@@ -79,6 +79,22 @@ struct AreaTriggerTeleport
     float  target_Orientation;
 };
 
+struct ShopEntry
+{
+	uint32 Category;
+	uint32 Item;
+	std::string Description;
+	uint32 Price;
+};
+
+struct ShopCategory
+{
+	std::string Name;
+};
+
+typedef std::map<uint32, ShopEntry> ShopEntriesMap;
+typedef std::map<uint8, ShopCategory> ShopCategoriesMap;
+
 struct BattlegroundEntranceTrigger
 {
     Team   team;
@@ -836,6 +852,7 @@ class ObjectMgr
         void LoadConditions();
         void LoadAreaTemplate();
         void LoadAreaLocales();
+		void LoadShop();
 
         void LoadNPCText();
 
@@ -1187,6 +1204,34 @@ class ObjectMgr
 
         int GetOrNewIndexForLocale(LocaleConstant loc);
 
+		ShopCategory const* GetShopCategoryInfo(uint8 category) const
+		{
+			auto iter = m_ShopCategoriesMap.find(category);
+			if (iter == m_ShopCategoriesMap.end())
+				return nullptr;
+
+			return &iter->second;
+		}
+
+		ShopEntry const* GetShopEntryInfo(uint32 id) const
+		{
+			auto iter = m_ShopEntriesMap.find(id);
+			if (iter == m_ShopEntriesMap.end())
+				return nullptr;
+
+			return &iter->second;
+		}
+
+		ShopEntriesMap GetShopEntriesList() const
+		{
+			return m_ShopEntriesMap;
+		}
+
+		ShopCategoriesMap GetShopCategoriesList() const
+		{
+			return m_ShopCategoriesMap;
+		}
+
         ItemRequiredTargetMapBounds GetItemRequiredTargetMapBounds(uint32 uiItemEntry) const
         {
             return m_ItemRequiredTarget.equal_range(uiItemEntry);
@@ -1465,6 +1510,9 @@ class ObjectMgr
 
         typedef std::vector<uint32> PlayerXPperLevel;       // [level]
         PlayerXPperLevel m_PlayerXPperLevel;
+
+		ShopCategoriesMap m_ShopCategoriesMap;
+		ShopEntriesMap m_ShopEntriesMap;
 
         typedef std::map<uint32,uint32> BaseXPMap;          // [area level][base xp]
         BaseXPMap m_BaseXPMap;

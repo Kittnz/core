@@ -10804,3 +10804,69 @@ void ObjectMgr::GetAreaLocaleString(uint32 entry, int32 loc_idx, std::string* na
                 *namePtr = al->Name[loc_idx].c_str();
     }
 }
+
+void ObjectMgr::LoadShop()
+{
+	m_ShopCategoriesMap.clear();
+
+	QueryResult* result = WorldDatabase.Query("SELECT ID, Name FROM shop_categories");
+
+	if (!result)
+	{
+		sLog.outString(">> Loaded 0 shop categories. DB table `shop_categories` is empty.");
+		return;
+	}
+
+	do
+	{
+		Field* fields = result->Fetch();
+
+		uint8 id = fields[0].GetUInt8();
+		std::string name = fields[1].GetString();
+
+		ShopCategory shopcategory;
+		shopcategory.Name = name;
+
+		m_ShopCategoriesMap[id] = shopcategory;
+
+	} while (result->NextRow());
+
+	delete result;
+
+	sLog.outString(">> Loaded " SIZEFMTD " shop categories", m_ShopCategoriesMap.size());
+
+	m_ShopEntriesMap.clear();
+
+	result = WorldDatabase.Query("SELECT ID, category, item, description, price FROM shop_items");
+
+	if (!result)
+	{
+		sLog.outString(">> Loaded 0 shop entries. DB table `shop_items` is empty.");
+		return;
+	}
+
+	do
+	{
+		Field* fields = result->Fetch();
+
+		uint32 id = fields[0].GetUInt32();
+		uint8 category = fields[1].GetUInt8();
+		uint32 item = fields[2].GetUInt32();
+		std::string text = fields[3].GetString();
+		uint32 price = fields[4].GetUInt32();
+
+		ShopEntry shopentry;
+		shopentry.Category = category;
+		shopentry.Item = item;
+		shopentry.Description = text;
+		shopentry.Price = price;
+
+		m_ShopEntriesMap[id] = shopentry;
+
+	} while (result->NextRow());
+
+	delete result;
+
+	sLog.outString(">> Loaded " SIZEFMTD " shop entries", m_ShopEntriesMap.size());
+}
+
