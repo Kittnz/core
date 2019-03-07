@@ -731,13 +731,9 @@ bool HonorMgr::Add(float cp, uint8 type, Unit* source)
         sLog.outHonor("[OPEN WORLD]: Player %s (account: %u) got %f honor for type %u, source %s %s (IP: %s)",
             m_owner->GetSession()->GetPlayerName(), m_owner->GetSession()->GetAccountId(), honor, type, plr ? "player" : "unit", source->GetName(), ip.c_str());
     
+	// DK penalties are subtracted from your RP score immediately and are not included in weekly adjustment.
     if (type == DISHONORABLE)
-    {
-        // DK penalties are subtracted from your RP score immediately
-        // and are not included in weekly adjustment
-        // remove this check to have negative ranks
-        m_rankPoints = m_rankPoints > honorCP.cp ? m_rankPoints - honorCP.cp : 0;
-    }
+        m_rankPoints = m_rankPoints - honorCP.cp;
 
     m_honorCP.push_back(honorCP);
 
