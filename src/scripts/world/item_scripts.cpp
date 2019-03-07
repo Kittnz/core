@@ -6,7 +6,7 @@
 
 bool ItemUse_character_rename(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
-    ChatHandler(pPlayer).PSendSysMessage("You will be asked to choose a new name on your next login!");
+    ChatHandler(pPlayer).PSendSysMessage("Please logout and enter a new name for this character.");
     pPlayer->SetAtLoginFlag(AT_LOGIN_RENAME);
     return false;
 }
