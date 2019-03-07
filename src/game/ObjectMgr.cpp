@@ -3233,6 +3233,15 @@ void ObjectMgr::CorrectItemModels(uint32 itemId, uint32& displayId)
 #endif
 }
 
+struct SQLItemLoader : public SQLStorageLoaderBase<SQLItemLoader, SQLStorage>
+{
+	template<class D>
+	void convert_from_str(uint32 /*field_pos*/, char const* src, D& dst)
+	{
+		dst = D(sScriptMgr.GetScriptId(src));
+	}
+};
+
 void ObjectMgr::FillObtainedItemsList(std::set<uint32>& obtainedItems)
 {
     // These are all the items that have been obtained by players.
@@ -3279,7 +3288,8 @@ void ObjectMgr::FillObtainedItemsList(std::set<uint32>& obtainedItems)
 
 void ObjectMgr::LoadItemPrototypes()
 {
-    sItemStorage.LoadProgressive(sWorld.GetWowPatch());
+    SQLItemLoader loader;
+    loader.LoadProgressive(sItemStorage, sWorld.GetWowPatch());
     m_QuestStartingItemsMap.clear();
     sLog.outString(">> Loaded %u item prototypes", sItemStorage.GetRecordCount());
     sLog.outString();

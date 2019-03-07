@@ -1514,6 +1514,8 @@ void ScriptMgr::LoadScriptNames()
                               "UNION "
                               "SELECT DISTINCT(script_name) FROM gameobject_template WHERE script_name <> '' "
                               "UNION "
+                              "SELECT DISTINCT(script_name) FROM item_template WHERE script_name <> '' "
+                              "UNION "
                               "SELECT DISTINCT(script_name) FROM scripted_areatrigger WHERE script_name <> '' "
                               "UNION "
                               "SELECT DISTINCT(script_name) FROM scripted_event_id WHERE script_name <> '' "
@@ -1778,6 +1780,16 @@ bool ScriptMgr::OnGameObjectUse(Player* pPlayer, GameObject* pGameObject)
     pPlayer->PlayerTalkClass->ClearMenus();
 
     return pTempScript->pGOHello(pPlayer, pGameObject);
+}
+
+bool ScriptMgr::OnItemUse(Player* pPlayer, Item* pItem, SpellCastTargets const& targets)
+{
+	Script* pTempScript = m_scripts[pItem->GetProto()->ScriptId];
+
+	if (!pTempScript || !pTempScript->pItemUse)
+		return false;
+
+	return pTempScript->pItemUse(pPlayer, pItem, targets);
 }
 
 bool ScriptMgr::OnAreaTrigger(Player* pPlayer, AreaTriggerEntry const* atEntry)
