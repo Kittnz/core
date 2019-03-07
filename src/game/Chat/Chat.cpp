@@ -702,6 +702,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { MSTR, "account_banned",              SEC_ADMINISTRATOR, true,  &ChatHandler::HandleReloadAccountBanList,                 "", nullptr },
         { MSTR, "instance_buff_removal",       SEC_DEVELOPPER,    true,  &ChatHandler::HandleReloadInstanceBuffRemoval,            "", nullptr },
         { MSTR, "petitions",                   SEC_ADMINISTRATOR, true,  &ChatHandler::HandleReloadPetitions,                      "", nullptr },
+        { MSTR, "shop",                        SEC_ADMINISTRATOR, true,  &ChatHandler::HandleReloadShopCommand,                    "", nullptr },
         { MSTR, nullptr,                       0,                 false, nullptr,                                                  "", nullptr }
     };
 

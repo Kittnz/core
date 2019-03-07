@@ -355,6 +355,7 @@ class MANGOS_DLL_SPEC ChatHandler
         bool HandleReloadGameObjectCommand(char* args);
         bool HandleReloadInstanceBuffRemoval(char* args);
         bool HandleReloadPetitions(char* args);
+        bool HandleReloadShopCommand(char* args);
         // Channel
         bool HandleChannelJoinCommand(char* );
         bool HandleChannelLeaveCommand(char* );

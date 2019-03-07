@@ -4,6 +4,14 @@
 #include "scriptPCH.h"
 #include <array>
 
+bool ChatHandler::HandleReloadShopCommand(char* args)
+{
+    sObjectMgr.LoadShop();
+    SendSysMessage("DB table `shop_categories` reloaded.");
+    SendSysMessage("DB table `shop_entries` reloaded.");
+    return true;
+}
+
 enum
 {
     ACTION_CATEGORY_START = 10000,
