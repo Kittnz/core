@@ -1250,14 +1250,14 @@ void Group::SendUpdate()
         if (GetMembersCount() - 1)
         {
             data << uint8(m_lootMethod);                    // loot method
-			if (GetLootMethod() == MASTER_LOOT)
-			{
-				data << m_looterGuid;                       // looter guid
-			}
-			else
-			{
-				data << ObjectGuid(uint64_t(0));
-			}
+            if (GetLootMethod() == MASTER_LOOT)
+            {
+                data << m_looterGuid;                       // looter guid
+            }
+            else
+            {
+                data << ObjectGuid(uint64_t(0));
+            }
             data << uint8(m_lootThreshold);                 // loot threshold
         }
         player->GetSession()->SendPacket(&data);

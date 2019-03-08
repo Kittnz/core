@@ -205,22 +205,22 @@ uint32 Quest::XPValue(Player *pPlayer) const
             //else
             //    return uint32(ceilf(fullxp * 0.1f));
 
-			///- Turtle WoW custom settings: 
+            ///- Turtle WoW custom settings: 
 
-			if (pLevel <= qLevel + 25)
-				return uint32(ceilf(fullxp));
-			else if (pLevel == qLevel + 26)
-				return uint32(ceilf(fullxp * 0.8f));
-			else if (pLevel == qLevel + 27)
-				return uint32(ceilf(fullxp * 0.8f));
-			else if (pLevel == qLevel + 28)
-				return uint32(ceilf(fullxp * 0.6f));
-			else if (pLevel == qLevel + 29)
-				return uint32(ceilf(fullxp * 0.4f));
-			else if (pLevel == qLevel + 30)
-				return uint32(ceilf(fullxp * 0.2f));
-			else
-				return uint32(ceilf(fullxp * 0.1f));
+            if (pLevel <= qLevel + 25)
+                return uint32(ceilf(fullxp));
+            else if (pLevel == qLevel + 26)
+                return uint32(ceilf(fullxp * 0.8f));
+            else if (pLevel == qLevel + 27)
+                return uint32(ceilf(fullxp * 0.8f));
+            else if (pLevel == qLevel + 28)
+                return uint32(ceilf(fullxp * 0.6f));
+            else if (pLevel == qLevel + 29)
+                return uint32(ceilf(fullxp * 0.4f));
+            else if (pLevel == qLevel + 30)
+                return uint32(ceilf(fullxp * 0.2f));
+            else
+                return uint32(ceilf(fullxp * 0.1f));
         }
     }
     return 0;
