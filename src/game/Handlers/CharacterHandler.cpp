@@ -44,6 +44,7 @@
 #include "Anticheat.h"
 #include "MasterPlayer.h"
 #include "PlayerBroadcaster.h"
+#include "Mail.h"
 
 // config option SkipCinematics supported values
 enum CinematicsSkipMode
@@ -709,6 +710,29 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
 
     if (pCurrChar->HasAtLoginFlag(AT_LOGIN_FIRST))
         pCurrChar->RemoveAtLoginFlag(AT_LOGIN_FIRST);
+
+    // Turtle WoW custom feature to reward players who haven't played for a long time
+
+    if (pCurrChar->IsReturning())
+    {
+        if (!pCurrChar->HasItemCount(19054, 1, true))
+        {
+            uint32 itemEntry = 0;
+            std::string subject = "";
+            std::string message = "";
+
+            itemEntry = 19054;
+            subject = "Welcome back, take good care of it!";
+            message = "Greetings!\n\nWe have found an illegal shipment of dragons from Pandaria.\n\nWe can't handle all of them, so we thought that our most veteran adventurers could take care of them.\n\nWith kind regards,\nTurtle WoW Team";
+
+            Item* wb_gift = Item::CreateItem(itemEntry, 1, pCurrChar);
+            wb_gift->SaveToDB();
+
+            MailDraft(subject, sObjectMgr.CreateItemText(message))
+                .AddItem(wb_gift)
+                .SendMailTo(pCurrChar, MailSender(MAIL_CREATURE, uint32(16547), MAIL_STATIONERY_DEFAULT), MAIL_CHECK_MASK_COPIED, 0, 30 * DAY);
+        }
+    }
 
     // show time before shutdown if shutdown planned.
     if (sWorld.IsShutdowning())

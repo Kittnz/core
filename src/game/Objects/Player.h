@@ -1320,6 +1320,8 @@ class MANGOS_DLL_SPEC Player final: public Unit
         bool HasAtLoginFlag(AtLoginFlags f) const { return m_atLoginFlags & f; }
         void SetAtLoginFlag(AtLoginFlags f) { m_atLoginFlags |= f; }
         void RemoveAtLoginFlag(AtLoginFlags f, bool in_db_also = false);
+        ///- Turtle WoW custom feature to reward players who haven't played for a long time
+        bool IsReturning();
 
         /*********************************************************/
         /***                   SAVE SYSTEM                     ***/
