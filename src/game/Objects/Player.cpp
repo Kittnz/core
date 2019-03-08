@@ -2763,6 +2763,9 @@ void Player::GiveLevel(uint32 level)
         sWorld.SendGMText(LANG_GM_ANNOUNCE_COLOR, "LevelUpAlert", message.str().c_str());
     }
 
+    if (sWorld.getConfig(CONFIG_BOOL_BEGINNERS_GUILD))
+        CheckIfShouldBeInBeginnersGuild(level);
+
     PlayerLevelInfo info;
     sObjectMgr.GetPlayerLevelInfo(getRace(), getClass(), level, &info);
 
@@ -21249,4 +21252,38 @@ bool Player::IsReturning()
 
     if (time_diff > 1209600)
         return true;
+}
+
+// In an effort to assist new players, the Turtle WoW team has decided to implement a new feature called "The Beginner’s Guild". 
+// This new feature will auto invite players into a guild, helping them easily find players who are also just starting out fresh.
+// Once players reach level 15 they will be removed from the guild, and thrown back into the wild!
+
+void Player::CheckIfShouldBeInBeginnersGuild(uint32 level)
+{
+        uint32 GuildId = GetGuildId();
+        uint32 BeginnersGuildId = 0;
+
+        BeginnersGuildId = (GetTeam() == ALLIANCE) ? sWorld.getConfig(CONFIG_INT32_BEGINNERS_GUILD_ALLIANCE) : sWorld.getConfig(CONFIG_INT32_BEGINNERS_GUILD_HORDE);
+
+        // Warn at level 14:
+
+        if (level == 14 && GetSession()->GetSecurity() == SEC_PLAYER && GuildId == BeginnersGuildId)
+        ChatHandler(this).PSendSysMessage("|cff00FF00You will be automatically removed from beginner's guild when you reach level 15!|r");
+
+        // Back into the wild:
+
+        if (level == 15 && GetSession()->GetSecurity() == SEC_PLAYER && GuildId == BeginnersGuildId)
+        {
+            if (Guild* NoobSquad = sGuildMgr.GetGuildById(BeginnersGuildId))
+            {
+                NoobSquad->DelMember(GetGUIDLow());
+                ChatHandler(this).PSendSysMessage("|cff00FF00You've made it to the water, time for you to find your own way!|r");
+            }
+        }
+}
+
+void Player::JoinBeginnersGuild()
+{
+    Guild* BeginnersGuild = (GetTeam() == ALLIANCE) ? sGuildMgr.GetGuildById(sWorld.getConfig(CONFIG_INT32_BEGINNERS_GUILD_ALLIANCE)) : sGuildMgr.GetGuildById(sWorld.getConfig(CONFIG_INT32_BEGINNERS_GUILD_HORDE));
+    BeginnersGuild->AddMember(GetObjectGuid(), BeginnersGuild->GetLowestRank());
 }

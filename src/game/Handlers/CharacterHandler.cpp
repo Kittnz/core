@@ -709,7 +709,12 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
     }
 
     if (pCurrChar->HasAtLoginFlag(AT_LOGIN_FIRST))
+    {
+        if (sWorld.getConfig(CONFIG_BOOL_BEGINNERS_GUILD))
+            pCurrChar->JoinBeginnersGuild();
+
         pCurrChar->RemoveAtLoginFlag(AT_LOGIN_FIRST);
+    }
 
     // Turtle WoW custom feature to reward players who haven't played for a long time
 

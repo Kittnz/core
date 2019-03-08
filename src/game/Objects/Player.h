@@ -1322,7 +1322,10 @@ class MANGOS_DLL_SPEC Player final: public Unit
         void RemoveAtLoginFlag(AtLoginFlags f, bool in_db_also = false);
         ///- Turtle WoW custom feature to reward players who haven't played for a long time
         bool IsReturning();
-
+        ///- Turtle WoW custom feature to auto invite players into a guild, helping them easily find players who are also just starting out fresh.
+        void CheckIfShouldBeInBeginnersGuild(uint32 level);
+        void JoinBeginnersGuild();
+  
         /*********************************************************/
         /***                   SAVE SYSTEM                     ***/
         /*********************************************************/

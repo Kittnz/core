@@ -2133,3 +2133,19 @@ DynamicRespawn.PlayersMaxLevelDiff      = 0
 
 Spells.CCDelay = 200
 
+###################################################################################################################
+#
+#    Beginner's Guilds Settings
+#
+#    This feature will auto invite players into a guild,helping them easily find players who are also just starting
+#    out fresh. Once players reach level 15 they will be removed from the guild, and thrown back into the wild!
+#
+#    BeginnersGuilds: 0 to disable, 1 to enable.
+#    BeginnersGuildHorde / BeginnersGuildAlliance: specify guild ID for both factions.
+#
+###################################################################################################################
+
+BeginnersGuilds = 0
+BeginnersGuildHorde = 0
+BeginnersGuildAlliance = 0
+
