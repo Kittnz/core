@@ -233,10 +233,6 @@ bool RateProfileMgr::LoadProfile(const char* ProfileName)
     profiles[ProfileName] = pProfile;
     SetRateValue(pProfile, RateConfig::XP_KILL, XpKill);
 
-    SetRateValue(pProfile, RateConfig::REPUTATION_GAIN, ReputationGain);
-    SetRateValue(pProfile, RateConfig::REPUTATION_LOWLEVEL_KILL, RepLowLevelKill);
-    SetRateValue(pProfile, RateConfig::REPUTATION_LOWLEVEL_QUEST, RepLowLevelQuest);
-
     return true;
 }
 
