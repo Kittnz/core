@@ -23,6 +23,7 @@
 
 #include "Common.h"
 #include "Platform/Define.h"
+#include <mutex>
 
 typedef std::map<std::string, std::string> StringKeyValue;
 typedef std::map<std::string, StringKeyValue> RegistryData;
