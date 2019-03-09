@@ -985,6 +985,10 @@ class MANGOS_DLL_SPEC ChatHandler
         void HandleCharacterDeletedRestoreHelper(DeletedInfo const& delInfo);
 
         void SetSentErrorMessage(bool val){ sentErrorMessage = val;};
+
+	protected:
+		bool HandleReloadRateProfile(char* args);
+
     private:
         WorldSession * m_session;                           // != NULL for chat command call and NULL for CLI command
 

@@ -145,6 +145,9 @@ World::World()
 
     m_timeRate = 1.0f;
     m_charDbWorkerThread    = nullptr;
+
+	// Turtle WoW custom feature: progressive rates system
+	m_rateProfileReloadScheduled = false;
 }
 
 /// World destructor
@@ -427,6 +430,9 @@ void World::LoadConfigSettings(bool reload)
     ///- Read the player limit and the Message of the day from the config file
     SetPlayerLimit(sConfig.GetIntDefault("PlayerLimit", DEFAULT_PLAYER_LIMIT), true);
     SetMotd(sConfig.GetStringDefault("Motd", "Welcome to the Massive Network Game Object Server.") + std::string("\n") + std::string(GetPatchName()) + std::string(" is now live!"));
+
+	// Turtle WoW custom feature: progressive rates system
+	m_rateProfile.Initialize();
 
     ///- Read all rates from the config file
     setConfigPos(CONFIG_FLOAT_RATE_HEALTH,               "Rate.Health", 1.0f);
@@ -1893,6 +1899,14 @@ void World::Update(uint32 diff)
     //cleanup unused GridMap objects as well as VMaps
     if (getConfig(CONFIG_BOOL_CLEANUP_TERRAIN))
         sTerrainMgr.Update(diff);
+
+	// Turtle WoW custom feature: progressive rates system
+	// reload rate profiles, if scheduled
+	if (m_rateProfileReloadScheduled)
+	{
+		m_rateProfileReloadScheduled = false;
+		m_rateProfile.Reload();
+	}
 }
 
 /// Send a packet to all players (except self if mentioned)
@@ -2918,4 +2932,28 @@ void SessionPacketSendTask::run()
     {
         session->SendPacket(&m_data);
     }
+}
+
+
+// Turtle WoW custom feature: progressive rates system
+float World::getRateConfig(RateConfig configId, Player* pPlayer)
+{
+	bool bPlayerInDungeon = false;
+	if (Map* currentPlayerMap = pPlayer->FindMap())
+	{
+		bPlayerInDungeon = currentPlayerMap->IsDungeon();
+	}
+
+	// Turtle very specific. If player have a Seal of Hardcore item [itemId: 55650], then we should apply to him a hardcore profile
+	if (pPlayer->IsAHardcorePlayer())
+	{
+		return m_rateProfile.GetRateValueForHardcorePlayers(configId, bPlayerInDungeon);
+	}
+
+	return m_rateProfile.GetRateValue(configId, pPlayer ? pPlayer->getLevel() : 1, bPlayerInDungeon);
+}
+
+void World::ScheduleRateReload()
+{
+	m_rateProfileReloadScheduled = true;
 }

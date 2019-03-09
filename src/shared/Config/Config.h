@@ -19,49 +19,49 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef CONFIG_H
-#define CONFIG_H
+#pragma once
 
 #include "Common.h"
-#include <ace/Recursive_Thread_Mutex.h>
-#include <ace/Singleton.h>
 #include "Platform/Define.h"
-#include "ace/Configuration_Import_Export.h"
 
-class ACE_Configuration_Heap;
+typedef std::map<std::string, std::string> StringKeyValue;
+typedef std::map<std::string, StringKeyValue> RegistryData;
 
 class MANGOS_DLL_SPEC Config
 {
-    friend class ACE_Singleton<Config, ACE_Recursive_Thread_Mutex>;
-    public:
+public:
 
-        Config();
-        ~Config();
+	Config();
+	~Config();
 
-        bool SetSource(const char *file);
-        bool Reload();
+	bool SetSource(const char *file);
+	bool Reload();
 
-        std::string GetStringDefault(const char* name, const char* def);
-        bool GetBoolDefault(const char* name, const bool def = false);
-        int32 GetIntDefault(const char* name, const int32 def);
-        float GetFloatDefault(const char* name, const float def);
+	std::string GetStringDefault(const char* name, const char* def);
+	bool GetBoolDefault(const char* name, const bool def = false);
+	int32 GetIntDefault(const char* name, const int32 def);
+	float GetFloatDefault(const char* name, const float def);
 
-        std::string GetFilename() const { return mFilename; }
-        bool GetValueHelper(const char* name, ACE_TString &result);
+	std::string GetFilename() const { return mFilename; }
+	bool GetValueHelper(const char* name, std::string& result);
 
-    private:
+	// for a profile configs
+	std::string GetStringDefaultInSection(const char* name, const char* section, const char* def);
+	float GetFloatDefault(const char* name, const char* section, const float def);
+	void GetRootSections(std::vector<std::string>& OutSectionList);
+	void GetKeys(const char* SectionName, std::vector<std::string>& OutKeysList);
 
-        std::string mFilename;
-        ACE_Configuration_Heap *mConf;
+private:
 
-        typedef ACE_Thread_Mutex LockType;
-        typedef ACE_Guard<LockType> GuardType;
+	RegistryData Registry;
 
-        std::string _filename;
-        LockType m_configLock;
+	const std::string GlobalSectionName = "_";
+
+	std::string mFilename;
+
+	std::mutex m_configLock;
 };
 
-// Nostalrius : multithreading lock
-#define sConfig (*ACE_Singleton<Config, ACE_Recursive_Thread_Mutex>::instance())
+//#define sConfig Config::instance())
+extern Config sConfig;
 
-#endif

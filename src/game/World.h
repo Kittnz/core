@@ -35,6 +35,7 @@
 #include "ObjectGuid.h"
 #include "MapNodes/AbstractPlayer.h"
 #include "WorldPacket.h"
+#include "Objects/RateProfile.h"
 
 #include <map>
 #include <set>
@@ -711,6 +712,11 @@ class World
         /// Get a server configuration element (see #eConfigBoolValues)
         bool getConfig(eConfigBoolValues index) const { return m_configBoolValues[index]; }
 
+		// Turtle WoW custom feature: progressive rates system
+		/// Get rate profile for specified player
+		float getRateConfig(RateConfig configId, Player* pPlayer);
+		void ScheduleRateReload();
+
         /// Are we on a "Player versus Player" server?
         bool IsPvPRealm() { return (getConfig(CONFIG_UINT32_GAME_TYPE) == REALM_TYPE_PVP || getConfig(CONFIG_UINT32_GAME_TYPE) == REALM_TYPE_RPPVP || getConfig(CONFIG_UINT32_GAME_TYPE) == REALM_TYPE_FFA_PVP); }
         bool IsFFAPvPRealm() { return getConfig(CONFIG_UINT32_GAME_TYPE) == REALM_TYPE_FFA_PVP; }
@@ -848,6 +854,8 @@ class World
         int32 m_configInt32Values[CONFIG_INT32_VALUE_COUNT];
         float m_configFloatValues[CONFIG_FLOAT_VALUE_COUNT];
         bool m_configBoolValues[CONFIG_BOOL_VALUE_COUNT];
+		RateProfileMgr m_rateProfile;
+		bool m_rateProfileReloadScheduled;
 
         int32 m_playerLimit;
         uint8 m_wowPatch;
