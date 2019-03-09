@@ -195,7 +195,7 @@ set (game_SRCS
     Objects/Object.cpp
     Objects/Pet.cpp
     Objects/Player.cpp
-	Objects/RateProfile.cpp
+    Objects/RateProfile.cpp
     Objects/TemporarySummon.cpp
     Objects/Totem.cpp
     Objects/Unit.cpp
@@ -386,7 +386,7 @@ set (game_SRCS
     Objects/Object.h
     Objects/Pet.h
     Objects/Player.h
-	Objects/RateProfile.h
+    Objects/RateProfile.h
     Objects/TemporarySummon.h
     Objects/Totem.h
     Objects/Unit.h

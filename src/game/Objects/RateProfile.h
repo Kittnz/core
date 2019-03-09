@@ -6,9 +6,6 @@
 enum class RateConfig : int
 {
     XP_KILL,
-    REPUTATION_GAIN,
-    REPUTATION_LOWLEVEL_KILL,
-    REPUTATION_LOWLEVEL_QUEST,
     MAX_VALUE
 };
 

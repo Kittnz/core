@@ -8,51 +8,21 @@
 
 [Default]
 Rate.XP.Kill    = 1
-Rate.XP.Quest   = 1
-Rate.XP.Explore = 1
-Rate.Reputation.Gain = 1
-Rate.Reputation.LowLevel.Kill    = 0.2
-Rate.Reputation.LowLevel.Quest   = 1
 
 [LowLevel]
 Rate.XP.Kill    = 0.9
-Rate.XP.Quest   = 1
-Rate.XP.Explore = 0.5
-Rate.Reputation.Gain = 1
-Rate.Reputation.LowLevel.Kill    = 0.2
-Rate.Reputation.LowLevel.Quest   = 1
 
 [LowLevel2]
 Rate.XP.Kill    = 0.8
-Rate.XP.Quest   = 1
-Rate.XP.Explore = 0.5
-Rate.Reputation.Gain = 1
-Rate.Reputation.LowLevel.Kill    = 0.2
-Rate.Reputation.LowLevel.Quest   = 1
 
 [MidLevel]
 Rate.XP.Kill    = 0.9
-Rate.XP.Quest   = 1
-Rate.XP.Explore = 0.5
-Rate.Reputation.Gain = 1
-Rate.Reputation.LowLevel.Kill    = 0.2
-Rate.Reputation.LowLevel.Quest   = 1
 
 [HighLevel1]
 Rate.XP.Kill    = 0.8
-Rate.XP.Quest   = 1
-Rate.XP.Explore = 0.5
-Rate.Reputation.Gain = 1
-Rate.Reputation.LowLevel.Kill    = 0.2
-Rate.Reputation.LowLevel.Quest   = 1
 
 [HighLevel2]
 Rate.XP.Kill    = 0.7
-Rate.XP.Quest   = 1
-Rate.XP.Explore = 0.5
-Rate.Reputation.Gain = 1
-Rate.Reputation.LowLevel.Kill    = 0.2
-Rate.Reputation.LowLevel.Quest   = 1
 
 ###################################################################################################################
 # Dungeon rate profile (0.5x rates for Crature.Kill)
@@ -60,23 +30,13 @@ Rate.Reputation.LowLevel.Quest   = 1
 
 [Dungeon]
 Rate.XP.Kill    = 1
-Rate.XP.Quest   = 1
-Rate.XP.Explore = 1
-Rate.Reputation.Gain = 1
-Rate.Reputation.LowLevel.Kill    = 0.2
-Rate.Reputation.LowLevel.Quest   = 1
 
 ###################################################################################################################
-# Hardcore Mode (0.5x rates for Crature.Kill)
+# Hardcore Mode (0.5x rates for Creature.Kill)
 ###################################################################################################################
 
 [Hardcore]
 Rate.XP.Kill    = 0.5
-Rate.XP.Quest   = 1
-Rate.XP.Explore = 0.5
-Rate.Reputation.Gain = 1
-Rate.Reputation.LowLevel.Kill    = 0.2
-Rate.Reputation.LowLevel.Quest   = 1
 
 ###################################################################################################################
 # Set profile for each level range, if not set, default is used.

@@ -986,8 +986,8 @@ class MANGOS_DLL_SPEC ChatHandler
 
         void SetSentErrorMessage(bool val){ sentErrorMessage = val;};
 
-	protected:
-		bool HandleReloadRateProfile(char* args);
+    protected:
+       bool HandleReloadRates(char* args);
 
     private:
         WorldSession * m_session;                           // != NULL for chat command call and NULL for CLI command

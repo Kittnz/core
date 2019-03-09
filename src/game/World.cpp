@@ -146,8 +146,8 @@ World::World()
     m_timeRate = 1.0f;
     m_charDbWorkerThread    = nullptr;
 
-	// Turtle WoW custom feature: progressive rates system
-	m_rateProfileReloadScheduled = false;
+    // Turtle WoW custom feature: progressive rates system
+    m_rateProfileReloadScheduled = false;
 }
 
 /// World destructor
@@ -431,8 +431,8 @@ void World::LoadConfigSettings(bool reload)
     SetPlayerLimit(sConfig.GetIntDefault("PlayerLimit", DEFAULT_PLAYER_LIMIT), true);
     SetMotd(sConfig.GetStringDefault("Motd", "Welcome to the Massive Network Game Object Server.") + std::string("\n") + std::string(GetPatchName()) + std::string(" is now live!"));
 
-	// Turtle WoW custom feature: progressive rates system
-	m_rateProfile.Initialize();
+    ///- Turtle WoW custom feature: progressive rates system
+    m_rateProfile.Initialize();
 
     ///- Read all rates from the config file
     setConfigPos(CONFIG_FLOAT_RATE_HEALTH,               "Rate.Health", 1.0f);
@@ -826,26 +826,26 @@ void World::LoadConfigSettings(bool reload)
     if (configNoReload(reload, CONFIG_UINT32_GUID_RESERVE_SIZE_GAMEOBJECT, "GuidReserveSize.GameObject", 100))
         setConfigPos(CONFIG_UINT32_GUID_RESERVE_SIZE_GAMEOBJECT, "GuidReserveSize.GameObject", 100);
 
-	///- Read the "Honor" directory from the config file (basically these are PvP ranking logs)
-	std::string honorPath = sConfig.GetStringDefault("HonorDir", "./");
+    ///- Read the "Honor" directory from the config file (basically these are PvP ranking logs)
+    std::string honorPath = sConfig.GetStringDefault("HonorDir", "./");
 
-	// for empty string use current dir as for absent case
-	if (honorPath.empty())
-		honorPath = "./";
-	// normalize dir path to path/ or path\ form
-	else if (honorPath.at(honorPath.length() - 1) != '/' && honorPath.at(honorPath.length() - 1) != '\\')
-		honorPath.append("/");
+    // for empty string use current dir as for absent case
+    if (honorPath.empty())
+        honorPath = "./";
+    // normalize dir path to path/ or path\ form
+    else if (honorPath.at(honorPath.length() - 1) != '/' && honorPath.at(honorPath.length() - 1) != '\\')
+        honorPath.append("/");
 
-	if (reload)
-	{
-		if (honorPath != m_honorPath)
-			sLog.outError("HonorDir option can't be changed at mangosd.conf reload, using current value (%s).", m_honorPath.c_str());
-	}
-	else
-	{
-		m_honorPath = honorPath;
-		sLog.outString("Using HonorDir %s", m_honorPath.c_str());
-	}
+    if (reload)
+    {
+        if (honorPath != m_honorPath)
+            sLog.outError("HonorDir option can't be changed at mangosd.conf reload, using current value (%s).", m_honorPath.c_str());
+    }
+    else
+    {
+        m_honorPath = honorPath;
+        sLog.outString("Using HonorDir %s", m_honorPath.c_str());
+    }
 
 
     ///- Read the "Data" directory from the config file
@@ -1120,8 +1120,8 @@ void World::SetInitialWorldSettings()
         exit(1);                                            // Error message displayed in function already
     }
 
-	///- Loading shop tables
-	sObjectMgr.LoadShop();
+    ///- Loading shop tables
+    sObjectMgr.LoadShop();
 
     ///- Loads existing IDs in the database.
     sObjectMgr.LoadAllIdentifiers();
@@ -1900,13 +1900,13 @@ void World::Update(uint32 diff)
     if (getConfig(CONFIG_BOOL_CLEANUP_TERRAIN))
         sTerrainMgr.Update(diff);
 
-	// Turtle WoW custom feature: progressive rates system
-	// reload rate profiles, if scheduled
-	if (m_rateProfileReloadScheduled)
-	{
-		m_rateProfileReloadScheduled = false;
-		m_rateProfile.Reload();
-	}
+    // Turtle WoW custom feature: progressive rates system
+    // Reload rates, if scheduled:
+    if (m_rateProfileReloadScheduled)
+    {
+        m_rateProfileReloadScheduled = false;
+        m_rateProfile.Reload();
+    }
 }
 
 /// Send a packet to all players (except self if mentioned)
@@ -2934,26 +2934,25 @@ void SessionPacketSendTask::run()
     }
 }
 
-
 // Turtle WoW custom feature: progressive rates system
 float World::getRateConfig(RateConfig configId, Player* pPlayer)
 {
-	bool bPlayerInDungeon = false;
-	if (Map* currentPlayerMap = pPlayer->FindMap())
-	{
-		bPlayerInDungeon = currentPlayerMap->IsDungeon();
-	}
+    bool bPlayerInDungeon = false;
+    if (Map* currentPlayerMap = pPlayer->FindMap())
+    {
+        bPlayerInDungeon = currentPlayerMap->IsDungeon();
+    }
 
-	// Turtle very specific. If player have a Seal of Hardcore item [itemId: 55650], then we should apply to him a hardcore profile
-	if (pPlayer->IsAHardcorePlayer())
-	{
-		return m_rateProfile.GetRateValueForHardcorePlayers(configId, bPlayerInDungeon);
-	}
+    // Turtle WoW custom feature (if players has item 50010 -> always apply hardcore profile)
+    if (pPlayer->IsAHardcorePlayer())
+    {
+        return m_rateProfile.GetRateValueForHardcorePlayers(configId, bPlayerInDungeon);
+    }
 
-	return m_rateProfile.GetRateValue(configId, pPlayer ? pPlayer->getLevel() : 1, bPlayerInDungeon);
+    return m_rateProfile.GetRateValue(configId, pPlayer ? pPlayer->getLevel() : 1, bPlayerInDungeon);
 }
 
 void World::ScheduleRateReload()
 {
-	m_rateProfileReloadScheduled = true;
+    m_rateProfileReloadScheduled = true;
 }

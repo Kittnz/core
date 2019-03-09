@@ -704,7 +704,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { MSTR, "instance_buff_removal",       SEC_DEVELOPPER,    true,  &ChatHandler::HandleReloadInstanceBuffRemoval,            "", nullptr },
         { MSTR, "petitions",                   SEC_ADMINISTRATOR, true,  &ChatHandler::HandleReloadPetitions,                      "", nullptr },
         { MSTR, "shop",                        SEC_ADMINISTRATOR, true,  &ChatHandler::HandleReloadShopCommand,                    "", nullptr },
-		{ MSTR, "rateprofile",                 SEC_ADMINISTRATOR, true,  &ChatHandler::HandleReloadRateProfile,                    "", nullptr },
+        { MSTR, "rates",                       SEC_ADMINISTRATOR, true,  &ChatHandler::HandleReloadRates,                          "", nullptr },
         { MSTR, nullptr,                       0,                 false, nullptr,                                                  "", nullptr }
     };
 
@@ -3742,10 +3742,10 @@ const char *NullChatHandler::GetMangosString(int32 entry) const
 
 // Turtle WoW custom feature: progressive rates system
 
-bool ChatHandler::HandleReloadRateProfile(char* args)
+bool ChatHandler::HandleReloadRates(char* args)
 {
-	sWorld.ScheduleRateReload();
-	sLog.outInfo("Progressive Rates system is being reloaded...");
-	PSendSysMessage("Progressive Rates system is being reloaded...");
-	return true;
+    sWorld.ScheduleRateReload();
+    sLog.outInfo("Progressive Rates system is being reloaded...");
+    PSendSysMessage("Progressive Rates system has been reloaded.");
+    return true;
 }

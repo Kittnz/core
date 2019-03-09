@@ -2043,8 +2043,8 @@ class MANGOS_DLL_SPEC Player final: public Unit
         uint32 GetSkippedUpdateTime() const { return m_skippedUpdateTime; }
         void ResetSkippedUpdateTime() { m_skippedUpdateTime = 0; }
 
-		bool IsAHardcorePlayer() const { return bIsHardcore; };
-		void EnableHardcoreMode() { bIsHardcore = true; };
+        bool IsAHardcorePlayer() const { return bIsHardcore; };
+        void EnableHardcoreMode() { bIsHardcore = true; };
 
         /*********************************************************/
         /***                 MISC GAME SYSTEMS                 ***/
@@ -2067,8 +2067,8 @@ class MANGOS_DLL_SPEC Player final: public Unit
         ObjectGuid m_escortingGuid;
         uint32 customFlags;
 
-		// Turtle specific
-		bool bIsHardcore = false;
+        // Turtle WoW custom feature: hardcore mode (0.5x rates for Creature.Kill)
+        bool bIsHardcore = false;
 
         void SendMountResult(PlayerMountResult result) const;
         void SendDismountResult(PlayerDismountResult result) const;

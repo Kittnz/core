@@ -32,35 +32,35 @@ class MANGOS_DLL_SPEC Config
 {
 public:
 
-	Config();
-	~Config();
+    Config();
+    ~Config();
 
-	bool SetSource(const char *file);
-	bool Reload();
+    bool SetSource(const char *file);
+    bool Reload();
 
-	std::string GetStringDefault(const char* name, const char* def);
-	bool GetBoolDefault(const char* name, const bool def = false);
-	int32 GetIntDefault(const char* name, const int32 def);
-	float GetFloatDefault(const char* name, const float def);
+    std::string GetStringDefault(const char* name, const char* def);
+    bool GetBoolDefault(const char* name, const bool def = false);
+    int32 GetIntDefault(const char* name, const int32 def);
+    float GetFloatDefault(const char* name, const float def);
 
-	std::string GetFilename() const { return mFilename; }
-	bool GetValueHelper(const char* name, std::string& result);
+    std::string GetFilename() const { return mFilename; }
+    bool GetValueHelper(const char* name, std::string& result);
 
-	// for a profile configs
-	std::string GetStringDefaultInSection(const char* name, const char* section, const char* def);
-	float GetFloatDefault(const char* name, const char* section, const float def);
-	void GetRootSections(std::vector<std::string>& OutSectionList);
-	void GetKeys(const char* SectionName, std::vector<std::string>& OutKeysList);
+    // for a profile configs
+    std::string GetStringDefaultInSection(const char* name, const char* section, const char* def);
+    float GetFloatDefault(const char* name, const char* section, const float def);
+    void GetRootSections(std::vector<std::string>& OutSectionList);
+    void GetKeys(const char* SectionName, std::vector<std::string>& OutKeysList);
 
 private:
 
-	RegistryData Registry;
+    RegistryData Registry;
 
-	const std::string GlobalSectionName = "_";
+    const std::string GlobalSectionName = "_";
 
-	std::string mFilename;
+    std::string mFilename;
 
-	std::mutex m_configLock;
+    std::mutex m_configLock;
 };
 
 //#define sConfig Config::instance())

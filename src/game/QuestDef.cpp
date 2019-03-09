@@ -190,7 +190,7 @@ uint32 Quest::XPValue(Player *pPlayer) const
             else if (qLevel > 0 && qLevel <= 60)
                 fullxp = RewMoneyMaxLevel / 0.6f;
 
-			///- Blizzlike XPValue diminishing values:
+            ///- Blizzlike XPValue diminishing values:
 
             //if (pLevel <= qLevel +  5)
             //    return uint32(ceilf(fullxp));

@@ -34,29 +34,29 @@ inline void SendEntriesInfoByCategory(Player* pPlayer, uint8 category)
 
 bool GossipHello_npc_shop(Player* pPlayer, Creature* pCreature)
 {
-	QueryResult* coins_result = LoginDatabase.PQuery("SELECT `coins` FROM `shop_coins` WHERE `id` = '%u'", pPlayer->GetSession()->GetAccountId());
+    QueryResult* coins_result = LoginDatabase.PQuery("SELECT `coins` FROM `shop_coins` WHERE `id` = '%u'", pPlayer->GetSession()->GetAccountId());
 
-	if (!coins_result)
-	{
-		LoginDatabase.PExecute("INSERT INTO shop_coins (id, coins) VALUES ('%u', 0)", pPlayer->GetSession()->GetAccountId());
-		pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Account Balance: 0 Turtle Tokens", GOSSIP_SENDER_MAIN, ACTION_CATEGORY_START);
-	}
+    if (!coins_result)
+    {
+        LoginDatabase.PExecute("INSERT INTO shop_coins (id, coins) VALUES ('%u', 0)", pPlayer->GetSession()->GetAccountId());
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Account Balance: 0 Turtle Tokens", GOSSIP_SENDER_MAIN, ACTION_CATEGORY_START);
+    }
 
-	if (coins_result)
-	{
-		Field* coins_amount = coins_result->Fetch();
+    if (coins_result)
+    {
+        Field* coins_amount = coins_result->Fetch();
 
-		std::stringstream strstream;
-		strstream << "Account Balance: " << coins_amount->GetUInt32() << " Turtle Tokens.";
-		std::string formattedMessage = strstream.str();
+        std::stringstream strstream;
+        strstream << "Account Balance: " << coins_amount->GetUInt32() << " Turtle Tokens.";
+        std::string formattedMessage = strstream.str();
 
-		if (coins_amount != nullptr)
-		{
-			pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, formattedMessage.c_str(), GOSSIP_SENDER_MAIN, ACTION_CATEGORY_START);
-		}
+        if (coins_amount != nullptr)
+        {
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, formattedMessage.c_str(), GOSSIP_SENDER_MAIN, ACTION_CATEGORY_START);
+        }
 
-		delete coins_result;
-	}
+        delete coins_result;
+    }
 
     uint8 index = 1;
 
@@ -126,20 +126,20 @@ bool GossipSelect_npc_shop(Player* pPlayer, Creature* pCreature, uint32 uiSender
 
             if (bSuccess == 1)
             {
-				// Going hardcore is possible only for characters below level 10.
-				if (pPlayer->getLevel() > 10 && shopentry->Item == 50010)
-				{
-					pCreature->MonsterSay("Too late, my friend! You must have done this before level 10.", 0U, pPlayer);
-					break;
-				}
+                // Going hardcore is possible only for characters below level 10.
+                if (pPlayer->getLevel() > 10 && shopentry->Item == 50010)
+                {
+                    pCreature->MonsterSay("Too late, my friend! You must have done this before level 10.", 0U, pPlayer);
+                    break;
+                }
 
                 Item* item = pPlayer->StoreNewItem(dest, shopentry->Item, true, Item::GenerateItemRandomPropertyId(shopentry->Item));
                 pPlayer->SendNewItem(item, count, false, true);
 
-				if (shopentry->Item == 50010)
-				{
-					// pPlayer->EnableHardcoreMode(); -- TODO: Hardcore Mode
-				}
+                if (shopentry->Item == 50010)
+                {
+                    // pPlayer->EnableHardcoreMode(); -- TODO: Hardcore Mode
+                }
 
                 uint8 index = 1;
 
@@ -150,7 +150,7 @@ bool GossipSelect_npc_shop(Player* pPlayer, Creature* pCreature, uint32 uiSender
                 }
             }
             else
-				pCreature->MonsterSay("You don't have enough Turtle WoW Tokens.", 0U, pPlayer);
+                pCreature->MonsterSay("You don't have enough Turtle WoW Tokens.", 0U, pPlayer);
         }
         break;
     }
