@@ -101,6 +101,7 @@ set (game_SRCS
     Commands/Level1.cpp
     Commands/Level2.cpp
     Commands/Level3.cpp
+    Commands/TurtleWoW.cpp
     Commands/Nostalrius.cpp
     Database/CharacterDatabaseCache.cpp
     Database/CharacterDatabaseCleaner.cpp

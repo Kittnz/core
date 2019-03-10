@@ -898,6 +898,11 @@ class MANGOS_DLL_SPEC ChatHandler
         //#INFO: Giperion was here
         bool HandleDebugShowNearestGOInfo(char* args);
 
+        // Turtle WoW 
+        bool HandleNextModelCommand(char* args);
+        bool HandlePrevModelCommand(char* args);        
+        bool HandleSetCityRankCommand(char* args);
+
         Player*   GetSelectedPlayer();
         Creature* GetSelectedCreature();
         Unit*     GetSelectedUnit();
