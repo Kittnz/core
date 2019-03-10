@@ -82,7 +82,8 @@ struct npc_spirit_guideAI : ScriptedAI
         // TODO: would be better to cast a dummy spell
         Map* pMap = m_creature->GetMap();
 
-        if (!pMap || !pMap->IsBattleGround())
+        // if (!pMap || !pMap->IsBattleGround()) // Return this check if you don't plan to run Turtle WoW Arena Tournament
+        if (!pMap)
             return;
 
         Map::PlayerList const &PlayerList = pMap->GetPlayers();

@@ -46,6 +46,7 @@ set (SCRIPTS_SRCS
     custom/zero_creatures.cpp
     custom/npc_j_eevee.cpp
     custom/shop.cpp
+    custom/arena_tournament.cpp
     eastern_kingdoms/alterac_mountains/alterac_mountains.cpp
     eastern_kingdoms/arathi_highlands/arathi_highlands.cpp
     eastern_kingdoms/blasted_lands/blasted_lands.cpp

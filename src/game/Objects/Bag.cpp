@@ -219,3 +219,41 @@ Item* Bag::GetItemByPos(uint8 slot) const
 
     return NULL;
 }
+
+uint32 Bag::RemoveItems(uint32 itemId, uint32 ReqCount)
+{
+    uint32 LastCount = ReqCount;
+    for (uint32 i = 0; i < GetBagSize(); ++i)
+    {
+        Item* pItem = m_bagslot[i];
+        if (pItem != nullptr && pItem->GetEntry() == itemId)
+        {
+            if (pItem->GetCount() > LastCount)
+            {
+                pItem->SetCount(pItem->GetCount() - LastCount);
+                LastCount = 0;
+                if (Player* player = GetOwner())
+                {
+                    if (player->IsInWorld())
+                    {
+                        pItem->SendCreateUpdateToPlayer(player);
+                    }
+                    pItem->SetState(ITEM_CHANGED, player);
+                }
+            }
+            else
+            {
+                if (Player* player = GetOwner())
+                {
+                    LastCount -= pItem->GetCount();
+                    player->RemoveItem(pItem->GetBagSlot(), pItem->GetSlot(), true);
+                    player->InterruptSpellsWithCastItem(pItem);
+                    pItem->RemoveFromUpdateQueueOf(player);
+                }
+            }
+        }
+    }
+
+    return ReqCount - LastCount;
+}
+

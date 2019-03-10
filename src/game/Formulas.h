@@ -221,10 +221,13 @@ namespace MaNGOS
                 levelCoeff = 0.3434;
             else if ((killerLevel <= 29) && (killerLevel >= 20))
                 levelCoeff = 0.2070;
-            else if (killerLevel <= 19)
-                levelCoeff = 0.1212;
-            else
-                levelCoeff = 0.1212; // Not sure
+            // Blizzlike:
+            //else if (killerLevel <= 19)
+            //    levelCoeff = 0.1212;
+            //else
+            //    levelCoeff = 0.1212; // Not sure
+            // Turtle WoW:
+            else levelCoeff = 0.1212; 
 
             float expFactor = 188.3f;
 
@@ -233,7 +236,14 @@ namespace MaNGOS
             if (sWorld.GetWowPatch() < WOW_PATCH_108 && sWorld.getConfig(CONFIG_BOOL_ACCURATE_PVP_REWARDS))
                 expFactor = 157.4f;
 
-            return levelCoeff * sameVictimPenalty * (expFactor * exp(0.05331 * victimRank)) * diffLevelPenalty / groupSize;
+            // Blizzlike:
+            // return levelCoeff * sameVictimPenalty * (expFactor * exp(0.05331 * victimRank)) * diffLevelPenalty / groupSize;
+            // Turtle WoW. Adding x5 honor inside Gurubashi's Arena Battle Ring:
+            int mult_factor = 1;
+
+            // TODO: !!! if GetArea() == 2177 mult_factor = 5; !!!
+
+            return static_cast<float>(ceil(levelCoeff * sameVictimPenalty * (expFactor * exp(0.05331 * victimRank)) * diffLevelPenalty / groupSize) * mult_factor);
         }
     }
 }

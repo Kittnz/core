@@ -4383,7 +4383,7 @@ void Player::SetHover(bool enable)
 void Player::BuildPlayerRepop()
 {
     // Waiting to Resurrect (probably redundant cast, yet to check thoroughly)
-    if (InBattleGround())
+    if (InBattleGround() || InGurubashiArena(true))
         CastSpell(this, 2584, true);
 
     //this is spirit release confirm?
@@ -4555,7 +4555,7 @@ Corpse* Player::CreateCorpse()
         flags |= CORPSE_FLAG_HIDE_HELM;
     if (HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_HIDE_CLOAK))
         flags |= CORPSE_FLAG_HIDE_CLOAK;
-    if (InBattleGround())
+    if (InBattleGround() /* || InGurubashiArena(true)*/)    // Turtle WoW Arena Tournament. We have decided to not keep them lootable.
         flags |= CORPSE_FLAG_LOOTABLE;                      // to be able to remove insignia
     corpse->SetUInt32Value(CORPSE_FIELD_FLAGS, flags);
 
@@ -4822,7 +4822,13 @@ void Player::RepopAtGraveyard()
             GetTransport()->RemovePassenger(this);
             ResurrectPlayer(1.0f);
         }
-        TeleportTo(ClosestGrave->map_id, ClosestGrave->x, ClosestGrave->y, ClosestGrave->z, GetOrientation(), 0, std::move(recover));
+        // Two additional ressurection points on STV Arena
+        if (InGurubashiArena(true) && GetTeam() == ALLIANCE)
+            TeleportTo(0, -13209.500977f, 221.450607f, 33.236431f, 2.956571f);
+        else if (InGurubashiArena(true) && GetTeam() == HORDE)
+                 TeleportTo(0, -13243.445312f, 239.786072f, 33.232769f, 5.375592f);
+        else
+            TeleportTo(ClosestGrave->map_id, ClosestGrave->x, ClosestGrave->y, ClosestGrave->z, GetOrientation(), 0, std::move(recover));        
     }
 
     // Fix invisible spirit healer if you die close to graveyard.
@@ -7651,6 +7657,21 @@ void Player::SendLoot(ObjectGuid guid, LootType loot_type, Player* pVictim)
                             LootStoreItem storeitem = LootStoreItem(17422, 75, 0, 0, 0, 20);
                             bones->loot.AddItem(storeitem);
                         }
+                    }
+                    else if (InGurubashiArena(false)) // For Turtle WoW Arena Tournament and daily PvP battles in STV (Gurubashi Arena)
+                    {
+                        uint8 team = pVictim->GetTeam();
+
+                        uint32 loot_fin = 0;
+
+                        int a_item[5] = { 18839, 18841, 4541, 19222, 15723 };
+
+                        int rand_item_index = rand() % 5;
+
+                        loot_fin = static_cast<uint32>(a_item[rand_item_index]);
+
+                        LootStoreItem storeitem = LootStoreItem(loot_fin, 100, 0, 0, 0, 1); // Random
+                        bones->loot.AddItem(storeitem);
                     }
                 }
             }
@@ -12952,7 +12973,10 @@ void Player::RewardQuest(Quest const *pQuest, uint32 reward, WorldObject* questG
     q_status.m_reward_choice = pQuest->RewChoiceItemId[reward];
 
     // Not give XP in case already completed once repeatable quest
-    uint32 XP = q_status.m_rewarded ? 0 : uint32(pQuest->XPValue(this) * sWorld.getConfig(CONFIG_FLOAT_RATE_XP_QUEST));
+    // Blizzlike:
+    // uint32 XP = q_status.m_rewarded ? 0 : uint32(pQuest->XPValue(this) * sWorld.getConfig(CONFIG_FLOAT_RATE_XP_QUEST));
+    // Quest check for Turtle WoW Arena Tournament:
+    uint32 XP = q_status.m_rewarded && (pQuest->GetQuestId() > 100026 || pQuest->GetQuestId() < 100022) ? 0 : uint32(pQuest->XPValue(this) *sWorld.getConfig(CONFIG_FLOAT_RATE_XP_QUEST));
 
     if (getLevel() < sWorld.getConfig(CONFIG_UINT32_MAX_PLAYER_LEVEL))
         GiveXP(XP , NULL);
@@ -19241,6 +19265,15 @@ void Player::RewardSinglePlayerAtKill(Unit* pVictim)
         if (pVictim->GetTypeId() == TYPEID_UNIT)
             KilledMonster(((Creature*)pVictim)->GetCreatureInfo(), pVictim->GetObjectGuid());
     }
+    else
+    {
+        if (InGurubashiArena(false) && IsHonorOrXPTarget(pVictim))
+        {
+            ChatHandler(this).PSendSysMessage("|cffff8040Arena Spectator throws you a coin.|r");
+            PlayDirectSound(1204, this); // Play sound of the coin
+            AddItem(50015, 1);
+        }
+    }
 }
 
 void Player::RewardPlayerAndGroupAtEvent(uint32 creature_id, WorldObject* pRewardSource)
@@ -21252,6 +21285,8 @@ bool Player::IsReturning()
 
     if (time_diff > 1209600)
         return true;
+
+    return false;
 }
 
 // In an effort to assist new players, the Turtle WoW team has decided to implement a new feature called "The Beginner’s Guild". 
@@ -21286,4 +21321,63 @@ void Player::JoinBeginnersGuild()
 {
     Guild* BeginnersGuild = (GetTeam() == ALLIANCE) ? sGuildMgr.GetGuildById(sWorld.getConfig(CONFIG_INT32_BEGINNERS_GUILD_ALLIANCE)) : sGuildMgr.GetGuildById(sWorld.getConfig(CONFIG_INT32_BEGINNERS_GUILD_HORDE));
     BeginnersGuild->AddMember(GetObjectGuid(), BeginnersGuild->GetLowestRank());
+}
+
+bool Player::InGurubashiArena(bool checkOutsideArea) const 
+{
+    return GetAreaId() == 2177 /* Gurubashi Arena Battle Ring*/ || (checkOutsideArea && GetAreaId() == 1741 /* Gurubashi Arena*/);
+}
+
+bool Player::RemoveItemCurrency(uint32 itemId, uint32 count)
+{
+    uint32 LastCount = count;
+
+    auto RemoveCompletelyOrPartialFunc = [&LastCount](Player* player, Item* pItem)
+    {
+        if (pItem->GetCount() > LastCount)
+        {
+            pItem->SetCount(pItem->GetCount() - LastCount);
+            LastCount = 0;
+            if (player->IsInWorld())
+            {
+                pItem->SendCreateUpdateToPlayer(player);
+            }
+            pItem->SetState(ITEM_CHANGED, player);
+        }
+        else
+        {
+            LastCount -= pItem->GetCount();
+            player->RemoveItem(pItem->GetBagSlot(), pItem->GetSlot(), true);
+        }
+    };
+
+    for (int i = EQUIPMENT_SLOT_START; i < INVENTORY_SLOT_ITEM_END; ++i)
+    {
+        Item *pItem = GetItemByPos(INVENTORY_SLOT_BAG_0, i);
+        if (pItem != nullptr && pItem->GetEntry() == itemId)
+        {
+            RemoveCompletelyOrPartialFunc(this, pItem);
+            if (LastCount == 0) return true;
+        }
+    }
+    for (int i = KEYRING_SLOT_START; i < KEYRING_SLOT_END; ++i)
+    {
+        Item *pItem = GetItemByPos(INVENTORY_SLOT_BAG_0, i);
+        if (pItem != nullptr && pItem->GetEntry() == itemId)
+        {
+            RemoveCompletelyOrPartialFunc(this, pItem);
+            if (LastCount == 0) return true;
+        }
+    }
+    for (int i = INVENTORY_SLOT_BAG_START; i < INVENTORY_SLOT_BAG_END; ++i)
+    {
+        Bag* pBag = (Bag*)GetItemByPos(INVENTORY_SLOT_BAG_0, i);
+        if (pBag != nullptr)
+        {
+            LastCount -= pBag->RemoveItems(itemId, LastCount);
+            if (LastCount == 0) return true;
+        }
+    }
+
+    return false;
 }

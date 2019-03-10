@@ -1057,6 +1057,8 @@ class MANGOS_DLL_SPEC Player final: public Unit
             return StoreItem(dest, pItem, update);
         }
         void RemoveItem(uint8 bag, uint8 slot, bool update);
+        // Turtle WoW, we use items as currency:
+        bool RemoveItemCurrency(uint32 itemId, uint32 count);
         void MoveItemFromInventory(uint8 bag, uint8 slot, bool update);
         // in trade, auction, guild bank, mail....
         void MoveItemToInventory(ItemPosCountVec const& dest, Item* pItem, bool update, bool in_characterInventoryDB = false);
@@ -1325,6 +1327,8 @@ class MANGOS_DLL_SPEC Player final: public Unit
         ///- Turtle WoW custom feature to auto invite players into a guild, helping them easily find players who are also just starting out fresh.
         void CheckIfShouldBeInBeginnersGuild(uint32 level);
         void JoinBeginnersGuild();
+        ///- Turtle WoW custom feature: Bloody Arena Tournament
+        bool InGurubashiArena(bool checkOutsideArea) const;
   
         /*********************************************************/
         /***                   SAVE SYSTEM                     ***/
