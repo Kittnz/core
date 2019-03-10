@@ -17,6 +17,7 @@ void AddSC_zero_scripts();
 void AddSC_ubrs_trash();
 void AddSC_shop();
 void AddSC_arena_tournament();
+void AddSC_lost_turtles();
 //void AddSC_gmisland();
 //void AddSC_boss_arena_hardog(); // EVENT de TORKIN
 
@@ -284,6 +285,7 @@ void AddScripts()
     AddSC_ubrs_trash();
     AddSC_shop();
     AddSC_arena_tournament();
+    AddSC_lost_turtles();
     //AddSC_gmisland();
 
     // Event
