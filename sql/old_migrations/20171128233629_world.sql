@@ -2005,7 +2005,6 @@ UPDATE quest_template SET MinLevel = 25, QuestLevel = 60 WHERE entry = 1658;
 UPDATE quest_template SET MinLevel = 20, QuestLevel = 20 WHERE entry = 2480;
 UPDATE quest_template SET MinLevel = 24, QuestLevel = 24 WHERE entry = 6681;
 UPDATE quest_template SET MinLevel = 24, QuestLevel = 60 WHERE entry = 6701;
-UPDATE quest_template SET MinLevel = 60, QuestLevel = 60 WHERE entry = 6701;
 UPDATE quest_template SET MinLevel = 50, QuestLevel = 60 WHERE entry = 8249;
 UPDATE quest_template SET MinLevel = 25, QuestLevel = 60 WHERE entry = 8373;
 UPDATE quest_template SET MinLevel = 50, QuestLevel = 50 WHERE entry = 8411;
