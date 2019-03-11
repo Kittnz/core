@@ -49,7 +49,6 @@ bool ChatHandler::HandleNextModelCommand(char*)
 
     target->SetDisplayId(display_id);
     PSendSysMessage("Current DisplayID: %u", m_session->GetPlayer()->GetDisplayId());
-
     return true;
 }
 
@@ -64,7 +63,6 @@ bool ChatHandler::HandlePrevModelCommand(char*)
 
     target->SetDisplayId(display_id);
     PSendSysMessage("Current DisplayID: %u", m_session->GetPlayer()->GetDisplayId());
-
     return true;
 } 
 
@@ -95,7 +93,6 @@ bool ChatHandler::HandleSetCityRankCommand(char* /*args*/)
 
     target->SetByteValue(PLAYER_BYTES_3, 2, (uint32)city_rank);
     PSendSysMessage("Attempting to assign a new rank: %u", city_rank);
-
     return true;
 }
 
