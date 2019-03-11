@@ -30,3 +30,9 @@ delete from item_template where entry = 50015;
 
 insert into item_template (entry, class, subclass, name, description, display_id, quality, stackable, bonding) values
 (50015, 0, 15, 'Bloody Coin', 'Local currency used in some bloody events.', 32277, 1, 200, 1);
+
+-- [Portable Meeting Stone]
+
+DELETE FROM `item_template` WHERE `entry` = 50016;
+INSERT INTO `item_template` (`entry`, `name`, `description`, `display_id`, `quality`, `spellid_1`, `spellcooldown_1`, `script_name`) 
+VALUES ('50016', 'Portable Meeting Stone', 'Right click to meet new friends.', '33543', '1', '31726', '3600000', 'portable_meeting_stone');
