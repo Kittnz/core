@@ -1,3 +1,4 @@
+#include <Log.h>
 #include "RateProfile.h"
 #include "SystemConfig.h"
 
