@@ -20,26 +20,30 @@
  */
 
 #include "Config.h"
-#include <cctype>
-#include "Util.h"
 
 #include "Policies/SingletonImp.h"
 
-Config sConfig;
+INSTANTIATE_SINGLETON_1(Config);
 
 // Defined here as it must not be exposed to end-users.
-bool Config::GetValueHelper(const char* name, std::string& result)
+bool Config::GetValueHelper(const char* name, ACE_TString &result)
 {
-    std::lock_guard<std::mutex> guard(m_configLock);
+    GuardType guard(m_configLock);
 
-    // enter root section and retrive value
-    StringKeyValue& RootSection = Registry[GlobalSectionName];
-    std::string strName(name);
-    auto valueIter = RootSection.find(strName);
-    if (valueIter != RootSection.end())
+    if (!mConf)
+        return false;
+
+    ACE_TString section_name;
+    ACE_Configuration_Section_Key section_key;
+    const ACE_Configuration_Section_Key &root_key = mConf->root_section();
+
+    int i = 0;
+    while (mConf->enumerate_sections(root_key, i, section_name) == 0)
     {
-        result = valueIter->second;
-        return true;
+        mConf->open_section(root_key, section_name.c_str(), 0, section_key);
+        if (mConf->get_string_value(section_key, name, result) == 0)
+            return true;
+        ++i;
     }
 
     return false;
@@ -47,56 +51,81 @@ bool Config::GetValueHelper(const char* name, std::string& result)
 
 std::string Config::GetStringDefaultInSection(const char* name, const char* section, const char* def)
 {
-    std::lock_guard<std::mutex> guard(m_configLock);
+    GuardType guard(m_configLock);
 
-    // check for section existance
-    std::string strSection(section);
-    auto sectionIter = Registry.find(strSection);
-    if (sectionIter != Registry.end())
+    if (!mConf)
+        return def;
+
+    const ACE_Configuration_Section_Key &root_key = mConf->root_section();
+    ACE_Configuration_Section_Key primary_section_key;
+    int openErrCode = mConf->open_section(root_key, section, 0, primary_section_key);
+    if (openErrCode != 0)
     {
-        std::string strName(name);
-        // search in that section requested key
-        auto KeyValueIter = sectionIter->second.find(strName);
-        if (KeyValueIter != sectionIter->second.end())
-        {
-            return KeyValueIter->second;
-        }
+        return def;
     }
 
-    return std::string(def);
+    ACE_TString section_value;
+    openErrCode = mConf->get_string_value(primary_section_key, name, section_value);
+    if (openErrCode != 0) return def;
+
+    return section_value.c_str();
 }
 
 void Config::GetRootSections(std::vector<std::string>& OutSectionList)
 {
-    for (auto& pair : Registry)
+    const ACE_Configuration_Section_Key &RootKey = mConf->root_section();
+
+    ACE_TString section_name;
+    int i = 0;
+    while (mConf->enumerate_sections(RootKey, i, section_name) == 0)
     {
-        if (pair.first != GlobalSectionName)
+        OutSectionList.emplace_back(section_name.c_str());
+        ++i;
+    }
+}
+
+void Config::GetSections(const char* SectionName, std::vector<std::string>& OutSectionList)
+{
+    const ACE_Configuration_Section_Key &RootKey = mConf->root_section();
+    ACE_Configuration_Section_Key BaseSectionKey;
+    if (mConf->open_section(RootKey, SectionName, 0, BaseSectionKey) == 0)
+    {
+        ACE_TString section_name;
+        int i = 0;
+        while (mConf->enumerate_sections(BaseSectionKey, i, section_name) == 0)
         {
-            OutSectionList.push_back(pair.first);
+            OutSectionList.emplace_back(section_name.c_str());
+            ++i;
         }
     }
 }
 
 void Config::GetKeys(const char* SectionName, std::vector<std::string>& OutKeysList)
 {
-    std::lock_guard<std::mutex> guard(m_configLock);
-
-    std::string strSection(SectionName);
-    auto sectionIter = Registry.find(strSection);
-    if (sectionIter != Registry.end())
+    const ACE_Configuration_Section_Key &RootKey = mConf->root_section();
+    ACE_Configuration_Section_Key BaseSectionKey;
+    if (mConf->open_section(RootKey, SectionName, 0, BaseSectionKey) == 0)
     {
-        for (auto& pair : sectionIter->second)
+        ACE_TString key_name;
+        ACE_Configuration::VALUETYPE valueType;
+        int i = 0;
+        while (mConf->enumerate_values(BaseSectionKey, i, key_name, valueType) == 0)
         {
-            OutKeysList.push_back(pair.first);
+            OutKeysList.emplace_back(key_name.c_str());
+            ++i;
         }
     }
 }
 
 Config::Config()
-{}
+    : mConf(nullptr)
+{
+}
 
 Config::~Config()
-{}
+{
+    delete mConf;
+}
 
 bool Config::SetSource(const char *file)
 {
@@ -105,155 +134,32 @@ bool Config::SetSource(const char *file)
     return Reload();
 }
 
-//xr_string class
-template < typename FuncClearens>
-std::vector<std::string> SplitWithClearens(std::string& pStr, char splitCh, FuncClearens FnClearens)
-{
-    std::vector<std::string> Result;
-    std::string temp_str = pStr,
-        Str = pStr;
-
-    size_t SubStrBeginCursor = 0;
-    size_t Len = 0;
-
-    size_t StrCursor = 0;
-    for (; StrCursor < pStr.size(); ++StrCursor)
-    {
-        if (Str[StrCursor] == splitCh)
-        {
-            if ((StrCursor - SubStrBeginCursor) > 0)
-            {
-                Len = StrCursor - SubStrBeginCursor;
-                temp_str = Str.substr(SubStrBeginCursor, Len);
-                FnClearens(temp_str);
-                Result.push_back(temp_str);
-                SubStrBeginCursor = StrCursor + 1;
-            }
-            else
-            {
-                Result.emplace_back("");
-                SubStrBeginCursor = StrCursor + 1;
-            }
-        }
-    }
-
-    if (StrCursor > SubStrBeginCursor)
-    {
-        Len = StrCursor - SubStrBeginCursor;
-        temp_str = Str.substr(SubStrBeginCursor, Len);
-        FnClearens(temp_str);
-        Result.push_back(temp_str);
-    }
-
-    return Result;
-}
-
 bool Config::Reload()
 {
-    // rewrited using std and 'C' runtime functions
-    FILE* configFile = nullptr;
-    if (fopen_s(&configFile, mFilename.c_str(), "rb") != 0)
+    delete mConf;
+    mConf = new ACE_Configuration_Heap;
+
+    if (mConf->open() != -1)
     {
-        return false;
+        ACE_Ini_ImpExp config_importer(*mConf);
+        if (config_importer.import_config(mFilename.c_str()) != -1)
+            return true;
     }
 
-    fseek(configFile, 0, SEEK_END);
-    long fileSize = ftell(configFile);
-    fseek(configFile, 0, SEEK_SET);
-
-    std::string configData(fileSize + 1, ' ');
-
-    size_t readedChars = 0;
-    while (readedChars < fileSize)
-    {
-        size_t currentReadedChars = fread((void*)(configData.data() + readedChars), sizeof(char), fileSize - readedChars, configFile);
-        readedChars += currentReadedChars;
-    }
-
-    fclose(configFile); configFile = nullptr;
-
-    std::vector<std::string> Lines = SplitWithClearens(configData, '\n', [](std::string& line)
-    {
-        std::string clearedLine; clearedLine.reserve(line.size());
-        for (char ch : line)
-        {
-            if (std::iscntrl(ch)) continue;
-            clearedLine.push_back(ch);
-        }
-        line = clearedLine;
-    });
-
-
-    std::string CurrentSection = GlobalSectionName;
-
-    auto ClearWhitespacesLambda = [](std::string& line)
-    {
-        std::string Result; Result.reserve(line.size());
-        for (char ch : line)
-        {
-            if (std::isspace(ch)) continue;
-            Result.push_back(ch);
-        }
-        line = Result;
-    };
-
-    for (std::string& line : Lines)
-    {
-        if (line.empty())
-        {
-            CurrentSection = GlobalSectionName;
-            continue;
-        }
-        if (line[0] == '#') continue;
-        if (line[0] == '[')
-        {
-            ClearWhitespacesLambda(line);
-            CurrentSection = line.substr(1, line.size() - 2);
-            continue;
-        }
-        std::vector<std::string> KeyValues = SplitWithClearens(line, '=', [&ClearWhitespacesLambda](std::string& line)
-        {
-            //ClearWhitespacesLambda(line);
-        });
-
-        // clear whitespaces for key
-        ClearWhitespacesLambda(KeyValues[0]);
-        if (KeyValues.size() != 2 || KeyValues[0].empty()) continue;
-
-        // filter carefully the value (do not drop whitespaces in quotes)
-        std::string& strValue = KeyValues[1];
-        std::string clearedValue; clearedValue.reserve(strValue.size());
-        bool bQuoteStarted = false;
-        for (int i = 0; i < strValue.size(); ++i)
-        {
-            char ch = strValue[i];
-            if (ch == '"')
-            {
-                bQuoteStarted = !bQuoteStarted;
-                continue;
-            }
-            if (!bQuoteStarted)
-            {
-                if (std::isspace(ch)) continue;
-            }
-            clearedValue.push_back(ch);
-        }
-
-        Registry[CurrentSection][KeyValues[0]] = clearedValue;
-    }
-
-    return true;
+    delete mConf;
+    mConf = nullptr;
+    return false;
 }
 
 std::string Config::GetStringDefault(const char* name, const char* def)
 {
-    std::string val;
-    return GetValueHelper(name, val) ? val : def;
+    ACE_TString val;
+    return GetValueHelper(name, val) ? val.c_str() : def;
 }
 
 bool Config::GetBoolDefault(const char* name, bool def)
 {
-    std::string val;
+    ACE_TString val;
     if (!GetValueHelper(name, val))
         return def;
 
@@ -269,14 +175,14 @@ bool Config::GetBoolDefault(const char* name, bool def)
 
 int32 Config::GetIntDefault(const char* name, int32 def)
 {
-    std::string val;
+    ACE_TString val;
     return GetValueHelper(name, val) ? atoi(val.c_str()) : def;
 }
 
 
 float Config::GetFloatDefault(const char* name, float def)
 {
-    std::string val;
+    ACE_TString val;
     return GetValueHelper(name, val) ? (float)atof(val.c_str()) : def;
 }
 

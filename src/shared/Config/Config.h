@@ -19,17 +19,20 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#pragma once
+#ifndef CONFIG_H
+#define CONFIG_H
 
 #include "Common.h"
+#include <ace/Recursive_Thread_Mutex.h>
+#include <ace/Singleton.h>
 #include "Platform/Define.h"
-#include <mutex>
+#include "ace/Configuration_Import_Export.h"
 
-typedef std::map<std::string, std::string> StringKeyValue;
-typedef std::map<std::string, StringKeyValue> RegistryData;
+class ACE_Configuration_Heap;
 
 class MANGOS_DLL_SPEC Config
 {
+    friend class ACE_Singleton<Config, ACE_Recursive_Thread_Mutex>;
 public:
 
     Config();
@@ -44,25 +47,28 @@ public:
     float GetFloatDefault(const char* name, const float def);
 
     std::string GetFilename() const { return mFilename; }
-    bool GetValueHelper(const char* name, std::string& result);
+    bool GetValueHelper(const char* name, ACE_TString &result);
 
     // for a profile configs
     std::string GetStringDefaultInSection(const char* name, const char* section, const char* def);
     float GetFloatDefault(const char* name, const char* section, const float def);
     void GetRootSections(std::vector<std::string>& OutSectionList);
+    void GetSections(const char* SectionName, std::vector<std::string>& OutSectionList);
     void GetKeys(const char* SectionName, std::vector<std::string>& OutKeysList);
 
 private:
 
-    RegistryData Registry;
-
-    const std::string GlobalSectionName = "_";
-
     std::string mFilename;
+    ACE_Configuration_Heap *mConf;
 
-    std::mutex m_configLock;
+    typedef ACE_Thread_Mutex LockType;
+    typedef ACE_Guard<LockType> GuardType;
+
+    std::string _filename;
+    LockType m_configLock;
 };
 
-//#define sConfig Config::instance())
-extern Config sConfig;
+// Nostalrius : multithreading lock
+#define sConfig (*ACE_Singleton<Config, ACE_Recursive_Thread_Mutex>::instance())
 
+#endif
