@@ -1123,6 +1123,9 @@ void World::SetInitialWorldSettings()
     ///- Loading shop tables
     sObjectMgr.LoadShop();
 
+    ///- Loading custom pets
+    sObjectMgr.LoadCustomPetCreatureEntries();
+
     ///- Loads existing IDs in the database.
     sObjectMgr.LoadAllIdentifiers();
 

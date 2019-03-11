@@ -8419,3 +8419,9 @@ bool ChatHandler::HandleDebugOverflowCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleReloadCustomPetEntries(char *args)
+{
+    sObjectMgr.LoadCustomPetCreatureEntries();
+    return true;
+}
+

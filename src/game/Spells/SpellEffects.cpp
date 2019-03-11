@@ -5965,7 +5965,23 @@ void Spell::EffectSummonCritter(SpellEffectIndex eff_idx)
     if (!pet_entry)
         return;
 
-    CreatureInfo const* cInfo = sCreatureStorage.LookupEntry<CreatureInfo>(pet_entry);
+    CreatureInfo const* cInfo;
+    // Custom pet handling (see table 'custom_pet_entry_relation')
+    if (m_spellInfo->Id == 28505 && m_CastItem->GetEntry() != 22781) { // 22781 = Original item for spell 28505
+        uint32 creature_entry = sObjectMgr.GetCustomPetCreatureEntryFromItem(m_CastItem->GetEntry());
+        if (creature_entry) {
+            cInfo = sCreatureStorage.LookupEntry<CreatureInfo>(creature_entry);
+        }
+        else {
+            sLog.outErrorDb("Spell::DoSummonCritter: (custom pet) creature entry not found for item %u.",
+                            m_CastItem->GetEntry());
+            return;
+        }
+        // End of Custom pet handling
+    } else {
+        cInfo = sCreatureStorage.LookupEntry<CreatureInfo>(pet_entry);
+    }
+
     if (!cInfo)
     {
         sLog.outErrorDb("Spell::DoSummonCritter: creature entry %u not found for spell %u.", pet_entry, m_spellInfo->Id);
