@@ -20,6 +20,15 @@ bool ItemUse_portable_meeting_stone(Player* pPlayer, Item* pItem, const SpellCas
     return false;
 }
 
+bool ItemUse_highborne_soul_mirror(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+{
+    int male_models[10] = { 7874, 7010, 6630, 11669, 11671, 6994, 6779, 6549, 6546, 6385 };
+    int female_models[6] = { 7872, 7922, 11672, 6782, 6548, 6547 };
+    int modelid = rand() % 6; //TODO: More female models.
+    pPlayer->SetDisplayId((pPlayer->getGender() == GENDER_MALE) ? male_models[modelid] : female_models[modelid]);
+    return false;
+}
+
 void AddSC_item_scripts()
 {
     Script *newscript;
@@ -32,5 +41,10 @@ void AddSC_item_scripts()
     newscript = new Script;
     newscript->Name = "portable_meeting_stone";
     newscript->pItemUse = &ItemUse_portable_meeting_stone;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "highborne_soul_mirror";
+    newscript->pItemUse = &ItemUse_highborne_soul_mirror;
     newscript->RegisterSelf();
 }
