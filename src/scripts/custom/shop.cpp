@@ -138,7 +138,7 @@ bool GossipSelect_npc_shop(Player* pPlayer, Creature* pCreature, uint32 uiSender
 
                 if (shopentry->Item == 50010)
                 {
-                    // pPlayer->EnableHardcoreMode(); -- TODO: Hardcore Mode
+                    pPlayer->EnableHardcoreMode(); 
                 }
 
                 uint8 index = 1;

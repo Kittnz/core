@@ -2944,7 +2944,7 @@ float World::getRateConfig(RateConfig configId, Player* pPlayer)
     }
 
     // Turtle WoW custom feature (if players has item 50010 -> always apply hardcore profile)
-    if (pPlayer->IsAHardcorePlayer())
+    if (pPlayer->HardcoreMode())
     {
         return m_rateProfile.GetRateValueForHardcorePlayers(configId, bPlayerInDungeon);
     }

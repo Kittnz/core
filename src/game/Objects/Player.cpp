@@ -21289,12 +21289,14 @@ bool Player::IsReturning()
     return false;
 }
 
-// In an effort to assist new players, the Turtle WoW team has decided to implement a new feature called "The Beginner’s Guild". 
-// This new feature will auto invite players into a guild, helping them easily find players who are also just starting out fresh.
-// Once players reach level 15 they will be removed from the guild, and thrown back into the wild!
+// Turtle WoW custom features:
 
 void Player::CheckIfShouldBeInBeginnersGuild(uint32 level)
 {
+        // In an effort to assist new players, the Turtle WoW team has decided to implement a new feature called "The Beginner’s Guild". 
+        // This new feature will auto invite players into a guild, helping them easily find players who are also just starting out fresh.
+        // Once players reach level 15 they will be removed from the guild, and thrown back into the wild!
+
         uint32 GuildId = GetGuildId();
         uint32 BeginnersGuildId = 0;
 
@@ -21380,4 +21382,58 @@ bool Player::RemoveItemCurrency(uint32 itemId, uint32 count)
     }
 
     return false;
+}
+
+void Player::HardcoreMode(uint32 level)
+{
+    // Speak to Speedy and get an item that will reduce your Creature.Kill XP to x0.5 (hardcore mode).
+    // If player stays at 0.5, he/she will be able to receive special rewards evry 10 levels.
+
+    uint32 itemEntry = 0;
+    std::string subject = "";
+    std::string message = "";
+
+    switch (level)
+    {
+    case 20:
+        itemEntry = 50080;
+        subject = "Congratulations on level 20!";
+        message = "Your recent achievements on reaching level 20 at the hardcore setting have not gone unnoticed. To commend you for your dedication and enthusiasm of exploring Azeroth to its fullest, we bestow upon you this reward box filled with goodies!";
+        break;
+    case 30:
+        itemEntry = 50081;
+        subject = "Congratulations on level 30!";
+        message = "Your recent achievements on reaching level 30 at the hardcore setting have not gone unnoticed. To commend you for your dedication and enthusiasm of exploring Azeroth to its fullest, we bestow upon you this reward box filled with goodies!";
+        break;
+    case 40:
+        itemEntry = 50082;
+        subject = "Congratulations on level 40!";
+        message = "Your recent achievements on reaching level 40 at the hardcore setting have not gone unnoticed. To commend you for your dedication and enthusiasm of exploring Azeroth to its fullest, we bestow upon you this reward box filled with goodies!";
+        break;
+    case 50:
+        itemEntry = 50083;
+        subject = "Congratulations on level 50!";
+        message = "Your recent achievements on reaching level 50 at the hardcore setting have not gone unnoticed. To commend you for your dedication and enthusiasm of exploring Azeroth to its fullest, we bestow upon you this reward box filled with goodies!";
+        break;
+    case 60:
+        itemEntry = 50084;
+        subject = "Congratulations on level 60!";
+        message = "Your recent achievements on reaching level 60 at the hardcore setting have not gone unnoticed. To commend you for your dedication and enthusiasm of exploring Azeroth to its fullest, we bestow upon you this reward box filled with goodies!";
+        break;
+    default:
+        return;
+    }
+
+    Item* ToMailItem = Item::CreateItem(itemEntry, 1, this);
+    ToMailItem->SaveToDB();
+
+    MailDraft(subject, sObjectMgr.CreateItemText(message))
+        .AddItem(ToMailItem)
+        .SendMailTo(this, MailSender(MAIL_CREATURE, uint32(16547), MAIL_STATIONERY_DEFAULT), MAIL_CHECK_MASK_COPIED, 0, 30 * DAY);
+
+    if (level == 60 && GetSession()->GetSecurity() == SEC_PLAYER)
+    {
+        LoginDatabase.PExecute("UPDATE `shop_coins` SET `coins`=`coins`+250 WHERE `id`=%u", GetSession()->GetAccountId());
+        ChatHandler(this).PSendSysMessage("|cffF58CBASpeedy whispers: Impressive! Your recent achievements on reaching level 60 at the hardcore setting have not gone unnoticed. We've added additional 250 Turtle Tokes to your account balance!|r");
+    }                 
 }
