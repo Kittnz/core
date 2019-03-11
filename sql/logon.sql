@@ -54,6 +54,7 @@ CREATE TABLE IF NOT EXISTS `account` (
   `nostalrius_email` text,
   `nostalrius_reason` text,
   `geolock_pin` int(11) DEFAULT '0',
+  `forum_username` varchar(32) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `idx_username` (`username`),
   KEY `idx_gmlevel` (`gmlevel`)
