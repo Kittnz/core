@@ -19,6 +19,7 @@ void AddSC_shop();
 void AddSC_arena_tournament();
 void AddSC_lost_turtles();
 void AddSC_battlemaster();
+void AddSC_boss_avatar_of_pompa();
 //void AddSC_gmisland();
 //void AddSC_boss_arena_hardog(); // EVENT de TORKIN
 
@@ -288,6 +289,7 @@ void AddScripts()
     AddSC_arena_tournament();
     AddSC_lost_turtles();
     AddSC_battlemaster();
+    AddSC_boss_avatar_of_pompa();
     //AddSC_gmisland();
 
     // Event
