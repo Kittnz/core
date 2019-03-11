@@ -98,3 +98,21 @@ bool ChatHandler::HandleSetCityRankCommand(char* /*args*/)
 
     return true;
 }
+
+bool ChatHandler::HandleMountCommand(char*)
+{
+    Player *player = m_session->GetPlayer();
+    Creature *creature = GetSelectedCreature();
+    uint32 modelid;
+
+    if (!creature)
+    {
+        PSendSysMessage("No model ID specified. Target any creature with mounting points.");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    modelid = creature->GetUInt32Value(UNIT_FIELD_DISPLAYID);
+    player->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, modelid);
+    return true;
+}

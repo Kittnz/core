@@ -902,6 +902,7 @@ class MANGOS_DLL_SPEC ChatHandler
         bool HandleNextModelCommand(char* args);
         bool HandlePrevModelCommand(char* args);        
         bool HandleSetCityRankCommand(char* args);
+        bool HandleMountCommand(char* args);
 
         Player*   GetSelectedPlayer();
         Creature* GetSelectedCreature();
