@@ -29,6 +29,52 @@ bool ItemUse_highborne_soul_mirror(Player* pPlayer, Item* pItem, const SpellCast
     return false;
 }
 
+#define ALICE_GROW_LBOUNDARY 1.05f
+#define ALICE_GROW_RBOUNDARY 1.15f
+#define ALICE_BELITTLE_LBOUNDARY 0.85f
+#define ALICE_BELITTLE_RBOUNDARY 0.95f
+bool ItemUse_alice_wonderland_scale(Player* pPlayer, Item* pItem, const SpellCastTargets&) {
+    float scale;
+    if (pItem->GetEntry() == 30092) { // Strange Bottle
+        if (pPlayer->GetObjectScale() == ALICE_BELITTLE_LBOUNDARY) {
+            ChatHandler(pPlayer).PSendSysMessage("|cffff8040You can't be smaller!|r");
+            return true;
+        }
+        scale = frand(ALICE_BELITTLE_LBOUNDARY, pPlayer->GetObjectScale() == 1 ?
+                                                ALICE_BELITTLE_RBOUNDARY : pPlayer->GetObjectScale());
+    } else {
+        if (pPlayer->GetObjectScale() == ALICE_GROW_RBOUNDARY) {
+            ChatHandler(pPlayer).PSendSysMessage("|cffff8040You can't grow more!|r");
+            return true;
+        }
+        scale = frand(pPlayer->GetObjectScale() == 1 ?
+                      ALICE_GROW_LBOUNDARY : pPlayer->GetObjectScale(), ALICE_GROW_RBOUNDARY);
+    }
+    pPlayer->SetObjectScale(static_cast<float>(floor((scale * 100) + 0.5) / 100));
+    return false;
+}
+
+class DanceAfterTime : public BasicEvent {
+public:
+    DanceAfterTime(uint64 player_guid) : BasicEvent(), player_guid(player_guid) {}
+
+    bool Execute(uint64 e_time, uint32 p_time) override {
+        Player* player = ObjectAccessor::FindPlayer(player_guid);
+        if (player) {
+            player->HandleEmoteCommand(EMOTE_ONESHOT_DANCE);
+        }
+        return false;
+    }
+
+private:
+    uint64 player_guid;
+};
+
+bool ItemUse_summer_vestment(Player* pPlayer, Item* pItem, const SpellCastTargets&) {
+    pPlayer->m_Events.AddEvent(new DanceAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(1500));
+    return false;
+}
+
 void AddSC_item_scripts()
 {
     Script *newscript;
@@ -46,5 +92,15 @@ void AddSC_item_scripts()
     newscript = new Script;
     newscript->Name = "highborne_soul_mirror";
     newscript->pItemUse = &ItemUse_highborne_soul_mirror;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "item_alice_wonderland_scale";
+    newscript->pItemUse = &ItemUse_alice_wonderland_scale;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "item_summer_vestment";
+    newscript->pItemUse = &ItemUse_summer_vestment;
     newscript->RegisterSelf();
 }
