@@ -1,3 +1,6 @@
+#include "scriptPCH.h"
+#include <array>
+#include <Objects/Creature.h>
 
 // Turtle WoW 1st quest:
 
