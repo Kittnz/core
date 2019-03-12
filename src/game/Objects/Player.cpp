@@ -7463,7 +7463,7 @@ void Player::SendLoot(ObjectGuid guid, LootType loot_type, Player* pVictim)
                 return;
             }
             // Allowed to loot chest ?
-            if (GameObjectInfo const* goInfo = go->GetGOInfo())
+            /*if (GameObjectInfo const* goInfo = go->GetGOInfo())
                 if (goInfo->type == GAMEOBJECT_TYPE_CHEST && goInfo->chest.level > (getLevel() + 10))
                 {
                     std::stringstream oss;
@@ -7472,7 +7472,7 @@ void Player::SendLoot(ObjectGuid guid, LootType loot_type, Player* pVictim)
                     SendLootRelease(guid);
                     return;
                 }
-
+            */
             loot = &go->loot;
 
             // generate loot only if ready for open and spawned in world
