@@ -1,4 +1,3 @@
-
 -- ### Custom mangos_string entries must remain in 50000-51000 entry range.
 -- ### Custom npc_text and broadcast_text entries must remain in 90000-91000 entry range.
 
@@ -21,19 +20,19 @@ INSERT INTO `mangos_string` (`entry`, `content_default`) VALUES ('50011', 'Turtl
 
 -- 'delay' is in seconds:
 
-DELETE FROM `autobroadcast` WHERE `string_id` BETWEEN 50000 AND 50015;
+DELETE FROM `autobroadcast` WHERE `string_Id` BETWEEN 50000 AND 50015;
 
-INSERT INTO `autobroadcast` (`delay`, `string_id`) VALUES ('3600000', '50000');
-INSERT INTO `autobroadcast` (`delay`, `string_id`) VALUES ('3600000', '50001');
-INSERT INTO `autobroadcast` (`delay`, `string_id`) VALUES ('3600000', '50002');
-INSERT INTO `autobroadcast` (`delay`, `string_id`) VALUES ('3600000', '50003');
-INSERT INTO `autobroadcast` (`delay`, `string_id`) VALUES ('3600000', '50004');
-INSERT INTO `autobroadcast` (`delay`, `string_id`) VALUES ('3600000', '50005');
-INSERT INTO `autobroadcast` (`delay`, `string_id`) VALUES ('3600000', '50006');
-INSERT INTO `autobroadcast` (`delay`, `string_id`) VALUES ('3600000', '50007');
-INSERT INTO `autobroadcast` (`delay`, `string_id`) VALUES ('3600000', '50009');
-INSERT INTO `autobroadcast` (`delay`, `string_id`) VALUES ('3600000', '50010');
-INSERT INTO `autobroadcast` (`delay`, `string_id`) VALUES ('3600000', '50011');
+INSERT INTO `autobroadcast` (`string_Id`) VALUES ('50000');
+INSERT INTO `autobroadcast` (`string_Id`) VALUES ('50001');
+INSERT INTO `autobroadcast` (`string_Id`) VALUES ('50002');
+INSERT INTO `autobroadcast` (`string_Id`) VALUES ('50003');
+INSERT INTO `autobroadcast` (`string_Id`) VALUES ('50004');
+INSERT INTO `autobroadcast` (`string_Id`) VALUES ('50005');
+INSERT INTO `autobroadcast` (`string_Id`) VALUES ('50006');
+INSERT INTO `autobroadcast` (`string_Id`) VALUES ('50007');
+INSERT INTO `autobroadcast` (`string_Id`) VALUES ('50009');
+INSERT INTO `autobroadcast` (`string_Id`) VALUES ('50010');
+INSERT INTO `autobroadcast` (`string_Id`) VALUES ('50011');
 
 -- Turtle WoW custom battlemasters:
 	

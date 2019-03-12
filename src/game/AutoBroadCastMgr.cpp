@@ -10,7 +10,8 @@ INSTANTIATE_SINGLETON_1(AutoBroadCastMgr);
 
 AutoBroadCastMgr::AutoBroadCastMgr()
 {
-
+    _constInterval = sWorld.getConfig(CONFIG_UINT32_AUTOBROADCAST_INTERVAL);
+    _current = 0;
 }
 
 AutoBroadCastMgr::~AutoBroadCastMgr()
@@ -21,7 +22,7 @@ AutoBroadCastMgr::~AutoBroadCastMgr()
 void AutoBroadCastMgr::load()
 {
     entries.clear();
-    std::unique_ptr<QueryResult> result(WorldDatabase.Query("SELECT `delay`, `string_id` FROM `autobroadcast`"));
+    std::unique_ptr<QueryResult> result(WorldDatabase.Query("SELECT `string_id` FROM `autobroadcast`"));
 
     if (!result)
     {
@@ -37,15 +38,14 @@ void AutoBroadCastMgr::load()
     BarGoLink bar(result->GetRowCount());
 
     Field *fields;
+
     do
     {
         bar.step();
         AutoBroadCastEntry e;
         fields = result->Fetch();
 
-        e.delay = fields[0].GetUInt32();
-        e.stringId = fields[1].GetInt32();
-        e.lastAnnounce = time(nullptr);
+        e.stringId = fields[0].GetInt32();
 
         entries.push_back(e);
         ++count;
@@ -54,19 +54,19 @@ void AutoBroadCastMgr::load()
 
     sLog.outString();
     sLog.outString(">> Loaded %u AutoBroadCast messages", count);
-
 }
 
 void AutoBroadCastMgr::update(uint32 diff)
 {
-    time_t now = time(nullptr);
-    std::vector<AutoBroadCastEntry>::iterator iter;
-    for (iter = entries.begin(); iter != entries.end(); ++iter)
+    if (entries.empty())
+        return;
+
+    _current += diff;
+
+    if (_current >= _constInterval)
     {
-        if ((now - iter->lastAnnounce) > iter->delay)
-        {
-            sWorld.SendWorldText(iter->stringId);
-            iter->lastAnnounce = now;
-        }
+        AutoBroadCastEntry entry = SelectRandomContainerElement(entries);
+        sWorld.SendWorldText(entry.stringId);
+        _current = 0;
     }
 }

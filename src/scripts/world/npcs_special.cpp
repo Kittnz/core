@@ -3535,17 +3535,11 @@ struct npc_scripted_companionAI : public ScriptedAI
 {
     npc_scripted_companionAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
-        if (m_creature->isAlive() && m_creature->IsPet()) {
-            pCreature->GetMotionMaster()->MoveFollow(pCreature->GetCharmerOrOwnerPlayerOrPlayerItself(),
-                                                     PET_FOLLOW_DIST,
-                                                     PET_FOLLOW_ANGLE);
-        }
+        if (m_creature->isAlive() && m_creature->IsPet())
+            pCreature->GetMotionMaster()->MoveFollow(pCreature->GetCharmerOrOwnerPlayerOrPlayerItself(), PET_FOLLOW_DIST,PET_FOLLOW_ANGLE);
     }
 
-    void Reset()
-    {
-        // empty
-    }
+    void Reset() {}
 
     void ReceiveEmote(Player* pPlayer, uint32 uiEmote)
     {
@@ -3556,10 +3550,7 @@ struct npc_scripted_companionAI : public ScriptedAI
             m_creature->HandleEmoteCommand(EMOTE_ONESHOT_DANCE);
     }
 
-    void UpdateAI(const uint32 uiDiff)
-    {
-        // empty
-    }
+    void UpdateAI(const uint32 uiDiff) {}
 };
 
 CreatureAI* GetAI_npc_scripted_companion(Creature* pCreature)

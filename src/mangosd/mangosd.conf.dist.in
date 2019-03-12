@@ -2149,3 +2149,9 @@ BeginnersGuilds = 0
 BeginnersGuildHorde = 0
 BeginnersGuildAlliance = 0
 
+###################################################################################################################
+#    Server autobroadcast settings. Interval is set in miliseconds, default value: 1800000 = 30 min.
+###################################################################################################################
+
+AutoBroadcast.Timer = 1800000
+

@@ -8,16 +8,13 @@
 
 struct AutoBroadCastEntry
 {
-    uint32 delay;
     int32 stringId;
-
-    time_t lastAnnounce;
 };
 
 class AutoBroadCastMgr
 {
     public :
-        AutoBroadCastMgr();
+         AutoBroadCastMgr();
         ~AutoBroadCastMgr();
 
         void load();
@@ -25,6 +22,8 @@ class AutoBroadCastMgr
 
     protected:
         std::vector<AutoBroadCastEntry> entries;
+        time_t _constInterval;
+        time_t _current;
 };
 
 #define sAutoBroadCastMgr MaNGOS::Singleton<AutoBroadCastMgr>::Instance()
