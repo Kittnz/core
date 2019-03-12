@@ -254,3 +254,22 @@ bool ChatHandler::HandleRaceCommand(char* args)
     SetSentErrorMessage(true);
     return false;
 }
+
+bool ChatHandler::HandleGiveXPCommand(char* args)
+{
+    if (!*args)
+    {
+        PSendSysMessage("Syntax: .givexp value, where [value] is experience.", args);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    uint32 XP = (uint32)atoi(args);
+    Player *target = GetSelectedPlayer();
+
+    if (!target)
+        target = m_session->GetPlayer();
+
+    target->GiveXP(XP, target);
+    return true;
+}
