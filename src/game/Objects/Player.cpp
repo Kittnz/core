@@ -16866,7 +16866,7 @@ void Player::TextEmote(const std::string& text) const
 {
     WorldPacket data;
     ChatHandler::BuildChatPacket(data, CHAT_MSG_EMOTE, text.c_str(), LANG_UNIVERSAL, GetChatTag(), GetObjectGuid(), GetName());
-    SendMessageToSetInRange(&data, sWorld.getConfig(CONFIG_FLOAT_LISTEN_RANGE_TEXTEMOTE), true, !sWorld.getConfig(CONFIG_BOOL_ALLOW_TWO_SIDE_INTERACTION_CHAT));
+    SendMessageToSetInRange(&data, sWorld.getConfig(CONFIG_FLOAT_LISTEN_RANGE_TEXTEMOTE), true, !sWorld.getConfig(CONFIG_BOOL_ALLOW_TWO_SIDE_INTERACTION_CHAT) || !IsDiplomat());
 }
 
 void Player::PetSpellInitialize()
@@ -21328,6 +21328,10 @@ void Player::JoinBeginnersGuild()
 bool Player::InGurubashiArena(bool checkOutsideArea) const 
 {
     return GetAreaId() == 2177 /* Gurubashi Arena Battle Ring*/ || (checkOutsideArea && GetAreaId() == 1741 /* Gurubashi Arena*/);
+}
+
+bool Player::IsDiplomat() const {
+    return HasItemCount(30111, 1, false);
 }
 
 bool Player::RemoveItemCurrency(uint32 itemId, uint32 count)

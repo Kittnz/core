@@ -241,9 +241,11 @@ void WorldSession::HandleSendMailCallback(WorldSession::AsyncMailSendRequest* re
     }
 
     // check the receiver's Faction...
-    if (!sWorld.getConfig(CONFIG_BOOL_ALLOW_TWO_SIDE_INTERACTION_MAIL) && pl->GetTeam() != req->rcTeam && GetSecurity() == SEC_PLAYER)
+    if (!sWorld.getConfig(CONFIG_BOOL_ALLOW_TWO_SIDE_INTERACTION_MAIL) && !GetPlayer()->IsDiplomat() && pl->GetTeam() != req->rcTeam && GetSecurity() == SEC_PLAYER)
     {
         pl->SendMailResult(0, MAIL_SEND, MAIL_ERR_NOT_YOUR_TEAM);
+        ChatHandler(this).PSendSysMessage(
+                "|cffff8040You need to be a diplomat in order to send mails to the other faction.|r");
         return;
     }
 

@@ -177,7 +177,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
         else
         {
             // send in universal language in two side iteration allowed mode
-            if (sWorld.getConfig(CONFIG_BOOL_ALLOW_TWO_SIDE_INTERACTION_CHAT))
+            if (sWorld.getConfig(CONFIG_BOOL_ALLOW_TWO_SIDE_INTERACTION_CHAT) || (_player &&_player->IsDiplomat()))
                 lang = LANG_UNIVERSAL;
             else
             {
@@ -188,7 +188,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                     case CHAT_MSG_RAID_LEADER:
                     case CHAT_MSG_RAID_WARNING:
                         // allow two side chat at group channel if two side group allowed
-                        if (sWorld.getConfig(CONFIG_BOOL_ALLOW_TWO_SIDE_INTERACTION_GROUP))
+                        if (sWorld.getConfig(CONFIG_BOOL_ALLOW_TWO_SIDE_INTERACTION_GROUP) || (_player &&_player->IsDiplomat()))
                             lang = LANG_UNIVERSAL;
                         break;
                     case CHAT_MSG_GUILD:
@@ -434,9 +434,11 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 
             if (tSecurity == SEC_PLAYER && pSecurity == SEC_PLAYER)
             {
-                if (!sWorld.getConfig(CONFIG_BOOL_ALLOW_TWO_SIDE_INTERACTION_CHAT) && GetPlayer()->GetTeam() != player->GetTeam())
+                if (!sWorld.getConfig(CONFIG_BOOL_ALLOW_TWO_SIDE_INTERACTION_CHAT) && !GetPlayer()->IsDiplomat() && GetPlayer()->GetTeam() != player->GetTeam())
                 {
                     SendWrongFactionNotice();
+                    ChatHandler(this).PSendSysMessage(
+                            "|cffff8040You need to be a diplomat in order to talk with the other faction.|r");
                     return;
                 }
                 if (/*player->GetZoneId() != masterPlr->GetZoneId() && */masterPlr->getLevel() < sWorld.getConfig(CONFIG_UINT32_WHISP_DIFF_ZONE_MIN_LEVEL))
@@ -455,6 +457,13 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 
                 if (masterPlr->IsGameMaster() || allowSendWhisper)
                     masterPlr->Whisper(msg, lang, player);
+
+                if (player->GetTeam() != masterPlr->GetTeam()) {
+                    if (!toPlayer->IsDiplomat() && !player->IsGameMaster()) {
+                        ChatHandler(this).PSendSysMessage(
+                                "|cffff8040The other adventurer is not interested in diplomacy at this moment.|r");
+                    }
+                }
 
                 if (lang != LANG_ADDON)
                 {

@@ -1882,6 +1882,8 @@ class MANGOS_DLL_SPEC Player final: public Unit
         void SetTransport(Transport* t) override;
         void DismountCheck();
 
+        bool IsDiplomat() const;
+
         // knockback/jumping states
         bool IsLaunched() const { return launched; }
         void SetLaunched(bool apply) { launched = apply; }
