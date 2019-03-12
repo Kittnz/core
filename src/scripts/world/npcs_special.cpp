@@ -3531,6 +3531,42 @@ CreatureAI* GetAI_npc_oozeling_jubjub(Creature* pCreature)
     return new npc_oozeling_jubjubAI(pCreature);
 }
 
+struct npc_scripted_companionAI : public ScriptedAI
+{
+    npc_scripted_companionAI(Creature* pCreature) : ScriptedAI(pCreature)
+    {
+        if (m_creature->isAlive() && m_creature->IsPet()) {
+            pCreature->GetMotionMaster()->MoveFollow(pCreature->GetCharmerOrOwnerPlayerOrPlayerItself(),
+                                                     PET_FOLLOW_DIST,
+                                                     PET_FOLLOW_ANGLE);
+        }
+    }
+
+    void Reset()
+    {
+        // empty
+    }
+
+    void ReceiveEmote(Player* pPlayer, uint32 uiEmote)
+    {
+        if (!m_creature->isAlive() || !m_creature->IsPet())
+            return;
+
+        if (uiEmote == TEXTEMOTE_DANCE)
+            m_creature->HandleEmoteCommand(EMOTE_ONESHOT_DANCE);
+    }
+
+    void UpdateAI(const uint32 uiDiff)
+    {
+        // empty
+    }
+};
+
+CreatureAI* GetAI_npc_scripted_companion(Creature* pCreature)
+{
+    return new npc_scripted_companionAI(pCreature);
+}
+
 void AddSC_npcs_special()
 {
     Script *newscript;
@@ -3702,5 +3738,10 @@ void AddSC_npcs_special()
     newscript = new Script;
     newscript->Name = "npc_oozeling_jubjub";
     newscript->GetAI = &GetAI_npc_oozeling_jubjub;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_scripted_companion";
+    newscript->GetAI = &GetAI_npc_scripted_companion;
     newscript->RegisterSelf();
 }
