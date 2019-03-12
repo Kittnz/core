@@ -880,25 +880,6 @@ std::string GetCustomFlagName(customFlag flagId)
     }
 }
 
-bool ChatHandler::HandleCharacterChangeRaceCommand(char* args)
-{
-    if (Player* pPlayer = GetSelectedPlayer())
-    {
-        uint8 newRaceId = 0;
-
-        char* newRaceStr = strtok(args, " ");
-        if (newRaceStr)
-            newRaceId = uint8(atoi(newRaceStr));
-
-        if (pPlayer->ChangeRace(newRaceId))
-            return true;
-
-        PSendSysMessage("Cannot change race to %u", newRaceId);
-        return true;
-    }
-    return false;
-}
-
 bool ChatHandler::HandleCharacterCopySkinCommand(char* args)
 {
     if (Player* target = GetSelectedPlayer())

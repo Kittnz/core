@@ -20360,7 +20360,7 @@ void Player::SetControlledBy(Unit* pWho)
 #define CHANGERACE_LOG(format, ...) sLog.outString("[RaceChanger/Log] " format, ##__VA_ARGS__)
 #define CHANGERACE_ERR(format, ...) sLog.outError("[RaceChanger/Err] " format, ##__VA_ARGS__)
 
-bool Player::ChangeRace(uint8 newRace)
+bool Player::ChangeRace(uint8 newRace, uint8 newGender, uint32 playerbyte1, uint32 playerbyte2)
 {
     PlayerInfo const *info = sObjectMgr.GetPlayerInfo(newRace, getClass());
     if (!info)
@@ -20376,10 +20376,35 @@ bool Player::ChangeRace(uint8 newRace)
         return false;
     }
 
-    // Le chanegement de race en lui meme.
-    SetByteValue(UNIT_FIELD_BYTES_0, 0, newRace);
-    LearnDefaultSpells();
 
+    SetByteValue(UNIT_FIELD_BYTES_0, 0, newRace);
+
+    if (newGender != 255)
+    {
+        SetByteValue(UNIT_FIELD_BYTES_0, 2, newGender);
+        SetUInt16Value(PLAYER_BYTES_3, 0, uint16(newGender) | (GetDrunkValue() & 0xFFFE));
+    }
+
+    if (playerbyte1 != 0)
+    {
+        uint8 skin = playerbyte1 & 0x000000FF;
+        uint8 face = (playerbyte1 & 0x0000FF00) >> 8;
+        uint8 hairStyle = (playerbyte1 & 0x00FF0000) >> 16;
+        uint8 hairColor = (playerbyte1 & 0xFF000000) >> 24;
+
+        CHANGERACE_LOG("New outfit data: Skin: '%hhu', Face: '%hhu', Hair Style: '%hhu', Hair Color: '%hhu'", skin, face, hairStyle, hairColor);
+        SetUInt32Value(PLAYER_BYTES, playerbyte1);
+    }
+
+    if (playerbyte2 != 0)
+    {
+        uint8 facialHair = playerbyte2 & 0x000000FF;
+
+        CHANGERACE_LOG("New outfit data 2: Facial Hair: '%hhu'", facialHair);
+        SetByteValue(PLAYER_BYTES_2, 0, facialHair);
+    }
+
+    LearnDefaultSpells();
     SetFactionForRace(newRace);
 
     if (!ChangeReputationsForRace(oldRace, newRace))

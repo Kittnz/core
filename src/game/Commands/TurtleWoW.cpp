@@ -38,6 +38,9 @@
 #include "Formulas.h"
 #include "AsyncCommandHandlers.h"
 
+#define GNOMISH_PLASTIC_SURGERY_TOOLS_SKIN 50001
+#define GNOMISH_PLASTIC_SURGERY_TOOLS_RACE 50002
+
 bool ChatHandler::HandleNextModelCommand(char*)
 {
     uint16 display_id = m_session->GetPlayer()->GetDisplayId();
@@ -112,4 +115,142 @@ bool ChatHandler::HandleMountCommand(char*)
     modelid = creature->GetUInt32Value(UNIT_FIELD_DISPLAYID);
     player->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, modelid);
     return true;
+}
+
+bool ChatHandler::HandleSkinCommand(char* args)
+{
+
+    if (Player* target = m_session->GetPlayer())
+    {
+        if (!target->HasItemCount(GNOMISH_PLASTIC_SURGERY_TOOLS_SKIN))
+        {
+            PSendSysMessage("You must purchase [Gnomish Plastic Surgery Tools] first.");
+            SetSentErrorMessage(true);
+            return false;
+        }
+
+        uint8 curr_race = target->getRace();
+        std::string plName(args);
+        CharacterDatabase.escape_string(plName);
+
+        if (target->isInCombat() || target->InBattleGround() || target->HasSpellCooldown(20939) || (target->getDeathState() == CORPSE) || target->IsBeingTeleported())
+        {
+            PSendSysMessage("You can not change your appearance yet.");
+            SetSentErrorMessage(true);
+            return false;
+        }
+
+        QueryResult* result = CharacterDatabase.PQuery("SELECT race, playerBytes, playerBytes2 & 0xFF, gender FROM characters WHERE name='%s'", plName.c_str());
+
+        if (!result)
+        {
+            PSendSysMessage("You must specify the name of the character you want to look like.", args);
+            SetSentErrorMessage(true);
+            return false;
+        }
+
+        Field* fields = result->Fetch();
+        uint8 race = fields[0].GetUInt8();
+        uint32 bytes = fields[1].GetUInt32();
+        uint32 bytes2 = fields[2].GetUInt32();
+        uint8 gender = fields[3].GetUInt8();
+
+        if (race != curr_race)
+        {
+            PSendSysMessage("It should be a character of the same race.", args);
+            SetSentErrorMessage(true);
+            return false;
+        }
+        else
+        {
+            bytes2 |= (target->GetUInt32Value(PLAYER_BYTES_2) & 0xFFFFFF00);
+            target->SetUInt32Value(PLAYER_BYTES, bytes);
+            target->SetUInt32Value(PLAYER_BYTES_2, bytes2);
+            target->SetByteValue(UNIT_FIELD_BYTES_0, 2, gender);
+            SendSysMessage("Done! A second chance at life to look pretty. Please, restart your game client!");
+            target->DestroyItemCount(GNOMISH_PLASTIC_SURGERY_TOOLS_SKIN, 1, true, false, true);
+            target->SaveInventoryAndGoldToDB();
+            return true;
+        }
+    }
+
+    PSendSysMessage("Please, target yourself first.", args);
+    SetSentErrorMessage(true);
+    return false;
+}
+
+bool ChatHandler::HandleRaceCommand(char* args)
+{
+
+    if (Player* target = m_session->GetPlayer())
+    {
+        if (!target->HasItemCount(GNOMISH_PLASTIC_SURGERY_TOOLS_RACE))
+        {
+            PSendSysMessage("You must purchase [Gnomish Plastic Surgery Tools] first!");
+            SetSentErrorMessage(true);
+            return false;
+        }
+
+        uint8 curr_race = target->getRace();
+        uint8 curr_class = target->getClass();
+
+        const char* curr_class_name = GetClassName(curr_class, GetSessionDbcLocale());
+
+        std::string plName(args);
+        CharacterDatabase.escape_string(plName);
+
+        if (target->isInCombat() || target->InBattleGround() || target->HasSpellCooldown(20939) || (target->getDeathState() == CORPSE) || target->IsBeingTeleported())
+        {
+            PSendSysMessage("You can not change your race yet.");
+            SetSentErrorMessage(true);
+            return false;
+        }
+
+        QueryResult* result = CharacterDatabase.PQuery("SELECT race, class, playerBytes, playerBytes2 & 0xFF, gender FROM characters WHERE name='%s'", plName.c_str());
+        if (!result)
+        {
+            PSendSysMessage("We don't know this guy! You must specify the name of the character you want to look like.", args);
+            SetSentErrorMessage(true);
+            return false;
+        }
+
+        Field* fields = result->Fetch();
+        uint32 new_race = fields[0].GetUInt32();
+        uint8 class_ = fields[1].GetUInt8();
+        uint32 bytes = fields[2].GetUInt32();
+        uint32 bytes2 = fields[3].GetUInt32();
+        uint8 gender = fields[4].GetUInt8();
+
+        ChrRacesEntry const* curr_race_entry = sChrRacesStore.LookupEntry(curr_race);
+        ChrRacesEntry const* new_race_entry = sChrRacesStore.LookupEntry(new_race);
+
+        if (class_ != curr_class || curr_race_entry->TeamID != new_race_entry->TeamID)
+        {
+            PSendSysMessage("This character should be a part of your faction, and must be a %s.", curr_class_name);
+            SetSentErrorMessage(true);
+            return false;
+        }
+        else
+        {
+            bytes2 |= (target->GetUInt32Value(PLAYER_BYTES_2) & 0xFFFFFF00);
+
+            target->SetUInt32Value(PLAYER_BYTES, bytes);
+            target->SetUInt32Value(PLAYER_BYTES_2, bytes2);
+            target->SetByteValue(UNIT_FIELD_BYTES_0, 2, gender);
+
+            target->DestroyItemCount(GNOMISH_PLASTIC_SURGERY_TOOLS_RACE, 1, true, false, true);
+            target->SaveInventoryAndGoldToDB();
+
+            target->ChangeRace(new_race, gender, bytes, bytes2); // Player gets kicked from the server at this very moment.
+
+            sLog.outInfo("Player (GUID: %llu) \"%s\" changed race to %u", target->GetObjectGuid(), target->GetName(), new_race);
+            // PSendSysMessage("Done! Please, restart your game client!"); // Might be not visible tho.
+
+            return true;
+        }
+    }
+
+    PSendSysMessage("Please, target yourself first.", args);
+    SetSentErrorMessage(true);
+    return false;
 }

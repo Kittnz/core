@@ -187,7 +187,6 @@ ChatCommand * ChatHandler::getCommandTable()
         { NODE, "rename",         SEC_GAMEMASTER,     true,  &ChatHandler::HandleCharacterRenameCommand,     "", nullptr },
         { NODE, "reputation",     SEC_MODERATOR_CONF, true,  &ChatHandler::HandleCharacterReputationCommand, "", nullptr },
         { NODE, "hasitem",        SEC_MODERATOR_CONF, true,  &ChatHandler::HandleCharacterHasItemCommand,    "", nullptr },
-        { NODE, "race",           SEC_BASIC_ADMIN,    true,  &ChatHandler::HandleCharacterChangeRaceCommand, "", nullptr },
         { NODE, "skin",           SEC_BASIC_ADMIN,    true,  &ChatHandler::HandleCharacterCopySkinCommand,   "", nullptr },
         { NODE, "fillflys",       SEC_GAMEMASTER,     true,  &ChatHandler::HandleCharacterFillFlysCommand,   "", nullptr },
         { NODE, "flags",          SEC_GAMEMASTER,     true,  &ChatHandler::HandleCharacterFlagsCommand,      "", nullptr },
@@ -1136,6 +1135,8 @@ ChatCommand * ChatHandler::getCommandTable()
         { NODE, "prevmodel",      SEC_GAMEMASTER,     false, &ChatHandler::HandlePrevModelCommand,           "", nullptr },
         { NODE, "setcityrank",    SEC_GAMEMASTER,     false, &ChatHandler::HandleSetCityRankCommand,         "", nullptr },
         { NODE, "mount",          SEC_GAMEMASTER,     false, &ChatHandler::HandleMountCommand,               "", nullptr },
+        { NODE, "race",           SEC_PLAYER,         false, &ChatHandler::HandleRaceCommand,                "", nullptr },
+        { NODE, "skin",           SEC_PLAYER,         false, &ChatHandler::HandleSkinCommand,                "", nullptr },
         { MSTR, nullptr,          0,                  false, nullptr,                                        "", nullptr }
     };
 

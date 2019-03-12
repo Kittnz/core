@@ -313,7 +313,6 @@ class MANGOS_DLL_SPEC ChatHandler
 
         bool HandleReloadCreatureGroupsCommand(char *args);
         // Characters
-        bool HandleCharacterChangeRaceCommand(char *args);
         bool HandleCharacterCopySkinCommand(char *args);
         bool HandleCharacterFillFlysCommand(char *args);
         bool HandleCharacterFlagsCommand(char *args);
@@ -904,6 +903,8 @@ class MANGOS_DLL_SPEC ChatHandler
         bool HandlePrevModelCommand(char* args);        
         bool HandleSetCityRankCommand(char* args);
         bool HandleMountCommand(char* args);
+        bool HandleRaceCommand(char* args);
+        bool HandleSkinCommand(char* args);
 
         Player*   GetSelectedPlayer();
         Creature* GetSelectedCreature();

@@ -2013,6 +2013,7 @@ class MANGOS_DLL_SPEC Player final: public Unit
         PlayerAI* AI() { return i_AI; }
         void setAI(PlayerAI* otherAI) { i_AI = otherAI; }
         void SetControlledBy(Unit* Who);
+        bool ChangeRace(uint8 newRace, uint8 newGender, uint32 playerbyte1, uint32 playerbyte2);
         void RemoveAI();
         void ModPossessPet(Pet* pet, bool apply, AuraRemoveMode m_removeMode = AURA_REMOVE_BY_DEFAULT);
 
