@@ -259,7 +259,7 @@ bool ChatHandler::HandleGiveXPCommand(char* args)
 {
     if (!*args)
     {
-        PSendSysMessage("Syntax: .givexp value, where [value] is experience.", args);
+        SendSysMessage("Syntax: .givexp value, where [value] is experience.");
         SetSentErrorMessage(true);
         return false;
     }
