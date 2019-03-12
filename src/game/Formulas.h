@@ -194,7 +194,7 @@ namespace MaNGOS
 
     namespace Honor
     {
-        inline float GetHonorGain(uint8 killerLevel, uint8 victimLevel, uint32 victimRank, uint32 totalKills = 0, uint32 groupSize = 1)
+        inline float GetHonorGain(uint8 killerLevel, uint8 victimLevel, uint32 victimRank, uint32 totalKills = 0, uint32 groupSize = 1, bool inGurubashiArena = false)
         {
             // Penalty due to level diff
             float diffLevelPenalty = XP::BaseGainLevelFactor(killerLevel, victimLevel);
@@ -239,11 +239,7 @@ namespace MaNGOS
             // Blizzlike:
             // return levelCoeff * sameVictimPenalty * (expFactor * exp(0.05331 * victimRank)) * diffLevelPenalty / groupSize;
             // Turtle WoW. Adding x5 honor inside Gurubashi's Arena Battle Ring:
-            int mult_factor = 1;
-
-            // TODO: !!! if GetArea() == 2177 mult_factor = 5; !!!
-
-            return static_cast<float>(ceil(levelCoeff * sameVictimPenalty * (expFactor * exp(0.05331 * victimRank)) * diffLevelPenalty / groupSize) * mult_factor);
+            return static_cast<float>(ceil(levelCoeff * sameVictimPenalty * (expFactor * exp(0.05331 * victimRank)) * diffLevelPenalty / groupSize) * inGurubashiArena ? 5 : 1);
         }
     }
 }

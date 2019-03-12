@@ -956,7 +956,7 @@ float HonorMgr::HonorableKillPoints(Player* killer, Player* victim, uint32 group
     uint8 killerLevel = killer->getLevel();
     uint8 victimLevel = victim->getLevel();
         
-    return MaNGOS::Honor::GetHonorGain(killerLevel, victimLevel, victimRank, totalKills, groupSize);
+    return MaNGOS::Honor::GetHonorGain(killerLevel, victimLevel, victimRank, totalKills, groupSize, killer->InGurubashiArena(false));
 }
 
 void HonorMgr::SendPVPCredit(Unit* victim, float honor)
