@@ -21356,7 +21356,7 @@ bool Player::InGurubashiArena(bool checkOutsideArea) const
 }
 
 bool Player::IsDiplomat() const {
-    return HasItemCount(30111, 1, false);
+    return HasItemCount(50012, 1, false);
 }
 
 bool Player::RemoveItemCurrency(uint32 itemId, uint32 count)
