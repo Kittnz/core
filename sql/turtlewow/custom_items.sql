@@ -89,7 +89,7 @@ replace into item_template (entry, class, subclass, name, description, display_i
 -- 50016 [Portable Meeting Stone]:
 
 replace into item_template (entry, name, description, display_id, quality, spellid_1, spellcooldown_1, script_name, bonding) values
-('50016', 'Portable Meeting Stone', 'Right click to meet new friends.', '33543', '1', '31726', '3600000', 'portable_meeting_stone', '1');
+('50016', 'Portable Meeting Stone', 'Use it to meet new friends.', '33543', '1', '31726', '3600000', 'portable_meeting_stone', '1');
 
 -- 50017 [Highborne Soul Mirror]:
 
