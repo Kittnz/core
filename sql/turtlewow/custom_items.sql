@@ -104,7 +104,7 @@ replace into item_template (entry, name, display_id, quality, buy_count, invento
 -- 50019 [Moonkin Egg]:
 
 replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1, spellcooldown_1) values
-(50019, 15, 2, 'Moonkin Egg', 'Moonkin are blessed by Elune and spread nature\'s grace wherever they travel. The festive fowls are always in the mood for a dance.', 18050, 1, 1, 28505, 1500);
+(50019, 15, 2, 'Moonkin Egg', 'Moonkins are blessed by Elune and spread nature\'s grace wherever they travel. The festive fowls are always in the mood for a dance.', 18050, 1, 1, 28505, 1500);
 
 -- 50020 [Magic Muffin]:
 
