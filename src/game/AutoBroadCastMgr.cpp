@@ -1,5 +1,6 @@
 #include "Database/DatabaseEnv.h"
 #include "World.h"
+#include "Util.h"
 #include "Log.h"
 #include "ProgressBar.h"
 #include "Policies/SingletonImp.h"

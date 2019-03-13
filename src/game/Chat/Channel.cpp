@@ -665,7 +665,11 @@ void Channel::Say(ObjectGuid guid, const char *text, uint32 lang, bool skipCheck
     }
 
     static std::string crossFactionChannel = sConfig.GetStringDefault("CrossfactionChannel", "Diplomacy");
-    // send channel message
+    // Prevent player from talking in the Diplomacy Channel if they drop the Diplomatic Declaration
+    if (m_name == crossFactionChannel && pPlayer->ToPlayer() && !pPlayer->ToPlayer()->IsDiplomat() && !pPlayer->IsGameMaster()) {
+        return;
+    }
+    // Send channel message
     if (sWorld.getConfig(CONFIG_BOOL_ALLOW_TWO_SIDE_INTERACTION_CHANNEL) || m_name == crossFactionChannel)
         lang = LANG_UNIVERSAL;
 
