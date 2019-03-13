@@ -284,7 +284,12 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
         {
             PlayerPointer playerPointer(GetPlayerPointer());
             ASSERT(playerPointer);
-            if (ChannelMgr* cMgr = channelMgr(playerPointer->GetTeam()))
+            static std::string crossFactionChannel = sConfig.GetStringDefault("CrossfactionChannel", "Diplomacy");
+            ChannelMgr* cMgr = channelMgr(playerPointer->GetTeam());
+            if (channel == crossFactionChannel)
+                cMgr = channelMgr(ALLIANCE);
+
+            if (cMgr)
             {
                 if (Channel *chn = cMgr->GetChannel(channel, playerPointer, IsMaster()))
                 {
