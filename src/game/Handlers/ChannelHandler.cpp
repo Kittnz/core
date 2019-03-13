@@ -23,6 +23,8 @@
 #include "ChannelMgr.h"
 #include "Chat.h"
 #include "World.h"
+#include "Config/Config.h"
+
 
 void WorldSession::HandleJoinChannelOpcode(WorldPacket& recvPacket)
 {
@@ -38,7 +40,12 @@ void WorldSession::HandleJoinChannelOpcode(WorldPacket& recvPacket)
     recvPacket >> pass;
 
     PlayerPointer player = GetPlayerPointer();
-    if (ChannelMgr* cMgr = channelMgr(player->GetTeam()))
+    static std::string crossFactionChannel = sConfig.GetStringDefault("CrossfactionChannel", "Diplomacy");
+    ChannelMgr* cMgr = channelMgr(player->GetTeam());
+    if (channelname == crossFactionChannel)
+        cMgr = channelMgr(ALLIANCE);
+
+    if (cMgr)
     {
         if (Channel *chn = cMgr->GetJoinChannel(channelname, IsNode()))
             chn->Join(player->GetObjectGuid(), pass.c_str());

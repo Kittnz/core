@@ -25,6 +25,7 @@
 #include "SocialMgr.h"
 #include "MasterPlayer.h"
 #include "Chat.h"
+#include "Config/Config.h"
 
 Channel::Channel(const std::string& name)
     : m_announce(true), m_moderate(false), m_name(name), m_flags(0), m_channelId(0),
@@ -653,6 +654,7 @@ void Channel::Say(ObjectGuid guid, const char *text, uint32 lang, bool skipCheck
             return;
         }
 
+
         if (m_moderate && !m_players[guid].IsModerator() && sec < SEC_GAMEMASTER)
         {
             WorldPacket data;
@@ -662,8 +664,9 @@ void Channel::Say(ObjectGuid guid, const char *text, uint32 lang, bool skipCheck
         }
     }
 
+    static std::string crossFactionChannel = sConfig.GetStringDefault("CrossfactionChannel", "Diplomacy");
     // send channel message
-    if (sWorld.getConfig(CONFIG_BOOL_ALLOW_TWO_SIDE_INTERACTION_CHANNEL))
+    if (sWorld.getConfig(CONFIG_BOOL_ALLOW_TWO_SIDE_INTERACTION_CHANNEL) || m_name == crossFactionChannel)
         lang = LANG_UNIVERSAL;
 
     WorldPacket data;
