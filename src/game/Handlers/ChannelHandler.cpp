@@ -24,6 +24,7 @@
 #include "Chat.h"
 #include "World.h"
 #include "Config/Config.h"
+#include "Util.h"
 
 
 void WorldSession::HandleJoinChannelOpcode(WorldPacket& recvPacket)
@@ -42,7 +43,7 @@ void WorldSession::HandleJoinChannelOpcode(WorldPacket& recvPacket)
     PlayerPointer player = GetPlayerPointer();
     static std::string crossFactionChannel = sConfig.GetStringDefault("CrossfactionChannel", "Diplomacy");
     ChannelMgr* cMgr = channelMgr(player->GetTeam());
-    if (channelname == crossFactionChannel) {
+    if (iequals(channelname, crossFactionChannel)) {
         if (GetSecurity() == SEC_PLAYER && player->ToPlayer() && !player->ToPlayer()->IsDiplomat()) {
             ChatHandler(this).SendSysMessage("|cffff8040You are not a diplomat!|r");
             return;

@@ -286,7 +286,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
             ASSERT(playerPointer);
             static std::string crossFactionChannel = sConfig.GetStringDefault("CrossfactionChannel", "Diplomacy");
             ChannelMgr* cMgr = channelMgr(playerPointer->GetTeam());
-            if (channel == crossFactionChannel) {
+            if (iequals(channel, crossFactionChannel)) {
                 if (GetSecurity() == SEC_PLAYER && playerPointer->ToPlayer() && !playerPointer->ToPlayer()->IsDiplomat()) {
                     ChatHandler(this).SendSysMessage("|cffff8040You are not a diplomat!|r");
                     return;

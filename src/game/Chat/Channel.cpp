@@ -26,6 +26,7 @@
 #include "MasterPlayer.h"
 #include "Chat.h"
 #include "Config/Config.h"
+#include "Util.h"
 
 Channel::Channel(const std::string& name)
     : m_announce(true), m_moderate(false), m_name(name), m_flags(0), m_channelId(0),
@@ -666,7 +667,7 @@ void Channel::Say(ObjectGuid guid, const char *text, uint32 lang, bool skipCheck
 
     static std::string crossFactionChannel = sConfig.GetStringDefault("CrossfactionChannel", "Diplomacy");
     // Prevent player from talking in the Diplomacy Channel if they drop the Diplomatic Declaration
-    if (m_name == crossFactionChannel && pPlayer->ToPlayer() && !pPlayer->ToPlayer()->IsDiplomat() && !pPlayer->IsGameMaster()) {
+    if (iequals(m_name, crossFactionChannel) && pPlayer->ToPlayer() && !pPlayer->ToPlayer()->IsDiplomat() && !pPlayer->IsGameMaster()) {
         return;
     }
     // Send channel message

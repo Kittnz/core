@@ -84,7 +84,7 @@ replace into item_template (entry, class, subclass, name, description, display_i
 -- 50015 [Bloody Coin]:
 
 replace into item_template (entry, class, subclass, name, description, display_id, quality, stackable, bonding) values
-(50015, 0, 15, 'Bloody Coin', 'Local currency used in some bloody events.', 32277, 1, 200, 1);
+(50015, 15, 0, 'Bloody Coin', 'Local currency used in some bloody events.', 32277, 1, 200, 1);
 
 -- 50016 [Portable Meeting Stone]:
 
@@ -108,10 +108,10 @@ replace into item_template (entry, class, subclass, name, description, display_i
 
 -- 50020 [Magic Muffin]:
 
-replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1, spellcooldown_1, buy_count, sell_price, container_slots, script_name) values
-(50020, 0, 5, 'Magic Muffin', 'Be careful, if you grow, you may not fit in your clothes.', 6343, 1, 1, 8213, 1000, 150, 35, 20, 'item_alice_wonderland_scale');
+replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1, spellcooldown_1, buy_count, sell_price, script_name) values
+(50020, 0, 5, 'Magic Muffin', 'Be careful, if you grow, you may not fit in your clothes.', 6343, 1, 1, 8213, 1000, 150, 35, 'item_alice_wonderland_scale');
 
 -- 50021 [Strange Bottle]:
 
-replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1, spellcooldown_1, buy_count, sell_price, container_slots, script_name) values
-(50021, 0, 5, 'Strange Bottle', 'You will feel a bit small...', 2357, 1, 1, 16589, 1000, 150, 35, 20, 'item_alice_wonderland_scale');
+replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1, spellcooldown_1, buy_count, sell_price, script_name) values
+(50021, 0, 5, 'Strange Bottle', 'You will feel a bit small...', 2357, 1, 1, 16589, 1000, 150, 35, 'item_alice_wonderland_scale');
