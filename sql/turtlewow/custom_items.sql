@@ -24,8 +24,40 @@
 -- 50019 [Moonkin Egg]
 -- 50020 [Magic Muffin]
 -- 50021 [Strange Bottle]
-
--- TODO: Hardcore rewards, dressing boses, check if there're real replacements of some of the items which we had: like Hippogryph Hatchling actually is existing in vmangosd DB.
+-- 50022 [Dressing Box: Midsummer Priestess]
+-- 50023 [Dressing Box: Demon Hunter]
+-- 50024 [Dressing Box: Invisible Suit]
+-- 50025 [Dressing Box: Sally Whitemane]
+-- 50026 [Invisible Pants]
+-- 50027 [Invisible Shirt]
+-- 50028 [Loramus Thalipedes' Blindfold]
+-- 50029 [Cursed Vision of Sargeras]
+-- 50030 [Demon Hunter Right Glaive]
+-- 50031 [Demon Hunter Left Glaive]
+-- 50032 [Demon Hunter Sandals]
+-- 50033 [Demon Hunter Kilt]
+-- 50034 [Demon Hunter Harness]
+-- 50035 [Demon Hunter Bracers]
+-- 50036 [High Inquisitor's Chapeau]
+-- 50037 [High Inquisitor's Chest]
+-- 50038 [High Inquisitor's Tabard]
+-- 50039 [High Inquisitor's Boots]
+-- 50040 [High Inquisitor's Shoulders]
+-- 50041 [High Inquisitor's Pants]
+-- 50042 [High Inquisitor's Gloves]
+-- 50043 [High Inquisitor's Staff]
+-- 50044 [Crown of the Fire Festival]
+-- 50045 [Mantle of the Fire Festival]
+-- 50046 [Vestment of Summer]
+-- 50047 [Sandals of Summer]
+-- 50048 [Right Juggling Torch]
+-- 50049 [Left Juggling Torch]
+-- 50050 [Turtle WoW Box (lvl 10)]
+-- 50051 [Turtle WoW Box (lvl 20)]
+-- 50052 [Turtle WoW Box (lvl 30)]
+-- 50053 [Turtle WoW Box (lvl 40)]
+-- 50054 [Turtle WoW Box (lvl 50)]
+-- 50055 [Turtle WoW Box (lvl 60)]
 
 -- 50000 [Character Name Change]:
 
@@ -45,10 +77,11 @@ replace into item_template (entry, name, display_id, description, quality) value
 -- 50003 [Loremaster's Backpack]:
 
 replace into item_template (entry, class, name, display_id, quality, buy_count, buy_price, inventory_type, item_level, stackable, container_slots, bonding, material) values
-(50003, 1, 'Loremaster\'s Backpack', 6430, 1, 1, 320000, 18, 60, 1, 28, 1, 8),
+(50003, 1, 'Loremaster\'s Backpack', 6430, 1, 1, 320000, 18, 60, 1, 28, 1, 8);
 
 -- 50004 [Portable Black Hole]:
 
+replace into item_template (entry, class, name, display_id, quality, buy_count, buy_price, inventory_type, item_level, stackable, container_slots, bonding, material) values
 (50004, 1, 'Portable Black Hole', 19502, 2, 1, 320000, 18, 60, 1, 36, 1, 8);
 
 -- 50006 [Mini Krampus]:
@@ -89,12 +122,12 @@ replace into item_template (entry, class, subclass, name, description, display_i
 -- 50016 [Portable Meeting Stone]:
 
 replace into item_template (entry, name, description, display_id, quality, spellid_1, spellcooldown_1, script_name, bonding) values
-('50016', 'Portable Meeting Stone', 'Use it to meet new friends.', '33543', '1', '31726', '3600000', 'portable_meeting_stone', '1');
+(50016, 'Portable Meeting Stone', 'Use it to meet new friends.', '33543', '1', '31726', '3600000', 'portable_meeting_stone', '1');
 
 -- 50017 [Highborne Soul Mirror]:
 
 replace into item_template (entry, name, description, display_id, quality, spellid_1, spellcooldown_1, script_name) values
-('50017', 'Highborne Soul Mirror', 'Before the Great Sundering, the Highborne were known among the night elves for their arrogance, avarice and outlandish clothing. It was said that nothing was so pleasing to the gaze of the Highborne as themselves. These mirrors were created so that elven ladies could see their colorful garments in three full dimensions, yet the reflection often exaggerated the already depraved visage of the viewer.', '14007', '1', '31726', '3600000', 'highborne_soul_mirror');
+(50017, 'Highborne Soul Mirror', 'Before the Great Sundering, the Highborne were known among the night elves for their arrogance, avarice and outlandish clothing. It was said that nothing was so pleasing to the gaze of the Highborne as themselves. These mirrors were created so that elven ladies could see their colorful garments in three full dimensions, yet the reflection often exaggerated the already depraved visage of the viewer.', '14007', '1', '31726', '3600000', 'highborne_soul_mirror');
 
 -- 50018 [Loramus Thalipedes Blindfold]:
 
@@ -115,3 +148,109 @@ replace into item_template (entry, class, subclass, name, description, display_i
 
 replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1, spellcooldown_1, buy_count, sell_price, script_name) values
 (50021, 0, 5, 'Strange Bottle', 'You will feel a bit small...', 2357, 1, 1, 16589, 1000, 150, 35, 'item_alice_wonderland_scale');
+
+-- 50022 [Dressing Box: Midsummer Priestess]:
+
+replace into item_template (entry, class, name, display_id, quality, bonding, flags, description) values
+(50022, 15, 'Dressing Box: Midsummer Priestess', 35406, 1, 1, 4, 'Warm yourself and the others.'); 
+
+-- 50023 [Dressing Box: Demon Hunter]:
+
+replace into item_template (entry, class, name, display_id, quality, bonding, flags, description) values
+(50023, 15, 'Dressing Box: Demon Hunter', 35406, 1, 1, 4, 'The Demon Hunters’ apparent blindness belies their true powers of perception. They rely on magically augmented sight spectral sight to detect enemies, even those that hide behind obstacles.'); 
+
+-- 50024 [Dressing Box: Invisible Suit]:
+
+replace into item_template (entry, class, name, display_id, quality, bonding, flags, description) values
+(50024, 15, 'Dressing Box: Invisible Suit', 35406, 1, 1, 4, 'What\'s happens in Goldhire\'s Tavern, stays in Goldshire\'s Tavern.'); 
+
+-- 50025 [Dressing Box: Sally Whitemane]:
+
+replace into item_template (entry, class, name, display_id, quality, bonding, flags, description) values
+(50025, 15, 'Dressing Box: Sally Whitemane', 35406, 1, 1, 4, 'Join us, take up the path of vengeance!'); 
+
+-- 50026 [Invisible Pants]
+-- 50027 [Invisible Shirt]
+-- 50028 [Loramus Thalipedes' Blindfold]
+-- 50029 [Cursed Vision of Sargeras]
+-- 50030 [Demon Hunter Right Glaive]
+-- 50031 [Demon Hunter Left Glaive]
+-- 50032 [Demon Hunter Sandals]
+-- 50033 [Demon Hunter Kilt]
+-- 50034 [Demon Hunter Harness]
+-- 50035 [Demon Hunter Bracers]
+-- 50036 [High Inquisitor's Chapeau]
+-- 50037 [High Inquisitor's Chest]
+-- 50038 [High Inquisitor's Tabard]
+-- 50039 [High Inquisitor's Boots]
+-- 50040 [High Inquisitor's Shoulders]
+-- 50041 [High Inquisitor's Pants]
+-- 50042 [High Inquisitor's Gloves]
+-- 50043 [High Inquisitor's Staff]
+-- 50044 [Crown of the Fire Festival]
+-- 50045 [Mantle of the Fire Festival]
+-- 50046 [Vestment of Summer]
+-- 50047 [Sandals of Summer]
+-- 50048 [Right Juggling Torch]
+-- 50049 [Left Juggling Torch]
+
+-- 50050 [Turtle WoW Box (lvl 10)]
+
+replace into item_template (entry, class, name, display_id, quality, bonding, flags, description) values
+(50050, 15, 'Turtle WoW Box', 18499, 1, 1, 4, 'Take it slow! Level 10 hardcore reward.'); 
+
+-- 50051 [Turtle WoW Box (lvl 20)]
+
+replace into item_template (entry, class, name, display_id, quality, bonding, flags, description) values
+(50051, 15, 'Turtle WoW Box', 18499, 1, 1, 4, 'Take it slow! Level 20 hardcore reward.'); 
+
+-- 50052 [Turtle WoW Box (lvl 30)]
+
+replace into item_template (entry, class, name, display_id, quality, bonding, flags, description) values
+(50052, 15, 'Turtle WoW Box', 18499, 1, 1, 4, 'Take it slow! Level 30 hardcore reward.'); 
+
+-- 50053 [Turtle WoW Box (lvl 40)]
+
+replace into item_template (entry, class, name, display_id, quality, bonding, flags, description) values
+(50053, 15, 'Turtle WoW Box', 18499, 1, 1, 4, 'Take it slow! Level 40 hardcore reward.'); 
+
+-- 50054 [Turtle WoW Box (lvl 50)]
+
+replace into item_template (entry, class, name, display_id, quality, bonding, flags, description) values
+(50054, 15, 'Turtle WoW Box', 18499, 1, 1, 4, 'Take it slow! Level 50 hardcore reward.'); 
+
+-- 50055 [Turtle WoW Box (lvl 60)]
+
+replace into item_template (entry, class, name, display_id, quality, bonding, flags, description) values
+(50055, 15, 'Turtle WoW Box', 18499, 1, 1, 4, 'Take it slow! Level 60 hardcore reward.'); 
+
+-- ### item_loot content:
+
+-- 50022 [Dressing Box: Midsummer Priestess] loot:
+
+replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid) values
+(50022, 50044, 100, 1),(50022, 50045, 100, 2),(50022, 50046, 100, 3),(50022, 50047, 100, 4),(50022, 50048, 100, 5),(50022, 50049, 100, 6);
+
+-- 50022 [Dressing Box: Demon Hunter] loot:
+
+replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid) values
+(50023, 50028, 100, 1),(50023, 50029, 100, 2),(50023, 50030, 100, 3),(50023, 50031, 100, 4),(50023, 50032, 100, 5),(50023, 50033, 100, 6),(50023, 50034, 100, 7),(50023, 50035, 100, 8);
+
+-- 50024 [Dressing Box: Invisible Suit] loot:
+
+replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid) values
+(50024, 50026, 100, 1),(50024, 50027, 100, 2);
+
+-- 50025 [Dressing Box: Sally Whitemane] loot:
+
+replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid) values
+(50025, 50036, 100, 1),(50025, 50037, 100, 2),(50025, 50038, 100, 3),(50025, 50039, 100, 4),(50025, 50040, 100, 5),(50025, 50041, 100, 6),(50025, 50042, 100, 7),(50025, 50043, 100, 8);
+
+-- 50050 [Turtle WoW Box (lvl 10)] loot:
+-- 50051 [Turtle WoW Box (lvl 20)] loot:
+-- 50052 [Turtle WoW Box (lvl 30)] loot:
+-- 50053 [Turtle WoW Box (lvl 40)] loot:
+-- 50054 [Turtle WoW Box (lvl 50)] loot:
+-- 50055 [Turtle WoW Box (lvl 60)] loot:
+
+
