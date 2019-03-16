@@ -124,7 +124,7 @@ replace into item_template (entry, class, subclass, name, description, display_i
 -- 50016 [Portable Meeting Stone]:
 
 replace into item_template (entry, name, description, display_id, quality, spellid_1, spellcooldown_1, script_name, bonding) values
-(50016, 'Portable Meeting Stone', 'Use it to meet new friends.', '33543', '1', '31726', '3600000', 'portable_meeting_stone', '1');
+(50016, 'Portable Meeting Stone', 'Use it to meet new friends.', '33543', '1', '7077', '3600000', '', '1');
 
 -- 50017 [Highborne Soul Mirror]:
 
@@ -199,12 +199,12 @@ replace into item_template (entry, class, name, display_id, quality, bonding, fl
 -- 50056 [Allliance Protector's Scroll] 
 
 replace into item_template (entry, name, description, display_id, quality, spellid_1, spellcooldown_1, script_name, bonding) values
-(50056, 'Alliance Protector\'s Scroll', 'Teleports you to your capital city.', '6270', '1', '31726', '3600000', 'city_protector_scroll', '1');
+(50056, 'Alliance Protector\'s Scroll', 'Teleports you to your capital city.', '6270', '1', '7794', '3600000', '', '1');
 
 -- 50057 [Horde Protector's Scroll] 
 
 replace into item_template (entry, name, description, display_id, quality, spellid_1, spellcooldown_1, script_name, bonding) values
-(50057, 'Horde Protector\'s Scroll', 'Teleport you to your capital city.', '1096', '1', '31726', '3600000', 'city_protector_scroll', '1');
+(50057, 'Horde Protector\'s Scroll', 'Teleports you to your capital city.', '1096', '1', '7794', '3600000', '', '1');
 
 -- 50050 [Turtle WoW Box (lvl 10)]
 

@@ -1593,6 +1593,58 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                     }
                     return;
                 }
+                case 7794: // Teleport
+                    if (m_caster->ToPlayer() && m_CastItem->GetEntry() == 50056 || m_CastItem->GetEntry() == 50057) {
+                        if (m_caster->ToPlayer()->IsCityProtector() && !m_caster->isInCombat() &
+                                !m_caster->ToPlayer()->IsBeingTeleported() && m_caster->getDeathState() != CORPSE) {
+                            switch (m_caster->ToPlayer()->getRace()) {
+                                case RACE_HUMAN:
+                                    // Stormwind City
+                                    m_caster->ToPlayer()->TeleportTo(0, -8828.231445f, 627.927490f, 94.055664f, 0.0f);
+                                    break;
+                                case RACE_GNOME:
+                                    // Ironforge
+                                    m_caster->ToPlayer()->TeleportTo(0, -4917.0f, -955.0f, 502.0f, 0.0f);
+                                    break;
+                                case RACE_DWARF:
+                                    // Ironforge
+                                    m_caster->ToPlayer()->TeleportTo(0, -4917.0f, -955.0f, 502.0f, 0.0f);
+                                    break;
+                                case RACE_NIGHTELF:
+                                    // Darnassus
+                                    m_caster->ToPlayer()->TeleportTo(1, 9962.712891f, 2280.142822f, 1341.394409f, 0.0f);
+                                    break;
+                                case RACE_ORC:
+                                    // Orgrimmar
+                                    m_caster->ToPlayer()->TeleportTo(1, 1437.0f, -4421.0f, 25.24f, 1.65f);
+                                    break;
+                                case RACE_TAUREN:
+                                    // Thunder Bluff
+                                    m_caster->ToPlayer()->TeleportTo(1, -1272.703735f, 116.886490f, 131.016861f, 0.0f);
+                                    break;
+                                case RACE_TROLL:
+                                    // Orgrimmar
+                                    m_caster->ToPlayer()->TeleportTo(1, 1437.0f, -4421.0f, 25.24f, 1.65f);
+                                    break;
+                                case RACE_UNDEAD:
+                                    //Undercity
+                                    m_caster->ToPlayer()->TeleportTo(0, 1822.0999f, 238.638855f, 60.694809f, 0.0f);
+                                    break;
+                            }
+                        }
+                    }
+                    return;
+                case 7077: // Simple Teleport
+                    if (m_caster->ToPlayer() && m_CastItem->GetEntry() == 50016) {
+                        if (!m_caster->isInCombat() && !m_caster->ToPlayer()->IsBeingTeleported() && m_caster->getDeathState() != CORPSE) {
+                            m_caster->ToPlayer()->TeleportTo(
+                                    (m_caster->ToPlayer()->GetTeam() == ALLIANCE) ? WorldLocation(0, -8607.52f, 382.006f,
+                                                                                     110.173f, 2.24265f)
+                                                                     : WorldLocation(1, -397.356f, -2654.94f,
+                                                                                     96.2232f, 2.25183f));
+                        }
+                    }
+                    return;
             }
 
             //All IconID Check in there
