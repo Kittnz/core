@@ -14532,6 +14532,11 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
     m_honorMgr.SetStoredHK(fields[43].GetUInt32());
     m_honorMgr.SetStoredDK(fields[44].GetUInt32());
 
+    if (fields[59].GetBool())
+        SetByteValue(PLAYER_BYTES_3, 2, getRace());
+    else
+        SetByteValue(PLAYER_BYTES_3, 2, 0);
+
     m_honorMgr.Load(holder->GetResult(PLAYER_LOGIN_QUERY_LOADHONORCP));
     _LoadBoundInstances(holder->GetResult(PLAYER_LOGIN_QUERY_LOADBOUNDINSTANCES));
     _LoadBGData(holder->GetResult(PLAYER_LOGIN_QUERY_LOADBGDATA));
@@ -21466,3 +21471,5 @@ void Player::HardcoreMode(uint32 level)
         ChatHandler(this).PSendSysMessage("|cffF58CBASpeedy whispers: Impressive! Your recent achievements on reaching level 60 at the hardcore setting have not gone unnoticed. We've added additional 250 Turtle Tokes to your account balance!|r");
     }                 
 }
+
+bool Player::IsCityProtector() { return GetByteValue(PLAYER_BYTES_3, 2) > 0; }

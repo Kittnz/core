@@ -1060,6 +1060,7 @@ class MANGOS_DLL_SPEC Player final: public Unit
         // Turtle WoW, we use items as currency:
         bool RemoveItemCurrency(uint32 itemId, uint32 count);
         void HardcoreMode(uint32 level);
+        bool IsCityProtector();
         void MoveItemFromInventory(uint8 bag, uint8 slot, bool update);
         // in trade, auction, guild bank, mail....
         void MoveItemToInventory(ItemPosCountVec const& dest, Item* pItem, bool update, bool in_characterInventoryDB = false);

@@ -69,7 +69,7 @@ bool ChatHandler::HandlePrevModelCommand(char*)
     return true;
 } 
 
-bool ChatHandler::HandleSetCityRankCommand(char* /*args*/)
+bool ChatHandler::HandleSetCityRankCommand(char* args)
 {
     // City Protector is an apparently discontinued or never-implemented PvP rank that was announced by Blizzard at some point.
     // It was described in the official PvP-Guide to the original honor system that this would be a rank granted the player with Standing 1 in the past week.
@@ -87,14 +87,13 @@ bool ChatHandler::HandleSetCityRankCommand(char* /*args*/)
     // For gnomes, Avenger of Gnomeregan
     // For trolls, Voodoo Boss of Sen'jin
 
-    uint32 city_rank = m_session->GetPlayer()->GetByteValue(PLAYER_BYTES_3, 2);
-    city_rank++;
+    uint32 city_rank = (uint32)atoi(args);
     Unit *target = GetSelectedUnit();
 
     if (!target)
         target = m_session->GetPlayer();
 
-    target->SetByteValue(PLAYER_BYTES_3, 2, (uint32)city_rank);
+    target->SetByteValue(PLAYER_BYTES_3, 2, city_rank);
     PSendSysMessage("Attempting to assign a new rank: %u", city_rank);
     return true;
 }

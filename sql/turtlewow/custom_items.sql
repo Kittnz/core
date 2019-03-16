@@ -58,6 +58,8 @@
 -- 50053 [Turtle WoW Box (lvl 40)]
 -- 50054 [Turtle WoW Box (lvl 50)]
 -- 50055 [Turtle WoW Box (lvl 60)]
+-- 50056 [Allliance Protector's Scroll]
+-- 50057 [Horde Protector's Scroll]
 
 -- 50000 [Character Name Change]:
 
@@ -193,6 +195,16 @@ replace into item_template (entry, class, name, display_id, quality, bonding, fl
 -- 50047 [Sandals of Summer]
 -- 50048 [Right Juggling Torch]
 -- 50049 [Left Juggling Torch]
+
+-- 50056 [Allliance Protector's Scroll] 
+
+replace into item_template (entry, name, description, display_id, quality, spellid_1, spellcooldown_1, script_name, bonding) values
+(50056, 'Alliance Protector\'s Scroll', 'Teleports you to your capital city.', '6270', '1', '31726', '3600000', 'city_protector_scroll', '1');
+
+-- 50057 [Horde Protector's Scroll] 
+
+replace into item_template (entry, name, description, display_id, quality, spellid_1, spellcooldown_1, script_name, bonding) values
+(50057, 'Horde Protector\'s Scroll', 'Teleport you to your capital city.', '1096', '1', '31726', '3600000', 'city_protector_scroll', '1');
 
 -- 50050 [Turtle WoW Box (lvl 10)]
 

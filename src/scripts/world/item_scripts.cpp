@@ -75,6 +75,54 @@ bool ItemUse_summer_vestment(Player* pPlayer, Item* pItem, const SpellCastTarget
     return false;
 }
 
+bool ItemUse_city_protector_scroll(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+{
+    if (!pPlayer->IsCityProtector() || pPlayer->isInCombat() || pPlayer->IsBeingTeleported() || (pPlayer->getDeathState() == CORPSE))
+    {
+        ChatHandler(pPlayer).PSendSysMessage("You can't use this item.");
+        return false;
+    }
+    else
+    {
+        switch (pPlayer->getRace())
+        {
+        case RACE_HUMAN:
+            // Stormwind City
+            pPlayer->TeleportTo(0, -8828.231445f, 627.927490f, 94.055664f, 0.0f);
+            break;
+        case RACE_GNOME:
+            // Ironforge
+            pPlayer->TeleportTo(0, -4917.0f, -955.0f, 502.0f, 0.0f);
+            break;
+        case RACE_DWARF:
+            // Ironforge
+            pPlayer->TeleportTo(0, -4917.0f, -955.0f, 502.0f, 0.0f);
+            break;
+        case RACE_NIGHTELF:
+            // Darnassus
+            pPlayer->TeleportTo(1, 9962.712891f, 2280.142822f, 1341.394409f, 0.0f);
+            break;
+        case RACE_ORC:
+            // Orgrimmar
+            pPlayer->TeleportTo(1, 1437.0f, -4421.0f, 25.24f, 1.65f);
+            break;
+        case RACE_TAUREN:
+            // Thunder Bluff
+            pPlayer->TeleportTo(1, -1272.703735f, 116.886490f, 131.016861f, 0.0f);
+            break;
+        case RACE_TROLL:
+            // Orgrimmar
+            pPlayer->TeleportTo(1, 1437.0f, -4421.0f, 25.24f, 1.65f);
+            break;
+        case RACE_UNDEAD:
+            //Undercity
+            pPlayer->TeleportTo(0, 1822.0999f, 238.638855f, 60.694809f, 0.0f);
+            break;
+        }
+        return true;
+    }
+}
+
 void AddSC_item_scripts()
 {
     Script *newscript;
@@ -102,5 +150,10 @@ void AddSC_item_scripts()
     newscript = new Script;
     newscript->Name = "item_summer_vestment";
     newscript->pItemUse = &ItemUse_summer_vestment;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "city_protector_scroll";
+    newscript->pItemUse = &ItemUse_city_protector_scroll;
     newscript->RegisterSelf();
 }

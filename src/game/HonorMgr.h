@@ -64,6 +64,7 @@ class HonorMaintenancer
         void LoadStandingLists();
         void DistributeRankPoints(Team team);
         void InactiveDecayRankPoints();
+        void SetCityRanks();
         void FlushRankPoints();
         void CreateCalculationReport();
 
