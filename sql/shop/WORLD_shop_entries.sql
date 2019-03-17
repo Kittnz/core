@@ -40,9 +40,9 @@ INSERT INTO `shop_items` VALUES ('106', '1', '50004', 'Portable Black Hole (36 s
 INSERT INTO `shop_items` VALUES ('107', '1', '50005', 'Field Repair Bot 75B', '100'); 
 INSERT INTO `shop_items` VALUES ('108', '1', '50007', 'Forworn Mule (Bank)', '100'); 
 INSERT INTO `shop_items` VALUES ('109', '1', '50008', 'Turtle Twink\'s Insignia (Stop XP)', '100'); 
-INSERT INTO `shop_items` VALUES ('110', '1', '50009', 'H.A.R.V.E.Y. (Mechanical Auctioneer)', '100'); 
-INSERT INTO `shop_items` VALUES ('111', '1', '50011', 'MOLL-E (Portable Mailbox)', '100'); 
-INSERT INTO `shop_items` VALUES ('112', '1', '50012', 'Portable Meeting Stone (RP Hub)', '0'); 
+INSERT INTO `shop_items` VALUES ('110', '1', '50009', 'Mechanical Auctioneer', '100'); 
+INSERT INTO `shop_items` VALUES ('111', '1', '50011', 'MOLL-E, Remote Mail Terminal', '100'); 
+INSERT INTO `shop_items` VALUES ('112', '1', '50016', 'Portable Meeting Stone (RP Hub)', '0'); 
 -- TODO: Item scripts and templates
 -- Pets ------------------------------------------------------------------------------------------------
 INSERT INTO `shop_items` VALUES ('200', '2', '13582', 'Zergling Leash', '50');
@@ -61,7 +61,7 @@ INSERT INTO `shop_items` VALUES ('302', '3', '8630',  'Reins of the Bengal Tiger
 -- Tabards ---------------------------------------------------------------------------------------------
 INSERT INTO `shop_items` VALUES ('400', '4', '23709', 'Tabard of Frost', '100');
 INSERT INTO `shop_items` VALUES ('401', '4', '23705', 'Tabard of Flame', '100');
-INSERT INTO `shop_items` VALUES ('402', '4', '23710', 'Darkmon faire tabard', '100'); 
+INSERT INTO `shop_items` VALUES ('402', '4', '23710', 'Darkmoon Faire Tabard', '100'); 
 -- TODO: More tabards
 -- Roleplay --------------------------------------------------------------------------------------------
 -- TODO: Dressing Boxes

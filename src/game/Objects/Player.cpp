@@ -2663,7 +2663,9 @@ void Player::GiveXP(uint32 xp, Unit* victim)
     uint32 level = getLevel();
 
     // XP to money conversion processed in Player::RewardQuest
-    if (level >= sWorld.getConfig(CONFIG_UINT32_MAX_PLAYER_LEVEL))
+    // if (level >= sWorld.getConfig(CONFIG_UINT32_MAX_PLAYER_LEVEL))
+    // Additional check for Turtle WoW Twink Token, which prevents the wielder of getting experience.
+    if ((level >= sWorld.getConfig(CONFIG_UINT32_MAX_PLAYER_LEVEL)) || (HasItemCount(50008, 1, true)))
         return;
 
     // XP resting bonus for kill
@@ -6089,7 +6091,9 @@ void Player::CheckAreaExploreAndOutdoor()
         {
             GetCheatData()->OnExplore(p);
             uint32 area = p->Id;
-            if (getLevel() >= sWorld.getConfig(CONFIG_UINT32_MAX_PLAYER_LEVEL))
+            // if (getLevel() >= sWorld.getConfig(CONFIG_UINT32_MAX_PLAYER_LEVEL))
+            // Additional check for Turtle WoW Twink Token, which prevents the wielder of getting experience.
+            if ((getLevel() >= sWorld.getConfig(CONFIG_UINT32_MAX_PLAYER_LEVEL)) || (HasItemCount(50008, 1, true)))
                 SendExplorationExperience(area, 0);
             else
             {

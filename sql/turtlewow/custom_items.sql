@@ -61,6 +61,9 @@
 -- 50056 [Allliance Protector's Scroll]
 -- 50057 [Horde Protector's Scroll]
 -- 50058 [Black Piglet]
+-- 50059 [Green Winter Vest]
+-- 50060 [Green Winter Pants]
+-- 50061 [Red Winter Vest]
 
 -- 50000 [Character Name Change]:
 
@@ -87,6 +90,11 @@ replace into item_template (entry, class, name, display_id, quality, buy_count, 
 replace into item_template (entry, class, name, display_id, quality, buy_count, buy_price, inventory_type, item_level, stackable, container_slots, bonding, material) values
 (50004, 1, 'Portable Black Hole', 19502, 2, 1, 320000, 18, 60, 1, 36, 1, 8);
 
+-- 50005 [Field Repair Bot 75B]:
+
+replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1, spellcooldown_1) values
+(50005, 15, 2, 'Field Repair Bot 75B', 'Unfolds into a Field Repair Bot that can repair damaged items and purchase unwanted goods', 19503, 1, 1, 28505, 1500);
+
 -- 50006 [Mini Krampus]:
 
 replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1, spellcooldown_1) values
@@ -95,7 +103,7 @@ replace into item_template (entry, class, subclass, name, description, display_i
 -- 50007 [Forworn Mule]:
 
 replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1, spellcooldown_1) values
-(50007, 15, 2, 'Forworn Mule', 'The coolest bank mule to carry everything you need in your long journey!', 13108, 1, 1, 28505, 1500);
+(50007, 15, 2, 'Forworn Mule', 'Carries all your worldly possessions, there and back. Just don\'t do anything P.E.T.A would disapprove of.', 13108, 1, 1, 28505, 1500);
 
 -- 50008 [Twink's Insignia]:
 
@@ -104,8 +112,8 @@ replace into item_template (entry, class, name, display_id, quality, buy_count, 
 
 -- 50009 [Mechanical Auctioneer]:
 
-replace into item_template (entry, name, description, quality, spellid_1, display_id, spellcharges_1, script_name) values
-(50009, 'Mechanical Auctioneer', 'Right click to summon your H.A.R.V.E.Y.', 1, 1575, 8931, -1, 'mechanical_auctioneer');
+replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1, spellcooldown_1) values
+(50009, 15, 2, 'Mechanical Auctioneer', 'Right click to summon your H.A.R.V.E.Y.', 8931, 1, 1, 28505, 1500);
 
 -- 50010 [Loremaster's Glyph]:
 
@@ -187,170 +195,185 @@ replace into item_template (entry, class, name, display_id, quality, bonding, fl
 replace into item_template (entry, class, name, display_id, quality, bonding, flags, description) values
 (50025, 15, 'Dressing Box: Sally Whitemane', 35406, 1, 1, 4, 'Join us, take up the path of vengeance!'); 
 
--- 50026 [Invisible Pants]
+-- 50026 [Invisible Pants]:
 
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50026, 'Invisible Pants', 7, 396, 1, 1);
 
--- 50027 [Invisible Shirt]
+-- 50027 [Invisible Shirt]:
 
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50027, 'Invisible Shirt', 5, 383, 1, 1);
 
--- 50028 [Loramus Thalipedes' Blindfold]
+-- 50028 [Loramus Thalipedes' Blindfold]:
 
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50028, 'Loramus Thalipedes\' Blindfold', 1, 5878, 1, 1);
 
--- 50029 [Cursed Vision of Sargeras]
+-- 50029 [Cursed Vision of Sargeras]:
 
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50029, 'Cursed Vision of Sargeras', 1, 17867, 1, 1);
 
--- 50030 [Demon Hunter Right Glaive]
+-- 50030 [Demon Hunter Right Glaive]:
 
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50030, 'Demon Hunter Right Glaive', 21, 22672, 1, 1);
 
--- 50031 [Demon Hunter Left Glaive]
+-- 50031 [Demon Hunter Left Glaive]:
 
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50031, 'Demon Hunter Left Glaive', 23, 22695, 1, 1);
 
--- 50032 [Demon Hunter Sandals]
+-- 50032 [Demon Hunter Sandals]:
 
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50032, 'Demon Hunter Sandals', 8, 16855, 1, 1);
 
--- 50033 [Demon Hunter Kilt]
+-- 50033 [Demon Hunter Kilt]:
 
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50033, 'Demon Hunter Kilt', 7, 28287, 1, 1);
 
--- 50034 [Demon Hunter Harness]
+-- 50034 [Demon Hunter Harness]:
 
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50034, 'Demon Hunter Harness', 5, 12370, 1, 1);
 
--- 50035 [Demon Hunter Bracers]
+-- 50035 [Demon Hunter Bracers]:
 
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50035, 'Demon Hunter Bracers', 9, 35091, 1, 1);
 
--- 50036 [High Inquisitor's Chapeau]
+-- 50036 [High Inquisitor's Chapeau]:
 
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50036, 'High Inquisitor\'s Chapeau', 1, 15991, 1, 1);
 
--- 50037 [High Inquisitor's Chest]
+-- 50037 [High Inquisitor's Chest]:
 
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50037, 'High Inquisitor\'s Chest', 5, 18839, 1, 1);
 
--- 50038 [High Inquisitor's Tabard]
+-- 50038 [High Inquisitor's Tabard]:
 
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50038, 'High Inquisitor\'s Tabard', 19, 30640, 1, 1);
 
--- 50039 [High Inquisitor's Boots]
+-- 50039 [High Inquisitor's Boots]:
 
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50039, 'High Inquisitor\'s Boots', 8, 24054, 1, 1);
 
--- 50040 [High Inquisitor's Shoulders]
+-- 50040 [High Inquisitor's Shoulders]:
 
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50040, 'High Inquisitor\'s Shoulders', 3, 13672, 1, 1);
 
--- 50041 [High Inquisitor's Pants]
+-- 50041 [High Inquisitor's Pants]:
 
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50041, 'High Inquisitor\'s Pants', 7, 24895, 1, 1);
 
--- 50042 [High Inquisitor's Gloves]
+-- 50042 [High Inquisitor's Gloves]:
 
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50042, 'High Inquisitor\'s Gloves', 10, 18853, 1, 1);
 
--- 50043 [High Inquisitor's Staff]
+-- 50043 [High Inquisitor's Staff]:
 
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50043, 'High Inquisitor\'s Tabard', 17, 20257, 1, 1);
 
--- 50044 [Amber Filigreed Tabard]
+-- 50044 [Amber Filigreed Tabard]:
 
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50044, 'Amber Filigreed Tabard', 19, 22370, 1, 1);
 
--- 50045 [Amber Filigreed Shirt]
+-- 50045 [Amber Filigreed Shirt]:
 
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50045, 'Amber Filigreed Shirt', 4, 22370, 1, 1);
 
--- 50046 [Vestment of Summer]
+-- 50046 [Vestment of Summer]:
 
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50046, 'Vestment of Summer', 5, 26131, 1, 1);
 
--- 50047 [Sandals of Summer]
+-- 50047 [Sandals of Summer]:
 
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50047, 'Sandals of Summer', 8, 28088, 1, 1);
 
--- 50048 [Right Juggling Torch]
+-- 50048 [Right Juggling Torch]:
 
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50048, 'Right Juggling Torch', 21, 12236, 1, 1);
 
--- 50049 [Left Juggling Torch]
+-- 50049 [Left Juggling Torch]:
 
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50049, 'Right Juggling Torch', 23, 12236, 1, 1);
 
--- 50050 [Turtle WoW Box (lvl 10)]
+-- 50050 [Turtle WoW Box (lvl 10)]:
 
 replace into item_template (entry, class, name, display_id, quality, bonding, flags, description) values
 (50050, 15, 'Turtle WoW Box', 18499, 1, 1, 4, 'Take it slow! Level 10 hardcore reward.'); 
 
--- 50051 [Turtle WoW Box (lvl 20)]
+-- 50051 [Turtle WoW Box (lvl 20)]:
 
 replace into item_template (entry, class, name, display_id, quality, bonding, flags, description) values
 (50051, 15, 'Turtle WoW Box', 18499, 1, 1, 4, 'Take it slow! Level 20 hardcore reward.'); 
 
--- 50052 [Turtle WoW Box (lvl 30)]
+-- 50052 [Turtle WoW Box (lvl 30)]:
 
 replace into item_template (entry, class, name, display_id, quality, bonding, flags, description) values
 (50052, 15, 'Turtle WoW Box', 18499, 1, 1, 4, 'Take it slow! Level 30 hardcore reward.'); 
 
--- 50053 [Turtle WoW Box (lvl 40)]
+-- 50053 [Turtle WoW Box (lvl 40)]:
 
 replace into item_template (entry, class, name, display_id, quality, bonding, flags, description) values
 (50053, 15, 'Turtle WoW Box', 18499, 1, 1, 4, 'Take it slow! Level 40 hardcore reward.'); 
 
--- 50054 [Turtle WoW Box (lvl 50)]
+-- 50054 [Turtle WoW Box (lvl 50)]:
 
 replace into item_template (entry, class, name, display_id, quality, bonding, flags, description) values
 (50054, 15, 'Turtle WoW Box', 18499, 1, 1, 4, 'Take it slow! Level 50 hardcore reward.'); 
 
--- 50055 [Turtle WoW Box (lvl 60)]
+-- 50055 [Turtle WoW Box (lvl 60)]:
 
 replace into item_template (entry, class, name, display_id, quality, bonding, flags, description) values
 (50055, 15, 'Turtle WoW Box', 18499, 1, 1, 4, 'Take it slow! Level 60 hardcore reward.'); 
 
--- 50056 [Allliance Protector's Scroll] 
+-- 50056 [Allliance Protector's Scroll]:
 
 replace into item_template (entry, name, description, display_id, quality, spellid_1, spellcooldown_1, script_name, bonding) values
 (50056, 'Alliance Protector\'s Scroll', 'Teleports you to your capital city.', '6270', '1', '7794', '3600000', '', '1');
 
--- 50057 [Horde Protector's Scroll] 
+-- 50057 [Horde Protector's Scroll]:
 
 replace into item_template (entry, name, description, display_id, quality, spellid_1, spellcooldown_1, script_name, bonding) values
 (50057, 'Horde Protector\'s Scroll', 'Teleports you to your capital city.', '1096', '1', '7794', '3600000', '', '1');
 
--- 50058 [Black Piglet]
+-- 50058 [Black Piglet]:
 
 replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1, spellcooldown_1) values
-(50008, 15, 2, 'Black Piglet', 'He loves to play in the mud! Then he likes to give you a hug!', 7287, 1, 1, 28505, 1500);
+(50058, 15, 2, 'Black Piglet', 'He loves to play in the mud! Then he likes to give you a hug!', 7287, 1, 1, 28505, 1500);
+
+-- 50059 [Green Winter Vest]:
+
+replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
+(50059, 'Green Winter Vest', 5, 33581, 1, 1);
+
+-- 50060 [Green Winter Pants]:
+
+replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
+(50060, 'Green Winter Pants', 7, 33582, 1, 1);
+
+-- 50061 [Red Winter Vest]:
+
+replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
+(50061, 'Green Winter Vest', 5, 34088, 1, 1);
 
 -- ### item_loot content:
 
@@ -375,6 +398,9 @@ replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid) valu
 (50025, 50036, 100, 1),(50025, 50037, 100, 2),(50025, 50038, 100, 3),(50025, 50039, 100, 4),(50025, 50040, 100, 5),(50025, 50041, 100, 6),(50025, 50042, 100, 7),(50025, 50043, 100, 8);
 
 -- 50050 [Turtle WoW Box (lvl 10)] loot:
+
+-- replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid) values...
+
 -- 50051 [Turtle WoW Box (lvl 20)] loot:
 -- 50052 [Turtle WoW Box (lvl 30)] loot:
 -- 50053 [Turtle WoW Box (lvl 40)] loot:
