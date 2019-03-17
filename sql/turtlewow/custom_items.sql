@@ -11,9 +11,9 @@
 -- 50006 [Mini Krampus]
 -- 50007 [Forworn Mule]
 -- 50008 [Twink's Insignia]
--- 50009 [H.A.R.V.E.Y.]
+-- 50009 [Mechanical Auctioneer]
 -- 50010 [Loremaster's Glyph]
--- 50011 [MOLL-E (Portable Mailbox)]
+-- 50011 [MOLL-E, Remote Mail Terminal]
 -- 50012 [Diplomatic Declaration]
 -- 50013 [Bone Golem]
 -- 50014 [Blitzen]
@@ -60,6 +60,7 @@
 -- 50055 [Turtle WoW Box (lvl 60)]
 -- 50056 [Allliance Protector's Scroll]
 -- 50057 [Horde Protector's Scroll]
+-- 50058 [Black Piglet]
 
 -- 50000 [Character Name Change]:
 
@@ -91,15 +92,30 @@ replace into item_template (entry, class, name, display_id, quality, buy_count, 
 replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1, spellcooldown_1) values
 (50006, 15, 2, 'Mini Krampus', 'Be careful, he will steal your children!', 7999, 1, 1, 28505, 1500);
 
+-- 50007 [Forworn Mule]:
+
+replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1, spellcooldown_1) values
+(50007, 15, 2, 'Forworn Mule', 'The coolest bank mule to carry everything you need in your long journey!', 13108, 1, 1, 28505, 1500);
+
 -- 50008 [Twink's Insignia]:
 
 replace into item_template (entry, class, name, display_id, quality, buy_count, max_count, stackable, bonding, description) values
 (50008, 15, 'Twink\'s Insignia', 17776, 6, 1, 1, 1, 1, 'This rune prevents the owner from gaining experience.');
 
+-- 50009 [Mechanical Auctioneer]:
+
+replace into item_template (entry, name, description, quality, spellid_1, display_id, spellcharges_1, script_name) values
+(50009, 'Mechanical Auctioneer', 'Right click to summon your H.A.R.V.E.Y.', 1, 1575, 8931, -1, 'mechanical_auctioneer');
+
 -- 50010 [Loremaster's Glyph]:
 
 replace into item_template (entry, class, name, display_id, flags, quality, buy_count, max_count, stackable, bonding, description, bag_family) values
 (50010, 13, 'Loremaster\'s Glyph', 22377, 32, 6, 1, 1, 1, 1, 'This item is a reminder of your hardcore adventure.', 9);
+
+-- 50011 [MOLL-E, Remote Mail Terminal]:
+
+replace into item_template (entry, name, description, quality, spellid_1, display_id, spellcharges_1, script_name) values
+(50011, 'MOLL-E, Remote Mail Terminal', 'Right click to create a portable mailbox for 10 min. "Mobile Oversized Letter and Literary Extractor."', 1, 1575, 3020, -1, 'remote_mail_terminal');
 
 -- 50012 [Diplomatic Declaration]:
 
@@ -271,7 +287,6 @@ replace into item_template (entry, name, inventory_type, display_id, quality, bo
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50045, 'Amber Filigreed Shirt', 4, 22370, 1, 1);
 
-
 -- 50046 [Vestment of Summer]
 
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
@@ -291,16 +306,6 @@ replace into item_template (entry, name, inventory_type, display_id, quality, bo
 
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50049, 'Right Juggling Torch', 23, 12236, 1, 1);
-
--- 50056 [Allliance Protector's Scroll] 
-
-replace into item_template (entry, name, description, display_id, quality, spellid_1, spellcooldown_1, script_name, bonding) values
-(50056, 'Alliance Protector\'s Scroll', 'Teleports you to your capital city.', '6270', '1', '7794', '3600000', '', '1');
-
--- 50057 [Horde Protector's Scroll] 
-
-replace into item_template (entry, name, description, display_id, quality, spellid_1, spellcooldown_1, script_name, bonding) values
-(50057, 'Horde Protector\'s Scroll', 'Teleports you to your capital city.', '1096', '1', '7794', '3600000', '', '1');
 
 -- 50050 [Turtle WoW Box (lvl 10)]
 
@@ -331,6 +336,21 @@ replace into item_template (entry, class, name, display_id, quality, bonding, fl
 
 replace into item_template (entry, class, name, display_id, quality, bonding, flags, description) values
 (50055, 15, 'Turtle WoW Box', 18499, 1, 1, 4, 'Take it slow! Level 60 hardcore reward.'); 
+
+-- 50056 [Allliance Protector's Scroll] 
+
+replace into item_template (entry, name, description, display_id, quality, spellid_1, spellcooldown_1, script_name, bonding) values
+(50056, 'Alliance Protector\'s Scroll', 'Teleports you to your capital city.', '6270', '1', '7794', '3600000', '', '1');
+
+-- 50057 [Horde Protector's Scroll] 
+
+replace into item_template (entry, name, description, display_id, quality, spellid_1, spellcooldown_1, script_name, bonding) values
+(50057, 'Horde Protector\'s Scroll', 'Teleports you to your capital city.', '1096', '1', '7794', '3600000', '', '1');
+
+-- 50058 [Black Piglet]
+
+replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1, spellcooldown_1) values
+(50008, 15, 2, 'Black Piglet', 'He loves to play in the mud! Then he likes to give you a hug!', 7287, 1, 1, 28505, 1500);
 
 -- ### item_loot content:
 
