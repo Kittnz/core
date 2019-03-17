@@ -104,6 +104,18 @@ insert ignore into npc_vendor (entry, item, maxcount, incrtime) values
 (50014, 4158, 1, 1800),
 (50014, 8881, 1, 1800);
 
+-- Remove BG restriction for Spirit Guides
+
+update creature_template set npc_flags = 65 where entry in (13116, 13117);
+
+-- Alliance Spirit Guide
+
+INSERT INTO `creature` (`guid`, `id`, `map`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `DeathState`, `MovementType`, `spawnFlags`, `visibilitymod`, `patch_min`, `patch_max`) VALUES ('2554782', '13116', '0', '0', '13116', '-13201.1', '222.009', '33.2316', '3.12936', '5', '0', '8609', '7860', '0', '0', '0', '0', '0', '10');
+
+-- Horde Spirit Guide
+
+INSERT INTO `creature` (`guid`, `id`, `map`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `DeathState`, `MovementType`, `spawnFlags`, `visibilitymod`, `patch_min`, `patch_max`) VALUES ('2554785', '13117', '0', '0', '13117', '-13250.4', '249.749', '33.2347', '5.26014', '5', '0', '8609', '7860', '0', '0', '0', '0', '0', '10');
+
 -- End of migration.
 END IF;
 END??
