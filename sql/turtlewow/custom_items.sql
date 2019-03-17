@@ -64,6 +64,7 @@
 -- 50059 [Green Winter Vest]
 -- 50060 [Green Winter Pants]
 -- 50061 [Red Winter Vest]
+-- 50062 [Half-Eaten Mutton Chop]
 
 -- 50000 [Character Name Change]:
 
@@ -297,13 +298,13 @@ replace into item_template (entry, name, inventory_type, display_id, quality, bo
 
 -- 50046 [Vestment of Summer]:
 
-replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
-(50046, 'Vestment of Summer', 5, 26131, 1, 1);
+replace into item_template (entry, name, description, inventory_type, display_id, quality, bonding, scriptname, spellid_1, spellcooldown_1) values
+(50046, 'Vestment of Summer', 'You feel the need to dance.', 5, 26131, 1, 1, 'item_summer_vestment', 11542, 1000);
 
--- 50047 [Sandals of Summer]:
+-- 50047 [Sandals of Summer]
 
-replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
-(50047, 'Sandals of Summer', 8, 28088, 1, 1);
+replace into item_template (entry, name, description, inventory_type, display_id, quality, bonding, spellid_1, spellcooldown_1) values
+(50047, 'Sandals of Summer', 'Be careful with the ground if you tap them.', 8, 28088, 1, 1, 24207, 1000);
 
 -- 50048 [Right Juggling Torch]:
 
@@ -374,6 +375,26 @@ replace into item_template (entry, name, inventory_type, display_id, quality, bo
 
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50061, 'Green Winter Vest', 5, 34088, 1, 1);
+
+-- 50062 [Half-Eaten Mutton Chop]:
+replace into item_template (entry, class, subclass, name, display_id, Quality, Flags, Buy_Count, Inventory_Type, bonding, delay, dmg_min1, dmg_max1, Item_Level, Material, sheath) values
+(50062, 2, 14, 'Half-Eaten Mutton Chop', 1950, 1, 0, 1, 13, 0, 1800, 5, 8, 8, 2, 3);
+
+-- 50063 [Intact Human Head]:
+
+replace into item_template (entry, class, subclass, name, display_id, Quality, Flags, Buy_Count, Buy_Price, Sell_Price, Item_Level, stackable, bonding, Material) values
+(50063, 12, 0, 'Intact Human Head', 32965, 1, 0, 1, 0, 0, 0, 1, 4, -1),
+
+-- 50064 [Intact Orc Head]:
+
+(50064, 12, 0, 'Intact Orc Head', 32969, 1, 0, 1, 0, 0, 0, 1, 4, -1);
+replace into item_template (entry, class, subclass, name, display_id, Quality, Flags, Buy_Count, stackable, bonding, Material, Page_Text) values
+
+-- 50065 [Anatomy Class Notes]:
+
+(50065, 15, 0, 'Anatomy Class Notes', 8628, 1, 16384, 1, 1, 1, -1, 50065);
+replace into page_text (entry, text) values
+(50065, 'The Professor told me that he has taught other people to disguise themselves. He has not told me where they are but he has given me a list indicating what their disguises are, I must go and look for them in the places where they have been able to infiltrate and they may want to teach me too.$B$B· Defias Footpad$B· Dark Iron Dwarf$B· Southsea Pirate$B· Dalaran Wizard$B· Stonesplinter Trogg$B· Syndicate Highwayman');
 
 -- ### item_loot content:
 
