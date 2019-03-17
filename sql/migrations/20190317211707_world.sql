@@ -28,49 +28,41 @@ insert ignore into creature_loot_template (entry, item, ChanceOrQuestChance, gro
 replace into npc_vendor (entry, item, maxcount, incrtime) values
 (3180, 5108, 1, 300);
 
-insert ignore into item_template (entry, class, subclass, name, display_id, Quality, Flags, Buy_Count, Buy_Price, Sell_Price, Item_Level, stackable, bonding, Material) values
-(130038, 12, 0, 'Intact Human Head', 32965, 1, 0, 1, 0, 0, 0, 1, 4, -1),
-(130039, 12, 0, 'Intact Orc Head', 32969, 1, 0, 1, 0, 0, 0, 1, 4, -1);
-insert ignore into item_template (entry, class, subclass, name, display_id, Quality, Flags, Buy_Count, stackable, bonding, Material, Page_Text) values
-(130040, 15, 0, 'Anatomy Class Notes', 8628, 1, 16384, 1, 1, 1, -1, 100000);
-insert ignore into page_text (entry, text) values
-(100000, 'The Professor told me that he has taught other people to disguise themselves. He has not told me where they are but he has given me a list indicating what their disguises are, I must go and look for them in the places where they have been able to infiltrate and they may want to teach me too.$B$B· Defias Footpad$B· Dark Iron Dwarf$B· Southsea Pirate$B· Dalaran Wizard$B· Stonesplinter Trogg$B· Syndicate Highwayman');
-
 insert ignore into npc_vendor (entry, item, maxcount, incrtime) values
-(100006, 5126, 1, 300),
-(100007, 5129, 1, 300),
-(100008, 5127, 1, 300),
-(100009, 5130, 1, 300),
-(100010, 5131, 1, 300),
-(100011, 5132, 1, 300);
+(50006, 5126, 1, 300),
+(50007, 5129, 1, 300),
+(50008, 5127, 1, 300),
+(50009, 5130, 1, 300),
+(50010, 5131, 1, 300),
+(50011, 5132, 1, 300);
 insert ignore into creature_loot_template (entry, item, ChanceOrQuestChance, mincountOrRef, maxcount) values
-(100003, 130038, -100, 1, 1),
-(100003, 2589, 100, 1, 3),
+(50003, 50063, -100, 1, 1),
+(50003, 2589, 100, 1, 3),
 
-(100005, 130039, -100, 1, 1),
-(100005, 2589, 100, 1, 3);
+(50005, 50064, -100, 1, 1),
+(50005, 2589, 100, 1, 3);
 insert ignore into quest_template (entry, Method, ZoneOrSort, MinLevel, QuestLevel, Type, RequiredClasses, NextQuestInChain, Title, Details, Objectives, OfferRewardText) values
-(100001, 2, -162, 2, 6, 0, 8, 100002, 'Professor Malkovich', 'Professor Malkovich is an old friend of mine. He told me to send him someone interested in anatomy.$B$BFind him at the bottom of the Apothecarium in Undercity.', 'Talk to Professor Malkovich at the bottom of the Apothecarium in Undercity.', 'Great! A student! Listen to me carefully...'),
-(100003, 2, -162, 2, 6, 0, 8, 100004, 'Professor Papucho', 'Professor Papucho is an old friend of mine. He told me to send him someone interested in anatomy.$B$BFind him somewhere inside The Forlorn Cavern in Ironforge.', 'Talk to Professor Papucho somewhere inside The Forlorn Cavern in Ironforge.', 'Great! A student! Listen to me carefully...');
+(50000, 2, -162, 2, 6, 0, 8, 50002, 'Professor Malkovich', 'Professor Malkovich is an old friend of mine. He told me to send him someone interested in anatomy.$B$BFind him at the bottom of the Apothecarium in Undercity.', 'Talk to Professor Malkovich at the bottom of the Apothecarium in Undercity.', 'Great! A student! Listen to me carefully...'),
+(50003, 2, -162, 2, 6, 0, 8, 50004, 'Professor Papucho', 'Professor Papucho is an old friend of mine. He told me to send him someone interested in anatomy.$B$BFind him somewhere inside The Forlorn Cavern in Ironforge.', 'Talk to Professor Papucho somewhere inside The Forlorn Cavern in Ironforge.', 'Great! A student! Listen to me carefully...');
 insert ignore into quest_template (entry, Method, ZoneOrSort, MinLevel, QuestLevel, Type, RequiredClasses, PrevQuestId, Title, Details, Objectives, OfferRewardText, ObjectiveText1, RequestItemsText, ReqItemId1, ReqItemCount1, RewItemId1, RewItemCount1, RewSpell, RewSpellCast) values
-(100002, 2, -162, 2, 6, 0, 8, 100001, 'The Human Anatomy', 'Being an undead for so long has made me forget some things about human anatomy. Since we have an annoying specimen in the room next to us, how about you get rid of him and bring me his head? That way I can study it without him screaming. Don\'t worry, he\'s already out of the cage.$B$BBy the way, I will show you how to disguise as a human if you bring me his head in good conditions.',
-'Get rid of the Annoying Peasant and bring his head to Professor Malkovich.', 'You have done well, his head is in perfect conditions. Come closer and I will show you how to disguise as a filthy human.$B$BDon\'t forget your class notes!', 'Intact Human Head', 'Come on! Bring me his head, I don\'t have all day.', 130038, 1, 130040, 1, 5670, 0),
-(100004, 2, -162, 2, 6, 0, 8, 100003, 'The Orcish Anatomy', 'My friends at the museum are thinking of dissecting the orc that I found drunk a few days ago. Kill him and bring me his head so I can study his anatomy better, I\'ll re-sew it to the body later.$B$BBy the way, I will show you how to disguise as an orc if you bring me his head in good conditions.',
-'Kill the Stupefied Orcish Peon and bring his head to Professor Papucho.', 'You have done well, his head is in perfect conditions. Come closer and I will show you how to disguise as a nasty orc.$B$BDon\'t forget your class notes!', 'Intact Orc Head', 'Come on! Bring me his head, I don\'t have all day.', 130039, 1, 130040, 1, 5671, 0);
+(50002, 2, -162, 2, 6, 0, 8, 50000, 'The Human Anatomy', 'Being an undead for so long has made me forget some things about human anatomy. Since we have an annoying specimen in the room next to us, how about you get rid of him and bring me his head? That way I can study it without him screaming. Don\'t worry, he\'s already out of the cage.$B$BBy the way, I will show you how to disguise as a human if you bring me his head in good conditions.',
+'Get rid of the Annoying Peasant and bring his head to Professor Malkovich.', 'You have done well, his head is in perfect conditions. Come closer and I will show you how to disguise as a filthy human.$B$BDon\'t forget your class notes!', 'Intact Human Head', 'Come on! Bring me his head, I don\'t have all day.', 50063, 1, 50065, 1, 5670, 0),
+(50004, 2, -162, 2, 6, 0, 8, 50003, 'The Orcish Anatomy', 'My friends at the museum are thinking of dissecting the orc that I found drunk a few days ago. Kill him and bring me his head so I can study his anatomy better, I\'ll re-sew it to the body later.$B$BBy the way, I will show you how to disguise as an orc if you bring me his head in good conditions.',
+'Kill the Stupefied Orcish Peon and bring his head to Professor Papucho.', 'You have done well, his head is in perfect conditions. Come closer and I will show you how to disguise as a nasty orc.$B$BDon\'t forget your class notes!', 'Intact Orc Head', 'Come on! Bring me his head, I don\'t have all day.', 50064, 1, 50065, 1, 5671, 0);
 insert ignore into creature_questrelation (id, quest) values
-(2122 /*Deathknell Rogue Trainer*/, 100001),
-(3155 /*Valley of Trials Rogue Trainer*/, 100001),
-(100002, 100002),
+(2122 /*Deathknell Rogue Trainer*/, 50000),
+(3155 /*Valley of Trials Rogue Trainer*/, 50000),
+(50002, 50002),
 
-(916 /*Anvilmar Rogue Trainer*/, 100003),
-(915 /*Northshire Valley Rogue Trainer*/, 100003),
-(3594 /*Shadowglen Rogue Trainer*/, 100003),
-(100004, 100004);
+(916 /*Anvilmar Rogue Trainer*/, 50003),
+(915 /*Northshire Valley Rogue Trainer*/, 50003),
+(3594 /*Shadowglen Rogue Trainer*/, 50003),
+(50004, 50004);
 insert ignore into creature_involvedrelation (id, quest) values
-(100002, 100001),
-(100002, 100002),
-(100004, 100003),
-(100004, 100004);
+(50002, 50000),
+(50002, 50002),
+(50004, 50003),
+(50004, 50004);
 update item_template set Quality = 1 where entry = 5113 or entry = 7997;
 
 
@@ -86,31 +78,31 @@ replace into item_template (entry, class, subclass, name, description, display_i
 (8147, 5, 0, 'Tiny Copper Key', 'A reagent for mage spells.', 16454, 1, 0, 1, 1000, 200, 42, 128, 10),
 (8148, 5, 0, 'Tiny Silver Key', 'A reagent for mage spells.', 9660, 1, 0, 1, 1200, 250, 54, 128, 10);
 insert ignore into quest_template (entry, Method, ZoneOrSort, PrevQuestId, MinLevel, QuestLevel, Type, RequiredClasses, RewSpell, RewSpellCast, RewOrReqMoney, Title, Details, Objectives, OfferRewardText) values
-(100005, 2, -161, 0, 42, 42, 0, 128, 10165, 10167, -30000, 'In need of Ol\' Biggins', 'The magic is amazing, but still you will need the help of a good rogue if you want to learn how to open such difficult locks...$B$BI have an old friend who lives in the Ravenholdt Manor, hidden between the mountains in the northern part of Hillsbrad Foothills. I\'m sure he will help you with your learnings in exchange of some gold.', 'Find Ol\' Biggins in the Ravenholdt Manor and pay him to help you with your learnings.', 'I can\'t stand the smell of magic. I\'m sure you know you need to pay me a fee, be quick and go away!'),
-(100006, 2, -161, 100005, 54, 54, 0, 128, 10166, 10168, -80000, 'In need of Ol\' Biggins. Again.', 'Do you remember Ol\' Biggins? My friend who lives in the Ravenholdt Manor, hidden between the mountains in the northern part of Hillsbrad Foothills? He will help you again with your learnings in exchange of more gold.', 'Find Ol\' Biggins in the Ravenholdt Manor and pay him again to help you with your learnings.', 'You again!? That smell... Pay me and I\'ll help you quickly, I hope you don\'t come back!');
+(50005, 2, -161, 0, 42, 42, 0, 128, 10165, 10167, -30000, 'In need of Ol\' Biggins', 'The magic is amazing, but still you will need the help of a good rogue if you want to learn how to open such difficult locks...$B$BI have an old friend who lives in the Ravenholdt Manor, hidden between the mountains in the northern part of Hillsbrad Foothills. I\'m sure he will help you with your learnings in exchange of some gold.', 'Find Ol\' Biggins in the Ravenholdt Manor and pay him to help you with your learnings.', 'I can\'t stand the smell of magic. I\'m sure you know you need to pay me a fee, be quick and go away!'),
+(50006, 2, -161, 50005, 54, 54, 0, 128, 10166, 10168, -80000, 'In need of Ol\' Biggins. Again.', 'Do you remember Ol\' Biggins? My friend who lives in the Ravenholdt Manor, hidden between the mountains in the northern part of Hillsbrad Foothills? He will help you again with your learnings in exchange of more gold.', 'Find Ol\' Biggins in the Ravenholdt Manor and pay him again to help you with your learnings.', 'You again!? That smell... Pay me and I\'ll help you quickly, I hope you don\'t come back!');
 insert into creature_involvedrelation (id, quest) values
-(100012, 100005),
-(100012, 100006);
+(50012, 50005),
+(50012, 50006);
 insert ignore into creature_equip_template (entry, equipentry1) values
-(100000, 3335);
+(50012, 3335);
 insert ignore into npc_vendor (entry, item, maxcount, incrtime) values
-(100000, 5517, 0, 0),
-(100000, 5518, 0, 0),
-(100000, 8147, 0, 0),
-(100000, 8148, 0, 0),
-(100000, 985, 1, 600),
-(100000, 1567, 1, 600),
-(100000, 4158, 1, 1800),
-(100000, 8881, 1, 1800),
+(50013, 5517, 0, 0),
+(50013, 5518, 0, 0),
+(50013, 8147, 0, 0),
+(50013, 8148, 0, 0),
+(50013, 985, 1, 600),
+(50013, 1567, 1, 600),
+(50013, 4158, 1, 1800),
+(50013, 8881, 1, 1800),
 
-(100001, 5517, 0, 0),
-(100001, 5518, 0, 0),
-(100001, 8147, 0, 0),
-(100001, 8148, 0, 0),
-(100001, 985, 1, 600),
-(100001, 1567, 1, 600),
-(100001, 4158, 1, 1800),
-(100001, 8881, 1, 1800);
+(50014, 5517, 0, 0),
+(50014, 5518, 0, 0),
+(50014, 8147, 0, 0),
+(50014, 8148, 0, 0),
+(50014, 985, 1, 600),
+(50014, 1567, 1, 600),
+(50014, 4158, 1, 1800),
+(50014, 8881, 1, 1800);
 
 -- End of migration.
 END IF;
