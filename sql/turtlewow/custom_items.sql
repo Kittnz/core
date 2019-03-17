@@ -46,8 +46,8 @@
 -- 50041 [High Inquisitor's Pants]
 -- 50042 [High Inquisitor's Gloves]
 -- 50043 [High Inquisitor's Staff]
--- 50044 [Crown of the Fire Festival]
--- 50045 [Mantle of the Fire Festival]
+-- 50044 [Amber Filigreed Tabard]
+-- 50045 [Amber Filigreed Shirt]
 -- 50046 [Vestment of Summer]
 -- 50047 [Sandals of Summer]
 -- 50048 [Right Juggling Torch]
@@ -172,29 +172,125 @@ replace into item_template (entry, class, name, display_id, quality, bonding, fl
 (50025, 15, 'Dressing Box: Sally Whitemane', 35406, 1, 1, 4, 'Join us, take up the path of vengeance!'); 
 
 -- 50026 [Invisible Pants]
+
+replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
+(50026, 'Invisible Pants', 7, 396, 1, 1);
+
 -- 50027 [Invisible Shirt]
+
+replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
+(50027, 'Invisible Shirt', 5, 383, 1, 1);
+
 -- 50028 [Loramus Thalipedes' Blindfold]
+
+replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
+(50028, 'Loramus Thalipedes\' Blindfold', 1, 5878, 1, 1);
+
 -- 50029 [Cursed Vision of Sargeras]
+
+replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
+(50029, 'Cursed Vision of Sargeras', 1, 17867, 1, 1);
+
 -- 50030 [Demon Hunter Right Glaive]
+
+replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
+(50030, 'Demon Hunter Right Glaive', 21, 22672, 1, 1);
+
 -- 50031 [Demon Hunter Left Glaive]
+
+replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
+(50031, 'Demon Hunter Left Glaive', 23, 22695, 1, 1);
+
 -- 50032 [Demon Hunter Sandals]
+
+replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
+(50032, 'Demon Hunter Sandals', 8, 16855, 1, 1);
+
 -- 50033 [Demon Hunter Kilt]
+
+replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
+(50033, 'Demon Hunter Kilt', 7, 28287, 1, 1);
+
 -- 50034 [Demon Hunter Harness]
+
+replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
+(50034, 'Demon Hunter Harness', 5, 12370, 1, 1);
+
 -- 50035 [Demon Hunter Bracers]
+
+replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
+(50035, 'Demon Hunter Bracers', 9, 35091, 1, 1);
+
 -- 50036 [High Inquisitor's Chapeau]
+
+replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
+(50036, 'High Inquisitor\'s Chapeau', 1, 15991, 1, 1);
+
 -- 50037 [High Inquisitor's Chest]
+
+replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
+(50037, 'High Inquisitor\'s Chest', 5, 18839, 1, 1);
+
 -- 50038 [High Inquisitor's Tabard]
+
+replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
+(50038, 'High Inquisitor\'s Tabard', 19, 30640, 1, 1);
+
 -- 50039 [High Inquisitor's Boots]
+
+replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
+(50039, 'High Inquisitor\'s Boots', 8, 24054, 1, 1);
+
 -- 50040 [High Inquisitor's Shoulders]
+
+replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
+(50040, 'High Inquisitor\'s Shoulders', 3, 13672, 1, 1);
+
 -- 50041 [High Inquisitor's Pants]
+
+replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
+(50041, 'High Inquisitor\'s Pants', 7, 24895, 1, 1);
+
 -- 50042 [High Inquisitor's Gloves]
+
+replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
+(50042, 'High Inquisitor\'s Gloves', 10, 18853, 1, 1);
+
 -- 50043 [High Inquisitor's Staff]
--- 50044 [Crown of the Fire Festival]
--- 50045 [Mantle of the Fire Festival]
+
+replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
+(50043, 'High Inquisitor\'s Tabard', 17, 20257, 1, 1);
+
+-- 50044 [Amber Filigreed Tabard]
+
+replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
+(50044, 'Amber Filigreed Tabard', 19, 22370, 1, 1);
+
+-- 50045 [Amber Filigreed Shirt]
+
+replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
+(50045, 'Amber Filigreed Shirt', 4, 22370, 1, 1);
+
+
 -- 50046 [Vestment of Summer]
+
+replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
+(50046, 'Vestment of Summer', 5, 26131, 1, 1);
+
 -- 50047 [Sandals of Summer]
+
+replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
+(50047, 'Sandals of Summer', 8, 28088, 1, 1);
+
 -- 50048 [Right Juggling Torch]
+
+replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
+(50048, 'Right Juggling Torch', 21, 12236, 1, 1);
+
 -- 50049 [Left Juggling Torch]
+
+replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
+(50049, 'Right Juggling Torch', 23, 12236, 1, 1);
 
 -- 50056 [Allliance Protector's Scroll] 
 
@@ -241,7 +337,7 @@ replace into item_template (entry, class, name, display_id, quality, bonding, fl
 -- 50022 [Dressing Box: Midsummer Priestess] loot:
 
 replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid) values
-(50022, 50044, 100, 1),(50022, 50045, 100, 2),(50022, 50046, 100, 3),(50022, 50047, 100, 4),(50022, 50048, 100, 5),(50022, 50049, 100, 6);
+(50022, 23323, 100, 1),(50022, 23324, 100, 2),(50022, 50046, 100, 3),(50022, 50047, 100, 4),(50022, 50048, 100, 5),(50022, 50049, 100, 6);
 
 -- 50022 [Dressing Box: Demon Hunter] loot:
 
