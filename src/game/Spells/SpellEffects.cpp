@@ -2350,8 +2350,16 @@ void Spell::EffectApplyAura(SpellEffectIndex eff_idx)
             break;
         case 12566: // Plainsrunning base spell
             if (!m_caster->ToPlayer()->HasSkill(762)) {
-                ChatHandler(m_caster->ToPlayer()).SendSysMessage("|cffff8040You are afraid of high speeds, better learn to ride first.|r");
+                if (eff_idx == EFFECT_INDEX_0)
+                    ChatHandler(m_caster->ToPlayer()).SendSysMessage("|cffff8040You are afraid of high speeds, better learn to ride first.|r");
                 return;
+            }
+
+            if (eff_idx == EFFECT_INDEX_1) {
+                if (m_caster->ToPlayer()->GetSkillValue(762) == 150) // Riding
+                    m_currentBasePoints[EFFECT_INDEX_1] = 40;
+                else
+                    m_currentBasePoints[EFFECT_INDEX_1] = 20;
             }
             break;
         case 12567: // Plainsrunning first tick
@@ -2360,10 +2368,12 @@ void Spell::EffectApplyAura(SpellEffectIndex eff_idx)
                 return;
             }
 
-            if (m_caster->ToPlayer()->GetSkillValue(762) == 150) // Riding
-                m_currentBasePoints[EFFECT_INDEX_1] = 60;
-            else
-                m_currentBasePoints[EFFECT_INDEX_1] = 40;
+            if (eff_idx == EFFECT_INDEX_1) {
+                if (m_caster->ToPlayer()->GetSkillValue(762) == 150) // Riding
+                    m_currentBasePoints[EFFECT_INDEX_1] = 60;
+                else
+                    m_currentBasePoints[EFFECT_INDEX_1] = 40;
+            }
             break;
         case 12568: // Plainsrunning last tick
             if (!m_caster->ToPlayer()->IsMoving()) {
@@ -2371,10 +2381,12 @@ void Spell::EffectApplyAura(SpellEffectIndex eff_idx)
                 return;
             }
 
-            if (m_caster->ToPlayer()->GetSkillValue(762) == 150) // Riding
-                m_currentBasePoints[EFFECT_INDEX_0] = 100;
-            else
-                m_currentBasePoints[EFFECT_INDEX_0] = 60;
+            if (eff_idx == EFFECT_INDEX_0) {
+                if (m_caster->ToPlayer()->GetSkillValue(762) == 150) // Riding
+                    m_currentBasePoints[EFFECT_INDEX_0] = 100;
+                else
+                    m_currentBasePoints[EFFECT_INDEX_0] = 60;
+            }
             break;
     }
 
