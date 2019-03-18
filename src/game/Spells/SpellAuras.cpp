@@ -539,38 +539,17 @@ void Aura::Update(uint32 diff)
     else if (!m_afterInitOnce)
     {
         m_afterInitOnce = true;
-        // Overriding mount speed values for non-speed mounts. TURTLE SPECIFIC VALUES
+        // Making all mounts have DYNAMIC SPEED depending of the Riding Skill the player has. TURTLE SPECIFIC.
         if (m_modifier.m_auraname == SPELL_AURA_MOUNTED)
         {
             bool isSlow = false;
             Unit *target = GetTarget();
-            switch (GetId()) {
-                // 60 % speed
-                case 10803: // Purple Tallstrider
-                case 10800: // Brown Tallstrider
-                case 10801: // Gray Tallstrider
-                    isSlow = true;
-                    break;
-
-                // 100% speed
-                case 10804: // Turquoise Tallstrider
-                case 10802: // Pink Tallstrider
-                case 8396: // Ivory Tallstrider
-                    isSlow = false;
-                    break;
-
-                // Adjustable speed
-                case 30174: // Riding turtle
-                    if (Player *player = target->ToPlayer()) {
-                        if (player->HasSkill(762)) {
-                            isSlow = player->GetSkillValue(762) == 75;
-                        } else {
-                            return;
-                        }
-                    }
-                    break;
-                default:
+            if (Player *player = target->ToPlayer()) {
+                if (player->HasSkill(762)) {
+                    isSlow = player->GetSkillValue(762) == 75;
+                } else {
                     return;
+                }
             }
 
             SpellEntry const *spellInfo = sSpellMgr.GetSpellEntry(isSlow ? 8980 : 22717);
