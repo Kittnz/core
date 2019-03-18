@@ -265,7 +265,7 @@ Aura::Aura(SpellEntry const* spellproto, SpellEffectIndex eff, int32 *currentBas
     m_effIndex(eff), m_positive(false), m_isPeriodic(false), m_isAreaAura(false),
     m_isPersistent(false), m_in_use(0), m_spellAuraHolder(holder),
 // NOSTALRIUS: auras exclusifs
-    m_applied(false)
+    m_applied(false), m_afterInitOnce(false)
 {
     MANGOS_ASSERT(target);
     MANGOS_ASSERT(spellproto && spellproto == sSpellMgr.GetSpellEntry(spellproto->Id) && "`info` must be pointer to a sSpellMgr element");
@@ -534,6 +534,52 @@ void Aura::Update(uint32 diff)
             m_periodicTimer += m_modifier.periodictime;
             ++m_periodicTick;                               // for some infinity auras in some cases can overflow and reset
             PeriodicTick();
+        }
+    }
+    else if (!m_afterInitOnce)
+    {
+        m_afterInitOnce = true;
+        // Overriding mount speed values for non-speed mounts. TURTLE SPECIFIC VALUES
+        if (m_modifier.m_auraname == SPELL_AURA_MOUNTED)
+        {
+            bool isSlow = false;
+            Unit *target = GetTarget();
+            switch (GetId()) {
+                // 60 % speed
+                case 10803: // Purple Tallstrider
+                case 10800: // Brown Tallstrider
+                case 10801: // Gray Tallstrider
+                    isSlow = true;
+                    break;
+
+                // 100% speed
+                case 10804: // Turquoise Tallstrider
+                case 10802: // Pink Tallstrider
+                case 8396: // Ivory Tallstrider
+                    isSlow = false;
+                    break;
+
+                // Adjustable speed
+                case 30174: // Riding turtle
+                    if (Player *player = target->ToPlayer()) {
+                        if (player->HasSkill(762)) {
+                            isSlow = player->GetSkillValue(762) == 75;
+                        } else {
+                            return;
+                        }
+                    }
+                    break;
+                default:
+                    return;
+            }
+
+            SpellEntry const *spellInfo = sSpellMgr.GetSpellEntry(isSlow ? 8980 : 22717);
+            Aura *aur = CreateAura(spellInfo, EFFECT_INDEX_1, nullptr, GetHolder(), target);
+            GetHolder()->AddAura(aur, EFFECT_INDEX_1);
+            target->AddAuraToModList(aur);
+
+            //Call apply directly, no one will call that after initialize ended
+            aur->ApplyModifier(true, true);
         }
     }
 }
