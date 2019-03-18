@@ -65,6 +65,28 @@
 -- 50060 [Green Winter Pants]
 -- 50061 [Red Winter Vest]
 -- 50062 [Half-Eaten Mutton Chop]
+-- 50063 [Intact Human Head]
+-- 50064 [Intact Orc Head]
+-- 50065 [Anatomy Class Notes]
+-- 50066 [Steel Mechanostrider]
+-- 50067 [Albino Snake]
+-- 50068 [Green Water Snake]
+-- 50069 [Scarlet Snake]
+-- 50070 [Ancient Bronze Pocketwatch]
+-- 50071 [Ivory Tallstrider]
+-- 50072 [Brown Tallstrider]
+-- 50073 [Gray Tallstrider]
+-- 50074 [Swift Lovebird]
+-- 50075 [Darkmoon Strider]
+-- 50076 [Turquoise Tallstrider]
+-- 50077 [Faeling Egg]
+-- 50078 [Dart Frog Box]
+-- 50079 [Island Frog Box]
+-- 50080 [Eagle Owl]
+-- 50081 [Cottontail Rabbit Crate]
+-- 50082 [Snowy Owl]
+-- 50083 [Ancient Arcane Dust]
+
 
 -- 50000 [Character Name Change]:
 
@@ -395,6 +417,28 @@ replace into item_template (entry, class, subclass, name, display_id, Quality, F
 (50065, 15, 0, 'Anatomy Class Notes', 8628, 1, 16384, 1, 1, 1, -1, 50065);
 replace into page_text (entry, text) values
 (50065, 'The Professor told me that he has taught other people to disguise themselves. He has not told me where they are but he has given me a list indicating what their disguises are, I must go and look for them in the places where they have been able to infiltrate and they may want to teach me too.$B$B· Defias Footpad$B· Dark Iron Dwarf$B· Southsea Pirate$B· Dalaran Wizard$B· Stonesplinter Trogg$B· Syndicate Highwayman');
+
+-- 50066 - 50083 [CUSTOM PET AND MOUNT ITEMS]:
+
+replace into item_template (entry, class, Flags, Buy_Count, Buy_Price, Sell_Price, name, description, display_id, Quality, Inventory_Type, Item_Level, Required_Level, Required_Skill, Required_Skill_Rank, spellid_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, bonding, max_count, stackable) values
+(50066, 15, 0, 1, 0, 0, 'Steel Mechanostrider', '', 17785, 3, 0, 40, 40, 762, 75, 15781, 1, 330, 3000, 1, 0, 1),
+(50067, 15, 0, 1, 0, 0, 'Albino Snake', '', 11889, 1, 0, 0, 0, 0, 0, 10713, 1, 0, 1500, 1, 1, 1),
+(50068, 15, 0, 1, 0, 0, 'Green Water Snake', '', 11889, 1, 0, 0, 0, 0, 0, 10718, 1, 0, 1500, 1, 1, 1),
+(50069, 15, 0, 1, 0, 0, 'Scarlet Snake', '', 11889, 1, 0, 0, 0, 0, 0, 10720, 1, 0, 1500, 1, 1, 1),
+(50070, 15, 0, 1, 0, 0, 'Ancient Bronze Pocketwatch', 'If you shake it, a naughty timeless visitor will come to see you.', 2820, 3, 0, 0, 0, 0, 0, 10699, 1, 0, 1500, 1, 1, 1),
+(50071, 15, 0, 1, 0, 0, 'Ivory Tallstrider', '', 1294, 3, 0, 0, 0, 0, 0, 8396, 1, 330, 3000, 1, 0, 1),
+(50072, 15, 0, 1, 0, 0, 'Brown Tallstrider', '', 1294, 3, 0, 0, 0, 0, 0, 10800, 1, 330, 3000, 1, 0, 1),
+(50073, 15, 0, 1, 0, 0, 'Gray Tallstrider', '', 1294, 3, 0, 0, 0, 0, 0, 10801, 1, 330, 3000, 1, 0, 1),
+(50074, 15, 0, 1, 0, 0, 'Swift Lovebird', '', 1294, 3, 0, 0, 0, 0, 0, 10802, 1, 330, 3000, 1, 0, 1),
+(50075, 15, 0, 1, 0, 0, 'Darkmoon Strider', '', 1294, 3, 0, 0, 0, 0, 0, 10803, 1, 330, 3000, 1, 0, 1),
+(50076, 15, 0, 1, 0, 0, 'Turquoise Tallstrider', '', 1294, 1, 0, 0, 0, 0, 0, 10804, 1, 330, 3000, 1, 0, 1),
+(50077, 15, 0, 1, 0, 0, 'Faeling Egg', 'Found in the distant lands of Hyjal.', 18048, 2, 0, 0, 0, 0, 0, 10700, 1, 0, 1500, 1, 1, 1),
+(50078, 15, 0, 1, 0, 0, 'Dart Frog Box', '', 7913, 1, 0, 0, 0, 0, 0, 10701, 1, 0, 1500, 1, 1, 1),
+(50079, 15, 0, 1, 0, 0, 'Island Frog Box', '', 7913, 1, 0, 0, 0, 0, 0, 10702, 1, 0, 1500, 1, 1, 1),
+(50080, 15, 0, 1, 0, 0, 'Eagle Owl', '', 33540, 1, 0, 0, 0, 0, 0, 10705, 1, 0, 1500, 1, 1, 1),
+(50081, 15, 0, 1, 0, 0, 'Cottontail Rabbit Crate', '', 7913, 1, 0, 0, 0, 0, 0, 10710, 1, 0, 1500, 1, 1, 1),
+(50082, 15, 0, 1, 0, 0, 'Snowy Owl', '', 33540, 1, 0, 0, 0, 0, 0, 10708, 1, 0, 1500, 1, 1, 1),
+(50083, 15, 0, 1, 0, 0, 'Ancient Arcane Dust', 'It slips between your fingers, but if you manage to put it together you may receive the visit of some little creature thirsty for magic.', 20614, 3, 0, 0, 0, 0, 0, 10696, 1, 0, 1500, 1, 1, 1);
 
 -- ### item_loot content:
 
