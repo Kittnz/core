@@ -320,7 +320,7 @@ replace into item_template (entry, name, inventory_type, display_id, quality, bo
 
 -- 50046 [Vestment of Summer]:
 
-replace into item_template (entry, name, description, inventory_type, display_id, quality, bonding, scriptname, spellid_1, spellcooldown_1) values
+replace into item_template (entry, name, description, inventory_type, display_id, quality, bonding, script_name, spellid_1, spellcooldown_1) values
 (50046, 'Vestment of Summer', 'You feel the need to dance.', 5, 26131, 1, 1, 'item_summer_vestment', 11542, 1000);
 
 -- 50047 [Sandals of Summer]
