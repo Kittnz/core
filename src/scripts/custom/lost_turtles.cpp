@@ -6,7 +6,7 @@
 #define ITEM_APPLE                          4536
 #define ITEM_RIDING_TURTLE                 23720
 
-#define QUEST_LOST_TURTLES		           50100 
+#define QUEST_LOST_TURTLES		           50010 
 
 #define TEXT_PLAYER_IS_FOLLOWED            90010
 #define TEXT_PLAYER_IS_NOT_FOLLOWED        90011
@@ -60,7 +60,7 @@ bool GossipSelect_npc_lost_turtle(Player* p_Player, Creature* p_Creature, uint32
 
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
     {
-        p_Player->AddItem(50017);
+        p_Player->AddItem(23720);
         p_Creature->MonsterSay(GET_IN_WE_ARE_GOING_TO_VEGAS, 0U, p_Player);
         p_Player->CastSpell(p_Player, 30174, true);
         p_Creature->GetMotionMaster()->Clear();
@@ -74,13 +74,9 @@ bool GossipSelect_npc_lost_turtle(Player* p_Player, Creature* p_Creature, uint32
 bool GossipHello_npc_lost_turtles_questgiver(Player* p_Player, Creature* p_Creature)
 {
     if (p_Player->isAlive() && p_Player->GetQuestStatus(QUEST_LOST_TURTLES) == QUEST_STATUS_INCOMPLETE && (std::find(g_followed_units.begin(), g_followed_units.end(), p_Player->GetObjectGuid()) != g_followed_units.end()))
-    {
         p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, TEXT_PLAYER_IS_FOLLOWED, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-    }
     else
-    {
         p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, TEXT_PLAYER_IS_NOT_FOLLOWED, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
-    }
 
     p_Player->SEND_GOSSIP_MENU(GOSSIP_MENU_TEXT, p_Creature->GetGUID());
     return true;
