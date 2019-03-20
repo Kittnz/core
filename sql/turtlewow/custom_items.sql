@@ -87,7 +87,6 @@
 -- 50082 [Snowy Owl]
 -- 50083 [Ancient Arcane Dust]
 
-
 -- 50000 [Character Name Change]:
 
 replace into item_template (entry, name, description, quality, spellid_1, display_id, spellcharges_1, script_name) values
