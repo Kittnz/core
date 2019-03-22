@@ -135,7 +135,7 @@ replace into item_template (entry, class, name, display_id, quality, buy_count, 
 -- 50009 [Mechanical Auctioneer]:
 
 replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1, spellcooldown_1) values
-(50009, 15, 2, 'Mechanical Auctioneer', 'Right click to summon your H.A.R.V.E.Y.', 8931, 1, 1, 28505, 1500);
+(50009, 15, 2, 'Mechanical Auctioneer', 'Right click to summon C.L.U.C.K.', 8931, 1, 1, 28505, 1500);
 
 -- 50010 [Loremaster's Glyph]:
 
@@ -144,8 +144,8 @@ replace into item_template (entry, class, name, display_id, flags, quality, buy_
 
 -- 50011 [MOLL-E, Remote Mail Terminal]:
 
-replace into item_template (entry, name, description, quality, spellid_1, display_id, spellcharges_1, script_name) values
-(50011, 'MOLL-E, Remote Mail Terminal', 'Right click to create a portable mailbox for 10 min. "Mobile Oversized Letter and Literary Extractor."', 1, 1575, 3020, -1, 'remote_mail_terminal');
+replace into item_template (entry, name, description, quality, spellid_1, display_id, spellcharges_1, script_name, spellcooldown_1) values
+(50011, 'MOLL-E, Remote Mail Terminal', 'Mobile Oversized Letter and Literary Extractor. Use it to create a portable mailbox for 5 min.', 1, 18282, 3020, 0, 'remote_mail_terminal', 1500000);
 
 -- 50012 [Diplomatic Declaration]:
 

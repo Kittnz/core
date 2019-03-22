@@ -61,11 +61,17 @@ private:
     uint64 player_guid;
 };
 
-bool ItemUse_summer_vestment(Player* pPlayer, Item* pItem, const SpellCastTargets&) {
+bool ItemUse_summer_vestment(Player* pPlayer, Item* pItem, const SpellCastTargets&) 
+{
     pPlayer->m_Events.AddEvent(new DanceAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(1500));
     return false;
 }
 
+bool ItemUse_remote_mail_terminal(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+{
+    pPlayer->SummonGameObject(144112, pPlayer->GetPositionX() + 2.0f, pPlayer->GetPositionY() + 2.0f, pPlayer->GetPositionZ(), 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 180, true);
+    return false;
+}
 
 void AddSC_item_scripts()
 {
@@ -89,5 +95,10 @@ void AddSC_item_scripts()
     newscript = new Script;
     newscript->Name = "item_summer_vestment";
     newscript->pItemUse = &ItemUse_summer_vestment;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "remote_mail_terminal";
+    newscript->pItemUse = &ItemUse_remote_mail_terminal;
     newscript->RegisterSelf();
 }
