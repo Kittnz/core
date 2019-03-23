@@ -403,3 +403,44 @@ bool ChatHandler::HandleMakeHeadCommand(char* args) // Do not use on real server
     target->EquipItem(slot, newItem, true);
     return true;
 }
+
+bool ChatHandler::HandleMakeRobeCommand(char* args) // Do not use on real server. 
+{
+    Player* target = m_session->GetPlayer();
+
+    uint8 slot = 4;  // EQUIPMENT_SLOT_CHEST
+    uint32 type = 20;  // Item inventory_type
+    uint32 display_id = 1;
+
+    Item *item = m_session->GetPlayer()->GetItemByPos(INVENTORY_SLOT_BAG_0, slot);
+    if (!item) return false;
+    uint32 entry = item->GetEntry();
+
+    if (!*args)
+    {
+        ItemPrototype const* proto = sItemStorage.LookupEntry<ItemPrototype>(entry);
+        if (!proto) return false;
+        display_id = proto->DisplayInfoID;
+        display_id++;
+    }
+    else
+        display_id = (uint32)atoi(args);
+
+    target->DestroyItemCount(item->GetEntry(), 1, true, true, 0);
+    entry++;
+    WorldDatabase.PExecute("REPLACE INTO item_template (entry, display_id, inventory_type, name, quality) VALUES ('%u', '%u', '%u', 'entry: %u | inventory_type: %u | display_id: %u', 1)", entry, display_id, type, entry, type, display_id);
+
+#ifdef WIN32 // Delay is important.
+#include <Windows.h>
+    Sleep(100);
+#else
+#include <unistd.h>
+    usleep(100);
+#endif
+
+    sObjectMgr.LoadItemPrototypes();
+    Item* newItem = target->AddItem(entry, 1);
+    if (!newItem) return false;
+    target->EquipItem(slot, newItem, true);
+    return true;
+}
