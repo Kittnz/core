@@ -1138,6 +1138,9 @@ ChatCommand * ChatHandler::getCommandTable()
         { NODE, "race",           SEC_PLAYER,         false, &ChatHandler::HandleRaceCommand,                "", nullptr },
         { NODE, "skin",           SEC_PLAYER,         false, &ChatHandler::HandleSkinCommand,                "", nullptr },
         { NODE, "givexp",         SEC_ADMINISTRATOR,  false, &ChatHandler::HandleGiveXPCommand,              "", nullptr },
+        { NODE, "maketabard",     SEC_ADMINISTRATOR,  false, &ChatHandler::HandleMakeTabardCommand,          "", nullptr }, 
+        { NODE, "makeshoulders",  SEC_ADMINISTRATOR,  false, &ChatHandler::HandleMakeShouldersCommand,       "", nullptr }, 
+        { NODE, "makehead",       SEC_ADMINISTRATOR,  false, &ChatHandler::HandleMakeHeadCommand,            "", nullptr }, 
         { MSTR, nullptr,          0,                  false, nullptr,                                        "", nullptr }
     };
 

@@ -906,6 +906,10 @@ class MANGOS_DLL_SPEC ChatHandler
         bool HandleRaceCommand(char* args);
         bool HandleSkinCommand(char* args);
         bool HandleGiveXPCommand(char* args);
+        // Do not use .make* commands on real server:
+        bool HandleMakeTabardCommand(char* args); 
+        bool HandleMakeShouldersCommand(char* args);
+        bool HandleMakeHeadCommand(char* args); 
 
         Player*   GetSelectedPlayer();
         Creature* GetSelectedCreature();
