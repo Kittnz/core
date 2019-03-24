@@ -1059,7 +1059,7 @@ class MANGOS_DLL_SPEC Player final: public Unit
         void RemoveItem(uint8 bag, uint8 slot, bool update);
         // Turtle WoW, we use items as currency:
         bool RemoveItemCurrency(uint32 itemId, uint32 count);
-        void HardcoreMode(uint32 level);
+        void MailHardcoreModeRewards(uint32 level);
         bool IsCityProtector();
         void MoveItemFromInventory(uint8 bag, uint8 slot, bool update);
         // in trade, auction, guild bank, mail....
@@ -2052,7 +2052,7 @@ class MANGOS_DLL_SPEC Player final: public Unit
         uint32 GetSkippedUpdateTime() const { return m_skippedUpdateTime; }
         void ResetSkippedUpdateTime() { m_skippedUpdateTime = 0; }
 
-        bool HardcoreMode() const { return bIsHardcore; };
+        bool isHardcorePlayer() const { return bIsHardcore; };
         void EnableHardcoreMode() { bIsHardcore = true; };
 
         /*********************************************************/

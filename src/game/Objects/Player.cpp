@@ -2768,6 +2768,9 @@ void Player::GiveLevel(uint32 level)
     if (sWorld.getConfig(CONFIG_BOOL_BEGINNERS_GUILD))
         CheckIfShouldBeInBeginnersGuild(level);
 
+    if (bIsHardcore)
+        MailHardcoreModeRewards(level);
+
     PlayerLevelInfo info;
     sObjectMgr.GetPlayerLevelInfo(getRace(), getClass(), level, &info);
 
@@ -14936,6 +14939,9 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
     if (sWorld.GetWowPatch() >= WOW_PATCH_112)
         UpdateOldRidingSkillToNew(has_epic_mount);
 
+    // Turtle WoW custom feature : hardcore mode(0.5x rates for Creature.Kill)
+    bIsHardcore = GetItemCount(50010) > 0;
+
     return true;
 }
 
@@ -21422,39 +21428,43 @@ bool Player::RemoveItemCurrency(uint32 itemId, uint32 count)
     return false;
 }
 
-void Player::HardcoreMode(uint32 level)
+void Player::MailHardcoreModeRewards(uint32 level)
 {
     // Speak to Speedy and get an item that will reduce your Creature.Kill XP to x0.5 (hardcore mode).
     // If player stays at 0.5, he/she will be able to receive special rewards evry 10 levels.
-
     uint32 itemEntry = 0;
     std::string subject = "";
     std::string message = "";
 
     switch (level)
     {
+    case 10:
+        itemEntry = 50050;
+        subject = "Congratulations on level 10!";
+        message = "Your recent achievements on reaching level 10 at the hardcore setting have not gone unnoticed. To commend you for your dedication and enthusiasm of exploring Azeroth to its fullest, we bestow upon you this reward box filled with goodies!";
+        break;
     case 20:
-        itemEntry = 50080;
+        itemEntry = 50051;
         subject = "Congratulations on level 20!";
         message = "Your recent achievements on reaching level 20 at the hardcore setting have not gone unnoticed. To commend you for your dedication and enthusiasm of exploring Azeroth to its fullest, we bestow upon you this reward box filled with goodies!";
         break;
     case 30:
-        itemEntry = 50081;
+        itemEntry = 50052;
         subject = "Congratulations on level 30!";
         message = "Your recent achievements on reaching level 30 at the hardcore setting have not gone unnoticed. To commend you for your dedication and enthusiasm of exploring Azeroth to its fullest, we bestow upon you this reward box filled with goodies!";
         break;
     case 40:
-        itemEntry = 50082;
+        itemEntry = 50053;
         subject = "Congratulations on level 40!";
         message = "Your recent achievements on reaching level 40 at the hardcore setting have not gone unnoticed. To commend you for your dedication and enthusiasm of exploring Azeroth to its fullest, we bestow upon you this reward box filled with goodies!";
         break;
     case 50:
-        itemEntry = 50083;
+        itemEntry = 50054;
         subject = "Congratulations on level 50!";
         message = "Your recent achievements on reaching level 50 at the hardcore setting have not gone unnoticed. To commend you for your dedication and enthusiasm of exploring Azeroth to its fullest, we bestow upon you this reward box filled with goodies!";
         break;
     case 60:
-        itemEntry = 50084;
+        itemEntry = 50055;
         subject = "Congratulations on level 60!";
         message = "Your recent achievements on reaching level 60 at the hardcore setting have not gone unnoticed. To commend you for your dedication and enthusiasm of exploring Azeroth to its fullest, we bestow upon you this reward box filled with goodies!";
         break;
@@ -21471,9 +21481,9 @@ void Player::HardcoreMode(uint32 level)
 
     if (level == 60 && GetSession()->GetSecurity() == SEC_PLAYER)
     {
-        LoginDatabase.PExecute("UPDATE `shop_coins` SET `coins`=`coins`+250 WHERE `id`=%u", GetSession()->GetAccountId());
+        LoginDatabase.PExecute("UPDATE `shop_coins` SET `coins`=`coins`+200 WHERE `id`=%u", GetSession()->GetAccountId());
         ChatHandler(this).PSendSysMessage("|cffF58CBASpeedy whispers: Impressive! Your recent achievements on reaching level 60 at the hardcore setting have not gone unnoticed. We've added additional 250 Turtle Tokes to your account balance!|r");
-    }                 
+    }
 }
 
 bool Player::IsCityProtector() { return GetByteValue(PLAYER_BYTES_3, 2) > 0; }

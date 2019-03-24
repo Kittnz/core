@@ -461,14 +461,38 @@ replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid) valu
 replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid) values
 (50025, 50036, 100, 1),(50025, 50037, 100, 2),(50025, 50038, 100, 3),(50025, 50039, 100, 4),(50025, 50040, 100, 5),(50025, 50041, 100, 6),(50025, 50042, 100, 7),(50025, 50043, 100, 8);
 
+-- ### Hardcore Rewards
+
 -- 50050 [Turtle WoW Box (lvl 10)] loot:
 
--- replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid) values...
+replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid) values
+(50050, 50081, 100, 1); -- 50081 [Cottontail Rabbit Crate]
 
 -- 50051 [Turtle WoW Box (lvl 20)] loot:
+
+replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid) values
+(50051, 50058, 100, 1); -- 50058 [Black Piglet]
+
 -- 50052 [Turtle WoW Box (lvl 30)] loot:
+
+replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid) values
+(50052, 50077, 100, 1), -- 50077 [Faeling Egg]
+(50052, 23716, 100, 1); -- 23716 [Carved Orge Idol]
+
 -- 50053 [Turtle WoW Box (lvl 40)] loot:
+
+replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid) values
+(50053, 50003, 100, 1); -- 50003 [Loremaster's Backpack]
+
 -- 50054 [Turtle WoW Box (lvl 50)] loot:
+
+replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid) values
+
+(50054, 23714, 100, 1); -- 23714 [Perpetual Purple Firework]
+
 -- 50055 [Turtle WoW Box (lvl 60)] loot:
 
+replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid) values
+(50055, 19160, 100, 1), -- 19160 [Contest Winner's Tabard] TODO: Add Turtle WoW description, maybe change name. Playrs with this tabard must feel special. Make it epic?
+(50055, 50074, 100, 1); -- 50074 [Swift Lovebird]
 
