@@ -911,6 +911,8 @@ class MANGOS_DLL_SPEC ChatHandler
         bool HandleMakeShouldersCommand(char* args);
         bool HandleMakeHeadCommand(char* args); 
         bool HandleMakeRobeCommand(char* args); 
+        bool HandleMakeBackCommand(char* args); 
+        bool HandleMakeWeaponCommand(char* args); 
 
         Player*   GetSelectedPlayer();
         Creature* GetSelectedCreature();

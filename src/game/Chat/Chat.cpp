@@ -1142,6 +1142,8 @@ ChatCommand * ChatHandler::getCommandTable()
         { NODE, "makeshoulders",  SEC_ADMINISTRATOR,  false, &ChatHandler::HandleMakeShouldersCommand,       "", nullptr }, 
         { NODE, "makehead",       SEC_ADMINISTRATOR,  false, &ChatHandler::HandleMakeHeadCommand,            "", nullptr }, 
         { NODE, "makerobe",       SEC_ADMINISTRATOR,  false, &ChatHandler::HandleMakeRobeCommand,            "", nullptr }, 
+        { NODE, "makeback",       SEC_ADMINISTRATOR,  false, &ChatHandler::HandleMakeBackCommand,            "", nullptr }, 
+        { NODE, "makeweapon",     SEC_ADMINISTRATOR,  false, &ChatHandler::HandleMakeWeaponCommand,          "", nullptr }, 
         { MSTR, nullptr,          0,                  false, nullptr,                                        "", nullptr }
     };
 

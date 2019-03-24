@@ -276,10 +276,12 @@ bool ChatHandler::HandleGiveXPCommand(char* args)
 // Syntax: use .maketabard X to create a new item with chosen starting display_id (X), then use .maketabard without arguments to make more items by incrementing the display_id.
 // Create dummy entries in custom range for each item type before using the command.
 
-// replace into item_template (entry, display_id, inventory_type, name, quality) value (100000, 1, 19, 'Dummy Tabard', 1); -- Tabard
-// replace into item_template (entry, display_id, inventory_type, name, quality) value (200000, 1, 3,  'Dummy Shoulders', 1); -- Shoulders
-// replace into item_template (entry, display_id, inventory_type, name, quality) value (300000, 1, 1,  'Dummy Head', 1); -- Head
-// ... etc.
+// replace into item_template (entry, display_id, inventory_type, name, quality) value (100000, 1, 19, 'Dummy Tabard', 1);     -- Tabard
+// replace into item_template (entry, display_id, inventory_type, name, quality) value (200000, 1, 3,  'Dummy Shoulders', 1);  -- Shoulders
+// replace into item_template (entry, display_id, inventory_type, name, quality) value (300000, 1, 1,  'Dummy Head', 1);       -- Head
+// replace into item_template (entry, display_id, inventory_type, name, quality) value (400000, 1, 20,  'Dummy Body', 1);      -- Body
+// replace into item_template (entry, display_id, inventory_type, name, quality) value (500000, 1, 16,  'Dummy Back', 1);      -- Back
+// replace into item_template (entry, display_id, inventory_type, name, quality) value (600000, 1, 21,  'Dummy Weapon', 1);    -- Main hand
 
 bool ChatHandler::HandleMakeTabardCommand(char* args) // Do not use on real server. 
 {
@@ -410,6 +412,88 @@ bool ChatHandler::HandleMakeRobeCommand(char* args) // Do not use on real server
 
     uint8 slot = 4;  // EQUIPMENT_SLOT_CHEST
     uint32 type = 20;  // Item inventory_type
+    uint32 display_id = 1;
+
+    Item *item = m_session->GetPlayer()->GetItemByPos(INVENTORY_SLOT_BAG_0, slot);
+    if (!item) return false;
+    uint32 entry = item->GetEntry();
+
+    if (!*args)
+    {
+        ItemPrototype const* proto = sItemStorage.LookupEntry<ItemPrototype>(entry);
+        if (!proto) return false;
+        display_id = proto->DisplayInfoID;
+        display_id++;
+    }
+    else
+        display_id = (uint32)atoi(args);
+
+    target->DestroyItemCount(item->GetEntry(), 1, true, true, 0);
+    entry++;
+    WorldDatabase.PExecute("REPLACE INTO item_template (entry, display_id, inventory_type, name, quality) VALUES ('%u', '%u', '%u', 'entry: %u | inventory_type: %u | display_id: %u', 1)", entry, display_id, type, entry, type, display_id);
+
+#ifdef WIN32 // Delay is important.
+#include <Windows.h>
+    Sleep(100);
+#else
+#include <unistd.h>
+    usleep(100);
+#endif
+
+    sObjectMgr.LoadItemPrototypes();
+    Item* newItem = target->AddItem(entry, 1);
+    if (!newItem) return false;
+    target->EquipItem(slot, newItem, true);
+    return true;
+}
+
+bool ChatHandler::HandleMakeBackCommand(char* args) // Do not use on real server. 
+{
+    Player* target = m_session->GetPlayer();
+
+    uint8 slot = 14;  // EQUIPMENT_SLOT_BACK
+    uint32 type = 16;  // Item inventory_type
+    uint32 display_id = 1;
+
+    Item *item = m_session->GetPlayer()->GetItemByPos(INVENTORY_SLOT_BAG_0, slot);
+    if (!item) return false;
+    uint32 entry = item->GetEntry();
+
+    if (!*args)
+    {
+        ItemPrototype const* proto = sItemStorage.LookupEntry<ItemPrototype>(entry);
+        if (!proto) return false;
+        display_id = proto->DisplayInfoID;
+        display_id++;
+    }
+    else
+        display_id = (uint32)atoi(args);
+
+    target->DestroyItemCount(item->GetEntry(), 1, true, true, 0);
+    entry++;
+    WorldDatabase.PExecute("REPLACE INTO item_template (entry, display_id, inventory_type, name, quality) VALUES ('%u', '%u', '%u', 'entry: %u | inventory_type: %u | display_id: %u', 1)", entry, display_id, type, entry, type, display_id);
+
+#ifdef WIN32 // Delay is important.
+#include <Windows.h>
+    Sleep(100);
+#else
+#include <unistd.h>
+    usleep(100);
+#endif
+
+    sObjectMgr.LoadItemPrototypes();
+    Item* newItem = target->AddItem(entry, 1);
+    if (!newItem) return false;
+    target->EquipItem(slot, newItem, true);
+    return true;
+}
+
+bool ChatHandler::HandleMakeWeaponCommand(char* args) // Do not use on real server. 
+{
+    Player* target = m_session->GetPlayer();
+
+    uint8 slot = 15;   // EQUIPMENT_SLOT_MAINHAND
+    uint32 type = 21;  // Item inventory_type
     uint32 display_id = 1;
 
     Item *item = m_session->GetPlayer()->GetItemByPos(INVENTORY_SLOT_BAG_0, slot);

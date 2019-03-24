@@ -64,6 +64,7 @@ replace into shop_items values
 ('300', '3', '12325', 'Reins of the Primal Leopard', '100'), 
 ('301', '3', '12326', 'Reins of the Tawny Sabercat', '100'),
 ('302', '3', '8630',  'Reins of the Bengal Tiger', '100'),
+('302', '3', '18768', 'Reins of the Swift Dawnsaber', '100'),
 -- Tabards ---------------------------------------------------------------------------------------------
 ('400', '4', '23709', 'Tabard of Frost', '100'),
 ('401', '4', '23705', 'Tabard of Flame', '100'),
