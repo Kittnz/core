@@ -60,8 +60,11 @@ replace into creature_template (entry, display_id1, name, subname, level_min, le
 insert ignore into creature_template_addon (entry, emote) values
 (50017, 4), (50018, 4), (50019, 4), (50020, 4), (50021, 4), (50022, 4), (50023, 4), (50024, 4), (50025, 4); -- Cheering
 
+
+-- Diplomacy related NPCs
+
 replace into creature_template (entry, display_id1, name, subname, level_min, level_max, health_min, health_max, faction, npc_flags) values
-('50027', '2532', 'Karn Deepeye', 'Horde Diplomat', '60', '60', '15768', '12298', '35', '1').
+('50027', '2532', 'Karn Deepeye', 'Horde Diplomat', '60', '60', '15768', '12298', '35', '1'),
 ('50028', '197', 'Tarun Swifteagle', 'Alliance Diplomat', '60', '60', '15768', '12298', '35', '1');
 
 
