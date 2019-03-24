@@ -14,7 +14,9 @@ replace into creature_template (entry, display_id1, name, subname, level_min, le
 ('50043', '15901', 'Blitzen', '', '1', '1', '64', '64', '35', '', 0.3),
 ('50036', '12074', 'Bone Golem', '', '1', '1', '64', '64', '35', '', 0.5),
 ('50037', '2878',  'Mini Krampus', '', '1', '1', '64', '64', '35', '', 0.3),
-('50039', '16357', 'Black Piglet', '', '1', '1', '64', '64', '35', '', 0.5);
+('50039', '16357', 'Black Piglet', '', '1', '1', '64', '64', '35', '', 0.5),
+('50044', '14432', 'Kirin Tor Familiar', '', '1', '1', '64', '64', '35', '', 0.4),
+('50045', '1236',  'Frostwolf Ghostpup', '', '1', '1', '64', '64', '35', '', 0.4);
 
 -- Functional companions, or scprited:
 
@@ -34,7 +36,9 @@ replace into custom_pet_entry_relation (item_entry, creature_entry) values
 ('50058', '50039'), -- Black Piglet
 ('50007', '50040'), -- Forworn Mule
 ('50005', '50041'), -- Field Repair Bot 75B
-('50009', '50042'); -- Mechanical Auctioneer
+('50009', '50042'), -- Mechanical Auctioneer
+('50084', '50044'), -- Kirin Tor Familiar
+('50085', '50045'); -- Frostwolf Ghostpup
 
 -- Vendor items for field Repair Bot 75B (Food & Drinks for now, TODO: add reagents)
 

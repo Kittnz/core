@@ -86,6 +86,8 @@
 -- 50081 [Cottontail Rabbit Crate]
 -- 50082 [Snowy Owl]
 -- 50083 [Ancient Arcane Dust]
+-- 50084 [Kirin Tor Familiar]
+-- 50085 [Frostwolf Ghostpaw]
 
 -- 50000 [Character Name Change]:
 
@@ -438,6 +440,16 @@ replace into item_template (entry, class, Flags, Buy_Count, Buy_Price, Sell_Pric
 (50081, 15, 0, 1, 0, 0, 'Cottontail Rabbit Crate', '', 7913, 1, 0, 0, 0, 0, 0, 10710, 1, 0, 1500, 1, 1, 1),
 (50082, 15, 0, 1, 0, 0, 'Snowy Owl', '', 33540, 1, 0, 0, 0, 0, 0, 10708, 1, 0, 1500, 1, 1, 1),
 (50083, 15, 0, 1, 0, 0, 'Ancient Arcane Dust', 'It slips between your fingers, but if you manage to put it together you may receive the visit of some little creature thirsty for magic.', 20614, 3, 0, 0, 0, 0, 0, 10696, 1, 0, 1500, 1, 1, 1);
+
+-- 50084 [Kirin Tor Familiar]:
+
+replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1, spellcooldown_1) values
+(50084, 15, 2, 'Kirin Tor Familiar', 'Who knew he was so into books?', 20614, 1, 1, 28505, 1500);
+
+-- 50085 [Frostwolf Ghostpup]:
+
+replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1, spellcooldown_1) values
+(50085, 15, 2, 'Frostwolf Ghostpup', 'The little wolf told to stay. Watching, waiting, for vacant prey. Too proud to leave, she slipped away. Unburdened now, forever free to play.', 31475, 1, 1, 28505, 1500);
 
 -- ### item_loot content:
 
