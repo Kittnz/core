@@ -309,13 +309,13 @@ replace into item_template (entry, class, Flags, Buy_Count, Buy_Price, Sell_Pric
 (50074, 15, 0, 1, 0, 0, 'Swift Lovebird', '', 1294, 3, 0, 0, 0, 0, 0, 10802, 1, 330, 3000, 1, 0, 1),
 (50075, 15, 0, 1, 0, 0, 'Darkmoon Strider', '', 1294, 3, 0, 0, 0, 0, 0, 10803, 1, 330, 3000, 1, 0, 1),
 (50076, 15, 0, 1, 0, 0, 'Turquoise Tallstrider', '', 1294, 1, 0, 0, 0, 0, 0, 10804, 1, 330, 3000, 1, 0, 1),
-(50077, 15, 0, 1, 0, 0, 'Faeling Egg', 'Found in the distant lands of Hyjal.', 18048, 2, 0, 0, 0, 0, 0, 10700, 1, 0, 1500, 1, 1, 1),
-(50078, 15, 0, 1, 0, 0, 'Dart Frog Box', '', 7913, 1, 0, 0, 0, 0, 0, 10701, 1, 0, 1500, 1, 1, 1),
-(50079, 15, 0, 1, 0, 0, 'Island Frog Box', '', 7913, 1, 0, 0, 0, 0, 0, 10702, 1, 0, 1500, 1, 1, 1),
-(50080, 15, 0, 1, 0, 0, 'Eagle Owl', '', 33540, 1, 0, 0, 0, 0, 0, 10705, 1, 0, 1500, 1, 1, 1),
-(50081, 15, 0, 1, 0, 0, 'Cottontail Rabbit Crate', '', 7913, 1, 0, 0, 0, 0, 0, 10710, 1, 0, 1500, 1, 1, 1),
-(50082, 15, 0, 1, 0, 0, 'Snowy Owl', '', 33540, 1, 0, 0, 0, 0, 0, 10708, 1, 0, 1500, 1, 1, 1),
-(50083, 15, 0, 1, 0, 0, 'Ancient Arcane Dust', 'It slips between your fingers, but if you manage to put it together you may receive the visit of some little creature thirsty for magic.', 20614, 3, 0, 0, 0, 0, 0, 10696, 1, 0, 1500, 1, 1, 1);
+(50077, 15, 0, 1, 0, 0, 'Faeling Egg', 'Found in the distant lands of Hyjal.', 18048, 2, 0, 0, 0, 0, 0, 10700, -1, 0, -1, 1, 1, 1),
+(50078, 15, 0, 1, 0, 0, 'Dart Frog Box', '', 7913, 1, 0, 0, 0, 0, 0, 10701, -1, 0, -1, 1, 1, 1),
+(50079, 15, 0, 1, 0, 0, 'Island Frog Box', '', 7913, 1, 0, 0, 0, 0, 0, 10702, -1, 0, -1, 1, 1, 1),
+(50080, 15, 0, 1, 0, 0, 'Eagle Owl', '', 33540, 1, 0, 0, 0, 0, 0, 10705, -1, 0, -1, 1, 1, 1),
+(50081, 15, 0, 1, 0, 0, 'Cottontail Rabbit Crate', '', 7913, 1, 0, 0, 0, 0, 0, 10710, -1, 0, -1, 1, 1, 1),
+(50082, 15, 0, 1, 0, 0, 'Snowy Owl', '', 33540, 1, 0, 0, 0, 0, 0, 10708, -1, 0, -1, 1, 1, 1),
+(50083, 15, 0, 1, 0, 0, 'Ancient Arcane Dust', 'It slips between your fingers, but if you manage to put it together you may receive the visit of some little creature thirsty for magic.', 20614, 3, 0, 0, 0, 0, 0, 10696, -1, 0, -1, 1, 1, 1);
 -- 50084 [Kirin Tor Familiar]
 replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1) values
 (50084, 15, 2, 'Kirin Tor Familiar', 'Who knew he was so into books?', 20614, 1, 1, 28505);
