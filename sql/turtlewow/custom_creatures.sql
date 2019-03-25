@@ -18,8 +18,8 @@ replace into creature_template (Entry, Name, SubName, level_min, level_max, disp
 (50002, 'Professor Malkovich', 'Anatomy Master', 25, 25, 11467, 68, 7, 3, 2, 0, 1, 1.14286, 8, 2, 1, 1104, 1104, 1984, 1984, 31, 40, 38.72, 53.24, 5043, 1500, 1919),
 (50004, 'Professor Papucho', 'Anatomy Master', 25, 25, 5377, 55, 7, 3, 2, 0, 1, 1.14286, 8, 2, 1, 1104, 1104, 1984, 1984, 31, 40, 38.72, 53.24, 5043, 1500, 1919);
 replace into creature_template (Entry, Name, SubName, Loot_Id, level_min, level_max, display_id1, Faction, Type, Inhabit_Type, Unit_Class, npc_flags, unit_flags, Speed_Walk, Speed_Run, Dmg_Multiplier, xp_multiplier, health_min, health_max, dmg_min, dmg_max, ranged_dmg_min, ranged_dmg_max, Armor, base_attack_time, Equipment_Id) values
-(50003, 'Annoying Peasant', '', 100003, 5, 5, 11036, 7, 7, 3, 1, 0, 0, 0.92, 1.14286, 1, 1.8, 112, 112, 15, 21, 5, 8, 65, 2500, 0),
-(50005, 'Stupefied Orcish Peon', '', 100005, 5, 5, 10038, 7, 7, 3, 1, 0, 0, 0.92, 1.14286, 1, 1.8, 112, 112, 15, 21, 5, 8, 65, 2500, 0);
+(50003, 'Annoying Peasant', '', 50003, 5, 5, 11036, 7, 7, 3, 1, 0, 0, 0.92, 1.14286, 1, 1.8, 112, 112, 15, 21, 5, 8, 65, 2500, 0),
+(50005, 'Stupefied Orcish Peon', '', 50003, 5, 5, 10038, 7, 7, 3, 1, 0, 0, 0.92, 1.14286, 1, 1.8, 112, 112, 15, 21, 5, 8, 65, 2500, 0);
 replace into creature_template (Entry, Name, SubName, level_min, level_max, display_id1, Faction, Type, Inhabit_Type, npc_flags, unit_flags, flags_extra, Speed_Walk, Speed_Run, Unit_Class, Dmg_Multiplier, xp_multiplier, health_min, health_max, dmg_min, dmg_max, ranged_dmg_min, ranged_dmg_max, Armor, base_attack_time, Equipment_Id) values
 (50006, 'Suspicious Defias Footpad', '', 15, 15, 2333, 35, 7, 3, 4, 0, 2, 1, 1.14286, 1, 2, 1, 2305, 2305, 42, 53, 45.144, 62.073, 5043, 2000, 481),
 (50007, 'Suspicious Dark Iron Dwarf', '', 30, 30, 825, 35, 7, 3, 4, 0, 2, 1, 1.14286, 1, 2, 1, 2305, 2305, 42, 53, 45.144, 62.073, 5043, 2000, 1051),

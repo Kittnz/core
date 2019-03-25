@@ -23,6 +23,8 @@ insert into creature_questrelation (id, quest) values
 (50027, 50011),
 (50028, 50012);
 
+update creature set spawndist = 0 where movementtype = 0;
+
 -- End of migration.
 END IF;
 END??
