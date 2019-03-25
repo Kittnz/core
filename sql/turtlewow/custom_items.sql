@@ -147,7 +147,7 @@ replace into item_template (entry, class, subclass, name, description, display_i
 (50015, 15, 0, 'Bloody Coin', 'Local currency used in some bloody events.', 32277, 1, 200, 1);
 -- 50016 [Portable Meeting Stone]
 replace into item_template (entry, name, description, display_id, quality, spellid_1, spellcooldown_1, script_name, bonding) values
-(50016, 'Portable Meeting Stone', 'Use it to meet new friends.', '33543', '1', '7077', '3600000', '', '1');
+(50016, 'Portable Meeting Stone', 'Use it to meet new friends.', '33543', '1', '7077', '3600000', 'portable_meeting_stone', '1');
 -- 50017 [Highborne Soul Mirror]
 replace into item_template (entry, name, description, display_id, quality, spellid_1, spellcooldown_1, script_name) values
 (50017, 'Highborne Soul Mirror', 'Before the Great Sundering, the Highborne were known among the night elves for their arrogance, avarice and outlandish clothing. It was said that nothing was so pleasing to the gaze of the Highborne as themselves. These mirrors were created so that elven ladies could see their colorful garments in three full dimensions, yet the reflection often exaggerated the already depraved visage of the viewer.', '14007', '1', '31726', '3600000', 'highborne_soul_mirror');
@@ -267,10 +267,10 @@ replace into item_template (entry, class, name, display_id, quality, bonding, fl
 (50055, 15, 'Turtle WoW Box', 18499, 1, 1, 4, 'Take it slow! Level 60 hardcore reward.'); 
 -- 50056 [Allliance Protector's Scroll]
 replace into item_template (entry, name, description, display_id, quality, spellid_1, spellcooldown_1, script_name, bonding) values
-(50056, 'Alliance Protector\'s Scroll', 'Teleports you to your capital city.', '6270', '1', '7794', '3600000', '', '1');
+(50056, 'Alliance Protector\'s Scroll', 'Teleports you to your capital city.', '6270', '1', '7794', '3600000', 'city_protector_scroll', '1');
 -- 50057 [Horde Protector's Scroll]
 replace into item_template (entry, name, description, display_id, quality, spellid_1, spellcooldown_1, script_name, bonding) values
-(50057, 'Horde Protector\'s Scroll', 'Teleports you to your capital city.', '1096', '1', '7794', '3600000', '', '1');
+(50057, 'Horde Protector\'s Scroll', 'Teleports you to your capital city.', '1096', '1', '7794', '3600000', 'city_protector_scroll', '1');
 -- 50058 [Black Piglet]
 replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1, spellcooldown_1) values
 (50058, 15, 2, 'Black Piglet', 'He loves to play in the mud! Then he likes to give you a hug!', 7287, 1, 1, 28505, 1500);
