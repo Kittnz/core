@@ -1080,18 +1080,6 @@ uint32 Unit::DealDamage(Unit *pVictim, uint32 damage, CleanDamage const* cleanDa
         }
     }
 
-    // FIX FOR PLAINSRUNNING
-    if (pVictim->HasAura(12568)) {
-        pVictim->RemoveAura(12568, EFFECT_INDEX_0);
-    } else if (pVictim->HasAura(12567)) {
-        pVictim->RemoveAura(12567, EFFECT_INDEX_0);
-        pVictim->RemoveAura(12567, EFFECT_INDEX_1);
-    } else if (pVictim->HasAura(12566)) {
-        pVictim->RemoveAura(12566, EFFECT_INDEX_0);
-        pVictim->RemoveAura(12566, EFFECT_INDEX_1);
-    }
-    // END FIX FOR PLAINSRUNNING
-
     return damage;
 }
 
@@ -7487,14 +7475,6 @@ void Unit::Mount(uint32 mount, uint32 spellId)
     }
 
     RemoveAurasWithInterruptFlags(AURA_INTERRUPT_FLAG_MOUNTING);
-
-    // FIX FOR PLAINSRUNNING
-    if (HasAura(12566)) {
-        RemoveAura(12566, EFFECT_INDEX_0);
-        RemoveAura(12566, EFFECT_INDEX_1);
-    }
-    // END FIX FOR PLAINSRUNNING
-
     SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, mount);
 }
 

@@ -265,7 +265,7 @@ Aura::Aura(SpellEntry const* spellproto, SpellEffectIndex eff, int32 *currentBas
     m_effIndex(eff), m_positive(false), m_isPeriodic(false), m_isAreaAura(false),
     m_isPersistent(false), m_in_use(0), m_spellAuraHolder(holder),
 // NOSTALRIUS: auras exclusifs
-    m_applied(false), m_afterInitOnce(false)
+    m_applied(false)
 {
     MANGOS_ASSERT(target);
     MANGOS_ASSERT(spellproto && spellproto == sSpellMgr.GetSpellEntry(spellproto->Id) && "`info` must be pointer to a sSpellMgr element");
@@ -534,31 +534,6 @@ void Aura::Update(uint32 diff)
             m_periodicTimer += m_modifier.periodictime;
             ++m_periodicTick;                               // for some infinity auras in some cases can overflow and reset
             PeriodicTick();
-        }
-    }
-    else if (!m_afterInitOnce)
-    {
-        m_afterInitOnce = true;
-        // Making all mounts have DYNAMIC SPEED depending of the Riding Skill the player has. TURTLE SPECIFIC.
-        if (m_modifier.m_auraname == SPELL_AURA_MOUNTED)
-        {
-            bool isSlow = false;
-            Unit *target = GetTarget();
-            if (Player *player = target->ToPlayer()) {
-                if (player->HasSkill(762)) {
-                    isSlow = player->GetSkillValue(762) == 75;
-                } else {
-                    return;
-                }
-            }
-
-            SpellEntry const *spellInfo = sSpellMgr.GetSpellEntry(isSlow ? 8980 : 22717);
-            Aura *aur = CreateAura(spellInfo, EFFECT_INDEX_1, nullptr, GetHolder(), target);
-            GetHolder()->AddAura(aur, EFFECT_INDEX_1);
-            target->AddAuraToModList(aur);
-
-            //Call apply directly, no one will call that after initialize ended
-            aur->ApplyModifier(true, true);
         }
     }
 }
@@ -3779,6 +3754,23 @@ void Aura::HandleAuraModIncreaseMountedSpeed(bool /*apply*/, bool Real)
     // all applied/removed only at real aura add/remove
     if (!Real)
         return;
+
+    // Turtle specific feature: all mounts will have dynamic speed:
+    if (Player* player = GetTarget()->ToPlayer())
+    {
+        bool mountAura = GetSpellProto()->EffectApplyAuraName[0] == SPELL_AURA_MOUNTED;
+
+        if (mountAura)
+        {
+            uint32 skillValue = player->GetSkillValue(762);
+
+            switch (skillValue)
+            {
+            case 75: m_modifier.m_amount = 60; break;
+            case 150: m_modifier.m_amount = 100; break;
+            }
+        }
+    }
 
     GetTarget()->UpdateSpeed(MOVE_RUN, true);
 }
