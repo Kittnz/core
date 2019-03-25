@@ -6034,7 +6034,7 @@ void Spell::EffectSummonCritter(SpellEffectIndex eff_idx)
     Pet* old_critter = player->GetMiniPet();
 
     // for same pet just despawn
-    if (old_critter && old_critter->GetEntry() == pet_entry)
+    if (old_critter && old_critter->GetEntry() == cInfo->entry)
     {
         player->RemoveMiniPet();
         return;

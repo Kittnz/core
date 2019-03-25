@@ -113,20 +113,20 @@ replace into item_template (entry, class, name, display_id, quality, buy_count, 
 replace into item_template (entry, class, name, display_id, quality, buy_count, buy_price, inventory_type, item_level, stackable, container_slots, bonding, material) values
 (50004, 1, 'Portable Black Hole', 19502, 2, 1, 320000, 18, 60, 1, 36, 1, 8);
 -- 50005 [Field Repair Bot 75B]
-replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1, spellcooldown_1) values
-(50005, 15, 2, 'Field Repair Bot 75B', 'Unfolds into a Field Repair Bot that can repair damaged items and purchase unwanted goods', 19503, 1, 1, 28505, 1500);
+replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1) values
+(50005, 15, 2, 'Field Repair Bot 75B', 'Unfolds into a Field Repair Bot that can repair damaged items and purchase unwanted goods', 19503, 1, 1, 28505);
 -- 50006 [Mini Krampus]
-replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1, spellcooldown_1) values
-(50006, 15, 2, 'Mini Krampus', 'Be careful, he will steal your children!', 7999, 1, 1, 28505, 1500);
+replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1) values
+(50006, 15, 2, 'Mini Krampus', 'Be careful, he will steal your children!', 7999, 1, 1, 28505);
 -- 50007 [Forworn Mule]
-replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1, spellcooldown_1) values
-(50007, 15, 2, 'Forworn Mule', 'Carries all your worldly possessions, there and back. Just don\'t do anything P.E.T.A would disapprove of.', 13108, 1, 1, 28505, 1500);
+replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1) values
+(50007, 15, 2, 'Forworn Mule', 'Carries all your worldly possessions, there and back. Just don\'t do anything P.E.T.A would disapprove of.', 13108, 1, 1, 28505);
 -- 50008 [Twink's Insignia]
 replace into item_template (entry, class, name, display_id, quality, buy_count, max_count, stackable, bonding, description) values
 (50008, 15, 'Twink\'s Insignia', 17776, 6, 1, 1, 1, 1, 'This rune prevents the owner from gaining experience.');
 -- 50009 [Mechanical Auctioneer]
-replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1, spellcooldown_1) values
-(50009, 15, 2, 'Mechanical Auctioneer', 'Right click to summon C.L.U.C.K.', 8931, 1, 1, 28505, 1500);
+replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1) values
+(50009, 15, 2, 'Mechanical Auctioneer', 'Right click to summon C.L.U.C.K.', 8931, 1, 1, 28505);
 -- 50010 [Loremaster's Glyph]
 replace into item_template (entry, class, name, display_id, flags, quality, buy_count, max_count, stackable, bonding, description, bag_family) values
 (50010, 13, 'Loremaster\'s Glyph', 22377, 32, 6, 1, 1, 1, 1, 'This item is a reminder of your hardcore adventure.', 9);
@@ -137,11 +137,11 @@ replace into item_template (entry, name, description, quality, spellid_1, displa
 replace into item_template (entry, display_id, quality, name, description, class, subclass, max_count, bonding) values
 (50012, 16065, 6, 'Diplomatic Declaration', 'As a diplomat, you have proved to be aware of the real issues. You now know how to speak with the other faction and are allowed to trade and group with them.', 15, 0, 1, 1);
 -- 50013 [Bone Golem]
-replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1, spellcooldown_1) values
-(50013, 15, 2, 'Bone Golem', 'Bone golems are deadly undead constructs made entirely of bones and fueled by ichor of Undeath.', 13806, 1, 1, 28505, 1500);
+replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1) values
+(50013, 15, 2, 'Bone Golem', 'Bone golems are deadly undead constructs made entirely of bones and fueled by ichor of Undeath.', 13806, 1, 1, 28505);
 -- 50014 [Blitzen]
-replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1, spellcooldown_1) values
-(50014, 15, 2, 'Blitzen', 'Happy Winter Veil 2018!', 8119, 1, 1, 28505, 1500);
+replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1) values
+(50014, 15, 2, 'Blitzen', 'Happy Winter Veil 2018!', 8119, 1, 1, 28505);
 -- 50015 [Bloody Coin]
 replace into item_template (entry, class, subclass, name, description, display_id, quality, stackable, bonding) values
 (50015, 15, 0, 'Bloody Coin', 'Local currency used in some bloody events.', 32277, 1, 200, 1);
@@ -155,8 +155,8 @@ replace into item_template (entry, name, description, display_id, quality, spell
 replace into item_template (entry, name, display_id, quality, buy_count, inventory_type, stackable, bonding) values
 (50018, 'Loramus Thalipedes Blindfold', 5878, 1, 1, 1, 1, 1);
 -- 50019 [Moonkin Egg]
-replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1, spellcooldown_1) values
-(50019, 15, 2, 'Moonkin Egg', 'Moonkins are blessed by Elune and spread nature\'s grace wherever they travel. The festive fowls are always in the mood for a dance.', 18050, 1, 1, 28505, 1500);
+replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1) values
+(50019, 15, 2, 'Moonkin Egg', 'Moonkins are blessed by Elune and spread nature\'s grace wherever they travel. The festive fowls are always in the mood for a dance.', 18050, 1, 1, 28505);
 -- 50020 [Magic Muffin]
 replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1, spellcooldown_1, buy_count, sell_price, script_name) values
 (50020, 0, 5, 'Magic Muffin', 'Be careful, if you grow, you may not fit in your clothes.', 6343, 1, 1, 8213, 1000, 150, 35, 'item_alice_wonderland_scale');
@@ -272,8 +272,8 @@ replace into item_template (entry, name, description, display_id, quality, spell
 replace into item_template (entry, name, description, display_id, quality, spellid_1, spellcooldown_1, script_name, bonding) values
 (50057, 'Horde Protector\'s Scroll', 'Teleports you to your capital city.', '1096', '1', '7794', '3600000', 'city_protector_scroll', '1');
 -- 50058 [Black Piglet]
-replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1, spellcooldown_1) values
-(50058, 15, 2, 'Black Piglet', 'He loves to play in the mud! Then he likes to give you a hug!', 7287, 1, 1, 28505, 1500);
+replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1) values
+(50058, 15, 2, 'Black Piglet', 'He loves to play in the mud! Then he likes to give you a hug!', 7287, 1, 1, 28505);
 -- 50059 [Green Winter Vest]
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50059, 'Green Winter Vest', 5, 33581, 1, 1);
@@ -317,11 +317,11 @@ replace into item_template (entry, class, Flags, Buy_Count, Buy_Price, Sell_Pric
 (50082, 15, 0, 1, 0, 0, 'Snowy Owl', '', 33540, 1, 0, 0, 0, 0, 0, 10708, 1, 0, 1500, 1, 1, 1),
 (50083, 15, 0, 1, 0, 0, 'Ancient Arcane Dust', 'It slips between your fingers, but if you manage to put it together you may receive the visit of some little creature thirsty for magic.', 20614, 3, 0, 0, 0, 0, 0, 10696, 1, 0, 1500, 1, 1, 1);
 -- 50084 [Kirin Tor Familiar]
-replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1, spellcooldown_1) values
-(50084, 15, 2, 'Kirin Tor Familiar', 'Who knew he was so into books?', 20614, 1, 1, 28505, 1500);
+replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1) values
+(50084, 15, 2, 'Kirin Tor Familiar', 'Who knew he was so into books?', 20614, 1, 1, 28505);
 -- 50085 [Frostwolf Ghostpup]
-replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1, spellcooldown_1) values
-(50085, 15, 2, 'Frostwolf Ghostpup', 'The little wolf told to stay. Watching, waiting, for vacant prey. Too proud to leave, she slipped away. Unburdened now, forever free to play.', 31475, 1, 1, 28505, 1500);
+replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1) values
+(50085, 15, 2, 'Frostwolf Ghostpup', 'The little wolf told to stay. Watching, waiting, for vacant prey. Too proud to leave, she slipped away. Unburdened now, forever free to play.', 31475, 1, 1, 28505);
 -- 50086 [Stromgarde Tabard]
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding, description) values
 (50086, 'Stromgarde Tabard', 19, 36468, 1, 1, '');

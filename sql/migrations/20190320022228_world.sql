@@ -18,7 +18,7 @@ replace into creature_template (entry, display_id1, name, subname, level_min, le
 ('50044', '14432', 'Kirin Tor Familiar', '', '1', '1', '64', '64', '35', '', 0.4),
 ('50045', '1236',  'Frostwolf Ghostpup', '', '1', '1', '64', '64', '35', '', 0.4);
 
--- Functional companions, or scprited:
+-- Functional companions, or scripted:
 
 replace into creature_template (entry, display_id1, name, subname, level_min, level_max, health_min, health_max, faction, script_name, npc_flags, scale) values
 ('50038', '15374',  'Moonkin Hatchling', '', '1', '1', '64', '64', '35', 'npc_scripted_companion', 0, 0.3),
