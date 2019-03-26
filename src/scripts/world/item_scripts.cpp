@@ -152,7 +152,7 @@ bool ItemUse_makeup_black(Player* pPlayer, Item* pItem, const SpellCastTargets&)
     return false;
 }
 
-bool ItemUse_nightelf_haircolor(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+bool ItemUse_nightelf_hairdye(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
     uint8 color = 0;
 
@@ -228,7 +228,7 @@ void AddSC_item_scripts()
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "nightelf_haircolor";
-    newscript->pItemUse = &ItemUse_nightelf_haircolor;
+    newscript->Name = "nightelf_hairdye";
+    newscript->pItemUse = &ItemUse_nightelf_hairdye;
     newscript->RegisterSelf();
 }

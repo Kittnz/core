@@ -408,21 +408,21 @@ replace into item_template (entry, name, description, quality, spellid_1, displa
 (50106, 'Jandis Barov\'s Makeup Kit', '', 2, 1575, 16028, 'makeup_black', 1, 1);
 replace into item_template (entry, name, description, quality, spellid_1, display_id, script_name, allowable_race, bonding) values
 -- 50107 [Night Elf Hair Dye: Grass Green]
-(50107, 'Night Elf Hair Dye: Grass Green', '', 2, 1575, 33449, 'nightelf_haircolor', 8, 1),
+(50107, 'Night Elf Hair Dye: Grass Green', '', 2, 1575, 33449, 'nightelf_hairdye', 8, 1),
 -- 50108 [Night Elf Hair Dye: Green]
-(50108, 'Night Elf Hair Dye: Green', '', 2, 1575, 33449, 'nightelf_haircolor', 8, 1),
+(50108, 'Night Elf Hair Dye: Green', '', 2, 1575, 33449, 'nightelf_hairdye', 8, 1),
 -- 50109 [Night Elf Hair Dye: Dark Green]
-(50109, 'Night Elf Hair Dye: Dark Green', '', 2, 1575, 33449, 'nightelf_haircolor', 8, 1),
+(50109, 'Night Elf Hair Dye: Dark Green', '', 2, 1575, 33449, 'nightelf_hairdye', 8, 1),
 -- 50110 [Night Elf Hair Dye: Aquamarine]
-(50110, 'Night Elf Hair Dye: Aquamarine', '', 2, 1575, 33449, 'nightelf_haircolor', 8, 1),
+(50110, 'Night Elf Hair Dye: Aquamarine', '', 2, 1575, 33449, 'nightelf_hairdye', 8, 1),
 -- 50111 [Night Elf Hair Dye: White]
-(50111, 'Night Elf Hair Dye: White', '', 2, 1575, 33449, 'nightelf_haircolor', 8, 1),
+(50111, 'Night Elf Hair Dye: White', '', 2, 1575, 33449, 'nightelf_hairdye', 8, 1),
 -- 50112 [Night Elf Hair Dye: Blue]
-(50112, 'Night Elf Hair Dye: Blue', '', 2, 1575, 33449, 'nightelf_haircolor', 8, 1),
+(50112, 'Night Elf Hair Dye: Blue', '', 2, 1575, 33449, 'nightelf_hairdye', 8, 1),
 -- 50113 [Night Elf Hair Dye: Dark Blue]
-(50113, 'Night Elf Hair Dye: Dark Blue', '', 2, 1575, 33449, 'nightelf_haircolor', 8, 1),
+(50113, 'Night Elf Hair Dye: Dark Blue', '', 2, 1575, 33449, 'nightelf_hairdye', 8, 1),
 -- 50114 [Night Elf Hair Dye: Purple]
-(50114, 'Night Elf Hair Dye: Purple', '', 2, 1575, 33449, 'nightelf_haircolor', 8, 1);
+(50114, 'Night Elf Hair Dye: Purple', '', 2, 1575, 33449, 'nightelf_hairdye', 8, 1);
 
 -- ### item_loot_template:
 
