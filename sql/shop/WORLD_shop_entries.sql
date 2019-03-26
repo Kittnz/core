@@ -93,6 +93,7 @@ replace into shop_items values
 -- Roleplay --------------------------------------------------------------------------------------------
 (500, 5, 50022, 'Dressing Box: Midsummer Priestess', 100),
 (501, 5, 50023, 'Dressing Box: Demon Hunter', 100),
-(502, 5, 50024, 'Dressing Box: Invisible Suit', 100),
-(503, 5, 50025, 'Dressing Box: Sally Whitemane', 100);
+(502, 5, 50024, 'Dressing Box: Invisible Suit', 10),
+(503, 5, 50025, 'Dressing Box: Sally Whitemane', 100),
+(504, 5, 50101, 'Dressing Box: Scholomance Student', 100);
 

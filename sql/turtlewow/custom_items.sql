@@ -97,6 +97,16 @@
 -- 50092 [Tabard of Scarlet Preacher]
 -- 50093 [Tabard of Scarlet Archmage]
 -- 50094 [Sword of a Thousand Truths]
+-- 50095 [Scholomance Academy Hood]
+-- 50096 [Scholomance Academy Vest]
+-- 50097 [Scholomance Academy Gloves]
+-- 50098 [Scholomance Academy Boots]
+-- 50099 [Scholomance Academy Shoulders]
+-- 50100 [Scholomance Academy Pants]
+-- 50101 [Dressing Box: Scholomance Student]
+-- 50102 [Scholomance Academy Belt]
+-- 50103 [Scholomance Academy Robe]
+-- 50103 [Scholomance Academy Staff]
 
 -- 50000 [Character Name Change]
 replace into item_template (entry, name, description, quality, spellid_1, display_id, spellcharges_1, script_name) values
@@ -351,6 +361,37 @@ replace into item_template (entry, name, inventory_type, display_id, quality, bo
 replace into item_template (entry, class, subclass, display_id, inventory_type, name, quality, description, required_level, bonding, dmg_min1, dmg_max1, spellid_1, spellcooldown_1, script_name) value 
 (50094, 2, 7, 36377, 21, 'Sword of a Thousand Truths', 5, 'It was foretold, that one day, heroes who could wield the sword might reveal themselves.', 60, 1, 170, 190, 6755, 50600, 'sword_of_truth');
 
+-- 50095 [Scholomance Academy Hood]
+replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
+(50095, 'Scholomance Academy Hood', 1, 16824, 1, 1);
+-- 50096 [Scholomance Academy Vest]
+replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
+(50096, 'Scholomance Academy Vest', 5, 8720, 1, 1);
+-- 50097 [Scholomance Academy Gloves]
+replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
+(50097, 'Scholomance Academy Gloves', 10, 16642, 1, 1);
+-- 50098 [Scholomance Academy Boots]
+replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
+(50098, 'Scholomance Academy Boots', 8, 21154, 1, 1);
+-- 50099 [Scholomance Academy Shoulders]
+replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
+(50099, 'Scholomance Academy Shoulders', 3, 18865, 1, 1);
+-- 50100 [Scholomance Academy Pants]
+replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
+(50100, 'Scholomance Academy Pants', 7, 14989, 1, 1);
+-- 50101 [Dressing Box: Scholomance Student]
+replace into item_template (entry, class, name, display_id, quality, bonding, flags, description) values
+(50101, 15, 'Dressing Box: Scholomance Student', 35406, 1, 1, 4, 'If you haven\'t come to study, I\'ll use you to teach a lesson.'); 
+-- 50102 [Scholomance Academy Belt]
+replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
+(50102, 'Scholomance Academy Belt', 6, 32289, 1, 1);
+-- 50103 [Scholomance Academy Robe]
+replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
+(50103, 'Scholomance Academy Robe', 20, 16643, 1, 1);
+-- 50103 [Scholomance Academy Staff]
+replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
+(50104, 'Scholomance Academy Staff', 17, 35563, 1, 1);
+
 -- ### item_loot content:
 
 -- 50022 [Dressing Box: Midsummer Priestess] loot:
@@ -364,7 +405,10 @@ replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid) valu
 (50024, 50026, 100, 1),(50024, 50027, 100, 2);
 -- 50025 [Dressing Box: Sally Whitemane] loot:
 replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid) values
-(50025, 50036, 100, 1),(50025, 50037, 100, 2),(50025, 50038, 100, 3),(50025, 50039, 100, 4),(50025, 50040, 100, 5),(50025, 50041, 100, 6),(50025, 50042, 100, 7),(50025, 50043, 100, 8);
+(50025, 50036, 100, 1),(50025, 50037, 100, 2),(50025, 50038, 100, 3);
+-- 50101 [Dressing Box: Scholomance Student]
+replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid) values
+(50101, 50091, 100, 1),(50101, 50095, 100, 2),(50101, 50096, 100, 3),(50101, 50097, 100, 4),(50101, 50098, 100, 5),(50101, 50099, 100, 6),(50101, 50100, 100, 7),(50101, 50102, 100, 8),(50101, 50103, 100, 9),(50101, 3427, 100, 10), (50101, 50104, 100, 11);
 
 -- ### Hardcore Rewards
 
