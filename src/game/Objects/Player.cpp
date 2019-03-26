@@ -12983,7 +12983,7 @@ void Player::RewardQuest(Quest const *pQuest, uint32 reward, WorldObject* questG
     // Blizzlike:
     // uint32 XP = q_status.m_rewarded ? 0 : uint32(pQuest->XPValue(this) * sWorld.getConfig(CONFIG_FLOAT_RATE_XP_QUEST));
     // Quest check for Turtle WoW Arena Tournament:
-    uint32 XP = q_status.m_rewarded && (pQuest->GetQuestId() > 100026 || pQuest->GetQuestId() < 100022) ? 0 : uint32(pQuest->XPValue(this) *sWorld.getConfig(CONFIG_FLOAT_RATE_XP_QUEST));
+    uint32 XP = q_status.m_rewarded && (pQuest->GetQuestId() > 50226 || pQuest->GetQuestId() < 50222) ? 0 : uint32(pQuest->XPValue(this) *sWorld.getConfig(CONFIG_FLOAT_RATE_XP_QUEST));
 
     if (getLevel() < sWorld.getConfig(CONFIG_UINT32_MAX_PLAYER_LEVEL))
         GiveXP(XP , NULL);
