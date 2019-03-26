@@ -152,6 +152,27 @@ bool ItemUse_makeup_black(Player* pPlayer, Item* pItem, const SpellCastTargets&)
     return false;
 }
 
+bool ItemUse_nightelf_haircolor(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+{
+    uint8 color = 0;
+
+    switch (pItem->GetEntry())
+    {
+    case 50107: color = 0; break; // Grass Green
+    case 50108: color = 1; break; // Green
+    case 50109: color = 2; break; // Dark Green
+    case 50110: color = 3; break; // Aquamarine
+    case 50111: color = 4; break; // White
+    case 50112: color = 5; break; // Blue
+    case 50113: color = 6; break; // Dark Blue
+    case 50114: color = 7; break; // Purple
+    }
+
+    pPlayer->SetByteValue(PLAYER_BYTES, 3, color);
+    ChatHandler(pPlayer).SendSysMessage("Please logout and login again!");
+    return false;
+}
+
 void AddSC_item_scripts()
 {
     Script *newscript;
@@ -204,5 +225,10 @@ void AddSC_item_scripts()
     newscript = new Script;
     newscript->Name = "makeup_black";
     newscript->pItemUse = &ItemUse_makeup_black;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "nightelf_haircolor";
+    newscript->pItemUse = &ItemUse_nightelf_haircolor;
     newscript->RegisterSelf();
 }
