@@ -405,7 +405,7 @@ replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid) valu
 (50024, 50026, 100, 1),(50024, 50027, 100, 2);
 -- 50025 [Dressing Box: Sally Whitemane] loot:
 replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid) values
-(50025, 50036, 100, 1),(50025, 50037, 100, 2),(50025, 50038, 100, 3);
+(50025, 50036, 100, 1),(50025, 50037, 100, 2),(50025, 50038, 100, 3),(50025, 50039, 100, 4),(50025, 50040, 100, 5),(50025, 50041, 100, 6),(50025, 50042, 100, 7),(50025, 50043, 100, 8);
 -- 50101 [Dressing Box: Scholomance Student]
 replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid) values
 (50101, 50091, 100, 1),(50101, 50095, 100, 2),(50101, 50096, 100, 3),(50101, 50097, 100, 4),(50101, 50098, 100, 5),(50101, 50099, 100, 6),(50101, 50100, 100, 7),(50101, 50102, 100, 8),(50101, 50103, 100, 9),(50101, 3427, 100, 10), (50101, 50104, 100, 11);
