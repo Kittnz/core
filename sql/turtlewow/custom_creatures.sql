@@ -67,6 +67,10 @@ replace into creature_template (entry, display_id1, name, subname, level_min, le
 ('50027', '2532', 'Karn Deepeye', 'Horde Diplomat', '60', '60', '15768', '12298', '35', '1'),
 ('50028', '197', 'Tarun Swifteagle', 'Alliance Diplomat', '60', '60', '15768', '12298', '35', '1');
 
+replace into creature_template (entry, name, scale, level_min, level_max, health_min, health_max, display_id1, faction, type, inhabit_type, npc_flags) values
+(50029, 'Agize', 1.2, 8, 8, 112, 112, 14616, 35, 7, 3, 4),
+(50030, 'Alice', 1.2, 8, 8, 112, 112, 257, 35, 7, 3, 4);
+
 
 
 
