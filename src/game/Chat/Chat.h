@@ -905,9 +905,9 @@ class MANGOS_DLL_SPEC ChatHandler
         bool HandleMountCommand(char* args);
         bool HandleRaceCommand(char* args);
         bool HandleSkinCommand(char* args);
-        bool HandleUpdateSkinBytesCommand(char * args);
-        bool HandleUpdateHairStyleCommand(char * args);
-        bool HandleUpdateHairColorCommand(char * args);
+        bool HandleUpdateSkinBytesCommand(char* args);
+        bool HandleUpdateHairStyleCommand(char* args);
+        bool HandleUpdateHairColorCommand(char* args);
         bool HandleGiveXPCommand(char* args);
         // Do not use .make* commands on real server:
         bool HandleMakeTabardCommand(char* args); 
