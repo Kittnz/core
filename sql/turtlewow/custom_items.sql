@@ -20,7 +20,7 @@
 -- 50015 [Bloody Coin]
 -- 50016 [Portable Meeting Stone]
 -- 50017 [Highborne Soul Mirror]
--- 50018 [Loramus Thalipedes Blindfold]
+-- 50018 [Turtle Traveller's Bag]
 -- 50019 [Moonkin Egg]
 -- 50020 [Magic Muffin]
 -- 50021 [Strange Bottle]
@@ -96,6 +96,7 @@
 -- 50091 [Scholomance Tabard]
 -- 50092 [Tabard of Scarlet Preacher]
 -- 50093 [Tabard of Scarlet Archmage]
+-- 50094 [Sword of a Thousand Truths]
 
 -- 50000 [Character Name Change]
 replace into item_template (entry, name, description, quality, spellid_1, display_id, spellcharges_1, script_name) values
@@ -150,10 +151,10 @@ replace into item_template (entry, name, description, display_id, quality, spell
 (50016, 'Portable Meeting Stone', 'Use it to meet new friends.', '33543', '1', '7077', '3600000', 'portable_meeting_stone', '1');
 -- 50017 [Highborne Soul Mirror]
 replace into item_template (entry, name, description, display_id, quality, spellid_1, spellcooldown_1, script_name) values
-(50017, 'Highborne Soul Mirror', 'Before the Great Sundering, the Highborne were known among the night elves for their arrogance, avarice and outlandish clothing. It was said that nothing was so pleasing to the gaze of the Highborne as themselves. These mirrors were created so that elven ladies could see their colorful garments in three full dimensions, yet the reflection often exaggerated the already depraved visage of the viewer.', '14007', '1', '31726', '3600000', 'highborne_soul_mirror');
--- 50018 [Loramus Thalipedes Blindfold]
-replace into item_template (entry, name, display_id, quality, buy_count, inventory_type, stackable, bonding) values
-(50018, 'Loramus Thalipedes Blindfold', 5878, 1, 1, 1, 1, 1);
+(50017, 'Highborne Soul Mirror', 'Before the Great Sundering, the Highborne were known among the night elves for their arrogance, avarice and outlandish clothing...', 14007, 1, 31726, 3600000, 'highborne_soul_mirror');
+-- 50018 [Turtle Traveller's Bag]
+replace into item_template (entry, class, name, display_id, quality, buy_count, buy_price, inventory_type, item_level, stackable, container_slots, bonding, material) values
+(50018, 1, 'Turtle Traveller\'s Bag', 6430, 1, 1, 320000, 18, 60, 1, 20, 1, 8);
 -- 50019 [Moonkin Egg]
 replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1) values
 (50019, 15, 2, 'Moonkin Egg', 'Moonkins are blessed by Elune and spread nature\'s grace wherever they travel. The festive fowls are always in the mood for a dance.', 18050, 1, 1, 28505);
@@ -346,6 +347,9 @@ replace into item_template (entry, name, inventory_type, display_id, quality, bo
 -- 50093 [Tabard of Scarlet Archmage]
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding, description) values
 (50093, 'Tabard of Scarlet Archmage', 19, 23954, 1, 1, '');
+-- 50094 [Sword of a Thousand Truths]
+replace into item_template (entry, class, subclass, display_id, inventory_type, name, quality, description, required_level, bonding, dmg_min1, dmg_max1, spellid_1, spellcooldown_1, script_name) value 
+(50094, 2, 7, 36377, 21, 'Sword of a Thousand Truths', 5, 'It was foretold, that one day, heroes who could wield the sword might reveal themselves.', 60, 1, 170, 190, 6755, 50600, 'sword_of_truth');
 
 -- ### item_loot content:
 
@@ -364,24 +368,30 @@ replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid) valu
 
 -- ### Hardcore Rewards
 
+replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid) values
 -- 50050 [Turtle WoW Box (lvl 10)] loot:
-replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid) values
-(50050, 50081, 100, 1); -- 50081 [Cottontail Rabbit Crate]
+(50050, 18967, 100, 1), -- 18954 [Turtle Egg (Olive)]
+(50050, 1470,  100, 1), -- 1470  [Murloc Skin Bag]
+(50050, 859,   100, 1), -- 859   [Fine Cloth Shirt]
+(50050, 50048, 100, 1), -- 50048 [Right Juggling Torch]
 -- 50051 [Turtle WoW Box (lvl 20)] loot:
-replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid) values
-(50051, 50058, 100, 1); -- 50058 [Black Piglet]
+(50051, 2588,  100, 1), --  2588 [Deprectaed Red Leather Mask]
+(50051, 1470,  100, 1), --  1470 [Murloc Skin Bag]
+(50051, 50058, 100, 1), -- 50058 [Black Piglet]
+(50051, 50021, 100, 1), -- 50021 [Strange Bottle]
 -- 50052 [Turtle WoW Box (lvl 30)] loot:
-replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid) values
-(50052, 50077, 100, 1), -- 50077 [Faeling Egg]
-(50052, 23716, 100, 1); -- 23716 [Carved Orge Idol]
+(50052, 50062, 100, 1), -- 50062 [Half-Eaten Mutton Chop]
+(50052, 23716, 100, 1), -- 23716 [Carved Orge Idol]
+(50052, 50020, 100, 1), -- 50020 [Magic Muffin]
 -- 50053 [Turtle WoW Box (lvl 40)] loot:
-replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid) values
-(50053, 50003, 100, 1); -- 50003 [Loremaster's Backpack]
+(50053, 50003, 100, 1), -- 50003 [Loremaster's Backpack]
+(50053, 50017, 100, 1), -- 50017 [Highborne Soul Mirror]
 -- 50054 [Turtle WoW Box (lvl 50)] loot:
-replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid) values
-(50054, 23714, 100, 1); -- 23714 [Perpetual Purple Firework]
+(50054, 23714, 100, 1), -- 23714 [Perpetual Purple Firework]
+(50054, 23578, 100, 1), -- 23578 [Diet McWeaksause]
+(50054, 23579, 100, 1), -- 23579 [Diet McWeaksause Classic]
 -- 50055 [Turtle WoW Box (lvl 60)] loot:
-replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid) values
-(50055, 19160, 100, 1), -- 19160 [Contest Winner's Tabard] TODO: Add Turtle WoW description, maybe change name. Playrs with this tabard must feel special. Make it epic?
-(50055, 50074, 100, 1); -- 50074 [Swift Lovebird]
+(50055, 19160, 100, 1), -- 19160 [Contest Winner's Tabard] 
+(50055, 50074, 100, 1), -- 50074 [Swift Lovebird]
+(50055, 50094, 100, 1); -- 50094 [Sword of a Thousand Truths]
 

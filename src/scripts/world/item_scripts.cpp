@@ -130,6 +130,12 @@ bool ItemUse_remote_mail_terminal(Player* pPlayer, Item* pItem, const SpellCastT
     return false;
 }
 
+bool ItemUse_sword_of_truth(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+{
+    ChatHandler(pPlayer).SendSysMessage(urand(50200, 50210));
+    return false;
+}
+
 void AddSC_item_scripts()
 {
     Script *newscript;
@@ -167,5 +173,10 @@ void AddSC_item_scripts()
     newscript = new Script;
     newscript->Name = "remote_mail_terminal";
     newscript->pItemUse = &ItemUse_remote_mail_terminal;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "sword_of_truth";
+    newscript->pItemUse = &ItemUse_sword_of_truth;
     newscript->RegisterSelf();
 }
