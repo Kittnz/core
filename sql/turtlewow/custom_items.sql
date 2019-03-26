@@ -393,33 +393,31 @@ replace into item_template (entry, name, inventory_type, display_id, quality, bo
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50104, 'Scholomance Academy Staff', 17, 35563, 1, 1);
 -- 50105 [Sally Whitemane's Makeup Kit]
-replace into item_template (entry, name, description, quality, spellid_1, display_id, spellcharges_1, script_name, allowable_race) values
-(50105, 'Sally Whitemane\'s Makeup Kit', '', 2, 1575, 16028, -1, 'makeup_red', 1);
+replace into item_template (entry, name, description, quality, spellid_1, display_id, script_name, allowable_race, bonding) values
+(50105, 'Sally Whitemane\'s Makeup Kit', '', 2, 1575, 14006, 'makeup_red', 1, 1);
 -- 50106 [Jandis Barov's Makeup Kit]
-replace into item_template (entry, name, description, quality, spellid_1, display_id, spellcharges_1, script_name, allowable_race) values
-(50106, 'Jandis Barov\'s Makeup Kit', '', 2, 1575, 14006, -1, 'makeup_black', 1);
+replace into item_template (entry, name, description, quality, spellid_1, display_id, script_name, allowable_race, bonding) values
+(50106, 'Jandis Barov\'s Makeup Kit', '', 2, 1575, 16028, 'makeup_black', 1, 1);
 
--- ### item_loot content:
+-- ### item_loot_template:
+
+replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid) values
+
+-- Dressing Boxes:
 
 -- 50022 [Dressing Box: Midsummer Priestess] loot:
-replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid) values
-(50022, 23323, 100, 1),(50022, 23324, 100, 2),(50022, 50046, 100, 3),(50022, 50047, 100, 4),(50022, 50048, 100, 5),(50022, 50049, 100, 6);
+(50022, 23323, 100, 1),(50022, 23324, 100, 2),(50022, 50046, 100, 3),(50022, 50047, 100, 4),(50022, 50048, 100, 5),(50022, 50049, 100, 6),
 -- 50022 [Dressing Box: Demon Hunter] loot:
-replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid) values
-(50023, 50028, 100, 1),(50023, 50029, 100, 2),(50023, 50030, 100, 3),(50023, 50031, 100, 4),(50023, 50032, 100, 5),(50023, 50033, 100, 6),(50023, 50034, 100, 7),(50023, 50035, 100, 8);
+(50023, 50028, 100, 1),(50023, 50029, 100, 2),(50023, 50030, 100, 3),(50023, 50031, 100, 4),(50023, 50032, 100, 5),(50023, 50033, 100, 6),(50023, 50034, 100, 7),(50023, 50035, 100, 8),
 -- 50024 [Dressing Box: Invisible Suit] loot:
-replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid) values
-(50024, 50026, 100, 1),(50024, 50027, 100, 2);
+(50024, 50026, 100, 1),(50024, 50027, 100, 2),
 -- 50025 [Dressing Box: Sally Whitemane] loot:
-replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid) values
-(50025, 50036, 100, 1),(50025, 50037, 100, 2),(50025, 50038, 100, 3),(50025, 50039, 100, 4),(50025, 50040, 100, 5),(50025, 50041, 100, 6),(50025, 50042, 100, 7),(50025, 50043, 100, 8), (50025, 50105, 100, 9);
+(50025, 50036, 100, 1),(50025, 50037, 100, 2),(50025, 50038, 100, 3),(50025, 50039, 100, 4),(50025, 50040, 100, 5),(50025, 50041, 100, 6),(50025, 50042, 100, 7),(50025, 50043, 100, 8), (50025, 50105, 100, 9),
 -- 50101 [Dressing Box: Scholomance Student]
-replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid) values
 (50101, 50091, 100, 1),(50101, 50095, 100, 2),(50101, 50096, 100, 3),(50101, 50097, 100, 4),(50101, 50098, 100, 5),(50101, 50099, 100, 6),(50101, 50100, 100, 7),(50101, 50102, 100, 8),(50101, 50103, 100, 9),(50101, 3427, 100, 10), (50101, 50104, 100, 11), (50101, 50106, 100, 12);
 
--- ### Hardcore Rewards
+-- Hardcore Rewards:
 
-replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid) values
 -- 50050 [Turtle WoW Box (lvl 10)] loot:
 (50050, 18967, 100, 1), -- 18954 [Turtle Egg (Olive)]
 (50050, 1470,  100, 1), -- 1470  [Murloc Skin Bag]
