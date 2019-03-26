@@ -254,6 +254,48 @@ bool ChatHandler::HandleRaceCommand(char* args)
     return false;
 }
 
+bool ChatHandler::HandleUpdateSkinBytesCommand(char* args)
+{
+    uint8 skin = (uint8)atoi(args);
+    Unit *target = GetSelectedUnit();
+
+    // 10 Sally Whitemane (humans only)
+    // 11 Jandis Barov (humans only)
+
+    if (!target)
+        target = m_session->GetPlayer();
+
+    target->SetByteValue(PLAYER_BYTES, 0, skin);
+    PSendSysMessage("Character's skin has been changed to: %u", skin);
+    return true;
+}
+
+bool ChatHandler::HandleUpdateHairStyleCommand(char* args)
+{
+    uint8 hair = (uint8)atoi(args);
+    Unit *target = GetSelectedUnit();
+
+    if (!target)
+        target = m_session->GetPlayer();
+
+    target->SetByteValue(PLAYER_BYTES, 2, hair);
+    PSendSysMessage("Character's hair style has been changed to: %u", hair);
+    return true;
+}
+
+bool ChatHandler::HandleUpdateHairColorCommand(char* args)
+{
+    uint8 color = (uint8)atoi(args);
+    Unit *target = GetSelectedUnit();
+
+    if (!target)
+        target = m_session->GetPlayer();
+
+    target->SetByteValue(PLAYER_BYTES, 3, color);
+    PSendSysMessage("Character's hair color has been changed to: %u", color);
+    return true;
+}
+
 bool ChatHandler::HandleGiveXPCommand(char* args)
 {
     if (!*args)
