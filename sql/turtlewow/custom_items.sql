@@ -106,7 +106,9 @@
 -- 50101 [Dressing Box: Scholomance Student]
 -- 50102 [Scholomance Academy Belt]
 -- 50103 [Scholomance Academy Robe]
--- 50103 [Scholomance Academy Staff]
+-- 50104 [Scholomance Academy Staff]
+-- 50105 [Sally Whitemane's Makeup Kit]
+-- 50106 [Jandis Barov's Makeup Kit]
 
 -- 50000 [Character Name Change]
 replace into item_template (entry, name, description, quality, spellid_1, display_id, spellcharges_1, script_name) values
@@ -360,7 +362,6 @@ replace into item_template (entry, name, inventory_type, display_id, quality, bo
 -- 50094 [Sword of a Thousand Truths]
 replace into item_template (entry, class, subclass, display_id, inventory_type, name, quality, description, required_level, bonding, dmg_min1, dmg_max1, spellid_1, spellcooldown_1, script_name) value 
 (50094, 2, 7, 36377, 21, 'Sword of a Thousand Truths', 5, 'It was foretold, that one day, heroes who could wield the sword might reveal themselves.', 60, 1, 170, 190, 6755, 50600, 'sword_of_truth');
-
 -- 50095 [Scholomance Academy Hood]
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50095, 'Scholomance Academy Hood', 1, 16824, 1, 1);
@@ -391,6 +392,12 @@ replace into item_template (entry, name, inventory_type, display_id, quality, bo
 -- 50103 [Scholomance Academy Staff]
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50104, 'Scholomance Academy Staff', 17, 35563, 1, 1);
+-- 50105 [Sally Whitemane's Makeup Kit]
+replace into item_template (entry, name, description, quality, spellid_1, display_id, spellcharges_1, script_name, allowable_race) values
+(50105, 'Sally Whitemane\'s Makeup Kit', '', 2, 1575, 16028, -1, 'makeup_red', 1);
+-- 50106 [Jandis Barov's Makeup Kit]
+replace into item_template (entry, name, description, quality, spellid_1, display_id, spellcharges_1, script_name, allowable_race) values
+(50106, 'Jandis Barov\'s Makeup Kit', '', 2, 1575, 14006, -1, 'makeup_black', 1);
 
 -- ### item_loot content:
 
@@ -405,10 +412,10 @@ replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid) valu
 (50024, 50026, 100, 1),(50024, 50027, 100, 2);
 -- 50025 [Dressing Box: Sally Whitemane] loot:
 replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid) values
-(50025, 50036, 100, 1),(50025, 50037, 100, 2),(50025, 50038, 100, 3),(50025, 50039, 100, 4),(50025, 50040, 100, 5),(50025, 50041, 100, 6),(50025, 50042, 100, 7),(50025, 50043, 100, 8);
+(50025, 50036, 100, 1),(50025, 50037, 100, 2),(50025, 50038, 100, 3),(50025, 50039, 100, 4),(50025, 50040, 100, 5),(50025, 50041, 100, 6),(50025, 50042, 100, 7),(50025, 50043, 100, 8), (50025, 50105, 100, 9);
 -- 50101 [Dressing Box: Scholomance Student]
 replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid) values
-(50101, 50091, 100, 1),(50101, 50095, 100, 2),(50101, 50096, 100, 3),(50101, 50097, 100, 4),(50101, 50098, 100, 5),(50101, 50099, 100, 6),(50101, 50100, 100, 7),(50101, 50102, 100, 8),(50101, 50103, 100, 9),(50101, 3427, 100, 10), (50101, 50104, 100, 11);
+(50101, 50091, 100, 1),(50101, 50095, 100, 2),(50101, 50096, 100, 3),(50101, 50097, 100, 4),(50101, 50098, 100, 5),(50101, 50099, 100, 6),(50101, 50100, 100, 7),(50101, 50102, 100, 8),(50101, 50103, 100, 9),(50101, 3427, 100, 10), (50101, 50104, 100, 11), (50101, 50106, 100, 12);
 
 -- ### Hardcore Rewards
 

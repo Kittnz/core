@@ -136,6 +136,22 @@ bool ItemUse_sword_of_truth(Player* pPlayer, Item* pItem, const SpellCastTargets
     return false;
 }
 
+bool ItemUse_makeup_red(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+{
+    // Sally Whitemane
+    pPlayer->SetByteValue(PLAYER_BYTES, 0, 10);
+    ChatHandler(pPlayer).SendSysMessage("Please logout and login again!");
+    return false;
+}
+
+bool ItemUse_makeup_black(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+{
+    // Jandis Barov
+    pPlayer->SetByteValue(PLAYER_BYTES, 0, 11);
+    ChatHandler(pPlayer).SendSysMessage("Please logout and login again!");
+    return false;
+}
+
 void AddSC_item_scripts()
 {
     Script *newscript;
@@ -178,5 +194,15 @@ void AddSC_item_scripts()
     newscript = new Script;
     newscript->Name = "sword_of_truth";
     newscript->pItemUse = &ItemUse_sword_of_truth;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "makeup_red";
+    newscript->pItemUse = &ItemUse_makeup_red;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "makeup_black";
+    newscript->pItemUse = &ItemUse_makeup_black;
     newscript->RegisterSelf();
 }
