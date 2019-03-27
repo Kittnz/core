@@ -197,10 +197,12 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     OPENSSL_free((void*) sStr);
     OPENSSL_free((void*) vStr);
 
+    auto const remote_ip = fields[3].GetCppString();
+
     ///- Re-check ip locking (same check as in realmd).
     if (fields[4].GetUInt8() == 1)  // if ip is locked
     {
-        if (strcmp(fields[3].GetString(), GetRemoteAddress().c_str()))
+        if (strcmp(remote_ip.c_str(), GetRemoteAddress().c_str()))
         {
             packet.Initialize(SMSG_AUTH_RESPONSE, 1);
             packet << uint8(AUTH_FAILED);
@@ -290,13 +292,6 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
               account.c_str(),
               address.c_str());
 
-    // Update the last_ip in the database
-    // No SQL injection, username escaped.
-    static SqlStatementID updAccount;
-
-    SqlStatement stmt = LoginDatabase.CreateStatement(updAccount, "UPDATE account SET last_ip = ? WHERE username = ?");
-    stmt.PExecute(address.c_str(), account.c_str());
-
     ClientOSType clientOs;
     if (os == "niW")
         clientOs = CLIENT_OS_WIN;
@@ -309,7 +304,7 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     }
 
     // NOTE ATM the socket is single-threaded, have this in mind ...
-    ACE_NEW_RETURN(m_Session, WorldSession(id, this, AccountTypes(security), mutetime, locale), -1);
+    ACE_NEW_RETURN(m_Session, WorldSession(id, this, AccountTypes(security), mutetime, locale, remote_ip), -1);
 
     m_Crypt.SetKey(K.AsByteArray());
     m_Crypt.Init();

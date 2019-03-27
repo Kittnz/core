@@ -29,6 +29,7 @@
 #include "Util.h"                                           // for Tokens typedef
 #include "Policies/SingletonImp.h"
 #include "Database/DatabaseEnv.h"
+#include "Config/Config.h"
 
 INSTANTIATE_SINGLETON_1( RealmList );
 
@@ -162,16 +163,19 @@ void RealmList::UpdateRealms(bool init)
         "allowedSecurityLevel, population, realmbuilds FROM realmlist "
         "WHERE (realmflags & 1) = 0 ORDER BY name");
 
+    // Auth config can't be reloaded. Make sure you use a valid address.
+    static const std::string overrideAddrStr = sConfig.GetStringDefault("HostAddressOverride", "0.0.0.0");
+    static bool overrideAddr = (overrideAddrStr.compare("0.0.0.0") != 0);
+
     ///- Circle through results and add them to the realm map
     if(result)
     {
         do
         {
             Field *fields = result->Fetch();
-
             uint8 allowedSecurityLevel = fields[7].GetUInt8();
-
             uint8 realmflags = fields[5].GetUInt8();
+            std::string realmAddress = overrideAddr ? overrideAddrStr : fields[2].GetCppString();
 
             if (realmflags & ~(REALM_FLAG_OFFLINE|REALM_FLAG_NEW_PLAYERS|REALM_FLAG_RECOMMENDED|REALM_FLAG_SPECIFYBUILD))
             {
@@ -180,7 +184,7 @@ void RealmList::UpdateRealms(bool init)
             }
 
             UpdateRealm(
-                fields[0].GetUInt32(), fields[1].GetCppString(),fields[2].GetCppString(),fields[3].GetUInt32(),
+                fields[0].GetUInt32(), fields[1].GetCppString(), realmAddress, fields[3].GetUInt32(),
                 fields[4].GetUInt8(), RealmFlags(realmflags), fields[6].GetUInt8(),
                 (allowedSecurityLevel <= SEC_ADMINISTRATOR ? AccountTypes(allowedSecurityLevel) : SEC_ADMINISTRATOR),
                 fields[8].GetFloat(), fields[9].GetCppString());

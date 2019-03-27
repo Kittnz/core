@@ -277,7 +277,7 @@ class MANGOS_DLL_SPEC WorldSession
 {
     friend class CharacterHandler;
     public:
-        WorldSession(uint32 id, WorldSocket *sock, AccountTypes sec, time_t mute_time, LocaleConstant locale);
+        WorldSession(uint32 id, WorldSocket *sock, AccountTypes sec, time_t mute_time, LocaleConstant locale, const std::string& remote_ip);
         ~WorldSession();
 
         bool PlayerLoading() const { return m_playerLoading; }

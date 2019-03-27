@@ -150,6 +150,11 @@ ConfVersion=2010062001
 #        The SendGrid template GUID for geolocking emails
 #        Default: ""
 #
+#    HostAddressOverride
+#        When set, the address forcibly overrides ALL addresses in realmlist table.
+#        This is not needed except for when proxies are being used.
+#        Default: "0.0.0.0" (Use realmlist table addresses)
+#
 ###################################################################################################################
 
 LoginDatabaseInfo = "127.0.0.1;3306;mangos;mangos;realmd"
@@ -181,3 +186,4 @@ MailFrom = ""
 MailCertChecks = 1
 SendGridKey = ""
 GeolockGUID = ""
+HostAddressOverride = "0.0.0.0"

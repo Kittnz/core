@@ -18,6 +18,7 @@ struct PacketLoadSession_Header
     AccountTypes sec;
     time_t muteTime;
     LocaleConstant locale;
+    std::string remoteIp;
 };
 
 void NodeSession::LoadSession(WorldSession* wsess)
@@ -30,6 +31,7 @@ void NodeSession::LoadSession(WorldSession* wsess)
     sessInfos.sec = wsess->GetSecurity();
     sessInfos.muteTime = wsess->m_muteTime;
     sessInfos.locale = wsess->GetSessionDbcLocale();
+    sessInfos.remoteIp = wsess->GetRemoteAddress();
 
     WorldPacket data(MMSG_LOAD_SESSION, sizeof(sessInfos));
     data.append(&sessInfos, 1);
@@ -54,7 +56,7 @@ void NodeSession::HandleLoadSession(WorldPacket& pkt)
     PacketLoadSession_Header loadInfos;
     pkt.read((uint8*)&loadInfos, sizeof(loadInfos));
 
-    WorldSession* wsess = new WorldSession(loadInfos.accountId, NULL, loadInfos.sec, loadInfos.muteTime, loadInfos.locale);
+    WorldSession* wsess = new WorldSession(loadInfos.accountId, NULL, loadInfos.sec, loadInfos.muteTime, loadInfos.locale, loadInfos.remoteIp);
     wsess->SetAccountFlags(loadInfos.accountFlags);
     wsess->SetAccountMaxLevel(loadInfos.accountMaxLevel);
     wsess->SetMasterSession(this);
