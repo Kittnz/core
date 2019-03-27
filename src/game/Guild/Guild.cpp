@@ -198,8 +198,6 @@ void Guild::Rename(std::string& newName)
 
 GuildAddStatus Guild::AddMember(ObjectGuid plGuid, uint32 plRank)
 {
-    if (members.size() >= GUILD_MAX_MEMBERS)
-        return GuildAddStatus::GUILD_FULL;
     Player* pl = sObjectAccessor.FindPlayerNotInWorld(plGuid);
     if (pl)
     {
@@ -751,11 +749,73 @@ void Guild::Disband()
 
 void Guild::Roster(WorldSession *session /*= NULL*/)
 {
+    struct TempMemberInfo
+    {
+        ObjectGuid Guid;
+        Player* Member = nullptr;
+        MemberSlot* Slot = nullptr;
+    };
+
+    size_t onlineMembers = 0;
+    size_t offlineMembers = 0;
+    std::vector<TempMemberInfo> memberCache;
+    memberCache.reserve(members.size());
+
+    for (auto itr = members.begin(); itr != members.end(); ++itr)
+    {
+        TempMemberInfo info;
+        info.Guid = ObjectGuid(HIGHGUID_PLAYER, itr->first);
+        info.Member = ObjectAccessor::FindPlayer(ObjectGuid(HIGHGUID_PLAYER, itr->first));
+        info.Slot = &itr->second;
+
+        if (info.Member)
+            ++onlineMembers;
+        else
+            ++offlineMembers;
+
+        memberCache.emplace_back(info);
+    }
+
+    size_t count = onlineMembers + offlineMembers;
+
+    count = std::min(count, size_t(GUILD_MAX_MEMBERS));
+    onlineMembers = std::min(onlineMembers, size_t(GUILD_MAX_MEMBERS));
+    offlineMembers = std::min(offlineMembers, size_t(GUILD_MAX_MEMBERS) - onlineMembers);
+
+    bool const sendNotes = count < GUILD_MAX_MEMBERS_WITH_NOTE;
+
+    auto writeMemberData = [sendNotes](WorldPacket& data, TempMemberInfo const& member) -> void
+    {
+        data << member.Guid;
+        data << uint8(member.Member != nullptr);
+        if (member.Member)
+        {
+            data << member.Member->GetName();
+            data << uint32(member.Slot->RankId);
+            data << uint8(member.Member->getLevel());
+            data << uint8(member.Member->getClass());
+            data << uint32(member.Member->GetCachedZoneId());
+        }
+        else
+        {
+            data << member.Slot->Name;
+            data << uint32(member.Slot->RankId);
+            data << uint8(member.Slot->Level);
+            data << uint8(member.Slot->Class);
+            data << uint32(member.Slot->ZoneId);
+            data << float(float(time(NULL) - member.Slot->LogoutTime) / DAY);
+        }
+
+        if (sendNotes)
+        {
+            data << member.Slot->Pnote;
+            data << member.Slot->OFFnote;
+        }
+        else
+            data << uint8(0) << uint8(0);
+    };
     // we can only guess size
-    WorldPacket data(SMSG_GUILD_ROSTER, (4 + MOTD.length() + 1 + GINFO.length() + 1 + 4 + m_Ranks.size() * 4 + members.size() * 50));
-    uint32 count = members.size();
-    if (count > GUILD_MAX_MEMBERS)
-        count = GUILD_MAX_MEMBERS;
+    WorldPacket data(SMSG_GUILD_ROSTER, (4 + MOTD.length() + 1 + GINFO.length() + 1 + 4 + m_Ranks.size() * 4 + count * GUILD_MEMBER_BLOCK_SIZE_WITHOUT_NOTE));
     data << uint32(count);
     data << MOTD;
     data << GINFO;
@@ -764,37 +824,29 @@ void Guild::Roster(WorldSession *session /*= NULL*/)
     for (RankList::const_iterator ritr = m_Ranks.begin(); ritr != m_Ranks.end(); ++ritr)
         data << uint32(ritr->Rights);
 
-    MemberList::const_iterator itr = members.begin();
-    for (; itr != members.end(); ++itr)
+    if (onlineMembers > 0)
     {
-        if (Player *pl = ObjectAccessor::FindPlayer(ObjectGuid(HIGHGUID_PLAYER, itr->first)))
+        for (TempMemberInfo const& member : memberCache)
         {
-            data << pl->GetObjectGuid();
-            data << uint8(1);
-            data << pl->GetName();
-            data << uint32(itr->second.RankId);
-            data << uint8(pl->getLevel());
-            data << uint8(pl->getClass());
-            data << uint32(pl->GetCachedZoneId());
-            data << itr->second.Pnote;
-            data << itr->second.OFFnote;
+            if (!member.Member)
+                continue;
+
+            writeMemberData(data, member);
+            if (--onlineMembers == 0)
+                break;
         }
-        else
+    }
+    if (offlineMembers > 0)
+    {
+        for (TempMemberInfo const& member : memberCache)
         {
-            data << ObjectGuid(HIGHGUID_PLAYER, itr->first);
-            data << uint8(0);
-            data << itr->second.Name;
-            data << uint32(itr->second.RankId);
-            data << uint8(itr->second.Level);
-            data << uint8(itr->second.Class);
-            data << uint32(itr->second.ZoneId);
-            data << float(float(time(NULL) - itr->second.LogoutTime) / DAY);
-            data << itr->second.Pnote;
-            data << itr->second.OFFnote;
+            if (member.Member)
+                continue;
+
+            writeMemberData(data, member);
+            if (--offlineMembers == 0)
+                break;
         }
-        --count;
-        if (count == 0)
-            break;
     }
     if (session)
         session->SendPacket(&data);
