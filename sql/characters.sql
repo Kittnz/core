@@ -142,6 +142,7 @@ CREATE TABLE IF NOT EXISTS `characters` (
   `area` int(11) unsigned NOT NULL DEFAULT '0',
   `world_phase_mask` int(11) DEFAULT '0',
   `customFlags` int(11) NOT NULL DEFAULT '0',
+  `city_protector` tinyint(3) NOT NULL DEFAULT '0',
   PRIMARY KEY (`guid`),
   KEY `idx_account` (`account`),
   KEY `idx_online` (`online`),

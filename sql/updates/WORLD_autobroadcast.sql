@@ -1,8 +1,3 @@
--- ### Custom mangos_string entries must remain in 50000-51000 entry range.
--- ### Custom npc_text and broadcast_text entries must remain in 90000-91000 entry range.
-
--- Autbroadcast messages of Turtle WoW
--- Doesn't work at this moment, TODO: figure out why 8). Right now it's printing all the messages at once.
 
 replace into `mangos_string` (`entry`, `content_default`) values ('50000', 'Turtle WoW: Don\'t forget to refresh your turtle power by clearing your WDB folder regularly. This is your game cache, and can often fix minor game/display glitches. Always try this before submitting a ticket, thanks!');
 replace into `mangos_string` (`entry`, `content_default`) values ('50001', 'Turtle WoW: Have a suggestion for our staff? Head over to our forums and submit your ideas, get support, or post something for the community to get involved in!');
@@ -27,14 +22,3 @@ replace into `autobroadcast` (`string_Id`) values ('50007');
 replace into `autobroadcast` (`string_Id`) values ('50009');
 replace into `autobroadcast` (`string_Id`) values ('50010');
 replace into `autobroadcast` (`string_Id`) values ('50011');
-
--- Turtle WoW custom battlemasters:
-	
-replace into `broadcast_text` (`ID`, `MaleText`) values
-('90100', 'Greetings, $GLord:Lady; Turtle $N!\n\nWe need your help defending our lands from the encroaching invaders!\n\nTake my hand, and I will guide you to the battlefield.');
-replace into `npc_text` (`ID`, `BroadcastTextID0`) values ('90100', '90100');
-
-replace into `broadcast_text` (`ID`, `MaleText`) values
-('90101', 'Transport to the battlefield is on its way! Slow and steady wins the race. Stand by!');
-replace into `npc_text` (`ID`, `BroadcastTextID0`) values ('90101', '90101');
-
