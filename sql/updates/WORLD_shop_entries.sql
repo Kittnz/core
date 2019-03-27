@@ -70,9 +70,9 @@ replace into shop_items values
 (307, 3, 15293, 'Teal Kodo', 100),
 (308, 3, 12351, 'Arctic Wolf', 100),
 (309, 3, 12302, 'Ancient Frostsaber', 100),
-(310, 3, 19872, 'Razzashi Raptor', 350),
-(311, 3, 19872, 'Zulian Tiger', 350),
-(312, 3, 8583,  'Skeletal Horse', 100),
+-- (310, 3, 19872, 'Razzashi Raptor', 350),
+-- (311, 3, 19872, 'Zulian Tiger', 350),
+-- (312, 3, 8583,  'Skeletal Horse', 100),
 (313, 3, 13335, 'Deathcharger', 400),
 (314, 3, 21044, 'Winter Reindeer', 100),
 -- Tabards ---------------------------------------------------------------------------------------------

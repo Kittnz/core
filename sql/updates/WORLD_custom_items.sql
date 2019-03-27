@@ -423,6 +423,12 @@ replace into item_template (entry, name, description, quality, spellid_1, displa
 (50113, 'Night Elf Hair Dye: Dark Blue', '', 2, 1575, 33449, 'nightelf_hairdye', 8, 1),
 -- 50114 [Night Elf Hair Dye: Purple]
 (50114, 'Night Elf Hair Dye: Purple', '', 2, 1575, 33449, 'nightelf_hairdye', 8, 1);
+-- 50200 [Darkmoon Steam Tonk]
+replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1) values
+(50200, 15, 2, 'Darkmoon Steam Tonk', '', 4233, 1, 1, 28505);
+-- 50201 [Expired Winter Veil Party Invitation]
+replace into item_template (entry, class, subclass, name, description, display_id, quality, stackable, bonding) values
+(50201, 15, 0, 'Expired Winter Veil Party Invitation', 'Happy New 2019 Year!', 1301, 0, 200, 1);
 
 -- ### item_loot_template:
 
