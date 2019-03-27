@@ -26,6 +26,7 @@
 #include "Item.h"
 #include "ObjectAccessor.h"
 #include "SharedDefines.h"
+#include "ObjectMgr.h"
 
 class Item;
 class Petition;
