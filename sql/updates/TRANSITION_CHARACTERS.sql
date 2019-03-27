@@ -41,6 +41,7 @@ update character_inventory set item_template = 50006 /*[Mini Krampus]*/ where it
 update character_inventory set item_template = 50007 /*[Forworn Mule]*/ where item_template = 50010;
 update character_inventory set item_template = 50008 /*[Twink's Insignia]*/ where item_template = 55555;
 update character_inventory set item_template = 50010 /*[Loremaster's Glyph]*/ where item_template = 55650;
+update character_inventory set item_template = 18768 /*[Swift Dawnsaber]*/ where item_template = 50012; 
 update character_inventory set item_template = 50012 /*[Diplomatic Declaration]*/ where item_template = 30111;
 update character_inventory set item_template = 50013 /*[Bone Golem]*/ where item_template = 130071;
 update character_inventory set item_template = 50014 /*[Blitzen]*/ where item_template = 130038;
@@ -105,15 +106,11 @@ update character_inventory set item_template = 50092 /*[Tabard of Scarlet Preach
 update character_inventory set item_template = 50093 /*[Tabard of Scarlet Archmage]*/ where item_template = 60011;
 update character_inventory set item_template = 50200 /*[Darkmoon Steam Tonk]*/ where item_template = 130037; 
 update character_inventory set item_template = 50201 /*[Expired Winter Veil Party Invitation]*/ where item_template = 40004; 
-
--- TODO: REPLACE ITEMS WHICH NOW ARE NOT IN CUSTOM RANGE, SUCH LIKE DAWNSABER, DARKMOON FAIRE TABARD, ETC:
-
 update character_inventory set item_template = 23705 /*[Tabard of Flame]*/ where item_template = 60012;
 update character_inventory set item_template = 23709 /*[Tabard of Frost]*/ where item_template = 60013;
 update character_inventory set item_template = 23710 /*[Darkmoon Faire Tabard]*/ where item_template = 60009;
 update character_inventory set item_template = 22781 /*[Polar Bear Cub]*/ where item_template = 55567;
-update character_inventory set item_template = 18768 /*[Swift Dawnsaber]*/ where item_template = 50012; -- move it up later, 50012 is already taken
-update character_inventory set item_template = 23713 /*[Hyppogryph Hatchling]*/ where item_template = 50002; -- move it up later, 50002 is already taken
+update character_inventory set item_template = 23713 /*[Hyppogryph Hatchling]*/ where item_template = 50002; 
 update character_inventory set item_template = 12326 /*[Reins of the Tawny Sabercat]*/ where item_template = 40003; 
 update character_inventory set item_template = 12327 /*[Reins of the Golden Sabercat]*/ where item_template = 40002; 
 update character_inventory set item_template = 19160 /*[Contest Winner Tabard]*/ where item_template = 30074; 
@@ -132,6 +129,7 @@ update item_instance set itementry = 50006 /*[Mini Krampus]*/ where itementry = 
 update item_instance set itementry = 50007 /*[Forworn Mule]*/ where itementry = 50010;
 update item_instance set itementry = 50008 /*[Twink's Insignia]*/ where itementry = 55555;
 update item_instance set itementry = 50010 /*[Loremaster's Glyph]*/ where itementry = 55650;
+update item_instance set itementry = 18768 /*[Swift Dawnsaber]*/ where itementry = 50012; 
 update item_instance set itementry = 50012 /*[Diplomatic Declaration]*/ where itementry = 30111;
 update item_instance set itementry = 50013 /*[Bone Golem]*/ where itementry = 130071;
 update item_instance set itementry = 50014 /*[Blitzen]*/ where itementry = 130038;
@@ -198,14 +196,16 @@ update item_instance set itementry = 23705 /*[Tabard of Flame]*/ where itementry
 update item_instance set itementry = 23709 /*[Tabard of Frost]*/ where itementry = 60013;
 update item_instance set itementry = 23710 /*[Darkmoon Faire Tabard]*/ where itementry = 60009;
 update item_instance set itementry = 22781 /*[Polar Bear Cub]*/ where itementry = 55567;
-update item_instance set itementry = 18768 /*[Swift Dawnsaber]*/ where itementry = 50012; -- move it up later, 50012 is already taken
-update item_instance set itementry = 23713 /*[Hyppogryph Hatchling]*/ where itementry = 50002; -- move it up later, 50002 is already taken
+update item_instance set itementry = 23713 /*[Hyppogryph Hatchling]*/ where itementry = 50002; 
 update item_instance set itementry = 12326 /*[Reins of the Tawny Sabercat]*/ where itementry = 40003; 
 update item_instance set itementry = 12327 /*[Reins of the Golden Sabercat]*/ where itementry = 40002; 
 update item_instance set itementry = 19160 /*[Contest Winner Tabard]*/ where itementry = 30074; 
 update item_instance set itementry = 19160 /*[Contest Winner Tabard]*/ where itementry = 30075; 
 update item_instance set itementry = 50200 /*[Darkmoon Steam Tonk]*/ where itementry = 130037; 
 update item_instance set itementry = 50201 /*[Expired Winter Veil Party Invitation]*/ where itementry = 40004; 
+update item_instance set itementry = 12302 /*[Ancient Frostsaber]*/ where itementry = 11555; 
+update item_instance set itementry = 12302 /*[Ancient Frostsaber]*/ where itementry = 55558;  -- Replacement for custom cat
+update item_instance set itementry = 12302 /*[Ancient Frostsaber]*/ where itementry = 55564;  -- Replacement for custom cat
 
 -- item_loot
 
@@ -220,6 +220,7 @@ update item_loot set itemid = 50006 /*[Mini Krampus]*/ where itemid = 130039;
 update item_loot set itemid = 50007 /*[Forworn Mule]*/ where itemid = 50010;
 update item_loot set itemid = 50008 /*[Twink's Insignia]*/ where itemid = 55555;
 update item_loot set itemid = 50010 /*[Loremaster's Glyph]*/ where itemid = 55650;
+update item_loot set itemid = 18768 /*[Swift Dawnsaber]*/ where itemid = 50012;
 update item_loot set itemid = 50012 /*[Diplomatic Declaration]*/ where itemid = 30111;
 update item_loot set itemid = 50013 /*[Bone Golem]*/ where itemid = 130071;
 update item_loot set itemid = 50014 /*[Blitzen]*/ where itemid = 130038;
@@ -286,14 +287,14 @@ update item_loot set itemid = 23705 /*[Tabard of Flame]*/ where itemid = 60012;
 update item_loot set itemid = 23709 /*[Tabard of Frost]*/ where itemid = 60013;
 update item_loot set itemid = 23710 /*[Darkmoon Faire Tabard]*/ where itemid = 60009;
 update item_loot set itemid = 22781 /*[Polar Bear Cub]*/ where itemid = 55567;
-update item_loot set itemid = 18768 /*[Swift Dawnsaber]*/ where itemid = 50012; -- move it up later, 50012 is already taken
-update item_loot set itemid = 23713 /*[Hyppogryph Hatchling]*/ where itemid = 50002; -- move it up later, 50002 is already taken
+update item_loot set itemid = 23713 /*[Hyppogryph Hatchling]*/ where itemid = 50002; 
 update item_loot set itemid = 12326 /*[Reins of the Tawny Sabercat]*/ where itemid = 40003; 
 update item_loot set itemid = 12327 /*[Reins of the Golden Sabercat]*/ where itemid = 40002; 
 update item_loot set itemid = 19160 /*[Contest Winner Tabard]*/ where itemid = 30074; 
 update item_loot set itemid = 19160 /*[Contest Winner Tabard]*/ where itemid = 30075; 
 update item_loot set itemid = 50200 /*[Darkmoon Steam Tonk]*/ where itemid = 130037; 
 update item_loot set itemid = 50201 /*[Expired Winter Veil Party Invitation]*/ where itemid = 40004; 
+update item_loot set itemid = 12302 /*[Ancient Frostsaber]*/ where itemid = 11555; 
 
 -- mail_items
 
@@ -308,6 +309,7 @@ update mail_items set item_template = 50006 /*[Mini Krampus]*/ where item_templa
 update mail_items set item_template = 50007 /*[Forworn Mule]*/ where item_template = 50010;
 update mail_items set item_template = 50008 /*[Twink's Insignia]*/ where item_template = 55555;
 update mail_items set item_template = 50010 /*[Loremaster's Glyph]*/ where item_template = 55650;
+update mail_items set item_template = 18768 /*[Swift Dawnsaber]*/ where item_template = 50012; 
 update mail_items set item_template = 50012 /*[Diplomatic Declaration]*/ where item_template = 30111;
 update mail_items set item_template = 50013 /*[Bone Golem]*/ where item_template = 130071;
 update mail_items set item_template = 50014 /*[Blitzen]*/ where item_template = 130038;
@@ -374,12 +376,10 @@ update mail_items set item_template = 23705 /*[Tabard of Flame]*/ where item_tem
 update mail_items set item_template = 23709 /*[Tabard of Frost]*/ where item_template = 60013;
 update mail_items set item_template = 23710 /*[Darkmoon Faire Tabard]*/ where item_template = 60009;
 update mail_items set item_template = 22781 /*[Polar Bear Cub]*/ where item_template = 55567;
-update mail_items set item_template = 18768 /*[Swift Dawnsaber]*/ where item_template = 50012; -- move it up later, 50012 is already taken
-update mail_items set item_template = 23713 /*[Hyppogryph Hatchling]*/ where item_template = 50002; -- move it up later, 50002 is already taken
+update mail_items set item_template = 23713 /*[Hyppogryph Hatchling]*/ where item_template = 50002; 
 update mail_items set item_template = 12326 /*[Reins of the Tawny Sabercat]*/ where item_template = 40003; 
 update mail_items set item_template = 12327 /*[Reins of the Golden Sabercat]*/ where item_template = 40002; 
 update mail_items set item_template = 19160 /*[Contest Winner Tabard]*/ where item_template = 30074; 
 update mail_items set item_template = 19160 /*[Contest Winner Tabard]*/ where item_template = 30075; 
 update mail_items set item_template = 50200 /*[Darkmoon Steam Tonk]*/ where item_template = 130037; 
 update mail_items set item_template = 50201 /*[Expired Winter Veil Party Invitation]*/ where item_template = 40004; 
-
