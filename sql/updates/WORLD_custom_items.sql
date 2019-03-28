@@ -431,49 +431,47 @@ replace into item_template (entry, class, subclass, name, description, display_i
 (50201, 15, 0, 'Expired Winter Veil Party Invitation', 'Happy New 2019 Year!', 1301, 0, 200, 1);
 
 -- ### item_loot_template:
-
+delete from item_loot_template where entry in (50050, 50051, 50052, 50053, 50054, 500055, 50022, 50023, 50024, 50025, 50101);
 replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid) values
 
 -- Dressing Boxes:
 
 -- 50022 [Dressing Box: Midsummer Priestess] loot:
 (50022, 23323, 100, 1),(50022, 23324, 100, 2),(50022, 50046, 100, 3),(50022, 50047, 100, 4),(50022, 50048, 100, 5),(50022, 50049, 100, 6),
--- 50022 [Dressing Box: Demon Hunter] loot:
+-- 50023 [Dressing Box: Demon Hunter] loot:
 (50023, 50028, 100, 1),(50023, 50029, 100, 2),(50023, 50030, 100, 3),(50023, 50031, 100, 4),(50023, 50032, 100, 5),(50023, 50033, 100, 6),(50023, 50034, 100, 7),(50023, 50035, 100, 8),
 -- 50024 [Dressing Box: Invisible Suit] loot:
 (50024, 50026, 100, 1),(50024, 50027, 100, 2),
 -- 50025 [Dressing Box: Sally Whitemane] loot:
 (50025, 50036, 100, 1),(50025, 50037, 100, 2),(50025, 50038, 100, 3),(50025, 50039, 100, 4),(50025, 50040, 100, 5),(50025, 50041, 100, 6),(50025, 50042, 100, 7),(50025, 50043, 100, 8), (50025, 50105, 100, 9),
 -- 50101 [Dressing Box: Scholomance Student]
-(50101, 50091, 100, 1),(50101, 50095, 100, 2),(50101, 50096, 100, 3),(50101, 50097, 100, 4),(50101, 50098, 100, 5),(50101, 50099, 100, 6),(50101, 50100, 100, 7),(50101, 50102, 100, 8),(50101, 50103, 100, 9),(50101, 3427, 100, 10), (50101, 50104, 100, 11), (50101, 50106, 100, 12),
+(50101, 50091, 100, 1),(50101, 50095, 100, 2),(50101, 50096, 100, 3),(50101, 50097, 100, 4),(50101, 50098, 100, 5),(50101, 50099, 100, 6),(50101, 50100, 100, 7),(50101, 50102, 100, 8),(50101, 50103, 100, 9),(50101, 3427, 100, 10), (50101, 50104, 100, 11), (50101, 50106, 100, 12);
 
-replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid, mincountOrRef) values
+replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid, mincountOrRef, maxcount) values
 
 -- Hardcore Rewards:
 
-
 -- 50050 [Turtle WoW Box (lvl 10)] loot:
-(50050, 18967, 100, 1, 1), -- 18954 [Turtle Egg (Olive)]
-(50050, 1470,  100, 1, 1), -- 1470  [Murloc Skin Bag]
-(50050, 859,   100, 1, 1), -- 859   [Fine Cloth Shirt]
-(50050, 50048, 100, 1, 1), -- 50048 [Right Juggling Torch]
+(50050, 18967, 100, 1, 1, 1), -- 18954 [Turtle Egg (Olive)]
+(50050, 1470,  100, 2, 1, 1), -- 1470  [Murloc Skin Bag]
+(50050, 859,   100, 3, 1, 1), -- 859   [Fine Cloth Shirt]
+(50050, 50048, 100, 4, 1, 1), -- 50048 [Right Juggling Torch]
 -- 50051 [Turtle WoW Box (lvl 20)] loot:
-(50051, 50018, 100, 1, 1), --  1470 [Turtle Traveller's Bag]
-(50051, 50058, 100, 1, 1), -- 50058 [Black Piglet]
-(50051, 50021, 100, 1, 10), -- 50021 [Strange Bottle]
+(50051, 50058, 100, 2, 1, 1), -- 50058 [Black Piglet]
+(50051, 50021, 100, 3, 10, 10), -- 50021 [Strange Bottle]
 -- 50052 [Turtle WoW Box (lvl 30)] loot:
-(50052, 50062, 100, 1, 1), -- 50062 [Half-Eaten Mutton Chop]
-(50052, 23716, 100, 1, 1), -- 23716 [Carved Ogre Idol]
-(50052, 50020, 100, 1, 10), -- 50020 [Magic Muffin]
+(50052, 50062, 100, 1, 1, 1), -- 50062 [Half-Eaten Mutton Chop]
+(50052, 23716, 100, 2, 1, 1), -- 23716 [Carved Ogre Idol]
+(50052, 50020, 100, 3, 10, 10), -- 50020 [Magic Muffin]
 -- 50053 [Turtle WoW Box (lvl 40)] loot:
-(50053, 50003, 100, 1, 1), -- 50003 [Loremaster's Backpack]
-(50053, 50017, 100, 1, 1), -- 50017 [Highborne Soul Mirror]
+(50053, 50018, 100, 1, 1, 1), --  1470 [Turtle Traveller's Bag]
+(50053, 50017, 100, 2, 1,1 ), -- 50017 [Highborne Soul Mirror]
 -- 50054 [Turtle WoW Box (lvl 50)] loot:
-(50054, 23714, 100, 1, 1), -- 23714 [Perpetual Purple Firework]
-(50054, 23578, 100, 1, 20), -- 23578 [Diet McWeaksause]
-(50054, 23579, 100, 1, 20), -- 23579 [Diet McWeaksause Classic]
+(50054, 23714, 100, 1, 1, 1), -- 23714 [Perpetual Purple Firework]
+(50054, 23578, 100, 2, 20, 20), -- 23578 [Diet McWeaksause]
+(50054, 23579, 100, 3, 20, 20), -- 23579 [Diet McWeaksause Classic]
 -- 50055 [Turtle WoW Box (lvl 60)] loot:
-(50055, 19160, 100, 1, 1), -- 19160 [Hardcore Master's Tabard]
-(50055, 50075, 100, 1, 1), -- 50074 [Darkmoon Strider]
-(50055, 50094, 100, 1, 1); -- 50094 [Sword of a Thousand Truths]
+(50055, 19160, 100, 1, 1, 1), -- 19160 [Hardcore Master's Tabard]
+(50055, 50075, 100, 2, 1, 1), -- 50074 [Darkmoon Strider]
+(50055, 50094, 100, 3, 1, 1); -- 50094 [Sword of a Thousand Truths]
 

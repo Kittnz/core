@@ -3766,8 +3766,9 @@ void Aura::HandleAuraModIncreaseMountedSpeed(bool /*apply*/, bool Real)
 
             switch (skillValue)
             {
-            case 75: m_modifier.m_amount = 60; break;
-            case 150: m_modifier.m_amount = 100; break;
+                case 75: m_modifier.m_amount = 60; break;
+                case 150: m_modifier.m_amount = 100; break;
+                default: m_modifier.m_amount = static_cast<int32>(ceil(player->getLevel() / 2)); break;
             }
         }
     }
