@@ -3,122 +3,6 @@
 -- ### If you insert something in the middle I will find you and hurt you.
 
 -- 50000 [Character Name Change]
--- 50001 [Gnomish Plastic Surgery Tools]
--- 50002 [Gnomish Plastic Surgery Tools]
--- 50003 [Loremaster's Backpack]
--- 50004 [Portable Black Hole]
--- 50005 [Field Repair Bot 75B]
--- 50006 [Mini Krampus]
--- 50007 [Forworn Mule]
--- 50008 [Twink's Insignia]
--- 50009 [Mechanical Auctioneer]
--- 50010 [Loremaster's Glyph]
--- 50011 [MOLL-E, Remote Mail Terminal]
--- 50012 [Diplomatic Declaration]
--- 50013 [Bone Golem]
--- 50014 [Blitzen]
--- 50015 [Bloody Coin]
--- 50016 [Portable Meeting Stone]
--- 50017 [Highborne Soul Mirror]
--- 50018 [Turtle Traveller's Bag]
--- 50019 [Moonkin Egg]
--- 50020 [Magic Muffin]
--- 50021 [Strange Bottle]
--- 50022 [Dressing Box: Midsummer Priestess]
--- 50023 [Dressing Box: Demon Hunter]
--- 50024 [Dressing Box: Invisible Suit]
--- 50025 [Dressing Box: Sally Whitemane]
--- 50026 [Invisible Pants]
--- 50027 [Invisible Shirt]
--- 50028 [Loramus Thalipedes' Blindfold]
--- 50029 [Cursed Vision of Sargeras]
--- 50030 [Demon Hunter Right Glaive]
--- 50031 [Demon Hunter Left Glaive]
--- 50032 [Demon Hunter Sandals]
--- 50033 [Demon Hunter Kilt]
--- 50034 [Demon Hunter Harness]
--- 50035 [Demon Hunter Bracers]
--- 50036 [High Inquisitor's Chapeau]
--- 50037 [High Inquisitor's Chest]
--- 50038 [High Inquisitor's Tabard]
--- 50039 [High Inquisitor's Boots]
--- 50040 [High Inquisitor's Shoulders]
--- 50041 [High Inquisitor's Pants]
--- 50042 [High Inquisitor's Gloves]
--- 50043 [High Inquisitor's Staff]
--- 50044 [Keepers of Time Tabard]
--- 50045 [Keepers of Time Vest]
--- 50046 [Vestment of Summer]
--- 50047 [Sandals of Summer]
--- 50048 [Right Juggling Torch]
--- 50049 [Left Juggling Torch]
--- 50050 [Turtle WoW Box (lvl 10)]
--- 50051 [Turtle WoW Box (lvl 20)]
--- 50052 [Turtle WoW Box (lvl 30)]
--- 50053 [Turtle WoW Box (lvl 40)]
--- 50054 [Turtle WoW Box (lvl 50)]
--- 50055 [Turtle WoW Box (lvl 60)]
--- 50056 [Allliance Protector's Scroll]
--- 50057 [Horde Protector's Scroll]
--- 50058 [Black Piglet]
--- 50059 [Green Winter Vest]
--- 50060 [Green Winter Pants]
--- 50061 [Red Winter Vest]
--- 50062 [Half-Eaten Mutton Chop]
--- 50063 [Intact Human Head]
--- 50064 [Intact Orc Head]
--- 50065 [Anatomy Class Notes]
--- 50066 [Steel Mechanostrider]
--- 50067 [Albino Snake]
--- 50068 [Green Water Snake]
--- 50069 [Scarlet Snake]
--- 50070 [Ancient Bronze Pocketwatch]
--- 50071 [Ivory Tallstrider]
--- 50072 [Brown Tallstrider]
--- 50073 [Gray Tallstrider]
--- 50074 [Swift Lovebird]
--- 50075 [Darkmoon Strider]
--- 50076 [Turquoise Tallstrider]
--- 50077 [Faeling Egg]
--- 50078 [Dart Frog Box]
--- 50079 [Island Frog Box]
--- 50080 [Eagle Owl]
--- 50081 [Cottontail Rabbit Crate]
--- 50082 [Snowy Owl]
--- 50083 [Ancient Arcane Dust]
--- 50084 [Kirin Tor Familiar]
--- 50085 [Frostwolf Ghostpaw]
--- 50086 [Stromgarde Tabard]
--- 50087 [Tabard of Kul'Tiras]
--- 50088 [Theramore Tabard]
--- 50089 [Tabard of the Kirin Tor]
--- 50090 [Tabard of Stormwind]
--- 50091 [Scholomance Tabard]
--- 50092 [Tabard of Scarlet Preacher]
--- 50093 [Tabard of Scarlet Archmage]
--- 50094 [Sword of a Thousand Truths]
--- 50095 [Scholomance Academy Hood]
--- 50096 [Scholomance Academy Vest]
--- 50097 [Scholomance Academy Gloves]
--- 50098 [Scholomance Academy Boots]
--- 50099 [Scholomance Academy Shoulders]
--- 50100 [Scholomance Academy Pants]
--- 50101 [Dressing Box: Scholomance Student]
--- 50102 [Scholomance Academy Belt]
--- 50103 [Scholomance Academy Robe]
--- 50104 [Scholomance Academy Staff]
--- 50105 [Sally Whitemane's Makeup Kit]
--- 50106 [Jandis Barov's Makeup Kit]
--- 50107 [Night Elf Hair Dye: Grass Green]
--- 50108 [Night Elf Hair Dye: Green]
--- 50109 [Night Elf Hair Dye: Dark Green]
--- 50110 [Night Elf Hair Dye: Aquamarine]
--- 50111 [Night Elf Hair Dye: White]
--- 50112 [Night Elf Hair Dye: Blue]
--- 50113 [Night Elf Hair Dye: Dark Blue]
--- 50114 [Night Elf Hair Dye: Purple]
-
--- 50000 [Character Name Change]
 replace into item_template (entry, name, description, quality, spellid_1, display_id, spellcharges_1, script_name) values
 (50000, 'Character Name Change', 'Right click to use. You will be requested to choose a new name on your next login.', 1, 1575, 30658, -1, 'character_rename');
 -- 50001 [Gnomish Plastic Surgery Tools]
@@ -406,23 +290,79 @@ replace into item_template (entry, name, description, quality, spellid_1, displa
 -- 50106 [Jandis Barov's Makeup Kit]
 replace into item_template (entry, name, description, quality, spellid_1, display_id, script_name, allowable_race, bonding) values
 (50106, 'Jandis Barov\'s Makeup Kit', '', 2, 1575, 16028, 'makeup_black', 1, 1);
+-- 50107-50171 [Hair Dye Items]
 replace into item_template (entry, name, description, quality, spellid_1, display_id, script_name, allowable_race, bonding) values
--- 50107 [Night Elf Hair Dye: Grass Green]
-(50107, 'Night Elf Hair Dye: Grass Green', '', 2, 1575, 33449, 'nightelf_hairdye', 8, 1),
--- 50108 [Night Elf Hair Dye: Green]
-(50108, 'Night Elf Hair Dye: Green', '', 2, 1575, 33449, 'nightelf_hairdye', 8, 1),
--- 50109 [Night Elf Hair Dye: Dark Green]
-(50109, 'Night Elf Hair Dye: Dark Green', '', 2, 1575, 33449, 'nightelf_hairdye', 8, 1),
--- 50110 [Night Elf Hair Dye: Aquamarine]
-(50110, 'Night Elf Hair Dye: Aquamarine', '', 2, 1575, 33449, 'nightelf_hairdye', 8, 1),
--- 50111 [Night Elf Hair Dye: White]
-(50111, 'Night Elf Hair Dye: White', '', 2, 1575, 33449, 'nightelf_hairdye', 8, 1),
--- 50112 [Night Elf Hair Dye: Blue]
-(50112, 'Night Elf Hair Dye: Blue', '', 2, 1575, 33449, 'nightelf_hairdye', 8, 1),
--- 50113 [Night Elf Hair Dye: Dark Blue]
-(50113, 'Night Elf Hair Dye: Dark Blue', '', 2, 1575, 33449, 'nightelf_hairdye', 8, 1),
--- 50114 [Night Elf Hair Dye: Purple]
-(50114, 'Night Elf Hair Dye: Purple', '', 2, 1575, 33449, 'nightelf_hairdye', 8, 1);
+(50107, 'Night Elf Hair Dye: Grass Green', '', 2, 1575, 33449, 'hairdye', 8, 1),
+(50108, 'Night Elf Hair Dye: Green', '', 2, 1575, 33449, 'hairdye', 8, 1),
+(50109, 'Night Elf Hair Dye: Dark Green', '', 2, 1575, 33449, 'hairdye', 8, 1),
+(50110, 'Night Elf Hair Dye: Aquamarine', '', 2, 1575, 33449, 'hairdye', 8, 1),
+(50111, 'Night Elf Hair Dye: White', '', 2, 1575, 33449, 'hairdye', 8, 1),
+(50112, 'Night Elf Hair Dye: Blue', '', 2, 1575, 33449, 'hairdye', 8, 1),
+(50113, 'Night Elf Hair Dye: Dark Blue', '', 2, 1575, 33449, 'hairdye', 8, 1),
+(50114, 'Night Elf Hair Dye: Purple', '', 2, 1575, 33449, 'hairdye', 8, 1),
+
+(50115, 'Human Hair Dye: Black', '', 2, 1575, 33449, 'hairdye', 1, 1),
+(50116, 'Human Hair Dye: Crushed Garnet', '', 2, 1575, 33449, 'hairdye', 1, 1),
+(50117, 'Human Hair Dye: Havana Brown', '', 2, 1575, 33449, 'hairdye', 1, 1),
+(50118, 'Human Hair Dye: Copper Shimmer', '', 2, 1575, 33449, 'hairdye', 1, 1),
+(50119, 'Human Hair Dye: Reddish Blonde', '', 2, 1575, 33449, 'hairdye', 1, 1),
+(50120, 'Human Hair Dye: Sunflower Blonde', '', 2, 1575, 33449, 'hairdye', 1, 1),
+(50121, 'Human Hair Dye: Beeline Honey', '', 2, 1575, 33449, 'hairdye', 1, 1),
+(50123, 'Human Hair Dye: Dark Ash Grey', '', 2, 1575, 33449, 'hairdye', 1, 1),
+(50124, 'Human Hair Dye: Light Ash Grey', '', 2, 1575, 33449, 'hairdye', 1, 1),
+
+(50125, 'Gnomish Hair Dye: Black', '', 2, 1575, 33449, 'hairdye', 64, 1),
+(50126, 'Gnomish Hair Dye: Chocolate Brown', '', 2, 1575, 33449, 'hairdye', 64, 1),
+(50127, 'Gnomish Hair Dye: Ash Blonde', '', 2, 1575, 33449, 'hairdye', 64, 1),
+(50128, 'Gnomish Hair Dye: Diamond Blonde', '', 2, 1575, 33449, 'hairdye', 64, 1),
+(50129, 'Gnomish Hair Dye: Dream Purple', '', 2, 1575, 33449, 'hairdye', 64, 1),
+(50130, 'Gnomish Hair Dye: Ruby Fusion', '', 2, 1575, 33449, 'hairdye', 64, 1),
+(50131, 'Gnomish Hair Dye: Steel Blue', '', 2, 1575, 33449, 'hairdye', 64, 1),
+(50132, 'Gnomish Hair Dye: Pure Green', '', 2, 1575, 33449, 'hairdye', 64, 1),
+(50133, 'Gnomish Hair Dye: Shining Pink', '', 2, 1575, 33449, 'hairdye', 64, 1),
+
+(50134, 'Dwarven Hair Dye: Copper Shimmer', '', 2, 1575, 33449, 'hairdye', 4, 1),
+(50135, 'Dwarven Hair Dye: Reddish Blonde', '', 2, 1575, 33449, 'hairdye', 4, 1),
+(50136, 'Dwarven Hair Dye: Dark Orange', '', 2, 1575, 33449, 'hairdye', 4, 1),
+(50137, 'Dwarven Hair Dye: Ash Blonde', '', 2, 1575, 33449, 'hairdye', 4, 1),
+(50138, 'Dwarven Hair Dye: Light Auburn', '', 2, 1575, 33449, 'hairdye', 4, 1),
+(50139, 'Dwarven Hair Dye: Black', '', 2, 1575, 33449, 'hairdye', 4, 1),
+(50140, 'Dwarven Hair Dye: Caramel', '', 2, 1575, 33449, 'hairdye', 4, 1),
+(50141, 'Dwarven Hair Dye: Light Ash Grey', '', 2, 1575, 33449, 'hairdye', 4, 1),
+(50142, 'Dwarven Hair Dye: Dark Ash Grey', '', 2, 1575, 33449, 'hairdye', 4, 1),
+	
+(50143, 'Troll Hair Dye: Purple', '', 2, 1575, 33449, 'hairdye', 128, 1),
+(50144, 'Troll Hair Dye: Red', '', 2, 1575, 33449, 'hairdye', 128, 1),
+(50145, 'Troll Hair Dye: Orange', '', 2, 1575, 33449, 'hairdye', 128, 1),
+(50146, 'Troll Hair Dye: Yellow', '', 2, 1575, 33449, 'hairdye', 128, 1),
+(50147, 'Troll Hair Dye: Grass Green', '', 2, 1575, 33449, 'hairdye', 128, 1),
+(50148, 'Troll Hair Dye: Mint Blue', '', 2, 1575, 33449, 'hairdye', 128, 1),
+(50149, 'Troll Hair Dye: Light Blue', '', 2, 1575, 33449, 'hairdye', 128, 1),
+(50150, 'Troll Hair Dye: Dark Blue', '', 2, 1575, 33449, 'hairdye', 128, 1),
+(50151, 'Troll Hair Dye: Ash Grey', '', 2, 1575, 33449, 'hairdye', 128, 1),
+(50152, 'Troll Hair Dye: Snow White', '', 2, 1575, 33449, 'hairdye', 128, 1),
+
+(50153, 'Orcish Hair Dye: Blue Black', '', 2, 1575, 33449, 'hairdye', 2, 1),
+(50154, 'Orcish Hair Dye: Oak Brown', '', 2, 1575, 33449, 'hairdye', 2, 1),
+(50155, 'Orcish Hair Dye: Dark Purple', '', 2, 1575, 33449, 'hairdye', 2, 1),
+(50156, 'Orcish Hair Dye: Lilac Violet', '', 2, 1575, 33449, 'hairdye', 2, 1),
+(50157, 'Orcish Hair Dye: Rich Purple', '', 2, 1575, 33449, 'hairdye', 2, 1),
+(50158, 'Orcish Hair Dye: Black', '', 2, 1575, 33449, 'hairdye', 2, 1),
+(50159, 'Orcish Hair Dye: Dark Ash Grey', '', 2, 1575, 33449, 'hairdye', 2, 1),
+(50160, 'Orcish Hair Dye: Light Ash Grey', '', 2, 1575, 33449, 'hairdye', 2, 1),
+	
+(50161, 'Undead Hair Dye: Lime Green', '', 2, 1575, 33449, 'hairdye', 16, 1),
+(50162, 'Undead Hair Dye: Ash Rose', '', 2, 1575, 33449, 'hairdye', 16, 1),
+(50163, 'Undead Hair Dye: Mud Brown', '', 2, 1575, 33449, 'hairdye', 16, 1),
+(50164, 'Undead Hair Dye: Green Blonde', '', 2, 1575, 33449, 'hairdye', 16, 1),
+(50165, 'Undead Hair Dye: Ash Blonde', '', 2, 1575, 33449, 'hairdye', 16, 1),
+(50166, 'Undead Hair Dye: Mint Blue', '', 2, 1575, 33449, 'hairdye', 16, 1),
+(50167, 'Undead Hair Dye: Mud Green', '', 2, 1575, 33449, 'hairdye', 16, 1),
+(50168, 'Undead Hair Dye: Light Ash Grey', '', 2, 1575, 33449, 'hairdye', 16, 1),
+(50169, 'Undead Hair Dye: Light Teal', '', 2, 1575, 33449, 'hairdye', 16, 1),
+(50170, 'Undead Hair Dye: Dirty Purple', '', 2, 1575, 33449, 'hairdye', 16, 1),
+(50171, 'Undead Hair Dye: Ash Black', '', 2, 1575, 33449, 'hairdye', 16, 1);
+
 -- 50200 [Darkmoon Steam Tonk]
 replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1) values
 (50200, 15, 2, 'Darkmoon Steam Tonk', '', 4233, 1, 1, 28505);
