@@ -466,14 +466,14 @@ replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid, minc
 (50052, 23716, 100, 1, 1), -- 23716 [Carved Ogre Idol]
 (50052, 50020, 100, 1, 10), -- 50020 [Magic Muffin]
 -- 50053 [Turtle WoW Box (lvl 40)] loot:
-(50053, 50003, 100, 1), -- 50003 [Loremaster's Backpack]
-(50053, 50017, 100, 1), -- 50017 [Highborne Soul Mirror]
+(50053, 50003, 100, 1, 1), -- 50003 [Loremaster's Backpack]
+(50053, 50017, 100, 1, 1), -- 50017 [Highborne Soul Mirror]
 -- 50054 [Turtle WoW Box (lvl 50)] loot:
-(50054, 23714, 100, 1), -- 23714 [Perpetual Purple Firework]
+(50054, 23714, 100, 1, 1), -- 23714 [Perpetual Purple Firework]
 (50054, 23578, 100, 1, 20), -- 23578 [Diet McWeaksause]
 (50054, 23579, 100, 1, 20), -- 23579 [Diet McWeaksause Classic]
 -- 50055 [Turtle WoW Box (lvl 60)] loot:
-(50055, 19160, 100, 1), -- 19160 [Hardcore Master's Tabard]
-(50055, 50075, 100, 1), -- 50074 [Darkmoon Strider]
-(50055, 50094, 100, 1); -- 50094 [Sword of a Thousand Truths]
+(50055, 19160, 100, 1, 1), -- 19160 [Hardcore Master's Tabard]
+(50055, 50075, 100, 1, 1), -- 50074 [Darkmoon Strider]
+(50055, 50094, 100, 1, 1); -- 50094 [Sword of a Thousand Truths]
 
