@@ -89,6 +89,9 @@ replace into npc_vendor (entry, item) values
 (50054, 50170),
 (50054, 50171);
 
+-- Remove cast time for SpellID 6755 (Tell Joke)
+replace into spell_mod (id, CastingTimeIndex) values (6755, 0);
+
 -- End of migration.
 END IF;
 END??
