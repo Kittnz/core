@@ -9,8 +9,8 @@ INSERT INTO `migrations` VALUES ('20190319235200');
 -- Add your query below.
 
 replace into creature_template (entry, name, subname, display_id1, level_min, level_max, health_min, health_max, faction, npc_flags, script_name) values
-(50028, 'Durgen Turtlehammer', '', 15887, 5, 5, 235, 235, 35, 2, 'npc_lost_turtles_questgiver'),
-(50030, 'Braken Greyturtle', '', 1601, 5, 5, 235, 235, 35, 2, 'npc_lost_turtles_questgiver'),
+(50051, 'Durgen Turtlehammer', '', 15887, 5, 5, 235, 235, 35, 2, 'npc_lost_turtles_questgiver'),
+(50052, 'Braken Greyturtle', '', 1601, 5, 5, 235, 235, 35, 2, 'npc_lost_turtles_questgiver'),
 (50031, 'E\'llo Turtle\'mon', '', 10171, 5, 5, 235, 235, 35, 2, 'npc_lost_turtles_questgiver'),
 (50032, 'El\'tsa', '', 15707, 5, 5, 235, 235, 35, 2, 'npc_lost_turtles_questgiver'),
 (50033, 'Tabitha Turtleton', '', 99, 5, 5, 235, 235, 35, 2, 'npc_lost_turtles_questgiver'),

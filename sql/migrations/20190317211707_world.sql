@@ -17,7 +17,7 @@ replace into item_template (entry, class, subclass, Flags, Buy_Price, Sell_Price
 (5131, 9, 0, 64, 2500, 500, 1, 'Knowledge: Stonesplinter Disguise', '', 1097, 1, 0, 0, 13, 8, 5170, 5270, 0, -1, 0, 0, 0, 0, 1),
 (5132, 9, 0, 64, 2500, 500, 1, 'Knowledge: Syndicate Disguise', '', 1097, 1, 0, 0, 22, 8, 5170, 5274, 0, -1, 0, 0, 0, 0, 1);
 
-insert ignore into creature_loot_template (entry, item, ChanceOrQuestChance, groupid, mincountOrRef, maxcount, condition_id) values
+replace into creature_loot_template (entry, item, ChanceOrQuestChance, groupid, mincountOrRef, maxcount, condition_id) values
 (1981, 5108, 1, 0, 1, 1, 0),
 (6523, 5108, 6, 0, 1, 1, 0),
 (6212, 5108, 4, 0, 1, 1, 0),
@@ -28,14 +28,14 @@ insert ignore into creature_loot_template (entry, item, ChanceOrQuestChance, gro
 replace into npc_vendor (entry, item, maxcount, incrtime) values
 (3180, 5108, 1, 300);
 
-insert ignore into npc_vendor (entry, item, maxcount, incrtime) values
+replace into npc_vendor (entry, item, maxcount, incrtime) values
 (50006, 5126, 1, 300),
 (50007, 5129, 1, 300),
 (50008, 5127, 1, 300),
 (50009, 5130, 1, 300),
 (50010, 5131, 1, 300),
 (50011, 5132, 1, 300);
-insert ignore into creature_loot_template (entry, item, ChanceOrQuestChance, mincountOrRef, maxcount) values
+replace into creature_loot_template (entry, item, ChanceOrQuestChance, mincountOrRef, maxcount) values
 (50003, 50063, -100, 1, 1),
 (50003, 2589, 100, 1, 3),
 

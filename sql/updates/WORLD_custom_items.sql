@@ -447,31 +447,33 @@ replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid) valu
 -- 50101 [Dressing Box: Scholomance Student]
 (50101, 50091, 100, 1),(50101, 50095, 100, 2),(50101, 50096, 100, 3),(50101, 50097, 100, 4),(50101, 50098, 100, 5),(50101, 50099, 100, 6),(50101, 50100, 100, 7),(50101, 50102, 100, 8),(50101, 50103, 100, 9),(50101, 3427, 100, 10), (50101, 50104, 100, 11), (50101, 50106, 100, 12),
 
+replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid, mincountOrRef) values
+
 -- Hardcore Rewards:
 
+
 -- 50050 [Turtle WoW Box (lvl 10)] loot:
-(50050, 18967, 100, 1), -- 18954 [Turtle Egg (Olive)]
-(50050, 1470,  100, 1), -- 1470  [Murloc Skin Bag]
-(50050, 859,   100, 1), -- 859   [Fine Cloth Shirt]
-(50050, 50048, 100, 1), -- 50048 [Right Juggling Torch]
+(50050, 18967, 100, 1, 1), -- 18954 [Turtle Egg (Olive)]
+(50050, 1470,  100, 1, 1), -- 1470  [Murloc Skin Bag]
+(50050, 859,   100, 1, 1), -- 859   [Fine Cloth Shirt]
+(50050, 50048, 100, 1, 1), -- 50048 [Right Juggling Torch]
 -- 50051 [Turtle WoW Box (lvl 20)] loot:
-(50051, 2588,  100, 1), --  2588 [Deprectaed Red Leather Mask]
-(50051, 1470,  100, 1), --  1470 [Murloc Skin Bag]
-(50051, 50058, 100, 1), -- 50058 [Black Piglet]
-(50051, 50021, 100, 1), -- 50021 [Strange Bottle]
+(50051, 50018, 100, 1, 1), --  1470 [Turtle Traveller's Bag]
+(50051, 50058, 100, 1, 1), -- 50058 [Black Piglet]
+(50051, 50021, 100, 1, 10), -- 50021 [Strange Bottle]
 -- 50052 [Turtle WoW Box (lvl 30)] loot:
-(50052, 50062, 100, 1), -- 50062 [Half-Eaten Mutton Chop]
-(50052, 23716, 100, 1), -- 23716 [Carved Orge Idol]
-(50052, 50020, 100, 1), -- 50020 [Magic Muffin]
+(50052, 50062, 100, 1, 1), -- 50062 [Half-Eaten Mutton Chop]
+(50052, 23716, 100, 1, 1), -- 23716 [Carved Ogre Idol]
+(50052, 50020, 100, 1, 10), -- 50020 [Magic Muffin]
 -- 50053 [Turtle WoW Box (lvl 40)] loot:
 (50053, 50003, 100, 1), -- 50003 [Loremaster's Backpack]
 (50053, 50017, 100, 1), -- 50017 [Highborne Soul Mirror]
 -- 50054 [Turtle WoW Box (lvl 50)] loot:
 (50054, 23714, 100, 1), -- 23714 [Perpetual Purple Firework]
-(50054, 23578, 100, 1), -- 23578 [Diet McWeaksause]
-(50054, 23579, 100, 1), -- 23579 [Diet McWeaksause Classic]
+(50054, 23578, 100, 1, 20), -- 23578 [Diet McWeaksause]
+(50054, 23579, 100, 1, 20), -- 23579 [Diet McWeaksause Classic]
 -- 50055 [Turtle WoW Box (lvl 60)] loot:
-(50055, 19160, 100, 1), -- 19160 [Contest Winner's Tabard] 
-(50055, 50074, 100, 1), -- 50074 [Swift Lovebird]
+(50055, 19160, 100, 1), -- 19160 [Hardcore Master's Tabard]
+(50055, 50075, 100, 1), -- 50074 [Darkmoon Strider]
 (50055, 50094, 100, 1); -- 50094 [Sword of a Thousand Truths]
 
