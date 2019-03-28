@@ -70,8 +70,8 @@ update item_template set Quality = 1 where entry = 5113 or entry = 7997;
 replace into item_template (entry, class, subclass, Flags, Buy_Count, Buy_Price, Sell_Price, name, description, display_id, Quality, Inventory_Type, Item_Level, Required_Level, Allowable_Class, Required_Skill, Required_Skill_Rank, spellid_1, spellcooldown_1, spellcharges_1, spellcategory_1, spellcategorycooldown_1, bonding, max_count, stackable, start_quest) values
 (985, 9, 0, 64, 1, 5000, 550, 'Tome of Khadgar\'s Unlocking', '', 1103, 1, 0, 18, 18, 128, 0, 0, 493, 0, -1, 0, 0, 0, 0, 1, 0),
 (1567, 9, 0, 64, 1, 15000, 2425, 'Tome of Khadgar\'s Unlocking II', '', 1103, 1, 0, 30, 30, 128, 0, 0, 858, 0, -1, 0, 0, 0, 0, 1, 0),
-(4158, 12, 0, 64, 1, 30000, 5500, 'Tome of Khadgar\'s Unlocking III', 'You only understand the magic part, you will need help to understand the rest of the things...', 1103, 1, 0, 42, 42, 128, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 100005),
-(8881, 12, 0, 64, 1, 50000, 11000, 'Tome of Khadgar\'s Unlocking IV', 'You only understand the magic part, you will need help to understand the rest of the things...', 1103, 1, 0, 54, 54, 128, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 100006);
+(4158, 12, 0, 64, 1, 30000, 5500, 'Tome of Khadgar\'s Unlocking III', 'You only understand the magic part, you will need help to understand the rest of the things...', 1103, 1, 0, 42, 42, 128, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 50005),
+(8881, 12, 0, 64, 1, 50000, 11000, 'Tome of Khadgar\'s Unlocking IV', 'You only understand the magic part, you will need help to understand the rest of the things...', 1103, 1, 0, 54, 54, 128, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 50006);
 replace into item_template (entry, class, subclass, name, description, display_id, Quality, Flags, Buy_Count, Buy_Price, Sell_Price, Item_Level, Allowable_Class, stackable) values
 (5517, 5, 0, 'Tiny Bronze Key', 'A reagent for mage spells.', 16454, 1, 0, 1, 600, 100, 18, 128, 10),
 (5518, 5, 0, 'Tiny Iron Key', 'A reagent for mage spells.', 8902, 1, 0, 1, 800, 150, 30, 128, 10),

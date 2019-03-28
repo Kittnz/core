@@ -25,7 +25,7 @@ update creature_template set equipment_id = 241 where entry in (50028, 50030, 50
 replace into quest_template (entry, Method, ZoneOrSort, PrevQuestId, MinLevel, QuestLevel, Type, RequiredClasses, RewSpell, RewSpellCast, QuestFlags, Title, Details, Objectives, OfferRewardText, RequestItemsText, SrcItemId, SrcItemCount) values
 (50010, 2, -22, 0, 1, 5, 0, 0, 0, 0, 1024, 
 'Little Lost Turtles', 'Please help, $N!\n\nI supply local adventurers with Azeroth\'s best turtles, but someone left the gate open and they\'ve all wandered off!\n\nHere, take this apple! 
-My sweet turtles can\'t resist them.\n\nThey likely wandered over to the nearby river...', 'Bring a lost turtle back.', 'Oh thank you! Thank you!', 'Have you found any of my precious turtles?', 4536, 1);
+My sweet turtles can\'t resist them.\n\nThey shouldn\'t be too far from here...', 'Bring a lost turtle back.', 'Oh thank you! Thank you!', 'Have you found any of my precious turtles?', 4536, 1);
 
 replace into creature_questrelation (id, quest) values
 (50028, 50010),(50030, 50010),(50031, 50010),(50032, 50010),(50033, 50010);
