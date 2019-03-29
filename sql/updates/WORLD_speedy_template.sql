@@ -4,7 +4,7 @@ update `creature_template` set `npc_flags`='1' where `entry`='16547';
 -- Speedy's greetings:
 
 replace into `broadcast_text` (`ID`, `MaleText`) values
-('90000', 'Welcome to Turtle WoW Shell Shop, $n.\n\nDonations are a way to help us improve your experience here at Turtle WoW, as well as help pay for general server costs, advertisement campaigns, developers, and overall production.\n\nYou can buy Turtle Tokens via PayPal (info.turtlewow@gmail.com, include your account name). The ratio is 10:1, which means 1 Euro gives you 10 Turtle Tokens.\n\nItem previews are available on our website.');
+('90000', 'Welcome to Turtle WoW Shell Shop, $n.\n\nDonations are a way to help us improve your experience here at Turtle WoW, as well as help pay for general server costs, advertisement campaigns, developers, and overall production.\n\nYou can buy Turtle Tokens via PayPal (info.turtlewow@gmail.com, include your account name). The ratio is 10:1, which means 1 Euro gives you 10 Turtle Tokens.');
 replace into `npc_text` (`ID`, `BroadcastTextID0`) values ('90000', '90000');
 
 -- Quote inside shop category:
