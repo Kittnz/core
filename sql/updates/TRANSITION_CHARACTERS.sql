@@ -383,3 +383,5 @@ update mail_items set item_template = 19160 /*[Contest Winner Tabard]*/ where it
 update mail_items set item_template = 19160 /*[Contest Winner Tabard]*/ where item_template = 30075; 
 update mail_items set item_template = 50200 /*[Darkmoon Steam Tonk]*/ where item_template = 130037; 
 update mail_items set item_template = 50201 /*[Expired Winter Veil Party Invitation]*/ where item_template = 40004; 
+
+update mail_items set item_template = 19054 /*[Red Dragon Orb]*/ where item_template = 50055;
