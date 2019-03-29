@@ -29,6 +29,11 @@ insert into npc_vendor (entry, item) values
 (50041, 17038),
 (50041, 21177);
 
+update item_template set required_level = 60 where entry in (18584, 18583, 18582);
+
+insert into creature_template (entry, name, display_id1, level_min, level_max, health_min, health_max, faction) values
+(13083, 'Echo of Archimonde', 12990, 60, 60, 6000, 6000, 35);
+
 -- End of migration.
 END IF;
 END??
