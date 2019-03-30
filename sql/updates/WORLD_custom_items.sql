@@ -277,7 +277,7 @@ replace into item_template (entry, class, name, display_id, quality, bonding, fl
 (50101, 15, 'Dressing Box: Scholomance Student', 35406, 1, 1, 4, 'If you haven\'t come to study, I\'ll use you to teach a lesson.'); 
 -- 50102 [Scholomance Academy Belt]
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
-(50102, 'Scholomance Academy Belt', 6, 32289, 1, 1);
+(50102, 'Scholomance Academy Belt', 6, 4557, 1, 1);
 -- 50103 [Scholomance Academy Robe]
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50103, 'Scholomance Academy Robe', 20, 16643, 1, 1);
