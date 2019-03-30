@@ -35,7 +35,7 @@ bool ItemUse_highborne_soul_mirror(Player* pPlayer, Item* pItem, const SpellCast
 #define ALICE_BELITTLE_RBOUNDARY 0.95f
 bool ItemUse_alice_wonderland_scale(Player* pPlayer, Item* pItem, const SpellCastTargets&) {
     float scale;
-    if (pItem->GetEntry() == 30092) { // Strange Bottle
+    if (pItem->GetEntry() == 50021) { // Strange Bottle
         if (pPlayer->GetObjectScale() == ALICE_BELITTLE_LBOUNDARY) {
             ChatHandler(pPlayer).PSendSysMessage("|cffff8040You can't be smaller!|r");
             return true;
