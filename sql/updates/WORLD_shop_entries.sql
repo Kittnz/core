@@ -32,7 +32,7 @@ replace into shop_categories values
 
 replace into shop_items values
 -- Gameplay --------------------------------------------------------------------------------------------
-(100, 1, 50010, 'Switch to Hardcore Mode (0.5 Rates)', 0),
+(100, 1, 50010, 'Switch to Hardcore Mode (0.5 Rates for mob kills outside instances)', 0),
 (101, 1, 50016, 'Portable Meeting Stone (RP Hub)', 0),
 (102, 1, 50008, 'Turtle Twink\'s Insignia (Stop XP)', 0),
 (103, 1, 50000, 'Character Name Change', 100),
