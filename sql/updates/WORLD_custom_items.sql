@@ -415,3 +415,13 @@ replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid, minc
 (50055, 50075, 100, 2, 1, 1), -- 50074 [Darkmoon Strider]
 (50055, 50094, 100, 3, 1, 1); -- 50094 [Sword of a Thousand Truths]
 
+-- Hotfixes, modify custom items only in this file:
+
+update item_template set delay = 2000, dmg_min1 = 70, dmg_max1 = 90 where entry = 50094;
+update item_template set display_id = 8119, name = 'Reindeer Reins', required_level = 40, required_skill = 762, required_skill_rank = 75, max_count = 1 where entry = 21044;
+update item_template set allowable_race = -1 where entry in (13322, 13323, 13324, 13325);
+update item_template set name = 'Hardcore Master\'s Tabard' where entry = 19160;
+update item_template set quality = 4, description = 'Only the bravest adventurers can ride it.' where entry = 50075;
+update item_template set quality = 6, subclass = 14, sheath = 1 where entry = 50094;
+update item_template set bonding = 0, stackable = 20, buy_price = 500, sell_price = 250, buy_count = 1, spellcharges_1 = -1, spellcooldown_1 = 1000, delay = 0, subclass = 0 where entry in (50020, 50021);
+update item_template set bonding = 0, stackable = 20, buy_price = 1250, sell_price = 250 where entry in (50020, 50021);

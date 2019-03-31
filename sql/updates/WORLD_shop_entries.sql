@@ -81,7 +81,7 @@ replace into shop_items values
 -- (319, 3, 13329, 'Level 60 Frost Ram', 250),
 -- (320, 5, 13327, 'Level 60 Icy Blue Mechanostrider Mod A', 250),
 -- (321, 5, 13326, 'Level 60 White Mechanostrider Mod B', 250),
-(322, 3, 12354, 'Level 60 Palomino', 250),
+-- (322, 3, 12354, 'Level 60 Palomino', 250),
 (323, 3, 12353, 'Level 60 White Stallion', 250),
 (324, 3, 12302, 'Level 60 Ancient Frostsaber', 250),
 -- (325, 5, 12303, 'Level 60 Black Nightsaber', 250),
