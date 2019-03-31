@@ -419,12 +419,15 @@ void WorldSession::HandleGossipSelectOptionOpcode(WorldPacket & recv_data)
             return;
         }
 
-        // Clear possible StopMoving motion
-        if (pCreature->IsStopped())        
-            pCreature->GetMotionMaster()->Clear();
-            
-        pCreature->StopMoving();
-        
+        // Turtle WoW Specific: required to make sure that companions with menu options will continue to follow players after option selection.
+        if (pCreature->GetCharmInfo() == nullptr || !pCreature->GetCharmInfo()->IsFollowing())
+        {
+            // Clear possible StopMoving motion
+            if (pCreature->IsStopped())
+                pCreature->GetMotionMaster()->Clear();
+
+            pCreature->StopMoving();
+        }
 
         if (!sScriptMgr.OnGossipSelect(_player, pCreature, sender, action, code.empty() ? NULL : code.c_str()))
             _player->OnGossipSelect(pCreature, gossipListId);
