@@ -16,7 +16,10 @@ bool ItemUse_portable_meeting_stone(Player* pPlayer, Item* pItem, const SpellCas
     if (pPlayer->isInCombat() || pPlayer->IsBeingTeleported() || pPlayer->HasSpellCooldown(31726) || (pPlayer->getDeathState() == CORPSE))
         ChatHandler(pPlayer).PSendSysMessage("|cffF58CBASpeedy whispers: The portal is currently unstable and your fat ass doesn't fit in, please try again later!|r");
     else
+    {
         pPlayer->TeleportTo((pPlayer->GetTeam() == ALLIANCE) ? WorldLocation(0, -8607.52f, 382.006f, 110.173f, 2.24265f) : WorldLocation(1, -397.356f, -2654.94f, 96.2232f, 2.25183f));
+        pPlayer->SendSpellCooldown(7077, 3600000, pItem->GetEntry() == 50016);
+    }
     return false;
 }
 
