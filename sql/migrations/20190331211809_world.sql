@@ -11,6 +11,8 @@ INSERT INTO `migrations` VALUES ('20190331211809');
 replace into creature_equip_template (entry, equipentry1) values (50055, 13262);
 update creature_template set equipment_id = 50055 where entry = 50055;
 
+replace into creature_template_addon(entry, auras) values (50056, 28126);
+
 -- End of migration.
 END IF;
 END??
