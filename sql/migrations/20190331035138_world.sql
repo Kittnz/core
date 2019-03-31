@@ -91,7 +91,7 @@ replace into npc_vendor (entry, item) values
 
 -- Correct queries for the Pompa's bosses.
 
-delete from creature_equip_template where entry=50053 and equipentry1 = 13262
+delete from creature_equip_template where entry=50053 and equipentry1 = 13262;
 
 replace into creature_template (entry, display_id1, name, level_min, level_max, health_min, health_max, mana_min, mana_max, armor, faction, speed_walk, speed_run, scale, rank, dmg_min, dmg_max,
 attack_power, dmg_multiplier, base_attack_time, ranged_attack_time, unit_class, beast_family, ranged_dmg_min, ranged_dmg_max, ranged_attack_power, type, type_flags, loot_id, holy_res, fire_res, nature_res,
