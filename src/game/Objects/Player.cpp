@@ -14539,10 +14539,10 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
     m_honorMgr.SetStoredHK(fields[43].GetUInt32());
     m_honorMgr.SetStoredDK(fields[44].GetUInt32());
 
-    if (fields[59].GetBool())
-        SetByteValue(PLAYER_BYTES_3, 2, getRace());
-    else
-        SetByteValue(PLAYER_BYTES_3, 2, 0);
+    //if (fields[59].GetBool())
+    //    SetByteValue(PLAYER_BYTES_3, 2, getRace());
+    //else
+    //    SetByteValue(PLAYER_BYTES_3, 2, 0);
 
     m_honorMgr.Load(holder->GetResult(PLAYER_LOGIN_QUERY_LOADHONORCP));
     _LoadBoundInstances(holder->GetResult(PLAYER_LOGIN_QUERY_LOADBOUNDINSTANCES));

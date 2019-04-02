@@ -37,7 +37,7 @@ replace into shop_items values
 (104, 1, 50001, 'Character Race Change', 200),
 (105, 1, 50002, 'Character Look Change', 150),
 (106, 1, 50003, 'Loremaster\'s Backpack (28 slot bag)', 80),
-(107, 1, 50011, 'MOLL-E, Remote Mail Terminal', 100),
+-- (107, 1, 50011, 'MOLL-E, Remote Mail Terminal', 100),
 (108, 1, 50009, 'Mechanical Auctioneer', 100),
 (109, 1, 50007, 'Forworn Mule (Bank)', 200),
 (110, 1, 50005, 'Field Repair Bot 75B', 200),
