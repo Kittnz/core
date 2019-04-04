@@ -2794,7 +2794,14 @@ public:
     virtual void run()
     {
         WorldDatabase.ThreadStart(); // Not needed if we don't do SQL queries from this thread ...
-        DoUpdateObjects();
+		try
+		{
+			DoUpdateObjects();
+		}
+		catch (...)
+		{
+			sLog.outError("[ERROR (CRASH)]: Can't properly update objects this tick, skipping...");
+		}
         WorldDatabase.ThreadEnd();
     }
     void DoUpdateObjects()
