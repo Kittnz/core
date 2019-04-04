@@ -152,9 +152,9 @@ enum BattleGroundBracketId                                  // bracketId for lev
 {
     BG_BRACKET_ID_NONE           = -1,
     BG_BRACKET_ID_FIRST          = 0,                       // brackets start from specific BG min level and each include 10 levels range
-    BG_BRACKET_ID_LAST           = 5,                       // so for start level 10 will be 10-19, 20-29, ...  all greater max bg level included in last bracket
+    BG_BRACKET_ID_LAST           = 6,                       // so for start level 0 will be 1-9, 10-19, 20-29, ...  all greater max bg level included in last bracket
 
-    MAX_BATTLEGROUND_BRACKETS    = 6                        // used as one from values, so in enum
+    MAX_BATTLEGROUND_BRACKETS    = 7                        // used as one from values, so in enum
 };
 
 enum ScoreType
