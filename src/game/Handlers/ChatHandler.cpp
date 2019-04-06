@@ -372,6 +372,9 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                 return;
             }
 
+            if (!GetPlayer()->isAlive())
+                return;
+
             GetPlayer()->Say(msg, lang);
 
             if (lang != LANG_ADDON)
@@ -390,6 +393,9 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                 ChatHandler(this).SendSysMessage("You cannot use emotes yet (too low level).");
                 return;
             }
+
+            if (!GetPlayer()->isAlive())
+                return;
 
             GetPlayer()->TextEmote(msg);
 
@@ -410,6 +416,9 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                 ChatHandler(this).SendSysMessage("You cannot yell yet (too low level).");
                 return;
             }
+
+            if (!GetPlayer()->isAlive())
+                return;
 
             GetPlayer()->Yell(msg, lang);
 
