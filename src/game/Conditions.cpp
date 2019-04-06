@@ -270,11 +270,17 @@ bool inline ConditionEntry::Evaluate(WorldObject const* target, Map const* map, 
         }
         case CONDITION_NEARBY_CREATURE:
         {
-            return (bool)(target->FindNearestCreature(m_value1, m_value2));
+            if (target->FindNearestCreature(m_value1, m_value2))
+                return true;
+            else
+                return false;
         }
         case CONDITION_NEARBY_GAMEOBJECT:
         {
-            return (bool)(target->FindNearestGameObject(m_value1, m_value2));
+            if (target->FindNearestGameObject(m_value1, m_value2))
+                return true;
+            else
+                return false;
         }
         case CONDITION_QUEST_NONE:
         {

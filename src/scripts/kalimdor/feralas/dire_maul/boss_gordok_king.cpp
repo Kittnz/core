@@ -493,7 +493,6 @@ void boss_chorushAI::UpdateAIPrist(const uint32 uiDiff)
             SetCombatMovement(true);
             DoStartMovement(m_creature->getVictim());
             m_bInMeele = true;
-            return;
         }
     }
     else
@@ -504,7 +503,6 @@ void boss_chorushAI::UpdateAIPrist(const uint32 uiDiff)
             SetCombatMovement(false);
             m_bInMeele = false;
             DoStartNoMovement(m_creature->getVictim());
-            return;
         }
     }
 };
