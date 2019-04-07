@@ -260,7 +260,7 @@ bool ChatHandler::HandleUpdateSkinBytesCommand(char* args)
     Unit *target = GetSelectedUnit();
 
     // 10 Sally Whitemane (humans only)
-    // 11 Jandis Barov (humans only)
+    // 11 Jandice Barov (humans only)
 
     if (!target)
         target = m_session->GetPlayer();

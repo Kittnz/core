@@ -149,7 +149,7 @@ bool ItemUse_makeup_red(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 
 bool ItemUse_makeup_black(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
-    // Jandis Barov
+    // Jandice Barov
     pPlayer->SetByteValue(PLAYER_BYTES, 0, 11);
     ChatHandler(pPlayer).SendSysMessage("Please logout and login again!");
     return false;

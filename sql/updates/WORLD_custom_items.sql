@@ -287,9 +287,9 @@ replace into item_template (entry, name, inventory_type, display_id, quality, bo
 -- 50105 [Sally Whitemane's Makeup Kit]
 replace into item_template (entry, name, description, quality, spellid_1, display_id, script_name, allowable_race, bonding) values
 (50105, 'Sally Whitemane\'s Makeup Kit', '', 2, 1575, 14006, 'makeup_red', 1, 1);
--- 50106 [Jandis Barov's Makeup Kit]
+-- 50106 [Jandice Barov's Makeup Kit]
 replace into item_template (entry, name, description, quality, spellid_1, display_id, script_name, allowable_race, bonding) values
-(50106, 'Jandis Barov\'s Makeup Kit', '', 2, 1575, 16028, 'makeup_black', 1, 1);
+(50106, 'Jandice Barov\'s Makeup Kit', '', 2, 1575, 16028, 'makeup_black', 1, 1);
 -- 50107-50171 [Hair Dye Items]
 replace into item_template (entry, name, description, quality, spellid_1, display_id, script_name, buy_price, spellcharges_1, allowable_race, bonding) values
 (50107, 'Night Elf Hair Dye: Grass Green', '', 2, 1575, 33449, 'hairdye', 250000, -1, 8, 1),
