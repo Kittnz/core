@@ -1938,7 +1938,7 @@ bool ChatHandler::isValidChatMessage(const char* message)
             break;
 
         char commandChar;
-        reader >> commandChar;
+        reader >> std::noskipws >> commandChar;
 
         // | in normal messages is escaped by ||
         if (commandChar != '|')
