@@ -37,6 +37,11 @@ struct boss_turtlhuAI : public ScriptedAI
         in_shadow_form = false;
     }
 
+    void Aggro(Unit *who)
+    {
+        m_creature->PMonsterYell("NO! LET ME STEAL MORE TREASURES! WE NEED THEM!");
+    }
+
     void Reset()
     {
         SetDefaults();
