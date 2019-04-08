@@ -28,7 +28,7 @@ struct boss_turtlhuAI : public ScriptedAI
     void SetDefaults() {
         m_creature->SetObjectScale(4.2f);
 
-        VoidBolt_Timer = 15000;
+        VoidBolt_Timer = 16000;
         ManaBurn_Timer = 45000;
         ShadowBolt_Timer = urand(4000, 6000);
         ShadowShock_Timer = urand(8000, 12000);
@@ -90,7 +90,7 @@ struct boss_turtlhuAI : public ScriptedAI
         m_creature->SetObjectScale(0.35f);
         m_creature->PMonsterSay("I... feel... weak... Thanks for freeing my soul, strangers.");
 
-        uint32 m_respawn_delay_Timer = urand(4, 6)*DAY + urand(0, 24*HOUR);
+        uint32 m_respawn_delay_Timer = urand(4, 6)*DAY + urand(12, 24*HOUR);
 
         /** DRRS */
         if (m_creature->GetSpawnFlags() & SPAWN_FLAG_DYNAMIC_RESPAWN_TIME &&
@@ -122,7 +122,7 @@ struct boss_turtlhuAI : public ScriptedAI
             if (ShadowShock_Timer < diff)
             {
                 DoCast(m_creature, SPELL_SHADOW_SHOCK);
-                ShadowShock_Timer = urand(6000, 12000);
+                ShadowShock_Timer = urand(8000, 16000);
             } else {
                 ShadowShock_Timer -= diff;
             }
@@ -161,7 +161,7 @@ struct boss_turtlhuAI : public ScriptedAI
         if (VoidBolt_Timer < diff && !in_shadow_form)
         {
             if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_VOIDBOLT) == CAST_OK)
-                VoidBolt_Timer = urand(9000, 12000);
+                VoidBolt_Timer = urand(9000, 16000);
         }
         else
             VoidBolt_Timer -= diff;

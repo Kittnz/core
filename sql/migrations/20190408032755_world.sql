@@ -42,7 +42,7 @@ replace into creature_loot_template (entry, item, chanceorquestchance, groupid, 
 
 (50056, 50203, 100, 4, 50, 100);
 
-update creature_template set loot_id = 50056, faction = 7 where entry = 50056;
+update creature_template set loot_id = 50056, faction = 7, health_min = 528293, health_max = 528293, armor = 4960 where entry = 50056;
 
 -- End of migration.
 END IF;
