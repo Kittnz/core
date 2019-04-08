@@ -1264,6 +1264,29 @@ void Spell::DoAllEffectOnTarget(TargetInfo *target)
         {
             procEx |= PROC_EX_CRITICAL_HIT;
             addhealth = caster->SpellCriticalHealingBonus(m_spellInfo, addhealth, nullptr);
+
+#if SUPPORTED_CLIENT_BUILD <= CLIENT_BUILD_1_9_4
+            // If healing crits, we need to update the execute log data.
+            for (uint32 i = 0; i < MAX_EFFECT_INDEX; ++i)
+            {
+                if (m_executeLogInfo[i].empty())
+                    continue;
+
+                for (uint32 j = 0; j < m_executeLogInfo[i].size(); ++j)
+                {
+                    switch (m_spellInfo->Effect[i])
+                    {
+                        case SPELL_EFFECT_HEAL:
+                        case SPELL_EFFECT_HEAL_MAX_HEALTH:
+                        {
+                            m_executeLogInfo[i][j].heal.amount = addhealth;
+                            m_executeLogInfo[i][j].heal.critical = 1;
+                            break;
+                        }
+                    }
+                }
+            }
+#endif
         }
         else
             procEx |= PROC_EX_NORMAL_HIT;
@@ -4620,6 +4643,17 @@ void Spell::SendLogExecute()
                     data << info.powerDrain.power;
                     data << info.powerDrain.multiplier;
                     break;
+                case SPELL_EFFECT_HEAL:
+                case SPELL_EFFECT_HEAL_MAX_HEALTH:
+                    data << info.targetGuid;
+                    data << info.heal.amount;
+                    data << info.heal.critical;
+                    break;
+                case SPELL_EFFECT_ENERGIZE:
+                    data << info.targetGuid;
+                    data << info.energize.amount;
+                    data << info.energize.powerType;
+                    break;
                 case SPELL_EFFECT_ADD_EXTRA_ATTACKS:
                     data << info.targetGuid;
                     data << info.extraAttacks.count;
@@ -5353,14 +5387,14 @@ SpellCastResult Spell::CheckCast(bool strict)
             case 14269:
             case 14270:
             case 14271:
-                if (m_targets.getUnitTargetGuid() != m_caster->GetReactiveTraget(REACTIVE_DEFENSE))
+                if (m_targets.getUnitTargetGuid() != m_caster->GetReactiveTarget(REACTIVE_DEFENSE))
                     return SPELL_FAILED_BAD_TARGETS;
                 break;
             // Contre-attaque
             case 19306:
             case 20909:
             case 20910:
-                if (m_targets.getUnitTargetGuid() != m_caster->GetReactiveTraget(REACTIVE_HUNTER_PARRY))
+                if (m_targets.getUnitTargetGuid() != m_caster->GetReactiveTarget(REACTIVE_HUNTER_PARRY))
                     return SPELL_FAILED_BAD_TARGETS;
                 break;
             // Reindeer Transformation only castable while mounted
