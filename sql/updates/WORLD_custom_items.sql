@@ -370,6 +370,12 @@ replace into item_template (entry, class, subclass, name, description, display_i
 replace into item_template (entry, class, subclass, name, description, display_id, quality, stackable, bonding) values
 (50201, 15, 0, 'Expired Winter Veil Party Invitation', 'Happy New 2019 Year!', 1301, 0, 200, 1);
 
+replace into item_template (entry, class, Flags, Buy_Count, Buy_Price, Sell_Price, name, description, display_id, Quality, Inventory_Type, Item_Level, Required_Level, Required_Skill, Required_Skill_Rank, spellid_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, bonding, max_count, stackable) values
+(50202, 15, 0, 1, 0, 0, 'Egg of Turtlhu', 'This poor turtle got a bit corrupted, but his heart is still lovely.', 18050, 3, 0, 0, 0, 0, 0, 28505, 1, 0, 0, 3, 0, 1);
+
+replace into item_template (entry, class, subclass, name, description, display_id, quality, stackable, bonding) values
+(50203, 15, 0, 'Corrupted Sand', 'This sand covers some corrupted creatures that have been involved in time travels, it could be purified again if you are able to find someone inside the Caverns of Time...', 20614, 1, 250, 0);
+
 -- ### item_loot_template:
 delete from item_loot_template where entry in (50050, 50051, 50052, 50053, 50054, 500055, 50022, 50023, 50024, 50025, 50101);
 replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid) values
