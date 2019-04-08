@@ -49,7 +49,7 @@ replace into item_template (entry, class, subclass, name, description, display_i
 (50014, 15, 2, 'Blitzen', 'Happy Winter Veil 2018!', 8119, 1, 1, 28505);
 -- 50015 [Bloody Coin]
 replace into item_template (entry, class, subclass, name, description, display_id, quality, stackable, bonding) values
-(50015, 15, 0, 'Bloody Coin', 'Local currency used in some bloody events.', 32277, 1, 200, 1);
+(50015, 15, 0, 'Bloody Coin', 'Local currency used in some bloody events.', 32277, 2, 200, 1);
 -- 50016 [Portable Meeting Stone]
 replace into item_template (entry, name, description, display_id, quality, spellid_1, spellcooldown_1, script_name, bonding) values
 (50016, 'Portable Meeting Stone', 'Use it to meet new friends.', '33543', '1', '7077', '3600000', 'portable_meeting_stone', '1');
@@ -374,7 +374,7 @@ replace into item_template (entry, class, Flags, Buy_Count, Buy_Price, Sell_Pric
 (50202, 15, 0, 1, 0, 0, 'Egg of Turtlhu', 'This poor turtle got a bit corrupted, but his heart is still lovely.', 18050, 3, 0, 0, 0, 0, 0, 28505, 1, 0, 0, 3, 0, 1);
 
 replace into item_template (entry, class, subclass, name, description, display_id, quality, stackable, bonding) values
-(50203, 15, 0, 'Corrupted Sand', 'This sand covers some corrupted creatures that have been involved in time travels, it could be purified again if you are able to find someone inside the Caverns of Time...', 20614, 1, 250, 0);
+(50203, 15, 0, 'Corrupted Sand', 'This sand covers some corrupted creatures that have been involved in time travels, it could be purified again if you are able to find someone inside the Caverns of Time...', 20614, 2, 250, 0);
 
 -- ### item_loot_template:
 delete from item_loot_template where entry in (50050, 50051, 50052, 50053, 50054, 500055, 50022, 50023, 50024, 50025, 50101);
