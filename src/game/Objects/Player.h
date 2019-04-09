@@ -1061,6 +1061,7 @@ class MANGOS_DLL_SPEC Player final: public Unit
         bool RemoveItemCurrency(uint32 itemId, uint32 count);
         void MailHardcoreModeRewards(uint32 level);
         bool IsCityProtector();
+        void MailCityProtectorScroll();
         void MoveItemFromInventory(uint8 bag, uint8 slot, bool update);
         // in trade, auction, guild bank, mail....
         void MoveItemToInventory(ItemPosCountVec const& dest, Item* pItem, bool update, bool in_characterInventoryDB = false);

@@ -14539,10 +14539,10 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
     m_honorMgr.SetStoredHK(fields[43].GetUInt32());
     m_honorMgr.SetStoredDK(fields[44].GetUInt32());
 
-    //if (fields[59].GetBool())
-    //    SetByteValue(PLAYER_BYTES_3, 2, getRace());
-    //else
-    //    SetByteValue(PLAYER_BYTES_3, 2, 0);
+    if (fields[59].GetBool())
+        SetByteValue(PLAYER_BYTES_3, 2, getRace());
+    else
+        SetByteValue(PLAYER_BYTES_3, 2, 0);
 
     m_honorMgr.Load(holder->GetResult(PLAYER_LOGIN_QUERY_LOADHONORCP));
     _LoadBoundInstances(holder->GetResult(PLAYER_LOGIN_QUERY_LOADBOUNDINSTANCES));
@@ -21521,3 +21521,22 @@ void Player::MailHardcoreModeRewards(uint32 level)
 }
 
 bool Player::IsCityProtector() { return GetByteValue(PLAYER_BYTES_3, 2) > 0; }
+
+void Player::MailCityProtectorScroll()
+{
+    uint32 itemEntry = 0;
+    std::string subject = "City Protector";
+    std::string message = "Defend the weak, protect both young and old, never desert your friends. Give justice to all, be fearless in battle and always ready to defend the right.";
+
+    itemEntry = GetTeam() == ALLIANCE ? 50056 : 50057; // Apply custom_items.sql
+
+    if (!HasItemCount(itemEntry, 1, true))
+    {
+        Item* ToMailItem = Item::CreateItem(itemEntry, 1, this);
+        ToMailItem->SaveToDB();
+
+        MailDraft(subject, sObjectMgr.CreateItemText(message))
+            .AddItem(ToMailItem)
+            .SendMailTo(this, MailSender(MAIL_CREATURE, uint32(16547), MAIL_STATIONERY_DEFAULT), MAIL_CHECK_MASK_COPIED, 0, 30 * DAY);
+    }      
+}
