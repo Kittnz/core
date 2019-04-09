@@ -20,7 +20,8 @@ update creature set position_x = -8606.067383, position_y = 384.018585, position
 update creature set position_x = 1658.71, position_y = -4348.8, position_z = 29.2574, orientation = 4.39823, spawntimesecsmin = 300, spawntimesecsmax = 300 where guid = 6504;
 
 -- Drop BG player requirements and allow AB and WSG at level 1.
-update battleground_template set min_level = 1, max_level = 60,  min_players_per_team = 1 where id in (2, 3) and patch > 0;
+update battleground_template set min_level = 1, max_level = 60,  min_players_per_team = 1 where id = 2 and patch > 0;
+update battleground_template set min_level = 1, max_level = 60,  min_players_per_team = 2 where id = 3 and patch > 0;
 update battleground_template set min_players_per_team = 5 where id = 1 and patch > 0;
 
 -- End of migration.
