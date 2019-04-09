@@ -40,7 +40,7 @@ UPDATE `creature_movement` SET `waittime`='30000' WHERE (`id`='13174') AND (`poi
 UPDATE `creature` SET `position_x`='265.967', `position_y`='-3050.67', `position_z`='96.9215', `orientation`='3.764', `MovementType`='2' WHERE (`guid`='13174');
 
 -- Repositioning Okla
-UDATE `creature` SET `position_x`='280.125', `position_y`='-3029.01', `position_z`='97.3502',  WHERE (`guid`='13179');
+UPDATE `creature` SET `position_x`='280.125', `position_y`='-3029.01', `position_z`='97.3502'  WHERE (`guid`='13179');
 
 -- End of migration.
 END IF;
