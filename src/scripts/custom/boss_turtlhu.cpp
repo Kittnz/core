@@ -122,7 +122,7 @@ struct boss_turtlhuAI : public ScriptedAI
             if (ShadowShock_Timer < diff)
             {
                 DoCast(m_creature, SPELL_SHADOW_SHOCK);
-                ShadowShock_Timer = urand(8000, 16000);
+                ShadowShock_Timer = urand(12000, 18000);
             } else {
                 ShadowShock_Timer -= diff;
             }
@@ -133,7 +133,7 @@ struct boss_turtlhuAI : public ScriptedAI
         {
             if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0)) {
                 DoCast(pTarget, SPELL_SHADOW_BOLT);
-                ShadowBolt_Timer = urand(2000, 6000);
+                ShadowBolt_Timer = urand(3000, 6000);
             } else {
                 ShadowBolt_Timer = 1000;
             }
@@ -150,7 +150,7 @@ struct boss_turtlhuAI : public ScriptedAI
         {
             m_creature->PMonsterYell("BURN! ALL OF YOUR ENERGY, BURN!");
             m_creature->InterruptNonMeleeSpells(false);
-            DoCast(m_creature->SelectNearestTarget(100), SPELL_MANA_BURN);
+            DoCast(m_creature, SPELL_MANA_BURN);
             ManaBurn_Timer = 45000;
             mana_burn_warning_said = false;
         }
