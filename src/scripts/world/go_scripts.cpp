@@ -345,7 +345,7 @@ enum
     ITEM_HIVE_REGAL_RUBBING             = 20456,
 };
 
-// gossip menu 20000 : Le cristal est couvert de glyphes et de runes compliqués. Vous n'y comprenez rien.
+// gossip menu 20000 : Le cristal est couvert de glyphes et de runes compliquï¿½s. Vous n'y comprenez rien.
 template <int REWARD_ITEM>
 bool GOHello_go_Hive_Glyphed_Crystal(Player* pPlayer, GameObject* pGo)
 {
@@ -531,6 +531,17 @@ GameObjectAI* GetAI_go_darkmoon_faire_music(GameObject* gameobject)
     return new go_darkmoon_faire_music(gameobject);
 }
 
+/*######
+## go_orb_of_the_bronze_dragonflight
+######*/
+
+bool GOHello_go_orb_of_the_bronze_dragonflight(Player* pPlayer, GameObject* pGo)
+{
+    pPlayer->TeleportTo(1, -8156.288086f, -4809.846191f, 35.879276f, 5.267656f);
+
+    return true;
+}
+
 void AddSC_go_scripts()
 {
     Script *newscript;
@@ -632,5 +643,10 @@ void AddSC_go_scripts()
     newscript = new Script;
     newscript->Name = "go_darkmoon_faire_music";
     newscript->GOGetAI = &GetAI_go_darkmoon_faire_music;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "go_orb_of_the_bronze_dragonflight";
+    newscript->pGOHello = &GOHello_go_orb_of_the_bronze_dragonflight;
     newscript->RegisterSelf();
 }
