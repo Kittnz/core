@@ -2079,7 +2079,6 @@ class MANGOS_DLL_SPEC Player final: public Unit
         ObjectGuid     m_selectedGobj; // For GM commands
         ObjectGuid m_escortingGuid;
         uint32 customFlags;
-        bool city_protector;
 
         // Turtle WoW custom feature: hardcore mode (0.5x rates for Creature.Kill)
         bool bIsHardcore = false;

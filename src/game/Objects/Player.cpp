@@ -16106,8 +16106,8 @@ void Player::SaveToDB(bool online, bool force)
     // Nostalrius
     uberInsert.addUInt32(GetAreaId());
     uberInsert.addUInt32(GetWorldMask());
-    uberInsert.addUInt32(customFlags);
-    uberInsert.addBool(city_protector);
+    uberInsert.addUInt32(GetCustomFlags());
+    uberInsert.addUInt8(IsCityProtector() ? 1 : 0);
     uberInsert.Execute();
 
     _SaveBGData();
