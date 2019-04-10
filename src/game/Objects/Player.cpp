@@ -15977,7 +15977,7 @@ void Player::SaveToDB(bool online, bool force)
                               "honorRankPoints, honorHighestRank, honorStanding, honorLastWeekHK, honorLastWeekCP, honorStoredHK, honorStoredDK, "
                               "watchedFaction, drunk, health, power1, power2, power3, "
                               "power4, power5, exploredZones, equipmentCache, ammoId, actionBars, "
-                              "area, world_phase_mask, customFlags) "
+                              "area, world_phase_mask, customFlags, city_protector) "
                               "VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,"
                               "?, ?, ?, ?, ?, "
                               "?, ?, ?, "
@@ -15987,7 +15987,7 @@ void Player::SaveToDB(bool online, bool force)
                               "?, ?, ?, ?, ?, ?, ?, "
                               "?, ?, ?, ?, ?, ?, "
                               "?, ?, ?, ?, ?, ?, "
-                              "?, ?, ?) ");
+                              "?, ?, ?, ?) ");
 
     uberInsert.addUInt32(GetGUIDLow());
     uberInsert.addUInt32(GetSession()->GetAccountId());
@@ -16107,6 +16107,7 @@ void Player::SaveToDB(bool online, bool force)
     uberInsert.addUInt32(GetAreaId());
     uberInsert.addUInt32(GetWorldMask());
     uberInsert.addUInt32(customFlags);
+    uberInsert.addBool(city_protector);
     uberInsert.Execute();
 
     _SaveBGData();
