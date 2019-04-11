@@ -114,7 +114,7 @@ replace into shop_items values
 (502, 5, 50023, 'Dressing Box: Demon Hunter', 75),
 (503, 5, 50025, 'Dressing Box: Sally Whitemane', 75),
 (504, 5, 50101, 'Dressing Box: Scholomance Student', 75);
-(505, 5, 50204, 'Wildhammer Clan Initiation Set (Female Only)', 125);
+(505, 5, 50204, 'Wildhammer Clan Initiation Set', 125);
 (506, 5, 50205, 'Dark Iron Dwarf Initiation Set', 125);
 (507, 5, 50206, 'Stoneskin Dwarf Initiation Set (Male Only)', 125);
 

@@ -242,12 +242,11 @@ bool ItemUse_hairdye(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 bool ItemUse_skin_wildhammer(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
     if (pPlayer->getGender() == GENDER_MALE)
-        ChatHandler(pPlayer).SendSysMessage("You can't use this item.");
+        pPlayer->SetByteValue(PLAYER_BYTES, 0, static_cast<uint8>(irand(16, 17)));
     else
-    {
         pPlayer->SetByteValue(PLAYER_BYTES, 0, 9);
-        ChatHandler(pPlayer).SendSysMessage("Please logout and login again!");
-    }
+
+    ChatHandler(pPlayer).SendSysMessage("Please logout and login again!");
     return false;
 }
 
@@ -257,7 +256,7 @@ bool ItemUse_skin_stoneskin(Player* pPlayer, Item* pItem, const SpellCastTargets
         ChatHandler(pPlayer).SendSysMessage("You can't use this item.");
     else
     {
-        pPlayer->SetByteValue(PLAYER_BYTES, 0, 9);
+        pPlayer->SetByteValue(PLAYER_BYTES, 0, static_cast<uint8>(irand(10, 15)));
         ChatHandler(pPlayer).SendSysMessage("Please logout and login again!");
     }
     return false;
@@ -265,7 +264,10 @@ bool ItemUse_skin_stoneskin(Player* pPlayer, Item* pItem, const SpellCastTargets
 
 bool ItemUse_skin_darkiron(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
-    pPlayer->SetByteValue(PLAYER_BYTES, 0, 10);
+    if (pPlayer->getGender() == GENDER_MALE)
+        pPlayer->SetByteValue(PLAYER_BYTES, 0, 9);
+    else
+        pPlayer->SetByteValue(PLAYER_BYTES, 0, 10);
     ChatHandler(pPlayer).SendSysMessage("Please logout and login again!");
     return false;
 }
@@ -341,6 +343,6 @@ void AddSC_item_scripts()
 
     newscript = new Script;
     newscript->Name = "skin_stoneskin";
-    newscript->pItemUse = &ItemUse_skin_darkiron;
+    newscript->pItemUse = &ItemUse_skin_stoneskin;
     newscript->RegisterSelf();
 }
