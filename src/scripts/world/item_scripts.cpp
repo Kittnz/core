@@ -250,7 +250,7 @@ bool ItemUse_skin_wildhammer(Player* pPlayer, Item* pItem, const SpellCastTarget
     return false;
 }
 
-bool ItemUse_skin_stoneskin(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+bool ItemUse_skin_earthen(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
     if (pPlayer->getGender() == GENDER_FEMALE)
         ChatHandler(pPlayer).SendSysMessage("You can't use this item.");
@@ -342,7 +342,7 @@ void AddSC_item_scripts()
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "skin_stoneskin";
-    newscript->pItemUse = &ItemUse_skin_stoneskin;
+    newscript->Name = "skin_earthen";
+    newscript->pItemUse = &ItemUse_skin_earthen;
     newscript->RegisterSelf();
 }
