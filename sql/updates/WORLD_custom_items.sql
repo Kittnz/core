@@ -376,6 +376,13 @@ replace into item_template (entry, class, Flags, Buy_Count, Buy_Price, Sell_Pric
 replace into item_template (entry, class, subclass, name, description, display_id, quality, stackable, bonding) values
 (50203, 15, 0, 'Corrupted Sand', 'This sand covers some corrupted creatures that have been involved in time travels, it could be purified again if you are able to find someone inside the Caverns of Time...', 20614, 2, 250, 0);
 
+replace into item_template (entry, name, description, quality, spellid_1, display_id, script_name, allowable_race, bonding) values
+(50204, 'Wildhammer Clan Initiation Set (Female Only)', '', 2, 12244, 31521, 'skin_wildhammer', 4, 1);
+replace into item_template (entry, name, description, quality, spellid_1, display_id, script_name, allowable_race, bonding) values
+(50205, 'Dark Iron Dwarf Initiation Set', '', 2, 12244, 28652, 'skin_darkiron', 4, 1);
+replace into item_template (entry, name, description, quality, spellid_1, display_id, script_name, allowable_race, bonding) values
+(50206, 'Stoneskin Dwarf Initiation Set (Male Only)', '', 2, 12244, 32933, 'skin_stoneskin', 4, 1);
+
 -- ### item_loot_template:
 delete from item_loot_template where entry in (50050, 50051, 50052, 50053, 50054, 500055, 50022, 50023, 50024, 50025, 50101);
 replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid) values
