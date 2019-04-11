@@ -26,7 +26,8 @@ replace into shop_categories values
 (2, 'Companions'),
 (3, 'Mounts'),
 (4, 'Tabards'),
-(5, 'Roleplay');
+(5, 'Roleplay'),
+(6, 'Skin Changers');                                ;
 
 replace into shop_items values
 -- Gameplay --------------------------------------------------------------------------------------------
@@ -59,39 +60,39 @@ replace into shop_items values
 (213, 2, 50085, 'Frostwolf Ghostpup', 50),
 (214, 2, 50077, 'Faeling Egg', 50),
 -- Mounts --------------------------------------------------------------------------------------
--- (300, 3, 50071, 'Level 1 Ivory Tallstrider', 100),
-(301, 3, 50072, 'Level 1   Brown Tallstrider', 100),
--- (302, 3, 50073, 'Level 1 Gray Tallstrider', 100),
--- (303, 3, 50076, 'Level 1 Turquoise Tallstrider', 100),
-(304, 3, 50074, 'Level 1   Swift Lovebird', 125),
--- (305, 3, 12325, 'Level 40 Primal Leopard', 150),
-(306, 3, 12326, 'Level 40 Tawny Sabercat', 150),
+(300, 3, 50071, 'Level 1   Ivory Tallstrider', 100),
+-- (301, 3, 50072, 'Level 1   Brown Tallstrider', 100),
+-- (302, 3, 50073, 'Level 1   Gray Tallstrider', 100),
+(303, 3, 50076, 'Level 1   Turquoise Tallstrider', 100),
+-- (304, 3, 50074, 'Level 1   Swift Lovebird', 125),
+(305, 3, 12325, 'Level 40 Primal Leopard', 150),
+-- (306, 3, 12326, 'Level 40 Tawny Sabercat', 150),
 (307, 3, 8630,  'Level 40 Bengal Tiger', 150),
 -- (308, 4, 8583,  'Level 40 "Skeletal" Horse', 150),
 -- (309, 4, 21044, 'Level 40 Reindeer Reins', 150),
 -- (310, 3, 13322, 'Level 40 Unpainted Mechanostrider', 150),
 -- (311, 4, 13323, 'Level 40 Purple Mechanostrider', 150),
--- (312, 4, 13324, 'Level 40 Red and Blue Mechanostrider', 150),
--- (313, 4, 13325, 'Level 40 Fluorescent Green Mechanostrider', 150),
-(314, 3, 14062, 'Level 40 Kodo Mount', 150),
--- (315, 4, 5875, 'Level 40 Blue Ram', 150),
-(316, 3, 5874, 'Level 40 Black Ram', 150),
+(312, 4, 13324, 'Level 40 Red and Blue Mechanostrider', 150),
+(313, 4, 13325, 'Level 40 Fluorescent Green Mechanostrider', 150),
+-- (314, 3, 14062, 'Level 40 Kodo Mount', 150),
+(315, 4, 5875, 'Level 40 Blue Ram', 150),
+-- (316, 3, 5874, 'Level 40 Black Ram', 150),
 (317, 3, 1041, 'Level 40 Black Wolf', 150),
 (318, 3, 8590, 'Level 40 Obsidian Raptor', 150),
 -- (319, 3, 13329, 'Level 60 Frost Ram', 250),
 -- (320, 5, 13327, 'Level 60 Icy Blue Mechanostrider Mod A', 250),
 -- (321, 5, 13326, 'Level 60 White Mechanostrider Mod B', 250),
 -- (322, 3, 12354, 'Level 60 Palomino', 250),
-(323, 3, 12353, 'Level 60 White Stallion', 250),
+-- (323, 3, 12353, 'Level 60 White Stallion', 250),
 (324, 3, 12302, 'Level 60 Ancient Frostsaber', 250),
 -- (325, 5, 12303, 'Level 60 Black Nightsaber', 250),
-(326, 3, 12351, 'Level 60 Arctic Wolf', 250),
--- (327, 5, 12330, 'Level 60 Red Wolf', 250),
+-- (326, 3, 12351, 'Level 60 Arctic Wolf', 250),
+(327, 5, 12330, 'Level 60 Red Wolf', 250),
 -- (328, 5, 15292, 'Level 60 Green Kodo', 250),
 (329, 3, 15293, 'Level 60 Teal Kodo', 250),
--- (330, 5, 13317, 'Level 60 Ivory Raptor', 250),
--- (331, 5, 8586, 'Level 60 Mottled Red Raptor', 250),
-(333, 3, 18768, 'Level 60 Swift Dawnsaber', 400),
+(330, 5, 13317, 'Level 60 Ivory Raptor', 250),
+(331, 5, 8586, 'Level 60 Mottled Red Raptor', 250),
+-- (333, 3, 18768, 'Level 60 Swift Dawnsaber', 400),
 (334, 3, 23193, 'Level 60 Skeletal Steed', 400),
 -- Tabards ---------------------------------------------------------------------------------------------
 (400, 4, 23709, 'Tabard of Frost', 150),
@@ -113,8 +114,16 @@ replace into shop_items values
 (501, 5, 50022, 'Dressing Box: Midsummer Priestess', 75),
 (502, 5, 50023, 'Dressing Box: Demon Hunter', 75),
 (503, 5, 50025, 'Dressing Box: Sally Whitemane', 100),
-(504, 5, 50101, 'Dressing Box: Scholomance Student', 100);
-(505, 5, 50204, 'Wildhammer Clan Initiation Set', 125);
-(506, 5, 50205, 'Dark Iron Dwarf Initiation Set', 125);
-(507, 5, 50206, 'Earthen Dwarf Initiation Set (Male Only)', 125);
+(504, 5, 50101, 'Dressing Box: Scholomance Student', 100),
+-- Skin Changers ---------------------------------------------------------------------------------------
+(600, 5, 50105, 'Cult of the Damned Makeup Kit', 50),
+(601, 5, 50106, 'Sally Whitemane Makeup Kit (Female Only)', 50),
+(602, 5, 50204, 'Wildhammer Clan Initiation Set', 125),
+(603, 5, 50205, 'Dark Iron Dwarf Initiation Set', 125),
+(604, 5, 50206, 'Earthen Dwarf Initiation Set (Male Only)', 125),
+(605, 5, 50207, 'Blackrock Clan Initiation Set', 125),
+(606, 5, 50208, 'Chaos Orc Initiation Set (Male Only)', 125),
+(607, 5, 50209, 'Mag\'Har Clan Initiation Set (Male Only)', 125),
+(608, 5, 50210, 'Forest Troll Initiation Set', 125),
+(609, 5, 50211, 'Sandfury Initiation Set (Includes Zombie)', 125);
 

@@ -239,36 +239,91 @@ bool ItemUse_hairdye(Player* pPlayer, Item* pItem, const SpellCastTargets&)
     return false;
 }
 
-bool ItemUse_skin_wildhammer(Player* pPlayer, Item* pItem, const SpellCastTargets&)
-{
-    if (pPlayer->getGender() == GENDER_MALE)
-        pPlayer->SetByteValue(PLAYER_BYTES, 0, static_cast<uint8>(irand(16, 17)));
-    else
-        pPlayer->SetByteValue(PLAYER_BYTES, 0, 9);
+bool ItemUse_skin_changer(Player* pPlayer, Item* pItem, const SpellCastTargets&) {
+    bool isMale = pPlayer->getGender() == GENDER_MALE;
+    uint32 itemEntry = pItem->GetEntry();
+    int8 bytesToSet = -1;
 
-    ChatHandler(pPlayer).SendSysMessage("Please logout and login again!");
-    return false;
-}
-
-bool ItemUse_skin_earthen(Player* pPlayer, Item* pItem, const SpellCastTargets&)
-{
-    if (pPlayer->getGender() == GENDER_FEMALE)
-        ChatHandler(pPlayer).SendSysMessage("You can't use this item.");
-    else
-    {
-        pPlayer->SetByteValue(PLAYER_BYTES, 0, static_cast<uint8>(irand(10, 15)));
-        ChatHandler(pPlayer).SendSysMessage("Please logout and login again!");
+    switch (pPlayer->getRace()) {
+        case RACE_HUMAN:
+            switch (itemEntry) {
+                case 50105: // Jandice Barov (Cult of the Damned)
+                    bytesToSet = 11;
+                    break;
+                case 50106: // Sally Whitemane
+                    if (!isMale)
+                        bytesToSet = 10;
+                    break;
+                default:
+                    break;
+            }
+            break;
+        case RACE_DWARF:
+            switch (itemEntry) {
+                case 50204: // Wildhammer
+                    if (isMale)
+                        bytesToSet = static_cast<uint8>(irand(16, 17));
+                    else
+                        bytesToSet = 9;
+                    break;
+                case 50205: // Dark Iron
+                    if (isMale)
+                        bytesToSet = 9;
+                    else
+                        bytesToSet = 10;
+                    break;
+                case 50206: // Earthen
+                    if (isMale)
+                        bytesToSet = static_cast<uint8>(irand(10, 15));
+                    break;
+                default:
+                    break;
+            }
+            break;
+        case RACE_ORC:
+            switch (itemEntry) {
+                case 50207: // Blackrock
+                    if (isMale)
+                        bytesToSet = static_cast<uint8>(irand(0, 1) == 0 ? 9 : 11);
+                    else
+                        bytesToSet = 9;
+                    break;
+                case 50208: // Chaos
+                    if (isMale)
+                        bytesToSet = 11;
+                    break;
+                case 50209: // Mag'Har
+                    if (isMale)
+                        bytesToSet = 12;
+                    break;
+                default:
+                    break;
+            }
+            break;
+        case RACE_TROLL:
+            switch (itemEntry) {
+                case 50210: // Forest
+                    bytesToSet = 13;
+                    break;
+                case 50211: // Sandfury (Farraki), 14 is the zombie one.
+                    bytesToSet = static_cast<uint8>(irand(0, 1) == 0 ? static_cast<uint8>(irand(9, 11)) : 14);
+                    break;
+                default:
+                    break;
+            }
+            break;
+        default:
+            break;
     }
-    return false;
-}
 
-bool ItemUse_skin_darkiron(Player* pPlayer, Item* pItem, const SpellCastTargets&)
-{
-    if (pPlayer->getGender() == GENDER_MALE)
-        pPlayer->SetByteValue(PLAYER_BYTES, 0, 9);
-    else
-        pPlayer->SetByteValue(PLAYER_BYTES, 0, 10);
-    ChatHandler(pPlayer).SendSysMessage("Please logout and login again!");
+
+    if (bytesToSet > -1) {
+        pPlayer->SetByteValue(PLAYER_BYTES, 0, static_cast<uint8>(bytesToSet));
+        ChatHandler(pPlayer).SendSysMessage("Please logout and login again! Some items have multiple skins, so try them all!");
+    } else {
+        ChatHandler(pPlayer).SendSysMessage("You can't use this item.");
+    }
+
     return false;
 }
 
@@ -332,17 +387,7 @@ void AddSC_item_scripts()
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "skin_wildhammer";
-    newscript->pItemUse = &ItemUse_skin_wildhammer;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "skin_darkiron";
-    newscript->pItemUse = &ItemUse_skin_darkiron;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "skin_earthen";
-    newscript->pItemUse = &ItemUse_skin_earthen;
+    newscript->Name = "skin_changer";
+    newscript->pItemUse = &ItemUse_skin_changer;
     newscript->RegisterSelf();
 }

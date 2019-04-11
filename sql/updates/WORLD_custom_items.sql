@@ -287,9 +287,9 @@ replace into item_template (entry, name, inventory_type, display_id, quality, bo
 -- 50105 [Sally Whitemane's Makeup Kit]
 replace into item_template (entry, name, description, quality, spellid_1, display_id, script_name, allowable_race, bonding) values
 (50105, 'Sally Whitemane\'s Makeup Kit', '', 2, 1575, 14006, 'makeup_red', 1, 1);
--- 50106 [Jandice Barov's Makeup Kit]
+-- 50106 [Cult of the Damned Makeup Kit]
 replace into item_template (entry, name, description, quality, spellid_1, display_id, script_name, allowable_race, bonding) values
-(50106, 'Jandice Barov\'s Makeup Kit', '', 2, 1575, 16028, 'makeup_black', 1, 1);
+(50106, 'Cult of the Damned Makeup Kit', '', 2, 1575, 16028, 'makeup_black', 1, 1);
 -- 50107-50171 [Hair Dye Items]
 replace into item_template (entry, name, description, quality, spellid_1, display_id, script_name, buy_price, spellcharges_1, allowable_race, bonding) values
 (50107, 'Night Elf Hair Dye: Grass Green', '', 2, 1575, 33449, 'hairdye', 250000, -1, 8, 1),
@@ -377,11 +377,16 @@ replace into item_template (entry, class, subclass, name, description, display_i
 (50203, 15, 0, 'Corrupted Sand', 'This sand covers some corrupted creatures that have been involved in time travels, it could be purified again if you are able to find someone inside the Caverns of Time...', 20614, 2, 250, 0);
 
 replace into item_template (entry, name, description, quality, spellid_1, display_id, script_name, allowable_race, bonding) values
-(50204, 'Wildhammer Clan Initiation Set', '', 2, 12244, 31521, 'skin_wildhammer', 4, 1);
-replace into item_template (entry, name, description, quality, spellid_1, display_id, script_name, allowable_race, bonding) values
-(50205, 'Dark Iron Dwarf Initiation Set', '', 2, 12244, 28652, 'skin_darkiron', 4, 1);
-replace into item_template (entry, name, description, quality, spellid_1, display_id, script_name, allowable_race, bonding) values
-(50206, 'Earthen Dwarf Initiation Set (Male Only)', '', 2, 12244, 32933, 'skin_earthen', 4, 1);
+(50204, 'Wildhammer Clan Initiation Set', '', 2, 12244, 31521, 'skin_changer', 4, 1),
+(50205, 'Dark Iron Dwarf Initiation Set', '', 2, 12244, 28652, 'skin_changer', 4, 1),
+(50206, 'Earthen Dwarf Initiation Set (Male Only)', '', 2, 12244, 32933, 'skin_changer', 4, 1),
+
+(50207, 'Blackrock Clan Initiation Set', '', 2, 12244, 9116, 'skin_changer', 2, 1),
+(50208, 'Chaos Orc Initiation Set (Male Only)', '', 2, 12244, 16452, 'skin_changer', 2, 1),
+(50209, 'Mag\'Har Clan Initiation Set (Male Only)', '', 2, 12244, 16207, 'skin_changer', 2, 1),
+
+(50210, 'Forest Troll Initiation Set', '', 2, 12244, 34924, 'skin_changer', 128, 1),
+(50211, 'Sandfury Initiation Set (Includes Zombie)', '', 2, 12244, 32280, 'skin_changer', 128, 1);
 
 -- ### item_loot_template:
 delete from item_loot_template where entry in (50050, 50051, 50052, 50053, 50054, 500055, 50022, 50023, 50024, 50025, 50101);
