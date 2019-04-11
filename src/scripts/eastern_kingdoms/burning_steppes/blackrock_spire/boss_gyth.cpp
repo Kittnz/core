@@ -103,6 +103,7 @@ struct boss_gythAI : public ScriptedAI
     bool m_bSummonedRend;
     bool m_bAggro;
     bool m_bRootSelf;
+    bool m_RendEventStarted;
 
     // NOSTALRIUS
     uint64 nefarianGUID;
@@ -126,6 +127,7 @@ struct boss_gythAI : public ScriptedAI
         m_bAggro = false;
         m_bRootSelf = false;
         bChromaticChaosCasted = false;
+        m_RendEventStarted = false;
 
         // how many times should the two lines of summoned creatures be spawned
         // min 2 x 2, max 7 lines of attack in total
@@ -182,15 +184,40 @@ struct boss_gythAI : public ScriptedAI
         sLog.outString("[Rend]     : %s", what);
 #endif
     }
+    void RemovePlayersCombat(Map* pMap)
+    {
+        Map::PlayerList const &PlList = pMap->GetPlayers();
+
+        if (PlList.isEmpty())
+            return;
+
+        for (Map::PlayerList::const_iterator i = PlList.begin(); i != PlList.end(); ++i)
+        {
+            if (Player* pPlayer = i->getSource())
+            {
+                if (!pPlayer->isInCombat())
+                    continue;
+
+                if (pPlayer->isAlive())
+                {
+                    pPlayer->CombatStop();
+                    pPlayer->getHostileRefManager().deleteReferences();
+                    m_creature->UpdateCombatWithZoneState(false);
+                }
+            }
+        }
+    }
+
+
     void SummonedCreatureJustDied(Creature* summ)
     {
-        // Rend - invoque par Gyth - peut mourir apres Gyth.
-        if (m_creature->isAlive())
-            m_creature->SetInCombatWithZone();
-
         // Ne doit pas etre negatif
         if (waveRemainingCount > 0)
             --waveRemainingCount;
+
+        // Stop players combat after every wave
+        if (waveRemainingCount == 0)
+            RemovePlayersCombat(summ->GetMap());
 
         if (uiWaveNum == 1 && waveRemainingCount == 2)
             NefarianSay(5665);
@@ -248,17 +275,20 @@ struct boss_gythAI : public ScriptedAI
     }
     void AttackStart(Unit *target)
     {
+        m_RendEventStarted = true;
         // $target commence a nous attaquer.
         if (!m_bAggro)
         {
+            m_creature->SetInCombatWithZone();
             m_creature->Attack(target, false);
             m_creature->AddThreat(target);
             m_creature->SetInCombatWith(target);
             target->SetInCombatWith(m_creature);
         }
-        // Sinon, go attaquer.
-        else if (m_creature->Attack(target, true))
+            // Sinon, go attaquer.
+        else if (m_bAggro && m_creature->Attack(target, true))
         {
+            m_creature->SetInCombatWithZone();
             m_creature->AddThreat(target);
             m_creature->SetInCombatWith(target);
             target->SetInCombatWith(m_creature);
@@ -316,8 +346,7 @@ struct boss_gythAI : public ScriptedAI
         fX = std::min(m_creature->GetPositionX(), fX);      // Halfcircle - suits better the rectangular form
         if (Creature* pSummoned = m_creature->SummonCreature(uiCreatureId, SPAWN_X + irand(-10, 10), SPAWN_Y + irand(-10, 10), SPAWN_Z, SPAWN_O, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 240000))
         {
-            if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
-                pSummoned->AI()->AttackStart(pTarget);
+            pSummoned->SetInCombatWithZone();
             m_lSummonedGuids.push_back(pSummoned->GetGUID());
         }
         ++waveRemainingCount;
@@ -330,8 +359,9 @@ struct boss_gythAI : public ScriptedAI
             Initialize();
             m_bInitialized = true;
         }
-        //Return since we have no target
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+
+        // Return since we have no target, only if event not started
+        if (!m_RendEventStarted)
             return;
 
         if (!m_bRootSelf)
@@ -360,7 +390,13 @@ struct boss_gythAI : public ScriptedAI
                 m_creature->clearUnitState(UNIT_STAT_ROOT);
 
                 DoResetThreat();
-                
+
+                // Start attack random player in map
+                m_creature->UpdateCombatWithZoneState(true);
+                m_creature->SetInCombatWithZone();
+                if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
+                    AttackStart(pTarget);
+
                 if (m_pInstance)
                     m_pInstance->DoUseDoorOrButton(m_uiCombatDoorGUID);
             }
@@ -384,6 +420,7 @@ struct boss_gythAI : public ScriptedAI
                     m_pInstance->DoUseDoorOrButton(m_uiCombatDoorGUID);
                 uiDragonsTimer = WAVE_TIMER;
                 bWaveSummoned = true;
+                m_creature->UpdateCombatWithZoneState(true);
             }
             else
                 uiDragonsTimer -= uiDiff;
@@ -405,6 +442,7 @@ struct boss_gythAI : public ScriptedAI
                 --uiLine2Count;
                 uiOrcTimer = WAVE_TIMER;
                 bWaveSummoned = true;
+                m_creature->UpdateCombatWithZoneState(true);
             }
             else
                 uiOrcTimer -= uiDiff;
@@ -481,6 +519,10 @@ struct boss_gythAI : public ScriptedAI
 
             DoMeleeAttackIfReady();
         }                                                   // end if Aggro
+
+        // Reset - if there are no target for attack
+        if (m_bAggro && (!m_creature->SelectHostileTarget() || !m_creature->getVictim()))
+            return;
     }
 };
 
