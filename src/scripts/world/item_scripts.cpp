@@ -247,12 +247,12 @@ bool ItemUse_skin_changer(Player* pPlayer, Item* pItem, const SpellCastTargets&)
     switch (pPlayer->getRace()) {
         case RACE_HUMAN:
             switch (itemEntry) {
-                case 50105: // Jandice Barov (Cult of the Damned)
-                    bytesToSet = 11;
-                    break;
-                case 50106: // Sally Whitemane
+                case 50105: // Sally Whitemane
                     if (!isMale)
                         bytesToSet = 10;
+                    break;
+                case 50106: // Jandice Barov (Cult of the Damned)
+                    bytesToSet = 11;
                     break;
                 default:
                     break;

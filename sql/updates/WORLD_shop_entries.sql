@@ -116,8 +116,8 @@ replace into shop_items values
 (503, 5, 50025, 'Dressing Box: Sally Whitemane', 100),
 (504, 5, 50101, 'Dressing Box: Scholomance Student', 100),
 -- Skins ---------------------------------------------------------------------------------------
-(600, 5, 50105, 'Human: Cult of the Damned', 50),
-(601, 5, 50106, 'Human: Sally Whitemane (Female Only)', 50),
+(600, 5, 50105, 'Human: Sally Whitemane (Female Only)', 50),
+(601, 5, 50106, 'Human: Cult of the Damned', 50),
 (602, 5, 50204, 'Dwarf: Wildhammer', 125),
 (603, 5, 50205, 'Dwarf: Dark Iron', 125),
 (604, 5, 50206, 'Dwarf: Earthen (Male Only)', 125),
