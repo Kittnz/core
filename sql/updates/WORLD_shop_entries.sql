@@ -116,14 +116,14 @@ replace into shop_items values
 (503, 5, 50025, 'Dressing Box: Sally Whitemane', 100),
 (504, 5, 50101, 'Dressing Box: Scholomance Student', 100),
 -- Skins ---------------------------------------------------------------------------------------
-(600, 5, 50105, 'Cult of the Damned Makeup Kit', 50),
-(601, 5, 50106, 'Sally Whitemane Makeup Kit (Female Only)', 50),
-(602, 5, 50204, 'Wildhammer Clan Initiation Set', 125),
-(603, 5, 50205, 'Dark Iron Dwarf Initiation Set', 125),
-(604, 5, 50206, 'Earthen Dwarf Initiation Set (Male Only)', 125),
-(605, 5, 50207, 'Blackrock Clan Initiation Set', 125),
-(606, 5, 50208, 'Chaos Orc Initiation Set (Male Only)', 125),
-(607, 5, 50209, 'Mag\'Har Clan Initiation Set (Male Only)', 125),
-(608, 5, 50210, 'Forest Troll Initiation Set', 125),
-(609, 5, 50211, 'Sandfury Initiation Set (Includes Zombie)', 125);
+(600, 5, 50105, 'Human: Cult of the Damned', 50),
+(601, 5, 50106, 'Human: Sally Whitemane (Female Only)', 50),
+(602, 5, 50204, 'Dwarf: Wildhammer', 125),
+(603, 5, 50205, 'Dwarf: Dark Iron', 125),
+(604, 5, 50206, 'Dwarf: Earthen (Male Only)', 125),
+(605, 5, 50207, 'Orc: Blackrock Clan', 125),
+(606, 5, 50208, 'Orc: Chaos (Male Only)', 125),
+(607, 5, 50209, 'Orc: Mag\'Har (Male Only)', 125),
+(608, 5, 50210, 'Troll: Forest', 125),
+(609, 5, 50211, 'Troll: Sandfury (Includes Zombie)', 125);
 
