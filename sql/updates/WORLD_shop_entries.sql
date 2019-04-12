@@ -27,7 +27,7 @@ replace into shop_categories values
 (3, 'Mounts'),
 (4, 'Tabards'),
 (5, 'Roleplay'),
-(6, 'Skin Changers');
+(6, 'Skins');
 
 replace into shop_items values
 -- Gameplay --------------------------------------------------------------------------------------------
@@ -115,7 +115,7 @@ replace into shop_items values
 (502, 5, 50023, 'Dressing Box: Demon Hunter', 75),
 (503, 5, 50025, 'Dressing Box: Sally Whitemane', 100),
 (504, 5, 50101, 'Dressing Box: Scholomance Student', 100),
--- Skin Changers ---------------------------------------------------------------------------------------
+-- Skins ---------------------------------------------------------------------------------------
 (600, 5, 50105, 'Cult of the Damned Makeup Kit', 50),
 (601, 5, 50106, 'Sally Whitemane Makeup Kit (Female Only)', 50),
 (602, 5, 50204, 'Wildhammer Clan Initiation Set', 125),
