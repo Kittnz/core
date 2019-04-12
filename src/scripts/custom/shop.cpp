@@ -91,6 +91,9 @@ bool GossipSelect_npc_shop(Player* pPlayer, Creature* pCreature, uint32 uiSender
     case ACTION_CATEGORY_START + 5:
         SendEntriesInfoByCategory(pPlayer, 5);
         break;
+    case ACTION_CATEGORY_START + 6:
+        SendEntriesInfoByCategory(pPlayer, 6);
+        break;
     case ACTION_CATEGORY_START:
         return GossipHello_npc_shop(pPlayer, pCreature);
 
