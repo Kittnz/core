@@ -19,6 +19,8 @@ replace into creature_template (entry, name, subname, display_id1, level_min, le
 update creature_template set faction = 35 where faction = 0;
 update creature_template set health_min = 100, health_max = 100 where entry in (351, 17258);
 
+UPDATE gameobject SET spawntimesecsmin=600, spawntimesecsmax=900 WHERE id=2656;
+
 -- End of migration.
 END IF;
 END??
