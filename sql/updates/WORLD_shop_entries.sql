@@ -27,7 +27,7 @@ replace into shop_categories values
 (3, 'Mounts'),
 (4, 'Tabards'),
 (5, 'Roleplay'),
-(6, 'Skin Changers');                                ;
+(6, 'Skin Changers');
 
 replace into shop_items values
 -- Gameplay --------------------------------------------------------------------------------------------
