@@ -290,7 +290,7 @@ bool ItemUse_skin_changer(Player* pPlayer, Item* pItem, const SpellCastTargets&)
                     break;
                 case 50208: // Chaos
                     if (isMale)
-                        bytesToSet = 11;
+                        bytesToSet = 10;
                     break;
                 case 50209: // Mag'Har
                     if (isMale)
