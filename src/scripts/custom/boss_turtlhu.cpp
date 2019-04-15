@@ -157,7 +157,7 @@ struct boss_turtlhuAI : public ScriptedAI
         //VoidBolt_Timer
         if (DrainLife_Timer < diff)
         {
-            if (DoCastSpellIfCan(m_creature->getVictim(), DrainLife_Timer) == CAST_OK)
+            if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_DRAIN_LIFE) == CAST_OK)
                 DrainLife_Timer = urand(3000, 6000);
         }
         else
@@ -168,7 +168,7 @@ struct boss_turtlhuAI : public ScriptedAI
         {
             if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0)) {
                 DoCast(pTarget, SPELL_BLACKOUT);
-                Blackout_Timer = urand(6000, 14000);
+                Blackout_Timer = urand(6000, 12000);
             } else {
                 Blackout_Timer = 1000;
             }
