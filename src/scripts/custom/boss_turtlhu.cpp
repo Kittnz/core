@@ -12,8 +12,8 @@ enum
     SPELL_PIERCING_SHADOW       = 16429,
     SPELL_VEIL_OF_SHADOW        = 22687,
     SPELL_BLACKOUT              = 15269,
-    TWIN_TELEPORT_VISUAL        = 26638
-
+    TWIN_TELEPORT_VISUAL        = 26638,
+    SPELL_DRAIN_LIFE            = 29155
 };
 
 struct boss_turtlhuAI : public ScriptedAI
@@ -30,6 +30,7 @@ struct boss_turtlhuAI : public ScriptedAI
     uint32 PiercingShadow_Timer;
     uint32 Veil_of_Shadow_Timer;
     uint32 Blackout_Timer;
+    uint32 DrainLife_Timer;
 
     bool mana_burn_warning_said;
     bool in_shadow_form;
@@ -42,8 +43,9 @@ struct boss_turtlhuAI : public ScriptedAI
         ShadowBolt_Timer = urand(4000, 6000);
         ShadowShock_Timer = urand(6000, 10000);
         PiercingShadow_Timer = 12000;
-        Veil_of_Shadow_Timer = 16000;
+        Veil_of_Shadow_Timer = 12000;
         Blackout_Timer = urand(6000, 16000);
+        DrainLife_Timer = urand(3000, 6000);
 
         mana_burn_warning_said = false;
         in_shadow_form = false;
@@ -146,18 +148,27 @@ struct boss_turtlhuAI : public ScriptedAI
             if (Veil_of_Shadow_Timer < diff)
             {
                 if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_VEIL_OF_SHADOW) == CAST_OK)
-                    Veil_of_Shadow_Timer = 20000;
+                    Veil_of_Shadow_Timer = 12000;
             } else {
                 Veil_of_Shadow_Timer -= diff;
             }
         }
+
+        //VoidBolt_Timer
+        if (DrainLife_Timer < diff)
+        {
+            if (DoCastSpellIfCan(m_creature->getVictim(), DrainLife_Timer) == CAST_OK)
+                DrainLife_Timer = urand(3000, 6000);
+        }
+        else
+            DrainLife_Timer -= diff;
 
         // Blackout_Timer
         if (Blackout_Timer < diff)
         {
             if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0)) {
                 DoCast(pTarget, SPELL_BLACKOUT);
-                Blackout_Timer = urand(6000, 16000);
+                Blackout_Timer = urand(6000, 14000);
             } else {
                 Blackout_Timer = 1000;
             }
