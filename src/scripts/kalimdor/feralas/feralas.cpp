@@ -880,7 +880,7 @@ void npc_kindal_moonweaverAI::EndEvent()
     if (HasFollowState(STATE_FOLLOW_POSTEVENT))
     {
         SetFollowComplete();
-        m_creature->SetRespawnTime(10);
+        m_creature->Respawn();
     }
 }
 
