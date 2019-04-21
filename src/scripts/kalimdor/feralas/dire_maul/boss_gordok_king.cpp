@@ -159,8 +159,8 @@ enum
     SET_SHAMAN              = 2,
     SET_PRIST               = 3,
 
-    SAY_OGRE_AGGRO_1        = -359,
-    SAY_OGRE_AGGRO_2        = -360,
+    //SAY_OGRE_AGGRO_1        = -359,
+    //SAY_OGRE_AGGRO_2        = -360,
 };
 
 struct boss_chorushAI : public ScriptedAI
@@ -184,7 +184,7 @@ struct boss_chorushAI : public ScriptedAI
 
     void EnterCombat(Unit* pWho)
     {
-        m_creature->MonsterSay(urand(0, 1) ? SAY_OGRE_AGGRO_1 : SAY_OGRE_AGGRO_2, 0);
+        //m_creature->MonsterSay(urand(0, 1) ? SAY_OGRE_AGGRO_1 : SAY_OGRE_AGGRO_2, 0);
     }
 
     void Reset()
