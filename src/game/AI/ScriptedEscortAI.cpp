@@ -235,6 +235,31 @@ bool npc_escortAI::IsPlayerOrGroupInRange() const
     return false;
 }
 
+bool npc_escortAI::IsPlayerOrGroupDead() const
+{
+    if (Player* pPlayer = GetPlayerForEscort())
+    {
+        if (Group* pGroup = pPlayer->GetGroup())
+        {
+            int numberOfDead = 0;
+            int groupCount = pGroup->GetMembersCount();
+            for(GroupReference* pRef = pGroup->GetFirstMember(); pRef != nullptr; pRef = pRef->next())
+            {
+                Player* pMember = pRef->getSource();
+
+                if (pMember && !pMember->isAlive())
+                    numberOfDead++;
+            }
+            return numberOfDead >= groupCount;
+        }
+        else
+        {
+            return !pPlayer->isAlive();
+        }
+    }
+    return false;
+}
+
 void npc_escortAI::UpdateAI(const uint32 uiDiff)
 {
     //Waypoint Updating
@@ -297,14 +322,14 @@ void npc_escortAI::UpdateAI(const uint32 uiDiff)
             m_uiWPWaitTimer -= uiDiff;
     }
 
-    //Check if player or any member of his group is within range
-    if (HasEscortState(STATE_ESCORT_ESCORTING) && m_uiPlayerGUID && m_MaxPlayerDistance && !m_creature->isInCombat() && !HasEscortState(STATE_ESCORT_RETURNING))
+    //Check if player or any member of his group is within range or dead
+    if (HasEscortState(STATE_ESCORT_ESCORTING) && m_uiPlayerGUID && !m_creature->isInCombat())
     {
         if (m_uiPlayerCheckTimer < uiDiff)
         {
-            if (!IsPlayerOrGroupInRange())
+            if ((!IsPlayerOrGroupInRange() && m_MaxPlayerDistance > 0 && !HasEscortState(STATE_ESCORT_RETURNING)) || IsPlayerOrGroupDead())
             {
-                sLog.outDebug("EscortAI failed because player/group was to far away or not found");
+                sLog.outDebug("EscortAI failed because player/group was too far away, not found, or dead");
 
                 JustDied(nullptr);
                 ResetEscort();

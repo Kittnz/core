@@ -108,6 +108,7 @@ struct MANGOS_DLL_DECL npc_escortAI : ScriptedAI
     private:
         bool AssistPlayerInCombat(Unit* pWho);
         bool IsPlayerOrGroupInRange() const;
+        bool IsPlayerOrGroupDead() const;
         void FillPointMovementListForCreature();
 
         uint64 m_uiPlayerGUID;
