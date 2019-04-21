@@ -251,7 +251,7 @@ bool ItemUse_skin_changer(Player* pPlayer, Item* pItem, const SpellCastTargets&)
                     if (!isMale)
                         bytesToSet = 10;
                     break;
-                case 50106: // Jandice Barov (Cult of the Damned)
+                case 50106: // Cult of the Damned
                     bytesToSet = 11;
                     break;
                 default:
@@ -307,6 +307,22 @@ bool ItemUse_skin_changer(Player* pPlayer, Item* pItem, const SpellCastTargets&)
                     break;
                 case 50211: // Sandfury (Farraki), 14 is the zombie one.
                     bytesToSet = static_cast<uint8>(irand(0, 1) == 0 ? static_cast<uint8>(irand(9, 11)) : 14);
+                    break;
+                default:
+                    break;
+            }
+            break;
+        case RACE_GNOME:
+            switch (itemEntry) {
+                case 50106: // Cult of the Damned
+                    if (isMale)
+                        bytesToSet = 6;
+                    else
+                        bytesToSet = 5;
+                    break;
+                case 50212: // Leper
+                    if (isMale)
+                        bytesToSet = 5;
                     break;
                 default:
                     break;

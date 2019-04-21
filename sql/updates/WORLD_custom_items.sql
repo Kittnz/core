@@ -289,7 +289,7 @@ replace into item_template (entry, name, description, quality, spellid_1, displa
 (50105, 'Sally Whitemane\'s Makeup Kit', '', 2, 1575, 14006, 'skin_changer', 1, 1);
 -- 50106 [Cult of the Damned Makeup Kit]
 replace into item_template (entry, name, description, quality, spellid_1, display_id, script_name, allowable_race, bonding) values
-(50106, 'Cult of the Damned Makeup Kit', '', 2, 1575, 16028, 'skin_changer', 1, 1);
+(50106, 'Cult of the Damned Makeup Kit', '', 2, 1575, 16028, 'skin_changer', 65, 1);
 -- 50107-50171 [Hair Dye Items]
 replace into item_template (entry, name, description, quality, spellid_1, display_id, script_name, buy_price, spellcharges_1, allowable_race, bonding) values
 (50107, 'Night Elf Hair Dye: Grass Green', '', 2, 1575, 33449, 'hairdye', 250000, -1, 8, 1),
@@ -386,7 +386,8 @@ replace into item_template (entry, name, description, quality, spellid_1, displa
 (50209, 'Mag\'Har Clan Initiation Set (Male Only)', '', 2, 12244, 16207, 'skin_changer', 2, 1),
 
 (50210, 'Forest Troll Initiation Set', '', 2, 12244, 34924, 'skin_changer', 128, 1),
-(50211, 'Sandfury Initiation Set (Includes Zombie)', '', 2, 12244, 32280, 'skin_changer', 128, 1);
+(50211, 'Sandfury Initiation Set (Includes Zombie)', '', 2, 12244, 32280, 'skin_changer', 128, 1),
+(50212, 'Leper Gnome Initiation Set (Male Only)', '', 2, 12244, 1288, 'skin_changer', 64, 1);
 
 -- ### item_loot_template:
 delete from item_loot_template where entry in (50050, 50051, 50052, 50053, 50054, 500055, 50022, 50023, 50024, 50025, 50101);

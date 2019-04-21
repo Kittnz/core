@@ -117,7 +117,7 @@ replace into shop_items values
 (504, 5, 50101, 'Dressing Box: Scholomance Student', 50),
 -- Skins ---------------------------------------------------------------------------------------
 (600, 6, 50105, 'Human: Sally Whitemane (Female Only)', 50),
-(601, 6, 50106, 'Human: Cult of the Damned', 50),
+(601, 6, 50106, 'Human, Gnome: Cult of the Damned', 50),
 (602, 6, 50204, 'Dwarf: Wildhammer', 75),
 (603, 6, 50205, 'Dwarf: Dark Iron', 75),
 (604, 6, 50206, 'Dwarf: Earthen (Male Only)', 75),
@@ -125,5 +125,6 @@ replace into shop_items values
 (606, 6, 50208, 'Orc: Chaos (Male Only)', 75),
 (607, 6, 50209, 'Orc: Mag\'Har (Male Only)', 75),
 (608, 6, 50210, 'Troll: Forest', 75),
-(609, 6, 50211, 'Troll: Sandfury (Includes Zombie)', 75);
+(609, 6, 50211, 'Troll: Sandfury (Includes Zombie)', 75),
+(610, 6, 50212, 'Gnome: Leper (Male Only)', 75);
 
