@@ -339,7 +339,6 @@ struct boss_gythAI : public ScriptedAI
 #endif
         if (m_pInstance)
             m_pInstance->SetData(TYPE_GYTH, FAIL);
-        DespawnAdds();
 
         if (m_creature->isAlive())
         {
@@ -355,7 +354,6 @@ struct boss_gythAI : public ScriptedAI
 #endif
         if (m_pInstance)
             m_pInstance->SetData(TYPE_GYTH, FAIL);
-        DespawnAdds();
 
         if (m_creature->isAlive())
         {
