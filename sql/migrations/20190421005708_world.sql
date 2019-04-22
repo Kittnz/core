@@ -14,6 +14,7 @@ update creature_template set detection_range = 10 where entry = 8901;
 update creature_template set flags_extra = 128 where entry = 11500;
 update item_template set description = 'If you have this, that means that someone loves you. It will have, exactly, the value that you want to give it.' where entry = 22130;
 update creature_template set display_id1 = 11035 where entry = 351;
+update creature_template set faction = 35 where entry in (50017, 50018, 50019, 50020, 50021, 50022, 50023, 50024, 50025);
 
 -- End of migration.
 END IF;
