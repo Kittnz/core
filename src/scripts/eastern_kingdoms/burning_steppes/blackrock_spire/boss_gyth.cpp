@@ -107,12 +107,13 @@ struct boss_gythAI : public ScriptedAI
 
     // NOSTALRIUS
     uint64 nefarianGUID;
-    uint32 mobCount;
     uint32 uiWaveNum;
     uint32 waveRemainingCount;
     bool m_bInitialized;
     std::list<uint64> m_lSummonedGuids;
     bool bChromaticChaosCasted;
+
+    uint32 checkEveryoneDeadTimer;
 
     void Reset()
     {
@@ -148,6 +149,9 @@ struct boss_gythAI : public ScriptedAI
         // NOSTALRIUS
         uiWaveNum    = 0;
         waveRemainingCount = 0;
+
+        checkEveryoneDeadTimer = 15000;
+
         DespawnAdds();
 #ifdef DEBUG_ON
         sLog.outString("Boss GYTH RESET");
@@ -167,19 +171,19 @@ struct boss_gythAI : public ScriptedAI
 #endif
     }
 
-    void NefarianSay(int32 what)
+    void NefarianYell(int32 what)
     {
         if (Unit* nefarian = Unit::GetUnit(*m_creature, nefarianGUID))
-            nefarian->MonsterSay(what, LANG_UNIVERSAL, 0);
+            nefarian->MonsterYell(what, LANG_UNIVERSAL, 0);
         else
             sLog.outString("Nefarian introuvable.");
 #ifdef DEBUG_ON
         sLog.outString("[Nefarian] : %s", what);
 #endif
     }
-    void RendSay(int32 what)
+    void RendYell(int32 what)
     {
-        m_creature->MonsterSay(what, LANG_UNIVERSAL, 0);
+        m_creature->MonsterYell(what, LANG_UNIVERSAL, 0);
 #ifdef DEBUG_ON
         sLog.outString("[Rend]     : %s", what);
 #endif
@@ -208,6 +212,28 @@ struct boss_gythAI : public ScriptedAI
         }
     }
 
+    bool ShouldEvade(Map* pMap)
+    {
+        Map::PlayerList const &PlList = pMap->GetPlayers();
+
+        if (PlList.isEmpty())
+            return true;
+
+        int noCombatNumber = 0;
+        int deadNumber = 0;
+        for (Map::PlayerList::const_iterator i = PlList.begin(); i != PlList.end(); ++i)
+        {
+            if (Player* pPlayer = i->getSource())
+            {
+                if (!pPlayer->isAlive())
+                    deadNumber++;
+
+                if (!pPlayer->isInCombat())
+                    noCombatNumber++;
+            }
+        }
+        return deadNumber == PlList.getSize() || (noCombatNumber == PlList.getSize() && waveRemainingCount > 0);
+    }
 
     void SummonedCreatureJustDied(Creature* summ)
     {
@@ -220,25 +246,25 @@ struct boss_gythAI : public ScriptedAI
             RemovePlayersCombat(summ->GetMap());
 
         if (uiWaveNum == 1 && waveRemainingCount == 2)
-            NefarianSay(5665);
+            NefarianYell(5665);
         else if (uiWaveNum == 3 && waveRemainingCount == 3)
-            NefarianSay(5671);
+            NefarianYell(5671);
         else if (uiWaveNum == 3 && waveRemainingCount == 2)
-            NefarianSay(5666);
+            NefarianYell(5666);
         else if (uiWaveNum == 3 && waveRemainingCount == 1)
-            NefarianSay(5667);
+            NefarianYell(5667);
         else if (uiWaveNum == 4 && waveRemainingCount == 2)
-            RendSay(5678);
+            RendYell(5678);
         else if (uiWaveNum == 4 && waveRemainingCount == 1)
-            RendSay(5673);
+            RendYell(5673);
         else if (uiWaveNum == 5 && waveRemainingCount == 1)
-            NefarianSay(5668);
+            NefarianYell(5668);
         else if (uiWaveNum == 6 && waveRemainingCount == 2)
-            NefarianSay(5709);
+            NefarianYell(5709);
         else if (uiWaveNum == 6 && waveRemainingCount == 1)
-            RendSay(5722);
+            RendYell(5722);
         else if (summ && summ->GetEntry() == NPC_REND_BLACKHAND)
-            NefarianSay(5824);
+            NefarianYell(5824);
 #ifdef DEBUG_ON
         sLog.outString("Creature %u morte. Vague %u / reste %u", summ->GetEntry(), uiWaveNum, waveRemainingCount);
 #endif
@@ -360,6 +386,16 @@ struct boss_gythAI : public ScriptedAI
             m_bInitialized = true;
         }
 
+        if (checkEveryoneDeadTimer < uiDiff) {
+            // Sometimes the adds remained after a wipe, make sure the event is reset.
+            if (ShouldEvade(m_creature->GetMap())) {
+                EnterEvadeMode();
+            }
+            checkEveryoneDeadTimer = 15000;
+        } else {
+            checkEveryoneDeadTimer -= uiDiff;
+        }
+
         // Return since we have no target, only if event not started
         if (!m_RendEventStarted)
             return;
@@ -377,7 +413,7 @@ struct boss_gythAI : public ScriptedAI
             if (uiAggroTimer < uiDiff)
             {
                 m_bAggro = true;
-                NefarianSay(5720);
+                NefarianYell(5720);
                 // Visible now!
                 //m_creature->Relocate(SPAWN_X, SPAWN_Y, SPAWN_Z, SPAWN_O);
                 m_creature->GetMap()->CreatureRelocation(m_creature, SPAWN_X, SPAWN_Y, SPAWN_Z, SPAWN_O);
@@ -409,7 +445,6 @@ struct boss_gythAI : public ScriptedAI
         {
             if (uiDragonsTimer < uiDiff)
             {
-                waveRemainingCount = 0;
                 SummonCreatureWithRandomTarget(NPC_FIRE_TONGUE);
                 SummonCreatureWithRandomTarget(NPC_FIRE_TONGUE);
                 SummonCreatureWithRandomTarget(NPC_CHROMATIC_WHELP);
@@ -431,7 +466,6 @@ struct boss_gythAI : public ScriptedAI
         {
             if (uiOrcTimer < uiDiff)
             {
-                waveRemainingCount = 0;
                 SummonCreatureWithRandomTarget(NPC_CHROMATIC_DRAGON);
                 SummonCreatureWithRandomTarget(NPC_BLACKHAND_ELITE);
                 SummonCreatureWithRandomTarget(NPC_CHROMATIC_WHELP);
@@ -451,9 +485,9 @@ struct boss_gythAI : public ScriptedAI
         {
             ++uiWaveNum;
             if (uiWaveNum == 1)
-                NefarianSay(5640);
+                NefarianYell(5640);
             else if (uiWaveNum == 3)
-                RendSay(5672);
+                RendYell(5672);
         }
 
         // we take part in the fight
