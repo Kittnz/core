@@ -154,7 +154,7 @@ struct boss_turtlhuAI : public ScriptedAI
             }
         }
 
-        //VoidBolt_Timer
+        //DrainLife_Timer
         if (DrainLife_Timer < diff)
         {
             if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_DRAIN_LIFE) == CAST_OK)

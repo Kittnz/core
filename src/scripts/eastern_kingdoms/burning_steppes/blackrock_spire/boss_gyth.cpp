@@ -150,6 +150,7 @@ struct boss_gythAI : public ScriptedAI
         uiWaveNum    = 0;
         waveRemainingCount = 0;
 
+        // TW
         checkEveryoneDeadTimer = 15000;
 
         DespawnAdds();
