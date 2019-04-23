@@ -11,12 +11,12 @@ INSERT INTO `migrations` VALUES ('20190420162939');
 replace into gameobject_template (entry, type, displayid, name, size, faction) values
 (7000030, 2, 1408, 'Strangely Giant Egg', 3.2, 35);
 
-insert into quest_template (entry, method, zoneorsort, title, offerrewardtext, rewitemid1, rewitemcount1) values
+replace into quest_template (entry, method, zoneorsort, title, offerrewardtext, rewitemid1, rewitemcount1) values
 (50227, 0, -374, 'Strangely Giant Egg', 'Something big and already grown is coming from the inside...', 50071, 1);
 
-insert into gameobject_involvedrelation (id, quest) values
+replace into gameobject_involvedrelation (id, quest) values
 (7000030, 50227);
-insert into gameobject_questrelation (id, quest) values
+replace into gameobject_questrelation (id, quest) values
 (7000030, 50227);
 
 -- End of migration.
