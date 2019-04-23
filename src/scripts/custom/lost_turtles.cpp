@@ -73,7 +73,7 @@ bool GossipHello_npc_lost_turtles_questgiver(Player* p_Player, Creature* p_Creat
 {
     if (p_Player->isAlive() && p_Player->GetQuestStatus(QUEST_LOST_TURTLES) == QUEST_STATUS_INCOMPLETE && (std::find(g_followed_units.begin(), g_followed_units.end(), p_Player->GetObjectGuid()) != g_followed_units.end()))
         p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, TEXT_PLAYER_IS_FOLLOWED, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-    else
+    else if (p_Player->GetQuestStatus(QUEST_LOST_TURTLES) != QUEST_STATUS_COMPLETE)
         p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, TEXT_PLAYER_IS_NOT_FOLLOWED, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
 
     p_Player->SEND_GOSSIP_MENU(GOSSIP_MENU_TEXT, p_Creature->GetGUID());
