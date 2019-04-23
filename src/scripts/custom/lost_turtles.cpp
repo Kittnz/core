@@ -20,6 +20,7 @@
 #define TEXT_TURTLE_IS_NOT_FOLLOWING       90017
 #define TEXT_TURTLE_IS_FOLLOWING           90018
 #define GET_IN_WE_ARE_GOING_TO_VEGAS       90019
+#define TEXT_TAME_TURTLE_FIRST             90020
 
 static std::vector<ObjectGuid> g_followed_units;
 
@@ -31,7 +32,7 @@ bool GossipHello_npc_lost_turtle(Player* p_Player, Creature* p_Creature)
     {
         if (p_Player->HasItemCount(ITEM_APPLE, 1, true) && p_Player->isAlive() && p_Player->GetQuestStatus(QUEST_LOST_TURTLES) == QUEST_STATUS_INCOMPLETE)
             p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, TEXT_PLAYER_HAS_APPLES , GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-        else
+        else if (std::find(g_followed_units.begin(), g_followed_units.end(), p_Player->GetObjectGuid()) == g_followed_units.end())
             p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, TEXT_PLAYER_HAS_NO_APPLES, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
     }
 
@@ -41,9 +42,6 @@ bool GossipHello_npc_lost_turtle(Player* p_Player, Creature* p_Creature)
 
 bool GossipSelect_npc_lost_turtle(Player* p_Player, Creature* p_Creature, uint32 uiSender, uint32 uiAction)
 {
-    bool isFollowed;
-    isFollowed = false;
-
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
         p_Player->DestroyItemCount(ITEM_APPLE, 1, true);
@@ -60,9 +58,9 @@ bool GossipSelect_npc_lost_turtle(Player* p_Player, Creature* p_Creature, uint32
 
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
     {
-        p_Player->AddItem(23720);
+        p_Player->AddItem(ITEM_RIDING_TURTLE);
         p_Creature->MonsterSay(GET_IN_WE_ARE_GOING_TO_VEGAS, 0U, p_Player);
-        p_Player->CastSpell(p_Player, 30174, true);
+        p_Player->AddAura(30174);
         p_Creature->GetMotionMaster()->Clear();
         p_Creature->ForcedDespawn();
     }
@@ -99,8 +97,8 @@ bool GossipSelect_npc_lost_turtles_questgiver(Player* p_Player, Creature* p_Crea
 
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
     {
-        if (p_Player->HasItemCount(ITEM_RIDING_TURTLE, 1, true) || p_Player->GetQuestStatus(QUEST_LOST_TURTLES) == QUEST_STATUS_INCOMPLETE)
-            ChatHandler(p_Player).PSendSysMessage("You must tame a turtle first!");
+        if (p_Player->GetQuestStatus(QUEST_LOST_TURTLES) == QUEST_STATUS_INCOMPLETE)
+            p_Creature->MonsterSay(TEXT_TAME_TURTLE_FIRST, 0U, p_Player);
         else
             p_Player->AddQuest(pQuest, NULL);
     }

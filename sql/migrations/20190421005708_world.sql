@@ -15,6 +15,14 @@ update creature_template set flags_extra = 128 where entry = 11500;
 update item_template set description = 'If you have this, that means that someone loves you. It will have, exactly, the value that you want to give it.' where entry = 22130;
 update creature_template set display_id1 = 11035 where entry = 351;
 update creature_template set faction = 35 where entry in (50017, 50018, 50019, 50020, 50021, 50022, 50023, 50024, 50025);
+update creature_template set name = 'Riding Turtle' where entry = 17266;
+
+update broadcast_text set MaleText = 'We\'re goin\' to Vegas... I mean, to Booty Bay!' where id = 90019;
+update broadcast_text set MaleText = 'Good job! Talk again to this little guy and he will allow you to ride him!' where id = 90015;
+update broadcast_text set MaleText = 'All it took was to fill his belly with apples and he\'s following me now!' where id = 90010;
+update broadcast_text set MaleText = 'Hmmm... This apple is great! *nom* *nom* Take my to my friend and MAYBE I\'ll let you ride me. Let\'s go!' where id = 90018;
+update broadcast_text set MaleText = 'This little turtle seems to only care about red apples.' where id = 90016;
+replace into broadcast_text (id, maletext) values (90020, 'You must tame a turtle first!');
 
 -- End of migration.
 END IF;
