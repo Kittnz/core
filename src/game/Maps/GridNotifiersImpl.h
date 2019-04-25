@@ -166,7 +166,7 @@ inline void MaNGOS::DynamicObjectUpdater::VisitHelper(Unit* target)
 
     // Negative AoE from non flagged players cannot target other players
     if (Player *attackedPlayer = target->GetCharmerOrOwnerPlayerOrPlayerItself())
-        if (!i_positive && i_check->IsPlayer() && !i_check->IsPvP() && !((Player*)i_check)->IsInDuelWith(attackedPlayer))
+        if (!i_positive && i_check->IsPlayer() && !i_check->IsPvP() && !((Player*)i_check)->IsInDuelWith(attackedPlayer) && !attackedPlayer->IsFFAPvP())
             return;
 
     SpellEntry const *spellInfo = sSpellMgr.GetSpellEntry(i_dynobject.GetSpellId());
