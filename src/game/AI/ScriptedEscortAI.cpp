@@ -241,16 +241,17 @@ bool npc_escortAI::IsPlayerOrGroupDead() const
     {
         if (Group* pGroup = pPlayer->GetGroup())
         {
-            int numberOfDeadOrAway = 0;
+            int numberOfDeadOrIgnored = 0;
             int groupCount = pGroup->GetMembersCount();
             for(GroupReference* pRef = pGroup->GetFirstMember(); pRef != nullptr; pRef = pRef->next())
             {
                 Player* pMember = pRef->getSource();
 
-                if (pMember && (!pMember->isAlive() || !m_creature->IsWithinDistInMap(pMember, m_MaxPlayerDistance)))
-                    numberOfDeadOrAway++;
+                if (pMember && (!pMember->isAlive() || !m_creature->IsWithinDistInMap(pMember, m_MaxPlayerDistance) ||
+                        (m_pQuestForEscort && !pMember->HasQuest(m_pQuestForEscort->GetQuestId()))))
+                    numberOfDeadOrIgnored++;
             }
-            return numberOfDeadOrAway >= groupCount;
+            return numberOfDeadOrIgnored >= groupCount;
         }
         else
         {
