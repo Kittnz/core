@@ -352,7 +352,7 @@ bool ItemUse_survival_kit(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 
 bool ItemUse_survival_skillup(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
-    // Quick and shitty way to get things done, skill should update on DoCreateItem() or move to spell_scripts. Fixme later.
+    // Quick and shitty way to get things done. Fix later.
     uint32 currvalue = 0;
     currvalue = pPlayer->GetSkillValue(142);
     switch (currvalue)
