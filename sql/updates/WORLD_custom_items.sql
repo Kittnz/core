@@ -393,7 +393,8 @@ replace into item_template (entry, name, description, quality, spellid_1, displa
 (50230, 'Simple Survival Kit', 'Basic supply package from Strangletorn Vale. Contains knife, rope, oil and rations.', 2, 12244, 9288, 'survival_kit', 1, -1, 0),
 (50231, 'Coil of Sturdy Rope', 'A strong, braided leather rope.', 1, 12244, 10301, '', 1, 0, 3500),
 (50232, 'Cheap Goblin\'s Oil', 'Smells horrible.', 1, 12244, 21794, '', 1, 0, 4500),
-(50233, 'Wooden Club', 'A simple stick made of wood.', 1, 12244, 2618, '', 1, 0, 0);
+(50233, 'Wooden Club', 'A simple stick made of wood.', 1, 12244, 2618, '', 1, 0, 0),
+(50234, 'Adventurer\'s Tent Kit', 'Hides you from cold wind and showers.', 1, 12244, 7450, 'survival_tent', 1, -1, 0);
 
 -- ### item_loot_template:
 delete from item_loot_template where entry in (50050, 50051, 50052, 50053, 50054, 500055, 50022, 50023, 50024, 50025, 50101);

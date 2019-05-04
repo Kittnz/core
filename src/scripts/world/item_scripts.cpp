@@ -351,19 +351,17 @@ bool ItemUse_survival_kit(Player* pPlayer, Item* pItem, const SpellCastTargets&)
     return false;
 }
 
-bool ItemUse_survival_skillup(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+bool ItemUse_survival_tent(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
-    // Deprecated. Reuse or delete later.
+    // summon tent object for 20 minutes
+    pPlayer->SummonGameObject(1000001, pPlayer->GetPositionX() + 4.0f, pPlayer->GetPositionY() +4.0f, pPlayer->GetPositionZ(), 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1200, true);
+    // set rested state:
+    pPlayer->SetFlag(PLAYER_FLAGS, PLAYER_FLAGS_RESTING);
+    // this is visual ^ todo: real resting
+    // update skill on usage:
     uint32 currvalue = 0;
     currvalue = pPlayer->GetSkillValue(142);
-    switch (currvalue)
-    {
-    case 150: break;
-    default: 
-        currvalue++; 
-        pPlayer->SetSkill(142, currvalue, 150); 
-        break;
-    }
+    switch (currvalue) { case 150: break; default: currvalue++; pPlayer->SetSkill(142, currvalue, 150); break; }
     return false;
 }
 
@@ -437,7 +435,7 @@ void AddSC_item_scripts()
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "survival_skillup";
-    newscript->pItemUse = &ItemUse_survival_skillup;
+    newscript->Name = "survival_tent";
+    newscript->pItemUse = &ItemUse_survival_tent;
     newscript->RegisterSelf();
 }

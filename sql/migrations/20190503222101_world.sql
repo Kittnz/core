@@ -52,6 +52,12 @@ values (1000000, 0, -11633.1, -66.3499, 10.9391, 0.630667, 0, 0, 0.310133, 0.950
 replace into skill_line_ability (id, build, skill_id, spell_id, race_mask, class_mask, req_skill_value, superseded_by_spell, learn_on_get_skill, max_value, min_value, req_train_points) 
 values (16000, 5875, 142, 7364, 0, 0, 0, 0, 0, 150, 1, 0);
 
+-- Survival Tent
+
+replace `gameobject_template` (`entry`, `patch`, `type`, `displayId`, `name`, `faction`, `flags`, `size`, `data0`, `data1`, `data2`, `data3`, `data4`, `data5`, `data6`, `data7`, `data8`, `data9`, `data10`, `data11`, `data12`, `data13`, `data14`, `data15`, `data16`, `data17`, `data18`, `data19`, `data20`, `data21`, `data22`, `data23`, `mingold`, `maxgold`, `script_name`) 
+value (1000001, 0, 5, 4176, 'Adventurer\'r Tent', 0, 0, 1.2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+
 -- End of migration.
 END IF;
 END??
