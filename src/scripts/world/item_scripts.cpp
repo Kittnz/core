@@ -343,6 +343,30 @@ bool ItemUse_skin_changer(Player* pPlayer, Item* pItem, const SpellCastTargets&)
     return false;
 }
 
+bool ItemUse_survival_kit(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+{
+    pPlayer->SetSkill(142, 1, 150);
+    ChatHandler(pPlayer).SendSysMessage("You have learned how to create a new item: Dim Torch");
+    return false;
+}
+
+bool ItemUse_survival_skillup(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+{
+    // Quick and shitty way to get things done, skill should update on DoCreateItem() or move to spell_scripts. Fixme later.
+    uint32 currvalue = 0;
+    currvalue = pPlayer->GetSkillValue(142);
+    switch (currvalue)
+    {
+    case 150: break;
+    default: 
+        currvalue++; 
+        pPlayer->SetSkill(142, currvalue, 150); 
+        break;
+    }
+    return false;
+}
+
+
 void AddSC_item_scripts()
 {
     Script *newscript;
@@ -405,5 +429,15 @@ void AddSC_item_scripts()
     newscript = new Script;
     newscript->Name = "skin_changer";
     newscript->pItemUse = &ItemUse_skin_changer;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "survival_kit";
+    newscript->pItemUse = &ItemUse_survival_kit;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "survival_skillup";
+    newscript->pItemUse = &ItemUse_survival_skillup;
     newscript->RegisterSelf();
 }

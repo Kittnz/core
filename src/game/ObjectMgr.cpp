@@ -9135,6 +9135,9 @@ SkillRangeType GetSkillRangeType(SkillLineEntry const *pSkill, bool racial)
                 return SKILL_RANGE_RANK;
             else if (racial)
                 return SKILL_RANGE_NONE;
+            // Turtle WoW:
+            else if (pSkill->id == SKILL_SURVIVAL2)
+                return SKILL_RANGE_RANK;
             else
                 return SKILL_RANGE_MONO;
         default:
