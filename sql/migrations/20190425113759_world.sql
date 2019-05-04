@@ -12,6 +12,10 @@ INSERT INTO `migrations` VALUES ('20190425113759');
 
 UPDATE game_event SET occurence = 42480 WHERE entry = 10;
 
+-- Tallstrider's fix:
+
+update spell_mod set InterruptFlags = 7, AuraInterruptFlags = 128 where id in (10800, 10801,8396,10802, 10803, 10804, 25675); 
+
 -- End of migration.
 END IF;
 END??

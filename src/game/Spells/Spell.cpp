@@ -7316,10 +7316,18 @@ SpellCastResult Spell::CheckItems()
                    ? SPELL_FAILED_DONT_REPORT : SPELL_FAILED_EQUIPPED_ITEM_CLASS;
     }
     // if not item target then required item must be equipped (for triggered case not report error)
-    else
+    else if (Player* pPlayer = m_caster->ToPlayer())
     {
-        if (m_caster->GetTypeId() == TYPEID_PLAYER && !((Player*)m_caster)->HasItemFitToSpellReqirements(m_spellInfo))
+        Item const* ignore = nullptr;
+        if (m_attackType == BASE_ATTACK)
+            ignore = pPlayer->GetWeaponForAttack(OFF_ATTACK);
+        else if (m_attackType == OFF_ATTACK)
+            ignore = pPlayer->GetWeaponForAttack(BASE_ATTACK);
+
+        if (!pPlayer->HasItemFitToSpellReqirements(m_spellInfo, ignore))
+        {
             return m_IsTriggeredSpell ? SPELL_FAILED_DONT_REPORT : SPELL_FAILED_EQUIPPED_ITEM_CLASS;
+        }
     }
 
     // check spell focus object
@@ -7534,8 +7542,9 @@ SpellCastResult Spell::CheckItems()
                     return SPELL_FAILED_CANT_BE_DISENCHANTED;
 
                 // must have disenchant loot (other static req. checked at item prototype loading)
-                if (!itemProto->DisenchantID)
+                if (!itemProto->DisenchantID || (itemProto->Flags & ITEM_FLAG_NO_DISENCHANT))
                     return SPELL_FAILED_CANT_BE_DISENCHANTED;
+
                 break;
             }
             case SPELL_EFFECT_WEAPON_DAMAGE:

@@ -389,6 +389,12 @@ replace into item_template (entry, name, description, quality, spellid_1, displa
 (50211, 'Sandfury Initiation Set (Includes Zombie)', '', 2, 12244, 32280, 'skin_changer', 128, 1),
 (50212, 'Leper Gnome Initiation Set (Male Only)', '', 2, 12244, 1288, 'skin_changer', 64, 1);
 
+replace into item_template (entry, name, description, quality, spellid_1, display_id, script_name, bonding, spellcharges_1, buy_price) values
+(50230, 'Simple Survival Kit', 'Basic supply package from Strangletorn Vale. Contains knife, rope, oil and rations.', 2, 12244, 9288, 'survival_kit', 1, -1, 0),
+(50231, 'Coil of Sturdy Rope', 'A strong, braided leather rope.', 1, 12244, 10301, '', 1, 0, 3500),
+(50232, 'Cheap Goblin\'s Oil', 'Smells horrible.', 1, 12244, 21794, '', 1, 0, 4500),
+(50233, 'Wooden Club', 'A simple stick made of wood.', 1, 12244, 2618, '', 1, 0, 0);
+
 -- ### item_loot_template:
 delete from item_loot_template where entry in (50050, 50051, 50052, 50053, 50054, 500055, 50022, 50023, 50024, 50025, 50101);
 replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid) values
@@ -435,7 +441,6 @@ replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid, minc
 (50055, 50094, 100, 3, 1, 1); -- 50094 [Sword of a Thousand Truths]
 
 -- Hotfixes, modify custom items only in this file:
-
 update item_template set bonding = 0 where entry in (50026, 50027);
 update item_template set inventory_type = 4 where entry = 50027;
 update item_template set delay = 2000, dmg_min1 = 70, dmg_max1 = 90 where entry = 50094;
