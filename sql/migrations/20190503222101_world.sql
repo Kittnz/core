@@ -28,7 +28,7 @@ replace into quest_template (entry, MinLevel, QuestLevel, Title, Details, Object
 
 -- Skill update on usage and some other stuff:
 
-update item_template set script_name = 'survival_skillup' where entry = 6183;
+update item_template set script_name = '' where entry = 6183;
 update item_template set required_skill_rank = 1 where entry = 6183;
 update item_template set bonding = 1 where entry = 6183;
 update item_template set spellcooldown_1 = 3600000 where entry = 6183;
@@ -47,6 +47,10 @@ replace into gameobject_loot_template (entry, item, ChanceOrQuestChance, groupid
 replace into`gameobject` (`id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`, `spawnFlags`, `visibilitymod`, `patch_min`, `patch_max`) 
 values (1000000, 0, -11633.1, -66.3499, 10.9391, 0.630667, 0, 0, 0.310133, 0.950693, 25, 25, 100, 1, 0, 0, 0, 10);
 
+-- Light Torch -> bind spell to the Survival skill.
+
+replace into skill_line_ability (id, build, skill_id, spell_id, race_mask, class_mask, req_skill_value, superseded_by_spell, learn_on_get_skill, max_value, min_value, req_train_points) 
+values (16000, 5875, 142, 7364, 0, 0, 0, 0, 0, 150, 1, 0);
 
 -- End of migration.
 END IF;

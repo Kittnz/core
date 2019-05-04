@@ -346,13 +346,14 @@ bool ItemUse_skin_changer(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 bool ItemUse_survival_kit(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
     pPlayer->SetSkill(142, 1, 150);
+    pPlayer->SetByteValue(PLAYER_BYTES_2, 3, 0x01);          
     ChatHandler(pPlayer).SendSysMessage("You have learned how to create a new item: Dim Torch");
     return false;
 }
 
 bool ItemUse_survival_skillup(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
-    // Quick and shitty way to get things done. Fix later.
+    // Deprecated. Reuse or delete later.
     uint32 currvalue = 0;
     currvalue = pPlayer->GetSkillValue(142);
     switch (currvalue)
@@ -365,7 +366,6 @@ bool ItemUse_survival_skillup(Player* pPlayer, Item* pItem, const SpellCastTarge
     }
     return false;
 }
-
 
 void AddSC_item_scripts()
 {
