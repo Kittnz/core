@@ -346,7 +346,7 @@ bool ItemUse_skin_changer(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 bool ItemUse_survival_kit(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
     pPlayer->SetSkill(142, 1, 150);
-    pPlayer->SetByteValue(PLAYER_BYTES_2, 3, 0x01);          
+    pPlayer->LearnSpell(818, false);
     ChatHandler(pPlayer).SendSysMessage("You have learned how to create a new item: Dim Torch");
     return false;
 }
