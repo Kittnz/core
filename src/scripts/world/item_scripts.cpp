@@ -365,6 +365,25 @@ bool ItemUse_survival_tent(Player* pPlayer, Item* pItem, const SpellCastTargets&
     return false;
 }
 
+bool ItemUse_survival_boat(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+{
+    // summon boat for 20 minutes
+    if (pPlayer->IsInWater())
+    {
+        pPlayer->SummonGameObject(1000002, pPlayer->GetPositionX(), pPlayer->GetPositionY(), pPlayer->GetPositionZ() + 1.3f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1200, true);
+        pPlayer->TeleportTo(pPlayer->GetMapId(), pPlayer->GetPositionX(), pPlayer->GetPositionY(), pPlayer->GetPositionZ() + 7.0f, 0.0f); 
+        pPlayer->AddAura((pPlayer->HasAura(8083)) ? 0 : 8083); // todo: add removal.
+        ChatHandler(pPlayer).SendSysMessage("You've gained +50 skill bonus to Fishing!");
+    }
+    else
+        ChatHandler(pPlayer).SendSysMessage("Can't build on the ground!");
+    // update skill on usage:
+    uint32 currvalue = 0;
+    currvalue = pPlayer->GetSkillValue(142);
+    switch (currvalue) { case 150: break; default: currvalue++; pPlayer->SetSkill(142, currvalue, 150); break; }
+    return false;
+}
+
 void AddSC_item_scripts()
 {
     Script *newscript;
@@ -437,5 +456,10 @@ void AddSC_item_scripts()
     newscript = new Script;
     newscript->Name = "survival_tent";
     newscript->pItemUse = &ItemUse_survival_tent;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "survival_boat";
+    newscript->pItemUse = &ItemUse_survival_boat;
     newscript->RegisterSelf();
 }

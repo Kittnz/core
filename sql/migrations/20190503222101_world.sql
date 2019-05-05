@@ -70,10 +70,16 @@ replace into npc_vendor (entry, item) values
 (50070, 7005), 
 (50070, 10111), 
 (50070, 8749), 
-(50070, 18288); 
+(50070, 18288),
+(50070, 50235); 
 
 replace into `creature` (`id`, `map`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `DeathState`, `MovementType`, `spawnFlags`, `visibilitymod`, `patch_min`, `patch_max`) 
 values (50070, 0, 0, 0, -11621.3, -47.7214, 10.9964, 5.40745, 25, 25, 0, 0, 100, 0, 0, 0, 0, 0, 0, 10);
+
+-- Boat
+
+replace into `gameobject_template` (`entry`, `patch`, `type`, `displayId`, `name`, `faction`, `flags`, `size`, `data0`, `data1`, `data2`, `data3`, `data4`, `data5`, `data6`, `data7`, `data8`, `data9`, `data10`, `data11`, `data12`, `data13`, `data14`, `data15`, `data16`, `data17`, `data18`, `data19`, `data20`, `data21`, `data22`, `data23`, `mingold`, `maxgold`, `script_name`) 
+values (1000002, 0, 5, 124, 'Fisherman\'s Boat', 0, 0, 0.8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
 
 
 
