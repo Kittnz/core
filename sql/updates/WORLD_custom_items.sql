@@ -394,7 +394,7 @@ replace into item_template (entry, name, description, quality, spellid_1, displa
 (50231, 'Coil of Sturdy Rope', 'A strong, braided leather rope.', 1, 12244, 10301, '', 1, 0, 3500),
 (50232, 'Cheap Goblin\'s Oil', 'Smells horrible.', 1, 12244, 21794, '', 1, 0, 4500),
 (50233, 'Wooden Club', 'A simple stick made of wood.', 1, 12244, 2618, '', 1, 0, 0),
-(50234, 'Adventurer\'s Tent', 'Hides you from cold wind and rain.', 1, 12244, 7450, 'survival_tent', 1, -1, 3000),
+(50234, 'Traveler\'s Tent', 'Hides you from cold wind and rain.', 1, 12244, 7450, 'survival_tent', 1, -1, 3000),
 (50235, 'Boats for Dummies', 'Build a boat for fishing! You must be standing in the water.', 1, 12244, 8117, 'survival_boat', 1, -1, 5000);
 
 -- ### item_loot_template:
