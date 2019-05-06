@@ -357,7 +357,8 @@ bool ItemUse_survival_tent(Player* pPlayer, Item* pItem, const SpellCastTargets&
     pPlayer->SummonGameObject(1000001, pPlayer->GetPositionX() + 4.0f, pPlayer->GetPositionY() +4.0f, pPlayer->GetPositionZ(), 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1200, true);
     // set rested state:
     pPlayer->SetFlag(PLAYER_FLAGS, PLAYER_FLAGS_RESTING);
-    // this is visual ^ todo: real resting
+    float bubble = 0.125f;
+    pPlayer->SetRestBonus(pPlayer->GetRestBonus() + urand(100, 250) * ((float)pPlayer->GetUInt32Value(PLAYER_NEXT_LEVEL_XP) / 72000)*bubble);
     // update skill on usage:
     uint32 currvalue = 0;
     currvalue = pPlayer->GetSkillValue(142);
