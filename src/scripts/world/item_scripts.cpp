@@ -346,26 +346,43 @@ bool ItemUse_skin_changer(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 bool ItemUse_survival_kit(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
     pPlayer->SetSkill(142, 1, 150);
+    pPlayer->LearnSpell(25085, false);
     ChatHandler(pPlayer).SendSysMessage("You have learned how to create a new item: Dim Torch");
     return false;
 }
 
-bool ItemUse_survival_skillup(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+bool ItemUse_survival_tent(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
-    // Quick and shitty way to get things done. Fix later.
+    // summon tent object for 20 minutes
+    pPlayer->SummonGameObject(1000001, pPlayer->GetPositionX() + 4.0f, pPlayer->GetPositionY() +4.0f, pPlayer->GetPositionZ(), 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1200, true);
+    // set rested state:
+    pPlayer->SetFlag(PLAYER_FLAGS, PLAYER_FLAGS_RESTING);
+    // this is visual ^ todo: real resting
+    // update skill on usage:
     uint32 currvalue = 0;
     currvalue = pPlayer->GetSkillValue(142);
-    switch (currvalue)
-    {
-    case 150: break;
-    default: 
-        currvalue++; 
-        pPlayer->SetSkill(142, currvalue, 150); 
-        break;
-    }
+    switch (currvalue) { case 150: break; default: currvalue++; pPlayer->SetSkill(142, currvalue, 150); break; }
     return false;
 }
 
+bool ItemUse_survival_boat(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+{
+    // summon boat for 20 minutes
+    if (pPlayer->IsInWater())
+    {
+        pPlayer->SummonGameObject(1000002, pPlayer->GetPositionX(), pPlayer->GetPositionY(), pPlayer->GetPositionZ() + 1.3f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1200, true);
+        pPlayer->TeleportTo(pPlayer->GetMapId(), pPlayer->GetPositionX(), pPlayer->GetPositionY(), pPlayer->GetPositionZ() + 7.0f, 0.0f); 
+        pPlayer->AddAura((pPlayer->HasAura(8083)) ? 0 : 8083); // todo: add removal.
+        ChatHandler(pPlayer).SendSysMessage("You've gained +50 skill bonus to Fishing!");
+    }
+    else
+        ChatHandler(pPlayer).SendSysMessage("Can't build on the ground!");
+    // update skill on usage:
+    uint32 currvalue = 0;
+    currvalue = pPlayer->GetSkillValue(142);
+    switch (currvalue) { case 150: break; default: currvalue++; pPlayer->SetSkill(142, currvalue, 150); break; }
+    return false;
+}
 
 void AddSC_item_scripts()
 {
@@ -437,7 +454,12 @@ void AddSC_item_scripts()
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "survival_skillup";
-    newscript->pItemUse = &ItemUse_survival_skillup;
+    newscript->Name = "survival_tent";
+    newscript->pItemUse = &ItemUse_survival_tent;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "survival_boat";
+    newscript->pItemUse = &ItemUse_survival_boat;
     newscript->RegisterSelf();
 }

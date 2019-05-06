@@ -28,7 +28,7 @@ replace into quest_template (entry, MinLevel, QuestLevel, Title, Details, Object
 
 -- Skill update on usage and some other stuff:
 
-update item_template set script_name = 'survival_skillup' where entry = 6183;
+update item_template set script_name = '' where entry = 6183;
 update item_template set required_skill_rank = 1 where entry = 6183;
 update item_template set bonding = 1 where entry = 6183;
 update item_template set spellcooldown_1 = 3600000 where entry = 6183;
@@ -46,6 +46,41 @@ replace into gameobject_loot_template (entry, item, ChanceOrQuestChance, groupid
 
 replace into`gameobject` (`id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`, `spawnFlags`, `visibilitymod`, `patch_min`, `patch_max`) 
 values (1000000, 0, -11633.1, -66.3499, 10.9391, 0.630667, 0, 0, 0.310133, 0.950693, 25, 25, 100, 1, 0, 0, 0, 10);
+
+-- Light Torch -> bind spell to the Survival skill.
+
+replace into skill_line_ability (id, build, skill_id, spell_id, race_mask, class_mask, req_skill_value, superseded_by_spell, learn_on_get_skill, max_value, min_value, req_train_points) 
+values (16000, 5875, 142, 7364, 0, 0, 0, 0, 0, 150, 1, 0);
+
+-- Survival Tent
+
+replace `gameobject_template` (`entry`, `patch`, `type`, `displayId`, `name`, `faction`, `flags`, `size`, `data0`, `data1`, `data2`, `data3`, `data4`, `data5`, `data6`, `data7`, `data8`, `data9`, `data10`, `data11`, `data12`, `data13`, `data14`, `data15`, `data16`, `data17`, `data18`, `data19`, `data20`, `data21`, `data22`, `data23`, `mingold`, `maxgold`, `script_name`) 
+value (1000001, 0, 5, 4176, 'Adventurer\'r Tent', 0, 0, 1.2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+-- Survival Expert
+
+replace into creature_template (entry, name, subname, level_min, level_max, health_min, health_max, display_id1, faction, type, inhabit_type, npc_flags) 
+values (50070, 'Rufus Hardwick', 'Survival Expert', 40, 40, 5000, 6000, 1685, 35, 7, 3, 4);
+
+replace into npc_vendor (entry, item) values 
+(50070, 4471),
+(50070, 4470), 
+(50070, 6183), 
+(50070, 50234), 
+(50070, 7005), 
+(50070, 10111), 
+(50070, 8749), 
+(50070, 18288),
+(50070, 50235); 
+
+replace into `creature` (`id`, `map`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `DeathState`, `MovementType`, `spawnFlags`, `visibilitymod`, `patch_min`, `patch_max`) 
+values (50070, 0, 0, 0, -11621.3, -47.7214, 10.9964, 5.40745, 25, 25, 0, 0, 100, 0, 0, 0, 0, 0, 0, 10);
+
+-- Boat
+
+replace into `gameobject_template` (`entry`, `patch`, `type`, `displayId`, `name`, `faction`, `flags`, `size`, `data0`, `data1`, `data2`, `data3`, `data4`, `data5`, `data6`, `data7`, `data8`, `data9`, `data10`, `data11`, `data12`, `data13`, `data14`, `data15`, `data16`, `data17`, `data18`, `data19`, `data20`, `data21`, `data22`, `data23`, `mingold`, `maxgold`, `script_name`) 
+values (1000002, 0, 5, 124, 'Fisherman\'s Boat', 0, 0, 0.8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
 
 
 -- End of migration.
