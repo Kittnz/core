@@ -395,7 +395,7 @@ replace into item_template (entry, name, description, quality, spellid_1, displa
 (50232, 'Cheap Goblin\'s Oil', 'Smells horrible.', 1, 12244, 21794, '', 1, 0, 4500),
 (50233, 'Wooden Club', 'A simple stick made of wood.', 1, 12244, 2618, '', 1, 0, 0),
 (50234, 'Traveler\'s Tent', 'Hides you from cold wind and rain.', 1, 12244, 7450, 'survival_tent', 1, -1, 3000),
-(50235, 'Boats for Dummies', 'Build a boat for fishing! You must be standing in the water.', 1, 12244, 8117, 'survival_boat', 1, -1, 5000);
+(50235, 'Boats for Dummies', 'Build a boat for fishing! You must be standing in the water.', 1, 14867, 8117, 'survival_boat', 1, -1, 5000);
 
 -- ### item_loot_template:
 delete from item_loot_template where entry in (50050, 50051, 50052, 50053, 50054, 500055, 50022, 50023, 50024, 50025, 50101);
@@ -443,8 +443,10 @@ replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid, minc
 (50055, 50094, 100, 3, 1, 1); -- 50094 [Sword of a Thousand Truths]
 
 -- Hotfixes, modify custom items only in this file:
-update item_template set required_skill = 142, required_skill_rank = 100, required_level = 20 where entry = 50234;
-update item_template set required_skill = 142, required_skill_rank = 125, required_level = 20 where entry = 50235;
+update item_template set spellcooldown_1 = 3600000 where entry = 50234;
+update item_template set spellcooldown_1 = 3600000 where entry = 50235;
+update item_template set required_skill = 142, required_skill_rank = 100, required_level = 15 where entry = 50234;
+update item_template set required_skill = 142, required_skill_rank = 125, required_level = 25 where entry = 50235;
 update item_template set bonding = 0 where entry in (50026, 50027);
 update item_template set inventory_type = 4 where entry = 50027;
 update item_template set delay = 2000, dmg_min1 = 70, dmg_max1 = 90 where entry = 50094;
