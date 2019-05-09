@@ -353,13 +353,26 @@ bool ItemUse_survival_kit(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 
 bool ItemUse_survival_tent(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
-    // summon tent object for 20 minutes
-    pPlayer->SummonGameObject(1000001, pPlayer->GetPositionX(), pPlayer->GetPositionY(), pPlayer->GetPositionZ(), 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1200, true);
-    // set rested state (visual), check for the actual script in go_survival_tent
-    // update skill on usage:
-    uint32 currvalue = 0;
-    currvalue = pPlayer->GetSkillValue(142);
-    switch (currvalue) { case 150: break; default: currvalue++; pPlayer->SetSkill(142, currvalue, 150); break; }
+    // reagents: Linen Cloth (5), Simple Wood (1)
+    if (pPlayer->HasItemCount(2589, 5, false) && pPlayer->HasItemCount(4470, 1, false))
+    {
+        // summon tent object for 20 minutes
+        pPlayer->SummonGameObject(1000001, pPlayer->GetPositionX(), pPlayer->GetPositionY(), pPlayer->GetPositionZ(), 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1200, true);
+        // set rested state - check for the actual script in go_survival_tent
+        // update skill on usage:
+        uint32 currvalue = 0;
+        currvalue = pPlayer->GetSkillValue(142);
+        switch (currvalue) { case 150: break; default: currvalue++; pPlayer->SetSkill(142, currvalue, 150); break; }
+        pPlayer->DestroyItemCount(2589, 5, true);
+        pPlayer->DestroyItemCount(4470, 1, true);
+    }
+    else
+    {
+        ChatHandler(pPlayer).SendSysMessage("You need 5 pieces of Linen Cloth and 1 stick of Simple Wood!");
+        pPlayer->RemoveSpellCooldown(12244, false);
+    }
+
+
     return false;
 }
 
