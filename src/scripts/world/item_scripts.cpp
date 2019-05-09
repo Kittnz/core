@@ -354,11 +354,8 @@ bool ItemUse_survival_kit(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 bool ItemUse_survival_tent(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
     // summon tent object for 20 minutes
-    pPlayer->SummonGameObject(1000001, pPlayer->GetPositionX() + 4.0f, pPlayer->GetPositionY() +4.0f, pPlayer->GetPositionZ(), 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1200, true);
-    // set rested state:
-    pPlayer->SetFlag(PLAYER_FLAGS, PLAYER_FLAGS_RESTING);
-    float bubble = 0.125f;
-    pPlayer->SetRestBonus(pPlayer->GetRestBonus() + urand(100, 250) * ((float)pPlayer->GetUInt32Value(PLAYER_NEXT_LEVEL_XP) / 72000)*bubble);
+    pPlayer->SummonGameObject(1000001, pPlayer->GetPositionX(), pPlayer->GetPositionY(), pPlayer->GetPositionZ(), 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1200, true);
+    // set rested state (visual), check for the actual script in go_survival_tent
     // update skill on usage:
     uint32 currvalue = 0;
     currvalue = pPlayer->GetSkillValue(142);

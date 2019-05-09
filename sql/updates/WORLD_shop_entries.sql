@@ -31,7 +31,7 @@ replace into shop_categories values
 
 replace into shop_items values
 -- Gameplay --------------------------------------------------------------------------------------------
-(100, 1, 50010, 'Switch to Hardcore Mode (0.5 Rates for mob kills outside instances)', 0),
+(100, 1, 50010, 'Hardcore Mode (0.5 rates for killing mobs)', 0),
 (101, 1, 50016, 'Portable Meeting Stone (RP Hub)', 0),
 (102, 1, 50008, 'Turtle Twink\'s Insignia (Stop XP)', 0),
 (103, 1, 50000, 'Character Name Change', 100),
@@ -73,7 +73,8 @@ replace into shop_items values
 -- (310, 3, 13322, 'Level 40 Unpainted Mechanostrider', 150),
 (311, 3, 13323, 'Level 40 Purple Mechanostrider', 150),
 -- (312, 3, 13324, 'Level 40 Red and Blue Mechanostrider', 150),
-(313, 3, 13325, 'Level 40 Fluorescent Green Mechanostrider', 150),
+(313, 3, 13325, 'Level 40 Fluorescent Mechanostrider', 150),
+-- Don't rename it again please, it doesn't fit into 1 line and my OCD is really tiggered!
 -- (314, 3, 14062, 'Level 40 Kodo Mount', 150),
 -- (315, 3, 5875, 'Level 40 Blue Ram', 150),
 (316, 3, 5874, 'Level 40 Black Ram', 150),

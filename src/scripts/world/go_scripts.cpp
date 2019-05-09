@@ -542,6 +542,57 @@ bool GOHello_go_orb_of_the_bronze_dragonflight(Player* pPlayer, GameObject* pGo)
     return true;
 }
 
+struct go_survival_tent : public GameObjectAI
+{
+    explicit go_survival_tent(GameObject* pGo) : GameObjectAI(pGo)
+    {
+        m_bUsed = false;
+        m_uiJustUsedTimer = 1;
+        m_uiUpdateTimer = 1000;
+    }
+
+    bool m_bUsed;
+    uint32 m_uiJustUsedTimer;
+    uint32 m_uiUpdateTimer;
+
+    void UpdateAI(uint32 const uiDiff) override
+    {       
+        if (m_uiJustUsedTimer < uiDiff)
+        {
+            if (m_uiUpdateTimer < uiDiff)
+            {
+                std::list<Player*> players;
+                MaNGOS::AnyPlayerInObjectRangeCheck check(me, 10.0f);
+                MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
+
+                Cell::VisitWorldObjects(me, searcher, 10.0f);
+
+                for (Player* pPlayer : players)
+                {
+                    pPlayer->SetFlag(PLAYER_FLAGS, PLAYER_FLAGS_RESTING);
+                    float bubble = 0.125f;
+                    pPlayer->SetRestBonus(pPlayer->GetRestBonus() + urand(150, 300) * ((float)pPlayer->GetUInt32Value(PLAYER_NEXT_LEVEL_XP) / 72000)*bubble);
+                }
+                m_uiUpdateTimer = 1000;
+            }
+            else
+            {
+                m_uiUpdateTimer -= uiDiff;
+            }
+            m_bUsed = true;
+        }
+        else
+        {            
+            m_uiJustUsedTimer -= uiDiff;
+        }
+    }
+};
+
+GameObjectAI* GetAI_go_survival_tent(GameObject* gameobject)
+{
+    return new go_survival_tent(gameobject);
+}
+
 void AddSC_go_scripts()
 {
     Script *newscript;
@@ -648,5 +699,10 @@ void AddSC_go_scripts()
     newscript = new Script;
     newscript->Name = "go_orb_of_the_bronze_dragonflight";
     newscript->pGOHello = &GOHello_go_orb_of_the_bronze_dragonflight;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "go_survival_tent";
+    newscript->GOGetAI = &GetAI_go_survival_tent;
     newscript->RegisterSelf();
 }
