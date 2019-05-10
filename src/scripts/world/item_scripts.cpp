@@ -365,33 +365,48 @@ bool ItemUse_survival_tent(Player* pPlayer, Item* pItem, const SpellCastTargets&
         switch (currvalue) { case 150: break; default: currvalue++; pPlayer->SetSkill(142, currvalue, 150); break; }
         pPlayer->DestroyItemCount(2589, 5, true);
         pPlayer->DestroyItemCount(4470, 1, true);
+        pPlayer->DestroyItemCount(50234, 1, true);
     }
     else
     {
-        ChatHandler(pPlayer).SendSysMessage("You need 5 pieces of Linen Cloth and 1 stick of Simple Wood!");
-        pPlayer->RemoveSpellCooldown(12244, false);
+        ChatHandler(pPlayer).SendSysMessage("5 [Linen Cloth] and 1 [Simple Wood] are required to build a tent.");
+        pPlayer->RemoveSpellCooldown(12244, true);
+        return true;
     }
-
 
     return false;
 }
 
 bool ItemUse_survival_boat(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
-    // summon boat for 20 minutes
-    if (pPlayer->IsInWater())
+    // reagents: Simple Wood (15), Handful of Copper Bolts (1)
+    if (pPlayer->HasItemCount(4470, 15, false) && pPlayer->HasItemCount(4359, 1, false))
     {
-        pPlayer->SummonGameObject(1000002, pPlayer->GetPositionX(), pPlayer->GetPositionY(), pPlayer->GetPositionZ() + 1.3f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1200, true);
-        pPlayer->TeleportTo(pPlayer->GetMapId(), pPlayer->GetPositionX(), pPlayer->GetPositionY(), pPlayer->GetPositionZ() + 7.0f, 0.0f); 
-        pPlayer->AddAura((pPlayer->HasAura(8083)) ? 0 : 8083); // todo: add removal.
-        ChatHandler(pPlayer).SendSysMessage("You've gained +50 skill bonus to Fishing!");
+        // summon boat for 40 minutes
+        if (pPlayer->IsInWater())
+        {
+            pPlayer->SummonGameObject(1000002, pPlayer->GetPositionX(), pPlayer->GetPositionY(), pPlayer->GetPositionZ() + 1.3f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 2400, true);
+            pPlayer->TeleportTo(pPlayer->GetMapId(), pPlayer->GetPositionX(), pPlayer->GetPositionY(), pPlayer->GetPositionZ() + 7.0f, 0.0f);
+            pPlayer->AddAura((pPlayer->HasAura(8083)) ? 0 : 8083); // todo: add removal.
+            ChatHandler(pPlayer).SendSysMessage("You've gained +50 skill bonus to Fishing!");
+        }
+        else
+            ChatHandler(pPlayer).SendSysMessage("Can't build on the ground!");
+        // update skill on usage:
+        uint32 currvalue = 0;
+        currvalue = pPlayer->GetSkillValue(142);
+        switch (currvalue) { case 150: break; default: currvalue++; pPlayer->SetSkill(142, currvalue, 150); break; }
+        pPlayer->DestroyItemCount(4470, 15, true);
+        pPlayer->DestroyItemCount(4359, 1, true);
+        pPlayer->DestroyItemCount(50235, 1, true);
     }
     else
-        ChatHandler(pPlayer).SendSysMessage("Can't build on the ground!");
-    // update skill on usage:
-    uint32 currvalue = 0;
-    currvalue = pPlayer->GetSkillValue(142);
-    switch (currvalue) { case 150: break; default: currvalue++; pPlayer->SetSkill(142, currvalue, 150); break; }
+    {
+        ChatHandler(pPlayer).SendSysMessage("15 [Simple Wood] and 1 [Handful of Copper Bolts] are required to build this boat.");
+        pPlayer->RemoveSpellCooldown(14867, true);
+        return true;
+    }
+
     return false;
 }
 
