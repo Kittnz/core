@@ -366,14 +366,14 @@ bool ItemUse_survival_tent(Player* pPlayer, Item* pItem, const SpellCastTargets&
         pPlayer->DestroyItemCount(2589, 5, true);
         pPlayer->DestroyItemCount(4470, 1, true);
         pPlayer->DestroyItemCount(50234, 1, true);
+        return false;
     }
     else
     {
         ChatHandler(pPlayer).SendSysMessage("5 [Linen Cloth] and 1 [Simple Wood] are required to build a tent.");
-        pPlayer->RemoveSpellCooldown(12244, true);
+        pPlayer->RemoveSpellCooldown(14867, true);
+        return true;
     }
-
-    return false;
 }
 
 bool ItemUse_survival_boat(Player* pPlayer, Item* pItem, const SpellCastTargets&)
@@ -391,20 +391,24 @@ bool ItemUse_survival_boat(Player* pPlayer, Item* pItem, const SpellCastTargets&
             pPlayer->DestroyItemCount(4470, 15, true);
             pPlayer->DestroyItemCount(4359, 1, true);
             pPlayer->DestroyItemCount(50235, 1, true);
-            // update skill on usage:
             uint32 currvalue = 0;
             currvalue = pPlayer->GetSkillValue(142);
-        switch (currvalue) { case 150: break; default: currvalue++; pPlayer->SetSkill(142, currvalue, 150); break; }
+            switch (currvalue) { case 150: break; default: currvalue++; pPlayer->SetSkill(142, currvalue, 150); break; }
+            return false;
         }
         else
+        {
             ChatHandler(pPlayer).SendSysMessage("Can't build on the ground!");
+            return true;
+        }
+
     }
     else
     {
         ChatHandler(pPlayer).SendSysMessage("15 [Simple Wood] and 1 [Handful of Copper Bolts] are required to build this boat.");
         pPlayer->RemoveSpellCooldown(14867, true);
+        return true;
     }
-    return false;
 }
 
 void AddSC_item_scripts()
