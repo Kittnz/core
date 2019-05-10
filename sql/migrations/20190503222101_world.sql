@@ -31,7 +31,7 @@ replace into quest_template (entry, MinLevel, QuestLevel, Title, Details, Object
 update item_template set script_name = '' where entry = 6183;
 update item_template set required_skill_rank = 1 where entry = 6183;
 update item_template set bonding = 1 where entry = 6183;
-update item_template set spellcooldown_1 = 3600000 where entry = 6183;
+update item_template set spellcooldown_1 = 600000 where entry = 6183;
 
 replace into creature_involvedrelation (id, quest) values (718, 50230);
 replace into creature_questrelation (id, quest) values (718, 50230);

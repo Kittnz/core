@@ -394,8 +394,8 @@ replace into item_template (entry, name, description, quality, spellid_1, displa
 (50231, 'Coil of Sturdy Rope', 'A strong, braided leather rope.', 1, 12244, 10301, '', 1, 0, 3500),
 (50232, 'Cheap Goblin\'s Oil', 'Smells horrible.', 1, 12244, 21794, '', 1, 0, 4500),
 (50233, 'Wooden Club', 'A simple stick made of wood.', 1, 12244, 2618, '', 1, 0, 0),
-(50234, 'Traveler\'s Tent Blueprints', 'Required: x5 [Linen Clot] and one [Simple Wood]"\n"Hides you from cold wind and rain.', 1, 14867, 7450, 'survival_tent', 1, 0, 4000),
-(50235, 'Boats for Dummies', 'Requires: x15 [Simple Wood] and one [Handful of Copper Bolts]"\n"Build a boat for fishing! You must be standing in the water.', 1, 14867, 8117, 'survival_boat', 1, 0, 8000);
+(50234, 'Traveler\'s Tent Blueprints', 'Adds 5% rested XP bonus per minute. Requires: x5 [Linen Clot] and x1 [Simple Wood].', 2, 14867, 7450, 'survival_tent', 1, 0, 4000),
+(50235, 'Boats for Dummies', 'Temporarily increasing your Fishing Skil to +50. Requires: x15 [Simple Wood] and x1 [Handful of Copper Bolts].', 2, 14867, 8117, 'survival_boat', 1, 0, 8000);
 
 -- ### item_loot_template:
 delete from item_loot_template where entry in (50050, 50051, 50052, 50053, 50054, 500055, 50022, 50023, 50024, 50025, 50101);
