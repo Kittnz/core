@@ -371,7 +371,6 @@ bool ItemUse_survival_tent(Player* pPlayer, Item* pItem, const SpellCastTargets&
     {
         ChatHandler(pPlayer).SendSysMessage("5 [Linen Cloth] and 1 [Simple Wood] are required to build a tent.");
         pPlayer->RemoveSpellCooldown(12244, true);
-        return true;
     }
 
     return false;
@@ -404,7 +403,6 @@ bool ItemUse_survival_boat(Player* pPlayer, Item* pItem, const SpellCastTargets&
     {
         ChatHandler(pPlayer).SendSysMessage("15 [Simple Wood] and 1 [Handful of Copper Bolts] are required to build this boat.");
         pPlayer->RemoveSpellCooldown(14867, true);
-        return true;
     }
 
     return false;
