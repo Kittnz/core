@@ -365,7 +365,7 @@ bool ItemUse_survival_tent(Player* pPlayer, Item* pItem, const SpellCastTargets&
         switch (currvalue) { case 150: break; default: currvalue++; pPlayer->SetSkill(142, currvalue, 150); break; }
         pPlayer->DestroyItemCount(2589, 5, true);
         pPlayer->DestroyItemCount(4470, 1, true);
-        pPlayer->DestroyItemCount(50234, 1, true);
+        //pPlayer->DestroyItemCount(50234, 1, true);
         return false;
     }
     else
@@ -390,7 +390,7 @@ bool ItemUse_survival_boat(Player* pPlayer, Item* pItem, const SpellCastTargets&
             ChatHandler(pPlayer).SendSysMessage("You've gained +50 skill bonus to Fishing!");
             pPlayer->DestroyItemCount(4470, 15, true);
             pPlayer->DestroyItemCount(4359, 1, true);
-            pPlayer->DestroyItemCount(50235, 1, true);
+            //pPlayer->DestroyItemCount(50235, 1, true);
             uint32 currvalue = 0;
             currvalue = pPlayer->GetSkillValue(142);
             switch (currvalue) { case 150: break; default: currvalue++; pPlayer->SetSkill(142, currvalue, 150); break; }
