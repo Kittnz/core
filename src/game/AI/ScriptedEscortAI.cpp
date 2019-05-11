@@ -227,7 +227,7 @@ bool npc_escortAI::IsPlayerOrGroupDeadOrAway() const
                         (m_pQuestForEscort && !pMember->HasQuest(m_pQuestForEscort->GetQuestId()))))
                     numberOfDeadOrIgnored++;
             }
-            return numberOfDeadOrIgnored >= groupCount;
+            return numberOfDeadOrIgnored > groupCount;
         }
         else
         {
