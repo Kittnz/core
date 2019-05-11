@@ -211,31 +211,7 @@ void npc_escortAI::EnterEvadeMode()
     Reset();
 }
 
-bool npc_escortAI::IsPlayerOrGroupInRange() const
-{
-    if (Player* pPlayer = GetPlayerForEscort())
-    {
-        if (Group* pGroup = pPlayer->GetGroup())
-        {
-            for(GroupReference* pRef = pGroup->GetFirstMember(); pRef != nullptr; pRef = pRef->next())
-            {
-                Player* pMember = pRef->getSource();
-
-                if (pMember && m_creature->IsWithinDistInMap(pMember, m_MaxPlayerDistance))
-                    return true;
-
-            }
-        }
-        else
-        {
-            if (m_creature->IsWithinDistInMap(pPlayer, m_MaxPlayerDistance))
-                return true;
-        }
-    }
-    return false;
-}
-
-bool npc_escortAI::IsPlayerOrGroupDead() const
+bool npc_escortAI::IsPlayerOrGroupDeadOrAway() const
 {
     if (Player* pPlayer = GetPlayerForEscort())
     {
@@ -255,7 +231,8 @@ bool npc_escortAI::IsPlayerOrGroupDead() const
         }
         else
         {
-            return !pPlayer->isAlive();
+            return !pPlayer->isAlive() || !m_creature->IsWithinDistInMap(pPlayer, m_MaxPlayerDistance) ||
+                   (m_pQuestForEscort && !pPlayer->HasQuest(m_pQuestForEscort->GetQuestId()));
         }
     }
     return false;
@@ -328,7 +305,7 @@ void npc_escortAI::UpdateAI(const uint32 uiDiff)
     {
         if (m_uiPlayerCheckTimer < uiDiff)
         {
-            if ((!IsPlayerOrGroupInRange() && m_MaxPlayerDistance > 0 && !HasEscortState(STATE_ESCORT_RETURNING)) || IsPlayerOrGroupDead())
+            if (!HasEscortState(STATE_ESCORT_RETURNING) && IsPlayerOrGroupDeadOrAway())
             {
                 sLog.outDebug("EscortAI failed because player/group was too far away, not found, or dead");
 
