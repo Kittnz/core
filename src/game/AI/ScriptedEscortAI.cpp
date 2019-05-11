@@ -224,8 +224,7 @@ bool npc_escortAI::IsPlayerOrGroupDeadOrAway() const
                 Player* pMember = pRef->getSource();
 
                 if (pMember && (!pMember->isAlive() || !m_creature->IsWithinDistInMap(pMember, m_MaxPlayerDistance) ||
-                        (m_pQuestForEscort && (pMember->GetQuestStatus(m_pQuestForEscort->GetQuestId()) == QUEST_STATUS_COMPLETE ||
-                                pMember->GetQuestStatus(m_pQuestForEscort->GetQuestId()) == QUEST_STATUS_NONE))))
+                        (m_pQuestForEscort && pMember->GetQuestStatus(m_pQuestForEscort->GetQuestId()) != QUEST_STATUS_INCOMPLETE)))
                     numberOfDeadOrIgnored++;
             }
             return numberOfDeadOrIgnored > groupCount;
