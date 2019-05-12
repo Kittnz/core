@@ -300,11 +300,11 @@ void npc_escortAI::UpdateAI(const uint32 uiDiff)
     }
 
     //Check if player or any member of his group is within range or dead
-    if (HasEscortState(STATE_ESCORT_ESCORTING) && m_uiPlayerGUID && !m_creature->isInCombat())
+    if (HasEscortState(STATE_ESCORT_ESCORTING) && !HasEscortState(STATE_ESCORT_RETURNING) && m_MaxPlayerDistance > 0 && !m_creature->isInCombat())
     {
         if (m_uiPlayerCheckTimer < uiDiff)
         {
-            if (!HasEscortState(STATE_ESCORT_RETURNING) && IsPlayerOrGroupDeadOrAway())
+            if (IsPlayerOrGroupDeadOrAway())
             {
                 sLog.outDebug("EscortAI failed because player/group was too far away, not found, or dead");
 
@@ -314,7 +314,7 @@ void npc_escortAI::UpdateAI(const uint32 uiDiff)
                 return;
             }
 
-            m_uiPlayerCheckTimer = 1000;
+            m_uiPlayerCheckTimer = 2500;
         }
         else
             m_uiPlayerCheckTimer -= uiDiff;
