@@ -562,7 +562,7 @@ struct go_survival_tent : public GameObjectAI
             if (m_uiUpdateTimer < uiDiff)
             {
                 std::list<Player*> players;
-                MaNGOS::AnyPlayerInObjectRangeCheck check(me, 10.0f);
+                MaNGOS::AnyPlayerInObjectRangeCheck check(me, 15.0f);
                 MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
 
                 Cell::VisitWorldObjects(me, searcher, 10.0f);
