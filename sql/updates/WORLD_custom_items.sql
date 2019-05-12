@@ -443,8 +443,9 @@ replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid, minc
 (50055, 50094, 100, 3, 1, 1); -- 50094 [Sword of a Thousand Truths]
 
 -- Hotfixes, modify custom items only in this file:
-update item_template set spellcooldown_1 = 3600000 where entry = 50234;
+update item_template set spellcooldown_1 = 5400000 where entry = 50234;
 update item_template set spellcooldown_1 = 3600000 where entry = 50235;
+update item_template set spellcooldown_1 = 60000 where entry = 6183;
 update item_template set required_skill = 142, required_skill_rank = 75, required_level = 15 where entry = 50234;
 update item_template set required_skill = 142, required_skill_rank = 125, required_level = 25 where entry = 50235;
 update item_template set bonding = 0 where entry in (50026, 50027);
