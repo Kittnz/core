@@ -394,8 +394,8 @@ replace into item_template (entry, name, description, quality, spellid_1, displa
 (50231, 'Coil of Sturdy Rope', 'A strong, braided leather rope.', 1, 12244, 10301, '', 1, 0, 3500),
 (50232, 'Cheap Goblin\'s Oil', 'Smells horrible.', 1, 12244, 21794, '', 1, 0, 4500),
 (50233, 'Wooden Club', 'A simple stick made of wood.', 1, 12244, 2618, '', 1, 0, 0),
-(50234, 'Traveler\'s Tent Blueprints', 'Adds 5% rested XP bonus per minute. Requires: x5 [Linen Cloth] and x1 [Simple Wood].', 2, 14867, 7450, 'survival_tent', 1, 0, 4000),
-(50235, 'Boats for Dummies', 'Temporarily increasing your Fishing Skil to +50. Requires: x15 [Simple Wood] and x1 [Handful of Copper Bolts].', 2, 14867, 8117, 'survival_boat', 1, 0, 8000);
+(50234, 'Traveler\'s Tent Blueprints', 'Increases your rested bonus if you stay near it. Requires: x5 [Linen Cloth] and x1 [Simple Wood].', 2, 14867, 7450, 'survival_tent', 1, 0, 4000),
+(50235, 'Boats for Dummies', 'Increases your Fishing Skill by 50 points. Requires: x15 [Simple Wood] and x1 [Handful of Copper Bolts].', 2, 14867, 8117, 'survival_boat', 1, 0, 8000);
 
 -- ### item_loot_template:
 delete from item_loot_template where entry in (50050, 50051, 50052, 50053, 50054, 500055, 50022, 50023, 50024, 50025, 50101);
@@ -443,9 +443,8 @@ replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid, minc
 (50055, 50094, 100, 3, 1, 1); -- 50094 [Sword of a Thousand Truths]
 
 -- Hotfixes, modify custom items only in this file:
-update item_template set spellcooldown_1 = 5400000 where entry = 50234;
+update item_template set spellcooldown_1 = 5400000, spellid_1 = 24085 where entry = 50234;
 update item_template set spellcooldown_1 = 3600000 where entry = 50235;
-update item_template set spellcooldown_1 = 60000 where entry = 6183;
 update item_template set required_skill = 142, required_skill_rank = 75, required_level = 15 where entry = 50234;
 update item_template set required_skill = 142, required_skill_rank = 125, required_level = 25 where entry = 50235;
 update item_template set bonding = 0 where entry in (50026, 50027);

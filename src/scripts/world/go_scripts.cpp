@@ -571,7 +571,7 @@ struct go_survival_tent : public GameObjectAI
                 {
                     pPlayer->SetFlag(PLAYER_FLAGS, PLAYER_FLAGS_RESTING);
                     float bubble = 0.125f;
-                    pPlayer->SetRestBonus(pPlayer->GetRestBonus() + urand(100, 250) * ((float)pPlayer->GetUInt32Value(PLAYER_NEXT_LEVEL_XP) / 72000)*bubble);
+                    pPlayer->SetRestBonus(pPlayer->GetRestBonus() + urand(75, 200) * ((float)pPlayer->GetUInt32Value(PLAYER_NEXT_LEVEL_XP) / 72000)*bubble);
                 }
                 m_uiUpdateTimer = 1000;
             }
