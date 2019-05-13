@@ -8,7 +8,7 @@ IF v=0 THEN
 INSERT INTO `migrations` VALUES ('20190513234136');
 -- Add your query below.
 
-update item_template set spellcooldown_1 = 180000, description = 'Light it in a Bright Campfire.', stackable = 20 where entry = 6183;
+update item_template set description = 'Light it in a Bright Campfire.', stackable = 20 where entry = 6183;
 replace into npc_vendor (entry, item) values
 (227, 6183),
 (989, 6183),
