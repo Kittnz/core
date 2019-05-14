@@ -109,6 +109,7 @@ replace into npc_vendor (entry, item) values
 (4084, 6183),
 (7942, 6183);
 
+UPDATE `mangos_string` SET `content_default`='|cff00FF80Server:|cff66FFFF %s|r' WHERE `entry`='3';
 
 -- End of migration.
 END IF;
