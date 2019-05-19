@@ -91,7 +91,7 @@ class SpellEntry
         uint32    EffectBaseDice[MAX_EFFECT_INDEX] = {};           // 67-69
         float     EffectDicePerLevel[MAX_EFFECT_INDEX] = {};       // 70-72
         float     EffectRealPointsPerLevel[MAX_EFFECT_INDEX] = {}; // 73-75
-        int32     EffectBasePoints[MAX_EFFECT_INDEX] = {};         // 76-78 
+        int32     EffectBasePoints[MAX_EFFECT_INDEX] = {};         // 76-78
         uint32    EffectMechanic[MAX_EFFECT_INDEX] = {};           // 79-81
         uint32    EffectImplicitTargetA[MAX_EFFECT_INDEX] = {};    // 82-84
         uint32    EffectImplicitTargetB[MAX_EFFECT_INDEX] = {};    // 85-87
