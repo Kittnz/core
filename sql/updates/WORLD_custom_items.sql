@@ -442,6 +442,10 @@ replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid, minc
 (50055, 50075, 100, 2, 1, 1), -- 50074 [Darkmoon Strider]
 (50055, 50094, 100, 3, 1, 1); -- 50094 [Sword of a Thousand Truths]
 
+replace into item_template (entry, name, description, inventory_type, quality, display_id, bonding, max_count, fire_res) values
+(50236, 'Drogon-scale Cloak', 'We shall not pretend to any understanding of the bond between dragon and dragonrider; wiser heads have pondered that mystery for centuries. We do know however, that dragons are not horses, to be ridden by any man who throws a saddle on their back.',
+16, 6, 23422, 1, 1, 5);
+
 -- Hotfixes, modify custom items only in this file:
 update item_template set spellcooldown_1 = 5400000, spellid_1 = 24085 where entry = 50234;
 update item_template set spellcooldown_1 = 3600000 where entry = 50235;

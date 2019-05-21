@@ -1094,10 +1094,21 @@ CreatureAI* GetAI_custom_summon_debug(Creature *creature)
     return new npc_summon_debugAI(creature);
 }
 
-
 bool GossipHello_daenerys(Player* pPlayer, Creature* pCreature)
 {
+    if (!pPlayer->HasItemCount(50236, 1, true))
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Can... Can I touch that cloak?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF);
     pPlayer->SEND_GOSSIP_MENU(90002, pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_daenerys(Player* player, Creature* creature, uint32 sender, uint32 action)
+{
+    if (action == GOSSIP_ACTION_INFO_DEF) {
+        creature->PMonsterSay("A good friend of mine crafted this cloak using one of Drogon's scales. You can have it, I don't need it anymore.");
+        player->AddItem(50236, 1);
+    }
+    player->CLOSE_GOSSIP_MENU();
     return true;
 }
 
@@ -1136,5 +1147,6 @@ void AddSC_custom_creatures()
     newscript = new Script;
     newscript->Name = "daenerys";
     newscript->pGossipHello = &GossipHello_daenerys;
+    newscript->pGossipSelect = &GossipSelect_daenerys;
     newscript->RegisterSelf();
 }
