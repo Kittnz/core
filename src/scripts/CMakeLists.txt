@@ -291,7 +291,7 @@ set (SCRIPTS_SRCS
     world/dragons_of_nightmare/boss_taerar.cpp
     world/dragons_of_nightmare/boss_ysondre.cpp
 
-        custom/boss_avatar_of_pompa.cpp custom/boss_turtlhu.cpp)
+        custom/boss_avatar_of_pompa.cpp custom/boss_turtlhu.cpp custom/drogon.cpp)
 
 
 # Used in game ScriptMgr, not need here
