@@ -8,11 +8,15 @@ IF v=0 THEN
 INSERT INTO `migrations` VALUES ('20190521225222');
 -- Add your query below.
 
-replace into creature_template (entry, name, subname, display_id1, level_min, level_max, health_min, health_max, scale, faction) values
-(50071, 'Daenerys', 'The True Queen', 3323, 60, 60, 12761, 12761, 1.25, 35);
+replace into creature_template (entry, name, subname, display_id1, level_min, level_max, health_min, health_max, scale, faction, npc_flags, script_name) values
+(50071, 'Daenerys', 'The True Queen', 3323, 60, 60, 12761, 12761, 1.25, 35, 1, 'daenerys');
 
 replace into creature_template (entry, name, subname, display_id1, level_min, level_max, health_min, health_max, scale, rank, faction, script_name) values
 (50072, 'Drogon', '', 6377, 63, 63, 998712, 998712, 4, 3, 31, 'drogon');
+
+replace into broadcast_text (ID, MaleText) values
+('90002', 'I come from a distant land, stranger. I died, and now I am reborn.\n\nI am the Mother of Dragons. I am the Unburnt. I am the Breaker of Chains. And now... I\'m back.');
+replace into npc_text (ID, BroadcastTextID0) values ('90002', '90002');
 
 -- End of migration.
 END IF;

@@ -1094,6 +1094,13 @@ CreatureAI* GetAI_custom_summon_debug(Creature *creature)
     return new npc_summon_debugAI(creature);
 }
 
+
+bool GossipHello_daenerys(Player* pPlayer, Creature* pCreature)
+{
+    pPlayer->SEND_GOSSIP_MENU(90002, pCreature->GetGUID());
+    return true;
+}
+
 void AddSC_custom_creatures()
 {
     Script *newscript;
@@ -1125,4 +1132,9 @@ void AddSC_custom_creatures()
     newscript->Name = "custom_npc_summon_debugAI";
     newscript->GetAI = &GetAI_custom_summon_debug;
     newscript->RegisterSelf(false);
+
+    newscript = new Script;
+    newscript->Name = "daenerys";
+    newscript->pGossipHello = &GossipHello_daenerys;
+    newscript->RegisterSelf();
 }

@@ -56,6 +56,9 @@ struct drogonAI : public ScriptedAI
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
 
+        if (m_creature->GetHealthPercent() < 100.0f)
+            m_creature->SetFullHealth();
+
         DoMeleeAttackIfReady();
     }
 
