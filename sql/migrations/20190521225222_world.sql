@@ -15,7 +15,7 @@ replace into creature_template (entry, name, subname, display_id1, level_min, le
 (50072, 'Drogon', '', 6377, 63, 63, 998712, 998712, 4, 3, 31, 'drogon');
 
 replace into broadcast_text (ID, MaleText) values
-('90002', 'What... What is this place? Am I alive? I need time to think.\n\nWe had everything, J...');
+('90002', 'What... What is this place? Am I alive?');
 replace into npc_text (ID, BroadcastTextID0) values ('90002', '90002');
 
 -- End of migration.
