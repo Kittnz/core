@@ -353,75 +353,82 @@ bool ItemUse_survival_kit(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 
 bool ItemUse_survival_tent(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
-    // reagents: Linen Cloth (5), Simple Wood (1)
-    if (pPlayer->HasItemCount(2589, 5, false) && pPlayer->HasItemCount(4470, 1, false))
-    {
-        // summon tent object for 20 minutes
-        if (!pPlayer->IsFalling() && !pPlayer->IsInWater()) {
-            pPlayer->SummonGameObject(1000001, pPlayer->GetPositionX(), pPlayer->GetPositionY(),
-                                      pPlayer->GetPositionZ(), 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1200, true);
-            // set rested state - check for the actual script in go_survival_tent
-            // update skill on usage:
-            uint32 currvalue = 0;
-            currvalue = pPlayer->GetSkillValue(142);
-            switch (currvalue) {
-                case 150:
-                    break;
-                default:
-                    currvalue++;
-                    pPlayer->SetSkill(142, currvalue, 150);
-                    break;
+    if (pPlayer) {
+        // reagents: Linen Cloth (5), Simple Wood (1)
+        if (pPlayer->HasItemCount(2589, 5, false) && pPlayer->HasItemCount(4470, 1, false)) {
+            // summon tent object for 20 minutes
+            if (!pPlayer->IsFalling() && !pPlayer->IsInWater() && !pPlayer->InBattleGround() && !pPlayer->InGurubashiArena(false)) {
+                pPlayer->SummonGameObject(1000001, pPlayer->GetPositionX(), pPlayer->GetPositionY(),
+                                          pPlayer->GetPositionZ(), 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1200, true);
+                // set rested state - check for the actual script in go_survival_tent
+                // update skill on usage:
+                uint32 currvalue = 0;
+                currvalue = pPlayer->GetSkillValue(142);
+                switch (currvalue) {
+                    case 150:
+                        break;
+                    default:
+                        currvalue++;
+                        pPlayer->SetSkill(142, currvalue, 150);
+                        break;
+                }
+                pPlayer->DestroyItemCount(2589, 5, true);
+                pPlayer->DestroyItemCount(4470, 1, true);
+                //pPlayer->DestroyItemCount(50234, 1, true);
+                return false;
+            } else {
+                ChatHandler(pPlayer).SendSysMessage("Can't build here!");
+                return true;
             }
-            pPlayer->DestroyItemCount(2589, 5, true);
-            pPlayer->DestroyItemCount(4470, 1, true);
-            //pPlayer->DestroyItemCount(50234, 1, true);
-            return false;
         } else {
-            ChatHandler(pPlayer).SendSysMessage("Can't build here!");
+            ChatHandler(pPlayer).SendSysMessage("5 [Linen Cloth] and 1 [Simple Wood] are required to build a tent.");
+            pPlayer->RemoveSpellCooldown(24085, true);
             return true;
         }
     }
-    else
-    {
-        ChatHandler(pPlayer).SendSysMessage("5 [Linen Cloth] and 1 [Simple Wood] are required to build a tent.");
-        pPlayer->RemoveSpellCooldown(24085, true);
-        return true;
-    }
+    return false;
 }
 
 bool ItemUse_survival_boat(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
-    // reagents: Simple Wood (15), Handful of Copper Bolts (1)
-    if (pPlayer->HasItemCount(4470, 15, false) && pPlayer->HasItemCount(4359, 1, false))
-    {
-        // summon boat for 60 minutes
-        if (pPlayer->IsInWater() && !pPlayer->IsUnderWater())
-        {
-            pPlayer->SummonGameObject(1000002, pPlayer->GetPositionX(), pPlayer->GetPositionY(), pPlayer->GetPositionZ() + 1.3f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 3600, true);
-            pPlayer->TeleportTo(pPlayer->GetMapId(), pPlayer->GetPositionX(), pPlayer->GetPositionY(), pPlayer->GetPositionZ() + 3.5f, 3.0f);
-            pPlayer->AddAura((pPlayer->HasAura(8083)) ? 0 : 8083); // todo: add removal.
-            ChatHandler(pPlayer).SendSysMessage("You've gained +50 skill bonus to Fishing!");
-            pPlayer->DestroyItemCount(4470, 15, true);
-            pPlayer->DestroyItemCount(4359, 1, true);
-            //pPlayer->DestroyItemCount(50235, 1, true);
-            uint32 currvalue = 0;
-            currvalue = pPlayer->GetSkillValue(142);
-            switch (currvalue) { case 150: break; default: currvalue++; pPlayer->SetSkill(142, currvalue, 150); break; }
-            return false;
-        }
-        else
-        {
-            ChatHandler(pPlayer).SendSysMessage("You need to be in a body of water surface!");
+    if (pPlayer) {
+        // reagents: Simple Wood (15), Handful of Copper Bolts (1)
+        if (pPlayer->HasItemCount(4470, 15, false) && pPlayer->HasItemCount(4359, 1, false)) {
+            // summon boat for 60 minutes
+            if (pPlayer->IsInWater() && !pPlayer->IsUnderWater()) {
+                pPlayer->SummonGameObject(1000002, pPlayer->GetPositionX(), pPlayer->GetPositionY(),
+                                          pPlayer->GetPositionZ() + 1.3f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 3600, true);
+                pPlayer->TeleportTo(pPlayer->GetMapId(), pPlayer->GetPositionX(), pPlayer->GetPositionY(),
+                                    pPlayer->GetPositionZ() + 3.5f, 3.0f);
+                pPlayer->AddAura((pPlayer->HasAura(8083)) ? 0 : 8083); // todo: add removal.
+                ChatHandler(pPlayer).SendSysMessage("You've gained +50 skill bonus to Fishing!");
+                pPlayer->DestroyItemCount(4470, 15, true);
+                pPlayer->DestroyItemCount(4359, 1, true);
+                //pPlayer->DestroyItemCount(50235, 1, true);
+                uint32 currvalue = 0;
+                currvalue = pPlayer->GetSkillValue(142);
+                switch (currvalue) {
+                    case 150:
+                        break;
+                    default:
+                        currvalue++;
+                        pPlayer->SetSkill(142, currvalue, 150);
+                        break;
+                }
+                return false;
+            } else {
+                ChatHandler(pPlayer).SendSysMessage("You need to be in a body of water surface!");
+                return true;
+            }
+
+        } else {
+            ChatHandler(pPlayer).SendSysMessage(
+                    "15 [Simple Wood] and 1 [Handful of Copper Bolts] are required to build this boat.");
+            pPlayer->RemoveSpellCooldown(14867, true);
             return true;
         }
-
     }
-    else
-    {
-        ChatHandler(pPlayer).SendSysMessage("15 [Simple Wood] and 1 [Handful of Copper Bolts] are required to build this boat.");
-        pPlayer->RemoveSpellCooldown(14867, true);
-        return true;
-    }
+    return false;
 }
 
 void AddSC_item_scripts()
