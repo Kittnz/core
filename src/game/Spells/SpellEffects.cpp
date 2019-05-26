@@ -55,6 +55,7 @@
 #include "TemporarySummon.h"
 #include "MoveMapSharedDefines.h"
 #include "GameEventMgr.h"
+#include "Chat.h"
 
 #include "InstanceData.h"
 #include "ScriptMgr.h"
@@ -2264,19 +2265,61 @@ void Spell::EffectApplyAura(SpellEffectIndex eff_idx)
 
     DEBUG_FILTER_LOG(LOG_FILTER_SPELL_CAST, "Spell: Aura is: %u [Spell%u:DiminishingGroup%u]", m_spellInfo->EffectApplyAuraName[eff_idx], m_spellInfo->Id, m_diminishGroup);
 
-    // Sayge's Dark Fortune of Damage: +1-10% (random)
-    if (m_spellInfo->Id == 23768)
+    switch (m_spellInfo->Id) {
+    case 23768: // Sayge's Dark Fortune of Damage: +1-10% (random)
         m_currentBasePoints[EFFECT_INDEX_0] = urand(1, 10);
-    // Gnomish Death Ray
-    // rarely has a chance of dealing double damage, 14.29% chance (guess)
-    // for now we use linear level scaling, but this is likely incorrect (hp pools don't scale exactly linearly)
-    // there is some speculation that this should be tied to Engineering skill level, but since you don't need Engineering to use the item at all this seems doubtful
-    else if (m_spellInfo->Id == 13278)
-        m_currentBasePoints[eff_idx] = eff_idx == EFFECT_INDEX_0 ? int32(urand(600, 1200) * (caster->getLevel() / 60.0f)) * (!urand(0, 6) ? 2 : 1)
-        : m_currentBasePoints[EFFECT_INDEX_0] * 0.1249f;
+        break;
+    case 13278: // Gnomish Death Ray, rarely has a chance of dealing double damage, 14.29% chance (guess), for now we use linear level scaling, but this is likely incorrect (hp pools don't scale exactly linearly), there is some speculation that this should be tied to Engineering skill level, but since you don't need Engineering to use the item at all this seems doubtful
+        m_currentBasePoints[eff_idx] = eff_idx == EFFECT_INDEX_0 ? int32(urand(600, 1200) * (caster->getLevel() / 60.0f)) * (!urand(0, 6) ? 2 : 1) : m_currentBasePoints[EFFECT_INDEX_0] * 0.1249f;
+        break;
+    // Turtle WoW. Plainsrunning:
+    case PLAINSRUNNING_SPELL:
+        if (!m_caster->ToPlayer()->HasSkill(762)) 
+        {
+            if (eff_idx == EFFECT_INDEX_0)
+                ChatHandler(m_caster->ToPlayer()).SendSysMessage("|cffff8040You are afraid of high speeds, better learn to ride first.|r");
+            return;
+        }
+        if (eff_idx == EFFECT_INDEX_1) 
+        {
+            if (m_caster->ToPlayer()->GetSkillValue(SKILL_RIDING) == 150) 
+                m_currentBasePoints[EFFECT_INDEX_1] = 40;
+            else
+                m_currentBasePoints[EFFECT_INDEX_1] = 20;
+        }
+        break;
+    case PLAINSRUNNING_FIRST_TICK: 
+        if (!m_caster->ToPlayer()->IsMoving()) 
+        {
+            m_caster->RemoveAura(12567, eff_idx);
+            return;
+        }
+        if (eff_idx == EFFECT_INDEX_1) 
+        {
+            if (m_caster->ToPlayer()->GetSkillValue(SKILL_RIDING) == 150) 
+                m_currentBasePoints[EFFECT_INDEX_1] = 60;
+            else
+                m_currentBasePoints[EFFECT_INDEX_1] = 40;
+        }
+        break;
+    case PLAINSRUNNING_SECOND_TICK:
+        if (!m_caster->ToPlayer()->IsMoving()) 
+        {
+            m_caster->RemoveAura(12568, eff_idx);
+            return;
+        }
+        if (eff_idx == EFFECT_INDEX_0) 
+        {
+            if (m_caster->ToPlayer()->GetSkillValue(SKILL_RIDING) == 150)
+                m_currentBasePoints[EFFECT_INDEX_0] = 100;
+            else
+                m_currentBasePoints[EFFECT_INDEX_0] = 60;
+        }
+        break;
+    }
 
     // Paladin T3 JoL
-    else if (m_spellInfo->IsFitToFamilyMask<CF_PALADIN_JUDGEMENT_OF_WISDOM_LIGHT>() && m_spellInfo->SpellIconID == 299 && m_caster->HasAura(28775))
+    if (m_spellInfo->IsFitToFamilyMask<CF_PALADIN_JUDGEMENT_OF_WISDOM_LIGHT>() && m_spellInfo->SpellIconID == 299 && m_caster->HasAura(28775))
         m_currentBasePoints[eff_idx] = 20;
 
     Aura* aur = CreateAura(m_spellInfo, eff_idx, &m_currentBasePoints[eff_idx], m_spellAuraHolder, unitTarget, caster, m_CastItem);

@@ -67,8 +67,6 @@
 #include <math.h>
 #include <stdarg.h>
 
-//#define DEBUG_DEBUFF_LIMIT
-
 float baseMoveSpeed[MAX_MOVE_TYPE] =
 {
     2.5f,                                                   // MOVE_WALK
@@ -1077,6 +1075,24 @@ uint32 Unit::DealDamage(Unit *pVictim, uint32 damage, CleanDamage const* cleanDa
 
             he->CastSpell(he, 7267, true);                  // beg
             he->DuelComplete(DUEL_WON);
+        }
+    }
+
+    if (getRace() == RACE_TAUREN)
+    {
+        if (pVictim->HasAura(PLAINSRUNNING_SECOND_TICK))
+        {
+            pVictim->RemoveAura(PLAINSRUNNING_SECOND_TICK, EFFECT_INDEX_0);
+        }
+        else if (pVictim->HasAura(PLAINSRUNNING_FIRST_TICK)) 
+        {
+            pVictim->RemoveAura(PLAINSRUNNING_FIRST_TICK, EFFECT_INDEX_0);
+            pVictim->RemoveAura(PLAINSRUNNING_FIRST_TICK, EFFECT_INDEX_1);
+        }
+        else if (pVictim->HasAura(PLAINSRUNNING_SPELL)) 
+        {
+            pVictim->RemoveAura(PLAINSRUNNING_SPELL, EFFECT_INDEX_0);
+            pVictim->RemoveAura(PLAINSRUNNING_SPELL, EFFECT_INDEX_1);
         }
     }
 
@@ -7473,6 +7489,16 @@ void Unit::Mount(uint32 mount, uint32 spellId)
     }
 
     RemoveAurasWithInterruptFlags(AURA_INTERRUPT_FLAG_MOUNTING);
+
+    if (getRace() == RACE_TAUREN) 
+    {
+        if (HasAura(PLAINSRUNNING_SPELL))
+        {
+            RemoveAura(PLAINSRUNNING_SPELL, EFFECT_INDEX_0);
+            RemoveAura(PLAINSRUNNING_SPELL, EFFECT_INDEX_1);
+        }    
+    }     
+
     SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, mount);
 }
 

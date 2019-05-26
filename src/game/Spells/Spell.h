@@ -41,6 +41,12 @@
 
 #define MAX_SPELL_ID 40000
 
+// For Plainsrunning hackfixes:
+
+#define PLAINSRUNNING_SPELL       12566
+#define PLAINSRUNNING_FIRST_TICK  12567
+#define PLAINSRUNNING_SECOND_TICK 12568
+
 class WorldSession;
 class WorldPacket;
 class DynamicObj;
