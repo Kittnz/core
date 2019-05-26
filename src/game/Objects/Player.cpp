@@ -426,10 +426,14 @@ Player::Player(WorldSession *session) : Unit(),
     m_mover(this), m_camera(this), m_reputationMgr(this),
     m_enableInstanceSwitch(true), m_currentTicketCounter(0),
 <<<<<<< HEAD
+<<<<<<< HEAD
     m_honorMgr(this), m_bNextRelocationsIgnored(0)
 =======
     m_honorMgr(this), m_bNextRelocationsIgnored(0), m_personalXpRate(-1.0f), m_newStandState(MAX_UNIT_STAND_STATE)
 >>>>>>> ef92ebe0... Prevent procs on being crit if sitting.
+=======
+    m_honorMgr(this), m_bNextRelocationsIgnored(0), m_personalXpRate(-1.0f), m_standStateTimer(0), m_newStandState(MAX_UNIT_STAND_STATE)
+>>>>>>> 8952dc72... Initialize stand state update timer.
 {
     m_objectType |= TYPEMASK_PLAYER;
     m_objectTypeId = TYPEID_PLAYER;
