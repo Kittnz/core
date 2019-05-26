@@ -1525,6 +1525,39 @@ bool ProcessEventId_event_the_principle_source(uint32 eventId, Object* pSource, 
     return true;
 }
 
+#define PLAINSRUNNING_QUEST_JORN 3580
+#define SPIRIT_OF_THE_WIND 16618
+
+bool GossipHello_npc_jorn_skyseer(Player* pPlayer, Creature* pCreature)
+{
+    pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    if (pPlayer->GetQuestStatus(PLAINSRUNNING_QUEST_JORN) == QUEST_STATUS_COMPLETE)
+    {
+        if (!pPlayer->HasAura(SPIRIT_OF_THE_WIND))
+        {
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Jorn, I need another Blessing of the Wind!", GOSSIP_SENDER_MAIN, GOSSIP_SENDER_INFO);
+            pPlayer->SEND_GOSSIP_MENU(90152, pCreature->GetObjectGuid());
+        }
+    }
+
+    pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetObjectGuid());
+    return true;
+}
+
+bool GossipSelect_npc_jorn_skyseer(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    switch (uiAction)
+    {
+    case GOSSIP_SENDER_INFO:
+        pPlayer->CastSpell(pPlayer, SPIRIT_OF_THE_WIND, false);
+        pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetObjectGuid());
+        break;
+    }
+    return true;
+}
+
+
 void AddSC_the_barrens()
 {
     Script *newscript;
@@ -1620,5 +1653,11 @@ void AddSC_the_barrens()
     newscript = new Script;
     newscript->Name = "event_the_principle_source";
     newscript->pProcessEventId = &ProcessEventId_event_the_principle_source;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_jorn_skyseer";
+    newscript->pGossipHello = &GossipHello_npc_jorn_skyseer;
+    newscript->pGossipSelect = &GossipSelect_npc_jorn_skyseer;
     newscript->RegisterSelf();
 }

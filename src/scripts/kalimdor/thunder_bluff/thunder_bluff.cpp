@@ -152,6 +152,24 @@ bool GossipSelect_npc_cairne_bloodhoof(Player* pPlayer, Creature* pCreature, uin
     return true;
 }
 
+#define PLAINSRUNNING_QUEST 3581
+#define SPIRIT_OF_THE_WIND 16618
+
+bool GossipHello_npc_saern_priderunner(Player* pPlayer, Creature* pCreature)
+{
+    if (pPlayer->GetQuestStatus(PLAINSRUNNING_QUEST) == QUEST_STATUS_COMPLETE)
+    {
+        if (pPlayer->HasAura(SPIRIT_OF_THE_WIND))
+        {
+            pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+            pPlayer->SEND_GOSSIP_MENU(90151, pCreature->GetGUID());
+        }
+        else
+            pPlayer->SEND_GOSSIP_MENU(90150, pCreature->GetGUID());
+    }    
+    return true;
+}
+
 void AddSC_thunder_bluff()
 {
     Script *newscript;
@@ -161,5 +179,10 @@ void AddSC_thunder_bluff()
     newscript->GetAI = &GetAI_boss_cairne_bloodhoof;
     newscript->pGossipHello = &GossipHello_npc_cairne_bloodhoof;
     newscript->pGossipSelect = &GossipSelect_npc_cairne_bloodhoof;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_saern_priderunner";
+    newscript->pGossipHello = &GossipHello_npc_saern_priderunner;
     newscript->RegisterSelf();
 }
