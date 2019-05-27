@@ -397,6 +397,9 @@ replace into item_template (entry, name, description, quality, spellid_1, displa
 (50234, 'Traveler\'s Tent Blueprints', 'Increases your rested bonus if you stay near it. Requires: x5 [Linen Cloth] and x1 [Simple Wood].', 2, 14867, 7450, 'survival_tent', 1, 0, 4000),
 (50235, 'Boats for Dummies', 'Increases your Fishing Skill by 50 points. Requires: x15 [Simple Wood] and x1 [Handful of Copper Bolts].', 2, 14867, 8117, 'survival_boat', 1, 0, 8000);
 
+replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1, spellcooldown_1) values
+(50240, 15, 2, 'Kodo Calfling', '', 31802, 1, 1, 28505, 1500);
+
 -- ### item_loot_template:
 delete from item_loot_template where entry in (50050, 50051, 50052, 50053, 50054, 500055, 50022, 50023, 50024, 50025, 50101);
 replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid) values
