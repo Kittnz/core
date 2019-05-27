@@ -58,7 +58,8 @@ replace into shop_items values
 (211, 2, 50084, 'Kirin Tor Familiar', 50),
 (212, 2, 22781, 'Polar Bear Collar', 50),
 (213, 2, 50085, 'Frostwolf Ghostpup', 50),
-(214, 2, 50077, 'Faeling Egg', 50),
+-- (214, 2, 50077, 'Faeling Egg', 50),
+(215, 2, 50240, 'Kodo Calfling', 25),
 -- Mounts --------------------------------------------------------------------------------------
 -- (300, 3, 50071, 'Level 1   Ivory Tallstrider', 100),
 -- (301, 3, 50072, 'Level 1   Brown Tallstrider', 100),

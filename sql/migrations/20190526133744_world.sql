@@ -132,6 +132,16 @@ replace into `npc_text` (`ID`, `BroadcastTextID0`) values ('90152', '90152');
 
 update `quest_template` set `ZoneOrSort`='222' where `entry` in (3578, 3579, 3580, 3581);
 
+-- Baby Kodo pet:
+
+replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1, spellcooldown_1) values
+(50240, 15, 2, 'Kodo Calfling', '', 31802, 1, 1, 28505, 1500);
+
+replace into creature_template (entry, display_id1, name, subname, level_min, level_max, health_min, health_max, faction, script_name, scale) values
+('50074', '1451', 'Kodo Calfling', '', '1', '1', '64', '64', '35', '', 0.2);
+
+replace into custom_pet_entry_relation (item_entry, creature_entry) values ('50240', '50074');
+
 -- End of migration.
 END IF;
 END??
