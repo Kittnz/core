@@ -138,7 +138,7 @@ replace into item_template (entry, class, subclass, name, description, display_i
 (50240, 15, 2, 'Kodo Calfling', '', 31802, 1, 1, 28505, 1500);
 
 replace into creature_template (entry, display_id1, name, subname, level_min, level_max, health_min, health_max, faction, script_name, scale) values
-('50074', '1451', 'Kodo Calfling', '', '1', '1', '64', '64', '35', '', 0.2);
+('50074', '12240', 'Kodo Calfling', '', '1', '1', '64', '64', '35', '', 0.2);
 
 replace into custom_pet_entry_relation (item_entry, creature_entry) values ('50240', '50074');
 
