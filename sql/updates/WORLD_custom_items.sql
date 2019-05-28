@@ -400,11 +400,6 @@ replace into item_template (entry, name, description, quality, spellid_1, displa
 replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1, spellcooldown_1) values
 (50240, 15, 2, 'Kodo Calfling', '', 31802, 1, 1, 28505, 1500);
 
-replace into item_template (entry, name, inventory_type, display_id, quality, bonding, description, script_name, spellid_1, allowable_race) values
--- TODO: need new name and description:
-(50241, 'Warsong Gulch: Alliance Team', 19, 32026, 1, 1, 'Welcome to PvP Week! Right click to register on the battleground. Available for level 1-9', 'wsg_tabard', 26489, 1101),
-(50242, 'Warsong Gulch: Horde Team', 19, 32026, 1, 1, 'Welcome to PvP Week! Right click to register on the battleground. Available for level 1-9', 'wsg_tabard', 26489, 690);
-
 -- ### item_loot_template:
 delete from item_loot_template where entry in (50050, 50051, 50052, 50053, 50054, 500055, 50022, 50023, 50024, 50025, 50101);
 replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid) values
