@@ -101,7 +101,7 @@ replace into shop_items values
 (401, 4, 23705, 'Tabard of Flame', 125),
 (402, 4, 23710, 'Darkmoon Faire Tabard', 100),
 (403, 4, 22999, 'Tabard of the Argent Dawn', 50),
--- (404, 4, 50044, 'Keepers of Time Tabard', 75),
+(404, 4, 50044, 'Keepers of Time Tabard', 75),
 (405, 4, 50086, 'Stromgarde Tabard', 75),
 (406, 4, 50087, 'Tabard of Kul\'Tiras', 75),
 (407, 4, 50088, 'Theramore Tabard', 75),
@@ -111,8 +111,6 @@ replace into shop_items values
 (411, 4, 50091, 'Whitemane\'s Tabard', 75),
 (412, 4, 23192, 'Tabard of Scarlet Preacher', 75),
 (413, 4, 23193, 'Tabard of Scarlet Archmage', 75),
-(414, 4, 50241, 'Warsong Gulch: Alliance Team', 0),
-(415, 4, 50242, 'Warsong Gulch: Horde Team', 0),
 -- Roleplay --------------------------------------------------------------------------------------------
 (500, 5, 50024, 'Dressing Box: Invisible Suit', 25),
 (501, 5, 50022, 'Dressing Box: Midsummer Priestess', 50),
