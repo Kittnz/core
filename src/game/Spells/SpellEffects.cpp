@@ -2274,7 +2274,11 @@ void Spell::EffectApplyAura(SpellEffectIndex eff_idx)
         break;
     // Turtle WoW. Plainsrunning:
     case PLAINSRUNNING_SPELL:
-        if (!m_caster->ToPlayer()->HasSkill(762)) 
+        if (m_caster->getRace() != RACE_TAUREN) {
+            m_caster->ToPlayer()->RemoveSpell(PLAINSRUNNING_SPELL, false, false);
+            return;
+        }
+        if (!m_caster->ToPlayer()->HasSkill(762))
         {
             if (eff_idx == EFFECT_INDEX_0)
                 ChatHandler(m_caster->ToPlayer()).SendSysMessage("|cffff8040You are afraid of high speeds, better learn to ride first.|r");

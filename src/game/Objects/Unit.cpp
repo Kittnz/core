@@ -1078,7 +1078,7 @@ uint32 Unit::DealDamage(Unit *pVictim, uint32 damage, CleanDamage const* cleanDa
         }
     }
 
-    if (getRace() == RACE_TAUREN)
+    if (pVictim->getRace() == RACE_TAUREN)
     {
         if (pVictim->HasAura(PLAINSRUNNING_SECOND_TICK))
         {
