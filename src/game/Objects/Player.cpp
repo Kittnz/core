@@ -14958,7 +14958,7 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
         UpdateOldRidingSkillToNew(has_epic_mount);
 
     // Turtle WoW custom feature : hardcore mode(0.5x rates for Creature.Kill)
-    bIsHardcore = GetItemCount(50010) > 0;
+    bIsHardcore = GetItemCount(50010, true) > 0;
 
     return true;
 }
