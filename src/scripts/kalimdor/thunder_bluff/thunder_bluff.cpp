@@ -162,7 +162,7 @@ bool GossipHello_npc_saern_priderunner(Player* pPlayer, Creature* pCreature)
         pPlayer->PrepareQuestMenu(pCreature->GetGUID());
         pPlayer->SEND_GOSSIP_MENU(90151, pCreature->GetGUID());
     }
-    else
+    else if (pPlayer->GetQuestStatus(PLAINSRUNNING_QUEST) == QUEST_STATUS_FAILED)
         pPlayer->SEND_GOSSIP_MENU(90150, pCreature->GetGUID());
     return true;
 }
