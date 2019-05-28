@@ -1532,7 +1532,7 @@ bool GossipHello_npc_jorn_skyseer(Player* pPlayer, Creature* pCreature)
 {
     pPlayer->PrepareQuestMenu(pCreature->GetGUID());
 
-    if (pPlayer->GetQuestStatus(PLAINSRUNNING_QUEST_JORN) == QUEST_STATUS_COMPLETE)
+    if (pPlayer->GetQuestRewardStatus(PLAINSRUNNING_QUEST_JORN))
     {
         if (!pPlayer->HasAura(SPIRIT_OF_THE_WIND))
         {

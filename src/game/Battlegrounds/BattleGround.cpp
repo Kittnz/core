@@ -560,6 +560,25 @@ void BattleGround::RewardReputationToTeam(uint32 faction_id, uint32 Reputation, 
     }
 }
 
+void BattleGround::RewardExperienceToPlayers(Team winnerTeam) {
+    for (BattleGroundPlayerMap::const_iterator itr = m_Players.begin(); itr != m_Players.end(); ++itr)
+    {
+        Player *plr = sObjectMgr.GetPlayer(itr->first);
+
+        if (!plr)
+        {
+            sLog.outError("BattleGround:RewardExperienceToPlayers: %s not found!", itr->first.GetString().c_str());
+            continue;
+        }
+
+        Team team = itr->second.PlayerTeam;
+        if (!team) team = plr->GetTeam();
+
+        int factor = team == winnerTeam ? 2 : 1;
+        //plr->GiveXP(plr->GetUInt32Value(PLAYER_NEXT_LEVEL_XP))
+    }
+}
+
 void BattleGround::UpdateWorldState(uint32 Field, uint32 Value)
 {
     WorldPacket data;
