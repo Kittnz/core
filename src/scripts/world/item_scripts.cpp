@@ -431,7 +431,7 @@ bool ItemUse_survival_boat(Player* pPlayer, Item* pItem, const SpellCastTargets&
     return false;
 }
 
-bool ItemUse_wsg_tabard(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+bool ItemUse_bg_tabard(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
     // Some spell checks might be obsolete, check it later.
     if (pPlayer->isInCombat() || pPlayer->InBattleGround() || pPlayer->IsBeingTeleported() || pPlayer->HasSpellCooldown(20939) || pPlayer->HasSpellCooldown(26013) || (pPlayer->getDeathState() == CORPSE))
@@ -439,7 +439,20 @@ bool ItemUse_wsg_tabard(Player* pPlayer, Item* pItem, const SpellCastTargets&)
     else
     {
         pPlayer->SetBattleGroundEntryPoint();
-        pPlayer->GetSession()->SendBattlegGroundList(pPlayer->GetObjectGuid(), BATTLEGROUND_WS);
+        switch (pItem->GetEntry()) {
+            case 19505:
+            case 19506:
+                pPlayer->GetSession()->SendBattlegGroundList(pPlayer->GetObjectGuid(), BATTLEGROUND_WS);
+                break;
+            case 20131:
+            case 20132:
+                pPlayer->GetSession()->SendBattlegGroundList(pPlayer->GetObjectGuid(), BATTLEGROUND_AB);
+                break;
+            case 19031:
+            case 19032:
+                pPlayer->GetSession()->SendBattlegGroundList(pPlayer->GetObjectGuid(), BATTLEGROUND_AV);
+                break;
+        }
     }
     return false;
 }
@@ -524,7 +537,7 @@ void AddSC_item_scripts()
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "wsg_tabard";
-    newscript->pItemUse = &ItemUse_wsg_tabard;
+    newscript->Name = "bg_tabard";
+    newscript->pItemUse = &ItemUse_bg_tabard;
     newscript->RegisterSelf();
 }

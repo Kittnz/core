@@ -574,8 +574,8 @@ void BattleGround::RewardExperienceToPlayers(Team winnerTeam) {
         Team team = itr->second.PlayerTeam;
         if (!team) team = plr->GetTeam();
 
-        int factor = team == winnerTeam ? 2 : 1;
-        //plr->GiveXP(plr->GetUInt32Value(PLAYER_NEXT_LEVEL_XP))
+        float factor = team == winnerTeam ? 2.0f : 1.0f;
+        plr->GiveXP(static_cast<uint32>((sObjectMgr.GetXPForLevel(plr->getLevel()) * 0.025) * factor), plr);
     }
 }
 
@@ -630,6 +630,10 @@ void BattleGround::EndBattleGround(Team winner)
     SetStatus(STATUS_WAIT_LEAVE);
     //we must set it this way, because end time is sent in packet!
     m_EndTime = TIME_TO_AUTOREMOVE;
+
+    // If PvP week is active, award experience (5% to the winner team and 2.5% to the others)
+    if (sWorld.getConfig(CONFIG_FLOAT_RATE_HONOR) > 1.0f)
+        RewardExperienceToPlayers(winner);
 
     for (BattleGroundPlayerMap::iterator itr = m_Players.begin(); itr != m_Players.end(); ++itr)
     {
