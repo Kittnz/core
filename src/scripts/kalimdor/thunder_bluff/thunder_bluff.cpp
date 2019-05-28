@@ -159,14 +159,11 @@ bool GossipHello_npc_saern_priderunner(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->GetQuestStatus(PLAINSRUNNING_QUEST) == QUEST_STATUS_COMPLETE)
     {
-        if (pPlayer->HasAura(SPIRIT_OF_THE_WIND))
-        {
-            pPlayer->PrepareQuestMenu(pCreature->GetGUID());
-            pPlayer->SEND_GOSSIP_MENU(90151, pCreature->GetGUID());
-        }
-        else
-            pPlayer->SEND_GOSSIP_MENU(90150, pCreature->GetGUID());
-    }    
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+        pPlayer->SEND_GOSSIP_MENU(90151, pCreature->GetGUID());
+    }
+    else
+        pPlayer->SEND_GOSSIP_MENU(90150, pCreature->GetGUID());
     return true;
 }
 
