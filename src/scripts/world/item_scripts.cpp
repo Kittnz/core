@@ -431,6 +431,19 @@ bool ItemUse_survival_boat(Player* pPlayer, Item* pItem, const SpellCastTargets&
     return false;
 }
 
+bool ItemUse_wsg_tabard(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+{
+    // Some spell checks might be obsolete, check it later.
+    if (pPlayer->isInCombat() || pPlayer->InBattleGround() || pPlayer->IsBeingTeleported() || pPlayer->HasSpellCooldown(20939) || pPlayer->HasSpellCooldown(26013) || (pPlayer->getDeathState() == CORPSE))
+        ChatHandler(pPlayer).PSendSysMessage("You are not meeting the conditions for joining!");
+    else
+    {
+        pPlayer->SetBattleGroundEntryPoint();
+        pPlayer->GetSession()->SendBattlegGroundList(pPlayer->GetObjectGuid(), BATTLEGROUND_WS);
+    }
+    return false;
+}
+
 void AddSC_item_scripts()
 {
     Script *newscript;
@@ -508,5 +521,10 @@ void AddSC_item_scripts()
     newscript = new Script;
     newscript->Name = "survival_boat";
     newscript->pItemUse = &ItemUse_survival_boat;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "wsg_tabard";
+    newscript->pItemUse = &ItemUse_wsg_tabard;
     newscript->RegisterSelf();
 }
