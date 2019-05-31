@@ -314,7 +314,7 @@ void WorldSession::HandlePetitionSignOpcode(WorldPacket & recv_data)
 
     // not let enemies sign guild charter
     if (!sWorld.getConfig(CONFIG_BOOL_ALLOW_TWO_SIDE_INTERACTION_GUILD) &&
-            GetPlayer()->GetTeam() != petition->GetTeam())
+            !GetPlayer()->IsDiplomat() && GetPlayer()->GetTeam() != petition->GetTeam())
     {
         SendGuildCommandResult(GUILD_CREATE_S, "", ERR_GUILD_NOT_ALLIED);
         return;
@@ -418,7 +418,7 @@ void WorldSession::HandleOfferPetitionOpcode(WorldPacket & recv_data)
     if (!player)
         return;
 
-    if (!sWorld.getConfig(CONFIG_BOOL_ALLOW_TWO_SIDE_INTERACTION_GUILD) && GetPlayer()->GetTeam() != player->GetTeam())
+    if (!sWorld.getConfig(CONFIG_BOOL_ALLOW_TWO_SIDE_INTERACTION_GUILD)  && !GetPlayer()->IsDiplomat() && GetPlayer()->GetTeam() != player->GetTeam())
     {
         SendGuildCommandResult(GUILD_CREATE_S, "", ERR_GUILD_NOT_ALLIED);
         return;
