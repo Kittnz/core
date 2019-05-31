@@ -9,6 +9,7 @@ INSERT INTO `migrations` VALUES ('20190531163221');
 -- Add your query below.
 
 update broadcast_text set MaleText = 'Hmmm... This apple is great! *nom* *nom* Take me to my friend and MAYBE I\'ll let you ride me. Let\'s go!' where id = 90018;
+update item_template set buy_price = 1000, sell_price = 250 where entry in (19505, 19506);
 
 -- End of migration.
 END IF;
