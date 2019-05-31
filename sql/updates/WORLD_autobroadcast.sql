@@ -1,7 +1,7 @@
 
 replace into `mangos_string` (`entry`, `content_default`) values ('50000', 'Turtle WoW: Don\'t forget to refresh your turtle power by clearing your WDB folder regularly. This is your game cache, and can often fix minor game/display glitches. Always try this before submitting a ticket, thanks!');
 replace into `mangos_string` (`entry`, `content_default`) values ('50001', 'Turtle WoW: Have a suggestion for our staff? Head over to our forums and submit your ideas, get support, or post something for the community to get involved in!');
-replace into `mangos_string` (`entry`, `content_default`) values ('50002', 'Turtle WoW: Take a peak at our Facebook page every now and then because we tend to it every day. You might just take it to your liking! https://www.facebook.com/turtlewowproject');
+replace into `mangos_string` (`entry`, `content_default`) values ('50002', 'Turtle WoW: Visit Stranglethorn Vale and speak to S. J. Erlgadin of Nesingwary\'s Expedition to get your intensive training in Survival.');
 replace into `mangos_string` (`entry`, `content_default`) values ('50003', 'Turtle WoW: Dear players, our shop is where you can find exotic wardrobes, mounts, and anything you need to spice up your roleplay! If you want to help support the server, check it out now: turtle-wow.org/donate');
 replace into `mangos_string` (`entry`, `content_default`) values ('50004', 'Turtle WoW: Greetings! Want to find players to start a RP adventure? Looking for a fun guild to join? Keep up to date with the Turtle WoW community and join our Discord channel: https://discord.gg/mBGxmHy');
 replace into `mangos_string` (`entry`, `content_default`) values ('50005', 'Turtle WoW: The world is awaiting you! Type /join World now to connect with the community around you, and find friends for groups, dungeons, and trades!');
@@ -10,8 +10,9 @@ replace into `mangos_string` (`entry`, `content_default`) values ('50007', 'Turt
 replace into `mangos_string` (`entry`, `content_default`) values ('50009', 'Turtle WoW: Please support Turtle WoW by voting! It will help us to maintain a healthy and stable population: turtle-wow.org/vote');
 replace into `mangos_string` (`entry`, `content_default`) values ('50010', 'Turtle WoW: Speak with Karn Deepeye in Orgrimmar or Tarun Swifteagle in Stormwind in order to become diplomats! You will be able to group, trade and speak with members of the other faction! If you are a diplomat /join Diplomacy in order to talk with other diplomats!');
 replace into `mangos_string` (`entry`, `content_default`) values ('50011', 'Turtle WoW: Come join the arena! You\'ll find Arena Ambassadors in any major city. Join the fray, get cool rewards for murdering friends and enemies in the Battle Ring, where you will experience a bonus x5 honor gaining!');
-replace into `mangos_string` (`entry`, `content_default`) values ('50012', 'Turtle TV & Chill! Please support our favorite streamer on Youtube: https://www.youtube.com/user/serenitytyaena/live');
+replace into `mangos_string` (`entry`, `content_default`) values ('50012', 'Turtle WoW:Remember that the level 1—9 PvP bracket is open for Warsong Gulch in Turtle WoW. ');
 replace into `mangos_string` (`entry`, `content_default`) values ('50013', 'Turtle WoW: Do your new fancy shoulderpads look awful with your hair? Would you rather not cover your amazing face with an ugly helmet? Don\'t worry! Find your local barber in Stormwind or Crossroads and buy some hair dyes.');
+replace into `mangos_string` (`entry`, `content_default`) values ('50014', 'Turtle WoW: We are announcing our first “PvP Week”, it will take place during the first week of June. The honor has been increased up to 5x. You aslo gain experience by doing Battlegrounds. 5% of the level if you win, and 2.5% of the level if you lose.');
 
 replace into `autobroadcast` (`string_Id`) values ('50000');
 replace into `autobroadcast` (`string_Id`) values ('50001');
@@ -26,3 +27,4 @@ replace into `autobroadcast` (`string_Id`) values ('50010');
 replace into `autobroadcast` (`string_Id`) values ('50011');
 replace into `autobroadcast` (`string_Id`) values ('50012');
 replace into `autobroadcast` (`string_Id`) values ('50013');
+replace into `autobroadcast` (`string_Id`) values ('50014');
