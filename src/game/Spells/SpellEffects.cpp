@@ -6437,6 +6437,18 @@ void Spell::EffectTransmitted(SpellEffectIndex eff_idx)
     pGameObj->SetOwnerGuid(m_caster->GetObjectGuid());
     if (m_caster->GetTypeId() == TYPEID_PLAYER)
     {
+        if (m_spellInfo->Id == 25085) { // If Spell is Bright Campfire, increase survival skill
+            uint32 currvalue = 0;
+            currvalue = m_caster->ToPlayer()->GetSkillValue(142);
+            switch (currvalue) {
+                case 150:
+                    break;
+                default:
+                    currvalue++;
+                    m_caster->ToPlayer()->SetSkill(142, currvalue, 150);
+                    break;
+            }
+        }
         if(Group * group = ((Player*)m_caster)->GetGroup())
             pGameObj->SetOwnerGroupId(group->GetId());
     }
