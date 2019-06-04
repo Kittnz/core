@@ -21153,10 +21153,16 @@ void Player::RewardHonorOnDeath()
     {
         Group* g = itr.first;
         std::list<Player*> rewarded;
-        for (auto grItr : g->GetMemberSlots())
-            if (Player* pl = GetMap()->GetPlayer(grItr.guid))
-                if (pl->IsAtGroupRewardDistance(this) && pl->isAlive() && pl->GetTeam() != GetTeam())
-                    rewarded.push_back(pl);
+		for (const Group::MemberSlot& grItr : g->GetMemberSlots())
+		{
+			if (Player* pl = GetMap()->GetPlayer(grItr.guid))
+			{
+				if (pl->IsAtGroupRewardDistance(this) && pl->isAlive() && pl->GetTeam() != GetTeam())
+				{
+					rewarded.push_back(pl);
+				}
+			}
+		}
 
         uint32 totalRewarded = rewarded.size();
         float honorRate = itr.second;
