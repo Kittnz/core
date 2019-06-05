@@ -10,9 +10,9 @@ replace into `mangos_string` (`entry`, `content_default`) values ('50007', 'Turt
 replace into `mangos_string` (`entry`, `content_default`) values ('50009', 'Turtle WoW: Please support Turtle WoW by voting! It will help us to maintain a healthy and stable population: turtle-wow.org/vote');
 replace into `mangos_string` (`entry`, `content_default`) values ('50010', 'Turtle WoW: Speak with Karn Deepeye in Orgrimmar or Tarun Swifteagle in Stormwind in order to become diplomats! You will be able to group, trade and speak with members of the other faction! If you are a diplomat /join Diplomacy in order to talk with other diplomats!');
 replace into `mangos_string` (`entry`, `content_default`) values ('50011', 'Turtle WoW: Come join the arena! You\'ll find Arena Ambassadors in any major city. Join the fray, get cool rewards for murdering friends and enemies in the Battle Ring, where you will experience a bonus x5 honor gaining!');
-replace into `mangos_string` (`entry`, `content_default`) values ('50012', 'Turtle WoW:Remember that the level 1—9 PvP bracket is open for Warsong Gulch in Turtle WoW. ');
+replace into `mangos_string` (`entry`, `content_default`) values ('50012', 'Turtle WoW: Remember that the level 1—9 PvP bracket is open for Warsong Gulch in Turtle WoW. ');
 replace into `mangos_string` (`entry`, `content_default`) values ('50013', 'Turtle WoW: Do your new fancy shoulderpads look awful with your hair? Would you rather not cover your amazing face with an ugly helmet? Don\'t worry! Find your local barber in Stormwind or Crossroads and buy some hair dyes.');
-replace into `mangos_string` (`entry`, `content_default`) values ('50014', 'Turtle WoW: We are announcing our first “PvP Week”, it will take place during the first week of June. The honor has been increased up to 5x. You aslo gain experience by doing Battlegrounds. 5% of the level if you win, and 2.5% of the level if you lose.');
+replace into `mangos_string` (`entry`, `content_default`) values ('50014', 'Turtle WoW: We are announcing our first “PvP Week”, it will take place during the first week of June. The honor has been increased up to 5x. You aslo gain experience by doing Battlegrounds.');
 
 replace into `autobroadcast` (`string_Id`) values ('50000');
 replace into `autobroadcast` (`string_Id`) values ('50001');
