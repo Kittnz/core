@@ -199,7 +199,7 @@ void HonorMaintenancer::SetCityRanks()
 
     for (uint8 i = 1; i < MAX_RACES; ++i)
     {
-        QueryResult *result = CharacterDatabase.PQuery("SELECT `guid`, `honorLastWeekHK` FROM characters WHERE `honorLastWeekHK` > 0 and race = '%u'", i);
+        QueryResult *result = CharacterDatabase.PQuery("SELECT `guid`, `honorStanding` FROM characters WHERE `honorStanding` > 0 and race = '%u'", i);
 
         if (result)
         {
@@ -230,8 +230,7 @@ void HonorMaintenancer::SetCityRanks()
 
 void HonorMaintenancer::FlushRankPoints()
 {
-    SetCityRanks();
-    // Imediatly reset honor standing before flushing
+    // Immediately reset honor standing before flushing
     CharacterDatabase.Execute("UPDATE `characters` SET `honorStanding` = 0 WHERE `honorStanding` > 0");
 
     for (auto& pair : m_weeklyScores)
@@ -278,6 +277,8 @@ void HonorMaintenancer::DoMaintenance()
     InactiveDecayRankPoints();
     sLog.outHonor("[MAINTENANCE] Flush rank points.");
     FlushRankPoints();
+    sLog.outHonor("[MAINTENANCE] Assign City Ranks.");
+    SetCityRanks();
 
     CreateCalculationReport();
 
