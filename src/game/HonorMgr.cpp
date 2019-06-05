@@ -150,13 +150,13 @@ void HonorMaintenancer::DistributeRankPoints(Team team)
             continue;
 
         auto& weeklyScore = itrWS->second;
-        
+
         // Calculate rank points earning
         weeklyScore.earning = CalculateRpEarning(weeklyScore.cp, scores);
-        
+
         // Calculate rank points with decay
         weeklyScore.newRp = CalculateRpDecay(weeklyScore.earning, weeklyScore.oldRp);
-        
+
         // Level restrictions
         weeklyScore.newRp = std::min(MaximumRpAtLevel(weeklyScore.level), weeklyScore.newRp);
 
@@ -199,7 +199,7 @@ void HonorMaintenancer::SetCityRanks()
 
     for (uint8 i = 1; i < MAX_RACES; ++i)
     {
-        QueryResult *result = CharacterDatabase.PQuery("SELECT `guid`, `honorStanding` FROM characters WHERE `honorStanding` > 0 and race = '%u'", i);
+        QueryResult *result = CharacterDatabase.PQuery("SELECT `guid`, `honorLastWeekHK` FROM characters WHERE `honorLastWeekHK` > 0 and race = '%u'", i);
 
         if (result)
         {
@@ -324,10 +324,10 @@ void HonorMaintenancer::CreateCalculationReport()
 
         for (auto i = 0; i < 15; ++i)
             ofs << "FY[" << i << "] = " << scores.FY[i] << std::endl;
-        
+
         ofs << std::endl;
         ofs << std::flush;
-        
+
         for (auto& st : m_allianceStandingList)
         {
             auto itrWS = m_weeklyScores.find(st.guid);
@@ -347,9 +347,9 @@ void HonorMaintenancer::CreateCalculationReport()
                 << ", standing: " << ws.standing << std::endl << std::flush;
         }
     }
-    
+
     ofs << "--------------------------------------------------" << std::endl << std::endl << std::flush;
-    
+
     if (!m_hordeStandingList.empty())
     {
         HonorScores scores = GenerateScores(m_hordeStandingList);
@@ -373,10 +373,10 @@ void HonorMaintenancer::CreateCalculationReport()
 
         for (auto i = 0; i < 15; ++i)
             ofs << "FY[" << i << "] = " << scores.FY[i] << std::endl;
-        
+
         ofs << std::endl;
         ofs << std::flush;
-        
+
         for (auto& st : m_hordeStandingList)
         {
             auto itrWS = m_weeklyScores.find(st.guid);
@@ -396,9 +396,9 @@ void HonorMaintenancer::CreateCalculationReport()
                 << ", standing: " << ws.standing << std::endl << std::flush;
         }
     }
-    
+
     ofs << "--------------------------------------------------" << std::endl << std::endl << std::flush;
-    
+
     if (!m_inactiveStandingList.empty())
     {
         ofs << "Inactive players decay" << std::endl << std::endl;
@@ -521,7 +521,7 @@ HonorScores HonorMaintenancer::GenerateScores(HonorStandingList& standingList)
 
     // set the high point if FX full filled before
     // top scorer
-    sc.FX[14] = !top ? standingList.begin()->cp : 0;   
+    sc.FX[14] = !top ? standingList.begin()->cp : 0;
 
     return sc;
 }
@@ -687,7 +687,7 @@ void HonorMgr::Save()
     m_honorCP.clear();
     m_honorCP = tempCP;
     tempCP.clear();
-    
+
     // Static data, used for armory
     /*CharacterDatabase.PExecute("DELETE FROM `character_honor_static` WHERE `guid` = %u", m_owner->GetGUIDLow());
     std::ostringstream ss;
@@ -711,7 +711,7 @@ void HonorMgr::SaveStoredData()
 {
     if (!m_owner)
         return;
-        
+
     CharacterDatabase.PExecute("UPDATE `characters` SET `honorRankPoints` = %.1f, `honorStanding` = %u, `honorHighestRank` = %u, "
             "`honorLastWeekHK` = %u, `honorLastWeekCP` = %.1f, `honorStoredHK` = %u, `honorStoredDK` = %u WHERE `guid` = %u",
             finiteAlways(m_rankPoints), m_standing, m_highestRank.rank, m_lastWeekHK,
@@ -778,7 +778,7 @@ bool HonorMgr::Add(float cp, uint8 type, Unit* source)
     else
         sLog.outHonor("[OPEN WORLD]: Player %s (account: %u) got %f honor for type %u, source %s %s (IP: %s)",
             m_owner->GetSession()->GetPlayerName(), m_owner->GetSession()->GetAccountId(), honor, type, plr ? "player" : "unit", source->GetName(), ip.c_str());
-    
+
 	// DK penalties are subtracted from your RP score immediately and are not included in weekly adjustment.
     if (type == DISHONORABLE)
         m_rankPoints = m_rankPoints - honorCP.cp;
@@ -840,7 +840,7 @@ void HonorMgr::Update()
         {
             if (itr.date == today)
                 ++todayDK;
-            
+
             ++m_totalDK;
         }
     }
@@ -853,10 +853,10 @@ void HonorMgr::Update()
     m_owner->SetByteValue(PLAYER_FIELD_BYTES, 3, m_highestRank.rank);
     // RANK (Patent)
     m_owner->SetByteValue(PLAYER_BYTES_3, 3, m_rank.rank);
-    
+
     uint32 honorBar = uint32(m_rankPoints >= 0.0f ? m_rankPoints : -1 * m_rankPoints);
     honorBar = uint8(((honorBar - m_rank.minRP) / (m_rank.maxRP - m_rank.minRP)) * (m_rank.positive ? 255 : -255));
-    
+
     // PLAYER_FIELD_HONOR_BAR
     m_owner->SetUInt32Value(PLAYER_FIELD_BYTES2, honorBar);
 
@@ -1003,7 +1003,7 @@ float HonorMgr::HonorableKillPoints(Player* killer, Player* victim, uint32 group
     uint32 victimRank = victim->GetHonorMgr().GetRank().visualRank;
     uint8 killerLevel = killer->getLevel();
     uint8 victimLevel = victim->getLevel();
-        
+
     return MaNGOS::Honor::GetHonorGain(killerLevel, victimLevel, victimRank, totalKills, groupSize, killer->InGurubashiArena(false));
 }
 
