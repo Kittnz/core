@@ -552,8 +552,8 @@ struct go_survival_tent : public GameObjectAI
                 for (Player* pPlayer : players)
                 {
                     pPlayer->SetFlag(PLAYER_FLAGS, PLAYER_FLAGS_RESTING);
-                    float bubble = 0.125f;
-                    pPlayer->SetRestBonus(pPlayer->GetRestBonus() + urand(75, 200) * ((float)pPlayer->GetUInt32Value(PLAYER_NEXT_LEVEL_XP) / 72000)*bubble);
+                    // Around 25% of the level
+                    pPlayer->SetRestBonus(static_cast<float>(pPlayer->GetRestBonus() + (sObjectMgr.GetXPForLevel(pPlayer->getLevel()) * 0.000125)));
                 }
                 m_uiUpdateTimer = 1000;
             }
