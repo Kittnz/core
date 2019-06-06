@@ -1062,6 +1062,8 @@ class MANGOS_DLL_SPEC Player final: public Unit
         void MailHardcoreModeRewards(uint32 level);
         bool IsCityProtector();
         void MailCityProtectorScroll();
+        bool IsIgnoringTitles();
+        void SetIgnoringTitles(bool shouldIgnore);
         void MoveItemFromInventory(uint8 bag, uint8 slot, bool update);
         // in trade, auction, guild bank, mail....
         void MoveItemToInventory(ItemPosCountVec const& dest, Item* pItem, bool update, bool in_characterInventoryDB = false);
@@ -1494,6 +1496,7 @@ class MANGOS_DLL_SPEC Player final: public Unit
         bool m_canBlock;
         bool m_canDualWield;
         float m_ammoDPS;
+        bool isIgnoringTitles;
 
         void RegenerateAll();
         void Regenerate(Powers power);

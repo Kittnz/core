@@ -608,6 +608,8 @@ Player::Player(WorldSession *session) : Unit(),
 
     m_longSightSpell = 0;
     m_longSightRange = 0.0f;
+
+    isIgnoringTitles = false;
 }
 
 Player::~Player()
@@ -14431,8 +14433,8 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
     //"honorRankPoints, honorRighestRank, honorStanding, honorLastWeekHK, honorLastWeekCP, honorStoredHK, honorStoredDK,"
     // 45               46     47      48      49      50      51      52      53             54              55      56
     //"watchedFaction,  drunk, health, power1, power2, power3, power4, power5, exploredZones, equipmentCache, ammoId, actionBars,"
-    // 57                58
-    //"world_phase_mask, customFlags FROM characters WHERE guid = '%u'", GUID_LOPART(m_guid));
+    // 57                58                59              60
+    //"world_phase_mask, customFlags, city_protector, ignore_titles FROM characters WHERE guid = '%u'", GUID_LOPART(m_guid));
 
     QueryResult *result = holder->GetResult(PLAYER_LOGIN_QUERY_LOADFROM);
 
@@ -14565,6 +14567,8 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
 
     _LoadGroup(holder->GetResult(PLAYER_LOGIN_QUERY_LOADGROUP));
 
+    isIgnoringTitles = fields[60].GetBool();
+
     m_honorMgr.SetRankPoints(fields[38].GetFloat());
     m_honorMgr.SetHighestRank(fields[39].GetUInt32());
     m_honorMgr.SetStanding(fields[40].GetUInt32());
@@ -14573,6 +14577,7 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
     m_honorMgr.SetStoredHK(fields[43].GetUInt32());
     m_honorMgr.SetStoredDK(fields[44].GetUInt32());
 
+    // Setting City Rank
     if (fields[59].GetBool())
         SetByteValue(PLAYER_BYTES_3, 2, getRace());
     else
@@ -16011,7 +16016,7 @@ void Player::SaveToDB(bool online, bool force)
                               "honorRankPoints, honorHighestRank, honorStanding, honorLastWeekHK, honorLastWeekCP, honorStoredHK, honorStoredDK, "
                               "watchedFaction, drunk, health, power1, power2, power3, "
                               "power4, power5, exploredZones, equipmentCache, ammoId, actionBars, "
-                              "area, world_phase_mask, customFlags, city_protector) "
+                              "area, world_phase_mask, customFlags, city_protector, ignore_titles) "
                               "VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,"
                               "?, ?, ?, ?, ?, "
                               "?, ?, ?, "
@@ -16021,7 +16026,7 @@ void Player::SaveToDB(bool online, bool force)
                               "?, ?, ?, ?, ?, ?, ?, "
                               "?, ?, ?, ?, ?, ?, "
                               "?, ?, ?, ?, ?, ?, "
-                              "?, ?, ?, ?) ");
+                              "?, ?, ?, ?, ?) ");
 
     uberInsert.addUInt32(GetGUIDLow());
     uberInsert.addUInt32(GetSession()->GetAccountId());
@@ -16142,6 +16147,7 @@ void Player::SaveToDB(bool online, bool force)
     uberInsert.addUInt32(GetWorldMask());
     uberInsert.addUInt32(GetCustomFlags());
     uberInsert.addUInt8(IsCityProtector() ? 1 : 0);
+    uberInsert.addUInt8(IsIgnoringTitles() ? 1 : 0);
     uberInsert.Execute();
 
     _SaveBGData();
@@ -21597,3 +21603,7 @@ void Player::MailCityProtectorScroll()
             .SendMailTo(this, MailSender(MAIL_CREATURE, uint32(16547), MAIL_STATIONERY_DEFAULT), MAIL_CHECK_MASK_COPIED, 0, 30 * DAY);
     }      
 }
+
+bool Player::IsIgnoringTitles() { return isIgnoringTitles; }
+
+void Player::SetIgnoringTitles(bool shouldIgnore) { isIgnoringTitles = shouldIgnore; }

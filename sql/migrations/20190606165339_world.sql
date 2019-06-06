@@ -1,0 +1,26 @@
+DROP PROCEDURE IF EXISTS add_migration;
+delimiter ??
+CREATE PROCEDURE `add_migration`()
+BEGIN
+DECLARE v INT DEFAULT 1;
+SET v = (SELECT COUNT(*) FROM `migrations` WHERE `id`='20190606165339');
+IF v=0 THEN
+INSERT INTO `migrations` VALUES ('20190606165339');
+-- Add your query below.
+
+alter table characters add ignore_titles tinyint(3) not null default 0;
+
+replace into broadcast_text (ID, MaleText) values
+('90003', 'Pssst... I can make you hide who you really are.');
+replace into npc_text (ID, BroadcastTextID0) values ('90003', '90003');
+
+replace into creature_template (entry, name, subname, display_id1, level_min, level_max, health_min, health_max, scale, faction, npc_flags, script_name) values
+(50073, 'Clyde "The Shaddy"', 'Rank Hider', 2639, 60, 60, 12761, 12761, 1, 85, 1, 'title_hider'),
+(50074, 'Bustus "The Malefactor"', 'Rank Hider', 5908, 60, 60, 12761, 12761, 1, 11, 1, 'title_hider');                                                                                                                                                          ;
+
+-- End of migration.
+END IF;
+END??
+delimiter ; 
+CALL add_migration();
+DROP PROCEDURE IF EXISTS add_migration;
