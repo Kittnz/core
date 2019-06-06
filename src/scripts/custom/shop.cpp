@@ -12,6 +12,20 @@ bool ChatHandler::HandleReloadShopCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleAddCoinsCommand(char* args)
+{
+    uint32 coins_amount = (uint32)atoi(args);
+    Player *target = GetSelectedPlayer();
+
+    if (!target)
+        target = m_session->GetPlayer();
+
+    // Change to REPLACE later, if tables has no entry it won't work.
+    LoginDatabase.PExecute("UPDATE `shop_coins` SET `coins`=`coins`+%u WHERE `id`=%u", coins_amount, target->GetSession()->GetAccountId());
+    PSendSysMessage("You'have successfully added %u Turtle Tokens to %s.", coins_amount, target->GetName());
+    return true;
+}
+
 enum
 {
     ACTION_CATEGORY_START = 10000,
