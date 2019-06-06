@@ -1112,19 +1112,24 @@ bool GossipSelect_daenerys(Player* player, Creature* creature, uint32 sender, ui
     return true;
 }
 
-bool GossipHello_title_hider(Player* pPlayer, Creature* pCreature)
+bool GossipHello_title_masker(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->IsIgnoringTitles())
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I'm ready to show my rank again!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF);
-    else
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Hey... I want some privacy, can you hide my rank?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    else if (pPlayer->GetMoney() >= 50000)
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Hey... I want some privacy, can you hide my rank? I'll give you the gold.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     pPlayer->SEND_GOSSIP_MENU(90003, pCreature->GetGUID());
     return true;
 }
 
-bool GossipSelect_title_hider(Player* player, Creature* creature, uint32 sender, uint32 action)
+bool GossipSelect_title_masker(Player* player, Creature* creature, uint32 sender, uint32 action)
 {
-    player->SetIgnoringTitles(action == GOSSIP_ACTION_INFO_DEF + 1);
+    bool hideRank = action == GOSSIP_ACTION_INFO_DEF + 1;
+    player->SetIgnoringTitles(hideRank);
+    if (hideRank) {
+        player->ModifyMoney(-50000);
+        ChatHandler(player).PSendSysMessage("|cffff8040You carefully place 5 gold coins in the dealer's hand.|r");
+    }
     ChatHandler(player).SendSysMessage("Please logout and login again!");
     player->CLOSE_GOSSIP_MENU();
     return true;
@@ -1169,8 +1174,8 @@ void AddSC_custom_creatures()
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "title_hider";
-    newscript->pGossipHello = &GossipHello_title_hider;
-    newscript->pGossipSelect = &GossipSelect_title_hider;
+    newscript->Name = "title_masker";
+    newscript->pGossipHello = &GossipHello_title_masker;
+    newscript->pGossipSelect = &GossipSelect_title_masker;
     newscript->RegisterSelf();
 }
