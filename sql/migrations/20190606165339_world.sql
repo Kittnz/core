@@ -8,7 +8,7 @@ IF v=0 THEN
 INSERT INTO `migrations` VALUES ('20190606165339');
 -- Add your query below.
 
-alter table characters add ignore_titles tinyint(3) not null default 0;
+
 
 replace into broadcast_text (ID, MaleText) values
 ('90003', 'Pssst... I can make you hide who you really are with some fake papers if you bring me 5 gold.');
