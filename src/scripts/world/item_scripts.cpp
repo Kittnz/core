@@ -359,7 +359,7 @@ bool ItemUse_survival_tent(Player* pPlayer, Item* pItem, const SpellCastTargets&
             // summon tent object for 20 minutes
             if (!pPlayer->IsFalling() && !pPlayer->IsInWater() && !pPlayer->InBattleGround() && !pPlayer->InGurubashiArena(false)) {
                 pPlayer->SummonGameObject(1000001, pPlayer->GetPositionX(), pPlayer->GetPositionY(),
-                                          pPlayer->GetPositionZ(), 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1200, true);
+                                          pPlayer->GetPositionZ(), pPlayer->GetOrientation(), 0.0f, 0.0f, 0.0f, 0.0f, 1200, true);
                 // set rested state - check for the actual script in go_survival_tent
                 // update skill on usage:
                 uint32 currvalue = 0;
