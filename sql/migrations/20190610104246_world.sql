@@ -15,6 +15,7 @@ replace into `creature_template` (`entry`, `patch`, `display_id1`, `display_id2`
 -- TODO: Replace greeting's text with: 
 -- 'I don\'t know about the others, but I sure am glad to see a fresh face down here.\n\nThis used to be packed every night with the boys from the town, now look at it, we could use extra hands... even if they look like yours.\n\nCheck with Blackmoore or the others if you want work 
 
+update quest_template set ReqItemCount1 = 1 where entry = 50210;
 
 -- End of migration.
 END IF;
