@@ -300,7 +300,8 @@ void npc_escortAI::UpdateAI(const uint32 uiDiff)
     }
 
     //Check if player or any member of his group is within range or dead
-    if (HasEscortState(STATE_ESCORT_ESCORTING) && !HasEscortState(STATE_ESCORT_RETURNING) && m_MaxPlayerDistance > 0 && !m_creature->isInCombat())
+    if (HasEscortState(STATE_ESCORT_ESCORTING) && !HasEscortState(STATE_ESCORT_RETURNING) && !m_creature->HasFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER)
+        && m_MaxPlayerDistance > 0 && !m_creature->isInCombat())
     {
         if (m_uiPlayerCheckTimer < uiDiff)
         {
