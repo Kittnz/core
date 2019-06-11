@@ -1114,23 +1114,25 @@ bool GossipSelect_daenerys(Player* player, Creature* creature, uint32 sender, ui
 
 bool GossipHello_title_masker(Player* pPlayer, Creature* pCreature)
 {
+    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I'm not interested, goodbye.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF );
     if (pPlayer->IsIgnoringTitles())
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I'm ready to show my rank again!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I'm ready to show my rank again!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     else if (pPlayer->GetMoney() >= 50000)
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Hey... I want some privacy, can you hide my rank? I'll give you the gold.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Yes... I want some privacy, can you hide my rank? I'll give you the gold.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
     pPlayer->SEND_GOSSIP_MENU(90003, pCreature->GetGUID());
     return true;
 }
 
-bool GossipSelect_title_masker(Player* player, Creature* creature, uint32 sender, uint32 action)
-{
-    bool hideRank = action == GOSSIP_ACTION_INFO_DEF + 1;
-    player->SetIgnoringTitles(hideRank);
-    if (hideRank) {
-        player->ModifyMoney(-50000);
-        ChatHandler(player).PSendSysMessage("|cffff8040You carefully place 5 gold coins in the dealer's hand.|r");
+bool GossipSelect_title_masker(Player* player, Creature* creature, uint32 sender, uint32 action) {
+    if (action > GOSSIP_ACTION_INFO_DEF) {
+        bool hideRank = action == GOSSIP_ACTION_INFO_DEF + 2;
+        player->SetIgnoringTitles(hideRank);
+        if (hideRank) {
+            player->ModifyMoney(-50000);
+            ChatHandler(player).PSendSysMessage("|cffff8040You carefully place 5 gold coins in the dealer's hand.|r");
+        }
+        ChatHandler(player).SendSysMessage("Please logout and login again!");
     }
-    ChatHandler(player).SendSysMessage("Please logout and login again!");
     player->CLOSE_GOSSIP_MENU();
     return true;
 }
