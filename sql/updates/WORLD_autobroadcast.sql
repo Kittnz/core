@@ -12,6 +12,7 @@ replace into `mangos_string` (`entry`, `content_default`) values ('50010', 'Turt
 replace into `mangos_string` (`entry`, `content_default`) values ('50011', 'Turtle WoW: Come join the arena! You\'ll find Arena Ambassadors in any major city. Join the fray, get cool rewards for murdering friends and enemies in the Battle Ring, where you will experience a bonus x5 honor gaining!');
 replace into `mangos_string` (`entry`, `content_default`) values ('50012', 'Turtle WoW: Remember that the level 1—9 PvP bracket is open for Warsong Gulch in Turtle WoW. ');
 replace into `mangos_string` (`entry`, `content_default`) values ('50013', 'Turtle WoW: Do your new fancy shoulderpads look awful with your hair? Would you rather not cover your amazing face with an ugly helmet? Don\'t worry! Find your local barber in Stormwind or Crossroads and buy some hair dyes.');
+replace into `mangos_string` (`entry`, `content_default`) values ('50014', 'Turtle WoW: Donations are a way to help us improve your experience here at Turtle WoW, as well as help pay for general server costs, advertisement campaigns, developers, and overall production. You can find changelogs and videos on our website and social media platforms. Thanks for your continued support!');
 
 replace into `autobroadcast` (`string_Id`) values ('50000');
 replace into `autobroadcast` (`string_Id`) values ('50001');
@@ -26,3 +27,4 @@ replace into `autobroadcast` (`string_Id`) values ('50010');
 replace into `autobroadcast` (`string_Id`) values ('50011');
 replace into `autobroadcast` (`string_Id`) values ('50012');
 replace into `autobroadcast` (`string_Id`) values ('50013');
+replace into `autobroadcast` (`string_Id`) values ('50014');
