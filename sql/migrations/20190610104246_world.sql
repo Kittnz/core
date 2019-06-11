@@ -17,6 +17,16 @@ replace into `creature_template` (`entry`, `patch`, `display_id1`, `display_id2`
 
 update quest_template set ReqItemCount1 = 1 where entry = 50210;
 
+replace into `broadcast_text` (`ID`, `MaleText`) values
+('90200', 'Tha last person that made trouble for Tha’ Greysteels ended up floating in tha canal... catch my drift?');
+replace into `npc_text` (`ID`, `BroadcastTextID0`) values ('90200', '90200');
+
+replace into creature_template (entry, name, subname, display_id1, level_min, level_max, health_min, health_max, scale, faction, script_name, npc_flags, equipment_id) values
+(50079, 'Dirge', 'The Bouncer', 3101, 60, 60, 12761, 12761, 1.25, 11, 'npc_dirge_the_bouncer', 1, 6182);
+
+replace into `creature_template_addon` (`entry`, `patch`, `mount`, `bytes1`, `b2_0_sheath`, `b2_1_flags`, `emote`, `moveflags`, `auras`) values
+('50079', '0', '0', '0', '1', '0', '0', '0', '');
+
 -- End of migration.
 END IF;
 END??
