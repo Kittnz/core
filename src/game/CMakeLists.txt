@@ -522,6 +522,7 @@ include_directories(
   ${MYSQL_INCLUDE_DIR}
   ${TBB_INCLUDE_DIRS}
   ${ACE_INCLUDE_DIR}
+  ${OPENSSL_INCLUDE_DIR}
 )
 
 if(WIN32)
