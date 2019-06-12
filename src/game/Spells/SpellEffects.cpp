@@ -2284,35 +2284,35 @@ void Spell::EffectApplyAura(SpellEffectIndex eff_idx)
                 ChatHandler(m_caster->ToPlayer()).SendSysMessage("|cffff8040You are afraid of high speeds, better learn to ride first.|r");
             return;
         }
-        if (eff_idx == EFFECT_INDEX_1) 
+        if (eff_idx == EFFECT_INDEX_1)
         {
-            if (m_caster->ToPlayer()->GetSkillValue(SKILL_RIDING) == 150) 
+            if (m_caster->ToPlayer()->GetSkillValue(SKILL_RIDING) == 150)
                 m_currentBasePoints[EFFECT_INDEX_1] = 40;
             else
                 m_currentBasePoints[EFFECT_INDEX_1] = 20;
         }
         break;
-    case PLAINSRUNNING_FIRST_TICK: 
-        if (!m_caster->ToPlayer()->IsMoving()) 
+    case PLAINSRUNNING_FIRST_TICK:
+        if (!m_caster->ToPlayer()->IsMoving())
         {
             m_caster->RemoveAura(12567, eff_idx);
             return;
         }
-        if (eff_idx == EFFECT_INDEX_1) 
+        if (eff_idx == EFFECT_INDEX_1)
         {
-            if (m_caster->ToPlayer()->GetSkillValue(SKILL_RIDING) == 150) 
+            if (m_caster->ToPlayer()->GetSkillValue(SKILL_RIDING) == 150)
                 m_currentBasePoints[EFFECT_INDEX_1] = 60;
             else
                 m_currentBasePoints[EFFECT_INDEX_1] = 40;
         }
         break;
     case PLAINSRUNNING_SECOND_TICK:
-        if (!m_caster->ToPlayer()->IsMoving()) 
+        if (!m_caster->ToPlayer()->IsMoving())
         {
             m_caster->RemoveAura(12568, eff_idx);
             return;
         }
-        if (eff_idx == EFFECT_INDEX_0) 
+        if (eff_idx == EFFECT_INDEX_0)
         {
             if (m_caster->ToPlayer()->GetSkillValue(SKILL_RIDING) == 150)
                 m_currentBasePoints[EFFECT_INDEX_0] = 100;
