@@ -9,6 +9,7 @@ INSERT INTO `migrations` VALUES ('20190612131030');
 -- Add your query below.
 
 update creature_template set faction = 35 where entry in (50078, 50079);
+update creature set spawntimesecsmin = 600, spawntimesecsmax = 600 where id in (50078, 50079);
 
 -- End of migration.
 END IF;
