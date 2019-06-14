@@ -451,12 +451,12 @@ replace into item_template (entry, name, description, inventory_type, quality, d
 
 replace into item_template (entry, name, description, display_id, class, subclass, quality, inventory_type, item_level, required_level, stat_type1, stat_value1, armor, spellid_1, spellid_2,
                             spelltrigger_1, spelltrigger_2, spellcooldown_1, spellcooldown_2, bonding) values
-(50237, 'Blood Hardened Ruby', 'The core of this ruby has been hardened with the blood of a thousand enemies.', 7122, 4, 0, 4, 12, 85, 60, 7, 15, 350, 21411, 24437, 1, 0, -1, 60000, 1),
+(50237, 'Blood Hardened Ruby', 'The core of this ruby has been hardened with the blood of a thousand enemies.', 7122, 4, 0, 4, 12, 85, 60, 7, 25, 350, 13390, 24437, 1, 0, -1, 60000, 1),
 (50238, 'Life Infused Emerald', 'This emerald is so bright that it will light even the darkest nights.', 6851, 4, 0, 4, 12, 85, 60, 6, 25, 0, 18043, 20655, 1, 0, -1, 3600000, 1),
-(50239, 'Mana Covered Sapphire', 'If you leave this sapphire on a surface, it will float on its own.', 1659, 4, 0, 4, 12, 85, 60, 5, 30, 0, 18052, 18803, 1, 0, -1, 360000, 1),
-(50240, 'Perfectly Polished Vitriol', 'This vitriol is the most perfect sphere you have ever seen.', 19239, 4, 0, 4, 12, 85, 60, 4, 15, 0, 15600, 13533, 1, 0, -1, 180000, 1),
-(50241, 'Telescopic Jade', 'The shape of this Jade allows you to look far away.', 1262, 4, 0, 4, 12, 85, 60, 3, 25, 0, 15468, 29602, 1, 0, -1, 180000, 1),
-(50242, 'War Forged Opal', 'This opal has been in more wars than you can even think, guess why.', 6496, 4, 0, 4, 12, 85, 60, 7, 10, 0, 16620, 5579, 1, 0, -1, 120000, 1);
+(50239, 'Mana Covered Sapphire', 'If you leave this sapphire on a surface, it will float on its own.', 1659, 4, 0, 4, 12, 85, 60, 5, 15, 0, 28264, 18803, 1, 0, -1, 360000, 1),
+(50240, 'Perfectly Polished Vitriol', 'This vitriol is the most perfect sphere you have ever seen.', 19239, 4, 0, 4, 12, 85, 60, 4, 30, 0, 7598, 13533, 1, 0, -1, 120000, 1),
+(50241, 'Telescopic Jade', 'The shape of this Jade allows you to look far away.', 1262, 4, 0, 4, 12, 85, 60, 3, 20, 0, 21462, 24661, 1, 0, -1, 180000, 1),
+(50242, 'War Forged Opal', 'This opal has been in more wars than you can even think, guess why.', 6496, 4, 0, 4, 12, 85, 60, 7, 10, 0, 16620, 5579, 1, 0, -1, 180000, 1);
 
 -- Hotfixes, modify custom items only in this file:
 update item_template set spellcooldown_1 = 5400000, spellid_1 = 24085 where entry = 50234;
