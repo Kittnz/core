@@ -18,7 +18,7 @@ bool ItemUse_portable_meeting_stone(Player* pPlayer, Item* pItem, const SpellCas
     else
     {
         pPlayer->TeleportTo((pPlayer->GetTeam() == ALLIANCE) ? WorldLocation(0, -8607.52f, 382.006f, 110.173f, 2.24265f) : WorldLocation(1, -397.356f, -2654.94f, 96.2232f, 2.25183f));
-        pPlayer->SendSpellCooldown(7077, 3600000, pItem->GetEntry() == 50016);
+        pPlayer->SendSpellCooldown(7077, 3600000, pPlayer->GetObjectGuid());
     }
     return false;
 }
@@ -83,7 +83,8 @@ bool ItemUse_city_protector_scroll(Player* pPlayer, Item* pItem, const SpellCast
 {
     if (!pPlayer->IsCityProtector() || pPlayer->isInCombat() || pPlayer->IsBeingTeleported() || (pPlayer->getDeathState() == CORPSE))
     {
-        ChatHandler(pPlayer).PSendSysMessage("You can't use this item.");
+        ChatHandler(pPlayer).PSendSysMessage("|cffff8040You are not a City Protector anymore.|r");
+        pPlayer->RemoveSpellCooldown(7794, true);
         return false;
     }
     else
@@ -123,6 +124,8 @@ bool ItemUse_city_protector_scroll(Player* pPlayer, Item* pItem, const SpellCast
             pPlayer->TeleportTo(0, 1822.0999f, 238.638855f, 60.694809f, 0.0f);
             break;
         }
+
+        pPlayer->SendSpellCooldown(7794, 3600000, pPlayer->GetObjectGuid());
         return true;
     }
 }
