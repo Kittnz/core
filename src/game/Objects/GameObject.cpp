@@ -218,8 +218,16 @@ public:
         if (!i_trap->CanSeeInWorld(u))
             return false;
 
-        if (i_trapOwner->IsPlayer() && u->IsPlayer() && !i_trapOwner->IsPvP() && !i_trapOwner->ToPlayer()->IsInDuelWith(u->ToPlayer()))
-            return false;
+        if (i_trapOwner->IsPlayer() && u->IsPlayer())
+        {
+            const Player* trapOwnerPlayer = i_trapOwner->ToPlayer();
+            const Player* targetPlayer = u->ToPlayer();
+            bool bothPvP = trapOwnerPlayer->IsPvP() && targetPlayer->IsPvP();
+            bool bothFFA = trapOwnerPlayer->IsFFAPvP() && targetPlayer->IsFFAPvP();
+
+            if(!bothPvP && !bothFFA && !trapOwnerPlayer->IsInDuelWith(targetPlayer))
+                return false;
+        }
 
         bool _isTotem = u->GetTypeId() == TYPEID_UNIT && ((Creature*)u)->IsTotem();
         if (u->isAlive() && i_trap->IsWithinDistInMap(u, _isTotem ? i_range / 3.0f : i_range) && i_trapOwner->IsValidAttackTarget(u) &&
