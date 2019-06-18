@@ -315,7 +315,7 @@ void npc_escortAI::UpdateAI(const uint32 uiDiff)
                 return;
             }
 
-            m_uiPlayerCheckTimer = 2500;
+            m_uiPlayerCheckTimer = 5000;
         }
         else
             m_uiPlayerCheckTimer -= uiDiff;
