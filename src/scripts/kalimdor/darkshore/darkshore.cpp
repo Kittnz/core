@@ -297,8 +297,8 @@ struct npc_prospector_remtravelAI : public npc_escortAI
 
     void JustSummoned(Creature* pSummoned) override
     {
-        if (Player* pPlayer = GetPlayerForEscort())
-            pSummoned->AI()->AttackStart(pPlayer);
+        if (m_creature)
+            pSummoned->AI()->AttackStart(m_creature);
     }
 };
 
