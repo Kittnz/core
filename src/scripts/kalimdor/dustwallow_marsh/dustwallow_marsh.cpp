@@ -26,6 +26,7 @@ npc_lady_jaina_proudmoore
 npc_morokk
 npc_private_hendel
 npc_cassa_crimsonwing
+npc_balon_jacken
 EndContentData */
 
 #include "scriptPCH.h"
@@ -1632,6 +1633,64 @@ GameObjectAI* GetAI_go_forged_seal(GameObject* pGo)
     return new go_forged_sealAI(pGo);
 }
 
+enum
+{
+    SAY_EVADE_BALOS_JACKEN = 1756
+};
+
+struct npc_balos_jackenAI : public ScriptedAI
+{
+    npc_balos_jackenAI(Creature *c) : ScriptedAI(c)
+    {
+        Reset();
+    }
+
+    uint32 resetFactionTimer;
+
+    void SetDefaults()
+    {
+        resetFactionTimer = 90000;
+        m_creature->setFaction(54);
+    }
+
+    void Reset()
+    {
+        SetDefaults();
+    }
+
+    void JustRespawned()
+    {
+        SetDefaults();
+    }
+
+    void UpdateAI(const uint32 diff)
+    {
+        if (m_creature->getFaction() == 35) {
+            resetFactionTimer -= diff;
+            if (resetFactionTimer < diff) {
+                m_creature->ForcedDespawn();
+            }
+        }
+
+        if (m_creature->GetHealthPercent() <= 20.0f && m_creature->getFaction() != 35) {
+            m_creature->MonsterSay(SAY_EVADE_BALOS_JACKEN, LANG_COMMON);
+            m_creature->setFaction(35);
+            m_creature->CombatStop(true);
+            m_creature->UpdateCombatState(false);
+            m_creature->UpdateCombatWithZoneState(false);
+        }
+
+        if (m_creature->getFaction() == 54)
+            DoMeleeAttackIfReady();
+    }
+
+};
+
+CreatureAI* GetAI_npc_balos_jacken(Creature *_Creature)
+{
+    return new npc_balos_jackenAI(_Creature);
+}
+
 /*######
 ##
 ######*/
@@ -1695,5 +1754,10 @@ void AddSC_dustwallow_marsh()
     newscript = new Script;
     newscript->Name = "go_forged_seal";
     newscript->GOGetAI = &GetAI_go_forged_seal;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_balos_jacken";
+    newscript->GetAI = &GetAI_npc_balos_jacken;
     newscript->RegisterSelf();
 }
