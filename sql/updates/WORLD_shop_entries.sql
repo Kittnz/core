@@ -113,7 +113,7 @@ replace into shop_items values
 (413, 4, 23193, 'Tabard of Scarlet Archmage', 75),
 -- Roleplay --------------------------------------------------------------------------------------------
 (500, 5, 50024, 'Dressing Box: Invisible Suit', 25),
-(501, 5, 50022, 'Dressing Box: Midsummer Priestess', 50),
+(501, 5, 50022, 'Dressing Box: Midsummer Priestess', 20),
 (502, 5, 50023, 'Dressing Box: Demon Hunter', 75),
 (503, 5, 50025, 'Dressing Box: Sally Whitemane', 100),
 (504, 5, 50101, 'Dressing Box: Scholomance Student', 100),
