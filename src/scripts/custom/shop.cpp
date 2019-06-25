@@ -2,6 +2,7 @@
 // Make sure to apply the contents of /sql/shop onto your database.
 
 #include "scriptPCH.h"
+#include "AccountMgr.h"
 #include <array>
 
 bool ChatHandler::HandleReloadShopCommand(char* args)
@@ -12,19 +13,60 @@ bool ChatHandler::HandleReloadShopCommand(char* args)
     return true;
 }
 
-bool ChatHandler::HandleAddCoinsCommand(char* args)
+bool ChatHandler::HandleBalanceCommand(char* args)
 {
-    uint32 coins_amount = (uint32)atoi(args);
-    Player *target = GetSelectedPlayer();
+    char* c_account_name = ExtractArg(&args);
 
-    if (!target)
-        target = m_session->GetPlayer();
+    if (!c_account_name)
+        return false;
 
-    // Change to REPLACE later, if tables has no entry it won't work.
-    LoginDatabase.PExecute("UPDATE `shop_coins` SET `coins`=`coins`+%u WHERE `id`=%u", coins_amount, target->GetSession()->GetAccountId());
-    PSendSysMessage("You'have successfully added %u Turtle Tokens to %s.", coins_amount, target->GetName());
-    return true;
+    std::string account_name = c_account_name;
+
+    if (!AccountMgr::normalizeString(account_name))
+    {
+        PSendSysMessage("Account doesn't exist.");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    uint32 account_id;
+    account_id = ExtractAccountId(&c_account_name, &account_name);
+
+    int32 coins = (int32)atoi(args);
+
+    if (!coins)
+        return false;
+
+    QueryResult* result = LoginDatabase.PQuery("SELECT `coins` FROM `shop_coins` WHERE `id` = '%u'", account_id);
+
+    if (!result)
+    {
+        LoginDatabase.PExecute("INSERT INTO shop_coins (id, coins) VALUES ('%u', 0)", account_id);
+        PSendSysMessage("This player had no record in the shop_coins table. Run the command again.");
+    }
+
+    if (result)
+    {
+        Field* fields = result->Fetch();
+        int32 current_balance = fields[0].GetInt32();
+
+        int32 updated_balance = current_balance + coins;
+        delete result;
+
+        if (updated_balance < 0)
+        {
+            PSendSysMessage("Can't go below zero, the current balance is %i.", current_balance);
+            return false;
+        }
+
+        LoginDatabase.PExecute("UPDATE `shop_coins` SET `coins`=`coins`+%i WHERE `id`=%u", coins, account_id);
+        PSendSysMessage("You've successfully added %i coins to %s.", coins, account_name);
+        PSendSysMessage("Account %s now has %i coins.", account_name, updated_balance);
+        return true;
+    }
+    return false;
 }
+
 
 enum
 {
