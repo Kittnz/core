@@ -38,22 +38,24 @@ bool ItemUse_highborne_soul_mirror(Player* pPlayer, Item* pItem, const SpellCast
 #define ALICE_BELITTLE_RBOUNDARY 0.95f
 bool ItemUse_alice_wonderland_scale(Player* pPlayer, Item* pItem, const SpellCastTargets&) {
     float scale;
+    float taurenVariance = pPlayer->getRace() == RACE_TAUREN ? (pPlayer->getGender() == GENDER_MALE ? 0.35f : 0.25f) : 0;
+    float currentNormalizedScale = pPlayer->GetObjectScale() - taurenVariance;
     if (pItem->GetEntry() == 50021) { // Strange Bottle
-        if (pPlayer->GetObjectScale() == ALICE_BELITTLE_LBOUNDARY) {
+        if (currentNormalizedScale == ALICE_BELITTLE_LBOUNDARY) {
             ChatHandler(pPlayer).PSendSysMessage("|cffff8040You can't be smaller!|r");
             return true;
         }
-        scale = frand(ALICE_BELITTLE_LBOUNDARY, pPlayer->GetObjectScale() == 1 ?
-                                                ALICE_BELITTLE_RBOUNDARY : pPlayer->GetObjectScale());
+        scale = frand(ALICE_BELITTLE_LBOUNDARY, currentNormalizedScale == 1 ?
+                                                ALICE_BELITTLE_RBOUNDARY : currentNormalizedScale);
     } else {
-        if (pPlayer->GetObjectScale() == ALICE_GROW_RBOUNDARY) {
+        if (currentNormalizedScale == ALICE_GROW_RBOUNDARY) {
             ChatHandler(pPlayer).PSendSysMessage("|cffff8040You can't grow more!|r");
             return true;
         }
-        scale = frand(pPlayer->GetObjectScale() == 1 ?
-                      ALICE_GROW_LBOUNDARY : pPlayer->GetObjectScale(), ALICE_GROW_RBOUNDARY);
+        scale = frand(currentNormalizedScale == 1 ?
+                      ALICE_GROW_LBOUNDARY : currentNormalizedScale, ALICE_GROW_RBOUNDARY);
     }
-    pPlayer->SetObjectScale(static_cast<float>(floor((scale * 100) + 0.5) / 100));
+    pPlayer->SetObjectScale(static_cast<float>(floor((scale * 100) + 0.5) / 100) + taurenVariance);
     return false;
 }
 
