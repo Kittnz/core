@@ -2489,7 +2489,7 @@ void Unit::CalculateAbsorbResistBlock(Unit *pCaster, SpellNonMeleeDamage *damage
         // Melee and Ranged Spells
         case SPELL_DAMAGE_CLASS_RANGED:
         case SPELL_DAMAGE_CLASS_MELEE:
-            blocked = IsSpellBlocked(pCaster, spellProto, attType);
+            blocked = IsSpellBlocked(pCaster, this, spellProto, attType);
             break;
         default:
             break;
@@ -2606,9 +2606,13 @@ MeleeHitOutcome Unit::RollMeleeOutcomeAgainst(const Unit *pVictim, WeaponAttackT
     int32 victimDefenseSkill = pVictim->GetDefenseSkillValue(this);
 
     // bonus from skills is 0.04%
-    int32    skillBonus  = 4 * (attackerWeaponSkill - victimMaxSkillValueForLevel);
+    int32    skillDiff = attackerWeaponSkill - victimMaxSkillValueForLevel;
+    int32    cappedSkillDiff = std::min(attackerMaxSkillValueForLevel, attackerWeaponSkill) - victimMaxSkillValueForLevel;
+    int32    blockSkillBonus = pVictim->IsPlayer() ? 4 * skillDiff : 10 * skillDiff;
+    int32    dodgeSkillBonus = pVictim->IsPlayer() ? 4 * skillDiff : 10 * skillDiff;
+    int32    parrySkillBonus = pVictim->IsPlayer() ? 4 * skillDiff : cappedSkillDiff < -10 ? 60 * cappedSkillDiff : 20 * cappedSkillDiff;
     int32    sum = 0, tmp = 0;
-    int32    roll = urand(0, 10000);
+    int32    roll = urand(0, 9999);
 
     //DEBUG_FILTER_LOG(LOG_FILTER_COMBAT, "RollMeleeOutcomeAgainst: skill bonus of %d for attacker", skillBonus);
     //DEBUG_FILTER_LOG(LOG_FILTER_COMBAT, "RollMeleeOutcomeAgainst: rolled %d, miss %d, dodge %d, parry %d, block %d, crit %d", roll, miss_chance, dodge_chance, parry_chance, block_chance, crit_chance);
@@ -2638,10 +2642,14 @@ MeleeHitOutcome Unit::RollMeleeOutcomeAgainst(const Unit *pVictim, WeaponAttackT
     // only players can't dodge if attacker is behind
     if (pVictim->GetTypeId() != TYPEID_PLAYER || !from_behind)
     {
-        tmp = dodge_chance;
-        if ((tmp > 0)                                           // check if unit _can_ dodge
-                && ((tmp -= skillBonus) > 0)
-                && roll < (sum += tmp))
+        dodge_chance -= dodgeSkillBonus;
+
+        // Low level reduction
+        if (!pVictim->IsPlayer() && pVictim->getLevel() < 10)
+            dodge_chance *= pVictim->getLevel() / 10.0f;
+
+        if (dodge_chance > 0 &&                         // check if unit _can_ dodge
+            (roll < (sum += dodge_chance)))
         {
             DEBUG_FILTER_LOG(LOG_FILTER_COMBAT, "RollMeleeOutcomeAgainst: DODGE <%d, %d)", sum - tmp, sum);
             return MELEE_HIT_DODGE;
@@ -2654,10 +2662,14 @@ MeleeHitOutcome Unit::RollMeleeOutcomeAgainst(const Unit *pVictim, WeaponAttackT
     {
         if (parry_chance > 0 && (pVictim->GetTypeId() == TYPEID_PLAYER || !(((Creature*)pVictim)->GetCreatureInfo()->flags_extra & CREATURE_FLAG_EXTRA_NO_PARRY)))
         {
-            parry_chance -= skillBonus;
+            parry_chance -= parrySkillBonus;
+
+            // Low level reduction
+            if (!pVictim->IsPlayer() && pVictim->getLevel() < 10)
+                parry_chance *= pVictim->getLevel() / 10.0f;
 
             if (parry_chance > 0 &&                         // check if unit _can_ parry
-                    (roll < (sum += parry_chance)))
+                (roll < (sum += parry_chance)))
             {
                 DEBUG_FILTER_LOG(LOG_FILTER_COMBAT, "RollMeleeOutcomeAgainst: PARRY <%d, %d)", sum - parry_chance, sum);
                 return MELEE_HIT_PARRY;
@@ -2667,8 +2679,8 @@ MeleeHitOutcome Unit::RollMeleeOutcomeAgainst(const Unit *pVictim, WeaponAttackT
 
     // Max 40% chance to score a glancing blow against mobs that are higher level (can do only players and pets and not with ranged weapon)
     if (attType != RANGED_ATTACK && !SpellCasted &&
-            (GetTypeId() == TYPEID_PLAYER || ((Creature*)this)->IsPet()) &&
-            pVictim->GetTypeId() != TYPEID_PLAYER && !((Creature*)pVictim)->IsPet() && !((Creature*)pVictim)->IsTotem())
+        (GetTypeId() == TYPEID_PLAYER || ((Creature*)this)->IsPet()) &&
+        pVictim->GetTypeId() != TYPEID_PLAYER && !((Creature*)pVictim)->IsPet() && !((Creature*)pVictim)->IsTotem())
     {
         // cap possible value (with bonuses > max skill)
         int32 skill = attackerWeaponSkill;
@@ -2698,12 +2710,20 @@ MeleeHitOutcome Unit::RollMeleeOutcomeAgainst(const Unit *pVictim, WeaponAttackT
     if (!from_behind)
     {
         if ((pVictim->GetTypeId() == TYPEID_PLAYER || !(((Creature*)pVictim)->GetCreatureInfo()->flags_extra & CREATURE_FLAG_EXTRA_NO_BLOCK))
-          && !(GetTypeId() == TYPEID_UNIT && GetMeleeDamageSchoolMask() != SPELL_SCHOOL_MASK_NORMAL))  // can't block elemental melee attacks from mobs
+            && !(GetTypeId() == TYPEID_UNIT && GetMeleeDamageSchoolMask() != SPELL_SCHOOL_MASK_NORMAL))  // can't block elemental melee attacks from mobs
         {
-            tmp = block_chance;
-            if ((tmp > 0)                                       // check if unit _can_ block
-                    && ((tmp -= skillBonus) > 0)
-                    && (roll < (sum += tmp)))
+            block_chance -= blockSkillBonus;
+
+            // mobs cannot block more than 5% of attacks regardless of rating difference
+            if (!pVictim->IsPlayer() && (block_chance > 500))
+                block_chance = 500;
+
+            // Low level reduction
+            if (!pVictim->IsPlayer() && pVictim->getLevel() < 10)
+                block_chance *= pVictim->getLevel() / 10.0f;
+
+            if (block_chance > 0 &&                         // check if unit _can_ block
+                (roll < (sum += block_chance)))
             {
                 // Critical chance
                 tmp = crit_chance;
@@ -2866,7 +2886,7 @@ void Unit::SendMeleeAttackStop(Unit* victim)
     ((Creature*)victim)->AI().EnterEvadeMode(this);*/
 }
 
-bool Unit::IsSpellBlocked(Unit *pCaster, SpellEntry const *spellEntry, WeaponAttackType attackType)
+bool Unit::IsSpellBlocked(Unit *pCaster, Unit *pVictim, SpellEntry const *spellEntry, WeaponAttackType attackType)
 {
     if (!HasInArc(M_PI_F, pCaster))
         return false;
@@ -2886,9 +2906,19 @@ bool Unit::IsSpellBlocked(Unit *pCaster, SpellEntry const *spellEntry, WeaponAtt
     }
 
     float blockChance = GetUnitBlockChance();
-    blockChance += (int32(pCaster->GetWeaponSkillValue(attackType)) - int32(GetSkillMaxForLevel())) * 0.04f;
 
-    if ((IsPlayer() && ToPlayer()->HasOption(PLAYER_CHEAT_UNRANDOMIZE)) ||
+    int32 skillDiff = int32(pCaster->GetWeaponSkillValue(attackType)) - int32(GetSkillMaxForLevel());
+    blockChance -= pVictim->IsPlayer() ? skillDiff * 0.04f : skillDiff * 0.1f;
+
+    // mobs cannot block more than 5% of attacks regardless of rating difference
+    if (!pVictim->IsPlayer() && (blockChance > 5))
+        blockChance = 5.0f;
+
+    // Low level reduction
+    if (!pVictim->IsPlayer() && pVictim->getLevel() < 10)
+        blockChance *= pVictim->getLevel() / 10.0f;
+
+    if ((IsPlayer() && ToPlayer()->HasOption(PLAYER_CHEAT_UNRANDOMIZE)) || (blockChance < 0) ||
         (pCaster->IsPlayer() && pCaster->ToPlayer()->HasOption(PLAYER_CHEAT_UNRANDOMIZE)))
         blockChance = 0;
     return roll_chance_f(blockChance);
