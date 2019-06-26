@@ -1668,7 +1668,9 @@ struct npc_balos_jackenAI : public ScriptedAI
         if (m_creature->getFaction() == 35) {
             resetFactionTimer -= diff;
             if (resetFactionTimer < diff) {
-                m_creature->ForcedDespawn();
+                m_creature->DisappearAndDie();
+                m_creature->ForcedDespawn(100);
+                m_creature->Respawn();
             }
         }
 

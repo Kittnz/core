@@ -330,7 +330,7 @@ void npc_escortAI::ResetEscort()
 
     m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
     m_creature->DisappearAndDie();
-    m_creature->ForcedDespawn();
+    m_creature->ForcedDespawn(100);
 
     if (m_bCanInstantRespawn)
         m_creature->Respawn();
