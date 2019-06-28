@@ -458,6 +458,8 @@ replace into item_template (entry, name, description, display_id, class, subclas
 (50241, 'DEPRECATED Telescopic Jade', 'The shape of this Jade allows you to look far away.', 1262, 4, 0, 4, 12, 85, 60, 3, 20, 0, 21454, 24661, 1, 0, -1, 180000, 1),
 (50242, 'DEPRECATED War Forged Opal', 'This opal has been in more wars than you can even think, guess why.', 6496, 4, 0, 4, 12, 85, 60, 7, 10, 0, 16620, 5579, 1, 0, -1, 180000, 1);
 
+replace into item_template (entry, name, class, subclass, display_id, inventory_type, quality, item_level, spellid_1, bonding, description, sheath, dmg_min1, dmg_max1) values (50243, 'Pompa\'s Scratching Stick', 2, 8, 34402, 17, 5, 1337, 5, 1, 'Only a madman would scratch with this.', 1, 1, 1337);
+
 -- Hotfixes, modify custom items only in this file:
 update item_template set spellcooldown_1 = 5400000, spellid_1 = 24085 where entry = 50234;
 update item_template set spellcooldown_1 = 3600000 where entry = 50235;
