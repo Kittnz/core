@@ -462,6 +462,16 @@ bool ItemUse_bg_tabard(Player* pPlayer, Item* pItem, const SpellCastTargets&)
     return false;
 }
 
+bool ItemUse_golden_pocket_watch(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+{
+    int male_models[6] = { 7212, 7106, 7102, 8847, 7172, 7809 };
+    int female_models[6] = { 7212, 7106, 7102, 8847, 7172, 7809 };
+    int modelid = rand() % 6; 
+    pPlayer->SetDisplayId((pPlayer->getGender() == GENDER_MALE) ? male_models[modelid] : female_models[modelid]);
+    ChatHandler(pPlayer).SendSysMessage("This disguise will work until logout.");
+    return false;
+}
+
 void AddSC_item_scripts()
 {
     Script *newscript;
@@ -544,5 +554,10 @@ void AddSC_item_scripts()
     newscript = new Script;
     newscript->Name = "bg_tabard";
     newscript->pItemUse = &ItemUse_bg_tabard;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "golden_pocket_watch";
+    newscript->pItemUse = &ItemUse_golden_pocket_watch;
     newscript->RegisterSelf();
 }
