@@ -554,7 +554,8 @@ replace into item_template (entry, name, class, subclass, inventory_type, displa
 (50315, 'Stormwind Guard\'s Shield', 4, 6, 14, 2080, 1, 1, 4),
 (50378, 'Stromgarde Guard\'s Shield', 4, 6, 14, 18690, 1, 1, 4),
 (50342, 'Sentinel\'s Glaive', 2, 14, 13, 4289, 1, 1, 2),
-(50374, 'Thunder Bluff Guard\'s Totem', 2, 14, 13, 5415, 1, 1, 2);
+(50374, 'Thunder Bluff Guard\'s Totem', 2, 14, 13, 5415, 1, 1, 2),
+(50379, 'Forsaken Guard\'s Shield', 4, 6, 14, 30559, 1, 1, 4);
 
 -- Hotfixes, modify custom items only in this file:
 update item_template set spellcooldown_1 = 5400000, spellid_1 = 24085 where entry = 50234;
