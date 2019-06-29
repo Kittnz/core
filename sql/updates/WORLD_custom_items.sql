@@ -134,12 +134,12 @@ replace into item_template (entry, name, inventory_type, display_id, quality, bo
 -- 50043 [High Inquisitor's Staff]
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50043, 'High Inquisitor\'s Tabard', 17, 20257, 1, 1);
--- 50044 [Keepers of Time Tabard]
+-- 50044 [Ambar Filigreed Tabard]
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
-(50044, 'Keepers of Time Tabard', 19, 22370, 1, 1);
--- 50045 [Keepers of Time Vest]
+(50044, 'Ambar Filigreed Tabard', 19, 22370, 1, 1);
+-- 50045 [Ambar Filigreed Vest]
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
-(50045, 'Keepers of Time Vest', 4, 22370, 1, 1);
+(50045, 'Ambar Filigreed Vest', 4, 22370, 1, 1);
 -- 50046 [Vestment of Summer]
 replace into item_template (entry, name, description, inventory_type, display_id, quality, bonding, script_name, spellid_1, spellcooldown_1) values
 (50046, 'Vestment of Summer', 'You feel the need to dance.', 5, 26131, 1, 1, 'item_summer_vestment', 11542, 1000);
@@ -460,6 +460,102 @@ replace into item_template (entry, name, description, display_id, class, subclas
 
 replace into item_template (entry, name, class, subclass, display_id, inventory_type, quality, item_level, spellid_1, bonding, description, sheath, dmg_min1, dmg_max1) values (50243, 'Pompa\'s Scratching Stick', 2, 8, 34402, 17, 5, 1337, 5, 1, 'Only a madman would scratch with this.', 1, 1, 1337);
 
+
+replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
+(50300, 'Ironforge Guard\'s Chest', 5, 10441, 1, 1),
+(50301, 'Ironforge Guard\'s Waistguard', 6, 10442, 1, 1),
+(50302, 'Ironforge Guard\'s Pants', 7, 10443, 1, 1),
+(50303, 'Ironforge Guard\'s Boots', 8, 10444, 1, 1),
+(50304, 'Ironforge Guard\'s Gloves', 10, 10445, 1, 1),
+(50305, 'Ironforge Guard\'s Shoulders', 3, 10493, 1, 1),
+(50306, 'Ironforge Guard\'s Helmet', 1, 10492, 1, 1),
+
+(50308, 'Stormwind Guard\'s Chestplate', 5, 7223, 1, 1),
+(50309, 'Stormwind Guard\'s Waistguard', 6, 7224, 1, 1),
+(50310, 'Stormwind Guard\'s Greaves', 7, 7225, 1, 1),
+(50311, 'Stormwind Guard\'s Sabatons', 8, 7226, 1, 1),
+(50312, 'Stormwind Guard\'s Gauntlets', 10, 7227, 1, 1),
+(50313, 'Stormwind Guard\'s Shoulders', 3, 10493, 1, 1),
+(50314, 'Stormwind Guard\'s Helmet', 1, 7712, 1, 1),
+
+(50316, 'Kul Tiran Guard\'s Chestplate', 5, 7677, 1, 1),
+(50317, 'Kul Tiran Guard\'s Waistguard', 6, 7679, 1, 1),
+(50318, 'Kul Tiran Guard\'s Greaves', 7, 7680, 1, 1),
+(50319, 'Kul Tiran Guard\'s Sabatons', 8, 7681, 1, 1),
+(50320, 'Kul Tiran Guard\'s Gauntlets', 10, 7682, 1, 1),
+(50321, 'Kul Tiran Guard\'s Shoulders', 3, 7684, 1, 1),
+(50322, 'Kul Tiran Guard\'s Helmet', 1, 7784, 1, 1),
+
+(50323, 'Theramore Guard\'s Chestplate', 5, 7686, 1, 1),
+(50324, 'Theramore Guard\'s Waistguard', 6, 7687, 1, 1),
+(50325, 'Theramore Guard\'s Greaves', 7, 7688, 1, 1),
+(50326, 'Theramore Guard\'s Sabatons', 8, 7689, 1, 1),
+(50327, 'Theramore Guard\'s Gauntlets', 10, 7692, 1, 1),
+(50328, 'Theramore Guard\'s Shoulders', 3, 7685, 1, 1),
+(50329, 'Theramore Guard\'s Helmet', 1, 7785, 1, 1),
+
+(50330, 'Stromgarde Guard\'s Chestplate', 5, 11711, 1, 1),
+(50331, 'Stromgarde Guard\'s Waistguard', 6, 11712, 1, 1),
+(50332, 'Stromgarde Guard\'s Greaves', 7, 11713, 1, 1),
+(50333, 'Stromgarde Guard\'s Sabatons', 8, 11714, 1, 1),
+(50334, 'Stromgarde Guard\'s Gauntlets', 10, 11715, 1, 1),
+(50335, 'Stromgarde Guard\'s Shoulders', 3, 11710, 1, 1),
+(50336, 'Stromgarde Guard\'s Helmet', 1, 11719, 1, 1),
+
+(50337, 'Sentinel\'s Chestpiece', 5, 6029, 1, 1),
+(50338, 'Sentinel\'s Pants', 7, 6030, 1, 1),
+(50339, 'Sentinel\'s Boots', 8, 6031, 1, 1),
+(50340, 'Sentinel\'s Gloves', 10, 12092, 1, 1),
+(50341, 'Sentinel\'s Faceguard', 1, 13368, 1, 1),
+
+(50343, 'Mountaineer\'s Chestpiece', 5, 6034, 1, 1),
+(50344, 'Mountaineer\'s Belt', 6, 6035, 1, 1),
+(50345, 'Mountaineer\'s Pants', 7, 6036, 1, 1),
+(50346, 'Mountaineer\'s Boots', 8, 6037, 1, 1),
+(50347, 'Mountaineer\'s Gloves', 10, 6039, 1, 1),
+(50348, 'Mountaineer\'s Bracers', 9, 6038, 1, 1),
+(50349, 'Mountaineer\'s Hood', 1, 13297, 1, 1),
+
+(50350, 'Deathguard\'s Chestpiece', 5, 6040, 1, 1),
+(50351, 'Deathguard\'s Belt', 6, 6041, 1, 1),
+(50352, 'Deathguard\'s Pants', 7, 6042, 1, 1),
+(50353, 'Deathguard\'s Boots', 8, 6043, 1, 1),
+(50354, 'Deathguard\'s Gloves', 10, 6045, 1, 1),
+(50355, 'Deathguard\'s Bracers', 9, 6044, 1, 1),
+(50356, 'Deathguard\'s Hood', 1, 12401, 1, 1),
+
+(50357, 'Nightwatch\'s Chestpiece', 5, 8610, 1, 1),
+(50358, 'Nightwatch\'s Belt', 6, 8611, 1, 1),
+(50359, 'Nightwatch\'s Pants', 7, 8612, 1, 1),
+(50360, 'Nightwatch\'s Boots', 8, 8613, 1, 1),
+(50361, 'Nightwatch\'s Gloves', 10, 8614, 1, 1),
+
+(50362, 'Orgrimmar Guard\'s Chestpiece', 5, 9194, 1, 1),
+(50363, 'Orgrimmar Guard\'s Belt', 6, 9903, 1, 1),
+(50364, 'Orgrimmar Guard\'s Pants', 7, 9195, 1, 1),
+(50365, 'Orgrimmar Guard\'s Boots', 8, 9196, 1, 1),
+(50366, 'Orgrimmar Guard\'s Gloves', 10, 9197, 1, 1),
+(50367, 'Orgrimmar Guard\'s Shoulders', 3, 12525, 1, 1),
+
+(50368, 'Thunder Bluff Guard\'s Chestpiece', 5, 10084, 1, 1),
+(50369, 'Thunder Bluff Guard\'s Belt', 6, 6282, 1, 1),
+(50370, 'Thunder Bluff Guard\'s Pants', 7, 6183, 1, 1),
+(50371, 'Thunder Bluff Guard\'s Boots', 8, 10085, 1, 1),
+(50372, 'Thunder Bluff Guard\'s Bracers', 9, 8217, 1, 1),
+(50373, 'Thunder Bluff Guard\'s Shoulders', 3, 8252, 1, 1),
+
+
+(50376, 'Hillsbrad Tabard', 19, 16078, 1, 1),
+(50377, 'Pilgrim Pants', 7, 24871, 1, 1);
+
+replace into item_template (entry, name, class, subclass, inventory_type, display_id, quality, bonding, sheath) values
+
+(50307, 'Ironforge Guard\'s Shield', 4, 6, 14, 10968, 1, 1, 4),
+(50315, 'Stormwind Guard\'s Shield', 4, 6, 14, 2080, 1, 1, 4),
+(50378, 'Stromgarde Guard\'s Shield', 4, 6, 14, 18690, 1, 1, 4),
+(50342, 'Sentinel\'s Glaive', 2, 14, 13, 4289, 1, 1, 2),
+(50374, 'Thunder Bluff Guard\'s Totem', 2, 14, 13, 5415, 1, 1, 2);
+
 -- Hotfixes, modify custom items only in this file:
 update item_template set spellcooldown_1 = 5400000, spellid_1 = 24085 where entry = 50234;
 update item_template set spellcooldown_1 = 3600000 where entry = 50235;
@@ -474,3 +570,4 @@ update item_template set name = 'Hardcore Master\'s Tabard' where entry = 19160;
 update item_template set quality = 4, description = 'Only the bravest adventurers can ride it.' where entry = 50075;
 update item_template set quality = 6, subclass = 14, sheath = 1 where entry = 50094;
 update item_template set bonding = 0, stackable = 20, buy_price = 500, sell_price = 250, buy_count = 1, spellcharges_1 = -1, spellcooldown_1 = 1000, delay = 0, subclass = 0 where entry in (50020, 50021);
+update item_template set name = 'Dalaran Tabard' where entry = 50089;
