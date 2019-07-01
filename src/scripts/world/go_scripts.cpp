@@ -595,7 +595,7 @@ struct go_custom_rested : public GameObjectAI
             if (m_uiUpdateTimer < uiDiff)
             {
                 std::list<Player*> players;
-                MaNGOS::AnyPlayerInObjectRangeCheck check(me, 50.0f);
+                MaNGOS::AnyPlayerInObjectRangeCheck check(me, 22.0f);
                 MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
 
                 Cell::VisitWorldObjects(me, searcher, 10.0f);
