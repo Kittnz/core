@@ -590,6 +590,11 @@ replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid) valu
 (50390, 50368, 100, 1),(50390, 50369, 100, 2),(50390, 50370, 100, 3),(50390, 50371, 100, 4),(50390, 50372, 100, 5),(50390, 50373, 100, 6),(50390, 50374, 100, 7),
 (50391, 50392, 100, 1),(50391, 50393, 100, 2),(50391, 50394, 100, 3),(50391, 50395, 100, 4),(50391, 50396, 100, 5);
 
+replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
+(50397, 'Goldweave Shoes', 8, 28644, 1, 1);
+replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
+(50398, 'Goldweave Pants', 7, 29782, 1, 1);
+
 -- Hotfixes, modify custom items only in this file:
 update item_template set spellcooldown_1 = 5400000, spellid_1 = 24085 where entry = 50234;
 update item_template set spellcooldown_1 = 3600000 where entry = 50235;

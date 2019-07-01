@@ -101,7 +101,7 @@ replace into shop_items values
 (401, 4, 23705, 'Tabard of Flame', 125),
 (402, 4, 23710, 'Darkmoon Faire Tabard', 100),
 (403, 4, 22999, 'Tabard of the Argent Dawn', 50),
-(404, 4, 50044, 'Ambar Filigreed Tabard', 75),
+(404, 4, 50044, 'Goldweave Tabard', 75),
 (405, 4, 50086, 'Stromgarde Tabard', 75),
 (406, 4, 50087, 'Tabard of Kul\'Tiras', 75),
 (407, 4, 50088, 'Theramore Tabard', 75),
