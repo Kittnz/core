@@ -31,7 +31,7 @@ replace into shop_categories values
 
 replace into shop_items values
 -- Gameplay --------------------------------------------------------------------------------------------
-(100, 1, 50010, 'Hardcore Mode (0.5 rates for killing mobs)', 0),
+(100, 1, 50010, 'Hardcore Mode (0.5 rates for mob kills)', 0),
 (101, 1, 50016, 'Portable Meeting Stone (RP Hub)', 0),
 (102, 1, 50008, 'Turtle Twink\'s Insignia (Stop XP)', 0),
 (103, 1, 50000, 'Character Name Change', 100),
@@ -116,7 +116,11 @@ replace into shop_items values
 (501, 5, 50022, 'Dressing Box: Midsummer Priestess', 20),
 (502, 5, 50023, 'Dressing Box: Demon Hunter', 75),
 (503, 5, 50025, 'Dressing Box: Sally Whitemane', 100),
-(504, 5, 50101, 'Dressing Box: Scholomance Student', 100),
+(504, 5, 50382, 'Dressing Box: Kul\'Tiras Guard', 100),
+(505, 5, 50383, 'Dressing Box: Theramore Guard', 100),
+(506, 5, 50386, 'Dressing Box: Dwarven Mountaineer', 100),
+(507, 5, 50388, 'Dressing Box: Nightwatchman', 100),
+(508, 5, 50384, 'Dressing Box: Stromgarde Guard', 100),
 -- Skins ---------------------------------------------------------------------------------------
 (600, 6, 50105, 'Human: Sally Whitemane (Female Only)', 50),
 (601, 6, 50106, 'Human, Gnome: Cult of the Damned', 50),

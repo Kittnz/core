@@ -134,12 +134,12 @@ replace into item_template (entry, name, inventory_type, display_id, quality, bo
 -- 50043 [High Inquisitor's Staff]
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50043, 'High Inquisitor\'s Tabard', 17, 20257, 1, 1);
--- 50044 [Ambar Filigreed Tabard]
+-- 50044 [Goldweave Tabard]
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
-(50044, 'Ambar Filigreed Tabard', 19, 22370, 1, 1);
--- 50045 [Ambar Filigreed Vest]
+(50044, 'Goldweave Tabard', 19, 22370, 1, 1);
+-- 50045 [Goldweave Vest]
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
-(50045, 'Ambar Filigreed Vest', 4, 22370, 1, 1);
+(50045, 'Goldweave Vest', 4, 22370, 1, 1);
 -- 50046 [Vestment of Summer]
 replace into item_template (entry, name, description, inventory_type, display_id, quality, bonding, script_name, spellid_1, spellcooldown_1) values
 (50046, 'Vestment of Summer', 'You feel the need to dance.', 5, 26131, 1, 1, 'item_summer_vestment', 11542, 1000);
@@ -473,18 +473,18 @@ replace into item_template (entry, name, inventory_type, display_id, quality, bo
 (50308, 'Stormwind Guard\'s Chestplate', 5, 7223, 1, 1),
 (50309, 'Stormwind Guard\'s Waistguard', 6, 7224, 1, 1),
 (50310, 'Stormwind Guard\'s Greaves', 7, 7225, 1, 1),
-(50311, 'Stormwind Guard\'s Sabatons', 8, 7226, 1, 1),
+(50311, 'Stormwind Guard\'s Sabatons', 8, 7255, 1, 1),
 (50312, 'Stormwind Guard\'s Gauntlets', 10, 7227, 1, 1),
 (50313, 'Stormwind Guard\'s Shoulders', 3, 10493, 1, 1),
-(50314, 'Stormwind Guard\'s Helmet', 1, 7712, 1, 1),
+(50314, 'Stormwind Guard\'s Helmet', 1, 24510, 1, 1),
 
-(50316, 'Kul Tiran Guard\'s Chestplate', 5, 7677, 1, 1),
-(50317, 'Kul Tiran Guard\'s Waistguard', 6, 7679, 1, 1),
-(50318, 'Kul Tiran Guard\'s Greaves', 7, 7680, 1, 1),
-(50319, 'Kul Tiran Guard\'s Sabatons', 8, 7681, 1, 1),
-(50320, 'Kul Tiran Guard\'s Gauntlets', 10, 7682, 1, 1),
-(50321, 'Kul Tiran Guard\'s Shoulders', 3, 7684, 1, 1),
-(50322, 'Kul Tiran Guard\'s Helmet', 1, 7784, 1, 1),
+(50316, 'Kul\'Tiras Guard\'s Chestplate', 5, 7677, 1, 1),
+(50317, 'Kul\'Tiras Guard\'s Waistguard', 6, 7679, 1, 1),
+(50318, 'Kul\'Tiras Guard\'s Greaves', 7, 7680, 1, 1),
+(50319, 'Kul\'Tiras Guard\'s Sabatons', 8, 7681, 1, 1),
+(50320, 'Kul\'Tiras Guard\'s Gauntlets', 10, 7682, 1, 1),
+(50321, 'Kul\'Tiras Guard\'s Shoulders', 3, 7684, 1, 1),
+(50322, 'Kul\'Tiras Guard\'s Helmet', 1, 7784, 1, 1),
 
 (50323, 'Theramore Guard\'s Chestplate', 5, 7686, 1, 1),
 (50324, 'Theramore Guard\'s Waistguard', 6, 7687, 1, 1),
@@ -522,7 +522,7 @@ replace into item_template (entry, name, inventory_type, display_id, quality, bo
 (50353, 'Deathguard\'s Boots', 8, 6043, 1, 1),
 (50354, 'Deathguard\'s Gloves', 10, 6045, 1, 1),
 (50355, 'Deathguard\'s Bracers', 9, 6044, 1, 1),
-(50356, 'Deathguard\'s Hood', 1, 12401, 1, 1),
+(50356, 'Deathguard\'s Hood', 1, 15298, 1, 1),
 
 (50357, 'Nightwatch\'s Chestpiece', 5, 8610, 1, 1),
 (50358, 'Nightwatch\'s Belt', 6, 8611, 1, 1),
@@ -544,6 +544,11 @@ replace into item_template (entry, name, inventory_type, display_id, quality, bo
 (50372, 'Thunder Bluff Guard\'s Bracers', 9, 8217, 1, 1),
 (50373, 'Thunder Bluff Guard\'s Shoulders', 3, 8252, 1, 1),
 
+(50392, 'Gnomeregan Guard\'s Chestpiece', 5, 5710, 1, 1),
+(50393, 'Gnomeregan Guard\'s Belt', 6, 4990, 1, 1),
+(50394, 'Gnomeregan Guard\'s Pants', 7, 4377, 1, 1),
+(50395, 'Gnomeregan Guard\'s Boots', 8, 4630, 1, 1),
+(50396, 'Gnomeregan Guard\'s Gloves', 10, 4375, 1, 1),
 
 (50376, 'Hillsbrad Tabard', 19, 16078, 1, 1),
 (50377, 'Pilgrim Pants', 7, 24871, 1, 1);
@@ -556,6 +561,34 @@ replace into item_template (entry, name, class, subclass, inventory_type, displa
 (50342, 'Sentinel\'s Glaive', 2, 14, 13, 4289, 1, 1, 2),
 (50374, 'Thunder Bluff Guard\'s Totem', 2, 14, 13, 5415, 1, 1, 2),
 (50379, 'Forsaken Guard\'s Shield', 4, 6, 14, 30559, 1, 1, 4);
+
+replace into item_template (entry, class, name, display_id, quality, bonding, flags, description, buy_price, required_reputation_faction, required_reputation_rank) values
+(50380, 15, 'Dressing Box: Ironforge Guard', 35406, 1, 1, 4, 'Keep yer feet on tha ground!', 250000, 47, 6),
+(50381, 15, 'Dressing Box: Stormwind Guard', 35406, 1, 1, 4, 'King\'s honor, friend.', 250000, 72, 6),
+(50382, 15, 'Dressing Box: Kul\'Tiras Guard', 35406, 1, 1, 4, 'This fight will never end.', 250000, 0, 0),
+(50383, 15, 'Dressing Box: Theramore Guard', 35406, 1, 1, 4, 'For Lady Proudmoore!', 250000, 0, 0),
+(50384, 15, 'Dressing Box: Stromgarde Guard', 35406, 1, 1, 4, 'For Stromgarde!', 250000, 0, 0),
+(50385, 15, 'Dressing Box: Night Elf Sentinel', 35406, 1, 1, 4, 'Elune guide your path!', 250000, 69, 6),
+(50386, 15, 'Dressing Box: Dwarven Mountaineer', 35406, 1, 1, 4, 'Interest ya\'n a pint?', 250000, 0, 0),
+(50387, 15, 'Dressing Box: Deathguard', 35406, 1, 1, 4, 'Our time will come.', 250000, 68, 6),
+(50388, 15, 'Dressing Box: Nightwatchman', 35406, 1, 1, 4, 'Be careful.', 250000, 0, 0),
+(50389, 15, 'Dressing Box: Orgrimmar Guard', 35406, 1, 1, 4, 'Dabu.', 250000, 76, 6),
+(50390, 15, 'Dressing Box: Thunder Bluff Guard', 35406, 1, 1, 4, 'Moo! are you happy now?', 250000, 81, 6),
+(50391, 15, 'Dressing Box: Gnomeregan Guard', 35406, 1, 1, 4, 'Salutations!', 250000, 54, 6);
+
+replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid) values
+(50380, 50300, 100, 1),(50380, 50301, 100, 2),(50380, 50302, 100, 3),(50380, 50303, 100, 4),(50380, 50304, 100, 5),(50380, 50305, 100, 6),(50380, 50306, 100, 7),(50380, 50307, 100, 8),
+(50381, 50308, 100, 1),(50381, 50309, 100, 2),(50381, 50310, 100, 3),(50381, 11364, 100, 4),(50381, 50311, 100, 5),(50381, 50312, 100, 6),(50381, 50313, 100, 7),(50381, 50314, 100, 8),(50381, 50315, 100, 9), 
+(50382, 50316, 100, 1),(50382, 50317, 100, 2),(50382, 50318, 100, 3),(50382, 50319, 100, 4),(50382, 50320, 100, 5),(50382, 50321, 100, 6),(50382, 50322, 100, 7),
+(50383, 50323, 100, 1),(50383, 50324, 100, 2),(50383, 50325, 100, 3),(50383, 50326, 100, 4),(50383, 50327, 100, 5),(50383, 50328, 100, 6),(50383, 50329, 100, 7),
+(50384, 50330, 100, 1),(50384, 50331, 100, 2),(50384, 50332, 100, 3),(50384, 50333, 100, 4),(50384, 50334, 100, 5),(50384, 50335, 100, 6),(50384, 50336, 100, 7),(50384, 50378, 100, 8),
+(50385, 50337, 100, 1),(50385, 50338, 100, 2),(50385, 50339, 100, 3),(50385, 50340, 100, 4),(50385, 50341, 100, 5),(50385, 50342, 100, 6),
+(50386, 50343, 100, 1),(50386, 50344, 100, 2),(50386, 50345, 100, 3),(50386, 50346, 100, 4),(50386, 50347, 100, 5),(50386, 50348, 100, 6),(50386, 50349, 100, 7),
+(50387, 50350, 100, 1),(50387, 50351, 100, 2),(50387, 50352, 100, 3),(50387, 50353, 100, 4),(50387, 50354, 100, 5),(50387, 50355, 100, 6),(50387, 50356, 100, 7),(50387, 50379, 100, 8),
+(50388, 50357, 100, 1),(50388, 50358, 100, 2),(50388, 50359, 100, 3),(50388, 50360, 100, 4),(50388, 50361, 100, 5),
+(50389, 50362, 100, 1),(50389, 50363, 100, 2),(50389, 50364, 100, 3),(50389, 50365, 100, 4),(50389, 50366, 100, 5),(50389, 50367, 100, 6),
+(50390, 50368, 100, 1),(50390, 50369, 100, 2),(50390, 50370, 100, 3),(50390, 50371, 100, 4),(50390, 50372, 100, 5),(50390, 50373, 100, 6),(50390, 50374, 100, 7),
+(50391, 50392, 100, 1),(50391, 50393, 100, 2),(50391, 50394, 100, 3),(50391, 50395, 100, 4),(50391, 50396, 100, 5);
 
 -- Hotfixes, modify custom items only in this file:
 update item_template set spellcooldown_1 = 5400000, spellid_1 = 24085 where entry = 50234;
