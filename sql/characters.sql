@@ -1023,6 +1023,7 @@ CREATE TABLE IF NOT EXISTS `world` (
 
 -- Data exporting was unselected.
 
+alter table characters add ignore_titles tinyint(3) not null default 0;
 
 -- Dumping structure for table characters.worldstates
 DROP TABLE IF EXISTS `worldstates`;

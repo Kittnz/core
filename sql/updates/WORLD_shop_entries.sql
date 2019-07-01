@@ -108,7 +108,7 @@ replace into shop_items values
 (408, 4, 50089, 'Dalaran Tabard', 75),
 (409, 4, 50090, 'White Tabard of Stormwind', 75),
 (410, 4, 50091, 'Scholomance Tabard', 75),
-(411, 4, 50091, 'Whitemane\'s Tabard', 75),
+(411, 4, 50038, 'Whitemane\'s Tabard', 75),
 (412, 4, 23192, 'Tabard of Scarlet Preacher', 75),
 (413, 4, 23193, 'Tabard of Scarlet Archmage', 75),
 -- Roleplay --------------------------------------------------------------------------------------------
