@@ -575,6 +575,57 @@ GameObjectAI* GetAI_go_survival_tent(GameObject* gameobject)
     return new go_survival_tent(gameobject);
 }
 
+struct go_custom_rested : public GameObjectAI
+{
+    explicit go_custom_rested(GameObject* pGo) : GameObjectAI(pGo)
+    {
+        m_bUsed = false;
+        m_uiJustUsedTimer = 1;
+        m_uiUpdateTimer = 1000;
+    }
+
+    bool m_bUsed;
+    uint32 m_uiJustUsedTimer;
+    uint32 m_uiUpdateTimer;
+
+    void UpdateAI(uint32 const uiDiff) override
+    {
+        if (m_uiJustUsedTimer < uiDiff)
+        {
+            if (m_uiUpdateTimer < uiDiff)
+            {
+                std::list<Player*> players;
+                MaNGOS::AnyPlayerInObjectRangeCheck check(me, 50.0f);
+                MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
+
+                Cell::VisitWorldObjects(me, searcher, 10.0f);
+
+                for (Player* pPlayer : players)
+                {
+                    pPlayer->SetFlag(PLAYER_FLAGS, PLAYER_FLAGS_RESTING);
+                    // Around 25% of the level
+                    pPlayer->SetRestBonus(static_cast<float>(pPlayer->GetRestBonus() + (sObjectMgr.GetXPForLevel(pPlayer->getLevel()) * 0.000025)));
+                }
+                m_uiUpdateTimer = 1000;
+            }
+            else
+            {
+                m_uiUpdateTimer -= uiDiff;
+            }
+            m_bUsed = true;
+        }
+        else
+        {
+            m_uiJustUsedTimer -= uiDiff;
+        }
+    }
+};
+
+GameObjectAI* GetAI_go_custom_rested(GameObject* gameobject)
+{
+    return new go_custom_rested(gameobject);
+}
+
 void AddSC_go_scripts()
 {
     Script *newscript;
@@ -681,5 +732,10 @@ void AddSC_go_scripts()
     newscript = new Script;
     newscript->Name = "go_survival_tent";
     newscript->GOGetAI = &GetAI_go_survival_tent;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "go_custom_rested";
+    newscript->GOGetAI = &GetAI_go_custom_rested;
     newscript->RegisterSelf();
 }
