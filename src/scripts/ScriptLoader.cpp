@@ -22,6 +22,7 @@ void AddSC_battlemaster();
 void AddSC_boss_avatar_of_pompa();
 void AddSC_boss_turtlhu();
 void AddSC_drogon();
+void AddSC_boss_gerastrasz();
 //void AddSC_gmisland();
 //void AddSC_boss_arena_hardog(); // EVENT de TORKIN
 
@@ -293,6 +294,7 @@ void AddScripts()
     AddSC_boss_avatar_of_pompa();
     AddSC_boss_turtlhu();
     AddSC_drogon();
+    AddSC_boss_gerastrasz();
     //AddSC_gmisland();
 
     // Event
