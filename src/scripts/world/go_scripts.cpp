@@ -603,10 +603,9 @@ struct go_custom_rested : public GameObjectAI
                 for (Player* pPlayer : players)
                 {
                     pPlayer->SetFlag(PLAYER_FLAGS, PLAYER_FLAGS_RESTING);
-                    // Around 25% of the level
-                    pPlayer->SetRestBonus(static_cast<float>(pPlayer->GetRestBonus() + (sObjectMgr.GetXPForLevel(pPlayer->getLevel()) * 0.000025)));
+                    pPlayer->SetRestType(REST_TYPE_IN_TAVERN);
                 }
-                m_uiUpdateTimer = 1000;
+                m_uiUpdateTimer = 2500;
             }
             else
             {

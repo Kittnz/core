@@ -20,11 +20,11 @@ replace into creature_template (entry, display_id1, name, subname, level_min, le
 (50088, 14357, 'Echo of Gerastrasz', '', 63, 63, 10632, 10632, 20312, 20312, 4490, 103, 1, 1.14286, 3, 20, 3, 580, 920, 285, 1, 2200, 1500, 600, 825, 100, 2, 76, 0, 27809, 43403, 0, 1, 3, 50080, 2764783455, 33025, '');
 
 
-update creature set faction = 83 where entry = 50081;
-update creature set faction = 71 where entry = 50083;
-update creature set faction = 57 where entry = 50084;
-update creature set faction = 79 where entry = 50086;
-update creature set faction = 875 where entry = 50087;
+update creature_template set faction = 83 where entry = 50081;
+update creature_template set faction = 71 where entry = 50083;
+update creature_template set faction = 57 where entry = 50084;
+update creature_template set faction = 79 where entry = 50086;
+update creature_template set faction = 875 where entry = 50087;
 
 REPLACE INTO `creature_template` VALUES (50089,0,3478,0,0,0,'Guntrus Barleybeard','Wandering Bartender',9395,50,50,3517,3517,0,0,2999,57,6,1.2,1.14286,0,20,5,0,0,1,85,109,0,226,1,2000,2000,1,4608,0,0,0,0,0,0,66.44,91.355,100,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'',0,3,0,0,3,0,0,0,0,0,10,'');
 update creature_template set npc_flags = 4, gossip_menu_id = 0 where entry = 50089;
