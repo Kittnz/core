@@ -26,6 +26,16 @@ update creature set faction = 57 where entry = 50084;
 update creature set faction = 79 where entry = 50086;
 update creature set faction = 875 where entry = 50087;
 
+REPLACE INTO `creature_template` VALUES (50089,0,3478,0,0,0,'Guntrus Barleybeard','Wandering Bartender',9395,50,50,3517,3517,0,0,2999,57,6,1.2,1.14286,0,20,5,0,0,1,85,109,0,226,1,2000,2000,1,4608,0,0,0,0,0,0,66.44,91.355,100,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'',0,3,0,0,3,0,0,0,0,0,10,'');
+update creature_template set npc_flags = 4, gossip_menu_id = 0 where entry = 50089;
+replace into npc_vendor (entry, item) values
+(50089, 2593),
+(50089, 2594),
+(50089, 2595),
+(50089, 2596),
+(50089, 2723),
+(50089, 4600);
+
 -- End of migration.
 END IF;
 END??
