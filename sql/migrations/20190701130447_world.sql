@@ -36,6 +36,7 @@ replace into npc_vendor (entry, item) values
 (50089, 2723),
 (50089, 4600);
 
+update map_template set level_max = 0, script_name = 'instance_caverns_of_time', ghost_entrance_map = 1, ghost_entrance_x = -8332.56, ghost_entrance_y = -4056.01 where entry = 269;
 -- End of migration.
 END IF;
 END??

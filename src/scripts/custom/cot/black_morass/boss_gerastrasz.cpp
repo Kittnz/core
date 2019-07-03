@@ -47,9 +47,9 @@ struct boss_gerastraszAI : public ScriptedAI
 
     void Reset()
     {
-        m_uiRainOfFireTimer = urand(10000, 15000);
+        m_uiRainOfFireTimer = urand(10000, 12000);
         m_uiCleaveTimer = urand(3000, 6000);
-        m_uiBloodFunnelTimer = 18000;
+        m_uiBloodFunnelTimer = 20000;
 
         first_echo_summoned = false;
         second_echo_summoned = false;
@@ -123,7 +123,7 @@ struct boss_gerastraszAI : public ScriptedAI
             m_creature->InterruptNonMeleeSpells(false);
             if (DoCastSpellIfCan(m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0), SPELL_RAIN_OF_FIRE) == CAST_OK) {
                 m_creature->PMonsterYell("The sky will fall upon you, mortals!");
-                m_uiRainOfFireTimer = urand(10000, 15000);
+                m_uiRainOfFireTimer = urand(16000, 24000);
             }
         }
         else
