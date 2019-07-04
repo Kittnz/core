@@ -144,21 +144,21 @@ bool ItemUse_sword_of_truth(Player* pPlayer, Item* pItem, const SpellCastTargets
     return false;
 }
 
-bool ItemUse_makeup_red(Player* pPlayer, Item* pItem, const SpellCastTargets&)
-{
-    // Sally Whitemane
-    pPlayer->SetByteValue(PLAYER_BYTES, 0, 10);
-    ChatHandler(pPlayer).SendSysMessage("Please logout and login again!");
-    return false;
-}
+class DemorphAfterTime : public BasicEvent {
+public:
+    explicit DemorphAfterTime(uint64 player_guid) : BasicEvent(), player_guid(player_guid) {}
 
-bool ItemUse_makeup_black(Player* pPlayer, Item* pItem, const SpellCastTargets&)
-{
-    // Jandice Barov
-    pPlayer->SetByteValue(PLAYER_BYTES, 0, 11);
-    ChatHandler(pPlayer).SendSysMessage("Please logout and login again!");
-    return false;
-}
+    bool Execute(uint64 e_time, uint32 p_time) override {
+        Player* player = ObjectAccessor::FindPlayer(player_guid);
+        if (player) {
+            player->DeMorph();
+        }
+        return false;
+    }
+
+private:
+    uint64 player_guid;
+};
 
 bool ItemUse_hairdye(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
@@ -240,7 +240,8 @@ bool ItemUse_hairdye(Player* pPlayer, Item* pItem, const SpellCastTargets&)
     }
 
     pPlayer->SetByteValue(PLAYER_BYTES, 3, color);
-    ChatHandler(pPlayer).SendSysMessage("Please logout and login again!");
+    pPlayer->SetDisplayId(15435); // Invisible
+    pPlayer->m_Events.AddEvent(new DemorphAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(250));
     return false;
 }
 
@@ -340,7 +341,8 @@ bool ItemUse_skin_changer(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 
     if (bytesToSet > -1) {
         pPlayer->SetByteValue(PLAYER_BYTES, 0, static_cast<uint8>(bytesToSet));
-        ChatHandler(pPlayer).SendSysMessage("Please logout and login again! Some items have multiple skins, so try them all!");
+        pPlayer->SetDisplayId(15435); // Invisible
+        pPlayer->m_Events.AddEvent(new DemorphAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(250));
     } else {
         ChatHandler(pPlayer).SendSysMessage("You can't use this item.");
     }
@@ -514,16 +516,6 @@ void AddSC_item_scripts()
     newscript = new Script;
     newscript->Name = "sword_of_truth";
     newscript->pItemUse = &ItemUse_sword_of_truth;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "makeup_red";
-    newscript->pItemUse = &ItemUse_makeup_red;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "makeup_black";
-    newscript->pItemUse = &ItemUse_makeup_black;
     newscript->RegisterSelf();
 
     newscript = new Script;

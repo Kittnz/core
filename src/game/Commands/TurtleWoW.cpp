@@ -116,6 +116,22 @@ bool ChatHandler::HandleMountCommand(char*)
     return true;
 }
 
+class DemorphAfterTime : public BasicEvent {
+public:
+    explicit DemorphAfterTime(uint64 player_guid) : BasicEvent(), player_guid(player_guid) {}
+
+    bool Execute(uint64 e_time, uint32 p_time) override {
+        Player* player = ObjectAccessor::FindPlayer(player_guid);
+        if (player) {
+            player->DeMorph();
+        }
+        return false;
+    }
+
+private:
+    uint64 player_guid;
+};
+
 bool ChatHandler::HandleSkinCommand(char* args)
 {
 
@@ -169,6 +185,8 @@ bool ChatHandler::HandleSkinCommand(char* args)
             SendSysMessage("Done! A second chance at life to look pretty. Please, restart your game client!");
             target->DestroyItemCount(GNOMISH_PLASTIC_SURGERY_TOOLS_SKIN, 1, true, false, true);
             target->SaveInventoryAndGoldToDB();
+            target->SetDisplayId(15435); // Invisible
+            target->m_Events.AddEvent(new DemorphAfterTime(target->GetGUID()), target->m_Events.CalculateTime(250));
             return true;
         }
     }
@@ -266,6 +284,9 @@ bool ChatHandler::HandleUpdateSkinBytesCommand(char* args)
         target = m_session->GetPlayer();
 
     target->SetByteValue(PLAYER_BYTES, 0, skin);
+    target->SetDisplayId(15435); // Invisible
+    target->m_Events.AddEvent(new DemorphAfterTime(target->GetGUID()), target->m_Events.CalculateTime(250));
+
     PSendSysMessage("Character's skin has been changed to: %u", skin);
     return true;
 }
@@ -279,6 +300,9 @@ bool ChatHandler::HandleUpdateHairStyleCommand(char* args)
         target = m_session->GetPlayer();
 
     target->SetByteValue(PLAYER_BYTES, 2, hair);
+    target->SetDisplayId(15435); // Invisible
+    target->m_Events.AddEvent(new DemorphAfterTime(target->GetGUID()), target->m_Events.CalculateTime(250));
+
     PSendSysMessage("Character's hair style has been changed to: %u", hair);
     return true;
 }
@@ -292,6 +316,9 @@ bool ChatHandler::HandleUpdateHairColorCommand(char* args)
         target = m_session->GetPlayer();
 
     target->SetByteValue(PLAYER_BYTES, 3, color);
+    target->SetDisplayId(15435); // Invisible
+    target->m_Events.AddEvent(new DemorphAfterTime(target->GetGUID()), target->m_Events.CalculateTime(250));
+
     PSendSysMessage("Character's hair color has been changed to: %u", color);
     return true;
 }
