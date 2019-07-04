@@ -625,6 +625,84 @@ GameObjectAI* GetAI_go_custom_rested(GameObject* gameobject)
     return new go_custom_rested(gameobject);
 }
 
+struct go_cot_enter_trigger : public GameObjectAI
+{
+    explicit go_cot_enter_trigger(GameObject* pGo) : GameObjectAI(pGo)
+    {
+        m_uiUpdateTimer = 1000;
+    }
+
+    uint32 m_uiUpdateTimer;
+
+    void UpdateAI(uint32 const uiDiff) override
+    {
+        if (m_uiUpdateTimer < uiDiff)
+        {
+            std::list<Player*> players;
+            MaNGOS::AnyPlayerInObjectRangeCheck check(me, 8.0f, true, false);
+            MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
+
+            Cell::VisitWorldObjects(me, searcher, 10.0f);
+
+            for (Player* pPlayer : players)
+            {
+                if (!pPlayer->isAlive()) {
+                    pPlayer->ResurrectPlayer(0.5f);
+                    pPlayer->SpawnCorpseBones();
+                }
+                pPlayer->TeleportTo(269, -2002.51f, 6575.36f, -154.93f, 5.76f);
+            }
+            m_uiUpdateTimer = 1000;
+        }
+        else
+        {
+            m_uiUpdateTimer -= uiDiff;
+        }
+    }
+};
+
+GameObjectAI* GetAI_go_cot_enter_trigger(GameObject* gameobject)
+{
+    return new go_cot_enter_trigger(gameobject);
+}
+
+struct go_cot_exit_trigger : public GameObjectAI
+{
+    explicit go_cot_exit_trigger(GameObject* pGo) : GameObjectAI(pGo)
+    {
+        m_uiUpdateTimer = 1000;
+    }
+
+    uint32 m_uiUpdateTimer;
+
+    void UpdateAI(uint32 const uiDiff) override
+    {
+        if (m_uiUpdateTimer < uiDiff)
+        {
+            std::list<Player*> players;
+            MaNGOS::AnyPlayerInObjectRangeCheck check(me, 8.0f, true, false);
+            MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
+
+            Cell::VisitWorldObjects(me, searcher, 10.0f);
+
+            for (Player* pPlayer : players)
+            {
+                pPlayer->TeleportTo(1, -8349.90f, -4060.05f, -208.06f, 3.48f);
+            }
+            m_uiUpdateTimer = 1000;
+        }
+        else
+        {
+            m_uiUpdateTimer -= uiDiff;
+        }
+    }
+};
+
+GameObjectAI* GetAI_go_cot_exit_trigger(GameObject* gameobject)
+{
+    return new go_cot_exit_trigger(gameobject);
+}
+
 void AddSC_go_scripts()
 {
     Script *newscript;
@@ -736,5 +814,15 @@ void AddSC_go_scripts()
     newscript = new Script;
     newscript->Name = "go_custom_rested";
     newscript->GOGetAI = &GetAI_go_custom_rested;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "go_cot_enter_trigger";
+    newscript->GOGetAI = &GetAI_go_cot_enter_trigger;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "go_cot_exit_trigger";
+    newscript->GOGetAI = &GetAI_go_cot_exit_trigger;
     newscript->RegisterSelf();
 }
