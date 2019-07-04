@@ -1699,7 +1699,7 @@ class MANGOS_DLL_SPEC Unit : public WorldObject
             return form == FORM_CAT || form == FORM_BEAR || form == FORM_DIREBEAR;
         }
 
-        bool IsInDisallowedMountForm() const;
+        bool IsInDisallowedMountForm();
 
         float m_modMeleeHitChance;
         float m_modRangedHitChance;

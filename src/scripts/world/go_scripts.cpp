@@ -687,7 +687,8 @@ struct go_cot_exit_trigger : public GameObjectAI
 
             for (Player* pPlayer : players)
             {
-                pPlayer->TeleportTo(1, -8349.90f, -4060.05f, -208.06f, 3.48f);
+                //pPlayer->TeleportTo(1, -8349.90f, -4060.05f, -208.06f, 3.48f);
+                pPlayer->TeleportTo(1, -8756.86f, -4191.39f, -209.49f, 5.57f);
             }
             m_uiUpdateTimer = 1000;
         }

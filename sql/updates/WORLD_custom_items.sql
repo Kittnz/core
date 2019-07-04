@@ -53,9 +53,9 @@ replace into item_template (entry, class, subclass, name, description, display_i
 -- 50016 [Portable Meeting Stone]
 replace into item_template (entry, name, description, display_id, quality, spellid_1, spellcooldown_1, script_name, bonding) values
 (50016, 'Portable Meeting Stone', 'Use it to meet new friends.', '33543', '1', '7077', '3600000', 'portable_meeting_stone', '1');
--- 50017 [Highborne Soul Mirror]
-replace into item_template (entry, name, description, display_id, quality, spellid_1, spellcooldown_1, script_name) values
-(50017, 'Highborne Soul Mirror', 'Before the Great Sundering, the Highborne were known among the night elves for their arrogance, avarice and outlandish clothing...', 14007, 1, 31726, 3600000, 'highborne_soul_mirror');
+-- 50017 [Vial of the Sunwell]
+replace into item_template (entry, name, description, display_id, quality, spellid_1, spellcooldown_1, script_name, bonding) values
+(50017, 'Vial of the Sunwell', 'This Vial contains some of the last uncorrupted water of the Thalassian Sunwell before it was defiled by the Scourge. Within this water lies the hope and dreams of the broken High elven people who hope to see the Dawn over their homeland once more.', 17898, 1, 31726, 0, 'highborne_soul_mirror', 1);
 -- 50018 [Turtle Traveller's Bag]
 replace into item_template (entry, class, name, display_id, quality, buy_count, buy_price, inventory_type, item_level, stackable, container_slots, bonding, material) values
 (50018, 1, 'Turtle Traveller\'s Bag', 6430, 1, 1, 320000, 18, 60, 1, 20, 1, 8);
@@ -605,6 +605,9 @@ replace into item_template (entry, class, Flags, Buy_Count, Buy_Price, Sell_Pric
 (50405, 15, 0, 1, 0, 0, 'Spectral Gryphon Essence', '', 9731, 4, 0, 60, 60, 762, 150, 10801, 1, 330, 3000, 1, 0, 1),
 (50406, 15, 0, 1, 0, 0, 'Shadowhorn Stag', '', 8232, 4, 0, 60, 60, 762, 150, 470, 1, 330, 3000, 1, 0, 1),
 (50407, 15, 0, 1, 0, 0, 'Nightmare Dreamrunner', '', 30608, 4, 0, 60, 60, 762, 150, 470, 1, 330, 3000, 1, 0, 1);
+
+replace into item_template (entry, name, description, display_id, quality, spellid_1, spellcooldown_1, script_name, bonding) values
+(50408, 'Cenarius Acorn', 'This little acorn holds great nature magic. It seems to listen to the words told to it and may one day hatch into a beautiful being.', 7287, 1, 31726, 0, 'dryad_acorn', 1);
 
 -- Hotfixes, modify custom items only in this file:
 update item_template set spellcooldown_1 = 5400000, spellid_1 = 24085 where entry = 50234;

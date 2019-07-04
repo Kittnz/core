@@ -7551,8 +7551,21 @@ void Unit::Unmount(bool from_aura)
     SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, 0);
 }
 
-bool Unit::IsInDisallowedMountForm() const
+bool Unit::IsInDisallowedMountForm()
 {
+    // Turtle WoW custom, some morphs should be allowed to use mounts
+    if (GetDisplayId() == 4545 || GetDisplayId() == 6779 || GetDisplayId() == 9752 || GetDisplayId() == 4494)
+        return false;
+
+    // Allow mounting but demorph first because of no mount animation
+    if (GetDisplayId() == 4729 || GetDisplayId() == 3293 || GetDisplayId() == 4730 || GetDisplayId() == 1643 ||
+        GetDisplayId() == 150 || GetDisplayId() == 876) {
+        DeMorph();
+        return false;
+    }
+
+    // End Turtle WoW custom
+
     ShapeshiftForm form = GetShapeshiftForm();
     if (form != FORM_NONE && form != FORM_BATTLESTANCE && form != FORM_BERSERKERSTANCE && form != FORM_DEFENSIVESTANCE && form != FORM_SHADOW && form != FORM_STEALTH)
         return true;

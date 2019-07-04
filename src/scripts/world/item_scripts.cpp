@@ -25,10 +25,53 @@ bool ItemUse_portable_meeting_stone(Player* pPlayer, Item* pItem, const SpellCas
 
 bool ItemUse_highborne_soul_mirror(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
-    int male_models[10] = { 7874, 7010, 6630, 11669, 11671, 6994, 6779, 6549, 6546, 6385 };
-    int female_models[6] = { 7872, 7922, 11672, 6782, 6548, 6547 };
-    int modelid = rand() % 6; //TODO: More female models.
-    pPlayer->SetDisplayId((pPlayer->getGender() == GENDER_MALE) ? male_models[modelid] : female_models[modelid]);
+    if (!pPlayer)
+        return false;
+
+    if (pPlayer->GetNativeDisplayId() != pPlayer->GetDisplayId()) {
+        pPlayer->DeMorph();
+        return false;
+    }
+
+    uint32 displayId = 0;
+    bool isMale = pPlayer->getGender() == GENDER_MALE;
+    switch (pPlayer->getClass())
+    {
+        case CLASS_WARRIOR:
+        case CLASS_PALADIN:
+            displayId = isMale ? 4245 : 4729;
+            break;
+        case CLASS_MAGE:
+        case CLASS_WARLOCK:
+            displayId = isMale ? 6779 : 3293;
+            break;
+        case CLASS_PRIEST:
+            displayId = isMale ? 9752 : 4730;
+            break;
+        case CLASS_DRUID:
+        case CLASS_ROGUE:
+        case CLASS_SHAMAN:
+        case CLASS_HUNTER:
+            displayId = isMale ? 4494 : 1643;
+            break;
+        default:
+            pPlayer->DeMorph();
+    }
+    pPlayer->SetDisplayId(displayId);
+    return false;
+}
+
+bool ItemUse_dryad_acorn(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+{
+    if (!pPlayer)
+        return false;
+
+    if (pPlayer->GetNativeDisplayId() != pPlayer->GetDisplayId()) {
+        pPlayer->DeMorph();
+        return false;
+    }
+
+    pPlayer->SetDisplayId(pPlayer->getGender() == GENDER_MALE ? 150 : 876);
     return false;
 }
 
@@ -551,5 +594,10 @@ void AddSC_item_scripts()
     newscript = new Script;
     newscript->Name = "golden_pocket_watch";
     newscript->pItemUse = &ItemUse_golden_pocket_watch;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "dryad_acorn";
+    newscript->pItemUse = &ItemUse_dryad_acorn;
     newscript->RegisterSelf();
 }
