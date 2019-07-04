@@ -59,7 +59,7 @@ struct boss_gerastraszAI : public ScriptedAI
 
     void Aggro(Unit* pWho)
     {
-        m_creature->PMonsterYell("Who dares disrupt our majestic plan? All dragons united will rule everything.");
+        m_creature->PMonsterYell("Who dares disrupt our majestic plan? The master won't like this.");
         m_creature->SetInCombatWithZone();
     }
 
