@@ -95,6 +95,7 @@ typedef std::map<uint32, ShopEntry> ShopEntriesMap;
 typedef std::map<uint8, ShopCategory> ShopCategoriesMap;
 
 typedef std::map<uint32, uint32> CustomPetItemCreatureEntryMap;
+typedef std::map<uint32, uint32> CustomMountItemCreatureEntryMap;
 
 struct BattlegroundEntranceTrigger
 {
@@ -856,6 +857,7 @@ class ObjectMgr
         void LoadAreaLocales();
 		void LoadShop();
         void LoadCustomPetCreatureEntries();
+        void LoadCustomMountCreatureEntries();
 
         void LoadNPCText();
 
@@ -1400,6 +1402,7 @@ class ObjectMgr
         void ResetOldMailCounter() { m_OldMailCounter = 0; }
         void IncrementOldMailCounter(uint32 count) { m_OldMailCounter += count; }
         uint32 GetCustomPetCreatureEntryFromItem(uint32 item_entry);
+        uint32 GetCustomMountCreatureEntryFromItem(uint32 item_entry);
 
     protected:
 
@@ -1519,6 +1522,7 @@ class ObjectMgr
 		ShopEntriesMap m_ShopEntriesMap;
 
 		CustomPetItemCreatureEntryMap m_customPetItemCreatureEntryMap;
+        CustomPetItemCreatureEntryMap m_customMountItemCreatureEntryMap;
 
         typedef std::map<uint32,uint32> BaseXPMap;          // [area level][base xp]
         BaseXPMap m_BaseXPMap;

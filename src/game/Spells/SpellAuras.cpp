@@ -2153,16 +2153,40 @@ void Aura::HandleAuraMounted(bool apply, bool Real)
 
     Unit *target = GetTarget();
 
+    if (!target)
+        return;
+
     if (apply)
     {
-        CreatureInfo const* ci = ObjectMgr::GetCreatureTemplate(m_modifier.m_miscvalue);
-        if (!ci)
+        bool useCustom = false;
+        CreatureInfo const* cInfo = nullptr;
+        if (Player* pPlayer = target->ToPlayer()) {
+            const ObjectGuid& itemGuid = GetCastItemGuid();
+            if (itemGuid) {
+                uint32 itemEntry = 0;
+                if (Item* item = pPlayer->GetItemByGuid(itemGuid))
+                    itemEntry = item->GetEntry();
+                if (itemEntry > 50000) {
+                    uint32 creature_entry = sObjectMgr.GetCustomMountCreatureEntryFromItem(itemEntry);
+                    if (creature_entry) {
+                        cInfo = sCreatureStorage.LookupEntry<CreatureInfo>(creature_entry);
+                        useCustom = true;
+                    }
+                }
+            }
+        }
+
+        if (!useCustom) {
+            cInfo = ObjectMgr::GetCreatureTemplate(m_modifier.m_miscvalue);
+        }
+
+        if (!cInfo)
         {
-            sLog.outErrorDb("AuraMounted: `creature_template`='%u' not found in database (only need it modelid)", m_modifier.m_miscvalue);
+            sLog.outErrorDb("AuraMounted: `creature_template`='%u' not found in database", m_modifier.m_miscvalue);
             return;
         }
 
-        uint32 display_id = Creature::ChooseDisplayId(ci);
+        uint32 display_id = Creature::ChooseDisplayId(cInfo);
         CreatureModelInfo const *minfo = sObjectMgr.GetCreatureModelRandomGender(display_id);
         if (minfo)
             display_id = minfo->modelid;

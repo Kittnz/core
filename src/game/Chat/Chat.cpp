@@ -705,6 +705,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { MSTR, "shop",                        SEC_DEVELOPER, true,  &ChatHandler::HandleReloadShopCommand,                    "", nullptr },
         { MSTR, "rates",                       SEC_DEVELOPER, true,  &ChatHandler::HandleReloadRates,                          "", nullptr },
         { MSTR, "custom_pets",                 SEC_DEVELOPER, true,  &ChatHandler::HandleReloadCustomPetEntries,               "", nullptr },
+        { MSTR, "custom_mounts",               SEC_DEVELOPER, true,  &ChatHandler::HandleReloadCustomMountEntries,               "", nullptr },
         { MSTR, nullptr,                       0,                 false, nullptr,                                                  "", nullptr }
     };
 

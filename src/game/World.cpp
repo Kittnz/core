@@ -1129,6 +1129,9 @@ void World::SetInitialWorldSettings()
     ///- Loading custom pets
     sObjectMgr.LoadCustomPetCreatureEntries();
 
+    ///- Loading custom mounts
+    sObjectMgr.LoadCustomMountCreatureEntries();
+
     ///- Loads existing IDs in the database.
     sObjectMgr.LoadAllIdentifiers();
 

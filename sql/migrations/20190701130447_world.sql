@@ -37,6 +37,33 @@ replace into npc_vendor (entry, item) values
 (50089, 4600);
 
 update map_template set level_max = 0, script_name = 'instance_caverns_of_time', ghost_entrance_map = 1, ghost_entrance_x = -8332.56, ghost_entrance_y = -4056.01 where entry = 269;
+
+create table if not exists custom_mount_entry_relation (
+     item_entry mediumint(8) unsigned not null default 0 primary key,
+     creature_entry mediumint(8) unsigned not null default 0
+);
+
+replace into creature_template (entry, name, display_id1, level_min, level_max, health_min, health_max, faction) values
+(50090, 'Quel\'dorei Steed', 2186, 5, 5, 100, 100, 35),
+(50091, 'Swift Zhevra', 2190, 5, 5, 100, 100, 35),
+(50092, 'Ivory War Raptor', 14345, 5, 5, 100, 100, 35),
+(50093, 'Violet War Raptor', 14343, 5, 5, 100, 100, 35),
+(50094, 'Obsidian War Raptor', 14340, 5, 5, 100, 100, 35),
+(50095, 'Red War Raptor', 14341, 5, 5, 100, 100, 35),
+(50096, 'Spectral Gryphon', 17328, 5, 5, 100, 100, 35),
+(50097, 'Shadowhorn Stag', 1992, 5, 5, 100, 100, 35),
+(50098, 'Nightmare Dreamrunner', 2185, 5, 5, 100, 100, 35);
+
+replace into custom_mount_entry_relation values
+(50399, 50090),
+(50400, 50091),
+(50401, 50092),
+(50402, 50093),
+(50404, 50094),
+(50403, 50095),
+(50405, 50096),
+(50406, 50097),
+(50407, 50098);
 -- End of migration.
 END IF;
 END??

@@ -10933,3 +10933,30 @@ uint32 ObjectMgr::GetCustomPetCreatureEntryFromItem(uint32 item_entry) {
         return 0;
     }
 }
+
+void ObjectMgr::LoadCustomMountCreatureEntries() {
+    m_customMountItemCreatureEntryMap.clear();
+    QueryResult* result = WorldDatabase.Query("SELECT * FROM custom_mount_entry_relation");
+    if (result) {
+        do {
+            Field* fields = result->Fetch();
+            uint32 item_entry = fields[0].GetUInt32();
+            uint32 creature_entry = fields[1].GetUInt32();
+            m_customMountItemCreatureEntryMap[item_entry] = creature_entry;
+        } while (result->NextRow());
+        sLog.outString(">> Loaded custom mounts.");
+    }
+    else {
+        sLog.outString(">> DB table `custom_mount_entry_relation` is empty.");
+    }
+    delete result;
+}
+
+uint32 ObjectMgr::GetCustomMountCreatureEntryFromItem(uint32 item_entry) {
+    if (m_customMountItemCreatureEntryMap.count(item_entry)) {
+        return m_customMountItemCreatureEntryMap[item_entry];
+    }
+    else {
+        return 0;
+    }
+}

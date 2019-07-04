@@ -8445,3 +8445,8 @@ bool ChatHandler::HandleReloadCustomPetEntries(char *args)
     return true;
 }
 
+bool ChatHandler::HandleReloadCustomMountEntries(char *args)
+{
+    sObjectMgr.LoadCustomMountCreatureEntries();
+    return true;
+}

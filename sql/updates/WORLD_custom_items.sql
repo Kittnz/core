@@ -595,6 +595,17 @@ replace into item_template (entry, name, inventory_type, display_id, quality, bo
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50398, 'Goldweave Pants', 7, 29782, 1, 1);
 
+replace into item_template (entry, class, Flags, Buy_Count, Buy_Price, Sell_Price, name, description, display_id, Quality, Inventory_Type, Item_Level, Required_Level, Required_Skill, Required_Skill_Rank, spellid_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, bonding, max_count, stackable) values
+(50399, 15, 0, 1, 0, 0, 'Quel\'dorei Steed', '', 13108, 4, 0, 60, 60, 762, 150, 16083, 1, 330, 3000, 1, 0, 1),
+(50400, 15, 0, 1, 0, 0, 'Swift Zhevra', '', 22037, 4, 0, 60, 60, 762, 150, 16083, 1, 330, 3000, 1, 0, 1),
+(50401, 15, 0, 1, 0, 0, 'Whistle of the Ivory War Raptor', '', 17494, 4, 0, 60, 60, 762, 150, 17450, 1, 330, 3000, 1, 0, 1),
+(50402, 15, 0, 1, 0, 0, 'Whistle of the Violet War Raptor', '', 17494, 4, 0, 60, 60, 762, 150, 10799, 1, 330, 3000, 1, 0, 1),
+(50403, 15, 0, 1, 0, 0, 'Whistle of the Red War Raptor', '', 17494, 4, 0, 60, 60, 762, 150, 16084, 1, 330, 3000, 1, 0, 1),
+(50404, 15, 0, 1, 0, 0, 'Whistle of the Obsidian War Raptor', '', 17494, 4, 0, 60, 60, 762, 150, 10798, 1, 330, 3000, 1, 0, 1),
+(50405, 15, 0, 1, 0, 0, 'Spectral Gryphon Essence', '', 9731, 4, 0, 60, 60, 762, 150, 10801, 1, 330, 3000, 1, 0, 1),
+(50406, 15, 0, 1, 0, 0, 'Shadowhorn Stag', '', 8232, 4, 0, 60, 60, 762, 150, 470, 1, 330, 3000, 1, 0, 1),
+(50407, 15, 0, 1, 0, 0, 'Nightmare Dreamrunner', '', 30608, 4, 0, 60, 60, 762, 150, 470, 1, 330, 3000, 1, 0, 1);
+
 -- Hotfixes, modify custom items only in this file:
 update item_template set spellcooldown_1 = 5400000, spellid_1 = 24085 where entry = 50234;
 update item_template set spellcooldown_1 = 3600000 where entry = 50235;
