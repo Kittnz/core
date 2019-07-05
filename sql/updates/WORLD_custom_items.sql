@@ -474,8 +474,8 @@ replace into item_template (entry, name, inventory_type, display_id, quality, bo
 (50309, 'Stormwind Guard\'s Waistguard', 6, 7224, 1, 1),
 (50310, 'Stormwind Guard\'s Greaves', 7, 7225, 1, 1),
 (50311, 'Stormwind Guard\'s Sabatons', 8, 7255, 1, 1),
-(50312, 'Stormwind Guard\'s Gauntlets', 10, 7227, 1, 1),
-(50313, 'Stormwind Guard\'s Shoulders', 3, 10493, 1, 1),
+(50312, 'Stormwind Guard\'s Gauntlets', 10, 7698, 1, 1),
+(50313, 'Stormwind Guard\'s Shoulders', 3, 7541, 1, 1),
 (50314, 'Stormwind Guard\'s Helmet', 1, 24510, 1, 1),
 
 (50316, 'Kul\'Tiras Guard\'s Chestplate', 5, 7677, 1, 1),
@@ -624,3 +624,4 @@ update item_template set quality = 4, description = 'Only the bravest adventurer
 update item_template set quality = 6, subclass = 14, sheath = 1 where entry = 50094;
 update item_template set bonding = 0, stackable = 20, buy_price = 500, sell_price = 250, buy_count = 1, spellcharges_1 = -1, spellcooldown_1 = 1000, delay = 0, subclass = 0 where entry in (50020, 50021);
 update item_template set name = 'Dalaran Tabard' where entry = 50089;
+update item_template set max_count = 1 where entry in (50234, 50235);

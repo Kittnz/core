@@ -2686,7 +2686,7 @@ void Player::GiveXP(uint32 xp, Unit* victim)
     if ((level >= sWorld.getConfig(CONFIG_UINT32_MAX_PLAYER_LEVEL)) || (HasItemCount(50008, 1, true)))
         return;
 
-    // XP resting bonus for kill
+    // XP resting bonus for kill010
     uint32 rested_bonus_xp = victim ? GetXPRestBonus(xp) : 0;
 
     SendLogXPGain(xp, victim, rested_bonus_xp);

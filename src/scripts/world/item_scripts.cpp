@@ -407,7 +407,11 @@ bool ItemUse_survival_tent(Player* pPlayer, Item* pItem, const SpellCastTargets&
         // reagents: Linen Cloth (5), Simple Wood (1)
         if (pPlayer->HasItemCount(2589, 5, false) && pPlayer->HasItemCount(4470, 1, false)) {
             // summon tent object for 20 minutes
-            if (!pPlayer->IsFalling() && !pPlayer->IsInWater() && !pPlayer->InBattleGround() && !pPlayer->InGurubashiArena(false)) {
+            if (!pPlayer->IsFalling() && !pPlayer->IsInWater() && !pPlayer->InGurubashiArena(false) &&
+                pPlayer->GetTerrain()->IsOutdoors(pPlayer->GetPositionX(), pPlayer->GetPositionY(), pPlayer->GetPositionZ()) &&
+                pPlayer->GetZoneId() != 1519 && pPlayer->GetZoneId() != 1637 && pPlayer->GetZoneId() != 1497 && pPlayer->GetZoneId() != 1537 && 
+                pPlayer->GetZoneId() != 1657 && pPlayer->GetZoneId() != 1638 && !pPlayer->GetInstanceId()) {
+                
                 pPlayer->SummonGameObject(1000001, pPlayer->GetPositionX(), pPlayer->GetPositionY(),
                                           pPlayer->GetPositionZ(), pPlayer->GetOrientation(), 0.0f, 0.0f, 0.0f, 0.0f, 1200, true);
                 // set rested state - check for the actual script in go_survival_tent
@@ -427,7 +431,7 @@ bool ItemUse_survival_tent(Player* pPlayer, Item* pItem, const SpellCastTargets&
                 //pPlayer->DestroyItemCount(50234, 1, true);
                 return false;
             } else {
-                ChatHandler(pPlayer).SendSysMessage("Can't build here!");
+                ChatHandler(pPlayer).SendSysMessage("Can't build here! You need to be outside.");
                 return true;
             }
         } else {
