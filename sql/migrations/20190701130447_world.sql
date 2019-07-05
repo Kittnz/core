@@ -25,7 +25,7 @@ update creature_template set faction = 83 where entry = 50081;
 update creature_template set faction = 71 where entry = 50083;
 update creature_template set faction = 57, display_id1 = 12917, display_id2 = 0 where entry = 50084;
 update creature_template set faction = 79 where entry = 50086;
-update creature_template set faction = 875, display_id1 = 12942, display_id2 = 0 where entry = 50087;
+update creature_template set faction = 875, display_id1 = 9818, display_id2 = 0 where entry = 50087;
 
 REPLACE INTO `creature_template` VALUES (50089,0,3478,0,0,0,'Guntrus Barleybeard','Wandering Bartender',9395,50,50,3517,3517,0,0,2999,57,6,1.2,1.14286,0,20,5,0,0,1,85,109,0,226,1,2000,2000,1,4608,0,0,0,0,0,0,66.44,91.355,100,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'',0,3,0,0,3,0,0,0,0,0,10,'');
 update creature_template set npc_flags = 4, gossip_menu_id = 0 where entry = 50089;
@@ -71,6 +71,17 @@ REPLACE INTO `gameobject_template` (`entry`, `patch`, `type`, `displayId`, `name
 (1000026, 0, 5, 381, 'CoT Exit Trigger', 0, 0, 0.01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_cot_exit_trigger');
 
 update creature set position_x = -7270.35, position_y = -4544.52, position_z = 8.90, orientation = 5.72 where guid = 23555;
+
+replace into creature_template (entry, name, subname, scale, level_min, level_max, health_min, health_max, display_id1, faction, type, inhabit_type, npc_flags) values
+(50099, 'Guay\'jin', 'Sen\'jin Watcher Recruiter', 1, 20, 20, 1120, 1120, 14759, 877, 7, 3, 4);
+
+update creature_template set subname = 'Thunder Bluff Brave Recruiter' where entry = 50081;
+
+replace into npc_vendor (entry, item) values
+(50099, 50416); -- Sen'jin Village
+
+insert into creature (id, map, position_x, position_y, position_z, orientation, curhealth) values
+(50099, 1, -777.545, -4910.82, 19.4466, 2.96565, 1120);
 
 -- End of migration.
 END IF;

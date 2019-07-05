@@ -563,18 +563,18 @@ replace into item_template (entry, name, class, subclass, inventory_type, displa
 (50379, 'Forsaken Guard\'s Shield', 4, 6, 14, 30559, 1, 1, 4);
 
 replace into item_template (entry, class, name, display_id, quality, bonding, flags, description, buy_price, required_reputation_faction, required_reputation_rank) values
-(50380, 15, 'Dressing Box: Ironforge Guard', 35406, 1, 1, 4, 'Keep yer feet on tha ground!', 250000, 47, 6),
-(50381, 15, 'Dressing Box: Stormwind Guard', 35406, 1, 1, 4, 'King\'s honor, friend.', 250000, 72, 6),
-(50382, 15, 'Dressing Box: Kul\'Tiras Guard', 35406, 1, 1, 4, 'This fight will never end.', 250000, 0, 0),
-(50383, 15, 'Dressing Box: Theramore Guard', 35406, 1, 1, 4, 'For Lady Proudmoore!', 250000, 0, 0),
-(50384, 15, 'Dressing Box: Stromgarde Guard', 35406, 1, 1, 4, 'For Stromgarde!', 250000, 0, 0),
-(50385, 15, 'Dressing Box: Night Elf Sentinel', 35406, 1, 1, 4, 'Elune guide your path!', 250000, 69, 6),
-(50386, 15, 'Dressing Box: Dwarven Mountaineer', 35406, 1, 1, 4, 'Interest ya\'n a pint?', 250000, 0, 0),
-(50387, 15, 'Dressing Box: Deathguard', 35406, 1, 1, 4, 'Our time will come.', 250000, 68, 6),
-(50388, 15, 'Dressing Box: Nightwatchman', 35406, 1, 1, 4, 'Be careful.', 250000, 0, 0),
-(50389, 15, 'Dressing Box: Orgrimmar Guard', 35406, 1, 1, 4, 'Dabu.', 250000, 76, 6),
-(50390, 15, 'Dressing Box: Thunder Bluff Guard', 35406, 1, 1, 4, 'Moo! are you happy now?', 250000, 81, 6),
-(50391, 15, 'Dressing Box: Gnomeregan Guard', 35406, 1, 1, 4, 'Salutations!', 250000, 54, 6);
+(50380, 15, 'Dressing Box: Ironforge Guard', 35406, 1, 1, 4, 'Keep yer feet on tha ground!', 150000, 47, 6),
+(50381, 15, 'Dressing Box: Stormwind Guard', 35406, 1, 1, 4, 'King\'s honor, friend.', 150000, 72, 6),
+(50382, 15, 'Dressing Box: Kul\'Tiras Guard', 35406, 1, 1, 4, 'This fight will never end.', 150000, 0, 0),
+(50383, 15, 'Dressing Box: Theramore Guard', 35406, 1, 1, 4, 'For Lady Proudmoore!', 150000, 0, 0),
+(50384, 15, 'Dressing Box: Stromgarde Guard', 35406, 1, 1, 4, 'For Stromgarde!', 150000, 0, 0),
+(50385, 15, 'Dressing Box: Night Elf Sentinel', 35406, 1, 1, 4, 'Elune guide your path!', 150000, 69, 6),
+(50386, 15, 'Dressing Box: Dwarven Mountaineer', 35406, 1, 1, 4, 'Interest ya\'n a pint?', 150000, 0, 0),
+(50387, 15, 'Dressing Box: Deathguard', 35406, 1, 1, 4, 'Our time will come.', 150000, 68, 6),
+(50388, 15, 'Dressing Box: Nightwatchman', 35406, 1, 1, 4, 'Be careful.', 150000, 0, 0),
+(50389, 15, 'Dressing Box: Orgrimmar Guard', 35406, 1, 1, 4, 'Dabu.', 150000, 76, 6),
+(50390, 15, 'Dressing Box: Thunder Bluff Guard', 35406, 1, 1, 4, 'Moo! are you happy now?', 150000, 81, 6),
+(50391, 15, 'Dressing Box: Gnomeregan Guard', 35406, 1, 1, 4, 'Salutations!', 150000, 54, 6);
 
 replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid) values
 (50380, 50300, 100, 1),(50380, 50301, 100, 2),(50380, 50302, 100, 3),(50380, 50303, 100, 4),(50380, 50304, 100, 5),(50380, 50305, 100, 6),(50380, 50306, 100, 7),(50380, 50307, 100, 8),
@@ -608,6 +608,27 @@ replace into item_template (entry, class, Flags, Buy_Count, Buy_Price, Sell_Pric
 
 replace into item_template (entry, name, description, display_id, quality, spellid_1, spellcooldown_1, script_name, bonding) values
 (50408, 'Cenarius Acorn', 'This little acorn holds great nature magic. It seems to listen to the words told to it and may one day hatch into a beautiful being.', 7287, 1, 31726, 0, 'dryad_acorn', 1);
+
+replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
+(50409, 'Sen\'jin Guard\'s Harness', 5, 10883, 1, 1),
+(50410, 'Sen\'jin Guard\'s Belt', 6, 11279, 1, 1),
+(50411, 'Sen\'jin Guard\'s Pants', 7, 8204, 1, 1),
+(50412, 'Sen\'jin Guard\'s Anklets', 8, 15412, 1, 1),
+(50413, 'Sen\'jin Guard\'s Bracers', 10, 15413, 1, 1),
+(50414, 'Sen\'jin Guard\'s Shoulders', 3, 34249, 1, 1),
+(50415, 'Sen\'jin Guard\'s Mask', 1, 18689, 1, 1);
+
+replace into item_template (entry, class, name, display_id, quality, bonding, flags, description, buy_price, required_reputation_faction, required_reputation_rank) values
+(50416, 15, 'Dressing Box: Sen\'jin Guard', 35406, 1, 1, 4, 'Taz\'dingo!', 150000, 530, 6);
+
+replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid) values
+(50416, 50409, 100, 1),
+(50416, 50410, 100, 2),
+(50416, 50411, 100, 3),
+(50416, 50412, 100, 4),
+(50416, 50413, 100, 5),
+(50416, 50414, 100, 6),
+(50416, 50415, 100, 7);
 
 -- Hotfixes, modify custom items only in this file:
 update item_template set spellcooldown_1 = 5400000, spellid_1 = 24085 where entry = 50234;
