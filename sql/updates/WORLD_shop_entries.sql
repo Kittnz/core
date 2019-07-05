@@ -121,7 +121,7 @@ replace into shop_items values
 (506, 5, 50386, 'Dressing Box: Dwarven Mountaineer', 100),
 (507, 5, 50388, 'Dressing Box: Nightwatchman', 100),
 (508, 5, 50384, 'Dressing Box: Stromgarde Guard', 100),
-(509, 5, 50408, 'Cenarius Acorn', 200),
+(509, 5, 50408, 'Cenarius Acorn (Dryad morph)', 200),
 -- Skins ---------------------------------------------------------------------------------------
 (600, 6, 50105, 'Human: Sally Whitemane (Female Only)', 50),
 (601, 6, 50106, 'Human, Gnome: Cult of the Damned', 50),
