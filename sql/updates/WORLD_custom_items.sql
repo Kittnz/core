@@ -241,7 +241,7 @@ replace into item_template (entry, name, inventory_type, display_id, quality, bo
 (50089, 'Tabard of the Kirin Tor', 19, 10643, 1, 1, '');
 -- 50090 [Tabard of Stormwind]
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding, description) values
-(50090, 'Tabard of Stormwind', 19, 12806, 1, 1, '');
+(50090, 'White Tabard of Stormwind', 19, 12806, 1, 1, '');
 -- 50091 [Scholomance Tabard]
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding, description) values
 (50091, 'Scholomance Tabard', 19, 24344, 1, 1, '');
