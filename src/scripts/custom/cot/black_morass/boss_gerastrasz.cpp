@@ -21,7 +21,8 @@ enum
     SPELL_RAIN_OF_FIRE          = 19717,
     SPELL_BLOOD_FUNNEL          = 24617,
     SPELL_CLEAVE                = 20691,
-    TWIN_TELEPORT_VISUAL        = 26638
+    TWIN_TELEPORT_VISUAL        = 26638,
+    SPELL_FIRE_NOVA             = 18432
 };
 
 enum
@@ -42,6 +43,7 @@ struct boss_gerastraszAI : public ScriptedAI
 
     bool first_echo_summoned;
     bool second_echo_summoned;
+    bool third_echo_summoned;
 
     Creature* currentEcho;
 
@@ -53,6 +55,7 @@ struct boss_gerastraszAI : public ScriptedAI
 
         first_echo_summoned = false;
         second_echo_summoned = false;
+        third_echo_summoned = false;
 
         currentEcho = nullptr;
     }
@@ -69,6 +72,14 @@ struct boss_gerastraszAI : public ScriptedAI
             currentEcho->DisappearAndDie();
             currentEcho = nullptr;
         }
+        m_creature->PMonsterSay("Already? So soon...");
+    }
+
+    void IgniteEcho() {
+        m_creature->PMonsterYell("BAH! USELESS MINION!");
+        m_creature->CastSpell(m_creature, SPELL_FIRE_NOVA, false);
+        m_creature->MonsterTextEmote("Commander Gerastrasz ignites his own echo.");
+        m_creature->DealDamage(currentEcho, currentEcho->GetHealth(), nullptr, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, nullptr, false);
     }
 
     void SummonEcho() {
@@ -83,7 +94,7 @@ struct boss_gerastraszAI : public ScriptedAI
         summoned->CastSpell(summoned, TWIN_TELEPORT_VISUAL, false);
         summoned->MonsterTextEmote("Echo of Gerastrasz prepares to sacrifice himself and heal the Commander.");
         summoned->Attack(summoned->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0), true);
-        m_uiBloodFunnelTimer = 18000;
+        m_uiBloodFunnelTimer = 20000;
         currentEcho = summoned;
     }
 
@@ -97,13 +108,30 @@ struct boss_gerastraszAI : public ScriptedAI
             return;
 
         if (m_creature->GetHealthPercent() <= 75 && !first_echo_summoned) {
-            SummonEcho();
-            first_echo_summoned = true;
+            if (currentEcho) {
+                IgniteEcho();
+            } else {
+                SummonEcho();
+                first_echo_summoned = true;
+            }
         }
 
-        if (m_creature->GetHealthPercent() <= 35 && !second_echo_summoned) {
-            SummonEcho();
-            second_echo_summoned = true;
+        if (m_creature->GetHealthPercent() <= 50 && !second_echo_summoned) {
+            if (currentEcho) {
+                IgniteEcho();
+            } else {
+                SummonEcho();
+                second_echo_summoned = true;
+            }
+        }
+
+        if (m_creature->GetHealthPercent() <= 25 && !third_echo_summoned) {
+            if (currentEcho) {
+                IgniteEcho();
+            } else {
+                SummonEcho();
+                third_echo_summoned = true;
+            }
         }
 
         if (currentEcho) {
@@ -111,7 +139,7 @@ struct boss_gerastraszAI : public ScriptedAI
                 currentEcho->addUnitState(UNIT_STAT_ROOT);
                 currentEcho->MonsterTextEmote("Echo of Gerastrasz begins to heal the Commander.");
                 currentEcho->CastSpell(m_creature, SPELL_BLOOD_FUNNEL, false);
-                m_uiBloodFunnelTimer = 10250;
+                m_uiBloodFunnelTimer = 10350;
             } else {
                 m_uiBloodFunnelTimer -= uiDiff;
             }
