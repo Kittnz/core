@@ -214,8 +214,7 @@ struct boss_turtlhuAI : public ScriptedAI
 
             for (auto &player : players) {
                 if (player && player->isAlive() && player != m_creature->getVictim())
-                    player->TeleportTo(m_creature->GetMapId(), m_creature->GetPositionX(), m_creature->GetPositionY(), m_creature->GetPositionZ(),
-                                       m_creature->GetOrientation(), TELE_TO_NOT_LEAVE_COMBAT);
+                    m_creature->CastSpell(player, 21150, true);
             }
 
             m_creature->PMonsterYell("Soon... You will run! Cowards!");

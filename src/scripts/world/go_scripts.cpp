@@ -547,7 +547,7 @@ struct go_survival_tent : public GameObjectAI
                 MaNGOS::AnyPlayerInObjectRangeCheck check(me, 15.0f);
                 MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
 
-                Cell::VisitWorldObjects(me, searcher, 10.0f);
+                Cell::VisitWorldObjects(me, searcher, 15.0f);
 
                 for (Player* pPlayer : players)
                 {
@@ -598,7 +598,7 @@ struct go_custom_rested : public GameObjectAI
                 MaNGOS::AnyPlayerInObjectRangeCheck check(me, 22.0f);
                 MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
 
-                Cell::VisitWorldObjects(me, searcher, 10.0f);
+                Cell::VisitWorldObjects(me, searcher, 22.0f);
 
                 for (Player* pPlayer : players)
                 {
@@ -642,7 +642,7 @@ struct go_cot_enter_trigger : public GameObjectAI
             MaNGOS::AnyPlayerInObjectRangeCheck check(me, 8.0f, true, false);
             MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
 
-            Cell::VisitWorldObjects(me, searcher, 10.0f);
+            Cell::VisitWorldObjects(me, searcher, 8.0f);
 
             for (Player* pPlayer : players)
             {
@@ -683,7 +683,7 @@ struct go_cot_exit_trigger : public GameObjectAI
             MaNGOS::AnyPlayerInObjectRangeCheck check(me, 8.0f, true, false);
             MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
 
-            Cell::VisitWorldObjects(me, searcher, 10.0f);
+            Cell::VisitWorldObjects(me, searcher, 8.0f);
 
             for (Player* pPlayer : players)
             {
