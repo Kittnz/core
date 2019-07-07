@@ -630,6 +630,22 @@ replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid) valu
 (50416, 50414, 100, 6),
 (50416, 50415, 100, 7);
 
+replace into item_template (entry, name, class, subclass, inventory_type, display_id, quality, bonding, sheath, spellid_1, required_level, buy_price, sell_price, item_level, stat_type1, stat_value1, stat_type2, stat_value2, block, armor, max_durability, disenchant_id, spelltrigger_1) values
+(50417, 'Time-shifting Wheel', 4, 6, 14, 28407, 3, 1, 4, 18032, 60, 192849, 36762, 70, 5, 9, 7, 5, 41, 2192, 120, 49, 1);
+replace into item_template (entry, class, subclass, name, display_id, quality, buy_price, sell_price, inventory_type, item_level, required_level, armor, spellid_1, spelltrigger_1, spellid_2, spelltrigger_2, bonding, max_durability, disenchant_id, stat_type1, stat_value1, stat_type2, stat_value2) values
+(50418, 4, 4, 'Corrupted Plate Pauldrons', 35434, 3, 102981, 32167, 3, 70, 60, 512, 15465, 1, 14027, 1, 1, 80, 49, 7, 9, 4, 11);
+
+replace into item_template (entry, class, Flags, Buy_Count, Buy_Price, Sell_Price, name, description, display_id, Quality, Inventory_Type, Item_Level, Required_Level, Required_Skill, Required_Skill_Rank, spellid_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, bonding, max_count, stackable) values
+(50419, 15, 0, 1, 0, 0, 'Frayfeather Hippogryph', '', 31500, 4, 0, 60, 60, 762, 150, 10803, 1, 330, 3000, 1, 0, 1);
+
+replace into item_template (entry, class, subclass, name, display_id, Quality, Flags, Buy_Count, Inventory_Type, bonding) values
+(50420, 4, 3, 'Thrall\'s Shoulders', 25551, 1, 0, 1, 3, 1),
+(50421, 4, 3, 'Thrall\'s Belt', 25522, 1, 0, 1, 6, 1),
+(50422, 4, 3, 'Thrall\'s Boots', 25524, 1, 0, 1, 8, 1),
+(50423, 4, 3, 'Thrall\'s Leggings', 25523, 1, 0, 1, 7, 1),
+(50424, 4, 3, 'Thrall\'s Handguards', 25525, 1, 0, 1, 10, 1),
+(50425, 4, 3, 'Thrall\'s Chestguard', 25521, 1, 0, 1, 4, 1);
+
 -- Hotfixes, modify custom items only in this file:
 update item_template set spellcooldown_1 = 5400000, spellid_1 = 24085 where entry = 50234;
 update item_template set spellcooldown_1 = 3600000 where entry = 50235;
