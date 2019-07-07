@@ -247,10 +247,10 @@ replace into item_template (entry, name, inventory_type, display_id, quality, bo
 (50091, 'Scholomance Tabard', 19, 24344, 1, 1, '');
 -- 50092 [Tabard of Scarlet Preacher]
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding, description) values
-(50092, 'Tabard of Scarlet Preacher', 19, 23951, 1, 1, '');
+(50092, 'Tabard of the Crimson Legion', 19, 23951, 1, 1, '');
 -- 50093 [Tabard of Scarlet Archmage]
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding, description) values
-(50093, 'Tabard of Scarlet Archmage', 19, 23954, 1, 1, '');
+(50093, 'Tabard of Hearthglen', 19, 23954, 1, 1, '');
 -- 50094 [Sword of a Thousand Truths]
 replace into item_template (entry, class, subclass, display_id, inventory_type, name, quality, description, required_level, bonding, dmg_min1, dmg_max1, spellid_1, spellcooldown_1, script_name) value 
 (50094, 2, 7, 36377, 21, 'Sword of a Thousand Truths', 5, 'It was foretold, that one day, heroes who could wield the sword might reveal themselves.', 60, 1, 170, 190, 6755, 50600, 'sword_of_truth');

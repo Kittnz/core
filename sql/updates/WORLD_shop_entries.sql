@@ -109,8 +109,8 @@ replace into shop_items values
 (409, 4, 50090, 'White Tabard of Stormwind', 75),
 (410, 4, 50091, 'Scholomance Tabard', 75),
 (411, 4, 50038, 'Whitemane\'s Tabard', 75),
-(412, 4, 23192, 'Tabard of Scarlet Preacher', 75),
-(413, 4, 23193, 'Tabard of Scarlet Archmage', 75),
+(412, 4, 23192, 'Tabard of the Crimson Legion', 75),
+(413, 4, 23193, 'Tabard of Hearthglen', 75),
 -- Roleplay --------------------------------------------------------------------------------------------
 (500, 5, 50024, 'Dressing Box: Invisible Suit', 25),
 (501, 5, 50022, 'Dressing Box: Midsummer Priestess', 50),
