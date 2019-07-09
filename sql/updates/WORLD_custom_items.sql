@@ -36,8 +36,8 @@ replace into item_template (entry, class, subclass, name, description, display_i
 replace into item_template (entry, class, name, display_id, flags, quality, buy_count, max_count, stackable, bonding, description, bag_family) values
 (50010, 13, 'Loremaster\'s Glyph', 22377, 32, 6, 1, 1, 1, 1, 'This item is a reminder of your hardcore adventure.', 9);
 -- 50011 [MOLL-E, Remote Mail Terminal]
-replace into item_template (entry, name, description, quality, spellid_1, display_id, spellcharges_1, script_name, spellcooldown_1) values
-(50011, 'MOLL-E, Remote Mail Terminal', 'Mobile Oversized Letter and Literary Extractor. Use it to create a portable mailbox for 5 min.', 1, 18282, 3020, 0, 'remote_mail_terminal', 1500000);
+replace into item_template (entry, name, description, quality, spellid_1, display_id, spellcharges_1, script_name, spellcooldown_1, bonding) values
+(50011, 'MOLL-E, Remote Mail Terminal', 'Mobile Oversized Letter and Literary Extractor. Use it to create a portable mailbox for 5 min.', 1, 18282, 3020, 0, 'remote_mail_terminal', 1500000, 1);
 -- 50012 [Diplomatic Declaration]
 replace into item_template (entry, display_id, quality, name, description, class, subclass, max_count, bonding) values
 (50012, 16065, 6, 'Diplomatic Declaration', 'As a diplomat, you have proved to be aware of the real issues. You now know how to speak with the other faction and are allowed to trade and group with them.', 15, 0, 1, 1);
