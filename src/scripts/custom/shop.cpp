@@ -60,8 +60,8 @@ bool ChatHandler::HandleBalanceCommand(char* args)
         }
 
         LoginDatabase.PExecute("UPDATE `shop_coins` SET `coins`=`coins`+%i WHERE `id`=%u", coins, account_id);
-        PSendSysMessage("You've successfully added %i coins to %s.", coins, account_name);
-        PSendSysMessage("Account %s now has %i coins.", account_name, updated_balance);
+        PSendSysMessage("You've successfully added %i coins to %s.", coins, account_name.c_str());
+        PSendSysMessage("Account %s now has %i coins.", account_name.c_str(), updated_balance);
         return true;
     }
     return false;
@@ -149,6 +149,9 @@ bool GossipSelect_npc_shop(Player* pPlayer, Creature* pCreature, uint32 uiSender
         break;
     case ACTION_CATEGORY_START + 6:
         SendEntriesInfoByCategory(pPlayer, 6);
+        break;
+    case ACTION_CATEGORY_START + 7:
+        SendEntriesInfoByCategory(pPlayer, 7);
         break;
     case ACTION_CATEGORY_START:
         return GossipHello_npc_shop(pPlayer, pCreature);
