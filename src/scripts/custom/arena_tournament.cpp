@@ -3,7 +3,7 @@
 //and enemies in the Battle Ring, where you will experience a bonus x5 honor gaining!
 //
 //There, you will earn[Bloody Coins] for slaying your opponents.You can exchange them for buffs talking 
-//to Trixy Gollavix or item rewards taken directly from Zul’Gurub if you give them to Dyah Owon, the item rewarder.
+//to Trixy Gollavix or item rewards taken directly from Zulï¿½Gurub if you give them to Dyah Owon, the item rewarder.
 //You will find them at the entrance of the arena.
 //
 //As an incentive for all players, Dyah Owon will offer repeatable quests to earn some experience from level 1 to 60, 
@@ -14,14 +14,14 @@
 
 #include "scriptPCH.h"
 
-#define ARENA_AMBASSADOR_INVITATION_TEXT 90002
+#define ARENA_AMBASSADOR_INVITATION_TEXT 90004
 #define BLOODY_COIN 50015
 
 static const WorldLocation m_GurubashiArena(0, -13233.059570f, 218.713669f, 31.868229f, 1.079525f);
 
 bool GossipHello_npc_arena_ambassador(Player* p_Player, Creature* p_Creature)
 {
-    p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Fight for your life!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Take me to the arena!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     p_Player->SEND_GOSSIP_MENU(ARENA_AMBASSADOR_INVITATION_TEXT, p_Creature->GetGUID());
     return true;
 }
