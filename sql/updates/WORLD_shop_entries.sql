@@ -104,9 +104,9 @@ replace into shop_items values
 (403, 4, 50402, 'Whistle of the Violet War Raptor', 350),
 (404, 4, 50403, 'Whistle of the Red War Raptor', 350),
 (405, 4, 50404, 'Whistle of the Obsidian War Raptor', 350),
-(406, 4, 50406, 'Shadowhorn Stag', 350),
+-- (406, 4, 50406, 'Shadowhorn Stag', 350),
 (407, 4, 50407, 'Nightmare Dreamrunner', 350),
-(408, 4, 50419, 'Frayfeather Hippogryph', 350),
+-- (408, 4, 50419, 'Frayfeather Hippogryph', 350),
 -- Tabards ---------------------------------------------------------------------------------------------
 (500, 5, 23709, 'Tabard of Frost', 125),
 (501, 5, 23705, 'Tabard of Flame', 125),
