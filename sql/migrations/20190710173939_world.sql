@@ -15,6 +15,8 @@ replace into broadcast_text (ID, MaleText) values
 ('90004', 'Kid, this ain\'t your daily stroll on the beach shore y\'know, there\'s a bloodbath ahead at the Gurubashi Arena! Stranglethorn Vale ain\'t called resort and spa \'round \'ere.');
 replace into npc_text (ID, BroadcastTextID0) values ('90004', '90004');
 
+update gameobject_loot_template set maxcount = 4 where item = 11018;
+
 -- End of migration.
 END IF;
 END??
