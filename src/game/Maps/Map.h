@@ -1012,7 +1012,10 @@ class MANGOS_DLL_SPEC DungeonMap : public Map
         void SendResetWarnings(uint32 timeLeft) const;
         void SetResetSchedule(bool on);
         uint32 GetMaxPlayers() const;
+        decltype(m_objectsStore_lock)& GetObjectLock() { return m_objectsStore_lock; }
 
+
+        decltype(m_objectsStore) const & GetObjectStore() const { return m_objectsStore; }
         // can't be NULL for loaded map
         DungeonPersistentState* GetPersistanceState() const;
 
