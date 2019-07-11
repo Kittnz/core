@@ -54,6 +54,7 @@
 #include "GameEventMgr.h"
 #include "world/world_event_wareffort.h"
 #include "LFGMgr.h"
+#include "Autoscaling/AutoScaler.hpp"
 
 Map::~Map()
 {
@@ -2127,6 +2128,9 @@ bool DungeonMap::Add(Player *player)
 
     // this will acquire the same mutex so it cannot be in the previous block
     Map::Add(player);
+
+    //everything checked and added. scale now.
+    sAutoScaler->Scale(this);
 
     return true;
 }
