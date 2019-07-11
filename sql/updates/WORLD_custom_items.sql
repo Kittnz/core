@@ -646,6 +646,9 @@ replace into item_template (entry, class, subclass, name, display_id, Quality, F
 (50424, 4, 3, 'Thrall\'s Handguards', 25525, 1, 0, 1, 10, 1),
 (50425, 4, 3, 'Thrall\'s Chestguard', 25521, 1, 0, 1, 4, 1);
 
+replace into item_template (entry, class, Flags, Buy_Count, Buy_Price, Sell_Price, name, description, display_id, Quality, Inventory_Type, Item_Level, Required_Level, Required_Skill, Required_Skill_Rank, spellid_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, bonding, max_count, stackable) values
+(50426, 15, 0, 1, 0, 0, 'Zebra Reins', '', 16833, 3, 0, 40, 40, 762, 75, 468, 1, 330, 3000, 3, 0, 1);
+
 -- Hotfixes, modify custom items only in this file:
 update item_template set spellcooldown_1 = 5400000, spellid_1 = 24085 where entry = 50234;
 update item_template set spellcooldown_1 = 3600000 where entry = 50235;
