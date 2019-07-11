@@ -1669,7 +1669,6 @@ struct npc_balos_jackenAI : public ScriptedAI
             resetFactionTimer -= diff;
             if (resetFactionTimer < diff) {
                 m_creature->DisappearAndDie();
-                m_creature->ForcedDespawn(100);
                 m_creature->Respawn();
             }
         }
@@ -1677,9 +1676,14 @@ struct npc_balos_jackenAI : public ScriptedAI
         if (m_creature->GetHealthPercent() <= 20.0f && m_creature->getFaction() != 35) {
             m_creature->MonsterSay(SAY_EVADE_BALOS_JACKEN, LANG_COMMON);
             m_creature->setFaction(35);
+            if (m_creature->getVictim())
+                m_creature->getVictim()->CombatStop(true);
             m_creature->CombatStop(true);
             m_creature->UpdateCombatState(false);
-            m_creature->UpdateCombatWithZoneState(false);
+
+            float fRetX, fRetY, fRetZ, o;
+            m_creature->GetRespawnCoord(fRetX, fRetY, fRetZ, &o);
+            m_creature->GetMotionMaster()->MovePoint(0, fRetX, fRetY, fRetZ, MOVE_PATHFINDING, 0, o);
         }
 
         if (m_creature->getFaction() == 54)
