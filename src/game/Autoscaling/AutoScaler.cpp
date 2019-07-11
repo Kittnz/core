@@ -47,6 +47,17 @@ void AutoScaler::Scale(DungeonMap* map)
 
     uint32 playerCount = map->GetPlayersCountExceptGMs();
     uint32 maxCount = map->GetMaxPlayers();
+
+    if (maxCount == 5)
+        return;
+
+    if (maxCount == 10 && playerCount < 8)
+        playerCount = 8;
+    else if (maxCount == 20 && playerCount < 12)
+        playerCount = 12;
+    else if (maxCount == 40 && playerCount < 20)
+        playerCount = 20;
+
     float percentage = static_cast<float>(playerCount) / static_cast<float>(maxCount) * 100.f;
 
     auto ScaleValue = [percentage](float value)
@@ -63,8 +74,8 @@ void AutoScaler::Scale(DungeonMap* map)
         auto creature = pairItr.first->second;
         if (creature && !creature->isInCombat())
         {
-            creature->SetMaxHealth(ScaleValue(static_cast<float>(creature->GetCreateHealth())));
-            creature->SetMaxPower(POWER_MANA, ScaleValue(static_cast<float>(creature->GetCreateMana())));
+            creature->SetMaxHealth(static_cast<uint32>(ScaleValue(creature->GetCreateHealth())));
+            creature->SetMaxPower(POWER_MANA, static_cast<uint32>(ScaleValue(creature->GetCreateMana())));
 
             if (baseDamages.find(creature->GetEntry()) == baseDamages.end())
             {
