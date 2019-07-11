@@ -190,6 +190,13 @@ void npc_escortAI::JustRespawned()
     if (m_creature->getFaction() != m_creature->GetCreatureInfo()->faction)
         m_creature->setFaction(m_creature->GetCreatureInfo()->faction);
 
+    // Extra check in case the escorting NPC is not in home position
+    float fRetX, fRetY, fRetZ, o;
+    m_creature->GetRespawnCoord(fRetX, fRetY, fRetZ, &o);
+    if (m_creature->GetPositionX() != fRetX || m_creature->GetPositionY() != fRetY ||
+        m_creature->GetPositionZ() != fRetZ)
+        m_creature->NearTeleportTo(fRetX, fRetY, fRetX, o);
+
     Reset();
     ResetCreature();
 }
@@ -330,7 +337,6 @@ void npc_escortAI::ResetEscort()
 
     m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
     m_creature->DisappearAndDie();
-    m_creature->ForcedDespawn(100);
 
     if (m_bCanInstantRespawn)
         m_creature->Respawn();
