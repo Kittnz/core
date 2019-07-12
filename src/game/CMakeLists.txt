@@ -69,7 +69,6 @@ set (game_SRCS
     AI/ScriptedInstance.cpp
     AI/ScriptedPetAI.cpp
     AI/TotemAI.cpp
-    Autoscaling/AutoScaler.cpp
     Anticheat/Anticheat.cpp
     AuctionHouse/AuctionHouseBotMgr.cpp
     AuctionHouse/AuctionHouseMgr.cpp
