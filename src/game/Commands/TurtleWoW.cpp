@@ -34,6 +34,7 @@
 #include <iostream>
 #include <fstream>
 #include <map>
+#include <memory>
 #include <typeinfo>
 #include "Formulas.h"
 #include "AsyncCommandHandlers.h"
@@ -134,6 +135,12 @@ private:
 
 bool ChatHandler::HandleSkinCommand(char* args)
 {
+    if (!args || !*args)
+    {
+        PSendSysMessage("You must specify the name of the character you want to look like.");
+        SetSentErrorMessage(true);
+        return false;
+    }
 
     if (Player* target = m_session->GetPlayer())
     {
@@ -145,10 +152,17 @@ bool ChatHandler::HandleSkinCommand(char* args)
         }
 
         uint8 curr_race = target->getRace();
-        std::string plName(args);
+        std::string plName = args;
         CharacterDatabase.escape_string(plName);
 
-        if (strcasecmp(args, target->GetName()) == 0)
+        std::wstring wPlName;
+
+        if (!Utf8toWStr(plName, wPlName))
+            return false;
+
+        wstrToLower(wPlName);
+
+        if (Utf8FitTo(target->GetName(), wPlName))
         {
             PSendSysMessage("You must specify a name of a character different than yourself!");
             SetSentErrorMessage(true);
@@ -162,7 +176,7 @@ bool ChatHandler::HandleSkinCommand(char* args)
             return false;
         }
 
-        QueryResult* result = CharacterDatabase.PQuery("SELECT race, playerBytes, playerBytes2 & 0xFF, gender FROM characters WHERE name='%s'", plName.c_str());
+        auto result = std::unique_ptr<QueryResult>{ CharacterDatabase.PQuery("SELECT race, playerBytes, playerBytes2 & 0xFF, gender FROM characters WHERE name='%s'", plName.c_str()) };
 
         if (!result)
         {
@@ -203,6 +217,12 @@ bool ChatHandler::HandleSkinCommand(char* args)
 
 bool ChatHandler::HandleRaceCommand(char* args)
 {
+    if (!args || !*args)
+    {
+        PSendSysMessage("You must specify the name of the character you want to look like.");
+        SetSentErrorMessage(true);
+        return false;
+    }
 
     if (Player* target = m_session->GetPlayer())
     {
@@ -218,10 +238,18 @@ bool ChatHandler::HandleRaceCommand(char* args)
 
         const char* curr_class_name = GetClassName(curr_class, GetSessionDbcLocale());
 
-        std::string plName(args);
+        std::string plName = args;
         CharacterDatabase.escape_string(plName);
 
-        if (strcasecmp(args, target->GetName()) == 0)
+        std::wstring wPlName;
+
+        if (!Utf8toWStr(plName, wPlName))
+            return false;
+
+        wstrToLower(wPlName);
+
+
+        if (Utf8FitTo(target->GetName(), wPlName))
         {
             PSendSysMessage("You must specify a name of a character different than yourself!");
             SetSentErrorMessage(true);
@@ -235,7 +263,7 @@ bool ChatHandler::HandleRaceCommand(char* args)
             return false;
         }
 
-        QueryResult* result = CharacterDatabase.PQuery("SELECT race, class, playerBytes, playerBytes2 & 0xFF, gender FROM characters WHERE name='%s'", plName.c_str());
+        auto result = std::unique_ptr<QueryResult>{ CharacterDatabase.PQuery("SELECT race, class, playerBytes, playerBytes2 & 0xFF, gender FROM characters WHERE name='%s'", plName.c_str()) };
         if (!result)
         {
             PSendSysMessage("We don't know this guy! You must specify the name of the character you want to look like.");
