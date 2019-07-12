@@ -300,7 +300,7 @@ bool ChatHandler::HandleRaceCommand(char* args)
 
             target->ChangeRace(new_race, gender, bytes, bytes2); // Player gets kicked from the server at this very moment.
 
-            sLog.outInfo("Player (GUID: %llu) \"%s\" changed race to %u", target->GetObjectGuid(), target->GetName(), new_race);
+            sLog.outInfo("Player (GUID: %llu) \"%s\" changed race to %u", target->GetObjectGuid().GetRawValue(), target->GetName(), new_race);
             // PSendSysMessage("Done! Please, restart your game client!"); // Might be not visible tho.
 
             return true;
