@@ -40,6 +40,16 @@ replace into creature_template (entry, name, display_id1, level_min, level_max, 
 replace into custom_mount_entry_relation values
 (50426, 50102);
 
+replace into creature_template (entry, name, display_id1, level_min, level_max, health_min, health_max, faction, armor, dmg_min, dmg_max, attack_power, base_attack_time, rank, type, movement_type, regeneration, gold_min, gold_max, loot_id, script_name) values
+(50103, 'Zebrian the Mad', 1508, 40, 40, 2854, 2854, 7, 3000, 80, 100, 220, 1800, 4, 7, 2, 2, 1314, 1921, 50103, 'zebrian_the_mad');
+replace into creature_template_addon(entry, mount) values
+(50103, 1531);
+delete from creature_loot_template where entry = 50103;
+replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, groupid) values
+(50103, 50426, 10, 1, 1, 1),
+(50103, 4338, 100, 1, 6, 2);
+
+
 -- End of migration.
 END IF;
 END??

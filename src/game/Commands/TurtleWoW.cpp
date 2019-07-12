@@ -148,6 +148,13 @@ bool ChatHandler::HandleSkinCommand(char* args)
         std::string plName(args);
         CharacterDatabase.escape_string(plName);
 
+        if (strcasecmp(args, target->GetName()) == 0)
+        {
+            PSendSysMessage("You must specify a name of a character different than yourself!");
+            SetSentErrorMessage(true);
+            return false;
+        }
+
         if (target->isInCombat() || target->InBattleGround() || target->HasSpellCooldown(20939) || (target->getDeathState() == CORPSE) || target->IsBeingTeleported())
         {
             PSendSysMessage("You can not change your appearance yet.");
@@ -159,7 +166,7 @@ bool ChatHandler::HandleSkinCommand(char* args)
 
         if (!result)
         {
-            PSendSysMessage("You must specify the name of the character you want to look like.", args);
+            PSendSysMessage("You must specify the name of the character you want to look like.");
             SetSentErrorMessage(true);
             return false;
         }
@@ -172,7 +179,7 @@ bool ChatHandler::HandleSkinCommand(char* args)
 
         if (race != curr_race)
         {
-            PSendSysMessage("It should be a character of the same race.", args);
+            PSendSysMessage("It should be a character of the same race.");
             SetSentErrorMessage(true);
             return false;
         }
@@ -182,7 +189,7 @@ bool ChatHandler::HandleSkinCommand(char* args)
             target->SetUInt32Value(PLAYER_BYTES, bytes);
             target->SetUInt32Value(PLAYER_BYTES_2, bytes2);
             target->SetByteValue(UNIT_FIELD_BYTES_0, 2, gender);
-            SendSysMessage("Done! A second chance at life to look pretty. Please, restart your game client!");
+            //SendSysMessage("Done! A second chance at life to look pretty. Please, restart your game client!");
             target->DestroyItemCount(GNOMISH_PLASTIC_SURGERY_TOOLS_SKIN, 1, true, false, true);
             target->SaveInventoryAndGoldToDB();
             target->SetDisplayId(15435); // Invisible
@@ -191,8 +198,6 @@ bool ChatHandler::HandleSkinCommand(char* args)
         }
     }
 
-    PSendSysMessage("Please, target yourself first.", args);
-    SetSentErrorMessage(true);
     return false;
 }
 
@@ -216,6 +221,13 @@ bool ChatHandler::HandleRaceCommand(char* args)
         std::string plName(args);
         CharacterDatabase.escape_string(plName);
 
+        if (strcasecmp(args, target->GetName()) == 0)
+        {
+            PSendSysMessage("You must specify a name of a character different than yourself!");
+            SetSentErrorMessage(true);
+            return false;
+        }
+
         if (target->isInCombat() || target->InBattleGround() || target->HasSpellCooldown(20939) || (target->getDeathState() == CORPSE) || target->IsBeingTeleported())
         {
             PSendSysMessage("You can not change your race yet.");
@@ -226,7 +238,7 @@ bool ChatHandler::HandleRaceCommand(char* args)
         QueryResult* result = CharacterDatabase.PQuery("SELECT race, class, playerBytes, playerBytes2 & 0xFF, gender FROM characters WHERE name='%s'", plName.c_str());
         if (!result)
         {
-            PSendSysMessage("We don't know this guy! You must specify the name of the character you want to look like.", args);
+            PSendSysMessage("We don't know this guy! You must specify the name of the character you want to look like.");
             SetSentErrorMessage(true);
             return false;
         }
@@ -267,8 +279,6 @@ bool ChatHandler::HandleRaceCommand(char* args)
         }
     }
 
-    PSendSysMessage("Please, target yourself first.", args);
-    SetSentErrorMessage(true);
     return false;
 }
 

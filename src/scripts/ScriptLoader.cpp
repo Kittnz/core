@@ -24,6 +24,7 @@ void AddSC_boss_turtlhu();
 void AddSC_drogon();
 void AddSC_boss_gerastrasz();
 void AddSC_instance_caverns_of_time();
+void AddSC_zebrian_the_mad();
 //void AddSC_gmisland();
 //void AddSC_boss_arena_hardog(); // EVENT de TORKIN
 
@@ -297,6 +298,7 @@ void AddScripts()
     AddSC_drogon();
     AddSC_boss_gerastrasz();
     AddSC_instance_caverns_of_time();
+    AddSC_zebrian_the_mad();
     //AddSC_gmisland();
 
     // Event
