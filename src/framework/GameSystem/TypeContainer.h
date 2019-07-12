@@ -76,49 +76,11 @@ class TypeUnorderedMapContainer
             return TypeUnorderedMapContainer::find(i_elements, hdl, (SPECIFIC_TYPE*)NULL);
         }
 
-        //it's outrageous that this is the way we have to go.
-        template<class SPECIFIC_TYPE>
-        std::pair<std::unordered_map<KEY_TYPE, SPECIFIC_TYPE*>::iterator, std::unordered_map<KEY_TYPE, SPECIFIC_TYPE*>::iterator>
-            range() const
-        {
-            return TypeUnorderedMapContainer::range(i_elements, hdl, (SPECIFIC_TYPE*)nullptr);
-        }
-
     private:
 
         ContainerUnorderedMap<OBJECT_TYPES, KEY_TYPE> i_elements;
 
-        // Helpers for range
-        template<class SPECIFIC_TYPE>
-        static std::pair<std::unordered_map<KEY_TYPE, SPECIFIC_TYPE*>::iterator, std::unordered_map<KEY_TYPE, SPECIFIC_TYPE*>::iterator>
-            range(ContainerUnorderedMap<SPECIFIC_TYPE, KEY_TYPE>& elements, KEY_TYPE hdl, SPECIFIC_TYPE* /*obj*/) const
-        {
-            return std::make_pair(elements._element.begin(), elements._element.end());
-        }
-
-        template<class SPECIFIC_TYPE>
-        static std::pair<std::unordered_map<KEY_TYPE, SPECIFIC_TYPE*>::iterator, std::unordered_map<KEY_TYPE, SPECIFIC_TYPE*>::iterator>
-            range(ContainerUnorderedMap<TypeNull, KEY_TYPE>& elements, KEY_TYPE /*hdl*/, SPECIFIC_TYPE* /*obj*/) const
-        {
-            return std::make_pair(elements._element.end(), elements._element.end());
-        }
-
-        template<class SPECIFIC_TYPE, class T>
-        static std::pair<std::unordered_map<KEY_TYPE, SPECIFIC_TYPE*>::iterator, std::unordered_map<KEY_TYPE, SPECIFIC_TYPE*>::iterator>
-            range(ContainerUnorderedMap<T, KEY_TYPE>& elements, KEY_TYPE /*hdl*/, SPECIFIC_TYPE* /*obj*/) const
-        {
-            return std::make_pair(elements._element.end(), elements._element.end());
-        }
-
-        template<class SPECIFIC_TYPE, class H, class T>
-        static std::pair<std::unordered_map<KEY_TYPE, SPECIFIC_TYPE*>::iterator, std::unordered_map<KEY_TYPE, SPECIFIC_TYPE*>::iterator>
-            range(ContainerUnorderedMap< TypeList<H, T>, KEY_TYPE >& elements, KEY_TYPE hdl, SPECIFIC_TYPE* /*obj*/) const
-        {
-            auto pair = TypeUnorderedMapContainer::range(elements._elements, hdl, (SPECIFIC_TYPE*)NULL);
-            return pair.first != pair.second ? pair : TypeUnorderedMapContainer::range(elements._TailElements, hdl, (SPECIFIC_TYPE*)NULL);
-        }
-
-
+        // Helpers
         // Insert helpers
         template<class SPECIFIC_TYPE>
         static bool insert(ContainerUnorderedMap<SPECIFIC_TYPE, KEY_TYPE>& elements, KEY_TYPE handle, SPECIFIC_TYPE* obj)
