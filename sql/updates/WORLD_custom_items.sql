@@ -649,6 +649,18 @@ replace into item_template (entry, class, subclass, name, display_id, Quality, F
 replace into item_template (entry, class, Flags, Buy_Count, Buy_Price, Sell_Price, name, description, display_id, Quality, Inventory_Type, Item_Level, Required_Level, Required_Skill, Required_Skill_Rank, spellid_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, bonding, max_count, stackable) values
 (50426, 15, 0, 1, 0, 0, 'Zebra Reins', '', 16833, 3, 0, 40, 40, 762, 75, 468, 1, 330, 3000, 3, 0, 1);
 
+replace into item_template (entry, class, subclass, name, display_id, quality, buy_price, sell_price, inventory_type, item_level, required_level, armor, spellid_1, spelltrigger_1, spellid_2, spelltrigger_2, bonding, max_durability, disenchant_id, stat_type1, stat_value1, stat_type2, stat_value2) values
+(50427, 4, 2, 'Time-blackened Chestpiece', 9123, 3, 101122, 32321, 5, 70, 60, 192, 14052, 1, 7597, 1, 1, 100, 49, 7, 12, 3, 8),
+(50428, 4, 4, 'Ancient Clutch', 13758, 3, 62983, 22161, 6, 70, 60, 420, 13387, 1, 13665, 1, 1, 80, 49, 7, 12, 4, 6);
+
+replace into item_template (entry, class, subclass, name, display_id, quality, buy_price, sell_price, inventory_type, item_level, required_level, spellid_1, spelltrigger_1, spellid_2, spelltrigger_2, spellid_3, spelltrigger_3, spellid_4, spelltrigger_4, bonding, max_durability, disenchant_id, stat_type1, stat_value1, delay, dmg_min1, dmg_max1) values
+(50429, 2, 6, 'Spear of the Endless Hunt', 25155, 3, 161122, 62321, 17, 70, 60, 21445, 1, 7570, 1, 7582, 1, 22811, 1, 1, 120, 49, 3, 18, 2800, 132, 228);
+
+replace into item_template (entry, class, subclass, name, display_id, quality, buy_price, sell_price, inventory_type, item_level, required_level, armor, spellid_1, spelltrigger_1, spellid_2, spelltrigger_2, bonding, max_durability, disenchant_id, stat_type1, stat_value1, stat_type2, stat_value2) values
+(50430, 4, 0, 'Magic-infused Cloak', 35076, 3, 71122, 13211, 16, 70, 60, 48, 14248, 1, 18384, 1, 1, 0, 49, 5, 12, 6, 6),
+(50431, 4, 1, 'Extremely Well Crafted Cuffs', 28619, 3, 51122, 11311, 9, 70, 60, 42, 9406, 1, 21625, 1, 1, 30, 49, 7, 8, 6, 6),
+(50432, 4, 2, 'Bracers of the Inevitable Fate', 30727, 3, 61143, 12214, 9, 70, 60, 74, 13669, 1, 9140, 1, 1, 45, 49, 7, 18, 3, 6);
+
 -- Hotfixes, modify custom items only in this file:
 update item_template set spellcooldown_1 = 5400000, spellid_1 = 24085 where entry = 50234;
 update item_template set spellcooldown_1 = 3600000 where entry = 50235;
