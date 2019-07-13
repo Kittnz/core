@@ -653,8 +653,8 @@ replace into item_template (entry, class, subclass, name, display_id, quality, b
 (50427, 4, 2, 'Time-blackened Chestpiece', 9123, 3, 101122, 32321, 5, 70, 60, 192, 14052, 1, 7597, 1, 1, 100, 49, 7, 12, 3, 8),
 (50428, 4, 4, 'Ancient Clutch', 13758, 3, 62983, 22161, 6, 70, 60, 420, 13387, 1, 13665, 1, 1, 80, 49, 7, 12, 4, 6);
 
-replace into item_template (entry, class, subclass, name, display_id, quality, buy_price, sell_price, inventory_type, item_level, required_level, spellid_1, spelltrigger_1, spellid_2, spelltrigger_2, spellid_3, spelltrigger_3, spellid_4, spelltrigger_4, bonding, max_durability, disenchant_id, stat_type1, stat_value1, delay, dmg_min1, dmg_max1) values
-(50429, 2, 6, 'Spear of the Endless Hunt', 25155, 3, 161122, 62321, 17, 70, 60, 21445, 1, 7570, 1, 7582, 1, 22811, 1, 1, 120, 49, 3, 18, 2800, 132, 228);
+replace into item_template (entry, class, subclass, name, display_id, quality, buy_price, sell_price, inventory_type, item_level, required_level, spellid_1, spelltrigger_1, spellid_2, spelltrigger_2, bonding, max_durability, disenchant_id, stat_type1, stat_value1, stat_type2, stat_value2, delay, dmg_min1, dmg_max1) values
+(50429, 2, 6, 'Spear of the Endless Hunt', 25155, 3, 161122, 62321, 17, 70, 60, 14052, 1, 7598, 1, 1, 120, 49, 3, 26, 5, 12, 3700, 152, 238);
 
 replace into item_template (entry, class, subclass, name, display_id, quality, buy_price, sell_price, inventory_type, item_level, required_level, armor, spellid_1, spelltrigger_1, spellid_2, spelltrigger_2, bonding, max_durability, disenchant_id, stat_type1, stat_value1, stat_type2, stat_value2) values
 (50430, 4, 0, 'Magic-infused Cloak', 35076, 3, 71122, 13211, 16, 70, 60, 48, 14248, 1, 18384, 1, 1, 0, 49, 5, 12, 6, 6),
