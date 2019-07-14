@@ -3528,12 +3528,10 @@ CreatureAI* GetAI_npc_oozeling_jubjub(Creature* pCreature)
     return new npc_oozeling_jubjubAI(pCreature);
 }
 
-struct npc_scripted_companionAI : public ScriptedAI
+struct npc_scripted_companionAI : public ScriptedPetAI
 {
-    npc_scripted_companionAI(Creature* pCreature) : ScriptedAI(pCreature)
+    npc_scripted_companionAI(Creature* pCreature) : ScriptedPetAI(pCreature)
     {
-        if (m_creature->isAlive() && m_creature->IsPet())
-            pCreature->GetMotionMaster()->MoveFollow(pCreature->GetCharmerOrOwnerPlayerOrPlayerItself(), PET_FOLLOW_DIST,PET_FOLLOW_ANGLE);
     }
 
     void Reset() {}
