@@ -117,7 +117,7 @@ class TypeUnorderedMapContainer
 
 
         template <typename SPECIFIC_TYPE>
-        using rangeproxy_t = RangeProxy<SPECIFIC_TYPE, KEY_TYPE>;
+        using rangeproxy_t = RangeProxy<SPECIFIC_TYPE>;
 
         // Helpers for range
         template<class SPECIFIC_TYPE>
