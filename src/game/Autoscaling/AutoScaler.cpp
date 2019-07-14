@@ -48,7 +48,7 @@ void AutoScaler::Scale(DungeonMap* map)
     uint32 playerCount = map->GetPlayersCountExceptGMs();
     uint32 maxCount = map->GetMaxPlayers();
 
-    if (maxCount == 5)
+    if (maxCount == 5 || playerCount == maxCount)
         return;
 
     if (maxCount == 10 && playerCount < 8)
@@ -57,13 +57,6 @@ void AutoScaler::Scale(DungeonMap* map)
         playerCount = 12;
     else if (maxCount == 40 && playerCount < 20)
         playerCount = 20;
-
-    float percentage = static_cast<float>(playerCount) / static_cast<float>(maxCount) * 100.f;
-
-    auto ScaleValue = [percentage](float value)
-    {
-        return value / 100 * percentage;
-    };
 
     auto& lock = map->GetObjectLock();
     Read_Mutex_Guard guard{ lock };
@@ -74,32 +67,55 @@ void AutoScaler::Scale(DungeonMap* map)
         auto creature = pairItr.first->second;
         if (creature && !creature->isInCombat())
         {
-            creature->SetMaxHealth(static_cast<uint32>(ScaleValue(creature->GetCreateHealth())));
-            creature->SetMaxPower(POWER_MANA, static_cast<uint32>(ScaleValue(creature->GetCreateMana())));
-
-            if (baseDamages.find(creature->GetEntry()) == baseDamages.end())
-            {
-                //store base vals.
-                auto tup = std::make_tuple(
-                    std::make_pair(creature->GetWeaponDamageRange(BASE_ATTACK, MINDAMAGE), creature->GetWeaponDamageRange(BASE_ATTACK, MAXDAMAGE)),
-                    std::make_pair(creature->GetFloatValue(UNIT_FIELD_MINRANGEDDAMAGE), creature->GetFloatValue(UNIT_FIELD_MAXRANGEDDAMAGE)),
-                    creature->GetModifierValue(UNIT_MOD_ATTACK_POWER, BASE_VALUE));
-                baseDamages[creature->GetEntry()] = std::move(tup);
-            }
-
-            auto& tup = baseDamages[creature->GetEntry()];
-
-            creature->SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, ScaleValue(std::get<0>(tup).first));
-            creature->SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, ScaleValue(std::get<0>(tup).second));
-
-            creature->SetBaseWeaponDamage(OFF_ATTACK, MINDAMAGE, ScaleValue(std::get<0>(tup).first));
-            creature->SetBaseWeaponDamage(OFF_ATTACK, MAXDAMAGE, ScaleValue(std::get<0>(tup).second));
-
-            creature->SetFloatValue(UNIT_FIELD_MINRANGEDDAMAGE, ScaleValue(std::get<1>(tup).first));
-            creature->SetFloatValue(UNIT_FIELD_MAXRANGEDDAMAGE, ScaleValue(std::get<1>(tup).second));
-
-            creature->SetModifierValue(UNIT_MOD_ATTACK_POWER, BASE_VALUE, ScaleValue(std::get<2>(tup)));
+            ScaleCreature(creature, playerCount, maxCount);
         }
         ++pairItr.first;
     }
+}
+
+void AutoScaler::ScaleCreature(Creature* creature, uint32 playerCount, uint32 maxCount)
+{
+    if (creature->IsPet() && creature->GetOwner()->IsPlayer())
+        return;
+
+    float hpPercentage = static_cast<float>(playerCount) / static_cast<float>(maxCount) * 100.f;
+    auto ScaleHp = [hpPercentage](float value)
+    {
+        return value / 100 * hpPercentage;
+    };
+    float powerPercentage = (static_cast<float>(playerCount) / static_cast<float>(maxCount) * 100.f) + (maxCount - playerCount);
+    auto ScalePower = [powerPercentage](float value)
+    {
+        return value / 100 * powerPercentage;
+    };
+    float dmgPercentage = (static_cast<float>(playerCount) / static_cast<float>(maxCount) * 100.f) + (maxCount - playerCount);
+    auto ScaleDamage = [dmgPercentage](float value)
+    {
+        return value / 100 * dmgPercentage;
+    };
+    creature->SetMaxHealth(static_cast<uint32>(ScaleHp(creature->GetCreateHealth())));
+    creature->SetMaxPower(POWER_MANA, static_cast<uint32>(ScalePower(creature->GetCreateMana())));
+
+    if (baseDamages.find(creature->GetEntry()) == baseDamages.end())
+    {
+        //store base vals.
+        auto tup = std::make_tuple(
+                std::make_pair(creature->GetWeaponDamageRange(BASE_ATTACK, MINDAMAGE), creature->GetWeaponDamageRange(BASE_ATTACK, MAXDAMAGE)),
+                std::make_pair(creature->GetFloatValue(UNIT_FIELD_MINRANGEDDAMAGE), creature->GetFloatValue(UNIT_FIELD_MAXRANGEDDAMAGE)),
+                creature->GetModifierValue(UNIT_MOD_ATTACK_POWER, BASE_VALUE));
+        baseDamages[creature->GetEntry()] = std::move(tup);
+    }
+
+    auto& tup = baseDamages[creature->GetEntry()];
+
+    creature->SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, ScaleDamage(std::get<0>(tup).first));
+    creature->SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, ScaleDamage(std::get<0>(tup).second));
+
+    creature->SetBaseWeaponDamage(OFF_ATTACK, MINDAMAGE, ScaleDamage(std::get<0>(tup).first));
+    creature->SetBaseWeaponDamage(OFF_ATTACK, MAXDAMAGE, ScaleDamage(std::get<0>(tup).second));
+
+    creature->SetFloatValue(UNIT_FIELD_MINRANGEDDAMAGE, ScaleDamage(std::get<1>(tup).first));
+    creature->SetFloatValue(UNIT_FIELD_MAXRANGEDDAMAGE, ScaleDamage(std::get<1>(tup).second));
+
+    creature->SetModifierValue(UNIT_MOD_ATTACK_POWER, BASE_VALUE, ScaleDamage(std::get<2>(tup)));
 }

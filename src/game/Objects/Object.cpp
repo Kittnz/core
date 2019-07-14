@@ -55,6 +55,8 @@
 #include "MovementBroadcaster.h"
 #include "PlayerBroadcaster.h"
 
+#include "Autoscaling/AutoScaler.hpp"
+
 ////////////////////////////////////////////////////////////
 // Methods of class MovementInfo
 
@@ -2038,6 +2040,10 @@ Creature *Map::SummonCreature(uint32 entry, float x, float y, float z, float ang
     // Creature Linking, Initial load is handled like respawn
     if (pCreature->IsLinkingEventTrigger())
         GetCreatureLinkingHolder()->DoCreatureLinkingEvent(LINKING_EVENT_RESPAWN, pCreature);
+
+    if (pCreature->GetMap()->IsRaid())
+        sAutoScaler->ScaleCreature(pCreature, pCreature->GetMap()->GetPlayersCountExceptGMs(),
+                                   ((DungeonMap*)pCreature->GetMap())->GetMaxPlayers());
 
     // return the creature therewith the summoner has access to it
     return pCreature;

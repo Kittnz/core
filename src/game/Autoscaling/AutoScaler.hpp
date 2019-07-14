@@ -1,6 +1,7 @@
 #pragma once
 #include <unordered_set>
 #include <unordered_map>
+#include <Objects/Creature.h>
 
 #include "Common.h"
 
@@ -24,6 +25,7 @@ namespace AutoScaling
 
         void LoadFromDB();
         void Scale(DungeonMap* map);
+        void ScaleCreature(Creature* creature, uint32 playerCount, uint32 maxCount);
 
 
     private:
