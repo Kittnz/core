@@ -122,3 +122,22 @@ void AutoScaler::ScaleCreature(Creature* creature, uint32 playerCount, uint32 ma
 
     creature->SetModifierValue(UNIT_MOD_ATTACK_POWER, BASE_VALUE, ScaleDamage(std::get<2>(tup)));
 }
+
+void AutoScaler::GenerateScaledMoneyLoot(Creature* creature, Loot* loot)
+{
+    uint32 playerCount = creature->GetMap()->GetPlayersCountExceptGMs();
+    uint32 maxCount = ((DungeonMap*)creature->GetMap())->GetMaxPlayers();
+    if (maxCount == 5 || playerCount == maxCount)
+    {
+        if (maxCount == 10 && playerCount < 8)
+            playerCount = 8;
+        else if (maxCount == 20 && playerCount < 12)
+            playerCount = 12;
+        else if (maxCount == 40 && playerCount < 20)
+            playerCount = 20;
+    }
+
+    float gold_factor = (static_cast<float>(playerCount) / maxCount) * 100.0f;
+    loot->generateMoneyLoot(static_cast<uint32>(creature->GetCreatureInfo()->gold_min * gold_factor),
+                            static_cast<uint32>(creature->GetCreatureInfo()->gold_max * gold_factor));
+}

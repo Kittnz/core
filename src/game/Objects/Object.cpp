@@ -2041,9 +2041,20 @@ Creature *Map::SummonCreature(uint32 entry, float x, float y, float z, float ang
     if (pCreature->IsLinkingEventTrigger())
         GetCreatureLinkingHolder()->DoCreatureLinkingEvent(LINKING_EVENT_RESPAWN, pCreature);
 
-    if (pCreature->GetMap()->IsRaid())
-        sAutoScaler->ScaleCreature(pCreature, pCreature->GetMap()->GetPlayersCountExceptGMs(),
-                                   ((DungeonMap*)pCreature->GetMap())->GetMaxPlayers());
+    // Scaling
+    uint32 playerCount = pCreature->GetMap()->GetPlayersCountExceptGMs();
+    uint32 maxCount = ((DungeonMap*)pCreature->GetMap())->GetMaxPlayers();
+    if (maxCount == 5 || playerCount == maxCount) {
+        if (maxCount == 10 && playerCount < 8)
+            playerCount = 8;
+        else if (maxCount == 20 && playerCount < 12)
+            playerCount = 12;
+        else if (maxCount == 40 && playerCount < 20)
+            playerCount = 20;
+
+        if (pCreature->GetMap()->IsRaid())
+            sAutoScaler->ScaleCreature(pCreature, playerCount, maxCount);
+    }
 
     // return the creature therewith the summoner has access to it
     return pCreature;
@@ -2104,6 +2115,21 @@ Creature* WorldObject::SummonCreature(uint32 id, float x, float y, float z, floa
 
     pCreature->SetWorldMask(GetWorldMask());
     // return the creature therewith the summoner has access to it
+
+    // Scaling
+    uint32 playerCount = pCreature->GetMap()->GetPlayersCountExceptGMs();
+    uint32 maxCount = ((DungeonMap*)pCreature->GetMap())->GetMaxPlayers();
+    if (maxCount == 5 || playerCount == maxCount) {
+        if (maxCount == 10 && playerCount < 8)
+            playerCount = 8;
+        else if (maxCount == 20 && playerCount < 12)
+            playerCount = 12;
+        else if (maxCount == 40 && playerCount < 20)
+            playerCount = 20;
+
+        if (pCreature->GetMap()->IsRaid())
+            sAutoScaler->ScaleCreature(pCreature, playerCount, maxCount);
+    }
 
     ++m_creatureSummonCount;
     return pCreature;

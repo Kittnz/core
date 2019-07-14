@@ -64,6 +64,8 @@
 #include "CreatureLinkingMgr.h"
 #include "InstanceStatistics.h"
 
+#include "Autoscaling/AutoScaler.hpp"
+
 #include <math.h>
 #include <stdarg.h>
 
@@ -1217,8 +1219,10 @@ void Unit::Kill(Unit* pVictim, SpellEntry const *spellProto, bool durabilityLoss
                     loot->FillLoot(lootid, LootTemplates_Creature, looter, false, false, pCreatureVictim);
                 }
             }
-
-            loot->generateMoneyLoot(pCreatureVictim->GetCreatureInfo()->gold_min, pCreatureVictim->GetCreatureInfo()->gold_max);
+            if (pCreatureVictim->GetMap()->IsRaid())
+                sAutoScaler->GenerateScaledMoneyLoot(pCreatureVictim, loot);
+            else
+                loot->generateMoneyLoot(pCreatureVictim->GetCreatureInfo()->gold_min, pCreatureVictim->GetCreatureInfo()->gold_max);
         }
 
         if (pGroupTap)
