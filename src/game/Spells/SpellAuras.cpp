@@ -1651,6 +1651,12 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
                         }
                         return;
                     }
+                    case 8067:                              // Party Time!
+                    {
+                        m_isPeriodic = true;
+                        m_modifier.periodictime = 10 * IN_MILLISECONDS;;
+                        return;
+                    }
                     case 10255:                             // Stoned
                     {
                         if (Unit* caster = GetCaster())
@@ -6099,6 +6105,28 @@ void Aura::PeriodicDummyTick()
                     if (roll_chance_i(33))
                         target->CastSpell(target, m_modifier.m_amount, true, nullptr, this);
                     return;
+                case 8067:                                  // Party Time!
+                {
+                    switch (urand(0, 4))
+                    {
+                        case 0:
+                            target->HandleEmoteCommand(EMOTE_ONESHOT_APPLAUD);
+                            return;
+                        case 1:
+                            target->HandleEmoteCommand(EMOTE_ONESHOT_CHEER);
+                            return;
+                        case 2:
+                            target->HandleEmoteCommand(EMOTE_ONESHOT_CHICKEN);
+                            return;
+                        case 3:
+                            target->HandleEmoteCommand(EMOTE_ONESHOT_LAUGH);
+                            return;
+                        case 4:
+                            target->HandleEmoteCommand(EMOTE_ONESHOT_DANCE);
+                            return;
+                    }
+                    return;
+                }
                 case 16336:                                 // Haunting Phantoms
                 {
                     if (urand(0,1))
