@@ -119,9 +119,9 @@ replace into shop_items values
 (508, 5, 50089, 'Dalaran Tabard', 75),
 (509, 5, 50090, 'White Tabard of Stormwind', 75),
 (510, 5, 50091, 'Scholomance Tabard', 75),
-(511, 5, 50038, 'Whitemane\'s Tabard', 75),
-(512, 5, 23192, 'Tabard of the Crimson Legion', 75),
-(513, 5, 23193, 'Tabard of Hearthglen', 75),
+(511, 5, 50038, 'High Inquisitor\'s Tabard', 75),
+(512, 5, 50092, 'Tabard of the Crimson Legion', 75),
+(513, 5, 50093, 'Tabard of Hearthglen', 75),
 -- Roleplay --------------------------------------------------------------------------------------------
 (600, 6, 50024, 'Dressing Box: Invisible Suit', 25),
 (601, 6, 50022, 'Dressing Box: Midsummer Priestess', 50),
