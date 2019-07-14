@@ -6107,6 +6107,8 @@ void Aura::PeriodicDummyTick()
                     return;
                 case 8067:                                  // Party Time!
                 {
+                    target->CastStop();
+                    target->AttackStop();
                     switch (urand(0, 4))
                     {
                         case 0:

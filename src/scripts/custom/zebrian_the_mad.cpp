@@ -46,7 +46,7 @@ struct zebrian_the_madAI : public ScriptedAI
                     player->AddAura(8067);
                     m_creature->CastSpell(player, 23135, true);
                     m_creature->HandleEmoteCommand(EMOTE_ONESHOT_LAUGH);
-                    m_creature->MonsterTextEmote("Zebrian the Mad throws you a smelly ball. And laughs at you.", player);
+                    ChatHandler(player).PSendSysMessage("|cffff8040Zebrian the Mad throws you a smelly ball. And laughs at you.|r");
                 }
             }
         }
