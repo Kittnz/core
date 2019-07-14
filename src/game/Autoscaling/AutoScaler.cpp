@@ -60,23 +60,25 @@ void AutoScaler::Scale(DungeonMap* map)
 
     auto& lock = map->GetObjectLock();
     Read_Mutex_Guard guard{ lock };
-    auto& container = map->GetObjectStore();
+    auto& container = const_cast<TypeUnorderedMapContainer<AllMapStoredObjectTypes, ObjectGuid>&>(map->GetObjectStore());
+
+
     auto pairItr = container.range<Creature>();
     while (pairItr.first != pairItr.second)
     {
         auto creature = pairItr.first->second;
         if (creature && !creature->isInCombat())
-        {
             ScaleCreature(creature, playerCount, maxCount);
-        }
+
         ++pairItr.first;
     }
 }
 
 void AutoScaler::ScaleCreature(Creature* creature, uint32 playerCount, uint32 maxCount)
 {
-    if (creature->IsPet() && creature->GetOwner()->IsPlayer())
+    if (creature->IsPet() && creature->GetOwner() && creature->GetOwner()->IsPlayer())
         return;
+
 
     float hpPercentage = static_cast<float>(playerCount) / static_cast<float>(maxCount) * 100.f;
     auto ScaleHp = [hpPercentage](float value)
@@ -93,6 +95,7 @@ void AutoScaler::ScaleCreature(Creature* creature, uint32 playerCount, uint32 ma
     {
         return value / 100 * dmgPercentage;
     };
+
     creature->SetMaxHealth(static_cast<uint32>(ScaleHp(creature->GetCreateHealth())));
     creature->SetMaxPower(POWER_MANA, static_cast<uint32>(ScalePower(creature->GetCreateMana())));
 

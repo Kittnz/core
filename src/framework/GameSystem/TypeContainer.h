@@ -56,6 +56,24 @@ struct ContainerUnorderedMap< TypeList<H, T>, KEY_TYPE >
 template<class OBJECT_TYPES, class KEY_TYPE = OBJECT_HANDLE>
 class TypeUnorderedMapContainer
 {
+    private:
+        template <typename SPECIFIC_TYPE, typename KEY_TYPE>
+        struct RangeProxy
+        {
+            using it_t = typename std::unordered_map<KEY_TYPE, SPECIFIC_TYPE*>::iterator;
+
+            std::pair<it_t, it_t> valPair;
+            bool valid;
+
+            RangeProxy() : valid(false) {}
+            RangeProxy(std::pair<it_t, it_t> itrs) : valPair(itrs), valid(true) {}
+
+            operator bool() const
+            {
+                return valid;
+            }
+        };
+
     public:
 
         template<class SPECIFIC_TYPE>
@@ -76,46 +94,56 @@ class TypeUnorderedMapContainer
             return TypeUnorderedMapContainer::find(i_elements, hdl, (SPECIFIC_TYPE*)NULL);
         }
 
+        
+        template<typename SPECIFIC_TYPE>
+        using maptype_itr_t = typename std::unordered_map<KEY_TYPE, SPECIFIC_TYPE*>::iterator;
+
+        template <typename SPECIFIC_TYPE>
+        using sptype_pair_t = typename std::pair<maptype_itr_t<SPECIFIC_TYPE>, maptype_itr_t<SPECIFIC_TYPE>>;
+
         //it's outrageous that this is the way we have to go.
         template<class SPECIFIC_TYPE>
-        std::pair<std::unordered_map<KEY_TYPE, SPECIFIC_TYPE*>::iterator, std::unordered_map<KEY_TYPE, SPECIFIC_TYPE*>::iterator>
-            range()
+        sptype_pair_t<SPECIFIC_TYPE> range()
         {
-            return TypeUnorderedMapContainer::range<SPECIFIC_TYPE>(i_elements, (SPECIFIC_TYPE*)nullptr);
+            rangeproxy_t<SPECIFIC_TYPE> proxy = TypeUnorderedMapContainer::range<SPECIFIC_TYPE>(i_elements, (SPECIFIC_TYPE*)nullptr);
+            if (proxy)
+                return proxy.valPair;
+            return sptype_pair_t<SPECIFIC_TYPE>{ maptype_itr_t<SPECIFIC_TYPE>{},  maptype_itr_t<SPECIFIC_TYPE>{} };
         }
 
     private:
 
         ContainerUnorderedMap<OBJECT_TYPES, KEY_TYPE> i_elements;
 
+
+        template <typename SPECIFIC_TYPE>
+        using rangeproxy_t = RangeProxy<SPECIFIC_TYPE, KEY_TYPE>;
+
         // Helpers for range
         template<class SPECIFIC_TYPE>
-        static std::pair<std::unordered_map<KEY_TYPE, SPECIFIC_TYPE*>::iterator, std::unordered_map<KEY_TYPE, SPECIFIC_TYPE*>::iterator>
-            range(ContainerUnorderedMap<SPECIFIC_TYPE, KEY_TYPE>& elements, SPECIFIC_TYPE* /*obj*/)
+        static rangeproxy_t<SPECIFIC_TYPE> range(ContainerUnorderedMap<SPECIFIC_TYPE, KEY_TYPE>& elements, SPECIFIC_TYPE* /*obj*/)
         {
-            return std::make_pair(elements._element.begin(), elements._element.end());
+            return rangeproxy_t<SPECIFIC_TYPE>((std::make_pair(elements._element.begin(), elements._element.end())));
         }
 
+
         template<class SPECIFIC_TYPE>
-        static std::pair<std::unordered_map<KEY_TYPE, SPECIFIC_TYPE*>::iterator, std::unordered_map<KEY_TYPE, SPECIFIC_TYPE*>::iterator>
-            range(ContainerUnorderedMap<TypeNull, KEY_TYPE>& elements, SPECIFIC_TYPE* /*obj*/)
+        static rangeproxy_t<SPECIFIC_TYPE> range(ContainerUnorderedMap<TypeNull, KEY_TYPE>& elements, SPECIFIC_TYPE* /*obj*/)
         {
-            return std::make_pair(elements._element.end(), elements._element.end());
+            return rangeproxy_t<SPECIFIC_TYPE>();
         }
 
         template<class SPECIFIC_TYPE, class T>
-        static std::pair<std::unordered_map<KEY_TYPE, SPECIFIC_TYPE*>::iterator, std::unordered_map<KEY_TYPE, SPECIFIC_TYPE*>::iterator>
-            range(ContainerUnorderedMap<T, KEY_TYPE>& elements, SPECIFIC_TYPE* /*obj*/)
+        static rangeproxy_t<SPECIFIC_TYPE> range(ContainerUnorderedMap<T, KEY_TYPE>& elements, SPECIFIC_TYPE* /*obj*/)
         {
-            return std::make_pair(elements._element.end(), elements._element.end());
+            return rangeproxy_t<SPECIFIC_TYPE>();
         }
 
         template<class SPECIFIC_TYPE, class H, class T>
-        static std::pair<std::unordered_map<KEY_TYPE, SPECIFIC_TYPE*>::iterator, std::unordered_map<KEY_TYPE, SPECIFIC_TYPE*>::iterator>
-            range(ContainerUnorderedMap< TypeList<H, T>, KEY_TYPE >& elements, SPECIFIC_TYPE* /*obj*/)
+        static rangeproxy_t<SPECIFIC_TYPE> range(ContainerUnorderedMap< TypeList<H, T>, KEY_TYPE >& elements, SPECIFIC_TYPE* /*obj*/)
         {
-            auto pair = TypeUnorderedMapContainer::range(elements._elements, (SPECIFIC_TYPE*)nullptr);
-            return pair.first != pair.second ? pair : TypeUnorderedMapContainer::range(elements._TailElements, (SPECIFIC_TYPE*)nullptr);
+            auto proxy = TypeUnorderedMapContainer::range(elements._elements, (SPECIFIC_TYPE*)nullptr);
+            return proxy.valid ? proxy : TypeUnorderedMapContainer::range(elements._TailElements, (SPECIFIC_TYPE*)nullptr);
         }
 
 
