@@ -7,6 +7,7 @@
 
 using namespace AutoScaling;
 
+// Unused
 void AutoScaler::LoadFromDB()
 {
     std::unique_ptr<QueryResult> result{ WorldDatabase.Query("SELECT * FROM disabled_dungeon_scaling") };
@@ -42,17 +43,15 @@ private:
 
 void AutoScaler::Scale(DungeonMap* map)
 {
-    if (disabledScaling.find(map->GetId()) != disabledScaling.end())
-        return;
+    //if (disabledScaling.find(map->GetId()) != disabledScaling.end())
+    //    return;
 
     uint32 playerCount = map->GetPlayersCountExceptGMs();
     uint32 maxCount = map->GetMaxPlayers();
 
-    if (maxCount == 5 || playerCount == maxCount)
+    if (maxCount <= 10 || playerCount == maxCount)
         return;
 
-    if (maxCount == 10 && playerCount < 8)
-        playerCount = 8;
     else if (maxCount == 20 && playerCount < 12)
         playerCount = 12;
     else if (maxCount == 40 && playerCount < 20)
@@ -78,7 +77,6 @@ void AutoScaler::ScaleCreature(Creature* creature, uint32 playerCount, uint32 ma
 {
     if (creature->IsPet() && creature->GetOwner() && creature->GetOwner()->IsPlayer())
         return;
-
 
     float hpPercentage = static_cast<float>(playerCount) / static_cast<float>(maxCount) * 100.f;
     auto ScaleHp = [hpPercentage](float value)
@@ -127,17 +125,15 @@ void AutoScaler::GenerateScaledMoneyLoot(Creature* creature, Loot* loot)
 {
     uint32 playerCount = creature->GetMap()->GetPlayersCountExceptGMs();
     uint32 maxCount = ((DungeonMap*)creature->GetMap())->GetMaxPlayers();
-    if (maxCount == 5 || playerCount == maxCount)
+    if (maxCount > 10 && playerCount < maxCount)
     {
-        if (maxCount == 10 && playerCount < 8)
-            playerCount = 8;
-        else if (maxCount == 20 && playerCount < 12)
+        if (maxCount == 20 && playerCount < 12)
             playerCount = 12;
         else if (maxCount == 40 && playerCount < 20)
             playerCount = 20;
     }
 
-    float gold_factor = (static_cast<float>(playerCount) / maxCount) * 100.0f;
+    float gold_factor = static_cast<float>(playerCount) / static_cast<float>(maxCount);
     loot->generateMoneyLoot(static_cast<uint32>(creature->GetCreatureInfo()->gold_min * gold_factor),
                             static_cast<uint32>(creature->GetCreatureInfo()->gold_max * gold_factor));
 }

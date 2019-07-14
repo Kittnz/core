@@ -60,6 +60,8 @@
 #include "ScriptedEscortAI.h"
 #include "GuardMgr.h"
 
+#include "Autoscaling/AutoScaler.hpp"
+
 // apply implementation of the singletons
 #include "Policies/SingletonImp.h"
 
@@ -643,7 +645,7 @@ void Creature::Update(uint32 update_diff, uint32 diff)
                     if (m_AI_InitializeOnRespawn)
                         AIM_Initialize();
                 }
-
+                
                 if (m_zoneScript)
                     m_zoneScript->OnCreatureRespawn(this);
 
@@ -654,6 +656,20 @@ void Creature::Update(uint32 update_diff, uint32 diff)
                 if (!IsLikePlayer())
                     SetTempPacified(5000);
 
+                // Scaling
+                if (GetMap()->IsRaid()) {
+                    uint32 playerCount = GetMap()->GetPlayersCountExceptGMs();
+                    uint32 maxCount = ((DungeonMap *) GetMap())->GetMaxPlayers();
+                    if (maxCount > 10 && playerCount < maxCount) {
+                        if (maxCount == 20 && playerCount < 12)
+                            playerCount = 12;
+                        else if (maxCount == 40 && playerCount < 20)
+                            playerCount = 20;
+                        
+                        sAutoScaler->ScaleCreature(this, playerCount, maxCount);
+                    }
+                }
+                
                 GetMap()->Add(this);
 
                 if (uint16 poolid = sPoolMgr.IsPartOfAPool<Creature>(GetGUIDLow()))

@@ -2042,18 +2042,17 @@ Creature *Map::SummonCreature(uint32 entry, float x, float y, float z, float ang
         GetCreatureLinkingHolder()->DoCreatureLinkingEvent(LINKING_EVENT_RESPAWN, pCreature);
 
     // Scaling
-    uint32 playerCount = pCreature->GetMap()->GetPlayersCountExceptGMs();
-    uint32 maxCount = ((DungeonMap*)pCreature->GetMap())->GetMaxPlayers();
-    if (maxCount == 5 || playerCount == maxCount) {
-        if (maxCount == 10 && playerCount < 8)
-            playerCount = 8;
-        else if (maxCount == 20 && playerCount < 12)
-            playerCount = 12;
-        else if (maxCount == 40 && playerCount < 20)
-            playerCount = 20;
-
-        if (pCreature->GetMap()->IsRaid())
+    if (pCreature->GetMap()->IsRaid()) {
+        uint32 playerCount = pCreature->GetMap()->GetPlayersCountExceptGMs();
+        uint32 maxCount = ((DungeonMap *) pCreature->GetMap())->GetMaxPlayers();
+        if (maxCount > 10 && playerCount < maxCount) {
+            if (maxCount == 20 && playerCount < 12)
+                playerCount = 12;
+            else if (maxCount == 40 && playerCount < 20)
+                playerCount = 20;
+            
             sAutoScaler->ScaleCreature(pCreature, playerCount, maxCount);
+        }
     }
 
     // return the creature therewith the summoner has access to it
@@ -2117,18 +2116,17 @@ Creature* WorldObject::SummonCreature(uint32 id, float x, float y, float z, floa
     // return the creature therewith the summoner has access to it
 
     // Scaling
-    uint32 playerCount = pCreature->GetMap()->GetPlayersCountExceptGMs();
-    uint32 maxCount = ((DungeonMap*)pCreature->GetMap())->GetMaxPlayers();
-    if (maxCount == 5 || playerCount == maxCount) {
-        if (maxCount == 10 && playerCount < 8)
-            playerCount = 8;
-        else if (maxCount == 20 && playerCount < 12)
-            playerCount = 12;
-        else if (maxCount == 40 && playerCount < 20)
-            playerCount = 20;
-
-        if (pCreature->GetMap()->IsRaid())
+    if (pCreature->GetMap()->IsRaid()) {
+        uint32 playerCount = pCreature->GetMap()->GetPlayersCountExceptGMs();
+        uint32 maxCount = ((DungeonMap *) pCreature->GetMap())->GetMaxPlayers();
+        if (maxCount > 10 && playerCount < maxCount) {
+            if (maxCount == 20 && playerCount < 12)
+                playerCount = 12;
+            else if (maxCount == 40 && playerCount < 20)
+                playerCount = 20;
+            
             sAutoScaler->ScaleCreature(pCreature, playerCount, maxCount);
+        }
     }
 
     ++m_creatureSummonCount;
