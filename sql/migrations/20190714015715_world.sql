@@ -43,6 +43,10 @@ UPDATE `creature_template` SET `frost_res`=-93 WHERE `entry`=11668;
 UPDATE `creature_template` SET `frost_res`=-93 WHERE `entry`=12143;
 UPDATE `creature_template` SET `frost_res`=-186 WHERE `entry`=12265;
 
+replace into creature_template_addon (entry, aura) values (50088, 22650);
+replace into creature_template (entry, display_id1, name, subname, level_min, level_max, health_min, health_max, mana_min, mana_max, armor, faction, speed_walk, speed_run, scale, detection_range, rank, dmg_min, dmg_max, attack_power, dmg_multiplier, base_attack_time, ranged_attack_time, ranged_dmg_min, ranged_dmg_max, ranged_attack_power, type, type_flags, loot_id, gold_min, gold_max, movement_type, inhabit_type, regeneration, equipment_id, mechanic_immune_mask, flags_extra, spell_id1, ai_name) values
+(50106, 7857, 'Time Anomaly', '', 58, 61, 4235, 5641, 1912, 2890, 2431, 7, 1, 1.14286, 1, 20, 0, 141, 162, 286, 1, 2000, 1500, 600, 825, 100, 10, 76, 0, 0, 0, 0, 1, 3, 50106, 8413718, 0, 27989, 'EventAI');
+
 -- End of migration.
 END IF;
 END??
