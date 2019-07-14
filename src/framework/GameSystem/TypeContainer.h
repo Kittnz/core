@@ -57,7 +57,7 @@ template<class OBJECT_TYPES, class KEY_TYPE = OBJECT_HANDLE>
 class TypeUnorderedMapContainer
 {
     private:
-        template <typename SPECIFIC_TYPE, typename KEY_TYPE>
+        template <typename SPECIFIC_TYPE>
         struct RangeProxy
         {
             using it_t = typename std::unordered_map<KEY_TYPE, SPECIFIC_TYPE*>::iterator;
