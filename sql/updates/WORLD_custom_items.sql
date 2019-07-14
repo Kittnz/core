@@ -631,7 +631,7 @@ replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid) valu
 (50416, 50415, 100, 7);
 
 replace into item_template (entry, name, class, subclass, inventory_type, display_id, quality, bonding, sheath, spellid_1, required_level, buy_price, sell_price, item_level, stat_type1, stat_value1, stat_type2, stat_value2, block, armor, max_durability, disenchant_id, spelltrigger_1) values
-(50417, 'Time-shifting Wheel', 4, 6, 14, 28407, 3, 1, 4, 18032, 60, 192849, 36762, 70, 5, 9, 7, 5, 41, 2192, 120, 49, 1);
+(50417, 'Time-shifting Wheel', 4, 6, 14, 28407, 3, 1, 4, 18030, 60, 192849, 36762, 70, 5, 9, 7, 5, 41, 2192, 120, 49, 1);
 replace into item_template (entry, class, subclass, name, display_id, quality, buy_price, sell_price, inventory_type, item_level, required_level, armor, spellid_1, spelltrigger_1, spellid_2, spelltrigger_2, bonding, max_durability, disenchant_id, stat_type1, stat_value1, stat_type2, stat_value2) values
 (50418, 4, 4, 'Corrupted Plate Pauldrons', 35434, 3, 102981, 32167, 3, 70, 60, 512, 15465, 1, 14027, 1, 1, 80, 49, 7, 9, 4, 11);
 
@@ -654,7 +654,7 @@ replace into item_template (entry, class, subclass, name, display_id, quality, b
 (50428, 4, 4, 'Ancient Clutch', 13758, 3, 62983, 22161, 6, 70, 60, 420, 13387, 1, 13665, 1, 1, 80, 49, 7, 12, 4, 6);
 
 replace into item_template (entry, class, subclass, name, display_id, quality, buy_price, sell_price, inventory_type, item_level, required_level, spellid_1, spelltrigger_1, spellid_2, spelltrigger_2, bonding, max_durability, disenchant_id, stat_type1, stat_value1, stat_type2, stat_value2, delay, dmg_min1, dmg_max1) values
-(50429, 2, 6, 'Spear of the Endless Hunt', 25155, 3, 161122, 62321, 17, 70, 60, 14052, 1, 7598, 1, 1, 120, 49, 3, 26, 5, 12, 3700, 152, 238);
+(50429, 2, 6, 'Spear of the Endless Hunt', 25155, 3, 161122, 62321, 17, 70, 60, 14056, 1, 7598, 1, 1, 120, 49, 3, 18, 5, 12, 3700, 152, 238);
 
 replace into item_template (entry, class, subclass, name, display_id, quality, buy_price, sell_price, inventory_type, item_level, required_level, armor, spellid_1, spelltrigger_1, spellid_2, spelltrigger_2, bonding, max_durability, disenchant_id, stat_type1, stat_value1, stat_type2, stat_value2) values
 (50430, 4, 0, 'Magic-infused Cloak', 35076, 3, 71122, 13211, 16, 70, 60, 48, 14248, 1, 18384, 1, 1, 0, 49, 5, 12, 6, 6),
