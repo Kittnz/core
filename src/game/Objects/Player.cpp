@@ -4834,10 +4834,24 @@ void Player::RepopAtGraveyard()
     // stop countdown until repop
     m_deathTimer = 0;
     SetDeathState(DEAD);
+    bool isCustomGraveyard = false;
+
+    // Custom Graveyards
+
+    if (InGurubashiArena(true)) { // Two additional resurrection points on STV Arena
+        if (GetTeam() == ALLIANCE)
+            TeleportTo(0, -13209.500977f, 221.450607f, 33.236431f, 2.956571f);
+        else
+            TeleportTo(0, -13243.445312f, 239.786072f, 33.232769f, 5.375592f);
+        isCustomGraveyard = true;
+    } else if (GetZoneId() == 1941 || GetZoneId() == 2366) { // CoT and The Black Morass
+        TeleportTo(1, -8149.983398f, -4616.60887f, -126.431488f, 1.113609f);
+        isCustomGraveyard = true;
+    }
 
     // if no grave found, stay at the current location
     // and don't show spirit healer location
-    if (ClosestGrave)
+    if (ClosestGrave && !isCustomGraveyard)
     {
         // Release spirit from transport => Teleport alive at nearest graveyard.
         if (GetTransport())
@@ -4845,13 +4859,8 @@ void Player::RepopAtGraveyard()
             GetTransport()->RemovePassenger(this);
             ResurrectPlayer(1.0f);
         }
-        // Two additional ressurection points on STV Arena
-        if (InGurubashiArena(true) && GetTeam() == ALLIANCE)
-            TeleportTo(0, -13209.500977f, 221.450607f, 33.236431f, 2.956571f);
-        else if (InGurubashiArena(true) && GetTeam() == HORDE)
-                 TeleportTo(0, -13243.445312f, 239.786072f, 33.232769f, 5.375592f);
-        else
-            TeleportTo(ClosestGrave->map_id, ClosestGrave->x, ClosestGrave->y, ClosestGrave->z, GetOrientation(), 0, std::move(recover));        
+
+        TeleportTo(ClosestGrave->map_id, ClosestGrave->x, ClosestGrave->y, ClosestGrave->z, GetOrientation(), 0, std::move(recover));
     }
 
     // Fix invisible spirit healer if you die close to graveyard.
