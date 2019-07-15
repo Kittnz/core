@@ -2150,6 +2150,9 @@ void DungeonMap::Remove(Player *player, bool remove)
 
     Map::Remove(player, remove);
 
+    if (m_mapRefManager.getSize() > 0)
+        sAutoScaler->Scale(this);
+
     // for normal instances schedule the reset after all players have left
     SetResetSchedule(true);
 }
