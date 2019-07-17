@@ -6424,6 +6424,10 @@ void SpellAuraHolder::_AddSpellAuraHolder()
     // Update Seals information
     if (IsSealSpell(GetSpellProto()))
         m_target->ModifyAuraState(AURA_STATE_JUDGEMENT, true);
+
+    // Break stealth on target
+    if (GetSpellProto()->Custom & SPELL_CUSTOM_AURA_APPLY_BREAKS_STEALTH)
+        m_target->RemoveSpellsCausingAura(SPELL_AURA_MOD_STEALTH, this);
 }
 
 void SpellAuraHolder::_RemoveSpellAuraHolder()
