@@ -661,6 +661,9 @@ replace into item_template (entry, class, subclass, name, display_id, quality, b
 (50431, 4, 1, 'Extremely Well Crafted Cuffs', 28619, 3, 51122, 11311, 9, 70, 60, 42, 9406, 1, 21625, 1, 1, 30, 49, 7, 8, 6, 6),
 (50432, 4, 2, 'Bracers of the Inevitable Fate', 30727, 3, 61143, 12214, 9, 70, 60, 74, 13669, 1, 9140, 1, 1, 45, 49, 7, 18, 3, 6);
 
+replace into item_template (entry, class, subclass, name, display_id, delay, inventory_type, bonding, dmg_min1, dmg_max1) values
+(50433, 2, 7, 'Monster, Sword Spear Red', 19804, 2200, 21, 1, 2, 5);
+
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding, description, spellid_1, spelltrigger_1, allowable_race) values
 (50440, 'Scarlet Crusade Insignia', 11, 9834, 2, 1, "This ring marks the bearer as a fully fledged member of the Scarlet Crusade.", 28282, 1, 1);
 
