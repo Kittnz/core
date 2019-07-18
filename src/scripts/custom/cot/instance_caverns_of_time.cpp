@@ -110,11 +110,76 @@ InstanceData* GetInstanceData_instance_caverns_of_time(Map* pMap)
     return new instance_caverns_of_time(pMap);
 }
 
+struct frostbitten_bronze_soldierAI : public ScriptedAI
+{
+    frostbitten_bronze_soldierAI(Creature *c) : ScriptedAI(c)
+    {
+        Reset();
+    }
+
+    bool hasBegged;
+
+    void Reset()
+    {
+        hasBegged = false;
+        m_creature->SetHealth(1);
+        m_creature->addUnitState(UNIT_STAT_CAN_NOT_MOVE);
+        m_creature->SetStandState(UNIT_STAND_STATE_DEAD);
+    }
+
+    void Aggro(Unit* pWho)
+    {
+        DoPlaySoundToSet(m_creature, 7);
+        pWho->DealDamage(m_creature, m_creature->GetHealth(), nullptr, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, nullptr, false);
+        m_creature->MonsterTextEmote("The body of the bronze soldier shatters as soon as you try to touch it.");
+    }
+
+    void MoveInLineOfSight(Unit* pWho) override
+    {
+        if (pWho && pWho->IsPlayer()) {
+            if (Player* player = pWho->ToPlayer()) {
+                if (!hasBegged && m_creature->IsWithinDistInMap(pWho, 12.0f)) {
+                    switch (urand(0, 4))
+                    {
+                        case 0:
+                            m_creature->MonsterSay("Please, I can't handle this, end with my life...");
+                            break;
+                        case 1:
+                            m_creature->MonsterSay("AT LAST! Finally I can rest.");
+                            break;
+                        case 2:
+                            m_creature->MonsterSay("Careful... Careful with the drake. I just want to... sleep.");
+                            break;
+                        case 3:
+                            m_creature->MonsterSay("This is suicide! End with my suffering, please, strangers...");
+                            break;
+                        case 4:
+                            m_creature->MonsterSay("I can't handle this suffering anymore...");
+                            break;
+                    }
+                    DoPlaySoundToSet(m_creature, 6931);
+                    hasBegged = true;
+                }
+            }
+        }
+    }
+};
+
+CreatureAI* GetAI_frostbitten_bronze_soldier(Creature *_Creature)
+{
+    return new frostbitten_bronze_soldierAI(_Creature);
+}
+
 void AddSC_instance_caverns_of_time()
 {
     Script *newscript;
     newscript = new Script;
     newscript->Name = "instance_caverns_of_time";
     newscript->GetInstanceData = &GetInstanceData_instance_caverns_of_time;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "frostbitten_bronze_soldier";
+    newscript->GetAI = &GetAI_frostbitten_bronze_soldier;
     newscript->RegisterSelf();
 }
