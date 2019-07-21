@@ -117,12 +117,19 @@ namespace MaNGOS
                 if (pCreature->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NO_KILL_REWARD))
                     return 0;
 
-                uint32 xp_gain = BaseGain(pl->getLevel(), u->getLevel());
-                if (!xp_gain)
+                float xp_gain = BaseGain(pl->getLevel(), u->getLevel());
+                if (xp_gain <= 0)
                     return 0;
 
                 if (pCreature->IsElite())
-                    xp_gain *= 2;
+                {
+                    if (pCreature->GetMap()->IsNonRaidDungeon())
+                        xp_gain *= 2.5;
+                    else
+                        xp_gain *= 2;
+
+                    xp_gain *= sWorld.getConfig(CONFIG_FLOAT_RATE_XP_KILL_ELITE);
+                }
 
                 if (isPet)
                     xp_gain *= 0.75f;
