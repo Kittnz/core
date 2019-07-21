@@ -281,6 +281,12 @@ struct boss_gythAI : public ScriptedAI
         } else if (summ && summ->GetEntry() == NPC_REND_BLACKHAND) {
             NefarianYell(5824);
             rend = nullptr;
+
+            if (m_creature && m_creature->isAlive())
+                m_creature->DealDamage(m_creature, m_creature->GetHealth(), nullptr, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, nullptr, false);
+
+            if (Unit* nefarian = Unit::GetUnit(*m_creature, nefarianGUID))
+                nefarian->ToCreature()->DisappearAndDie();
         }
 #ifdef DEBUG_ON
         sLog.outString("Creature %u morte. Vague %u / reste %u", summ->GetEntry(), uiWaveNum, waveRemainingCount);
@@ -355,6 +361,7 @@ struct boss_gythAI : public ScriptedAI
         /*if (m_pInstance) {
             m_pInstance->SetData(TYPE_GYTH, DONE);
         }*/
+
     }
 
     void EnterEvadeMode()
@@ -578,6 +585,9 @@ struct boss_gythAI : public ScriptedAI
                 // Gyth model
                 m_creature->SetDisplayId(MODEL_ID_GYTH);
                 if (rend) {
+                    CreatureCreatePos pos((rend->GetMap()), m_creature->GetPositionX(), m_creature->GetPositionY(),
+                            m_creature->getVictim() ? m_creature->getVictim()->GetPositionZ() : m_creature->GetPositionZ(), 0);
+                    rend->SetSummonPoint(pos);
                     rend->GetMap()->CreatureRelocation(rend, m_creature->GetPositionX(), m_creature->GetPositionY(),
                             m_creature->getVictim() ? m_creature->getVictim()->GetPositionZ() : m_creature->GetPositionZ(), 0);
                     rend->UpdateCombatWithZoneState(true);
