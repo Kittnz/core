@@ -54,6 +54,8 @@ enum
     MODEL_ID_INVISIBLE      = 11686,
     MODEL_ID_GYTH_MOUNTED   = 9723,
     MODEL_ID_GYTH           = 9806,
+    MODEL_ID_REND           = 9778,
+    MODEL_ID_REND_CHRISTMAS = 15736,
 
     NPC_FIRE_TONGUE         = 10372,
     NPC_CHROMATIC_WHELP     = 10442,
@@ -113,6 +115,8 @@ struct boss_gythAI : public ScriptedAI
     std::list<uint64> m_lSummonedGuids;
     bool bChromaticChaosCasted;
 
+    Creature* rend = nullptr;
+
     uint32 checkEveryoneDeadTimer;
 
     void Reset()
@@ -154,6 +158,12 @@ struct boss_gythAI : public ScriptedAI
         checkEveryoneDeadTimer = 15000;
 
         DespawnAdds();
+
+        // Despawn Rend if he's alive
+        if (rend) {
+            rend->DisappearAndDie();
+            rend = nullptr;
+        }
 #ifdef DEBUG_ON
         sLog.outString("Boss GYTH RESET");
 #endif
@@ -174,9 +184,10 @@ struct boss_gythAI : public ScriptedAI
 
     void NefarianYell(int32 what)
     {
-        if (Unit* nefarian = Unit::GetUnit(*m_creature, nefarianGUID))
+        if (Unit* nefarian = Unit::GetUnit(*m_creature, nefarianGUID)) {
             nefarian->MonsterYell(what, LANG_UNIVERSAL, 0);
-        else
+            nefarian->HandleEmoteCommand(EMOTE_ONESHOT_SHOUT);
+        } else
             sLog.outString("Nefarian introuvable.");
 #ifdef DEBUG_ON
         sLog.outString("[Nefarian] : %s", what);
@@ -184,7 +195,10 @@ struct boss_gythAI : public ScriptedAI
     }
     void RendYell(int32 what)
     {
-        m_creature->MonsterYell(what, LANG_UNIVERSAL, 0);
+        if (rend) {
+            rend->MonsterYell(what, LANG_UNIVERSAL, 0);
+            rend->HandleEmoteCommand(EMOTE_ONESHOT_SHOUT);
+        }
 #ifdef DEBUG_ON
         sLog.outString("[Rend]     : %s", what);
 #endif
@@ -196,9 +210,8 @@ struct boss_gythAI : public ScriptedAI
         if (PlList.isEmpty())
             return;
 
-        for (Map::PlayerList::const_iterator i = PlList.begin(); i != PlList.end(); ++i)
-        {
-            if (Player* pPlayer = i->getSource())
+        for (const auto &i : PlList) {
+            if (Player* pPlayer = i.getSource())
             {
                 if (!pPlayer->isInCombat())
                     continue;
@@ -222,9 +235,8 @@ struct boss_gythAI : public ScriptedAI
 
         int noCombatNumber = 0;
         int deadNumber = 0;
-        for (Map::PlayerList::const_iterator i = PlList.begin(); i != PlList.end(); ++i)
-        {
-            if (Player* pPlayer = i->getSource())
+        for (const auto &i : PlList) {
+            if (Player* pPlayer = i.getSource())
             {
                 if (!pPlayer->isAlive())
                     deadNumber++;
@@ -262,10 +274,14 @@ struct boss_gythAI : public ScriptedAI
             NefarianYell(5668);
         else if (uiWaveNum == 6 && waveRemainingCount == 2)
             NefarianYell(5709);
-        else if (uiWaveNum == 6 && waveRemainingCount == 1)
+        else if (uiWaveNum == 6 && waveRemainingCount == 1) {
             RendYell(5722);
-        else if (summ && summ->GetEntry() == NPC_REND_BLACKHAND)
+            if (rend)
+                rend->SetVisibility(VISIBILITY_OFF);
+        } else if (summ && summ->GetEntry() == NPC_REND_BLACKHAND) {
             NefarianYell(5824);
+            rend = nullptr;
+        }
 #ifdef DEBUG_ON
         sLog.outString("Creature %u morte. Vague %u / reste %u", summ->GetEntry(), uiWaveNum, waveRemainingCount);
 #endif
@@ -298,6 +314,13 @@ struct boss_gythAI : public ScriptedAI
         {
             m_pInstance->SetData(TYPE_GYTH, IN_PROGRESS);
             m_uiCombatDoorGUID = m_pInstance->GetData64(GO_GYTH_COMBAT_DOOR);
+
+            rend = m_creature->SummonCreature(NPC_REND_BLACKHAND, 150.378f, -443.601f, 121.975, 1.606, TEMPSUMMON_DEAD_DESPAWN, 900000);
+            rend->addUnitState(UNIT_STAT_ROOT);
+            rend->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+            rend->setFaction(35);
+            rend->SetVisibility(VISIBILITY_ON);
+            rend->SetDisplayId(sGameEventMgr.IsActiveEvent(2) ? MODEL_ID_REND_CHRISTMAS : MODEL_ID_REND); // Check if its Christmas too
         }
     }
     void AttackStart(Unit *target)
@@ -329,8 +352,9 @@ struct boss_gythAI : public ScriptedAI
 #ifdef DEBUG_ON
         sLog.outString("Boss GYTH JustDied");
 #endif
-        if (m_pInstance)
+        /*if (m_pInstance) {
             m_pInstance->SetData(TYPE_GYTH, DONE);
+        }*/
     }
 
     void EnterEvadeMode()
@@ -379,6 +403,9 @@ struct boss_gythAI : public ScriptedAI
 
     void UpdateAI(const uint32 uiDiff)
     {
+        if (!m_creature->isAlive())
+            return;
+
         if (!m_bInitialized)
         {
             Initialize();
@@ -398,6 +425,9 @@ struct boss_gythAI : public ScriptedAI
         // Return since we have no target, only if event not started
         if (!m_RendEventStarted)
             return;
+
+        if (m_bSummonedRend && rend && rend->GetVisibility() == VISIBILITY_OFF)
+            rend->SetVisibility(VISIBILITY_ON);
 
         if (!m_bRootSelf)
         {
@@ -424,11 +454,12 @@ struct boss_gythAI : public ScriptedAI
                 //m_creature->RemoveAurasDueToSpell(SPELL_ROOT_SELF);
                 m_creature->clearUnitState(UNIT_STAT_ROOT);
 
-                DoResetThreat();
-
                 // Start attack random player in map
                 m_creature->UpdateCombatWithZoneState(true);
                 m_creature->SetInCombatWithZone();
+
+                if (rend)
+                    rend->SetVisibility(VISIBILITY_OFF);
                 if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
                     AttackStart(pTarget);
 
@@ -546,7 +577,16 @@ struct boss_gythAI : public ScriptedAI
                 m_creature->InterruptNonMeleeSpells(false);
                 // Gyth model
                 m_creature->SetDisplayId(MODEL_ID_GYTH);
-                m_creature->SummonCreature(NPC_REND_BLACKHAND, m_creature->GetPositionX(), m_creature->GetPositionY(), m_creature->GetPositionZ(), 0, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 900000);
+                if (rend) {
+                    rend->GetMap()->CreatureRelocation(rend, m_creature->GetPositionX(), m_creature->GetPositionY(),
+                            m_creature->getVictim() ? m_creature->getVictim()->GetPositionZ() : m_creature->GetPositionZ(), 0);
+                    rend->UpdateCombatWithZoneState(true);
+                    rend->SetInCombatWithZone();
+                    rend->setFaction(73);
+                    rend->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                    rend->SetVisibility(VISIBILITY_ON);
+                    rend->clearUnitState(UNIT_STAT_ROOT);
+                }
                 m_bSummonedRend = true;
             }
 

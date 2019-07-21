@@ -22,6 +22,7 @@ SDCategory: Blackrock Spire
 EndScriptData */
 
 #include "scriptPCH.h"
+#include "blackrock_spire.h"
 
 /*
 In DB : change creature_template et creature_equip_template
@@ -40,7 +41,10 @@ struct boss_rend_blackhandAI : public ScriptedAI
     boss_rend_blackhandAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
         Reset();
+        m_pInstance = (instance_blackrock_spire*) pCreature->GetInstanceData();
     }
+
+    instance_blackrock_spire* m_pInstance;
 
     uint32 m_uiMortalStrikeTimer;
     uint32 m_uiCleaveTimer;
@@ -57,6 +61,12 @@ struct boss_rend_blackhandAI : public ScriptedAI
         m_uiCloseCombatCheckTimer   = 1000;
         m_uiCloseCombatCount        = 0;
         m_uiWhirlWindTimer          = 0;
+    }
+
+    void JustDied(Unit* pKiller)
+    {
+        if (m_pInstance)
+            m_pInstance->SetData(TYPE_GYTH, DONE);
     }
 
     void UpdateAI(const uint32 uiDiff)
@@ -126,6 +136,7 @@ struct boss_rend_blackhandAI : public ScriptedAI
                 m_uiFrenzyTimer -= uiDiff;
         }
     }
+
 };
 
 CreatureAI* GetAI_boss_rend_blackhand(Creature* pCreature)
