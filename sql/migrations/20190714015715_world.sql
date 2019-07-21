@@ -10,7 +10,6 @@ INSERT INTO `migrations` VALUES ('20190714015715');
 
 update creature set position_x = -11017.14, position_y = -1884.88, position_z = 49.83, orientation = 2.37 where guid = 4008;
 update creature set position_x = -11002.20, position_y = -1913.02, position_z = 49.95, orientation = 4.57 where guid = 4007;
-update creature set position_x = -11984.88, position_y = -1958.80, position_z = 42.14, orientation = 0.42 where guid = 4148;
 
 -- Fix gossip option for Torwa Pathfinder.
 UPDATE `gossip_menu_option` SET `action_menu_id` = 2201 WHERE `menu_id` = 2188 AND `id` = 0 AND `action_menu_id` = 2189;
