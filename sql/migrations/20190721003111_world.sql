@@ -13,6 +13,8 @@ update creature set position_x = -5534.72, position_y = -1349.27, position_z = 3
 update creature set position_x = -10980.58, position_y = -1968.36, position_z = 39.92, orientation = 1.27 where guid = 4009;
 update creature_template set movement_type = 0 where entry = 10429;
 
+UPDATE `mangos_string` SET `content_default`='|cff00FF80A voice in your head:|cff66FFFF %s|r' WHERE `entry`='3';
+
 -- End of migration.
 END IF;
 END??
