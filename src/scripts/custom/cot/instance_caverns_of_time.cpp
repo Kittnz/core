@@ -84,25 +84,25 @@ struct instance_caverns_of_time : public ScriptedInstance
         pPlayer->DeMorph();
     }
 
-    void SetData(uint32 uiType, uint32 uiData)
-    {
+    //void SetData(uint32 uiType, uint32 uiData)
+    //{
 
-    }
+    //}
 
-    uint32 GetData(uint32 uiType)
-    {
+    //uint32 GetData(uint32 uiType)
+    //{
 
-    }
+    //}
 
-    uint64 GetData64(uint32 uiData)
-    {
+    //uint64 GetData64(uint32 uiData)
+    //{
 
-    }
+    //}
 
-    void Update(uint32 uiDiff)
-    {
+    //void Update(uint32 uiDiff)
+    //{
 
-    }
+    //}
 };
 
 InstanceData* GetInstanceData_instance_caverns_of_time(Map* pMap)
