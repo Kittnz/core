@@ -132,7 +132,7 @@ replace into shop_items values
 (606, 6, 50386, 'Dressing Box: Dwarven Mountaineer', 100),
 (607, 6, 50388, 'Dressing Box: Nightwatchman', 100),
 (608, 6, 50384, 'Dressing Box: Stromgarde Guard', 100),
-(609, 6, 50408, 'Cenarius Acorn (Dryad morph)', 200),
+(609, 6, 50101, 'Dressing Box: Scholomance Student', 100),
 -- Skins ---------------------------------------------------------------------------------------
 (700, 7, 50105, 'Human: Sally Whitemane (Female Only)', 50),
 (701, 7, 50106, 'Human, Gnome: Cult of the Damned', 50),
@@ -144,5 +144,6 @@ replace into shop_items values
 (707, 7, 50209, 'Orc: Mag\'Har (Male Only)', 125),
 (708, 7, 50210, 'Troll: Forest', 125),
 (709, 7, 50211, 'Troll: Sandfury (Includes Zombie)', 125),
-(710, 7, 50212, 'Gnome: Leper (Male Only)', 125);
+(710, 7, 50212, 'Gnome: Leper (Male Only)', 125),
+(711, 7, 50408, 'Cenarius Acorn (Dryad Morph)', 200);
 
