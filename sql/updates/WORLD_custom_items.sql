@@ -1,207 +1,137 @@
 
--- ### Any custom item on Turtle WoW should remain in 50000-51000 entry range. 
--- ### If you insert something in the middle I will find you and hurt you.
-
--- 50000 [Character Name Change]
 replace into item_template (entry, name, description, quality, spellid_1, display_id, spellcharges_1, script_name) values
 (50000, 'Character Name Change', 'Right click to use. You will be requested to choose a new name on your next login.', 1, 1575, 30658, -1, 'character_rename');
--- 50001 [Gnomish Plastic Surgery Tools]
 replace into item_template (entry, name, display_id, description, quality) values
 (50001, 'Gnomish Plastic Surgery Tools', 7064, 'Type: .skin <the name of the character you want to look like>. It should be a character of the same race.', 1);
--- 50002 [Gnomish Plastic Surgery Tools]
 replace into item_template (entry, name, display_id, description, quality) values
 (50002, 'Gnomish Plastic Surgery Tools', 7064, 'Type: .race <the name of the character you want to look like>. It should be a character of the same faction.', 1);
--- 50003 [Loremaster's Backpack]
 replace into item_template (entry, class, name, display_id, quality, buy_count, buy_price, inventory_type, item_level, stackable, container_slots, bonding, material) values
 (50003, 1, 'Loremaster\'s Backpack', 6430, 1, 1, 320000, 18, 60, 1, 28, 1, 8);
--- 50004 [Portable Black Hole]
 replace into item_template (entry, class, name, display_id, quality, buy_count, buy_price, inventory_type, item_level, stackable, container_slots, bonding, material) values
 (50004, 1, 'Portable Black Hole', 19502, 2, 1, 320000, 18, 60, 1, 36, 1, 8);
--- 50005 [Field Repair Bot 75B]
 replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1) values
 (50005, 15, 2, 'Field Repair Bot 75B', 'Unfolds into a Field Repair Bot that can repair damaged items and purchase unwanted goods', 19503, 1, 1, 28505);
--- 50006 [Mini Krampus]
 replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1) values
 (50006, 15, 2, 'Mini Krampus', 'Be careful, he will steal your children!', 7999, 1, 1, 28505);
--- 50007 [Forworn Mule]
 replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1) values
 (50007, 15, 2, 'Forworn Mule', 'Carries all your worldly possessions, there and back. Just don\'t do anything P.E.T.A would disapprove of.', 13108, 1, 1, 28505);
--- 50008 [Twink's Insignia]
 replace into item_template (entry, class, name, display_id, quality, buy_count, max_count, stackable, bonding, description) values
 (50008, 15, 'Twink\'s Insignia', 17776, 6, 1, 1, 1, 1, 'This rune prevents the owner from gaining experience.');
--- 50009 [Mechanical Auctioneer]
 replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1) values
 (50009, 15, 2, 'Mechanical Auctioneer', 'Right click to summon C.L.U.C.K.', 8931, 1, 1, 28505);
--- 50010 [Loremaster's Glyph]
 replace into item_template (entry, class, name, display_id, flags, quality, buy_count, max_count, stackable, bonding, description, bag_family) values
 (50010, 13, 'Loremaster\'s Glyph', 22377, 32, 6, 1, 1, 1, 1, 'This item is a reminder of your hardcore adventure.', 9);
--- 50011 [MOLL-E, Remote Mail Terminal]
 replace into item_template (entry, name, description, quality, spellid_1, display_id, spellcharges_1, script_name, spellcooldown_1, bonding) values
 (50011, 'MOLL-E, Remote Mail Terminal', 'Mobile Oversized Letter and Literary Extractor. Use it to create a portable mailbox for 5 min.', 1, 18282, 3020, 0, 'remote_mail_terminal', 1500000, 1);
--- 50012 [Diplomatic Declaration]
 replace into item_template (entry, display_id, quality, name, description, class, subclass, max_count, bonding) values
 (50012, 16065, 6, 'Diplomatic Declaration', 'As a diplomat, you have proved to be aware of the real issues. You now know how to speak with the other faction and are allowed to trade and group with them.', 15, 0, 1, 1);
--- 50013 [Bone Golem]
 replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1) values
 (50013, 15, 2, 'Bone Golem', 'Bone golems are deadly undead constructs made entirely of bones and fueled by ichor of Undeath.', 13806, 1, 1, 28505);
--- 50014 [Blitzen]
 replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1) values
 (50014, 15, 2, 'Blitzen', 'Happy Winter Veil 2018!', 8119, 1, 1, 28505);
--- 50015 [Bloody Coin]
 replace into item_template (entry, class, subclass, name, description, display_id, quality, stackable, bonding) values
 (50015, 15, 0, 'Bloody Coin', 'Local currency used in some bloody events.', 32277, 2, 200, 1);
--- 50016 [Portable Meeting Stone]
 replace into item_template (entry, name, description, display_id, quality, spellid_1, spellcooldown_1, script_name, bonding) values
 (50016, 'Portable Meeting Stone', 'Use it to meet new friends.', '33543', '1', '7077', '3600000', 'portable_meeting_stone', '1');
--- 50017 [Vial of the Sunwell]
 replace into item_template (entry, name, description, display_id, quality, spellid_1, spellcooldown_1, script_name, bonding) values
 (50017, 'Vial of the Sunwell', 'This Vial contains some of the last uncorrupted water of the Thalassian Sunwell before it was defiled by the Scourge. Within this water lies the hope and dreams of the broken High elven people who hope to see the Dawn over their homeland once more.', 17898, 1, 31726, 0, 'highborne_soul_mirror', 1);
--- 50018 [Turtle Traveller's Bag]
 replace into item_template (entry, class, name, display_id, quality, buy_count, buy_price, inventory_type, item_level, stackable, container_slots, bonding, material) values
 (50018, 1, 'Turtle Traveller\'s Bag', 6430, 1, 1, 320000, 18, 60, 1, 20, 1, 8);
--- 50019 [Moonkin Egg]
 replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1) values
 (50019, 15, 2, 'Moonkin Egg', 'Moonkins are blessed by Elune and spread nature\'s grace wherever they travel. The festive fowls are always in the mood for a dance.', 18050, 1, 1, 28505);
--- 50020 [Magic Muffin]
 replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1, spellcooldown_1, buy_count, sell_price, script_name) values
 (50020, 0, 5, 'Magic Muffin', 'Be careful, if you grow, you may not fit in your clothes.', 6343, 1, 1, 8213, 1000, 150, 35, 'item_alice_wonderland_scale');
--- 50021 [Strange Bottle]
 replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1, spellcooldown_1, buy_count, sell_price, script_name) values
 (50021, 0, 5, 'Strange Bottle', 'You will feel a bit small...', 2357, 1, 1, 16589, 1000, 150, 35, 'item_alice_wonderland_scale');
--- 50022 [Dressing Box: Midsummer Priestess]
 replace into item_template (entry, class, name, display_id, quality, bonding, flags, description) values
 (50022, 15, 'Dressing Box: Midsummer Priestess', 35406, 1, 1, 4, 'Warm yourself and the others.'); 
--- 50023 [Dressing Box: Demon Hunter]
 replace into item_template (entry, class, name, display_id, quality, bonding, flags, description) values
 (50023, 15, 'Dressing Box: Demon Hunter', 35406, 1, 1, 4, 'The Demon Hunters’ apparent blindness belies their true powers of perception. They rely on magically augmented sight spectral sight to detect enemies, even those that hide behind obstacles.'); 
--- 50024 [Dressing Box: Invisible Suit]
 replace into item_template (entry, class, name, display_id, quality, bonding, flags, description) values
 (50024, 15, 'Dressing Box: Invisible Suit', 35406, 1, 1, 4, 'What\'s happens in Goldhire\'s Tavern, stays in Goldshire\'s Tavern.'); 
--- 50025 [Dressing Box: Sally Whitemane]
 replace into item_template (entry, class, name, display_id, quality, bonding, flags, description) values
 (50025, 15, 'Dressing Box: Sally Whitemane', 35406, 1, 1, 4, 'Join us, take up the path of vengeance!'); 
--- 50026 [Invisible Pants]
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50026, 'Invisible Pants', 7, 396, 1, 1);
--- 50027 [Invisible Shirt]
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50027, 'Invisible Shirt', 5, 383, 1, 1);
--- 50028 [Loramus Thalipedes' Blindfold]
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50028, 'Loramus Thalipedes\' Blindfold', 1, 5878, 1, 1);
--- 50029 [Cursed Vision of Sargeras]
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50029, 'Cursed Vision of Sargeras', 1, 17867, 1, 1);
--- 50030 [Demon Hunter Right Glaive]
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50030, 'Demon Hunter Right Glaive', 21, 22672, 1, 1);
--- 50031 [Demon Hunter Left Glaive]
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50031, 'Demon Hunter Left Glaive', 23, 22695, 1, 1);
--- 50032 [Demon Hunter Sandals]
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50032, 'Demon Hunter Sandals', 8, 16855, 1, 1);
--- 50033 [Demon Hunter Kilt]
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50033, 'Demon Hunter Kilt', 7, 28287, 1, 1);
--- 50034 [Demon Hunter Harness]
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50034, 'Demon Hunter Harness', 5, 12370, 1, 1);
--- 50035 [Demon Hunter Bracers]
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50035, 'Demon Hunter Bracers', 9, 35091, 1, 1);
--- 50036 [High Inquisitor's Chapeau]
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50036, 'High Inquisitor\'s Chapeau', 1, 15991, 1, 1);
--- 50037 [High Inquisitor's Chest]
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50037, 'High Inquisitor\'s Chest', 5, 18839, 1, 1);
--- 50038 [High Inquisitor's Tabard]
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50038, 'High Inquisitor\'s Tabard', 19, 30640, 1, 1);
--- 50039 [High Inquisitor's Boots]
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50039, 'High Inquisitor\'s Boots', 8, 24054, 1, 1);
--- 50040 [High Inquisitor's Shoulders]
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50040, 'High Inquisitor\'s Shoulders', 3, 13672, 1, 1);
--- 50041 [High Inquisitor's Pants]
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50041, 'High Inquisitor\'s Pants', 7, 24895, 1, 1);
--- 50042 [High Inquisitor's Gloves]
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50042, 'High Inquisitor\'s Gloves', 10, 18853, 1, 1);
--- 50043 [High Inquisitor's Staff]
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50043, 'High Inquisitor\'s Tabard', 17, 20257, 1, 1);
--- 50044 [Goldweave Tabard]
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50044, 'Goldweave Tabard', 19, 22370, 1, 1);
--- 50045 [Goldweave Vest]
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50045, 'Goldweave Vest', 4, 22370, 1, 1);
--- 50046 [Vestment of Summer]
 replace into item_template (entry, name, description, inventory_type, display_id, quality, bonding, script_name, spellid_1, spellcooldown_1) values
 (50046, 'Vestment of Summer', 'You feel the need to dance.', 5, 26131, 1, 1, 'item_summer_vestment', 11542, 1000);
--- 50047 [Sandals of Summer]
 replace into item_template (entry, name, description, inventory_type, display_id, quality, bonding, spellid_1, spellcooldown_1) values
 (50047, 'Sandals of Summer', 'Be careful with the ground if you tap them.', 8, 28088, 1, 1, 24207, 1000);
--- 50048 [Right Juggling Torch]
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50048, 'Right Juggling Torch', 21, 12236, 1, 1);
--- 50049 [Left Juggling Torch]
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50049, 'Right Juggling Torch', 23, 12236, 1, 1);
--- 50050 [Turtle WoW Box (lvl 10)]
 replace into item_template (entry, class, name, display_id, quality, bonding, flags, description) values
 (50050, 15, 'Turtle WoW Box', 18499, 1, 1, 4, 'Take it slow! Level 10 hardcore reward.'); 
--- 50051 [Turtle WoW Box (lvl 20)]
 replace into item_template (entry, class, name, display_id, quality, bonding, flags, description) values
 (50051, 15, 'Turtle WoW Box', 18499, 1, 1, 4, 'Take it slow! Level 20 hardcore reward.'); 
--- 50052 [Turtle WoW Box (lvl 30)]
 replace into item_template (entry, class, name, display_id, quality, bonding, flags, description) values
 (50052, 15, 'Turtle WoW Box', 18499, 1, 1, 4, 'Take it slow! Level 30 hardcore reward.'); 
--- 50053 [Turtle WoW Box (lvl 40)]
 replace into item_template (entry, class, name, display_id, quality, bonding, flags, description) values
 (50053, 15, 'Turtle WoW Box', 18499, 1, 1, 4, 'Take it slow! Level 40 hardcore reward.'); 
--- 50054 [Turtle WoW Box (lvl 50)]
 replace into item_template (entry, class, name, display_id, quality, bonding, flags, description) values
 (50054, 15, 'Turtle WoW Box', 18499, 1, 1, 4, 'Take it slow! Level 50 hardcore reward.'); 
--- 50055 [Turtle WoW Box (lvl 60)]
 replace into item_template (entry, class, name, display_id, quality, bonding, flags, description) values
 (50055, 15, 'Turtle WoW Box', 18499, 1, 1, 4, 'Take it slow! Level 60 hardcore reward.'); 
--- 50056 [Allliance Protector's Scroll]
 replace into item_template (entry, name, description, display_id, quality, spellid_1, spellcooldown_1, script_name, bonding) values
 (50056, 'Alliance Protector\'s Scroll', 'Teleports you to your capital city.', '6270', '1', '7794', '3600000', 'city_protector_scroll', '1');
--- 50057 [Horde Protector's Scroll]
 replace into item_template (entry, name, description, display_id, quality, spellid_1, spellcooldown_1, script_name, bonding) values
 (50057, 'Horde Protector\'s Scroll', 'Teleports you to your capital city.', '1096', '1', '7794', '3600000', 'city_protector_scroll', '1');
--- 50058 [Black Piglet]
 replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1) values
 (50058, 15, 2, 'Black Piglet', 'He loves to play in the mud! Then he likes to give you a hug!', 7287, 1, 1, 28505);
--- 50059 [Green Winter Vest]
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50059, 'Green Winter Vest', 5, 33581, 1, 1);
--- 50060 [Green Winter Pants]
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50060, 'Green Winter Pants', 7, 33582, 1, 1);
--- 50061 [Red Winter Vest]
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50061, 'Green Winter Vest', 5, 34088, 1, 1);
--- 50062 [Half-Eaten Mutton Chop]
 replace into item_template (entry, class, subclass, name, display_id, Quality, Flags, Buy_Count, Inventory_Type, bonding, delay, dmg_min1, dmg_max1, Item_Level, Material, sheath) values
 (50062, 2, 14, 'Half-Eaten Mutton Chop', 1950, 1, 0, 1, 13, 0, 1800, 5, 8, 8, 2, 3);
--- 50063 [Intact Human Head]
 replace into item_template (entry, class, subclass, name, display_id, Quality, Flags, Buy_Count, Buy_Price, Sell_Price, Item_Level, stackable, bonding, Material) values
 (50063, 12, 0, 'Intact Human Head', 32965, 1, 0, 1, 0, 0, 0, 1, 4, -1),
--- 50064 [Intact Orc Head]
 (50064, 12, 0, 'Intact Orc Head', 32969, 1, 0, 1, 0, 0, 0, 1, 4, -1);
--- 50065 [Anatomy Class Notes]
 replace into item_template (entry, class, subclass, name, display_id, Quality, Flags, Buy_Count, stackable, bonding, Material, Page_Text) values
 (50065, 15, 0, 'Anatomy Class Notes', 8628, 1, 16384, 1, 1, 1, -1, 50065);
 replace into page_text (entry, text) values
 (50065, 'The Professor told me that he has taught other people to disguise themselves. He has not told me where they are but he has given me a list indicating what their disguises are, I must go and look for them in the places where they have been able to infiltrate and they may want to teach me too.$B$B· Defias Footpad$B· Dark Iron Dwarf$B· Southsea Pirate$B· Dalaran Wizard$B· Stonesplinter Trogg$B· Syndicate Highwayman');
--- 50066 - 50083 [CUSTOM PET AND MOUNT ITEMS]
 replace into item_template (entry, class, Flags, Buy_Count, Buy_Price, Sell_Price, name, description, display_id, Quality, Inventory_Type, Item_Level, Required_Level, Required_Skill, Required_Skill_Rank, spellid_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, bonding, max_count, stackable) values
 (50066, 15, 0, 1, 0, 0, 'Steel Mechanostrider', '', 17785, 3, 0, 40, 40, 762, 75, 15781, 1, 330, 3000, 1, 0, 1),
 (50067, 15, 0, 1, 0, 0, 'Albino Snake', '', 11889, 1, 0, 0, 0, 0, 0, 10713, 1, 0, 1500, 1, 1, 1),
@@ -221,76 +151,52 @@ replace into item_template (entry, class, Flags, Buy_Count, Buy_Price, Sell_Pric
 (50081, 15, 0, 1, 0, 0, 'Cottontail Rabbit Crate', '', 7913, 1, 0, 0, 0, 0, 0, 10710, -1, 0, -1, 1, 1, 1),
 (50082, 15, 0, 1, 0, 0, 'Snowy Owl', '', 33540, 1, 0, 0, 0, 0, 0, 10708, -1, 0, -1, 1, 1, 1),
 (50083, 15, 0, 1, 0, 0, 'Ancient Arcane Dust', 'It slips between your fingers, but if you manage to put it together you may receive the visit of some little creature thirsty for magic.', 20614, 3, 0, 0, 0, 0, 0, 10696, -1, 0, -1, 1, 1, 1);
--- 50084 [Kirin Tor Familiar]
 replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1) values
 (50084, 15, 2, 'Kirin Tor Familiar', 'Who knew he was so into books?', 20614, 1, 1, 28505);
--- 50085 [Frostwolf Ghostpup]
 replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1) values
 (50085, 15, 2, 'Frostwolf Ghostpup', 'The little wolf told to stay. Watching, waiting, for vacant prey. Too proud to leave, she slipped away. Unburdened now, forever free to play.', 31475, 1, 1, 28505);
--- 50086 [Stromgarde Tabard]
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding, description) values
 (50086, 'Stromgarde Tabard', 19, 36468, 1, 1, '');
--- 50087 [Tabard of Kul'Tiras]
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding, description) values
 (50087, 'Tabard of Kul\'Tiras', 19, 7683, 1, 1, '');
--- 50088 [Theramore Tabard]
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding, description) values
 (50088, 'Theramore Tabard', 19, 7690, 1, 1, '');
--- 50089 [Tabard of the Kirin Tor]
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding, description) values
 (50089, 'Tabard of the Kirin Tor', 19, 10643, 1, 1, '');
--- 50090 [Tabard of Stormwind]
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding, description) values
 (50090, 'White Tabard of Stormwind', 19, 12806, 1, 1, '');
--- 50091 [Scholomance Tabard]
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding, description) values
 (50091, 'Scholomance Tabard', 19, 24344, 1, 1, '');
--- 50092 [Tabard of Scarlet Preacher]
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding, description) values
 (50092, 'Tabard of the Crimson Legion', 19, 23951, 1, 1, '');
--- 50093 [Tabard of Scarlet Archmage]
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding, description) values
 (50093, 'Tabard of Hearthglen', 19, 23954, 1, 1, '');
--- 50094 [Sword of a Thousand Truths]
 replace into item_template (entry, class, subclass, display_id, inventory_type, name, quality, description, required_level, bonding, dmg_min1, dmg_max1, spellid_1, spellcooldown_1, script_name) value 
 (50094, 2, 7, 36377, 21, 'Sword of a Thousand Truths', 5, 'It was foretold, that one day, heroes who could wield the sword might reveal themselves.', 60, 1, 170, 190, 6755, 50600, 'sword_of_truth');
--- 50095 [Scholomance Academy Hood]
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50095, 'Scholomance Academy Hood', 1, 16824, 1, 1);
--- 50096 [Scholomance Academy Vest]
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50096, 'Scholomance Academy Vest', 5, 8720, 1, 1);
--- 50097 [Scholomance Academy Gloves]
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50097, 'Scholomance Academy Gloves', 10, 16642, 1, 1);
--- 50098 [Scholomance Academy Boots]
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50098, 'Scholomance Academy Boots', 8, 21154, 1, 1);
--- 50099 [Scholomance Academy Shoulders]
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50099, 'Scholomance Academy Shoulders', 3, 18865, 1, 1);
--- 50100 [Scholomance Academy Pants]
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50100, 'Scholomance Academy Pants', 7, 14989, 1, 1);
--- 50101 [Dressing Box: Scholomance Student]
 replace into item_template (entry, class, name, display_id, quality, bonding, flags, description) values
 (50101, 15, 'Dressing Box: Scholomance Student', 35406, 1, 1, 4, 'If you haven\'t come to study, I\'ll use you to teach a lesson.'); 
--- 50102 [Scholomance Academy Belt]
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50102, 'Scholomance Academy Belt', 6, 4557, 1, 1);
--- 50103 [Scholomance Academy Robe]
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50103, 'Scholomance Academy Robe', 20, 16643, 1, 1);
--- 50103 [Scholomance Academy Staff]
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50104, 'Scholomance Academy Staff', 17, 35563, 1, 1);
--- 50105 [Sally Whitemane's Makeup Kit]
 replace into item_template (entry, name, description, quality, spellid_1, display_id, script_name, allowable_race, bonding) values
 (50105, 'Sally Whitemane\'s Makeup Kit', '', 2, 1575, 14006, 'skin_changer', 1, 1);
--- 50106 [Cult of the Damned Makeup Kit]
 replace into item_template (entry, name, description, quality, spellid_1, display_id, script_name, allowable_race, bonding) values
 (50106, 'Cult of the Damned Makeup Kit', '', 2, 1575, 16028, 'skin_changer', 65, 1);
--- 50107-50171 [Hair Dye Items]
 replace into item_template (entry, name, description, quality, spellid_1, display_id, script_name, buy_price, spellcharges_1, allowable_race, bonding) values
 (50107, 'Night Elf Hair Dye: Grass Green', '', 2, 1575, 33449, 'hairdye', 50000, -1, 8, 1),
 (50108, 'Night Elf Hair Dye: Green', '', 2, 1575, 33449, 'hairdye', 50000, -1, 8, 1),
@@ -363,32 +269,24 @@ replace into item_template (entry, name, description, quality, spellid_1, displa
 (50170, 'Undead Hair Dye: Dirty Purple', '', 2, 1575, 33449, 'hairdye', 50000, -1, 16, 1),
 (50171, 'Undead Hair Dye: Ash Black', '', 2, 1575, 33449, 'hairdye', 50000, -1, 16, 1);
 
--- 50200 [Darkmoon Steam Tonk]
 replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1) values
 (50200, 15, 2, 'Darkmoon Steam Tonk', '', 4233, 1, 1, 28505);
--- 50201 [Expired Winter Veil Party Invitation]
 replace into item_template (entry, class, subclass, name, description, display_id, quality, stackable, bonding) values
 (50201, 15, 0, 'Expired Winter Veil Party Invitation', 'Happy New 2019 Year!', 1301, 0, 200, 1);
-
 replace into item_template (entry, class, Flags, Buy_Count, Buy_Price, Sell_Price, name, description, display_id, Quality, Inventory_Type, Item_Level, Required_Level, Required_Skill, Required_Skill_Rank, spellid_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, bonding, max_count, stackable) values
 (50202, 15, 0, 1, 0, 0, 'Egg of Turtlhu', 'This poor turtle got a bit corrupted, but his heart is still lovely.', 18050, 3, 0, 0, 0, 0, 0, 28505, 1, 0, 0, 3, 0, 1);
-
 replace into item_template (entry, class, subclass, name, description, display_id, quality, stackable, bonding) values
 (50203, 15, 0, 'Corrupted Sand', 'This sand covers some corrupted creatures that have been involved in time travels, it could be purified again if you are able to find someone inside the Caverns of Time...', 20614, 2, 250, 0);
-
 replace into item_template (entry, name, description, quality, spellid_1, display_id, script_name, allowable_race, bonding) values
 (50204, 'Wildhammer Clan Initiation Set', '', 2, 12244, 31521, 'skin_changer', 4, 1),
 (50205, 'Dark Iron Dwarf Initiation Set', '', 2, 12244, 28652, 'skin_changer', 4, 1),
 (50206, 'Earthen Dwarf Initiation Set (Male Only)', '', 2, 12244, 32933, 'skin_changer', 4, 1),
-
 (50207, 'Blackrock Clan Initiation Set', '', 2, 12244, 9116, 'skin_changer', 2, 1),
 (50208, 'Chaos Orc Initiation Set (Male Only)', '', 2, 12244, 16452, 'skin_changer', 2, 1),
 (50209, 'Mag\'Har Clan Initiation Set (Male Only)', '', 2, 12244, 16207, 'skin_changer', 2, 1),
-
 (50210, 'Forest Troll Initiation Set', '', 2, 12244, 34924, 'skin_changer', 128, 1),
 (50211, 'Sandfury Initiation Set (Includes Zombie)', '', 2, 12244, 32280, 'skin_changer', 128, 1),
 (50212, 'Leper Gnome Initiation Set (Male Only)', '', 2, 12244, 1288, 'skin_changer', 64, 1);
-
 replace into item_template (entry, name, description, quality, spellid_1, display_id, script_name, bonding, spellcharges_1, buy_price) values
 (50230, 'Survival Skill Book', 'A weather-beaten leather covered journal instructing for Survival in the Wilds.', 2, 12244, 8117, 'survival_kit', 1, -1, 0),
 (50231, 'Coil of Sturdy Rope', 'A strong, braided leather rope.', 1, 12244, 10301, '', 1, 0, 3500),
@@ -399,51 +297,6 @@ replace into item_template (entry, name, description, quality, spellid_1, displa
 
 replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1, spellcooldown_1) values
 (50240, 15, 2, 'Kodo Calfling', '', 31802, 1, 1, 28505, 1500);
-
--- ### item_loot_template:
-delete from item_loot_template where entry in (50050, 50051, 50052, 50053, 50054, 500055, 50022, 50023, 50024, 50025, 50101);
-replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid) values
-
--- Dressing Boxes:
-
--- 50022 [Dressing Box: Midsummer Priestess] loot:
-(50022, 23323, 100, 1),(50022, 23324, 100, 2),(50022, 50046, 100, 3),(50022, 50047, 100, 4),(50022, 50048, 100, 5),(50022, 50049, 100, 6),
--- 50023 [Dressing Box: Demon Hunter] loot:
-(50023, 50028, 100, 1),(50023, 50029, 100, 2),(50023, 50030, 100, 3),(50023, 50031, 100, 4),(50023, 50032, 100, 5),(50023, 50033, 100, 6),(50023, 50034, 100, 7),(50023, 50035, 100, 8),
--- 50024 [Dressing Box: Invisible Suit] loot:
-(50024, 50026, 100, 1),(50024, 50027, 100, 2),
--- 50025 [Dressing Box: Sally Whitemane] loot:
-(50025, 50036, 100, 1),(50025, 50037, 100, 2),(50025, 50038, 100, 3),(50025, 50039, 100, 4),(50025, 50040, 100, 5),(50025, 50041, 100, 6),(50025, 50042, 100, 7),(50025, 50043, 100, 8), (50025, 50105, 100, 9),
--- 50101 [Dressing Box: Scholomance Student]
-(50101, 50091, 100, 1),(50101, 50095, 100, 2),(50101, 50096, 100, 3),(50101, 50097, 100, 4),(50101, 50098, 100, 5),(50101, 50099, 100, 6),(50101, 50100, 100, 7),(50101, 50102, 100, 8),(50101, 50103, 100, 9),(50101, 3427, 100, 10), (50101, 50104, 100, 11), (50101, 50106, 100, 12);
-
-replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid, mincountOrRef, maxcount) values
-
--- Hardcore Rewards:
-
--- 50050 [Turtle WoW Box (lvl 10)] loot:
-(50050, 18967, 100, 1, 1, 1), -- 18954 [Turtle Egg (Olive)]
-(50050, 1470,  100, 2, 1, 1), -- 1470  [Murloc Skin Bag]
-(50050, 859,   100, 3, 1, 1), -- 859   [Fine Cloth Shirt]
-(50050, 50048, 100, 4, 1, 1), -- 50048 [Right Juggling Torch]
--- 50051 [Turtle WoW Box (lvl 20)] loot:
-(50051, 50058, 100, 2, 1, 1), -- 50058 [Black Piglet]
-(50051, 50021, 100, 3, 10, 10), -- 50021 [Strange Bottle]
--- 50052 [Turtle WoW Box (lvl 30)] loot:
-(50052, 50062, 100, 1, 1, 1), -- 50062 [Half-Eaten Mutton Chop]
-(50052, 23716, 100, 2, 1, 1), -- 23716 [Carved Ogre Idol]
-(50052, 50020, 100, 3, 10, 10), -- 50020 [Magic Muffin]
--- 50053 [Turtle WoW Box (lvl 40)] loot:
-(50053, 50018, 100, 1, 1, 1), --  1470 [Turtle Traveller's Bag]
-(50053, 50017, 100, 2, 1,1 ), -- 50017 [Highborne Soul Mirror]
--- 50054 [Turtle WoW Box (lvl 50)] loot:
-(50054, 23714, 100, 1, 1, 1), -- 23714 [Perpetual Purple Firework]
-(50054, 23578, 100, 2, 20, 20), -- 23578 [Diet McWeaksause]
-(50054, 23579, 100, 3, 20, 20), -- 23579 [Diet McWeaksause Classic]
--- 50055 [Turtle WoW Box (lvl 60)] loot:
-(50055, 19160, 100, 1, 1, 1), -- 19160 [Hardcore Master's Tabard]
-(50055, 50075, 100, 2, 1, 1), -- 50074 [Darkmoon Strider]
-(50055, 50094, 100, 3, 1, 1); -- 50094 [Sword of a Thousand Truths]
 
 replace into item_template (entry, name, description, inventory_type, quality, display_id, bonding, max_count, fire_res) values
 (50236, 'Stormborn\'s Cape', 'We shall not pretend to any understanding of the bond between dragon and dragonrider; wiser heads have pondered that mystery for centuries. We do know however, that dragons are not horses, to be ridden by any man who throws a saddle on their back.',
@@ -459,7 +312,6 @@ replace into item_template (entry, name, description, display_id, class, subclas
 (50242, 'DEPRECATED War Forged Opal', 'This opal has been in more wars than you can even think, guess why.', 6496, 4, 0, 4, 12, 85, 60, 7, 10, 0, 16620, 5579, 1, 0, -1, 180000, 1);
 
 replace into item_template (entry, name, class, subclass, display_id, inventory_type, quality, item_level, spellid_1, bonding, description, sheath, dmg_min1, dmg_max1) values (50243, 'Pompa\'s Scratching Stick', 2, 8, 34402, 17, 5, 1337, 5, 1, 'Only a madman would scratch with this.', 1, 1, 1337);
-
 
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50300, 'Ironforge Guard\'s Chest', 5, 10441, 1, 1),
@@ -552,16 +404,13 @@ replace into item_template (entry, name, inventory_type, display_id, quality, bo
 
 (50376, 'Hillsbrad Tabard', 19, 16078, 1, 1),
 (50377, 'Pilgrim Pants', 7, 24871, 1, 1);
-
 replace into item_template (entry, name, class, subclass, inventory_type, display_id, quality, bonding, sheath) values
-
 (50307, 'Ironforge Guard\'s Shield', 4, 6, 14, 10968, 1, 1, 4),
 (50315, 'Stormwind Guard\'s Shield', 4, 6, 14, 2080, 1, 1, 4),
 (50378, 'Stromgarde Guard\'s Shield', 4, 6, 14, 18690, 1, 1, 4),
 (50342, 'Sentinel\'s Glaive', 2, 14, 13, 4289, 1, 1, 2),
 (50374, 'Thunder Bluff Guard\'s Totem', 2, 14, 13, 5415, 1, 1, 2),
 (50379, 'Forsaken Guard\'s Shield', 4, 6, 14, 30559, 1, 1, 4);
-
 replace into item_template (entry, class, name, display_id, quality, bonding, flags, description, buy_price, required_reputation_faction, required_reputation_rank) values
 (50380, 15, 'Dressing Box: Ironforge Guard', 35406, 1, 1, 4, 'Keep yer feet on tha ground!', 150000, 47, 6),
 (50381, 15, 'Dressing Box: Stormwind Guard', 35406, 1, 1, 4, 'King\'s honor, friend.', 150000, 72, 6),
@@ -575,26 +424,10 @@ replace into item_template (entry, class, name, display_id, quality, bonding, fl
 (50389, 15, 'Dressing Box: Orgrimmar Guard', 35406, 1, 1, 4, 'Dabu.', 150000, 76, 6),
 (50390, 15, 'Dressing Box: Thunder Bluff Guard', 35406, 1, 1, 4, 'Moo! are you happy now?', 150000, 81, 6),
 (50391, 15, 'Dressing Box: Gnomeregan Guard', 35406, 1, 1, 4, 'Salutations!', 150000, 54, 6);
-
-replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid) values
-(50380, 50300, 100, 1),(50380, 50301, 100, 2),(50380, 50302, 100, 3),(50380, 50303, 100, 4),(50380, 50304, 100, 5),(50380, 50305, 100, 6),(50380, 50306, 100, 7),(50380, 50307, 100, 8),
-(50381, 50308, 100, 1),(50381, 50309, 100, 2),(50381, 50310, 100, 3),(50381, 11364, 100, 4),(50381, 50311, 100, 5),(50381, 50312, 100, 6),(50381, 50313, 100, 7),(50381, 50314, 100, 8),(50381, 50315, 100, 9), 
-(50382, 50316, 100, 1),(50382, 50317, 100, 2),(50382, 50318, 100, 3),(50382, 50319, 100, 4),(50382, 50320, 100, 5),(50382, 50321, 100, 6),(50382, 50322, 100, 7),(50382, 50087, 100, 8),
-(50383, 50323, 100, 1),(50383, 50324, 100, 2),(50383, 50325, 100, 3),(50383, 50326, 100, 4),(50383, 50327, 100, 5),(50383, 50328, 100, 6),(50383, 50329, 100, 7),(50383, 50088, 100, 8),
-(50384, 50330, 100, 1),(50384, 50331, 100, 2),(50384, 50332, 100, 3),(50384, 50333, 100, 4),(50384, 50334, 100, 5),(50384, 50335, 100, 6),(50384, 50336, 100, 7),(50384, 50378, 100, 8),(50384, 50086, 100, 9),
-(50385, 50337, 100, 1),(50385, 50338, 100, 2),(50385, 50339, 100, 3),(50385, 50340, 100, 4),(50385, 50341, 100, 5),(50385, 50342, 100, 6),
-(50386, 50343, 100, 1),(50386, 50344, 100, 2),(50386, 50345, 100, 3),(50386, 50346, 100, 4),(50386, 50347, 100, 5),(50386, 50348, 100, 6),(50386, 50349, 100, 7),
-(50387, 50350, 100, 1),(50387, 50351, 100, 2),(50387, 50352, 100, 3),(50387, 50353, 100, 4),(50387, 50354, 100, 5),(50387, 50355, 100, 6),(50387, 50356, 100, 7),(50387, 50379, 100, 8),
-(50388, 50357, 100, 1),(50388, 50358, 100, 2),(50388, 50359, 100, 3),(50388, 50360, 100, 4),(50388, 50361, 100, 5),
-(50389, 50362, 100, 1),(50389, 50363, 100, 2),(50389, 50364, 100, 3),(50389, 50365, 100, 4),(50389, 50366, 100, 5),(50389, 50367, 100, 6),
-(50390, 50368, 100, 1),(50390, 50369, 100, 2),(50390, 50370, 100, 3),(50390, 50371, 100, 4),(50390, 50372, 100, 5),(50390, 50373, 100, 6),(50390, 50374, 100, 7),
-(50391, 50392, 100, 1),(50391, 50393, 100, 2),(50391, 50394, 100, 3),(50391, 50395, 100, 4),(50391, 50396, 100, 5);
-
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50397, 'Goldweave Shoes', 8, 28644, 1, 1);
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50398, 'Goldweave Pants', 7, 29782, 1, 1);
-
 replace into item_template (entry, class, Flags, Buy_Count, Buy_Price, Sell_Price, name, description, display_id, Quality, Inventory_Type, Item_Level, Required_Level, Required_Skill, Required_Skill_Rank, spellid_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, bonding, max_count, stackable) values
 (50399, 15, 0, 1, 0, 0, 'Quel\'dorei Steed', '', 13108, 4, 0, 60, 60, 762, 150, 16083, 1, 330, 3000, 1, 0, 1),
 (50400, 15, 0, 1, 0, 0, 'Swift Zhevra', '', 22037, 4, 0, 60, 60, 762, 150, 16083, 1, 330, 3000, 1, 0, 1),
@@ -605,10 +438,8 @@ replace into item_template (entry, class, Flags, Buy_Count, Buy_Price, Sell_Pric
 (50405, 15, 0, 1, 0, 0, 'Spectral Gryphon Essence', '', 9731, 4, 0, 60, 60, 762, 150, 10801, 1, 330, 3000, 1, 0, 1),
 (50406, 15, 0, 1, 0, 0, 'Shadowhorn Stag', '', 8232, 4, 0, 60, 60, 762, 150, 470, 1, 330, 3000, 1, 0, 1),
 (50407, 15, 0, 1, 0, 0, 'Nightmare Dreamrunner', '', 30608, 4, 0, 60, 60, 762, 150, 470, 1, 330, 3000, 1, 0, 1);
-
 replace into item_template (entry, name, description, display_id, quality, spellid_1, spellcooldown_1, script_name, bonding) values
 (50408, 'Cenarius Acorn', 'This little acorn holds great nature magic. It seems to listen to the words told to it and may one day hatch into a beautiful being.', 7287, 1, 31726, 0, 'dryad_acorn', 1);
-
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50409, 'Sen\'jin Guard\'s Harness', 5, 10883, 1, 1),
 (50410, 'Sen\'jin Guard\'s Belt', 6, 11279, 1, 1),
@@ -617,27 +448,14 @@ replace into item_template (entry, name, inventory_type, display_id, quality, bo
 (50413, 'Sen\'jin Guard\'s Bracers', 10, 15413, 1, 1),
 (50414, 'Sen\'jin Guard\'s Shoulders', 3, 34249, 1, 1),
 (50415, 'Sen\'jin Guard\'s Mask', 1, 18689, 1, 1);
-
 replace into item_template (entry, class, name, display_id, quality, bonding, flags, description, buy_price, required_reputation_faction, required_reputation_rank) values
 (50416, 15, 'Dressing Box: Sen\'jin Guard', 35406, 1, 1, 4, 'Taz\'dingo!', 150000, 530, 6);
-
-replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid) values
-(50416, 50409, 100, 1),
-(50416, 50410, 100, 2),
-(50416, 50411, 100, 3),
-(50416, 50412, 100, 4),
-(50416, 50413, 100, 5),
-(50416, 50414, 100, 6),
-(50416, 50415, 100, 7);
-
 replace into item_template (entry, name, class, subclass, inventory_type, display_id, quality, bonding, sheath, spellid_1, required_level, buy_price, sell_price, item_level, stat_type1, stat_value1, stat_type2, stat_value2, block, armor, max_durability, disenchant_id, spelltrigger_1) values
 (50417, 'Time-shifting Wheel', 4, 6, 14, 28407, 3, 1, 4, 18030, 60, 192849, 36762, 70, 5, 9, 7, 5, 41, 2192, 120, 49, 1);
 replace into item_template (entry, class, subclass, name, display_id, quality, buy_price, sell_price, inventory_type, item_level, required_level, armor, spellid_1, spelltrigger_1, spellid_2, spelltrigger_2, bonding, max_durability, disenchant_id, stat_type1, stat_value1, stat_type2, stat_value2) values
 (50418, 4, 4, 'Corrupted Plate Pauldrons', 35434, 3, 102981, 32167, 3, 70, 60, 512, 15465, 1, 14027, 1, 1, 80, 49, 7, 9, 4, 11);
-
 replace into item_template (entry, class, Flags, Buy_Count, Buy_Price, Sell_Price, name, description, display_id, Quality, Inventory_Type, Item_Level, Required_Level, Required_Skill, Required_Skill_Rank, spellid_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, bonding, max_count, stackable) values
 (50419, 15, 0, 1, 0, 0, 'Frayfeather Hippogryph', '', 31500, 4, 0, 60, 60, 762, 150, 10803, 1, 330, 3000, 1, 0, 1);
-
 replace into item_template (entry, class, subclass, name, display_id, Quality, Flags, Buy_Count, Inventory_Type, bonding) values
 (50420, 4, 3, 'Thrall\'s Shoulders', 25551, 1, 0, 1, 3, 1),
 (50421, 4, 3, 'Thrall\'s Belt', 25522, 1, 0, 1, 6, 1),
@@ -645,29 +463,24 @@ replace into item_template (entry, class, subclass, name, display_id, Quality, F
 (50423, 4, 3, 'Thrall\'s Leggings', 25523, 1, 0, 1, 7, 1),
 (50424, 4, 3, 'Thrall\'s Handguards', 25525, 1, 0, 1, 10, 1),
 (50425, 4, 3, 'Thrall\'s Chestguard', 25521, 1, 0, 1, 4, 1);
-
 replace into item_template (entry, class, Flags, Buy_Count, Buy_Price, Sell_Price, name, description, display_id, Quality, Inventory_Type, Item_Level, Required_Level, Required_Skill, Required_Skill_Rank, spellid_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, bonding, max_count, stackable) values
 (50426, 15, 0, 1, 0, 0, 'Zebra Reins', '', 16833, 3, 0, 40, 40, 762, 75, 468, 1, 330, 3000, 3, 0, 1);
-
 replace into item_template (entry, class, subclass, name, display_id, quality, buy_price, sell_price, inventory_type, item_level, required_level, armor, spellid_1, spelltrigger_1, spellid_2, spelltrigger_2, bonding, max_durability, disenchant_id, stat_type1, stat_value1, stat_type2, stat_value2) values
 (50427, 4, 2, 'Time-blackened Chestpiece', 9123, 3, 101122, 32321, 5, 70, 60, 192, 14052, 1, 7597, 1, 1, 100, 49, 7, 12, 3, 8),
 (50428, 4, 4, 'Ancient Clutch', 13758, 3, 62983, 22161, 6, 70, 60, 420, 13387, 1, 13665, 1, 1, 80, 49, 7, 12, 4, 6);
-
 replace into item_template (entry, class, subclass, name, display_id, quality, buy_price, sell_price, inventory_type, item_level, required_level, spellid_1, spelltrigger_1, spellid_2, spelltrigger_2, bonding, max_durability, disenchant_id, stat_type1, stat_value1, stat_type2, stat_value2, delay, dmg_min1, dmg_max1) values
 (50429, 2, 6, 'Spear of the Endless Hunt', 25155, 3, 161122, 62321, 17, 70, 60, 14049, 1, 7598, 1, 1, 120, 49, 3, 18, 5, 12, 3700, 152, 238);
-
 replace into item_template (entry, class, subclass, name, display_id, quality, buy_price, sell_price, inventory_type, item_level, required_level, armor, spellid_1, spelltrigger_1, spellid_2, spelltrigger_2, bonding, max_durability, disenchant_id, stat_type1, stat_value1, stat_type2, stat_value2) values
 (50430, 4, 0, 'Magic-infused Cloak', 35076, 3, 71122, 13211, 16, 70, 60, 48, 14248, 1, 18384, 1, 1, 0, 49, 5, 12, 6, 6),
 (50431, 4, 1, 'Extremely Well Crafted Cuffs', 28619, 3, 51122, 11311, 9, 70, 60, 42, 9406, 1, 21625, 1, 1, 30, 49, 7, 8, 6, 6),
 (50432, 4, 2, 'Bracers of the Inevitable Fate', 30727, 3, 61143, 12214, 9, 70, 60, 74, 13669, 1, 9140, 1, 1, 45, 49, 7, 18, 3, 6);
-
 replace into item_template (entry, class, subclass, name, display_id, delay, inventory_type, bonding, dmg_min1, dmg_max1) values
 (50433, 2, 7, 'Monster, Sword Spear Red', 19804, 2200, 21, 1, 2, 5);
-
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding, description, spellid_1, spelltrigger_1, allowable_race) values
 (50440, 'Scarlet Crusade Insignia', 11, 9834, 2, 1, "This ring marks the bearer as a fully fledged member of the Scarlet Crusade.", 28282, 1, 1);
 
 -- Hotfixes, modify custom items only in this file:
+
 update item_template set spellcooldown_1 = 5400000, spellid_1 = 24085 where entry = 50234;
 update item_template set spellcooldown_1 = 3600000 where entry = 50235;
 update item_template set required_skill = 142, required_skill_rank = 75, required_level = 15 where entry = 50234;
@@ -683,3 +496,51 @@ update item_template set quality = 6, subclass = 14, sheath = 1 where entry = 50
 update item_template set bonding = 0, stackable = 20, buy_price = 500, sell_price = 250, buy_count = 1, spellcharges_1 = -1, spellcooldown_1 = 1000, delay = 0, subclass = 0 where entry in (50020, 50021);
 update item_template set name = 'Dalaran Tabard' where entry = 50089;
 update item_template set max_count = 1 where entry in (50234, 50235);
+
+-- item_loot_template:
+
+replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid, mincountOrRef, maxcount) values
+
+-- 50050 [Turtle WoW Box (lvl 10)] loot:
+(50050, 18967, 100, 1, 1, 1), -- 18954 [Turtle Egg (Olive)]
+(50050, 1470,  100, 2, 1, 1), -- 1470  [Murloc Skin Bag]
+(50050, 859,   100, 3, 1, 1), -- 859   [Fine Cloth Shirt]
+(50050, 50048, 100, 4, 1, 1), -- 50048 [Right Juggling Torch]
+-- 50051 [Turtle WoW Box (lvl 20)] loot:
+(50051, 50058, 100, 2, 1, 1), -- 50058 [Black Piglet]
+(50051, 50021, 100, 3, 10, 10), -- 50021 [Strange Bottle]
+-- 50052 [Turtle WoW Box (lvl 30)] loot:
+(50052, 50062, 100, 1, 1, 1), -- 50062 [Half-Eaten Mutton Chop]
+(50052, 23716, 100, 2, 1, 1), -- 23716 [Carved Ogre Idol]
+(50052, 50020, 100, 3, 10, 10), -- 50020 [Magic Muffin]
+-- 50053 [Turtle WoW Box (lvl 40)] loot:
+(50053, 50018, 100, 1, 1, 1), --  1470 [Turtle Traveller's Bag]
+(50053, 50017, 100, 2, 1,1 ), -- 50017 [Highborne Soul Mirror]
+-- 50054 [Turtle WoW Box (lvl 50)] loot:
+(50054, 23714, 100, 1, 1, 1), -- 23714 [Perpetual Purple Firework]
+(50054, 23578, 100, 2, 20, 20), -- 23578 [Diet McWeaksause]
+(50054, 23579, 100, 3, 20, 20), -- 23579 [Diet McWeaksause Classic]
+-- 50055 [Turtle WoW Box (lvl 60)] loot:
+(50055, 19160, 100, 1, 1, 1), -- 19160 [Hardcore Master's Tabard]
+(50055, 50075, 100, 2, 1, 1), -- 50074 [Darkmoon Strider]
+(50055, 50094, 100, 3, 1, 1); -- 50094 [Sword of a Thousand Truths]
+
+replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid) values
+
+(50022, 23323, 100, 1),(50022, 23324, 100, 2),(50022, 50046, 100, 3),(50022, 50047, 100, 4),(50022, 50048, 100, 5),(50022, 50049, 100, 6),
+(50023, 50028, 100, 1),(50023, 50029, 100, 2),(50023, 50030, 100, 3),(50023, 50031, 100, 4),(50023, 50032, 100, 5),(50023, 50033, 100, 6),(50023, 50034, 100, 7),(50023, 50035, 100, 8),(50024, 50026, 100, 1),(50024, 50027, 100, 2),
+(50025, 50036, 100, 1),(50025, 50037, 100, 2),(50025, 50038, 100, 3),(50025, 50039, 100, 4),(50025, 50040, 100, 5),(50025, 50041, 100, 6),(50025, 50042, 100, 7),(50025, 50043, 100, 8), (50025, 50105, 100, 9),
+(50101, 50091, 100, 1),(50101, 50095, 100, 2),(50101, 50096, 100, 3),(50101, 50097, 100, 4),(50101, 50098, 100, 5),(50101, 50099, 100, 6),(50101, 50100, 100, 7),(50101, 50102, 100, 8),(50101, 50103, 100, 9),(50101, 3427, 100, 10), (50101, 50104, 100, 11), (50101, 50106, 100, 12),
+(50380, 50300, 100, 1),(50380, 50301, 100, 2),(50380, 50302, 100, 3),(50380, 50303, 100, 4),(50380, 50304, 100, 5),(50380, 50305, 100, 6),(50380, 50306, 100, 7),(50380, 50307, 100, 8),
+(50381, 50308, 100, 1),(50381, 50309, 100, 2),(50381, 50310, 100, 3),(50381, 11364, 100, 4),(50381, 50311, 100, 5),(50381, 50312, 100, 6),(50381, 50313, 100, 7),(50381, 50314, 100, 8),(50381, 50315, 100, 9), 
+(50382, 50316, 100, 1),(50382, 50317, 100, 2),(50382, 50318, 100, 3),(50382, 50319, 100, 4),(50382, 50320, 100, 5),(50382, 50321, 100, 6),(50382, 50322, 100, 7),(50382, 50087, 100, 8),
+(50383, 50323, 100, 1),(50383, 50324, 100, 2),(50383, 50325, 100, 3),(50383, 50326, 100, 4),(50383, 50327, 100, 5),(50383, 50328, 100, 6),(50383, 50329, 100, 7),(50383, 50088, 100, 8),
+(50384, 50330, 100, 1),(50384, 50331, 100, 2),(50384, 50332, 100, 3),(50384, 50333, 100, 4),(50384, 50334, 100, 5),(50384, 50335, 100, 6),(50384, 50336, 100, 7),(50384, 50378, 100, 8),(50384, 50086, 100, 9),
+(50385, 50337, 100, 1),(50385, 50338, 100, 2),(50385, 50339, 100, 3),(50385, 50340, 100, 4),(50385, 50341, 100, 5),(50385, 50342, 100, 6),
+(50386, 50343, 100, 1),(50386, 50344, 100, 2),(50386, 50345, 100, 3),(50386, 50346, 100, 4),(50386, 50347, 100, 5),(50386, 50348, 100, 6),(50386, 50349, 100, 7),
+(50387, 50350, 100, 1),(50387, 50351, 100, 2),(50387, 50352, 100, 3),(50387, 50353, 100, 4),(50387, 50354, 100, 5),(50387, 50355, 100, 6),(50387, 50356, 100, 7),(50387, 50379, 100, 8),
+(50388, 50357, 100, 1),(50388, 50358, 100, 2),(50388, 50359, 100, 3),(50388, 50360, 100, 4),(50388, 50361, 100, 5),
+(50389, 50362, 100, 1),(50389, 50363, 100, 2),(50389, 50364, 100, 3),(50389, 50365, 100, 4),(50389, 50366, 100, 5),(50389, 50367, 100, 6),
+(50390, 50368, 100, 1),(50390, 50369, 100, 2),(50390, 50370, 100, 3),(50390, 50371, 100, 4),(50390, 50372, 100, 5),(50390, 50373, 100, 6),(50390, 50374, 100, 7),
+(50391, 50392, 100, 1),(50391, 50393, 100, 2),(50391, 50394, 100, 3),(50391, 50395, 100, 4),(50391, 50396, 100, 5),
+(50416, 50409, 100, 1),(50416, 50410, 100, 2),(50416, 50411, 100, 3),(50416, 50412, 100, 4),(50416, 50413, 100, 5),(50416, 50414, 100, 6),(50416, 50415, 100, 7);
