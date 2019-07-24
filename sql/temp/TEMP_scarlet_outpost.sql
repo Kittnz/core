@@ -1,6 +1,6 @@
 
 replace into quest_template 
-(entry, minlevel, questlevel, requiredraces, title, details, objectives, offerrewardtext, requestitemstext, prevquestid, nextquestid, rewitemid1, reqcreatureorgoid1, reqcreatureorgocount1, rewmoneymaxlevel, zoneorsort) values
+(entry, minlevel, questlevel, requiredraces, title, details, objectives, offerrewardtext, requestitemstext, prevquestid, nextquestid, rewitemid1, reqcreatureorgoid1, reqcreatureorgocount1, rewmoneymaxlevel, zoneorsort, rewitemcount1) values
 
 (50300, 1, 6, 1, 'In Service of the Light', 
 'Greetings, $n!\n\nI\'ve been asked to direct all those heroes who will listen to plea of a Holy Light crusaders to go and talk to the Brother Crowley.\n\nHe\'s here in the Cathedral. He told me to direct all believers to the Cathedral\'s lower level.\n\nThis is where he should be right now.', 
@@ -10,7 +10,7 @@ replace into quest_template
  0,     -- PrevQuestId
  50301, -- NextQuestId
  0, 
- 0, 0, 510, 1519),
+ 0, 0, 510, 1519, 0),
 
 (50301, 1, 6, 1, 'In Service of the Light', 
 'There are not many of those revent believers in the Light with desire to not only uphold the Law and Order but also to save humanity itself!\n\nHumanity is on a verge of survival as it had never been before! Alas, you don\'t have to trust a mere messenger of the Light on a word, yes!\n\nI dare you to check on it yourself without hesitation if you truly believe in the Holy Light! How? It is simple.\n\nYou might think that now isn\'t the time of war and strive while you traverse these stone walls and confines of th 	e great Cathedral of Light here in Stormwind. In reality, however there are humans, out kin, who suffer the consequences of the Scourge invasion and strive for survival back at our homeland - Lordaeron.\n\nIf you are ready to help, then rack up and talk to me again to see the precipice of humanity\'s possible end where it\'s all started. Tirisfal Glades.\n\nOnce there talk to the emissary named Godrick Bell. He\'ll get you on track. Go with the Light.', 
@@ -20,7 +20,7 @@ replace into quest_template
  50300, -- PrevQuestId
  50302, -- NextQuestId
  0,
- 0, 0, 510, 85),
+ 0, 0, 510, 85, 0),
 
 (50302, 1, 7, 1, 'Light\'s Chosen Champion.', 
 'Finally, you have arrived! We\'re on a desperate line of survival here, $c! We need men, we need arms, we need … Champions! Like you, yes!\n\nWhat to do? Oh, let\'s start it with essentials then. There are farmers around who still protect and foster the lands which are Light hadn\'t forsaken yet, but their numbers are few and enemies are abundant.\n\nHumanity is in need of your prowess with weapons and Light. Go and bring peace to the land! We need farmers saved and these undead monsters finally dead. You start with the nearest farm from here.', 
@@ -30,7 +30,7 @@ replace into quest_template
  50301, -- PrevQuestId
  50303, -- NextQuestId
  50440, -- Scarlet Crusade Insignia
- 50508, 10, 510, 85),
+ 50508, 15, 510, 85, 1),
 
 (50303, 1, 8, 1, 'Before the Storm', 
 'Be carefull and may the Light protect you!',
@@ -40,7 +40,7 @@ replace into quest_template
  50302, -- PrevQuestId
  0,     -- NextQuestId
  23192,
- 0, 0, 510, 85);
+ 0, 0, 510, 85, 1);
 
 replace into creature_questrelation (id, quest)    values (4982, 50300); 
 replace into creature_involvedrelation (id, quest) values (12336, 50300);
