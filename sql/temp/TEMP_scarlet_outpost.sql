@@ -2,38 +2,38 @@
 replace into quest_template (entry, minlevel, questlevel, requiredraces, title, details, objectives, offerrewardtext, requestitemstext, prevquestid, nextquestid, rewitemid1) values
 
 (50300, 1, 3, 1, 'In Service of the Light', 
-'Greetings,$n!\n\nI\'ve been asked to direct all those heroes who will listen to plea of a Holy Light crusaders to go and talk to the Brother Crowley. He\'s here in the Cathedral. He told me to direct all believers to the Cathedral\'s lower level. This is where he should be right now.', 
+'Greetings, $n!\n\nI\'ve been asked to direct all those heroes who will listen to plea of a Holy Light crusaders to go and talk to the Brother Crowley.\n\nHe\'s here in the Cathedral. He told me to direct all believers to the Cathedral\'s lower level.\n\nThis is where he should be right now.', 
 'Talk to the Brother Crowley at the Stormwind City Cathedral.',
-'',
 'Light guide you, $c. How can I be of service?',
+'',
  0,     -- PrevQuestId
  50301, -- NextQuestId
  0
-);
+),
 
 (50301, 1, 3, 1, 'In Service of the Light', 
-'There are not many of those revent believers in the Light with desire to not only uphold the Law and Order but also to save humanity itself!\n\nHumanity is on a verge of survival as it had never been before! Alas, you don\'t have to trust a mere messenger of the Light on a word, yes! I dare you to check on it yourself without hesitation if you truly believe in the Holy Light! How? It is simple. You might think that now isn\'t the time of war and strive while you traverse these stone walls and confines of the great Cathedral of Light here in Stormwind. In reality, however there are humans, out kin, who suffer the consequences of the Scourge invasion and strive for survival back at our homeland - Lordaeron.\n\nIf you are ready to help, then rack up and talk to me again to see the precipice of humanity\'s possible end where it\'s all started. Tirisfal Glades. Once there talk to the emissary named Godrick Bell. He\'ll get you on track. Go with the Light.', 
+'There are not many of those revent believers in the Light with desire to not only uphold the Law and Order but also to save humanity itself!\n\nHumanity is on a verge of survival as it had never been before! Alas, you don\'t have to trust a mere messenger of the Light on a word, yes!\n\nI dare you to check on it yourself without hesitation if you truly believe in the Holy Light! How? It is simple.\n\nYou might think that now isn\'t the time of war and strive while you traverse these stone walls and confines of the great Cathedral of Light here in Stormwind. In reality, however there are humans, out kin, who suffer the consequences of the Scourge invasion and strive for survival back at our homeland - Lordaeron.\n\nIf you are ready to help, then rack up and talk to me again to see the precipice of humanity\'s possible end where it\'s all started. Tirisfal Glades.\n\nOnce there talk to the emissary named Godrick Bell. He\'ll get you on track. Go with the Light.', 
 'Speak to Godrick Bell at Solliden Farmstead in Tirisfal Glades.',
+'Hail! You are here to help, aren\'t you?',
 '',
-'Hail, $c and Light be your guidance! You here to help, aren\'t you?',
  50300, -- PrevQuestId
  50302, -- NextQuestId
  0
-);
+),
 
 (50302, 1, 3, 1, 'Light\'s Chosen Champion.', 
-'Finally, you have arrived! We\'re on a desperate line of survival here, $c! We need men, we need arms, we need … Champions! Like you, yes!\n\nWhat to do? Oh, let\'s start it with essentials then. There are farmers around who still protect and foster the lands which are Light hadn\'t forsaken yet, but their nunmbers are few and enemies are abundant.\n\nHumanity is in need of your prowess with weapons and Light. Go and bring peace to the land! We need farmers saved and these undead monsters finally dead. You start with the nearest farm from here.', 
+'Finally, you have arrived! We\'re on a desperate line of survival here, $c! We need men, we need arms, we need … Champions! Like you, yes!\n\nWhat to do? Oh, let\'s start it with essentials then. There are farmers around who still protect and foster the lands which are Light hadn\'t forsaken yet, but their numbers are few and enemies are abundant.\n\nHumanity is in need of your prowess with weapons and Light. Go and bring peace to the land! We need farmers saved and these undead monsters finally dead. You start with the nearest farm from here.', 
 'Slay 15 undead minions and save 10 farmers on the Solliden\'s Farm in Tirisfal Glades.',
 'Be carefull and may the Light protect you!',
 'Thank the Light you\'re safe and judging by your looks did what was needed! Very well done, champion!',
  50301, -- PrevQuestId
  50303, -- NextQuestId
  50440  -- Scarlet Crusade Insignia
-);
+),
 
-(50302, 1, 3, 1, 'Scarlet Outpost', 
+(50303, 1, 3, 1, 'Scarlet Outpost', 
 'Visit Scarlet Outpost (long description)', 
-'Speak to Benjamin Bradley at Scarlet Outpost next to the Scarlet Monastery.',
+'Speak to Benjamin Bradley at Scarlet Outpost near the Scarlet Monastery.',
 'Be carefull and may the Light protect you!',
 'Visit Scarlet Outpost (completed)',
  50302, -- PrevQuestId
@@ -56,10 +56,13 @@ replace into item_template (entry, name, inventory_type, display_id, quality, bo
 delete from creature_template where entry = 50440; -- Old Godrick Bell
 
 replace into creature_template (entry, name, subname, scale, level_min, level_max, health_min, health_max, display_id1, faction, type, inhabit_type, npc_flags) values
-(50506, 'Godrick Bell', 'Scarlet Crusade Emissary', 1, 4, 7, 978, 987, 10343, 35, 7, 3, 1);
+(50506, 'Godrick Bell', 'Scarlet Crusade Emissary', 1, 4, 7, 978, 987, 10343, 35, 7, 3, 2);
 
 replace into creature_template (entry, name, subname, scale, level_min, level_max, health_min, health_max, display_id1, faction, type, inhabit_type, npc_flags) values
-(50507, 'Benjamin Bradley', 'Scarlet Crusade Officer', 1, 4, 7, 978, 987, 10343, 67, 7, 3, 1);
+(50507, 'Benjamin Bradley', 'Scarlet Crusade Officer', 1, 4, 7, 978, 987, 10343, 67, 7, 3, 2);
+
+delete from creature where id = 50506;
+replace into creature (id, map, position_x, position_y, position_z, orientation, spawntimesecsmin) values (50506, 0, 2268, 1314.54, 33.8874, 6.24014, 25);
 
 replace into creature_template (entry, display_id1, name, subname, gossip_menu_id, level_min, level_max, health_min, health_max, mana_min, mana_max, faction, npc_flags, attack_power, base_attack_time, unit_class, unit_flags, type, equipment_id, flags_extra, trainer_class) values
 
