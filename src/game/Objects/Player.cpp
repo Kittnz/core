@@ -21613,3 +21613,7 @@ void Player::MailCityProtectorScroll()
 bool Player::IsIgnoringTitles() { return isIgnoringTitles; }
 
 void Player::SetIgnoringTitles(bool shouldIgnore) { isIgnoringTitles = shouldIgnore; }
+
+bool Player::IsScarletCrusade() { return HasItemWithIdEquipped(50440); }
+
+bool Player::InScarletMonastery() { return GetAreaId() == 796; }
