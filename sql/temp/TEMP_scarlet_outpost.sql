@@ -24,7 +24,7 @@ replace into quest_template
 
 (50302, 1, 7, 1, 'Light\'s Chosen Champion.', 
 'Finally, you have arrived! We\'re on a desperate line of survival here, $c! We need men, we need arms, we need … Champions! Like you, yes!\n\nWhat to do? Oh, let\'s start it with essentials then. There are farmers around who still protect and foster the lands which are Light hadn\'t forsaken yet, but their numbers are few and enemies are abundant.\n\nHumanity is in need of your prowess with weapons and Light. Go and bring peace to the land! We need farmers saved and these undead monsters finally dead. You start with the nearest farm from here.', 
-'Slay 15 Cursed Horrors on the Solliden\'s Farm in Tirisfal Glades.',
+'Kill 15 Undead Slayers on the Solliden\'s Farm in Tirisfal Glades.',
 'Be carefull and may the Light protect you!',
 'Thank the Light you\'re safe and judging by your looks did what was needed! Very well done, champion!',
  50301, -- PrevQuestId
@@ -34,7 +34,7 @@ replace into quest_template
 
 (50303, 1, 8, 1, 'Before the Storm', 
 'Be carefull and may the Light protect you!',
-'While I see some value in the ways any zealot bear into the combat there\'s only one thing they all might lack.\n\nSo you see yourself a worthy protector of the humankind and defender of the Light, eh?\n\nDidn\'t you know there should be not only a zealotry and eagerness within actions, but also style and significance fo us all to be identified easily upon the battlefield!\n\nYou must wear the tabard fir for a true Warrior of the Light!\n\nGet yourself a proper tabard, recruit! This will be your mark of readiness to thwart Scourge plans and a proper way of identification should you fall.', 
+'While I see some value in the ways any zealot bear into the combat there\'s only one thing they all might lack.\n\nSo you see yourself a worthy protector of the humankind and defender of the Light, eh?\n\nDidn\'t you know there should be not only a zealotry and eagerness within actions, but also style and significance fo us all to be identified easily upon the battlefield!\n\nYou must wear the tabard for for a true Warrior of the Light!\n\nGet yourself a proper tabard, recruit! This will be your mark of readiness to thwart Scourge plans and a proper way of identification.', 
 'Speak to Benjamin Bradley at Scarlet Outpost near the Scarlet Monastery.',
 '',
  50302, -- PrevQuestId
@@ -52,8 +52,7 @@ replace into creature_questrelation (id, quest)    values (50506, 50303);
 replace into creature_involvedrelation (id, quest) values (50507, 50303);
 
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding, description, spellid_1, spelltrigger_1, allowable_race) values
--- (50440, 'Scarlet Crusade Insignia', 11, 9834, 2, 1, "This ring marks the bearer as a fully fledged member of the Scarlet Crusade.", 28282, 1, 1);
-(50440, 'Scarlet Crusade Insignia', 11, 9834, 2, 1, "This ring marks the bearer as a fully fledged member of the Scarlet Crusade.", 0, 0, 1);
+(50440, 'Scarlet Crusade Insignia', 11, 9834, 2, 1, "This ring marks the bearer as a fully fledged member of the Scarlet Crusade.", 28282, 1, 1);
 
 replace into creature_template (entry, name, subname, scale, level_min, level_max, health_min, health_max, display_id1, faction, type, inhabit_type, npc_flags) values
 (50506, 'Godrick Bell', 'Scarlet Crusade Emissary', 1, 4, 7, 978, 987, 10343, 35, 7, 3, 2);
@@ -62,7 +61,7 @@ replace into creature_template (entry, name, subname, scale, level_min, level_ma
 (50507, 'Benjamin Bradley', 'Scarlet Crusade Officer', 1, 4, 7, 978, 987, 10343, 67, 7, 3, 2);
 
 replace into creature_template values 
-(50508, 0, 10971, 10975, 10970, 10973, 'Cursed Horror', NULL, 0, 6, 8, 161, 166, 0, 0, 278, 18, 0, 0.9, 1.14286, 0, 20, 5, 0, 0, 1, 9, 13, 0, 58, 1, 2000, 2000, 1, 32768, 0, 0, 0, 0, 0, 0, 13.4464, 18.4888, 100, 7, 0, 1543, 1543, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 13, 'EventAI', 1, 3, 0, 0, 3, 1543, 0, 0, 0, 0, 0, '');
+(50508, 0, 3651, 3671, 3672, 3676, 'Undead Slayer', NULL, 0, 5, 7, 161, 166, 0, 0, 278, 18, 0, 0.9, 1.14286, 0, 20, 5, 0, 0, 1, 9, 13, 0, 58, 1, 2000, 2000, 1, 32768, 0, 0, 0, 0, 0, 0, 13.4464, 18.4888, 100, 7, 0, 1543, 1543, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 13, 'EventAI', 1, 3, 0, 0, 3, 1543, 0, 0, 0, 0, 0, '');
 update creature_template set faction = 5 where entry = 50508;
 
 replace into creature_template (entry, name, subname, scale, level_min, level_max, health_min, health_max, display_id1, faction, type, inhabit_type, npc_flags) values

@@ -2706,19 +2706,7 @@ void Aura::HandleForceReaction(bool apply, bool Real)
         player->StopAttackFaction(faction_id);
 
     // sorry, need to hack ashbringer to make you friendly with scarlet crusade too
-    if (m_spellAuraHolder && m_spellAuraHolder->GetSpellProto() &&  m_spellAuraHolder->GetId() == 28282)
-    {
-        uint32 scarlet_crusade_faction_id = 56;
-        ReputationRank scarlet_crusade_rank = ReputationRank(7);
-        player->GetReputationMgr().ApplyForceReaction(scarlet_crusade_faction_id, scarlet_crusade_rank, apply);
-        player->GetReputationMgr().SendForceReactions();
-
-        // stop fighting if at apply forced rank friendly or at remove real rank friendly
-        if ((apply && scarlet_crusade_rank >= REP_FRIENDLY) || (!apply && player->GetReputationRank(scarlet_crusade_faction_id) >= REP_FRIENDLY))
-            player->StopAttackFaction(scarlet_crusade_faction_id);
-    }
-
-    if (player->IsScarletCrusade())
+    if (m_spellAuraHolder && m_spellAuraHolder->GetSpellProto() && m_spellAuraHolder->GetId() == 28282)
     {
         uint32 scarlet_crusade_faction_id = 56;
         ReputationRank scarlet_crusade_rank = ReputationRank(7);

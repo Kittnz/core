@@ -1065,7 +1065,6 @@ class MANGOS_DLL_SPEC Player final: public Unit
         bool IsIgnoringTitles();
         void SetIgnoringTitles(bool shouldIgnore);
         bool IsScarletCrusade();
-        bool InScarletMonastery();
         void MoveItemFromInventory(uint8 bag, uint8 slot, bool update);
         // in trade, auction, guild bank, mail....
         void MoveItemToInventory(ItemPosCountVec const& dest, Item* pItem, bool update, bool in_characterInventoryDB = false);
