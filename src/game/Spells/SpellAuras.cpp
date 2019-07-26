@@ -1631,6 +1631,24 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
             {
                 switch (GetId())
                 {
+                    case 1:
+                    {
+                        if (Unit* caster = GetCaster()) {
+                            if (Player* player = caster->ToPlayer()) {
+                                if (!player->GetMap()->IsDungeon()) {
+                                    uint32 scarlet_crusade_faction_id = 56;
+                                    ReputationRank scarlet_crusade_rank = ReputationRank(7);
+                                    player->GetReputationMgr().ApplyForceReaction(scarlet_crusade_faction_id, scarlet_crusade_rank, apply);
+                                    player->GetReputationMgr().SendForceReactions();
+
+                                    // stop fighting if at apply forced rank friendly or at remove real rank friendly
+                                    if ((apply && scarlet_crusade_rank >= REP_FRIENDLY) || (!apply && player->GetReputationRank(scarlet_crusade_faction_id) >= REP_FRIENDLY))
+                                        player->StopAttackFaction(scarlet_crusade_faction_id);
+                                }
+                            }
+                        }
+                        break;
+                    }
                     case 2584:                              // Waiting to Resurrect
                     {
                         // for cases where aura would re-apply and player is no longer in BG
@@ -1799,6 +1817,18 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
 
         switch (GetId())
         {
+            case 1:
+                if (Unit* caster = GetCaster()) {
+                    if (Player* player = caster->ToPlayer()) {
+                        if (!player->GetMap()->IsDungeon()) {
+                            uint32 scarlet_crusade_faction_id = 56;
+                            ReputationRank scarlet_crusade_rank = ReputationRank(0);
+                            player->GetReputationMgr().ApplyForceReaction(scarlet_crusade_faction_id, scarlet_crusade_rank, apply);
+                            player->GetReputationMgr().SendForceReactions();
+                        }
+                    }
+                }
+                break;
             case 126:   // Kilrogg eye
             case 6272:  // Eye of Yesmur
             case 11403: // Dream Vision

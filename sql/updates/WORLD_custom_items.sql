@@ -477,7 +477,7 @@ replace into item_template (entry, class, subclass, name, display_id, quality, b
 replace into item_template (entry, class, subclass, name, display_id, delay, inventory_type, bonding, dmg_min1, dmg_max1) values
 (50433, 2, 7, 'Monster, Sword Spear Red', 19804, 2200, 21, 1, 2, 5);
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding, description, spellid_1, spelltrigger_1, allowable_race) values
-(50440, 'Scarlet Crusade Insignia', 11, 9834, 2, 1, "This ring marks the bearer as a fully fledged member of the Scarlet Crusade.", 28282, 1, 1);
+(50440, 'Scarlet Crusade Insignia', 11, 9834, 2, 1, "This ring marks the bearer as a fully fledged member of the Scarlet Crusade.", 1, 1, 1);
 
 -- Hotfixes, modify custom items only in this file:
 
