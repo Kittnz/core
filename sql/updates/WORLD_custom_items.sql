@@ -496,6 +496,7 @@ update item_template set quality = 6, subclass = 14, sheath = 1 where entry = 50
 update item_template set bonding = 0, stackable = 20, buy_price = 500, sell_price = 250, buy_count = 1, spellcharges_1 = -1, spellcooldown_1 = 1000, delay = 0, subclass = 0 where entry in (50020, 50021);
 update item_template set name = 'Dalaran Tabard' where entry = 50089;
 update item_template set max_count = 1 where entry in (50234, 50235);
+update item_template set buy_price = 500 where entry in (50330, 50331, 50332, 50333, 50334, 50335, 50336, 50378);
 
 -- item_loot_template:
 
