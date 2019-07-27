@@ -187,6 +187,7 @@ Unit::Unit()
 
     m_CombatTimer = 0;
     m_lastManaUseTimer = 0;
+    m_lastManaUseSpellId = 0;
 
     //m_victimThreat = 0.0f;
     for (int i = 0; i < MAX_SPELL_SCHOOL; ++i)
@@ -290,7 +291,14 @@ void Unit::Update(uint32 update_diff, uint32 p_time)
     if (m_lastManaUseTimer)
     {
         if (update_diff >= m_lastManaUseTimer)
-            m_lastManaUseTimer = 0;
+        {
+            // Do not regen mana if still channeling last spell that took mana.
+            if (!m_currentSpells[CURRENT_CHANNELED_SPELL] || (m_currentSpells[CURRENT_CHANNELED_SPELL]->m_spellInfo->Id != m_lastManaUseSpellId))
+            {
+                m_lastManaUseTimer = 0;
+                m_lastManaUseSpellId = 0;
+            }
+        }
         else
             m_lastManaUseTimer -= update_diff;
     }
