@@ -35,7 +35,7 @@ replace into quest_template
 (50303, 1, 8, 1, 'Before the Storm',
 'While I see some value in the ways any zealot bear into the combat, there\'s only one thing they all might lack.\n\nSo you see yourself a worthy protector of the humankind and defender of the Light, eh?\n\nDidn\'t you know there should be not only a zealotry and eagerness within actions, but also style and significance for us all to be identified easily upon the battlefield!\n\nYou must wear the tabard to be seen as a true Warrior of the Light!\n\nGet yourself a proper tabard, recruit! This will be your mark of readiness to thwart Scourge plans and a proper way of identification in case you fall.',
  'Speak to Benjamin Bradley at the Scarlet Outpost near the Scarlet Monastery.',
- 'Be careful and may the Light protect you!',
+ 'I hope this is the beginning of something good. Welcome, champion of the Light.',
 '',
  50302, -- PrevQuestId
  0,     -- NextQuestId
