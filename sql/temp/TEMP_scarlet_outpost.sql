@@ -3,7 +3,7 @@ replace into quest_template
 (entry, minlevel, questlevel, requiredraces, title, details, objectives, offerrewardtext, requestitemstext, prevquestid, nextquestid, rewitemid1, reqcreatureorgoid1, reqcreatureorgocount1, rewmoneymaxlevel, zoneorsort, rewitemcount1) values
 
 (50300, 1, 6, 1, 'In Service of the Light', 
-'Greetings, $n!\n\nI\'ve been asked to direct all those heroes who will listen to plea of a Holy Light crusaders to go and talk to the Brother Crowley.\n\nHe\'s here in the Cathedral. He told me to direct all believers to the Cathedral\'s lower level.\n\nThis is where he should be right now.', 
+'Greetings, $n!\n\nI\'ve been asked to direct all those heroes who will listen to the plea of Holy Light crusaders to go and talk to the Brother Crowley.\n\nHe\'s here in the Cathedral. He told me to direct all believers to the Cathedral\'s lower level.\n\nThis is where he should be right now.',
 'Talk to the Brother Crowley at the Stormwind City Cathedral.',
 'Light guide you, $c. How can I be of service?',
 '',
@@ -23,9 +23,9 @@ replace into quest_template
  0, 0, 510, 85, 0),
 
 (50302, 1, 7, 1, 'Light\'s Chosen Champion.', 
-'Finally, you have arrived! We\'re on a desperate line of survival here, $c! We need men, we need arms, we need … Champions! Like you, yes!\n\nWhat to do? Oh, let\'s start it with essentials then. There are farmers around who still protect and foster the lands which are Light hadn\'t forsaken yet, but their numbers are few and enemies are abundant.\n\nHumanity is in need of your prowess with weapons and Light. Go and bring peace to the land! We need farmers saved and these undead monsters finally dead. You start with the nearest farm from here.', 
+'Finally, you have arrived! We\'re on a desperate line of survival here, $c! We need men, we need arms, we need… champions! Like you, yes!\n\nWhat to do? Oh, let\'s start it with essentials then. There are farmers around who still protect and foster the lands where they have lived for so long, but their numbers are few and enemies are abundant.\n\nHumanity is in need of your prowess with weapons and Light. Go and bring peace to the land! We need farmers saved and these undead monsters finally dead. You start with the nearest farm from here.',
 'Kill 15 Undead Slayers on the Solliden\'s Farm in Tirisfal Glades.',
-'Be carefull and may the Light protect you!',
+'Be careful and may the Light protect you!',
 'Thank the Light you\'re safe and judging by your looks did what was needed! Very well done, champion!',
  50301, -- PrevQuestId
  50303, -- NextQuestId
@@ -33,9 +33,9 @@ replace into quest_template
  50508, 15, 510, 85, 1),
 
 (50303, 1, 8, 1, 'Before the Storm', 
-'Be carefull and may the Light protect you!',
-'While I see some value in the ways any zealot bear into the combat there\'s only one thing they all might lack.\n\nSo you see yourself a worthy protector of the humankind and defender of the Light, eh?\n\nDidn\'t you know there should be not only a zealotry and eagerness within actions, but also style and significance fo us all to be identified easily upon the battlefield!\n\nYou must wear the tabard for for a true Warrior of the Light!\n\nGet yourself a proper tabard, recruit! This will be your mark of readiness to thwart Scourge plans and a proper way of identification.', 
-'Speak to Benjamin Bradley at Scarlet Outpost near the Scarlet Monastery.',
+'Speak to Benjamin Bradley at the Scarlet Outpost near the Scarlet Monastery.',
+'While I see some value in the ways any zealot bear into the combat, there\'s only one thing they all might lack.\n\nSo you see yourself a worthy protector of the humankind and defender of the Light, eh?\n\nDidn\'t you know there should be not only a zealotry and eagerness within actions, but also style and significance for us all to be identified easily upon the battlefield!\n\nYou must wear the tabard to be seen as a true Warrior of the Light!\n\nGet yourself a proper tabard, recruit! This will be your mark of readiness to thwart Scourge plans and a proper way of identification in case you fall.',
+'Be careful and may the Light protect you!',
 '',
  50302, -- PrevQuestId
  0,     -- NextQuestId
