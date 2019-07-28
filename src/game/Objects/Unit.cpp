@@ -869,8 +869,8 @@ uint32 Unit::DealDamage(Unit *pVictim, uint32 damage, CleanDamage const* cleanDa
         duel_hasEnded = true;
     }
     //Get in CombatState
-    if ((pVictim != this) && (damagetype != DOT || (spellProto && !IsSpellAppliesPeriodicAura(spellProto))) &&
-       (!spellProto || !spellProto->IsAuraAddedBySpell(SPELL_AURA_DAMAGE_SHIELD)))
+    if ((pVictim != this) && (damagetype != DOT || (spellProto && IsSpellHaveEffect(sSpellMgr.GetSpellEntry(spellProto->Id),
+            SPELL_EFFECT_PERSISTENT_AREA_AURA))) && (!spellProto || !spellProto->IsAuraAddedBySpell(SPELL_AURA_DAMAGE_SHIELD)))
     {
         SetInCombatWithVictim(pVictim);
         pVictim->SetInCombatWithAggressor(this);
