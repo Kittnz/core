@@ -423,7 +423,8 @@ replace into item_template (entry, class, name, display_id, quality, bonding, fl
 (50388, 15, 'Dressing Box: Nightwatchman', 35406, 1, 1, 4, 'Be careful.', 150000, 0, 0),
 (50389, 15, 'Dressing Box: Orgrimmar Guard', 35406, 1, 1, 4, 'Dabu.', 150000, 76, 6),
 (50390, 15, 'Dressing Box: Thunder Bluff Guard', 35406, 1, 1, 4, 'Moo! are you happy now?', 150000, 81, 6),
-(50391, 15, 'Dressing Box: Gnomeregan Guard', 35406, 1, 1, 4, 'Salutations!', 150000, 54, 6);
+(50391, 15, 'Dressing Box: Gnomeregan Guard', 35406, 1, 1, 4, 'Salutations!', 150000, 54, 6),
+(50509, 15, 'Dressing Box: Darkmaster Gandling', 35406, 1, 1, 4, 'If you haven\'t come to study, I\'ll use you to teach a lesson.', 150000, 54, 6);
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50397, 'Goldweave Shoes', 8, 28644, 1, 1);
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
@@ -478,6 +479,22 @@ replace into item_template (entry, class, subclass, name, display_id, delay, inv
 (50433, 2, 7, 'Monster, Sword Spear Red', 19804, 2200, 21, 1, 2, 5);
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding, description, spellid_1, spelltrigger_1, allowable_race) values
 (50440, 'Scarlet Crusade Insignia', 11, 9834, 2, 1, "This ring marks the bearer as a fully fledged member of the Scarlet Crusade.", 1, 1, 1);
+
+replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
+(50500, 'Darkmaster\'s Cuirass', 5, 23620, 1, 1),
+(50501, 'Darkmaster\'s Belt', 6, 19178, 1, 1),
+(50502, 'Darkmaster\'s Pants', 7, 5717, 1, 1),
+(50503, 'Darkmaster\'s Boots', 8, 9098, 1, 1),
+(50504, 'Darkmaster\'s Gloves', 10, 10387, 1, 1),
+(50505, 'Darkmaster\'s Shoulders', 3, 19475, 1, 1),
+(50506, 'Darkmaster\'s Helmet (Human Male Only)', 1, 24330, 1, 1), -- DON'T INCLUDE IN THE DRESSING BOX.
+(50507, 'Darkmaster\'s Headdress', 1, 24330, 1, 1), -- TODO.
+(50508, 'Darkmaster\'s Shirt', 4, 24314, 1, 1);
+
+
+
+
+
 
 -- Hotfixes, modify custom items only in this file:
 
@@ -544,4 +561,5 @@ replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid) valu
 (50389, 50362, 100, 1),(50389, 50363, 100, 2),(50389, 50364, 100, 3),(50389, 50365, 100, 4),(50389, 50366, 100, 5),(50389, 50367, 100, 6),
 (50390, 50368, 100, 1),(50390, 50369, 100, 2),(50390, 50370, 100, 3),(50390, 50371, 100, 4),(50390, 50372, 100, 5),(50390, 50373, 100, 6),(50390, 50374, 100, 7),
 (50391, 50392, 100, 1),(50391, 50393, 100, 2),(50391, 50394, 100, 3),(50391, 50395, 100, 4),(50391, 50396, 100, 5),
+(50509, 50500, 100, 1),(50509, 50501, 100, 2),(50509, 50502, 100, 3),(50509, 50503, 100, 4),(50509, 50504, 100, 5),(50509, 50505, 100, 6),(50509, 50507, 100, 7),(50509, 50508, 100, 8),(50509, 50506, 100, 9),
 (50416, 50409, 100, 1),(50416, 50410, 100, 2),(50416, 50411, 100, 3),(50416, 50412, 100, 4),(50416, 50413, 100, 5),(50416, 50414, 100, 6),(50416, 50415, 100, 7);

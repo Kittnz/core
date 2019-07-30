@@ -10,7 +10,7 @@ replace into `creature_template` (`entry`, `patch`, `display_id1`, `display_id2`
 -- Vendor
 
 replace into creature_template (entry, name, subname, scale, level_min, level_max, health_min, health_max, display_id1, faction, type, inhabit_type, npc_flags) values
-(50511, 'Cameron Hildom', 'Supplies & Repair', 1, 4, 7, 978, 987, 4139, 11, 7, 3, 16388);
+(50511, 'Cameron Hildom', 'Supplies & Repair', 1, 30, 36, 2978, 2997, 4139, 11, 7, 3, 16388);
 
 delete from npc_vendor where entry = 50511;		
 replace into npc_vendor (entry, item) values 

@@ -13,7 +13,7 @@ replace into quest_template
  0, 0, 510, 1519, 0),
 
 (50301, 1, 6, 1, 'In Service of the Light', 
-'There are not many of those revent believers in the Light with desire to not only uphold the Law and Order but also to save humanity itself!\n\nHumanity is on a verge of survival as it had never been before! Alas, you don\'t have to trust a mere messenger of the Light on a word, yes!\n\nI dare you to check on it yourself without hesitation if you truly believe in the Holy Light! How? It is simple.\n\nYou might think that now isn\'t the time of war and strive while you traverse these stone walls and confines of th 	e great Cathedral of Light here in Stormwind. In reality, however there are humans, out kin, who suffer the consequences of the Scourge invasion and strive for survival back at our homeland - Lordaeron.\n\nIf you are ready to help, then rack up and talk to me again to see the precipice of humanity\'s possible end where it\'s all started. Tirisfal Glades.\n\nOnce there talk to the emissary named Godrick Bell. He\'ll get you on track. Go with the Light.', 
+'There are not many of those revent believers in the Light with desire to not only uphold the Law and Order but also to save humanity itself!\n\nHumanity is on a verge of survival as it had never been before! Alas, you don\'t have to trust a mere messenger of the Light on a word, yes!\n\nI dare you to check on it yourself without hesitation if you truly believe in the Holy Light! How? It is simple.\n\nYou might think that now isn\'t the time of war and strive while you traverse these stone walls and confines of the great Cathedral of Light here in Stormwind. In reality, however there are humans, out kind, who suffer the consequences of the Scourge invasion and strive for survival back at our homeland - Lordaeron.\n\nIf you are ready to help, then rack up and talk to me again to see the precipice of humanity\'s possible end where it\'s all started. Tirisfal Glades.\n\nOnce there talk to the emissary named Godrick Bell. He\'ll get you on track. Go with the Light.', 
 'Speak to Godrick Bell at Solliden Farmstead in Tirisfal Glades.',
 'Hail! You are here to help, aren\'t you?',
 '',
@@ -24,7 +24,7 @@ replace into quest_template
 
 (50302, 1, 7, 1, 'Light\'s Chosen Champion.', 
 'Finally, you have arrived! We\'re on a desperate line of survival here, $c! We need men, we need arms, we need… champions! Like you, yes!\n\nWhat to do? Oh, let\'s start it with essentials then. There are farmers around who still protect and foster the lands where they have lived for so long, but their numbers are few and enemies are abundant.\n\nHumanity is in need of your prowess with weapons and Light. Go and bring peace to the land! We need farmers saved and these undead monsters finally dead. You start with the nearest farm from here.',
-'Kill 15 Undead Slayers on the Solliden\'s Farm in Tirisfal Glades.',
+'Kill 15 Forsaken Slayers on the Solliden\'s Farm in Tirisfal Glades.',
 'Be careful and may the Light protect you!',
 'Thank the Light you\'re safe and judging by your looks did what was needed! Very well done, champion!',
  50301, -- PrevQuestId
@@ -58,7 +58,7 @@ replace into creature_template (entry, name, subname, scale, level_min, level_ma
 (50507, 'Benjamin Bradley', 'Scarlet Crusade Officer', 1, 4, 7, 978, 987, 10343, 67, 7, 3, 2);
 
 replace into creature_template values 
-(50508, 0, 3651, 3671, 3672, 3676, 'Undead Slayer', NULL, 0, 5, 7, 161, 166, 0, 0, 278, 18, 0, 0.9, 1.14286, 0, 20, 5, 0, 0, 1, 9, 13, 0, 58, 1, 2000, 2000, 1, 32768, 0, 0, 0, 0, 0, 0, 13.4464, 18.4888, 100, 7, 0, 1543, 1543, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 13, 'EventAI', 1, 3, 0, 0, 3, 1543, 0, 0, 0, 0, 0, '');
+(50508, 0, 3651, 3671, 3672, 3676, 'Forsaken Slayer', NULL, 0, 5, 7, 161, 166, 0, 0, 278, 18, 0, 0.9, 1.14286, 0, 20, 5, 0, 0, 1, 9, 13, 0, 58, 1, 2000, 2000, 1, 32768, 0, 0, 0, 0, 0, 0, 13.4464, 18.4888, 100, 7, 0, 1543, 1543, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 13, 'EventAI', 1, 3, 0, 0, 3, 1543, 0, 0, 0, 0, 0, '');
 update creature_template set faction = 5 where entry = 50508;
 
 replace into creature_template (entry, name, subname, scale, level_min, level_max, health_min, health_max, display_id1, faction, type, inhabit_type, npc_flags) values
