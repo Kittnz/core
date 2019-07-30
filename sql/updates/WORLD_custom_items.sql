@@ -424,7 +424,7 @@ replace into item_template (entry, class, name, display_id, quality, bonding, fl
 (50389, 15, 'Dressing Box: Orgrimmar Guard', 35406, 1, 1, 4, 'Dabu.', 150000, 76, 6),
 (50390, 15, 'Dressing Box: Thunder Bluff Guard', 35406, 1, 1, 4, 'Moo! are you happy now?', 150000, 81, 6),
 (50391, 15, 'Dressing Box: Gnomeregan Guard', 35406, 1, 1, 4, 'Salutations!', 150000, 54, 6),
-(50509, 15, 'Dressing Box: Darkmaster Gandling', 35406, 1, 1, 4, 'If you haven\'t come to study, I\'ll use you to teach a lesson.', 150000, 54, 6);
+(50509, 15, 'Dressing Box: Darkmaster Gandling', 35406, 1, 1, 4, 'If you haven\'t come to study, I\'ll use you to teach a lesson.', 150000, 0, 0);
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50397, 'Goldweave Shoes', 8, 28644, 1, 1);
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
@@ -488,7 +488,7 @@ replace into item_template (entry, name, inventory_type, display_id, quality, bo
 (50504, 'Darkmaster\'s Gloves', 10, 10387, 1, 1),
 (50505, 'Darkmaster\'s Shoulders', 3, 19475, 1, 1),
 (50506, 'Darkmaster\'s Helmet (Human Male Only)', 1, 24330, 1, 1), -- DON'T INCLUDE IN THE DRESSING BOX.
-(50507, 'Darkmaster\'s Headdress', 1, 24330, 1, 1), -- TODO.
+(50507, 'Darkmaster\'s Headdress', 1, 30352, 1, 1),
 (50508, 'Darkmaster\'s Shirt', 4, 24314, 1, 1);
 
 
