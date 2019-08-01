@@ -114,6 +114,7 @@ replace into shop_items values
 (611, 6, 50038, 'High Inquisitor\'s Tabard', 75),
 (612, 6, 50092, 'Tabard of the Crimson Legion', 75),
 (613, 6, 50093, 'Tabard of Hearthglen', 75),
+(613, 6, 50376, 'Hillsbrad Fields Tabard', 75),
 -- Roleplay --------------------------------------------------------------------------------------------
 (700, 7, 50024, 'Dressing Box: Invisible Suit', 25),
 (701, 7, 50022, 'Dressing Box: Midsummer Priestess', 50),

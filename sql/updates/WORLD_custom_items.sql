@@ -403,7 +403,8 @@ replace into item_template (entry, name, inventory_type, display_id, quality, bo
 (50396, 'Gnomeregan Guard\'s Gloves', 10, 4375, 1, 1),
 
 (50376, 'Hillsbrad Tabard', 19, 16078, 1, 1),
-(50377, 'Pilgrim Pants', 7, 24871, 1, 1);
+(50377, 'Pilgrim Pants', 7, 24871, 1, 1),
+(50520, 'Torta\'s Test Tabard', 19, 24611, 1, 1);
 replace into item_template (entry, name, class, subclass, inventory_type, display_id, quality, bonding, sheath) values
 (50307, 'Ironforge Guard\'s Shield', 4, 6, 14, 10968, 1, 1, 4),
 (50315, 'Stormwind Guard\'s Shield', 4, 6, 14, 2080, 1, 1, 4),
@@ -490,7 +491,6 @@ replace into item_template (entry, name, inventory_type, display_id, quality, bo
 (50505, 'Darkmaster\'s Shoulders', 3, 19475, 1, 1),
 (50506, 'Darkmaster\'s Helmet (Human Male Only)', 1, 24330, 1, 1), 
 (50507, 'Darkmaster\'s Cowl', 1, 34781, 1, 1),
-(50510, 'Darkmaster\'s Headdress', 1, 30352, 1, 1),
 (50508, 'Darkmaster\'s Shirt', 4, 24314, 1, 1);
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50112, 'Goldweave Sash', 20, 16829, 1, 1);
