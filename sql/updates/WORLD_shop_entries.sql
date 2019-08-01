@@ -122,6 +122,7 @@ replace into shop_items values
 (511, 5, 50038, 'High Inquisitor\'s Tabard', 75),
 (512, 5, 50092, 'Tabard of the Crimson Legion', 75),
 (513, 5, 50093, 'Tabard of Hearthglen', 75),
+(513, 5, 50044, 'Goldweave Tabard', 75),
 -- Roleplay --------------------------------------------------------------------------------------------
 (600, 6, 50024, 'Dressing Box: Invisible Suit', 25),
 (601, 6, 50022, 'Dressing Box: Midsummer Priestess', 50),
@@ -133,6 +134,9 @@ replace into shop_items values
 (607, 6, 50388, 'Dressing Box: Nightwatchman', 100),
 (608, 6, 50384, 'Dressing Box: Stromgarde Guard', 100),
 (609, 6, 50101, 'Dressing Box: Scholomance Student', 100),
+(610, 6, 50509, 'Dressing Box: Darkmaster Gandling', 100),
+(611, 6, 50511, 'Dressing Box: Goldweave Raiment', 100),
+(612, 6, 50513, 'Dressing Box: Necromancer', 100),
 -- Skins ---------------------------------------------------------------------------------------
 (700, 7, 50105, 'Human: Sally Whitemane (Female Only)', 50),
 (701, 7, 50106, 'Human, Gnome: Cult of the Damned', 50),
@@ -145,5 +149,5 @@ replace into shop_items values
 (708, 7, 50210, 'Troll: Forest', 125),
 (709, 7, 50211, 'Troll: Sandfury (Includes Zombie)', 125),
 (710, 7, 50212, 'Gnome: Leper (Male Only)', 125),
-(711, 7, 50408, 'Cenarius Acorn (Dryad Morph)', 200);
+--(711, 7, 50408, 'Cenarius Acorn (Dryad Morph)', 200);
 
