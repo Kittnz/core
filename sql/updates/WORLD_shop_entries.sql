@@ -49,7 +49,6 @@ replace into shop_items values
 (206, 2, 21168, 'Baby Shark', 50),
 (207, 2, 50013, 'Bone Golem', 50),
 (208, 2, 50019, 'Moonkin Egg', 50),
-(209, 2, 19055, 'Green Dragon Orb', 50),
 (210, 2, 50083, 'Ancient Arcane Dust', 50),
 (211, 2, 50084, 'Kirin Tor Familiar', 50),
 (212, 2, 22781, 'Polar Bear Collar', 50),

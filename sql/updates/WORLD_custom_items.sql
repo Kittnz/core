@@ -493,7 +493,7 @@ replace into item_template (entry, name, inventory_type, display_id, quality, bo
 (50507, 'Darkmaster\'s Cowl', 1, 34781, 1, 1),
 (50508, 'Darkmaster\'s Shirt', 4, 24314, 1, 1);
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
-(50112, 'Goldweave Sash', 20, 16829, 1, 1);
+(50512, 'Goldweave Sash', 20, 16829, 1, 1);
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding) values
 (50514, 'Necromancer\'s Cuirass', 5, 35121, 1, 1),
 (50515, 'Necromancer\'s Belt', 6, 35122, 1, 1),
