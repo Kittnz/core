@@ -90,8 +90,8 @@ ChatCommand * ChatHandler::getCommandTable()
     static ChatCommand accountSetCommandTable[] =
     {
         { NODE, "addon",          SEC_CONSOLE,        true,  &ChatHandler::HandleAccountSetAddonCommand,     "", nullptr },
-        { NODE, "gmlevel",        SEC_CONSOLE,        true,  &ChatHandler::HandleAccountSetGmLevelCommand,   "", nullptr },
-        { NODE, "password",       SEC_CONSOLE,        true,  &ChatHandler::HandleAccountSetPasswordCommand,  "", nullptr },
+        { NODE, "gmlevel",        SEC_ADMINISTRATOR,        true,  &ChatHandler::HandleAccountSetGmLevelCommand,   "", nullptr },
+        { NODE, "password",       SEC_ADMINISTRATOR,        true,  &ChatHandler::HandleAccountSetPasswordCommand,  "", nullptr },
         { NODE, "locked",         SEC_ADMINISTRATOR,  true,  &ChatHandler::HandleAccountSetLockedCommand,    "", nullptr },
         { MSTR, nullptr,          0,                  false, nullptr,                                        "", nullptr }
     };
