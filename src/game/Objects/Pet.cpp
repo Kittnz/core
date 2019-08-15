@@ -1060,7 +1060,7 @@ uint32 Pet::GetSkillIdForPetTraining() const
     return 0;
 }
 
-bool Pet::CanLearnPetSpell(uint32 spellId) const
+bool Pet::CanLearnPetSpell(uint32 spellId)
 {
     uint32 requiredSkillId = 0;
     SkillLineAbilityMapBounds bounds = sSpellMgr.GetSkillLineAbilityMapBoundsBySpellId(spellId);
