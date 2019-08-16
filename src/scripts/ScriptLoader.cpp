@@ -49,6 +49,7 @@ void AddSC_boss_lord_kazzak();
 void AddSC_go_scripts();
 void AddSC_item_scripts();
 void AddSC_guild_housing();
+void AddSC_miracle_raceaway();
 void AddSC_npcs_special();
 void AddSC_Totems();
 void AddSC_world_event_naxxramas();
@@ -322,6 +323,7 @@ void AddScripts()
     AddSC_go_scripts();
     AddSC_item_scripts();
     AddSC_guild_housing();
+    AddSC_miracle_raceaway();
     AddSC_npcs_special();
     AddSC_Totems();
     AddSC_world_event_naxxramas();

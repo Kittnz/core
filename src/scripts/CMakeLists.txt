@@ -49,7 +49,7 @@ set (SCRIPTS_SRCS
     custom/arena_tournament.cpp
     custom/lost_turtles.cpp
     custom/battlemaster.cpp
-    custom/miracle_race.cpp
+    custom/miracle_raceaway.cpp
     eastern_kingdoms/alterac_mountains/alterac_mountains.cpp
     eastern_kingdoms/arathi_highlands/arathi_highlands.cpp
     eastern_kingdoms/blasted_lands/blasted_lands.cpp
