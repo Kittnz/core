@@ -95,7 +95,7 @@ GameObjectAI* GetAI_go_speed_up(GameObject* gameobject)
     return new go_speed_up(gameobject);
 }
 
-void AddSC_lost_turtles()
+void AddSC_miracle_raceaway()
 {
     Script *newscript;
 
