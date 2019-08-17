@@ -104,3 +104,6 @@ sql/migrations/*.py
 revision.h
 migrations_list.h
 Progression.h
+
+# Giperion solution directory
+Solution/
