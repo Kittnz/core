@@ -59,6 +59,7 @@
 #include "QuestDef.h"
 #include "Anticheat.h"
 #include "AsyncCommandHandlers.h"
+#include "TemporarySummon.h"
 
 bool ChatHandler::HandleReloadAllCommand(char* /*args*/)
 {
@@ -8407,4 +8408,82 @@ bool ChatHandler::HandleReloadCustomMountEntries(char *args)
 {
     sObjectMgr.LoadCustomMountCreatureEntries();
     return true;
+}
+
+bool ChatHandler::HandleRaceTest(char *args)
+{
+	// Spawn goblin in front of us
+	// grab our camera and attach to him
+	// Make goblin always move forward
+	// but if player moves to other direction - move npc
+	static ObjectGuid carGuid;
+	static ObjectGuid cameraGuid;
+	if (WorldSession* PlayerSession = GetSession())
+	{
+		if (Player* pl = PlayerSession->GetPlayer())
+		{
+			bool bEnable = false;
+			if (ExtractOnOff(&args, bEnable))
+			{
+				if (bEnable)
+				{
+					Creature* raceCar = pl->SummonCreature(17999,
+						pl->GetPositionX(),
+						pl->GetPositionY(),
+						pl->GetPositionZ(),
+						pl->GetOrientation(),
+						TEMPSUMMON_DEAD_DESPAWN,
+						10 * MINUTE);
+					carGuid = raceCar->GetObjectGuid();
+
+					//Creature* camera = pl->SummonCreature(4034,
+					//	pl->GetPositionX(),
+					//	pl->GetPositionY(),
+					//	pl->GetPositionZ() + 50.0f,
+					//	pl->GetOrientation(),
+					//	TEMPSUMMON_DEAD_DESPAWN,
+					//	10 * MINUTE);
+					cameraGuid = pl->GetObjectGuid();
+					//camera->SetFly(true);
+#if 0
+					//pl->GetCamera().SetView(raceCar, true);
+					//pl->SetCharm(raceCar);
+					//pl->SetMover(pl);
+					
+					raceCar->AI()->InformGuid(pl->GetObjectGuid());
+
+					//pl->SetClientControl(raceCar, 1);
+					//pl->SetClientControl(pl, 1);
+#else
+					//pl->ModPossess(camera, true, AURA_REMOVE_BY_DEFAULT);
+					raceCar->AI()->InformGuid(pl->GetObjectGuid());
+#endif
+
+				}
+				else
+				{
+#if 0
+					//pl->SetCharm(nullptr);
+					//pl->SetMover(nullptr);
+#endif
+					if (Creature* creature = pl->GetMap()->GetCreature(cameraGuid))
+					{
+						pl->ModPossess(creature, false, AURA_REMOVE_BY_DEFAULT);
+						((TemporarySummon*)creature)->UnSummon();
+					}
+
+					if (Creature* creature = pl->GetMap()->GetCreature(carGuid))
+					{
+						((TemporarySummon*)creature)->UnSummon();
+					}
+				}
+			}
+
+
+			return true;
+		}
+	}
+
+
+	return false;
 }

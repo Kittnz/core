@@ -265,7 +265,7 @@ enum EUnitFields
     PLAYER_FARSIGHT,                           // Size:2
     PLAYER_FARSIGHT_END,
     PLAYER_FIELD_COMBO_TARGET,                 // Size:2
-    PLAYER_FIELD_COMBO_TARGET_END,
+	PLAYER_FIELD_KNOWN_TITLES,
     PLAYER_XP,                                 // Size:1
     PLAYER_NEXT_LEVEL_XP,                      // Size:1
     PLAYER_SKILL_INFO_1_1,                     // Size:384

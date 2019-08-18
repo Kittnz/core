@@ -1148,7 +1148,8 @@ ChatCommand * ChatHandler::getCommandTable()
         { NODE, "makerobe",       SEC_ADMINISTRATOR,  false, &ChatHandler::HandleMakeRobeCommand,            "", nullptr }, 
         { NODE, "makeback",       SEC_ADMINISTRATOR,  false, &ChatHandler::HandleMakeBackCommand,            "", nullptr }, 
         { NODE, "makeweapon",     SEC_ADMINISTRATOR,  false, &ChatHandler::HandleMakeWeaponCommand,          "", nullptr }, 
-        { NODE, "balance",        SEC_ADMINISTRATOR,  false, &ChatHandler::HandleBalanceCommand,            "", nullptr }, 
+		{ NODE, "balance",        SEC_ADMINISTRATOR,  false, &ChatHandler::HandleBalanceCommand,            "", nullptr },
+		{ NODE, "racetest",        SEC_ADMINISTRATOR,  false, &ChatHandler::HandleRaceTest,            "", nullptr },
         { MSTR, nullptr,          0,                  false, nullptr,                                        "", nullptr }
     };
 
