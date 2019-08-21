@@ -78,6 +78,25 @@ void AutoScaler::ScaleCreature(Creature* creature, uint32 playerCount, uint32 ma
     if (creature->IsPet() && creature->GetOwner() && creature->GetOwner()->IsPlayer())
         return;
 
+    float specificHPFactor = 1;
+    float specificPowerFactor = 1;
+    float specificDmgFactor = 1;
+
+    switch (creature->GetEntry()) {
+        case 12099: // Firesworn, Garr add.
+            if (playerCount < 30) {
+                specificHPFactor = 0.5f;
+                specificDmgFactor =  0.5f;
+            }
+            break;
+        case 11661: // Flamewalker, Gehenass add.
+        case 12119: // Flamewalker Protector, Lucifron add.
+            if (playerCount < 30) {
+                specificDmgFactor =  0.75f;
+            }
+            break;
+    }
+
     float hpPercentage = static_cast<float>(playerCount) / static_cast<float>(maxCount) * 100.f;
     auto ScaleHp = [hpPercentage](float value)
     {
@@ -94,8 +113,8 @@ void AutoScaler::ScaleCreature(Creature* creature, uint32 playerCount, uint32 ma
         return value / 100 * dmgPercentage;
     };
 
-    creature->SetMaxHealth(static_cast<uint32>(ScaleHp(creature->GetCreateHealth())));
-    creature->SetMaxPower(POWER_MANA, static_cast<uint32>(ScalePower(creature->GetCreateMana())));
+    creature->SetMaxHealth(static_cast<uint32>(ScaleHp(creature->GetCreateHealth()) * specificHPFactor));
+    creature->SetMaxPower(POWER_MANA, static_cast<uint32>(ScalePower(creature->GetCreateMana()) * specificPowerFactor));
 
     if (baseDamages.find(creature->GetEntry()) == baseDamages.end())
     {
@@ -109,16 +128,16 @@ void AutoScaler::ScaleCreature(Creature* creature, uint32 playerCount, uint32 ma
 
     auto& tup = baseDamages[creature->GetEntry()];
 
-    creature->SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, ScaleDamage(std::get<0>(tup).first));
-    creature->SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, ScaleDamage(std::get<0>(tup).second));
+    creature->SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, ScaleDamage(std::get<0>(tup).first) * specificDmgFactor);
+    creature->SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, ScaleDamage(std::get<0>(tup).second) * specificDmgFactor);
 
-    creature->SetBaseWeaponDamage(OFF_ATTACK, MINDAMAGE, ScaleDamage(std::get<0>(tup).first));
-    creature->SetBaseWeaponDamage(OFF_ATTACK, MAXDAMAGE, ScaleDamage(std::get<0>(tup).second));
+    creature->SetBaseWeaponDamage(OFF_ATTACK, MINDAMAGE, ScaleDamage(std::get<0>(tup).first) * specificDmgFactor);
+    creature->SetBaseWeaponDamage(OFF_ATTACK, MAXDAMAGE, ScaleDamage(std::get<0>(tup).second) * specificDmgFactor);
 
-    creature->SetFloatValue(UNIT_FIELD_MINRANGEDDAMAGE, ScaleDamage(std::get<1>(tup).first));
-    creature->SetFloatValue(UNIT_FIELD_MAXRANGEDDAMAGE, ScaleDamage(std::get<1>(tup).second));
+    creature->SetFloatValue(UNIT_FIELD_MINRANGEDDAMAGE, ScaleDamage(std::get<1>(tup).first) * specificDmgFactor);
+    creature->SetFloatValue(UNIT_FIELD_MAXRANGEDDAMAGE, ScaleDamage(std::get<1>(tup).second) * specificDmgFactor);
 
-    creature->SetModifierValue(UNIT_MOD_ATTACK_POWER, BASE_VALUE, ScaleDamage(std::get<2>(tup)));
+    creature->SetModifierValue(UNIT_MOD_ATTACK_POWER, BASE_VALUE, ScaleDamage(std::get<2>(tup)) * specificDmgFactor);
 }
 
 void AutoScaler::GenerateScaledMoneyLoot(Creature* creature, Loot* loot)
