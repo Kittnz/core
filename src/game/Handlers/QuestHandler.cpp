@@ -346,7 +346,26 @@ void WorldSession::HandleQuestLogRemoveQuest(WorldPacket& recv_data)
 
     DEBUG_LOG("WORLD: Received CMSG_QUESTLOG_REMOVE_QUEST slot = %u", slot);
 
-    _player->RemoveQuestAtSlot(slot);
+    if (slot < MAX_QUEST_LOG_SIZE)
+    {
+        if (uint32 quest = _player->GetQuestSlotQuestId(slot))
+        {
+            sScriptMgr.OnQuestCanceled(_player, quest);
+            if (!_player->TakeOrReplaceQuestStartItems(quest, true, true))
+            // can't un-equip some items, reject quest cancel
+                return;
+
+            if (const Quest *pQuest = sObjectMgr.GetQuestTemplate(quest))
+            {
+                if (pQuest->HasSpecialFlag(QUEST_SPECIAL_FLAG_TIMED))
+                    _player->RemoveTimedQuest(quest);
+            }
+
+            _player->SetQuestStatus(quest, QUEST_STATUS_NONE);
+        }
+
+        _player->SetQuestSlot(slot, 0);
+    }
 }
 
 void WorldSession::HandleQuestConfirmAccept(WorldPacket& recv_data)

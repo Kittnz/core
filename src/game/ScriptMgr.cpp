@@ -32,7 +32,7 @@
 
 typedef std::vector<Script*> ScriptVector;
 int num_sc_scripts;
-ScriptVector m_scripts;
+ScriptVector m_NPC_scripts;
 
 ScriptMapMap sQuestEndScripts;
 ScriptMapMap sQuestStartScripts;
@@ -53,10 +53,10 @@ ScriptMgr::ScriptMgr() : m_scheduledScripts(0)
 ScriptMgr::~ScriptMgr()
 {
     // Free resources before library unload
-    for (ScriptVector::iterator itr = m_scripts.begin(); itr != m_scripts.end(); ++itr)
+    for (ScriptVector::iterator itr = m_NPC_scripts.begin(); itr != m_NPC_scripts.end(); ++itr)
         delete *itr;
 
-    m_scripts.clear();
+    m_NPC_scripts.clear();
 
     num_sc_scripts = 0;
 }
@@ -1584,7 +1584,7 @@ uint32 ScriptMgr::GetEventIdScriptId(uint32 eventId) const
 
 CreatureAI* ScriptMgr::GetCreatureAI(Creature* pCreature)
 {
-    Script* pTempScript = m_scripts[pCreature->GetScriptId()];
+    Script* pTempScript = m_NPC_scripts[pCreature->GetScriptId()];
 
     if (!pTempScript || !pTempScript->GetAI)
         return nullptr;
@@ -1594,7 +1594,7 @@ CreatureAI* ScriptMgr::GetCreatureAI(Creature* pCreature)
 
 GameObjectAI* ScriptMgr::GetGameObjectAI(GameObject* pGobj)
 {
-    Script* pTempScript = m_scripts[pGobj->GetGOInfo()->ScriptId];
+    Script* pTempScript = m_NPC_scripts[pGobj->GetGOInfo()->ScriptId];
 
     if (!pTempScript || !pTempScript->GOGetAI)
         return nullptr;
@@ -1604,7 +1604,7 @@ GameObjectAI* ScriptMgr::GetGameObjectAI(GameObject* pGobj)
 
 InstanceData* ScriptMgr::CreateInstanceData(Map* pMap)
 {
-    Script* pTempScript = m_scripts[pMap->GetScriptId()];
+    Script* pTempScript = m_NPC_scripts[pMap->GetScriptId()];
 
     if (!pTempScript || !pTempScript->GetInstanceData)
         return nullptr;
@@ -1614,7 +1614,7 @@ InstanceData* ScriptMgr::CreateInstanceData(Map* pMap)
 
 bool ScriptMgr::OnGossipHello(Player* pPlayer, Creature* pCreature)
 {
-    Script* pTempScript = m_scripts[pCreature->GetScriptId()];
+    Script* pTempScript = m_NPC_scripts[pCreature->GetScriptId()];
 
     if (!pTempScript || !pTempScript->pGossipHello)
         return false;
@@ -1626,7 +1626,7 @@ bool ScriptMgr::OnGossipHello(Player* pPlayer, Creature* pCreature)
 
 bool ScriptMgr::OnGossipHello(Player* pPlayer, GameObject* pGameObject)
 {
-    Script* pTempScript = m_scripts[pGameObject->GetGOInfo()->ScriptId];
+    Script* pTempScript = m_NPC_scripts[pGameObject->GetGOInfo()->ScriptId];
 
     if (!pTempScript || !pTempScript->pGOGossipHello)
         return false;
@@ -1640,7 +1640,7 @@ bool ScriptMgr::OnGossipSelect(Player* pPlayer, Creature* pCreature, uint32 send
 {
     sLog.outDebug("Gossip selection%s, sender: %d, action: %d", code ? " with code" : "", sender, action);
 
-    Script* pTempScript = m_scripts[pCreature->GetScriptId()];
+    Script* pTempScript = m_NPC_scripts[pCreature->GetScriptId()];
 
     if (code)
     {
@@ -1666,7 +1666,7 @@ bool ScriptMgr::OnGossipSelect(Player* pPlayer, GameObject* pGameObject, uint32 
 {
     sLog.outDebug("Gossip selection%s, sender: %d, action: %d", code ? " with code" : "", sender, action);
 
-    Script* pTempScript = m_scripts[pGameObject->GetGOInfo()->ScriptId];
+    Script* pTempScript = m_NPC_scripts[pGameObject->GetGOInfo()->ScriptId];
 
     if (code)
     {
@@ -1690,7 +1690,10 @@ bool ScriptMgr::OnGossipSelect(Player* pPlayer, GameObject* pGameObject, uint32 
 
 bool ScriptMgr::OnQuestAccept(Player* pPlayer, Creature* pCreature, Quest const* pQuest)
 {
-    Script* pTempScript = m_scripts[pCreature->GetScriptId()];
+    //quest scripts have higher priority
+    if (OnQuestAcceptByScript(pPlayer, pQuest)) return true;
+
+    Script* pTempScript = m_NPC_scripts[pCreature->GetScriptId()];
 
     if (!pTempScript || !pTempScript->pQuestAcceptNPC)
         return false;
@@ -1702,7 +1705,10 @@ bool ScriptMgr::OnQuestAccept(Player* pPlayer, Creature* pCreature, Quest const*
 
 bool ScriptMgr::OnQuestAccept(Player* pPlayer, GameObject* pGameObject, Quest const* pQuest)
 {
-    Script* pTempScript = m_scripts[pGameObject->GetGOInfo()->ScriptId];
+    //quest scripts have higher priority
+    if (OnQuestAcceptByScript(pPlayer, pQuest)) return true;
+
+    Script* pTempScript = m_NPC_scripts[pGameObject->GetGOInfo()->ScriptId];
 
     if (!pTempScript || !pTempScript->pGOQuestAccept)
         return false;
@@ -1712,9 +1718,81 @@ bool ScriptMgr::OnQuestAccept(Player* pPlayer, GameObject* pGameObject, Quest co
     return pTempScript->pGOQuestAccept(pPlayer, pGameObject, pQuest);
 }
 
+bool ScriptMgr::OnQuestAccept(Player* pPlayer, Item* pItem, Quest const* pQuest)
+{
+    //quest scripts have higher priority
+    if (OnQuestAcceptByScript(pPlayer, pQuest)) return true;
+
+    Script* pTempScript = m_NPC_scripts[pItem->GetProto()->ScriptId];
+
+    if (!pTempScript || !pTempScript->pItemHello)
+        return false;
+
+    pPlayer->PlayerTalkClass->ClearMenus();
+
+    return pTempScript->pItemHello(pPlayer, pItem, pQuest);
+}
+
+bool ScriptMgr::OnQuestAcceptByScript(Player* pPlayer, Quest const* pQuest)
+{
+    auto questScriptIter = m_questScripts.find(pQuest->GetQuestId());
+    if (questScriptIter != m_questScripts.end())
+    {
+        Script* pQuestScript = questScriptIter->second;
+
+        if (pQuestScript->GetQuestInstance == nullptr) return false;
+        RegisterQuestInstance(pQuestScript, pPlayer);
+
+        return true;
+    }
+    return false;
+}
+
+bool ScriptMgr::OnQuestRewardedByScript(Player* pPlayer, Quest const* pQuest)
+{
+    uint32 questID = pQuest->GetQuestId();
+    for (auto pQuestIter = m_questInstancies.begin(); pQuestIter != m_questInstancies.end(); pQuestIter++)
+    {
+        auto& Elem = *pQuestIter;
+        if (Elem->GetQuestId() == questID)
+        {
+            Elem->OnQuestFinished();
+            m_questInstancies.erase(pQuestIter);
+            return true;
+        }
+    }
+
+    return false;
+}
+
+void ScriptMgr::RegisterQuestInstance(Script* pQuestScript, Player* pPlayer)
+{
+    QuestInstance* pNewInstance = pQuestScript->GetQuestInstance(pPlayer->GetObjectGuid());
+    m_questInstancies.push_back(std::shared_ptr<QuestInstance>(pNewInstance));
+    pNewInstance->OnQuestStarted();
+}
+
+bool ScriptMgr::OnQuestCanceled(Player* pPlayer, uint32 questID)
+{
+    for (auto pQuestIter = m_questInstancies.begin(); pQuestIter != m_questInstancies.end(); pQuestIter++)
+    {
+        auto& Elem = *pQuestIter;
+        if (Elem->GetQuestId() == questID)
+        {
+            Elem->OnQuestCanceled();
+            m_questInstancies.erase(pQuestIter);
+            return true;
+        }
+    }
+
+    return false;
+}
+
 bool ScriptMgr::OnQuestRewarded(Player* pPlayer, Creature* pCreature, Quest const* pQuest)
 {
-    Script* pTempScript = m_scripts[pCreature->GetScriptId()];
+    if (OnQuestRewardedByScript(pPlayer, pQuest)) return true;
+
+    Script* pTempScript = m_NPC_scripts[pCreature->GetScriptId()];
 
     if (!pTempScript || !pTempScript->pQuestRewardedNPC)
         return false;
@@ -1726,7 +1804,9 @@ bool ScriptMgr::OnQuestRewarded(Player* pPlayer, Creature* pCreature, Quest cons
 
 bool ScriptMgr::OnQuestRewarded(Player* pPlayer, GameObject* pGameObject, Quest const* pQuest)
 {
-    Script* pTempScript = m_scripts[pGameObject->GetGOInfo()->ScriptId];
+    if (OnQuestRewardedByScript(pPlayer, pQuest)) return true;
+
+    Script* pTempScript = m_NPC_scripts[pGameObject->GetGOInfo()->ScriptId];
 
     if (!pTempScript || !pTempScript->pQuestRewardedGO)
         return false;
@@ -1738,7 +1818,7 @@ bool ScriptMgr::OnQuestRewarded(Player* pPlayer, GameObject* pGameObject, Quest 
 
 uint32 ScriptMgr::GetDialogStatus(Player* pPlayer, Creature* pCreature)
 {
-    Script* pTempScript = m_scripts[pCreature->GetScriptId()];
+    Script* pTempScript = m_NPC_scripts[pCreature->GetScriptId()];
 
     if (!pTempScript || !pTempScript->pNPCDialogStatus)
         return DIALOG_STATUS_UNDEFINED;
@@ -1750,7 +1830,7 @@ uint32 ScriptMgr::GetDialogStatus(Player* pPlayer, Creature* pCreature)
 
 uint32 ScriptMgr::GetDialogStatus(Player* pPlayer, GameObject* pGameObject)
 {
-    Script* pTempScript = m_scripts[pGameObject->GetGOInfo()->ScriptId];
+    Script* pTempScript = m_NPC_scripts[pGameObject->GetGOInfo()->ScriptId];
 
     if (!pTempScript || !pTempScript->pGODialogStatus)
         return DIALOG_STATUS_UNDEFINED;
@@ -1762,7 +1842,7 @@ uint32 ScriptMgr::GetDialogStatus(Player* pPlayer, GameObject* pGameObject)
 
 bool ScriptMgr::OnGameObjectOpen(Player* pPlayer, GameObject* pGameObject)
 {
-    Script* pTempScript = m_scripts[pGameObject->GetGOInfo()->ScriptId];
+    Script* pTempScript = m_NPC_scripts[pGameObject->GetGOInfo()->ScriptId];
 
     if (!pTempScript || !pTempScript->GOOpen)
         return false;
@@ -1772,7 +1852,7 @@ bool ScriptMgr::OnGameObjectOpen(Player* pPlayer, GameObject* pGameObject)
 
 bool ScriptMgr::OnGameObjectUse(Player* pPlayer, GameObject* pGameObject)
 {
-    Script* pTempScript = m_scripts[pGameObject->GetGOInfo()->ScriptId];
+    Script* pTempScript = m_NPC_scripts[pGameObject->GetGOInfo()->ScriptId];
 
     if (!pTempScript || !pTempScript->pGOHello)
         return false;
@@ -1784,7 +1864,7 @@ bool ScriptMgr::OnGameObjectUse(Player* pPlayer, GameObject* pGameObject)
 
 bool ScriptMgr::OnItemUse(Player* pPlayer, Item* pItem, SpellCastTargets const& targets)
 {
-	Script* pTempScript = m_scripts[pItem->GetProto()->ScriptId];
+    Script* pTempScript = m_NPC_scripts[pItem->GetProto()->ScriptId];
 
 	if (!pTempScript || !pTempScript->pItemUse)
 		return false;
@@ -1794,7 +1874,7 @@ bool ScriptMgr::OnItemUse(Player* pPlayer, Item* pItem, SpellCastTargets const& 
 
 bool ScriptMgr::OnAreaTrigger(Player* pPlayer, AreaTriggerEntry const* atEntry)
 {
-    Script* pTempScript = m_scripts[GetAreaTriggerScriptId(atEntry->id)];
+    Script* pTempScript = m_NPC_scripts[GetAreaTriggerScriptId(atEntry->id)];
 
     if (!pTempScript || !pTempScript->pAreaTrigger)
         return false;
@@ -1804,7 +1884,7 @@ bool ScriptMgr::OnAreaTrigger(Player* pPlayer, AreaTriggerEntry const* atEntry)
 
 bool ScriptMgr::OnProcessEvent(uint32 eventId, Object* pSource, Object* pTarget, bool isStart)
 {
-    Script* pTempScript = m_scripts[GetEventIdScriptId(eventId)];
+    Script* pTempScript = m_NPC_scripts[GetEventIdScriptId(eventId)];
 
     if (!pTempScript || !pTempScript->pProcessEventId)
         return false;
@@ -1815,7 +1895,7 @@ bool ScriptMgr::OnProcessEvent(uint32 eventId, Object* pSource, Object* pTarget,
 
 bool ScriptMgr::OnEffectDummy(Unit* pCaster, uint32 spellId, SpellEffectIndex effIndex, Creature* pTarget)
 {
-    Script* pTempScript = m_scripts[pTarget->GetScriptId()];
+    Script* pTempScript = m_NPC_scripts[pTarget->GetScriptId()];
 
     if (!pTempScript || !pTempScript->pEffectDummyCreature)
         return false;
@@ -1825,7 +1905,7 @@ bool ScriptMgr::OnEffectDummy(Unit* pCaster, uint32 spellId, SpellEffectIndex ef
 
 bool ScriptMgr::OnEffectDummy(Unit* pCaster, uint32 spellId, SpellEffectIndex effIndex, GameObject* pTarget)
 {
-    Script* pTempScript = m_scripts[pTarget->GetGOInfo()->ScriptId];
+    Script* pTempScript = m_NPC_scripts[pTarget->GetGOInfo()->ScriptId];
 
     if (!pTempScript || !pTempScript->pEffectDummyGameObj)
         return false;
@@ -1833,9 +1913,19 @@ bool ScriptMgr::OnEffectDummy(Unit* pCaster, uint32 spellId, SpellEffectIndex ef
     return pTempScript->pEffectDummyGameObj(pCaster, spellId, effIndex, pTarget);
 }
 
+bool ScriptMgr::OnEffectDummy(Unit* pCaster, uint32 spellId, SpellEffectIndex effIndex, Item* pTarget)
+{
+    Script* pTempScript = m_NPC_scripts[pTarget->GetProto()->ScriptId];
+
+    if (!pTempScript || !pTempScript->pEffectDummyItem)
+        return false;
+
+    return pTempScript->pEffectDummyItem(pCaster, spellId, effIndex, pTarget);
+}
+
 bool ScriptMgr::OnAuraDummy(Aura const* pAura, bool apply)
 {
-    Script* pTempScript = m_scripts[((Creature*)pAura->GetTarget())->GetScriptId()];
+    Script* pTempScript = m_NPC_scripts[((Creature*)pAura->GetTarget())->GetScriptId()];
 
     if (!pTempScript || !pTempScript->pEffectAuraDummy)
         return false;
@@ -1879,15 +1969,15 @@ void ScriptMgr::Initialize()
     sLog.outString("");
 
     // Resize script ids to needed ammount of assigned ScriptNames (from core)
-    m_scripts.resize(GetScriptIdsCount(), nullptr);
+    m_NPC_scripts.resize(GetScriptIdsCount(), nullptr);
 
     AddScripts();
 
     // Check existance scripts for all registered by core script names
     for (uint32 i = 1; i < GetScriptIdsCount(); ++i)
     {
-        if (!m_scripts[i])
-            sLog.outError("No script found for script_name '%s'.", GetScriptName(i));
+        if (!m_NPC_scripts[i])
+            sLog.outError("No script found for ScriptName '%s'.", GetScriptName(i));
     }
 
     sLog.outString(">> Loaded %i C++ Scripts.", num_sc_scripts);
@@ -2156,6 +2246,22 @@ void ScriptMgr::LoadEscortData()
         sLog.outString("");
         sLog.outString(">> Loaded 0 Escort Creature Data. DB table `script_escort_data` is empty.");
     }
+}
+
+std::shared_ptr<QuestInstance> ScriptMgr::GetSharedCopy(QuestInstance* pOrig)
+{
+    if (pOrig == nullptr)
+        return std::shared_ptr<QuestInstance>();
+
+    for (auto& questInstance : m_questInstancies)
+    {
+        if (questInstance.operator->() == pOrig)
+        {
+            return questInstance;
+        }
+    }
+
+    return std::shared_ptr<QuestInstance>();
 }
 
 void ScriptMgr::CollectPossibleEventIds(std::set<uint32>& eventIds)
@@ -2539,9 +2645,21 @@ void DoOrSimulateScriptTextForMap(int32 iTextEntry, uint32 uiCreatureEntry, Map*
 
 void Script::RegisterSelf(bool bReportError)
 {
-    if (uint32 id = sScriptMgr.GetScriptId(Name.c_str()))
+    if (QuestID != 0)
     {
-        m_scripts[id] = this;
+        if (GetQuestInstance != nullptr)
+        {
+            sScriptMgr.m_questScripts[QuestID] = this;
+            ++num_sc_scripts;
+        }
+        else
+        {
+            sLog.outError("Script for quest %s can't be registered: GetQuestInstance function is nullptr", Name.c_str());
+        }
+    }
+    else if (uint32 id = sScriptMgr.GetScriptId(Name.c_str()))
+    {
+        m_NPC_scripts[id] = this;
         ++num_sc_scripts;
     }
     else
@@ -2644,5 +2762,36 @@ WorldObject* GetTargetByType(WorldObject* pSource, WorldObject* pTarget, uint8 T
                 return pUnitSource->FindNearestFriendlyPlayer(Param1);
             break;
     }
-    return nullptr;
+            // Make sure that this spell applies an aura
+            if (pTempSpell->Effect[j] == SPELL_EFFECT_APPLY_AURA)
+                m_spellSummary[i].Effects |= 1 << (SELECT_EFFECT_AURA - 1);
+        }
+    }
+}
+
+QuestInstance::QuestInstance(ObjectGuid InPlayerGuid, uint32 InQuestID)
+    : PlayerGuid(InPlayerGuid), QuestID(InQuestID)
+{
+    QuestTemplate = sObjectMgr.GetQuestTemplate(QuestID);
+
+    if (!QuestTemplate)
+    {
+        sLog.outError("FATAL: Can't find QuestTemplate with id %llu while creating script instance", QuestID);
+        MANGOS_ASSERT(QuestTemplate);
+    }
+}
+
+Player* QuestInstance::GetPlayer() const
+{
+    return ObjectMgr::GetPlayer(PlayerGuid);
+}
+
+bool QuestInstance::GoToStage(uint32 newStage)
+{
+    if (newStage < QuestStage)
+    {
+        DETAIL_LOG("[QuestInstance]: '%s' new stage '%d' but old '%d' which is lower", GetQuestTemplate()->GetTitle().c_str(), newStage, QuestStage);
+    }
+    SetQuestStage(newStage);
+    return true;
 }

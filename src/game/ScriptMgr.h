@@ -27,6 +27,7 @@
 #include "ace/Atomic_Op.h"
 #include "SpellMgr.h"
 #include "Creature.h"
+#include <memory> //for shared_ptr
 
 struct AreaTriggerEntry;
 class Aura;
@@ -1184,20 +1185,70 @@ struct CreatureEscortData
     uint32 uiLastWaypointEntry;
 };
 
+struct TSpellSummary
+{
+    uint8 Targets;                                          // set of enum SelectTarget
+    uint8 Effects;                                          // set of enum SelectEffect
+};
+
+class QuestInstance
+{
+public:
+
+    QuestInstance(ObjectGuid InPlayerGuid, uint32 InQuestID);
+    virtual ~QuestInstance() {}
+    virtual void OnQuestStarted() {};
+    virtual void OnQuestCanceled() {};
+    virtual void OnQuestFinished() {};
+
+    uint32 GetQuestStage() const
+    {
+        return QuestStage;
+    }
+
+    Player* GetPlayer() const;
+
+    const Quest* GetQuestTemplate() const
+    {
+        return QuestTemplate;
+    }
+
+    const uint32 GetQuestId() const
+    {
+        return QuestID;
+    }
+
+    virtual bool GoToStage(uint32 newStage);
+
+protected:
+    uint32 QuestStage;
+    const Quest* QuestTemplate;
+    uint32 QuestID;
+
+    void SetQuestStage(uint32 newStage)
+    {
+        QuestStage = newStage;
+    }
+
+    //Quest holder
+    ObjectGuid PlayerGuid;
+};
+
 struct Script
 {
     Script() :
-        Name(""), pGossipHello(nullptr), pGOGossipHello(nullptr), pQuestAcceptNPC(nullptr),
+        Name(""), QuestID(0), pGossipHello(nullptr), pGOGossipHello(nullptr), pQuestAcceptNPC(nullptr),
         pGossipSelect(nullptr), pGOGossipSelect(nullptr),
         pGossipSelectWithCode(nullptr), pGOGossipSelectWithCode(nullptr), pQuestComplete(nullptr),
         pNPCDialogStatus(nullptr), pGODialogStatus(nullptr), pQuestRewardedNPC(nullptr), pQuestRewardedGO(nullptr), pItemHello(nullptr), pGOHello(nullptr), pAreaTrigger(nullptr),
         pProcessEventId(nullptr), pItemQuestAccept(nullptr), pGOQuestAccept(nullptr),
         pItemUse(nullptr), pEffectDummyCreature(nullptr), pEffectDummyGameObj(nullptr), pEffectDummyItem(nullptr),
         pEffectAuraDummy(nullptr), GOOpen(nullptr),
-        GOGetAI(nullptr), GetAI(nullptr), GetInstanceData(nullptr)
+        GOGetAI(nullptr), GetAI(nullptr), GetQuestInstance(nullptr), GetInstanceData(nullptr)
     {}
 
     std::string Name;
+    uint32 QuestID;
 
     //Methods to be scripted
     bool (*pGossipHello             )(Player*, Creature*);
@@ -1229,6 +1280,7 @@ struct Script
     GameObjectAI* (*GOGetAI         )(GameObject* pGo);
 
     CreatureAI* (*GetAI)(Creature*);
+    QuestInstance* (*GetQuestInstance)(ObjectGuid PlayerGuid);
     InstanceData* (*GetInstanceData)(Map*);
 
     void RegisterSelf(bool reportUnused = true);
@@ -1270,6 +1322,8 @@ class ScriptMgr
         void LoadScriptTextsCustom();
         void LoadScriptWaypoints();
         void LoadEscortData();
+
+        std::shared_ptr<QuestInstance> GetSharedCopy(QuestInstance* pOrig);
 
         StringTextData const* GetTextData(int32 uiTextId) const
         {
@@ -1318,6 +1372,8 @@ class ScriptMgr
         bool OnGossipSelect(Player* pPlayer, GameObject* pGameObject, uint32 sender, uint32 action, const char* code);
         bool OnQuestAccept(Player* pPlayer, Creature* pCreature, Quest const* pQuest);
         bool OnQuestAccept(Player* pPlayer, GameObject* pGameObject, Quest const* pQuest);
+        bool OnQuestAccept(Player* pPlayer, Item* pItem, Quest const* pQuest);
+        bool OnQuestCanceled(Player* pPlayer, uint32 questID);
         bool OnQuestRewarded(Player* pPlayer, Creature* pCreature, Quest const* pQuest);
         bool OnQuestRewarded(Player* pPlayer, GameObject* pGameObject, Quest const* pQuest);
         uint32 GetDialogStatus(Player* pPlayer, Creature* pCreature);
@@ -1331,7 +1387,13 @@ class ScriptMgr
         bool OnEffectDummy(Unit* pCaster, uint32 spellId, SpellEffectIndex effIndex, GameObject* pTarget);
         bool OnAuraDummy(Aura const* pAura, bool apply);
 
+        typedef UNORDERED_MAP<uint32, Script*> QuestScriptMap;
+        QuestScriptMap m_questScripts;
+
     private:
+        bool OnQuestAcceptByScript(Player* pPlayer, Quest const* pQuest);
+        bool OnQuestRewardedByScript(Player* pPlayer, Quest const* pQuest);
+        void RegisterQuestInstance(Script* pQuestScript, Player* pPlayer);
         void CollectPossibleEventIds(std::set<uint32>& eventIds);
         void LoadScripts(ScriptMapMap& scripts, const char* tablename);
         void CheckScriptTexts(ScriptMapMap const& scripts);
@@ -1353,6 +1415,9 @@ class ScriptMgr
         TextDataMap     m_mTextDataMap;                     //additional data for text strings
         PointMoveMap    m_mPointMoveMap;                    //coordinates for waypoints
         EscortDataMap   m_mEscortDataMap;                   // Des donnees pour les quetes d'escorte scriptees via la DB
+
+        //active quest instancies
+        std::vector <std::shared_ptr<QuestInstance>> m_questInstancies;
 
         //atomic op counter for active scripts amount
         ACE_Atomic_Op<ACE_Thread_Mutex, int> m_scheduledScripts;
