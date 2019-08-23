@@ -1323,7 +1323,7 @@ class ScriptMgr
         void LoadScriptWaypoints();
         void LoadEscortData();
 
-        std::shared_ptr<QuestInstance> GetSharedCopy(QuestInstance* pOrig);
+        std::shared_ptr<QuestInstance> GetSharedCopy(ObjectGuid PlayerGuid, QuestInstance* pOrig);
 
         StringTextData const* GetTextData(int32 uiTextId) const
         {
@@ -1417,7 +1417,8 @@ class ScriptMgr
         EscortDataMap   m_mEscortDataMap;                   // Des donnees pour les quetes d'escorte scriptees via la DB
 
         //active quest instancies
-        std::vector <std::shared_ptr<QuestInstance>> m_questInstancies;
+        typedef std::unordered_multimap <ObjectGuid, std::shared_ptr<QuestInstance>> QuestInstanceMultiMap;
+        QuestInstanceMultiMap m_questInstancies;
 
         //atomic op counter for active scripts amount
         ACE_Atomic_Op<ACE_Thread_Mutex, int> m_scheduledScripts;

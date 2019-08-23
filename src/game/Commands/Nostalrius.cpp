@@ -1185,106 +1185,178 @@ bool ChatHandler::HandleSendSpellImpactCommand(char *args)
     return true;
 }
 
+//Hack for gcc
+struct EnumClassHash
+{
+    template <typename T>
+    std::size_t operator()(T t) const
+    {
+        return static_cast<std::size_t>(t);
+    }
+};
+
 // BG
-
-#define COLOR_HORDE      "FF3300"
-#define COLOR_ALLIANCE   "0066B3"
-#define COLOR_BG         "D580FE"
-#define COLOR_INFO       "FF9900"
-#define COLOR_STATUS     "FECCBF"
-
-//#define DO_LINK(b,a)     "|Hnostalrius:0|h"a"|h"
-#define DO_COLOR(a, b)   "|cff" a "" b "|r"
-
-typedef std::map<ObjectGuid, BattleGroundPlayer> BattleGroundPlayerMap;
 bool ChatHandler::HandleBGStatusCommand(char *args)
 {
-    Player *chr = m_session->GetPlayer();
-    ASSERT(chr);
-    SendSysMessage(DO_COLOR(COLOR_INFO, "-- Currently running BGs"));
-    uint8 i = 0;
-    uint8 uiAllianceCount, uiHordeCount;
-    for (int8 bgTypeId = BATTLEGROUND_AB; bgTypeId >= BATTLEGROUND_AV; --bgTypeId)
+    struct BattlegroundQueueInfo
     {
-        for (BattleGroundSet::const_iterator it = sBattleGroundMgr.GetBattleGroundsBegin(BattleGroundTypeId(bgTypeId)); it != sBattleGroundMgr.GetBattleGroundsEnd(BattleGroundTypeId(bgTypeId)); ++it)
+        uint32 AlliancePlayers = 0;
+        uint32 AllianceOfflinePlayers = 0;
+
+        uint32 HordePlayers = 0;
+        uint32 HordeOfflinePlayers = 0;
+    };
+
+    struct BattlegroundQueueInfoCollection
+    {
+        std::unordered_map< BattleGroundTypeId, BattlegroundQueueInfo, EnumClassHash > Players;
+    };
+
+    SendSysMessage("BG STATUS");
+
+    uint32 TotalAlliancePlayers = 0;
+    uint32 TotalHordePlayers = 0;
+
+    uint32 TotalQueuedAlliancePlayers = 0;
+    uint32 TotalQueuedHordePlayers = 0;
+
+    std::unordered_map< BattleGroundBracketId, std::list < std::string >, EnumClassHash > BGInfoPerBracket;
+    std::unordered_map< BattleGroundBracketId, BattlegroundQueueInfoCollection, EnumClassHash > BGQueuePlayersPerBracket;
+    //for every BG type
+    for (int8 bgType = BATTLEGROUND_AB; bgType > BATTLEGROUND_TYPE_NONE; --bgType)
+    {
+        BattleGroundTypeId bgTypeId = (BattleGroundTypeId)bgType;
+        //1. Check live matches
+        for (auto bgIter = sBattleGroundMgr.GetBattleGroundsBegin(bgTypeId); bgIter != sBattleGroundMgr.GetBattleGroundsEnd(bgTypeId); bgIter++)
         {
-            // Pas un "vrai" BG, mais un "modele" de BG.
-            if (!it->first)
+            if (bgIter->first == 0)
                 continue;
 
-            ++i;
-            uiAllianceCount = 0;
-            uiHordeCount    = 0;
-            BattleGroundPlayerMap const& pPlayers = it->second->GetPlayers();
-            std::string playerName = "";
-
-            for (BattleGroundPlayerMap::const_iterator itr = pPlayers.begin(); itr != pPlayers.end(); ++itr)
+            BattleGround* bgInstance = bgIter->second;
+            if (bgInstance == nullptr)
             {
-                if (itr->second.PlayerTeam == HORDE)
-                    uiHordeCount++;
-                else
-                    uiAllianceCount++;
-                if (playerName == "")
-                    if (sObjectMgr.GetPlayerNameByGUID(itr->first, playerName))
-                        playerName = playerLink(playerName);
+                SendSysMessage("Internal error!");
+                return true;
+            }
+            BattleGroundBracketId bgBracket = bgInstance->GetBracketId();
+            if (bgType == BATTLEGROUND_AV)
+                bgBracket = BG_BRACKET_ID_LAST; //#HACK: Actualy AV for stats must use last bracket (60)
+
+            uint32 AlliancePlayers = 0;
+            uint32 HordePlayers = 0;
+
+            for (auto& bgPlayer : bgInstance->GetPlayers())
+            {
+                switch (bgPlayer.second.PlayerTeam)
+                {
+                case HORDE:
+                    ++HordePlayers;
+                    break;
+                case ALLIANCE:
+                    ++AlliancePlayers;
+                    break;
+                } 
             }
 
-            std::string statusName;
-            bool bFull                = it->second->HasFreeSlots();
-            BattleGroundStatus status = it->second->GetStatus();
-            switch (status)
+            TotalAlliancePlayers += AlliancePlayers;
+            TotalHordePlayers += HordePlayers;
+
+            char* BGStatus = nullptr;
+
+            switch (bgInstance->GetStatus())
             {
-                case STATUS_WAIT_JOIN:
-                    statusName = "WaitJoin";
-                    break;
-                case STATUS_IN_PROGRESS:
-                    statusName = "InProgress";
-                    break;
-                case STATUS_WAIT_LEAVE:
-                    statusName = "WaitLeave";
-                    break;
+            case STATUS_WAIT_QUEUE:
+                BGStatus = "Wait Queue";
+                break;
+            case STATUS_WAIT_JOIN:
+                BGStatus = "Wait Join";
+                break;
+            case STATUS_IN_PROGRESS:
+                BGStatus = "In Progress";
+                break;
+            case STATUS_WAIT_LEAVE:
+                BGStatus = "Wait Leave";
+                break;
+            case STATUS_NONE:
+            default:
+                BGStatus = "[UNDEFINED]";
+                break;
+
             }
 
-            PSendSysMessage(DO_COLOR(COLOR_BG, "[%s %2u]") " [%2u-%2u] "
-                    DO_COLOR(COLOR_STATUS, "[%s]")
-                    DO_COLOR(COLOR_ALLIANCE, "%2u") "vs" DO_COLOR(COLOR_HORDE, "%2u")
-                    " Player:%s %s",
-                    it->second->GetName(), it->first, it->second->GetMinLevel(), it->second->GetMaxLevel(), statusName.c_str(),
-                    uiAllianceCount, uiHordeCount,
-                    playerName.c_str(), secsToTimeString(it->second->GetStartTime() / 1000, true).c_str());
+            std::ostringstream oss;
+            oss << bgInstance->GetName() << " : Alliance: " << AlliancePlayers << " Horde: " << HordePlayers << " Status: " << BGStatus;
+            BGInfoPerBracket[bgBracket].push_back(oss.str());
         }
-    }
-    if (!i)
-        PSendSysMessage(DO_COLOR(COLOR_INFO, "(No battleground started)"));
 
-    PSendSysMessage(DO_COLOR(COLOR_INFO, "-- Queues for your bracket"));
-    i = 0;
-
-    for (uint8 bgTypeId = BATTLEGROUND_AV; bgTypeId <= BATTLEGROUND_AB; ++bgTypeId)
-    {
-        ++i;
-        uiAllianceCount = 0;
-        uiHordeCount    = 0;
-
+        //2. Check queue for that BG type
         BattleGroundQueueTypeId bgQueueTypeId = BattleGroundMgr::BGQueueTypeId(BattleGroundTypeId(bgTypeId));
-        // Doit etre une référence (&), sinon crash par la suite ...
         BattleGroundQueue& queue = sBattleGroundMgr.m_BattleGroundQueues[bgQueueTypeId];
-        for (BattleGroundQueue::QueuedPlayersMap::const_iterator it = queue.m_QueuedPlayers.begin(); it != queue.m_QueuedPlayers.end(); ++it)
+
+        for (auto& QueuedPlayer : queue.m_QueuedPlayers)
         {
-            if (it->second.GroupInfo->GroupTeam == HORDE)
-                uiHordeCount++;
-            else
-                uiAllianceCount++;
+            PlayerQueueInfo& pInfo = QueuedPlayer.second;
+            BattleGroundTypeId targetBGId = pInfo.GroupInfo->BgTypeId;
+            BattleGroundBracketId targetBracketId = pInfo.GroupInfo->BracketId;
+            if (bgType == BATTLEGROUND_AV)
+                targetBracketId = BG_BRACKET_ID_LAST; //#HACK: Actualy AV for stats must use last bracket (60)
+            BattlegroundQueueInfoCollection& bgQueueInfo = BGQueuePlayersPerBracket[targetBracketId];
+            
+            switch (pInfo.GroupInfo->GroupTeam)
+            {
+            case ALLIANCE:
+                bgQueueInfo.Players[targetBGId].AlliancePlayers += pInfo.GroupInfo->Players.size();
+                if (!pInfo.online)
+                {
+                    bgQueueInfo.Players[targetBGId].AllianceOfflinePlayers += pInfo.GroupInfo->Players.size();
+                }
+                TotalQueuedAlliancePlayers += pInfo.GroupInfo->Players.size();
+                break;
+            case HORDE:
+                bgQueueInfo.Players[targetBGId].HordePlayers += pInfo.GroupInfo->Players.size();
+                if (!pInfo.online)
+                {
+                    bgQueueInfo.Players[targetBGId].HordeOfflinePlayers += pInfo.GroupInfo->Players.size();
+                }
+                TotalQueuedHordePlayers += pInfo.GroupInfo->Players.size();
+                break;
+            default:
+                break;
+            }
+        }
+    }
+
+    //Output collected info
+    for (BattleGroundBracketId Id = BG_BRACKET_ID_FIRST; Id < MAX_BATTLEGROUND_BRACKETS; ((int32&)Id)++)
+    {
+        PSendSysMessage(GetBattleGroundBracketIdString(Id));
+        BattlegroundQueueInfoCollection& bgQueueInfo = BGQueuePlayersPerBracket[Id];
+
+        for (auto QueueInfoIter : bgQueueInfo.Players)
+        {
+            std::string BGName = "unknown";
+            uint32 mapId = GetBattleGrounMapIdByTypeId(QueueInfoIter.first);
+            if (MapEntry const* mapEntry = sMapStorage.LookupEntry<MapEntry>(mapId))
+            {
+                BGName = mapEntry->name;
+            }
+            BattlegroundQueueInfo& bgInfo = QueueInfoIter.second;
+
+            PSendSysMessage("\t\t%s: Queued players: Alliance %u (including offline %u), Horde %u (including offline %u)",
+                BGName.c_str(), bgInfo.AlliancePlayers, bgInfo.AllianceOfflinePlayers, bgInfo.HordePlayers, bgInfo.HordeOfflinePlayers);
         }
 
-        BattleGround *bg_template = sBattleGroundMgr.GetBattleGroundTemplate(BattleGroundTypeId(bgTypeId));
-        ASSERT(bg_template);
+        std::list <std::string>& BattlegroundsInBracket = BGInfoPerBracket[Id];
 
-        PSendSysMessage(DO_COLOR(COLOR_BG, "[%s]" "   " DO_COLOR(COLOR_ALLIANCE, "[Alliance] : %2u") " - " DO_COLOR(COLOR_HORDE, "[Horde] : %2u")),
-                        bg_template->GetName(), uiAllianceCount, uiHordeCount);
+        for (std::string& bgInfo : BattlegroundsInBracket)
+        {
+            PSendSysMessage("\t\t %s", bgInfo.c_str());
+        }
     }
-    if (!i)
-        PSendSysMessage(DO_COLOR(COLOR_INFO, "(No player queued)"));
+
+    PSendSysMessage("Total Alliance/Horde playing on BG right now: %u/%u", TotalAlliancePlayers, TotalHordePlayers);
+    PSendSysMessage("Total Alliance/Horde queued on BG right now: %u/%u", TotalQueuedAlliancePlayers, TotalQueuedHordePlayers);
+
     return true;
 }
 

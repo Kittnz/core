@@ -304,6 +304,22 @@ inline void strToLower(std::string& str)
     std::transform( str.begin(), str.end(), str.begin(), tolower );
 }
 
+inline void strToLower(char* str, int strLen)
+{
+    for (int i = 0; i < strLen; i++)
+    {
+        str[i] = tolower(str[i]);
+    }
+}
+
+inline void strToUpper(char* str, int strLen)
+{
+    for (int i = 0; i < strLen; i++)
+    {
+        str[i] = toupper(str[i]);
+    }
+}
+
 inline wchar_t wcharToUpper(wchar_t wchar)
 {
     if(wchar >= L'a' && wchar <= L'z')                      // LATIN SMALL LETTER A - LATIN SMALL LETTER Z

@@ -2199,6 +2199,8 @@ void Player::RemoveFromWorld()
 
     SetEscortingGuid(ObjectGuid());
 
+    sChatHookMgr.ClearAllHooksRelatedToListener(this);
+
     Unit::RemoveFromWorld();
 }
 

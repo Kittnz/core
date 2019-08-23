@@ -1751,12 +1751,15 @@ bool ScriptMgr::OnQuestAcceptByScript(Player* pPlayer, Quest const* pQuest)
 bool ScriptMgr::OnQuestRewardedByScript(Player* pPlayer, Quest const* pQuest)
 {
     uint32 questID = pQuest->GetQuestId();
-    for (auto pQuestIter = m_questInstancies.begin(); pQuestIter != m_questInstancies.end(); pQuestIter++)
+
+    std::pair<QuestInstanceMultiMap::iterator, QuestInstanceMultiMap::iterator> QuestInstancesByPlayer = m_questInstancies.equal_range(pPlayer->GetObjectGuid());
+    
+    for (QuestInstanceMultiMap::iterator pQuestIter = QuestInstancesByPlayer.first; pQuestIter != QuestInstancesByPlayer.second; pQuestIter++)
     {
         auto& Elem = *pQuestIter;
-        if (Elem->GetQuestId() == questID)
+        if (Elem.second->GetQuestId() == questID)
         {
-            Elem->OnQuestFinished();
+            Elem.second->OnQuestFinished();
             m_questInstancies.erase(pQuestIter);
             return true;
         }
@@ -1768,18 +1771,20 @@ bool ScriptMgr::OnQuestRewardedByScript(Player* pPlayer, Quest const* pQuest)
 void ScriptMgr::RegisterQuestInstance(Script* pQuestScript, Player* pPlayer)
 {
     QuestInstance* pNewInstance = pQuestScript->GetQuestInstance(pPlayer->GetObjectGuid());
-    m_questInstancies.push_back(std::shared_ptr<QuestInstance>(pNewInstance));
+    m_questInstancies.insert(std::pair < ObjectGuid, std::shared_ptr < QuestInstance > >(pPlayer->GetObjectGuid(), std::shared_ptr<QuestInstance>(pNewInstance)));
     pNewInstance->OnQuestStarted();
 }
 
 bool ScriptMgr::OnQuestCanceled(Player* pPlayer, uint32 questID)
 {
-    for (auto pQuestIter = m_questInstancies.begin(); pQuestIter != m_questInstancies.end(); pQuestIter++)
+    std::pair<QuestInstanceMultiMap::iterator, QuestInstanceMultiMap::iterator> QuestInstancesByPlayer = m_questInstancies.equal_range(pPlayer->GetObjectGuid());
+
+    for (QuestInstanceMultiMap::iterator pQuestIter = QuestInstancesByPlayer.first; pQuestIter != QuestInstancesByPlayer.second; pQuestIter++)
     {
         auto& Elem = *pQuestIter;
-        if (Elem->GetQuestId() == questID)
+        if (Elem.second->GetQuestId() == questID)
         {
-            Elem->OnQuestCanceled();
+            Elem.second->OnQuestCanceled();
             m_questInstancies.erase(pQuestIter);
             return true;
         }
@@ -2248,16 +2253,19 @@ void ScriptMgr::LoadEscortData()
     }
 }
 
-std::shared_ptr<QuestInstance> ScriptMgr::GetSharedCopy(QuestInstance* pOrig)
+std::shared_ptr<QuestInstance> ScriptMgr::GetSharedCopy(ObjectGuid PlayerGuid, QuestInstance* pOrig)
 {
     if (pOrig == nullptr)
         return std::shared_ptr<QuestInstance>();
 
-    for (auto& questInstance : m_questInstancies)
+    std::pair<QuestInstanceMultiMap::iterator, QuestInstanceMultiMap::iterator> QuestInstancesByPlayer = m_questInstancies.equal_range(PlayerGuid);
+
+    for (QuestInstanceMultiMap::iterator pQuestIter = QuestInstancesByPlayer.first; pQuestIter != QuestInstancesByPlayer.second; pQuestIter++)
     {
-        if (questInstance.operator->() == pOrig)
+        auto& Elem = *pQuestIter;
+        if (Elem.second.operator->() == pOrig)
         {
-            return questInstance;
+            return Elem.second;
         }
     }
 

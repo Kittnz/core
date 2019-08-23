@@ -211,6 +211,9 @@ class MANGOS_DLL_SPEC ObjectGuid
         bool operator!= (ObjectGuid const& guid) const { return GetRawValue() != guid.GetRawValue(); }
         bool operator< (ObjectGuid const& guid) const { return GetRawValue() < guid.GetRawValue(); }
 
+        ObjectGuid& operator= (const ObjectGuid& otherGuid) { m_guid = otherGuid.m_guid; return *this; };
+        //ObjectGuid& operator= (const ObjectGuid otherGuid) { m_guid = otherGuid.m_guid; return *this; };
+
     public:                                                 // accessors - for debug
         static char const* GetTypeName(HighGuid high);
         char const* GetTypeName() const { return !IsEmpty() ? GetTypeName(GetHigh()) : "None"; }
