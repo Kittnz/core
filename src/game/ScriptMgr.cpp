@@ -2770,11 +2770,7 @@ WorldObject* GetTargetByType(WorldObject* pSource, WorldObject* pTarget, uint8 T
                 return pUnitSource->FindNearestFriendlyPlayer(Param1);
             break;
     }
-            // Make sure that this spell applies an aura
-            if (pTempSpell->Effect[j] == SPELL_EFFECT_APPLY_AURA)
-                m_spellSummary[i].Effects |= 1 << (SELECT_EFFECT_AURA - 1);
-        }
-    }
+	return nullptr;
 }
 
 QuestInstance::QuestInstance(ObjectGuid InPlayerGuid, uint32 InQuestID)

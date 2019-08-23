@@ -1385,9 +1385,10 @@ class ScriptMgr
         bool OnProcessEvent(uint32 eventId, Object* pSource, Object* pTarget, bool isStart);
         bool OnEffectDummy(Unit* pCaster, uint32 spellId, SpellEffectIndex effIndex, Creature* pTarget);
         bool OnEffectDummy(Unit* pCaster, uint32 spellId, SpellEffectIndex effIndex, GameObject* pTarget);
+		bool OnEffectDummy(Unit* pCaster, uint32 spellId, SpellEffectIndex effIndex, Item* pTarget);
         bool OnAuraDummy(Aura const* pAura, bool apply);
 
-        typedef UNORDERED_MAP<uint32, Script*> QuestScriptMap;
+        typedef std::unordered_map<uint32, Script*> QuestScriptMap;
         QuestScriptMap m_questScripts;
 
     private:
