@@ -75,7 +75,7 @@ enum BloodyCoinReward
 
 bool GossipHello_npc_arena_vendor(Player *pPlayer, Creature *_Creature)
 {
-    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, "Speed (30%, 2 hours): 10 Bloody Coins", GOSSIP_SENDER_MAIN, BloodyCoinReward::BloodyCoinRew_1);
+    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, "Speed (50%, 15 seconds): 1 Bloody Coin", GOSSIP_SENDER_MAIN, BloodyCoinReward::BloodyCoinRew_1);
     pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, "Stamina (16, 30 min): 3 Bloody Coins", GOSSIP_SENDER_MAIN, BloodyCoinReward::BloodyCoinRew_2);
     pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, "Intellect (16, 30 min): 3 Bloody Coins", GOSSIP_SENDER_MAIN, BloodyCoinReward::BloodyCoinRew_3);
     pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, "Agility (17, 30 min): 3 Bloody Coins", GOSSIP_SENDER_MAIN, BloodyCoinReward::BloodyCoinRew_4);
@@ -108,8 +108,8 @@ bool GossipSelect_npc_arena_vendor(Player *player, Creature *_Creature, uint32 s
         switch (eAction)
         {
             case BloodyCoinRew_1: // Speed
-                spell = 22863;
-                coins = 10;
+                spell = 2379;
+                coins = 1;
                 buff = "Speed";
                 break;
             case BloodyCoinRew_2: // Stamina
