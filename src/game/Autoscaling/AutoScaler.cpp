@@ -95,6 +95,11 @@ void AutoScaler::ScaleCreature(Creature* creature, uint32 playerCount, uint32 ma
                 specificDmgFactor =  0.75f;
             }
             break;
+        case 11669: // Flame Imp
+            if (playerCount < 30) {
+                specificHPFactor = 0.75f;
+                specificDmgFactor = 0.75f;
+            }
     }
 
     float hpPercentage = static_cast<float>(playerCount) / static_cast<float>(maxCount) * 100.f;
