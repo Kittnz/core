@@ -100,6 +100,7 @@ void AutoScaler::ScaleCreature(Creature* creature, uint32 playerCount, uint32 ma
                 specificHPFactor = 0.75f;
                 specificDmgFactor = 0.75f;
             }
+            break;
     }
 
     float hpPercentage = static_cast<float>(playerCount) / static_cast<float>(maxCount) * 100.f;
