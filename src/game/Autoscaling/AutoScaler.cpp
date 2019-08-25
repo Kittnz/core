@@ -85,12 +85,13 @@ void AutoScaler::ScaleCreature(Creature* creature, uint32 playerCount, uint32 ma
     switch (creature->GetEntry()) {
         case 12099: // Firesworn, Garr add.
             if (playerCount < 30) {
-                specificHPFactor = 0.5f;
-                specificDmgFactor =  0.5f;
+                specificHPFactor = 0.35f;
+                specificDmgFactor =  0.25f;
             }
             break;
-        case 11661: // Flamewalker, Gehenass add.
-        case 12119: // Flamewalker Protector, Lucifron add.
+        case 11661: // Flamewaker, Gehenass add.
+        case 12119: // Flamewaker Protector, Lucifron add.
+        case 11672: // Core Rager, Golemagg add
             if (playerCount < 30) {
                 specificDmgFactor =  0.75f;
             }
@@ -99,6 +100,20 @@ void AutoScaler::ScaleCreature(Creature* creature, uint32 playerCount, uint32 ma
             if (playerCount < 30) {
                 specificHPFactor = 0.75f;
                 specificDmgFactor = 0.75f;
+            }
+            break;
+        case 11662: // Flamewaker Priest, Sulfuron Harbringer add
+            if (playerCount < 30) {
+                specificHPFactor = 0.75f;
+                specificDmgFactor = 0.5f;
+            }
+            break;
+
+        case 11368: // Bloodseeker bat, Jeklik add
+        case 15101: // Zulian Prowler
+            if (playerCount < 20) {
+                specificHPFactor = 0.5f;
+                specificDmgFactor = 0.5f;
             }
             break;
     }
