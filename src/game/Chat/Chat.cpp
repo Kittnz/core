@@ -1137,6 +1137,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { NODE, "setcityrank",    SEC_GAMEMASTER,     false, &ChatHandler::HandleSetCityRankCommand,         "", nullptr },
         { NODE, "mount",          SEC_GAMEMASTER,     false, &ChatHandler::HandleMountCommand,               "", nullptr },
         { NODE, "race",           SEC_PLAYER,         false, &ChatHandler::HandleRaceCommand,                "", nullptr },
+        { NODE, "faction",       SEC_ADMINISTRATOR,   false, &ChatHandler::HandleFactionCommand,              "", nullptr },
         { NODE, "skin",           SEC_PLAYER,         false, &ChatHandler::HandleSkinCommand,                "", nullptr },
         { NODE, "updateskinbytes", SEC_ADMINISTRATOR, false, &ChatHandler::HandleUpdateSkinBytesCommand,     "", nullptr },
         { NODE, "updatehairstyle", SEC_ADMINISTRATOR, false, &ChatHandler::HandleUpdateHairStyleCommand,     "", nullptr },

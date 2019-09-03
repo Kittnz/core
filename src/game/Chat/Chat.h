@@ -905,6 +905,7 @@ class MANGOS_DLL_SPEC ChatHandler
         bool HandleSetCityRankCommand(char* args);
         bool HandleMountCommand(char* args);
         bool HandleRaceCommand(char* args);
+        bool HandleFactionCommand(char* args);
         bool HandleSkinCommand(char* args);
         bool HandleUpdateSkinBytesCommand(char* args);
         bool HandleUpdateHairStyleCommand(char* args);
