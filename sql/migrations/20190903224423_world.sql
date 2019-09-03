@@ -18,7 +18,7 @@ replace into quest_template
 'Good.\n\nLet me tell you one thing before you waste it in a feeble attempt of cooking it. It\'s about the amount of spices that your meat gets ready, not about the amount of fire.\n\nWell, fire is needed anyway…
 ',
 'You got the meat?',
- 0, -- PrevQuestId
+ 815, -- PrevQuestId
  0, -- NextQuestId
  3678, 
  0, 0, 410, 14, 1);
