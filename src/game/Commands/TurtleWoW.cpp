@@ -462,6 +462,35 @@ bool ChatHandler::HandleGiveXPCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleTiredCommand(char* args)
+{
+    uint32 XP = (uint32)atoi(args);
+    Player *target = GetSelectedPlayer();
+
+    if (!target)
+        target = m_session->GetPlayer();
+
+    target->SetFlag(PLAYER_FLAGS, PLAYER_FLAGS_PARTIAL_PLAY_TIME);
+    target->SetRestBonus(0);
+    ChatHandler(target).SendSysMessage("You feel weary and exhausted as undead.");
+    return true;
+}
+
+bool ChatHandler::HandleTooTiredCommand(char* args)
+{
+    uint32 XP = (uint32)atoi(args);
+    Player *target = GetSelectedPlayer();
+
+    if (!target)
+        target = m_session->GetPlayer();
+
+    target->RemoveFlag(PLAYER_FLAGS, PLAYER_FLAGS_PARTIAL_PLAY_TIME);
+    target->SetFlag(PLAYER_FLAGS, PLAYER_FLAGS_NO_PLAY_TIME);
+    target->SetRestBonus(0);
+    ChatHandler(target).SendSysMessage("You feel weary and exhausted as undead.");
+    return true;
+}
+
 // Syntax: use .maketabard X to create a new item with chosen starting display_id (X), then use .maketabard without arguments to make more items by incrementing the display_id.
 // Create dummy entries in custom range for each item type before using the command.
 

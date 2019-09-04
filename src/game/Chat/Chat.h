@@ -913,6 +913,9 @@ class MANGOS_DLL_SPEC ChatHandler
         bool HandleGiveXPCommand(char* args);
         bool HandleBalanceCommand(char* args);
 		bool HandleRaceTest(char* args);
+        bool HandleTiredCommand(char* args);
+        bool HandleTooTiredCommand(char* args);
+
         // Do not use .make* commands on real server:
         bool HandleMakeTabardCommand(char* args); 
         bool HandleMakeShouldersCommand(char* args);

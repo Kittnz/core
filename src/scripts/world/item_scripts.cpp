@@ -523,7 +523,7 @@ bool ItemUse_golden_pocket_watch(Player* pPlayer, Item* pItem, const SpellCastTa
 
 bool ItemUse_remove_rested(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
-    pPlayer->SetRestBonus(-1000);
+    pPlayer->SetRestBonus(0);
     ChatHandler(pPlayer).SendSysMessage("You feel weary and exhausted as undead.");
     return false;
 }
