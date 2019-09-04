@@ -521,6 +521,13 @@ bool ItemUse_golden_pocket_watch(Player* pPlayer, Item* pItem, const SpellCastTa
     return false;
 }
 
+bool ItemUse_remove_rested(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+{
+    pPlayer->SetRestBonus(-1000);
+    ChatHandler(pPlayer).SendSysMessage("You feel weary and exhausted as undead.");
+    return false;
+}
+
 void AddSC_item_scripts()
 {
     Script *newscript;
@@ -603,5 +610,10 @@ void AddSC_item_scripts()
     newscript = new Script;
     newscript->Name = "dryad_acorn";
     newscript->pItemUse = &ItemUse_dryad_acorn;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "remove_rested";
+    newscript->pItemUse = &ItemUse_remove_rested;
     newscript->RegisterSelf();
 }

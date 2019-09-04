@@ -502,6 +502,9 @@ replace into item_template (entry, name, inventory_type, display_id, quality, bo
 (50518, 'Necromancer\'s Shoulders', 3, 35136, 1, 1),
 (50519, 'Necromancer\'s Cowl', 1, 35137, 1, 1);
 
+replace into item_template (entry, name, description, quality, spellid_1, display_id, spellcharges_1, script_name, spellcooldown_1) values
+(50521, '24/7 Game Support Mark', 'You\'ll feel weary and exhausted as undead. Resets your rested XP to 0.', 1, 1575, 30658, 0, 'remove_rested', 360000);
+
 -- Hotfixes, modify custom items only in this file:
 
 update item_template set spellcooldown_1 = 5400000, spellid_1 = 24085 where entry = 50234;
