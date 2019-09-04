@@ -99,6 +99,22 @@ bool ChatHandler::HandleSetCityRankCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleDebugRedXPBarCommand(char* args)
+{
+    uint32 rested_state = (uint32)atoi(args);
+    Unit *target = GetSelectedUnit();
+
+    if (!target)
+        target = m_session->GetPlayer();
+
+    // 4 - tired
+    // 5 - exhausted
+
+    target->SetByteValue(PLAYER_BYTES_2, 3, rested_state);
+    PSendSysMessage("Attempting to set an exhausting state.");
+    return true;
+}
+
 bool ChatHandler::HandleMountCommand(char*)
 {
     Player *player = m_session->GetPlayer();

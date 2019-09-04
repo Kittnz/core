@@ -1152,6 +1152,7 @@ ChatCommand * ChatHandler::getCommandTable()
 		{ NODE, "racetest",       SEC_ADMINISTRATOR,  false, &ChatHandler::HandleRaceTest,                   "", nullptr },
         { NODE, "tired",          SEC_GAMEMASTER,     false, &ChatHandler::HandleTiredCommand,               "", nullptr }, 
         { NODE, "tootired",       SEC_GAMEMASTER,     false, &ChatHandler::HandleTooTiredCommand,            "", nullptr }, 
+        { NODE, "debugredxpbar",  SEC_GAMEMASTER,     false, &ChatHandler::HandleDebugRedXPBarCommand,       "", nullptr }, 
         { MSTR, nullptr,          0,                  false, nullptr,                                        "", nullptr }
     };
 
