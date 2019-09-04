@@ -16,10 +16,6 @@ values
 
 UPDATE `creature_template` SET `mechanic_immune_mask` = '2793635679' WHERE entry in (50513, 50514, 50515);
 
-
-50521
-
-
 -- End of migration.
 END IF;
 END??
