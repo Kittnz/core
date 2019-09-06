@@ -4402,7 +4402,7 @@ bool ChatHandler::HandlePoolListCommand(char* args)
 
     if (!mapState->GetMapEntry()->Instanceable())
     {
-        PSendSysMessage(LANG_POOL_LIST_NON_INSTANCE, mapState->GetMapEntry()->name[GetSessionDbcLocale()], mapState->GetMapId());
+        PSendSysMessage(LANG_NO_POOL_FOR_MAP, mapState->GetMapEntry()->name, mapState->GetMapId());
         SetSentErrorMessage(false);
         return false;
     }
@@ -4420,7 +4420,7 @@ bool ChatHandler::HandlePoolListCommand(char* args)
     }
 
     if (counter == 0)
-        PSendSysMessage(LANG_NO_POOL_FOR_MAP, mapState->GetMapEntry()->name[GetSessionDbcLocale()], mapState->GetMapId());
+        PSendSysMessage(LANG_NO_POOL_FOR_MAP, mapState->GetMapEntry()->name, mapState->GetMapId());
 
     return true;
 }
@@ -4456,7 +4456,7 @@ bool ChatHandler::HandlePoolSpawnsCommand(char* args)
     uint32 pool_id = 0;
     if (!ExtractUint32KeyFromLink(&args, "Hpool", pool_id) && !mapState->GetMapEntry()->Instanceable())
     {
-        PSendSysMessage(LANG_POOL_SPAWNS_NON_INSTANCE, mapState->GetMapEntry()->name[GetSessionDbcLocale()], mapState->GetMapId());
+        PSendSysMessage(LANG_POOL_SPAWNS_NON_INSTANCE, mapState->GetMapEntry()->name, mapState->GetMapId());
         SetSentErrorMessage(false);
         return false;
     }
