@@ -50,6 +50,85 @@ REPLACE INTO `gameobject_template` (`entry`, `patch`, `type`, `displayId`, `name
 
 REPLACE INTO `gameobject_template` (`entry`, `patch`, `type`, `displayId`, `name`, `faction`, `flags`, `size`, `data0`, `data1`, `data2`, `data3`, `data4`, `data5`, `data6`, `data7`, `data8`, `data9`, `data10`, `data11`, `data12`, `data13`, `data14`, `data15`, `data16`, `data17`, `data18`, `data19`, `data20`, `data21`, `data22`, `data23`, `mingold`, `maxgold`, `script_name`) VALUES (1000043, 0, 5, 699, 'Bush Wntersbite', 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
 
+-- Old "unused" quests: 
+
+replace into quest_template (entry, minlevel, questlevel, requiredraces, title, details, objectives, offerrewardtext, requestitemstext, prevquestid, nextquestid, rewitemid1, reqcreatureorgoid1, reqcreatureorgocount1, rewmoneymaxlevel, zoneorsort, rewitemcount1, reqitemid1, reqitemcount1) values
+(807, 4, 4, 0, 'Scorched Hearts', 
+'My scouts report that some of the Durotar wildlife have become infected with a demonic taint. They were seen to the north and west.\n\nThey wander among their brethren as normal beasts, but evil powers flow through them, and burning within each one is a heart scorched by black magic.\n\nThese beasts must be destroyed!\n\nIf you find such an animal while you explore Durotar, kill it and collect its Scorched Heart. Bring the hearts to me and I will have them studied, then destroyed.',
+'Bring 5 Scorched Hearts to Orgnil Soulscar in Razor Hill.',
+'These beasts must be destroyed!',
+'Bring the hearts to me and I will have them studied, then destroyed.',
+ 0, -- PrevQuestId
+ 0, -- NextQuestId
+ 0, 0, 0, 1100, 14, 1,
+ 4868 -- Required Item
+ 5     -- Amount);
+-- Todo: [Deprecated Scorched Hearte] rename and add to the loot tables.
+replace into creature_questrelation (id, quest)    values (3142, 807); 
+replace into creature_involvedrelation (id, quest) values (3142, 807);
+
+replace into quest_template (entry, minlevel, questlevel, requiredraces, title, details, objectives, offerrewardtext, requestitemstext, prevquestid, nextquestid, rewitemid1, reqcreatureorgoid1, reqcreatureorgocount1, rewmoneymaxlevel, zoneorsort, rewitemcount1, reqitemid1, reqitemcount1) values
+(810, 4, 5, 0, 'Small Scorpid Carapaces', 
+'You would do well to learn how dangerous this land can be, $c.\n\nThe wildlife here can teach us such things... if we are wise and observant.\n\nThe scorpids are a perfect example of survival in Durotar. If you are to survive, it would be wise to take on some of their characteristics as your own. Their hardened carapaces can protect you from the harshness of the sun, or even a deadly weapon.\n\nBring me 6 Small Scorpid Carapaces from the Clattering Scorpids, <name>, and I shall see about rewarding you justly.',
+'Bring 6 Small Scorpid Carapaces to Kor\'ghan in Sen\'jin Village.',
+'Bring me 6 Small Scorpid Carapaces from the Clattering Scorpids, $n, and I shall see about rewarding you justly.',
+'You got the capacies',
+ 0, -- PrevQuestId
+ 811, -- NextQuestId
+ 0, 0, 0, 450, 14, 1,
+ 19937 -- Required Item
+ 6     -- Amount);
+-- Todo: [Small Scorpid Carapace] item and add it to the loot.
+replace into creature_questrelation (id, quest)    values (3189, 810); 
+replace into creature_involvedrelation (id, quest) values (3189, 810);
+
+replace into quest_template (entry, minlevel, questlevel, requiredraces, title, details, objectives, offerrewardtext, requestitemstext, prevquestid, nextquestid, rewitemid1, reqcreatureorgoid1, reqcreatureorgocount1, rewmoneymaxlevel, zoneorsort, rewitemcount1, reqitemid1, reqitemcount1) values
+(811, 4, 5, 0, 'Large Scorpid Carapaces', 
+'One of the other traits of the scorpids is their fierce loyalty. They will protect one another if they are in danger--you\'ve probably already seen this behavior in your first scorpid hunt.\n\nYou would do well to heed that lesson and adapt it for yourself: we are stronger as one; we are weak when we are divided into many.\n\nBring me 8 Large Scorpid Carapaces from the Armored Scorpids and I shall reward you for learning this wisdom.',
+'Bring 8 Large Scorpid Carapaces to Kor\'ghan in Sen\'jin Village.',
+'Bring me 8 Large Scorpid Carapaces from the Armored Scorpids and I shall reward you for learning this wisdom.',
+'You got the capacies?',
+ 810, -- PrevQuestId
+ 0, -- NextQuestId
+ 0, 0, 0, 450, 14, 1,
+ 19937 -- Required Item
+ 6     -- Amount);
+-- Todo: [Large Scorpid Carapace] item and add it to the loot.
+replace into creature_questrelation (id, quest)    values (3189, 811); 
+replace into creature_involvedrelation (id, quest) values (3189, 811);
+
+replace into quest_template (entry, minlevel, questlevel, requiredraces, title, details, objectives, offerrewardtext, requestitemstext, prevquestid, nextquestid, rewitemid1, reqcreatureorgoid1, reqcreatureorgocount1, rewmoneymaxlevel, zoneorsort, rewitemcount1, reqitemid1, reqitemcount1) values
+(814, 4, 6, 0, 'Chunks of Boar Meat', 
+'Cook and clean--that\'s all I do!\n\nYou want to eat, you get me some more meat! I don\'t have all day to hunt and prepare food for all these louses. You got to learn to pull your own weight around here if you wanna be treated equal.\n\nGet me some Chunks of Boar Meat if you want to make yourself useful... or you don\'t want to starve to death.',
+'Bring 10 Chunks of Boar Meat to Cook Torka in Razor Hill.',
+'Get me some Chunks of Boar Meat if you want to make yourself useful...',
+'You want to eat, you get me some more meat!',
+ 0, -- PrevQuestId
+ 0, -- NextQuestId
+ 0, 0, 0, 540, 14, 1,
+ 769 -- Required Item
+ 10  -- Amount);
+replace into creature_questrelation (id, quest)    values (3191, 814); 
+replace into creature_involvedrelation (id, quest) values (3191, 814);
+
+replace into quest_template (entry, minlevel, questlevel, requiredraces, title, details, objectives, offerrewardtext, requestitemstext, prevquestid, nextquestid, rewitemid1, reqcreatureorgoid1, reqcreatureorgocount1, rewmoneymaxlevel, zoneorsort, rewitemcount1, reqitemid1, reqitemcount1) values
+(814, 4, 6, 0, 'Chunks of Boar Meat', 
+'Truly a spirit of strength resides in your body--or maybe it was only luck, yes?\n\nThat is what the young rely on these days: luck... and the generosity of those more powerful than they. Not many take the time to find their own path. It\'s always begging for help... always the reward, and never the quest. I\'m sure you\'ll be the same.\n\nBut there is hope. I need one other thing for my potion, <name>: 8 shimmerweed herbs. They can be found in Thunder Ridge to the northwest of Razor Hill.
+',
+'Bring 8 Shimmerweed to Master Vornal in Sen\'jin Village..',
+'Get me some Chunks of Boar Meat if you want to make yourself useful...',
+'You want to eat, you get me some more meat!',
+ 0, -- PrevQuestId
+ 0, -- NextQuestId
+ 0, 0, 0, 780, 14, 1,
+ 2676 -- Required Item
+ 8  -- Amount);
+-- Todo: [Shimmerweed] should drop at Thunder Ridge to the northwest of Razor Hill.
+replace into creature_questrelation (id, quest)    values (3304, 820); 
+replace into creature_involvedrelation (id, quest) values (3304, 820);
+
+
+
 
 
 -- End of migration.
