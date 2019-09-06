@@ -61,8 +61,9 @@ replace into quest_template (entry, minlevel, questlevel, requiredraces, title, 
  0, -- PrevQuestId
  0, -- NextQuestId
  0, 0, 0, 1100, 14, 1,
- 4868 -- Required Item
- 5     -- Amount);
+ 4868, -- Required Item
+ 5     -- Amount
+ );
 -- Todo: [Deprecated Scorched Hearte] rename and add to the loot tables.
 replace into creature_questrelation (id, quest)    values (3142, 807); 
 replace into creature_involvedrelation (id, quest) values (3142, 807);
@@ -76,8 +77,9 @@ replace into quest_template (entry, minlevel, questlevel, requiredraces, title, 
  0, -- PrevQuestId
  811, -- NextQuestId
  0, 0, 0, 450, 14, 1,
- 19937 -- Required Item
- 6     -- Amount);
+ 19937, -- Required Item
+ 6     -- Amount
+ );
 -- Todo: [Small Scorpid Carapace] item and add it to the loot.
 replace into creature_questrelation (id, quest)    values (3189, 810); 
 replace into creature_involvedrelation (id, quest) values (3189, 810);
@@ -91,8 +93,9 @@ replace into quest_template (entry, minlevel, questlevel, requiredraces, title, 
  810, -- PrevQuestId
  0, -- NextQuestId
  0, 0, 0, 450, 14, 1,
- 19937 -- Required Item
- 6     -- Amount);
+ 19937, -- Required Item
+ 6     -- Amount
+ );
 -- Todo: [Large Scorpid Carapace] item and add it to the loot.
 replace into creature_questrelation (id, quest)    values (3189, 811); 
 replace into creature_involvedrelation (id, quest) values (3189, 811);
@@ -106,8 +109,9 @@ replace into quest_template (entry, minlevel, questlevel, requiredraces, title, 
  0, -- PrevQuestId
  0, -- NextQuestId
  0, 0, 0, 540, 14, 1,
- 769 -- Required Item
- 10  -- Amount);
+ 769, -- Required Item
+ 10  -- Amount
+ );
 replace into creature_questrelation (id, quest)    values (3191, 814); 
 replace into creature_involvedrelation (id, quest) values (3191, 814);
 
@@ -121,14 +125,12 @@ replace into quest_template (entry, minlevel, questlevel, requiredraces, title, 
  0, -- PrevQuestId
  0, -- NextQuestId
  0, 0, 0, 780, 14, 1,
- 2676 -- Required Item
- 8  -- Amount);
+ 2676, -- Required Item
+ 8  -- Amount
+ );
 -- Todo: [Shimmerweed] should drop at Thunder Ridge to the northwest of Razor Hill.
 replace into creature_questrelation (id, quest)    values (3304, 820); 
 replace into creature_involvedrelation (id, quest) values (3304, 820);
-
-
-
 
 
 -- End of migration.
