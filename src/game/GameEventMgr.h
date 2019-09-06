@@ -128,6 +128,10 @@ class GameEventMgr
 
         GameEventCreatureData const* GetCreatureUpdateDataForActiveEvent(uint32 lowguid) const;       
         HardcodedEventList mGameEventHardcodedList;
+
+		template<typename RequestedEventType>
+		RequestedEventType* GetHardcodedEvent();
+
         void LoadHardcodedEvents(HardcodedEventList& eventList);
     private:
         bool m_IsSilithusEventCompleted;
@@ -166,6 +170,20 @@ class GameEventMgr
         ActiveEvents m_ActiveEvents;
         bool m_IsGameEventsInit;
 };
+
+template<typename RequestedEventType>
+RequestedEventType* GameEventMgr::GetHardcodedEvent()
+{
+	for (WorldEvent* event : mGameEventHardcodedList)
+	{
+		if (RequestedEventType* TargetType = dynamic_cast<RequestedEventType*>(event))
+		{
+			return TargetType;
+		}
+	}
+
+	return nullptr;
+}
 
 #define sGameEventMgr MaNGOS::Singleton<GameEventMgr>::Instance()
 

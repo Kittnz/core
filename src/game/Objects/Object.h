@@ -924,6 +924,11 @@ m_obj->m_updateTracker.Reset();
         uint32 GetCreatureSummonLimit() const { return m_creatureSummonLimit; }
         void SetCreatureSummonLimit(uint32 limit);
 
+		inline void SetExclusiveVisibleFor(WorldObject* visibleFor)
+		{
+			ExclusiveVisibleGuid = visibleFor->GetObjectGuid();
+		}
+
     protected:
         explicit WorldObject();
 
@@ -947,6 +952,8 @@ m_obj->m_updateTracker.Reset();
         WorldUpdateCounter m_updateTracker;
         
         float m_lootAndXPRangeModifier;
+
+		ObjectGuid ExclusiveVisibleGuid;
 
         uint32 m_creatureSummonCount;   // Current summon count
         uint32 m_creatureSummonLimit;   // Hard limit on creature summons

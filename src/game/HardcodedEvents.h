@@ -369,3 +369,96 @@ private:
     void DisableAndStopEvent(uint16 event_id);
     void UpdateHiveColossusEvents();
 };
+
+struct MiracleRaceEvent;
+struct RaceSubEvent;
+struct RaceCheckpoint
+{
+	uint32 Id;
+	Position pos;
+	Position camPos;
+};
+struct RacePlayer
+{
+	RacePlayer(Player* racer, RaceSubEvent* InEvent);
+	~RacePlayer();
+
+	ObjectGuid guid;
+	ObjectGuid carGuid;
+	ObjectGuid checkpointEffectGuid;
+	Map* map = nullptr; // might be dangerous
+	RaceSubEvent* raceEvent = nullptr;
+
+	WorldLocation savedPlPos;
+	RaceCheckpoint nextCheckpoint;
+
+	bool bIsRaceMode = false;
+
+	void GoRaceMode();
+	void LeaveRaceMode();
+	void Update(uint32 deltaTime);
+private:
+	void IncrementCheckpoint(Player* pl);
+};
+
+struct RaceSubEvent
+{
+	RaceSubEvent(uint32 InRaceId, const std::list<Player*>& InRaces, MiracleRaceEvent* InEvent);
+
+	uint32 raceId;
+	std::vector<RacePlayer> racers;
+
+	enum class State
+	{
+		None,
+		WarmUp, // 15 sec.
+		Race
+	};
+	State state;
+
+	void Start();
+	void Update(uint32 deltaTime);
+	void End();
+
+	void OnFinishedRace(RacePlayer& param1);
+
+	inline const RaceCheckpoint& GetCheckpoint(size_t index) const
+	{
+		return checkpoints[index];
+	}
+
+	inline bool IsValidCheckpoint(size_t index) const
+	{
+		return checkpoints.size() > index;
+	}
+
+private:
+	// we need cached version, because we allow editing race checkpoints in-game
+	std::vector<RaceCheckpoint> checkpoints;
+	MiracleRaceEvent* pEvent;
+
+	std::list<std::string> leaderboard;
+};
+
+
+
+struct MiracleRaceEvent : WorldEvent
+{
+	MiracleRaceEvent();
+
+	bool InitializeRace(uint32 raceId);
+
+	void StartTestRace(uint32 raceId, Player* racer);
+
+	virtual void Update() override;
+	virtual uint32 GetNextUpdateDelay() override;
+
+	std::map<uint32, std::vector<RaceCheckpoint>> racesCheckpoints;
+	std::list<std::shared_ptr<RaceSubEvent>> races;
+
+	virtual void Disable() override;
+
+private:
+
+	uint32 lastTime = 0;
+};

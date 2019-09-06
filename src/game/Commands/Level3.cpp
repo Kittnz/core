@@ -60,6 +60,7 @@
 #include "Anticheat.h"
 #include "AsyncCommandHandlers.h"
 #include "TemporarySummon.h"
+#include "HardcodedEvents.h"
 
 bool ChatHandler::HandleReloadAllCommand(char* /*args*/)
 {
@@ -8412,6 +8413,7 @@ bool ChatHandler::HandleReloadCustomMountEntries(char *args)
 
 bool ChatHandler::HandleRaceTest(char *args)
 {
+#if 0
 	// Spawn goblin in front of us
 	// grab our camera and attach to him
 	// Make goblin always move forward
@@ -8483,7 +8485,18 @@ bool ChatHandler::HandleRaceTest(char *args)
 			return true;
 		}
 	}
+#endif
+	if (WorldSession* PlayerSession = GetSession())
+	{
+		if (Player* pl = PlayerSession->GetPlayer())
+		{
+			if (MiracleRaceEvent* event = sGameEventMgr.GetHardcodedEvent<MiracleRaceEvent>())
+			{
+				event->StartTestRace(1, pl);
+			}
+		}
+	}
 
 
-	return false;
+	return true;
 }

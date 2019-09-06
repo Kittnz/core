@@ -1005,6 +1005,17 @@ bool GameObject::isVisibleForInState(Player const* u, WorldObject const* viewPoi
     if (IsTransport() && IsInMap(u))
         return true;
 
+	// Check for exclusive visibility settings
+	if (!ExclusiveVisibleGuid.IsEmpty())
+	{
+		if (u->GetObjectGuid() == ExclusiveVisibleGuid)
+		{
+			return true;
+		}
+
+		return false;
+	}
+
     // quick check visibility false cases for non-GM-mode
     if (!u->IsGameMaster())
     {

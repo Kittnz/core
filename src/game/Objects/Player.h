@@ -2549,6 +2549,15 @@ class MANGOS_DLL_SPEC Player final: public Unit
         void SerializeSpells(OP& buf);
         template <typename OP>
         void SerializeSpellCooldowns(OP& buf);
+
+		// Giperion TURTLE SPECIFIC Begin
+		public:
+			//Giperion Elysium: Send message to upper place of player screen, even if he not in raid. Useful for scripts/events
+			void SendRaidWarning(uint32 textId);
+			void SendRaidWarning(const std::string& text);
+			void SendRaidWarning(const char* text);
+
+		// Giperion TURTLE SPECIFIC End
 };
 
 void AddItemsSetItem(Player*player,Item* item);

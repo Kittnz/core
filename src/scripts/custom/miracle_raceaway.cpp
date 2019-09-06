@@ -95,9 +95,7 @@ struct npc_race_car : public ScriptedAI
 {
 	npc_race_car(Creature* InCreature)
 		: ScriptedAI(InCreature)
-	{
-
-	}
+	{}
 
 	virtual void UpdateAI(const uint32 delta) override
 	{
@@ -117,10 +115,8 @@ struct npc_race_car : public ScriptedAI
 
 	virtual void Reset() override
 	{
-		playerLookVector = G3D::Vector3();
 	}
 
-	G3D::Vector3 playerLookVector;
 	ObjectGuid PlayerControllerGuid;
 
 	virtual void InformGuid(const ObjectGuid guid, uint32 = 0) override
@@ -130,6 +126,35 @@ struct npc_race_car : public ScriptedAI
 
 };
 
+struct MiracleRaceTestRound : public QuestInstance
+{
+	MiracleRaceTestRound(ObjectGuid player)
+		: QuestInstance(player, 9500)
+	{}
+
+	virtual void OnQuestStarted() override
+	{
+		// Check for event
+		
+		// Move player to specific vis layer
+
+		// Initialize race
+	}
+
+	virtual void OnQuestCanceled() override
+	{
+		// move to global vis layer
+		
+		// despawn car, return control to main player pawn
+	}
+
+	virtual void OnQuestFinished() override
+	{
+	}
+
+};
+
+
 GameObjectAI* GetAI_go_speed_up(GameObject* gameobject)
 {
     return new go_speed_up(gameobject);
@@ -138,6 +163,11 @@ GameObjectAI* GetAI_go_speed_up(GameObject* gameobject)
 CreatureAI* GetAI_npc_race_car(Creature* creature)
 {
 	return new npc_race_car(creature);
+}
+
+QuestInstance* GetQuest_MiracleRaceTest(ObjectGuid PlayerGuid)
+{
+	return new MiracleRaceTestRound(PlayerGuid);
 }
 
 void AddSC_miracle_raceaway()
@@ -158,6 +188,11 @@ void AddSC_miracle_raceaway()
 	newscript = new Script;
 	newscript->Name = "npc_race_car";
 	newscript->GetAI = GetAI_npc_race_car;
+	newscript->RegisterSelf();
+
+	newscript = new Script;
+	newscript->Name = "quest_miracle_race_test_round";
+	newscript->GetQuestInstance = GetQuest_MiracleRaceTest;
 	newscript->RegisterSelf();
 
     //newscript = new Script;

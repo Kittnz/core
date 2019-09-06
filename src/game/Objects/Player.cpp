@@ -21539,3 +21539,26 @@ bool Player::IsIgnoringTitles() { return isIgnoringTitles; }
 void Player::SetIgnoringTitles(bool shouldIgnore) { isIgnoringTitles = shouldIgnore; }
 
 bool Player::IsScarletCrusade() { return HasItemWithIdEquipped(50440); }
+
+void Player::SendRaidWarning(const std::string& text)
+{
+	SendRaidWarning(text.c_str());
+}
+
+void Player::SendRaidWarning(uint32 textId)
+{
+	if (WorldSession* Sess = GetSession())
+	{
+		SendRaidWarning(Sess->GetMangosString(textId));
+	}
+}
+
+void Player::SendRaidWarning(const char* text)
+{
+	WorldPacket data;
+	if (WorldSession* Sess = GetSession())
+	{
+		ChatHandler::BuildChatPacket(data, CHAT_MSG_RAID_WARNING, text, LANG_UNIVERSAL);
+		Sess->SendPacket(&data);
+	}
+}

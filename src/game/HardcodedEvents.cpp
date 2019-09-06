@@ -18,6 +18,9 @@
  * Elemental Invasion
  */
 
+#define MIRACLERACEEVENT_ID 161
+
+
 void ElementalInvasion::Update()
 {
     auto stageFire = sObjectMgr.GetSavedVariable(VAR_FIRE, 0);
@@ -1631,22 +1634,337 @@ void WarEffortEvent::UpdateHiveColossusEvents()
     }
 }
 
+
+MiracleRaceEvent::MiracleRaceEvent()
+	: WorldEvent(MIRACLERACEEVENT_ID)
+{}
+
+bool MiracleRaceEvent::InitializeRace(uint32 raceId)
+{
+	if (racesCheckpoints.find(raceId) != racesCheckpoints.end())
+	{
+		// already initialized
+		return true;
+	}
+
+	QueryResult* raceData = WorldDatabase.PQuery("SELECT `id`, `PositionX`, `PositionY`, `PositionZ`, `CameraPosX`, `CameraPosY`, `CameraPosZ`, `CameraPosOrientation`"
+		"FROM miraclerace_checkpoint where raceID = '%u'", raceId);
+
+	if (raceData == nullptr)
+	{
+		sLog.outError("Can't initialize race data for id %u", raceId);
+		return false;
+	}
+
+	Field* fields = raceData->Fetch();
+	std::vector<RaceCheckpoint>& raceCheckpoints = racesCheckpoints[raceId];
+
+	do 
+	{
+		uint32 id = fields[0].GetUInt32();
+		float PosX = fields[1].GetFloat();
+		float PosY = fields[2].GetFloat();
+		float PosZ = fields[3].GetFloat();
+		float CameraPosX = fields[4].GetFloat();
+		float CameraPosY = fields[5].GetFloat();
+		float CameraPosZ = fields[6].GetFloat();
+		float CameraPosOrientation = fields[7].GetFloat();
+		Position Pos(PosX, PosY, PosZ, 0.0f);
+		Position CameraPos(CameraPosX, CameraPosY, CameraPosZ, CameraPosOrientation);
+
+		raceCheckpoints.emplace_back(RaceCheckpoint{ id , Pos, CameraPos});
+	} while (raceData->NextRow());
+
+	delete raceData;
+	return true;
+}
+
+void MiracleRaceEvent::StartTestRace(uint32 raceId, Player* racer)
+{
+	if (racer != nullptr && InitializeRace(raceId))
+	{
+		std::list<Player*> racers;
+		racers.push_back(racer);
+		std::shared_ptr<RaceSubEvent> raceSubEvent = std::make_shared<RaceSubEvent>(raceId, racers, this);
+		races.push_back(raceSubEvent);
+		raceSubEvent->Start();
+	}
+}
+
+void MiracleRaceEvent::Update()
+{
+	WorldEvent::Update();
+
+	uint32 newTime = WorldTimer::getMSTime();
+	uint32 deltaTime = newTime - lastTime;
+
+	lastTime = newTime;
+	for (std::shared_ptr<RaceSubEvent>& race : races)
+	{
+		race->Update(deltaTime);
+	}
+}
+
+uint32 MiracleRaceEvent::GetNextUpdateDelay()
+{
+	return 1;
+}
+
+void MiracleRaceEvent::Disable()
+{
+	for (std::shared_ptr<RaceSubEvent>& race : races)
+	{
+		race->End();
+	}
+	WorldEvent::Disable();
+}
+
+RaceSubEvent::RaceSubEvent(uint32 InRaceId, const std::list<Player*>& InRaces, MiracleRaceEvent* InEvent)
+	: raceId(InRaceId), pEvent(InEvent)
+{
+	racers.reserve(InRaces.size());
+
+	for (Player* racer : InRaces)
+	{
+		racers.emplace_back(RacePlayer(racer, this));
+	}
+}
+
+void RaceSubEvent::Start()
+{
+	// START THE GODDAMN RACE
+	
+	// 1. Cache race data
+	checkpoints = pEvent->racesCheckpoints[raceId];
+
+	state = State::WarmUp;
+	
+	// 2. Transit player to race form
+
+	for (RacePlayer& player : racers)
+	{
+		player.GoRaceMode();
+	}
+}
+
+void RaceSubEvent::Update(uint32 deltaTime)
+{
+	for (RacePlayer& player : racers)
+	{
+		player.Update(deltaTime);
+	}
+}
+
+void RaceSubEvent::End()
+{
+	for (RacePlayer& player : racers)
+	{
+		player.LeaveRaceMode();
+	}
+}
+
+void RaceSubEvent::OnFinishedRace(RacePlayer& player)
+{
+	if (Player* pl = player.map->GetPlayer(player.guid))
+	{
+		// write to leaderboards
+		leaderboard.push_back(pl->GetName());
+		size_t place = leaderboard.size();
+
+
+		switch (place)
+		{
+		case 1:
+		{
+			std::string msg = "YOU ARE BREATHTAKING!";
+			pl->SendRaidWarning(msg);
+		}
+		break;
+		case 2:
+		{
+			std::string msg = "You almost did it!";
+			pl->SendRaidWarning(msg);
+		}
+		break;
+		case 3:
+		{
+			std::string msg = "Not bad!";
+			pl->SendRaidWarning(msg);
+		}
+		break;
+		default:
+		{
+			std::stringstream iss;
+			iss << "You came at " << place << " place!";
+			pl->SendRaidWarning(iss.str());
+		}
+			break;
+		}
+	}
+}
+
+RacePlayer::RacePlayer(Player* racer, RaceSubEvent* InEvent)
+	: guid(racer->GetObjectGuid()), map(racer->FindMap()), raceEvent(InEvent)
+{}
+
+RacePlayer::~RacePlayer()
+{
+	LeaveRaceMode();
+}
+
+#define INVISIBLE_MODELID 13069
+#define GOBLINCAR_CREATURE_ENTRY 17999
+#define CHECKPOINT_EFFECT_GOBJECT 1000039
+
+void RacePlayer::GoRaceMode()
+{
+	if (map == nullptr) return;
+	if (!bIsRaceMode)
+	{
+		if (Player* pl = map->GetPlayer(guid))
+		{
+			if (!pl->IsInWorld()) return;
+			// read first point
+			const RaceCheckpoint& startPoint = raceEvent->GetCheckpoint(0);
+
+			pl->GetPosition(savedPlPos);
+
+			Creature* raceCar = pl->SummonCreature(GOBLINCAR_CREATURE_ENTRY,
+				startPoint.pos.x,
+				startPoint.pos.y,
+				startPoint.pos.z,
+				startPoint.pos.o,
+				TEMPSUMMON_DEAD_DESPAWN,
+				10 * MINUTE);
+			carGuid = raceCar->GetObjectGuid();
+			raceCar->AI()->InformGuid(pl->GetObjectGuid());
+
+			// rotate car to next point
+			const RaceCheckpoint& nextPoint = raceEvent->GetCheckpoint(1);
+			nextCheckpoint = nextPoint;
+
+			G3D::Vector2 dir = (G3D::Vector2(nextCheckpoint.pos.x, nextCheckpoint.pos.y) - G3D::Vector2(startPoint.pos.x, startPoint.pos.y));
+
+			float ang = atan2(dir.y, dir.x);
+			ang = (ang >= 0) ? ang : 2 * M_PI_F + ang;
+			raceCar->SetOrientation(ang);
+
+			pl->SetDisplayId(INVISIBLE_MODELID);
+
+			pl->SetFly(true);
+			pl->TeleportTo(map->GetId(), startPoint.camPos.x, startPoint.camPos.y, startPoint.camPos.z, startPoint.camPos.o, 0, [this]()
+			{
+				LeaveRaceMode();
+			});
+			pl->SetFly(true);
+
+			// spawn initial checkpoint effect
+			GameObject* checkPointEffect = pl->SummonGameObject(CHECKPOINT_EFFECT_GOBJECT, nextCheckpoint.pos.x, nextCheckpoint.pos.y, nextCheckpoint.pos.z, nextCheckpoint.pos.o, 0.0f, 0.0f, 0.0f, 0.0f, 300 * 1000);
+			checkpointEffectGuid = checkPointEffect->GetObjectGuid();
+
+			checkPointEffect->SetExclusiveVisibleFor(pl);
+
+			bIsRaceMode = true;
+		}
+	}
+}
+
+void RacePlayer::LeaveRaceMode()
+{
+	if (map == nullptr) return;
+
+	if (bIsRaceMode)
+	{
+		if (Player* pl = map->GetPlayer(guid))
+		{
+			pl->SetDisplayId(pl->GetNativeDisplayId());
+			pl->SetFly(false);
+			pl->TeleportTo(savedPlPos);
+			pl->SetFly(false);
+
+			if (GameObject* checkpointEffect = map->GetGameObject(checkpointEffectGuid))
+			{
+				pl->RemoveGameObject(checkpointEffect, true);
+			}
+		}
+
+		if (Creature* raceCar = map->GetAnyTypeCreature(carGuid))
+		{
+			((TemporarySummon*)raceCar)->UnSummon();
+		}
+
+
+
+		bIsRaceMode = false;
+	}
+}
+
+
+void RacePlayer::Update(uint32 deltaTime)
+{
+	// check if we meet next checkpoint
+	if (Player* pl = map->GetPlayer(guid))
+	{
+		constexpr float AllowedDist = 30.0f * 30.0f;
+
+		if (Creature* raceCar = map->GetAnyTypeCreature(carGuid))
+		{
+			float DistToCheckpoint = raceCar->GetDistanceSqr(nextCheckpoint.pos.x, nextCheckpoint.pos.y, nextCheckpoint.pos.z);
+			if (DistToCheckpoint < AllowedDist)
+			{
+				// we reach checkpoint!
+
+				IncrementCheckpoint(pl);
+			}
+		}
+		else
+		{
+			LeaveRaceMode();
+		}
+	}
+	else
+	{
+		LeaveRaceMode();
+	}
+
+
+}
+
+void RacePlayer::IncrementCheckpoint(Player* pl)
+{
+	if (raceEvent->IsValidCheckpoint(nextCheckpoint.Id + 1))
+	{
+		// teleport to current cam pos
+		pl->TeleportTo(map->GetId(), nextCheckpoint.camPos.x, nextCheckpoint.camPos.y, nextCheckpoint.camPos.z, nextCheckpoint.camPos.o, 0, [this]()
+		{
+			LeaveRaceMode();
+		});
+
+		nextCheckpoint = raceEvent->GetCheckpoint(nextCheckpoint.Id + 1);
+	}
+	else
+	{
+		// we reach end of the track, yay!
+		raceEvent->OnFinishedRace(*this);
+		LeaveRaceMode();
+	}
+}
+
 /*
 *
 */
 
 void GameEventMgr::LoadHardcodedEvents(HardcodedEventList& eventList)
 {
-    auto invasion = new ElementalInvasion();
-    auto leprithus = new Leprithus();
-    auto moonbrook = new Moonbrook();
-    auto nightmare = new DragonsOfNightmare();
-    auto darkmoon = new DarkmoonFaire();
-    auto lunarfw = new LunarFestivalFirework();
-    auto silithusWarEffortBattle = new SilithusWarEffortBattle();
-    auto scourge_invasion = new ScourgeInvasionEvent();
-    auto war_effort = new WarEffortEvent();
-    eventList = { invasion, leprithus, moonbrook, nightmare, darkmoon, lunarfw, silithusWarEffortBattle, scourge_invasion, war_effort };
+	auto invasion = new ElementalInvasion();
+	auto leprithus = new Leprithus();
+	auto moonbrook = new Moonbrook();
+	auto nightmare = new DragonsOfNightmare();
+	auto darkmoon = new DarkmoonFaire();
+	auto lunarfw = new LunarFestivalFirework();
+	auto silithusWarEffortBattle = new SilithusWarEffortBattle();
+	auto scourge_invasion = new ScourgeInvasionEvent();
+	auto war_effort = new WarEffortEvent();
+	auto miracleRaceEvent = new MiracleRaceEvent();
+	eventList = { invasion, leprithus, moonbrook, nightmare, darkmoon, lunarfw, silithusWarEffortBattle, scourge_invasion, war_effort, miracleRaceEvent };
 }
-
-
