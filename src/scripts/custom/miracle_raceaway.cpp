@@ -1,4 +1,5 @@
 #include "scriptPCH.h"
+#include "HardcodedEvents.h"
 #include <array>
 
 // Spells:
@@ -16,6 +17,8 @@
 #define GNOME_CAMERA_KEY   5916
 #define GOBLIN_CAMERA_KEY  5937
 
+#define ALREADY_REGISTERED_TXTID 50212
+
 bool GossipHello_npc_daisy(Player* p_Player, Creature* p_Creature)
 {
     p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I'll join Goblin's Team.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
@@ -28,18 +31,49 @@ bool GossipSelect_npc_daisy(Player* p_Player, Creature* p_Creature, uint32 /*uiS
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
+#if 0
         p_Player->TeleportTo(1, -6168.598145F, -3907.561523F, -60.108891F + 1.5f, 3.0f);
         p_Player->SetDisplayId(15435); // Hiding player, else they'll be sitting on a spinning wheel.
         p_Player->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, 10318);
         p_Creature->MonsterSay("Dicks out for Goblins!", 0, 0);
+#endif
+		// register new goblin player
+		MiracleRaceEvent* miracleEvent = sGameEventMgr.GetHardcodedEvent<MiracleRaceEvent>();
+		if (miracleEvent != nullptr)
+		{
+			if (!miracleEvent->queueSystem().isPlayerQueuedAlready(p_Player->GetObjectGuid()))
+			{
+				miracleEvent->queueSystem().QueuePlayer(p_Player, MiracleRaceSide::Goblin);
+			}
+			else
+			{
+				p_Creature->MonsterWhisper(ALREADY_REGISTERED_TXTID, p_Player);
+			}
+		}
     }
 
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
     {
+#if 0
         p_Player->TeleportTo(1, -6168.643555F, -3897.561523F, -60.092022F + 1.5f, 3.0f);
         p_Player->SetDisplayId(15435); // Hiding player, else they'll be sitting on a spinning wheel.
         p_Player->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, 2490);
         p_Creature->MonsterSay("Dicks out for Gnomes!", 0, 0);
+#endif
+		// register new gnome player
+		MiracleRaceEvent* miracleEvent = sGameEventMgr.GetHardcodedEvent<MiracleRaceEvent>();
+		if (miracleEvent != nullptr)
+		{
+			if (!miracleEvent->queueSystem().isPlayerQueuedAlready(p_Player->GetObjectGuid()))
+			{
+				miracleEvent->queueSystem().QueuePlayer(p_Player, MiracleRaceSide::Gnome);
+			}
+			else
+			{
+				p_Creature->MonsterWhisper(ALREADY_REGISTERED_TXTID, p_Player);
+			}
+		}
+
     }
     p_Player->CLOSE_GOSSIP_MENU();
     return true;
@@ -154,6 +188,17 @@ struct MiracleRaceTestRound : public QuestInstance
 
 };
 
+bool ItemUse_Miracle_AcceptInvite(Player* player, Item* item, SpellCastTargets const& target)
+{
+	MiracleRaceEvent* miracleEvent = sGameEventMgr.GetHardcodedEvent<MiracleRaceEvent>();
+	if (miracleEvent != nullptr)
+	{
+		miracleEvent->queueSystem().PlayerAcceptInvite(player);
+	}
+
+	return true;
+}
+
 
 GameObjectAI* GetAI_go_speed_up(GameObject* gameobject)
 {
@@ -193,6 +238,11 @@ void AddSC_miracle_raceaway()
 	newscript = new Script;
 	newscript->Name = "quest_miracle_race_test_round";
 	newscript->GetQuestInstance = GetQuest_MiracleRaceTest;
+	newscript->RegisterSelf();
+
+	newscript = new Script;
+	newscript->Name = "item_miracle_acceptInvite";
+	newscript->pItemUse = ItemUse_Miracle_AcceptInvite;
 	newscript->RegisterSelf();
 
     //newscript = new Script;

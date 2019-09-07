@@ -1637,7 +1637,14 @@ void WarEffortEvent::UpdateHiveColossusEvents()
 
 MiracleRaceEvent::MiracleRaceEvent()
 	: WorldEvent(MIRACLERACEEVENT_ID)
-{}
+{
+	auto onInviteAcceptedWrapperLambda = [this](ObjectGuid gnomePlayer, ObjectGuid goblinPlayer)
+	{
+		onInviteAccepted(gnomePlayer, goblinPlayer);
+	};
+
+	_queueSystem.onFoundRace = onInviteAcceptedWrapperLambda;
+}
 
 bool MiracleRaceEvent::InitializeRace(uint32 raceId)
 {
@@ -1717,6 +1724,11 @@ void MiracleRaceEvent::Disable()
 		race->End();
 	}
 	WorldEvent::Disable();
+}
+
+void MiracleRaceEvent::onInviteAccepted(ObjectGuid gnomePlayer, ObjectGuid goblinPlayer)
+{
+
 }
 
 RaceSubEvent::RaceSubEvent(uint32 InRaceId, const std::list<Player*>& InRaces, MiracleRaceEvent* InEvent)
@@ -1976,4 +1988,168 @@ void GameEventMgr::LoadHardcodedEvents(HardcodedEventList& eventList)
 	auto war_effort = new WarEffortEvent();
 	auto miracleRaceEvent = new MiracleRaceEvent();
 	eventList = { invasion, leprithus, moonbrook, nightmare, darkmoon, lunarfw, silithusWarEffortBattle, scourge_invasion, war_effort, miracleRaceEvent };
+}
+
+
+void MiracleRaceQueueSystem::QueuePlayer(Player* player, MiracleRaceSide bySide)
+{
+	switch (bySide)
+	{
+	case MiracleRaceSide::Gnome:
+		gnomePlayers.emplace(player->GetObjectGuid());
+		queuedPlayers.push_back(player->GetObjectGuid());
+		break;
+	case MiracleRaceSide::Goblin:
+		goblinPlayers.emplace(player->GetObjectGuid());
+		queuedPlayers.push_back(player->GetObjectGuid());
+		break;
+	default:
+		MANGOS_ASSERT(false);
+		break;
+	}
+
+	TryStartRace();
+}
+
+bool MiracleRaceQueueSystem::isPlayerQueuedAlready(ObjectGuid playerGuid) const
+{
+	auto queuedPlayerIter = std::find(queuedPlayers.begin(), queuedPlayers.end(), playerGuid);
+	return queuedPlayerIter != queuedPlayers.end();
+}
+
+#define MAX_INVITE_TIME 45 * IN_MILLISECONDS // 45 sec
+
+void MiracleRaceQueueSystem::Update(uint32 deltaTime)
+{
+	// check for invites, we might want remove some deprecated one's
+	for (auto iter = _inviteRequests.begin(); iter != _inviteRequests.end();)
+	{
+		InviteRequest& request = *iter;
+		
+		uint32 elapsedSinceStart = WorldTimer::getMSTimeDiffToNow(request.InviteTimeStart);
+
+		if (elapsedSinceStart >= MAX_INVITE_TIME)
+		{
+			iter = _inviteRequests.erase(iter);
+			continue;
+		}
+
+		iter++;
+	}
+
+}
+
+void MiracleRaceQueueSystem::PlayerAcceptInvite(Player* player)
+{
+	if (!player->IsInWorld()) return;
+
+	// find that invite
+
+	ObjectGuid playerGuid = player->GetObjectGuid();
+
+	for (auto iter = _inviteRequests.begin(); iter != _inviteRequests.end();)
+	{
+		InviteRequest& invite = *iter;
+
+		bool bFoundPlayer = false;
+		if (invite.GnomePlayer == playerGuid)
+		{
+			invite.bPlayerAcceptInvite[0] = true;
+			bFoundPlayer = true;
+		}
+
+		if (invite.GoblinPlayer == playerGuid)
+		{
+			invite.bPlayerAcceptInvite[1] = true;
+			bFoundPlayer = true;
+		}
+
+		if (invite.bPlayerAcceptInvite[0] && invite.bPlayerAcceptInvite[1])
+		{
+			if (onFoundRace)
+			{
+				// declare hooked up manager that we found the pair
+				onFoundRace(invite.GnomePlayer, invite.GoblinPlayer);
+
+				// also, that invite is finished - remove it from list
+				iter = _inviteRequests.erase(iter);
+			}
+		}
+
+		if (bFoundPlayer)
+		{
+			break;
+		}
+
+		iter++;
+	}
+}
+
+#define RACEINVITE_TXTID 50211
+
+bool MiracleRaceQueueSystem::TryStartRace()
+{
+	// Peek live opponents for race
+	if (gnomePlayers.size() < 1 || goblinPlayers.size() < 1)
+	{
+		return false;
+	}
+
+	ObjectGuid LiveGnomePlayer;
+	ObjectGuid LiveGoblinPlayer;
+
+	auto TryGetAlivePlayerLambda = [this](MiracleRaceSide bySide) -> ObjectGuid
+	{
+		std::queue<ObjectGuid>* playerQueue = nullptr;
+		switch (bySide)
+		{
+		case MiracleRaceSide::Gnome:
+			playerQueue = &gnomePlayers;
+			break;
+		case MiracleRaceSide::Goblin:
+			playerQueue = &goblinPlayers;
+			break;
+		default:
+			MANGOS_ASSERT(false);
+			break;
+		}
+
+		ObjectGuid potentialPlayer = playerQueue->front();
+		playerQueue->pop();
+		queuedPlayers.remove(potentialPlayer);
+
+		if (sObjectMgr.GetPlayer(potentialPlayer) != nullptr)
+		{
+			// HE'S ALIVE!
+			return potentialPlayer;
+		}
+
+		return ObjectGuid(); // return nothing
+	};
+
+	LiveGnomePlayer = TryGetAlivePlayerLambda(MiracleRaceSide::Gnome);
+	LiveGoblinPlayer = TryGetAlivePlayerLambda(MiracleRaceSide::Goblin);
+
+
+	if (!LiveGnomePlayer.IsEmpty() && !LiveGoblinPlayer.IsEmpty())
+	{
+		// Register invite
+		_inviteRequests.emplace_back(InviteRequest( LiveGnomePlayer , LiveGoblinPlayer));
+		InviteRequest& newInvite = _inviteRequests.back();
+
+		// Send them invite
+		if (Player* gnomePlayer = sObjectMgr.GetPlayer(LiveGnomePlayer))
+		{
+			gnomePlayer->SendRaidWarning(RACEINVITE_TXTID);
+		}
+
+		if (Player* goblinPlayer = sObjectMgr.GetPlayer(LiveGoblinPlayer))
+		{
+			goblinPlayer->SendRaidWarning(RACEINVITE_TXTID);
+		}
+
+		return true;
+	}
+
+	return false;
 }

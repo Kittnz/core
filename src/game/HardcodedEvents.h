@@ -8,6 +8,7 @@
 #include "ObjectMgr.h"
 #include "PlayerBotAI.h"
 #include "AdvancedPlayerBotAI.h"
+#include <queue>
 
 /*
  * Elemental Invasion
@@ -440,7 +441,50 @@ private:
 	std::list<std::string> leaderboard;
 };
 
+enum class MiracleRaceSide
+{
+	Gnome,
+	Goblin
+};
 
+struct MiracleRaceQueueSystem
+{
+	void QueuePlayer(Player* player, MiracleRaceSide bySide);
+
+	bool isPlayerQueuedAlready(ObjectGuid playerGuid) const;
+
+	void Update(uint32 deltaTime);
+
+	void PlayerAcceptInvite(Player* player);
+
+	std::queue<ObjectGuid> gnomePlayers;
+	std::queue<ObjectGuid> goblinPlayers;
+
+	std::list<ObjectGuid> queuedPlayers;
+
+	std::function<void(ObjectGuid, ObjectGuid)> onFoundRace;
+
+private:
+
+	struct InviteRequest
+	{
+		InviteRequest(ObjectGuid InGnomePlayer, ObjectGuid InGoblinPlayer)
+			: GnomePlayer(InGnomePlayer), GoblinPlayer(InGoblinPlayer), InviteTimeStart(WorldTimer::getMSTime())
+		{
+			bPlayerAcceptInvite[0] = false; // Gnome accepted invite
+			bPlayerAcceptInvite[1] = false; // Goblin accepted invite
+		}
+		ObjectGuid GnomePlayer;
+		ObjectGuid GoblinPlayer;
+		uint32 InviteTimeStart;
+		bool bPlayerAcceptInvite[2];
+	};
+
+	std::list<InviteRequest> _inviteRequests;
+
+	bool TryStartRace();
+
+};
 
 struct MiracleRaceEvent : WorldEvent
 {
@@ -458,7 +502,15 @@ struct MiracleRaceEvent : WorldEvent
 
 	virtual void Disable() override;
 
+	inline MiracleRaceQueueSystem& queueSystem()
+	{
+		return _queueSystem;
+	}
+
 private:
 
+	void onInviteAccepted(ObjectGuid gnomePlayer, ObjectGuid goblinPlayer);
+
+	MiracleRaceQueueSystem _queueSystem;
 	uint32 lastTime = 0;
 };
