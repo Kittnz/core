@@ -1875,16 +1875,25 @@ void RacePlayer::LeaveRaceMode()
 
 	if (bIsRaceMode)
 	{
-		if (Player* pl = map->GetPlayer(guid))
+		Player* pl = nullptr;
+		if (pl = map->GetPlayer(guid); pl != nullptr)
 		{
 			pl->SetDisplayId(pl->GetNativeDisplayId());
 			pl->SetFly(false);
 			pl->TeleportTo(savedPlPos);
 			pl->SetFly(false);
+		}
 
-			if (GameObject* checkpointEffect = map->GetGameObject(checkpointEffectGuid))
+		if (GameObject* checkpointEffect = map->GetGameObject(checkpointEffectGuid))
+		{
+			if (pl != nullptr)
 			{
 				pl->RemoveGameObject(checkpointEffect, true);
+			}
+			else
+			{
+				checkpointEffect->SetRespawnTime(0);
+				checkpointEffect->Delete();
 			}
 		}
 

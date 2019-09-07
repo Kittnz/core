@@ -23,6 +23,7 @@ EndScriptData */
 
 #include "scriptPCH.h"
 #include "ruins_of_ahnqiraj.h"
+#include <random>
 
 enum
 {
@@ -703,7 +704,9 @@ void instance_ruins_of_ahnqiraj::SpawnNewCrystals(ObjectGuid usedCrystal)
         possibleIndexes.push_back(i);
     }
 
-    std::random_shuffle(possibleIndexes.begin(), possibleIndexes.end());
+	std::random_device rd;
+	std::mt19937 g(rd());
+    std::shuffle(possibleIndexes.begin(), possibleIndexes.end(), g);
 
     while (crystalIndexes.size() < OSSIRIAN_CRYSTAL_NUM_ACTIVE)
     {

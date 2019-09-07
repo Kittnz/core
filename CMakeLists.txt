@@ -52,6 +52,17 @@ if(BUILDING_IN_SOURCE)
   )
 endif()
 
+# Giperion: Enable C++17
+set(CMAKE_CXX_STANDARD 17)
+if(MSVC)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++17")
+endif(MSVC)
+
+# Giperion: Set Edit and Continue by default for all windows debug builds
+if(MSVC)
+	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /ZI")
+endif(MSVC)
+
 if(WIN32)
   if(NOT MSVC)
     message(FATAL_ERROR "Under Windows other compiler than Microsoft Visual Studio are not supported.")
