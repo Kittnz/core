@@ -30,8 +30,8 @@ replace into quest_template (entry, minlevel, questlevel, requiredraces, title, 
 (50310, 1, 60, 0, 'Goblin Engineering At It\'s Finest!', 
 'Ey, kid! Yes, you! I see you\'re an adventuring type and ready to jump into any frey if only there\'s one to jump into, right? Just as I thought. What? Of course there\'s a reward involved, how else could it be around here? It\'s a Mirage Raceway after all!\n\nWhat to do? Oh, that\'s so simple, I\'m sure that even a gnome would manage to test our jolly vehicle on the sustain for … errh, durability conditions! Yes! So, if you\'re ready to earn some coins and crack some scorpids flat then you\'re at the right spot, kid! What helmet? Instruction? Bah! Who needs\'em anyway?!\n\nLet\'s blast it!',
 'Ride a goblin race car to see if it survives the start at all.',
-'What helmet? Instruction? Bah! Who needs\'em anyway?!',
-'You got it, eh?',
+'Data should be gathered and then processed. Do you realize how important it is for us? Good. Now then, see to it done!',
+'Ahhh, finally! I\'ve been awaiting for this data... Many thanks, many thanks indeed.',
  0, -- PrevQuestId
  0, -- NextQuestId
  50522, 0, 0, 2400, 0, 1, 0, 0 );
@@ -43,8 +43,8 @@ replace into quest_template (entry, minlevel, questlevel, requiredraces, title, 
 (50311, 1, 60, 0, 'Mirage Raceway: Goblin\'s Team', 
 'Oh, so nice you\'re alive and back in one piece! I had no doubts in you, of course.\n\nSo you\'re ready for another run on our goblin engineering masterpiece, eh? Well then if you know the drill you better get ready and take the first place yet again!',
 'Complete the lap with best time.',
-'Don\'t swap the pedals!',
-'You got it, eh?',
+'Data should be gathered and then processed. Do you realize how important it is for us? Good. Now then, see to it done!',
+'Ahhh, finally! I\'ve been awaiting for this data... Many thanks, many thanks indeed.',
  50310, -- PrevQuestId
  0, -- NextQuestId
  0, 0, 0, 2400, 0, 0, 0, 0 );
@@ -86,6 +86,9 @@ replace into creature_involvedrelation (id, quest) values (50522, 50313);
 -- Providing Gnome Camera Key, TODO: attach item script.
 update quest_template set SrcItemId=5916, SrcItemCount=1 where entry in (50312, 50313);
 update quest_template set reqitemid2=5916, reqitemcount1=1 where entry in (50312, 50313);
+
+replace into mangos_string (entry, content_default) values (50211, 'Get ready! Shimmering Flats race event is about to start! Make haste if you wish to attend!');
+
 
  
  
