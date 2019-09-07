@@ -513,6 +513,8 @@ replace into page_text values
 (50066, 'Red button! Starts the engine, of course! Levers for stearing.\n\nObviously don\'t hit any rocks on the way. Hit the landmarks to get points and smear down these gnomes! If you happend to experience explosion of the race car and have no insurance then your belongings will be passed to Kruzak and Goblin Engineering team.\n\nThanks for running the race car durability crash test for us!\n\nYou\'re awesome!', 0),
 (50067, 'Red button! Starts the engine, of course! Levers for stearing.\n\nObviously don\'t hit any rocks on the way. Hit the landmarks to get points and smear down these goblins! If you happend to experience explosion of the race car and have no insurance then your belongings will be passed to Garry Crashbash and Gnome Engineering team.\n\nThanks for running the race car durability crash test for us!\n\nYou\'re awesome!', 0);
 
+-- 50525, 50524 TAKEN.
+
 -- Hotfixes, modify custom items only in this file:
 
 update item_template set spellcooldown_1 = 5400000, spellid_1 = 24085 where entry = 50234;
