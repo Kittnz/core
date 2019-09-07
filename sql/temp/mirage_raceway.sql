@@ -54,7 +54,7 @@ replace into creature_involvedrelation (id, quest) values (50521, 50311);
 
 -- Providing Goblin Camera Key, TODO: attach item script.
 update quest_template set SrcItemId=5937, SrcItemCount=1 where entry in (50310, 50311);
-update quest_template set reqitemid2=5916, reqitemcount1=1 where entry in (50310, 50311);
+update quest_template set reqitemid2=5937, reqitemcount1=1 where entry in (50310, 50311);
 
 -- Gnome Test Quest
 replace into quest_template (entry, minlevel, questlevel, requiredraces, title, details, objectives, offerrewardtext, requestitemstext, prevquestid, nextquestid, rewitemid1, reqcreatureorgoid1, reqcreatureorgocount1, rewmoneymaxlevel, zoneorsort, rewitemcount1, reqitemid1, reqitemcount1) values
