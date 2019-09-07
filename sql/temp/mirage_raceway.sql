@@ -52,6 +52,10 @@ replace into quest_template (entry, minlevel, questlevel, requiredraces, title, 
 replace into creature_questrelation (id, quest)    values (50521, 50311); 
 replace into creature_involvedrelation (id, quest) values (50521, 50311);
 
+-- Providing Goblin Camera Key, TODO: attach item script.
+update quest_template set SrcItemId=5937 SrcItemCount=1 where entry in (50310, 50311);
+update quest_template set rewitemid2=5916 rewitemcount1=1 where entry in (50310, 50311);
+
 -- Gnome Test Quest
 replace into quest_template (entry, minlevel, questlevel, requiredraces, title, details, objectives, offerrewardtext, requestitemstext, prevquestid, nextquestid, rewitemid1, reqcreatureorgoid1, reqcreatureorgocount1, rewmoneymaxlevel, zoneorsort, rewitemcount1, reqitemid1, reqitemcount1) values
 (50312, 1, 60, 0, 'Gnomes Are Genuine Inventors', 
@@ -79,8 +83,9 @@ replace into quest_template (entry, minlevel, questlevel, requiredraces, title, 
 replace into creature_questrelation (id, quest)    values (50522, 50313); 
 replace into creature_involvedrelation (id, quest) values (50522, 50313);
 
-
-
+-- Providing Gnome Camera Key, TODO: attach item script.
+update quest_template set SrcItemId=5916 SrcItemCount=1 where entry in (50312, 50313);
+update quest_template set rewitemid2=5916 rewitemcount1=1 where entry in (50312, 50313);
 
  
  
