@@ -12,8 +12,7 @@ INSERT INTO `creature_template` (`entry`, `patch`, `display_id1`, `display_id2`,
 
 UPDATE `creature_template` SET `script_name` = 'npc_race_car' WHERE (`entry` = '17999') and (`patch` = '0');
 
-INSERT INTO `game_event` (`entry`, `start_time`, `end_time`, `occurence`, `length`, `holiday`, `description`, `hardcoded`, `disabled`, `patch_min`, `patch_max`) VALUES ('161', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '1', '999999999', '0', 'Miracle Mirage Race', '1', '0', '0', '10');
-
+INSERT INTO `game_event` (`entry`, `start_time`, `end_time`, `occurence`, `length`, `holiday`, `description`, `hardcoded`, `disabled`, `patch_min`, `patch_max`) VALUES ('161', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '1', '999999999', '0', 'Mirage Raceway', '1', '0', '0', '10');
 
 CREATE TABLE `miraclerace_checkpoint` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -27,9 +26,6 @@ CREATE TABLE `miraclerace_checkpoint` (
   `CameraPosOrientation` FLOAT NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC));
-
-REPLACE INTO `gameobject_template` (`entry`, `patch`, `type`, `displayId`, `name`, `faction`, `flags`, `size`, `data0`, `data1`, `data2`, `data3`, `data4`, `data5`, `data6`, `data7`, `data8`, `data9`, `data10`, `data11`, `data12`, `data13`, `data14`, `data15`, `data16`, `data17`, `data18`, `data19`, `data20`, `data21`, `data22`, `data23`, `mingold`, `maxgold`, `script_name`) VALUES (1000039, 0, 5, 5932, 'Purple Crystal', 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
-
 
 -- End of migration.
 END IF;
