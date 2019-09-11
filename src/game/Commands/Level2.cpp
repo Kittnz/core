@@ -1607,6 +1607,8 @@ bool ChatHandler::HandleNpcAddCommand(char* args)
         return false;
     }
 
+    pCreature->SetRe
+
     pCreature->SaveToDB(map->GetId());
 
     uint32 db_guid = pCreature->GetGUIDLow();
