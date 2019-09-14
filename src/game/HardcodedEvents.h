@@ -373,15 +373,23 @@ private:
 
 struct MiracleRaceEvent;
 struct RaceSubEvent;
+enum class MiracleRaceSide;
 struct RaceCheckpoint
 {
 	uint32 Id;
 	Position pos;
 	Position camPos;
 };
+
+struct RacePlayerSetup
+{
+	Player* player;
+	MiracleRaceSide side;
+};
+
 struct RacePlayer
 {
-	RacePlayer(Player* racer, RaceSubEvent* InEvent);
+	RacePlayer(const RacePlayerSetup& racer, RaceSubEvent* InEvent);
 	~RacePlayer();
 
 	ObjectGuid guid;
@@ -389,6 +397,7 @@ struct RacePlayer
 	ObjectGuid checkpointEffectGuid;
 	Map* map = nullptr; // might be dangerous
 	RaceSubEvent* raceEvent = nullptr;
+	MiracleRaceSide side;
 
 	WorldLocation savedPlPos;
 	RaceCheckpoint nextCheckpoint;
@@ -404,7 +413,7 @@ private:
 
 struct RaceSubEvent
 {
-	RaceSubEvent(uint32 InRaceId, const std::list<Player*>& InRaces, MiracleRaceEvent* InEvent);
+	RaceSubEvent(uint32 InRaceId, const std::list<RacePlayerSetup>& InRaces, MiracleRaceEvent* InEvent);
 
 	uint32 raceId;
 	std::vector<RacePlayer> racers;

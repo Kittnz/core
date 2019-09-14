@@ -1690,8 +1690,8 @@ void MiracleRaceEvent::StartTestRace(uint32 raceId, Player* racer)
 {
 	if (racer != nullptr && InitializeRace(raceId))
 	{
-		std::list<Player*> racers;
-		racers.push_back(racer);
+		std::list<RacePlayerSetup> racers;
+		racers.emplace_back(RacePlayerSetup{racer, MiracleRaceSide::Gnome});
 		std::shared_ptr<RaceSubEvent> raceSubEvent = std::make_shared<RaceSubEvent>(raceId, racers, this);
 		races.push_back(raceSubEvent);
 		raceSubEvent->Start();
@@ -1728,15 +1728,21 @@ void MiracleRaceEvent::Disable()
 
 void MiracleRaceEvent::onInviteAccepted(ObjectGuid gnomePlayer, ObjectGuid goblinPlayer)
 {
-
+	std::list<RacePlayerSetup> racers;
+	Player* gnomePlayerP = sObjectMgr.GetPlayer(gnomePlayer);
+	Player* goblinPlayerP = sObjectMgr.GetPlayer(goblinPlayer);
+	racers.emplace_back(RacePlayerSetup{ gnomePlayerP, MiracleRaceSide::Gnome });
+	racers.emplace_back(RacePlayerSetup{ goblinPlayerP, MiracleRaceSide::Goblin });
+	std::shared_ptr<RaceSubEvent> SubEvent = races.emplace_back(std::make_shared<RaceSubEvent>(1, racers, this));
+	SubEvent->Start();
 }
 
-RaceSubEvent::RaceSubEvent(uint32 InRaceId, const std::list<Player*>& InRaces, MiracleRaceEvent* InEvent)
+RaceSubEvent::RaceSubEvent(uint32 InRaceId, const std::list<RacePlayerSetup>& InRaces, MiracleRaceEvent* InEvent)
 	: raceId(InRaceId), pEvent(InEvent)
 {
 	racers.reserve(InRaces.size());
 
-	for (Player* racer : InRaces)
+	for (const RacePlayerSetup& racer : InRaces)
 	{
 		racers.emplace_back(RacePlayer(racer, this));
 	}
@@ -1815,8 +1821,8 @@ void RaceSubEvent::OnFinishedRace(RacePlayer& player)
 	}
 }
 
-RacePlayer::RacePlayer(Player* racer, RaceSubEvent* InEvent)
-	: guid(racer->GetObjectGuid()), map(racer->FindMap()), raceEvent(InEvent)
+RacePlayer::RacePlayer(const RacePlayerSetup& racer, RaceSubEvent* InEvent)
+	: guid(racer.player->GetObjectGuid()), map(racer.player->FindMap()), raceEvent(InEvent), side(racer.side)
 {}
 
 RacePlayer::~RacePlayer()
@@ -1859,7 +1865,7 @@ void RacePlayer::GoRaceMode()
 
 			float ang = atan2(dir.y, dir.x);
 			ang = (ang >= 0) ? ang : 2 * M_PI_F + ang;
-			raceCar->SetOrientation(ang);
+			pl->SetOrientation(ang);
 
 			pl->SetDisplayId(INVISIBLE_MODELID);
 
@@ -1879,6 +1885,7 @@ void RacePlayer::GoRaceMode()
 			pl->m_movementInfo.pos.z = startPoint.camPos.z;
 			pl->m_movementInfo.pos.o = startPoint.camPos.o;
 			pl->SendHeartBeat();
+			pl->PlayDirectMusic(6077);
 
 			// spawn initial checkpoint effect
 			GameObject* checkPointEffect = pl->SummonGameObject(CHECKPOINT_EFFECT_GOBJECT, nextCheckpoint.pos.x, nextCheckpoint.pos.y, nextCheckpoint.pos.z, nextCheckpoint.pos.o, 0.0f, 0.0f, 0.0f, 0.0f, 300 * 1000);
@@ -1900,10 +1907,8 @@ void RacePlayer::LeaveRaceMode()
 		Player* pl = nullptr;
 		if (pl = map->GetPlayer(guid); pl != nullptr)
 		{
-			pl->SetDisplayId(pl->GetNativeDisplayId());
 			pl->SetFly(false);
 			pl->TeleportTo(savedPlPos);
-			pl->SetFly(false);
 		}
 
 		if (GameObject* checkpointEffect = map->GetGameObject(checkpointEffectGuid))
@@ -1924,8 +1929,6 @@ void RacePlayer::LeaveRaceMode()
 			((TemporarySummon*)raceCar)->UnSummon();
 		}
 
-
-
 		bIsRaceMode = false;
 	}
 }
@@ -1936,7 +1939,7 @@ void RacePlayer::Update(uint32 deltaTime)
 	// check if we meet next checkpoint
 	if (Player* pl = map->GetPlayer(guid))
 	{
-		constexpr float AllowedDist = 30.0f * 30.0f;
+		constexpr float AllowedDist = 24.0f * 24.0f;
 
 		if (Creature* raceCar = map->GetAnyTypeCreature(carGuid))
 		{
@@ -1963,15 +1966,27 @@ void RacePlayer::Update(uint32 deltaTime)
 
 void RacePlayer::IncrementCheckpoint(Player* pl)
 {
-	if (raceEvent->IsValidCheckpoint(nextCheckpoint.Id + 1))
+	if (raceEvent->IsValidCheckpoint(nextCheckpoint.Id))
 	{
-		// teleport to current cam pos
-		pl->TeleportTo(map->GetId(), nextCheckpoint.camPos.x, nextCheckpoint.camPos.y, nextCheckpoint.camPos.z, nextCheckpoint.camPos.o, 0, [this]()
+		if (GameObject* gObjectCheckPoint = map->GetGameObject(checkpointEffectGuid))
 		{
-			LeaveRaceMode();
-		});
+			pl->RemoveGameObject(gObjectCheckPoint, true);
+		}
 
-		nextCheckpoint = raceEvent->GetCheckpoint(nextCheckpoint.Id + 1);
+		// teleport to current cam pos
+		pl->m_movementInfo.moveFlags = (MOVEFLAG_LEVITATING | MOVEFLAG_SWIMMING | MOVEFLAG_CAN_FLY | MOVEFLAG_FLYING);
+		pl->m_movementInfo.pos.x = nextCheckpoint.camPos.x;
+		pl->m_movementInfo.pos.y = nextCheckpoint.camPos.y;
+		pl->m_movementInfo.pos.z = nextCheckpoint.camPos.z;
+		pl->m_movementInfo.pos.o = nextCheckpoint.camPos.o;
+		pl->SendHeartBeat();
+
+		nextCheckpoint = raceEvent->GetCheckpoint(nextCheckpoint.Id);
+
+		GameObject* checkPointEffect = pl->SummonGameObject(CHECKPOINT_EFFECT_GOBJECT, nextCheckpoint.pos.x, nextCheckpoint.pos.y, nextCheckpoint.pos.z, nextCheckpoint.pos.o, 0.0f, 0.0f, 0.0f, 0.0f, 300 * 1000);
+		checkpointEffectGuid = checkPointEffect->GetObjectGuid();
+
+		checkPointEffect->SetExclusiveVisibleFor(pl);
 	}
 	else
 	{
