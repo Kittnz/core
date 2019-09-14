@@ -41,7 +41,9 @@ replace into creature_loot_template (entry, item, ChanceOrQuestChance, mincountO
 
 replace into gameobject_loot_template (entry, item, ChanceOrQuestChance, mincountOrRef, maxcount, groupid) values
 (1000045, 2676, -100, 1, 2, 1);
-update gameobject_template set type=3, data0=43, data1=1000045, data3=1 where entry=1000045;
+update gameobject_template set type=3, data0=57, data1=1000045, data3=0, data4=0 where entry=1000045;
+UPDATE `gameobject_template` SET `data3`='1' WHERE (`entry`='1000045') AND (`patch`='0');
+UPDATE `gameobject_template` SET `data8`='820' WHERE (`entry`='1000045') AND (`patch`='0');
 
 replace into quest_template (entry, minlevel, questlevel, requiredraces, title, details, objectives, offerrewardtext, requestitemstext, prevquestid, nextquestid, rewitemid1, reqcreatureorgoid1, reqcreatureorgocount1, rewmoneymaxlevel, zoneorsort, rewitemcount1, reqitemid1, reqitemcount1) values
 (811, 4, 5, 0, 'Unity is Strength',
