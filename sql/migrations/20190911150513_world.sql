@@ -8,10 +8,10 @@ IF v=0 THEN
 INSERT INTO `migrations` VALUES ('20190911150513');
 -- Add your query below.
 
-replace into item_template (entry, class, subclass, name, display_id, Quality, Flags, Buy_Count, Buy_Price, Sell_Price, Item_Level, stackable, bonding, stackable) values
-(51000, 12, 0, 'Small Scorpid Carapace', 21365, 1, 0, 1, 0, 0, 0, 1, 4, 6),
+replace into item_template (entry, class, subclass, name, display_id, Quality, Flags, Buy_Count, Buy_Price, Sell_Price, Item_Level, bonding, stackable) values
+(51000, 12, 0, 'Small Scorpid Carapace', 21365, 1, 0, 1, 0, 0, 0, 4, 6),
 
-(51001, 12, 0, 'Large Scorpid Carapace', 32820, 1, 0, 1, 0, 0, 0, 1, 4, 8);
+(51001, 12, 0, 'Large Scorpid Carapace', 32820, 1, 0, 1, 0, 0, 0, 4, 8);
 
 update item_template set name = 'Scorched Heart' where entry = 4868;
 
