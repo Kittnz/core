@@ -1863,12 +1863,22 @@ void RacePlayer::GoRaceMode()
 
 			pl->SetDisplayId(INVISIBLE_MODELID);
 
-			pl->SetFly(true);
-			pl->TeleportTo(map->GetId(), startPoint.camPos.x, startPoint.camPos.y, startPoint.camPos.z, startPoint.camPos.o, 0, [this]()
-			{
-				LeaveRaceMode();
-			});
-			pl->SetFly(true);
+// 			pl->SetFly(true);
+// 			pl->TeleportTo(map->GetId(), startPoint.camPos.x, startPoint.camPos.y, startPoint.camPos.z, startPoint.camPos.o, 0, [this]()
+// 			{
+// 				LeaveRaceMode();
+// 			},
+// 			[pl]()
+// 			{
+// 				pl->SetFly(true);
+// 			});
+
+			pl->m_movementInfo.moveFlags = (MOVEFLAG_LEVITATING | MOVEFLAG_SWIMMING | MOVEFLAG_CAN_FLY | MOVEFLAG_FLYING);
+			pl->m_movementInfo.pos.x = startPoint.camPos.x;
+			pl->m_movementInfo.pos.y = startPoint.camPos.y;
+			pl->m_movementInfo.pos.z = startPoint.camPos.z;
+			pl->m_movementInfo.pos.o = startPoint.camPos.o;
+			pl->SendHeartBeat();
 
 			// spawn initial checkpoint effect
 			GameObject* checkPointEffect = pl->SummonGameObject(CHECKPOINT_EFFECT_GOBJECT, nextCheckpoint.pos.x, nextCheckpoint.pos.y, nextCheckpoint.pos.z, nextCheckpoint.pos.o, 0.0f, 0.0f, 0.0f, 0.0f, 300 * 1000);

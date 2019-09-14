@@ -1655,7 +1655,8 @@ class MANGOS_DLL_SPEC Player final: public Unit
         WorldLocation m_teleport_dest;
         uint32 m_teleport_options;
         std::function<void()> m_teleportRecover;
-        std::function<void()> m_teleportRecoverDelayed;
+		std::function<void()> m_teleportRecoverDelayed;
+		std::function<void()> m_teleportNearFinishedDelayed;
         bool mSemaphoreTeleport_Near;
         bool mSemaphoreTeleport_Far;
         bool mPendingFarTeleport;
@@ -1746,13 +1747,13 @@ class MANGOS_DLL_SPEC Player final: public Unit
 
         /* Switch from instanceId of same map.
         * Assumes that you can enter the map.
-        * Should be called in a thread-safe environnement (not in map update for example !)
+        * Should be called in a thread-safe environment (not in map update for example !)
         */
         bool SwitchInstance(uint32 newInstanceId);
-        bool TeleportTo(uint32 mapid, float x, float y, float z, float orientation, uint32 options = 0, std::function<void()> recover = std::function<void()>());
-        bool TeleportTo(WorldLocation const &loc, uint32 options = 0, std::function<void()> recover = std::function<void()>())
+        bool TeleportTo(uint32 mapid, float x, float y, float z, float orientation, uint32 options = 0, std::function<void()> recover = std::function<void()>(), std::function<void()> OnNearTeleportFinished = std::function<void()>());
+        bool TeleportTo(WorldLocation const &loc, uint32 options = 0, std::function<void()> recover = std::function<void()>(), std::function<void()> OnNearTeleportFinished = std::function<void()>())
         {
-            return TeleportTo(loc.mapid, loc.coord_x, loc.coord_y, loc.coord_z, loc.orientation, options, recover);
+            return TeleportTo(loc.mapid, loc.coord_x, loc.coord_y, loc.coord_z, loc.orientation, options, recover, OnNearTeleportFinished);
         }
 
         // _NOT_ thread-safe. Must be executed by the map manager after map updates, since we

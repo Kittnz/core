@@ -1829,7 +1829,7 @@ bool Player::SwitchInstance(uint32 newInstanceId)
     return true;
 }
 
-bool Player::TeleportTo(uint32 mapid, float x, float y, float z, float orientation, uint32 options, std::function<void()> recover)
+bool Player::TeleportTo(uint32 mapid, float x, float y, float z, float orientation, uint32 options, std::function<void()> recover, std::function<void()> OnNearTeleportFinished)
 {
     if (!MapManager::IsValidMapCoord(mapid, x, y, z, orientation))
     {
@@ -1883,6 +1883,7 @@ bool Player::TeleportTo(uint32 mapid, float x, float y, float z, float orientati
             m_teleport_dest = WorldLocation(mapid, x, y, z, orientation);
             m_teleport_options = options;
             m_teleportRecoverDelayed = recover;
+			m_teleportNearFinishedDelayed = OnNearTeleportFinished;
             return true;
         }
 
@@ -1928,6 +1929,10 @@ bool Player::TeleportTo(uint32 mapid, float x, float y, float z, float orientati
             else
                 m_teleportRecover = wps;
             wps();
+			if (OnNearTeleportFinished)
+			{
+				OnNearTeleportFinished();
+			}
         }
         m_movementInfo.moveFlags &= ~MOVEFLAG_MASK_MOVING_OR_TURN; // For interpolation
     }
