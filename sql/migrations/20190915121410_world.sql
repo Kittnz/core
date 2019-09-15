@@ -27,3 +27,11 @@ replace into creature_template (entry, patch, display_id1, display_id2, display_
 (50526, 0, 5530, 5531, 5532, 5545, 'Race Spectator', '', 0, 5, 5, 112, 112, 0, 0, 120, 35, 0, 0.92, 1.14286, 1, 20, 5, 0, 0, 1.8, 15, 21, 0, 0, 1.9, 2000, 0, 1, 0, 0, 0, 0, 0, 0, 0, 5, 8, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, '');
 -- /cheer
 replace into creature_template_addon (entry, emote) values ('50523', '4'),('50524', '4'),('50525', '4'),('50526', '4');
+
+-- Ironaya and Archaedas texts
+delete from script_texts where entry = -1070000;
+update broadcast_text set Sound = 5851, type = 1 where ID = 3261;
+update broadcast_text set Sound = 5855, type = 1 where ID = 3400;
+update broadcast_text set Sound = 5856, type = 1 where ID = 6536;
+update broadcast_text set Sound = 5857, type = 1 where ID = 6537;
+update broadcast_text set Sound = 5858, type = 1 where ID = 6215;
