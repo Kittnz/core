@@ -28,10 +28,13 @@ replace into creature_template (entry, patch, display_id1, display_id2, display_
 -- /cheer
 replace into creature_template_addon (entry, emote) values ('50523', '4'),('50524', '4'),('50525', '4'),('50526', '4');
 
--- Ironaya and Archaedas texts
+-- Ironaya and Archaedas texts:
 delete from script_texts where entry = -1070000;
 update broadcast_text set Sound = 5851, type = 1 where ID = 3261;
 update broadcast_text set Sound = 5855, type = 1 where ID = 3400;
 update broadcast_text set Sound = 5856, type = 1 where ID = 6536;
 update broadcast_text set Sound = 5857, type = 1 where ID = 6537;
 update broadcast_text set Sound = 5858, type = 1 where ID = 6215;
+
+-- Fix crash on script loading: 
+delete from creature_movement_scripts where command = 79;
