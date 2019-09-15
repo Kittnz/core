@@ -17646,12 +17646,16 @@ void Player::Mount(uint32 mount, uint32 spellId)
         return;
     }
 
-    if (!spellId && IsInDisallowedMountForm())
-    {
-        RemoveSpellsCausingAura(SPELL_AURA_MOUNTED);
-        SendMountResult(MOUNTRESULT_SHAPESHIFTED);
-        return;
-    }
+	// Turtle specific - allow gnome and goblin display ID to mount on
+	if (mount != GOBLINCAR_DISPLAYID && mount != GNOMECAR_DISPLAYID)
+	{
+		if (!spellId && IsInDisallowedMountForm())
+		{
+			RemoveSpellsCausingAura(SPELL_AURA_MOUNTED);
+			SendMountResult(MOUNTRESULT_SHAPESHIFTED);
+			return;
+		}
+	}
 
     if (HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_LOOTING))
     {
@@ -21566,4 +21570,20 @@ void Player::SendRaidWarning(const char* text)
 		ChatHandler::BuildChatPacket(data, CHAT_MSG_RAID_WARNING, text, LANG_UNIVERSAL);
 		Sess->SendPacket(&data);
 	}
+}
+
+bool Player::IsObjectIsExclusiveVisible(ObjectGuid guid)
+{
+	auto findIter = std::find(m_exclusiveVisibleObjects.begin(), m_exclusiveVisibleObjects.end(), guid);
+	return findIter != m_exclusiveVisibleObjects.end();
+}
+
+void Player::AddExclusiveVisibleObject(ObjectGuid guid)
+{
+	m_exclusiveVisibleObjects.push_back(guid);
+}
+
+void Player::RemoveExclusiveVisibleObject(ObjectGuid guid)
+{
+	m_exclusiveVisibleObjects.remove(guid);
 }

@@ -82,6 +82,17 @@ VisibleNotifier::Notify()
     if (player.GetMap())
         player.GetMap()->UpdateActiveObjectVisibility(&player, i_clientGUIDs, i_data, i_visibleNow);
 
+	for (auto iter = i_clientGUIDs.begin(); iter != i_clientGUIDs.end();)
+	{
+		if (player.IsObjectIsExclusiveVisible(*iter))
+		{
+			iter = i_clientGUIDs.erase(iter);
+			continue;
+		}
+
+		iter++;
+	}
+
     // generate outOfRange for not iterate objects
     i_data.AddOutOfRangeGUID(i_clientGUIDs);
     player.m_visibleGUIDs_lock.acquire_write();

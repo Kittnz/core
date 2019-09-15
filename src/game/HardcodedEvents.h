@@ -381,6 +381,13 @@ struct RaceCheckpoint
 	Position camPos;
 };
 
+struct RaceCreature
+{
+	uint32 entry;
+	Position pos;
+	uint8 chance;
+};
+
 struct RacePlayerSetup
 {
 	Player* player;
@@ -393,7 +400,6 @@ struct RacePlayer
 	~RacePlayer();
 
 	ObjectGuid guid;
-	ObjectGuid carGuid;
 	ObjectGuid checkpointEffectGuid;
 	Map* map = nullptr; // might be dangerous
 	RaceSubEvent* raceEvent = nullptr;
@@ -428,6 +434,9 @@ struct RaceSubEvent
 
 	void Start();
 	void Update(uint32 deltaTime);
+
+	void AnnounceToRacers(const char* msg);
+
 	void End();
 
 	void OnFinishedRace(RacePlayer& param1);
@@ -445,9 +454,14 @@ struct RaceSubEvent
 private:
 	// we need cached version, because we allow editing race checkpoints in-game
 	std::vector<RaceCheckpoint> checkpoints;
+	std::vector<RaceCreature> creatures;
 	MiracleRaceEvent* pEvent;
+	Map* theMap = nullptr;
 
 	std::list<std::string> leaderboard;
+	std::vector<ObjectGuid> spawnedShit;
+	uint32 backTimer = 0;
+	uint32 startReportBackTimer = 0;
 };
 
 enum class MiracleRaceSide
@@ -507,6 +521,7 @@ struct MiracleRaceEvent : WorldEvent
 	virtual uint32 GetNextUpdateDelay() override;
 
 	std::map<uint32, std::vector<RaceCheckpoint>> racesCheckpoints;
+	std::map<uint32, std::vector< RaceCreature>> racesCreatures;
 	std::list<std::shared_ptr<RaceSubEvent>> races;
 
 	virtual void Disable() override;

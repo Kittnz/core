@@ -1949,7 +1949,10 @@ void WorldObject::SendObjectDeSpawnAnim(ObjectGuid guid) const
 
 bool WorldObject::isWithinVisibilityDistanceOf(Unit const* viewer, WorldObject const* viewPoint, bool inVisibleList) const
 {
-	if (!ExclusiveVisibleGuid.IsEmpty()) return true;
+	if (!ExclusiveVisibleGuid.IsEmpty())
+	{
+		return viewer->GetObjectGuid() == ExclusiveVisibleGuid;
+	}
     if (viewer->IsTaxiFlying())
     {
         float distance = World::GetMaxVisibleDistanceInFlight() + (inVisibleList ? World::GetVisibleObjectGreyDistance() : 0.0f);

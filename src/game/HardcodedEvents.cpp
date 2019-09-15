@@ -1653,8 +1653,9 @@ bool MiracleRaceEvent::InitializeRace(uint32 raceId)
 		// already initialized
 		return true;
 	}
-
-	QueryResult* raceData = WorldDatabase.PQuery("SELECT `id`, `PositionX`, `PositionY`, `PositionZ`, `CameraPosX`, `CameraPosY`, `CameraPosZ`, `CameraPosOrientation`"
+	
+	// load waypoints
+	QueryResult* raceData = WorldDatabase.PQuery("SELECT `id`, `PositionX`, `PositionY`, `PositionZ`, `CameraPosX`, `CameraPosY`, `CameraPosZ`"
 		"FROM miraclerace_checkpoint where raceID = '%u'", raceId);
 
 	if (raceData == nullptr)
@@ -1675,14 +1676,34 @@ bool MiracleRaceEvent::InitializeRace(uint32 raceId)
 		float CameraPosX = fields[4].GetFloat();
 		float CameraPosY = fields[5].GetFloat();
 		float CameraPosZ = fields[6].GetFloat();
-		float CameraPosOrientation = fields[7].GetFloat();
 		Position Pos(PosX, PosY, PosZ, 0.0f);
-		Position CameraPos(CameraPosX, CameraPosY, CameraPosZ, CameraPosOrientation);
+		Position CameraPos(CameraPosX, CameraPosY, CameraPosZ, 0.0f);
 
 		raceCheckpoints.emplace_back(RaceCheckpoint{ id , Pos, CameraPos});
 	} while (raceData->NextRow());
 
-	delete raceData;
+	delete raceData; raceData = nullptr;
+
+	// load creatures
+	raceData = WorldDatabase.PQuery("SELECT `entry`, `chance`, `positionX`, `positionY`, `positionZ`"
+		"FROM miraclerace_creaturespool where raceId = '%u'", raceId);
+
+	std::vector<RaceCreature>& raceCreatures = racesCreatures[raceId];
+	if (raceData != nullptr)
+	{
+		fields = raceData->Fetch();
+
+		uint32 entry = fields[0].GetUInt32();
+		uint32 chance = fields[1].GetUInt32();
+		chance = std::min(chance, 100u);
+		float PosX = fields[2].GetFloat();
+		float PosY = fields[3].GetFloat();
+		float PosZ = fields[4].GetFloat();
+		Position pos(PosX, PosY, PosZ, 0.0f);
+
+		raceCreatures.emplace_back(RaceCreature{entry, pos, uint8(chance)});
+	}
+
 	return true;
 }
 
@@ -1706,15 +1727,28 @@ void MiracleRaceEvent::Update()
 	uint32 deltaTime = newTime - lastTime;
 
 	lastTime = newTime;
+
+	std::shared_ptr< RaceSubEvent> raceShouldBeDestroyed;
 	for (std::shared_ptr<RaceSubEvent>& race : races)
 	{
 		race->Update(deltaTime);
+		if (race->state == RaceSubEvent::State::None)
+		{
+			// race should be deleted
+			raceShouldBeDestroyed = race;
+		}
+	}
+
+	if (raceShouldBeDestroyed)
+	{
+		raceShouldBeDestroyed->End();
+		races.remove(raceShouldBeDestroyed);
 	}
 }
 
 uint32 MiracleRaceEvent::GetNextUpdateDelay()
 {
-	return 1;
+	return 0;
 }
 
 void MiracleRaceEvent::Disable()
@@ -1754,22 +1788,121 @@ void RaceSubEvent::Start()
 	
 	// 1. Cache race data
 	checkpoints = pEvent->racesCheckpoints[raceId];
+	creatures = pEvent->racesCreatures[raceId];
 
 	state = State::WarmUp;
 	
 	// 2. Transit player to race form
+	// we in warm up mode, so root them
 
 	for (RacePlayer& player : racers)
 	{
 		player.GoRaceMode();
+		if (Player* pPlayer = sObjectMgr.GetPlayer(player.guid))
+		{
+			pPlayer->SetMovement(MOVE_ROOT);
+		}
 	}
+
+	backTimer = 15 * IN_MILLISECONDS;
+	startReportBackTimer = backTimer;
 }
 
 void RaceSubEvent::Update(uint32 deltaTime)
 {
-	for (RacePlayer& player : racers)
+	// also check if players quited race mode
+	// in that case - finish event
+	switch (state)
 	{
-		player.Update(deltaTime);
+	case RaceSubEvent::State::None:
+		break;
+	case RaceSubEvent::State::WarmUp:
+	{
+		if (backTimer < deltaTime)
+		{
+			backTimer = 0;
+			state = State::Race;
+			for (RacePlayer& player : racers)
+			{
+				if (Player* pPlayer = sObjectMgr.GetPlayer(player.guid))
+				{
+					pPlayer->SetMovement(MOVE_UNROOT);
+					
+					if (theMap == nullptr)
+					{
+						theMap = pPlayer->GetMap();
+					}
+				}
+			}
+
+			AnnounceToRacers("Go Go Go!");
+
+			// Spawn the shit
+			if (theMap != nullptr)
+			{
+				spawnedShit.reserve(creatures.size());
+				for (const RaceCreature& creature : creatures)
+				{
+					float fChance = float(creature.chance);
+					if (rand_chance_f() < fChance)
+					{
+						if (Creature* spawnedCreature = theMap->SummonCreature(creature.entry, creature.pos.x, creature.pos.y, creature.pos.z, creature.pos.o, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 10 * MINUTE * IN_MILLISECONDS))
+						{
+							spawnedShit.push_back(spawnedCreature->GetObjectGuid());
+						}
+					}
+				}
+			}
+		}
+		else
+		{
+			backTimer -= deltaTime;
+
+			auto ConditionalAnnounce = [this](uint32 delay, const char* msg)
+			{
+				if (backTimer < delay)
+				{
+					if (startReportBackTimer > delay)
+					{
+						AnnounceToRacers(msg);
+						startReportBackTimer = delay;
+					}
+				}
+			};
+
+			ConditionalAnnounce(10 * IN_MILLISECONDS, "Race will start in 10 seconds");
+			ConditionalAnnounce(5 * IN_MILLISECONDS, "Race will start in 5 seconds");
+		}
+	}
+		break;
+	case RaceSubEvent::State::Race:
+	{
+		bool bAllPlayersQuitRace = true;
+		for (RacePlayer& player : racers)
+		{
+			player.Update(deltaTime);
+			bAllPlayersQuitRace &= !player.bIsRaceMode;
+		}
+
+		if (bAllPlayersQuitRace)
+		{
+			state = State::None;
+		}
+	}
+		break;
+	default:
+		break;
+	}
+}
+
+void RaceSubEvent::AnnounceToRacers(const char* msg)
+{
+	for (RacePlayer& racer : racers)
+	{
+		if (Player* player = sObjectMgr.GetPlayer(racer.guid))
+		{
+			player->SendRaidWarning(msg);
+		}
 	}
 }
 
@@ -1778,6 +1911,13 @@ void RaceSubEvent::End()
 	for (RacePlayer& player : racers)
 	{
 		player.LeaveRaceMode();
+	}
+
+	// despawn the shit
+	for (ObjectGuid guid : spawnedShit)
+	{
+		Creature* creature = theMap->GetAnyTypeCreature(guid);
+		creature->DespawnOrUnsummon();
 	}
 }
 
@@ -1834,6 +1974,7 @@ RacePlayer::~RacePlayer()
 #define GOBLINCAR_CREATURE_ENTRY 17999
 #define CHECKPOINT_EFFECT_GOBJECT 1000039
 
+
 void RacePlayer::GoRaceMode()
 {
 	if (map == nullptr) return;
@@ -1847,15 +1988,15 @@ void RacePlayer::GoRaceMode()
 
 			pl->GetPosition(savedPlPos);
 
-			Creature* raceCar = pl->SummonCreature(GOBLINCAR_CREATURE_ENTRY,
-				startPoint.pos.x,
-				startPoint.pos.y,
-				startPoint.pos.z,
-				startPoint.pos.o,
-				TEMPSUMMON_DEAD_DESPAWN,
-				10 * MINUTE);
-			carGuid = raceCar->GetObjectGuid();
-			raceCar->AI()->InformGuid(pl->GetObjectGuid());
+			//Creature* raceCar = pl->SummonCreature(GOBLINCAR_CREATURE_ENTRY,
+			//	startPoint.pos.x,
+			//	startPoint.pos.y,
+			//	startPoint.pos.z,
+			//	startPoint.pos.o,
+			//	TEMPSUMMON_DEAD_DESPAWN,
+			//	10 * MINUTE);
+			//carGuid = raceCar->GetObjectGuid();
+			//raceCar->AI()->InformGuid(pl->GetObjectGuid());
 
 			// rotate car to next point
 			const RaceCheckpoint& nextPoint = raceEvent->GetCheckpoint(1);
@@ -1868,23 +2009,14 @@ void RacePlayer::GoRaceMode()
 			pl->SetOrientation(ang);
 
 			pl->SetDisplayId(INVISIBLE_MODELID);
+			pl->Mount(GOBLINCAR_DISPLAYID);
 
-// 			pl->SetFly(true);
-// 			pl->TeleportTo(map->GetId(), startPoint.camPos.x, startPoint.camPos.y, startPoint.camPos.z, startPoint.camPos.o, 0, [this]()
-// 			{
-// 				LeaveRaceMode();
-// 			},
-// 			[pl]()
-// 			{
-// 				pl->SetFly(true);
-// 			});
+			//pl->SetFly(true);
+			pl->TeleportTo(map->GetId(), startPoint.pos.x, startPoint.pos.y, startPoint.pos.z, pl->GetOrientation(), 0, [this]()
+			{
+				LeaveRaceMode();
+			});
 
-			pl->m_movementInfo.moveFlags = (MOVEFLAG_LEVITATING | MOVEFLAG_SWIMMING | MOVEFLAG_CAN_FLY | MOVEFLAG_FLYING);
-			pl->m_movementInfo.pos.x = startPoint.camPos.x;
-			pl->m_movementInfo.pos.y = startPoint.camPos.y;
-			pl->m_movementInfo.pos.z = startPoint.camPos.z;
-			pl->m_movementInfo.pos.o = startPoint.camPos.o;
-			pl->SendHeartBeat();
 			pl->PlayDirectMusic(6077);
 
 			// spawn initial checkpoint effect
@@ -1892,6 +2024,10 @@ void RacePlayer::GoRaceMode()
 			checkpointEffectGuid = checkPointEffect->GetObjectGuid();
 
 			checkPointEffect->SetExclusiveVisibleFor(pl);
+			pl->AddExclusiveVisibleObject(checkpointEffectGuid);
+			pl->UpdateVisibilityOf(pl, checkPointEffect);
+			pl->SetSpeedRatePersistance(MOVE_RUN, 3.0f);
+			pl->UpdateSpeed(MOVE_RUN, true, 3.0f);
 
 			bIsRaceMode = true;
 		}
@@ -1909,6 +2045,12 @@ void RacePlayer::LeaveRaceMode()
 		{
 			pl->SetFly(false);
 			pl->TeleportTo(savedPlPos);
+			pl->SetDisplayId(pl->GetNativeDisplayId());
+			pl->SetMovement(MOVE_UNROOT);
+			pl->Unmount();
+			pl->RemoveExclusiveVisibleObject(checkpointEffectGuid);
+			pl->SetSpeedRatePersistance(MOVE_RUN, 1.0f);
+			pl->UpdateSpeed(MOVE_RUN, true, 1.0f);
 		}
 
 		if (GameObject* checkpointEffect = map->GetGameObject(checkpointEffectGuid))
@@ -1924,10 +2066,6 @@ void RacePlayer::LeaveRaceMode()
 			}
 		}
 
-		if (Creature* raceCar = map->GetAnyTypeCreature(carGuid))
-		{
-			((TemporarySummon*)raceCar)->UnSummon();
-		}
 
 		bIsRaceMode = false;
 	}
@@ -1937,22 +2075,25 @@ void RacePlayer::LeaveRaceMode()
 void RacePlayer::Update(uint32 deltaTime)
 {
 	// check if we meet next checkpoint
+	if (!bIsRaceMode)
+	{
+		return;
+	}
 	if (Player* pl = map->GetPlayer(guid))
 	{
 		constexpr float AllowedDist = 24.0f * 24.0f;
+		constexpr float OutOfRaceDist = 250.0f * 250.0f;
 
-		if (Creature* raceCar = map->GetAnyTypeCreature(carGuid))
+		float DistToCheckpoint = pl->GetDistanceSqr(nextCheckpoint.pos.x, nextCheckpoint.pos.y, nextCheckpoint.pos.z);
+		if (DistToCheckpoint < AllowedDist)
 		{
-			float DistToCheckpoint = raceCar->GetDistanceSqr(nextCheckpoint.pos.x, nextCheckpoint.pos.y, nextCheckpoint.pos.z);
-			if (DistToCheckpoint < AllowedDist)
-			{
-				// we reach checkpoint!
-
-				IncrementCheckpoint(pl);
-			}
+			// we reach checkpoint!
+			IncrementCheckpoint(pl);
 		}
-		else
+
+		if (DistToCheckpoint > OutOfRaceDist)
 		{
+			pl->SendRaidWarning("You leave the race!");
 			LeaveRaceMode();
 		}
 	}
@@ -1960,8 +2101,6 @@ void RacePlayer::Update(uint32 deltaTime)
 	{
 		LeaveRaceMode();
 	}
-
-
 }
 
 void RacePlayer::IncrementCheckpoint(Player* pl)
@@ -1974,19 +2113,21 @@ void RacePlayer::IncrementCheckpoint(Player* pl)
 		}
 
 		// teleport to current cam pos
-		pl->m_movementInfo.moveFlags = (MOVEFLAG_LEVITATING | MOVEFLAG_SWIMMING | MOVEFLAG_CAN_FLY | MOVEFLAG_FLYING);
-		pl->m_movementInfo.pos.x = nextCheckpoint.camPos.x;
-		pl->m_movementInfo.pos.y = nextCheckpoint.camPos.y;
-		pl->m_movementInfo.pos.z = nextCheckpoint.camPos.z;
-		pl->m_movementInfo.pos.o = nextCheckpoint.camPos.o;
-		pl->SendHeartBeat();
+		//pl->m_movementInfo.moveFlags = (MOVEFLAG_LEVITATING | MOVEFLAG_SWIMMING | MOVEFLAG_CAN_FLY | MOVEFLAG_FLYING);
+		//pl->m_movementInfo.pos.x = nextCheckpoint.camPos.x;
+		//pl->m_movementInfo.pos.y = nextCheckpoint.camPos.y;
+		//pl->m_movementInfo.pos.z = nextCheckpoint.camPos.z;
+		//pl->SendHeartBeat();
 
 		nextCheckpoint = raceEvent->GetCheckpoint(nextCheckpoint.Id);
+		pl->RemoveExclusiveVisibleObject(checkpointEffectGuid);
 
 		GameObject* checkPointEffect = pl->SummonGameObject(CHECKPOINT_EFFECT_GOBJECT, nextCheckpoint.pos.x, nextCheckpoint.pos.y, nextCheckpoint.pos.z, nextCheckpoint.pos.o, 0.0f, 0.0f, 0.0f, 0.0f, 300 * 1000);
 		checkpointEffectGuid = checkPointEffect->GetObjectGuid();
+		pl->AddExclusiveVisibleObject(checkpointEffectGuid);
 
 		checkPointEffect->SetExclusiveVisibleFor(pl);
+		pl->UpdateVisibilityOf(pl, checkPointEffect);
 	}
 	else
 	{

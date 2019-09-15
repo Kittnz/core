@@ -1711,6 +1711,11 @@ class MANGOS_DLL_SPEC Unit : public WorldObject
         float m_modAttackSpeedPct[3];
         float m_modRecalcDamagePct[3];
 
+		// Turtle specific - persistance speed rate
+		float m_speedRatePersistance[6];
+		void SetSpeedRatePersistance(UnitMoveType mtype, float speed);
+		float GetSpeedRatePersistance(UnitMoveType mtype);
+
         // Event handler
         EventProcessor m_Events;
 

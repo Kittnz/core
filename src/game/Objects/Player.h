@@ -433,6 +433,9 @@ struct SkillStatusData
 
 typedef std::unordered_map<uint32, SkillStatusData> SkillStatusMap;
 
+#define GNOMECAR_DISPLAYID 2490
+#define GOBLINCAR_DISPLAYID 10318
+
 enum PlayerSlots
 {
     // first slot for item stored (in any way in player m_items data)
@@ -2557,6 +2560,11 @@ class MANGOS_DLL_SPEC Player final: public Unit
 			void SendRaidWarning(uint32 textId);
 			void SendRaidWarning(const std::string& text);
 			void SendRaidWarning(const char* text);
+
+			bool IsObjectIsExclusiveVisible(ObjectGuid guid);
+			void AddExclusiveVisibleObject(ObjectGuid guid);
+			void RemoveExclusiveVisibleObject(ObjectGuid guid);
+			std::list<ObjectGuid> m_exclusiveVisibleObjects;
 
 		// Giperion TURTLE SPECIFIC End
 };

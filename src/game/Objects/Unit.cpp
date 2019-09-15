@@ -126,6 +126,13 @@ Unit::Unit()
     m_extraAttacks = 0;
     m_extraMute = false;
 
+	m_speedRatePersistance[UnitMoveType::MOVE_WALK] = 1.0f;
+	m_speedRatePersistance[UnitMoveType::MOVE_RUN] = 1.0f;
+	m_speedRatePersistance[UnitMoveType::MOVE_RUN_BACK] = 1.0f;
+	m_speedRatePersistance[UnitMoveType::MOVE_SWIM] = 1.0f;
+	m_speedRatePersistance[UnitMoveType::MOVE_SWIM_BACK] = 1.0f;
+	m_speedRatePersistance[UnitMoveType::MOVE_TURN_RATE] = 1.0f;
+
     m_state = 0;
     m_deathState = ALIVE;
 
@@ -8991,6 +8998,16 @@ uint32 Unit::GetCreatureType() const
     }
     else
         return ((Creature*)this)->GetCreatureInfo()->type;
+}
+
+void Unit::SetSpeedRatePersistance(UnitMoveType mtype, float speed)
+{
+	m_speedRatePersistance[mtype] = speed;
+}
+
+float Unit::GetSpeedRatePersistance(UnitMoveType mtype)
+{
+	return m_speedRatePersistance[mtype];
 }
 
 /*#######################################
