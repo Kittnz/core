@@ -10,10 +10,10 @@ ECHO "Formatted UTC Date time : %UTC%"
 
 SET "output=%UTC%_world.sql"
 
-ECHO replace into migrations values (%UTC%);>> migrations/%output%
-ECHO.>> migrations/%output%
-ECHO.>> migrations/%output%
-ECHO.>> migrations/%output%
+ECHO replace into migrations values (%UTC%);>> %output%
+ECHO.>> %output%
+ECHO.>> %output%
+ECHO.>> %output%
 
 REM End of the script Body
 :EndOfScriptBody
