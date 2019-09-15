@@ -1835,7 +1835,7 @@ void RaceSubEvent::Update(uint32 deltaTime)
 				}
 			}
 
-			AnnounceToRacers("Go Go Go!");
+			AnnounceToRacers("GO! GO! GO!");
 
 			// Spawn the shit
 			if (theMap != nullptr)
@@ -1870,8 +1870,8 @@ void RaceSubEvent::Update(uint32 deltaTime)
 				}
 			};
 
-			ConditionalAnnounce(10 * IN_MILLISECONDS, "Race will start in 10 seconds");
-			ConditionalAnnounce(5 * IN_MILLISECONDS, "Race will start in 5 seconds");
+			ConditionalAnnounce(10 * IN_MILLISECONDS, "The race begins in 10 seconds!");
+			ConditionalAnnounce(5 * IN_MILLISECONDS, "The race begins in 5 seconds!");
 		}
 	}
 		break;
@@ -1940,20 +1940,20 @@ void RaceSubEvent::OnFinishedRace(RacePlayer& player)
 		break;
 		case 2:
 		{
-			std::string msg = "You almost did it!";
+			std::string msg = "OUTSTANDING RESULT!";
 			pl->SendRaidWarning(msg);
 		}
 		break;
 		case 3:
 		{
-			std::string msg = "Not bad!";
+			std::string msg = "Slow but steady wins the race...";
 			pl->SendRaidWarning(msg);
 		}
 		break;
 		default:
 		{
 			std::stringstream iss;
-			iss << "You came at " << place << " place!";
+			iss << "Place: " << place << ". Got Anything Faster?";
 			pl->SendRaidWarning(iss.str());
 		}
 			break;
