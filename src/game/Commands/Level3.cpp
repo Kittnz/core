@@ -8500,3 +8500,18 @@ bool ChatHandler::HandleRaceTest(char *args)
 
 	return true;
 }
+
+
+
+bool ChatHandler::HandleRaceQueueStatus(char* args)
+{
+	MiracleRaceEvent* miracleEvent = sGameEventMgr.GetHardcodedEvent<MiracleRaceEvent>();
+	if (miracleEvent != nullptr)
+	{
+		PSendSysMessage("Total players in queue: %zu", miracleEvent->queueSystem().queuedPlayers.size());
+		PSendSysMessage("   gnomes: %zu", miracleEvent->queueSystem().gnomePlayers.size());
+		PSendSysMessage("   goblins: %zu", miracleEvent->queueSystem().goblinPlayers.size());
+		PSendSysMessage("   number of invites: %zu", miracleEvent->queueSystem().GetInviteCount());
+	}
+	return true;
+}

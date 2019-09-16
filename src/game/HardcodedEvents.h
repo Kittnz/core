@@ -441,6 +441,8 @@ struct RaceSubEvent
 
 	void OnFinishedRace(RacePlayer& param1);
 
+	void RewardPlayer(Player* pl);
+
 	inline const RaceCheckpoint& GetCheckpoint(size_t index) const
 	{
 		return checkpoints[index];
@@ -486,6 +488,8 @@ struct MiracleRaceQueueSystem
 	std::list<ObjectGuid> queuedPlayers;
 
 	std::function<void(ObjectGuid, ObjectGuid)> onFoundRace;
+
+	size_t GetInviteCount() const;
 
 private:
 

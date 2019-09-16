@@ -45,10 +45,11 @@ bool GossipSelect_npc_daisy(Player* p_Player, Creature* p_Creature, uint32 /*uiS
 			if (!miracleEvent->queueSystem().isPlayerQueuedAlready(p_Player->GetObjectGuid()))
 			{
 				miracleEvent->queueSystem().QueuePlayer(p_Player, MiracleRaceSide::Goblin);
+				p_Creature->MonsterWhisper("Get ready! Shimmering Flats race event is about to start! Make haste if you wish to attend!", p_Player);
 			}
 			else
 			{
-				p_Creature->MonsterWhisper(ALREADY_REGISTERED_TXTID, p_Player);
+				p_Creature->MonsterWhisper("You are already registered to participate on Mirage Race.", p_Player);
 			}
 		}
     }
@@ -68,10 +69,11 @@ bool GossipSelect_npc_daisy(Player* p_Player, Creature* p_Creature, uint32 /*uiS
 			if (!miracleEvent->queueSystem().isPlayerQueuedAlready(p_Player->GetObjectGuid()))
 			{
 				miracleEvent->queueSystem().QueuePlayer(p_Player, MiracleRaceSide::Gnome);
+				p_Creature->MonsterWhisper("Get ready! Shimmering Flats race event is about to start! Make haste if you wish to attend!", p_Player);
 			}
 			else
 			{
-				p_Creature->MonsterWhisper(ALREADY_REGISTERED_TXTID, p_Player);
+				p_Creature->MonsterWhisper("You are already registered to participate on Mirage Race.", p_Player);
 			}
 		}
 
@@ -125,7 +127,7 @@ struct go_speed_up : public GameObjectAI
     }
 };
 
-constexpr float SheepAcceptanceRadius = 3.4f;
+constexpr float SheepAcceptanceRadius = 4.4f;
 constexpr float SheepAcceptanceRadiusSqr = SheepAcceptanceRadius * SheepAcceptanceRadius;
 
 #define INVISIBLE_TRIGGER_ID 14495
@@ -139,7 +141,7 @@ struct npc_race_sheep : public ScriptedAI
 	std::set<ObjectGuid> racers;
 	uint32 checkTimer = 0;
 
-	static const uint32 CheckForRacersInterval = 200;
+	static const uint32 CheckForRacersInterval = 10;
 
 
 	virtual void Reset() override
@@ -275,6 +277,13 @@ bool ItemUse_Miracle_AcceptInvite(Player* player, Item* item, SpellCastTargets c
 	if (miracleEvent != nullptr)
 	{
 		miracleEvent->queueSystem().PlayerAcceptInvite(player);
+	}
+
+	ItemPrototype const *proto = item->GetProto();
+	if (proto != nullptr)
+	{
+		if (SpellEntry const* spellInfo = sSpellMgr.GetSpellEntry(proto->Spells[0].SpellId))
+			Spell::SendCastResult(player, spellInfo, SPELL_FAILED_NOT_READY);
 	}
 
 	return true;

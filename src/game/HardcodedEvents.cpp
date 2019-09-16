@@ -1693,15 +1693,18 @@ bool MiracleRaceEvent::InitializeRace(uint32 raceId)
 	{
 		fields = raceData->Fetch();
 
-		uint32 entry = fields[0].GetUInt32();
-		uint32 chance = fields[1].GetUInt32();
-		chance = std::min(chance, 100u);
-		float PosX = fields[2].GetFloat();
-		float PosY = fields[3].GetFloat();
-		float PosZ = fields[4].GetFloat();
-		Position pos(PosX, PosY, PosZ, 0.0f);
+		do 
+		{
+			uint32 entry = fields[0].GetUInt32();
+			uint32 chance = fields[1].GetUInt32();
+			chance = std::min(chance, 100u);
+			float PosX = fields[2].GetFloat();
+			float PosY = fields[3].GetFloat();
+			float PosZ = fields[4].GetFloat();
+			Position pos(PosX, PosY, PosZ, 0.0f);
 
-		raceCreatures.emplace_back(RaceCreature{entry, pos, uint8(chance)});
+			raceCreatures.emplace_back(RaceCreature{ entry, pos, uint8(chance) });
+		} while (raceData->NextRow());
 	}
 
 	return true;
@@ -1767,6 +1770,7 @@ void MiracleRaceEvent::onInviteAccepted(ObjectGuid gnomePlayer, ObjectGuid gobli
 	Player* goblinPlayerP = sObjectMgr.GetPlayer(goblinPlayer);
 	racers.emplace_back(RacePlayerSetup{ gnomePlayerP, MiracleRaceSide::Gnome });
 	racers.emplace_back(RacePlayerSetup{ goblinPlayerP, MiracleRaceSide::Goblin });
+	InitializeRace(1);
 	std::shared_ptr<RaceSubEvent> SubEvent = races.emplace_back(std::make_shared<RaceSubEvent>(1, racers, this));
 	SubEvent->Start();
 }
@@ -1916,10 +1920,20 @@ void RaceSubEvent::End()
 	// despawn the shit
 	for (ObjectGuid guid : spawnedShit)
 	{
-		Creature* creature = theMap->GetAnyTypeCreature(guid);
-		creature->DespawnOrUnsummon();
+		if (Creature* creature = theMap->GetAnyTypeCreature(guid))
+		{
+			creature->DespawnOrUnsummon();
+		}
 	}
 }
+
+enum MiracleRaceQuests
+{
+	GoblinTest = 50310,// - goblin test
+	GnomeTest = 50312,// - gnome test
+	GoblinReal = 50311,// - goblin real
+	GnomeReal = 50313 //- gnome real
+};
 
 void RaceSubEvent::OnFinishedRace(RacePlayer& player)
 {
@@ -1929,6 +1943,7 @@ void RaceSubEvent::OnFinishedRace(RacePlayer& player)
 		leaderboard.push_back(pl->GetName());
 		size_t place = leaderboard.size();
 
+		RewardPlayer(pl);
 
 		switch (place)
 		{
@@ -1959,6 +1974,24 @@ void RaceSubEvent::OnFinishedRace(RacePlayer& player)
 			break;
 		}
 	}
+}
+
+void RaceSubEvent::RewardPlayer(Player* pl)
+{
+	auto CheckForQuestAndMarkCompleteLambda = [pl](uint32 questId) -> bool
+	{
+		if (pl->GetQuestStatus(questId) == QUEST_STATUS_INCOMPLETE)
+		{
+			pl->AreaExploredOrEventHappens(questId);
+			return true;
+		}
+		return false;
+	};
+
+	if (CheckForQuestAndMarkCompleteLambda(MiracleRaceQuests::GoblinTest)) return;
+	if (CheckForQuestAndMarkCompleteLambda(MiracleRaceQuests::GnomeTest)) return;
+	if (CheckForQuestAndMarkCompleteLambda(MiracleRaceQuests::GoblinReal)) return;
+	if (CheckForQuestAndMarkCompleteLambda(MiracleRaceQuests::GnomeReal)) return;
 }
 
 RacePlayer::RacePlayer(const RacePlayerSetup& racer, RaceSubEvent* InEvent)
@@ -2009,10 +2042,24 @@ void RacePlayer::GoRaceMode()
 			pl->SetOrientation(ang);
 
 			pl->SetDisplayId(INVISIBLE_MODELID);
-			pl->Mount(GOBLINCAR_DISPLAYID);
+
+			float startY = startPoint.pos.y + 5.0f;
+			switch (side)
+			{
+			case MiracleRaceSide::Gnome:
+				pl->Mount(GNOMECAR_DISPLAYID);
+				startY -= 6.0f;
+				break;
+			case MiracleRaceSide::Goblin:
+				pl->Mount(GOBLINCAR_DISPLAYID);
+				break;
+			default:
+				pl->Mount(GOBLINCAR_DISPLAYID);
+				break;
+			}
 
 			//pl->SetFly(true);
-			pl->TeleportTo(map->GetId(), startPoint.pos.x, startPoint.pos.y, startPoint.pos.z, pl->GetOrientation(), 0, [this]()
+			pl->TeleportTo(map->GetId(), startPoint.pos.x, startY, startPoint.pos.z, pl->GetOrientation(), 0, [this]()
 			{
 				LeaveRaceMode();
 			});
@@ -2251,6 +2298,11 @@ void MiracleRaceQueueSystem::PlayerAcceptInvite(Player* player)
 	}
 }
 
+size_t MiracleRaceQueueSystem::GetInviteCount() const
+{
+	return _inviteRequests.size();
+}
+
 #define RACEINVITE_TXTID 50211
 
 bool MiracleRaceQueueSystem::TryStartRace()
@@ -2296,22 +2348,22 @@ bool MiracleRaceQueueSystem::TryStartRace()
 	LiveGnomePlayer = TryGetAlivePlayerLambda(MiracleRaceSide::Gnome);
 	LiveGoblinPlayer = TryGetAlivePlayerLambda(MiracleRaceSide::Goblin);
 
-
 	if (!LiveGnomePlayer.IsEmpty() && !LiveGoblinPlayer.IsEmpty())
 	{
 		// Register invite
 		_inviteRequests.emplace_back(InviteRequest( LiveGnomePlayer , LiveGoblinPlayer));
 		InviteRequest& newInvite = _inviteRequests.back();
 
+		const char* InvitationText = "Shimmering Flats race is about to start! Use the key in your inventory to accept the invitation NOW!";
 		// Send them invite
 		if (Player* gnomePlayer = sObjectMgr.GetPlayer(LiveGnomePlayer))
 		{
-			gnomePlayer->SendRaidWarning(RACEINVITE_TXTID);
+			gnomePlayer->SendRaidWarning(InvitationText);
 		}
 
 		if (Player* goblinPlayer = sObjectMgr.GetPlayer(LiveGoblinPlayer))
 		{
-			goblinPlayer->SendRaidWarning(RACEINVITE_TXTID);
+			goblinPlayer->SendRaidWarning(InvitationText);
 		}
 
 		return true;

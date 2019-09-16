@@ -925,6 +925,10 @@ class MANGOS_DLL_SPEC ChatHandler
         bool HandleMakeBackCommand(char* args); 
         bool HandleMakeWeaponCommand(char* args);
 
+		// turtle specific
+		// race event
+		bool HandleRaceQueueStatus(char* args);
+
         Player*   GetSelectedPlayer();
         Creature* GetSelectedCreature();
         Unit*     GetSelectedUnit();

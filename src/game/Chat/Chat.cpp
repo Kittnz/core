@@ -37,6 +37,7 @@
 #include "SpellMgr.h"
 #include "PoolManager.h"
 #include "GameEventMgr.h"
+#include "HardcodedEvents.h"
 
 // Supported shift-links (client generated and server side)
 // |color|Harea:area_id|h[name]|h|r
@@ -1006,6 +1007,12 @@ ChatCommand * ChatHandler::getCommandTable()
         { MSTR, nullptr,             0,                     false, nullptr,                                        "", nullptr }
     };
 
+	static ChatCommand raceCommandTable[] =
+	{
+		{ NODE, "status",        SEC_PLAYER,         false, &ChatHandler::HandleRaceQueueStatus,                                         "", nullptr  },
+		{ MSTR, nullptr,          0,                  false, nullptr,                                        "", nullptr }
+	};
+
     static ChatCommand commandTable[] =
     {
         { NODE, "account",        SEC_PLAYER,         true, nullptr,                                         "", accountCommandTable  },
@@ -1152,7 +1159,8 @@ ChatCommand * ChatHandler::getCommandTable()
 		{ NODE, "racetest",       SEC_ADMINISTRATOR,  false, &ChatHandler::HandleRaceTest,                   "", nullptr },
         { NODE, "tired",          SEC_GAMEMASTER,     false, &ChatHandler::HandleTiredCommand,               "", nullptr }, 
         { NODE, "tootired",       SEC_GAMEMASTER,     false, &ChatHandler::HandleTooTiredCommand,            "", nullptr }, 
-        { NODE, "debugredxpbar",  SEC_GAMEMASTER,     false, &ChatHandler::HandleDebugRedXPBarCommand,       "", nullptr }, 
+		{ NODE, "debugredxpbar",  SEC_GAMEMASTER,     false, &ChatHandler::HandleDebugRedXPBarCommand,       "", nullptr },
+		{ NODE, "miragerace",	  SEC_GAMEMASTER,     false, nullptr,										 "", raceCommandTable },
         { MSTR, nullptr,          0,                  false, nullptr,                                        "", nullptr }
     };
 
@@ -2287,6 +2295,8 @@ void ChatHandler::BuildChatPacket(WorldPacket& data, ChatMsg msgtype, char const
     data << message;
     data << uint8(chatTag);
 }
+
+
 
 Player * ChatHandler::GetSelectedPlayer()
 {
