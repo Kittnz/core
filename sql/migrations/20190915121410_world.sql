@@ -50,7 +50,7 @@ replace into custom_pet_entry_relation (item_entry, creature_entry) values
 ('51002', '50527'), 
 ('51003', '50528');
 replace into item_template (entry, class, name, display_id, quality, bonding, flags, description) values
-(51004, 15, 'Miracle Raceway Winner\'s Box', 6394, 1, 1, 4, ''); 
+(51004, 15, 'Mirage Raceway Winner\'s Box', 6394, 1, 1, 4, ''); 
 replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid, mincountOrRef, maxcount) values
 (51004, 18253, 100, 1, 1, 1), 
 (51004, 13444, 100, 2, 1, 1),
