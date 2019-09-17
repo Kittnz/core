@@ -71,8 +71,8 @@ replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid, minc
 -- TODO: add more elixirs and randomize their drop.
 replace into quest_template (entry, patch, Method, ZoneOrSort, MinLevel, MaxLevel, QuestLevel, Type, RequiredClasses, RequiredRaces, RequiredSkill, RequiredSkillValue, RepObjectiveFaction, RepObjectiveValue, RequiredMinRepFaction, RequiredMinRepValue, RequiredMaxRepFaction, RequiredMaxRepValue, SuggestedPlayers, LimitTime, QuestFlags, SpecialFlags, PrevQuestId, NextQuestId, ExclusiveGroup, NextQuestInChain, SrcItemId, SrcItemCount, SrcSpell, Title, Details, Objectives, OfferRewardText, RequestItemsText, EndText, ObjectiveText1, ObjectiveText2, ObjectiveText3, ObjectiveText4, ReqItemId1, ReqItemId2, ReqItemId3, ReqItemId4, ReqItemCount1, ReqItemCount2, ReqItemCount3, ReqItemCount4, ReqSourceId1, ReqSourceId2, ReqSourceId3, ReqSourceId4, ReqSourceCount1, ReqSourceCount2, ReqSourceCount3, ReqSourceCount4, ReqCreatureOrGOId1, ReqCreatureOrGOId2, ReqCreatureOrGOId3, ReqCreatureOrGOId4, ReqCreatureOrGOCount1, ReqCreatureOrGOCount2, ReqCreatureOrGOCount3, ReqCreatureOrGOCount4, ReqSpellCast1, ReqSpellCast2, ReqSpellCast3, ReqSpellCast4, RewChoiceItemId1, RewChoiceItemId2, RewChoiceItemId3, RewChoiceItemId4, RewChoiceItemId5, RewChoiceItemId6, RewChoiceItemCount1, RewChoiceItemCount2, RewChoiceItemCount3, RewChoiceItemCount4, RewChoiceItemCount5, RewChoiceItemCount6, RewItemId1, RewItemId2, RewItemId3, RewItemId4, RewItemCount1, RewItemCount2, RewItemCount3, RewItemCount4, RewRepFaction1, RewRepFaction2, RewRepFaction3, RewRepFaction4, RewRepFaction5, RewRepValue1, RewRepValue2, RewRepValue3, RewRepValue4, RewRepValue5, RewOrReqMoney, RewMoneyMaxLevel, RewSpell, RewSpellCast, RewMailTemplateId, RewMailDelaySecs, RewMailMoney, PointMapId, PointX, PointY, PointOpt, DetailsEmote1, DetailsEmote2, DetailsEmote3, DetailsEmote4, DetailsEmoteDelay1, DetailsEmoteDelay2, DetailsEmoteDelay3, DetailsEmoteDelay4, IncompleteEmote, CompleteEmote, OfferRewardEmote1, OfferRewardEmote2, OfferRewardEmote3, OfferRewardEmote4, OfferRewardEmoteDelay1, OfferRewardEmoteDelay2, OfferRewardEmoteDelay3, OfferRewardEmoteDelay4, StartScript, CompleteScript) values 
 -- Test drive quests:
-(50310, 0, 2, 0, 1, 0, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 50525, 1, 0, 'Goblin Engineering At It\'s Finest!', 'Ey, kid! Yes, you! I see you\'re an adventuring type and ready to jump into any frey if only there\'s one to jump into, right? Just as I thought. What? Of course there\'s a reward involved, how else could it be around here? It\'s a Mirage Raceway after all!\n\nWhat to do? Oh, that\'s so simple, I\'m sure that even a gnome would manage to test our jolly vehicle on the sustain for … errh, durability conditions! Yes! So, if you\'re ready to earn some coins and crack some scorpids flat then you\'re at the right spot, kid! What helmet? Instruction? Bah! Who needs\'em anyway?!\n\nLet\'s blast it!', 'Ride a goblin race car to see if it survives the start at all.', 'Data should be gathered and then processed. Do you realize how important it is for us? Good. Now then, see to it done!', 'Ahhh, finally! I\'ve been awaiting for this data... Many thanks, many thanks indeed.', NULL, NULL, NULL, NULL, NULL, 0, 50525, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 50522, 51002, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2400, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(50312, 0, 2, 0, 1, 0, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 50524, 1, 0, 'Gnomes Are Genuine Inventors', 'I am sure that you\'re very well aware of the fact about us, gnomes, we\'re the best inventors. Assuming you\'re striving to improve your skills and knowledge you will eventually be considered to study from us. Obviously, no gnome is that stupid to decline this intriguing and exciting partnership, alas it might be costly sometimes.\n\nSpeaking shorter; we need someone to compliment our natural resourcefulness of brain activity with their muscle and durability!\n\nIf you successfully ride this awesome masterpiece of gnomish engineering any other dimwit goblin would simply call a race car then you will be granted an opportunity to represent our bright society of inventors even further in Mirage Races!\n\nCool, right?\n\nWell, here\'s the instructions we\'ve specifically designed for other races for better understanding and comprehension.\n\nGood luck, sentient one!', 'Ride a goblin race car to see if it survives the start at all.', 'What helmet? Instruction? Bah! Who needs\'em anyway?!', 'Starts the engine, of course! Levers for stearing.', NULL, NULL, NULL, NULL, NULL, 0, 50524, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 50523, 51003, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2400, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(50310, 0, 2, 0, 1, 0, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 50525, 1, 0, 'Goblin Engineering At It\'s Finest!', 'Ey, kid! Yes, you! I see you\'re an adventuring type and ready to jump into any fray if only there\'s one to jump into, right? Just as I thought. What? Of course there\'s a reward involved, how else could it be around here? It\'s a Mirage Raceway after all!\n\nWhat to do? Oh, that\'s so simple, I\'m sure that even a gnome would manage to test our jolly vehicle on the sustain for … errh, durability conditions! Yes! So, if you\'re ready to earn some coins and crack some scorpids flat then you\'re at the right spot, kid! What helmet? Instruction? Bah! Who needs\'em anyway?!\n\nLet\'s blast it!', 'Ride a goblin race car to see if it survives the start at all.', 'Data should be gathered and then processed. Do you realize how important it is for us? Good. Now then, see to it done!', 'Ahhh, finally! I\'ve been awaiting for this data... Many thanks, many thanks indeed.', NULL, NULL, NULL, NULL, NULL, 0, 50525, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 50522, 51002, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2400, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(50312, 0, 2, 0, 1, 0, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 50524, 1, 0, 'Gnomes Are Genuine Inventors', 'I am sure that you\'re very well aware of the fact about us, gnomes, we\'re the best inventors. Assuming you\'re striving to improve your skills and knowledge you will eventually be considered to study from us. Obviously, no gnome is that stupid to decline this intriguing and exciting partnership, alas it might be costly sometimes.\n\nSpeaking shorter; we need someone to compliment our natural resourcefulness of brain activity with their muscle and durability!\n\nIf you successfully ride this awesome masterpiece of gnomish engineering any other dimwit goblin would simply call a race car then you will be granted an opportunity to represent our bright society of inventors even further in Mirage Races!\n\nCool, right?\n\nWell, here\'s the instructions we\'ve specifically designed for other races for better understanding and comprehension.\n\nGood luck, sentient one!', 'Ride a gnome race car to see if it survives the start at all.', 'What helmet? Instruction? Bah! Who needs\'em anyway?!', 'Starts the engine, of course! Levers for stirring!', NULL, NULL, NULL, NULL, NULL, 0, 50524, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 50523, 51003, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2400, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
 -- Real race quests:
 (50311, 0, 2, 0, 1, 0, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 50310, 0, 0, 0, 50525, 1, 0, 'Mirage Raceway: Goblin\'s Team', 'Oh, so nice you\'re alive and back in one piece! I had no doubts in you, of course.\n\nSo you\'re ready for another run on our goblin engineering masterpiece, eh? Well then if you know the drill you better get ready and take the first place yet again!', 'Complete the lap with best time.', 'Data should be gathered and then processed. Do you realize how important it is for us? Good. Now then, see to it done!', 'Ahhh, finally! I\'ve been awaiting for this data... Many thanks, many thanks indeed.', NULL, NULL, NULL, NULL, NULL, 0, 50525, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 51004, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2400, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
 (50313, 0, 2, 0, 1, 0, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 50312, 0, 0, 0, 50524, 1, 0, 'Mirage Raceway: Gnome\'s Team', 'Salutations, sentient one! We\'re very much satisfied with the results you have achieved with the test drive for our mechanical engineering device and proved to be very useful for providing us so much needed data for analysis.We\'re ready to allow you continuous partial involvement with our research team and have agreed on supplying you for your efforts.\n\nWhen you\'re ready to proceed with data gathering be sure to remember the instructions provided and safety measures recommended.\n\nHave a great day!', 'Complete the lap with best time.', 'Don\'t swap the pedals!', 'You got it, eh?', NULL, NULL, NULL, NULL, NULL, 0, 50524, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 51004, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2400, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
@@ -86,6 +86,9 @@ update quest_template set questflags = 1 where entry = 50311;
 update quest_template set specialflags = 3 where entry = 50311;
 update quest_template set questflags = 1 where entry = 50313;
 update quest_template set specialflags = 3 where entry = 50313;
+-- Update test quest PrevQuestId:
+update quest_template set prevquestid = 50315 where entry = 50310;
+update quest_template set prevquestid = 50315 where entry = 50312;
 -- Fara Boltbreaker, and her Gadgetzan Times quest:
 replace into creature_template (entry, patch, display_id1, display_id2, display_id3, display_id4, name, subname, gossip_menu_id, level_min, level_max, health_min, health_max, mana_min, mana_max, armor, faction, npc_flags, speed_walk, speed_run, scale, detection_range, call_for_help_range, leash_range, rank, xp_multiplier, dmg_min, dmg_max, dmg_school, attack_power, dmg_multiplier, base_attack_time, ranged_attack_time, unit_class, unit_flags, dynamic_flags, beast_family, trainer_type, trainer_spell, trainer_class, trainer_race, ranged_dmg_min, ranged_dmg_max, ranged_attack_power, type, type_flags, loot_id, pickpocket_loot_id, skinning_loot_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, spell_id1, spell_id2, spell_id3, spell_id4, spell_list_id, pet_spell_list_id, gold_min, gold_max, ai_name, movement_type, inhabit_type, civilian, racial_leader, regeneration, equipment_id, trainer_id, vendor_id, mechanic_immune_mask, school_immune_mask, flags_extra, script_name) values 
 (50530, 0, 7909, 0, 0, 0, 'Fara Boltbreaker', 'Gadgetzan Times Reporter', 90200, 30, 30, 1605, 1605, 0, 0, 1200, 35, 2, 1.08, 1.14286, 0, 20, 5, 0, 0, 1, 42, 53, 0, 122, 1, 1000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 45.144, 62.073, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 100, 0, 0, 10, '');
@@ -119,6 +122,7 @@ create table if not exists miraclerace_creaturespool
   positiony float not null,
   positionz float not null); 
 replace into miraclerace_creaturespool (raceid, entry, chance, positionx, positiony, positionz) values
+-- Main track cheeps:
 (1, 50513, rand()*(100-10)+10, -6208.65, -3896.71, -60.359),
 (1, 50513, rand()*(100-10)+10, -6211.08, -3904.97, -60.3782),
 (1, 50513, rand()*(100-10)+10, -6220.44, -3898.68, -60.4702),
@@ -223,7 +227,65 @@ replace into miraclerace_creaturespool (raceid, entry, chance, positionx, positi
 (1, 50513, rand()*(100-10)+10, -6117.13, -3903.78, -59.9301),
 (1, 50513, rand()*(100-10)+10, -6142.66, -3904.75, -59.8828),
 (1, 50513, rand()*(100-10)+10, -6164.32, -3901.69, -59.8917),
-(1, 50513, rand()*(100-10)+10, -6191.15, -3905.9, -60.1542);
+(1, 50513, rand()*(100-10)+10, -6191.15, -3905.9, -60.1542),
+-- Test track sheeps:
+(2, 50513, rand()*(100-10)+10, -6219.1, -4005.1, -58.7494),
+(2, 50513, rand()*(100-10)+10, -6247.96, -4000.81, -58.7494),
+(2, 50513, rand()*(100-10)+10, -6246.48, -4017.45, -58.7494),
+(2, 50513, rand()*(100-10)+10, -6197.83, -4012.05, -58.7494),
+(2, 50513, rand()*(100-10)+10, -6080.61, -4008.31, -58.7494),
+(2, 50513, rand()*(100-10)+10, -6041.8, -4021.71, -58.7494),
+(2, 50513, rand()*(100-10)+10, -6012.7, -4015.41, -58.7494),
+(2, 50513, rand()*(100-10)+10, -5973.97, -4014.31, -58.7494),
+(2, 50513, rand()*(100-10)+10, -5939.13, -4018.28, -58.7494),
+(2, 50513, rand()*(100-10)+10, -5901.31, -4018.74, -58.7494),
+(2, 50513, rand()*(100-10)+10, -5876.22, -4013.01, -58.7439),
+(2, 50513, rand()*(100-10)+10, -5845.52, -4022.79, -58.7496),
+(2, 50513, rand()*(100-10)+10, -5836.68, -4023.64, -58.7496),
+(2, 50513, rand()*(100-10)+10, -5800.81, -4017.22, -58.7704),
+(2, 50513, rand()*(100-10)+10, -5794.06, -4022.09, -58.7507),
+(2, 50513, rand()*(100-10)+10, -5779.79, -4023.48, -58.7723),
+(2, 50513, rand()*(100-10)+10, -5789.01, -4011.74, -58.7876),
+(2, 50513, rand()*(100-10)+10, -5804.28, -4020.29, -58.753),
+(2, 50513, rand()*(100-10)+10, -5817.34, -4023.24, -58.751),
+(2, 50513, rand()*(100-10)+10, -5838.08, -4009.66, -58.758),
+(2, 50513, rand()*(100-10)+10, -5849.69, -4010.28, -58.7502),
+(2, 50513, rand()*(100-10)+10, -5870.33, -4025, -58.7502),
+(2, 50513, rand()*(100-10)+10, -5876.07, -4026.35, -58.7502),
+(2, 50513, rand()*(100-10)+10, -5901.24, -4011.5, -58.7502),
+(2, 50513, rand()*(100-10)+10, -5908.33, -4011.22, -58.7502),
+(2, 50513, rand()*(100-10)+10, -5922.85, -4021.63, -58.7502),
+(2, 50513, rand()*(100-10)+10, -5935.79, -4022.58, -58.7502),
+(2, 50513, rand()*(100-10)+10, -5946.61, -4011.44, -58.7502),
+(2, 50513, rand()*(100-10)+10, -5959.99, -4012.37, -58.7502),
+(2, 50513, rand()*(100-10)+10, -5971.36, -4021.9, -58.7502),
+(2, 50513, rand()*(100-10)+10, -5981.52, -4024.52, -58.7502),
+(2, 50513, rand()*(100-10)+10, -5999.21, -4012.43, -58.7502),
+(2, 50513, rand()*(100-10)+10, -6009.23, -4008.15, -58.7502),
+(2, 50513, rand()*(100-10)+10, -6033.94, -4019.29, -58.7502),
+(2, 50513, rand()*(100-10)+10, -6036.37, -4020.18, -58.7502),
+(2, 50513, rand()*(100-10)+10, -6055.43, -4017.67, -58.7502),
+(2, 50513, rand()*(100-10)+10, -6043.92, -4010.95, -58.7502),
+(2, 50513, rand()*(100-10)+10, -6057.59, -4007.79, -58.7502),
+(2, 50513, rand()*(100-10)+10, -6082.25, -4018.77, -58.7502),
+(2, 50513, rand()*(100-10)+10, -6093.45, -4019.01, -58.7502),
+(2, 50513, rand()*(100-10)+10, -6114.17, -4011.95, -58.7502),
+(2, 50513, rand()*(100-10)+10, -6128.49, -4006.56, -58.7502),
+(2, 50513, rand()*(100-10)+10, -6133.19, -4006.96, -58.7502),
+(2, 50513, rand()*(100-10)+10, -6145.7, -4016.47, -58.7502),
+(2, 50513, rand()*(100-10)+10, -6152.49, -4017.23, -58.7502),
+(2, 50513, rand()*(100-10)+10, -6163.91, -4013.05, -58.7502),
+(2, 50513, rand()*(100-10)+10, -6179.51, -4007.84, -58.7502),
+(2, 50513, rand()*(100-10)+10, -6185.99, -4009.88, -58.7502),
+(2, 50513, rand()*(100-10)+10, -6192.3, -4021.18, -58.7502),
+(2, 50513, rand()*(100-10)+10, -6199.62, -4021.83, -58.7502),
+(2, 50513, rand()*(100-10)+10, -6199.62, -4021.83, -58.7502),
+(2, 50513, rand()*(100-10)+10, -6211.69, -4011.99, -58.7502),
+(2, 50513, rand()*(100-10)+10, -6213.56, -4010.87, -58.7502),
+(2, 50513, rand()*(100-10)+10, -6219.95, -4011.24, -58.7502),
+(2, 50513, rand()*(100-10)+10, -6228.26, -4016.87, -58.7502),
+(2, 50513, rand()*(100-10)+10, -6244.16, -4010.07, -58.7502),
+(2, 50513, rand()*(100-10)+10, -6264.78, -4011.69, -58.7502);
 -- Update movement type for racetrack sheep:
 update creature_template set movement_type = 1 where entry = 50513;
 -- Goblin and Gnome car keys:
@@ -234,4 +296,10 @@ replace into item_template (entry, patch, class, subclass, name, description, di
 -- Second racetrack girl, Dolores:
 replace into creature_template (entry, patch, display_id1, display_id2, display_id3, display_id4, name, subname, gossip_menu_id, level_min, level_max, health_min, health_max, mana_min, mana_max, armor, faction, npc_flags, speed_walk, speed_run, scale, detection_range, call_for_help_range, leash_range, rank, xp_multiplier, dmg_min, dmg_max, dmg_school, attack_power, dmg_multiplier, base_attack_time, ranged_attack_time, unit_class, unit_flags, dynamic_flags, beast_family, trainer_type, trainer_spell, trainer_class, trainer_race, ranged_dmg_min, ranged_dmg_max, ranged_attack_power, type, type_flags, loot_id, pickpocket_loot_id, skinning_loot_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, spell_id1, spell_id2, spell_id3, spell_id4, spell_list_id, pet_spell_list_id, gold_min, gold_max, ai_name, movement_type, inhabit_type, civilian, racial_leader, regeneration, equipment_id, trainer_id, vendor_id, mechanic_immune_mask, school_immune_mask, flags_extra, script_name) values 
 (50533, 0, 3463, 0, 0, 0, 'Dolores', 'Race Starter Girl', 0, 15, 15, 644, 644, 0, 0, 20, 35, 1, 1, 1.14286, 0, 20, 5, 0, 0, 1, 17, 22, 0, 74, 1, 2000, 2000, 1, 768, 0, 0, 0, 0, 0, 0, 24.552, 33.759, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 4507, 0, 0, 0, 0, 2, 'npc_dolores');
+-- Update Daisy & Dolores gossip_menu_ids:
+replace into broadcast_text (ID, MaleText) values ('90250', 'The winner ain\'t the one with the fastest car, it\'s the one who refuses to lose.');
+replace into npc_text (ID, BroadcastTextID0) values ('90250', '90250');
+replace into broadcast_text (ID, MaleText) values ('90251', 'There\'s no secret. You just press the accelerator to the floor and steer left.');
+replace into npc_text (ID, BroadcastTextID0) values ('90251', '90251');
+
 

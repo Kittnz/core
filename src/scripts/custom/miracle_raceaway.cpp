@@ -24,7 +24,7 @@ bool GossipHello_npc_daisy(Player* p_Player, Creature* p_Creature)
 {
     p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I'll join Goblin's Team.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I'll join Gnomes's Team.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
-    p_Player->SEND_GOSSIP_MENU(90200, p_Creature->GetGUID());
+    p_Player->SEND_GOSSIP_MENU(90250, p_Creature->GetGUID());
     return true;
 }
 
@@ -79,6 +79,13 @@ bool GossipSelect_npc_daisy(Player* p_Player, Creature* p_Creature, uint32 /*uiS
 
     }
     p_Player->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
+bool GossipHello_npc_dolores(Player* p_Player, Creature* p_Creature)
+{
+    p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I'want my driving licence!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    p_Player->SEND_GOSSIP_MENU(90251, p_Creature->GetGUID());
     return true;
 }
 
@@ -318,6 +325,12 @@ void AddSC_miracle_raceaway()
     newscript->Name = "npc_daisy";
     newscript->pGossipHello = &GossipHello_npc_daisy;
     newscript->pGossipSelect = &GossipSelect_npc_daisy;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_dolores";
+    newscript->pGossipHello = &GossipHello_npc_dolores;
+    // newscript->pGossipSelect = &GossipSelect_npc_dolores;
     newscript->RegisterSelf();
 
     newscript = new Script;
