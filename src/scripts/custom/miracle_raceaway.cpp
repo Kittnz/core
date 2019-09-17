@@ -4,8 +4,13 @@
 
 // Items:
 
-#define GNOME_CAMERA_KEY   5916
-#define GOBLIN_CAMERA_KEY  5937
+#define GOBLIN_CAR_KEY  50525
+#define GNOME_CAR_KEY  50524
+
+// Quests:
+
+#define GOBLIN_TEST_QUEST 50310
+#define GNOME_TEST_QUEST 50312
 
 #define ALREADY_REGISTERED_TXTID 50212
 
@@ -84,8 +89,44 @@ bool GossipSelect_npc_daisy(Player* p_Player, Creature* p_Creature, uint32 /*uiS
 
 bool GossipHello_npc_dolores(Player* p_Player, Creature* p_Creature)
 {
-    p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I'want my driving licence!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I want a test drive of Goblin's Car!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I want a test drive of Gnome's Car!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
     p_Player->SEND_GOSSIP_MENU(90251, p_Creature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_dolores(Player* p_Player, Creature* p_Creature, uint32 /*uiSender*/, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        if (p_Player->HasItemCount(GOBLIN_CAR_KEY, 0) && p_Player->GetQuestStatus(GOBLIN_TEST_QUEST) == QUEST_STATUS_INCOMPLETE)
+        {
+            if (MiracleRaceEvent* event = sGameEventMgr.GetHardcodedEvent<MiracleRaceEvent>())
+            {
+                event->StartTestRace(2, p_Player);
+            }
+        }
+        else
+        {
+            p_Creature->MonsterSay("You can't drive the car without keys! Speak to Jizzle Grikbot, silly.");
+        }  
+    }
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
+    {
+        if (p_Player->HasItemCount(GNOME_CAR_KEY, 0) && p_Player->GetQuestStatus(GNOME_TEST_QUEST) == QUEST_STATUS_INCOMPLETE)
+        {
+            if (MiracleRaceEvent* event = sGameEventMgr.GetHardcodedEvent<MiracleRaceEvent>())
+            {
+                event->StartTestRace(2, p_Player);
+            }
+        }
+        else
+        {
+            p_Creature->MonsterSay("You can't drive the car without keys! Speak to Gregor Fizzwuzz, silly.");
+        }
+    }
+
+    p_Player->CLOSE_GOSSIP_MENU();
     return true;
 }
 
@@ -330,7 +371,7 @@ void AddSC_miracle_raceaway()
     newscript = new Script;
     newscript->Name = "npc_dolores";
     newscript->pGossipHello = &GossipHello_npc_dolores;
-    // newscript->pGossipSelect = &GossipSelect_npc_dolores;
+    newscript->pGossipSelect = &GossipSelect_npc_dolores;
     newscript->RegisterSelf();
 
     newscript = new Script;
