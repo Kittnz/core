@@ -1,6 +1,6 @@
 replace into migrations values (20190915121410);
 
--- replace into game_event (entry, start_time, end_time, occurence, length, holiday, description, hardcoded, disabled, patch_min, patch_max) values ('161', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '1', '999999999', '0', 'miracle mirage race', '1', '0', '0', '10');
+replace into game_event (entry, start_time, end_time, occurence, length, holiday, description, hardcoded, disabled, patch_min, patch_max) values ('161', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '1', '999999999', '0', 'miracle mirage race', '1', '0', '0', '10');
 
 update creature_template set script_name="npc_daisy" where entry=4507;
 update creature_template set npc_flags=1 where entry=4507;		
@@ -334,3 +334,5 @@ replace into item_template (entry, class, subclass, name, display_id, Quality, F
 replace into page_text values
 (50066, 'Red button! Starts the engine, of course! Levers for stearing.\n\nObviously don\'t hit any rocks on the way. Hit the landmarks to get points and smear down these gnomes! If you happend to experience explosion of the race car and have no insurance then your belongings will be passed to Kruzak and Goblin Engineering team.\n\nThanks for running the race car durability crash test for us!\n\nYou\'re awesome!', 0),
 (50067, 'Red button! Starts the engine, of course! Levers for stearing.\n\nObviously don\'t hit any rocks on the way. Hit the landmarks to get points and smear down these goblins! If you happend to experience explosion of the race car and have no insurance then your belongings will be passed to Garry Crashbash and Gnome Engineering team.\n\nThanks for running the race car durability crash test for us!\n\nYou\'re awesome!', 0);
+-- Update Tabitha's DisplayID:
+update creature_template set display_id1=3377 where entry = 50033;
