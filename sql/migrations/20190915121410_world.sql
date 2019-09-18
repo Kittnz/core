@@ -301,5 +301,11 @@ replace into broadcast_text (ID, MaleText) values ('90250', 'The winner ain\'t t
 replace into npc_text (ID, BroadcastTextID0) values ('90250', '90250');
 replace into broadcast_text (ID, MaleText) values ('90251', 'There\'s no secret. You just press the accelerator to the floor and steer left.');
 replace into npc_text (ID, BroadcastTextID0) values ('90251', '90251');
-
-
+-- Events list for Fara Boltbreaker:
+replace into broadcast_text (ID, MaleText) values ('90252', 'Latest news from the best race event ever! Come and get your own magazine!');
+replace into npc_text (ID, BroadcastTextID0) values ('90252', '90252');
+delete from creature_ai_scripts where id = 50530;
+replace into creature_ai_scripts (id, delay, command, datalong, datalong2, datalong3, datalong4, target_param1, target_param2, target_type, data_flags, dataint, dataint2, dataint3, dataint4, x, y, z, o, condition_id, comments) values (50530, 300, 0, 1, 0, 0, 0, 0, 0, 0, 0, 90252, 0, 0, 0, 0, 0, 0, 0, 0, 'Fara_peaking.');
+update creature_template set ai_name = "EventAI" where entry = 50530;
+delete from creature_ai_events where creature_id=50530;
+insert into creature_ai_events (id, creature_id, condition_id, event_type, event_inverse_phase_mask, event_chance, event_flags, event_param1, event_param2, event_param3, event_param4, action1_script, action2_script, action3_script, comment) values (50530, 50530, 0, 1, 0, 100, 1, 0, 0, 0, 0, 50530, 0, 0, 'fara, speaking.');
