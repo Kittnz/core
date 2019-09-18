@@ -1,5 +1,20 @@
 replace into migrations values (20190915121410);
 
+-- replace into game_event (entry, start_time, end_time, occurence, length, holiday, description, hardcoded, disabled, patch_min, patch_max) values ('161', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '1', '999999999', '0', 'miracle mirage race', '1', '0', '0', '10');
+
+create table miraclerace_checkpoint (
+  id int unsigned not null auto_increment,
+  raceid int unsigned not null,
+  positionx float not null,
+  positiony float not null,
+  positionz float not null,
+  cameraposx float not null,
+  cameraposy float not null,
+  cameraposz float not null,
+  cameraposorientation float not null,
+  primary key (id),
+  unique index id_unique (id asc));
+
 set @height = -46;
 truncate table miraclerace_checkpoint;
 replace into miraclerace_checkpoint (raceid, positionx, positiony, positionz, cameraposx, cameraposy, cameraposz) values
