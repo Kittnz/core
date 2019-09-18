@@ -2,6 +2,9 @@ replace into migrations values (20190915121410);
 
 -- replace into game_event (entry, start_time, end_time, occurence, length, holiday, description, hardcoded, disabled, patch_min, patch_max) values ('161', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '1', '999999999', '0', 'miracle mirage race', '1', '0', '0', '10');
 
+update creature_template set script_name="npc_daisy" where entry=4507;
+update creature_template set npc_flags=1 where entry=4507;		
+
 create table if not exists miraclerace_checkpoint (
   id int unsigned not null auto_increment,
   raceid int unsigned not null,
