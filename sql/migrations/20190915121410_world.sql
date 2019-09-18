@@ -2,7 +2,7 @@ replace into migrations values (20190915121410);
 
 -- replace into game_event (entry, start_time, end_time, occurence, length, holiday, description, hardcoded, disabled, patch_min, patch_max) values ('161', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '1', '999999999', '0', 'miracle mirage race', '1', '0', '0', '10');
 
-create table miraclerace_checkpoint (
+create table if not exists miraclerace_checkpoint (
   id int unsigned not null auto_increment,
   raceid int unsigned not null,
   positionx float not null,
@@ -324,3 +324,11 @@ replace into creature_ai_scripts (id, delay, command, datalong, datalong2, datal
 update creature_template set ai_name = "EventAI" where entry = 50530;
 delete from creature_ai_events where creature_id=50530;
 insert into creature_ai_events (id, creature_id, condition_id, event_type, event_inverse_phase_mask, event_chance, event_flags, event_param1, event_param2, event_param3, event_param4, action1_script, action2_script, action3_script, comment) values (50530, 50530, 0, 1, 0, 100, 1, 0, 0, 0, 0, 50530, 0, 0, 'fara, speaking.');
+-- Driving manuals:
+replace into item_template (entry, class, subclass, name, display_id, Quality, Flags, Buy_Count, stackable, bonding, Material, Page_Text) values
+(50522, 15, 0, 'Goblin Race Car Manual', 8117, 1, 16384, 1, 1, 1, -1, 50066),
+(50523, 15, 0, 'Gnome Race Car Manual', 8117, 1, 16384, 1, 1, 1, -1, 50067);
+replace into page_text values
+(50066, 'Red button! Starts the engine, of course! Levers for stearing.\n\nObviously don\'t hit any rocks on the way. Hit the landmarks to get points and smear down these gnomes! If you happend to experience explosion of the race car and have no insurance then your belongings will be passed to Kruzak and Goblin Engineering team.\n\nThanks for running the race car durability crash test for us!\n\nYou\'re awesome!', 0),
+(50067, 'Red button! Starts the engine, of course! Levers for stearing.\n\nObviously don\'t hit any rocks on the way. Hit the landmarks to get points and smear down these goblins! If you happend to experience explosion of the race car and have no insurance then your belongings will be passed to Garry Crashbash and Gnome Engineering team.\n\nThanks for running the race car durability crash test for us!\n\nYou\'re awesome!', 0);
+-- Food and drinks tents:

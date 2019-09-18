@@ -505,16 +505,6 @@ replace into item_template (entry, name, inventory_type, display_id, quality, bo
 replace into item_template (entry, name, description, quality, spellid_1, display_id, spellcharges_1, script_name, spellcooldown_1) values
 (50521, '24/7 Game Support Mark', 'You\'ll feel weary and exhausted as undead. Resets your rested XP to 0.', 1, 1575, 30658, 0, 'remove_rested', 360000);
 
-replace into item_template (entry, class, subclass, name, display_id, Quality, Flags, Buy_Count, stackable, bonding, Material, Page_Text) values
-(50522, 15, 0, 'Goblin Race Car Manual', 8117, 1, 16384, 1, 1, 1, -1, 50066),
-(50523, 15, 0, 'Gnome Race Car Manual', 8117, 1, 16384, 1, 1, 1, -1, 50067);
-
-replace into page_text values
-(50066, 'Red button! Starts the engine, of course! Levers for stearing.\n\nObviously don\'t hit any rocks on the way. Hit the landmarks to get points and smear down these gnomes! If you happend to experience explosion of the race car and have no insurance then your belongings will be passed to Kruzak and Goblin Engineering team.\n\nThanks for running the race car durability crash test for us!\n\nYou\'re awesome!', 0),
-(50067, 'Red button! Starts the engine, of course! Levers for stearing.\n\nObviously don\'t hit any rocks on the way. Hit the landmarks to get points and smear down these goblins! If you happend to experience explosion of the race car and have no insurance then your belongings will be passed to Garry Crashbash and Gnome Engineering team.\n\nThanks for running the race car durability crash test for us!\n\nYou\'re awesome!', 0);
-
--- 50525, 50524 TAKEN.
-
 -- Hotfixes, modify custom items only in this file:
 
 update item_template set spellcooldown_1 = 5400000, spellid_1 = 24085 where entry = 50234;
