@@ -25,6 +25,9 @@
 #define EXPLOSIVE_SHEEP           4050
 #define SPELL_BOMB				  5134
 
+constexpr float SheepAcceptanceRadius = 4.4f;
+constexpr float SheepAcceptanceRadiusSqr = SheepAcceptanceRadius * SheepAcceptanceRadius;
+
 bool GossipHello_npc_daisy(Player* p_Player, Creature* p_Creature)
 {
     p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I'll join Goblin's Team.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
@@ -81,11 +84,11 @@ bool GossipSelect_npc_daisy(Player* p_Player, Creature* p_Creature, uint32 /*uiS
 			if (miracleEvent->queueSystem().isPlayerQueuedAlready(p_Player))
 			{
 				miracleEvent->queueSystem().RemoveFromQueue(p_Player);
-				p_Creature->MonsterWhisper("You was removed from race queue", p_Player);
+				p_Creature->MonsterWhisper("Done. You are no longer queued!", p_Player);
 			}
 			else
 			{
-				p_Creature->MonsterWhisper("You was not in the race queue", p_Player);
+				p_Creature->MonsterWhisper("You are not queued.", p_Player);
 			}
 		}
 	}
@@ -190,9 +193,6 @@ struct go_speed_up : public GameObjectAI
 	}
 
 };
-
-constexpr float SheepAcceptanceRadius = 4.4f;
-constexpr float SheepAcceptanceRadiusSqr = SheepAcceptanceRadius * SheepAcceptanceRadius;
 
 #define INVISIBLE_TRIGGER_ID 14495
 
