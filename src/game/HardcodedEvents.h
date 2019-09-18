@@ -388,6 +388,14 @@ struct RaceCreature
 	uint8 chance;
 };
 
+// basically the same as RaceCreature, but still should be another name
+struct RaceGameobject
+{
+	uint32 entry;
+	Position pos;
+	uint8 chance;
+};
+
 struct RacePlayerSetup
 {
 	Player* player;
@@ -457,11 +465,13 @@ private:
 	// we need cached version, because we allow editing race checkpoints in-game
 	std::vector<RaceCheckpoint> checkpoints;
 	std::vector<RaceCreature> creatures;
+	std::vector<RaceGameobject> gameobjects;
 	MiracleRaceEvent* pEvent;
 	Map* theMap = nullptr;
 
 	std::list<std::string> leaderboard;
-	std::vector<ObjectGuid> spawnedShit;
+	std::vector<ObjectGuid> spawnedCreatures;
+	std::vector<ObjectGuid> spawnedGameobjects;
 	uint32 backTimer = 0;
 	uint32 startReportBackTimer = 0;
 };
@@ -475,21 +485,21 @@ enum class MiracleRaceSide
 struct MiracleRaceQueueSystem
 {
 	void QueuePlayer(Player* player, MiracleRaceSide bySide);
+	void RemoveFromQueue(Player* p_Player);
 
-	bool isPlayerQueuedAlready(ObjectGuid playerGuid) const;
+	bool isPlayerQueuedAlready(Player* player) const;
 
 	void Update(uint32 deltaTime);
 
 	void PlayerAcceptInvite(Player* player);
 
-	std::queue<ObjectGuid> gnomePlayers;
-	std::queue<ObjectGuid> goblinPlayers;
-
-	std::list<ObjectGuid> queuedPlayers;
+	std::list<ObjectGuid> gnomePlayers;
+	std::list<ObjectGuid> goblinPlayers;
 
 	std::function<void(ObjectGuid, ObjectGuid)> onFoundRace;
 
 	size_t GetInviteCount() const;
+
 
 private:
 
@@ -510,7 +520,6 @@ private:
 	std::list<InviteRequest> _inviteRequests;
 
 	bool TryStartRace();
-
 };
 
 struct MiracleRaceEvent : WorldEvent
@@ -519,13 +528,14 @@ struct MiracleRaceEvent : WorldEvent
 
 	bool InitializeRace(uint32 raceId);
 
-	void StartTestRace(uint32 raceId, Player* racer);
+	void StartTestRace(uint32 raceId, Player* racer, MiracleRaceSide side);
 
 	virtual void Update() override;
 	virtual uint32 GetNextUpdateDelay() override;
 
 	std::map<uint32, std::vector<RaceCheckpoint>> racesCheckpoints;
 	std::map<uint32, std::vector< RaceCreature>> racesCreatures;
+	std::map<uint32, std::vector< RaceGameobject>> racesGameobjects;
 	std::list<std::shared_ptr<RaceSubEvent>> races;
 
 	virtual void Disable() override;

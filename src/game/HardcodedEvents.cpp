@@ -1656,7 +1656,7 @@ bool MiracleRaceEvent::InitializeRace(uint32 raceId)
 	
 	// load waypoints
 	QueryResult* raceData = WorldDatabase.PQuery("SELECT `id`, `PositionX`, `PositionY`, `PositionZ`, `CameraPosX`, `CameraPosY`, `CameraPosZ`"
-		"FROM miraclerace_checkpoint where raceID = '%u'", raceId);
+		"FROM miraclerace_checkpoint where raceID = '%u' ORDER BY `id` ASC", raceId);
 
 	if (raceData == nullptr)
 	{
@@ -1707,15 +1707,42 @@ bool MiracleRaceEvent::InitializeRace(uint32 raceId)
 		} while (raceData->NextRow());
 	}
 
+	delete raceData; raceData = nullptr;
+
+	// load gameobjects
+	raceData = WorldDatabase.PQuery("SELECT `entry`, `chance`, `positionX`, `positionY`, `positionZ`"
+		"FROM miraclerace_gameobject where raceId = '%u'", raceId);
+
+	std::vector<RaceGameobject>& raceGameobjects = racesGameobjects[raceId];
+	if (raceData != nullptr)
+	{
+		fields = raceData->Fetch();
+
+		do
+		{
+			uint32 entry = fields[0].GetUInt32();
+			uint32 chance = fields[1].GetUInt32();
+			chance = std::min(chance, 100u);
+			float PosX = fields[2].GetFloat();
+			float PosY = fields[3].GetFloat();
+			float PosZ = fields[4].GetFloat();
+			Position pos(PosX, PosY, PosZ, 0.0f);
+
+			raceGameobjects.emplace_back(RaceGameobject{ entry, pos, uint8(chance) });
+		} while (raceData->NextRow());
+	}
+
+	delete raceData; raceData = nullptr;
+
 	return true;
 }
 
-void MiracleRaceEvent::StartTestRace(uint32 raceId, Player* racer)
+void MiracleRaceEvent::StartTestRace(uint32 raceId, Player* racer, MiracleRaceSide side)
 {
 	if (racer != nullptr && InitializeRace(raceId))
 	{
 		std::list<RacePlayerSetup> racers;
-		racers.emplace_back(RacePlayerSetup{racer, MiracleRaceSide::Gnome});
+		racers.emplace_back(RacePlayerSetup{racer, side});
 		std::shared_ptr<RaceSubEvent> raceSubEvent = std::make_shared<RaceSubEvent>(raceId, racers, this);
 		races.push_back(raceSubEvent);
 		raceSubEvent->Start();
@@ -1793,6 +1820,7 @@ void RaceSubEvent::Start()
 	// 1. Cache race data
 	checkpoints = pEvent->racesCheckpoints[raceId];
 	creatures = pEvent->racesCreatures[raceId];
+	gameobjects = pEvent->racesGameobjects[raceId];
 
 	state = State::WarmUp;
 	
@@ -1844,7 +1872,8 @@ void RaceSubEvent::Update(uint32 deltaTime)
 			// Spawn the shit
 			if (theMap != nullptr)
 			{
-				spawnedShit.reserve(creatures.size());
+				//	creatures
+				spawnedCreatures.reserve(creatures.size());
 				for (const RaceCreature& creature : creatures)
 				{
 					float fChance = float(creature.chance);
@@ -1852,11 +1881,30 @@ void RaceSubEvent::Update(uint32 deltaTime)
 					{
 						if (Creature* spawnedCreature = theMap->SummonCreature(creature.entry, creature.pos.x, creature.pos.y, creature.pos.z, creature.pos.o, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 10 * MINUTE * IN_MILLISECONDS))
 						{
-							spawnedShit.push_back(spawnedCreature->GetObjectGuid());
+							spawnedCreatures.push_back(spawnedCreature->GetObjectGuid());
 						}
 					}
 				}
+				//  gameobjects
+				spawnedGameobjects.reserve(gameobjects.size());
+				for (const RaceGameobject& gameobject : gameobjects)
+				{
+					float fChance = float(gameobject.chance);
+					if (rand_chance_f() < fChance)
+					{
+						if (GameObject* spawnedGameobject = theMap->SummonGameObject(gameobject.entry, gameobject.pos.x, gameobject.pos.y, gameobject.pos.z, gameobject.pos.o, 0.0f, 0.0f, 0.0f, 0.0f, 10 * MINUTE * IN_MILLISECONDS, 1))
+						{
+							for (const RacePlayer& racer : racers)
+							{
+								spawnedGameobject->AI()->InformGuid(racer.guid);
+							}
+							spawnedGameobjects.push_back(spawnedGameobject->GetObjectGuid());
+						}
+					}
+				}
+
 			}
+
 		}
 		else
 		{
@@ -1918,11 +1966,20 @@ void RaceSubEvent::End()
 	}
 
 	// despawn the shit
-	for (ObjectGuid guid : spawnedShit)
+	for (ObjectGuid guid : spawnedCreatures)
 	{
 		if (Creature* creature = theMap->GetAnyTypeCreature(guid))
 		{
 			creature->DespawnOrUnsummon();
+		}
+	}
+
+	for (ObjectGuid guid : spawnedGameobjects)
+	{
+		if (GameObject* gameobject = theMap->GetGameObject(guid))
+		{
+			gameobject->Despawn();
+			gameobject->Delete();
 		}
 	}
 }
@@ -2160,12 +2217,6 @@ void RacePlayer::IncrementCheckpoint(Player* pl)
 		}
 
 		// teleport to current cam pos
-		//pl->m_movementInfo.moveFlags = (MOVEFLAG_LEVITATING | MOVEFLAG_SWIMMING | MOVEFLAG_CAN_FLY | MOVEFLAG_FLYING);
-		//pl->m_movementInfo.pos.x = nextCheckpoint.camPos.x;
-		//pl->m_movementInfo.pos.y = nextCheckpoint.camPos.y;
-		//pl->m_movementInfo.pos.z = nextCheckpoint.camPos.z;
-		//pl->SendHeartBeat();
-
 		nextCheckpoint = raceEvent->GetCheckpoint(nextCheckpoint.Id);
 		pl->RemoveExclusiveVisibleObject(checkpointEffectGuid);
 
@@ -2209,12 +2260,10 @@ void MiracleRaceQueueSystem::QueuePlayer(Player* player, MiracleRaceSide bySide)
 	switch (bySide)
 	{
 	case MiracleRaceSide::Gnome:
-		gnomePlayers.emplace(player->GetObjectGuid());
-		queuedPlayers.push_back(player->GetObjectGuid());
+		gnomePlayers.push_back(player->GetObjectGuid());
 		break;
 	case MiracleRaceSide::Goblin:
-		goblinPlayers.emplace(player->GetObjectGuid());
-		queuedPlayers.push_back(player->GetObjectGuid());
+		goblinPlayers.push_back(player->GetObjectGuid());
 		break;
 	default:
 		MANGOS_ASSERT(false);
@@ -2224,10 +2273,17 @@ void MiracleRaceQueueSystem::QueuePlayer(Player* player, MiracleRaceSide bySide)
 	TryStartRace();
 }
 
-bool MiracleRaceQueueSystem::isPlayerQueuedAlready(ObjectGuid playerGuid) const
+bool MiracleRaceQueueSystem::isPlayerQueuedAlready(Player* player) const
 {
-	auto queuedPlayerIter = std::find(queuedPlayers.begin(), queuedPlayers.end(), playerGuid);
-	return queuedPlayerIter != queuedPlayers.end();
+	ObjectGuid PlayerGuid = player->GetObjectGuid();
+	auto gnomeQueuedPlayerIter = std::find(gnomePlayers.begin(), gnomePlayers.end(), PlayerGuid);
+	if (gnomeQueuedPlayerIter == gnomePlayers.end())
+	{
+		auto goblinQueuedPlayerIter = std::find(goblinPlayers.begin(), goblinPlayers.end(), PlayerGuid);
+		return goblinQueuedPlayerIter != goblinPlayers.end();
+	}
+
+	return true;
 }
 
 #define MAX_INVITE_TIME 45 * IN_MILLISECONDS // 45 sec
@@ -2318,7 +2374,7 @@ bool MiracleRaceQueueSystem::TryStartRace()
 
 	auto TryGetAlivePlayerLambda = [this](MiracleRaceSide bySide) -> ObjectGuid
 	{
-		std::queue<ObjectGuid>* playerQueue = nullptr;
+		std::list<ObjectGuid>* playerQueue = nullptr;
 		switch (bySide)
 		{
 		case MiracleRaceSide::Gnome:
@@ -2333,14 +2389,29 @@ bool MiracleRaceQueueSystem::TryStartRace()
 		}
 
 		ObjectGuid potentialPlayer = playerQueue->front();
-		playerQueue->pop();
-		queuedPlayers.remove(potentialPlayer);
 
-		if (sObjectMgr.GetPlayer(potentialPlayer) != nullptr)
+		do 
 		{
-			// HE'S ALIVE!
-			return potentialPlayer;
-		}
+			if (sObjectMgr.GetPlayer(potentialPlayer) == nullptr)
+			{
+				// HE'S ALIVE!
+				return potentialPlayer;
+			}
+			else
+			{
+				playerQueue->remove(potentialPlayer);
+				
+				if (!playerQueue->empty())
+				{
+					potentialPlayer = playerQueue->front();
+				}
+				else
+				{
+					potentialPlayer = ObjectGuid();
+				}
+			}
+		} while (!potentialPlayer.IsEmpty());
+
 
 		return ObjectGuid(); // return nothing
 	};
@@ -2350,6 +2421,10 @@ bool MiracleRaceQueueSystem::TryStartRace()
 
 	if (!LiveGnomePlayer.IsEmpty() && !LiveGoblinPlayer.IsEmpty())
 	{
+		// remove player from queue
+		gnomePlayers.remove(LiveGnomePlayer);
+		goblinPlayers.remove(LiveGoblinPlayer);
+
 		// Register invite
 		_inviteRequests.emplace_back(InviteRequest( LiveGnomePlayer , LiveGoblinPlayer));
 		InviteRequest& newInvite = _inviteRequests.back();
@@ -2370,4 +2445,10 @@ bool MiracleRaceQueueSystem::TryStartRace()
 	}
 
 	return false;
+}
+
+void MiracleRaceQueueSystem::RemoveFromQueue(Player* p_Player)
+{
+	gnomePlayers.remove(p_Player->GetObjectGuid());
+	goblinPlayers.remove(p_Player->GetObjectGuid());
 }

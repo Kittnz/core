@@ -28,7 +28,8 @@
 bool GossipHello_npc_daisy(Player* p_Player, Creature* p_Creature)
 {
     p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I'll join Goblin's Team.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-    p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I'll join Gnomes's Team.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+	p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I'll join Gnomes's Team.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+	p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I want to leave from race queue.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
     p_Player->SEND_GOSSIP_MENU(90250, p_Creature->GetGUID());
     return true;
 }
@@ -37,17 +38,11 @@ bool GossipSelect_npc_daisy(Player* p_Player, Creature* p_Creature, uint32 /*uiS
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
-#if 0
-        p_Player->TeleportTo(1, -6168.598145F, -3907.561523F, -60.108891F + 1.5f, 3.0f);
-        p_Player->SetDisplayId(15435); // Hiding player, else they'll be sitting on a spinning wheel.
-        p_Player->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, 10318);
-        p_Creature->MonsterSay("Dicks out for Goblins!", 0, 0);
-#endif
 		// register new goblin player
 		MiracleRaceEvent* miracleEvent = sGameEventMgr.GetHardcodedEvent<MiracleRaceEvent>();
 		if (miracleEvent != nullptr)
 		{
-			if (!miracleEvent->queueSystem().isPlayerQueuedAlready(p_Player->GetObjectGuid()))
+			if (!miracleEvent->queueSystem().isPlayerQueuedAlready(p_Player))
 			{
 				miracleEvent->queueSystem().QueuePlayer(p_Player, MiracleRaceSide::Goblin);
 				p_Creature->MonsterWhisper("Get ready! Shimmering Flats race event is about to start! Make haste if you wish to attend!", p_Player);
@@ -61,17 +56,11 @@ bool GossipSelect_npc_daisy(Player* p_Player, Creature* p_Creature, uint32 /*uiS
 
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
     {
-#if 0
-        p_Player->TeleportTo(1, -6168.643555F, -3897.561523F, -60.092022F + 1.5f, 3.0f);
-        p_Player->SetDisplayId(15435); // Hiding player, else they'll be sitting on a spinning wheel.
-        p_Player->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, 2490);
-        p_Creature->MonsterSay("Dicks out for Gnomes!", 0, 0);
-#endif
 		// register new gnome player
 		MiracleRaceEvent* miracleEvent = sGameEventMgr.GetHardcodedEvent<MiracleRaceEvent>();
 		if (miracleEvent != nullptr)
 		{
-			if (!miracleEvent->queueSystem().isPlayerQueuedAlready(p_Player->GetObjectGuid()))
+			if (!miracleEvent->queueSystem().isPlayerQueuedAlready(p_Player))
 			{
 				miracleEvent->queueSystem().QueuePlayer(p_Player, MiracleRaceSide::Gnome);
 				p_Creature->MonsterWhisper("Get ready! Shimmering Flats race event is about to start! Make haste if you wish to attend!", p_Player);
@@ -83,6 +72,24 @@ bool GossipSelect_npc_daisy(Player* p_Player, Creature* p_Creature, uint32 /*uiS
 		}
 
     }
+
+	if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
+	{
+		MiracleRaceEvent* miracleEvent = sGameEventMgr.GetHardcodedEvent<MiracleRaceEvent>();
+		if (miracleEvent != nullptr)
+		{
+			if (miracleEvent->queueSystem().isPlayerQueuedAlready(p_Player))
+			{
+				miracleEvent->queueSystem().RemoveFromQueue(p_Player);
+				p_Creature->MonsterWhisper("You was removed from race queue", p_Player);
+			}
+			else
+			{
+				p_Creature->MonsterWhisper("You was not in the race queue", p_Player);
+			}
+		}
+	}
+
     p_Player->CLOSE_GOSSIP_MENU();
     return true;
 }
@@ -103,7 +110,7 @@ bool GossipSelect_npc_dolores(Player* p_Player, Creature* p_Creature, uint32 /*u
         {
             if (MiracleRaceEvent* event = sGameEventMgr.GetHardcodedEvent<MiracleRaceEvent>())
             {
-                event->StartTestRace(2, p_Player);
+                event->StartTestRace(2, p_Player, MiracleRaceSide::Goblin);
             }
         }
         else
@@ -117,7 +124,7 @@ bool GossipSelect_npc_dolores(Player* p_Player, Creature* p_Creature, uint32 /*u
         {
             if (MiracleRaceEvent* event = sGameEventMgr.GetHardcodedEvent<MiracleRaceEvent>())
             {
-                event->StartTestRace(2, p_Player);
+                event->StartTestRace(2, p_Player, MiracleRaceSide::Gnome);
             }
         }
         else
@@ -136,43 +143,52 @@ struct go_speed_up : public GameObjectAI
 {
     explicit go_speed_up(GameObject* pGo) : GameObjectAI(pGo)
     {
-        m_bUsed = false;
-        m_uiJustUsedTimer = 1;
-        m_uiUpdateTimer = 10;
     }
 
-    bool m_bUsed;
-    uint32 m_uiJustUsedTimer;
-    uint32 m_uiUpdateTimer;
+	std::set<ObjectGuid> racers;
+	uint32 checkTimer = 0;
+
+	static const uint32 CheckForRacersInterval = 10;
 
     void UpdateAI(uint32 const uiDiff) override
     {
-        if (m_uiJustUsedTimer < uiDiff)
-        {
-            if (m_uiUpdateTimer < uiDiff)
-            {
-                std::list<Player*> players;
-                MaNGOS::AnyPlayerInObjectRangeCheck check(me, 5.0f);
-                MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
-                Cell::VisitWorldObjects(me, searcher, 5.0f);
+		GameObjectAI::UpdateAI(uiDiff);
 
-                for (Player* p_Player : players)
-                {
-                    p_Player->CastSpell(p_Player, SALT_FLATS_RACE_SPEED, false);
-                }
-                m_uiUpdateTimer = 10;
-            }
-            else
-            {
-                m_uiUpdateTimer -= uiDiff;
-            }
-            m_bUsed = true;
-        }
-        else
-        {
-            m_uiJustUsedTimer -= uiDiff;
-        }
+		if (checkTimer < uiDiff)
+		{
+			for (auto iter = racers.begin(); iter != racers.end();)
+			{
+				if (Player* player = sObjectMgr.GetPlayer(*iter))
+				{
+					float distSqr = me->GetDistanceSqr(player->GetPositionX(), player->GetPositionY(), player->GetPositionZ());
+					if (distSqr < SheepAcceptanceRadiusSqr)
+					{
+						// our client
+						player->CastSpell(player, SALT_FLATS_RACE_SPEED, true);
+						me->Despawn();
+						me->Delete();
+					}
+				}
+				else
+				{
+					iter = racers.erase(iter);
+					continue;
+				}
+				iter++;
+			}
+			checkTimer = CheckForRacersInterval;
+		}
+		else
+		{
+			checkTimer -= uiDiff;
+		}
     }
+
+	virtual void InformGuid(ObjectGuid guid) override
+	{
+		racers.insert(guid);
+	}
+
 };
 
 constexpr float SheepAcceptanceRadius = 4.4f;
@@ -327,12 +343,14 @@ bool ItemUse_Miracle_AcceptInvite(Player* player, Item* item, SpellCastTargets c
 		miracleEvent->queueSystem().PlayerAcceptInvite(player);
 	}
 
+#if 0
 	ItemPrototype const *proto = item->GetProto();
 	if (proto != nullptr)
 	{
 		if (SpellEntry const* spellInfo = sSpellMgr.GetSpellEntry(proto->Spells[0].SpellId))
 			Spell::SendCastResult(player, spellInfo, SPELL_FAILED_NOT_READY);
 	}
+#endif
 
 	return true;
 }
