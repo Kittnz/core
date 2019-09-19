@@ -103,8 +103,10 @@ bool GossipSelect_npc_daisy(Player* p_Player, Creature* p_Creature, uint32 /*uiS
 
 bool GossipHello_npc_dolores(Player* p_Player, Creature* p_Creature)
 {
+    if (p_Player->GetQuestStatus(GOBLIN_TEST_QUEST) == QUEST_STATUS_INCOMPLETE)
     if (!p_Player->GetQuestRewardStatus(GOBLIN_TEST_QUEST))
         p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I want a test drive of Goblin's Car!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    if (p_Player->GetQuestStatus(GNOME_TEST_QUEST) == QUEST_STATUS_INCOMPLETE)
     if (!p_Player->GetQuestRewardStatus(GNOME_TEST_QUEST))
         p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I want a test drive of Gnome's Car!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
     p_Player->SEND_GOSSIP_MENU(90251, p_Creature->GetGUID());
@@ -197,7 +199,7 @@ struct npc_dolores_say : public ScriptedAI
                 } else {
                     ++it;
                 }
-                dialogTimer = 2000;
+                dialogTimer = 5000;
             }
         } else {
             dialogTimer -= uiDiff;
