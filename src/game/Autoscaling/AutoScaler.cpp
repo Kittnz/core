@@ -83,10 +83,16 @@ void AutoScaler::ScaleCreature(Creature* creature, uint32 playerCount, uint32 ma
     float specificDmgFactor = 1;
 
     switch (creature->GetEntry()) {
+        case 12057: // Garr
+            if (playerCount < 30) {
+                specificHPFactor = 0.75f;
+                specificDmgFactor =  0.65f;
+            }
+            break;
         case 12099: // Firesworn, Garr add.
             if (playerCount < 30) {
-                specificHPFactor = 0.35f;
-                specificDmgFactor =  0.25f;
+                specificHPFactor = 0.30f;
+                specificDmgFactor =  0.15f;
             }
             break;
         case 11661: // Flamewaker, Gehenass add.
