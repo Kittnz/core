@@ -114,7 +114,7 @@ bool GossipHello_npc_dolores(Player* p_Player, Creature* p_Creature)
 struct player_dolores_step
 {
     Player* player;
-    uint dialogStep;
+    uint32 dialogStep;
 
     player_dolores_step(Player* p_Player) {
         player = p_Player;
