@@ -31,11 +31,11 @@ constexpr float SheepAcceptanceRadiusSqr = SheepAcceptanceRadius * SheepAcceptan
 bool GossipHello_npc_daisy(Player* p_Player, Creature* p_Creature)
 {
     if (p_Player->GetQuestRewardStatus(GOBLIN_TEST_QUEST))
-    p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I'll join Goblin's Team.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I'll join Goblin's Team.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     if (p_Player->GetQuestRewardStatus(GNOME_TEST_QUEST))
-    p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I'll join Gnome's Team.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I'll join Gnome's Team.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
     if ((p_Player->GetQuestRewardStatus(GOBLIN_TEST_QUEST)) || (p_Player->GetQuestRewardStatus(GNOME_TEST_QUEST)))
-    p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I want to leave from race queue.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+        p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I want to leave from race queue.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
 
     p_Player->SEND_GOSSIP_MENU(90250, p_Creature->GetGUID());    
     return true;
@@ -104,12 +104,25 @@ bool GossipSelect_npc_daisy(Player* p_Player, Creature* p_Creature, uint32 /*uiS
 bool GossipHello_npc_dolores(Player* p_Player, Creature* p_Creature)
 {
     if (!p_Player->GetQuestRewardStatus(GOBLIN_TEST_QUEST))
-    p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I want a test drive of Goblin's Car!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I want a test drive of Goblin's Car!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     if (!p_Player->GetQuestRewardStatus(GNOME_TEST_QUEST))
-    p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I want a test drive of Gnome's Car!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I want a test drive of Gnome's Car!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
     p_Player->SEND_GOSSIP_MENU(90251, p_Creature->GetGUID());
     return true;
 }
+
+struct player_dolores_step
+{
+    Player* player;
+    uint dialogStep;
+
+    player_dolores_step(Player* p_Player) {
+        player = p_Player;
+        dialogStep = 0;
+    };
+};
+
+std::list<player_dolores_step> playerSteps;
 
 bool GossipSelect_npc_dolores(Player* p_Player, Creature* p_Creature, uint32 /*uiSender*/, uint32 uiAction)
 {
@@ -120,6 +133,7 @@ bool GossipSelect_npc_dolores(Player* p_Player, Creature* p_Creature, uint32 /*u
             if (MiracleRaceEvent* event = sGameEventMgr.GetHardcodedEvent<MiracleRaceEvent>())
             {
                 event->StartTestRace(2, p_Player, MiracleRaceSide::Goblin);
+                playerSteps.push_back(player_dolores_step(p_Player));
             }
         }
         else
@@ -134,6 +148,7 @@ bool GossipSelect_npc_dolores(Player* p_Player, Creature* p_Creature, uint32 /*u
             if (MiracleRaceEvent* event = sGameEventMgr.GetHardcodedEvent<MiracleRaceEvent>())
             {
                 event->StartTestRace(2, p_Player, MiracleRaceSide::Gnome);
+                playerSteps.push_back(player_dolores_step(p_Player));
             }
         }
         else
@@ -145,6 +160,49 @@ bool GossipSelect_npc_dolores(Player* p_Player, Creature* p_Creature, uint32 /*u
     p_Player->CLOSE_GOSSIP_MENU();
     return true;
 }
+
+struct npc_dolores_say : public ScriptedAI
+{
+    npc_dolores_say(Creature* InCreature) : ScriptedAI(InCreature){}
+
+    uint32 dialogTimer = 2000;
+
+    void Reset() override
+    {
+    }
+
+    void UpdateAI(uint32 const uiDiff) override {
+        if (dialogTimer < uiDiff) {
+            for (auto it = playerSteps.begin(); it != playerSteps.end();) {
+                switch (it->dialogStep) {
+                    case 0:
+                        me->MonsterWhisper("While you race, try and pick up those crystals on the road. They will direct you to victory!", it->player);
+                        it->dialogStep = 1;
+                        break;
+                    case 1:
+                        me->MonsterWhisper("I've seen some sheeps on the road, they are so cute and harmless, please don't hit them.", it->player);
+                        it->dialogStep = 2;
+                        break;
+                    case 2:
+                        me->MonsterWhisper("I heard there are some traps on the road, so I guess you want to avoid them. Be careful.", it->player);
+                        it->dialogStep = 3;
+                        break;
+                    case 3:
+                        me->MonsterWhisper("Of course you'll have your chances to win since there are boots… no, boosters on the track!", it->player);
+                        it->dialogStep = 4;
+                        break;
+                }
+                if (it->dialogStep == 4) {
+                    it = playerSteps.erase(it);
+                } else {
+                    ++it;
+                }
+            }
+        } else {
+            dialogTimer -= uiDiff;
+        }
+    }
+};
 
 // Ignore this for while:
 
@@ -377,6 +435,11 @@ CreatureAI* GetAI_npc_race_sheep(Creature* creature)
 	return new npc_race_sheep(creature);
 }
 
+CreatureAI* GetAI_npc_dolores_say(Creature* creature)
+{
+    return new npc_dolores_say(creature);
+}
+
 QuestInstance* GetQuest_MiracleRaceTest(ObjectGuid PlayerGuid)
 {
 	return new MiracleRaceTestRound(PlayerGuid);
@@ -396,6 +459,7 @@ void AddSC_miracle_raceaway()
     newscript->Name = "npc_dolores";
     newscript->pGossipHello = &GossipHello_npc_dolores;
     newscript->pGossipSelect = &GossipSelect_npc_dolores;
+    newscript->GetAI = &GetAI_npc_dolores_say;
     newscript->RegisterSelf();
 
     newscript = new Script;
