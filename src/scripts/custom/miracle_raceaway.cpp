@@ -197,6 +197,7 @@ struct npc_dolores_say : public ScriptedAI
                 } else {
                     ++it;
                 }
+                dialogTimer = 2000;
             }
         } else {
             dialogTimer -= uiDiff;
