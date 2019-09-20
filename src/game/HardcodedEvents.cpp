@@ -2105,10 +2105,10 @@ void RacePlayer::GoRaceMode()
 			{
 			case MiracleRaceSide::Gnome:
 				pl->Mount(GNOMECAR_DISPLAYID);
-				startY -= 6.0f;
 				break;
 			case MiracleRaceSide::Goblin:
 				pl->Mount(GOBLINCAR_DISPLAYID);
+				startY -= 12.0f;
 				break;
 			default:
 				pl->Mount(GOBLINCAR_DISPLAYID);
@@ -2392,7 +2392,7 @@ bool MiracleRaceQueueSystem::TryStartRace()
 
 		do 
 		{
-			if (sObjectMgr.GetPlayer(potentialPlayer) == nullptr)
+			if (sObjectMgr.GetPlayer(potentialPlayer) != nullptr)
 			{
 				// HE'S ALIVE!
 				return potentialPlayer;
