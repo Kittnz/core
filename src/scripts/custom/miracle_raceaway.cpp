@@ -113,19 +113,6 @@ bool GossipHello_npc_dolores(Player* p_Player, Creature* p_Creature)
     return true;
 }
 
-struct player_dolores_step
-{
-    Player* player;
-    uint32 dialogStep;
-
-    player_dolores_step(Player* p_Player) {
-        player = p_Player;
-        dialogStep = 0;
-    };
-};
-
-std::list<player_dolores_step> playerSteps;
-
 bool GossipSelect_npc_dolores(Player* p_Player, Creature* p_Creature, uint32 /*uiSender*/, uint32 uiAction)
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
@@ -135,7 +122,7 @@ bool GossipSelect_npc_dolores(Player* p_Player, Creature* p_Creature, uint32 /*u
             if (MiracleRaceEvent* event = sGameEventMgr.GetHardcodedEvent<MiracleRaceEvent>())
             {
                 event->StartTestRace(2, p_Player, MiracleRaceSide::Goblin);
-                playerSteps.push_back(player_dolores_step(p_Player));
+				p_Creature->AI()->InformGuid(p_Player->GetObjectGuid());
             }
         }
         else
@@ -150,7 +137,7 @@ bool GossipSelect_npc_dolores(Player* p_Player, Creature* p_Creature, uint32 /*u
             if (MiracleRaceEvent* event = sGameEventMgr.GetHardcodedEvent<MiracleRaceEvent>())
             {
                 event->StartTestRace(2, p_Player, MiracleRaceSide::Gnome);
-                playerSteps.push_back(player_dolores_step(p_Player));
+				p_Creature->AI()->InformGuid(p_Player->GetObjectGuid());
             }
         }
         else
@@ -167,44 +154,100 @@ struct npc_dolores_say : public ScriptedAI
 {
     npc_dolores_say(Creature* InCreature) : ScriptedAI(InCreature){}
 
-    uint32 dialogTimer = 2000;
+	struct PlayerInteraction
+	{
+		enum class Step
+		{
+			One,
+			Two,
+			Three,
+			Four
+		};
 
-    void Reset() override
+		Step step;
+		uint32 backTimer;
+	};
+
+	std::map<ObjectGuid, PlayerInteraction> Interactions;
+	std::mutex InteractionsGuard;
+
+	static const uint32 SpeechCooldown = 5 * IN_MILLISECONDS; // 5 sec
+
+	virtual void Reset() override
     {
     }
 
-    void UpdateAI(uint32 const uiDiff) override {
-        if (dialogTimer < uiDiff) {
-            for (auto it = playerSteps.begin(); it != playerSteps.end();) {
-                switch (it->dialogStep) {
-                    case 0:
-                        me->MonsterWhisper("While you race, try and pick up those crystals on the road. They will direct you to victory!", it->player);
-                        it->dialogStep = 1;
-                        break;
-                    case 1:
-                        me->MonsterWhisper("I've seen some sheeps on the road, they are so cute and harmless, please don't hit them.", it->player);
-                        it->dialogStep = 2;
-                        break;
-                    case 2:
-                        me->MonsterWhisper("I heard there are some traps on the road, so I guess you want to avoid them. Be careful.", it->player);
-                        it->dialogStep = 3;
-                        break;
-                    case 3:
-                        me->MonsterWhisper("Of course you'll have your chances to win since there are boots… no, boosters on the track!", it->player);
-                        it->dialogStep = 4;
-                        break;
-                }
-                if (it->dialogStep == 4) {
-                    it = playerSteps.erase(it);
-                } else {
-                    ++it;
-                }
-                dialogTimer = 5000;
-            }
-        } else {
-            dialogTimer -= uiDiff;
-        }
-    }
+	virtual void UpdateAI(uint32 const uiDiff) override
+	{
+		std::lock_guard<std::mutex> guard(InteractionsGuard);
+		for (auto iter = Interactions.begin(); iter != Interactions.end();)
+		{
+			ObjectGuid guid = iter->first;
+			if (Player* player = sObjectMgr.GetPlayer(guid))
+			{
+				PlayerInteraction& InteractionData = iter->second;
+				if (InteractionData.backTimer < uiDiff)
+				{
+					bool bShouldSkip = false;
+					switch (InteractionData.step)
+					{
+					case PlayerInteraction::Step::One:
+						me->MonsterWhisper("While you race, try and pick up those crystals on the road. They will direct you to victory!", player);
+						InteractionData.step = PlayerInteraction::Step::Two;
+						InteractionData.backTimer = SpeechCooldown;
+						break;
+					case PlayerInteraction::Step::Two:
+						me->MonsterWhisper("I've seen some sheeps on the road, they are so cute and harmless, please don't hit them.", player);
+						InteractionData.step = PlayerInteraction::Step::Three;
+						InteractionData.backTimer = SpeechCooldown;
+						break;
+					case PlayerInteraction::Step::Three:
+						me->MonsterWhisper("I heard there are some traps on the road, so I guess you want to avoid them. Be careful.", player);
+						InteractionData.step = PlayerInteraction::Step::Four;
+						InteractionData.backTimer = SpeechCooldown;
+						break;
+					case PlayerInteraction::Step::Four:
+						me->MonsterWhisper("Of course you'll have your chances to win since there are boots… no, boosters on the track!", player);
+						iter = Interactions.erase(iter);
+						bShouldSkip = true;
+						break;
+					default:
+						iter = Interactions.erase(iter);
+						bShouldSkip = true;
+						break;
+					}
+
+					if (bShouldSkip)
+					{
+						continue;
+					}
+				}
+				else
+				{
+					InteractionData.backTimer -= uiDiff;
+				}
+			}
+			else
+			{
+				iter = Interactions.erase(iter);
+				continue;
+			}
+
+			iter++;
+		}
+	}
+
+	// not sure about time when this function called.
+	// can be a time when AI was updating
+	virtual void InformGuid(const ObjectGuid guid, uint32) override
+	{
+		std::lock_guard<std::mutex> guard(InteractionsGuard);
+		if (Interactions.find(guid) == Interactions.end())
+		{
+			Interactions.emplace(std::pair(guid, PlayerInteraction{ PlayerInteraction::Step::One, 10 }));
+		}
+	}
+
 };
 
 // Ignore this for while:
