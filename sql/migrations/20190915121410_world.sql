@@ -23,6 +23,10 @@ create table if not exists miraclerace_checkpoint (
 alter table miraclerace_checkpoint
 drop primary key;
 
+alter table miraclerace_checkpoint 
+change column id id int(10) unsigned not null ,
+drop index id_unique ;
+
 set @height = -46;
 truncate table miraclerace_checkpoint;
 replace into miraclerace_checkpoint (id, raceid, positionx, positiony, positionz, cameraposx, cameraposy, cameraposz) values
