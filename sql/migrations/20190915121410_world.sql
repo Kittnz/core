@@ -43,15 +43,15 @@ replace into miraclerace_checkpoint (id, raceid, positionx, positiony, positionz
 (14, 1, -5996.42, -3852.06, -60.5732, -5996.42, -3852.06, @height),
 (15, 1, -6146.15, -3902.03, -59.8756, -6146.15, -3902.03, @height),
 -- Test racetrack: 
-(24, 2, -5787.68, -4018.67, -58.7782, 0, 0, 0),
-(23, 2, -5822.68, -4018.18, -58.751, 0, 0, 0),
-(22, 2, -5870.23, -4018.35, -58.751, 0, 0, 0),
-(21, 2, -5931.47, -4018.32, -58.751, 0, 0, 0),
-(20, 2, -6012.91, -4015.88, -58.751, 0, 0, 0),
-(19, 2, -6092.2, -4014.09, -58.751, 0, 0, 0),
-(18, 2, -6157.24, -4013.88, -58.751, 0, 0, 0),
-(17, 2, -6213.02, -4014.08, -58.751, 0, 0, 0),
-(16, 2, -6254.5, -4011.59, -58.751, 0, 0, 0);
+(1, 2, -6254.5, -4011.59, -58.751, 0, 0, 0),
+(2, 2, -6213.02, -4014.08, -58.751, 0, 0, 0),
+(3, 2, -6157.24, -4013.88, -58.751, 0, 0, 0),
+(4, 2, -6092.2, -4014.09, -58.751, 0, 0, 0),
+(5, 2, -6012.91, -4015.88, -58.751, 0, 0, 0),
+(6, 2, -5931.47, -4018.32, -58.751, 0, 0, 0),
+(7, 2, -5870.23, -4018.35, -58.751, 0, 0, 0),
+(8, 2, -5822.68, -4018.18, -58.751, 0, 0, 0),
+(9, 2, -5787.68, -4018.67, -58.7782, 0, 0, 0);
 -- Race Spectator:
 replace into creature_template (entry, patch, display_id1, display_id2, display_id3, display_id4, name, subname, gossip_menu_id, level_min, level_max, health_min, health_max, mana_min, mana_max, armor, faction, npc_flags, speed_walk, speed_run, scale, detection_range, call_for_help_range, leash_range, rank, xp_multiplier, dmg_min, dmg_max, dmg_school, attack_power, dmg_multiplier, base_attack_time, ranged_attack_time, unit_class, unit_flags, dynamic_flags, beast_family, trainer_type, trainer_spell, trainer_class, trainer_race, ranged_dmg_min, ranged_dmg_max, ranged_attack_power, type, type_flags, loot_id, pickpocket_loot_id, skinning_loot_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, spell_id1, spell_id2, spell_id3, spell_id4, spell_list_id, pet_spell_list_id, gold_min, gold_max, ai_name, movement_type, inhabit_type, civilian, racial_leader, regeneration, equipment_id, trainer_id, vendor_id, mechanic_immune_mask, school_immune_mask, flags_extra, script_name) values 
 (50523, 0, 11676, 11689, 11691, 10620, 'Race Spectator', '', 0, 5, 5, 112, 112, 0, 0, 120, 35, 0, 0.92, 1.14286, 1, 20, 5, 0, 0, 1.8, 15, 21, 0, 0, 1.9, 2000, 0, 1, 0, 0, 0, 0, 0, 0, 0, 5, 8, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, ''),
