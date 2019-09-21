@@ -8,7 +8,7 @@ replace into item_template (entry, name, display_id, description, quality) value
 replace into item_template (entry, class, name, display_id, quality, buy_count, buy_price, inventory_type, item_level, stackable, container_slots, bonding, material) values
 (50003, 1, 'Loremaster\'s Backpack', 6430, 1, 1, 320000, 18, 60, 1, 28, 1, 8);
 replace into item_template (entry, class, name, display_id, quality, buy_count, buy_price, inventory_type, item_level, stackable, container_slots, bonding, material) values
-(50004, 1, 'Portable Black Hole', 20984, 2, 1, 320000, 18, 60, 1, 36, 1, 8);
+(50004, 1, 'Portable Black Hole', 19502, 2, 1, 320000, 18, 60, 1, 36, 1, 8);
 replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1) values
 (50005, 15, 2, 'Field Repair Bot 75B', 'Unfolds into a Field Repair Bot that can repair damaged items and purchase unwanted goods', 19503, 1, 1, 28505);
 replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1) values
@@ -32,7 +32,7 @@ replace into item_template (entry, class, subclass, name, description, display_i
 replace into item_template (entry, class, subclass, name, description, display_id, quality, stackable, bonding) values
 (50015, 15, 0, 'Bloody Coin', 'Local currency used in some bloody events.', 32277, 2, 200, 1);
 replace into item_template (entry, name, description, display_id, quality, spellid_1, spellcooldown_1, script_name, bonding) values
-(50016, 'Portable Meeting Stone', 'Use it to meet new friends.', '33543', '1', '7077', '3600000', 'portable_meeting_stone', '1');
+(50016, 'Portable Meeting Stone', 'Use it to meet new friends.', '20984', '1', '7077', '3600000', 'portable_meeting_stone', '1');
 replace into item_template (entry, name, description, display_id, quality, spellid_1, spellcooldown_1, script_name, bonding) values
 (50017, 'Vial of the Sunwell', 'This Vial contains some of the last uncorrupted water of the Thalassian Sunwell before it was defiled by the Scourge. Within this water lies the hope and dreams of the broken High elven people who hope to see the Dawn over their homeland once more.', 17898, 1, 31726, 0, 'highborne_soul_mirror', 1);
 replace into item_template (entry, class, name, display_id, quality, buy_count, buy_price, inventory_type, item_level, stackable, container_slots, bonding, material) values
