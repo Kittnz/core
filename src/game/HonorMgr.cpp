@@ -474,8 +474,9 @@ HonorScores HonorMaintenancer::GenerateScores(HonorStandingList& standingList)
 
     // get the WS scores at the top of each break point
     for (uint8 group = 0; group < 14; group++)
-        sc.BRK[group] = floor((sc.BRK[group] * standingList.size()) + 0.5f);
-
+    //   sc.BRK[group] = floor((sc.BRK[group] * standingList.size()) + 0.5f);
+    // Xerron's hackfix:
+        sc.BRK[group] = floor((sc.BRK[group] * 1500) + 0.5f);
     // initialize RP array
     // set the low point
     sc.FY[0] = 0;
