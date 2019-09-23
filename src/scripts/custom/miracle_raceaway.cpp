@@ -501,8 +501,10 @@ struct npc_landing_siteAI : public ScriptedAI
 
     void MoveInLineOfSight(Unit* pWho) override
     {
-        if (pWho && pWho->IsPlayer()) {
-            if (Player* player = pWho->ToPlayer()) {
+        if (pWho && pWho->IsPlayer()) 
+        {
+            if (Player* player = pWho->ToPlayer()) 
+            {
                 if (m_creature->IsWithinDistInMap(pWho, 200.0f) && pWho->GetMountID() == 8011 && !pWho->HasAura(130))
                 {                    
                     player->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, 0);
@@ -516,7 +518,6 @@ CreatureAI* GetAI_npc_landing_site(Creature* pCreature)
 {
     return new npc_landing_siteAI(pCreature);
 }
-
 
 GameObjectAI* GetAI_go_speed_up(GameObject* gameobject)
 {
