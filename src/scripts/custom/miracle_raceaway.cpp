@@ -465,6 +465,38 @@ bool ItemUse_Miracle_AcceptInvite(Player* player, Item* item, SpellCastTargets c
 	return true;
 }
 
+struct npc_landing_siteAI : public ScriptedAI
+{
+    npc_landing_siteAI(Creature *c) : ScriptedAI(c)
+    {
+        Reset();
+    }
+
+    void Reset()
+    {
+        m_creature->addUnitState(UNIT_STAT_CAN_NOT_MOVE);
+    }
+
+    void Aggro(Unit* pWho) { }
+
+    void MoveInLineOfSight(Unit* pWho) override
+    {
+        if (pWho && pWho->IsPlayer()) {
+            if (Player* player = pWho->ToPlayer()) {
+                if (m_creature->IsWithinDistInMap(pWho, 150.0f) && pWho->GetMountID() == 8011 && !pWho->HasAura(130))
+                {                    
+                    player->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, 0);
+                }
+            }
+        }
+    }
+};
+
+CreatureAI* GetAI_npc_landing_site(Creature* pCreature)
+{
+    return new npc_landing_siteAI(pCreature);
+}
+
 
 GameObjectAI* GetAI_go_speed_up(GameObject* gameobject)
 {
@@ -532,6 +564,11 @@ void AddSC_miracle_raceaway()
 	newscript->Name = "npc_race_sheep";
 	newscript->GetAI = GetAI_npc_race_sheep;
 	newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_landing_site";
+    newscript->GetAI = &GetAI_npc_landing_site;
+    newscript->RegisterSelf();
 
     //newscript = new Script;
     //newscript->Name = "npc_raceaway_sheep";
