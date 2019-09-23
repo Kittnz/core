@@ -465,6 +465,26 @@ bool ItemUse_Miracle_AcceptInvite(Player* player, Item* item, SpellCastTargets c
 	return true;
 }
 
+bool GOHello_go_flying_machine(Player* pPlayer, GameObject* pGo)
+{
+    if (pPlayer->GetQuestRewardStatus(50315))
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TAXI, "Set a course to Thousand Needles!\nMaximum warp!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+
+    pPlayer->SEND_GOSSIP_MENU(90254, pGo->GetGUID());
+    return true;
+}
+
+bool GOSelect_go_flying_machine(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 action)
+{
+    if (action == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pPlayer->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, 8011);
+        pPlayer->TeleportTo(1, -6103.890000F, -3872.739700F, 145.055800F, 3.567656F);
+        pPlayer->CastSpell(pPlayer, 130, true);
+    }
+    return true;
+}
+
 struct npc_landing_siteAI : public ScriptedAI
 {
     npc_landing_siteAI(Creature *c) : ScriptedAI(c)
@@ -483,7 +503,7 @@ struct npc_landing_siteAI : public ScriptedAI
     {
         if (pWho && pWho->IsPlayer()) {
             if (Player* player = pWho->ToPlayer()) {
-                if (m_creature->IsWithinDistInMap(pWho, 150.0f) && pWho->GetMountID() == 8011 && !pWho->HasAura(130))
+                if (m_creature->IsWithinDistInMap(pWho, 200.0f) && pWho->GetMountID() == 8011 && !pWho->HasAura(130))
                 {                    
                     player->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, 0);
                 }
@@ -570,9 +590,9 @@ void AddSC_miracle_raceaway()
     newscript->GetAI = &GetAI_npc_landing_site;
     newscript->RegisterSelf();
 
-    //newscript = new Script;
-    //newscript->Name = "npc_raceaway_sheep";
-    //newscript->pGossipHello = &GossipHello_npc_raceaway_sheep;
-    //newscript->pGossipSelect = &GossipSelect_npc_raceaway_sheep;
-    //newscript->RegisterSelf();
+    newscript = new Script;
+    newscript->Name = "go_flying_machine";
+    newscript->pGOHello = &GOHello_go_flying_machine;
+    newscript->pGOGossipSelect = &GOSelect_go_flying_machine;
+    newscript->RegisterSelf();
 }

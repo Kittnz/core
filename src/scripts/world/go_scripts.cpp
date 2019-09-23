@@ -704,26 +704,6 @@ GameObjectAI* GetAI_go_cot_exit_trigger(GameObject* gameobject)
     return new go_cot_exit_trigger(gameobject);
 }
 
-bool GOHello_go_flying_machine(Player* pPlayer, GameObject* pGo)
-{
-    if  (pPlayer->GetQuestRewardStatus(50315))
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TAXI, "Set a course to Thousand Needles!\nMaximum warp!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-
-    pPlayer->SEND_GOSSIP_MENU(90254, pGo->GetGUID());
-    return true;
-}
-
-bool GOSelect_go_flying_machine(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 action)
-{
-    if (action == GOSSIP_ACTION_INFO_DEF + 1)
-    {
-          pPlayer->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, 8011);
-          pPlayer->TeleportTo(1, -6103.890000F, -3872.739700F, 145.055800F, 3.567656F);
-          pPlayer->CastSpell(pPlayer, 130, true);
-    }
-            return true;
-}
-
 void AddSC_go_scripts()
 {
     Script *newscript;
@@ -845,11 +825,5 @@ void AddSC_go_scripts()
     newscript = new Script;
     newscript->Name = "go_cot_exit_trigger";
     newscript->GOGetAI = &GetAI_go_cot_exit_trigger;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "go_flying_machine";
-    newscript->pGOHello = &GOHello_go_flying_machine;
-    newscript->pGOGossipSelect = &GOSelect_go_flying_machine;
     newscript->RegisterSelf();
 }
