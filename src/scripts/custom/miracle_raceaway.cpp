@@ -497,19 +497,13 @@ struct npc_landing_siteAI : public ScriptedAI
         m_creature->addUnitState(UNIT_STAT_CAN_NOT_MOVE);
     }
 
-    void Aggro(Unit* pWho) { }
-
     void MoveInLineOfSight(Unit* pWho) override
     {
         if (pWho && pWho->IsPlayer()) 
         {
             if (Player* player = pWho->ToPlayer()) 
-            {
-                if (m_creature->IsWithinDistInMap(pWho, 200.0f) && pWho->GetMountID() == 8011 && !pWho->HasAura(130))
-                {                    
+                if (m_creature->IsWithinDistInMap(pWho, 200.0F) && pWho->GetMountID() == 8011 && !pWho->HasAura(130))               
                     player->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, 0);
-                }
-            }
         }
     }
 };
