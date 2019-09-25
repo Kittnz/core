@@ -40,7 +40,8 @@ replace into shop_items values
 (110, 1, 50004, 'Portable Black Hole (36 slot bag)', 150),
 (111, 1, 50007, 'Forworn Mule (Bank)', 200),
 -- Pets ------------------------------------------------------------------------------------------------
-(200, 2, 13582, 'Zergling Leash', 50),
+-- (200, 2, 13582, 'Zergling Leash', 50),
+(200, 2, 51007, 'Teldrassil Sproutling', 50),
 (201, 2, 13584, 'Diablo Stone', 50),
 (202, 2, 13583, 'Panda Collar', 50),
 (203, 2, 20371, 'Blue Murloc Egg', 50),
