@@ -490,7 +490,7 @@ HonorScores HonorMaintenancer::GenerateScores(HonorStandingList& standingList)
     sc.FY[14] = 13000;   // ... gets 13000 RP
 
     // the X values for each breakpoint are found from the CP scores
-    // of the players around that point in the WS scores
+    // of the players around that point in the WS schcores
     float honor;
     float tempHonor;
 
