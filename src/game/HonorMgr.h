@@ -68,6 +68,8 @@ class HonorMaintenancer
         void FlushRankPoints();
         void CreateCalculationReport();
 
+        void FlushWeeklyQuests();
+
         float GetStandingCPByPosition(HonorStandingList& standingList, uint32 position);
         uint32 GetStandingPositionByGUID(uint32 guid, Team team);
         HonorStandingList& GetStandingListByTeam(Team team);

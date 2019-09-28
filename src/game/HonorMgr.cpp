@@ -229,6 +229,12 @@ void HonorMaintenancer::SetCityRanks()
     }
 }
 
+void HonorMaintenancer::FlushWeeklyQuests()
+{
+    // Children's Week quests:
+    CharacterDatabase.PExecute("DELETE FROM `character_queststatus` WHERE `quest` IN (1558, 171, 5502, 4822, 1800, 1468, 1479, 910, 925, 915, 558, 1687, 172, 911)");
+}
+
 void HonorMaintenancer::FlushRankPoints()
 {
     // Immediately reset honor standing before flushing
@@ -278,8 +284,10 @@ void HonorMaintenancer::DoMaintenance()
     InactiveDecayRankPoints();
     sLog.outHonor("[MAINTENANCE] Flush rank points.");
     FlushRankPoints();
-    sLog.outHonor("[MAINTENANCE] Assign City Ranks.");
+    sLog.outHonor("[MAINTENANCE] Assign city ranks.");
     SetCityRanks();
+    sLog.outHonor("[MAINTENANCE] Flush weekly quests.");
+    FlushWeeklyQuests();
 
     CreateCalculationReport();
 
