@@ -138,5 +138,7 @@ replace into shop_items values
 (807, 8, 50209, 'Orc: Mag\'Har (Male)', 125),
 (808, 8, 50210, 'Troll: Forest', 125),
 (809, 8, 50211, 'Troll: Sandfury (Including Zombies)', 125),
-(810, 8, 50212, 'Gnome: Leper (Male)', 125);
+(810, 8, 51010, 'Troll: Dark', 125),
+(811, 8, 51011, 'Troll: Ice', 125),
+(812, 8, 50212, 'Gnome: Leper (Male)', 125);
 

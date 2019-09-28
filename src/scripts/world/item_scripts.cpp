@@ -357,8 +357,14 @@ bool ItemUse_skin_changer(Player* pPlayer, Item* pItem, const SpellCastTargets&)
                 case 50211: // Sandfury (Farraki), 14 is the zombie one.
                     bytesToSet = static_cast<uint8>(irand(0, 1) == 0 ? static_cast<uint8>(irand(9, 11)) : 14);
                     break;
-                default:
+                case 51010: // Dark Troll
+                    bytesToSet = 6;
                     break;
+                case 51011: // Ice Troll
+                    bytesToSet = 7;
+                    break;
+                default:
+                    break; 
             }
             break;
         case RACE_GNOME:

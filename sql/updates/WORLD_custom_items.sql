@@ -286,7 +286,9 @@ replace into item_template (entry, name, description, quality, spellid_1, displa
 (50209, 'Mag\'Har Clan Initiation Set (Male Only)', '', 2, 12244, 16207, 'skin_changer', 2, 1),
 (50210, 'Forest Troll Initiation Set', '', 2, 12244, 34924, 'skin_changer', 128, 1),
 (50211, 'Sandfury Initiation Set (Includes Zombie)', '', 2, 12244, 32280, 'skin_changer', 128, 1),
-(50212, 'Leper Gnome Initiation Set (Male Only)', '', 2, 12244, 1288, 'skin_changer', 64, 1);
+(50212, 'Leper Gnome Initiation Set (Male Only)', '', 2, 12244, 1288, 'skin_changer', 64, 1),
+(51010, 'Dark Troll Initiation Set', '', 2, 12244, 32326, 'skin_changer', 128, 1),
+(51011, 'Ice Troll Initiation Set', '', 2, 12244, 9860, 'skin_changer', 128, 1);
 replace into item_template (entry, name, description, quality, spellid_1, display_id, script_name, bonding, spellcharges_1, buy_price) values
 (50230, 'Survival Skill Book', 'A weather-beaten leather covered journal instructing for Survival in the Wilds.', 2, 12244, 8117, 'survival_kit', 1, -1, 0),
 (50231, 'Coil of Sturdy Rope', 'A strong, braided leather rope.', 1, 12244, 10301, '', 1, 0, 3500),
