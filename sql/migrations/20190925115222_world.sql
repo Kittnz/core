@@ -52,3 +52,5 @@ replace into game_weather (zone, spring_rain_chance, spring_snow_chance, spring_
 (1637, 15, 0, 0, 0, 0, 0, 10, 0, 5, 0, 15, 15),
 (1657, 15, 0, 0, 0, 0, 0, 10, 0, 5, 0, 15, 15),
 (1638, 15, 0, 0, 0, 0, 0, 10, 0, 5, 0, 15, 15);
+-- Adjusting Children's Week timing:
+update game_event set occurence=10080, length=10081 where entry=10;
