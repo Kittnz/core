@@ -178,7 +178,7 @@ public:
 
     bool IsAuraAddedBySpell(uint32 auraType) const
     {
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < MAX_EFFECT_INDEX; i++)
             if (EffectApplyAuraName[i] == auraType)
                 return true;
         return false;
