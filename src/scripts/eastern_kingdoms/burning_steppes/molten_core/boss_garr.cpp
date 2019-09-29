@@ -47,7 +47,7 @@ struct boss_garrAI : ScriptedAI
     {
         m_uiAntiMagicPulseTimer = 25000;                       //These times are probably wrong
         m_uiMagmaShacklesTimer  = 15000;
-        m_uiExplodeTimer        = 20000;//360000; // 6 Minutes
+        m_uiExplodeTimer        = 360000; // 6 Minutes
 
         if (m_pInstance && m_creature->isAlive())
             m_pInstance->SetData(TYPE_GARR, NOT_STARTED);
