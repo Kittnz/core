@@ -69,3 +69,6 @@ replace into creature (id, map, modelid, equipment_id, position_x, position_y, p
 replace into creature (id, map, modelid, equipment_id, position_x, position_y, position_z, orientation, spawntimesecsmin, spawntimesecsmax, spawndist, currentwaypoint, curhealth, curmana, deathstate, movementtype, spawnflags, visibilitymod, patch_min, patch_max) values (50537, 1, 0, 0, -6105.78, -3875.83, -58.7563, 2.26232, 25, 25, 0, 0, 100, 0, 0, 0, 0, 0, 0, 10);
 -- Lower XP for Mirage Raceway quests:
 update quest_template set rewmoneymaxlevel='500' where entry in (50310, 50311, 50312, 50313, 50315);
+-- Set correct ZoneID for Mirage Raceway quests:
+update quest_template set zoneorsort='2240' where entry in (50310, 50311, 50312, 50313, 50315);
+
