@@ -1833,6 +1833,7 @@ void RaceSubEvent::Start()
 		if (Player* pPlayer = sObjectMgr.GetPlayer(player.guid))
 		{
 			pPlayer->SetMovement(MOVE_ROOT);
+            pPlayer->ModifyHealth(3000);
 		}
 	}
 
