@@ -502,8 +502,13 @@ struct npc_landing_siteAI : public ScriptedAI
         if (pWho && pWho->IsPlayer()) 
         {
             if (Player* player = pWho->ToPlayer()) 
-                if (m_creature->IsWithinDistInMap(pWho, 200.0F) && pWho->GetMountID() == 8011 && !pWho->HasAura(130))               
+                if (m_creature->IsWithinDistInMap(pWho, 200.0F) && pWho->GetMountID() == 8011 && !pWho->HasAura(130))
+                {
                     player->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, 0);
+                    me->MonsterSay("Ugh, another one… Welcome to tha Mirage Raceway, $N!", 0U, pWho);
+                    me->MonsterWhisper("Ya go ahead and talk to Jizzle Grikbot or Gregor Fizzwuzz ta git ya on track in all manner of meanings.", pWho);
+                    me->HandleEmoteCommand(EMOTE_ONESHOT_SALUTE);
+                }
         }
     }
 };
