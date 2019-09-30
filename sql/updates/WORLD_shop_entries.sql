@@ -1,19 +1,22 @@
-DROP TABLE IF EXISTS `shop_categories`;
-CREATE TABLE `shop_categories` (
-  `ID` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `Name` text,
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+replace into broadcast_text (id, maletext) values
+('90000', 'Welcome to Turtle WoW Shell Shop, $n.\n\nDonations are a way to help us improve your experience here at Turtle WoW, as well as help pay for general server costs, advertisement campaigns, developers, and overall production.\n\nYou can buy Turtle Tokens via PayPal (info.turtlewow@gmail.com, include your account name). The ratio is 10:1, which means 1 Euro gives you 10 Turtle Tokens.');
 
-DROP TABLE IF EXISTS `shop_items`;
-CREATE TABLE `shop_items` (
-  `ID` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `category` tinyint(3) unsigned NOT NULL DEFAULT '0',
-  `item` int(11) unsigned NOT NULL DEFAULT '0',
-  `description` text,
-  `price` int(11) unsigned DEFAULT '0',
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+drop table if exists shop_categories;
+create table shop_categories (
+  id int(11) unsigned not null auto_increment,
+  name text,
+  primary key (id)
+) engine=innodb default charset=utf8;
+
+drop table if exists shop_items;
+create table shop_items (
+  id int(11) unsigned not null auto_increment,
+  category tinyint(3) unsigned not null default '0',
+  item int(11) unsigned not null default '0',
+  description text,
+  price int(11) unsigned default '0',
+  primary key (id)
+) engine=innodb auto_increment=10 default charset=utf8;
 
 replace into shop_categories values
 (1, 'Gameplay'),
@@ -115,6 +118,7 @@ replace into shop_items values
 (612, 6, 50092, 'Tabard of the Crimson Legion', 75),
 (613, 6, 50093, 'Tabard of Hearthglen', 75),
 -- Roleplay --------------------------------------------------------------------------------------------
+(700, 7, 50024, 'Dressing Box: Invisible Suit', 20),
 (701, 7, 50022, 'Dressing Box: Midsummer Priestess', 50),
 (702, 7, 50023, 'Dressing Box: Demon Hunter', 75),
 (703, 7, 50025, 'Dressing Box: Sally Whitemane', 100),
