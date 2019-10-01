@@ -1830,7 +1830,7 @@ bool Player::SwitchInstance(uint32 newInstanceId)
     return true;
 }
 
-bool Player::TeleportTo(uint32 mapid, float x, float y, float z, float orientation, uint32 options, std::function<void()> recover, std::function<void()> OnNearTeleportFinished)
+bool Player::TeleportTo(uint32 mapid, float x, float y, float z, float orientation, uint32 options, std::function<void()> recover, std::function<void()> OnTeleportFinished)
 {
     if (!MapManager::IsValidMapCoord(mapid, x, y, z, orientation))
     {
@@ -1884,7 +1884,7 @@ bool Player::TeleportTo(uint32 mapid, float x, float y, float z, float orientati
             m_teleport_dest = WorldLocation(mapid, x, y, z, orientation);
             m_teleport_options = options;
             m_teleportRecoverDelayed = recover;
-			m_teleportNearFinishedDelayed = OnNearTeleportFinished;
+			m_teleportFinishedDelayed = OnTeleportFinished;
             return true;
         }
 
@@ -1930,9 +1930,9 @@ bool Player::TeleportTo(uint32 mapid, float x, float y, float z, float orientati
             else
                 m_teleportRecover = wps;
             wps();
-			if (OnNearTeleportFinished)
+			if (OnTeleportFinished)
 			{
-				OnNearTeleportFinished();
+				OnTeleportFinished();
 			}
         }
         m_movementInfo.moveFlags &= ~MOVEFLAG_MASK_MOVING_OR_TURN; // For interpolation
@@ -1960,7 +1960,7 @@ bool Player::TeleportTo(uint32 mapid, float x, float y, float z, float orientati
         // Far teleport to another map. We can't do this right now since it means
         // we need to remove from this map mid-update. Instead, schedule it for
         // after updates are complete
-        ScheduledTeleportData *data = new ScheduledTeleportData(mapid, x, y, z, orientation, options, recover);
+        ScheduledTeleportData *data = new ScheduledTeleportData(mapid, x, y, z, orientation, options, recover, OnTeleportFinished);
 
         sMapMgr.ScheduleFarTeleport(this, data);
     }
@@ -2099,6 +2099,10 @@ bool Player::ExecuteTeleportFar(ScheduledTeleportData *data)
             wps();
         }
 
+		if (data->OnTeleportFinished)
+		{
+			data->OnTeleportFinished();
+		}
         return true;
     }
 

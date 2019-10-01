@@ -259,41 +259,31 @@ struct go_speed_up : public GameObjectAI
     }
 
 	std::set<ObjectGuid> racers;
-	uint32 checkTimer = 0;
-
-	static const uint32 CheckForRacersInterval = 10;
 
     void UpdateAI(uint32 const uiDiff) override
     {
 		GameObjectAI::UpdateAI(uiDiff);
 
-		if (checkTimer < uiDiff)
+		for (auto iter = racers.begin(); iter != racers.end();)
 		{
-			for (auto iter = racers.begin(); iter != racers.end();)
+			if (Player* player = sObjectMgr.GetPlayer(*iter))
 			{
-				if (Player* player = sObjectMgr.GetPlayer(*iter))
+				float distSqr = me->GetDistanceSqr(player->GetPositionX(), player->GetPositionY(), player->GetPositionZ());
+				if (distSqr < SheepAcceptanceRadiusSqr)
 				{
-					float distSqr = me->GetDistanceSqr(player->GetPositionX(), player->GetPositionY(), player->GetPositionZ());
-					if (distSqr < SheepAcceptanceRadiusSqr)
-					{
-						// our client
-						player->CastSpell(player, SALT_FLATS_RACE_SPEED, true);
-						me->Despawn();
-						me->Delete();
-					}
+					// our client
+					player->CastSpell(player, 454, true);
+					me->Despawn();
+					me->Delete();
 				}
-				else
-				{
-					iter = racers.erase(iter);
-					continue;
-				}
-				iter++;
 			}
-			checkTimer = CheckForRacersInterval;
-		}
-		else
-		{
-			checkTimer -= uiDiff;
+			else
+			{
+				iter = racers.erase(iter);
+
+				continue;
+			}
+			iter++;
 		}
     }
 
@@ -360,8 +350,6 @@ struct npc_race_sheep : public ScriptedAI
 
 						me->CastSpell(me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), 5162, true);
 						me->DespawnOrUnsummon(1000);
-						//player->AddAura(5162);
-						player->CastSpell(player, 5162, true);
 					}
 				}
 				else
@@ -494,7 +482,6 @@ struct npc_landing_siteAI : public ScriptedAI
 
     void Reset()
     {
-        m_creature->addUnitState(UNIT_STAT_CAN_NOT_MOVE);
     }
 
     void MoveInLineOfSight(Unit* pWho) override

@@ -8356,6 +8356,8 @@ void Unit::UpdateSpeed(UnitMoveType mtype, bool forced, float ratio)
             return;
     }
 
+	//main_speed_mod *= ratio;
+
     float bonus = non_stack_bonus > stack_bonus ? non_stack_bonus : stack_bonus;
     // now we ready for speed calculation
     float speed  = main_speed_mod ? bonus * (100.0f + main_speed_mod) / 100.0f : bonus;
@@ -8389,8 +8391,11 @@ void Unit::UpdateSpeed(UnitMoveType mtype, bool forced, float ratio)
 
     // Apply strongest slow aura mod to speed
     int32 slow = GetMaxNegativeAuraModifier(SPELL_AURA_MOD_DECREASE_SPEED);
-    if (slow)
-        speed *= (100.0f + slow) / 100.0f;
+	if (slow)
+	{
+		int32 scaledSlow = int32(float(slow) * ratio);
+        speed *= (100.0f + scaledSlow) / 100.0f;
+	}
 
     if (GetTypeId() == TYPEID_UNIT)
     {

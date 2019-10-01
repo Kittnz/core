@@ -851,9 +851,9 @@ struct ScheduledTeleportData
 {
     ScheduledTeleportData() = default;
     ScheduledTeleportData(uint32 mapid, float x, float y, float z, float o,
-        uint32 options, std::function<void()> recover)
+        uint32 options, std::function<void()> recover, std::function<void()> InOnTeleportFinished)
         : targetMapId(mapid), x(x), y(y), z(z),
-          orientation(o), options(options), recover(recover) {};
+          orientation(o), options(options), recover(recover), OnTeleportFinished(InOnTeleportFinished){};
 
     uint32 targetMapId = 0;
     float x = 0.0f;
@@ -863,7 +863,8 @@ struct ScheduledTeleportData
 
     uint32 options = 0;
 
-    std::function<void()> recover = std::function<void()>();
+	std::function<void()> recover = std::function<void()>();
+	std::function<void()> OnTeleportFinished = std::function<void()>();
 };
 
 class MANGOS_DLL_SPEC Player final: public Unit
@@ -1661,7 +1662,7 @@ class MANGOS_DLL_SPEC Player final: public Unit
         uint32 m_teleport_options;
         std::function<void()> m_teleportRecover;
 		std::function<void()> m_teleportRecoverDelayed;
-		std::function<void()> m_teleportNearFinishedDelayed;
+		std::function<void()> m_teleportFinishedDelayed;
         bool mSemaphoreTeleport_Near;
         bool mSemaphoreTeleport_Far;
         bool mPendingFarTeleport;
@@ -1755,10 +1756,10 @@ class MANGOS_DLL_SPEC Player final: public Unit
         * Should be called in a thread-safe environment (not in map update for example !)
         */
         bool SwitchInstance(uint32 newInstanceId);
-        bool TeleportTo(uint32 mapid, float x, float y, float z, float orientation, uint32 options = 0, std::function<void()> recover = std::function<void()>(), std::function<void()> OnNearTeleportFinished = std::function<void()>());
-        bool TeleportTo(WorldLocation const &loc, uint32 options = 0, std::function<void()> recover = std::function<void()>(), std::function<void()> OnNearTeleportFinished = std::function<void()>())
+        bool TeleportTo(uint32 mapid, float x, float y, float z, float orientation, uint32 options = 0, std::function<void()> recover = std::function<void()>(), std::function<void()> OnTeleportFinished = std::function<void()>());
+        bool TeleportTo(WorldLocation const &loc, uint32 options = 0, std::function<void()> recover = std::function<void()>(), std::function<void()> OnTeleportFinished = std::function<void()>())
         {
-            return TeleportTo(loc.mapid, loc.coord_x, loc.coord_y, loc.coord_z, loc.orientation, options, recover, OnNearTeleportFinished);
+            return TeleportTo(loc.mapid, loc.coord_x, loc.coord_y, loc.coord_z, loc.orientation, options, recover, OnTeleportFinished);
         }
 
         // _NOT_ thread-safe. Must be executed by the map manager after map updates, since we

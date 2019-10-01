@@ -3881,7 +3881,7 @@ void Aura::HandleAuraModIncreaseSpeed(bool apply, bool Real)
         if (Player* modOwner = caster->GetSpellModOwner())
             modOwner->ApplySpellMod(GetSpellProto()->Id, SPELLMOD_SPEED, m_modifier.m_amount);
 
-    GetTarget()->UpdateSpeed(MOVE_RUN, true);
+    GetTarget()->UpdateSpeed(MOVE_RUN, true, GetTarget()->GetSpeedRatePersistance(MOVE_RUN));
 }
 
 void Aura::HandleAuraModIncreaseMountedSpeed(bool /*apply*/, bool Real)
@@ -3913,7 +3913,7 @@ void Aura::HandleAuraModIncreaseMountedSpeed(bool /*apply*/, bool Real)
         }
     }
 
-    GetTarget()->UpdateSpeed(MOVE_RUN, true);
+    GetTarget()->UpdateSpeed(MOVE_RUN, true, GetTarget()->GetSpeedRatePersistance(MOVE_RUN));
 }
 
 void Aura::HandleAuraModIncreaseSwimSpeed(bool /*apply*/, bool Real)
@@ -3922,7 +3922,7 @@ void Aura::HandleAuraModIncreaseSwimSpeed(bool /*apply*/, bool Real)
     if (!Real)
         return;
 
-    GetTarget()->UpdateSpeed(MOVE_SWIM, true);
+    GetTarget()->UpdateSpeed(MOVE_SWIM, true, GetTarget()->GetSpeedRatePersistance(MOVE_SWIM));
 }
 
 void Aura::HandleAuraModDecreaseSpeed(bool apply, bool Real)
@@ -3949,8 +3949,8 @@ void Aura::HandleAuraModUseNormalSpeed(bool /*apply*/, bool Real)
 
     Unit *target = GetTarget();
 
-    target->UpdateSpeed(MOVE_RUN, true);
-    target->UpdateSpeed(MOVE_SWIM, true);
+    target->UpdateSpeed(MOVE_RUN, true, target->GetSpeedRatePersistance(MOVE_RUN));
+    target->UpdateSpeed(MOVE_SWIM, true, target->GetSpeedRatePersistance(MOVE_SWIM));
 }
 
 /*********************************************************/
