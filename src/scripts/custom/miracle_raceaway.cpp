@@ -160,8 +160,7 @@ struct npc_dolores_say : public ScriptedAI
 		{
 			One,
 			Two,
-			Three,
-			Four
+			Three
 		};
 
 		Step step;
@@ -203,11 +202,6 @@ struct npc_dolores_say : public ScriptedAI
 						break;
 					case PlayerInteraction::Step::Three:
 						me->MonsterWhisper("I heard there are some traps on the road, so I guess you want to avoid them. Be careful.", player);
-						InteractionData.step = PlayerInteraction::Step::Four;
-						InteractionData.backTimer = SpeechCooldown;
-						break;
-					case PlayerInteraction::Step::Four:
-						me->MonsterWhisper("Of course you'll have your chances to win since there are boots… no, boosters on the track!", player);
 						iter = Interactions.erase(iter);
 						bShouldSkip = true;
 						break;

@@ -2001,14 +2001,13 @@ void RaceSubEvent::OnFinishedRace(RacePlayer& player)
 		leaderboard.push_back(pl->GetName());
 		size_t place = leaderboard.size();
 
-		RewardPlayer(pl);
-
 		switch (place)
 		{
 		case 1:
 		{
 			std::string msg = "YOU ARE BREATHTAKING!";
 			pl->SendRaidWarning(msg);
+			RewardPlayer(pl);
 		}
 		break;
 		case 2:
