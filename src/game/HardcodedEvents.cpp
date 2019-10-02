@@ -1798,7 +1798,8 @@ void MiracleRaceEvent::onInviteAccepted(ObjectGuid gnomePlayer, ObjectGuid gobli
 	racers.emplace_back(RacePlayerSetup{ gnomePlayerP, MiracleRaceSide::Gnome });
 	racers.emplace_back(RacePlayerSetup{ goblinPlayerP, MiracleRaceSide::Goblin });
 	InitializeRace(1);
-	std::shared_ptr<RaceSubEvent> SubEvent = races.emplace_back(std::make_shared<RaceSubEvent>(1, racers, this));
+	races.emplace_back(std::make_shared<RaceSubEvent>(1, racers, this));
+	std::shared_ptr<RaceSubEvent> SubEvent = races.back();
 	SubEvent->Start();
 }
 
@@ -2144,8 +2145,8 @@ void RacePlayer::LeaveRaceMode()
 
 	if (bIsRaceMode)
 	{
-		Player* pl = nullptr;
-		if (pl = map->GetPlayer(guid); pl != nullptr)
+		Player* pl = map->GetPlayer(guid);
+		if (pl != nullptr)
 		{
 			pl->SetFly(false);
 			pl->TeleportTo(savedPlPos);
