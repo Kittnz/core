@@ -238,7 +238,7 @@ struct npc_dolores_say : public ScriptedAI
 		std::lock_guard<std::mutex> guard(InteractionsGuard);
 		if (Interactions.find(guid) == Interactions.end())
 		{
-			Interactions.emplace(std::pair(guid, PlayerInteraction{ PlayerInteraction::Step::One, 10 }));
+			Interactions.emplace(std::make_pair(guid, PlayerInteraction{ PlayerInteraction::Step::One, 10 }));
 		}
 	}
 
