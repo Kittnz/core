@@ -95,15 +95,15 @@ bool GossipHello_npc_shop(Player* pPlayer, Creature* pCreature)
     if (!coins_result)
     {
         LoginDatabase.PExecute("INSERT INTO shop_coins (id, coins) VALUES ('%u', 0)", pPlayer->GetSession()->GetAccountId());
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Account Balance: 0 Turtle Tokens", GOSSIP_SENDER_MAIN, ACTION_CATEGORY_START);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Balance: 0", GOSSIP_SENDER_MAIN, ACTION_CATEGORY_START);
     }
 
     if (coins_result)
     {
-        Field* coins_amount = coins_result->Fetch();
-
+        Field* coins_amount = coins_result->Fetch();        
+        
         std::stringstream strstream;
-        strstream << "Account Balance: " << coins_amount->GetUInt32() << " Turtle Tokens.";
+        strstream << "Balance: " << coins_amount->GetUInt32();
         std::string formattedMessage = strstream.str();
 
         if (coins_amount != nullptr)
@@ -157,6 +157,7 @@ bool GossipSelect_npc_shop(Player* pPlayer, Creature* pCreature, uint32 uiSender
         SendEntriesInfoByCategory(pPlayer, 8);
         break;
     case ACTION_CATEGORY_START:
+        pCreature->MonsterWhisper("If you'd like to purchase some items from me, you need Turtle Tokens! You can buy them via PayPal: info.turtlewow@gmail.com. Please include your account name. 1 euro gives you 10 tokens.", pPlayer);
         return GossipHello_npc_shop(pPlayer, pCreature);
 
     default:
@@ -215,7 +216,7 @@ bool GossipSelect_npc_shop(Player* pPlayer, Creature* pCreature, uint32 uiSender
                 }
             }
             else
-                pCreature->MonsterSay("You don't have enough Turtle WoW Tokens.", 0U, pPlayer);
+                pCreature->MonsterWhisper("You don't have enough tokens! You can buy them via PayPal: info.turtlewow@gmail.com. Please include your account name. 1 euro gives you 10 tokens.", pPlayer);
         }
         break;
     }
