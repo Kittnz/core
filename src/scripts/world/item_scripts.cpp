@@ -519,10 +519,18 @@ bool ItemUse_bg_tabard(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 
 bool ItemUse_golden_pocket_watch(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
+    if (!pPlayer)
+        return false;
+
+    if (pPlayer->GetNativeDisplayId() != pPlayer->GetDisplayId()) {
+        pPlayer->DeMorph();
+        return false;
+    }
+
     int male_models[6] = { 7212, 7106, 7102, 8847, 7172, 7809 };
     int female_models[6] = { 7212, 7106, 7102, 8847, 7172, 7809 };
-    int modelid = rand() % 6; 
-    pPlayer->SetDisplayId((pPlayer->getGender() == GENDER_MALE) ? male_models[modelid] : female_models[modelid]);
+    int modelid = rand() % 6;
+    pPlayer->SetDisplayId(static_cast<uint32>((pPlayer->getGender() == GENDER_MALE) ? male_models[modelid] : female_models[modelid]));
     ChatHandler(pPlayer).SendSysMessage("This disguise will work until logout.");
     return false;
 }
@@ -536,8 +544,16 @@ bool ItemUse_remove_rested(Player* pPlayer, Item* pItem, const SpellCastTargets&
 
 bool ItemUse_turtle_morph(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
+    if (!pPlayer)
+        return false;
+
+    if (pPlayer->GetNativeDisplayId() != pPlayer->GetDisplayId()) {
+        pPlayer->DeMorph();
+        return false;
+    }
+
     pPlayer->SetDisplayId(16259);
-    pPlayer->SetObjectScale(0.3F);
+    pPlayer->SetObjectScale(0.3f);
     ChatHandler(pPlayer).SendSysMessage("You're a turtle now!");
     return false;
 }
