@@ -552,6 +552,7 @@ bool ItemUse_turtle_morph(Player* pPlayer, Item* pItem, const SpellCastTargets&)
         return false;
     }
 
+    pPlayer->RemoveAurasDueToSpell(25037);
     pPlayer->SetDisplayId(16259);
     pPlayer->SetObjectScale(0.3f);
     ChatHandler(pPlayer).SendSysMessage("You're a turtle now!");
