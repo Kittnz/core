@@ -534,6 +534,15 @@ bool ItemUse_remove_rested(Player* pPlayer, Item* pItem, const SpellCastTargets&
     return false;
 }
 
+bool ItemUse_turtle_morph(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+{
+    pPlayer->SetDisplayId(16259);
+    pPlayer->SetObjectScale(0.3F);
+    ChatHandler(pPlayer).SendSysMessage("You're a turtle now!");
+    return false;
+}
+
+
 void AddSC_item_scripts()
 {
     Script *newscript;
@@ -621,5 +630,10 @@ void AddSC_item_scripts()
     newscript = new Script;
     newscript->Name = "remove_rested";
     newscript->pItemUse = &ItemUse_remove_rested;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "turtle_morph";
+    newscript->pItemUse = &ItemUse_turtle_morph;
     newscript->RegisterSelf();
 }
