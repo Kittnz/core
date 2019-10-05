@@ -1137,6 +1137,25 @@ bool GossipSelect_title_masker(Player* player, Creature* creature, uint32 sender
     return true;
 }
 
+bool GossipHello_birthday_dragon(Player* pPlayer, Creature* pCreature)
+{
+    if (pPlayer->GetQuestStatus(60000) == QUEST_STATUS_INCOMPLETE)
+                if (!pPlayer->GetQuestRewardStatus(60000))
+                    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Speedy is having a Birthday Party today!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF);
+    pPlayer->SEND_GOSSIP_MENU(90301, pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_birthday_dragon(Player* player, Creature* creature, uint32 sender, uint32 action)
+{
+    if (action == GOSSIP_ACTION_INFO_DEF) {
+        creature->PMonsterSay("A birthday party? Why would HE need such a ... Nevermind. Since it's Speedy, I'm going to bring some joy to old friend no matter the reason.");
+        player->AddItem(51022, 1);
+    }
+    player->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
 void AddSC_custom_creatures()
 {
     Script *newscript;
@@ -1179,5 +1198,11 @@ void AddSC_custom_creatures()
     newscript->Name = "title_masker";
     newscript->pGossipHello = &GossipHello_title_masker;
     newscript->pGossipSelect = &GossipSelect_title_masker;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "birthday_dragon";
+    newscript->pGossipHello = &GossipHello_birthday_dragon;
+    newscript->pGossipSelect = &GossipSelect_birthday_dragon;
     newscript->RegisterSelf();
 }
