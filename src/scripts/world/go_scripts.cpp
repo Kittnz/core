@@ -699,6 +699,60 @@ struct go_cot_exit_trigger : public GameObjectAI
     }
 };
 
+bool GOHello_go_turtle_radio(Player* pPlayer, GameObject* pGo)
+{
+    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "Play 'Teldrassil'", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "Play 'Brill's Tavern'", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "Play 'Ashenvale'", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "Play 'Darkmoon Faire'", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
+    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "Play 'Thunderbluff'", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
+    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "Play 'Goldshire Inn'", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 6);
+    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "Play 'Magic'", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 7);
+    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "Play 'Baby Murloc Song'", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 8);
+    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "Play 'Barrens'", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 9);
+    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "Play 'Tinker Town'", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 10);
+    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "Play 'Dark Forest'", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 11);
+    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "Play 'Maexxna'", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 12);
+    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "Play 'Orgrimmar'", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 13);
+
+    pPlayer->SEND_GOSSIP_MENU(90300, pGo->GetGUID());
+    return true;
+}
+
+bool GOSelect_go_turtle_radio(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 action)
+{
+    if (action == GOSSIP_ACTION_INFO_DEF + 1)
+        pPlayer->PlayDirectMusic(4536);
+    if (action == GOSSIP_ACTION_INFO_DEF + 2)
+        pPlayer->PlayDirectMusic(5355);
+    if (action == GOSSIP_ACTION_INFO_DEF + 3)
+        pPlayer->PlayDirectMusic(5532);
+    if (action == GOSSIP_ACTION_INFO_DEF + 4)
+        pPlayer->PlayDirectMusic(8440);
+    if (action == GOSSIP_ACTION_INFO_DEF + 5)
+        pPlayer->PlayDirectMusic(7077);
+    if (action == GOSSIP_ACTION_INFO_DEF + 6)
+        pPlayer->PlayDirectMusic(4516);
+    if (action == GOSSIP_ACTION_INFO_DEF + 7)
+        pPlayer->PlayDirectMusic(6669);
+    if (action == GOSSIP_ACTION_INFO_DEF + 8)
+        pPlayer->PlayDirectMusic(8485);
+    if (action == GOSSIP_ACTION_INFO_DEF + 9)
+        pPlayer->PlayDirectMusic(2536);
+    if (action == GOSSIP_ACTION_INFO_DEF + 10)
+        pPlayer->PlayDirectMusic(7196);
+    if (action == GOSSIP_ACTION_INFO_DEF + 11)
+        pPlayer->PlayDirectMusic(5376);
+    if (action == GOSSIP_ACTION_INFO_DEF + 12)
+        pPlayer->PlayDirectMusic(8887);
+    if (action == GOSSIP_ACTION_INFO_DEF + 13)
+        pPlayer->PlayDirectMusic(5055);
+
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
+
 GameObjectAI* GetAI_go_cot_exit_trigger(GameObject* gameobject)
 {
     return new go_cot_exit_trigger(gameobject);
@@ -826,4 +880,12 @@ void AddSC_go_scripts()
     newscript->Name = "go_cot_exit_trigger";
     newscript->GOGetAI = &GetAI_go_cot_exit_trigger;
     newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "go_turtle_radio";
+    newscript->pGOHello = &GOHello_go_turtle_radio;
+    newscript->pGOGossipSelect = &GOSelect_go_turtle_radio;
+    newscript->RegisterSelf();
 }
+
+

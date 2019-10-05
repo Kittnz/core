@@ -558,6 +558,17 @@ bool ItemUse_turtle_morph(Player* pPlayer, Item* pItem, const SpellCastTargets&)
     return false;
 }
 
+bool ItemUse_turtle_radio(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+{
+    pPlayer->SummonGameObject(1000055, pPlayer->GetPositionX(), pPlayer->GetPositionY(), pPlayer->GetPositionZ(), 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 180, true);
+    return false;
+}
+
+bool ItemUse_turtle_party(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+{
+    pPlayer->AddAura(8067);
+    return false;
+}
 
 void AddSC_item_scripts()
 {
@@ -651,5 +662,15 @@ void AddSC_item_scripts()
     newscript = new Script;
     newscript->Name = "turtle_morph";
     newscript->pItemUse = &ItemUse_turtle_morph;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "turtle_radio";
+    newscript->pItemUse = &ItemUse_turtle_radio;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "turtle_party";
+    newscript->pItemUse = &ItemUse_turtle_party;
     newscript->RegisterSelf();
 }
