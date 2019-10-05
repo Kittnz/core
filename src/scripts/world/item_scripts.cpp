@@ -560,7 +560,7 @@ bool ItemUse_turtle_morph(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 
 bool ItemUse_turtle_radio(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
-    pPlayer->SummonGameObject(1000055, pPlayer->GetPositionX(), pPlayer->GetPositionY(), pPlayer->GetPositionZ(), 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 180, true);
+    pPlayer->SummonGameObject(1000055, pPlayer->GetPositionX(), pPlayer->GetPositionY(), pPlayer->GetPositionZ(), 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 600, true);
     return false;
 }
 
