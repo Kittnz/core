@@ -1991,7 +1991,8 @@ enum MiracleRaceQuests
 	GoblinTest = 50310,// - goblin test
 	GnomeTest = 50312,// - gnome test
 	GoblinReal = 50311,// - goblin real
-	GnomeReal = 50313 //- gnome real
+	GnomeReal = 50313, //- gnome real
+	TimeQuest = 50316 // Race against Time!
 };
 
 void RaceSubEvent::OnFinishedRace(RacePlayer& player)
@@ -2050,6 +2051,7 @@ void RaceSubEvent::RewardPlayer(Player* pl)
 	if (CheckForQuestAndMarkCompleteLambda(MiracleRaceQuests::GnomeTest)) return;
 	if (CheckForQuestAndMarkCompleteLambda(MiracleRaceQuests::GoblinReal)) return;
 	if (CheckForQuestAndMarkCompleteLambda(MiracleRaceQuests::GnomeReal)) return;
+	if (CheckForQuestAndMarkCompleteLambda(MiracleRaceQuests::TimeQuest)) return;
 }
 
 RacePlayer::RacePlayer(const RacePlayerSetup& racer, RaceSubEvent* InEvent)
@@ -2101,14 +2103,37 @@ void RacePlayer::GoRaceMode()
 
 			pl->SetDisplayId(INVISIBLE_MODELID);
 
+			auto SpawnControllerForTeamLambda = [this, pl](uint32 ControllerEntryId)
+			{
+				if (Creature* CarController = pl->SummonCreature(ControllerEntryId, pl->GetPositionX(), pl->GetPositionY(), pl->GetPositionZ(), pl->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN, 30 * MINUTE * IN_MILLISECONDS))
+				{
+					pl->SetCharm(CarController);
+					controllerNPC = CarController->GetObjectGuid();
+					CarController->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_POSSESSED);
+					CarController->SetCharmerGuid(pl->GetObjectGuid());
+					CarController->SetPossesorGuid(pl->GetObjectGuid());
+					CharmInfo* pSpells = CarController->InitCharmInfo(CarController);
+					for (uint32 spellId : CarController->m_spells)
+					{
+						pSpells->AddSpellToActionBar(spellId);
+					}
+					CarController->AI()->InformGuid(pl->GetObjectGuid());
+					pl->PossessSpellInitialize();
+				}
+			};
+
 			float startY = startPoint.pos.y + 5.0f;
 			switch (side)
 			{
 			case MiracleRaceSide::Gnome:
+			{
 				pl->Mount(GNOMECAR_DISPLAYID);
+				SpawnControllerForTeamLambda(50529);
 				break;
+			}
 			case MiracleRaceSide::Goblin:
 				pl->Mount(GOBLINCAR_DISPLAYID);
+				SpawnControllerForTeamLambda(50531);
 				startY -= 12.0f;
 				break;
 			default:
@@ -2134,6 +2159,9 @@ void RacePlayer::GoRaceMode()
 			pl->SetSpeedRatePersistance(MOVE_RUN, 3.0f);
 			pl->UpdateSpeed(MOVE_RUN, true, 3.0f);
 
+			// Set ability bar
+
+
 			bIsRaceMode = true;
 		}
 	}
@@ -2156,6 +2184,8 @@ void RacePlayer::LeaveRaceMode()
 			pl->RemoveExclusiveVisibleObject(checkpointEffectGuid);
 			pl->SetSpeedRatePersistance(MOVE_RUN, 1.0f);
 			pl->UpdateSpeed(MOVE_RUN, true, 1.0f);
+			pl->SetCharm(nullptr);
+			pl->RemovePetActionBar();
 		}
 
 		if (GameObject* checkpointEffect = map->GetGameObject(checkpointEffectGuid))
@@ -2169,6 +2199,11 @@ void RacePlayer::LeaveRaceMode()
 				checkpointEffect->SetRespawnTime(0);
 				checkpointEffect->Delete();
 			}
+		}
+
+		if (Creature* controller = map->GetCreature(controllerNPC))
+		{
+			controller->DespawnOrUnsummon();
 		}
 
 

@@ -243,6 +243,34 @@ void WorldSession::HandlePetAction(WorldPacket& recv_data)
 
             pCharmedUnit->clearUnitState(UNIT_STAT_MOVING);
 
+			//Turtle specific
+			if (pCharmedUnit->GetEntry() == 50529)
+			{
+				Spell* spell = new Spell(_player, spellInfo, true);
+				spell->m_targets.setUnitTarget(unit_target);
+				SpellCastResult result = spell->CheckPetCast(unit_target);
+				if (result == SPELL_CAST_OK)
+				{
+					if (pCharmedUnit->HasSpellCooldown(spellid) || pCharmedUnit->HasSpellCategoryCooldown(spellInfo->Category))
+					{
+						result = SPELL_FAILED_NOT_READY;
+					}
+					else
+					{
+						spell->prepare();
+						//spell->SendSpellCooldown();
+						pCharmedUnit->AddSpellAndCategoryCooldowns(spellInfo, 0, spell, false);
+					}
+				}
+
+				if (result != SPELL_CAST_OK)
+				{
+					Spell::SendCastResult(_player, spellInfo, result);
+				}
+
+				break;
+			}
+
             Spell* spell = new Spell(pCharmedUnit, spellInfo, false);
 
             SpellCastResult result = spell->CheckPetCast(unit_target);

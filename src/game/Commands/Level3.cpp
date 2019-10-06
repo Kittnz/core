@@ -8492,7 +8492,7 @@ bool ChatHandler::HandleRaceTest(char *args)
 		{
 			if (MiracleRaceEvent* event = sGameEventMgr.GetHardcodedEvent<MiracleRaceEvent>())
 			{
-				event->StartTestRace(1, pl, MiracleRaceSide::Goblin);
+				event->StartTestRace(1, pl, MiracleRaceSide::Gnome);
 			}
 		}
 	}

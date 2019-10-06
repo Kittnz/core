@@ -409,6 +409,7 @@ struct RacePlayer
 
 	ObjectGuid guid;
 	ObjectGuid checkpointEffectGuid;
+	ObjectGuid controllerNPC;
 	Map* map = nullptr; // might be dangerous
 	RaceSubEvent* raceEvent = nullptr;
 	MiracleRaceSide side;

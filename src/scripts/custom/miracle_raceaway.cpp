@@ -25,6 +25,8 @@
 #define EXPLOSIVE_SHEEP           4050
 #define SPELL_BOMB				  5134
 
+#define RACE_AGAINST_TIME_QUESTID 50316
+
 constexpr float SheepAcceptanceRadius = 4.4f;
 constexpr float SheepAcceptanceRadiusSqr = SheepAcceptanceRadius * SheepAcceptanceRadius;
 
@@ -37,6 +39,7 @@ bool GossipHello_npc_daisy(Player* p_Player, Creature* p_Creature)
     if ((p_Player->GetQuestRewardStatus(GOBLIN_TEST_QUEST)) || (p_Player->GetQuestRewardStatus(GNOME_TEST_QUEST)))
         p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I want to leave from race queue.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
 
+	p_Player->PrepareQuestMenu(p_Creature->GetGUID());
     p_Player->SEND_GOSSIP_MENU(90250, p_Creature->GetGUID());    
     return true;
 }
@@ -340,6 +343,14 @@ struct npc_race_sheep : public ScriptedAI
 					if (distSqr < SheepAcceptanceRadiusSqr)
 					{
 						// our client
+						
+						// do not hurt a player with invisibility
+						if (player->HasAura(4079)) // Cloaking
+						{
+							iter++;
+							continue;
+						}
+
 						player->AddAura(SALT_FLATS_RACE_SLOW);
 
 						me->CastSpell(me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), 5162, true);
@@ -359,6 +370,53 @@ struct npc_race_sheep : public ScriptedAI
 		{
 			checkTimer -= deltaTime;
 		}
+	}
+
+};
+
+struct npc_car_controller : public ScriptedAI
+{
+	npc_car_controller(Creature* InCreature)
+		: ScriptedAI(InCreature)
+	{
+		Reset();
+	}
+
+	ObjectGuid targetGuid;
+
+	uint32 BackTimer;
+	static constexpr uint32 TickInterval = 3 * IN_MILLISECONDS;
+
+	virtual void UpdateAI(const uint32 delta) override
+	{
+		if (BackTimer < delta)
+		{
+			BackTimer = TickInterval;
+
+			if (!targetGuid.IsEmpty())
+			{
+				if (Player* pl = sObjectMgr.GetPlayer(targetGuid))
+				{
+					me->NearTeleportTo(pl->GetPositionX(), pl->GetPositionY(), pl->GetPositionZ() - 7.0f, 0.0f);
+				}
+			}
+		}
+		else
+		{
+			BackTimer -= delta;
+		}
+	}
+
+
+	virtual void Reset() override
+	{
+		BackTimer = TickInterval;
+	}
+
+
+	virtual void InformGuid(const ObjectGuid playerGuid, uint32 = 0) override
+	{
+		targetGuid = playerGuid;
 	}
 
 };
@@ -395,34 +453,6 @@ struct npc_race_car : public ScriptedAI
 	virtual void InformGuid(const ObjectGuid guid, uint32 = 0) override
 	{
 		PlayerControllerGuid = guid;
-	}
-
-};
-
-struct MiracleRaceTestRound : public QuestInstance
-{
-	MiracleRaceTestRound(ObjectGuid player)
-		: QuestInstance(player, 9500)
-	{}
-
-	virtual void OnQuestStarted() override
-	{
-		// Check for event
-		
-		// Move player to specific vis layer
-
-		// Initialize race
-	}
-
-	virtual void OnQuestCanceled() override
-	{
-		// move to global vis layer
-		
-		// despawn car, return control to main player pawn
-	}
-
-	virtual void OnQuestFinished() override
-	{
 	}
 
 };
@@ -519,9 +549,27 @@ CreatureAI* GetAI_npc_dolores_say(Creature* creature)
     return new npc_dolores_say(creature);
 }
 
-QuestInstance* GetQuest_MiracleRaceTest(ObjectGuid PlayerGuid)
+CreatureAI* GetAI_npc_car_controller(Creature* creature)
 {
-	return new MiracleRaceTestRound(PlayerGuid);
+	return new npc_car_controller(creature);
+}
+
+bool QuestAccepted_npc_daisy(Player* player, Creature* creature, const Quest* quest)
+{
+	if (quest->GetQuestId() == RACE_AGAINST_TIME_QUESTID)
+	{
+		MiracleRaceEvent* miracleEvent = sGameEventMgr.GetHardcodedEvent<MiracleRaceEvent>();
+		MiracleRaceSide side = MiracleRaceSide::Gnome;
+
+		if (player->GetQuestRewardStatus(GOBLIN_TEST_QUEST))
+		{
+			side = MiracleRaceSide::Goblin;
+		}
+
+		miracleEvent->StartTestRace(1, player, side);
+	}
+
+	return true;
 }
 
 void AddSC_miracle_raceaway()
@@ -532,6 +580,7 @@ void AddSC_miracle_raceaway()
     newscript->Name = "npc_daisy";
     newscript->pGossipHello = &GossipHello_npc_daisy;
     newscript->pGossipSelect = &GossipSelect_npc_daisy;
+	newscript->pQuestAcceptNPC = &QuestAccepted_npc_daisy;
     newscript->RegisterSelf();
 
     newscript = new Script;
@@ -552,11 +601,6 @@ void AddSC_miracle_raceaway()
 	newscript->RegisterSelf();
 
 	newscript = new Script;
-	newscript->Name = "quest_miracle_race_test_round";
-	newscript->GetQuestInstance = GetQuest_MiracleRaceTest;
-	newscript->RegisterSelf();
-
-	newscript = new Script;
 	newscript->Name = "item_miracle_acceptInvite";
 	newscript->pItemUse = ItemUse_Miracle_AcceptInvite;
 	newscript->RegisterSelf();
@@ -570,6 +614,11 @@ void AddSC_miracle_raceaway()
     newscript->Name = "npc_landing_site";
     newscript->GetAI = &GetAI_npc_landing_site;
     newscript->RegisterSelf();
+
+	newscript = new Script;
+	newscript->Name = "npc_car_controller";
+	newscript->GetAI = &GetAI_npc_car_controller;
+	newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "go_flying_machine";
