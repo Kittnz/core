@@ -22,7 +22,7 @@ spell_id2 = 22863, -- Speed Bonus
 spell_id3 = 1953, -- Blink + Unstun
 spell_id4 = 4079  -- Invisibility
 
-where entry = 50529;
+where entry = 50531;
 
 -- Gnome Car Controller Spells: 50531
 
@@ -33,7 +33,7 @@ spell_id2 = 22863, -- Speed Bonus
 spell_id3 = 1953, -- Blink + Unstun
 spell_id4 = 13234 -- Harm Prevention Belt
 
-where entry = 50531;
+where entry = 50529;
 
 delete from spell_effect_mod where id = 454;
 replace into spell_effect_mod (Id, EffectIndex, Effect, EffectDieSides, EffectBaseDice, EffectDicePerLevel, EffectRealPointsPerLevel, EffectBasePoints, EffectAmplitude, EffectPointsPerComboPoint, EffectChainTarget, EffectMultipleValue, EffectMechanic, EffectImplicitTargetA, EffectImplicitTargetB, EffectRadiusIndex, EffectApplyAuraName, EffectItemType, EffectMiscValue, EffectTriggerSpell) values

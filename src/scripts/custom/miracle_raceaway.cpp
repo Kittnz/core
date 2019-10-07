@@ -12,6 +12,9 @@
 #define GOBLIN_TEST_QUEST 50310
 #define GNOME_TEST_QUEST 50312
 
+#define GOBLIN_REAL_QUEST 50311
+#define GNOME_REAL_QUEST 50313
+
 #define ALREADY_REGISTERED_TXTID 50212
 
 // Spells:
@@ -33,8 +36,10 @@ constexpr float SheepAcceptanceRadiusSqr = SheepAcceptanceRadius * SheepAcceptan
 bool GossipHello_npc_daisy(Player* p_Player, Creature* p_Creature)
 {
     if (p_Player->GetQuestRewardStatus(GOBLIN_TEST_QUEST))
+        if (p_Player->GetQuestStatus(GOBLIN_REAL_QUEST) == QUEST_STATUS_INCOMPLETE)
         p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I'll join Goblin's Team.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     if (p_Player->GetQuestRewardStatus(GNOME_TEST_QUEST))
+        if (p_Player->GetQuestStatus(GNOME_REAL_QUEST) == QUEST_STATUS_INCOMPLETE)
         p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I'll join Gnome's Team.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
     if ((p_Player->GetQuestRewardStatus(GOBLIN_TEST_QUEST)) || (p_Player->GetQuestRewardStatus(GNOME_TEST_QUEST)))
         p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I want to leave from race queue.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
