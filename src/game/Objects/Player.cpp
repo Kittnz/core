@@ -21289,7 +21289,11 @@ void Player::TaxiStepFinished()
             m_taxi.ClearTaxiDestinations();    // clear problematic path and next
     }
     else
+    {
+        // When the player reaches the last flight point, teleport to destination taxi node location
+        TeleportTo(curDestNode->map_id, curDestNode->x, curDestNode->y, curDestNode->z, GetOrientation());
         m_taxi.ClearTaxiDestinations();        // not destinations, clear source node
+    } 
 }
 
 
