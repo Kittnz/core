@@ -39,7 +39,10 @@ bool GossipHello_npc_daisy(Player* p_Player, Creature* p_Creature)
     if ((p_Player->GetQuestRewardStatus(GOBLIN_TEST_QUEST)) || (p_Player->GetQuestRewardStatus(GNOME_TEST_QUEST)))
         p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I want to leave from race queue.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
 
-	p_Player->PrepareQuestMenu(p_Creature->GetGUID());
+    if (p_Player->GetQuestRewardStatus(GOBLIN_TEST_QUEST))
+        p_Player->PrepareQuestMenu(p_Creature->GetGUID());
+    if (p_Player->GetQuestRewardStatus(GNOME_TEST_QUEST))
+        p_Player->PrepareQuestMenu(p_Creature->GetGUID());
     p_Player->SEND_GOSSIP_MENU(90250, p_Creature->GetGUID());    
     return true;
 }
