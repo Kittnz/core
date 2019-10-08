@@ -15,8 +15,9 @@ replace into `mangos_string` (`entry`, `content_default`) values
 ('50013', 'Turtle WoW: Do your new fancy shoulderpads look awful with your hair? Would you rather not cover your amazing face with an ugly helmet? Don\'t worry! Find your local barber in Stormwind or Crossroads and buy some hair dyes.'),
 ('50014', 'Turtle WoW: Donations are a way to help us improve your experience here at Turtle WoW, as well as help pay for general server costs, advertisement campaigns, developers, and overall production. You can find changelogs and videos on our website and social media platforms. Thanks for your continued support!'),
 ('50015', 'Turtle WoW: Grab your dusty sword and join your faction\'s defending forces! Get your brand new equipment sets from the Guard Recruiters in the main cities: https://forum.turtle-wow.org/viewtopic.php?f=2&t=642'),
-('50016', 'Turtle WoW: Check our shop for donation rewards if you are interested to contribute to this community. Thank you all for supporting Turtle WoW since launch. We couldn’t be here without your help.');
-
+('50016', 'Turtle WoW: Check our shop for donation rewards if you are interested to contribute to this community. Thank you all for supporting Turtle WoW since launch. We couldn’t be here without your help.'),
+('50017', 'Turtle WoW: Speak with Karn Deepeye in Orgrimmar or Tarun Swifteagle in Stormwind in order to become diplomats! You will be able to group, trade and speak with members of the other faction! If you are a diplomat /join Diplomacy in order to talk with other diplomats!'),
+('50018', 'Turtle WoW: World chat is united! Please /join Horde or /join Alliance for faction-only talks.');
 replace into `autobroadcast` (`string_Id`) values
 ('50001'),
 ('50002'),
@@ -32,4 +33,6 @@ replace into `autobroadcast` (`string_Id`) values
 ('50013'),
 ('50014'),
 ('50015'),
-('50016');
+('50016'),
+('50017'),
+('50018');
