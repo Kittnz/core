@@ -244,13 +244,22 @@ void WorldSession::HandlePetAction(WorldPacket& recv_data)
             pCharmedUnit->clearUnitState(UNIT_STAT_MOVING);
 
 			//Turtle specific
-			if (pCharmedUnit->GetEntry() == 50529)
+			if (pCharmedUnit->GetEntry() == 50529 || pCharmedUnit->GetEntry() == 50531 &&
+				!_player->IsRooted())
 			{
 				Spell* spell = new Spell(_player, spellInfo, true);
-				spell->m_targets.setUnitTarget(unit_target);
+				if (spellInfo->Id == 1953)
+				{
+					spell->m_targets.setUnitTarget(_player);
+				}
+				else
+				{
+					spell->m_targets.setUnitTarget(unit_target);
+				}
 				SpellCastResult result = spell->CheckPetCast(unit_target);
 				if (result == SPELL_CAST_OK)
 				{
+					spell->FillTargetMap();
 					if (pCharmedUnit->HasSpellCooldown(spellid) || pCharmedUnit->HasSpellCategoryCooldown(spellInfo->Category))
 					{
 						result = SPELL_FAILED_NOT_READY;

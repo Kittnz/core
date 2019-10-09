@@ -1642,7 +1642,8 @@ void Spell::DoSpellHitOnUnit(Unit *unit, uint32 effectMask)
         else
         {
             // for delayed spells ignore negative spells (after duel end) for friendly targets
-            if (m_delayed && !IsPositiveSpell(m_spellInfo))
+            if (m_delayed && !IsPositiveSpell(m_spellInfo) &&
+				realCaster->GetMountID() != GNOMECAR_DISPLAYID && realCaster->GetMountID() != GOBLINCAR_DISPLAYID)
             {
                 realCaster->SendSpellMiss(unit, m_spellInfo->Id, SPELL_MISS_EVADE);
                 ResetEffectDamageAndHeal();
@@ -5606,8 +5607,19 @@ SpellCastResult Spell::CheckCast(bool strict)
                     if (!target_friendly_checked)
                     {
                         target_friendly_checked = true;
-                        if (!m_caster->IsValidAttackTarget(target))
-                            return SPELL_FAILED_BAD_TARGETS;
+						// Turtle specific - allow target friendly targets when you racing, BUT ONLY PLAYERS
+						if (m_caster->GetMountID() == GNOMECAR_DISPLAYID || m_caster->GetMountID() == GOBLINCAR_DISPLAYID)
+						{
+							if (!target->IsPlayer())
+							{
+								return SPELL_FAILED_BAD_TARGETS;
+							}
+						}
+						else
+						{
+							if (!m_caster->IsValidAttackTarget(target))
+								return SPELL_FAILED_BAD_TARGETS;
+						}
                     }
                     explicit_target_mode = true;
                 }

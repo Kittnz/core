@@ -350,19 +350,27 @@ struct npc_race_sheep : public ScriptedAI
 					float distSqr = me->GetDistanceSqr(player->GetPositionX(), player->GetPositionY(), player->GetPositionZ());
 					if (distSqr < SheepAcceptanceRadiusSqr)
 					{
-						// our client
-						
-						// do not hurt a player with invisibility
-						if (player->HasAura(4079)) // Cloaking
+						uint32 mountId = player->GetMountID();
+						if (mountId == GNOMECAR_DISPLAYID || mountId == GOBLINCAR_DISPLAYID)
 						{
-							iter++;
+							// our client
+							// do not hurt a player with invisibility
+							if (player->HasAura(4079)) // Cloaking
+							{
+								iter++;
+								continue;
+							}
+
+							player->AddAura(SALT_FLATS_RACE_SLOW);
+
+							me->CastSpell(me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), 5162, true);
+							me->DespawnOrUnsummon(1000);
+						}
+						else
+						{
+							iter = racers.erase(iter);
 							continue;
 						}
-
-						player->AddAura(SALT_FLATS_RACE_SLOW);
-
-						me->CastSpell(me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), 5162, true);
-						me->DespawnOrUnsummon(1000);
 					}
 				}
 				else

@@ -1739,13 +1739,21 @@ bool MiracleRaceEvent::InitializeRace(uint32 raceId)
 
 void MiracleRaceEvent::StartTestRace(uint32 raceId, Player* racer, MiracleRaceSide side)
 {
-	if (racer != nullptr && InitializeRace(raceId))
+	if (racer != nullptr)
 	{
-		std::list<RacePlayerSetup> racers;
-		racers.emplace_back(RacePlayerSetup{racer, side});
-		std::shared_ptr<RaceSubEvent> raceSubEvent = std::make_shared<RaceSubEvent>(raceId, racers, this);
-		races.push_back(raceSubEvent);
-		raceSubEvent->Start();
+		uint32 mountId = racer->GetMountID();
+		if (mountId != GNOMECAR_DISPLAYID && mountId != GOBLINCAR_DISPLAYID)
+		{
+			if (InitializeRace(raceId))
+			{
+				queueSystem().RemoveFromQueue(racer);
+				std::list<RacePlayerSetup> racers;
+				racers.emplace_back(RacePlayerSetup{ racer, side });
+				std::shared_ptr<RaceSubEvent> raceSubEvent = std::make_shared<RaceSubEvent>(raceId, racers, this);
+				races.push_back(raceSubEvent);
+				raceSubEvent->Start();
+			}
+		}
 	}
 }
 
