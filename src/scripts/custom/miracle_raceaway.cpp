@@ -2,11 +2,6 @@
 #include "HardcodedEvents.h"
 #include <array>
 
-// Items:
-
-#define GOBLIN_CAR_KEY  50525
-#define GNOME_CAR_KEY  50524
-
 // Quests:
 
 #define GOBLIN_TEST_QUEST 50310
@@ -128,7 +123,7 @@ bool GossipSelect_npc_dolores(Player* p_Player, Creature* p_Creature, uint32 /*u
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        if (p_Player->HasItemCount(GOBLIN_CAR_KEY, 0) && p_Player->GetQuestStatus(GOBLIN_TEST_QUEST) == QUEST_STATUS_INCOMPLETE)
+        if (p_Player->GetQuestStatus(GOBLIN_TEST_QUEST) == QUEST_STATUS_INCOMPLETE)
         {
             if (MiracleRaceEvent* event = sGameEventMgr.GetHardcodedEvent<MiracleRaceEvent>())
             {
@@ -143,7 +138,7 @@ bool GossipSelect_npc_dolores(Player* p_Player, Creature* p_Creature, uint32 /*u
     }
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
     {
-        if (p_Player->HasItemCount(GNOME_CAR_KEY, 0) && p_Player->GetQuestStatus(GNOME_TEST_QUEST) == QUEST_STATUS_INCOMPLETE)
+        if (p_Player->GetQuestStatus(GNOME_TEST_QUEST) == QUEST_STATUS_INCOMPLETE)
         {
             if (MiracleRaceEvent* event = sGameEventMgr.GetHardcodedEvent<MiracleRaceEvent>())
             {
