@@ -63,14 +63,9 @@ Channel::Channel(const std::string& name)
             m_announce = false;
         }
 
-        if (m_name == u8"World")
+        if (m_name == u8"World" || m_name == u8"Alliance" || m_name == u8"Horde")
         {
             m_flags |= CHANNEL_FLAG_GENERAL;
-            m_announce = false;
-        }
-        else if (m_name == u8"China" || m_name == u8"中国")
-        {
-            m_flags |= CHANNEL_FLAG_CUSTOM;
             m_announce = false;
         }
         else
