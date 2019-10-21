@@ -65,8 +65,8 @@ UPDATE `quest_template` SET `SrcItemId`='0' WHERE (`entry`='50312') AND (`patch`
 UPDATE `quest_template` SET `SrcItemId`='0' WHERE (`entry`='50311') AND (`patch`='0');
 UPDATE `quest_template` SET `SrcItemId`='0' WHERE (`entry`='50310') AND (`patch`='0');
 
-UPDATE `quest_template` SET `RegItemId`='2' WHERE (`entry`='50313') AND (`patch`='0');
-UPDATE `quest_template` SET `RegItemId`='2' WHERE (`entry`='50312') AND (`patch`='0');
-UPDATE `quest_template` SET `RegItemId`='2' WHERE (`entry`='50311') AND (`patch`='0');
-UPDATE `quest_template` SET `RegItemId`='2' WHERE (`entry`='50310') AND (`patch`='0');
+UPDATE `quest_template` SET `ReqItemId1`='0' WHERE (`entry`='50313') AND (`patch`='0');
+UPDATE `quest_template` SET `ReqItemId1`='0' WHERE (`entry`='50312') AND (`patch`='0');
+UPDATE `quest_template` SET `ReqItemId1`='0' WHERE (`entry`='50311') AND (`patch`='0');
+UPDATE `quest_template` SET `ReqItemId1`='0' WHERE (`entry`='50310') AND (`patch`='0');
 
