@@ -2431,7 +2431,7 @@ bool MiracleRaceQueueSystem::TryStartRace()
 		_inviteRequests.emplace_back(InviteRequest( LiveGnomePlayer , LiveGoblinPlayer));
 		InviteRequest& newInvite = _inviteRequests.back();
 
-		const char* InvitationText = "Shimmering Flats race is about to start! The race begins in 10 seconds! Get ready!";
+		const char* InvitationText = "Shimmering Flats race is about to start! Get ready!";
 		// Send them invite
 		if (Player* gnomePlayer = sObjectMgr.GetPlayer(LiveGnomePlayer))
 		{
