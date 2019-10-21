@@ -1766,6 +1766,7 @@ void MiracleRaceEvent::Update()
 
 	lastTime = newTime;
 
+	queueSystem().Update(deltaTime);
 	std::shared_ptr< RaceSubEvent> raceShouldBeDestroyed;
 	for (std::shared_ptr<RaceSubEvent>& race : races)
 	{
@@ -2331,6 +2332,7 @@ bool MiracleRaceQueueSystem::isPlayerQueuedAlready(Player* player) const
 }
 
 #define MAX_INVITE_TIME 45 * IN_MILLISECONDS // 45 sec
+#define TIME_BEFORE_TELEPORT 10 * IN_MILLISECONDS // 10 sec
 
 void MiracleRaceQueueSystem::Update(uint32 deltaTime)
 {
@@ -2341,8 +2343,9 @@ void MiracleRaceQueueSystem::Update(uint32 deltaTime)
 		
 		uint32 elapsedSinceStart = WorldTimer::getMSTimeDiffToNow(request.InviteTimeStart);
 
-		if (elapsedSinceStart >= MAX_INVITE_TIME)
+		if (elapsedSinceStart >= TIME_BEFORE_TELEPORT)
 		{
+			onFoundRace(request.GnomePlayer, request.GoblinPlayer);
 			iter = _inviteRequests.erase(iter);
 			continue;
 		}
@@ -2352,51 +2355,6 @@ void MiracleRaceQueueSystem::Update(uint32 deltaTime)
 
 }
 
-void MiracleRaceQueueSystem::PlayerAcceptInvite(Player* player)
-{
-	if (!player->IsInWorld()) return;
-
-	// find that invite
-
-	ObjectGuid playerGuid = player->GetObjectGuid();
-
-	for (auto iter = _inviteRequests.begin(); iter != _inviteRequests.end();)
-	{
-		InviteRequest& invite = *iter;
-
-		bool bFoundPlayer = false;
-		if (invite.GnomePlayer == playerGuid)
-		{
-			invite.bPlayerAcceptInvite[0] = true;
-			bFoundPlayer = true;
-		}
-
-		if (invite.GoblinPlayer == playerGuid)
-		{
-			invite.bPlayerAcceptInvite[1] = true;
-			bFoundPlayer = true;
-		}
-
-		if (invite.bPlayerAcceptInvite[0] && invite.bPlayerAcceptInvite[1])
-		{
-			if (onFoundRace)
-			{
-				// declare hooked up manager that we found the pair
-				onFoundRace(invite.GnomePlayer, invite.GoblinPlayer);
-
-				// also, that invite is finished - remove it from list
-				iter = _inviteRequests.erase(iter);
-			}
-		}
-
-		if (bFoundPlayer)
-		{
-			break;
-		}
-
-		iter++;
-	}
-}
 
 size_t MiracleRaceQueueSystem::GetInviteCount() const
 {
@@ -2473,7 +2431,7 @@ bool MiracleRaceQueueSystem::TryStartRace()
 		_inviteRequests.emplace_back(InviteRequest( LiveGnomePlayer , LiveGoblinPlayer));
 		InviteRequest& newInvite = _inviteRequests.back();
 
-		const char* InvitationText = "Shimmering Flats race is about to start! Use the key in your inventory to accept the invitation NOW!";
+		const char* InvitationText = "Shimmering Flats race is about to start! The race begins in 10 seconds! Get ready!";
 		// Send them invite
 		if (Player* gnomePlayer = sObjectMgr.GetPlayer(LiveGnomePlayer))
 		{

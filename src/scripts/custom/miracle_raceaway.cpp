@@ -468,26 +468,6 @@ struct npc_race_car : public ScriptedAI
 
 };
 
-bool ItemUse_Miracle_AcceptInvite(Player* player, Item* item, SpellCastTargets const& target)
-{
-	MiracleRaceEvent* miracleEvent = sGameEventMgr.GetHardcodedEvent<MiracleRaceEvent>();
-	if (miracleEvent != nullptr)
-	{
-		miracleEvent->queueSystem().PlayerAcceptInvite(player);
-	}
-
-#if 0
-	ItemPrototype const *proto = item->GetProto();
-	if (proto != nullptr)
-	{
-		if (SpellEntry const* spellInfo = sSpellMgr.GetSpellEntry(proto->Spells[0].SpellId))
-			Spell::SendCastResult(player, spellInfo, SPELL_FAILED_NOT_READY);
-	}
-#endif
-
-	return true;
-}
-
 bool GOHello_go_flying_machine(Player* pPlayer, GameObject* pGo)
 {
     if (pPlayer->GetQuestRewardStatus(50315))
@@ -609,11 +589,6 @@ void AddSC_miracle_raceaway()
 	newscript = new Script;
 	newscript->Name = "npc_race_car";
 	newscript->GetAI = GetAI_npc_race_car;
-	newscript->RegisterSelf();
-
-	newscript = new Script;
-	newscript->Name = "item_miracle_acceptInvite";
-	newscript->pItemUse = ItemUse_Miracle_AcceptInvite;
 	newscript->RegisterSelf();
 
 	newscript = new Script;

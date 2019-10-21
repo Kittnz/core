@@ -244,40 +244,55 @@ void WorldSession::HandlePetAction(WorldPacket& recv_data)
             pCharmedUnit->clearUnitState(UNIT_STAT_MOVING);
 
 			//Turtle specific
-			if (pCharmedUnit->GetEntry() == 50529 || pCharmedUnit->GetEntry() == 50531 &&
-				!_player->IsRooted())
+			if (pCharmedUnit->GetEntry() == 50529 || pCharmedUnit->GetEntry() == 50531)
 			{
-				Spell* spell = new Spell(_player, spellInfo, true);
-				if (spellInfo->Id == 1953)
+				auto SetSpellCooldownLambda = [this, pCharmedUnit](uint32 spellId)
 				{
-					spell->m_targets.setUnitTarget(_player);
-				}
-				else
+					time_t currentTime = time(NULL);
+
+					pCharmedUnit->AddSpellCooldown(spellId, 0, currentTime + 15 * IN_MILLISECONDS);
+					_player->SendSpellCooldown(spellId, 15 * IN_MILLISECONDS, pCharmedUnit->GetObjectGuid());
+				};
+
+				if (!_player->IsRooted())
 				{
-					spell->m_targets.setUnitTarget(unit_target);
-				}
-				SpellCastResult result = spell->CheckPetCast(unit_target);
-				if (result == SPELL_CAST_OK)
-				{
-					spell->FillTargetMap();
-					if (pCharmedUnit->HasSpellCooldown(spellid) || pCharmedUnit->HasSpellCategoryCooldown(spellInfo->Category))
+					Spell* spell = new Spell(_player, spellInfo, true);
+					if (spellInfo->Id == 1953)
 					{
-						result = SPELL_FAILED_NOT_READY;
+						spell->m_targets.setUnitTarget(_player);
 					}
 					else
 					{
-						spell->prepare();
-						//spell->SendSpellCooldown();
-						pCharmedUnit->AddSpellAndCategoryCooldowns(spellInfo, 0, spell, false);
+						spell->m_targets.setUnitTarget(unit_target);
+					}
+					SpellCastResult result = spell->CheckPetCast(unit_target);
+					if (result == SPELL_CAST_OK)
+					{
+						spell->FillTargetMap();
+						if (pCharmedUnit->HasSpellCooldown(spellid) || pCharmedUnit->HasSpellCategoryCooldown(spellInfo->Category))
+						{
+							result = SPELL_FAILED_NOT_READY;
+						}
+						else
+						{
+							spell->prepare();
+							//spell->SendSpellCooldown();
+							//pCharmedUnit->AddSpellAndCategoryCooldowns(spellInfo, 0, spell, false);
+							SetSpellCooldownLambda(spellInfo->Id);
+						}
+					}
+
+					if (result != SPELL_CAST_OK)
+					{
+						Spell::SendCastResult(_player, spellInfo, result);
 					}
 				}
-
-				if (result != SPELL_CAST_OK)
+				else
 				{
-					Spell::SendCastResult(_player, spellInfo, result);
+					Spell::SendCastResult(_player, spellInfo, SPELL_FAILED_ROOTED);
 				}
 
-				break;
+				return;
 			}
 
             Spell* spell = new Spell(pCharmedUnit, spellInfo, false);

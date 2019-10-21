@@ -492,8 +492,6 @@ struct MiracleRaceQueueSystem
 
 	void Update(uint32 deltaTime);
 
-	void PlayerAcceptInvite(Player* player);
-
 	std::list<ObjectGuid> gnomePlayers;
 	std::list<ObjectGuid> goblinPlayers;
 
@@ -508,14 +506,10 @@ private:
 	{
 		InviteRequest(ObjectGuid InGnomePlayer, ObjectGuid InGoblinPlayer)
 			: GnomePlayer(InGnomePlayer), GoblinPlayer(InGoblinPlayer), InviteTimeStart(WorldTimer::getMSTime())
-		{
-			bPlayerAcceptInvite[0] = false; // Gnome accepted invite
-			bPlayerAcceptInvite[1] = false; // Goblin accepted invite
-		}
+		{}
 		ObjectGuid GnomePlayer;
 		ObjectGuid GoblinPlayer;
 		uint32 InviteTimeStart;
-		bool bPlayerAcceptInvite[2];
 	};
 
 	std::list<InviteRequest> _inviteRequests;
