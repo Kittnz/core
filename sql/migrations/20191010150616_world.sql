@@ -70,3 +70,42 @@ UPDATE `quest_template` SET `ReqItemId2`='0' WHERE (`entry`='50312') AND (`patch
 UPDATE `quest_template` SET `ReqItemId2`='0' WHERE (`entry`='50311') AND (`patch`='0');
 UPDATE `quest_template` SET `ReqItemId2`='0' WHERE (`entry`='50310') AND (`patch`='0');
 
+-- Ghosts of Lordaeron NPCs:
+
+replace into creature_template (entry, name, subname, scale, level_min, level_max, health_min, health_max, display_id1, faction, type, inhabit_type, npc_flags) values
+(50555, 'Hamlet', 'Quartermaster', 1, 34, 34, 978, 987, 1576, 85, 7, 3, 16388),
+(50556, 'Ferryman Ike', '', 1, 34, 34, 978, 987, 8847, 85, 7, 3, 135),
+(50557, 'Alice', '', 1, 34, 34, 978, 987, 4010, 85, 7, 3, 1);
+
+update creature_template set equipment_id = 2118 where entry = 50557;
+update creature_template set script_name = "npc_lordaeron_alice" where entry = 50557;
+update creature_template set script_name = "npc_lordaeron_ike" where entry = 50556;
+
+delete from npc_vendor where entry = 50556;		
+replace into npc_vendor (entry, item) values (50556, 19222);
+
+delete from npc_vendor where entry = 50555;		
+replace into npc_vendor (entry, item) values 
+(50555, 5976),
+(50555, 159),
+(50555, 1179),
+(50555, 1205),
+(50555, 1645),
+(50555, 1708),
+(50555, 4604),
+(50555, 4605),
+(50555, 4606),
+(50555, 4607),
+(50555, 4608),
+(50555, 8766),
+(50555, 8948),
+(50555, 23002);
+
+replace into `broadcast_text` (`ID`, `MaleText`) values ('90201', 'So, you\'ve come to see how far the rabbit hole goes...\n\n-takes out two stones, red and blue-\n\nChoose the blue stone, and you can go back to ferryman Ike, taking the ferry back to Silverpine and forgetting everything that happened here.\n\nChoose the red stone.... And you will come into the camp and discover the truth about the Dark Lady. Be warned, though. Once you join us, we can not easily let you leave, and you will have to turn your back on the Forsaken forever.\n\nChoose carefully.');
+replace into `npc_text` (`ID`, `BroadcastTextID0`) values ('90201', '90201');
+
+replace into `broadcast_text` (`ID`, `MaleText`) values ('90202', 'Lard tunderin\', we made it! Now get yer arses off me boat \'fore ya sink the ol\' girl!\n\nDrinks? If yer guts can handle it, I gots somethin\' fer ye, but don\'t ye go blamin\' me if ye go blind!');
+replace into `npc_text` (`ID`, `BroadcastTextID0`) values ('90202', '90202');
+
+
+
