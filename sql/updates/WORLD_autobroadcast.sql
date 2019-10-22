@@ -8,16 +8,18 @@ replace into `mangos_string` (`entry`, `content_default`) values
 ('50005', 'Turtle WoW: The world is awaiting you! Type /join World now to connect with the community around you, and find friends for groups, dungeons, and trades!'),
 ('50006', 'Turtle WoW: Please remember, a GM will never ask for your password, so please do NOT share your password with anyone. Use a secure password, and change it often. Protect your account!'),
 ('50007', 'Turtle WoW: Donations are a way to help us improve your experience here at Turtle WoW, as well as help pay for general server costs, advertisement campaigns, developers, and overall production. You can find changelogs and videos on our website and social media platforms. Thanks for your continued support!'),
-('50009', 'Turtle WoW: Please support Turtle WoW by voting! It will help us to maintain a healthy and stable population: turtle-wow.org/vote'),
+('50009', 'Turtle WoW: Please support Turtle WoW by voting! It will help us to maintain a healthy and stable population.'),
+('50009', 'Turtle WoW: Please support Turtle WoW by voting! It will help us to maintain a healthy and stable population.'),
 ('50010', 'Turtle WoW: Check our shop for donation rewards if you are interested to contribute to this community. Thank you all for supporting Turtle WoW since launch. We couldn’t be here without your help.'),
 ('50011', 'Turtle WoW: Come join the arena! You\'ll find Arena Ambassadors in any major city. Join the fray, get cool rewards for murdering friends and enemies in the Battle Ring, where you will experience a bonus x5 honor gaining!'),
 ('50012', 'Turtle WoW: Remember that the level 1—9 PvP bracket is open for Warsong Gulch in Turtle WoW. '),
 ('50013', 'Turtle WoW: Do your new fancy shoulderpads look awful with your hair? Would you rather not cover your amazing face with an ugly helmet? Don\'t worry! Find your local barber in Stormwind or Crossroads and buy some hair dyes.'),
 ('50014', 'Turtle WoW: Donations are a way to help us improve your experience here at Turtle WoW, as well as help pay for general server costs, advertisement campaigns, developers, and overall production. You can find changelogs and videos on our website and social media platforms. Thanks for your continued support!'),
-('50015', 'Turtle WoW: Grab your dusty sword and join your faction\'s defending forces! Get your brand new equipment sets from the Guard Recruiters in the main cities: https://forum.turtle-wow.org/viewtopic.php?f=2&t=642'),
+('50015', 'Turtle WoW: Grab your dusty sword and join your faction\'s defending forces! Get your brand new equipment sets from the Guard Recruiters in the main cities!'),
 ('50016', 'Turtle WoW: Check our shop for donation rewards if you are interested to contribute to this community. Thank you all for supporting Turtle WoW since launch. We couldn’t be here without your help.'),
 ('50017', 'Turtle WoW: Speak with Karn Deepeye in Orgrimmar or Tarun Swifteagle in Stormwind in order to become diplomats! You will be able to group, trade and speak with members of the other faction!'),
 ('50018', 'Turtle WoW: World chat is united! Please /join Horde or /join Alliance for faction-only talks.');
+('50019', 'Turtle WoW: Please support Turtle WoW by using our official launcher. It\'s one way to help us to advertise our project! Learn more: turtle-wow.org/launcher');
 replace into `autobroadcast` (`string_Id`) values
 ('50001'),
 ('50002'),
@@ -35,4 +37,5 @@ replace into `autobroadcast` (`string_Id`) values
 ('50015'),
 ('50016'),
 ('50017'),
-('50018');
+('50018'),
+('50019');
