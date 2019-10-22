@@ -112,9 +112,9 @@ replace into `npc_text` (`ID`, `BroadcastTextID0`) values ('90202', '90202');
 UPDATE `gameobject_template` SET `name`='Raven Trade Co.' WHERE (`entry`='1000005') AND (`patch`='0');
 
 replace into creature_template (entry, name, subname, scale, level_min, level_max, health_min, health_max, display_id1, faction, type, inhabit_type, npc_flags) values
-(50558, 'Company Guard ', 'Raven Trade Co.', 1, 34, 34, 978, 987, 15536, 35, 7, 3, 1),
+(50558, 'Company Guard ', 'Raven Trade Co.', 1, 34, 34, 978, 987, 7842, 35, 7, 3, 1),
 (50559, 'Felicia Draug', 'Innkeeper', 1, 34, 34, 978, 987, 14663, 35, 7, 3, 135),
-(50560, 'Isabela Mondragón', 'Blacksmith', 1, 34, 34, 978, 987, 3448, 35, 7, 3, 16388);
+(50560, 'Isabela Mondragon', 'Blacksmith', 1, 34, 34, 978, 987, 3448, 35, 7, 3, 16388);
 
 update creature_template set script_name = "npc_raventrade_guard" where entry = 50558;
 
@@ -124,5 +124,13 @@ replace into `npc_text` (`ID`, `BroadcastTextID0`) values ('90203', '90203');
 delete from npc_vendor where entry = 50560;		
 replace into npc_vendor (entry, item) values 
 (50560, 5976); -- todo items.
+
+-- Dolores new look:
+
+UPDATE `creature_template` SET `display_id1`='15173' WHERE (`entry`='50533') AND (`patch`='0');
+UPDATE `creature_template` SET `display_id2`='15173' WHERE (`entry`='50533') AND (`patch`='0');
+UPDATE `creature_template` SET `display_id3`='15173' WHERE (`entry`='50533') AND (`patch`='0');
+UPDATE `creature_template` SET `display_id4`='15173' WHERE (`entry`='50533') AND (`patch`='0');
+
 
 
