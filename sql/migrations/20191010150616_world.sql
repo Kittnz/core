@@ -143,3 +143,7 @@ values
 
 UPDATE `creature_template` SET `mechanic_immune_mask` = '2793635679' WHERE entry in (50516, 50514, 50515);
 
+-- Wrong script command:
+
+delete from creature_movement_scripts where command = 78;
+
