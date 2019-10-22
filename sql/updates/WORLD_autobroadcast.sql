@@ -18,7 +18,7 @@ replace into `mangos_string` (`entry`, `content_default`) values
 ('50015', 'Turtle WoW: Grab your dusty sword and join your faction\'s defending forces! Get your brand new equipment sets from the Guard Recruiters in the main cities!'),
 ('50016', 'Turtle WoW: Check our shop for donation rewards if you are interested to contribute to this community. Thank you all for supporting Turtle WoW since launch. We couldn’t be here without your help.'),
 ('50017', 'Turtle WoW: Speak with Karn Deepeye in Orgrimmar or Tarun Swifteagle in Stormwind in order to become diplomats! You will be able to group, trade and speak with members of the other faction!'),
-('50018', 'Turtle WoW: World chat is united! Please /join Horde or /join Alliance for faction-only talks.');
+('50018', 'Turtle WoW: World chat is united! Please /join Horde or /join Alliance for faction-only talks.'),
 ('50019', 'Turtle WoW: Please support Turtle WoW by using our official launcher. It\'s one way to help us to advertise our project! Learn more: turtle-wow.org/launcher');
 replace into `autobroadcast` (`string_Id`) values
 ('50001'),
