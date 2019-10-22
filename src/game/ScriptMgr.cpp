@@ -172,6 +172,12 @@ void ScriptMgr::LoadScripts(ScriptMapMap& scripts, const char* tablename)
             continue;
         }
 
+		if (tmp.command >= SCRIPT_COMMAND_MAX)
+		{
+			sLog.outErrorDb("Table `%s` has command = %u for script id %u, but this command is not exist", tablename, tmp.command, tmp.id);
+			continue;
+		}
+
         switch (tmp.target_type)
         {
             case TARGET_T_CREATURE_WITH_ENTRY:
