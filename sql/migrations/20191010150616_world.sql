@@ -107,5 +107,22 @@ replace into `npc_text` (`ID`, `BroadcastTextID0`) values ('90201', '90201');
 replace into `broadcast_text` (`ID`, `MaleText`) values ('90202', 'Lard tunderin\', we made it! Now get yer arses off me boat \'fore ya sink the ol\' girl!\n\nDrinks? If yer guts can handle it, I gots somethin\' fer ye, but don\'t ye go blamin\' me if ye go blind!');
 replace into `npc_text` (`ID`, `BroadcastTextID0`) values ('90202', '90202');
 
+-- Raven Trade Co. NPCs:
+
+UPDATE `gameobject_template` SET `name`='Raven Trade Co.' WHERE (`entry`='1000005') AND (`patch`='0');
+
+replace into creature_template (entry, name, subname, scale, level_min, level_max, health_min, health_max, display_id1, faction, type, inhabit_type, npc_flags) values
+(50558, 'Company Guard ', 'Raven Trade Co.', 1, 34, 34, 978, 987, 15536, 35, 7, 3, 1),
+(50559, 'Felicia Draug', 'Innkeeper', 1, 34, 34, 978, 987, 14663, 35, 7, 3, 135),
+(50560, 'Isabela Mondragón', 'Blacksmith', 1, 34, 34, 978, 987, 3448, 35, 7, 3, 16388);
+
+update creature_template set script_name = "npc_raventrade_guard" where entry = 50558;
+
+replace into `broadcast_text` (`ID`, `MaleText`) values ('90203', '<The guard watches you closely, not saying a word.>');
+replace into `npc_text` (`ID`, `BroadcastTextID0`) values ('90203', '90203');
+
+delete from npc_vendor where entry = 50560;		
+replace into npc_vendor (entry, item) values 
+(50560, 5976); -- todo items.
 
 

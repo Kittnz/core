@@ -56,6 +56,16 @@ bool GossipHello_npc_lordaeron_ike(Player* p_Player, Creature* p_Creature)
     return true;
 }
 
+// Raven Trade Co. NPCs:
+
+bool GossipHello_npc_raventrade_guard(Player* p_Player, Creature* p_Creature)
+{
+
+    p_Player->PrepareGossipMenu(p_Creature, p_Creature->GetCreatureInfo()->gossip_menu_id);
+    p_Player->SEND_GOSSIP_MENU(90203, p_Creature->GetGUID());
+    return true;
+}
+
 
 void AddSC_guild_housing()
 {
@@ -76,6 +86,11 @@ void AddSC_guild_housing()
     newscript = new Script;
     newscript->Name = "npc_lordaeron_ike";
     newscript->pGossipHello = &GossipHello_npc_lordaeron_ike;
+    newscript->RegisterSelf();
+    
+    newscript = new Script;
+    newscript->Name = "npc_raventrade_guard";
+    newscript->pGossipHello = &GossipHello_npc_raventrade_guard;
     newscript->RegisterSelf();
 
 }
