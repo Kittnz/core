@@ -47,3 +47,23 @@ replace into npc_vendor (entry, item) values
 (50559, 8948),
 (50559, 23002);
 
+-- Knights of Templar stuff:
+
+replace into item_template (entry, name, inventory_type, display_id, quality, bonding, buy_price) values
+(51040, 'Claymore of the Templar', 21, 33033, 1, 1, 5000),
+(51041, 'Falchion of the Templar', 21, 28527, 1, 1, 5000),
+(51042, 'Heater Shield of the Templar', 14, 27415, 1, 1, 5000);
+
+delete from npc_vendor where entry = 50539;		
+replace into npc_vendor (entry, item) values 
+(50539, 51013),
+(50539, 51014),
+(50539, 51015),
+(50539, 51016),
+(50539, 51017),
+(50539, 51018),
+(50539, 51019),
+(50539, 51040),
+(50539, 51041),
+(50539, 51042),
+(50539, 5976);
