@@ -50,7 +50,7 @@ replace into npc_vendor (entry, item) values
 -- Knights of Templar stuff:
 
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding, buy_price) values
-(51040, 'Claymore of the Templar', 21, 33033, 1, 1, 5000),
+(51040, 'Claymore of the Templar', 17, 33033, 1, 1, 5000),
 (51041, 'Falchion of the Templar', 21, 28527, 1, 1, 5000),
 (51042, 'Heater Shield of the Templar', 14, 27415, 1, 1, 5000);
 
