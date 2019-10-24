@@ -84,3 +84,16 @@ replace into npc_vendor (entry, item) values
 (50520, 8766),
 (50520, 8948),
 (50520, 23002);
+
+-- SWAG set:
+
+replace into item_template (entry, name, inventory_type, display_id, quality, bonding, buy_price, description) values
+(51050, 'S.W.A.G Goggles', 1, 10416, 1, 1, 5000, "I wear my goggles at night."),
+(51051, 'Daisy Semi-Hot Pants', 7, 14967, 1, 1, 5000, "They patched hot pants out in 1.12."),
+(51052, 'Blue Summer Top', 5, 5956, 1, 1, 5000, "");
+
+
+
+
+-- Raceway rewards:
+
