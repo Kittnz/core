@@ -108,5 +108,9 @@ update item_template set dmg_min1 =1 , dmg_max1 = 2 where entry in (51041, 51040
 update item_template set class = 2, subclass = 7 where entry = 51041;
 update item_template set class = 2, subclass = 8 where entry = 51040;
 
+-- Fix GoL NPCs:
+
+update creature_template set faction = 35 where entry in (50555, 50556, 50557);
+
 
 
