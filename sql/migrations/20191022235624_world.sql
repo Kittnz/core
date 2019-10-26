@@ -102,4 +102,11 @@ replace into spell_template values (1, 5875, 0, 0, 0, 0, 0, 448, 268435456, 0, 0
 -- Fix Ironforge Guards Helmet:
 update item_template set display_id = 21301 where entry = 50306;
 
+-- Fix Aurrius weapons:
+
+update item_template set dmg_min1 =1 , dmg_max1 = 2 where entry in (51041, 51040);
+update item_template set class = 2, subclass = 7 where entry = 51041;
+update item_template set class = 2, subclass = 8 where entry = 51040;
+
+
 
