@@ -517,7 +517,9 @@ bool ItemUse_bg_tabard(Player* pPlayer, Item* pItem, const SpellCastTargets&)
     return false;
 }
 
-bool ItemUse_golden_pocket_watch(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+// Shop morph items
+
+bool ItemUse_shop_morph_goblin(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
     if (!pPlayer)
         return false;
@@ -526,14 +528,110 @@ bool ItemUse_golden_pocket_watch(Player* pPlayer, Item* pItem, const SpellCastTa
         pPlayer->DeMorph();
         return false;
     }
+    
+    int male[9] = { 7170, 7102, 8847, 7185, 7809, 15095, 15096, 15097, 7209 };
+    int female[9] = { 9553, 15094, 10744, 15094, 11675, 15094, 7175, 11689, 10651};
+    int modelid = rand() % 9;
+    pPlayer->SetDisplayId(static_cast<uint32>((pPlayer->getGender() == GENDER_MALE) ? male[modelid] : female[modelid]));
 
-    int male_models[6] = { 7212, 7106, 7102, 8847, 7172, 7809 };
-    int female_models[6] = { 7212, 7106, 7102, 8847, 7172, 7809 };
-    int modelid = rand() % 6;
-    pPlayer->SetDisplayId(static_cast<uint32>((pPlayer->getGender() == GENDER_MALE) ? male_models[modelid] : female_models[modelid]));
     ChatHandler(pPlayer).SendSysMessage("This disguise will work until logout.");
     return false;
 }
+
+bool ItemUse_shop_morph_worgen(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+{
+    if (!pPlayer)
+        return false;
+
+    if (pPlayer->GetNativeDisplayId() != pPlayer->GetDisplayId()) {
+        pPlayer->DeMorph();
+        return false;
+    }
+    int models[3] = { 522, 523, 524 };
+    int modelid = rand() % 3;
+    pPlayer->SetDisplayId(models[modelid]);
+
+    ChatHandler(pPlayer).SendSysMessage("This disguise will work until logout.");
+    return false;
+}
+
+bool ItemUse_shop_morph_blood_elf(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+{
+    if (!pPlayer)
+        return false;
+
+    if (pPlayer->GetNativeDisplayId() != pPlayer->GetDisplayId()) {
+        pPlayer->DeMorph();
+        return false;
+    }
+    // TODO DISPLAYIDS!!!
+    //int male[9] = { 7170, 7102, 8847, 7185, 7809, 15095, 15096, 15097, 7209 };
+    //int female[9] = { 9553, 15094, 10744, 15094, 11675, 15094, 7175, 11689, 10651 };
+    //int modelid = rand() % 9;
+    //pPlayer->SetDisplayId(static_cast<uint32>((pPlayer->getGender() == GENDER_MALE) ? male[modelid] : female[modelid]));
+
+    ChatHandler(pPlayer).SendSysMessage("This disguise will work until logout.");
+    return false;
+}
+
+bool ItemUse_shop_morph_high_elf(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+{
+    if (!pPlayer)
+        return false;
+
+    if (pPlayer->GetNativeDisplayId() != pPlayer->GetDisplayId()) {
+        pPlayer->DeMorph();
+        return false;
+    }
+    // TODO DISPLAYIDS!!!
+    //int male[9] = { 7170, 7102, 8847, 7185, 7809, 15095, 15096, 15097, 7209 };
+    //int female[9] = { 9553, 15094, 10744, 15094, 11675, 15094, 7175, 11689, 10651 };
+    //int modelid = rand() % 9;
+    //pPlayer->SetDisplayId(static_cast<uint32>((pPlayer->getGender() == GENDER_MALE) ? male[modelid] : female[modelid]));
+
+    ChatHandler(pPlayer).SendSysMessage("This disguise will work until logout.");
+    return false;
+}
+
+bool ItemUse_shop_morph_dryad(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+{
+    if (!pPlayer)
+        return false;
+
+    if (pPlayer->GetNativeDisplayId() != pPlayer->GetDisplayId()) {
+        pPlayer->DeMorph();
+        return false;
+    }
+    // TODO DISPLAYIDS!!!
+    //int male[9] = { 7170, 7102, 8847, 7185, 7809, 15095, 15096, 15097, 7209 };
+    //int female[9] = { 9553, 15094, 10744, 15094, 11675, 15094, 7175, 11689, 10651 };
+    //int modelid = rand() % 9;
+    //pPlayer->SetDisplayId(static_cast<uint32>((pPlayer->getGender() == GENDER_MALE) ? male[modelid] : female[modelid]));
+
+    ChatHandler(pPlayer).SendSysMessage("This disguise will work until logout.");
+    return false;
+}
+
+bool ItemUse_shop_morph_ghost(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+{
+    if (!pPlayer)
+        return false;
+
+    if (pPlayer->GetNativeDisplayId() != pPlayer->GetDisplayId()) {
+        pPlayer->DeMorph();
+        return false;
+    }
+    // TODO DISPLAYIDS!!!
+    //int male[9] = { 7170, 7102, 8847, 7185, 7809, 15095, 15096, 15097, 7209 };
+    //int female[9] = { 9553, 15094, 10744, 15094, 11675, 15094, 7175, 11689, 10651 };
+    //int modelid = rand() % 9;
+    //pPlayer->SetDisplayId(static_cast<uint32>((pPlayer->getGender() == GENDER_MALE) ? male[modelid] : female[modelid]));
+
+    ChatHandler(pPlayer).SendSysMessage("This disguise will work until logout.");
+    return false;
+}
+
+// Enf of shop morph items
 
 bool ItemUse_remove_rested(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
@@ -644,10 +742,39 @@ void AddSC_item_scripts()
     newscript->pItemUse = &ItemUse_bg_tabard;
     newscript->RegisterSelf();
 
+    // Shop morph items 
+
     newscript = new Script;
-    newscript->Name = "golden_pocket_watch";
-    newscript->pItemUse = &ItemUse_golden_pocket_watch;
+    newscript->Name = "shop_morph_goblin";
+    newscript->pItemUse = &ItemUse_shop_morph_goblin;
     newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "shop_morph_worgen";
+    newscript->pItemUse = &ItemUse_shop_morph_goblin;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "shop_morph_blood_elf";
+    newscript->pItemUse = &ItemUse_shop_morph_goblin;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "shop_morph_high_elf";
+    newscript->pItemUse = &ItemUse_shop_morph_goblin;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "shop_morph_dryad";
+    newscript->pItemUse = &ItemUse_shop_morph_goblin;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "shop_morph_ghost";
+    newscript->pItemUse = &ItemUse_shop_morph_goblin;
+    newscript->RegisterSelf();
+
+    // End of shop morph items 
 
     newscript = new Script;
     newscript->Name = "dryad_acorn";

@@ -26,7 +26,8 @@ replace into shop_categories values
 (5, 'Mounts #3'),
 (6, 'Tabards'),
 (7, 'Roleplay'),
-(8, 'Skins');
+(8, 'Skins'),
+(9, 'Appearances');
 
 replace into shop_items values
 -- Gameplay --------------------------------------------------------------------------------------------
@@ -143,5 +144,12 @@ replace into shop_items values
 (809, 8, 50211, 'Troll: Sandfury (Including Zombies)', 125),
 (810, 8, 51010, 'Troll: Dark', 125),
 (811, 8, 51011, 'Troll: Ice', 125),
-(812, 8, 50212, 'Gnome: Leper (Male)', 125);
+(812, 8, 50212, 'Gnome: Leper (Male)', 125),
+-- Appearances -----------------------------------------------------------------------------------------
+(900, 8, 51200, 'Goblin', 50),
+(901, 8, 51201, 'Worgen', 50),
+(902, 8, 51202, 'Blood Elf', 50),
+(903, 8, 51203, 'High Elf', 50),
+(904, 8, 51204, 'Dryad', 50),
+(905, 8, 51205, 'Ghost', 50);
 

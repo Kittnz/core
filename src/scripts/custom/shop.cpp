@@ -157,6 +157,9 @@ bool GossipSelect_npc_shop(Player* pPlayer, Creature* pCreature, uint32 uiSender
     case ACTION_CATEGORY_START + 8:
         SendEntriesInfoByCategory(pPlayer, 8);
         break;
+    case ACTION_CATEGORY_START + 9:
+        SendEntriesInfoByCategory(pPlayer, 9);
+        break;
     case ACTION_CATEGORY_START:
         pCreature->MonsterWhisper("If you'd like to purchase some items from me, you need Turtle Tokens! You can buy them via PayPal: info.turtlewow@gmail.com. Please include your account name. 1 euro gives you 10 tokens.", pPlayer);
         return GossipHello_npc_shop(pPlayer, pCreature);
