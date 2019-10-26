@@ -112,5 +112,11 @@ update item_template set class = 2, subclass = 8 where entry = 51040;
 
 update creature_template set faction = 35 where entry in (50555, 50556, 50557);
 
+-- Fix RP Horses names:
+
+update creature_template set name = "Brown Riding Horse" where entry = 284;
+update creature_template set name = "White Stallion" where entry  = 305;
+update creature_template set name = "Black Stallion" where entry  = 308;
+
 
 
