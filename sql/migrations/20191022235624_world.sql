@@ -300,5 +300,143 @@ values
  '0', '0', '0', '31726', '0', '0', '0', '100000', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '4', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
- '0', '1', 'shop_morph_ghost');
+ '0', '1', 'shop_morph_ghost');	
  
+-- Mirage Raceway: * rewards
+-- 51009 - Race Against Time
+ 
+delete from item_loot_template where entry in (51009, 51004, 51005);
+replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid, mincountOrRef, maxcount) values
+
+(51004, 2459, 100, 1, 1, 5), -- Swiftness Potion
+(51004, 13457, 100, 1, 1, 1), -- Greater Fire Protection Potion
+(51004, 13458, 100, 1, 1, 1), -- Greater Nature Protection Potion
+(51004, 13446, 100, 1, 1, 3), -- Major Healing Potion
+(51004, 13444, 100, 1, 1, 3), -- Major Healing Potion
+(51004, 4354, 100, 1, 1, 1), -- Pattern: Rich Purple Silk Shirt
+(51004, 22780, 100, 1, 1, 1), -- White Murloc Egg
+(51004, 20031, 100, 1, 1, 15), -- Essence Mango
+(51004, 10606, 100, 1, 1, 1), -- Schematic: Parachute Cloak
+(51004, 20400, 100, 1, 1, 1), -- Pumpkin Bag
+(51004, 10683, 100, 1, 1, 1), -- Explorer's Knapsack
+(51004, 9653, 100, 1, 1, 1), -- Speedy Racer Goggles
+(51004, 50524, 100, 1, 1, 1), -- Gnome Car Key
+(51004, 50525, 100, 1, 1, 1), -- Goblin Car Key
+(51004, 51050, 100, 1, 1, 1), -- S.W.A.G Goggles
+(51004, 50079, 100, 1, 1, 1), -- Island Frog Box
+(51004, 50062, 100, 1, 1, 1), -- Half-Eaten Mutton Chop
+(51004, 50058, 100, 1, 1, 1), -- Black Piglet
+(51004, 50021, 100, 1, 1, 5), -- Strange Bottle
+(51004, 50020, 100, 1, 1, 5), -- Magic Muffin
+(51004, 13454, 100, 1, 1, 1), -- Greater Arcane Elixir
+(51004, 9264, 100, 1, 1, 1), -- Elixir of Shadow Power
+(51004, 13453, 100, 1, 1, 1), -- Elixir of Brute Force
+(51004, 13447, 100, 1, 1, 1), -- Elixir of the Sages
+(51004, 13445, 100, 1, 1, 1), -- Elixir of Superior Defense
+(51004, 18229, 100, 1, 1, 1), -- Nat Pagle's Guide to Extreme Anglin'
+(51004, 13610, 100, 1, 1, 1), -- Square Lantern
+(51004, 50048, 100, 1, 1, 1), -- Right Juggling Torch
+(51004, 3829, 100, 1, 1, 2), -- Frost Oil
+(51004, 20750, 100, 1, 1, 2), -- Wizard Oil
+(51004, 6522, 100, 1, 1, 2), -- Deviate Fish
+(51004, 6366, 100, 1, 1, 1), -- Darkwood Fishing Pole
+(51004, 9318, 100, 1, 1, 10), -- Red Firework
+(51004, 9315, 100, 1, 1, 10), -- Yellow Rose Firework
+(51004, 19026, 100, 1, 1, 10), -- Snake Burst Firework
+(51004, 9313, 100, 1, 1, 10), -- Green Firework
+(51004, 7338, 100, 1, 1, 1), -- Mood Ring
+(51004, 7548, 100, 1, 1, 1), -- Onyx Choker
+(51004, 12048, 100, 1, 1, 1), -- Prismatic Pendant
+(51004, 12035, 100, 1, 1, 1), -- Obsidian Pendant
+(51004, 12022, 100, 1, 1, 1), -- Iridium Chain
+(51004, 12039, 100, 1, 1, 1), -- Tundra Necklace
+(51004, 12047, 100, 1, 1, 1), -- Spectral Necklace
+(51004, 12030, 100, 1, 1, 1), -- Jet Chain
+(51004, 12017, 100, 1, 1, 1), -- Prismatic Band
+(51004, 11990, 100, 1, 1, 1), -- Selenium Loop
+(51004, 11989, 100, 1, 1, 1), -- Vanadium Loop
+(51004, 11988, 100, 1, 1, 1), -- Tellurium Band
+(51004, 6589, 100, 1, 1, 1), -- Viridian Band
+(51004, 10249, 100, 1, 1, 1), -- Master's Cloak
+(51004, 10159, 100, 1, 1, 1), -- Mercurial Cloak
+(51004, 14313, 100, 1, 1, 1), -- Celestial Cape
+(51004, 15392, 100, 1, 1, 1), -- Jadefire Cloak
+(51004, 15519, 100, 1, 1, 1), -- Spiked Chain Cloak
+(51004, 9822, 100, 1, 1, 1), -- Durable Cape
+(51004, 51052, 100, 1, 1, 1), -- Blue Summer Top
+
+(51005, 2459, 100, 1, 1, 5), -- Swiftness Potion
+(51005, 13457, 100, 1, 1, 1), -- Greater Fire Protection Potion
+(51005, 13458, 100, 1, 1, 1), -- Greater Nature Protection Potion
+(51005, 13446, 100, 1, 1, 3), -- Major Healing Potion
+(51005, 13444, 100, 1, 1, 3), -- Major Healing Potion
+(51005, 4354, 100, 1, 1, 1), -- Pattern: Rich Purple Silk Shirt
+(51005, 22780, 100, 1, 1, 1), -- White Murloc Egg
+(51005, 20031, 100, 1, 1, 15), -- Essence Mango
+(51005, 10606, 100, 1, 1, 1), -- Schematic: Parachute Cloak
+(51005, 20400, 100, 1, 1, 1), -- Pumpkin Bag
+(51005, 10683, 100, 1, 1, 1), -- Explorer's Knapsack
+(51005, 9653, 100, 1, 1, 1), -- Speedy Racer Goggles
+(51005, 50524, 100, 1, 1, 1), -- Gnome Car Key
+(51005, 50525, 100, 1, 1, 1), -- Goblin Car Key
+(51005, 51050, 100, 1, 1, 1), -- S.W.A.G Goggles
+(51005, 50079, 100, 1, 1, 1), -- Island Frog Box
+(51005, 50062, 100, 1, 1, 1), -- Half-Eaten Mutton Chop
+(51005, 50058, 100, 1, 1, 1), -- Black Piglet
+(51005, 50021, 100, 1, 1, 5), -- Strange Bottle
+(51005, 50020, 100, 1, 1, 5), -- Magic Muffin
+(51005, 13454, 100, 1, 1, 1), -- Greater Arcane Elixir
+(51005, 9264, 100, 1, 1, 1), -- Elixir of Shadow Power
+(51005, 13453, 100, 1, 1, 1), -- Elixir of Brute Force
+(51005, 13447, 100, 1, 1, 1), -- Elixir of the Sages
+(51005, 13445, 100, 1, 1, 1), -- Elixir of Superior Defense
+(51005, 18229, 100, 1, 1, 1), -- Nat Pagle's Guide to Extreme Anglin'
+(51005, 13610, 100, 1, 1, 1), -- Square Lantern
+(51005, 50048, 100, 1, 1, 1), -- Right Juggling Torch
+(51005, 3829, 100, 1, 1, 2), -- Frost Oil
+(51005, 20750, 100, 1, 1, 2), -- Wizard Oil
+(51005, 6522, 100, 1, 1, 2), -- Deviate Fish
+(51005, 6366, 100, 1, 1, 1), -- Darkwood Fishing Pole
+(51005, 9318, 100, 1, 1, 10), -- Red Firework
+(51005, 9315, 100, 1, 1, 10), -- Yellow Rose Firework
+(51005, 19026, 100, 1, 1, 10), -- Snake Burst Firework
+(51005, 9313, 100, 1, 1, 10), -- Green Firework
+(51005, 7338, 100, 1, 1, 1), -- Mood Ring
+(51005, 7548, 100, 1, 1, 1), -- Onyx Choker
+(51005, 12048, 100, 1, 1, 1), -- Prismatic Pendant
+(51005, 12035, 100, 1, 1, 1), -- Obsidian Pendant
+(51005, 12022, 100, 1, 1, 1), -- Iridium Chain
+(51005, 12039, 100, 1, 1, 1), -- Tundra Necklace
+(51005, 12047, 100, 1, 1, 1), -- Spectral Necklace
+(51005, 12030, 100, 1, 1, 1), -- Jet Chain
+(51005, 12017, 100, 1, 1, 1), -- Prismatic Band
+(51005, 11990, 100, 1, 1, 1), -- Selenium Loop
+(51005, 11989, 100, 1, 1, 1), -- Vanadium Loop
+(51005, 11988, 100, 1, 1, 1), -- Tellurium Band
+(51005, 6589, 100, 1, 1, 1), -- Viridian Band
+(51005, 10249, 100, 1, 1, 1), -- Master's Cloak
+(51005, 10159, 100, 1, 1, 1), -- Mercurial Cloak
+(51005, 14313, 100, 1, 1, 1), -- Celestial Cape
+(51005, 15392, 100, 1, 1, 1), -- Jadefire Cloak
+(51005, 15519, 100, 1, 1, 1), -- Spiked Chain Cloak
+(51005, 9822, 100, 1, 1, 1), -- Durable Cape
+(51005, 51052, 100, 1, 1, 1), -- Blue Summer Top
+
+(51009, 2459, 100, 1, 1, 5), -- Swiftness Potion
+(51009, 13457, 100, 1, 1, 1), -- Greater Fire Protection Potion
+(51009, 13458, 100, 1, 1, 1), -- Greater Nature Protection Potion
+(51009, 13446, 100, 1, 1, 3), -- Major Healing Potion
+(51009, 13444, 100, 1, 1, 3), -- Major Healing Potion
+(51009, 20031, 100, 1, 1, 15), -- Essence Mango
+(51009, 50062, 100, 1, 1, 1), -- Half-Eaten Mutton Chop
+(51009, 50021, 100, 1, 1, 5), -- Strange Bottle
+(51009, 50020, 100, 1, 1, 5), -- Magic Muffin
+(51009, 13610, 100, 1, 1, 1), -- Square Lantern
+(51009, 50048, 100, 1, 1, 1), -- Right Juggling Torch
+(51009, 6522, 100, 1, 1, 2), -- Deviate Fish
+(51009, 9318, 100, 1, 1, 10), -- Red Firework
+(51009, 9315, 100, 1, 1, 10), -- Yellow Rose Firework
+(51009, 19026, 100, 1, 1, 10), -- Snake Burst Firework
+(51009, 9313, 100, 1, 1, 10); -- Green Firework
+
+
