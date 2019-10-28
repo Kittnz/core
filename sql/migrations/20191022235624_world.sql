@@ -90,7 +90,7 @@ replace into npc_vendor (entry, item) values
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding, buy_price, description) values
 (51050, 'S.W.A.G Goggles', 1, 10416, 1, 1, 5000, "I wear my goggles at night."),
 (51051, 'Daisy Semi-Hot Pants', 7, 14967, 1, 1, 5000, "They patched hot pants out in 1.12."),
-(51052, 'Blue Summer Top', 5, 5956, 1, 1, 5000, "");
+(51052, 'Random Scroll', 5, 5956, 1, 1, 5000, "");
 
 -- SC Insignia fix:
 
@@ -308,14 +308,14 @@ values
 delete from item_loot_template where entry in (51009, 51004, 51005);
 replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid, mincountOrRef, maxcount) values
 
-(51004, 2459, 0, 1, 1, 5), -- Swiftness Potion
+(51004, 2459, 0, 1, 1, 3), -- Swiftness Potion
 (51004, 13457, 0, 1, 1, 1), -- Greater Fire Protection Potion
 (51004, 13458, 0, 1, 1, 1), -- Greater Nature Protection Potion
-(51004, 13446, 0, 1, 1, 3), -- Major Healing Potion
-(51004, 13444, 0, 1, 1, 3), -- Major Healing Potion
+(51004, 13446, 0, 1, 1, 2), -- Major Healing Potion
+(51004, 13444, 0, 1, 1, 2), -- Major Healing Potion
 (51004, 4354, 0, 1, 1, 1), -- Pattern: Rich Purple Silk Shirt
 (51004, 22780, 0, 1, 1, 1), -- White Murloc Egg
-(51004, 20031, 0, 1, 1, 15), -- Essence Mango
+(51004, 20031, 0, 1, 1, 10), -- Essence Mango
 (51004, 10606, 0, 1, 1, 1), -- Schematic: Parachute Cloak
 (51004, 10683, 0, 1, 1, 1), -- Explorer's Knapsack
 (51004, 9653, 0, 1, 1, 1), -- Speedy Racer Goggles
@@ -361,7 +361,27 @@ replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid, minc
 (51004, 15392, 0, 1, 1, 1), -- Jadefire Cloak
 (51004, 15519, 0, 1, 1, 1), -- Spiked Chain Cloak
 (51004, 9822, 0, 1, 1, 1), -- Durable Cape
-(51004, 51052, 0, 1, 1, 1), -- Blue Summer Top
+(51004, 51052, 0, 1, 1, 1), -- Random Scroll
+(51004, 10310, 0, 1, 1, 2), -- Random Scroll
+(51004, 10309, 0, 1, 1, 2), -- Random Scroll
+(51004, 10308, 0, 1, 1, 2), -- Random Scroll
+(51004, 10307, 0, 1, 1, 2), -- Random Scroll
+(51004, 10306, 0, 1, 1, 2), -- Random Scroll
+(51004, 10305, 0, 1, 1, 2), -- Random Scroll
+(51004, 4426, 0, 1, 1, 2), -- Random Scroll
+(51004, 4425, 0, 1, 1, 2), -- Random Scroll
+(51004, 4424, 0, 1, 1, 2), -- Random Scroll
+(51004, 4422, 0, 1, 1, 2), -- Random Scroll
+(51004, 4421, 0, 1, 1, 2), -- Random Scroll
+(51004, 4419, 0, 1, 1, 2), -- Random Scroll
+(51004, 3013, 0, 1, 1, 2), -- Random Scroll
+(51004, 3012, 0, 1, 1, 2), -- Random Scroll
+(51004, 2290, 0, 1, 1, 2), -- Random Scroll
+(51004, 2289, 0, 1, 1, 2), -- Random Scroll
+(51004, 1712, 0, 1, 1, 2), -- Random Scroll
+(51004, 1711, 0, 1, 1, 2), -- Random Scroll
+(51004, 1478, 0, 1, 1, 2), -- Random Scroll
+(51004, 1477, 0, 1, 1, 2), -- Random Scroll
 
 (51005, 2459, 0, 1, 1, 5), -- Swiftness Potion
 (51005, 13457, 0, 1, 1, 1), -- Greater Fire Protection Potion
@@ -416,22 +436,37 @@ replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid, minc
 (51005, 15392, 0, 1, 1, 1), -- Jadefire Cloak
 (51005, 15519, 0, 1, 1, 1), -- Spiked Chain Cloak
 (51005, 9822, 0, 1, 1, 1), -- Durable Cape
-(51005, 51052, 0, 1, 1, 1), -- Blue Summer Top
+(51005, 51052, 0, 1, 1, 1), -- Random Scroll
+(51005, 10310, 0, 1, 1, 2), -- Random Scroll
+(51005, 10309, 0, 1, 1, 2), -- Random Scroll
+(51005, 10308, 0, 1, 1, 2), -- Random Scroll
+(51005, 10307, 0, 1, 1, 2), -- Random Scroll
+(51005, 10306, 0, 1, 1, 2), -- Random Scroll
+(51005, 10305, 0, 1, 1, 2), -- Random Scroll
+(51005, 4426, 0, 1, 1, 2), -- Random Scroll
+(51005, 4425, 0, 1, 1, 2), -- Random Scroll
+(51005, 4424, 0, 1, 1, 2), -- Random Scroll
+(51005, 4422, 0, 1, 1, 2), -- Random Scroll
+(51005, 4421, 0, 1, 1, 2), -- Random Scroll
+(51005, 4419, 0, 1, 1, 2), -- Random Scroll
+(51005, 3013, 0, 1, 1, 2), -- Random Scroll
+(51005, 3012, 0, 1, 1, 2), -- Random Scroll
+(51005, 2290, 0, 1, 1, 2), -- Random Scroll
+(51005, 2289, 0, 1, 1, 2), -- Random Scroll
+(51005, 1712, 0, 1, 1, 2), -- Random Scroll
+(51005, 1711, 0, 1, 1, 2), -- Random Scroll
+(51005, 1478, 0, 1, 1, 2), -- Random Scroll
+(51005, 1477, 0, 1, 1, 2), -- Random Scroll
 
-(51009, 2459, 0, 1, 1, 5), -- Swiftness Potion
-(51009, 13457, 0, 1, 1, 1), -- Greater Fire Protection Potion
-(51009, 13446, 0, 1, 1, 3), -- Major Healing Potion
-(51009, 13444, 0, 1, 1, 3), -- Major Mana Potion
-(51009, 20031, 0, 1, 1, 5), -- Essence Mango
-(51009, 50062, 0, 1, 1, 1), -- Half-Eaten Mutton Chop
-(51009, 50021, 0, 1, 1, 5), -- Strange Bottle
-(51009, 50020, 0, 1, 1, 5), -- Magic Muffin
+(51009, 2459, 0, 1, 1, 3), -- Swiftness Potion
+(51009, 3928, 0, 1, 1, 1), -- Superior Healing Potion
+(51009, 21114, 0, 1, 1, 5), -- Rumsey Rum Dark
 (51009, 13610, 0, 1, 1, 1), -- Square Lantern
 (51009, 50048, 0, 1, 1, 1), -- Right Juggling Torch
-(51009, 6522, 0, 1, 1, 2), -- Deviate Fish
-(51009, 9318, 0, 1, 1, 10), -- Red Firework
-(51009, 9315, 0, 1, 1, 10), -- Yellow Rose Firework
-(51009, 19026, 0, 1, 1, 10), -- Snake Burst Firework
-(51009, 9313, 0, 1, 1, 10); -- Green Firework
+(51009, 9318, 0, 1, 1, 5), -- Red Firework
+(51009, 9315, 0, 1, 1, 5), -- Yellow Rose Firework
+(51009, 19026, 0, 1, 1, 5), -- Snake Burst Firework
+(51009, 9313, 0, 1, 1, 5); -- Green Firework
+
 
 
