@@ -362,26 +362,26 @@ replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid, minc
 (51004, 15519, 0, 1, 1, 1), -- Spiked Chain Cloak
 (51004, 9822, 0, 1, 1, 1), -- Durable Cape
 (51004, 51052, 0, 1, 1, 1), -- Random Scroll
-(51004, 10310, 0, 1, 1, 2), -- Random Scroll
-(51004, 10309, 0, 1, 1, 2), -- Random Scroll
-(51004, 10308, 0, 1, 1, 2), -- Random Scroll
-(51004, 10307, 0, 1, 1, 2), -- Random Scroll
-(51004, 10306, 0, 1, 1, 2), -- Random Scroll
-(51004, 10305, 0, 1, 1, 2), -- Random Scroll
-(51004, 4426, 0, 1, 1, 2), -- Random Scroll
-(51004, 4425, 0, 1, 1, 2), -- Random Scroll
-(51004, 4424, 0, 1, 1, 2), -- Random Scroll
-(51004, 4422, 0, 1, 1, 2), -- Random Scroll
-(51004, 4421, 0, 1, 1, 2), -- Random Scroll
-(51004, 4419, 0, 1, 1, 2), -- Random Scroll
-(51004, 3013, 0, 1, 1, 2), -- Random Scroll
-(51004, 3012, 0, 1, 1, 2), -- Random Scroll
-(51004, 2290, 0, 1, 1, 2), -- Random Scroll
-(51004, 2289, 0, 1, 1, 2), -- Random Scroll
-(51004, 1712, 0, 1, 1, 2), -- Random Scroll
-(51004, 1711, 0, 1, 1, 2), -- Random Scroll
-(51004, 1478, 0, 1, 1, 2), -- Random Scroll
-(51004, 1477, 0, 1, 1, 2), -- Random Scroll
+(51004, 10310, 0, 1, 1, 5), -- Random Scroll
+(51004, 10309, 0, 1, 1, 5), -- Random Scroll
+(51004, 10308, 0, 1, 1, 5), -- Random Scroll
+(51004, 10307, 0, 1, 1, 5), -- Random Scroll
+(51004, 10306, 0, 1, 1, 5), -- Random Scroll
+(51004, 10305, 0, 1, 1, 5), -- Random Scroll
+(51004, 4426, 0, 1, 1, 5), -- Random Scroll
+(51004, 4425, 0, 1, 1, 5), -- Random Scroll
+(51004, 4424, 0, 1, 1, 5), -- Random Scroll
+(51004, 4422, 0, 1, 1, 5), -- Random Scroll
+(51004, 4421, 0, 1, 1, 5), -- Random Scroll
+(51004, 4419, 0, 1, 1, 5), -- Random Scroll
+(51004, 3013, 0, 1, 1, 5), -- Random Scroll
+(51004, 3012, 0, 1, 1, 5), -- Random Scroll
+(51004, 2290, 0, 1, 1, 5), -- Random Scroll
+(51004, 2289, 0, 1, 1, 5), -- Random Scroll
+(51004, 1712, 0, 1, 1, 5), -- Random Scroll
+(51004, 1711, 0, 1, 1, 5), -- Random Scroll
+(51004, 1478, 0, 1, 1, 5), -- Random Scroll
+(51004, 1477, 0, 1, 1, 5), -- Random Scroll
 
 (51005, 2459, 0, 1, 1, 5), -- Swiftness Potion
 (51005, 13457, 0, 1, 1, 1), -- Greater Fire Protection Potion
@@ -437,36 +437,38 @@ replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid, minc
 (51005, 15519, 0, 1, 1, 1), -- Spiked Chain Cloak
 (51005, 9822, 0, 1, 1, 1), -- Durable Cape
 (51005, 51052, 0, 1, 1, 1), -- Random Scroll
-(51005, 10310, 0, 1, 1, 2), -- Random Scroll
-(51005, 10309, 0, 1, 1, 2), -- Random Scroll
-(51005, 10308, 0, 1, 1, 2), -- Random Scroll
-(51005, 10307, 0, 1, 1, 2), -- Random Scroll
-(51005, 10306, 0, 1, 1, 2), -- Random Scroll
-(51005, 10305, 0, 1, 1, 2), -- Random Scroll
-(51005, 4426, 0, 1, 1, 2), -- Random Scroll
-(51005, 4425, 0, 1, 1, 2), -- Random Scroll
-(51005, 4424, 0, 1, 1, 2), -- Random Scroll
-(51005, 4422, 0, 1, 1, 2), -- Random Scroll
-(51005, 4421, 0, 1, 1, 2), -- Random Scroll
-(51005, 4419, 0, 1, 1, 2), -- Random Scroll
-(51005, 3013, 0, 1, 1, 2), -- Random Scroll
-(51005, 3012, 0, 1, 1, 2), -- Random Scroll
-(51005, 2290, 0, 1, 1, 2), -- Random Scroll
-(51005, 2289, 0, 1, 1, 2), -- Random Scroll
-(51005, 1712, 0, 1, 1, 2), -- Random Scroll
-(51005, 1711, 0, 1, 1, 2), -- Random Scroll
-(51005, 1478, 0, 1, 1, 2), -- Random Scroll
-(51005, 1477, 0, 1, 1, 2), -- Random Scroll
+(51005, 10310, 0, 1, 1, 5), -- Random Scroll
+(51005, 10309, 0, 1, 1, 5), -- Random Scroll
+(51005, 10308, 0, 1, 1, 5), -- Random Scroll
+(51005, 10307, 0, 1, 1, 5), -- Random Scroll
+(51005, 10306, 0, 1, 1, 5), -- Random Scroll
+(51005, 10305, 0, 1, 1, 5), -- Random Scroll
+(51005, 4426, 0, 1, 1, 5), -- Random Scroll
+(51005, 4425, 0, 1, 1, 5), -- Random Scroll
+(51005, 4424, 0, 1, 1, 5), -- Random Scroll
+(51005, 4422, 0, 1, 1, 5), -- Random Scroll
+(51005, 4421, 0, 1, 1, 5), -- Random Scroll
+(51005, 4419, 0, 1, 1, 5), -- Random Scroll
+(51005, 3013, 0, 1, 1, 5), -- Random Scroll
+(51005, 3012, 0, 1, 1, 5), -- Random Scroll
+(51005, 2290, 0, 1, 1, 5), -- Random Scroll
+(51005, 2289, 0, 1, 1, 5), -- Random Scroll
+(51005, 1712, 0, 1, 1, 5), -- Random Scroll
+(51005, 1711, 0, 1, 1, 5), -- Random Scroll
+(51005, 1478, 0, 1, 1, 5), -- Random Scroll
+(51005, 1477, 0, 1, 1, 5), -- Random Scroll
 
 (51009, 2459, 0, 1, 1, 3), -- Swiftness Potion
-(51009, 3928, 0, 1, 1, 1), -- Superior Healing Potion
+(51009, 3928, 0, 1, 1, 2), -- Superior Healing Potion
 (51009, 21114, 0, 1, 1, 5), -- Rumsey Rum Dark
-(51009, 13610, 0, 1, 1, 1), -- Square Lantern
-(51009, 50048, 0, 1, 1, 1), -- Right Juggling Torch
-(51009, 9318, 0, 1, 1, 5), -- Red Firework
-(51009, 9315, 0, 1, 1, 5), -- Yellow Rose Firework
-(51009, 19026, 0, 1, 1, 5), -- Snake Burst Firework
-(51009, 9313, 0, 1, 1, 5); -- Green Firework
+(51009, 9318, 0, 1, 1, 10), -- Red Firework
+(51009, 9315, 0, 1, 1, 10), -- Yellow Rose Firework
+(51009, 19026, 0, 1, 1, 10), -- Snake Burst Firework
+(51009, 9313, 0, 1, 1, 10), -- Green Firework
+(51009, 22130, 0, 1, 1, 10), -- Symbol of Love
+(51009, 3419, 0, 1, 1, 10), -- Red Rose
+(51009, 3420, 0, 1, 1, 10), -- Black Rose
+(51009, 21829, 0, 1, 1, 10); -- Perfume Bottle
 
 
 
