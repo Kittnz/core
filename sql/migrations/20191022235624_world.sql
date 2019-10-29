@@ -470,5 +470,8 @@ replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid, minc
 (51009, 3420, 0, 1, 1, 10), -- Black Rose
 (51009, 21829, 0, 1, 1, 10); -- Perfume Bottle
 
+-- Fix work for food quest:
+
+update `quest_template` set `rewitemid1`='2888' where (`entry`='814') and (`patch`='0');
 
 
