@@ -506,6 +506,8 @@ replace into npc_vendor (entry, item) values
 update creature_template set subname = "Firework Vendor" where entry = 6548;
 
 UPDATE `spell_template` SET `durationIndex` = '27' WHERE (`entry` = '15283') and (`build` = '5875');
+UPDATE `spell_template` SET `durationIndex` = '7' WHERE (`entry` = '4079') and (`build` = '5875');
+UPDATE `spell_template` SET `durationIndex` = '7' WHERE (`entry` = '13234') and (`build` = '5875');
 
 delete from spell_mod where id = 15283;
 replace into `spell_mod` (`Id`, `procChance`, `procFlags`, `procCharges`, `DurationIndex`, `Category`, `CastingTimeIndex`, `StackAmount`, `SpellIconID`, `activeIconID`, `manaCost`, `Attributes`, `AttributesEx`, `AttributesEx2`, `AttributesEx3`, `AttributesEx4`, `Custom`, `InterruptFlags`, `AuraInterruptFlags`, `ChannelInterruptFlags`, `Dispel`, `Stances`, `StancesNot`, `SpellVisual`, `ManaCostPercentage`, `StartRecoveryCategory`, `StartRecoveryTime`, `MaxAffectedTargets`, `MaxTargetLevel`, `DmgClass`, `rangeIndex`, `RecoveryTime`, `CategoryRecoveryTime`, `SpellFamilyName`, `SpellFamilyFlags`, `Mechanic`, `EquippedItemClass`, `Comment`) VALUES ('15283', '-1', '-1', '-1', '27', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '0', '-1', '-1', 'Turtle Mirage Race: Stunning Blow duration for 3 sec.');
