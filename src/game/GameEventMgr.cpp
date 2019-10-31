@@ -763,7 +763,7 @@ uint32 GameEventMgr::Update(ActiveEvents const* activeAtShutdown /*= NULL*/)
             nextEventDelay = calcDelay;
     }
 
-    BASIC_LOG("Next game event check in %u seconds.", nextEventDelay + 1);
+//    BASIC_LOG("Next game event check in %u seconds.", nextEventDelay + 1);
 
     return (nextEventDelay + 1) * IN_MILLISECONDS;           // Add 1 second to be sure event has started/stopped at next call
 }
