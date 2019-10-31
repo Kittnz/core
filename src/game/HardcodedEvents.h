@@ -400,6 +400,7 @@ struct RacePlayerSetup
 {
 	Player* player;
 	MiracleRaceSide side;
+	uint32 startedByQuest;
 };
 
 struct RacePlayer
@@ -413,6 +414,7 @@ struct RacePlayer
 	Map* map = nullptr; // might be dangerous
 	RaceSubEvent* raceEvent = nullptr;
 	MiracleRaceSide side;
+	uint32 startedQuest;
 
 	WorldLocation savedPlPos;
 	RaceCheckpoint nextCheckpoint;
@@ -450,7 +452,7 @@ struct RaceSubEvent
 
 	void OnFinishedRace(RacePlayer& param1);
 
-	void RewardPlayer(Player* pl);
+	void RewardPlayer(Player* pl, uint32 startedQuest);
 
 	inline const RaceCheckpoint& GetCheckpoint(size_t index) const
 	{
@@ -523,7 +525,7 @@ struct MiracleRaceEvent : WorldEvent
 
 	bool InitializeRace(uint32 raceId);
 
-	void StartTestRace(uint32 raceId, Player* racer, MiracleRaceSide side);
+	void StartTestRace(uint32 raceId, Player* racer, MiracleRaceSide side, uint32 startedQuest = 0);
 
 	virtual void Update() override;
 	virtual uint32 GetNextUpdateDelay() override;

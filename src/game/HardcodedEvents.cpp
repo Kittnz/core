@@ -1737,7 +1737,7 @@ bool MiracleRaceEvent::InitializeRace(uint32 raceId)
 	return true;
 }
 
-void MiracleRaceEvent::StartTestRace(uint32 raceId, Player* racer, MiracleRaceSide side)
+void MiracleRaceEvent::StartTestRace(uint32 raceId, Player* racer, MiracleRaceSide side, uint32 startedQuest /*= 0*/)
 {
 	if (racer != nullptr)
 	{
@@ -1748,7 +1748,7 @@ void MiracleRaceEvent::StartTestRace(uint32 raceId, Player* racer, MiracleRaceSi
 			{
 				queueSystem().RemoveFromQueue(racer);
 				std::list<RacePlayerSetup> racers;
-				racers.emplace_back(RacePlayerSetup{ racer, side });
+				racers.emplace_back(RacePlayerSetup{ racer, side, startedQuest });
 				std::shared_ptr<RaceSubEvent> raceSubEvent = std::make_shared<RaceSubEvent>(raceId, racers, this);
 				races.push_back(raceSubEvent);
 				raceSubEvent->Start();
@@ -2009,7 +2009,7 @@ void RaceSubEvent::OnFinishedRace(RacePlayer& player)
 	if (Player* pl = player.map->GetPlayer(player.guid))
 	{
 		// write to leaderboards
-		leaderboard.push_back(pl->GetName());
+		leaderboard.emplace_back(pl->GetName());
 		size_t place = leaderboard.size();
 
 		switch (place)
@@ -2018,7 +2018,7 @@ void RaceSubEvent::OnFinishedRace(RacePlayer& player)
 		{
 			std::string msg = "YOU ARE BREATHTAKING!";
 			pl->SendRaidWarning(msg);
-			RewardPlayer(pl);
+			RewardPlayer(pl, player.startedQuest);
 		}
 		break;
 		case 2:
@@ -2044,7 +2044,7 @@ void RaceSubEvent::OnFinishedRace(RacePlayer& player)
 	}
 }
 
-void RaceSubEvent::RewardPlayer(Player* pl)
+void RaceSubEvent::RewardPlayer(Player* pl, uint32 startedQuest)
 {
 	auto CheckForQuestAndMarkCompleteLambda = [pl](uint32 questId) -> bool
 	{
@@ -2056,6 +2056,12 @@ void RaceSubEvent::RewardPlayer(Player* pl)
 		return false;
 	};
 
+	if (startedQuest != 0)
+	{
+		CheckForQuestAndMarkCompleteLambda(startedQuest);
+		return;
+	}
+
 	if (CheckForQuestAndMarkCompleteLambda(MiracleRaceQuests::GoblinTest)) return;
 	if (CheckForQuestAndMarkCompleteLambda(MiracleRaceQuests::GnomeTest)) return;
 	if (CheckForQuestAndMarkCompleteLambda(MiracleRaceQuests::GoblinReal)) return;
@@ -2064,7 +2070,8 @@ void RaceSubEvent::RewardPlayer(Player* pl)
 }
 
 RacePlayer::RacePlayer(const RacePlayerSetup& racer, RaceSubEvent* InEvent)
-	: guid(racer.player->GetObjectGuid()), map(racer.player->FindMap()), raceEvent(InEvent), side(racer.side)
+	: guid(racer.player->GetObjectGuid()), map(racer.player->FindMap()), raceEvent(InEvent), side(racer.side),
+	startedQuest(racer.startedByQuest)
 {}
 
 RacePlayer::~RacePlayer()

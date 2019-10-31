@@ -557,7 +557,7 @@ bool QuestAccepted_npc_daisy(Player* player, Creature* creature, const Quest* qu
 			side = MiracleRaceSide::Goblin;
 		}
 
-		miracleEvent->StartTestRace(1, player, side);
+		miracleEvent->StartTestRace(1, player, side, RACE_AGAINST_TIME_QUESTID);
 	}
 
 	return true;
