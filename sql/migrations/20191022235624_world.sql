@@ -460,6 +460,7 @@ replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid, minc
 
 (51009, 2459, 0, 1, 1, 3), -- Swiftness Potion
 (51009, 3928, 0, 1, 1, 2), -- Superior Healing Potion
+(51009, 13446, 0, 1, 1, 2), -- Major Healing Potion
 (51009, 21114, 0, 1, 1, 5), -- Rumsey Rum Dark
 (51009, 9318, 0, 1, 1, 10), -- Red Firework
 (51009, 9315, 0, 1, 1, 10), -- Yellow Rose Firework
@@ -467,6 +468,14 @@ replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid, minc
 (51009, 9313, 0, 1, 1, 10), -- Green Firework
 (51009, 3419, 0, 1, 1, 10), -- Red Rose
 (51009, 3420, 0, 1, 1, 10), -- Black Rose
+(51009, 21718, 0, 1, 1, 10), -- FW
+(51009, 21590, 0, 1, 1, 10), -- FW
+(51009, 21717, 0, 1, 1, 10), -- FW
+(51009, 21591, 0, 1, 1, 10), -- FW
+(51009, 21719, 0, 1, 1, 10), -- FW
+(51009, 21720, 0, 1, 1, 10), -- FW
+(51009, 21592, 0, 1, 1, 10), -- FW
+(51009, 21593, 0, 1, 1, 10), -- FW
 (51009, 21829, 0, 1, 1, 10); -- Perfume Bottle
 
 -- Fix work for food quest:
@@ -483,3 +492,19 @@ delete from spell_effect_mod where id = 454;
 replace into `spell_effect_mod` (`Id`, `EffectIndex`, `Effect`, `EffectDieSides`, `EffectBaseDice`, `EffectDicePerLevel`, `EffectRealPointsPerLevel`, `EffectBasePoints`, `EffectAmplitude`, `EffectPointsPerComboPoint`, `EffectChainTarget`, `EffectMultipleValue`, `EffectMechanic`, `EffectImplicitTargetA`, `EffectImplicitTargetB`, `EffectRadiusIndex`, `EffectApplyAuraName`, `EffectItemType`, `EffectMiscValue`, `EffectTriggerSpell`) values ('454', '0', '-1', '-1', '-1', '-1', '-1', '8', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1');
 
 
+delete from npc_vendor where entry = 6548;		
+replace into npc_vendor (entry, item) values 
+(6548, 11023),
+(6548, 21593),
+(6548, 21595),
+(6548, 21592),
+(6548, 21719),
+(6548, 21720),
+(6548, 21717),
+(6548, 21590),
+(6548, 21718),
+(6548, 21714),
+(6548, 21716),
+(6548, 21589);
+
+update creature_template set subname = "Firework Vendor" where entry = 6548;
