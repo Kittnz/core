@@ -465,7 +465,6 @@ replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid, minc
 (51009, 9315, 0, 1, 1, 10), -- Yellow Rose Firework
 (51009, 19026, 0, 1, 1, 10), -- Snake Burst Firework
 (51009, 9313, 0, 1, 1, 10), -- Green Firework
-(51009, 22130, 0, 1, 1, 10), -- Symbol of Love
 (51009, 3419, 0, 1, 1, 10), -- Red Rose
 (51009, 3420, 0, 1, 1, 10), -- Black Rose
 (51009, 21829, 0, 1, 1, 10); -- Perfume Bottle
@@ -473,5 +472,14 @@ replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid, minc
 -- Fix work for food quest:
 
 update `quest_template` set `rewitemid1`='2888' where (`entry`='814') and (`patch`='0');
+
+-- Update quest timer:
+
+update quest_template set limittime = 115 where entry = 50316;
+
+-- Speed Boosters Adjustements:
+
+delete from spell_effect_mod where id = 454;
+replace into `spell_effect_mod` (`Id`, `EffectIndex`, `Effect`, `EffectDieSides`, `EffectBaseDice`, `EffectDicePerLevel`, `EffectRealPointsPerLevel`, `EffectBasePoints`, `EffectAmplitude`, `EffectPointsPerComboPoint`, `EffectChainTarget`, `EffectMultipleValue`, `EffectMechanic`, `EffectImplicitTargetA`, `EffectImplicitTargetB`, `EffectRadiusIndex`, `EffectApplyAuraName`, `EffectItemType`, `EffectMiscValue`, `EffectTriggerSpell`) values ('454', '0', '-1', '-1', '-1', '-1', '-1', '8', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1');
 
 

@@ -251,7 +251,7 @@ void WorldSession::HandlePetAction(WorldPacket& recv_data)
 					time_t currentTime = time(NULL);
 
 					pCharmedUnit->AddSpellCooldown(spellId, 0, currentTime + 15 * IN_MILLISECONDS);
-					_player->SendSpellCooldown(spellId, 15 * IN_MILLISECONDS, pCharmedUnit->GetObjectGuid());
+					_player->SendSpellCooldown(spellId, 20 * IN_MILLISECONDS, pCharmedUnit->GetObjectGuid());
 				};
 
 				if (!_player->IsRooted())
