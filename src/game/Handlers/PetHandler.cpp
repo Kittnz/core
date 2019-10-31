@@ -250,7 +250,7 @@ void WorldSession::HandlePetAction(WorldPacket& recv_data)
 				{
 					time_t currentTime = time(NULL);
 
-					pCharmedUnit->AddSpellCooldown(spellId, 0, currentTime + 20 * IN_MILLISECONDS);
+					pCharmedUnit->AddSpellCooldown(spellId, 0, currentTime + 20);
 					_player->SendSpellCooldown(spellId, 20 * IN_MILLISECONDS, pCharmedUnit->GetObjectGuid());
 				};
 
