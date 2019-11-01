@@ -18,7 +18,7 @@ replace into `mangos_string` (`entry`, `content_default`) values
 ('50016', 'Check our shop for donation rewards if you are interested to contribute to this community. Thank you all for supporting Turtle WoW since launch. We couldn’t be here without your help.'),
 ('50017', 'Speak with Karn Deepeye in Orgrimmar or Tarun Swifteagle in Stormwind in order to become diplomats! You will be able to group, trade and speak with members of the other faction!'),
 ('50018', 'World chat is united! Please /join Horde or /join Alliance for faction-only talks.'),
-('50019', 'Please support Turtle WoW by using our official launcher. It\'s one way to help us to advertise our project! Learn more: turtle-wow.org/launcher');
+('50019', 'Please support Turtle WoW by using our official launcher. It\'s one way to help us to advertise our project! Learn more: turtle-wow.org/launcher'),
 ('50020', 'We welcome everyone to visit Shimmering Flats and participate to the real Mirage Raceway! Find Fara Boltbreaker in Stormwind or Orgrimmar and learn what’s going on.');
 replace into `autobroadcast` (`string_Id`) values
 ('50001'),
