@@ -669,3 +669,13 @@ replace into creature_ai_scripts (id, delay, command, datalong, datalong2, datal
 update creature_template set ai_name = "EventAI" where entry = 50592;
 delete from creature_ai_events where creature_id=50592;
 insert into creature_ai_events (id, creature_id, condition_id, event_type, event_inverse_phase_mask, event_chance, event_flags, event_param1, event_param2, event_param3, event_param4, action1_script, action2_script, action3_script, comment) values (50592, 50592, 0, 1, 0, 100, 1, 0, 0, 100000, 600000, 50592, 0, 0, 'Goblin Crew Member Speaking');
+
+delete from creature where id in (50537, 50534, 50535, 50533, 50530, 50521, 50522, 4507);
+replace into creature (id, map, modelid, equipment_id, position_x, position_y, position_z, orientation, spawntimesecsmin, spawntimesecsmax, spawndist, currentwaypoint, curhealth, curmana, deathstate, movementtype, spawnflags, visibilitymod, patch_min, patch_max) values (4507, 1, 0, 4507, -6197.65, -3901.92, -60.2418, 0.0178976, 25, 25, 0, 0, 100, 0, 0, 0, 0, 0, 0, 10),
+(50521, 1, 0, 0, -6218.1, -3954.83, -58.2914, 0.479733, 25, 25, 0, 0, 100, 0, 0, 0, 0, 0, 0, 10),
+(50522, 1, 0, 0, -6228.78, -3869.77, -57.5069, 0.164787, 25, 25, 0, 0, 100, 0, 0, 0, 0, 0, 0, 10),
+(50530, 0, 0, 0, -8845.51, 595.031, 93.3977, 2.4987, 25, 25, 0, 0, 100, 0, 0, 0, 0, 0, 0, 10),
+(50533, 1, 0, 4507, -6254.59, -4011.57, -58.7491, 6.15185, 25, 25, 0, 0, 100, 0, 0, 0, 0, 0, 0, 10),
+(50534, 1, 0, 0, -6151.3, -3925.89, -58.7505, 1.57775, 25, 25, 0, 0, 100, 0, 0, 0, 0, 0, 0, 10),
+(50535, 1, 0, 0, -6191.22, -3876.85, -58.7517, 4.66123, 25, 25, 0, 0, 100, 0, 0, 0, 0, 0, 0, 10),
+(50537, 1, 0, 0, -6105.78, -3875.83, -58.7563, 2.26232, 25, 25, 0, 0, 100, 0, 0, 0, 0, 0, 0, 10);
