@@ -476,6 +476,13 @@ replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid, minc
 (51009, 21720, 0, 1, 1, 10), -- FW
 (51009, 21592, 0, 1, 1, 10), -- FW
 (51009, 21593, 0, 1, 1, 10), -- FW
+(51009, 22780, 0, 1, 1, 1), -- White Murloc Egg
+(51009, 20031, 0, 1, 1, 10), -- Essence Mango
+(51009, 50079, 0, 1, 1, 1), -- Island Frog Box
+(51009, 50062, 0, 1, 1, 1), -- Half-Eaten Mutton Chop
+(51009, 50058, 0, 1, 1, 1), -- Black Piglet
+(51009, 50021, 0, 1, 1, 5), -- Strange Bottle
+(51009, 13444, 0, 1, 1, 3), -- Major Healing Potion
 (51009, 21829, 0, 1, 1, 10); -- Perfume Bottle
 
 -- Fix work for food quest:
@@ -489,7 +496,7 @@ update quest_template set limittime = 110 where entry = 50316;
 -- Speed Boosters Adjustements:
 
 delete from spell_effect_mod where id = 454;
-replace into `spell_effect_mod` (`Id`, `EffectIndex`, `Effect`, `EffectDieSides`, `EffectBaseDice`, `EffectDicePerLevel`, `EffectRealPointsPerLevel`, `EffectBasePoints`, `EffectAmplitude`, `EffectPointsPerComboPoint`, `EffectChainTarget`, `EffectMultipleValue`, `EffectMechanic`, `EffectImplicitTargetA`, `EffectImplicitTargetB`, `EffectRadiusIndex`, `EffectApplyAuraName`, `EffectItemType`, `EffectMiscValue`, `EffectTriggerSpell`) values ('454', '0', '-1', '-1', '-1', '-1', '-1', '10', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1');
+replace into `spell_effect_mod` (`Id`, `EffectIndex`, `Effect`, `EffectDieSides`, `EffectBaseDice`, `EffectDicePerLevel`, `EffectRealPointsPerLevel`, `EffectBasePoints`, `EffectAmplitude`, `EffectPointsPerComboPoint`, `EffectChainTarget`, `EffectMultipleValue`, `EffectMechanic`, `EffectImplicitTargetA`, `EffectImplicitTargetB`, `EffectRadiusIndex`, `EffectApplyAuraName`, `EffectItemType`, `EffectMiscValue`, `EffectTriggerSpell`) values ('454', '0', '-1', '-1', '-1', '-1', '-1', '15', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1');
 
 delete from npc_vendor where entry = 6548;		
 replace into npc_vendor (entry, item) values 
@@ -506,8 +513,10 @@ replace into npc_vendor (entry, item) values
 update creature_template set subname = "Firework Vendor" where entry = 6548;
 
 UPDATE `spell_template` SET `durationIndex` = '27' WHERE (`entry` = '15283') and (`build` = '5875');
-UPDATE `spell_template` SET `durationIndex` = '7' WHERE (`entry` = '4079') and (`build` = '5875');
-UPDATE `spell_template` SET `durationIndex` = '7' WHERE (`entry` = '13234') and (`build` = '5875');
+UPDATE `spell_template` SET `durationIndex` = '27' WHERE (`entry` = '4079') and (`build` = '5875');
+UPDATE `spell_template` SET `durationIndex` = '27' WHERE (`entry` = '13234') and (`build` = '5875');
+
+UPDATE `creature_template` SET `spell_id4`='4079' WHERE (`entry`='50529') AND (`patch`='0');
 
 delete from spell_mod where id = 15283;
 replace into `spell_mod` (`Id`, `procChance`, `procFlags`, `procCharges`, `DurationIndex`, `Category`, `CastingTimeIndex`, `StackAmount`, `SpellIconID`, `activeIconID`, `manaCost`, `Attributes`, `AttributesEx`, `AttributesEx2`, `AttributesEx3`, `AttributesEx4`, `Custom`, `InterruptFlags`, `AuraInterruptFlags`, `ChannelInterruptFlags`, `Dispel`, `Stances`, `StancesNot`, `SpellVisual`, `ManaCostPercentage`, `StartRecoveryCategory`, `StartRecoveryTime`, `MaxAffectedTargets`, `MaxTargetLevel`, `DmgClass`, `rangeIndex`, `RecoveryTime`, `CategoryRecoveryTime`, `SpellFamilyName`, `SpellFamilyFlags`, `Mechanic`, `EquippedItemClass`, `Comment`) VALUES ('15283', '-1', '-1', '-1', '27', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '0', '-1', '-1', 'Turtle Mirage Race: Stunning Blow duration for 3 sec.');
