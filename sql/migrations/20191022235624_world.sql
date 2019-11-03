@@ -90,7 +90,7 @@ replace into npc_vendor (entry, item) values
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding, buy_price, description) values
 (51050, 'S.W.A.G Goggles', 1, 10416, 1, 1, 5000, "I wear my goggles at night."),
 (51051, 'Daisy Semi-Hot Pants', 7, 14967, 1, 1, 5000, "They patched hot pants out in 1.12."),
-(51052, 'Random Scroll', 5, 5956, 1, 1, 5000, "");
+(51052, 'Blue Summer Shirt', 5, 5956, 1, 1, 5000, "");
 
 -- SC Insignia fix:
 
@@ -679,3 +679,11 @@ replace into creature (id, map, modelid, equipment_id, position_x, position_y, p
 (50534, 1, 0, 0, -6151.3, -3925.89, -58.7505, 1.57775, 25, 25, 0, 0, 100, 0, 0, 0, 0, 0, 0, 10),
 (50535, 1, 0, 0, -6191.22, -3876.85, -58.7517, 4.66123, 25, 25, 0, 0, 100, 0, 0, 0, 0, 0, 0, 10),
 (50537, 1, 0, 0, -6105.78, -3875.83, -58.7563, 2.26232, 25, 25, 0, 0, 100, 0, 0, 0, 0, 0, 0, 10);
+
+-- Portal to Stormwind:
+
+REPLACE INTO `gameobject_template` (`entry`, `patch`, `type`, `displayId`, `name`, `faction`, `flags`, `size`, `data0`, `data1`, `data2`, `data3`, `data4`, `data5`, `data6`, `data7`, `data8`, `data9`, `data10`, `data11`, `data12`, `data13`, `data14`, `data15`, `data16`, `data17`, `data18`, `data19`, `data20`, `data21`, `data22`, `data23`, `mingold`, `maxgold`, `script_name`) VALUES (1000060, 0, 1, 4396, 'Portal to Stormwind', 1735, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_portal_to_stormwind');
+
+-- Portal to Orgrimmar:
+
+REPLACE INTO `gameobject_template` (`entry`, `patch`, `type`, `displayId`, `name`, `faction`, `flags`, `size`, `data0`, `data1`, `data2`, `data3`, `data4`, `data5`, `data6`, `data7`, `data8`, `data9`, `data10`, `data11`, `data12`, `data13`, `data14`, `data15`, `data16`, `data17`, `data18`, `data19`, `data20`, `data21`, `data22`, `data23`, `mingold`, `maxgold`, `script_name`) VALUES (1000061, 0, 1, 4395, 'Portal to Orgrimmar', 1732, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_portal_to_orgrimmar');

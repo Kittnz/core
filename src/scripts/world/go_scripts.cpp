@@ -752,11 +752,27 @@ bool GOSelect_go_turtle_radio(Player* pPlayer, GameObject* pGo, uint32 sender, u
     return true;
 }
 
-
 GameObjectAI* GetAI_go_cot_exit_trigger(GameObject* gameobject)
 {
     return new go_cot_exit_trigger(gameobject);
 }
+
+bool GOHello_go_portal_to_stormwind(Player* pPlayer, GameObject* pGo)
+{
+    if (pPlayer->GetTeam() == ALLIANCE)
+        pPlayer->TeleportTo(0, -8828.231445f, 627.927490f, 94.055664f, 0.0f);
+
+    return true;
+}
+
+bool GOHello_go_portal_to_orgrimmar(Player* pPlayer, GameObject* pGo)
+{
+    if (pPlayer->GetTeam() == HORDE)
+        pPlayer->TeleportTo(1, 1437.0f, -4421.0f, 25.24f, 1.65f);
+
+    return true;
+}
+
 
 void AddSC_go_scripts()
 {
@@ -885,6 +901,16 @@ void AddSC_go_scripts()
     newscript->Name = "go_turtle_radio";
     newscript->pGOHello = &GOHello_go_turtle_radio;
     newscript->pGOGossipSelect = &GOSelect_go_turtle_radio;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "go_portal_to_stormwind";
+    newscript->pGOHello = &GOHello_go_portal_to_stormwind;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "go_portal_to_orgrimmar";
+    newscript->pGOHello = &GOHello_go_portal_to_orgrimmar;
     newscript->RegisterSelf();
 }
 
