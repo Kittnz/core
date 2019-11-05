@@ -458,32 +458,16 @@ replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid, minc
 (51005, 1478, 0, 1, 1, 5), -- Random Scroll
 (51005, 1477, 0, 1, 1, 5), -- Random Scroll
 
-(51009, 2459, 0, 1, 1, 3), -- Swiftness Potion
-(51009, 3928, 0, 1, 1, 2), -- Superior Healing Potion
-(51009, 13446, 0, 1, 1, 2), -- Major Healing Potion
-(51009, 21114, 0, 1, 1, 5), -- Rumsey Rum Dark
-(51009, 9318, 0, 1, 1, 10), -- Red Firework
-(51009, 9315, 0, 1, 1, 10), -- Yellow Rose Firework
-(51009, 19026, 0, 1, 1, 10), -- Snake Burst Firework
-(51009, 9313, 0, 1, 1, 10), -- Green Firework
-(51009, 3419, 0, 1, 1, 10), -- Red Rose
-(51009, 3420, 0, 1, 1, 10), -- Black Rose
-(51009, 21718, 0, 1, 1, 10), -- FW
-(51009, 21590, 0, 1, 1, 10), -- FW
-(51009, 21717, 0, 1, 1, 10), -- FW
-(51009, 21591, 0, 1, 1, 10), -- FW
-(51009, 21719, 0, 1, 1, 10), -- FW
-(51009, 21720, 0, 1, 1, 10), -- FW
-(51009, 21592, 0, 1, 1, 10), -- FW
-(51009, 21593, 0, 1, 1, 10), -- FW
-(51009, 22780, 0, 1, 1, 1), -- White Murloc Egg
-(51009, 20031, 0, 1, 1, 10), -- Essence Mango
-(51009, 50079, 0, 1, 1, 1), -- Island Frog Box
-(51009, 50062, 0, 1, 1, 1), -- Half-Eaten Mutton Chop
-(51009, 50058, 0, 1, 1, 1), -- Black Piglet
-(51009, 50021, 0, 1, 1, 5), -- Strange Bottle
-(51009, 13444, 0, 1, 1, 3), -- Major Healing Potion
-(51009, 21829, 0, 1, 1, 10); -- Perfume Bottle
+(51009, 2459, 0, 1, 1, 1), -- Swiftness Potion
+(51009, 23579, 0, 1, 1, 1), -- The McWeaksauce Classi
+(51009, 23578, 0, 1, 1, 1), -- Diet McWeaksauce
+(51009, 21820, 0, 2, 1, 1), -- Candy
+(51009, 21817, 0, 2, 1, 1), -- Candy
+(51009, 21821, 0, 2, 1, 1), -- Candy
+(51009, 3420, 0, 2, 1, 1); -- Black Rose
+
+
+
 
 -- Fix work for food quest:
 
