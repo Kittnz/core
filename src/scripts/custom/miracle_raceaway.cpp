@@ -547,19 +547,27 @@ CreatureAI* GetAI_npc_car_controller(Creature* creature)
 
 bool QuestAccepted_npc_daisy(Player* player, Creature* creature, const Quest* quest)
 {
-	if (quest->GetQuestId() == RACE_AGAINST_TIME_QUESTID)
-	{
-		MiracleRaceEvent* miracleEvent = sGameEventMgr.GetHardcodedEvent<MiracleRaceEvent>();
-		MiracleRaceSide side = MiracleRaceSide::Gnome;
+    if (quest->GetQuestId() == RACE_AGAINST_TIME_QUESTID)
+    {
+        if (!player->IsMounted())
+        {
+            MiracleRaceEvent* miracleEvent = sGameEventMgr.GetHardcodedEvent<MiracleRaceEvent>();
+            MiracleRaceSide side = MiracleRaceSide::Gnome;
 
-		if (player->GetQuestRewardStatus(GOBLIN_TEST_QUEST))
-		{
-			side = MiracleRaceSide::Goblin;
-		}
+            if (player->GetQuestRewardStatus(GOBLIN_TEST_QUEST))
+            {
+                side = MiracleRaceSide::Goblin;
+            }
 
-		miracleEvent->StartTestRace(1, player, side, RACE_AGAINST_TIME_QUESTID);
-	}
-
+            miracleEvent->StartTestRace(1, player, side, RACE_AGAINST_TIME_QUESTID);
+        }
+        else
+        {
+            creature->MonsterSay("You're already mounted!");
+            player->RemoveQuest(RACE_AGAINST_TIME_QUESTID);
+        }
+    }
+       
 	return true;
 }
 
