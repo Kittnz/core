@@ -37,5 +37,4 @@ replace into `autobroadcast` (`string_Id`) values
 ('50016'),
 ('50017'),
 ('50018'),
-('50019'),
-('50021');
+('50019');
