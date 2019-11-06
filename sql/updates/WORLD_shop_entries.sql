@@ -34,6 +34,7 @@ replace into shop_items values
 (100, 1, 50010, 'Enable Hardcore Mode', 0),
 (101, 1, 50016, 'Portable Meeting Stone (RP Hub)', 0),
 (102, 1, 50008, 'Turtle Twink\'s Insignia (Stop XP)', 0),
+(102, 1, 50521, 'Exhausting Trinket', 0),
 (103, 1, 50000, 'Character Name Change', 100),
 (104, 1, 50002, 'Character Race Change', 200),
 (105, 1, 50001, 'Character Look Change', 150),
@@ -145,7 +146,7 @@ replace into shop_items values
 (810, 8, 51010, 'Troll: Dark', 125),
 (811, 8, 51011, 'Troll: Ice', 125),
 (812, 8, 50212, 'Gnome: Leper (Male)', 125),
--- Appearances -----------------------------------------------------------------------------------------
+-- Disguises -----------------------------------------------------------------------------------------
 (900, 9, 51200, 'Goblin', 100),
 (901, 9, 51201, 'Worgen', 100),
 (902, 9, 51202, 'Blood Elf', 100),

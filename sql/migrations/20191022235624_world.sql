@@ -394,6 +394,14 @@ values
  
 update item_template set spellcooldown_1 = 5000 where entry in (51200, 51201, 51202, 51203, 51204, 51205, 51206, 51207, 51208);
  
+UPDATE `item_template` SET `description`='Nullifies your rested XP bonus.' WHERE (`entry`='50521') AND (`patch`='0');
+UPDATE `item_template` SET `name`='Exhausting Trinket' WHERE (`entry`='50521') AND (`patch`='0');
+UPDATE `item_template` SET `quality`='2' WHERE (`entry`='50236') AND (`patch`='0');
+UPDATE `item_template` SET `quality`='1' WHERE (`entry`='50012') AND (`patch`='0');
+UPDATE `item_template` SET `quality`='1' WHERE (`entry`='50010') AND (`patch`='0');
+UPDATE `item_template` SET `quality`='1' WHERE (`entry`='50008') AND (`patch`='0');
+UPDATE `item_template` SET `flags`='0' WHERE (`entry`='50010') AND (`patch`='0');
+ 
 -- Mirage Raceway: * rewards
 -- 51009 - Race Against Time
  
