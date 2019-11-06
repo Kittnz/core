@@ -392,6 +392,7 @@ values
  '-1', '1', '0', '0', '0', '0', '0', '4', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', 'shop_morph_succubus');
  
+update item_template set spellcooldown_1 = 5000 where entry in (51200, 51201, 51202, 51203, 51204, 51205, 51206, 51207, 51208);
  
 -- Mirage Raceway: * rewards
 -- 51009 - Race Against Time
