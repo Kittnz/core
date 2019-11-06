@@ -23,58 +23,6 @@ bool ItemUse_portable_meeting_stone(Player* pPlayer, Item* pItem, const SpellCas
     return false;
 }
 
-bool ItemUse_highborne_soul_mirror(Player* pPlayer, Item* pItem, const SpellCastTargets&)
-{
-    if (!pPlayer)
-        return false;
-
-    if (pPlayer->GetNativeDisplayId() != pPlayer->GetDisplayId()) {
-        pPlayer->DeMorph();
-        return false;
-    }
-
-    uint32 displayId = 0;
-    bool isMale = pPlayer->getGender() == GENDER_MALE;
-    switch (pPlayer->getClass())
-    {
-        case CLASS_WARRIOR:
-        case CLASS_PALADIN:
-            displayId = isMale ? 4245 : 4729;
-            break;
-        case CLASS_MAGE:
-        case CLASS_WARLOCK:
-            displayId = isMale ? 6779 : 3293;
-            break;
-        case CLASS_PRIEST:
-            displayId = isMale ? 9752 : 4730;
-            break;
-        case CLASS_DRUID:
-        case CLASS_ROGUE:
-        case CLASS_SHAMAN:
-        case CLASS_HUNTER:
-            displayId = isMale ? 4494 : 1643;
-            break;
-        default:
-            pPlayer->DeMorph();
-    }
-    pPlayer->SetDisplayId(displayId);
-    return false;
-}
-
-bool ItemUse_dryad_acorn(Player* pPlayer, Item* pItem, const SpellCastTargets&)
-{
-    if (!pPlayer)
-        return false;
-
-    if (pPlayer->GetNativeDisplayId() != pPlayer->GetDisplayId()) {
-        pPlayer->DeMorph();
-        return false;
-    }
-
-    pPlayer->SetDisplayId(pPlayer->getGender() == GENDER_MALE ? 150 : 876);
-    return false;
-}
-
 #define ALICE_GROW_LBOUNDARY 1.05f
 #define ALICE_GROW_RBOUNDARY 1.15f
 #define ALICE_BELITTLE_LBOUNDARY 0.85f
@@ -518,6 +466,60 @@ bool ItemUse_bg_tabard(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 }
 
 // Shop morph items
+bool ItemUse_highborne_soul_mirror(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+{
+    if (!pPlayer)
+        return false;
+
+    if (pPlayer->GetNativeDisplayId() != pPlayer->GetDisplayId()) {
+        pPlayer->DeMorph();
+        return false;
+    }
+
+    uint32 displayId = 0;
+    bool isMale = pPlayer->getGender() == GENDER_MALE;
+    switch (pPlayer->getClass())
+    {
+        case CLASS_WARRIOR:
+        case CLASS_PALADIN:
+            displayId = isMale ? 4245 : 4729;
+            break;
+        case CLASS_MAGE:
+        case CLASS_WARLOCK:
+            displayId = isMale ? 6779 : 3293;
+            break;
+        case CLASS_PRIEST:
+            displayId = isMale ? 9752 : 4730;
+            break;
+        case CLASS_DRUID:
+        case CLASS_ROGUE:
+        case CLASS_SHAMAN:
+        case CLASS_HUNTER:
+            displayId = isMale ? 4494 : 1643;
+            break;
+        default:
+            pPlayer->DeMorph();
+    }
+    pPlayer->SetDisplayId(displayId);
+
+    ChatHandler(pPlayer).SendSysMessage("Fel Magic was never an option. This disguise will work until logout.");
+    return false;
+}
+
+bool ItemUse_dryad_acorn(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+{
+    if (!pPlayer)
+        return false;
+
+    if (pPlayer->GetNativeDisplayId() != pPlayer->GetDisplayId()) {
+        pPlayer->DeMorph();
+        return false;
+    }
+
+    pPlayer->SetDisplayId(pPlayer->getGender() == GENDER_MALE ? 150 : 876);
+    ChatHandler(pPlayer).SendSysMessage("Fear the fearsome fury of the forest fawn! This disguise will work until logout.");
+    return false;
+}
 
 bool ItemUse_shop_morph_goblin(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
@@ -575,42 +577,6 @@ bool ItemUse_shop_morph_blood_elf(Player* pPlayer, Item* pItem, const SpellCastT
     pPlayer->SetDisplayId(static_cast<uint32>((pPlayer->getGender() == GENDER_MALE) ? male[modelid] : female[modelid]));
     
     ChatHandler(pPlayer).SendSysMessage("Glory to the Sin'dorei. This disguise will work until logout.");
-    return false;
-}
-
-bool ItemUse_shop_morph_high_elf(Player* pPlayer, Item* pItem, const SpellCastTargets&)
-{
-    if (!pPlayer)
-        return false;
-
-    if (pPlayer->GetNativeDisplayId() != pPlayer->GetDisplayId())
-    {
-        pPlayer->DeMorph();
-        return false;
-    }
-
-    int male[7] = { 11669, 11671, 6779, 14394, 11671, 6779, 9752 };
-    int female[7] = { 11672, 4729, 4730, 4731, 9752, 10857, 10857 };
-    int modelid = rand() % 7;
-    pPlayer->SetDisplayId(static_cast<uint32>((pPlayer->getGender() == GENDER_MALE) ? male[modelid] : female[modelid]));
-
-    ChatHandler(pPlayer).SendSysMessage("Fel Magic was never an option. This disguise will work until logout.");
-    return false;
-}
-
-bool ItemUse_shop_morph_dryad(Player* pPlayer, Item* pItem, const SpellCastTargets&)
-{
-    if (!pPlayer)
-        return false;
-
-    if (pPlayer->GetNativeDisplayId() != pPlayer->GetDisplayId())
-    {
-        pPlayer->DeMorph();
-        return false;
-    }
-
-    pPlayer->SetDisplayId(pPlayer->getGender() == GENDER_MALE ? 150 : 876);
-    ChatHandler(pPlayer).SendSysMessage("Fear the fearsome fury of the forest fawn! This disguise will work until logout.");
     return false;
 }
 
@@ -743,11 +709,6 @@ void AddSC_item_scripts()
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "highborne_soul_mirror";
-    newscript->pItemUse = &ItemUse_highborne_soul_mirror;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
     newscript->Name = "item_alice_wonderland_scale";
     newscript->pItemUse = &ItemUse_alice_wonderland_scale;
     newscript->RegisterSelf();
@@ -820,13 +781,13 @@ void AddSC_item_scripts()
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "shop_morph_high_elf";
-    newscript->pItemUse = &ItemUse_shop_morph_high_elf;
+    newscript->Name = "highborne_soul_mirror";
+    newscript->pItemUse = &ItemUse_highborne_soul_mirror;
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "shop_morph_dryad";
-    newscript->pItemUse = &ItemUse_shop_morph_dryad;
+    newscript->Name = "dryad_acorn";
+    newscript->pItemUse = &ItemUse_dryad_acorn;
     newscript->RegisterSelf();
 
     newscript = new Script;
@@ -849,12 +810,7 @@ void AddSC_item_scripts()
     newscript->pItemUse = &ItemUse_shop_morph_succubus;
     newscript->RegisterSelf();
 
-    // End of shop morph items 
-
-    newscript = new Script;
-    newscript->Name = "dryad_acorn";
-    newscript->pItemUse = &ItemUse_dryad_acorn;
-    newscript->RegisterSelf();
+    // End of shop morph items
 
     newscript = new Script;
     newscript->Name = "remove_rested";
