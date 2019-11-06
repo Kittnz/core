@@ -4,7 +4,7 @@ FPATH="$DATE"_world.sql
 touch "$FPATH"
 
 if [ -e "$FPATH" ]; then
-	echo -e "replace into migrations values (%UTC%);>> %output%" > $FPATH
+	echo -e "replace into migrations values ('$DATE');" > $FPATH
 
 else 
 	echo "FAILED to create file"
