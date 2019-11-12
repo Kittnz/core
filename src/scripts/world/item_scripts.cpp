@@ -706,19 +706,6 @@ bool ItemUse_roleplay_summon_1(Player* pPlayer, Item* pItem, const SpellCastTarg
     return false;
 }
 
-bool ItemUse_roleplay_summon_2(Player* pPlayer, Item* pItem, const SpellCastTargets&)
-{
-    if (!pPlayer)
-        return false;
-
-    if (pPlayer->GetZoneId() == 440)
-        pPlayer->SummonCreature(50601, pPlayer->GetPositionX(), pPlayer->GetPositionY(), pPlayer->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 30 * MINUTE);
-    else
-        ChatHandler(pPlayer).SendSysMessage("You must be in Tanaris.");
-    return false;
-}
-
-
 void AddSC_item_scripts()
 {
     Script *newscript;
@@ -862,8 +849,4 @@ void AddSC_item_scripts()
     newscript->pItemUse = &ItemUse_roleplay_summon_1;
     newscript->RegisterSelf();
 
-    newscript = new Script;
-    newscript->Name = "roleplay_summon_2";
-    newscript->pItemUse = &ItemUse_roleplay_summon_2;
-    newscript->RegisterSelf();
 }
