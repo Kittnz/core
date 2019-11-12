@@ -26,8 +26,7 @@ replace into shop_categories values
 (5, 'Mounts #3'),
 (6, 'Tabards'),
 (7, 'Roleplay'),
-(8, 'Skins'),
-(9, 'Disguises');
+(8, 'Skins');
 
 replace into shop_items values
 -- Gameplay --------------------------------------------------------------------------------------------
@@ -145,15 +144,15 @@ replace into shop_items values
 (809, 8, 50211, 'Troll: Sandfury (Including Zombies)', 125),
 (810, 8, 51010, 'Troll: Dark', 125),
 (811, 8, 51011, 'Troll: Ice', 125),
-(812, 8, 50212, 'Gnome: Leper (Male)', 125),
+(812, 8, 50212, 'Gnome: Leper (Male)', 125);
 -- Disguises -----------------------------------------------------------------------------------------
-(900, 9, 51200, 'Goblin', 100),
-(901, 9, 51201, 'Worgen', 100),
-(902, 9, 51202, 'Blood Elf', 100),
-(903, 9, 50017, 'High Elf', 100),
-(904, 9, 50408, 'Grove Keeper (M) / Dryad (F)', 100),
-(905, 9, 51205, 'Ghost', 100),
-(906, 9, 51206, 'Banshee', 100),
-(907, 9, 51207, 'Druid of the Fang', 100),
-(908, 9, 51208, 'Succubus', 100);
+-- (900, 9, 51200, 'Goblin', 100),
+-- (901, 9, 51201, 'Worgen', 100),
+-- (902, 9, 51202, 'Blood Elf', 100),
+-- (903, 9, 50017, 'High Elf', 100),
+-- (904, 9, 50408, 'Grove Keeper (M) / Dryad (F)', 100),
+-- (905, 9, 51205, 'Ghost', 100),
+-- (906, 9, 51206, 'Banshee', 100),
+-- (907, 9, 51207, 'Druid of the Fang', 100),
+-- (908, 9, 51208, 'Succubus', 100);
 
