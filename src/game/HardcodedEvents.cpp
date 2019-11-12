@@ -1804,6 +1804,25 @@ void MiracleRaceEvent::onInviteAccepted(ObjectGuid gnomePlayer, ObjectGuid gobli
 	std::list<RacePlayerSetup> racers;
 	Player* gnomePlayerP = sObjectMgr.GetPlayer(gnomePlayer);
 	Player* goblinPlayerP = sObjectMgr.GetPlayer(goblinPlayer);
+	// Racers can exit from world at this point
+	if (gnomePlayerP == nullptr || goblinPlayerP == nullptr)
+	{
+		const char* UnavailableRacer = "Both";
+		ObjectGuid UnavailableRacerGuid;
+		if (gnomePlayerP != nullptr)
+		{
+			UnavailableRacer = "Goblin";
+			UnavailableRacerGuid = goblinPlayer;
+		}
+		else if (goblinPlayerP != nullptr)
+		{
+			UnavailableRacer = "Gnome";
+			UnavailableRacerGuid = gnomePlayer;
+		}
+		sLog.outError("Can't start Mirage race, because %s racer(s) with guid '%s' is not available", UnavailableRacer, UnavailableRacerGuid.GetString().c_str());
+		return;
+	}
+
 	racers.emplace_back(RacePlayerSetup{ gnomePlayerP, MiracleRaceSide::Gnome });
 	racers.emplace_back(RacePlayerSetup{ goblinPlayerP, MiracleRaceSide::Goblin });
 	InitializeRace(1);
