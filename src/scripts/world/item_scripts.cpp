@@ -706,6 +706,17 @@ bool ItemUse_roleplay_summon_1(Player* pPlayer, Item* pItem, const SpellCastTarg
     return false;
 }
 
+// ------------------ TRANSMOGRIFICATION ------------------ //
+
+#define TRANSMOGRIFICATION_SATCHEL 51216
+#define TRANSMOGRIFICATION_TOKEN 51217
+
+bool ItemUse_transmogrification(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+{
+    // There'll be lots of ugly and hacky code. 
+    return false;
+}
+
 void AddSC_item_scripts()
 {
     Script *newscript;
@@ -847,6 +858,11 @@ void AddSC_item_scripts()
     newscript = new Script;
     newscript->Name = "roleplay_summon_1";
     newscript->pItemUse = &ItemUse_roleplay_summon_1;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "transmogrification";
+    newscript->pItemUse = &ItemUse_transmogrification;
     newscript->RegisterSelf();
 
 }
