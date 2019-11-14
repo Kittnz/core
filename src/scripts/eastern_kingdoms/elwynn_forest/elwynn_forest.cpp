@@ -164,6 +164,9 @@ bool GossipSelect_npc_lost_farm_sheep(Player* pPlayer, Creature* pCreature, uint
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
+        if (!pPlayer)
+            return false;
+
         pCreature->MonsterSay("Ba-a-a-h!");
         pCreature->MonsterTextEmote("Sheep quickly eats this truffle and starting to jump around your bags, in case if you want to share more!");
         pCreature->ForcedDespawn();    
