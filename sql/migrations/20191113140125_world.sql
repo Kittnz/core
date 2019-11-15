@@ -343,3 +343,15 @@ values
 
 UPDATE `quest_template` SET `RewRepFaction1`='72', `RewRepValue1`='250' WHERE (`entry`='60005') AND (`patch`='0');
 UPDATE `quest_template` SET `RewMoneyMaxLevel`='465' WHERE (`entry`='60005') AND (`patch`='0');
+
+-- Torka the Cook:
+UPDATE `creature_template` SET `trainer_type`='2' WHERE (`entry`='3191') AND (`patch`='0');
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`, `build_min`, `build_max`) VALUES (3191, 2551, 100, 0, 0, 5, 0, 5875);
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`, `build_min`, `build_max`) VALUES (3191, 2559, 50, 185, 10, 0, 0, 5875);
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`, `build_min`, `build_max`) VALUES (3191, 2561, 100, 185, 50, 0, 0, 5875);
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`, `build_min`, `build_max`) VALUES (3191, 2562, 200, 185, 75, 0, 0, 5875);
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`, `build_min`, `build_max`) VALUES (3191, 2563, 150, 185, 80, 0, 0, 5875);
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`, `build_min`, `build_max`) VALUES (3191, 3412, 500, 185, 50, 10, 0, 5875);
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`, `build_min`, `build_max`) VALUES (3191, 6502, 100, 185, 50, 0, 0, 5875);
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`, `build_min`, `build_max`) VALUES (3191, 6503, 300, 185, 125, 0, 0, 5875);
+REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`, `build_min`, `build_max`) VALUES (3191, 21176, 4000, 185, 200, 0, 0, 5875);
