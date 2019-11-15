@@ -340,3 +340,6 @@ values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', 'roleplay_globalemote_3');
+
+UPDATE `quest_template` SET `RewRepFaction1`='72', `RewRepValue1`='250' WHERE (`entry`='60005') AND (`patch`='0');
+UPDATE `quest_template` SET `RewMoneyMaxLevel`='465' WHERE (`entry`='60005') AND (`patch`='0');
