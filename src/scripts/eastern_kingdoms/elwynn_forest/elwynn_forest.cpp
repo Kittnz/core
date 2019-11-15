@@ -148,14 +148,21 @@ bool GOHello_go_marshal_haggards_chest(Player* pPlayer, GameObject* pGo)
     return true;
 }
 
-#define ONCE_UPON_A_SHEEP    60005
-#define LOST_FARM_SHEEP_ITEM 51220
+#define ONCE_UPON_A_SHEEP        60005
+#define LOST_FARM_SHEEP_ITEM     51220
+#define DELICIOUS_ELWYNN_TRUFFLE 51218
 
 bool GossipHello_npc_lost_farm_sheep(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->GetQuestStatus(ONCE_UPON_A_SHEEP) == QUEST_STATUS_INCOMPLETE)
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Come with me!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-
+        if (pPlayer->HasItemCount(DELICIOUS_ELWYNN_TRUFFLE, 0))
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Come with me!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        else
+        {
+            pCreature->MonsterSay("Ba-a-a-h! Ba-a-a-h!");
+            pCreature->GetMotionMaster()->MoveConfused();
+        }
+    
     pPlayer->SEND_GOSSIP_MENU(90310, pCreature->GetGUID());
     return true;
 }
