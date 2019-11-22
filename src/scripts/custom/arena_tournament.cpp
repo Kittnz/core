@@ -75,12 +75,12 @@ enum BloodyCoinReward
 
 bool GossipHello_npc_arena_vendor(Player *pPlayer, Creature *_Creature)
 {
-    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, "Speed (50%, 15 seconds): 1 Bloody Coin", GOSSIP_SENDER_MAIN, BloodyCoinReward::BloodyCoinRew_1);
-    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, "Stamina (16, 30 min): 3 Bloody Coins", GOSSIP_SENDER_MAIN, BloodyCoinReward::BloodyCoinRew_2);
-    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, "Intellect (16, 30 min): 3 Bloody Coins", GOSSIP_SENDER_MAIN, BloodyCoinReward::BloodyCoinRew_3);
-    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, "Agility (17, 30 min): 3 Bloody Coins", GOSSIP_SENDER_MAIN, BloodyCoinReward::BloodyCoinRew_4);
-    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, "Strength (17, 30 min): 3 Bloody Coins", GOSSIP_SENDER_MAIN, BloodyCoinReward::BloodyCoinRew_5);
-    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, "Spirit (15, 30 min): 3 Bloody Coins", GOSSIP_SENDER_MAIN, BloodyCoinReward::BloodyCoinRew_6);
+    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, "Speed (15 seconds): 1 Bloody Coin", GOSSIP_SENDER_MAIN, BloodyCoinReward::BloodyCoinRew_1);
+    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, "Stamina (30 minutes): 3 Bloody Coins", GOSSIP_SENDER_MAIN, BloodyCoinReward::BloodyCoinRew_2);
+    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, "Intellect (30 minutes): 3 Bloody Coins", GOSSIP_SENDER_MAIN, BloodyCoinReward::BloodyCoinRew_3);
+    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, "Agility (30 minutes): 3 Bloody Coins", GOSSIP_SENDER_MAIN, BloodyCoinReward::BloodyCoinRew_4);
+    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, "Strength (30 minutes): 3 Bloody Coins", GOSSIP_SENDER_MAIN, BloodyCoinReward::BloodyCoinRew_5);
+    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, "Spirit (30 minutes): 3 Bloody Coins", GOSSIP_SENDER_MAIN, BloodyCoinReward::BloodyCoinRew_6);
 
     pPlayer->SEND_GOSSIP_MENU(90316, _Creature->GetGUID());
     return true;
