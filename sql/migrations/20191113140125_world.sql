@@ -183,7 +183,7 @@ start_quest, lock_id, material, sheath, random_property, set_id, max_durability,
 duration, bag_family, disenchant_id, food_type, min_money_loot, max_money_loot, extra_flags, other_team_entry,
 script_name)
 values
- ('51219', '0', '4', '1', 'Woolen Cowl', '', '15278', '1', '0', '1', '0', '935', '1', '-1', '-1', '8',
+ ('51219', '0', '4', '1', 'Woolen Cowl', '', '16825', '1', '0', '1', '0', '935', '1', '-1', '-1', '8',
  '7', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
