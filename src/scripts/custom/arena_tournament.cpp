@@ -82,7 +82,7 @@ bool GossipHello_npc_arena_vendor(Player *pPlayer, Creature *_Creature)
     pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, "Strength (17, 30 min): 3 Bloody Coins", GOSSIP_SENDER_MAIN, BloodyCoinReward::BloodyCoinRew_5);
     pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, "Spirit (15, 30 min): 3 Bloody Coins", GOSSIP_SENDER_MAIN, BloodyCoinReward::BloodyCoinRew_6);
 
-    pPlayer->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, _Creature->GetGUID());
+    pPlayer->SEND_GOSSIP_MENU(90316, _Creature->GetGUID());
     return true;
 }
 

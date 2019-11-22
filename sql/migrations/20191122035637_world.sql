@@ -16,3 +16,6 @@ UPDATE creature_template SET Script_name = 'wsg_arena' WHERE entry = 50636;
 
 replace into broadcast_text (ID, MaleText) values ('90315', 'If a warrior ignores duty, acts dishonorably, or is disloyal, he is nothing.');
 replace into npc_text (ID, BroadcastTextID0) values ('90315', '90315');
+
+replace into broadcast_text (ID, MaleText) values ('90316', 'Peace is bad for business.');
+replace into npc_text (ID, BroadcastTextID0) values ('90316', '90316');
