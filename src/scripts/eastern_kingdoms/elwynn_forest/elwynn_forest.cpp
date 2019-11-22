@@ -159,7 +159,7 @@ bool GossipHello_npc_lost_farm_sheep(Player* pPlayer, Creature* pCreature)
     if (pPlayer->GetQuestStatus(ONCE_UPON_A_SHEEP) == QUEST_STATUS_INCOMPLETE)
         if (pPlayer->HasItemCount(DELICIOUS_ELWYNN_TRUFFLE, 0))
         {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Come with me!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Come with me, if you want to live!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
         }
         else
         {

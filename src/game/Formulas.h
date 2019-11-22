@@ -244,9 +244,9 @@ namespace MaNGOS
                 expFactor = 157.4f;
 
             // Blizzlike:
-            // return levelCoeff * sameVictimPenalty * (expFactor * exp(0.05331 * victimRank)) * diffLevelPenalty / groupSize;
+            return levelCoeff * sameVictimPenalty * (expFactor * exp(0.05331 * victimRank)) * diffLevelPenalty / groupSize;
             // Turtle WoW. Adding x5 honor inside Gurubashi's Arena Battle Ring:
-            return static_cast<float>(ceil(levelCoeff * sameVictimPenalty * (expFactor * exp(0.05331 * victimRank)) * diffLevelPenalty / groupSize) * (inGurubashiArena ? 2 : 1));
+            // return static_cast<float>(ceil(levelCoeff * sameVictimPenalty * (expFactor * exp(0.05331 * victimRank)) * diffLevelPenalty / groupSize) * (inGurubashiArena ? 2 : 1));
         }
     }
 }
