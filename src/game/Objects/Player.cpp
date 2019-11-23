@@ -21191,6 +21191,11 @@ void Player::RewardHonorOnDeath()
             if (!rewItr->IsHonorOrXPTarget(this))
                 continue;
 
+            if (!InBattleGround())
+            {
+                honorRate = 0.25F;
+            }
+
             uint32 rewPoints = uint32(HonorMgr::HonorableKillPoints(rewItr, this, 1) * honorRate);
             if (rewPoints)
                 rewItr->GetHonorMgr().Add(rewPoints, HONORABLE, this);
@@ -21205,7 +21210,13 @@ void Player::RewardHonorOnDeath()
 
         uint32 rewPoints = uint32(HonorMgr::HonorableKillPoints(rewItr.first, this, 1) * rewItr.second / float(totalDamage));
         if (rewPoints)
+        {
+            if (!InBattleGround())
+            {
+                rewPoints *= 0.25F;
+            }
             rewItr.first->GetHonorMgr().Add(rewPoints, HONORABLE, this);
+        }
     }
 
     _damageTakenHistory.clear();
