@@ -4904,6 +4904,11 @@ void Player::RepopAtGraveyard()
             ResurrectPlayer(1.0f);
         }
 
+        if (InBattleGround())
+        {
+            RemoveAllSpellCooldown();
+        }
+
         TeleportTo(ClosestGrave->map_id, ClosestGrave->x, ClosestGrave->y, ClosestGrave->z, GetOrientation(), 0, std::move(recover));
     }
 
