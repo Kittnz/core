@@ -1010,6 +1010,14 @@ void BattleGround::AddPlayer(Player *plr)
     PlayerAddedToBGCheckIfBGIsRunning(plr);
     AddOrSetPlayerToCorrectBgGroup(plr, guid, team);
 
+    // Buff-like spell for free mana casts for 30 seconds
+    plr->AddAura(23513, 0, plr);
+
+    SpellAuraHolder* holder = plr->GetSpellAuraHolder(23513); 
+    holder->SetAuraDuration(30000);
+    holder->UpdateAuraDuration();
+
+
     // Log
     DETAIL_LOG("BATTLEGROUND: Player %s joined the battle.", plr->GetName());
 }
