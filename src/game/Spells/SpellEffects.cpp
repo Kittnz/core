@@ -2274,8 +2274,15 @@ void Spell::EffectApplyAura(SpellEffectIndex eff_idx)
         break;
     // Turtle WoW. Plainsrunning:
     case PLAINSRUNNING_SPELL:
-        if (m_caster->getRace() != RACE_TAUREN) {
+        if (m_caster->getRace() != RACE_TAUREN) 
+        {
             m_caster->ToPlayer()->RemoveSpell(PLAINSRUNNING_SPELL, false, false);
+            return;
+        }
+        if (((Player*)m_caster)->InBattleGround())
+        {
+            m_caster->RemoveAurasDueToSpell(PLAINSRUNNING_SPELL);
+            ChatHandler(m_caster->ToPlayer()).SendSysMessage("|cffff8040Plainsrunning is disabled on Battlegrounds.|r");
             return;
         }
         if (!m_caster->ToPlayer()->HasSkill(762))
