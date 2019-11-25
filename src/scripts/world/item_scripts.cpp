@@ -913,6 +913,35 @@ bool ItemUse_roleplay_globalemote_3(Player* pPlayer, Item* pItem, const SpellCas
     return false;
 }
 
+bool ItemUse_item_engie(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+{
+    if (!pPlayer)
+        return false;
+
+    if (pPlayer->GetNativeDisplayId() != pPlayer->GetDisplayId()) {
+        pPlayer->DeMorph();
+        return false;
+    }
+
+    uint32 displayid{ 0 };
+
+    switch (pItem->GetEntry())
+    {
+    case 51246: // Sarah Sadwhistle 
+        displayid = 15458;
+        break;
+    case 51247: // Chromie
+        displayid = 10008;
+        break;
+    default:
+        break;
+    }
+
+    pPlayer->SetDisplayId(displayid);
+    ChatHandler(pPlayer).SendSysMessage("This disguise will work until logout.");
+    return false;
+}
+
 void AddSC_item_scripts()
 {
     Script *newscript;
@@ -1109,5 +1138,10 @@ void AddSC_item_scripts()
     newscript = new Script;
     newscript->Name = "roleplay_globalemote_3";
     newscript->pItemUse = &ItemUse_roleplay_globalemote_3;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "item_engie";
+    newscript->pItemUse = &ItemUse_item_engie;
     newscript->RegisterSelf();
 }
