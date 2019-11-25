@@ -60,5 +60,5 @@ values
  '-1', '1', '0', '0', '0', '0', '0', '4', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', 'item_engie');
 
-update item_template set stackable = 0 where entry = 51246;
-update item_template set stackable = 0 where entry = 51247;
+update item_template set stackable = 15 where entry = 51246;
+update item_template set stackable = 15 where entry = 51247;
