@@ -1148,8 +1148,5 @@ void AddSC_item_scripts()
     newscript->pItemUse = &ItemUse_item_engie;
     newscript->RegisterSelf();
 
-    newscript = new Script;
-    newscript->Name = "item_treeform";
-    newscript->pItemUse = &ItemUse_item_treeform;
-    newscript->RegisterSelf();
+
 }
