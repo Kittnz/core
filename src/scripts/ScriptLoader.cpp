@@ -22,6 +22,7 @@ void AddSC_battlemaster();
 void AddSC_boss_avatar_of_pompa();
 void AddSC_boss_turtlhu();
 void AddSC_boss_xmas_wolf();
+void AddSC_npc_shivering_moonkin();
 void AddSC_drogon();
 void AddSC_boss_gerastrasz();
 void AddSC_instance_caverns_of_time();
@@ -298,6 +299,7 @@ void AddScripts()
     AddSC_boss_avatar_of_pompa();
     AddSC_boss_turtlhu();
     AddSC_boss_xmas_wolf();
+    AddSC_npc_shivering_moonkin();
     AddSC_drogon();
     AddSC_boss_gerastrasz();
     AddSC_instance_caverns_of_time();
