@@ -292,7 +292,7 @@ set (SCRIPTS_SRCS
     world/dragons_of_nightmare/boss_taerar.cpp
     world/dragons_of_nightmare/boss_ysondre.cpp
 
-        custom/boss_avatar_of_pompa.cpp custom/boss_turtlhu.cpp custom/drogon.cpp custom/cot/black_morass/boss_gerastrasz.cpp custom/cot/instance_caverns_of_time.cpp custom/cot/instance_caverns_of_time.h custom/zebrian_the_mad.cpp)
+        custom/boss_avatar_of_pompa.cpp custom/boss_turtlhu.cpp custom/drogon.cpp custom/cot/black_morass/boss_gerastrasz.cpp custom/cot/instance_caverns_of_time.cpp custom/cot/instance_caverns_of_time.h custom/zebrian_the_mad.cpp custom/boss_xmas_wolf.cpp)
 
 
 # Used in game ScriptMgr, not need here
