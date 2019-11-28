@@ -933,6 +933,9 @@ bool ItemUse_item_engie(Player* pPlayer, Item* pItem, const SpellCastTargets&)
     case 51247: // Chromie
         displayid = 10008;
         break;
+    case 51055: // Tree Form
+        displayid = 9591;
+        break;
     default:
         break;
     }
@@ -1144,4 +1147,6 @@ void AddSC_item_scripts()
     newscript->Name = "item_engie";
     newscript->pItemUse = &ItemUse_item_engie;
     newscript->RegisterSelf();
+
+
 }
