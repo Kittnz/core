@@ -7,7 +7,8 @@ enum
     SPELL_MASS_FROSTBOLT    = 28479,
     SPELL_FROST_BREATH      = 22479,
     SPELL_SUMMON_ICE_BLOCK  = 28535,
-    SPELL_FROST_SHOCK       = 23115
+    SPELL_FROST_NOVA        = 865,
+    SPELL_FROST_BERSERK     = 28498
 };
 
 struct boss_xmas_wolfAI : public ScriptedAI
@@ -24,15 +25,18 @@ struct boss_xmas_wolfAI : public ScriptedAI
 
     int requiredFireHits;
     int currentFireHits;
+    int requiredFrostBerserkHits;
+    int currentFrostBerserkHits;
     int isFrozen;
 
     void SetDefaults() {
-        IceBlock_Timer = 12000;
+        IceBlock_Timer = 18000;
         Heal_Timer = 1000;
         Frost_Breath_Timer = 3000;
         Block_Event_Timer = 20000;
         requiredFireHits = 6;
         currentFireHits = 0;
+        requiredFrostBerserkHits = 30;
         isFrozen = false;
     }
 
@@ -92,6 +96,17 @@ struct boss_xmas_wolfAI : public ScriptedAI
                 DoCast(m_creature, SPELL_FROST_REFLECTOR);
             }
         }
+
+        if (pSpell->School == SPELL_SCHOOL_FROST && !m_creature->HasAura(SPELL_FROST_BERSERK))
+        {
+            currentFrostBerserkHits++;
+            if (currentFrostBerserkHits >= requiredFrostBerserkHits)
+            {
+                m_creature->MonsterTextEmote("Snowball doesn't like others throwing ice at him.", nullptr);
+                currentFrostBerserkHits = 0;
+                m_creature->AddAura(SPELL_FROST_BERSERK);
+            }
+        }
     }
 
     void UpdateAI(const uint32 diff)
@@ -122,6 +137,8 @@ struct boss_xmas_wolfAI : public ScriptedAI
                 DoCast(m_creature, SPELL_ICE_LOCK);
                 IceBlock_Timer = urand(12000, 18000);
                 isFrozen = true;
+
+                m_creature->MonsterTextEmote("Snowball starts to rest in his cozy ice block.", nullptr);
             } else {
                 IceBlock_Timer -= diff;
             }
@@ -140,8 +157,10 @@ struct boss_xmas_wolfAI : public ScriptedAI
 
             for (auto &player : players) {
                 if (player && player->isAlive() && player != m_creature->getVictim()) {
-                    
-                    float dis{ 4.0F };
+                    player->AddAura(SPELL_FROST_NOVA);
+
+                    // Spawning an ice block where the player is facing
+                    float dis{ 4.0f };
                     float x, y, z;
                     player->GetSafePosition(x, y, z);
                     x += dis * cos(player->GetOrientation());
@@ -149,7 +168,7 @@ struct boss_xmas_wolfAI : public ScriptedAI
                     m_creature->CastSpell(x, y, z, SPELL_SUMMON_ICE_BLOCK, true);
                 }
             }
-            Block_Event_Timer = urand(20000, 40000);
+            Block_Event_Timer = urand(25000, 40000);
         } else {
             Block_Event_Timer -= diff;
         }
