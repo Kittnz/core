@@ -37,6 +37,7 @@ struct boss_xmas_wolfAI : public ScriptedAI
         requiredFireHits = 6;
         currentFireHits = 0;
         requiredFrostBerserkHits = 30;
+        currentFrostBerserkHits = 0;
         isFrozen = false;
     }
 
