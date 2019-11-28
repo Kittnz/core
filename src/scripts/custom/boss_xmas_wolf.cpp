@@ -140,10 +140,13 @@ struct boss_xmas_wolfAI : public ScriptedAI
 
             for (auto &player : players) {
                 if (player && player->isAlive() && player != m_creature->getVictim()) {
-                    float p_x = player->GetPositionX();
-                    float p_y = player->GetPositionY();
-                    m_creature->CastSpell(p_x, p_y, player->GetPositionZ(),
-                                          SPELL_SUMMON_ICE_BLOCK, true);
+                    
+                    float dis{ 4.0F };
+                    float x, y, z;
+                    player->GetSafePosition(x, y, z);
+                    x += dis * cos(player->GetOrientation());
+                    y += dis * sin(player->GetOrientation());
+                    m_creature->CastSpell(x, y, z, SPELL_SUMMON_ICE_BLOCK, true);
                 }
             }
             Block_Event_Timer = urand(20000, 40000);
