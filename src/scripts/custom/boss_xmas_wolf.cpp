@@ -3,6 +3,11 @@
 enum
 {
     SPELL_ICE_LOCK          = 22856,
+    SPELL_FROST_REFLECTOR   = 23131,
+    SPELL_MASS_FROSTBOLT    = 28479,
+    SPELL_FROST_BREATH      = 22479,
+    SPELL_SUMMON_ICE_BLOCK  = 28535,
+    SPELL_FROST_SHOCK       = 23115
 };
 
 struct boss_xmas_wolfAI : public ScriptedAI
@@ -14,6 +19,8 @@ struct boss_xmas_wolfAI : public ScriptedAI
 
     uint32 IceBlock_Timer;
     uint32 Heal_Timer;
+    uint32 Frost_Breath_Timer;
+    uint32 Block_Event_Timer;
 
     int requiredFireHits;
     int currentFireHits;
@@ -22,22 +29,21 @@ struct boss_xmas_wolfAI : public ScriptedAI
     void SetDefaults() {
         IceBlock_Timer = 12000;
         Heal_Timer = 1000;
-        requiredFireHits = 3;
+        Frost_Breath_Timer = 3000;
+        Block_Event_Timer = 20000;
+        requiredFireHits = 6;
         currentFireHits = 0;
         isFrozen = false;
     }
 
     void Aggro(Unit *who)
     {
-        m_creature->PMonsterYell("Leave me alone! I want to eat more snow!");
     }
 
     void Reset()
     {
         SetDefaults();
-        m_creature->RemoveAura(SPELL_ICE_LOCK, EFFECT_INDEX_0);
-        m_creature->RemoveAura(SPELL_ICE_LOCK, EFFECT_INDEX_1);
-        m_creature->RemoveAura(SPELL_ICE_LOCK, EFFECT_INDEX_2);
+        RemoveIceLock();
     }
 
     void JustRespawned()
@@ -47,13 +53,10 @@ struct boss_xmas_wolfAI : public ScriptedAI
 
     void KilledUnit(Unit* victim)
     {
-
     }
 
     void JustDied(Unit* /*pKiller*/)
     {
-        m_creature->PMonsterSay("Fa... Father? Why?");
-
         uint32 m_respawn_delay_Timer = urand(12, 32*HOUR);
 
         /** DRRS */
@@ -67,6 +70,15 @@ struct boss_xmas_wolfAI : public ScriptedAI
         m_creature->SaveRespawnTime();
     }
 
+    void RemoveIceLock()
+    {
+        m_creature->RemoveAura(SPELL_ICE_LOCK, EFFECT_INDEX_0);
+        m_creature->RemoveAura(SPELL_ICE_LOCK, EFFECT_INDEX_1);
+        m_creature->RemoveAura(SPELL_ICE_LOCK, EFFECT_INDEX_2);
+
+        isFrozen = false;
+    }
+
     void SpellHit(Unit* pCaster, const SpellEntry* pSpell)
     {
         if (isFrozen && pSpell->School == SPELL_SCHOOL_FIRE)
@@ -74,14 +86,10 @@ struct boss_xmas_wolfAI : public ScriptedAI
             currentFireHits++;
             if (currentFireHits >= requiredFireHits)
             {
-                m_creature->PMonsterYell("NO! I WASN'T READY YET!");
+                RemoveIceLock();
+                requiredFireHits = urand(3, 12);
 
-                m_creature->RemoveAura(SPELL_ICE_LOCK, EFFECT_INDEX_0);
-                m_creature->RemoveAura(SPELL_ICE_LOCK, EFFECT_INDEX_1);
-                m_creature->RemoveAura(SPELL_ICE_LOCK, EFFECT_INDEX_2);
-
-                requiredFireHits = urand(3, 5);
-                isFrozen = false;
+                DoCast(m_creature, SPELL_FROST_REFLECTOR);
             }
         }
     }
@@ -93,27 +101,54 @@ struct boss_xmas_wolfAI : public ScriptedAI
             {
                 if (m_creature->GetHealthPercent() <= 99.0f)
                     m_creature->SetHealthPercent(m_creature->GetHealthPercent() + 1.0f);
+                else {
+                    RemoveIceLock();
+                    DoCast(m_creature, SPELL_MASS_FROSTBOLT);
+                }
                 Heal_Timer = 1000;
             } else {
                 Heal_Timer -= diff;
             }
+            return;
         }
 
         //Return since we have no target
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
 
-        // IceBlock_Timer
         if (!isFrozen) {
             if (IceBlock_Timer < diff) {
-                m_creature->PMonsterYell("Cold!");
                 currentFireHits = 0;
                 DoCast(m_creature, SPELL_ICE_LOCK);
-                IceBlock_Timer = urand(12000, 16000);
+                IceBlock_Timer = urand(12000, 18000);
                 isFrozen = true;
             } else {
                 IceBlock_Timer -= diff;
             }
+        }
+
+        if (Frost_Breath_Timer < diff) {
+            DoCast(m_creature->getVictim(), SPELL_FROST_BREATH);
+            Frost_Breath_Timer = urand(6000, 16000);
+        } else {
+            Frost_Breath_Timer -= diff;
+        }
+
+        if (Block_Event_Timer < diff) {
+            std::list<Player*> players;
+            GetPlayersWithinRange(players, 50);
+
+            for (auto &player : players) {
+                if (player && player->isAlive() && player != m_creature->getVictim()) {
+                    float p_x = player->GetPositionX();
+                    float p_y = player->GetPositionY();
+                    m_creature->CastSpell(p_x, p_y, player->GetPositionZ(),
+                                          SPELL_SUMMON_ICE_BLOCK, true);
+                }
+            }
+            Block_Event_Timer = urand(20000, 40000);
+        } else {
+            Block_Event_Timer -= diff;
         }
 
         DoMeleeAttackIfReady();
