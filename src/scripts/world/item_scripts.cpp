@@ -945,6 +945,35 @@ bool ItemUse_item_engie(Player* pPlayer, Item* pItem, const SpellCastTargets&)
     return false;
 }
 
+bool ItemUse_item_zeaus(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+{
+    if (!pPlayer)
+        return false;
+
+    if (pPlayer->GetNativeDisplayId() != pPlayer->GetDisplayId()) {
+        pPlayer->DeMorph();
+        return false;
+    }
+
+    uint32 displayid{ 0 };
+
+    switch (pItem->GetEntry())
+    {
+        case 51066: // Flamewaker
+            displayid = 12030;
+            break;
+        case 51067: // Bone Serpent
+            displayid = 8053;
+            break;
+        default:
+            break;
+    }
+
+    pPlayer->SetDisplayId(displayid);
+    ChatHandler(pPlayer).SendSysMessage("This disguise will work until logout.");
+    return false;
+}
+
 void AddSC_item_scripts()
 {
     Script *newscript;
@@ -1148,5 +1177,8 @@ void AddSC_item_scripts()
     newscript->pItemUse = &ItemUse_item_engie;
     newscript->RegisterSelf();
 
-
+    newscript = new Script;
+    newscript->Name = "item_zeaus";
+    newscript->pItemUse = &ItemUse_item_zeaus;
+    newscript->RegisterSelf();
 }
