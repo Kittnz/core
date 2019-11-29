@@ -591,10 +591,7 @@ bool ItemUse_shop_morph_ghost(Player* pPlayer, Item* pItem, const SpellCastTarge
         return false;
     }
 
-    int models[4] = {  14366, 14368, 4629, 146 };
-    int modelid = rand() % 4;
-    pPlayer->SetDisplayId(static_cast<uint32>(models[modelid]));
-
+    pPlayer->SetDisplayId(14368);
     ChatHandler(pPlayer).SendSysMessage("Boo! This disguise will work until logout.");
     return false;
 }
@@ -935,6 +932,9 @@ bool ItemUse_item_engie(Player* pPlayer, Item* pItem, const SpellCastTargets&)
         break;
     case 51055: // Tree Form
         displayid = 9591;
+        break;
+    case 51065: // Shadow
+        displayid = 4629;
         break;
     default:
         break;

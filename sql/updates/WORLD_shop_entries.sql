@@ -26,7 +26,8 @@ replace into shop_categories values
 (5, 'Mounts #3'),
 (6, 'Tabards'),
 (7, 'Roleplay'),
-(8, 'Skins');
+(8, 'Skins'),
+(9, 'Illusions');
 
 replace into shop_items values
 -- Gameplay --------------------------------------------------------------------------------------------
@@ -145,14 +146,15 @@ replace into shop_items values
 (810, 8, 51010, 'Troll: Dark', 125),
 (811, 8, 51011, 'Troll: Ice', 125),
 (812, 8, 50212, 'Gnome: Leper (Male)', 125);
--- Disguises -----------------------------------------------------------------------------------------
--- (900, 9, 51200, 'Goblin', 100),
--- (901, 9, 51201, 'Worgen', 100),
--- (902, 9, 51202, 'Blood Elf', 100),
--- (903, 9, 50017, 'High Elf', 100),
--- (904, 9, 50408, 'Grove Keeper (M) / Dryad (F)', 100),
--- (905, 9, 51205, 'Ghost', 100),
--- (906, 9, 51206, 'Banshee', 100),
--- (907, 9, 51207, 'Druid of the Fang', 100),
--- (908, 9, 51208, 'Succubus', 100);
+-- Illusions -----------------------------------------------------------------------------------------
+ (900, 9, 51200, 'Illusion: Goblin', 100),
+ (901, 9, 51201, 'Illusion: Worgen', 100),
+ (902, 9, 51202, 'Illusion: Blood Elf', 100),
+ (903, 9, 50017, 'Illusion: High Elf', 100),
+ (904, 9, 50408, 'Illusion: Dryad ', 100),
+ (905, 9, 51205, 'Illusion: Ghost', 100),
+ (906, 9, 51206, 'Illusion: Banshee', 100),
+ (907, 9, 51207, 'Illusion: Druid of the Fang', 100),
+ (908, 9, 51208, 'Illusion: Succubus', 100),
+ (909, 9, 51065, 'Illusion: Shadow', 100);
 
