@@ -1521,7 +1521,7 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                             unitTarget->CastSpell(unitTarget, 21167, true);
                         }
                         // Turtle WoW Winter Veil quests:  
-                        if ((m_caster->ToPlayer()->GetQuestStatus(50319) == QUEST_STATUS_INCOMPLETE) || (m_caster->ToPlayer()->GetQuestStatus(50320) == QUEST_STATUS_INCOMPLETE)) // Snowball Wars: Episode I & Episode II
+                        if ((m_caster->ToPlayer()->GetQuestStatus(50319) == QUEST_STATUS_INCOMPLETE) || (m_caster->ToPlayer()->GetQuestStatus(50320) == QUEST_STATUS_INCOMPLETE) || (m_caster->ToPlayer()->GetQuestStatus(50321) == QUEST_STATUS_INCOMPLETE)) // Snowball Wars: Episode I & Episode II
                         {
                             int32 dummy_player{0};
                             switch (unitTarget->getClass())
@@ -1536,6 +1536,13 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                             case CLASS_SHAMAN:  dummy_player = 60007; break;
                             default: break;
                             }
+
+                            //switch (unitTarget->GetObjectGuid())
+                            //{
+                            //case 45: dummy_player = 70000; break; // Xerron
+                            //default: break;
+                            //}
+
                             CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(dummy_player);
                             m_caster->ToPlayer()->KilledMonster(cInfo, ObjectGuid());
                         }             
