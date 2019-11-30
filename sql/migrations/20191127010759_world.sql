@@ -18,7 +18,7 @@ UPDATE creature_template SET npc_flags = 1 WHERE entry = 50637;
 UPDATE creature_template SET scale = 0.4 WHERE entry = 50637;
 UPDATE creature_template SET movement_type = 1 WHERE entry = 50637;
 
-replace into broadcast_text (ID, MaleText) values ('90318', '<The feathers are covered with snow and the hatchling is shivering with cold we chomped.>');
+replace into broadcast_text (ID, MaleText) values ('90318', '<The feathers are covered with snow and the hatchling is shivering with cold.>');
 replace into npc_text (ID, BroadcastTextID0) values ('90318', '90318');
 
 replace into broadcast_text (ID, MaleText) values ('90319', '%s is starting to drink his Egg Nog.');
