@@ -11532,20 +11532,15 @@ bool Unit::IsCaster()
             return false;
         case CLASS_MAGE:
         case CLASS_PRIEST:
-        case CLASS_SHAMAN:
         case CLASS_HUNTER:
         case CLASS_WARLOCK:
             return true;
-        // Pala heal si faveur divine. Sinon CaC.
+        case CLASS_SHAMAN:
+            return !HasSpell(17364); // Stormstrike
         case CLASS_PALADIN:
-            return HasSpell(20216);
-        // Druide caster ?
+            return HasSpell(20216); // Divine Favor
         case CLASS_DRUID:
-            if (HasAura(14858)) // Forme de Selenien
-                return true;
-            if (HasAuraType(SPELL_AURA_MOD_SHAPESHIFT)) // Dans une forme (donc CaC, ou voyage ou aquatique)
-                return false;
-            return true; // Pas en changeforme, on suppose qu'il est casteur.
+            return HasSpell(24858) || HasSpell(18562); // Moonkin Form / Swiftmend
         default:
             return false;
     }
