@@ -308,11 +308,11 @@ start_quest, lock_id, material, sheath, random_property, set_id, max_durability,
 duration, bag_family, disenchant_id, food_type, min_money_loot, max_money_loot, extra_flags, other_team_entry,
 script_name)
 values
- ('51250', '0', '15', '0', 'Miniature Winter Veil Tree', 'Summon a Winter Veil Tree with fluffy branches and beautiful bright lights! 5 charges.', '29166', '2', '64', '1', '0', '0', '0', '-1', '-1', '0',
+ ('51250', '0', '15', '0', 'Miniature Winter Veil Tree', 'Summon a Winter Veil Tree with fluffy branches and beautiful bright lights!', '29166', '2', '64', '1', '0', '0', '0', '-1', '-1', '0',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
- '0', '0', '0', '31726', '0', '-5', '0', '10', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '0', '31726', '0', '-1', '0', '10', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', 'item_winter_tree');
