@@ -19349,18 +19349,22 @@ void Player::RewardSinglePlayerAtKill(Unit* pVictim)
         
 #define WANTED_JOHN 50322
 #define WANTED_ER 50322
+#define DUMMY_PLAYER_JOHN 70004
+#define DUMMY_PLAYER_ER   70005
 
         if ((GetQuestStatus(WANTED_JOHN) == QUEST_STATUS_INCOMPLETE) || (GetQuestStatus(WANTED_ER) == QUEST_STATUS_INCOMPLETE))
         {
             int32 dummy_player{ 0 };
             switch (pVictim->GetObjectGuid())
             {
-            case 22392: dummy_player = 70004; break; // John
-            case 35673: dummy_player = 70005; break; // Er
+            case 22392: dummy_player = DUMMY_PLAYER_JOHN; break; 
+            case 35673: dummy_player = DUMMY_PLAYER_ER; break; 
             default: break;
             }
             CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(dummy_player);
-            KilledMonster(cInfo, ObjectGuid());
+
+            if (cInfo != nullptr)
+                KilledMonster(cInfo, ObjectGuid());
         }
         // Bounty Hunt -->
         

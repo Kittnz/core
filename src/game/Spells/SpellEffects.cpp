@@ -1547,7 +1547,9 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                             }
 
                             CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(dummy_player);
-                            m_caster->ToPlayer()->KilledMonster(cInfo, ObjectGuid());
+
+                            if (cInfo != nullptr)
+                                m_caster->ToPlayer()->KilledMonster(cInfo, ObjectGuid());
                         }             
                         
                     }
