@@ -71,7 +71,7 @@ struct boss_xmas_wolfAI : public ScriptedAI
 
     void JustDied(Unit* /*pKiller*/)
     {
-        uint32 m_respawn_delay_Timer = urand(24*HOUR, 32*HOUR);
+        uint32 m_respawn_delay_Timer = urand(64*HOUR, 72*HOUR);
 
         /** DRRS */
         if (m_creature->GetSpawnFlags() & SPAWN_FLAG_DYNAMIC_RESPAWN_TIME &&
@@ -184,7 +184,7 @@ struct boss_xmas_wolfAI : public ScriptedAI
             Block_Event_Timer = urand(25000, 45000);
 
             for (auto &player : players) {
-                if (player && player->isAlive() && player != m_creature->getVictim() && !player->IsGameMaster() && player->GetDistance2d(m_creature) > 5) {
+                if (player && player->isAlive() && player != m_creature->getVictim() && !player->IsGameMaster() && player->GetDistance2d(m_creature) > 6) {
                     player->AddAura(SPELL_FROST_NOVA);
 
                     // Spawning an ice block facing to the boss
