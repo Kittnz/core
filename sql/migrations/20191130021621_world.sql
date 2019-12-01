@@ -332,3 +332,9 @@ REPLACE INTO `gameobject_template` (`entry`, `patch`, `type`, `displayId`, `name
 
 update quest_template set ZoneOrSort = 1519 where entry = 50322;
 update quest_template set ZoneOrSort = 1637 where entry = 50323;
+
+
+replace into creature_involvedrelation (id, quest, patch_min, patch_max) values ('12480', '50322','10','10');
+replace into creature_involvedrelation (id, quest, patch_min, patch_max) values ('14392', '50323','10','10');
+
+
