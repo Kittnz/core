@@ -19344,7 +19344,7 @@ void Player::RewardSinglePlayerAtKill(Unit* pVictim)
             PlayDirectSound(1204, this); // Play sound of the coin
             AddItem(50015, 1);
         }
-        /*
+        
         // <-- Bounty Hunt 
         
 #define WANTED_JOHN 50322
@@ -19354,14 +19354,14 @@ void Player::RewardSinglePlayerAtKill(Unit* pVictim)
             int32 dummy_player{ 0 };
             switch (pVictim->GetObjectGuid())
             {
-            case 46: dummy_player = 70001; break; // John
+            case 22392: dummy_player = 70004; break; // John
             default: break;
             }
             CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(dummy_player);
             KilledMonster(cInfo, ObjectGuid());
         }
         // Bounty Hunt -->
-        */
+        
     }    
 }
 

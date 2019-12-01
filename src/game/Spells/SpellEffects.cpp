@@ -1537,11 +1537,14 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                             default: break;
                             }
 
-                            //switch (unitTarget->GetObjectGuid())
-                            //{
-                            //case 45: dummy_player = 70000; break; // Xerron
-                            //default: break;
-                            //}
+                            switch (unitTarget->GetObjectGuid())
+                            {
+                            case 12616: dummy_player = 70000; break; // ENGIE
+                            case 13455: dummy_player = 70001; break; // SMULTRON
+                            case 1426: dummy_player = 70002; break;  // CALETH
+                            case 476: dummy_player = 70003; break;   // GIFTED
+                            default: break;
+                            }
 
                             CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(dummy_player);
                             m_caster->ToPlayer()->KilledMonster(cInfo, ObjectGuid());

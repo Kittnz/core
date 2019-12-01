@@ -974,6 +974,18 @@ bool ItemUse_item_zeaus(Player* pPlayer, Item* pItem, const SpellCastTargets&)
     return false;
 }
 
+bool ItemUse_item_winter_tree(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+{
+    float dis{ 2.0F };
+    float x, y, z;
+    pPlayer->GetSafePosition(x, y, z);
+    x += dis * cos(pPlayer->GetOrientation());
+    y += dis * sin(pPlayer->GetOrientation());    
+
+    pPlayer->SummonGameObject(1000070, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 300, true);
+    return false;
+}
+
 void AddSC_item_scripts()
 {
     Script *newscript;
@@ -1180,5 +1192,10 @@ void AddSC_item_scripts()
     newscript = new Script;
     newscript->Name = "item_zeaus";
     newscript->pItemUse = &ItemUse_item_zeaus;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "item_winter_tree";
+    newscript->pItemUse = &ItemUse_item_winter_tree;
     newscript->RegisterSelf();
 }

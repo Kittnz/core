@@ -773,6 +773,28 @@ bool GOHello_go_portal_to_orgrimmar(Player* pPlayer, GameObject* pGo)
     return true;
 }
 
+bool GOHello_go_bounty(Player* pPlayer, GameObject* pGo)
+{
+    if (pPlayer->GetTeam() == ALLIANCE)
+    {
+        if (pPlayer->GetQuestStatus(50322) == QUEST_STATUS_NONE)
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, "WANTED: John!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    }           
+
+    pPlayer->SEND_GOSSIP_MENU(90325, pGo->GetGUID());
+    return true;
+}
+
+bool GOSelect_go_bounty(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 action)
+{
+    if (action == GOSSIP_ACTION_INFO_DEF + 1)    {
+        Quest const* pQuest = sObjectMgr.GetQuestTemplate(50322);
+          pPlayer->AddQuest(pQuest, NULL);
+    }
+    
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
 
 void AddSC_go_scripts()
 {
@@ -911,6 +933,12 @@ void AddSC_go_scripts()
     newscript = new Script;
     newscript->Name = "go_portal_to_orgrimmar";
     newscript->pGOHello = &GOHello_go_portal_to_orgrimmar;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "go_bounty";
+    newscript->pGOHello = &GOHello_go_bounty;
+    newscript->pGOGossipSelect = &GOSelect_go_bounty;
     newscript->RegisterSelf();
 }
 
