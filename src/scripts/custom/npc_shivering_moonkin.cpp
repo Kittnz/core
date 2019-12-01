@@ -1,20 +1,36 @@
 #include "scriptPCH.h"
 
-#define ELUNE_WINTER_QUEST 60009      
+#define ELUNE_WINTER_QUEST 50318     
 #define EGGNOG_ITEM        17198      
+#define MOONKIN_FED        19705      
 
 bool GossipHello_npc_shivering_moonkin(Player* pPlayer, Creature* pCreature)
 {
-    if (pPlayer->GetQuestStatus(ELUNE_WINTER_QUEST) == QUEST_STATUS_INCOMPLETE)
-        if (pPlayer->HasItemCount(EGGNOG_ITEM, 0))
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "<Give moonkin a hot cup of Egg Nog>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-
-    pPlayer->SEND_GOSSIP_MENU(90318, pCreature->GetGUID());
+    if (pCreature->HasAura(MOONKIN_FED))
+    {
+        pCreature->MonsterSay("Hoot!");
+        pCreature->SendPlaySpellVisual(SPELL_VISUAL_KIT_DRINK);
+    }
+    else
+    {
+        if (pPlayer->GetQuestStatus(ELUNE_WINTER_QUEST) == QUEST_STATUS_INCOMPLETE)
+        {
+            if (pPlayer->HasItemCount(EGGNOG_ITEM, 1, 0))
+                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "<Give moonkin a hot cup of Egg Nog>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        }
+        pPlayer->SEND_GOSSIP_MENU(90318, pCreature->GetGUID());
+    }
     return true;
 }
 
 bool GossipSelect_npc_shivering_moonkin(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
 {
+    if (!pCreature)
+        return true;
+
+    if (!pPlayer)
+        return true;
+
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
             pCreature->MonsterSay("Hoot!");
@@ -22,8 +38,12 @@ bool GossipSelect_npc_shivering_moonkin(Player* pPlayer, Creature* pCreature, ui
             pCreature->SendPlaySpellVisual(SPELL_VISUAL_KIT_DRINK);
             pPlayer->AddItem(51248); // Add Snow Covered Feather
             pPlayer->RemoveItemCurrency(EGGNOG_ITEM, 1); 
-    }  
+            pCreature->AddAura(MOONKIN_FED);
 
+            SpellAuraHolder* holder = pCreature->GetSpellAuraHolder(MOONKIN_FED);
+            holder->SetAuraDuration(300000); // 5 minutes
+            holder->UpdateAuraDuration();
+    }  
     pPlayer->CLOSE_GOSSIP_MENU();
     return true;
 }
