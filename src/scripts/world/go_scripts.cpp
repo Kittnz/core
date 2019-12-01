@@ -775,12 +775,26 @@ bool GOHello_go_portal_to_orgrimmar(Player* pPlayer, GameObject* pGo)
 
 bool GOHello_go_bounty(Player* pPlayer, GameObject* pGo)
 {
-    if (pPlayer->GetTeam() == ALLIANCE)
+    switch (pGo->GetEntry()) // Stormwind
     {
-        if (pPlayer->GetQuestStatus(50322) == QUEST_STATUS_NONE)
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, "WANTED: John!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-    }           
+    case 1000075:
 
+        if (pPlayer->GetTeam() == ALLIANCE)
+        {
+            if (pPlayer->GetQuestStatus(50322) == QUEST_STATUS_NONE)
+                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, "WANTED: John!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        }
+        break;
+
+    case 1000076: // Orgrimmar
+
+        if (pPlayer->GetTeam() == HORDE)
+        {
+            if (pPlayer->GetQuestStatus(50323) == QUEST_STATUS_NONE)
+                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, "WANTED: Er!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        }
+        break;
+    }  
     pPlayer->SEND_GOSSIP_MENU(90325, pGo->GetGUID());
     return true;
 }
@@ -790,6 +804,11 @@ bool GOSelect_go_bounty(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 
     if (action == GOSSIP_ACTION_INFO_DEF + 1)    {
         Quest const* pQuest = sObjectMgr.GetQuestTemplate(50322);
           pPlayer->AddQuest(pQuest, NULL);
+    }
+
+    if (action == GOSSIP_ACTION_INFO_DEF + 2) {
+        Quest const* pQuest = sObjectMgr.GetQuestTemplate(50323);
+        pPlayer->AddQuest(pQuest, NULL);
     }
     
     pPlayer->CLOSE_GOSSIP_MENU();
