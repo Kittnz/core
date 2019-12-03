@@ -373,7 +373,7 @@ StartScript, CompleteScript)
 '1', '1', '1', '0', '0', '0',
 '0', '0', '0', '0', '0', '0', '0',
 '0', '0', '0', '0', '0', '0',
-'51250', '0', '0', '0', '1', '0', '0', '0', '0',
+'50663', '0', '0', '0', '1', '0', '0', '0', '0',
 '0', '0', '0', '0', '0', '0', '0', '0',
 '0', '0', '3970', '0', '0', '0', '0', '0',
 '0', '0', '0', '0', '0', '0', '0', '0', '0',
@@ -388,14 +388,19 @@ replace into creature_involvedrelation (id, quest, patch_min, patch_max)
       values
       ('50662','50325','10','10');
 	  
-UPDATE `quest_template` SET `ObjectiveText1`='Throw snowball at Aurrius' WHERE `entry`= 50321;
-UPDATE `quest_template` SET `ObjectiveText2`='Throw snowball at Momo' WHERE `entry`= 50321;
-UPDATE `quest_template` SET `ObjectiveText3`='Throw snowball at Chlothar' WHERE `entry`= 50321;
-UPDATE `quest_template` SET `ObjectiveText4`='Throw snowball at Noxul' WHERE `entry`= 50321;
+UPDATE `quest_template` SET `ObjectiveText1`='Throw snowball at Aurrius' WHERE `entry`= 50325;
+UPDATE `quest_template` SET `ObjectiveText2`='Throw snowball at Momo' WHERE `entry`= 50325;
+UPDATE `quest_template` SET `ObjectiveText3`='Throw snowball at Chlothar' WHERE `entry`= 50325;
+UPDATE `quest_template` SET `ObjectiveText4`='Throw snowball at Noxul' WHERE `entry`= 50325;
 
 
 REPLACE INTO `creature_template` (`entry`, `patch`, `display_id1`, `display_id2`, `display_id3`, `display_id4`, `name`, `subname`, `gossip_menu_id`, `level_min`, `level_max`, `health_min`, `health_max`, `mana_min`, `mana_max`, `armor`, `faction`, `npc_flags`, `speed_walk`, `speed_run`, `scale`, `detection_range`, `call_for_help_range`, `leash_range`, `rank`, `xp_multiplier`, `dmg_min`, `dmg_max`, `dmg_school`, `attack_power`, `dmg_multiplier`, `base_attack_time`, `ranged_attack_time`, `unit_class`, `unit_flags`, `dynamic_flags`, `beast_family`, `trainer_type`, `trainer_spell`, `trainer_class`, `trainer_race`, `ranged_dmg_min`, `ranged_dmg_max`, `ranged_attack_power`, `type`, `type_flags`, `loot_id`, `pickpocket_loot_id`, `skinning_loot_id`, `holy_res`, `fire_res`, `nature_res`, `frost_res`, `shadow_res`, `arcane_res`, `spell_id1`, `spell_id2`, `spell_id3`, `spell_id4`, `spell_list_id`, `pet_spell_list_id`, `gold_min`, `gold_max`, `ai_name`, `movement_type`, `inhabit_type`, `civilian`, `racial_leader`, `regeneration`, `equipment_id`, `trainer_id`, `vendor_id`, `mechanic_immune_mask`, `school_immune_mask`, `flags_extra`, `script_name`) VALUES 
 (70008, 0, 1555, 0, 0, 0, 'DUMMY_PLAYER_CHLOTHAR', 'Snowball_Bounty', 0, 1, 1, 10, 30, 0, 0, 7, 35, 0, 1.2, 1.14286, 1, 20, 5, 0, 0, 1, 2, 2, 0, 44, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524288, ''),
 (70009, 0, 1555, 0, 0, 0, 'DUMMY_PLAYER_NOXUL', 'Snowball_Bounty', 0, 1, 1, 10, 30, 0, 0, 7, 35, 0, 1.2, 1.14286, 1, 20, 5, 0, 0, 1, 2, 2, 0, 44, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524288, '');
 
-12237
+REPLACE INTO `creature_template` (`entry`, `patch`, `display_id1`, `display_id2`, `display_id3`, `display_id4`, `name`, `subname`, `gossip_menu_id`, `level_min`, `level_max`, `health_min`, `health_max`, `mana_min`, `mana_max`, `armor`, `faction`, `npc_flags`, `speed_walk`, `speed_run`, `scale`, `detection_range`, `call_for_help_range`, `leash_range`, `rank`, `xp_multiplier`, `dmg_min`, `dmg_max`, `dmg_school`, `attack_power`, `dmg_multiplier`, `base_attack_time`, `ranged_attack_time`, `unit_class`, `unit_flags`, `dynamic_flags`, `beast_family`, `trainer_type`, `trainer_spell`, `trainer_class`, `trainer_race`, `ranged_dmg_min`, `ranged_dmg_max`, `ranged_attack_power`, `type`, `type_flags`, `loot_id`, `pickpocket_loot_id`, `skinning_loot_id`, `holy_res`, `fire_res`, `nature_res`, `frost_res`, `shadow_res`, `arcane_res`, `spell_id1`, `spell_id2`, `spell_id3`, `spell_id4`, `spell_list_id`, `pet_spell_list_id`, `gold_min`, `gold_max`, `ai_name`, `movement_type`, `inhabit_type`, `civilian`, `racial_leader`, `regeneration`, `equipment_id`, `trainer_id`, `vendor_id`, `mechanic_immune_mask`, `school_immune_mask`, `flags_extra`, `script_name`) VALUES (50663, 0, 12237, 0, 0, 0, 'Hedwig', '', 0, 1, 1, 64, 64, 0, 0, 0, 35, 0, 1, 1.14286, 0.3, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 'npc_scripted_companion');
+
+replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1, spellcooldown_1) values
+(51251, 15, 2, 'Hedwig', 'Happy Winter Veil!', 19091, 2, 1, 28505, 1500);
+replace into custom_pet_entry_relation (item_entry, creature_entry) values 
+('51251', '50663');
