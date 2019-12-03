@@ -3,13 +3,13 @@ replace into `mangos_string` (`entry`, `content_default`) values
 ('50000', 'Don\'t forget to refresh your turtle power by clearing your WDB folder regularly. This is your game cache, and can often fix minor game/display glitches. Always try this before submitting a ticket, thanks!'),
 ('50001', 'Have a suggestion for our staff? Head over to our forums and submit your ideas, get support, or post something for the community to get involved in!'),
 ('50002', 'Visit Stranglethorn Vale and speak to S. J. Erlgadin of Nesingwary\'s Expedition to get your intensive training in Survival.'),
-('50003', 'Dear players, our shop is where you can find exotic wardrobes, mounts, and anything you need to spice up your roleplay! If you want to help support the server, check it out now: turtle-wow.org/donate'),
+('50003', 'You\'re all breathtaking and we invite everyone to join the celebration in Dun Morogh, at Winter Veil Vale! Check out forums for details!'),
 ('50004', 'Greetings! Want to find players to start a RP adventure? Looking for a fun guild to join? Keep up to date with the Turtle WoW community and join our Discord channel: discord.turtle-wow.org'),
 ('50005', 'The world is awaiting you! Type /join World now to connect with the community around you, and find friends for groups, dungeons, and trades!'),
 ('50006', 'Please remember, a GM will never ask for your password, so please do NOT share your password with anyone. Use a secure password, and change it often. Protect your account!'),
 ('50007', 'Donations are a way to help us improve your experience here at Turtle WoW, as well as help pay for general server costs, advertisement campaigns, developers, and overall production. You can find changelogs and videos on our website and social media platforms. Thanks for your continued support!'),
 ('50009', 'We welcome everyone to visit Shimmering Flats and participate to the real Mirage Raceway! Find Fara Boltbreaker in Stormwind or Orgrimmar and learn what’s going on.'),
-('50010', 'Check our shop for donation rewards if you are interested to contribute to this community. Thank you all for supporting Turtle WoW since launch. We couldn’t be here without your help.'),
+('50010', 'You\'re all breathtaking and we invite everyone to join the celebration in Dun Morogh, at Winter Veil Vale! Check out forums for details!'),
 ('50012', 'Remember that the level 1—9 PvP bracket is open for Warsong Gulch in Turtle WoW. '),
 ('50013', 'Do your new fancy shoulderpads look awful with your hair? Would you rather not cover your amazing face with an ugly helmet? Don\'t worry! Find your local barber in Stormwind or Crossroads and buy some hair dyes.'),
 ('50014', 'Donations are a way to help us improve your experience here at Turtle WoW, as well as help pay for general server costs, advertisement campaigns, developers, and overall production. You can find changelogs and videos on our website and social media platforms. Thanks for your continued support!'),
@@ -18,7 +18,7 @@ replace into `mangos_string` (`entry`, `content_default`) values
 ('50017', 'Speak with Karn Deepeye in Orgrimmar or Tarun Swifteagle in Stormwind in order to become diplomats! You will be able to group, trade and speak with members of the other faction!'),
 ('50018', 'World chat is united! Please /join Horde or /join Alliance for faction-only talks.'),
 ('50019', 'Please support Turtle WoW by using our official launcher. It\'s one way to help us to advertise our project! Learn more: turtle-wow.org/launcher'),
-('50020', 'We welcome everyone to visit Shimmering Flats and participate to the real Mirage Raceway! Find Fara Boltbreaker in Stormwind or Orgrimmar and learn what’s going on.');
+('50020', 'You\'re all breathtaking and we invite everyone to join the celebration in Dun Morogh, at Winter Veil Vale! Check out forums for details!');
 replace into `autobroadcast` (`string_Id`) values
 ('50001'),
 ('50002'),
@@ -35,4 +35,5 @@ replace into `autobroadcast` (`string_Id`) values
 ('50016'),
 ('50017'),
 ('50018'),
-('50019');
+('50019'),
+('50020');
