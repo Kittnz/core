@@ -5728,6 +5728,16 @@ void Spell::EffectInebriate(SpellEffectIndex /*eff_idx*/)
     else
         currentDrunk += drunkMod;
     player->SetDrunkValue(currentDrunk, m_CastItem ? m_CastItem->GetEntry() : 0);
+
+    // Turtle WoW Winter Veil quests:  
+    if (player->ToPlayer()->GetQuestStatus(50328) == QUEST_STATUS_INCOMPLETE) // The Winter Veil Gourmet
+    {
+            int32 dummy_player{ 70010 }; // DUMMY_PLAYER_YOURSELF 
+            CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(dummy_player);
+
+            if (cInfo != nullptr)
+                player->ToPlayer()->KilledMonster(cInfo, ObjectGuid());
+    }
 }
 
 void Spell::EffectFeedPet(SpellEffectIndex eff_idx)

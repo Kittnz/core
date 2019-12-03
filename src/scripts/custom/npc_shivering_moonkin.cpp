@@ -67,6 +67,40 @@ bool GossipSelect_npc_frosty(Player* pPlayer, Creature* pCreature, uint32 /*uiSe
     return true;
 }
 
+struct npc_chihkoaAI : public ScriptedPetAI
+{
+    npc_chihkoaAI(Creature* pCreature) : ScriptedPetAI(pCreature)
+    {
+    }
+
+    void ReceiveEmote(Player* pPlayer, uint32 uiEmote)
+    {
+        if (m_creature && m_creature->isAlive()) 
+        {
+            if (uiEmote == TEXTEMOTE_DANCE)
+                m_creature->MonsterSay("Yeee-ha!");
+
+            if (pPlayer->ToPlayer()->GetQuestStatus(50328) == QUEST_STATUS_INCOMPLETE) 
+            {
+                if (pPlayer->ToPlayer()->GetDrunkValue() > 0)
+                {
+                    int32 dummy_player{ 70011 };
+                    CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(dummy_player);
+
+                    if (cInfo != nullptr)
+                        pPlayer->ToPlayer()->KilledMonster(cInfo, ObjectGuid());
+                }
+
+            }
+        }
+    }
+};
+
+CreatureAI* GetAI_npc_chihkoa(Creature* pCreature)
+{
+    return new npc_chihkoaAI(pCreature);
+}
+
 void AddSC_npc_shivering_moonkin()
 {
     Script *newscript;
@@ -80,5 +114,11 @@ void AddSC_npc_shivering_moonkin()
     newscript->Name = "npc_frosty";
     newscript->pGossipHello = &GossipHello_npc_frosty;
     newscript->pGossipSelect = &GossipSelect_npc_frosty;
+    newscript->RegisterSelf();
+
+
+    newscript = new Script;
+    newscript->Name = "npc_chihkoa";
+    newscript->GetAI = &GetAI_npc_chihkoa;
     newscript->RegisterSelf();
 }
