@@ -10,6 +10,7 @@ enum
     SPELL_FROST_NOVA        = 865,
     SPELL_FROST_BERSERK     = 28498,
     SPELL_CROWD_PUMMEL      = 10887,
+    SPELL_KNOCK_SNOWBALL    = 25677,
 
     SOUND_FROST_WARD_TARGET = 3075,
 
@@ -28,6 +29,7 @@ struct boss_xmas_wolfAI : public ScriptedAI
     uint32 Frost_Breath_Timer;
     uint32 Block_Event_Timer;
     uint32 Kick_Timer;
+    uint32 Knock_Snowball_Timer;
 
     int requiredFireHits;
     int currentFireHits;
@@ -42,6 +44,7 @@ struct boss_xmas_wolfAI : public ScriptedAI
         Frost_Breath_Timer = 3000;
         Block_Event_Timer = 22000;
         Kick_Timer = 3000;
+        Knock_Snowball_Timer = 2000;
         requiredFireHits = 4;
         currentFireHits = 0;
         requiredFrostBerserkHits = 30;
@@ -152,6 +155,20 @@ struct boss_xmas_wolfAI : public ScriptedAI
             } else {
                 IceBlock_Timer -= diff;
             }
+        }
+
+        if (Knock_Snowball_Timer < diff)
+        {
+            if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0)) {
+                if (pTarget->IsCaster()) {
+                    DoCastSpellIfCan(pTarget, SPELL_KNOCK_SNOWBALL);
+                    Knock_Snowball_Timer = 2000;
+                } else {
+                    Knock_Snowball_Timer = 500;
+                }
+            }
+        } else {
+            Knock_Snowball_Timer -= diff;
         }
 
         if (Frost_Breath_Timer < diff) {
