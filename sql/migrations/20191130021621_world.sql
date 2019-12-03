@@ -404,3 +404,6 @@ replace into item_template (entry, class, subclass, name, description, display_i
 (51251, 15, 2, 'Hedwig', 'Happy Winter Veil!', 19091, 2, 1, 28505, 1500);
 replace into custom_pet_entry_relation (item_entry, creature_entry) values 
 ('51251', '50663');
+
+
+REPLACE INTO `gameobject_template` (`entry`, `patch`, `type`, `displayId`, `name`, `faction`, `flags`, `size`, `data0`, `data1`, `data2`, `data3`, `data4`, `data5`, `data6`, `data7`, `data8`, `data9`, `data10`, `data11`, `data12`, `data13`, `data14`, `data15`, `data16`, `data17`, `data18`, `data19`, `data20`, `data21`, `data22`, `data23`, `mingold`, `maxgold`, `script_name`) VALUES (1000078, 0, 1, 2091, 'Frosty\'s Jukebox', 0, 0, 0.5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_winter_radio');

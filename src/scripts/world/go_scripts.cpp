@@ -752,6 +752,27 @@ bool GOSelect_go_turtle_radio(Player* pPlayer, GameObject* pGo, uint32 sender, u
     return true;
 }
 
+bool GOHello_go_winter_radio(Player* pPlayer, GameObject* pGo)
+{
+    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "<Switch: 100.3 FM>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "<Switch: 101.5 FM>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+
+
+    pPlayer->SEND_GOSSIP_MENU(90300, pGo->GetGUID());
+    return true;
+}
+
+bool GOSelect_go_winter_radio(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 action)
+{
+    if (action == GOSSIP_ACTION_INFO_DEF + 1)
+        pPlayer->PlayDirectMusic(4516);
+    if (action == GOSSIP_ACTION_INFO_DEF + 2)
+        pPlayer->PlayDirectMusic(8440);
+
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
 GameObjectAI* GetAI_go_cot_exit_trigger(GameObject* gameobject)
 {
     return new go_cot_exit_trigger(gameobject);
@@ -958,6 +979,12 @@ void AddSC_go_scripts()
     newscript->Name = "go_bounty";
     newscript->pGOHello = &GOHello_go_bounty;
     newscript->pGOGossipSelect = &GOSelect_go_bounty;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "go_winter_radio";
+    newscript->pGOHello = &GOHello_go_winter_radio;
+    newscript->pGOGossipSelect = &GOSelect_go_winter_radio;
     newscript->RegisterSelf();
 }
 
