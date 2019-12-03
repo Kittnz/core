@@ -1539,10 +1539,14 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
 
                             switch (unitTarget->GetObjectGuid())
                             {
-                            case 12616: dummy_player = 70000; break; // ENGIE
-                            case 13455: dummy_player = 70001; break; // SMULTRON
-                            case 1426: dummy_player = 70002; break;  // CALETH
-                            case 476: dummy_player = 70003; break;   // GIFTED
+                            case 12616: dummy_player = 70000; break;   // ENGIE
+                            case 13455: dummy_player = 70001; break;   // SMULTRON
+                            case 1426: dummy_player = 70002;  break;   // CALETH
+                            case 476: dummy_player = 70003;   break;   // GIFTED
+                            case 21990: dummy_player = 70006; break;   // Aurrius
+                            case 8542: dummy_player = 70007; break;    // Aurrius
+                            case 12605: dummy_player = 70008; break;   // Chlothar
+                            case 13827: dummy_player = 70009; break;   // Noxul
                             default: break;
                             }
 
