@@ -325,6 +325,7 @@ values
  
 update item_template set armor = 20, frost_res = 1 where entry in ( 50061, 50059, 50060, 51061, 51062);
  
+ delete from item_loot_template where entry = 51060 and item = 17712;
 replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid, mincountOrRef, maxcount) values
 (51060, 50061, 0, 1, 1, 1), -- Red Winter Vest 
 (51060, 21524, 0, 1, 1, 1), -- Red Winter Hat 
@@ -338,9 +339,8 @@ replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid, minc
 
 (51060, 21301, 0, 1, 1, 1), -- Green Helper Box (Pet)
 (51060, 21305, 0, 1, 1, 1), -- Red Helper Box (Pet)
-(51060, 21309, 0, 1, 1, 1), -- Snowman Kit (Pet)
+(51060, 21309, 0, 1, 1, 1); -- Snowman Kit (Pet)
 
-(51060, 17712, 0, 1, 1, 1); -- Snowman Disguise Kit (Morph)
 
 -- TODO MORE ITEMS ^
 

@@ -32,4 +32,5 @@ replace into reference_loot_template (entry, item, chanceorquestchance, groupid,
 (150112, 2801, 0, 1, 1, 1),
 (150112, 2099, 0, 1, 1, 1),
 (150112, 1168, 0, 1, 1, 1),
+(150112, 21044, 0, 1, 1, 1),
 (150112, 944, 0, 1, 1, 1);

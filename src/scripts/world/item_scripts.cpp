@@ -936,6 +936,9 @@ bool ItemUse_item_engie(Player* pPlayer, Item* pItem, const SpellCastTargets&)
     case 51065: // Shadow
         displayid = 4629;
         break;
+    case 51253: // Furbolg
+        displayid = 6746;
+        break;
     default:
         break;
     }
