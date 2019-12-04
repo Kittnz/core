@@ -4907,6 +4907,9 @@ void Player::RepopAtGraveyard()
     } else if (GetZoneId() == 1941 || GetZoneId() == 2366) { // CoT and The Black Morass
         TeleportTo(1, -8149.983398f, -4616.60887f, -126.431488f, 1.113609f);
         isCustomGraveyard = true;
+    } else if ((GetZoneId() == 1 && GetAreaId() == 1) || (GetZoneId() == 11 && GetAreaId() == 2365) && GetPositionY() > 380) {
+        TeleportTo(0, -4829.64f, 596.77f, 438.9f, 3.913609f); // Winter Veil Vale
+        isCustomGraveyard = true;
     }
 
     // if no grave found, stay at the current location
