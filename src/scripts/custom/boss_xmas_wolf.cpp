@@ -6,11 +6,13 @@ enum
     SPELL_FROST_REFLECTOR   = 23131,
     SPELL_MASS_FROSTBOLT    = 28479,
     SPELL_FROST_BREATH      = 22479,
-    SPELL_SUMMON_ICE_BLOCK  = 28535,
+    SPELL_SUMMON_ICE_BLOCK  = 28535, // Using actual gobject summoning now
     SPELL_FROST_NOVA        = 865,
     SPELL_FROST_BERSERK     = 28498,
     SPELL_CROWD_PUMMEL      = 10887,
     SPELL_KNOCK_SNOWBALL    = 25677,
+    SPELL_BLIZZARD          = 26607,
+    SPELL_FROST_NOVA_DMG    = 30094,
 
     SOUND_FROST_WARD_TARGET = 3075,
 
@@ -30,6 +32,7 @@ struct boss_xmas_wolfAI : public ScriptedAI
     uint32 Block_Event_Timer;
     uint32 Kick_Timer;
     uint32 Knock_Snowball_Timer;
+    uint32 Blizzard_Timer;
 
     int requiredFireHits;
     int currentFireHits;
@@ -45,7 +48,8 @@ struct boss_xmas_wolfAI : public ScriptedAI
         Block_Event_Timer = 22000;
         Kick_Timer = 3000;
         Knock_Snowball_Timer = 2000;
-        requiredFireHits = 4;
+        Blizzard_Timer = 4000;
+        requiredFireHits = 6;
         currentFireHits = 0;
         requiredFrostBerserkHits = 30;
         currentFrostBerserkHits = 0;
@@ -104,7 +108,7 @@ struct boss_xmas_wolfAI : public ScriptedAI
             if (currentFireHits >= requiredFireHits)
             {
                 RemoveIceLock();
-                requiredFireHits = urand(4, 12);
+                requiredFireHits = urand(6, 18);
 
                 DoCast(m_creature, SPELL_FROST_REFLECTOR);
             }
@@ -162,9 +166,9 @@ struct boss_xmas_wolfAI : public ScriptedAI
             if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0)) {
                 if (pTarget->IsCaster()) {
                     DoCastSpellIfCan(pTarget, SPELL_KNOCK_SNOWBALL);
-                    Knock_Snowball_Timer = 2000;
+                    Knock_Snowball_Timer = 1500;
                 } else {
-                    Knock_Snowball_Timer = 500;
+                    Knock_Snowball_Timer = 200;
                 }
             }
         } else {
@@ -194,11 +198,26 @@ struct boss_xmas_wolfAI : public ScriptedAI
             Kick_Timer -= diff;
         }
 
+        if (Blizzard_Timer < diff) {
+            if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0)) {
+                if (pTarget->IsCaster()) {
+                    DoCast(pTarget, SPELL_BLIZZARD);
+                    Blizzard_Timer = 8000;
+                } else {
+                    Blizzard_Timer = 150;
+                }
+            }
+        } else {
+            Blizzard_Timer -= diff;
+        }
+
         if (Block_Event_Timer < diff) {
+            DoCastAOE(SPELL_FROST_NOVA_DMG);
+
             std::list<Player*> players;
             GetPlayersWithinRange(players, 50);
 
-            Block_Event_Timer = urand(25000, 45000);
+            Block_Event_Timer = urand(24000, 42000);
 
             for (auto &player : players) {
                 if (player && player->isAlive() && player != m_creature->getVictim() && !player->IsGameMaster() && player->GetDistance2d(m_creature) > 6) {
