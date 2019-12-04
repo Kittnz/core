@@ -1521,7 +1521,7 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                             unitTarget->CastSpell(unitTarget, 21167, true);
                         }
                         // Turtle WoW Winter Veil quests:  
-                        if ((m_caster->ToPlayer()->GetQuestStatus(50319) == QUEST_STATUS_INCOMPLETE) || (m_caster->ToPlayer()->GetQuestStatus(50320) == QUEST_STATUS_INCOMPLETE) || (m_caster->ToPlayer()->GetQuestStatus(50321) == QUEST_STATUS_INCOMPLETE)) // Snowball Wars: Episode I & Episode II
+                        if ((m_caster->ToPlayer()->GetQuestStatus(50319) == QUEST_STATUS_INCOMPLETE) || (m_caster->ToPlayer()->GetQuestStatus(50320) == QUEST_STATUS_INCOMPLETE)) // Snowball Wars: Episode I & Episode II
                         {
                             int32 dummy_player{0};
                             switch (unitTarget->getClass())
@@ -1537,25 +1537,34 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                             default: break;
                             }
 
+                            CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(dummy_player);
+
+                            if (cInfo != nullptr)
+                                m_caster->ToPlayer()->KilledMonster(cInfo, ObjectGuid());
+                        }
+
+                        if (m_caster->ToPlayer()->GetQuestStatus(50321) == QUEST_STATUS_INCOMPLETE) // The Icy Menace
+                        {
+                            int32 dummy_player{0};
+
                             switch (unitTarget->GetObjectGuid())
                             {
-                            case 12616: dummy_player = 70000; break;   // ENGIE
-                            case 13455: dummy_player = 70001; break;   // SMULTRON
-                            case 1426: dummy_player = 70002;  break;   // CALETH
-                            case 476: dummy_player = 70003;   break;   // GIFTED
-                            case 21990: dummy_player = 70006; break;   // Aurrius
-                            case 8542: dummy_player = 70007; break;    // Aurrius
-                            case 12605: dummy_player = 70008; break;   // Chlothar
-                            case 13827: dummy_player = 70009; break;   // Noxul
-                            default: break;
+                                case 12616: dummy_player = 70000; break;   // ENGIE
+                                case 13455: dummy_player = 70001; break;   // SMULTRON
+                                case 1426: dummy_player = 70002;  break;   // CALETH
+                                case 476: dummy_player = 70003;   break;   // GIFTED
+                                case 21990: dummy_player = 70006; break;   // Aurrius
+                                case 8542: dummy_player = 70007; break;    // Aurrius
+                                case 12605: dummy_player = 70008; break;   // Chlothar
+                                case 13827: dummy_player = 70009; break;   // Noxul
+                                default: break;
                             }
 
                             CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(dummy_player);
 
                             if (cInfo != nullptr)
                                 m_caster->ToPlayer()->KilledMonster(cInfo, ObjectGuid());
-                        }             
-                        
+                        }
                     }
                     return;
                 }
