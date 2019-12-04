@@ -4908,7 +4908,7 @@ void Player::RepopAtGraveyard()
         TeleportTo(1, -8149.983398f, -4616.60887f, -126.431488f, 1.113609f);
         isCustomGraveyard = true;
     } else if ((GetZoneId() == 1 && GetAreaId() == 1) || (GetZoneId() == 11 && GetAreaId() == 2365) && GetPositionY() > 380) {
-        TeleportTo(0, -4829.64f, 596.77f, 438.9f, 3.913609f); // Winter Veil Vale
+        TeleportTo(0, -4828.36f, 587.81f, 428.40f, 0.76f); // Winter Veil Vale
         isCustomGraveyard = true;
     }
 
