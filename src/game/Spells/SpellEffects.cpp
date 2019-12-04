@@ -1556,7 +1556,7 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                                 case 21990: dummy_player = 70006; break;   // Aurrius
                                 case 8542: dummy_player = 70007; break;    // Momo
                                 case 12605: dummy_player = 70008; break;   // Chlothar
-                                case 13827: dummy_player = 70009; break;   // Noxul
+                                case 16667: dummy_player = 70009; break;   // Edd
                                 default: break;
                             }
 
