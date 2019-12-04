@@ -493,8 +493,9 @@ StartScript, CompleteScript)
  ('50326', '0', '2', '0', '1', '60', '60', '0', '0', '0', '0',
 '0', '0', '0', '0', '0','0',
 '0', '0', '0', '0', '0', '0', '0', '0', '0',
-'0', '0', '0', 'Out of Booze (TEST)', 'Grizzlore and Icepaw are out of Fireawater, visit Winterfall Village and bring them some more.', 'Bring Icepaw and Grizzlore 1 stack of Winterfell Firewater.', 'Great job!', 'Got our firewater?', '', '', '',
-'', '', '12820', '0', '0', '0', '20', '0', '0',
+'0', '0', '0', 'Grizzlore Wants Thunder', 'Grizzlore - me! I want more booze! <hick!>\n\nThunder… <hick!> …brew! Lager… <hick!>\n\nGrimbooze brews it well. You go there. Westfall! <hick!>
+', 'Acquire Thunderbrew Lager from Grombooze Thunderbrew in Westfall for Grizzlore.', 'Rawwrr!! More booze! Me like!!', 'Westfallen Dagger Hills is where Grimmbooze brews his lager… hey, you have it?', '', '', '',
+'', '', '1262', '0', '0', '0', '1', '0', '0',
 '0', '0', '0', '0', '0', '0', '0', '0',
 '0', '0', '0', '0', '0', '0',
 '0', '0', '0', '0', '0', '0',
@@ -513,6 +514,7 @@ replace into creature_questrelation (id, quest, patch_min, patch_max)
 replace into creature_involvedrelation (id, quest, patch_min, patch_max)
       values
       ('51254','50326','10','10');
+
 
 
 replace into quest_template (
@@ -537,7 +539,7 @@ StartScript, CompleteScript)
  ('50328', '0', '2', '0', '1', '60', '60', '0', '0', '0', '0',
 '0', '0', '0', '0', '0','0',
 '0', '0', '0', '0', '0', '0', '0', '0', '0',
-'0', '0', '0', 'Dancing on Ice', 'During the Feast of Winter Veil, sample the most famous Winter Veil drink — Greatfather\'s Winter Ale and dance with me!', 'Get drunk to boots and /dance with Chickoa Tallhair!', 'Yaaa-ho!', 'Did you like my favorite ale?', '', 'Sample Greatfather\'s Winter Ale', 'Dance with Chickoa Tallhair while drunk',
+'0', '0', '0', 'Jolly Holly Dances Prolly', 'Hey there, pretty sweet cheeks! Wouldn\'t you like to have some real fun with jolly Holly right here, my dear? <laughs>\n\nOf course you would, I can see that in your eyes right there. But … you do know that there\'s an ultimate intimate fun is about to follow, don\'t you? Good sweet brews and drinks!\n\nBest way to have some jolly fun with Holly!\n\nNow, drink up and do me … a good long sweety dance, my li\'l marmelade! Haha!', 'Get smashed with Holly and after that /dance with her.', 'Yaaa-ho!', 'Marry Winter Veil!', '', 'Get drunk to boot', 'Dance with Holly Tallhair',
 '', '', '0', '0', '0', '0', '0', '0', '0',
 '0', '0', '0', '0', '0', '0', '0', '0',
 '0', '0', '0', '0', '0', '0',
@@ -574,3 +576,8 @@ replace into creature_questrelation (id, quest, patch_min, patch_max)
 	 
 	 update quest_template set ZoneorSort = 2 where entry = 50328;
 	 update quest_template set ZoneorSort = 2 where entry = 50326;
+	 
+	 
+	 replace into creature_equip_template (entry, equipentry1) values (50649, 1906);
+	 
+	 update creature_template set equipment_id = 50649 where entry = 50649;
