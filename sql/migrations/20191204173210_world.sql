@@ -19,7 +19,7 @@ update creature_template set equipment_id = 51261 where entry = 51261;
 -- Smutrone's pet.
 
 replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1, spellcooldown_1) values
-(51260, 15, 2, 'Prince Herman II', '', 5689, 5, 3, 28505, 1500);
+(51260, 15, 2, 'Prince Herman II', 'In loving memory of our favourite raiding kitty.', 5689, 5, 3, 28505, 1500);
 replace into creature_template (entry, display_id1, display_id2, display_id3, name, subname, level_min, level_max, health_min, health_max, faction, script_name, scale) values
 ('51264', '5586', '5586', '5586', 'Prince Herman II', '', '1', '1', '64', '64', '35', '', 0.7);
 replace into custom_pet_entry_relation (item_entry, creature_entry) values 
