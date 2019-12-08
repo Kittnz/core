@@ -440,35 +440,21 @@ void DarkmoonFaire::Disable()
 
 }
 
-uint32 DarkmoonFaire::FindMonthFirstMonday(bool &foireAlly, struct tm *timeinfo)
-{
-    foireAlly = timeinfo->tm_mon % 2;
-    // 36 = 7*5 + 1 (+1 because tm_mday starts with 1)
-    // tm_wday: days since Sunday [0-6]
-    uint8 firstDayType = (36 - timeinfo->tm_mday + timeinfo->tm_wday) % 7;
-    return (8 - firstDayType) % 7 + 1;
-}
-
 DarkmoonState DarkmoonFaire::GetDarkmoonState()
 {
-    bool faireAlly = true;
     time_t rawtime;
     time(&rawtime);
 
     struct tm *timeinfo;
     timeinfo = localtime(&rawtime);
 
-    auto firstMonday = FindMonthFirstMonday(faireAlly, timeinfo);
-    auto tm_mday = uint32(timeinfo->tm_mday);
+    // Even week of the year = Horde, otherwise Alliance
+    bool isHorde = (((timeinfo->tm_yday - timeinfo->tm_wday + 7) / 7) % 2) == 0;
 
-    if (tm_mday + 3 < firstMonday)
-        return DARKMOON_NONE;
-    if (tm_mday < firstMonday)
-        return faireAlly ? DARKMOON_A2_INSTALLATION : DARKMOON_H2_INSTALLATION;
-    if (tm_mday < firstMonday + 7)
-        return faireAlly ? DARKMOON_A2 : DARKMOON_H2;
-
-    return DARKMOON_NONE;
+    if (timeinfo->tm_wday == 0) // Sunday is installation time! :P
+        return isHorde ? DARKMOON_H2_INSTALLATION : DARKMOON_A2_INSTALLATION;
+    else
+        return isHorde ? DARKMOON_H2 : DARKMOON_A2;
 }
 
 /*
