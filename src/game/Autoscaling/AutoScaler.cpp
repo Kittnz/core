@@ -109,6 +109,8 @@ void AutoScaler::ScaleCreature(Creature* creature, uint32 playerCount, uint32 ma
             }
             break;
         case 11662: // Flamewaker Priest, Sulfuron Harbringer add
+        case 11663: // Majordomo Executus healer
+        case 11664: // Majordomo Executus elite
             if (playerCount < 30) {
                 specificHPFactor = 0.75f;
                 specificDmgFactor = 0.5f;
