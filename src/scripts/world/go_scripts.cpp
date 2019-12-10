@@ -812,7 +812,7 @@ bool GOHello_go_bounty(Player* pPlayer, GameObject* pGo)
         if (pPlayer->GetTeam() == HORDE)
         {
             if (pPlayer->GetQuestStatus(50331) == QUEST_STATUS_NONE)
-                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, "WANTED: Aurrius!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, "WANTED: Aristoxenus!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
         }
         break;
     }  
