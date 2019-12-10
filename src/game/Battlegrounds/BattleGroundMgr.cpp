@@ -478,10 +478,11 @@ void BattleGroundQueue::FillPlayersToBG(BattleGround* bg, BattleGroundBracketId 
     int32 hordeFree = bg->GetFreeSlotsForTeam(HORDE);
     int32 aliFree   = bg->GetFreeSlotsForTeam(ALLIANCE);
 
-    int8 bg_differential = 1; // default differential between Horde & Alliance
+    int8 bg_differential = 0; // default differential between Horde & Alliance
 
-    //if (bg->GetTypeID() == BATTLEGROUND_AV)
-    //  bg_differential = 3;    // custom differential between Horde & Alliance for Alterac Valley
+    if (bg->GetTypeID() == BATTLEGROUND_AV)
+        bg_differential = 3;    // custom differential between Horde & Alliance for Alterac Valley
+
 
     //iterator for iterating through bg queue
     GroupsQueueType::const_iterator Ali_itr = m_QueuedGroups[bracket_id][BG_QUEUE_NORMAL_ALLIANCE].begin();
@@ -573,10 +574,6 @@ bool BattleGroundQueue::CheckPremadeMatch(BattleGroundBracketId bracket_id, uint
                 }
             }
         }
-    //try to invite same number of players - this cycle may cause longer wait time even if there are enough players in queue, but we want ballanced bg
-    uint32 j = BG_TEAM_ALLIANCE;
-    if (m_SelectionPools[BG_TEAM_HORDE].GetPlayerCount() < m_SelectionPools[BG_TEAM_ALLIANCE].GetPlayerCount())
-        j = BG_TEAM_HORDE;
 
     //allow 1v0 if debug bg
     if (sBattleGroundMgr.isTesting() && (m_SelectionPools[BG_TEAM_ALLIANCE].GetPlayerCount() || m_SelectionPools[BG_TEAM_HORDE].GetPlayerCount()))
@@ -640,8 +637,8 @@ bool BattleGroundQueue::CheckNormalMatch(BattleGroundBracketId bracket_id, uint3
                 if (!m_SelectionPools[j].AddGroup(*(itr_team[j]), m_SelectionPools[(j + 1) % BG_TEAMS_COUNT].GetPlayerCount()))
                     break;
         }
-        // do not allow to start bg with more than 2 players more on 1 faction
-        if (abs((int32)(m_SelectionPools[BG_TEAM_HORDE].GetPlayerCount() - m_SelectionPools[BG_TEAM_ALLIANCE].GetPlayerCount())) > 2)
+        // do not allow to start bg with more than 1 players more on 1 faction
+        if (abs((int32)(m_SelectionPools[BG_TEAM_HORDE].GetPlayerCount() - m_SelectionPools[BG_TEAM_ALLIANCE].GetPlayerCount())) > 1)
             return false;
     }
     //allow 1v0 if debug bg
