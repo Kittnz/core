@@ -802,8 +802,8 @@ bool GOHello_go_bounty(Player* pPlayer, GameObject* pGo)
 
         if (pPlayer->GetTeam() == ALLIANCE)
         {
-            if (pPlayer->GetQuestStatus(50322) == QUEST_STATUS_NONE)
-                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, "WANTED: John!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            if (pPlayer->GetQuestStatus(50332) == QUEST_STATUS_NONE)
+                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, "WANTED: Azteq!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
         }
         break;
 
@@ -811,8 +811,8 @@ bool GOHello_go_bounty(Player* pPlayer, GameObject* pGo)
 
         if (pPlayer->GetTeam() == HORDE)
         {
-            if (pPlayer->GetQuestStatus(50323) == QUEST_STATUS_NONE)
-                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, "WANTED: Er!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+            if (pPlayer->GetQuestStatus(50331) == QUEST_STATUS_NONE)
+                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, "WANTED: Aurrius!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
         }
         break;
     }  
@@ -823,12 +823,12 @@ bool GOHello_go_bounty(Player* pPlayer, GameObject* pGo)
 bool GOSelect_go_bounty(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 action)
 {
     if (action == GOSSIP_ACTION_INFO_DEF + 1)    {
-        Quest const* pQuest = sObjectMgr.GetQuestTemplate(50322);
+        Quest const* pQuest = sObjectMgr.GetQuestTemplate(50332);
           pPlayer->AddQuest(pQuest, NULL);
     }
 
     if (action == GOSSIP_ACTION_INFO_DEF + 2) {
-        Quest const* pQuest = sObjectMgr.GetQuestTemplate(50323);
+        Quest const* pQuest = sObjectMgr.GetQuestTemplate(50331);
         pPlayer->AddQuest(pQuest, NULL);
     }
     

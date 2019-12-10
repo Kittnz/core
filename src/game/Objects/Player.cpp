@@ -19352,13 +19352,24 @@ void Player::RewardSinglePlayerAtKill(Unit* pVictim)
 #define DUMMY_PLAYER_JOHN 70004
 #define DUMMY_PLAYER_ER   70005
 
-        if ((GetQuestStatus(WANTED_JOHN) == QUEST_STATUS_INCOMPLETE) || (GetQuestStatus(WANTED_ER) == QUEST_STATUS_INCOMPLETE))
+#define WANTED_AZTEQ 50331
+#define WANTED_AURRIUS 50332
+#define DUMMY_PLAYER_AZTEQ 70014
+#define DUMMY_PLAYER_AURRIUS   70015
+
+        if (
+                (GetQuestStatus(WANTED_JOHN) == QUEST_STATUS_INCOMPLETE) || (GetQuestStatus(WANTED_ER) == QUEST_STATUS_INCOMPLETE) ||
+                (GetQuestStatus(WANTED_AZTEQ) == QUEST_STATUS_INCOMPLETE) || (GetQuestStatus(WANTED_AURRIUS) == QUEST_STATUS_INCOMPLETE)
+                )
+
         {
             int32 dummy_player{ 0 };
             switch (pVictim->GetObjectGuid())
             {
-            case 22392: dummy_player = DUMMY_PLAYER_JOHN; break; 
-            case 35673: dummy_player = DUMMY_PLAYER_ER; break; 
+            case 22392: dummy_player = DUMMY_PLAYER_JOHN; break;
+            case 35673: dummy_player = DUMMY_PLAYER_ER; break;
+            case 21990: dummy_player = DUMMY_PLAYER_AURRIUS; break;
+            case 33397: dummy_player = DUMMY_PLAYER_AZTEQ; break;
             default: break;
             }
             CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(dummy_player);
