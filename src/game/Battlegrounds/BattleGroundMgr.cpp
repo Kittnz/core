@@ -1399,7 +1399,6 @@ void BattleGroundMgr::SendToBattleGround(Player *pl, uint32 instanceId, BattleGr
         bg->GetTeamStartLoc(team, x, y, z, O);
 
         DETAIL_LOG("BATTLEGROUND: Sending %s to map %u, X %f, Y %f, Z %f, O %f", pl->GetName(), mapid, x, y, z, O);
-        pl->RemoveAllSpellCooldown();
         pl->TeleportTo(mapid, x, y, z, O);
     }
     else
