@@ -15,20 +15,6 @@ void AddSC_bg_alterac();
 //custom
 void AddSC_zero_scripts();
 void AddSC_ubrs_trash();
-void AddSC_shop();
-void AddSC_arena_tournament();
-void AddSC_lost_turtles();
-void AddSC_battlemaster();
-void AddSC_boss_avatar_of_pompa();
-void AddSC_boss_turtlhu();
-void AddSC_boss_xmas_wolf();
-void AddSC_npc_shivering_moonkin();
-void AddSC_drogon();
-void AddSC_boss_gerastrasz();
-void AddSC_instance_caverns_of_time();
-void AddSC_zebrian_the_mad();
-//void AddSC_gmisland();
-//void AddSC_boss_arena_hardog(); // EVENT de TORKIN
 
 // Event
 //void AddSC_event_attack_city();
@@ -48,10 +34,6 @@ void AddSC_npc_king_gordok();
 void AddSC_areatrigger_scripts();
 void AddSC_dragons_of_nightmare();
 void AddSC_boss_lord_kazzak();
-void AddSC_go_scripts();
-void AddSC_item_scripts();
-void AddSC_guild_housing();
-void AddSC_miracle_raceaway();
 void AddSC_npcs_special();
 void AddSC_Totems();
 void AddSC_world_event_naxxramas();
@@ -279,6 +261,25 @@ void AddSC_war_effort();
 
 void AddSC_npc_j_eevee();                            // J'Eevee, the Imp in a Jar
 
+// Turtle WoW Scripts
+
+void AddSC_shop();
+void AddSC_arena_tournament();
+void AddSC_lost_turtles();
+void AddSC_battlemaster();
+void AddSC_boss_avatar_of_pompa();
+void AddSC_boss_turtlhu();
+void AddSC_boss_xmas_wolf();
+void AddSC_winter_veil_vale();
+void AddSC_drogon();
+void AddSC_boss_gerastrasz();
+void AddSC_instance_caverns_of_time();
+void AddSC_zebrian_the_mad();
+void AddSC_go_scripts();
+void AddSC_item_scripts();
+void AddSC_guild_housing();
+void AddSC_miracle_raceaway();
+
 void AddScripts()
 {
     //Nostalrius
@@ -292,19 +293,6 @@ void AddScripts()
     //custom
     AddSC_zero_scripts();
     AddSC_ubrs_trash();
-    AddSC_shop();
-    AddSC_arena_tournament();
-    AddSC_lost_turtles();
-    AddSC_battlemaster();
-    AddSC_boss_avatar_of_pompa();
-    AddSC_boss_turtlhu();
-    AddSC_boss_xmas_wolf();
-    AddSC_npc_shivering_moonkin();
-    AddSC_drogon();
-    AddSC_boss_gerastrasz();
-    AddSC_instance_caverns_of_time();
-    AddSC_zebrian_the_mad();
-    //AddSC_gmisland();
 
     // Event
     //AddSC_event_attack_city();
@@ -324,10 +312,6 @@ void AddScripts()
     AddSC_areatrigger_scripts();
     AddSC_dragons_of_nightmare();
     AddSC_boss_lord_kazzak();
-    AddSC_go_scripts();
-    AddSC_item_scripts();
-    AddSC_guild_housing();
-    AddSC_miracle_raceaway();
     AddSC_npcs_special();
     AddSC_Totems();
     AddSC_world_event_naxxramas();
@@ -553,4 +537,24 @@ void AddScripts()
     AddSC_winterspring();
 
     AddSC_npc_j_eevee();
+
+    // Turtle WoW Scripts
+
+    AddSC_shop();
+    AddSC_arena_tournament();
+    AddSC_lost_turtles();
+    AddSC_battlemaster();
+    AddSC_boss_avatar_of_pompa();
+    AddSC_boss_turtlhu();
+    AddSC_boss_xmas_wolf();
+    AddSC_winter_veil_vale();
+    AddSC_drogon();
+    AddSC_boss_gerastrasz();
+    AddSC_instance_caverns_of_time();
+    AddSC_zebrian_the_mad();
+    AddSC_go_scripts();
+    AddSC_item_scripts();
+    AddSC_guild_housing();
+    AddSC_miracle_raceaway();
+
 }

@@ -45,11 +45,7 @@ set (SCRIPTS_SRCS
     custom/npc_escort.cpp
     custom/zero_creatures.cpp
     custom/npc_j_eevee.cpp
-    custom/shop.cpp
-    custom/arena_tournament.cpp
-    custom/lost_turtles.cpp
-    custom/battlemaster.cpp
-    custom/miracle_raceaway.cpp
+
     eastern_kingdoms/alterac_mountains/alterac_mountains.cpp
     eastern_kingdoms/arathi_highlands/arathi_highlands.cpp
     eastern_kingdoms/blasted_lands/blasted_lands.cpp
@@ -276,9 +272,6 @@ set (SCRIPTS_SRCS
     world/boss_lord_kazzak.cpp
     world/elemental_invasions.cpp
     world/event_scourge_invasion.cpp
-    world/go_scripts.cpp
-    world/item_scripts.cpp
-    world/guild_housing.cpp
     world/npcs_special.cpp
     world/spell_scripts.cpp
     world/totems.cpp
@@ -291,8 +284,26 @@ set (SCRIPTS_SRCS
     world/dragons_of_nightmare/boss_lethon.cpp
     world/dragons_of_nightmare/boss_taerar.cpp
     world/dragons_of_nightmare/boss_ysondre.cpp
-
-        custom/boss_avatar_of_pompa.cpp custom/boss_turtlhu.cpp custom/drogon.cpp custom/cot/black_morass/boss_gerastrasz.cpp custom/cot/instance_caverns_of_time.cpp custom/cot/instance_caverns_of_time.h custom/zebrian_the_mad.cpp custom/boss_xmas_wolf.cpp custom/npc_shivering_moonkin.cpp)
+	
+	turtlewow/shop.cpp
+    turtlewow/arena_tournament.cpp
+    turtlewow/lost_turtles.cpp
+    turtlewow/battlemaster.cpp
+    turtlewow/miracle_raceaway.cpp
+	turtlewow/boss_avatar_of_pompa.cpp 
+	turtlewow/boss_turtlhu.cpp 
+	turtlewow/drogon.cpp 
+	turtlewow/cot/black_morass/boss_gerastrasz.cpp 
+	turtlewow/cot/instance_caverns_of_time.cpp 
+	turtlewow/cot/instance_caverns_of_time.h 
+	turtlewow/zebrian_the_mad.cpp 
+	turtlewow/boss_xmas_wolf.cpp 
+	turtlewow/winter_veil_vale.cpp
+	turtlewow/go_scripts.cpp
+    turtlewow/item_scripts.cpp
+    turtlewow/guild_housing.cpp
+	
+)
 
 
 # Used in game ScriptMgr, not need here

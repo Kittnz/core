@@ -101,7 +101,7 @@ CreatureAI* GetAI_npc_chihkoa(Creature* pCreature)
     return new npc_chihkoaAI(pCreature);
 }
 
-void AddSC_npc_shivering_moonkin()
+void AddSC_winter_veil_vale()
 {
     Script *newscript;
     newscript = new Script;
