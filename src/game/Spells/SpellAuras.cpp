@@ -2273,7 +2273,7 @@ std::pair<unsigned int, float> getShapeshiftModelInfo(ShapeshiftForm form, Unit 
     switch (form)
     {
     case FORM_CAT:
-        
+
         if (target->IsPlayer())
         {
             if (Player::TeamForRace(target->getRace()) == ALLIANCE)
@@ -2286,7 +2286,7 @@ std::pair<unsigned int, float> getShapeshiftModelInfo(ShapeshiftForm form, Unit 
         mod = 0.80f;
         break;
     case FORM_TRAVEL:
-        modelid = 632;
+        modelid = (target->IsPlayer() && target->ToPlayer()->HasItemCount(51056, 1, 0)) ? 1991 : 632;
         mod = 0.80f;
         break;
     case FORM_AQUA:

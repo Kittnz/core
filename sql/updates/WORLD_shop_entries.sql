@@ -27,7 +27,8 @@ replace into shop_categories values
 (6, 'Tabards'),
 (7, 'Roleplay'),
 (8, 'Skins'),
-(9, 'Illusions');
+(9, 'Illusions'),
+(10, 'Glyphs');
 
 replace into shop_items values
 -- Gameplay --------------------------------------------------------------------------------------------
@@ -151,10 +152,12 @@ replace into shop_items values
 (901, 9, 51201, 'Illusion: Worgen', 100),
 (902, 9, 51202, 'Illusion: Blood Elf', 100),
 (903, 9, 50017, 'Illusion: High Elf', 100),
-(904, 9, 50408, 'Illusion: Dryad / Keeper of the Grove', 100),
+(904, 9, 50408, 'Illusion: Dryad / Keeper', 100),
 (905, 9, 51205, 'Illusion: Ghost', 100),
 (906, 9, 51206, 'Illusion: Banshee', 100),
 (907, 9, 51207, 'Illusion: Druid of the Fang', 100),
 (908, 9, 51208, 'Illusion: Succubus', 100),
-(909, 9, 51065, 'Illusion: Shadow', 100);
-
+(909, 9, 51065, 'Illusion: Shadow', 100),
+-- Glyphs -----------------------------------------------------------------------------------------
+(1000, 10, 51055, 'Druid: Glyph of the Tree', 100),
+(1001, 10, 51056, 'Druid: Glyph of the Stag', 100),
