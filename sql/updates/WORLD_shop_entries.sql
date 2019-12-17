@@ -160,4 +160,4 @@ replace into shop_items values
 (909, 9, 51065, 'Illusion: Shadow', 100),
 -- Glyphs -----------------------------------------------------------------------------------------
 (1000, 10, 51055, 'Druid: Glyph of the Tree', 100),
-(1001, 10, 51056, 'Druid: Glyph of the Stag', 100),
+(1001, 10, 51056, 'Druid: Glyph of the Stag', 100);
