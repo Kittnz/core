@@ -372,8 +372,20 @@ bool ItemUse_survival_tent(Player* pPlayer, Item* pItem, const SpellCastTargets&
                 pPlayer->GetZoneId() != 1519 && pPlayer->GetZoneId() != 1637 && pPlayer->GetZoneId() != 1497 && pPlayer->GetZoneId() != 1537 && 
                 pPlayer->GetZoneId() != 1657 && pPlayer->GetZoneId() != 1638 && !pPlayer->GetInstanceId()) {
                 
-                pPlayer->SummonGameObject(1000001, pPlayer->GetPositionX(), pPlayer->GetPositionY(),
-                                          pPlayer->GetPositionZ(), pPlayer->GetOrientation(), 0.0f, 0.0f, 0.0f, 0.0f, 1200, true);
+                // Tent now will appear in front of the player:
+                float dis{ 4.0F };
+                float x, y, z, ang, p_r, o_r;
+                pPlayer->GetSafePosition(x, y, z);
+                x += dis * cos(pPlayer->GetOrientation());
+                y += dis * sin(pPlayer->GetOrientation());
+
+                p_r = pPlayer->GetOrientation();
+                o_r = remainderf(p_r + M_PI, M_PI * 2.0f);
+
+                float rot2 = sin(o_r / 2);
+                float rot3 = cos(o_r / 2);
+
+                pPlayer->SummonGameObject(1000001, x, y, z, o_r, 0.0f, 0.0f, rot2, rot3, 1200, true);
                 // set rested state - check for the actual script in go_survival_tent
                 // update skill on usage:
                 uint32 currvalue = 0;
