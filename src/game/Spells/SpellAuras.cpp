@@ -2299,10 +2299,12 @@ std::pair<unsigned int, float> getShapeshiftModelInfo(ShapeshiftForm form, Unit 
     case FORM_DIREBEAR:
         if (target->IsPlayer())
         {
-            if (Player::TeamForRace(target->getRace()) == ALLIANCE)
-                modelid = 2281;
+            if (target->ToPlayer()->HasItemCount(51266, 1, 0))
+                // Glyph of the Icebear, Turtle WoW:
+                modelid = 8837;
             else
-                modelid = 2289;
+                // Blizzlike bear models:
+                modelid = (Player::TeamForRace(target->getRace()) == ALLIANCE) ? 2281 : 2289;
         }
         else
             modelid = 2281;
