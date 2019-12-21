@@ -52,3 +52,7 @@ values
  UPDATE `item_template` SET `description`='Use this Glyph to Shapeshift into the Tree of Life.' WHERE (`entry`='51055') AND (`patch`='0');
  UPDATE `item_template` SET `name`='Glyph of the Oak' WHERE (`entry`='51055') AND (`patch`='0');
  UPDATE `item_template` SET `display_id`='32845' WHERE (`entry`='51055') AND (`patch`='0');
+ 
+ 
+ UPDATE `quest_template` SET `Details`='Tinsel Lost-Gloves am I, my favorite gloves were stolen, oh why can I not cry?! Of the thieves, I have a list of names long, punish them with frozen fury, for they have done wrong! Is this legal, you may ask? I shall make it so, and quite fast! Do this for me, and for you I shall prepare a friendly little tree!', `Objectives`='Throw a snowball at the following players:' WHERE (`entry`='50321') AND (`patch`='0');
+ UPDATE `quest_template` SET `Objectives`='Throw a snowball at the following players: Engie, Smultron, Caleth, Gifted.' WHERE (`entry`='50321') AND (`patch`='0');
