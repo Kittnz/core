@@ -2323,10 +2323,12 @@ std::pair<unsigned int, float> getShapeshiftModelInfo(ShapeshiftForm form, Unit 
     case FORM_MOONKIN:
         if (target->IsPlayer())
         {
-            if (Player::TeamForRace(target->getRace()) == ALLIANCE)
-                modelid = 15374;
+            if (target->ToPlayer()->HasItemCount(51267, 1, 0))
+                // Glyph of the Snow Owl, Turtle WoW:
+                modelid = 12237;
             else
-                modelid = 15375;
+                // Blizzlike moonkin models:
+                modelid = (Player::TeamForRace(target->getRace()) == ALLIANCE) ? 15374 : 15375;
         }
         else
             modelid = 15374;
