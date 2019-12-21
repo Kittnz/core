@@ -125,7 +125,13 @@ bool ItemUse_city_protector_scroll(Player* pPlayer, Item* pItem, const SpellCast
 
 bool ItemUse_remote_mail_terminal(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
-    pPlayer->SummonGameObject(144112, pPlayer->GetPositionX() + 2.0f, pPlayer->GetPositionY() + 2.0f, pPlayer->GetPositionZ(), 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 180, true);
+    float dis{ 2.0F };
+    float x, y, z;
+    pPlayer->GetSafePosition(x, y, z);
+    x += dis * cos(pPlayer->GetOrientation());
+    y += dis * sin(pPlayer->GetOrientation());
+
+    pPlayer->SummonGameObject(144112, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 180, true);
     return false;
 }
 
