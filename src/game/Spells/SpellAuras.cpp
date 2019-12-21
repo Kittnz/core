@@ -2276,10 +2276,12 @@ std::pair<unsigned int, float> getShapeshiftModelInfo(ShapeshiftForm form, Unit 
 
         if (target->IsPlayer())
         {
-            if (Player::TeamForRace(target->getRace()) == ALLIANCE)
-                modelid = 892;
-            else
-                modelid = 8571;
+            if (target->ToPlayer()->HasItemCount(51057, 1, 0))
+                // Glyph of the Frostsaber, Turtle WoW:
+                modelid = (Player::TeamForRace(target->getRace()) == ALLIANCE) ? 11444 : 10054;
+            else    
+                // Blizzlike cat models:
+                modelid = (Player::TeamForRace(target->getRace()) == ALLIANCE) ? 892 : 8571;  
         }
         else
             modelid = 892;
