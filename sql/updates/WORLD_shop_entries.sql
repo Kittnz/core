@@ -32,10 +32,7 @@ replace into shop_categories values
 
 replace into shop_items values
 -- Gameplay --------------------------------------------------------------------------------------------
-(100, 1, 50010, 'Enable Hardcore Mode', 0),
-(101, 1, 50016, 'Portable Meeting Stone (RP Hub)', 0),
-(102, 1, 50008, 'Turtle Twink\'s Insignia (Stop XP)', 0),
-(103, 1, 50521, 'Exhausting Trinket', 0),
+(101, 1, 50016, 'Portable Meeting Stone', 0),
 (104, 1, 50000, 'Character Name Change', 100),
 (105, 1, 50002, 'Character Race Change', 200),
 (106, 1, 50001, 'Character Look Change', 150),
@@ -158,5 +155,12 @@ replace into shop_items values
 (908, 9, 51208, 'Illusion: Succubus', 100),
 (909, 9, 51065, 'Illusion: Shadow', 100),
 -- Glyphs -----------------------------------------------------------------------------------------
-(1000, 10, 51055, 'Druid: Glyph of the Tree', 100),
-(1001, 10, 51056, 'Druid: Glyph of the Stag', 100);
+(1000, 10, 50010, 'General: Glyph of Hardcore', 0),
+(1001, 10, 50008, 'General: Glyph of Twinking', 0),
+(1002, 10, 50521, 'General: Glyph of Exhaustion', 0),
+(1003, 10, 51055, 'Druid: Glyph of the Tree', 100),
+(1004, 10, 51056, 'Druid: Glyph of the Stag', 100),
+(1005, 10, 51057, 'Druid: Glyph of the Frostsaber', 100),
+(1006, 10, 51266, 'Druid: Glyph of the Ice Bear', 100),
+(1007, 10, 51267, 'Druid: Glyph of the Frostkin', 100);
+
