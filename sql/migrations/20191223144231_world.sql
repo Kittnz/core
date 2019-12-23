@@ -103,3 +103,93 @@ replace into broadcast_text (ID, MaleText) values ('90335', 'Tinsel Lost-Gloves 
 replace into npc_text (ID, BroadcastTextID0) values ('90335', '90335');
 
 update creature_template set script_name = 'npc_tinsel' where entry = 50662;
+
+-- Holy Strike shit:
+
+replace into quest_template (
+entry, patch, Method, ZoneOrSort, MinLevel, QuestLevel, MaxLevel, Type, RequiredClasses, RequiredRaces, RequiredSkill,
+RequiredSkillValue, RepObjectiveFaction, RepObjectiveValue, RequiredMinRepFaction, RequiredMinRepValue,RequiredMaxRepFaction,
+RequiredMaxRepValue, SuggestedPlayers, LimitTime, QuestFlags, SpecialFlags, PrevQuestId, NextQuestId, ExclusiveGroup, NextQuestInChain,
+SrcItemId, SrcItemCount, SrcSpell, Title, Details, Objectives, OfferRewardText, RequestItemsText, EndText, ObjectiveText1, ObjectiveText2,
+ObjectiveText3, ObjectiveText4, ReqItemId1, ReqItemId2, ReqItemId3, ReqItemId4, ReqItemCount1, ReqItemCount2, ReqItemCount3,
+ReqItemCount4, ReqSourceId1, ReqSourceId2, ReqSourceId3, ReqSourceId4, ReqSourceCount1, ReqSourceCount2, ReqSourceCount3,
+ReqSourceCount4, ReqCreatureOrGOId1, ReqCreatureOrGOId2, ReqCreatureOrGOId3, ReqCreatureOrGOId4, ReqCreatureOrGOCount1,
+ReqCreatureOrGOCount2, ReqCreatureOrGOCount3, ReqCreatureOrGOCount4, ReqSpellCast1, ReqSpellCast2, ReqSpellCast3,
+ReqSpellCast4, RewChoiceItemId1, RewChoiceItemId2, RewChoiceItemId3, RewChoiceItemId4, RewChoiceItemId5, RewChoiceItemId6,
+RewChoiceItemCount1, RewChoiceItemCount2, RewChoiceItemCount3, RewChoiceItemCount4, RewChoiceItemCount5, RewChoiceItemCount6,
+RewItemId1, RewItemId2, RewItemId3, RewItemId4, RewItemCount1, RewItemCount2, RewItemCount3, RewItemCount4, RewRepFaction1,
+RewRepFaction2, RewRepFaction3, RewRepFaction4, RewRepFaction5, RewRepValue1, RewRepValue2, RewRepValue3, RewRepValue4,
+RewRepValue5, RewOrReqMoney, RewMoneyMaxLevel, RewSpell, RewSpellCast, RewMailTemplateId, RewMailMoney, RewMailDelaySecs,
+PointMapId, PointX, PointY, PointOpt, DetailsEmote1, DetailsEmote2, DetailsEmote3, DetailsEmote4, DetailsEmoteDelay1,
+DetailsEmoteDelay2, DetailsEmoteDelay3, DetailsEmoteDelay4, IncompleteEmote, CompleteEmote, OfferRewardEmote1, OfferRewardEmote2,
+OfferRewardEmote3, OfferRewardEmote4, OfferRewardEmoteDelay1, OfferRewardEmoteDelay2, OfferRewardEmoteDelay3,OfferRewardEmoteDelay4,
+StartScript, CompleteScript)
+         values
+ ('60011', '0', '2', '12', '10', '15', '0', '0', '2', '0', '0',
+'0', '0', '0', '0', '0','0',
+'0', '0', '0', '0', '0', '0', '0', '0', '0',
+'0', '0', '0', 'Piercing Light', 'Paladin! It is a great responsibility protecting the weak and cast Justice upon the wicked. There\'s a special case when you will face very powerful and too fierce enemies who rage, anger and determination might bring a downfall to either you or your company, and there is such a foe.\n\nHe\'s known as Hogger.\n\nTo know the weaknesses of the enemies and bringing Justice you will need all prowess you can muster. Above all else you will need your faith in the Light more than ever and the Light shall grant you the strength.', 'Defeat Hogger in Elwynn Forest\'s Edge.', 'There\'s only one passion we paladins are allowed to foster. Passion to serve and protect.', 'To know the weaknesses of the enemies and bringing Justice you will need all prowess you can muster. Above all else you will need your faith in the Light more than ever and the Light shall grant you the strength.', '', '', '',
+'', '', '0', '0', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0', '0', '0',
+'0', '448', '0', '0', '0', '1',
+'0', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0', '0', '0',
+'0', '0', '0', '17284', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0','0',
+0, 0);
+/* replace into creature_questrelation (id, quest, patch_min, patch_max)
+      values
+      ('928','60011','10','10');
+	  
+	  replace into creature_involvedrelation (id, quest, patch_min, patch_max)
+      values
+      ('928','60011','10','10');
+	   */
+	  replace into quest_template (
+entry, patch, Method, ZoneOrSort, MinLevel, QuestLevel, MaxLevel, Type, RequiredClasses, RequiredRaces, RequiredSkill,
+RequiredSkillValue, RepObjectiveFaction, RepObjectiveValue, RequiredMinRepFaction, RequiredMinRepValue,RequiredMaxRepFaction,
+RequiredMaxRepValue, SuggestedPlayers, LimitTime, QuestFlags, SpecialFlags, PrevQuestId, NextQuestId, ExclusiveGroup, NextQuestInChain,
+SrcItemId, SrcItemCount, SrcSpell, Title, Details, Objectives, OfferRewardText, RequestItemsText, EndText, ObjectiveText1, ObjectiveText2,
+ObjectiveText3, ObjectiveText4, ReqItemId1, ReqItemId2, ReqItemId3, ReqItemId4, ReqItemCount1, ReqItemCount2, ReqItemCount3,
+ReqItemCount4, ReqSourceId1, ReqSourceId2, ReqSourceId3, ReqSourceId4, ReqSourceCount1, ReqSourceCount2, ReqSourceCount3,
+ReqSourceCount4, ReqCreatureOrGOId1, ReqCreatureOrGOId2, ReqCreatureOrGOId3, ReqCreatureOrGOId4, ReqCreatureOrGOCount1,
+ReqCreatureOrGOCount2, ReqCreatureOrGOCount3, ReqCreatureOrGOCount4, ReqSpellCast1, ReqSpellCast2, ReqSpellCast3,
+ReqSpellCast4, RewChoiceItemId1, RewChoiceItemId2, RewChoiceItemId3, RewChoiceItemId4, RewChoiceItemId5, RewChoiceItemId6,
+RewChoiceItemCount1, RewChoiceItemCount2, RewChoiceItemCount3, RewChoiceItemCount4, RewChoiceItemCount5, RewChoiceItemCount6,
+RewItemId1, RewItemId2, RewItemId3, RewItemId4, RewItemCount1, RewItemCount2, RewItemCount3, RewItemCount4, RewRepFaction1,
+RewRepFaction2, RewRepFaction3, RewRepFaction4, RewRepFaction5, RewRepValue1, RewRepValue2, RewRepValue3, RewRepValue4,
+RewRepValue5, RewOrReqMoney, RewMoneyMaxLevel, RewSpell, RewSpellCast, RewMailTemplateId, RewMailMoney, RewMailDelaySecs,
+PointMapId, PointX, PointY, PointOpt, DetailsEmote1, DetailsEmote2, DetailsEmote3, DetailsEmote4, DetailsEmoteDelay1,
+DetailsEmoteDelay2, DetailsEmoteDelay3, DetailsEmoteDelay4, IncompleteEmote, CompleteEmote, OfferRewardEmote1, OfferRewardEmote2,
+OfferRewardEmote3, OfferRewardEmote4, OfferRewardEmoteDelay1, OfferRewardEmoteDelay2, OfferRewardEmoteDelay3,OfferRewardEmoteDelay4,
+StartScript, CompleteScript)
+         values
+ ('60012', '0', '2', '1', '10', '15', '0', '0', '2', '0', '0',
+'0', '0', '0', '0', '0','0',
+'0', '0', '0', '0', '0', '0', '0', '0', '0',
+'0', '0', '0', 'Piercing Light', 'Paladin! It is a great responsibility protecting the weak and cast Justice upon the wicked. There\'s a special case when you will face very powerful and too fierce enemies who rage, anger and determination might bring a downfall to either you or your company, and there is such a foe.\n\nHe\'s known as Old Icebeard.\n\nTo know the weaknesses of the enemies and bringing Justice you will need all prowess you can muster. Above all else you will need your faith in the Light more than ever and the Light shall grant you the strength.', 'Defeat Old Icebeard west from Kharanos.', 'There\'s only one passion we paladins are allowed to foster. Passion to serve and protect.', 'To know the weaknesses of the enemies and bringing Justice you will need all prowess you can muster. Above all else you will need your faith in the Light more than ever and the Light shall grant you the strength.', '', '', '',
+'', '', '0', '0', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0', '0', '0',
+'0', '1271', '0', '0', '0', '1',
+'0', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0', '0', '0',
+'0', '0', '0', '17284', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0','0',
+0, 0);
+/* replace into creature_questrelation (id, quest, patch_min, patch_max)
+      values
+      ('5149','60012','10','10');
+	  
+	  replace into creature_involvedrelation (id, quest, patch_min, patch_max)
+      values
+      ('5149','60012','10','10'); */
