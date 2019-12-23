@@ -797,7 +797,9 @@ bool GOHello_go_portal_to_orgrimmar(Player* pPlayer, GameObject* pGo)
 // -- Bounty Quests
 
 #define QUEST_HORDE_PLAYER          50322
-#define QUEST_ALLIANCE_PLAYER       50323   
+#define QUEST_ALLIANCE_PLAYER       50323  
+
+
 
 bool GOHello_go_bounty(Player* pPlayer, GameObject* pGo)
 {
@@ -808,7 +810,11 @@ bool GOHello_go_bounty(Player* pPlayer, GameObject* pGo)
         if (pPlayer->GetTeam() == ALLIANCE)
         {
             if (pPlayer->GetQuestStatus(QUEST_HORDE_PLAYER) == QUEST_STATUS_NONE)
-                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, "WANTED: Dragojazz!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            {
+                Quest const* pQuest = sObjectMgr.GetQuestTemplate(QUEST_HORDE_PLAYER);
+                std::string quest_horde_player_title = pQuest->GetTitle();
+                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, quest_horde_player_title.c_str(), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            }
         }
         break;
 
@@ -817,7 +823,11 @@ bool GOHello_go_bounty(Player* pPlayer, GameObject* pGo)
         if (pPlayer->GetTeam() == HORDE)
         {
             if (pPlayer->GetQuestStatus(QUEST_ALLIANCE_PLAYER) == QUEST_STATUS_NONE)
-                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, "WANTED: Preston!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+            {
+                Quest const* pQuest = sObjectMgr.GetQuestTemplate(QUEST_ALLIANCE_PLAYER);
+                std::string quest_alliance_player_title = pQuest->GetTitle();
+                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, quest_alliance_player_title.c_str(), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+            } 
         }
         break;
     }  
