@@ -1523,6 +1523,12 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                         // Turtle WoW Winter Veil quests:  
                         if ((m_caster->ToPlayer()->GetQuestStatus(50319) == QUEST_STATUS_INCOMPLETE) || (m_caster->ToPlayer()->GetQuestStatus(50320) == QUEST_STATUS_INCOMPLETE)) // Snowball Wars: Episode I & Episode II
                         {
+                            // Change this part: 
+                            #define SNOWBALL_TARGET_1 44719 // Gracemourn
+                            #define SNOWBALL_TARGET_2 45906 // Reinhold
+                            #define SNOWBALL_TARGET_3 39054 // Alexandrios
+                            #define SNOWBALL_TARGET_4 45164 // Pirya
+                            
                             int32 dummy_player{0};
                             switch (unitTarget->getClass())
                             {
@@ -1549,14 +1555,10 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
 
                             switch (unitTarget->GetObjectGuid())
                             {
-                                case 12616: dummy_player = 70000; break;   // ENGIE
-                                case 13455: dummy_player = 70001; break;   // SMULTRON
-                                case 1426: dummy_player = 70002;  break;   // CALETH
-                                case 476: dummy_player = 70003;   break;   // GIFTED
-                                case 21990: dummy_player = 70006; break;   // Aurrius
-                                case 8542: dummy_player = 70007; break;    // Momo
-                                case 12605: dummy_player = 70008; break;   // Chlothar
-                                case 16667: dummy_player = 70009; break;   // Edd
+                                case SNOWBALL_TARGET_1: dummy_player  = 70000; break;   
+                                case SNOWBALL_TARGET_2: dummy_player  = 70001; break;   
+                                case SNOWBALL_TARGET_3: dummy_player  = 70002; break;   
+                                case SNOWBALL_TARGET_4: dummy_player  = 70003; break;   
                                 default: break;
                             }
 

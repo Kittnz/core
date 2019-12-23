@@ -83,3 +83,23 @@ values
  `spell_id3`, `spell_id4`, `spell_list_id`, `pet_spell_list_id`, `gold_min`, `gold_max`, `ai_name`, `movement_type`, `inhabit_type`, `civilian`, `racial_leader`, `regeneration`, 
  `equipment_id`, `trainer_id`, `vendor_id`, `mechanic_immune_mask`, `school_immune_mask`, `flags_extra`, `script_name`) VALUES 
  (51266, 6, 3121, 0, 0, 0, 'Reas', '', 0, 45, 45, 2500, 3800, 0, 0, 7, 35, 2, 1.2, 1.14286, 1, 20, 5, 0, 0, 1, 2, 2, 0, 44, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524288, '');
+
+DELETE FROM `quest_template` WHERE (`entry`='50325') AND (`patch`='0');
+DELETE FROM `creature_involvedrelation` WHERE quest = 50325;
+DELETE FROM `creature_questrelation` WHERE quest = 50325;
+
+UPDATE `quest_template` SET `Title`='The Icy Menace' WHERE (`entry`='50321') AND (`patch`='0');
+UPDATE `quest_template` SET `RewItemCount2`='1' WHERE (`entry`='50321') AND (`patch`='0');
+UPDATE `quest_template` SET `RewItemId2`='51251' WHERE (`entry`='50321') AND (`patch`='0');
+
+UPDATE `quest_template` SET `ObjectiveText1`='Throw snowball at Gracemourn' WHERE (`entry`='50321') AND (`patch`='0');
+UPDATE `quest_template` SET `ObjectiveText2`='Throw snowball at Reinhold' WHERE (`entry`='50321') AND (`patch`='0');
+UPDATE `quest_template` SET `ObjectiveText3`='Throw snowball at Alexandrios' WHERE (`entry`='50321') AND (`patch`='0');
+UPDATE `quest_template` SET `ObjectiveText4`='Throw snowball at Pirya' WHERE (`entry`='50321') AND (`patch`='0');
+
+UPDATE `quest_template` SET `Objectives`=' Help Tinsel Lost-Gloves take revenge upon the thieves who have stolen his favorite gloves!' WHERE (`entry`='50321') AND (`patch`='0');
+
+replace into broadcast_text (ID, MaleText) values ('90335', 'Tinsel Lost-Gloves am I, my favorite gloves were stolen, oh why can I not cry?!\n\nOf the thieves, I have a list of names long, punish them with frozen fury, for they have done wrong!');
+replace into npc_text (ID, BroadcastTextID0) values ('90335', '90335');
+
+update creature_template set script_name = 'npc_tinsel' where entry = 50662;
