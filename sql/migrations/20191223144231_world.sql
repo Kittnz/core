@@ -97,7 +97,7 @@ UPDATE `quest_template` SET `ObjectiveText2`='Throw snowball at Reinhold' WHERE 
 UPDATE `quest_template` SET `ObjectiveText3`='Throw snowball at Alexandrios' WHERE (`entry`='50321') AND (`patch`='0');
 UPDATE `quest_template` SET `ObjectiveText4`='Throw snowball at Pirya' WHERE (`entry`='50321') AND (`patch`='0');
 
-UPDATE `quest_template` SET `Objectives`=' Help Tinsel Lost-Gloves take revenge upon the thieves who have stolen his favorite gloves!' WHERE (`entry`='50321') AND (`patch`='0');
+UPDATE `quest_template` SET `Objectives`='Help Tinsel Lost-Gloves take revenge upon the thieves who have stolen his favorite gloves!' WHERE (`entry`='50321') AND (`patch`='0');
 
 replace into broadcast_text (ID, MaleText) values ('90335', 'Tinsel Lost-Gloves am I, my favorite gloves were stolen, oh why can I not cry?!\n\nOf the thieves, I have a list of names long, punish them with frozen fury, for they have done wrong!');
 replace into npc_text (ID, BroadcastTextID0) values ('90335', '90335');
