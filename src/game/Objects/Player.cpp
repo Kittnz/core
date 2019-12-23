@@ -19346,30 +19346,21 @@ void Player::RewardSinglePlayerAtKill(Unit* pVictim)
         }
         
         // <-- Bounty Hunt 
+        // TODO: Handle it via DB.
         
-#define WANTED_JOHN 50322
-#define WANTED_ER 50322
-#define DUMMY_PLAYER_JOHN 70004
-#define DUMMY_PLAYER_ER   70005
+#define QUEST_HORDE_PLAYER          50322
+#define QUEST_ALLIANCE_PLAYER       50323
+#define DUMMY_NPC_HORDE_PLAYER      70004
+#define DUMMY_NPC_ALLIANCE_PLAYER   70005
 
-#define WANTED_AZTEQ 50331
-#define WANTED_ARISTOXENUS 50332
-#define DUMMY_PLAYER_AZTEQ 70014
-#define DUMMY_PLAYER_ARISTOXENUS   70015
-
-        if (
-                (GetQuestStatus(WANTED_JOHN) == QUEST_STATUS_INCOMPLETE) || (GetQuestStatus(WANTED_ER) == QUEST_STATUS_INCOMPLETE) ||
-                (GetQuestStatus(WANTED_AZTEQ) == QUEST_STATUS_INCOMPLETE) || (GetQuestStatus(WANTED_ARISTOXENUS) == QUEST_STATUS_INCOMPLETE)
-                )
-
+        if ((GetQuestStatus(QUEST_HORDE_PLAYER) == QUEST_STATUS_INCOMPLETE) || (GetQuestStatus(QUEST_ALLIANCE_PLAYER) == QUEST_STATUS_INCOMPLETE))
         {
             int32 dummy_player{ 0 };
             switch (pVictim->GetObjectGuid())
             {
-            case 22392: dummy_player = DUMMY_PLAYER_JOHN; break;
-            case 35673: dummy_player = DUMMY_PLAYER_ER; break;
-            case 23506: dummy_player = DUMMY_PLAYER_ARISTOXENUS; break;
-            case 33397: dummy_player = DUMMY_PLAYER_AZTEQ; break;
+            case 32846: dummy_player = DUMMY_NPC_HORDE_PLAYER; break;     // Dragojazz
+            case 44295: dummy_player = DUMMY_NPC_ALLIANCE_PLAYER; break;  // Preston
+
             default: break;
             }
             CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(dummy_player);
@@ -19377,6 +19368,7 @@ void Player::RewardSinglePlayerAtKill(Unit* pVictim)
             if (cInfo != nullptr)
                 KilledMonster(cInfo, ObjectGuid());
         }
+
         // Bounty Hunt -->
         
     }    

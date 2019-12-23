@@ -231,8 +231,8 @@ void HonorMaintenancer::SetCityRanks()
 
 void HonorMaintenancer::FlushWeeklyQuests()
 {
-    // Children's Week quests:
-    CharacterDatabase.PExecute("DELETE FROM `character_queststatus` WHERE `quest` IN (1558, 171, 5502, 4822, 1800, 1468, 1479, 910, 925, 915, 558, 1687, 172, 911)");
+    // Weekly quests:
+    CharacterDatabase.PExecute("DELETE FROM `character_queststatus` WHERE `quest` IN (1558, 171, 5502, 4822, 1800, 1468, 1479, 910, 925, 915, 558, 1687, 172, 911, 50322, 50323)");
 }
 
 void HonorMaintenancer::FlushRankPoints()
