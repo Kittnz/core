@@ -19346,20 +19346,26 @@ void Player::RewardSinglePlayerAtKill(Unit* pVictim)
         }
         
         // <-- Bounty Hunt 
-        // TODO: Handle it via DB.
-        
+
+        // Change this part only:        
+
+#define GUID_HORDE_PLAYER           32846  // Dragojazz
+#define GUID_ALLIANCE_PLAYER        44295  // Preston
+
+        // Don't change DUMMY NPC's or quest IDs, we now flush the quests on weekly maintenance.
+
 #define QUEST_HORDE_PLAYER          50322
 #define QUEST_ALLIANCE_PLAYER       50323
 #define DUMMY_NPC_HORDE_PLAYER      70004
-#define DUMMY_NPC_ALLIANCE_PLAYER   70005
+#define DUMMY_NPC_ALLIANCE_PLAYER   70005        
 
         if ((GetQuestStatus(QUEST_HORDE_PLAYER) == QUEST_STATUS_INCOMPLETE) || (GetQuestStatus(QUEST_ALLIANCE_PLAYER) == QUEST_STATUS_INCOMPLETE))
         {
             int32 dummy_player{ 0 };
             switch (pVictim->GetObjectGuid())
             {
-            case 32846: dummy_player = DUMMY_NPC_HORDE_PLAYER; break;     // Dragojazz
-            case 44295: dummy_player = DUMMY_NPC_ALLIANCE_PLAYER; break;  // Preston
+            case GUID_HORDE_PLAYER: dummy_player = DUMMY_NPC_HORDE_PLAYER; break;
+            case GUID_ALLIANCE_PLAYER: dummy_player = DUMMY_NPC_ALLIANCE_PLAYER; break;
 
             default: break;
             }
