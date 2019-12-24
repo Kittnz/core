@@ -55,6 +55,14 @@ bool GossipHello_npc_tinsel(Player* pPlayer, Creature* pCreature)
     return true;
 }
 
+
+bool GossipHello_npc_misletoe(Player* pPlayer, Creature* pCreature)
+{
+    pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+    pPlayer->SEND_GOSSIP_MENU(90336, pCreature->GetGUID());
+    return true;
+}
+
 bool GossipHello_npc_frosty(Player* pPlayer, Creature* pCreature)
 {
     pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Happy Winter Veil, Frosty!\nTeleport me to the Winter Veil Vale!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
@@ -126,6 +134,11 @@ void AddSC_winter_veil_vale()
     newscript = new Script;
     newscript->Name = "npc_tinsel";
     newscript->pGossipHello = &GossipHello_npc_tinsel;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_misletoe";
+    newscript->pGossipHello = &GossipHello_npc_misletoe;
     newscript->RegisterSelf();
 
     newscript = new Script;

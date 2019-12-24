@@ -102,7 +102,11 @@ UPDATE `quest_template` SET `Objectives`='Help Tinsel Lost-Gloves take revenge u
 replace into broadcast_text (ID, MaleText) values ('90335', 'Tinsel Lost-Gloves am I, my favorite gloves were stolen, oh why can I not cry?!\n\nOf the thieves, I have a list of names long, punish them with frozen fury, for they have done wrong!');
 replace into npc_text (ID, BroadcastTextID0) values ('90335', '90335');
 
+replace into broadcast_text (ID, MaleText) values ('90336', 'War! The merry times of Winter Veil are crumbling under attacks by the ruthless adventurers!\n\nThere are heroes on all sides, and snowballs are everywhere!\n\nJoin in the fray, and unleash these freezing projectiles upon the many classes, be rewarded with a box of Winter goodies!');
+replace into npc_text (ID, BroadcastTextID0) values ('90336', '90336');
+
 update creature_template set script_name = 'npc_tinsel' where entry = 50662;
+update creature_template set script_name = 'npc_misletoe' where entry = 50654;
 
 -- Holy Strike shit:
 
