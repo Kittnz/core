@@ -55,7 +55,7 @@ replace into creature_involvedrelation (id, quest) values
 (100013, 100008),
 (100013, 100009);
 replace into creature_template (Entry, Name, SubName, regeneration, level_min, level_max, display_id1, Scale, Rank, Faction, Type, Inhabit_Type, npc_flags, unit_flags, Speed_Walk, Speed_Run, Unit_Class, Dmg_Multiplier, xp_multiplier, health_min, health_max, mana_min, mana_max, dmg_min, dmg_max, ranged_dmg_min, ranged_dmg_max, Armor, base_attack_time, Equipment_Id) values
-(100013, 'Aurelius Bornicus III', 'Unknown Traveler', 1, 63, 63, 3122, 1.4, 3, 35, 7, 3, 2, 0, 1, 1.14286, 8, 8, 1, 1729, 1729, 5013, 5013, 143, 194, 70.664, 97.163, 2609, 1500, 100013);
+(100013, 'Aurelius Bornicus III', 'Mysterious Traveler', 1, 63, 63, 3122, 1.4, 3, 35, 7, 3, 2, 0, 1, 1.14286, 8, 8, 1, 1729, 1729, 5013, 5013, 143, 194, 70.664, 97.163, 2609, 1500, 100013);
 replace into creature_equip_template (entry, equipentry1) values
 (100013, 22800);
 replace into creature (id, position_x, position_y, position_z, orientation, map) values (100013, -4697.52, -3704.54, 47.0587, 0.437031, 1);
