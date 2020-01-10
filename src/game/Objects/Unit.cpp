@@ -7576,14 +7576,64 @@ void Unit::Unmount(bool from_aura)
 bool Unit::IsInDisallowedMountForm()
 {
     // Turtle WoW custom, some morphs should be allowed to use mounts
-    if (GetDisplayId() == 4545 || GetDisplayId() == 6779 || GetDisplayId() == 9752 || GetDisplayId() == 4494)
-        return false;
-
-    // Allow mounting but demorph first because of no mount animation
-    if (GetDisplayId() == 4729 || GetDisplayId() == 3293 || GetDisplayId() == 4730 || GetDisplayId() == 1643 ||
-        GetDisplayId() == 150 || GetDisplayId() == 876) {
-        DeMorph();
-        return false;
+    switch (GetDisplayId()) {
+        case 4245:
+        case 6779:
+        case 9752:
+        case 4494:
+        case 7170:
+        case 7102:
+        case 8847:
+        case 7185:
+        case 7809:
+        case 15095:
+        case 15096:
+        case 15097:
+        case 7209:
+        case 9553:
+        case 15094:
+        case 10744:
+        case 15094:
+        case 11675:
+        case 7175:
+        case 11689:
+        case 10651:
+        case 522:
+        case 523:
+        case 524:
+        case 6630:
+        case 7874:
+        case 4232:
+        case 4214:
+        case 4215:
+        case 4212:
+        case 4213:
+        case 4233:
+        case 4234:
+        case 4313:
+        case 4233:
+        case 4234:
+            return false;
+        // Allow mounting but demorph first because of no mount animation
+        case 4729:
+        case 3293:
+        case 4730:
+        case 1643:
+        case 150:
+        case 876:
+        case 6631:
+        case 7922:
+        case 14368:
+        case 8782:
+        case 10728:
+        case 10750:
+        case 10994:
+        case 10923:
+        case 10924:
+        case 10925:
+        case 10926:
+            DeMorph();
+            return false;
     }
 
     // End Turtle WoW custom
