@@ -7593,7 +7593,6 @@ bool Unit::IsInDisallowedMountForm()
         case 9553:
         case 15094:
         case 10744:
-        case 15094:
         case 11675:
         case 7175:
         case 11689:
@@ -7611,8 +7610,6 @@ bool Unit::IsInDisallowedMountForm()
         case 4233:
         case 4234:
         case 4313:
-        case 4233:
-        case 4234:
         case 15458:
         case 10008:
             return false;
