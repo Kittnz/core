@@ -4,7 +4,7 @@
 set @HordePlayer         = 'Dragojazz';
 set @HordePlayerRace     = 'Undead';
 
-set @AlliancePlayer      = 'Preston';
+set @AlliancePlayer      = 'Vaedath';
 set @AlliancePlayerRace  = 'Human';
 
 -- Don't touch this part --

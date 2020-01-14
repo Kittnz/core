@@ -19350,7 +19350,7 @@ void Player::RewardSinglePlayerAtKill(Unit* pVictim)
         // Change this part only:        
 
 #define GUID_HORDE_PLAYER           32846  // Dragojazz
-#define GUID_ALLIANCE_PLAYER        44295  // Preston
+#define GUID_ALLIANCE_PLAYER        31462  // Vaedath
 
         // Don't change DUMMY NPC's or quest IDs, we now flush the quests on weekly maintenance.
 
