@@ -1004,6 +1004,7 @@ bool ItemUse_item_winter_tree(Player* pPlayer, Item* pItem, const SpellCastTarge
     y += dis * sin(pPlayer->GetOrientation());    
 
     pPlayer->SummonGameObject(1000070, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 300, true);
+    pPlayer->SendSpellCooldown(31726, 1600000, pPlayer->GetObjectGuid());
     return false;
 }
 
