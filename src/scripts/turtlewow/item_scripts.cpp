@@ -1013,6 +1013,9 @@ bool ItemUse_item_holy_strike_book(Player* pPlayer, Item* pItem, const SpellCast
     if (pPlayer->IsMoving())
         return false;
 
+    if (!pPlayer->getClass() == CLASS_PALADIN)
+        return false;
+
     switch (pItem->GetEntry())
     {
     case 51270:
