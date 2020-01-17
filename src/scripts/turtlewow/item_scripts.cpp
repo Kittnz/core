@@ -1008,6 +1008,38 @@ bool ItemUse_item_winter_tree(Player* pPlayer, Item* pItem, const SpellCastTarge
     return false;
 }
 
+bool ItemUse_item_holy_strike_book(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+{
+    if (pPlayer->IsMoving())
+        return false;
+
+    switch (pItem->GetEntry())
+    {
+    case 51270:
+        pPlayer->LearnSpell(678, 679);
+        break;
+    case 51271:
+        pPlayer->LearnSpell(1866, 678);
+        break;
+    case 51272:
+        pPlayer->LearnSpell(680, 1866);
+        break;
+    case 51273:
+        pPlayer->LearnSpell(2495, 680);
+        break;
+    case 51274:
+        pPlayer->LearnSpell(5569, 2495);
+        break;
+    case 51275:
+        pPlayer->LearnSpell(10332, 5569);
+        break;
+    case 51276:
+        pPlayer->LearnSpell(10333, 10332);
+        break;
+    }
+    return false;
+}
+
 void AddSC_item_scripts()
 {
     Script *newscript;
@@ -1219,5 +1251,10 @@ void AddSC_item_scripts()
     newscript = new Script;
     newscript->Name = "item_winter_tree";
     newscript->pItemUse = &ItemUse_item_winter_tree;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "item_holy_strike_book";
+    newscript->pItemUse = &ItemUse_item_holy_strike_book;
     newscript->RegisterSelf();
 }
