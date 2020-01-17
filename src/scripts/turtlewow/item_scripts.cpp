@@ -1019,25 +1019,25 @@ bool ItemUse_item_holy_strike_book(Player* pPlayer, Item* pItem, const SpellCast
     switch (pItem->GetEntry())
     {
     case 51270:
-        pPlayer->LearnSpell(678, 679);
+        pPlayer->LearnSpell(678, false);
         break;
     case 51271:
-        pPlayer->LearnSpell(1866, 678);
+        pPlayer->LearnSpell(1866, false);
         break;
     case 51272:
-        pPlayer->LearnSpell(680, 1866);
+        pPlayer->LearnSpell(680, false);
         break;
     case 51273:
-        pPlayer->LearnSpell(2495, 680);
+        pPlayer->LearnSpell(2495, false);
         break;
     case 51274:
-        pPlayer->LearnSpell(5569, 2495);
+        pPlayer->LearnSpell(5569, false);
         break;
     case 51275:
-        pPlayer->LearnSpell(10332, 5569);
+        pPlayer->LearnSpell(10332, false);
         break;
     case 51276:
-        pPlayer->LearnSpell(10333, 10332);
+        pPlayer->LearnSpell(10333, false);
         break;
     }
     return false;

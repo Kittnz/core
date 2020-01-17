@@ -399,13 +399,13 @@ update creature_template set gossip_menu_id = 2304 where entry = 51270;
 		  UPDATE `quest_template` SET `RewMoneyMaxLevel`='610' WHERE (`entry`='60011') AND (`patch`='0');
 		  UPDATE `quest_template` SET `RewMoneyMaxLevel`='610' WHERE (`entry`='60012') AND (`patch`='0');
 
-replace into `spell_chain` (`spell_id`, `prev_spell`, `first_spell`, `rank`, `req_spell`) VALUES ('679', '0', '679', '0', '0');
-replace into `spell_chain` (`spell_id`, `prev_spell`, `first_spell`, `rank`, `req_spell`) VALUES ('678', '679', '679', '1', '0');
-replace into `spell_chain` (`spell_id`, `prev_spell`, `first_spell`, `rank`, `req_spell`) VALUES ('1866', '678', '679', '2', '0');
-replace into `spell_chain` (`spell_id`, `prev_spell`, `first_spell`, `rank`, `req_spell`) VALUES ('680', '1866', '679', '3', '0');
-replace into `spell_chain` (`spell_id`, `prev_spell`, `first_spell`, `rank`, `req_spell`) VALUES ('2495', '680', '679', '4', 	'0');
-replace into `spell_chain` (`spell_id`, `prev_spell`, `first_spell`, `rank`, `req_spell`) VALUES ('5569', '2495', '679', '5', '0');
-replace into `spell_chain` (`spell_id`, `prev_spell`, `first_spell`, `rank`, `req_spell`) VALUES ('10332', '5569', '679', '6', '0');
-replace into `spell_chain` (`spell_id`, `prev_spell`, `first_spell`, `rank`, `req_spell`) VALUES ('10333', '10332', '679', '7', '0');
+replace into `spell_chain` (`spell_id`, `prev_spell`, `first_spell`, `rank`, `req_spell`) VALUES ('679', '0', '679', '1', '0');
+replace into `spell_chain` (`spell_id`, `prev_spell`, `first_spell`, `rank`, `req_spell`) VALUES ('678', '679', '679', '2', '0');
+replace into `spell_chain` (`spell_id`, `prev_spell`, `first_spell`, `rank`, `req_spell`) VALUES ('1866', '678', '679', '3', '0');
+replace into `spell_chain` (`spell_id`, `prev_spell`, `first_spell`, `rank`, `req_spell`) VALUES ('680', '1866', '679', '4', '0');
+replace into `spell_chain` (`spell_id`, `prev_spell`, `first_spell`, `rank`, `req_spell`) VALUES ('2495', '680', '679', '5', 	'0');
+replace into `spell_chain` (`spell_id`, `prev_spell`, `first_spell`, `rank`, `req_spell`) VALUES ('5569', '2495', '679', '6', '0');
+replace into `spell_chain` (`spell_id`, `prev_spell`, `first_spell`, `rank`, `req_spell`) VALUES ('10332', '5569', '679', '7', '0');
+replace into `spell_chain` (`spell_id`, `prev_spell`, `first_spell`, `rank`, `req_spell`) VALUES ('10333', '10332', '679', '8', '0');
 
 
