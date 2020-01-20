@@ -69,6 +69,7 @@ class HonorMaintenancer
         void CreateCalculationReport();
 
         void FlushWeeklyQuests();
+        void AssignBountyTargets();
 
         float GetStandingCPByPosition(HonorStandingList& standingList, uint32 position);
         uint32 GetStandingPositionByGUID(uint32 guid, Team team);

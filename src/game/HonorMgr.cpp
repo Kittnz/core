@@ -235,6 +235,55 @@ void HonorMaintenancer::FlushWeeklyQuests()
     CharacterDatabase.PExecute("DELETE FROM `character_queststatus` WHERE `quest` IN (1558, 171, 5502, 4822, 1800, 1468, 1479, 910, 925, 915, 558, 1687, 172, 911, 50322, 50323)");
 }
 
+void HonorMaintenancer::AssignBountyTargets()
+{  
+    uint32 HordePlayerGUID{ 1 };
+    uint32 AlliancePlayerGUID{ 1 };
+
+    std::string HordePlayerName{"H_Empty"};
+    std::string AlliancePlayerName{"A_Empty"};
+
+    // Horde Player
+
+    QueryResult* result1 = CharacterDatabase.PQuery("SELECT `guid`, `name`, `honorStoredDK` FROM characters WHERE race in (2,5,6,8) ORDER BY `honorStoredDK` DESC LIMIT 1");
+
+    if (result1)
+    {
+        Field* fields = result1->Fetch();
+        HordePlayerGUID = fields[0].GetUInt32();
+        HordePlayerName = fields[1].GetString();
+    }
+    delete result1;
+
+    // Alliance Player
+
+    QueryResult* result2 = CharacterDatabase.PQuery("SELECT `guid`, `name`, `honorStoredDK` FROM characters WHERE race in (1,3,4,7) ORDER BY `honorStoredDK` DESC LIMIT 1");
+
+    if (result2)
+    {
+        Field* fields = result2->Fetch();
+        AlliancePlayerGUID = fields[0].GetUInt32();
+        AlliancePlayerName = fields[1].GetString();
+    }
+    delete result2;
+
+    CharacterDatabase.PExecute("REPLACE INTO `bounty_quest_targets` (id, horde_player, alliance_player) VALUES (1, %u, %u)", HordePlayerGUID, AlliancePlayerGUID);
+    
+    // Update Horde quest textes:
+
+    WorldDatabase.PExecute("UPDATE quest_template SET details = CONCAT('Kill %s.') where entry = 50322", HordePlayerName.c_str());
+    WorldDatabase.PExecute("UPDATE quest_template SET title = CONCAT('WANTED: %s!') where entry = 50322", HordePlayerName.c_str());
+    WorldDatabase.PExecute("UPDATE quest_template SET objectivetext1 = CONCAT('%s is dead') where entry = 50322", HordePlayerName.c_str());
+    WorldDatabase.PExecute("UPDATE quest_template SET objectives = CONCAT('Recently a vile criminal was sighted with actions uspeakably evil and such actions must be punished! On behalf of Military forces and royalty combined we issue an order for this person elimination.\n\nThere is a just reward for those brave enough to slay the criminal in question.\n\nName is: %s.\n\nReward: 250 Reputation points.\r\n') where entry = 50322", HordePlayerName.c_str());    
+
+    // Update and Alliance quest textes:
+
+    WorldDatabase.PExecute("UPDATE quest_template SET details = CONCAT('Kill %s.') where entry = 50323", AlliancePlayerName.c_str());
+    WorldDatabase.PExecute("UPDATE quest_template SET title = CONCAT('WANTED: %s!') where entry = 50323", AlliancePlayerName.c_str());
+    WorldDatabase.PExecute("UPDATE quest_template SET objectivetext1 = CONCAT('%s is dead') where entry = 50323", AlliancePlayerName.c_str());
+    WorldDatabase.PExecute("UPDATE quest_template SET objectives = CONCAT('Recently a vile criminal was sighted with actions uspeakably evil and such actions must be punished! On behalf of Military forces and royalty combined we issue an order for this person elimination.\n\nThere is a just reward for those brave enough to slay the criminal in question.\n\nName is: %s.\n\nReward: 250 Reputation points.\r\n') where entry = 50323", AlliancePlayerName.c_str());    
+}
+
 void HonorMaintenancer::FlushRankPoints()
 {
     // Immediately reset honor standing before flushing
@@ -288,6 +337,8 @@ void HonorMaintenancer::DoMaintenance()
     SetCityRanks();
     sLog.outHonor("[MAINTENANCE] Flush weekly quests.");
     FlushWeeklyQuests();
+    sLog.outHonor("[MAINTENANCE] Assign bounty quest targets.");
+    AssignBountyTargets();
 
     CreateCalculationReport();
 

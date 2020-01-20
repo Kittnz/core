@@ -19344,39 +19344,9 @@ void Player::RewardSinglePlayerAtKill(Unit* pVictim)
             PlayDirectSound(1204, this); // Play sound of the coin
             AddItem(50015, 1);
         }
-        
-        // <-- Bounty Hunt 
 
-        // Change this part only:        
-
-#define GUID_HORDE_PLAYER           32846  // Dragojazz
-#define GUID_ALLIANCE_PLAYER        31462  // Vaedath
-
-        // Don't change DUMMY NPC's or quest IDs, we now flush the quests on weekly maintenance.
-
-#define QUEST_HORDE_PLAYER          50322
-#define QUEST_ALLIANCE_PLAYER       50323
-#define DUMMY_NPC_HORDE_PLAYER      70004
-#define DUMMY_NPC_ALLIANCE_PLAYER   70005        
-
-        if ((GetQuestStatus(QUEST_HORDE_PLAYER) == QUEST_STATUS_INCOMPLETE) || (GetQuestStatus(QUEST_ALLIANCE_PLAYER) == QUEST_STATUS_INCOMPLETE))
-        {
-            int32 dummy_player{ 0 };
-            switch (pVictim->GetObjectGuid())
-            {
-            case GUID_HORDE_PLAYER: dummy_player = DUMMY_NPC_HORDE_PLAYER; break;
-            case GUID_ALLIANCE_PLAYER: dummy_player = DUMMY_NPC_ALLIANCE_PLAYER; break;
-
-            default: break;
-            }
-            CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(dummy_player);
-
-            if (cInfo != nullptr)
-                KilledMonster(cInfo, ObjectGuid());
-        }
-
-        // Bounty Hunt -->
-        
+        // Turtle WoW custom feature:
+        RewardBountyHuntKill(pVictim);        
     }    
 }
 
@@ -21694,4 +21664,50 @@ void Player::AddExclusiveVisibleObject(ObjectGuid guid)
 void Player::RemoveExclusiveVisibleObject(ObjectGuid guid)
 {
 	m_exclusiveVisibleObjects.remove(guid);
+}
+
+void Player::RewardBountyHuntKill(Unit* pVictim)
+{
+    uint32 HordePlayerGUID{ 1 };
+    uint32 AlliancePlayerGUID{ 1 };
+
+    QueryResult* result_h = CharacterDatabase.PQuery("SELECT `horde_player` FROM `bounty_quest_targets` WHERE id = 1");
+
+    if (result_h)
+    {
+        Field* fields = result_h->Fetch();
+        HordePlayerGUID = fields[0].GetUInt32();
+    }
+    delete result_h;
+
+    QueryResult* result_a = CharacterDatabase.PQuery("SELECT `alliance_player` FROM `bounty_quest_targets` WHERE id = 1");
+
+    if (result_a)
+    {
+        Field* fields = result_h->Fetch();
+        AlliancePlayerGUID = fields[0].GetUInt32();
+    }
+    delete result_a;
+
+    // Don't change DUMMY NPC's or quest IDs, we now flush the quests on weekly maintenance.
+
+#define QUEST_HORDE_PLAYER          50322
+#define QUEST_ALLIANCE_PLAYER       50323
+#define DUMMY_NPC_HORDE_PLAYER      70004
+#define DUMMY_NPC_ALLIANCE_PLAYER   70005        
+
+    if ((GetQuestStatus(QUEST_HORDE_PLAYER) == QUEST_STATUS_INCOMPLETE) || (GetQuestStatus(QUEST_ALLIANCE_PLAYER) == QUEST_STATUS_INCOMPLETE))
+    {
+        int32 dummy_player{ 0 };
+
+        if (HordePlayerGUID == pVictim->GetObjectGuid())
+            dummy_player = DUMMY_NPC_HORDE_PLAYER;
+        else if (AlliancePlayerGUID == pVictim->GetObjectGuid())
+            dummy_player = DUMMY_NPC_ALLIANCE_PLAYER;
+
+        CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(dummy_player);
+
+        if (cInfo != nullptr)
+            KilledMonster(cInfo, ObjectGuid());
+    }
 }
