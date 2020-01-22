@@ -1043,6 +1043,7 @@ bool ItemUse_item_holy_strike_book(Player* pPlayer, Item* pItem, const SpellCast
         pPlayer->LearnSpell(10333, false);
         break;
     }
+    pPlayer->DestroyItemCount(pItem->GetEntry(), 1, true);
     return false;
 }
 

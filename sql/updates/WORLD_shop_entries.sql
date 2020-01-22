@@ -154,7 +154,7 @@ replace into shop_items values
 (907, 9, 51208, 'Illusion: Succubus', 100),
 (908, 9, 51065, 'Illusion: Shadow', 100),
 (909, 9, 51247, 'Illusion: Chromie', 100),
-(909, 9, 51209, 'Illusion: Rat', 100),
+(910, 9, 51209, 'Illusion: Rat', 100),
 -- Glyphs -----------------------------------------------------------------------------------------
 (1000, 10, 50010, 'General: Glyph of Hardcore', 0),
 (1001, 10, 50008, 'General: Glyph of Twinking', 0),
