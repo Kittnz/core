@@ -28,7 +28,8 @@ replace into shop_categories values
 (7, 'Roleplay'),
 (8, 'Skins'),
 (9, 'Illusions'),
-(10, 'Glyphs');
+(10, 'Glyphs'),
+(11, 'Gifts');
 
 replace into shop_items values
 -- Gameplay --------------------------------------------------------------------------------------------
@@ -163,5 +164,8 @@ replace into shop_items values
 (1004, 10, 51056, 'Druid: Glyph of the Stag', 100),
 (1005, 10, 51057, 'Druid: Glyph of the Frostsaber', 100),
 (1006, 10, 51266, 'Druid: Glyph of the Ice Bear', 100),
-(1007, 10, 51267, 'Druid: Glyph of the Frostkin', 100);
+(1007, 10, 51267, 'Druid: Glyph of the Frostkin', 100),
+-- Gifts -----------------------------------------------------------------------------------------
+(1100, 11, 51255, 'Small Gift of Appreciation', 0),
+(1101, 11, 51256, 'Large Gift of Adoration', 0);
 
