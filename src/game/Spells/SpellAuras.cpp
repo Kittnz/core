@@ -3910,7 +3910,8 @@ void Aura::HandleAuraModIncreaseMountedSpeed(bool /*apply*/, bool Real)
                 case 0: m_modifier.m_amount = static_cast<int32>(ceil(player->getLevel() / 2)); break;
                 case 75: m_modifier.m_amount = 60; break;
                 case 150:
-                    if (GetCastItemGuid() && player->GetItemByGuid(GetCastItemGuid())->GetEntry() == 51252) { // Bronze Drake
+                    if (GetCastItemGuid() && player->GetItemByGuid(GetCastItemGuid()) && 
+                        player->GetItemByGuid(GetCastItemGuid())->GetEntry() == 51252) { // Bronze Drake
                         m_modifier.m_amount = 120;
                     } else {
                         m_modifier.m_amount = 100;
