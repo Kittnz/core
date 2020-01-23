@@ -1071,6 +1071,7 @@ class MANGOS_DLL_SPEC Player final: public Unit
         bool IsScarletCrusade();
         void RewardBountyHuntKill(Unit* pVictim);
         void MoveItemFromInventory(uint8 bag, uint8 slot, bool update);
+        bool IsInMainCity();
         // in trade, auction, guild bank, mail....
         void MoveItemToInventory(ItemPosCountVec const& dest, Item* pItem, bool update, bool in_characterInventoryDB = false);
         void DestroyItem(uint8 bag, uint8 slot, bool update);

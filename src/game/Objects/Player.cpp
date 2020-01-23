@@ -21711,3 +21711,8 @@ void Player::RewardBountyHuntKill(Unit* pVictim)
             KilledMonster(cInfo, ObjectGuid());
     }
 }
+
+bool Player::IsInMainCity() {
+    return GetZoneId() == 1519 || GetZoneId() == 1637 || GetZoneId() == 1497 || GetZoneId() == 1537 ||
+        GetZoneId() == 1657 || GetZoneId() == 1638 || GetInstanceId();
+}
