@@ -166,6 +166,6 @@ replace into shop_items values
 (1006, 10, 51266, 'Druid: Glyph of the Ice Bear', 100),
 (1007, 10, 51267, 'Druid: Glyph of the Frostkin', 100),
 -- Gifts -----------------------------------------------------------------------------------------
-(1100, 11, 51255, 'Small Gift of Appreciation', 0),
-(1101, 11, 51256, 'Large Gift of Adoration', 0);
+(1100, 11, 51255, 'Small Gift of Appreciation', 100),
+(1101, 11, 51256, 'Large Gift of Adoration', 150);
 
