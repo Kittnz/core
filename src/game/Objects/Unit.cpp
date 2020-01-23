@@ -7597,9 +7597,6 @@ bool Unit::IsInDisallowedMountForm()
         case 7175:
         case 11689:
         case 10651:
-        case 522:
-        case 523:
-        case 524:
         case 6630:
         case 7874:
         case 4232:
@@ -7639,6 +7636,9 @@ bool Unit::IsInDisallowedMountForm()
         case 12030:
         case 8053:
         case 2176:
+        case 522:
+        case 523:
+        case 524:
             DeMorph();
             return false;
     }
