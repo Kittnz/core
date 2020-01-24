@@ -3920,6 +3920,11 @@ bool Unit::isInAccessablePlaceFor(Creature const* c) const
         return c->CanWalk() || c->CanFly();
 }
 
+bool Unit::IsReachableBySwimming() const
+{
+    return GetTerrain()->IsSwimmable(GetPositionX(), GetPositionY(), GetPositionZ());
+}
+
 bool Unit::IsInWater() const
 {
     return GetTerrain()->IsInWater(GetPositionX(), GetPositionY(), GetPositionZ());
@@ -11456,7 +11461,7 @@ void Unit::GetRandomAttackPoint(const Unit* attacker, float &x, float &y, float 
     y = initialPosY + dist * sin(angle) * normalizedVectXY;
     z = initialPosZ + dist * normalizedVectZ;
 
-    if ((attacker->CanFly() || (attacker->CanSwim() && IsInWater())))
+    if ((attacker->CanFly() || (attacker->CanSwim() && IsReachableBySwimming())))
     {
         GetMap()->GetLosHitPosition(initialPosX, initialPosY, initialPosZ, x, y, z, -0.2f);
         if (attacker->CanFly())
