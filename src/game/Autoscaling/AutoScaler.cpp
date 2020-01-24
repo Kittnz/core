@@ -61,7 +61,6 @@ void AutoScaler::Scale(DungeonMap* map)
     Read_Mutex_Guard guard{ lock };
     auto& container = const_cast<TypeUnorderedMapContainer<AllMapStoredObjectTypes, ObjectGuid>&>(map->GetObjectStore());
 
-
     auto pairItr = container.range<Creature>();
     while (pairItr.first != pairItr.second)
     {
