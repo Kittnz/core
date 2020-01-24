@@ -19346,7 +19346,7 @@ void Player::RewardSinglePlayerAtKill(Unit* pVictim)
         }
 
         // Turtle WoW custom feature:
-        RewardBountyHuntKill(pVictim);        
+        /*RewardBountyHuntKill(pVictim); */       
     }    
 }
 
