@@ -55,7 +55,7 @@ namespace VMAP
             uint32 GetType() const { return iType; }
             float* GetHeightStorage() { return iHeight; }
             uint8* GetFlagsStorage() { return iFlags; }
-            uint32 GetFileSize();
+            uint32 GetFileSize() const;
             bool writeToFile(FILE* wf);
             static bool readFromFile(FILE* rf, WmoLiquid*& liquid);
         private:
