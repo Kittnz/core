@@ -123,6 +123,33 @@ void AutoScaler::ScaleCreature(Creature* creature, uint32 playerCount, uint32 ma
                 specificDmgFactor = 0.5f;
             }
             break;
+        case 12422: // Razorgore the Untamed adds
+        case 12420:
+        case 12416:
+            if (playerCount < 30) {
+                specificHPFactor = 0.75f;
+                specificDmgFactor = 0.35f;
+            }
+            break;
+        case 14022: // Corrupted Dragon whelps
+        case 14023:
+        case 14024:
+        case 14025:
+            if (playerCount < 30) {
+                specificHPFactor = 0.5f;
+                specificDmgFactor = 0.75f;
+            }
+            break;
+        case 14261: // Corrupted Dragon whelps
+        case 14262:
+        case 14263:
+        case 14264:
+        case 14265:
+            if (playerCount < 30) {
+                specificHPFactor = 0.65f;
+                specificDmgFactor = 0.5f;
+            }
+            break;
     }
 
     float hpPercentage = static_cast<float>(playerCount) / static_cast<float>(maxCount) * 100.f;
@@ -143,6 +170,9 @@ void AutoScaler::ScaleCreature(Creature* creature, uint32 playerCount, uint32 ma
 
     creature->SetMaxHealth(static_cast<uint32>(ScaleHp(creature->GetCreateHealth()) * specificHPFactor));
     creature->SetMaxPower(POWER_MANA, static_cast<uint32>(ScalePower(creature->GetCreateMana()) * specificPowerFactor));
+
+    if (creature->GetEntry() == 13020) // Valestrasz the Corrupt, set his health to 30% to avoid visual bug before the first pull
+        creature->SetHealthPercent(30.0);
 
     if (baseDamages.find(creature->GetEntry()) == baseDamages.end())
     {
