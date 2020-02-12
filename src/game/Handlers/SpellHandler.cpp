@@ -350,6 +350,15 @@ void WorldSession::HandleCastSpellOpcode(WorldPacket& recvPacket)
     _player->RemoveAurasWithInterruptFlags(AURA_INTERRUPT_FLAG_ON_CAST_SPELL, 4079);
 #endif
 
+    if (_player->getRace() == RACE_TAUREN)
+    {
+        if (_player->HasAura(PLAINSRUNNING_SPELL))
+        {
+            _player->RemoveAura(PLAINSRUNNING_SPELL, EFFECT_INDEX_0);
+            _player->RemoveAura(PLAINSRUNNING_SPELL, EFFECT_INDEX_1);
+        }
+    }
+
     _player->m_castingSpell = spellId;
     if (spellInfo->SpellFamilyName == SPELLFAMILY_ROGUE)
         _player->m_castingSpell = _player->GetComboPoints();
