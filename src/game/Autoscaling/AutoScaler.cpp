@@ -140,7 +140,7 @@ void AutoScaler::ScaleCreature(Creature* creature, uint32 playerCount, uint32 ma
                 specificDmgFactor = 0.75f;
             }
             break;
-        case 14261: // Corrupted Dragon whelps
+        case 14261: // Nefarian adds
         case 14262:
         case 14263:
         case 14264:
