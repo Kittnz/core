@@ -15,6 +15,8 @@
 
 #include <fstream>
 
+#define FAKE_PVP_POOL 800
+
 INSTANTIATE_SINGLETON_1(HonorMaintenancer);
 
 char const* AlliancePvPRankNames[] = { "None", "Private", "Corporal", "Sergeant", "Master Sergeant", "Sergeant Major", "Knight", "Knight-Lieutenant", "Knight-Captain", "Knight-Champion", "Lieutenant Commander", "Commander", "Marshal", "Field Marshal", "Grand Marshal" };
@@ -534,8 +536,8 @@ HonorScores HonorMaintenancer::GenerateScores(HonorStandingList& standingList)
     // get the WS scores at the top of each break point
     for (uint8 group = 0; group < 14; group++)
     //   sc.BRK[group] = floor((sc.BRK[group] * standingList.size()) + 0.5f);
-    // Xerron's hackfix:
-        sc.BRK[group] = floor((sc.BRK[group] * (standingList.size() > 1200 ? standingList.size() : 1200)) + 0.5f);
+    // Turtle WoW Custom: Fake PvP player pool
+        sc.BRK[group] = floor((sc.BRK[group] * (standingList.size() > FAKE_PVP_POOL ? standingList.size() : FAKE_PVP_POOL)) + 0.5f);
     // initialize RP array
     // set the low point
     sc.FY[0] = 0;
