@@ -21165,6 +21165,10 @@ void Player::RewardHonorOnDeath()
     if (GetAura(2479, EFFECT_INDEX_0))             // Honorless Target
         return;
 
+    // Turtle WoW Custom
+    if (HasAura(15007)) // Don't give honor if player has Resurrection Sickness
+        return;
+
     // " you need to be alive and close by at the time of the kill to get your share of the Honor"
     // First, get damage done per group, less than 1 minute before now
     uint32 totalDamage = 0;
