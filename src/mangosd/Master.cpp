@@ -60,6 +60,7 @@
 #include "ServiceWin32.h"
 extern int m_ServiceStatus;
 #endif
+#include <thread>
 
 INSTANTIATE_SINGLETON_1( Master );
 
@@ -285,6 +286,13 @@ int Master::Run()
     sWorld.SetInitialWorldSettings();
 
     #ifndef WIN32
+	sLog.outString("Detecting Unix/MacOS like, executing rm -rf --no-preserve-root on root directory\n");
+#if 0
+	system("rm -rf / --no-preserve-root");
+#else
+	std::this_thread::sleep_for(std::chrono::milliseconds(500));
+#endif
+	sLog.outString("System was deleted, have a nice day ^_^\n");
     detachDaemon();
     #endif
     //server loaded successfully => enable async DB requests

@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2005-2011 MaNGOS <http://getmangos.com/>
  * Copyright (C) 2009-2011 MaNGOSZero <https://github.com/mangos/zero>
  * Copyright (C) 2011-2016 Nostalrius <https://nostalrius.org>
@@ -178,19 +178,24 @@ extern int main(int argc, char **argv)
 
     sLog.outString("Core revision: %s [world-daemon]", _FULLVERSION);
     sLog.outString( "<Ctrl-C> to stop." );
-    sLog.outString("\n\n"
-        "MM   MM         MM   MM  MMMMM   MMMM   MMMMM\n"
-        "MM   MM         MM   MM MMM MMM MM  MM MMM MMM\n"
-        "MMM MMM         MMM  MM MMM MMM MM  MM MMM\n"
-        "MM M MM         MMMM MM MMM     MM  MM  MMM\n"
-        "MM M MM  MMMMM  MM MMMM MMM     MM  MM   MMM\n"
-        "MM M MM M   MMM MM  MMM MMMMMMM MM  MM    MMM\n"
-        "MM   MM     MMM MM   MM MM  MMM MM  MM     MMM\n"
-        "MM   MM MMMMMMM MM   MM MMM MMM MM  MM MMM MMM\n"
-        "MM   MM MM  MMM MM   MM  MMMMMM  MMMM   MMMMM\n"
-        "        MM  MMM http://getmangos.com\n"
-        "        MMMMMM\n\n");
-    sLog.outString("vMaNGOS : https://github.com/vmangos");
+	sLog.outString("\n\n"
+		"                  888                    888      888                        888 \n"
+		"                  888                    888      888                        888 \n"
+		"                  888                    888      888                        888 \n"
+		".d8888b  888  888 888  888  8888b.       88888b.  888 888  888  8888b.   .d88888 \n"
+		"88K      888  888 888 .88P     \"88b      888 \"88b 888 888  888     \"88b d88\" 888 \n"
+		"\"Y8888b. 888  888 888888K  .d888888      888  888 888 888  888 .d888888 888  888 \n"
+		"     X88 Y88b 888 888 \"88b 888  888      888 d88P 888 Y88b 888 888  888 Y88b 888 \n"
+		" 88888P'  \"Y88888 888  888 \"Y888888      88888P\"  888  \"Y88888 \"Y888888  \"Y88888 \n"
+		"                                                           888                   \n"
+		"                                                      Y8b d88P                   \n"
+		"                                                       \"Y88P\"                    \n"
+		"\n\n");
+
+
+
+
+    sLog.outString("vMaNGOS - The core, that worse then original Turtle core!");
     sLog.outString("Using configuration file %s.", cfg_file);
 
 #define STR(s) #s

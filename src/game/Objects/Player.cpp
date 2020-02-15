@@ -18841,7 +18841,19 @@ uint32 Player::GetMinLevelForBattleGroundBracketId(BattleGroundBracketId bracket
 
     BattleGround *bg = sBattleGroundMgr.GetBattleGroundTemplate(bgTypeId);
     ASSERT(bg);
-    return 10 * bracket_id + bg->GetMinLevel();
+	// Giperion Turtle: first bracket for 1 lvl, second bracket starts from 2 lvl
+	if (bracket_id == 0)
+	{
+		return 1;
+	}
+	else if (bracket_id == 1)
+	{
+		return 2;
+	}
+
+	uint32 ShiftedBracket = bracket_id - 1;
+
+    return 10 * ShiftedBracket + bg->GetMinLevel();
 }
 
 uint32 Player::GetMaxLevelForBattleGroundBracketId(BattleGroundBracketId bracket_id, BattleGroundTypeId bgTypeId)
@@ -18851,6 +18863,17 @@ uint32 Player::GetMaxLevelForBattleGroundBracketId(BattleGroundBracketId bracket
     if (bracket_id >= BG_BRACKET_ID_LAST || (bgTypeId == BATTLEGROUND_AB && bracket_id == (BG_BRACKET_ID_LAST - 1)))
         return (GetMinLevelForBattleGroundBracketId(BG_BRACKET_ID_LAST, bgTypeId) + 1);
 
+	// Giperion Turtle: first bracket start and ends in 1 lvl, second ends on 10
+	if (bracket_id == 0)
+	{
+		return 2;
+	}
+	else if (bracket_id == 1)
+	{
+		return 10;
+	}
+
+
     return GetMinLevelForBattleGroundBracketId(bracket_id, bgTypeId) + 10;
 }
 
@@ -18858,13 +18881,28 @@ BattleGroundBracketId Player::GetBattleGroundBracketIdFromLevel(BattleGroundType
 {
     BattleGround *bg = sBattleGroundMgr.GetBattleGroundTemplate(bgTypeId);
     ASSERT(bg);
+	uint32 playerLvl = getLevel();
 
-    if (getLevel() < bg->GetMinLevel())
+    if (playerLvl < bg->GetMinLevel())
         return BG_BRACKET_ID_NONE;
 
-    uint32 bracket_id = (getLevel() - bg->GetMinLevel()) / 10;
-    if (bracket_id > MAX_BATTLEGROUND_BRACKETS)
-        return BG_BRACKET_ID_LAST;
+	// Giperion Turtle: Make a separate BG bracket for 1 lvl
+	uint32 bracket_id = BG_BRACKET_ID_NONE;
+	if (playerLvl == 1)
+	{
+		return BG_BRACKET_ID_FIRST;
+	}
+	else
+	{
+		bracket_id = (playerLvl - bg->GetMinLevel()) / 10;
+		
+		// shift bracketId, since the first bracket for 1 lvl characters only
+		bracket_id++;
+		if (bracket_id > MAX_BATTLEGROUND_BRACKETS)
+		{
+			return BG_BRACKET_ID_LAST;
+		}
+	}
 
     return BattleGroundBracketId(bracket_id);
 }
