@@ -28,8 +28,8 @@ replace into shop_categories values
 (7, 'Roleplay'),
 (8, 'Skins'),
 (9, 'Illusions'),
-(10, 'Glyphs'),
-(11, 'Gifts');
+(10, 'Glyphs')/* ,
+(11, 'Gifts') */;
 
 replace into shop_items values
 -- Gameplay --------------------------------------------------------------------------------------------
@@ -40,9 +40,9 @@ replace into shop_items values
 (107, 1, 50003, 'Loremaster\'s Backpack (28 slot bag)', 75),
 (108, 1, 50011, 'MOLL-E, Portable Mailbox', 100),
 (109, 1, 50009, 'Mechanical Auctioneer', 100),
-(110, 1, 50005, 'Field Repair Bot 75B', 100),
+(110, 1, 50005, 'Field Repair Bot 75B (Companion)', 100),
 (111, 1, 50004, 'Portable Black Hole (36 slot bag)', 150),
-(112, 1, 50007, 'Forworn Mule (Bank)', 200),
+(112, 1, 50007, 'Forworn Mule (Bank Companion)', 200),
 -- Pets ------------------------------------------------------------------------------------------------
 (200, 2, 51007, 'Teldrassil Sproutling', 50),
 (201, 2, 13584, 'Diablo Stone', 50),
@@ -164,8 +164,8 @@ replace into shop_items values
 (1004, 10, 51056, 'Druid: Glyph of the Stag', 100),
 (1005, 10, 51057, 'Druid: Glyph of the Frostsaber', 100),
 (1006, 10, 51266, 'Druid: Glyph of the Ice Bear', 100),
-(1007, 10, 51267, 'Druid: Glyph of the Frostkin', 100),
+(1007, 10, 51267, 'Druid: Glyph of the Frostkin', 100)/* ,
 -- Gifts -----------------------------------------------------------------------------------------
 (1100, 11, 51255, 'Small Gift of Appreciation', 100),
-(1101, 11, 51256, 'Large Gift of Adoration', 150);
+(1101, 11, 51256, 'Large Gift of Adoration', 150) */;
 

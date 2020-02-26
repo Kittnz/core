@@ -2153,7 +2153,7 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
         return;
     }
 
-    if (GetEffIndex() == EFFECT_INDEX_0 && target->GetTypeId() == TYPEID_PLAYER)
+    if (target->GetTypeId() == TYPEID_PLAYER)
     {
         SpellAreaForAreaMapBounds saBounds = sSpellMgr.GetSpellAreaForAuraMapBounds(GetId());
         if (saBounds.first != saBounds.second)
@@ -2161,18 +2161,30 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
             uint32 zone, area;
             target->GetZoneAndAreaId(zone, area);
 
+            std::set<uint32> spellsToCast;
+            std::set<uint32> spellsToRemove;
+
             for (SpellAreaForAreaMap::const_iterator itr = saBounds.first; itr != saBounds.second; ++itr)
             {
                 // some auras remove at aura remove
                 if (!itr->second->IsFitToRequirements((Player*)target, zone, area))
-                    target->RemoveAurasDueToSpell(itr->second->spellId);
+                {
+                    spellsToRemove.insert(itr->second->spellId);
+                }
                 // some auras applied at aura apply
                 else if (itr->second->autocast)
                 {
                     if (!target->HasAura(itr->second->spellId, EFFECT_INDEX_0))
-                        target->CastSpell(target, itr->second->spellId, true);
+                        spellsToCast.insert(itr->second->spellId);
                 }
             }
+
+            for (auto i : spellsToRemove)
+                if (spellsToCast.find(i) == spellsToCast.end())
+                    target->RemoveAurasDueToSpell(i);
+
+            for (auto i : spellsToCast)
+                target->CastSpell(target, i, true);
         }
     }
 
@@ -7149,11 +7161,22 @@ void SpellAuraHolder::SetAuraFlag(uint32 slot, bool add)
     uint32 index    = slot >> 3;
     uint32 byte     = (slot & 7) << 2;
     uint32 val      = m_target->GetUInt32Value(UNIT_FIELD_AURAFLAGS + index);
+    val &= ~(uint32(AFLAG_MASK_ALL) << byte);
     if (add)
-        val |= ((uint32)AFLAG_MASK << byte);
-    else
-        val &= ~((uint32)AFLAG_MASK << byte);
+    {
+        uint32 flags = AFLAG_NONE;
 
+        if (IsPositive())
+        {
+            if (!m_spellProto->HasAttribute(SPELL_ATTR_CANT_CANCEL))
+                flags |= AFLAG_CANCELABLE;
+            flags |= AFLAG_UNK3;
+        }
+        else
+            flags |= AFLAG_UNK4;
+
+        val |= (flags << byte);
+    }
     m_target->SetUInt32Value(UNIT_FIELD_AURAFLAGS + index, val);
 }
 
