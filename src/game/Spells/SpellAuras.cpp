@@ -3903,25 +3903,40 @@ void Aura::HandleAuraModIncreaseMountedSpeed(bool /*apply*/, bool Real)
 
         if (mountAura)
         {
-            uint32 skillValue = player->GetSkillValue(762);
+            uint32 itemEntry = GetCastItemGuid() && player->GetItemByGuid(GetCastItemGuid()) ?
+                               player->GetItemByGuid(GetCastItemGuid())->GetEntry() : 0;
 
-            switch (skillValue)
+            switch (itemEntry)
             {
-                case 0: m_modifier.m_amount = static_cast<int32>(ceil(player->getLevel() / 2)); break;
-                case 75: m_modifier.m_amount = 60; break;
-                case 150:
-                    if (GetCastItemGuid() && player->GetItemByGuid(GetCastItemGuid()) && 
-                        player->GetItemByGuid(GetCastItemGuid())->GetEntry() == 51252) { // Bronze Drake
-                        m_modifier.m_amount = 120;
-                    } else {
-                        m_modifier.m_amount = 100;
-                    }
+                // PvP mounts should always have 100% speed.
+                case 18241:
+                case 18242:
+                case 18243:
+                case 18244:
+                case 18245:
+                case 18246:
+                case 18247:
+                case 18248:
+                    m_modifier.m_amount = 100;
+                    break;
+                    // Bronze Drake
+                case 51252:
+                    m_modifier.m_amount = 120;
                     break;
                 default:
-                    // TODO If the player logs out and logs back in, riding skill value is not loaded yet. Unmounting in order to prevent wrong speed.
-                    player->Unmount();
-                    player->RemoveSpellsCausingAura(SPELL_AURA_MOUNTED);
-                    return;
+                    uint32 skillValue = player->GetSkillValue(762);
+
+                    switch (skillValue)
+                    {
+                        case 0: m_modifier.m_amount = static_cast<int32>(ceil(player->getLevel() / 2)); break;
+                        case 75: m_modifier.m_amount = 60; break;
+                        case 150: m_modifier.m_amount = 100; break;
+                        default:
+                            // TODO If the player logs out and logs back in, riding skill value is not loaded yet. Unmounting in order to prevent wrong speed.
+                            player->Unmount();
+                            player->RemoveSpellsCausingAura(SPELL_AURA_MOUNTED);
+                            return;
+                    }
             }
         }
     }
