@@ -2101,6 +2101,7 @@ void RacePlayer::GoRaceMode()
 			// read first point
 			const RaceCheckpoint& startPoint = raceEvent->GetCheckpoint(0);
 
+			pl->Unmount();
 			pl->GetPosition(savedPlPos);
 
 			//Creature* raceCar = pl->SummonCreature(GOBLINCAR_CREATURE_ENTRY,
@@ -2208,6 +2209,7 @@ void RacePlayer::LeaveRaceMode()
 			pl->UpdateSpeed(MOVE_RUN, true, 1.0f);
 			pl->SetCharm(nullptr);
 			pl->RemovePetActionBar();
+			pl->CastSpell(pl, 1604, true); // Dazed spell
 		}
 
 		if (GameObject* checkpointEffect = map->GetGameObject(checkpointEffectGuid))
