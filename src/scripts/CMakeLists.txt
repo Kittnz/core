@@ -302,8 +302,8 @@ set (SCRIPTS_SRCS
 	turtlewow/go_scripts.cpp
     turtlewow/item_scripts.cpp
     turtlewow/guild_housing.cpp
-	
-)
+
+        turtlewow/cot/black_morass/boss_chromie.cpp turtlewow/cot/black_morass/boss_chronormu.cpp)
 
 
 # Used in game ScriptMgr, not need here

@@ -12,7 +12,7 @@ enum
     SPELL_PIERCING_SHADOW       = 16429,
     SPELL_VEIL_OF_SHADOW        = 22687,
     SPELL_BLACKOUT              = 15269,
-    TWIN_TELEPORT_VISUAL        = 26638,
+    SPELL_TWIN_TELEPORT_VISUAL  = 26638,
     SPELL_DRAIN_LIFE            = 29155
 };
 
@@ -210,7 +210,7 @@ struct boss_turtlhuAI : public ScriptedAI
             std::list<Player*> players;
             GetPlayersWithinRange(players, 75);
             m_creature->InterruptNonMeleeSpells(false);
-            DoCast(m_creature, TWIN_TELEPORT_VISUAL);
+            DoCast(m_creature, SPELL_TWIN_TELEPORT_VISUAL);
 
             for (auto &player : players) {
                 if (player && player->isAlive() && player != m_creature->getVictim())

@@ -273,6 +273,7 @@ void AddSC_boss_xmas_wolf();
 void AddSC_winter_veil_vale();
 void AddSC_drogon();
 void AddSC_boss_gerastrasz();
+void AddSC_boss_chromie();
 void AddSC_instance_caverns_of_time();
 void AddSC_zebrian_the_mad();
 void AddSC_go_scripts();
@@ -550,6 +551,7 @@ void AddScripts()
     AddSC_winter_veil_vale();
     AddSC_drogon();
     AddSC_boss_gerastrasz();
+    AddSC_boss_chromie();
     AddSC_instance_caverns_of_time();
     AddSC_zebrian_the_mad();
     AddSC_go_scripts();

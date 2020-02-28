@@ -1,19 +1,3 @@
-/* Copyright (C) 2006 - 2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- */
-
 #include "scriptPCH.h"
 
 enum
@@ -21,7 +5,7 @@ enum
     SPELL_RAIN_OF_FIRE          = 19717,
     SPELL_BLOOD_FUNNEL          = 24617,
     SPELL_CLEAVE                = 20691,
-    TWIN_TELEPORT_VISUAL        = 26638,
+    SPELL_TWIN_TELEPORT_VISUAL        = 26638,
     SPELL_FIRE_NOVA             = 18432
 };
 
@@ -91,7 +75,7 @@ struct boss_gerastraszAI : public ScriptedAI
 
     void JustSummoned(Creature *summoned)
     {
-        summoned->CastSpell(summoned, TWIN_TELEPORT_VISUAL, false);
+        summoned->CastSpell(summoned, SPELL_TWIN_TELEPORT_VISUAL, false);
         summoned->MonsterTextEmote("Echo of Gerastrasz prepares to sacrifice himself and heal the Commander.");
         summoned->Attack(summoned->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0), true);
         m_uiBloodFunnelTimer = 20000;
