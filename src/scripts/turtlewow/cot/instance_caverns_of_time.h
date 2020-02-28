@@ -1,5 +1,5 @@
-#ifndef DEF_DEADMINES_H
-#define DEF_DEADMINES_H
+#ifndef DEF_COT_H
+#define DEF_COT_H
 
 enum
 {
