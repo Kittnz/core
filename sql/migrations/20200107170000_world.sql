@@ -7,33 +7,29 @@ SET v = (SELECT COUNT(*) FROM `migrations` WHERE `id`='20200107170000');
 IF v=0 THEN
 INSERT INTO `migrations` VALUES ('20200107170000');
 
-INSERT INTO `mangos_string` (`entry`, `content_default`, `content_loc8`) VALUES 
-('70000', 'Head', 'Голова'),
-('70001', 'Shoulders', 'Наплечники'),
-('70002', 'Cape', 'Плащ'),
-('70003', 'Chestplate', 'Нагрудник'),
-('70004', 'Wrists', 'Запястья'),
-('70005', 'Hands', 'Перчатки'),
-('70006', 'Waist', 'Пояс'),
-('70007', 'Legs', 'Ноги'),
-('70008', 'Feet', 'Ботинки'),
-('70009', 'Main Hand', 'Правая рука'),
-('70010', 'Off Hand', 'Левая рука'),
-('70011', 'Ranged Weapon', 'Оружие дальнего боя'),
-('70012', 'Cost: ', 'Цена: '),
-('70013', 'Reset: ', 'Вернуть: '),
-('70014', 'g ', 'з '),
-('70015', 's ', 'с '),
-('70016', 'c ', 'м ');
+INSERT INTO `broadcast_text` (`ID`, `maletext`) VALUES
+('70000', 'Head'),
+('70001', 'Shoulders'),
+('70002', 'Cape'),
+('70003', 'Chestplate'),
+('70004', 'Wrists'),
+('70005', 'Hands'),
+('70006', 'Waist'),
+('70007', 'Legs'),
+('70008', 'Feet'),
+('70009', 'Main Hand'),
+('70010', 'Off Hand'),
+('70011', 'Ranged Weapon'),
+('70012', 'Cost: '),
+('70013', 'Reset: '),
+('70014', 'g '),
+('70015', 's '),
+('70016', 'c ');
 
--- INSERT INTO `npc_text` (`ID`, `text0_0`) VALUES ('60000', 'You may only use items contained in your main backpack as a transmog option!');
--- INSERT INTO `locales_npc_text` (`entry`, `Text0_0_loc8`) VALUES ('60000', 'Помести в первую сумку вещи, внешний вид которых ты хотел бы позаимствовать.');
--- INSERT INTO `npc_text` (`ID`, `text0_0`) VALUES ('60001', 'Select item:');
--- INSERT INTO `locales_npc_text` (`entry`, `Text0_0_loc8`) VALUES ('60001', 'Выберите предмет:');
+INSERT INTO `broadcast_text` (`ID`, `maletext`) VALUES ('60000', 'You may only use items contained in your main backpack as a transmog option!');
+INSERT INTO `broadcast_text` (`ID`, `maletext`) VALUES ('60001', 'Select item:');
 
 -- INSERT INTO `creature_template` (`entry`, `patch`, `KillCredit1`, `KillCredit2`, `modelid_1`, `modelid_2`, `modelid_3`, `modelid_4`, `name`, `subname`, `gossip_menu_id`, `minlevel`, `maxlevel`, `minhealth`, `maxhealth`, `minmana`, `maxmana`, `armor`, `faction_A`, `faction_H`, `npcflag`, `speed_walk`, `speed_run`, `scale`, `rank`, `mindmg`, `maxdmg`, `dmgschool`, `attackpower`, `dmg_multiplier`, `baseattacktime`, `rangeattacktime`, `unit_class`, `unit_flags`, `dynamicflags`, `family`, `trainer_type`, `trainer_spell`, `trainer_class`, `trainer_race`, `minrangedmg`, `maxrangedmg`, `rangedattackpower`, `type`, `type_flags`, `lootid`, `pickpocketloot`, `skinloot`, `resistance1`, `resistance2`, `resistance3`, `resistance4`, `resistance5`, `resistance6`, `spell1`, `spell2`, `spell3`, `spell4`, `PetSpellDataId`, `mingold`, `maxgold`, `AIName`, `MovementType`, `InhabitType`, `Civilian`, `RacialLeader`, `RegenHealth`, `equipment_id`, `trainer_id`, `vendor_id`, `MechanicImmuneMask`, `SchoolImmuneMask`, `flags_extra`, `aggroRadius`, `ScriptName`) VALUES ('321000', '0', '0', '0', '3019', '0', '0', '0', 'Transmogrification', '', '0', '1', '1', '1000000', '1000000', '0', '0', '100', '35', '35', '1', '0.91', '1.14286', '2', '0', '1', '2', '0', '0', '1', '2000', '0', '0', '4', '0', '0', '0', '0', '0', '0', '0', '0', '100', '10', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '', '0', '3', '0', '0', '1', '0', '0', '0', '17', '0', '64', '0', 'custom_TransmogNPC');
-
-INSERT INTO `locales_creature` (`entry`, `name_loc8`) VALUES ('321000', 'Трансмогрификация');
 
 -- ----------------------------
 -- Table structure for `transmog_template`
