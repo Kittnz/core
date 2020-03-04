@@ -2155,3 +2155,33 @@ BeginnersGuildAlliance = 0
 
 AutoBroadcast.Timer = 1800000
 
+###################################################################################################
+# TRANSMOG
+#
+#    Transmog.Enable
+#        Description: Enable or disable transmog feature
+#        Default:     1 - (Enabled)
+#                     0 - (Disabled)
+#
+#    Transmog.ReqItemID
+#        Description: Adds/disables item cost
+#        Default:     0 - (Disabled)
+#                     1 - (Require ItemID)
+#
+#    Transmog.ReqItemCount
+#        Description: Count of required items
+#        Default:     1 - (Disabled)
+#
+#
+#    Transmog.ReqMoneyRate
+#        Description: Required gold modificator
+#        Default:     1.0 - 100% of buy price item
+#					  Example: 0.0 - (Free)
+#					           0.1 - 10% of buy price item
+
+Transmog.Enable = 1
+Transmog.ReqItemID = 0
+Transmog.ReqItemCount = 1
+Transmog.ReqMoneyRate = 1.0
+
+

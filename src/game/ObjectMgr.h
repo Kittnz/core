@@ -39,6 +39,7 @@
 #include "Policies/Singleton.h"
 #include "SQLStorages.h"
 #include "Conditions.h"
+#include "turtlewow/transmog.h"
 
 #include <string>
 #include <map>
@@ -655,7 +656,12 @@ class ObjectMgr
             return sCreatureInfoAddonStorage.LookupEntry<CreatureDataAddon>(entry);
         }
 
-        static ItemPrototype const* GetItemPrototype(uint32 id) { return sItemStorage.LookupEntry<ItemPrototype>(id); }
+        static ItemPrototype const* GetItemPrototype(uint32 id);
+
+        static TransmogEntry const* GetTransmogEntry(uint32 displayid)
+        {
+            return sTransmogEntryStorage.LookupEntry<TransmogEntry>(displayid);
+        }
 
         PetLevelInfo const* GetPetLevelInfo(uint32 creature_id, uint32 level) const;
 
@@ -842,6 +848,7 @@ class ObjectMgr
         void LoadGameObjectLocales();
         void LoadGameobjects(bool reload = false);
         void LoadItemPrototypes();
+        void LoadTransmogTemplate();
         void FillObtainedItemsList(std::set<uint32>&);
         void CorrectItemEffects(uint32, _ItemSpell&);
         void CorrectItemModels(uint32, uint32&);
@@ -998,6 +1005,23 @@ class ObjectMgr
             auto itr = m_GameObjectLocaleMap.find(entry);
             if(itr==m_GameObjectLocaleMap.end()) return nullptr;
             return &itr->second;
+        }
+
+        std::string GetItemLocaleName(uint32 entry, uint32 loc_idx)
+        {
+            const ItemPrototype* proto = GetItemPrototype(entry);
+            if (!proto)
+                return "ITEM NOT EXIST";
+
+            ItemLocale const* il = GetItemLocale(entry);
+
+            if (!il)
+                return proto->Name1;
+
+            if (il->Name.size() < loc_idx)
+                return proto->Name1;
+            else
+                return il->Name[loc_idx];
         }
 
         ItemLocale const* GetItemLocale(uint32 entry) const
@@ -1358,6 +1382,8 @@ class ObjectMgr
         void LoadSkillLineAbility();
         SkillLineAbilityEntry const* GetSkillLineAbility(uint32 id) const { return id < GetMaxSkillLineAbilityId() ? m_SkillLineAbilities[id].get() : nullptr; }
         uint32 GetMaxSkillLineAbilityId() const { return m_SkillLineAbilities.size(); }
+
+
 
         // Changes of faction
         typedef std::map<uint32, uint32> CharacterConversionMap;

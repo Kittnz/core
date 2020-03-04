@@ -52,6 +52,7 @@
 #include "NodeSession.h"
 #include "NodesOpcodes.h"
 #include "MasterPlayer.h"
+#include "turtlewow/transmog.h"
 
 // select opcodes appropriate for processing in Map::Update context for current session state
 static bool MapSessionFilterHelper(WorldSession* session, OpcodeHandler const& opHandle)
@@ -739,11 +740,14 @@ void WorldSession::LogoutPlayer(bool Save)
                 sMapMgr.ExecuteSingleDelayedTeleport(_player);
             }
         }
-
         ///- empty buyback items and save the player in the database
         // some save parts only correctly work in case player present in map/player_lists (pets, etc)
         if (Save)
+        {
+            if (InWorld && sWorld.getConfig(CONFIG_BOOL_TRANSMOG_ENABLED))
+                sTransmog.LoadTransmog(_player, true);
             _player->SaveToDB(false, removedFromMap);
+        }
 
         ///- Leave all channels before player delete...
         _player->CleanupChannels();

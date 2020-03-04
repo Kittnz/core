@@ -1034,6 +1034,22 @@ void World::LoadConfigSettings(bool reload)
 
     // Server autobroadcast settings:
     setConfig(CONFIG_UINT32_AUTOBROADCAST_INTERVAL, "AutoBroadcast.Timer", 60000);
+
+    setConfig(CONFIG_BOOL_TRANSMOG_ENABLED, "Transmog.Enable", false);
+
+    setConfig(CONFIG_UINT32_TRANSMOG_REQ_ITEM, "Transmog.ReqItemID", 0);
+    if (getConfig(CONFIG_UINT32_TRANSMOG_REQ_ITEM) < 0)
+    {
+        sLog.outError("WORLD: CONFIG_UINT32_TRANSMOG_REQ_ITEM has wrong value (%u). Must be > 0. Set to 0.", getConfig(CONFIG_UINT32_TRANSMOG_REQ_ITEM));
+        setConfig(CONFIG_UINT32_TRANSMOG_REQ_ITEM, 0);
+    }
+    setConfig(CONFIG_UINT32_TRANSMOG_REQ_ITEM_COUNT, "Transmog.ReqItemCount", 1);
+    if (getConfig(CONFIG_UINT32_TRANSMOG_REQ_ITEM_COUNT) <= 0 || getConfig(CONFIG_UINT32_TRANSMOG_REQ_ITEM_COUNT) > 200)
+    {
+        sLog.outError("WORLD: CONFIG_UINT32_TRANSMOG_REQ_ITEM_COUNT has wrong value (%u). Must be 1 - 200. Set to 1.", getConfig(CONFIG_UINT32_TRANSMOG_REQ_ITEM_COUNT));
+        setConfig(CONFIG_UINT32_TRANSMOG_REQ_ITEM_COUNT, 1);
+    }
+    setConfig(CONFIG_FLOAT_TRANSMOG_REQ_MONEY_RATE, "Transmog.ReqMoneyRate", 0.0);
 }
 
 class CharactersDatabaseWorkerThread : public ACE_Based::Runnable
@@ -1670,6 +1686,9 @@ void World::SetInitialWorldSettings()
 
     sLog.outString("Loading `cinematic_waypoints`");
     sObjectMgr.LoadCinematicsWaypoints();
+
+    sLog.outString("Loading Transmog template...");
+    sObjectMgr.LoadTransmogTemplate();
 
     sLog.outString("Loading spell groups ...");
     sSpellMgr.LoadSpellGroups();

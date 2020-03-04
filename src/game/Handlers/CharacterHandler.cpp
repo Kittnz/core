@@ -45,6 +45,7 @@
 #include "MasterPlayer.h"
 #include "PlayerBroadcaster.h"
 #include "Mail.h"
+#include "turtlewow/transmog.h"
 
 // config option SkipCinematics supported values
 enum CinematicsSkipMode
@@ -789,6 +790,9 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
     //if (GetWarden())
         //for (int i = 0; i < MAX_MOVE_TYPE; ++i)
             //GetWarden()->SendSpeedChange(UnitMoveType(i), pCurrChar->GetSpeed(UnitMoveType(i)));
+
+    if (sWorld.getConfig(CONFIG_BOOL_TRANSMOG_ENABLED))
+        sTransmog.LoadTransmog(pCurrChar);
 
     ALL_SESSION_SCRIPTS(this, OnLogin(pCurrChar));
 }

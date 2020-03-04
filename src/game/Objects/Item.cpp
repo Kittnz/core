@@ -26,6 +26,7 @@
 #include "Database/DatabaseEnv.h"
 #include "ItemEnchantmentMgr.h"
 #include "GuildMgr.h"
+#include "turtlewow/transmog.h"
 
 void AddItemsSetItem(Player* player, Item* item)
 {
@@ -354,6 +355,7 @@ void Item::SaveToDB()
             }
 
             SqlStatement stmt = CharacterDatabase.CreateStatement(delInst, "DELETE FROM `item_instance` WHERE `guid` = ?");
+            sTransmog.DeleteTransmogItemFromDB(guid);
             stmt.PExecute(guid);
 
             if (HasFlag(ITEM_FIELD_FLAGS, ITEM_DYNFLAG_WRAPPED))
@@ -540,6 +542,7 @@ void Item::DeleteAllFromDB(uint32 guidLow)
         sGuildMgr.DeletePetition(petition);
 
     CharacterDatabase.PExecute("DELETE FROM `character_gifts` WHERE `item_guid` = '%u'", guidLow);
+    sTransmog.DeleteTransmogItemFromDB(guidLow);
 }
 
 void Item::LoadLootFromDB(Field* fields)
@@ -578,6 +581,7 @@ void Item::DeleteFromDB()
 
     SqlStatement stmt = CharacterDatabase.CreateStatement(delItem, "DELETE FROM `item_instance` WHERE `guid` = ?");
     stmt.PExecute(GetGUIDLow());
+    sTransmog.DeleteTransmogItemFromDB(GetGUIDLow());
 }
 
 void Item::DeleteFromInventoryDB()
@@ -586,6 +590,7 @@ void Item::DeleteFromInventoryDB()
 
     SqlStatement stmt = CharacterDatabase.CreateStatement(delInv, "DELETE FROM `character_inventory` WHERE `item` = ?");
     stmt.PExecute(GetGUIDLow());
+    sTransmog.DeleteTransmogItemFromDB(GetGUIDLow());
 }
 
 ItemPrototype const* Item::GetProto() const
@@ -745,6 +750,7 @@ void Item::SetState(ItemUpdateState state, Player* forplayer)
 {
     if (uState == ITEM_NEW && state == ITEM_REMOVED)
     {
+        sTransmog.DeleteTransmogItemFromDB(GetGUIDLow());
         // pretend the item never existed
         RemoveFromUpdateQueueOf(forplayer);
         delete this;
