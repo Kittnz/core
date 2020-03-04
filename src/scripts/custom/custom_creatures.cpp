@@ -17,7 +17,7 @@
 #include "scriptPCH.h"
 #include "custom.h"
 #include "ScriptedAI.h"
-#include "turtlewow/transmog.h"
+#include "../turtlewow/transmog.h"
 #include <ctime>
 
 // TELEPORT NPC

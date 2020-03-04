@@ -70,7 +70,7 @@ struct boss_chromieAI : public ScriptedAI
     }
 
     void UpdateAI(const uint32 diff) {
-        if (m_creature->GetHealthPercent() <= 25 and !isFriendly) {
+        if (m_creature->GetHealthPercent() <= 25 && !isFriendly) {
             isFriendly = true;
 
             m_creature->addUnitState(UNIT_STAT_ROOT);
@@ -98,7 +98,7 @@ struct boss_chromieAI : public ScriptedAI
         }
 
         if (isFriendly) {
-            if (m_uiChronormuTimer < diff and !chronormuSummoned) {
+            if (m_uiChronormuTimer < diff && !chronormuSummoned) {
                 chronormuSummoned = true;
 
                 chronormu = m_creature->SummonCreature(CREATURE_CHRONORMU, old_x, old_y,
@@ -112,7 +112,7 @@ struct boss_chromieAI : public ScriptedAI
                 chronormu->PMonsterYell("I'll handle this alone, I don't need the help of a weaker self!");
             } else m_uiChronormuTimer -= diff;
 
-            if (m_uiChronormuCombatStartTimer < diff and !chronormuCombatStarted) {
+            if (m_uiChronormuCombatStartTimer < diff && !chronormuCombatStarted) {
                 chronormuCombatStarted = true;
                 chronormu->SetFacingToObject(m_creature);
                 m_creature->RemoveAllAuras();

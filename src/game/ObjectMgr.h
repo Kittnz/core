@@ -39,7 +39,6 @@
 #include "Policies/Singleton.h"
 #include "SQLStorages.h"
 #include "Conditions.h"
-#include "turtlewow/transmog.h"
 
 #include <string>
 #include <map>

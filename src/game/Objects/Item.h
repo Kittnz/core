@@ -355,8 +355,7 @@ class MANGOS_DLL_SPEC Item : public Object
         static void GetLocalizedNameWithSuffix(std::string& name, const ItemPrototype* proto, const ItemRandomPropertiesEntry* randomProp, int dbLocale, LocaleConstant dbcLocale);
 
         uint32 GetFakeEntry() { return m_fakeEntry; }
-        void SetFakeEntry(uint32 fakeEntry) {
-            m_fakeEntry = fakeEntry;
+        void SetFakeEntry(uint32 fakeEntry) { m_fakeEntry = fakeEntry; }
 
     private:
         uint32 m_fakeEntry = 0;

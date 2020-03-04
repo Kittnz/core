@@ -744,7 +744,7 @@ void WorldSession::LogoutPlayer(bool Save)
         // some save parts only correctly work in case player present in map/player_lists (pets, etc)
         if (Save)
         {
-            if (InWorld && sWorld.getConfig(CONFIG_BOOL_TRANSMOG_ENABLED))
+            if (inWorld && sWorld.getConfig(CONFIG_BOOL_TRANSMOG_ENABLED))
                 sTransmog.LoadTransmog(_player, true);
             _player->SaveToDB(false, removedFromMap);
         }

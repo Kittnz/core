@@ -1,5 +1,5 @@
 
-#include "turtlewow/transmog.h"
+#include "transmog.h"
 #include "ObjectMgr.h"
 #include "World.h"
 #include "GossipDef.h"
