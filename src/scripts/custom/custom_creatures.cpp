@@ -1349,7 +1349,7 @@ void AddSC_custom_creatures()
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "custom_TransmogNPC";
+    newscript->Name = "npc_transmog";
     newscript->pGossipHello = &GossipHello_TransmogNPC;
     newscript->pGossipSelect = &GossipSelect_TransmogNPC;
     newscript->RegisterSelf();

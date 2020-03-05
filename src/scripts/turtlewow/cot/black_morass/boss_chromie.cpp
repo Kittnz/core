@@ -182,7 +182,7 @@ struct boss_chromieAI : public ScriptedAI
             if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
                 return;
 
-            if (m_creature->GetHealthPercent() <= 30 and !stopCasting)
+            if (m_creature->GetHealthPercent() <= 30 && !stopCasting)
                 stopCasting = true;
 
             if (!stopCasting) {

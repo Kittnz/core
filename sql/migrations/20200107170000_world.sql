@@ -11,12 +11,6 @@ REPLACE INTO `creature_template` VALUES (51290, 0, 13730, 0, 0, 0, 'Mr. Spock', 
 
 update `creature_template` set `npc_flags`='1' where `entry`='51290';	
 
-replace into `broadcast_text` (`ID`, `maletext`) VALUES ('60000', 'You may only use items contained in your main backpack as a transmog option!');
-replace into`broadcast_text` (`ID`, `maletext`) VALUES ('60001', 'Select item:');
- 
-replace into `npc_text` (`ID`, `BroadcastTextID0`) values ('60000', '60000');
-replace into `npc_text` (`ID`, `BroadcastTextID0`) values ('60001', '60001');
-
 -- ----------------------------
 -- Table structure for `transmog_template`
 -- ----------------------------

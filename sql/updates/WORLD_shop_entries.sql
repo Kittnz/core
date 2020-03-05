@@ -43,6 +43,7 @@ replace into shop_items values
 (110, 1, 50005, 'Field Repair Bot 75B (Companion)', 100),
 (111, 1, 50004, 'Portable Black Hole (36 slot bag)', 150),
 (112, 1, 50007, 'Forworn Mule (Bank Companion)', 200),
+(113, 1, 51216, 'Transmogrification Token', 10),
 -- Pets ------------------------------------------------------------------------------------------------
 (200, 2, 51007, 'Teldrassil Sproutling', 50),
 (201, 2, 13584, 'Diablo Stone', 50),
