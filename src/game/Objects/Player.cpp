@@ -69,6 +69,7 @@
 #include "MapReferenceImpl.h"
 #include "GMTicketMgr.h"
 #include "MasterPlayer.h"
+#include "turtlewow/transmog.h"
 
 /* Nostalrius */
 #include "Config/Config.h"
@@ -10375,6 +10376,9 @@ void Player::SetVisibleItemSlot(uint8 slot, Item *pItem)
         // Use SetInt16Value to prevent set high part to FFFF for negative value
         SetInt16Value(PLAYER_VISIBLE_ITEM_1_PROPERTIES + (slot * MAX_VISIBLE_ITEM_OFFSET), 0, pItem->GetItemRandomPropertyId());
         SetUInt32Value(PLAYER_VISIBLE_ITEM_1_PROPERTIES + 1 + (slot * MAX_VISIBLE_ITEM_OFFSET), pItem->GetItemSuffixFactor());
+
+        if (sWorld.getConfig(CONFIG_BOOL_TRANSMOG_ENABLED))
+            sTransmog.UpdateTransmogItem(this, pItem);
     }
     else
     {

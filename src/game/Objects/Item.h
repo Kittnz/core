@@ -354,7 +354,11 @@ class MANGOS_DLL_SPEC Item : public Object
         bool IsCharter() const { return GetEntry() == 5863u; }
         static void GetLocalizedNameWithSuffix(std::string& name, const ItemPrototype* proto, const ItemRandomPropertiesEntry* randomProp, int dbLocale, LocaleConstant dbcLocale);
 
+        uint32 GetFakeEntry() { return m_fakeEntry; }
+        void SetFakeEntry(uint32 fakeEntry) { m_fakeEntry = fakeEntry; }
+
     private:
+        uint32 m_fakeEntry = 0;
         bool generatedLoot;
         uint8 m_slot;
         Bag* m_container;
@@ -381,6 +385,8 @@ class MANGOS_DLL_SPEC Item : public Object
          * @return false iif the Item is corrupt.
          */
         bool WakeUp();
+
+
 };
 
 #endif

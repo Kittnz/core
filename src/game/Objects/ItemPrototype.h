@@ -433,6 +433,13 @@ struct _ItemSpell
 #define MAX_ITEM_PROTO_SPELLS  5
 #define MAX_ITEM_PROTO_STATS  10
 
+struct TransmogEntry
+{
+    uint32 displayid;
+    uint32 display_entry;
+    uint32 inventory_type;
+};
+
 struct ItemPrototype
 {
     uint32 ItemId;
