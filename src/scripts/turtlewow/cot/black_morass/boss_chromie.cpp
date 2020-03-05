@@ -11,7 +11,9 @@ enum
     SPELL_GREEN_CHANNELING = 13540,
     SPELL_PARTICLES_GREEN = 18951,
 
-    CREATURE_CHRONORMU = 50117
+    CREATURE_CHRONORMU = 50117,
+
+    SOUND_BODY_OF_KATHUNE = 8674
 
 };
 
@@ -121,6 +123,7 @@ struct boss_chromieAI : public ScriptedAI
             DoCastSpellIfCan(m_creature, SPELL_TWIN_TELEPORT_VISUAL, CF_FORCE_CAST);
             m_creature->NearTeleportTo(pTarget->GetPositionX() + 1, pTarget->GetPositionY() - 1, pTarget->GetPositionZ(),
                                        m_creature->GetOrientation());
+            m_creature->PlayDirectSound(SOUND_BODY_OF_KATHUNE);
         }
 
         if (isFriendly) {
