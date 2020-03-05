@@ -1,6 +1,3 @@
-// This will run an additional script each time we cast the spell of the item. 
-// Set up cooldown and charges directly for item_template in the database: spellid_1, spellcharges_1, spellcooldown_1. 
-// If you make a new item, use visual effects only, make it doesn't share spell cooldown with anything important.
 
 #include "scriptPCH.h"
 
@@ -483,7 +480,6 @@ bool ItemUse_bg_tabard(Player* pPlayer, Item* pItem, const SpellCastTargets&)
     return false;
 }
 
-// Shop morph items
 bool ItemUse_highborne_soul_mirror(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
     if (!pPlayer)
@@ -672,28 +668,10 @@ bool ItemUse_shop_morph_succubus(Player* pPlayer, Item* pItem, const SpellCastTa
     return false;
 }
 
-// Enf of shop morph items
-
 bool ItemUse_remove_rested(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
     pPlayer->SetRestBonus(0);
     ChatHandler(pPlayer).SendSysMessage("You feel weary and exhausted as undead.");
-    return false;
-}
-
-bool ItemUse_turtle_morph(Player* pPlayer, Item* pItem, const SpellCastTargets&)
-{
-    if (!pPlayer)
-        return false;
-
-    if (pPlayer->GetNativeDisplayId() != pPlayer->GetDisplayId()) {
-        pPlayer->DeMorph();
-        return false;
-    }
-
-    pPlayer->SetDisplayId(16259);
-    pPlayer->SetObjectScale(0.3f);
-    ChatHandler(pPlayer).SendSysMessage("You're a turtle now!");
     return false;
 }
 
@@ -709,18 +687,6 @@ bool ItemUse_turtle_party(Player* pPlayer, Item* pItem, const SpellCastTargets&)
     return false;
 }
 
-bool ItemUse_roleplay_summon_1(Player* pPlayer, Item* pItem, const SpellCastTargets&)
-{
-    if (!pPlayer)
-        return false;
-
-    if (pPlayer->GetZoneId() == 440)
-        pPlayer->SummonCreature(50600, pPlayer->GetPositionX(), pPlayer->GetPositionY(), pPlayer->GetPositionZ(), pPlayer->GetOrientation(),TEMPSUMMON_DEAD_DESPAWN, 30 * MINUTE);
-    else 
-        ChatHandler(pPlayer).SendSysMessage("You must be in Tanaris.");
-    return false;
-}
-
 // ------------------ TRANSMOGRIFICATION ------------------ //
 
 #define TRANSMOGRIFICATION_SATCHEL 51216
@@ -729,202 +695,6 @@ bool ItemUse_roleplay_summon_1(Player* pPlayer, Item* pItem, const SpellCastTarg
 bool ItemUse_transmogrification(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
     // There'll be lots of ugly and hacky code. 
-    return false;
-}
-
-bool ItemUse_roleplay_wave_1(Player* pPlayer, Item* pItem, const SpellCastTargets&)
-{
-    if (!pPlayer)
-        return false;
-
-    if (pPlayer->GetZoneId() == 440)
-    {
-        pPlayer->SummonCreature(50620, pPlayer->GetPositionX() + 5.0F, pPlayer->GetPositionY() + 12.0F, pPlayer->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 30 * MINUTE);
-        pPlayer->SummonCreature(50620, pPlayer->GetPositionX() + 6.0F, pPlayer->GetPositionY() + 14.0F, pPlayer->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 30 * MINUTE);
-        pPlayer->SummonCreature(50620, pPlayer->GetPositionX() + 7.0F, pPlayer->GetPositionY() + 17.0F, pPlayer->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 30 * MINUTE);
-        pPlayer->SummonCreature(50620, pPlayer->GetPositionX() + 8.0F, pPlayer->GetPositionY() + 4.0F, pPlayer->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 30 * MINUTE);
-        pPlayer->SummonCreature(50620, pPlayer->GetPositionX() + 9.0F, pPlayer->GetPositionY() + 2.0F, pPlayer->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 30 * MINUTE);
-        pPlayer->SummonCreature(50620, pPlayer->GetPositionX() + 10.0F, pPlayer->GetPositionY() + 3.0F, pPlayer->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 30 * MINUTE);
-        pPlayer->SummonCreature(50620, pPlayer->GetPositionX() + 11.0F, pPlayer->GetPositionY() + 7.0F, pPlayer->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 30 * MINUTE);
-        pPlayer->SummonCreature(50620, pPlayer->GetPositionX() + 12.0F, pPlayer->GetPositionY() + 1.0F, pPlayer->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 30 * MINUTE);
-    }
-
-    else
-        ChatHandler(pPlayer).SendSysMessage("You must be in Tanaris.");
-    return false;
-}
-
-bool ItemUse_roleplay_wave_2(Player* pPlayer, Item* pItem, const SpellCastTargets&)
-{
-    if (!pPlayer)
-        return false;
-
-    if (pPlayer->GetZoneId() == 440)
-    {
-        pPlayer->SummonCreature(50621, pPlayer->GetPositionX() + 5.0F, pPlayer->GetPositionY() + 10.0F, pPlayer->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 30 * MINUTE);
-        pPlayer->SummonCreature(50621, pPlayer->GetPositionX() + 6.0F, pPlayer->GetPositionY() + 1.0F, pPlayer->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 30 * MINUTE);
-        pPlayer->SummonCreature(50621, pPlayer->GetPositionX() + 7.0F, pPlayer->GetPositionY() + 14.0F, pPlayer->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 30 * MINUTE);
-        pPlayer->SummonCreature(50621, pPlayer->GetPositionX() + 8.0F, pPlayer->GetPositionY() + 12.0F, pPlayer->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 30 * MINUTE);
-
-        pPlayer->SummonCreature(50622, pPlayer->GetPositionX() + 9.0F, pPlayer->GetPositionY() + 18.0F, pPlayer->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 30 * MINUTE);
-        pPlayer->SummonCreature(50622, pPlayer->GetPositionX() + 10.0F, pPlayer->GetPositionY() + 2.0F, pPlayer->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 30 * MINUTE);
-        pPlayer->SummonCreature(50622, pPlayer->GetPositionX() + 11.0F, pPlayer->GetPositionY() + 13.0F, pPlayer->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 30 * MINUTE);
-        pPlayer->SummonCreature(50622, pPlayer->GetPositionX() + 12.0F, pPlayer->GetPositionY() + 2.0F, pPlayer->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 30 * MINUTE);
-        pPlayer->SummonCreature(50622, pPlayer->GetPositionX() + 13.0F, pPlayer->GetPositionY() + 7.0F, pPlayer->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 30 * MINUTE);
-    }
-
-    else
-        ChatHandler(pPlayer).SendSysMessage("You must be in Tanaris.");
-    return false;
-}
-
-bool ItemUse_roleplay_wave_3(Player* pPlayer, Item* pItem, const SpellCastTargets&)
-{
-    if (!pPlayer)
-        return false;
-
-    if (pPlayer->GetZoneId() == 440)
-    {
-        pPlayer->SummonCreature(50623, pPlayer->GetPositionX() + 5.0F, pPlayer->GetPositionY() + 5.0F, pPlayer->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 30 * MINUTE);
-        pPlayer->SummonCreature(50623, pPlayer->GetPositionX() + 6.0F, pPlayer->GetPositionY() + 11.0F, pPlayer->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 30 * MINUTE);
-        pPlayer->SummonCreature(50623, pPlayer->GetPositionX() + 7.0F, pPlayer->GetPositionY() + 15.0F, pPlayer->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 30 * MINUTE);
-        pPlayer->SummonCreature(50623, pPlayer->GetPositionX() + 8.0F, pPlayer->GetPositionY() + 17.0F, pPlayer->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 30 * MINUTE);
-        pPlayer->SummonCreature(50623, pPlayer->GetPositionX() + 9.0F, pPlayer->GetPositionY() + 1.0F, pPlayer->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 30 * MINUTE);
-
-        pPlayer->SummonCreature(50624, pPlayer->GetPositionX() + 10.0F, pPlayer->GetPositionY() + 2.0F, pPlayer->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 30 * MINUTE);
-        pPlayer->SummonCreature(50624, pPlayer->GetPositionX() + 11.0F, pPlayer->GetPositionY() + 4.0F, pPlayer->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 30 * MINUTE);
-        pPlayer->SummonCreature(50624, pPlayer->GetPositionX() + 12.0F, pPlayer->GetPositionY() + 6.0F, pPlayer->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 30 * MINUTE);
-        pPlayer->SummonCreature(50624, pPlayer->GetPositionX() + 13.0F, pPlayer->GetPositionY() + 7.0F, pPlayer->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 30 * MINUTE);
-        pPlayer->SummonCreature(50624, pPlayer->GetPositionX() + 14.0F, pPlayer->GetPositionY() + 8.0F, pPlayer->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 30 * MINUTE);
-    }
-
-    else
-        ChatHandler(pPlayer).SendSysMessage("You must be in Tanaris.");
-    return false;
-}
-
-bool ItemUse_roleplay_wave_4(Player* pPlayer, Item* pItem, const SpellCastTargets&)
-{
-    if (!pPlayer)
-        return false;
-
-    if (pPlayer->GetZoneId() == 440)
-    {
-        pPlayer->SummonCreature(50625, pPlayer->GetPositionX() + 5.0F, pPlayer->GetPositionY() + 5.0F, pPlayer->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 30 * MINUTE);
-        pPlayer->SummonCreature(50625, pPlayer->GetPositionX() + 6.0F, pPlayer->GetPositionY() + 12.0F, pPlayer->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 30 * MINUTE);
-        pPlayer->SummonCreature(50625, pPlayer->GetPositionX() + 7.0F, pPlayer->GetPositionY() + 7.0F, pPlayer->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 30 * MINUTE);
-        pPlayer->SummonCreature(50625, pPlayer->GetPositionX() + 8.0F, pPlayer->GetPositionY() + 14.0F, pPlayer->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 30 * MINUTE);
-
-        pPlayer->SummonCreature(50626, pPlayer->GetPositionX() + 5.0F, pPlayer->GetPositionY() + 2.0F, pPlayer->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 30 * MINUTE);
-        pPlayer->SummonCreature(50626, pPlayer->GetPositionX() + 6.0F, pPlayer->GetPositionY() + 10.0F, pPlayer->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 30 * MINUTE);
-        pPlayer->SummonCreature(50626, pPlayer->GetPositionX() + 7.0F, pPlayer->GetPositionY() + 17.0F, pPlayer->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 30 * MINUTE);
-        pPlayer->SummonCreature(50626, pPlayer->GetPositionX() + 8.0F, pPlayer->GetPositionY() + 14.0F, pPlayer->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 30 * MINUTE);
-        pPlayer->SummonCreature(50626, pPlayer->GetPositionX() + 9.0F, pPlayer->GetPositionY() + 9.0F, pPlayer->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 30 * MINUTE);
-        pPlayer->SummonCreature(50626, pPlayer->GetPositionX() + 10.0F, pPlayer->GetPositionY() + 10.0F, pPlayer->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 30 * MINUTE);
-        pPlayer->SummonCreature(50626, pPlayer->GetPositionX() + 11.0F, pPlayer->GetPositionY() + 11.0F, pPlayer->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 30 * MINUTE);
-    }
-
-    else
-        ChatHandler(pPlayer).SendSysMessage("You must be in Tanaris.");
-    return false;
-}
-
-bool ItemUse_roleplay_wave_5(Player* pPlayer, Item* pItem, const SpellCastTargets&)
-{
-    if (!pPlayer)
-        return false;
-
-    if (pPlayer->GetZoneId() == 440)
-    {
-        pPlayer->SummonCreature(50627, pPlayer->GetPositionX() + 5.0F, pPlayer->GetPositionY() + 15.0F, pPlayer->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 30 * MINUTE);
-        pPlayer->SummonCreature(50627, pPlayer->GetPositionX() + 6.0F, pPlayer->GetPositionY() + 16.0F, pPlayer->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 30 * MINUTE);
-        pPlayer->SummonCreature(50627, pPlayer->GetPositionX() + 7.0F, pPlayer->GetPositionY() + 17.0F, pPlayer->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 30 * MINUTE);
-
-        pPlayer->SummonCreature(50628, pPlayer->GetPositionX() + 8.0F, pPlayer->GetPositionY() + 8.0F, pPlayer->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 30 * MINUTE);
-        pPlayer->SummonCreature(50628, pPlayer->GetPositionX() + 9.0F, pPlayer->GetPositionY() + 9.0F, pPlayer->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 30 * MINUTE);
-        pPlayer->SummonCreature(50628, pPlayer->GetPositionX() + 10.0F, pPlayer->GetPositionY() + 10.0F, pPlayer->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 30 * MINUTE);
-        pPlayer->SummonCreature(50628, pPlayer->GetPositionX() + 11.0F, pPlayer->GetPositionY() + 1.0F, pPlayer->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 30 * MINUTE);
-        pPlayer->SummonCreature(50628, pPlayer->GetPositionX() + 12.0F, pPlayer->GetPositionY() + 12.0F, pPlayer->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 30 * MINUTE);
-        pPlayer->SummonCreature(50628, pPlayer->GetPositionX() + 13.0F, pPlayer->GetPositionY() + 9.0F, pPlayer->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 30 * MINUTE);
-        pPlayer->SummonCreature(50628, pPlayer->GetPositionX() + 14.0F, pPlayer->GetPositionY() + 14.0F, pPlayer->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 30 * MINUTE);
-
-        pPlayer->SummonCreature(50629, pPlayer->GetPositionX() + 15.0F, pPlayer->GetPositionY() + 3.0F, pPlayer->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 30 * MINUTE);
-        pPlayer->SummonCreature(50629, pPlayer->GetPositionX() + 16.0F, pPlayer->GetPositionY() + 5.0F, pPlayer->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 30 * MINUTE);
-    }
-
-    else
-        ChatHandler(pPlayer).SendSysMessage("You must be in Tanaris.");
-    return false;
-}
-
-bool ItemUse_roleplay_wave_6(Player* pPlayer, Item* pItem, const SpellCastTargets&)
-{
-    if (!pPlayer)
-        return false;
-
-    if (pPlayer->GetZoneId() == 440)
-    {
-        pPlayer->SummonCreature(50630, pPlayer->GetPositionX() + 5.0F, pPlayer->GetPositionY() + 17.0F, pPlayer->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 30 * MINUTE);
-        pPlayer->SummonCreature(50630, pPlayer->GetPositionX() + 6.0F, pPlayer->GetPositionY() + 16.0F, pPlayer->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 30 * MINUTE);
-        pPlayer->SummonCreature(50630, pPlayer->GetPositionX() + 7.0F, pPlayer->GetPositionY() + 15.0F, pPlayer->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 30 * MINUTE);
-        pPlayer->SummonCreature(50630, pPlayer->GetPositionX() + 8.0F, pPlayer->GetPositionY() + 13.0F, pPlayer->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 30 * MINUTE);
-
-        pPlayer->SummonCreature(50631, pPlayer->GetPositionX() + 9.0F, pPlayer->GetPositionY() + 12.0F, pPlayer->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 30 * MINUTE);
-        pPlayer->SummonCreature(50631, pPlayer->GetPositionX() + 10.0F, pPlayer->GetPositionY() + 10.0F, pPlayer->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 30 * MINUTE);
-        pPlayer->SummonCreature(50631, pPlayer->GetPositionX() + 11.0F, pPlayer->GetPositionY() + 1.0F, pPlayer->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 30 * MINUTE);
-        pPlayer->SummonCreature(50631, pPlayer->GetPositionX() + 12.0F, pPlayer->GetPositionY() + 2.0F, pPlayer->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 30 * MINUTE);
-        pPlayer->SummonCreature(50631, pPlayer->GetPositionX() + 13.0F, pPlayer->GetPositionY() + 3.0F, pPlayer->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 30 * MINUTE);
-        pPlayer->SummonCreature(50631, pPlayer->GetPositionX() + 14.0F, pPlayer->GetPositionY() + 4.0F, pPlayer->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 30 * MINUTE);
-        pPlayer->SummonCreature(50631, pPlayer->GetPositionX() + 15.0F, pPlayer->GetPositionY() + 5.0F, pPlayer->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 30 * MINUTE);
-        pPlayer->SummonCreature(50631, pPlayer->GetPositionX() + 16.0F, pPlayer->GetPositionY() + 1.0F, pPlayer->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 30 * MINUTE);
-
-        pPlayer->SummonCreature(50632, pPlayer->GetPositionX(), pPlayer->GetPositionY(), pPlayer->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 30 * MINUTE);
-    }
-
-    else
-        ChatHandler(pPlayer).SendSysMessage("You must be in Tanaris.");
-    return false;
-}
-
-bool ItemUse_roleplay_globalemote_1(Player* pPlayer, Item* pItem, const SpellCastTargets&)
-{
-    if (!pPlayer)
-        return false;
-
-    if (pPlayer->GetZoneId() == 440)
-    {
-        sWorld.SendWorldText(3, "A great droning fills the lands of Tanaris. The Sands of are alive as the ground shakes with rumbling and scuttling!");
-    }
-    else
-        ChatHandler(pPlayer).SendSysMessage("You must be in Tanaris.");
-    return false;
-}
-
-bool ItemUse_roleplay_globalemote_2(Player* pPlayer, Item* pItem, const SpellCastTargets&)
-{
-    if (!pPlayer)
-        return false;
-
-    if (pPlayer->GetZoneId() == 440)
-    {
-        sWorld.SendWorldText(3, "The very sands of Tanaris erupt in buzzing and the screaming of a thousand monsrosities! The silithid hive lay's siege to Gadgetzan!");
-    }
-    else
-        ChatHandler(pPlayer).SendSysMessage("You must be in Tanaris.");
-    return false;
-}
-
-bool ItemUse_roleplay_globalemote_3(Player* pPlayer, Item* pItem, const SpellCastTargets&)
-{
-    if (!pPlayer)
-        return false;
-
-    if (pPlayer->GetZoneId() == 440)
-    {
-        sWorld.SendWorldText(3, "The Silithid forces reteat in turmoil as Akk'Nariji, Taskmaster of the Swarm is slain! The Siege of Gadgetzan is over! Azeroth's champion's have proven victorious!");
-    }
-    else
-        ChatHandler(pPlayer).SendSysMessage("You must be in Tanaris.");
     return false;
 }
 
@@ -1051,17 +821,17 @@ void AddSC_item_scripts()
     Script *newscript;
 
     newscript = new Script;
-    newscript->Name = "character_rename";
+    newscript->Name = "item_character_rename";
     newscript->pItemUse = &ItemUse_character_rename;
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "portable_meeting_stone";
+    newscript->Name = "item_roleplay_hub";
     newscript->pItemUse = &ItemUse_portable_meeting_stone;
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "item_alice_wonderland_scale";
+    newscript->Name = "item_scaler";
     newscript->pItemUse = &ItemUse_alice_wonderland_scale;
     newscript->RegisterSelf();
 
@@ -1071,186 +841,122 @@ void AddSC_item_scripts()
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "city_protector_scroll";
+    newscript->Name = "item_city_portal";
     newscript->pItemUse = &ItemUse_city_protector_scroll;
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "remote_mail_terminal";
+    newscript->Name = "item_portable_mailbox";
     newscript->pItemUse = &ItemUse_remote_mail_terminal;
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "sword_of_truth";
+    newscript->Name = "item_sword_of_truth";
     newscript->pItemUse = &ItemUse_sword_of_truth;
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "hairdye";
+    newscript->Name = "item_hairdye";
     newscript->pItemUse = &ItemUse_hairdye;
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "skin_changer";
+    newscript->Name = "item_skin_change";
     newscript->pItemUse = &ItemUse_skin_changer;
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "survival_kit";
+    newscript->Name = "item_survival_kit";
     newscript->pItemUse = &ItemUse_survival_kit;
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "survival_tent";
+    newscript->Name = "item_survival_tent";
     newscript->pItemUse = &ItemUse_survival_tent;
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "survival_boat";
+    newscript->Name = "item_survival_boat";
     newscript->pItemUse = &ItemUse_survival_boat;
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "bg_tabard";
+    newscript->Name = "item_bg_tabard";
     newscript->pItemUse = &ItemUse_bg_tabard;
     newscript->RegisterSelf();
 
-    // Shop morph items 
-
     newscript = new Script;
-    newscript->Name = "shop_morph_goblin";
+    newscript->Name = "item_morph_goblin";
     newscript->pItemUse = &ItemUse_shop_morph_goblin;
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "shop_morph_worgen";
+    newscript->Name = "item_morph_worgen";
     newscript->pItemUse = &ItemUse_shop_morph_worgen;
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "shop_morph_blood_elf";
+    newscript->Name = "item_morph_bloodelf";
     newscript->pItemUse = &ItemUse_shop_morph_blood_elf;
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "highborne_soul_mirror";
+    newscript->Name = "item_morph_highelf";
     newscript->pItemUse = &ItemUse_highborne_soul_mirror;
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "dryad_acorn";
+    newscript->Name = "item_morph_dryad";
     newscript->pItemUse = &ItemUse_dryad_acorn;
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "shop_morph_ghost";
+    newscript->Name = "item_morph_ghost";
     newscript->pItemUse = &ItemUse_shop_morph_ghost;
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "shop_morph_banshee";
+    newscript->Name = "item_morph_banshee";
     newscript->pItemUse = &ItemUse_shop_morph_banshee;
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "shop_morph_druid_fang";
+    newscript->Name = "item_morph_serpentlord";
     newscript->pItemUse = &ItemUse_shop_morph_druid_fang;
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "shop_morph_succubus";
+    newscript->Name = "item_morph_succubus";
     newscript->pItemUse = &ItemUse_shop_morph_succubus;
     newscript->RegisterSelf();
 
-    // End of shop morph items
-
     newscript = new Script;
-    newscript->Name = "remove_rested";
+    newscript->Name = "item_exhaustion_glyph";
     newscript->pItemUse = &ItemUse_remove_rested;
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "turtle_morph";
-    newscript->pItemUse = &ItemUse_turtle_morph;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "turtle_radio";
+    newscript->Name = "item_radio";
     newscript->pItemUse = &ItemUse_turtle_radio;
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "turtle_party";
+    newscript->Name = "item_schnapps";
     newscript->pItemUse = &ItemUse_turtle_party;
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "roleplay_summon_1";
-    newscript->pItemUse = &ItemUse_roleplay_summon_1;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "transmogrification";
+    newscript->Name = "item_transmog";
     newscript->pItemUse = &ItemUse_transmogrification;
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "roleplay_wave_1";
-    newscript->pItemUse = &ItemUse_roleplay_wave_1;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "roleplay_wave_2";
-    newscript->pItemUse = &ItemUse_roleplay_wave_2;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "roleplay_wave_3";
-    newscript->pItemUse = &ItemUse_roleplay_wave_3;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "roleplay_wave_4";
-    newscript->pItemUse = &ItemUse_roleplay_wave_4;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "roleplay_wave_5";
-    newscript->pItemUse = &ItemUse_roleplay_wave_5;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "roleplay_wave_5";
-    newscript->pItemUse = &ItemUse_roleplay_wave_5;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "roleplay_wave_6";
-    newscript->pItemUse = &ItemUse_roleplay_wave_6;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "roleplay_globalemote_1";
-    newscript->pItemUse = &ItemUse_roleplay_globalemote_1;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "roleplay_globalemote_2";
-    newscript->pItemUse = &ItemUse_roleplay_globalemote_2;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "roleplay_globalemote_3";
-    newscript->pItemUse = &ItemUse_roleplay_globalemote_3;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "item_engie";
+    newscript->Name = "item_player_engie";
     newscript->pItemUse = &ItemUse_item_engie;
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "item_zeaus";
+    newscript->Name = "item_player_zeaus";
     newscript->pItemUse = &ItemUse_item_zeaus;
     newscript->RegisterSelf();
 
@@ -1260,7 +966,7 @@ void AddSC_item_scripts()
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "item_holy_strike_book";
+    newscript->Name = "item_holystrike_libram";
     newscript->pItemUse = &ItemUse_item_holy_strike_book;
     newscript->RegisterSelf();
 }
