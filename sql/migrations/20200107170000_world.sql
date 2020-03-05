@@ -7,29 +7,15 @@ SET v = (SELECT COUNT(*) FROM `migrations` WHERE `id`='20200107170000');
 IF v=0 THEN
 INSERT INTO `migrations` VALUES ('20200107170000');
 
-INSERT INTO `broadcast_text` (`ID`, `maletext`) VALUES
-('70000', 'Head'),
-('70001', 'Shoulders'),
-('70002', 'Cape'),
-('70003', 'Chestplate'),
-('70004', 'Wrists'),
-('70005', 'Hands'),
-('70006', 'Waist'),
-('70007', 'Legs'),
-('70008', 'Feet'),
-('70009', 'Main Hand'),
-('70010', 'Off Hand'),
-('70011', 'Ranged Weapon'),
-('70012', 'Cost: '),
-('70013', 'Reset: '),
-('70014', 'g '),
-('70015', 's '),
-('70016', 'c ');
+REPLACE INTO `creature_template` VALUES (51290, 0, 13730, 0, 0, 0, 'Mr. Spock', 'Transmogrification Master', 0, 35, 35, 2016, 2016, 0, 0, 1357, 35, 1, 1.11, 1.14286, 0.8, 20, 5, 0, 0, 1, 51, 65, 0, 138, 1, 2000, 2000, 1, 768, 0, 0, 0, 0, 0, 0, 51.128, 70.301, 100, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 2, 'custom_TransmogNPC');
 
-INSERT INTO `broadcast_text` (`ID`, `maletext`) VALUES ('60000', 'You may only use items contained in your main backpack as a transmog option!');
-INSERT INTO `broadcast_text` (`ID`, `maletext`) VALUES ('60001', 'Select item:');
+update `creature_template` set `npc_flags`='1' where `entry`='51290';	
 
--- INSERT INTO `creature_template` (`entry`, `patch`, `KillCredit1`, `KillCredit2`, `modelid_1`, `modelid_2`, `modelid_3`, `modelid_4`, `name`, `subname`, `gossip_menu_id`, `minlevel`, `maxlevel`, `minhealth`, `maxhealth`, `minmana`, `maxmana`, `armor`, `faction_A`, `faction_H`, `npcflag`, `speed_walk`, `speed_run`, `scale`, `rank`, `mindmg`, `maxdmg`, `dmgschool`, `attackpower`, `dmg_multiplier`, `baseattacktime`, `rangeattacktime`, `unit_class`, `unit_flags`, `dynamicflags`, `family`, `trainer_type`, `trainer_spell`, `trainer_class`, `trainer_race`, `minrangedmg`, `maxrangedmg`, `rangedattackpower`, `type`, `type_flags`, `lootid`, `pickpocketloot`, `skinloot`, `resistance1`, `resistance2`, `resistance3`, `resistance4`, `resistance5`, `resistance6`, `spell1`, `spell2`, `spell3`, `spell4`, `PetSpellDataId`, `mingold`, `maxgold`, `AIName`, `MovementType`, `InhabitType`, `Civilian`, `RacialLeader`, `RegenHealth`, `equipment_id`, `trainer_id`, `vendor_id`, `MechanicImmuneMask`, `SchoolImmuneMask`, `flags_extra`, `aggroRadius`, `ScriptName`) VALUES ('321000', '0', '0', '0', '3019', '0', '0', '0', 'Transmogrification', '', '0', '1', '1', '1000000', '1000000', '0', '0', '100', '35', '35', '1', '0.91', '1.14286', '2', '0', '1', '2', '0', '0', '1', '2000', '0', '0', '4', '0', '0', '0', '0', '0', '0', '0', '0', '100', '10', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '', '0', '3', '0', '0', '1', '0', '0', '0', '17', '0', '64', '0', 'custom_TransmogNPC');
+replace into `broadcast_text` (`ID`, `maletext`) VALUES ('60000', 'You may only use items contained in your main backpack as a transmog option!');
+replace into`broadcast_text` (`ID`, `maletext`) VALUES ('60001', 'Select item:');
+ 
+replace into `npc_text` (`ID`, `BroadcastTextID0`) values ('60000', '60000');
+replace into `npc_text` (`ID`, `BroadcastTextID0`) values ('60001', '60001');
 
 -- ----------------------------
 -- Table structure for `transmog_template`

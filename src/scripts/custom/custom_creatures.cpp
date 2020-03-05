@@ -1166,53 +1166,53 @@ bool GossipHello_TransmogNPC(Player* player, Creature* creature)
     player->PlayerTalkClass->ClearMenus();
 
     if (sTransmog.HasItemsForTransmog(player, EQUIPMENT_SLOT_HEAD))
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, GOSSIP_TEXT_HEAD, GOSSIP_SENDER_MAIN, GOSSIP_ID_HEAD);
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Head", GOSSIP_SENDER_MAIN, GOSSIP_ID_HEAD);
 
     if (sTransmog.HasItemsForTransmog(player, EQUIPMENT_SLOT_SHOULDERS))
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, GOSSIP_TEXT_SHOULDERS, GOSSIP_SENDER_MAIN, GOSSIP_ID_SHOULDERS);
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Shoulders", GOSSIP_SENDER_MAIN, GOSSIP_ID_SHOULDERS);
 
     if (sTransmog.HasItemsForTransmog(player, EQUIPMENT_SLOT_BACK))
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, GOSSIP_TEXT_CLOAK, GOSSIP_SENDER_MAIN, GOSSIP_ID_CLOAK);
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Cloak", GOSSIP_SENDER_MAIN, GOSSIP_ID_CLOAK);
 
     if (sTransmog.HasItemsForTransmog(player, EQUIPMENT_SLOT_CHEST))
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, GOSSIP_TEXT_CHEST, GOSSIP_SENDER_MAIN, GOSSIP_ID_CHEST);
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Chest", GOSSIP_SENDER_MAIN, GOSSIP_ID_CHEST);
 
     if (sTransmog.HasItemsForTransmog(player, EQUIPMENT_SLOT_WRISTS))
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, GOSSIP_TEXT_WRISTS, GOSSIP_SENDER_MAIN, GOSSIP_ID_WRISTS);
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT,"Wrists", GOSSIP_SENDER_MAIN, GOSSIP_ID_WRISTS);
 
     if (sTransmog.HasItemsForTransmog(player, EQUIPMENT_SLOT_HANDS))
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, GOSSIP_TEXT_HANDS, GOSSIP_SENDER_MAIN, GOSSIP_ID_HANDS);
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Hands", GOSSIP_SENDER_MAIN, GOSSIP_ID_HANDS);
 
     if (sTransmog.HasItemsForTransmog(player, EQUIPMENT_SLOT_WAIST))
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, GOSSIP_TEXT_WAIST, GOSSIP_SENDER_MAIN, GOSSIP_ID_WAIST);
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Waist", GOSSIP_SENDER_MAIN, GOSSIP_ID_WAIST);
 
     if (sTransmog.HasItemsForTransmog(player, EQUIPMENT_SLOT_LEGS))
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, GOSSIP_TEXT_LEGS, GOSSIP_SENDER_MAIN, GOSSIP_ID_LEGS);
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Legs", GOSSIP_SENDER_MAIN, GOSSIP_ID_LEGS);
 
     if (sTransmog.HasItemsForTransmog(player, EQUIPMENT_SLOT_FEET))
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, GOSSIP_TEXT_FEET, GOSSIP_SENDER_MAIN, GOSSIP_ID_FEET);
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Feet", GOSSIP_SENDER_MAIN, GOSSIP_ID_FEET);
 
     if (Item* it = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_MAINHAND))
     {
         if (sTransmog.HasItemsForTransmog(player, EQUIPMENT_SLOT_MAINHAND))
             if (it->GetProto()->InventoryType == INVTYPE_WEAPON)
-                player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, GOSSIP_TEXT_MAINHAND, GOSSIP_SENDER_MAIN, GOSSIP_ID_ONEHAND_MAIN);
+                player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Main Hand", GOSSIP_SENDER_MAIN, GOSSIP_ID_ONEHAND_MAIN);
             else
-                player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, GOSSIP_TEXT_MAINHAND, GOSSIP_SENDER_MAIN, it->GetProto()->InventoryType);
+                player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Main Hand", GOSSIP_SENDER_MAIN, it->GetProto()->InventoryType);
     }
 
     if (Item* it = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND))
     {
         if (sTransmog.HasItemsForTransmog(player, EQUIPMENT_SLOT_OFFHAND))
             if (it->GetProto()->InventoryType == INVTYPE_WEAPON)
-                player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, GOSSIP_TEXT_OFFHAND, GOSSIP_SENDER_MAIN, GOSSIP_ID_ONEHAND_OFF);
+                player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Off-Hand", GOSSIP_SENDER_MAIN, GOSSIP_ID_ONEHAND_OFF);
             else
-                player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, GOSSIP_TEXT_OFFHAND, GOSSIP_SENDER_MAIN, it->GetProto()->InventoryType);
+                player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT,"Off-Hand", GOSSIP_SENDER_MAIN, it->GetProto()->InventoryType);
     }
 
     if (sTransmog.HasItemsForTransmog(player, EQUIPMENT_SLOT_RANGED))
         if (Item* it = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_RANGED))
-            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, GOSSIP_TEXT_RANGED, GOSSIP_SENDER_MAIN, it->GetProto()->InventoryType);
+            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Ranged", GOSSIP_SENDER_MAIN, it->GetProto()->InventoryType);
 
     player->SEND_GOSSIP_MENU(GOSSIP_TEXT_1, creature->GetGUID());
     return true;
