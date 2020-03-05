@@ -130,21 +130,21 @@ std::string transmog::GetTransmogItemColor(uint32 quality)
     switch (quality)
     {
     case ITEM_QUALITY_POOR:
-        return "|cff888888";
+        return "|cff0E0F06";
     case ITEM_QUALITY_NORMAL:
-        return "|cffffffff";
+        return "|cff0E0F06";
     case ITEM_QUALITY_UNCOMMON:
-        return "|cff00ff00";
+        return "|cff0E0F06";
     case ITEM_QUALITY_RARE:
-        return "|cff0000ff";
+        return "|cff0E0F06";
     case ITEM_QUALITY_EPIC:
-        return "|cFF800080";
+        return "|cFF0E0F06";
     case ITEM_QUALITY_LEGENDARY:
-        return "|cFFFFA500";
+        return "|cFF0E0F06";
     case ITEM_QUALITY_ARTIFACT:
-        return "|cFFFFFFE0";
+        return "|cFF0E0F06";
     default:
-        return "|cFF000000";
+        return "|cFF0E0F06";
     }
 }
 
@@ -154,10 +154,11 @@ std::string transmog::GetTransmogCostStr(Player* player, uint32 copper)
 
     if (sWorld.getConfig(CONFIG_UINT32_TRANSMOG_REQ_ITEM) > 0)
     {
-        if (const ItemPrototype* proto = sObjectMgr.GetItemPrototype(sWorld.getConfig(CONFIG_UINT32_TRANSMOG_REQ_ITEM)))
-            return (costText + " " + GetTransmogItemColor(proto->Quality) +
-                "[" + sObjectMgr.GetItemLocaleName(sWorld.getConfig(CONFIG_UINT32_TRANSMOG_REQ_ITEM),
-                    player->GetSession()->GetSessionDbLocaleIndex()) + "]|r x" + std::to_string(sWorld.getConfig(CONFIG_UINT32_TRANSMOG_REQ_ITEM_COUNT)));
+        //if (const ItemPrototype* proto = sObjectMgr.GetItemPrototype(sWorld.getConfig(CONFIG_UINT32_TRANSMOG_REQ_ITEM)))
+        //    return (costText + " " + GetTransmogItemColor(proto->Quality) +
+        //        "[" + sObjectMgr.GetItemLocaleName(sWorld.getConfig(CONFIG_UINT32_TRANSMOG_REQ_ITEM),
+        //            player->GetSession()->GetSessionDbLocaleIndex()) + "]|r x" + std::to_string(sWorld.getConfig(CONFIG_UINT32_TRANSMOG_REQ_ITEM_COUNT)));
+        return " ";
     }
     else if (sWorld.getConfig(CONFIG_FLOAT_TRANSMOG_REQ_MONEY_RATE) != 0.0)
     {
@@ -352,7 +353,7 @@ void transmog::GetTransmogItems(Player* player, Creature* creature, uint32 Inven
         }
 
         player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, (resetText + GetTransmogItemColor(itemToTransmog->GetProto()->Quality) +
-            "[" + sObjectMgr.GetItemLocaleName(itemToTransmog->GetEntry(), player->GetSession()->GetSessionDbLocaleIndex()) + "]|r" /*\n" +
+            "" + sObjectMgr.GetItemLocaleName(itemToTransmog->GetEntry(), player->GetSession()->GetSessionDbLocaleIndex()) + "|r \n\n" /*\n" +
             GetTransmogCostStr(player, tItem->GetProto()->BuyPrice)*/).c_str()
             , GOSSIP_SENDER_TRANSMOGRIFY, index + itemToTransmog->GetEntry());
     }
@@ -374,7 +375,7 @@ void transmog::GetTransmogItems(Player* player, Creature* creature, uint32 Inven
 
             if (CanTransmogrifyItemWithItem(player, itemToTransmog, itemTransmog))
                 player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, (GetTransmogItemColor(itemTransmog->GetProto()->Quality) +
-                    "[" + sObjectMgr.GetItemLocaleName(itemTransmog->GetEntry(), player->GetSession()->GetSessionDbLocaleIndex()) + "]|r \n" +
+                    "" + sObjectMgr.GetItemLocaleName(itemTransmog->GetEntry(), player->GetSession()->GetSessionDbLocaleIndex()) + "|r \n" +
                     GetTransmogCostStr(player, itemTransmog->GetProto()->BuyPrice)).c_str()
                     , GOSSIP_SENDER_TRANSMOGRIFY, index + itemTransmog->GetEntry());
         }
