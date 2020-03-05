@@ -40,6 +40,7 @@ const char MapEntrydstfmt[] = "iiiiiiiiiffsi";
 const char ConditionsSrcFmt[] = "iiiiiii";
 const char ConditionsDstFmt[] = "iiiiiii";
 const char AreaEntryfmt[] = "iiiiiisii";
+const char TransmogEntrySrcFmt[] = "iis";
 
 SQLStorage sCreatureStorage(CreatureInfosrcfmt, CreatureInfodstfmt, "entry", "creature_template");
 SQLStorage sCreatureDataAddonStorage(CreatureDataAddonInfofmt, "guid", "creature_addon");
@@ -51,5 +52,6 @@ SQLStorage sPageTextStore(PageTextfmt, "entry", "page_text");
 SQLStorage sMapStorage(MapEntrysrcfmt, MapEntrydstfmt, "entry", "map_template");
 SQLStorage sConditionStorage(ConditionsSrcFmt, ConditionsDstFmt, "condition_entry", "conditions");
 SQLStorage sAreaStorage(AreaEntryfmt, "entry", "area_template");
+SQLStorage sTransmogEntryStorage(TransmogEntrySrcFmt, "displayid", "transmog_template");
 
 SQLHashStorage sGOStorage(GameObjectInfosrcfmt, GameObjectInfodstfmt, "entry", "gameobject_template");

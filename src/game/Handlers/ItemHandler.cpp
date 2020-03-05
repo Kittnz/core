@@ -30,6 +30,7 @@
 #include "UpdateData.h"
 #include "Chat.h"
 #include "Anticheat.h"
+#include "turtlewow/transmog.h"
 
 void WorldSession::HandleSplitItemOpcode(WorldPacket & recv_data)
 {
@@ -311,7 +312,13 @@ void WorldSession::HandleItemQuerySingleOpcode(WorldPacket & recv_data)
         int loc_idx = GetSessionDbLocaleIndex();
         if (loc_idx >= 0)
         {
-            ItemLocale const *il = sObjectMgr.GetItemLocale(pProto->ItemId);
+            uint32 i_id = pProto->ItemId;
+
+            if (sWorld.getConfig(CONFIG_BOOL_TRANSMOG_ENABLED))
+                if (sTransmog.IsFakeItem(pProto->ItemId))
+                    i_id = sTransmog.GetRealItemEntry(pProto->ItemId);
+
+            ItemLocale const* il = sObjectMgr.GetItemLocale(i_id);
             if (il)
             {
                 if (il->Name.size() > size_t(loc_idx) && !il->Name[loc_idx].empty())

@@ -52,6 +52,7 @@
 #include "InstanceData.h"
 #include "CharacterDatabaseCache.h"
 #include "HardcodedEvents.h"
+#include "turtlewow/transmog.h"
 
 #include <limits>
 
@@ -3624,6 +3625,14 @@ void ObjectMgr::LoadItemPrototypes()
     }
 }
 
+void ObjectMgr::LoadTransmogTemplate()
+{
+    SQLItemLoader loader;
+    loader.Load(sTransmogEntryStorage);
+    sLog.outString(">> Loaded %u transmog models", sTransmogEntryStorage.GetRecordCount());
+    sLog.outString();
+}
+
 void ObjectMgr::LoadItemLocales()
 {
     m_ItemLocaleMap.clear();                                 // need for reload case
@@ -3893,6 +3902,11 @@ void ObjectMgr::LoadPetLevelInfo()
             }
         }
     }
+}
+
+ItemPrototype const* ObjectMgr::GetItemPrototype(uint32 id)
+{
+    return sTransmog.GetFakeItemProto(id) ? sTransmog.GetFakeItemProto(id) : sItemStorage.LookupEntry<ItemPrototype>(id);
 }
 
 PetLevelInfo const* ObjectMgr::GetPetLevelInfo(uint32 creature_id, uint32 level) const

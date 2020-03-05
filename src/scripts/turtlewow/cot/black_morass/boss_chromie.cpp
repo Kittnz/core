@@ -97,7 +97,7 @@ struct boss_chromieAI : public ScriptedAI
     }
 
     void UpdateAI(const uint32 diff) {
-        if (m_creature->GetHealthPercent() <= 25 and !isFriendly) {
+        if (m_creature->GetHealthPercent() <= 25 && !isFriendly) {
             isFriendly = true;
 
             m_creature->addUnitState(UNIT_STAT_ROOT);
@@ -127,7 +127,7 @@ struct boss_chromieAI : public ScriptedAI
         }
 
         if (isFriendly) {
-            if (m_uiChronormuTimer < diff and !chronormuSummoned) {
+            if (m_uiChronormuTimer < diff && !chronormuSummoned) {
                 chronormuSummoned = true;
 
                 chronormu = m_creature->SummonCreature(CREATURE_CHRONORMU, old_x, old_y,
@@ -141,7 +141,7 @@ struct boss_chromieAI : public ScriptedAI
             } else m_uiChronormuTimer -= diff;
 
             if (chronormuSummoned) {
-                if (m_uiSecondPhaseDialog1 < diff and !saidDialog1) {
+                if (m_uiSecondPhaseDialog1 < diff && !saidDialog1) {
                     saidDialog1 = true;
                     chronormu->SetFacingToObject(m_creature);
                     chronormu->PMonsterSay("Your time here has come to an end, mortals. The dragonflights won't tolerate living in a world inhabited by such evil, greedy and cynical beings.");
@@ -149,7 +149,7 @@ struct boss_chromieAI : public ScriptedAI
                     chronormu->PMonsterSay("I ask you again, \"Chromie\", why don't you join me? Why don't you join your wiser self?");
                 } else m_uiSecondPhaseDialog1 -= diff;
 
-                if (m_uiSecondPhaseDialog2 < diff and !saidDialog2) {
+                if (m_uiSecondPhaseDialog2 < diff && !saidDialog2) {
                     saidDialog2 = true;
                     m_creature->PMonsterYell("NEVER!");
                     m_creature->PMonsterSay("You are only seeing one side of the coin. These mortals you mention may have committed, "
@@ -160,14 +160,14 @@ struct boss_chromieAI : public ScriptedAI
                     m_creature->PMonsterSay("I won't ever let you corrupt me or play magic tricks with me again.");
                 } else m_uiSecondPhaseDialog2 -= diff;
 
-                if (m_uiSecondPhaseDialog3 < diff and !saidDialog3) {
+                if (m_uiSecondPhaseDialog3 < diff && !saidDialog3) {
                     saidDialog3 = true;
                     chronormu->PMonsterSay("Don't make me laugh, little one. You speak about corruption but have you ever considered how corrupted is your pure heart by those mortals you seek to protect?");
                     chronormu->PMonsterYell("Get out of my way! Let me carry on with my plans! Let me build my army! I want those orcs!");
                     m_creature->PMonsterYell("Now, heroes! Attack now! I'll contain his strength!");
                 } else m_uiSecondPhaseDialog3 -= diff;
 
-                if (m_uiChronormuCombatStartTimer < diff and !chronormuCombatStarted) {
+                if (m_uiChronormuCombatStartTimer < diff && !chronormuCombatStarted) {
                     chronormuCombatStarted = true;
                     m_creature->RemoveAllAuras();
 
@@ -185,7 +185,7 @@ struct boss_chromieAI : public ScriptedAI
             if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
                 return;
 
-            if (m_creature->GetHealthPercent() <= 30 and !stopCasting)
+            if (m_creature->GetHealthPercent() <= 30 && !stopCasting)
                 stopCasting = true;
 
             if (!stopCasting) {
