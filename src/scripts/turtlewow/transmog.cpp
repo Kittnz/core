@@ -12,10 +12,8 @@ transmog& transmog::Instance()
 
 bool transmog::IsFakeItem(uint32 entry)
 {
-    if (GetFakeItemProto(entry))
-        return true;
+    return GetFakeItemProto(entry) != nullptr;
 
-    return false;
 }
 
 void transmog::AddFakeItemProto(uint32 fakeentry, const ItemPrototype* proto)
@@ -47,13 +45,11 @@ const ItemPrototype* transmog::GetOrCreateFakeItemProto(uint32 fakeEntry, const 
         CreateFakeItemPrototype(GenerateFakeItemEntry(itemToTransmog, itemTransmog), itemToTransmog, itemTransmog);
         return GetFakeItemProto(GenerateFakeItemEntry(itemToTransmog, itemTransmog));
     }
-
-    return nullptr;
 }
 
 void transmog::CreateFakeItemPrototype(uint32 newFakeID, const ItemPrototype* itemProto1, const ItemPrototype* itemProto2)
 {
-    ItemPrototype* fakeIProto = new ItemPrototype[1];
+    auto* fakeIProto = new ItemPrototype[1];
 
     *fakeIProto = *itemProto1;
 
@@ -68,7 +64,8 @@ const ItemPrototype* transmog::GetFakeItemProto(uint32 fakeentry)
     if (!m_fakeitemproto.empty())
     {
         auto itr = m_fakeitemproto.find(fakeentry);
-        return itr->second;
+        if (itr->second)
+            return itr->second;
     }
 
     return nullptr;
@@ -237,6 +234,9 @@ bool transmog::CanTransmogrifyItemWithItem(Player* player, Item* pItemToTransmog
     const ItemPrototype* target = pItemToTransmog->GetProto();
     const ItemPrototype* source = pItemTransmog->GetProto();
 
+    if (!target || !source)
+        return false;
+
     if (source->Class != target->Class)
         return false;
 
@@ -281,10 +281,8 @@ bool transmog::CanTransmogrifyItemWithItem(Player* player, Item* pItemToTransmog
         if (source->Material != 0)
             return false;
 
-    if (GetEquipmentSlot(source->InventoryType) != GetEquipmentSlot(target->InventoryType))
-        return false;
+    return GetEquipmentSlot(source->InventoryType) == GetEquipmentSlot(target->InventoryType);
 
-    return true;
 }
 
 bool transmog::CanBuy(Player* player, uint32 buyPrice)
@@ -434,7 +432,7 @@ void transmog::LoadTransmog(Player* player, bool logout /*= false*/)
     {
         do
         {
-            uint64 itemGUID = MAKE_NEW_GUID((*result)[0].GetUInt32(), 0, HIGHGUID_ITEM);
+            auto itemGUID = MAKE_NEW_GUID((*result)[0].GetUInt32(), 0, HIGHGUID_ITEM);
             uint32 fakeEntry = (*result)[1].GetUInt32();
             uint32 newEntry = (*result)[2].GetUInt32();
 
