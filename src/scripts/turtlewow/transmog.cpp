@@ -64,7 +64,7 @@ const ItemPrototype* transmog::GetFakeItemProto(uint32 fakeentry)
     if (!m_fakeitemproto.empty())
     {
         auto itr = m_fakeitemproto.find(fakeentry);
-        if (itr->second)
+        if (itr != m_fakeitemproto.end())
             return itr->second;
     }
 

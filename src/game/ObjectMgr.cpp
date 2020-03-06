@@ -3906,7 +3906,8 @@ void ObjectMgr::LoadPetLevelInfo()
 
 ItemPrototype const* ObjectMgr::GetItemPrototype(uint32 id)
 {
-    return sTransmog.GetFakeItemProto(id) ? sTransmog.GetFakeItemProto(id) : sItemStorage.LookupEntry<ItemPrototype>(id);
+    auto fakeProto = sTransmog.GetFakeItemProto(id);
+    return fakeProto ? fakeProto : sItemStorage.LookupEntry<ItemPrototype>(id);
 }
 
 PetLevelInfo const* ObjectMgr::GetPetLevelInfo(uint32 creature_id, uint32 level) const
