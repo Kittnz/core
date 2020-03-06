@@ -55,7 +55,7 @@ struct boss_chromieAI : public ScriptedAI
         m_uiAoESleepTimer = 12000;
         m_uiLightningCloudTimer = 8000;
 
-        m_uiChronormuTimer = 5000;
+        m_uiChronormuTimer = 3000;
         m_uiChronormuCombatStartTimer = 22500;
 
         m_uiSecondPhaseDialog1 = 6500;
@@ -96,18 +96,22 @@ struct boss_chromieAI : public ScriptedAI
 
     }
 
+    void LeaveCombat() {
+        m_creature->ClearTarget();
+        m_creature->ClearInCombat();
+        m_creature->InterruptNonMeleeSpells(false);
+        m_creature->CombatStop(true);
+        m_creature->UpdateCombatState(false);
+        m_creature->UpdateCombatWithZoneState(false);
+    }
+
     void UpdateAI(const uint32 diff) {
         if (m_creature->GetHealthPercent() <= 25 && !isFriendly) {
             isFriendly = true;
 
             m_creature->addUnitState(UNIT_STAT_ROOT);
-            m_creature->ClearTarget();
-            m_creature->ClearInCombat();
-            m_creature->InterruptNonMeleeSpells(false);
-            m_creature->CombatStop(true);
-            m_creature->UpdateCombatState(false);
-            m_creature->UpdateCombatWithZoneState(false);
             m_creature->setFaction(35);
+            LeaveCombat();
             m_creature->RemoveAllAuras();
             m_creature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
 
@@ -123,10 +127,13 @@ struct boss_chromieAI : public ScriptedAI
             DoCastSpellIfCan(m_creature, SPELL_TWIN_TELEPORT_VISUAL, CF_FORCE_CAST);
             m_creature->NearTeleportTo(pTarget->GetPositionX() + 1, pTarget->GetPositionY() - 1, pTarget->GetPositionZ(),
                                        m_creature->GetOrientation());
-            m_creature->PlayDirectSound(SOUND_BODY_OF_KATHUNE);
+            DoPlaySoundToSet(m_creature, SOUND_BODY_OF_KATHUNE);
         }
 
         if (isFriendly) {
+            if (m_creature->SelectHostileTarget() || m_creature->getVictim())
+                LeaveCombat();
+
             if (m_uiChronormuTimer < diff && !chronormuSummoned) {
                 chronormuSummoned = true;
 
@@ -164,7 +171,7 @@ struct boss_chromieAI : public ScriptedAI
                     saidDialog3 = true;
                     chronormu->PMonsterSay("Don't make me laugh, little one. You speak about corruption but have you ever considered how corrupted is your pure heart by those mortals you seek to protect?");
                     chronormu->PMonsterYell("Get out of my way! Let me carry on with my plans! Let me build my army! I want those orcs!");
-                    m_creature->PMonsterYell("Now, heroes! Attack now! I'll contain his strength!");
+                    m_creature->PMonsterYell("Now, heroes! Attack now! I'll contain Chronormu's strength!");
                 } else m_uiSecondPhaseDialog3 -= diff;
 
                 if (m_uiChronormuCombatStartTimer < diff && !chronormuCombatStarted) {
@@ -172,7 +179,7 @@ struct boss_chromieAI : public ScriptedAI
                     m_creature->RemoveAllAuras();
 
                     DoCastSpellIfCan(m_creature, SPELL_GREEN_CHANNELING, CF_FORCE_CAST);
-                    chronormu->SetObjectScale(0.5);
+                    chronormu->SetObjectScale(0.75);
                     chronormu->AddAura(SPELL_PARTICLES_GREEN);
 
                     chronormu->setFaction(38);

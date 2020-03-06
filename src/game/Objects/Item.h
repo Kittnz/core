@@ -358,7 +358,7 @@ class MANGOS_DLL_SPEC Item : public Object
         void SetFakeEntry(uint32 fakeEntry) { m_fakeEntry = fakeEntry; }
 
     private:
-        uint32 m_fakeEntry = 0;
+        uint32 m_fakeEntry;
         bool generatedLoot;
         uint8 m_slot;
         Bag* m_container;

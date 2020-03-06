@@ -3,9 +3,10 @@
 
 enum
 {
-    INSTANCE_BM_MAX_ENCOUNTER           = 1,
+    INSTANCE_BM_MAX_ENCOUNTER           = 3,
 
-    NPC_GERASTRASZ = 50080
+    TYPE_GERASTRASZ = 4,
+    TYPE_CHRONORMU = 5
 };
 
 #endif
