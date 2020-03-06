@@ -225,7 +225,7 @@ bool transmog::CanTransmogrifyItemWithItem(Player* player, Item* pItemToTransmog
     if (pItemToTransmog->IsInTrade() || pItemTransmog->IsInTrade())
         return false;
 
-    uint32 fakeEntry = sTransmog.GenerateFakeItemEntry(pItemToTransmog->GetProto(),
+    uint32 fakeEntry = GenerateFakeItemEntry(pItemToTransmog->GetProto(),
         pItemTransmog->GetProto());
 
     if (fakeEntry == 0)
