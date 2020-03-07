@@ -518,6 +518,6 @@ bool ChatHandler::HandleMountCommand(char* /*args*/)
 
     modelid = target->GetUInt32Value(UNIT_FIELD_DISPLAYID);
     player->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, modelid);
-    player->UpdateSpeed(MOVE_RUN, false, 2.0F);
+    player->UpdateSpeed(MOVE_RUN, false, 4.0F);
     return true;
 }
