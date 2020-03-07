@@ -22,10 +22,10 @@ REPLACE INTO `creature` (`id`, `map`, `modelid`, `equipment_id`, `position_x`, `
 
 delete from creature where id = 51261;
 
-REPLACE INTO `creature` (`guid`, `id`, `map`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `DeathState`, `MovementType`, `spawnFlags`, `visibilitymod`, `patch_min`, `patch_max`) VALUES (2555967, 51261, 0, 0, 51261, -8857.02, 661.961, 97.132, 5.398, 25, 25, 0, 0, 100, 0, 0, 0, 0, 0, 0, 10);
+REPLACE INTO `creature` (`id`, `map`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `DeathState`, `MovementType`, `spawnFlags`, `visibilitymod`, `patch_min`, `patch_max`) VALUES (51261, 0, 0, 51261, -8857.02, 661.961, 97.132, 5.398, 25, 25, 0, 0, 100, 0, 0, 0, 0, 0, 0, 10);
 
 delete from gameobject where id = 1000080;
 
 -- REPLACE INTO `gameobject` (`id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`, `spawnFlags`, `visibilitymod`, `patch_min`, `patch_max`) VALUES (1000080, 0, -8841, 652.3, 100.4, 3.76751, 0, 0, 0.951427, -0.307874, 25, 25, 100, 1, 0, 0, 0, 10);
 
-REPLACE INTO `creature` (`id`, `map`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `DeathState`, `MovementType`, `spawnFlags`, `visibilitymod`, `patch_min`, `patch_max`) VALUES (50053, 0, 0, 0, -8841.31, 658.602, 98.3674, 3.65088, 25, 25, 0, 0, 100, 0, 0, 0, 0, 0, 0, 10);
+REPLACE INTO `creature` (`id`, `map`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `DeathState`, `MovementType`, `spawnFlags`, `visibilitymod`, `patch_min`, `patch_max`) VALUES (50053, 0, 0, 51260, -8839.74, 659.425, 98.5229, 3.64305, 25, 25, 0, 0, 100, 0, 0, 0, 0, 0, 0, 10);
