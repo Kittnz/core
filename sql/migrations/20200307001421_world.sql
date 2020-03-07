@@ -16,7 +16,8 @@ delete from creature where id = 51290;
 delete from creature where id = 51292;
 delete from creature where id = 50053;
 
-REPLACE INTO `creature` (`id`, `map`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `DeathState`, `MovementType`, `spawnFlags`, `visibilitymod`, `patch_min`, `patch_max`) VALUES (51290, 0, 0, 0, -8871.94, 609.898, 95.4889, 5.20048, 25, 25, 0, 0, 100, 0, 0, 0, 0, 0, 0, 10);
+REPLACE INTO `creature` (`id`, `map`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `DeathState`, `MovementType`, `spawnFlags`, `visibilitymod`, `patch_min`, `patch_max`) VALUES (51290, 0, 0, 0, -8870.39, 606.938, 93.4834, 5.22689, 25, 25, 0, 0, 100, 0, 0, 0, 0, 0, 0, 10);
+
 
 REPLACE INTO `creature` (`id`, `map`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `DeathState`, `MovementType`, `spawnFlags`, `visibilitymod`, `patch_min`, `patch_max`) VALUES (51292, 0, 0, 0, -8872.04, 602.626, 92.7552, 6.00354, 25, 25, 0, 0, 100, 0, 0, 0, 0, 0, 0, 10);
 
