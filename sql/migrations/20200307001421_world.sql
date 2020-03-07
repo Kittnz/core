@@ -2,6 +2,8 @@ replace into migrations values (20200307001421);
 
 update creature_template set equipment_id = 51260 where entry = 51292;
 update creature_template set equipment_id = 51260 where entry = 50053;
+update creature_template set equipment_id = 51260 where entry = 50001;
+update creature_template set equipment_id = 51260 where entry = 50089;
 update creature_template set npc_flags = 1 where entry = 51292;
 
 REPLACE INTO `gameobject_template` VALUES (1000080, 0, 5, 179, 'Barbershop', 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
@@ -19,7 +21,7 @@ delete from creature where id = 50053;
 REPLACE INTO `creature` (`id`, `map`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `DeathState`, `MovementType`, `spawnFlags`, `visibilitymod`, `patch_min`, `patch_max`) VALUES (51290, 0, 0, 0, -8870.39, 606.938, 93.4834, 5.22689, 25, 25, 0, 0, 100, 0, 0, 0, 0, 0, 0, 10);
 
 
-REPLACE INTO `creature` (`id`, `map`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `DeathState`, `MovementType`, `spawnFlags`, `visibilitymod`, `patch_min`, `patch_max`) VALUES (51292, 0, 0, 0, -8872.04, 602.626, 92.7552, 6.00354, 25, 25, 0, 0, 100, 0, 0, 0, 0, 0, 0, 10);
+REPLACE INTO `creature` (`id`, `map`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `DeathState`, `MovementType`, `spawnFlags`, `visibilitymod`, `patch_min`, `patch_max`) VALUES (51292, 0, 0, 51260, -8868.51, 610.732, 93.7448, 5.25097, 25, 25, 0, 0, 100, 0, 0, 0, 0, 0, 0, 10);
 
 delete from creature where id = 51261;
 
