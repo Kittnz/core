@@ -505,11 +505,7 @@ bool ChatHandler::HandleMountCommand(char* /*args*/)
     uint32 modelid;
 
     if (player->IsTaxiFlying())
-    {
-        SendSysMessage(LANG_YOU_IN_FLIGHT);
-        SetSentErrorMessage(true);
         return false;
-    }
 
     if (!target)
     {
