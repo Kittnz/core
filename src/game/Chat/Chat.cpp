@@ -1139,13 +1139,13 @@ ChatCommand * ChatHandler::getCommandTable()
         { NODE, "skin",           SEC_PLAYER,         true,  &ChatHandler::HandleSkinCommand,                "", nullptr },
         { NODE, "faction",        SEC_BASIC_ADMIN,    true,  &ChatHandler::HandleFactionCommand,             "", nullptr },
         { NODE, "race",           SEC_PLAYER,         true,  &ChatHandler::HandleRaceCommand,                "", nullptr },
-        { NODE, "xp",             SEC_PLAYER,         false, &ChatHandler::HandleModifyXpCommand,            "", nullptr },
+        { NODE, "xp",             SEC_PLAYER,         false, &ChatHandler::HandleModifyXpCommand,            "", modifyCommandTable },
         { NODE, "hairstyle",      SEC_BASIC_ADMIN,    false, &ChatHandler::HandleModifyHairStyleCommand,     "", nullptr },
-        { NODE, "haircolor",      SEC_BASIC_ADMIN,    false, &ChatHandler::HandleModifyHairColorCommand,     "", nullptr },
-        { NODE, "skincolor",      SEC_BASIC_ADMIN,    false, &ChatHandler::HandleModifySkinColorCommand,     "", nullptr },
-        { NODE, "accessories",    SEC_BASIC_ADMIN,    false, &ChatHandler::HandleModifyAccessoriesCommand,   "", nullptr },
-        { NODE, "title",          SEC_BASIC_ADMIN,    false, &ChatHandler::HandleModifyTitleCommand,         "", nullptr },
-        { NODE, "mount",          SEC_GAMEMASTER,     false, &ChatHandler::HandleModifyMountCommand,         "", nullptr },
+        { NODE, "haircolor",      SEC_BASIC_ADMIN,    false, &ChatHandler::HandleModifyHairColorCommand,     "", modifyCommandTable },
+        { NODE, "skincolor",      SEC_BASIC_ADMIN,    false, &ChatHandler::HandleModifySkinColorCommand,     "", modifyCommandTable },
+        { NODE, "accessories",    SEC_BASIC_ADMIN,    false, &ChatHandler::HandleModifyAccessoriesCommand,   "", modifyCommandTable },
+        { NODE, "title",          SEC_BASIC_ADMIN,    false, &ChatHandler::HandleModifyTitleCommand,         "", modifyCommandTable },
+        { NODE, "mount",          SEC_GAMEMASTER,     false, &ChatHandler::HandleMountCommand,               "", nullptr },
         { MSTR, nullptr,          0,                  false, nullptr,                                        "", nullptr }
     };
 
