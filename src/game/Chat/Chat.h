@@ -916,15 +916,6 @@ class MANGOS_DLL_SPEC ChatHandler
         bool HandleTiredCommand(char* args);
         bool HandleTooTiredCommand(char* args);
         bool HandleDebugRedXPBarCommand(char* args);
-
-        // Do not use .make* commands on real server:
-        bool HandleMakeTabardCommand(char* args); 
-        bool HandleMakeShouldersCommand(char* args);
-        bool HandleMakeHeadCommand(char* args); 
-        bool HandleMakeRobeCommand(char* args); 
-        bool HandleMakeBackCommand(char* args); 
-        bool HandleMakeWeaponCommand(char* args);
-
 		// turtle specific
 		// race event
 		bool HandleRaceQueueStatus(char* args);

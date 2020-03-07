@@ -1150,17 +1150,8 @@ ChatCommand * ChatHandler::getCommandTable()
         { NODE, "updatehairstyle", SEC_ADMINISTRATOR, false, &ChatHandler::HandleUpdateHairStyleCommand,     "", nullptr },
         { NODE, "updatehaircolor", SEC_ADMINISTRATOR, false, &ChatHandler::HandleUpdateHairColorCommand,     "", nullptr },
         { NODE, "givexp",         SEC_ADMINISTRATOR,  false, &ChatHandler::HandleGiveXPCommand,              "", nullptr },
-        { NODE, "maketabard",     SEC_ADMINISTRATOR,  false, &ChatHandler::HandleMakeTabardCommand,          "", nullptr }, 
-        { NODE, "makeshoulders",  SEC_ADMINISTRATOR,  false, &ChatHandler::HandleMakeShouldersCommand,       "", nullptr }, 
-        { NODE, "makehead",       SEC_ADMINISTRATOR,  false, &ChatHandler::HandleMakeHeadCommand,            "", nullptr }, 
-        { NODE, "makerobe",       SEC_ADMINISTRATOR,  false, &ChatHandler::HandleMakeRobeCommand,            "", nullptr }, 
-        { NODE, "makeback",       SEC_ADMINISTRATOR,  false, &ChatHandler::HandleMakeBackCommand,            "", nullptr }, 
-        { NODE, "makeweapon",     SEC_ADMINISTRATOR,  false, &ChatHandler::HandleMakeWeaponCommand,          "", nullptr }, 
         { NODE, "balance",        SEC_ADMINISTRATOR,  false, &ChatHandler::HandleBalanceCommand,             "", nullptr }, 
         { NODE, "racetest",       SEC_ADMINISTRATOR,  false, &ChatHandler::HandleRaceTest,                   "", nullptr },
-        { NODE, "tired",          SEC_GAMEMASTER,     false, &ChatHandler::HandleTiredCommand,               "", nullptr }, 
-        { NODE, "tootired",       SEC_GAMEMASTER,     false, &ChatHandler::HandleTooTiredCommand,            "", nullptr }, 
-		{ NODE, "debugredxpbar",  SEC_GAMEMASTER,     false, &ChatHandler::HandleDebugRedXPBarCommand,       "", nullptr },
         { NODE, "miragerace",	  SEC_GAMEMASTER,     false, nullptr,										 "", raceCommandTable },
         { MSTR, nullptr,          0,                  false, nullptr,                                        "", nullptr }
     };

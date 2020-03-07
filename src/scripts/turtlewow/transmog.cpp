@@ -336,8 +336,6 @@ void transmog::GetTransmogItems(Player* player, Creature* creature, uint32 Inven
 {
     Item* itemToTransmog = player->GetItemByPos(INVENTORY_SLOT_BAG_0, SlotType);
 
-    std::string resetText = sObjectMgr.GetMangosString(GOSSIP_TEXT_RESET, player->GetSession()->GetSessionDbLocaleIndex());
-
     if (itemToTransmog && itemToTransmog->GetFakeEntry() > 0)
     {
         uint32 index = 0;
@@ -350,7 +348,7 @@ void transmog::GetTransmogItems(Player* player, Creature* creature, uint32 Inven
                 index = GOSSIP_INDEX_OFFHAND;
         }
 
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, (resetText + GetTransmogItemColor(itemToTransmog->GetProto()->Quality) +
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, ("Reset: " + GetTransmogItemColor(itemToTransmog->GetProto()->Quality) +
             "" + sObjectMgr.GetItemLocaleName(itemToTransmog->GetEntry(), player->GetSession()->GetSessionDbLocaleIndex()) + "|r \n\n" /*\n" +
             GetTransmogCostStr(player, tItem->GetProto()->BuyPrice)*/).c_str()
             , GOSSIP_SENDER_TRANSMOGRIFY, index + itemToTransmog->GetEntry());
