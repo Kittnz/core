@@ -15,6 +15,7 @@ void AddSC_bg_alterac();
 //custom
 void AddSC_zero_scripts();
 void AddSC_ubrs_trash();
+void AddSC_go_scripts();
 
 // Event
 //void AddSC_event_attack_city();
@@ -261,8 +262,7 @@ void AddSC_war_effort();
 
 void AddSC_npc_j_eevee();                            // J'Eevee, the Imp in a Jar
 
-// Turtle WoW Scripts
-
+// Turtle WoW
 void AddSC_shop();
 void AddSC_arena_tournament();
 void AddSC_lost_turtles();
@@ -270,16 +270,15 @@ void AddSC_battlemaster();
 void AddSC_boss_avatar_of_pompa();
 void AddSC_boss_turtlhu();
 void AddSC_boss_xmas_wolf();
-void AddSC_winter_veil_vale();
 void AddSC_drogon();
 void AddSC_boss_gerastrasz();
 void AddSC_boss_chromie();
 void AddSC_boss_chronormu();
 void AddSC_instance_caverns_of_time();
 void AddSC_zebrian_the_mad();
-void AddSC_go_scripts();
+void AddSC_object_scripts();
 void AddSC_item_scripts();
-void AddSC_guild_housing();
+void AddSC_random();
 void AddSC_miracle_raceaway();
 
 void AddScripts()
@@ -295,6 +294,7 @@ void AddScripts()
     //custom
     AddSC_zero_scripts();
     AddSC_ubrs_trash();
+    AddSC_go_scripts();
 
     // Event
     //AddSC_event_attack_city();
@@ -540,7 +540,7 @@ void AddScripts()
 
     AddSC_npc_j_eevee();
 
-    // Turtle WoW Scripts
+    // Turtle WoW
 
     AddSC_shop();
     AddSC_arena_tournament();
@@ -549,16 +549,15 @@ void AddScripts()
     AddSC_boss_avatar_of_pompa();
     AddSC_boss_turtlhu();
     AddSC_boss_xmas_wolf();
-    AddSC_winter_veil_vale();
     AddSC_drogon();
     AddSC_boss_gerastrasz();
     AddSC_boss_chromie();
     AddSC_boss_chronormu();
     AddSC_instance_caverns_of_time();
     AddSC_zebrian_the_mad();
-    AddSC_go_scripts();
+    AddSC_object_scripts();
     AddSC_item_scripts();
-    AddSC_guild_housing();
+    AddSC_random();
     AddSC_miracle_raceaway();
 
 }

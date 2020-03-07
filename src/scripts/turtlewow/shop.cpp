@@ -5,69 +5,6 @@
 #include "AccountMgr.h"
 #include <array>
 
-bool ChatHandler::HandleReloadShopCommand(char* args)
-{
-    sObjectMgr.LoadShop();
-    SendSysMessage("DB table `shop_categories` reloaded.");
-    SendSysMessage("DB table `shop_entries` reloaded.");
-    return true;
-}
-
-bool ChatHandler::HandleBalanceCommand(char* args)
-{
-    char* c_account_name = ExtractArg(&args);
-
-    if (!c_account_name)
-        return false;
-
-    std::string account_name = c_account_name;
-
-    if (!AccountMgr::normalizeString(account_name))
-    {
-        PSendSysMessage("Account doesn't exist.");
-        SetSentErrorMessage(true);
-        return false;
-    }
-
-    uint32 account_id;
-    account_id = ExtractAccountId(&c_account_name, &account_name);
-
-    int32 coins = (int32)atoi(args);
-
-    if (!coins)
-        return false;
-
-    QueryResult* result = LoginDatabase.PQuery("SELECT `coins` FROM `shop_coins` WHERE `id` = '%u'", account_id);
-
-    if (!result)
-    {
-        LoginDatabase.PExecute("INSERT INTO shop_coins (id, coins) VALUES ('%u', 0)", account_id);
-        PSendSysMessage("This player had no record in the shop_coins table. Run the command again.");
-    }
-
-    if (result)
-    {
-        Field* fields = result->Fetch();
-        int32 current_balance = fields[0].GetInt32();
-
-        int32 updated_balance = current_balance + coins;
-        delete result;
-
-        if (updated_balance < 0)
-        {
-            PSendSysMessage("Can't go below zero, the current balance is %i.", current_balance);
-            return false;
-        }
-
-        LoginDatabase.PExecute("UPDATE `shop_coins` SET `coins`=`coins`+%i WHERE `id`=%u", coins, account_id);
-        PSendSysMessage("You've successfully added %i coins to %s.", coins, account_name.c_str());
-        PSendSysMessage("Account %s now has %i coins.", account_name.c_str(), updated_balance);
-        return true;
-    }
-    return false;
-}
-
-
 enum
 {
     ACTION_CATEGORY_START = 10000,

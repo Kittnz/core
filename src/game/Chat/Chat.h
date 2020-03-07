@@ -899,26 +899,19 @@ class MANGOS_DLL_SPEC ChatHandler
         //#INFO: Giperion was here
         bool HandleDebugShowNearestGOInfo(char* args);
 
-        // Turtle WoW 
-        bool HandleNextModelCommand(char* args);
-        bool HandlePrevModelCommand(char* args);        
-        bool HandleSetCityRankCommand(char* args);
-        bool HandleMountCommand(char* args);
-        bool HandleRaceCommand(char* args);
-        bool HandleFactionCommand(char* args);
+        // Turtle WoW
         bool HandleSkinCommand(char* args);
-        bool HandleUpdateSkinBytesCommand(char* args);
-        bool HandleUpdateHairStyleCommand(char* args);
-        bool HandleUpdateHairColorCommand(char* args);
-        bool HandleGiveXPCommand(char* args);
+        bool HandleFactionCommand(char* args);
+        bool HandleRaceCommand(char* args);
         bool HandleBalanceCommand(char* args);
-		bool HandleRaceTest(char* args);
-        bool HandleTiredCommand(char* args);
-        bool HandleTooTiredCommand(char* args);
-        bool HandleDebugRedXPBarCommand(char* args);
-		// turtle specific
-		// race event
-		bool HandleRaceQueueStatus(char* args);
+        bool HandleModifyTitleCommand(char* args);
+        bool HandleModifyXpCommand(char* args);
+        bool HandleMorphBackCommand(char* args);
+        bool HandleMorphNextCommand(char* args);
+        bool HandleModifyHairStyleCommand(char* args);
+        bool HandleModifyHairColorCommand(char* args);
+        bool HandleModifySkinColorCommand(char* args);
+        bool HandleModifyAccessoriesCommand(char* args);
 
         Player*   GetSelectedPlayer();
         Creature* GetSelectedCreature();

@@ -46,7 +46,7 @@ set (SCRIPTS_SRCS
     custom/npc_escort.cpp
     custom/zero_creatures.cpp
     custom/npc_j_eevee.cpp
-    turtlewow/transmog.cpp
+    custom/go_scripts.cpp
     eastern_kingdoms/alterac_mountains/alterac_mountains.cpp
     eastern_kingdoms/arathi_highlands/arathi_highlands.cpp
     eastern_kingdoms/blasted_lands/blasted_lands.cpp
@@ -285,27 +285,33 @@ set (SCRIPTS_SRCS
     world/dragons_of_nightmare/boss_lethon.cpp
     world/dragons_of_nightmare/boss_taerar.cpp
     world/dragons_of_nightmare/boss_ysondre.cpp
-	
-	turtlewow/shop.cpp
-    turtlewow/arena_tournament.cpp
-    turtlewow/lost_turtles.cpp
-    turtlewow/battlemaster.cpp
-    turtlewow/miracle_raceaway.cpp
-	turtlewow/boss_avatar_of_pompa.cpp 
-	turtlewow/boss_turtlhu.cpp 
-	turtlewow/drogon.cpp 
-	turtlewow/cot/black_morass/boss_gerastrasz.cpp 
-	turtlewow/cot/instance_caverns_of_time.cpp 
-	turtlewow/cot/instance_caverns_of_time.h 
-	turtlewow/zebrian_the_mad.cpp 
-	turtlewow/boss_xmas_wolf.cpp 
-	turtlewow/winter_veil_vale.cpp
-	turtlewow/go_scripts.cpp
+
+    # Turtle WoW
+
+    turtlewow/shop.cpp
     turtlewow/item_scripts.cpp
-    turtlewow/guild_housing.cpp
 
-        turtlewow/cot/black_morass/boss_chromie.cpp turtlewow/cot/black_morass/boss_chronormu.cpp)
+    turtlewow/creatures/random.cpp
+    turtlewow/creatures/npc_turtle.cpp
+    turtlewow/creatures/npc_zebrian.cpp 
+    turtlewow/creatures/npc_drogon.cpp 
+    turtlewow/creatures/npc_battlemaster.cpp
+    turtlewow/creatures/npc_arena.cpp
+    turtlewow/creatures/boss_pompa.cpp 
+    turtlewow/creatures/boss_turtlhu.cpp 
+    turtlewow/creatures/boss_snowball.cpp 
 
+    turtlewow/creatures/cot/black_morass/boss_gerastrasz.cpp 
+    turtlewow/creatures/cot/instance_caverns_of_time.cpp 
+    turtlewow/creatures/cot/instance_caverns_of_time.h 
+    turtlewow/creatures/cot/black_morass/boss_chromie.cpp 
+    turtlewow/creatures/cot/black_morass/boss_chronormu.cpp   
+
+    turtlewow/mirage_raceway/miracle_raceaway.cpp
+    turtlewow/transmog.cpp
+    turtlewow/object_scripts.cpp
+    turtlewow/commands.cpp
+)
 
 # Used in game ScriptMgr, not need here
 list(REMOVE_ITEM SCRIPTS_SRCS ScriptLoader.cpp)

@@ -17,7 +17,6 @@ CREATE TABLE `character_transmog` (
   PRIMARY KEY (`itemguid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-
 END IF;
 END??
 delimiter ; 

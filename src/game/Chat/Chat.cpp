@@ -704,8 +704,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { MSTR, "instance_buff_removal",       SEC_DEVELOPER,    true,  &ChatHandler::HandleReloadInstanceBuffRemoval,            "", nullptr },
         { MSTR, "petitions",                   SEC_ADMINISTRATOR, true,  &ChatHandler::HandleReloadPetitions,                      "", nullptr },
         { MSTR, "shop",                        SEC_DEVELOPER, true,  &ChatHandler::HandleReloadShopCommand,                    "", nullptr },
-        { MSTR, "rates",                       SEC_DEVELOPER, true,  &ChatHandler::HandleReloadRates,                          "", nullptr },
-        { MSTR, "custom_pets",                 SEC_DEVELOPER, true,  &ChatHandler::HandleReloadCustomPetEntries,               "", nullptr },
+        { MSTR, "companions",                  SEC_DEVELOPER, true,  &ChatHandler::HandleReloadCustomPetEntries,               "", nullptr },
         { MSTR, "custom_mounts",               SEC_DEVELOPER, true,  &ChatHandler::HandleReloadCustomMountEntries,               "", nullptr },
         { MSTR, nullptr,                       0,                 false, nullptr,                                                  "", nullptr }
     };
@@ -1007,12 +1006,6 @@ ChatCommand * ChatHandler::getCommandTable()
         { MSTR, nullptr,             0,                     false, nullptr,                                        "", nullptr }
     };
 
-	static ChatCommand raceCommandTable[] =
-	{
-		{ NODE, "status",        SEC_PLAYER,         false, &ChatHandler::HandleRaceQueueStatus,                                         "", nullptr  },
-		{ MSTR, nullptr,          0,                  false, nullptr,                                        "", nullptr }
-	};
-
     static ChatCommand commandTable[] =
     {
         { NODE, "account",        SEC_PLAYER,         true, nullptr,                                         "", accountCommandTable  },
@@ -1139,20 +1132,20 @@ ChatCommand * ChatHandler::getCommandTable()
         { MSTR, "spamer",         SEC_MODERATOR,      true, nullptr,                                         "", spamerCommandTable },
         { MSTR, "antispam",       SEC_MODERATOR_CONF, true, nullptr,                                         "", AntiSpamCommandTable },
         { MSTR, "gold",           SEC_BASIC_ADMIN,    true, nullptr,                                         "", goldCommandTable },
-        { NODE, "nextmodel",      SEC_GAMEMASTER,     false, &ChatHandler::HandleNextModelCommand,           "", nullptr },
-        { NODE, "prevmodel",      SEC_GAMEMASTER,     false, &ChatHandler::HandlePrevModelCommand,           "", nullptr },
-        { NODE, "setcityrank",    SEC_GAMEMASTER,     false, &ChatHandler::HandleSetCityRankCommand,         "", nullptr },
-        { NODE, "mount",          SEC_GAMEMASTER,     false, &ChatHandler::HandleMountCommand,               "", nullptr },
-        { NODE, "race",           SEC_PLAYER,         false, &ChatHandler::HandleRaceCommand,                "", nullptr },
-        { NODE, "faction",       SEC_ADMINISTRATOR,   false, &ChatHandler::HandleFactionCommand,              "", nullptr },
-        { NODE, "skin",           SEC_PLAYER,         false, &ChatHandler::HandleSkinCommand,                "", nullptr },
-        { NODE, "updateskinbytes", SEC_ADMINISTRATOR, false, &ChatHandler::HandleUpdateSkinBytesCommand,     "", nullptr },
-        { NODE, "updatehairstyle", SEC_ADMINISTRATOR, false, &ChatHandler::HandleUpdateHairStyleCommand,     "", nullptr },
-        { NODE, "updatehaircolor", SEC_ADMINISTRATOR, false, &ChatHandler::HandleUpdateHairColorCommand,     "", nullptr },
-        { NODE, "givexp",         SEC_ADMINISTRATOR,  false, &ChatHandler::HandleGiveXPCommand,              "", nullptr },
-        { NODE, "balance",        SEC_ADMINISTRATOR,  false, &ChatHandler::HandleBalanceCommand,             "", nullptr }, 
-        { NODE, "racetest",       SEC_ADMINISTRATOR,  false, &ChatHandler::HandleRaceTest,                   "", nullptr },
-        { NODE, "miragerace",	  SEC_GAMEMASTER,     false, nullptr,										 "", raceCommandTable },
+            // Turtle WoW
+        { NODE, "balance",        SEC_BASIC_ADMIN,    true,  &ChatHandler::HandleBalanceCommand,             "", nullptr },
+        { NODE, "morphnext",      SEC_GAMEMASTER,     true,  &ChatHandler::HandleMorphNextCommand,           "", nullptr },
+        { NODE, "morphback",      SEC_GAMEMASTER,     true,  &ChatHandler::HandleMorphBackCommand,           "", nullptr },
+        { NODE, "skin",           SEC_PLAYER,         true,  &ChatHandler::HandleSkinCommand,                "", nullptr },
+        { NODE, "faction",        SEC_BASIC_ADMIN,    true,  &ChatHandler::HandleFactionCommand,             "", nullptr },
+        { NODE, "race",           SEC_PLAYER,         true,  &ChatHandler::HandleRaceCommand,                "", nullptr },
+        { NODE, "xp",             SEC_PLAYER,         false, &ChatHandler::HandleModifyXpCommand,            "", nullptr },
+        { NODE, "hairstyle",      SEC_BASIC_ADMIN,    false, &ChatHandler::HandleModifyHairStyleCommand,     "", nullptr },
+        { NODE, "haircolor",      SEC_BASIC_ADMIN,    false, &ChatHandler::HandleModifyHairColorCommand,     "", nullptr },
+        { NODE, "skincolor",      SEC_BASIC_ADMIN,    false, &ChatHandler::HandleModifySkinColorCommand,     "", nullptr },
+        { NODE, "accessories",    SEC_BASIC_ADMIN,    false, &ChatHandler::HandleModifyAccessoriesCommand,   "", nullptr },
+        { NODE, "title",          SEC_BASIC_ADMIN,    false, &ChatHandler::HandleModifyTitleCommand,         "", nullptr },
+        { NODE, "mount",          SEC_GAMEMASTER,     false, &ChatHandler::HandleModifyMountCommand,         "", nullptr },
         { MSTR, nullptr,          0,                  false, nullptr,                                        "", nullptr }
     };
 
