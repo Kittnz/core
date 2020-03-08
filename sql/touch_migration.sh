@@ -1,5 +1,5 @@
 DATE=`date +%Y%m%d%H%M%S`
-FPATH="$DATE"_world.sql
+FPATH="migrations/$DATE"_world.sql
 
 touch "$FPATH"
 

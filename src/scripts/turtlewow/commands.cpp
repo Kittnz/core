@@ -1,6 +1,3 @@
-#include "..\..\game\Chat\Chat.h"
-#include "..\..\game\Chat\Chat.h"
-
 #include "scriptPCH.h"
 #include "AccountMgr.h"
 #include <array>
