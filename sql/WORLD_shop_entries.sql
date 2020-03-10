@@ -34,6 +34,7 @@ replace into shop_categories values
 replace into shop_items values
 -- Gameplay --------------------------------------------------------------------------------------------
 (101, 1, 50016, 'Portable Meeting Stone', 0),
+(100, 1, 23720, 'Level 1 Riding Turtle', 0),
 (104, 1, 50000, 'Character Name Change', 100),
 (105, 1, 50002, 'Character Race Change', 200),
 (106, 1, 50001, 'Character Look Change', 150),
@@ -43,7 +44,7 @@ replace into shop_items values
 (110, 1, 50005, 'Field Repair Bot 75B (Companion)', 100),
 (111, 1, 50004, 'Portable Black Hole (36 slot bag)', 150),
 (112, 1, 50007, 'Forworn Mule (Bank Companion)', 200),
-(113, 1, 51216, 'Transmogrification Token', 10),
+(113, 1, 51216, 'Fashion Coin (Transmogrification)', 10),
 -- Pets ------------------------------------------------------------------------------------------------
 (200, 2, 51007, 'Teldrassil Sproutling', 50),
 (201, 2, 13584, 'Diablo Stone', 50),
