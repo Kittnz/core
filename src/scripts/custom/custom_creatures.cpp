@@ -1214,6 +1214,8 @@ bool GossipHello_TransmogNPC(Player* player, Creature* creature)
         if (Item* it = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_RANGED))
             player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Ranged", GOSSIP_SENDER_MAIN, it->GetProto()->InventoryType);
 
+    player->PrepareQuestMenu(creature->GetGUID());
+
     player->SEND_GOSSIP_MENU(GOSSIP_TEXT_1, creature->GetGUID());
     return true;
 }
