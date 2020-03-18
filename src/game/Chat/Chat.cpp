@@ -494,7 +494,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { NODE, "combreach",      SEC_BASIC_ADMIN,    false, &ChatHandler::HandleModifyCrCommand,            "", nullptr },
         { NODE, "boundrad",       SEC_BASIC_ADMIN,    false, &ChatHandler::HandleModifyBrCommand,            "", nullptr },
         // Turtle WoW
-        { NODE, "xp",             SEC_PLAYER,         false, &ChatHandler::HandleModifyXpCommand,            "", nullptr },
+        { NODE, "xp",             SEC_BASIC_ADMIN,         false, &ChatHandler::HandleModifyXpCommand,            "", nullptr },
         { NODE, "hairstyle",      SEC_BASIC_ADMIN,    false, &ChatHandler::HandleModifyHairStyleCommand,     "", nullptr },
         { NODE, "haircolor",      SEC_BASIC_ADMIN,    false, &ChatHandler::HandleModifyHairColorCommand,     "", nullptr },
         { NODE, "skincolor",      SEC_BASIC_ADMIN,    false, &ChatHandler::HandleModifySkinColorCommand,     "", nullptr },
