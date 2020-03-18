@@ -337,7 +337,7 @@ StartScript, CompleteScript)
  ('60036', '0', '2', '-284', '51', '60', '60', '0', '0', '0', '0',
 '0', '0', '0', '0', '0','0',
 '0', '0', '0', '0', '0', '0', '0', '0', '0',
-'0', '0', '0', 'Make the Right Choice', 'I\'ve heard rumors that there are some kind of zealous fanatics that still reside in that cursed Stratholme, which I\'d say is absolutely insane place to remain at if you ask me, alas, these folks might get a hold onto some Righteous Orbs I need for my new invention and an exquisite masterpice I have patterned long time ago to be made real.\n\nThere\'s also another orb, no, I think it\'s a Sphere… let me check my list; oh, correct – Flawless Draenethyst Sphere. I need one. Where? No idea, sorry. Perhaps someone knows something about it in some Blasted Lands far away from here? Ask people around.\n\nBring me 5 of these orbs and I will see that you have your precious Fashion Coin.\n\nPerhaps… oh, nothing, nevermind.\n\nOh, you\'re ready to go right away? Marvelous!', 'Bring 5 Righteous Orbs to Fashionista and recieve 3 Fashion Coins as a reward.', 'Splendid. Hmm, is that a … *<gasps>* A CRACK?!?\n\nOh, it\'s just a hair. Lucky me it\'s not dusty or rot covered by undead. Oh yes, your reward.', 'So soon? Seems like those fanatics are lying dead and draw no breath at all, unless they became undead at this point already. Whatever. Do you have the orbs I asked for and that sphere as well?', '', '', '',
+'0', '0', '0', 'Make the Right Choice', 'I\'ve heard rumors that there are some kind of zealous fanatics that still reside in that cursed Stratholme, which I\'d say is absolutely insane place to remain at if you ask me, alas, these folks might get a hold onto some Righteous Orbs I need for my new invention and an exquisite masterpice I have patterned long time ago to be made real.\n\nThere\'s also another orb, no, I think it\'s a Sphere… let me check my list; oh, correct – Flawless Draenethyst Sphere. I need one. Where? No idea, sorry. Perhaps someone knows something about it in some Blasted Lands far away from here? Ask people around.\n\nBring me 5 of these orbs and I will see that you have your precious Fashion Coin.\n\nPerhaps… oh, nothing, nevermind.\n\nOh, you\'re ready to go right away? Marvelous!', 'Bring 5 Righteous Orbs to Fashionista\'s Apprentice and recieve 3 Fashion Coins as a reward.', 'Splendid. Hmm, is that a … *<gasps>* A CRACK?!?\n\nOh, it\'s just a hair. Lucky me it\'s not dusty or rot covered by undead. Oh yes, your reward.', 'So soon?\n\nSeems like those fanatics are lying dead and draw no breath at all, unless they became undead at this point already. Whatever.\n\nDo you have the orbs I asked for and that sphere as well?', '', '', '',
 '', '', '12811', '8244', '0', '0', '5', '1', '0',
 '0', '0', '0', '0', '0', '0', '0', '0',
 '0', '0', '0', '0', '0', '0',
@@ -351,10 +351,14 @@ StartScript, CompleteScript)
 '0', '0', '0', '0', '0', '0', '0',
 '0', '0', '0', '0', '0','0',
 0, 0);
-replace into creature_questrelation (id, quest, patch_min, patch_max) values ('51291','60036','10','10');
-replace into creature_involvedrelation (id, quest, patch_min, patch_max) values ('51291','60036','10','10');  
-replace into creature_questrelation (id, quest, patch_min, patch_max) values ('51290','60036','10','10');
-replace into creature_involvedrelation (id, quest, patch_min, patch_max) values ('51290','60036','10','10');  
+
+delete from creature_involvedrelation where quest = 60036;
+delete from creature_questrelation where quest = 60036;
+
+replace into creature_questrelation (id, quest, patch_min, patch_max) values ('51293','60036','10','10');
+replace into creature_involvedrelation (id, quest, patch_min, patch_max) values ('51293','60036','10','10');  
+replace into creature_questrelation (id, quest, patch_min, patch_max) values ('51292','60036','10','10');
+replace into creature_involvedrelation (id, quest, patch_min, patch_max) values ('51292','60036','10','10');  
 
 REPLACE INTO `transmog_template` (`displayid`, `inventory_type`) VALUES ('10416', '1');
 
