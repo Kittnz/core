@@ -349,7 +349,7 @@ void transmog::GetTransmogItems(Player* player, Creature* creature, uint32 Inven
         }
 
         player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, ("Reset: " + GetTransmogItemColor(itemToTransmog->GetProto()->Quality) +
-            "" + sObjectMgr.GetItemLocaleName(itemToTransmog->GetEntry(), player->GetSession()->GetSessionDbLocaleIndex()) + "|r \n\n" /*\n" +
+            "" + sObjectMgr.GetItemLocaleName(itemToTransmog->GetEntry(), player->GetSession()->GetSessionDbLocaleIndex()) + "|r" /*\n" +
             GetTransmogCostStr(player, tItem->GetProto()->BuyPrice)*/).c_str()
             , GOSSIP_SENDER_TRANSMOGRIFY, index + itemToTransmog->GetEntry());
     }
@@ -371,7 +371,7 @@ void transmog::GetTransmogItems(Player* player, Creature* creature, uint32 Inven
 
             if (CanTransmogrifyItemWithItem(player, itemToTransmog, itemTransmog))
                 player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, (GetTransmogItemColor(itemTransmog->GetProto()->Quality) +
-                    "" + sObjectMgr.GetItemLocaleName(itemTransmog->GetEntry(), player->GetSession()->GetSessionDbLocaleIndex()) + "|r \n" +
+                    "" + sObjectMgr.GetItemLocaleName(itemTransmog->GetEntry(), player->GetSession()->GetSessionDbLocaleIndex()) + "|r" +
                     GetTransmogCostStr(player, itemTransmog->GetProto()->BuyPrice)).c_str()
                     , GOSSIP_SENDER_TRANSMOGRIFY, index + itemTransmog->GetEntry());
         }
