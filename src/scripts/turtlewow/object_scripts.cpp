@@ -14,7 +14,7 @@ bool GOHello_go_portable_wormhole(Player* pPlayer, GameObject* pGo)
     if (pPlayer->isInCombat() || pPlayer->IsBeingTeleported() || (pPlayer->getDeathState() == CORPSE) || pPlayer->IsMoving())
         ChatHandler(pPlayer).PSendSysMessage("The wormhole is currently unstable.");
     else
-    pPlayer->TeleportTo((pPlayer->GetTeam() == ALLIANCE) ? WorldLocation(0, -8828.231445f, 627.927490f, 94.055664f, 0.0f) : WorldLocation(1, 1437.0f, -4421.0f, 25.24f, 1.65f));
+    pPlayer->TeleportTo((pPlayer->GetTeam() == ALLIANCE) ? WorldLocation(0, -8828.231445f, 627.927490f, 94.055664f, 0.0f) : WorldLocation(1, 1653.7f, -4416.6f, 16.8f, 0.65f));
     return true;
 }
 
