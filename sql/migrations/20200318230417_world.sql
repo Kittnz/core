@@ -12,7 +12,7 @@ update item_template set quality = 0 where entry = 50016;
 update item_template set name = 'Broken Meeting Stone' where entry = 50016;
 update item_template set description = 'This doesn\'t seem to be magical at all... The amulet is scratched and broken.' where entry = 50016;
 update item_template set sell_price = 200 where entry = 50016;
-update item_template set spellid_1 = 18282 where entry = 50016;
+update item_template set spellid_1 = 0 where entry = 50016;
 
 REPLACE INTO `gameobject_template` (`entry`, `patch`, `type`, `displayId`, `name`, `faction`, `flags`, `size`, `data0`, `data1`, `data2`, `data3`, `data4`, `data5`, `data6`, `data7`, `data8`, `data9`, `data10`, `data11`, `data12`, `data13`, `data14`, `data15`, `data16`, `data17`, `data18`, `data19`, `data20`, `data21`, `data22`, `data23`, `mingold`, `maxgold`, `script_name`) VALUES (1000081, 0, 1, 1327, 'Wormhole', 35, 0, 0.50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_portable_wormhole');
 
