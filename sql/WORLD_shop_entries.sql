@@ -44,8 +44,8 @@ replace into shop_items values
 (108, 1, 50009, 'Mechanical Auctioneer (Companion)', 100),
 (109, 1, 50005, 'Field Repair Bot 75B (Companion)', 100),
 (110, 1, 50007, 'Forworn Mule (Bank Companion)', 200),
-(111, 1, 51305, 'Fashion Coin x5 (Transmogrification)', 50),
-(112, 1, 51306, 'Fashion Coin x10 (Transmogrification)', 90),
+(111, 1, 51305, 'Fashion Coin x5 (Transmogrification)', 100),
+(112, 1, 51306, 'Fashion Coin x10 (Transmogrification)', 160),
 -- Pets ------------------------------------------------------------------------------------------------
 (200, 2, 51007, 'Teldrassil Sproutling', 50),
 (201, 2, 13584, 'Diablo Stone', 50),
