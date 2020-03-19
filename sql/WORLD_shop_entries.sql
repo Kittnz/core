@@ -34,7 +34,7 @@ replace into shop_categories values
 replace into shop_items values
 -- Gameplay --------------------------------------------------------------------------------------------
 (100, 1, 23720, 'Level 1 Riding Turtle', 0),
-(101, 1, 50000, 'Character Name Change', 100),
+(101, 1, 50000, 'Character Name Change', 150),
 (102, 1, 50002, 'Character Race Change', 200),
 (103, 1, 50001, 'Character Look Change', 150),
 (104, 1, 50003, 'Loremaster\'s Backpack (28 slot bag)', 75),
