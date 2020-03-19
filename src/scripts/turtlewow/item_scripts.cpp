@@ -21,7 +21,7 @@ bool ItemUse_portable_wormhole_generator(Player* pPlayer, Item* pItem, const Spe
             pPlayer->GetSafePosition(x, y, z);
             x += dis * cos(pPlayer->GetOrientation());
             y += dis * sin(pPlayer->GetOrientation());
-            pPlayer->SummonGameObject(1000081, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 5, true);
+            pPlayer->SummonGameObject(1000081, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 10, true);
             pPlayer->ModifyMoney(-500);
         }
         else
