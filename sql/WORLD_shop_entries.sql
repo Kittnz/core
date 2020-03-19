@@ -33,16 +33,17 @@ replace into shop_categories values
 
 replace into shop_items values
 -- Gameplay --------------------------------------------------------------------------------------------
-(101, 1, 50016, 'Portable Meeting Stone', 0),
 (100, 1, 23720, 'Level 1 Riding Turtle', 0),
-(104, 1, 50000, 'Character Name Change', 100),
-(105, 1, 50002, 'Character Race Change', 200),
-(106, 1, 50001, 'Character Look Change', 150),
-(107, 1, 50003, 'Loremaster\'s Backpack (28 slot bag)', 75),
-(108, 1, 50011, 'MOLL-E, Portable Mailbox', 100),
-(109, 1, 50009, 'Mechanical Auctioneer', 100),
+(101, 1, 50000, 'Character Name Change', 100),
+(102, 1, 50002, 'Character Race Change', 200),
+(103, 1, 50001, 'Character Look Change', 150),
+(104, 1, 50003, 'Loremaster\'s Backpack (28 slot bag)', 75),
+(105, 1, 50004, 'Portable Black Hole (36 slot bag)', 150),
+(101, 1, 51310, 'Portable Wormhole Generator', 0),
+(108, 1, 50011, 'Portable Gnomish Mailbox', 100),
+(109, 1, 50009, 'Mechanical Auctioneer (Companion)', 100),
 (110, 1, 50005, 'Field Repair Bot 75B (Companion)', 100),
-(111, 1, 50004, 'Portable Black Hole (36 slot bag)', 150),
+
 (112, 1, 50007, 'Forworn Mule (Bank Companion)', 200),
 (113, 1, 51305, 'Fashion Coin x5 (Transmogrification)', 50),
 (114, 1, 51306, 'Fashion Coin x10 (Transmogrification)', 90),

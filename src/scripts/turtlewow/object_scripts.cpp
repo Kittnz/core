@@ -9,6 +9,15 @@ bool GOHello_go_orb_of_the_bronze_dragonflight(Player* pPlayer, GameObject* pGo)
     return true;
 }
 
+bool GOHello_go_portable_wormhole(Player* pPlayer, GameObject* pGo)
+{
+    if (pPlayer->isInCombat() || pPlayer->IsBeingTeleported() || (pPlayer->getDeathState() == CORPSE) || pPlayer->IsMoving())
+        ChatHandler(pPlayer).PSendSysMessage("The wormhole is currently unstable.");
+    else
+    pPlayer->TeleportTo((pPlayer->GetTeam() == ALLIANCE) ? WorldLocation(0, -8828.231445f, 627.927490f, 94.055664f, 0.0f) : WorldLocation(1, 1437.0f, -4421.0f, 25.24f, 1.65f));
+    return true;
+}
+
 struct go_survival_tent : public GameObjectAI
 {
     explicit go_survival_tent(GameObject* pGo) : GameObjectAI(pGo)
@@ -357,6 +366,11 @@ bool GOSelect_go_bounty(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 
 void AddSC_object_scripts()
 {
     Script *newscript;
+
+    newscript = new Script;
+    newscript->Name = "go_portable_wormhole";
+    newscript->pGOHello = &GOHello_go_portable_wormhole;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "go_orb_of_the_bronze_dragonflight";
