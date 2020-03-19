@@ -150,15 +150,10 @@ replace into shop_items values
 -- Illusions -----------------------------------------------------------------------------------------
 (900, 9, 51200, 'Illusion: Goblin', 100),
 (901, 9, 51201, 'Illusion: Worgen', 100),
-(902, 9, 50017, 'Illusion: High Elf', 100),
-(903, 9, 50408, 'Illusion: Dryad / Keeper', 100),
 (904, 9, 51205, 'Illusion: Ghost', 100),
 (905, 9, 51206, 'Illusion: Banshee', 100),
-(906, 9, 51207, 'Illusion: Druid of the Fang', 100),
 (907, 9, 51208, 'Illusion: Succubus', 100),
 (908, 9, 51065, 'Illusion: Shadow', 100),
-(909, 9, 51247, 'Illusion: Chromie', 100),
-(910, 9, 51209, 'Illusion: Rat', 100),
 -- Glyphs -----------------------------------------------------------------------------------------
 (1000, 10, 50010, 'General: Glyph of Hardcore', 0),
 (1001, 10, 50008, 'General: Glyph of Twinking', 0),
