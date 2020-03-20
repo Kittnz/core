@@ -280,7 +280,7 @@ StartScript, CompleteScript)
 '0', '0', '0', '0', '0','0',
 '0', '0', '0', '0', '0', '0', '0', '0', '0',
 '0', '0', '0', 'Fashion Demands Sacrifices', 'Greetings!$B$BAren\'t you here for some Fashion Coins exchange? Well then, one will cost you some materials. Here\'s what we need at the moment...$B$BI need all the items on the list and not a single one of it less. Make sure they aren\'t damaged or chipped… I\'m not a goblin to meddle with.', 'Bring 15 Bolts of Runcloth, 5 Huge Emeralds, 20 Long Soft Tails and 15 Delicate Feathers to Fashionista\'s apprentice and recieve one Fashion Coin as a reward.', 'Here you go. Have your Fashion Coin and knock yourself off my face, I\'m not some Speedy to appreciate your so called heroic deeds and miniscule efforts.', 'What? Don\'t even ask me anything.$B$BFeel free to knock yourself out, I\'m very busy. Have a good day to you too.', '', '', '',
-'', '', '14048', '12364', '1688', '5636', '15', '5', '20',
+'', '', '14048', '13926', '1688', '5636', '15', '1', '20',
 '15', '0', '0', '0', '0', '0', '0', '0',
 '0', '0', '0', '0', '0', '0',
 '0', '0', '0', '0', '0', '0',
