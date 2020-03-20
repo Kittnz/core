@@ -1,5 +1,5 @@
 replace into broadcast_text (id, maletext) values
-('90000', 'So, you want to help support our server and our staff, but not sure how? Well, you\'ve come to the right place! Donations are a way to help us improve your experience here at Turtle WoW, as well as help pay for general server costs and cheer up the developers.');
+('90000', 'Welcome to our shop! We offer exotic garments, large bags, mysterious engineering devices and much more to improve your experience on our server.');
 
 drop table if exists shop_categories;
 create table shop_categories (
