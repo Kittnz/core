@@ -54,7 +54,7 @@ bool ChatHandler::HandleSaleCommand(char* args)
         WorldDatabase.PExecute("UPDATE shop_items SET price = price * 2;");
         SendSysMessage("Shop sale is OFF.");
     }
-    sObjectMgr.LoadShop();
+    SendSysMessage("Use this command to update prices: |cff0ccaec.reload shop|r");
     return true;
 }
 
