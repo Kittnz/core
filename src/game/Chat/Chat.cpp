@@ -1141,6 +1141,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { MSTR, "gold",           SEC_BASIC_ADMIN,    true, nullptr,                                         "", goldCommandTable },
             // Turtle WoW
         { NODE, "balance",        SEC_BASIC_ADMIN,    true,  &ChatHandler::HandleBalanceCommand,             "", nullptr },
+        { NODE, "sale",           SEC_BASIC_ADMIN,    true,  &ChatHandler::HandleSaleCommand,                "", nullptr },
         { NODE, "morphnext",      SEC_GAMEMASTER,     true,  &ChatHandler::HandleMorphNextCommand,           "", nullptr },
         { NODE, "morphback",      SEC_GAMEMASTER,     true,  &ChatHandler::HandleMorphBackCommand,           "", nullptr },
         { NODE, "skin",           SEC_PLAYER,         true,  &ChatHandler::HandleSkinCommand,                "", nullptr },

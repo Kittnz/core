@@ -27,6 +27,37 @@ bool ChatHandler::HandleReloadShopCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleSaleCommand(char* args)
+{
+    if (!*args)
+    {
+        SendSysMessage("Syntax: .sale on / off");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    bool value;
+
+    if (!ExtractOnOff(&args, value))
+    {
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    if (value)
+    {
+        WorldDatabase.PExecute("UPDATE shop_items SET price = price / 2;");
+        SendSysMessage("Shop sale is ON.");
+    }
+    else
+    {
+        WorldDatabase.PExecute("UPDATE shop_items SET price = price * 2;");
+        SendSysMessage("Shop sale is OFF.");
+    }
+    sObjectMgr.LoadShop();
+    return true;
+}
+
 bool ChatHandler::HandleBalanceCommand(char* args)
 {
     char* c_account_name = ExtractArg(&args);

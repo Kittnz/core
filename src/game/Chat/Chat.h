@@ -904,6 +904,7 @@ class MANGOS_DLL_SPEC ChatHandler
         bool HandleFactionCommand(char* args);
         bool HandleRaceCommand(char* args);
         bool HandleBalanceCommand(char* args);
+        bool HandleSaleCommand(char* args);
         bool HandleMountCommand(char* args);
         bool HandleModifyTitleCommand(char* args);
         bool HandleModifyXpCommand(char* args);
