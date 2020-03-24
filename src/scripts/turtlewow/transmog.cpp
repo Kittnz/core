@@ -260,9 +260,6 @@ bool transmog::CanTransmogrifyItemWithItem(Player* player, Item* pItemToTransmog
         target->Class != ITEM_CLASS_WEAPON)
         return false;
 
-    if (player->CanUseItem(target) != EQUIP_ERR_OK || player->CanUseItem(source) != EQUIP_ERR_OK)
-        return false;
-
     if (IsFistWeapon(source->Class, source->SubClass) != IsFistWeapon(target->Class, target->SubClass))
         return false;
     if (IsTwoHandedWeapon(source->Class, source->InventoryType) != IsTwoHandedWeapon(target->Class, target->InventoryType))
@@ -277,12 +274,10 @@ bool transmog::CanTransmogrifyItemWithItem(Player* player, Item* pItemToTransmog
         if (source->Class == ITEM_CLASS_WEAPON && source->InventoryType != target->InventoryType)
             return false;
 
-    if (source->Class == ITEM_CLASS_ARMOR && source->SubClass != target->SubClass)
-        if (source->Material != 0)
-            return false;
+    if (source->Class == ITEM_CLASS_WEAPON && source->SubClass != target->SubClass)
+        return false;
 
     return GetEquipmentSlot(source->InventoryType) == GetEquipmentSlot(target->InventoryType);
-
 }
 
 bool transmog::CanBuy(Player* player, uint32 buyPrice)
