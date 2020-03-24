@@ -914,6 +914,7 @@ class MANGOS_DLL_SPEC ChatHandler
         bool HandleModifyHairColorCommand(char* args);
         bool HandleModifySkinColorCommand(char* args);
         bool HandleModifyAccessoriesCommand(char* args);
+        bool HandleFlyCommand(char* args);
 
         Player*   GetSelectedPlayer();
         Creature* GetSelectedCreature();

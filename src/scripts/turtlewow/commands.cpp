@@ -58,6 +58,45 @@ bool ChatHandler::HandleSaleCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleFlyCommand(char* args)
+{
+    if (!*args)
+    {
+        SendSysMessage("Syntax: .fly on / off");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    Player* target = m_session->GetPlayer();
+    bool value;
+
+    if (!target)
+        return false;
+
+    if (!ExtractOnOff(&args, value))
+    {
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    if (value)
+    {
+        target->SetFly(value);
+        target->SetDisplayId(6299); // Hawk Owl
+        target->SetObjectScale(0.7F);
+        target->UpdateSpeed(MOVE_SWIM, true, 6.0F);
+    }
+    else
+    {
+        target->SetObjectScale(1.0F);
+        target->UpdateSpeed(MOVE_SWIM, true, 1.0F);
+        target->SetFly(value);
+        target->DeMorph();
+    }
+    return true;
+}
+
+
 bool ChatHandler::HandleBalanceCommand(char* args)
 {
     char* c_account_name = ExtractArg(&args);

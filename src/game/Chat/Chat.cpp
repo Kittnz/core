@@ -494,7 +494,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { NODE, "combreach",      SEC_BASIC_ADMIN,    false, &ChatHandler::HandleModifyCrCommand,            "", nullptr },
         { NODE, "boundrad",       SEC_BASIC_ADMIN,    false, &ChatHandler::HandleModifyBrCommand,            "", nullptr },
         // Turtle WoW
-        { NODE, "xp",             SEC_BASIC_ADMIN,         false, &ChatHandler::HandleModifyXpCommand,            "", nullptr },
+        { NODE, "xp",             SEC_BASIC_ADMIN,    false, &ChatHandler::HandleModifyXpCommand,            "", nullptr },
         { NODE, "hairstyle",      SEC_BASIC_ADMIN,    false, &ChatHandler::HandleModifyHairStyleCommand,     "", nullptr },
         { NODE, "haircolor",      SEC_BASIC_ADMIN,    false, &ChatHandler::HandleModifyHairColorCommand,     "", nullptr },
         { NODE, "skincolor",      SEC_BASIC_ADMIN,    false, &ChatHandler::HandleModifySkinColorCommand,     "", nullptr },
@@ -1148,6 +1148,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { NODE, "faction",        SEC_BASIC_ADMIN,    true,  &ChatHandler::HandleFactionCommand,             "", nullptr },
         { NODE, "race",           SEC_PLAYER,         true,  &ChatHandler::HandleRaceCommand,                "", nullptr },
         { NODE, "mount",          SEC_GAMEMASTER,     false, &ChatHandler::HandleMountCommand,               "", nullptr },
+        { NODE, "fly",            SEC_GAMEMASTER,     false, &ChatHandler::HandleFlyCommand,                 "", nullptr },
         { MSTR, nullptr,          0,                  false, nullptr,                                        "", nullptr }
     };
 
