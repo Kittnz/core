@@ -337,7 +337,7 @@ void WorldSession::HandleMovementOpcodes(WorldPacket & recv_data)
         plMover->UpdateFallInformationIfNeed(movementInfo, opcode);
 
     // Turtle WoW, jump while flying
-    
+    /*
     Player* exceptPlayer = _player;
 
     if (_player->IsFlying() && !movementInfo.HasMovementFlag(MOVEFLAG_SWIMMING))
@@ -348,7 +348,8 @@ void WorldSession::HandleMovementOpcodes(WorldPacket & recv_data)
         movementInfo.RemoveMovementFlag(MOVEFLAG_MASK_MOVING);
         plMover->RemoveUnitMovementFlag(MOVEFLAG_MASK_MOVING);
         exceptPlayer = nullptr;
-    }
+    }*/
+
     WorldPacket data(opcode, recv_data.size());
 
 #if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
@@ -358,7 +359,8 @@ void WorldSession::HandleMovementOpcodes(WorldPacket & recv_data)
 #endif
     movementInfo.Write(data);
 
-    mover->SendMovementMessageToSet(std::move(data), true, exceptPlayer);
+//    mover->SendMovementMessageToSet(std::move(data), true, exceptPlayer);
+    mover->SendMovementMessageToSet(std::move(data), true, _player);
 
     // Fix movement issue on older clients where if the player jumps while running,
     // and then lets go of the key while in the air, he appears to continue moving

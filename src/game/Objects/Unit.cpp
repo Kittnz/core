@@ -7587,36 +7587,6 @@ void Unit::Unmount(bool from_aura)
     // SetFlying(false);
 }
 
-void Unit::SetFlying(bool apply)
-{
-    if (apply)
-    {
-        m_isFlying = true;
-        m_movementInfo.AddMovementFlag(MOVEFLAG_LEVITATING);
-        m_movementInfo.AddMovementFlag(MOVEFLAG_SWIMMING);
-        m_movementInfo.AddMovementFlag(MOVEFLAG_CAN_FLY);
-        m_movementInfo.AddMovementFlag(MOVEFLAG_FLYING);
-
-        if (GetTypeId() == TYPEID_PLAYER)
-        {
-            ((Player*)this)->SendHeartBeat(true);
-        }
-    }
-    else if (m_isFlying)
-    {
-        m_isFlying = false;
-        m_movementInfo.RemoveMovementFlag(MOVEFLAG_LEVITATING);
-        m_movementInfo.RemoveMovementFlag(MOVEFLAG_SWIMMING);
-        m_movementInfo.RemoveMovementFlag(MOVEFLAG_CAN_FLY);
-        m_movementInfo.RemoveMovementFlag(MOVEFLAG_FLYING);
-
-        if (GetTypeId() == TYPEID_PLAYER)
-        {
-            ((Player*)this)->SendHeartBeat(true);
-        }
-    }
-}
-
 bool Unit::IsInDisallowedMountForm()
 {
     // Turtle WoW custom, some morphs should be allowed to use mounts

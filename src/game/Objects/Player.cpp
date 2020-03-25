@@ -21762,3 +21762,22 @@ bool Player::IsInMainCity() {
     return GetZoneId() == 1519 || GetZoneId() == 1637 || GetZoneId() == 1497 || GetZoneId() == 1537 ||
         GetZoneId() == 1657 || GetZoneId() == 1638 || GetInstanceId();
 }
+
+
+void Player::SetFlying(bool flying)
+{
+    if (flying)
+    {
+        m_isFlying = true;
+        m_movementInfo.AddMovementFlag(MOVEFLAG_SWIMMING);
+        m_movementInfo.AddMovementFlag(MOVEFLAG_LEVITATING);
+        m_movementInfo.AddMovementFlag(MOVEFLAG_HOVER);
+        SendHeartBeat(true);
+    }
+    else 
+    {
+        m_isFlying = false;
+        m_movementInfo.RemoveMovementFlag(MOVEFLAG_LEVITATING);
+        SendHeartBeat(true);
+    }
+}

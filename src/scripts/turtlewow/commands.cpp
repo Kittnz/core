@@ -1,6 +1,8 @@
 #include "scriptPCH.h"
 #include "AccountMgr.h"
 #include <array>
+#include "MoveSplineInit.h"
+#include "MoveSpline.h"
 
 class DemorphAfterTime : public BasicEvent {
 public:
@@ -79,23 +81,46 @@ bool ChatHandler::HandleFlyCommand(char* args)
         return false;
     }
 
+    target->CastSpell(target, 14867, true);
+
     if (value)
     {
-        target->SetFlying(value);
-        target->SetDisplayId(6299); // Hawk Owl
+        target->SetFlying(true);
+        target->SetDisplayId(6299);         // Hawk Owl
         target->SetObjectScale(0.7F);
         target->UpdateSpeed(MOVE_SWIM, true, 6.0F);
+        // Looks better if bird doesn't appear on the ground:
+        target->NearLandTo(target->GetPositionX(), target->GetPositionY(), target->GetPositionZ() + 4.0F, target->GetOrientation()); 
     }
     else
     {
-        target->SetObjectScale(1.0F);
+        target->SetFlying(false);
+        target->SetObjectScale(target->getNativeScale());
         target->UpdateSpeed(MOVE_SWIM, true, 1.0F);
-        target->SetFlying(value);
+        target->UpdateSpeed(MOVE_RUN,  true, 1.0F);
+        target->UpdateSpeed(MOVE_WALK, true, 1.0F);
         target->DeMorph();
+
+        target->m_movementInfo.UpdateTime(WorldTimer::getMSTime());
+        WorldPacket hover(SMSG_MOVE_SET_HOVER, 31);
+        hover << target->GetPackGUID();
+        hover << target->m_movementInfo;
+        target->SendMovementMessageToSet(std::move(hover), true);
+
+        target->m_movementInfo.UpdateTime(WorldTimer::getMSTime());
+        WorldPacket stop_swim(MSG_MOVE_STOP_SWIM, 31);
+        stop_swim << target->GetPackGUID();
+        stop_swim << target->m_movementInfo;
+        target->SendMovementMessageToSet(std::move(stop_swim), true);
+
+        //target->m_movementInfo.UpdateTime(WorldTimer::getMSTime());
+        //WorldPacket jump(MSG_MOVE_JUMP, 31);
+        //jump << target->GetPackGUID();
+        //jump << target->m_movementInfo;
+        //target->SendMovementMessageToSet(std::move(jump), true);
     }
     return true;
 }
-
 
 bool ChatHandler::HandleBalanceCommand(char* args)
 {
