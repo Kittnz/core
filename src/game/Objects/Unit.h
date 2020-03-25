@@ -1327,8 +1327,9 @@ class MANGOS_DLL_SPEC Unit : public WorldObject
 
         bool IsMounted() const { return (GetMountID() != 0); }
         uint32 GetMountID() const { return GetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID); }
-        virtual void Mount(uint32 mount, uint32 spellId = 0);
+        virtual void Mount(uint32 mount, uint32 spellId = 0/*, bool IsTaxi = false*/);
         virtual void Unmount(bool from_aura = false);
+        void SetFlying(bool apply);
 
         // Tuer cette unite.
         void DoKillUnit(Unit *victim = nullptr);
@@ -1405,6 +1406,8 @@ class MANGOS_DLL_SPEC Unit : public WorldObject
         bool isSpiritService() const { return HasFlag( UNIT_NPC_FLAGS, UNIT_NPC_FLAG_SPIRITHEALER | UNIT_NPC_FLAG_SPIRITGUIDE ); }
 
         bool IsTaxiFlying() const { return hasUnitState(UNIT_STAT_TAXI_FLIGHT); }
+        // Turtle WoW
+        bool IsFlying() const { return m_isFlying; }
 
         bool isInCombat() const { return HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IN_COMBAT); }
         void SetInCombatState(bool PvP, Unit* enemy = nullptr);
@@ -2169,6 +2172,7 @@ class MANGOS_DLL_SPEC Unit : public WorldObject
 
         bool m_isCreatureLinkingTrigger;
         bool m_isSpawningLinked;
+        bool m_isFlying = false;
 
     public:
         void DisableSpline();

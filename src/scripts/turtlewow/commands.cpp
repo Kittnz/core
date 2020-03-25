@@ -81,7 +81,7 @@ bool ChatHandler::HandleFlyCommand(char* args)
 
     if (value)
     {
-        target->SetFly(value);
+        target->SetFlying(value);
         target->SetDisplayId(6299); // Hawk Owl
         target->SetObjectScale(0.7F);
         target->UpdateSpeed(MOVE_SWIM, true, 6.0F);
@@ -90,7 +90,7 @@ bool ChatHandler::HandleFlyCommand(char* args)
     {
         target->SetObjectScale(1.0F);
         target->UpdateSpeed(MOVE_SWIM, true, 1.0F);
-        target->SetFly(value);
+        target->SetFlying(value);
         target->DeMorph();
     }
     return true;

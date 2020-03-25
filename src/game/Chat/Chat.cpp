@@ -287,7 +287,6 @@ ChatCommand * ChatHandler::getCommandTable()
     static ChatCommand gmCommandTable[] =
     {
         { NODE, "chat",           SEC_MODERATOR,      false, &ChatHandler::HandleGMChatCommand,              "", nullptr },
-        { NODE, "fly",            SEC_GAMEMASTER,     false, &ChatHandler::HandleGMFlyCommand,               "", nullptr },
         { NODE, "ingame",         SEC_PLAYER,         true,  &ChatHandler::HandleGMListIngameCommand,        "", nullptr },
         { NODE, "list",           SEC_ADMINISTRATOR,  true,  &ChatHandler::HandleGMListFullCommand,          "", nullptr },
         { NODE, "visible",        SEC_MODERATOR_CONF, false, &ChatHandler::HandleGMVisibleCommand,           "", nullptr },

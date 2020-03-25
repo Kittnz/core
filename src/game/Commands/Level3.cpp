@@ -6042,39 +6042,6 @@ bool ChatHandler::HandleRespawnCommand(char* /*args*/)
     return true;
 }
 
-bool ChatHandler::HandleGMFlyCommand(char* args)
-{
-    bool value;
-    if (!ExtractOnOff(&args, value))
-    {
-        SendSysMessage(LANG_USE_BOL);
-        SetSentErrorMessage(true);
-        return false;
-    }
-
-    Player *target = GetSelectedPlayer();
-    if (!target)
-        target = m_session->GetPlayer();
-
-    target->SetFly(value);
-
-    if (value)
-        SendSysMessage("WARNING: Do not jump or flying mode will be removed.");
-
-    if (m_session->IsReplaying())
-    {
-        MovementInfo movementInfo = m_session->GetPlayer()->m_movementInfo;
-        movementInfo.UpdateTime(WorldTimer::getMSTime());
-        WorldPacket data(MSG_MOVE_HEARTBEAT, 31);
-        data << m_session->GetRecorderGuid().WriteAsPacked();
-        data << movementInfo;
-        m_session->SendPacket(&data);
-    }
-
-    PSendSysMessage(LANG_COMMAND_FLYMODE_STATUS, GetNameLink(target).c_str(), args);
-    return true;
-}
-
 bool ChatHandler::HandlePDumpLoadCommand(char *args)
 {
     char* file = ExtractQuotedOrLiteralArg(&args);
