@@ -112,12 +112,6 @@ bool ChatHandler::HandleFlyCommand(char* args)
         stop_swim << target->GetPackGUID();
         stop_swim << target->m_movementInfo;
         target->SendMovementMessageToSet(std::move(stop_swim), true);
-
-        //target->m_movementInfo.UpdateTime(WorldTimer::getMSTime());
-        //WorldPacket jump(MSG_MOVE_JUMP, 31);
-        //jump << target->GetPackGUID();
-        //jump << target->m_movementInfo;
-        //target->SendMovementMessageToSet(std::move(jump), true);
     }
     return true;
 }
