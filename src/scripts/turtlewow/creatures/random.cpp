@@ -19,6 +19,20 @@ bool GossipSelect_npc_dirge_the_bouncer(Player* p_Player, Creature* p_Creature, 
     return true;
 }
 
+bool GossipHello_npc_terry_palin(Player* pPlayer, Creature* pCreature)
+{
+
+        CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(51299);
+
+        if (cInfo != nullptr)
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+
+
+    pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+    pPlayer->SEND_GOSSIP_MENU(90338, pCreature->GetGUID());
+    return true;
+}
+
 bool GossipHello_npc_lordaeron_alice(Player* p_Player, Creature* p_Creature)
 {
     p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "<Choose blue stone>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
@@ -184,6 +198,11 @@ void AddSC_random()
     newscript = new Script;
     newscript->Name = "npc_lordaeron_ike";
     newscript->pGossipHello = &GossipHello_npc_lordaeron_ike;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_terry_palin";
+    newscript->pGossipHello = &GossipHello_npc_terry_palin;
     newscript->RegisterSelf();
     
     newscript = new Script;

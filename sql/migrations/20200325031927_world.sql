@@ -121,7 +121,7 @@ start_quest, lock_id, material, sheath, random_property, set_id, max_durability,
 duration, bag_family, disenchant_id, food_type, min_money_loot, max_money_loot, extra_flags, other_team_entry,
 script_name)
 values
- ('51332', '0', '2', '14', 'Gramma Stonefield\'s Lantern', 'Bright enough to not get lost in the woods.', '7461', '2', '0', '1', '950', '950', '22', '-1', '-1', '8',
+ ('51332', '0', '4', '0', 'Gramma Stonefield\'s Lantern', 'Bright enough to not get lost in the woods.', '7461', '2', '0', '1', '950', '950', '22', '-1', '-1', '8',
  '6', '0', '0', '0', '0', '0', '0', '0', '0', '20', '0', '7', '2', '5', '1',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
@@ -129,6 +129,9 @@ values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
+ 
+
+	  
 
 -- End of migration.
 END IF;
