@@ -41,7 +41,7 @@ StartScript, CompleteScript)
 '1', '1', '0', '0', '0', '0',
 '0', '0', '0', '0', '0', '0', '0', '0', '0',
 '0', '0', '0', '0', '0', '0', '0', '0',
-'0', '0', '480', '0', '0', '0', '0', '0',
+'0', '0', '500', '0', '0', '0', '0', '0',
 '0', '0', '0', '0', '0', '0', '0', '0', '0',
 '0', '0', '0', '0', '0', '0', '0',
 '0', '0', '0', '0', '0','0',
@@ -185,7 +185,7 @@ StartScript, CompleteScript)
 '1', '1', '0', '0', '0', '0',
 '0', '858', '0', '0', '0', '3', '0', '0', '0',
 '0', '0', '0', '0', '0', '0', '0', '0',
-'0', '0', '500', '0', '0', '0', '0', '0',
+'0', '0', '550', '0', '0', '0', '0', '0',
 '0', '0', '0', '0', '0', '0', '0', '0', '0',
 '0', '0', '0', '0', '4', '5', '3',
 '0', '0', '2', '4', '0','0',
@@ -199,7 +199,7 @@ update creature_template set script_name = 'npc_terry_palin' where entry = 1650;
 
 delete from creature WHERE id = 51261;
 
-REPLACE INTO `creature` (`guid`, `id`, `map`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `DeathState`, `MovementType`, `spawnFlags`, `visibilitymod`, `patch_min`, `patch_max`) VALUES (2555962, 51261, 0, 0, 51261, -9406.09, 111.806, 60.4824, 5.25074, 25, 25, 0, 0, 100, 0, 0, 0, 0, 0, 0, 10);
+REPLACE INTO `creature` (`id`, `map`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `DeathState`, `MovementType`, `spawnFlags`, `visibilitymod`, `patch_min`, `patch_max`) VALUES (51261, 0, 0, 51261, -9406.09, 111.806, 60.4824, 5.25074, 25, 25, 0, 0, 100, 0, 0, 0, 0, 0, 0, 10);
 
 UPDATE `quest_template` SET `ReqItemId1`='0', `ReqItemCount1`='0' WHERE (`entry`='60042') AND (`patch`='0');
 UPDATE `quest_template` SET `ObjectiveText1`='Speak to Terry Palin.', `ObjectiveText2`='' WHERE (`entry`='60041') AND (`patch`='0');
