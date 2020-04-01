@@ -146,6 +146,7 @@ replace into shop_items values
 (812, 8, 50212, 'Gnome: Leper (Male)', 160),
 -- Illusions -----------------------------------------------------------------------------------------
 (900, 9, 51200, 'Illusion: Goblin', 100),
+(902, 9, 50017, 'Illusion: Blood Elf', 100),
 (901, 9, 51201, 'Illusion: Worgen', 100),
 (904, 9, 51205, 'Illusion: Ghost', 100),
 (905, 9, 51206, 'Illusion: Banshee', 100),

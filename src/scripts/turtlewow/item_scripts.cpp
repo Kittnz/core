@@ -511,6 +511,8 @@ bool ItemUse_highborne_soul_mirror(Player* pPlayer, Item* pItem, const SpellCast
     switch (pPlayer->getClass())
     {
         case CLASS_WARRIOR:
+            displayId = isMale ? 10375 : 4729;
+            break;
         case CLASS_PALADIN:
             displayId = isMale ? 4245 : 4729;
             break;
@@ -519,13 +521,13 @@ bool ItemUse_highborne_soul_mirror(Player* pPlayer, Item* pItem, const SpellCast
             displayId = isMale ? 6779 : 3293;
             break;
         case CLASS_PRIEST:
-            displayId = isMale ? 9752 : 4730;
+            displayId = isMale ? 14394 : 4730;
             break;
         case CLASS_DRUID:
         case CLASS_ROGUE:
         case CLASS_SHAMAN:
         case CLASS_HUNTER:
-            displayId = isMale ? 4494 : 1643;
+            displayId = isMale ? 6549 : 1643;
             break;
         default:
             pPlayer->DeMorph();
