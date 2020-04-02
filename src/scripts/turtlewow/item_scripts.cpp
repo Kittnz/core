@@ -524,10 +524,12 @@ bool ItemUse_highborne_soul_mirror(Player* pPlayer, Item* pItem, const SpellCast
             displayId = isMale ? 14394 : 4730;
             break;
         case CLASS_DRUID:
-        case CLASS_ROGUE:
         case CLASS_SHAMAN:
         case CLASS_HUNTER:
-            displayId = isMale ? 6549 : 1643;
+            displayId = isMale ? 11671 : 1643;
+            break;
+        case CLASS_ROGUE:
+            displayId = isMale ? 6549 : 10381;
             break;
         default:
             pPlayer->DeMorph();
