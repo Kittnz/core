@@ -1883,6 +1883,16 @@ bool ScriptMgr::OnItemUse(Player* pPlayer, Item* pItem, SpellCastTargets const& 
 	return pTempScript->pItemUse(pPlayer, pItem, targets);
 }
 
+bool ScriptMgr::OnItemUseSpell(Player* pPlayer, Item* pItem, SpellCastTargets const& targets)
+{
+    Script* pTempScript = m_NPC_scripts[pItem->GetProto()->ScriptId];
+
+    if (!pTempScript || !pTempScript->pItemUse)
+        return false;
+
+    return pTempScript->pItemUse(pPlayer, pItem, targets);
+}
+
 bool ScriptMgr::OnAreaTrigger(Player* pPlayer, AreaTriggerEntry const* atEntry)
 {
     Script* pTempScript = m_NPC_scripts[GetAreaTriggerScriptId(atEntry->id)];

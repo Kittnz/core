@@ -873,161 +873,161 @@ void AddSC_item_scripts()
 
     newscript = new Script;
     newscript->Name = "item_character_rename";
-    newscript->pItemUse = &ItemUse_character_rename;
+    newscript->pItemUseSpell = &ItemUse_character_rename;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "item_roleplay_hub";
-    newscript->pItemUse = &ItemUse_portable_meeting_stone;
+    newscript->pItemUseSpell = &ItemUse_portable_meeting_stone;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "item_wormhole_generator";
-    newscript->pItemUse = &ItemUse_portable_wormhole_generator;
+    newscript->pItemUseSpell = &ItemUse_portable_wormhole_generator;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "item_scaler";
-    newscript->pItemUse = &ItemUse_alice_wonderland_scale;
+    newscript->pItemUseSpell = &ItemUse_alice_wonderland_scale;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "item_summer_vestment";
-    newscript->pItemUse = &ItemUse_summer_vestment;
+    newscript->pItemUseSpell = &ItemUse_summer_vestment;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "item_city_portal";
-    newscript->pItemUse = &ItemUse_city_protector_scroll;
+    newscript->pItemUseSpell = &ItemUse_city_protector_scroll;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "item_portable_mailbox";
-    newscript->pItemUse = &ItemUse_remote_mail_terminal;
+    newscript->pItemUseSpell = &ItemUse_remote_mail_terminal;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "item_sword_of_truth";
-    newscript->pItemUse = &ItemUse_sword_of_truth;
+    newscript->pItemUseSpell = &ItemUse_sword_of_truth;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "item_hairdye";
-    newscript->pItemUse = &ItemUse_hairdye;
+    newscript->pItemUseSpell = &ItemUse_hairdye;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "item_skin_change";
-    newscript->pItemUse = &ItemUse_skin_changer;
+    newscript->pItemUseSpell = &ItemUse_skin_changer;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "item_survival_kit";
-    newscript->pItemUse = &ItemUse_survival_kit;
+    newscript->pItemUseSpell = &ItemUse_survival_kit;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "item_survival_tent";
-    newscript->pItemUse = &ItemUse_survival_tent;
+    newscript->pItemUseSpell = &ItemUse_survival_tent;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "item_survival_boat";
-    newscript->pItemUse = &ItemUse_survival_boat;
+    newscript->pItemUseSpell = &ItemUse_survival_boat;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "item_bg_tabard";
-    newscript->pItemUse = &ItemUse_bg_tabard;
+    newscript->pItemUseSpell = &ItemUse_bg_tabard;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "item_morph_goblin";
-    newscript->pItemUse = &ItemUse_shop_morph_goblin;
+    newscript->pItemUseSpell = &ItemUse_shop_morph_goblin;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "item_morph_worgen";
-    newscript->pItemUse = &ItemUse_shop_morph_worgen;
+    newscript->pItemUseSpell = &ItemUse_shop_morph_worgen;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "item_morph_bloodelf";
-    newscript->pItemUse = &ItemUse_shop_morph_blood_elf;
+    newscript->pItemUseSpell = &ItemUse_shop_morph_blood_elf;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "item_morph_highelf";
-    newscript->pItemUse = &ItemUse_highborne_soul_mirror;
+    newscript->pItemUseSpell = &ItemUse_highborne_soul_mirror;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "item_morph_dryad";
-    newscript->pItemUse = &ItemUse_dryad_acorn;
+    newscript->pItemUseSpell = &ItemUse_dryad_acorn;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "item_morph_ghost";
-    newscript->pItemUse = &ItemUse_shop_morph_ghost;
+    newscript->pItemUseSpell = &ItemUse_shop_morph_ghost;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "item_morph_banshee";
-    newscript->pItemUse = &ItemUse_shop_morph_banshee;
+    newscript->pItemUseSpell = &ItemUse_shop_morph_banshee;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "item_morph_serpentlord";
-    newscript->pItemUse = &ItemUse_shop_morph_druid_fang;
+    newscript->pItemUseSpell = &ItemUse_shop_morph_druid_fang;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "item_morph_succubus";
-    newscript->pItemUse = &ItemUse_shop_morph_succubus;
+    newscript->pItemUseSpell = &ItemUse_shop_morph_succubus;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "item_exhaustion_glyph";
-    newscript->pItemUse = &ItemUse_remove_rested;
+    newscript->pItemUseSpell = &ItemUse_remove_rested;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "item_radio";
-    newscript->pItemUse = &ItemUse_turtle_radio;
+    newscript->pItemUseSpell = &ItemUse_turtle_radio;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "item_schnapps";
-    newscript->pItemUse = &ItemUse_turtle_party;
+    newscript->pItemUseSpell = &ItemUse_turtle_party;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "item_transmog";
-    newscript->pItemUse = &ItemUse_transmogrification;
+    newscript->pItemUseSpell = &ItemUse_transmogrification;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "item_player_engie";
-    newscript->pItemUse = &ItemUse_item_engie;
+    newscript->pItemUseSpell = &ItemUse_item_engie;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "item_player_zeaus";
-    newscript->pItemUse = &ItemUse_item_zeaus;
+    newscript->pItemUseSpell = &ItemUse_item_zeaus;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "item_winter_tree";
-    newscript->pItemUse = &ItemUse_item_winter_tree;
+    newscript->pItemUseSpell = &ItemUse_item_winter_tree;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "item_roleplay_effect";
-    newscript->pItemUse = &ItemUse_item_roleplay_effect;
+    newscript->pItemUseSpell = &ItemUse_item_roleplay_effect;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "item_holystrike_libram";
-    newscript->pItemUse = &ItemUse_item_holy_strike_book;
+    newscript->pItemUseSpell = &ItemUse_item_holy_strike_book;
     newscript->RegisterSelf();
 }

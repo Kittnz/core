@@ -7232,6 +7232,7 @@ void Player::CastItemUseSpell(Item *item, SpellCastTargets const& targets)
     // use triggered flag only for items with many spell casts and for not first cast
     int count = 0;
 
+    bool SpellUsed = false;
     // item spells casted at use
     for (int i = 0; i < MAX_ITEM_PROTO_SPELLS; ++i)
     {
@@ -7256,8 +7257,15 @@ void Player::CastItemUseSpell(Item *item, SpellCastTargets const& targets)
         spell->SetCastItem(item);
         spell->prepare(targets);
 
+        SpellCastResult result = spell->CheckCast(true);
+        if (result == SPELL_CAST_OK)
+            SpellUsed = true;
+
         ++count;
     }
+
+    if (SpellUsed)
+        sScriptMgr.OnItemUseSpell(this, item, targets)
 }
 
 void Player::_RemoveAllItemMods()
