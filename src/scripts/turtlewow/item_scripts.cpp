@@ -801,6 +801,37 @@ bool ItemUse_item_winter_tree(Player* pPlayer, Item* pItem, const SpellCastTarge
     return false;
 }
 
+bool ItemUse_item_roleplay_effect(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+{
+    float dis{ 10.0F };
+    float x, y, z;
+    pPlayer->GetSafePosition(x, y, z);
+    x += dis * cos(pPlayer->GetOrientation());
+    y += dis * sin(pPlayer->GetOrientation());
+
+    switch (pItem->GetEntry())
+    {
+    case 51410:
+        pPlayer->SummonGameObject(1000200, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 120, true);
+        break;
+    case 51411:
+        pPlayer->SummonGameObject(1000201, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 120, true);
+        break;
+    case 51412:
+        pPlayer->SummonGameObject(1000202, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 120, true);
+        break;
+    case 51413:
+        pPlayer->SummonGameObject(1000203, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 120, true);
+        break;
+    case 51414:
+        pPlayer->SummonGameObject(1000204, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 120, true);
+        break;
+    default:
+        break;
+    }
+    return false;
+}
+
 bool ItemUse_item_holy_strike_book(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
     if (pPlayer->IsMoving())
@@ -988,6 +1019,11 @@ void AddSC_item_scripts()
     newscript = new Script;
     newscript->Name = "item_winter_tree";
     newscript->pItemUse = &ItemUse_item_winter_tree;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "item_roleplay_effect";
+    newscript->pItemUse = &ItemUse_item_roleplay_effect;
     newscript->RegisterSelf();
 
     newscript = new Script;
