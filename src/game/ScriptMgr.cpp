@@ -1887,10 +1887,10 @@ bool ScriptMgr::OnItemUseSpell(Player* pPlayer, Item* pItem, SpellCastTargets co
 {
     Script* pTempScript = m_NPC_scripts[pItem->GetProto()->ScriptId];
 
-    if (!pTempScript || !pTempScript->pItemUse)
+    if (!pTempScript || !pTempScript->pItemUseSpell)
         return false;
 
-    return pTempScript->pItemUse(pPlayer, pItem, targets);
+    return pTempScript->pItemUseSpell(pPlayer, pItem, targets);
 }
 
 bool ScriptMgr::OnAreaTrigger(Player* pPlayer, AreaTriggerEntry const* atEntry)

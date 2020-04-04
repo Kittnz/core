@@ -1,14 +1,14 @@
 
 #include "scriptPCH.h"
 
-bool ItemUse_character_rename(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+bool ItemUseSpell_character_rename(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
     ChatHandler(pPlayer).PSendSysMessage("Please logout and enter a new name for this character.");
     pPlayer->SetAtLoginFlag(AT_LOGIN_RENAME);
     return false;
 }
 
-bool ItemUse_portable_wormhole_generator(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+bool ItemUseSpell_portable_wormhole_generator(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
     if (pPlayer->isInCombat() || pPlayer->IsBeingTeleported() || (pPlayer->getDeathState() == CORPSE) || pPlayer->IsMoving())
         ChatHandler(pPlayer).PSendSysMessage("Warning! High radiation emittment detected! Wormhole Generator failsafe system shutting device down! Please use later!");
@@ -30,7 +30,7 @@ bool ItemUse_portable_wormhole_generator(Player* pPlayer, Item* pItem, const Spe
     return false;
 }
 
-bool ItemUse_portable_meeting_stone(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+bool ItemUseSpell_portable_meeting_stone(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
     ChatHandler(pPlayer).PSendSysMessage("You sense magic sipped away from this stone. Most likely the source of magic is gone. Try Portable Wormhole Generator instead.");
     return false;
@@ -40,7 +40,7 @@ bool ItemUse_portable_meeting_stone(Player* pPlayer, Item* pItem, const SpellCas
 #define ALICE_GROW_RBOUNDARY 1.15f
 #define ALICE_BELITTLE_LBOUNDARY 0.85f
 #define ALICE_BELITTLE_RBOUNDARY 0.95f
-bool ItemUse_alice_wonderland_scale(Player* pPlayer, Item* pItem, const SpellCastTargets&) {
+bool ItemUseSpell_alice_wonderland_scale(Player* pPlayer, Item* pItem, const SpellCastTargets&) {
     float scale;
     float taurenVariance = pPlayer->getRace() == RACE_TAUREN ? (pPlayer->getGender() == GENDER_MALE ? 0.35f : 0.25f) : 0;
     float currentNormalizedScale = pPlayer->GetObjectScale() - taurenVariance;
@@ -79,13 +79,13 @@ private:
     uint64 player_guid;
 };
 
-bool ItemUse_summer_vestment(Player* pPlayer, Item* pItem, const SpellCastTargets&) 
+bool ItemUseSpell_summer_vestment(Player* pPlayer, Item* pItem, const SpellCastTargets&) 
 {
     pPlayer->m_Events.AddEvent(new DanceAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(1500));
     return false;
 }
 
-bool ItemUse_city_protector_scroll(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+bool ItemUseSpell_city_protector_scroll(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
     if (!pPlayer->IsCityProtector() || pPlayer->isInCombat() || pPlayer->IsBeingTeleported() || (pPlayer->getDeathState() == CORPSE))
     {
@@ -136,7 +136,7 @@ bool ItemUse_city_protector_scroll(Player* pPlayer, Item* pItem, const SpellCast
     }
 }
 
-bool ItemUse_remote_mail_terminal(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+bool ItemUseSpell_remote_mail_terminal(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
     float dis{ 2.0F };
     float x, y, z;
@@ -148,7 +148,7 @@ bool ItemUse_remote_mail_terminal(Player* pPlayer, Item* pItem, const SpellCastT
     return false;
 }
 
-bool ItemUse_sword_of_truth(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+bool ItemUseSpell_sword_of_truth(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
     ChatHandler(pPlayer).SendSysMessage(urand(50200, 50210));
     return false;
@@ -170,7 +170,7 @@ private:
     uint64 player_guid;
 };
 
-bool ItemUse_hairdye(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+bool ItemUseSpell_hairdye(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
     uint8 color = 0;
     
@@ -255,7 +255,7 @@ bool ItemUse_hairdye(Player* pPlayer, Item* pItem, const SpellCastTargets&)
     return false;
 }
 
-bool ItemUse_skin_changer(Player* pPlayer, Item* pItem, const SpellCastTargets&) {
+bool ItemUseSpell_skin_changer(Player* pPlayer, Item* pItem, const SpellCastTargets&) {
     bool isMale = pPlayer->getGender() == GENDER_MALE;
     uint32 itemEntry = pItem->GetEntry();
     int8 bytesToSet = -1;
@@ -366,7 +366,7 @@ bool ItemUse_skin_changer(Player* pPlayer, Item* pItem, const SpellCastTargets&)
     return false;
 }
 
-bool ItemUse_survival_kit(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+bool ItemUseSpell_survival_kit(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
     pPlayer->SetSkill(142, 1, 150);
     pPlayer->LearnSpell(25085, false);
@@ -374,7 +374,7 @@ bool ItemUse_survival_kit(Player* pPlayer, Item* pItem, const SpellCastTargets&)
     return false;
 }
 
-bool ItemUse_survival_tent(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+bool ItemUseSpell_survival_tent(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
     if (pPlayer) {
         // reagents: Linen Cloth (5), Simple Wood (1)
@@ -428,7 +428,7 @@ bool ItemUse_survival_tent(Player* pPlayer, Item* pItem, const SpellCastTargets&
     return false;
 }
 
-bool ItemUse_survival_boat(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+bool ItemUseSpell_survival_boat(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
     if (pPlayer) {
         // reagents: Simple Wood (15), Handful of Copper Bolts (1)
@@ -470,7 +470,7 @@ bool ItemUse_survival_boat(Player* pPlayer, Item* pItem, const SpellCastTargets&
     return false;
 }
 
-bool ItemUse_bg_tabard(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+bool ItemUseSpell_bg_tabard(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
     // Some spell checks might be obsolete, check it later.
     if (pPlayer->isInCombat() || pPlayer->InBattleGround() || pPlayer->IsBeingTeleported() || pPlayer->HasSpellCooldown(20939) || pPlayer->HasSpellCooldown(26013) || (pPlayer->getDeathState() == CORPSE))
@@ -496,7 +496,7 @@ bool ItemUse_bg_tabard(Player* pPlayer, Item* pItem, const SpellCastTargets&)
     return false;
 }
 
-bool ItemUse_highborne_soul_mirror(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+bool ItemUseSpell_highborne_soul_mirror(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
     if (!pPlayer)
         return false;
@@ -540,7 +540,7 @@ bool ItemUse_highborne_soul_mirror(Player* pPlayer, Item* pItem, const SpellCast
     return false;
 }
 
-bool ItemUse_dryad_acorn(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+bool ItemUseSpell_dryad_acorn(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
     if (!pPlayer)
         return false;
@@ -555,7 +555,7 @@ bool ItemUse_dryad_acorn(Player* pPlayer, Item* pItem, const SpellCastTargets&)
     return false;
 }
 
-bool ItemUse_shop_morph_goblin(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+bool ItemUseSpell_shop_morph_goblin(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
     if (!pPlayer)
         return false;
@@ -575,7 +575,7 @@ bool ItemUse_shop_morph_goblin(Player* pPlayer, Item* pItem, const SpellCastTarg
     return false;
 }
 
-bool ItemUse_shop_morph_worgen(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+bool ItemUseSpell_shop_morph_worgen(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
     if (!pPlayer)
         return false;
@@ -594,7 +594,7 @@ bool ItemUse_shop_morph_worgen(Player* pPlayer, Item* pItem, const SpellCastTarg
     return false;
 }
 
-bool ItemUse_shop_morph_blood_elf(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+bool ItemUseSpell_shop_morph_blood_elf(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
     if (!pPlayer)
         return false;
@@ -614,7 +614,7 @@ bool ItemUse_shop_morph_blood_elf(Player* pPlayer, Item* pItem, const SpellCastT
     return false;
 }
 
-bool ItemUse_shop_morph_ghost(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+bool ItemUseSpell_shop_morph_ghost(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
     if (!pPlayer)
         return false;
@@ -630,7 +630,7 @@ bool ItemUse_shop_morph_ghost(Player* pPlayer, Item* pItem, const SpellCastTarge
     return false;
 }
 
-bool ItemUse_shop_morph_banshee(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+bool ItemUseSpell_shop_morph_banshee(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
     if (!pPlayer)
         return false;
@@ -649,7 +649,7 @@ bool ItemUse_shop_morph_banshee(Player* pPlayer, Item* pItem, const SpellCastTar
     return false;
 }
 
-bool ItemUse_shop_morph_druid_fang(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+bool ItemUseSpell_shop_morph_druid_fang(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
     if (!pPlayer)
         return false;
@@ -669,7 +669,7 @@ bool ItemUse_shop_morph_druid_fang(Player* pPlayer, Item* pItem, const SpellCast
     return false;
 }
 
-bool ItemUse_shop_morph_succubus(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+bool ItemUseSpell_shop_morph_succubus(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
     if (!pPlayer)
         return false;
@@ -688,20 +688,20 @@ bool ItemUse_shop_morph_succubus(Player* pPlayer, Item* pItem, const SpellCastTa
     return false;
 }
 
-bool ItemUse_remove_rested(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+bool ItemUseSpell_remove_rested(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
     pPlayer->SetRestBonus(0);
     ChatHandler(pPlayer).SendSysMessage("You feel weary and exhausted as undead.");
     return false;
 }
 
-bool ItemUse_turtle_radio(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+bool ItemUseSpell_turtle_radio(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
     pPlayer->SummonGameObject(1000055, pPlayer->GetPositionX(), pPlayer->GetPositionY(), pPlayer->GetPositionZ(), 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 600, true);
     return false;
 }
 
-bool ItemUse_turtle_party(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+bool ItemUseSpell_turtle_party(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
     pPlayer->AddAura(8067);
     return false;
@@ -712,13 +712,13 @@ bool ItemUse_turtle_party(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 #define TRANSMOGRIFICATION_SATCHEL 51216
 #define TRANSMOGRIFICATION_TOKEN 51217
 
-bool ItemUse_transmogrification(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+bool ItemUseSpell_transmogrification(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
     // There'll be lots of ugly and hacky code. 
     return false;
 }
 
-bool ItemUse_item_engie(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+bool ItemUseSpell_item_engie(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
     if (!pPlayer)
         return false;
@@ -759,7 +759,7 @@ bool ItemUse_item_engie(Player* pPlayer, Item* pItem, const SpellCastTargets&)
     return false;
 }
 
-bool ItemUse_item_zeaus(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+bool ItemUseSpell_item_zeaus(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
     if (!pPlayer)
         return false;
@@ -788,7 +788,7 @@ bool ItemUse_item_zeaus(Player* pPlayer, Item* pItem, const SpellCastTargets&)
     return false;
 }
 
-bool ItemUse_item_winter_tree(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+bool ItemUseSpell_item_winter_tree(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
     float dis{ 2.0F };
     float x, y, z;
@@ -801,7 +801,7 @@ bool ItemUse_item_winter_tree(Player* pPlayer, Item* pItem, const SpellCastTarge
     return false;
 }
 
-bool ItemUse_item_roleplay_effect(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+bool ItemUseSpell_item_roleplay_effect(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
     float dis{ 10.0F };
     float x, y, z;
@@ -832,7 +832,7 @@ bool ItemUse_item_roleplay_effect(Player* pPlayer, Item* pItem, const SpellCastT
     return false;
 }
 
-bool ItemUse_item_holy_strike_book(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+bool ItemUseSpell_item_holy_strike_book(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
     if (pPlayer->IsMoving())
         return false;
@@ -873,161 +873,161 @@ void AddSC_item_scripts()
 
     newscript = new Script;
     newscript->Name = "item_character_rename";
-    newscript->pItemUseSpell = &ItemUse_character_rename;
+    newscript->pItemUseSpell = &ItemUseSpell_character_rename;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "item_roleplay_hub";
-    newscript->pItemUseSpell = &ItemUse_portable_meeting_stone;
+    newscript->pItemUseSpell = &ItemUseSpell_portable_meeting_stone;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "item_wormhole_generator";
-    newscript->pItemUseSpell = &ItemUse_portable_wormhole_generator;
+    newscript->pItemUseSpell = &ItemUseSpell_portable_wormhole_generator;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "item_scaler";
-    newscript->pItemUseSpell = &ItemUse_alice_wonderland_scale;
+    newscript->pItemUseSpell = &ItemUseSpell_alice_wonderland_scale;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "item_summer_vestment";
-    newscript->pItemUseSpell = &ItemUse_summer_vestment;
+    newscript->pItemUseSpell = &ItemUseSpell_summer_vestment;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "item_city_portal";
-    newscript->pItemUseSpell = &ItemUse_city_protector_scroll;
+    newscript->pItemUseSpell = &ItemUseSpell_city_protector_scroll;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "item_portable_mailbox";
-    newscript->pItemUseSpell = &ItemUse_remote_mail_terminal;
+    newscript->pItemUseSpell = &ItemUseSpell_remote_mail_terminal;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "item_sword_of_truth";
-    newscript->pItemUseSpell = &ItemUse_sword_of_truth;
+    newscript->pItemUseSpell = &ItemUseSpell_sword_of_truth;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "item_hairdye";
-    newscript->pItemUseSpell = &ItemUse_hairdye;
+    newscript->pItemUseSpell = &ItemUseSpell_hairdye;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "item_skin_change";
-    newscript->pItemUseSpell = &ItemUse_skin_changer;
+    newscript->pItemUseSpell = &ItemUseSpell_skin_changer;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "item_survival_kit";
-    newscript->pItemUseSpell = &ItemUse_survival_kit;
+    newscript->pItemUseSpell = &ItemUseSpell_survival_kit;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "item_survival_tent";
-    newscript->pItemUseSpell = &ItemUse_survival_tent;
+    newscript->pItemUseSpell = &ItemUseSpell_survival_tent;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "item_survival_boat";
-    newscript->pItemUseSpell = &ItemUse_survival_boat;
+    newscript->pItemUseSpell = &ItemUseSpell_survival_boat;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "item_bg_tabard";
-    newscript->pItemUseSpell = &ItemUse_bg_tabard;
+    newscript->pItemUseSpell = &ItemUseSpell_bg_tabard;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "item_morph_goblin";
-    newscript->pItemUseSpell = &ItemUse_shop_morph_goblin;
+    newscript->pItemUseSpell = &ItemUseSpell_shop_morph_goblin;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "item_morph_worgen";
-    newscript->pItemUseSpell = &ItemUse_shop_morph_worgen;
+    newscript->pItemUseSpell = &ItemUseSpell_shop_morph_worgen;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "item_morph_bloodelf";
-    newscript->pItemUseSpell = &ItemUse_shop_morph_blood_elf;
+    newscript->pItemUseSpell = &ItemUseSpell_shop_morph_blood_elf;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "item_morph_highelf";
-    newscript->pItemUseSpell = &ItemUse_highborne_soul_mirror;
+    newscript->pItemUseSpell = &ItemUseSpell_highborne_soul_mirror;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "item_morph_dryad";
-    newscript->pItemUseSpell = &ItemUse_dryad_acorn;
+    newscript->pItemUseSpell = &ItemUseSpell_dryad_acorn;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "item_morph_ghost";
-    newscript->pItemUseSpell = &ItemUse_shop_morph_ghost;
+    newscript->pItemUseSpell = &ItemUseSpell_shop_morph_ghost;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "item_morph_banshee";
-    newscript->pItemUseSpell = &ItemUse_shop_morph_banshee;
+    newscript->pItemUseSpell = &ItemUseSpell_shop_morph_banshee;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "item_morph_serpentlord";
-    newscript->pItemUseSpell = &ItemUse_shop_morph_druid_fang;
+    newscript->pItemUseSpell = &ItemUseSpell_shop_morph_druid_fang;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "item_morph_succubus";
-    newscript->pItemUseSpell = &ItemUse_shop_morph_succubus;
+    newscript->pItemUseSpell = &ItemUseSpell_shop_morph_succubus;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "item_exhaustion_glyph";
-    newscript->pItemUseSpell = &ItemUse_remove_rested;
+    newscript->pItemUseSpell = &ItemUseSpell_remove_rested;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "item_radio";
-    newscript->pItemUseSpell = &ItemUse_turtle_radio;
+    newscript->pItemUseSpell = &ItemUseSpell_turtle_radio;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "item_schnapps";
-    newscript->pItemUseSpell = &ItemUse_turtle_party;
+    newscript->pItemUseSpell = &ItemUseSpell_turtle_party;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "item_transmog";
-    newscript->pItemUseSpell = &ItemUse_transmogrification;
+    newscript->pItemUseSpell = &ItemUseSpell_transmogrification;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "item_player_engie";
-    newscript->pItemUseSpell = &ItemUse_item_engie;
+    newscript->pItemUseSpell = &ItemUseSpell_item_engie;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "item_player_zeaus";
-    newscript->pItemUseSpell = &ItemUse_item_zeaus;
+    newscript->pItemUseSpell = &ItemUseSpell_item_zeaus;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "item_winter_tree";
-    newscript->pItemUseSpell = &ItemUse_item_winter_tree;
+    newscript->pItemUseSpell = &ItemUseSpell_item_winter_tree;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "item_roleplay_effect";
-    newscript->pItemUseSpell = &ItemUse_item_roleplay_effect;
+    newscript->pItemUseSpell = &ItemUseSpell_item_roleplay_effect;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "item_holystrike_libram";
-    newscript->pItemUseSpell = &ItemUse_item_holy_strike_book;
+    newscript->pItemUseSpell = &ItemUseSpell_item_holy_strike_book;
     newscript->RegisterSelf();
 }

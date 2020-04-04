@@ -7265,7 +7265,7 @@ void Player::CastItemUseSpell(Item *item, SpellCastTargets const& targets)
     }
 
     if (SpellUsed)
-        sScriptMgr.OnItemUseSpell(this, item, targets)
+        sScriptMgr.OnItemUseSpell(this, item, targets);
 }
 
 void Player::_RemoveAllItemMods()
