@@ -820,12 +820,6 @@ bool ItemUseSpell_item_roleplay_effect(Player* pPlayer, Item* pItem, const Spell
     case 51412:
         pPlayer->SummonGameObject(1000202, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 120, true);
         break;
-    case 51413:
-        pPlayer->SummonGameObject(1000203, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 120, true);
-        break;
-    case 51414:
-        pPlayer->SummonGameObject(1000204, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 120, true);
-        break;
     default:
         break;
     }

@@ -3528,29 +3528,6 @@ CreatureAI* GetAI_npc_oozeling_jubjub(Creature* pCreature)
     return new npc_oozeling_jubjubAI(pCreature);
 }
 
-struct npc_scripted_companionAI : public ScriptedPetAI
-{
-    npc_scripted_companionAI(Creature* pCreature) : ScriptedPetAI(pCreature)
-    {
-        if (m_creature && m_creature->isAlive() && m_creature->IsPet())
-            pCreature->GetMotionMaster()->MoveFollow(pCreature->GetCharmerOrOwnerPlayerOrPlayerItself(), PET_FOLLOW_DIST,
-                    270.0f * (M_PI_F / 180.0f));
-    }
-
-    void ReceiveEmote(Player* pPlayer, uint32 uiEmote)
-    {
-        if (m_creature && m_creature->isAlive() && m_creature->IsPet()) {
-            if (uiEmote == TEXTEMOTE_DANCE)
-                m_creature->HandleEmoteCommand(EMOTE_ONESHOT_DANCE);
-        }
-    }
-};
-
-CreatureAI* GetAI_npc_scripted_companion(Creature* pCreature)
-{
-    return new npc_scripted_companionAI(pCreature);
-}
-
 void AddSC_npcs_special()
 {
     Script *newscript;
@@ -3650,12 +3627,7 @@ void AddSC_npcs_special()
     newscript->Name = "npc_pats_firework_guy";
     newscript->GetAI = &GetAI_npc_pats_firework_guy;
     newscript->RegisterSelf();
-    /*
-    newscript = new Script;
-    newscript->Name = "npc_firestarter_regular";
-    newscript->GetAI = &GetAI_npc_firestarter_regular;
-    newscript->RegisterSelf();
-    */
+
     newscript = new Script;
     newscript->Name = "npc_firestarter_show";
     newscript->GetAI = &GetAI_npc_firestarter_show;
@@ -3722,10 +3694,5 @@ void AddSC_npcs_special()
     newscript = new Script;
     newscript->Name = "npc_oozeling_jubjub";
     newscript->GetAI = &GetAI_npc_oozeling_jubjub;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "npc_scripted_companion";
-    newscript->GetAI = &GetAI_npc_scripted_companion;
     newscript->RegisterSelf();
 }

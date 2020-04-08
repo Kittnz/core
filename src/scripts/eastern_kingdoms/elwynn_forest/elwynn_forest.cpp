@@ -148,80 +148,6 @@ bool GOHello_go_marshal_haggards_chest(Player* pPlayer, GameObject* pGo)
     return true;
 }
 
-#define ONCE_UPON_A_SHEEP        60005
-#define LOST_FARM_SHEEP_ITEM     51220
-#define DELICIOUS_ELWYNN_TRUFFLE 51218
-#define WOOL_WILL_WORL           60008
-#define FLOCK_OF_WOOL            51223
-
-bool GossipHello_npc_lost_farm_sheep(Player* pPlayer, Creature* pCreature)
-{
-    if (pPlayer->GetQuestStatus(ONCE_UPON_A_SHEEP) == QUEST_STATUS_INCOMPLETE)
-        if (pPlayer->HasItemCount(DELICIOUS_ELWYNN_TRUFFLE, 0))
-        {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Come with me, if you want to live!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-        }
-        else
-        {
-            pCreature->MonsterSay("Ba-a-a-h! Ba-a-a-h!");
-            pCreature->GetMotionMaster()->MoveConfused();
-        }
-    if (pPlayer->GetQuestStatus(WOOL_WILL_WORL) == QUEST_STATUS_INCOMPLETE)
-    {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Attempt to gather some wool.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
-    }
-    
-    pPlayer->SEND_GOSSIP_MENU(90310, pCreature->GetGUID());
-    return true;
-}
-
-bool GossipSelect_npc_lost_farm_sheep(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
-{
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
-    {
-        if (!pPlayer)
-            return false;
-
-        pCreature->MonsterSay("Ba-a-a-h!");
-        pCreature->MonsterTextEmote("Sheep quickly eats this truffle and starting to jump around your bags, in case if you want to share more!");
-        pCreature->ForcedDespawn();    
-        pPlayer->AddItem(LOST_FARM_SHEEP_ITEM);
-        pPlayer->RemoveItemCurrency(DELICIOUS_ELWYNN_TRUFFLE, 1);
-    }      
-
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
-    {
-        if (!pPlayer)
-            return false;
-
-        int chance_array[100];
-
-        for (int i = 0; i < 100; i++) 
-        {
-            int chance_array = i;
-        }
-
-        int chance_rand = rand() % 100;
-
-        if (chance_rand[chance_array] >= 80)
-        {
-            pCreature->MonsterSay("Ba-a-a-h?");
-            pPlayer->AddItem(FLOCK_OF_WOOL, 1);
-        }
-        else
-        {
-            pCreature->MonsterSay("Ba-a-a-h! Ba-a-a-h!");
-            pCreature->GetMotionMaster()->MoveFleeing(pPlayer, 100);
-            pPlayer->KnockBack(2.0F, 3.0F, 3.0F);
-        }
-
-    }
-
-    pPlayer->CLOSE_GOSSIP_MENU();
-    return true;
-}
-
-
 void AddSC_elwynn_forest()
 {
     Script *newscript;
@@ -236,11 +162,4 @@ void AddSC_elwynn_forest()
     newscript->GOGetAI = &GetAIgo_marshal_haggards_chest;
     newscript->pGOHello = &GOHello_go_marshal_haggards_chest;
     newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "npc_lost_farm_sheep";
-    newscript->pGossipHello = &GossipHello_npc_lost_farm_sheep;
-    newscript->pGossipSelect = &GossipSelect_npc_lost_farm_sheep;
-    newscript->RegisterSelf();
-
 }

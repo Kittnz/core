@@ -32,7 +32,7 @@ set (SCRIPTS_SRCS
     kalimdor/the_barrens/razorfen_downs/razorfen_downs.h
     kalimdor/the_barrens/razorfen_kraul/razorfen_kraul.h
     kalimdor/the_barrens/wailing_caverns/def_wailing_caverns.h
-    PrecompiledHeaders/scriptPCH.h
+    precompiled_headers/scriptPCH.h
     world/dragons_of_nightmare/boss_dragon_of_nightmare.h
     ScriptLoader.cpp
     ScriptLoader_noscripts.cpp
@@ -42,7 +42,6 @@ set (SCRIPTS_SRCS
     custom/custom.cpp
     custom/custom_creatures.cpp
     custom/event_attack_city.cpp
-    custom/gmisland.cpp
     custom/npc_escort.cpp
     custom/zero_creatures.cpp
     custom/npc_j_eevee.cpp
@@ -268,7 +267,7 @@ set (SCRIPTS_SRCS
     kalimdor/thunder_bluff/thunder_bluff.cpp
     kalimdor/ungoro_crater/ungoro_crater.cpp
     kalimdor/winterspring/winterspring.cpp
-    PrecompiledHeaders/scriptPCH.cpp
+    precompiled_headers/scriptPCH.cpp
     world/areatrigger_scripts.cpp
     world/boss_lord_kazzak.cpp
     world/elemental_invasions.cpp
@@ -300,6 +299,7 @@ set (SCRIPTS_SRCS
     turtlewow/creatures/boss_pompa.cpp 
     turtlewow/creatures/boss_turtlhu.cpp 
     turtlewow/creatures/boss_snowball.cpp 
+    turtlewow/creatures/npc_transmog.cpp 
 
     turtlewow/creatures/cot/black_morass/boss_gerastrasz.cpp 
     turtlewow/creatures/cot/instance_caverns_of_time.cpp 
@@ -329,7 +329,7 @@ foreach(SRC ${SCRIPTS_SRCS})
 endforeach(SRC)
 
 include_directories(
-  ${CMAKE_CURRENT_SOURCE_DIR}/PrecompiledHeaders
+  ${CMAKE_CURRENT_SOURCE_DIR}/precompiled_headers
   ${CMAKE_SOURCE_DIR}/src/shared
   ${CMAKE_SOURCE_DIR}/src/framework
   ${CMAKE_SOURCE_DIR}/src/framework/Network
@@ -392,10 +392,10 @@ target_link_libraries(scripts
 if(PCH)
   if(MSVC OR XCODE)
     if(MSVC)
-      set(scripts_pch "${CMAKE_CURRENT_SOURCE_DIR}/PrecompiledHeaders/scriptPCH.cpp")
+      set(scripts_pch "${CMAKE_CURRENT_SOURCE_DIR}/precompiled_headers/scriptPCH.cpp")
     endif()
-    add_native_precompiled_header(scripts ${CMAKE_CURRENT_SOURCE_DIR}/PrecompiledHeaders/scriptPCH.h)
+    add_native_precompiled_header(scripts ${CMAKE_CURRENT_SOURCE_DIR}/precompiled_headers/scriptPCH.h)
   elseif(CMAKE_COMPILER_IS_GNUCXX)
-    add_precompiled_header(scripts ${CMAKE_CURRENT_SOURCE_DIR}/PrecompiledHeaders/scriptPCH.h)
+    add_precompiled_header(scripts ${CMAKE_CURRENT_SOURCE_DIR}/precompiled_headers/scriptPCH.h)
   endif()
 endif()
