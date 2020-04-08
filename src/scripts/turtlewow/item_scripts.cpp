@@ -861,9 +861,35 @@ bool ItemUseSpell_item_holy_strike_book(Player* pPlayer, Item* pItem, const Spel
     return false;
 }
 
+
+bool ItemUseSpell_item_elwynn_coin(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+{
+    if (GameObject* pObject = pPlayer->FindNearestGameObject(1000220, 3.0F))
+    {
+        pPlayer->HandleEmoteCommand(EMOTE_ONESHOT_KNEEL);
+        pPlayer->PlayDirectSound(1204, pPlayer);
+
+        CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(51301);
+
+        if (cInfo != nullptr)
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+        return true;
+    }
+    else
+    {
+        pPlayer->SendRaidWarning("Requires Stormwind Fountain.");
+        return false;
+    }
+}
+
 void AddSC_item_scripts()
 {
     Script *newscript;
+
+    newscript = new Script;
+    newscript->Name = "item_elwynn_coin";
+    newscript->pItemUseSpell = &ItemUseSpell_item_elwynn_coin;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "item_character_rename";
