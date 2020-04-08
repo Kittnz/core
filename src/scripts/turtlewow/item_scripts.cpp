@@ -413,7 +413,6 @@ bool ItemUseSpell_survival_tent(Player* pPlayer, Item* pItem, const SpellCastTar
                 }
                 pPlayer->DestroyItemCount(2589, 5, true);
                 pPlayer->DestroyItemCount(4470, 1, true);
-                //pPlayer->DestroyItemCount(50234, 1, true);
                 return false;
             } else {
                 ChatHandler(pPlayer).SendSysMessage("Can't build here! You need to be outside.");
@@ -443,7 +442,6 @@ bool ItemUseSpell_survival_boat(Player* pPlayer, Item* pItem, const SpellCastTar
                 ChatHandler(pPlayer).SendSysMessage("You've gained +50 skill bonus to Fishing!");
                 pPlayer->DestroyItemCount(4470, 15, true);
                 pPlayer->DestroyItemCount(4359, 1, true);
-                //pPlayer->DestroyItemCount(50235, 1, true);
                 uint32 currvalue = 0;
                 currvalue = pPlayer->GetSkillValue(142);
                 switch (currvalue) {
@@ -857,29 +855,37 @@ bool ItemUseSpell_item_holy_strike_book(Player* pPlayer, Item* pItem, const Spel
     case 51276:
         pPlayer->LearnSpell(10333, false);
         break;
+    default: break;
     }
-    return false;
+    return true;
 }
-
 
 bool ItemUseSpell_item_elwynn_coin(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
-    if (GameObject* pObject = pPlayer->FindNearestGameObject(1000220, 3.0F))
+    if (pPlayer->HasItemCount(51425, 1, false))
     {
-        pPlayer->HandleEmoteCommand(EMOTE_ONESHOT_KNEEL);
-        pPlayer->PlayDirectSound(1204, pPlayer);
+        if (GameObject* pObject = pPlayer->FindNearestGameObject(1000220, 3.0F))
+        {
+            pPlayer->HandleEmoteCommand(EMOTE_ONESHOT_KNEEL);
+            pPlayer->PlayDirectSound(1204, pPlayer);
 
-        CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(51301);
+            CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(51301);
 
-        if (cInfo != nullptr)
-            pPlayer->KilledMonster(cInfo, ObjectGuid());
-        return true;
+            if (cInfo != nullptr)
+            {
+                pPlayer->KilledMonster(cInfo, ObjectGuid());
+                pPlayer->DestroyItemCount(51425, 1, true);
+                return true;
+            }
+        }
+        else
+        {
+            pPlayer->GetSession()->SendNotification("Requires Stormwind Fountain.");
+            return false;
+        }
     }
     else
-    {
-        pPlayer->SendRaidWarning("Requires Stormwind Fountain.");
         return false;
-    }
 }
 
 void AddSC_item_scripts()
