@@ -1,9 +1,5 @@
 replace into migrations values ('20200406230153');
 
-update item_template set spellid_1 = 18282 where script_name != '' and entry != 50000 and name not like 'Illusion:%' ;
-update item_template set spellcooldown_1 = 1000 where spellcooldown_1 = -1 and script_name != '';
-
-
 replace into item_template (
 entry, patch, class, subclass, name,description, display_id, quality, flags, buy_count,
 buy_price, sell_price, inventory_type, allowable_class, allowable_race, item_level,
