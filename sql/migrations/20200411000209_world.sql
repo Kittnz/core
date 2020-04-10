@@ -1,0 +1,7 @@
+replace into migrations values ('20200411000209');
+
+REPLACE INTO `quest_template` VALUES (8460,7,2,361,45,0,48,0,0,0,0,0,0,0,0,0,0,0,0,0,8,0,0,0,0,0,0,0,0,'Timbermaw Ally','The Timbermaw are the only furbolg tribe to escape the corruption. However, many other races kill furbolg blindly now, without bothering to see if they are friend or foe. For this reason, the Timbermaw furbolg trust very few.$B$BAre you interested in proving yourself? Drive back the corrupted Deadwood tribe of Felwood and we may one day consider you an ally. You\'ll find the first Deadwood tribe - warriors, pathfinders and gardeners - to my west.','Grazle wants you to prove yourself by killing 6 Deadwood Warriors, 6 Deadwood Pathfinders, and 6 Deadwood Gardeners.  Return to him in southern Felwood near the Emerald Sanctuary when you are done.','We suffer much from the events of the past. Thank you for what you have done to help protect the Timbermaw.','Keep at it, $N. If you are to earn our trust, you will need to prove yourself to us.',NULL,NULL,NULL,NULL,NULL,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7153,7155,7154,0,6,6,6,0,0,0,0,0,21311,21312,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,576,0,0,0,0,150,0,0,0,0,0,2640,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0);
+REPLACE INTO `creature_involvedrelation` VALUES (11554,8460,7,10);
+REPLACE INTO `creature_questrelation` VALUES (11554,8460,7,10);
+UPDATE `creature_involvedrelation` set patch_min=0, patch_max=6 where quest = 6131;
+UPDATE `creature_questrelation` set patch_min=0, patch_max=6 where quest = 6131;
