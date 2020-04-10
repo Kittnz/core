@@ -801,7 +801,7 @@ bool ItemUseSpell_item_winter_tree(Player* pPlayer, Item* pItem, const SpellCast
 
 bool ItemUseSpell_item_roleplay_effect(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
-    float dis{ 10.0F };
+    float dis{ 20.0F };
     float x, y, z;
     pPlayer->GetSafePosition(x, y, z);
     x += dis * cos(pPlayer->GetOrientation());
