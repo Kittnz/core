@@ -280,6 +280,7 @@ void AddSC_object_scripts();
 void AddSC_item_scripts();
 void AddSC_random();
 void AddSC_miracle_raceaway();
+void AddZoneScript_GmIsle();
 
 void AddScripts()
 {
@@ -559,5 +560,5 @@ void AddScripts()
     AddSC_item_scripts();
     AddSC_random();
     AddSC_miracle_raceaway();
-
+	AddZoneScript_GmIsle();
 }
