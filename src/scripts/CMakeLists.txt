@@ -310,6 +310,7 @@ set (SCRIPTS_SRCS
     turtlewow/mirage_raceway/miracle_raceaway.cpp
     turtlewow/transmog.cpp
     turtlewow/object_scripts.cpp
+    turtlewow/zonescript_gm_isle.cpp
     turtlewow/commands.cpp
 )
 
