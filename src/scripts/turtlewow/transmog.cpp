@@ -1,4 +1,4 @@
-
+#include "scriptPCH.h"
 #include "transmog.h"
 #include "ObjectMgr.h"
 #include "World.h"

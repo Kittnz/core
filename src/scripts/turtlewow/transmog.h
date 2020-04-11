@@ -1,7 +1,6 @@
 #ifndef DEF_TRANSMOGRIFICATION_H
 #define DEF_TRANSMOGRIFICATION_H
 
-#include "scriptPCH.h"
 
 enum
 {
