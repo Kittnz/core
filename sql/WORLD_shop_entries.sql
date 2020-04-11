@@ -161,5 +161,6 @@ replace into shop_items values
 (1004, 10, 51056, 'Druid: Glyph of the Stag', 100),
 (1005, 10, 51057, 'Druid: Glyph of the Frostsaber', 100),
 (1006, 10, 51266, 'Druid: Glyph of the Ice Bear', 100),
-(1007, 10, 51267, 'Druid: Glyph of the Frostkin', 100);
+(1007, 10, 51431, 'Druid: Glyph of the Frostkin', 100),
+(1008, 10, 51432, 'Druid: Glyph of Stars', 100);
 
