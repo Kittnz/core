@@ -2394,7 +2394,7 @@ void Aura::HandleAuraModShapeshift(bool apply, bool Real)
         {
             // Cast Shapeshift Form Effect to remove slows and roots.
             target->CastSpell(target, 9033, true);
-            if (target->ToPlayer()->HasItemCount(51432, 1, 0))
+            if (target->IsPlayer() && target->ToPlayer()->HasItemCount(51432, 1, 0))
             {
                 target->AddAura(22650); // Glyph of Stars
             }
