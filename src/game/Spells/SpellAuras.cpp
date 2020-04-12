@@ -2288,7 +2288,7 @@ std::pair<unsigned int, float> getShapeshiftModelInfo(ShapeshiftForm form, Unit 
 
         if (target->IsPlayer())
         {
-            if (target->ToPlayer()->HasItemCount(51057, 1, 0))
+            if (target->ToPlayer()->HasItemCount(51057, 1))
                 // Glyph of the Frostsaber, Turtle WoW:
                 modelid = (Player::TeamForRace(target->getRace()) == ALLIANCE) ? 11444 : 10054;
             else    
@@ -2300,7 +2300,7 @@ std::pair<unsigned int, float> getShapeshiftModelInfo(ShapeshiftForm form, Unit 
         mod = 0.80f;
         break;
     case FORM_TRAVEL:
-        modelid = (target->IsPlayer() && target->ToPlayer()->HasItemCount(51056, 1, 0)) ? 1991 : 632;
+        modelid = (target->IsPlayer() && target->ToPlayer()->HasItemCount(51056, 1)) ? 1991 : 632;
         mod = 0.80f;
         break;
     case FORM_AQUA:
@@ -2311,7 +2311,7 @@ std::pair<unsigned int, float> getShapeshiftModelInfo(ShapeshiftForm form, Unit 
     case FORM_DIREBEAR:
         if (target->IsPlayer())
         {
-            if (target->ToPlayer()->HasItemCount(51266, 1, 0))
+            if (target->ToPlayer()->HasItemCount(51266, 1))
                 // Glyph of the Icebear, Turtle WoW:
                 modelid = 8837;
             else
@@ -2338,11 +2338,11 @@ std::pair<unsigned int, float> getShapeshiftModelInfo(ShapeshiftForm form, Unit 
             modelid = (Player::TeamForRace(target->getRace()) == ALLIANCE) ? 15374 : 15375;
 
             // Glyph of the Frostkin
-            if (target->ToPlayer()->HasItemCount(51431, 1, 0))                
+            if (target->ToPlayer()->HasItemCount(51431, 1))
                 modelid = 12237;
 
             // Glyph of Stars
-            if (target->ToPlayer()->HasItemCount(51432, 1, 0))
+            if (target->ToPlayer()->HasItemCount(51432, 1))
                 modelid = target->ToPlayer()->GetNativeDisplayId();
 
         }
@@ -2394,7 +2394,7 @@ void Aura::HandleAuraModShapeshift(bool apply, bool Real)
         {
             // Cast Shapeshift Form Effect to remove slows and roots.
             target->CastSpell(target, 9033, true);
-            if (target->IsPlayer() && target->ToPlayer()->HasItemCount(51432, 1, 0))
+            if (form == FORM_MOONKIN && target->IsPlayer() && target->ToPlayer()->HasItemCount(51432, 10))
             {
                 target->AddAura(22650); // Glyph of Stars
             }
@@ -2425,7 +2425,7 @@ void Aura::HandleAuraModShapeshift(bool apply, bool Real)
         }
         else
         {
-            if (target->IsPlayer() && target->ToPlayer()->HasItemCount(51432, 1, 0))
+            if (form == FORM_MOONKIN && target->IsPlayer() && target->ToPlayer()->HasItemCount(51432, 1))
             {
                 target->ToPlayer()->RemoveAurasDueToSpell(22650);
             }
