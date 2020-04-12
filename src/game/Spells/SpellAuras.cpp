@@ -2427,7 +2427,7 @@ void Aura::HandleAuraModShapeshift(bool apply, bool Real)
         {
             if (target->IsPlayer() && target->ToPlayer()->HasItemCount(51432, 1, 0))
             {
-                target->ToPlayer()->RemoveAurasDueToSpell((22650));
+                target->ToPlayer()->RemoveAurasDueToSpell(22650);
             }
             target->resetTransformScale();
             target->SetDisplayId(target->GetNativeDisplayId());
