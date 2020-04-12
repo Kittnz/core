@@ -46,7 +46,7 @@ replace into shop_items values
 (112, 1, 51305, 'Fashion Coin x5 (Transmogrification)', 100),
 (113, 1, 51306, 'Fashion Coin x10 (Transmogrification)', 160),
 -- Pets ------------------------------------------------------------------------------------------------
-(200, 2, 51007, 'Teldrassil Sproutling', 60),
+(200, 2, 51433, 'Little Fawn (Happy Easter!)', 0),
 (201, 2, 13584, 'Diablo Stone', 60),
 (202, 2, 13583, 'Panda Collar', 60),
 (203, 2, 20371, 'Blue Murloc Egg', 60),
@@ -59,7 +59,7 @@ replace into shop_items values
 (211, 2, 50084, 'Kirin Tor Familiar', 60),
 (212, 2, 22781, 'Polar Bear Collar', 60),
 (213, 2, 50085, 'Frostwolf Ghostpup', 60),
-(215, 2, 50240, 'Kodo Calfling', 60),
+(214, 2, 51007, 'Teldrassil Sproutling', 60),
 -- Mounts #1 --------------------------------------------------------------------------------------
 (300, 3, 23720, 'Level 1 Riding Turtle', 0),
 (301, 3, 50071, 'Level 1  Ivory Tallstrider', 100),
