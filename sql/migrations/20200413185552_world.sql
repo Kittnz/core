@@ -2575,8 +2575,7 @@ replace into `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, 
 replace into `creature_equip_template` (`entry`, `equipentry1`, `equipentry2`, `equipentry3`) VALUES (6549, 5747, 0, 0);
 UPDATE `creature_template` SET `equipment_id`=6549 WHERE `entry`=6549;
 
-
-
+UPDATE `item_template` SET `spellid_1`='31726' WHERE `entry` in (51270, 51276, 51275, 51274, 51273, 51272, 51271);
 
 -- End of migration.
 END IF;
