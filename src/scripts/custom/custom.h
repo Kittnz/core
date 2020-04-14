@@ -15,6 +15,7 @@
  */ 
 
 void AddSC_custom_creatures();
+void AddSC_transmog();
 //void AddSC_zero_creatures();
 
 // used to call all scripts
