@@ -1971,6 +1971,8 @@ UPDATE `creature` SET `position_x`=5210.24, `position_y`=-573.692, `position_z`=
 UPDATE `creature` SET `position_x`=5205.97, `position_y`=-564.198, `position_z`=287.41, `orientation`=4.08407 WHERE `guid`=40665;
 
 
+-- Add missing completion text for Summon Felsteed quests.
+UPDATE `quest_template` SET `OfferRewardText`='So, you\'ve decided to grace my presence again. How kind of you.$B$BMy acolytes wondered if you\'d ever show up. I told them there was no doubt. When power is concerned, you are drawn in like a moth to the flame.' WHERE `entry` IN (3631, 4487, 4488);
 
 
 
