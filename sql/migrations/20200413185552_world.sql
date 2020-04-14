@@ -1927,6 +1927,12 @@ UPDATE `gameobject_template` SET `type`=0, `flags`=20 WHERE `entry`=179668;
 -- Fix scale of Orb of Domination.
 UPDATE `creature_template` SET `scale`=1 WHERE `entry`=14453;
 
+-- Correct givers for quest Cenarion Aid.
+DELETE FROM `creature_questrelation` WHERE `quest`=8254;
+INSERT INTO `creature_questrelation` (`id`, `quest`, `patch_min`, `patch_max`) VALUES (5489, 8254, 5, 10);
+INSERT INTO `creature_questrelation` (`id`, `quest`, `patch_min`, `patch_max`) VALUES (6018, 8254, 5, 10);
+INSERT INTO `creature_questrelation` (`id`, `quest`, `patch_min`, `patch_max`) VALUES (11406, 8254, 5, 10);
+
 
 -- End of migration.
 END IF;
