@@ -2532,6 +2532,11 @@ INSERT INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillv
 (4608, 27875, 1200, 0, 0, 50, 5302, 5875),
 (4608, 27876, 1500, 0, 0, 60, 5302, 5875);
 
+-- Add missing completion text for Summon Felsteed quests.
+UPDATE `quest_template` SET `OfferRewardText`='So, you\'ve decided to grace my presence again. How kind of you.$B$BMy acolytes wondered if you\'d ever show up. I told them there was no doubt. When power is concerned, you are drawn in like a moth to the flame.' WHERE `entry` IN (3631, 4487, 4488);
+
+
+
 -- End of migration.
 END IF;
 END??
