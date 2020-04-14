@@ -1924,6 +1924,10 @@ DELETE FROM `event_scripts` WHERE `id`=8420;
 -- Correct type of dreadstead ritual circle. This fixes the animation.
 UPDATE `gameobject_template` SET `type`=0, `flags`=20 WHERE `entry`=179668;
 
+-- Fix scale of Orb of Domination.
+UPDATE `creature_template` SET `scale`=1 WHERE `entry`=14453;
+
+
 -- End of migration.
 END IF;
 END??
