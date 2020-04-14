@@ -601,7 +601,7 @@ bool GossipSelect_TransmogNPC(Player* player, Creature* creature, uint32 sender,
     return true;
 }
 
-void AddSC_custom_creatures()
+void AddSC_transmog()
 {
     Script *newscript;
 
