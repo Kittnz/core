@@ -1965,12 +1965,6 @@ replace into `gossip_menu` VALUES (5864, 7037, 0);
 replace into `gossip_menu_option` (`menu_id`, `id`, `option_icon`, `option_text`, `OptionBroadcastTextID`, `option_id`, `npc_option_npcflag`, `action_menu_id`, `action_poi_id`, `action_script_id`, `box_coded`, `box_money`, `box_text`, `BoxBroadcastTextID`, `condition_id`) VALUES (5864, 0, 1, 'I wish to purchase from you.', 9734, 3, 4, 0, 0, 0, 0, 0, NULL, 0, 7624);
 UPDATE `creature_template` SET `gossip_menu_id`=5864, `npc_flags`=5 WHERE `entry`=14522;
 
--- Cultist near Rakaiah should not be moving.
-UPDATE `creature` SET `wander_distance`=0, `movement_type`=0 WHERE `guid` IN (40659, 40665);
-UPDATE `creature` SET `position_x`=5210.24, `position_y`=-573.692, `position_z`=287.41, `orientation`=2.74017 WHERE `guid`=40659;
-UPDATE `creature` SET `position_x`=5205.97, `position_y`=-564.198, `position_z`=287.41, `orientation`=4.08407 WHERE `guid`=40665;
-
-
 -- Add missing completion text for Summon Felsteed quests.
 UPDATE `quest_template` SET `OfferRewardText`='So, you\'ve decided to grace my presence again. How kind of you.$B$BMy acolytes wondered if you\'d ever show up. I told them there was no doubt. When power is concerned, you are drawn in like a moth to the flame.' WHERE `entry` IN (3631, 4487, 4488);
 
