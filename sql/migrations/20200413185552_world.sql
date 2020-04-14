@@ -1959,6 +1959,20 @@ INSERT INTO `creature_involvedrelation` (`id`, `quest`, `patch_min`, `patch_max`
 -- Quests 5657, 5656, 5655 are unobtainable.
 DELETE FROM `creature_questrelation` WHERE `quest` IN (5657, 5656, 5655);
 
+-- Ur'dan should only sell items after quest Ulathek the Traitor is completed.
+INSERT INTO `conditions` (`condition_entry`, `type`, `value1`, `value2`, `value3`, `value4`, `flags`) VALUES (7624, 8, 7624, 0, 0, 0, 0);
+INSERT INTO `gossip_menu` VALUES (5864, 7037, 0);
+INSERT INTO `gossip_menu_option` (`menu_id`, `id`, `option_icon`, `option_text`, `OptionBroadcastTextID`, `option_id`, `npc_option_npcflag`, `action_menu_id`, `action_poi_id`, `action_script_id`, `box_coded`, `box_money`, `box_text`, `BoxBroadcastTextID`, `condition_id`) VALUES (5864, 0, 1, 'I wish to purchase from you.', 9734, 3, 4, 0, 0, 0, 0, 0, NULL, 0, 7624);
+UPDATE `creature_template` SET `gossip_menu_id`=5864, `npc_flags`=5 WHERE `entry`=14522;
+
+-- Cultist near Rakaiah should not be moving.
+UPDATE `creature` SET `wander_distance`=0, `movement_type`=0 WHERE `guid` IN (40659, 40665);
+UPDATE `creature` SET `position_x`=5210.24, `position_y`=-573.692, `position_z`=287.41, `orientation`=2.74017 WHERE `guid`=40659;
+UPDATE `creature` SET `position_x`=5205.97, `position_y`=-564.198, `position_z`=287.41, `orientation`=4.08407 WHERE `guid`=40665;
+
+
+
+
 
 -- End of migration.
 END IF;
