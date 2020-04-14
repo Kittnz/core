@@ -45,7 +45,7 @@
 #include "MasterPlayer.h"
 #include "PlayerBroadcaster.h"
 #include "Mail.h"
-#include "turtlewow/transmog.h"
+#include "turtlewow/transmog/transmog.h"
 
 // config option SkipCinematics supported values
 enum CinematicsSkipMode

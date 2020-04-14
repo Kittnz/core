@@ -52,7 +52,7 @@
 #include "NodeSession.h"
 #include "NodesOpcodes.h"
 #include "MasterPlayer.h"
-#include "turtlewow/transmog.h"
+#include "turtlewow/transmog/transmog.h"
 
 // select opcodes appropriate for processing in Map::Update context for current session state
 static bool MapSessionFilterHelper(WorldSession* session, OpcodeHandler const& opHandle)

@@ -5,7 +5,7 @@ set (SCRIPTS_SRCS
     ScriptLoader.h
     custom/custom.h
     custom/npc_j_eevee.h
-    turtlewow/transmog.h
+    turtlewow/transmog/transmog.h
     eastern_kingdoms/burning_steppes/blackrock_depths/blackrock_depths.h
     eastern_kingdoms/burning_steppes/blackrock_spire/blackrock_spire.h
     eastern_kingdoms/burning_steppes/blackwing_lair/blackwing_lair.h
@@ -299,7 +299,6 @@ set (SCRIPTS_SRCS
     turtlewow/creatures/boss_pompa.cpp 
     turtlewow/creatures/boss_turtlhu.cpp 
     turtlewow/creatures/boss_snowball.cpp 
-    turtlewow/creatures/npc_transmog.cpp 
 
     turtlewow/creatures/cot/black_morass/boss_gerastrasz.cpp 
     turtlewow/creatures/cot/instance_caverns_of_time.cpp 
@@ -308,7 +307,7 @@ set (SCRIPTS_SRCS
     turtlewow/creatures/cot/black_morass/boss_chronormu.cpp   
 
     turtlewow/mirage_raceway/miracle_raceaway.cpp
-    turtlewow/transmog.cpp
+    turtlewow/transmog/transmog.cpp
     turtlewow/object_scripts.cpp
     turtlewow/zonescript_gm_isle.cpp
     turtlewow/commands.cpp

@@ -31,7 +31,7 @@
 #include "Chat.h"
 #include "Anticheat.h"
 #include "scriptPCH.h"
-#include "turtlewow/transmog.h"
+#include "turtlewow/transmog/transmog.h"
 
 void WorldSession::HandleSplitItemOpcode(WorldPacket & recv_data)
 {

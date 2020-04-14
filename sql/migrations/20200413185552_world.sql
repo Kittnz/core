@@ -1929,9 +1929,9 @@ UPDATE `creature_template` SET `scale`=1 WHERE `entry`=14453;
 
 -- Correct givers for quest Cenarion Aid.
 DELETE FROM `creature_questrelation` WHERE `quest`=8254;
-INSERT INTO `creature_questrelation` (`id`, `quest`, `patch_min`, `patch_max`) VALUES (5489, 8254, 5, 10);
-INSERT INTO `creature_questrelation` (`id`, `quest`, `patch_min`, `patch_max`) VALUES (6018, 8254, 5, 10);
-INSERT INTO `creature_questrelation` (`id`, `quest`, `patch_min`, `patch_max`) VALUES (11406, 8254, 5, 10);
+replace into `creature_questrelation` (`id`, `quest`, `patch_min`, `patch_max`) VALUES (5489, 8254, 5, 10);
+replace into `creature_questrelation` (`id`, `quest`, `patch_min`, `patch_max`) VALUES (6018, 8254, 5, 10);
+replace into `creature_questrelation` (`id`, `quest`, `patch_min`, `patch_max`) VALUES (11406, 8254, 5, 10);
 
 -- Quest 5663 should be started by Miles Welsh.
 UPDATE `creature_questrelation` SET `id`=3044 WHERE `id`=2129 && `quest`=5663;
@@ -1953,16 +1953,16 @@ UPDATE `creature_questrelation` SET `id`=6018 WHERE `id`=3046 && `quest`=5646;
 UPDATE `creature_questrelation` SET `id`=4606 WHERE `id`=4607 && `quest`=5643;
 
 -- Add missing relations for quest 5654.
-INSERT INTO `creature_questrelation` (`id`, `quest`, `patch_min`, `patch_max`) VALUES (3706, 5654, 0, 10);
-INSERT INTO `creature_involvedrelation` (`id`, `quest`, `patch_min`, `patch_max`) VALUES (6018, 5654, 0, 10);
+replace into `creature_questrelation` (`id`, `quest`, `patch_min`, `patch_max`) VALUES (3706, 5654, 0, 10);
+replace into `creature_involvedrelation` (`id`, `quest`, `patch_min`, `patch_max`) VALUES (6018, 5654, 0, 10);
 
 -- Quests 5657, 5656, 5655 are unobtainable.
 DELETE FROM `creature_questrelation` WHERE `quest` IN (5657, 5656, 5655);
 
 -- Ur'dan should only sell items after quest Ulathek the Traitor is completed.
-INSERT INTO `conditions` (`condition_entry`, `type`, `value1`, `value2`, `value3`, `value4`, `flags`) VALUES (7624, 8, 7624, 0, 0, 0, 0);
-INSERT INTO `gossip_menu` VALUES (5864, 7037, 0);
-INSERT INTO `gossip_menu_option` (`menu_id`, `id`, `option_icon`, `option_text`, `OptionBroadcastTextID`, `option_id`, `npc_option_npcflag`, `action_menu_id`, `action_poi_id`, `action_script_id`, `box_coded`, `box_money`, `box_text`, `BoxBroadcastTextID`, `condition_id`) VALUES (5864, 0, 1, 'I wish to purchase from you.', 9734, 3, 4, 0, 0, 0, 0, 0, NULL, 0, 7624);
+replace into `conditions` (`condition_entry`, `type`, `value1`, `value2`, `value3`, `value4`, `flags`) VALUES (7624, 8, 7624, 0, 0, 0, 0);
+replace into `gossip_menu` VALUES (5864, 7037, 0);
+replace into `gossip_menu_option` (`menu_id`, `id`, `option_icon`, `option_text`, `OptionBroadcastTextID`, `option_id`, `npc_option_npcflag`, `action_menu_id`, `action_poi_id`, `action_script_id`, `box_coded`, `box_money`, `box_text`, `BoxBroadcastTextID`, `condition_id`) VALUES (5864, 0, 1, 'I wish to purchase from you.', 9734, 3, 4, 0, 0, 0, 0, 0, NULL, 0, 7624);
 UPDATE `creature_template` SET `gossip_menu_id`=5864, `npc_flags`=5 WHERE `entry`=14522;
 
 -- Cultist near Rakaiah should not be moving.
@@ -1977,7 +1977,7 @@ UPDATE `quest_template` SET `OfferRewardText`='So, you\'ve decided to grace my p
 
 -- Aelthalyste
 DELETE FROM `npc_trainer` WHERE `entry`=4606;
-INSERT INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqlevel`) VALUES 
+replace into `npc_trainer` (`entry`, `spell`, `spellcost`, `reqlevel`) VALUES 
 (4606, 1252, 800, 12),
 (4606, 1253, 10000, 30),
 (4606, 1254, 18000, 40),
@@ -2128,7 +2128,7 @@ INSERT INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqlevel`) VALUES
 (4606, 27875, 1200, 50),
 (4606, 27876, 1500, 60);
 DELETE FROM `npc_trainer` WHERE `entry`=4606 && `spell` IN (19313, 19315, 19316, 19317, 19323, 19324, 19329, 19330, 19334, 19335, 19336, 19342, 19343, 19344, 19354, 19355, 19356, 19360, 19361);
-INSERT INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`, `build_min`, `build_max`) VALUES 
+replace into `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`, `build_min`, `build_max`) VALUES 
 (4606, 19313, 2000, 0, 0, 28, 0, 5086),
 (4606, 19313, 400, 0, 0, 28, 5302, 5875),
 (4606, 19315, 5400, 0, 0, 44, 0, 5086),
@@ -2169,7 +2169,7 @@ INSERT INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillv
 (4606, 19361, 2070, 0, 0, 60, 5302, 5875);
 -- Father Lankester
 DELETE FROM `npc_trainer` WHERE `entry`=4607;
-INSERT INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqlevel`) VALUES 
+replace into `npc_trainer` (`entry`, `spell`, `spellcost`, `reqlevel`) VALUES 
 (4607, 1252, 800, 12),
 (4607, 1253, 10000, 30),
 (4607, 1254, 18000, 40),
@@ -2320,7 +2320,7 @@ INSERT INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqlevel`) VALUES
 (4607, 27875, 1200, 50),
 (4607, 27876, 1500, 60);
 DELETE FROM `npc_trainer` WHERE `entry`=4607 && `spell` IN (19313, 19314, 19315, 19316, 19317, 19320, 19321, 19322, 19323, 19324, 27796, 27821, 27822, 27823, 27843, 27845, 27875, 27876);
-INSERT INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`, `build_min`, `build_max`) VALUES 
+replace into `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`, `build_min`, `build_max`) VALUES 
 (4607, 19313, 2000, 0, 0, 28, 0, 5086),
 (4607, 19313, 400, 0, 0, 28, 5302, 5875),
 (4607, 19314, 3500, 0, 0, 36, 0, 5086),
@@ -2351,7 +2351,7 @@ INSERT INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillv
 (4607, 27876, 1500, 0, 0, 60, 5302, 5875);
 -- Father Lazarus
 DELETE FROM `npc_trainer` WHERE `entry`=4608;
-INSERT INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqlevel`) VALUES 
+replace into `npc_trainer` (`entry`, `spell`, `spellcost`, `reqlevel`) VALUES 
 (4608, 1252, 800, 12),
 (4608, 1253, 10000, 30),
 (4608, 1254, 18000, 40),
@@ -2502,7 +2502,7 @@ INSERT INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqlevel`) VALUES
 (4608, 27875, 1200, 50),
 (4608, 27876, 1500, 60);
 DELETE FROM `npc_trainer` WHERE `entry`=4608 && `spell` IN (19313, 19314, 19315, 19316, 19317, 19320, 19321, 19322, 19323, 19324, 27796, 27821, 27822, 27823, 27843, 27845, 27875, 27876);
-INSERT INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`, `build_min`, `build_max`) VALUES 
+replace into `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`, `build_min`, `build_max`) VALUES 
 (4608, 19313, 2000, 0, 0, 28, 0, 5086),
 (4608, 19313, 400, 0, 0, 28, 5302, 5875),
 (4608, 19314, 3500, 0, 0, 36, 0, 5086),
@@ -2543,12 +2543,12 @@ UPDATE `quest_template` SET `ExclusiveGroup`=0, `PrevQuestId`=4963 WHERE `entry`
 
 -- Improved script for quest Cleansing of the Orb of Orahil.
 DELETE FROM `quest_start_scripts` WHERE `id`=4961;
-INSERT INTO `quest_start_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (4961, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2629, 0, 0, 0, 0, 0, 0, 0, 0, 'Cleansing of the Orb of Orahil: Tabetha - Say Text');
-INSERT INTO `quest_start_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (4961, 0, 60, 3, 0, 0, 0, 0, 0, 0, 4, 0, 4961, 0, 0, 0, 0, 0, 0, 0, 'Cleansing of the Orb of Orahil: Tabetha - Start Waypoints');
-INSERT INTO `quest_start_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (4961, 0, 4, 147, 3, 2, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Cleansing of the Orb of Orahil: Tabetha - Remove Quest Giver Flag');
+replace into `quest_start_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (4961, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2629, 0, 0, 0, 0, 0, 0, 0, 0, 'Cleansing of the Orb of Orahil: Tabetha - Say Text');
+replace into `quest_start_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (4961, 0, 60, 3, 0, 0, 0, 0, 0, 0, 4, 0, 4961, 0, 0, 0, 0, 0, 0, 0, 'Cleansing of the Orb of Orahil: Tabetha - Start Waypoints');
+replace into `quest_start_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (4961, 0, 4, 147, 3, 2, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Cleansing of the Orb of Orahil: Tabetha - Remove Quest Giver Flag');
 
 -- Waypoints for Tabetha when quest Cleansing of the Orb of Orahil is started.
-INSERT INTO `creature_movement_special` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES 
+replace into `creature_movement_special` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES 
 (4961, 1, -4035.85, -3384.24, 38.9959, 100, 0, 0, 0),
 (4961, 2, -4037.6, -3381.32, 37.9133, 100, 0, 0, 0),
 (4961, 3, -4037.38, -3378.67, 37.7076, 100, 0, 0, 0),
@@ -2564,15 +2564,15 @@ INSERT INTO `creature_movement_special` (`id`, `point`, `position_x`, `position_
 
 -- Waypoint scripts for Tabetha.
 DELETE FROM `creature_movement_scripts` WHERE `id`=496106;
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (496106, 0, 15, 9097, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Cleansing of the Orb of Orahil: Tabetha - Cast Spell Summon Demon of the Orb');
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (496106, 0, 25, 1, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Cleansing of the Orb of Orahil: Tabetha - Set Run');
+replace into `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (496106, 0, 15, 9097, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Cleansing of the Orb of Orahil: Tabetha - Cast Spell Summon Demon of the Orb');
+replace into `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (496106, 0, 25, 1, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Cleansing of the Orb of Orahil: Tabetha - Set Run');
 DELETE FROM `creature_movement_scripts` WHERE `id`=496111;
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (496111, 0, 4, 147, 3, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Cleansing of the Orb of Orahil: Tabetha - Add Quest Giver Flag');
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (496111, 0, 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Cleansing of the Orb of Orahil: Tabetha - Set Walk');
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (496111, 0, 20, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Cleansing of the Orb of Orahil: Tabetha - Move Idle');
+replace into `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (496111, 0, 4, 147, 3, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Cleansing of the Orb of Orahil: Tabetha - Add Quest Giver Flag');
+replace into `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (496111, 0, 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Cleansing of the Orb of Orahil: Tabetha - Set Walk');
+replace into `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (496111, 0, 20, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Cleansing of the Orb of Orahil: Tabetha - Move Idle');
 
 -- Missing weapon used by Demon of the Orb.
-INSERT INTO `creature_equip_template` (`entry`, `equipentry1`, `equipentry2`, `equipentry3`) VALUES (6549, 5747, 0, 0);
+replace into `creature_equip_template` (`entry`, `equipentry1`, `equipentry2`, `equipentry3`) VALUES (6549, 5747, 0, 0);
 UPDATE `creature_template` SET `equipment_id`=6549 WHERE `entry`=6549;
 
 

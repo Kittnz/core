@@ -69,7 +69,7 @@
 #include "MapReferenceImpl.h"
 #include "GMTicketMgr.h"
 #include "MasterPlayer.h"
-#include "turtlewow/transmog.h"
+#include "turtlewow/transmog/transmog.h"
 
 /* Nostalrius */
 #include "Config/Config.h"
