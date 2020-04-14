@@ -1949,6 +1949,17 @@ UPDATE `creature_questrelation` SET `id`=3044 WHERE `id`=5994 && `quest`=5644;
 UPDATE `creature_questrelation` SET `id`=6018 WHERE `id`=3046 && `quest`=5646;
 
 
+-- Quest 5643 should be started by Aelthalyste.
+UPDATE `creature_questrelation` SET `id`=4606 WHERE `id`=4607 && `quest`=5643;
+
+-- Add missing relations for quest 5654.
+INSERT INTO `creature_questrelation` (`id`, `quest`, `patch_min`, `patch_max`) VALUES (3706, 5654, 0, 10);
+INSERT INTO `creature_involvedrelation` (`id`, `quest`, `patch_min`, `patch_max`) VALUES (6018, 5654, 0, 10);
+
+-- Quests 5657, 5656, 5655 are unobtainable.
+DELETE FROM `creature_questrelation` WHERE `quest` IN (5657, 5656, 5655);
+
+
 -- End of migration.
 END IF;
 END??
