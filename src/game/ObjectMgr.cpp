@@ -9503,7 +9503,7 @@ void ObjectMgr::LoadVendors(char const* tableName, bool isTemplates)
 
     std::set<uint32> skip_vendors;
 
-    std::unique_ptr<QueryResult> result(WorldDatabase.PQuery("SELECT `entry`, `item`, `maxcount`, `incrtime`, `itemflags` FROM %s WHERE (`item` NOT IN (SELECT `entry` FROM `forbidden_items` WHERE (`after_or_before` = 0 && `patch` <= %u) || (`after_or_before` = 1 && `patch` >= %u)))", tableName, sWorld.GetWowPatch(), sWorld.GetWowPatch()));
+    std::unique_ptr<QueryResult> result(WorldDatabase.PQuery("SELECT `entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id` FROM %s WHERE (`item` NOT IN (SELECT `entry` FROM `forbidden_items` WHERE (`after_or_before` = 0 && `patch` <= %u) || (`after_or_before` = 1 && `patch` >= %u)))", tableName, sWorld.GetWowPatch(), sWorld.GetWowPatch()));
     if (!result)
     {
         BarGoLink bar(1);
@@ -9527,13 +9527,14 @@ void ObjectMgr::LoadVendors(char const* tableName, bool isTemplates)
         uint32 maxcount     = fields[2].GetUInt32();
         uint32 incrtime     = fields[3].GetUInt32();
         uint32 itemflags    = fields[4].GetUInt32();
+        uint32 conditionId  = fields[5].GetUInt32();
 
-        if (!IsVendorItemValid(isTemplates, tableName, entry, item_id, maxcount, incrtime, nullptr, &skip_vendors))
+        if (!IsVendorItemValid(isTemplates, tableName, entry, item_id, maxcount, incrtime, conditionId, nullptr, &skip_vendors))
             continue;
 
         VendorItemData& vList = vendorList[entry];
 
-        vList.AddItem(item_id, maxcount, incrtime, itemflags);
+        vList.AddItem(item_id, maxcount, incrtime, itemflags, conditionId);
         ++count;
 
     }
@@ -9894,7 +9895,7 @@ void ObjectMgr::LoadGossipMenuItems()
 void ObjectMgr::AddVendorItem(uint32 entry, uint32 item, uint32 maxcount, uint32 incrtime, uint32 itemflags)
 {
     VendorItemData& vList = m_CacheVendorItemMap[entry];
-    vList.AddItem(item, maxcount, incrtime, itemflags);
+    vList.AddItem(item, maxcount, incrtime, itemflags, 0);
 
     WorldDatabase.PExecuteLog("INSERT INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`) VALUES('%u','%u','%u','%u','%u')", entry, item, maxcount, incrtime, itemflags);
 }
@@ -9913,7 +9914,7 @@ bool ObjectMgr::RemoveVendorItem(uint32 entry, uint32 item)
     return true;
 }
 
-bool ObjectMgr::IsVendorItemValid(bool isTemplate, char const* tableName, uint32 vendor_entry, uint32 item_id, uint32 maxcount, uint32 incrtime, Player* pl, std::set<uint32>* skip_vendors) const
+bool ObjectMgr::IsVendorItemValid(bool isTemplate, char const* tableName, uint32 vendor_entry, uint32 item_id, uint32 maxcount, uint32 incrtime, uint32 conditionId, Player* pl, std::set<uint32>* skip_vendors) const
 {
     char const* idStr = isTemplate ? "vendor template" : "vendor";
     CreatureInfo const* cInfo = nullptr;
@@ -9974,6 +9975,12 @@ bool ObjectMgr::IsVendorItemValid(bool isTemplate, char const* tableName, uint32
         else
             sLog.outErrorDb("Table `%s` has `maxcount`=0 for item %u of %s %u but `incrtime`<>0, ignoring",
                             tableName, item_id, idStr, vendor_entry);
+        return false;
+    }
+
+    if (conditionId && !sConditionStorage.LookupEntry<ConditionEntry>(conditionId))
+    {
+        sLog.outErrorDb("Table `%s` has `condition_id`=%u for item %u of %s %u but this condition is not valid, ignoring", tableName, conditionId, item_id, idStr, vendor_entry);
         return false;
     }
 
