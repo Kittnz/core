@@ -171,7 +171,7 @@ void AutoScaler::ScaleCreature(Creature* creature, uint32 playerCount, uint32 ma
     creature->SetMaxHealth(static_cast<uint32>(ScaleHp(creature->GetCreateHealth()) * specificHPFactor));
     creature->SetMaxPower(POWER_MANA, static_cast<uint32>(ScalePower(creature->GetCreateMana()) * specificPowerFactor));
 
-    if (creature->GetEntry() == 13020) // Valestrasz the Corrupt, set his health to 30% to avoid visual bug before the first pull
+    if (creature->GetEntry() == 13020 && creature->isAlive()) // Valestrasz the Corrupt, set his health to 30% to avoid visual bug before the first pull
         creature->SetHealthPercent(30.0);
 
     if (baseDamages.find(creature->GetEntry()) == baseDamages.end())
