@@ -376,34 +376,33 @@ bool ItemUseSpell_survival_kit(Player* pPlayer, Item* pItem, const SpellCastTarg
 
 bool ItemUseSpell_survival_tent(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
-    if (pPlayer) {
+    if (pPlayer) 
+    {
         // reagents: Linen Cloth (5), Simple Wood (1)
-        if (pPlayer->HasItemCount(2589, 5, false) && pPlayer->HasItemCount(4470, 1, false)) {
+        if (pPlayer->HasItemCount(2589, 5, false) && pPlayer->HasItemCount(4470, 1, false)) 
+        {
             // summon tent object for 20 minutes
             if (!pPlayer->IsFalling() && !pPlayer->IsInWater() && !pPlayer->InGurubashiArena(false) &&
                 pPlayer->GetTerrain()->IsOutdoors(pPlayer->GetPositionX(), pPlayer->GetPositionY(), pPlayer->GetPositionZ()) &&
                 pPlayer->GetZoneId() != 1519 && pPlayer->GetZoneId() != 1637 && pPlayer->GetZoneId() != 1497 && pPlayer->GetZoneId() != 1537 &&
-                pPlayer->GetZoneId() != 1657 && pPlayer->GetZoneId() != 1638 && !pPlayer->GetInstanceId()) {
-                
-                // Tent now will appear in front of the player:
+                pPlayer->GetZoneId() != 1657 && pPlayer->GetZoneId() != 1638 && !pPlayer->GetInstanceId()) 
+            {                
                 float dis{ 4.0F };
                 float x, y, z, ang, p_r, o_r;
                 pPlayer->GetSafePosition(x, y, z);
                 x += dis * cos(pPlayer->GetOrientation());
                 y += dis * sin(pPlayer->GetOrientation());
-
                 p_r = pPlayer->GetOrientation();
                 o_r = remainderf(p_r + M_PI, M_PI * 2.0f);
-
                 float rot2 = sin(o_r / 2);
                 float rot3 = cos(o_r / 2);
 
-                pPlayer->SummonGameObject(1000001, x, y, z, o_r, 0.0f, 0.0f, rot2, rot3, 1200, true);
-                // set rested state - check for the actual script in go_survival_tent
-                // update skill on usage:
+                pPlayer->SummonGameObject((pPlayer->GetTeam() == ALLIANCE ? 1000001 : 1000236), x, y, z, o_r, 0.0f, 0.0f, rot2, rot3, 1200, true);
+
                 uint32 currvalue = 0;
                 currvalue = pPlayer->GetSkillValue(142);
-                switch (currvalue) {
+                switch (currvalue) 
+                {
                     case 150:
                         break;
                     default:
@@ -414,11 +413,15 @@ bool ItemUseSpell_survival_tent(Player* pPlayer, Item* pItem, const SpellCastTar
                 pPlayer->DestroyItemCount(2589, 5, true);
                 pPlayer->DestroyItemCount(4470, 1, true);
                 return false;
-            } else {
+            } 
+            else 
+            {
                 ChatHandler(pPlayer).SendSysMessage("Can't build here! You need to be outside.");
                 return true;
             }
-        } else {
+        }
+        else 
+        {
             ChatHandler(pPlayer).SendSysMessage("5 [Linen Cloth] and 1 [Simple Wood] are required to build a tent.");
             pPlayer->RemoveSpellCooldown(24085, true);
             return true;
@@ -429,9 +432,11 @@ bool ItemUseSpell_survival_tent(Player* pPlayer, Item* pItem, const SpellCastTar
 
 bool ItemUseSpell_survival_boat(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
-    if (pPlayer) {
+    if (pPlayer) 
+    {
         // reagents: Simple Wood (15), Handful of Copper Bolts (1)
-        if (pPlayer->HasItemCount(4470, 15, false) && pPlayer->HasItemCount(4359, 1, false)) {
+        if (pPlayer->HasItemCount(4470, 15, false) && pPlayer->HasItemCount(4359, 1, false)) 
+        {
             // summon boat for 60 minutes
             if (pPlayer->IsInWater() && !pPlayer->IsUnderWater()) {
                 pPlayer->SummonGameObject(1000002, pPlayer->GetPositionX(), pPlayer->GetPositionY(),
@@ -444,7 +449,8 @@ bool ItemUseSpell_survival_boat(Player* pPlayer, Item* pItem, const SpellCastTar
                 pPlayer->DestroyItemCount(4359, 1, true);
                 uint32 currvalue = 0;
                 currvalue = pPlayer->GetSkillValue(142);
-                switch (currvalue) {
+                switch (currvalue) 
+{
                     case 150:
                         break;
                     default:
@@ -453,12 +459,16 @@ bool ItemUseSpell_survival_boat(Player* pPlayer, Item* pItem, const SpellCastTar
                         break;
                 }
                 return false;
-            } else {
+            } 
+            else 
+            {
                 ChatHandler(pPlayer).SendSysMessage("You need to be in a body of water surface!");
                 return true;
             }
 
-        } else {
+        } 
+        else 
+        {
             ChatHandler(pPlayer).SendSysMessage(
                     "15 [Simple Wood] and 1 [Handful of Copper Bolts] are required to build this boat.");
             pPlayer->RemoveSpellCooldown(14867, true);
