@@ -36,9 +36,6 @@ bool GossipSelect_npc_battlemaster(Player* p_Player, Creature* p_Creature, uint3
             p_Player->GetSession()->SendBattlegGroundList(p_Player->GetObjectGuid(), BATTLEGROUND_AV);
         else if (uiAction == GOSSIP_ACTION_INFO_DEF + 4)
             p_Player->SEND_VENDORLIST(p_Creature->GetGUID());
-
-        if (uiAction < (GOSSIP_ACTION_INFO_DEF + 4))
-            p_Creature->MonsterSay(IN_QUEUE, 0U, p_Player);
     }
 
 	p_Player->CLOSE_GOSSIP_MENU();
