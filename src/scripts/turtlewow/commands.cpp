@@ -335,6 +335,7 @@ bool ChatHandler::HandleModifyTitleCommand(char* args)
 
 #define GNOMISH_PLASTIC_SURGERY_TOOLS_SKIN 50001
 #define GNOMISH_PLASTIC_SURGERY_TOOLS_RACE 50002
+#define GNOMISH_PLASTIC_SURGERY_TOOLS_FACTION 51433
 
 bool ChatHandler::HandleRaceCommand(char* args)
 {
@@ -349,7 +350,7 @@ bool ChatHandler::HandleRaceCommand(char* args)
     {
         if (!target->HasItemCount(GNOMISH_PLASTIC_SURGERY_TOOLS_RACE))
         {
-            PSendSysMessage("You must purchase [Gnomish Plastic Surgery Tools] first!");
+            PSendSysMessage("You must purchase [Gnomish Plastic Surgery Tools: Race Change] first!");
             SetSentErrorMessage(true);
             return false;
         }
@@ -441,7 +442,7 @@ bool ChatHandler::HandleSkinCommand(char* args)
     {
         if (!target->HasItemCount(GNOMISH_PLASTIC_SURGERY_TOOLS_SKIN))
         {
-            PSendSysMessage("You must purchase [Gnomish Plastic Surgery Tools] first.");
+            PSendSysMessage("You must purchase [Gnomish Plastic Surgery Tools: Look Change] first.");
             SetSentErrorMessage(true);
             return false;
         }
@@ -520,11 +521,12 @@ bool ChatHandler::HandleFactionCommand(char* args)
 
     if (Player* target = m_session->GetPlayer())
     {
-        uint8 curr_race = target->getRace();
-        uint8 curr_class = target->getClass();
-
-        const char* curr_class_name = GetClassName(curr_class, GetSessionDbcLocale());
-
+        if (!target->HasItemCount(GNOMISH_PLASTIC_SURGERY_TOOLS_FACTION))
+        {
+            PSendSysMessage("You must purchase [Gnomish Plastic Surgery Tools: Faction Change] first.");
+            SetSentErrorMessage(true);
+            return false;
+        } 
         std::string plName = args;
         CharacterDatabase.escape_string(plName);
 
@@ -535,7 +537,6 @@ bool ChatHandler::HandleFactionCommand(char* args)
 
         wstrToLower(wPlName);
 
-
         if (Utf8FitTo(target->GetName(), wPlName))
         {
             PSendSysMessage("You must specify a name of a character different than yourself!");
@@ -545,7 +546,7 @@ bool ChatHandler::HandleFactionCommand(char* args)
 
         if (target->isInCombat() || target->InBattleGround() || target->HasSpellCooldown(20939) || (target->getDeathState() == CORPSE) || target->IsBeingTeleported())
         {
-            PSendSysMessage("You can not change your race yet.");
+            PSendSysMessage("You can not change your faction yet.");
             SetSentErrorMessage(true);
             return false;
         }
@@ -565,16 +566,13 @@ bool ChatHandler::HandleFactionCommand(char* args)
         uint32 bytes2 = fields[3].GetUInt32();
         uint8 gender = fields[4].GetUInt8();
 
-        ChrRacesEntry const* curr_race_entry = sChrRacesStore.LookupEntry(curr_race);
-        ChrRacesEntry const* new_race_entry = sChrRacesStore.LookupEntry(new_race);
-
         bytes2 |= (target->GetUInt32Value(PLAYER_BYTES_2) & 0xFFFFFF00);
 
         target->SetUInt32Value(PLAYER_BYTES, bytes);
         target->SetUInt32Value(PLAYER_BYTES_2, bytes2);
         target->SetByteValue(UNIT_FIELD_BYTES_0, 2, gender);
 
-        target->DestroyItemCount(GNOMISH_PLASTIC_SURGERY_TOOLS_RACE, 1, true, false, true);
+        target->DestroyItemCount(GNOMISH_PLASTIC_SURGERY_TOOLS_FACTION, 1, true, false, true);
         target->SaveInventoryAndGoldToDB();
 
         target->ChangeRace(new_race, gender, bytes, bytes2);
