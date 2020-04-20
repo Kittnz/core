@@ -63,28 +63,28 @@ bool GOHello_go_shadowforge_brazier(Player* pPlayer, GameObject* pGo)
 enum
 {
     //4 or 6 in total? 1+2+1 / 2+2+2 / 3+3. Depending on this, code should be changed.
-    MAX_MOB_AMOUNT      = 8
+            MAX_MOB_AMOUNT      = 8
 };
 
 uint32 RingMob[] =
-{
-    8925,                                                   // Dredge Worm
-    8926,                                                   // Deep Stinger
-    8927,                                                   // Dark Screecher
-    8928,                                                   // Burrowing Thundersnout
-    8933,                                                   // Cave Creeper
-    8932,                                                   // Borer Beetle
-};
+        {
+                8925,                                                   // Dredge Worm
+                8926,                                                   // Deep Stinger
+                8927,                                                   // Dark Screecher
+                8928,                                                   // Burrowing Thundersnout
+                8933,                                                   // Cave Creeper
+                8932,                                                   // Borer Beetle
+        };
 
 uint32 RingBoss[] =
-{
-    9027,                                                   // Gorosh
-    9028,                                                   // Grizzle
-    9029,                                                   // Eviscerator
-    9030,                                                   // Ok'thor
-    9031,                                                   // Anub'shiah
-    9032,                                                   // Hedrum
-};
+        {
+                9027,                                                   // Gorosh
+                9028,                                                   // Grizzle
+                9029,                                                   // Eviscerator
+                9030,                                                   // Ok'thor
+                9031,                                                   // Anub'shiah
+                9032,                                                   // Hedrum
+        };
 
 /*######
 ## npc_grimstone
@@ -119,7 +119,7 @@ struct npc_grimstoneAI : public npc_escortAI
 
     bool GroupIsWiped;
 
-    void Reset()
+    void Reset() override
     {
         m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
 
@@ -129,11 +129,11 @@ struct npc_grimstoneAI : public npc_escortAI
         MobCount = 0;
         MobDeath_Timer = 0;
 
-        for (uint8 i = 0; i < MAX_MOB_AMOUNT; ++i)
-            RingMobGUID[i] = 0;
+        for (uint64 & guid : RingMobGUID)
+            guid = 0;
 
-        for (uint8 i = 0; i < 4; ++i)
-            ChallengeMobGUID[i] = 0;
+        for (uint64 & guid : ChallengeMobGUID)
+            guid = 0;
 
         RingBossGUID = 0;
 
@@ -265,7 +265,7 @@ struct npc_grimstoneAI : public npc_escortAI
         MobDeath_Timer = 2500;
     }
 
-    void WaypointReached(uint32 i)
+    void WaypointReached(uint32 i) override
     {
         switch (i)
         {
@@ -303,7 +303,7 @@ struct npc_grimstoneAI : public npc_escortAI
         }
     }
 
-    void UpdateAI(const uint32 diff)
+    void UpdateAI(uint32 const diff) override
     {
         if (!m_pInstance)
             return;
@@ -322,7 +322,7 @@ struct npc_grimstoneAI : public npc_escortAI
                         RingBossGUID = 0;
                         Event_Timer = 5000;
                         MobDeath_Timer = 0;
-                        
+
                         --MobCount;
                         // End of the event if boss dies, even if some adds are left alive
                         return;
@@ -330,25 +330,25 @@ struct npc_grimstoneAI : public npc_escortAI
 
                     if (ArenaChallenge)
                     {
-                        for (uint8 i = 0; i < 4; ++i)
+                        for (uint64 & guid : ChallengeMobGUID)
                         {
-                            Creature *mob = m_creature->GetMap()->GetCreature(ChallengeMobGUID[i]);
+                            Creature *mob = m_creature->GetMap()->GetCreature(guid);
                             if (mob && !mob->isAlive() && mob->isDead())
                             {
-                                ChallengeMobGUID[i] = 0;
+                                guid = 0;
                                 --MobCount;
                             }
                         }
                     }
                 }
-                else 
+                else
                 {
-                    for (uint8 i = 0; i < MAX_MOB_AMOUNT; ++i)
+                    for (uint64 & guid : RingMobGUID)
                     {
-                        Creature *mob = m_creature->GetMap()->GetCreature(RingMobGUID[i]);
+                        Creature *mob = m_creature->GetMap()->GetCreature(guid);
                         if (mob && !mob->isAlive() && mob->isDead())
                         {
-                            RingMobGUID[i] = 0;
+                            guid = 0;
                             --MobCount;
 
                             //seems all are gone, so set timer to continue and discontinue this
@@ -472,9 +472,9 @@ struct npc_grimstoneAI : public npc_escortAI
 
         Map::PlayerList const &PlayerList = m_creature->GetMap()->GetPlayers();
 
-        for (Map::PlayerList::const_iterator itr = PlayerList.begin(); itr != PlayerList.end(); ++itr)
+        for (const auto& itr : PlayerList)
         {
-            Player *player = itr->getSource();
+            Player *player = itr.getSource();
 
             if (player && player->IsWithinDistInMap(m_creature, 80.0f) && player->isInCombat()) {
                 wiped = false;
@@ -498,7 +498,7 @@ struct npc_grimstoneAI : public npc_escortAI
                 m_creature->ForcedDespawn();
             }
         }
-        
+
         return wiped;
     }
 
@@ -523,11 +523,11 @@ struct npc_grimstoneAI : public npc_escortAI
 CreatureAI* GetAI_npc_grimstone(Creature* pCreature)
 {
     if (!pCreature->GetInstanceData())
-        return NULL;
+        return nullptr;
     return new npc_grimstoneAI(pCreature);
 }
 
-bool AreaTrigger_at_ring_of_law(Player* pPlayer, const AreaTriggerEntry *at)
+bool AreaTrigger_at_ring_of_law(Player* pPlayer, AreaTriggerEntry const *at)
 {
     if (ScriptedInstance* pInstance = (ScriptedInstance*)pPlayer->GetInstanceData())
     {
@@ -583,7 +583,7 @@ struct mob_phalanxAI : public ScriptedAI
     float m_fKeepDoorOrientation;
     bool m_bActivated;
 
-    void Reset()
+    void Reset() override
     {
         m_fKeepDoorOrientation = 2.06059f;
         m_uiCallPatrolTimer    = 0;
@@ -594,7 +594,7 @@ struct mob_phalanxAI : public ScriptedAI
     }
 
     void Activate()
-    { 
+    {
         if (m_bActivated)
             return;
 
@@ -608,18 +608,18 @@ struct mob_phalanxAI : public ScriptedAI
         m_creature->GetMotionMaster()->MovePoint(0, 865.555f, -219.056f, -43.70f);
         m_creature->setFaction(14);
         m_bActivated = true;
-    } 
+    }
 
-    void MovementInform(uint32 uiType, uint32 uiPointId)
+    void MovementInform(uint32 uiType, uint32 uiPointId) override
     {
         if (uiType != POINT_MOTION_TYPE)
             return;
 
         if (uiPointId == 0)
-            m_creature->GetMotionMaster()->MovePoint(1, 868.122f, -223.884f, -43.695f, MOVE_PATHFINDING, 0, 2.06059f); 
+            m_creature->GetMotionMaster()->MovePoint(1, 868.122f, -223.884f, -43.695f, MOVE_PATHFINDING, 0, 2.06059f);
     }
 
-    void UpdateAI(const uint32 diff)
+    void UpdateAI(uint32 const diff) override
     {
         if (!m_pInstance)
             return;
@@ -781,8 +781,8 @@ bool GossipHello_npc_lokhtos_darkbargainer(Player* pPlayer, Creature* pCreature)
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, GOSSIP_ITEM_SHOW_ACCESS, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_TRADE);
 
     if (pPlayer->GetQuestRewardStatus(QUEST_A_BINDING_CONTRACT) != 1 &&
-            !pPlayer->HasItemCount(ITEM_THRORIUM_BROTHERHOOD_CONTRACT, 1, true) &&
-            pPlayer->HasItemCount(ITEM_SULFURON_INGOT, 1))
+        !pPlayer->HasItemCount(ITEM_THRORIUM_BROTHERHOOD_CONTRACT, 1, true) &&
+        pPlayer->HasItemCount(ITEM_SULFURON_INGOT, 1))
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_GET_CONTRACT, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
     if (pPlayer->GetReputationRank(59) < REP_FRIENDLY)
@@ -865,10 +865,10 @@ struct npc_mistress_nagmaraAI : public ScriptedAI
         m_uiPhase = 1;
     }
 
-    void UpdateAI(const uint32 uiDiff) override
+    void UpdateAI(uint32 const uiDiff) override
     {
         if (m_uiPhaseTimer)
-       {
+        {
             if (m_uiPhaseTimer <= uiDiff)
                 m_uiPhaseTimer = 0;
             else
@@ -996,7 +996,7 @@ enum
     QUEST_ALE          = 4295
 };
 
-static const float aPosNagmaraRocknot[3] = {878.1779f, -222.0662f, -49.96714f};
+static float const aPosNagmaraRocknot[3] = {878.1779f, -222.0662f, -49.96714f};
 
 
 struct npc_rocknotAI : public npc_escortAI
@@ -1017,7 +1017,7 @@ struct npc_rocknotAI : public npc_escortAI
 
     float m_fInitialOrientation;
 
-    void Reset()
+    void Reset() override
     {
         if (!m_pInstance)
             return;
@@ -1104,7 +1104,7 @@ struct npc_rocknotAI : public npc_escortAI
         }
     }
 
-    void UpdateEscortAI(const uint32 uiDiff) override
+    void UpdateEscortAI(uint32 const uiDiff) override
     {
         if (!m_pInstance)
             return;
@@ -1334,7 +1334,7 @@ bool GOHello_go_thunderbrew_laguer_keg(Player* pPlayer, GameObject* pGo)
     {
         // Summon Hurley Blackbreath
         Creature* pHurley = pPlayer->SummonCreature(NPC_HURLEY,
-                             856.087f, -149.747f, -49.672f, 0.059f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 300000);
+                                                    856.087f, -149.747f, -49.672f, 0.059f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 300000);
         if (!pHurley)
             return true;
 
@@ -1383,7 +1383,7 @@ struct npc_hurley_blackbreathAI : public ScriptedAI
     }
 
 
-    void MovementInform(uint32 uiType, uint32 uiPointId)
+    void MovementInform(uint32 uiType, uint32 uiPointId) override
     {
         if (uiType != POINT_MOTION_TYPE)
             return;
@@ -1407,10 +1407,10 @@ struct npc_hurley_blackbreathAI : public ScriptedAI
         DoScriptText(SAY_HURLEY_AGGRO, m_creature);
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(uint32 const uiDiff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
-            return; 
+            return;
 
         if (uiFlameBreathTimer < uiDiff)
         {
@@ -1459,7 +1459,7 @@ bool GOHello_go_relic_coffer_door(Player* pPlayer, GameObject* pGo)
     if (pInstance->GetData(TYPE_RELIC_COFFER) == DONE)
     {
         if (Creature* pCreature = pPlayer->SummonCreature(RUINEPOIGNE_ENTRY,
-            819.45f, -348.96f, -50.49f, 0.35f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 300000))
+                                                          819.45f, -348.96f, -50.49f, 0.35f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 300000))
         {
             // pCreature->MonsterYell("Ne les laissez pas s'emparer du Coeur de la montagne!!", 0, pPlayer);
             pCreature->MonsterYell("Don't let them take the moutain hearth!", 0, pPlayer);
@@ -1493,38 +1493,38 @@ struct npc_watchman_doomgripAI : public ScriptedAI
     uint32 BoireLaPotionDeSoins_Timer;
     uint32 FracasserArmure_Timer;
 
-    void JustDied(Unit* pKiller)
+    void JustDied(Unit* pKiller) override
     {
         if (m_pInstance)
             m_pInstance->SetData(TYPE_DOOMGRIP, DONE);
     }
 
-    void Reset()
+    void Reset() override
     {
         BoireLaPotionDeSoins_Timer = 0;
         FracasserArmure_Timer = 1000;
     }
 
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* pWho) override
     {
-        std::list<Creature*> m_lGolems;
-        GetCreatureListWithEntryInGrid(m_lGolems, m_creature, NPC_WARBRINGER_CONSTRUCT, 20.0f);
-        if (!m_lGolems.empty())
+        std::list<Creature*> lGolems;
+        GetCreatureListWithEntryInGrid(lGolems, m_creature, NPC_WARBRINGER_CONSTRUCT, 20.0f);
+        if (!lGolems.empty())
         {
-            for (std::list<Creature*>::iterator itr = m_lGolems.begin(); itr != m_lGolems.end(); ++itr)
+            for (const auto& pGolem : lGolems)
             {
-                if ((*itr)->isAlive())
+                if (pGolem->isAlive())
                 {
-                    (*itr)->RemoveAurasDueToSpell(10255);
-                    (*itr)->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_PASSIVE);
+                    pGolem->RemoveAurasDueToSpell(10255);
+                    pGolem->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_PASSIVE);
                     if (pWho)
-                        (*itr)->AI()->AttackStart(pWho);
+                        pGolem->AI()->AttackStart(pWho);
                 }
             }
         }
     }
 
-    void UpdateAI(const uint32 diff)
+    void UpdateAI(uint32 const diff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
@@ -1558,94 +1558,6 @@ CreatureAI* GetAI_npc_watchman_doomgrip(Creature* pCreature)
 }
 
 /*######
-## npc_ribbly_fermevanne
-######*/
-
-
-enum
-{
-    NPC_RIBBLY_CRONY    = 10043,
-
-    SPELL_BRISE_GENOU   = 9080,
-    SPELL_SURINER       = 12540
-};
-
-//#define GOSSIP_ITEM_ATTAQUE  "On pay bien pour votre tête..."
-#define GOSSIP_ITEM_ATTAQUE "Your family says hello, Ribbly. And they want your head!"
-
-struct npc_ribbly_fermevanneAI : public ScriptedAI
-{
-    npc_ribbly_fermevanneAI(Creature* pCreature) : ScriptedAI(pCreature)
-    {
-        Reset();
-    }
-
-    uint32 BiseGenou_Timer;
-    uint32 Suriner_Timer;
-
-    void Reset()
-    {
-        BiseGenou_Timer = urand(3000, 9000);
-        Suriner_Timer = urand(2000, 10000);
-    }
-
-    void UpdateAI(const uint32 diff)
-    {
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
-            return;
-
-        //BiseGenou_Timer
-        if (BiseGenou_Timer < diff)
-        {
-            DoCastSpellIfCan(m_creature->getVictim(), SPELL_BRISE_GENOU);
-            BiseGenou_Timer = urand(9000, 15000);
-        }
-        else BiseGenou_Timer -= diff;
-
-        //Suriner_Timer
-        if (Suriner_Timer < diff)
-        {
-            DoCastSpellIfCan(m_creature->getVictim(), SPELL_SURINER);
-            Suriner_Timer = urand(9000, 12000);
-        }
-        else Suriner_Timer -= diff;
-
-        DoMeleeAttackIfReady();
-    }
-};
-
-CreatureAI* GetAI_npc_ribbly_fermevanne(Creature* pCreature)
-{
-    return new npc_ribbly_fermevanneAI(pCreature);
-}
-
-bool GossipHello_npc_ribbly_fermevanne(Player* pPlayer, Creature* pCreature)
-{
-    if (pPlayer->GetQuestStatus(4136) == QUEST_STATUS_INCOMPLETE)
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_BATTLE, GOSSIP_ITEM_ATTAQUE, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-
-    pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
-
-    return true;
-}
-
-bool GossipSelect_npc_ribbly_fermevanne(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
-{
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
-    {
-        pPlayer->CLOSE_GOSSIP_MENU();
-        pCreature->MonsterYell(4973, 0, pPlayer);
-        pCreature->setFaction(14);
-        pCreature->AI()->AttackStart(pPlayer);
-
-        if (ScriptedInstance* pInstance = (ScriptedInstance*)pCreature->GetInstanceData())
-            pInstance->SetData(TYPE_RIBBLY, DONE);
-    }
-
-    return true;
-}
-
-/*######
 ## npc_golem_lord_argelmach
 ######*/
 
@@ -1667,7 +1579,7 @@ struct npc_golem_lord_argelmachAI : public ScriptedAI
     uint32 ChaineDEclaires_Timer;
     uint32 Horion_Timer;
 
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* pWho) override
     {
         m_creature->GetMotionMaster()->MovePoint(0, 846.801025f, 16.280600f, -53.639500f);
         //m_creature->MonsterYell("Golems, votre Seigneur a besoin de vous!", 0, pWho);
@@ -1677,20 +1589,20 @@ struct npc_golem_lord_argelmachAI : public ScriptedAI
             m_pInstance->SetData(DATA_ARGELMACH_AGGRO, IN_PROGRESS);
     }
 
-    void JustDied(Unit* pKiller)
+    void JustDied(Unit* pKiller) override
     {
         if (m_pInstance)
             m_pInstance->SetData(DATA_ARGELMACH_AGGRO, DONE);
     }
 
-    void Reset()
+    void Reset() override
     {
         BouclierDeFoudre_Timer = 0;
         ChaineDEclaires_Timer = 5000;
         Horion_Timer = 2000;
     }
 
-    void UpdateAI(const uint32 diff)
+    void UpdateAI(uint32 const diff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
@@ -1733,11 +1645,11 @@ CreatureAI* GetAI_npc_golem_lord_argelmach(Creature* pCreature)
 ## at_shadowforge_bridge
 ######*/
 
-static const float aGuardSpawnPositions[2][4] =
-{
-    {642.3660f, -274.5155f, -43.10918f, 0.4712389f},                // First guard spawn position
-    {740.1137f, -283.3448f, -42.75082f, 2.8623400f}                 // Second guard spawn position
-};
+static float const aGuardSpawnPositions[2][4] =
+        {
+                {642.3660f, -274.5155f, -43.10918f, 0.4712389f},                // First guard spawn position
+                {740.1137f, -283.3448f, -42.75082f, 2.8623400f}                 // Second guard spawn position
+        };
 
 enum
 {
@@ -1787,13 +1699,13 @@ enum
     YELL_STOLEN_1                   = -1230054,
     YELL_STOLEN_2                   = -1230055,
     YELL_STOLEN_3                   = -1230056,
-    
+
     YELL_AGRRO_1                    = -1230057,
     YELL_AGRRO_2                    = -1230058,
     YELL_PICKPOCKETED               = -1230059,
 
     // spells
-    SPELL_BANISH                    = 8994,
+            SPELL_BANISH                    = 8994,
     SPELL_CURSE_OF_TONGUES          = 13338,
     SPELL_DEMON_ARMOR               = 13787,
     SPELL_IMMOLATE                  = 12742,
@@ -1801,9 +1713,9 @@ enum
     SPELL_PICKPOCKET                = 921,
 };
 
-static const int aRandomSays[] = { SAY_OOC_1, SAY_OOC_2, SAY_OOC_3, SAY_OOC_4 };
+static int const aRandomSays[] = { SAY_OOC_1, SAY_OOC_2, SAY_OOC_3, SAY_OOC_4 };
 
-static const int aRandomYells[] = { YELL_STOLEN_1, YELL_STOLEN_2, YELL_STOLEN_3 };
+static int const aRandomYells[] = { YELL_STOLEN_1, YELL_STOLEN_2, YELL_STOLEN_3 };
 
 struct boss_plugger_spazzringAI : public ScriptedAI
 {
@@ -1859,7 +1771,7 @@ struct boss_plugger_spazzringAI : public ScriptedAI
         }
     }
 
-    void SpellHit(Unit* pCaster, const SpellEntry* pSpell) override
+    void SpellHit(Unit* pCaster, SpellEntry const* pSpell) override
     {
         if (pCaster->GetTypeId() == TYPEID_PLAYER)
         {
@@ -1887,7 +1799,7 @@ struct boss_plugger_spazzringAI : public ScriptedAI
         }
     }
 
-    void UpdateAI(const uint32 uiDiff) override
+    void UpdateAI(uint32 const uiDiff) override
     {
         // Combat check
         if (m_creature->SelectHostileTarget() && m_creature->getVictim())
@@ -1932,7 +1844,7 @@ struct boss_plugger_spazzringAI : public ScriptedAI
 
             DoMeleeAttackIfReady();
         }
-        // Out of Combat (OOC)
+            // Out of Combat (OOC)
         else
         {
             if (m_uiOocSayTimer)
@@ -2090,19 +2002,19 @@ struct npc_dughal_stormwingAI : npc_escortAI
         }
     }
 
-    void UpdateEscortAI(const uint32 uiDiff) override
+    void UpdateEscortAI(uint32 const uiDiff) override
     {
         if (!m_pInstance || m_pInstance->GetData(TYPE_QUEST_JAIL_BREAK) != IN_PROGRESS)
             return;
 
-        if (m_pInstance->GetData(TYPE_QUEST_JAIL_BREAK) == FAIL || 
-            m_pInstance->GetData(TYPE_QUEST_JAIL_BREAK) == DONE || 
+        if (m_pInstance->GetData(TYPE_QUEST_JAIL_BREAK) == FAIL ||
+            m_pInstance->GetData(TYPE_QUEST_JAIL_BREAK) == DONE ||
             m_pInstance->GetData(TYPE_JAIL_DUGHAL) == DONE)
         {
-            m_creature->SetVisibility(VISIBILITY_OFF);            
+            m_creature->SetVisibility(VISIBILITY_OFF);
         }
         else
-             m_creature->SetVisibility(VISIBILITY_ON);
+            m_creature->SetVisibility(VISIBILITY_ON);
 
         npc_escortAI::UpdateEscortAI(uiDiff);
     }
@@ -2144,7 +2056,7 @@ struct npc_marshal_reginald_windsorAI : npc_escortAI
     explicit npc_marshal_reginald_windsorAI(Creature* m_creature) : npc_escortAI(m_creature)
     {
         m_pInstance = static_cast<ScriptedInstance*>(m_creature->GetInstanceData());
-        npc_marshal_reginald_windsorAI::Reset();        
+        npc_marshal_reginald_windsorAI::Reset();
     }
 
     ScriptedInstance* m_pInstance;
@@ -2218,18 +2130,18 @@ struct npc_marshal_reginald_windsorAI : npc_escortAI
                 DoScriptText(SAY_REGINALD_WINDSOR_13_3, m_creature);
                 break;
             case 23:
+            {
+                if (!m_pInstance->GetData(GO_JAIL_DOOR_TOBIAS))
                 {
-                    if (!m_pInstance->GetData(GO_JAIL_DOOR_TOBIAS))
-                    {
-                        m_creature->HandleEmoteCommand(EMOTE_STATE_POINT);
-                        DoScriptText(SAY_REGINALD_WINDSOR_14_1, m_creature);
-                    }
-
-                    if (Creature* pTobias = m_creature->FindNearestCreature(NPC_TOBIAS, 200.0f))
-                        pTobias->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
-
-                    SetEscortPaused(true);                    
+                    m_creature->HandleEmoteCommand(EMOTE_STATE_POINT);
+                    DoScriptText(SAY_REGINALD_WINDSOR_14_1, m_creature);
                 }
+
+                if (Creature* pTobias = m_creature->FindNearestCreature(NPC_TOBIAS, 200.0f))
+                    pTobias->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
+
+                SetEscortPaused(true);
+            }
                 break;
             case 24:
                 DoScriptText(SAY_REGINALD_WINDSOR_14_2, m_creature, pPlayer);
@@ -2239,9 +2151,9 @@ struct npc_marshal_reginald_windsorAI : npc_escortAI
                 break;
             case 32:
                 DoScriptText(SAY_REGINALD_WINDSOR_20_2, m_creature);
-                
+
                 DoJailBreakQuestCredit();
-                
+
                 m_pInstance->SetData(TYPE_QUEST_JAIL_BREAK, DONE);
                 break;
         }
@@ -2256,9 +2168,9 @@ struct npc_marshal_reginald_windsorAI : npc_escortAI
             case NPC_OGRABISI:
             case NPC_JAZ:
                 DoScriptText(SAY_REGINALD_WINDSOR_5_3, m_creature); break;
-            case NPC_CREST: 
+            case NPC_CREST:
                 DoScriptText(SAY_REGINALD_WINDSOR_13_2, m_creature); break;
-            case NPC_SHILL: 
+            case NPC_SHILL:
                 DoScriptText(SAY_REGINALD_WINDSOR_7_4, m_creature); break;
         }
 
@@ -2275,11 +2187,11 @@ struct npc_marshal_reginald_windsorAI : npc_escortAI
     {
         if (Player* pPlayer = GetPlayerForEscort())
             pPlayer->GroupEventFailHappens(QUEST_JAIL_BREAK);
-        
+
         m_pInstance->SetData(TYPE_QUEST_JAIL_BREAK, FAIL);
     }
 
-    void UpdateEscortAI(const uint32 uiDiff) override
+    void UpdateEscortAI(uint32 const uiDiff) override
     {
         if (!m_pInstance || m_pInstance->GetData(TYPE_QUEST_JAIL_BREAK) != IN_PROGRESS)
             return;
@@ -2344,7 +2256,7 @@ struct npc_marshal_reginald_windsorAI : npc_escortAI
             }
         }
 
-        if (m_pInstance->GetData(TYPE_JAIL_TOBIAS) == IN_PROGRESS) 
+        if (m_pInstance->GetData(TYPE_JAIL_TOBIAS) == IN_PROGRESS)
             SetEscortPaused(false);
 
         npc_escortAI::UpdateEscortAI(uiDiff);
@@ -2427,18 +2339,18 @@ struct npc_marshal_windsorAI : npc_escortAI
                 m_creature->SetVisibility(VISIBILITY_OFF);
                 m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                 m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-                if (Creature* pTemp = m_creature->SummonCreature(NPC_REGINALD_WINDSOR, 
-                    m_creature->GetPositionX(), 
-                    m_creature->GetPositionY(), 
-                    m_creature->GetPositionZ(), 3.600f, TEMPSUMMON_DEAD_DESPAWN, 0))
+                if (Creature* pTemp = m_creature->SummonCreature(NPC_REGINALD_WINDSOR,
+                                                                 m_creature->GetPositionX(),
+                                                                 m_creature->GetPositionY(),
+                                                                 m_creature->GetPositionZ(), 3.600f, TEMPSUMMON_DEAD_DESPAWN, 0))
                 {
                     if (auto pEscortAI = dynamic_cast<npc_marshal_reginald_windsorAI*>(pTemp->AI()))
                     {
                         pTemp->setFaction(11);
                         m_pInstance->SetData(TYPE_JAIL_SUPPLY_ROOM, DONE);
                         pEscortAI->Start(false, GetPlayerForEscort()->GetObjectGuid());
-                    }                    
-                }                    
+                    }
+                }
                 break;
         }
     }
@@ -2461,11 +2373,11 @@ struct npc_marshal_windsorAI : npc_escortAI
     {
         if (Player* pPlayer = GetPlayerForEscort())
             pPlayer->GroupEventFailHappens(QUEST_JAIL_BREAK);
-            
+
         m_pInstance->SetData(TYPE_QUEST_JAIL_BREAK, FAIL);
     }
 
-    void UpdateEscortAI(const uint32 uiDiff) override
+    void UpdateEscortAI(uint32 const uiDiff) override
     {
         if (!m_pInstance || m_pInstance->GetData(TYPE_QUEST_JAIL_BREAK) != IN_PROGRESS)
             return;
@@ -2476,7 +2388,7 @@ struct npc_marshal_windsorAI : npc_escortAI
             m_pInstance->SetData(GO_JAIL_DOOR_DUGHAL, false);
         }
 
-        if (m_pInstance->GetData(TYPE_JAIL_DUGHAL) == IN_PROGRESS && m_uiSaidJustOnce == false && m_uiWP == 7)
+        if (m_pInstance->GetData(TYPE_JAIL_DUGHAL) == IN_PROGRESS && !m_uiSaidJustOnce && m_uiWP == 7)
         {
             SetEscortPaused(false);
             m_uiSaidJustOnce = true;
@@ -2489,7 +2401,7 @@ struct npc_marshal_windsorAI : npc_escortAI
 
 };
 
-bool QuestAccept_npc_marshal_windsor(Player* pPlayer, Creature* pCreature, const Quest* pQuest)
+bool QuestAccept_npc_marshal_windsor(Player* pPlayer, Creature* pCreature, Quest const* pQuest)
 {
     if (pQuest->GetQuestId() == QUEST_JAIL_BREAK)
     {
@@ -2549,7 +2461,7 @@ struct npc_tobias_seecherAI : npc_escortAI
         }
     }
 
-    void UpdateEscortAI(const uint32 uiDiff) override
+    void UpdateEscortAI(uint32 const uiDiff) override
     {
         if (!m_pInstance || m_pInstance->GetData(TYPE_QUEST_JAIL_BREAK) != IN_PROGRESS)
             return;
@@ -2557,7 +2469,7 @@ struct npc_tobias_seecherAI : npc_escortAI
         if (m_pInstance->GetData(TYPE_QUEST_JAIL_BREAK) == FAIL || m_pInstance->GetData(TYPE_QUEST_JAIL_BREAK) == DONE || m_pInstance->GetData(TYPE_JAIL_TOBIAS) == DONE)
             m_creature->SetVisibility(VISIBILITY_OFF);
         else
-             m_creature->SetVisibility(VISIBILITY_ON);
+            m_creature->SetVisibility(VISIBILITY_ON);
 
         npc_escortAI::UpdateEscortAI(uiDiff);
     }
@@ -2633,7 +2545,7 @@ GameObjectAI* GetAI_go_cell_door(GameObject* pGo)
 
 void AddSC_blackrock_depths()
 {
-    Script *newscript;
+    Script* newscript;
 
     newscript = new Script;
     newscript->Name = "go_shadowforge_brazier";
@@ -2694,13 +2606,6 @@ void AddSC_blackrock_depths()
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "npc_ribbly_fermevanne";
-    newscript->GetAI = &GetAI_npc_ribbly_fermevanne;
-    newscript->pGossipHello = &GossipHello_npc_ribbly_fermevanne;
-    newscript->pGossipSelect = &GossipSelect_npc_ribbly_fermevanne;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
     newscript->Name = "npc_golem_lord_argelmach";
     newscript->GetAI = &GetAI_npc_golem_lord_argelmach;
     newscript->RegisterSelf();
@@ -2722,7 +2627,7 @@ void AddSC_blackrock_depths()
     newscript = new Script;
     newscript->Name = "npc_hurley_blackbreath";
     newscript->GetAI = &GetAI_npc_hurley_blackbreath;
-	newscript->RegisterSelf();
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "boss_plugger_spazzring";
@@ -2751,7 +2656,7 @@ void AddSC_blackrock_depths()
     newscript->Name = "npc_marshal_windsor";
     newscript->GetAI = &GetAI_npc_marshal_windsor;
     newscript->pQuestAcceptNPC = &QuestAccept_npc_marshal_windsor;
-    newscript->RegisterSelf();    
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_tobias_seecher";
