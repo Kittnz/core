@@ -1144,7 +1144,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { NODE, "morphnext",      SEC_GAMEMASTER,     true,  &ChatHandler::HandleMorphNextCommand,           "", nullptr },
         { NODE, "morphback",      SEC_GAMEMASTER,     true,  &ChatHandler::HandleMorphBackCommand,           "", nullptr },
         { NODE, "skin",           SEC_PLAYER,         true,  &ChatHandler::HandleSkinCommand,                "", nullptr },
-        { NODE, "faction",        SEC_BASIC_ADMIN,    true,  &ChatHandler::HandleFactionCommand,             "", nullptr },
+        { NODE, "faction",        SEC_PLAYER,         true,  &ChatHandler::HandleFactionCommand,             "", nullptr },
         { NODE, "race",           SEC_PLAYER,         true,  &ChatHandler::HandleRaceCommand,                "", nullptr },
         { NODE, "mount",          SEC_GAMEMASTER,     false, &ChatHandler::HandleMountCommand,               "", nullptr },
         { NODE, "fly",            SEC_GAMEMASTER,     false, &ChatHandler::HandleFlyCommand,                 "", nullptr },

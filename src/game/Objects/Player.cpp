@@ -21658,20 +21658,17 @@ bool Player::IsCityProtector() { return GetByteValue(PLAYER_BYTES_3, 2) > 0; }
 
 void Player::MailCityProtectorScroll()
 {
-    uint32 itemEntry = 0;
     std::string subject = "City Protector";
     std::string message = "Defend the weak, protect both young and old, never desert your friends. Give justice to all, be fearless in battle and always ready to defend the right.";
 
-    itemEntry = GetTeam() == ALLIANCE ? 50056 : 50057; // Apply custom_items.sql
-
-    if (!HasItemCount(itemEntry, 1, true))
+    if (!HasItemCount(50056, 1, true))
     {
-        Item* ToMailItem = Item::CreateItem(itemEntry, 1, this);
+        Item* ToMailItem = Item::CreateItem(50056, 1, this);
         ToMailItem->SaveToDB();
 
         MailDraft(subject, sObjectMgr.CreateItemText(message))
             .AddItem(ToMailItem)
-            .SendMailTo(this, MailSender(MAIL_CREATURE, uint32(16547), MAIL_STATIONERY_DEFAULT), MAIL_CHECK_MASK_COPIED, 0, 30 * DAY);
+            .SendMailTo(this, MailSender(MAIL_CREATURE, uint32(4968), MAIL_STATIONERY_DEFAULT), MAIL_CHECK_MASK_COPIED, 0, 30 * DAY);
     }      
 }
 

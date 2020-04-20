@@ -129,9 +129,8 @@ bool ItemUseSpell_city_protector_scroll(Player* pPlayer, Item* pItem, const Spel
             //Undercity
             pPlayer->TeleportTo(0, 1822.0999f, 238.638855f, 60.694809f, 0.0f);
             break;
+        default: break;
         }
-
-        pPlayer->SendSpellCooldown(7794, 3600000, pPlayer->GetObjectGuid());
         return true;
     }
 }
@@ -712,17 +711,6 @@ bool ItemUseSpell_turtle_radio(Player* pPlayer, Item* pItem, const SpellCastTarg
 bool ItemUseSpell_turtle_party(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
     pPlayer->AddAura(8067);
-    return false;
-}
-
-// ------------------ TRANSMOGRIFICATION ------------------ //
-
-#define TRANSMOGRIFICATION_SATCHEL 51216
-#define TRANSMOGRIFICATION_TOKEN 51217
-
-bool ItemUseSpell_transmogrification(Player* pPlayer, Item* pItem, const SpellCastTargets&)
-{
-    // There'll be lots of ugly and hacky code. 
     return false;
 }
 
