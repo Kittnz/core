@@ -1026,11 +1026,6 @@ void AddSC_item_scripts()
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "item_transmog";
-    newscript->pItemUseSpell = &ItemUseSpell_transmogrification;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
     newscript->Name = "item_player_engie";
     newscript->pItemUseSpell = &ItemUseSpell_item_engie;
     newscript->RegisterSelf();

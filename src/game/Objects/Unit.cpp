@@ -7590,8 +7590,14 @@ void Unit::Unmount(bool from_aura)
 bool Unit::IsInDisallowedMountForm()
 {
     // Turtle WoW custom, some morphs should be allowed to use mounts
-    switch (GetDisplayId()) {
+    switch (GetDisplayId()) 
+    {
         case 4245:
+        case 1643:
+        case 3293:
+        case 4730:
+        case 10381:
+        case 4729:
         case 6779:
         case 9752:
         case 4494:
