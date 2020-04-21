@@ -704,8 +704,13 @@ bool ItemUseSpell_remove_rested(Player* pPlayer, Item* pItem, const SpellCastTar
 
 bool ItemUseSpell_turtle_radio(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
-    pPlayer->SummonGameObject(1000055, pPlayer->GetPositionX(), pPlayer->GetPositionY(), pPlayer->GetPositionZ(), 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 600, true);
-    return false;
+    float dis{ 2.0F };
+    float x, y, z;
+    pPlayer->GetSafePosition(x, y, z);
+    x += dis * cos(pPlayer->GetOrientation());
+    y += dis * sin(pPlayer->GetOrientation());
+    pPlayer->SummonGameObject(1000055, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 600, true);
+    return true;
 }
 
 bool ItemUseSpell_turtle_party(Player* pPlayer, Item* pItem, const SpellCastTargets&)
