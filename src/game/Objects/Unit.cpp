@@ -7632,10 +7632,6 @@ bool Unit::IsInDisallowedMountForm()
         case 278:
             return false;
         // Allow mounting but demorph first because of no mount animation
-        case 4729:
-        case 3293:
-        case 4730:
-        case 1643:
         case 150:
         case 876:
         case 6631:
