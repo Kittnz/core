@@ -704,6 +704,9 @@ bool ItemUseSpell_remove_rested(Player* pPlayer, Item* pItem, const SpellCastTar
 
 bool ItemUseSpell_turtle_radio(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
+    if (!pPlayer)
+        return false;
+
     float dis{ 2.0F };
     float x, y, z;
     pPlayer->GetSafePosition(x, y, z);
