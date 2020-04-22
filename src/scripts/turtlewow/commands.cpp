@@ -335,7 +335,7 @@ bool ChatHandler::HandleModifyTitleCommand(char* args)
 
 #define GNOMISH_PLASTIC_SURGERY_TOOLS_SKIN 50001
 #define GNOMISH_PLASTIC_SURGERY_TOOLS_RACE 50002
-#define GNOMISH_PLASTIC_SURGERY_TOOLS_FACTION 51433
+#define GNOMISH_PLASTIC_SURGERY_TOOLS_FACTION 51434
 
 bool ChatHandler::HandleRaceCommand(char* args)
 {
