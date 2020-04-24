@@ -339,9 +339,98 @@ bool GossipSelect_birthday_dragon(Player* player, Creature* creature, uint32 sen
     return true;
 }
 
+bool GossipHello_npc_guild_bank(Player* pPlayer, Creature* pCreature)
+{
+    if (pPlayer->GetGuildId() == 1)
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, "Open Guild Vault (TEST)", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF);
+    pPlayer->SEND_GOSSIP_MENU(90340, pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_guild_bank(Player* pPlayer, Creature* pCreature, uint32 sender, uint32 action)
+{
+    if (action == GOSSIP_ACTION_INFO_DEF) 
+    {
+        uint32 guildvault_npc_entry{ 1294 };
+
+        CreatureInfo const* guildvault_npc_info = ObjectMgr::GetCreatureTemplate(guildvault_npc_entry);
+
+        uint64 guildvault_npc_guid{ 79714 }; // Ќе знаю как найти первый в списке guid этого непис€ в мире, иначе он не сформирует лист товаров. 
+
+        if (!guildvault_npc_info)
+        {
+            pCreature->PMonsterSay("Your guild does not have a guild bank!");
+            return false;
+        }
+
+        Creature* guildvault_npc = pPlayer->GetSession()->GetPlayer()->GetMap()->GetCreature(guildvault_npc_guid);
+
+        VendorItemData const* vItems = 1 & VENDOR_MENU_NORMAL ? guildvault_npc->GetVendorItems() : nullptr;
+        VendorItemData const* tItems = 2 & VENDOR_MENU_TEMPLATE ? guildvault_npc->GetVendorTemplateItems() : nullptr;
+
+        if (!vItems)
+        {
+            WorldPacket data(SMSG_LIST_INVENTORY, (8 + 1 + 1));
+            data << ObjectGuid(guildvault_npc_guid);
+            data << uint8(0);                                   
+            data << uint8(0);                                   
+            pPlayer->GetSession()->SendPacket(&data);
+            pCreature->PMonsterSay("!vItems!");
+        }
+
+        uint8 customitems = vItems ? vItems->GetItemCount() : 0;
+        uint8 numitems = customitems + (tItems ? tItems->GetItemCount() : 0);
+        uint8 count = 0;
+
+        WorldPacket data(SMSG_LIST_INVENTORY, (8 + 1 + numitems * 7 * 4));
+        data << ObjectGuid(guildvault_npc_guid);
+
+        size_t count_pos = data.wpos();
+        data << uint8(count);
+
+        for (int i = 0; i < numitems; ++i)
+        {
+            VendorItem const* crItem = i < customitems ? vItems->GetItem(i) : tItems->GetItem(i - customitems);
+
+            if (crItem)
+            {
+                if (ItemPrototype const *pProto = ObjectMgr::GetItemPrototype(crItem->item))
+                {
+                    if (!pProto->RequiredReputationFaction && pProto->RequiredReputationRank > 0 &&
+                        ReputationRank(pProto->RequiredReputationRank) > pPlayer->GetReputationRank(pCreature->getFactionTemplateEntry()->faction))
+                        continue;
+
+                    ++count;
+
+                    uint32 price = 0;
+
+                    data << uint32(count);
+                    data << uint32(crItem->item);
+                    data << uint32(pProto->DisplayInfoID);
+                    data << uint32(crItem->maxcount <= 0 ? 0xFFFFFFFF : pCreature->GetVendorItemCurrentCount(crItem));
+                    data << uint32(price);
+                    data << uint32(pProto->MaxDurability);
+                    data << uint32(pProto->BuyCount);
+                }
+            }
+        }
+
+        data.put<uint8>(count_pos, count);
+        pPlayer->GetSession()->SendPacket(&data);
+    }
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
 void AddSC_random()
 {
     Script *newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_guild_bank";
+    newscript->pGossipHello = &GossipHello_npc_guild_bank;
+    newscript->pGossipSelect = &GossipSelect_npc_guild_bank;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_lost_farm_sheep";
