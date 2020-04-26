@@ -965,6 +965,18 @@ class MANGOS_DLL_SPEC Player final: public Unit
         uint32 m_WeaponProficiency;
         uint32 m_ArmorProficiency;
 
+		struct StashedItem
+		{
+			Item* item;
+			uint8 slot;
+			uint8 bag;
+		};
+		std::vector< StashedItem> m_bankStash;
+
+		// Turtle specific: 
+		bool TryOpenGuildBank();
+		void RestoreBankFromStash();
+
         // internal common parts for CanStore/StoreItem functions
         InventoryResult _CanStoreItem_InSpecificSlot(uint8 bag, uint8 slot, ItemPosCountVec& dest, ItemPrototype const* pProto, uint32& count, bool swap, Item* pSrcItem) const;
         InventoryResult _CanStoreItem_InBag(uint8 bag, ItemPosCountVec& dest, ItemPrototype const* pProto, uint32& count, bool merge, bool non_specialized, Item* pSrcItem, uint8 skip_bag, uint8 skip_slot) const;

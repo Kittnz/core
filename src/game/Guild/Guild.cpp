@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2005-2011 MaNGOS <http://getmangos.com/>
  * Copyright (C) 2009-2011 MaNGOSZero <https://github.com/mangos/zero>
  * Copyright (C) 2011-2016 Nostalrius <https://nostalrius.org>
@@ -33,6 +33,7 @@
 #include "Language.h"
 #include "World.h"
 #include "Anticheat.h"
+#include "Item.h"
 
 //// MemberSlot ////////////////////////////////////////////
 void MemberSlot::SetMemberStats(Player* player)
@@ -95,6 +96,7 @@ Guild::Guild() : m_Name(), MOTD(), GINFO()
     m_CreatedDay = 0;
 
     m_GuildEventLogNextGuid = 0;
+	memset(&m_guildInventory[0], 0, sizeof(Item*) * 255);
 }
 
 Guild::~Guild()
@@ -498,6 +500,58 @@ bool Guild::LoadMembersFromDB(QueryResult *guildMembersResult)
     UpdateAccountsNumber();
 
     return true;
+}
+
+void Guild::LoadGuildBankFromDB()
+{
+	QueryResult* result = CharacterDatabase.PQuery("SELECT * FROM "
+		"(SELECT creatorGuid, giftCreatorGuid, count, duration, charges, flags, enchantments, randomPropertyId, durability, text, bag, slot, item, itemEntry, generated_loot "
+		"FROM guild_bank "
+		"JOIN item_instance "
+		"ON guild_bank.item = item_instance.guid "
+		"WHERE guild_bank.guid = '%u') as t ORDER BY bag, slot", GetId());
+
+	if (result == nullptr)
+	{
+		return;
+	}
+
+	do
+	{
+		Field *fields = result->Fetch();
+		uint8 slot = fields[11].GetUInt8();
+		uint32 item = fields[12].GetUInt32();
+		uint32 item_template = fields[13].GetUInt32();
+
+		ItemPrototype const * proto = ObjectMgr::GetItemPrototype(item_template);
+		if (proto == nullptr)
+		{
+			CharacterDatabase.PExecute("DELETE FROM guild_bank WHERE item = '%u'", item);
+			sLog.outError("Guild::LoadGuildBankFromDB: Guild %s has an unknown item (id: #%u) in inventory, deleted.", GetName(), item_template);
+			continue;
+		}
+
+		Item* itemInstance = NewItemOrBag(proto);
+
+		const uint32 GuildIdsStart = 0xEFFFFFFF;
+
+		ObjectGuid FakeGuildId(HIGHGUID_PLAYER, GuildIdsStart + GetId());
+		if (!itemInstance->LoadFromDB(item, FakeGuildId, fields, item_template))
+		{
+			sLog.outError("Guild::LoadGuildBankFromDB: Guild %s has broken item (id: #%u) in inventory, deleted.", GetName(), item_template);
+			CharacterDatabase.PExecute("DELETE FROM guild_bank WHERE item = '%u'", item);
+			itemInstance->FSetState(ITEM_REMOVED);
+			itemInstance->SaveToDB();                           // it also deletes item object !
+			continue;
+		}
+
+		itemInstance->SetContainer(nullptr);
+		itemInstance->SetSlot(slot);
+
+		m_guildInventory[slot] = itemInstance;
+	} while (result->NextRow());
+
+	delete result;
 }
 
 void Guild::SetLeader(ObjectGuid guid)
