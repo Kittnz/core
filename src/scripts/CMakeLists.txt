@@ -310,6 +310,7 @@ set (SCRIPTS_SRCS
     turtlewow/transmog/transmog.cpp
     turtlewow/object_scripts.cpp
     turtlewow/zonescript_gm_isle.cpp
+    turtlewow/zonescript_epl.cpp
     turtlewow/commands.cpp
 )
 
