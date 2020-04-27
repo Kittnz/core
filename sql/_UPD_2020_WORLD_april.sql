@@ -43,6 +43,8 @@ replace into npc_text (ID, BroadcastTextID0) values ('90343', '90343');
 replace into creature_template values 
 (51513, 0, 2198, 0, 0, 0, 'Aspirant Shadewalker', 'Ardent Watch', 342, 30, 30, 1605, 1605, 0, 0, 1200, 12, 135, 1, 1.14286, 0, 20, 5, 0, 0, 1, 42, 53, 0, 122, 1, 1000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 45.144, 62.073, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 100, 0, 0, 524298, 'npc_aspirant_shadewalker');
 
-REPLACE INTO creature_template VALUES (50101, 0, 1516, 0, 0, 0, 'Thomas Berkley', 'Argent Watch Campkeeper', 0, 38, 38, 2284, 2284, 0, 0, 1709, 120, 4, 1, 1.14286, 0, 20, 5, 0, 0, 1, 55, 71, 0, 148, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 54.5072, 74.9474, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 10, '');
+REPLACE INTO creature_template VALUES (50101, 0, 1516, 0, 0, 0, 'Thomas Berkley', 'Ardent Watch Campkeeper', 0, 38, 38, 2284, 2284, 0, 0, 1709, 120, 4, 1, 1.14286, 0, 20, 5, 0, 0, 1, 55, 71, 0, 148, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 54.5072, 74.9474, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 10, '');
 
 update creature_template set subname = 'Ardent Watch Blacksmith' where entry = 50560;
+
+update creature_template set faction = 35 where entry = 50101;
