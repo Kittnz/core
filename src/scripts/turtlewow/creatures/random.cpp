@@ -19,6 +19,26 @@ bool GossipSelect_npc_dirge_the_bouncer(Player* p_Player, Creature* p_Creature, 
     return true;
 }
 
+bool GossipHello_npc_joshua_westfield(Player* p_Player, Creature* p_Creature)
+{
+    p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "What is Redwater Syndicate?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    p_Player->SEND_GOSSIP_MENU(90341, p_Creature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_joshua_westfield(Player* p_Player, Creature* p_Creature, uint32 /*uiSender*/, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        p_Creature->MonsterSay("We are a syndicate, we make profit, we work for ourselves and we fight like brothers in arms. Do you think you have what it takes to join a syndicate? Talk to Grohkan!", 7, 0);
+        p_Creature->HandleEmote(EMOTE_ONESHOT_EXCLAMATION);
+    }
+
+    p_Player->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
+
 bool GossipHello_npc_terry_palin(Player* pPlayer, Creature* pCreature)
 {
 
@@ -360,6 +380,12 @@ bool GossipSelect_npc_guild_bank(Player* pPlayer, Creature* pCreature, uint32 se
 void AddSC_random()
 {
     Script *newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_joshua_westfield";
+    newscript->pGossipHello = &GossipHello_npc_joshua_westfield;
+    newscript->pGossipSelect = &GossipSelect_npc_joshua_westfield;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_guild_bank";
