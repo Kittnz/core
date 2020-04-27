@@ -19,6 +19,24 @@ bool GossipSelect_npc_dirge_the_bouncer(Player* p_Player, Creature* p_Creature, 
     return true;
 }
 
+bool GossipHello_npc_aspirant_shadewalker(Player* p_Player, Creature* p_Creature)
+{
+    p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "What is Ardent Watch?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Who is allowed in Ardent Watch?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+    p_Player->SEND_GOSSIP_MENU(90343, p_Creature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_aspirant_shadewalker(Player* p_Player, Creature* p_Creature, uint32 /*uiSender*/, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+        p_Creature->MonsterSay("Ardent Watch is the central most base of operations for the Argent Dawn and its foreign operations battalion, The Argent Vanguard. Besides Light's Hope itself, it is one of the most well fortified bastions in the fight against the Scourge within the former Eastweald.", 7, 0);
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
+        p_Creature->MonsterSay("Being members of the Argent Dawn, they hold no affiliations to the Horde and Alliance short of co-operation in our fight against the Scourge. Due to necessity, the Argent Dawn and Scarlet Crusade have signed a pact making them non-hostile for the moment, yet tensions exist. Members of the Scourge or other shadowy organizations will likely not be welcomed.", 7, 0);
+    p_Player->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
 bool GossipHello_npc_joshua_westfield(Player* p_Player, Creature* p_Creature)
 {
     p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "What is Redwater Syndicate?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
@@ -380,6 +398,12 @@ bool GossipSelect_npc_guild_bank(Player* pPlayer, Creature* pCreature, uint32 se
 void AddSC_random()
 {
     Script *newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_aspirant_shadewalker";
+    newscript->pGossipHello = &GossipHello_npc_aspirant_shadewalker;
+    newscript->pGossipSelect = &GossipSelect_npc_aspirant_shadewalker;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_joshua_westfield";
