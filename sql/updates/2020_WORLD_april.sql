@@ -29,3 +29,6 @@ replace into `creature_template` values
 replace into broadcast_text (ID, MaleText) values ('90341', 'Redwater Syndicate is a guild that is looking for people to join its ranks,');
 replace into npc_text (ID, BroadcastTextID0) values ('90341', '90341');
 
+replace into broadcast_text (ID, MaleText) values ('90342', 'This flying machine lands at the outpost of Ardent Watch, from where the Argents wage their campaign against the damned Scourge.');
+replace into npc_text (ID, BroadcastTextID0) values ('90342', '90342');
+

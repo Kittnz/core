@@ -363,9 +363,55 @@ bool GOSelect_go_bounty(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 
     return true;
 }
 
+class DemorphAfterTime : public BasicEvent 
+{
+public:
+    explicit DemorphAfterTime(uint64 player_guid) : BasicEvent(), player_guid(player_guid) {}
+
+    bool Execute(uint64 e_time, uint32 p_time) override 
+    {
+        Player* player = ObjectAccessor::FindPlayer(player_guid);
+        if (player) 
+            player->DeMorph();
+
+        return false;
+    }
+
+private:
+    uint64 player_guid;
+};
+
+
+bool GOHello_go_epl_flying_machine(Player* pPlayer, GameObject* pGo)
+{
+    if (pPlayer->getLevel() >= 25)
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TAXI, "Up to the Plaguelands, right up to the frontlines!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+
+    pPlayer->SEND_GOSSIP_MENU(90342, pGo->GetGUID());
+    return true;
+}
+
+bool GOSelect_go_epl_flying_machine(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 action)
+{
+    if (action == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pPlayer->SetDisplayId(8011);
+        pPlayer->TeleportTo(0, 1648.210000F, -3049.509700F, 151.055800F, 2.967656F);
+        pPlayer->m_Events.AddEvent(new DemorphAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(20000));
+        pPlayer->CastSpell(pPlayer, 130, true);
+    }
+    return true;
+}
+
 void AddSC_object_scripts()
 {
     Script *newscript;
+
+    newscript = new Script;
+    newscript->Name = "go_epl_flying_machine";
+    newscript->pGOHello = &GOHello_go_epl_flying_machine;
+    newscript->pGOGossipSelect = &GOSelect_go_epl_flying_machine;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "go_portable_wormhole";
