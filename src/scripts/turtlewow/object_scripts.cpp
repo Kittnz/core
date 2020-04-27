@@ -385,7 +385,13 @@ private:
 bool GOHello_go_epl_flying_machine(Player* pPlayer, GameObject* pGo)
 {
     if (pPlayer->getLevel() >= 25)
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TAXI, "Up to the Plaguelands, right up to the frontlines!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    {
+        if (pPlayer->GetZoneId() == 139)
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TAXI, "Back to the Stormwind City!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        else
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TAXI, "Up to the Plaguelands!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+    }
+
 
     pPlayer->SEND_GOSSIP_MENU(90342, pGo->GetGUID());
     return true;
@@ -395,10 +401,29 @@ bool GOSelect_go_epl_flying_machine(Player* pPlayer, GameObject* pGo, uint32 sen
 {
     if (action == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        pPlayer->SetDisplayId(8011);
-        pPlayer->TeleportTo(0, 1648.210000F, -3049.509700F, 151.055800F, 2.967656F);
-        pPlayer->m_Events.AddEvent(new DemorphAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(20000));
-        pPlayer->CastSpell(pPlayer, 130, true);
+        if (pPlayer->GetMoney() >= 5000)
+        {
+            pPlayer->ModifyMoney(-5000);
+            pPlayer->SetDisplayId(8011);
+            pPlayer->TeleportTo(0, -9046.90000F, 343.2570F, 190.055800F, 2.967656F);
+            pPlayer->m_Events.AddEvent(new DemorphAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(15000));
+            pPlayer->CastSpell(pPlayer, 130, true);
+        }
+        else
+            ChatHandler(pPlayer).PSendSysMessage("You don't have enough money!");
+    }
+    if (action == GOSSIP_ACTION_INFO_DEF + 2)
+    {
+        if (pPlayer->GetMoney() >= 5000)
+        {
+            pPlayer->ModifyMoney(-5000);
+            pPlayer->SetDisplayId(8011);
+            pPlayer->TeleportTo(0, 1645.700000F, -3044.899700F, 190.055800F, 2.967656F);
+            pPlayer->m_Events.AddEvent(new DemorphAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(15000));
+            pPlayer->CastSpell(pPlayer, 130, true);
+        }
+        else
+        ChatHandler(pPlayer).PSendSysMessage("You don't have enough money!");
     }
     return true;
 }

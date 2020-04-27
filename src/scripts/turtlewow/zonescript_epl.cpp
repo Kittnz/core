@@ -2,9 +2,9 @@
 
 #include "ZoneScriptMgr.h"
 
-#define ZONEID_GM_ISLE 876
+#define ZONEID_EPL 139
 
-class ZoneGmIsle : public ZoneScript
+class ZoneEPL : public ZoneScript
 {
 
 public:
@@ -13,34 +13,34 @@ public:
 		// Giperion Turtle: Froze weather in a permanent gray state.
 		// print in log, that weather is constant, in case we forgot about that and want to change it
 		DETAIL_LOG("Loaded ZoneScript for GM isles. GM Isle will have a permanent weather");
-		GetMap()->SetWeather(ZONEID_GM_ISLE, WEATHER_TYPE_RAIN, 0.2f, true);
+		GetMap()->SetWeather(ZONEID_EPL, WEATHER_TYPE_RAIN, 0.2f, true);
 
 		return true;
 	}
 
 };
 
-class ZoneGmIsle_Script : public ZoneScript_Script
+class ZoneEPL_Script : public ZoneScript_Script
 {
 public:
 
-	ZoneGmIsle_Script()
+	ZoneEPL_Script()
 		: ZoneScript_Script()
 	{
 	}
 
 	uint32 GetMapId() const override
 	{
-		return 1;
+		return 0;
 	}
 
 	ZoneScript* GetZoneScript() const override
 	{
-		return new ZoneGmIsle();
+		return new ZoneEPL();
 	}
 };
 
-void AddZoneScript_GmIsle()
+void AddZoneScript_EPL()
 {
-    sZoneScriptMgr.AddScript(new ZoneGmIsle_Script());
+    sZoneScriptMgr.AddScript(new ZoneEPL_Script());
 }
