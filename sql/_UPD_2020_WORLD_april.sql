@@ -60,3 +60,6 @@ replace into creature_template values
 
 update creature_template set faction = 85 where entry = 51521;
 
+delete from creature_template where entry in (50558, 50087, 50086, 50085, 50084, 50083, 50082, 50081, 50078, 50099);
+delete from creature where id in (50558, 50087, 50086, 50085, 50084, 50083, 50082, 50081, 50078, 50099);
+
