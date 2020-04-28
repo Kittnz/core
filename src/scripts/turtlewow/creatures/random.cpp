@@ -395,9 +395,124 @@ bool GossipSelect_npc_guild_bank(Player* pPlayer, Creature* pCreature, uint32 se
     return true;
 }
 
+enum DressingBoxes
+{
+    FESTIVALE_GARMENTS        = 50022,
+    DEMON_HUNTER              = 50023,
+    CRIMSON_INQUISITOR        = 50025,
+    KULTIRAS_GUARD            = 50382,
+    THERAMORE_GUARD           = 50383,
+    DWARF_MOUNTAINEER         = 50386,
+    NIGHTWATCHMAN             = 50388,
+    STROMGARDE_GURAD          = 50384,
+    SCHOLOMANCE_STUDENT       = 50101,
+    DARKMASTER                = 50509,
+    GOLDWEAVE_RAINMENT        = 50511,
+    NECROMANCER               = 50513,
+    STORMWIND_GUARD           = 50381,
+    DARNASSUS_SENTINEL        = 50385,
+    ORGRIMMAR_GUARD           = 50389,
+    THUNDER_BLUFF_GUARD       = 50390,
+    SENJIN_GUARD              = 50416,
+    DEATHGUARD                = 50387,
+
+    FASHION_COIN              = 51217
+};
+
+bool GossipHello_npc_dressing_room(Player* pPlayer, Creature* pCreature)
+{
+    if (pPlayer->GetTeam() == ALLIANCE)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TABARD, "Festival Garments", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TABARD, "Demon Hunter", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TABARD, "Crimson Inquisitor", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TABARD, "Kul'Tiras Guard", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TABARD, "Theramore Guard", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TABARD, "Dwarf Mountaineer", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 6);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TABARD, "Nightwatchman", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 7);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TABARD, "Stromgarde Guard", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 8);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TABARD, "Scholomance Student", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 9);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TABARD, "Goldweave Raiment", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 10);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TABARD, "Necromancer", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 11);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TABARD, "Stormwind Guard", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 12);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TABARD, "Darnassus Sentinel", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 13);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TABARD, "Sholomance Darkmaster", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 14);
+    }
+    if (pPlayer->GetTeam() == HORDE)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TABARD, "Festival Garments", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TABARD, "Demon Hunter", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TABARD, "Crimson Inquisitor", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TABARD, "Undercity Deathguard", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TABARD, "Scholomance Student", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TABARD, "Goldweave Raiment", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 6);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TABARD, "Necromancer", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 7);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TABARD, "Orgrimmar Guard", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 8);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TABARD, "Thunder Bluff Guard", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 9);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TABARD, "Sen'jin Guard", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 10);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TABARD, "Sholomance Darkmaster", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 11);
+    }
+
+    pPlayer->SEND_GOSSIP_MENU(90345, pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_dressing_room(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
+{
+    uint32 price{ 4 };
+
+    if (!pPlayer->HasItemCount(FASHION_COIN, price, false)) 
+    { 
+        pCreature->MonsterSay("You don't have enough coins!"); 
+        pPlayer->CLOSE_GOSSIP_MENU(); 
+        return false;    
+    }
+
+    if (pPlayer->GetTeam() == ALLIANCE)
+    {
+        if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)  { pPlayer->AddItem(FESTIVALE_GARMENTS); pPlayer->DestroyItemCount(FASHION_COIN, price, true); }
+        if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)  { pPlayer->AddItem(DEMON_HUNTER); pPlayer->DestroyItemCount(FASHION_COIN, price, true); }
+        if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)  { pPlayer->AddItem(CRIMSON_INQUISITOR); pPlayer->DestroyItemCount(FASHION_COIN, price, true); }
+        if (uiAction == GOSSIP_ACTION_INFO_DEF + 4)  { pPlayer->AddItem(KULTIRAS_GUARD); pPlayer->DestroyItemCount(FASHION_COIN, price, true); }
+        if (uiAction == GOSSIP_ACTION_INFO_DEF + 5)  { pPlayer->AddItem(THERAMORE_GUARD); pPlayer->DestroyItemCount(FASHION_COIN, price, true); }
+        if (uiAction == GOSSIP_ACTION_INFO_DEF + 6)  { pPlayer->AddItem(DWARF_MOUNTAINEER); pPlayer->DestroyItemCount(FASHION_COIN, price, true); }
+        if (uiAction == GOSSIP_ACTION_INFO_DEF + 7)  { pPlayer->AddItem(NIGHTWATCHMAN); pPlayer->DestroyItemCount(FASHION_COIN, price, true); }
+        if (uiAction == GOSSIP_ACTION_INFO_DEF + 8)  { pPlayer->AddItem(STROMGARDE_GURAD); pPlayer->DestroyItemCount(FASHION_COIN, price, true); }
+        if (uiAction == GOSSIP_ACTION_INFO_DEF + 9)  { pPlayer->AddItem(SCHOLOMANCE_STUDENT); pPlayer->DestroyItemCount(FASHION_COIN, price, true); }
+        if (uiAction == GOSSIP_ACTION_INFO_DEF + 10) { pPlayer->AddItem(GOLDWEAVE_RAINMENT); pPlayer->DestroyItemCount(FASHION_COIN, price, true); }
+        if (uiAction == GOSSIP_ACTION_INFO_DEF + 11) { pPlayer->AddItem(NECROMANCER); pPlayer->DestroyItemCount(FASHION_COIN, price, true); }
+        if (uiAction == GOSSIP_ACTION_INFO_DEF + 12) { pPlayer->AddItem(STORMWIND_GUARD); pPlayer->DestroyItemCount(FASHION_COIN, price, true); }
+        if (uiAction == GOSSIP_ACTION_INFO_DEF + 13) { pPlayer->AddItem(DARNASSUS_SENTINEL); pPlayer->DestroyItemCount(FASHION_COIN, price, true); }
+        if (uiAction == GOSSIP_ACTION_INFO_DEF + 14) { pPlayer->AddItem(DARKMASTER); pPlayer->DestroyItemCount(FASHION_COIN, price, true); }
+    }
+    if (pPlayer->GetTeam() == HORDE)
+    {
+        if (uiAction == GOSSIP_ACTION_INFO_DEF + 1) { pPlayer->AddItem(FESTIVALE_GARMENTS); pPlayer->DestroyItemCount(FASHION_COIN, price, true); }
+        if (uiAction == GOSSIP_ACTION_INFO_DEF + 2) { pPlayer->AddItem(DEMON_HUNTER); pPlayer->DestroyItemCount(FASHION_COIN, price, true); }
+        if (uiAction == GOSSIP_ACTION_INFO_DEF + 3) { pPlayer->AddItem(CRIMSON_INQUISITOR); pPlayer->DestroyItemCount(FASHION_COIN, price, true); }
+        if (uiAction == GOSSIP_ACTION_INFO_DEF + 4) { pPlayer->AddItem(DEATHGUARD); pPlayer->DestroyItemCount(FASHION_COIN, price, true); }
+        if (uiAction == GOSSIP_ACTION_INFO_DEF + 5) { pPlayer->AddItem(SCHOLOMANCE_STUDENT); pPlayer->DestroyItemCount(FASHION_COIN, price, true); }
+        if (uiAction == GOSSIP_ACTION_INFO_DEF + 6) { pPlayer->AddItem(GOLDWEAVE_RAINMENT); pPlayer->DestroyItemCount(FASHION_COIN, price, true); }
+        if (uiAction == GOSSIP_ACTION_INFO_DEF + 7) { pPlayer->AddItem(NECROMANCER); pPlayer->DestroyItemCount(FASHION_COIN, price, true); }
+        if (uiAction == GOSSIP_ACTION_INFO_DEF + 8) { pPlayer->AddItem(ORGRIMMAR_GUARD); pPlayer->DestroyItemCount(FASHION_COIN, price, true); }
+        if (uiAction == GOSSIP_ACTION_INFO_DEF + 9) { pPlayer->AddItem(THUNDER_BLUFF_GUARD); pPlayer->DestroyItemCount(FASHION_COIN, price, true); }
+        if (uiAction == GOSSIP_ACTION_INFO_DEF + 10) { pPlayer->AddItem(SENJIN_GUARD); pPlayer->DestroyItemCount(FASHION_COIN, price, true); }
+        if (uiAction == GOSSIP_ACTION_INFO_DEF + 11) { pPlayer->AddItem(DARKMASTER); pPlayer->DestroyItemCount(FASHION_COIN, price, true); }
+    }
+
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
 void AddSC_random()
 {
     Script *newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_dressing_room";
+    newscript->pGossipHello = &GossipHello_npc_dressing_room;
+    newscript->pGossipSelect = &GossipSelect_npc_dressing_room;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_aspirant_shadewalker";

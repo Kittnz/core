@@ -48,3 +48,15 @@ REPLACE INTO creature_template VALUES (50101, 0, 1516, 0, 0, 0, 'Thomas Berkley'
 update creature_template set subname = 'Ardent Watch Blacksmith' where entry = 50560;
 
 update creature_template set faction = 35 where entry = 50101;
+
+replace into broadcast_text (ID, MaleText) values ('90345', 'Ugh, you call THAT fashion? What kind of person would allow themselves to be seen in such embarrassing attire.\n\nLuckily for you, for a few fashion coins, I can trade you one of these amazing outfits. You\'ll be the best-dressed $C in town. Talk to me when you\'ve knocked some fashion-sense into your head.');
+replace into npc_text (ID, BroadcastTextID0) values ('90345', '90345');
+
+replace into creature_template values 
+(51520, 0, 3061, 0, 0, 0, 'Lacy Knottley', 'Fashion House Storekeeper', 342, 30, 30, 1605, 1605, 0, 0, 1200, 12, 135, 1, 1.14286, 0, 20, 5, 0, 0, 1, 42, 53, 0, 122, 1, 1000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 45.144, 62.073, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 100, 0, 0, 524298, 'npc_dressing_room');
+
+replace into creature_template values 
+(51521, 0, 15094, 0, 0, 0, 'Lwaxana', 'Fashion House Storekeeper', 342, 30, 30, 1605, 1605, 0, 0, 1200, 12, 135, 1, 1.14286, 0, 20, 5, 0, 0, 1, 42, 53, 0, 122, 1, 1000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 45.144, 62.073, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 100, 0, 0, 524298, 'npc_dressing_room');
+
+update creature_template set faction = 85 where entry = 51521;
+
