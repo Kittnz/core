@@ -453,9 +453,28 @@ bool GOSelect_go_epl_flying_machine(Player* pPlayer, GameObject* pGo, uint32 sen
     return true;
 }
 
+bool GOHello_go_stormwind_fountain(Player* pPlayer, GameObject* pGo)
+{
+    int32 coin = 51600 + urand(0, 35);
+    pPlayer->AddItem(coin);
+    pPlayer->PlayDirectSound(1204, pPlayer);
+    pPlayer->HandleEmote(EMOTE_ONESHOT_KNEEL);
+
+    int32 timer = 30 + urand(0, 70);
+    pGo->SetRespawnTime(timer * MINUTE);
+    pGo->Despawn();
+    pGo->UpdateObjectVisibility();
+    return true;
+}
+
 void AddSC_object_scripts()
 {
     Script *newscript;
+
+    newscript = new Script;
+    newscript->Name = "go_stormwind_fountain";
+    newscript->pGOHello = &GOHello_go_stormwind_fountain;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "go_epl_flying_machine";
