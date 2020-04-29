@@ -77,9 +77,12 @@ replace into creature_template values
 
 REPLACE INTO creature_template VALUES (50101, 0, 1516, 0, 0, 0, 'Thomas Berkley', 'Ardent Watch Campkeeper', 0, 38, 38, 2284, 2284, 0, 0, 1709, 120, 4, 1, 1.14286, 0, 20, 5, 0, 0, 1, 55, 71, 0, 148, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 54.5072, 74.9474, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 10, '');
 
+update creature_template set faction = 1625 where entry = 51513;
+
 update creature_template set subname = 'Ardent Watch Blacksmith' where entry = 50560;
 
 update creature_template set faction = 35 where entry = 50101;
+
 
 replace into broadcast_text (ID, MaleText) values ('90345', 'Ugh, you call THAT fashion? What kind of person would allow themselves to be seen in such embarrassing attire.\n\nLuckily for you, for a few fashion coins, I can trade you one of these amazing outfits. You\'ll be the best-dressed $C in town. Talk to me when you\'ve knocked some fashion-sense into your head.');
 replace into npc_text (ID, BroadcastTextID0) values ('90345', '90345');
