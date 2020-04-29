@@ -311,6 +311,7 @@ set (SCRIPTS_SRCS
     turtlewow/object_scripts.cpp
     turtlewow/zonescript_gm_isle.cpp
     turtlewow/zonescript_epl.cpp
+    turtlewow/zonescript_moonglade.cpp
     turtlewow/commands.cpp
 )
 

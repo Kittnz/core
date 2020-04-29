@@ -282,6 +282,7 @@ void AddSC_random();
 void AddSC_miracle_raceaway();
 void AddZoneScript_GmIsle();
 void AddZoneScript_EPL();
+void AddZoneScript_MOONGLADE();
 
 void AddScripts()
 {
@@ -563,4 +564,5 @@ void AddScripts()
     AddSC_miracle_raceaway();
 	AddZoneScript_GmIsle();
 	AddZoneScript_EPL();
+	AddZoneScript_MOONGLADE();
 }
