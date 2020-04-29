@@ -947,7 +947,7 @@ struct npc_simone_the_inconspicuousAI : public ScriptedAI
 
 bool GossipHello_npc_simone_the_inconspicuous(Player* pPlayer, Creature* pCreature)
 {
-    if (pPlayer->GetQuestStatus(QUEST_STAVE_OF_THE_ANCIENTS) == QUEST_STATUS_INCOMPLETE)
+    if (pPlayer->GetQuestStatus(QUEST_STAVE_OF_THE_ANCIENTS) == QUEST_STATUS_INCOMPLETE || pPlayer->HasItemCount(51636, 1))
         pPlayer->ADD_GOSSIP_ITEM(0, GOSSIP_ITEM , GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF);
 
     pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetObjectGuid());
