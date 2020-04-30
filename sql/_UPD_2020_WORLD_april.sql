@@ -103,3 +103,10 @@ update creature_template set faction = 85 where entry = 51521;
 delete from creature_template where entry in (50558, 50087, 50086, 50085, 50084, 50083, 50082, 50081, 50078, 50099);
 delete from creature where id in (50558, 50087, 50086, 50085, 50084, 50083, 50082, 50081, 50078, 50099);
 
+-- Lil'Foot Chlo' Pet
+
+replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1, spellcooldown_1) values
+(51700, 15, 2, 'Cracked Raptor Egg', 'It\'s about to hatch! What could be inside?', 18047, 3, 1, 28505, 1500);
+replace into creature_template (entry, display_id1, name, subname, level_min, level_max, health_min, health_max, faction, script_name, scale) values
+(51523, 5291, 'Lil\'Foot', '', 1, 1, 64, 64, 35, '', 0.3);
+replace into custom_pet_entry_relation (item_entry, creature_entry) values (51700, 51523);
