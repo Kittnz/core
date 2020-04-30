@@ -461,7 +461,33 @@ bool GOHello_go_stormwind_fountain(Player* pPlayer, GameObject* pGo)
     pPlayer->HandleEmote(EMOTE_ONESHOT_KNEEL);
 
     int32 timer = 30 + urand(0, 70);
-    pGo->SetRespawnTime(timer * MINUTE);
+
+    pGo->Despawn();
+    pGo->UpdateObjectVisibility();
+    return true;
+}
+
+#define VANGUARD_SEED 51701
+
+bool GOHello_go_epl_tree_of_life(Player* pPlayer, GameObject* pGo)
+{
+    if (!pPlayer->HasItemCount(VANGUARD_SEED))
+        return false;
+
+    float x, y, z;
+    pGo->GetSafePosition(x, y, z);
+
+    pPlayer->SummonGameObject(1000322, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 18000, true); // Tree
+    pPlayer->SummonGameObject(1000321, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, true); // Aura
+    pPlayer->SummonGameObject(1000222, x, y, z - 1.0F, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 18000, true); // Tree Bush
+    pPlayer->SummonGameObject(1000228, x, y, z + 4.0F, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, true); // Whisp
+ //   pPlayer->SummonGameObject(1000233, x, y, z + 2.0F, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 15, true); // Whisps
+
+    
+    pPlayer->PlayDirectMusic(8887);
+    pPlayer->HandleEmote(EMOTE_ONESHOT_KNEEL);
+
+    pGo->SetRespawnTime(4320 * MINUTE); // 3 days
     pGo->Despawn();
     pGo->UpdateObjectVisibility();
     return true;
@@ -470,6 +496,11 @@ bool GOHello_go_stormwind_fountain(Player* pPlayer, GameObject* pGo)
 void AddSC_object_scripts()
 {
     Script *newscript;
+
+    newscript = new Script;
+    newscript->Name = "go_epl_tree_of_life";
+    newscript->pGOHello = &GOHello_go_epl_tree_of_life;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "go_stormwind_fountain";
