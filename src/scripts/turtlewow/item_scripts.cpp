@@ -894,9 +894,25 @@ bool ItemUseSpell_item_elwynn_coin(Player* pPlayer, Item* pItem, const SpellCast
         return false;
 }
 
+bool ItemUseSpell_item_holy_wings(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+{    
+    float x, y, z;
+    pPlayer->GetSafePosition(x, y, z);
+    pPlayer->SummonGameObject(1000323, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, true); // Golden Aura
+    pPlayer->SummonCreature(51525, x, y, z, pPlayer->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN, 1000000, true);
+    pPlayer->PlayDirectMusic(3221);
+    pPlayer->HandleEmote(EMOTE_ONESHOT_ROAR);
+    return false;
+}
+
 void AddSC_item_scripts()
 {
     Script *newscript;
+
+    newscript = new Script;
+    newscript->Name = "item_holy_wings";
+    newscript->pItemUseSpell = &ItemUseSpell_item_holy_wings;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "item_elwynn_coin";

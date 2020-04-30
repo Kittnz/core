@@ -480,9 +480,7 @@ bool GOHello_go_epl_tree_of_life(Player* pPlayer, GameObject* pGo)
     pPlayer->SummonGameObject(1000322, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 18000, true); // Tree
     pPlayer->SummonGameObject(1000321, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, true); // Aura
     pPlayer->SummonGameObject(1000222, x, y, z - 1.0F, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 18000, true); // Tree Bush
-    pPlayer->SummonGameObject(1000228, x, y, z + 4.0F, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, true); // Whisp
- //   pPlayer->SummonGameObject(1000233, x, y, z + 2.0F, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 15, true); // Whisps
-
+    pPlayer->SummonGameObject(1000233, x, y, z + 2.0F, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 15, true); // Whisps
     
     pPlayer->PlayDirectMusic(8887);
     pPlayer->HandleEmote(EMOTE_ONESHOT_KNEEL);
