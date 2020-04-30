@@ -377,6 +377,7 @@ void Item::SaveToDB()
             return;
         }
         case ITEM_UNCHANGED:
+		case ITEM_STASHED:
             return;
     }
 

@@ -16354,7 +16354,7 @@ void Player::_SaveInventory()
         if (!item)
             continue;
 
-        if (item->GetState() != ITEM_REMOVED)
+        if (item->GetState() != ITEM_REMOVED && item->GetState() != ITEM_STASHED)
         {
             // Plusieurs tests anti dupli ...
             Item *test = GetItemByPos(item->GetBagSlot(), item->GetSlot());
@@ -21821,6 +21821,7 @@ bool Player::TryOpenGuildBank()
 			if (Item* BankItem = GetItemByPos(INVENTORY_SLOT_BAG_0, i))
 			{
 				RemoveItem(INVENTORY_SLOT_BAG_0, i, true);
+				BankItem->FSetState(ITEM_STASHED);
 				m_bankStash.emplace_back(StashedItem{ BankItem, i, INVENTORY_SLOT_BAG_0 });
 			}
 		}
@@ -21870,6 +21871,7 @@ void Player::RestoreBankFromStash()
 			{
 				RemoveItem(INVENTORY_SLOT_BAG_0, i, true);
 
+				BankItem->FSetState(ITEM_STASHED);
 				pInventory[i] = BankItem;
 			}
 		}

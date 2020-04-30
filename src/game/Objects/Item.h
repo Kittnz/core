@@ -174,7 +174,8 @@ enum ItemUpdateState
     ITEM_UNCHANGED                               = 0,
     ITEM_CHANGED                                 = 1,
     ITEM_NEW                                     = 2,
-    ITEM_REMOVED                                 = 3
+    ITEM_REMOVED                                 = 3,
+	ITEM_STASHED								 = 4 // Giperion Turtle: Item is moved from owner, but should be keeped in world
 };
 
 enum ItemLootUpdateState
