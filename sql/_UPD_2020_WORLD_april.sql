@@ -110,3 +110,4 @@ replace into item_template (entry, class, subclass, name, description, display_i
 replace into creature_template (entry, display_id1, name, subname, level_min, level_max, health_min, health_max, faction, script_name, scale) values
 (51523, 5291, 'Lil\'Foot', '', 1, 1, 64, 64, 35, '', 0.3);
 replace into custom_pet_entry_relation (item_entry, creature_entry) values (51700, 51523);
+update creature_template set script_name = 'lil_foot_pet' where entry = 51523;

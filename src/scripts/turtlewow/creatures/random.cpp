@@ -219,16 +219,28 @@ CreatureAI* GetAI_npc_chihkoa(Creature* pCreature)
 
 struct npc_scripted_companionAI : public ScriptedPetAI
 {
+    bool init = false;
+
     npc_scripted_companionAI(Creature* pCreature) : ScriptedPetAI(pCreature)
     {
-        if (m_creature && m_creature->isAlive() && m_creature->IsPet())
-            pCreature->GetMotionMaster()->MoveFollow(pCreature->GetCharmerOrOwnerPlayerOrPlayerItself(), PET_FOLLOW_DIST,
-                270.0f * (M_PI_F / 180.0f));
+        init = false;
+    }
+
+    void UpdatePetOOCAI(const uint32 uiDiff)
+    {
+        if (!init && m_creature && m_creature->isAlive() && m_creature->IsPet())
+        {
+            init = true;
+            m_creature->GetMotionMaster()->MoveFollow(m_creature->GetCharmerOrOwnerPlayerOrPlayerItself(),
+                                                      PET_FOLLOW_DIST,
+                                                      270.0f * (M_PI_F / 180.0f));
+        }
     }
 
     void ReceiveEmote(Player* pPlayer, uint32 uiEmote)
     {
-        if (m_creature && m_creature->isAlive() && m_creature->IsPet()) {
+        if (m_creature && m_creature->isAlive() && m_creature->IsPet())
+        {
             if (uiEmote == TEXTEMOTE_DANCE)
                 m_creature->HandleEmoteCommand(EMOTE_ONESHOT_DANCE);
         }
@@ -238,6 +250,34 @@ struct npc_scripted_companionAI : public ScriptedPetAI
 CreatureAI* GetAI_npc_scripted_companion(Creature* pCreature)
 {
     return new npc_scripted_companionAI(pCreature);
+}
+
+struct lil_foot_petAI : public ScriptedPetAI
+{
+    bool init = false;
+
+    lil_foot_petAI(Creature* pCreature) : ScriptedPetAI(pCreature)
+    {
+        init = false;
+    }
+
+    void UpdatePetOOCAI(const uint32 uiDiff)
+    {
+        if (!init && m_creature && m_creature->isAlive() && m_creature->IsPet())
+        {
+            init = true;
+            m_creature->PMonsterSay("Aww! I hate being little!");
+            m_creature->GetMotionMaster()->MoveFollow(m_creature->GetCharmerOrOwnerPlayerOrPlayerItself(),
+                                                      PET_FOLLOW_DIST,
+                                                      270.0f * (M_PI_F / 180.0f));
+        }
+    }
+
+};
+
+CreatureAI* GetAI_lil_foot_pet(Creature* pCreature)
+{
+    return new lil_foot_petAI(pCreature);
 }
 
 #define ONCE_UPON_A_SHEEP        60005
@@ -566,6 +606,11 @@ void AddSC_random()
     newscript = new Script;
     newscript->Name = "npc_scripted_companion";
     newscript->GetAI = &GetAI_npc_scripted_companion;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "lil_foot_pet";
+    newscript->GetAI = &GetAI_lil_foot_pet;
     newscript->RegisterSelf();
 
     newscript = new Script;
