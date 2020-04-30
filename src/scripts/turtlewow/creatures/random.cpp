@@ -377,24 +377,6 @@ bool GossipSelect_birthday_dragon(Player* player, Creature* creature, uint32 sen
     return true;
 }
 
-bool GossipHello_npc_guild_bank(Player* pPlayer, Creature* pCreature)
-{
-    if (pPlayer->GetGuildId() == 1)
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, "Open Guild Vault (TEST)", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF);
-    pPlayer->SEND_GOSSIP_MENU(90340, pCreature->GetGUID());
-    return true;
-}
-
-bool GossipSelect_npc_guild_bank(Player* pPlayer, Creature* pCreature, uint32 sender, uint32 action)
-{
-    if (action == GOSSIP_ACTION_INFO_DEF) 
-    {
- // Soon.
-    }
-    pPlayer->CLOSE_GOSSIP_MENU();
-    return true;
-}
-
 enum DressingBoxes
 {
     FESTIVALE_GARMENTS        = 50022,
@@ -524,12 +506,6 @@ void AddSC_random()
     newscript->Name = "npc_joshua_westfield";
     newscript->pGossipHello = &GossipHello_npc_joshua_westfield;
     newscript->pGossipSelect = &GossipSelect_npc_joshua_westfield;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "npc_guild_bank";
-    newscript->pGossipHello = &GossipHello_npc_guild_bank;
-    newscript->pGossipSelect = &GossipSelect_npc_guild_bank;
     newscript->RegisterSelf();
 
     newscript = new Script;

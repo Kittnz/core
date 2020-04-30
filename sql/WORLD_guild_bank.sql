@@ -9,35 +9,37 @@ spell_id2, spell_id3, spell_id4, spell_list_id, pet_spell_list_id, gold_min, gol
 inhabit_type, civilian, racial_leader, regeneration, equipment_id, trainer_id, vendor_id, mechanic_immune_mask,
 school_immune_mask, flags_extra, script_name)
 values
-('51500', '0', '3374', '0', '0', '0', 'Teller Plushner', 'Guild Vault Administrator', '0', '60', '60',
-'5000', '6000', '0', '0', '300', '31', '1', '1', '1.14286', '1', '20',
+('51500', '0', '3374', '0', '0', '0', 'Teller Plushner', 'Guild Vault Administrator', '56003', '60', '60',
+'5000', '6000', '0', '0', '300', '31', '257', '1', '1.14286', '1', '20',
 '5', '0', '0', '1', '0', '0', '0', '0', '1',
 '0', '0', '1', '0', '0', '1', '0', '0',
 '0', '0', '0', '0', '0', '1', '0', '0',
 '0', '0', '0', '0', '0', '0', '0', '0', '0',
 '0', '0', '0', '0', '0', '0', '0', '', '0',
 '3', '0', '0', '1', '0', '0', '0', '0',
-'0', '0', 'npc_guild_bank');
+'0', '0', '');
 
-replace into broadcast_text (ID, MaleText) values ('90340', 'The Guild Vault is a storage space available for your guild members only.');
-replace into npc_text (ID, BroadcastTextID0) values ('90340', '90340');
+delete from creature where id = 51500;
+replace into creature values (600000, 51500, 0, 0, 0, -8904.61, 620.256, 99.5234, 3.65953, 25, 25, 0, 0, 100, 0, 0, 0, 0, 0, 0, 10);
 
 replace into item_template values
 (51500, 0, 1, 0, 'Guild Vault Section', '', 18525, 2, 0, 1, 320000, 0, 18, -1, -1, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 36, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, null),
 (51501, 0, 1, 0, 'Guild Vault Section', '', 18815, 2, 0, 1, 320000, 0, 18, -1, -1, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 36, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, null);
 
-replace into gameobject_template values 
-(1000300, 0, 2, 4192, 'Orgrimmar Guild Vault', 0, 0, 2, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
-(1000301, 0, 2, 3078, 'Ironforge Guild Vault', 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
-(1000302, 0, 2, 3078, 'Stormwind Guild Vault', 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
-(1000304, 0, 2, 6502, 'Darnassus Guild Vault', 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
-(1000305, 0, 2, 1387, 'Undercity Guild Vault', 0, 0, 0.8, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
-(1000306, 0, 2, 5743, 'Thunder Bluff Guild Vault', 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
-
 replace into gossip_menu_option (menu_id, id, option_icon, option_text, OptionBroadcastTextID, option_id, npc_option_npcflag, action_menu_id, action_poi_id, action_script_id, box_coded, box_money, box_text, BoxBroadcastTextID, condition_id) VALUES ('56003', '0', '6', 'I would like to check my guild bank', '3398', '18', '0', '0', '0', '0', '0', '0', '', '0', '0');
 
-replace into npc_text (ID, BroadcastTextID0, Probability0, BroadcastTextID1, Probability1, BroadcastTextID2, Probability2, BroadcastTextID3, Probability3, BroadcastTextID4, Probability4, BroadcastTextID5, Probability5, BroadcastTextID6, Probability6, BroadcastTextID7, Probability7) VALUES ('90341', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0');
+replace into gossip_menu (entry, text_id, condition_id) VALUES ('56003', '90340', '0'); 
+update gossip_menu_option set npc_option_npcflag = '1' where (menu_id = '56003') and (id = '0'); 
 
-replace into gossip_menu (entry, text_id, condition_id) VALUES ('56003', '90341', '0');
+replace into broadcast_text (ID, MaleText) values ('90340', 'The Guild Vault is a storage space available for your guild members only.');
+replace into npc_text (ID, BroadcastTextID0) values ('90340', '90340');
+replace into npc_gossip values (600000, 90340);
 
-update gossip_menu_option set npc_option_npcflag = '1' where (menu_id = '56003') and (id = '0');
+replace into gameobject_template values 
+(1000300, 0, 5, 4192, 'Orgrimmar Guild Vault', 0, 0, 2, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(1000301, 0, 5, 3078, 'Ironforge Guild Vault', 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(1000302, 0, 5, 3078, 'Stormwind Guild Vault', 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(1000304, 0, 5, 6502, 'Darnassus Guild Vault', 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(1000305, 0, 5, 1387, 'Undercity Guild Vault', 0, 0, 0.8, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+
