@@ -905,7 +905,7 @@ bool ItemUseSpell_item_holy_wings(Player* pPlayer, Item* pItem, const SpellCastT
     pPlayer->NearLandTo(px, py, pz, pPlayer->GetOrientation());
     pPlayer->PlayDirectMusic(3221);
     pPlayer->HandleEmote(EMOTE_ONESHOT_ROAR);
-    pPlayer->SummonGameObject(1000323, px, py, pz - 1.06F, pPlayer->GetOrientation(), 0.0F, 0.0F, 0.0F, 0.0F, 15, true); // Golden Aura
+    pPlayer->SummonGameObject(1000330, px, py, pz - 1.06F, pPlayer->GetOrientation(), 0.0F, 0.0F, 0.0F, 0.0F, 15, true); // Golden Aura
     return false;
 }
 
