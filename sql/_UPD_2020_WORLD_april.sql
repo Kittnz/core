@@ -16,7 +16,7 @@ replace into gameobject_template values
 (1000320, 0, 2, 49, 'Plant the Blessed Seed the dirt mound.', 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_epl_tree_of_life'),
 (1000321, 0, 5, 1310, 'Argent Down Yellow Aura', 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
 (1000322, 0, 5, 967, 'Green Tree', 0, 0, 0.7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
-(1000323, 0, 5, 1310, 'Holy Wings Yellow Aura', 0, 0, 1.2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+(1000323, 0, 5, 6671, 'Holy Wings Yellow Aura', 0, 0, 1.2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
 
 
 
@@ -118,19 +118,6 @@ replace into creature_template (entry, display_id1, name, subname, level_min, le
 replace into custom_pet_entry_relation (item_entry, creature_entry) values (51700, 51523);
 update creature_template set script_name = 'lil_foot_pet' where entry = 51523;
 
-
-
-replace into creature_template values 
-(51525, 0, 10045, 0, 0, 0, ' ', '', 342, 30, 30, 1605, 1605, 0, 0, 1200, 12, 135, 1, 1.14286, 0, 20, 5, 0, 0, 1, 42, 53, 0, 122, 1, 1000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 45.144, 62.073, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 100, 0, 0, 524298, 'npc_dressing_room');
-
-
-update creature_template set Movement_Type = 0 where entry = 51525;
-update creature_template set faction = 35 where entry = 51525;
-update creature_template set scale = 0.4 where entry = 51525;
-delete from `creature_template_addon` where entry = 51525;
-replace into creature_template_addon (entry, auras) values (51525, 24742);
-
-
 -- Vanguard RP Event
 
 replace into item_template (
@@ -163,6 +150,18 @@ values
  '-1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
- REPLACE INTO `item_template` VALUES (51702, 0, 0, 0, 'Holy Wings', 'Very gay.', 20627, 2, 0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 18282, 0, 0, 0, 300, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 'item_holy_wings');
+ -- Er's Swaggery
+ 
+ REPLACE INTO `item_template` VALUES (51702, 0, 0, 0, 'Glyph of Blazing Wings', 'Don a pair of fiery wings, showing off your mastery of the Healer.', 35130, 2, 0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 31726, 0, 0, 0, 300000, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 'item_holy_wings');
+ update item_template set allowable_class = 16 where entry = 51702;
 
+replace into creature_template values 
+(51525, 0, 10045, 0, 0, 0, ' ', '', 342, 1, 1, 1, 1, 0, 0, 1200, 12, 135, 1, 1.14286, 0, 20, 5, 0, 0, 1, 42, 53, 0, 122, 1, 0, 0, 1, 4608, 0, 0, 0, 0, 0, 0, 45.144, 62.073, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 100, 0, 0, 0, '');
+
+update creature_template set Movement_Type = 0 where entry = 51525;
+update creature_template set npc_flags = 0 where entry = 51525;
+update creature_template set faction = 35 where entry = 51525;
+update creature_template set scale = 0.4 where entry = 51525;
+delete from `creature_template_addon` where entry = 51525;
+replace into creature_template_addon (entry, auras) values (51525, 24742);
 

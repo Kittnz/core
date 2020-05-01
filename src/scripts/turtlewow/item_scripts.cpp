@@ -898,10 +898,14 @@ bool ItemUseSpell_item_holy_wings(Player* pPlayer, Item* pItem, const SpellCastT
 {    
     float x, y, z;
     pPlayer->GetSafePosition(x, y, z);
-    pPlayer->SummonGameObject(1000323, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, true); // Golden Aura
-    pPlayer->SummonCreature(51525, x, y, z, pPlayer->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN, 1000000, true);
+    pPlayer->SummonCreature(51525, x, y, z, pPlayer->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN, 15000, true);
+    float px, py, pz;
+    float add = 0.5F;
+    pPlayer->GetRelativePositions(add, 0.0F, 0.0F, px, py, pz);
+    pPlayer->NearLandTo(px, py, pz, pPlayer->GetOrientation());
     pPlayer->PlayDirectMusic(3221);
     pPlayer->HandleEmote(EMOTE_ONESHOT_ROAR);
+    pPlayer->SummonGameObject(1000323, px, py, pz - 1.06F, pPlayer->GetOrientation(), 0.0F, 0.0F, 0.0F, 0.0F, 15, true); // Golden Aura
     return false;
 }
 
