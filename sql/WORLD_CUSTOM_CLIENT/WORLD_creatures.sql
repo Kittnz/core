@@ -1,0 +1,1 @@
+update creature_template set npc_flags = 2 where entry = 1752;
