@@ -13,7 +13,7 @@ replace into gameobject_template values
 (1000317, 0, 5, 5831, 'Burnt Outpost', 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
 (1000318, 0, 5, 6035, 'Elf Crate', 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
 (1000319, 0, 5, 6709, 'Argent Dawn Banner', 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
-(1000320, 0, 2, 49, 'Plant the Blessed Seed the dirt mound.', 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_epl_tree_of_life'),
+(1000320, 0, 2, 49, 'Plant the Blessed Seed into dirt mound.', 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_epl_tree_of_life'),
 (1000321, 0, 5, 1310, 'Argent Down Yellow Aura', 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
 (1000322, 0, 5, 967, 'Green Tree', 0, 0, 0.1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_epl_growing_tree'),
 (1000323, 0, 5, 967, 'Green Tree', 0, 0, 0.2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_epl_growing_tree'),
@@ -24,7 +24,16 @@ replace into gameobject_template values
 (1000328, 0, 5, 967, 'Green Tree', 0, 0, 0.9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_epl_growing_tree'),
 (1000329, 0, 5, 967, 'Green Tree Final', 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
 (1000330, 0, 5, 6671, 'Holy Wings Yellow Aura', 0, 0, 1.2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
-(1000333, 0, 2, 6424, 'Goblin Brainwashing Device', 35, 0, 0.7, 0, 0, 2, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_brainwashing_device');
+(1000333, 0, 2, 6424, 'Goblin Brainwashing Device', 35, 0, 0.7, 0, 0, 2, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_brainwashing_device'),
+
+-- Farm Stuff
+
+(1000334, 0, 2, 113, 'Simple Wooden Planter', 35, 0, 0.7, 0, 0, 2, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_simple_wooden_planter'),
+(1000335, 0, 5, 20,  'Planter Mud', 0, 0, 0.25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+
+(1000336, 0, 2, 60, 'Cute Little Pumpkin. Water it!', 0, 0, 0.2, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_growing_food'),
+(1000337, 0, 2, 60, 'This Pumpkin is getting bigger!', 0, 0, 0.4, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_growing_food'),
+(1000338, 0, 2, 60, 'Plump Juicy Pumpkin. Ready for harvest.', 0, 0, 0.6, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_growing_food');
 
 
 replace into item_template values
@@ -203,7 +212,7 @@ spellcooldown_5, spellcategory_5, spellcategorycooldown_5, bonding, page_text, p
 start_quest, lock_id, material, sheath, random_property, set_id, max_durability, area_bound, map_bound,
 duration, bag_family, disenchant_id, food_type, min_money_loot, max_money_loot, extra_flags, other_team_entry,
 script_name) values
-('51705', '0', '15', '0', 'Simple Wooden Planter', 'Plant a seed and wait for the harvest!', '10273', '2', '0', '0', '50000', '40000', '0', '-1', '-1', '15', '0', '51', '150', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '24240', '0', '0', '0', '-1', '0', '1200000', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '1', '0', '0', '0', '0', '0', '2', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', 'item_wooden_planter'), 
+('51705', '0', '15', '0', 'Simple Wooden Planter', 'Plant a seed and wait for the harvest!', '10273', '2', '0', '0', '50000', '40000', '0', '-1', '-1', '15', '0', '142', '150', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '31564', '0', '0', '0', '-1', '0', '1200000', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '1', '0', '0', '0', '0', '0', '2', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', 'item_wooden_planter'), 
 
 ('51706', '0', '15', '0', 'Country Pumpkin Seeds', 'Can be planted in Simple Wooden Planter. Requires watering and fertilizing.', '3565', '1', '0', '0', '3000', '1500', '0', '-1', '-1', '15', '0', '51', '150', '0', '0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '4504', '0', '0', '0', '-1', '0', '1200000', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '1', '0', '0', '0', '0', '0', '2', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', 'item_pumpkin_seeds'),
 
@@ -345,4 +354,27 @@ values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', 'item_brainwashing_device');
+
+ALTER TABLE `game_weather` DROP COLUMN IF EXISTS `copy_weather_from`;
+ALTER TABLE `game_weather` 
+ADD COLUMN `copy_weather_from` MEDIUMINT(8) UNSIGNED NULL AFTER `zone`;
+
+-- thunder bluff
+UPDATE `game_weather` SET `copy_weather_from` = '1638' WHERE (`zone` = '215');
+
+-- durotar and orgrimmar
+delete from game_weather where zone = 14;
+INSERT INTO `game_weather` (`zone`) VALUES ('14');
+UPDATE `game_weather` SET `copy_weather_from` = '1637' WHERE (`zone` = '14');
+
+-- darnassus and teldrassil
+UPDATE `game_weather` SET `copy_weather_from` = '1657' WHERE (`zone` = '141');
+
+-- stormwind and elwynn
+UPDATE `game_weather` SET `copy_weather_from` = '1519' WHERE (`zone` = '12');
+
+-- Farm Stuff again
+
+replace into broadcast_text (ID, MaleText) values ('90351', 'We reap what we sow!');
+replace into npc_text (ID, BroadcastTextID0) values ('90351', '90351');
 

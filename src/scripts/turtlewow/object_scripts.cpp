@@ -567,10 +567,68 @@ bool GOSelect_go_brainwashing_device(Player* pPlayer, GameObject* pGo, uint32 se
     return true;
 }
 
+enum FarmObjects
+{
+    PUMPKIN_SEEDS = 51706,
+    BERRY_SEEDS = 51707,
+    WATERMELON_SEEDS = 51708,
+
+    PUMPKIN_GO = 111,
+    BERRY_BUSH_GO = 111,
+    WATERMELON_GO = 111
+};
+
+bool GOHello_go_simple_wooden_planter(Player* pPlayer, GameObject* pGo)
+{
+    if (pPlayer->HasItemCount(PUMPKIN_SEEDS, 1)) 
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, "Plant Country Pumpkin Seeds.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    if (pPlayer->HasItemCount(BERRY_SEEDS, 1)) 
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, "Plant Mountain Berries Seeds.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+    if (pPlayer->HasItemCount(WATERMELON_SEEDS, 1)) 
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, "Plant Stripped Melon Seeds.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);  
+
+    pPlayer->SEND_GOSSIP_MENU(90351, pGo->GetGUID());
+    return true;
+}
+
+bool GOSelect_go_simple_wooden_planter(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 action)
+{
+    float x, y, z;
+    pGo->GetSafePosition(x, y, z);
+
+    if (action == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pPlayer->RemoveItemCurrency(PUMPKIN_SEEDS, 1);
+        pPlayer->SummonGameObject(1000336, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 120, true);
+    }
+
+    if (action == GOSSIP_ACTION_INFO_DEF + 2)
+    {
+        pPlayer->RemoveItemCurrency(PUMPKIN_SEEDS, 1);
+        // todo
+    }
+
+    if (action == GOSSIP_ACTION_INFO_DEF + 3)
+    {
+        pPlayer->RemoveItemCurrency(PUMPKIN_SEEDS, 1);
+        // todo
+    }
+
+
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
 void AddSC_object_scripts()
 {
     Script *newscript;
-    
+
+    newscript = new Script;
+    newscript->Name = "go_simple_wooden_planter";
+    newscript->pGOHello = &GOHello_go_simple_wooden_planter;
+    newscript->pGOGossipSelect = &GOSelect_go_simple_wooden_planter;
+    newscript->RegisterSelf();
+
     newscript = new Script;
     newscript->Name = "go_brainwashing_device";
     newscript->pGOHello = &GOHello_go_brainwashing_device;
