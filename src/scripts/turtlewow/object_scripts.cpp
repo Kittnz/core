@@ -541,9 +541,41 @@ GameObjectAI* GetAI_go_epl_growing_tree(GameObject* gameobject)
     return new go_epl_growing_tree(gameobject);
 }
 
+bool GOHello_go_brainwashing_device(Player* pPlayer, GameObject* pGo)
+{
+    if (pPlayer->getLevel() >= 10 && pPlayer->HasItemCount(51715, 1))
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, "Click here to reset your talents.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    
+    pPlayer->SEND_GOSSIP_MENU(90350, pGo->GetGUID());
+    return true;
+}
+
+bool GOSelect_go_brainwashing_device(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 action)
+{
+    if (action == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        if (pPlayer->GetMoney() >= 50000)
+        {
+            pPlayer->ModifyMoney(-50000);
+            pPlayer->ResetTalents();
+            pPlayer->AddAura(27880);
+        }
+        else
+            ChatHandler(pPlayer).PSendSysMessage("You don't have enough money!");
+    }
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
 void AddSC_object_scripts()
 {
     Script *newscript;
+    
+    newscript = new Script;
+    newscript->Name = "go_brainwashing_device";
+    newscript->pGOHello = &GOHello_go_brainwashing_device;
+    newscript->pGOGossipSelect = &GOSelect_go_brainwashing_device;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "go_epl_growing_tree";
