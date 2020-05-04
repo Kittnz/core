@@ -328,6 +328,9 @@ struct boss_thekalAI : public zg_rez_add
                 m_pInstance->SetData(TYPE_THEKAL, DONE);
             }
 
+            // Remove a Hakkar Power stack.
+            m_creature->CastSpell(m_creature, SPELL_HAKKAR_POWER_DOWN, true);
+
             ScriptedAI::JustDied(Killer);
         }
         else
@@ -431,7 +434,7 @@ struct boss_thekalAI : public zg_rez_add
                 }
                 else
                 {
-                    // On tente tout de même de trouver une cible.
+                    // On tente tout de mï¿½me de trouver une cible.
                     Map::PlayerList const& players = m_creature->GetMap()->GetPlayers();
                     float nearestDist = 200.0f;
                     Player* target = NULL;
