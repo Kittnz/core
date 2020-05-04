@@ -241,11 +241,11 @@ SET @quest_finisher = 1752;
 SET @nextquest = 80001;
 SET @nextquestinchain = 0;
 SET @prevquest = 0;
-SET @reward_item_1 = 0;
+SET @reward_item_1 = 51705;
 SET @reward_item_2 = 0;
 SET @reward_item_3 = 0;
 SET @reward_item_4 = 0;
-SET @reward_item_1_count = 0;
+SET @reward_item_1_count = 1;
 SET @reward_item_2_count = 0;
 SET @reward_item_3_count = 0;
 SET @reward_item_4_count = 0;
@@ -257,13 +257,13 @@ SET @creature_to_kill_1_count = 0;
 SET @creature_to_kill_2_count = 0;
 SET @creature_to_kill_3_count = 0;
 SET @creature_to_kill_4_count = 0;
-SET @required_item_1 = 0;
-SET @required_item_2 = 0;
-SET @required_item_3 = 0;
+SET @required_item_1 = 51706;
+SET @required_item_2 = 51707;
+SET @required_item_3 = 51708;
 SET @required_item_4 = 0;
-SET @required_item_1_count = 0;
-SET @required_item_2_count = 0;
-SET @required_item_3_count = 0;
+SET @required_item_1_count = 1;
+SET @required_item_2_count = 1;
+SET @required_item_3_count = 1;
 SET @required_item_4_count = 0;
 
 replace into quest_template (entry, patch, Method, ZoneOrSort, MinLevel, QuestLevel, MaxLevel, Type, RequiredClasses, RequiredRaces, RequiredSkill,
@@ -286,15 +286,15 @@ StartScript, CompleteScript) values
 
 (@quest_entry, '0', '2', @quest_zone, @min_level, @quest_level, '0', '0', '0', '69', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', 
 
-'Growing the Farm', 
+'You Reap What You Sow', 
 
-'Hey $N, I\'ve been thinkin\' recently about expanding my farm. Bring me 3 types of seeds from faraway lands.', 
+'Survival itself is not that hard if you know what to do. It is harder to survive when you have no food. Hunting? Yes, you could try that, alas, not always you have something to sustain you longer than just some primitive herbs before you catch something.\n\nI see you\'re pondering on the situation a bit harder than your normal hunters and trappers, so why don\'t you learn something for your own good and best chances to survive out in the wilds?\n\nBring me what I need and I\'ll teach you what to do. Here\'s the list. Please do not lose it.', 
 
-'Speak to Caledra Dawnbreeze in Stormwind Keep.', 
+'Find Country Pumpkin Seeds, Mountain Berries Seeds and Stripped Melon Seeds.', 
 
-'Wow! Cool!', 
+'Great! Let\'s get you some new know-how to about thing or two.', 
 
-'Yes? Got ye seeds?', 
+'I see you\'re back. Have you managed to find everything required, yes?', 
 
 '', '', '', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @faction_id, '0', '0', '0', '0', @faction_count, '0', '0', '0', '0', '0', @xp_or_money, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', 0, 0);
       
@@ -375,6 +375,9 @@ UPDATE `game_weather` SET `copy_weather_from` = '1519' WHERE (`zone` = '12');
 
 -- Farm Stuff again
 
-replace into broadcast_text (ID, MaleText) values ('90351', 'We reap what we sow!');
+replace into broadcast_text (ID, MaleText) values ('90351', 'Before you reap your harvest you sowing seeds and foster them with care.');
 replace into npc_text (ID, BroadcastTextID0) values ('90351', '90351');
+
+REPLACE INTO `page_text` (`entry`, `text`) VALUES (50100, 'Before you reap your harvest you sowing seeds and foster them with care.\n\nFirst and perhaps an easiest one to start with will be Pumpkins. You will need some of those Pumpkin Seeds from any Pumpkin you can procure. Nearest must be on the Hillsbrad Fields I gather.\n\nSecond would be very similar, however a bit more complicated to tend to – watermelons. To grow some you will need seeds as well and the place to find them is the same.\n\nLast thing you\'d be able to grow on your own with the same technique is the Mountain Berry seeds which are in abundance in Hinterlands. Not far from here, just north from Durnhold Keep. Be careful there, area is dense with fierce wildlife and gruesome monsters should you stride too far into the wilds.');
+
 
