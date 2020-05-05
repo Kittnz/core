@@ -26,7 +26,7 @@ replace into gameobject_template values
 (1000330, 0, 5, 6671, 'Holy Wings Yellow Aura', 0, 0, 1.2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
 (1000333, 0, 2, 6424, 'Goblin Brainwashing Device', 35, 0, 0.7, 0, 0, 2, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_brainwashing_device'),
 
--- Farm Stuff
+-- Farm Stuff 
 
 -- 1. You get the quest: bring 3 types of special seeds with accelerated grow rate
 -- 2. You travel around Azeroth, get seeds from 3 locations, bring it to NPC and get a Planter as reward.
@@ -73,7 +73,7 @@ replace into gameobject_template values
 (1000361, 0, 2, 155, 'Small Magic Mushroom. Fertilize it with Ungoro Soil!', 0, 0, 0.2, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_grow_activate'),
 (1000362, 0, 5, 155, 'Your Magic Mushroom is growing!', 0, 0, 0.4, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_vegetable_growing_stage'),
 (1000363, 0, 2, 155, 'Your Magic Mushroom is growing! Water it!', 0, 0, 0.4, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_grow_activate'),
-(1000364, 0, 3, 155, 'Delicious and completely absent of  psychedelic properties. Ready for harvest!', 0, 0, 0.6, 57, 1000001, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+(1000364, 0, 3, 155, 'Delicious and completely absent of psychedelic properties. Ready for harvest!', 0, 0, 0.6, 57, 1000001, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
 
 replace into item_template values
 
@@ -271,6 +271,29 @@ script_name) values
 
 ('51712', '0', '0', '0', 'Juicy Stripped Melon', 'So sweet and juicy!', '4781', '1', '0', '0', '3000', '2000', '0', '-1', '-1', '15', '0', '0', '0', '0','0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '24005', '0', '0', '0', '-1', '0', '1200000', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '50100', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '1', '');
 
+update item_template set spellid_1 = 5006 where entry = 51710; -- Pumpkin   -- 6 Stamina and Spirit for 15 min.
+update item_template set spellid_1 = 18230 where entry = 51711; -- Berry    -- 10 Agility for 10 min.
+update item_template set spellid_1 = 10256 where entry = 51712; -- Melon    -- 12 Stamina and Spirit for 15 min.
+update item_template set spellid_1 = 25660 where entry = 51717; -- Mushroom -- 25 Stamina for 15 min.
+
+update item_template set required_level = 25 where entry = 51710; -- Pumpkin
+update item_template set required_level = 35 where entry = 51711; -- Berry
+update item_template set required_level = 45 where entry = 51712; -- Melon
+update item_template set required_level = 55 where entry = 51717; -- Mushroom
+
+-- GO LOOT
+
+update gameobject_template set data1 = 1000050 where entry = 1000342;
+update gameobject_template set data1 = 1000051 where entry = 1000349;
+update gameobject_template set data1 = 1000052 where entry = 1000356;
+update gameobject_template set data1 = 1000053 where entry = 1000364;
+
+REPLACE INTO `gameobject_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`, `patch_min`, `patch_max`) VALUES 
+(1000050, 51710, 100, 1, 6, 15, 0, 0, 10),
+(1000051, 51711, 100, 1, 6, 15, 0, 0, 10),
+(1000052, 51712, 100, 1, 6, 15, 0, 0, 10),
+(1000053, 51717, 100, 1, 6, 15, 0, 0, 10);
+
 SET @quest_entry = 60060;
 SET @quest_zone = 1519;
 SET @faction_id = 269;
@@ -422,26 +445,25 @@ replace into npc_text (ID, BroadcastTextID0) values ('90351', '90351');
 
 REPLACE INTO `page_text` (`entry`, `text`) VALUES (50100, 'Before you reap your harvest you sowing seeds and foster them with care.\n\nFirst and perhaps an easiest one to start with will be Pumpkins. You will need some of those Pumpkin Seeds from any Pumpkin you can procure. Nearest must be on the Hillsbrad Fields I gather.\n\nSecond would be very similar, however a bit more complicated to tend to – watermelons. To grow some you will need seeds as well and the place to find them is the same.\n\nLast thing you\'d be able to grow on your own with the same technique is the Mountain Berry seeds which are in abundance in Hinterlands. Not far from here, just north from Durnhold Keep. Be careful there, area is dense with fierce wildlife and gruesome monsters should you stride too far into the wilds.');
 
--- 3770 HORDE FARMER FEMALE
--- 3777 HORDE FARMER MALE
-
 REPLACE INTO `creature_template` VALUES 
 
-(51530, 0, 3492, 0, 0, 0, 'Mortimer Stansfield', 'Gardener', 56004, 25, 25, 1040, 1640, 0, 0, 1009, 11, 2, 1.05, 1.14286, 0, 20, 5, 0, 0, 1, 31, 40, 0, 106, 1, 1500, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 38.72, 53.24, 100, 7, 0, 240, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 1, 0, 3, 50000, 0, 0, 0, 0, 524298, ''),
-(51531, 0, 9263, 0, 0, 0, 'Betty', 'Gardener\'s Apprentice', 56005, 25, 25, 1040, 1640, 0, 0, 1009, 11, 1, 1.05, 1.14286, 0, 20, 5, 0, 0, 1, 31, 40, 0, 106, 1, 1500, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 38.72, 53.24, 100, 7, 0, 240, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 1, 0, 3, 50000, 0, 0, 0, 0, 524298, '');
-
+(51530, 0, 3492, 0, 0, 0, 'Mortimer Stansfield', 'Gardener', 0, 25, 25, 1040, 1640, 0, 0, 1009, 11, 2, 1.05, 1.14286, 0, 20, 5, 0, 0, 1, 31, 40, 0, 106, 1, 1500, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 38.72, 53.24, 100, 7, 0, 240, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 1, 0, 3, 50000, 0, 0, 0, 0, 524298, ''),
+(51531, 0, 9263, 0, 0, 0, 'Betty', 'Gardener\'s Apprentice', 0, 25, 25, 1040, 1640, 0, 0, 1009, 11, 1, 1.05, 1.14286, 0, 20, 5, 0, 0, 1, 31, 40, 0, 106, 1, 1500, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 38.72, 53.24, 100, 7, 0, 240, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 1, 0, 3, 50000, 0, 0, 0, 0, 524298, ''),
+(51532, 0, 3777, 0, 0, 0, 'Margor Wheathoof', 'Gardener', 0, 25, 25, 1040, 1640, 0, 0, 1009, 78, 2, 1.05, 1.14286, 0, 20, 5, 0, 0, 1, 31, 40, 0, 106, 1, 1500, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 38.72, 53.24, 100, 7, 0, 240, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 1, 0, 3, 50000, 0, 0, 0, 0, 524298, ''),
+(51533, 0, 3770, 0, 0, 0, 'Taima Riverwinds', 'Gardener\'s Apprentice', 0, 25, 25, 1040, 1640, 0, 0, 1009, 78, 1, 1.05, 1.14286, 0, 20, 5, 0, 0, 1, 31, 40, 0, 106, 1, 1500, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 38.72, 53.24, 100, 7, 0, 240, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 1, 0, 3, 50000, 0, 0, 0, 0, 524298, '');
 
 replace into gossip_menu (entry, text_id, condition_id) VALUES ('56004', '90352', '0'); 
 replace into broadcast_text (ID, MaleText) values ('90352', 'If you have a garden and a library, you have everything you need.');
 replace into npc_text (ID, BroadcastTextID0) values ('90352', '90352');
-update gossip_menu_option set npc_option_npcflag = '1' where (menu_id = '51530') and (id = '0'); 
+update creature_template set gossip_menu_id = 56004 where entry = 51530;
+update creature_template set gossip_menu_id = 56004 where entry = 51532;
 
 replace into gossip_menu (entry, text_id, condition_id) VALUES ('56005', '90353', '0'); 
-replace into broadcast_text (ID, MaleText) values ('90353', 'My dream is to grow World\'s Biggest Pumpkin!/n/nWhat\'s yours?');
+replace into broadcast_text (ID, MaleText) values ('90353', 'My biggest dream is to grow the World\'s Biggest Pumpkin!\n\nWhat\'s yours?');
 replace into npc_text (ID, BroadcastTextID0) values ('90353', '90353');
-update gossip_menu_option set npc_option_npcflag = '1' where (menu_id = '51531') and (id = '0'); 
+update creature_template set gossip_menu_id = 56005 where entry = 51531;
+update creature_template set gossip_menu_id = 56005 where entry = 51533;
 
 update creature_template set equipment_id = 50000 where entry = 51530;
 replace into `creature_equip_template` (`entry`, `equipentry1`) VALUES ('50000', '3334');
-
 
