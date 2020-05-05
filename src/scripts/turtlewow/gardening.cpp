@@ -7,11 +7,12 @@ enum GardenObjects
     LIFESPAN_GROWING       = 10 * MINUTE * IN_MILLISECONDS, 
     LIFESPAN_GROWING_TICK  =  1 * MINUTE * IN_MILLISECONDS, // 1 minute for test. Set it to 9.
     LIFESPAN_BUTTON        =  5 * MINUTE * IN_MILLISECONDS, 
-    LIFESPAN_SPLASH        =  1,
+    LIFESPAN_SPLASH        =  2,
 
     PUMPKIN_SEEDS = 51706,
     BERRY_SEEDS = 51707,
     WATERMELON_SEEDS = 51708,
+    MUSHROOM_SEEDS = 51716,
 
     REFRESHING_SPRING_WATER = 159,
     UNGORO_SOIL = 11018,
@@ -43,6 +44,14 @@ enum GardenObjects
     WATERMELON_MEDIUM_ACTIVE = 1000355,
     WATERMELON_HARVEST = 1000356,
 
+    MUSHROOM_SPROUTLING = 1000358,
+    MUSHROOM_SPROUTLING_ACTIVE = 1000359,
+    MUSHROOM_SMALL = 1000360,
+    MUSHROOM_SMALL_ACTIVE = 1000361,
+    MUSHROOM_MEDIUM = 1000362,
+    MUSHROOM_MEDIUM_ACTIVE = 1000363,
+    MUSHROOM_HARVEST = 1000364,
+
     WATER_SPLASH = 1000357
 };
 
@@ -64,7 +73,7 @@ bool ItemUseSpell_item_wooden_planter(Player* pPlayer, Item* pItem, const SpellC
     float rot3 = cos(o_r / 2);
 
     pPlayer->SummonGameObject(WOODEN_PLANTER, x, y, z - 0.1F, o_r, 0.0f, 0.0f, rot2, rot3, LIFESPAN_PLANTER, true);
-    pPlayer->SummonGameObject(PLANTER_EARTH, x, y, z - 0.05F, o_r + 1.6F, 0.0f, 0.0f, 0.0f, 0.0f, LIFESPAN_PLANTER, true);
+    pPlayer->SummonGameObject(PLANTER_EARTH, x, y, z + 0.1F, o_r + 1.6F, 0.0f, 0.0f, 0.0f, 0.0f, LIFESPAN_PLANTER, true);
     return true;
 }
 
@@ -76,6 +85,8 @@ bool GOHello_go_simple_wooden_planter(Player* pPlayer, GameObject* pGo)
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Plant Mountain Berries Seeds.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
     if (pPlayer->HasItemCount(WATERMELON_SEEDS, 1)) 
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Plant Stripped Melon Seeds.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);  
+    if (pPlayer->HasItemCount(MUSHROOM_SEEDS, 1))
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Plant Magic Mushroom Sample", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
 
     pPlayer->SEND_GOSSIP_MENU(90351, pGo->GetGUID());
     return true;
@@ -86,25 +97,33 @@ bool GOSelect_go_simple_wooden_planter(Player* pPlayer, GameObject* pGo, uint32 
     float x, y, z;
     pGo->GetSafePosition(x, y, z);
 
-    if (action == GOSSIP_ACTION_INFO_DEF + 1)
+    uint32 static_go { 0 };
+    uint32 currency  { 0 };
+
+    switch (action)
     {
-        pPlayer->RemoveItemCurrency(PUMPKIN_SEEDS, 1);
-        pPlayer->SummonGameObject(PUMPKIN_SPROUTLING, x, y, z + 0.2F, 0.0F, 0.0f, 0.0f, 0.0f, 0.0f, LIFESPAN_GROWING, true);
+        case GOSSIP_ACTION_INFO_DEF + 1:
+            currency = PUMPKIN_SEEDS;
+            static_go = PUMPKIN_SPROUTLING;
+            break;
+        case GOSSIP_ACTION_INFO_DEF + 2:
+            currency = BERRY_SEEDS;
+            static_go = BERRY_SPROUTLING;
+            break;
+        case GOSSIP_ACTION_INFO_DEF + 3:
+            currency = WATERMELON_SEEDS;
+            static_go = WATERMELON_SPROUTLING;
+            break;
+        case GOSSIP_ACTION_INFO_DEF + 4:
+            currency = MUSHROOM_SEEDS;
+            static_go = MUSHROOM_SPROUTLING;
+            break;
+        default: break;
     }
 
-    if (action == GOSSIP_ACTION_INFO_DEF + 2)
-    {
-        pPlayer->RemoveItemCurrency(BERRY_SEEDS, 1);
-        pPlayer->SummonGameObject(BERRY_SPROUTLING, x, y, z + 0.2F, 0.0F, 0.0f, 0.0f, 0.0f, 0.0f, LIFESPAN_GROWING, true);
-    }
-
-    if (action == GOSSIP_ACTION_INFO_DEF + 3)
-    {
-        pPlayer->RemoveItemCurrency(WATERMELON_SEEDS, 1);
-        pPlayer->SummonGameObject(WATERMELON_SPROUTLING, x, y, z + 0.2F, 1.6F, 0.0f, 0.0f, 0.0f, 0.0f, LIFESPAN_GROWING, true);
-    }
-
-    pGo->ResetDoorOrButton();
+    pPlayer->RemoveItemCurrency(currency, 1);
+    pPlayer->SummonGameObject(static_go, x, y, z + 0.4F, 0.0F, 0.0f, 0.0f, 0.0f, 0.0f, LIFESPAN_GROWING, true);
+    pGo->UseDoorOrButton();
     pPlayer->CLOSE_GOSSIP_MENU();
     return true;
 }
@@ -131,21 +150,30 @@ struct go_farm_vegetable_growing_stage : public GameObjectAI
                 float x, y, z;
                 me->GetSafePosition(x, y, z);
 
+                uint32 active_go = 0;
+
                 switch (me->GetEntry())
                 {
-                case PUMPKIN_SPROUTLING:    me->SummonGameObject(PUMPKIN_SPROUTLING_ACTIVE, x, y, z, 0.0F, 0.0f, 0.0f, 0.0f, 0.0f, LIFESPAN_BUTTON, true); break;
-                case PUMPKIN_SMALL:         me->SummonGameObject(PUMPKIN_SMALL_ACTIVE, x, y, z, 0.0F, 0.0f, 0.0f, 0.0f, 0.0f, LIFESPAN_BUTTON, true); break;
-                case PUMPKIN_MEDIUM:        me->SummonGameObject(PUMPKIN_MEDIUM_ACTIVE, x, y, z, 0.0F, 0.0f, 0.0f, 0.0f, 0.0f, LIFESPAN_BUTTON, true); break;
+                case PUMPKIN_SPROUTLING:    active_go = PUMPKIN_SPROUTLING_ACTIVE; break;
+                case PUMPKIN_SMALL:         active_go = PUMPKIN_SMALL_ACTIVE; break;
+                case PUMPKIN_MEDIUM:        active_go = PUMPKIN_MEDIUM_ACTIVE; break;
 
-                case BERRY_SPROUTLING:      me->SummonGameObject(BERRY_SPROUTLING_ACTIVE, x, y, z, 0.0F, 0.0f, 0.0f, 0.0f, 0.0f, LIFESPAN_BUTTON, true); break;
-                case BERRY_SMALL:           me->SummonGameObject(BERRY_SMALL_ACTIVE, x, y, z, 0.0F, 0.0f, 0.0f, 0.0f, 0.0f, LIFESPAN_BUTTON, true); break;
-                case BERRY_MEDIUM:          me->SummonGameObject(BERRY_MEDIUM_ACTIVE, x, y, z, 0.0F, 0.0f, 0.0f, 0.0f, 0.0f, LIFESPAN_BUTTON, true); break;
+                case BERRY_SPROUTLING:      active_go = BERRY_SPROUTLING_ACTIVE; break;
+                case BERRY_SMALL:           active_go = BERRY_SMALL_ACTIVE; break;
+                case BERRY_MEDIUM:          active_go = BERRY_MEDIUM_ACTIVE; break;
 
-                case WATERMELON_SPROUTLING: me->SummonGameObject(WATERMELON_SPROUTLING_ACTIVE, x, y, z, 0.0F, 0.0f, 0.0f, 0.0f, 0.0f, LIFESPAN_BUTTON, true); break;
-                case WATERMELON_SMALL:      me->SummonGameObject(WATERMELON_SMALL_ACTIVE, x, y, z, 0.0F, 0.0f, 0.0f, 0.0f, 0.0f, LIFESPAN_BUTTON, true); break;
-                case WATERMELON_MEDIUM:     me->SummonGameObject(WATERMELON_MEDIUM_ACTIVE, x, y, z, 0.0F, 0.0f, 0.0f, 0.0f, 0.0f, LIFESPAN_BUTTON, true); break;
+                case WATERMELON_SPROUTLING: active_go = WATERMELON_SPROUTLING_ACTIVE; break;
+                case WATERMELON_SMALL:      active_go = WATERMELON_SMALL_ACTIVE; break;
+                case WATERMELON_MEDIUM:     active_go = WATERMELON_MEDIUM_ACTIVE; break;
+
+                case MUSHROOM_SPROUTLING: active_go = MUSHROOM_SPROUTLING_ACTIVE; break;
+                case MUSHROOM_SMALL:      active_go = MUSHROOM_SMALL_ACTIVE; break;
+                case MUSHROOM_MEDIUM:     active_go = MUSHROOM_MEDIUM_ACTIVE; break;
+
+                default: break;
                 }
 
+                me->SummonGameObject(active_go, x, y, z, 0.0F, 0.0f, 0.0f, 0.0f, 0.0f, LIFESPAN_BUTTON, true);
                 me->Despawn(); 
                 me->UpdateObjectVisibility();
                 m_uiUpdateTimer = LIFESPAN_GROWING_TICK;
@@ -173,67 +201,80 @@ bool GOHello_go_farm_grow_activate(Player* pPlayer, GameObject* pGo)
     float x, y, z;
     pGo->GetSafePosition(x, y, z);
 
+    uint32 static_go { 0 };
+    uint32 currency  { 0 };
+    bool harvest     { 0 };
+
     switch (pGo->GetEntry())
     {
     case PUMPKIN_SPROUTLING_ACTIVE:
-        if (!pPlayer->HasItemCount(REFRESHING_SPRING_WATER, 1))
-            ChatHandler(pPlayer).PSendSysMessage("Use Refreshing Spring Water to water it!");
-        pPlayer->RemoveItemCurrency(REFRESHING_SPRING_WATER, 1);
-        pPlayer->SummonGameObject(PUMPKIN_SMALL, x, y, z, 0.0F, 0.0f, 0.0f, 0.0f, 0.0f, LIFESPAN_GROWING, true);
+        currency = REFRESHING_SPRING_WATER;
+        static_go = PUMPKIN_SMALL;
         break;
     case PUMPKIN_SMALL_ACTIVE:
-        if (!pPlayer->HasItemCount(UNGORO_SOIL, 1))
-            ChatHandler(pPlayer).PSendSysMessage("Use Ungoro Soil to fertilize it!");
-        pPlayer->RemoveItemCurrency(UNGORO_SOIL, 1);
-        pPlayer->SummonGameObject(PUMPKIN_MEDIUM, x, y, z, 0.0F, 0.0f, 0.0f, 0.0f, 0.0f, LIFESPAN_GROWING, true);
+        currency = UNGORO_SOIL;
+        static_go = PUMPKIN_MEDIUM;
         break;
     case PUMPKIN_MEDIUM_ACTIVE:
-        if (!pPlayer->HasItemCount(REFRESHING_SPRING_WATER, 1))
-            ChatHandler(pPlayer).PSendSysMessage("Use Refreshing Spring Water to water it!");
-        pPlayer->RemoveItemCurrency(REFRESHING_SPRING_WATER, 1);
-        pPlayer->SummonGameObject(PUMPKIN_HARVEST, x, y, z, 0.0F, 0.0f, 0.0f, 0.0f, 0.0f, LIFESPAN_BUTTON, true);
+        currency = REFRESHING_SPRING_WATER;
+        static_go = PUMPKIN_HARVEST;
+        harvest = true;
         break;
 
     case BERRY_SPROUTLING_ACTIVE:
-        if (!pPlayer->HasItemCount(REFRESHING_SPRING_WATER, 1))
-            ChatHandler(pPlayer).PSendSysMessage("Use Refreshing Spring Water to water it!");
-        pPlayer->RemoveItemCurrency(REFRESHING_SPRING_WATER, 1);
-        pPlayer->SummonGameObject(BERRY_SMALL, x, y, z, 0.0F, 0.0f, 0.0f, 0.0f, 0.0f, LIFESPAN_GROWING, true);
+        currency = REFRESHING_SPRING_WATER;
+        static_go = BERRY_SMALL;
         break;
     case BERRY_SMALL_ACTIVE:
-        if (!pPlayer->HasItemCount(UNGORO_SOIL, 1))
-            ChatHandler(pPlayer).PSendSysMessage("Use Ungoro Soil to fertilize it!");
-        pPlayer->RemoveItemCurrency(UNGORO_SOIL, 1);
-        pPlayer->SummonGameObject(BERRY_MEDIUM, x, y, z, 0.0F, 0.0f, 0.0f, 0.0f, 0.0f, LIFESPAN_GROWING, true);
+        currency = UNGORO_SOIL;
+        static_go = BERRY_MEDIUM;
         break;
     case BERRY_MEDIUM_ACTIVE:
-        if (!pPlayer->HasItemCount(REFRESHING_SPRING_WATER, 1))
-            ChatHandler(pPlayer).PSendSysMessage("Use Refreshing Spring Water to water it!");
-        pPlayer->RemoveItemCurrency(REFRESHING_SPRING_WATER, 1);
-        pPlayer->SummonGameObject(BERRY_HARVEST, x, y, z, 0.0F, 0.0f, 0.0f, 0.0f, 0.0f, LIFESPAN_BUTTON, true);
+        currency = REFRESHING_SPRING_WATER;
+        static_go = BERRY_HARVEST;
+        harvest = true;
         break;
 
     case WATERMELON_SPROUTLING_ACTIVE:
-        if (!pPlayer->HasItemCount(REFRESHING_SPRING_WATER, 1))
-            ChatHandler(pPlayer).PSendSysMessage("Use Refreshing Spring Water to water it!");
-        pPlayer->RemoveItemCurrency(REFRESHING_SPRING_WATER, 1);
-        pPlayer->SummonGameObject(WATERMELON_SMALL, x, y, z, 0.0F, 0.0f, 0.0f, 0.0f, 0.0f, LIFESPAN_GROWING, true);
+        currency = REFRESHING_SPRING_WATER;
+        static_go = WATERMELON_SMALL;
         break;
     case WATERMELON_SMALL_ACTIVE:
-        if (!pPlayer->HasItemCount(UNGORO_SOIL, 1))
-            ChatHandler(pPlayer).PSendSysMessage("Use Ungoro Soil to fertilize it!");
-        pPlayer->RemoveItemCurrency(UNGORO_SOIL, 1);
-        pPlayer->SummonGameObject(WATERMELON_MEDIUM, x, y, z, 0.0F, 0.0f, 0.0f, 0.0f, 0.0f, LIFESPAN_GROWING, true);
+        currency = UNGORO_SOIL;
+        static_go = WATERMELON_MEDIUM;
         break;
     case WATERMELON_MEDIUM_ACTIVE:
-        if (!pPlayer->HasItemCount(REFRESHING_SPRING_WATER, 1))
-            ChatHandler(pPlayer).PSendSysMessage("Use Refreshing Spring Water to water it!");
-        pPlayer->RemoveItemCurrency(REFRESHING_SPRING_WATER, 1);
-        pPlayer->SummonGameObject(WATERMELON_HARVEST, x, y, z, 0.0F, 0.0f, 0.0f, 0.0f, 0.0f, LIFESPAN_BUTTON, true);
+        currency = REFRESHING_SPRING_WATER;
+        static_go = WATERMELON_HARVEST;
+        harvest = true;
         break;
+
+    case MUSHROOM_SPROUTLING_ACTIVE:
+        currency = REFRESHING_SPRING_WATER;
+        static_go = MUSHROOM_SMALL;
+        break;
+    case MUSHROOM_SMALL_ACTIVE:
+        currency = UNGORO_SOIL;
+        static_go = MUSHROOM_MEDIUM;
+        break;
+    case MUSHROOM_MEDIUM_ACTIVE:
+        currency = REFRESHING_SPRING_WATER;
+        static_go = MUSHROOM_HARVEST;
+        harvest = true;
+        break;
+
+    default: break;
     }
 
-    pPlayer->SummonGameObject(WATER_SPLASH, x, y, z-0.1F, 0.0F, 0.0f, 0.0f, 0.0f, 0.0f, LIFESPAN_SPLASH, true);
+    if (!pPlayer->HasItemCount(currency, 1))
+    {
+        ChatHandler(pPlayer).PSendSysMessage(currency == REFRESHING_SPRING_WATER ? "Use Refreshing Spring Water to water it!" : "Use Ungoro Soil to fertilize it!");
+        return false;
+    }
+
+    pPlayer->RemoveItemCurrency(currency, 1);
+    pPlayer->SummonGameObject(static_go, x, y, z, 0.0F, 0.0f, 0.0f, 0.0f, 0.0f, harvest == false ? LIFESPAN_GROWING : LIFESPAN_BUTTON, true);
+    pPlayer->SummonGameObject(WATER_SPLASH, x, y, z, 0.0F, 0.0f, 0.0f, 0.0f, 0.0f, LIFESPAN_SPLASH, true);
     pGo->Despawn();
     pGo->UpdateObjectVisibility();
     return true;
