@@ -277,10 +277,10 @@ SET @faction_id = 269;
 SET @faction_count = 250;
 SET @xp_or_money = 1650;
 SET @quest_level = 60;
-SET @min_level = 15;
-SET @questgiver_id = 80000;
-SET @quest_finisher = 1752;
-SET @nextquest = 80001;
+SET @min_level = 20;
+SET @questgiver_id = 51530;
+SET @quest_finisher = 51530;
+SET @nextquest = 0;
 SET @nextquestinchain = 0;
 SET @prevquest = 0;
 SET @reward_item_1 = 51705;
@@ -302,11 +302,11 @@ SET @creature_to_kill_4_count = 0;
 SET @required_item_1 = 51706;
 SET @required_item_2 = 51707;
 SET @required_item_3 = 51708;
-SET @required_item_4 = 0;
+SET @required_item_4 = 51716;
 SET @required_item_1_count = 1;
 SET @required_item_2_count = 1;
 SET @required_item_3_count = 1;
-SET @required_item_4_count = 0;
+SET @required_item_4_count = 1;
 
 replace into quest_template (entry, patch, Method, ZoneOrSort, MinLevel, QuestLevel, MaxLevel, Type, RequiredClasses, RequiredRaces, RequiredSkill,
 RequiredSkillValue, RepObjectiveFaction, RepObjectiveValue, RequiredMinRepFaction, RequiredMinRepValue,RequiredMaxRepFaction,
@@ -332,7 +332,7 @@ StartScript, CompleteScript) values
 
 'Survival itself is not that hard if you know what to do. It is harder to survive when you have no food. Hunting? Yes, you could try that, alas, not always you have something to sustain you longer than just some primitive herbs before you catch something.\n\nI see you\'re pondering on the situation a bit harder than your normal hunters and trappers, so why don\'t you learn something for your own good and best chances to survive out in the wilds?\n\nBring me what I need and I\'ll teach you what to do. Here\'s the list. Please do not lose it.', 
 
-'Find Country Pumpkin Seeds, Mountain Berries Seeds and Stripped Melon Seeds.', 
+'Find Country Pumpkin Seeds, Mountain Berries Seeds, Stripped Melon Seeds and Magic Mushrooms Samples!', 
 
 'Great! Let\'s get you some new know-how to about thing or two.', 
 
@@ -421,5 +421,27 @@ replace into broadcast_text (ID, MaleText) values ('90351', 'Before you reap you
 replace into npc_text (ID, BroadcastTextID0) values ('90351', '90351');
 
 REPLACE INTO `page_text` (`entry`, `text`) VALUES (50100, 'Before you reap your harvest you sowing seeds and foster them with care.\n\nFirst and perhaps an easiest one to start with will be Pumpkins. You will need some of those Pumpkin Seeds from any Pumpkin you can procure. Nearest must be on the Hillsbrad Fields I gather.\n\nSecond would be very similar, however a bit more complicated to tend to – watermelons. To grow some you will need seeds as well and the place to find them is the same.\n\nLast thing you\'d be able to grow on your own with the same technique is the Mountain Berry seeds which are in abundance in Hinterlands. Not far from here, just north from Durnhold Keep. Be careful there, area is dense with fierce wildlife and gruesome monsters should you stride too far into the wilds.');
+
+-- 3770 HORDE FARMER FEMALE
+-- 3777 HORDE FARMER MALE
+
+REPLACE INTO `creature_template` VALUES 
+
+(51530, 0, 3492, 0, 0, 0, 'Mortimer Stansfield', 'Gardener', 56004, 25, 25, 1040, 1640, 0, 0, 1009, 11, 2, 1.05, 1.14286, 0, 20, 5, 0, 0, 1, 31, 40, 0, 106, 1, 1500, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 38.72, 53.24, 100, 7, 0, 240, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 1, 0, 3, 50000, 0, 0, 0, 0, 524298, ''),
+(51531, 0, 9263, 0, 0, 0, 'Betty', 'Gardener\'s Apprentice', 56005, 25, 25, 1040, 1640, 0, 0, 1009, 11, 1, 1.05, 1.14286, 0, 20, 5, 0, 0, 1, 31, 40, 0, 106, 1, 1500, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 38.72, 53.24, 100, 7, 0, 240, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 1, 0, 3, 50000, 0, 0, 0, 0, 524298, '');
+
+
+replace into gossip_menu (entry, text_id, condition_id) VALUES ('56004', '90352', '0'); 
+replace into broadcast_text (ID, MaleText) values ('90352', 'If you have a garden and a library, you have everything you need.');
+replace into npc_text (ID, BroadcastTextID0) values ('90352', '90352');
+update gossip_menu_option set npc_option_npcflag = '1' where (menu_id = '51530') and (id = '0'); 
+
+replace into gossip_menu (entry, text_id, condition_id) VALUES ('56005', '90353', '0'); 
+replace into broadcast_text (ID, MaleText) values ('90353', 'My dream is to grow World\'s Biggest Pumpkin!/n/nWhat\'s yours?');
+replace into npc_text (ID, BroadcastTextID0) values ('90353', '90353');
+update gossip_menu_option set npc_option_npcflag = '1' where (menu_id = '51531') and (id = '0'); 
+
+update creature_template set equipment_id = 50000 where entry = 51530;
+replace into `creature_equip_template` (`entry`, `equipentry1`) VALUES ('50000', '3334');
 
 
