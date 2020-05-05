@@ -28,12 +28,27 @@ replace into gameobject_template values
 
 -- Farm Stuff
 
+-- 1. You get the quest: bring 3 types of special seeds with accelerated grow rate
+-- 2. You travel around Azeroth, get seeds from 3 locations, bring it to NPC and get a Planter as reward.
+-- 3. Optional: you get seconds quest to grow three things, with a Blue Shovel and Green Farmer;s Hat as reward.
+-- 4. You spawn planter, click on it, if you have seeds: there'll be a gossip line for each, like: plant pumpkin, plant berries etc.
+-- 5. You click on gossip, small sproutling appear in the box. It says to wait 10 minutes.
+-- 6. Once 5 minutes is over, object becomes active and you need to water it with Refreshing Spring Water. 
+-- 7. It turns into small pumpkin. You want again 10 minutes. Object becomes active and asking for watering again.
+-- 8. You water it. It turns into medium pumpkin, you wait 10 minutes, water it again, it turns into grownup pumpkin.
+-- 9. You loot pumpkin an get from 5-15 pumpkins
+
 (1000334, 0, 2, 113, 'Simple Wooden Planter', 35, 0, 0.7, 0, 0, 2, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_simple_wooden_planter'),
 (1000335, 0, 5, 20,  'Planter Mud', 0, 0, 0.25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
 
-(1000336, 0, 2, 60, 'Cute Little Pumpkin. Water it!', 0, 0, 0.2, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_growing_food'),
-(1000337, 0, 2, 60, 'This Pumpkin is getting bigger!', 0, 0, 0.4, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_growing_food'),
-(1000338, 0, 2, 60, 'Plump Juicy Pumpkin. Ready for harvest.', 0, 0, 0.6, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_growing_food');
+(1000336, 0, 2, 677, 'Little sproutling. Nice and healthy!', 0, 0, 0.2, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_vegetable_growing_stage'),
+(1000337, 0, 2, 677, 'Little sproutling. Water it!', 0, 0, 0.3, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_grow_activate'),
+(1000338, 0, 2, 60, 'Cute little Pumpkin. Watch what will happen...', 0, 0, 0.2, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_vegetable_growing_stage'),
+(1000339, 0, 2, 60, 'Cute little Pumpkin. Fertilize it with Ungoro Soil!', 0, 0, 0.2, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_grow_activate'),
+(1000340, 0, 2, 60, 'This pumpkin is growing!', 0, 0, 0.4, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_vegetable_growing_stage'),
+(1000341, 0, 2, 60, 'Medium pumpkin. Water it!', 0, 0, 0.4, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_grow_activate'),
+(1000342, 0, 2, 60, 'Plump juicy pumpkin. Ready for harvest!', 0, 0, 0.6, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
 
 
 replace into item_template values
