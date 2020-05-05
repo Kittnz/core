@@ -38,17 +38,34 @@ replace into gameobject_template values
 -- 8. You water it. It turns into medium pumpkin, you wait 10 minutes, water it again, it turns into grownup pumpkin.
 -- 9. You loot pumpkin an get from 5-15 pumpkins
 
-(1000334, 0, 2, 113, 'Simple Wooden Planter', 35, 0, 0.7, 0, 0, 2, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_simple_wooden_planter'),
-(1000335, 0, 5, 20,  'Planter Mud', 0, 0, 0.25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(1000334, 0, 2, 113, 'Simple Wooden Planter', 35, 0, 1.1, 0, 0, 2, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_simple_wooden_planter'),
+(1000335, 0, 5, 20,  'Planter Mud', 0, 0, 0.4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
 
-(1000336, 0, 2, 677, 'Little sproutling. Nice and healthy!', 0, 0, 0.2, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_vegetable_growing_stage'),
+(1000336, 0, 5, 677, 'Little sproutling. Nice and healthy!', 0, 0, 0.2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_vegetable_growing_stage'),
 (1000337, 0, 2, 677, 'Little sproutling. Water it!', 0, 0, 0.3, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_grow_activate'),
-(1000338, 0, 2, 60, 'Cute little Pumpkin. Watch what will happen...', 0, 0, 0.2, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_vegetable_growing_stage'),
+(1000338, 0, 5, 60, 'Cute little Pumpkin. Watch what will happen...', 0, 0, 0.2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_vegetable_growing_stage'),
 (1000339, 0, 2, 60, 'Cute little Pumpkin. Fertilize it with Ungoro Soil!', 0, 0, 0.2, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_grow_activate'),
-(1000340, 0, 2, 60, 'This pumpkin is growing!', 0, 0, 0.4, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_vegetable_growing_stage'),
+(1000340, 0, 5, 60, 'This pumpkin is growing!', 0, 0, 0.4, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_vegetable_growing_stage'),
 (1000341, 0, 2, 60, 'Medium pumpkin. Water it!', 0, 0, 0.4, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_grow_activate'),
-(1000342, 0, 2, 60, 'Plump juicy pumpkin. Ready for harvest!', 0, 0, 0.6, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+(1000342, 0, 3, 60, 'Plump juicy pumpkin. Ready for harvest!', 0, 0, 0.6, 57, 1000001, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
 
+(1000343, 0, 5, 677, 'Little sproutling. Nice and healthy!', 0, 0, 0.2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_vegetable_growing_stage'),
+(1000344, 0, 2, 677, 'Little sproutling. Water it!', 0, 0, 0.3, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_grow_activate'),
+(1000345, 0, 5, 28, 'Small Berry Bush. Watch what will happen...', 0, 0, 0.1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_vegetable_growing_stage'),
+(1000346, 0, 2, 28, 'Small Berry Bush. Fertilize it with Ungoro Soil!', 0, 0, 0.1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_grow_activate'),
+(1000347, 0, 5, 28, 'Your Berry Bush is growing!', 0, 0, 0.3, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_vegetable_growing_stage'),
+(1000348, 0, 2, 28, 'Your Berry Bush is growing! Water it!', 0, 0, 0.3, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_grow_activate'),
+(1000349, 0, 3, 28, 'Bush full of berries. Ready for harvest!', 0, 0, 0.4, 57, 1000001, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+
+(1000350, 0, 5, 677, 'Little sproutling. Nice and healthy!', 0, 0, 0.2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_vegetable_growing_stage'),
+(1000351, 0, 2, 677, 'Little sproutling. Water it!', 0, 0, 0.3, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_grow_activate'),
+(1000352, 0, 5, 332, 'Small Watermelon. Watch what will happen...', 0, 0, 0.2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_vegetable_growing_stage'),
+(1000353, 0, 2, 332, 'Small Watermelon. Fertilize it with Ungoro Soil!', 0, 0, 0.2, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_grow_activate'),
+(1000354, 0, 5, 332, 'Your Watermelon is growing!', 0, 0, 0.4, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_vegetable_growing_stage'),
+(1000355, 0, 2, 332, 'Your Watermelon is growing! Water it!', 0, 0, 0.4, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_grow_activate'),
+(1000356, 0, 3, 332, 'Awesome sweet watermelon. Ready for harvest!', 0, 0, 0.6, 57, 1000001, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+
+(1000357, 0, 5, 6397, 'Splash!', 0, 0, 0.3, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
 
 
 replace into item_template values

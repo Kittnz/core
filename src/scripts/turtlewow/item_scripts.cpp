@@ -926,29 +926,9 @@ bool ItemUseSpell_item_brainwashing_device(Player* pPlayer, Item* pItem, const S
     return false;
 }
 
-bool ItemUseSpell_item_wooden_planter(Player* pPlayer, Item* pItem, const SpellCastTargets&)
-{
-    if (pPlayer->isInCombat() || pPlayer->IsBeingTeleported() || (pPlayer->getDeathState() == CORPSE) || pPlayer->IsMoving())
-        return false;
-
-    float dis{ 2.0F };
-    float x, y, z;
-    pPlayer->GetSafePosition(x, y, z);
-    x += dis * cos(pPlayer->GetOrientation());
-    y += dis * sin(pPlayer->GetOrientation());
-    pPlayer->SummonGameObject(1000334, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 30 * MINUTE * IN_MILLISECONDS, true);
-    pPlayer->SummonGameObject(1000335, x, y, z, 1.6f, 0.0f, 0.0f, 0.0f, 0.0f, 30 * MINUTE * IN_MILLISECONDS, true);
-    return true;
-}
-
 void AddSC_item_scripts()
 {
     Script *newscript;
-
-    newscript = new Script;
-    newscript->Name = "item_wooden_planter";
-    newscript->pItemUseSpell = &ItemUseSpell_item_wooden_planter;
-    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "item_brainwashing_device";
