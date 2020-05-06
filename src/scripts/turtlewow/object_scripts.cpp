@@ -462,6 +462,7 @@ bool GOHello_go_stormwind_fountain(Player* pPlayer, GameObject* pGo)
 
     int32 timer = 30 + urand(0, 70);
 
+    pGo->SetRespawnTime(timer * MINUTE);
     pGo->Despawn();
     pGo->UpdateObjectVisibility();
     return true;

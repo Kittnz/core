@@ -39,7 +39,7 @@ replace into shop_items values
 (105, 1, 50004, 'Portable Black Hole: 36 Slot Bag', 180),
 (106, 1, 51310, 'Portable Wormhole Generator', 0),
 (107, 1, 50011, 'Portable Gnomish Mailbox', 160),
-(108, 1, 51305, 'Portable Goblin Brainwashing Device', 200),
+(108, 1, 51715, 'Portable Goblin Brainwashing Device', 200),
 (109, 1, 50009, 'Mechanical Auctioneer (Companion)', 160),
 (110, 1, 50005, 'Field Repair Bot (Companion)', 160),
 (111, 1, 50007, 'Forworn Mule (Bank Companion)', 200),
