@@ -280,14 +280,14 @@ script_name) values
 
 ('51715', '0', '0', '0', 'Magic Mushroom', 'Delicious and completely absent of  psychedelic properties.', '15853', '1', '0', '0', '3000', '2000', '0', '-1', '-1', '15', '0', '0', '0', '0','0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '24707', '0', '0', '0', '-1', '0', '1200000', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '1', ''),
 
-('51716', '0', '0', '0', 'Juicy Stripped Melon', 'So sweet and juicy!', '4781', '1', '0', '0', '3000', '2000', '0', '-1', '-1', '15', '0', '0', '0', '0','0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '24005', '0', '0', '0', '-1', '0', '1200000', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '1', '');
+('51718', '0', '0', '0', 'Juicy Stripped Melon', 'So sweet and juicy!', '4781', '1', '0', '0', '3000', '2000', '0', '-1', '-1', '15', '0', '0', '0', '0','0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '24005', '0', '0', '0', '-1', '0', '1200000', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '1', '');
 
 update item_template set spellid_1 = 5006 where entry = 51710;  -- Pumpkin   -- 6 Stamina and Spirit for 15 min.
 update item_template set spellid_1 = 24869 where entry = 51713; -- Pumpkin   -- 10 Stamina for 15 min.
 update item_template set spellid_1 = 18230 where entry = 51711; -- Berry     -- 10 Agility for 10 min.
 update item_template set spellid_1 = 18229 where entry = 51714; -- Berry     -- 10 Stamina for 10 min.
 update item_template set spellid_1 = 10256 where entry = 51712; -- Melon     -- 12 Stamina and Spirit for 15 min.
-update item_template set spellid_1 = 22731 where entry = 51716; -- Melon     -- 10 Intellect for 15 min.
+update item_template set spellid_1 = 22731 where entry = 51718; -- Melon     -- 10 Intellect for 15 min.
 update item_template set spellid_1 = 25660 where entry = 51717; -- Mushroom  -- 25 Stamina for 15 min.
 update item_template set spellid_1 = 24800 where entry = 51715; -- Mushroom  -- 25 Strenght for 15 min.
 
@@ -298,7 +298,7 @@ update item_template set required_level = 35 where entry = 51711; -- Berry
 update item_template set required_level = 35 where entry = 51714; -- Berry
 
 update item_template set required_level = 45 where entry = 51712; -- Melon
-update item_template set required_level = 45 where entry = 51716; -- Melon
+update item_template set required_level = 45 where entry = 51718; -- Melon
 
 update item_template set required_level = 55 where entry = 51717; -- Mushroom
 update item_template set required_level = 55 where entry = 51715; -- Mushroom
@@ -339,7 +339,7 @@ SET @nextquest = 0;
 SET @nextquestinchain = 0;
 SET @prevquest = 0;
 SET @reward_item_1 = 51705;
-SET @reward_item_2 = 51718;
+SET @reward_item_2 = 51719;
 SET @reward_item_3 = 0;
 SET @reward_item_4 = 0;
 SET @reward_item_1_count = 1;
@@ -520,10 +520,10 @@ start_quest, lock_id, material, sheath, random_property, set_id, max_durability,
 duration, bag_family, disenchant_id, food_type, min_money_loot, max_money_loot, extra_flags, other_team_entry,
 script_name)
 values
- ('51718', '0', '2', '4', 'Garden Shovel', '', '7495', '3', '0', '1', '0', '0', '13', '-1', '-1', '22',
+ ('51719', '0', '2', '4', 'Garden Shovel', '', '7495', '3', '0', '1', '0', '0', '13', '-1', '-1', '22',
  '20', '0', '0', '0', '0', '0', '0', '0', '1', '1', '0', '7', '10', '3', '8',
- '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '2000', '0',
- '0', '68', '88', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '2700', '0',
+ '0', '58', '78', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '0', '0', '16790', '2', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
