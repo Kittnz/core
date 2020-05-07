@@ -52,7 +52,8 @@ enum GardenObjects
     MUSHROOM_MEDIUM_ACTIVE = 1000363,
     MUSHROOM_HARVEST = 1000364,
 
-    WATER_SPLASH = 1000357
+    WATER_SPLASH = 1000357,
+    DUST_CLOUD = 1000365
 };
 
 bool ItemUseSpell_item_wooden_planter(Player* pPlayer, Item* pItem, const SpellCastTargets&)
@@ -208,11 +209,11 @@ bool GOHello_go_farm_grow_activate(Player* pPlayer, GameObject* pGo)
     switch (pGo->GetEntry())
     {
     case PUMPKIN_SPROUTLING_ACTIVE:
-        currency = REFRESHING_SPRING_WATER;
+        currency = UNGORO_SOIL;
         static_go = PUMPKIN_SMALL;
         break;
     case PUMPKIN_SMALL_ACTIVE:
-        currency = UNGORO_SOIL;
+        currency = REFRESHING_SPRING_WATER;
         static_go = PUMPKIN_MEDIUM;
         break;
     case PUMPKIN_MEDIUM_ACTIVE:
@@ -222,11 +223,11 @@ bool GOHello_go_farm_grow_activate(Player* pPlayer, GameObject* pGo)
         break;
 
     case BERRY_SPROUTLING_ACTIVE:
-        currency = REFRESHING_SPRING_WATER;
+        currency = UNGORO_SOIL;
         static_go = BERRY_SMALL;
         break;
     case BERRY_SMALL_ACTIVE:
-        currency = UNGORO_SOIL;
+        currency = REFRESHING_SPRING_WATER;
         static_go = BERRY_MEDIUM;
         break;
     case BERRY_MEDIUM_ACTIVE:
@@ -236,11 +237,11 @@ bool GOHello_go_farm_grow_activate(Player* pPlayer, GameObject* pGo)
         break;
 
     case WATERMELON_SPROUTLING_ACTIVE:
-        currency = REFRESHING_SPRING_WATER;
+        currency = UNGORO_SOIL;
         static_go = WATERMELON_SMALL;
         break;
     case WATERMELON_SMALL_ACTIVE:
-        currency = UNGORO_SOIL;
+        currency = REFRESHING_SPRING_WATER;
         static_go = WATERMELON_MEDIUM;
         break;
     case WATERMELON_MEDIUM_ACTIVE:
@@ -250,11 +251,11 @@ bool GOHello_go_farm_grow_activate(Player* pPlayer, GameObject* pGo)
         break;
 
     case MUSHROOM_SPROUTLING_ACTIVE:
-        currency = REFRESHING_SPRING_WATER;
+        currency = UNGORO_SOIL;
         static_go = MUSHROOM_SMALL;
         break;
     case MUSHROOM_SMALL_ACTIVE:
-        currency = UNGORO_SOIL;
+        currency = REFRESHING_SPRING_WATER;
         static_go = MUSHROOM_MEDIUM;
         break;
     case MUSHROOM_MEDIUM_ACTIVE:
@@ -268,13 +269,13 @@ bool GOHello_go_farm_grow_activate(Player* pPlayer, GameObject* pGo)
 
     if (!pPlayer->HasItemCount(currency, 1))
     {
-        ChatHandler(pPlayer).PSendSysMessage(currency == REFRESHING_SPRING_WATER ? "Use Refreshing Spring Water to water it!" : "Use Ungoro Soil to fertilize it!");
+        ChatHandler(pPlayer).PSendSysMessage(currency == REFRESHING_SPRING_WATER ? "You're out of Refreshing Spring Water! Find more." : "You're out of Un'Goro Soil! Find more.");
         return false;
     }
 
     pPlayer->RemoveItemCurrency(currency, 1);
     pPlayer->SummonGameObject(static_go, x, y, z, 0.0F, 0.0f, 0.0f, 0.0f, 0.0f, harvest == false ? LIFESPAN_GROWING : LIFESPAN_BUTTON, true);
-    pPlayer->SummonGameObject(WATER_SPLASH, x, y, z, 0.0F, 0.0f, 0.0f, 0.0f, 0.0f, LIFESPAN_SPLASH, true);
+    pPlayer->SummonGameObject(currency == REFRESHING_SPRING_WATER ? WATER_SPLASH : DUST_CLOUD, x, y, z, 0.0F, 0.0f, 0.0f, 0.0f, 0.0f, LIFESPAN_SPLASH, true);
     pGo->Despawn();
     pGo->UpdateObjectVisibility();
     return true;

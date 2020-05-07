@@ -41,39 +41,40 @@ replace into gameobject_template values
 (1000334, 0, 2, 113, 'Simple Wooden Planter', 35, 0, 1.1, 0, 0, 2, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_simple_wooden_planter'),
 (1000335, 0, 5, 20,  'Planter Mud', 0, 0, 0.4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
 
-(1000336, 0, 5, 677, 'Little sproutling. Nice and healthy!', 0, 0, 0.2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_vegetable_growing_stage'),
-(1000337, 0, 2, 677, 'Little sproutling. Water it!', 0, 0, 0.3, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_grow_activate'),
-(1000338, 0, 5, 60, 'Cute little Pumpkin. Watch what will happen...', 0, 0, 0.2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_vegetable_growing_stage'),
-(1000339, 0, 2, 60, 'Cute little Pumpkin. Fertilize it with Ungoro Soil!', 0, 0, 0.2, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_grow_activate'),
-(1000340, 0, 5, 60, 'This pumpkin is growing!', 0, 0, 0.3, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_vegetable_growing_stage'),
+(1000336, 0, 5, 677, 'Little sproutling. Looks healthy.', 0, 0, 0.2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_vegetable_growing_stage'),
+(1000337, 0, 2, 677, 'Little sproutling. It earns for fertile Soil!', 0, 0, 0.3, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_grow_activate'),
+(1000338, 0, 5, 60, 'Little pumpkin. Watch it growing!', 0, 0, 0.2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_vegetable_growing_stage'),
+(1000339, 0, 2, 60, 'Cute pumpkin looks like needing water!', 0, 0, 0.2, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_grow_activate'),
+(1000340, 0, 5, 60, 'Pumpkin is getting bigger!', 0, 0, 0.3, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_vegetable_growing_stage'),
 (1000341, 0, 2, 60, 'Medium pumpkin. Water it!', 0, 0, 0.3, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_grow_activate'),
-(1000342, 0, 3, 60, 'Plump juicy pumpkin. Ready for harvest!', 0, 0, 0.4, 57, 1000001, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(1000342, 0, 3, 60, 'Ripe juicy pumpkin. Pluck it!', 0, 0, 0.4, 57, 1000001, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
 
-(1000343, 0, 5, 677, 'Little sproutling. Nice and healthy!', 0, 0, 0.2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_vegetable_growing_stage'),
-(1000344, 0, 2, 677, 'Little sproutling. Water it!', 0, 0, 0.3, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_grow_activate'),
-(1000345, 0, 5, 28, 'Small Berry Bush. Watch what will happen...', 0, 0, 0.1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_vegetable_growing_stage'),
-(1000346, 0, 2, 28, 'Small Berry Bush. Fertilize it with Ungoro Soil!', 0, 0, 0.1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_grow_activate'),
-(1000347, 0, 5, 28, 'Your Berry Bush is growing!', 0, 0, 0.2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_vegetable_growing_stage'),
-(1000348, 0, 2, 28, 'Your Berry Bush is growing! Water it!', 0, 0, 0.2, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_grow_activate'),
-(1000349, 0, 3, 28, 'Bush full of berries. Ready for harvest!', 0, 0, 0.3, 57, 1000001, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(1000343, 0, 5, 677, 'Small shrub of berries. Looks promising.', 0, 0, 0.2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_vegetable_growing_stage'),
+(1000344, 0, 2, 677, 'Small shrub of berries. Soil needed.', 0, 0, 0.3, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_grow_activate'),
+(1000345, 0, 5, 28, 'Growing bush of berries. Wait for it…', 0, 0, 0.1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_vegetable_growing_stage'),
+(1000346, 0, 2, 28, 'Growing bush of berries. Water it!', 0, 0, 0.1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_grow_activate'),
+(1000347, 0, 5, 28, 'Berry bush is growing!', 0, 0, 0.2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_vegetable_growing_stage'),
+(1000348, 0, 2, 28, 'Berry bush needs some water!', 0, 0, 0.2, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_grow_activate'),
+(1000349, 0, 3, 28, 'Bush full of berries. Harvest it!', 0, 0, 0.3, 57, 1000001, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
 
 (1000350, 0, 5, 677, 'Little sproutling. Nice and healthy!', 0, 0, 0.2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_vegetable_growing_stage'),
-(1000351, 0, 2, 677, 'Little sproutling. Water it!', 0, 0, 0.3, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_grow_activate'),
-(1000352, 0, 5, 332, 'Small Watermelon. Watch what will happen...', 0, 0, 0.2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_vegetable_growing_stage'),
-(1000353, 0, 2, 332, 'Small Watermelon. Fertilize it with Ungoro Soil!', 0, 0, 0.2, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_grow_activate'),
-(1000354, 0, 5, 332, 'Your Watermelon is growing!', 0, 0, 0.4, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_vegetable_growing_stage'),
-(1000355, 0, 2, 332, 'Your Watermelon is growing! Water it!', 0, 0, 0.4, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_grow_activate'),
-(1000356, 0, 3, 332, 'Awesome sweet watermelon. Ready for harvest!', 0, 0, 0.6, 57, 1000001, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(1000351, 0, 2, 677, 'Little sproutling needs fertile Soil!', 0, 0, 0.3, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_grow_activate'),
+(1000352, 0, 5, 332, 'Small watermelon. It\'s growing.', 0, 0, 0.2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_vegetable_growing_stage'),
+(1000353, 0, 2, 332, 'Small watermelon. Water it good!', 0, 0, 0.2, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_grow_activate'),
+(1000354, 0, 5, 332, 'Medium watermelon. Getting bigger!', 0, 0, 0.4, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_vegetable_growing_stage'),
+(1000355, 0, 2, 332, 'Medium watermelon. More water!', 0, 0, 0.4, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_grow_activate'),
+(1000356, 0, 3, 332, 'Big juicy watermelon ready for harvest!', 0, 0, 0.6, 57, 1000001, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
 
 (1000357, 0, 5, 6397, 'Splash!', 0, 0, 0.3, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(1000365, 0, 5, 250,  '', 0, 0, 0.3, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
 
-(1000358, 0, 5, 155, 'Little mushroom. Nice and healthy!', 0, 0, 0.2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_vegetable_growing_stage'),
-(1000359, 0, 2, 155, 'Little mushroom. Water it!', 0, 0, 0.3, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_grow_activate'),
-(1000360, 0, 5, 155, 'Small Magic Mushroom. Watch what will happen...', 0, 0, 0.2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_vegetable_growing_stage'),
-(1000361, 0, 2, 155, 'Small Magic Mushroom. Fertilize it with Ungoro Soil!', 0, 0, 0.2, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_grow_activate'),
-(1000362, 0, 5, 155, 'Your Magic Mushroom is growing!', 0, 0, 0.4, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_vegetable_growing_stage'),
-(1000363, 0, 2, 155, 'Your Magic Mushroom is growing! Water it!', 0, 0, 0.4, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_grow_activate'),
-(1000364, 0, 3, 155, 'Delicious and completely absent of psychedelic properties. Ready for harvest!', 0, 0, 0.6, 57, 1000001, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+(1000358, 0, 5, 155, 'Little mushrooms. Looks cute.', 0, 0, 0.2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_vegetable_growing_stage'),
+(1000359, 0, 2, 155, 'Germinating slowly. Mushrooms need fertile Soil.', 0, 0, 0.3, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_grow_activate'),
+(1000360, 0, 5, 155, 'Mushrooms are sprouting. Wait for it…', 0, 0, 0.2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_vegetable_growing_stage'),
+(1000361, 0, 2, 155, 'Small mushrooms earn for some water.', 0, 0, 0.2, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_grow_activate'),
+(1000362, 0, 5, 155, 'Mushrooms are germinating!', 0, 0, 0.4, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_vegetable_growing_stage'),
+(1000363, 0, 2, 155, 'Mushrooms are growing further! Water them!', 0, 0, 0.4, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_grow_activate'),
+(1000364, 0, 3, 155, 'Delicious, chunky \'shrooms are ready for harvesting. Trip free likely.', 0, 0, 0.6, 57, 1000001, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
 
 replace into item_template values
 
@@ -251,35 +252,60 @@ spellcooldown_5, spellcategory_5, spellcategorycooldown_5, bonding, page_text, p
 start_quest, lock_id, material, sheath, random_property, set_id, max_durability, area_bound, map_bound,
 duration, bag_family, disenchant_id, food_type, min_money_loot, max_money_loot, extra_flags, other_team_entry,
 script_name) values
-('51705', '0', '15', '0', 'Simple Wooden Planter', 'Plant a seed and wait for the harvest!', '10273', '2', '0', '0', '50000', '40000', '0', '-1', '-1', '15', '0', '142', '150', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '31564', '0', '0', '0', '-1', '0', '1200000', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '1', '0', '0', '0', '0', '0', '2', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', 'item_wooden_planter'), 
+('51705', '0', '15', '0', 'Simple Wooden Planter', 'Specially handcrafted planter with fertile and watered soil.', '10273', '2', '0', '0', '50000', '40000', '0', '-1', '-1', '15', '0', '142', '150', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '31564', '0', '0', '0', '-1', '0', '1200000', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '1', '0', '0', '0', '0', '0', '2', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', 'item_wooden_planter'), 
 
-('51706', '0', '15', '0', 'Country Pumpkin Seeds', 'Can be planted in Simple Wooden Planter. Requires watering and fertilizing.', '3565', '1', '0', '0', '3000', '1500', '0', '-1', '-1', '15', '0', '51', '150', '0', '0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '4504', '0', '0', '0', '-1', '0', '1200000', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '1', '0', '0', '0', '0', '0', '2', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', 'item_pumpkin_seeds'),
+('51706', '0', '15', '0', 'Country Pumpkin Seeds', 'Can be planted in Simple Wooden Planter. Requires watering and fertilizing.', '3565', '1', '0', '0', '3000', '1500', '0', '-1', '-1', '15', '0', '51', '150', '0', '0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '4504', '0', '0', '0', '-1', '0', '1200000', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '1', '0', '0', '0', '0', '0', '2', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', ''),
 
-('51707', '0', '15', '0', 'Mountain Berries Seeds', 'Colorful berries from Hinterlands region. Can be planted in Simple Wooden Planter. Requires watering and fertilizing.', '8270', '1', '0', '0', '3000', '1500', '0', '-1', '-1', '15', '0', '51', '150', '0', '0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '4504', '0', '0', '0', '-1', '0', '1200000', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '1', '0', '0', '0', '0', '0', '2', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', 'item_berry_seeds'),
+('51707', '0', '15', '0', 'Mountain Berries Seeds', 'Colorful berries from Hinterlands region. Can be planted in Simple Wooden Planter. Requires watering and fertilizing.', '8270', '1', '0', '0', '3000', '1500', '0', '-1', '-1', '15', '0', '51', '150', '0', '0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '4504', '0', '0', '0', '-1', '0', '1200000', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '1', '0', '0', '0', '0', '0', '2', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', ''),
 
-('51708', '0', '15', '0', 'Stripped Melon Seeds', 'The sweetest sort ever known! Can be planted in Simple Wooden Planter. Requires watering and fertilizing.', '3237', '1', '0', '0', '3000', '1500', '0', '-1', '-1', '15', '0', '51', '150', '0', '0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '4504', '0', '0', '0', '-1', '0', '1200000', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '1', '0', '0','0', '0', '0', '2', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', 'item_melon_seeds'), 
+('51708', '0', '15', '0', 'Stripped Melon Seeds', 'The sweetest sort ever known! Can be planted in Simple Wooden Planter. Requires watering and fertilizing.', '3237', '1', '0', '0', '3000', '1500', '0', '-1', '-1', '15', '0', '51', '150', '0', '0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '4504', '0', '0', '0', '-1', '0', '1200000', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '1', '0', '0','0', '0', '0', '2', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', ''), 
 
-('51716', '0', '15', '0', 'Magic Mushroom Samples', 'Delicious and completely absent of  psychedelic properties.', '362', '1', '0', '0', '3000', '1500', '0', '-1', '-1', '15', '0', '51', '150', '0', '0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '4504', '0', '0', '0', '-1', '0', '1200000', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '1', '0', '0','0', '0', '0', '2', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', 'item_melon_seeds'), 
+('51716', '0', '15', '0', 'Magic Mushroom Samples', 'Delicious and completely absent of  psychedelic properties.', '362', '1', '0', '0', '3000', '1500', '0', '-1', '-1', '15', '0', '51', '150', '0', '0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '4504', '0', '0', '0', '-1', '0', '1200000', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '1', '0', '0','0', '0', '0', '2', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', ''), 
 
 ('51709', '0', '15', '0', 'Farmer\'s Guidebook: Epic Pumpkins!', 'How to select and grow the best varieties of all time!', '3114', '1', '8192', '0', '2500', '1500', '0', '-1', '-1','15', '0', '0', '0', '0', '0', '0', '0', '0', '1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '-1', '0', '1200000', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '1', '50100', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', ''),
  
-('51710', '0', '0', '0', 'Plump Country Pumpkin', 'The pumpkin is much heavier than you thought.', '3225', '1', '0', '0', '3000', '2000', '0', '-1', '-1', '15', '0', '0', '0', '0', '0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '24005', '0', '0', '0', '-1', '0', '1200000', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '50100', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '1', ''),
+ 
+('51710', '0', '0', '0', 'Plump Country Pumpkin', 'The pumpkin is much heavier than you thought.', '3225', '1', '0', '0', '3000', '2000', '0', '-1', '-1', '15', '0', '0', '0', '0', '0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '24005', '0', '0', '0', '-1', '0', '1200000', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '1', ''),
 
-('51711', '0', '0', '0', 'Sweet Mountain Berry', 'These unassuming little berries pack a lot of power!', '20770', '1', '0', '0', '3000', '2000', '0', '-1', '-1', '15', '0', '0', '0', '0','0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '24707', '0', '0', '0', '-1', '0', '1200000', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '50100', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '1', ''),
+('51711', '0', '0', '0', 'Sweet Mountain Berry', 'These unassuming little berries pack a lot of power!', '20770', '1', '0', '0', '3000', '2000', '0', '-1', '-1', '15', '0', '0', '0', '0','0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '24707', '0', '0', '0', '-1', '0', '1200000', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '1', ''),
 
-('51717', '0', '0', '0', 'Magic Mushroom', 'Delicious and completely absent of  psychedelic properties.', '15853', '1', '0', '0', '3000', '2000', '0', '-1', '-1', '15', '0', '0', '0', '0','0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '24707', '0', '0', '0', '-1', '0', '1200000', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '50100', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '1', ''),
+('51717', '0', '0', '0', 'Magic Mushroom', 'Delicious and completely absent of  psychedelic properties.', '15853', '1', '0', '0', '3000', '2000', '0', '-1', '-1', '15', '0', '0', '0', '0','0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '24707', '0', '0', '0', '-1', '0', '1200000', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '1', ''),
 
-('51712', '0', '0', '0', 'Juicy Stripped Melon', 'So sweet and juicy!', '4781', '1', '0', '0', '3000', '2000', '0', '-1', '-1', '15', '0', '0', '0', '0','0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '24005', '0', '0', '0', '-1', '0', '1200000', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '50100', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '1', '');
+('51712', '0', '0', '0', 'Juicy Stripped Melon', 'So sweet and juicy!', '4781', '1', '0', '0', '3000', '2000', '0', '-1', '-1', '15', '0', '0', '0', '0','0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '24005', '0', '0', '0', '-1', '0', '1200000', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '1', ''),
+ 
+ 
+('51713', '0', '0', '0', 'Plump Country Pumpkin', 'The pumpkin is much heavier than you thought.', '3225', '1', '0', '0', '3000', '2000', '0', '-1', '-1', '15', '0', '0', '0', '0', '0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '24005', '0', '0', '0', '-1', '0', '1200000', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '1', ''),
 
-update item_template set spellid_1 = 5006 where entry = 51710; -- Pumpkin   -- 6 Stamina and Spirit for 15 min.
-update item_template set spellid_1 = 18230 where entry = 51711; -- Berry    -- 10 Agility for 10 min.
-update item_template set spellid_1 = 10256 where entry = 51712; -- Melon    -- 12 Stamina and Spirit for 15 min.
-update item_template set spellid_1 = 25660 where entry = 51717; -- Mushroom -- 25 Stamina for 15 min.
+('51714', '0', '0', '0', 'Sweet Mountain Berry', 'These unassuming little berries pack a lot of power!', '20770', '1', '0', '0', '3000', '2000', '0', '-1', '-1', '15', '0', '0', '0', '0','0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '24707', '0', '0', '0', '-1', '0', '1200000', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '1', ''),
+
+('51715', '0', '0', '0', 'Magic Mushroom', 'Delicious and completely absent of  psychedelic properties.', '15853', '1', '0', '0', '3000', '2000', '0', '-1', '-1', '15', '0', '0', '0', '0','0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '24707', '0', '0', '0', '-1', '0', '1200000', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '1', ''),
+
+('51716', '0', '0', '0', 'Juicy Stripped Melon', 'So sweet and juicy!', '4781', '1', '0', '0', '3000', '2000', '0', '-1', '-1', '15', '0', '0', '0', '0','0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '24005', '0', '0', '0', '-1', '0', '1200000', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '1', '');
+
+update item_template set spellid_1 = 5006 where entry = 51710;  -- Pumpkin   -- 6 Stamina and Spirit for 15 min.
+update item_template set spellid_1 = 24869 where entry = 51713; -- Pumpkin   -- 10 Stamina for 15 min.
+update item_template set spellid_1 = 18230 where entry = 51711; -- Berry     -- 10 Agility for 10 min.
+update item_template set spellid_1 = 18229 where entry = 51714; -- Berry     -- 10 Stamina for 10 min.
+update item_template set spellid_1 = 10256 where entry = 51712; -- Melon     -- 12 Stamina and Spirit for 15 min.
+update item_template set spellid_1 = 22731 where entry = 51716; -- Melon     -- 10 Intellect for 15 min.
+update item_template set spellid_1 = 25660 where entry = 51717; -- Mushroom  -- 25 Stamina for 15 min.
+update item_template set spellid_1 = 24800 where entry = 51715; -- Mushroom  -- 25 Strenght for 15 min.
 
 update item_template set required_level = 25 where entry = 51710; -- Pumpkin
+update item_template set required_level = 25 where entry = 51713; -- Pumpkin
+
 update item_template set required_level = 35 where entry = 51711; -- Berry
+update item_template set required_level = 35 where entry = 51714; -- Berry
+
 update item_template set required_level = 45 where entry = 51712; -- Melon
+update item_template set required_level = 45 where entry = 51716; -- Melon
+
 update item_template set required_level = 55 where entry = 51717; -- Mushroom
+update item_template set required_level = 55 where entry = 51715; -- Mushroom
+
+-- Remove Prices
+
+update item_template set buy_price = 0, sell_price = 0 where entry in (51710, 51711, 51712, 51713, 51714, 51715, 51716, 51718);
 
 -- GO LOOT
 
@@ -289,10 +315,16 @@ update gameobject_template set data1 = 1000052 where entry = 1000356;
 update gameobject_template set data1 = 1000053 where entry = 1000364;
 
 REPLACE INTO `gameobject_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`, `patch_min`, `patch_max`) VALUES 
-(1000050, 51710, 100, 1, 6, 15, 0, 0, 10),
-(1000051, 51711, 100, 1, 6, 15, 0, 0, 10),
-(1000052, 51712, 100, 1, 6, 15, 0, 0, 10),
-(1000053, 51717, 100, 1, 6, 15, 0, 0, 10);
+(1000050, 51710, 100, 1, 6, 10, 0, 0, 10),
+(1000051, 51711, 100, 1, 6, 10, 0, 0, 10),
+(1000052, 51712, 100, 1, 6, 10, 0, 0, 10),
+(1000053, 51717, 100, 1, 6, 10, 0, 0, 10);
+
+REPLACE INTO `gameobject_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`, `patch_min`, `patch_max`) VALUES 
+(1000050, 51713, 100, 2, 6, 10, 0, 0, 10),
+(1000051, 51714, 100, 2, 6, 10, 0, 0, 10),
+(1000052, 51716, 100, 2, 6, 10, 0, 0, 10),
+(1000053, 51715, 100, 2, 6, 10, 0, 0, 10);
 
 SET @quest_entry = 60060;
 SET @quest_zone = 1519;
@@ -307,11 +339,11 @@ SET @nextquest = 0;
 SET @nextquestinchain = 0;
 SET @prevquest = 0;
 SET @reward_item_1 = 51705;
-SET @reward_item_2 = 0;
+SET @reward_item_2 = 51718;
 SET @reward_item_3 = 0;
 SET @reward_item_4 = 0;
 SET @reward_item_1_count = 1;
-SET @reward_item_2_count = 0;
+SET @reward_item_2_count = 1;
 SET @reward_item_3_count = 0;
 SET @reward_item_4_count = 0;
 SET @creature_to_kill_1 = 0;
@@ -440,7 +472,7 @@ UPDATE `game_weather` SET `copy_weather_from` = '1519' WHERE (`zone` = '12');
 
 -- Farm Stuff again
 
-replace into broadcast_text (ID, MaleText) values ('90351', 'Before you reap your harvest you sowing seeds and foster them with care.');
+replace into broadcast_text (ID, MaleText) values ('90351', 'Specially handcrafted planter with fertile and watered Soil.');
 replace into npc_text (ID, BroadcastTextID0) values ('90351', '90351');
 
 REPLACE INTO `page_text` (`entry`, `text`) VALUES (50100, 'Before you reap your harvest you sowing seeds and foster them with care.\n\nFirst and perhaps an easiest one to start with will be Pumpkins. You will need some of those Pumpkin Seeds from any Pumpkin you can procure. Nearest must be on the Hillsbrad Fields I gather.\n\nSecond would be very similar, however a bit more complicated to tend to – watermelons. To grow some you will need seeds as well and the place to find them is the same.\n\nLast thing you\'d be able to grow on your own with the same technique is the Mountain Berry seeds which are in abundance in Hinterlands. Not far from here, just north from Durnhold Keep. Be careful there, area is dense with fierce wildlife and gruesome monsters should you stride too far into the wilds.');
@@ -459,11 +491,41 @@ update creature_template set gossip_menu_id = 56004 where entry = 51530;
 update creature_template set gossip_menu_id = 56004 where entry = 51532;
 
 replace into gossip_menu (entry, text_id, condition_id) VALUES ('56005', '90353', '0'); 
-replace into broadcast_text (ID, MaleText) values ('90353', 'My biggest dream is to grow the World\'s Biggest Pumpkin!\n\nWhat\'s yours?');
+replace into broadcast_text (ID, MaleText) values ('90353', 'My grand dream is to grow the World\'s Biggest Pumpkin!\n\nWhat\'s yours?');
 replace into npc_text (ID, BroadcastTextID0) values ('90353', '90353');
 update creature_template set gossip_menu_id = 56005 where entry = 51531;
 update creature_template set gossip_menu_id = 56005 where entry = 51533;
 
 update creature_template set equipment_id = 50000 where entry = 51530;
 replace into `creature_equip_template` (`entry`, `equipentry1`) VALUES ('50000', '3334');
+
+replace into item_template (
+entry, patch, class, subclass, name,description, display_id, quality, flags, buy_count,
+buy_price, sell_price, inventory_type, allowable_class, allowable_race, item_level,
+required_level, required_skill, required_skill_rank, required_spell, required_honor_rank,
+required_city_rank, required_reputation_faction, required_reputation_rank, max_count, stackable,
+container_slots, stat_type1, stat_value1, stat_type2, stat_value2, stat_type3, stat_value3,
+stat_type4, stat_value4, stat_type5, stat_value5, stat_type6, stat_value6, stat_type7,
+stat_value7, stat_type8, stat_value8, stat_type9, stat_value9, stat_type10, stat_value10,
+delay, range_mod, ammo_type, dmg_min1, dmg_max1, dmg_type1, dmg_min2, dmg_max2, dmg_type2,
+dmg_min3, dmg_max3, dmg_type3, dmg_min4, dmg_max4, dmg_type4, dmg_min5, dmg_max5, dmg_type5, block,
+armor, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, spellid_1, spelltrigger_1,
+spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, spellid_2,
+spelltrigger_2, spellcharges_2, spellppmrate_2, spellcooldown_2, spellcategory_2, spellcategorycooldown_2,
+spellid_3, spelltrigger_3, spellcharges_3, spellppmrate_3, spellcooldown_3, spellcategory_3,
+spellcategorycooldown_3, spellid_4, spelltrigger_4, spellcharges_4, spellppmrate_4, spellcooldown_4,
+spellcategory_4, spellcategorycooldown_4, spellid_5, spelltrigger_5, spellcharges_5, spellppmrate_5,
+spellcooldown_5, spellcategory_5, spellcategorycooldown_5, bonding, page_text, page_language, page_material,
+start_quest, lock_id, material, sheath, random_property, set_id, max_durability, area_bound, map_bound,
+duration, bag_family, disenchant_id, food_type, min_money_loot, max_money_loot, extra_flags, other_team_entry,
+script_name)
+values
+ ('51718', '0', '2', '4', 'Garden Shovel', '', '7495', '3', '0', '1', '0', '0', '13', '-1', '-1', '22',
+ '20', '0', '0', '0', '0', '0', '0', '0', '1', '1', '0', '7', '10', '3', '8',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '2000', '0',
+ '0', '68', '88', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '16790', '2', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
 
