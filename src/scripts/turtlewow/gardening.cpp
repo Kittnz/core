@@ -5,7 +5,7 @@ enum GardenObjects
 {
     LIFESPAN_PLANTER       = 60 * MINUTE * IN_MILLISECONDS, 
     LIFESPAN_GROWING       = 10 * MINUTE * IN_MILLISECONDS, 
-    LIFESPAN_GROWING_TICK  =  1 * MINUTE * IN_MILLISECONDS, // 1 minute for test. Set it to 9.
+    LIFESPAN_GROWING_TICK  =  9 * MINUTE * IN_MILLISECONDS, 
     LIFESPAN_BUTTON        =  5 * MINUTE * IN_MILLISECONDS, 
     LIFESPAN_SPLASH        =  2,
 
@@ -87,7 +87,7 @@ bool GOHello_go_simple_wooden_planter(Player* pPlayer, GameObject* pGo)
     if (pPlayer->HasItemCount(WATERMELON_SEEDS, 1)) 
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Plant Stripped Melon Seeds.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);  
     if (pPlayer->HasItemCount(MUSHROOM_SEEDS, 1))
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Plant Magic Mushroom Sample", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Plant Magic Mushroom Spores.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
 
     pPlayer->SEND_GOSSIP_MENU(90351, pGo->GetGUID());
     return true;

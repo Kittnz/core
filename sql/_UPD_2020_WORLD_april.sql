@@ -74,7 +74,21 @@ replace into gameobject_template values
 (1000361, 0, 2, 155, 'Small mushrooms earn for some water.', 0, 0, 0.2, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_grow_activate'),
 (1000362, 0, 5, 155, 'Mushrooms are germinating!', 0, 0, 0.4, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_vegetable_growing_stage'),
 (1000363, 0, 2, 155, 'Mushrooms are growing further! Water them!', 0, 0, 0.4, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farm_grow_activate'),
-(1000364, 0, 3, 155, 'Delicious, chunky \'shrooms are ready for harvesting. Trip free likely.', 0, 0, 0.6, 57, 1000001, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+(1000364, 0, 3, 155, 'Delicious, chunky \'shrooms are ready for harvesting. Trip free likely.', 0, 0, 0.6, 57, 1000001, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+
+-- SEED GOS
+
+(1000370, 0, 3, 60, 'Ripe Garden Pumpkin', 0, 0, 0.8, 57, 1000054, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(1000371, 0, 3, 28, 'Garden Berry Bush', 0, 0, 0.8, 57, 1000055, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(1000372, 0, 3, 332, 'Ripe Garden Watermelon', 0, 0, 0.8, 57, 1000056, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+-- SEED LOOT
+
+REPLACE INTO `gameobject_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`, `patch_min`, `patch_max`) VALUES 
+(1000054, 51706, 100, 1, 4, 10, 0, 0, 10),
+(1000055, 51707, 100, 1, 4, 10, 0, 0, 10),
+(1000056, 51708, 100, 1, 4, 10, 0, 0, 10);
+
 
 replace into item_template values
 
@@ -252,17 +266,17 @@ spellcooldown_5, spellcategory_5, spellcategorycooldown_5, bonding, page_text, p
 start_quest, lock_id, material, sheath, random_property, set_id, max_durability, area_bound, map_bound,
 duration, bag_family, disenchant_id, food_type, min_money_loot, max_money_loot, extra_flags, other_team_entry,
 script_name) values
-('51705', '0', '15', '0', 'Simple Wooden Planter', 'Specially handcrafted planter with fertile and watered soil.', '10273', '2', '0', '0', '50000', '40000', '0', '-1', '-1', '15', '0', '142', '150', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '22050', '0', '0', '0', '-1', '0', '12000', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '1', '0', '0', '0', '0', '0', '2', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', 'item_wooden_planter'), 
+('51705', '0', '15', '0', 'Simple Wooden Planter', 'Specially handcrafted planter with fertile and watered soil.', '10273', '2', '0', '0', '50000', '40000', '0', '-1', '-1', '15', '0', '142', '100', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '22050', '0', '0', '0', '-1', '0', '12000', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '1', '0', '0', '0', '0', '0', '2', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', 'item_wooden_planter'), 
 
-('51706', '0', '15', '0', 'Country Pumpkin Seeds', 'Can be planted in Simple Wooden Planter. Requires watering and fertilizing.', '3565', '1', '0', '0', '3000', '1500', '0', '-1', '-1', '15', '0', '0', '0', '0', '0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '4504', '0', '0', '0', '-1', '0', '1200000', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '1', '0', '0', '0', '0', '0', '2', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', ''),
+('51706', '0', '15', '0', 'Country Pumpkin Seeds', 'Can be planted in Simple Wooden Planter. Requires watering and fertilizing.', '3565', '1', '0', '0', '3000', '1500', '0', '-1', '-1', '15', '0', '0', '0', '0', '0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '-1', '0', '1200000', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '1', '0', '0', '0', '0', '0', '2', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', ''),
 
-('51707', '0', '15', '0', 'Mountain Berries Seeds', 'Colorful berries from Hinterlands region. Can be planted in Simple Wooden Planter. Requires watering and fertilizing.', '8270', '1', '0', '0', '3000', '1500', '0', '-1', '-1', '15', '0', '0', '0', '0', '0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '4504', '0', '0', '0', '-1', '0', '1200000', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '1', '0', '0', '0', '0', '0', '2', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', ''),
+('51707', '0', '15', '0', 'Mountain Berries Seeds', 'Colorful berries from Hinterlands region. Can be planted in Simple Wooden Planter. Requires watering and fertilizing.', '8270', '1', '0', '0', '3000', '1500', '0', '-1', '-1', '15', '0', '0', '0', '0', '0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '-1', '0', '1200000', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '1', '0', '0', '0', '0', '0', '2', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', ''),
 
-('51708', '0', '15', '0', 'Stripped Melon Seeds', 'The sweetest sort ever known! Can be planted in Simple Wooden Planter. Requires watering and fertilizing.', '3237', '1', '0', '0', '3000', '1500', '0', '-1', '-1', '15', '0', '0', '0', '0', '0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '4504', '0', '0', '0', '-1', '0', '1200000', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '1', '0', '0','0', '0', '0', '2', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', ''), 
+('51708', '0', '15', '0', 'Stripped Melon Seeds', 'The sweetest sort ever known! Can be planted in Simple Wooden Planter. Requires watering and fertilizing.', '3237', '1', '0', '0', '3000', '1500', '0', '-1', '-1', '15', '0', '0', '0', '0', '0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '-1', '0', '1200000', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '1', '0', '0','0', '0', '0', '2', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', ''), 
 
-('51716', '0', '15', '0', 'Magic Mushroom Samples', 'Delicious and completely absent of  psychedelic properties.', '362', '1', '0', '0', '3000', '1500', '0', '-1', '-1', '15', '0', '0', '0', '0', '0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '4504', '0', '0', '0', '-1', '0', '1200000', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '1', '0', '0','0', '0', '0', '2', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', ''), 
+('51716', '0', '15', '0', 'Magic Mushroom Spores', 'Delicious and completely absent of  psychedelic properties.', '362', '1', '0', '0', '3000', '1500', '0', '-1', '-1', '15', '0', '0', '0', '0', '0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '-1', '0', '1200000', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '1', '0', '0','0', '0', '0', '2', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', ''), 
 
-('51709', '0', '15', '0', 'Farmer\'s Guidebook: Epic Pumpkins!', 'How to select and grow the best varieties of all time!', '3114', '1', '8192', '0', '2500', '1500', '0', '-1', '-1','15', '0', '0', '0', '0', '0', '0', '0', '0', '1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '-1', '0', '1200000', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '1', '50100', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', ''),
+('51709', '0', '15', '0', 'Farmer\'s Guidebook: Surviving on the Land!', 'How to select and grow the best varieties of all time!', '3114', '1', '8192', '0', '2500', '1500', '0', '-1', '-1','15', '0', '0', '0', '0', '0', '0', '0', '0', '1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '-1', '0', '1200000', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '1', '50100', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', ''),
  
  
 ('51710', '0', '0', '0', 'Plump Country Pumpkin', 'The pumpkin is much heavier than you thought.', '3225', '1', '0', '0', '3000', '2000', '0', '-1', '-1', '15', '0', '0', '0', '0', '0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '24005', '0', '0', '0', '-1', '0', '1200000', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '1', ''),
@@ -289,7 +303,7 @@ update item_template set spellid_1 = 18229 where entry = 51714; -- Berry     -- 
 update item_template set spellid_1 = 10256 where entry = 51712; -- Melon     -- 12 Stamina and Spirit for 15 min.
 update item_template set spellid_1 = 22731 where entry = 51718; -- Melon     -- 10 Intellect for 15 min.
 update item_template set spellid_1 = 25660 where entry = 51717; -- Mushroom  -- 25 Stamina for 15 min.
-update item_template set spellid_1 = 24800 where entry = 51715; -- Mushroom  -- 25 Strenght for 15 min.
+update item_template set spellid_1 = 24800 where entry = 51720; -- Mushroom  -- 25 Strenght for 15 min.
 
 update item_template set required_level = 25 where entry = 51710; -- Pumpkin
 update item_template set required_level = 25 where entry = 51713; -- Pumpkin
@@ -305,7 +319,7 @@ update item_template set required_level = 55 where entry = 51720; -- Mushroom
 
 -- Remove Prices
 
-update item_template set buy_price = 0, sell_price = 0 where entry in (51710, 51711, 51712, 51713, 51714, 51720, 51716, 51718);
+update item_template set buy_price = 0, sell_price = 0 where entry in (51710, 51711, 51712, 51713, 51714, 51720, 51716, 51718, 51706, 51707, 51708);
 
 -- GO LOOT
 
@@ -314,22 +328,26 @@ update gameobject_template set data1 = 1000051 where entry = 1000349;
 update gameobject_template set data1 = 1000052 where entry = 1000356;
 update gameobject_template set data1 = 1000053 where entry = 1000364;
 
-REPLACE INTO `gameobject_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`, `patch_min`, `patch_max`) VALUES 
-(1000050, 51710, 100, 1, 6, 10, 0, 0, 10),
-(1000051, 51711, 100, 1, 6, 10, 0, 0, 10),
-(1000052, 51712, 100, 1, 6, 10, 0, 0, 10),
-(1000053, 51717, 100, 1, 6, 10, 0, 0, 10);
+delete from gameobject_loot_template where entry in (1000050, 1000051, 1000052, 1000053);
 
 REPLACE INTO `gameobject_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`, `patch_min`, `patch_max`) VALUES 
-(1000050, 51713, 100, 2, 6, 10, 0, 0, 10),
-(1000051, 51714, 100, 2, 6, 10, 0, 0, 10),
-(1000052, 51718, 100, 2, 6, 10, 0, 0, 10),
-(1000053, 51720, 100, 2, 6, 10, 0, 0, 10);
+(1000050, 51710, 100, 1, 4, 8, 0, 0, 10),
+(1000051, 51711, 100, 1, 4, 8, 0, 0, 10),
+(1000052, 51712, 100, 1, 4, 8, 0, 0, 10),
+(1000053, 51717, 100, 1, 4, 8, 0, 0, 10);
+
+REPLACE INTO `gameobject_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`, `patch_min`, `patch_max`) VALUES 
+(1000050, 51713, 100, 2, 4, 8, 0, 0, 10),
+(1000051, 51714, 100, 2, 4, 8, 0, 0, 10),
+(1000052, 51718, 100, 2, 4, 8, 0, 0, 10),
+(1000053, 51720, 100, 2, 4, 8, 0, 0, 10);
+
+update item_template set bonding = 0 where entry in (51706, 51707, 51708, 51716);
 
 SET @quest_entry = 60060;
 SET @quest_zone = 1519;
-SET @faction_id = 269;
-SET @faction_count = 250;
+SET @faction_id = 0;
+SET @faction_count = 0;
 SET @xp_or_money = 1650;
 SET @quest_level = 60;
 SET @min_level = 20;
@@ -417,6 +435,100 @@ update quest_template set prevquestid = @nextquest where entry = @quest_entry;
 replace into creature_questrelation (id, quest, patch_min, patch_max) values (@questgiver_id, @quest_entry,'10','10');
 replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (@quest_finisher, @quest_entry,'10','10'); 
 
+-- HORDE FARM QUERST
+
+SET @quest_entry = 60061;
+SET @quest_zone = 215;
+SET @faction_id = 0;
+SET @faction_count = 0;
+SET @xp_or_money = 1650;
+SET @quest_level = 60;
+SET @min_level = 20;
+SET @questgiver_id = 51532;
+SET @quest_finisher = 51532;
+SET @nextquest = 0;
+SET @nextquestinchain = 0;
+SET @prevquest = 0;
+SET @reward_item_1 = 51705;
+SET @reward_item_2 = 51719;
+SET @reward_item_3 = 0;
+SET @reward_item_4 = 0;
+SET @reward_item_1_count = 1;
+SET @reward_item_2_count = 1;
+SET @reward_item_3_count = 0;
+SET @reward_item_4_count = 0;
+SET @creature_to_kill_1 = 0;
+SET @creature_to_kill_2 = 0;
+SET @creature_to_kill_3 = 0;
+SET @creature_to_kill_4 = 0;
+SET @creature_to_kill_1_count = 0;
+SET @creature_to_kill_2_count = 0;
+SET @creature_to_kill_3_count = 0;
+SET @creature_to_kill_4_count = 0;
+SET @required_item_1 = 51706;
+SET @required_item_2 = 51707;
+SET @required_item_3 = 51708;
+SET @required_item_4 = 51716;
+SET @required_item_1_count = 1;
+SET @required_item_2_count = 1;
+SET @required_item_3_count = 1;
+SET @required_item_4_count = 1;
+
+replace into quest_template (entry, patch, Method, ZoneOrSort, MinLevel, QuestLevel, MaxLevel, Type, RequiredClasses, RequiredRaces, RequiredSkill,
+RequiredSkillValue, RepObjectiveFaction, RepObjectiveValue, RequiredMinRepFaction, RequiredMinRepValue,RequiredMaxRepFaction,
+RequiredMaxRepValue, SuggestedPlayers, LimitTime, QuestFlags, SpecialFlags, PrevQuestId, NextQuestId, ExclusiveGroup, NextQuestInChain,
+SrcItemId, SrcItemCount, SrcSpell, Title, Details, Objectives, OfferRewardText, RequestItemsText, EndText, ObjectiveText1, ObjectiveText2,
+ObjectiveText3, ObjectiveText4, ReqItemId1, ReqItemId2, ReqItemId3, ReqItemId4, ReqItemCount1, ReqItemCount2, ReqItemCount3,
+ReqItemCount4, ReqSourceId1, ReqSourceId2, ReqSourceId3, ReqSourceId4, ReqSourceCount1, ReqSourceCount2, ReqSourceCount3,
+ReqSourceCount4, ReqCreatureOrGOId1, ReqCreatureOrGOId2, ReqCreatureOrGOId3, ReqCreatureOrGOId4, ReqCreatureOrGOCount1,
+ReqCreatureOrGOCount2, ReqCreatureOrGOCount3, ReqCreatureOrGOCount4, ReqSpellCast1, ReqSpellCast2, ReqSpellCast3,
+ReqSpellCast4, RewChoiceItemId1, RewChoiceItemId2, RewChoiceItemId3, RewChoiceItemId4, RewChoiceItemId5, RewChoiceItemId6,
+RewChoiceItemCount1, RewChoiceItemCount2, RewChoiceItemCount3, RewChoiceItemCount4, RewChoiceItemCount5, RewChoiceItemCount6,
+RewItemId1, RewItemId2, RewItemId3, RewItemId4, RewItemCount1, RewItemCount2, RewItemCount3, RewItemCount4, RewRepFaction1,
+RewRepFaction2, RewRepFaction3, RewRepFaction4, RewRepFaction5, RewRepValue1, RewRepValue2, RewRepValue3, RewRepValue4,
+RewRepValue5, RewOrReqMoney, RewMoneyMaxLevel, RewSpell, RewSpellCast, RewMailTemplateId, RewMailMoney, RewMailDelaySecs,
+PointMapId, PointX, PointY, PointOpt, DetailsEmote1, DetailsEmote2, DetailsEmote3, DetailsEmote4, DetailsEmoteDelay1,
+DetailsEmoteDelay2, DetailsEmoteDelay3, DetailsEmoteDelay4, IncompleteEmote, CompleteEmote, OfferRewardEmote1, OfferRewardEmote2,
+OfferRewardEmote3, OfferRewardEmote4, OfferRewardEmoteDelay1, OfferRewardEmoteDelay2, OfferRewardEmoteDelay3,OfferRewardEmoteDelay4,
+StartScript, CompleteScript) values
+
+(@quest_entry, '0', '2', @quest_zone, @min_level, @quest_level, '0', '0', '0', '178', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', 
+
+'You Reap What You Sow', 
+
+'Ish-ne-alo por-ah, young one! Sole reason you\'re here can only be the desire to learn how to foster your own garden and procure food where otherwise it wouldn\'t grow I believe? By the squint in your eyes I can see it is true. Very well.\n\nThere\'s a particular type of seeds you will have to find first. Once you have\'em all with you I shall teach you something not even hunters or trappers would know how to survive with less violence and killing. This is the Blessing that our tribes bear with pride and foster with care, a Blessing of the Earth-Mother herself. Come back to me when you have all the seeds I\'ve mentioned in this parchment here. I have and will be expecting you … again.\n\nWinds be at your back.', 
+
+'Find Country Pumpkin Seeds, Mountain Berries Seeds, Stripped Melon Seeds and Magic Mushrooms Samples!', 
+
+'Ahh, it\'s good to see you back. It is inspiring to see younglings get back to the roots of the best traditions we\'ve had to survive properly, with dignity and respect to the Earth-Mother!', 
+
+'I have no doubts your venture was fruitful and you have procured all the seeds.', 
+
+'', '', '', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @faction_id, '0', '0', '0', '0', @faction_count, '0', '0', '0', '0', '0', @xp_or_money, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', 0, 0);
+      
+update quest_template set 
+rewitemid1 = @reward_item_1, rewitemcount1 = @reward_item_1_count,
+rewitemid2 = @reward_item_2, rewitemcount2 = @reward_item_2_count,
+rewitemid3 = @reward_item_3, rewitemcount3 = @reward_item_3_count,
+rewitemid4 = @reward_item_4, rewitemcount4 = @reward_item_4_count,
+ReqCreatureOrGOId2 = @creature_to_kill_2, ReqCreatureOrGOCount1 = @creature_to_kill_1_count,
+ReqCreatureOrGOId2 = @creature_to_kill_2, ReqCreatureOrGOCount2 = @creature_to_kill_2_count,
+ReqCreatureOrGOId3 = @creature_to_kill_3, ReqCreatureOrGOCount3 = @creature_to_kill_3_count,
+ReqCreatureOrGOId4 = @creature_to_kill_4, ReqCreatureOrGOCount4 = @creature_to_kill_4_count,
+reqitemid1 = @required_item_1, reqitemcount1 = @required_item_1_count,
+reqitemid2 = @required_item_2, reqitemcount2 = @required_item_2_count,
+reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
+reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count
+where entry = @quest_entry;
+
+update quest_template set nextquestid = @nextquest where entry = @quest_entry;
+update quest_template set nextquestinchain = @nextquestinchain where entry = @quest_entry;
+update quest_template set prevquestid = @nextquest where entry = @quest_entry;
+
+	  
+replace into creature_questrelation (id, quest, patch_min, patch_max) values (51532, 60061,'10','10');
+replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (51532, 60061,'10','10'); 
+
 -- Brainwashing Device Text
 
 replace into broadcast_text (ID, MaleText) values ('90350', '1. Take the device in both hands.\n\n2. Put it above your head.\n\n3. Let it go.\n\n4. Enjoy the sunshine of the spotless mind.');
@@ -475,14 +587,19 @@ UPDATE `game_weather` SET `copy_weather_from` = '1519' WHERE (`zone` = '12');
 replace into broadcast_text (ID, MaleText) values ('90351', 'Specially handcrafted planter with fertile and watered Soil.');
 replace into npc_text (ID, BroadcastTextID0) values ('90351', '90351');
 
-REPLACE INTO `page_text` (`entry`, `text`) VALUES (50100, 'Before you reap your harvest you sowing seeds and foster them with care.\n\nFirst and perhaps an easiest one to start with will be Pumpkins. You will need some of those Pumpkin Seeds from any Pumpkin you can procure. Nearest must be on the Hillsbrad Fields I gather.\n\nSecond would be very similar, however a bit more complicated to tend to – watermelons. To grow some you will need seeds as well and the place to find them is the same.\n\nLast thing you\'d be able to grow on your own with the same technique is the Mountain Berry seeds which are in abundance in Hinterlands. Not far from here, just north from Durnhold Keep. Be careful there, area is dense with fierce wildlife and gruesome monsters should you stride too far into the wilds.');
+REPLACE INTO `page_text` (`entry`, `text`, `next_page`) VALUES (50100, 'Before you reap your harvest you sowing seeds and foster them with care.\n\nFirst and perhaps an easiest one to start with will be Pumpkins. You will need some of those Pumpkin Seeds from ripe enough Pumpkin you can find. Nearly every farmer in the fields gather only ripe Pumpkins and extract new grown seeds for the next harvest.', 50101);
+REPLACE INTO `page_text` (`entry`, `text`, `next_page`) VALUES (50101, 'Second would be very similar, however a bit more complicated to tend to - watermelons. To grow some you will need seeds as well and the place to find them is very similar. Some farmers specialize on that sweet giant berries and grow only them. They are not many and very well known across all Eastern Kingdoms.', 50102);
+REPLACE INTO `page_text` (`entry`, `text`, `next_page`) VALUES (50102, 'More than interesting and absolutely another story is mushrooms. Yes, you can grow these too! Alas, mushroom spores are pretty special and differ greatly. You will have to search for those who have dedicated their lifetime for such study. Mushrooms grow well if tended right. Sometimes they grow as pest and should be avoided at all costs. Be very careful.', 50103);
+REPLACE INTO `page_text` (`entry`, `text`, `next_page`) VALUES (50103, 'Last thing you\'d be able to grow on your own with the same technique is the Mountain Berry seeds which are known to grow on natural hills, alas, the world is filled with hills not every hill is good enough for these berries. Not far from Durnhold Keep I had my chance to trade with one of the Wildhammers and I\'ve managed to buy a hefty amount of such seeds. No idea where he got them, but all seeds were in great shape, fertile and fresh, so I can only assume it\'s not too far from that spot. You will have to search. Be careful there, area is dense with fierce wildlife and gruesome monsters should you stride too far.', 0);
+REPLACE INTO `page_text` (`entry`, `text`, `next_page`) VALUES (50104, '', 50105);
+REPLACE INTO `page_text` (`entry`, `text`, `next_page`) VALUES (50105, '', 50106);
 
 REPLACE INTO `creature_template` VALUES 
 
 (51530, 0, 3492, 0, 0, 0, 'Mortimer Stansfield', 'Gardener', 0, 25, 25, 1040, 1640, 0, 0, 1009, 11, 2, 1.05, 1.14286, 0, 20, 5, 0, 0, 1, 31, 40, 0, 106, 1, 1500, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 38.72, 53.24, 100, 7, 0, 240, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 1, 0, 3, 50000, 0, 0, 0, 0, 524298, ''),
 (51531, 0, 9263, 0, 0, 0, 'Betty', 'Gardener\'s Apprentice', 0, 25, 25, 1040, 1640, 0, 0, 1009, 11, 1, 1.05, 1.14286, 0, 20, 5, 0, 0, 1, 31, 40, 0, 106, 1, 1500, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 38.72, 53.24, 100, 7, 0, 240, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 1, 0, 3, 50000, 0, 0, 0, 0, 524298, ''),
-(51532, 0, 3777, 0, 0, 0, 'Margor Wheathoof', 'Gardener', 0, 25, 25, 1040, 1640, 0, 0, 1009, 105, 2, 1.05, 1.14286, 0, 20, 5, 0, 0, 1, 31, 40, 0, 106, 1, 1500, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 38.72, 53.24, 100, 7, 0, 240, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 1, 0, 3, 50000, 0, 0, 0, 0, 524298, ''),
-(51533, 0, 3770, 0, 0, 0, 'Taima Riverwinds', 'Gardener\'s Apprentice', 0, 25, 25, 1040, 1640, 0, 0, 1009, 105, 1, 1.05, 1.14286, 0, 20, 5, 0, 0, 1, 31, 40, 0, 106, 1, 1500, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 38.72, 53.24, 100, 7, 0, 240, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 1, 0, 3, 50000, 0, 0, 0, 0, 524298, '');
+(51532, 0, 3777, 0, 0, 0, 'Kern Mosshoof', 'Gardener', 0, 25, 25, 1040, 1640, 0, 0, 1009, 105, 2, 1.05, 1.14286, 0, 20, 5, 0, 0, 1, 31, 40, 0, 106, 1, 1500, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 38.72, 53.24, 100, 7, 0, 240, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 1, 0, 3, 50000, 0, 0, 0, 0, 524298, ''),
+(51533, 0, 3770, 0, 0, 0, 'Yrta Younghoof', 'Gardener\'s Apprentice', 0, 25, 25, 1040, 1640, 0, 0, 1009, 105, 1, 1.05, 1.14286, 0, 20, 5, 0, 0, 1, 31, 40, 0, 106, 1, 1500, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 38.72, 53.24, 100, 7, 0, 240, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 1, 0, 3, 50000, 0, 0, 0, 0, 524298, '');
 
 replace into gossip_menu (entry, text_id, condition_id) VALUES ('56004', '90352', '0'); 
 replace into broadcast_text (ID, MaleText) values ('90352', 'If you have a garden and a library, you have everything you need.');
@@ -503,7 +620,7 @@ replace into npc_text (ID, BroadcastTextID0) values ('90354', '90354');
 update creature_template set gossip_menu_id = 56006 where entry = 51532;
 
 replace into gossip_menu (entry, text_id, condition_id) VALUES ('56007', '90355', '0'); 
-replace into broadcast_text (ID, MaleText) values ('90355', 'I\'m captured with all things growing!\n\nEarth-Mother is blessing those who care for her work.\n\nAre you here to study too, $N?');
+replace into broadcast_text (ID, MaleText) values ('90355', 'I\'m here to study the art of Survival under one of the wisest elders of the Mosshoof tribe, shando Kern.\n\nMy sister tend to the wounds, teaching First Aid and I\'m certain that healing comes from the Earth-Mother much more than any bandage could ever heal, gifts of the Earth itself.\n\nGrowing food is an art I\'m eager to know as good as my own hooves.');
 replace into npc_text (ID, BroadcastTextID0) values ('90355', '90355');
 update creature_template set gossip_menu_id = 56007 where entry = 51533;
 
@@ -541,4 +658,22 @@ values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
+ 
+ update item_template set sheath = 3 where entry = 51719;
 
+update creature_template set npc_flags = 6 where entry = 9047;
+update creature_template set npc_flags = 6 where entry = 9076;
+
+replace into npc_vendor (entry, item) values (9047, 51716);
+replace into npc_vendor (entry, item) values (9076, 51716);
+update item_template set buy_price = 25000 where entry = 51716; 
+
+replace into gossip_menu (entry, text_id, condition_id) VALUES ('56009', '90357', '0'); 
+replace into broadcast_text (ID, MaleText) values ('90357', 'Dirt. All I\'m left with nowadays.\n\nI\'d rather keep developing new myceliums and grow new kinds of … what?\n\nOh, so you\'re fond of mushrooms too?');
+replace into npc_text (ID, BroadcastTextID0) values ('90357', '90357');
+update creature_template set gossip_menu_id = 56009 where entry = 9047;
+
+replace into gossip_menu (entry, text_id, condition_id) VALUES ('56010', '90358', '0'); 
+replace into broadcast_text (ID, MaleText) values ('90358', 'Aren\'t you like any other think the same when you see me all alone here digging through the dirt piles?\n\nDon\'t worry, that\'s only natural.\n\nAfter all you\'re not even close to fungal life.');
+replace into npc_text (ID, BroadcastTextID0) values ('90358', '90358');
+update creature_template set gossip_menu_id = 56010 where entry = 9076;
