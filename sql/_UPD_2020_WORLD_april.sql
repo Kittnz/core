@@ -683,3 +683,9 @@ replace into gossip_menu (entry, text_id, condition_id) VALUES ('56010', '90358'
 replace into broadcast_text (ID, MaleText) values ('90358', 'Aren\'t you like any other think the same when you see me all alone here digging through the dirt piles?\n\nDon\'t worry, that\'s only natural.\n\nAfter all you\'re not even close to fungal life.');
 replace into npc_text (ID, BroadcastTextID0) values ('90358', '90358');
 update creature_template set gossip_menu_id = 56010 where entry = 9076;
+
+
+update item_template set spellcharges_1 = -1 where entry in (51710, 51711, 51712, 51717, 51713, 51714, 51718, 51720);
+update item_template set spellcategorycooldown_1 = 1000 where entry in (51710, 51711, 51712, 51717, 51713, 51714, 51718, 51720);
+
+
