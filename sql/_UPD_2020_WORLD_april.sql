@@ -412,6 +412,7 @@ StartScript, CompleteScript) values
 'I see you\'re back. Have you managed to find everything required, yes?', 
 
 '', '', '', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @faction_id, '0', '0', '0', '0', @faction_count, '0', '0', '0', '0', '0', @xp_or_money, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', 0, 0);
+
       
 update quest_template set 
 rewitemid1 = @reward_item_1, rewitemcount1 = @reward_item_1_count,
@@ -528,6 +529,11 @@ update quest_template set prevquestid = @nextquest where entry = @quest_entry;
 	  
 replace into creature_questrelation (id, quest, patch_min, patch_max) values (51532, 60061,'10','10');
 replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (51532, 60061,'10','10'); 
+
+
+update quest_template set SrcItemId = 51709, srcItemcount = 1 where entry in (60060, 60061);
+update quest_template set RequiredRaces = 0  where entry in (60060, 60061);
+
 
 -- Brainwashing Device Text
 
