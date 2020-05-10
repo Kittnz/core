@@ -5,7 +5,7 @@ enum GardenObjects
 {
     LIFESPAN_PLANTER       = 60 * MINUTE * IN_MILLISECONDS, 
     LIFESPAN_GROWING       = 10 * MINUTE * IN_MILLISECONDS, 
-    LIFESPAN_GROWING_TICK  =  9 * MINUTE * IN_MILLISECONDS, 
+    LIFESPAN_GROWING_TICK  =  1 * MINUTE * IN_MILLISECONDS, 
     LIFESPAN_BUTTON        =  5 * MINUTE * IN_MILLISECONDS, 
     LIFESPAN_SPLASH        =  2,
 
@@ -17,8 +17,11 @@ enum GardenObjects
     REFRESHING_SPRING_WATER = 159,
     UNGORO_SOIL = 11018,
 
+    PLANTER_ITEM_ENTRY = 51705,
+
     WOODEN_PLANTER = 1000334,
     PLANTER_EARTH = 1000335,
+    GARDEN_ZONE_CHECK = 1000373,
 
     PUMPKIN_SPROUTLING = 1000336,
     PUMPKIN_SPROUTLING_ACTIVE = 1000337,
@@ -58,8 +61,30 @@ enum GardenObjects
 
 bool ItemUseSpell_item_wooden_planter(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
-    if (pPlayer->isInCombat() || pPlayer->IsBeingTeleported() || (pPlayer->getDeathState() == CORPSE) || pPlayer->IsMoving())
+    GameObject* ZoneCheck = pPlayer->FindNearestGameObject(GARDEN_ZONE_CHECK, 25.0F);
+
+    if (!ZoneCheck)
+    {
+        pPlayer->AddItem(PLANTER_ITEM_ENTRY); 
+        pPlayer->GetSession()->SendNotification(pPlayer->GetTeam() == ALLIANCE ? "Requires Elwynn Gardens." : "Requires Mulgore Fields.");
         return false;
+    }
+
+    GameObject* OtherPlanter = pPlayer->FindNearestGameObject(WOODEN_PLANTER, 3.0F);
+
+    if (OtherPlanter)
+    {
+        pPlayer->AddItem(PLANTER_ITEM_ENTRY);
+        pPlayer->GetSession()->SendNotification("Can't place Planters too close to each other!");
+        return false;
+    }
+
+    if (pPlayer->isInCombat() || pPlayer->IsBeingTeleported() || (pPlayer->getDeathState() == CORPSE) || pPlayer->IsMoving())
+    {
+        pPlayer->AddItem(PLANTER_ITEM_ENTRY);
+        pPlayer->GetSession()->SendNotification("Leave battle or stop moving!");
+        return false;
+    }   
 
     float dis{ 2.0F };
     float x, y, z;
@@ -85,7 +110,7 @@ bool GOHello_go_simple_wooden_planter(Player* pPlayer, GameObject* pGo)
     if (pPlayer->HasItemCount(BERRY_SEEDS, 1)) 
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Plant Mountain Berries Seeds.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
     if (pPlayer->HasItemCount(WATERMELON_SEEDS, 1)) 
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Plant Stripped Melon Seeds.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);  
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Plant Striped Melon Seeds.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);  
     if (pPlayer->HasItemCount(MUSHROOM_SEEDS, 1))
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Plant Magic Mushroom Spores.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
 

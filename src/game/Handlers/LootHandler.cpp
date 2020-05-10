@@ -374,6 +374,27 @@ void WorldSession::DoLootRelease(ObjectGuid lguid)
                             go->GetMap()->ScriptsStart(sEventScripts, go->GetGOInfo()->chest.eventId, _player, go);
                     }
 
+                    // Oh God forgive me
+                    // Despawn Planters after looting Harvest.
+                    if (go->GetEntry() == 1000342 || go->GetEntry() == 1000349 || go->GetEntry() == 1000356 || go->GetEntry() == 1000364)
+                    {
+                        GameObject* Planter = go->FindNearestGameObject(1000334, 0.8F);
+                        GameObject* Soil    = go->FindNearestGameObject(1000335, 0.8F);
+
+                        if (Planter)
+                        {
+                            Planter->Despawn();
+                            Planter->UpdateObjectVisibility();
+                        }
+
+                        if (Soil)
+                        {
+                            Soil->Despawn();
+                            Soil->UpdateObjectVisibility();
+                        }
+                    }
+
+
                     // only vein pass this check
                     if (go_min != 0 && go_max > go_min)
                     {

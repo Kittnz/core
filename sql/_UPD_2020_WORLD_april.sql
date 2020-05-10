@@ -80,7 +80,13 @@ replace into gameobject_template values
 
 (1000370, 0, 3, 60, 'Ripe Garden Pumpkin', 0, 0, 0.8, 57, 1000054, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
 (1000371, 0, 3, 28, 'Garden Berry Bush', 0, 0, 0.8, 57, 1000055, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
-(1000372, 0, 3, 332, 'Ripe Garden Watermelon', 0, 0, 0.8, 57, 1000056, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+(1000372, 0, 3, 332, 'Ripe Garden Watermelon', 0, 0, 0.8, 57, 1000056, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+
+-- Farmstead trigger
+
+(1000373, 0, 5, 1367, 'Gardening Zone Check', 0, 0, 0.5, 57, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+
 
 -- SEED LOOT
 
@@ -272,7 +278,7 @@ script_name) values
 
 ('51707', '0', '15', '0', 'Mountain Berries Seeds', 'Colorful berries from Hinterlands region. Can be planted in Simple Wooden Planter. Requires watering and fertilizing.', '8270', '1', '0', '0', '3000', '1500', '0', '-1', '-1', '15', '0', '0', '0', '0', '0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '-1', '0', '1200000', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '1', '0', '0', '0', '0', '0', '2', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', ''),
 
-('51708', '0', '15', '0', 'Stripped Melon Seeds', 'The sweetest sort ever known! Can be planted in Simple Wooden Planter. Requires watering and fertilizing.', '3237', '1', '0', '0', '3000', '1500', '0', '-1', '-1', '15', '0', '0', '0', '0', '0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '-1', '0', '1200000', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '1', '0', '0','0', '0', '0', '2', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', ''), 
+('51708', '0', '15', '0', 'Striped Melon Seeds', 'The sweetest sort ever known! Can be planted in Simple Wooden Planter. Requires watering and fertilizing.', '3237', '1', '0', '0', '3000', '1500', '0', '-1', '-1', '15', '0', '0', '0', '0', '0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '-1', '0', '1200000', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '1', '0', '0','0', '0', '0', '2', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', ''), 
 
 ('51716', '0', '15', '0', 'Magic Mushroom Spores', 'Delicious and completely absent of  psychedelic properties.', '362', '1', '0', '0', '3000', '1500', '0', '-1', '-1', '15', '0', '0', '0', '0', '0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '-1', '0', '1200000', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '1', '0', '0','0', '0', '0', '2', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', ''), 
 
@@ -285,7 +291,7 @@ script_name) values
 
 ('51717', '0', '0', '0', 'Magic Mushroom', 'Delicious and completely absent of  psychedelic properties.', '15853', '1', '0', '0', '3000', '2000', '0', '-1', '-1', '15', '0', '0', '0', '0','0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '24707', '0', '0', '0', '-1', '0', '1200000', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '1', ''),
 
-('51712', '0', '0', '0', 'Juicy Stripped Melon', 'So sweet and juicy!', '4781', '1', '0', '0', '3000', '2000', '0', '-1', '-1', '15', '0', '0', '0', '0','0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '24005', '0', '0', '0', '-1', '0', '1200000', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '1', ''),
+('51712', '0', '0', '0', 'Juicy Striped Melon', 'So sweet and juicy!', '4781', '1', '0', '0', '3000', '2000', '0', '-1', '-1', '15', '0', '0', '0', '0','0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '24005', '0', '0', '0', '-1', '0', '1200000', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '1', ''),
  
  
 ('51713', '0', '0', '0', 'Plump Country Pumpkin', 'The pumpkin is much heavier than you thought.', '3225', '1', '0', '0', '3000', '2000', '0', '-1', '-1', '15', '0', '0', '0', '0', '0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '24005', '0', '0', '0', '-1', '0', '1200000', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '1', ''),
@@ -294,7 +300,7 @@ script_name) values
 
 ('51720', '0', '0', '0', 'Magic Mushroom', 'Delicious and completely absent of  psychedelic properties.', '15853', '1', '0', '0', '3000', '2000', '0', '-1', '-1', '15', '0', '0', '0', '0','0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '24707', '0', '0', '0', '-1', '0', '1200000', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '1', ''),
 
-('51718', '0', '0', '0', 'Juicy Stripped Melon', 'So sweet and juicy!', '4781', '1', '0', '0', '3000', '2000', '0', '-1', '-1', '15', '0', '0', '0', '0','0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '24005', '0', '0', '0', '-1', '0', '1200000', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '1', '');
+('51718', '0', '0', '0', 'Juicy Striped Melon', 'So sweet and juicy!', '4781', '1', '0', '0', '3000', '2000', '0', '-1', '-1', '15', '0', '0', '0', '0','0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '24005', '0', '0', '0', '-1', '0', '1200000', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '1', '');
 
 update item_template set spellid_1 = 5006 where entry = 51710;  -- Pumpkin   -- 6 Stamina and Spirit for 15 min.
 update item_template set spellid_1 = 24869 where entry = 51713; -- Pumpkin   -- 10 Stamina for 15 min.
@@ -405,7 +411,7 @@ StartScript, CompleteScript) values
 
 'Survival itself is not that hard if you know what to do. It is harder to survive when you have no food. Hunting? Yes, you could try that, alas, not always you have something to sustain you longer than just some primitive herbs before you catch something.\n\nI see you\'re pondering on the situation a bit harder than your normal hunters and trappers, so why don\'t you learn something for your own good and best chances to survive out in the wilds?\n\nBring me what I need and I\'ll teach you what to do. Here\'s the list. Please do not lose it.', 
 
-'Find Country Pumpkin Seeds, Mountain Berries Seeds, Stripped Melon Seeds and Magic Mushrooms Samples!', 
+'Find Country Pumpkin Seeds, Mountain Berries Seeds, Striped Melon Seeds and Magic Mushrooms Samples!', 
 
 'Great! Let\'s get you some new know-how to about thing or two.', 
 
@@ -499,7 +505,7 @@ StartScript, CompleteScript) values
 
 'Ish-ne-alo por-ah, young one! Sole reason you\'re here can only be the desire to learn how to foster your own garden and procure food where otherwise it wouldn\'t grow I believe? By the squint in your eyes I can see it is true. Very well.\n\nThere\'s a particular type of seeds you will have to find first. Once you have\'em all with you I shall teach you something not even hunters or trappers would know how to survive with less violence and killing. This is the Blessing that our tribes bear with pride and foster with care, a Blessing of the Earth-Mother herself. Come back to me when you have all the seeds I\'ve mentioned in this parchment here. I have and will be expecting you … again.\n\nWinds be at your back.', 
 
-'Find Country Pumpkin Seeds, Mountain Berries Seeds, Stripped Melon Seeds and Magic Mushrooms Samples!', 
+'Find Country Pumpkin Seeds, Mountain Berries Seeds, Striped Melon Seeds and Magic Mushrooms Samples!', 
 
 'Ahh, it\'s good to see you back. It is inspiring to see younglings get back to the roots of the best traditions we\'ve had to survive properly, with dignity and respect to the Earth-Mother!', 
 
@@ -659,13 +665,13 @@ values
  ('51719', '0', '2', '4', 'Garden Shovel', '', '7495', '3', '0', '1', '0', '0', '13', '-1', '-1', '22',
  '20', '0', '0', '0', '0', '0', '0', '0', '1', '1', '0', '7', '10', '3', '8',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '2700', '0',
- '0', '58', '78', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '30', '60', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '0', '0', '18670', '2', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
- update item_template set sheath = 3 where entry = 51719;
+ update item_template set sheath = 4 where entry = 51719;
 
 update creature_template set npc_flags = 6 where entry = 9047;
 update creature_template set npc_flags = 6 where entry = 9076;
@@ -684,8 +690,31 @@ replace into broadcast_text (ID, MaleText) values ('90358', 'Aren\'t you like an
 replace into npc_text (ID, BroadcastTextID0) values ('90358', '90358');
 update creature_template set gossip_menu_id = 56010 where entry = 9076;
 
-
 update item_template set spellcharges_1 = -1 where entry in (51710, 51711, 51712, 51717, 51713, 51714, 51718, 51720);
 update item_template set spellcategorycooldown_1 = 1000 where entry in (51710, 51711, 51712, 51717, 51713, 51714, 51718, 51720);
 
+update item_template set max_count = 5 where entry = 51705;
+update item_template set spellcharges_1 = -1 where entry = 51705;
+update item_template set spellcategorycooldown_1 = 1000 where entry = 51705;
+update item_template set spellcooldown_1 = 1000 where entry = 51705;
+
+replace into npc_vendor (entry, item, condition_id) values (51531, 51705, 90000);
+replace into npc_vendor (entry, item) values (51531, 4536);
+replace into npc_vendor (entry, item) values (51531, 11415);
+replace into npc_vendor (entry, item) values (51531, 4539);
+replace into npc_vendor (entry, item) values (51531, 3334);
+
+replace into npc_vendor (entry, item, condition_id) values (51533, 51705, 90001);
+replace into npc_vendor (entry, item) values (51533, 4536);
+replace into npc_vendor (entry, item) values (51533, 11415);
+replace into npc_vendor (entry, item) values (51533, 4539);
+replace into npc_vendor (entry, item) values (51533, 3334);
+
+update creature_template set npc_flags = 16391 where entry in (51533, 51531);
+
+update item_template set buy_price = 2500 where entry = 51705;
+update item_template set stackable = 5 where entry = 51705;
+
+replace into `conditions` (`condition_entry`, `type`, `value1`) VALUES ('90000', '8', '60060');
+replace into `conditions` (`condition_entry`, `type`, `value1`) VALUES ('90001', '8', '60061');
 
