@@ -717,4 +717,4 @@ update item_template set stackable = 5 where entry = 51705;
 
 replace into `conditions` (`condition_entry`, `type`, `value1`) VALUES ('90000', '8', '60060');
 replace into `conditions` (`condition_entry`, `type`, `value1`) VALUES ('90001', '8', '60061');
-
+UPDATE `item_template` SET `sell_price`='1000' WHERE (`entry`='51705') AND (`patch`='0');
