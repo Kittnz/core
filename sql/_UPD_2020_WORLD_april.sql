@@ -340,13 +340,13 @@ REPLACE INTO `gameobject_loot_template` (`entry`, `item`, `ChanceOrQuestChance`,
 (1000050, 51710, 100, 1, 4, 8, 0, 0, 10),
 (1000051, 51711, 100, 1, 4, 8, 0, 0, 10),
 (1000052, 51712, 100, 1, 4, 8, 0, 0, 10),
-(1000053, 51717, 100, 1, 4, 8, 0, 0, 10);
+(1000053, 51717, 100, 1, 2, 5, 0, 0, 10);
 
 REPLACE INTO `gameobject_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`, `patch_min`, `patch_max`) VALUES 
 (1000050, 51713, 100, 2, 4, 8, 0, 0, 10),
 (1000051, 51714, 100, 2, 4, 8, 0, 0, 10),
 (1000052, 51718, 100, 2, 4, 8, 0, 0, 10),
-(1000053, 51720, 100, 2, 4, 8, 0, 0, 10);
+(1000053, 51720, 100, 2, 2, 5, 0, 0, 10);
 
 update item_template set bonding = 0 where entry in (51706, 51707, 51708, 51716);
 
