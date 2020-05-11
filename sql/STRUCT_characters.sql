@@ -1,17 +1,17 @@
 -- --------------------------------------------------------
--- Хост:                         127.0.0.1
--- Server version:               5.5.53 - MySQL Community Server (GPL)
--- Server OS:                    Win32
--- HeidiSQL Версия:              9.3.0.4998
+-- Host:                         127.0.0.1
+-- Server Version:               10.1.26-MariaDB-0+deb9u1 - Debian 9.1
+-- Server Betriebssystem:        debian-linux-gnu
+-- HeidiSQL Version:             9.5.0.5196
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET NAMES utf8mb4 */;
+/*!40101 SET NAMES utf8 */;
+/*!50503 SET NAMES utf8mb4 */;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for table characters.auction
-DROP TABLE IF EXISTS `auction`;
+-- Exportiere Struktur von Tabelle tw_char.auction
 CREATE TABLE IF NOT EXISTS `auction` (
   `id` int(11) unsigned NOT NULL DEFAULT '0',
   `houseid` int(11) unsigned NOT NULL DEFAULT '0',
@@ -28,11 +28,17 @@ CREATE TABLE IF NOT EXISTS `auction` (
   UNIQUE KEY `key_item_guid` (`itemguid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
--- Data exporting was unselected.
+-- Daten Export vom Benutzer nicht ausgewählt
+-- Exportiere Struktur von Tabelle tw_char.bounty_quest_targets
+CREATE TABLE IF NOT EXISTS `bounty_quest_targets` (
+  `id` int(5) unsigned NOT NULL DEFAULT '1',
+  `horde_player` int(15) unsigned NOT NULL DEFAULT '0',
+  `alliance_player` int(15) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
--- Dumping structure for table characters.bugreport
-DROP TABLE IF EXISTS `bugreport`;
+-- Daten Export vom Benutzer nicht ausgewählt
+-- Exportiere Struktur von Tabelle tw_char.bugreport
 CREATE TABLE IF NOT EXISTS `bugreport` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Identifier',
   `type` longtext NOT NULL,
@@ -40,11 +46,8 @@ CREATE TABLE IF NOT EXISTS `bugreport` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Debug System';
 
--- Data exporting was unselected.
-
-
--- Dumping structure for table characters.bugreports
-DROP TABLE IF EXISTS `bugreports`;
+-- Daten Export vom Benutzer nicht ausgewählt
+-- Exportiere Struktur von Tabelle tw_char.bugreports
 CREATE TABLE IF NOT EXISTS `bugreports` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `reportTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
@@ -62,22 +65,16 @@ CREATE TABLE IF NOT EXISTS `bugreports` (
   KEY `idx_id` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- Data exporting was unselected.
-
-
--- Dumping structure for table characters.census
-DROP TABLE IF EXISTS `census`;
+-- Daten Export vom Benutzer nicht ausgewählt
+-- Exportiere Struktur von Tabelle tw_char.census
 CREATE TABLE IF NOT EXISTS `census` (
   `time` datetime DEFAULT NULL,
   `race` int(11) DEFAULT NULL,
   `onlineCount` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- Data exporting was unselected.
-
-
--- Dumping structure for table characters.characters
-DROP TABLE IF EXISTS `characters`;
+-- Daten Export vom Benutzer nicht ausgewählt
+-- Exportiere Struktur von Tabelle tw_char.characters
 CREATE TABLE IF NOT EXISTS `characters` (
   `guid` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Global Unique Identifier',
   `account` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Account Identifier',
@@ -121,7 +118,7 @@ CREATE TABLE IF NOT EXISTS `characters` (
   `honorHighestRank` int(11) unsigned NOT NULL DEFAULT '0',
   `honorStanding` int(11) unsigned NOT NULL DEFAULT '0',
   `honorLastWeekHK` int(11) unsigned NOT NULL DEFAULT '0',
-  `honorLastWeekCP` float NOT NULL DEFAULT '0',
+  `honorLastWeekCP` decimal(11,1) NOT NULL DEFAULT '0.0',
   `honorStoredHK` int(11) NOT NULL DEFAULT '0',
   `honorStoredDK` int(11) NOT NULL DEFAULT '0',
   `watchedFaction` int(10) unsigned NOT NULL DEFAULT '0',
@@ -143,37 +140,168 @@ CREATE TABLE IF NOT EXISTS `characters` (
   `world_phase_mask` int(11) DEFAULT '0',
   `customFlags` int(11) NOT NULL DEFAULT '0',
   `city_protector` tinyint(3) NOT NULL DEFAULT '0',
+  `regexFilterCount` int(6) unsigned NOT NULL DEFAULT '0',
+  `isGMCharacter` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `ignore_titles` tinyint(3) NOT NULL DEFAULT '0',
   PRIMARY KEY (`guid`),
   KEY `idx_account` (`account`),
   KEY `idx_online` (`online`),
   KEY `idx_name` (`name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Player System';
 
--- Data exporting was unselected.
+-- Daten Export vom Benutzer nicht ausgewählt
+-- Exportiere Struktur von Tabelle tw_char.characters_namecleanup2019
+CREATE TABLE IF NOT EXISTS `characters_namecleanup2019` (
+  `guid` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Global Unique Identifier',
+  `account` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Account Identifier',
+  `name` varchar(12) NOT NULL DEFAULT '',
+  `race` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `class` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `gender` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `level` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `xp` int(10) unsigned NOT NULL DEFAULT '0',
+  `money` int(10) unsigned NOT NULL DEFAULT '0',
+  `playerBytes` int(10) unsigned NOT NULL DEFAULT '0',
+  `playerBytes2` int(10) unsigned NOT NULL DEFAULT '0',
+  `playerFlags` int(10) unsigned NOT NULL DEFAULT '0',
+  `position_x` float NOT NULL DEFAULT '0',
+  `position_y` float NOT NULL DEFAULT '0',
+  `position_z` float NOT NULL DEFAULT '0',
+  `map` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Map Identifier',
+  `orientation` float NOT NULL DEFAULT '0',
+  `taximask` longtext,
+  `online` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `cinematic` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `totaltime` int(11) unsigned NOT NULL DEFAULT '0',
+  `leveltime` int(11) unsigned NOT NULL DEFAULT '0',
+  `logout_time` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `is_logout_resting` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `rest_bonus` float NOT NULL DEFAULT '0',
+  `resettalents_multiplier` int(11) unsigned NOT NULL DEFAULT '0',
+  `resettalents_time` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `trans_x` float NOT NULL DEFAULT '0',
+  `trans_y` float NOT NULL DEFAULT '0',
+  `trans_z` float NOT NULL DEFAULT '0',
+  `trans_o` float NOT NULL DEFAULT '0',
+  `transguid` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `extra_flags` int(11) unsigned NOT NULL DEFAULT '0',
+  `stable_slots` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `at_login` int(11) unsigned NOT NULL DEFAULT '0',
+  `zone` int(11) unsigned NOT NULL DEFAULT '0',
+  `death_expire_time` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `taxi_path` text,
+  `honorRankPoints` float NOT NULL DEFAULT '0',
+  `honorHighestRank` int(11) unsigned NOT NULL DEFAULT '0',
+  `honorStanding` int(11) unsigned NOT NULL DEFAULT '0',
+  `honorLastWeekHK` int(11) unsigned NOT NULL DEFAULT '0',
+  `honorLastWeekCP` decimal(11,1) NOT NULL DEFAULT '0.0',
+  `honorStoredHK` int(11) NOT NULL DEFAULT '0',
+  `honorStoredDK` int(11) NOT NULL DEFAULT '0',
+  `watchedFaction` int(10) unsigned NOT NULL DEFAULT '0',
+  `drunk` smallint(5) unsigned NOT NULL DEFAULT '0',
+  `health` int(10) unsigned NOT NULL DEFAULT '0',
+  `power1` int(10) unsigned NOT NULL DEFAULT '0',
+  `power2` int(10) unsigned NOT NULL DEFAULT '0',
+  `power3` int(10) unsigned NOT NULL DEFAULT '0',
+  `power4` int(10) unsigned NOT NULL DEFAULT '0',
+  `power5` int(10) unsigned NOT NULL DEFAULT '0',
+  `exploredZones` longtext,
+  `equipmentCache` longtext,
+  `ammoId` int(10) unsigned NOT NULL DEFAULT '0',
+  `actionBars` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `deleteInfos_Account` int(11) unsigned DEFAULT NULL,
+  `deleteInfos_Name` varchar(12) DEFAULT NULL,
+  `deleteDate` bigint(20) DEFAULT NULL,
+  `area` int(11) unsigned NOT NULL DEFAULT '0',
+  `world_phase_mask` int(11) DEFAULT '0',
+  `customFlags` int(11) NOT NULL DEFAULT '0',
+  `city_protector` tinyint(3) NOT NULL DEFAULT '0',
+  `regexFilterCount` int(6) unsigned NOT NULL DEFAULT '0',
+  `isGMCharacter` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`guid`),
+  KEY `idx_account` (`account`),
+  KEY `idx_online` (`online`),
+  KEY `idx_name` (`name`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Player System';
 
+-- Daten Export vom Benutzer nicht ausgewählt
+-- Exportiere Struktur von Tabelle tw_char.characters_namecleanup2020
+CREATE TABLE IF NOT EXISTS `characters_namecleanup2020` (
+  `guid` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Global Unique Identifier',
+  `account` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Account Identifier',
+  `name` varchar(12) NOT NULL DEFAULT '',
+  `race` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `class` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `gender` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `level` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `xp` int(10) unsigned NOT NULL DEFAULT '0',
+  `money` int(10) unsigned NOT NULL DEFAULT '0',
+  `playerBytes` int(10) unsigned NOT NULL DEFAULT '0',
+  `playerBytes2` int(10) unsigned NOT NULL DEFAULT '0',
+  `playerFlags` int(10) unsigned NOT NULL DEFAULT '0',
+  `position_x` float NOT NULL DEFAULT '0',
+  `position_y` float NOT NULL DEFAULT '0',
+  `position_z` float NOT NULL DEFAULT '0',
+  `map` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Map Identifier',
+  `orientation` float NOT NULL DEFAULT '0',
+  `taximask` longtext,
+  `online` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `cinematic` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `totaltime` int(11) unsigned NOT NULL DEFAULT '0',
+  `leveltime` int(11) unsigned NOT NULL DEFAULT '0',
+  `logout_time` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `is_logout_resting` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `rest_bonus` float NOT NULL DEFAULT '0',
+  `resettalents_multiplier` int(11) unsigned NOT NULL DEFAULT '0',
+  `resettalents_time` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `trans_x` float NOT NULL DEFAULT '0',
+  `trans_y` float NOT NULL DEFAULT '0',
+  `trans_z` float NOT NULL DEFAULT '0',
+  `trans_o` float NOT NULL DEFAULT '0',
+  `transguid` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `extra_flags` int(11) unsigned NOT NULL DEFAULT '0',
+  `stable_slots` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `at_login` int(11) unsigned NOT NULL DEFAULT '0',
+  `zone` int(11) unsigned NOT NULL DEFAULT '0',
+  `death_expire_time` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `taxi_path` text,
+  `honorRankPoints` float NOT NULL DEFAULT '0',
+  `honorHighestRank` int(11) unsigned NOT NULL DEFAULT '0',
+  `honorStanding` int(11) unsigned NOT NULL DEFAULT '0',
+  `honorLastWeekHK` int(11) unsigned NOT NULL DEFAULT '0',
+  `honorLastWeekCP` decimal(11,1) NOT NULL DEFAULT '0.0',
+  `honorStoredHK` int(11) NOT NULL DEFAULT '0',
+  `honorStoredDK` int(11) NOT NULL DEFAULT '0',
+  `watchedFaction` int(10) unsigned NOT NULL DEFAULT '0',
+  `drunk` smallint(5) unsigned NOT NULL DEFAULT '0',
+  `health` int(10) unsigned NOT NULL DEFAULT '0',
+  `power1` int(10) unsigned NOT NULL DEFAULT '0',
+  `power2` int(10) unsigned NOT NULL DEFAULT '0',
+  `power3` int(10) unsigned NOT NULL DEFAULT '0',
+  `power4` int(10) unsigned NOT NULL DEFAULT '0',
+  `power5` int(10) unsigned NOT NULL DEFAULT '0',
+  `exploredZones` longtext,
+  `equipmentCache` longtext,
+  `ammoId` int(10) unsigned NOT NULL DEFAULT '0',
+  `actionBars` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `deleteInfos_Account` int(11) unsigned DEFAULT NULL,
+  `deleteInfos_Name` varchar(12) DEFAULT NULL,
+  `deleteDate` bigint(20) DEFAULT NULL,
+  `area` int(11) unsigned NOT NULL DEFAULT '0',
+  `world_phase_mask` int(11) DEFAULT '0',
+  `customFlags` int(11) NOT NULL DEFAULT '0',
+  `city_protector` tinyint(3) NOT NULL DEFAULT '0',
+  `regexFilterCount` int(6) unsigned NOT NULL DEFAULT '0',
+  `isGMCharacter` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `ignore_titles` tinyint(3) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`guid`),
+  KEY `idx_account` (`account`),
+  KEY `idx_online` (`online`),
+  KEY `idx_name` (`name`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Player System';
 
--- Dumping structure for table characters.characters_guid_delete
-DROP TABLE IF EXISTS `characters_guid_delete`;
-CREATE TABLE IF NOT EXISTS `characters_guid_delete` (
-  `guid` int(11) DEFAULT NULL,
-  UNIQUE KEY `key_guid` (`guid`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-
--- Data exporting was unselected.
-
-
--- Dumping structure for table characters.characters_item_delete
-DROP TABLE IF EXISTS `characters_item_delete`;
-CREATE TABLE IF NOT EXISTS `characters_item_delete` (
-  `entry` int(11) DEFAULT NULL,
-  UNIQUE KEY `key_entry` (`entry`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-
--- Data exporting was unselected.
-
-
--- Dumping structure for table characters.character_action
-DROP TABLE IF EXISTS `character_action`;
+-- Daten Export vom Benutzer nicht ausgewählt
+-- Exportiere Struktur von Tabelle tw_char.character_action
 CREATE TABLE IF NOT EXISTS `character_action` (
   `guid` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Global Unique Identifier',
   `button` tinyint(3) unsigned NOT NULL DEFAULT '0',
@@ -182,11 +310,55 @@ CREATE TABLE IF NOT EXISTS `character_action` (
   PRIMARY KEY (`guid`,`button`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Player System';
 
--- Data exporting was unselected.
+-- Daten Export vom Benutzer nicht ausgewählt
+-- Exportiere Struktur von Tabelle tw_char.character_armory_stats
+CREATE TABLE IF NOT EXISTS `character_armory_stats` (
+  `guid` int(10) unsigned NOT NULL DEFAULT '0',
+  `maxhealth` int(10) unsigned NOT NULL DEFAULT '0',
+  `maxpower1` int(10) unsigned NOT NULL DEFAULT '0',
+  `maxpower2` int(10) unsigned NOT NULL DEFAULT '0',
+  `maxpower3` int(10) unsigned NOT NULL DEFAULT '0',
+  `maxpower4` int(10) unsigned NOT NULL DEFAULT '0',
+  `maxpower5` int(10) unsigned NOT NULL DEFAULT '0',
+  `strength` float NOT NULL DEFAULT '0',
+  `agility` float NOT NULL DEFAULT '0',
+  `stamina` float NOT NULL DEFAULT '0',
+  `intellect` float NOT NULL DEFAULT '0',
+  `spirit` float NOT NULL DEFAULT '0',
+  `armor` int(10) unsigned NOT NULL DEFAULT '0',
+  `resHoly` int(10) unsigned NOT NULL DEFAULT '0',
+  `resFire` int(10) unsigned NOT NULL DEFAULT '0',
+  `resNature` int(10) unsigned NOT NULL DEFAULT '0',
+  `resFrost` int(10) unsigned NOT NULL DEFAULT '0',
+  `resShadow` int(10) unsigned NOT NULL DEFAULT '0',
+  `resArcane` int(10) unsigned NOT NULL DEFAULT '0',
+  `dmgModNormal` int(10) unsigned NOT NULL DEFAULT '0',
+  `dmgModHoly` int(10) unsigned NOT NULL DEFAULT '0',
+  `dmgModFire` int(10) unsigned NOT NULL DEFAULT '0',
+  `dmgModNature` int(10) unsigned NOT NULL DEFAULT '0',
+  `dmgModFrost` int(10) unsigned NOT NULL DEFAULT '0',
+  `dmgModShadow` int(10) unsigned NOT NULL DEFAULT '0',
+  `dmgModArcane` int(10) unsigned NOT NULL DEFAULT '0',
+  `blockPct` float NOT NULL DEFAULT '0',
+  `dodgePct` float NOT NULL DEFAULT '0',
+  `parryPct` float NOT NULL DEFAULT '0',
+  `meleeCritPct` float NOT NULL DEFAULT '0',
+  `rangedCritPct` float NOT NULL DEFAULT '0',
+  `attackPower` float NOT NULL DEFAULT '0',
+  `rangedAttackPower` float NOT NULL DEFAULT '0',
+  `meleeDamage` text NOT NULL,
+  `rangedDamage` text NOT NULL,
+  `meleeWeaponSpeed` float NOT NULL DEFAULT '0',
+  `rangedWeaponSpeed` float NOT NULL DEFAULT '0',
+  `castSpeed` float NOT NULL DEFAULT '0',
+  `meleeHit` float NOT NULL DEFAULT '0',
+  `rangedHit` float NOT NULL DEFAULT '0',
+  `spellHit` float NOT NULL DEFAULT '0',
+  PRIMARY KEY (`guid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
--- Dumping structure for table characters.character_aura
-DROP TABLE IF EXISTS `character_aura`;
+-- Daten Export vom Benutzer nicht ausgewählt
+-- Exportiere Struktur von Tabelle tw_char.character_aura
 CREATE TABLE IF NOT EXISTS `character_aura` (
   `guid` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Global Unique Identifier',
   `caster_guid` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT 'Full Global Unique Identifier',
@@ -206,11 +378,8 @@ CREATE TABLE IF NOT EXISTS `character_aura` (
   PRIMARY KEY (`guid`,`caster_guid`,`item_guid`,`spell`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Player System';
 
--- Data exporting was unselected.
-
-
--- Dumping structure for table characters.character_battleground_data
-DROP TABLE IF EXISTS `character_battleground_data`;
+-- Daten Export vom Benutzer nicht ausgewählt
+-- Exportiere Struktur von Tabelle tw_char.character_battleground_data
 CREATE TABLE IF NOT EXISTS `character_battleground_data` (
   `guid` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Global Unique Identifier',
   `instance_id` int(11) unsigned NOT NULL DEFAULT '0',
@@ -223,11 +392,8 @@ CREATE TABLE IF NOT EXISTS `character_battleground_data` (
   PRIMARY KEY (`guid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Player System';
 
--- Data exporting was unselected.
-
-
--- Dumping structure for table characters.character_bgqueue
-DROP TABLE IF EXISTS `character_bgqueue`;
+-- Daten Export vom Benutzer nicht ausgewählt
+-- Exportiere Struktur von Tabelle tw_char.character_bgqueue
 CREATE TABLE IF NOT EXISTS `character_bgqueue` (
   `PlayerGUID` int(11) NOT NULL DEFAULT '0',
   `playerName` varchar(12) CHARACTER SET latin1 NOT NULL,
@@ -238,33 +404,24 @@ CREATE TABLE IF NOT EXISTS `character_bgqueue` (
   PRIMARY KEY (`PlayerGUID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
--- Data exporting was unselected.
-
-
--- Dumping structure for table characters.character_deleted_items
-DROP TABLE IF EXISTS `character_deleted_items`;
+-- Daten Export vom Benutzer nicht ausgewählt
+-- Exportiere Struktur von Tabelle tw_char.character_deleted_items
 CREATE TABLE IF NOT EXISTS `character_deleted_items` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `player_guid` int(11) unsigned NOT NULL DEFAULT '0',
   `item_entry` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `stack_count` mediumint(8) unsigned NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=425 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Data exporting was unselected.
-
-
--- Dumping structure for table characters.character_duplicate_account
-DROP TABLE IF EXISTS `character_duplicate_account`;
+-- Daten Export vom Benutzer nicht ausgewählt
+-- Exportiere Struktur von Tabelle tw_char.character_duplicate_account
 CREATE TABLE IF NOT EXISTS `character_duplicate_account` (
   `account` int(11) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
--- Data exporting was unselected.
-
-
--- Dumping structure for table characters.character_forgotten_skills
-DROP TABLE IF EXISTS `character_forgotten_skills`;
+-- Daten Export vom Benutzer nicht ausgewählt
+-- Exportiere Struktur von Tabelle tw_char.character_forgotten_skills
 CREATE TABLE IF NOT EXISTS `character_forgotten_skills` (
   `guid` int(11) unsigned NOT NULL COMMENT 'Global Unique Identifier',
   `skill` mediumint(9) unsigned NOT NULL,
@@ -272,11 +429,8 @@ CREATE TABLE IF NOT EXISTS `character_forgotten_skills` (
   PRIMARY KEY (`guid`,`skill`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Player System';
 
--- Data exporting was unselected.
-
-
--- Dumping structure for table characters.character_gifts
-DROP TABLE IF EXISTS `character_gifts`;
+-- Daten Export vom Benutzer nicht ausgewählt
+-- Exportiere Struktur von Tabelle tw_char.character_gifts
 CREATE TABLE IF NOT EXISTS `character_gifts` (
   `guid` int(20) unsigned NOT NULL DEFAULT '0',
   `item_guid` int(11) unsigned NOT NULL DEFAULT '0',
@@ -286,11 +440,8 @@ CREATE TABLE IF NOT EXISTS `character_gifts` (
   KEY `idx_guid` (`guid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
--- Data exporting was unselected.
-
-
--- Dumping structure for table characters.character_homebind
-DROP TABLE IF EXISTS `character_homebind`;
+-- Daten Export vom Benutzer nicht ausgewählt
+-- Exportiere Struktur von Tabelle tw_char.character_homebind
 CREATE TABLE IF NOT EXISTS `character_homebind` (
   `guid` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Global Unique Identifier',
   `map` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Map Identifier',
@@ -301,11 +452,8 @@ CREATE TABLE IF NOT EXISTS `character_homebind` (
   PRIMARY KEY (`guid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Player System';
 
--- Data exporting was unselected.
-
-
--- Dumping structure for table characters.character_honor_cp
-DROP TABLE IF EXISTS `character_honor_cp`;
+-- Daten Export vom Benutzer nicht ausgewählt
+-- Exportiere Struktur von Tabelle tw_char.character_honor_cp
 CREATE TABLE IF NOT EXISTS `character_honor_cp` (
   `guid` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Global Unique Identifier',
   `victimType` tinyint(3) unsigned NOT NULL DEFAULT '4',
@@ -316,11 +464,8 @@ CREATE TABLE IF NOT EXISTS `character_honor_cp` (
   KEY `idx_guid` (`guid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Player System';
 
--- Data exporting was unselected.
-
-
--- Dumping structure for table characters.character_instance
-DROP TABLE IF EXISTS `character_instance`;
+-- Daten Export vom Benutzer nicht ausgewählt
+-- Exportiere Struktur von Tabelle tw_char.character_instance
 CREATE TABLE IF NOT EXISTS `character_instance` (
   `guid` int(11) unsigned NOT NULL DEFAULT '0',
   `instance` int(11) unsigned NOT NULL DEFAULT '0',
@@ -329,11 +474,8 @@ CREATE TABLE IF NOT EXISTS `character_instance` (
   KEY `idx_instance` (`instance`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
--- Data exporting was unselected.
-
-
--- Dumping structure for table characters.character_inventory
-DROP TABLE IF EXISTS `character_inventory`;
+-- Daten Export vom Benutzer nicht ausgewählt
+-- Exportiere Struktur von Tabelle tw_char.character_inventory
 CREATE TABLE IF NOT EXISTS `character_inventory` (
   `guid` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Global Unique Identifier',
   `bag` int(11) unsigned NOT NULL DEFAULT '0',
@@ -344,11 +486,8 @@ CREATE TABLE IF NOT EXISTS `character_inventory` (
   KEY `idx_guid` (`guid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Player System';
 
--- Data exporting was unselected.
-
-
--- Dumping structure for table characters.character_pet
-DROP TABLE IF EXISTS `character_pet`;
+-- Daten Export vom Benutzer nicht ausgewählt
+-- Exportiere Struktur von Tabelle tw_char.character_pet
 CREATE TABLE IF NOT EXISTS `character_pet` (
   `id` int(11) unsigned NOT NULL DEFAULT '0',
   `entry` int(11) unsigned NOT NULL DEFAULT '0',
@@ -377,11 +516,8 @@ CREATE TABLE IF NOT EXISTS `character_pet` (
   KEY `idx_owner` (`owner`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Pet System';
 
--- Data exporting was unselected.
-
-
--- Dumping structure for table characters.character_queststatus
-DROP TABLE IF EXISTS `character_queststatus`;
+-- Daten Export vom Benutzer nicht ausgewählt
+-- Exportiere Struktur von Tabelle tw_char.character_queststatus
 CREATE TABLE IF NOT EXISTS `character_queststatus` (
   `guid` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Global Unique Identifier',
   `quest` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Quest Identifier',
@@ -401,11 +537,8 @@ CREATE TABLE IF NOT EXISTS `character_queststatus` (
   PRIMARY KEY (`guid`,`quest`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Player System';
 
--- Data exporting was unselected.
-
-
--- Dumping structure for table characters.character_reputation
-DROP TABLE IF EXISTS `character_reputation`;
+-- Daten Export vom Benutzer nicht ausgewählt
+-- Exportiere Struktur von Tabelle tw_char.character_reputation
 CREATE TABLE IF NOT EXISTS `character_reputation` (
   `guid` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Global Unique Identifier',
   `faction` int(11) unsigned NOT NULL DEFAULT '0',
@@ -414,11 +547,8 @@ CREATE TABLE IF NOT EXISTS `character_reputation` (
   PRIMARY KEY (`guid`,`faction`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Player System';
 
--- Data exporting was unselected.
-
-
--- Dumping structure for table characters.character_skills
-DROP TABLE IF EXISTS `character_skills`;
+-- Daten Export vom Benutzer nicht ausgewählt
+-- Exportiere Struktur von Tabelle tw_char.character_skills
 CREATE TABLE IF NOT EXISTS `character_skills` (
   `guid` int(11) unsigned NOT NULL COMMENT 'Global Unique Identifier',
   `skill` mediumint(9) unsigned NOT NULL,
@@ -427,11 +557,8 @@ CREATE TABLE IF NOT EXISTS `character_skills` (
   PRIMARY KEY (`guid`,`skill`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Player System';
 
--- Data exporting was unselected.
-
-
--- Dumping structure for table characters.character_social
-DROP TABLE IF EXISTS `character_social`;
+-- Daten Export vom Benutzer nicht ausgewählt
+-- Exportiere Struktur von Tabelle tw_char.character_social
 CREATE TABLE IF NOT EXISTS `character_social` (
   `guid` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Character Global Unique Identifier',
   `friend` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Friend Global Unique Identifier',
@@ -443,11 +570,8 @@ CREATE TABLE IF NOT EXISTS `character_social` (
   KEY `idx_friend_flags` (`friend`,`flags`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Player System';
 
--- Data exporting was unselected.
-
-
--- Dumping structure for table characters.character_spell
-DROP TABLE IF EXISTS `character_spell`;
+-- Daten Export vom Benutzer nicht ausgewählt
+-- Exportiere Struktur von Tabelle tw_char.character_spell
 CREATE TABLE IF NOT EXISTS `character_spell` (
   `guid` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Global Unique Identifier',
   `spell` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Spell Identifier',
@@ -457,11 +581,8 @@ CREATE TABLE IF NOT EXISTS `character_spell` (
   KEY `idx_spell` (`spell`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Player System';
 
--- Data exporting was unselected.
-
-
--- Dumping structure for table characters.character_spell_cooldown
-DROP TABLE IF EXISTS `character_spell_cooldown`;
+-- Daten Export vom Benutzer nicht ausgewählt
+-- Exportiere Struktur von Tabelle tw_char.character_spell_cooldown
 CREATE TABLE IF NOT EXISTS `character_spell_cooldown` (
   `guid` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Global Unique Identifier, Low part',
   `spell` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Spell Identifier',
@@ -471,11 +592,8 @@ CREATE TABLE IF NOT EXISTS `character_spell_cooldown` (
   PRIMARY KEY (`guid`,`spell`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
--- Data exporting was unselected.
-
-
--- Dumping structure for table characters.character_stats
-DROP TABLE IF EXISTS `character_stats`;
+-- Daten Export vom Benutzer nicht ausgewählt
+-- Exportiere Struktur von Tabelle tw_char.character_stats
 CREATE TABLE IF NOT EXISTS `character_stats` (
   `guid` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Global Unique Identifier, Low part',
   `maxhealth` int(10) unsigned NOT NULL DEFAULT '0',
@@ -508,11 +626,8 @@ CREATE TABLE IF NOT EXISTS `character_stats` (
   PRIMARY KEY (`guid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
--- Data exporting was unselected.
-
-
--- Dumping structure for table characters.character_ticket
-DROP TABLE IF EXISTS `character_ticket`;
+-- Daten Export vom Benutzer nicht ausgewählt
+-- Exportiere Struktur von Tabelle tw_char.character_ticket
 CREATE TABLE IF NOT EXISTS `character_ticket` (
   `ticket_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `guid` int(11) unsigned NOT NULL DEFAULT '0',
@@ -522,11 +637,19 @@ CREATE TABLE IF NOT EXISTS `character_ticket` (
   PRIMARY KEY (`ticket_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Player System';
 
--- Data exporting was unselected.
+-- Daten Export vom Benutzer nicht ausgewählt
+-- Exportiere Struktur von Tabelle tw_char.character_transmog
+CREATE TABLE IF NOT EXISTS `character_transmog` (
+  `itemguid` int(18) unsigned NOT NULL,
+  `fakeentry` int(11) NOT NULL,
+  `ownerguid` int(11) NOT NULL,
+  `oldentry` int(11) NOT NULL,
+  `newentry` int(11) NOT NULL,
+  PRIMARY KEY (`itemguid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-
--- Dumping structure for table characters.character_tutorial
-DROP TABLE IF EXISTS `character_tutorial`;
+-- Daten Export vom Benutzer nicht ausgewählt
+-- Exportiere Struktur von Tabelle tw_char.character_tutorial
 CREATE TABLE IF NOT EXISTS `character_tutorial` (
   `account` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Account Identifier',
   `tut0` int(11) unsigned NOT NULL DEFAULT '0',
@@ -538,13 +661,19 @@ CREATE TABLE IF NOT EXISTS `character_tutorial` (
   `tut6` int(11) unsigned NOT NULL DEFAULT '0',
   `tut7` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`account`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Player System';
+) ENGINE=MyISAM AUTO_INCREMENT=3514189 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Player System';
 
--- Data exporting was unselected.
+-- Daten Export vom Benutzer nicht ausgewählt
+-- Exportiere Struktur von Tabelle tw_char.character_xp_from_log
+CREATE TABLE IF NOT EXISTS `character_xp_from_log` (
+  `guid` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Global Unique Identifier',
+  `type` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `xp` bigint(20) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`guid`,`type`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
--- Dumping structure for table characters.corpse
-DROP TABLE IF EXISTS `corpse`;
+-- Daten Export vom Benutzer nicht ausgewählt
+-- Exportiere Struktur von Tabelle tw_char.corpse
 CREATE TABLE IF NOT EXISTS `corpse` (
   `guid` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Global Unique Identifier',
   `player` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Character Global Unique Identifier',
@@ -563,11 +692,8 @@ CREATE TABLE IF NOT EXISTS `corpse` (
   KEY `idx_time` (`time`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Death System';
 
--- Data exporting was unselected.
-
-
--- Dumping structure for table characters.creature_respawn
-DROP TABLE IF EXISTS `creature_respawn`;
+-- Daten Export vom Benutzer nicht ausgewählt
+-- Exportiere Struktur von Tabelle tw_char.creature_respawn
 CREATE TABLE IF NOT EXISTS `creature_respawn` (
   `guid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Global Unique Identifier',
   `respawntime` bigint(20) NOT NULL DEFAULT '0',
@@ -577,11 +703,8 @@ CREATE TABLE IF NOT EXISTS `creature_respawn` (
   KEY `idx_instance` (`instance`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Grid Loading System';
 
--- Data exporting was unselected.
-
-
--- Dumping structure for table characters.gameobject_respawn
-DROP TABLE IF EXISTS `gameobject_respawn`;
+-- Daten Export vom Benutzer nicht ausgewählt
+-- Exportiere Struktur von Tabelle tw_char.gameobject_respawn
 CREATE TABLE IF NOT EXISTS `gameobject_respawn` (
   `guid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Global Unique Identifier',
   `respawntime` bigint(20) NOT NULL DEFAULT '0',
@@ -591,21 +714,15 @@ CREATE TABLE IF NOT EXISTS `gameobject_respawn` (
   KEY `idx_instance` (`instance`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Grid Loading System';
 
--- Data exporting was unselected.
-
-
--- Dumping structure for table characters.game_event_status
-DROP TABLE IF EXISTS `game_event_status`;
+-- Daten Export vom Benutzer nicht ausgewählt
+-- Exportiere Struktur von Tabelle tw_char.game_event_status
 CREATE TABLE IF NOT EXISTS `game_event_status` (
   `event` smallint(6) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`event`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=FIXED COMMENT='Game event system';
 
--- Data exporting was unselected.
-
-
--- Dumping structure for table characters.gm_subsurveys
-DROP TABLE IF EXISTS `gm_subsurveys`;
+-- Daten Export vom Benutzer nicht ausgewählt
+-- Exportiere Struktur von Tabelle tw_char.gm_subsurveys
 CREATE TABLE IF NOT EXISTS `gm_subsurveys` (
   `surveyId` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `subsurveyId` int(10) unsigned NOT NULL DEFAULT '0',
@@ -614,11 +731,8 @@ CREATE TABLE IF NOT EXISTS `gm_subsurveys` (
   PRIMARY KEY (`surveyId`,`subsurveyId`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Player System';
 
--- Data exporting was unselected.
-
-
--- Dumping structure for table characters.gm_surveys
-DROP TABLE IF EXISTS `gm_surveys`;
+-- Daten Export vom Benutzer nicht ausgewählt
+-- Exportiere Struktur von Tabelle tw_char.gm_surveys
 CREATE TABLE IF NOT EXISTS `gm_surveys` (
   `surveyId` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `guid` int(10) unsigned NOT NULL DEFAULT '0',
@@ -628,11 +742,8 @@ CREATE TABLE IF NOT EXISTS `gm_surveys` (
   PRIMARY KEY (`surveyId`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Player System';
 
--- Data exporting was unselected.
-
-
--- Dumping structure for table characters.gm_tickets
-DROP TABLE IF EXISTS `gm_tickets`;
+-- Daten Export vom Benutzer nicht ausgewählt
+-- Exportiere Struktur von Tabelle tw_char.gm_tickets
 CREATE TABLE IF NOT EXISTS `gm_tickets` (
   `ticketId` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `guid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Global Unique Identifier of ticket creator',
@@ -655,13 +766,10 @@ CREATE TABLE IF NOT EXISTS `gm_tickets` (
   `ticketType` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `securityNeeded` tinyint(3) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`ticketId`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Player System';
+) ENGINE=MyISAM AUTO_INCREMENT=779 DEFAULT CHARSET=utf8 COMMENT='Player System';
 
--- Data exporting was unselected.
-
-
--- Dumping structure for table characters.groups
-DROP TABLE IF EXISTS `groups`;
+-- Daten Export vom Benutzer nicht ausgewählt
+-- Exportiere Struktur von Tabelle tw_char.groups
 CREATE TABLE IF NOT EXISTS `groups` (
   `groupId` int(11) unsigned NOT NULL,
   `leaderGuid` int(11) unsigned NOT NULL,
@@ -683,11 +791,8 @@ CREATE TABLE IF NOT EXISTS `groups` (
   UNIQUE KEY `key_leaderGuid` (`leaderGuid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=FIXED COMMENT='Groups';
 
--- Data exporting was unselected.
-
-
--- Dumping structure for table characters.group_instance
-DROP TABLE IF EXISTS `group_instance`;
+-- Daten Export vom Benutzer nicht ausgewählt
+-- Exportiere Struktur von Tabelle tw_char.group_instance
 CREATE TABLE IF NOT EXISTS `group_instance` (
   `leaderGuid` int(11) unsigned NOT NULL DEFAULT '0',
   `instance` int(11) unsigned NOT NULL DEFAULT '0',
@@ -696,11 +801,8 @@ CREATE TABLE IF NOT EXISTS `group_instance` (
   KEY `idx_instance` (`instance`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
--- Data exporting was unselected.
-
-
--- Dumping structure for table characters.group_member
-DROP TABLE IF EXISTS `group_member`;
+-- Daten Export vom Benutzer nicht ausgewählt
+-- Exportiere Struktur von Tabelle tw_char.group_member
 CREATE TABLE IF NOT EXISTS `group_member` (
   `groupId` int(11) unsigned NOT NULL,
   `memberGuid` int(11) unsigned NOT NULL,
@@ -710,11 +812,8 @@ CREATE TABLE IF NOT EXISTS `group_member` (
   KEY `idx_memberGuid` (`memberGuid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=FIXED COMMENT='Groups';
 
--- Data exporting was unselected.
-
-
--- Dumping structure for table characters.guild
-DROP TABLE IF EXISTS `guild`;
+-- Daten Export vom Benutzer nicht ausgewählt
+-- Exportiere Struktur von Tabelle tw_char.guild
 CREATE TABLE IF NOT EXISTS `guild` (
   `guildid` int(6) unsigned NOT NULL DEFAULT '0',
   `name` varchar(255) NOT NULL DEFAULT '',
@@ -730,11 +829,19 @@ CREATE TABLE IF NOT EXISTS `guild` (
   PRIMARY KEY (`guildid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Guild System';
 
--- Data exporting was unselected.
+-- Daten Export vom Benutzer nicht ausgewählt
+-- Exportiere Struktur von Tabelle tw_char.guild_bank
+CREATE TABLE IF NOT EXISTS `guild_bank` (
+  `guid` int(11) unsigned NOT NULL,
+  `bag` int(11) unsigned NOT NULL DEFAULT '0',
+  `slot` tinyint(3) unsigned NOT NULL,
+  `item` int(11) unsigned NOT NULL,
+  `item_template` int(11) unsigned NOT NULL,
+  PRIMARY KEY (`item`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-
--- Dumping structure for table characters.guild_eventlog
-DROP TABLE IF EXISTS `guild_eventlog`;
+-- Daten Export vom Benutzer nicht ausgewählt
+-- Exportiere Struktur von Tabelle tw_char.guild_eventlog
 CREATE TABLE IF NOT EXISTS `guild_eventlog` (
   `guildid` int(11) NOT NULL COMMENT 'Guild Identificator',
   `LogGuid` int(11) NOT NULL COMMENT 'Log record identificator - auxiliary column',
@@ -749,11 +856,8 @@ CREATE TABLE IF NOT EXISTS `guild_eventlog` (
   KEY `idx_LogGuid` (`LogGuid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Guild Eventlog';
 
--- Data exporting was unselected.
-
-
--- Dumping structure for table characters.guild_member
-DROP TABLE IF EXISTS `guild_member`;
+-- Daten Export vom Benutzer nicht ausgewählt
+-- Exportiere Struktur von Tabelle tw_char.guild_member
 CREATE TABLE IF NOT EXISTS `guild_member` (
   `guildid` int(6) unsigned NOT NULL DEFAULT '0',
   `guid` int(11) unsigned NOT NULL DEFAULT '0',
@@ -765,11 +869,8 @@ CREATE TABLE IF NOT EXISTS `guild_member` (
   KEY `idx_guildid_rank` (`guildid`,`rank`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=FIXED COMMENT='Guild System';
 
--- Data exporting was unselected.
-
-
--- Dumping structure for table characters.guild_rank
-DROP TABLE IF EXISTS `guild_rank`;
+-- Daten Export vom Benutzer nicht ausgewählt
+-- Exportiere Struktur von Tabelle tw_char.guild_rank
 CREATE TABLE IF NOT EXISTS `guild_rank` (
   `guildid` int(6) unsigned NOT NULL DEFAULT '0',
   `rid` int(11) unsigned NOT NULL,
@@ -779,11 +880,8 @@ CREATE TABLE IF NOT EXISTS `guild_rank` (
   KEY `idx_rid` (`rid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Guild System';
 
--- Data exporting was unselected.
-
-
--- Dumping structure for table characters.instance
-DROP TABLE IF EXISTS `instance`;
+-- Daten Export vom Benutzer nicht ausgewählt
+-- Exportiere Struktur von Tabelle tw_char.instance
 CREATE TABLE IF NOT EXISTS `instance` (
   `id` int(11) unsigned NOT NULL DEFAULT '0',
   `map` int(11) unsigned NOT NULL DEFAULT '0',
@@ -794,22 +892,28 @@ CREATE TABLE IF NOT EXISTS `instance` (
   KEY `idx_resettime` (`resettime`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
--- Data exporting was unselected.
+-- Daten Export vom Benutzer nicht ausgewählt
+-- Exportiere Struktur von Tabelle tw_char.instance_copy
+CREATE TABLE IF NOT EXISTS `instance_copy` (
+  `id` int(11) unsigned NOT NULL DEFAULT '0',
+  `map` int(11) unsigned NOT NULL DEFAULT '0',
+  `resettime` bigint(40) NOT NULL DEFAULT '0',
+  `data` longtext,
+  PRIMARY KEY (`id`),
+  KEY `idx_map` (`map`),
+  KEY `idx_resettime` (`resettime`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
--- Dumping structure for table characters.instance_reset
-DROP TABLE IF EXISTS `instance_reset`;
+-- Daten Export vom Benutzer nicht ausgewählt
+-- Exportiere Struktur von Tabelle tw_char.instance_reset
 CREATE TABLE IF NOT EXISTS `instance_reset` (
   `mapid` int(11) unsigned NOT NULL DEFAULT '0',
   `resettime` bigint(40) NOT NULL DEFAULT '0',
   PRIMARY KEY (`mapid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
--- Data exporting was unselected.
-
-
--- Dumping structure for table characters.item_instance
-DROP TABLE IF EXISTS `item_instance`;
+-- Daten Export vom Benutzer nicht ausgewählt
+-- Exportiere Struktur von Tabelle tw_char.item_instance
 CREATE TABLE IF NOT EXISTS `item_instance` (
   `guid` int(10) unsigned NOT NULL DEFAULT '0',
   `itemEntry` mediumint(8) unsigned NOT NULL DEFAULT '0',
@@ -830,11 +934,8 @@ CREATE TABLE IF NOT EXISTS `item_instance` (
   KEY `idx_itemEntry` (`itemEntry`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Item System';
 
--- Data exporting was unselected.
-
-
--- Dumping structure for table characters.item_loot
-DROP TABLE IF EXISTS `item_loot`;
+-- Daten Export vom Benutzer nicht ausgewählt
+-- Exportiere Struktur von Tabelle tw_char.item_loot
 CREATE TABLE IF NOT EXISTS `item_loot` (
   `guid` int(11) unsigned NOT NULL DEFAULT '0',
   `owner_guid` int(11) unsigned NOT NULL DEFAULT '0',
@@ -845,22 +946,16 @@ CREATE TABLE IF NOT EXISTS `item_loot` (
   KEY `idx_owner_guid` (`owner_guid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Item System';
 
--- Data exporting was unselected.
-
-
--- Dumping structure for table characters.item_text
-DROP TABLE IF EXISTS `item_text`;
+-- Daten Export vom Benutzer nicht ausgewählt
+-- Exportiere Struktur von Tabelle tw_char.item_text
 CREATE TABLE IF NOT EXISTS `item_text` (
   `id` int(11) unsigned NOT NULL DEFAULT '0',
   `text` longtext,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=FIXED COMMENT='Item System';
 
--- Data exporting was unselected.
-
-
--- Dumping structure for table characters.mail
-DROP TABLE IF EXISTS `mail`;
+-- Daten Export vom Benutzer nicht ausgewählt
+-- Exportiere Struktur von Tabelle tw_char.mail
 CREATE TABLE IF NOT EXISTS `mail` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Identifier',
   `messageType` tinyint(3) unsigned NOT NULL DEFAULT '0',
@@ -877,14 +972,12 @@ CREATE TABLE IF NOT EXISTS `mail` (
   `cod` int(11) unsigned NOT NULL DEFAULT '0',
   `checked` tinyint(3) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  KEY `idx_receiver` (`receiver`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Mail System';
+  KEY `idx_receiver` (`receiver`),
+  KEY `FK_mail_item_text` (`itemTextId`)
+) ENGINE=InnoDB AUTO_INCREMENT=1682409 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Mail System';
 
--- Data exporting was unselected.
-
-
--- Dumping structure for table characters.mail_items
-DROP TABLE IF EXISTS `mail_items`;
+-- Daten Export vom Benutzer nicht ausgewählt
+-- Exportiere Struktur von Tabelle tw_char.mail_items
 CREATE TABLE IF NOT EXISTS `mail_items` (
   `mail_id` int(11) unsigned NOT NULL DEFAULT '0',
   `item_guid` int(11) unsigned NOT NULL DEFAULT '0',
@@ -895,21 +988,15 @@ CREATE TABLE IF NOT EXISTS `mail_items` (
   KEY `idx_item_guid` (`item_guid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
--- Data exporting was unselected.
-
-
--- Dumping structure for table characters.migrations
-DROP TABLE IF EXISTS `migrations`;
+-- Daten Export vom Benutzer nicht ausgewählt
+-- Exportiere Struktur von Tabelle tw_char.migrations
 CREATE TABLE IF NOT EXISTS `migrations` (
   `id` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
--- Data exporting was unselected.
-
-
--- Dumping structure for table characters.petition
-DROP TABLE IF EXISTS `petition`;
+-- Daten Export vom Benutzer nicht ausgewählt
+-- Exportiere Struktur von Tabelle tw_char.petition
 CREATE TABLE IF NOT EXISTS `petition` (
   `ownerguid` int(10) unsigned NOT NULL,
   `petitionguid` int(10) unsigned DEFAULT '0',
@@ -920,11 +1007,8 @@ CREATE TABLE IF NOT EXISTS `petition` (
   UNIQUE KEY `charterguid` (`charterguid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Guild System';
 
--- Data exporting was unselected.
-
-
--- Dumping structure for table characters.petition_sign
-DROP TABLE IF EXISTS `petition_sign`;
+-- Daten Export vom Benutzer nicht ausgewählt
+-- Exportiere Struktur von Tabelle tw_char.petition_sign
 CREATE TABLE IF NOT EXISTS `petition_sign` (
   `ownerguid` int(10) unsigned NOT NULL,
   `petitionguid` int(11) unsigned NOT NULL DEFAULT '0',
@@ -935,11 +1019,8 @@ CREATE TABLE IF NOT EXISTS `petition_sign` (
   KEY `idx_ownerguid` (`ownerguid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Guild System';
 
--- Data exporting was unselected.
-
-
--- Dumping structure for table characters.pet_aura
-DROP TABLE IF EXISTS `pet_aura`;
+-- Daten Export vom Benutzer nicht ausgewählt
+-- Exportiere Struktur von Tabelle tw_char.pet_aura
 CREATE TABLE IF NOT EXISTS `pet_aura` (
   `guid` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Global Unique Identifier',
   `caster_guid` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT 'Full Global Unique Identifier',
@@ -959,11 +1040,8 @@ CREATE TABLE IF NOT EXISTS `pet_aura` (
   PRIMARY KEY (`guid`,`caster_guid`,`item_guid`,`spell`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Pet System';
 
--- Data exporting was unselected.
-
-
--- Dumping structure for table characters.pet_spell
-DROP TABLE IF EXISTS `pet_spell`;
+-- Daten Export vom Benutzer nicht ausgewählt
+-- Exportiere Struktur von Tabelle tw_char.pet_spell
 CREATE TABLE IF NOT EXISTS `pet_spell` (
   `guid` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Global Unique Identifier',
   `spell` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Spell Identifier',
@@ -971,11 +1049,8 @@ CREATE TABLE IF NOT EXISTS `pet_spell` (
   PRIMARY KEY (`guid`,`spell`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Pet System';
 
--- Data exporting was unselected.
-
-
--- Dumping structure for table characters.pet_spell_cooldown
-DROP TABLE IF EXISTS `pet_spell_cooldown`;
+-- Daten Export vom Benutzer nicht ausgewählt
+-- Exportiere Struktur von Tabelle tw_char.pet_spell_cooldown
 CREATE TABLE IF NOT EXISTS `pet_spell_cooldown` (
   `guid` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Global Unique Identifier, Low part',
   `spell` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Spell Identifier',
@@ -983,11 +1058,8 @@ CREATE TABLE IF NOT EXISTS `pet_spell_cooldown` (
   PRIMARY KEY (`guid`,`spell`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
--- Data exporting was unselected.
-
-
--- Dumping structure for table characters.playerbot
-DROP TABLE IF EXISTS `playerbot`;
+-- Daten Export vom Benutzer nicht ausgewählt
+-- Exportiere Struktur von Tabelle tw_char.playerbot
 CREATE TABLE IF NOT EXISTS `playerbot` (
   `char_guid` bigint(20) unsigned NOT NULL,
   `chance` int(10) unsigned NOT NULL DEFAULT '10',
@@ -996,11 +1068,39 @@ CREATE TABLE IF NOT EXISTS `playerbot` (
   PRIMARY KEY (`char_guid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
--- Data exporting was unselected.
+-- Daten Export vom Benutzer nicht ausgewählt
+-- Exportiere Struktur von Prozedur tw_char.reset_petition_id
+-- NEEDED FOR THE LIFE REALM ONLY
+-- DELIMITER 
+-- CREATE DEFINER=``@`%` PROCEDURE `reset_petition_id`()
+-- BEGIN
+ -- DECLARE maxRow INT UNSIGNED DEFAULT 0;
+ -- DECLARE currRow INT UNSIGNED DEFAULT 0;
+ -- DECLARE oldId INT UNSIGNED DEFAULT 0;
+ -- DROP TABLE IF EXISTS temp_petition;
+ -- CREATE TABLE `temp_petition` (
+  -- `row` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  -- `ownerguid` int(10) unsigned NOT NULL,
+  -- `petitionguid` int(10) unsigned DEFAULT '0',
+  -- `name` varchar(255) NOT NULL DEFAULT '',
+  -- PRIMARY KEY (`row`)
+ -- );
+ -- INSERT INTO temp_petition SELECT 0, petition.* FROM petition;
+ -- SET currRow=1;
+ -- SET oldId=0;
+ -- SELECT COUNT(*) FROM temp_petition INTO maxRow;
+ -- WHILE currRow <= maxRow DO
+  -- SELECT petitionguid FROM temp_petition WHERE row = currRow INTO oldId;
+  -- UPDATE petition SET petitionguid=currRow WHERE petitionguid=oldId;
+  -- UPDATE petition_sign SET petitionguid=currRow WHERE petitionguid=oldId;
+  -- UPDATE item_instance SET enchantments=CONCAT(currRow,' 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 ') WHERE guid=oldId and itemEntry=5863;
+  -- SET currRow = currRow + 1;
+ -- END WHILE;
+ -- DROP TABLE temp_petition;
+-- END//
+-- DELIMITER ;
 
-
--- Dumping structure for table characters.saved_variables
-DROP TABLE IF EXISTS `saved_variables`;
+-- Exportiere Struktur von Tabelle tw_char.saved_variables
 CREATE TABLE IF NOT EXISTS `saved_variables` (
   `key` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `cleaning_flags` int(11) unsigned NOT NULL DEFAULT '0',
@@ -1010,23 +1110,28 @@ CREATE TABLE IF NOT EXISTS `saved_variables` (
   PRIMARY KEY (`key`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Variable Saves';
 
--- Data exporting was unselected.
+-- Daten Export vom Benutzer nicht ausgewählt
+-- Exportiere Struktur von Tabelle tw_char.store_racechange
+CREATE TABLE IF NOT EXISTS `store_racechange` (
+  `guid` int(11) unsigned NOT NULL,
+  `race` tinyint(1) unsigned NOT NULL,
+  `gender` tinyint(1) unsigned NOT NULL,
+  `playerbytes1` int(10) unsigned NOT NULL,
+  `playerbytes2` int(10) unsigned NOT NULL,
+  `transaction` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`transaction`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Race change requests from web backend. Playerbytes is from ''characters'' table, is used to copy new character outfit.';
 
-
--- Dumping structure for table characters.world
-DROP TABLE IF EXISTS `world`;
+-- Daten Export vom Benutzer nicht ausgewählt
+-- Exportiere Struktur von Tabelle tw_char.world
 CREATE TABLE IF NOT EXISTS `world` (
   `map` int(11) unsigned NOT NULL DEFAULT '0',
   `data` longtext,
   PRIMARY KEY (`map`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
--- Data exporting was unselected.
-
-alter table characters add ignore_titles tinyint(3) not null default 0;
-
--- Dumping structure for table characters.worldstates
-DROP TABLE IF EXISTS `worldstates`;
+-- Daten Export vom Benutzer nicht ausgewählt
+-- Exportiere Struktur von Tabelle tw_char.worldstates
 CREATE TABLE IF NOT EXISTS `worldstates` (
   `entry` int(11) DEFAULT NULL,
   `value` int(11) DEFAULT NULL,
@@ -1034,7 +1139,7 @@ CREATE TABLE IF NOT EXISTS `worldstates` (
   UNIQUE KEY `key_entry` (`entry`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
--- Data exporting was unselected.
+-- Daten Export vom Benutzer nicht ausgewählt
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
