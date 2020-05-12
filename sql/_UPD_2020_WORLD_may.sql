@@ -883,7 +883,7 @@ UPDATE `creature_template` SET `dmg_min`=355, `dmg_max`=480, `fire_res`=171, `na
 
 SET @quest_entry = 60065;
 SET @quest_zone = 139;
-SET @faction_id = 1625;
+SET @faction_id = 529;
 SET @faction_count = 250;
 SET @xp_or_money = 6540;
 SET @quest_level = 60;
