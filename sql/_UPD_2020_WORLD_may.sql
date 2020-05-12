@@ -1037,3 +1037,7 @@ REPLACE INTO `creature_template_addon` VALUES (51536, 0, 0, 7, 1, 16, 0, 0, NULL
 update creature_template set scale = 3 where entry = 16184;
 update creature_template set rank = 3 where entry = 16184;
 update creature_template set script_name = 'boss_nerubian_overseer' where entry = 16184;
+
+-- Glyph of Exhaustion update
+
+UPDATE `item_template` SET `description`='This glyph prevents you from ever receiving rested experience.' WHERE (`entry`='50521') AND (`patch`='0');
