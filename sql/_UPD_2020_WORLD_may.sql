@@ -1027,8 +1027,8 @@ replace into npc_text (ID, BroadcastTextID0) values ('90362', '90362');
 update creature_template set gossip_menu_id = 56012 where entry = 51538;
 
 update creature_template set equipment_id = 468 where entry = 51537;
-update creature_template set flag = 1 where entry = 51537;
-update creature_template set flag = 1 where entry = 51538;
+update creature_template set npc_flags = 1 where entry = 51537;
+update creature_template set npc_flags = 1 where entry = 51538;
 
 REPLACE INTO `creature_template_addon` VALUES (51536, 0, 0, 7, 1, 16, 0, 0, NULL);
 
