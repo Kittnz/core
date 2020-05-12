@@ -1041,3 +1041,7 @@ update creature_template set script_name = 'boss_nerubian_overseer' where entry 
 -- Glyph of Exhaustion update
 
 UPDATE `item_template` SET `description`='This glyph prevents you from ever receiving rested experience.' WHERE (`entry`='50521') AND (`patch`='0');
+UPDATE `item_template` SET `script_name`='' WHERE (`entry`='50521') AND (`patch`='0');
+UPDATE `item_template` SET `spellid_1`='0' WHERE (`entry`='50521') AND (`patch`='0');
+UPDATE `item_template` SET `spellcooldown_1`='0' WHERE (`entry`='50521') AND (`patch`='0');
+UPDATE `item_template` SET `spellcharges_1`='0' WHERE (`entry`='50521') AND (`patch`='0');
