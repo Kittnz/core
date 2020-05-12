@@ -885,7 +885,7 @@ SET @quest_entry = 60065;
 SET @quest_zone = 139;
 SET @faction_id = 1625;
 SET @faction_count = 250;
-SET @xp_or_money = 4650;
+SET @xp_or_money = 6540;
 SET @quest_level = 60;
 SET @min_level = 58;
 SET @questgiver_id = 51536;
@@ -944,7 +944,7 @@ StartScript, CompleteScript) values
 
 'Slay 20 Crypt Fiends and 20 Crypt Horrors in Terrorweb Tunnel.\n\nKill Nerubian Overseer.', 
 
-'What do you have there? Is that … what I think it is?', 
+'What do you have there?\n\nIs that … what I think it is?', 
 
 'Yes?', 
 
