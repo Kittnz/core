@@ -563,8 +563,9 @@ bool GOSelect_go_brainwashing_device(Player* pPlayer, GameObject* pGo, uint32 se
         }
         else
             ChatHandler(pPlayer).PSendSysMessage("You don't have enough money!");
+
+        pPlayer->CLOSE_GOSSIP_MENU();
     }
-    pPlayer->CLOSE_GOSSIP_MENU();
     return true;
 }
 
