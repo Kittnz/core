@@ -270,6 +270,7 @@ void AddSC_battlemaster();
 void AddSC_boss_avatar_of_pompa();
 void AddSC_boss_turtlhu();
 void AddSC_boss_xmas_wolf();
+void AddSC_boss_nerubian_overseer();
 void AddSC_drogon();
 void AddSC_boss_gerastrasz();
 void AddSC_boss_chromie();
@@ -552,6 +553,7 @@ void AddScripts()
     AddSC_boss_avatar_of_pompa();
     AddSC_boss_turtlhu();
     AddSC_boss_xmas_wolf();
+    AddSC_boss_nerubian_overseer();
     AddSC_drogon();
     AddSC_boss_gerastrasz();
     AddSC_boss_chromie();

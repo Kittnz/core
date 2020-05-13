@@ -1034,9 +1034,15 @@ REPLACE INTO `creature_template_addon` VALUES (51536, 0, 0, 7, 1, 16, 0, 0, NULL
 
 -- Boss Nerubian Overseer
 
-update creature_template set scale = 3 where entry = 16184;
+update creature_template set scale = 2.2 where entry = 16184;
 update creature_template set rank = 3 where entry = 16184;
 update creature_template set script_name = 'boss_nerubian_overseer' where entry = 16184;
+
+update creature_template set spell_list_id = 0, spell_id1 = 0, ai_name = '', gold_min = 1603240, gold_max = 1624230,
+                             dmg_min = 2646, dmg_max = 3840, attack_power = 300, ranged_dmg_min = 740,
+                             ranged_dmg_max = 1012, shadow_res = 45, nature_res = 45, level_min = 63, level_max = 63,
+                             mechanic_immune_mask = 2798337883, health_min = 984162, health_max = 984162
+where entry = 16184;
 
 -- Glyph of Exhaustion update
 
