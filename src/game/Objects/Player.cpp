@@ -17369,8 +17369,8 @@ void Player::RemovePetitionsAndSigns(ObjectGuid guid)
 
 void Player::SetRestBonus(float rest_bonus_new)
 {
-    // Prevent resting on max level
-    if (getLevel() >= sWorld.getConfig(CONFIG_UINT32_MAX_PLAYER_LEVEL))
+    // Prevent resting on max level or with the Glyph og Exhaustion // Turtle WoW daily fose of hackfixes.
+    if (getLevel() >= sWorld.getConfig(CONFIG_UINT32_MAX_PLAYER_LEVEL) || HasItemCount(50521, 1, false))
         rest_bonus_new = 0;
 
     if (rest_bonus_new < 0)
