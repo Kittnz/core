@@ -7,6 +7,7 @@ enum
     SPELL_VENOM_SPIT         = 25053,
     SPELL_CORROSIVE_POISON   = 24111,
     SPELL_SHADOW_SHOCK       = 20603,
+    SPELL_SHADOW_BOLT_VOLLEY = 28407,
 
     CREATURE_NERUBLING       = 51539
 };
@@ -56,6 +57,9 @@ struct boss_nerubian_overseerAI : public ScriptedAI
 
     void JustDied(Unit* /*pKiller*/)
     {
+        // A bit of trolling :P
+        DoCast(webTarget, SPELL_SHADOW_BOLT_VOLLEY, true);
+
         uint32 m_respawn_delay_Timer = urand(120 * HOUR, 168 * HOUR);
 
         /** DRRS */
@@ -71,8 +75,9 @@ struct boss_nerubian_overseerAI : public ScriptedAI
 
     void WebExplosion()
     {
-        m_creature->DoKillUnit(webTarget);
         webTarget->PMonsterEmote("|cffff8040%s explodes.|r", nullptr, true, webTarget->GetName());
+        m_creature->DoKillUnit(webTarget);
+
         Unit* nerublingTarget = m_creature->GetNearestVictimInRange(0, 20);
         for (int i = 0; i < 4; i++)
         {
