@@ -56,7 +56,7 @@ struct boss_nerubian_overseerAI : public ScriptedAI
 
     void JustDied(Unit* /*pKiller*/)
     {
-        uint32 m_respawn_delay_Timer = urand(64*HOUR, 72*HOUR);
+        uint32 m_respawn_delay_Timer = urand(120 * HOUR, 168 * HOUR);
 
         /** DRRS */
         if (m_creature->GetSpawnFlags() & SPAWN_FLAG_DYNAMIC_RESPAWN_TIME &&
