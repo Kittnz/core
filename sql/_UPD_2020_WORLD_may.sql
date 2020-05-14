@@ -1276,3 +1276,6 @@ REPLACE INTO transmog_template VALUES  (24314, 911,4);
 REPLACE INTO transmog_template VALUES  (16829, 914,20);
 REPLACE INTO transmog_template VALUES  (28704, 915,3);
 
+-- Update Zealot Lor'Khan and Zealot Zath respawn time to match Thekal.
+UPDATE `creature` SET `spawntimesecsmin`=259200, `spawntimesecsmax`=259200 WHERE `id` IN (11347, 11348);
+
