@@ -98,10 +98,10 @@ struct boss_nerubian_overseerAI : public ScriptedAI
 
     void UpdateAI(const uint32 diff)
     {
-
         //Return since we have no target
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
+
 
         if (WebSpray_Timer < diff)
         {
