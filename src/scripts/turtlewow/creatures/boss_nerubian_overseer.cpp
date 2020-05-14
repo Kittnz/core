@@ -2,7 +2,13 @@
 
 enum
 {
-    SPELL_WEB_SPRAY          = 29484
+    SPELL_WEB_SPRAY          = 29484,
+    SPELL_POISON_CLOUD       = 24840,
+    SPELL_VENOM_SPIT         = 25053,
+    SPELL_CORROSIVE_POISON   = 24111,
+    SPELL_SHADOW_SHOCK       = 20603,
+
+    CREATURE_NERUBLING       = 51539
 };
 
 struct boss_nerubian_overseerAI : public ScriptedAI
@@ -14,12 +20,18 @@ struct boss_nerubian_overseerAI : public ScriptedAI
 
     uint32 WebSpray_Timer;
     uint32 WebExplode_Timer;
+    uint32 VenomSpit_Timer;
+    uint32 CorrosivePoison_Timer;
+    uint32 ShadowShock_Timer;
 
     Unit* webTarget;
 
     void SetDefaults() {
         WebSpray_Timer = 20000;
-        WebExplode_Timer = 10000;
+        WebExplode_Timer = 9000;
+        VenomSpit_Timer = 5000;
+        CorrosivePoison_Timer = 30000;
+        ShadowShock_Timer = 15000;
 
         webTarget = nullptr;
     }
@@ -57,6 +69,28 @@ struct boss_nerubian_overseerAI : public ScriptedAI
         m_creature->SaveRespawnTime();
     }
 
+    void WebExplosion()
+    {
+        m_creature->DoKillUnit(webTarget);
+        webTarget->PMonsterEmote("|cffff8040%s explodes.|r", nullptr, true, webTarget->GetName());
+        Unit* nerublingTarget = m_creature->GetNearestVictimInRange(0, 20);
+        for (int i = 0; i < 4; i++)
+        {
+            Unit* nerubling = m_creature->SummonCreature(CREATURE_NERUBLING, webTarget->GetPositionX(),
+                                                         webTarget->GetPositionY(),
+                                                         webTarget->GetPositionZ(), webTarget->GetOrientation(),
+                                                         TEMPSUMMON_CORPSE_DESPAWN);
+            if (nerublingTarget)
+            {
+                nerubling->SetInCombatWith(nerublingTarget);
+                nerubling->Attack(nerublingTarget, true);
+            }
+        }
+        DoCast(webTarget, SPELL_POISON_CLOUD, true);
+
+        webTarget = nullptr;
+    }
+
     void UpdateAI(const uint32 diff)
     {
 
@@ -66,8 +100,8 @@ struct boss_nerubian_overseerAI : public ScriptedAI
 
         if (WebSpray_Timer < diff)
         {
-            webTarget = m_creature->GetNearestVictimInRange(10, 60);
-            DoCast(webTarget, SPELL_WEB_SPRAY);
+            webTarget = m_creature->GetFarthestVictimInRange(0, 60);
+            DoCast(webTarget, SPELL_WEB_SPRAY, true);
             WebSpray_Timer = 30000;
         }
         else
@@ -77,9 +111,11 @@ struct boss_nerubian_overseerAI : public ScriptedAI
             {
                 if (WebExplode_Timer < diff)
                 {
-                    WebExplode_Timer = 10000;
-                    m_creature->DoKillUnit(webTarget);
-                    webTarget = nullptr;
+                    WebExplode_Timer = 9000;
+                    if (webTarget && webTarget->HasAura(SPELL_WEB_SPRAY))
+                    {
+                        WebExplosion();
+                    }
                 }
                 else
                 {
@@ -87,6 +123,31 @@ struct boss_nerubian_overseerAI : public ScriptedAI
                 }
             }
         }
+
+        if (VenomSpit_Timer < diff)
+        {
+            DoCast(m_creature, SPELL_VENOM_SPIT, true);
+            VenomSpit_Timer = 30000;
+        }
+        else
+            VenomSpit_Timer -= diff;
+
+        if (CorrosivePoison_Timer < diff)
+        {
+            DoCast(m_creature->getVictim(), SPELL_CORROSIVE_POISON, true);
+            CorrosivePoison_Timer = 30000;
+        }
+        else
+            CorrosivePoison_Timer -= diff;
+
+        if (ShadowShock_Timer < diff)
+        {
+            DoCast(m_creature, SPELL_SHADOW_SHOCK, true);
+            ShadowShock_Timer = urand(12000, 20000);
+        }
+        else
+            ShadowShock_Timer -= diff;
+
 
         DoMeleeAttackIfReady();
     }
