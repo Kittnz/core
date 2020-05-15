@@ -46,7 +46,6 @@ replace into shop_items values
 (112, 1, 51421, 'Caravan Kodo (Bank Companion)', 200),
 (113, 1, 51306, 'Fashion Coinss x10 (Transmogrification)', 160),
 -- Pets ------------------------------------------------------------------------------------------------
-(200, 2, 51433, 'Little Fawn (Happy Easter!)', 0),
 (201, 2, 13584, 'Diablo Stone', 60),
 (202, 2, 13583, 'Panda Collar', 60),
 (203, 2, 20371, 'Blue Murloc Egg', 60),
