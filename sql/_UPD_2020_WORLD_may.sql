@@ -2454,3 +2454,5 @@ REPLACE INTO `creature_movement_template` (`entry`, `point`, `position_x`, `posi
 (14842, 45, -5003.69, -1018.41, 501.656, 1.20824, 0, 0),
 (14842, 46, -4998.19, -1003.91, 501.658, 1.20824, 0, 0),
 (14842, 47, -4990.7, -984.164, 501.659, 1.20824, 0, 0);
+
+update quest_template set rewrepvalue1 = 400 where entry = 8302;
