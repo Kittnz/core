@@ -33,10 +33,7 @@ replace into gossip_menu_option (menu_id, id, option_icon, option_text, OptionBr
 update gossip_menu_option set npc_option_npcflag = '1' where (menu_id = '56003') and (id = '0'); 
 
 replace into gameobject_template values 
-(1000300, 0, 5, 4192, 'Orgrimmar Guild Vault', 0, 0, 2, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
-(1000301, 0, 5, 3078, 'Ironforge Guild Vault', 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
-(1000302, 0, 5, 3078, 'Stormwind Guild Vault', 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
-(1000304, 0, 5, 6502, 'Darnassus Guild Vault', 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
-(1000305, 0, 5, 1387, 'Undercity Guild Vault', 0, 0, 0.8, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+(1000300, 0, 5, 4192, 'Orgrimmar Guild Vault', 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(1000302, 0, 5, 3078, 'Stormwind Guild Vault', 0, 0, 0.5, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
 
 
