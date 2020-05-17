@@ -201,10 +201,11 @@ if(NOT USE_STD_MALLOC)
   
 endif()
 
-find_package(MySQL REQUIRED)
-
 # Win32 delifered packages
 if(WIN32)
+  set(MYSQL_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/dep/include/mysql)
+  set(MYSQL_LIBRARY ${CMAKE_SOURCE_DIR}/dep/lib/${DEP_ARCH}_release/libmySQL.lib)
+  set(MYSQL_DEBUG_LIBRARY ${CMAKE_SOURCE_DIR}/dep/lib/${DEP_ARCH}_debug/libmySQL.lib)
   set(OPENSSL_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/dep/include-windows/openssl)
   set(OPENSSL_LIBRARIES ${CMAKE_SOURCE_DIR}/dep/lib/${DEP_ARCH}_release/libeay32.lib)
   set(OPENSSL_DEBUG_LIBRARIES ${CMAKE_SOURCE_DIR}/dep/lib/${DEP_ARCH}_debug/libeay32.lib)
@@ -213,6 +214,7 @@ endif()
 
 # *nix-specific packages
 if(UNIX)
+  find_package(MySQL REQUIRED)
   find_package(OpenSSL REQUIRED)
   find_package(ZLIB REQUIRED)
 endif()
