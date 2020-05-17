@@ -313,7 +313,7 @@ set (SCRIPTS_SRCS
     turtlewow/zonescript_gm_isle.cpp
     turtlewow/zonescript_epl.cpp
     turtlewow/commands.cpp
-)
+        turtlewow/creatures/boss_nerubian_overseer.cpp)
 
 # Used in game ScriptMgr, not need here
 list(REMOVE_ITEM SCRIPTS_SRCS ScriptLoader.cpp)

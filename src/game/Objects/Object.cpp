@@ -3059,3 +3059,25 @@ void WorldObject::LoadMapCellsAround(float dist) const
     NULLNotifier notifier = NULLNotifier();
     Cell::VisitAllObjects(this, notifier, dist, false);
 }
+
+void WorldObject::PMonsterEmote(const char *text, Unit const* target, bool IsBossEmote, ...) const
+{
+    va_list ap;
+    char str[2048];
+    va_start(ap, text);
+    vsnprintf(str, 2048, text, ap);
+    va_end(ap);
+    MonsterTextEmote(str, target, IsBossEmote);
+}
+
+void WorldObject::PMonsterEmote(int32 textId, Unit const* target, bool IsBossEmote, ...) const
+{
+    va_list ap;
+    va_start(ap, textId);
+    float range = sWorld.getConfig(CONFIG_FLOAT_LISTEN_RANGE_TEXTEMOTE);
+    MaNGOS::MonsterChatBuilderFormat emote_build(*this, CHAT_MSG_MONSTER_EMOTE, textId, LANG_UNIVERSAL, nullptr, &ap);
+    MaNGOS::LocalizedPacketDo<MaNGOS::MonsterChatBuilderFormat> emote_do(emote_build);
+    MaNGOS::CameraDistWorker<MaNGOS::LocalizedPacketDo<MaNGOS::MonsterChatBuilderFormat> > emote_worker(this, range, emote_do);
+    Cell::VisitWorldObjects(this, emote_worker, range);
+    va_end(ap);
+}

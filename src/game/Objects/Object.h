@@ -826,6 +826,8 @@ m_obj->m_updateTracker.Reset();
         void PMonsterSay(int32 text, ...) const;
         void PMonsterYell(const char* text, ...) const;
         void PMonsterYell(int32 text, ...) const;
+        void PMonsterEmote(const char* text, Unit const* target = nullptr, bool IsBossEmote = false, ...) const;
+        void PMonsterEmote(int32 text, Unit const* target = nullptr, bool IsBossEmote = false, ...) const;
 
         void MonsterSay(const char* text, uint32 language = 0, Unit const* target = nullptr) const;
         void MonsterYell(const char* text, uint32 language = 0, Unit const* target = nullptr) const;

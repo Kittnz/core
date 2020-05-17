@@ -218,7 +218,7 @@ struct zg_rez_add : public ScriptedAI
     }
     void Reset()
     {
-        if (m_pInstance)
+        if (m_pInstance && m_creature->isAlive())
             m_pInstance->SetData(m_uiInstMobType, NOT_STARTED);
     }
 
