@@ -106,7 +106,8 @@ struct boss_nerubian_overseerAI : public ScriptedAI
         if (WebSpray_Timer < diff)
         {
             webTarget = m_creature->GetFarthestVictimInRange(0, 60);
-            webTarget->AddAura(SPELL_WEB_SPRAY, 0, m_creature);
+            if (webTarget)
+                webTarget->AddAura(SPELL_WEB_SPRAY, 0, m_creature);
             WebSpray_Timer = 30000;
         }
         else
