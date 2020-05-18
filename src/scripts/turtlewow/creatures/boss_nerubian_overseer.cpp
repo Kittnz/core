@@ -78,13 +78,13 @@ struct boss_nerubian_overseerAI : public ScriptedAI
         webTarget->PMonsterEmote("|cffff8040%s explodes.|r", nullptr, true, webTarget->GetName());
         m_creature->DoKillUnit(webTarget);
 
-        Unit* nerublingTarget = m_creature->GetNearestVictimInRange(0, 20);
+        Unit* nerublingTarget = m_creature->GetNearestVictimInRange(0, 30);
         for (int i = 0; i < 4; i++)
         {
             Unit* nerubling = m_creature->SummonCreature(CREATURE_NERUBLING, webTarget->GetPositionX(),
                                                          webTarget->GetPositionY(),
                                                          webTarget->GetPositionZ(), webTarget->GetOrientation(),
-                                                         TEMPSUMMON_CORPSE_DESPAWN);
+                                                         TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 30000);
             if (nerublingTarget)
             {
                 nerubling->SetInCombatWith(nerublingTarget);
@@ -98,7 +98,7 @@ struct boss_nerubian_overseerAI : public ScriptedAI
 
     void UpdateAI(const uint32 diff)
     {
-        //Return since we have no target
+        // Return since we have no target
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
 
@@ -106,7 +106,7 @@ struct boss_nerubian_overseerAI : public ScriptedAI
         if (WebSpray_Timer < diff)
         {
             webTarget = m_creature->GetFarthestVictimInRange(0, 60);
-            DoCast(webTarget, SPELL_WEB_SPRAY, true);
+            webTarget->AddAura(SPELL_WEB_SPRAY, 0, m_creature);
             WebSpray_Timer = 30000;
         }
         else
