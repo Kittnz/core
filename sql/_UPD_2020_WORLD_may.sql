@@ -2252,15 +2252,12 @@ UPDATE `creature` SET `orientation` = 3.776711 WHERE `guid`= 79522;
 UPDATE `creature` SET `orientation` = 3.776711 WHERE `guid`= 79580;
 UPDATE `creature` SET `orientation` = 3.776711 WHERE `guid`= 79550;
 
--- add missing injured stockade guard
-REPLACE INTO `creature` (`guid`, `id`, `id2`, `id3`, `id4`, `map`, `display_id`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `wander_distance`, `health_percent`, `mana_percent`, `movement_type`, `spawn_flags`, `visibility_mod`, `patch_min`, `patch_max`) VALUES
-(79581, 4996, 0, 0, 0, 0, 0, 0, -8766.31, 819.304, 97.6345, 5.357542, 540, 540, 0, 100, 0, 0, 0, 0, 0, 10);
 
 -- increase respawn time for injured stockade guard
 UPDATE `creature` SET `spawntimesecsmin`=540, `spawntimesecsmax`=540 WHERE `id`=4996;
 
 -- pathing and scripts for nurse lilian
-UPDATE `creature` SET `movement_type`= 2 WHERE `id`= 5042;
+UPDATE `creature` SET `movementtype`= 2 WHERE `id`= 5042;
 REPLACE INTO `creature_movement_template` (`entry`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (5042, 1, -8765.8, 820.428, 97.6347, 100, 12000, 0, 5042),
 (5042, 2, -8760, 813.384, 97.6347, 100, 0, 0, 0),
@@ -2303,7 +2300,7 @@ REPLACE INTO `gameobject` (`guid`, `id`,`map`,`position_x`,`position_y`,`positio
 
 -- https://github.com/vmangos/core/commit/156c1a6737c5a4759d4065c970f8e236176f0c5e
 -- Add waypoints for Kruban Darkblade.
-UPDATE `creature` SET `movement_type`=2 WHERE `id`=14843;
+UPDATE `creature` SET `movementtype`=2 WHERE `id`=14843;
 REPLACE INTO `creature_movement_template` (`entry`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `script_id`) VALUES
 (14843, 1, 1651.27, -4422.52, 16.14, 6.28295, 0, 0),
 (14843, 2, 1665.54, -4412.53, 17.6, 0.795575, 0, 0),
@@ -2332,7 +2329,7 @@ REPLACE INTO `creature_movement_template` (`entry`, `point`, `position_x`, `posi
 (14843, 25, 1629.31, -4427.41, 13.73, 0.358897, 0, 0);
 
 -- add gameobject blue recluse sign
-REPLACE INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`, `spawn_flags`, `visibility_mod`, `patch_min`, `patch_max`) VALUES
+REPLACE INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`, `spawnflags`, `visibilitymod`, `patch_min`, `patch_max`) VALUES
 (393853, 2169, 0, -9036.7, 842.987, 109.076, 0.410153, 0, 0, 0.203642, 0.979046, 120, 255, 0, 0, 0, 0, 0, 10);
 
 -- update completion text for Deathdealer's Leggings (8640)
