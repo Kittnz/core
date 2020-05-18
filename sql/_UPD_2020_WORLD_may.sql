@@ -2342,8 +2342,7 @@ UPDATE `quest_template` SET `OfferRewardText` = "Very good, I'm glad Kaplak was 
 UPDATE `quest_template` SET `RequestItemsText` = "Practice!" WHERE `entry` = 2460;
 
 -- Add waypoints for Fingat.
-UPDATE `creature` SET `position_x`=-10901, `position_y`=-3632, `position_z`=16.582, `orientation`=2.607 WHERE `guid`=43604;
-update creature_template set movement_type = 2 where entry = 14446;
+UPDATE `creature` SET `position_x`=-10901, `position_y`=-3632, `position_z`=16.582, `orientation`=2.607, movementtype = 2 WHERE `guid`=43604;
 DELETE FROM `creature_movement_template` WHERE `entry`=14446;
 REPLACE INTO `creature_movement_template` (`entry`, `point`, `position_x`, `position_y`, `position_z`, `orientation`) VALUES
 (14446, 1, -10909, -3625.7, 16.1231, 2.57951),
@@ -2396,13 +2395,13 @@ REPLACE INTO `creature_movement_template` (`entry`, `point`, `position_x`, `posi
 (14446, 48, -10900.9, -3632, 16.5475, 2.28104);
 
 -- Correct spawn position of Grel'borg the Miser.
+update creature set guid = 17040 where id = 2417;
 UPDATE `creature` SET `position_x`=484.117, `position_y`=-212.956, `position_z`=145.449, `orientation`=1.34361, spawntimesecsmin =600, spawntimesecsmax = 600 WHERE `id`=2417;
 REPLACE INTO `creature_movement` (id, point, position_x, position_y, position_z, orientation, waittime, wander_distance, script_id) VALUES (17040,1,483.455,-211.943,145.366,0,30000,0,0),(17040,2,484.363,-204.875,145.366,0,0,0,0),(17040,3,489.105,-202.629,145.729,0,0,0,0),(17040,4,490.724,-205.655,146.934,0,0,0,0),(17040,5,492.269,-208.544,148.86,0,0,0,0),(17040,6,494.028,-211.834,151.054,0,0,0,0),(17040,7,495.24,-214.1,152.522,0,0,0,0),(17040,8,497.445,-218.223,152.522,0,0,0,0),(17040,9,487.539,-223.48,152.522,0,0,0,0),(17040,10,472.323,-231.556,152.522,0,0,0,0),(17040,11,473.665,-237.36,152.522,0,0,0,0),(17040,12,476.727,-243.128,152.522,0,0,0,0),(17040,13,487.11,-237.534,152.522,0,0,0,0),(17040,14,494.296,-233.662,151.023,0,0,0,0),(17040,15,499.73,-240.012,151.006,0,0,0,0),(17040,16,511.527,-260.497,151.372,0,0,0,0),(17040,17,521.315,-277.494,150.669,0,0,0,0),(17040,18,525.75,-293.445,151.252,0,0,0,0),(17040,19,538.297,-303.477,152.147,0,0,0,0),(17040,20,543.011,-314.067,151.662,0,0,0,0),(17040,21,555.934,-319.452,150.67,0,0,0,0),(17040,22,575.609,-327.652,150.67,0,0,0,0),(17040,23,588.855,-336.454,150.735,0,0,0,0),(17040,24,608.37,-340.924,151.677,0,0,0,0),(17040,25,620.733,-345.274,151.892,0,0,0,0),(17040,26,628.55,-352.284,151.323,0,0,0,0),(17040,27,630.055,-358.358,151.91,0,0,0,0),(17040,28,636.973,-359.514,152.407,0,10000,0,0),(17040,29,634.513,-350.666,150.912,0,0,0,0),(17040,30,618.574,-345.559,152.033,0,0,0,0),(17040,31,600.921,-338.654,150.949,0,0,0,0),(17040,32,583.413,-331.806,150.692,0,0,0,0),(17040,33,567.701,-322.93,150.67,0,0,0,0),(17040,34,557.249,-317.025,150.67,0,0,0,0),(17040,35,544.084,-311.732,151.633,0,0,0,0),(17040,36,539.037,-306.881,152.326,0,0,0,0),(17040,37,530.512,-296.477,151.526,0,0,0,0),(17040,38,521.22,-285.05,151.121,0,0,0,0),(17040,39,516.919,-272.902,150.948,0,0,0,0),(17040,40,513.425,-263.035,151.491,0,0,0,0),(17040,41,507.308,-250.38,151.283,0,0,0,0),(17040,42,497.071,-232.076,151.022,0,0,0,0),(17040,43,502.656,-229.569,151.648,0,0,0,0),(17040,44,507.337,-227.467,152.522,0,0,0,0),(17040,45,516.603,-223.307,152.522,0,0,0,0),(17040,46,512.04,-211.965,152.522,0,0,0,0),(17040,47,500.043,-216.841,152.522,0,0,0,0),(17040,48,497.124,-218.512,152.522,0,0,0,0),(17040,49,494.878,-214.149,152.491,0,0,0,0),(17040,50,492.796,-210.103,149.816,0,0,0,0),(17040,51,490.925,-206.469,147.412,0,0,0,0),(17040,52,488.842,-202.423,145.729,0,0,0,0),(17040,53,484.401,-204.745,145.367,0,0,0,0);
 
 -- Add missing spawn for Melnan Darkstone.
 REPLACE INTO `game_event_creature` (`guid`, `event`) VALUES (144028, 4);
-REPLACE INTO `creature` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `patch_min`, `patch_max`) VALUES (144028, 14842, 0, -4982.69, -963.739, 501.659, 0.802197, 300, 300, 4, 10);
-update creature_template set movement_type = 2 where entry = 14842;
+REPLACE INTO `creature` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `patch_min`, `patch_max`, `movementtype`) VALUES (144028, 14842, 0, -4982.69, -963.739, 501.659, 0.802197, 300, 300, 4, 10, 2);
 REPLACE INTO `creature_movement_template` (`entry`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `script_id`) VALUES
 (14842, 1, -4982.68, -963.738, 501.659, 0.802197, 0, 0),
 (14842, 2, -4966.25, -948.009, 501.659, 0.852462, 0, 0),
@@ -2453,3 +2452,5 @@ REPLACE INTO `creature_movement_template` (`entry`, `point`, `position_x`, `posi
 (14842, 47, -4990.7, -984.164, 501.659, 1.20824, 0, 0);
 
 update quest_template set rewrepvalue1 = 400 where entry = 8302;
+REPLACE INTO `creature` (`guid`, `id`,  `map`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `spawndist`, `curhealth`, `curmana`, `movementtype`, `spawnflags`, `visibilitymod`, `patch_min`, `patch_max`) VALUES
+(79581, 4996, 0, 0, 0, -8766.31, 819.304, 97.6345, 5.357542, 540, 540, 0, 100, 0, 0, 0, 0, 0, 10);
