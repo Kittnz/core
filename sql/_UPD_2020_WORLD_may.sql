@@ -2465,3 +2465,4 @@ update item_template set allowable_race = 178 where entry in (13331, 13332, 1333
 
 UPDATE `item_template` SET `display_id`='23920' WHERE (`entry`='51735') AND (`patch`='0');
 UPDATE `item_template` SET `inventory_type`='26' WHERE (`entry`='51735') AND (`patch`='0');
+UPDATE `item_template` SET `subclass`='1', `inventory_type`='5' WHERE (`entry`='51738') AND (`patch`='0');
