@@ -2452,5 +2452,10 @@ REPLACE INTO `creature_movement_template` (`entry`, `point`, `position_x`, `posi
 (14842, 47, -4990.7, -984.164, 501.659, 1.20824, 0, 0);
 
 update quest_template set rewrepvalue1 = 400 where entry = 8302;
+
 REPLACE INTO `creature` (`guid`, `id`,  `map`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `spawndist`, `curhealth`, `curmana`, `movementtype`, `spawnflags`, `visibilitymod`, `patch_min`, `patch_max`) VALUES
 (79581, 4996, 0, 0, 0, -8766.31, 819.304, 97.6345, 5.357542, 540, 540, 0, 100, 0, 0, 0, 0, 0, 10);
+
+-- Remove conditions from mounts for Taurens
+update conditions set value1 = 178, flags = 0 where condition_entry = 4127;
+update item_template set allowable_race = 178 where entry in (13331, 13332, 13333, 13334, 18248, 18791, 8588, 8591, 8592, 18246, 18788, 18789, 18790); 
