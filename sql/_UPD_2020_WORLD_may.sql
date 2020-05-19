@@ -2472,7 +2472,7 @@ UPDATE `item_template` SET `name`='Venom Covered Cloak', `display_id`='30850' WH
 UPDATE `item_template` SET `name`='Shawl of Haunted Memories', `display_id`='30831' WHERE (`entry`='51734') AND (`patch`='0');
 
 replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1, spellcooldown_1) values
-(51739, 15, 2, 'Little Ball of Spider Web', 'It\'s moving!',1007, 3, 1, 28505, 1500);
+(51739, 15, 2, 'Little Ball of Spider Web', 'It\'s moving!',4749, 3, 1, 28505, 1500);
 replace into creature_template (entry, display_id1, name, subname, level_min, level_max, health_min, health_max, faction, script_name, scale) values
 (51539, 11178, 'Nerubling', '', 1, 1, 64, 64, 35, '', 0.3);
 replace into custom_pet_entry_relation (item_entry, creature_entry) values (51739, 51539);
