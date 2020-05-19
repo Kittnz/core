@@ -2468,3 +2468,5 @@ UPDATE `item_template` SET `subclass`='1', `inventory_type`='5' WHERE (`entry`='
 UPDATE `item_template` SET `stat_type1`='4' WHERE (`entry`='51734') AND (`patch`='0');
 UPDATE `item_template` SET `spellid_1`='0' WHERE (`entry`='51734') AND (`patch`='0');
 UPDATE `item_template` SET `spellid_2`='12438' WHERE (`entry`='51733') AND (`patch`='0');
+UPDATE `item_template` SET `name`='Venom Covered Cloak', `display_id`='30850' WHERE (`entry`='51731') AND (`patch`='0');
+UPDATE `item_template` SET `name`='Shawl of Haunted Memories', `display_id`='30831' WHERE (`entry`='51734') AND (`patch`='0');
