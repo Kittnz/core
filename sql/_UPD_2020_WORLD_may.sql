@@ -2460,9 +2460,11 @@ REPLACE INTO `creature` (`guid`, `id`,  `map`, `modelid`, `equipment_id`, `posit
 update conditions set value1 = 178, flags = 0 where condition_entry = 4127;
 update item_template set allowable_race = 178 where entry in (13331, 13332, 13333, 13334, 18248, 18791, 8588, 8591, 8592, 18246, 18788, 18789, 18790); 
 
-
 -- Nerubian Items
 
 UPDATE `item_template` SET `display_id`='23920' WHERE (`entry`='51735') AND (`patch`='0');
 UPDATE `item_template` SET `inventory_type`='26' WHERE (`entry`='51735') AND (`patch`='0');
 UPDATE `item_template` SET `subclass`='1', `inventory_type`='5' WHERE (`entry`='51738') AND (`patch`='0');
+UPDATE `item_template` SET `stat_type1`='4' WHERE (`entry`='51734') AND (`patch`='0');
+UPDATE `item_template` SET `spellid_1`='0' WHERE (`entry`='51734') AND (`patch`='0');
+UPDATE `item_template` SET `spellid_2`='12438' WHERE (`entry`='51733') AND (`patch`='0');
