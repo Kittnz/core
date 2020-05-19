@@ -2459,3 +2459,9 @@ REPLACE INTO `creature` (`guid`, `id`,  `map`, `modelid`, `equipment_id`, `posit
 -- Remove conditions from mounts for Taurens
 update conditions set value1 = 178, flags = 0 where condition_entry = 4127;
 update item_template set allowable_race = 178 where entry in (13331, 13332, 13333, 13334, 18248, 18791, 8588, 8591, 8592, 18246, 18788, 18789, 18790); 
+
+
+-- Nerubian Items
+
+UPDATE `item_template` SET `display_id`='23920' WHERE (`entry`='51735') AND (`patch`='0');
+UPDATE `item_template` SET `inventory_type`='26' WHERE (`entry`='51735') AND (`patch`='0');
