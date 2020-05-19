@@ -2470,3 +2470,13 @@ UPDATE `item_template` SET `spellid_1`='0' WHERE (`entry`='51734') AND (`patch`=
 UPDATE `item_template` SET `spellid_2`='12438' WHERE (`entry`='51733') AND (`patch`='0');
 UPDATE `item_template` SET `name`='Venom Covered Cloak', `display_id`='30850' WHERE (`entry`='51731') AND (`patch`='0');
 UPDATE `item_template` SET `name`='Shawl of Haunted Memories', `display_id`='30831' WHERE (`entry`='51734') AND (`patch`='0');
+
+replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1, spellcooldown_1) values
+(51739, 15, 2, 'Little Ball of Spider Web', 'It\'s moving!', 1007, 3, 1, 28505, 1500);
+replace into creature_template (entry, display_id1, name, subname, level_min, level_max, health_min, health_max, faction, script_name, scale) values
+(51539, 11178, 'Nerubling', '', 1, 1, 64, 64, 35, '', 0.3);
+replace into custom_pet_entry_relation (item_entry, creature_entry) values (51739, 51539);
+
+update creature_template set scale = 0.2, spell_list_id = 51539 where entry = 51539;
+replace into creature_spells (entry, name, spellId_1, probability_1, castTarget_1, delayInitialMin_1, delayInitialMax_1, delayRepeatMin_1, delayRepeatMax_1) values
+(51539, 'Nerubling', 28776, 100, 4, 1, 1, 4, 4);
