@@ -2482,3 +2482,32 @@ replace into creature_spells (entry, name, spellId_1, probability_1, castTarget_
 (51539, 'Nerubling', 28776, 100, 4, 1, 1, 4, 4);
 
 update quest_template set type = 62 where entry = 60065;
+update item_template set max_count = 1 where entry = 51725;
+
+-- Loot
+
+delete from creature_loot_template where entry = 16184;
+
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values
+
+(16184, 51739, 100, 1, 1, 1), -- Pet, Group 1
+
+(16184, 51738, 0,   2, 1, 1), -- Chest 1, Group 2
+(16184, 51737, 0,   2, 1, 1), -- Chest 2, Group 2
+(16184, 51736, 0,   2, 1, 1), -- Chest 3, Group 2
+(16184, 51735, 0,   2, 1, 1), -- Wand 1,  Group 2
+
+(16184, 51734, 0,   3, 1, 1), -- Cloak 1, Group 3
+(16184, 51733, 0,   3, 1, 1), -- Cloak 2, Group 3
+(16184, 51732, 0,   3, 1, 1), -- Cloak 3, Group 3
+(16184, 51731, 0,   3, 1, 1), -- Cloak 4, Group 3
+(16184, 51730, 0,   3, 1, 1), -- Cloak 5, Group 3
+
+(16184, 51725, -100,   0, 1, 1); -- Quest Item, Group 0
+
+
+
+
+
+
+
