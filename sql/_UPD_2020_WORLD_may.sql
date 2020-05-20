@@ -942,7 +942,7 @@ StartScript, CompleteScript) values
 
 'Listen closely, for I have no time or strength to repeat, I\'m obviously dying here… Light … Elune, give me peace of death, I beg you…\n\n<Argent Watcher Mal\'adaris gazes on you with fierce intent.>\n\nTwenty of each kind, $R, and only one … it! Destroy\'em for all the living…\n\n<Argent Watcher Mal\'adaris points you directly to the north.>\n\nCave … no, a tunnel… Don\'t go alone.',
 
-'Slay 20 Crypt Fiends and 20 Crypt Horrors in Terrorweb Tunnel.\n\nKill Nerubian Overseer.', 
+'Slay 20 Crypt Fiends and 20 Crypt Horrors in Terrorweb Tunnel.\n\nKill Nerubian Overseer. Report to Lord Maxwell Tyrosus in Eastern Plaguelands.', 
 
 'What do you have there?\n\nYou did WHAT?', 
 
