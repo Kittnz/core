@@ -2506,6 +2506,8 @@ replace into creature_loot_template (entry, item, chanceorquestchance, groupid, 
 (16184, 12717, 5, 4, 1, 1), -- Lionheart Helm Pattern, Group 4
 (16184, 22388, 5, 4, 1, 1), -- Titanic Leggins Pattern, Group 4
 
+(16184, 30171, 100, 5, -30171, 2), -- BoE Reference loot, Group 5
+
 (16184, 51725, -100, 0, 1, 1); -- Quest Item, Group 0
 
 
