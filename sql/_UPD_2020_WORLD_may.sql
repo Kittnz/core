@@ -884,8 +884,8 @@ UPDATE `creature_template` SET `dmg_min`=355, `dmg_max`=480, `fire_res`=171, `na
 SET @quest_entry = 60065;
 SET @quest_zone = 139;
 SET @faction_id = 529;
-SET @faction_count = 250;
-SET @xp_or_money = 6540;
+SET @faction_count = 2350;
+SET @xp_or_money = 8540;
 SET @quest_level = 60;
 SET @min_level = 58;
 SET @questgiver_id = 51536;
@@ -899,21 +899,21 @@ SET @reward_item_3 = 0;
 SET @reward_item_4 = 0;
 SET @reward_item_1_count = 1;
 SET @reward_item_2_count = 1;
-SET @reward_item_3_count = 1;
-SET @reward_item_4_count = 1;
+SET @reward_item_3_count = 0;
+SET @reward_item_4_count = 0;
 SET @creature_to_kill_1 = 8555;
 SET @creature_to_kill_2 = 8557;
-SET @creature_to_kill_3 = 0;
+SET @creature_to_kill_3 = 16184;
 SET @creature_to_kill_4 = 0;
 SET @creature_to_kill_1_count = 20;
 SET @creature_to_kill_2_count = 20;
-SET @creature_to_kill_3_count = 0;
+SET @creature_to_kill_3_count = 1;
 SET @creature_to_kill_4_count = 0;
-SET @required_item_1 = 51725;
+SET @required_item_1 = 0;
 SET @required_item_2 = 0;
 SET @required_item_3 = 0;
 SET @required_item_4 = 0;
-SET @required_item_1_count = 1;
+SET @required_item_1_count = 0;
 SET @required_item_2_count = 0;
 SET @required_item_3_count = 0;
 SET @required_item_4_count = 0;
@@ -944,7 +944,7 @@ StartScript, CompleteScript) values
 
 'Slay 20 Crypt Fiends and 20 Crypt Horrors in Terrorweb Tunnel.\n\nKill Nerubian Overseer.', 
 
-'What do you have there?\n\nIs that … what I think it is?', 
+'What do you have there?\n\nYou did WHAT?', 
 
 'Yes?', 
 
@@ -2484,6 +2484,8 @@ replace into creature_spells (entry, name, spellId_1, probability_1, castTarget_
 update quest_template set type = 62 where entry = 60065;
 update item_template set max_count = 1 where entry = 51725;
 
+update creature set movementtype = 2 where guid = 10740;
+
 -- Loot
 
 delete from creature_loot_template where entry = 16184;
@@ -2506,9 +2508,9 @@ replace into creature_loot_template (entry, item, chanceorquestchance, groupid, 
 (16184, 12717, 5, 4, 1, 1), -- Lionheart Helm Pattern, Group 4
 (16184, 22388, 5, 4, 1, 1), -- Titanic Leggins Pattern, Group 4
 
-(16184, 30171, 100, 5, -30171, 2), -- BoE Reference loot, Group 5
+(16184, 30171, 100, 5, -30171, 2); -- BoE Reference loot, Group 5
 
-(16184, 51725, -100, 0, 1, 1); -- Quest Item, Group 0
+
 
 
 
