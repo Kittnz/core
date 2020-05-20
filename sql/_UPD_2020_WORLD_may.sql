@@ -2492,18 +2492,21 @@ replace into creature_loot_template (entry, item, chanceorquestchance, groupid, 
 
 (16184, 51739, 100, 1, 1, 1), -- Pet, Group 1
 
-(16184, 51738, 0,   2, 1, 1), -- Chest 1, Group 2
-(16184, 51737, 0,   2, 1, 1), -- Chest 2, Group 2
-(16184, 51736, 0,   2, 1, 1), -- Chest 3, Group 2
-(16184, 51735, 0,   2, 1, 1), -- Wand 1,  Group 2
+(16184, 51738, 0, 2, 1, 1), -- Chest 1, Group 2
+(16184, 51737, 0, 2, 1, 1), -- Chest 2, Group 2
+(16184, 51736, 0, 2, 1, 1), -- Chest 3, Group 2
+(16184, 51735, 0, 2, 1, 1), -- Wand 1,  Group 2
 
-(16184, 51734, 0,   3, 1, 1), -- Cloak 1, Group 3
-(16184, 51733, 0,   3, 1, 1), -- Cloak 2, Group 3
-(16184, 51732, 0,   3, 1, 1), -- Cloak 3, Group 3
-(16184, 51731, 0,   3, 1, 1), -- Cloak 4, Group 3
-(16184, 51730, 0,   3, 1, 1), -- Cloak 5, Group 3
+(16184, 51734, 0, 3, 1, 1), -- Cloak 1, Group 3
+(16184, 51733, 0, 3, 1, 1), -- Cloak 2, Group 3
+(16184, 51732, 0, 3, 1, 1), -- Cloak 3, Group 3
+(16184, 51731, 0, 3, 1, 1), -- Cloak 4, Group 3
+(16184, 51730, 0, 3, 1, 1), -- Cloak 5, Group 3
 
-(16184, 51725, -100,   0, 1, 1); -- Quest Item, Group 0
+(16184, 12717, 5, 4, 1, 1), -- Lionheart Helm Pattern, Group 4
+(16184, 22388, 5, 4, 1, 1), -- Titanic Leggins Pattern, Group 4
+
+(16184, 51725, -100, 0, 1, 1); -- Quest Item, Group 0
 
 
 
