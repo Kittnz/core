@@ -2510,9 +2510,12 @@ replace into creature_loot_template (entry, item, chanceorquestchance, groupid, 
 
 (16184, 30171, 100, 5, -30171, 2); -- BoE Reference loot, Group 5
 
+-- fuck 
+UPDATE `quest_template` SET `RewChoiceItemId1`='0', `RewChoiceItemId2`='0', `RewChoiceItemCount1`='0', `RewChoiceItemCount2`='0' WHERE (`entry`='60065') AND (`patch`='0');
 
 
-
+UPDATE `quest_template` SET `OfferRewardText`='You did WHAT?' WHERE (`entry`='60065') AND (`patch`='0');
+UPDATE `item_template` SET `subclass`='2' WHERE (`entry`='51738') AND (`patch`='0');
 
 
 
