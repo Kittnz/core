@@ -797,9 +797,9 @@ class MANGOS_DLL_SPEC Creature : public Unit
         uint64 m_castingTargetGuid;
 
         // - Victim selection (from aggro list)
-        Unit* GetNearestVictimInRange(float min, float max);
-        Unit* GetFarthestVictimInRange(float min, float max);
-        Unit* GetVictimInRange(float min, float max);
+        Unit* GetNearestVictimInRange(float min, float max, bool includeCreatures = true);
+        Unit* GetFarthestVictimInRange(float min, float max, bool includeCreatures = true);
+        Unit* GetVictimInRange(float min, float max, bool includeCreatures = true);
         Unit* GetHostileCasterInRange(float min, float max);
         Unit* GetHostileCaster();
 

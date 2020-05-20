@@ -3294,7 +3294,7 @@ void Creature::ResetStats()
     RemoveAllAuras();
 }
 
-Unit* Creature::GetNearestVictimInRange(float min, float max)
+Unit* Creature::GetNearestVictimInRange(float min, float max, bool includeCreatures)
 {
     if (!CanHaveThreatList())
         return nullptr;
@@ -3306,7 +3306,7 @@ Unit* Creature::GetNearestVictimInRange(float min, float max)
     for (ThreatList::const_iterator i = tList.begin(); i != tList.end(); ++i)
     {
         Unit* pTarget = GetMap()->GetUnit((*i)->getUnitGuid());
-        if (!pTarget)
+        if (!pTarget || (!pTarget->IsPlayer() && !includeCreatures)))
             continue;
 
         float currRange = GetDistance(pTarget);
@@ -3319,7 +3319,7 @@ Unit* Creature::GetNearestVictimInRange(float min, float max)
     return pUnit;
 }
 
-Unit* Creature::GetFarthestVictimInRange(float min, float max)
+Unit* Creature::GetFarthestVictimInRange(float min, float max, bool includeCreatures)
 {
     if (!CanHaveThreatList())
         return nullptr;
@@ -3331,7 +3331,7 @@ Unit* Creature::GetFarthestVictimInRange(float min, float max)
     for (ThreatList::const_iterator i = tList.begin(); i != tList.end(); ++i)
     {
         Unit* pTarget = GetMap()->GetUnit((*i)->getUnitGuid());
-        if (!pTarget)
+        if (!pTarget || (!pTarget->IsPlayer() && !includeCreatures))
             continue;
 
         float currRange = GetDistance(pTarget);
@@ -3344,7 +3344,7 @@ Unit* Creature::GetFarthestVictimInRange(float min, float max)
     return pUnit;
 }
 
-Unit* Creature::GetVictimInRange(float min, float max)
+Unit* Creature::GetVictimInRange(float min, float max, bool includeCreatures)
 {
     if (!CanHaveThreatList())
         return nullptr;
@@ -3355,7 +3355,11 @@ Unit* Creature::GetVictimInRange(float min, float max)
         Unit* pTarget = GetMap()->GetUnit((*i)->getUnitGuid());
 
         if (pTarget && IsInRange(pTarget, min, max))
+        {
+            if (!pTarget->IsPlayer() && !includeCreatures)
+                continue;
             return pTarget;
+        }
     }
     return nullptr;
 }
