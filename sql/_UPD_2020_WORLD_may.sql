@@ -2517,7 +2517,6 @@ UPDATE `quest_template` SET `RewChoiceItemId1`='0', `RewChoiceItemId2`='0', `Rew
 UPDATE `quest_template` SET `OfferRewardText`='You did WHAT?' WHERE (`entry`='60065') AND (`patch`='0');
 UPDATE `item_template` SET `subclass`='2' WHERE (`entry`='51738') AND (`patch`='0');
 
-
-
+update npc_trainer set reqlevel = 5 where entry in ( 11867, 11870, 2704,11868,11866,13084,11869, 11865);
 
 
