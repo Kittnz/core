@@ -76,22 +76,23 @@ struct boss_nerubian_overseerAI : public ScriptedAI
     void WebExplosion()
     {
         webTarget->PMonsterEmote("|cffff8040%s explodes.|r", nullptr, true, webTarget->GetName());
+        DoCast(webTarget, SPELL_POISON_CLOUD, true);
+        float x, y, z;
+        webTarget->GetSafePosition(x, y, z);
+
         m_creature->DoKillUnit(webTarget);
 
         Unit* nerublingTarget = m_creature->GetNearestVictimInRange(0, 30, false);
         for (int i = 0; i < 4; i++)
         {
-            Unit* nerubling = m_creature->SummonCreature(CREATURE_NERUBLING, webTarget->GetPositionX(),
-                                                         webTarget->GetPositionY(),
-                                                         webTarget->GetPositionZ(), webTarget->GetOrientation(),
-                                                         TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 30000);
+            Unit* nerubling = m_creature->SummonCreature(CREATURE_NERUBLING, x, y, z,
+                    0,TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 30000);
             if (nerublingTarget)
             {
                 nerubling->SetInCombatWith(nerublingTarget);
                 nerubling->Attack(nerublingTarget, true);
             }
         }
-        DoCast(webTarget, SPELL_POISON_CLOUD, true);
 
         webTarget = nullptr;
     }
@@ -102,11 +103,10 @@ struct boss_nerubian_overseerAI : public ScriptedAI
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
 
-
         if (WebSpray_Timer < diff)
         {
             webTarget = m_creature->GetFarthestVictimInRange(0, 45, false);
-            if (webTarget)
+            if (webTarget && !webTarget->IsImmuneToDamage(SPELL_SCHOOL_MASK_NORMAL))
                 webTarget->AddAura(SPELL_WEB_SPRAY, 0, m_creature);
             WebSpray_Timer = 24000;
         }
@@ -117,7 +117,7 @@ struct boss_nerubian_overseerAI : public ScriptedAI
             {
                 if (WebExplode_Timer < diff)
                 {
-                    WebExplode_Timer = 9000;
+                    WebExplode_Timer = 8000;
                     if (webTarget->HasAura(SPELL_WEB_SPRAY))
                     {
                         WebExplosion();
@@ -149,7 +149,7 @@ struct boss_nerubian_overseerAI : public ScriptedAI
         if (ShadowShock_Timer < diff)
         {
             DoCast(m_creature, SPELL_SHADOW_SHOCK, true);
-            ShadowShock_Timer = urand(8000, 14000);
+            ShadowShock_Timer = urand(8000, 12000);
         }
         else
             ShadowShock_Timer -= diff;

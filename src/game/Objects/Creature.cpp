@@ -3306,7 +3306,7 @@ Unit* Creature::GetNearestVictimInRange(float min, float max, bool includeCreatu
     for (ThreatList::const_iterator i = tList.begin(); i != tList.end(); ++i)
     {
         Unit* pTarget = GetMap()->GetUnit((*i)->getUnitGuid());
-        if (!pTarget || (!pTarget->IsPlayer() && !includeCreatures)))
+        if (!pTarget || (!pTarget->IsPlayer() && !includeCreatures))
             continue;
 
         float currRange = GetDistance(pTarget);
