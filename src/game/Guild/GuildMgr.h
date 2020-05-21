@@ -72,6 +72,8 @@ class GuildMgr
 
         void LoadGuilds();
         void LoadPetitions();
+
+		void SaveGuildBankInventories();
     private:
         void CleanUpPetitions();
         mutable ACE_Thread_Mutex m_guildMutex;

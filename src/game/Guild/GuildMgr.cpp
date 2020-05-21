@@ -255,6 +255,14 @@ void GuildMgr::LoadPetitions()
     sLog.outString(">> Loaded %u petitions", count);
 }
 
+void GuildMgr::SaveGuildBankInventories()
+{
+	for (const auto& guildPair : m_GuildMap)
+	{
+		guildPair.second->SaveGuildBank();
+	}
+}
+
 Petition::~Petition()
 {
     for (PetitionSignatureList::iterator iter = m_signatures.begin(); iter != m_signatures.end(); ++iter)

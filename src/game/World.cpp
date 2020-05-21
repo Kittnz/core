@@ -177,6 +177,7 @@ World::~World()
 
 void World::Shutdown()
 {
+	sGuildMgr.SaveGuildBankInventories();
     sWorld.KickAll();                                       // save and kick all players
     sWorld.UpdateSessions( 1 );                             // real players unload required UpdateSessions call
     if (m_charDbWorkerThread)
