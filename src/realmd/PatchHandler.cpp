@@ -194,24 +194,29 @@ bool PatchCache::GetHash(const char * pat, ACE_UINT8 mymd5[MD5_DIGEST_LENGTH])
     return false;
 }
 
+#include <filesystem>
+
 void PatchCache::LoadPatchesInfo()
 {
-    ACE_DIR* dirp = ACE_OS::opendir(ACE_TEXT("./patches/"));
+	if (std::filesystem::exists("./patches/"))
+	{
+		std::filesystem::directory_iterator patchDirIter ("./patches/");
 
-    if(!dirp)
-        return;
+		for (const std::filesystem::directory_entry& path : patchDirIter)
+		{
+			std::filesystem::path filename = path.path().filename();
+			std::string strFilename = filename.u8string();
+			if (strFilename.size() < 8)
+			{
+				continue;
+			}
 
-    ACE_DIRENT* dp;
+			if (filename.extension() == ".mpq")
+			{
+				
+				LoadPatchMD5(strFilename.c_str());
+			}
+		}
+	}
 
-    while((dp = ACE_OS::readdir(dirp)) != NULL)
-    {
-        int l = strlen(dp->d_name);
-        if (l < 8)
-            continue;
-
-        if(!memcmp(&dp->d_name[l - 4], ".mpq", 4))
-            LoadPatchMD5(dp->d_name);
-    }
-
-    ACE_OS::closedir(dirp);
 }
