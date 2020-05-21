@@ -118,10 +118,10 @@ struct boss_nerubian_overseerAI : public ScriptedAI
                 if (WebExplode_Timer < diff)
                 {
                     WebExplode_Timer = 8000;
-                    if (webTarget->HasAura(SPELL_WEB_SPRAY))
-                    {
+                    if (!webTarget->isAlive())
+                        webTarget = nullptr;
+                    else if (webTarget->HasAura(SPELL_WEB_SPRAY))
                         WebExplosion();
-                    }
                 }
                 else
                 {
