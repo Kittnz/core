@@ -951,6 +951,10 @@ class MANGOS_DLL_SPEC Player final: public Unit
         /***                    STORAGE SYSTEM                 ***/
         /*********************************************************/
 
+		// Turtle specific
+		// need to be public, in order to force close guild bank
+		void RestoreBankFromStash();
+
     private:
         ObjectGuid m_lootGuid;
         Item* m_items[PLAYER_SLOTS_COUNT];
@@ -975,7 +979,6 @@ class MANGOS_DLL_SPEC Player final: public Unit
 
 		// Turtle specific: 
 		bool TryOpenGuildBank();
-		void RestoreBankFromStash();
 
         // internal common parts for CanStore/StoreItem functions
         InventoryResult _CanStoreItem_InSpecificSlot(uint8 bag, uint8 slot, ItemPosCountVec& dest, ItemPrototype const* pProto, uint32& count, bool swap, Item* pSrcItem) const;

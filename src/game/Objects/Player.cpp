@@ -21811,6 +21811,11 @@ bool Player::TryOpenGuildBank()
 
 	if (Guild* guild = sGuildMgr.GetGuildById(GetGuildId()))
 	{
+		if (guild->IsGuildBankUsingNow())
+		{
+			return false;
+		}
+
 		Item** pInventory = guild->GetInventory();
 
 		// stash all our bank, and replace it to guild bank
@@ -21849,6 +21854,8 @@ bool Player::TryOpenGuildBank()
 			}
 		}
 
+		guild->SetGuildBankUser(this);
+
 		return true;
 	}
 
@@ -21863,6 +21870,13 @@ void Player::RestoreBankFromStash()
 
 	if (Guild* guild = sGuildMgr.GetGuildById(GetGuildId()))
 	{
+		if (!guild->IsGuildBankUser(this))
+		{
+			sLog.outError("Player \"%s\" GUID: %llu tried to restore bank items, but he doesn't own guild inventory", 
+				GetName(), GetObjectGuid().GetRawValue());
+			return;
+		}
+
 		Item** pInventory = guild->GetInventory();
 
 		for (uint8 i = BANK_SLOT_ITEM_START; i < BANK_SLOT_ITEM_END; i++)
@@ -21895,6 +21909,7 @@ void Player::RestoreBankFromStash()
 		}
 
 		m_bankStash.clear();
+		guild->SetGuildBankUser(nullptr);
 	}
 
 	PlayerTalkClass->CloseGossip();

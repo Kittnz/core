@@ -554,6 +554,50 @@ void Guild::LoadGuildBankFromDB()
 	delete result;
 }
 
+void Guild::SaveGuildBank()
+{
+	// check if GB is opened. If so - refuse to save
+	if (IsGuildBankUsingNow())
+	{
+		// force close
+		if (Player* guildUser = sObjectMgr.GetPlayer(m_guildInventoryUsedBy))
+		{
+			guildUser->RestoreBankFromStash();
+		}
+		else
+		{
+			sLog.outError("CRITICAL ERROR: Can't restore guild inventory (ID: '%u'), because system can't find player with ID '%llu'", GetId(), m_guildInventoryUsedBy.GetRawValue());
+		}
+	}
+
+	// check again
+	if (IsGuildBankUsingNow())
+	{
+		sLog.outError("Can't drop guild bank user even after request. Save request for guild '%u' will be ignored", GetId());
+		return;
+	}
+
+	if (CharacterDatabase.BeginTransaction(m_Id))
+	{
+		for (int32 i = 0; i < 255; i++)
+		{
+			if (Item* GuildItem = m_guildInventory[i])
+			{
+				CharacterDatabase.PExecute("INSERT INTO guild_bank VALUES ('%u', '0', %hu, %llu, %u)", GetId(), i, GuildItem->GetObjectGuid().GetRawValue(), GuildItem->GetEntry());
+			}
+		}
+
+		if (!CharacterDatabase.CommitTransaction())
+		{
+			sLog.outError("Can't save guild inventory for guild '%u'", GetId());
+		}
+	}
+	else
+	{
+		sLog.outError("Can't begin save transaction for guild bank inventory. Guild Id '%u'", GetId());
+	}
+}
+
 void Guild::SetLeader(ObjectGuid guid)
 {
     MemberSlot* slot = GetMemberSlot(guid);
@@ -1033,6 +1077,29 @@ void Guild::LogGuildEvent(uint8 EventType, ObjectGuid playerGuid1, ObjectGuid pl
     CharacterDatabase.PExecute("DELETE FROM guild_eventlog WHERE guildid='%u' AND LogGuid='%u'", m_Id, m_GuildEventLogNextGuid);
     CharacterDatabase.PExecute("INSERT INTO guild_eventlog (guildid, LogGuid, EventType, PlayerGuid1, PlayerGuid2, NewRank, TimeStamp) VALUES ('%u','%u','%u','%u','%u','%u','" UI64FMTD "')",
                                m_Id, m_GuildEventLogNextGuid, uint32(NewEvent.EventType), NewEvent.PlayerGuid1, NewEvent.PlayerGuid2, uint32(NewEvent.NewRank), NewEvent.TimeStamp);
+}
+
+
+void Guild::SetGuildBankUser(Player* pPlayer)
+{
+	if (pPlayer != nullptr)
+	{
+		m_guildInventoryUsedBy = pPlayer->GetObjectGuid();
+	}
+	else
+	{
+		m_guildInventoryUsedBy = ObjectGuid();
+	}
+}
+
+bool Guild::IsGuildBankUser(Player* pPlayer) const
+{
+	return pPlayer->GetObjectGuid() == m_guildInventoryUsedBy;
+}
+
+bool Guild::IsGuildBankUsingNow() const
+{
+	return !m_guildInventoryUsedBy.IsEmpty();
 }
 
 void Guild::BroadcastEvent(GuildEvents event, ObjectGuid guid, char const* str1 /*=NULL*/, char const* str2 /*=NULL*/, char const* str3 /*=NULL*/)
