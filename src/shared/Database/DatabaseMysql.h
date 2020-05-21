@@ -37,6 +37,10 @@
 #include <mysql.h>
 #endif
 
+#if MYSQL_VERSION_ID >= 80000
+typedef char my_bool;
+#endif
+
 //MySQL prepared statement class
 class MANGOS_DLL_SPEC MySqlPreparedStatement : public SqlPreparedStatement
 {
