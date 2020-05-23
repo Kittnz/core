@@ -2504,7 +2504,7 @@ replace into creature_loot_template (entry, item, chanceorquestchance, groupid, 
 (16184, 51733, 0, 3, 1, 1), -- Cloak 2, Group 3
 (16184, 51732, 0, 3, 1, 1), -- Cloak 3, Group 3
 (16184, 51731, 0, 3, 1, 1), -- Cloak 4, Group 3
-(16184, 51730, 0, 3, 1, 1), -- Cloak 5, Group 3
+(16184, 51730, 0, 3, 1, 1), -- Head  1, Group 3
 
 (16184, 12717, 5, 4, 1, 1), -- Lionheart Helm Pattern, Group 4
 (16184, 22388, 5, 4, 1, 1), -- Titanic Leggins Pattern, Group 4
@@ -2543,7 +2543,7 @@ start_quest, lock_id, material, sheath, random_property, set_id, max_durability,
 duration, bag_family, disenchant_id, food_type, min_money_loot, max_money_loot, extra_flags, other_team_entry,
 script_name)
 values
- ('51740', '0', '0', '0', 'Crown of Skittering Shadows', '', '34370', '4', '0', '1', '63000', '50000', '1', '-1', '-1', '78',
+ ('51740', '0', '4', '1', 'Crown of Skittering Shadows', '', '34370', '4', '0', '1', '63000', '50000', '1', '-1', '-1', '78',
  '60', '0', '0', '0', '0', '0', '0', '0', '1', '1', '0', '5', '16', '6', '12',
  '7', '10', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '84', '0', '0', '0',
