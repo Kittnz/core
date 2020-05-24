@@ -1,5 +1,5 @@
 
--- Assisting the Children of the Sun // Human |Version
+-- ASSISTING THE CHILDREN OF THE SUN // Human |Version
 
 SET @quest_entry = 80000;
 SET @quest_zone = 1519;
@@ -11,7 +11,7 @@ SET @min_level = 10;
 SET @questgiver_id = 80000;
 SET @quest_finisher = 1752;
 SET @nextquest = 80001;
-SET @nextquestinchain = 0;
+SET @nextquestinchain = 80001;
 SET @prevquest = 0;
 SET @reward_item_1 = 0;
 SET @reward_item_2 = 0;
@@ -64,7 +64,7 @@ StartScript, CompleteScript) values
 
 'Speak to Caledra Dawnbreeze in Stormwind Keep.', 
 
-'Ahh, so you seek to assist us in our effort?\n\nWonderful… Our people have set up a new settlement called Alah\'thalas on the coast north of Stratholme, bordering Quel\'thalas.However, setting up a new home is difficult and we have run into our share of issues.\n\nYour help will definitely be appreciated! I shall sum up our situation for you.', 
+'Ahh, so you seek to assist us in our effort?\n\nWonderful…\n\nOur people have set up a new settlement called Alah\'thalas on the coast north of Stratholme, bordering Quel\'thalas.However, setting up a new home is difficult and we have run into our share of issues.\n\nYour help will definitely be appreciated! I shall sum up our situation for you.', 
 
 'Yes? What can I do for you, stranger?', 
 
@@ -88,12 +88,12 @@ where entry = @quest_entry;
 update quest_template set nextquestid = @nextquest where entry = @quest_entry;
 update quest_template set nextquestinchain = @nextquestinchain where entry = @quest_entry;
 update quest_template set prevquestid = @prevquest where entry = @quest_entry;
-update quest_template set ObjectiveText1 = 'Listen to Caledra\'s Story.' where entry = @quest_entry;
+update quest_template set ObjectiveText1 = 'Listen to Caledra\'s Story' where entry = @quest_entry;
 	  
 replace into creature_questrelation (id, quest, patch_min, patch_max) values (@questgiver_id, @quest_entry,'10','10');
 replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (@quest_finisher, @quest_entry,'10','10');   
   
--- To Alah’Thalas! // Human |Version
+-- TO ALAH’THALAS! // Human |Version
 
 SET @quest_entry = 80001;
 SET @quest_zone = 1519; 
@@ -105,7 +105,7 @@ SET @min_level = 10;
 SET @questgiver_id = 1752;
 SET @quest_finisher = 5498;
 SET @nextquest = 80002;
-SET @nextquestinchain = 80002;
+SET @nextquestinchain = 0;
 SET @prevquest = 80000;
 SET @reward_item_1 = 0;
 SET @reward_item_2 = 0;
@@ -154,7 +154,7 @@ StartScript, CompleteScript) values
 
 'To Alah’Thalas!', 
 
-'Now that you know what we’re dealing with and our history...The time has come to act. If you’re truly interested in helping us, then this is the way.\n\nOne of our most talented mages has established a leyline connection to Alah\'thalas. Go to the Mage Tower in the Mage District, and speak to Elsharin.\n\nShe will be able to take you there, once you arrive I am sure someone will tend to you.\n\n', 
+'Now that you know what we’re dealing with and our history...\n\nThe time has come to act. If you’re truly interested in helping us, then this is the way.\n\nOne of our most talented mages has established a leyline connection to Alah\'thalas.\n\nGo to the Mage Tower in the Mage District, and speak to Elsharin. She will be able to take you there, once you arrive I am sure someone will tend to you.\n\n', 
 
 'Speak to Elsharin, she can be found beyond the portal in the Mage district Mage Tower in Stormwind.', 
 
@@ -186,7 +186,7 @@ update quest_template set prevquestid = @prevquest where entry = @quest_entry;
 replace into creature_questrelation (id, quest, patch_min, patch_max) values (@questgiver_id, @quest_entry,'10','10'); 
 replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (@quest_finisher, @quest_entry,'10','10');
 
--- A Crystal Clear Task 
+-- A CRYSTAL CLEAR TASK 
 
 SET @quest_entry = 80002;
 SET @quest_zone = 1519; 
@@ -280,7 +280,7 @@ update quest_template set prevquestid = @prevquest where entry = @quest_entry;
 replace into creature_questrelation (id, quest, patch_min, patch_max) values (@questgiver_id, @quest_entry,'10','10'); 
 replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (@quest_finisher, @quest_entry,'10','10');
 
--- Relics in Feralas
+-- RELICS IN FERALAS
 
 SET @quest_entry = 80003;
 SET @quest_zone = 1519; 

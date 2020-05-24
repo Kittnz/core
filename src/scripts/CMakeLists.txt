@@ -299,6 +299,7 @@ set (SCRIPTS_SRCS
     turtlewow/creatures/boss_pompa.cpp 
     turtlewow/creatures/boss_turtlhu.cpp 
     turtlewow/creatures/boss_snowball.cpp 
+    turtlewow/creatures/boss_nerubian_overseer.cpp
 
     turtlewow/creatures/cot/black_morass/boss_gerastrasz.cpp 
     turtlewow/creatures/cot/instance_caverns_of_time.cpp 
@@ -313,7 +314,9 @@ set (SCRIPTS_SRCS
     turtlewow/zonescript_gm_isle.cpp
     turtlewow/zonescript_epl.cpp
     turtlewow/commands.cpp
-        turtlewow/creatures/boss_nerubian_overseer.cpp)
+    
+    turtlewow/expansion/episode_1.cpp
+)
 
 # Used in game ScriptMgr, not need here
 list(REMOVE_ITEM SCRIPTS_SRCS ScriptLoader.cpp)

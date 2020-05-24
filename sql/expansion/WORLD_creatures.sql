@@ -1,5 +1,6 @@
 update creature_template set npc_flags = 2 where entry = 1752; -- Calendra Questgiver Flag
-update creature_template set script_name = 'npc_caledra' where entry = 1752; -- Calendra Questgiver Flag
+update creature_template set script_name = 'npc_caledra' where entry = 1752; 
+update creature_template set script_name = 'npc_elsharin' where entry = 5498; 
 
 replace into creature_template (entry, display_id1, name, subname, level_min, level_max, health_min, health_max, faction, script_name, scale) values
 (6029, 4729, 'Test Morph #1', '', 1, 1, 64, 64, 35, '', 1),
