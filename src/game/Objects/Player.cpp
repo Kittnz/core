@@ -19411,7 +19411,7 @@ void Player::RewardSinglePlayerAtKill(Unit* pVictim)
         }
 
         // Turtle WoW custom feature:
-        /*RewardBountyHuntKill(pVictim); */       
+        RewardBountyHuntKill(pVictim);      
     }    
 }
 
@@ -21732,6 +21732,14 @@ void Player::RemoveExclusiveVisibleObject(ObjectGuid guid)
 	m_exclusiveVisibleObjects.remove(guid);
 }
 
+enum BountyBoards
+{
+QUEST_HORDE_PLAYER          = 50322,
+QUEST_ALLIANCE_PLAYER       = 50323,
+DUMMY_NPC_HORDE_PLAYER      = 70004,
+DUMMY_NPC_ALLIANCE_PLAYER   = 70005  
+};
+
 void Player::RewardBountyHuntKill(Unit* pVictim)
 {
     uint32 HordePlayerGUID{ 1 };
@@ -21753,14 +21761,7 @@ void Player::RewardBountyHuntKill(Unit* pVictim)
         Field* fields = result_h->Fetch();
         AlliancePlayerGUID = fields[0].GetUInt32();
     }
-    delete result_a;
-
-    // Don't change DUMMY NPC's or quest IDs, we now flush the quests on weekly maintenance.
-
-#define QUEST_HORDE_PLAYER          50322
-#define QUEST_ALLIANCE_PLAYER       50323
-#define DUMMY_NPC_HORDE_PLAYER      70004
-#define DUMMY_NPC_ALLIANCE_PLAYER   70005        
+    delete result_a;    
 
     if ((GetQuestStatus(QUEST_HORDE_PLAYER) == QUEST_STATUS_INCOMPLETE) || (GetQuestStatus(QUEST_ALLIANCE_PLAYER) == QUEST_STATUS_INCOMPLETE))
     {

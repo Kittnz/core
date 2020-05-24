@@ -288,10 +288,11 @@ bool GOHello_go_portal_to_orgrimmar(Player* pPlayer, GameObject* pGo)
     return true;
 }
 
-// -- Bounty Quests
-
-#define QUEST_HORDE_PLAYER          50322
-#define QUEST_ALLIANCE_PLAYER       50323  
+enum BountyQuests
+{
+    QUEST_HORDE_PLAYER = 50322,
+    QUEST_ALLIANCE_PLAYER = 50323
+};
 
 bool GOHello_go_bounty(Player* pPlayer, GameObject* pGo)
 {
@@ -301,9 +302,9 @@ bool GOHello_go_bounty(Player* pPlayer, GameObject* pGo)
     QueryResult* result_h = CharacterDatabase.PQuery("SELECT characters.name FROM characters JOIN bounty_quest_targets ON characters.guid = bounty_quest_targets.horde_player WHERE bounty_quest_targets.id = 1");
     QueryResult* result_a = CharacterDatabase.PQuery("SELECT characters.name FROM characters JOIN bounty_quest_targets ON characters.guid = bounty_quest_targets.alliance_player WHERE bounty_quest_targets.id = 1");
 
-    switch (pGo->GetEntry()) // Stormwind
+    switch (pPlayer->GetTeam()) 
     {
-    case 1000075:
+    case ALLIANCE:
 
         if (result_h)
         {
@@ -312,18 +313,15 @@ bool GOHello_go_bounty(Player* pPlayer, GameObject* pGo)
         }
         delete result_h;
 
-        if (pPlayer->GetTeam() == ALLIANCE)
+        if (pPlayer->GetQuestStatus(QUEST_HORDE_PLAYER) == QUEST_STATUS_NONE)
         {
-            if (pPlayer->GetQuestStatus(QUEST_HORDE_PLAYER) == QUEST_STATUS_NONE)
-            {
-                std::stringstream WantedHordePlayerName;
-                WantedHordePlayerName << "WANTED: " << HordePlayerName;
-                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, WantedHordePlayerName.str().c_str(), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-            }
+            std::stringstream WantedHordePlayerName;
+            WantedHordePlayerName << "WANTED: " << HordePlayerName;
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, WantedHordePlayerName.str().c_str(), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
         }
         break;
 
-    case 1000076: // Orgrimmar
+    case HORDE: 
 
         if (result_a)
         {
@@ -332,15 +330,17 @@ bool GOHello_go_bounty(Player* pPlayer, GameObject* pGo)
         }
         delete result_a;
 
-        if (pPlayer->GetTeam() == HORDE)
+        if (pPlayer->GetQuestStatus(QUEST_ALLIANCE_PLAYER) == QUEST_STATUS_NONE)
         {
-            if (pPlayer->GetQuestStatus(QUEST_ALLIANCE_PLAYER) == QUEST_STATUS_NONE)
-            {
-                std::stringstream WantedAlliancePlayerName;
-                WantedAlliancePlayerName << "WANTED: " << AlliancePlayerName;
-                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, WantedAlliancePlayerName.str().c_str(), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
-            } 
+            std::stringstream WantedAlliancePlayerName;
+            WantedAlliancePlayerName << "WANTED: " << AlliancePlayerName;
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, WantedAlliancePlayerName.str().c_str(), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
         }
+        break;
+    case TEAM_NONE:
+    case TEAM_CROSSFACTION:
+        break;
+    default:
         break;
     }  
     pPlayer->SEND_GOSSIP_MENU(90325, pGo->GetGUID());
