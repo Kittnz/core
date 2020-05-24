@@ -2184,4 +2184,9 @@ Transmog.ReqItemID = 0
 Transmog.ReqItemCount = 1
 Transmog.ReqMoneyRate = 1.0
 
+###################################################################################################################
+#    ExpansionContent 0 / 1. Enable new races: Goblins and High Elves with this option.
+###################################################################################################################
+
+ExpansionContent = 0
 

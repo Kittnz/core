@@ -284,6 +284,8 @@ void AddSC_miracle_raceaway();
 void AddSC_gardening();
 void AddZoneScript_GmIsle();
 void AddZoneScript_EPL();
+// Turtle WoW Expansion
+void AddSC_episode_1();
 
 void AddScripts()
 {
@@ -567,4 +569,7 @@ void AddScripts()
     AddSC_gardening();
 	AddZoneScript_GmIsle();
 	AddZoneScript_EPL();
+
+    // Turtle WoW expansion
+    AddSC_episode_1();
 }

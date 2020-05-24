@@ -20,6 +20,7 @@
 #ifndef _OBJECTMGR_H
 #define _OBJECTMGR_H
 
+#include "World.h"
 #include "Common.h"
 #include "Log.h"
 #include "Object.h"
@@ -677,6 +678,7 @@ class ObjectMgr
             if(class_ >= MAX_CLASSES) return nullptr;
             PlayerInfo const* info = &m_PlayerInfo[race][class_];
             if(info->displayId_m==0 || info->displayId_f==0) return nullptr;
+            if (!sWorld.getConfig(CONFIG_BOOL_EXPANSION_CONTENT) && (race == 9 || race == 10)) return nullptr;
             return info;
         }
         void GetPlayerLevelInfo(uint32 race, uint32 class_,uint32 level, PlayerLevelInfo* info) const;

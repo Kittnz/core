@@ -1051,6 +1051,9 @@ void World::LoadConfigSettings(bool reload)
         setConfig(CONFIG_UINT32_TRANSMOG_REQ_ITEM_COUNT, 1);
     }
     setConfig(CONFIG_FLOAT_TRANSMOG_REQ_MONEY_RATE, "Transmog.ReqMoneyRate", 0.0);
+
+    // Turtle WoW Expansion
+    setConfig(CONFIG_BOOL_EXPANSION_CONTENT, "ExpansionContent", false);
 }
 
 class CharactersDatabaseWorkerThread : public ACE_Based::Runnable
