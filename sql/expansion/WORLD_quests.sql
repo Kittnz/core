@@ -247,8 +247,7 @@ StartScript, CompleteScript) values
 
 'A Crystal Clear Task', 
 
-'Greetings, $R. Since you\'re here this means you’ve come to help so listen up. We have a situation here… You might be aware, our buildings operate with Arcane magic in use.\n\nWhile our central crystal is the main power source, we use smaller crystals to effectively channel the arcane energy from the nexus to the outlying Ley points of the structure.\n\nThe downside is that these crystals break down overtime, if we had found this outpost a decade later the entire Academy could have collapsed.\n\nFortunately, our predecessors built this site on a location with Arcane crystal deposits. While the automated constructs have long since stopped working or malfunctioned, the mine remains full of intact crystals.\n\nI need you to head down there and bring me some crystals... Eight should do for now.\n\n
-...Are you still here? Get moving.', 
+'Greetings, $R. Since you\'re here this means you’ve come to help so listen up. We have a situation here… You might be aware, our buildings operate with Arcane magic in use.\n\nWhile our central crystal is the main power source, we use smaller crystals to effectively channel the arcane energy from the nexus to the outlying Ley points of the structure.\n\nThe downside is that these crystals break down overtime, if we had found this outpost a decade later the entire Academy could have collapsed.\n\nFortunately, our predecessors built this site on a location with Arcane crystal deposits. While the automated constructs have long since stopped working or malfunctioned, the mine remains full of intact crystals.\n\nI need you to head down there and bring me some crystals... Eight should do for now.\n\n...Are you still here? Get moving.', 
 
 'Gather 8 Arcane Crystals from the Silver Sun Mine in Alah\'thalas.', 
 
@@ -345,7 +344,7 @@ StartScript, CompleteScript) values
 
 'Gather 4 Arcane Artifacts from the High Wilderness in Feralas.', 
 
-'What’s that you got there?... By the Sunwell! These are perfect! Yes yes, I’m sure some of these will assist our cause! You have my thanks $R, you have my thanks indeed...\n\nHere is your little trinket, now get going! I have research to do.', 
+'What’s that you got there?...\n\nBy the Sunwell! These are perfect! Yes yes, I’m sure some of these will assist our cause! You have my thanks $R, you have my thanks indeed...\n\nHere is your little trinket, now get going!\n\nI have research to do.', 
 
 'What are you waiting for?\n\nEvery moment you delay some fat Ogre can crush an irreplaceable relic!\n\nGet going! We’re counting on you.', 
 
