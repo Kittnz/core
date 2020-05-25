@@ -1054,6 +1054,9 @@ void World::LoadConfigSettings(bool reload)
 
     // Turtle WoW Expansion
     setConfig(CONFIG_BOOL_EXPANSION_CONTENT, "ExpansionContent", false);
+
+    // Bounty Boards
+    setConfig(CONFIG_BOOL_BOUNTY, "PvPBounryBoards", false);
 }
 
 class CharactersDatabaseWorkerThread : public ACE_Based::Runnable

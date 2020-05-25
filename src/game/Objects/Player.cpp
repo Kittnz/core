@@ -19414,7 +19414,8 @@ void Player::RewardSinglePlayerAtKill(Unit* pVictim)
         }
 
         // Turtle WoW custom feature:
-        RewardBountyHuntKill(pVictim);      
+        if (sWorld.getConfig(CONFIG_BOOL_BOUNTY))
+            RewardBountyHuntKill(pVictim);  
     }    
 }
 
