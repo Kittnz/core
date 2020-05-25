@@ -2554,4 +2554,6 @@ values
 
 REPLACE INTO `gameobject_template` VALUES (1000223, 0, 2, 3053, 'Wanted: Vile Criminal!', 35, 0, 1, 0, 0, 2, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_bounty');
 
+replace into creature_template (entry, display_id1, name, subname, level_min, level_max, health_min, health_max, faction, script_name, scale) values
+(51550, 11178, 'Turtle WoW', '', 1, 1, 64, 64, 35, '', 0.3);
 

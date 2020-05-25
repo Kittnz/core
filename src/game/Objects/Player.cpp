@@ -2834,6 +2834,9 @@ void Player::GiveLevel(uint32 level)
     if (bIsHardcore)
         MailHardcoreModeRewards(level);
 
+    if (level == 5)
+        MailRidingTurtleGift();
+
     PlayerLevelInfo info;
     sObjectMgr.GetPlayerLevelInfo(getRace(), getClass(), level, &info);
 
@@ -21685,6 +21688,24 @@ void Player::MailCityProtectorScroll()
             .AddItem(ToMailItem)
             .SendMailTo(this, MailSender(MAIL_CREATURE, uint32(4968), MAIL_STATIONERY_DEFAULT), MAIL_CHECK_MASK_COPIED, 0, 30 * DAY);
     }      
+}
+
+void Player::MailRidingTurtleGift()
+{
+    if (HasItemCount(23720, 1))
+        return;
+
+    std::string subject = "Riding Turtle";
+    std::string message = "Greetings, traveler!\n\nWe sincerely hope you enjoy your stay on Turtle WoW! We have the best community out there and are very happy to have you join us.\n\nPlease accept this adorable Riding Turtle as your companion during this long and difficult journey!\n\nSafe Travels!";
+
+    {
+        Item* ToMailItem = Item::CreateItem(23720, 1, this);
+        ToMailItem->SaveToDB();
+
+        MailDraft(subject, sObjectMgr.CreateItemText(message))
+            .AddItem(ToMailItem)
+            .SendMailTo(this, MailSender(MAIL_CREATURE, uint32(51550), MAIL_STATIONERY_DEFAULT), MAIL_CHECK_MASK_COPIED, 0, 30 * DAY);
+    }
 }
 
 bool Player::IsIgnoringTitles() { return isIgnoringTitles; }

@@ -1081,6 +1081,7 @@ class MANGOS_DLL_SPEC Player final: public Unit
         void MailHardcoreModeRewards(uint32 level);
         bool IsCityProtector();
         void MailCityProtectorScroll();
+        void MailRidingTurtleGift();
         bool IsIgnoringTitles();
         void SetIgnoringTitles(bool shouldIgnore);
         bool IsScarletCrusade();
