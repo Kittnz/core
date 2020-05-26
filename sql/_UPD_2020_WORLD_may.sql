@@ -2557,3 +2557,8 @@ values
 replace into creature_template (entry, display_id1, name, subname, level_min, level_max, health_min, health_max, faction, script_name, scale) values
 (51550, 11178, 'Turtle WoW', '', 1, 1, 64, 64, 35, '', 0.3);
 
+-- Trepp's Taco
+
+REPLACE INTO `item_template` VALUES (51750, 0, 15, 0, 'Trepp\'s Taco', 'Happy Birthday, Trepp!', 1483, 2, 0, 1, 0, 0, 0, 128, 16, 60, 60, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5004, 0, 60, 0, 3000, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+
+
