@@ -11,7 +11,8 @@ replace into mangos_string (entry, content_default) values
 ('50007', 'Speak to Karn Deepeye in Orgrimmar or Tarun Swifteagle in Stormwind to become a diplomat! You will be able to group and trade with the players of an opposite faction.'),
 ('50008', 'We\'ve implemented a list of features that Blizzard never published, you can find information about them on our forums under Sands of Time section.'),
 ('50009', 'If you really like questing and leveling, play in hardcore mode, your creature kill rates will be set to 0.5 raters. Enjoy your journey and receive rewards every 10 levels!'),
-('50010', 'We\'re constantly working on improving the leveling experience on Turtle WoW: creating new quests for starting locations or extending the existing quest chains. If you have an idea for a new quest, please visit this page: dev.turtle-wow.org');
+('50010', 'We\'re constantly working on improving the leveling experience on Turtle WoW: creating new quests for starting locations or extending the existing quest chains. If you have an idea for a new quest, please visit this page: dev.turtle-wow.org'),
+('50011', 'Have you ever had a dream about setting your own garden? Grow your own food: plant the seed, water it, foster it, and enjoy the results of your hard work once it’s fully grown! Speak to Kern Mosshoof in Mulgore or find Mortimer Stansfield in Elwynn Forest.');
 
 delete from autobroadcast where string_id between 50000 and 50015;
 replace into autobroadcast (string_Id) values
@@ -25,4 +26,5 @@ replace into autobroadcast (string_Id) values
 ('50007'),
 ('50008'),
 ('50009'),
-('50010');
+('50010'),
+('50011');

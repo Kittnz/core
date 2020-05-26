@@ -17,7 +17,7 @@ bool GossipHello_npc_caledra(Player* pPlayer, Creature* pCreature)
     }
 
     pPlayer->PrepareQuestMenu(pCreature->GetGUID());
-    pPlayer->SEND_GOSSIP_MENU(pCreature->GetDefaultGossipMenuId(), pCreature->GetGUID());
+    pPlayer->SEND_GOSSIP_MENU(300000, pCreature->GetGUID());
     return true;
 }
 
@@ -53,7 +53,7 @@ bool GossipHello_npc_elsharin(Player* pPlayer, Creature* pCreature)
     }
 
     pPlayer->PrepareQuestMenu(pCreature->GetGUID());
-    pPlayer->SEND_GOSSIP_MENU(pCreature->GetDefaultGossipMenuId(), pCreature->GetGUID());
+    pPlayer->SEND_GOSSIP_MENU(300001, pCreature->GetGUID());
     return true;
 }
 

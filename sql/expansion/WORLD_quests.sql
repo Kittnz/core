@@ -6,7 +6,7 @@ SET @quest_zone = 1519;
 SET @faction_id = 269;
 SET @faction_count = 250;
 SET @xp_or_money = 650;
-SET @quest_level = 60;
+SET @quest_level = 15;
 SET @min_level = 10;
 SET @questgiver_id = 80000;
 SET @quest_finisher = 1752;
@@ -100,11 +100,11 @@ SET @quest_zone = 1519;
 SET @faction_id = 269;
 SET @faction_count = 250;
 SET @xp_or_money = 650;
-SET @quest_level = 60;
+SET @quest_level = 20;
 SET @min_level = 10;
 SET @questgiver_id = 1752;
 SET @quest_finisher = 5498;
-SET @nextquest = 80002;
+SET @nextquest = 0;
 SET @nextquestinchain = 0;
 SET @prevquest = 80000;
 SET @reward_item_1 = 0;
@@ -173,10 +173,10 @@ ReqCreatureOrGOId1 = @creature_to_kill_1, ReqCreatureOrGOCount1 = @creature_to_k
 ReqCreatureOrGOId2 = @creature_to_kill_2, ReqCreatureOrGOCount2 = @creature_to_kill_2_count,
 ReqCreatureOrGOId3 = @creature_to_kill_3, ReqCreatureOrGOCount3 = @creature_to_kill_3_count,
 ReqCreatureOrGOId4 = @creature_to_kill_4, ReqCreatureOrGOCount4 = @creature_to_kill_4_count,
-reqitemid1 = @required_item_1, rewitemcount1 = @required_item_1_count,
-reqitemid2 = @required_item_2, rewitemcount2 = @required_item_2_count,
-reqitemid3 = @required_item_3, rewitemcount3 = @required_item_3_count,
-reqitemid4 = @required_item_4, rewitemcount4 = @required_item_4_count
+reqitemid1 = @required_item_1, reqitemcount1 = @required_item_1_count,
+reqitemid2 = @required_item_2, reqitemcount2 = @required_item_2_count,
+reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
+reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count
 where entry = @quest_entry;
 
 update quest_template set nextquestid = @nextquest where entry = @quest_entry;
@@ -266,10 +266,10 @@ ReqCreatureOrGOId1 = @creature_to_kill_1, ReqCreatureOrGOCount1 = @creature_to_k
 ReqCreatureOrGOId2 = @creature_to_kill_2, ReqCreatureOrGOCount2 = @creature_to_kill_2_count,
 ReqCreatureOrGOId3 = @creature_to_kill_3, ReqCreatureOrGOCount3 = @creature_to_kill_3_count,
 ReqCreatureOrGOId4 = @creature_to_kill_4, ReqCreatureOrGOCount4 = @creature_to_kill_4_count,
-reqitemid1 = @required_item_1, rewitemcount1 = @required_item_1_count,
-reqitemid2 = @required_item_2, rewitemcount2 = @required_item_2_count,
-reqitemid3 = @required_item_3, rewitemcount3 = @required_item_3_count,
-reqitemid4 = @required_item_4, rewitemcount4 = @required_item_4_count
+reqitemid1 = @required_item_1, reqitemcount1 = @required_item_1_count,
+reqitemid2 = @required_item_2, reqitemcount2 = @required_item_2_count,
+reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
+reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count
 where entry = @quest_entry;
 
 update quest_template set nextquestid = @nextquest where entry = @quest_entry;
@@ -359,10 +359,10 @@ ReqCreatureOrGOId2 = @creature_to_kill_2, ReqCreatureOrGOCount1 = @creature_to_k
 ReqCreatureOrGOId2 = @creature_to_kill_2, ReqCreatureOrGOCount2 = @creature_to_kill_2_count,
 ReqCreatureOrGOId3 = @creature_to_kill_3, ReqCreatureOrGOCount3 = @creature_to_kill_3_count,
 ReqCreatureOrGOId4 = @creature_to_kill_4, ReqCreatureOrGOCount4 = @creature_to_kill_4_count,
-reqitemid1 = @required_item_1, rewitemcount1 = @required_item_1_count,
-reqitemid2 = @required_item_2, rewitemcount2 = @required_item_2_count,
-reqitemid3 = @required_item_3, rewitemcount3 = @required_item_3_count,
-reqitemid4 = @required_item_4, rewitemcount4 = @required_item_4_count
+reqitemid1 = @required_item_1, reqitemcount1 = @required_item_1_count,
+reqitemid2 = @required_item_2, reqitemcount2 = @required_item_2_count,
+reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
+reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count
 where entry = @quest_entry;
 
 update quest_template set nextquestid = @nextquest where entry = @quest_entry;
