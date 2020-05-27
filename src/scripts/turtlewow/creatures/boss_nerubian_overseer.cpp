@@ -58,7 +58,7 @@ struct boss_nerubian_overseerAI : public ScriptedAI
     void JustDied(Unit* /*pKiller*/)
     {
         // A bit of trolling :P
-        DoCast(webTarget, SPELL_SHADOW_BOLT_VOLLEY, true);
+        DoCast(m_creature, SPELL_SHADOW_BOLT_VOLLEY, true);
 
         uint32 m_respawn_delay_Timer = urand(120 * HOUR, 168 * HOUR);
 
