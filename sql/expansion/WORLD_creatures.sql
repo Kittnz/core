@@ -299,7 +299,10 @@ replace into creature_template (entry, display_id1, name, subname, level_min, le
 (80000, 10381, 'High Elf Ranger', '', 9, 10, 350, 640, 269, '', 1, 2, 2),
 (80001, 17329, 'Arcanist Anu\'delen', '', 60, 60, 3350, 4640, 269, '', 1, 2, 2),
 (80002, 6631, 'Ashylah Starcaller', '', 60, 60, 3350, 4640, 269, '', 1, 2, 1),
-(80003, 262, 'Caledra Gossip Trigger 1', '', 60, 60, 3350, 4640, 269, '', 1, 2, 1);
+(80003, 262, 'Caledra Gossip Trigger 1', '', 60, 60, 3350, 4640, 269, '', 1, 2, 1),
+
+(80004, 18002, 'Alah\'Thalas Guard', '', 60, 60, 3350, 4300, 269, '', 1, 2, 2), -- TODO: Armor, DMG, etc. It's a placeholder.
+(80005, 18003, 'Norel', '', 20, 59, 1350, 3300, 269, '', 1, 2, 1);
 
 -- Greeting's textes
 
