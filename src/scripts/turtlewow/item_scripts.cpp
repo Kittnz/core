@@ -11,7 +11,7 @@ bool ItemUseSpell_character_rename(Player* pPlayer, Item* pItem, const SpellCast
 bool ItemUseSpell_portable_wormhole_generator(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
     if (pPlayer->isInCombat() || pPlayer->IsBeingTeleported() || (pPlayer->getDeathState() == CORPSE) || pPlayer->IsMoving())
-        ChatHandler(pPlayer).PSendSysMessage("Warning! High radiation emittment detected! Wormhole Generator failsafe system shutting device down! Please use later!");
+        ChatHandler(pPlayer).PSendSysMessage("Warning! High radiation emission detected! Wormhole Generator failsafe system shutting device down! Please use later!");
     else
     {
         if (pPlayer->GetMoney() >= 500)
@@ -21,6 +21,7 @@ bool ItemUseSpell_portable_wormhole_generator(Player* pPlayer, Item* pItem, cons
             pPlayer->GetSafePosition(x, y, z);
             x += dis * cos(pPlayer->GetOrientation());
             y += dis * sin(pPlayer->GetOrientation());
+            pPlayer->PMonsterEmote("%s just opened a wormhole.", nullptr, false, pPlayer->GetName());
             pPlayer->SummonGameObject(1000081, x, y, z + 0.5F, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 8, true);
             pPlayer->ModifyMoney(-500);
         }
