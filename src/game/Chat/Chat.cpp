@@ -112,6 +112,29 @@ ChatCommand * ChatHandler::getCommandTable()
         { "showallpaths", SEC_ADMINISTRATOR,    false, &ChatHandler::HandleBattleBotShowAllPathsCommand, "", nullptr },
         { nullptr,        0,                    false, nullptr,                                          "", nullptr },
     };
+    static ChatCommand mapBotPathCommandTable[] =
+    {
+        { "add",          SEC_ADMINISTRATOR,    false, &ChatHandler::HandleMapBotPathPointAddCommand,    "", nullptr },
+        { nullptr,        0,                    false, nullptr,                                          "", nullptr },
+    };
+    static ChatCommand mapBotAddCommandTable[] =
+    {
+        { "alterac",    SEC_ADMINISTRATOR,      false, &ChatHandler::HandleMapBotAddAlteracCommand, "", nullptr },
+        { "arathi",     SEC_ADMINISTRATOR,      false, &ChatHandler::HandleMapBotAddArathiCommand,  "", nullptr },
+        { "warsong",    SEC_ADMINISTRATOR,      false, &ChatHandler::HandleMapBotAddWarsongCommand, "", nullptr },
+        { "eastern",    SEC_ADMINISTRATOR,      false, &ChatHandler::HandleMapBotAddEasternKingdomsCommand, "", nullptr },
+        { "kalimdor",   SEC_ADMINISTRATOR,      false, &ChatHandler::HandleMapBotAddKalimdorCommand,  "", nullptr },
+        { nullptr,      0,                      false, nullptr,                                        "", nullptr },
+    };
+    static ChatCommand mapBotCommandTable[] =
+    {
+        { "add",          SEC_ADMINISTRATOR,    false, nullptr,            "Add a new bot", mapBotAddCommandTable },
+        { "remove",       SEC_ADMINISTRATOR,    false, &ChatHandler::HandleMapBotRemoveCommand,       "", nullptr },
+        { "showpath",     SEC_ADMINISTRATOR,    false, &ChatHandler::HandleMapBotShowPathCommand,     "", nullptr },
+        { "showallpaths", SEC_ADMINISTRATOR,    false, &ChatHandler::HandleMapBotShowAllPathsCommand, "", nullptr },
+        { "path",         SEC_ADMINISTRATOR,    false, nullptr,              "Add a path", mapBotPathCommandTable },
+        { nullptr,        0,                    false, nullptr,                                          "", nullptr },
+    };
     static ChatCommand accountSetCommandTable[] =
     {
         { "addon",          SEC_CONSOLE,        true,  &ChatHandler::HandleAccountSetAddonCommand,     "", nullptr },

@@ -57,6 +57,20 @@ struct PlayerBotStats
     confMaxOnline(0), confMinOnline(0), confBotsRefresh(0), confUpdateDiff(0) {}
 };
 
+class MapBotsCollection
+{
+public:
+    uint32 guid;
+    uint32 account;
+    std::string name;
+    uint32 race;
+    uint32 class_;
+    float pos_x;
+    float pos_y;
+    float pos_z;
+    uint32 map;
+    float orientation;
+};
 
 class PlayerBotMgr
 {
@@ -95,6 +109,12 @@ class PlayerBotMgr
         uint32 GenBotAccountId() { return ++_maxAccountId; }
         PlayerBotStats& GetStats(){ return m_stats; }
         void Start() { enable = true; }
+
+        void MapBotLoader();
+        void MapBotCreator();
+        void MapBotBalancer();
+        bool m_useMapBotLoader = false;
+
     protected:
         /* Combien de temps depuis la derniere MaJ ?*/
         uint32 m_elapsedTime;

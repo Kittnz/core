@@ -11177,3 +11177,45 @@ void ObjectMgr::ApplyPremadeSpecTemplateToPlayer(uint32 entry, Player* pPlayer) 
         }
     }
 }
+
+void ObjectMgr::ApplyPremadeSpecTemplateToPlayerMapBot(uint32 entry, Player* pPlayer) const
+{
+    auto itr = m_playerPremadeSpecMap.find(entry);
+    if (itr == m_playerPremadeSpecMap.end())
+    {
+        sLog.outError("Attempt to apply non-existent premade template to player (%u)", entry);
+        return;
+    }
+
+    if (pPlayer->GetClass() != itr->second.requiredClass)
+    {
+        sLog.outError("Attempt to apply premade template (%u) to a player with wrong class", entry);
+        return;
+    }
+
+    /*if (pPlayer->GetLevel() != itr->second.level)
+    {
+        pPlayer->GiveLevel(itr->second.level);
+        pPlayer->InitTalentForLevel();
+        pPlayer->SetUInt32Value(PLAYER_XP, 0);
+    }*/
+
+    pPlayer->InitTalentForLevel();
+
+    // Learn Dual Wield Specialization
+    if (pPlayer->GetClass() == CLASS_WARRIOR || pPlayer->GetClass() == CLASS_ROGUE || pPlayer->GetClass() == CLASS_HUNTER)
+        if (!pPlayer->HasSpell(674))
+            pPlayer->LearnSpell(674, false, false);
+
+    if (!itr->second.spells.empty())
+    {
+        pPlayer->ResetTalents(true);
+        for (auto spellId : itr->second.spells)
+        {
+            uint32 const firstRankId = sSpellMgr.GetFirstSpellInChain(spellId);
+            if (firstRankId && firstRankId != spellId && GetTalentSpellPos(firstRankId))
+                pPlayer->LearnSpell(firstRankId, false, true);
+            pPlayer->LearnSpell(spellId, false, (firstRankId == spellId && GetTalentSpellPos(firstRankId)));
+        }
+    }
+}
