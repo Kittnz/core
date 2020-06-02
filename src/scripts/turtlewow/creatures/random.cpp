@@ -558,10 +558,65 @@ bool GossipSelect_npc_riding_horse(Player* p_Player, Creature* p_Creature, uint3
     return true;
 }
 
+class DismountAfterTime : public BasicEvent 
+{
+public:
+    explicit DismountAfterTime(uint64 player_guid) : BasicEvent(), player_guid(player_guid) {}
+
+    bool Execute(uint64 e_time, uint32 p_time) override 
+    {
+        Player* player = ObjectAccessor::FindPlayer(player_guid);
+        if (player) 
+        {
+            player->Unmount(); 
+            if (player->IsFlying())
+            {
+                player->SetFlying(false);
+                player->UpdateSpeed(MOVE_SWIM, true, 1.0F);
+            }
+        }
+        return false;
+    }
+private:
+    uint64 player_guid;
+};
+
+bool GossipHello_npc_riding_gryphon(Player* p_Player, Creature* p_Creature)
+{
+    p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Take me to Elwynn Uphills!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    p_Player->SEND_GOSSIP_MENU(90366, p_Creature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_riding_gryphon(Player* p_Player, Creature* p_Creature, uint32 /*uiSender*/, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        if (!p_Player->GetQuestRewardStatus(60070))
+        {
+            p_Player->GetSession()->SendNotification("You have 60 seconds to get to the Uphills!");
+            p_Player->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, 6852);
+            p_Player->m_Events.AddEvent(new DismountAfterTime(p_Player->GetGUID()), p_Player->m_Events.CalculateTime(1 * MINUTE * IN_MILLISECONDS));
+            p_Player->SetFlying(true);
+            p_Player->UpdateSpeed(MOVE_SWIM, true, 4.0F);
+        }
+        else
+            p_Player->PMonsterEmote("Gryphon stares at you. You feel uncomfortable.", nullptr, false);
+    }
+    p_Player->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
 
 void AddSC_random()
 {
     Script *newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_riding_gryphon";
+    newscript->pGossipHello = &GossipHello_npc_riding_gryphon;
+    newscript->pGossipSelect = &GossipSelect_npc_riding_gryphon;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_riding_horse";
