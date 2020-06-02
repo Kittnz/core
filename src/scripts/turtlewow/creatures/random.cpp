@@ -595,7 +595,11 @@ private:
 
 bool GossipHello_npc_riding_gryphon(Player* p_Player, Creature* p_Creature)
 {
-    p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Take me to Elwynn Uphills!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    if (p_Player->GetQuestRewardStatus(60070))
+    {
+        p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Take me to Elwynn Uphills!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    }
+    p_Player->PrepareQuestMenu(p_Creature->GetGUID());
     p_Player->SEND_GOSSIP_MENU(90366, p_Creature->GetGUID());
     return true;
 }
@@ -604,18 +608,35 @@ bool GossipSelect_npc_riding_gryphon(Player* p_Player, Creature* p_Creature, uin
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        if (!p_Player->GetQuestRewardStatus(60070))
+        if (p_Player->HasItemCount(422, 1))
         {
             p_Player->GetSession()->SendNotification("You have 60 seconds to get to the Uphills!");
             p_Player->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, 6852);
             p_Player->m_Events.AddEvent(new DismountAfterTime(p_Player->GetGUID()), p_Player->m_Events.CalculateTime(1 * MINUTE * IN_MILLISECONDS));
             p_Player->SetFlying(true);
             p_Player->UpdateSpeed(MOVE_SWIM, true, 4.0F);
+            p_Player->AddItem(422, -1);
         }
         else
-            p_Player->PMonsterEmote("Gryphon stares at you. You feel uncomfortable.", nullptr, false);
+            p_Player->PMonsterEmote("Gryphon clearly looks hungry and frustrated. Perhaps handful of famous Dwarven Mild could do some good?", nullptr, false);
     }
     p_Player->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
+
+bool GossipHello_npc_rholo(Player* p_Player, Creature* p_Creature)
+{
+    p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "What is this place?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    p_Player->SEND_GOSSIP_MENU(90368, p_Creature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_rholo(Player* p_Player, Creature* p_Creature, uint32 /*uiSender*/, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+        p_Creature->MonsterSay("We're renegades. We abandoned Northshire Abbey under the leadership of Mcdoubles, former Priest from the Church of Holy Light. Why you ask? Well the Defias moved in and took over the valley, the Stormwind nobility just don't want you to know that.Corrupt I tell you! Luckily, we have everything you could ever want in our camp so feel free to look around and whatever you do remember this: The most common way people give up their power is by thinking they don't have any.", 7, 0);
+   p_Player->CLOSE_GOSSIP_MENU();
     return true;
 }
 
@@ -623,6 +644,12 @@ bool GossipSelect_npc_riding_gryphon(Player* p_Player, Creature* p_Creature, uin
 void AddSC_random()
 {
     Script *newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_rholo";
+    newscript->pGossipHello = &GossipHello_npc_rholo;
+    newscript->pGossipSelect = &GossipSelect_npc_rholo;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_riding_gryphon";
