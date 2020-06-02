@@ -526,9 +526,48 @@ bool GossipSelect_npc_dressing_room(Player* pPlayer, Creature* pCreature, uint32
     return true;
 }
 
+bool GossipHello_npc_riding_horse(Player* p_Player, Creature* p_Creature)
+{
+    p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Hire this horse for 50 copper.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    p_Player->SEND_GOSSIP_MENU(90365, p_Creature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_riding_horse(Player* p_Player, Creature* p_Creature, uint32 /*uiSender*/, uint32 uiAction)
+{
+    uint32 spell{ 0 };
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        if (p_Player->GetMoney() >= 50)
+        {
+            switch (p_Creature->GetEntry())
+            {
+            case 51560: spell = 468; break;
+            case 51561: spell = 471; break;
+            default:
+                break;
+            }
+            p_Player->CastSpell(p_Player, spell, true);
+            p_Player->ModifyMoney(-50);
+        }
+        else
+            p_Player->GetSession()->SendNotification("You don't have enough money!");
+    }
+    p_Player->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
+
 void AddSC_random()
 {
     Script *newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_riding_horse";
+    newscript->pGossipHello = &GossipHello_npc_riding_horse;
+    newscript->pGossipSelect = &GossipSelect_npc_riding_horse;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_dressing_room";
