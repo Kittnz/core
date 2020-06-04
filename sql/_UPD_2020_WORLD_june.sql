@@ -5,15 +5,15 @@ update creature set spawntimesecsmin = 300, spawntimesecsmax = 300 where id = 51
 UPDATE `quest_template` SET `ExclusiveGroup` = 0 WHERE `entry` = 1661;
 
 -- add missing quest Feathermoon Stronghold (7494) to Crier Goodman (2198) and Herald Moonstalker (10878)
-INSERT INTO `creature_questrelation` (`id`, `quest`, `patch_min`, `patch_max`) VALUES
+replace into `creature_questrelation` (`id`, `quest`, `patch_min`, `patch_max`) VALUES
 (10878, 7494, 1, 10),
 (2198, 7494, 1, 10);
 
 -- allow wren darkspring to summon an imp
 UPDATE `creature_template` SET `ai_name` = 'EventAI' WHERE `entry` = 6376;
-INSERT INTO `creature_ai_events` (`id`, `creature_id`, `event_type`, `event_chance`, `action1_script`, `comment`) VALUES
+replace into `creature_ai_events` (`id`, `creature_id`, `event_type`, `event_chance`, `action1_script`, `comment`) VALUES
 (637601, 6376, 11, 100, 637601, 'Wren Darkspring - Summon Imp on Spawn');
-INSERT INTO `creature_ai_scripts` (`id`, `command`, `datalong`, `data_flags`, `comments`) VALUES
+replace into `creature_ai_scripts` (`id`, `command`, `datalong`, `data_flags`, `comments`) VALUES
 (637601, 15, 11939, 4, 'Wren Darkspring - Summon Imp on Spawn');
 
 -- Massive Longbow - Skolmin Goldfury
@@ -48,7 +48,7 @@ DELETE FROM `npc_vendor` WHERE `entry` = 7976 AND `item` = 2533;
 
 
 -- Missing Items - Brenwyn Wintersteel
-INSERT INTO `npc_vendor` (`entry`, `item`) VALUES
+replace into `npc_vendor` (`entry`, `item`) VALUES
 (5120, 3111),
 (5120, 2946),
 (5120, 3107),
