@@ -615,7 +615,7 @@ bool GossipSelect_npc_riding_gryphon(Player* p_Player, Creature* p_Creature, uin
             p_Player->m_Events.AddEvent(new DismountAfterTime(p_Player->GetGUID()), p_Player->m_Events.CalculateTime(1 * MINUTE * IN_MILLISECONDS));
             p_Player->SetFlying(true);
             p_Player->UpdateSpeed(MOVE_SWIM, true, 4.0F);
-            p_Player->AddItem(422, -1);
+            p_Player->RemoveItemCurrency(422, 1);
         }
         else
             p_Player->PMonsterEmote("Gryphon clearly looks hungry and frustrated. Perhaps handful of famous Dwarven Mild could do some good?", nullptr, false);
