@@ -643,7 +643,7 @@ bool GossipSelect_npc_riding_gryphon_back(Player* p_Player, Creature* p_Creature
     {
         if (p_Player->HasItemCount(422, 1))
         {
-            p_Player->GetSession()->SendNotification("You have 10 seconds to get back to the Northshire Valley!");
+            p_Player->GetSession()->SendNotification("You have 10 seconds to get back to Northshire Valley!");
             p_Player->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, 6852);
             p_Player->m_Events.AddEvent(new DismountAfterTime(p_Player->GetGUID()), p_Player->m_Events.CalculateTime(10000));
             p_Player->SetFlying(true);
