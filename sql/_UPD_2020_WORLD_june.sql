@@ -348,7 +348,7 @@ values
  ('51752', '1', '2', '8', 'Crusader\'s Redemption', '', '20195', '3', '0', '1', '0', '15471', '17', '-1', '-1', '39',
  '39', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '7', '7', '5',
  '5', '15', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '2900', '0',
- '0', '88', '133', '0', '5', '10', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '', '0', '0', '0',
+ '0', '88', '133', '0', '5', '10', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '10', '0', '13665', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '2', '0', '0', '0', '0', '0', '1', '1', '0', '0', '100', '0', '0', '0', '0', '1', '0', '0', '0',
@@ -499,8 +499,8 @@ StartScript, CompleteScript)
 '0', '471', '250', '0', '0','0',
 '0', '0', '0', '8', '0', '60071', '60073', '0', '0',
 '0', '0', '0', 'Trimming the Vilebranch', 'Back for more, $N? There is still more to do and more rewards to claim. Your next target will be the Vilebranchs, we think they\'re preparing something big. Their chanting can be heard even from here! Go to the Altar of Zul to the southeast, and trim their numbers!', 'Drakin Swiftaxe wants you to kill 15 Vilebranch Soothsayers and 30 Vilebranch Scalpers.$BReturn to him when you\'re done.', 'I knew it was nothing for a $C like you! Here, take this for your troubles.', 'Did you do it? If they\'re not stopped, we might be doomed.', '', 'Vilebranch Soothsayers slain (15)', 'Vilebranch Scalpers slain (30)',
-'', '', '0', '0', '0', '0', '0', '0', '0',
-'0', '', '0', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0', '0', '0',
 '0', '4467', '4466', '0', '0', '15',
 '30', '0', '0', '0', '0', '0',
 '0', '0', '0', '0', '0', '0', '0',
@@ -555,8 +555,8 @@ Vilebranch Soul Eaters.$BDo not return until you\'re done.', 'You are a true her
 '0', '0', '0', '14', '4', '0', '0',
 '0', '0', '0', '0', '0','0',
 0, 0);
-replace into creature_questrelation (id, quest, patch_min, patch_max) values ('51754','60073','10','10');
-replace into creature_involvedrelation (id, quest, patch_min, patch_max) values ('51754','60073','10','10');
+replace into creature_questrelation (id, quest, patch_min, patch_max) values ('51566','60073','10','10');
+replace into creature_involvedrelation (id, quest, patch_min, patch_max) values ('51566','60073','10','10');
 
 replace into item_template (
 entry, patch, class, subclass, name,description, display_id, quality, flags, buy_count,
@@ -612,7 +612,7 @@ StartScript, CompleteScript)
 '0', '0', '0', '0', '0','0',
 '0', '5', '0', '0', '0', '60072', '0', '0', '0',
 '0', '0', '0', 'Bring Down the Priestess!', 'I\'ve been making you kill trolls left and right but this time, we have an actual target for once! We got reports of their leader, Vile Priestess Hexx rallying the Vilebranch trolls for an assault on Aerie Peak! We can\'t let that happen, can we?$B Gather your friends and climb the city of Jintha\'alor to the very southeast and kill her and her special guards. You will be richly rewarded for you efforts.', 'Drakir Swiftaxe has tasked you with death of Vile Priestess Hexx and 20 Vilebranch Aman\'zasi Guards in the city of Jintha\'alor, to the very southeast of Aerie Peak.$BReturn to him when it\'s done.', 'You truly dealt a mighty blow to the Vilebranch trolls, they won\'t be attacking us anytime soon. Here, a reward truly worthy of the hero you are!', 'The possibility of an assault increases with every passing moment, go there and stop her plans!', '', 'Vilebranch Aman\'zasi Guards slain (20)', 'Vile Priestess Hexx slain',
-'', '', '0', '0', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0', '0', '0', '0',
 '0', '0', '0', '0', '0', '0', '0', '0',
 '0', '2648', '7995', '0', '0', '20',
 '1', '0', '0', '0', '0', '0',
@@ -625,8 +625,8 @@ StartScript, CompleteScript)
 '0', '0', '0', '5', '2', '0', '0',
 '0', '0', '0', '0', '0','0',
 0, 0);
-replace into creature_questrelation (id, quest, patch_min, patch_max) values ('51754','60074','10','10');
-replace into creature_involvedrelation (id, quest, patch_min, patch_max) values ('51754','60074','10','10');
+replace into creature_questrelation (id, quest, patch_min, patch_max) values ('51566','60074','10','10');
+replace into creature_involvedrelation (id, quest, patch_min, patch_max) values ('51566','60074','10','10');
       
 	  
 	  replace into item_template (
