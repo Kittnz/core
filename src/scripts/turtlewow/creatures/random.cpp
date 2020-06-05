@@ -624,6 +624,39 @@ bool GossipSelect_npc_riding_gryphon(Player* p_Player, Creature* p_Creature, uin
     return true;
 }
 
+// too lazy
+
+bool GossipHello_npc_riding_gryphon_back(Player* p_Player, Creature* p_Creature)
+{
+    if (p_Player->GetQuestRewardStatus(60070))
+    {
+        p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Take me back!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    }
+    p_Player->PrepareQuestMenu(p_Creature->GetGUID());
+    p_Player->SEND_GOSSIP_MENU(90366, p_Creature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_riding_gryphon_back(Player* p_Player, Creature* p_Creature, uint32 /*uiSender*/, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        if (p_Player->HasItemCount(422, 1))
+        {
+            p_Player->GetSession()->SendNotification("You have 10 seconds to get back to the Northshire Valley!");
+            p_Player->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, 6852);
+            p_Player->m_Events.AddEvent(new DismountAfterTime(p_Player->GetGUID()), p_Player->m_Events.CalculateTime(10000));
+            p_Player->SetFlying(true);
+            p_Player->UpdateSpeed(MOVE_SWIM, true, 4.0F);
+            p_Player->RemoveItemCurrency(422, 1);
+        }
+        else
+            p_Player->PMonsterEmote("Gryphon clearly looks hungry and frustrated. Perhaps handful of famous Dwarven Mild could do some good?", nullptr, false);
+    }
+    p_Player->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
 
 bool GossipHello_npc_rholo(Player* p_Player, Creature* p_Creature)
 {
@@ -644,6 +677,12 @@ bool GossipSelect_npc_rholo(Player* p_Player, Creature* p_Creature, uint32 /*uiS
 void AddSC_random()
 {
     Script *newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_riding_gryphon_back";
+    newscript->pGossipHello = &GossipHello_npc_riding_gryphon_back;
+    newscript->pGossipSelect = &GossipSelect_npc_riding_gryphon_back;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_rholo";
