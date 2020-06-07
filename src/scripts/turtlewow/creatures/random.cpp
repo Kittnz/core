@@ -573,11 +573,11 @@ public:
             player->SetFlying(false);
             player->UpdateSpeed(MOVE_SWIM, true, 1.0F);
 
-            player->m_movementInfo.UpdateTime(WorldTimer::getMSTime());
-            WorldPacket hover(SMSG_MOVE_SET_HOVER, 31);
-            hover << player->GetPackGUID();
-            hover << player->m_movementInfo;
-            player->SendMovementMessageToSet(std::move(hover), true);
+            //player->m_movementInfo.UpdateTime(WorldTimer::getMSTime());
+            //WorldPacket hover(SMSG_MOVE_SET_HOVER, 31);
+            //hover << player->GetPackGUID();
+            //hover << player->m_movementInfo;
+            //player->SendMovementMessageToSet(std::move(hover), true);
 
             player->m_movementInfo.UpdateTime(WorldTimer::getMSTime());
             WorldPacket stop_swim(MSG_MOVE_STOP_SWIM, 31);
