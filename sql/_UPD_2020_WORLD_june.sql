@@ -458,8 +458,8 @@ StartScript, CompleteScript)
  ('60071', '1', '2', '47', '42', '42', '60', '0', '0', '0', '0',
 '0', '0', '0', '0', '0','0',
 '0', '0', '0', '8', '0', '0', '60072', '0', '0',
-'0', '0', '0', 'Cracking the Witherbark', 'Hey, $N, that was your name wasn\'t it? $B You probably know that we have some troll problems, so we decided to hire more adventurers such as yourself, sounds good right?$BYour first target will be the Witherbarks to the east of Aerie Peak, they\'re too close for comfort and they brew deadly poisons right at our doorstep! Are you up for challenge?', 'Drakin Swiftaxe has tasked you with the disposal of 10 Vilebranch Scalpers, 10 Vilebranch Zealots and 5 Vilebranch Venombloods. Return to him when you are done.', 'You actually did it? I mean of course i always believed in you! Here, take some gold for your troubles.', 'Don\'t be a sissy and go show those trolls who\'s the boss!', '', 'Witherbark Scalpers slain (10)', 'Witherbark Zealots slain (10)',
-'Witherbark Venombloods slain (5)', '', '0', '0', '0', '0', '0', '0', '0',
+'0', '0', '0', 'Cracking the Witherbark', 'Hey, $N, that was your name wasn\'t it?\n\nYou probably know that we have some troll problems, so we decided to hire more adventurers such as yourself, sounds good right?\n\nYour first target will be the Witherbarks to the east of Aerie Peak, they\'re too close for comfort and they brew deadly poisons right at our doorstep! Are you up for challenge?', 'Drakin Swiftaxe has tasked you with the disposal of 10 Vilebranch Scalpers, 10 Vilebranch Zealots and 5 Vilebranch Venombloods. Return to him when you are done.', 'You actually did it? I mean of course i always believed in you! Here, take some gold for your troubles.', 'Don\'t be a sissy and go show those trolls who\'s the boss!', '', '', '',
+'', '', '0', '0', '0', '0', '0', '0', '0',
 '0', '0', '0', '0', '0', '0', '0', '0',
 '0', '2649', '2650', '2652', '0', '10',
 '10', '5', '0', '0', '0', '0',
@@ -498,7 +498,7 @@ StartScript, CompleteScript)
  ('60072', '1', '2', '47', '42', '46', '60', '0', '0', '0', '0',
 '0', '471', '250', '0', '0','0',
 '0', '0', '0', '8', '0', '60071', '60073', '0', '0',
-'0', '0', '0', 'Trimming the Vilebranch', 'Back for more, $N? There is still more to do and more rewards to claim. Your next target will be the Vilebranchs, we think they\'re preparing something big. Their chanting can be heard even from here! Go to the Altar of Zul to the southeast, and trim their numbers!', 'Drakin Swiftaxe wants you to kill 15 Vilebranch Soothsayers and 30 Vilebranch Scalpers.$BReturn to him when you\'re done.', 'I knew it was nothing for a $C like you! Here, take this for your troubles.', 'Did you do it? If they\'re not stopped, we might be doomed.', '', 'Vilebranch Soothsayers slain (15)', 'Vilebranch Scalpers slain (30)',
+'0', '0', '0', 'Trimming the Vilebranch', 'Back for more, $N?\n\nThere is still more to do and more rewards to claim. Your next target will be the Vilebranchs, we think they\'re preparing something big. Their chanting can be heard even from here! Go to the Altar of Zul to the southeast, and trim their numbers!', 'Drakin Swiftaxe wants you to kill 15 Vilebranch Soothsayers and 30 Vilebranch Scalpers. Return to him when you\'re done.', 'I knew it was nothing for a $C like you! Here, take this for your troubles.', 'Did you do it? If they\'re not stopped, we might be doomed.', '', '', '',
 '0', '0', '0', '0', '0', '0', '0', '0', '0',
 '0', '0', '0', '0', '0', '0', '0', '0',
 '0', '4467', '4466', '0', '0', '15',
@@ -537,12 +537,9 @@ StartScript, CompleteScript)
  ('60073', '1', '2', '354', '42', '50', '60', '1', '0', '0', '0',
 '0', '0', '0', '0', '0','0',
 '0', '0', '0', '0', '0', '60072', '0', '0', '0',
-'0', '0', '0', 'Decimate Their Ranks', 'Alright $N, we\'re chased the rats to their den. To the very southeast of the Hinterlands you\'ll find the troll city of Jintha\'alor. You\'ll encounter the very elite, practicing dark magic and foul practices.$B I know you\'re all powerful but I\'m not gonna lie, I don\'t think you can do this alone, bring your friends and kill EVERY. SINGLE. TROLL.$BNow go out there and sweep the city!', 'Drakir Swiftaxe has tasked you with the extermination of 20  
-Vilebranch Berserkers, 20  
-Vilebranch Shadow Hunters, 20  
-Vilebranch Blood Drinkers and 20  
-Vilebranch Soul Eaters.$BDo not return until you\'re done.', 'You are a true hero, $N. I expected nothing less from you. Here take this, it has more power than you think.', 'Did you do it or do you have no friends? Not my problem, go get some and sweep the city!', '', 'Kill 20 Vilebranch Berserkers', 'Kill 20 Vilebranch Shadow Hunters',
-'Kill 20 Blood Drinkers', 'Kill 20 Blood Drinkers', '0', '0', '0', '0', '0', '0', '0',
+'0', '0', '0', 'Decimate Their Ranks', 'Alright $N, we\'re chased the rats to their den. To the very southeast of the Hinterlands you\'ll find the troll city of Jintha\'alor. You\'ll encounter the very elite, practicing dark magic and foul practices.\n\nI know you\'re all powerful but I\'m not gonna lie, I don\'t think you can do this alone, bring your friends and kill EVERY. SINGLE. TROLL.\n\nNow go out there and sweep the city!', 'Drakir Swiftaxe has tasked you with the extermination of 20  
+Vilebranch Berserkers, Vilebranch Shadow Hunters, Vilebranch Blood Drinkers and Vilebranch Soul Eaters, twenty of each. Do not return until you\'re done.', 'You are a true hero, $N.\n\nI expected nothing less from you. Here take this, it has more power than you think.', 'Did you do it or do you have no friends? Not my problem, go get some and sweep the city!', '', '', '',
+'', '', '0', '0', '0', '0', '0', '0', '0',
 '0', '0', '0', '0', '0', '0', '0', '0',
 '0', '2643', '2645', '2646', '2647', '20',
 '20', '20', '20', '0', '0', '0',
@@ -611,7 +608,7 @@ StartScript, CompleteScript)
  ('60074', '1', '2', '354', '42', '50', '60', '1', '0', '0', '0',
 '0', '0', '0', '0', '0','0',
 '0', '5', '0', '0', '0', '60072', '0', '0', '0',
-'0', '0', '0', 'Bring Down the Priestess!', 'I\'ve been making you kill trolls left and right but this time, we have an actual target for once! We got reports of their leader, Vile Priestess Hexx rallying the Vilebranch trolls for an assault on Aerie Peak! We can\'t let that happen, can we?$B Gather your friends and climb the city of Jintha\'alor to the very southeast and kill her and her special guards. You will be richly rewarded for you efforts.', 'Drakir Swiftaxe has tasked you with death of Vile Priestess Hexx and 20 Vilebranch Aman\'zasi Guards in the city of Jintha\'alor, to the very southeast of Aerie Peak.$BReturn to him when it\'s done.', 'You truly dealt a mighty blow to the Vilebranch trolls, they won\'t be attacking us anytime soon. Here, a reward truly worthy of the hero you are!', 'The possibility of an assault increases with every passing moment, go there and stop her plans!', '', 'Vilebranch Aman\'zasi Guards slain (20)', 'Vile Priestess Hexx slain',
+'0', '0', '0', 'Bring Down the Priestess!', 'I\'ve been making you kill trolls left and right but this time, we have an actual target for once! We got reports of their leader, Vile Priestess Hexx rallying the Vilebranch trolls for an assault on Aerie Peak! We can\'t let that happen, can we?\n\nGather your friends and climb the city of Jintha\'alor to the very southeast and kill her and her special guards. You will be richly rewarded for you efforts.', 'Drakir Swiftaxe has tasked you with death of Vile Priestess Hexx and 20 Vilebranch Aman\'zasi Guards in the city of Jintha\'alor, to the very southeast of Aerie Peak.\n\nReturn to him when it\'s done.', 'You truly dealt a mighty blow to the Vilebranch trolls, they won\'t be attacking us anytime soon. Here, a reward truly worthy of the hero you are!', 'The possibility of an assault increases with every passing moment, go there and stop her plans!', '', 'Vilebranch Aman\'zasi Guards slain (20)', 'Vile Priestess Hexx slain',
 '0', '0', '0', '0', '0', '0', '0', '0', '0',
 '0', '0', '0', '0', '0', '0', '0', '0',
 '0', '2648', '7995', '0', '0', '20',
@@ -680,7 +677,7 @@ start_quest, lock_id, material, sheath, random_property, set_id, max_durability,
 duration, bag_family, disenchant_id, food_type, min_money_loot, max_money_loot, extra_flags, other_team_entry,
 script_name)
 values
- ('51757', '0', '4', '1', 'Ivy Woven Cloak', 'Don\'t worry, the backside has been trimmed.', '8782', '3', '0', '1', '0', '9835', '16', '-1', '-1', '51',
+ ('51757', '0', '4', '1', 'Ivy Woven Cloak', 'Don\'t worry, the backside has been trimmed.', '26951', '3', '0', '1', '0', '9835', '16', '-1', '-1', '51',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '8', '4', '9',
  '7', '8', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '101', '0', '0', '10',
