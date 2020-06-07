@@ -740,6 +740,11 @@ void World::LoadConfigSettings(bool reload)
 
     setConfig(CONFIG_UINT32_ANTIFLOOD_SANCTION,       "Antiflood.Sanction", CHEAT_ACTION_KICK);
 
+    setConfig(CONFIG_BOOL_MAPBOT, "MapBot.Enable", true);
+    setConfig(CONFIG_BOOL_MAPBOT_LOADER, "MapBot.UseMapBotLoader", false);
+    setConfig(CONFIG_UINT32_MAPBOT_HORDE_MAX, "MapBot.MaxHordeBots", 100);
+    setConfig(CONFIG_UINT32_MAPBOT_ALLIANCE_MAX, "MapBot.MaxAllianceBots", 100);
+
     setConfig(CONFIG_BOOL_VISIBILITY_FORCE_ACTIVE_OBJECTS, "Visibility.ForceActiveObjects", true);
     m_relocation_ai_notify_delay = sConfig.GetIntDefault("Visibility.AIRelocationNotifyDelay", 1000u);
     m_relocation_lower_limit_sq  = pow(sConfig.GetFloatDefault("Visibility.RelocationLowerLimit", 10), 2);

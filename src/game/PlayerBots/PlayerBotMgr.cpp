@@ -1602,44 +1602,7 @@ void PlayerBotMgr::MapBotCreator()
         if (mapBotHordeCount >= mapBotHordeMax)
             break;
 
-        uint32 accountId = 0;
-        PlayerBotEntry* e = nullptr;
-        std::map<uint32, PlayerBotEntry*>::iterator iter = m_bots.find(b.guid);
-        if (iter == m_bots.end())
-            accountId = b.account;
-        else
-            accountId = iter->second->accountId;
-
-        if (!accountId)
-        {
-            sLog.outString("Player account %u not found ...", b.guid);
-            break;
-        }
-
-        if (iter != m_bots.end())
-        {
-            e = iter->second;
-        }
-        else
-        {
-            MapBotAI* ai = new MapBotAI(b.race, b.class_, b.map, 0, b.pos_x, b.pos_y, b.pos_z, b.orientation, false, 0);
-            e = new PlayerBotEntry();
-            e->state = PB_STATE_LOADING;
-            e->playerGUID = b.guid;
-            e->chance = 100;
-            e->accountId = accountId;
-            e->isChatBot = false;
-            e->ai = ai;
-            ai->botEntry = e;
-            m_bots[b.guid] = e;
-        }
-
-        e->state = PB_STATE_LOADING;
-        WorldSession* session = new WorldSession(accountId, nullptr, sAccountMgr.GetSecurity(accountId), 0, LOCALE_enUS);
-        session->SetBot(e);
-        sWorld.AddSession(session);
-        m_stats.loadingCount++;
-
+        MapBotAdd(b.guid, b.account, b.race, b.class_, b.pos_x, b.pos_y, b.pos_z, b.orientation, b.map);
         mapBotHordeCount++;
     }
 
@@ -1649,48 +1612,54 @@ void PlayerBotMgr::MapBotCreator()
         if (mapBotAllianceCount >= mapBotAllianceMax)
             break;
 
-        uint32 accountId = 0;
-        PlayerBotEntry* e = nullptr;
-        std::map<uint32, PlayerBotEntry*>::iterator iter = m_bots.find(b.guid);
-        if (iter == m_bots.end())
-            accountId = b.account;
-        else
-            accountId = iter->second->accountId;
-
-        if (!accountId)
-        {
-            sLog.outString("Player account %u not found ...", b.guid);
-            break;
-        }
-
-        if (iter != m_bots.end())
-        {
-            e = iter->second;
-        }
-        else
-        {
-            MapBotAI* ai = new MapBotAI(b.race, b.class_, b.map, 0, b.pos_x, b.pos_y, b.pos_z, b.orientation, false, 0);
-            e = new PlayerBotEntry();
-            e->state = PB_STATE_LOADING;
-            e->playerGUID = b.guid;
-            e->chance = 100;
-            e->accountId = accountId;
-            e->isChatBot = false;
-            e->ai = ai;
-            ai->botEntry = e;
-            m_bots[b.guid] = e;
-        }
-
-        e->state = PB_STATE_LOADING;
-        WorldSession* session = new WorldSession(accountId, nullptr, sAccountMgr.GetSecurity(accountId), 0, LOCALE_enUS);
-        session->SetBot(e);
-        sWorld.AddSession(session);
-        m_stats.loadingCount++;
-
+        MapBotAdd(b.guid, b.account, b.race, b.class_, b.pos_x, b.pos_y, b.pos_z, b.orientation, b.map);
         mapBotAllianceCount++;
     }
 
     sLog.outString("MapBotLoader:  Loaded %u horde bots and %u alliance bots", mapBotHordeCount, mapBotAllianceCount);
+}
+
+bool PlayerBotMgr::MapBotAdd(uint32 guid, uint32 account, uint32 race, uint32 class_, float pos_x, float pos_y, float pos_z, float orientation, uint32 map)
+{
+    uint32 accountId = 0;
+    PlayerBotEntry* e = nullptr;
+    std::map<uint32, PlayerBotEntry*>::iterator iter = m_bots.find(guid);
+    if (iter == m_bots.end())
+        accountId = account;
+    else
+        accountId = iter->second->accountId;
+
+    if (!accountId)
+    {
+        sLog.outString("Player account %u not found ...", guid);
+        return false;
+    }
+
+    if (iter != m_bots.end())
+    {
+        e = iter->second;
+    }
+    else
+    {
+        MapBotAI* ai = new MapBotAI(race, class_, map, 0, pos_x, pos_y, pos_z, orientation, false, 0);
+        e = new PlayerBotEntry();
+        e->state = PB_STATE_LOADING;
+        e->playerGUID = guid;
+        e->chance = 100;
+        e->accountId = accountId;
+        e->isChatBot = false;
+        e->ai = ai;
+        ai->botEntry = e;
+        m_bots[guid] = e;
+    }
+
+    e->state = PB_STATE_LOADING;
+    WorldSession* session = new WorldSession(accountId, nullptr, sAccountMgr.GetSecurity(accountId), 0, LOCALE_enUS);
+    session->SetBot(e);
+    sWorld.AddSession(session);
+    m_stats.loadingCount++;
+
+    return true;
 }
 
 void PlayerBotMgr::MapBotBalancer()

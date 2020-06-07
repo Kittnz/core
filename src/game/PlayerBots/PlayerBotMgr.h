@@ -113,6 +113,7 @@ class PlayerBotMgr
         void MapBotLoader();
         void MapBotCreator();
         void MapBotBalancer();
+        bool MapBotAdd(uint32 guid, uint32 account, uint32 race, uint32 class_, float pos_x, float pos_y, float pos_z, float orientation, uint32 map);
         bool m_useMapBotLoader = false;
 
     protected:
