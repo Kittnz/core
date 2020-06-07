@@ -558,10 +558,10 @@ bool GossipSelect_npc_riding_horse(Player* p_Player, Creature* p_Creature, uint3
     return true;
 }
 
-class DismountAfterTime : public BasicEvent 
+class  StopFlyingAfterTime : public BasicEvent
 {
 public:
-    explicit DismountAfterTime(uint64 player_guid) : BasicEvent(), player_guid(player_guid) {}
+    explicit StopFlyingAfterTime(uint64 player_guid) : BasicEvent(), player_guid(player_guid) {}
 
     bool Execute(uint64 e_time, uint32 p_time) override 
     {
@@ -569,23 +569,21 @@ public:
         if (player) 
         {
             player->Unmount(); 
-            if (player->IsFlying())
-            {
-                player->SetFlying(false);
-                player->UpdateSpeed(MOVE_SWIM, true, 1.0F);
 
-                player->m_movementInfo.UpdateTime(WorldTimer::getMSTime());
-                WorldPacket hover(SMSG_MOVE_SET_HOVER, 31);
-                hover << player->GetPackGUID();
-                hover << player->m_movementInfo;
-                player->SendMovementMessageToSet(std::move(hover), true);
+            player->SetFlying(false);
+            player->UpdateSpeed(MOVE_SWIM, true, 1.0F);
 
-                player->m_movementInfo.UpdateTime(WorldTimer::getMSTime());
-                WorldPacket stop_swim(MSG_MOVE_STOP_SWIM, 31);
-                stop_swim << player->GetPackGUID();
-                stop_swim << player->m_movementInfo;
-                player->SendMovementMessageToSet(std::move(stop_swim), true);
-            }
+            player->m_movementInfo.UpdateTime(WorldTimer::getMSTime());
+            WorldPacket hover(SMSG_MOVE_SET_HOVER, 31);
+            hover << player->GetPackGUID();
+            hover << player->m_movementInfo;
+            player->SendMovementMessageToSet(std::move(hover), true);
+
+            player->m_movementInfo.UpdateTime(WorldTimer::getMSTime());
+            WorldPacket stop_swim(MSG_MOVE_STOP_SWIM, 31);
+            stop_swim << player->GetPackGUID();
+            stop_swim << player->m_movementInfo;
+            player->SendMovementMessageToSet(std::move(stop_swim), true);
         }
         return false;
     }
@@ -612,7 +610,7 @@ bool GossipSelect_npc_riding_gryphon(Player* p_Player, Creature* p_Creature, uin
         {
             p_Player->GetSession()->SendNotification("You have 60 seconds to get to the Uphills!");
             p_Player->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, 6852);
-            p_Player->m_Events.AddEvent(new DismountAfterTime(p_Player->GetGUID()), p_Player->m_Events.CalculateTime(1 * MINUTE * IN_MILLISECONDS));
+            p_Player->m_Events.AddEvent(new StopFlyingAfterTime(p_Player->GetGUID()), p_Player->m_Events.CalculateTime(1 * MINUTE * IN_MILLISECONDS));
             p_Player->SetFlying(true);
             p_Player->UpdateSpeed(MOVE_SWIM, true, 4.0F);
             p_Player->RemoveItemCurrency(422, 1);
@@ -645,7 +643,7 @@ bool GossipSelect_npc_riding_gryphon_back(Player* p_Player, Creature* p_Creature
         {
             p_Player->GetSession()->SendNotification("You have 10 seconds to get back to Northshire Valley!");
             p_Player->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, 6852);
-            p_Player->m_Events.AddEvent(new DismountAfterTime(p_Player->GetGUID()), p_Player->m_Events.CalculateTime(10000));
+            p_Player->m_Events.AddEvent(new StopFlyingAfterTime(p_Player->GetGUID()), p_Player->m_Events.CalculateTime(10000));
             p_Player->SetFlying(true);
             p_Player->UpdateSpeed(MOVE_SWIM, true, 4.0F);
             p_Player->RemoveItemCurrency(422, 1);
