@@ -875,7 +875,7 @@ where entry = @quest_entry;
 UPDATE `creature_template` SET `faction` = 17 WHERE entry = 5043;
 
 -- add middle lane pathing
-INSERT INTO `creature_movement_special` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+replace into `creature_movement_special` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (504301, 1, -8716.43, 884.722, 76.3504, 100, 0, 0, 0),
 (504301, 2, -8742.05, 864.404, 76.5227, 100, 0, 0, 0),
 (504301, 3, -8754.53, 854.314, 82.5392, 100, 0, 0, 0),
@@ -885,7 +885,7 @@ INSERT INTO `creature_movement_special` (`id`, `point`, `position_x`, `position_
 (504301, 7, -8780.68, 833.842, 95.0307, 100, 0, 0, 0);
 
 -- add left lane pathing
-INSERT INTO `creature_movement_special` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+replace into `creature_movement_special` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (504302, 1, -8713.28, 884.912, 76.351, 100, 0, 0, 0),
 (504302, 2, -8740.69, 863.015, 76.448, 100, 0, 0, 0),
 (504302, 3, -8753.21, 852.692, 82.5292, 100, 0, 0, 0),
@@ -895,7 +895,7 @@ INSERT INTO `creature_movement_special` (`id`, `point`, `position_x`, `position_
 (504302, 7, -8778.45, 831.800, 94.8518, 100, 0, 0, 0);
 
 -- add right lane pathing
-INSERT INTO `creature_movement_special` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+replace into `creature_movement_special` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (504303, 1, -8715.18, 887.661, 76.3511, 100, 0, 0, 0),
 (504303, 2, -8742.84, 865.801, 76.4288, 100, 0, 0, 0),
 (504303, 3, -8755.53, 855.885, 82.4662, 100, 0, 0, 0),
@@ -921,7 +921,7 @@ INSERT INTO `event_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, 
 INSERT INTO `event_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (504302, 0, 60, 3, 0, 0, 0, 0, 0, 0, 0, 0, 504302, 0, 0, 0, 0, 0, 0, 0, 'jailbreak - left lane move');
 INSERT INTO `event_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (504303, 0, 60, 3, 0, 0, 0, 0, 0, 0, 0, 0, 504303, 0, 0, 0, 0, 0, 0, 0, 'jailbreak - right lane move');
 
-- update script id's in pathing
+-- update script id's in pathing
 UPDATE `creature_movement_template` SET `script_id` = 504201 WHERE `entry` = 5042 AND `point` IN (1,6,10,13);
 
 -- slight update to timing, emotes and script id for nurse lilian
