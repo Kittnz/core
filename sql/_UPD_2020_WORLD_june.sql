@@ -875,7 +875,7 @@ where entry = @quest_entry;
 UPDATE `creature_template` SET `faction` = 17 WHERE entry = 5043;
 
 -- add middle lane pathing
-INSERT INTO `creature_movement_special` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement_special` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (504301, 1, -8716.43, 884.722, 76.3504, 100, 0, 0, 0),
 (504301, 2, -8742.05, 864.404, 76.5227, 100, 0, 0, 0),
 (504301, 3, -8754.53, 854.314, 82.5392, 100, 0, 0, 0),
@@ -885,7 +885,7 @@ INSERT INTO `creature_movement_special` (`id`, `point`, `position_x`, `position_
 (504301, 7, -8780.68, 833.842, 95.0307, 100, 0, 0, 0);
 
 -- add left lane pathing
-INSERT INTO `creature_movement_special` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement_special` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (504302, 1, -8713.28, 884.912, 76.351, 100, 0, 0, 0),
 (504302, 2, -8740.69, 863.015, 76.448, 100, 0, 0, 0),
 (504302, 3, -8753.21, 852.692, 82.5292, 100, 0, 0, 0),
@@ -895,7 +895,7 @@ INSERT INTO `creature_movement_special` (`id`, `point`, `position_x`, `position_
 (504302, 7, -8778.45, 831.800, 94.8518, 100, 0, 0, 0);
 
 -- add right lane pathing
-INSERT INTO `creature_movement_special` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement_special` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (504303, 1, -8715.18, 887.661, 76.3511, 100, 0, 0, 0),
 (504303, 2, -8742.84, 865.801, 76.4288, 100, 0, 0, 0),
 (504303, 3, -8755.53, 855.885, 82.4662, 100, 0, 0, 0),
@@ -905,31 +905,31 @@ INSERT INTO `creature_movement_special` (`id`, `point`, `position_x`, `position_
 (504303, 7, -8781.85, 835.478, 94.9935, 100, 0, 0, 0);
 
 -- add event
-INSERT INTO `creature_ai_events` (`id`, `creature_id`, `condition_id`, `event_type`, `event_inverse_phase_mask`, `event_chance`, `event_flags`, `event_param1`, `event_param2`, `event_param3`, `event_param4`, `action1_script`, `action2_script`, `action3_script`, `comment`) VALUES (171902, 1719, 0, 1, 0, 100, 1, 1800000, 1800000, 1800000, 1800000, 171902, 0, 0, 'Warden Thelwater - Start Stockade Jailbreak Event');
+REPLACE INTO `creature_ai_events` (`id`, `creature_id`, `condition_id`, `event_type`, `event_inverse_phase_mask`, `event_chance`, `event_flags`, `event_param1`, `event_param2`, `event_param3`, `event_param4`, `action1_script`, `action2_script`, `action3_script`, `comment`) VALUES (171902, 1719, 0, 1, 0, 100, 1, 1800000, 1800000, 1800000, 1800000, 171902, 0, 0, 'Warden Thelwater - Start Stockade Jailbreak Event');
 
 -- add event scripts
-INSERT INTO `creature_ai_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (171902, 0, 10, 5043, 15000, 0, 0, 0, 0, 0, 0, 1, 504301, 6, 6, -8716.43, 884.722, 76.3504, 3.84802, 0, 'jailbreak - summon middle lane 1');
-INSERT INTO `creature_ai_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (171902, 0, 10, 5043, 15000, 0, 0, 0, 0, 0, 0, 1, 504302, 6, 6, -8713.28, 884.912, 76.351, 3.84802, 0, 'jailbreak - summon left lane 1');
-INSERT INTO `creature_ai_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (171902, 0, 10, 5043, 15000, 0, 0, 0, 0, 0, 0, 1, 504303, 6, 6, -8715.18, 887.661, 76.3511, 3.84802, 0, 'jailbreak - summon right lane 1');
-INSERT INTO `creature_ai_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (171902, 0, 10, 5043, 15000, 0, 0, 0, 0, 0, 0, 1, 504301, 6, 6, -8714.18, 886.3988, 76.3511, 3.84802, 0, 'jailbreak - summon middle lane 2');
-INSERT INTO `creature_ai_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (171902, 0, 10, 5043, 15000, 0, 0, 0, 0, 0, 0, 1, 504301, 6, 6, -8712.94, 887.305, 76.3511, 3.84802, 0, 'jailbreak - summon middle lane 3');
-INSERT INTO `creature_ai_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (171902, 0, 10, 5043, 15000, 0, 0, 0, 0, 0, 0, 1, 504302, 6, 6, -8711.87, 885.939, 76.3511, 3.84802, 0, 'jailbreak - summon left lane 2');
-INSERT INTO `creature_ai_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (171902, 0, 10, 5043, 15000, 0, 0, 0, 0, 0, 0, 1, 504303, 6, 6, -8714.06, 888.635, 76.3511, 3.84802, 0, 'jailbreak - summon right lane 2');
+REPLACE INTO `creature_ai_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (171902, 0, 10, 5043, 15000, 0, 0, 0, 0, 0, 0, 1, 504301, 6, 6, -8716.43, 884.722, 76.3504, 3.84802, 0, 'jailbreak - summon middle lane 1');
+REPLACE INTO `creature_ai_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (171902, 0, 10, 5043, 15000, 0, 0, 0, 0, 0, 0, 1, 504302, 6, 6, -8713.28, 884.912, 76.351, 3.84802, 0, 'jailbreak - summon left lane 1');
+REPLACE INTO `creature_ai_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (171902, 0, 10, 5043, 15000, 0, 0, 0, 0, 0, 0, 1, 504303, 6, 6, -8715.18, 887.661, 76.3511, 3.84802, 0, 'jailbreak - summon right lane 1');
+REPLACE INTO `creature_ai_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (171902, 0, 10, 5043, 15000, 0, 0, 0, 0, 0, 0, 1, 504301, 6, 6, -8714.18, 886.3988, 76.3511, 3.84802, 0, 'jailbreak - summon middle lane 2');
+REPLACE INTO `creature_ai_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (171902, 0, 10, 5043, 15000, 0, 0, 0, 0, 0, 0, 1, 504301, 6, 6, -8712.94, 887.305, 76.3511, 3.84802, 0, 'jailbreak - summon middle lane 3');
+REPLACE INTO `creature_ai_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (171902, 0, 10, 5043, 15000, 0, 0, 0, 0, 0, 0, 1, 504302, 6, 6, -8711.87, 885.939, 76.3511, 3.84802, 0, 'jailbreak - summon left lane 2');
+REPLACE INTO `creature_ai_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (171902, 0, 10, 5043, 15000, 0, 0, 0, 0, 0, 0, 1, 504303, 6, 6, -8714.06, 888.635, 76.3511, 3.84802, 0, 'jailbreak - summon right lane 2');
 
 -- add event scripts, scripts
-INSERT INTO `event_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (504301, 0, 60, 3, 0, 0, 0, 0, 0, 0, 0, 0, 504301, 0, 0, 0, 0, 0, 0, 0, 'jailbreak - middle lane move');
-INSERT INTO `event_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (504302, 0, 60, 3, 0, 0, 0, 0, 0, 0, 0, 0, 504302, 0, 0, 0, 0, 0, 0, 0, 'jailbreak - left lane move');
-INSERT INTO `event_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (504303, 0, 60, 3, 0, 0, 0, 0, 0, 0, 0, 0, 504303, 0, 0, 0, 0, 0, 0, 0, 'jailbreak - right lane move');
+REPLACE INTO `event_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (504301, 0, 60, 3, 0, 0, 0, 0, 0, 0, 0, 0, 504301, 0, 0, 0, 0, 0, 0, 0, 'jailbreak - middle lane move');
+REPLACE INTO `event_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (504302, 0, 60, 3, 0, 0, 0, 0, 0, 0, 0, 0, 504302, 0, 0, 0, 0, 0, 0, 0, 'jailbreak - left lane move');
+REPLACE INTO `event_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (504303, 0, 60, 3, 0, 0, 0, 0, 0, 0, 0, 0, 504303, 0, 0, 0, 0, 0, 0, 0, 'jailbreak - right lane move');
 
-- update script id's in pathing
+-- update script id's in pathing
 UPDATE `creature_movement_template` SET `script_id` = 504201 WHERE `entry` = 5042 AND `point` IN (1,6,10,13);
 
 -- slight update to timing, emotes and script id for nurse lilian
 DELETE FROM `creature_movement_scripts` WHERE `id`=5042;
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (504201, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1680, 1681, 1685, 1682, 0, 0, 0, 0, 0, 'Nurse Lilian Pathing - Speech');
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (504201, 2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Nurse Lilian Pathing - Speech Emote');
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (504201, 1, 28, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Nurse Lilian Pathing - Crouch');
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (504201, 10, 28, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Nurse Lilian Pathing - Stand');
+REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (504201, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1680, 1681, 1685, 1682, 0, 0, 0, 0, 0, 'Nurse Lilian Pathing - Speech');
+REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (504201, 2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Nurse Lilian Pathing - Speech Emote');
+REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (504201, 1, 28, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Nurse Lilian Pathing - Crouch');
+REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (504201, 10, 28, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Nurse Lilian Pathing - Stand');
 
 -- Massive Longbow - Skolmin Goldfury
 UPDATE `npc_vendor` SET `maxcount` = 1, `incrtime` = 10800 WHERE `entry` = 5122 AND `item` = 11307;
@@ -963,7 +963,7 @@ DELETE FROM `npc_vendor` WHERE `entry` = 7976 AND `item` = 2533;
 
 
 -- Missing Items - Brenwyn Wintersteel
-INSERT INTO `npc_vendor` (`entry`, `item`) VALUES
+REPLACE INTO `npc_vendor` (`entry`, `item`) VALUES
 (5120, 3111),
 (5120, 2946),
 (5120, 3107),
