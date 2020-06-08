@@ -1082,3 +1082,19 @@ UPDATE `creature` SET `position_x` = -8825.5, `position_y` = 630.778, `position_
 
 -- correct position of melgris malagan
 UPDATE `creature` SET `position_x` = -8824.71, `position_y` = 629.821, `position_z` = 94.1077, `orientation` = 4.03171 WHERE `id` = 12480;
+
+-- Fix Reginald's horse faction
+UPDATE `creature_template` SET `faction` = 12 WHERE `entry` = 12581;
+
+-- Fix equip template of spawned Onyxia guards
+UPDATE `creature_equip_template` SET `equipentry1` = 1899, `equipentry2` = 143 WHERE `entry` = 12739;
+
+-- Fixing broadcast texts
+UPDATE `broadcast_text` SET `EmoteId0` = 1 WHERE `ID` IN (8090, 8107, 8121, 8123, 8125, 8132, 8126, 8126, 8130, 8210, 8212, 8215, 8216, 8218, 8219, 8227, 8235);
+UPDATE `broadcast_text` SET `EmoteId0` = 22 WHERE `ID` IN (8109, 8127, 8128, 8129);
+UPDATE `broadcast_text` SET `EmoteId0` = 35 WHERE `ID` = 8091;
+UPDATE `broadcast_text` SET `EmoteId0` = 11 WHERE `ID` = 8214;
+UPDATE `broadcast_text` SET `EmoteId0` = 25 WHERE `ID` IN (8206, 8207, 8211);
+
+UPDATE `broadcast_text` SET `Type` = 6 WHERE `ID` = 8119;
+UPDATE `broadcast_text` SET `Type` = 1 WHERE `ID` IN (8109, 8129, 8248);

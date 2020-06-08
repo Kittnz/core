@@ -22,7 +22,7 @@ Player* npc_reginald_windsorAI::GetPlayer() const
 
 Creature* npc_reginald_windsorAI::GetGuard(uint8 num) const
 {
-    return me->GetMap()->GetCreature(GardesGUIDs[num]);
+    return me->GetMap()->GetCreature(GuardsGUIDs[num]);
 }
 
 void npc_reginald_windsorAI::ResetCreature()
@@ -30,7 +30,7 @@ void npc_reginald_windsorAI::ResetCreature()
     m_bRoweKnows = false;
     m_squireRoweGuid.Clear();
 
-    m_uiDespawnTimer = 5 * MINUTE*IN_MILLISECONDS;
+    m_uiDespawnTimer = 5 * MINUTE * IN_MILLISECONDS;
     Timer = 3000;
     Tick = 0;
     IDSpeech = 0;
@@ -46,20 +46,20 @@ void npc_reginald_windsorAI::ResetCreature()
 
     for (uint8 i = 0; i < 6; i++)
     {
-        GardeTimer[i] = 0;
-        GardeNeed[i] = false;
+        GuardTimer[i] = 0;
+        GuardNeed[i] = false;
     }
-    for (uint8 i = 0; i < 30; i++)
-        GardesGUIDs[i] = 0;
+    for (uint64 & guid : GuardsGUIDs)
+        guid = 0;
 
-    for (uint8 i = 0; i < 10; i++)
-        DragsGUIDs[i] = 0;
+    for (uint64 & guid : DragsGUIDs)
+        guid = 0;
 }
 
 void npc_reginald_windsorAI::JustDied(Unit* /*pKiller*/)
 {
     PokeRowe();
-    m_creature->DespawnOrUnsummon(1500);
+    m_creature->DespawnOrUnsummon(7 * MINUTE * IN_MILLISECONDS);
 }
 
 void npc_reginald_windsorAI::PokeRowe()
@@ -78,61 +78,22 @@ void npc_reginald_windsorAI::PokeRowe()
     }
 }
 
-void npc_reginald_windsorAI::DoTalk(Unit* pWho, bool yell, Unit* pTarget)
+void npc_reginald_windsorAI::AdvanceDialog(Unit* pWho, Unit* pTarget)
 {
-    yell ? pWho->MonsterYell(WindsorTalk[IDSpeech], 0, pTarget) : pWho->MonsterSay(WindsorTalk[IDSpeech], 0, pTarget);
+    DoScriptText(MasqueradeDialogSteps[IDSpeech], pWho, pTarget);
     IDSpeech++;
 }
 
-void npc_reginald_windsorAI::SituationFinale()
+void npc_reginald_windsorAI::CompleteQuest()
 {
-    Player* pPlayer = GetPlayer();
-    std::list<Creature*> MobListe;
-
-    GetCreatureListWithEntryInGrid(MobListe, m_creature, NPC_ONYXIA_ELITE_GUARD, 150.0f);
-    for (auto itr = MobListe.begin(); itr != MobListe.end(); ++itr)
-    {
-        (*itr)->Respawn();
-        (*itr)->UpdateEntry(NPC_STORMWIND_ROYAL_GUARD);
-        (*itr)->AIM_Initialize();
-    }
-
-    if (Creature* Bolvar = m_creature->FindNearestCreature(NPC_BOLVAR_FORDRAGON, 150.0f))
-    {
-        Bolvar->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER | UNIT_NPC_FLAG_GOSSIP);
-        Bolvar->GetMotionMaster()->MoveTargetedHome();
-    }
-
-    if (Creature* Anduin = m_creature->FindNearestCreature(NPC_ANDUIN_WRYNN, 150.0f))
-    {
-        float X = 0.0f;
-        float Y = 0.0f;
-        float Z = 0.0f;
-        Anduin->GetRespawnCoord(X, Y, Z);
-        Anduin->GetMotionMaster()->MovePoint(0, X, Y, Z);
-        float x = Anduin->GetPositionX() - X;
-        float y = Anduin->GetPositionY() - Y;
-        FinalTimer = 1000 + sqrt((x * x) + (y * y)) / (Anduin->GetSpeed(MOVE_WALK) * 0.001f);
-        PhaseFinale = true;
-    }
-
-    if (Creature* Onyxia = m_creature->FindNearestCreature(NPC_KATRANA_PRESTOR, 150.0f))
-    {
-        Onyxia->RemoveAurasDueToSpell(SPELL_GREATER_INVISIBILITY);
-        Onyxia->CastSpell(Onyxia, SPELL_INVISIBILITY, true);
-    }
-
-    m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
-
-    if (pPlayer)
+    if (Player* pPlayer = GetPlayer())
     {
         if (Group* jGroup = pPlayer->GetGroup())
         {
             for (GroupReference* pRef = jGroup->GetFirstMember(); pRef != nullptr; pRef = pRef->next())
             {
-                if (pRef)
-                    if (pRef->getSource()->GetQuestStatus(QUEST_THE_GREAT_MASQUERADE) == QUEST_STATUS_INCOMPLETE)
-                        pRef->getSource()->CompleteQuest(QUEST_THE_GREAT_MASQUERADE);
+                if (pRef->getSource()->GetQuestStatus(QUEST_THE_GREAT_MASQUERADE) == QUEST_STATUS_INCOMPLETE)
+                    pRef->getSource()->CompleteQuest(QUEST_THE_GREAT_MASQUERADE);
             }
         }
         else
@@ -143,9 +104,43 @@ void npc_reginald_windsorAI::SituationFinale()
     }
 }
 
-void npc_reginald_windsorAI::UpdateAI_corpse(const uint32 uiDiff)
+void npc_reginald_windsorAI::EndScene()
 {
-    if (PhaseFinale == false)
+    if (Creature* Bolvar = m_creature->FindNearestCreature(NPC_BOLVAR_FORDRAGON, 150.0f))
+    {
+        float X = 0.0f;
+        float Y = 0.0f;
+        float Z = 0.0f;
+        float orientation = 0.0f;
+        Bolvar->SetStandState(UNIT_STAND_STATE_STAND);
+        Bolvar->GetRespawnCoord(X, Y, Z, &orientation);
+        Bolvar->GetMotionMaster()->MovePoint(0, X, Y, Z, MOVE_NONE, 0, orientation);
+    }
+
+    if (Creature* Anduin = m_creature->FindNearestCreature(NPC_ANDUIN_WRYNN, 150.0f))
+    {
+        float X = 0.0f;
+        float Y = 0.0f;
+        float Z = 0.0f;
+        float orientation = 0.0f;
+        Anduin->GetRespawnCoord(X, Y, Z, &orientation);
+        Anduin->GetMotionMaster()->MovePoint(0, X, Y, Z, MOVE_NONE, 0, orientation);
+        float x = Anduin->GetPositionX() - X;
+        float y = Anduin->GetPositionY() - Y;
+        FinalTimer = 1000 + sqrt((x * x) + (y * y)) / (Anduin->GetSpeed(MOVE_WALK) * 0.001f);
+        PhaseFinale = true;
+    }
+
+    if (Creature* Onyxia = m_creature->FindNearestCreature(NPC_LADY_ONYXIA, 150.0f))
+    {
+        Onyxia->RemoveAurasDueToSpell(SPELL_GREATER_INVISIBILITY);
+        Onyxia->CastSpell(Onyxia, SPELL_INVISIBILITY, true);
+    }
+}
+
+void npc_reginald_windsorAI::UpdateAI_corpse(uint32 const uiDiff)
+{
+    if (!PhaseFinale)
         return;
 
     if (FinalTimer < uiDiff)
@@ -164,7 +159,7 @@ void npc_reginald_windsorAI::UpdateAI_corpse(const uint32 uiDiff)
             Anduin->GetRespawnCoord(X, Y, Z, &O);
             Anduin->SetFacingTo(O);
         }
-        if (Creature* Onyxia = m_creature->FindNearestCreature(NPC_KATRANA_PRESTOR, 150.0f))
+        if (Creature* Onyxia = m_creature->FindNearestCreature(NPC_LADY_ONYXIA, 150.0f))
         {
             Onyxia->GetRespawnCoord(X, Y, Z, &O);
             Onyxia->SetFacingTo(O);
@@ -177,12 +172,11 @@ void npc_reginald_windsorAI::UpdateAI_corpse(const uint32 uiDiff)
     else
         FinalTimer -= uiDiff;
 
-    if (TheEnd == true)
+    if (TheEnd)
     {
         if (FinalTimer < uiDiff)
         {
             PokeRowe();
-            m_creature->DisappearAndDie();
             TheEnd = false;
         }
     }
@@ -218,37 +212,37 @@ void npc_reginald_windsorAI::MoveInLineOfSight(Unit* Victim)
             Victim->GetEntry() == NPC_STORMWIND_ROYAL_GUARD ||
             Victim->GetEntry() == NPC_STORMWIND_CITY_PATROL)
         {
-            if (Victim->GetDistance2d(m_creature) < 8.0f && NeedCheck == true)
+            if (Victim->GetDistance2d(m_creature) < 8.0f && NeedCheck)
             {
                 bool Continuer = true;
-                for (int i = 0; i < 30; i++)
+                for (uint64 guid : GuardsGUIDs)
                 {
-                    if (Victim->GetGUID() == GardesGUIDs[i] || m_creature->GetPositionY() < 360)
+                    if (Victim->GetGUID() == guid || m_creature->GetPositionY() < 360)
                         Continuer = false;
                 }
-                if (Continuer == true)
+                if (Continuer)
                 {
                     Victim->SetFacingToObject(m_creature);
                     Victim->HandleEmote(EMOTE_ONESHOT_SALUTE);
                     Victim->MonsterSay(GetRandomGuardText());
                     int Var = 0;
-                    while (GardesGUIDs[Var] && Var < 29)
+                    while (GuardsGUIDs[Var] && Var < 29)
                         Var++;
 
-                    GardesGUIDs[Var] = Victim->GetGUID();
+                    GuardsGUIDs[Var] = Victim->GetGUID();
                 }
             }
         }
     }
 }
 
-void npc_reginald_windsorAI::SpellHit(Unit* /*pCaster*/, const SpellEntry* pSpellEntry)
+void npc_reginald_windsorAI::SpellHit(Unit* /*pCaster*/, SpellEntry const* pSpellEntry)
 {
     if (pSpellEntry->Id == SPELL_WINDSOR_DEATH)
         m_creature->SetFeignDeath(true);
 }
 
-void npc_reginald_windsorAI::UpdateAI(const uint32 uiDiff)
+void npc_reginald_windsorAI::UpdateAI(uint32 const uiDiff)
 {
     // in case of idle / afk players
     if (m_uiDespawnTimer < uiDiff)
@@ -261,46 +255,77 @@ void npc_reginald_windsorAI::UpdateAI(const uint32 uiDiff)
 
     for (int i = 0; i < 6; i++)
     {
-        if (GardeNeed[i] == true)
+        if (GuardNeed[i])
         {
-            if (GardeTimer[i] < uiDiff)
+            if (GuardTimer[i] < uiDiff)
             {
-                if (Creature* pGarde = GetGuard(i))
+                if (Creature* pGuard = GetGuard(i))
                 {
                     int Var = i + 7;
-                    pGarde->SetFacingTo(WindsorEventMove[Var].o);
-                    pGarde->SetStandState(UNIT_STAND_STATE_KNEEL);
-                    GardeNeed[i] = false;
+                    pGuard->SetFacingTo(WindsorEventMove[Var].o);
+                    pGuard->SetStandState(UNIT_STAND_STATE_KNEEL);
+                    GuardNeed[i] = false;
                 }
             }
             else
-                GardeTimer[i] -= uiDiff;
+                GuardTimer[i] -= uiDiff;
         }
     }
     if (Begin)
     {
-        if (m_creature->GetDistance2d(WindsorDeplacement[0].x, WindsorDeplacement[0].y) < 2.0f)
+        if (m_creature->GetDistance2d(WindsorWaypoints[0].x, WindsorWaypoints[0].y) < 2.0f)
         {
-            Begin = false;
-            m_creature->Unmount();
-            m_creature->CastSpell(m_creature, SPELL_WINDSOR_DISMISS_HORSE, true);
-            m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
+            if (Timer <= uiDiff)
+            {
+                Begin = false;
+                m_creature->SetWalk(true);
+                m_creature->SetSpeedRate(MOVE_WALK, 1.0f);
 
+                if (Creature* pRowe = m_creature->FindNearestCreature(NPC_ROWE, 50.0f))
+                    pRowe->HandleEmote(EMOTE_ONESHOT_SALUTE);
+
+                Timer = 2000;
+                SummonHorse = true;
+            }
+            else
+                Timer -= uiDiff;
+        }
+    }
+
+    if (SummonHorse)
+    {
+        if (Timer <= uiDiff)
+        {
+            SummonHorse = false;
+            m_creature->Unmount();
+            DoCast(m_creature, SPELL_WINDSOR_DISMISS_HORSE, true);
             if (Creature* pMercutio = m_creature->FindNearestCreature(NPC_MERCUTIO, 10.0f))
             {
-                pMercutio->SetSpeedRate(MOVE_WALK, 2.5f, true);
-                pMercutio->setFaction(m_creature->getFaction());
-                pMercutio->GetMotionMaster()->MovePoint(0, -9148.395508f, 371.322174f, 90.543655f);
-                pMercutio->ForcedDespawn(12000);
+                pMercutio->SetWalk(false);
                 m_creature->SetFacingToObject(pMercutio);
-                m_creature->MonsterSay("Yawww!");
-                m_creature->HandleEmote(EMOTE_ONESHOT_ATTACKUNARMED);
             }
-
-            m_creature->SetWalk(true);
-            m_creature->SetSpeedRate(MOVE_WALK, 1.0f, true);
-            GreetPlayer = true;
+            ShooHorse = true;
+            Timer = 2000;
         }
+        else
+            Timer -= uiDiff;
+    }
+
+    if (ShooHorse)
+    {
+        if (Timer <= uiDiff)
+        {
+            ShooHorse = false;
+            if (Creature* pMercutio = m_creature->FindNearestCreature(NPC_MERCUTIO, 10.0f))
+            {
+                AdvanceDialog(m_creature);
+                pMercutio->GetMotionMaster()->MovePoint(0, -9148.395508f, 371.322174f, 90.543655f);
+            }
+            GreetPlayer = true;
+            Timer = 5000;
+        }
+        else
+            Timer -= uiDiff;
     }
 
     if (!BeginQuest)
@@ -313,12 +338,9 @@ void npc_reginald_windsorAI::UpdateAI(const uint32 uiDiff)
                 if (pPlayer)
                 {
                     m_creature->SetFacingToObject(pPlayer);
-                    char sMessage[200];
-                    sprintf(sMessage, "I knew you would come, %s. It is good to see you again, friend.", pPlayer->GetName());
-                    m_creature->MonsterSay(sMessage);
-                    m_creature->HandleEmote(EMOTE_ONESHOT_TALK);
+                    m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
+                    AdvanceDialog(m_creature, pPlayer);
                 }
-                Timer = 5000;
                 GreetPlayer = false;
             }
             else
@@ -335,409 +357,424 @@ void npc_reginald_windsorAI::UpdateAI(const uint32 uiDiff)
         uint32 eventGardId = 6;
         switch (Tick)
         {
-        case 0:
-            m_uiDespawnTimer = 20 * MINUTE*IN_MILLISECONDS;
-            m_creature->SetFacingTo(0.659f);
-            m_creature->MonsterYellToZone(8109);
-            m_creature->HandleEmote(EMOTE_ONESHOT_SHOUT);
-            Timer = 5000;
-            break;
-        case 1:
-            for (int i = 0; i < 6; i++)
-            {
-                int Var = i + 1;
-                Creature* pSummon = m_creature->SummonCreature(NPC_STORMWIND_CITY_GUARD,
-                    WindsorEventMove[Var].x,
-                    WindsorEventMove[Var].y,
-                    WindsorEventMove[Var].z,
-                    WindsorEventMove[Var].o, TEMPSUMMON_TIMED_DESPAWN, 240 * IN_MILLISECONDS);
-                if (pSummon)
+            case 0:
+                m_uiDespawnTimer = 20 * MINUTE * IN_MILLISECONDS;
+                AdvanceDialog(m_creature);
+                Timer = 5000;
+                break;
+            case 1:
+                m_creature->SetFacingTo(0.659f);
+                AdvanceDialog(m_creature);
+                Timer = 5000;
+                break;
+            case 2:
+                for (int i = 0; i < 6; i++)
                 {
-                    GardesGUIDs[i] = pSummon->GetGUID();
-                    pSummon->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
+                    int Var = i + 1;
+                    Creature* pSummon = m_creature->SummonCreature(NPC_STORMWIND_CITY_GUARD,
+                                                                   WindsorEventMove[Var].x,
+                                                                   WindsorEventMove[Var].y,
+                                                                   WindsorEventMove[Var].z,
+                                                                   WindsorEventMove[Var].o, TEMPSUMMON_TIMED_DESPAWN, 240 * IN_MILLISECONDS);
+                    if (pSummon)
+                    {
+                        GuardsGUIDs[i] = pSummon->GetGUID();
+                        pSummon->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
+                    }
                 }
-            }
-            if (Creature* Onyxia = m_creature->SummonCreature(NPC_KATRANA_PRESTOR, -9075.6f, 466.11f, 120.383f, 6.27f, TEMPSUMMON_TIMED_DESPAWN, 10 * IN_MILLISECONDS))
-            {
-                Onyxia->SetDisplayId(11686);
-                Onyxia->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-                Onyxia->MonsterYellToZone(WindsorTalk[IDSpeech]);
-                IDSpeech++;
-            }
-            if (Creature* General = m_creature->FindNearestCreature(NPC_MARCUS_JONATHAN, 150.0f))
-            {
-                General->GetMotionMaster()->MovePoint(0, WindsorEventMove[0].x, WindsorEventMove[0].y, WindsorEventMove[0].z);
-                General->Unmount();
-            }
-            m_creature->GetMotionMaster()->MovePoint(0, WindsorDeplacement[1].x, WindsorDeplacement[1].y, WindsorDeplacement[1].z);
-            X = m_creature->GetPositionX() - WindsorDeplacement[1].x;
-            Y = m_creature->GetPositionY() - WindsorDeplacement[1].y;
-            Timer = 1000 + sqrt(X * X + Y * Y) / (m_creature->GetSpeed(MOVE_WALK) * 0.001f);
-            break;
-        case 2:
-            if (Creature* General = m_creature->FindNearestCreature(NPC_MARCUS_JONATHAN, 150.0f))
-            {
-                DoTalk(General, false);
-                General->HandleEmote(EMOTE_ONESHOT_TALK);
-            }
-            Timer = 10000;
-            break;
-        case 3:
-            DoTalk(m_creature, false);
-            m_creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            Timer = 10000;
-            break;
-        case 4:
-            DoTalk(m_creature, false);
-            m_creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            Timer = 10000;
-            break;
-        case 5:
-            if (Creature* General = m_creature->FindNearestCreature(NPC_MARCUS_JONATHAN, 150.0f))
-            {
-                DoTalk(General, false);
-                General->HandleEmote(EMOTE_ONESHOT_TALK);
-                General->MonsterTextEmote("General Marcus Jonathan appears lost in contemplation.", nullptr);
-            }
-            Timer = 10000;
-            break;
-        case 6:
-            if (Creature* General = m_creature->FindNearestCreature(NPC_MARCUS_JONATHAN, 150.0f))
-            {
-                DoTalk(General, false);
-                General->HandleEmote(EMOTE_ONESHOT_TALK);
-            }
-            Timer = 10000;
-            break;
-        case 7:
-            DoTalk(m_creature, false);
-            m_creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            Timer = 10000;
-            break;
-        case 8:
-            DoTalk(m_creature, false);
-            m_creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            Timer = 10000;
-            break;
-        case 9:
-            if (Creature* General = m_creature->FindNearestCreature(NPC_MARCUS_JONATHAN, 150.0f))
-            {
-                if (Creature* pGarde = GetGuard(0))
-                    General->SetFacingToObject(pGarde);
-                General->HandleEmote(EMOTE_ONESHOT_EXCLAMATION);
-                DoTalk(General, false);
-            }
-            Timer = 4000;
-            break;
-        case 10:
-            eventGardId = 0;
-            break;
-        case 11:
-            eventGardId = 1;
-            break;
-        case 12:
-            eventGardId = 2;
-            break;
-        case 13:
-            if (Creature* General = m_creature->FindNearestCreature(NPC_MARCUS_JONATHAN, 150.0f))
-            {
-                if (Creature* pGarde = GetGuard(3))
-                    General->SetFacingToObject(pGarde);
-                General->HandleEmote(EMOTE_ONESHOT_EXCLAMATION);
-                DoTalk(General, false);
-            }
-            Timer = 4000;
-            break;
-        case 14:
-            eventGardId = 3;
-            break;
-        case 15:
-            eventGardId = 4;
-            break;
-        case 16:
-            eventGardId = 5;
-            break;
-        case 17:
-            if (Creature* General = m_creature->FindNearestCreature(NPC_MARCUS_JONATHAN, 150.0f))
-            {
-                General->SetFacingToObject(m_creature);
-                DoTalk(General, true);
-                General->HandleEmote(EMOTE_ONESHOT_SHOUT);
-            }
-            Timer = 5000;
-            break;
-        case 18:
-            if (Creature* General = m_creature->FindNearestCreature(NPC_MARCUS_JONATHAN, 150.0f))
-                General->HandleEmote(EMOTE_ONESHOT_SALUTE);
-            Timer = 5000;
-            break;
-        case 19:
-            if (Creature* General = m_creature->FindNearestCreature(NPC_MARCUS_JONATHAN, 150.0f))
-                DoTalk(General, false);
-            Timer = 10000;
-            break;
-        case 20:
-            if (Creature* General = m_creature->FindNearestCreature(NPC_MARCUS_JONATHAN, 150.0f))
-            {
-                General->GetMotionMaster()->MovePoint(0, WindsorEventMove[13].x, WindsorEventMove[13].y, WindsorEventMove[13].z);
-                X = General->GetPositionX() - WindsorEventMove[13].x;
-                Y = General->GetPositionY() - WindsorEventMove[13].y;
+                if (Creature* Onyxia = m_creature->SummonCreature(NPC_KATRANA_PRESTOR, -9075.6f, 466.11f, 120.383f, 6.27f, TEMPSUMMON_TIMED_DESPAWN, 10 * IN_MILLISECONDS))
+                {
+                    Onyxia->SetDisplayId(11686); // invisible
+                    Onyxia->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                    AdvanceDialog(Onyxia);
+                }
+                if (Creature* General = m_creature->FindNearestCreature(NPC_MARCUS_JONATHAN, 150.0f))
+                {
+                    General->GetMotionMaster()->MovePoint(0, WindsorEventMove[0].x, WindsorEventMove[0].y, WindsorEventMove[0].z);
+                    General->Unmount();
+                }
+                m_creature->GetMotionMaster()->MovePoint(0, WindsorWaypoints[1].x, WindsorWaypoints[1].y, WindsorWaypoints[1].z);
+                X = m_creature->GetPositionX() - WindsorWaypoints[1].x;
+                Y = m_creature->GetPositionY() - WindsorWaypoints[1].y;
                 Timer = 1000 + sqrt(X * X + Y * Y) / (m_creature->GetSpeed(MOVE_WALK) * 0.001f);
-            }
-            else Timer = 1000;
-            break;
-        case 21:
-            if (Creature* General = m_creature->FindNearestCreature(NPC_MARCUS_JONATHAN, 150.0f))
-            {
-                General->HandleEmote(EMOTE_STATE_KNEEL);
-                General->SetFacingTo(WindsorEventMove[13].o);
-                m_creature->SetFacingToObject(General);
-                DoTalk(m_creature, false);
-            }
-            Timer = 10000;
-            break;
-        case 22:
-            if (Creature* pGarde = GetGuard(0))
-                m_creature->SetFacingToObject(pGarde);
-            DoTalk(m_creature, false);
-            m_creature->HandleEmote(EMOTE_ONESHOT_POINT);
-            Timer = 5000;
-            break;
-        case 25:
-            NeedCheck = true;
-            break;
-        case 26:
-            if (Creature* General = m_creature->FindNearestCreature(NPC_MARCUS_JONATHAN, 150.0f))
-            {
-                General->ForcedDespawn();
-                General->Respawn();
-            }
-            break;
-        case 40:
-            m_uiDespawnTimer = 10 * MINUTE*IN_MILLISECONDS;
-            BeginQuest = false;
-            m_creature->SetUInt32Value(UNIT_NPC_FLAGS, 1);
-            DoTalk(m_creature, false);
-            break;
-        case 47:
-            DoTalk(m_creature, false);
-            if (Creature* Bolvar = m_creature->FindNearestCreature(NPC_BOLVAR_FORDRAGON, 150.0f))
-                Bolvar->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER | UNIT_NPC_FLAG_GOSSIP);
-            if (Creature* Onyxia = m_creature->FindNearestCreature(NPC_KATRANA_PRESTOR, 150.0f))
-                Onyxia->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER | UNIT_NPC_FLAG_GOSSIP);
-            Timer = 10000;
-            break;
-        case 48:
-            if (Creature* Bolvar = m_creature->FindNearestCreature(NPC_BOLVAR_FORDRAGON, 150.0f))
-                DoTalk(Bolvar, false);
-            Timer = 500;
-            break;
-        case 49:
-            if (Creature* Anduin = m_creature->FindNearestCreature(NPC_ANDUIN_WRYNN, 150.0f))
-                Anduin->GetMotionMaster()->MovePoint(0, WindsorEventMove[14].x, WindsorEventMove[14].y, WindsorEventMove[14].z);
-            Timer = 5000;
-            break;
-        case 50:
-            if (Creature* Onyxia = m_creature->FindNearestCreature(NPC_KATRANA_PRESTOR, 150.0f))
-            {
-                m_creature->SetFacingToObject(Onyxia);
-                DoTalk(m_creature, false);
-                m_creature->HandleEmote(EMOTE_ONESHOT_POINT);
-            }
-            Timer = 10000;
-            break;
-        case 51:
-        case 52:
-            if (Creature* Onyxia = m_creature->FindNearestCreature(NPC_KATRANA_PRESTOR, 150.0f))
-            {
-                DoTalk(Onyxia, false);
-                Onyxia->HandleEmote(EMOTE_ONESHOT_TALK);
-            }
-            Timer = 10000;
-            break;
-        case 53:
-            DoTalk(m_creature, false);
-            m_creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            Timer = 7000;
-            break;
-        case 54:
-            m_creature->MonsterTextEmote("Reginald Windsor reaches into his pack and pulls out the encoded tablets.");
-            Timer = 4000;
-            break;
-        case 55:
-            DoTalk(m_creature, false);
-            m_creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            Timer = 6000;
-            break;
-        case 56:
-            DoTalk(m_creature, false);
-            m_creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            Timer = 4000;
-            break;
-        case 57:
-            m_creature->MonsterTextEmote("Reginald Windsor reads from the tablets. Unknown, unheard sounds flow through your consciousness.");
-            Timer = 2000;
-            break;
-        case 58:
-            if (Creature* Onyxia = m_creature->FindNearestCreature(NPC_KATRANA_PRESTOR, 150.0f))
-                m_creature->CastSpell(Onyxia, SPELL_WINSOR_READ_TABLETS, false);
-            Timer = 10000;
-            break;
-        case 59:
-            if (Creature* Onyxia = m_creature->FindNearestCreature(NPC_KATRANA_PRESTOR, 150.0f))
-            {
-                Onyxia->CastSpell(Onyxia, SPELL_ONYXIA_TRANS, true);
-                Onyxia->SetFloatValue(OBJECT_FIELD_SCALE_X, 0.5f);
-            }
-            if (Creature* Bolvar = m_creature->FindNearestCreature(NPC_BOLVAR_FORDRAGON, 150.0f))
-                Bolvar->MonsterTextEmote("Highlord Bolvar Fordragon gasps.");
-            Timer = 2000;
-            break;
-        case 60:
-            if (Creature* Bolvar = m_creature->FindNearestCreature(NPC_BOLVAR_FORDRAGON, 150.0f))
-            {
-                Bolvar->GetMotionMaster()->MovePoint(0, WindsorEventMove[15].x, WindsorEventMove[15].y, WindsorEventMove[15].z);
-                X = Bolvar->GetPositionX() - WindsorEventMove[15].x;
-                Y = Bolvar->GetPositionY() - WindsorEventMove[15].y;
-                Timer = 1000 + sqrt((X * X) + (Y * Y)) / (m_creature->GetSpeed(MOVE_WALK) * 0.001f);
-            }
-            if (Creature* Onyxia = m_creature->FindNearestCreature(NPC_KATRANA_PRESTOR, 150.0f))
-            {
-                DoTalk(Onyxia, false);
-                Onyxia->HandleEmote(EMOTE_ONESHOT_TALK);
-            }
-            else Timer = 5000;
-            break;
-        case 61:
-            if (Creature* Bolvar = m_creature->FindNearestCreature(NPC_BOLVAR_FORDRAGON, 150.0f))
-            {
-                if (Creature* Onyxia = m_creature->FindNearestCreature(NPC_KATRANA_PRESTOR, 150.0f))
-                    Bolvar->SetFacingToObject(Onyxia);
-                DoTalk(Bolvar, true);
-            }
-            Timer = 1000;
-            break;
-        case 62:
-            if (Creature* Onyxia = m_creature->FindNearestCreature(NPC_KATRANA_PRESTOR, 150.0f))
-                Onyxia->MonsterTextEmote("Lady Onyxia laughs.");
-            Timer = 2000;
-            break;
-        case 63:
-            if (Creature* Onyxia = m_creature->FindNearestCreature(NPC_KATRANA_PRESTOR, 150.0f))
-            {
-                Onyxia->MonsterSay("Yesss... Guards, come to your lord's aid!");
-                int Var = 0;
-                GetCreatureListWithEntryInGrid(DragListe, Onyxia, NPC_STORMWIND_ROYAL_GUARD, 25.0f);
-                for (auto itr = DragListe.begin(); itr != DragListe.end(); ++itr)
+                break;
+            case 3:
+                if (Creature* General = m_creature->FindNearestCreature(NPC_MARCUS_JONATHAN, 150.0f))
+                    AdvanceDialog(General);
+                Timer = 5000;
+                break;
+            case 4:
+                AdvanceDialog(m_creature);
+                Timer = 5000;
+                break;
+            case 5:
+                AdvanceDialog(m_creature);
+                Timer = 5000;
+                break;
+            case 6:
+                if (Creature* General = m_creature->FindNearestCreature(NPC_MARCUS_JONATHAN, 150.0f))
+                    AdvanceDialog(General);
+                Timer = 5000;
+                break;
+            case 7:
+                if (Creature* General = m_creature->FindNearestCreature(NPC_MARCUS_JONATHAN, 150.0f))
+                    AdvanceDialog(General);
+                Timer = 5000;
+                break;
+            case 8:
+                if (Creature* General = m_creature->FindNearestCreature(NPC_MARCUS_JONATHAN, 150.0f))
+                    AdvanceDialog(General);
+                Timer = 10000;
+                break;
+            case 9:
+                AdvanceDialog(m_creature);
+                Timer = 5000;
+                break;
+            case 10:
+                AdvanceDialog(m_creature);
+                Timer = 5000;
+                break;
+            case 11:
+                if (Creature* General = m_creature->FindNearestCreature(NPC_MARCUS_JONATHAN, 150.0f))
                 {
-                    DragsGUIDs[Var] = (*itr)->GetGUID();
-                    (*itr)->UpdateEntry(NPC_ONYXIA_ELITE_GUARD);
-                    (*itr)->AIM_Initialize();
-                    (*itr)->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-                    if (!urand(0, 2))
-                        (*itr)->MonsterTextEmote("Onyxia's Elite Guard hisses.");
-                    Var++;
+                    if (Creature* pGuard = GetGuard(0))
+                        General->SetFacingToObject(pGuard);
+                    AdvanceDialog(General);
                 }
-            }
-            Timer = 4000;
-            break;
-        case 64:
-            if (Creature* Onyxia = m_creature->FindNearestCreature(NPC_KATRANA_PRESTOR, 150.0f))
-                Onyxia->CastSpell(m_creature, SPELL_WINDSOR_DEATH, false);
-            Timer = 1500;
-            break;
-        case 65:
-            DoTalk(m_creature, false);
-            if (Creature* Onyxia = m_creature->FindNearestCreature(NPC_KATRANA_PRESTOR, 150.0f))
-            {
-                Onyxia->MonsterSay("Was this fated, Windsor? If it was death that you came for then the prophecy has been fulfilled. May your consciousness rot in the Twisting Nether. Finish the rest of these meddlesome insects, children. Bolvar, you have been a pleasurable puppet.");
-                Onyxia->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_PASSIVE);
+                break;
+            case 12:
+                eventGardId = 0;
+                break;
+            case 13:
+                eventGardId = 1;
+                break;
+            case 14:
+                eventGardId = 2;
+                Timer = 5000;
+                break;
+            case 15:
+                if (Creature* General = m_creature->FindNearestCreature(NPC_MARCUS_JONATHAN, 150.0f))
+                {
+                    if (Creature* pGuard = GetGuard(3))
+                        General->SetFacingToObject(pGuard);
+                    AdvanceDialog(General);
+                }
+                break;
+            case 16:
+                eventGardId = 3;
+                break;
+            case 17:
+                eventGardId = 4;
+                break;
+            case 18:
+                eventGardId = 5;
+                Timer = 5000;
+                break;
+            case 19:
+                if (Creature* General = m_creature->FindNearestCreature(NPC_MARCUS_JONATHAN, 150.0f))
+                {
+                    General->SetFacingToObject(m_creature);
+                    AdvanceDialog(General);
+                }
+                Timer = 5000;
+                break;
+            case 20:
+                if (Creature* General = m_creature->FindNearestCreature(NPC_MARCUS_JONATHAN, 150.0f))
+                    General->HandleEmote(EMOTE_ONESHOT_SALUTE);
+                Timer = 5000;
+                break;
+            case 21:
+                if (Creature* General = m_creature->FindNearestCreature(NPC_MARCUS_JONATHAN, 150.0f))
+                    AdvanceDialog(General);
+                Timer = 5000;
+                break;
+            case 22:
+                if (Creature* General = m_creature->FindNearestCreature(NPC_MARCUS_JONATHAN, 150.0f))
+                {
+                    General->GetMotionMaster()->MovePoint(0, WindsorEventMove[13].x, WindsorEventMove[13].y, WindsorEventMove[13].z);
+                    X = General->GetPositionX() - WindsorEventMove[13].x;
+                    Y = General->GetPositionY() - WindsorEventMove[13].y;
+                    Timer = 1000 + sqrt(X * X + Y * Y) / (m_creature->GetSpeed(MOVE_WALK) * 0.001f);
+                }
+                else Timer = 1000;
+                break;
+            case 23:
+                if (Creature* General = m_creature->FindNearestCreature(NPC_MARCUS_JONATHAN, 150.0f))
+                {
+                    General->SetStandState(UNIT_STAND_STATE_KNEEL);
+                    General->SetFacingTo(WindsorEventMove[13].o);
+                    m_creature->SetFacingToObject(General);
+                    AdvanceDialog(m_creature);
+                }
+                Timer = 10000;
+                break;
+            case 24:
+                if (Creature* pGuard = GetGuard(0))
+                    m_creature->SetFacingToObject(pGuard);
+                AdvanceDialog(m_creature);
+                Timer = 5000;
+                break;
+            case 28:
+                NeedCheck = true;
+                break;
+            case 29:
+                if (Creature* General = m_creature->FindNearestCreature(NPC_MARCUS_JONATHAN, 150.0f))
+                {
+                    General->ForcedDespawn();
+                    General->Respawn();
+                }
+                break;
+            case 43:
+                m_uiDespawnTimer = 10 * MINUTE * IN_MILLISECONDS;
+                BeginQuest = false;
+                m_creature->SetUInt32Value(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
+                AdvanceDialog(m_creature);
+                break;
+            case 50:
+                AdvanceDialog(m_creature);
+                if (Creature* Bolvar = m_creature->FindNearestCreature(NPC_BOLVAR_FORDRAGON, 150.0f))
+                    Bolvar->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER | UNIT_NPC_FLAG_GOSSIP);
+                if (Creature* Onyxia = m_creature->FindNearestCreature(NPC_KATRANA_PRESTOR, 150.0f))
+                    Onyxia->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER | UNIT_NPC_FLAG_GOSSIP);
+                Timer = 4000;
+                break;
+            case 51:
+                if (Creature* Bolvar = m_creature->FindNearestCreature(NPC_BOLVAR_FORDRAGON, 150.0f))
+                    AdvanceDialog(Bolvar);
+                break;
+            case 52:
+                if (Creature* Anduin = m_creature->FindNearestCreature(NPC_ANDUIN_WRYNN, 150.0f))
+                {
+                    Anduin->SetWalk(false);
+                    Anduin->GetMotionMaster()->MovePoint(0, WindsorEventMove[14].x, WindsorEventMove[14].y,
+                                                         WindsorEventMove[14].z);
+                }
+                Timer = 5000;
+                break;
+            case 53:
+                if (Creature* Onyxia = m_creature->FindNearestCreature(NPC_KATRANA_PRESTOR, 150.0f))
+                {
+                    m_creature->SetFacingToObject(Onyxia);
+                    AdvanceDialog(m_creature);
+                }
+                Timer = 5000;
+                break;
+            case 54:
+                if (Creature* Onyxia = m_creature->FindNearestCreature(NPC_KATRANA_PRESTOR, 150.0f))
+                    AdvanceDialog(Onyxia);
+                Timer = 4000;
+                break;
+            case 55:
+                if (Creature* Onyxia = m_creature->FindNearestCreature(NPC_KATRANA_PRESTOR, 150.0f))
+                    AdvanceDialog(Onyxia);
+                Timer = 10000;
+                break;
+            case 56:
+                if (Creature* Onyxia = m_creature->FindNearestCreature(NPC_KATRANA_PRESTOR, 150.0f))
+                    AdvanceDialog(Onyxia);
+                Timer = 5000;
+                break;
+            case 57:
+                AdvanceDialog(m_creature);
+                Timer = 5000;
+                break;
+            case 58:
+                AdvanceDialog(m_creature, m_creature);
+                Timer = 5000;
+                break;
+            case 59:
+                AdvanceDialog(m_creature);
+                Timer = 4000;
+                break;
+            case 60:
+                AdvanceDialog(m_creature);
+                Timer = 5000;
+                break;
+            case 61:
+                AdvanceDialog(m_creature, m_creature);
+                Timer = 2000;
+                break;
+            case 62:
+                if (Creature* Onyxia = m_creature->FindNearestCreature(NPC_KATRANA_PRESTOR, 150.0f))
+                    m_creature->CastSpell(Onyxia, SPELL_WINSOR_READ_TABLETS, false);
+                Timer = 10000;
+                break;
+            case 63:
+                if (Creature* Onyxia = m_creature->FindNearestCreature(NPC_KATRANA_PRESTOR, 150.0f))
+                {
+                    Onyxia->UpdateEntry(NPC_LADY_ONYXIA);
+                    Onyxia->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_PASSIVE);
+                }
+                Timer = 1000;
+                break;
+            case 64:
+                if (Creature* Bolvar = m_creature->FindNearestCreature(NPC_BOLVAR_FORDRAGON, 150.0f))
+                    AdvanceDialog(Bolvar, Bolvar);
+                Timer = 2000;
+                break;
+            case 65:
                 if (Creature* Bolvar = m_creature->FindNearestCreature(NPC_BOLVAR_FORDRAGON, 150.0f))
                 {
+                    Bolvar->SetWalk(false);
+                    Bolvar->GetMotionMaster()->MovePoint(0, WindsorEventMove[15].x, WindsorEventMove[15].y, WindsorEventMove[15].z,
+                                                         MOVE_NONE, 0, 5.740616);
+                    X = Bolvar->GetPositionX() - WindsorEventMove[15].x;
+                    Y = Bolvar->GetPositionY() - WindsorEventMove[15].y;
+                    Timer = 1000 + sqrt((X * X) + (Y * Y)) / (m_creature->GetSpeed(MOVE_WALK) * 0.001f);
+                }
+                if (Creature* Onyxia = m_creature->FindNearestCreature(NPC_LADY_ONYXIA, 150.0f))
+                    AdvanceDialog(Onyxia);
+                else Timer = 4000;
+                break;
+            case 66:
+                if (Creature* Bolvar = m_creature->FindNearestCreature(NPC_BOLVAR_FORDRAGON, 150.0f))
+                    AdvanceDialog(Bolvar);
+                break;
+            case 67:
+                if (Creature* Onyxia = m_creature->FindNearestCreature(NPC_LADY_ONYXIA, 150.0f))
+                    AdvanceDialog(Onyxia);
+                Timer = 2000;
+                break;
+            case 68:
+                if (Creature* Onyxia = m_creature->FindNearestCreature(NPC_LADY_ONYXIA, 150.0f))
+                {
+                    AdvanceDialog(Onyxia);
                     int Var = 0;
-                    while (DragsGUIDs[Var] && Var < 9)
+                    GetCreatureListWithEntryInGrid(DragListe, Onyxia, NPC_STORMWIND_ROYAL_GUARD, 25.0f);
+                    for (const auto& itr : DragListe)
                     {
-                        Creature* crea = me->GetMap()->GetCreature(DragsGUIDs[Var]);
-                        crea->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-                        crea->getThreatManager().addThreatDirectly(Bolvar, 5000.0f);
-                        crea->SetTargetGuid(Bolvar->GetGUID());
-                        Bolvar->AddThreat(crea);
-                        Bolvar->SetInCombatWith(crea);
-                        crea->SetInCombatWith(Bolvar);
+                        DragsGUIDs[Var] = itr->GetGUID();
+                        itr->UpdateEntry(NPC_ONYXIA_ELITE_GUARD);
+                        itr->AIM_Initialize();
+                        itr->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                        if (!urand(0, 2))
+                            DoScriptText(SAY_HISS, itr);
                         Var++;
                     }
                 }
-            }
-            Timer = 5000;
-            break;
-        case 66:
-            if (Creature* Onyxia = m_creature->FindNearestCreature(NPC_KATRANA_PRESTOR, 150.0f))
-            {
-                Onyxia->MonsterYell("You have failed him, mortalsss... Farewell!");
-                Onyxia->CastSpell(Onyxia, SPELL_PRESTOR_DESPAWNS, true);
-            }
-            if (Creature* Bolvar = m_creature->FindNearestCreature(NPC_BOLVAR_FORDRAGON, 150.0f))
-                Bolvar->MonsterTextEmote("Highlord Bolvar Fordragon's medallion shatters.");
-            Timer = 1000;
-            PhaseFinale = true;
-            break;
-        case 67:
-            if (Creature* Onyxia = m_creature->FindNearestCreature(NPC_KATRANA_PRESTOR, 150.0f))
-            {
-                Onyxia->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER | UNIT_NPC_FLAG_GOSSIP);
-                Onyxia->SetFloatValue(OBJECT_FIELD_SCALE_X, 1.0f);
-                Onyxia->ForcedDespawn();
-                Onyxia->SetRespawnDelay(7 * MINUTE);
-                Onyxia->SetRespawnTime(7 * MINUTE);
-            }
-            Tick = 100; // come back when combat is done
-            break;
-        case 68:
-            if (Creature* Bolvar = m_creature->FindNearestCreature(NPC_BOLVAR_FORDRAGON, 150.0f))
-            {
-                DoTalk(Bolvar, false);
-                DoTalk(m_creature, false);
-                Bolvar->HandleEmote(EMOTE_ONESHOT_KNEEL);
-            }
-            Timer = 4500;
-            break;
-        case 69:
-            SituationFinale();
-            BeginQuest = false;
-            m_creature->MonsterTextEmote("Reginald Windsor dies.");
-            m_creature->CastSpell(m_creature, 5, true);
-            break;
+                Timer = 4000;
+                break;
+            case 69:
+                if (Creature* Onyxia = m_creature->FindNearestCreature(NPC_LADY_ONYXIA, 150.0f))
+                    Onyxia->CastSpell(m_creature, SPELL_WINDSOR_DEATH, false);
+                if (Creature* Bolvar = m_creature->FindNearestCreature(NPC_BOLVAR_FORDRAGON, 150.0f))
+                    Bolvar->HandleEmote(EMOTE_STATE_READYUNARMED);
+                Timer = 1500;
+                break;
+            case 70:
+                AdvanceDialog(m_creature);
+                Timer = 1000;
+                break;
+            case 71:
+                if (Creature* Onyxia = m_creature->FindNearestCreature(NPC_LADY_ONYXIA, 150.0f))
+                {
+                    AdvanceDialog(Onyxia);
+                    if (Creature* Bolvar = m_creature->FindNearestCreature(NPC_BOLVAR_FORDRAGON, 150.0f))
+                    {
+                        int Var = 0;
+                        while (DragsGUIDs[Var] && Var < 9)
+                        {
+                            Creature* crea = me->GetMap()->GetCreature(DragsGUIDs[Var]);
+                            crea->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                            crea->getThreatManager().addThreatDirectly(Bolvar, 5000.0f);
+                            crea->SetTargetGuid(Bolvar->GetGUID());
+                            Bolvar->AddThreat(crea);
+                            Bolvar->SetInCombatWith(crea);
+                            crea->SetInCombatWith(Bolvar);
+                            Var++;
+                        }
+                    }
+                }
+                Timer = 5000;
+                break;
+            case 72:
+                if (Creature* Onyxia = m_creature->FindNearestCreature(NPC_LADY_ONYXIA, 150.0f))
+                {
+                    AdvanceDialog(Onyxia);
+                    Onyxia->CastSpell(Onyxia, SPELL_PRESTOR_DESPAWNS, true);
+                }
+                Timer = 1000;
+                break;
+            case 73:
+                if (Creature* Onyxia = m_creature->FindNearestCreature(NPC_LADY_ONYXIA, 150.0f))
+                {
+                    Onyxia->ForcedDespawn();
+                    Onyxia->SetRespawnDelay(30 * MINUTE);
+                    Onyxia->SetRespawnTime(30 * MINUTE);
+                    Onyxia->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER | UNIT_NPC_FLAG_GOSSIP);
+                }
+                Timer = 15000;
+                break;
+            case 74:
+                if (Creature* Bolvar = m_creature->FindNearestCreature(NPC_BOLVAR_FORDRAGON, 150.0f))
+                    AdvanceDialog(Bolvar, Bolvar);
+            case 75:
+                if (Creature* Onyxia = m_creature->FindNearestCreature(NPC_LADY_ONYXIA, 150.0f))
+                {
+                    Onyxia->ForcedDespawn();
+                    Onyxia->SetRespawnDelay(30 * MINUTE);
+                    Onyxia->SetRespawnTime(30 * MINUTE);
+                    Onyxia->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER | UNIT_NPC_FLAG_GOSSIP);
+                }
+                Tick = 100; // come back when combat is done
+                PhaseFinale = true;
+                break;
+            case 76:
+                if (Creature* Bolvar = m_creature->FindNearestCreature(NPC_BOLVAR_FORDRAGON, 150.0f))
+                {
+                    Bolvar->HandleEmote(EMOTE_STATE_STAND);
+
+                    AdvanceDialog(Bolvar);
+                    Bolvar->SetWalk(true);
+                    Bolvar->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER | UNIT_NPC_FLAG_GOSSIP);
+                    Bolvar->SetStandState(UNIT_STAND_STATE_KNEEL);
+                }
+                Timer = 1000;
+                break;
+            case 77:
+                CompleteQuest();
+                AdvanceDialog(m_creature);
+                Timer = 8000;
+                break;
+            case 78:
+                AdvanceDialog(m_creature);
+                m_creature->CastSpell(m_creature, 5, true); // death
+                EndScene();
+                BeginQuest = false;
+                break;
         }
         if (eventGardId < 6)
         {
-            if (Creature* pGarde = GetGuard(eventGardId))
+            if (Creature* pGuard = GetGuard(eventGardId))
             {
                 int Var = eventGardId + 7;
-                pGarde->GetMotionMaster()->MovePoint(0, WindsorEventMove[Var].x, WindsorEventMove[Var].y, WindsorEventMove[Var].z);
-                X = pGarde->GetPositionX() - WindsorEventMove[Var].x;
-                Y = pGarde->GetPositionY() - WindsorEventMove[Var].y;
+                pGuard->GetMotionMaster()->MovePoint(0, WindsorEventMove[Var].x, WindsorEventMove[Var].y, WindsorEventMove[Var].z);
+                X = pGuard->GetPositionX() - WindsorEventMove[Var].x;
+                Y = pGuard->GetPositionY() - WindsorEventMove[Var].y;
             }
-            GardeTimer[eventGardId] = 1000 + sqrt(X * X + Y * Y) / (m_creature->GetSpeed(MOVE_WALK) * 0.001f);
-            GardeNeed[eventGardId] = true;
+            GuardTimer[eventGardId] = 1000 + sqrt(X * X + Y * Y) / (m_creature->GetSpeed(MOVE_WALK) * 0.001f);
+            GuardNeed[eventGardId] = true;
             Timer = 1000;
         }
-        if (Tick > 23 && Tick < 40)
+        if (Tick > 26 && Tick < 44)
         {
-            int Var = Tick - 21;
-            m_creature->GetMotionMaster()->MovePoint(0, WindsorDeplacement[Var].x, WindsorDeplacement[Var].y, WindsorDeplacement[Var].z);
-            X = m_creature->GetPositionX() - WindsorDeplacement[Var].x;
-            Y = m_creature->GetPositionY() - WindsorDeplacement[Var].y;
+            int Var = Tick - 25;
+            m_creature->GetMotionMaster()->MovePoint(0, WindsorWaypoints[Var].x, WindsorWaypoints[Var].y, WindsorWaypoints[Var].z,
+                                                     MOVE_NONE, 0.0f, WindsorWaypoints[Var].o);
+            X = m_creature->GetPositionX() - WindsorWaypoints[Var].x;
+            Y = m_creature->GetPositionY() - WindsorWaypoints[Var].y;
             Timer = 1000 + sqrt(X * X + Y * Y) / (m_creature->GetSpeed(MOVE_WALK) * 0.001f);
         }
-        else if (Tick > 41 && Tick < 46)
+        else if (Tick > 44 && Tick < 50)
         {
-            int Var = Tick - 22;
-            m_creature->GetMotionMaster()->MovePoint(0, WindsorDeplacement[Var].x, WindsorDeplacement[Var].y, WindsorDeplacement[Var].z);
-            X = m_creature->GetPositionX() - WindsorDeplacement[Var].x;
-            Y = m_creature->GetPositionY() - WindsorDeplacement[Var].y;
+            int Var = Tick - 26;
+            m_creature->GetMotionMaster()->MovePoint(0, WindsorWaypoints[Var].x, WindsorWaypoints[Var].y, WindsorWaypoints[Var].z,
+                                                     MOVE_NONE, 0.0f, WindsorWaypoints[Var].o);
+            X = m_creature->GetPositionX() - WindsorWaypoints[Var].x;
+            Y = m_creature->GetPositionY() - WindsorWaypoints[Var].y;
             Timer = 1000 + sqrt(X * X + Y * Y) / (m_creature->GetSpeed(MOVE_WALK) * 0.001f);
         }
-        else if (PhaseFinale == true)
+        else if (PhaseFinale)
         {
             if (Creature* Bolvar = m_creature->FindNearestCreature(NPC_BOLVAR_FORDRAGON, 150.0f))
             {
@@ -746,10 +783,10 @@ void npc_reginald_windsorAI::UpdateAI(const uint32 uiDiff)
                     if (!CombatJustEnded)
                     {
                         Bolvar->SetWalk(true);
-                        Bolvar->GetMotionMaster()->MovePoint(0, -8447.39f, 335.35f, 121.747f, 1.29f);
+                        Bolvar->GetMotionMaster()->MovePoint(0, -8447.39f, 335.35f, 121.747f, 0, 0, 1.29f);
                         CombatJustEnded = true;
                         Timer = 5000;
-                        Tick = 68;
+                        Tick = 76;
                         return;
                     }
                 }
@@ -761,19 +798,17 @@ void npc_reginald_windsorAI::UpdateAI(const uint32 uiDiff)
         Timer -= uiDiff;
 }
 
-bool QuestAccept_npc_reginald_windsor(Player* pPlayer, Creature* pCreature, const Quest* pQuest)
+bool QuestAccept_npc_reginald_windsor(Player* pPlayer, Creature* pCreature, Quest const* pQuest)
 {
     if (pQuest->GetQuestId() == QUEST_THE_GREAT_MASQUERADE)
     {
         if (auto pWindsorEventAI = dynamic_cast<npc_reginald_windsorAI*>(pCreature->AI()))
         {
-            pCreature->MonsterSay("On guard, friend. The lady dragon will not give in without a fight.");
-            pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
             pWindsorEventAI->BeginQuest = true;
             pWindsorEventAI->QuestAccepted = true;
             pWindsorEventAI->GreetPlayer = false;
             pWindsorEventAI->playerGUID = pPlayer->GetGUID();
-            pWindsorEventAI->m_uiDespawnTimer = 30 * MINUTE*IN_MILLISECONDS;
+            pWindsorEventAI->m_uiDespawnTimer = 30 * MINUTE * IN_MILLISECONDS;
             pCreature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
         }
     }
@@ -798,15 +833,15 @@ bool GossipSelect_npc_reginald_windsor(Player* pPlayer, Creature* pCreature, uin
 {
     switch (uiAction)
     {
-    case GOSSIP_ACTION_INFO_DEF:
-        if (auto pWindsorEventAI = static_cast<npc_reginald_windsorAI*>(pCreature->AI()))
-        {
-            pWindsorEventAI->BeginQuest = true;
-            pWindsorEventAI->DoTalk(pCreature, false);
-            pCreature->SetUInt32Value(UNIT_NPC_FLAGS, 0);
-        }
-        pPlayer->CLOSE_GOSSIP_MENU();
-        break;
+        case GOSSIP_ACTION_INFO_DEF:
+            if (auto pWindsorEventAI = static_cast<npc_reginald_windsorAI*>(pCreature->AI()))
+            {
+                pWindsorEventAI->BeginQuest = true;
+                pWindsorEventAI->AdvanceDialog(pCreature);
+                pCreature->SetUInt32Value(UNIT_NPC_FLAGS, 0);
+            }
+            pPlayer->CLOSE_GOSSIP_MENU();
+            break;
     }
     return true;
 }
@@ -843,22 +878,23 @@ void npc_squire_roweAI::MovementInform(uint32 uiType, uint32 uiPointId)
 
     switch (uiPointId)
     {
-    case 1:
-        m_creature->GetMotionMaster()->MovePoint(2, RoweDeplacement[1].x, RoweDeplacement[1].y, RoweDeplacement[1].z);
-        break;
-    case 2:
-        m_creature->HandleEmote(EMOTE_ONESHOT_KNEEL);
-        m_uiTimer = 5000;
-        ++m_uiStep;
-        break;
-    case 4:
-        m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
-        m_bEventProcessed = false;
-        break;
+        case 1:
+            m_creature->GetMotionMaster()->MovePoint(2, RoweWaypoints[1].x, RoweWaypoints[1].y, RoweWaypoints[1].z);
+            break;
+        case 2:
+            m_creature->HandleEmote(EMOTE_ONESHOT_KNEEL);
+            m_uiTimer = 5000;
+            ++m_uiStep;
+            break;
+        case 4:
+            m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
+            DoScriptText(SAY_SIGNAL_SENT, m_creature);
+            m_bEventProcessed = false;
+            break;
     }
 }
 
-void npc_squire_roweAI::UpdateAI(const uint32 uiDiff)
+void npc_squire_roweAI::UpdateAI(uint32 const uiDiff)
 {
     if (m_bEventProcessed)
     {
@@ -866,50 +902,49 @@ void npc_squire_roweAI::UpdateAI(const uint32 uiDiff)
         {
             switch (m_uiStep)
             {
-            case 0:
-                m_creature->SetSpeedRate(MOVE_RUN, 1.1f, true);
-                m_creature->GetMotionMaster()->MovePoint(1, RoweDeplacement[0].x, RoweDeplacement[0].y, RoweDeplacement[0].z);
-                m_uiTimer = 1000;
-                ++m_uiStep;
-                break;
-            case 2:
-                m_creature->GetMotionMaster()->MovePoint(3, RoweDeplacement[0].x, RoweDeplacement[0].y, RoweDeplacement[0].z);
-                m_uiTimer = 1500;
-                ++m_uiStep;
-                break;
-            case 3:
-                if (Creature* pWindsor = m_creature->SummonCreature(NPC_REGINALD_WINDSOR,
-                    WindsorSummon.x,
-                    WindsorSummon.y,
-                    WindsorSummon.z,
-                    WindsorSummon.o, TEMPSUMMON_MANUAL_DESPAWN, 1.5 * HOUR * IN_MILLISECONDS, true))
-                {
-                    auto pWindsorAI = static_cast<npc_reginald_windsorAI*>(pWindsor->AI());
-
-                    if (pWindsorAI)
+                case 0:
+                    m_creature->SetSpeedRate(MOVE_RUN, 1.1f);
+                    m_creature->GetMotionMaster()->MovePoint(1, RoweWaypoints[0].x, RoweWaypoints[0].y, RoweWaypoints[0].z);
+                    m_uiTimer = 1000;
+                    ++m_uiStep;
+                    break;
+                case 2:
+                    m_creature->GetMotionMaster()->MovePoint(3, RoweWaypoints[0].x, RoweWaypoints[0].y, RoweWaypoints[0].z);
+                    m_uiTimer = 1500;
+                    ++m_uiStep;
+                    break;
+                case 3:
+                    if (Creature* pWindsor = m_creature->SummonCreature(NPC_REGINALD_WINDSOR,
+                                                                        WindsorSummon.x,
+                                                                        WindsorSummon.y,
+                                                                        WindsorSummon.z,
+                                                                        WindsorSummon.o, TEMPSUMMON_MANUAL_DESPAWN, 1.5 * HOUR * IN_MILLISECONDS, true))
                     {
-                        if (m_playerGuid)
-                            pWindsorAI->playerGUID = m_playerGuid;
+                        auto pWindsorAI = static_cast<npc_reginald_windsorAI*>(pWindsor->AI());
 
-                        pWindsorAI->m_squireRoweGuid = m_creature->GetObjectGuid();
+                        if (pWindsorAI)
+                        {
+                            if (m_playerGuid)
+                                pWindsorAI->playerGUID = m_playerGuid;
+
+                            pWindsorAI->m_squireRoweGuid = m_creature->GetObjectGuid();
+                        }
+
+                        m_bWindsorUp = true;
+                        pWindsor->Mount(MOUNT_WINDSOR);
+                        pWindsor->SetWalk(false);
+                        pWindsor->SetSpeedRate(MOVE_RUN, 1.0f);
+                        pWindsor->GetMotionMaster()->MovePoint(0, WindsorWaypoints[0].x, WindsorWaypoints[0].y, WindsorWaypoints[0].z, MOVE_PATHFINDING);
+                        pWindsor->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
                     }
-
-                    m_bWindsorUp = true;
-                    pWindsor->Mount(MOUNT_WINDSOR);
-                    pWindsor->SetWalk(false);
-                    pWindsor->SetSpeedRate(MOVE_RUN, 1.0f, true);
-                    pWindsor->GetMotionMaster()->MovePoint(0, WindsorDeplacement[0].x, WindsorDeplacement[0].y, WindsorDeplacement[0].z, MOVE_PATHFINDING);
-                    pWindsor->SetRespawnDelay(100000000);
-                    pWindsor->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
-                }
-                ++m_uiStep;
-                break;
-            case 4:
-                float x, y, z, o;
-                m_creature->GetRespawnCoord(x, y, z, &o);
-                m_creature->GetMotionMaster()->MovePoint(4, x, y, z, MOVE_NONE, 0, o);
-                ++m_uiStep;
-                break;
+                    ++m_uiStep;
+                    break;
+                case 4:
+                    float x, y, z, o;
+                    m_creature->GetRespawnCoord(x, y, z, &o);
+                    m_creature->GetMotionMaster()->MovePoint(4, x, y, z, MOVE_NONE, 0, o);
+                    ++m_uiStep;
+                    break;
             }
         }
         else
@@ -937,6 +972,8 @@ bool GossipHello_npc_squire_rowe(Player* pPlayer, Creature* pCreature)
         else
             pPlayer->SEND_GOSSIP_MENU(GOSSIP_ROWE_BUSY, pCreature->GetGUID());
     }
+    else if (pPlayer->GetQuestStatus(QUEST_THE_GREAT_MASQUERADE) == QUEST_STATUS_COMPLETE)
+        pPlayer->SEND_GOSSIP_MENU(GOSSIP_ROWE_COMPLETED, pCreature->GetGUID());
     else
         pPlayer->SEND_GOSSIP_MENU(GOSSIP_ROWE_NOTHING, pCreature->GetGUID());
 
@@ -947,20 +984,20 @@ bool GossipSelect_npc_squire_rowe(Player* pPlayer, Creature* pCreature, uint32 /
 {
     switch (uiAction)
     {
-    case GOSSIP_ACTION_INFO_DEF:
-        if (pPlayer->GetQuestStatus(QUEST_STORMWIND_RENDEZVOUS) == QUEST_STATUS_COMPLETE)
-        {
-            if (auto pSquireRoweAI = static_cast<npc_squire_roweAI*>(pCreature->AI()))
+        case GOSSIP_ACTION_INFO_DEF:
+            if (pPlayer->GetQuestStatus(QUEST_STORMWIND_RENDEZVOUS) == QUEST_STATUS_COMPLETE)
             {
-                pSquireRoweAI->m_bEventProcessed = true;
-                pSquireRoweAI->m_playerGuid = pPlayer->GetObjectGuid();
-                pCreature->SetWalk(false);
-                pCreature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
+                if (auto pSquireRoweAI = static_cast<npc_squire_roweAI*>(pCreature->AI()))
+                {
+                    pSquireRoweAI->m_bEventProcessed = true;
+                    pSquireRoweAI->m_playerGuid = pPlayer->GetObjectGuid();
+                    pCreature->SetWalk(false);
+                    pCreature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
+                }
             }
-        }
 
-        pPlayer->CLOSE_GOSSIP_MENU();
-        break;
+            pPlayer->CLOSE_GOSSIP_MENU();
+            break;
     }
 
     return true;
@@ -995,10 +1032,10 @@ bool AreaTrigger_at_stormwind_gates(Player* pPlayer, AreaTriggerEntry const* /*p
         return false;
 
     if (Creature* pWindsor = pPlayer->SummonCreature(NPC_REGINALD_WINDSOR,
-        WindsorSummon.x,
-        WindsorSummon.y,
-        WindsorSummon.z,
-        WindsorSummon.o, TEMPSUMMON_MANUAL_DESPAWN, 1.5 * HOUR * IN_MILLISECONDS, true))
+                                                     WindsorSummon.x,
+                                                     WindsorSummon.y,
+                                                     WindsorSummon.z,
+                                                     WindsorSummon.o, TEMPSUMMON_MANUAL_DESPAWN, 1.5 * HOUR * IN_MILLISECONDS, true))
     {
         auto pWindsorAI = static_cast<npc_reginald_windsorAI*>(pWindsor->AI());
 
@@ -1010,9 +1047,8 @@ bool AreaTrigger_at_stormwind_gates(Player* pPlayer, AreaTriggerEntry const* /*p
 
         pWindsor->Mount(MOUNT_WINDSOR);
         pWindsor->SetWalk(false);
-        pWindsor->SetSpeedRate(MOVE_RUN, 1.0f, true);
-        pWindsor->GetMotionMaster()->MovePoint(0, WindsorDeplacement[0].x, WindsorDeplacement[0].y, WindsorDeplacement[0].z, MOVE_PATHFINDING);
-        pWindsor->SetRespawnDelay(100000000);
+        pWindsor->SetSpeedRate(MOVE_RUN, 1.0f);
+        pWindsor->GetMotionMaster()->MovePoint(0, WindsorWaypoints[0].x, WindsorWaypoints[0].y, WindsorWaypoints[0].z, MOVE_PATHFINDING);
         pWindsor->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
 
         globalWindsorLastSpawnTime = sWorld.GetGameTime();
@@ -1025,7 +1061,7 @@ bool AreaTrigger_at_stormwind_gates(Player* pPlayer, AreaTriggerEntry const* /*p
 
 void AddSC_quest_stormwind_rendezvous()
 {
-    Script *pNewScript;
+    Script* pNewScript;
 
     pNewScript = new Script;
     pNewScript->Name = "npc_squire_rowe";
