@@ -870,5 +870,215 @@ reqitemid2 = @required_item_2, reqitemcount2 = @required_item_2_count,
 reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
 reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count
 where entry = @quest_entry;
-	  
-	  
+
+-- set faction for defias rioter
+UPDATE `creature_template` SET `faction` = 17 WHERE entry = 5043;
+
+-- add middle lane pathing
+INSERT INTO `creature_movement_special` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+(504301, 1, -8716.43, 884.722, 76.3504, 100, 0, 0, 0),
+(504301, 2, -8742.05, 864.404, 76.5227, 100, 0, 0, 0),
+(504301, 3, -8754.53, 854.314, 82.5392, 100, 0, 0, 0),
+(504301, 4, -8762.12, 848.166, 86.1997, 100, 0, 0, 0),
+(504301, 5, -8764.43, 846.379, 87.2971, 100, 0, 0, 0),
+(504301, 6, -8772.04, 840.429, 90.9329, 100, 0, 0, 0),
+(504301, 7, -8780.68, 833.842, 95.0307, 100, 0, 0, 0);
+
+-- add left lane pathing
+INSERT INTO `creature_movement_special` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+(504302, 1, -8713.28, 884.912, 76.351, 100, 0, 0, 0),
+(504302, 2, -8740.69, 863.015, 76.448, 100, 0, 0, 0),
+(504302, 3, -8753.21, 852.692, 82.5292, 100, 0, 0, 0),
+(504302, 4, -8760.63, 846.642, 86.1184, 100, 0, 0, 0),
+(504302, 5, -8762.88, 844.698, 87.2342, 100, 0, 0, 0),
+(504302, 6, -8770.44, 838.699, 90.8653, 100, 0, 0, 0),
+(504302, 7, -8778.45, 831.800, 94.8518, 100, 0, 0, 0);
+
+-- add right lane pathing
+INSERT INTO `creature_movement_special` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+(504303, 1, -8715.18, 887.661, 76.3511, 100, 0, 0, 0),
+(504303, 2, -8742.84, 865.801, 76.4288, 100, 0, 0, 0),
+(504303, 3, -8755.53, 855.885, 82.4662, 100, 0, 0, 0),
+(504303, 4, -8763.28, 849.84, 86.1526, 100, 0, 0, 0),
+(504303, 5, -8765.64, 847.962, 87.2845, 100, 0, 0, 0),
+(504303, 6, -8773.36, 842.437, 90.8508, 100, 0, 0, 0),
+(504303, 7, -8781.85, 835.478, 94.9935, 100, 0, 0, 0);
+
+-- add event
+INSERT INTO `creature_ai_events` (`id`, `creature_id`, `condition_id`, `event_type`, `event_inverse_phase_mask`, `event_chance`, `event_flags`, `event_param1`, `event_param2`, `event_param3`, `event_param4`, `action1_script`, `action2_script`, `action3_script`, `comment`) VALUES (171902, 1719, 0, 1, 0, 100, 1, 1800000, 1800000, 1800000, 1800000, 171902, 0, 0, 'Warden Thelwater - Start Stockade Jailbreak Event');
+
+-- add event scripts
+INSERT INTO `creature_ai_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (171902, 0, 10, 5043, 15000, 0, 0, 0, 0, 0, 0, 1, 504301, 6, 6, -8716.43, 884.722, 76.3504, 3.84802, 0, 'jailbreak - summon middle lane 1');
+INSERT INTO `creature_ai_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (171902, 0, 10, 5043, 15000, 0, 0, 0, 0, 0, 0, 1, 504302, 6, 6, -8713.28, 884.912, 76.351, 3.84802, 0, 'jailbreak - summon left lane 1');
+INSERT INTO `creature_ai_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (171902, 0, 10, 5043, 15000, 0, 0, 0, 0, 0, 0, 1, 504303, 6, 6, -8715.18, 887.661, 76.3511, 3.84802, 0, 'jailbreak - summon right lane 1');
+INSERT INTO `creature_ai_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (171902, 0, 10, 5043, 15000, 0, 0, 0, 0, 0, 0, 1, 504301, 6, 6, -8714.18, 886.3988, 76.3511, 3.84802, 0, 'jailbreak - summon middle lane 2');
+INSERT INTO `creature_ai_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (171902, 0, 10, 5043, 15000, 0, 0, 0, 0, 0, 0, 1, 504301, 6, 6, -8712.94, 887.305, 76.3511, 3.84802, 0, 'jailbreak - summon middle lane 3');
+INSERT INTO `creature_ai_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (171902, 0, 10, 5043, 15000, 0, 0, 0, 0, 0, 0, 1, 504302, 6, 6, -8711.87, 885.939, 76.3511, 3.84802, 0, 'jailbreak - summon left lane 2');
+INSERT INTO `creature_ai_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (171902, 0, 10, 5043, 15000, 0, 0, 0, 0, 0, 0, 1, 504303, 6, 6, -8714.06, 888.635, 76.3511, 3.84802, 0, 'jailbreak - summon right lane 2');
+
+-- add event scripts, scripts
+INSERT INTO `event_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (504301, 0, 60, 3, 0, 0, 0, 0, 0, 0, 0, 0, 504301, 0, 0, 0, 0, 0, 0, 0, 'jailbreak - middle lane move');
+INSERT INTO `event_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (504302, 0, 60, 3, 0, 0, 0, 0, 0, 0, 0, 0, 504302, 0, 0, 0, 0, 0, 0, 0, 'jailbreak - left lane move');
+INSERT INTO `event_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (504303, 0, 60, 3, 0, 0, 0, 0, 0, 0, 0, 0, 504303, 0, 0, 0, 0, 0, 0, 0, 'jailbreak - right lane move');
+
+- update script id's in pathing
+UPDATE `creature_movement_template` SET `script_id` = 504201 WHERE `entry` = 5042 AND `point` IN (1,6,10,13);
+
+-- slight update to timing, emotes and script id for nurse lilian
+DELETE FROM `creature_movement_scripts` WHERE `id`=5042;
+INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (504201, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1680, 1681, 1685, 1682, 0, 0, 0, 0, 0, 'Nurse Lilian Pathing - Speech');
+INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (504201, 2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Nurse Lilian Pathing - Speech Emote');
+INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (504201, 1, 28, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Nurse Lilian Pathing - Crouch');
+INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (504201, 10, 28, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Nurse Lilian Pathing - Stand');
+
+-- Massive Longbow - Skolmin Goldfury
+UPDATE `npc_vendor` SET `maxcount` = 1, `incrtime` = 10800 WHERE `entry` = 5122 AND `item` = 11307;
+
+-- Sturdy Recurve - Skolmin Goldfury
+UPDATE `npc_vendor` SET `maxcount` = 1, `incrtime` = 10800 WHERE `entry` = 5122 AND `item` = 11306;
+
+-- Fine Shortbow - Skolmin Goldfury
+UPDATE `npc_vendor` SET `maxcount` = 2, `incrtime` = 10800 WHERE `entry` = 5122 AND `item` = 11303;
+
+
+
+-- Flamberge - Thalgus Thunderfist
+DELETE FROM `npc_vendor` WHERE `entry` = 7976 AND `item` = 2521;
+
+-- Bullova - Thalgus Thunderfist
+DELETE FROM `npc_vendor` WHERE `entry` = 7976 AND `item` = 2523;
+
+-- War Hammer - Thalgus Thunderfist
+DELETE FROM `npc_vendor` WHERE `entry` = 7976 AND `item` = 2525;
+
+-- Zweihander - Thalgus Thunderfist
+DELETE FROM `npc_vendor` WHERE `entry` = 7976 AND `item` = 2529;
+
+-- Great Axe - Thalgus Thunderfist
+DELETE FROM `npc_vendor` WHERE `entry` = 7976 AND `item` = 2531;
+
+-- War Maul - Thalgus Thunderfist
+DELETE FROM `npc_vendor` WHERE `entry` = 7976 AND `item` = 2533;
+
+
+
+-- Missing Items - Brenwyn Wintersteel
+INSERT INTO `npc_vendor` (`entry`, `item`) VALUES
+(5120, 3111),
+(5120, 2946),
+(5120, 3107),
+(5120, 3137),
+(5120, 3108),
+(5120, 3131),
+(5120, 3135),
+(5120, 2947),
+(5120, 15326),
+(5120, 15327);
+
+
+
+-- Weighted Throwing Axe - Bryllia Ironbrand
+DELETE FROM `npc_vendor` WHERE `entry` = 5101 AND `item` = 3131;
+
+-- Balanced Throwing Dagger - Bryllia Ironbrand
+DELETE FROM `npc_vendor` WHERE `entry` = 5101 AND `item` = 2946;
+
+
+
+-- Strong Fishing Pole - Tansy Puddlefizz
+UPDATE `npc_vendor` SET `maxcount` = 1, `incrtime` = 7200 WHERE `entry` = 5162 AND `item` = 6365;
+
+
+
+-- Gyrochronatom - Gearcutter Cogspinner
+UPDATE `npc_vendor` SET `maxcount` = 1, `incrtime` = 10800 WHERE `entry` = 5175 AND `item` = 4389;
+
+-- Schematic: Thorium Grenade - Gearcutter Cogspinner
+UPDATE `npc_vendor` SET `maxcount` = 1, `incrtime` = 10800 WHERE `entry` = 5175 AND `item` = 16041;
+
+-- Schematic: Thorium Widget - Gearcutter Cogspinner
+UPDATE `npc_vendor` SET `maxcount` = 1, `incrtime` = 10800 WHERE `entry` = 5175 AND `item` = 16042;
+
+-- Schematic: Blue Firework - Gearcutter Cogspinner
+UPDATE `npc_vendor` SET `maxcount` = 1, `incrtime` = 10800 WHERE `entry` = 5175 AND `item` = 18649;
+
+
+
+-- Lesser Mana Potion - Soolie Berryfizz
+DELETE FROM `npc_vendor` WHERE `entry` = 5178 AND `item` = 3385;
+
+-- Lesser Healing Potion - Soolie Berryfizz
+DELETE FROM `npc_vendor` WHERE `entry` = 5178 AND `item` = 858;
+
+
+
+-- Black Dye - Burbik Gearspanner
+DELETE FROM `npc_vendor` WHERE `entry` = 5163 AND `item` = 2325;
+
+-- Red Dye - Burbik Gearspanner
+DELETE FROM `npc_vendor` WHERE `entry` = 5163 AND `item` = 2604;
+
+-- Dust of Decay - Burbik Gearspanner
+DELETE FROM `npc_vendor` WHERE `entry` = 5163 AND `item` = 2928;
+
+-- Gray Dye - Burbik Gearspanner
+DELETE FROM `npc_vendor` WHERE `entry` = 5163 AND `item` = 4340;
+
+-- Yellow Dye - Burbik Gearspanner
+DELETE FROM `npc_vendor` WHERE `entry` = 5163 AND `item` = 4341;
+
+-- Purple Dye - Burbik Gearspanner
+DELETE FROM `npc_vendor` WHERE `entry` = 5163 AND `item` = 4342;
+
+-- Fishing Pole - Burbik Gearspanner
+DELETE FROM `npc_vendor` WHERE `entry` = 5163 AND `item` = 6256;
+
+-- Skinning Knife - Burbik Gearspanner
+DELETE FROM `npc_vendor` WHERE `entry` = 5163 AND `item` = 7005;
+
+-- Heavy Silken Thread - Burbik Gearspanner
+DELETE FROM `npc_vendor` WHERE `entry` = 5163 AND `item` = 8343;
+
+-- Crystal Vial - Burbik Gearspanner
+DELETE FROM `npc_vendor` WHERE `entry` = 5163 AND `item` = 8925;
+
+-- Rune Thread - Burbik Gearspanner
+DELETE FROM `npc_vendor` WHERE `entry` = 5163 AND `item` = 14341;
+
+-- Imbued Vial - Burbik Gearspanner
+DELETE FROM `npc_vendor` WHERE `entry` = 5163 AND `item` = 18256;
+
+
+
+-- Pattern: Tuxedo Jacket - Outfitter Eric
+UPDATE `npc_vendor` SET `maxcount` = 1, `incrtime` = 3600 WHERE `entry` = 8681 AND `item` = 10326;
+
+-- Pattern: Tuxedo Pants - Outfitter Eric
+UPDATE `npc_vendor` SET `maxcount` = 1, `incrtime` = 3600 WHERE `entry` = 8681 AND `item` = 10323;
+
+-- Pattern: Tuxedo Shirt - Outfitter Eric
+UPDATE `npc_vendor` SET `maxcount` = 1, `incrtime` = 3600 WHERE `entry` = 8681 AND `item` = 10321;
+
+-- Pattern: Lavender Mageweave Shirt - Outfitter Eric
+UPDATE `npc_vendor` SET `maxcount` = 1, `incrtime` = 7200 WHERE `entry` = 8681 AND `item` = 10314;
+
+
+
+-- Pattern: Heavy Leather Ball - Bombus Finespindle
+UPDATE `npc_vendor` SET `maxcount` = 1, `incrtime` = 7200 WHERE `entry` = 5128 AND `item` = 18731;
+
+
+
+-- Formula: Enchant 2H Weapon - Lesser Intellect - Tilli Thistlefuzz
+UPDATE `npc_vendor` SET `maxcount` = 1, `incrtime` = 7200 WHERE `entry` = 5158 AND `item` = 6349;
+
+UPDATE `quest_template` SET `ExclusiveGroup` = 0 WHERE `entry` = 1661;
+
+UPDATE `creature_template` SET `skinning_loot_id` = 0 WHERE `skinning_loot_id` = 100001;
+DELETE FROM `skinning_loot_template` where `entry` = 100001;
+
+-- correct position of justine demalier
+UPDATE `creature` SET `position_x` = -8825.5, `position_y` = 630.778, `position_z` = 94.1948, `orientation` = 3.82227 WHERE `id` = 12481;
+
+-- correct position of melgris malagan
+UPDATE `creature` SET `position_x` = -8824.71, `position_y` = 629.821, `position_z` = 94.1077, `orientation` = 4.03171 WHERE `id` = 12480;
