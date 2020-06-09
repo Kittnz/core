@@ -36,7 +36,6 @@ replace into shop_items values
 (103, 1, 51434, 'Character Faction Change', 250),
 (104, 1, 50003, 'Loremaster\'s Backpack: 28 Slot Bag', 120),
 (105, 1, 50004, 'Portable Black Hole: 36 Slot Bag', 180),
-(106, 1, 51310, 'Portable Wormhole Generator', 0),
 (107, 1, 50011, 'Portable Gnomish Mailbox', 160),
 (108, 1, 51715, 'Portable Goblin Brainwashing Device', 200),
 (109, 1, 50009, 'Portable Auctioneer (Companion)', 160),

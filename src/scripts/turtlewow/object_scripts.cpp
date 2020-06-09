@@ -14,8 +14,18 @@ bool GOHello_go_portable_wormhole(Player* pPlayer, GameObject* pGo)
     if (pPlayer->isInCombat() || pPlayer->IsBeingTeleported() || (pPlayer->getDeathState() == CORPSE) || pPlayer->IsMoving())
         ChatHandler(pPlayer).PSendSysMessage("The wormhole is currently unstable.");
     else
-    pPlayer->TeleportTo((pPlayer->GetTeam() == ALLIANCE) ? WorldLocation(0, -8828.231445f, 627.927490f, 94.055664f, 0.0f) : WorldLocation(1, 1653.7f, -4416.6f, 16.8f, 0.65f));
-    return true;
+    {
+        pPlayer->TeleportTo((pPlayer->GetTeam() == ALLIANCE) ? WorldLocation(0, -8828.231445f, 627.927490f, 94.055664f, 0.0f) : WorldLocation(1, 1653.7f, -4416.6f, 16.8f, 0.65f));
+
+        if (pPlayer->GetQuestStatus(60104) == QUEST_STATUS_INCOMPLETE)
+        {
+            CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(51573);
+
+            if (cInfo != nullptr)
+                pPlayer->KilledMonster(cInfo, ObjectGuid());
+        }
+    }
+        return true;
 }
 
 struct go_survival_tent : public GameObjectAI

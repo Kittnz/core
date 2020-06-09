@@ -786,11 +786,11 @@ replace into custom_pet_entry_relation (item_entry, creature_entry) values
 
 -- Wormhole quest
 
-SET @quest_entry = 60107;
+SET @quest_entry = 60104;
 SET @quest_zone = 2255;
 SET @faction_id = 0;
 SET @faction_count = 0;
-SET @xp_or_money = 450;
+SET @xp_or_money = 350;
 SET @quest_level = 5;
 SET @min_level = 1;
 SET @questgiver_id = 51564;
@@ -798,19 +798,19 @@ SET @quest_finisher = 51562;
 SET @nextquest = 0;
 SET @nextquestinchain = 0;
 SET @prevquest = 0;
-SET @reward_item_1 = 0;
+SET @reward_item_1 = 51310;
 SET @reward_item_2 = 0;
 SET @reward_item_3 = 0;
 SET @reward_item_4 = 0;
-SET @reward_item_1_count = 51310;
+SET @reward_item_1_count = 1;
 SET @reward_item_2_count = 0;
 SET @reward_item_3_count = 0;
 SET @reward_item_4_count = 0;
-SET @creature_to_kill_1 = 1;
+SET @creature_to_kill_1 = 51573;
 SET @creature_to_kill_2 = 0;
 SET @creature_to_kill_3 = 0;
 SET @creature_to_kill_4 = 0;
-SET @creature_to_kill_1_count = 0;
+SET @creature_to_kill_1_count = 1;
 SET @creature_to_kill_2_count = 0;
 SET @creature_to_kill_3_count = 0;
 SET @creature_to_kill_4_count = 0;
@@ -818,9 +818,9 @@ SET @required_item_1 = 0;
 SET @required_item_2 = 0;
 SET @required_item_3 = 0;
 SET @required_item_4 = 0;
-SET @required_item_1_count = 5;
-SET @required_item_2_count = 3;
-SET @required_item_3_count = 1;
+SET @required_item_1_count = 0;
+SET @required_item_2_count = 0;
+SET @required_item_3_count = 0;
 SET @required_item_4_count = 0;
 
 replace into quest_template (entry, patch, Method, ZoneOrSort, MinLevel, QuestLevel, MaxLevel, Type, RequiredClasses, RequiredRaces, RequiredSkill,
@@ -845,18 +845,19 @@ StartScript, CompleteScript) values
 
 'Into the Unknown', 
 
-'Greetings, $R!\n\nYou look like s brave soul. What if I told you I am on the brink of revolutionizing travel as we know it?\n\nThrough some clever recombobulating of magic Runes that mages use I was able to make a device that can open a wormhole which can be used to teleport someone to a place on the other side of the world.\n\nBehold the invention that will change travel as we know it! I call it the Portable Wormhole Generator.\n\nNow the only thing left to do is to test it... That\'s where you come in.\n\nIf you are willing to step into the portal created by the Generator you should end up in Stormwind where my partner Felix will be waiting for you. Do this and you will be given one of the devices as a show of our gratidude.\n\nGood luck!
+'Greetings! You look like a brave soul. What if I told you I am on the brink of revolutionizing travel as we know it?\n\nThrough some clever recombobulating of magic Runes that mages use I was able to make a device that can open a wormhole which can be used to teleport someone to a place on the other side of the world.\n\nBehold the invention that will change travel as we know it! I call it the Portable Wormhole Generator.\n\nNow the only thing left to do is to test it... That\'s where you come in.\n\nIf you are willing to step into the portal created by the Generator you should end up in the other side where my partner will be waiting for you. Do this and you will be given one of the devices as a show of our gratidude.\n\nGood luck!
 ', 
 
 'Test Portable Wormhole Generator.', 
 
-'By the Gods it actually worked! I can\'t believe it!\n\nI mean.. of course it worked, worked just fine.\n\nThis changes everything. Thank you $R, it took no small amount of courage to step into that portal not knowing for certain what was on the other side. I\'m sure Herman promised you a reward, so here it is, your very own Portable Wormhole Generator.\n\nUse it well, and for your own good don\'t fiddle around with it. Good luck!', 
+'By the Gods it actually worked! I can\'t believe it!\n\nI mean... of course it worked, worked just fine.\n\nThis changes everything. Thank you $R, it took no small amount of courage to step into that portal not knowing for certain what was on the other side. I\'m sure Kleo promised you a reward, so here it is, your very own Portable Wormhole Generator.\n\nUse it well, and for your own good don\'t fiddle around with it. Good luck!', 
 
 'Nothing to be afraid of... Nothing at all!', 
 
-'', '', '', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @faction_id, '0', '0', '0', '0', @faction_count, '0', '0', '0', '0', '0', @xp_or_money, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', 0, 0);
+'', 'Test Portable Wormhole Generator', '', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @faction_id, '0', '0', '0', '0', @faction_count, '0', '0', '0', '0', '0', @xp_or_money, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', 0, 0);
       
 update quest_template set 
+SrcItemId = 51808, SrcItemCount = 1,
 rewitemid1 = @reward_item_1, rewitemcount1 = @reward_item_1_count,
 rewitemid2 = @reward_item_2, rewitemcount2 = @reward_item_2_count,
 rewitemid3 = @reward_item_3, rewitemcount3 = @reward_item_3_count,
@@ -870,6 +871,23 @@ reqitemid2 = @required_item_2, reqitemcount2 = @required_item_2_count,
 reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
 reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count
 where entry = @quest_entry;
+
+replace into creature_questrelation (id, quest, patch_min, patch_max) values ('51570','60104','10','10');
+replace into creature_involvedrelation (id, quest, patch_min, patch_max) values ('51571','60104','10','10');      
+replace into creature_involvedrelation (id, quest, patch_min, patch_max) values ('51572','60104','10','10');      
+
+REPLACE INTO `item_template` (`entry`, `patch`, `class`, `subclass`, `name`, `description`, `display_id`, `quality`, `flags`, `buy_count`, `buy_price`, `sell_price`, `inventory_type`, `allowable_class`, `allowable_race`, `item_level`, `required_level`, `required_skill`, `required_skill_rank`, `required_spell`, `required_honor_rank`, `required_city_rank`, `required_reputation_faction`, `required_reputation_rank`, `max_count`, `stackable`, `container_slots`, `stat_type1`, `stat_value1`, `stat_type2`, `stat_value2`, `stat_type3`, `stat_value3`, `stat_type4`, `stat_value4`, `stat_type5`, `stat_value5`, `stat_type6`, `stat_value6`, `stat_type7`, `stat_value7`, `stat_type8`, `stat_value8`, `stat_type9`, `stat_value9`, `stat_type10`, `stat_value10`, `delay`, `range_mod`, `ammo_type`, `dmg_min1`, `dmg_max1`, `dmg_type1`, `dmg_min2`, `dmg_max2`, `dmg_type2`, `dmg_min3`, `dmg_max3`, `dmg_type3`, `dmg_min4`, `dmg_max4`, `dmg_type4`, `dmg_min5`, `dmg_max5`, `dmg_type5`, `block`, `armor`, `holy_res`, `fire_res`, `nature_res`, `frost_res`, `shadow_res`, `arcane_res`, `spellid_1`, `spelltrigger_1`, `spellcharges_1`, `spellppmrate_1`, `spellcooldown_1`, `spellcategory_1`, `spellcategorycooldown_1`, `spellid_2`, `spelltrigger_2`, `spellcharges_2`, `spellppmrate_2`, `spellcooldown_2`, `spellcategory_2`, `spellcategorycooldown_2`, `spellid_3`, `spelltrigger_3`, `spellcharges_3`, `spellppmrate_3`, `spellcooldown_3`, `spellcategory_3`, `spellcategorycooldown_3`, `spellid_4`, `spelltrigger_4`, `spellcharges_4`, `spellppmrate_4`, `spellcooldown_4`, `spellcategory_4`, `spellcategorycooldown_4`, `spellid_5`, `spelltrigger_5`, `spellcharges_5`, `spellppmrate_5`, `spellcooldown_5`, `spellcategory_5`, `spellcategorycooldown_5`, `bonding`, `page_text`, `page_language`, `page_material`, `start_quest`, `lock_id`, `material`, `sheath`, `random_property`, `set_id`, `max_durability`, `area_bound`, `map_bound`, `duration`, `bag_family`, `disenchant_id`, `food_type`, `min_money_loot`, `max_money_loot`, `extra_flags`, `other_team_entry`, `script_name`) VALUES (51808, 0, 0, 0, 'Experimental Portable Wormhole Generator', 'Creates a highly radioactive Wormhole.', 21189, 2, 0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 18282, 0, 0, 0, 3600000, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 'item_wormhole_generator');
+
+update item_template set spellcharges_1 = -1 where entry = 51808;
+
+REPLACE INTO `creature_template` (`entry`, `patch`, `display_id1`, `display_id2`, `display_id3`, `display_id4`, `name`, `subname`, `gossip_menu_id`, `level_min`, `level_max`, `health_min`, `health_max`, `mana_min`, `mana_max`, `armor`, `faction`, `npc_flags`, `speed_walk`, `speed_run`, `scale`, `detection_range`, `call_for_help_range`, `leash_range`, `rank`, `xp_multiplier`, `dmg_min`, `dmg_max`, `dmg_school`, `attack_power`, `dmg_multiplier`, `base_attack_time`, `ranged_attack_time`, `unit_class`, `unit_flags`, `dynamic_flags`, `beast_family`, `trainer_type`, `trainer_spell`, `trainer_class`, `trainer_race`, `ranged_dmg_min`, `ranged_dmg_max`, `ranged_attack_power`, `type`, `type_flags`, `loot_id`, `pickpocket_loot_id`, `skinning_loot_id`, `holy_res`, `fire_res`, `nature_res`, `frost_res`, `shadow_res`, `arcane_res`, `spell_id1`, `spell_id2`, `spell_id3`, `spell_id4`, `spell_list_id`, `pet_spell_list_id`, `gold_min`, `gold_max`, `ai_name`, `movement_type`, `inhabit_type`, `civilian`, `racial_leader`, `regeneration`, `equipment_id`, `trainer_id`, `vendor_id`, `mechanic_immune_mask`, `school_immune_mask`, `flags_extra`, `script_name`) VALUES (51570, 0, 9780, 0, 0, 0, 'Kleo Ficklevolt', 'Everlook Science Squad', 0, 40, 55, 1605, 1605, 0, 0, 1200, 35, 2, 1.08, 1.14286, 0, 20, 5, 0, 0, 1, 42, 53, 0, 122, 1, 1000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 45.144, 62.073, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 100, 0, 0, 10, '');
+
+REPLACE INTO `creature_template` (`entry`, `patch`, `display_id1`, `display_id2`, `display_id3`, `display_id4`, `name`, `subname`, `gossip_menu_id`, `level_min`, `level_max`, `health_min`, `health_max`, `mana_min`, `mana_max`, `armor`, `faction`, `npc_flags`, `speed_walk`, `speed_run`, `scale`, `detection_range`, `call_for_help_range`, `leash_range`, `rank`, `xp_multiplier`, `dmg_min`, `dmg_max`, `dmg_school`, `attack_power`, `dmg_multiplier`, `base_attack_time`, `ranged_attack_time`, `unit_class`, `unit_flags`, `dynamic_flags`, `beast_family`, `trainer_type`, `trainer_spell`, `trainer_class`, `trainer_race`, `ranged_dmg_min`, `ranged_dmg_max`, `ranged_attack_power`, `type`, `type_flags`, `loot_id`, `pickpocket_loot_id`, `skinning_loot_id`, `holy_res`, `fire_res`, `nature_res`, `frost_res`, `shadow_res`, `arcane_res`, `spell_id1`, `spell_id2`, `spell_id3`, `spell_id4`, `spell_list_id`, `pet_spell_list_id`, `gold_min`, `gold_max`, `ai_name`, `movement_type`, `inhabit_type`, `civilian`, `racial_leader`, `regeneration`, `equipment_id`, `trainer_id`, `vendor_id`, `mechanic_immune_mask`, `school_immune_mask`, `flags_extra`, `script_name`) VALUES (51571, 0, 13969, 0, 0, 0, 'Kizzi Sparkblast', 'Everlook Science Squad', 0, 40, 55, 1605, 1605, 0, 0, 1200, 35, 2, 1.08, 1.14286, 0, 20, 5, 0, 0, 1, 42, 53, 0, 122, 1, 1000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 45.144, 62.073, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 100, 0, 0, 10, '');
+
+REPLACE INTO `creature_template` (`entry`, `patch`, `display_id1`, `display_id2`, `display_id3`, `display_id4`, `name`, `subname`, `gossip_menu_id`, `level_min`, `level_max`, `health_min`, `health_max`, `mana_min`, `mana_max`, `armor`, `faction`, `npc_flags`, `speed_walk`, `speed_run`, `scale`, `detection_range`, `call_for_help_range`, `leash_range`, `rank`, `xp_multiplier`, `dmg_min`, `dmg_max`, `dmg_school`, `attack_power`, `dmg_multiplier`, `base_attack_time`, `ranged_attack_time`, `unit_class`, `unit_flags`, `dynamic_flags`, `beast_family`, `trainer_type`, `trainer_spell`, `trainer_class`, `trainer_race`, `ranged_dmg_min`, `ranged_dmg_max`, `ranged_attack_power`, `type`, `type_flags`, `loot_id`, `pickpocket_loot_id`, `skinning_loot_id`, `holy_res`, `fire_res`, `nature_res`, `frost_res`, `shadow_res`, `arcane_res`, `spell_id1`, `spell_id2`, `spell_id3`, `spell_id4`, `spell_list_id`, `pet_spell_list_id`, `gold_min`, `gold_max`, `ai_name`, `movement_type`, `inhabit_type`, `civilian`, `racial_leader`, `regeneration`, `equipment_id`, `trainer_id`, `vendor_id`, `mechanic_immune_mask`, `school_immune_mask`, `flags_extra`, `script_name`) VALUES (51572, 0, 13969, 0, 0, 0, 'Felix Lazyrocket', 'Everlook Science Squad', 0, 40, 55, 1605, 1605, 0, 0, 1200, 35, 2, 1.08, 1.14286, 0, 20, 5, 0, 0, 1, 42, 53, 0, 122, 1, 1000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 45.144, 62.073, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 100, 0, 0, 10, '');
+
+REPLACE INTO `creature_template` (`entry`, `patch`, `display_id1`, `display_id2`, `display_id3`, `display_id4`, `name`, `subname`, `gossip_menu_id`, `level_min`, `level_max`, `health_min`, `health_max`, `mana_min`, `mana_max`, `armor`, `faction`, `npc_flags`, `speed_walk`, `speed_run`, `scale`, `detection_range`, `call_for_help_range`, `leash_range`, `rank`, `xp_multiplier`, `dmg_min`, `dmg_max`, `dmg_school`, `attack_power`, `dmg_multiplier`, `base_attack_time`, `ranged_attack_time`, `unit_class`, `unit_flags`, `dynamic_flags`, `beast_family`, `trainer_type`, `trainer_spell`, `trainer_class`, `trainer_race`, `ranged_dmg_min`, `ranged_dmg_max`, `ranged_attack_power`, `type`, `type_flags`, `loot_id`, `pickpocket_loot_id`, `skinning_loot_id`, `holy_res`, `fire_res`, `nature_res`, `frost_res`, `shadow_res`, `arcane_res`, `spell_id1`, `spell_id2`, `spell_id3`, `spell_id4`, `spell_list_id`, `pet_spell_list_id`, `gold_min`, `gold_max`, `ai_name`, `movement_type`, `inhabit_type`, `civilian`, `racial_leader`, `regeneration`, `equipment_id`, `trainer_id`, `vendor_id`, `mechanic_immune_mask`, `school_immune_mask`, `flags_extra`, `script_name`) VALUES (51573, 0, 13969, 0, 0, 0, 'WORMHOLE QUEST OBJECTIVE', '', 0, 40, 55, 1605, 1605, 0, 0, 1200, 35, 2, 1.08, 1.14286, 0, 20, 5, 0, 0, 1, 42, 53, 0, 122, 1, 1000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 45.144, 62.073, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 100, 0, 0, 10, '');
+
 
 -- set faction for defias rioter
 UPDATE `creature_template` SET `faction` = 17 WHERE entry = 5043;
