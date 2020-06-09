@@ -437,6 +437,7 @@ enum DressingBoxes
     THUNDER_BLUFF_GUARD       = 50390,
     SENJIN_GUARD              = 50416,
     DEATHGUARD                = 50387,
+    HIDDEN_SET                = 50024,
 
     FASHION_COIN              = 51217
 };
@@ -459,6 +460,7 @@ bool GossipHello_npc_dressing_room(Player* pPlayer, Creature* pCreature)
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TABARD, "Stormwind Guard", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 12);
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TABARD, "Darnassus Sentinel", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 13);
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TABARD, "Sholomance Darkmaster", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 14);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TABARD, "Emperor's New Raiment", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 15);
     }
     if (pPlayer->GetTeam() == HORDE)
     {
@@ -473,6 +475,7 @@ bool GossipHello_npc_dressing_room(Player* pPlayer, Creature* pCreature)
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TABARD, "Thunder Bluff Guard", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 9);
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TABARD, "Sen'jin Guard", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 10);
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TABARD, "Sholomance Darkmaster", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 11);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TABARD, "Emperor's New Raiment", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 12);
     }
 
     pPlayer->SEND_GOSSIP_MENU(90345, pCreature->GetGUID());
@@ -506,6 +509,7 @@ bool GossipSelect_npc_dressing_room(Player* pPlayer, Creature* pCreature, uint32
         if (uiAction == GOSSIP_ACTION_INFO_DEF + 12) { pPlayer->AddItem(STORMWIND_GUARD); pPlayer->DestroyItemCount(FASHION_COIN, price, true); }
         if (uiAction == GOSSIP_ACTION_INFO_DEF + 13) { pPlayer->AddItem(DARNASSUS_SENTINEL); pPlayer->DestroyItemCount(FASHION_COIN, price, true); }
         if (uiAction == GOSSIP_ACTION_INFO_DEF + 14) { pPlayer->AddItem(DARKMASTER); pPlayer->DestroyItemCount(FASHION_COIN, price, true); }
+        if (uiAction == GOSSIP_ACTION_INFO_DEF + 15) { pPlayer->AddItem(HIDDEN_SET); pPlayer->DestroyItemCount(FASHION_COIN, price, true); }
     }
     if (pPlayer->GetTeam() == HORDE)
     {
@@ -520,6 +524,7 @@ bool GossipSelect_npc_dressing_room(Player* pPlayer, Creature* pCreature, uint32
         if (uiAction == GOSSIP_ACTION_INFO_DEF + 9) { pPlayer->AddItem(THUNDER_BLUFF_GUARD); pPlayer->DestroyItemCount(FASHION_COIN, price, true); }
         if (uiAction == GOSSIP_ACTION_INFO_DEF + 10) { pPlayer->AddItem(SENJIN_GUARD); pPlayer->DestroyItemCount(FASHION_COIN, price, true); }
         if (uiAction == GOSSIP_ACTION_INFO_DEF + 11) { pPlayer->AddItem(DARKMASTER); pPlayer->DestroyItemCount(FASHION_COIN, price, true); }
+        if (uiAction == GOSSIP_ACTION_INFO_DEF + 12) { pPlayer->AddItem(HIDDEN_SET); pPlayer->DestroyItemCount(FASHION_COIN, price, true); }
     }
 
     pPlayer->CLOSE_GOSSIP_MENU();
