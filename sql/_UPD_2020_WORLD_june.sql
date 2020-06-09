@@ -1255,5 +1255,5 @@ REPLACE INTO `item_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `grou
 (50024, 51810, 100, 5, 1, 1, 0, 0, 10),
 (50024, 51811, 100, 6, 1, 1, 0, 0, 10);
 
-
+update creature_template set scale = 1 where entry = 1749;
       
