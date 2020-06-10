@@ -746,7 +746,7 @@ DetailsEmoteDelay2, DetailsEmoteDelay3, DetailsEmoteDelay4, IncompleteEmote, Com
 OfferRewardEmote3, OfferRewardEmote4, OfferRewardEmoteDelay1, OfferRewardEmoteDelay2, OfferRewardEmoteDelay3,OfferRewardEmoteDelay4,
 StartScript, CompleteScript)
          values
- ('60107', '1', '2', '85', '8', '10', '15', '0', '0', '0', '0',
+ ('60107', '1', '2', '85', '8', '10', '60', '0', '0', '0', '0',
 '0', '0', '0', '0', '0','0',
 '0', '0', '0', '0', '0', '375', '0', '0', '0',
 '0', '0', '0', 'Cold Feet', 'The damned cold won\'t leave me. I thank you for the pelts, $N but I wonder if I may trouble you again?\n\nI paid a helpful soul, Calvin, to go to Solliden Farmstead to retrieve my slippers before you happened along. He hasn\'t returned and I\'ve heard that he may be less than honest. Undeath doesn\'t change an opportunist it seems. My slippers are in a footlocker at the farmstead.\n\nThe reports I overheard about Scarlets in the area are the least concerning. The murlocs like anything shiny I\'ve heard and I did keep that footlocker polished up...', 'Retrieve Gretchen\'s slippers from the shiny footlocker north of Solliden Farmstead.', 'My slippers! Thank you very much! You have shown a great kindness to me. Please take this coin for your troubles. Dark lady watch over you.', 'Hello again, $N. Have you made the trip to the shore North of Solliden Farmstead yet?', '', '', '',
@@ -765,7 +765,7 @@ StartScript, CompleteScript)
 0, 0);
 replace into creature_questrelation (id, quest, patch_min, patch_max) values ('1521','60107','10','10');
 replace into creature_involvedrelation (id, quest, patch_min, patch_max) values ('1521','60107','10','10');
-      
+update quest_template set RemMoneyMaxLevel = 340 where entry = 60107;
 replace into gameobject_template values 
 (1000383, 0, 3, 5744, 'Seaweed-covered Footlocker', 0, 0, 0.7, 57, 1000383, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
 
