@@ -765,7 +765,7 @@ StartScript, CompleteScript)
 0, 0);
 replace into creature_questrelation (id, quest, patch_min, patch_max) values ('1521','60107','10','10');
 replace into creature_involvedrelation (id, quest, patch_min, patch_max) values ('1521','60107','10','10');
-update quest_template set RemMoneyMaxLevel = 450 where entry = 60107;
+update quest_template set RewMoneyMaxLevel = 450 where entry = 60107;
 replace into gameobject_template values 
 (1000383, 0, 3, 5744, 'Seaweed-covered Footlocker', 0, 0, 0.7, 57, 1000383, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
 
