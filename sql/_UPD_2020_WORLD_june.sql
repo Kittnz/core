@@ -780,9 +780,9 @@ REPLACE INTO `gameobject` (`id`, `map`, `position_x`, `position_y`, `position_z`
 replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1, spellcooldown_1) values
 (51760, 15, 2, 'Gryphon Hatchling', 'A gift from the Wildhammer dwarves to the heroes of the Alliance, these hatchlings are descendants of the same gryphons ridden by Falstad and his entourage into Grim Batol.', 1294, 3, 1, 28505, 1500);
 replace into creature_template (entry, display_id1, display_id2, display_id3, name, subname, level_min, level_max, health_min, health_max, faction, script_name, scale) values
-(51570, '6852', 0, 0, 'Beaky', '', '1', '1', '64', '64', '35', '', 0.4);
+(51576, '6852', 0, 0, 'Beaky', '', '1', '1', '64', '64', '35', '', 0.4);
 replace into custom_pet_entry_relation (item_entry, creature_entry) values 
-(51760, 51570);
+(51760, 51576);
 
 -- Wormhole quest
 
