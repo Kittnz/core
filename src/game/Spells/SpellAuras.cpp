@@ -1733,6 +1733,12 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
                         caster->HandleEmote(EMOTE_STATE_SUBMERGED);
                         break;
                     }
+                    case 29705: // Midsummer Pole Dancing
+                    {
+                        m_isPeriodic = true;
+                        m_modifier.periodictime = 3000;
+                        break;
+                    }
                 }
                 break;
             }
@@ -6230,6 +6236,7 @@ void Aura::PeriodicDummyTick()
                     return;
                 }
                 case 24596:                                 // Intoxicating Venom
+                {
                     if (target->isInCombat())
                     {
                         uint32 rand = urand(0, 99);
@@ -6239,6 +6246,26 @@ void Aura::PeriodicDummyTick()
                             target->CastSpell(target, 6869, true, nullptr, this);     // Fall Down
                     }
                     return;
+                }
+                case 29705:  // Midsummer Pole Dancing
+                {
+                    int ribbonCount = 0;
+
+                    Unit::SpellAuraHolderMap const& uAuras = target->GetSpellAuraHolderMap();
+                    for (const auto& aura : uAuras)
+                    {
+                        if (ribbonCount < 2)
+                            if (aura.second->GetId() == 29705)
+                                ribbonCount++;
+                            else
+                                break;
+                    }
+
+                    if (ribbonCount > 1)
+                        target->CastSpell(GetCaster(), 29175, true); // Midsummer Pole Buff
+
+                    return;
+                }
             }
             break;
         }
