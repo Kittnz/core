@@ -1286,3 +1286,762 @@ values
  '0', '1', NULL);
 
 update creature_template set npc_flags = 1 where entry = 51569;
+
+-- New Darnassus Quests
+
+replace into quest_template (
+entry, patch, Method, ZoneOrSort, MinLevel, QuestLevel, MaxLevel, Type, RequiredClasses, RequiredRaces, RequiredSkill,
+RequiredSkillValue, RepObjectiveFaction, RepObjectiveValue, RequiredMinRepFaction, RequiredMinRepValue,RequiredMaxRepFaction,
+RequiredMaxRepValue, SuggestedPlayers, LimitTime, QuestFlags, SpecialFlags, PrevQuestId, NextQuestId, ExclusiveGroup, NextQuestInChain,
+SrcItemId, SrcItemCount, SrcSpell, Title, Details, Objectives, OfferRewardText, RequestItemsText, EndText, ObjectiveText1, ObjectiveText2,
+ObjectiveText3, ObjectiveText4, ReqItemId1, ReqItemId2, ReqItemId3, ReqItemId4, ReqItemCount1, ReqItemCount2, ReqItemCount3,
+ReqItemCount4, ReqSourceId1, ReqSourceId2, ReqSourceId3, ReqSourceId4, ReqSourceCount1, ReqSourceCount2, ReqSourceCount3,
+ReqSourceCount4, ReqCreatureOrGOId1, ReqCreatureOrGOId2, ReqCreatureOrGOId3, ReqCreatureOrGOId4, ReqCreatureOrGOCount1,
+ReqCreatureOrGOCount2, ReqCreatureOrGOCount3, ReqCreatureOrGOCount4, ReqSpellCast1, ReqSpellCast2, ReqSpellCast3,
+ReqSpellCast4, RewChoiceItemId1, RewChoiceItemId2, RewChoiceItemId3, RewChoiceItemId4, RewChoiceItemId5, RewChoiceItemId6,
+RewChoiceItemCount1, RewChoiceItemCount2, RewChoiceItemCount3, RewChoiceItemCount4, RewChoiceItemCount5, RewChoiceItemCount6,
+RewItemId1, RewItemId2, RewItemId3, RewItemId4, RewItemCount1, RewItemCount2, RewItemCount3, RewItemCount4, RewRepFaction1,
+RewRepFaction2, RewRepFaction3, RewRepFaction4, RewRepFaction5, RewRepValue1, RewRepValue2, RewRepValue3, RewRepValue4,
+RewRepValue5, RewOrReqMoney, RewMoneyMaxLevel, RewSpell, RewSpellCast, RewMailTemplateId, RewMailMoney, RewMailDelaySecs,
+PointMapId, PointX, PointY, PointOpt, DetailsEmote1, DetailsEmote2, DetailsEmote3, DetailsEmote4, DetailsEmoteDelay1,
+DetailsEmoteDelay2, DetailsEmoteDelay3, DetailsEmoteDelay4, IncompleteEmote, CompleteEmote, OfferRewardEmote1, OfferRewardEmote2,
+OfferRewardEmote3, OfferRewardEmote4, OfferRewardEmoteDelay1, OfferRewardEmoteDelay2, OfferRewardEmoteDelay3,OfferRewardEmoteDelay4,
+StartScript, CompleteScript)
+         values
+ ('60110', '0', '2', '188', '3', '5', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0','0',
+'0', '0', '0', '8', '0', '916', '0', '0', '0',
+'0', '0', '0', 'Githyiss the Vile', 'It pains me to ask this of you but the brood mother of the Webwood spiders has become increasingly hostile.\n\nHer behavior threatens Shadowglen\'s balance as she mercilessly overhunts the local wildlife... going as far as attacking Iverron when he wandered near the Shadowthread Cave. Bring back her venom sac so that I may further my research.\n\nBe careful, her poison is stronger than any of the lesser spiders.', 'Kill Githyiss the Vile and collect her Venom Sac, she can be found deep inside the Shadowthread Cave.', 'Thank you, $N. Be proud of your actions this day, you have finally restored balance to Shadowglen.', 'It is important that we put the brood mother down.\n\nI\'m afraid we have no other choice...', '', '', '',
+'', '', '51815', '0', '0', '0', '1', '0', '0',
+'0', '0', '0', '0', '0', '0', '0', '0',
+'0', '1994', '0', '0', '0', '1',
+'0', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0', '0', '0', '69',
+'0', '0', '0', '0', '350', '0', '0', '0',
+'0', '0', '204', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '1', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0','0',
+0, 0);
+replace into creature_questrelation (id, quest, patch_min, patch_max) values ('2082','60110','10','10');
+replace into creature_involvedrelation (id, quest, patch_min, patch_max) values ('2082','60110','10','10');      
+
+replace into item_template (
+entry, patch, class, subclass, name,description, display_id, quality, flags, buy_count,
+buy_price, sell_price, inventory_type, allowable_class, allowable_race, item_level,
+required_level, required_skill, required_skill_rank, required_spell, required_honor_rank,
+required_city_rank, required_reputation_faction, required_reputation_rank, max_count, stackable,
+container_slots, stat_type1, stat_value1, stat_type2, stat_value2, stat_type3, stat_value3,
+stat_type4, stat_value4, stat_type5, stat_value5, stat_type6, stat_value6, stat_type7,
+stat_value7, stat_type8, stat_value8, stat_type9, stat_value9, stat_type10, stat_value10,
+delay, range_mod, ammo_type, dmg_min1, dmg_max1, dmg_type1, dmg_min2, dmg_max2, dmg_type2,
+dmg_min3, dmg_max3, dmg_type3, dmg_min4, dmg_max4, dmg_type4, dmg_min5, dmg_max5, dmg_type5, block,
+armor, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, spellid_1, spelltrigger_1,
+spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, spellid_2,
+spelltrigger_2, spellcharges_2, spellppmrate_2, spellcooldown_2, spellcategory_2, spellcategorycooldown_2,
+spellid_3, spelltrigger_3, spellcharges_3, spellppmrate_3, spellcooldown_3, spellcategory_3,
+spellcategorycooldown_3, spellid_4, spelltrigger_4, spellcharges_4, spellppmrate_4, spellcooldown_4,
+spellcategory_4, spellcategorycooldown_4, spellid_5, spelltrigger_5, spellcharges_5, spellppmrate_5,
+spellcooldown_5, spellcategory_5, spellcategorycooldown_5, bonding, page_text, page_language, page_material,
+start_quest, lock_id, material, sheath, random_property, set_id, max_durability, area_bound, map_bound,
+duration, bag_family, disenchant_id, food_type, min_money_loot, max_money_loot, extra_flags, other_team_entry,
+script_name)
+values
+ ('51815', '0', '12', '0', 'Githyis\'s Venom Sac', '', '1423', '1', '2048', '1', '0', '0', '0', '-1', '-1', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '1', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '4', '0', '0', '0', '0', '0', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+ 
+ replace into creature_loot_template values (1994, 51815, -100, 0, 1, 1, 0, 0, 10);
+ 
+replace into item_template (
+entry, patch, class, subclass, name,description, display_id, quality, flags, buy_count,
+buy_price, sell_price, inventory_type, allowable_class, allowable_race, item_level,
+required_level, required_skill, required_skill_rank, required_spell, required_honor_rank,
+required_city_rank, required_reputation_faction, required_reputation_rank, max_count, stackable,
+container_slots, stat_type1, stat_value1, stat_type2, stat_value2, stat_type3, stat_value3,
+stat_type4, stat_value4, stat_type5, stat_value5, stat_type6, stat_value6, stat_type7,
+stat_value7, stat_type8, stat_value8, stat_type9, stat_value9, stat_type10, stat_value10,
+delay, range_mod, ammo_type, dmg_min1, dmg_max1, dmg_type1, dmg_min2, dmg_max2, dmg_type2,
+dmg_min3, dmg_max3, dmg_type3, dmg_min4, dmg_max4, dmg_type4, dmg_min5, dmg_max5, dmg_type5, block,
+armor, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, spellid_1, spelltrigger_1,
+spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, spellid_2,
+spelltrigger_2, spellcharges_2, spellppmrate_2, spellcooldown_2, spellcategory_2, spellcategorycooldown_2,
+spellid_3, spelltrigger_3, spellcharges_3, spellppmrate_3, spellcooldown_3, spellcategory_3,
+spellcategorycooldown_3, spellid_4, spelltrigger_4, spellcharges_4, spellppmrate_4, spellcooldown_4,
+spellcategory_4, spellcategorycooldown_4, spellid_5, spelltrigger_5, spellcharges_5, spellppmrate_5,
+spellcooldown_5, spellcategory_5, spellcategorycooldown_5, bonding, page_text, page_language, page_material,
+start_quest, lock_id, material, sheath, random_property, set_id, max_durability, area_bound, map_bound,
+duration, bag_family, disenchant_id, food_type, min_money_loot, max_money_loot, extra_flags, other_team_entry,
+script_name)
+values
+ ('51816', '0', '2', '19', 'Webwood Branch', '', '6099', '1', '0', '1', '0', '41', '15', '-1', '-1', '7',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1600', '0',
+ '0', '7', '14', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '2', '0', '0', '0', '25', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+ 
+ replace into item_template (
+entry, patch, class, subclass, name,description, display_id, quality, flags, buy_count,
+buy_price, sell_price, inventory_type, allowable_class, allowable_race, item_level,
+required_level, required_skill, required_skill_rank, required_spell, required_honor_rank,
+required_city_rank, required_reputation_faction, required_reputation_rank, max_count, stackable,
+container_slots, stat_type1, stat_value1, stat_type2, stat_value2, stat_type3, stat_value3,
+stat_type4, stat_value4, stat_type5, stat_value5, stat_type6, stat_value6, stat_type7,
+stat_value7, stat_type8, stat_value8, stat_type9, stat_value9, stat_type10, stat_value10,
+delay, range_mod, ammo_type, dmg_min1, dmg_max1, dmg_type1, dmg_min2, dmg_max2, dmg_type2,
+dmg_min3, dmg_max3, dmg_type3, dmg_min4, dmg_max4, dmg_type4, dmg_min5, dmg_max5, dmg_type5, block,
+armor, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, spellid_1, spelltrigger_1,
+spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, spellid_2,
+spelltrigger_2, spellcharges_2, spellppmrate_2, spellcooldown_2, spellcategory_2, spellcategorycooldown_2,
+spellid_3, spelltrigger_3, spellcharges_3, spellppmrate_3, spellcooldown_3, spellcategory_3,
+spellcategorycooldown_3, spellid_4, spelltrigger_4, spellcharges_4, spellppmrate_4, spellcooldown_4,
+spellcategory_4, spellcategorycooldown_4, spellid_5, spelltrigger_5, spellcharges_5, spellppmrate_5,
+spellcooldown_5, spellcategory_5, spellcategorycooldown_5, bonding, page_text, page_language, page_material,
+start_quest, lock_id, material, sheath, random_property, set_id, max_durability, area_bound, map_bound,
+duration, bag_family, disenchant_id, food_type, min_money_loot, max_money_loot, extra_flags, other_team_entry,
+script_name)
+values
+ ('51817', '0', '4', '2', 'Woodland Boots', '', '16854', '1', '0', '1', '0', '0', '8', '-1', '-1', '9',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '34', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '25', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+ 
+ update quest_template set rewitemid1 = 51816, rewitemcount1 = 1 where entry = 60110;
+ update quest_template set rewitemid2 = 51817, rewitemcount2 = 1 where entry = 60110;
+  
+replace into quest_template (
+entry, patch, Method, ZoneOrSort, MinLevel, QuestLevel, MaxLevel, Type, RequiredClasses, RequiredRaces, RequiredSkill,
+RequiredSkillValue, RepObjectiveFaction, RepObjectiveValue, RequiredMinRepFaction, RequiredMinRepValue,RequiredMaxRepFaction,
+RequiredMaxRepValue, SuggestedPlayers, LimitTime, QuestFlags, SpecialFlags, PrevQuestId, NextQuestId, ExclusiveGroup, NextQuestInChain,
+SrcItemId, SrcItemCount, SrcSpell, Title, Details, Objectives, OfferRewardText, RequestItemsText, EndText, ObjectiveText1, ObjectiveText2,
+ObjectiveText3, ObjectiveText4, ReqItemId1, ReqItemId2, ReqItemId3, ReqItemId4, ReqItemCount1, ReqItemCount2, ReqItemCount3,
+ReqItemCount4, ReqSourceId1, ReqSourceId2, ReqSourceId3, ReqSourceId4, ReqSourceCount1, ReqSourceCount2, ReqSourceCount3,
+ReqSourceCount4, ReqCreatureOrGOId1, ReqCreatureOrGOId2, ReqCreatureOrGOId3, ReqCreatureOrGOId4, ReqCreatureOrGOCount1,
+ReqCreatureOrGOCount2, ReqCreatureOrGOCount3, ReqCreatureOrGOCount4, ReqSpellCast1, ReqSpellCast2, ReqSpellCast3,
+ReqSpellCast4, RewChoiceItemId1, RewChoiceItemId2, RewChoiceItemId3, RewChoiceItemId4, RewChoiceItemId5, RewChoiceItemId6,
+RewChoiceItemCount1, RewChoiceItemCount2, RewChoiceItemCount3, RewChoiceItemCount4, RewChoiceItemCount5, RewChoiceItemCount6,
+RewItemId1, RewItemId2, RewItemId3, RewItemId4, RewItemCount1, RewItemCount2, RewItemCount3, RewItemCount4, RewRepFaction1,
+RewRepFaction2, RewRepFaction3, RewRepFaction4, RewRepFaction5, RewRepValue1, RewRepValue2, RewRepValue3, RewRepValue4,
+RewRepValue5, RewOrReqMoney, RewMoneyMaxLevel, RewSpell, RewSpellCast, RewMailTemplateId, RewMailMoney, RewMailDelaySecs,
+PointMapId, PointX, PointY, PointOpt, DetailsEmote1, DetailsEmote2, DetailsEmote3, DetailsEmote4, DetailsEmoteDelay1,
+DetailsEmoteDelay2, DetailsEmoteDelay3, DetailsEmoteDelay4, IncompleteEmote, CompleteEmote, OfferRewardEmote1, OfferRewardEmote2,
+OfferRewardEmote3, OfferRewardEmote4, OfferRewardEmoteDelay1, OfferRewardEmoteDelay2, OfferRewardEmoteDelay3,OfferRewardEmoteDelay4,
+StartScript, CompleteScript)
+         values
+ ('60111', '0', '2', '141', '0', '10', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0','0',
+'0', '0', '0', '8', '0', '487', '0', '0', '0',
+'0', '0', '0', 'A Decisive Blow', 'You\'ve proven yourself capable enough to assist us in dealing with their leaders.\n\nOur scouts have identified them as Agal, who orchestrates the ambushes from inside a cave below the road and Greenpaw, a powerful shaman who terrorizes the Ban\'ethil Barrow Den from within.\n\nThey are surrounded by their underlings, so bring an ally or prepare yourself to wade through them alone, though I advise caution when doing so.', 'Moon Priestess Amara has asked you to kill Agal in the cave below the road and Greenpaw inside the Ban\'ethil Barrow Den.', 'Elune be praised! Though it is regrettable that it had to end this way, know that your actions will ensure safe passage to Darnassus for our people. Thank you, $C.', 'Please be careful, Agal and Greenpaw might have once been honorable allies... but they\'re corrupted beyond redemption now.', '', '', '',
+'', '', '0', '0', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0', '0', '0',
+'0', '2162', '1993', '0', '0', '1',
+'1', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0', '0', '0', '69',
+'0', '0', '0', '0', '250', '0', '0', '0',
+'0', '115', '585', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '1', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0','0',
+0, 0);
+replace into creature_questrelation (id, quest, patch_min, patch_max) values ('2151','60111','10','10');
+replace into creature_involvedrelation (id, quest, patch_min, patch_max) values ('2151','60111','10','10');
+
+ update quest_template set rewitemid1 = 51818, rewitemcount1 = 1 where entry = 60111;
+ update quest_template set rewitemid2 = 51819, rewitemcount2 = 1 where entry = 60111;
+ 
+ replace into item_template (
+entry, patch, class, subclass, name,description, display_id, quality, flags, buy_count,
+buy_price, sell_price, inventory_type, allowable_class, allowable_race, item_level,
+required_level, required_skill, required_skill_rank, required_spell, required_honor_rank,
+required_city_rank, required_reputation_faction, required_reputation_rank, max_count, stackable,
+container_slots, stat_type1, stat_value1, stat_type2, stat_value2, stat_type3, stat_value3,
+stat_type4, stat_value4, stat_type5, stat_value5, stat_type6, stat_value6, stat_type7,
+stat_value7, stat_type8, stat_value8, stat_type9, stat_value9, stat_type10, stat_value10,
+delay, range_mod, ammo_type, dmg_min1, dmg_max1, dmg_type1, dmg_min2, dmg_max2, dmg_type2,
+dmg_min3, dmg_max3, dmg_type3, dmg_min4, dmg_max4, dmg_type4, dmg_min5, dmg_max5, dmg_type5, block,
+armor, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, spellid_1, spelltrigger_1,
+spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, spellid_2,
+spelltrigger_2, spellcharges_2, spellppmrate_2, spellcooldown_2, spellcategory_2, spellcategorycooldown_2,
+spellid_3, spelltrigger_3, spellcharges_3, spellppmrate_3, spellcooldown_3, spellcategory_3,
+spellcategorycooldown_3, spellid_4, spelltrigger_4, spellcharges_4, spellppmrate_4, spellcooldown_4,
+spellcategory_4, spellcategorycooldown_4, spellid_5, spelltrigger_5, spellcharges_5, spellppmrate_5,
+spellcooldown_5, spellcategory_5, spellcategorycooldown_5, bonding, page_text, page_language, page_material,
+start_quest, lock_id, material, sheath, random_property, set_id, max_durability, area_bound, map_bound,
+duration, bag_family, disenchant_id, food_type, min_money_loot, max_money_loot, extra_flags, other_team_entry,
+script_name)
+values
+ ('51818', '0', '2', '15', 'Agal\'s Ambusher', '', '20398', '2', '0', '1', '0', '425', '13', '-1', '-1', '14',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '2', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1700', '0',
+ '0', '9', '15', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '1', '5', '0', '0', '35', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+ 
+ replace into item_template (
+entry, patch, class, subclass, name,description, display_id, quality, flags, buy_count,
+buy_price, sell_price, inventory_type, allowable_class, allowable_race, item_level,
+required_level, required_skill, required_skill_rank, required_spell, required_honor_rank,
+required_city_rank, required_reputation_faction, required_reputation_rank, max_count, stackable,
+container_slots, stat_type1, stat_value1, stat_type2, stat_value2, stat_type3, stat_value3,
+stat_type4, stat_value4, stat_type5, stat_value5, stat_type6, stat_value6, stat_type7,
+stat_value7, stat_type8, stat_value8, stat_type9, stat_value9, stat_type10, stat_value10,
+delay, range_mod, ammo_type, dmg_min1, dmg_max1, dmg_type1, dmg_min2, dmg_max2, dmg_type2,
+dmg_min3, dmg_max3, dmg_type3, dmg_min4, dmg_max4, dmg_type4, dmg_min5, dmg_max5, dmg_type5, block,
+armor, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, spellid_1, spelltrigger_1,
+spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, spellid_2,
+spelltrigger_2, spellcharges_2, spellppmrate_2, spellcooldown_2, spellcategory_2, spellcategorycooldown_2,
+spellid_3, spelltrigger_3, spellcharges_3, spellppmrate_3, spellcooldown_3, spellcategory_3,
+spellcategorycooldown_3, spellid_4, spelltrigger_4, spellcharges_4, spellppmrate_4, spellcooldown_4,
+spellcategory_4, spellcategorycooldown_4, spellid_5, spelltrigger_5, spellcharges_5, spellppmrate_5,
+spellcooldown_5, spellcategory_5, spellcategorycooldown_5, bonding, page_text, page_language, page_material,
+start_quest, lock_id, material, sheath, random_property, set_id, max_durability, area_bound, map_bound,
+duration, bag_family, disenchant_id, food_type, min_money_loot, max_money_loot, extra_flags, other_team_entry,
+script_name)
+values
+ ('51819', '0', '4', '1', 'Greenpaw\'s Sash', '', '34506', '2', '0', '1', '0', '136', '6', '-1', '-1', '15',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '1', '6', '2',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '0', '0', '0', '18', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+ 
+-- New Tirisfal Quests
+
+replace into quest_template (
+entry, patch, Method, ZoneOrSort, MinLevel, QuestLevel, MaxLevel, Type, RequiredClasses, RequiredRaces, RequiredSkill,
+RequiredSkillValue, RepObjectiveFaction, RepObjectiveValue, RequiredMinRepFaction, RequiredMinRepValue,RequiredMaxRepFaction,
+RequiredMaxRepValue, SuggestedPlayers, LimitTime, QuestFlags, SpecialFlags, PrevQuestId, NextQuestId, ExclusiveGroup, NextQuestInChain,
+SrcItemId, SrcItemCount, SrcSpell, Title, Details, Objectives, OfferRewardText, RequestItemsText, EndText, ObjectiveText1, ObjectiveText2,
+ObjectiveText3, ObjectiveText4, ReqItemId1, ReqItemId2, ReqItemId3, ReqItemId4, ReqItemCount1, ReqItemCount2, ReqItemCount3,
+ReqItemCount4, ReqSourceId1, ReqSourceId2, ReqSourceId3, ReqSourceId4, ReqSourceCount1, ReqSourceCount2, ReqSourceCount3,
+ReqSourceCount4, ReqCreatureOrGOId1, ReqCreatureOrGOId2, ReqCreatureOrGOId3, ReqCreatureOrGOId4, ReqCreatureOrGOCount1,
+ReqCreatureOrGOCount2, ReqCreatureOrGOCount3, ReqCreatureOrGOCount4, ReqSpellCast1, ReqSpellCast2, ReqSpellCast3,
+ReqSpellCast4, RewChoiceItemId1, RewChoiceItemId2, RewChoiceItemId3, RewChoiceItemId4, RewChoiceItemId5, RewChoiceItemId6,
+RewChoiceItemCount1, RewChoiceItemCount2, RewChoiceItemCount3, RewChoiceItemCount4, RewChoiceItemCount5, RewChoiceItemCount6,
+RewItemId1, RewItemId2, RewItemId3, RewItemId4, RewItemCount1, RewItemCount2, RewItemCount3, RewItemCount4, RewRepFaction1,
+RewRepFaction2, RewRepFaction3, RewRepFaction4, RewRepFaction5, RewRepValue1, RewRepValue2, RewRepValue3, RewRepValue4,
+RewRepValue5, RewOrReqMoney, RewMoneyMaxLevel, RewSpell, RewSpellCast, RewMailTemplateId, RewMailMoney, RewMailDelaySecs,
+PointMapId, PointX, PointY, PointOpt, DetailsEmote1, DetailsEmote2, DetailsEmote3, DetailsEmote4, DetailsEmoteDelay1,
+DetailsEmoteDelay2, DetailsEmoteDelay3, DetailsEmoteDelay4, IncompleteEmote, CompleteEmote, OfferRewardEmote1, OfferRewardEmote2,
+OfferRewardEmote3, OfferRewardEmote4, OfferRewardEmoteDelay1, OfferRewardEmoteDelay2, OfferRewardEmoteDelay3,OfferRewardEmoteDelay4,
+StartScript, CompleteScript)
+         values
+ ('60112', '0', '2', '154', '3', '4', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0','0',
+'0', '0', '0', '8', '0', '376', '0', '0', '0',
+'0', '0', '0', 'Fallen Adventurers', 'While I\'m bound to fulfill Marla\'s wish, I cannot help but think about Samuel\'s friends. They are damned into eternal service for the Scourge with their bodies and minds beyond recovery. Please, if you see them... lay them to rest.', 'Novice Elreth has asked you to kill Karrel Grayves, Daniel Ulfman and Stephen Bhartec. They were last seen at a camp near Deathknell\'s gate.', 'Thank you, $N. It is a shame they never broke free of the Scourge\'s control. They would\'ve made powerful allies.', 'They all used to explore Tirisfal together. Karrel was a blacksmith, Daniel was a huntsman and Stephen\'s wisdom guided them all. To see them like this breaks my heart.', '', '', '',
+'', '', '0', '0', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0', '0', '0',
+'0', '1918', '1917', '1916', '0', '1',
+'1', '1', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0', '0', '0', '68',
+'0', '0', '0', '0', '100', '0', '0', '0',
+'0', '0', '235', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0','0',
+0, 0);
+replace into creature_questrelation (id, quest, patch_min, patch_max) values ('1661','60112','10','10');
+replace into creature_involvedrelation (id, quest, patch_min, patch_max) values ('1661','60112','10','10');
+      
+replace into item_template (
+entry, patch, class, subclass, name,description, display_id, quality, flags, buy_count,
+buy_price, sell_price, inventory_type, allowable_class, allowable_race, item_level,
+required_level, required_skill, required_skill_rank, required_spell, required_honor_rank,
+required_city_rank, required_reputation_faction, required_reputation_rank, max_count, stackable,
+container_slots, stat_type1, stat_value1, stat_type2, stat_value2, stat_type3, stat_value3,
+stat_type4, stat_value4, stat_type5, stat_value5, stat_type6, stat_value6, stat_type7,
+stat_value7, stat_type8, stat_value8, stat_type9, stat_value9, stat_type10, stat_value10,
+delay, range_mod, ammo_type, dmg_min1, dmg_max1, dmg_type1, dmg_min2, dmg_max2, dmg_type2,
+dmg_min3, dmg_max3, dmg_type3, dmg_min4, dmg_max4, dmg_type4, dmg_min5, dmg_max5, dmg_type5, block,
+armor, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, spellid_1, spelltrigger_1,
+spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, spellid_2,
+spelltrigger_2, spellcharges_2, spellppmrate_2, spellcooldown_2, spellcategory_2, spellcategorycooldown_2,
+spellid_3, spelltrigger_3, spellcharges_3, spellppmrate_3, spellcooldown_3, spellcategory_3,
+spellcategorycooldown_3, spellid_4, spelltrigger_4, spellcharges_4, spellppmrate_4, spellcooldown_4,
+spellcategory_4, spellcategorycooldown_4, spellid_5, spelltrigger_5, spellcharges_5, spellppmrate_5,
+spellcooldown_5, spellcategory_5, spellcategorycooldown_5, bonding, page_text, page_language, page_material,
+start_quest, lock_id, material, sheath, random_property, set_id, max_durability, area_bound, map_bound,
+duration, bag_family, disenchant_id, food_type, min_money_loot, max_money_loot, extra_flags, other_team_entry,
+script_name)
+values
+ ('51820', '0', '2', '19', 'Bhartec\'s Lost Wand', '', '6138', '1', '0', '1', '0', '40', '15', '-1', '-1', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1700', '0',
+ '0', '6', '13', '5', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '2', '0', '0', '0', '25', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+	 
+replace into item_template (
+entry, patch, class, subclass, name,description, display_id, quality, flags, buy_count,
+buy_price, sell_price, inventory_type, allowable_class, allowable_race, item_level,
+required_level, required_skill, required_skill_rank, required_spell, required_honor_rank,
+required_city_rank, required_reputation_faction, required_reputation_rank, max_count, stackable,
+container_slots, stat_type1, stat_value1, stat_type2, stat_value2, stat_type3, stat_value3,
+stat_type4, stat_value4, stat_type5, stat_value5, stat_type6, stat_value6, stat_type7,
+stat_value7, stat_type8, stat_value8, stat_type9, stat_value9, stat_type10, stat_value10,
+delay, range_mod, ammo_type, dmg_min1, dmg_max1, dmg_type1, dmg_min2, dmg_max2, dmg_type2,
+dmg_min3, dmg_max3, dmg_type3, dmg_min4, dmg_max4, dmg_type4, dmg_min5, dmg_max5, dmg_type5, block,
+armor, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, spellid_1, spelltrigger_1,
+spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, spellid_2,
+spelltrigger_2, spellcharges_2, spellppmrate_2, spellcooldown_2, spellcategory_2, spellcategorycooldown_2,
+spellid_3, spelltrigger_3, spellcharges_3, spellppmrate_3, spellcooldown_3, spellcategory_3,
+spellcategorycooldown_3, spellid_4, spelltrigger_4, spellcharges_4, spellppmrate_4, spellcooldown_4,
+spellcategory_4, spellcategorycooldown_4, spellid_5, spelltrigger_5, spellcharges_5, spellppmrate_5,
+spellcooldown_5, spellcategory_5, spellcategorycooldown_5, bonding, page_text, page_language, page_material,
+start_quest, lock_id, material, sheath, random_property, set_id, max_durability, area_bound, map_bound,
+duration, bag_family, disenchant_id, food_type, min_money_loot, max_money_loot, extra_flags, other_team_entry,
+script_name)
+values
+ ('51821', '0', '1', '0', 'Decaying Pouch', '', '1282', '1', '0', '1', '0', '75', '18', '-1', '-1', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '6', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+ 
+ update quest_template set rewitemid1 = 51820, rewitemcount1 = 1 where entry = 60112;
+ update quest_template set rewitemid2 = 51821, rewitemcount2 = 1 where entry = 60112;
+ 
+ replace into quest_template (
+entry, patch, Method, ZoneOrSort, MinLevel, QuestLevel, MaxLevel, Type, RequiredClasses, RequiredRaces, RequiredSkill,
+RequiredSkillValue, RepObjectiveFaction, RepObjectiveValue, RequiredMinRepFaction, RequiredMinRepValue,RequiredMaxRepFaction,
+RequiredMaxRepValue, SuggestedPlayers, LimitTime, QuestFlags, SpecialFlags, PrevQuestId, NextQuestId, ExclusiveGroup, NextQuestInChain,
+SrcItemId, SrcItemCount, SrcSpell, Title, Details, Objectives, OfferRewardText, RequestItemsText, EndText, ObjectiveText1, ObjectiveText2,
+ObjectiveText3, ObjectiveText4, ReqItemId1, ReqItemId2, ReqItemId3, ReqItemId4, ReqItemCount1, ReqItemCount2, ReqItemCount3,
+ReqItemCount4, ReqSourceId1, ReqSourceId2, ReqSourceId3, ReqSourceId4, ReqSourceCount1, ReqSourceCount2, ReqSourceCount3,
+ReqSourceCount4, ReqCreatureOrGOId1, ReqCreatureOrGOId2, ReqCreatureOrGOId3, ReqCreatureOrGOId4, ReqCreatureOrGOCount1,
+ReqCreatureOrGOCount2, ReqCreatureOrGOCount3, ReqCreatureOrGOCount4, ReqSpellCast1, ReqSpellCast2, ReqSpellCast3,
+ReqSpellCast4, RewChoiceItemId1, RewChoiceItemId2, RewChoiceItemId3, RewChoiceItemId4, RewChoiceItemId5, RewChoiceItemId6,
+RewChoiceItemCount1, RewChoiceItemCount2, RewChoiceItemCount3, RewChoiceItemCount4, RewChoiceItemCount5, RewChoiceItemCount6,
+RewItemId1, RewItemId2, RewItemId3, RewItemId4, RewItemCount1, RewItemCount2, RewItemCount3, RewItemCount4, RewRepFaction1,
+RewRepFaction2, RewRepFaction3, RewRepFaction4, RewRepFaction5, RewRepValue1, RewRepValue2, RewRepValue3, RewRepValue4,
+RewRepValue5, RewOrReqMoney, RewMoneyMaxLevel, RewSpell, RewSpellCast, RewMailTemplateId, RewMailMoney, RewMailDelaySecs,
+PointMapId, PointX, PointY, PointOpt, DetailsEmote1, DetailsEmote2, DetailsEmote3, DetailsEmote4, DetailsEmoteDelay1,
+DetailsEmoteDelay2, DetailsEmoteDelay3, DetailsEmoteDelay4, IncompleteEmote, CompleteEmote, OfferRewardEmote1, OfferRewardEmote2,
+OfferRewardEmote3, OfferRewardEmote4, OfferRewardEmoteDelay1, OfferRewardEmoteDelay2, OfferRewardEmoteDelay3,OfferRewardEmoteDelay4,
+StartScript, CompleteScript)
+         values
+ ('60113', '0', '2', '85', '6', '8', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0','0',
+'0', '0', '0', '8', '0', '367', '0', '0', '0',
+'0', '0', '0', 'Virulence', 'If my theories are correct, then human blood should react to the plague I\'m concocting. While you\'re out gathering the Murloc scales, go to the Solliden Farmstead and bring blood from the Farmhands and Farmers.', 'Apothecary Johaan has asked you to gather 5 Vials of Human Blood from the Tirisfal Farmers located in the Solliden Farmstead.', 'Good. Goooood. This should be plenty of blood to perfect my plague. The other apothecaries would be jealous of this advantage.', 'It shouldn\'t be hard to find the Solliden Farmstead. That\'s where you got the pumpkins from... if you can\'t remember that, then I suggest getting a brain replacement.', '', '', '',
+'', '', '0', '0', '0', '0', '5', '0', '0',
+'0', '0', '0', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0', '0', '0', '68',
+'0', '0', '0', '0', '100', '0', '0', '0',
+'0', '275', '304', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0','0',
+0, 0);
+
+replace into item_template (
+entry, patch, class, subclass, name,description, display_id, quality, flags, buy_count,
+buy_price, sell_price, inventory_type, allowable_class, allowable_race, item_level,
+required_level, required_skill, required_skill_rank, required_spell, required_honor_rank,
+required_city_rank, required_reputation_faction, required_reputation_rank, max_count, stackable,
+container_slots, stat_type1, stat_value1, stat_type2, stat_value2, stat_type3, stat_value3,
+stat_type4, stat_value4, stat_type5, stat_value5, stat_type6, stat_value6, stat_type7,
+stat_value7, stat_type8, stat_value8, stat_type9, stat_value9, stat_type10, stat_value10,
+delay, range_mod, ammo_type, dmg_min1, dmg_max1, dmg_type1, dmg_min2, dmg_max2, dmg_type2,
+dmg_min3, dmg_max3, dmg_type3, dmg_min4, dmg_max4, dmg_type4, dmg_min5, dmg_max5, dmg_type5, block,
+armor, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, spellid_1, spelltrigger_1,
+spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, spellid_2,
+spelltrigger_2, spellcharges_2, spellppmrate_2, spellcooldown_2, spellcategory_2, spellcategorycooldown_2,
+spellid_3, spelltrigger_3, spellcharges_3, spellppmrate_3, spellcooldown_3, spellcategory_3,
+spellcategorycooldown_3, spellid_4, spelltrigger_4, spellcharges_4, spellppmrate_4, spellcooldown_4,
+spellcategory_4, spellcategorycooldown_4, spellid_5, spelltrigger_5, spellcharges_5, spellppmrate_5,
+spellcooldown_5, spellcategory_5, spellcategorycooldown_5, bonding, page_text, page_language, page_material,
+start_quest, lock_id, material, sheath, random_property, set_id, max_durability, area_bound, map_bound,
+duration, bag_family, disenchant_id, food_type, min_money_loot, max_money_loot, extra_flags, other_team_entry,
+script_name)
+values
+ ('51822', '0', '12', '0', 'Human Blood', '', '11199', '1', '0', '1', '0', '0', '0', '-1', '-1', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '5', '5', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '4', '0', '0', '0', '0', '0', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+ 
+update quest_template set reqitemid1 = 51822, reqitemcount1 = 5 where entry = 60113;
+ 
+replace into creature_questrelation (id, quest, patch_min, patch_max) values ('1518','60113','10','10');
+replace into creature_involvedrelation (id, quest, patch_min, patch_max) values ('1518','60113','10','10');
+      
+replace into creature_loot_template values (1934, 51822, -100, 0, 1, 1, 0, 0, 10);
+replace into creature_loot_template values (1935, 51822, -100, 0, 1, 1, 0, 0, 10);
+
+-- Dun Morogh
+
+replace into quest_template (
+entry, patch, Method, ZoneOrSort, MinLevel, QuestLevel, MaxLevel, Type, RequiredClasses, RequiredRaces, RequiredSkill,
+RequiredSkillValue, RepObjectiveFaction, RepObjectiveValue, RequiredMinRepFaction, RequiredMinRepValue,RequiredMaxRepFaction,
+RequiredMaxRepValue, SuggestedPlayers, LimitTime, QuestFlags, SpecialFlags, PrevQuestId, NextQuestId, ExclusiveGroup, NextQuestInChain,
+SrcItemId, SrcItemCount, SrcSpell, Title, Details, Objectives, OfferRewardText, RequestItemsText, EndText, ObjectiveText1, ObjectiveText2,
+ObjectiveText3, ObjectiveText4, ReqItemId1, ReqItemId2, ReqItemId3, ReqItemId4, ReqItemCount1, ReqItemCount2, ReqItemCount3,
+ReqItemCount4, ReqSourceId1, ReqSourceId2, ReqSourceId3, ReqSourceId4, ReqSourceCount1, ReqSourceCount2, ReqSourceCount3,
+ReqSourceCount4, ReqCreatureOrGOId1, ReqCreatureOrGOId2, ReqCreatureOrGOId3, ReqCreatureOrGOId4, ReqCreatureOrGOCount1,
+ReqCreatureOrGOCount2, ReqCreatureOrGOCount3, ReqCreatureOrGOCount4, ReqSpellCast1, ReqSpellCast2, ReqSpellCast3,
+ReqSpellCast4, RewChoiceItemId1, RewChoiceItemId2, RewChoiceItemId3, RewChoiceItemId4, RewChoiceItemId5, RewChoiceItemId6,
+RewChoiceItemCount1, RewChoiceItemCount2, RewChoiceItemCount3, RewChoiceItemCount4, RewChoiceItemCount5, RewChoiceItemCount6,
+RewItemId1, RewItemId2, RewItemId3, RewItemId4, RewItemCount1, RewItemCount2, RewItemCount3, RewItemCount4, RewRepFaction1,
+RewRepFaction2, RewRepFaction3, RewRepFaction4, RewRepFaction5, RewRepValue1, RewRepValue2, RewRepValue3, RewRepValue4,
+RewRepValue5, RewOrReqMoney, RewMoneyMaxLevel, RewSpell, RewSpellCast, RewMailTemplateId, RewMailMoney, RewMailDelaySecs,
+PointMapId, PointX, PointY, PointOpt, DetailsEmote1, DetailsEmote2, DetailsEmote3, DetailsEmote4, DetailsEmoteDelay1,
+DetailsEmoteDelay2, DetailsEmoteDelay3, DetailsEmoteDelay4, IncompleteEmote, CompleteEmote, OfferRewardEmote1, OfferRewardEmote2,
+OfferRewardEmote3, OfferRewardEmote4, OfferRewardEmoteDelay1, OfferRewardEmoteDelay2, OfferRewardEmoteDelay3,OfferRewardEmoteDelay4,
+StartScript, CompleteScript)
+         values
+ ('60114', '0', '2', '1', '7', '11', '0', '1', '0', '0', '0',
+'0', '0', '0', '0', '0','0',
+'0', '2', '0', '8', '0', '0', '0', '0', '0',
+'0', '0', '0', 'The Terror of Chill Breeze', 'I enjoy camping in this cave, but as long as Old Icebeard makes his home near this area then I\'ll never be safe from him raiding my food. It would make for a great trophy if you could bring me his beard... not to mention making this place safer.', 'Tundra MacGrann has asked you to kill Old Icebeard and collect its beard.', 'Great! That\'s the spirit. Here\'s some stuff I had laying around from a buddy of mine who left for Loch Modan and never came back.', 'Did you kill him? You best be careful now, this is no ordinary wendigo.', '', '', '',
+'', '', '0', '0', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0', '0', '0',
+'0', '1271', '0', '0', '0', '1',
+'0', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0', '0', '0', '47',
+'54', '0', '0', '0', '100', '100', '0', '0',
+'0', '0', '625', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '1', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0','0',
+0, 0);
+replace into creature_questrelation (id, quest, patch_min, patch_max) values ('1266','60114','10','10');
+replace into creature_involvedrelation (id, quest, patch_min, patch_max) values ('1266','60114','10','10');
+      
+replace into item_template (
+entry, patch, class, subclass, name,description, display_id, quality, flags, buy_count,
+buy_price, sell_price, inventory_type, allowable_class, allowable_race, item_level,
+required_level, required_skill, required_skill_rank, required_spell, required_honor_rank,
+required_city_rank, required_reputation_faction, required_reputation_rank, max_count, stackable,
+container_slots, stat_type1, stat_value1, stat_type2, stat_value2, stat_type3, stat_value3,
+stat_type4, stat_value4, stat_type5, stat_value5, stat_type6, stat_value6, stat_type7,
+stat_value7, stat_type8, stat_value8, stat_type9, stat_value9, stat_type10, stat_value10,
+delay, range_mod, ammo_type, dmg_min1, dmg_max1, dmg_type1, dmg_min2, dmg_max2, dmg_type2,
+dmg_min3, dmg_max3, dmg_type3, dmg_min4, dmg_max4, dmg_type4, dmg_min5, dmg_max5, dmg_type5, block,
+armor, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, spellid_1, spelltrigger_1,
+spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, spellid_2,
+spelltrigger_2, spellcharges_2, spellppmrate_2, spellcooldown_2, spellcategory_2, spellcategorycooldown_2,
+spellid_3, spelltrigger_3, spellcharges_3, spellppmrate_3, spellcooldown_3, spellcategory_3,
+spellcategorycooldown_3, spellid_4, spelltrigger_4, spellcharges_4, spellppmrate_4, spellcooldown_4,
+spellcategory_4, spellcategorycooldown_4, spellid_5, spelltrigger_5, spellcharges_5, spellppmrate_5,
+spellcooldown_5, spellcategory_5, spellcategorycooldown_5, bonding, page_text, page_language, page_material,
+start_quest, lock_id, material, sheath, random_property, set_id, max_durability, area_bound, map_bound,
+duration, bag_family, disenchant_id, food_type, min_money_loot, max_money_loot, extra_flags, other_team_entry,
+script_name)
+values
+ ('51823', '0', '12', '0', 'Old Icebeard\'s Beard', '', '18095', '1', '2048', '1', '0', '0', '0', '-1', '-1', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '1', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);	 
+
+update quest_template set reqitemid1 = 51823, reqitemcount1 = 1 where entry = 60114;
+  
+  replace into item_template (
+entry, patch, class, subclass, name,description, display_id, quality, flags, buy_count,
+buy_price, sell_price, inventory_type, allowable_class, allowable_race, item_level,
+required_level, required_skill, required_skill_rank, required_spell, required_honor_rank,
+required_city_rank, required_reputation_faction, required_reputation_rank, max_count, stackable,
+container_slots, stat_type1, stat_value1, stat_type2, stat_value2, stat_type3, stat_value3,
+stat_type4, stat_value4, stat_type5, stat_value5, stat_type6, stat_value6, stat_type7,
+stat_value7, stat_type8, stat_value8, stat_type9, stat_value9, stat_type10, stat_value10,
+delay, range_mod, ammo_type, dmg_min1, dmg_max1, dmg_type1, dmg_min2, dmg_max2, dmg_type2,
+dmg_min3, dmg_max3, dmg_type3, dmg_min4, dmg_max4, dmg_type4, dmg_min5, dmg_max5, dmg_type5, block,
+armor, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, spellid_1, spelltrigger_1,
+spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, spellid_2,
+spelltrigger_2, spellcharges_2, spellppmrate_2, spellcooldown_2, spellcategory_2, spellcategorycooldown_2,
+spellid_3, spelltrigger_3, spellcharges_3, spellppmrate_3, spellcooldown_3, spellcategory_3,
+spellcategorycooldown_3, spellid_4, spelltrigger_4, spellcharges_4, spellppmrate_4, spellcooldown_4,
+spellcategory_4, spellcategorycooldown_4, spellid_5, spelltrigger_5, spellcharges_5, spellppmrate_5,
+spellcooldown_5, spellcategory_5, spellcategorycooldown_5, bonding, page_text, page_language, page_material,
+start_quest, lock_id, material, sheath, random_property, set_id, max_durability, area_bound, map_bound,
+duration, bag_family, disenchant_id, food_type, min_money_loot, max_money_loot, extra_flags, other_team_entry,
+script_name)
+values
+ ('51824', '0', '4', '2', 'Trogg Kickers', '', '3749', '2', '0', '1', '0', '212', '8', '-1', '-1', '15',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '1', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '45', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '8', '0', '0', '0', '30', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+ 
+ replace into item_template (
+entry, patch, class, subclass, name,description, display_id, quality, flags, buy_count,
+buy_price, sell_price, inventory_type, allowable_class, allowable_race, item_level,
+required_level, required_skill, required_skill_rank, required_spell, required_honor_rank,
+required_city_rank, required_reputation_faction, required_reputation_rank, max_count, stackable,
+container_slots, stat_type1, stat_value1, stat_type2, stat_value2, stat_type3, stat_value3,
+stat_type4, stat_value4, stat_type5, stat_value5, stat_type6, stat_value6, stat_type7,
+stat_value7, stat_type8, stat_value8, stat_type9, stat_value9, stat_type10, stat_value10,
+delay, range_mod, ammo_type, dmg_min1, dmg_max1, dmg_type1, dmg_min2, dmg_max2, dmg_type2,
+dmg_min3, dmg_max3, dmg_type3, dmg_min4, dmg_max4, dmg_type4, dmg_min5, dmg_max5, dmg_type5, block,
+armor, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, spellid_1, spelltrigger_1,
+spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, spellid_2,
+spelltrigger_2, spellcharges_2, spellppmrate_2, spellcooldown_2, spellcategory_2, spellcategorycooldown_2,
+spellid_3, spelltrigger_3, spellcharges_3, spellppmrate_3, spellcooldown_3, spellcategory_3,
+spellcategorycooldown_3, spellid_4, spelltrigger_4, spellcharges_4, spellppmrate_4, spellcooldown_4,
+spellcategory_4, spellcategorycooldown_4, spellid_5, spelltrigger_5, spellcharges_5, spellppmrate_5,
+spellcooldown_5, spellcategory_5, spellcategorycooldown_5, bonding, page_text, page_language, page_material,
+start_quest, lock_id, material, sheath, random_property, set_id, max_durability, area_bound, map_bound,
+duration, bag_family, disenchant_id, food_type, min_money_loot, max_money_loot, extra_flags, other_team_entry,
+script_name)
+values
+ ('51825', '0', '4', '3', 'Beer-Stained Tunic', '', '2982', '2', '0', '1', '0', '368', '4', '-1', '-1', '14',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '1', '4', '1',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '137', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '5', '0', '0', '0', '70', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+ 
+ replace into item_template (
+entry, patch, class, subclass, name,description, display_id, quality, flags, buy_count,
+buy_price, sell_price, inventory_type, allowable_class, allowable_race, item_level,
+required_level, required_skill, required_skill_rank, required_spell, required_honor_rank,
+required_city_rank, required_reputation_faction, required_reputation_rank, max_count, stackable,
+container_slots, stat_type1, stat_value1, stat_type2, stat_value2, stat_type3, stat_value3,
+stat_type4, stat_value4, stat_type5, stat_value5, stat_type6, stat_value6, stat_type7,
+stat_value7, stat_type8, stat_value8, stat_type9, stat_value9, stat_type10, stat_value10,
+delay, range_mod, ammo_type, dmg_min1, dmg_max1, dmg_type1, dmg_min2, dmg_max2, dmg_type2,
+dmg_min3, dmg_max3, dmg_type3, dmg_min4, dmg_max4, dmg_type4, dmg_min5, dmg_max5, dmg_type5, block,
+armor, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, spellid_1, spelltrigger_1,
+spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, spellid_2,
+spelltrigger_2, spellcharges_2, spellppmrate_2, spellcooldown_2, spellcategory_2, spellcategorycooldown_2,
+spellid_3, spelltrigger_3, spellcharges_3, spellppmrate_3, spellcooldown_3, spellcategory_3,
+spellcategorycooldown_3, spellid_4, spelltrigger_4, spellcharges_4, spellppmrate_4, spellcooldown_4,
+spellcategory_4, spellcategorycooldown_4, spellid_5, spelltrigger_5, spellcharges_5, spellppmrate_5,
+spellcooldown_5, spellcategory_5, spellcategorycooldown_5, bonding, page_text, page_language, page_material,
+start_quest, lock_id, material, sheath, random_property, set_id, max_durability, area_bound, map_bound,
+duration, bag_family, disenchant_id, food_type, min_money_loot, max_money_loot, extra_flags, other_team_entry,
+script_name)
+values
+ ('51826', '0', '2', '3', 'Emilgund\'s Rifle', 'A fine piece of Dwarven craftsmanship.', '28206', '2', '0', '1', '0', '432', '15', '-1', '-1', '14',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '2200', '1',
+ '3', '9', '16', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '6', '0', '0', '0', '35', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+ 
+ update quest_template set rewitemid1 = 51826, rewitemcount1 = 1 where entry = 60114;
+ update quest_template set RewChoiceItemId1 = 51825, RewChoiceItemCount1 = 1 where entry = 60114;
+ update quest_template set RewChoiceItemId2 = 51824, RewChoiceItemCount2 = 1 where entry = 60114;
+ 
+replace into creature_loot_template values (1271, 51823, -100, 0, 1, 1, 0, 0, 10);
+
+-- Mulgore
+
+replace into quest_template (
+entry, patch, Method, ZoneOrSort, MinLevel, QuestLevel, MaxLevel, Type, RequiredClasses, RequiredRaces, RequiredSkill,
+RequiredSkillValue, RepObjectiveFaction, RepObjectiveValue, RequiredMinRepFaction, RequiredMinRepValue,RequiredMaxRepFaction,
+RequiredMaxRepValue, SuggestedPlayers, LimitTime, QuestFlags, SpecialFlags, PrevQuestId, NextQuestId, ExclusiveGroup, NextQuestInChain,
+SrcItemId, SrcItemCount, SrcSpell, Title, Details, Objectives, OfferRewardText, RequestItemsText, EndText, ObjectiveText1, ObjectiveText2,
+ObjectiveText3, ObjectiveText4, ReqItemId1, ReqItemId2, ReqItemId3, ReqItemId4, ReqItemCount1, ReqItemCount2, ReqItemCount3,
+ReqItemCount4, ReqSourceId1, ReqSourceId2, ReqSourceId3, ReqSourceId4, ReqSourceCount1, ReqSourceCount2, ReqSourceCount3,
+ReqSourceCount4, ReqCreatureOrGOId1, ReqCreatureOrGOId2, ReqCreatureOrGOId3, ReqCreatureOrGOId4, ReqCreatureOrGOCount1,
+ReqCreatureOrGOCount2, ReqCreatureOrGOCount3, ReqCreatureOrGOCount4, ReqSpellCast1, ReqSpellCast2, ReqSpellCast3,
+ReqSpellCast4, RewChoiceItemId1, RewChoiceItemId2, RewChoiceItemId3, RewChoiceItemId4, RewChoiceItemId5, RewChoiceItemId6,
+RewChoiceItemCount1, RewChoiceItemCount2, RewChoiceItemCount3, RewChoiceItemCount4, RewChoiceItemCount5, RewChoiceItemCount6,
+RewItemId1, RewItemId2, RewItemId3, RewItemId4, RewItemCount1, RewItemCount2, RewItemCount3, RewItemCount4, RewRepFaction1,
+RewRepFaction2, RewRepFaction3, RewRepFaction4, RewRepFaction5, RewRepValue1, RewRepValue2, RewRepValue3, RewRepValue4,
+RewRepValue5, RewOrReqMoney, RewMoneyMaxLevel, RewSpell, RewSpellCast, RewMailTemplateId, RewMailMoney, RewMailDelaySecs,
+PointMapId, PointX, PointY, PointOpt, DetailsEmote1, DetailsEmote2, DetailsEmote3, DetailsEmote4, DetailsEmoteDelay1,
+DetailsEmoteDelay2, DetailsEmoteDelay3, DetailsEmoteDelay4, IncompleteEmote, CompleteEmote, OfferRewardEmote1, OfferRewardEmote2,
+OfferRewardEmote3, OfferRewardEmote4, OfferRewardEmoteDelay1, OfferRewardEmoteDelay2, OfferRewardEmoteDelay3,OfferRewardEmoteDelay4,
+StartScript, CompleteScript)
+         values
+ ('60115', '0', '2', '221', '3', '5', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0','0',
+'0', '0', '0', '8', '0', '-3376', '0', '0', '0',
+'0', '0', '0', 'Preventive Strike', 'I have another task for you, $N. While you\'re hunting Sharptusk, look for any signs of battle plans. It would give us a strategic advantage over them. If they are planning to attack us, then we best be ready for when they do.$BIf I had to guess, they would probably hide it in a safe location like a Cave. Kill whoever is defending the plans and bring me their mane as proof.', 'Brave Windfeather has asked you to kill and bring the mane of whoever is protecting the battle plans. Then look around for the attack plans.', 'What is this? \"Squealer\" was planning to attack us? I shall inform Chief Hawkwind immediately! Your actions speak highly of your dedication to protect our tribe. Earthmother guide your path, $N.', 'Have you found anything, $N?', '', '', '',
+'', '', '0', '0', '0', '0', '1', '0', '0',
+'0', '0', '0', '0', '0', '0', '0', '0',
+'0', '3229', '0', '0', '0', '1',
+'0', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0', '0', '0', '81',
+'0', '0', '0', '0', '200', '0', '0', '0',
+'0', '0', '204', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0','0',
+0, 0);
+
+replace into creature_questrelation (id, quest, patch_min, patch_max) values ('3209','60115','10','10');
+replace into creature_involvedrelation (id, quest, patch_min, patch_max) values ('3209','60115','10','10');
+      
+replace into creature_questrelation (id, quest, patch_min, patch_max) values ('3209','60115','10','10');
+replace into creature_involvedrelation (id, quest, patch_min, patch_max) values ('3209','60115','10','10');
+
+replace into item_template (
+entry, patch, class, subclass, name,description, display_id, quality, flags, buy_count,
+buy_price, sell_price, inventory_type, allowable_class, allowable_race, item_level,
+required_level, required_skill, required_skill_rank, required_spell, required_honor_rank,
+required_city_rank, required_reputation_faction, required_reputation_rank, max_count, stackable,
+container_slots, stat_type1, stat_value1, stat_type2, stat_value2, stat_type3, stat_value3,
+stat_type4, stat_value4, stat_type5, stat_value5, stat_type6, stat_value6, stat_type7,
+stat_value7, stat_type8, stat_value8, stat_type9, stat_value9, stat_type10, stat_value10,
+delay, range_mod, ammo_type, dmg_min1, dmg_max1, dmg_type1, dmg_min2, dmg_max2, dmg_type2,
+dmg_min3, dmg_max3, dmg_type3, dmg_min4, dmg_max4, dmg_type4, dmg_min5, dmg_max5, dmg_type5, block,
+armor, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, spellid_1, spelltrigger_1,
+spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, spellid_2,
+spelltrigger_2, spellcharges_2, spellppmrate_2, spellcooldown_2, spellcategory_2, spellcategorycooldown_2,
+spellid_3, spelltrigger_3, spellcharges_3, spellppmrate_3, spellcooldown_3, spellcategory_3,
+spellcategorycooldown_3, spellid_4, spelltrigger_4, spellcharges_4, spellppmrate_4, spellcooldown_4,
+spellcategory_4, spellcategorycooldown_4, spellid_5, spelltrigger_5, spellcharges_5, spellppmrate_5,
+spellcooldown_5, spellcategory_5, spellcategorycooldown_5, bonding, page_text, page_language, page_material,
+start_quest, lock_id, material, sheath, random_property, set_id, max_durability, area_bound, map_bound,
+duration, bag_family, disenchant_id, food_type, min_money_loot, max_money_loot, extra_flags, other_team_entry,
+script_name)
+values
+ ('51826', '0', '12', '0', '\"Squealer\" Thornmantle\'s Mane', '', '7990', '1', '2048', '1', '0', '0', '0', '-1', '-1', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '1', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+ 
+ update quest_template set reqitemid1 = 51826, reqitemcount1 = 1 where entry = 60115;
+ 
+ replace into item_template (
+entry, patch, class, subclass, name,description, display_id, quality, flags, buy_count,
+buy_price, sell_price, inventory_type, allowable_class, allowable_race, item_level,
+required_level, required_skill, required_skill_rank, required_spell, required_honor_rank,
+required_city_rank, required_reputation_faction, required_reputation_rank, max_count, stackable,
+container_slots, stat_type1, stat_value1, stat_type2, stat_value2, stat_type3, stat_value3,
+stat_type4, stat_value4, stat_type5, stat_value5, stat_type6, stat_value6, stat_type7,
+stat_value7, stat_type8, stat_value8, stat_type9, stat_value9, stat_type10, stat_value10,
+delay, range_mod, ammo_type, dmg_min1, dmg_max1, dmg_type1, dmg_min2, dmg_max2, dmg_type2,
+dmg_min3, dmg_max3, dmg_type3, dmg_min4, dmg_max4, dmg_type4, dmg_min5, dmg_max5, dmg_type5, block,
+armor, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, spellid_1, spelltrigger_1,
+spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, spellid_2,
+spelltrigger_2, spellcharges_2, spellppmrate_2, spellcooldown_2, spellcategory_2, spellcategorycooldown_2,
+spellid_3, spelltrigger_3, spellcharges_3, spellppmrate_3, spellcooldown_3, spellcategory_3,
+spellcategorycooldown_3, spellid_4, spelltrigger_4, spellcharges_4, spellppmrate_4, spellcooldown_4,
+spellcategory_4, spellcategorycooldown_4, spellid_5, spelltrigger_5, spellcharges_5, spellppmrate_5,
+spellcooldown_5, spellcategory_5, spellcategorycooldown_5, bonding, page_text, page_language, page_material,
+start_quest, lock_id, material, sheath, random_property, set_id, max_durability, area_bound, map_bound,
+duration, bag_family, disenchant_id, food_type, min_money_loot, max_money_loot, extra_flags, other_team_entry,
+script_name)
+values
+ ('51827', '0', '4', '3', 'Thornmantle Harness', '', '28368', '1', '0', '1', '0', '14', '4', '-1', '-1', '5',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '67', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '5', '0', '0', '0', '55', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+ 
+ replace into item_template (
+entry, patch, class, subclass, name,description, display_id, quality, flags, buy_count,
+buy_price, sell_price, inventory_type, allowable_class, allowable_race, item_level,
+required_level, required_skill, required_skill_rank, required_spell, required_honor_rank,
+required_city_rank, required_reputation_faction, required_reputation_rank, max_count, stackable,
+container_slots, stat_type1, stat_value1, stat_type2, stat_value2, stat_type3, stat_value3,
+stat_type4, stat_value4, stat_type5, stat_value5, stat_type6, stat_value6, stat_type7,
+stat_value7, stat_type8, stat_value8, stat_type9, stat_value9, stat_type10, stat_value10,
+delay, range_mod, ammo_type, dmg_min1, dmg_max1, dmg_type1, dmg_min2, dmg_max2, dmg_type2,
+dmg_min3, dmg_max3, dmg_type3, dmg_min4, dmg_max4, dmg_type4, dmg_min5, dmg_max5, dmg_type5, block,
+armor, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, spellid_1, spelltrigger_1,
+spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, spellid_2,
+spelltrigger_2, spellcharges_2, spellppmrate_2, spellcooldown_2, spellcategory_2, spellcategorycooldown_2,
+spellid_3, spelltrigger_3, spellcharges_3, spellppmrate_3, spellcooldown_3, spellcategory_3,
+spellcategorycooldown_3, spellid_4, spelltrigger_4, spellcharges_4, spellppmrate_4, spellcooldown_4,
+spellcategory_4, spellcategorycooldown_4, spellid_5, spelltrigger_5, spellcharges_5, spellppmrate_5,
+spellcooldown_5, spellcategory_5, spellcategorycooldown_5, bonding, page_text, page_language, page_material,
+start_quest, lock_id, material, sheath, random_property, set_id, max_durability, area_bound, map_bound,
+duration, bag_family, disenchant_id, food_type, min_money_loot, max_money_loot, extra_flags, other_team_entry,
+script_name)
+values
+ ('51828', '0', '2', '3', 'Hawkwind Rifle', '', '28206', '1', '0', '1', '0', '65', '15', '-1', '-1', '10',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '2600', '1',
+ '3', '6', '12', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '30', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+ 
+ replace into item_template (
+entry, patch, class, subclass, name,description, display_id, quality, flags, buy_count,
+buy_price, sell_price, inventory_type, allowable_class, allowable_race, item_level,
+required_level, required_skill, required_skill_rank, required_spell, required_honor_rank,
+required_city_rank, required_reputation_faction, required_reputation_rank, max_count, stackable,
+container_slots, stat_type1, stat_value1, stat_type2, stat_value2, stat_type3, stat_value3,
+stat_type4, stat_value4, stat_type5, stat_value5, stat_type6, stat_value6, stat_type7,
+stat_value7, stat_type8, stat_value8, stat_type9, stat_value9, stat_type10, stat_value10,
+delay, range_mod, ammo_type, dmg_min1, dmg_max1, dmg_type1, dmg_min2, dmg_max2, dmg_type2,
+dmg_min3, dmg_max3, dmg_type3, dmg_min4, dmg_max4, dmg_type4, dmg_min5, dmg_max5, dmg_type5, block,
+armor, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, spellid_1, spelltrigger_1,
+spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, spellid_2,
+spelltrigger_2, spellcharges_2, spellppmrate_2, spellcooldown_2, spellcategory_2, spellcategorycooldown_2,
+spellid_3, spelltrigger_3, spellcharges_3, spellppmrate_3, spellcooldown_3, spellcategory_3,
+spellcategorycooldown_3, spellid_4, spelltrigger_4, spellcharges_4, spellppmrate_4, spellcooldown_4,
+spellcategory_4, spellcategorycooldown_4, spellid_5, spelltrigger_5, spellcharges_5, spellppmrate_5,
+spellcooldown_5, spellcategory_5, spellcategorycooldown_5, bonding, page_text, page_language, page_material,
+start_quest, lock_id, material, sheath, random_property, set_id, max_durability, area_bound, map_bound,
+duration, bag_family, disenchant_id, food_type, min_money_loot, max_money_loot, extra_flags, other_team_entry,
+script_name)
+values
+ ('51829', '0', '4', '0', 'Windfeather Poncho', '', '27686', '1', '0', '1', '0', '22', '16', '-1', '-1', '6',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '6', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '8', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);      
+	  
+ update quest_template set rewitemid1 = 51829, rewitemcount1 = 1 where entry = 60115;
+ update quest_template set RewChoiceItemId1 = 51827, RewChoiceItemCount1 = 1 where entry = 60115;
+ update quest_template set RewChoiceItemId2 = 51828, RewChoiceItemCount2 = 1 where entry = 60115;
+ 
+replace into creature_loot_template values (3229, 51826, -100, 0, 1, 1, 0, 0, 10);
