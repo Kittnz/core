@@ -203,6 +203,7 @@ enum
     SPELL_ERANIKUS_REDEEMED = 25846, // transform Eranikus
     //SPELL_MOONGLADE_TRANQUILITY = unk, // spell which acts as a spotlight over Eranikus after he is redeemed
     SPELL_THROW_NIGHTMARE_OBJECT = 25004,
+    SPELL_MASS_HEALING           = 25839, // by Tyrande
 
     NPC_ERANIKUS_TYRANT = 15491,
     NPC_NIGHTMARE_PHANTASM = 15629, // shadows summoned during the event - should cast 17228 and 21307
@@ -210,6 +211,7 @@ enum
     NPC_TYRANDE_WHISPERWIND = 15633, // appears with the priestess during the event to help the players - should cast healing spells
     NPC_ELUNE_PRIESTESS = 15634,
     NPC_MALFURION = 15362,
+    NPC_NIGHTHAVEN_DEFENDER = 15495,
 
     QUEST_NIGHTMARE_MANIFESTS = 8736,
     QUEST_WAKING_LEGENDS = 8447,
@@ -345,6 +347,7 @@ struct npc_keeper_remulosAI : public npc_escortAI
         Reset();
     }
 
+    std::vector<uint64> summonedGUIDs;
     uint32 m_uiHealTimer;
     uint32 m_uiStarfireTimer;
     uint32 m_uiShadesummonTimer;
@@ -398,6 +401,7 @@ struct npc_keeper_remulosAI : public npc_escortAI
             m_uiQuestComplete = 0;
             m_uiDispawnTimer = 0;
             m_bEventWLFinished = false;
+            summonedGUIDs.clear();
 
             m_uiMalfurionGUID.Clear();
 
@@ -439,6 +443,10 @@ struct npc_keeper_remulosAI : public npc_escortAI
             case NPC_NIGHTMARE_PHANTASM:
                 pSummoned->AI()->AttackStart(m_creature);
                 pSummoned->SetRespawnDelay(DAY);
+                summonedGUIDs.push_back(pSummoned->GetGUID());
+                break;
+            case NPC_NIGHTHAVEN_DEFENDER:
+                summonedGUIDs.push_back(pSummoned->GetGUID());
                 break;
             case NPC_MALFURION:
                 m_uiMalfurionGUID = pSummoned->GetObjectGuid();
@@ -484,6 +492,15 @@ struct npc_keeper_remulosAI : public npc_escortAI
             // despawn the summons
             if (Creature* pEranikus = m_creature->GetMap()->GetCreature(m_uiEranikusGUID))
                 pEranikus->AI()->EnterEvadeMode();
+
+            // despawn manifests
+            for (auto&& itr : summonedGUIDs)
+                if (Creature* manifest = me->GetMap()->GetCreature(itr))
+                    manifest->ForcedDespawn();
+
+            summonedGUIDs.clear();
+
+            me->setFaction(996); // restore default faction
             m_idQuestActive = 0;
         }
         if (m_idQuestActive == QUEST_WAKING_LEGENDS)
@@ -593,6 +610,14 @@ struct npc_keeper_remulosAI : public npc_escortAI
         if (Player* pPlayer = GetPlayerForEscort())
             pPlayer->GroupEventHappens(QUEST_NIGHTMARE_MANIFESTS, pTarget);
 
+        // despawn manifests
+        for (auto&& itr : summonedGUIDs)
+            if (Creature* manifest = me->GetMap()->GetCreature(itr))
+                manifest->ForcedDespawn();
+
+        summonedGUIDs.clear();
+        me->setFaction(996); // restore default faction
+
         m_uiOutroTimer = 3000;
     }
 
@@ -690,6 +715,17 @@ struct npc_keeper_remulosAI : public npc_escortAI
                                 break;
                         }
                         ++m_uiSummonCount;
+                    }
+
+                    // also summon 2 guards near with some chance
+                    if (roll_chance_i(50))
+                    {
+                        for (uint8 i = 0; i < 2; i++)
+                        {
+                            float newX, newY, newZ;
+                            m_creature->GetRandomPoint(me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), 25.0f, newX, newY, newZ);
+                            m_creature->SummonCreature(NPC_NIGHTHAVEN_DEFENDER, newX, newY, newZ, 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 60 * IN_MILLISECONDS);
+                        }
                     }
 
                     // If all the shades were summoned then set Eranikus in combat
@@ -1308,6 +1344,7 @@ struct boss_eranikusAI : public ScriptedAI
                     // Unmont, yell and prepare to channel the spell on Eranikus
                     DoScriptText(SAY_TYRANDE_HEAL, pSummoned);
                     pSummoned->Unmount();
+                    pSummoned->CastSpell(pSummoned, SPELL_MASS_HEALING, false);
                     m_uiTyrandeMoveTimer = 5000;
                 }
                 // Unmount the priestess - unk what is their exact purpose (maybe healer)
