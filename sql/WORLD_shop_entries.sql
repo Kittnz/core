@@ -132,5 +132,6 @@ replace into shop_items values
 (805, 8, 51057, 'Druid: Glyph of the Frostsaber', 100),
 (806, 8, 51266, 'Druid: Glyph of the Ice Bear', 100),
 (807, 8, 51431, 'Druid: Glyph of the Frostkin', 100),
-(808, 8, 51432, 'Druid: Glyph of Stars', 100);
+(808, 8, 51830, 'Druid: Glyph of the Orca', 100),
+(809, 8, 51432, 'Druid: Glyph of Stars', 100);
 

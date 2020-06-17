@@ -2310,7 +2310,8 @@ std::pair<unsigned int, float> getShapeshiftModelInfo(ShapeshiftForm form, Unit 
         mod = 0.80f;
         break;
     case FORM_AQUA:
-        modelid = 2428;
+        // Glyph of the Orca
+        modelid = (target->IsPlayer() && target->ToPlayer()->HasItemCount(51830, 1)) ? 4591 : 2428;
         mod = 0.80f;
         break;
     case FORM_BEAR:
