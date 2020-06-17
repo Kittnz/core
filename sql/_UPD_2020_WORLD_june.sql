@@ -2115,3 +2115,6 @@ REPLACE INTO `item_template` (`entry`, `patch`, `class`, `subclass`, `name`, `de
 
 update item_template set inventory_type = 5 where entry = 51825;
 update item_template set inventory_type = 5 where entry = 51827;
+
+update item_template set range_mod = 100 where entry = 51820;
+update item_template set range_mod = 100 where entry = 51816;
