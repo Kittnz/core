@@ -2336,7 +2336,8 @@ std::pair<unsigned int, float> getShapeshiftModelInfo(ShapeshiftForm form, Unit 
         modelid = 902;
         break;
     case FORM_GHOSTWOLF:
-        modelid = 4613;
+        // Glyph of the Spectral Wolf
+        modelid = (target->IsPlayer() && target->ToPlayer()->HasItemCount(51831, 1)) ? 3123 : 4613;
         mod = 0.80f;
         break;
     case FORM_MOONKIN:
