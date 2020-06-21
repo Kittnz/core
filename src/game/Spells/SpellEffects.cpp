@@ -5018,9 +5018,7 @@ void Spell::EffectScriptEffect(SpellEffectIndex eff_idx)
                 case 29710:  // Pole Dancing (triggered when clicking the pole)
                 {
                     if (Player* pPlayerTarget = ToPlayer(unitTarget))
-                    {
-                        pPlayerTarget->CastSpell(pPlayerTarget, 29705, false); // Pole Dancing Visual
-                    }
+                        pPlayerTarget->CastSpell(pPlayerTarget, 29705, true); // Pole Dancing Visual
                     return;
                 }
             }
