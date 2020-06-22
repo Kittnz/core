@@ -131,9 +131,9 @@ bool GossipSelect_npc_shop(Player* pPlayer, Creature* pCreature, uint32 uiSender
             if (bSuccess == 1)
             {
                 // Going hardcore is possible only for characters below level 10.
-                if (pPlayer->getLevel() > 10 && shopentry->Item == 50010)
+                if (pPlayer->getLevel() > 1 && shopentry->Item == 50010)
                 {
-                    pCreature->MonsterSay("Too late, my friend! You must have done this before level 10.", 0U, pPlayer);
+                    pCreature->MonsterSay("Too late, my friend! You must have done this at level 1.", 0U, pPlayer);
                     break;
                 }
 
