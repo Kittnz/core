@@ -104,7 +104,7 @@ struct boss_turtlhuAI : public ScriptedAI
         m_creature->SetObjectScale(0.35f);
         m_creature->PMonsterSay("I... feel... weak... Thanks for freeing my soul, strangers.");
 
-        uint32 m_respawn_delay_Timer = urand(4, 6)*DAY + urand(12, 24*HOUR);
+        uint32 m_respawn_delay_Timer = urand(3, 5) * DAY;
 
         /** DRRS */
         if (m_creature->GetSpawnFlags() & SPAWN_FLAG_DYNAMIC_RESPAWN_TIME &&
