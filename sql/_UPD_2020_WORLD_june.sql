@@ -2187,7 +2187,7 @@ DetailsEmoteDelay2, DetailsEmoteDelay3, DetailsEmoteDelay4, IncompleteEmote, Com
 OfferRewardEmote3, OfferRewardEmote4, OfferRewardEmoteDelay1, OfferRewardEmoteDelay2, OfferRewardEmoteDelay3,OfferRewardEmoteDelay4,
 StartScript, CompleteScript)
          values
- ('60116', '1', '2', '161', '27', '29', '37', '1', '0', '0', '0',
+ ('60116', '1', '2', '161', '27', '29', '0', '1', '0', '0', '0',
 '0', '0', '0', '0', '0','0',
 '0', '0', '0', '0', '0', '60115', '0', '0', '0',
 '0', '0', '0', 'Paint the Roses Red', 'It\'s about time someone with some skills showed up around here! It\'s one thing to send fresh bodies after the lower Scarlet ranks, but I need an experienced $C if we\'re going to bring down the zealots on their own grounds.\n\nHmm. I seem to recall you being quite the efficient killer. Let me see that you\'ve still got what it takes to serve. Thin the ranks outside the Monastery!', 'Eliminate the Scarlet forces outside the Monastery.', 'Now our forces may enter the Monastery fresh for battle and with the advantage of surprise. Varimathras shall be pleased.', 'Well?', '', '', '',
