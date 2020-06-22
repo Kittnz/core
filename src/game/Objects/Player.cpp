@@ -21780,7 +21780,7 @@ void Player::RewardBountyHuntKill(Unit* pVictim)
 
     if (result_a)
     {
-        Field* fields = result_h->Fetch();
+        Field* fields = result_a->Fetch();
         AlliancePlayerGUID = fields[0].GetUInt32();
     }
     delete result_a;    
