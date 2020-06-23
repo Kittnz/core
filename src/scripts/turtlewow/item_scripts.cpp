@@ -602,6 +602,23 @@ bool ItemUseSpell_shop_morph_worgen(Player* pPlayer, Item* pItem, const SpellCas
     return false;
 }
 
+bool ItemUseSpell_item_morph_murloc(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+{
+    if (!pPlayer)
+        return false;
+
+    if (pPlayer->GetNativeDisplayId() != pPlayer->GetDisplayId())
+    {
+        pPlayer->DeMorph();
+        return false;
+    }
+
+    pPlayer->SetDisplayId(15393 + urand(0, 5));
+    pPlayer->PlayDirectMusic(8485);
+    ChatHandler(pPlayer).SendSysMessage("Mglrmglmglmgl! This disguise will work until logout.");
+    return false;
+}
+
 bool ItemUseSpell_shop_morph_blood_elf(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
     if (!pPlayer)
@@ -1024,6 +1041,11 @@ void AddSC_item_scripts()
     newscript = new Script;
     newscript->Name = "item_morph_worgen";
     newscript->pItemUseSpell = &ItemUseSpell_shop_morph_worgen;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "item_morph_murloc";
+    newscript->pItemUseSpell = &ItemUseSpell_item_morph_murloc;
     newscript->RegisterSelf();
 
     newscript = new Script;
