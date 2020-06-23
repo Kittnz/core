@@ -2349,3 +2349,7 @@ REPLACE INTO `item_template` (`entry`, `patch`, `class`, `subclass`, `name`, `de
 -- Enable Bounty Boards
 
 REPLACE INTO `gameobject_template` VALUES (1000223, 0, 2, 3053, 'Wanted: Vile Criminal!', 35, 0, 1, 0, 0, 2, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_bounty');
+
+-- Removed faction requirement for Black Battlestrider.
+
+update item_template set allowable_race = -1 where entry = 18243;
