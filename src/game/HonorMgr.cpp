@@ -247,7 +247,7 @@ void HonorMaintenancer::AssignBountyTargets()
 
     // Horde Player
 
-    QueryResult* result1 = CharacterDatabase.PQuery("SELECT `guid`, `name`, `honorStoredDK` FROM characters WHERE race in (2,5,6,8) ORDER BY `honorStoredDK` DESC LIMIT 1");
+    QueryResult* result1 = CharacterDatabase.PQuery("SELECT `guid`, `name`, `honorLastWeekHK` FROM characters WHERE race in (2,5,6,8) ORDER BY `honorLastWeekHK` DESC LIMIT 1");
 
     if (result1)
     {
@@ -259,7 +259,7 @@ void HonorMaintenancer::AssignBountyTargets()
 
     // Alliance Player
 
-    QueryResult* result2 = CharacterDatabase.PQuery("SELECT `guid`, `name`, `honorStoredDK` FROM characters WHERE race in (1,3,4,7) ORDER BY `honorStoredDK` DESC LIMIT 1");
+    QueryResult* result2 = CharacterDatabase.PQuery("SELECT `guid`, `name`, `honorLastWeekHK` FROM characters WHERE race in (1,3,4,7) ORDER BY `honorLastWeekHK` DESC LIMIT 1");
 
     if (result2)
     {
