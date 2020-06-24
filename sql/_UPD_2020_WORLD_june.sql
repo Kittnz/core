@@ -2259,7 +2259,7 @@ start_quest, lock_id, material, sheath, random_property, set_id, max_durability,
 duration, bag_family, disenchant_id, food_type, min_money_loot, max_money_loot, extra_flags, other_team_entry,
 script_name)
 values
- ('51833', '0', '2', '10', 'Femur Staff', '', '20426', '3', '0', '1', '0', '0', '17', '-1', '-1', '0',
+ ('51833', '0', '2', '10', 'Femur Staff', '"LEGendary Quality.', '20426', '3', '0', '1', '0', '0', '17', '-1', '-1', '0',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '3', '5', '4',
  '6', '10', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3200', '0',
  '0', '71', '107', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
@@ -2289,7 +2289,7 @@ start_quest, lock_id, material, sheath, random_property, set_id, max_durability,
 duration, bag_family, disenchant_id, food_type, min_money_loot, max_money_loot, extra_flags, other_team_entry,
 script_name)
 values
- ('51834', '0', '2', '5', 'Scarlet Pillar', 'A relic from the monastery.', '18324', '3', '0', '1', '0', '0', '13', '-1', '-1', '0',
+ ('51834', '0', '2', '5', 'Scarlet Pillar', 'A relic from the monastery.', '18324', '3', '0', '1', '12050', '12050', '13', '-1', '-1', '0',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3800', '0',
  '0', '78', '120', '0', '4', '6', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
@@ -2297,6 +2297,8 @@ values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
+ 
+ update item_template set sell_price = 12050, buy_price = 12050 where entry in (51834, 51833, 51832);
  
 -- Update hardcore rewards:
  
