@@ -1335,6 +1335,12 @@ void Unit::Kill(Unit* pVictim, SpellEntry const *spellProto, bool durabilityLoss
 
     // Call AI OwnerKilledUnit (for any current summoned minipet/guardian/protector)
     PetOwnerKilledUnit(pVictim);
+    
+    // 10% XP loss on death in Hardcore Mode
+    if (pPlayerVictim && pPlayerVictim->isHardcorePlayer() && !pPlayerVictim->InBattleGround())
+    {
+        pPlayerVictim->GiveNegativeXP(5, pPlayerVictim); // Percentage
+    }
 
     // 10% durability loss on death
     // clean InHateListOf

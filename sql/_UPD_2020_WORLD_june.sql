@@ -2352,4 +2352,4 @@ REPLACE INTO `gameobject_template` VALUES (1000223, 0, 2, 3053, 'Wanted: Vile Cr
 
 -- Removed faction requirement for Black Battlestrider.
 
-update item_template set allowable_race = -1 where entry = 18243;
+update item_template set allowable_race = 1101 where entry = 18243;

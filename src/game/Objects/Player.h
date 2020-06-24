@@ -1549,6 +1549,7 @@ class MANGOS_DLL_SPEC Player final: public Unit
         void _ApplyAmmoBonuses();
     public:
         void GiveXP(uint32 xp, Unit* victim);
+        void GiveNegativeXP(uint32 percent, Unit* victim);
         void GiveLevel(uint32 level);
         void InitStatsForLevel(bool reapplyMods = false);
 
