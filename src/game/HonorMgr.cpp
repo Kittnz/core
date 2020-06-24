@@ -271,15 +271,11 @@ void HonorMaintenancer::AssignBountyTargets()
 
     CharacterDatabase.PExecute("REPLACE INTO `bounty_quest_targets` (id, horde_player, alliance_player) VALUES (1, %u, %u)", HordePlayerGUID, AlliancePlayerGUID);
     
-    // Update Horde quest textes:
-
     WorldDatabase.PExecute("UPDATE quest_template SET details = CONCAT('Kill %s.') where entry = 50322", HordePlayerName.c_str());
     WorldDatabase.PExecute("UPDATE quest_template SET title = CONCAT('WANTED: %s!') where entry = 50322", HordePlayerName.c_str());
     WorldDatabase.PExecute("UPDATE quest_template SET objectivetext1 = CONCAT('%s is dead') where entry = 50322", HordePlayerName.c_str());
     WorldDatabase.PExecute("UPDATE quest_template SET objectives = CONCAT('Recently a vile criminal was sighted with actions uspeakably evil and such actions must be punished! On behalf of Military forces and royalty combined we issue an order for this person elimination.\n\nThere is a just reward for those brave enough to slay the criminal in question.\n\nName is: %s.\n\nReward: 250 Reputation points.\r\n') where entry = 50322", HordePlayerName.c_str());    
-
-    // Update and Alliance quest textes:
-
+    
     WorldDatabase.PExecute("UPDATE quest_template SET details = CONCAT('Kill %s.') where entry = 50323", AlliancePlayerName.c_str());
     WorldDatabase.PExecute("UPDATE quest_template SET title = CONCAT('WANTED: %s!') where entry = 50323", AlliancePlayerName.c_str());
     WorldDatabase.PExecute("UPDATE quest_template SET objectivetext1 = CONCAT('%s is dead') where entry = 50323", AlliancePlayerName.c_str());
