@@ -2754,6 +2754,26 @@ void Player::GiveXP(uint32 xp, Unit* victim)
     SetUInt32Value(PLAYER_XP, newXP);
 }
 
+void Player::GiveNegativeXP(uint32 percent, Unit* victim)
+{
+    uint32 level{ getLevel() };
+
+    if ((level >= sWorld.getConfig(CONFIG_UINT32_MAX_PLAYER_LEVEL)))
+        return;
+
+    uint32 curXP{ GetUInt32Value(PLAYER_XP) };
+    uint32 percent_divider = 100 / percent;
+    uint32 xp{ GetUInt32Value(PLAYER_NEXT_LEVEL_XP) / percent_divider };
+
+    if (xp >= curXP)
+        xp = curXP;
+
+    uint32 newXP = curXP - xp;
+
+    SendLogXPGain(xp, victim, 0);
+    SetUInt32Value(PLAYER_XP, newXP);
+}
+
 // Update player to next level
 // Current player experience not update (must be update by caller)
 void Player::GiveLevel(uint32 level)
