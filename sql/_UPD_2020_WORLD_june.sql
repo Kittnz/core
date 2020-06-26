@@ -2355,3 +2355,45 @@ REPLACE INTO `gameobject_template` VALUES (1000223, 0, 2, 3053, 'Wanted: Vile Cr
 -- Removed faction requirement for Black Battlestrider.
 
 update item_template set allowable_race = 1101 where entry = 18243;
+
+-- Rush'n Attack Guild
+
+REPLACE INTO `creature_template` (`entry`, `patch`, `display_id1`, `display_id2`, `display_id3`, `display_id4`, `name`, `subname`, `gossip_menu_id`, `level_min`, `level_max`, `health_min`, `health_max`, `mana_min`, `mana_max`, `armor`, `faction`, `npc_flags`, `speed_walk`, `speed_run`, `scale`, `detection_range`, `call_for_help_range`, `leash_range`, `rank`, `xp_multiplier`, `dmg_min`, `dmg_max`, `dmg_school`, `attack_power`, `dmg_multiplier`, `base_attack_time`, `ranged_attack_time`, `unit_class`, `unit_flags`, `dynamic_flags`, `beast_family`, `trainer_type`, `trainer_spell`, `trainer_class`, `trainer_race`, `ranged_dmg_min`, `ranged_dmg_max`, `ranged_attack_power`, `type`, `type_flags`, `loot_id`, `pickpocket_loot_id`, `skinning_loot_id`, `holy_res`, `fire_res`, `nature_res`, `frost_res`, `shadow_res`, `arcane_res`, `spell_id1`, `spell_id2`, `spell_id3`, `spell_id4`, `spell_list_id`, `pet_spell_list_id`, `gold_min`, `gold_max`, `ai_name`, `movement_type`, `inhabit_type`, `civilian`, `racial_leader`, `regeneration`, `equipment_id`, `trainer_id`, `vendor_id`, `mechanic_immune_mask`, `school_immune_mask`, `flags_extra`, `script_name`) VALUES 
+
+(51575, 0, 4871, 0, 0, 0, 'Alpha', '', 342, 30, 30, 1605, 1605, 0, 0, 1200, 1625, 135, 1, 1.14286, 0, 20, 5, 0, 0, 1, 42, 53, 0, 122, 1, 1000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 45.144, 62.073, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 100, 0, 0, 524298, ''),
+
+(51576, 0, 5448, 0, 0, 0, 'Meow Meat', NULL, 0, 1, 1, 64, 64, 0, 0, 20, 188, 0, 1, 0.857143, 0, 20, 5, 0, 0, 1, 2, 2, 0, 44, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 1.76, 2.42, 100, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 2, ''),
+
+(51577, 0, 1132, 0, 0, 0, 'Ghost of Space', NULL, 0, 10, 10, 200, 200, 0, 0, 486, 35, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 22, 26, 0, 62, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 16.808, 23.111, 100, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 3, 0, 0, 3, 0, 0, 0, 0, 0, 2, ''),
+
+(51579, 0, 7028, 0, 0, 0, 'Chixpixx', 'Guards of Azeroth', 0, 40, 55, 1605, 1605, 0, 0, 1200, 35, 2, 1.08, 1.14286, 0, 20, 5, 0, 0, 1, 42, 53, 0, 122, 1, 1000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 45.144, 62.073, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 100, 0, 0, 10, 'npc_chixpixx'),
+
+(51580, 0, 4375, 0, 0, 0, 'Jara', 'Innkeeper', 342, 30, 30, 1605, 1605, 0, 0, 1200, 1625, 135, 1, 1.14286, 0, 20, 5, 0, 0, 1, 42, 53, 0, 122, 1, 1000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 45.144, 62.073, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 100, 0, 0, 524298, '');
+
+REPLACE INTO `creature_template` (`entry`, `patch`, `display_id1`, `display_id2`, `display_id3`, `display_id4`, `name`, `subname`, `gossip_menu_id`, `level_min`, `level_max`, `health_min`, `health_max`, `mana_min`, `mana_max`, `armor`, `faction`, `npc_flags`, `speed_walk`, `speed_run`, `scale`, `detection_range`, `call_for_help_range`, `leash_range`, `rank`, `xp_multiplier`, `dmg_min`, `dmg_max`, `dmg_school`, `attack_power`, `dmg_multiplier`, `base_attack_time`, `ranged_attack_time`, `unit_class`, `unit_flags`, `dynamic_flags`, `beast_family`, `trainer_type`, `trainer_spell`, `trainer_class`, `trainer_race`, `ranged_dmg_min`, `ranged_dmg_max`, `ranged_attack_power`, `type`, `type_flags`, `loot_id`, `pickpocket_loot_id`, `skinning_loot_id`, `holy_res`, `fire_res`, `nature_res`, `frost_res`, `shadow_res`, `arcane_res`, `spell_id1`, `spell_id2`, `spell_id3`, `spell_id4`, `spell_list_id`, `pet_spell_list_id`, `gold_min`, `gold_max`, `ai_name`, `movement_type`, `inhabit_type`, `civilian`, `racial_leader`, `regeneration`, `equipment_id`, `trainer_id`, `vendor_id`, `mechanic_immune_mask`, `school_immune_mask`, `flags_extra`, `script_name`) VALUES (51578, 6, 15374, 0, 0, 0, 'Moonkin', 'Azeroth Dance Club', 0, 30, 40, 1500, 3000, 0, 0, 7, 35, 2, 1.2, 1.14286, 1, 20, 5, 0, 0, 1, 2, 2, 0, 44, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524288, '');
+
+REPLACE INTO `creature_template_addon` (`entry`, `patch`, `mount`, `bytes1`, `b2_0_sheath`, `b2_1_flags`, `emote`, `moveflags`, `auras`) VALUES (51578, 0, 0, 0, 0, 0, 10, 0, NULL);
+
+update creature_template set npc_flags = 1 where entry = 51579;
+update creature_template set npc_flags = 0 where entry = 51575;
+update creature_template set scale = 2 where entry = 51576;
+
+replace into broadcast_text (ID, MaleText) values ('90370', 'Hey, you! Let me out!');
+replace into npc_text (ID, BroadcastTextID0) values ('90370', '90370');
+
+replace into broadcast_text (ID, MaleText) values ('90371', 'Совы не нужны! Уходи!');
+replace into broadcast_text (ID, MaleText) values ('90372', 'Вары дамажат!');
+replace into broadcast_text (ID, MaleText) values ('90373', 'Смайт-присты самые лучшие присты.');
+replace into broadcast_text (ID, MaleText) values ('90374', 'СЛ Варлоки ТОП-1 в ПВП!');
+replace into broadcast_text (ID, MaleText) values ('90375', 'Иди фарми, что уставился?');
+replace into broadcast_text (ID, MaleText) values ('90376', 'Паладины могут и будут танчить!');
+replace into broadcast_text (ID, MaleText) values ('90377', 'Пета убери!');
+replace into broadcast_text (ID, MaleText) values ('90378', 'Сорвал аггро и думаешь, что нормальный?!');
+replace into broadcast_text (ID, MaleText) values ('90379', 'Роги бесполезны в ПВП!');
+
+replace into gameobject_template values 
+(1000385, 0, 5, 4636,  'Fake Black Lotus', 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+
+REPLACE INTO `gameobject_template` (`entry`, `patch`, `type`, `displayId`, `name`, `faction`, `flags`, `size`, `data0`, `data1`, `data2`, `data3`, `data4`, `data5`, `data6`, `data7`, `data8`, `data9`, `data10`, `data11`, `data12`, `data13`, `data14`, `data15`, `data16`, `data17`, `data18`, `data19`, `data20`, `data21`, `data22`, `data23`, `mingold`, `maxgold`, `script_name`) VALUES (1000386, 0, 5, 6531, 'Sevirian, "The Legendary Hunter"', 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+

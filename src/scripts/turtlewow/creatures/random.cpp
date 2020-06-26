@@ -19,6 +19,36 @@ bool GossipSelect_npc_dirge_the_bouncer(Player* p_Player, Creature* p_Creature, 
     return true;
 }
 
+bool GossipHello_npc_chixpixx(Player* p_Player, Creature* p_Creature)
+{
+    p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Poke him with a stick!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    p_Player->SEND_GOSSIP_MENU(90370, p_Creature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_chixpixx(Player* p_Player, Creature* p_Creature, uint32 /*uiSender*/, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        switch (p_Player->getClass())
+        {
+        case CLASS_DRUID:    p_Creature->MonsterSay(90371); break;
+        case CLASS_WARRIOR:  p_Creature->MonsterSay(90372); break;
+        case CLASS_PRIEST:   p_Creature->MonsterSay(90373); break;
+        case CLASS_WARLOCK:  p_Creature->MonsterSay(90374); break;
+        case CLASS_MAGE:     p_Creature->MonsterSay(90375); break;
+        case CLASS_PALADIN:  p_Creature->MonsterSay(90376); break;
+        case CLASS_HUNTER:   p_Creature->MonsterSay(90377); break;
+        case CLASS_SHAMAN:   p_Creature->MonsterSay(90378); break;
+        case CLASS_ROGUE:    p_Creature->MonsterSay(90379); break;
+        default:
+            break;
+        }
+    }
+    p_Player->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
 bool GossipHello_npc_aspirant_shadewalker(Player* p_Player, Creature* p_Creature)
 {
     p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "What is Ardent Watch?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
@@ -680,6 +710,12 @@ bool GossipSelect_npc_rholo(Player* p_Player, Creature* p_Creature, uint32 /*uiS
 void AddSC_random()
 {
     Script *newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_chixpixx";
+    newscript->pGossipHello = &GossipHello_npc_chixpixx;
+    newscript->pGossipSelect = &GossipSelect_npc_chixpixx;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_riding_gryphon_back";
