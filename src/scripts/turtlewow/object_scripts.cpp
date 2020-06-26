@@ -397,7 +397,7 @@ bool GOHello_go_epl_flying_machine(Player* pPlayer, GameObject* pGo)
 {
     if (pPlayer->getLevel() >= 25)
     {
-        if (pPlayer->GetZoneId() == 139)
+        if (pPlayer->GetZoneId() == 139 || pPlayer->GetZoneId() == 1377)
         {
             if (pPlayer->GetTeam() == ALLIANCE)
             {
@@ -412,7 +412,7 @@ bool GOHello_go_epl_flying_machine(Player* pPlayer, GameObject* pGo)
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TAXI, "Up to the Plaguelands!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
     }
 
-    if (pPlayer->GetGuildId() == 1)
+    if (pPlayer->GetGuildId() == 1 || pPlayer->GetGuildId() == 137)
     {
         if (pPlayer->GetZoneId() == 1377)
         {
@@ -480,8 +480,8 @@ bool GOSelect_go_epl_flying_machine(Player* pPlayer, GameObject* pGo, uint32 sen
         {
             pPlayer->ModifyMoney(-5000);
             pPlayer->SetDisplayId(8011);
-            pPlayer->TeleportTo(1, 10750.700000F, 2379.079700F, 94.985800F, 1.967656F); 
-            pPlayer->m_Events.AddEvent(new DemorphAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(15000));
+            pPlayer->TeleportTo(1, -10750.700000F, 2379.079700F, 150.985800F, 1.967656F); 
+            pPlayer->m_Events.AddEvent(new DemorphAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(18000));
             pPlayer->CastSpell(pPlayer, 130, true);
         }
         else
