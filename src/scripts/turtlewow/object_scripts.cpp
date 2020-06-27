@@ -400,13 +400,9 @@ bool GOHello_go_epl_flying_machine(Player* pPlayer, GameObject* pGo)
         if (pPlayer->GetZoneId() == 139 || pPlayer->GetZoneId() == 1377)
         {
             if (pPlayer->GetTeam() == ALLIANCE)
-            {
                 pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TAXI, "Set a course back to the Stormwind City!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-            }
             else
-            {
                 pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TAXI, "Set a course back to the Orgrimmar!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-            } 
         }
         else
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TAXI, "Up to the Plaguelands!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
@@ -414,16 +410,10 @@ bool GOHello_go_epl_flying_machine(Player* pPlayer, GameObject* pGo)
 
     if (pPlayer->GetGuildId() == 1 || pPlayer->GetGuildId() == 137)
     {
-        if (pPlayer->GetZoneId() == 1377)
-        {
-            if (pPlayer->GetTeam() == ALLIANCE)
-                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TAXI, "Set a course back to the Stormwind City!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TAXI, "Up to the Tarnum!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
 
-            else
-                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TAXI, "Set a course back to the Orgrimmar!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-        }
-        else
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TAXI, "Set a course to Silithus!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+        if (pPlayer->GetZoneId() == 1377)
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TAXI, "Up to the Cenarion Hold!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
     }
 
     pPlayer->SEND_GOSSIP_MENU(90342, pGo->GetGUID());
@@ -481,6 +471,19 @@ bool GOSelect_go_epl_flying_machine(Player* pPlayer, GameObject* pGo, uint32 sen
             pPlayer->ModifyMoney(-5000);
             pPlayer->SetDisplayId(8011);
             pPlayer->TeleportTo(1, -10750.700000F, 2379.079700F, 150.985800F, 1.967656F); 
+            pPlayer->m_Events.AddEvent(new DemorphAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(18000));
+            pPlayer->CastSpell(pPlayer, 130, true);
+        }
+        else
+            ChatHandler(pPlayer).PSendSysMessage("You don't have enough money!");
+    }
+    if (action == GOSSIP_ACTION_INFO_DEF + 4)
+    {
+        if (pPlayer->GetMoney() >= 5000)
+        {
+            pPlayer->ModifyMoney(-5000);
+            pPlayer->SetDisplayId(8011);
+            pPlayer->TeleportTo(1, -7430.070313f, 1002.554565f, 104.249787f, 0.0f);
             pPlayer->m_Events.AddEvent(new DemorphAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(18000));
             pPlayer->CastSpell(pPlayer, 130, true);
         }
