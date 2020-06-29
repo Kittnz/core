@@ -944,9 +944,109 @@ bool ItemUseSpell_item_brainwashing_device(Player* pPlayer, Item* pItem, const S
     return false;
 }
 
+enum PlayerMounting
+{
+    STAG_MOUNT_DISPLAY = 1991,
+    SPELL_CHARM = 530,
+    EMPTY_DISPLAY_ID = 15435,
+    SPELL_TAXI_INVISIBILITY = 16380
+};
+
+class DismountAfterTime : public BasicEvent
+{
+public:
+    explicit DismountAfterTime(uint64 player_guid) : BasicEvent(), player_guid(player_guid) {}
+
+    bool Execute(uint64 e_time, uint32 p_time) override
+    {
+        Player* player = ObjectAccessor::FindPlayer(player_guid);
+        if (player)
+        {
+            player->Unmount();
+            player->UpdateSpeed(MOVE_SWIM, true, 1.0F);
+            player->RemoveAurasDueToSpell(SPELL_CHARM);
+        }
+        return false;
+    }
+private:
+    uint64 player_guid;
+};
+
+class StopBeingTaxi : public BasicEvent
+{
+public:
+    explicit StopBeingTaxi(uint64 player_guid) : BasicEvent(), player_guid(player_guid) {}
+
+    bool Execute(uint64 e_time, uint32 p_time) override
+    {
+        Player* player = ObjectAccessor::FindPlayer(player_guid);
+        if (player)
+        {
+            player->SetDisplayId(STAG_MOUNT_DISPLAY);
+            Player* target = player->GetSelectedPlayer(); // Should be charmed GUID.
+
+            float x, y, z;
+            target->GetSafePosition(x, y, z);
+
+            player->TeleportTo(target->GetMapId(), x, y, z, 0.0F, 0);            
+            player->RemoveAurasDueToSpell(SPELL_TAXI_INVISIBILITY);
+        }
+        return false;
+    }
+private:
+    uint64 player_guid;
+};
+
+bool ItemUseSpell_item_saddle(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+{
+    if (pPlayer->isInCombat() || pPlayer->IsBeingTeleported() || (pPlayer->getDeathState() == CORPSE) || pPlayer->IsMoving())
+    {        
+        pPlayer->GetSession()->SendNotification("You can't use this yet.");
+        return false;
+    }
+
+    Player* target = pPlayer->GetSelectedPlayer();
+
+    if (!target || target == pPlayer)
+    {
+        pPlayer->GetSession()->SendNotification("You need a passenger.");
+        return false;
+    }
+
+    if (!target->IsInPartyWith(pPlayer))
+    {
+        pPlayer->GetSession()->SendNotification("Your paseenger must be in party!");
+        return false;
+    }
+
+    if (pPlayer->GetDisplayId() != STAG_MOUNT_DISPLAY)
+    {
+        pPlayer->GetSession()->SendNotification("Saddle be used only in a Stag Form.");
+        return false;
+    }
+
+    target->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, STAG_MOUNT_DISPLAY);
+    target->UpdateSpeed(MOVE_RUN, false, 4.0F);
+    target->m_Events.AddEvent(new DismountAfterTime(target->GetGUID()), target->m_Events.CalculateTime(1 * MINUTE * IN_MILLISECONDS));
+
+    pPlayer->AddAura(SPELL_TAXI_INVISIBILITY, ADD_AURA_PERMANENT);
+    pPlayer->CastSpell(target, SPELL_CHARM, true);
+    pPlayer->SetDisplayId(EMPTY_DISPLAY_ID);
+    pPlayer->m_Events.AddEvent(new StopBeingTaxi(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(1 * MINUTE * IN_MILLISECONDS));
+
+    pPlayer->GetSession()->SendNotification("You have 1 minute (TEST).");
+
+    return true;
+}
+
 void AddSC_item_scripts()
 {
     Script *newscript;
+
+    newscript = new Script;
+    newscript->Name = "item_saddle";
+    newscript->pItemUseSpell = &ItemUseSpell_item_saddle;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "item_brainwashing_device";
