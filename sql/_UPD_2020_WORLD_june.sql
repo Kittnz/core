@@ -2426,7 +2426,7 @@ start_quest, lock_id, material, sheath, random_property, set_id, max_durability,
 duration, bag_family, disenchant_id, food_type, min_money_loot, max_money_loot, extra_flags, other_team_entry,
 script_name)
 values
- ('51838', '0', '0', '0', 'Saddle', 'Get in! We\'re going to Vegas!', '33942', '4', '0', '1', '1000000', '500000', '19', '1024', '-1', '60',
+ ('51838', '0', '0', '0', 'Saddle', 'Get in! We\'re going to Vegas!', '5658', '4', '0', '1', '1000000', '500000', '19', '1024', '-1', '60',
  '60', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
@@ -2456,7 +2456,7 @@ start_quest, lock_id, material, sheath, random_property, set_id, max_durability,
 duration, bag_family, disenchant_id, food_type, min_money_loot, max_money_loot, extra_flags, other_team_entry,
 script_name)
 values
- ('51839', '0', '0', '0', 'Riding Turtle\'s Saddle', 'Get in! We\'re going to Vegas!', '33942', '4', '0', '1', '1000000', '500000', '19', '-1', '-1', '60',
+ ('51839', '0', '0', '0', 'Riding Turtle\'s Saddle', 'Get in! We\'re going to Vegas!', '21321', '4', '0', '1', '1000000', '500000', '19', '-1', '-1', '60',
  '60', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
