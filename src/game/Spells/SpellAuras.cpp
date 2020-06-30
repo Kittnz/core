@@ -2565,6 +2565,14 @@ void Aura::HandleAuraModShapeshift(bool apply, bool Real)
     }
     else
     {
+        //if (Player* player_target = target->ToPlayer())
+        //{
+        //    Unit* charmed_passenger = player_target->GetMap()->GetUnit(player_target->GetPetGuid());
+        //    Player* player_passenger = charmed_passenger->ToPlayer();
+        //    if (player_target && player_passenger && player_target->IsTaxiDriver() & player_passenger->IsTaxiPassenger())
+        //    player_target->CancelTaxiRide(player_passenger);
+        //}
+    
         if (target->getClass() == CLASS_DRUID)
         {
             target->setPowerType(POWER_MANA);

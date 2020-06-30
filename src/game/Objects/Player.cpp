@@ -21961,3 +21961,27 @@ void Player::RestoreBankFromStash()
 
 	PlayerTalkClass->CloseGossip();
 }
+
+void Player::CancelTaxiRide(Player* passenger)
+{
+    if (IsTaxiDriver())
+    {
+        SetDisplayId(15435);
+        SetObjectScale(1.0F);
+        SetDisplayId(1991);
+        RemoveAurasDueToSpell(16380);
+        SetTaxiDriverStatus(false);
+    }
+    if (passenger->IsTaxiPassenger())
+    {
+        passenger->Unmount();
+        passenger->UpdateSpeed(MOVE_SWIM, true, 1.0F);
+
+        float x, y, z;
+        passenger->GetSafePosition(x, y, z);
+        TeleportTo(this->GetMapId(), x, y, z, 0.0F, 0);
+        passenger->Uncharm();
+
+        passenger->SetTaxiPassengerStatus(false);
+    }
+}

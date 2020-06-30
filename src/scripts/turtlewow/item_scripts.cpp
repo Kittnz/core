@@ -948,53 +948,25 @@ enum PlayerMounting
 {
     STAG_MOUNT_DISPLAY = 1991,
     SPELL_CHARM = 530,
-    EMPTY_DISPLAY_ID = 15435,
     SPELL_TAXI_INVISIBILITY = 16380
 };
 
-class DismountAfterTime : public BasicEvent
+class StopUber : public BasicEvent
 {
 public:
-    explicit DismountAfterTime(uint64 player_guid) : BasicEvent(), player_guid(player_guid) {}
+    explicit StopUber(uint64 player_guid, uint64 passenger_guid) : BasicEvent(), player_guid(player_guid), passenger_guid(passenger_guid) {}
 
     bool Execute(uint64 e_time, uint32 p_time) override
     {
         Player* player = ObjectAccessor::FindPlayer(player_guid);
-        if (player)
-        {
-            player->Unmount();
-            player->UpdateSpeed(MOVE_SWIM, true, 1.0F);
-            player->RemoveAurasDueToSpell(SPELL_CHARM);
-        }
+        Player* passenger = ObjectAccessor::FindPlayer(passenger_guid);
+        if (player && passenger)
+            player->CancelTaxiRide(passenger);
         return false;
     }
 private:
     uint64 player_guid;
-};
-
-class StopBeingTaxi : public BasicEvent
-{
-public:
-    explicit StopBeingTaxi(uint64 player_guid) : BasicEvent(), player_guid(player_guid) {}
-
-    bool Execute(uint64 e_time, uint32 p_time) override
-    {
-        Player* player = ObjectAccessor::FindPlayer(player_guid);
-        if (player)
-        {
-            player->SetDisplayId(STAG_MOUNT_DISPLAY);
-            Player* target = player->GetSelectedPlayer(); // Should be charmed GUID.
-
-            float x, y, z;
-            target->GetSafePosition(x, y, z);
-
-            player->TeleportTo(target->GetMapId(), x, y, z, 0.0F, 0);            
-            player->RemoveAurasDueToSpell(SPELL_TAXI_INVISIBILITY);
-        }
-        return false;
-    }
-private:
-    uint64 player_guid;
+    uint64 passenger_guid;
 };
 
 bool ItemUseSpell_item_saddle(Player* pPlayer, Item* pItem, const SpellCastTargets&)
@@ -1006,6 +978,12 @@ bool ItemUseSpell_item_saddle(Player* pPlayer, Item* pItem, const SpellCastTarge
     }
 
     Player* target = pPlayer->GetSelectedPlayer();
+
+    if (!pPlayer->GetTerrain()->IsOutdoors(pPlayer->GetPositionX(), pPlayer->GetPositionY(), pPlayer->GetPositionZ()) && pPlayer->GetInstanceId())
+    {
+        pPlayer->GetSession()->SendNotification("You can't use it here.");
+        return false;
+    }
 
     if (!target || target == pPlayer)
     {
@@ -1027,16 +1005,16 @@ bool ItemUseSpell_item_saddle(Player* pPlayer, Item* pItem, const SpellCastTarge
 
     target->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, STAG_MOUNT_DISPLAY);
     target->UpdateSpeed(MOVE_RUN, false, 4.0F);
-    target->m_Events.AddEvent(new DismountAfterTime(target->GetGUID()), target->m_Events.CalculateTime(20 * MINUTE * IN_MILLISECONDS));
     target->SetTaxiPassengerStatus(true);
 
     pPlayer->AddAura(SPELL_TAXI_INVISIBILITY, ADD_AURA_PERMANENT);
     pPlayer->CastSpell(target, SPELL_CHARM, true);
-    pPlayer->SetDisplayId(EMPTY_DISPLAY_ID);
-    pPlayer->m_Events.AddEvent(new StopBeingTaxi(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(20 * MINUTE * IN_MILLISECONDS));
+    pPlayer->SetObjectScale(0.01F);
     pPlayer->SetTaxiDriverStatus(true);
 
-    pPlayer->GetSession()->SendNotification("You have 1 minute (TEST).");
+
+    pPlayer->m_Events.AddEvent(new StopUber(pPlayer->GetGUID(), target->GetGUID()), pPlayer->m_Events.CalculateTime(10 * MINUTE * IN_MILLISECONDS));
+    pPlayer->GetSession()->SendNotification("You have 10 minute.");
 
     return true;
 }
