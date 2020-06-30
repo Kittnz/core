@@ -2606,7 +2606,7 @@ StartScript, CompleteScript)
 replace into creature_questrelation (id, quest, patch_min, patch_max) values ('2395','60119','10','10');
 replace into creature_involvedrelation (id, quest, patch_min, patch_max) values ('2395','60119','10','10');
       
-update quest_template set RewMoneyMaxLevel = 1110 where entry = 60119;
+update quest_template set RewMoneyMaxLevel = 2100 where entry = 60119;
 update creature_template set npc_flags = 2 where entry = 2395;  
 	  
 replace into item_template (
