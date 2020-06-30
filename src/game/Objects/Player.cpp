@@ -2854,6 +2854,10 @@ void Player::GiveLevel(uint32 level)
     if (bIsHardcore)
         MailHardcoreModeRewards(level);
 
+    // Quick-fix for Slow and Steady Quest.
+    if (level == 2)
+        RemoveQuest(60118);
+
     if (level == 5)
         MailRidingTurtleGift();
 
