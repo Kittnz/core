@@ -2090,13 +2090,6 @@ class MANGOS_DLL_SPEC Player final: public Unit
         bool isHardcorePlayer() const { return bIsHardcore; };
         void EnableHardcoreMode() { bIsHardcore = true; };
 
-        // For druids carrying players in a stag form
-        bool bIsTaxiPassenger = false;
-        bool bIsTaxiDriver = false;
-
-        bool IsTaxiDriver() { return bIsTaxiDriver; };
-        bool IsTaxiPassenger() { return bIsTaxiPassenger; };
-
         /*********************************************************/
         /***                 MISC GAME SYSTEMS                 ***/
         /*********************************************************/
@@ -2122,6 +2115,10 @@ class MANGOS_DLL_SPEC Player final: public Unit
 
         // Turtle WoW custom feature: hardcore mode (0.5x rates for Creature.Kill)
         bool bIsHardcore = false;
+
+        // For druids carrying players in a stag form
+        bool bIsTaxiPassenger = false;
+        bool bIsTaxiDriver = false;
 
         void SendMountResult(PlayerMountResult result) const;
         void SendDismountResult(PlayerDismountResult result) const;
@@ -2199,6 +2196,11 @@ class MANGOS_DLL_SPEC Player final: public Unit
         uint32 GetDeathTimer() const { return m_deathTimer; }
         uint32 GetCorpseReclaimDelay(bool pvp) const;
         void SendCorpseReclaimDelay(bool load = false) const;
+
+        bool IsTaxiDriver() { return bIsTaxiDriver; };
+        bool IsTaxiPassenger() { return bIsTaxiPassenger; };
+
+        void SetTaxiPassengerStatus(bool status) { bIsTaxiPassenger = status; }
 
         /*********************************************************/
         /***                    CHAT SYSTEM                    ***/

@@ -1028,13 +1028,14 @@ bool ItemUseSpell_item_saddle(Player* pPlayer, Item* pItem, const SpellCastTarge
     target->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, STAG_MOUNT_DISPLAY);
     target->UpdateSpeed(MOVE_RUN, false, 4.0F);
     target->m_Events.AddEvent(new DismountAfterTime(target->GetGUID()), target->m_Events.CalculateTime(20 * MINUTE * IN_MILLISECONDS));
-    target->bIsTaxiPassenger = true;
+    target->SetTaxiPassengerStatus(true);
+
 
     pPlayer->AddAura(SPELL_TAXI_INVISIBILITY, ADD_AURA_PERMANENT);
     pPlayer->CastSpell(target, SPELL_CHARM, true);
     pPlayer->SetDisplayId(EMPTY_DISPLAY_ID);
     pPlayer->m_Events.AddEvent(new StopBeingTaxi(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(20 * MINUTE * IN_MILLISECONDS));
-    pPlayer->bIsTaxiDriver = true;
+
 
     pPlayer->GetSession()->SendNotification("You have 1 minute (TEST).");
 
