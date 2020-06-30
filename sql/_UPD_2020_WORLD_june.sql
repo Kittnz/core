@@ -2781,7 +2781,7 @@ replace into creature_involvedrelation (id, quest, patch_min, patch_max) values 
 
 update quest_template set PrevQuestId = 834 where entry = 60120;
 
-delete from gameobject WHERE id = 1000389;;
+delete from gameobject WHERE id = 1000389;
 REPLACE INTO `gameobject` (`id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`) VALUES (1000389, 1, 669.469, -4589.28, -0.516273, 1.38622, 600, 600);
 REPLACE INTO `gameobject` (`id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`) VALUES (1000389, 1, 669.469, -4589.28, -0.516273, 1.38622, 1000, 1000);
 REPLACE INTO `gameobject` (`id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`) VALUES (1000389, 1, 663.5, -4541.66, 8.83084, 2.94166, 600, 600);
@@ -3133,3 +3133,8 @@ update item_template set stackable = 20 where entry = 17635;
 update item_template set stackable = 20 where entry = 17570;
 update item_template set stackable = 20 where entry = 13512;
 update item_template set stackable = 20 where entry = 13511;
+update item_template set stackable = 20 where entry = 5631;
+update item_template set stackable = 20 where entry = 5633;
+update item_template set stackable = 20 where entry = 13442;
+
+
