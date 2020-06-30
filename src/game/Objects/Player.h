@@ -2201,6 +2201,7 @@ class MANGOS_DLL_SPEC Player final: public Unit
         bool IsTaxiPassenger() { return bIsTaxiPassenger; };
 
         void SetTaxiPassengerStatus(bool status) { bIsTaxiPassenger = status; }
+        void SetTaxiDriverStatus(bool status) { bIsTaxiDriver = status; }
 
         /*********************************************************/
         /***                    CHAT SYSTEM                    ***/

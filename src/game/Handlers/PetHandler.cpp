@@ -193,10 +193,27 @@ void WorldSession::HandlePetAction(WorldPacket& recv_data)
                     }
                     else                                    // charmed
                     {
-                        _player->Uncharm();
-                    }
-                        
+                        if (Player* PassangerPlayer = pCharmedUnit->ToPlayer())
+                        {
+                            if (_player->IsTaxiDriver())
+                            {
+                                _player->SetDisplayId(1991);
 
+                                float x, y, z;
+                                PassangerPlayer->GetSafePosition(x, y, z);
+
+                                _player->TeleportTo(PassangerPlayer->GetMapId(), x, y, z, 0.0F, 0);
+                                _player->RemoveAurasDueToSpell(16380);
+
+                                PassangerPlayer->Unmount();
+                                PassangerPlayer->UpdateSpeed(MOVE_SWIM, true, 1.0F);
+
+                                _player->SetTaxiDriverStatus(false);
+                                PassangerPlayer->SetTaxiPassengerStatus(false);
+                            }
+                        }
+                        _player->Uncharm();
+                    }    
                     break;
                 }  
                 default:
@@ -616,11 +633,6 @@ void WorldSession::HandlePetAbandon(WorldPacket& recv_data)
         }
         else if (petUnit->GetObjectGuid() == _player->GetCharmGuid())
         {
-            if (_player->IsTaxiPassenger())
-            {
-                _player->Unmount();
-                _player->UpdateSpeed(MOVE_SWIM, true, 1.0F);
-            }
             _player->Uncharm();
         }
     }

@@ -1030,12 +1030,11 @@ bool ItemUseSpell_item_saddle(Player* pPlayer, Item* pItem, const SpellCastTarge
     target->m_Events.AddEvent(new DismountAfterTime(target->GetGUID()), target->m_Events.CalculateTime(20 * MINUTE * IN_MILLISECONDS));
     target->SetTaxiPassengerStatus(true);
 
-
     pPlayer->AddAura(SPELL_TAXI_INVISIBILITY, ADD_AURA_PERMANENT);
     pPlayer->CastSpell(target, SPELL_CHARM, true);
     pPlayer->SetDisplayId(EMPTY_DISPLAY_ID);
     pPlayer->m_Events.AddEvent(new StopBeingTaxi(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(20 * MINUTE * IN_MILLISECONDS));
-
+    pPlayer->SetTaxiDriverStatus(true);
 
     pPlayer->GetSession()->SendNotification("You have 1 minute (TEST).");
 
