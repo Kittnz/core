@@ -192,7 +192,11 @@ void WorldSession::HandlePetAction(WorldPacket& recv_data)
                             pPet->Unsummon(PET_SAVE_NOT_IN_SLOT);
                     }
                     else                                    // charmed
+                    {
                         _player->Uncharm();
+                    }
+                        
+
                     break;
                 }  
                 default:
@@ -613,6 +617,12 @@ void WorldSession::HandlePetAbandon(WorldPacket& recv_data)
         else if (petUnit->GetObjectGuid() == _player->GetCharmGuid())
         {
             _player->Uncharm();
+
+            if (_player->IsTaxiPassenger())
+            {
+                _player->Unmount();
+                _player->UpdateSpeed(MOVE_SWIM, true, 1.0F);
+            }
         }
     }
 }

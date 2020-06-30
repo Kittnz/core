@@ -2090,6 +2090,13 @@ class MANGOS_DLL_SPEC Player final: public Unit
         bool isHardcorePlayer() const { return bIsHardcore; };
         void EnableHardcoreMode() { bIsHardcore = true; };
 
+        // For druids carrying players in a stag form
+        bool bIsTaxiPassenger = false;
+        bool bIsTaxiDriver = false;
+
+        bool IsTaxiDriver() { return bIsTaxiDriver; };
+        bool IsTaxiPassenger() { return bIsTaxiPassenger; };
+
         /*********************************************************/
         /***                 MISC GAME SYSTEMS                 ***/
         /*********************************************************/
