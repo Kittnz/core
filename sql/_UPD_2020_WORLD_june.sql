@@ -3104,4 +3104,32 @@ StartScript, CompleteScript)
 replace into creature_questrelation (id, quest, patch_min, patch_max) values ('3702','60125','10','10');
 replace into creature_involvedrelation (id, quest, patch_min, patch_max) values ('3702','60125','10','10');
       
-      
+update item_template set stackable = 20 where entry = 7676;
+update item_template set stackable = 20 where entry = 13457;
+update item_template set stackable = 20 where entry = 13461;
+update item_template set stackable = 20 where entry = 13459;
+update item_template set stackable = 20 where entry = 13458;
+update item_template set stackable = 20 where entry = 13452;
+update item_template set stackable = 20 where entry = 13454;
+update item_template set stackable = 20 where entry = 9206;
+update item_template set stackable = 20 where entry = 9264;
+update item_template set stackable = 20 where entry = 21546;
+update item_template set stackable = 20 where entry = 12820;
+update item_template set stackable = 20 where entry = 13446;
+update item_template set stackable = 20 where entry = 13444;
+update item_template set stackable = 20 where entry = 9513;
+update item_template set stackable = 20 where entry = 3387;
+update item_template set stackable = 20 where entry = 11452;
+update item_template set stackable = 20 where entry = 5634;
+update item_template set stackable = 20 where entry = 20007;
+update item_template set stackable = 20 where entry = 13445;
+update item_template set stackable = 20 where entry = 3825;
+update item_template set stackable = 20 where entry = 11951;
+update item_template set stackable = 20 where entry = 18253;
+update item_template set stackable = 20 where entry = 21151;
+update item_template set stackable = 20 where entry = 18269;
+update item_template set stackable = 20 where entry = 17554;
+update item_template set stackable = 20 where entry = 17635;
+update item_template set stackable = 20 where entry = 17570;
+update item_template set stackable = 20 where entry = 13512;
+update item_template set stackable = 20 where entry = 13511;
