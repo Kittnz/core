@@ -27,7 +27,7 @@ start_quest, lock_id, material, sheath, random_property, set_id, max_durability,
 duration, bag_family, disenchant_id, food_type, min_money_loot, max_money_loot, extra_flags, other_team_entry,
 script_name)
 values
- ('51855', '0', '12', '0', 'Dirty Old Ring', 'It\'s so light it almost slipped out of your hand', '9833', '1', '0', '1', '0', '0', '11', '-1', '-1', '0',
+ ('51855', '0', '15', '0', 'Dirty Old Ring', 'It\'s so light it almost slipped out of your hand', '9833', '1', '0', '1', '0', '0', '11', '-1', '-1', '0',
  '5', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
@@ -105,4 +105,4 @@ StartScript, CompleteScript)
 replace into creature_questrelation (id, quest, patch_min, patch_max) values ('328','60130','10','10');
 replace into creature_involvedrelation (id, quest, patch_min, patch_max) values ('328','60130','10','10');
 
-UPDATE `creature_loot_template` SET `item`='60130' WHERE (`entry`='285') AND (`item`='779') AND (`groupid`='0');
+update quest_template set questflags = 512 where entry = 60130;
