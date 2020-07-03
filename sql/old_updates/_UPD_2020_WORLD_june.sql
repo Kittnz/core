@@ -3137,4 +3137,4 @@ update item_template set stackable = 10 where entry = 5631;
 update item_template set stackable = 10 where entry = 5633;
 update item_template set stackable = 10 where entry = 13442;
 
-
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (285, 51855, 20, 0, 1, 1);
