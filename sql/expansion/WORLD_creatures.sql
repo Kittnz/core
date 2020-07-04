@@ -301,9 +301,10 @@ replace into creature_template (entry, display_id1, name, subname, level_min, le
 (80000, 10381, 'High Elf Ranger', '', 9, 10, 350, 640, 269, '', 1, 2, 2),
 (80001, 17329, 'Arcanist Anu\'delen', '', 60, 60, 3350, 4640, 269, '', 1, 2, 2),
 (80002, 6631, 'Ashylah Starcaller', '', 60, 60, 3350, 4640, 269, '', 1, 2, 1),
-(80003, 262, 'Caledra Gossip Trigger 1', '', 60, 60, 3350, 4640, 269, '', 1, 2, 1),
+(80003, 262, 'Caledra Gossip Trigger 1', '', 60, 60, 3350, 4640, 35, '', 1, 2, 1),
 (80005, 18003, 'Norel', '', 20, 59, 1350, 3300, 269, '', 1, 2, 1),
-(80006, 17329, 'Ranger-Captain Alisaeh Sunblade', '', 60, 60, 3350, 4640, 269, '', 1, 2, 2);
+(80006, 17329, 'Ranger-Captain Alisaeh Sunblade', '', 60, 60, 3350, 4640, 269, '', 1, 2, 2),
+(80007, 17329, 'Dummy Horde Player Trigger', '', 60, 60, 3350, 4640, 35, '', 1, 2, 2);
 
 -- Greeting's textes
 
