@@ -106,3 +106,6 @@ replace into creature_questrelation (id, quest, patch_min, patch_max) values ('3
 replace into creature_involvedrelation (id, quest, patch_min, patch_max) values ('328','60130','10','10');
 
 update quest_template set questflags = 512 where entry = 60130;
+
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (285, 51855, 20, 0, 1, 1);
+update creature_template set npc_flags = 16390 where entry = 3322;
