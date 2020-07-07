@@ -346,8 +346,8 @@ void WorldSession::HandleNpcTextQueryOpcode(WorldPacket & recv_data)
         for (uint32 i = 0; i < 8; ++i)
         {
             data << float(0);
-            data << "Greetings $N";
-            data << "Greetings $N";
+            data << "Greetings, $N.";
+            data << "Greetings, $N.";
             data << uint32(0);
             data << uint32(0);
             data << uint32(0);
@@ -393,8 +393,8 @@ void WorldSession::HandleNpcTextQueryOpcode(WorldPacket & recv_data)
             else
             {
                 data << float(0);
-                data << "Greetings $N";
-                data << "Greetings $N";
+                data << "Greetings, $N.";
+                data << "Greetings, $N.";
                 data << uint32(0);
                 data << uint32(0);
                 data << uint32(0);
