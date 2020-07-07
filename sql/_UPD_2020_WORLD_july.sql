@@ -109,3 +109,7 @@ update quest_template set questflags = 512 where entry = 60130;
 
 replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (285, 51855, 20, 0, 1, 1);
 update creature_template set npc_flags = 16390 where entry = 3322;
+
+update item_template set inventory_type = 17, class = 2, subclass = 5, sheath = 1 where entry = 51834;
+update item_template set sheath = 2 where entry = 51833;
+update item_template set sheath = 3 where entry = 51832;
