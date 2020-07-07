@@ -123,3 +123,17 @@ DELETE FROM `creature_loot_template` WHERE `entry`=3663;
 -- Feero Ironhand - No XP on kill, 10 seconds respawn.
 UPDATE `creature_template` SET `flags_extra` = 64 + 524288 + 1048576, `civilian`=0 WHERE `entry`=4484;
 UPDATE `creature` SET `spawntimesecsmin`=10, `spawntimesecsmax`=10 WHERE `id`=4484;
+
+-- Delete non blizzlike graveyards for Deeprun Tram
+DELETE FROM `game_graveyard_zone` WHERE  `id`=852 AND `ghost_zone`=2257;
+DELETE FROM `game_graveyard_zone` WHERE  `id`=101 AND `ghost_zone`=2257;
+
+-- Taim Ragetotem <Alterac Valley Battlemaster>, Thunderbluff
+UPDATE `creature` SET `position_x`=-1384.38, `position_y`=-98.4701, `position_z`=159.018, `orientation`=2.93215 WHERE `guid`=24670;
+
+-- Horde Warbringer, Thunderbluff
+UPDATE `creature` SET `position_x`=-1381.13, `position_y`=-87.0034, `position_z`=159.532, `orientation`=3.14159 WHERE `guid`=26901;
+
+-- Varimathras
+UPDATE `creature` SET `orientation`='0.820305' WHERE  `guid`=31901;
+UPDATE `creature_template` SET `scale`='1.2' WHERE  `entry`=2425;
