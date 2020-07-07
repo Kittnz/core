@@ -113,3 +113,13 @@ update creature_template set npc_flags = 16390 where entry = 3322;
 update item_template set inventory_type = 17, class = 2, subclass = 5, sheath = 1 where entry = 51834;
 update item_template set sheath = 2 where entry = 51833;
 update item_template set sheath = 3 where entry = 51832;
+
+
+-- Delgren the Purifier - No XP on kill, no loot, 10 seconds respawn.
+UPDATE `creature_template` SET `flags_extra` = 2 + 64 + 524288, `loot_id`=0, `civilian`=0 WHERE `entry`=3663;
+UPDATE `creature` SET `spawntimesecsmin`=10, `spawntimesecsmax`=10 WHERE `id`=3663;
+DELETE FROM `creature_loot_template` WHERE `entry`=3663;
+
+-- Feero Ironhand - No XP on kill, 10 seconds respawn.
+UPDATE `creature_template` SET `flags_extra` = 64 + 524288 + 1048576, `civilian`=0 WHERE `entry`=4484;
+UPDATE `creature` SET `spawntimesecsmin`=10, `spawntimesecsmax`=10 WHERE `id`=4484;
