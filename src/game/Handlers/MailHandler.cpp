@@ -291,13 +291,28 @@ void WorldSession::HandleSendMailCallback(WorldSession::AsyncMailSendRequest* re
     }
 
     // Antispam checks
-    if (loadedPlayer->getLevel() < sWorld.getConfig(CONFIG_UINT32_MAILSPAM_LEVEL) &&
-        req->money < sWorld.getConfig(CONFIG_UINT32_MAILSPAM_MONEY) &&
-        (sWorld.getConfig(CONFIG_BOOL_MAILSPAM_ITEM) && !req->itemGuid))
-    {
-        pl->SendMailResult(0, MAIL_SEND, MAIL_ERR_INTERNAL_ERROR);
-        return;
-    }
+	bool bHasHighLevelCharacter = false;
+	std::list<PlayerCacheData*> AllCharactersOfThatPlayer;
+	sObjectMgr.GetPlayerDataForAccount(loadedPlayer->GetSession()->GetAccountId(), AllCharactersOfThatPlayer);
+	for (PlayerCacheData* character : AllCharactersOfThatPlayer)
+	{
+		bHasHighLevelCharacter = character->uiLevel >= sWorld.getConfig(CONFIG_UINT32_MAILSPAM_ACCOUNT_LEVEL);
+		if (bHasHighLevelCharacter)
+		{
+			break;
+		}
+	}
+
+	if (!bHasHighLevelCharacter)
+	{
+		if (loadedPlayer->getLevel() < sWorld.getConfig(CONFIG_UINT32_MAILSPAM_LEVEL) &&
+			req->money < sWorld.getConfig(CONFIG_UINT32_MAILSPAM_MONEY) &&
+			(sWorld.getConfig(CONFIG_BOOL_MAILSPAM_ITEM) && !req->itemGuid))
+		{
+			pl->SendMailResult(0, MAIL_SEND, MAIL_ERR_INTERNAL_ERROR);
+			return;
+		}
+	}
 
     AccountPersistentData& data = sAccountMgr.GetAccountPersistentData(GetAccountId());
     if (!data.CanMail(rc_account))

@@ -484,6 +484,8 @@ struct PlayerCacheData
 };
 typedef std::map<uint32 /*guid*/, PlayerCacheData*> PlayerCacheDataMap;
 
+typedef std::map<uint32 /*accountId*/, std::set<PlayerCacheData*>> PlayerCachePerAccountMap;
+
 struct FactionChangeMountData
 {
     Races RaceId;
@@ -1330,6 +1332,10 @@ class ObjectMgr
         void UpdatePlayerCache(PlayerCacheData* data, uint32 race, uint32 _class, uint32 gender, uint32 accountId, const std::string& name, uint32 level, uint32 zoneId);
 
         PlayerCacheDataMap m_playerCacheData;
+
+		// Turtle specific. Should be synchronized with m_playerCacheData, since it using pointers from that map!
+		PlayerCachePerAccountMap m_accountPlayersCacheData;
+
         std::map<std::string, uint32> m_playerNameToGuid;
 
         uint32 AddCreData(uint32 entry, uint32 team, uint32 map, float, float, float, float, uint32 spawnDelay);

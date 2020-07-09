@@ -641,6 +641,7 @@ void ObjectMgr::LoadSavedVariable()
 void ObjectMgr::LoadPlayerCacheData()
 {
     m_playerCacheData.clear();
+	m_accountPlayersCacheData.clear();
     m_playerNameToGuid.clear();
 
     std::unique_ptr<QueryResult> result(CharacterDatabase.Query(
@@ -848,12 +849,15 @@ void ObjectMgr::UpdatePlayerCache(PlayerCacheData* data, uint32 race, uint32 _cl
 
 PlayerCacheData* ObjectMgr::InsertPlayerInCache(uint32 lowGuid, uint32 race, uint32 _class, uint32 gender, uint32 accountId, const std::string& name, uint32 level, uint32 zoneId)
 {
-    auto data = new PlayerCacheData;
+	PlayerCacheData* data = new PlayerCacheData;
     data->uiGuid = lowGuid;
     UpdatePlayerCache(data, race, _class, gender, accountId, name, level, zoneId);
 
     m_playerCacheData[lowGuid] = data;
     m_playerNameToGuid[name] = lowGuid;
+
+	std::set<PlayerCacheData*>& AccountChars = m_accountPlayersCacheData[accountId];
+	AccountChars.insert(data);
 
     return data;
 }
@@ -863,9 +867,12 @@ void ObjectMgr::DeletePlayerFromCache(uint32 lowGuid)
     auto itr = m_playerCacheData.find(lowGuid);
     if (itr != m_playerCacheData.end())
     {
+		uint32 AccId = itr->second->uiAccount;
+		m_accountPlayersCacheData[AccId].erase(itr->second);
         auto itr2 = m_playerNameToGuid.find(itr->second->sName);
         if (itr2 != m_playerNameToGuid.end())
             m_playerNameToGuid.erase(itr2);
+		delete itr->second;
         m_playerCacheData.erase(itr);
     }
 }
@@ -883,11 +890,16 @@ void ObjectMgr::ChangePlayerNameInCache(uint32 guidLow, const std::string& oldNa
 
 void ObjectMgr::GetPlayerDataForAccount(uint32 accountId, std::list<PlayerCacheData*>& data) const
 {
-    for (auto iter = m_playerCacheData.cbegin(); iter != m_playerCacheData.cend(); ++iter)
-    {
-        if (iter->second->uiAccount == accountId)
-            data.push_back(iter->second);
-    }
+	auto AccPlayerCacheIter = m_accountPlayersCacheData.find(accountId);
+	if (AccPlayerCacheIter != m_accountPlayersCacheData.end())
+	{
+		const std::set<PlayerCacheData*>& PlayersInAcc = AccPlayerCacheIter->second;
+
+		for (PlayerCacheData* pPlayerCache : PlayersInAcc)
+		{
+			data.push_back(pPlayerCache);
+		}
+	}
 }
 
 Group* ObjectMgr::GetGroupById(uint32 id) const

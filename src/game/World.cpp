@@ -988,7 +988,8 @@ void World::LoadConfigSettings(bool reload)
 
     setConfig(CONFIG_UINT32_MAILSPAM_EXPIRE_SECS, "MailSpam.ExpireSecs", 0);
     setConfig(CONFIG_UINT32_MAILSPAM_MAX_MAILS, "MailSpam.MaxMails", 2);
-    setConfig(CONFIG_UINT32_MAILSPAM_LEVEL, "MailSpam.Level", 1);
+	setConfig(CONFIG_UINT32_MAILSPAM_LEVEL, "MailSpam.Level", 1);
+	setConfig(CONFIG_UINT32_MAILSPAM_ACCOUNT_LEVEL, "MailSpam.AccountCharLevel", 1);
     setConfig(CONFIG_UINT32_MAILSPAM_MONEY, "MailSpam.Money", 0);
     setConfig(CONFIG_BOOL_MAILSPAM_ITEM, "MailSpam.Item", false);
     setConfig(CONFIG_UINT32_COD_FORCE_TAG_MAX_LEVEL, "Mails.COD.ForceTag.MaxLevel", 0);
