@@ -231,3 +231,5 @@ values
  '0', '1', NULL);
 REPLACE INTO `creature_template` VALUES (51584,0,10095,0,0,0,'Chromatic Whelp','',0,1,1,64,64,0,0,0,35,0,1,1.14286,0.75,20,5,0,0,1,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'',0,3,0,0,3,0,0,0,0,0,0,'');
 replace into custom_pet_entry_relation (item_entry, creature_entry) values (51857, 51584);
+
+update creature_spells set spellId_1 = 17228 where entry = 156290;

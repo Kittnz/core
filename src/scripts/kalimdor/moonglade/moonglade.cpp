@@ -285,7 +285,7 @@ enum
     POINT_ID_ERANIKUS_COMBAT = 1,
     POINT_ID_ERANIKUS_REDEEMED = 2,
 
-    MAX_SHADOWS = 4, // the max shadows summoned per turn
+    MAX_SHADOWS = 3, // the max shadows summoned per turn
     MAX_SUMMON_TURNS = 10, // There are about 10 summoned shade waves
 };
 
@@ -676,14 +676,12 @@ struct npc_keeper_remulosAI : public npc_escortAI
                         ++m_uiSummonCount;
                         SetEscortPaused(false);
                         m_bIsFirstWave = false;
+                        m_uiShadesummonTimer = 15000;
+                        return;
                     }
 
                     // Summon 3 shades per turn until the maximum summon turns are reached
                     float fX, fY, fZ;
-                    // Randomize the summon point - guesswork; not used //Alita, I'm convinced there's some randomness to add.
-                    //uint8 uiSummonPoint = roll_chance_i(70) ? MAX_SHADOWS : urand(MAX_SHADOWS + 1, 2*MAX_SHADOWS - 1);
-
-                    uint8 randomShadowNumber = urand(3, MAX_SHADOWS);
 
                     //Alita : four possible zones : in front of the building, accross the bridge(not far from the platform), another farther away, and next to player(well since the player is supposed to be with Remulos).
                     //I beleive there is also a loner, but oh well.
@@ -698,7 +696,7 @@ struct npc_keeper_remulosAI : public npc_escortAI
                                     plfX = pPlayer->GetPositionX();
                                     plfY = pPlayer->GetPositionY();
                                     plfZ = pPlayer->GetPositionZ();
-                                    for (uint8 i = 0; i < randomShadowNumber; ++i)
+                                    for (uint8 i = 0; i < MAX_SHADOWS; ++i)
                                     {
                                         m_creature->GetRandomPoint(plfX, plfY, plfZ, 20.0f, fX, fY, fZ);
                                         m_creature->SummonCreature(NPC_NIGHTMARE_PHANTASM, fX, fY, fZ + 2, 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000);
@@ -707,7 +705,7 @@ struct npc_keeper_remulosAI : public npc_escortAI
                                 break;
                             case 1:
                                 uint8 randomSummonPoint = urand(3, 5);
-                                for (uint8 i = 0; i < randomShadowNumber; ++i)
+                                for (uint8 i = 0; i < MAX_SHADOWS; ++i)
                                 {
                                     m_creature->GetRandomPoint(aShadowsLocations[randomSummonPoint].m_fX, aShadowsLocations[randomSummonPoint].m_fY, aShadowsLocations[randomSummonPoint].m_fZ, 10.0f, fX, fY, fZ);
                                     m_creature->SummonCreature(NPC_NIGHTMARE_PHANTASM, fX, fY, fZ, 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 50000);
@@ -717,15 +715,11 @@ struct npc_keeper_remulosAI : public npc_escortAI
                         ++m_uiSummonCount;
                     }
 
-                    // also summon 2 guards near with some chance
-                    if (roll_chance_i(50))
+                    // also summon 2 guards near the shadows
+                    for (uint8 i = 0; i < 2; i++)
                     {
-                        for (uint8 i = 0; i < 2; i++)
-                        {
-                            float newX, newY, newZ;
-                            m_creature->GetRandomPoint(me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), 25.0f, newX, newY, newZ);
-                            m_creature->SummonCreature(NPC_NIGHTHAVEN_DEFENDER, newX, newY, newZ, 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 60 * IN_MILLISECONDS);
-                        }
+                        m_creature->SummonCreature(NPC_NIGHTHAVEN_DEFENDER, fX, fY, fZ, 0.0f,
+                                                   TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 60 * IN_MILLISECONDS);
                     }
 
                     // If all the shades were summoned then set Eranikus in combat
@@ -742,7 +736,7 @@ struct npc_keeper_remulosAI : public npc_escortAI
                         }
                     }
                     else
-                        m_uiShadesummonTimer = urand(20000, 30000);
+                        m_uiShadesummonTimer = urand(25000, 35000);
                 }
                 else
                     m_uiShadesummonTimer -= uiDiff;
