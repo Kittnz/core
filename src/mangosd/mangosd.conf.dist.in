@@ -2112,6 +2112,7 @@ PlayerBot.ForceLogoutDelay = 1
 MailSpam.ExpireSecs                             = 0
 MailSpam.MaxMails                               = 2
 MailSpam.Level                                  = 1
+MailSpam.AccountCharLevel						= 1
 MailSpam.Money                                  = 0
 MailSpam.Item                                   = 0
 
