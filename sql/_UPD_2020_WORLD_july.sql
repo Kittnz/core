@@ -233,3 +233,4 @@ REPLACE INTO `creature_template` VALUES (51584,0,10095,0,0,0,'Chromatic Whelp','
 replace into custom_pet_entry_relation (item_entry, creature_entry) values (51857, 51584);
 
 update creature_spells set spellId_1 = 17228 where entry = 156290;
+update creature_template set faction = 1254 where entry = 15495;
