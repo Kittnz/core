@@ -479,16 +479,10 @@ bool GOSelect_go_epl_flying_machine(Player* pPlayer, GameObject* pGo, uint32 sen
     }
     if (action == GOSSIP_ACTION_INFO_DEF + 4)
     {
-        if (pPlayer->GetMoney() >= 5000)
-        {
-            pPlayer->ModifyMoney(-5000);
-            pPlayer->SetDisplayId(8011);
-            pPlayer->TeleportTo(1, -7430.070313f, 1002.554565f, 104.249787f, 0.0f);
-            pPlayer->m_Events.AddEvent(new DemorphAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(18000));
-            pPlayer->CastSpell(pPlayer, 130, true);
-        }
-        else
-            ChatHandler(pPlayer).PSendSysMessage("You don't have enough money!");
+        pPlayer->SetDisplayId(8011);
+        pPlayer->TeleportTo(1, -7430.070313f, 1002.554565f, 104.249787f, 0.0f);
+        pPlayer->m_Events.AddEvent(new DemorphAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(18000));
+        pPlayer->CastSpell(pPlayer, 130, true);
     }
     return true;
 }
