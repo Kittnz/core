@@ -8005,40 +8005,6 @@ bool ChatHandler::HandleModifyParryCommand(char *args)
     return true;
 }
 
-bool ChatHandler::HandleDebugMoveCommand(char* args)
-{
-    Unit* target = GetSelectedUnit();
-    uint32 movetype = 0;
-
-    if (!target || !ExtractUInt32(&args, movetype))
-        return false;
-
-    switch (movetype)
-    {
-        case 0:
-            target->GetMotionMaster()->Clear(true, true);
-            target->GetMotionMaster()->MoveIdle();
-            break;
-        case 1:
-            target->GetMotionMaster()->MoveIdle();
-            break;
-        case 2:
-            target->GetMotionMaster()->MoveRandom();
-            break;
-        case 3:
-            target->GetMotionMaster()->MoveConfused();
-            break;
-        case 4:
-            target->GetMotionMaster()->MoveFleeing(m_session->GetPlayer());
-            break;
-        case 5:
-            target->GetMotionMaster()->MoveFeared(m_session->GetPlayer());
-            break;
-    }
-    SendSysMessage("Debug Move.");
-    return true;
-}
-
 bool ChatHandler::HandleReloadConditionsCommand(char* /*args*/)
 {
     sLog.outString("Re-Loading `conditions`... ");
@@ -8326,42 +8292,3 @@ bool ChatHandler::HandleAntiSpamRemoveReplace(char* args)
     return true;
 }
 
-
-//#UNDONE !!!
-bool ChatHandler::HandleDebugShowNearestGOInfo(char* args)
-{
-    if (WorldSession* PlayerSession = GetSession())
-    {
-        if (Player* pl = PlayerSession->GetPlayer())
-        {
-            Map* CurrentMap = pl->GetMap();
-            if (CurrentMap == nullptr) return true;
-
-            float PlayerPosX = 0.0f;
-            float PlayerPosY = 0.0f;
-            float PlayerPosZ = 0.0f;
-            pl->GetPosition(PlayerPosX, PlayerPosY, PlayerPosZ);
-
-
-        }
-        else
-        {
-            PSendSysMessage("ERROR: Session without player!");
-        }
-    }
-
-
-    PSendSysMessage("Command must be executed in game!");
-
-    return true;
-}
-
-bool ChatHandler::HandleDebugOverflowCommand(char* args)
-{
-    std::string name("\360\222\214\245\360\222\221\243\360\222\221\251\360\223\213\215\360\223\213\210\360\223\211\241\360\222\214\245\360\222\221\243\360\222\221\251\360\223\213\215\360\223\213\210\360\223\211\241");
-    // Overflow: \xd808\xdf25\xd809\xdc63\xd809\xdc69\xd80c\xdecd\xd80c\xdec8\xd80c\xde61\000\xdf25\xd809\xdc63
-
-    normalizePlayerName(name);
-
-    return true;
-}

@@ -198,30 +198,6 @@ bool ChatHandler::HandlePossessCommand(char *args)
 	return true;
 }
 
-bool ChatHandler::HandleDebugForceUpdateCommand(char *args)
-{
-	Unit* target = GetSelectedUnit();
-	if (!target)
-	{
-		SendSysMessage(LANG_SELECT_CHAR_OR_CREATURE);
-		SetSentErrorMessage(true);
-		return false;
-	}
-
-	char* indexStr = strtok((char*)args, " ");
-
-	if (!indexStr)
-	{
-		SendSysMessage("Syntax : .debug forceupdate $field");
-		SetSentErrorMessage(true);
-		return false;
-	}
-
-	uint16 index = (uint16)atoi(indexStr);
-	target->ForceValuesUpdateAtIndex(index);
-	PSendSysMessage("Update sent for field %u", index);
-	return true;
-}
 
 bool ChatHandler::HandleGameObjectTempAddCommand(char *args)
 {
@@ -589,74 +565,6 @@ bool ChatHandler::HandleReloadVariablesCommand(char*)
 	return true;
 }
 
-bool ChatHandler::HandleDebugLoSCommand(char*)
-{
-	Unit* target = GetSelectedUnit();
-	if (!target)
-	{
-		SendSysMessage(LANG_SELECT_CHAR_OR_CREATURE);
-		return false;
-	}
-
-	float x0, y0, z0;
-	float x1, y1, z1;
-	m_session->GetPlayer()->GetPosition(x0, y0, z0);
-	target->GetPosition(x1, y1, z1);
-
-	VMAP::ModelInstance* spawn = m_session->GetPlayer()->GetMap()->FindCollisionModel(x0, y0, z0, x1, y1, z1);
-
-	if (!spawn)
-		SendSysMessage("* No collision found.");
-	else
-		PSendSysMessage("* Collision at '%s' [%f %f %f]", spawn->name.c_str(), spawn->iPos.x, spawn->iPos.y, spawn->iPos.z);
-	return true;
-}
-
-bool ChatHandler::HandleDebugLoSAllowCommand(char* args)
-{
-	Unit* target = GetSelectedUnit();
-	bool value;
-	if (!target || !ExtractOnOff(&args, value))
-		return false;
-
-	float x0, y0, z0;
-	float x1, y1, z1;
-	m_session->GetPlayer()->GetPosition(x0, y0, z0);
-	target->GetPosition(x1, y1, z1);
-
-	VMAP::ModelInstance* spawn = m_session->GetPlayer()->GetMap()->FindCollisionModel(x0, y0, z0, x1, y1, z1);
-
-	if (!spawn)
-		SendSysMessage("* No collision found.");
-	else if (((spawn->flags & VMAP::MOD_NO_BREAK_LOS) > 0) != value)
-	{
-		sLog.outInfo("[VMAPS] Collision for model '%s' %s by %s (guid %u)", spawn->name.c_str(), value ? "disabled" : "enabled", m_session->GetPlayer()->GetName(), m_session->GetPlayer()->GetGUIDLow());
-		if (value)
-		{
-			spawn->flags |= VMAP::MOD_NO_BREAK_LOS;
-			PSendSysMessage("'%s' will no longer break LOS.", spawn->name.c_str());
-		}
-		else
-		{
-			spawn->flags &= ~VMAP::MOD_NO_BREAK_LOS;
-			PSendSysMessage("'%s' will break LOS.", spawn->name.c_str());
-		}
-		if (FILE* f = fopen("los_mods", "a"))
-		{
-			fprintf(f, "%u %u %s\n", !value, spawn->ID, spawn->name.c_str());
-			fclose(f);
-		}
-	}
-	else
-		PSendSysMessage("Model '%s' already %s for LOS.", spawn->name.c_str(), value ? "disabled" : "enabled");
-	return true;
-}
-
-bool ChatHandler::HandleDebugAssertFalseCommand(char*)
-{
-	ASSERT(false);
-	return false;
-}
 
 bool ChatHandler::HandleGoForwardCommand(char* args)
 {
@@ -1453,23 +1361,6 @@ bool ChatHandler::HandleSpellSearchCommand(char *args)
 	return true;
 }
 
-bool ChatHandler::HandleDebugMoveToCommand(char* args)
-{
-	Player* player = m_session->GetPlayer();
-	Unit* target = GetSelectedUnit();
-	if (!player || !target || player == target)
-	{
-		PSendSysMessage("Invalid target/source selection.");
-		return true;
-	}
-
-	// Determination des flags
-	uint32 flags = 0;
-	sscanf(args, "%x", &flags);
-	player->GetMotionMaster()->MovePoint(0, target->GetPositionX(), target->GetPositionY(), target->GetPositionZ(), flags);
-	PSendSysMessage("Moving to \"%s\" (flags 0x%x)", target->GetName(), flags);
-	return true;
-}
 
 bool ChatHandler::HandleGodCommand(char* args)
 {
@@ -1492,41 +1383,6 @@ bool ChatHandler::HandleGodCommand(char* args)
 		SendSysMessage("Mode GOD : [ON]");
 	else
 		SendSysMessage("Mode GOD : [OFF]");
-	return true;
-}
-
-bool ChatHandler::HandleDebugPvPCreditCommand(char *args)
-{
-	Unit* pSelection = GetSelectedUnit();
-	if (!pSelection)
-		pSelection = m_session->GetPlayer();
-
-	uint32 uiRankValue = urand(1, 14);
-	/*
-	Arguments :
-	 * uiHonorValue = Honor Gained
-	 * uiGradeValue = Honor Rank of Victim
-	If uiHonorValue=0 : "Dishonorable Kill"
-	*/
-	WorldPacket data(SMSG_PVP_CREDIT, 4 + 8 + 4);
-
-	if (pSelection->GetTypeId() == TYPEID_PLAYER)
-	{
-		uint32 uiHonorValue = urand(1, 100);
-		data << uiHonorValue;
-		data << pSelection->GetGUID();
-		PSendSysMessage("Honorable Kill : Rank %3u and Honor %3u.", uiRankValue, uiHonorValue);
-	}
-	else // Victoire deshonorante
-	{
-		data << uint32(0);
-		data << pSelection->GetGUID();
-		PSendSysMessage("Dishonorable Kill.");
-		uiRankValue = 0;
-	}
-	data << uiRankValue;
-	m_session->SendPacket(&data);
-
 	return true;
 }
 
@@ -2058,115 +1914,6 @@ bool ChatHandler::HandleUnitStatCommand(char *args)
 	return true;
 }
 
-bool ChatHandler::HandleDebugControlCommand(char *args)
-{
-	Player* pTarget = GetSelectedPlayer();
-	if (!pTarget)
-		return false;
-	bool control = false;
-	if (!ExtractOnOff(&args, control))
-		return false;
-	pTarget->SetClientControl(pTarget, control);
-	return true;
-}
-
-bool ChatHandler::HandleDebugMonsterChatCommand(char* args)
-{
-	Unit* pTarget = GetSelectedUnit();
-	if (!pTarget)
-		return false;
-	for (uint8 i = 0; i < 0xFF; ++i)
-	{
-		std::ostringstream oss;
-		oss << "Chat" << int(i);
-		std::string rightText = oss.str();
-		WorldPacket data(SMSG_MESSAGECHAT, 200);
-		data << (uint8)i;
-		data << (uint32)LANG_UNIVERSAL;
-		data << (uint32)(strlen(pTarget->GetName()) + 1);
-		data << pTarget->GetName();
-		data << (uint64)0;
-		data << (uint32)(rightText.length() + 1);
-		data << rightText;
-		data << (uint8)0;                       // ChatTag
-		pTarget->SendMessageToSet(&data, true);
-	}
-
-	pTarget->MonsterTextEmote("Testing WorldObject::MonsterTextEmote", m_session->GetPlayer());
-	pTarget->MonsterTextEmote("Testing WorldObject::MonsterTextEmote(boss)", m_session->GetPlayer(), true);
-	pTarget->MonsterWhisper("Testing WorldObject::MonsterWhisper", m_session->GetPlayer());
-	return true;
-}
-
-bool ChatHandler::HandleDebugUnitCommand(char* args)
-{
-	Unit* target = GetSelectedUnit();
-	if (!target)
-		return false;
-	uint32 flags = 0;
-	if (ExtractUInt32(&args, flags))
-		target->SetDebugger(m_session->GetPlayer()->GetObjectGuid(), flags);
-
-	PSendSysMessage("Debugs on target [%s]%s", target->GetName(), (target->GetDebuggerGuid() == m_session->GetPlayer()->GetObjectGuid()) ? " ATTACHE" : "");
-#define HANDLE_DEBUG(flag, nom) PSendSysMessage("[%s] %6u \"" nom "\"", (target->GetDebugFlags() & flag) ? "ON" : "OFF", flag);
-	HANDLE_DEBUG(DEBUG_SPELL_COMPUTE_RESISTS, "Calculs des resists des sorts");
-	HANDLE_DEBUG(DEBUG_PACKETS_RECV, "Paquets recus par le serveur");
-	HANDLE_DEBUG(DEBUG_PACKETS_SEND, "Paquets envoyes par le serveur");
-	HANDLE_DEBUG(DEBUG_AI, "Divers debugs de l'AI");
-	HANDLE_DEBUG(DEBUG_DR, "Diminishing returns");
-	HANDLE_DEBUG(DEBUG_CHEAT, "Anticheat");
-	HANDLE_DEBUG(DEBUG_PROCS, "Proc system");
-	HANDLE_DEBUG(DEBUG_SPELLS_DAMAGE, "Spells damage and healing bonus");
-
-	return true;
-}
-
-bool ChatHandler::HandleDebugTimeCommand(char* args)
-{
-	float rate = 1.0f;
-
-	if (ExtractFloat(&args, rate))
-		PSendSysMessage("Time rate: x %f", rate);
-	else
-		SendSysMessage("Time is back to normal.");
-
-	sWorld.SetTimeRate(rate);
-	return true;
-}
-
-bool ChatHandler::HandleDebugMoveFlagsCommand(char* args)
-{
-	Unit* unit = GetSelectedUnit();
-	if (!unit)
-		return false;
-	uint32 flags = MOVEFLAG_NONE;
-	if (ExtractUInt32Base(&args, flags, 16))
-	{
-		PSendSysMessage("moveFlags = 0x%x", flags);
-		unit->m_movementInfo.moveFlags = flags;
-		unit->SendHeartBeat(true);
-	}
-	else
-	{
-		PSendSysMessage("moveFlags = 0x%x", unit->GetUnitMovementFlags());
-	}
-	return true;
-}
-
-bool ChatHandler::HandleDebugMoveSplineCommand(char* args)
-{
-	Unit* unit = GetSelectedUnit();
-	if (!unit)
-		return false;
-	PSendSysMessage("Target: %s", unit->GetGuidStr().c_str());
-	PSendSysMessage("MoveSpline: %s", unit->movespline->Finalized() ? "finalized" : "running");
-	PSendSysMessage("MvtOrigin: %s", unit->movespline->GetMovementOrigin());
-	const std::vector<Vector3>& path = unit->movespline->getPath();
-	for (size_t i = 0; i < path.size(); ++i)
-		PSendSysMessage("Point%u %f %f %f", i, path[i].x, path[i].y, path[i].z);
-	return true;
-}
-
 bool ChatHandler::HandleAnticheatCommand(char* args)
 {
 	Player* player = NULL;
@@ -2343,16 +2090,6 @@ bool ChatHandler::HandleReplayPlayCommand(char* c)
 		PSendSysMessage("Starting replay %s for %s", c, playerLink(sess->GetPlayerName()).c_str());
 	else
 		PSendSysMessage("Could not start replay %s", c);
-	return true;
-}
-
-bool ChatHandler::HandleDebugRecvPacketDumpWrite(char* c)
-{
-	WorldSession* sess = m_session;
-	if (Player* player = GetSelectedPlayer())
-		sess = player->GetSession();
-	PSendSysMessage("Starting replay recording for %s", playerLink(sess->GetPlayerName()).c_str());
-	sess->SetDumpRecvPackets(c);
 	return true;
 }
 
@@ -2566,55 +2303,6 @@ bool ChatHandler::HandleRecupCommand(char* c)
 	return true;
 }
 
-bool ChatHandler::HandleDebugExp(char*)
-{
-	const float moveDist = 80.0f;
-	const float searchCreaturesRange = 60.0f;
-	const float retournementRayon = 2.0f;
-	const float moveSpeed = 6.0f;
-	std::list<Creature*> targets;
-	Unit* selection = GetSelectedUnit();
-	if (!selection)
-	{
-		SendSysMessage(LANG_SELECT_CHAR_OR_CREATURE);
-		return false;
-	}
-	CellPair pair(MaNGOS::ComputeCellPair(selection->GetPositionX(), selection->GetPositionY()));
-	Cell cell(pair);
-	cell.SetNoCreate();
-
-	MaNGOS::AnyUnitInObjectRangeCheck check(selection, searchCreaturesRange);
-	MaNGOS::CreatureListSearcher<MaNGOS::AnyUnitInObjectRangeCheck> searcher(targets, check);
-	TypeContainerVisitor<MaNGOS::CreatureListSearcher<MaNGOS::AnyUnitInObjectRangeCheck>, GridTypeMapContainer> visitor(searcher);
-
-	cell.Visit(pair, visitor, *(selection->GetMap()), *selection, searchCreaturesRange);
-
-	for (std::list<Creature*>::iterator it = targets.begin(); it != targets.end(); ++it)
-	{
-		Unit* target = *it;
-		float x = target->GetPositionX() + moveDist * cos(target->GetOrientation());
-		float y = target->GetPositionY() + moveDist * sin(target->GetOrientation());
-		float z = target->GetPositionZ();
-		target->UpdateGroundPositionZ(x, y, z);
-		PointsArray a;
-		for (int i = 10; i >= 0; --i)
-		{
-			float angle = target->GetOrientation() - M_PI / 2 + i * M_PI / 10.0f;
-			float currx = x + retournementRayon * cos(angle);
-			float curry = y + retournementRayon * sin(angle);
-			float currz = z;
-			target->UpdateGroundPositionZ(currx, curry, currz);
-			a.push_back(Vector3(currx, curry, currz));
-		}
-
-		Movement::MoveSplineInit init(*target);
-		init.MovebyPath(a);
-		init.SetWalk(true);
-		init.SetVelocity(moveSpeed);
-		init.Launch();
-	}
-	return true;
-}
 
 bool ChatHandler::HandleVideoTurn(char*)
 {
@@ -2849,176 +2537,6 @@ bool ChatHandler::HandleInstancePerfInfosCommand(char* args)
 	return true;
 }
 
-extern LootStore LootTemplates_Creature;
-extern LootStore LootTemplates_Fishing;
-extern LootStore LootTemplates_Gameobject;
-extern LootStore LootTemplates_Item;
-extern LootStore LootTemplates_Mail;
-extern LootStore LootTemplates_Pickpocketing;
-extern LootStore LootTemplates_Skinning;
-extern LootStore LootTemplates_Disenchant;
-
-bool ChatHandler::HandleDebugLootTableCommand(char* args)
-{
-	std::stringstream in(args);
-	std::string tableName;
-	int lootid = 0;
-	int checkItem = 0;
-	unsigned int simCount = 0;
-	in >> tableName >> lootid >> simCount >> checkItem;
-	simCount = simCount ? simCount : 10000;
-	SetSentErrorMessage(true);
-
-	LootStore const* store = NULL;
-	if (tableName == "creature")
-		store = &LootTemplates_Creature;
-	else if (tableName == "reference")
-		store = &LootTemplates_Reference;
-	else if (tableName == "fishing")
-		store = &LootTemplates_Fishing;
-	else if (tableName == "gameobject")
-		store = &LootTemplates_Gameobject;
-	else if (tableName == "item")
-		store = &LootTemplates_Item;
-	else if (tableName == "mail")
-		store = &LootTemplates_Mail;
-	else if (tableName == "pickpocketing")
-		store = &LootTemplates_Pickpocketing;
-	else if (tableName == "skinning")
-		store = &LootTemplates_Skinning;
-	else if (tableName == "disenchant")
-		store = &LootTemplates_Disenchant;
-	else if (tableName == "enchant")
-		return HandleDebugItemEnchantCommand(lootid, simCount);
-	else
-	{
-		PSendSysMessage("Error: loot type \"%s\" unknown", tableName.c_str());
-		return false;
-	}
-
-	LootTemplate const* tab = store->GetLootFor(lootid);
-	if (!tab)
-	{
-		PSendSysMessage("Error: loot type \"%s\" has no lootid %u", tableName.c_str(), lootid);
-		return false;
-	}
-
-	Player* lootOwner = GetSelectedPlayer();
-
-	std::map<uint32, uint32> lootChances;
-	if (checkItem)
-		lootChances[checkItem] = 0;
-
-	const unsigned int MAX_TIME = 30;
-	auto startTime = time(nullptr);
-
-	for (unsigned int i = 0; i < simCount; ++i)
-	{
-		Loot l(NULL);
-		if (lootOwner)
-			l.SetTeam(lootOwner->GetTeam());
-		tab->Process(l, *store, store->IsRatesAllowed());
-		for (LootItemList::const_iterator it = l.items.begin(); it != l.items.end(); ++it)
-			if (!lootOwner || !it->conditionId)
-				lootChances[it->itemid]++;
-		for (LootItemList::const_iterator it = l.m_questItems.begin(); it != l.m_questItems.end(); ++it)
-			lootChances[it->itemid]++;
-		if (lootOwner)
-		{
-			l.FillNotNormalLootFor(lootOwner);
-			QuestItemMap::const_iterator itemsList = l.m_playerFFAItems.find(lootOwner->GetGUIDLow());
-			if (itemsList != l.m_playerFFAItems.end())
-				for (QuestItemList::const_iterator it = itemsList->second->begin(); it != itemsList->second->end(); ++it)
-					lootChances[l.items[it->index].itemid]++;
-			itemsList = l.m_playerQuestItems.find(lootOwner->GetGUIDLow());
-			if (itemsList != l.m_playerQuestItems.end())
-				for (QuestItemList::const_iterator it = itemsList->second->begin(); it != itemsList->second->end(); ++it)
-					lootChances[l.m_questItems[it->index].itemid]++;
-			itemsList = l.m_playerNonQuestNonFFAConditionalItems.find(lootOwner->GetGUIDLow());
-			if (itemsList != l.m_playerNonQuestNonFFAConditionalItems.end())
-				for (QuestItemList::const_iterator it = itemsList->second->begin(); it != itemsList->second->end(); ++it)
-					lootChances[l.items[it->index].itemid]++;
-		}
-
-		if (i % 1000000 == 0) // check the time every million iterations
-		{
-			if (time(nullptr) - startTime > MAX_TIME)
-			{
-				PSendSysMessage("Error: Aborted loot simulation after %u runs for exceeding max allowed time of %us", i, MAX_TIME);
-				simCount = i;
-				break;
-			}
-		}
-	}
-	PSendSysMessage("%u items dropped after %u attempts for loot %s.%u", lootChances.size(), simCount, tableName.c_str(), lootid);
-	for (std::map<uint32, uint32>::const_iterator it = lootChances.begin(); it != lootChances.end(); ++it)
-		if (it->first == checkItem || !checkItem)
-		{
-			ItemPrototype const *proto = sItemStorage.LookupEntry<ItemPrototype >(it->first);
-			if (!proto)
-				continue;
-
-			std::stringstream chance;
-			chance << 100 * it->second / float(simCount);
-			chance << "%";
-			if (m_session)
-				PSendSysMessage(LANG_ITEM_LIST_CHAT, it->first, it->first, proto->Name1, chance.str().c_str());
-			else
-				PSendSysMessage(LANG_ITEM_LIST_CONSOLE, it->first, proto->Name1, chance.str().c_str());
-		}
-	return true;
-}
-
-bool ChatHandler::HandleDebugItemEnchantCommand(int lootid, unsigned int simCount)
-{
-	std::map<uint32, uint32> lootChances;
-	const unsigned int MAX_TIME = 30;
-	auto startTime = time(nullptr);
-
-	ItemPrototype const *proto = sItemStorage.LookupEntry<ItemPrototype >(lootid);
-	if (!proto)
-	{
-		PSendSysMessage("Error: invalid item id %u", lootid);
-		return false;
-	}
-	if (!proto->RandomProperty)
-	{
-		PSendSysMessage("Error: item %u has no random enchantments", lootid);
-		return false;
-	}
-
-	for (unsigned int i = 0; i < simCount; ++i)
-	{
-		uint32 enchant = GetItemEnchantMod(proto->RandomProperty);
-		lootChances[enchant]++;
-
-		if (i % 1000000 == 0) // check the time every million iterations
-		{
-			if (time(nullptr) - startTime > MAX_TIME)
-			{
-				PSendSysMessage("Error: Aborted loot simulation after %u runs for exceeding max allowed time of %us", i, MAX_TIME);
-				simCount = i;
-				break;
-			}
-		}
-	}
-
-	PSendSysMessage("%u items dropped after %u attempts for item %s.", lootChances.size(), simCount, proto->Name1);
-	for (std::map<uint32, uint32>::const_iterator it = lootChances.begin(); it != lootChances.end(); ++it)
-	{
-		std::stringstream chance;
-		chance << 100 * it->second / float(simCount);
-		chance << "%";
-		ItemRandomPropertiesEntry const* randomProp = sItemRandomPropertiesStore.LookupEntry(it->first);
-		if (!randomProp)
-			continue;
-		if (m_session)
-			PSendSysMessage(LANG_ITEM_LIST_CHAT, it->first, lootid, randomProp->internalName, chance.str().c_str());
-		else
-			PSendSysMessage(LANG_ITEM_LIST_CONSOLE, it->first, randomProp->internalName, chance.str().c_str());
-	}
-	return true;
-}
 
 bool ChatHandler::HandleReloadCreatureTemplate(char*)
 {

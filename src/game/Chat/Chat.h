@@ -194,14 +194,7 @@ class MANGOS_DLL_SPEC ChatHandler
         bool HandleUpdateWorldStateCommand(char *);
         bool HandleSendSpellVisualCommand(char *);
         bool HandleSendSpellImpactCommand(char *);
-        bool HandleDebugUnitCommand(char *);
-        bool HandleDebugTimeCommand(char *);
-        bool HandleDebugMoveFlagsCommand(char *);
-        bool HandleDebugMoveSplineCommand(char *);
-        bool HandleDebugExp(char* );
         bool HandleVideoTurn(char* );
-        bool HandleDebugLootTableCommand(char*);
-        bool HandleDebugItemEnchantCommand(int lootid, unsigned int simCount);
         bool HandleServiceDeleteCharacters(char* args);
 
         bool HandleSpamerMute(char* args);
@@ -221,12 +214,10 @@ class MANGOS_DLL_SPEC ChatHandler
         bool HandleReplayForwardCommand(char*);
         bool HandleReplayStopCommand(char*);
         bool HandleReplaySpeedCommand(char*);
-        bool HandleDebugRecvPacketDumpWrite(char *);
         // Mmaps
         bool HandleMmap(char* args);
         bool HandleMmapConnection(char* args);
         bool HandleMmapTestArea(char* args);
-        bool HandleMmapDebug(char* args);
         bool HandleMmapUnload(char *args);
         bool HandleMmapLoad(char* args);
         bool HandleMmapPathCommand(char* args);
@@ -234,7 +225,6 @@ class MANGOS_DLL_SPEC ChatHandler
         bool HandleMmapLoadedTilesCommand(char* args);
         bool HandleMmapStatsCommand(char* args);
 
-        bool HandleDebugMoveToCommand(char* args);
         // AHBot
         bool HandleAHBotReloadCommand(char *);
         bool HandleAHBotUpdateCommand(char *);
@@ -294,17 +284,11 @@ class MANGOS_DLL_SPEC ChatHandler
         bool HandleGoRelativeCommand(char* args);
         // Other
         bool HandlePossessCommand(char* args);
-        bool HandleDebugForceUpdateCommand(char *args);
+
         bool HandleGameObjectTempAddCommand(char *args);
         // Clean characters
         bool HandleCleanCharactersToDeleteCommand(char *args);
         bool HandleCleanCharactersItemsCommand(char *args);
-        // Debug
-        bool HandleDebugLoSCommand(char* args);
-        bool HandleDebugLoSAllowCommand(char* args);
-        bool HandleDebugAssertFalseCommand(char* args);
-        bool HandleDebugPvPCreditCommand(char* args);
-        bool HandleDebugMonsterChatCommand(char *args);
         // Formations
         bool HandleNpcGroupAddCommand(char *args);
         bool HandleNpcGroupAddRelCommand(char *args);
@@ -332,7 +316,6 @@ class MANGOS_DLL_SPEC ChatHandler
         bool HandleUnfreezeCommand(char *args);
         bool HandleSpellIconFixCommand(char *args);
         bool HandleUnitStatCommand(char *args);
-        bool HandleDebugControlCommand(char *args);
         // Reload
         bool HandleReloadCreatureTemplate(char* args);
         bool HandleReloadItemTemplate(char* args);
@@ -408,48 +391,6 @@ class MANGOS_DLL_SPEC ChatHandler
         bool HandleCharacterRenameCommand(char* args);
         bool HandleCharacterReputationCommand(char* args);
         bool HandleCharacterHasItemCommand(char* args);
-
-        bool HandleDebugAnimCommand(char* args);
-        bool HandleDebugBattlegroundCommand(char* args);
-        bool HandleDebugConditionCommand(char* args);
-        bool HandleDebugGetItemStateCommand(char* args);
-        bool HandleDebugGetItemValueCommand(char* args);
-        bool HandleDebugGetLootRecipientCommand(char* args);
-        bool HandleDebugGetValueCommand(char* args);
-        bool HandleDebugModItemValueCommand(char* args);
-        bool HandleDebugModValueCommand(char* args);
-        bool HandleDebugSetAuraStateCommand(char* args);
-        bool HandleDebugSetItemValueCommand(char* args);
-        bool HandleDebugSetValueCommand(char* args);
-        bool HandleDebugSpellCheckCommand(char* args);
-        bool HandleDebugSpellCoefsCommand(char* args);
-        bool HandleDebugSpellModsCommand(char* args);
-        bool HandleDebugUpdateWorldStateCommand(char* args);
-        bool HandleDebugOverflowCommand(char* args);
-
-        bool HandleDebugPlayCinematicCommand(char* args);
-        bool HandleDebugPlaySoundCommand(char* args);
-        bool HandleDebugPlayScriptText(char* args);
-        bool HandleDebugPlayMusicCommand(char* args);
-        
-        bool HandleDebugSendBuyErrorCommand(char* args);
-        bool HandleDebugSendChannelNotifyCommand(char* args);
-        bool HandleDebugSendChatMsgCommand(char* args);
-        bool HandleDebugSendEquipErrorCommand(char* args);
-        bool HandleDebugSendOpcodeCommand(char* args);
-        bool HandleDebugSendPoiCommand(char* args);
-        bool HandleDebugSendQuestPartyMsgCommand(char* args);
-        bool HandleDebugSendQuestInvalidMsgCommand(char* args);
-        bool HandleDebugSendSellErrorCommand(char* args);
-        bool HandleDebugSendSpellFailCommand(char* args);
-        bool HandleDebugSendOpenBagCommand(char* args);
-
-        /*
-        Send the visual of the next channeled spell after args, suggested macro :
-        /run if not f then f=ChatFrame_OnEvent ChatFrame_OnEvent=function(e)f(e)if p==0 and e=='CHAT_MSG_SYSTEM'then n=gsub(arg1,'%D*(%d*)%s.*','%1')end end end n=n or 0 SendChatMessage('.debug send chanvisualnext '..(p==1 and n or -1))p=p==1 and 0 or 1
-        */
-        bool HandleDebugSendNextChannelSpellVisualCommand(char* args);
-        bool HandleSendSpellChannelVisualCommand(char* args);
 
         bool HandleEventListCommand(char* args);
         bool HandleEventStartCommand(char* args);
@@ -890,13 +831,7 @@ class MANGOS_DLL_SPEC ChatHandler
         bool HandleStableCommand(char* args);
         bool HandleWaterwalkCommand(char* args);
         bool HandleQuitCommand(char* args);
-
-        //! Development Commands
         bool HandleSaveAllCommand(char* args);
-        bool HandleDebugMoveCommand(char* args);
-
-        //#INFO: Giperion was here
-        bool HandleDebugShowNearestGOInfo(char* args);
 
         // Turtle WoW
         bool HandleSkinCommand(char* args);

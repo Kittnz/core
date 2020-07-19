@@ -196,82 +196,6 @@ ChatCommand * ChatHandler::getCommandTable()
         { MSTR, nullptr,          0,                   false, nullptr,                                       "", nullptr }
     };
 
-    static ChatCommand debugPlayCommandTable[] =
-    {
-        { NODE, "cinematic",      SEC_MODERATOR_CONF, false, &ChatHandler::HandleDebugPlayCinematicCommand,       "", nullptr },
-        { NODE, "sound",          SEC_MODERATOR_CONF, false, &ChatHandler::HandleDebugPlaySoundCommand,           "", nullptr },
-        { NODE, "text",           SEC_MODERATOR_CONF, false, &ChatHandler::HandleDebugPlayScriptText,             "", nullptr },
-        { NODE, "music",          SEC_MODERATOR_CONF, false, &ChatHandler::HandleDebugPlayMusicCommand,           "", nullptr },
-        { MSTR, nullptr,          0,                  false, nullptr,                                             "", nullptr }
-    };
-
-    static ChatCommand debugLosCommandTable[] =
-    {
-        { NODE, "check",          SEC_DEVELOPER,     false, &ChatHandler::HandleDebugLoSCommand,                 "", nullptr },
-        { NODE, "allow",          SEC_DEVELOPER,     false, &ChatHandler::HandleDebugLoSAllowCommand,            "", nullptr },
-        { MSTR, nullptr,          0,                  false, nullptr,                                             "", nullptr }
-    };
-
-    static ChatCommand debugSendCommandTable[] =
-    {
-        { NODE, "buyerror",       SEC_DEVELOPER,     false, &ChatHandler::HandleDebugSendBuyErrorCommand,        "", nullptr },
-        { NODE, "channelnotify",  SEC_DEVELOPER,     false, &ChatHandler::HandleDebugSendChannelNotifyCommand,   "", nullptr },
-        { NODE, "chatmmessage",   SEC_DEVELOPER,     false, &ChatHandler::HandleDebugSendChatMsgCommand,         "", nullptr },
-        { NODE, "equiperror",     SEC_DEVELOPER,     false, &ChatHandler::HandleDebugSendEquipErrorCommand,      "", nullptr },
-        { NODE, "opcode",         SEC_DEVELOPER,     false, &ChatHandler::HandleDebugSendOpcodeCommand,          "", nullptr },
-        { NODE, "poi",            SEC_DEVELOPER,     false, &ChatHandler::HandleDebugSendPoiCommand,             "", nullptr },
-        { NODE, "qpartymsg",      SEC_DEVELOPER,     false, &ChatHandler::HandleDebugSendQuestPartyMsgCommand,   "", nullptr },
-        { NODE, "qinvalidmsg",    SEC_DEVELOPER,     false, &ChatHandler::HandleDebugSendQuestInvalidMsgCommand, "", nullptr },
-        { NODE, "sellerror",      SEC_DEVELOPER,     false, &ChatHandler::HandleDebugSendSellErrorCommand,       "", nullptr },
-        { NODE, "spellfail",      SEC_DEVELOPER,     false, &ChatHandler::HandleDebugSendSpellFailCommand,       "", nullptr },
-        { NODE, "visual",         SEC_DEVELOPER,     true,  &ChatHandler::HandleSendSpellVisualCommand,          "", nullptr },
-        { NODE, "chanvisual",     SEC_DEVELOPER,     true,  &ChatHandler::HandleSendSpellChannelVisualCommand,   "", nullptr },
-        { NODE, "chanvisualnext", SEC_DEVELOPER,     true,  &ChatHandler::HandleDebugSendNextChannelSpellVisualCommand, "", nullptr },
-        { NODE, "impact",         SEC_DEVELOPER,     true,  &ChatHandler::HandleSendSpellImpactCommand,          "", nullptr },
-        { NODE, "openbag",        SEC_GAMEMASTER,     false, &ChatHandler::HandleDebugSendOpenBagCommand,         "", nullptr },
-        { MSTR, nullptr,          0,                  false, nullptr,                                             "", nullptr }
-    };
-
-    static ChatCommand debugCommandTable[] =
-    {
-        { NODE, "anim",           SEC_GAMEMASTER,     false, &ChatHandler::HandleDebugAnimCommand,                "", nullptr },
-        { NODE, "bg",             SEC_ADMINISTRATOR,  true,  &ChatHandler::HandleDebugBattlegroundCommand,        "", nullptr },
-        { NODE, "condition",      SEC_MODERATOR_CONF, false, &ChatHandler::HandleDebugConditionCommand,           "", nullptr },
-        { NODE, "getitemstate",   SEC_DEVELOPER,     false, &ChatHandler::HandleDebugGetItemStateCommand,        "", nullptr },
-        { NODE, "lrecipient",     SEC_GAMEMASTER,     false, &ChatHandler::HandleDebugGetLootRecipientCommand,    "", nullptr },
-        { NODE, "getitemvalue",   SEC_DEVELOPER,     false, &ChatHandler::HandleDebugGetItemValueCommand,        "", nullptr },
-        { NODE, "getvalue",       SEC_DEVELOPER,     false, &ChatHandler::HandleDebugGetValueCommand,            "", nullptr },
-        { NODE, "moditemvalue",   SEC_DEVELOPER,     false, &ChatHandler::HandleDebugModItemValueCommand,        "", nullptr },
-        { NODE, "modvalue",       SEC_DEVELOPER,     false, &ChatHandler::HandleDebugModValueCommand,            "", nullptr },
-        { NODE, "play",           SEC_MODERATOR_CONF, false, nullptr,                                             "", debugPlayCommandTable },
-        { NODE, "send",           SEC_GAMEMASTER,     false, nullptr,                                             "", debugSendCommandTable },
-        { NODE, "setaurastate",   SEC_DEVELOPER,     false, &ChatHandler::HandleDebugSetAuraStateCommand,        "", nullptr },
-        { NODE, "setitemvalue",   SEC_DEVELOPER,     false, &ChatHandler::HandleDebugSetItemValueCommand,        "", nullptr },
-        { NODE, "setvalue",       SEC_DEVELOPER,     false, &ChatHandler::HandleDebugSetValueCommand,            "", nullptr },
-        { NODE, "spellcheck",     SEC_CONSOLE,        true,  &ChatHandler::HandleDebugSpellCheckCommand,          "", nullptr },
-        { NODE, "spellcoefs",     SEC_DEVELOPER,     true,  &ChatHandler::HandleDebugSpellCoefsCommand,          "", nullptr },
-        { NODE, "spellmods",      SEC_DEVELOPER,     false, &ChatHandler::HandleDebugSpellModsCommand,           "", nullptr },
-        { NODE, "uws",            SEC_DEVELOPER,     false, &ChatHandler::HandleDebugUpdateWorldStateCommand,    "", nullptr },
-        // Nostalrius
-        { NODE, "forceupdate",    SEC_DEVELOPER,     false, &ChatHandler::HandleDebugForceUpdateCommand,         "", nullptr },
-        { NODE, "los",            SEC_DEVELOPER,     false, &ChatHandler::HandleDebugLoSCommand,                 "", debugLosCommandTable },
-        { NODE, "moveto",         SEC_GAMEMASTER,     false, &ChatHandler::HandleDebugMoveToCommand,              "", nullptr },
-        { NODE, "assert",         SEC_ADMINISTRATOR,  true,  &ChatHandler::HandleDebugAssertFalseCommand,         "", nullptr },
-        { NODE, "pvpcredit",      SEC_DEVELOPER,     false, &ChatHandler::HandleDebugPvPCreditCommand,           "", nullptr },
-        { NODE, "unitstate",      SEC_GAMEMASTER,     false, &ChatHandler::HandleUnitStatCommand,                 "", nullptr },
-        { NODE, "control",        SEC_GAMEMASTER,     false, &ChatHandler::HandleDebugControlCommand,             "", nullptr },
-        { NODE, "monster",        SEC_GAMEMASTER,     false, &ChatHandler::HandleDebugMonsterChatCommand,         "", nullptr },
-        { NODE, "target",         SEC_GAMEMASTER,     false, &ChatHandler::HandleDebugUnitCommand,                "", nullptr },
-        { NODE, "time",           SEC_ADMINISTRATOR,  true,  &ChatHandler::HandleDebugTimeCommand,                "", nullptr },
-        { NODE, "moveflags",      SEC_GAMEMASTER,     false, &ChatHandler::HandleDebugMoveFlagsCommand,           "", nullptr },
-        { NODE, "movespline",     SEC_GAMEMASTER,     false, &ChatHandler::HandleDebugMoveSplineCommand,          "", nullptr },
-        { NODE, "dump",           SEC_ADMINISTRATOR,  false, &ChatHandler::HandleDebugRecvPacketDumpWrite,        "", nullptr },
-        { NODE, "movemotion",     SEC_DEVELOPER,     false, &ChatHandler::HandleDebugMoveCommand,                "", nullptr },
-        { NODE, "factionchange_items", SEC_ADMINISTRATOR, true, &ChatHandler::HandleFactionChangeItemsCommand,    "", nullptr },
-        { NODE, "loottable",      SEC_DEVELOPER,     true,  &ChatHandler::HandleDebugLootTableCommand,           "", nullptr },
-        { NODE, "utf8overflow",   SEC_ADMINISTRATOR,  true,  &ChatHandler::HandleDebugOverflowCommand,            "", nullptr },
-        { MSTR,  nullptr,         0,                  false, nullptr,                                             "", nullptr }
-    };
 
     static ChatCommand eventCommandTable[] =
     {
@@ -900,9 +824,7 @@ ChatCommand * ChatHandler::getCommandTable()
 
     static ChatCommand videosCommandTable[] =
     {
-        { NODE, "expendables",    SEC_GAMEMASTER,     false, &ChatHandler::HandleDebugExp,                   "", nullptr },
         { NODE, "turn",           SEC_GAMEMASTER,     false, &ChatHandler::HandleVideoTurn,                  "", nullptr },
-        { NODE, "",               SEC_GAMEMASTER,     false, &ChatHandler::HandleDebugExp,                   "", nullptr },
         { MSTR, nullptr,          0,                  false, nullptr,                                        "", nullptr }
     };
 
@@ -1018,7 +940,6 @@ ChatCommand * ChatHandler::getCommandTable()
         { NODE, "auction",        SEC_MODERATOR_CONF, false, nullptr,                                        "", auctionCommandTable  },
         { NODE, "cast",           SEC_DEVELOPER,     false, nullptr,                                        "", castCommandTable     },
         { NODE, "character",      SEC_MODERATOR_CONF, true, nullptr,                                         "", characterCommandTable},
-        { NODE, "debug",          SEC_MODERATOR_CONF, true, nullptr,                                         "", debugCommandTable    },
         { NODE, "replay",         SEC_ADMINISTRATOR,  false, nullptr,                                        "", replayCommandTable   },
         { NODE, "event",          SEC_GAMEMASTER,     false, nullptr,                                        "", eventCommandTable    },
         { NODE, "gm",             SEC_PLAYER,         true, nullptr,                                         "", gmCommandTable       },
