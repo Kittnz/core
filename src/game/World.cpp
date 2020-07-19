@@ -64,7 +64,6 @@
 #include "CharacterDatabaseCleaner.h"
 #include "LFGMgr.h"
 #include "AutoBroadCastMgr.h"
-#include "AuctionHouseBotMgr.h"
 #include "AutoTesting/AutoTestingMgr.h"
 #include "Transports/TransportMgr.h"
 #include "PlayerBotMgr.h"
@@ -1668,9 +1667,6 @@ void World::SetInitialWorldSettings()
         sLog.outString("Loading auto broadcast");
         sAutoBroadCastMgr.load();
 
-        sLog.outString("Loading AH bot");
-        sAuctionHouseBotMgr.Load();
-
         sLog.outString("Caching player phases (obsolete)");
         sObjectMgr.LoadPlayerPhaseFromDb();
 
@@ -1815,8 +1811,6 @@ void World::Update(uint32 diff)
     if (m_timers[WUPDATE_AUCTIONS].Passed())
     {
         m_timers[WUPDATE_AUCTIONS].Reset();
-
-        sAuctionHouseBotMgr.Update();
         ///- Handle expired auctions
         sAuctionMgr.Update();
     }

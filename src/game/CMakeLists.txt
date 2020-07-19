@@ -71,7 +71,6 @@ set (game_SRCS
     AI/TotemAI.cpp
     Autoscaling/AutoScaler.cpp
     Anticheat/Anticheat.cpp
-    AuctionHouse/AuctionHouseBotMgr.cpp
     AuctionHouse/AuctionHouseMgr.cpp
     AutoTesting/AutoTestingMgr.cpp
     AutoTesting/TestLoader.cpp
@@ -289,7 +288,6 @@ set (game_SRCS
     AI/ScriptedPetAI.h
     AI/TotemAI.h
     Anticheat/Anticheat.h
-    AuctionHouse/AuctionHouseBotMgr.h
     AuctionHouse/AuctionHouseMgr.h
     AutoTesting/AutoTestingMgr.h
     AutoTesting/Tests/TestPCH.h

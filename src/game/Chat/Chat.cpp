@@ -70,12 +70,6 @@ ChatCommand * ChatHandler::getCommandTable()
         { NODE, "rule",          SEC_ADMINISTRATOR,    true,   &ChatHandler::HandleGroupSetRuleCommand,               "", nullptr},
         { MSTR, nullptr,         0,                    false, nullptr,                                                "", nullptr}
     };
-    static ChatCommand ahbotCommandTable[] =
-    {
-        { MSTR, "reload",        SEC_ADMINISTRATOR,    true,     &ChatHandler::HandleAHBotReloadCommand,              "Reload table and config", nullptr},
-        { MSTR, "update",        SEC_ADMINISTRATOR,    true,    &ChatHandler::HandleAHBotUpdateCommand,               "Add items for sale", nullptr},
-        { MSTR, nullptr,         0,                    false, nullptr,                                                "", nullptr}
-    };
     static ChatCommand botCommandTable[] =
     {
         { NODE, "add",        SEC_ADMINISTRATOR,  true,  &ChatHandler::HandleBotAddCommand,                   "", nullptr },
@@ -467,12 +461,6 @@ ChatCommand * ChatHandler::getCommandTable()
         { NODE, "setdeathstate",  SEC_GAMEMASTER,     false, &ChatHandler::HandleNpcSetDeathStateCommand,    "", nullptr },
         { NODE, "group",          SEC_DEVELOPER,     false, nullptr,                                        "", creatureGroupsCommandTable },
 
-
-        //{ TODO: fix or remove this commands
-        { NODE, "name",           SEC_GAMEMASTER,     false, &ChatHandler::HandleNpcNameCommand,             "", nullptr },
-        { NODE, "subname",        SEC_GAMEMASTER,     false, &ChatHandler::HandleNpcSubNameCommand,          "", nullptr },
-        //}
-
         { MSTR, nullptr,          0,                  false, nullptr,                                        "", nullptr }
     };
 
@@ -822,11 +810,6 @@ ChatCommand * ChatHandler::getCommandTable()
         { MSTR, nullptr,          0,                  false, nullptr,                                        "", nullptr }
     };
 
-    static ChatCommand videosCommandTable[] =
-    {
-        { NODE, "turn",           SEC_GAMEMASTER,     false, &ChatHandler::HandleVideoTurn,                  "", nullptr },
-        { MSTR, nullptr,          0,                  false, nullptr,                                        "", nullptr }
-    };
 
     static ChatCommand anticheatClientCommandTable[] =
     {

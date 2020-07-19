@@ -2303,43 +2303,6 @@ bool ChatHandler::HandleRecupCommand(char* c)
 	return true;
 }
 
-
-bool ChatHandler::HandleVideoTurn(char*)
-{
-	const float radiusBegin = 40.0f;
-	const float radiusEnd = 10.0f;
-	const float zBegin = 30.0f;
-	const float zEnd = 10.0f;
-	const float angleBegin = 0.0f;
-	const float angleEnd = 10 * M_PI_F;
-	const float moveSpeed = 30.0f;
-	std::list<Creature*> targets;
-	Unit* selection = GetSelectedUnit();
-	if (!selection)
-	{
-		SendSysMessage(LANG_SELECT_CHAR_OR_CREATURE);
-		return false;
-	}
-
-	PointsArray a;
-	float x, y, z;
-	selection->GetPosition(x, y, z);
-	for (float t = 0; t < 1; t += 0.03f)
-	{
-		float angle = angleBegin * t + (1 - t) * angleEnd;
-		float posZ = zBegin * t + (1 - t) * zEnd + z;
-		float d = radiusBegin * t + (1 - t) * radiusEnd;
-		sLog.outString("%f %f %f", angle, d, z);
-		a.push_back(Vector3(x + d * cos(angle), y + d * sin(angle), posZ));
-	}
-	Movement::MoveSplineInit init(*m_session->GetPlayer());
-	init.MovebyPath(a);
-	init.SetFly();
-	init.SetVelocity(moveSpeed);
-	init.Launch();
-	return true;
-}
-
 bool ChatHandler::HandleReloadCharacterPetCommand(char *args)
 {
 	uint32 petId = 0;

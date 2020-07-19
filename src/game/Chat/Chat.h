@@ -194,7 +194,6 @@ class MANGOS_DLL_SPEC ChatHandler
         bool HandleUpdateWorldStateCommand(char *);
         bool HandleSendSpellVisualCommand(char *);
         bool HandleSendSpellImpactCommand(char *);
-        bool HandleVideoTurn(char* );
         bool HandleServiceDeleteCharacters(char* args);
 
         bool HandleSpamerMute(char* args);
@@ -225,9 +224,6 @@ class MANGOS_DLL_SPEC ChatHandler
         bool HandleMmapLoadedTilesCommand(char* args);
         bool HandleMmapStatsCommand(char* args);
 
-        // AHBot
-        bool HandleAHBotReloadCommand(char *);
-        bool HandleAHBotUpdateCommand(char *);
         //Bg
         bool HandleGoWarsongCommand(char *);
         bool HandleGoArathiCommand(char *);
@@ -579,11 +575,6 @@ class MANGOS_DLL_SPEC ChatHandler
         bool HandleNpcWhisperCommand(char* args);
         bool HandleNpcYellCommand(char* args);
 
-        //TODO: NpcCommands that needs to be fixed :
-        bool HandleNpcNameCommand(char* args);
-        bool HandleNpcSubNameCommand(char* args);
-        //----------------------------------------------------------
-
         bool HandlePDumpLoadCommand(char* args);
         bool HandlePDumpWriteCommand(char* args);
 
@@ -684,7 +675,6 @@ class MANGOS_DLL_SPEC ChatHandler
         bool HandleReloadSpellThreatsCommand(char* args);
         bool HandleReloadSpellPetAurasCommand(char* args);
 
-        bool HandleResetAchievementsCommand(char* args);
         bool HandleResetAllCommand(char* args);
         bool HandleResetHonorCommand(char* args);
         bool HandleResetLevelCommand(char* args);
