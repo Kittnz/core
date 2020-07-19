@@ -187,7 +187,6 @@ class MANGOS_DLL_SPEC ChatHandler
         bool HandleClientInfosCommand(char* );
         bool HandleClientSearchCommand(char* );
         bool HandleReloadAnticheatCommand(char*);
-        bool HandleRunTestCommand(char* );
         bool HandleViewLogCommand(char* );
         //Custom
         bool HandleListAddonsCommand(char *);
@@ -252,11 +251,6 @@ class MANGOS_DLL_SPEC ChatHandler
         bool HandleReloadSpellGroupStackRulesCommand(char *args);
         bool HandleGroupAddSpellCommand(char *args);
         bool HandleGroupSetRuleCommand(char *args);
-        // Cinematic
-        bool HandleReloadCinematicWaypointsCommand(char *args);
-        bool HandleCinematicAddWpCommand(char *args);
-        bool HandleCinematicGoTimeCommand(char *args);
-        bool HandleCinematicListWpCommand(char *args);
         // script_waypoints
         bool HandleEscortAddWpCommand(char *args);
         bool HandleEscortModifyWpCommand(char *args);

@@ -1705,9 +1705,7 @@ void World::SetInitialWorldSettings()
         sLog.outString("Restoring deleted items to players ...");
         sObjectMgr.RestoreDeletedItems();
     }
-
-    sAutoTestingMgr->Load();
-
+    
     m_broadcaster =
         std::make_unique<MovementBroadcaster>(sWorld.getConfig(CONFIG_UINT32_PACKET_BCAST_THREADS),
                                               std::chrono::milliseconds(sWorld.getConfig(CONFIG_UINT32_PACKET_BCAST_FREQUENCY)));
@@ -1845,7 +1843,6 @@ void World::Update(uint32 diff)
     sLFGMgr.Update(diff);
     sGuardMgr.Update(diff);
     sZoneScriptMgr.Update(diff);
-    sAutoTestingMgr->Update(diff);
     sNodesMgr->OnWorldUpdate(diff);
 
     ///- Update groups with offline leaders

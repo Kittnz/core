@@ -342,7 +342,6 @@ include_directories(
   ${CMAKE_SOURCE_DIR}/src/game/AI
   ${CMAKE_SOURCE_DIR}/src/game/Anticheat
   ${CMAKE_SOURCE_DIR}/src/game/AuctionHouse
-  ${CMAKE_SOURCE_DIR}/src/game/AutoTesting
   ${CMAKE_SOURCE_DIR}/src/game/Battlegrounds
   ${CMAKE_SOURCE_DIR}/src/game/Chat
   ${CMAKE_SOURCE_DIR}/src/game/Commands

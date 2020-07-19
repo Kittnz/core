@@ -72,18 +72,6 @@ set (game_SRCS
     Autoscaling/AutoScaler.cpp
     Anticheat/Anticheat.cpp
     AuctionHouse/AuctionHouseMgr.cpp
-    AutoTesting/AutoTestingMgr.cpp
-    AutoTesting/TestLoader.cpp
-    AutoTesting/Tests/AurasStack.cpp
-    AutoTesting/Tests/ChanneledSpells.cpp
-    AutoTesting/Tests/Cinematics.cpp
-    AutoTesting/Tests/ControlSpells.cpp
-    AutoTesting/Tests/Generic.cpp
-    AutoTesting/Tests/Mage.cpp
-    AutoTesting/Tests/PacketBroadcaster.cpp
-    AutoTesting/Tests/Shaman.cpp
-    AutoTesting/Tests/Test.cpp
-    AutoTesting/Tests/Warlock.cpp
     Battlegrounds/BattleGround.cpp
     Battlegrounds/BattleGroundAB.cpp
     Battlegrounds/BattleGroundAV.cpp
@@ -93,8 +81,6 @@ set (game_SRCS
     Chat/ChannelMgr.cpp
     Chat/Chat.cpp
     Chat/AsyncCommandHandlers.cpp
-    CinematicStuff/CinematicStuff.cpp
-    CinematicStuff/CinematicStuff.h
     Commands/debugcmds.cpp
     Commands/GMTicketCommands.cpp
     Commands/Level0.cpp

@@ -1,6 +1,3 @@
-/*
- *
- */
 
 #pragma once
 
@@ -196,10 +193,6 @@ private:
     bool IsHourBeginning(uint8 minutes = FIREWORKS_DURATION) const;
 };
 
-enum EventSilithusWarEffortState
-{
-    EVENT_SILITHUS_WE_START = 98
-};
 
 
 struct RaceClassCombo
@@ -239,23 +232,6 @@ struct BotEventInfo
     BotEventInfo(BattlePlayerAI* InBot)
         : pBot(InBot)
     {}
-};
-
-struct SilithusWarEffortBattle : WorldEvent
-{
-    SilithusWarEffortBattle();
-
-    void Update() override;
-    void Enable() override;
-    void Disable() override;
-
-private:
-
-    std::vector <RaceClassCombo> AvaliableCombos;
-    std::vector <BotEventInfo> Bots;
-
-    std::vector <Creature*> SummonedMobs;
-    const WorldLocation EventPos = WorldLocation(1, -8065.42f, 1527.93f, 2.61001f);
 };
 
 struct ScourgeInvasionEvent : WorldEvent

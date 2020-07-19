@@ -597,7 +597,6 @@ ChatCommand * ChatHandler::getCommandTable()
         { MSTR, "autobroadcast",                SEC_ADMINISTRATOR, true,  &ChatHandler::HandleReloadAutoBroadcastCommand,           "", nullptr },
         { MSTR, "spell_mod",                    SEC_DEVELOPER,    true,  &ChatHandler::HandleReloadSpellModsCommand,               "", nullptr },
         { MSTR, "map_loot_disabled",            SEC_DEVELOPER,    true,  &ChatHandler::HandleReloadMapLootDisabledCommand,         "", nullptr },
-        { MSTR, "cinematic_waypoints",          SEC_DEVELOPER,    true,  &ChatHandler::HandleReloadCinematicWaypointsCommand,      "", nullptr },
         { MSTR, "variables",                    SEC_DEVELOPER,    true,  &ChatHandler::HandleReloadVariablesCommand,               "", nullptr },
         { MSTR, "spell_group",                  SEC_DEVELOPER,    true,  &ChatHandler::HandleReloadSpellGroupCommand,              "", nullptr },
         { MSTR, "spell_group_stack_rules",      SEC_DEVELOPER,    true,  &ChatHandler::HandleReloadSpellGroupStackRulesCommand,    "", nullptr },
@@ -757,13 +756,6 @@ ChatCommand * ChatHandler::getCommandTable()
         { MSTR, nullptr,             0,                        false, nullptr,                                     "", nullptr}
     };
 
-    static ChatCommand cinematicCommandTable[] =
-    {
-        { NODE, "addwp",             SEC_DEVELOPER,           false, &ChatHandler::HandleCinematicAddWpCommand,   "", nullptr},
-        { NODE, "gotime",            SEC_DEVELOPER,           false, &ChatHandler::HandleCinematicGoTimeCommand,  "", nullptr},
-        { NODE, "listwp",            SEC_DEVELOPER,           false, &ChatHandler::HandleCinematicListWpCommand,  "", nullptr},
-        { MSTR, nullptr,            0,                         false, nullptr,                                     "", nullptr}
-    };
 
     static ChatCommand escortCommandTable[] =
     {
@@ -950,7 +942,6 @@ ChatCommand * ChatHandler::getCommandTable()
         { NODE, "bot",            SEC_ADMINISTRATOR,  true, nullptr,                                "Manage bots", botCommandTable},
         { NODE, "world",          SEC_ADMINISTRATOR,  false, nullptr,                                        "", worldCommandTable },
         { NODE, "possess",        SEC_GAMEMASTER,     false, &ChatHandler::HandlePossessCommand,             "", nullptr},
-        { NODE, "cinematic",      SEC_DEVELOPER,     false, nullptr,                                        "", cinematicCommandTable},
         { NODE, "escorte",        SEC_MODERATOR_CONF, false, nullptr,                                        "", escortCommandTable},
         { NODE, "worldstate",     SEC_ADMINISTRATOR,  false, nullptr,                                        "", worldStateCommandTable},
         { NODE, "bg",             SEC_GAMEMASTER,     false, nullptr,                                        "", bgCommandTable},
@@ -1035,7 +1026,6 @@ ChatCommand * ChatHandler::getCommandTable()
         { NODE, "pet",            SEC_GAMEMASTER,     true, nullptr,                                         "", petCommandTable},
         { NODE, "channel",        SEC_MODERATOR,      false, nullptr,                                        "", channelCommandTable},
         { NODE, "nodes",          SEC_ADMINISTRATOR,  true, nullptr,                                         "", nodeServersCommandTable},
-        { MSTR, "runtest",        SEC_ADMINISTRATOR,  true,  &ChatHandler::HandleRunTestCommand,             "", nullptr },
         { MSTR, "log",            SEC_GAMEMASTER,     true,  &ChatHandler::HandleViewLogCommand,             "", nullptr },
         { MSTR, "spamer",         SEC_MODERATOR,      true, nullptr,                                         "", spamerCommandTable },
         { MSTR, "antispam",       SEC_MODERATOR_CONF, true, nullptr,                                         "", AntiSpamCommandTable },
