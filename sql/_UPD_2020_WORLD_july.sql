@@ -272,3 +272,49 @@ REPLACE INTO `creature_template` (`entry`, `patch`, `display_id1`, `display_id2`
 replace into broadcast_text (ID, MaleText) values ('90501', 'I’m a free knight! I don’t have a lord. You got a problem with that?\n\n<She glares at you for a moment before lighting up>/n/nAh whatever... Welcome to our chapel! I can give you a sleeping bag or offer you some rations.');
 replace into npc_text (ID, BroadcastTextID0) values ('90501', '90501');
 replace into gossip_menu (entry, text_id, condition_id) VALUES ('59001', '90501', '0'); 
+
+-- New quests
+
+replace into quest_template (
+entry, patch, Method, ZoneOrSort, MinLevel, QuestLevel, MaxLevel, Type, RequiredClasses, RequiredRaces, RequiredSkill,
+RequiredSkillValue, RepObjectiveFaction, RepObjectiveValue, RequiredMinRepFaction, RequiredMinRepValue,RequiredMaxRepFaction,
+RequiredMaxRepValue, SuggestedPlayers, LimitTime, QuestFlags, SpecialFlags, PrevQuestId, NextQuestId, ExclusiveGroup, NextQuestInChain,
+SrcItemId, SrcItemCount, SrcSpell, Title, Details, Objectives, OfferRewardText, RequestItemsText, EndText, ObjectiveText1, ObjectiveText2,
+ObjectiveText3, ObjectiveText4, ReqItemId1, ReqItemId2, ReqItemId3, ReqItemId4, ReqItemCount1, ReqItemCount2, ReqItemCount3,
+ReqItemCount4, ReqSourceId1, ReqSourceId2, ReqSourceId3, ReqSourceId4, ReqSourceCount1, ReqSourceCount2, ReqSourceCount3,
+ReqSourceCount4, ReqCreatureOrGOId1, ReqCreatureOrGOId2, ReqCreatureOrGOId3, ReqCreatureOrGOId4, ReqCreatureOrGOCount1,
+ReqCreatureOrGOCount2, ReqCreatureOrGOCount3, ReqCreatureOrGOCount4, ReqSpellCast1, ReqSpellCast2, ReqSpellCast3,
+ReqSpellCast4, RewChoiceItemId1, RewChoiceItemId2, RewChoiceItemId3, RewChoiceItemId4, RewChoiceItemId5, RewChoiceItemId6,
+RewChoiceItemCount1, RewChoiceItemCount2, RewChoiceItemCount3, RewChoiceItemCount4, RewChoiceItemCount5, RewChoiceItemCount6,
+RewItemId1, RewItemId2, RewItemId3, RewItemId4, RewItemCount1, RewItemCount2, RewItemCount3, RewItemCount4, RewRepFaction1,
+RewRepFaction2, RewRepFaction3, RewRepFaction4, RewRepFaction5, RewRepValue1, RewRepValue2, RewRepValue3, RewRepValue4,
+RewRepValue5, RewOrReqMoney, RewMoneyMaxLevel, RewSpell, RewSpellCast, RewMailTemplateId, RewMailMoney, RewMailDelaySecs,
+PointMapId, PointX, PointY, PointOpt, DetailsEmote1, DetailsEmote2, DetailsEmote3, DetailsEmote4, DetailsEmoteDelay1,
+DetailsEmoteDelay2, DetailsEmoteDelay3, DetailsEmoteDelay4, IncompleteEmote, CompleteEmote, OfferRewardEmote1, OfferRewardEmote2,
+OfferRewardEmote3, OfferRewardEmote4, OfferRewardEmoteDelay1, OfferRewardEmoteDelay2, OfferRewardEmoteDelay3,OfferRewardEmoteDelay4,
+StartScript, CompleteScript)
+         values
+ ('60131', '0', '2', '14', '10', '13', '60', '1', '0', '0', '0',
+'0', '0', '0', '0', '0','0',
+'0', '0', '0', '8', '0', '0', '0', '0', '0',
+'0', '0', '0', 'Deep Blue Sea', 'Greetings $R!\n\nMuch of Orgrimmar\'s food supply comes from the sea to the east. Grunts can assist with escorting the fishermen and crabbers through the scorpids, raptors, and those fanatical weaklings in the eastern cave but there is an issue in the depths that needs to be dealt with.\n\nFishermen have reported an aggressive shark that shreds their nets and attacks their smaller boats. Crabbers won\'t even drop traps now for fear of getting eaten!\n\nKill it $C, take friends if needed but rid us of this menace before our food stores dwindle!', 'Kill the Sand Shark off Durotar\'s eastern coast.', 'You smell of the sea, $R.\n\nTell me the beast is slain so I can get the workers back to the shore.', 'You smell of the sea, $R.\n\nTell me the beast is slain so I can get the workers back to the shore.', '', '', '',
+'', '', '0', '0', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0', '0', '0',
+'0', '5435', '0', '0', '0', '1',
+'0', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0',
+'4949', '0', '0', '0', '1', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0', '0', '0',
+'0', '800', '870', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '1', '0', '0', '0', '0',
+'0', '0', '0', '6', '0', '0', '0',
+'0', '0', '0', '0', '0','0',
+0, 0);
+replace into creature_questrelation (id, quest, patch_min, patch_max) values ('4311','60131','10','10');
+replace into creature_involvedrelation (id, quest, patch_min, patch_max) values ('4311','60131','10','10');
+      
+update creature_template set npc_flags = 2 where entry = 4311;
+
+update item_template set required_level = 13 where entry = 4949;
+
