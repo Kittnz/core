@@ -318,3 +318,45 @@ update creature_template set npc_flags = 2 where entry = 4311;
 
 update item_template set required_level = 13 where entry = 4949;
 
+
+replace into quest_template (
+entry, patch, Method, ZoneOrSort, MinLevel, QuestLevel, MaxLevel, Type, RequiredClasses, RequiredRaces, RequiredSkill,
+RequiredSkillValue, RepObjectiveFaction, RepObjectiveValue, RequiredMinRepFaction, RequiredMinRepValue,RequiredMaxRepFaction,
+RequiredMaxRepValue, SuggestedPlayers, LimitTime, QuestFlags, SpecialFlags, PrevQuestId, NextQuestId, ExclusiveGroup, NextQuestInChain,
+SrcItemId, SrcItemCount, SrcSpell, Title, Details, Objectives, OfferRewardText, RequestItemsText, EndText, ObjectiveText1, ObjectiveText2,
+ObjectiveText3, ObjectiveText4, ReqItemId1, ReqItemId2, ReqItemId3, ReqItemId4, ReqItemCount1, ReqItemCount2, ReqItemCount3,
+ReqItemCount4, ReqSourceId1, ReqSourceId2, ReqSourceId3, ReqSourceId4, ReqSourceCount1, ReqSourceCount2, ReqSourceCount3,
+ReqSourceCount4, ReqCreatureOrGOId1, ReqCreatureOrGOId2, ReqCreatureOrGOId3, ReqCreatureOrGOId4, ReqCreatureOrGOCount1,
+ReqCreatureOrGOCount2, ReqCreatureOrGOCount3, ReqCreatureOrGOCount4, ReqSpellCast1, ReqSpellCast2, ReqSpellCast3,
+ReqSpellCast4, RewChoiceItemId1, RewChoiceItemId2, RewChoiceItemId3, RewChoiceItemId4, RewChoiceItemId5, RewChoiceItemId6,
+RewChoiceItemCount1, RewChoiceItemCount2, RewChoiceItemCount3, RewChoiceItemCount4, RewChoiceItemCount5, RewChoiceItemCount6,
+RewItemId1, RewItemId2, RewItemId3, RewItemId4, RewItemCount1, RewItemCount2, RewItemCount3, RewItemCount4, RewRepFaction1,
+RewRepFaction2, RewRepFaction3, RewRepFaction4, RewRepFaction5, RewRepValue1, RewRepValue2, RewRepValue3, RewRepValue4,
+RewRepValue5, RewOrReqMoney, RewMoneyMaxLevel, RewSpell, RewSpellCast, RewMailTemplateId, RewMailMoney, RewMailDelaySecs,
+PointMapId, PointX, PointY, PointOpt, DetailsEmote1, DetailsEmote2, DetailsEmote3, DetailsEmote4, DetailsEmoteDelay1,
+DetailsEmoteDelay2, DetailsEmoteDelay3, DetailsEmoteDelay4, IncompleteEmote, CompleteEmote, OfferRewardEmote1, OfferRewardEmote2,
+OfferRewardEmote3, OfferRewardEmote4, OfferRewardEmoteDelay1, OfferRewardEmoteDelay2, OfferRewardEmoteDelay3,OfferRewardEmoteDelay4,
+StartScript, CompleteScript)
+         values
+ ('60132', '0', '2', '45', '30', '32', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0','0',
+'0', '0', '0', '8', '0', '0', '0', '0', '0',
+'0', '0', '0', 'They\'re In The Way!', '<Mu\'uta stares into the distance, one hand rubbing a massive scar on his face and the other holding his bow at his side.>\n\n\A spider, $C. A spider caused this wound. Not inflicted it, mind you, but caused it.\n\n<He lowers his hand and his one functioning eye fixes on you.>\n\nI was hunting raptors. I need their feathers, the butcher needs the meat, the claws can be used as weapons, they\'re good creatures. A worthy opponent. If you misstep, into a web in my case, they\'ll leave their mark.\n\n<He grimaces and points at his scarred face.>\n\nSpiders, on the other hand, are useless. Their web is too sticky to use for armor or fletching, their carapace too brittle to make decent armor. They\'re in the way, $C. Kill them.', 'Kill 20 Plains Creepers in Arathi Highlands.', 'Azeroth is a far better place with less spiders alive in it.', 'Eight legs is too many.', '', '', '',
+'', '', '0', '0', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0', '0', '0',
+'0', '2563', '0', '0', '0', '20',
+'0', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0',
+'14420', '0', '0', '0', '1', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0', '0', '0',
+'0', '3000', '1530', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '1', '0', '0', '0', '0',
+'0', '0', '0', '48', '4', '11', '0',
+'0', '0', '0', '0', '0','0',
+0, 0);
+replace into creature_questrelation (id, quest, patch_min, patch_max) values ('9555','60132','10','10');
+replace into creature_involvedrelation (id, quest, patch_min, patch_max) values ('9555','60132','10','10');
+
+update creature_template set npc_flags = 16390 where entry = 9555;
+      
