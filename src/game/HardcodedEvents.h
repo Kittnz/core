@@ -4,7 +4,6 @@
 #include "GameEventMgr.h"
 #include "ObjectMgr.h"
 #include "PlayerBotAI.h"
-#include "AdvancedPlayerBotAI.h"
 #include <queue>
 
 /*
@@ -195,44 +194,8 @@ private:
 
 
 
-struct RaceClassCombo
-{
-    int Race;
-    int Class;
 
-    RaceClassCombo(int InRace, int InClass)
-        : Race(InRace), Class(InClass)
-    {}
-};
 
-class BattlePlayerAI : public AdvancedPlayerBotAI
-{
-public:
-    explicit BattlePlayerAI(Player* pPlayer, uint8 _race_, uint8 _class_, uint32 mapId, uint32 instanceId, float x, float y, float z, float o) :
-        AdvancedPlayerBotAI(pPlayer, _race_, _class_, mapId, instanceId, x, y, z, o)
-    {
-    }
-
-    virtual ~BattlePlayerAI ()
-    {
-    }
-
-    virtual void OnPlayerLogin();
-
-};
-
-struct BotEventInfo
-{
-    BattlePlayerAI* pBot;
-
-    BotEventInfo()
-        : BotEventInfo(nullptr)
-    {}
-
-    BotEventInfo(BattlePlayerAI* InBot)
-        : pBot(InBot)
-    {}
-};
 
 struct ScourgeInvasionEvent : WorldEvent
 {
