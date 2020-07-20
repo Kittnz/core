@@ -305,7 +305,9 @@ replace into creature_template (entry, display_id1, name, subname, level_min, le
 (80005, 18003, 'Norel', '', 20, 59, 1350, 3300, 269, '', 1, 2, 1),
 (80006, 17329, 'Ranger-Captain Alisaeh Sunblade', '', 60, 60, 3350, 4640, 269, '', 1, 2, 2),
 (80007, 17329, 'Dummy Horde Player Trigger', '', 60, 60, 3350, 4640, 35, '', 1, 2, 2),
-(80008, 6631, 'Malvinah Sunblade', '', 60, 60, 3350, 4640, 269, '', 1, 2, 1);
+(80008, 6631, 'Malvinah Sunblade', '', 60, 60, 3350, 4640, 269, '', 1, 2, 1),
+(80009, 6631, 'Kathy Wake', '', 60, 60, 3350, 4640, 269, '', 1, 2, 1), -- Reserved. TODO.
+(80010, 6631, 'Trogg Vermin', '', 60, 60, 3350, 4640, 269, '', 1, 2, 1); -- Reserved. TODO.
 
 -- Greeting's textes
 
