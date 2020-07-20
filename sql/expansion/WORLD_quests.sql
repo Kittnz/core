@@ -1230,6 +1230,102 @@ update quest_template set prevquestid = @prevquest where entry = @quest_entry;
 replace into creature_questrelation (id, quest, patch_min, patch_max) values (@questgiver_id, @quest_entry,'10','10'); 
 replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (@quest_finisher, @quest_entry,'10','10');
 
+-- Slaking their Thirst
+-- TODO: Rewards, required items, script.
+
+SET @quest_entry = 80012;
+SET @quest_zone = 1519; 
+SET @faction_id = 269;
+SET @faction_count = 250; -- TODO: Add SW rep.
+SET @xp_or_money = 186;  
+SET @reward_money = 20;  
+SET @quest_level = 3;
+SET @min_level = 3;
+SET @questgiver_id = 1156; 
+SET @quest_finisher = 1156;
+SET @nextquest = 0;
+SET @nextquestinchain = 0;
+SET @prevquest = 80010;
+SET @reward_item_1 = 4919;
+SET @reward_item_2 = 0;
+SET @reward_item_3 = 0;
+SET @reward_item_4 = 0;
+SET @reward_item_1_count = 0;
+SET @reward_item_2_count = 0;
+SET @reward_item_3_count = 0;
+SET @reward_item_4_count = 0;
+SET @creature_to_kill_1 = 0;
+SET @creature_to_kill_2 = 0;
+SET @creature_to_kill_3 = 0;
+SET @creature_to_kill_4 = 0;
+SET @creature_to_kill_1_count = 0;
+SET @creature_to_kill_2_count = 0;
+SET @creature_to_kill_3_count = 0;
+SET @creature_to_kill_4_count = 0;
+SET @required_item_1 = 80006; 
+SET @required_item_2 = 0;
+SET @required_item_3 = 0;
+SET @required_item_4 = 0;
+SET @required_item_1_count = 1;
+SET @required_item_2_count = 0;
+SET @required_item_3_count = 0;
+SET @required_item_4_count = 0;
+
+replace into quest_template (entry, patch, Method, ZoneOrSort, MinLevel, QuestLevel, MaxLevel, Type, RequiredClasses, RequiredRaces, RequiredSkill,
+RequiredSkillValue, RepObjectiveFaction, RepObjectiveValue, RequiredMinRepFaction, RequiredMinRepValue,RequiredMaxRepFaction,
+RequiredMaxRepValue, SuggestedPlayers, LimitTime, QuestFlags, SpecialFlags, PrevQuestId, NextQuestId, ExclusiveGroup, NextQuestInChain,
+SrcItemId, SrcItemCount, SrcSpell, Title, Details, Objectives, OfferRewardText, RequestItemsText, EndText, ObjectiveText1, ObjectiveText2,
+ObjectiveText3, ObjectiveText4, ReqItemId1, ReqItemId2, ReqItemId3, ReqItemId4, ReqItemCount1, ReqItemCount2, ReqItemCount3,
+ReqItemCount4, ReqSourceId1, ReqSourceId2, ReqSourceId3, ReqSourceId4, ReqSourceCount1, ReqSourceCount2, ReqSourceCount3,
+ReqSourceCount4, ReqCreatureOrGOId1, ReqCreatureOrGOId2, ReqCreatureOrGOId3, ReqCreatureOrGOId4, ReqCreatureOrGOCount1,
+ReqCreatureOrGOCount2, ReqCreatureOrGOCount3, ReqCreatureOrGOCount4, ReqSpellCast1, ReqSpellCast2, ReqSpellCast3,
+ReqSpellCast4, RewChoiceItemId1, RewChoiceItemId2, RewChoiceItemId3, RewChoiceItemId4, RewChoiceItemId5, RewChoiceItemId6,
+RewChoiceItemCount1, RewChoiceItemCount2, RewChoiceItemCount3, RewChoiceItemCount4, RewChoiceItemCount5, RewChoiceItemCount6,
+RewItemId1, RewItemId2, RewItemId3, RewItemId4, RewItemCount1, RewItemCount2, RewItemCount3, RewItemCount4, RewRepFaction1,
+RewRepFaction2, RewRepFaction3, RewRepFaction4, RewRepFaction5, RewRepValue1, RewRepValue2, RewRepValue3, RewRepValue4,
+RewRepValue5, RewOrReqMoney, RewMoneyMaxLevel, RewSpell, RewSpellCast, RewMailTemplateId, RewMailMoney, RewMailDelaySecs,
+PointMapId, PointX, PointY, PointOpt, DetailsEmote1, DetailsEmote2, DetailsEmote3, DetailsEmote4, DetailsEmoteDelay1,
+DetailsEmoteDelay2, DetailsEmoteDelay3, DetailsEmoteDelay4, IncompleteEmote, CompleteEmote, OfferRewardEmote1, OfferRewardEmote2,
+OfferRewardEmote3, OfferRewardEmote4, OfferRewardEmoteDelay1, OfferRewardEmoteDelay2, OfferRewardEmoteDelay3,OfferRewardEmoteDelay4,
+StartScript, CompleteScript) values
+
+(@quest_entry, '0', '2', @quest_zone, @min_level, @quest_level, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', 
+
+'Slaking their Thirst', 
+
+'Hello again $N!/n/nYour wood helped feed many of the refugees, it’s wonderful! However, the situation is far from resolved…/n/nThe drinking water stores and even the ale is running low, soon we will not be able to care for the refugees, luckily there is a well to the north near the border of the valley, can I ask you to go there and fill this barrel with water? In the mean time volunteers are trying to dig a new well here but that will take time./n/nPlease $N, I know I can count on you!', 
+
+'Fill barrel of water.', 
+
+'You got the water?...\n\nThank you $N at least...that’s one less problem we have to deal with.\n\nThe children will have water and the progress on the well is going wonderfully! I also don’t have to touch Dwarven ale again...\n\nNo offense to them but that stuff is vile to my palate.', 
+
+'Did you get it? The children are thirsty…', 
+
+'', '', '', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @faction_id, '0', '0', '0', '0', @faction_count, '0', '0', '0', '0', '0', @xp_or_money, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', 0, 0);
+      
+update quest_template set 
+rewitemid1 = @reward_item_1, rewitemcount1 = @reward_item_1_count,
+rewitemid2 = @reward_item_2, rewitemcount2 = @reward_item_2_count,
+rewitemid3 = @reward_item_3, rewitemcount3 = @reward_item_3_count,
+rewitemid4 = @reward_item_4, rewitemcount4 = @reward_item_4_count,
+ReqCreatureOrGOId2 = @creature_to_kill_2, ReqCreatureOrGOCount1 = @creature_to_kill_1_count,
+ReqCreatureOrGOId2 = @creature_to_kill_2, ReqCreatureOrGOCount2 = @creature_to_kill_2_count,
+ReqCreatureOrGOId3 = @creature_to_kill_3, ReqCreatureOrGOCount3 = @creature_to_kill_3_count,
+ReqCreatureOrGOId4 = @creature_to_kill_4, ReqCreatureOrGOCount4 = @creature_to_kill_4_count,
+reqitemid1 = @required_item_1, reqitemcount1 = @required_item_1_count,
+reqitemid2 = @required_item_2, reqitemcount2 = @required_item_2_count,
+reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
+reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count
+where entry = @quest_entry;
+
+update quest_template set nextquestid = @nextquest where entry = @quest_entry;
+update quest_template set RewOrReqMoney = @reward_money where entry = @quest_entry;
+update quest_template set nextquestinchain = @nextquestinchain where entry = @quest_entry;
+update quest_template set prevquestid = @prevquest where entry = @quest_entry;
+	  
+replace into creature_questrelation (id, quest, patch_min, patch_max) values (@questgiver_id, @quest_entry,'10','10'); 
+replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (@quest_finisher, @quest_entry,'10','10');
+
 -- HORDE INTRO QUEST (NEED NAME)
 
 SET @quest_entry = 80100;
