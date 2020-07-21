@@ -359,4 +359,6 @@ replace into creature_questrelation (id, quest, patch_min, patch_max) values ('9
 replace into creature_involvedrelation (id, quest, patch_min, patch_max) values ('9555','60132','10','10');
 
 update creature_template set npc_flags = 16390 where entry = 9555;
-      
+
+-- Make Essence of the Red ignore invulnerability effects.
+INSERT INTO `spell_mod` (`ID`, `Attributes`, `Comment`) VALUES (23513, 536870912, 'Essence of the Red - Ignore Invulnerability');
