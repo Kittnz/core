@@ -310,7 +310,8 @@ replace into creature_template (entry, display_id1, name, subname, level_min, le
 (80010, 6631, 'Trogg Vermin', '', 60, 60, 3350, 4640, 269, '', 1, 2, 1), -- Reserved. TODO.
 (80011, 6631, 'Burnt Wheels Gossip Trigger 1', '', 60, 60, 3350, 4640, 269, '', 1, 2, 1), -- Reserved. TODO.
 (80012, 6631, 'Shadowforge Fire Priest', '', 60, 60, 3350, 4640, 269, '', 1, 2, 1), -- Reserved. TODO.
-(80013, 6631, 'Dark Iron Scrapping Gossip Trigger 1', '', 60, 60, 3350, 4640, 269, '', 1, 2, 1); -- Reserved. TODO.
+(80013, 6631, 'Dark Iron Scrapping Gossip Trigger 1', '', 60, 60, 3350, 4640, 269, '', 1, 2, 1), -- Reserved. TODO.
+(80014, 6631, 'Sunblade Reunion Gossip Trigger 1', '', 60, 60, 3350, 4640, 269, '', 1, 2, 1); -- Reserved. TODO.
 
 -- Greeting's textes
 
