@@ -131,6 +131,57 @@ GameObjectAI* GetAI_go_custom_rested(GameObject* gameobject)
     return new go_custom_rested(gameobject);
 }
 
+
+struct go_campfire_rested : public GameObjectAI
+{
+    explicit go_campfire_rested(GameObject* pGo) : GameObjectAI(pGo)
+    {
+        m_bUsed = false;
+        m_uiJustUsedTimer = 1;
+        m_uiUpdateTimer = 1000;
+    }
+
+    bool m_bUsed;
+    uint32 m_uiJustUsedTimer;
+    uint32 m_uiUpdateTimer;
+
+    void UpdateAI(uint32 const uiDiff) override
+    {
+        if (m_uiJustUsedTimer < uiDiff)
+        {
+            if (m_uiUpdateTimer < uiDiff)
+            {
+                std::list<Player*> players;
+                MaNGOS::AnyPlayerInObjectRangeCheck check(me, 5.0f);
+                MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
+
+                Cell::VisitWorldObjects(me, searcher, 5.0f);
+
+                for (Player* pPlayer : players)
+                {
+                    pPlayer->SetFlag(PLAYER_FLAGS, PLAYER_FLAGS_RESTING);
+                    pPlayer->SetRestBonus(static_cast<float>(pPlayer->GetRestBonus() + (sObjectMgr.GetXPForLevel(pPlayer->getLevel()) * 0.000125)));
+                }
+                m_uiUpdateTimer = 2500;
+            }
+            else
+            {
+                m_uiUpdateTimer -= uiDiff;
+            }
+            m_bUsed = true;
+        }
+        else
+        {
+            m_uiJustUsedTimer -= uiDiff;
+        }
+    }
+};
+
+GameObjectAI* GetAI_go_campfire_rested(GameObject* gameobject)
+{
+    return new go_campfire_rested(gameobject);
+}
+
 struct go_cot_enter_trigger : public GameObjectAI
 {
     explicit go_cot_enter_trigger(GameObject* pGo) : GameObjectAI(pGo)
@@ -610,6 +661,11 @@ bool GOSelect_go_brainwashing_device(Player* pPlayer, GameObject* pGo, uint32 se
 void AddSC_object_scripts()
 {
     Script *newscript;
+
+    newscript = new Script;
+    newscript->Name = "go_campfire_rested";
+    newscript->GOGetAI = &GetAI_go_campfire_rested;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "go_brainwashing_device";

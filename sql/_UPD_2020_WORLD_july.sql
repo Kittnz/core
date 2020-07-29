@@ -364,3 +364,6 @@ update creature_template set npc_flags = 16390 where entry = 9555;
 INSERT INTO `spell_mod` (`ID`, `Attributes`, `Comment`) VALUES (23513, 536870912, 'Essence of the Red - Ignore Invulnerability');
 
 delete from creature_questrelation where quest = 60130;
+
+-- Add rested for campfire
+UPDATE `gameobject_template` SET `script_name`='go_campfire_rested' WHERE (`entry`='31511') AND (`patch`='0');
