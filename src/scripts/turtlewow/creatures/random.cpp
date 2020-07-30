@@ -707,9 +707,124 @@ bool GossipSelect_npc_rholo(Player* p_Player, Creature* p_Creature, uint32 /*uiS
 }
 
 
+#define KODO_CALFLING 51599
+
+enum palkeoteEvents
+{
+    EVENT_WEAKNESS = 1,
+    EVENT_FEAR
+};
+
+enum palkeoteSpells
+{
+    SPELL_CURSE_OF_WEAKNESS = 11708,
+    SPELL_FEAR = 26580
+};
+
+struct palkeoteAI : public ScriptedAI
+{
+    palkeoteAI(Creature *c) : ScriptedAI(c)
+    {
+        Reset();
+    }
+
+    EventMap m_events;
+    bool calfActive = false;
+
+    void Reset()
+    {
+        m_events.Reset();
+        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_PASSIVE);
+        m_creature->setFaction(m_creature->GetCreatureInfo()->faction);
+        calfActive = false;
+    }
+
+    void Aggro()
+    {
+        m_events.ScheduleEvent(EVENT_WEAKNESS, Seconds(urand(4, 8)));
+        m_events.ScheduleEvent(SPELL_FEAR, Seconds(urand(8, 12)));
+    }
+
+    void JustRespawned()
+    {
+        Reset();
+    }
+
+    void UpdateAI(const uint32 diff)
+    {
+        if (calfActive)
+            return;
+
+        if (m_creature->GetHealthPercent() < 20)
+        {
+            calfActive = true;
+
+            m_creature->CombatStop(true);
+            m_creature->ClearInCombat();
+            m_creature->setFaction(35);
+            m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_PASSIVE);
+
+
+            ThreatList const& tList = m_creature->getThreatManager().getThreatList();
+            for (ThreatList::const_iterator i = tList.begin(); i != tList.end(); ++i)
+            {
+                Unit* pUnit = m_creature->GetMap()->GetUnit((*i)->getUnitGuid());
+                if (pUnit && (pUnit->GetTypeId() == TYPEID_PLAYER))
+                {
+                    CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(51598);
+                    pUnit->ToPlayer()->KilledMonster(cInfo, ObjectGuid());
+                }
+            }
+
+            m_creature->ForcedDespawn(10 * 1000);
+
+            float fX, fY, fZ;
+            m_creature->GetRandomPoint(m_creature->GetPositionX(), m_creature->GetPositionY(), m_creature->GetPositionZ(), 60.0f, fX, fY, fZ);
+            m_creature->SummonCreature(KODO_CALFLING, fX, fY, fZ, 0.0F, TEMPSUMMON_TIMED_DESPAWN, 10 * 1000);
+            m_creature->SetWalk(true);
+            m_creature->GetMotionMaster()->MovePoint(0, fX, fY, fZ + 1.0F);
+            return;
+        }
+
+        //Return since we have no target
+        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+            return;
+
+        m_events.Update(diff);
+        while (uint32 eventId = m_events.ExecuteEvent())
+        {
+            switch (eventId)
+            {
+            case EVENT_WEAKNESS:
+                DoCastSpellIfCan(m_creature->getVictim(), SPELL_CURSE_OF_WEAKNESS);
+                m_events.Repeat(Seconds(urand(4, 8)));
+                break;
+            case EVENT_FEAR:
+                DoCastSpellIfCan(m_creature->getVictim(), SPELL_FEAR);
+                m_events.Repeat(Seconds(urand(8, 12)));
+                break;
+            }
+        }
+
+        DoMeleeAttackIfReady();
+    }
+
+};
+
+CreatureAI* GetAI_palkeote(Creature *_Creature)
+{
+    return new palkeoteAI(_Creature);
+}
+
+
 void AddSC_random()
 {
     Script *newscript;
+
+    newscript = new Script;
+    newscript->Name = "palkeote";
+    newscript->GetAI = &GetAI_palkeote;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_chixpixx";
