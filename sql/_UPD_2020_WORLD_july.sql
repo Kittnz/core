@@ -1122,7 +1122,7 @@ values
  '-1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
-update item_template set stackable = 20 where entry = 50001;
+update item_template set stackable = 20 where entry = 51868;
 replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (524, 51868, 80, 0, 1, 1);
 update creature_template set npc_flags = 19 where entry = 1103;
 
