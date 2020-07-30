@@ -802,3 +802,697 @@ nextquestinchain = @nextquestinchain, prevquestid = @prevquest
 where entry = @quest_entry;	 
 
 
+-- Mulgore
+
+-- Kodo Hunt (Horde)
+
+SET @quest_entry = 60138;
+SET @quest_zone = 215;
+SET @faction_id = 0;
+SET @faction_count = 0;
+SET @xp_or_money = 475;
+SET @reward_money = 500; 
+SET @quest_level = 11;
+SET @min_level = 10;
+SET @questgiver_id = 2993;
+SET @quest_finisher = 2993;
+SET @nextquest = 0;
+SET @nextquestinchain = 0;
+SET @prevquest = 0;
+SET @reward_item_1 = 5081; -- https://classic.wowhead.com/item=5081/kodo-hide-bag
+SET @reward_item_2 = 0;
+SET @reward_item_3 = 0;
+SET @reward_item_4 = 0;
+SET @reward_item_1_count = 1;
+SET @reward_item_2_count = 0;
+SET @reward_item_3_count = 0;
+SET @reward_item_4_count = 0;
+SET @creature_to_kill_1 = 2973; 
+SET @creature_to_kill_2 = 2974; 
+SET @creature_to_kill_3 = 0;
+SET @creature_to_kill_4 = 0;
+SET @creature_to_kill_1_count = 1;
+SET @creature_to_kill_2_count = 1;
+SET @creature_to_kill_3_count = 0;
+SET @creature_to_kill_4_count = 0;
+SET @required_item_1 = 0;
+SET @required_item_2 = 0;
+SET @required_item_3 = 0;
+SET @required_item_4 = 0;
+SET @required_item_1_count = 0;
+SET @required_item_2_count = 0;
+SET @required_item_3_count = 0;
+SET @required_item_4_count = 0;
+
+replace into quest_template (entry, patch, Method, ZoneOrSort, MinLevel, QuestLevel, MaxLevel, Type, RequiredClasses, RequiredRaces, RequiredSkill,
+RequiredSkillValue, RepObjectiveFaction, RepObjectiveValue, RequiredMinRepFaction, RequiredMinRepValue,RequiredMaxRepFaction,
+RequiredMaxRepValue, SuggestedPlayers, LimitTime, QuestFlags, SpecialFlags, PrevQuestId, NextQuestId, ExclusiveGroup, NextQuestInChain,
+SrcItemId, SrcItemCount, SrcSpell, Title, Details, Objectives, OfferRewardText, RequestItemsText, EndText, ObjectiveText1, ObjectiveText2,
+ObjectiveText3, ObjectiveText4, ReqItemId1, ReqItemId2, ReqItemId3, ReqItemId4, ReqItemCount1, ReqItemCount2, ReqItemCount3,
+ReqItemCount4, ReqSourceId1, ReqSourceId2, ReqSourceId3, ReqSourceId4, ReqSourceCount1, ReqSourceCount2, ReqSourceCount3,
+ReqSourceCount4, ReqCreatureOrGOId1, ReqCreatureOrGOId2, ReqCreatureOrGOId3, ReqCreatureOrGOId4, ReqCreatureOrGOCount1,
+ReqCreatureOrGOCount2, ReqCreatureOrGOCount3, ReqCreatureOrGOCount4, ReqSpellCast1, ReqSpellCast2, ReqSpellCast3,
+ReqSpellCast4, RewChoiceItemId1, RewChoiceItemId2, RewChoiceItemId3, RewChoiceItemId4, RewChoiceItemId5, RewChoiceItemId6,
+RewChoiceItemCount1, RewChoiceItemCount2, RewChoiceItemCount3, RewChoiceItemCount4, RewChoiceItemCount5, RewChoiceItemCount6,
+RewItemId1, RewItemId2, RewItemId3, RewItemId4, RewItemCount1, RewItemCount2, RewItemCount3, RewItemCount4, RewRepFaction1,
+RewRepFaction2, RewRepFaction3, RewRepFaction4, RewRepFaction5, RewRepValue1, RewRepValue2, RewRepValue3, RewRepValue4,
+RewRepValue5, RewOrReqMoney, RewMoneyMaxLevel, RewSpell, RewSpellCast, RewMailTemplateId, RewMailMoney, RewMailDelaySecs,
+PointMapId, PointX, PointY, PointOpt, DetailsEmote1, DetailsEmote2, DetailsEmote3, DetailsEmote4, DetailsEmoteDelay1,
+DetailsEmoteDelay2, DetailsEmoteDelay3, DetailsEmoteDelay4, IncompleteEmote, CompleteEmote, OfferRewardEmote1, OfferRewardEmote2,
+OfferRewardEmote3, OfferRewardEmote4, OfferRewardEmoteDelay1, OfferRewardEmoteDelay2, OfferRewardEmoteDelay3,OfferRewardEmoteDelay4,
+StartScript, CompleteScript) values
+
+(@quest_entry, '0', '2', @quest_zone, @min_level, @quest_level, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', 
+
+'Kodo Hunt', 
+
+'The kodo is the mightiest of the beasts of Mulgore, and therefore the greatest of its hunts. You are ready, young $C, to hunt them yourself.\n\nYou have probably already seen the kodo herds wandering Mulgore during your earlier travels. Find one of the herds, and challenge its matriarch and bull.\n\nKodos are not aggressive creatures, but they are fearsome when provoked – you will need all the skills you have learned to overcome their elders, $R.\n\nReturn to me when you have conquered them.', 
+
+'Find a herd of kodo in the fields of Mulgore and defeat its Matriarch and Bull.', 
+
+'You have overcome the greatest trial a Mulgore hunter can face, and you have emerged with greater strength – and wisdom – for your efforts.\n\nCarry it with you as you step further into the world, young $C, and honor the memory of the beasts you defeated by remembering their lessons.', 
+
+'The kodo wander Mulgore far and wide. You may need to search for some time to find the herd. Patience is one of the lessons of the hunt.', 
+
+'', '', '', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @faction_id, '0', '0', '0', '0', @faction_count, '0', '0', '0', '0', '0', @xp_or_money, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', 0, 0);
+     
+replace into creature_questrelation (id, quest, patch_min, patch_max) values (@questgiver_id, @quest_entry,'0','10'); 
+replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (@quest_finisher, @quest_entry,'0','10');
+	 
+update quest_template set 
+rewitemid1 = @reward_item_1, rewitemcount1 = @reward_item_1_count,
+rewitemid2 = @reward_item_2, rewitemcount2 = @reward_item_2_count,
+rewitemid3 = @reward_item_3, rewitemcount3 = @reward_item_3_count,
+rewitemid4 = @reward_item_4, rewitemcount4 = @reward_item_4_count,
+ReqCreatureOrGOId1 = @creature_to_kill_1, ReqCreatureOrGOCount1 = @creature_to_kill_1_count,
+ReqCreatureOrGOId2 = @creature_to_kill_2, ReqCreatureOrGOCount2 = @creature_to_kill_2_count,
+ReqCreatureOrGOId3 = @creature_to_kill_3, ReqCreatureOrGOCount3 = @creature_to_kill_3_count,
+ReqCreatureOrGOId4 = @creature_to_kill_4, ReqCreatureOrGOCount4 = @creature_to_kill_4_count,
+reqitemid1 = @required_item_1, reqitemcount1 = @required_item_1_count,
+reqitemid2 = @required_item_2, reqitemcount2 = @required_item_2_count,
+reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
+reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
+nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
+nextquestinchain = @nextquestinchain, prevquestid = @prevquest 
+where entry = @quest_entry;	 
+
+-- Durotar
+
+-- No More-pid! (Horde)
+
+update creature_template set npc_flags = 2 where entry = 6787;
+
+SET @quest_entry = 60139;
+SET @quest_zone = 14;
+SET @faction_id = 0;
+SET @faction_count = 0;
+SET @xp_or_money = 275;
+SET @reward_money = 300; 
+SET @quest_level = 7;
+SET @min_level = 6;
+SET @questgiver_id = 6787;
+SET @quest_finisher = 6787;
+SET @nextquest = 0;
+SET @nextquestinchain = 0;
+SET @prevquest = 0;
+SET @reward_item_1 = 118; -- https://classic.wowhead.com/item=118/minor-healing-potion
+SET @reward_item_2 = 0;
+SET @reward_item_3 = 0;
+SET @reward_item_4 = 0;
+SET @reward_item_1_count = 5;
+SET @reward_item_2_count = 0;
+SET @reward_item_3_count = 0;
+SET @reward_item_4_count = 0;
+SET @creature_to_kill_1 = 3126;  -- https://classic.wowhead.com/npc=3126/armored-scorpid
+SET @creature_to_kill_2 = 0; 
+SET @creature_to_kill_3 = 0;
+SET @creature_to_kill_4 = 0;
+SET @creature_to_kill_1_count = 10;
+SET @creature_to_kill_2_count = 0;
+SET @creature_to_kill_3_count = 0;
+SET @creature_to_kill_4_count = 0;
+SET @required_item_1 = 0;
+SET @required_item_2 = 0;
+SET @required_item_3 = 0;
+SET @required_item_4 = 0;
+SET @required_item_1_count = 0;
+SET @required_item_2_count = 0;
+SET @required_item_3_count = 0;
+SET @required_item_4_count = 0;
+
+replace into quest_template (entry, patch, Method, ZoneOrSort, MinLevel, QuestLevel, MaxLevel, Type, RequiredClasses, RequiredRaces, RequiredSkill,
+RequiredSkillValue, RepObjectiveFaction, RepObjectiveValue, RequiredMinRepFaction, RequiredMinRepValue,RequiredMaxRepFaction,
+RequiredMaxRepValue, SuggestedPlayers, LimitTime, QuestFlags, SpecialFlags, PrevQuestId, NextQuestId, ExclusiveGroup, NextQuestInChain,
+SrcItemId, SrcItemCount, SrcSpell, Title, Details, Objectives, OfferRewardText, RequestItemsText, EndText, ObjectiveText1, ObjectiveText2,
+ObjectiveText3, ObjectiveText4, ReqItemId1, ReqItemId2, ReqItemId3, ReqItemId4, ReqItemCount1, ReqItemCount2, ReqItemCount3,
+ReqItemCount4, ReqSourceId1, ReqSourceId2, ReqSourceId3, ReqSourceId4, ReqSourceCount1, ReqSourceCount2, ReqSourceCount3,
+ReqSourceCount4, ReqCreatureOrGOId1, ReqCreatureOrGOId2, ReqCreatureOrGOId3, ReqCreatureOrGOId4, ReqCreatureOrGOCount1,
+ReqCreatureOrGOCount2, ReqCreatureOrGOCount3, ReqCreatureOrGOCount4, ReqSpellCast1, ReqSpellCast2, ReqSpellCast3,
+ReqSpellCast4, RewChoiceItemId1, RewChoiceItemId2, RewChoiceItemId3, RewChoiceItemId4, RewChoiceItemId5, RewChoiceItemId6,
+RewChoiceItemCount1, RewChoiceItemCount2, RewChoiceItemCount3, RewChoiceItemCount4, RewChoiceItemCount5, RewChoiceItemCount6,
+RewItemId1, RewItemId2, RewItemId3, RewItemId4, RewItemCount1, RewItemCount2, RewItemCount3, RewItemCount4, RewRepFaction1,
+RewRepFaction2, RewRepFaction3, RewRepFaction4, RewRepFaction5, RewRepValue1, RewRepValue2, RewRepValue3, RewRepValue4,
+RewRepValue5, RewOrReqMoney, RewMoneyMaxLevel, RewSpell, RewSpellCast, RewMailTemplateId, RewMailMoney, RewMailDelaySecs,
+PointMapId, PointX, PointY, PointOpt, DetailsEmote1, DetailsEmote2, DetailsEmote3, DetailsEmote4, DetailsEmoteDelay1,
+DetailsEmoteDelay2, DetailsEmoteDelay3, DetailsEmoteDelay4, IncompleteEmote, CompleteEmote, OfferRewardEmote1, OfferRewardEmote2,
+OfferRewardEmote3, OfferRewardEmote4, OfferRewardEmoteDelay1, OfferRewardEmoteDelay2, OfferRewardEmoteDelay3,OfferRewardEmoteDelay4,
+StartScript, CompleteScript) values
+
+(@quest_entry, '0', '2', @quest_zone, @min_level, @quest_level, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', 
+
+'No More-pid!', 
+
+'Why in the name of Doomhammer did we have to settle in a desert?\n\nScorpids! Every time I leave Razor Hill, scorpids! In my tent, in my shoes, in my armor, scorpids! I can defeat them easily - I am no weakling - but every time they sting me I have to drink a healing potion or walk all the way back to town to find a healer. I’m sick of it!\n\nYou seem like a study warrior. Will you go out and kill every scorpid you can find? Then stomp on their tails a little? It’s your duty to the Horde to stomp on every tail!\n\nYou can find the scorpid all over northern Durotar... whether you want to or not.', 
+
+'Kill 10 Armored Scorpid. Stomping on their tails is not required, but may make you feel better.', 
+
+'Are they dead? Are they all dead?\n\n<Blackarm laughs aloud.>\n\nYou will be counted among the great heroes of the Horde for this effort, $N. I will sing your name only below that of the Warchief! Have some of these healing potions for your trouble: with any luck, I won’t need so many anymore.', 
+
+'Is it done? Have you ridded the world of the scorpid menace?', 
+
+'', '', '', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @faction_id, '0', '0', '0', '0', @faction_count, '0', '0', '0', '0', '0', @xp_or_money, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', 0, 0);
+     
+replace into creature_questrelation (id, quest, patch_min, patch_max) values (@questgiver_id, @quest_entry,'0','10'); 
+replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (@quest_finisher, @quest_entry,'0','10');
+	 
+update quest_template set 
+rewitemid1 = @reward_item_1, rewitemcount1 = @reward_item_1_count,
+rewitemid2 = @reward_item_2, rewitemcount2 = @reward_item_2_count,
+rewitemid3 = @reward_item_3, rewitemcount3 = @reward_item_3_count,
+rewitemid4 = @reward_item_4, rewitemcount4 = @reward_item_4_count,
+ReqCreatureOrGOId1 = @creature_to_kill_1, ReqCreatureOrGOCount1 = @creature_to_kill_1_count,
+ReqCreatureOrGOId2 = @creature_to_kill_2, ReqCreatureOrGOCount2 = @creature_to_kill_2_count,
+ReqCreatureOrGOId3 = @creature_to_kill_3, ReqCreatureOrGOCount3 = @creature_to_kill_3_count,
+ReqCreatureOrGOId4 = @creature_to_kill_4, ReqCreatureOrGOCount4 = @creature_to_kill_4_count,
+reqitemid1 = @required_item_1, reqitemcount1 = @required_item_1_count,
+reqitemid2 = @required_item_2, reqitemcount2 = @required_item_2_count,
+reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
+reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
+nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
+nextquestinchain = @nextquestinchain, prevquestid = @prevquest 
+where entry = @quest_entry;	 
+
+-- Tirisfal Glades
+
+-- Don’t Lose (Part Of) Your Head (Horde)
+
+update creature_template set npc_flags = 19 where entry = 2131;
+
+SET @quest_entry = 60140;
+SET @quest_zone = 85;
+SET @faction_id = 0;
+SET @faction_count = 0;
+SET @xp_or_money = 275;
+SET @reward_money = 500; 
+SET @quest_level = 6;
+SET @min_level = 5;
+SET @questgiver_id = 2131;
+SET @quest_finisher = 2131;
+SET @nextquest = 0;
+SET @nextquestinchain = 0;
+SET @prevquest = 0;
+SET @reward_item_1 = 0;
+SET @reward_item_2 = 0;
+SET @reward_item_3 = 0;
+SET @reward_item_4 = 0;
+SET @reward_item_1_count = 0;
+SET @reward_item_2_count = 0;
+SET @reward_item_3_count = 0;
+SET @reward_item_4_count = 0;
+SET @creature_to_kill_1 = 0;
+SET @creature_to_kill_2 = 0; 
+SET @creature_to_kill_3 = 0;
+SET @creature_to_kill_4 = 0;
+SET @creature_to_kill_1_count = 0;
+SET @creature_to_kill_2_count = 0;
+SET @creature_to_kill_3_count = 0;
+SET @creature_to_kill_4_count = 0;
+SET @required_item_1 = 1251; -- https://classic.wowhead.com/item=1251/linen-bandage
+SET @required_item_2 = 0;
+SET @required_item_3 = 0;
+SET @required_item_4 = 0;
+SET @required_item_1_count = 10;
+SET @required_item_2_count = 0;
+SET @required_item_3_count = 0;
+SET @required_item_4_count = 0;
+
+replace into quest_template (entry, patch, Method, ZoneOrSort, MinLevel, QuestLevel, MaxLevel, Type, RequiredClasses, RequiredRaces, RequiredSkill,
+RequiredSkillValue, RepObjectiveFaction, RepObjectiveValue, RequiredMinRepFaction, RequiredMinRepValue,RequiredMaxRepFaction,
+RequiredMaxRepValue, SuggestedPlayers, LimitTime, QuestFlags, SpecialFlags, PrevQuestId, NextQuestId, ExclusiveGroup, NextQuestInChain,
+SrcItemId, SrcItemCount, SrcSpell, Title, Details, Objectives, OfferRewardText, RequestItemsText, EndText, ObjectiveText1, ObjectiveText2,
+ObjectiveText3, ObjectiveText4, ReqItemId1, ReqItemId2, ReqItemId3, ReqItemId4, ReqItemCount1, ReqItemCount2, ReqItemCount3,
+ReqItemCount4, ReqSourceId1, ReqSourceId2, ReqSourceId3, ReqSourceId4, ReqSourceCount1, ReqSourceCount2, ReqSourceCount3,
+ReqSourceCount4, ReqCreatureOrGOId1, ReqCreatureOrGOId2, ReqCreatureOrGOId3, ReqCreatureOrGOId4, ReqCreatureOrGOCount1,
+ReqCreatureOrGOCount2, ReqCreatureOrGOCount3, ReqCreatureOrGOCount4, ReqSpellCast1, ReqSpellCast2, ReqSpellCast3,
+ReqSpellCast4, RewChoiceItemId1, RewChoiceItemId2, RewChoiceItemId3, RewChoiceItemId4, RewChoiceItemId5, RewChoiceItemId6,
+RewChoiceItemCount1, RewChoiceItemCount2, RewChoiceItemCount3, RewChoiceItemCount4, RewChoiceItemCount5, RewChoiceItemCount6,
+RewItemId1, RewItemId2, RewItemId3, RewItemId4, RewItemCount1, RewItemCount2, RewItemCount3, RewItemCount4, RewRepFaction1,
+RewRepFaction2, RewRepFaction3, RewRepFaction4, RewRepFaction5, RewRepValue1, RewRepValue2, RewRepValue3, RewRepValue4,
+RewRepValue5, RewOrReqMoney, RewMoneyMaxLevel, RewSpell, RewSpellCast, RewMailTemplateId, RewMailMoney, RewMailDelaySecs,
+PointMapId, PointX, PointY, PointOpt, DetailsEmote1, DetailsEmote2, DetailsEmote3, DetailsEmote4, DetailsEmoteDelay1,
+DetailsEmoteDelay2, DetailsEmoteDelay3, DetailsEmoteDelay4, IncompleteEmote, CompleteEmote, OfferRewardEmote1, OfferRewardEmote2,
+OfferRewardEmote3, OfferRewardEmote4, OfferRewardEmoteDelay1, OfferRewardEmoteDelay2, OfferRewardEmoteDelay3,OfferRewardEmoteDelay4,
+StartScript, CompleteScript) values
+
+(@quest_entry, '0', '2', @quest_zone, @min_level, @quest_level, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', 
+
+'Don’t Lose (Part Of) Your Head', 
+
+'Some people get all the luck!\n\n<Austil glares at Colman Farthing across the inn.>\n\n“Oh, I lost my family, the plague took my home from me.” On and on and on he goes! We get it! The plague took all of our homes and all of our families. But some of us at least came out of it with a jaw intact!\n\n<Austil cracks a bone back into place.>\n\nIf you want to make yourself useful, bring me some bandages so I can hold what’s left of me together!', 
+
+'Bring 10 Linen Bandages to Austil de Mon, in the Gallows’ End Tavern in Brill.\n\nYou can make the bandages with First Aid skill or buy them from another player.', 
+
+'<Austil takes the bandages and uses them to lash some of his looser extremities into place.>\n\nAh, thank you. This will do nicely.\n\nI’m sorry if I snapped at you before. Having bits of oneself threatening to escape at any moment does tend to make one a little grumpy.\n\nBut I feel much better now. Maybe I’ll go even talk to old Farthing.', 
+
+'Every minute that passes is another minute for pieces to fall off of me, $N!', 
+
+'', '', '', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @faction_id, '0', '0', '0', '0', @faction_count, '0', '0', '0', '0', '0', @xp_or_money, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', 0, 0);
+     
+replace into creature_questrelation (id, quest, patch_min, patch_max) values (@questgiver_id, @quest_entry,'0','10'); 
+replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (@quest_finisher, @quest_entry,'0','10');
+	 
+update quest_template set 
+rewitemid1 = @reward_item_1, rewitemcount1 = @reward_item_1_count,
+rewitemid2 = @reward_item_2, rewitemcount2 = @reward_item_2_count,
+rewitemid3 = @reward_item_3, rewitemcount3 = @reward_item_3_count,
+rewitemid4 = @reward_item_4, rewitemcount4 = @reward_item_4_count,
+ReqCreatureOrGOId1 = @creature_to_kill_1, ReqCreatureOrGOCount1 = @creature_to_kill_1_count,
+ReqCreatureOrGOId2 = @creature_to_kill_2, ReqCreatureOrGOCount2 = @creature_to_kill_2_count,
+ReqCreatureOrGOId3 = @creature_to_kill_3, ReqCreatureOrGOCount3 = @creature_to_kill_3_count,
+ReqCreatureOrGOId4 = @creature_to_kill_4, ReqCreatureOrGOCount4 = @creature_to_kill_4_count,
+reqitemid1 = @required_item_1, reqitemcount1 = @required_item_1_count,
+reqitemid2 = @required_item_2, reqitemcount2 = @required_item_2_count,
+reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
+reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
+nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
+nextquestinchain = @nextquestinchain, prevquestid = @prevquest 
+where entry = @quest_entry;	 
+
+-- Elwynn Forest
+
+-- Duty to the Light (Alliance)
+
+replace into item_template (
+entry, patch, class, subclass, name,description, display_id, quality, flags, buy_count,
+buy_price, sell_price, inventory_type, allowable_class, allowable_race, item_level,
+required_level, required_skill, required_skill_rank, required_spell, required_honor_rank,
+required_city_rank, required_reputation_faction, required_reputation_rank, max_count, stackable,
+container_slots, stat_type1, stat_value1, stat_type2, stat_value2, stat_type3, stat_value3,
+stat_type4, stat_value4, stat_type5, stat_value5, stat_type6, stat_value6, stat_type7,
+stat_value7, stat_type8, stat_value8, stat_type9, stat_value9, stat_type10, stat_value10,
+delay, range_mod, ammo_type, dmg_min1, dmg_max1, dmg_type1, dmg_min2, dmg_max2, dmg_type2,
+dmg_min3, dmg_max3, dmg_type3, dmg_min4, dmg_max4, dmg_type4, dmg_min5, dmg_max5, dmg_type5, block,
+armor, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, spellid_1, spelltrigger_1,
+spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, spellid_2,
+spelltrigger_2, spellcharges_2, spellppmrate_2, spellcooldown_2, spellcategory_2, spellcategorycooldown_2,
+spellid_3, spelltrigger_3, spellcharges_3, spellppmrate_3, spellcooldown_3, spellcategory_3,
+spellcategorycooldown_3, spellid_4, spelltrigger_4, spellcharges_4, spellppmrate_4, spellcooldown_4,
+spellcategory_4, spellcategorycooldown_4, spellid_5, spelltrigger_5, spellcharges_5, spellppmrate_5,
+spellcooldown_5, spellcategory_5, spellcategorycooldown_5, bonding, page_text, page_language, page_material,
+start_quest, lock_id, material, sheath, random_property, set_id, max_durability, area_bound, map_bound,
+duration, bag_family, disenchant_id, food_type, min_money_loot, max_money_loot, extra_flags, other_team_entry,
+script_name)
+values
+ ('51868', '0', '15', '0', 'Rockhide Boar Meat', '', '25472', '1', '0', '1', '0', '0', '0', '-1', '-1', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+ 
+update item_template set stackable = 20 where entry = 50001;
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (524, 51868, 80, 0, 1, 1);
+update creature_template set npc_flags = 19 where entry = 1103;
+
+SET @quest_entry = 60141;
+SET @quest_zone = 12;
+SET @faction_id = 0;
+SET @faction_count = 0;
+SET @xp_or_money = 220;
+SET @reward_money = 0; 
+SET @quest_level = 9;
+SET @min_level = 8;
+SET @questgiver_id = 927;
+SET @quest_finisher = 1103;
+SET @nextquest = 0;
+SET @nextquestinchain = 0;
+SET @prevquest = 0;
+SET @reward_item_1 = 4238;
+SET @reward_item_2 = 0;
+SET @reward_item_3 = 0;
+SET @reward_item_4 = 0;
+SET @reward_item_1_count = 1;
+SET @reward_item_2_count = 0;
+SET @reward_item_3_count = 0;
+SET @reward_item_4_count = 0;
+SET @creature_to_kill_1 = 0;
+SET @creature_to_kill_2 = 0; 
+SET @creature_to_kill_3 = 0;
+SET @creature_to_kill_4 = 0;
+SET @creature_to_kill_1_count = 0;
+SET @creature_to_kill_2_count = 0;
+SET @creature_to_kill_3_count = 0;
+SET @creature_to_kill_4_count = 0;
+SET @required_item_1 = 51868;
+SET @required_item_2 = 0;
+SET @required_item_3 = 0;
+SET @required_item_4 = 0;
+SET @required_item_1_count = 8;
+SET @required_item_2_count = 0;
+SET @required_item_3_count = 0;
+SET @required_item_4_count = 0;
+
+replace into quest_template (entry, patch, Method, ZoneOrSort, MinLevel, QuestLevel, MaxLevel, Type, RequiredClasses, RequiredRaces, RequiredSkill,
+RequiredSkillValue, RepObjectiveFaction, RepObjectiveValue, RequiredMinRepFaction, RequiredMinRepValue,RequiredMaxRepFaction,
+RequiredMaxRepValue, SuggestedPlayers, LimitTime, QuestFlags, SpecialFlags, PrevQuestId, NextQuestId, ExclusiveGroup, NextQuestInChain,
+SrcItemId, SrcItemCount, SrcSpell, Title, Details, Objectives, OfferRewardText, RequestItemsText, EndText, ObjectiveText1, ObjectiveText2,
+ObjectiveText3, ObjectiveText4, ReqItemId1, ReqItemId2, ReqItemId3, ReqItemId4, ReqItemCount1, ReqItemCount2, ReqItemCount3,
+ReqItemCount4, ReqSourceId1, ReqSourceId2, ReqSourceId3, ReqSourceId4, ReqSourceCount1, ReqSourceCount2, ReqSourceCount3,
+ReqSourceCount4, ReqCreatureOrGOId1, ReqCreatureOrGOId2, ReqCreatureOrGOId3, ReqCreatureOrGOId4, ReqCreatureOrGOCount1,
+ReqCreatureOrGOCount2, ReqCreatureOrGOCount3, ReqCreatureOrGOCount4, ReqSpellCast1, ReqSpellCast2, ReqSpellCast3,
+ReqSpellCast4, RewChoiceItemId1, RewChoiceItemId2, RewChoiceItemId3, RewChoiceItemId4, RewChoiceItemId5, RewChoiceItemId6,
+RewChoiceItemCount1, RewChoiceItemCount2, RewChoiceItemCount3, RewChoiceItemCount4, RewChoiceItemCount5, RewChoiceItemCount6,
+RewItemId1, RewItemId2, RewItemId3, RewItemId4, RewItemCount1, RewItemCount2, RewItemCount3, RewItemCount4, RewRepFaction1,
+RewRepFaction2, RewRepFaction3, RewRepFaction4, RewRepFaction5, RewRepValue1, RewRepValue2, RewRepValue3, RewRepValue4,
+RewRepValue5, RewOrReqMoney, RewMoneyMaxLevel, RewSpell, RewSpellCast, RewMailTemplateId, RewMailMoney, RewMailDelaySecs,
+PointMapId, PointX, PointY, PointOpt, DetailsEmote1, DetailsEmote2, DetailsEmote3, DetailsEmote4, DetailsEmoteDelay1,
+DetailsEmoteDelay2, DetailsEmoteDelay3, DetailsEmoteDelay4, IncompleteEmote, CompleteEmote, OfferRewardEmote1, OfferRewardEmote2,
+OfferRewardEmote3, OfferRewardEmote4, OfferRewardEmoteDelay1, OfferRewardEmoteDelay2, OfferRewardEmoteDelay3,OfferRewardEmoteDelay4,
+StartScript, CompleteScript) values
+
+(@quest_entry, '0', '2', @quest_zone, @min_level, @quest_level, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', 
+
+'Duty to the Light', 
+
+'To the nobles of Stormwind, a Paladin is an elite soldier, whose glory comes from deeds on the battlefield. But we who follow the light know better. To the poor of the kingdom, we are often the only source of comfort and aid. It is these simple tasks of assistance and caring that separate a true Paladin from some fool with a cudgel.\n\nThere is a struggling family in the Eastvale Logging Camp that is in need of help to get through the year. I had hoped to help myself, but I cannot leave Goldshire, not with so many threats around us. If you would aid them in my stead, hunt the Rockhide Boars found south of the road and bring their meat to the logging camp.', 
+
+'Objectives: Bring 8 pieces of Rockhide Boar Meat to Eldrin in the Eastvale Logging Camp.',
+
+'<You explain why Brother WIlhelm sent you. Eldrin’s angry, defensive posture softens as you explain, and eventually you see the shine of tears in his eyes.\n\nMiles away and busy with the work of the Light and he still finds time to help us. I never would have asked, he’s already done so much for us, you see. We’ve asked too many times. But things’ve been hard and I’ve been goin’ without so Sara and Eric don’t have to, and... well, thank you.\n\nBless Brother Wilhelm, and bless you too, $N.\n\nHere. I know it’s not much, but Sara makes them for the locals. Maybe you can find some use in it. Take it! It’s the least we can do in return.', 
+
+'Are you here from Stormwind?\n\nWe told you before, we don’t have any money left to spare for Lady Prestor’s coffers! Can’t you see I have a family to feed?', 
+
+'', '', '', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @faction_id, '0', '0', '0', '0', @faction_count, '0', '0', '0', '0', '0', @xp_or_money, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', 0, 0);
+     
+replace into creature_questrelation (id, quest, patch_min, patch_max) values (@questgiver_id, @quest_entry,'0','10'); 
+replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (@quest_finisher, @quest_entry,'0','10');
+	 
+update quest_template set 
+rewitemid1 = @reward_item_1, rewitemcount1 = @reward_item_1_count,
+rewitemid2 = @reward_item_2, rewitemcount2 = @reward_item_2_count,
+rewitemid3 = @reward_item_3, rewitemcount3 = @reward_item_3_count,
+rewitemid4 = @reward_item_4, rewitemcount4 = @reward_item_4_count,
+ReqCreatureOrGOId1 = @creature_to_kill_1, ReqCreatureOrGOCount1 = @creature_to_kill_1_count,
+ReqCreatureOrGOId2 = @creature_to_kill_2, ReqCreatureOrGOCount2 = @creature_to_kill_2_count,
+ReqCreatureOrGOId3 = @creature_to_kill_3, ReqCreatureOrGOCount3 = @creature_to_kill_3_count,
+ReqCreatureOrGOId4 = @creature_to_kill_4, ReqCreatureOrGOCount4 = @creature_to_kill_4_count,
+reqitemid1 = @required_item_1, reqitemcount1 = @required_item_1_count,
+reqitemid2 = @required_item_2, reqitemcount2 = @required_item_2_count,
+reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
+reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
+nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
+nextquestinchain = @nextquestinchain, prevquestid = @prevquest 
+where entry = @quest_entry;	 
+	   
+-- Dun Morogh
+
+-- A Change Of Heart (Alliance)
+
+replace into item_template (
+entry, patch, class, subclass, name,description, display_id, quality, flags, buy_count,
+buy_price, sell_price, inventory_type, allowable_class, allowable_race, item_level,
+required_level, required_skill, required_skill_rank, required_spell, required_honor_rank,
+required_city_rank, required_reputation_faction, required_reputation_rank, max_count, stackable,
+container_slots, stat_type1, stat_value1, stat_type2, stat_value2, stat_type3, stat_value3,
+stat_type4, stat_value4, stat_type5, stat_value5, stat_type6, stat_value6, stat_type7,
+stat_value7, stat_type8, stat_value8, stat_type9, stat_value9, stat_type10, stat_value10,
+delay, range_mod, ammo_type, dmg_min1, dmg_max1, dmg_type1, dmg_min2, dmg_max2, dmg_type2,
+dmg_min3, dmg_max3, dmg_type3, dmg_min4, dmg_max4, dmg_type4, dmg_min5, dmg_max5, dmg_type5, block,
+armor, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, spellid_1, spelltrigger_1,
+spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, spellid_2,
+spelltrigger_2, spellcharges_2, spellppmrate_2, spellcooldown_2, spellcategory_2, spellcategorycooldown_2,
+spellid_3, spelltrigger_3, spellcharges_3, spellppmrate_3, spellcooldown_3, spellcategory_3,
+spellcategorycooldown_3, spellid_4, spelltrigger_4, spellcharges_4, spellppmrate_4, spellcooldown_4,
+spellcategory_4, spellcategorycooldown_4, spellid_5, spelltrigger_5, spellcharges_5, spellppmrate_5,
+spellcooldown_5, spellcategory_5, spellcategorycooldown_5, bonding, page_text, page_language, page_material,
+start_quest, lock_id, material, sheath, random_property, set_id, max_durability, area_bound, map_bound,
+duration, bag_family, disenchant_id, food_type, min_money_loot, max_money_loot, extra_flags, other_team_entry,
+script_name)
+values
+ ('51869', '0', '12', '0', 'Tog’s Letter', '', '7798', '1', '0', '1', '0', '0', '0', '-1', '-1', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '4', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+
+SET @quest_entry = 60142;
+SET @quest_zone = 1;
+SET @faction_id = 0;
+SET @faction_count = 0;
+SET @xp_or_money = 175;
+SET @reward_money = 0; 
+SET @quest_level = 6;
+SET @min_level = 5;
+SET @questgiver_id = 6119;
+SET @quest_finisher = 6031;
+SET @nextquest = 0;
+SET @nextquestinchain = 0;
+SET @prevquest = 0;
+SET @SrcItemId = 50002;
+SET @SrcItemCount = 1;
+SET @RewChoiceItemId1 = 3239; -- https://classic.wowhead.com/item=3239/rough-weightstone
+SET @RewChoiceItemId2 = 2862; -- https://classic.wowhead.com/item=2862/rough-sharpening-stone
+SET @RewChoiceItemId3 = 0;
+SET @RewChoiceItemId4 = 0;
+SET @RewChoiceItemCount1 = 2;
+SET @RewChoiceItemCount2 = 2;
+SET @RewChoiceItemCount3 = 0;
+SET @RewChoiceItemCount4 = 0;
+SET @reward_item_1 = 0;
+SET @reward_item_2 = 0;
+SET @reward_item_3 = 0;
+SET @reward_item_4 = 0;
+SET @reward_item_1_count = 0;
+SET @reward_item_2_count = 0;
+SET @reward_item_3_count = 0;
+SET @reward_item_4_count = 0;
+SET @creature_to_kill_1 = 0;
+SET @creature_to_kill_2 = 0; 
+SET @creature_to_kill_3 = 0;
+SET @creature_to_kill_4 = 0;
+SET @creature_to_kill_1_count = 0;
+SET @creature_to_kill_2_count = 0;
+SET @creature_to_kill_3_count = 0;
+SET @creature_to_kill_4_count = 0;
+SET @required_item_1 = 51869;
+SET @required_item_2 = 0;
+SET @required_item_3 = 0;
+SET @required_item_4 = 0;
+SET @required_item_1_count = 1;
+SET @required_item_2_count = 0;
+SET @required_item_3_count = 0;
+SET @required_item_4_count = 0;
+
+replace into quest_template (entry, patch, Method, ZoneOrSort, MinLevel, QuestLevel, MaxLevel, Type, RequiredClasses, RequiredRaces, RequiredSkill,
+RequiredSkillValue, RepObjectiveFaction, RepObjectiveValue, RequiredMinRepFaction, RequiredMinRepValue,RequiredMaxRepFaction,
+RequiredMaxRepValue, SuggestedPlayers, LimitTime, QuestFlags, SpecialFlags, PrevQuestId, NextQuestId, ExclusiveGroup, NextQuestInChain,
+SrcItemId, SrcItemCount, SrcSpell, Title, Details, Objectives, OfferRewardText, RequestItemsText, EndText, ObjectiveText1, ObjectiveText2,
+ObjectiveText3, ObjectiveText4, ReqItemId1, ReqItemId2, ReqItemId3, ReqItemId4, ReqItemCount1, ReqItemCount2, ReqItemCount3,
+ReqItemCount4, ReqSourceId1, ReqSourceId2, ReqSourceId3, ReqSourceId4, ReqSourceCount1, ReqSourceCount2, ReqSourceCount3,
+ReqSourceCount4, ReqCreatureOrGOId1, ReqCreatureOrGOId2, ReqCreatureOrGOId3, ReqCreatureOrGOId4, ReqCreatureOrGOCount1,
+ReqCreatureOrGOCount2, ReqCreatureOrGOCount3, ReqCreatureOrGOCount4, ReqSpellCast1, ReqSpellCast2, ReqSpellCast3,
+ReqSpellCast4, RewChoiceItemId1, RewChoiceItemId2, RewChoiceItemId3, RewChoiceItemId4, RewChoiceItemId5, RewChoiceItemId6,
+RewChoiceItemCount1, RewChoiceItemCount2, RewChoiceItemCount3, RewChoiceItemCount4, RewChoiceItemCount5, RewChoiceItemCount6,
+RewItemId1, RewItemId2, RewItemId3, RewItemId4, RewItemCount1, RewItemCount2, RewItemCount3, RewItemCount4, RewRepFaction1,
+RewRepFaction2, RewRepFaction3, RewRepFaction4, RewRepFaction5, RewRepValue1, RewRepValue2, RewRepValue3, RewRepValue4,
+RewRepValue5, RewOrReqMoney, RewMoneyMaxLevel, RewSpell, RewSpellCast, RewMailTemplateId, RewMailMoney, RewMailDelaySecs,
+PointMapId, PointX, PointY, PointOpt, DetailsEmote1, DetailsEmote2, DetailsEmote3, DetailsEmote4, DetailsEmoteDelay1,
+DetailsEmoteDelay2, DetailsEmoteDelay3, DetailsEmoteDelay4, IncompleteEmote, CompleteEmote, OfferRewardEmote1, OfferRewardEmote2,
+OfferRewardEmote3, OfferRewardEmote4, OfferRewardEmoteDelay1, OfferRewardEmoteDelay2, OfferRewardEmoteDelay3,OfferRewardEmoteDelay4,
+StartScript, CompleteScript) values
+
+(@quest_entry, '0', '2', @quest_zone, @min_level, @quest_level, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', 
+
+'A Change Of Heart', 
+
+'Hey, $C, do you think I can ask you a favor?\n\nI know I’m here with Grimrizz and all his dark magic, but all I ever really wanted to be was a blacksmith. I know, I know, most gnomes go for engineering, but ever since I first saw Ironforge I knew that’s what I wanted to do. The heat of the forge, the clang of the hammers, the shine of a fine-smithed blade, that’s the life for me!\n\nWill you take this to Tormus Deepforge for me? It’s an application to join the smith’s guild up in Ironforge. He’s probably near the Great Forge there, since he works with all the new smithing trainees.', 
+
+'Bring Tog’s Letter to Tormus Deepforge at the Great Forge in Ironforge.', 
+
+'<Tormus takes the letter and skims through it.>\n\nA gnome! It’s been a long time since we had a gnome recruit at the forge.\n\nThank you for your efforts as a courier, $R. Here, I have a few extra stones for your weapon, if you can make use of them?', 
+
+'Oh? Are you here to learn blacksmithing, friend?', 
+
+'', '', '', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @faction_id, '0', '0', '0', '0', @faction_count, '0', '0', '0', '0', '0', @xp_or_money, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', 0, 0);
+     
+replace into creature_questrelation (id, quest, patch_min, patch_max) values (@questgiver_id, @quest_entry,'0','10'); 
+replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (@quest_finisher, @quest_entry,'0','10');
+	 
+update quest_template set 
+rewitemid1 = @reward_item_1, rewitemcount1 = @reward_item_1_count,
+rewitemid2 = @reward_item_2, rewitemcount2 = @reward_item_2_count,
+rewitemid3 = @reward_item_3, rewitemcount3 = @reward_item_3_count,
+rewitemid4 = @reward_item_4, rewitemcount4 = @reward_item_4_count,
+RewChoiceItemId1 = @RewChoiceItemId1, RewChoiceItemCount1 = @RewChoiceItemCount1,
+RewChoiceItemId2 = @RewChoiceItemId2, RewChoiceItemCount2 = @RewChoiceItemCount2,
+RewChoiceItemId3 = @RewChoiceItemId3, RewChoiceItemCount3 = @RewChoiceItemCount3,
+RewChoiceItemId4 = @RewChoiceItemId4, RewChoiceItemCount4 = @RewChoiceItemCount4,
+ReqCreatureOrGOId1 = @creature_to_kill_1, ReqCreatureOrGOCount1 = @creature_to_kill_1_count,
+ReqCreatureOrGOId2 = @creature_to_kill_2, ReqCreatureOrGOCount2 = @creature_to_kill_2_count,
+ReqCreatureOrGOId3 = @creature_to_kill_3, ReqCreatureOrGOCount3 = @creature_to_kill_3_count,
+ReqCreatureOrGOId4 = @creature_to_kill_4, ReqCreatureOrGOCount4 = @creature_to_kill_4_count,
+reqitemid1 = @required_item_1, reqitemcount1 = @required_item_1_count,
+reqitemid2 = @required_item_2, reqitemcount2 = @required_item_2_count,
+reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
+reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
+nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
+nextquestinchain = @nextquestinchain, prevquestid = @prevquest, 
+SrcItemId = @SrcItemId, SrcItemCount = @SrcItemCount
+where entry = @quest_entry;	 
+
+update creature_template set npc_flags = 6 where entry = 3611;
+
+replace into gameobject_template values 
+(1000395, 0, 3, 6035, 'Brannol’s Sewing Kit', 0, 0, 0.4, 57, 1000395, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+replace into `gameobject_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`, `patch_min`, `patch_max`) VALUES 
+(1000395, 51870, 100, 1, 1, 1, 0, 0, 10);
+
+replace into `gameobject` (`id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`, `spawnFlags`, `visibilitymod`, `patch_min`, `patch_max`) VALUES (1000395, 1, 10941.1, 1560.91, 1274.22, 0.315161, 0, 0, 0.156929, 0.98761, 25, 25, 100, 1, 0, 0, 0, 10);
+
+replace into item_template (
+entry, patch, class, subclass, name,description, display_id, quality, flags, buy_count,
+buy_price, sell_price, inventory_type, allowable_class, allowable_race, item_level,
+required_level, required_skill, required_skill_rank, required_spell, required_honor_rank,
+required_city_rank, required_reputation_faction, required_reputation_rank, max_count, stackable,
+container_slots, stat_type1, stat_value1, stat_type2, stat_value2, stat_type3, stat_value3,
+stat_type4, stat_value4, stat_type5, stat_value5, stat_type6, stat_value6, stat_type7,
+stat_value7, stat_type8, stat_value8, stat_type9, stat_value9, stat_type10, stat_value10,
+delay, range_mod, ammo_type, dmg_min1, dmg_max1, dmg_type1, dmg_min2, dmg_max2, dmg_type2,
+dmg_min3, dmg_max3, dmg_type3, dmg_min4, dmg_max4, dmg_type4, dmg_min5, dmg_max5, dmg_type5, block,
+armor, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, spellid_1, spelltrigger_1,
+spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, spellid_2,
+spelltrigger_2, spellcharges_2, spellppmrate_2, spellcooldown_2, spellcategory_2, spellcategorycooldown_2,
+spellid_3, spelltrigger_3, spellcharges_3, spellppmrate_3, spellcooldown_3, spellcategory_3,
+spellcategorycooldown_3, spellid_4, spelltrigger_4, spellcharges_4, spellppmrate_4, spellcooldown_4,
+spellcategory_4, spellcategorycooldown_4, spellid_5, spelltrigger_5, spellcharges_5, spellppmrate_5,
+spellcooldown_5, spellcategory_5, spellcategorycooldown_5, bonding, page_text, page_language, page_material,
+start_quest, lock_id, material, sheath, random_property, set_id, max_durability, area_bound, map_bound,
+duration, bag_family, disenchant_id, food_type, min_money_loot, max_money_loot, extra_flags, other_team_entry,
+script_name)
+values
+ ('51870', '0', '12', '0', 'Brannol’s Sewing Kit', '', '16028', '1', '0', '1', '0', '0', '0', '-1', '-1', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '4', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+
+SET @quest_entry = 60143;
+SET @quest_zone = 141;
+SET @faction_id = 0;
+SET @faction_count = 0;
+SET @xp_or_money = 275;
+SET @reward_money = 0; 
+SET @quest_level = 10;
+SET @min_level = 9;
+SET @questgiver_id = 3611;
+SET @quest_finisher = 3611;
+SET @nextquest = 0;
+SET @nextquestinchain = 0;
+SET @prevquest = 0;
+SET @RewChoiceItemId1 = 2576; -- White Linen Shirt
+SET @RewChoiceItemId2 = 2575; -- Red Linen Shirt
+SET @RewChoiceItemId3 = 2577; -- Blue Linen Shirt
+SET @RewChoiceItemId4 = 2589; -- 10x Linen Cloth
+SET @RewChoiceItemCount1 = 1;
+SET @RewChoiceItemCount2 = 1;
+SET @RewChoiceItemCount3 = 1;
+SET @RewChoiceItemCount4 = 10;
+SET @reward_item_1 = 0;
+SET @reward_item_2 = 0; 
+SET @reward_item_3 = 0;
+SET @reward_item_4 = 0;
+SET @reward_item_1_count = 0;
+SET @reward_item_2_count = 0;
+SET @reward_item_3_count = 0;
+SET @reward_item_4_count = 0;
+SET @creature_to_kill_1 = 0;
+SET @creature_to_kill_2 = 0; 
+SET @creature_to_kill_3 = 0;
+SET @creature_to_kill_4 = 0;
+SET @creature_to_kill_1_count = 0;
+SET @creature_to_kill_2_count = 0;
+SET @creature_to_kill_3_count = 0;
+SET @creature_to_kill_4_count = 0;
+SET @required_item_1 = 51870; 
+SET @required_item_2 = 0;
+SET @required_item_3 = 0;
+SET @required_item_4 = 0;
+SET @required_item_1_count = 1;
+SET @required_item_2_count = 0;
+SET @required_item_3_count = 0;
+SET @required_item_4_count = 0;
+
+replace into quest_template (entry, patch, Method, ZoneOrSort, MinLevel, QuestLevel, MaxLevel, Type, RequiredClasses, RequiredRaces, RequiredSkill,
+RequiredSkillValue, RepObjectiveFaction, RepObjectiveValue, RequiredMinRepFaction, RequiredMinRepValue,RequiredMaxRepFaction,
+RequiredMaxRepValue, SuggestedPlayers, LimitTime, QuestFlags, SpecialFlags, PrevQuestId, NextQuestId, ExclusiveGroup, NextQuestInChain,
+SrcItemId, SrcItemCount, SrcSpell, Title, Details, Objectives, OfferRewardText, RequestItemsText, EndText, ObjectiveText1, ObjectiveText2,
+ObjectiveText3, ObjectiveText4, ReqItemId1, ReqItemId2, ReqItemId3, ReqItemId4, ReqItemCount1, ReqItemCount2, ReqItemCount3,
+ReqItemCount4, ReqSourceId1, ReqSourceId2, ReqSourceId3, ReqSourceId4, ReqSourceCount1, ReqSourceCount2, ReqSourceCount3,
+ReqSourceCount4, ReqCreatureOrGOId1, ReqCreatureOrGOId2, ReqCreatureOrGOId3, ReqCreatureOrGOId4, ReqCreatureOrGOCount1,
+ReqCreatureOrGOCount2, ReqCreatureOrGOCount3, ReqCreatureOrGOCount4, ReqSpellCast1, ReqSpellCast2, ReqSpellCast3,
+ReqSpellCast4, RewChoiceItemId1, RewChoiceItemId2, RewChoiceItemId3, RewChoiceItemId4, RewChoiceItemId5, RewChoiceItemId6,
+RewChoiceItemCount1, RewChoiceItemCount2, RewChoiceItemCount3, RewChoiceItemCount4, RewChoiceItemCount5, RewChoiceItemCount6,
+RewItemId1, RewItemId2, RewItemId3, RewItemId4, RewItemCount1, RewItemCount2, RewItemCount3, RewItemCount4, RewRepFaction1,
+RewRepFaction2, RewRepFaction3, RewRepFaction4, RewRepFaction5, RewRepValue1, RewRepValue2, RewRepValue3, RewRepValue4,
+RewRepValue5, RewOrReqMoney, RewMoneyMaxLevel, RewSpell, RewSpellCast, RewMailTemplateId, RewMailMoney, RewMailDelaySecs,
+PointMapId, PointX, PointY, PointOpt, DetailsEmote1, DetailsEmote2, DetailsEmote3, DetailsEmote4, DetailsEmoteDelay1,
+DetailsEmoteDelay2, DetailsEmoteDelay3, DetailsEmoteDelay4, IncompleteEmote, CompleteEmote, OfferRewardEmote1, OfferRewardEmote2,
+OfferRewardEmote3, OfferRewardEmote4, OfferRewardEmoteDelay1, OfferRewardEmoteDelay2, OfferRewardEmoteDelay3,OfferRewardEmoteDelay4,
+StartScript, CompleteScript) values
+
+(@quest_entry, '0', '2', @quest_zone, @min_level, @quest_level, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', 
+
+'Brannol’s Sewing Kit', 
+
+'Have you ever stood at the edge of Teldrassil and looked out over the Veiled Sea? It’s a magnificent sight, $N - you should try it sometime!\n\nI used to take my sewing kit to the waterfalls near Wellspring Lake, right as they pour over the side of the trunk, to do my work in peace and serenity. But last time I was there, I was attacked by a group of maddened timberlings and driven off without my kit!\n\nThose tools have been with me a long time, and I can’t bear to think of them tumbling over the side and into the sea and being lost forever. Would you recover them for me, please?', 
+
+'Recover Brannol’s Sewing Kit and return it to him in Dolanaar.',
+
+'Oh! You’ve found it! Thank you so much, $C!\n\nHere, will a well-tailored shirt do for your trouble? I stock them in a number of different colors to suit any taste - help yourself! Or perhaps you’d rather just have some raw cloth for your own use?', 
+
+'Have you found my sewing kit, $N?', 
+
+'', '', '', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @faction_id, '0', '0', '0', '0', @faction_count, '0', '0', '0', '0', '0', @xp_or_money, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', 0, 0);
+     
+replace into creature_questrelation (id, quest, patch_min, patch_max) values (@questgiver_id, @quest_entry,'0','10'); 
+replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (@quest_finisher, @quest_entry,'0','10');
+	 
+update quest_template set 
+rewitemid1 = @reward_item_1, rewitemcount1 = @reward_item_1_count,
+rewitemid2 = @reward_item_2, rewitemcount2 = @reward_item_2_count,
+rewitemid3 = @reward_item_3, rewitemcount3 = @reward_item_3_count,
+rewitemid4 = @reward_item_4, rewitemcount4 = @reward_item_4_count,
+RewChoiceItemId1 = @RewChoiceItemId1, RewChoiceItemCount1 = @RewChoiceItemCount1,
+RewChoiceItemId2 = @RewChoiceItemId2, RewChoiceItemCount2 = @RewChoiceItemCount2,
+RewChoiceItemId3 = @RewChoiceItemId3, RewChoiceItemCount3 = @RewChoiceItemCount3,
+RewChoiceItemId4 = @RewChoiceItemId4, RewChoiceItemCount4 = @RewChoiceItemCount4,
+ReqCreatureOrGOId1 = @creature_to_kill_1, ReqCreatureOrGOCount1 = @creature_to_kill_1_count,
+ReqCreatureOrGOId2 = @creature_to_kill_2, ReqCreatureOrGOCount2 = @creature_to_kill_2_count,
+ReqCreatureOrGOId3 = @creature_to_kill_3, ReqCreatureOrGOCount3 = @creature_to_kill_3_count,
+ReqCreatureOrGOId4 = @creature_to_kill_4, ReqCreatureOrGOCount4 = @creature_to_kill_4_count,
+reqitemid1 = @required_item_1, reqitemcount1 = @required_item_1_count,
+reqitemid2 = @required_item_2, reqitemcount2 = @required_item_2_count,
+reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
+reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
+nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
+nextquestinchain = @nextquestinchain, prevquestid = @prevquest 
+where entry = @quest_entry;	 
+	   
