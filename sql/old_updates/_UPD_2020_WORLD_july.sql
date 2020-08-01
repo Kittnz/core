@@ -1263,7 +1263,7 @@ SET @quest_finisher = 6031;
 SET @nextquest = 0;
 SET @nextquestinchain = 0;
 SET @prevquest = 0;
-SET @SrcItemId = 50002;
+SET @SrcItemId = 51869;
 SET @SrcItemCount = 1;
 SET @RewChoiceItemId1 = 3239; -- https://classic.wowhead.com/item=3239/rough-weightstone
 SET @RewChoiceItemId2 = 2862; -- https://classic.wowhead.com/item=2862/rough-sharpening-stone
