@@ -870,3 +870,82 @@ where entry = @quest_entry;
 -- Shadow On The Plateau
 
 REPLACE INTO `creature_template` VALUES (80120, 0, 12074, 0, 0, 0, 'Tomb Shadow', NULL, 0, 6, 7, 120, 136, 0, 0, 207, 21, 0, 0.888888, 0.857143, 0, 20, 5, 0, 0, 1, 7, 10, 0, 56, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 13.4464, 18.4888, 100, 6, 0, 1520, 1520, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 12, '', 1, 1, 0, 0, 3, 1520, 0, 0, 8602131, 0, 0, '');
+	 
+SET @quest_entry = 80107;
+SET @quest_zone = 406;
+SET @title = 'Shadow On The Plateau';
+SET @description = 'I’m gonna level with you, kid. I don’t envy you right now.\n\nSee, those weird vultures aren’t the worst thing in the woods. Some of the other bruisers were havin’ a look around, and they saw...something...in the woods, next to a tomb that looks like it’s from Suramar for how old it is.\n\nI’ll fight elves, I’ll fight plant monsters, I’ll fight our own tanks, but I am not messing with some ancient cursed undead. You go out there and fight that thing, and you and me are friends for good, alright?';
+SET @objective = 'Find and defeat the Tomb Shadow in the Grumbling Grove, then return to Nert Blastentom.';
+SET @completetext = 'The first of many? Nope, nope, nope. I don’t care what the boss says, I am not gettin’ cursed by some angry ghost. We gotta get out of here, kid.';
+SET @incompletetext = 'This place gives me the heebie-jeebies.';
+SET @faction_id = 0;
+SET @faction_count = 0;
+SET @xp_or_money = 250;
+SET @reward_money = 0; 
+SET @quest_level = 6;
+SET @min_level = 4;
+SET @questgiver_id = 80100;
+SET @quest_finisher = 80100;
+SET @nextquest = 0;
+SET @nextquestinchain = 0;
+SET @prevquest = 80106;
+SET @RewChoiceItemId1 = 80124; 
+SET @RewChoiceItemId2 = 80125; 
+SET @RewChoiceItemId3 = 0;
+SET @RewChoiceItemId4 = 0; 
+SET @RewChoiceItemCount1 = 1;
+SET @RewChoiceItemCount2 = 1;
+SET @RewChoiceItemCount3 = 0;
+SET @RewChoiceItemCount4 = 0;
+SET @reward_item_1 = 0;
+SET @reward_item_2 = 0; 
+SET @reward_item_3 = 0;
+SET @reward_item_4 = 0;
+SET @reward_item_1_count = 0;
+SET @reward_item_2_count = 0;
+SET @reward_item_3_count = 0;
+SET @reward_item_4_count = 0;
+SET @creature_to_kill_1 = 80120;
+SET @creature_to_kill_2 = 0; 
+SET @creature_to_kill_3 = 0;
+SET @creature_to_kill_4 = 0;
+SET @creature_to_kill_1_count = 1;
+SET @creature_to_kill_2_count = 0;
+SET @creature_to_kill_3_count = 0;
+SET @creature_to_kill_4_count = 0;
+SET @required_item_1 = 0; 
+SET @required_item_2 = 0;
+SET @required_item_3 = 0;
+SET @required_item_4 = 0;
+SET @required_item_1_count = 0;
+SET @required_item_2_count = 0;
+SET @required_item_3_count = 0;
+SET @required_item_4_count = 0;
+
+replace into quest_template values 
+
+(@quest_entry, '0', '2', @quest_zone, @min_level, @quest_level, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @title, @description, @objective, @completetext, @incompletetext, '', '', '', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @faction_id, '0', '0', '0', '0', @faction_count, '0', '0', '0', '0', '0', @xp_or_money, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', 0, 0);
+     
+replace into creature_questrelation (id, quest, patch_min, patch_max) values (@questgiver_id, @quest_entry,'0','10'); 
+replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (@quest_finisher, @quest_entry,'0','10');
+
+update quest_template set 
+rewitemid1 = @reward_item_1, rewitemcount1 = @reward_item_1_count,
+rewitemid2 = @reward_item_2, rewitemcount2 = @reward_item_2_count,
+rewitemid3 = @reward_item_3, rewitemcount3 = @reward_item_3_count,
+rewitemid4 = @reward_item_4, rewitemcount4 = @reward_item_4_count,
+RewChoiceItemId1 = @RewChoiceItemId1, RewChoiceItemCount1 = @RewChoiceItemCount1,
+RewChoiceItemId2 = @RewChoiceItemId2, RewChoiceItemCount2 = @RewChoiceItemCount2,
+RewChoiceItemId3 = @RewChoiceItemId3, RewChoiceItemCount3 = @RewChoiceItemCount3,
+RewChoiceItemId4 = @RewChoiceItemId4, RewChoiceItemCount4 = @RewChoiceItemCount4,
+ReqCreatureOrGOId1 = @creature_to_kill_1, ReqCreatureOrGOCount1 = @creature_to_kill_1_count,
+ReqCreatureOrGOId2 = @creature_to_kill_2, ReqCreatureOrGOCount2 = @creature_to_kill_2_count,
+ReqCreatureOrGOId3 = @creature_to_kill_3, ReqCreatureOrGOCount3 = @creature_to_kill_3_count,
+ReqCreatureOrGOId4 = @creature_to_kill_4, ReqCreatureOrGOCount4 = @creature_to_kill_4_count,
+reqitemid1 = @required_item_1, reqitemcount1 = @required_item_1_count,
+reqitemid2 = @required_item_2, reqitemcount2 = @required_item_2_count,
+reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
+reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
+nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
+nextquestinchain = @nextquestinchain, prevquestid = @prevquest 
+where entry = @quest_entry;
