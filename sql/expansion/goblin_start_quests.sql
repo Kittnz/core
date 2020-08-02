@@ -260,7 +260,7 @@ replace into item_template values
  '0', '1', NULL);
  
  replace into item_template values
- ('80106', '0', '2', '3', 'Miscalibrated Rifle', '', '5928', '1', '0', '1', '2', '2', '15', '-1', '-1', '6',
+ ('80106', '0', '2', '3', 'Miscalibrated Rifle', '', '20738', '1', '0', '1', '2', '2', '15', '-1', '-1', '6',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '2800', '35',
  '3', '5', '9', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
@@ -269,14 +269,26 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '1', '3', '0', '0', '25', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
+ update item_template set Range_Mod = 100 where entry = 80106;
+ 
  replace into item_template values
- ('80107', '0', '2', '10', 'Smooth Metal Staff', '', '20446', '1', '0', '1', '2', '2', '17', '-1', '-1', '6',
+ ('80107', '0', '2', '10', 'Smooth Wooden Staff', '', '10654', '1', '0', '1', '2', '2', '17', '-1', '-1', '6',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3200', '0',
  '0', '8', '12', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '1', '3', '0', '0', '35', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+ 
+ replace into item_template values
+ ('80113', '0', '2', '15', 'Pocket Knife', '', '6433', '1', '0', '1', '18', '18', '21', '-1', '-1', '9',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1600', '0',
+ '0', '4', '8', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '1', '1', '0', '0', '25', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
 
 SET @quest_entry = 80102;
@@ -300,11 +312,11 @@ SET @prevquest = 0;
 SET @RewChoiceItemId1 = 80105; 
 SET @RewChoiceItemId2 = 80106; 
 SET @RewChoiceItemId3 = 80107;
-SET @RewChoiceItemId4 = 0; 
+SET @RewChoiceItemId4 = 80113; 
 SET @RewChoiceItemCount1 = 1;
 SET @RewChoiceItemCount2 = 1;
 SET @RewChoiceItemCount3 = 1;
-SET @RewChoiceItemCount4 = 0;
+SET @RewChoiceItemCount4 = 1;
 SET @reward_item_1 = 0;
 SET @reward_item_2 = 0; 
 SET @reward_item_3 = 0;
@@ -325,7 +337,7 @@ SET @required_item_1 = 0;
 SET @required_item_2 = 0;
 SET @required_item_3 = 0;
 SET @required_item_4 = 0;
-SET @required_item_1_count = 60;
+SET @required_item_1_count = 0;
 SET @required_item_2_count = 0;
 SET @required_item_3_count = 0;
 SET @required_item_4_count = 0;
@@ -360,4 +372,155 @@ where entry = @quest_entry;
 
 -- Risen Oilblazes
 
+replace into item_template values
+ ('80112', '0', '0', '0', 'Living Petroleum', '', '9518', '1', '0', '1', '0', '0', '0', '-1', '-1', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '4', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+ 
+ update item_template set stackable = 10 where entry = 80112;
+ 
+ replace into item_template values
+ ('80114', '0', '0', '0', 'Oil-Scorched Note', '', '3020', '1', '0', '1', '0', '0', '0', '-1', '-1', '3',
+ '4', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '4', '0', '0', '0', '80105', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+ 
+ update item_template set max_count = 1 where entry = 80114;
+ 
+ replace into item_template values
+ ('80110', '0', '4', '2', 'Scorched Vest', '', '14190', '1', '0', '1', '12', '12', '4', '-1', '-1', '9',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '46', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '8', '0', '0', '0', '55', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+ 
+ replace into item_template values
+ ('80109', '0', '4', '1', 'Oil Splattered Robe', '', '6116', '1', '0', '1', '12', '12', '4', '-1', '-1', '9',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '16', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '0', '0', '0', '40', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+ 
+ replace into item_template values
+ ('80108', '0', '4', '3', 'Charred Chainmail', '', '954', '1', '0', '1', '12', '12', '4', '-1', '-1', '9',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '86', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '5', '0', '0', '0', '60', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL); 
+ 
+replace into item_template values
+ ('80111', '0', '4', '2', 'Ash Covered Tunic', '', '8717', '1', '0', '1', '12', '12', '5', '-1', '-1', '9',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '16', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '0', '0', '0', '40', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+ 
+REPLACE INTO `creature_template` VALUES (80116, 0, 2075, 1070, 0, 0, 'Risen Oilblaze', NULL, 0, 3, 4, 72, 89, 0, 0, 59, 22, 0, 1, 0.857143, 0, 20, 5, 0, 0, 1, 3, 5, 0, 50, 1, 2000, 2000, 1, 0, 0, 3, 0, 0, 0, 0, 6.9344, 9.5348, 100, 4, 1, 1505, 0, 0, 0, 0, 0, 0, 0, 0, 6751, 0, 0, 0, 0, 5879, 0, 0, 'EventAI', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, '');
 
+update creature_template set loot_id = 80116 where entry = 80116; 
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (80116, 80114, 30, 0, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (80116, 80112, 60, 1, 1, 1);
+
+REPLACE INTO `creature_template` VALUES (80117, 0, 7920, 0, 0, 0, 'Haywire Battlechicken', NULL, 0, 3, 4, 72, 89, 0, 0, 59, 22, 0, 1, 0.857143, 0, 20, 5, 0, 0, 1, 3, 5, 0, 50, 1, 2000, 2000, 1, 0, 0, 3, 0, 0, 0, 0, 6.9344, 9.5348, 100, 4, 1, 1505, 0, 0, 0, 0, 0, 0, 0, 0, 6751, 0, 0, 0, 0, 5879, 0, 0, 'EventAI', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, '');
+
+update creature_template set scale = 2, type = 9 where entry = 80117;
+
+SET @quest_entry = 80103;
+SET @quest_zone = 406;
+SET @title = 'Risen Oilblazes';
+SET @description = 'Well, I guess we figured out why the elves are up here. The whole dang forest up ahead is on fire! And it’s gotta be goblin-made, too, because no one else uses the same kind of oil! That’s Undermine stuff, kid, there’s not a gnome in the world that can buy that.\n\nI don’t know what’s goin’ on, but I don’t like it. Go out and get some of that oil. Maybe it’ll tell us what’s goin’ on, or at least it’ll be a nice prize when we go back if not.';
+SET @objective = 'Collect 10 Living Petroleum from Risen Oilblazes in the Scorched Stand, then return to Nerd Blasentom.';
+SET @completetext = 'This doesn’t make any sense. Why would they leave such valuable stuff behind?\n\nWhere the heck did everybody go?';
+SET @incompletetext = 'This stuff will burn for years if you let it. There’s a reason it’s a goblin trade secret. There’s no profit in burning down a whole forest!';
+SET @faction_id = 0;
+SET @faction_count = 0;
+SET @xp_or_money = 150;
+SET @reward_money = 250; 
+SET @quest_level = 4;
+SET @min_level = 3;
+SET @questgiver_id = 80100;
+SET @quest_finisher = 80100;
+SET @nextquest = 0;
+SET @nextquestinchain = 0;
+SET @prevquest = 0;
+SET @RewChoiceItemId1 = 80108; 
+SET @RewChoiceItemId2 = 80109; 
+SET @RewChoiceItemId3 = 80110;
+SET @RewChoiceItemId4 = 80111; 
+SET @RewChoiceItemCount1 = 1;
+SET @RewChoiceItemCount2 = 1;
+SET @RewChoiceItemCount3 = 1;
+SET @RewChoiceItemCount4 = 1;
+SET @reward_item_1 = 0;
+SET @reward_item_2 = 0; 
+SET @reward_item_3 = 0;
+SET @reward_item_4 = 0;
+SET @reward_item_1_count = 0;
+SET @reward_item_2_count = 0;
+SET @reward_item_3_count = 0;
+SET @reward_item_4_count = 0;
+SET @creature_to_kill_1 = 0;
+SET @creature_to_kill_2 = 0; 
+SET @creature_to_kill_3 = 0;
+SET @creature_to_kill_4 = 0;
+SET @creature_to_kill_1_count = 0;
+SET @creature_to_kill_2_count = 0;
+SET @creature_to_kill_3_count = 0;
+SET @creature_to_kill_4_count = 0;
+SET @required_item_1 = 80112; 
+SET @required_item_2 = 0;
+SET @required_item_3 = 0;
+SET @required_item_4 = 0;
+SET @required_item_1_count = 10;
+SET @required_item_2_count = 0;
+SET @required_item_3_count = 0;
+SET @required_item_4_count = 0;
+
+replace into quest_template values 
+
+(@quest_entry, '0', '2', @quest_zone, @min_level, @quest_level, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @title, @description, @objective, @completetext, @incompletetext, '', '', '', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @faction_id, '0', '0', '0', '0', @faction_count, '0', '0', '0', '0', '0', @xp_or_money, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', 0, 0);
+     
+replace into creature_questrelation (id, quest, patch_min, patch_max) values (@questgiver_id, @quest_entry,'0','10'); 
+replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (@quest_finisher, @quest_entry,'0','10');
+
+update quest_template set 
+rewitemid1 = @reward_item_1, rewitemcount1 = @reward_item_1_count,
+rewitemid2 = @reward_item_2, rewitemcount2 = @reward_item_2_count,
+rewitemid3 = @reward_item_3, rewitemcount3 = @reward_item_3_count,
+rewitemid4 = @reward_item_4, rewitemcount4 = @reward_item_4_count,
+RewChoiceItemId1 = @RewChoiceItemId1, RewChoiceItemCount1 = @RewChoiceItemCount1,
+RewChoiceItemId2 = @RewChoiceItemId2, RewChoiceItemCount2 = @RewChoiceItemCount2,
+RewChoiceItemId3 = @RewChoiceItemId3, RewChoiceItemCount3 = @RewChoiceItemCount3,
+RewChoiceItemId4 = @RewChoiceItemId4, RewChoiceItemCount4 = @RewChoiceItemCount4,
+ReqCreatureOrGOId1 = @creature_to_kill_1, ReqCreatureOrGOCount1 = @creature_to_kill_1_count,
+ReqCreatureOrGOId2 = @creature_to_kill_2, ReqCreatureOrGOCount2 = @creature_to_kill_2_count,
+ReqCreatureOrGOId3 = @creature_to_kill_3, ReqCreatureOrGOCount3 = @creature_to_kill_3_count,
+ReqCreatureOrGOId4 = @creature_to_kill_4, ReqCreatureOrGOCount4 = @creature_to_kill_4_count,
+reqitemid1 = @required_item_1, reqitemcount1 = @required_item_1_count,
+reqitemid2 = @required_item_2, reqitemcount2 = @required_item_2_count,
+reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
+reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
+nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
+nextquestinchain = @nextquestinchain, prevquestid = @prevquest 
+where entry = @quest_entry;	
