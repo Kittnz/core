@@ -873,6 +873,7 @@ REPLACE INTO `creature_template` VALUES (80120, 0, 12074, 0, 0, 0, 'Tomb Shadow'
 	 
 update creature_template set faction = 22 where entry = 80120;
 update creature_template set loot_id = 1531 where entry = 80120;
+update creature_template set equipment_id = 0 where entry = 80120;
 	 
 SET @quest_entry = 80107;
 SET @quest_zone = 406;
