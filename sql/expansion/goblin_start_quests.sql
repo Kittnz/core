@@ -32,7 +32,7 @@ update creature_template set faction = 35 where entry between 80100 and 80111;
 
 REPLACE INTO `creature_template` VALUES (80112, 7, 1150, 0, 0, 0, 'Whirling Whizz-Bot', NULL, 0, 1, 2, 42, 60, 0, 0, 16, 189, 0, 1, 0.857143, 0, 20, 5, 0, 0, 1, 0, 1, 0, 46, 1, 2000, 2000, 1, 0, 0, 5, 0, 0, 0, 0, 1.76, 2.42, 100, 9, 1, 3098, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9074, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, '');
 
-update creature_template set scale = 3, type = 9 where entry = 80112;
+update creature_template set scale = 1, type = 9 where entry = 80112;
 
 replace into item_template values
  ('80100', '0', '0', '0', 'Whirling Whizmagig', '', '20628', '1', '0', '1', '0', '0', '0', '-1', '-1', '1',
