@@ -297,5 +297,78 @@ replace into creature_template (entry, display_id1, name, subname, level_min, le
 (40021, 18098, 'Cheeky Monkey', '', 1, 1, 64, 64, 35, '', 1),
 (41000, 19000, 'Tamamo', '', 1, 1, 64, 64, 35, '', 1);
 
+-- New quests
+
+replace into item_template values
+ ('51877', '0', '4', '3', 'Light Chain Leggings', '', '2228', '1', '0', '1', '15', '15', '7', '-1', '-1', '5',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '58', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '5', '0', '0', '0', '40', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+ 
+ replace into item_template values
+ ('51876', '0', '4', '2', 'Wolfskin Boots', '', '16802', '1', '0', '1', '15', '15', '8', '-1', '-1', '5',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '23', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '8', '0', '0', '0', '20', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+ 
+ replace into item_template values
+ ('51875', '0', '4', '1', 'Tapered Belt', '', '16832', '1', '0', '1', '15', '15', '6', '-1', '-1', '5',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '6', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '0', '0', '0', '14', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+ 
+REPLACE INTO `creature_template` VALUES (51600, 0, 365, 0, 0, 0, 'Snufflesnout', '', 0, 4, 5, 145, 165, 0, 0, 72, 25, 0, 1, 0.857143, 1.2, 20, 5, 0, 0, 1, 3, 5, 0, 60, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 80, 80, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 8, 'EventAI', 1, 1, 0, 0, 3, 80, 0, 0, 0, 0, 2, '');
+
+replace into quest_template (
+entry, patch, Method, ZoneOrSort, MinLevel, QuestLevel, MaxLevel, Type, RequiredClasses, RequiredRaces, RequiredSkill,
+RequiredSkillValue, RepObjectiveFaction, RepObjectiveValue, RequiredMinRepFaction, RequiredMinRepValue,RequiredMaxRepFaction,
+RequiredMaxRepValue, SuggestedPlayers, LimitTime, QuestFlags, SpecialFlags, PrevQuestId, NextQuestId, ExclusiveGroup, NextQuestInChain,
+SrcItemId, SrcItemCount, SrcSpell, Title, Details, Objectives, OfferRewardText, RequestItemsText, EndText, ObjectiveText1, ObjectiveText2,
+ObjectiveText3, ObjectiveText4, ReqItemId1, ReqItemId2, ReqItemId3, ReqItemId4, ReqItemCount1, ReqItemCount2, ReqItemCount3,
+ReqItemCount4, ReqSourceId1, ReqSourceId2, ReqSourceId3, ReqSourceId4, ReqSourceCount1, ReqSourceCount2, ReqSourceCount3,
+ReqSourceCount4, ReqCreatureOrGOId1, ReqCreatureOrGOId2, ReqCreatureOrGOId3, ReqCreatureOrGOId4, ReqCreatureOrGOCount1,
+ReqCreatureOrGOCount2, ReqCreatureOrGOCount3, ReqCreatureOrGOCount4, ReqSpellCast1, ReqSpellCast2, ReqSpellCast3,
+ReqSpellCast4, RewChoiceItemId1, RewChoiceItemId2, RewChoiceItemId3, RewChoiceItemId4, RewChoiceItemId5, RewChoiceItemId6,
+RewChoiceItemCount1, RewChoiceItemCount2, RewChoiceItemCount3, RewChoiceItemCount4, RewChoiceItemCount5, RewChoiceItemCount6,
+RewItemId1, RewItemId2, RewItemId3, RewItemId4, RewItemCount1, RewItemCount2, RewItemCount3, RewItemCount4, RewRepFaction1,
+RewRepFaction2, RewRepFaction3, RewRepFaction4, RewRepFaction5, RewRepValue1, RewRepValue2, RewRepValue3, RewRepValue4,
+RewRepValue5, RewOrReqMoney, RewMoneyMaxLevel, RewSpell, RewSpellCast, RewMailTemplateId, RewMailMoney, RewMailDelaySecs,
+PointMapId, PointX, PointY, PointOpt, DetailsEmote1, DetailsEmote2, DetailsEmote3, DetailsEmote4, DetailsEmoteDelay1,
+DetailsEmoteDelay2, DetailsEmoteDelay3, DetailsEmoteDelay4, IncompleteEmote, CompleteEmote, OfferRewardEmote1, OfferRewardEmote2,
+OfferRewardEmote3, OfferRewardEmote4, OfferRewardEmoteDelay1, OfferRewardEmoteDelay2, OfferRewardEmoteDelay3,OfferRewardEmoteDelay4,
+StartScript, CompleteScript)
+         values
+ ('60145', '0', '2', '24', '1', '5', '60', '0', '0', '0', '0',
+'0', '0', '0', '0', '0','0',
+'0', '0', '0', '0', '0', '15', '0', '0', '0',
+'0', '0', '0', 'Down in the Ridge', 'Kill Snufflesnout, then report back to Marshal McBride in Northshire Abbey.', 'We also got reports of a kobold much larger than the others, hiding deep in the Echo Ridge. Even it\'s mere existence poses a threat to the abbey.\n\nGo down into the Echo Ridge and kill it. You will be justly rewarded.', 'Even though your journey just begun, you\'re already accomplishing great things. Take one, you earned it.', 'I assume you killed the beast?', '', '', '',
+'', '', '0', '0', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0', '0', '0',
+'0', '51600', '0', '0', '0', '1',
+'0', '0', '0', '0', '0', '0',
+'0', '51875', '51876', '51877', '0', '0', '0',
+'1', '1', '1', '0', '0', '0',
+'0', '0', '0', '0', '0', '0', '0', '0', '72',
+'0', '0', '0', '0', '100', '0', '0', '0',
+'0', '0', '300', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0','0',
+0, 0);
+replace into creature_questrelation (id, quest, patch_min, patch_max) values ('197','60145','10','10');
+replace into creature_involvedrelation (id, quest, patch_min, patch_max) values ('197','60145','10','10');
+      
 
 
