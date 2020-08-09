@@ -719,3 +719,5 @@ values
  -- Nefr garden shovel
  
  UPDATE `item_template` SET `spellid_1`='0', `spelltrigger_1`='0' WHERE (`entry`='51719') AND (`patch`='0');
+ 
+ update item_template set name = "Sickly Gazelle Flesh Sample", stackable = 10 where entry = 51860;
