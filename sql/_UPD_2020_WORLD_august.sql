@@ -486,3 +486,6 @@ update item_template set stackable = 10 where entry in (
 4421,
 10305);
 
+-- repair bot
+
+replace into  `npc_vendor` (`entry`, `item`) VALUES ('50041', '5140');
