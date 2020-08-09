@@ -547,4 +547,69 @@ UPDATE `quest_template` SET questlevel = 4 WHERE (`entry`='60147') AND (`patch`=
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '8', '0', '0', '0', '25', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
+ 
+-- Broodmother
+ 
+replace into quest_template (
+entry, patch, Method, ZoneOrSort, MinLevel, QuestLevel, MaxLevel, Type, RequiredClasses, RequiredRaces, RequiredSkill,
+RequiredSkillValue, RepObjectiveFaction, RepObjectiveValue, RequiredMinRepFaction, RequiredMinRepValue,RequiredMaxRepFaction,
+RequiredMaxRepValue, SuggestedPlayers, LimitTime, QuestFlags, SpecialFlags, PrevQuestId, NextQuestId, ExclusiveGroup, NextQuestInChain,
+SrcItemId, SrcItemCount, SrcSpell, Title, Details, Objectives, OfferRewardText, RequestItemsText, EndText, ObjectiveText1, ObjectiveText2,
+ObjectiveText3, ObjectiveText4, ReqItemId1, ReqItemId2, ReqItemId3, ReqItemId4, ReqItemCount1, ReqItemCount2, ReqItemCount3,
+ReqItemCount4, ReqSourceId1, ReqSourceId2, ReqSourceId3, ReqSourceId4, ReqSourceCount1, ReqSourceCount2, ReqSourceCount3,
+ReqSourceCount4, ReqCreatureOrGOId1, ReqCreatureOrGOId2, ReqCreatureOrGOId3, ReqCreatureOrGOId4, ReqCreatureOrGOCount1,
+ReqCreatureOrGOCount2, ReqCreatureOrGOCount3, ReqCreatureOrGOCount4, ReqSpellCast1, ReqSpellCast2, ReqSpellCast3,
+ReqSpellCast4, RewChoiceItemId1, RewChoiceItemId2, RewChoiceItemId3, RewChoiceItemId4, RewChoiceItemId5, RewChoiceItemId6,
+RewChoiceItemCount1, RewChoiceItemCount2, RewChoiceItemCount3, RewChoiceItemCount4, RewChoiceItemCount5, RewChoiceItemCount6,
+RewItemId1, RewItemId2, RewItemId3, RewItemId4, RewItemCount1, RewItemCount2, RewItemCount3, RewItemCount4, RewRepFaction1,
+RewRepFaction2, RewRepFaction3, RewRepFaction4, RewRepFaction5, RewRepValue1, RewRepValue2, RewRepValue3, RewRepValue4,
+RewRepValue5, RewOrReqMoney, RewMoneyMaxLevel, RewSpell, RewSpellCast, RewMailTemplateId, RewMailMoney, RewMailDelaySecs,
+PointMapId, PointX, PointY, PointOpt, DetailsEmote1, DetailsEmote2, DetailsEmote3, DetailsEmote4, DetailsEmoteDelay1,
+DetailsEmoteDelay2, DetailsEmoteDelay3, DetailsEmoteDelay4, IncompleteEmote, CompleteEmote, OfferRewardEmote1, OfferRewardEmote2,
+OfferRewardEmote3, OfferRewardEmote4, OfferRewardEmoteDelay1, OfferRewardEmoteDelay2, OfferRewardEmoteDelay3,OfferRewardEmoteDelay4,
+StartScript, CompleteScript)
+         values
+ ('60148', '0', '2', '154', '4', '5', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0','0',
+'0', '0', '0', '0', '0', '376', '0', '0', '0',
+'0', '0', '0', 'Mother of the Hollow', 'We keep killing the spiders but we find that the number hasn\'t changed the next day. I think there\'s something off.\n\nGo down into the hollow and investigate. Come back in one piece and be rewarded.\n\nWe suspect that they have a broodmother.', 'Executor Arren wants you to investigate the Night Web Hollow and kill their broodmother.', 'Splendid!\n\nNow that the broodmother has been ridden of whe can finally cleaning out the mines for good.', 'They keep coming back, something is amiss.', '', '', '',
+'', '', '0', '0', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0', '0', '0',
+'0', '1688', '0', '0', '0', '1',
+'0', '0', '0', '0', '0', '0',
+'0', '51885', '51886', '0', '0', '0', '0',
+'1', '1', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0', '0', '0', '68',
+'0', '0', '0', '0', '100', '0', '0', '0',
+'0', '0', '200', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0','0',
+0, 0);
+replace into creature_questrelation (id, quest, patch_min, patch_max) values ('1570','60148','10','10');
+replace into creature_involvedrelation (id, quest, patch_min, patch_max) values ('1570','60148','10','10');
       
+update quest_template set PrevQuestId = 380 where entry = 60148;
+
+update creature_template set scale = 2 where entry = 1688;
+update creature_template set health_min = 150, health_max = 200, armor = 200 where entry = 1688;
+
+ replace into item_template values
+ ('51885', '0', '4', '1', 'Web Covered Shoes', '', '16576', '1', '0', '1', '18', '18', '8', '-1', '-1', '9',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '13', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '0', '0', '0', '20', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+ 
+ replace into item_template values
+ ('51886', '0', '4', '3', 'Deathguard Boots', '', '22673', '1', '0', '1', '18', '18', '8', '-1', '-1', '9',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '65', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '5', '0', '0', '0', '30', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
