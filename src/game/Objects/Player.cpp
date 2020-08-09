@@ -4567,22 +4567,6 @@ void Player::ResurrectPlayer(float restore_percent, bool applySickness)
     // update visibility of player for nearby cameras
     UpdateObjectVisibility();
 
-    // Buff-like spell for free mana casts for 5 seconds upon resurrecting at Spirit Guides on Battlegrounds.
-    if (InBattleGround())
-    {
-        // Essence of the Red
-        // Restores 500 Mana per second.
-        // Restores 50 Energy per second.
-        // Generates 20 Rage per second.
-        AddAura(23513, 0, this);
-
-        if (SpellAuraHolder* holder = GetSpellAuraHolder(23513))
-        {
-            holder->SetAuraDuration(10000);
-            holder->UpdateAuraDuration();
-        }
-    }
-
     if (!applySickness)
         return;
 
