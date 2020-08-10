@@ -12,13 +12,45 @@ REPLACE INTO `creature_template` VALUES (80103, 8, 7185, 0, 0, 0, 'Venture Co. B
 
 REPLACE INTO `creature_template` VALUES (80104, 0, 7166, 0, 0, 0, 'Grizzie the Enforcer', 'Warrior Trainer', 523, 11, 11, 456, 456, 406, 406, 20, 29, 19, 1, 1.14286, 0, 20, 5, 0, 0, 1, 12, 14, 0, 64, 1, 2000, 2000, 1, 4864, 0, 0, 0, 0, 1, 0, 18.392, 25.289, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 3153, 0, 0, 0, 0, 524298, '');
 
+REPLACE INTO `npc_trainer` VALUES (80104, 1343, 100, 0, 0, 6, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80104, 1423, 100, 0, 0, 4, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80104, 1738, 100, 0, 0, 4, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80104, 3128, 100, 0, 0, 6, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80104, 6674, 10, 0, 0, 1, 0, 5875);
+
 REPLACE INTO `creature_template` VALUES (80105, 0, 7179, 0, 0, 0, 'Mayten Boomrifle', 'Hunter Trainer', 4648, 8, 8, 334, 334, 297, 297, 20, 126, 19, 1, 1.14286, 0, 20, 5, 0, 0, 1, 7, 10, 0, 58, 1, 2000, 2000, 1, 4864, 0, 0, 0, 0, 3, 0, 13.5872, 18.6824, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 3154, 0, 0, 0, 0, 524298, '');
+
+REPLACE INTO `npc_trainer` VALUES (80105, 1547, 10, 0, 0, 1, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80105, 2003, 100, 0, 0, 4, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80105, 3048, 100, 0, 0, 6, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80105, 5298, 100, 0, 0, 6, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80105, 13164, 50, 0, 0, 4, 0, 5875);
 
 REPLACE INTO `creature_template`VALUES (80106, 0, 15300, 0, 0, 0, 'Leyti Quicktongue', 'Rogue Trainer', 0, 8, 8, 334, 334, 297, 297, 20, 29, 18, 1, 1.14286, 0, 20, 5, 0, 0, 1, 7, 10, 0, 58, 1, 2000, 2000, 1, 4864, 0, 0, 0, 0, 4, 0, 13.5872, 18.6824, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 3155, 0, 0, 0, 0, 524298, '');
 
+REPLACE INTO `npc_trainer` VALUES (80106, 1762, 100, 0, 0, 6, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80106, 1780, 100, 0, 0, 6, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80106, 1789, 10, 0, 0, 1, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80106, 2592, 100, 0, 0, 4, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80106, 5167, 100, 0, 0, 4, 0, 5875);
+
 REPLACE INTO `creature_template` VALUES (80107, 0, 9780, 0, 0, 0, 'Amri Demondeal', 'Warlock Trainer', 4670, 9, 9, 372, 372, 333, 333, 20, 29, 19, 1, 1.14286, 0, 20, 5, 0, 0, 1, 9, 13, 0, 60, 1, 2000, 2000, 1, 4864, 0, 0, 0, 0, 9, 0, 15.2064, 20.9088, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 3156, 0, 0, 0, 0, 524298, '');
 
+REPLACE INTO `npc_trainer` VALUES (80107, 1374, 10, 0, 0, 1, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80107, 1381, 100, 0, 0, 6, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80107, 1393, 100, 0, 0, 4, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80107, 1476, 100, 0, 0, 6, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80107, 6221, 100, 0, 0, 4, 0, 5875);
+
 REPLACE INTO `creature_template` VALUES (80108, 0, 10745, 0, 0, 0, 'Wizette Icewhistle', 'Mage Trainer', 64, 10, 10, 413, 413, 370, 370, 20, 126, 19, 1, 1.14286, 0, 20, 5, 0, 0, 1, 7, 7, 0, 62, 1, 2000, 2000, 1, 4864, 0, 0, 0, 0, 8, 0, 16.808, 23.111, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 5884, 0, 0, 0, 0, 524298, '');
+
+REPLACE INTO `npc_trainer` VALUES (80108, 1142, 100, 0, 0, 0, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80108, 1173, 100, 0, 0, 0, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80108, 1249, 100, 0, 0, 0, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80108, 1472, 10, 0, 0, 0, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80108, 2141, 100, 0, 0, 0, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80108, 5507, 100, 0, 0, 0, 0, 5875);
+
 
 REPLACE INTO `creature_template` VALUES (80109, 0, 7174, 0, 0, 0, 'Flarnt Tightstitch', 'Venture Co. Cloth Merchant', 0, 11, 11, 456, 456, 0, 0, 20, 29, 16388, 1.1, 1.14286, 0, 20, 5, 0, 0, 1, 12, 14, 0, 64, 1, 2000, 2090, 1, 4864, 0, 0, 0, 0, 0, 0, 18.392, 25.289, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, '');
 
@@ -1304,5 +1336,7 @@ reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
 nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
 nextquestinchain = @nextquestinchain, prevquestid = @prevquest 
 where entry = @quest_entry;
+
+-- Populating the area:
 
 
