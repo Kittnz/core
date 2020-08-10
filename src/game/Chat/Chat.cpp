@@ -478,15 +478,6 @@ ChatCommand * ChatHandler::getCommandTable()
         { MSTR, nullptr,          0,                  false, nullptr,                                        "", nullptr }
     };
 
-    static ChatCommand poolCommandTable[] =
-    {
-        { NODE, "list",           SEC_GAMEMASTER,     false, &ChatHandler::HandlePoolListCommand,            "", nullptr },
-        { NODE, "update",         SEC_ADMINISTRATOR,  false, &ChatHandler::HandlePoolUpdateCommand,          "", nullptr },
-        { NODE, "spawns",         SEC_GAMEMASTER,     false, &ChatHandler::HandlePoolSpawnsCommand,          "", nullptr },
-        { NODE, "",               SEC_GAMEMASTER,     true,  &ChatHandler::HandlePoolInfoCommand,            "", nullptr },
-        { MSTR, nullptr,          0,                  false, nullptr,                                        "", nullptr }
-    };
-
     static ChatCommand questCommandTable[] =
     {
         { NODE, "add",            SEC_BASIC_ADMIN, false, &ChatHandler::HandleQuestAddCommand,            "", nullptr },
@@ -753,18 +744,6 @@ ChatCommand * ChatHandler::getCommandTable()
         { NODE, "update",            SEC_ADMINISTRATOR,        false, &ChatHandler::HandleWorldUpdateCommand,      "", nullptr},
         { NODE, "cansee",            SEC_ADMINISTRATOR,        false, &ChatHandler::HandleWorldTestCommand,        "", nullptr},
         { NODE, "detail",            SEC_ADMINISTRATOR,        false, &ChatHandler::HandleWorldDetailCommand,      "", nullptr},
-        { MSTR, nullptr,             0,                        false, nullptr,                                     "", nullptr}
-    };
-
-
-    static ChatCommand escortCommandTable[] =
-    {
-        { NODE, "create",            SEC_DEVELOPER,           false, &ChatHandler::HandleEscortCreateCommand,     "", nullptr},
-        { NODE, "addwp",             SEC_DEVELOPER,           false, &ChatHandler::HandleEscortAddWpCommand,      "", nullptr},
-        { NODE, "modwp",             SEC_DEVELOPER,           false, &ChatHandler::HandleEscortModifyWpCommand,   "", nullptr},
-        { NODE, "clearwp",           SEC_DEVELOPER,           false, &ChatHandler::HandleEscortClearWpCommand,    "", nullptr},
-        { NODE, "showwp",            SEC_MODERATOR_CONF,       false, &ChatHandler::HandleEscortShowWpCommand,     "", nullptr},
-        { NODE, "hidewp",            SEC_MODERATOR_CONF,       false, &ChatHandler::HandleEscortHideWpCommand,     "", nullptr},
         { MSTR, nullptr,             0,                        false, nullptr,                                     "", nullptr}
     };
     static ChatCommand worldStateCommandTable[] =

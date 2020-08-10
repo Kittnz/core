@@ -251,13 +251,6 @@ class MANGOS_DLL_SPEC ChatHandler
         bool HandleReloadSpellGroupStackRulesCommand(char *args);
         bool HandleGroupAddSpellCommand(char *args);
         bool HandleGroupSetRuleCommand(char *args);
-        // script_waypoints
-        bool HandleEscortAddWpCommand(char *args);
-        bool HandleEscortModifyWpCommand(char *args);
-        bool HandleEscortClearWpCommand(char *args);
-        bool HandleEscortCreateCommand(char *args);
-        bool HandleEscortShowWpCommand(char *args);
-        bool HandleEscortHideWpCommand(char *args);
         // World Gestion
         bool HandleWorldUpdateCommand(char *args);
         bool HandleWorldTestCommand(char *args);
@@ -393,7 +386,6 @@ class MANGOS_DLL_SPEC ChatHandler
         bool HandleGameObjectDeleteCommand(char* args);
         bool HandleGameObjectMoveCommand(char* args);
         bool HandleGameObjectNearCommand(char* args);
-        bool HandleGameObjectPhaseCommand(char* args);
         bool HandleGameObjectTargetCommand(char* args);
         bool HandleGameObjectTurnCommand(char* args);
         bool HandleGameObjectDespawnCommand(char* args);
@@ -571,12 +563,6 @@ class MANGOS_DLL_SPEC ChatHandler
 
         bool HandlePDumpLoadCommand(char* args);
         bool HandlePDumpWriteCommand(char* args);
-
-        bool HandlePoolListCommand(char* args);
-        bool HandlePoolSpawnsCommand(char* args);
-        bool HandlePoolUpdateCommand(char* args);
-        bool HandlePoolInfoCommand(char* args);
-
         bool HandleQuestAddCommand(char* args);
         bool HandleQuestRemoveCommand(char* args);
         bool HandleQuestCompleteCommand(char* args);
