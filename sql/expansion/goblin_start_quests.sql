@@ -980,14 +980,14 @@ where entry = @quest_entry;
 
 -- Todo: items, flying machine
 
-REPLACE INTO `creature_template` VALUES (80108, 0, 7164, 0, 0, 0, 'Nert Blastentom', 'Venture Co. Foreman', 0, 5, 5, 319, 319, 0, 0, 852, 35, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 24, 31, 0, 90, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 31.856, 43.802, 100, 7, 4096, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 4276, 0, 0, 0, 0, 2, '');
+REPLACE INTO `creature_template` VALUES (80121, 0, 7164, 0, 0, 0, 'Nert Blastentom', 'Venture Co. Foreman', 0, 5, 5, 319, 319, 0, 0, 852, 35, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 24, 31, 0, 90, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 31.856, 43.802, 100, 7, 4096, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 4276, 0, 0, 0, 0, 2, '');
 	 
 SET @quest_entry = 80108;
 SET @quest_zone = 406;
 SET @title = 'Me Not Any Kind Of Orc';
 SET @description = 'There’s only one place in the world that would take in a bunch of smelly refugees with nothing to contribute, kid. The Horde.\n\nYeah, I know they don’t like us. But they don’t like us less than our former associates, get it? We got a chance of winning them over, and there’s no way the Venture Co is gonna get us if we’re holed up inside Orgrimmar!\n\nIt’s time to go straight, little buddy.';
 SET @objective = 'Join Nert Blastentom and travel to Durotar to join the Horde.';
-SET @completetext = 'Alright. We made it to Durotar. Step 1 complete.\n\nNow, for step 2 of my master plan that I just made up...';
+SET @completetext = 'Alright.\n\nWe made it to Durotar. Step 1 complete.\n\nNow, for step 2 of my master plan that I just made up...';
 SET @incompletetext = 'Bit of a bumpy flight, but not as bumpy as being tossed off the cliffs of Mulgore, I bet.';
 SET @faction_id = 0;
 SET @faction_count = 0;
@@ -996,7 +996,7 @@ SET @reward_money = 200;
 SET @quest_level = 6;
 SET @min_level = 4;
 SET @questgiver_id = 80100;
-SET @quest_finisher = 80108;
+SET @quest_finisher = 80121;
 SET @nextquest = 0;
 SET @nextquestinchain = 0;
 SET @prevquest = 80107;
@@ -1073,10 +1073,10 @@ SET @incompletetext = 'Oh, hello there! It’s been a long time since I’ve see
 SET @faction_id = 0;
 SET @faction_count = 0;
 SET @xp_or_money = 200;
-SET @reward_money = 200; 
+SET @reward_money = 0; 
 SET @quest_level = 6;
 SET @min_level = 4;
-SET @questgiver_id = 80108;
+SET @questgiver_id = 80121;
 SET @quest_finisher = 3191;
 SET @nextquest = 0;
 SET @nextquestinchain = 0;
