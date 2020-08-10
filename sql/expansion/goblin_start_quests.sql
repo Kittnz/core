@@ -898,7 +898,7 @@ update creature_template set equipment_id = 0 where entry = 80120;
 SET @quest_entry = 80107;
 SET @quest_zone = 406;
 SET @title = 'Shadow On The Plateau';
-SET @description = 'I’m gonna level with you, kid. I don’t envy you right now.\n\nSee, those weird vultures aren’t the worst thing in the woods. Some of the other bruisers were havin’ a look around, and they saw...something...in the woods, next to a tomb that looks like it’s from Suramar for how old it is.\n\nI’ll fight elves, I’ll fight plant monsters, I’ll fight our own tanks, but I am not messing with some ancient cursed undead. You go out there and fight that thing, and you and me are friends for good, alright?';
+SET @description = 'I don’t envy you right now, kid.\n\nSee, those weird vultures aren’t the worst thing in the woods. Some of the other bruisers were havin’ a look around, and they saw...something...in the woods, next to a tomb that looks like it’s from Suramar for how old it is.\n\nI’ll fight elves, I’ll fight plant monsters, I’ll fight our own tanks, but I am not messing with some ancient cursed undead. You go out there and fight that thing, and you and me are friends for good, alright?';
 SET @objective = 'Find and defeat the Tomb Shadow in the Grumbling Grove, then return to Nert Blastentom.';
 SET @completetext = 'The first of many? Nope, nope, nope. I don’t care what the boss says, I am not gettin’ cursed by some angry ghost. We gotta get out of here, kid.';
 SET @incompletetext = 'This place gives me the heebie-jeebies.';
@@ -975,4 +975,88 @@ nextquestinchain = @nextquestinchain, prevquestid = @prevquest
 where entry = @quest_entry;
 
 -- Part II, Durotar
+-- Todo: Items
+
+REPLACE INTO `creature_template` VALUES (80108, 0, 7164, 0, 0, 0, 'Nert Blastentom', 'Venture Co. Foreman', 0, 5, 5, 319, 319, 0, 0, 852, 35, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 24, 31, 0, 90, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 31.856, 43.802, 100, 7, 4096, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 4276, 0, 0, 0, 0, 2, '');
+	 
+SET @quest_entry = 80108;
+SET @quest_zone = 406;
+SET @title = 'Me Not Any Kind Of Orc';
+SET @description = 'There’s only one place in the world that would take in a bunch of smelly refugees with nothing to contribute, kid. The Horde.\n\nYeah, I know they don’t like us. But they don’t like us less than our former associates, get it? We got a chance of winning them over, and there’s no way the Venture Co is gonna get us if we’re holed up inside Orgrimmar!\n\nIt’s time to go straight, little buddy.';
+SET @objective = 'Join Nert Blastentom and travel to Durotar to join the Horde.';
+SET @completetext = 'Alright. We made it to Durotar. Step 1 complete.\n\nNow, for step 2 of my master plan that I just made up...';
+SET @incompletetext = 'Bit of a bumpy flight, but not as bumpy as being tossed off the cliffs of Mulgore, I bet.';
+SET @faction_id = 0;
+SET @faction_count = 0;
+SET @xp_or_money = 200;
+SET @reward_money = 200; 
+SET @quest_level = 6;
+SET @min_level = 4;
+SET @questgiver_id = 80100;
+SET @quest_finisher = 80108;
+SET @nextquest = 0;
+SET @nextquestinchain = 0;
+SET @prevquest = 80107;
+SET @RewChoiceItemId1 = 80126; 
+SET @RewChoiceItemId2 = 80127; 
+SET @RewChoiceItemId3 = 80128;
+SET @RewChoiceItemId4 = 80129; 
+SET @RewChoiceItemCount1 = 1;
+SET @RewChoiceItemCount2 = 1;
+SET @RewChoiceItemCount3 = 1;
+SET @RewChoiceItemCount4 = 1;
+SET @reward_item_1 = 0;
+SET @reward_item_2 = 0; 
+SET @reward_item_3 = 0;
+SET @reward_item_4 = 0;
+SET @reward_item_1_count = 0;
+SET @reward_item_2_count = 0;
+SET @reward_item_3_count = 0;
+SET @reward_item_4_count = 0;
+SET @creature_to_kill_1 = 0;
+SET @creature_to_kill_2 = 0; 
+SET @creature_to_kill_3 = 0;
+SET @creature_to_kill_4 = 0;
+SET @creature_to_kill_1_count = 0;
+SET @creature_to_kill_2_count = 0;
+SET @creature_to_kill_3_count = 0;
+SET @creature_to_kill_4_count = 0;
+SET @required_item_1 = 0; 
+SET @required_item_2 = 0;
+SET @required_item_3 = 0;
+SET @required_item_4 = 0;
+SET @required_item_1_count = 0;
+SET @required_item_2_count = 0;
+SET @required_item_3_count = 0;
+SET @required_item_4_count = 0;
+
+replace into quest_template values 
+
+(@quest_entry, '0', '2', @quest_zone, @min_level,  '0', @quest_level, '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @title, @description, @objective, @completetext, @incompletetext, '', '', '', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @faction_id, '0', '0', '0', '0', @faction_count, '0', '0', '0', '0', '0', @xp_or_money, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', 0, 0);
+     
+replace into creature_questrelation (id, quest, patch_min, patch_max) values (@questgiver_id, @quest_entry,'0','10'); 
+replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (@quest_finisher, @quest_entry,'0','10');
+
+update quest_template set 
+rewitemid1 = @reward_item_1, rewitemcount1 = @reward_item_1_count,
+rewitemid2 = @reward_item_2, rewitemcount2 = @reward_item_2_count,
+rewitemid3 = @reward_item_3, rewitemcount3 = @reward_item_3_count,
+rewitemid4 = @reward_item_4, rewitemcount4 = @reward_item_4_count,
+RewChoiceItemId1 = @RewChoiceItemId1, RewChoiceItemCount1 = @RewChoiceItemCount1,
+RewChoiceItemId2 = @RewChoiceItemId2, RewChoiceItemCount2 = @RewChoiceItemCount2,
+RewChoiceItemId3 = @RewChoiceItemId3, RewChoiceItemCount3 = @RewChoiceItemCount3,
+RewChoiceItemId4 = @RewChoiceItemId4, RewChoiceItemCount4 = @RewChoiceItemCount4,
+ReqCreatureOrGOId1 = @creature_to_kill_1, ReqCreatureOrGOCount1 = @creature_to_kill_1_count,
+ReqCreatureOrGOId2 = @creature_to_kill_2, ReqCreatureOrGOCount2 = @creature_to_kill_2_count,
+ReqCreatureOrGOId3 = @creature_to_kill_3, ReqCreatureOrGOCount3 = @creature_to_kill_3_count,
+ReqCreatureOrGOId4 = @creature_to_kill_4, ReqCreatureOrGOCount4 = @creature_to_kill_4_count,
+reqitemid1 = @required_item_1, reqitemcount1 = @required_item_1_count,
+reqitemid2 = @required_item_2, reqitemcount2 = @required_item_2_count,
+reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
+reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
+nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
+nextquestinchain = @nextquestinchain, prevquestid = @prevquest 
+where entry = @quest_entry;
+
+
 
