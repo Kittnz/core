@@ -755,3 +755,5 @@ values
  update item_template set shadow_res = 0, inventory_type = 0 where entry = 51858;
 REPLACE INTO `creature_template` VALUES (51585,0,10007,0,0,0,'Plagued Hatchling','',0,1,1,64,64,0,0,0,35,0,1,1.14286,0.75,20,5,0,0,1,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'',0,3,0,0,3,0,0,0,0,0,0,'');
 replace into custom_pet_entry_relation (item_entry, creature_entry) values (51858, 51585);
+
+update battleground_template set min_players_per_team = 5 where max_players_per_team = 40;
