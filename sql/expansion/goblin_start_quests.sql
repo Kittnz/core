@@ -1058,8 +1058,20 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '1', '5', '0', '0', '30', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
 
-REPLACE INTO `creature_template` VALUES (80121, 0, 7164, 0, 0, 0, 'Nert Blastentom', 'Venture Co. Foreman', 0, 5, 5, 319, 319, 0, 0, 852, 35, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 24, 31, 0, 90, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 31.856, 43.802, 100, 7, 4096, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 4276, 0, 0, 0, 0, 2, '');
-	 
+REPLACE INTO `creature_template` VALUES (80121, 0, 7164, 0, 0, 0, 'Nert Blastentom', 'Venture Refugee', 0, 5, 5, 319, 319, 0, 0, 852, 35, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 24, 31, 0, 90, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 31.856, 43.802, 100, 7, 4096, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 4276, 0, 0, 0, 0, 2, '');
+
+update creature_template set equipment_id = 0 where entry = 80121;
+
+REPLACE INTO `creature_template` VALUES (80122, 0, 10746, 0, 0, 0, 'Sprat Nozzleton', 'Venture Refugee', 0, 3, 3, 219, 219, 0, 0, 852, 35, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 24, 31, 0, 90, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 31.856, 43.802, 100, 7, 4096, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 4276, 0, 0, 0, 0, 2, '');
+
+update creature_template set equipment_id = 0 where entry = 80122;	
+
+REPLACE INTO `creature_template` VALUES (80123, 0, 7180, 0, 0, 0, 'Nagus', 'Venture Refugee', 0, 14, 14, 594, 594, 0, 0, 20, 29, 6, 1, 1.14286, 0, 20, 5, 0, 0, 1, 15, 19, 0, 70, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 23.0384, 31.6778, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 3881, 0, 0, 0, 0, 524298, '');
+
+update creature_template set equipment_id = 0 where entry = 80123;	
+
+replace into creature_template_addon (entry, emote) values ('80122', '1'),('80123', '1'); 
+	
 SET @quest_entry = 80108;
 SET @quest_zone = 406;
 SET @title = 'Me Not Any Kind Of Orc';
