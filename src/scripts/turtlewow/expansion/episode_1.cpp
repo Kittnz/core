@@ -90,7 +90,8 @@ bool GOHello_go_portal_alahthalas(Player* pPlayer, GameObject* pGo)
 enum GoblinStartingZone
 {
     QUEST_ME_NOT_ANY_KIND_OF_ORC = 80108,
-    ZONE_STONETALON_MOUNTAINS    = 406
+    ZONE_STONETALON_MOUNTAINS    = 406,
+    ZONE_DUROTAR                 = 14
 };
 
 class DemorphAfterTime : public BasicEvent
@@ -113,7 +114,7 @@ private:
 
 bool GOHello_go_fm_acquisition(Player* pPlayer, GameObject* pGo)
 {
-    if (pPlayer->GetZoneId() == ZONE_STONETALON_MOUNTAINS && pPlayer->GetQuestStatus(QUEST_ME_NOT_ANY_KIND_OF_ORC) == QUEST_STATUS_INCOMPLETE)
+    if (pPlayer->GetZoneId() != ZONE_DUROTAR && pPlayer->GetQuestStatus(QUEST_ME_NOT_ANY_KIND_OF_ORC) == QUEST_STATUS_COMPLETE)
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TAXI, "Set a course to Durotar! Full speed!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     
     pPlayer->SEND_GOSSIP_MENU(100100, pGo->GetGUID());
