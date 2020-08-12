@@ -85,9 +85,62 @@ bool GOHello_go_portal_alahthalas(Player* pPlayer, GameObject* pGo)
     return true;
 }
 
+// Goblin starting zone
+
+enum GoblinStartingZone
+{
+    QUEST_ME_NOT_ANY_KIND_OF_ORC = 80108,
+    ZONE_STONETALON_MOUNTAINS    = 406
+};
+
+class DemorphAfterTime : public BasicEvent
+{
+public:
+    explicit DemorphAfterTime(uint64 player_guid) : BasicEvent(), player_guid(player_guid) {}
+
+    bool Execute(uint64 e_time, uint32 p_time) override
+    {
+        Player* player = ObjectAccessor::FindPlayer(player_guid);
+        if (player)
+            player->DeMorph();
+
+        return false;
+    }
+
+private:
+    uint64 player_guid;
+};
+
+bool GOHello_go_fm_acquisition(Player* pPlayer, GameObject* pGo)
+{
+    if (pPlayer->GetZoneId() == ZONE_STONETALON_MOUNTAINS && pPlayer->GetQuestStatus(QUEST_ME_NOT_ANY_KIND_OF_ORC) == QUEST_STATUS_INCOMPLETE)
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TAXI, "Set a course to Durotar! Full speed!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    
+    pPlayer->SEND_GOSSIP_MENU(100100, pGo->GetGUID());
+    return true;
+}
+
+bool GOSelect_go_fm_acquisition(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 action)
+{
+    if (action == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pPlayer->SetDisplayId(8011);
+        pPlayer->TeleportTo(1, 560.20F, -4576.21F, 142.0F, 4.08F);
+        pPlayer->m_Events.AddEvent(new DemorphAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(15000));
+        pPlayer->CastSpell(pPlayer, 130, true);
+    }   
+    return true;
+}
+
 void AddSC_episode_1()
 {
     Script *newscript;
+
+    newscript = new Script;
+    newscript->Name = "go_fm_acquisition";
+    newscript->pGOHello = &GOHello_go_fm_acquisition;
+    newscript->pGOGossipSelect = &GOSelect_go_fm_acquisition;
+    newscript->RegisterSelf();
 	
 	newscript = new Script;
     newscript->Name = "go_portal_alahthalas";
