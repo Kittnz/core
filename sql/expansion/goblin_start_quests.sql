@@ -1013,9 +1013,9 @@ where entry = @quest_entry;
 -- Me Not Any Kind Of Orc
 
 replace into `gameobject_template` values 
-(3000100, 0, 1, 330, 'FM Acquisition, Nert Blastentom\'s Property', 0, 0, 0.8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_fm_acquisition');
+(3000100, 0, 1, 330, 'FM Acquisition, Blastentom\'s Property', 0, 0, 0.8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_fm_acquisition');
 
-replace into broadcast_text (ID, MaleText) values (100100, '<As you turn inspect the plane more closely you notice something scribbled onto it\'s side: "Nert Blastentom\'s Property". The plane is decorated with some stickers on the back, among them were a small coin, a yellow parrot and a hammer. The words "FM Acquisition" were written on the bottom of the plane.>');
+replace into broadcast_text (ID, MaleText) values (100100, 'As you turn inspect the plane more closely you notice something scribbled onto it\'s side: Nert Blastentom\'s Property.\n\nThe plane is decorated with some stickers on the back, among them were a small coin, a yellow parrot and a hammer.\n\nThe words FM Acquisition were written on the bottom of the plane.');
 replace into npc_text (ID, BroadcastTextID0) values (100100, 100100);
 
 replace into item_template values
