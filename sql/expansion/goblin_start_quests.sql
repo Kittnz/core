@@ -1012,7 +1012,11 @@ where entry = @quest_entry;
 
 -- Me Not Any Kind Of Orc
 
--- Todo: flying machine
+replace into `gameobject_template` values 
+(3000100, 0, 1, 330, 'FM Acquisition, Nert Blastentom\'s Property', 0, 0, 0.8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_fm_acquisition');
+
+replace into broadcast_text (ID, MaleText) values (100100, '<As you turn inspect the plane more closely you notice something scribbled onto it\'s side: "Nert Blastentom\'s Property". The plane is decorated with some stickers on the back, among them were a small coin, a yellow parrot and a hammer. The words "FM Acquisition" were written on the bottom of the plane.>');
+replace into npc_text (ID, BroadcastTextID0) values (100100, 100100);
 
 replace into item_template values
  ('80126', '0', '2', '8', 'Sharpened Bastard Sword', '', '31400', '2', '0', '1', '235', '235', '17', '-1', '-1', '11',
