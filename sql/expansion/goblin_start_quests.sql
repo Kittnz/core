@@ -321,7 +321,7 @@ where entry = @quest_entry;
 
 REPLACE INTO `creature_template` VALUES (80114, 0, 4249, 4250, 4247, 4248, 'Stonetalon Environmentalist', NULL, 0, 2, 3, 74, 80, 0, 0, 49, 91, 0, 1, 0.857143, 0, 20, 5, 0, 0, 1, 3, 5, 0, 50, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 6.9344, 9.5348, 100, 7, 0, 38, 38, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 7, 'EventAI', 1, 3, 0, 0, 3, 38, 0, 0, 0, 0, 0, '');
 
-REPLACE INTO `creature_template` VALUES (80115, 0, 8172, 0, 0, 0, 'Highpeak Lasher', NULL, 0, 3, 3, 70, 85, 0, 0, 50, 91, 0, 0.93, 1.14286, 1, 20, 5, 0, 0, 1, 15, 16, 0, 40, 1, 1960, 2156, 8, 0, 0, 0, 0, 0, 0, 0, 8.624, 11.858, 100, 4, 0, 3569, 0, 0, 0, 5, 5, 5, 10, 5, 0, 0, 0, 0, 0, 0, 1, 4, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 16384, 0, 0, '');
+REPLACE INTO `creature_template` VALUES (80115, 0, 8172, 0, 0, 0, 'Highpeak Lasher', NULL, 0, 3, 3, 40, 45, 0, 0, 50, 91, 0, 0.93, 1.14286, 1, 20, 5, 0, 0, 1, 10, 12, 0, 40, 1, 1960, 2156, 8, 0, 0, 0, 0, 0, 0, 0, 8.624, 11.858, 100, 4, 0, 3569, 0, 0, 0, 5, 5, 5, 10, 5, 0, 0, 0, 0, 0, 0, 1, 4, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 16384, 0, 0, '');
 
 replace into item_template values
  ('80105', '0', '2', '5', 'Bruiser Club', '', '19544', '1', '0', '1', '2', '2', '17', '-1', '-1', '6',
@@ -1512,6 +1512,6 @@ replace into `creature` (`id`, `map`, `modelid`, `equipment_id`, `position_x`, `
 (80113, 1, 0, 0, 1982.18, 1404.93, 169.319, 3.42396, 25, 25, 5, 0, 100, 0, 0, 1, 0, 0, 0, 10),
 (80113, 1, 0, 0, 1801.5, 1416.77, 166.634, 4.94763, 25, 25, 5, 0, 100, 0, 0, 1, 0, 0, 0, 10);
 
-update creature set spawntimesecsmin = 180, spawntimesecsmax = 230 where id between 80100 and 80125;
+update creature set spawntimesecsmin = 100, spawntimesecsmax = 180 where id between 80100 and 80125;
 
 
