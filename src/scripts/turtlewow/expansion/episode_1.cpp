@@ -384,10 +384,49 @@ bool QuestComplete_npc_nert_blastentom(Player* pPlayer, Creature* pQuestGiver, Q
     return false;
 }
 
+struct npc_tomb_shadowAI : public ScriptedAI
+{
+    npc_tomb_shadowAI(Creature *c) : ScriptedAI(c)
+    {
+        Reset();
+    }
+
+    void Aggro(Unit *who)
+    {
+        m_creature->MonsterSay("You will not disturb what lays here!");
+    }
+
+    void Reset() {}
+
+    void KilledUnit(Unit* victim) {}
+
+    void JustDied(Unit*)
+    {
+        m_creature->MonsterSay("There is only death for your people here! I am only one... of many...");
+    }
+
+    void UpdateAI(const uint32 diff)
+    {
+        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+            return;
+        DoMeleeAttackIfReady();
+    }
+
+};
+
+CreatureAI* GetAI_npc_tomb_shadow(Creature *_Creature)
+{
+    return new npc_tomb_shadowAI(_Creature);
+}
 
 void AddSC_episode_1()
 {
     Script *newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_tomb_shadow";
+    newscript->GetAI = &GetAI_npc_tomb_shadow;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_nert_blastentom";

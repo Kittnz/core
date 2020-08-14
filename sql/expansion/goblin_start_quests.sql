@@ -963,6 +963,8 @@ replace into item_template values
 
 REPLACE INTO `creature_template` VALUES (80120, 0, 12074, 0, 0, 0, 'Tomb Shadow', NULL, 0, 6, 7, 120, 136, 0, 0, 207, 21, 0, 0.888888, 0.857143, 0, 20, 5, 0, 0, 1, 7, 10, 0, 56, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 13.4464, 18.4888, 100, 6, 0, 1520, 1520, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 12, '', 1, 1, 0, 0, 3, 1520, 0, 0, 8602131, 0, 0, '');
 	 
+update creature_template set script_name = "npc_tomb_shadow" where entry = 80120;
+	 
 update creature_template set faction = 22 where entry = 80120;
 update creature_template set loot_id = 1531 where entry = 80120;
 update creature_template set equipment_id = 0 where entry = 80120;
