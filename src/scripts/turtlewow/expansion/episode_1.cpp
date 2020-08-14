@@ -366,10 +366,10 @@ bool QuestComplete_npc_nert_blastentom(Player* pPlayer, Creature* pQuestGiver, Q
                 return false;
 
             creature->SetWalk(true);
-            creature->GetMotionMaster()->MovePoint(0, 1799.06F, 1349.06F, 144.95F, 4.04F, 1.3F);
+            creature->GetMotionMaster()->MovePoint(0, 1799.06F, 1349.06F, 144.95F, 4.04F, 1.7F);
         });
 
-        DoAfterTime(pPlayer, 55 * IN_MILLISECONDS,
+        DoAfterTime(pPlayer, 50 * IN_MILLISECONDS,
             [CreatureGuid = pQuestGiver->GetObjectGuid()]()
         {
             Map* map = sMapMgr.FindMap(1);
