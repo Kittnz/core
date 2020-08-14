@@ -163,7 +163,7 @@ bool QuestComplete_npc_garthok(Player* pPlayer, Creature* pQuestGiver, Quest con
 
     if (pQuest->GetQuestId() == QUEST_GREEN_GOES_RED)
     {
-        Creature* NertBlastenton    = pQuestGiver->SummonCreature(NPC_NERT_BLASTENTOM,      268.11F, -4710.95F, 17.58F, 3.87F, TEMPSUMMON_TIMED_DESPAWN, 1 * MINUTE * IN_MILLISECONDS);
+        Creature* NertBlastenton    = pQuestGiver->SummonCreature(NPC_NERT_BLASTENTOM,      286.33F, -4717.00F, 13.78F, 2.68F, TEMPSUMMON_TIMED_DESPAWN, 1 * MINUTE * IN_MILLISECONDS);
         Creature* GrizzleEnforcer   = pQuestGiver->SummonCreature(NPC_GRIZZLE_THE_ENFORCER, 288.25F, -4721.18F, 13.34F, 2.50F, TEMPSUMMON_TIMED_DESPAWN, 1 * MINUTE * IN_MILLISECONDS);
         Creature* MaytenBoomfire    = pQuestGiver->SummonCreature(NPC_MAYTEN_BOOMRIFLE,     290.45F, -4717.65F, 13.34F, 2.59F, TEMPSUMMON_TIMED_DESPAWN, 1 * MINUTE * IN_MILLISECONDS);
         Creature* LeytiQuicktongue  = pQuestGiver->SummonCreature(NPC_LEYTI_QUICKTONGUEM,   293.18F, -4716.50F, 13.09F, 2.59F, TEMPSUMMON_TIMED_DESPAWN, 1 * MINUTE * IN_MILLISECONDS);
@@ -171,7 +171,7 @@ bool QuestComplete_npc_garthok(Player* pPlayer, Creature* pQuestGiver, Quest con
         Creature* AmriDemondeal     = pQuestGiver->SummonCreature(NPC_AMRI_DEMONDEAL,       289.36F, -4723.89F, 12.91F, 2.80F, TEMPSUMMON_TIMED_DESPAWN, 1 * MINUTE * IN_MILLISECONDS);
         Creature* SpratNozzleton    = pQuestGiver->SummonCreature(NPC_SPRAT_NOZZLETON,      293.27F, -4719.20F, 12.74F, 2.87F, TEMPSUMMON_TIMED_DESPAWN, 1 * MINUTE * IN_MILLISECONDS);
 
-        DoAfterTime(pPlayer, 4 * IN_MILLISECONDS,
+        DoAfterTime(pPlayer, 5 * IN_MILLISECONDS,
             [CreatureGuid = NertBlastenton->GetObjectGuid()]()
         {
             Map* map = sMapMgr.FindMap(1);
@@ -180,11 +180,11 @@ bool QuestComplete_npc_garthok(Player* pPlayer, Creature* pQuestGiver, Quest con
             if (!creature)
                 return false;
 
-            creature->HandleEmote(ANIM_EMOTE_TALK);
-            creature->MonsterSay("Mister Gar’thok, may I introduce ya to my crew ? We’ve all got nowhere else to go, and we hear that’s as good a reason as any to join the Horde.");
+            creature->HandleEmote(EMOTE_ONESHOT_TALK);
+            creature->MonsterSay("Mister Gar'thok, may I introduce ya to my crew? We've all got nowhere else to go, and we hear that’s as good a reason as any to join the Horde.");
         });
 
-        DoAfterTime(pPlayer, 7 * IN_MILLISECONDS,
+        DoAfterTime(pPlayer, 13 * IN_MILLISECONDS,
             [CreatureGuid = GrizzleEnforcer->GetObjectGuid()]()
         {
             Map* map = sMapMgr.FindMap(1);
@@ -193,11 +193,11 @@ bool QuestComplete_npc_garthok(Player* pPlayer, Creature* pQuestGiver, Quest con
             if (!creature) 
                 return false;
 
-            creature->HandleEmote(ANIM_EMOTE_TALK);
-            creature->MonsterSay("Barely any different for me!I hear you orcs like bashin’ skills, I like bashin’ skulls, we’re gonna get along just fine.");
+            creature->HandleEmote(EMOTE_ONESHOT_TALK);
+            creature->MonsterSay("Barely any different for me! I hear you orcs like bashin’ skills, I like bashin' skulls, we’re gonna get along just fine.");
         });
 
-        DoAfterTime(pPlayer, 10 * IN_MILLISECONDS,
+        DoAfterTime(pPlayer, 21 * IN_MILLISECONDS,
             [CreatureGuid = MaytenBoomfire->GetObjectGuid()]()
         {
             Map* map = sMapMgr.FindMap(1);
@@ -206,11 +206,11 @@ bool QuestComplete_npc_garthok(Player* pPlayer, Creature* pQuestGiver, Quest con
             if (!creature)
                 return false;
 
-            creature->HandleEmote(ANIM_EMOTE_TALK);
-            creature->MonsterSay("Is what I hear true? You guys use bows? Buddy, buddy. Get with the century! I’ll show you some real weapons.");
+            creature->HandleEmote(EMOTE_ONESHOT_TALK);
+            creature->MonsterSay("Is what I hear true? You guys use bows? Buddy, buddy. Get with the century! I'll show you some real weapons.");
         });
 
-        DoAfterTime(pPlayer, 13 * IN_MILLISECONDS,
+        DoAfterTime(pPlayer, 23 * IN_MILLISECONDS,
             [CreatureGuid = LeytiQuicktongue->GetObjectGuid()]()
         {
             Map* map = sMapMgr.FindMap(1);
@@ -219,11 +219,11 @@ bool QuestComplete_npc_garthok(Player* pPlayer, Creature* pQuestGiver, Quest con
             if (!creature)
                 return false;
 
-            creature->HandleEmote(ANIM_EMOTE_BOW);
+            creature->HandleEmote(EMOTE_ONESHOT_BOW);
             creature->MonsterTextEmote("Leyti Quicktongue bows silently.");
         });
 
-        DoAfterTime(pPlayer, 14 * IN_MILLISECONDS,
+        DoAfterTime(pPlayer, 31 * IN_MILLISECONDS,
             [CreatureGuid = WizetteIcewhistle->GetObjectGuid()]()
         {
             Map* map = sMapMgr.FindMap(1);
@@ -232,11 +232,11 @@ bool QuestComplete_npc_garthok(Player* pPlayer, Creature* pQuestGiver, Quest con
             if (!creature)
                 return false;
 
-            creature->HandleEmote(ANIM_EMOTE_TALK);
-            creature->MonsterTextEmote("Do ya even have a mage to help out around here? Well, I guess I can set up shop, conjure up some water. For a price, of course, but also for the Horde!");
+            creature->HandleEmote(EMOTE_ONESHOT_TALK);
+            creature->MonsterSay("Do ya even have a mage to help out around here? Well, I guess I can set up shop, conjure up some water. For a price, of course, but also for the Horde!");
         });
 
-        DoAfterTime(pPlayer, 17 * IN_MILLISECONDS,
+        DoAfterTime(pPlayer, 39 * IN_MILLISECONDS,
             [CreatureGuid = AmriDemondeal->GetObjectGuid()]()
         {
             Map* map = sMapMgr.FindMap(1);
@@ -245,11 +245,11 @@ bool QuestComplete_npc_garthok(Player* pPlayer, Creature* pQuestGiver, Quest con
             if (!creature)
                 return false;
 
-            creature->HandleEmote(ANIM_EMOTE_TALK);
-            creature->MonsterTextEmote("I’ve made some bad deals with demons, and I know you orcs have too.Thanks for takin’ us in.");
+            creature->HandleEmote(EMOTE_ONESHOT_TALK);
+            creature->MonsterSay("I've made some bad deals with demons, and I know you orcs have too. Thanks for takin' us in.");
         });
 
-        DoAfterTime(pPlayer, 20 * IN_MILLISECONDS,
+        DoAfterTime(pPlayer, 48 * IN_MILLISECONDS,
             [CreatureGuid = SpratNozzleton->GetObjectGuid()]()
         {
             Map* map = sMapMgr.FindMap(1);
@@ -258,12 +258,12 @@ bool QuestComplete_npc_garthok(Player* pPlayer, Creature* pQuestGiver, Quest con
             if (!creature)
                 return false;
 
-            creature->HandleEmote(ANIM_EMOTE_TALK);
-            creature->MonsterTextEmote("Who cares about honor? Where’s the food!?");
+            creature->HandleEmote(EMOTE_ONESHOT_TALK);
+            creature->MonsterSay("Who cares about honor? Where's the food!?");
         });
 
-        DoAfterTime(pPlayer, 23 * IN_MILLISECONDS,
-            [CreatureGuid = pQuestGiver->GetObjectGuid()]()
+        DoAfterTime(pPlayer, 53 * IN_MILLISECONDS,
+            [CreatureGuid = pQuestGiver->GetObjectGuid(), PlayerName = pPlayer->GetName()]()
         {
             Map* map = sMapMgr.FindMap(1);
             Creature* creature = map->GetCreature(CreatureGuid);
@@ -271,8 +271,9 @@ bool QuestComplete_npc_garthok(Player* pPlayer, Creature* pQuestGiver, Quest con
             if (!creature)
                 return false;
 
-            creature->MonsterTextEmote("Gar’thok laughs.");
-            creature->MonsterSay("You’ll do nicely.Welcome to the horde, my little green friends.Head up the road to Orgrimmar and get settled in - except you, <name>, if you think you’re strong enough to serve the Horde here for a while.");
+            creature->HandleEmote(EMOTE_ONESHOT_LAUGH);
+            creature->MonsterTextEmote("Gar'thok laughs.");
+            creature->MonsterSay("You'll do nicely. Welcome to the horde, my little green friends. Head up the road to Orgrimmar and get settled in. Except you, if you think you're strong enough to serve the Horde here for a while.");
         });
     }
     return false;
