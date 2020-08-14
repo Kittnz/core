@@ -104,7 +104,7 @@ update creature_template set faction = 35 where entry between 80100 and 80111;
 
 REPLACE INTO `creature_template` VALUES (80112, 7, 1150, 0, 0, 0, 'Whirling Whizz-Bot', NULL, 0, 1, 2, 42, 60, 0, 0, 16, 189, 0, 1, 0.857143, 0, 20, 5, 0, 0, 1, 0, 1, 0, 46, 1, 2000, 2000, 1, 0, 0, 5, 0, 0, 0, 0, 1.76, 2.42, 100, 9, 1, 3098, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9074, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, '');
 
-update creature_template set scale = 1, type = 9 where entry = 80112;
+update creature_template set scale = 0.8, type = 9 where entry = 80112;
 
 replace into item_template values
  ('80100', '0', '0', '0', 'Whirling Whizmagig', '', '20628', '1', '0', '1', '0', '0', '0', '-1', '-1', '1',
@@ -1119,7 +1119,7 @@ REPLACE INTO `creature_template` VALUES (80127, 0, 9780, 0, 0, 0, 'Amri Demondea
 REPLACE INTO `creature_template` VALUES (80128, 0, 10745, 0, 0, 0, 'Wizette Icewhistle', 'Venture Refugee', 64, 10, 10, 413, 413, 370, 370, 20, 126, 19, 1, 1.14286, 0, 20, 5, 0, 0, 1, 7, 7, 0, 62, 1, 2000, 2000, 1, 4864, 0, 0, 0, 0, 8, 0, 16.808, 23.111, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 5884, 0, 0, 0, 0, 524298, '');
 
 update creature_template set equipment_id = 0 where entry in (80123,80124,80125,80126,80127,80128);
-update creature_template set npc_flag = 0 where entry in (80123,80124,80125,80126,80127,80128);
+update creature_template set npc_flags = 0 where entry in (80123,80124,80125,80126,80127,80128);
 
 replace into creature_template_addon (entry, bytes1, emote) values ('80122', '1', 0),('80123', '1', 0); 
 	
@@ -1323,7 +1323,13 @@ replace into item_template values
  '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '4', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
- '0', '1', NULL);
+ '0', '1', NULL); 
+ 
+update creature_template set script_name = "npc_garthok" where entry = 3139;
+
+delete from creature where id = 3139;
+
+replace into `creature` (`id`, `map`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `deathstate`, `movementtype`, `spawnflags`, `visibilitymod`, `patch_min`, `patch_max`) values (3139, 1, 0, 3139, 280.431, -4713.14, 11.6292, 5.74273, 25, 25, 0, 0, 100, 0, 0, 0, 0, 0, 0, 10);
 	 
 SET @quest_entry = 80110;
 SET @quest_zone = 14;
@@ -1410,7 +1416,7 @@ where entry = @quest_entry;
 
 -- Object GUID:   4004067
 
-delete from creature where id between 80100 and 80125;
+delete from creature where id between 80100 and 80130;
 
 replace into `creature` (`id`, `map`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `deathstate`, `movementtype`, `spawnflags`, `visibilitymod`, `patch_min`, `patch_max`) values 
 (4075, 1, 0, 0, 1836.26, 1406.97, 144.469, 3.76829, 25, 25, 5, 0, 100, 0, 0, 1, 0, 0, 0, 10),
