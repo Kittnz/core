@@ -275,7 +275,7 @@ bool QuestComplete_npc_garthok(Player* pPlayer, Creature* pQuestGiver, Quest con
 
             creature->HandleEmote(EMOTE_ONESHOT_LAUGH);
             creature->MonsterTextEmote("Gar'thok laughs.");
-            creature->MonsterSay("You'll do nicely. Welcome to the horde, my little green friends. Head up the road to Orgrimmar and get settled in. Except you, if you think you're strong enough to serve the Horde here for a while.");
+            creature->MonsterSay("You'll do nicely. Welcome to the Horde, my little green friends. Head up the road to Orgrimmar and get settled in. Except you, if you think you're strong enough to serve the Horde here for a while.");
         });
     }
     return false;
