@@ -91,6 +91,7 @@ enum GoblinStartingZone
 {
     QUEST_ME_NOT_ANY_KIND_OF_ORC = 80108,
     QUEST_GREEN_GOES_RED         = 80110,
+    QUEST_SHADOW_ON_THE_PLATEAU  = 80107,
     ZONE_STONETALON_MOUNTAINS    = 406,
     ZONE_DUROTAR                 = 14
 };
@@ -144,6 +145,7 @@ void DoAfterTime(Player* player, uint32 p_time, Functor&& function)
 
 enum RefugeeNPCs
 {
+    NPC_NERT_STONETALON      = 80100,
     NPC_NERT_BLASTENTOM      = 80121,
     NPC_GRIZZLE_THE_ENFORCER = 80124,
     NPC_MAYTEN_BOOMRIFLE     = 80125,
@@ -181,7 +183,7 @@ bool QuestComplete_npc_garthok(Player* pPlayer, Creature* pQuestGiver, Quest con
                 return false;
 
             creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            creature->MonsterSay("Mister Gar'thok, may I introduce ya to my crew? We've all got nowhere else to go, and we hear that’s as good a reason as any to join the Horde.");
+            creature->MonsterSay("Mister Gar'thok, may I introduce ya to my crew? We've all got nowhere else to go, and we hear that's as good a reason as any to join the Horde.");
         });
 
         DoAfterTime(pPlayer, 13 * IN_MILLISECONDS,
@@ -194,7 +196,7 @@ bool QuestComplete_npc_garthok(Player* pPlayer, Creature* pQuestGiver, Quest con
                 return false;
 
             creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            creature->MonsterSay("Barely any different for me! I hear you orcs like bashin’ skills, I like bashin' skulls, we’re gonna get along just fine.");
+            creature->MonsterSay("Barely any different for me! I hear you orcs like bashin' skills, I like bashin' skulls, we’re gonna get along just fine.");
         });
 
         DoAfterTime(pPlayer, 21 * IN_MILLISECONDS,
@@ -279,10 +281,118 @@ bool QuestComplete_npc_garthok(Player* pPlayer, Creature* pQuestGiver, Quest con
     return false;
 }
 
+bool QuestComplete_npc_nert_blastentom(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver)
+        return false;
+
+    if (!pPlayer)
+        return false;
+
+    if (pQuest->GetQuestId() == QUEST_SHADOW_ON_THE_PLATEAU)
+    {
+        DoAfterTime(pPlayer, 2 * IN_MILLISECONDS,
+            [CreatureGuid = pQuestGiver->GetObjectGuid()]()
+        {
+            Map* map = sMapMgr.FindMap(1);
+            Creature* creature = map->GetCreature(CreatureGuid);
+
+            if (!creature)
+                return false;
+
+            creature->HandleEmote(EMOTE_ONESHOT_NO);
+            creature->MonsterSay("Alright, I'll be honest with you. The boss isn't gonna be happy we're not bringing him back his treasure. But I've seen enough, and I think you have too, right?");
+        });
+
+        DoAfterTime(pPlayer, 10 * IN_MILLISECONDS,
+            [CreatureGuid = pQuestGiver->GetObjectGuid()]()
+        {
+            Map* map = sMapMgr.FindMap(1);
+            Creature* creature = map->GetCreature(CreatureGuid);
+
+            if (!creature)
+                return false;
+
+            creature->HandleEmote(EMOTE_ONESHOT_QUESTION);
+            creature->MonsterSay("We can't go back to the Venture Co, or the boss'll find us. And there's no way the Steamwheedle Cartel will trust us, not after the Venture Co puts out the word that we took off with their loot, right?");
+        });
+
+
+        DoAfterTime(pPlayer, 17 * IN_MILLISECONDS,
+            [CreatureGuid = pQuestGiver->GetObjectGuid()]()
+        {
+            Map* map = sMapMgr.FindMap(1);
+            Creature* creature = map->GetCreature(CreatureGuid);
+
+            if (!creature)
+                return false;
+
+            creature->HandleEmote(EMOTE_ONESHOT_LAUGH);
+            creature->MonsterSay("So here we are. A bunch of smelly, grimy refugees without a single coin to our name. Who in the world would take us in?");
+        });
+
+
+        DoAfterTime(pPlayer, 20 * IN_MILLISECONDS,
+            [CreatureGuid = pQuestGiver->GetObjectGuid()]()
+        {
+            Map* map = sMapMgr.FindMap(1);
+            Creature* creature = map->GetCreature(CreatureGuid);
+
+            if (!creature)
+                return false;
+
+            creature->MonsterTextEmote("Nert Blastentom smiles.");
+        });
+
+        DoAfterTime(pPlayer, 23 * IN_MILLISECONDS,
+            [CreatureGuid = pQuestGiver->GetObjectGuid()]()
+        {
+            Map* map = sMapMgr.FindMap(1);
+            Creature* creature = map->GetCreature(CreatureGuid);
+
+            if (!creature)
+                return false;
+
+            creature->MonsterSay("I think I have just the place... Get the team and hop in the plane.");
+        });
+
+        DoAfterTime(pPlayer, 21 * IN_MILLISECONDS,
+            [CreatureGuid = pQuestGiver->GetObjectGuid()]()
+        {
+            Map* map = sMapMgr.FindMap(1);
+            Creature* creature = map->GetCreature(CreatureGuid);
+
+            if (!creature)
+                return false;
+
+            creature->SetWalk(true);
+            creature->GetMotionMaster()->MovePoint(0, 1799.06F, 1349.06F, 144.95F, 4.04F, 1.3F);
+        });
+
+        DoAfterTime(pPlayer, 55 * IN_MILLISECONDS,
+            [CreatureGuid = pQuestGiver->GetObjectGuid()]()
+        {
+            Map* map = sMapMgr.FindMap(1);
+            Creature* creature = map->GetCreature(CreatureGuid);
+
+            if (!creature)
+                return false;
+
+            creature->DespawnOrUnsummon();
+        });
+    }
+    return false;
+}
+
 
 void AddSC_episode_1()
 {
     Script *newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_nert_blastentom";
+    newscript->pQuestRewardedNPC = &QuestComplete_npc_nert_blastentom;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_garthok";

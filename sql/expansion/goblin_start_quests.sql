@@ -3,7 +3,7 @@ REPLACE INTO `creature_template` VALUES (80100, 0, 7164, 0, 0, 0, 'Nert Blastent
 
 REPLACE INTO `creature_template` VALUES (80101, 0, 10746, 0, 0, 0, 'Sprat Nozzleton', 'Venture Co. Worker', 0, 3, 3, 219, 219, 0, 0, 852, 35, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 24, 31, 0, 90, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 31.856, 43.802, 100, 7, 4096, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 4276, 0, 0, 0, 0, 2, '');
 
-update creature_template set equipment_id = 51260 where entry = 80100;
+update creature_template set equipment_id = 0 where entry = 80100;
 update creature_template set equipment_id = 152 where entry = 80101;
 
 REPLACE INTO `creature_template` VALUES (80102, 0, 9132, 0, 0, 0, 'Ohgi Cardya', 'Venture Co. Trader', 0, 3, 3, 219, 219, 0, 0, 852, 35, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 24, 31, 0, 90, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 31.856, 43.802, 100, 7, 4096, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 4276, 0, 0, 0, 0, 2, '');
@@ -966,6 +966,8 @@ REPLACE INTO `creature_template` VALUES (80120, 0, 12074, 0, 0, 0, 'Tomb Shadow'
 update creature_template set faction = 22 where entry = 80120;
 update creature_template set loot_id = 1531 where entry = 80120;
 update creature_template set equipment_id = 0 where entry = 80120;
+
+update creature_template set script_name = "npc_nert_blastentom" where entry = 80100;
 	 
 SET @quest_entry = 80107;
 SET @quest_zone = 406;
@@ -1531,6 +1533,7 @@ replace into `creature` (`id`, `map`, `modelid`, `equipment_id`, `position_x`, `
 (80113, 1, 0, 0, 1982.18, 1404.93, 169.319, 3.42396, 25, 25, 5, 0, 100, 0, 0, 1, 0, 0, 0, 10),
 (80113, 1, 0, 0, 1801.5, 1416.77, 166.634, 4.94763, 25, 25, 5, 0, 100, 0, 0, 1, 0, 0, 0, 10);
 
-update creature set spawntimesecsmin = 100, spawntimesecsmax = 180 where id between 80100 and 80125;
+update creature set spawntimesecsmin = 100, spawntimesecsmax = 180 where id between 80101 and 80125;
+update creature set spawntimesecsmin = 1, spawntimesecsmax = 4 where id = 80100;
 
 
