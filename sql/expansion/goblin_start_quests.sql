@@ -1108,6 +1108,19 @@ REPLACE INTO `creature_template` VALUES (80123, 0, 7180, 0, 0, 0, 'Nagus', 'Vent
 
 update creature_template set equipment_id = 0 where entry = 80123;	
 
+REPLACE INTO `creature_template` VALUES (80124, 0, 7166, 0, 0, 0, 'Grizzie the Enforcer', 'Venture Refugee', 523, 11, 11, 456, 456, 406, 406, 20, 29, 19, 1, 1.14286, 0, 20, 5, 0, 0, 1, 12, 14, 0, 64, 1, 2000, 2000, 1, 4864, 0, 0, 0, 0, 1, 0, 18.392, 25.289, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 3153, 0, 0, 0, 0, 524298, '');
+
+REPLACE INTO `creature_template` VALUES (80125, 0, 7179, 0, 0, 0, 'Mayten Boomrifle', 'Venture Refugee', 4648, 8, 8, 334, 334, 297, 297, 20, 126, 19, 1, 1.14286, 0, 20, 5, 0, 0, 1, 7, 10, 0, 58, 1, 2000, 2000, 1, 4864, 0, 0, 0, 0, 3, 0, 13.5872, 18.6824, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 3154, 0, 0, 0, 0, 524298, '');
+
+REPLACE INTO `creature_template`VALUES (80126, 0, 15300, 0, 0, 0, 'Leyti Quicktongue', 'Venture Refugee', 0, 8, 8, 334, 334, 297, 297, 20, 29, 18, 1, 1.14286, 0, 20, 5, 0, 0, 1, 7, 10, 0, 58, 1, 2000, 2000, 1, 4864, 0, 0, 0, 0, 4, 0, 13.5872, 18.6824, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 3155, 0, 0, 0, 0, 524298, '');
+
+REPLACE INTO `creature_template` VALUES (80127, 0, 9780, 0, 0, 0, 'Amri Demondeal', 'Venture Refugee', 4670, 9, 9, 372, 372, 333, 333, 20, 29, 19, 1, 1.14286, 0, 20, 5, 0, 0, 1, 9, 13, 0, 60, 1, 2000, 2000, 1, 4864, 0, 0, 0, 0, 9, 0, 15.2064, 20.9088, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 3156, 0, 0, 0, 0, 524298, '');
+
+REPLACE INTO `creature_template` VALUES (80128, 0, 10745, 0, 0, 0, 'Wizette Icewhistle', 'Venture Refugee', 64, 10, 10, 413, 413, 370, 370, 20, 126, 19, 1, 1.14286, 0, 20, 5, 0, 0, 1, 7, 7, 0, 62, 1, 2000, 2000, 1, 4864, 0, 0, 0, 0, 8, 0, 16.808, 23.111, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 5884, 0, 0, 0, 0, 524298, '');
+
+update creature_template set equipment_id = 0 where entry in (80123,80124,80125,80126,80127,80128);
+update creature_template set npc_flag = 0 where entry in (80123,80124,80125,80126,80127,80128);
+
 replace into creature_template_addon (entry, bytes1, emote) values ('80122', '1', 0),('80123', '1', 0); 
 	
 SET @quest_entry = 80108;
