@@ -265,7 +265,7 @@ bool QuestComplete_npc_garthok(Player* pPlayer, Creature* pQuestGiver, Quest con
         });
 
         DoAfterTime(pPlayer, 53 * IN_MILLISECONDS,
-            [CreatureGuid = pQuestGiver->GetObjectGuid(), PlayerName = pPlayer->GetName()]()
+            [CreatureGuid = pQuestGiver->GetObjectGuid()]()
         {
             Map* map = sMapMgr.FindMap(1);
             Creature* creature = map->GetCreature(CreatureGuid);
@@ -424,7 +424,9 @@ enum HighElfStartingZone
     QUEST_CLEARING_OUT_VERMINS           = 80203,
     QUEST_GATHERING_INTEL                = 80204,
     NPC_CUSTOM_OBJECTIVE_GATHERING_INTEL = 80203,
-    QUEST_SLAKING_THEIR_THIRST           = 80205
+    NPC_CUSTOM_OBJECTIVE_BURNT_WHEELS    = 80204,
+    QUEST_SLAKING_THEIR_THIRST           = 80205,
+    QUEST_BURNT_WHEELS                   = 80206
 };
 
 bool QuestAccept_npc_kathy_wake(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
@@ -518,9 +520,116 @@ bool GOHello_go_farstrider_well(Player* pPlayer, GameObject* pGo)
     return true;
 }
 
+bool GossipHello_npc_malvinah_sunblade(Player* pPlayer, Creature* pCreature)
+{
+    if (pPlayer->GetQuestStatus(QUEST_BURNT_WHEELS) == QUEST_STATUS_INCOMPLETE)
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Malvinah, we need to talk.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+
+    pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+    pPlayer->SEND_GOSSIP_MENU(100200, pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_malvinah_sunblade(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        DoAfterTime(pPlayer, 1 * IN_MILLISECONDS,
+            [CreatureGuid = pCreature->GetObjectGuid()]()
+        {
+            Map* map = sMapMgr.FindMap(0);
+            Creature* creature = map->GetCreature(CreatureGuid);
+
+            if (!creature)
+                return false;
+
+            creature->HandleEmote(EMOTE_ONESHOT_CRY);
+            creature->MonsterSay("My sister was on that wagon!");
+        });
+
+        DoAfterTime(pPlayer, 5 * IN_MILLISECONDS,
+            [CreatureGuid = pCreature->GetObjectGuid()]()
+        {
+            Map* map = sMapMgr.FindMap(0);
+            Creature* creature = map->GetCreature(CreatureGuid);
+
+            if (!creature)
+                return false;
+
+            creature->HandleEmote(EMOTE_ONESHOT_TALK);
+            creature->MonsterSay("We all knew there was a risk but...she was practically here! It could have been us!");
+        });
+
+        DoAfterTime(pPlayer, 10 * IN_MILLISECONDS,
+            [CreatureGuid = pCreature->GetObjectGuid()]()
+        {
+            Map* map = sMapMgr.FindMap(0);
+            Creature* creature = map->GetCreature(CreatureGuid);
+
+            if (!creature)
+                return false;
+
+            creature->HandleEmote(EMOTE_ONESHOT_CRY);
+            creature->MonsterSay("How could this have happened?! We survived the Scourge, the Wetlands, the Horde... only for... them to have their possessions burnt while being kidnapped?! It’s not fair!");
+        });
+
+        DoAfterTime(pPlayer, 15 * IN_MILLISECONDS,
+            [CreatureGuid = pCreature->GetObjectGuid()]()
+        {
+            Map* map = sMapMgr.FindMap(0);
+            Creature* creature = map->GetCreature(CreatureGuid);
+
+            if (!creature)
+                return false;
+
+            creature->HandleEmote(EMOTE_ONESHOT_TALK);
+            creature->MonsterSay("I’m... sorry I shouldn’t burden you with this, we’ve all struggled ever since we lost Quel’thalas but you’ve come through for us here...");
+        });
+
+        DoAfterTime(pPlayer, 20 * IN_MILLISECONDS,
+            [CreatureGuid = pCreature->GetObjectGuid()]()
+        {
+            Map* map = sMapMgr.FindMap(0);
+            Creature* creature = map->GetCreature(CreatureGuid);
+
+            if (!creature)
+                return false;
+
+            creature->HandleEmote(EMOTE_ONESHOT_TALK);
+            creature->MonsterSay("The wood, the water, heck you’ve even defeated those vile Trogg creatures... You’re right, I must be calm, perhaps my sister is still out there, she is the only family I have left and if anyone can save her it’s you.");
+        });
+
+        DoAfterTime(pPlayer, 25 * IN_MILLISECONDS,
+            [CreatureGuid = pCreature->GetObjectGuid(), player = pPlayer]()
+        {
+            Map* map = sMapMgr.FindMap(0);
+            Creature* creature = map->GetCreature(CreatureGuid);
+
+            if (!creature)
+                return false;
+
+            creature->HandleEmote(EMOTE_ONESHOT_EXCLAMATION);
+            creature->MonsterSay("Go speak to that rogueish Human woman who led the escorts, perhaps she can help!");
+            CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(NPC_CUSTOM_OBJECTIVE_BURNT_WHEELS);
+            if (cInfo != nullptr)
+                player->KilledMonster(cInfo, ObjectGuid());
+
+        });
+    }
+
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
 void AddSC_episode_1()
 {
     Script *newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_malvinah_sunblade";
+    newscript->pGossipHello = &GossipHello_npc_malvinah_sunblade;
+    newscript->pGossipSelect = &GossipSelect_npc_malvinah_sunblade;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "go_farstrider_well";
