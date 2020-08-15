@@ -423,7 +423,8 @@ enum HighElfStartingZone
 {
     QUEST_CLEARING_OUT_VERMINS           = 80203,
     QUEST_GATHERING_INTEL                = 80204,
-    NPC_CUSTOM_OBJECTIVE_GATHERING_INTEL = 80203
+    NPC_CUSTOM_OBJECTIVE_GATHERING_INTEL = 80203,
+    QUEST_SLAKING_THEIR_THIRST           = 80205
 };
 
 bool QuestAccept_npc_kathy_wake(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
@@ -496,10 +497,35 @@ GameObjectAI* GetAI_go_exploration_trigger(GameObject* gameobject)
     return new go_exploration_trigger(gameobject);
 }
 
+#define EMPTY_BARREL  80209
+#define FILLED_BARREL 80210
+
+bool GOHello_go_farstrider_well(Player* pPlayer, GameObject* pGo)
+{
+    if (pPlayer->HasItemCount(EMPTY_BARREL, 1))
+    {
+        pPlayer->RemoveItemCurrency(EMPTY_BARREL, 1); // Remove Empty Barrel
+        pPlayer->AddItem(FILLED_BARREL); // Filled Barrel of Water
+        pPlayer->HandleEmote(EMOTE_ONESHOT_KNEEL);
+
+        pGo->SetRespawnTime(1 * MINUTE);
+        pGo->Despawn();
+        pGo->UpdateObjectVisibility();
+    }
+    else
+        pPlayer->GetSession()->SendNotification("Requires Empty Barrel.");
+
+    return true;
+}
+
 void AddSC_episode_1()
 {
     Script *newscript;
 
+    newscript = new Script;
+    newscript->Name = "go_farstrider_well";
+    newscript->pGOHello = &GOHello_go_farstrider_well;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "go_exploration_trigger";
