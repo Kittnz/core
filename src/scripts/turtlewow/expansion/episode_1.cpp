@@ -419,9 +419,35 @@ CreatureAI* GetAI_npc_tomb_shadow(Creature *_Creature)
     return new npc_tomb_shadowAI(_Creature);
 }
 
+enum HighElfStartingZone
+{
+    QUEST_CLEARING_OUT_VERMINS = 80203
+};
+
+bool QuestAccept_npc_kathy_wake(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver)
+        return false;
+
+    if (!pPlayer)
+        return false;
+
+    if (pQuest->GetQuestId() == QUEST_CLEARING_OUT_VERMINS)
+    {
+        pQuestGiver->HandleEmote(EMOTE_ONESHOT_NO);
+        pQuestGiver->MonsterSay("Do not be frightened, these Trogg are small and weak, easy to take out alone, however... if they swarm the Caravans, people could get hurt and we cannot spare more men to deal with them while keeping the other big bad things out there away from the lodge.");
+    }
+    return false;
+}
+
 void AddSC_episode_1()
 {
     Script *newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_kathy_wake";
+    newscript->pQuestAcceptNPC = &QuestAccept_npc_kathy_wake;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_tomb_shadow";
