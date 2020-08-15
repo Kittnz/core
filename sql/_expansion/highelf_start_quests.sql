@@ -276,45 +276,62 @@ nextquestid = @nextquest, RewOrReqMoney = @reward_money,
 nextquestinchain = @nextquestinchain, prevquestid = @prevquest 
 where entry = @quest_entry;	
 
-
--- EVERYTHING BELOW SHOULD NOT BE USED OR APPLIED!!!! DRAFT!!!
-
-replace into item_template values
-
-('80005', '0', '0', '0', 'Empty Barrel', '', '7922', '0', '0', '1', '0', '0', '0', '-1', '-1', '0','0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0','0','0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0','0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0','0', '-1', '0','-1', '4', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '1', NULL),
-
-('80006', '0', '0', '0', 'Filled Barrel', '', '7922', '0', '0', '1', '0', '0', '0', '-1', '-1', '0','0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0','0','0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0','0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0','0', '-1', '0','-1', '4', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '1', NULL);
-
-update item_template set stackable = 10 where entry in (80000, 80001, 80002, 80003);
-
 -- Gathering Intel
 
-SET @quest_entry = 80011;
-SET @quest_zone = 1519; 
-SET @faction_id = 269;
-SET @faction_count = 250; -- TODO: Add SW rep.
-SET @xp_or_money = 186;  
-SET @reward_money = 20;  
+replace into `gameobject_template` values (3000201, 0, 5, 381, 'Quest 80204 Custom Trigger', 0, 0, 0.01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_exploration_trigger');
+
+replace into `creature_template` values (80203, 0, 0, 0, 0, 0, 'Quest 80204 Custom Objective', '', 0, 5, 5, 319, 319, 0, 0, 852, 84, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 24, 31, 0, 90, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 31.856, 43.802, 100, 7, 4096, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 4276, 0, 0, 0, 0, 2, '');
+
+replace into `item_template` values (80206, '0', '2', '8', 'Rusted Bastard Sword', '', '2399', '1', '0', '1', '2', '2', '17', '-1', '-1', '6','0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3500', '0','0', '8', '13', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0','0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0','-1', '1', '0', '0', '0', '0', '0', '2', '3', '0', '0', '35', '0', '0', '0', '0', '0', '0', '0', '0','0', '1', NULL);
+
+replace into `item_template` values (80207, 0, 2, 2, 'Worn Wooden Bow', '', 28235, 1, 0, 1, 2, 2, 15, -1, -1, 6,0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2800, 100,3, 5, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0,0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0,-1, 1, 0, 0, 0, 0, 0, 1, 3, 0, 0, 25, 0, 0, 0, 0, 0, 0, 0, 0,0, 1, NULL);
+
+replace into `item_template` values (80208, 0, 2, 10, 'Crooked Tree Branch', '', 5404, 1, 0, 1, 2, 2, 17, -1, -1, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3200, 0, 0, 8, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 1, 3, 0, 0, 35, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+
+replace into `areatrigger_template` (`id`, `build`, `map_id`, `x`, `y`, `z`, `radius`, `box_x`, `box_y`, `box_z`, `box_orientation`) values 
+(5000, 5875, 0, -5845.7, -4148.67, 387.78, 30, 0, 0, 0, 0);
+
+replace into areatrigger_involvedrelation values (80204, 5000);
+
+SET @quest_entry = 80204;
+SET @quest_zone = 1519;
+SET @title = 'Gathering Intel';
+SET @description = 'You’re less green behind your ears now, which is good.\n\nThe vermins you’ve defeated are only a nuisance compared to something else that may lurk in this valley. Some of the recent refugees who arrived late last night reported seeing a figure of short stature with glowing red eyes in the woods, stalking the area...\n\nSome would say it’s mere superstition, I on the other hand believe it may be the forward scout of a Shadowforge raiding party.\n\nThe Shadowforge are one of the Dark Iron clans, corrupted red eyed dwarves who are at odds with the kingdom of Ironforge. Please investigate the area to the west where the sighting took place, but do not stray too close to the digsite, it is infested with Troggs far stronger than those vermin you fought earlier.\n\nRemember, do not engage if you find something, go in, confirm your sighting and immediately return here.';
+SET @objective = 'Investigate the area to the west of the the Lodge.';
+SET @completetext = 'A whole armed camp? Damn, this is a problem, we’ll need to devote resources into dealing with it and we don’t have many. Thank you for your help <name>! We may call upon you again once we figure out how to deal with this.';
+SET @incompletetext = 'Well $R, is the deed done?';
+SET @faction_id = 72;
+SET @faction_count = 250;
+SET @xp_or_money = 176;
+SET @reward_money = 90; 
 SET @quest_level = 3;
-SET @min_level = 3;
-SET @questgiver_id = 80009; 
-SET @quest_finisher = 80009;
+SET @min_level = 2;
+SET @questgiver_id = 80202;
+SET @quest_finisher = 80202;
 SET @nextquest = 0;
 SET @nextquestinchain = 0;
-SET @prevquest = 80010;
-SET @reward_item_1 = 4919;
-SET @reward_item_2 = 0;
+SET @prevquest = 80203;
+SET @RewChoiceItemId1 = 80206; 
+SET @RewChoiceItemId2 = 80207; 
+SET @RewChoiceItemId3 = 80208;
+SET @RewChoiceItemId4 = 0; 
+SET @RewChoiceItemCount1 = 1;
+SET @RewChoiceItemCount2 = 1;
+SET @RewChoiceItemCount3 = 1;
+SET @RewChoiceItemCount4 = 0;
+SET @reward_item_1 = 0;
+SET @reward_item_2 = 0; 
 SET @reward_item_3 = 0;
 SET @reward_item_4 = 0;
-SET @reward_item_1_count = 1;
+SET @reward_item_1_count = 0;
 SET @reward_item_2_count = 0;
 SET @reward_item_3_count = 0;
 SET @reward_item_4_count = 0;
-SET @creature_to_kill_1 = 0;
-SET @creature_to_kill_2 = 0;
+SET @creature_to_kill_1 = 80203;
+SET @creature_to_kill_2 = 0; 
 SET @creature_to_kill_3 = 0;
 SET @creature_to_kill_4 = 0;
-SET @creature_to_kill_1_count = 0;
+SET @creature_to_kill_1_count = 1;
 SET @creature_to_kill_2_count = 0;
 SET @creature_to_kill_3_count = 0;
 SET @creature_to_kill_4_count = 0;
@@ -327,60 +344,65 @@ SET @required_item_2_count = 0;
 SET @required_item_3_count = 0;
 SET @required_item_4_count = 0;
 
-replace into quest_template (entry, patch, Method, ZoneOrSort, MinLevel, QuestLevel, MaxLevel, Type, RequiredClasses, RequiredRaces, RequiredSkill,
-RequiredSkillValue, RepObjectiveFaction, RepObjectiveValue, RequiredMinRepFaction, RequiredMinRepValue,RequiredMaxRepFaction,
-RequiredMaxRepValue, SuggestedPlayers, LimitTime, QuestFlags, SpecialFlags, PrevQuestId, NextQuestId, ExclusiveGroup, NextQuestInChain,
-SrcItemId, SrcItemCount, SrcSpell, Title, Details, Objectives, OfferRewardText, RequestItemsText, EndText, ObjectiveText1, ObjectiveText2,
-ObjectiveText3, ObjectiveText4, ReqItemId1, ReqItemId2, ReqItemId3, ReqItemId4, ReqItemCount1, ReqItemCount2, ReqItemCount3,
-ReqItemCount4, ReqSourceId1, ReqSourceId2, ReqSourceId3, ReqSourceId4, ReqSourceCount1, ReqSourceCount2, ReqSourceCount3,
-ReqSourceCount4, ReqCreatureOrGOId1, ReqCreatureOrGOId2, ReqCreatureOrGOId3, ReqCreatureOrGOId4, ReqCreatureOrGOCount1,
-ReqCreatureOrGOCount2, ReqCreatureOrGOCount3, ReqCreatureOrGOCount4, ReqSpellCast1, ReqSpellCast2, ReqSpellCast3,
-ReqSpellCast4, RewChoiceItemId1, RewChoiceItemId2, RewChoiceItemId3, RewChoiceItemId4, RewChoiceItemId5, RewChoiceItemId6,
-RewChoiceItemCount1, RewChoiceItemCount2, RewChoiceItemCount3, RewChoiceItemCount4, RewChoiceItemCount5, RewChoiceItemCount6,
-RewItemId1, RewItemId2, RewItemId3, RewItemId4, RewItemCount1, RewItemCount2, RewItemCount3, RewItemCount4, RewRepFaction1,
-RewRepFaction2, RewRepFaction3, RewRepFaction4, RewRepFaction5, RewRepValue1, RewRepValue2, RewRepValue3, RewRepValue4,
-RewRepValue5, RewOrReqMoney, RewMoneyMaxLevel, RewSpell, RewSpellCast, RewMailTemplateId, RewMailMoney, RewMailDelaySecs,
-PointMapId, PointX, PointY, PointOpt, DetailsEmote1, DetailsEmote2, DetailsEmote3, DetailsEmote4, DetailsEmoteDelay1,
-DetailsEmoteDelay2, DetailsEmoteDelay3, DetailsEmoteDelay4, IncompleteEmote, CompleteEmote, OfferRewardEmote1, OfferRewardEmote2,
-OfferRewardEmote3, OfferRewardEmote4, OfferRewardEmoteDelay1, OfferRewardEmoteDelay2, OfferRewardEmoteDelay3,OfferRewardEmoteDelay4,
-StartScript, CompleteScript) values
+replace into quest_template values 
 
-(@quest_entry, '0', '2', @quest_zone, @min_level, @quest_level, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', 
-
-'Gathering Intel', 
-
-'You’re less green behind your ears now, which is good.\n\nThe vermins you’ve defeated are only a nuisance compared to something else that may lurk in this valley. Some of the recent refugees who arrived late last night reported seeing a figure of short stature with glowing red eyes in the woods, stalking the area...\n\nSome would say it’s mere superstition, I on the other hand believe it may be the forward scout of a Shadowforge raiding party.\n\nThe Shadowforge are one of the Dark Iron clans, corrupted red eyed dwarves who are at odds with the kingdom of Ironforge. Please investigate the area to the west where the sighting took place, but do not stray too close to the digsite, it is infested with Troggs far stronger than those vermin you fought earlier.\n\nRemember, do not engage if you find something, go in, confirm your sighting and immediately return here.', 
-
-'Investigate the area to the west of the the Lodge.', 
-
-'A whole armed camp? Damn, this is a problem, we’ll need to devote resources into dealing with it and we don’t have many. Thank you for your help <name>! We may call upon you again once we figure out how to deal with this.', 
-
-'So? Did you find anything yet?', 
-
-'', '', '', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @faction_id, '0', '0', '0', '0', @faction_count, '0', '0', '0', '0', '0', @xp_or_money, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', 0, 0);
-      
+(@quest_entry, '0', '2', @quest_zone, @min_level,  '0', @quest_level, '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @title, @description, @objective, @completetext, @incompletetext, '', '', '', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @faction_id, '0', '0', '0', '0', @faction_count, '0', '0', '0', '0', '0', @xp_or_money, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', 0, 0);
+     
+replace into creature_questrelation (id, quest, patch_min, patch_max) values (@questgiver_id, @quest_entry,'0','10'); 
+replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (@quest_finisher, @quest_entry,'0','10');
+	 
 update quest_template set 
 rewitemid1 = @reward_item_1, rewitemcount1 = @reward_item_1_count,
 rewitemid2 = @reward_item_2, rewitemcount2 = @reward_item_2_count,
 rewitemid3 = @reward_item_3, rewitemcount3 = @reward_item_3_count,
 rewitemid4 = @reward_item_4, rewitemcount4 = @reward_item_4_count,
-ReqCreatureOrGOId2 = @creature_to_kill_2, ReqCreatureOrGOCount1 = @creature_to_kill_1_count,
+RewChoiceItemId1 = @RewChoiceItemId1, RewChoiceItemCount1 = @RewChoiceItemCount1,
+RewChoiceItemId2 = @RewChoiceItemId2, RewChoiceItemCount2 = @RewChoiceItemCount2,
+RewChoiceItemId3 = @RewChoiceItemId3, RewChoiceItemCount3 = @RewChoiceItemCount3,
+RewChoiceItemId4 = @RewChoiceItemId4, RewChoiceItemCount4 = @RewChoiceItemCount4,
+ReqCreatureOrGOId1 = @creature_to_kill_1, ReqCreatureOrGOCount1 = @creature_to_kill_1_count,
 ReqCreatureOrGOId2 = @creature_to_kill_2, ReqCreatureOrGOCount2 = @creature_to_kill_2_count,
 ReqCreatureOrGOId3 = @creature_to_kill_3, ReqCreatureOrGOCount3 = @creature_to_kill_3_count,
 ReqCreatureOrGOId4 = @creature_to_kill_4, ReqCreatureOrGOCount4 = @creature_to_kill_4_count,
 reqitemid1 = @required_item_1, reqitemcount1 = @required_item_1_count,
 reqitemid2 = @required_item_2, reqitemcount2 = @required_item_2_count,
 reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
-reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count
-where entry = @quest_entry;
+reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
+nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
+nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
+objectivetext1='Location scouting completed' where entry = @quest_entry;	
 
-update quest_template set nextquestid = @nextquest where entry = @quest_entry;
-update quest_template set RewOrReqMoney = @reward_money where entry = @quest_entry;
-update quest_template set nextquestinchain = @nextquestinchain where entry = @quest_entry;
-update quest_template set prevquestid = @prevquest where entry = @quest_entry;
-	  
-replace into creature_questrelation (id, quest, patch_min, patch_max) values (@questgiver_id, @quest_entry,'10','10'); 
-replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (@quest_finisher, @quest_entry,'10','10');
+
+
+
+
+-- EVERYTHING BELOW SHOULD NOT BE USED OR APPLIED!!!! DRAFT!!!
+16592 16676 16682 16289 - Female Refugee
+16103 16704 16825 17658 - Male Refugee
+18220 18221 18222 18223 - Ranger Protector <Silvermoon Remnant>
+1435 2027 2045 1297 - Caravan Escort
+16624 - Lor'thas the Holy <Paladin Trainer>
+wait 16624 is better for paladin, fixed it
+16767 - Valanos Dawnfire <Warrior Trainer>
+16655 - Melonius Silvershine <Armor Merchant>
+16705 - Malanius Silvershine <Food Merchant>
+17279 - Magister Ala'shor Sunblood <Mage Trainer>
+16133 - Alyssia Solar <Weapon Merchant>
+18003 - Arisha Sunblade
+16115 - Magistrix Ishalah (The NPC teleporting you to Goldshire)
+16760 - Malvinah Sunblade
+16765 - Priestess Maelah Sunsworn <Priest Trainer>
+16778 - Ranger Rubinah Sunsworn <Hunter Trainer>
+(Move the resident dwarven Hunter trainer elsewhere, perhaps to Stormwind, pet trainer can stay)
+17842 (stand by for this)
+
+replace into item_template values
+
+('80005', '0', '0', '0', 'Empty Barrel', '', '7922', '0', '0', '1', '0', '0', '0', '-1', '-1', '0','0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0','0','0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0','0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0','0', '-1', '0','-1', '4', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '1', NULL),
+
+('80006', '0', '0', '0', 'Filled Barrel', '', '7922', '0', '0', '1', '0', '0', '0', '-1', '-1', '0','0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0','0','0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0','0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0','0', '-1', '0','-1', '4', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '1', NULL);
+
+update item_template set stackable = 10 where entry in (80000, 80001, 80002, 80003);
 
 -- Slaking their Thirst
 -- TODO: Rewards, required items, script.

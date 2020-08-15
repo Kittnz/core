@@ -421,7 +421,9 @@ CreatureAI* GetAI_npc_tomb_shadow(Creature *_Creature)
 
 enum HighElfStartingZone
 {
-    QUEST_CLEARING_OUT_VERMINS = 80203
+    QUEST_CLEARING_OUT_VERMINS           = 80203,
+    QUEST_GATHERING_INTEL                = 80204,
+    NPC_CUSTOM_OBJECTIVE_GATHERING_INTEL = 80203
 };
 
 bool QuestAccept_npc_kathy_wake(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
@@ -440,9 +442,69 @@ bool QuestAccept_npc_kathy_wake(Player* pPlayer, Creature* pQuestGiver, Quest co
     return false;
 }
 
+struct go_exploration_trigger : public GameObjectAI
+{
+    explicit go_exploration_trigger(GameObject* pGo) : GameObjectAI(pGo)
+    {
+        m_bUsed = false;
+        m_uiJustUsedTimer = 1;
+        m_uiUpdateTimer = 1000;
+    }
+
+    bool m_bUsed;
+    uint32 m_uiJustUsedTimer;
+    uint32 m_uiUpdateTimer;
+
+    void UpdateAI(uint32 const uiDiff) override
+    {
+        if (m_uiJustUsedTimer < uiDiff)
+        {
+            if (m_uiUpdateTimer < uiDiff)
+            {
+                std::list<Player*> players;
+                MaNGOS::AnyPlayerInObjectRangeCheck check(me, 30.0f);
+                MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
+
+                Cell::VisitWorldObjects(me, searcher, 30.0f);
+
+                for (Player* pPlayer : players)
+                {
+                    if (pPlayer->GetQuestStatus(QUEST_GATHERING_INTEL) == QUEST_STATUS_INCOMPLETE)
+                    {
+                        CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(NPC_CUSTOM_OBJECTIVE_GATHERING_INTEL);
+                        if (cInfo != nullptr)
+                            pPlayer->KilledMonster(cInfo, ObjectGuid());
+                    }
+                }
+                m_uiUpdateTimer = 2500;
+            }
+            else
+            {
+                m_uiUpdateTimer -= uiDiff;
+            }
+            m_bUsed = true;
+        }
+        else
+        {
+            m_uiJustUsedTimer -= uiDiff;
+        }
+    }
+};
+
+GameObjectAI* GetAI_go_exploration_trigger(GameObject* gameobject)
+{
+    return new go_exploration_trigger(gameobject);
+}
+
 void AddSC_episode_1()
 {
     Script *newscript;
+
+
+    newscript = new Script;
+    newscript->Name = "go_exploration_trigger";
+    newscript->GOGetAI = &GetAI_go_exploration_trigger;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_kathy_wake";
