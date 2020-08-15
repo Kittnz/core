@@ -1057,7 +1057,7 @@ where entry = @quest_entry;
 replace into `gameobject_template` values 
 (3000100, 0, 1, 330, 'FM Acquisition, Blastentom\'s Property', 0, 0, 0.8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_fm_acquisition');
 
-replace into broadcast_text (ID, MaleText) values (100100, 'As you turn inspect the plane more closely you notice something scribbled onto it\'s side: Nert Blastentom\'s Property.\n\nThe plane is decorated with some stickers on the back, among them were a small coin, a yellow parrot and a hammer.\n\nThe words FM Acquisition were written on the bottom of the plane.');
+replace into broadcast_text (ID, MaleText) values (100100, 'As you inspect the plane more carefully, you notice the words "Property of Nert Blastentom" scribbled onto the side.\n\nThe plane is decorated with small stickers, among them a small coin, a yellow parrot, and a hammer.\n\nThe words "FM Acquisition" are inscribed on the bottom.');
 replace into npc_text (ID, BroadcastTextID0) values (100100, 100100);
 
 replace into item_template values
@@ -1535,7 +1535,7 @@ replace into `creature` (`id`, `map`, `modelid`, `equipment_id`, `position_x`, `
 (80113, 1, 0, 0, 1982.18, 1404.93, 169.319, 3.42396, 25, 25, 5, 0, 100, 0, 0, 1, 0, 0, 0, 10),
 (80113, 1, 0, 0, 1801.5, 1416.77, 166.634, 4.94763, 25, 25, 5, 0, 100, 0, 0, 1, 0, 0, 0, 10);
 
-update creature set spawntimesecsmin = 100, spawntimesecsmax = 180 where id between 80101 and 80125;
+update creature set spawntimesecsmin = 60, spawntimesecsmax = 120 where id between 80101 and 80125;
 update creature set spawntimesecsmin = 1, spawntimesecsmax = 4 where id = 80100;
 
 
