@@ -422,16 +422,18 @@ CreatureAI* GetAI_npc_tomb_shadow(Creature *_Creature)
 
 enum HighElfStartingZone
 {
-    QUEST_CLEARING_OUT_VERMINS              = 80203,
-    QUEST_GATHERING_INTEL                   = 80204,
-    NPC_CUSTOM_OBJECTIVE_GATHERING_INTEL    = 80203,
-    NPC_CUSTOM_OBJECTIVE_BURNT_WHEELS       = 80204,
-    QUEST_SLAKING_THEIR_THIRST              = 80205,
-    QUEST_BURNT_WHEELS                      = 80206,
-    NPC_CUSTOM_OBJECTIVE_ITEM_SCRAPPING     = 80206,
-    NPC_ALISHA_SUNBLADE                     = 80210,
-    NPC_CUSTOM_OBJECTIVE_SUNBLADE_RENUNION  = 80211,
-    QUEST_SUNBLADE_RENUNION                 = 80208
+    QUEST_CLEARING_OUT_VERMINS                = 80203,
+    QUEST_GATHERING_INTEL                      = 80204,
+    NPC_CUSTOM_OBJECTIVE_GATHERING_INTEL       = 80203,
+    NPC_CUSTOM_OBJECTIVE_BURNT_WHEELS          = 80204,
+    QUEST_SLAKING_THEIR_THIRST                 = 80205,
+    QUEST_BURNT_WHEELS                         = 80206,
+    NPC_CUSTOM_OBJECTIVE_ITEM_SCRAPPING        = 80206,
+    NPC_ALISHA_SUNBLADE                        = 80210,
+    NPC_CUSTOM_OBJECTIVE_SUNBLADE_RENUNION     = 80211,
+    QUEST_SUNBLADE_RENUNION                    = 80208,
+    QUEST_PORTING_TO_GOLDSHIRE                 = 80209,
+    NPC_CUSTOM_OBJECTIVE_PORTING_TO_GOLDSHIRE  = 80212
 };
 
 bool QuestAccept_npc_kathy_wake(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
@@ -712,7 +714,7 @@ bool GOHello_go_shadowforge_cage(Player* pPlayer, GameObject* pGo)
             // Change it later to real coords.
             float fX, fY, fZ;
             Alisha->GetRandomPoint(Alisha->GetPositionX(), Alisha->GetPositionY(), Alisha->GetPositionZ(), 15.0f, fX, fY, fZ);
-            Alisha->GetMotionMaster()->MovePoint(0, fX, fY, fZ, 0, 0.5F);
+            Alisha->GetMotionMaster()->MovePoint(0, fX, fY, fZ, 0, 1.0F);
             Alisha->SetWalk(true);
 
             DoAfterTime(pPlayer, 25 * IN_MILLISECONDS,
@@ -733,9 +735,64 @@ bool GOHello_go_shadowforge_cage(Player* pPlayer, GameObject* pGo)
     return true;
 }
 
+
+bool GossipHello_npc_magistrix_ishalah(Player* pPlayer, Creature* pCreature)
+{
+    if (pPlayer->GetQuestStatus(QUEST_PORTING_TO_GOLDSHIRE) == QUEST_STATUS_INCOMPLETE)
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I'm ready, Ishalah. Teleport me to Goldshire!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+
+    pPlayer->SEND_GOSSIP_MENU(100201, pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_magistrix_ishalah(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pCreature->MonsterSay("Safe travels, friend!");
+
+        float dis{ -3.0F };
+        float x, y, z;
+        pPlayer->GetSafePosition(x, y, z);
+        x += dis * cos(pPlayer->GetOrientation());
+        y += dis * sin(pPlayer->GetOrientation());
+        pPlayer->SummonGameObject(3000204, x, y, z + 0.5F, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 30, true);
+        pPlayer->SummonGameObject(3000205, x, y, z - 1.5F, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 30, true);
+
+        pCreature->HandleEmote(EMOTE_STATE_SUBMERGED);
+    }
+
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
+bool GOHello_go_portal_goldshire(Player* pPlayer, GameObject* pGo)
+{
+    if (pPlayer->GetQuestStatus(QUEST_PORTING_TO_GOLDSHIRE) == QUEST_STATUS_INCOMPLETE)
+    {
+        pPlayer->TeleportTo(0, -9464.0f, 62.0f, 56.0f, 0.0f);
+        CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(NPC_CUSTOM_OBJECTIVE_PORTING_TO_GOLDSHIRE);
+        if (cInfo != nullptr)
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+    }
+
+    return true;
+}
+
 void AddSC_episode_1()
 {
     Script *newscript;
+
+    newscript = new Script;
+    newscript->Name = "go_portal_goldshire";
+    newscript->pGOHello = &GOHello_go_portal_goldshire;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_magistrix_ishalah";
+    newscript->pGossipHello = &GossipHello_npc_magistrix_ishalah;
+    newscript->pGossipSelect = &GossipSelect_npc_magistrix_ishalah;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "go_shadowforge_cage";

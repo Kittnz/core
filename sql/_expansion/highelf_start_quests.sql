@@ -712,7 +712,7 @@ replace into item_template values
 SET @quest_entry = 80208;
 SET @quest_zone = 1519;
 SET @title = 'Sunblade Reunion';
-SET @description = 'You’re the hero of the hour, $N! All the Refugees are speaking your name...\n\nI believe a friend is grateful in particular, why not go and speak with Malvinah Sunblade?';
+SET @description = 'You’re the hero of the hour, $N! All the Refugees are speaking your name!\n\nI believe a friend is grateful in particular, why not go and speak with Malvinah Sunblade?';
 SET @objective = 'Speak to Malvinah Sunblade.';
 SET @completetext = 'You did well, $N, you deserve all this praise.\n\nIt may not seem like much to save a few refugees, but once you consider that this is just the start of your journey, combined with the courage you exhibited. \n\nWell I can safely say that I am proud to have met you. However, there is another matter we much talk about.\n\nSeveral of the Refugee caravans have decided to move on to Stormwind, we can escort them part of the way, but eventually they will arrive in a region beset by strife.\n\nWhile bandits and beasts run amok, we are ordered to outlying areas such as this.\n\nWe can’t go against our orders, but adventurers like you can make a difference back home.\n\nThink about it and talk to me again.';
 SET @incompletetext = 'The Hero of the hour returns huh?';
@@ -727,19 +727,19 @@ SET @quest_finisher = 1156;
 SET @nextquest = 0;
 SET @nextquestinchain = 0;
 SET @prevquest = 80207;
-SET @RewChoiceItemId1 = 80221; 
+SET @RewChoiceItemId1 = 0; 
 SET @RewChoiceItemId2 = 0; 
 SET @RewChoiceItemId3 = 0;
 SET @RewChoiceItemId4 = 0; 
-SET @RewChoiceItemCount1 = 1;
+SET @RewChoiceItemCount1 = 0;
 SET @RewChoiceItemCount2 = 0;
 SET @RewChoiceItemCount3 = 0;
 SET @RewChoiceItemCount4 = 0;
-SET @reward_item_1 = 0;
+SET @reward_item_1 = 80221;
 SET @reward_item_2 = 0; 
 SET @reward_item_3 = 0;
 SET @reward_item_4 = 0;
-SET @reward_item_1_count = 0;
+SET @reward_item_1_count = 1;
 SET @reward_item_2_count = 0;
 SET @reward_item_3_count = 0;
 SET @reward_item_4_count = 0;
@@ -789,30 +789,58 @@ nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
 objectivetext1='Listen to Malvinah Sunblade' 
 where entry = @quest_entry;	
 
--- EVERYTHING BELOW SHOULD NOT BE USED OR APPLIED!!!! DRAFT!!!
--- PORTING TO GOLDSHIRE
+-- Porting to Goldshire
 
-SET @quest_entry = 80016;
-SET @quest_zone = 1519; 
-SET @faction_id = 269;
-SET @faction_count = 75; -- TODO: Add SW rep.
-SET @xp_or_money = 286;  
-SET @reward_money = 0;  
+replace into broadcast_text (ID, MaleText) values (100201, 'Ah if it isn’t $N! You’ve certainly become famous here...\n\nAh you need to get to Goldshire? Well I can’t deny you after all you’ve done for us. I will be able to teleport you there this one time as a special favor.\n\nAre you ready to go? It will be a while before you can return here once you leave.');
+replace into npc_text (ID, BroadcastTextID0) values (100201, 100201);
+
+replace into`creature_template` values (80212, 0, 0, 0, 0, 0, 'Quest 80209 Custom Objective', '', 0, 5, 5, 319, 319, 0, 0, 852, 84, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 24, 31, 0, 90, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 31.856, 43.802, 100, 7, 4096, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 4276, 0, 0, 0, 0, 2, '');
+
+-- Correct NPC display for this one: 16115, change later when implemented.
+replace into `creature_template` values (80213, 0, 1643, 0, 0, 0, 'Magistrix Ishalah', '', 0, 6, 7, 319, 319, 0, 0, 852, 84, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 24, 31, 0, 90, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 31.856, 43.802, 100, 7, 4096, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 4276, 0, 0, 0, 0, 2, 'npc_magistrix_ishalah');
+
+update creature_template set npc_flags = 1 where entry = 80213;
+update creature_template set equipment_id = 0 where entry = 80213;
+
+replace into gameobject_template values 
+(3000204, 0, 1, 2770,  'Portal to Goldshire', 35, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_portal_goldshire'),
+(3000205, 0, 1, 6696,  'Portal to Goldshire', 35, 0, 0.5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_portal_goldshire');
+
+SET @quest_entry = 80209;
+SET @quest_zone = 1519;
+SET @title = 'Porting to Goldshire';
+SET @description = 'You’ve decided to assist then? I am grateful $N!\n\nThe situation back home is dire and we simply are not allowed to go back. I do not know what kind of affliction ails the Stormwind nobles. Ever since King Varian disappeared, the Kingdom has been run into the ground!\n\nAlas while we cannot deal with the nobles, we can deal with the problems in the provinces! Elwynn Forest is a good place to start, the capital itself is located in this region and it has been beset by issues. Kobolds raiding the mines, Gnolls raiding towns and Bandits raiding the roads. \n\nMy friend Marshal Dugan is stationed in Goldshire and he can put you to good use, I believe the Magistrix here can teleport you to Goldshire.';
+SET @objective = 'Speak to Magistrix Ishalah to be teleported to Goldshire, report to Marshal Dugan.';
+SET @completetext = 'Kathy Wake sent you?! You’ve certainly made connections if an SI... I mean, if a member of the Alliance military sent you!\n\nIf you’re here to assist, I can assure you that we’ll need the help. I have requested for reinforcements from the capital several times and received nothing.\n\nIf Kathy vouches for you, then it’s good enough for me. I believe I have your first assignment in mind!\n\nOh and don’t forget to visit the inn, you may want to attune your Hearthstone there if you have one.';
+SET @incompletetext = 'A High elf here? What can I do for you stranger';
+SET @faction_id = 72;
+SET @faction_count = 250;
+SET @xp_or_money = 234;
+SET @reward_money = 0; 
 SET @quest_level = 5;
-SET @min_level = 5;
-SET @questgiver_id = 80009; 
+SET @min_level = 4;
+SET @questgiver_id = 1156;
 SET @quest_finisher = 240;
+SET @nextquest = 0;
 SET @nextquestinchain = 0;
-SET @prevquest = 80015;
-SET @reward_item_1 = 0; 
-SET @reward_item_2 = 0;
+SET @prevquest = 80208;
+SET @RewChoiceItemId1 = 0; 
+SET @RewChoiceItemId2 = 0; 
+SET @RewChoiceItemId3 = 0;
+SET @RewChoiceItemId4 = 0; 
+SET @RewChoiceItemCount1 = 0;
+SET @RewChoiceItemCount2 = 0;
+SET @RewChoiceItemCount3 = 0;
+SET @RewChoiceItemCount4 = 0;
+SET @reward_item_1 = 0;
+SET @reward_item_2 = 0; 
 SET @reward_item_3 = 0;
 SET @reward_item_4 = 0;
 SET @reward_item_1_count = 0;
 SET @reward_item_2_count = 0;
 SET @reward_item_3_count = 0;
 SET @reward_item_4_count = 0;
-SET @creature_to_kill_1 = 80015; -- TODO: Script this trigger.
+SET @creature_to_kill_1 = 80212;
 SET @creature_to_kill_2 = 0; 
 SET @creature_to_kill_3 = 0;
 SET @creature_to_kill_4 = 0;
@@ -829,36 +857,48 @@ SET @required_item_2_count = 0;
 SET @required_item_3_count = 0;
 SET @required_item_4_count = 0;
 
--- TODO GOSSIP SCRIPT Gossip text during this stage: Ah if it isn’t <name> ! You’ve certainly become famous here...Ah you need to get to Goldshire? Well I can’t deny you after all you’ve done for us. I will be able to teleport you there this one time as a special favor. Are you ready to go? It will be a while before you can return here once you leave. Yes/No
+replace into quest_template values 
 
+(@quest_entry, '0', '2', @quest_zone, @min_level,  '0', @quest_level, '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @title, @description, @objective, @completetext, @incompletetext, '', '', '', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @faction_id, '0', '0', '0', '0', @faction_count, '0', '0', '0', '0', '0', @xp_or_money, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', 0, 0);
+     
+replace into creature_questrelation (id, quest, patch_min, patch_max) values (@questgiver_id, @quest_entry,'0','10'); 
+replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (@quest_finisher, @quest_entry,'0','10');
+	 
+update quest_template set 
+rewitemid1 = @reward_item_1, rewitemcount1 = @reward_item_1_count,
+rewitemid2 = @reward_item_2, rewitemcount2 = @reward_item_2_count,
+rewitemid3 = @reward_item_3, rewitemcount3 = @reward_item_3_count,
+rewitemid4 = @reward_item_4, rewitemcount4 = @reward_item_4_count,
+RewChoiceItemId1 = @RewChoiceItemId1, RewChoiceItemCount1 = @RewChoiceItemCount1,
+RewChoiceItemId2 = @RewChoiceItemId2, RewChoiceItemCount2 = @RewChoiceItemCount2,
+RewChoiceItemId3 = @RewChoiceItemId3, RewChoiceItemCount3 = @RewChoiceItemCount3,
+RewChoiceItemId4 = @RewChoiceItemId4, RewChoiceItemCount4 = @RewChoiceItemCount4,
+ReqCreatureOrGOId1 = @creature_to_kill_1, ReqCreatureOrGOCount1 = @creature_to_kill_1_count,
+ReqCreatureOrGOId2 = @creature_to_kill_2, ReqCreatureOrGOCount2 = @creature_to_kill_2_count,
+ReqCreatureOrGOId3 = @creature_to_kill_3, ReqCreatureOrGOCount3 = @creature_to_kill_3_count,
+ReqCreatureOrGOId4 = @creature_to_kill_4, ReqCreatureOrGOCount4 = @creature_to_kill_4_count,
+reqitemid1 = @required_item_1, reqitemcount1 = @required_item_1_count,
+reqitemid2 = @required_item_2, reqitemcount2 = @required_item_2_count,
+reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
+reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
+nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
+nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
+objectivetext1='Teleport to Goldshire' 
+where entry = @quest_entry;	
 
-'Porting to Goldshire', 
+-- EVERYTHING BELOW SHOULD NOT BE USED OR APPLIED!!!! DRAFT!!!
 
-'You’ve decided to assist then? I am grateful $N!\n\nThe situation back home is dire and we simply are not allowed to go back. I do not know what kind of affliction ails the Stormwind nobles...Ever since King Varian disappeared, the Kingdom has been run into the ground!\n\nAlas while we cannot deal with the nobles, we can deal with the problems in the provinces! Elwynn Forest is a good place to start, the capital itself is located in this region and it has been beset by issues. Kobolds raiding the mines, Gnolls raiding towns and Bandits raiding the roads...\n\nMy friend Marshal Dugan is stationed in Goldshire and he can put you to good use, I believe the Magistrix here can teleport you to Goldshire.', 
-
-'Speak to Magistrix Ishalah to be teleported to Goldshire, report to Marshal Dugan.', 
-
-'Kathy Wake sent you?! You’ve certainly made connections if an SI...I mean, if a member of the Alliance military sent you! If you’re here to assist, I can assure you that we’ll need the help. I have requested for reinforcements from the capital several times and received nothing. If Kathy vouches for you, then it’s good enough for me.  I believe I have your first assignment in mind! Oh and don’t forget to visit the inn, you may want to attune your Hearthstone there if you have one.', 
-
-'A High elf here? What can I do for you stranger?', 
-
-'', '', '', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @faction_id, '0', '0', '0', '0', @faction_count, '0', '0', '0', '0', '0', @xp_or_money, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', 0, 0);
-      
-16592 16676 16682 16289 - Female Refugee
-16103 16704 16825 17658 - Male Refugee
-18220 18221 18222 18223 - Ranger Protector <Silvermoon Remnant>
-1435 2027 2045 1297 - Caravan Escort
-16624 - Lor'thas the Holy <Paladin Trainer>
-wait 16624 is better for paladin, fixed it
-16767 - Valanos Dawnfire <Warrior Trainer>
-16655 - Melonius Silvershine <Armor Merchant>
-16705 - Malanius Silvershine <Food Merchant>
-17279 - Magister Ala'shor Sunblood <Mage Trainer>
-16133 - Alyssia Solar <Weapon Merchant>
-
-16115 - Magistrix Ishalah (The NPC teleporting you to Goldshire)
-16760 - Malvinah Sunblade
-16765 - Priestess Maelah Sunsworn <Priest Trainer>
-16778 - Ranger Rubinah Sunsworn <Hunter Trainer>
-(Move the resident dwarven Hunter trainer elsewhere, perhaps to Stormwind, pet trainer can stay)
-17842 (stand by for this)
+-- 18220 18221 18222 18223 - Ranger Protector <Silvermoon Remnant>
+-- 1435 2027 2045 1297 - Caravan Escort
+-- 16624 - Lor'thas the Holy <Paladin Trainer>
+-- wait 16624 is better for paladin, fixed it
+-- 16767 - Valanos Dawnfire <Warrior Trainer>
+-- 16655 - Melonius Silvershine <Armor Merchant>
+-- 16705 - Malanius Silvershine <Food Merchant>
+-- 17279 - Magister Ala'shor Sunblood <Mage Trainer>
+-- 16133 - Alyssia Solar <Weapon Merchant>
+-- 16760 - Malvinah Sunblade
+-- 16765 - Priestess Maelah Sunsworn <Priest Trainer>
+-- 16778 - Ranger Rubinah Sunsworn <Hunter Trainer>
+-- (Move the resident dwarven Hunter trainer elsewhere, perhaps to Stormwind, pet trainer can stay)
+-- 17842 (stand by for this)
