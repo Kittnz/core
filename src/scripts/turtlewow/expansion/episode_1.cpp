@@ -421,14 +421,16 @@ CreatureAI* GetAI_npc_tomb_shadow(Creature *_Creature)
 
 enum HighElfStartingZone
 {
-    QUEST_CLEARING_OUT_VERMINS           = 80203,
-    QUEST_GATHERING_INTEL                = 80204,
-    NPC_CUSTOM_OBJECTIVE_GATHERING_INTEL = 80203,
-    NPC_CUSTOM_OBJECTIVE_BURNT_WHEELS    = 80204,
-    QUEST_SLAKING_THEIR_THIRST           = 80205,
-    QUEST_BURNT_WHEELS                   = 80206,
-    NPC_CUSTOM_OBJECTIVE_ITEM_SCRAPPING  = 80206,
-    NPC_ALISHA_SUNBLADE                  = 80210
+    QUEST_CLEARING_OUT_VERMINS              = 80203,
+    QUEST_GATHERING_INTEL                   = 80204,
+    NPC_CUSTOM_OBJECTIVE_GATHERING_INTEL    = 80203,
+    NPC_CUSTOM_OBJECTIVE_BURNT_WHEELS       = 80204,
+    QUEST_SLAKING_THEIR_THIRST              = 80205,
+    QUEST_BURNT_WHEELS                      = 80206,
+    NPC_CUSTOM_OBJECTIVE_ITEM_SCRAPPING     = 80206,
+    NPC_ALISHA_SUNBLADE                     = 80210,
+    NPC_CUSTOM_OBJECTIVE_SUNBLADE_RENUNION  = 80211,
+    QUEST_SUNBLADE_RENUNION                 = 80208
 };
 
 bool QuestAccept_npc_kathy_wake(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
@@ -527,6 +529,9 @@ bool GossipHello_npc_malvinah_sunblade(Player* pPlayer, Creature* pCreature)
     if (pPlayer->GetQuestStatus(QUEST_BURNT_WHEELS) == QUEST_STATUS_INCOMPLETE)
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Malvinah, we need to talk.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
+    if (pPlayer->GetQuestStatus(QUEST_SUNBLADE_RENUNION) == QUEST_STATUS_INCOMPLETE)
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I'm glad that your sister is safe and sound!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+
     pPlayer->PrepareQuestMenu(pCreature->GetGUID());
     pPlayer->SEND_GOSSIP_MENU(100200, pCreature->GetGUID());
     return true;
@@ -572,7 +577,7 @@ bool GossipSelect_npc_malvinah_sunblade(Player* pPlayer, Creature* pCreature, ui
                 return false;
 
             creature->HandleEmote(EMOTE_ONESHOT_CRY);
-            creature->MonsterSay("How could this have happened?! We survived the Scourge, the Wetlands, the Horde... only for... them to have their possessions burnt while being kidnapped?! It’s not fair!");
+            creature->MonsterSay("How could this have happened?! We survived the Scourge, the Wetlands, the Horde... only for... them to have their possessions burnt while being kidnapped?! It's not fair!");
         });
 
         DoAfterTime(pPlayer, 15 * IN_MILLISECONDS,
@@ -585,7 +590,7 @@ bool GossipSelect_npc_malvinah_sunblade(Player* pPlayer, Creature* pCreature, ui
                 return false;
 
             creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            creature->MonsterSay("I’m... sorry I shouldn’t burden you with this, we’ve all struggled ever since we lost Quel’thalas but you’ve come through for us here...");
+            creature->MonsterSay("I’m... sorry I shouldn’t burden you with this, we've all struggled ever since we lost Quel'thalas but you’ve come through for us here...");
         });
 
         DoAfterTime(pPlayer, 20 * IN_MILLISECONDS,
@@ -598,7 +603,7 @@ bool GossipSelect_npc_malvinah_sunblade(Player* pPlayer, Creature* pCreature, ui
                 return false;
 
             creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            creature->MonsterSay("The wood, the water, heck you’ve even defeated those vile Trogg creatures... You’re right, I must be calm, perhaps my sister is still out there, she is the only family I have left and if anyone can save her it’s you.");
+            creature->MonsterSay("The wood, the water, heck you've even defeated those vile Trogg creatures... You're right, I must be calm, perhaps my sister is still out there, she is the only family I have left and if anyone can save her it's you.");
         });
 
         DoAfterTime(pPlayer, 25 * IN_MILLISECONDS,
@@ -616,6 +621,67 @@ bool GossipSelect_npc_malvinah_sunblade(Player* pPlayer, Creature* pCreature, ui
             if (cInfo != nullptr)
                 player->KilledMonster(cInfo, ObjectGuid());
 
+        });
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
+    {
+        DoAfterTime(pPlayer, 2 * IN_MILLISECONDS,
+            [CreatureGuid = pCreature->GetObjectGuid(), player = pPlayer]()
+        {
+            Map* map = sMapMgr.FindMap(0);
+            Creature* creature = map->GetCreature(CreatureGuid);
+
+            if (!creature)
+                return false;
+
+            creature->HandleEmote(EMOTE_ONESHOT_CHEER);
+            creature->MonsterSay("You've saved my sister!");
+        });
+
+
+        DoAfterTime(pPlayer, 8 * IN_MILLISECONDS,
+            [CreatureGuid = pCreature->GetObjectGuid(), player = pPlayer]()
+        {
+            Map* map = sMapMgr.FindMap(0);
+            Creature* creature = map->GetCreature(CreatureGuid);
+
+            if (!creature)
+                return false;
+
+            creature->HandleEmote(EMOTE_ONESHOT_TALK);
+            creature->MonsterSay("I can't overstate how honored I am to be able to call you my friend. Thanks to you little Arisha is safe. We’re all so overwhelmed by your heroism...");
+        });
+
+
+        DoAfterTime(pPlayer, 14 * IN_MILLISECONDS,
+            [CreatureGuid = pCreature->GetObjectGuid(), player = pPlayer]()
+        {
+            Map* map = sMapMgr.FindMap(0);
+            Creature* creature = map->GetCreature(CreatureGuid);
+
+            if (!creature)
+                return false;
+
+            creature->HandleEmote(EMOTE_ONESHOT_TALK);
+            creature->MonsterSay("Several wagons have moved on to Stormwind while you were away but a lot of us have decided to stay here for the time being perhaps even forever. ");
+        });
+
+
+        DoAfterTime(pPlayer, 19 * IN_MILLISECONDS,
+            [CreatureGuid = pCreature->GetObjectGuid(), player = pPlayer]()
+        {
+            Map* map = sMapMgr.FindMap(0);
+            Creature* creature = map->GetCreature(CreatureGuid);
+
+            if (!creature)
+                return false;
+
+            creature->HandleEmote(EMOTE_ONESHOT_APPLAUD);
+            creature->MonsterSay("I also believe Kathy wishes to speak with you... Here is a present from me, take care, okay? Wherever you may end up, remember that we'll remains friends!");
+            CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(NPC_CUSTOM_OBJECTIVE_SUNBLADE_RENUNION);
+            if (cInfo != nullptr)
+                player->KilledMonster(cInfo, ObjectGuid());
         });
     }
 

@@ -695,33 +695,55 @@ nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
 objectivetext2='High Elf refugees freed' 
 where entry = @quest_entry;	
 
+-- Sunblade Reunion
 
--- EVERYTHING BELOW SHOULD NOT BE USED OR APPLIED!!!! DRAFT!!!
+replace into`creature_template` values (80211, 0, 0, 0, 0, 0, 'Quest 80208 Custom Objective', '', 0, 5, 5, 319, 319, 0, 0, 852, 84, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 24, 31, 0, 90, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 31.856, 43.802, 100, 7, 4096, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 4276, 0, 0, 0, 0, 2, '');
 
--- SUNBLADE REUNION
+replace into item_template values
+ ('80221', '0', '0', '0', 'Forever-Lovely Rose', 'Just like our friendship this rose shall never wither. — Malvinah Sunblade', '942', '1', '0', '1', '0', '0', '1', '-1', '-1', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
 
-SET @quest_entry = 80015;
-SET @quest_zone = 1519; 
+SET @quest_entry = 80208;
+SET @quest_zone = 1519;
+SET @title = 'Sunblade Reunion';
+SET @description = 'You’re the hero of the hour, $N! All the Refugees are speaking your name...\n\nI believe a friend is grateful in particular, why not go and speak with Malvinah Sunblade?';
+SET @objective = 'Speak to Malvinah Sunblade.';
+SET @completetext = 'You did well, $N, you deserve all this praise.\n\nIt may not seem like much to save a few refugees, but once you consider that this is just the start of your journey, combined with the courage you exhibited. \n\nWell I can safely say that I am proud to have met you. However, there is another matter we much talk about.\n\nSeveral of the Refugee caravans have decided to move on to Stormwind, we can escort them part of the way, but eventually they will arrive in a region beset by strife.\n\nWhile bandits and beasts run amok, we are ordered to outlying areas such as this.\n\nWe can’t go against our orders, but adventurers like you can make a difference back home.\n\nThink about it and talk to me again.';
+SET @incompletetext = 'The Hero of the hour returns huh?';
 SET @faction_id = 269;
-SET @faction_count = 75; -- TODO: Add SW rep.
-SET @xp_or_money = 186;  
-SET @reward_money = 10;  
+SET @faction_count = 250;
+SET @xp_or_money = 204;
+SET @reward_money = 100; 
 SET @quest_level = 5;
-SET @min_level = 5;
-SET @questgiver_id = 1156; 
-SET @quest_finisher = 80009;
+SET @min_level = 4;
+SET @questgiver_id = 1156;
+SET @quest_finisher = 1156;
 SET @nextquest = 0;
 SET @nextquestinchain = 0;
-SET @prevquest = 80014;
-SET @reward_item_1 = 0; -- TODO: <Rose head item with the following flavor text:> “Just like our friendship this rose shall never wither. - Malvinah Sunblade”
-SET @reward_item_2 = 0;
+SET @prevquest = 80207;
+SET @RewChoiceItemId1 = 80221; 
+SET @RewChoiceItemId2 = 0; 
+SET @RewChoiceItemId3 = 0;
+SET @RewChoiceItemId4 = 0; 
+SET @RewChoiceItemCount1 = 1;
+SET @RewChoiceItemCount2 = 0;
+SET @RewChoiceItemCount3 = 0;
+SET @RewChoiceItemCount4 = 0;
+SET @reward_item_1 = 0;
+SET @reward_item_2 = 0; 
 SET @reward_item_3 = 0;
 SET @reward_item_4 = 0;
 SET @reward_item_1_count = 0;
 SET @reward_item_2_count = 0;
 SET @reward_item_3_count = 0;
 SET @reward_item_4_count = 0;
-SET @creature_to_kill_1 = 80014; -- TODO: Script this trigger.
+SET @creature_to_kill_1 = 80211;
 SET @creature_to_kill_2 = 0; 
 SET @creature_to_kill_3 = 0;
 SET @creature_to_kill_4 = 0;
@@ -738,20 +760,36 @@ SET @required_item_2_count = 0;
 SET @required_item_3_count = 0;
 SET @required_item_4_count = 0;
 
--- TODO GOSSIP SCRIPT FOR MALVINAH <Name> You’ve saved my sister...I can’t overstate how honored I am to be able to call you my friend...Thanks to you little Arisha is safe. We’re all so overwhelmed by your heroism...Several wagons have moved on to Stormwind while you were away but a lot of us have decided to stay here for the time being perhaps even forever. I also believe Kathy wishes to speak with you...Here is a present from me, take care <name> okay? Wherever you may end up, remember that we’ll remains friends and comrades!
+replace into quest_template values 
 
-'Sunblade Reunion', 
+(@quest_entry, '0', '2', @quest_zone, @min_level,  '0', @quest_level, '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @title, @description, @objective, @completetext, @incompletetext, '', '', '', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @faction_id, '0', '0', '0', '0', @faction_count, '0', '0', '0', '0', '0', @xp_or_money, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', 0, 0);
+     
+replace into creature_questrelation (id, quest, patch_min, patch_max) values (@questgiver_id, @quest_entry,'0','10'); 
+replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (@quest_finisher, @quest_entry,'0','10');
+	 
+update quest_template set 
+rewitemid1 = @reward_item_1, rewitemcount1 = @reward_item_1_count,
+rewitemid2 = @reward_item_2, rewitemcount2 = @reward_item_2_count,
+rewitemid3 = @reward_item_3, rewitemcount3 = @reward_item_3_count,
+rewitemid4 = @reward_item_4, rewitemcount4 = @reward_item_4_count,
+RewChoiceItemId1 = @RewChoiceItemId1, RewChoiceItemCount1 = @RewChoiceItemCount1,
+RewChoiceItemId2 = @RewChoiceItemId2, RewChoiceItemCount2 = @RewChoiceItemCount2,
+RewChoiceItemId3 = @RewChoiceItemId3, RewChoiceItemCount3 = @RewChoiceItemCount3,
+RewChoiceItemId4 = @RewChoiceItemId4, RewChoiceItemCount4 = @RewChoiceItemCount4,
+ReqCreatureOrGOId1 = @creature_to_kill_1, ReqCreatureOrGOCount1 = @creature_to_kill_1_count,
+ReqCreatureOrGOId2 = @creature_to_kill_2, ReqCreatureOrGOCount2 = @creature_to_kill_2_count,
+ReqCreatureOrGOId3 = @creature_to_kill_3, ReqCreatureOrGOCount3 = @creature_to_kill_3_count,
+ReqCreatureOrGOId4 = @creature_to_kill_4, ReqCreatureOrGOCount4 = @creature_to_kill_4_count,
+reqitemid1 = @required_item_1, reqitemcount1 = @required_item_1_count,
+reqitemid2 = @required_item_2, reqitemcount2 = @required_item_2_count,
+reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
+reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
+nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
+nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
+objectivetext1='Listen to Malvinah Sunblade' 
+where entry = @quest_entry;	
 
-'You’re the hero of the hour $N! All the Refugees are speaking your name...\n\nI believe a friend is grateful in particular, why not go and speak with Malvinah Sunblade?', 
-
-'Speak to Malvinah Sunblade.', 
-
-'You did well $N you deserve all this praise. It may not seem like much to save a few refugees, but once you consider that this is just the start of your journey, combined with the courage you exhibited...\n\nWell I can safely say that I am proud to have met you. However, there is another matter we much talk about.\n\nSeveral of the Refugee caravans have decided to move on to Stormwind, we can escort them part of the way, but eventually they will arrive in a region beset by strife. While bandits and beasts run amok, we are ordered to outlying areas such as this…\n\nWe can’t go against our orders, but adventurers like you can make a difference back home… Think about it and talk to me again.', 
-
-'The Hero of the hour returns huh?', 
-
-'', '', '', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @faction_id, '0', '0', '0', '0', @faction_count, '0', '0', '0', '0', '0', @xp_or_money, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', 0, 0);
-
+-- EVERYTHING BELOW SHOULD NOT BE USED OR APPLIED!!!! DRAFT!!!
 -- PORTING TO GOLDSHIRE
 
 SET @quest_entry = 80016;
