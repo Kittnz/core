@@ -400,13 +400,13 @@ replace into item_template values
  '-1', '4', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
 
-replace into `item_template` VALUES (80212, 0, 4, 3, 'Polished Scalemail', '', 8672, 1, 0, 1, 12, 12, 5, -1, -1, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 86, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 5, 0, 0, 0, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+replace into `item_template` values (80212, 0, 4, 3, 'Polished Scalemail', '', 8672, 1, 0, 1, 12, 12, 5, -1, -1, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 86, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 5, 0, 0, 0, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
 
-replace into `item_template` VALUES (80213, 0, 4, 1, 'Comfy Robe', '', 14549, 1, 0, 1, 12, 12, 5, -1, -1, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 7, 0, 0, 0, 40, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+replace into `item_template` values (80213, 0, 4, 1, 'Comfy Robe', '', 14549, 1, 0, 1, 12, 12, 5, -1, -1, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 7, 0, 0, 0, 40, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
 
-replace into `item_template` VALUES (80214, 0, 4, 2, 'Ragged Cloth Vest', '', 16585, 1, 0, 1, 12, 12, 5, -1, -1, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 46, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 8, 0, 0, 0, 55, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+replace into `item_template` values (80214, 0, 4, 2, 'Ragged Cloth Vest', '', 16585, 1, 0, 1, 12, 12, 5, -1, -1, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 46, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 8, 0, 0, 0, 55, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
 
-replace into `item_template` VALUES (80215, 0, 4, 1, 'Stitched Leather Vest', '', 14339, 1, 0, 1, 12, 12, 5, -1, -1, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 7, 0, 0, 0, 40, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+replace into `item_template` values (80215, 0, 4, 1, 'Stitched Leather Vest', '', 14339, 1, 0, 1, 12, 12, 5, -1, -1, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 7, 0, 0, 0, 40, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
 
 SET @quest_entry = 80205;
 SET @quest_zone = 1519;
@@ -575,123 +575,128 @@ nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
 objectivetext1='Listen to Malvinah Sunblade\'s story' 
 where entry = @quest_entry;	
 
+-- Dark Iron Scrapping
 
+replace into item_template values
+ ('80216', '0', '0', '0', 'Dark Key', '', '16100', '1', '0', '1', '0', '0', '0', '-1', '-1', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '4', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL); 
+ 
+replace into `item_template` values (80217, 0, 4, 2, 'Stitched Leather Boots', '', 14354, 1, 0, 1, 12, 12, 8, -1, -1, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 34, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 8, 0, 0, 0, 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+replace into `item_template` values (80218, 0, 4, 3, 'Polished Scale Boots', '', 16980, 1, 0, 1, 12, 12, 8, -1, -1, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 62, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 5, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+replace into `item_template` values (80219, 0, 4, 1, 'Ragged Cloth Gloves', '', 16586, 1, 0, 1, 15, 15, 10, -1, -1, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 7, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+replace into `item_template` values (80220, 0, 4, 2, 'Stitched Leather Gloves', '', 17184, 1, 0, 1, 15, 15, 10, -1, -1, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 33, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 8, 0, 0, 0, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
 
--- EVERYTHING BELOW SHOULD NOT BE USED OR APPLIED!!!! DRAFT!!!
+replace into`creature_template` values (80205, 0, 6055, 0, 0, 0, 'Shadowforge Fire Priest', NULL, 0, 5, 5, 109, 109, 138, 138, 105, 16, 0, 0.92, 1.14286, 0, 20, 5, 0, 0, 1, 4, 5, 0, 52, 1, 2000, 2156, 2, 32768, 0, 0, 0, 0, 0, 0, 8.624, 11.858, 100, 7, 0, 3183, 3183, 0, 0, 0, 0, 0, 0, 0, 172, 348, 0, 0, 31830, 0, 3, 9, 'EventAI', 0, 3, 0, 0, 3, 3183, 0, 0, 0, 0, 0, '');
 
-16592 16676 16682 16289 - Female Refugee
-16103 16704 16825 17658 - Male Refugee
-18220 18221 18222 18223 - Ranger Protector <Silvermoon Remnant>
-1435 2027 2045 1297 - Caravan Escort
-16624 - Lor'thas the Holy <Paladin Trainer>
-wait 16624 is better for paladin, fixed it
-16767 - Valanos Dawnfire <Warrior Trainer>
-16655 - Melonius Silvershine <Armor Merchant>
-16705 - Malanius Silvershine <Food Merchant>
-17279 - Magister Ala'shor Sunblood <Mage Trainer>
-16133 - Alyssia Solar <Weapon Merchant>
-18003 - Arisha Sunblade
-16115 - Magistrix Ishalah (The NPC teleporting you to Goldshire)
-16760 - Malvinah Sunblade
-16765 - Priestess Maelah Sunsworn <Priest Trainer>
-16778 - Ranger Rubinah Sunsworn <Hunter Trainer>
-(Move the resident dwarven Hunter trainer elsewhere, perhaps to Stormwind, pet trainer can stay)
-17842 (stand by for this)
+update creature_template set loot_id = 80205 where entry = 80205; 
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (80205, 80216, 100, 0, 1, 1);	 
 
--- DARK IRON SCRAPPING
+replace into `creature_template` values (80206, 0, 0, 0, 0, 0, 'Quest 80207 Custom Objective', '', 0, 5, 5, 319, 319, 0, 0, 852, 84, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 24, 31, 0, 90, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 31.856, 43.802, 100, 7, 4096, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 4276, 0, 0, 0, 0, 2, '');
 
-SET @quest_entry = 80014;
-SET @quest_zone = 1519; 
+replace into`creature_template` values (80207, 0, 6053, 6057, 0, 0, 'Shadowforge Prowler', NULL, 0, 5, 5, 109, 109, 138, 138, 105, 16, 0, 0.92, 1.14286, 0, 20, 5, 0, 0, 1, 4, 5, 0, 52, 1, 2000, 2156, 2, 32768, 0, 0, 0, 0, 0, 0, 8.624, 11.858, 100, 7, 0, 3183, 3183, 0, 0, 0, 0, 0, 0, 0, 172, 348, 0, 0, 31830, 0, 3, 9, 'EventAI', 0, 3, 0, 0, 3, 3183, 0, 0, 0, 0, 0, '');
+
+replace into `creature_template` values (80208, 0, 16592, 16676, 16682, 16289, 'Captured Refugee', '', 0, 5, 5, 319, 319, 0, 0, 852, 84, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 24, 31, 0, 90, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 31.856, 43.802, 100, 7, 4096, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 4276, 0, 0, 0, 0, 2, '');
+
+replace into `creature_template` values (80209, 0, 16825, 17658, 16103, 16704, 'Captured Refugee', '', 0, 5, 5, 319, 319, 0, 0, 852, 84, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 24, 31, 0, 90, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 31.856, 43.802, 100, 7, 4096, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 4276, 0, 0, 0, 0, 2, '');
+
+replace into `creature_template` values (80210, 0, 18003, 0, 0, 0, 'Arisha Sunblade', '', 0, 5, 5, 319, 319, 0, 0, 852, 84, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 24, 31, 0, 90, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 31.856, 43.802, 100, 7, 4096, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 4276, 0, 0, 0, 0, 2, '');
+
+update creature_template set equipment_id = 0 where entry = 80208;
+update creature_template set equipment_id = 0 where entry = 80209;
+update creature_template set equipment_id = 0 where entry = 80210;
+
+replace into creature_template_addon (entry, bytes1, emote) values ('80208', '1', 0); 
+
+REPLACE INTO `gameobject_template` (`entry`, `patch`, `type`, `displayId`, `name`, `faction`, `flags`, `size`, `data0`, `data1`, `data2`, `data3`, `data4`, `data5`, `data6`, `data7`, `data8`, `data9`, `data10`, `data11`, `data12`, `data13`, `data14`, `data15`, `data16`, `data17`, `data18`, `data19`, `data20`, `data21`, `data22`, `data23`, `mingold`, `maxgold`, `script_name`) VALUES (3000203, 0, 0, 25794, 'Shadowforge Cage', 0, 32, 1, 0, 0, 0, 0, 21400, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_shadowforge_cage');
+
+SET @quest_entry = 80207;
+SET @quest_zone = 1519;
+SET @title = 'Dark Iron Scrapping';
+SET @description = 'Alright, $N, here is the plan. We have established a perimeter but we believe that if we move in in force, then they will execute the refugees, we have been ordered to not engage.\n\nHowever if we do not act now, the refugees will be executed. We need an outsider to sneak into their camp, kill the Fire Cleric, acquire the key to the cells and free the refugees.\n\nI can think of no one more worthy for this task, you have proven yourself to be strong and resourceful in the short time we’ve known each other.\n\nI believe that you can do this $N! Go now and save those people!';
+SET @objective = 'Kill Shadowforge Fire Priest, acquire Dark Key and free High Elf refugees.';
+SET @completetext = 'They are all safe... I can’t believe it, we have averted a disaster! I can’t thank you enough, $N! We take our duty very seriously and losing those people would have been terrible.\n\nThe time is now, we will take care of the raiding party... Now I believe someone wishes to talk to you, go see Vyrin!';
+SET @incompletetext = 'Time is of the essence, $N, do not delay!';
 SET @faction_id = 269;
-SET @faction_count = 250; -- TODO: Add SW rep.
-SET @xp_or_money = 186;  
-SET @reward_money = 100;  
+SET @faction_count = 250;
+SET @xp_or_money = 204;
+SET @reward_money = 200; 
 SET @quest_level = 4;
 SET @min_level = 4;
-SET @questgiver_id = 80009; 
-SET @quest_finisher = 80009;
+SET @questgiver_id = 80202;
+SET @quest_finisher = 80202;
 SET @nextquest = 0;
 SET @nextquestinchain = 0;
-SET @prevquest = 80013;
-SET @reward_item_1 = 0; -- TODO: Chest item.
-SET @reward_item_2 = 0;
+SET @prevquest = 80205;
+SET @RewChoiceItemId1 = 80217; 
+SET @RewChoiceItemId2 = 80218; 
+SET @RewChoiceItemId3 = 80219;
+SET @RewChoiceItemId4 = 80220; 
+SET @RewChoiceItemCount1 = 1;
+SET @RewChoiceItemCount2 = 1;
+SET @RewChoiceItemCount3 = 1;
+SET @RewChoiceItemCount4 = 1;
+SET @reward_item_1 = 0;
+SET @reward_item_2 = 0; 
 SET @reward_item_3 = 0;
 SET @reward_item_4 = 0;
 SET @reward_item_1_count = 0;
 SET @reward_item_2_count = 0;
 SET @reward_item_3_count = 0;
 SET @reward_item_4_count = 0;
-SET @creature_to_kill_1 = 80012;
-SET @creature_to_kill_2 = 80013; -- TODO: Script this trigger.
+SET @creature_to_kill_1 = 80205;
+SET @creature_to_kill_2 = 80206; 
 SET @creature_to_kill_3 = 0;
 SET @creature_to_kill_4 = 0;
 SET @creature_to_kill_1_count = 1;
-SET @creature_to_kill_2_count = 6;
+SET @creature_to_kill_2_count = 1;
 SET @creature_to_kill_3_count = 0;
 SET @creature_to_kill_4_count = 0;
-SET @required_item_1 = 80012; 
+SET @required_item_1 = 0; 
 SET @required_item_2 = 0;
 SET @required_item_3 = 0;
 SET @required_item_4 = 0;
-SET @required_item_1_count = 1;
+SET @required_item_1_count = 0;
 SET @required_item_2_count = 0;
 SET @required_item_3_count = 0;
 SET @required_item_4_count = 0;
 
-replace into quest_template (entry, patch, Method, ZoneOrSort, MinLevel, QuestLevel, MaxLevel, Type, RequiredClasses, RequiredRaces, RequiredSkill,
-RequiredSkillValue, RepObjectiveFaction, RepObjectiveValue, RequiredMinRepFaction, RequiredMinRepValue,RequiredMaxRepFaction,
-RequiredMaxRepValue, SuggestedPlayers, LimitTime, QuestFlags, SpecialFlags, PrevQuestId, NextQuestId, ExclusiveGroup, NextQuestInChain,
-SrcItemId, SrcItemCount, SrcSpell, Title, Details, Objectives, OfferRewardText, RequestItemsText, EndText, ObjectiveText1, ObjectiveText2,
-ObjectiveText3, ObjectiveText4, ReqItemId1, ReqItemId2, ReqItemId3, ReqItemId4, ReqItemCount1, ReqItemCount2, ReqItemCount3,
-ReqItemCount4, ReqSourceId1, ReqSourceId2, ReqSourceId3, ReqSourceId4, ReqSourceCount1, ReqSourceCount2, ReqSourceCount3,
-ReqSourceCount4, ReqCreatureOrGOId1, ReqCreatureOrGOId2, ReqCreatureOrGOId3, ReqCreatureOrGOId4, ReqCreatureOrGOCount1,
-ReqCreatureOrGOCount2, ReqCreatureOrGOCount3, ReqCreatureOrGOCount4, ReqSpellCast1, ReqSpellCast2, ReqSpellCast3,
-ReqSpellCast4, RewChoiceItemId1, RewChoiceItemId2, RewChoiceItemId3, RewChoiceItemId4, RewChoiceItemId5, RewChoiceItemId6,
-RewChoiceItemCount1, RewChoiceItemCount2, RewChoiceItemCount3, RewChoiceItemCount4, RewChoiceItemCount5, RewChoiceItemCount6,
-RewItemId1, RewItemId2, RewItemId3, RewItemId4, RewItemCount1, RewItemCount2, RewItemCount3, RewItemCount4, RewRepFaction1,
-RewRepFaction2, RewRepFaction3, RewRepFaction4, RewRepFaction5, RewRepValue1, RewRepValue2, RewRepValue3, RewRepValue4,
-RewRepValue5, RewOrReqMoney, RewMoneyMaxLevel, RewSpell, RewSpellCast, RewMailTemplateId, RewMailMoney, RewMailDelaySecs,
-PointMapId, PointX, PointY, PointOpt, DetailsEmote1, DetailsEmote2, DetailsEmote3, DetailsEmote4, DetailsEmoteDelay1,
-DetailsEmoteDelay2, DetailsEmoteDelay3, DetailsEmoteDelay4, IncompleteEmote, CompleteEmote, OfferRewardEmote1, OfferRewardEmote2,
-OfferRewardEmote3, OfferRewardEmote4, OfferRewardEmoteDelay1, OfferRewardEmoteDelay2, OfferRewardEmoteDelay3,OfferRewardEmoteDelay4,
-StartScript, CompleteScript) values
+replace into quest_template values 
 
-(@quest_entry, '0', '2', @quest_zone, @min_level, @quest_level, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', 
-
-'Dark Iron Scrapping', 
-
-'Alright $N here is the plan... We have established a perimeter but we believe that if we move in in force, then they will execute the refugees, we have been ordered to not engage…\n\nHowever if we do not act now, the refugees will be executed. We need an outsider to sneak into their camp, kill the Fire Cleric, acquire the key to the cells and free the refugees.\n\nI can think of no one more worthy for this task, you have proven yourself to be strong and resourceful in the short time we’ve known each other.\n\nI believe that you can do this $N! Go now and save those people!', 
-
-'Kill Shadowforge Fire Priest, acquire Dark Key and free High Elf refugees', 
-
-'They are all safe… I can’t believe it, we have averted a disaster! I can’t thank you enough $N! We take our duty very seriously and losing those people would have been terrible.\n\nThe time is now, we will take care of the raiding party...Now I believe someone wishes to talk to you, go see Vyrin!', 
-
-'Time is of the essence $N do not delay!', 
-
-'', '', '', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @faction_id, '0', '0', '0', '0', @faction_count, '0', '0', '0', '0', '0', @xp_or_money, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', 0, 0);
-      
+(@quest_entry, '0', '2', @quest_zone, @min_level,  '0', @quest_level, '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @title, @description, @objective, @completetext, @incompletetext, '', '', '', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @faction_id, '0', '0', '0', '0', @faction_count, '0', '0', '0', '0', '0', @xp_or_money, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', 0, 0);
+     
+replace into creature_questrelation (id, quest, patch_min, patch_max) values (@questgiver_id, @quest_entry,'0','10'); 
+replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (@quest_finisher, @quest_entry,'0','10');
+	 
 update quest_template set 
 rewitemid1 = @reward_item_1, rewitemcount1 = @reward_item_1_count,
 rewitemid2 = @reward_item_2, rewitemcount2 = @reward_item_2_count,
 rewitemid3 = @reward_item_3, rewitemcount3 = @reward_item_3_count,
 rewitemid4 = @reward_item_4, rewitemcount4 = @reward_item_4_count,
-ReqCreatureOrGOId2 = @creature_to_kill_2, ReqCreatureOrGOCount1 = @creature_to_kill_1_count,
+RewChoiceItemId1 = @RewChoiceItemId1, RewChoiceItemCount1 = @RewChoiceItemCount1,
+RewChoiceItemId2 = @RewChoiceItemId2, RewChoiceItemCount2 = @RewChoiceItemCount2,
+RewChoiceItemId3 = @RewChoiceItemId3, RewChoiceItemCount3 = @RewChoiceItemCount3,
+RewChoiceItemId4 = @RewChoiceItemId4, RewChoiceItemCount4 = @RewChoiceItemCount4,
+ReqCreatureOrGOId1 = @creature_to_kill_1, ReqCreatureOrGOCount1 = @creature_to_kill_1_count,
 ReqCreatureOrGOId2 = @creature_to_kill_2, ReqCreatureOrGOCount2 = @creature_to_kill_2_count,
 ReqCreatureOrGOId3 = @creature_to_kill_3, ReqCreatureOrGOCount3 = @creature_to_kill_3_count,
 ReqCreatureOrGOId4 = @creature_to_kill_4, ReqCreatureOrGOCount4 = @creature_to_kill_4_count,
 reqitemid1 = @required_item_1, reqitemcount1 = @required_item_1_count,
 reqitemid2 = @required_item_2, reqitemcount2 = @required_item_2_count,
 reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
-reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count
-where entry = @quest_entry;
+reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
+nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
+nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
+objectivetext2='High Elf refugees freed' 
+where entry = @quest_entry;	
 
-update quest_template set nextquestid = @nextquest where entry = @quest_entry;
-update quest_template set RewOrReqMoney = @reward_money where entry = @quest_entry;
-update quest_template set nextquestinchain = @nextquestinchain where entry = @quest_entry;
-update quest_template set prevquestid = @prevquest where entry = @quest_entry;
-	  
-replace into creature_questrelation (id, quest, patch_min, patch_max) values (@questgiver_id, @quest_entry,'10','10'); 
-replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (@quest_finisher, @quest_entry,'10','10');
+
+-- EVERYTHING BELOW SHOULD NOT BE USED OR APPLIED!!!! DRAFT!!!
 
 -- SUNBLADE REUNION
 
@@ -735,26 +740,6 @@ SET @required_item_4_count = 0;
 
 -- TODO GOSSIP SCRIPT FOR MALVINAH <Name> You’ve saved my sister...I can’t overstate how honored I am to be able to call you my friend...Thanks to you little Arisha is safe. We’re all so overwhelmed by your heroism...Several wagons have moved on to Stormwind while you were away but a lot of us have decided to stay here for the time being perhaps even forever. I also believe Kathy wishes to speak with you...Here is a present from me, take care <name> okay? Wherever you may end up, remember that we’ll remains friends and comrades!
 
-replace into quest_template (entry, patch, Method, ZoneOrSort, MinLevel, QuestLevel, MaxLevel, Type, RequiredClasses, RequiredRaces, RequiredSkill,
-RequiredSkillValue, RepObjectiveFaction, RepObjectiveValue, RequiredMinRepFaction, RequiredMinRepValue,RequiredMaxRepFaction,
-RequiredMaxRepValue, SuggestedPlayers, LimitTime, QuestFlags, SpecialFlags, PrevQuestId, NextQuestId, ExclusiveGroup, NextQuestInChain,
-SrcItemId, SrcItemCount, SrcSpell, Title, Details, Objectives, OfferRewardText, RequestItemsText, EndText, ObjectiveText1, ObjectiveText2,
-ObjectiveText3, ObjectiveText4, ReqItemId1, ReqItemId2, ReqItemId3, ReqItemId4, ReqItemCount1, ReqItemCount2, ReqItemCount3,
-ReqItemCount4, ReqSourceId1, ReqSourceId2, ReqSourceId3, ReqSourceId4, ReqSourceCount1, ReqSourceCount2, ReqSourceCount3,
-ReqSourceCount4, ReqCreatureOrGOId1, ReqCreatureOrGOId2, ReqCreatureOrGOId3, ReqCreatureOrGOId4, ReqCreatureOrGOCount1,
-ReqCreatureOrGOCount2, ReqCreatureOrGOCount3, ReqCreatureOrGOCount4, ReqSpellCast1, ReqSpellCast2, ReqSpellCast3,
-ReqSpellCast4, RewChoiceItemId1, RewChoiceItemId2, RewChoiceItemId3, RewChoiceItemId4, RewChoiceItemId5, RewChoiceItemId6,
-RewChoiceItemCount1, RewChoiceItemCount2, RewChoiceItemCount3, RewChoiceItemCount4, RewChoiceItemCount5, RewChoiceItemCount6,
-RewItemId1, RewItemId2, RewItemId3, RewItemId4, RewItemCount1, RewItemCount2, RewItemCount3, RewItemCount4, RewRepFaction1,
-RewRepFaction2, RewRepFaction3, RewRepFaction4, RewRepFaction5, RewRepValue1, RewRepValue2, RewRepValue3, RewRepValue4,
-RewRepValue5, RewOrReqMoney, RewMoneyMaxLevel, RewSpell, RewSpellCast, RewMailTemplateId, RewMailMoney, RewMailDelaySecs,
-PointMapId, PointX, PointY, PointOpt, DetailsEmote1, DetailsEmote2, DetailsEmote3, DetailsEmote4, DetailsEmoteDelay1,
-DetailsEmoteDelay2, DetailsEmoteDelay3, DetailsEmoteDelay4, IncompleteEmote, CompleteEmote, OfferRewardEmote1, OfferRewardEmote2,
-OfferRewardEmote3, OfferRewardEmote4, OfferRewardEmoteDelay1, OfferRewardEmoteDelay2, OfferRewardEmoteDelay3,OfferRewardEmoteDelay4,
-StartScript, CompleteScript) values
-
-(@quest_entry, '0', '2', @quest_zone, @min_level, @quest_level, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', 
-
 'Sunblade Reunion', 
 
 'You’re the hero of the hour $N! All the Refugees are speaking your name...\n\nI believe a friend is grateful in particular, why not go and speak with Malvinah Sunblade?', 
@@ -766,29 +751,6 @@ StartScript, CompleteScript) values
 'The Hero of the hour returns huh?', 
 
 '', '', '', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @faction_id, '0', '0', '0', '0', @faction_count, '0', '0', '0', '0', '0', @xp_or_money, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', 0, 0);
-      
-update quest_template set 
-rewitemid1 = @reward_item_1, rewitemcount1 = @reward_item_1_count,
-rewitemid2 = @reward_item_2, rewitemcount2 = @reward_item_2_count,
-rewitemid3 = @reward_item_3, rewitemcount3 = @reward_item_3_count,
-rewitemid4 = @reward_item_4, rewitemcount4 = @reward_item_4_count,
-ReqCreatureOrGOId2 = @creature_to_kill_2, ReqCreatureOrGOCount1 = @creature_to_kill_1_count,
-ReqCreatureOrGOId2 = @creature_to_kill_2, ReqCreatureOrGOCount2 = @creature_to_kill_2_count,
-ReqCreatureOrGOId3 = @creature_to_kill_3, ReqCreatureOrGOCount3 = @creature_to_kill_3_count,
-ReqCreatureOrGOId4 = @creature_to_kill_4, ReqCreatureOrGOCount4 = @creature_to_kill_4_count,
-reqitemid1 = @required_item_1, reqitemcount1 = @required_item_1_count,
-reqitemid2 = @required_item_2, reqitemcount2 = @required_item_2_count,
-reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
-reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count
-where entry = @quest_entry;
-
-update quest_template set nextquestid = @nextquest where entry = @quest_entry;
-update quest_template set RewOrReqMoney = @reward_money where entry = @quest_entry;
-update quest_template set nextquestinchain = @nextquestinchain where entry = @quest_entry;
-update quest_template set prevquestid = @prevquest where entry = @quest_entry;
-	  
-replace into creature_questrelation (id, quest, patch_min, patch_max) values (@questgiver_id, @quest_entry,'10','10'); 
-replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (@quest_finisher, @quest_entry,'10','10');
 
 -- PORTING TO GOLDSHIRE
 
@@ -831,25 +793,6 @@ SET @required_item_4_count = 0;
 
 -- TODO GOSSIP SCRIPT Gossip text during this stage: Ah if it isn’t <name> ! You’ve certainly become famous here...Ah you need to get to Goldshire? Well I can’t deny you after all you’ve done for us. I will be able to teleport you there this one time as a special favor. Are you ready to go? It will be a while before you can return here once you leave. Yes/No
 
-replace into quest_template (entry, patch, Method, ZoneOrSort, MinLevel, QuestLevel, MaxLevel, Type, RequiredClasses, RequiredRaces, RequiredSkill,
-RequiredSkillValue, RepObjectiveFaction, RepObjectiveValue, RequiredMinRepFaction, RequiredMinRepValue,RequiredMaxRepFaction,
-RequiredMaxRepValue, SuggestedPlayers, LimitTime, QuestFlags, SpecialFlags, PrevQuestId, NextQuestId, ExclusiveGroup, NextQuestInChain,
-SrcItemId, SrcItemCount, SrcSpell, Title, Details, Objectives, OfferRewardText, RequestItemsText, EndText, ObjectiveText1, ObjectiveText2,
-ObjectiveText3, ObjectiveText4, ReqItemId1, ReqItemId2, ReqItemId3, ReqItemId4, ReqItemCount1, ReqItemCount2, ReqItemCount3,
-ReqItemCount4, ReqSourceId1, ReqSourceId2, ReqSourceId3, ReqSourceId4, ReqSourceCount1, ReqSourceCount2, ReqSourceCount3,
-ReqSourceCount4, ReqCreatureOrGOId1, ReqCreatureOrGOId2, ReqCreatureOrGOId3, ReqCreatureOrGOId4, ReqCreatureOrGOCount1,
-ReqCreatureOrGOCount2, ReqCreatureOrGOCount3, ReqCreatureOrGOCount4, ReqSpellCast1, ReqSpellCast2, ReqSpellCast3,
-ReqSpellCast4, RewChoiceItemId1, RewChoiceItemId2, RewChoiceItemId3, RewChoiceItemId4, RewChoiceItemId5, RewChoiceItemId6,
-RewChoiceItemCount1, RewChoiceItemCount2, RewChoiceItemCount3, RewChoiceItemCount4, RewChoiceItemCount5, RewChoiceItemCount6,
-RewItemId1, RewItemId2, RewItemId3, RewItemId4, RewItemCount1, RewItemCount2, RewItemCount3, RewItemCount4, RewRepFaction1,
-RewRepFaction2, RewRepFaction3, RewRepFaction4, RewRepFaction5, RewRepValue1, RewRepValue2, RewRepValue3, RewRepValue4,
-RewRepValue5, RewOrReqMoney, RewMoneyMaxLevel, RewSpell, RewSpellCast, RewMailTemplateId, RewMailMoney, RewMailDelaySecs,
-PointMapId, PointX, PointY, PointOpt, DetailsEmote1, DetailsEmote2, DetailsEmote3, DetailsEmote4, DetailsEmoteDelay1,
-DetailsEmoteDelay2, DetailsEmoteDelay3, DetailsEmoteDelay4, IncompleteEmote, CompleteEmote, OfferRewardEmote1, OfferRewardEmote2,
-OfferRewardEmote3, OfferRewardEmote4, OfferRewardEmoteDelay1, OfferRewardEmoteDelay2, OfferRewardEmoteDelay3,OfferRewardEmoteDelay4,
-StartScript, CompleteScript) values
-
-(@quest_entry, '0', '2', @quest_zone, @min_level, @quest_level, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', 
 
 'Porting to Goldshire', 
 
@@ -863,25 +806,21 @@ StartScript, CompleteScript) values
 
 '', '', '', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @faction_id, '0', '0', '0', '0', @faction_count, '0', '0', '0', '0', '0', @xp_or_money, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', 0, 0);
       
-update quest_template set 
-rewitemid1 = @reward_item_1, rewitemcount1 = @reward_item_1_count,
-rewitemid2 = @reward_item_2, rewitemcount2 = @reward_item_2_count,
-rewitemid3 = @reward_item_3, rewitemcount3 = @reward_item_3_count,
-rewitemid4 = @reward_item_4, rewitemcount4 = @reward_item_4_count,
-ReqCreatureOrGOId2 = @creature_to_kill_2, ReqCreatureOrGOCount1 = @creature_to_kill_1_count,
-ReqCreatureOrGOId2 = @creature_to_kill_2, ReqCreatureOrGOCount2 = @creature_to_kill_2_count,
-ReqCreatureOrGOId3 = @creature_to_kill_3, ReqCreatureOrGOCount3 = @creature_to_kill_3_count,
-ReqCreatureOrGOId4 = @creature_to_kill_4, ReqCreatureOrGOCount4 = @creature_to_kill_4_count,
-reqitemid1 = @required_item_1, reqitemcount1 = @required_item_1_count,
-reqitemid2 = @required_item_2, reqitemcount2 = @required_item_2_count,
-reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
-reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count
-where entry = @quest_entry;
+16592 16676 16682 16289 - Female Refugee
+16103 16704 16825 17658 - Male Refugee
+18220 18221 18222 18223 - Ranger Protector <Silvermoon Remnant>
+1435 2027 2045 1297 - Caravan Escort
+16624 - Lor'thas the Holy <Paladin Trainer>
+wait 16624 is better for paladin, fixed it
+16767 - Valanos Dawnfire <Warrior Trainer>
+16655 - Melonius Silvershine <Armor Merchant>
+16705 - Malanius Silvershine <Food Merchant>
+17279 - Magister Ala'shor Sunblood <Mage Trainer>
+16133 - Alyssia Solar <Weapon Merchant>
 
-update quest_template set nextquestid = @nextquest where entry = @quest_entry;
-update quest_template set RewOrReqMoney = @reward_money where entry = @quest_entry;
-update quest_template set nextquestinchain = @nextquestinchain where entry = @quest_entry;
-update quest_template set prevquestid = @prevquest where entry = @quest_entry;
-	  
-replace into creature_questrelation (id, quest, patch_min, patch_max) values (@questgiver_id, @quest_entry,'10','10'); 
-replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (@quest_finisher, @quest_entry,'10','10');
+16115 - Magistrix Ishalah (The NPC teleporting you to Goldshire)
+16760 - Malvinah Sunblade
+16765 - Priestess Maelah Sunsworn <Priest Trainer>
+16778 - Ranger Rubinah Sunsworn <Hunter Trainer>
+(Move the resident dwarven Hunter trainer elsewhere, perhaps to Stormwind, pet trainer can stay)
+17842 (stand by for this)

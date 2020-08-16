@@ -426,7 +426,9 @@ enum HighElfStartingZone
     NPC_CUSTOM_OBJECTIVE_GATHERING_INTEL = 80203,
     NPC_CUSTOM_OBJECTIVE_BURNT_WHEELS    = 80204,
     QUEST_SLAKING_THEIR_THIRST           = 80205,
-    QUEST_BURNT_WHEELS                   = 80206
+    QUEST_BURNT_WHEELS                   = 80206,
+    NPC_CUSTOM_OBJECTIVE_ITEM_SCRAPPING  = 80206,
+    NPC_ALISHA_SUNBLADE                  = 80210
 };
 
 bool QuestAccept_npc_kathy_wake(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
@@ -506,8 +508,8 @@ bool GOHello_go_farstrider_well(Player* pPlayer, GameObject* pGo)
 {
     if (pPlayer->HasItemCount(EMPTY_BARREL, 1))
     {
-        pPlayer->RemoveItemCurrency(EMPTY_BARREL, 1); // Remove Empty Barrel
-        pPlayer->AddItem(FILLED_BARREL); // Filled Barrel of Water
+        pPlayer->RemoveItemCurrency(EMPTY_BARREL, 1); 
+        pPlayer->AddItem(FILLED_BARREL); 
         pPlayer->HandleEmote(EMOTE_ONESHOT_KNEEL);
 
         pGo->SetRespawnTime(1 * MINUTE);
@@ -621,9 +623,57 @@ bool GossipSelect_npc_malvinah_sunblade(Player* pPlayer, Creature* pCreature, ui
     return true;
 }
 
+#define DARK_KEY 80216
+
+bool GOHello_go_shadowforge_cage(Player* pPlayer, GameObject* pGo)
+{
+    if (pPlayer->HasItemCount(DARK_KEY, 1))
+    {
+        pPlayer->RemoveItemCurrency(DARK_KEY, 1); 
+        pGo->UseDoorOrButton();
+        pPlayer->HandleEmote(EMOTE_ONESHOT_KNEEL);
+
+        CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(NPC_CUSTOM_OBJECTIVE_ITEM_SCRAPPING);
+        if (cInfo != nullptr)
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+
+        Creature* Alisha = pPlayer->FindNearestCreature(NPC_ALISHA_SUNBLADE, 5.0F);
+
+        if (Alisha)
+        {
+            Alisha->MonsterSay("I thought I'd never see my sister again. Thank you, hero!");
+            // Change it later to real coords.
+            float fX, fY, fZ;
+            Alisha->GetRandomPoint(Alisha->GetPositionX(), Alisha->GetPositionY(), Alisha->GetPositionZ(), 15.0f, fX, fY, fZ);
+            Alisha->GetMotionMaster()->MovePoint(0, fX, fY, fZ, 0, 0.5F);
+            Alisha->SetWalk(true);
+
+            DoAfterTime(pPlayer, 25 * IN_MILLISECONDS,
+                [CreatureGuid = Alisha->GetObjectGuid(), player = pPlayer]()
+            {
+                Map* map = sMapMgr.FindMap(0);
+                Creature* creature = map->GetCreature(CreatureGuid);
+                if (!creature)
+                    return false;
+
+                creature->DespawnOrUnsummon();
+            });
+        }
+    }
+    else
+        pPlayer->GetSession()->SendNotification("Requires Dark Key.");
+
+    return true;
+}
+
 void AddSC_episode_1()
 {
     Script *newscript;
+
+    newscript = new Script;
+    newscript->Name = "go_shadowforge_cage";
+    newscript->pGOHello = &GOHello_go_shadowforge_cage;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_malvinah_sunblade";
