@@ -141,7 +141,7 @@ bool GOSelect_go_fm_acquisition(Player* pPlayer, GameObject* pGo, uint32 sender,
 template <typename Functor>
 void DoAfterTime(Player* player, uint32 p_time, Functor&& function)
 {
-    player->m_Events.AddEvent(new LambdaBasicEvent(std::move(function)), player->m_Events.CalculateTime(p_time));
+    player->m_Events.AddEvent(new LambdaBasicEvent<Functor>(std::move(function)), player->m_Events.CalculateTime(p_time));
 }
 
 enum RefugeeNPCs
