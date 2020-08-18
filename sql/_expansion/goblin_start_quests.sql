@@ -838,7 +838,11 @@ where entry = @quest_entry;
 
 REPLACE INTO `creature_template` VALUES (80118, 0, 6915, 0, 0, 0, 'Whispering Spidertank', NULL, 0, 5, 6, 100, 120, 0, 0, 147, 22, 0, 1, 0.857143, 0, 20, 5, 0, 0, 1, 7, 10, 0, 54, 1, 2000, 2000, 1, 0, 0, 3, 0, 0, 0, 0, 8.58, 11.7975, 100, 9, 1, 30, 0, 0, 0, 0, 0, 0, 0, 0, 744, 0, 0, 0, 0, 5880, 0, 0, 'EventAI', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, '');
 
+replace into `creature_template_addon` (`entry`, `auras`) values ('80118', '16592');
+
 REPLACE INTO `creature_template` VALUES (80119, 0, 1228, 0, 0, 0, 'Muttering Vulture', NULL, 0, 5, 7, 80, 100, 0, 0, 180, 73, 0, 1, 0.857143, 0, 20, 5, 0, 0, 1, 6, 11, 0, 56, 1, 2000, 2000, 1, 0, 0, 7, 0, 0, 0, 0, 13.4464, 18.4888, 100, 1, 1, 2969, 0, 0, 0, 0, 0, 0, 0, 0, 5708, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, '');
+	 
+replace into `creature_template_addon` (`entry`, `auras`) values ('80119', '16592');
 	 
 replace into item_template values
  ('80122', '0', '4', '1', 'Oil Splattered Boots', '', '27725', '1', '0', '1', '18', '18', '8', '-1', '-1', '10',
