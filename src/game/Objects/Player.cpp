@@ -4874,6 +4874,16 @@ uint32 Player::DurabilityRepair(uint16 pos, bool cost, float discountMod)
     return TotalCost;
 }
 
+enum CustomGraveyardZones
+{
+    CGZ_STRANGLETHORN_VALE      = 33,
+    CGZ_STONETALON_MOUNTAINS    = 406,
+    CGZ_DUN_MOROGH              = 1,
+    CGZ_WETLANDS                = 11,
+    CGZ_BLACK_MORASS            = 2366,
+    CGZ_CAVERNS_OF_TIME         = 1941
+};
+
 void Player::RepopAtGraveyard()
 {
     // note: this can be called also when the player is alive
@@ -4908,23 +4918,52 @@ void Player::RepopAtGraveyard()
     SetDeathState(DEAD);
     bool isCustomGraveyard = false;
 
-    // Custom Graveyards
+    // Custom graveyards
 
-    if (InGurubashiArena(true)) { // Two additional resurrection points on STV Arena
-        if (GetTeam() == ALLIANCE)
-            TeleportTo(0, -13209.500977f, 221.450607f, 33.236431f, 2.956571f);
-        else
-            TeleportTo(0, -13243.445312f, 239.786072f, 33.232769f, 5.375592f);
-        isCustomGraveyard = true;
-    } else if (GetZoneId() == 1941 || GetZoneId() == 2366) { // CoT and The Black Morass
-        TeleportTo(1, -8149.983398f, -4616.60887f, -126.431488f, 1.113609f);
-        isCustomGraveyard = true;
-    } else if ((GetZoneId() == 1 && GetAreaId() == 1) || (GetZoneId() == 11 && GetAreaId() == 2365) && GetPositionZ() > 380) {
-        if (GetDistance2d(-4828.36f, 587.81f) < GetDistance2d(ClosestGrave->x, ClosestGrave->y)) { // Only if Winter Veil Vale is nearer than the nearest graveyard
-            TeleportTo(0, -4828.36f, 587.81f, 428.40f, 0.76f); // Winter Veil Vale
+    switch (GetZoneId())
+    {
+    case CGZ_STRANGLETHORN_VALE:
+        if (InGurubashiArena(true)) // (inside the ring)
+        {
+            TeleportTo(GetTeam() == ALLIANCE ? 0, -13209.500977f, 221.450607f, 33.236431f, 2.956571f : 0, -13243.445312f, 239.786072f, 33.232769f, 5.375592f);
             isCustomGraveyard = true;
         }
+        break;
+    case CGZ_CAVERNS_OF_TIME:
+    case CGZ_BLACK_MORASS:
+    {
+        TeleportTo(1, -8149.983398f, -4616.60887f, -126.431488f, 1.113609f);
+        isCustomGraveyard = true;
     }
+    break;
+    case CGZ_DUN_MOROGH:
+        if (GetAreaId() == 1 && GetPositionZ() > 380)
+        {
+            if (GetDistance2d(-4828.36f, 587.81f) < GetDistance2d(ClosestGrave->x, ClosestGrave->y)) // Only if Winter Veil Vale is nearer than the nearest graveyard
+            {
+                TeleportTo(0, -4828.36f, 587.81f, 428.40f, 0.76f); // Winter Veil Vale
+                isCustomGraveyard = true;
+            }
+        }
+        break;
+    case CGZ_WETLANDS:
+        if (GetAreaId() == 2361 && GetPositionZ() > 380)
+        {
+            if (GetDistance2d(-4828.36f, 587.81f) < GetDistance2d(ClosestGrave->x, ClosestGrave->y))
+            {
+                TeleportTo(0, -4828.36f, 587.81f, 428.40f, 0.76f); 
+                isCustomGraveyard = true;
+            }
+        }
+        break;
+    case CGZ_STONETALON_MOUNTAINS:
+        if (getLevel() < 10)
+        {
+            TeleportTo(1, 1931.73F, 1363.91F, 149.9F, 6.13F);
+            isCustomGraveyard = true;
+        }
+        break;
+    };
 
     // if no grave found, stay at the current location
     // and don't show spirit healer location
