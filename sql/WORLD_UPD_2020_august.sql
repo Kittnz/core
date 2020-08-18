@@ -638,7 +638,7 @@ StartScript, CompleteScript)
  ('60150', '0', '2', '215', '3', '4', '60', '0', '0', '0', '0',
 '0', '0', '0', '0', '0','0',
 '0', '0', '0', '0', '0', '750', '0', '0', '0',
-'0', '0', '0', 'Bristleback Aggresion', 'Grull Hawkwind in Camp Narache wants you to kill 6 Bristleback Quilboars and 4 Bristleback Shamans.', 'The quilboar activity in the Brambleblade Valley has been increasing lately, we suspect that they\'re preparing for an attack on Camp Narache.\n\nGo to the ravine and thin their numbers, they fight without honor and deserve none.', 'With heroes like you we might even push them out of Mulgore.\n\nTake one, it\'s the least we can do.', 'Show them that we are not to be meddled with.', '', '', '',
+'0', '0', '0', 'Bristleback Aggression', 'The quilboar activity in the Brambleblade Valley has been increasing lately, we suspect that they\'re preparing for an attack on Camp Narache.\n\nGo to the ravine and thin their numbers, they fight without honor and deserve none.', 'Grull Hawkwind in Camp Narache wants you to kill 6 Bristleback Quilboars and 4 Bristleback Shamans.', 'With heroes like you we might even push them out of Mulgore.\n\nTake one, it\'s the least we can do.', 'Show them that we are not to be meddled with.', '', '', '',
 '', '', '0', '0', '0', '0', '0', '0', '0',
 '0', '0', '0', '0', '0', '0', '0', '0',
 '0', '2952', '2953', '0', '0', '6',
@@ -677,7 +677,7 @@ start_quest, lock_id, material, sheath, random_property, set_id, max_durability,
 duration, bag_family, disenchant_id, food_type, min_money_loot, max_money_loot, extra_flags, other_team_entry,
 script_name)
 values
- ('51887', '0', '4', '2', 'Nomadic Pants', '', '6183', '1', '0', '1', '11', '11', '7', '-1', '-1', '5',
+ ('51887', '0', '4', '2', 'Nomadic Pants', '', '12402', '1', '0', '1', '11', '11', '7', '-1', '-1', '5',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '29', '0', '0', '0',
