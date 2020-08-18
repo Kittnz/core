@@ -901,22 +901,9 @@ replace into `npc_vendor` values
 (80214, 4540, 0, 0, 0, 0),
 (80214, 6183, 0, 0, 0, 0);
 
-replace into `creature_template` values (80215, 0, 16655, 0, 0, 0, 'Melonius Silvershine', 'Mail Armor Merchant', 0, 10, 10, 413, 413, 0, 0, 20, 29, 16388, 1.1, 1.14286, 0, 20, 5, 0, 0, 1, 9, 13, 0, 62, 1, 2000, 2101, 1, 4864, 0, 0, 0, 0, 0, 0, 16.808, 23.111, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 3161, 0, 0, 0, 0, 524298, '');
+replace into `creature_template` values (80215, 0, 16133, 0, 0, 0, 'Alyssia Solar', 'Cloth & Leather Armor Merchant', 0, 11, 11, 456, 456, 0, 0, 20, 29, 16388, 1.1, 1.14286, 0, 20, 5, 0, 0, 1, 12, 14, 0, 64, 1, 2000, 2090, 1, 4864, 0, 0, 0, 0, 0, 0, 18.392, 25.289, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, '');
 
 update creature_template set faction = 84 where entry = 80215; 
-update creature_template set equipment_id = 0 where entry = 80215;
-
-replace into `npc_vendor` values
-(80215, 2129, 0, 0, 0, 0),
-(80215, 2379, 0, 0, 0, 0),
-(80215, 2380, 0, 0, 0, 0),
-(80215, 2381, 0, 0, 0, 0),
-(80215, 2383, 0, 0, 0, 0),
-(80215, 2384, 0, 0, 0, 0),
-(80215, 2385, 0, 0, 0, 0),
-(80215, 17184, 0, 0, 0, 0);
-
-replace into `creature_template` values (80215, 0, 16133, 0, 0, 0, 'Alyssia Solar', 'Cloth & Leather Armor Merchant', 0, 11, 11, 456, 456, 0, 0, 20, 29, 16388, 1.1, 1.14286, 0, 20, 5, 0, 0, 1, 12, 14, 0, 64, 1, 2000, 2090, 1, 4864, 0, 0, 0, 0, 0, 0, 18.392, 25.289, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, '');
 
 replace into `npc_vendor` values 
 (80215, 2117, 0, 0, 0, 0),
@@ -987,6 +974,22 @@ replace into `npc_trainer` values (80221, 1258, 100, 0, 0, 4, 0, 5875);
 replace into `npc_trainer` values (80221, 1275, 100, 0, 0, 6, 0, 5875);
 replace into `npc_trainer` values (80221, 2056, 100, 0, 0, 4, 0, 5875);
 replace into `npc_trainer` values (80221, 2851, 100, 0, 0, 6, 0, 5875);
+
+
+replace into `creature_template` values (80222, 0, 16655, 0, 0, 0, 'Melonius Silvershine', 'Mail Armor Merchant', 0, 10, 10, 413, 413, 0, 0, 20, 29, 16388, 1.1, 1.14286, 0, 20, 5, 0, 0, 1, 9, 13, 0, 62, 1, 2000, 2101, 1, 4864, 0, 0, 0, 0, 0, 0, 16.808, 23.111, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 3161, 0, 0, 0, 0, 524298, '');
+
+update creature_template set faction = 84 where entry = 80222; 
+update creature_template set equipment_id = 0 where entry = 80222;
+
+replace into `npc_vendor` values
+(80222, 2129, 0, 0, 0, 0),
+(80222, 2379, 0, 0, 0, 0),
+(80222, 2380, 0, 0, 0, 0),
+(80222, 2381, 0, 0, 0, 0),
+(80222, 2383, 0, 0, 0, 0),
+(80222, 2384, 0, 0, 0, 0),
+(80222, 2385, 0, 0, 0, 0),
+(80222, 17184, 0, 0, 0, 0);
 
 REPLACE INTO creature_model_info VALUES 
 
