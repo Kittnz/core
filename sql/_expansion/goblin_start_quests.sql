@@ -137,7 +137,7 @@ replace into item_template values
  '0', '1', NULL);
  
 update creature_template set loot_id = 80112 where entry = 80112; 
-replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (80112, 80100, 100, 0, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (80112, 80100, -100, 0, 1, 1);
 
 SET @quest_entry = 80100;
 SET @quest_zone = 406;
@@ -234,7 +234,7 @@ replace into item_template values
   
 update item_template set stackable = 10 where entry = 80103;
 update creature_template set loot_id = 80113 where entry = 80113; 
-replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (80113, 80103, 70, 0, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (80113, 80103, -100, 0, 1, 1);
 
 REPLACE INTO `item_template` VALUES (80104, 0, 0, 0, 'Sprat’s Crunchy Vulture Surprise', '', 22200, 1, 0, 1, 40, 10, 0, -1, -1, 7, 1, 0, 0, 0, 0, 0, 0, 0, 0, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5004, 0, -1, 0, 0, 11, 1000, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, NULL);
 
@@ -514,7 +514,7 @@ REPLACE INTO `creature_template` VALUES (80116, 0, 1070, 0, 0, 0, 'Risen Oilblaz
 
 update creature_template set loot_id = 80116 where entry = 80116; 
 replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (80116, 80114, 30, 0, 1, 1);
-replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (80116, 80112, 60, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (80116, 80112, -100, 1, 1, 1);
 
 SET @quest_entry = 80103;
 SET @quest_zone = 406;
@@ -652,7 +652,7 @@ replace into item_template values
  '0', '1', NULL);      
 
 update creature_template set loot_id = 80117 where entry = 80117; 
-replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (80117, 80119, 50, 0, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (80117, 80119, -50, 0, 1, 1);
 	 
 SET @quest_entry = 80104;
 SET @quest_zone = 406;
