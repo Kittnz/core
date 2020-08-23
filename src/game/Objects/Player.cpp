@@ -4881,7 +4881,8 @@ enum CustomGraveyardZones
     CGZ_DUN_MOROGH              = 1,
     CGZ_WETLANDS                = 11,
     CGZ_BLACK_MORASS            = 2366,
-    CGZ_CAVERNS_OF_TIME         = 1941
+    CGZ_CAVERNS_OF_TIME         = 1941,
+    CGZ_LOCH_MODAN              = 36
 };
 
 void Player::RepopAtGraveyard()
@@ -4960,6 +4961,13 @@ void Player::RepopAtGraveyard()
         if (getLevel() < 10)
         {
             TeleportTo(1, 1931.73F, 1363.91F, 149.9F, 6.13F);
+            isCustomGraveyard = true;
+        }
+        break;
+    case CGZ_LOCH_MODAN:
+        if (getLevel() < 10)
+        {
+            TeleportTo(0, -5653.60F, -4181.42F, 391.90F, 1.09F;
             isCustomGraveyard = true;
         }
         break;
