@@ -198,6 +198,7 @@ replace into `creature_template` values (80202, 0, 4618, 0, 0, 0, 'Kathy Wake', 
 
 update creature_template set level_min = 60, level_max = 60 where entry = 80202;
 update creature_template set rank = 2 where entry = 80202;
+update creature_template set faction = 12 where entry = 80202;
 
 update creature_template set equipment_id = 0 where entry = 80202;
 
