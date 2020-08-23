@@ -1142,3 +1142,4 @@ REPLACE INTO creature_model_info VALUES
 -- Misc. fixes.:
 
 update gameobject_template set size = 0.5 where entry = 2003285;
+update gameobject_template set displayid = 32841 where entry = 2010516;
