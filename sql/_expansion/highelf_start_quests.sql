@@ -1013,6 +1013,8 @@ replace into `creature_template` values (80226, 0, 1435, 2027, 2045, 1297,  'Car
 
 update creature_template set equipment_id = 0 where entry = 80226;
 
+REPLACE INTO `creature_template` values (80227, 0, 17676, 0, 0, 0, 'Ashanya Quel\'belore', 'Innkeeper', 1293, 30, 30, 1605, 1605, 0, 0, 1200, 80, 135, 1, 1.14286, 0, 20, 5, 0, 0, 1, 42, 53, 0, 122, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 45.144, 62.073, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 6736, 0, 0, 0, 0, 524298, '');
+
 REPLACE INTO creature_model_info VALUES 
 
 (15475, 5875, 2, 2, 0, 0, 0),(15476, 5875, 2, 2, 0, 0, 0),(15504, 5875, 2, 2, 0, 0, 0),(15505, 5875, 2, 2, 0, 0, 0),
