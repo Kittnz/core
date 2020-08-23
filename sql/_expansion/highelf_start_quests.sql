@@ -887,7 +887,7 @@ where entry = @quest_entry;
 
 -- Additional NPC and citizens:
 
-replace into `creature_template` values (80214, 0, 16705, 0, 0, 0, 'Malanius Silvershine', 'General Goods', 0, 3, 3, 219, 219, 0, 0, 852, 84, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 24, 31, 0, 90, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 31.856, 43.802, 100, 7, 4096, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 4276, 0, 0, 0, 0, 2, '');
+replace into `creature_template` values (80214, 0, 16705, 0, 0, 0, 'Malanius Silvershine', 'Food Merchant', 0, 3, 3, 219, 219, 0, 0, 852, 84, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 24, 31, 0, 90, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 31.856, 43.802, 100, 7, 4096, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 4276, 0, 0, 0, 0, 2, '');
 
 update creature_template set npc_flags = 4 where entry = 80214;
 update creature_template set equipment_id = 0 where entry = 80214;
