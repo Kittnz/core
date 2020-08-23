@@ -1430,8 +1430,6 @@ where entry = @quest_entry;
 
 -- Populating the area:
 
--- Object GUID:   4004067
-
 delete from creature where id between 80100 and 80130;
 
 replace into `creature` (`id`, `map`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `deathstate`, `movementtype`, `spawnflags`, `visibilitymod`, `patch_min`, `patch_max`) values 
@@ -1442,7 +1440,7 @@ replace into `creature` (`id`, `map`, `modelid`, `equipment_id`, `position_x`, `
 (80104, 1, 0, 3153, 1930.98, 1385.29, 148.817, 0.155697, 25, 25, 0, 0, 100, 100, 0, 0, 0, 0, 0, 10),
 (80105, 1, 0, 3154, 1894.19, 1332.83, 144.969, 1.37806, 25, 25, 0, 0, 100, 100, 0, 0, 0, 0, 0, 10),
 (80107, 1, 0, 3156, 1959.3, 1324.5, 146.361, 1.84328, 25, 25, 0, 0, 100, 100, 0, 0, 0, 0, 0, 10),
-(416, 1, 0, 0, 1959.58, 1327.49, 145.946, 4.8106, 25, 25, 0, 0, 100, 100, 0, 0, 0, 0, 0, 10),
+(80119, 1, 0, 0, 1959.58, 1327.49, 145.946, 4.8106, 25, 25, 0, 0, 100, 100, 0, 0, 0, 0, 0, 10),
 (80106, 1, 0, 3155, 1954.54, 1336.18, 147.322, 4.19833, 25, 25, 0, 0, 100, 100, 0, 0, 0, 0, 0, 10),
 (80108, 1, 0, 5884, 1796.09, 1382.46, 149.459, 0.407838, 25, 25, 0, 0, 100, 100, 0, 0, 0, 0, 0, 10),
 (80100, 1, 0, 51260, 1839.5, 1382.96, 146.483, 3.01878, 25, 25, 0, 0, 100, 0, 0, 0, 0, 0, 0, 10),
