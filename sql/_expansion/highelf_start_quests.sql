@@ -196,6 +196,9 @@ replace into `item_template` values (80205, 0, 4, 2, 'Studded Bracers', '', 1700
 
 replace into `creature_template` values (80202, 0, 4618, 0, 0, 0, 'Kathy Wake', '', 0, 5, 5, 319, 319, 0, 0, 852, 84, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 24, 31, 0, 90, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 31.856, 43.802, 100, 7, 4096, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 4276, 0, 0, 0, 0, 2, 'npc_kathy_wake');
 
+update creature_template set level_min = 60, level_max = 60 where entry = 80202;
+update creature_template set rank = 2 where entry = 80202;
+
 update creature_template set equipment_id = 0 where entry = 80202;
 
 set @quest_entry = 80203;
