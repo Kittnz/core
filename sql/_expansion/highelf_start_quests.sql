@@ -931,6 +931,8 @@ REPLACE INTO `item_template` values (80222, 0, 2, 8, 'Farstrider Lodge Protector
 
 REPLACE INTO `item_template` values (80223, 6, 2, 2, 'Farstrider Lodge Protector\'s Bow', '', 40143, 3, 32768, 1, 9126, 1825, 15, 2047, 255, 23, 18, 0, 0, 0, 0, 0, 0, 6, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2400, 100, 2, 19, 37, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, -1, 1, 0, 0, 0, 0, 0, 2, 0, 0, 0, 65, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
 
+update item_template set allowable_race = -1 where entry = 80223;
+
 replace into `creature_equip_template` (`entry`, `equipentry1`, `equipentry3`) values ('80216', '80222', '80223');
 
 update creature_template set equipment_id = 80216 where entry = 80216;
