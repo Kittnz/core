@@ -1,6 +1,6 @@
 -- Farstrider Lodge
 
-replace into `creature_template` values (80200, 0, 16760, 0, 0, 0, 'Malvinah Sunblade', '', 0, 5, 5, 319, 319, 0, 0, 852, 84, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 24, 31, 0, 90, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 31.856, 43.802, 100, 7, 4096, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 4276, 0, 0, 0, 0, 2, 'npc_malvinah_sunblade');
+replace into `creature_template` values (80200, 0, 16760, 0, 0, 0, 'Malvinah Sunblade', '', 0, 5, 5, 319, 319, 0, 0, 852, 371, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 24, 31, 0, 90, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 31.856, 43.802, 100, 7, 4096, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 4276, 0, 0, 0, 0, 2, 'npc_malvinah_sunblade');
 
 update creature_template set npc_flags = 3 where entry = 80200;
 update creature_template set equipment_id = 0 where entry = 80200;
@@ -907,7 +907,7 @@ replace into `npc_vendor` values
 
 replace into `creature_template` values (80215, 0, 16133, 0, 0, 0, 'Alyssia Solar', 'Cloth & Leather Armor Merchant', 0, 11, 11, 456, 456, 0, 0, 20, 29, 16388, 1.1, 1.14286, 0, 20, 5, 0, 0, 1, 12, 14, 0, 64, 1, 2000, 2090, 1, 4864, 0, 0, 0, 0, 0, 0, 18.392, 25.289, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, '');
 
-update creature_template set faction = 84 where entry = 80215; 
+update creature_template set faction = 371 where entry = 80215; 
 
 replace into `npc_vendor` values 
 (80215, 2117, 0, 0, 0, 0),
@@ -939,7 +939,7 @@ update creature_template set equipment_id = 80216 where entry = 80216;
 
 replace into `creature_template` values (80217, 0, 16767, 0, 0, 0, 'Valanos Dawnfire', 'Warrior Trainer', 523, 11, 11, 456, 456, 406, 406, 20, 29, 19, 1, 1.14286, 0, 20, 5, 0, 0, 1, 12, 14, 0, 64, 1, 2000, 2000, 1, 4864, 0, 0, 0, 0, 1, 0, 18.392, 25.289, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 3153, 0, 0, 0, 0, 524298, '');
 
-update creature_template set faction = 84 where entry = 80217; 
+update creature_template set faction = 371 where entry = 80217; 
 
 replace into `npc_trainer` values (80217, 1343, 100, 0, 0, 6, 0, 5875);
 replace into `npc_trainer` values (80217, 1423, 100, 0, 0, 4, 0, 5875);
@@ -949,7 +949,7 @@ replace into `npc_trainer` values (80217, 6674, 10, 0, 0, 1, 0, 5875);
 
 replace into `creature_template` values (80218, 0, 17279, 0, 0, 0, 'Magister Ala\'shor Sunblood', 'Mage Trainer', 64, 10, 10, 413, 413, 370, 370, 20, 126, 19, 1, 1.14286, 0, 20, 5, 0, 0, 1, 7, 7, 0, 62, 1, 2000, 2000, 1, 4864, 0, 0, 0, 0, 8, 0, 16.808, 23.111, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 5884, 0, 0, 0, 0, 524298, '');
 
-update creature_template set faction = 84 where entry = 80218;
+update creature_template set faction = 371 where entry = 80218;
 
 replace into `npc_trainer` values (80218, 1142, 100, 0, 0, 0, 0, 5875);
 replace into `npc_trainer` values (80218, 1173, 100, 0, 0, 0, 0, 5875);
@@ -960,7 +960,7 @@ replace into `npc_trainer` values (80218, 5507, 100, 0, 0, 0, 0, 5875);
 
 replace into `creature_template` values (80219, 0, 16778, 0, 0, 0, 'Ranger Rubinah Sunsworn', 'Hunter Trainer', 4648, 8, 8, 334, 334, 297, 297, 20, 126, 19, 1, 1.14286, 0, 20, 5, 0, 0, 1, 7, 10, 0, 58, 1, 2000, 2000, 1, 4864, 0, 0, 0, 0, 3, 0, 13.5872, 18.6824, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 3154, 0, 0, 0, 0, 524298, '');
 
-update creature_template set faction = 84 where entry = 80219;
+update creature_template set faction = 371 where entry = 80219;
 
 replace into `npc_trainer` values (80219, 1547, 10, 0, 0, 1, 0, 5875);
 replace into `npc_trainer` values (80219, 2003, 100, 0, 0, 4, 0, 5875);
@@ -970,7 +970,7 @@ replace into `npc_trainer` values (80219, 13164, 50, 0, 0, 4, 0, 5875);
 
 replace into `creature_template`  values (80220, 0, 16624 , 0, 0, 0, 'Lor\'thas the Holy', 'Paladin Trainer', 4663, 5, 5, 166, 166, 190, 190, 20, 12, 19, 1, 1.14286, 0, 20, 5, 0, 0, 1, 6, 8, 0, 52, 1, 1500, 2000, 1, 4864, 0, 0, 0, 0, 2, 0, 8.624, 11.858, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 925, 0, 0, 0, 0, 524298, '');
 
-update creature_template set faction = 84 where entry = 80220;
+update creature_template set faction = 371 where entry = 80220;
 
 replace into `npc_trainer` values (80220, 1873, 100, 0, 0, 6, 0, 5875);
 replace into `npc_trainer` values (80220, 1875, 10, 0, 0, 1, 0, 5875);
@@ -981,7 +981,7 @@ replace into `npc_trainer` values (80220, 21083, 100, 0, 0, 6, 0, 5875);
 
 replace into `creature_template` values (80221, 0, 16765, 0, 0, 0, 'Priestess Maelah Sunsworn', 'Priest Trainer', 4665, 5, 5, 166, 166, 190, 190, 20, 12, 19, 1, 1.14286, 0, 20, 5, 0, 0, 1, 6, 8, 0, 52, 1, 1500, 2000, 1, 4864, 0, 0, 0, 0, 5, 0, 8.624, 11.858, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 375, 0, 0, 0, 0, 524298, '');
 
-update creature_template set faction = 84 where entry = 80221;
+update creature_template set faction = 371 where entry = 80221;
 
 replace into `npc_trainer` values (80221, 1255, 10, 0, 0, 1, 0, 5875);
 replace into `npc_trainer` values (80221, 1258, 100, 0, 0, 4, 0, 5875);
@@ -992,7 +992,7 @@ replace into `npc_trainer` values (80221, 2851, 100, 0, 0, 6, 0, 5875);
 
 replace into `creature_template` values (80222, 0, 16655, 0, 0, 0, 'Melonius Silvershine', 'Mail Armor Merchant', 0, 10, 10, 413, 413, 0, 0, 20, 29, 16388, 1.1, 1.14286, 0, 20, 5, 0, 0, 1, 9, 13, 0, 62, 1, 2000, 2101, 1, 4864, 0, 0, 0, 0, 0, 0, 16.808, 23.111, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 3161, 0, 0, 0, 0, 524298, '');
 
-update creature_template set faction = 84 where entry = 80222; 
+update creature_template set faction = 371 where entry = 80222; 
 update creature_template set equipment_id = 0 where entry = 80222;
 
 replace into `npc_vendor` values
@@ -1007,7 +1007,7 @@ replace into `npc_vendor` values
 
 REPLACE INTO `creature_template`VALUES (80223, 0, 16796, 0, 0, 0, 'Leela the Shadow', 'Rogue Trainer', 0, 8, 8, 334, 334, 297, 297, 20, 29, 18, 1, 1.14286, 0, 20, 5, 0, 0, 1, 7, 10, 0, 58, 1, 2000, 2000, 1, 4864, 0, 0, 0, 0, 4, 0, 13.5872, 18.6824, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 3155, 0, 0, 0, 0, 524298, '');
 
-update creature_template set faction = 84 where entry = 80223;
+update creature_template set faction = 371 where entry = 80223;
 
 REPLACE INTO `npc_trainer` VALUES (80223, 1762, 100, 0, 0, 6, 0, 5875);
 REPLACE INTO `npc_trainer` VALUES (80223, 1780, 100, 0, 0, 6, 0, 5875);
@@ -1023,9 +1023,10 @@ replace into `creature_template` values (80225, 0, 16825, 17658, 16103, 16704, '
 
 update creature_template set equipment_id = 0 where entry = 80225;
 
-replace into `creature_template` values (80226, 0, 1435, 2027, 2045, 1297,  'Caravan Escort', '', 0, 5, 5, 319, 319, 0, 0, 852, 84, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 24, 31, 0, 90, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 31.856, 43.802, 100, 7, 4096, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 4276, 0, 0, 0, 0, 2, '');
+replace into `creature_template` values (80226, 0, 1435, 2027, 2045, 1297, 'Caravan Escort', '', 0, 55, 55, 4700, 4700, 0, 0, 20, 85, 0, 1, 1.42857, 0, 20, 5, 0, 0, 1, 154, 222, 0, 248, 1, 2000, 2000, 1, 36864, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 35021, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 16096, 0, 0, 0, 0, 524288, '');
 
-update creature_template set equipment_id = 0 where entry = 80226;
+update creature_template set equipment_id = 1423 where entry = 80226;
+update creature_template set faction = 12 where entry = 80226;
 
 REPLACE INTO `creature_template` values (80227, 0, 17676, 0, 0, 0, 'Ashanya Quel\'belore', 'Innkeeper', 1293, 30, 30, 1605, 1605, 0, 0, 1200, 80, 135, 1, 1.14286, 0, 20, 5, 0, 0, 1, 42, 53, 0, 122, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 45.144, 62.073, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 6736, 0, 0, 0, 0, 524298, '');
 
