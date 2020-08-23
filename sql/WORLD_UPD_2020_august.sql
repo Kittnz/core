@@ -773,3 +773,8 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
+ 
+ -- Misc. fixes:
+ 
+ update item_template set max_durability = 75 where entry = 51820;
+ update item_template set inventory_type = 26 where entry = 51820;
