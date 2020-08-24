@@ -4967,7 +4967,7 @@ void Player::RepopAtGraveyard()
     case CGZ_LOCH_MODAN:
         if (getLevel() < 10)
         {
-            TeleportTo(0, -5653.60F, -4181.42F, 391.90F, 1.09F;
+            TeleportTo(0, -5653.60F, -4181.42F, 391.90F, 1.09F);
             isCustomGraveyard = true;
         }
         break;
