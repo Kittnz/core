@@ -34,6 +34,8 @@ REPLACE INTO `playercreateinfo_action` VALUES
 (9, 9, 10, 159, 128),
 (9, 9, 11, 117, 128);
 
+delete from playercreateinfo_item where race = 9;
+
 REPLACE INTO `playercreateinfo_item` VALUES 
 
 (9, 1, 117, 4),

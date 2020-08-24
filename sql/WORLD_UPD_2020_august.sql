@@ -778,3 +778,15 @@ replace into item_template values
  
  update item_template set max_durability = 75 where entry = 51820;
  update item_template set inventory_type = 26 where entry = 51820;
+ 
+ -- Mount fixes
+ 
+ update item_template set required_level = 0 where entry in (50071,50072,50073,50076,50074,12325,12326,8630,13325,5875,5874,1041,8590);
+ update item_template set required_level = 0 where entry in (13329,12353,12302,12303,12351,15293,18768,23193,50399,50400,50401,50402,50403,50404,50407);
+ 
+  update item_template set required_skill = 0, required_skill_rank = 0 where entry in (50071,50072,50073,50076,50074,12325,12326,8630,13325,5875,5874,1041,8590);
+ update item_template set required_skill = 0, required_skill_rank = 0 where entry in (13329,12353,12302,12303,12351,15293,18768,23193,50399,50400,50401,50402,50403,50404,50407);
+ 
+  update item_template set quality = 3 where entry in (50071,50072,50073,50076,50074,12325,12326,8630,13325,5875,5874,1041,8590);
+ update item_template set quality = 3 where entry in (13329,12353,12302,12303,12351,15293,18768,23193,50399,50400,50401,50402,50403,50404,50407);
+ 
