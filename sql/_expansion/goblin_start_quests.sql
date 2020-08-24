@@ -842,7 +842,7 @@ where entry = @quest_entry;
 
 -- The Grumbling Grove 
 
-REPLACE INTO `creature_template` VALUES (80118, 0, 18322, 18323, 0, 0, 'Whispering Spidertank', NULL, 0, 5, 6, 100, 120, 0, 0, 147, 22, 0, 1, 0.857143, 0, 20, 5, 0, 0, 1, 7, 10, 0, 54, 1, 2000, 2000, 1, 0, 0, 3, 0, 0, 0, 0, 8.58, 11.7975, 100, 9, 1, 30, 0, 0, 0, 0, 0, 0, 0, 0, 744, 0, 0, 0, 0, 5880, 0, 0, 'EventAI', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, '');
+REPLACE INTO `creature_template` VALUES (80118, 0, 18322, 18323, 0, 0, 'Animated Shredder', NULL, 0, 5, 6, 100, 120, 0, 0, 147, 22, 0, 1, 0.857143, 0, 20, 5, 0, 0, 1, 7, 10, 0, 54, 1, 2000, 2000, 1, 0, 0, 3, 0, 0, 0, 0, 8.58, 11.7975, 100, 9, 1, 30, 0, 0, 0, 0, 0, 0, 0, 0, 744, 0, 0, 0, 0, 5880, 0, 0, 'EventAI', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, '');
 
 replace into `creature_template_addon` (`entry`, `auras`) values ('80118', '16592');
 
@@ -877,7 +877,7 @@ SET @quest_entry = 80106;
 SET @quest_zone = 406;
 SET @title = 'The Grumbling Grove';
 SET @description = 'Okay, look. Any treasure hunter is gonna find some haunted treasure from time to time, see? And we CAN’T go back to the boss empty-handed. I mean CAN’T.\n\nLike, he’ll have us shipped off to the mines, can’t.\n\nSo here’s what we’re gonna do, okay? We’re gonna try and get this thing anyway. You’ve done good so far, kid, so you think you’re up for a little more “enforcing”? There seem to be more of the first expedition’s mechs in the little forest on the other side of the valley, and, uh, some vultures that don’t look real natural. Clear ‘em out, and we’ll see what’s in there.';
-SET @objective = 'Kill 7 Whispering Spidertanks and 7 Muttering Vultures in the Grumbling Grove.';
+SET @objective = 'Kill 7 Animated Shredders and 7 Muttering Vultures in the Grumbling Grove.';
 SET @completetext = 'This place gives me the willies. The sooner we’re out of here, the better, right kid?';
 SET @incompletetext = 'I don’t like the look of ‘em any more than you do, kid. But what choice we got?';
 SET @faction_id = 0;
