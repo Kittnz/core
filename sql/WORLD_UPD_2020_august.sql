@@ -496,7 +496,7 @@ replace into quest_template values
 ('60147', '0', '2', '363', '4', '4', '0', '0', '0', '0', '0',
 '0', '0', '0', '0', '0', '0',
 '0', '0', '0', '0', '0', '0', '0', '0', '0',
-'0', '0', '0', 'Stalking the Felstalkers', 'Kill 10 Felstalkers. Return to Zureetha Fargaze outside the Den.', 'You\'ve fought the vile familiars outside the coven, but the taint in the valley trails deeper.\n\nYou must go inside the coven and slay the felstalkers. Return and you\'ll be rewarded.', 'You have struck a blow to their numbers, and returned in one piece.\n\nTake one, you earned it.', 'What are you waiting for?', '', '', '',
+'0', '0', '0', 'Stalking the Felstalkers', 'You\'ve fought the vile familiars outside the coven, but the taint in the valley trails deeper.\n\nYou must go inside the coven and slay the felstalkers. Return and you\'ll be rewarded.', 'Kill 10 Felstalkers. Return to Zureetha Fargaze outside the Den.', 'You have struck a blow to their numbers, and returned in one piece.\n\nTake one, you earned it.', 'What are you waiting for?', '', '', '',
 '', '', '0', '0', '0', '0', '0', '0', '0',
 '0', '0', '0', '0', '0', '0', '0', '0',
 '0', '3102', '0', '0', '0', '10',
