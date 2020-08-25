@@ -652,10 +652,10 @@ bool ChatHandler::HandleGameObjectUpCommand(char* args)
 
         map->Remove(object, false);
 
-        object->Relocate(x, y, z + 0.5F);
+        object->Relocate(x, y, z + 0.3F);
         object->SetFloatValue(GAMEOBJECT_POS_X, x);
         object->SetFloatValue(GAMEOBJECT_POS_Y, y);
-        object->SetFloatValue(GAMEOBJECT_POS_Z, z + 0.5F);
+        object->SetFloatValue(GAMEOBJECT_POS_Z, z + 0.3F);
 
         map->Add(object);
 
@@ -691,10 +691,10 @@ bool ChatHandler::HandleGameObjectDownCommand(char* args)
 
         map->Remove(object, false);
 
-        object->Relocate(x, y, z - 0.5F);
+        object->Relocate(x, y, z - 0.3F);
         object->SetFloatValue(GAMEOBJECT_POS_X, x);
         object->SetFloatValue(GAMEOBJECT_POS_Y, y);
-        object->SetFloatValue(GAMEOBJECT_POS_Z, z - 0.5F);
+        object->SetFloatValue(GAMEOBJECT_POS_Z, z - 0.3F);
 
         map->Add(object);
 
