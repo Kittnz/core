@@ -792,4 +792,4 @@ replace into item_template values
  
  -- Wormhole fixes
  
- update item_template set script_name = "item_test_wormhole_generator" where entry = 51808;
+ update item_template set script_name = "item_test_wormhole_generator", description = "Creates a highly radioactive Wormhole, lasting 5 seconds. 1 charge." where entry = 51808;
