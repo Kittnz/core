@@ -11,7 +11,7 @@ void EnableCreature(Creature* pCreature)
 {
     pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
     pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-    pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
+    pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
 }
 
 instance_dire_maul::instance_dire_maul(Map* pMap) : ScriptedInstance(pMap),
@@ -314,7 +314,7 @@ void instance_dire_maul::SetData(uint32 uiType, uint32 uiData)
                 {
                     tortheldrin->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                     tortheldrin->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-                    tortheldrin->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
+                    tortheldrin->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
                     sLog.outString("Tortheldrin (%u) rendu attaquable.", tortheldrin->GetGUIDLow());
                 }
                 else
@@ -896,50 +896,6 @@ CreatureAI* GetAI_npc_mizzle_the_crafty(Creature* pCreature)
     return new npc_mizzle_the_craftyAI(pCreature);
 }
 
-bool GossipHello_npc_mizzle_the_crafty(Player* pPlayer, Creature* pCreature)
-{
-
-    uint32 menuItem = 0;
-    if (pPlayer->HasAura(SPELL_KING_OF_GORDOK))
-        menuItem = 2;
-
-    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, sMizzleGossips[menuItem].m_chItem, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF);
-    pPlayer->SEND_GOSSIP_MENU(sMizzleGossips[menuItem].m_uiMenu, pCreature->GetObjectGuid());
-
-    return true;
-}
-
-bool GossipSelect_npc_mizzle_the_crafty(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
-{
-    pPlayer->PlayerTalkClass->ClearMenus();
-
-    uint32 menuItem = 1;
-    if (pPlayer->HasAura(SPELL_KING_OF_GORDOK))
-        menuItem = 3;
-
-    switch (uiAction)
-    {
-        case GOSSIP_ACTION_INFO_DEF:
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, sMizzleGossips[menuItem].m_chItem, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-            pPlayer->SEND_GOSSIP_MENU(sMizzleGossips[menuItem].m_uiMenu, pCreature->GetObjectGuid());
-            break;
-        case GOSSIP_ACTION_INFO_DEF + 1:
-            pPlayer->CLOSE_GOSSIP_MENU();
-            if (menuItem == 3)
-            {
-                if (instance_dire_maul* pInstance = (instance_dire_maul*)pPlayer->GetInstanceData())
-                {
-                    if (pInstance->GetData(TYPE_GORDOK_TRIBUTE) != DONE)
-                        pInstance->SetData(TYPE_GORDOK_TRIBUTE, DONE);
-                }
-            }
-            else
-                if (!pPlayer->IsInCombat())
-                    pCreature->CastSpell(pPlayer, SPELL_KING_OF_GORDOK, true);
-    }
-    return true;
-}
-
 /*######
 ## npc_knot_thimblejack
 ######*/
@@ -1355,70 +1311,6 @@ struct boss_guardsAI : public ScriptedAI
     }
 };
 
-enum
-{
-    GOSSIP_MENU_MOLDAR_1                    = 6907,
-    GOSSIP_MENU_MOLDAR_2                    = 6908,    
-    GOSSIP_ITEM_MOLDAR                      = 9401,
-    
-    GOSSIP_MENU_FENGUS_1                    = 6903,
-    GOSSIP_MENU_FENGUS_2                    = 6904, 
-    GOSSIP_ITEM_FENGUS                      = 9394,
-    
-    GOSSIP_MENU_SLIPKIK_1                   = 6905,
-    GOSSIP_MENU_SLIPKIK_2                   = 6906,
-    GOSSIP_ITEM_SLIPKIK                     = 9398
-};
-
-bool GossipHello_boss_guards(Player* pPlayer, Creature * pCreature) 
-{
-    if (pPlayer) 
-    {
-        switch(pCreature->GetEntry())
-        {
-            case NPC_GUARD_MOLDAR:
-                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_MOLDAR, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-                pPlayer->SEND_GOSSIP_MENU(GOSSIP_MENU_MOLDAR_1, pCreature->GetObjectGuid());
-                break;          
-            case NPC_GUARD_FENGUS:
-                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_FENGUS, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-                pPlayer->SEND_GOSSIP_MENU(GOSSIP_MENU_FENGUS_1, pCreature->GetObjectGuid());
-                break;
-            case NPC_GUARD_SLIPKIK:
-                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_SLIPKIK, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-                pPlayer->SEND_GOSSIP_MENU(GOSSIP_MENU_SLIPKIK_1, pCreature->GetObjectGuid());
-                break;
-        }
-        return true;
-    }
-    return false;
-}
-
-bool GossipSelect_boss_guards(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction) 
-{
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1) 
-    {       
-        pPlayer->PlayerTalkClass->ClearMenus();
-        switch (pCreature->GetEntry())
-        {
-            case NPC_GUARD_MOLDAR:
-                pPlayer->SEND_GOSSIP_MENU(GOSSIP_MENU_MOLDAR_2, pCreature->GetObjectGuid());
-                pCreature->CastSpell(pPlayer, SPELL_MOLDAR_MOXIE, true);
-                break;
-            case NPC_GUARD_FENGUS:
-                pPlayer->SEND_GOSSIP_MENU(GOSSIP_MENU_FENGUS_2, pCreature->GetObjectGuid());
-                pCreature->CastSpell(pPlayer, SPELL_FENGUS_FEROCITY, true);
-                break;
-            case NPC_GUARD_SLIPKIK:
-                pPlayer->SEND_GOSSIP_MENU(GOSSIP_MENU_SLIPKIK_2, pCreature->GetObjectGuid());
-                pCreature->CastSpell(pPlayer, SPELL_SLIPKIKS_SAVVY, true);
-                break;
-        }
-    }    
-    return true;
-}
-
-
 CreatureAI* GetAI_boss_guards(Creature* pCreature)
 {
     return new boss_guardsAI(pCreature);
@@ -1445,7 +1337,7 @@ struct go_fixed_trap : public GameObjectAI
             {
                 pSlipkik->CombatStop(true);
                 pSlipkik->DeleteThreatList();
-                pSlipkik->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
+                pSlipkik->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
                 pSlipkik->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
                 pSlipkik->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PLAYER);
                 pSlipkik->CastSpell(pSlipkik, SPELL_ICE_LOCK, true, nullptr);
@@ -2464,8 +2356,6 @@ void AddSC_instance_dire_maul()
     pNewScript = new Script;
     pNewScript->Name = "npc_mizzle_the_crafty";
     pNewScript->GetAI = &GetAI_npc_mizzle_the_crafty;
-    pNewScript->pGossipHello = &GossipHello_npc_mizzle_the_crafty;
-    pNewScript->pGossipSelect = &GossipSelect_npc_mizzle_the_crafty;
     pNewScript->RegisterSelf();
 
     pNewScript = new Script;
@@ -2479,8 +2369,6 @@ void AddSC_instance_dire_maul()
     pNewScript = new Script;
     pNewScript->Name = "boss_guards";
     pNewScript->GetAI = &GetAI_boss_guards;
-    pNewScript->pGossipHello = &GossipHello_boss_guards;
-    pNewScript->pGossipSelect = &GossipSelect_boss_guards;
     pNewScript->RegisterSelf();
 
     pNewScript = new Script;

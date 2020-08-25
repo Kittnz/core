@@ -178,7 +178,7 @@ Creature::Creature(CreatureSubtype subtype) :
     m_combatStartX(0.0f), m_combatStartY(0.0f), m_combatStartZ(0.0f), m_reactState(REACT_PASSIVE),
     m_lastDamageTakenForEvade(0), m_playerDamageTaken(0), m_nonPlayerDamageTaken(0), m_creatureInfo(nullptr),
     m_detectionDistance(20.0f), m_callForHelpDist(5.0f), m_leashDistance(0.0f), m_mountId(0),
-    m_reputationId(-1), m_castingTargetGuid(0)
+    m_reputationId(-1), m_gossipMenuId(0), m_castingTargetGuid(0)
 {
     m_regenTimer = 200;
     m_valuesCount = UNIT_END;
@@ -289,13 +289,6 @@ bool Creature::InitEntry(uint32 Entry, Team team, CreatureData const* data /*=nu
     SetEntry(Entry);                                        // normal entry always
     m_creatureInfo = cinfo;                                 // map mode related always
 
-    SetObjectScale(cinfo->scale);
-    // Reset native scale before we apply creature info multiplier, otherwise we are
-    // stuck at 1 from the previous m_nativeScaleOverride if the unit's entry is
-    // being changed
-    m_nativeScaleOverride = cinfo->scale;
-    m_nativeScale = cinfo->scale;
-
     // equal to player Race field, but creature does not have race
     SetByteValue(UNIT_FIELD_BYTES_0, 0, 0);
 
@@ -304,24 +297,32 @@ bool Creature::InitEntry(uint32 Entry, Team team, CreatureData const* data /*=nu
 
     SetInitCreaturePowerType();
 
-    uint32 display_id = ChooseDisplayId(GetCreatureInfo(), data, eventData);
-    if (!display_id)                                        // Cancel load if no display id
+    float scale;
+    uint32 displayId = ChooseDisplayId(GetCreatureInfo(), data, eventData, &scale);
+    if (!displayId)                                         // Cancel load if no display id
     {
         sLog.outErrorDb("Creature (Entry: %u) has no display id defined in table `creature_template`, can't load.", Entry);
         return false;
     }
 
-    CreatureDisplayInfoAddon const* minfo = sObjectMgr.GetCreatureDisplayInfoRandomGender(display_id);
+    CreatureDisplayInfoAddon const* minfo = sObjectMgr.GetCreatureDisplayInfoRandomGender(displayId);
     if (!minfo)                                             // Cancel load if no display info addon defined
     {
         sLog.outErrorDb("Creature (Entry: %u) has no display id data defined in table `creature_display_info_addon`, can't load.", Entry);
         return false;
     }
 
-    display_id = minfo->display_id;                            // it can be different (for another gender)
+    displayId = minfo->display_id;                          // it can be different (for another gender)
 
-    SetNativeDisplayId(display_id);
-    SetDisplayId(display_id);
+    SetObjectScale(scale);
+    // Reset native scale before we apply creature info multiplier, otherwise we are
+    // stuck at 1 from the previous m_nativeScaleOverride if the unit's entry is
+    // being changed
+    m_nativeScaleOverride = scale;
+    m_nativeScale = scale;
+
+    SetNativeDisplayId(displayId);
+    SetDisplayId(displayId);
     SetByteValue(UNIT_FIELD_BYTES_0, 2, minfo->gender);
 
     // Load creature equipment
@@ -484,7 +485,7 @@ bool Creature::UpdateEntry(uint32 Entry, Team team, CreatureData const* data /*=
     SelectLevel(GetCreatureInfo(), preserveHPAndPower ? GetHealthPercent() : 100.0f, preserveHPAndPower ? GetPowerPercent(POWER_MANA) : 100.0f);
 
     SetFactionTemplateId(GetCreatureInfo()->faction);
-
+    SetDefaultGossipMenuId(GetCreatureInfo()->gossip_menu_id);
     SetUInt32Value(UNIT_NPC_FLAGS, GetCreatureInfo()->npc_flags);
 
     uint32 attackTimer = GetCreatureInfo()->base_attack_time;
@@ -493,7 +494,6 @@ bool Creature::UpdateEntry(uint32 Entry, Team team, CreatureData const* data /*=
     SetAttackTime(RANGED_ATTACK, GetCreatureInfo()->ranged_attack_time);
 
     uint32 unitFlags = GetCreatureInfo()->unit_flags;
-
     // we may need to append or remove additional flags
     if (HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IN_COMBAT))
         unitFlags |= UNIT_FLAG_IN_COMBAT;
@@ -521,10 +521,6 @@ bool Creature::UpdateEntry(uint32 Entry, Team team, CreatureData const* data /*=
     SetCanModifyStats(true);
     UpdateAllStats();
 
-    // Bosses have increased loot distance.
-    if (GetCreatureInfo()->rank == CREATURE_ELITE_WORLDBOSS)
-        SetLootAndXPModDist(150.0f);
-
     m_reputationId = -1;
 
     // checked and error show at loading templates
@@ -532,7 +528,7 @@ bool Creature::UpdateEntry(uint32 Entry, Team team, CreatureData const* data /*=
         if (FactionEntry const* pFaction = sObjectMgr.GetFactionEntry(pFactionTemplate->faction))
             m_reputationId = pFaction->reputationListID;
 
-    if (GetCreatureInfo()->flags_extra & CREATURE_FLAG_EXTRA_PVP)
+    if (HasExtraFlag(CREATURE_FLAG_EXTRA_PVP))
         SetPvP(true);
     else
         SetPvP(false);
@@ -544,19 +540,19 @@ bool Creature::UpdateEntry(uint32 Entry, Team team, CreatureData const* data /*=
     SetLeashDistance(GetCreatureInfo()->leash_range);
     SetDetectionDistance(GetCreatureInfo()->detection_range);
 
-    if (GetCreatureInfo()->flags_extra & CREATURE_FLAG_EXTRA_LARGE_AOI)
+    if (HasExtraFlag(CREATURE_FLAG_EXTRA_LARGE_AOI))
     {
         SetVisibilityModifier(VISIBILITY_DISTANCE_LARGE);
         if (sWorld.getConfig(CONFIG_BOOL_VISIBILITY_FORCE_ACTIVE_OBJECTS))
             SetActiveObjectState(true);
     }
-    if (GetCreatureInfo()->flags_extra & CREATURE_FLAG_EXTRA_GIGANTIC_AOI)
+    if (HasExtraFlag(CREATURE_FLAG_EXTRA_GIGANTIC_AOI))
     {
         SetVisibilityModifier(VISIBILITY_DISTANCE_GIGANTIC);
         if (sWorld.getConfig(CONFIG_BOOL_VISIBILITY_FORCE_ACTIVE_OBJECTS))
             SetActiveObjectState(true);
     } 
-    if (GetCreatureInfo()->flags_extra & CREATURE_FLAG_EXTRA_INFINITE_AOI)
+    if (HasExtraFlag(CREATURE_FLAG_EXTRA_INFINITE_AOI))
     {
         SetVisibilityModifier(MAX_VISIBILITY_DISTANCE);
         if (sWorld.getConfig(CONFIG_BOOL_VISIBILITY_FORCE_ACTIVE_OBJECTS))
@@ -570,36 +566,82 @@ bool Creature::UpdateEntry(uint32 Entry, Team team, CreatureData const* data /*=
     return true;
 }
 
-uint32 Creature::ChooseDisplayId(CreatureInfo const* cinfo, CreatureData const* data /*= nullptr*/, GameEventCreatureData const* eventData /*=nullptr*/)
+float Creature::GetScaleForDisplayId(uint32 displayId)
+{
+    if (CreatureDisplayInfoEntry const* displayEntry = sCreatureDisplayInfoStore.LookupEntry(displayId))
+        return displayEntry->scale;
+    
+    return DEFAULT_OBJECT_SCALE;
+}
+
+uint32 Creature::ChooseDisplayId(CreatureInfo const* cinfo, CreatureData const* data /*= nullptr*/, GameEventCreatureData const* eventData /*=nullptr*/, float* scale /*=nullptr*/)
 {
     // Use creature event display id explicit, override any other static models
     if (eventData && eventData->display_id)
+    {
+        if (scale)
+            *scale = GetScaleForDisplayId(eventData->display_id);
         return eventData->display_id;
+    }
 
     // Use creature display id explicit, override template (creature.display_id)
     if (data && data->display_id)
-        return data->display_id;
-
-    // use defaults from the template
-    uint32 display_id = 0;
-
-    // display id selected here may be replaced with other_gender using own function
-    uint32 maxDisplayId = 0;
-    for (; maxDisplayId < MAX_DISPLAY_IDS_PER_CREATURE && cinfo->display_id[maxDisplayId]; ++maxDisplayId);
-
-    if (maxDisplayId)
-        display_id = cinfo->display_id[urand(0, maxDisplayId - 1)];
-
-    // fail safe, we use creature entry 1 and make error
-    if (!display_id)
     {
-        sLog.outErrorDb("Creature::ChooseDisplayId can not select native display id for creature entry %u, model from creature entry 1 will be used instead.", cinfo->entry);
-
-        if (CreatureInfo const* creatureDefault = ObjectMgr::GetCreatureTemplate(1))
-            display_id = creatureDefault->display_id[0];
+        if (scale)
+            *scale = GetScaleForDisplayId(data->display_id);
+        return data->display_id;
     }
 
-    return display_id;
+    // use defaults from the template
+    int8 displayIndex = -1;
+    if (cinfo->display_total_probability)
+    {
+        uint32 const roll = urand(1, cinfo->display_total_probability);
+        uint32 sum = 0;
+
+        for (int i = 0; i < MAX_DISPLAY_IDS_PER_CREATURE; i++)
+        {
+            if (!cinfo->display_id[i])
+                continue;
+
+            uint32 const currentChance = cinfo->display_probability[i];
+            if (!currentChance)
+                continue;
+
+            if ((roll > sum) && (roll <= (sum + currentChance)))
+            {
+                displayIndex = i;
+                break;
+            }
+
+            sum += currentChance;
+        }
+    }
+    else
+    {
+        // display id selected here may be replaced with other_gender using own function
+        uint32 maxDisplayId = 0;
+        for (; maxDisplayId < MAX_DISPLAY_IDS_PER_CREATURE && cinfo->display_id[maxDisplayId]; ++maxDisplayId);
+
+        if (maxDisplayId)
+            displayIndex = urand(0, maxDisplayId - 1);
+    }
+
+    // fail safe, we use creature entry 1 and make error
+    if (displayIndex < 0)
+    {
+        sLog.outErrorDb("Creature::ChooseDisplayId can not select native display id for creature entry %u, placeholder model will be used.", cinfo->entry);
+        if (scale)
+            *scale = DEFAULT_OBJECT_SCALE;
+        return UNIT_DISPLAY_ID_BOX;
+    }
+
+    uint32 displayId = cinfo->display_id[displayIndex];
+
+    if (scale)
+        *scale = cinfo->display_scale[displayIndex] ? cinfo->display_scale[displayIndex] : GetScaleForDisplayId(displayId);
+
+    return displayId;
 }
 
 void Creature::Update(uint32 update_diff, uint32 diff)
@@ -1442,19 +1484,19 @@ void Creature::SaveToDB(uint32 mapid)
        << data.creature_id[2] << ","
        << data.creature_id[3] << ","
        << mapid << ","
-       << displayId << ","
-       << GetEquipmentId() << ","
-       << GetPositionX() << ","
-       << GetPositionY() << ","
-       << GetPositionZ() << ","
-       << GetOrientation() << ","
-       << data.spawntimesecsmin << ","                     // respawn time minimum
-       << data.spawntimesecsmax << ","                     // respawn time maximum
-       << wander_distance << ","                           // wander distance
-       << data.health_percent << ","                       // health_percent
-       << data.mana_percent << ","                         // mana_percent
-       << GetDefaultMovementType() << ","                  // default movement generator type
-       << m_isActiveObject << ","
+       << data.display_id << ","
+       << data.equipment_id << ","
+       << data.position.x << ","
+       << data.position.y << ","
+       << data.position.z << ","
+       << data.position.o << ","
+       << data.spawntimesecsmin << ","
+       << data.spawntimesecsmax << ","
+       << wander_distance << ","
+       << data.health_percent << ","
+       << data.mana_percent << ","
+       << data.movement_type << ","
+       << data.spawn_flags << ","
        << m_visibilityModifier << ","
        << "0,"                                             // patch_min
        << "10)";                                           // patch_max
@@ -2047,7 +2089,7 @@ bool Creature::IsImmuneToSpellEffect(SpellEntry const* spellInfo, SpellEffectInd
         return true;
 
     // Taunt immunity special flag check
-    if (GetCreatureInfo()->flags_extra & CREATURE_FLAG_EXTRA_NOT_TAUNTABLE)
+    if (HasExtraFlag(CREATURE_FLAG_EXTRA_NOT_TAUNTABLE))
     {
         // Taunt aura apply check
         if (spellInfo->Effect[index] == SPELL_EFFECT_APPLY_AURA)
@@ -2080,7 +2122,7 @@ bool Creature::IsVisibleInGridForPlayer(Player const* pl) const
     if (pl->IsGameMaster())
         return true;
 
-    if (GetCreatureInfo()->flags_extra & CREATURE_FLAG_EXTRA_INVISIBLE)
+    if (HasExtraFlag(CREATURE_FLAG_EXTRA_INVISIBLE))
         return false;
 
     // Live player (or with not release body see live creatures or death creatures with corpse disappearing time > 0
@@ -2161,13 +2203,13 @@ bool Creature::CanAssistTo(Unit const* u, Unit const* enemy, bool checkfaction /
     if (!IsAlive())
         return false;
 
-    if (GetCreatureInfo()->flags_extra & CREATURE_FLAG_EXTRA_NO_ASSIST)
+    if (HasExtraFlag(CREATURE_FLAG_EXTRA_NO_ASSIST))
         return false;
 
-    if (GetCreatureInfo()->flags_extra & CREATURE_FLAG_EXTRA_NO_AGGRO)
+    if (HasExtraFlag(CREATURE_FLAG_EXTRA_NO_AGGRO))
         return false;
 
-    if (HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_PASSIVE))
+    if (HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_IMMUNE_TO_NPC))
         return false;
 
     // skip fighting creature
@@ -3127,7 +3169,7 @@ void Creature::ResetHomePosition()
 
 void Creature::RemoveAurasAtReset()
 {
-    if (GetCreatureInfo()->flags_extra & CREATURE_FLAG_EXTRA_KEEP_POSITIVE_AURAS_ON_EVADE)
+    if (HasExtraFlag(CREATURE_FLAG_EXTRA_KEEP_POSITIVE_AURAS_ON_EVADE))
     {
         RemoveAllNegativeAuras(AURA_REMOVE_BY_DEFAULT);
         return;

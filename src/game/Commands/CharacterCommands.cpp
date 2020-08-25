@@ -1883,7 +1883,7 @@ bool ChatHandler::HandleCharacterPremadeGearCommand(char* args)
         {
             if (itr.second.requiredClass == pPlayer->GetClass())
             {
-                PSendSysMessage("%u - %s", itr.first, itr.second.name.c_str());
+                PSendSysMessage("%u - %s (lvl %u)", itr.first, itr.second.name.c_str(), itr.second.level);
             }
         }
         return true;
@@ -1984,7 +1984,7 @@ bool ChatHandler::HandleCharacterPremadeSpecCommand(char* args)
         {
             if (itr.second.requiredClass == pPlayer->GetClass())
             {
-                PSendSysMessage("%u - %s", itr.first, itr.second.name.c_str());
+                PSendSysMessage("%u - %s (lvl %u)", itr.first, itr.second.name.c_str(), itr.second.level);
             }
         }
         return true;
@@ -3088,7 +3088,9 @@ bool ChatHandler::HandleDeleteItemCommand(char* args)
             return false;
         }
 
-        while (count)
+        uint32 stacksToRemove = count;
+
+        while (stacksToRemove)
         {
             result.reset(CharacterDatabase.PQuery(
                 "SELECT guid, count FROM item_instance ii WHERE itemEntry = %u and owner_guid = %u ORDER BY count DESC",
@@ -3106,10 +3108,10 @@ bool ChatHandler::HandleDeleteItemCommand(char* args)
             auto guid = fields[0].GetUInt32();
             auto stackCount = fields[1].GetUInt32();
 
-            if (stackCount > count) // make sure we don't delete more than requested
+            if (stackCount > stacksToRemove) // make sure we don't delete more than requested
             {
                 if (!CharacterDatabase.PExecute("UPDATE item_instance SET count = %u WHERE guid = %u",
-                    stackCount - count, guid))
+                    stackCount - stacksToRemove, guid))
                 {
                     SendSysMessage("Encountered an error while attempting to adjust item stack count");
                     SetSentErrorMessage(true);
@@ -3148,7 +3150,7 @@ bool ChatHandler::HandleDeleteItemCommand(char* args)
                     return false;
                 }
 
-                count -= stackCount;
+                stacksToRemove -= stackCount;
             }
         }
     }
@@ -3581,6 +3583,57 @@ bool ChatHandler::HandleResetTalentsCommand(char* args)
         PSendSysMessage(LANG_RESET_TALENTS_OFFLINE, nameLink.c_str());
     }
 
+    return true;
+}
+
+bool ChatHandler::HandleResetItemsCommand(char* args)
+{
+    Player* pTarget;
+    ObjectGuid targetGuid;
+    std::string targetName;
+    if (!ExtractPlayerTarget(&args, &pTarget, &targetGuid, &targetName))
+        return false;
+
+    if (!pTarget)
+    {
+        PSendSysMessage(LANG_PLAYER_NOT_FOUND);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    uint32 count = 0;
+    for (int i = EQUIPMENT_SLOT_START; i < EQUIPMENT_SLOT_END; ++i)
+    {
+        if (Item* pItem = pTarget->GetItemByPos(INVENTORY_SLOT_BAG_0, i))
+        {
+            pTarget->DestroyItem(INVENTORY_SLOT_BAG_0, i, true);
+            ++count;
+        }
+    }
+    for (int i = INVENTORY_SLOT_ITEM_START; i < INVENTORY_SLOT_ITEM_END; ++i)
+    {
+        if (Item* pItem = pTarget->GetItemByPos(INVENTORY_SLOT_BAG_0, i))
+        {
+            pTarget->DestroyItem(INVENTORY_SLOT_BAG_0, i, true);
+            ++count;
+        }
+    }
+    for (int i = INVENTORY_SLOT_BAG_START; i < INVENTORY_SLOT_BAG_END; ++i)
+    {
+        if (Bag* pBag = (Bag*)pTarget->GetItemByPos(INVENTORY_SLOT_BAG_0, i))
+        {
+            for (uint32 j = 0; j < pBag->GetBagSize(); ++j)
+            {
+                if (Item* pItem = pBag->GetItemByPos(j))
+                {
+                    pTarget->DestroyItem(i, j, true);
+                    ++count;
+                }
+            }
+        }
+    }
+
+    PSendSysMessage("Removed all items from %s.", targetName.c_str());
     return true;
 }
 

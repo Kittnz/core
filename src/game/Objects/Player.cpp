@@ -643,6 +643,39 @@ void Player::CleanupsBeforeDelete()
     Unit::CleanupsBeforeDelete();
 }
 
+bool Player::ValidateAppearance(uint8 race, uint8 class_, uint8 gender, uint8 hairID, uint8 hairColor, uint8 faceID, uint8 facialHair, uint8 skinColor, bool create /*=false*/)
+{
+    // For Skin type is always 0
+    CharSectionsEntry const* skinEntry = GetCharSectionEntry(race, SECTION_TYPE_SKIN, gender, 0, skinColor);
+    if (!skinEntry)
+        return false;
+
+    // Skin Color defined as Face color, too
+    CharSectionsEntry const* faceEntry = GetCharSectionEntry(race, SECTION_TYPE_FACE, gender, faceID, skinColor);
+    if (!faceEntry)
+        return false;
+
+    // Check Hair
+    CharSectionsEntry const* hairEntry = GetCharSectionEntry(race, SECTION_TYPE_HAIR, gender, hairID, hairColor);
+    if (!hairEntry)
+        return false;
+
+    // These combinations don't have an entry of Type SECTION_TYPE_FACIAL_HAIR, exclude them from that check
+    bool const excludeCheck = (race == RACE_TAUREN) || (gender == GENDER_FEMALE && race != RACE_NIGHTELF && race != RACE_UNDEAD);
+    if (!excludeCheck)
+    {
+        CharSectionsEntry const* facialHairEntry = GetCharSectionEntry(race, SECTION_TYPE_FACIAL_HAIR, gender, facialHair, hairColor);
+        if (!facialHairEntry)
+            return false;
+    }
+
+    CharacterFacialHairStylesEntry const* entry = GetCharFacialHairEntry(race, gender, facialHair);
+    if (!entry)
+        return false;
+
+    return true;
+}
+
 bool Player::Create(uint32 guidlow, std::string const& name, uint8 race, uint8 class_, uint8 gender, uint8 skin, uint8 face, uint8 hairStyle, uint8 hairColor, uint8 facialHair)
 {
     Object::_Create(guidlow, 0, HIGHGUID_PLAYER);
@@ -826,6 +859,8 @@ bool Player::StoreNewItemInBestSlots(uint32 titem_id, uint32 titem_amount, uint3
                 pItem->ClearEnchantment(PERM_ENCHANTMENT_SLOT);
                 pItem->SetEnchantment(PERM_ENCHANTMENT_SLOT, enchantId, 0, 0);
             }
+            if (uint32 randomPropertyId = Item::GenerateItemRandomPropertyId(titem_id))
+                pItem->SetItemRandomProperties(randomPropertyId);
         }
         AutoUnequipOffhandIfNeed();
         --titem_amount;
@@ -3289,12 +3324,12 @@ void Player::InitStatsForLevel(bool reapplyMods)
 
     // cleanup unit flags (will be re-applied if need at aura load).
     RemoveFlag(UNIT_FIELD_FLAGS,
-               UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_DISABLE_MOVE | UNIT_FLAG_NOT_ATTACKABLE_1 |
-               UNIT_FLAG_IMMUNE_TO_PLAYER | UNIT_FLAG_PASSIVE  | UNIT_FLAG_LOOTING          |
-               UNIT_FLAG_PET_IN_COMBAT  | UNIT_FLAG_SILENCED   | UNIT_FLAG_PACIFIED         |
-               UNIT_FLAG_STUNNED        | UNIT_FLAG_IN_COMBAT  | UNIT_FLAG_DISARMED         |
-               UNIT_FLAG_CONFUSED       | UNIT_FLAG_FLEEING    | UNIT_FLAG_NOT_SELECTABLE   |
-               UNIT_FLAG_SKINNABLE      | UNIT_FLAG_IMMUNE     | UNIT_FLAG_AURAS_VISIBLE    | UNIT_FLAG_TAXI_FLIGHT);
+               UNIT_FLAG_NON_ATTACKABLE   | UNIT_FLAG_DISABLE_MOVE  | UNIT_FLAG_NOT_ATTACKABLE_1 |
+               UNIT_FLAG_IMMUNE_TO_PLAYER | UNIT_FLAG_IMMUNE_TO_NPC | UNIT_FLAG_LOOTING          |
+               UNIT_FLAG_PET_IN_COMBAT    | UNIT_FLAG_SILENCED      | UNIT_FLAG_PACIFIED         |
+               UNIT_FLAG_STUNNED          | UNIT_FLAG_IN_COMBAT     | UNIT_FLAG_DISARMED         |
+               UNIT_FLAG_CONFUSED         | UNIT_FLAG_FLEEING       | UNIT_FLAG_NOT_SELECTABLE   |
+               UNIT_FLAG_SKINNABLE        | UNIT_FLAG_IMMUNE        | UNIT_FLAG_AURAS_VISIBLE    | UNIT_FLAG_TAXI_FLIGHT);
     SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PLAYER_CONTROLLED);    // must be set
 
     // cleanup player flags (will be re-applied if need at aura load), to avoid have ghost flag without ghost aura, for example.
@@ -10239,6 +10274,16 @@ InventoryResult Player::CanUseAmmo(uint32 item) const
     return EQUIP_ERR_ITEM_NOT_FOUND;
 }
 
+bool Player::IsInDisallowedItemUseForm() const
+{
+    ShapeshiftForm const form = GetShapeshiftForm();
+    if (form == FORM_NONE)
+        return false;
+
+    SpellShapeshiftFormEntry const* ssEntry = sSpellShapeshiftFormStore.LookupEntry(form);
+    return ssEntry && !(ssEntry->flags1 & SHAPESHIFT_FORM_FLAG_ALLOW_ACTIVITY);
+}
+
 void Player::SetAmmo(uint32 item)
 {
     if (!item)
@@ -12071,7 +12116,7 @@ void Player::PrepareGossipMenu(WorldObject* pSource, uint32 menuId)
         bool hasMenuItem = true;
         bool isGMSkipConditionCheck = false;
 
-        if (itr->second.conditionId && !sObjectMgr.IsConditionSatisfied(itr->second.conditionId, this, GetMap(), pSource, CONDITION_FROM_GOSSIP_OPTION))
+        if (itr->second.condition_id && !sObjectMgr.IsConditionSatisfied(itr->second.condition_id, this, GetMap(), pSource, CONDITION_FROM_GOSSIP_OPTION))
         {
             if (IsGameMaster())                             // Let GM always see menu items regardless of conditions
                 isGMSkipConditionCheck = true;
@@ -12180,13 +12225,13 @@ void Player::PrepareGossipMenu(WorldObject* pSource, uint32 menuId)
             std::string strOptionText, strBoxText;
             int loc_idx = GetSession()->GetSessionDbLocaleIndex();
 
-            if (itr->second.OptionBroadcastTextID)
-                strOptionText = sObjectMgr.GetBroadcastTextLocale(itr->second.OptionBroadcastTextID)->GetText(loc_idx, GetGender(), false);
+            if (itr->second.option_broadcast_text)
+                strOptionText = sObjectMgr.GetBroadcastTextLocale(itr->second.option_broadcast_text)->GetText(loc_idx, GetGender(), false);
             else
                 strOptionText = itr->second.option_text;
 
-            if (itr->second.BoxBroadcastTextID)
-                strBoxText = sObjectMgr.GetBroadcastTextLocale(itr->second.BoxBroadcastTextID)->GetText(loc_idx, GetGender(), false);
+            if (itr->second.box_broadcast_text)
+                strBoxText = sObjectMgr.GetBroadcastTextLocale(itr->second.box_broadcast_text)->GetText(loc_idx, GetGender(), false);
             else
                 strBoxText = itr->second.box_text;
 
@@ -12194,12 +12239,12 @@ void Player::PrepareGossipMenu(WorldObject* pSource, uint32 menuId)
             {
                 uint32 idxEntry = MAKE_PAIR32(menuId, itr->second.id);
 
-                if (!itr->second.OptionBroadcastTextID)
+                if (!itr->second.option_broadcast_text)
                     if (GossipMenuItemsLocale const* no = sObjectMgr.GetGossipMenuItemsLocale(idxEntry))
                         if (no->OptionText.size() > (size_t)loc_idx && !no->OptionText[loc_idx].empty())
                             strOptionText = no->OptionText[loc_idx];
 
-                if (!itr->second.BoxBroadcastTextID)
+                if (!itr->second.box_broadcast_text)
                     if (GossipMenuItemsLocale const* no = sObjectMgr.GetGossipMenuItemsLocale(idxEntry))
                         if (no->BoxText.size() > (size_t)loc_idx && !no->BoxText[loc_idx].empty())
                             strBoxText = no->BoxText[loc_idx];
@@ -12641,7 +12686,7 @@ Quest const* Player::GetNextQuest(ObjectGuid guid, Quest const* pQuest)
 */
 bool Player::CanSeeStartQuest(Quest const* pQuest) const
 {
-    if (SatisfyQuestClass(pQuest, false) && SatisfyQuestRace(pQuest, false) && SatisfyQuestSkill(pQuest, false) &&
+    if (SatisfyQuestClass(pQuest, false) && SatisfyQuestRace(pQuest, false) && SatisfyQuestSkill(pQuest, false) && SatisfyQuestCondition(pQuest, false) &&
             SatisfyQuestExclusiveGroup(pQuest, false) && SatisfyQuestReputation(pQuest, false) &&
             SatisfyQuestPreviousQuest(pQuest, false) && SatisfyQuestNextChain(pQuest, false) &&
             SatisfyQuestPrevChain(pQuest, false) &&
@@ -12663,7 +12708,7 @@ bool Player::CanTakeQuest(Quest const* pQuest, bool msg, bool skipStatusCheck /*
 
     return (skipStatusCheck || SatisfyQuestStatus(pQuest, msg)) && SatisfyQuestExclusiveGroup(pQuest, msg) &&
            SatisfyQuestClass(pQuest, msg) && SatisfyQuestRace(pQuest, msg) && SatisfyQuestLevel(pQuest, msg) &&
-           SatisfyQuestSkill(pQuest, msg) && SatisfyQuestReputation(pQuest, msg) &&
+           SatisfyQuestSkill(pQuest, msg) && SatisfyQuestCondition(pQuest, msg) && SatisfyQuestReputation(pQuest, msg) &&
            SatisfyQuestPreviousQuest(pQuest, msg) && SatisfyQuestTimed(pQuest, msg) &&
            SatisfyQuestNextChain(pQuest, msg) && SatisfyQuestPrevChain(pQuest, msg) &&
            pQuest->IsActive();
@@ -13365,6 +13410,20 @@ bool Player::SatisfyQuestSkill(Quest const* qInfo, bool msg) const
         return false;
     }
 
+    return true;
+}
+
+bool Player::SatisfyQuestCondition(Quest const* qInfo, bool msg) const
+{
+    if (uint32 conditionId = qInfo->GetRequiredCondition())
+    {
+        bool result = sObjectMgr.IsConditionSatisfied(conditionId, this, GetMap(), nullptr, CONDITION_FROM_QUEST);
+
+        if (!result && msg)
+            SendCanTakeQuestResponse(INVALIDREASON_DONT_HAVE_REQ);
+
+        return result;
+    }
     return true;
 }
 
@@ -19434,9 +19493,9 @@ bool Player::IsHonorOrXPTarget(Unit* pVictim) const
     if (pVictim->GetTypeId() == TYPEID_UNIT)
     {
         if (((Creature*)pVictim)->IsTotem() ||
-                ((Creature*)pVictim)->IsPet() ||
-                ((Creature*)pVictim)->GetCreatureInfo()->flags_extra & CREATURE_FLAG_EXTRA_NO_XP_AT_KILL ||
-                pVictim->HasUnitState(UNIT_STAT_NO_KILL_REWARD))
+            ((Creature*)pVictim)->IsPet() ||
+            ((Creature*)pVictim)->HasExtraFlag(CREATURE_FLAG_EXTRA_NO_XP_AT_KILL) ||
+            pVictim->HasUnitState(UNIT_STAT_NO_KILL_REWARD))
             return false;
     }
     return true;
@@ -20550,10 +20609,31 @@ void Player::RemoveAI()
     if (i_AI)
         i_AI->Remove();
 }
+
+void Player::RemoveTemporaryAI()
+{
+    PlayerBotEntry* pBot = GetSession()->GetBot();
+
+    if (!pBot || (pBot->ai != AI()))
+        RemoveAI();
+
+    if (pBot && (pBot->ai != AI()))
+        SetAI(pBot->ai);
+}
+
 void Player::SetControlledBy(Unit* pWho)
 {
-    RemoveAI();
-    i_AI = new PlayerControlledAI(this, pWho->ToCreature());
+    if (i_AI)
+    {
+        PlayerBotEntry* pBot = GetSession()->GetBot();
+
+        // Careful not to delete bot ai
+        if (!pBot || (pBot->ai != i_AI))
+            delete i_AI;
+
+        i_AI = nullptr;
+    }
+    i_AI = new PlayerControlledAI(this, pWho);
 }
 
 #define CHANGERACE_LOG(format, ...) sLog.outString("[RaceChanger/Log] " format, ##__VA_ARGS__)

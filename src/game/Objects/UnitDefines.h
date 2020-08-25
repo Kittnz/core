@@ -372,7 +372,7 @@ enum UnitFlags
     UNIT_FLAG_PET_ABANDON           = 0x00000020,           // Old pet abandon: moved to UNIT_FIELD_BYTES_2,2 in TBC+
     UNIT_FLAG_UNK_6                 = 0x00000040,
     UNIT_FLAG_IMMUNE_TO_PLAYER      = 0x00000100,           // Target is immune to players
-    UNIT_FLAG_PASSIVE               = 0x00000200,           // makes you unable to attack everything. Almost identical to our "civilian"-term. Will ignore it's surroundings and not engage in combat unless "called upon" or engaged by another unit.
+    UNIT_FLAG_IMMUNE_TO_NPC         = 0x00000200,           // Target is immune to creatures
     UNIT_FLAG_PVP                   = 0x00001000,
     UNIT_FLAG_SILENCED              = 0x00002000,           // silenced, 2.1.1
     UNIT_FLAG_UNK_14                = 0x00004000,
@@ -556,6 +556,29 @@ enum UnitDismountResult
     DISMOUNTRESULT_NOTMOUNTED   = 1,    // You're not mounted!
     DISMOUNTRESULT_NOTYOURPET   = 2,    // internal
     DISMOUNTRESULT_OK           = 3     // no error
+};
+
+// First entry in CreatureDisplayInfo.dbc
+#define UNIT_DISPLAY_ID_BOX 4
+
+enum ModelIds
+{
+    MODEL_HUMAN_MALE    = 49,
+    MODEL_HUMAN_FEMALE  = 50,
+    MODEL_ORC_MALE      = 51,
+    MODEL_ORC_FEMALE    = 52,
+    MODEL_DWARF_MALE    = 53,
+    MODEL_DWARF_FEMALE  = 54,
+    MODEL_NELF_MALE     = 55,
+    MODEL_NELF_FEMALE   = 56,
+    MODEL_UNDEAD_MALE   = 57,
+    MODEL_UNDEAD_FEMALE = 58,
+    MODEL_TAUREN_MALE   = 59,
+    MODEL_TAUREN_FEMALE = 60,
+    MODEL_GNOME_MALE    = 182,
+    MODEL_GNOME_FEMALE  = 183,
+    MODEL_TROLL_MALE    = 185,
+    MODEL_TROLL_FEMALE  = 186,
 };
 
 #endif

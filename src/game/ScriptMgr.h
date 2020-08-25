@@ -62,7 +62,7 @@ enum eScriptCommand
                                                             // datalong = chat_type (see enum ChatType)
                                                             // dataint = broadcast_text id. dataint2-4 optional for random selected text.
     SCRIPT_COMMAND_EMOTE                    = 1,            // source = Unit
-                                                            // datalong = emote_id
+                                                            // datalong1-4 = emote_id
     SCRIPT_COMMAND_FIELD_SET                = 2,            // source = Object
                                                             // datalong = field_id
                                                             // datalong2 = value
@@ -336,6 +336,8 @@ enum eScriptCommand
                                                             // datalong = db_guid
     SCRIPT_COMMAND_QUEST_CREDIT             = 83,           // source = Player (from provided source or target)
                                                             // target = WorldObject (from provided source or target)
+    SCRIPT_COMMAND_SET_GOSSIP_MENU          = 84,           // source = Creature
+                                                            // datalong = gossip_menu_id
     SCRIPT_COMMAND_MAX,
 
     SCRIPT_COMMAND_DISABLED                 = 9999          // Script action was disabled during loading.
@@ -522,12 +524,7 @@ struct ScriptInfo
 
         struct                                              // SCRIPT_COMMAND_EMOTE (1)
         {
-            uint32 emoteId;                                 // datalong
-            uint32 unused1;                                 // datalong2
-            uint32 unused2;                                 // datalong3
-            uint32 unused3;                                 // datalong4
-            uint32 unused4;                                 // data_flags
-            uint32 randomEmotes[MAX_EMOTE_ID];              // dataint to dataint4
+            uint32 emoteId[MAX_EMOTE_ID];                   // datalong to datalong4
         } emote;
 
         struct                                              // SCRIPT_COMMAND_FIELD_SET (2)
@@ -1016,6 +1013,11 @@ struct ScriptInfo
         } loadGo;
 
                                                             // SCRIPT_COMMAND_QUEST_CREDIT (83)
+
+        struct                                              // SCRIPT_COMMAND_SET_GOSSIP_MENU (84)
+        {
+            uint32 gossipMenuId;                            // datalong
+        } setGossipMenu;
 
         struct
         {

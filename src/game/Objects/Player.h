@@ -1037,6 +1037,7 @@ class Player final: public Unit
         InventoryResult CanUseItem(Item* pItem, bool not_loading = true) const;
         InventoryResult CanUseItem(ItemPrototype const* pItem, bool not_loading = true) const;
         InventoryResult CanUseAmmo(uint32 item) const;
+        bool IsInDisallowedItemUseForm() const;
         Item* StoreNewItem(ItemPosCountVec const& pos, uint32 item, bool update, int32 randomPropertyId = 0);
         Item* StoreItem(ItemPosCountVec const& pos, Item* pItem, bool update);
         Item* EquipNewItem(uint16 pos, uint32 item, bool update);
@@ -1216,6 +1217,7 @@ class Player final: public Unit
         void RewardQuest(Quest const* pQuest, uint32 reward, WorldObject* questGiver, bool announce = true);
         void FailQuest(uint32 quest_id);
         bool SatisfyQuestSkill(Quest const* qInfo, bool msg) const;
+        bool SatisfyQuestCondition(Quest const* qInfo, bool msg) const;
         bool SatisfyQuestLevel(Quest const* qInfo, bool msg) const;
         bool SatisfyQuestLog(bool msg) const;
         bool SatisfyQuestPreviousQuest(Quest const* qInfo, bool msg) const;
@@ -1323,6 +1325,7 @@ class Player final: public Unit
         bool HasAtLoginFlag(AtLoginFlags f) const { return m_atLoginFlags & f; }
         void SetAtLoginFlag(AtLoginFlags f) { m_atLoginFlags |= f; }
         void RemoveAtLoginFlag(AtLoginFlags f, bool in_db_also = false);
+        static bool ValidateAppearance(uint8 race, uint8 class_, uint8 gender, uint8 hairID, uint8 hairColor, uint8 faceID, uint8 facialHair, uint8 skinColor, bool create = false);
 
         /*********************************************************/
         /***                   SAVE SYSTEM                     ***/
@@ -2006,13 +2009,13 @@ class Player final: public Unit
         void SetCannotBeDetectedTimer(uint32 milliseconds) { m_cannotBeDetectedTimer = milliseconds; };
         bool CanBeDetected() const override { return m_cannotBeDetectedTimer <= 0; }
 
-        // Nostalrius
-        // Gestion des PlayerAI
+        // PlayerAI management
         PlayerAI* i_AI;
         PlayerAI* AI() { return i_AI; }
-        void setAI(PlayerAI* otherAI) { i_AI = otherAI; }
+        void SetAI(PlayerAI* otherAI) { i_AI = otherAI; }
         void SetControlledBy(Unit* Who);
         void RemoveAI();
+        void RemoveTemporaryAI(); // will restore player bot AI if needed
         void ModPossessPet(Pet* pet, bool apply, AuraRemoveMode m_removeMode = AURA_REMOVE_BY_DEFAULT);
 
         void SetDeathState(DeathState s) override;                   // overwrite Unit::SetDeathState

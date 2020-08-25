@@ -92,6 +92,10 @@ ChatCommand * ChatHandler::getCommandTable()
         { "add",        SEC_ADMINISTRATOR,      false, &ChatHandler::HandlePartyBotAddCommand,         "", nullptr },
         { "clone",      SEC_ADMINISTRATOR,      false, &ChatHandler::HandlePartyBotCloneCommand,       "", nullptr },
         { "setrole",    SEC_ADMINISTRATOR,      false, &ChatHandler::HandlePartyBotSetRoleCommand,     "", nullptr },
+        { "attackstart",SEC_ADMINISTRATOR,      false, &ChatHandler::HandlePartyBotAttackStartCommand, "", nullptr },
+        { "attackstop", SEC_ADMINISTRATOR,      false, &ChatHandler::HandlePartyBotAttackStopCommand,  "", nullptr },
+        { "cometome",   SEC_ADMINISTRATOR,      false, &ChatHandler::HandlePartyBotComeToMeCommand,    "", nullptr },
+        { "usegobject", SEC_ADMINISTRATOR,      false, &ChatHandler::HandlePartyBotUseGObjectCommand,  "", nullptr },
         { "pause",      SEC_ADMINISTRATOR,      false, &ChatHandler::HandlePartyBotPauseCommand,       "", nullptr },
         { "unpause",    SEC_ADMINISTRATOR,      false, &ChatHandler::HandlePartyBotUnpauseCommand,     "", nullptr },
         { "remove",     SEC_ADMINISTRATOR,      false, &ChatHandler::HandlePartyBotRemoveCommand,      "", nullptr },
@@ -297,6 +301,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "poi",            SEC_DEVELOPPER,     false, &ChatHandler::HandleDebugSendPoiCommand,             "", nullptr },
         { "qpartymsg",      SEC_DEVELOPPER,     false, &ChatHandler::HandleDebugSendQuestPartyMsgCommand,   "", nullptr },
         { "qinvalidmsg",    SEC_DEVELOPPER,     false, &ChatHandler::HandleDebugSendQuestInvalidMsgCommand, "", nullptr },
+        { "mailerror",      SEC_DEVELOPPER,     false, &ChatHandler::HandleDebugSendMailErrorCommand,       "", nullptr },
         { "sellerror",      SEC_DEVELOPPER,     false, &ChatHandler::HandleDebugSendSellErrorCommand,       "", nullptr },
         { "spellfail",      SEC_DEVELOPPER,     false, &ChatHandler::HandleDebugSendSpellFailCommand,       "", nullptr },
         { "visual",         SEC_DEVELOPPER,     true,  &ChatHandler::HandleSendSpellVisualCommand,          "", nullptr },
@@ -598,39 +603,64 @@ ChatCommand * ChatHandler::getCommandTable()
         { nullptr,          0,                  false, nullptr,                                        "", nullptr }
     };
 
-    static ChatCommand npcCommandTable[] =
+    static ChatCommand creatureSpawnsSetCommandTable[] =
+    {
+        { "entry",          SEC_DEVELOPPER,     false, &ChatHandler::HandleNpcSpawnSetEntryCommand, "", nullptr },
+        { "displayid",      SEC_DEVELOPPER,     false, &ChatHandler::HandleNpcSpawnSetDisplayIdCommand,"", nullptr },
+        { "movetype",       SEC_DEVELOPPER,     false, &ChatHandler::HandleNpcSpawnSetMoveTypeCommand, "", nullptr },
+        { "wanderdistance", SEC_DEVELOPPER,     false, &ChatHandler::HandleNpcSpawnWanderDistCommand,  "", nullptr },
+        { "respawntime",    SEC_DEVELOPPER,     false, &ChatHandler::HandleNpcSpawnSpawnTimeCommand,   "", nullptr },
+        { "deathstate",     SEC_DEVELOPPER,     false, &ChatHandler::HandleNpcSetDeathStateCommand,    "", nullptr },
+        { nullptr,          0,                  false, nullptr,                                        "", nullptr }
+    };
+
+    static ChatCommand creatureSpawnsCommandTable[] =
     {
         { "add",            SEC_DEVELOPPER,     false, &ChatHandler::HandleNpcAddCommand,              "", nullptr },
         { "addentry",       SEC_DEVELOPPER,     false, &ChatHandler::HandleNpcAddEntryCommand,         "", nullptr },
+        { "delete",         SEC_DEVELOPPER,     false, &ChatHandler::HandleNpcDeleteCommand,           "", nullptr },
+        { "info",           SEC_MODERATOR,      false, &ChatHandler::HandleNpcSpawnInfoCommand,        "", nullptr },
+        { "set",            SEC_DEVELOPPER,     false, nullptr,                                        "", creatureSpawnsSetCommandTable },
+        { "move",           SEC_DEVELOPPER,     false, &ChatHandler::HandleNpcSpawnMoveCommand,        "", nullptr },
+        { nullptr,          0,                  false, nullptr,                                        "", nullptr }
+    };
+
+    static ChatCommand creatureSetCommandTable[] =
+    {
+        { "entry",          SEC_GAMEMASTER,     false, &ChatHandler::HandleNpcSetEntryCommand,         "", nullptr },
+        { "level",          SEC_GAMEMASTER,     false, &ChatHandler::HandleNpcSetLevelCommand,         "", nullptr },
+        { "faction",        SEC_GAMEMASTER,     false, &ChatHandler::HandleNpcSetFactionIdCommand,     "", nullptr },
+        { "flag",           SEC_GAMEMASTER,     false, &ChatHandler::HandleNpcSetFlagCommand,          "", nullptr },
+        { "displayid",      SEC_GAMEMASTER,     false, &ChatHandler::HandleNpcSetDisplayIdCommand,     "", nullptr },
+        { "movetype",       SEC_GAMEMASTER,     false, &ChatHandler::HandleNpcSetMoveTypeCommand,      "", nullptr },
+        { "wanderdistance", SEC_GAMEMASTER,     false, &ChatHandler::HandleNpcSetWanderDistCommand,    "", nullptr },
+        { "respawntime",    SEC_GAMEMASTER,     false, &ChatHandler::HandleNpcSetSpawnTimeCommand,     "", nullptr },
+        { nullptr,          0,                  false, nullptr,                                        "", nullptr }
+    };
+
+    static ChatCommand npcCommandTable[] =
+    {
         { "additem",        SEC_DEVELOPPER,     false, &ChatHandler::HandleNpcAddVendorItemCommand,    "", nullptr },
         { "addweapon",      SEC_GAMEMASTER,     false, &ChatHandler::HandleNpcAddWeaponCommand,        "", nullptr },
         { "aiinfo",         SEC_MODERATOR,      false, &ChatHandler::HandleNpcAIInfoCommand,           "", nullptr },
         { "allowmove",      SEC_GAMEMASTER,     false, &ChatHandler::HandleNpcAllowMovementCommand,    "", nullptr },
         { "allowattack",    SEC_GAMEMASTER,     false, &ChatHandler::HandleNpcAllowAttackCommand,      "", nullptr },
-        { "changeentry",    SEC_GAMEMASTER,     false, &ChatHandler::HandleNpcChangeEntryCommand,      "", nullptr },
-        { "changelevel",    SEC_GAMEMASTER,     false, &ChatHandler::HandleNpcChangeLevelCommand,      "", nullptr },
         { "despawn",        SEC_GAMEMASTER,     false, &ChatHandler::HandleNpcDespawnCommand,          "", nullptr },
-        { "delete",         SEC_DEVELOPPER,     false, &ChatHandler::HandleNpcDeleteCommand,           "", nullptr },
         { "delitem",        SEC_DEVELOPPER,     false, &ChatHandler::HandleNpcDelVendorItemCommand,    "", nullptr },
         { "evade",          SEC_GAMEMASTER,     false, &ChatHandler::HandleNpcEvadeCommand,            "", nullptr },
-        { "factionid",      SEC_GAMEMASTER,     false, &ChatHandler::HandleNpcFactionIdCommand,        "", nullptr },
-        { "flag",           SEC_GAMEMASTER,     false, &ChatHandler::HandleNpcFlagCommand,             "", nullptr },
         { "follow",         SEC_GAMEMASTER,     false, &ChatHandler::HandleNpcFollowCommand,           "", nullptr },
+        { "unfollow",       SEC_GAMEMASTER,     false, &ChatHandler::HandleNpcUnFollowCommand,         "", nullptr },
         { "info",           SEC_MODERATOR,      false, &ChatHandler::HandleNpcInfoCommand,             "", nullptr },
         { "move",           SEC_GAMEMASTER,     false, &ChatHandler::HandleNpcMoveCommand,             "", nullptr },
         { "playemote",      SEC_TICKETMASTER,   false, &ChatHandler::HandleNpcPlayEmoteCommand,        "", nullptr },
-        { "setmodel",       SEC_GAMEMASTER,     false, &ChatHandler::HandleNpcSetModelCommand,         "", nullptr },
-        { "setmovetype",    SEC_GAMEMASTER,     false, &ChatHandler::HandleNpcSetMoveTypeCommand,      "", nullptr },
-        { "spawndist",      SEC_GAMEMASTER,     false, &ChatHandler::HandleNpcSpawnDistCommand,        "", nullptr },
-        { "spawntime",      SEC_GAMEMASTER,     false, &ChatHandler::HandleNpcSpawnTimeCommand,        "", nullptr },
         { "say",            SEC_TICKETMASTER,   false, &ChatHandler::HandleNpcSayCommand,              "", nullptr },
         { "summon",         SEC_GAMEMASTER,     false, &ChatHandler::HandleNpcSummonCommand,           "", nullptr },
         { "textemote",      SEC_TICKETMASTER,   false, &ChatHandler::HandleNpcTextEmoteCommand,        "", nullptr },
-        { "unfollow",       SEC_GAMEMASTER,     false, &ChatHandler::HandleNpcUnFollowCommand,         "", nullptr },
         { "whisper",        SEC_TICKETMASTER,   false, &ChatHandler::HandleNpcWhisperCommand,          "", nullptr },
         { "yell",           SEC_TICKETMASTER,   false, &ChatHandler::HandleNpcYellCommand,             "", nullptr },
         { "tame",           SEC_GAMEMASTER,     false, &ChatHandler::HandleNpcTameCommand,             "", nullptr },
-        { "setdeathstate",  SEC_DEVELOPPER,     false, &ChatHandler::HandleNpcSetDeathStateCommand,    "", nullptr },
+        { "spawn",          SEC_MODERATOR,      false, nullptr,                                        "", creatureSpawnsCommandTable },
+        { "set",            SEC_GAMEMASTER,     false, nullptr,                                        "", creatureSetCommandTable },
         { "group",          SEC_DEVELOPPER,     false, nullptr,                                        "", creatureGroupsCommandTable },
         { nullptr,          0,                  false, nullptr,                                        "", nullptr }
     };
@@ -811,6 +841,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "spells",         SEC_DEVELOPPER,     true,  &ChatHandler::HandleResetSpellsCommand,         "", nullptr },
         { "stats",          SEC_DEVELOPPER,     true,  &ChatHandler::HandleResetStatsCommand,          "", nullptr },
         { "talents",        SEC_GAMEMASTER,     true,  &ChatHandler::HandleResetTalentsCommand,        "", nullptr },
+        { "items",          SEC_ADMINISTRATOR,  true,  &ChatHandler::HandleResetItemsCommand,          "", nullptr },
         { "all",            SEC_ADMINISTRATOR,  true,  &ChatHandler::HandleResetAllCommand,            "", nullptr },
         { nullptr,          0,                  false, nullptr,                                        "", nullptr }
     };
