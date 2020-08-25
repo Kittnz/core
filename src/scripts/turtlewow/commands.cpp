@@ -605,3 +605,101 @@ bool ChatHandler::HandleMountCommand(char* /*args*/)
     player->UpdateSpeed(MOVE_RUN, false, 4.0F);
     return true;
 }
+
+class NearestGameObjectInObjectRangeCheck
+{
+public:
+    NearestGameObjectInObjectRangeCheck(WorldObject const& obj, float range) : i_obj(obj), i_range(range) {}
+    WorldObject const& GetFocusObject() const { return i_obj; }
+    bool operator()(GameObject* go)
+    {
+        if (i_obj.IsWithinDistInMap(go, i_range))
+        {
+            i_range = i_obj.GetDistance(go);        // use found GO range as new range limit for next check
+            return true;
+        }
+        return false;
+    }
+    float GetLastRange() const { return i_range; }
+private:
+    WorldObject const& i_obj;
+    float  i_range;
+};
+
+bool ChatHandler::HandleGameObjectUpCommand(char* args)
+{
+    Player* player = m_session->GetPlayer();
+
+    const float dist = 5.0f;
+
+    GameObject* object = NULL;
+    CellPair pair(MaNGOS::ComputeCellPair(player->GetPositionX(), player->GetPositionY()));
+    Cell cell(pair);
+    cell.SetNoCreate();
+
+    NearestGameObjectInObjectRangeCheck go_check(*player, dist);
+    MaNGOS::GameObjectLastSearcher<NearestGameObjectInObjectRangeCheck> searcher(object, go_check);
+    TypeContainerVisitor<MaNGOS::GameObjectLastSearcher<NearestGameObjectInObjectRangeCheck>, GridTypeMapContainer> go_searcher(searcher);
+    cell.Visit(pair, go_searcher, *(player->GetMap()), *player, dist);
+
+    if (object)
+    {
+        GameObjectInfo const* data = object->GetGOInfo();
+        Map* map = object->GetMap();
+
+        float x, y, z;
+        object->GetSafePosition(x, y, z);
+
+        map->Remove(object, false);
+
+        object->Relocate(x, y, z + 0.5F);
+        object->SetFloatValue(GAMEOBJECT_POS_X, x);
+        object->SetFloatValue(GAMEOBJECT_POS_Y, y);
+        object->SetFloatValue(GAMEOBJECT_POS_Z, z + 0.5F);
+
+        map->Add(object);
+
+        object->SaveToDB();
+        object->Refresh();
+    }
+    return true;
+}
+
+bool ChatHandler::HandleGameObjectDownCommand(char* args)
+{
+    Player* player = m_session->GetPlayer();
+
+    const float dist = 5.0f;
+
+    GameObject* object = NULL;
+    CellPair pair(MaNGOS::ComputeCellPair(player->GetPositionX(), player->GetPositionY()));
+    Cell cell(pair);
+    cell.SetNoCreate();
+
+    NearestGameObjectInObjectRangeCheck go_check(*player, dist);
+    MaNGOS::GameObjectLastSearcher<NearestGameObjectInObjectRangeCheck> searcher(object, go_check);
+    TypeContainerVisitor<MaNGOS::GameObjectLastSearcher<NearestGameObjectInObjectRangeCheck>, GridTypeMapContainer> go_searcher(searcher);
+    cell.Visit(pair, go_searcher, *(player->GetMap()), *player, dist);
+
+    if (object)
+    {
+        GameObjectInfo const* data = object->GetGOInfo();
+        Map* map = object->GetMap();
+
+        float x, y, z;
+        object->GetSafePosition(x, y, z);
+
+        map->Remove(object, false);
+
+        object->Relocate(x, y, z - 0.5F);
+        object->SetFloatValue(GAMEOBJECT_POS_X, x);
+        object->SetFloatValue(GAMEOBJECT_POS_Y, y);
+        object->SetFloatValue(GAMEOBJECT_POS_Z, z - 0.5F);
+
+        map->Add(object);
+
+        object->SaveToDB();
+        object->Refresh();
+    }
+    return true;
+}
