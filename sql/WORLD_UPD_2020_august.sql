@@ -790,3 +790,6 @@ replace into item_template values
   update item_template set quality = 3 where entry in (50071,50072,50073,50076,50074,12325,12326,8630,13325,5875,5874,1041,8590);
  update item_template set quality = 3 where entry in (13329,12353,12302,12303,12351,15293,18768,23193,50399,50400,50401,50402,50403,50404,50407);
  
+ -- Wormhole fixes
+ 
+ update item_template set script_name = "item_test_wormhole_generator" where entry = 51808;
