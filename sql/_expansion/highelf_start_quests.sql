@@ -1034,11 +1034,6 @@ replace into`creature_template` values (80228, 0, 16818, 0, 0, 0, 'Toranial Mish
 
 update creature_template set faction = 371 where entry = 80228;
 
-REPLACE INTO `creature_template` VALUES (80229, 0, 18027, 0, 0, 0, 'Crimson Lynx', NULL, 0, 10, 10, 197, 197, 618, 618, 20, 16, 0, 1, 1.42857, 0, 20, 5, 0, 4, 1, 11, 19, 0, 62, 1, 1200, 2000, 1, 0, 0, 2, 0, 0, 0, 0, 15.1624, 20.8483, 100, 1, 1, 5807, 0, 5807, 0, 0, 0, 0, 0, 0, 12166, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, '');
-
-update creature_template set faction = 7 where entry = 80229;
-update creature_template set rank = 0 where entry = 80229;
-
 REPLACE INTO `npc_trainer` VALUES 
 (80228, 1847, 1000, 0, 0, 5, 0, 5875),
 (80228, 15983, 1000, 0, 0, 5, 0, 5875),
