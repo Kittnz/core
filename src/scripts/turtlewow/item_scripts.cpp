@@ -31,6 +31,23 @@ bool ItemUseSpell_portable_wormhole_generator(Player* pPlayer, Item* pItem, cons
     return false;
 }
 
+bool ItemUseSpell_experimental_wormhole_generator(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+{
+    if (pPlayer->isInCombat() || pPlayer->IsBeingTeleported() || (pPlayer->getDeathState() == CORPSE) || pPlayer->IsMoving())
+        ChatHandler(pPlayer).PSendSysMessage("Warning! High radiation emission detected! Wormhole Generator failsafe system shutting device down! Please use later!");
+    else
+    {
+        float dis{ 2.0F };
+        float x, y, z;
+        pPlayer->GetSafePosition(x, y, z);
+        x += dis * cos(pPlayer->GetOrientation());
+        y += dis * sin(pPlayer->GetOrientation());
+        pPlayer->PMonsterEmote("%s just opened a wormhole.", nullptr, false, pPlayer->GetName());
+        pPlayer->SummonGameObject(1000081, x, y, z + 0.5F, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 8, true);
+    }
+    return false;
+}
+
 bool ItemUseSpell_portable_meeting_stone(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
     ChatHandler(pPlayer).PSendSysMessage("You sense magic sipped away from this stone. Most likely the source of magic is gone. Try Portable Wormhole Generator instead.");
@@ -1051,6 +1068,11 @@ void AddSC_item_scripts()
     newscript = new Script;
     newscript->Name = "item_roleplay_hub";
     newscript->pItemUseSpell = &ItemUseSpell_portable_meeting_stone;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "item_test_wormhole_generator";
+    newscript->pItemUseSpell = &ItemUseSpell_experimental_wormhole_generator;
     newscript->RegisterSelf();
 
     newscript = new Script;
