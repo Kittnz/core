@@ -4882,7 +4882,7 @@ enum CustomGraveyardZones
     CGZ_WETLANDS                = 11,
     CGZ_BLACK_MORASS            = 2366,
     CGZ_CAVERNS_OF_TIME         = 1941,
-    CGZ_LOCH_MODAN              = 36
+    CGZ_LOCH_MODAN              = 38
 };
 
 void Player::RepopAtGraveyard()
