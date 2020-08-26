@@ -243,5 +243,24 @@ replace into `creature_template` values
 (80311, 0, 18317, 0, 0, 0, 'Green Pounder Vehicle', '', 0, 1, 2, 64, 55, 53, 53, 30, 35, 0, 1, 1.38571, 0, 20, 5, 0, 0, 1, 2, 2, 0, 44, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 1.76, 2.42, 100, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 2, ''),
 (80312, 0, 18318, 0, 0, 0, 'Red Pounder Vehicle', '', 0, 1, 2, 64, 55, 53, 53, 30, 35, 0, 1, 1.38571, 0, 20, 5, 0, 0, 1, 2, 2, 0, 44, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 1.76, 2.42, 100, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 2, '');
 
+-- Re-scaling some NPCs:
 
-
+update creature_template set scale = 0.6 where entry = 18004;
+update creature_template set scale = 0.6 where entry = 18005;
+update creature_template set scale = 0.6 where entry = 18006;
+update creature_template set scale = 0.6 where entry = 18007;
+update creature_template set scale = 1.5 where entry = 18315;
+update creature_template set scale = 1.5 where entry = 18316;
+update creature_template set scale = 1.5 where entry = 18317;
+update creature_template set scale = 1.5 where entry = 18318;
+update creature_template set scale = 1.3 where entry = 18101;
+update creature_template set scale = 1.3 where entry = 18102;
+update creature_template set scale = 1.3 where entry = 18046;
+update creature_template set scale = 1.3 where entry = 18103;
+update creature_template set scale = 0.8 where entry = 19000;
+update creature_template set scale = 1.5 where entry = 18096;
+update creature_template set scale = 0.7 where entry = 18037;
+update creature_template set scale = 0.5 where entry = 18097;
+update creature_template set scale = 0.5 where entry = 18098;
+update creature_template set scale = 0.5 where entry = 18099;
+update creature_template set scale = 0.5 where entry = 18100;
