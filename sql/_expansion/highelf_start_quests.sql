@@ -424,7 +424,7 @@ set @faction_count = 250;
 set @xp_or_money = 176;
 set @reward_money = 90; 
 set @quest_level = 3;
-set @min_level = 3;
+set @min_level = 2;
 set @questgiver_id = 1156;
 set @quest_finisher = 1156;
 set @nextquest = 0;
@@ -599,7 +599,7 @@ replace into `item_template` values (80220, 0, 4, 2, 'Stitched Leather Gloves', 
 replace into`creature_template` values (80205, 0, 6055, 0, 0, 0, 'Shadowforge Fire Priest', NULL, 0, 5, 5, 109, 109, 138, 138, 105, 16, 0, 0.92, 1.14286, 0, 20, 5, 0, 0, 1, 4, 5, 0, 52, 1, 2000, 2156, 2, 32768, 0, 0, 0, 0, 0, 0, 8.624, 11.858, 100, 7, 0, 3183, 3183, 0, 0, 0, 0, 0, 0, 0, 172, 348, 0, 0, 31830, 0, 3, 9, 'EventAI', 0, 3, 0, 0, 3, 3183, 0, 0, 0, 0, 0, '');
 
 update creature_template set loot_id = 80205 where entry = 80205; 
-replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (80205, 80216, 100, 0, 1, 1);	 
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (80205, 80216, -100, 0, 1, 1);	 
 
 replace into `creature_template` values (80206, 0, 0, 0, 0, 0, 'Quest 80207 Custom Objective', '', 0, 5, 5, 319, 319, 0, 0, 852, 84, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 24, 31, 0, 90, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 31.856, 43.802, 100, 7, 4096, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 4276, 0, 0, 0, 0, 2, '');
 
