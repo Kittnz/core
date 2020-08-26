@@ -593,7 +593,7 @@ bool GossipSelect_npc_malvinah_sunblade(Player* pPlayer, Creature* pCreature, ui
                 return;
 
             creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            creature->MonsterSay("I’m... sorry I shouldn’t burden you with this, we've all struggled ever since we lost Quel'thalas but you’ve come through for us here...");
+            creature->MonsterSay("I'm... sorry I shouldn't burden you with this, we've all struggled ever since we lost Quel'thalas but you've come through for us here...");
         });
 
         DoAfterTime(pPlayer, 20 * IN_MILLISECONDS,
@@ -606,7 +606,7 @@ bool GossipSelect_npc_malvinah_sunblade(Player* pPlayer, Creature* pCreature, ui
                 return;
 
             creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            creature->MonsterSay("The wood, the water, heck you've even defeated those vile Trogg creatures... You're right, I must be calm, perhaps my sister is still out there, she is the only family I have left and if anyone can save her it's you.");
+            creature->MonsterSay("The wood, the water, you've even defeated those vile Trogg creatures... You're right, I must be calm, perhaps my sister is still out there, she is the only family I have left and if anyone can save her it's you.");
         });
 
         DoAfterTime(pPlayer, 25 * IN_MILLISECONDS,
@@ -653,7 +653,7 @@ bool GossipSelect_npc_malvinah_sunblade(Player* pPlayer, Creature* pCreature, ui
                 return;
 
             creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            creature->MonsterSay("I can't overstate how honored I am to be able to call you my friend. Thanks to you little Arisha is safe. We’re all so overwhelmed by your heroism...");
+            creature->MonsterSay("I can't overstate how honored I am to be able to call you my friend. Thanks to you little Arisha is safe. We're all so overwhelmed by your heroism...");
         });
 
 
