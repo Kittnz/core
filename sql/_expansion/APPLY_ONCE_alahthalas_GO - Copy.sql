@@ -1,0 +1,1 @@
+-- Export object 4004585 (ship).
