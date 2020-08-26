@@ -1156,6 +1156,7 @@ REPLACE INTO creature_model_info VALUES
 
 update gameobject_template set size = 0.5 where entry = 2003285;
 update gameobject_template set displayid = 32841 where entry = 2010516;
+update creature_template set faction = 371 where entry in (80208, 80209, 80210,80213,80214,80224,80225,80227);
 
 -- Starting items:
 
