@@ -714,7 +714,7 @@ bool GOHello_go_shadowforge_cage(Player* pPlayer, GameObject* pGo)
             // Change it later to real coords.
             float fX, fY, fZ;
             Alisha->GetRandomPoint(Alisha->GetPositionX(), Alisha->GetPositionY(), Alisha->GetPositionZ(), 15.0f, fX, fY, fZ);
-            Alisha->GetMotionMaster()->MovePoint(0, fX, fY, fZ, 0, 1.0F);
+            Alisha->GetMotionMaster()->MovePoint(0, -5843.51F, -4149.20F, 387.19F, 0, 1.0F);
             Alisha->SetWalk(true);
 
             DoAfterTime(pPlayer, 25 * IN_MILLISECONDS,
