@@ -382,7 +382,7 @@ objectivetext1='Location scouting completed' where entry = @quest_entry;
 -- Slaking Their Thirst
 
 replace into `gameobject_template` values 
-(3000202, 0, 2, 6291, 'Fill barrel of water.', 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farstrider_well');
+(3000202, 0, 2, 25386, 'Farstrider Water Well', 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_farstrider_well');
 
 replace into item_template values
  ('80209', '0', '0', '0', 'Empty Barrel', '', '8381', '1', '0', '1', '0', '0', '0', '-1', '-1', '0',
