@@ -267,3 +267,8 @@ update creature_template set scale = 0.5 where display_id1 = 18098;
 update creature_template set scale = 0.5 where display_id1 = 18099;
 update creature_template set scale = 0.5 where display_id1 = 18100;
 update creature_template set scale = 0.8 where display_id1 = 41000;
+
+-- Changing some of Display IDs:
+
+update creature_template set display_id1 = 18208 where entry = 10824;
+update creature_template set display_id1 = 18209 where entry = 1752;
