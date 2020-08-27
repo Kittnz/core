@@ -1,6 +1,6 @@
 -- Farstrider Lodge
 
-replace into `creature_template` values (80200, 0, 16760, 0, 0, 0, 'Malvinah Sunblade', '', 0, 5, 5, 319, 319, 0, 0, 852, 371, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 24, 31, 0, 90, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 31.856, 43.802, 100, 7, 4096, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 4276, 0, 0, 0, 0, 2, 'npc_malvinah_sunblade');
+replace into `creature_template` values (80200, 0, 16760, 0, 0, 0, 'Malvinah Sunblade', '', 0, 8, 8, 319, 319, 0, 0, 852, 371, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 24, 31, 0, 90, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 31.856, 43.802, 100, 7, 4096, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 4276, 0, 0, 0, 0, 2, 'npc_malvinah_sunblade');
 
 update creature_template set npc_flags = 3 where entry = 80200;
 update creature_template set equipment_id = 0 where entry = 80200;
