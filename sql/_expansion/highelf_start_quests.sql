@@ -1023,7 +1023,7 @@ set @quest_zone = 1519;
 set @title = 'Seeking Further Guidance';
 set @description = '$N, the fall of our homeland has affected all of us. But even if our education and path was cut short, there are still ways…\n\nRecently someone left a letter on the desk, and it was addressed to you.\n\nPerhaps you should read it and see what it says?';
 set @objective = 'Read the Ranger\'s Letter and speak to Rubinah Sunsworn.';
-set @completetext = 'So you’ve chosen to begin your training, I am pleased name, very pleased.\n\nTalk to me again and I will do my best to guide you with knowledge. In time I believe you will grow to become someone all Rangers can be proud of calling a comrade!\n\nMy bearded friend Claude Erksine can also assist you with beast related training once you are prepared.';
+set @completetext = 'So you’ve chosen to begin your training, I am pleased, $N, very pleased. Talk to me again and I will do my best to guide you with knowledge.\n\nIn time I believe you will grow to become someone all Rangers can be proud of calling a comrade!\n\nMy bearded friend Claude Erksine can also assist you with beast related training once you are prepared.';
 set @incompletetext = 'Yes? What is it?';
 set @faction_id = 269;
 set @faction_count = 250;
@@ -1094,7 +1094,8 @@ reqitemid2 = @required_item_2, reqitemcount2 = @required_item_2_count,
 reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
 reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
 nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
-nextquestinchain = @nextquestinchain, prevquestid = @prevquest
+nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
+srcItemId = 80226, srcitemcount = 1, RequiredClasses = 4
 where entry = @quest_entry;	
 
 -- Seeking Further Guidance (Paladin)
@@ -1109,7 +1110,7 @@ replace into item_template values
  '-1', '4', '80227', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
-replace into page_text values (80227, '$N, I am known as Lor\'thas the Holy... I was once part of the Order of the Silverhand.\n\nBefore the fall of the Order and the Kingdom of Lordaeron I was known as Paladin, a valiant servant of the light, banishing Darkness wherever it may be… \n\nYour path is taking you down one similar to mine, you carry the will of the Light alongside great martial prowess.\n\nSeek me out in the lodge and I shall train you to the best of my abilities!', 0);
+replace into page_text values (80227, '$N, I am known as Lor\'thas the Holy. I was once part of the Order of the Silverhand.\n\nBefore the fall of the Order and the Kingdom of Lordaeron I was known as Paladin, a valiant servant of the light, banishing Darkness wherever it may be. Your path is taking you down one similar to mine, you carry the will of the Light alongside great martial prowess.\n\nSeek me out in the lodge and I shall train you to the best of my abilities!', 0);
 
 set @quest_entry = 80212;
 set @quest_zone = 1519;
@@ -1187,13 +1188,14 @@ reqitemid2 = @required_item_2, reqitemcount2 = @required_item_2_count,
 reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
 reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
 nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
-nextquestinchain = @nextquestinchain, prevquestid = @prevquest
+nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
+srcItemId = 80227, srcitemcount = 1, RequiredClasses = 2
 where entry = @quest_entry;	
 
 -- Seeking Further Guidance (Priest)
 
 replace into item_template values
- ('80228', '0', '15', '0', 'Sun-stamped Letter', '', '3029', '1', '0', '1', '0', '0', '0', '-1', '-1', '0',
+ ('80228', '0', '15', '0', 'Priest\'s Letter', '', '3029', '1', '0', '1', '0', '0', '0', '-1', '-1', '0',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
@@ -1202,13 +1204,13 @@ replace into item_template values
  '-1', '4', '80228', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
-replace into page_text values (80228, 'Light be with you, $N, I am Maelah Sunsworn.\n\nI was once ordained in Temples of Quel’thalas, preaching the Light of the Sun, I walked the same halls as High Priest Belo’vir.\n\nIt is with much sadness that those days are gone, our Temples lay in ruin, and the warmth of the Sun lays forsaken.\n\nI have seen within you the spark of devotion and faith… n\nCome to me within the lodge, I will gladly guide your path so that one day our people’s faith may be restored, not only in the Light, but in our future.', 0);
+replace into page_text values (80228, 'Light be with you, $N!\n\nI am Maelah Sunsworn.\n\nI was once ordained in Temples of Quel’thalas, preaching the Light of the Sun, I walked the same halls as High Priest Belo’vir.\n\nIt is with much sadness that those days are gone, our Temples lay in ruin, and the warmth of the Sun lays forsaken.\n\nI have seen within you the spark of devotion and faith… \n\nCome to me within the lodge, I will gladly guide your path so that one day our people’s faith may be restored, not only in the Light, but in our future.', 0);
 
 set @quest_entry = 80213;
 set @quest_zone = 1519;
 set @title = 'Seeking Further Guidance';
 set @description = '$N, the fall of our homeland has affected all of us. But even if our education and path was cut short, there are still ways…\n\nRecently someone left a letter on the desk, and it was addressed to you.\n\nPerhaps you should read it and see what it says?';
-set @objective = 'Read the Sun-stamped Letter and speak to Maelah Sunsworn.';
+set @objective = 'Read the Priest\'s Letter and speak to Maelah Sunsworn.';
 set @completetext = 'By the Sun you\'ve come! I am so happy.\n\nSo many of our people have lost their faith in the Light of the Sun, wandering like lost sheep in the dark. \n\nTogether we can be the beacon guiding them to salvation and to the warmth of the Sun!\n\nI shall of course do my best to be your beacon, $N, you shall but ask and I will teach you what I can.';
 set @incompletetext = 'Yes? What is it?';
 set @faction_id = 269;
@@ -1280,7 +1282,8 @@ reqitemid2 = @required_item_2, reqitemcount2 = @required_item_2_count,
 reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
 reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
 nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
-nextquestinchain = @nextquestinchain, prevquestid = @prevquest
+nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
+srcItemId = 80228, srcitemcount = 1, RequiredClasses = 16
 where entry = @quest_entry;	
 
 -- Seeking Further Guidance (Mage)
@@ -1295,7 +1298,7 @@ replace into item_template values
  '-1', '4', '80229', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
-replace into page_text values (80229, 'Bal’a’desh $N, you have the honor of being addressed by Magister Ala’shor of house Sunblood.\n\nI see that you have a meager grasp of magic that exceeds the common refugee. The Magisterium these days is a shadow of what it once was: As a Magister of Quel’thalas I cannot allow this to continue.\n\nWhatever may have befallen our homeland, my duties or those of the Magisterium do not cease there.\n\nCome to me, and I shall make you my apprentice. If you can handle my training you will become a capable Magic Caster, one worthy of a rebuilt Magisterium one day. I reside within the lodge.', 0);
+replace into page_text values (80229, 'Bal’a’desh $N, you have the honor of being addressed by Magister Ala’shor of house Sunblood.\n\nI see that you have a meager grasp of magic that exceeds the common refugee. The Magisterium these days is a shadow of what it once was: As a Magister of Quel’thalas I cannot allow this to continue.\n\nWhatever may have befallen our homeland, my duties or those of the Magisterium do not cease there.\n\nCome to me, and I shall make you my apprentice. If you can handle my training you will become a capable Magic Caster, one worthy of a rebuilt Magisterium one day.\n\nI reside within the lodge.', 0);
 
 set @quest_entry = 80214;
 set @quest_zone = 1519;
@@ -1311,7 +1314,7 @@ set @reward_money = 0;
 set @quest_level = 3;
 set @min_level = 3;
 set @questgiver_id = 1156;
-set @quest_finisher = 80221;
+set @quest_finisher = 80218;
 set @nextquest = 0;
 set @nextquestinchain = 0;
 set @prevquest = 80200;
@@ -1373,7 +1376,8 @@ reqitemid2 = @required_item_2, reqitemcount2 = @required_item_2_count,
 reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
 reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
 nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
-nextquestinchain = @nextquestinchain, prevquestid = @prevquest
+nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
+srcItemId = 80229, srcitemcount = 1, RequiredClasses = 128
 where entry = @quest_entry;	
 
 -- Seeking Further Guidance (Rogue)
@@ -1466,9 +1470,9 @@ reqitemid2 = @required_item_2, reqitemcount2 = @required_item_2_count,
 reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
 reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
 nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
-nextquestinchain = @nextquestinchain, prevquestid = @prevquest
+nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
+srcItemId = 80230, srcitemcount = 1, RequiredClasses = 8
 where entry = @quest_entry;	
-
 
 -- Seeking Further Guidance (Warrior)
 
@@ -1482,14 +1486,14 @@ replace into item_template values
  '-1', '4', '80231', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
-replace into page_text values (80231, 'Hail to you, $N, I am Valanos Dawnfire, a swordsman of the Thalassian army.\n\nWith the fall of Quel’thalas, my duties now lay on protecting what’s left of us, on protecting our heritage, our people, and wherever they may reside.\n\nThat duty includes training new warriors who can fight for our people.\n\nSeek me out in the lodge $N and I shall hone your inexperienced body into that of a warrior, one that can protect our people!', 0);
+replace into page_text values (80231, 'Hail to you, $N!\n\nI am Valanos Dawnfire, a swordsman of the Thalassian army.\n\nWith the fall of Quel’thalas, my duties now lay on protecting what’s left of us, on protecting our heritage, our people, and wherever they may reside.\n\nThat duty includes training new warriors who can fight for our people.\n\nSeek me out in the lodge $N and I shall hone your inexperienced body into that of a warrior, one that can protect our people!', 0);
 
 set @quest_entry = 80216;
 set @quest_zone = 1519;
 set @title = 'Seeking Further Guidance';
 set @description = '$N, the fall of our homeland has affected all of us. But even if our education and path was cut short, there are still ways…\n\nRecently someone left a letter on the desk, and it was addressed to you.\n\nPerhaps you should read it and see what it says?';
 set @objective = 'Read Swordsman\'s Letter and speak to Valanos Dawnfire.';
-set @completetext = ' I must say, your appearance gives me hope.\n\nFew of our people take on the path of the sword, it is a long and arduous journey, but I have faith that you can overcome it with my training.\n\nIt doesn’t matter how many Rangers or Mages you have, in the end you need someone on the frontlines to win battles.\n\nWhen you’re ready to take up that mantle talk to me again.';
+set @completetext = 'I must say, your appearance gives me hope.\n\nFew of our people take on the path of the sword, it is a long and arduous journey, but I have faith that you can overcome it with my training.\n\nIt doesn’t matter how many Rangers or Mages you have, in the end you need someone on the frontlines to win battles.\n\nWhen you’re ready to take up that mantle talk to me again.';
 set @incompletetext = 'Yes? What is it?';
 set @faction_id = 269;
 set @faction_count = 250;
@@ -1560,7 +1564,8 @@ reqitemid2 = @required_item_2, reqitemcount2 = @required_item_2_count,
 reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
 reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
 nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
-nextquestinchain = @nextquestinchain, prevquestid = @prevquest
+nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
+srcItemId = 80231, srcitemcount = 1, RequiredClasses = 1
 where entry = @quest_entry;	
 
 -- Additional NPC and citizens:
