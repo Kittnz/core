@@ -272,3 +272,7 @@ update creature_template set scale = 0.8 where display_id1 = 41000;
 
 update creature_template set display_id1 = 18208 where entry = 10824;
 update creature_template set display_id1 = 18209 where entry = 1752;
+
+-- Mug object fixes:
+
+update gameobject set id = 2003390 where id = 165738 and guid > 4004321;
