@@ -470,6 +470,12 @@ bool Item::LoadFromDB(uint32 guidLow, ObjectGuid ownerGuid, Field* fields, uint3
         need_save = true;
     }
 
+	// Turtle specific - set binding for all items with BIND_ACCOUNT
+	if (proto->Bonding == BIND_ACCOUNT)
+	{
+		ApplyModFlag(ITEM_FIELD_FLAGS, ITEM_DYNFLAG_BOA, true);
+	}
+
     Tokenizer tokens(fields[4].GetString(), ' ', MAX_ITEM_PROTO_SPELLS);
     if (tokens.size() == MAX_ITEM_PROTO_SPELLS)
         for (uint8 i = 0; i < MAX_ITEM_PROTO_SPELLS; ++i)

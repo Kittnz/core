@@ -254,7 +254,7 @@ class MANGOS_DLL_SPEC Item : public Object
         Player* GetOwner()const;
 
         void SetBinding(bool val) { ApplyModFlag(ITEM_FIELD_FLAGS, ITEM_DYNFLAG_BINDED,val); }
-        bool IsSoulBound() const { return HasFlag(ITEM_FIELD_FLAGS, ITEM_DYNFLAG_BINDED); }
+        bool IsSoulBound() const { return HasFlag(ITEM_FIELD_FLAGS, ITEM_DYNFLAG_BINDED) || HasFlag(ITEM_FIELD_FLAGS, ITEM_DYNFLAG_BOA); }
         bool IsAccountBound() const { return HasFlag(ITEM_FIELD_FLAGS, ITEM_DYNFLAG_BOA); }
         bool IsBindedNotWith(Player const* player) const;
         bool IsBoundByEnchant() const;

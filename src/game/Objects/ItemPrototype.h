@@ -61,10 +61,11 @@ enum ItemBondingType
     BIND_WHEN_EQUIPPED                          = 2,
     BIND_WHEN_USE                               = 3,
     BIND_QUEST_ITEM                             = 4,
-    BIND_QUEST_ITEM1                            = 5         // not used in game
+    BIND_QUEST_ITEM1                            = 5,         // not used in game
+	BIND_ACCOUNT								= 6, // Turtle specific
 };
 
-#define MAX_BIND_TYPE                             6
+#define MAX_BIND_TYPE                             7
 
 // Mask for ItemPrototype.Flags field
 enum ItemPrototypeFlags
