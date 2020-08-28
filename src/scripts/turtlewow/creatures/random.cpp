@@ -828,7 +828,6 @@ bool GossipSelect_npc_ropaw(Player* p_Player, Creature* p_Creature, uint32 /*uiS
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
         p_Creature->MonsterSay(urand(90560, 90628));
-        p_Creature->HandleEmote(EMOTE_ONESHOT_TALK_NOSHEATHE);
     }
     p_Player->CLOSE_GOSSIP_MENU();
     return true;

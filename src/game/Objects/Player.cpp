@@ -2861,7 +2861,7 @@ void Player::GiveLevel(uint32 level)
     if (level == 5)
         MailRidingTurtleGift();
 
-    if (level == 10)
+    if (level == 10 && sWorld.getConfig(CONFIG_BOOL_BOUNTY))
         MailOpenHouseGift();
 
     PlayerLevelInfo info;
