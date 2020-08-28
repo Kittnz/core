@@ -270,8 +270,7 @@ void WorldSession::HandleSendMailCallback(WorldSession::AsyncMailSendRequest* re
             pl->SendMailResult(0, MAIL_SEND, MAIL_ERR_MAIL_ATTACHMENT_INVALID);
             return;
         }
-
-		// Turtle specific - allowing special soulbound items to be able to send through email
+        // check if item is bound to account
 		if (!item->HasFlag(ITEM_FIELD_FLAGS, ITEM_DYNFLAG_BOA))
 		{
 			if (!item->CanBeTraded())
@@ -284,9 +283,10 @@ void WorldSession::HandleSendMailCallback(WorldSession::AsyncMailSendRequest* re
 		{
 			uint32 SenderAccId = sObjectMgr.GetPlayerAccountIdByGUID(req->senderGuid);
 			uint32 ReceiverAccId = sObjectMgr.GetPlayerAccountIdByGUID(req->receiver);
-			if (!SenderAccId == ReceiverAccId)
+			if (SenderAccId != ReceiverAccId)
 			{
-
+                pl->SendMailResult(0, MAIL_SEND, MAIL_ERR_MAIL_ATTACHMENT_INVALID);
+                return;
 			}
 		}
 

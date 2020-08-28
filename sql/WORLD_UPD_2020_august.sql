@@ -784,6 +784,8 @@ update creature_template set equipment_id = 14822 where entry = 51605;
 update creature_template set npc_flags = 1 where entry = 51605;
 replace into custom_pet_entry_relation (item_entry, creature_entry) values 
 ('51891', '51605'); 
+
+update creature_template set bonding = 6 where entry in (51890, 51891);
  
 REPLACE INTO `item_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`, `patch_min`, `patch_max`) VALUES 
 
