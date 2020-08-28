@@ -855,6 +855,7 @@ replace into broadcast_text (ID, MaleText) values
 (90619, 'Find beauty in ordinary things. Vendor them for cash.'),
 (90620, 'Epics are like children; none are so wonderful as your own.'),
 (90621, 'One who promises to go on a blind date is bound on pickup.'),
+(90622, 'If I were you, I wouldn\'t get on boats anytime soon.'),
 (90623, 'Your outlook looks bright, unless you run into Xerron.'),
 (90624, 'You might have better luck with another fortune.'),
 (90625, 'You have a good chance to roll 100 in the near future.'),
