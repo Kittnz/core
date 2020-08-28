@@ -846,7 +846,7 @@ bool Item::IsEquipped() const
 
 bool Item::CanBeTraded() const
 {
-    if (IsSoulBound())
+    if (IsSoulBound() && IsAccountBound())
         return false;
     if (IsBag() && (Player::IsBagPos(GetPos()) || !((Bag const*)this)->IsEmpty()))
         return false;

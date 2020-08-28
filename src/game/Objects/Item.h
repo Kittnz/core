@@ -209,6 +209,10 @@ enum ItemDynFlags
     ITEM_DYNFLAG_UNK15                        = 0x00008000,
     ITEM_DYNFLAG_UNK16                        = 0x00010000,
     ITEM_DYNFLAG_UNK17                        = 0x00020000,
+
+    ITEM_DYNFLAG_BOA                          = 0x00040000 // custom flag, server soulbound
+
+
 };
 
 enum ItemRequiredTargetType
@@ -251,6 +255,7 @@ class MANGOS_DLL_SPEC Item : public Object
 
         void SetBinding(bool val) { ApplyModFlag(ITEM_FIELD_FLAGS, ITEM_DYNFLAG_BINDED,val); }
         bool IsSoulBound() const { return HasFlag(ITEM_FIELD_FLAGS, ITEM_DYNFLAG_BINDED); }
+        bool IsAccountBound() const { return HasFlag(ITEM_FIELD_FLAGS, ITEM_DYNFLAG_BOA); }
         bool IsBindedNotWith(Player const* player) const;
         bool IsBoundByEnchant() const;
         virtual void SaveToDB();

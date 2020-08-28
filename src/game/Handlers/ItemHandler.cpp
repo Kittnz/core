@@ -1205,7 +1205,7 @@ void WorldSession::HandleWrapItemOpcode(WorldPacket& recv_data)
         return;
     }
 
-    if (item->IsSoulBound())
+    if (item->IsSoulBound() && item->IsAccountBound())
     {
         _player->SendEquipError(EQUIP_ERR_BOUND_CANT_BE_WRAPPED, item, NULL);
         return;
