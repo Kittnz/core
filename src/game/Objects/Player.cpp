@@ -10230,10 +10230,17 @@ Item* Player::_StoreItem(uint16 pos, Item *pItem, uint32 count, bool clone, bool
         if (!pItem)
             return NULL;
 
-        if (pItem->GetProto()->Bonding == BIND_WHEN_PICKED_UP ||
-                pItem->GetProto()->Bonding == BIND_QUEST_ITEM ||
-                (pItem->GetProto()->Bonding == BIND_WHEN_EQUIPPED && IsBagPos(pos)))
+		const ItemPrototype* proto = pItem->GetProto();
+        if (proto->Bonding == BIND_WHEN_PICKED_UP ||
+			proto->Bonding == BIND_QUEST_ITEM ||
+                (proto->Bonding == BIND_WHEN_EQUIPPED && IsBagPos(pos)))
             pItem->SetBinding(true);
+
+		// Turtle specific - set binding for all items with BIND_ACCOUNT
+		if (proto->Bonding == BIND_ACCOUNT)
+		{
+			pItem->ApplyModFlag(ITEM_FIELD_FLAGS, ITEM_DYNFLAG_BOA, true);
+		}
 
         if (bag == INVENTORY_SLOT_BAG_0)
         {
@@ -10272,10 +10279,17 @@ Item* Player::_StoreItem(uint16 pos, Item *pItem, uint32 count, bool clone, bool
     }
     else
     {
-        if (pItem2->GetProto()->Bonding == BIND_WHEN_PICKED_UP ||
-                pItem2->GetProto()->Bonding == BIND_QUEST_ITEM ||
-                (pItem2->GetProto()->Bonding == BIND_WHEN_EQUIPPED && IsBagPos(pos)))
+		const ItemPrototype* proto = pItem2->GetProto();
+        if (proto->Bonding == BIND_WHEN_PICKED_UP ||
+			proto->Bonding == BIND_QUEST_ITEM ||
+           (proto->Bonding == BIND_WHEN_EQUIPPED && IsBagPos(pos)))
             pItem2->SetBinding(true);
+
+		// Turtle specific - set binding for all items with BIND_ACCOUNT
+		if (proto->Bonding == BIND_ACCOUNT)
+		{
+			pItem2->ApplyModFlag(ITEM_FIELD_FLAGS, ITEM_DYNFLAG_BOA, true);
+		}
 
         pItem2->SetCount(pItem2->GetCount() + count);
         if (IsInWorld() && update)
