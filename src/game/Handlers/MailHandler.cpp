@@ -284,9 +284,9 @@ void WorldSession::HandleSendMailCallback(WorldSession::AsyncMailSendRequest* re
 		{
 			uint32 SenderAccId = sObjectMgr.GetPlayerAccountIdByGUID(req->senderGuid);
 			uint32 ReceiverAccId = sObjectMgr.GetPlayerAccountIdByGUID(req->receiver);
-			if (SenderAccId == ReceiverAccId)
+			if (!SenderAccId == ReceiverAccId)
 			{
-				// WRITE SHIT HERE
+
 			}
 		}
 
