@@ -218,20 +218,6 @@ enum ItemSubclassWeapon
 
 #define MAX_ITEM_SUBCLASS_WEAPON                  21
 
-/* enum ItemSubclassGem [-ZERO] not used in pre-bc
-{
-  ITEM_SUBCLASS_GEM_RED                       = 0,
-    ITEM_SUBCLASS_GEM_BLUE                      = 1,
-    ITEM_SUBCLASS_GEM_YELLOW                    = 2,
-    ITEM_SUBCLASS_GEM_PURPLE                    = 3,
-    ITEM_SUBCLASS_GEM_GREEN                     = 4,
-    ITEM_SUBCLASS_GEM_ORANGE                    = 5,
-    ITEM_SUBCLASS_GEM_META                      = 6,
-    ITEM_SUBCLASS_GEM_SIMPLE                    = 7,
-    ITEM_SUBCLASS_GEM_PRISMATIC                 = 8
-};
-*/
-
 #define MAX_ITEM_SUBCLASS_GEM                     1
 
 enum ItemSubclassArmor
@@ -274,7 +260,6 @@ enum ItemSubclassTradeGoods
     ITEM_SUBCLASS_PARTS                         = 1,
     ITEM_SUBCLASS_EXPLOSIVES                    = 2,
     ITEM_SUBCLASS_DEVICES                       = 3,
-    // ITEM_SUBCLASS_JEWELCRAFTING                 = 4,
     ITEM_SUBCLASS_CLOTH                         = 5,
     ITEM_SUBCLASS_LEATHER                       = 6,
     ITEM_SUBCLASS_METAL_STONE                   = 7,
