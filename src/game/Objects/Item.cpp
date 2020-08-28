@@ -257,6 +257,12 @@ bool Item::Create(uint32 guidlow, uint32 itemid, ObjectGuid ownerGuid)
 
     SetUInt32Value(ITEM_FIELD_DURATION, itemProto->Duration);
 
+	// Turtle specific - set binding for all items with BIND_ACCOUNT
+	if (itemProto->Bonding == BIND_ACCOUNT)
+	{
+		ApplyModFlag(ITEM_FIELD_FLAGS, ITEM_DYNFLAG_BOA, true);
+	}
+
     itemProto->m_bDiscovered = true;
 
     return true;
