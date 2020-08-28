@@ -816,10 +816,33 @@ CreatureAI* GetAI_palkeote(Creature *_Creature)
     return new palkeoteAI(_Creature);
 }
 
+bool GossipHello_npc_ropaw(Player* p_Player, Creature* p_Creature)
+{
+    p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Tell me my fortune.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    p_Player->SEND_GOSSIP_MENU(urand(90650, 90667), p_Creature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_ropaw(Player* p_Player, Creature* p_Creature, uint32 /*uiSender*/, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        p_Creature->MonsterSay(urand(90560, 90628));
+        p_Creature->HandleEmote(EMOTE_ONESHOT_TALK_NOSHEATHE);
+    }
+    p_Player->CLOSE_GOSSIP_MENU();
+    return true;
+}
 
 void AddSC_random()
 {
     Script *newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_ropaw";
+    newscript->pGossipHello = &GossipHello_npc_ropaw;
+    newscript->pGossipSelect = &GossipSelect_npc_ropaw;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "palkeote";

@@ -2861,6 +2861,9 @@ void Player::GiveLevel(uint32 level)
     if (level == 5)
         MailRidingTurtleGift();
 
+    if (level == 10)
+        MailOpenHouseGift();
+
     PlayerLevelInfo info;
     sObjectMgr.GetPlayerLevelInfo(getRace(), getClass(), level, &info);
 
@@ -21756,6 +21759,21 @@ void Player::MailRidingTurtleGift()
 
     {
         Item* ToMailItem = Item::CreateItem(23720, 1, this);
+        ToMailItem->SaveToDB();
+
+        MailDraft(subject, sObjectMgr.CreateItemText(message))
+            .AddItem(ToMailItem)
+            .SendMailTo(this, MailSender(MAIL_CREATURE, uint32(51550), MAIL_STATIONERY_DEFAULT), MAIL_CHECK_MASK_COPIED, 0, 30 * DAY);
+    }
+}
+
+void Player::MailOpenHouseGift()
+{
+    std::string subject = "Open House 2020";
+    std::string message = "Thanks for joining the Open House event!\n\nWe hope you enjoy rest of the journey and continue being a part of our amazing community!";
+
+    {
+        Item* ToMailItem = Item::CreateItem(51892, 1, this);
         ToMailItem->SaveToDB();
 
         MailDraft(subject, sObjectMgr.CreateItemText(message))
