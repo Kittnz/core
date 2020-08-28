@@ -764,6 +764,8 @@ update item_template set display_id = 27062 where entry = 51757;
 
 -- Open House Rewards
 
+REPLACE INTO `item_template` VALUES (51892, 0, 15, 0, 'Open House Gift Box', '', 16028, 1, 4, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+
 replace into item_template values
  ('51890', '0', '4', '0', 'Adventurer\'s Shirt', 'Turtle WoW Open House 2020.', '18466', '3', '0', '1', '0', '0', '4', '-1', '-1', '15',
  '0', '0', '0', '0', '0', '0', '0', '0', '1', '1', '0', '0', '0', '0', '0',
@@ -773,6 +775,109 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
+ 
+replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1, spellcooldown_1) values
+(51891, 15, 2, 'Mysterious Fortune Teller', 'Extremely trustworthy individual.', 940, 3, 1, 28505, 1500);
+replace into creature_template (entry, display_id1, display_id2, display_id3, name, subname, level_min, level_max, health_min, health_max, faction, script_name, scale) values
+('51605', '491', '0', '0', 'Ro\'Paw', '', '1', '1', '64', '64', '35', 'npc_ropaw', 0.7);
+update creature_template set equipment_id = 14822 where entry = 51605;
+update creature_template set npc_flags = 1 where entry = 51605;
+replace into custom_pet_entry_relation (item_entry, creature_entry) values 
+('51891', '51605'); 
+ 
+REPLACE INTO `item_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`, `patch_min`, `patch_max`) VALUES 
+
+(51892, 51890, 100, 1, 1, 1, 0, 0, 10),   
+(51892, 51891, 100, 2, 1, 1, 0, 0, 10);
+
+replace into broadcast_text (ID, MaleText) values 
+(90560, 'Never eat beef with a tauren.'),
+(90561, 'You will find something wonderful tomorrow.'),
+(90562, 'An enemy from your past will soon become an ally.'),
+(90563, 'You will be fortunate in everything you put your hands to.'),
+(90564, 'Someone is speaking well of you.'),
+(90565, 'Be cautious when landing in unfamiliar territory.'),
+(90566, 'Avoid taking unnecessary gambles.'),
+(90567, 'You will receive a fortune.'),
+(90568, 'Your first love and last love is self-love.'),
+(90569, 'Rest is a good thing, but boredom is its brother.'),
+(90570, 'Those with simple tastes are always satisfied with the best.'),
+(90571, 'Let not the tides of war wash you away.'),
+(90572, 'You leave your adversaries speechless.'),
+(90573, 'You have a good eye for spotting hypocrisy.'),
+(90574, 'One learns most when teaching others.'),
+(90575, 'The time will soon come for you to make a choice in a pressing matter.'),
+(90576, 'Never punt a gnome without due cause.'),
+(90577, 'Accept the next proposition you hear.'),
+(90578, 'The Forsaken are up to something.'),
+(90579, 'Many a false step is made by standing still.'),
+(90580, 'Divine Shields and Hearthstones do not make a hero heroic.'),
+(90581, 'An answer in blue is always true.'),
+(90582, 'Your fortune awaits you in Molten Core.'),
+(90583, 'Hunters who specialize in survival are not guaranteed to survive.'),
+(90584, 'A Shaman\'s blessing is elementary.'),
+(90585, 'The sun will shine tomorrow.'),
+(90586, 'All of the effort you are making is worth the repair costs.'),
+(90587, 'As the purse is emptied, the rogue\'s heart fills.'),
+(90588, 'Trust in the Light, but watch your mount.'),
+(90589, 'You will develop a great sense of relaxation and patience from the fishing profession.'),
+(90590, 'You aren\'t very lucky.  Yet.'),
+(90591, 'He who expects a wipe will never be disappointed.'),
+(90592, 'A friend asks for your time. A guild asks for your money.'),
+(90593, 'Never stand in the shadow of dragons.'),
+(90594, 'Someone nearby wants to /flirt with you.'),
+(90595, 'A light heart carries you through bad Battlegrounds.'),
+(90596, 'Your future is clouded with a purple rain.'),
+(90597, 'Never trust a troll. Or a rogue. Especially a troll rogue.'),
+(90598, 'Now is the time to try something new. Perhaps a new tradeskill.'),
+(90599, 'Your lucky numbers are: 4 8 15 16 23 42'),
+(90600, 'When life gives you lemons, pay for repair costs.'),
+(90601, 'Every herb blooms in its own sweet time. Then you pick it!'),
+(90602, 'The road to Blackrock Mountain is paved with good intentions.'),
+(90603, 'You will live a long, happy life with many resurrections along the way.'),
+(90604, 'Go take a rest. You deserve it. Remember to rest in an inn though!'),
+(90605, 'You really should\'ve looted that spider.'),
+(90606, 'You will inherit a large sum of money. You will blow it at the Auction House.'),
+(90607, 'The path of the faceroller is not the path to wisdom.'),
+(90608, 'Many raid wipes are in your immediate future.'),
+(90609, 'He who fights an army is a martyr; he who fights five is elite.'),
+(90610, 'You\'ll never know until you loot.'),
+(90611, 'You will hear the tinkling of golden coins.'),
+(90612, 'Your racial leader is thinking about you.'),
+(90613, 'You will someday be able to afford that mount.'),
+(90614, 'Stay away from mystery meat.'),
+(90615, 'Never trust an honest goblin or a sober dwarf.'),
+(90616, 'The future looks cataclysmic.'),
+(90617, 'Beware of a tall night elf with one blond boot.'),
+(90618, 'Be cautious in your daily quests.'),
+(90619, 'Find beauty in ordinary things. Vendor them for cash.'),
+(90620, 'Epics are like children; none are so wonderful as your own.'),
+(90621, 'One who promises to go on a blind date is bound on pickup.'),
+(90623, 'Your outlook looks bright, unless you run into Xerron.'),
+(90624, 'You might have better luck with another fortune.'),
+(90625, 'You have a good chance to roll 100 in the near future.'),
+(90626, 'Disbelief destroys the magic.'),
+(90627, 'The beginning of wisdom is to desire it. The end of wisdom is to theorycraft.'),
+(90628, 'You will receive a gift from someone you hate.');
+
+replace into broadcast_text (ID, MaleText) values (90650, 'Greetings, $N. Care to hear your fortune?'); replace into npc_text (ID, BroadcastTextID0) values (90650, 90650);
+replace into broadcast_text (ID, MaleText) values (90651, 'Back for another reading?'); replace into npc_text (ID, BroadcastTextID0) values (90651, 90651);
+replace into broadcast_text (ID, MaleText) values (90652, 'I have some bad news for you. Want me to share?'); replace into npc_text (ID, BroadcastTextID0) values (90652, 90652);
+replace into broadcast_text (ID, MaleText) values (90653, 'If I were you, I wouldn\'t wear blue today.'); replace into npc_text (ID, BroadcastTextID0) values (90653, 90653);
+replace into broadcast_text (ID, MaleText) values (90654, 'Eight is my lucky number. Always bet on the number eight.'); replace into npc_text (ID, BroadcastTextID0) values (90654, 90654);
+replace into broadcast_text (ID, MaleText) values (90655, 'Let me read your paw. Oh, my. That can\'t be good.'); replace into npc_text (ID, BroadcastTextID0) values (90655, 90655);
+replace into broadcast_text (ID, MaleText) values (90656, 'I\'ve seen a lot of bad fortunes, but your\'s is the worst!'); replace into npc_text (ID, BroadcastTextID0) values (90656, 90656);
+replace into broadcast_text (ID, MaleText) values (90657, 'It looks like I might be looking for a new traveling companion soon.'); replace into npc_text (ID, BroadcastTextID0) values (90657, 90657);
+replace into broadcast_text (ID, MaleText) values (90658, 'How\'s your day going? Just kidding, I already know.'); replace into npc_text (ID, BroadcastTextID0) values (90658, 90658);
+replace into broadcast_text (ID, MaleText) values (90659, 'Don\'t eat the red mushroom you find off the ground. You\'ll thank me later.'); replace into npc_text (ID, BroadcastTextID0) values (90659, 90659);
+replace into broadcast_text (ID, MaleText) values (90660, 'You will find true love one day. But then you\'ll forget where you put it.'); replace into npc_text (ID, BroadcastTextID0) values (90660, 90660);
+replace into broadcast_text (ID, MaleText) values (90661, 'I hope you don\'t mind prison food.'); replace into npc_text (ID, BroadcastTextID0) values (90661, 90661);
+replace into broadcast_text (ID, MaleText) values (90662, 'Don\'t buy any potions from that goblin alchemist you\'ll meet today.'); replace into npc_text (ID, BroadcastTextID0) values (90662, 90662);
+replace into broadcast_text (ID, MaleText) values (90663, 'Please don\'t run into that group of ogres today. You\'ll break every bone in your body.'); replace into npc_text (ID, BroadcastTextID0) values (90663, 90663);
+replace into broadcast_text (ID, MaleText) values (90664, 'Wanna know how long you have left to live?'); replace into npc_text (ID, BroadcastTextID0) values (90664, 90664);
+replace into broadcast_text (ID, MaleText) values (90665, 'Beware of an orc with a silly sounding name starting with the letter K. He\'s up to no good.'); replace into npc_text (ID, BroadcastTextID0) values (90665, 90665);
+replace into broadcast_text (ID, MaleText) values (90666, 'You should check the auction house right now for some unbelievable deals.'); replace into npc_text (ID, BroadcastTextID0) values (90666, 90666);
+replace into broadcast_text (ID, MaleText) values (90667, 'I hope you know how to swim.'); replace into npc_text (ID, BroadcastTextID0) values (90667, 90667);
  
  -- Misc. fixes:
  

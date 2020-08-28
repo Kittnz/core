@@ -1082,6 +1082,7 @@ class MANGOS_DLL_SPEC Player final: public Unit
         bool IsCityProtector();
         void MailCityProtectorScroll();
         void MailRidingTurtleGift();
+        void MailOpenHouseGift();
         bool IsIgnoringTitles();
         void SetIgnoringTitles(bool shouldIgnore);
         bool IsScarletCrusade();
