@@ -1052,11 +1052,9 @@ void World::LoadConfigSettings(bool reload)
     }
     setConfig(CONFIG_FLOAT_TRANSMOG_REQ_MONEY_RATE, "Transmog.ReqMoneyRate", 0.0);
 
-    // Turtle WoW Expansion
     setConfig(CONFIG_BOOL_EXPANSION_CONTENT, "ExpansionContent", false);
-
-    // Bounty Boards
     setConfig(CONFIG_BOOL_BOUNTY, "PvPBounryBoards", false);
+    setConfig(CONFIG_BOOL_OPENHOUSE, "OpenHouse", false);
 }
 
 class CharactersDatabaseWorkerThread : public ACE_Based::Runnable
