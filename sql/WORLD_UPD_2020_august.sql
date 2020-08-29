@@ -901,3 +901,7 @@ replace into broadcast_text (ID, MaleText) values (90667, 'I hope you know how t
  -- Wormhole fixes
  
  update item_template set script_name = "item_test_wormhole_generator", description = "Creates a highly radioactive Wormhole, lasting 5 seconds. 1 charge." where entry = 51808;
+ 
+ -- Fix Mazoga text
+ 
+ replace into broadcast_text (ID, MaleText) values ('90501', 'I’m a free knight! I don’t have a lord. You got a problem with that?\n\nAh whatever... Welcome to our chapel! I can give you a sleeping bag or offer you some rations.');
