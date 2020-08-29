@@ -603,6 +603,8 @@ replace into `item_template` values (80220, 0, 4, 2, 'Stitched Leather Gloves', 
 replace into`creature_template` values (80205, 0, 6055, 0, 0, 0, 'Shadowforge Fire Priest', NULL, 0, 5, 5, 109, 109, 138, 138, 105, 16, 0, 0.92, 1.14286, 0, 20, 5, 0, 0, 1, 4, 5, 0, 52, 1, 2000, 2156, 2, 32768, 0, 0, 0, 0, 0, 0, 8.624, 11.858, 100, 7, 0, 3183, 3183, 0, 0, 0, 0, 0, 0, 0, 172, 348, 0, 0, 31830, 0, 3, 9, 'EventAI', 0, 3, 0, 0, 3, 3183, 0, 0, 0, 0, 0, '');
 
 update creature_template set loot_id = 80205 where entry = 80205; 
+
+delete from creature_loot_template where entry = 80205 and item = 80216;
 replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (80205, 80216, -100, 1, 1, 1);	 
 
 replace into `creature_template` values (80206, 0, 0, 0, 0, 0, 'Quest 80207 Custom Objective', '', 0, 5, 5, 319, 319, 0, 0, 852, 84, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 24, 31, 0, 90, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 31.856, 43.802, 100, 7, 4096, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 4276, 0, 0, 0, 0, 2, '');
@@ -929,7 +931,7 @@ set @quest_entry = 80210;
 set @quest_zone = 1519;
 set @title = 'Providing a Balanced Diet';
 set @description = 'Greetings, $N! You’ve done amazing progress so far, but there still remains so much to do.\n\nWhile the lodge is stocked with an abundance of grain and meat, we’re lacking other types of nourishment, especially fruits and vegetables.\n\nLuckily, the area around the lodge has an overabundance of pumpkin and berries at this time of the year. Can I count on you to search the area for berries and pumpkins?\n\nOur people’s welfare depends on it!';
-set @objective = 'Speak to Magistrix Ishalah to be teleported to Goldshire, report to Marshal Dugan.';
+set @objective = 'Collect 4 Loch Modan Pumpkins and 8 Loch Modan Berries.';
 set @completetext = 'Wonderful! This will last for a while until we can acquire supplies from the Alliance.\n\nWe can also use the seeds from the pumpkins to plan our own pumpkin patch.';
 set @incompletetext = 'Did you get the berries and fruits?';
 set @faction_id = 269;

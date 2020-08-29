@@ -640,6 +640,7 @@ bool GossipSelect_npc_malvinah_sunblade(Player* pPlayer, Creature* pCreature, ui
 
             creature->HandleEmote(EMOTE_ONESHOT_CHEER);
             creature->MonsterSay("You've saved my sister!");
+            creature->SummonCreature(NPC_ALISHA_SUNBLADE, -5628.99F, -4319.46F, 401.18F, 4.4F, TEMPSUMMON_TIMED_DESPAWN, 25 * 1000);
         });
 
 
@@ -713,14 +714,18 @@ bool GOHello_go_shadowforge_cage(Player* pPlayer, GameObject* pGo)
             // Change it later to real coords.
             float fX, fY, fZ;
             Alisha->GetRandomPoint(Alisha->GetPositionX(), Alisha->GetPositionY(), Alisha->GetPositionZ(), 15.0f, fX, fY, fZ);
-            Alisha->GetMotionMaster()->MovePoint(0, -5831.14F, -4119.65F, 387.77F, 0, 1.0F);
+            Alisha->GetMotionMaster()->MovePoint(0, -5831.14F, -4119.65F, 387.77F, 0, 3.0F);
             Alisha->SetWalk(false);
 
             DoAfterTime(pPlayer, 25 * IN_MILLISECONDS,
-                [CreatureGuid = Alisha->GetObjectGuid(), player = pPlayer]()
+                [CreatureGuid = Alisha->GetObjectGuid(), GObjectGuid = pGo->GetObjectGuid(),  player = pPlayer]()
             {
                 Map* map = sMapMgr.FindMap(0);
                 Creature* creature = map->GetCreature(CreatureGuid);
+                GameObject* object = map->GetGameObject(GObjectGuid);
+
+                object->ResetDoorOrButton();
+
                 if (!creature)
                     return;
 
