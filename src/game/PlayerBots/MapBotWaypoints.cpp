@@ -459,7 +459,7 @@ void TransportTeleportToRatchetFromBootyBay(MapBotAI* pAI)
 
 void TransportTeleportToBootyBayFromRatchet(MapBotAI* pAI)
 {
-    pAI->me->TeleportTo(1, -4002.525f, -4727.977f, 5.009f, 0.781f, TELE_TO_FORCE_MAP_CHANGE);
+    pAI->me->TeleportTo(0, -14281.021f, 566.528f, 7.0141f, 4.326f, TELE_TO_FORCE_MAP_CHANGE);
     pAI->MoveToNextPoint();
 }
 
