@@ -698,7 +698,6 @@ bool GOHello_go_shadowforge_cage(Player* pPlayer, GameObject* pGo)
 {
     if (pPlayer->HasItemCount(DARK_KEY, 1))
     {
-        pPlayer->RemoveItemCurrency(DARK_KEY, 1); 
         pGo->UseDoorOrButton();
         pPlayer->HandleEmote(EMOTE_ONESHOT_KNEEL);
 
