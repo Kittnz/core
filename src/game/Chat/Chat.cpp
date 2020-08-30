@@ -229,9 +229,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { NODE, "xyzo",           SEC_MODERATOR_CONF, false, &ChatHandler::HandleGoXYZOCommand,              "", nullptr },
         // Nostalrius
         { NODE, "forward",        SEC_MODERATOR_CONF, false, &ChatHandler::HandleGoForwardCommand,           "", nullptr },
-        { NODE, "back",           SEC_MODERATOR_CONF, false, &ChatHandler::HandleGoBackCommand,           "", nullptr },
         { NODE, "up",             SEC_MODERATOR_CONF, false, &ChatHandler::HandleGoUpCommand,                "", nullptr },
-        { NODE, "down",           SEC_MODERATOR_CONF, false, &ChatHandler::HandleGoDownCommand,                "", nullptr },
         { NODE, "relative",       SEC_MODERATOR_CONF, false, &ChatHandler::HandleGoRelativeCommand,          "", nullptr },
         // Battleground join
         { NODE, "warsong",        SEC_MODERATOR_CONF, false, &ChatHandler::HandleGoWarsongCommand,           "", nullptr },
