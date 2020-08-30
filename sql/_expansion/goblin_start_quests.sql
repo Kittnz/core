@@ -1473,7 +1473,7 @@ replace into`creature_template` values (80130, 0, 10747, 0, 0, 0, 'Fareck', 'Wea
 SET @gossip_menu_id = 56552;
 SET @magic_number = 80130; -- Weapon Master
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
-replace into broadcast_text (ID, MaleText) values (@magic_number, 'What you actually want to learn how to use a weapon?!\n\nSure, sure pal, don\'t get me wrong it\'s just that these other guys are mostly cowards, ye know?')
+replace into broadcast_text (ID, MaleText) values (@magic_number, 'What you actually want to learn how to use a weapon?!\n\nSure, sure pal, don\'t get me wrong it\'s just that these other guys are mostly cowards, ye know?');
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
