@@ -263,7 +263,9 @@ class MANGOS_DLL_SPEC ChatHandler
         bool HandleSetWarEffortResource(char* args);
         // Deplacement
         bool HandleGoForwardCommand(char* args);
+        bool HandleGoBackCommand(char* args);
         bool HandleGoUpCommand(char* args);
+        bool HandleGoDownCommand(char* args);
         bool HandleGoRelativeCommand(char* args);
         // Other
         bool HandlePossessCommand(char* args);
