@@ -905,3 +905,24 @@ replace into broadcast_text (ID, MaleText) values (90667, 'I hope you know how t
  -- Fix Mazoga text
  
  replace into broadcast_text (ID, MaleText) values ('90501', 'I’m a free knight! I don’t have a lord. You got a problem with that?\n\nAh whatever... Welcome to our chapel! I can give you a sleeping bag or offer you some rations.');
+ 
+ -- Loot issues
+ 
+REPLACE INTO `creature_loot_template` VALUES (10429, 12588, 17, 0, 1, 1, 0, 0, 10);
+
+-- Geddon
+
+REPLACE INTO `creature_loot_template` VALUES (12056, 4787, 40, 0, 1, 5, 0, 0, 10);
+REPLACE INTO `creature_loot_template` VALUES (12056, 7068, 30, 0, 1, 6, 0, 0, 10);
+REPLACE INTO `creature_loot_template` VALUES (12056, 7077, 30, 0, 1, 3, 0, 0, 10);
+REPLACE INTO `creature_loot_template` VALUES (12056, 7078, 50, 0, 1, 2, 0, 0, 10);
+REPLACE INTO `creature_loot_template` VALUES (12056, 17010, 3, 0, 1, 1, 0, 0, 10); -- -7
+REPLACE INTO `creature_loot_template` VALUES (12056, 18563, 14, 0, 1, 1, 0, 0, 10); -- +7
+REPLACE INTO `creature_loot_template` VALUES (12056, 20951, -1, 0, 1, 1, 0, 0, 10);
+REPLACE INTO `creature_loot_template` VALUES (12056, 30001, 10, 0, -30001, 1, 0, 2, 10);
+REPLACE INTO `creature_loot_template` VALUES (12056, 30349, 100, 0, -30349, 1, 0, 0, 10);
+REPLACE INTO `creature_loot_template` VALUES (12056, 30350, 100, 0, -30350, 1, 0, 0, 10);
+REPLACE INTO `creature_loot_template` VALUES (12056, 30351, 100, 0, -30351, 1, 0, 0, 10);
+
+
+ 
