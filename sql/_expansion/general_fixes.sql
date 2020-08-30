@@ -276,3 +276,8 @@ update creature_template set display_id1 = 18209 where entry = 1752;
 -- Mug object fixes:
 
 update gameobject set id = 2003390 where id = 165738 and guid > 4004321;
+
+-- Mostlikely fix for faction only quests (include new races):
+
+UPDATE quest_template SET requiredraces = requiredraces + 512 WHERE requiredraces = 77;	
+UPDATE quest_template SET requiredraces = requiredraces + 256 WHERE requiredraces = 178;	
