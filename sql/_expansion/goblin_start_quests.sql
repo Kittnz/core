@@ -141,7 +141,13 @@ update creature_template set faction = 35 where entry between 80100 and 80111;
 
 -- A New Ad-Venture
 
-REPLACE INTO `creature_template` VALUES (80112, 7, 1150, 0, 0, 0, 'Whirling Whizz-Bot', NULL, 0, 1, 2, 42, 60, 0, 0, 16, 189, 0, 1, 0.857143, 0, 20, 5, 0, 0, 1, 0, 1, 0, 46, 1, 2000, 2000, 1, 0, 0, 5, 0, 0, 0, 0, 1.76, 2.42, 100, 9, 1, 3098, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9074, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, '');
+REPLACE INTO `creature_template` VALUES (80112, 7, 1159, 0, 0, 0, 'Whirling Whizz-Bot', NULL, 0, 1, 2, 50, 60, 0, 0, 16, 189, 0, 1, 0.857143, 0, 20, 5, 0, 0, 1, 0, 1, 0, 46, 1, 2000, 2000, 1, 0, 0, 5, 0, 0, 0, 0, 1.76, 2.42, 100, 9, 1, 3098, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9074, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, '');
+
+update creature_template set 
+health_min = 60, health_max = 70, 
+armor = 76, dmg_min = 3, dmg_max = 6, attack_power = 50,
+spell_id1 = 0, gold_min = 1, gold_max = 7 
+where entry = 80112;
 
 update creature_template set scale = 0.8, type = 9 where entry = 80112;
 
