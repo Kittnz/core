@@ -1916,24 +1916,50 @@ replace into item_template values
  
 replace into `item_template` values (80234, 0, 4, 1, 'Bear Hide Cape', '', 23054, 0, 0, 1, 11, 2, 16, -1, -1, 3, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
 
-REPLACE INTO `creature_template` VALUES (80507, 7, 8869, 503, 607, 0, 'Young Boar', NULL, 0, 1, 2, 42, 54, 0, 0, 16, 189, 0, 1, 0.857143, 0, 20, 5, 0, 0, 1, 0, 1, 0, 46, 1, 2000, 2000, 1, 0, 0, 5, 0, 0, 0, 0, 3.5024, 4.8158, 100, 1, 1, 1984, 0, 100008, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9083, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 2, '');
+update item_template set quality = 1 where entry = 80234;
+update item_template set armor = 6 where entry = 80234;
 
-REPLACE INTO `creature_template` VALUES (80508, 7, 1006, 8843, 719, 0, 'Young Bear', NULL, 0, 1, 2, 42, 54, 0, 0, 16, 189, 0, 1, 0.857143, 0, 20, 5, 0, 0, 1, 0, 1, 0, 46, 1, 2000, 2000, 1, 0, 0, 5, 0, 0, 0, 0, 3.5024, 4.8158, 100, 1, 1, 1984, 0, 100008, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9083, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 2, '');
+REPLACE INTO `creature_template` VALUES (80507, 7, 8869, 503, 607, 0, 'Young Boar', NULL, 0, 1, 2, 42, 54, 0, 0, 16, 189, 0, 1, 0.857143, 0, 20, 5, 0, 0, 1, 0, 1, 0, 46, 1, 2000, 2000, 1, 0, 0, 5, 0, 0, 0, 0, 3.5024, 4.8158, 100, 1, 1, 80507, 0, 100008, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9083, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 2, '');
+
+REPLACE INTO `creature_template` VALUES (80508, 7, 1006, 8843, 719, 0, 'Young Bear', NULL, 0, 1, 2, 42, 54, 0, 0, 16, 189, 0, 1, 0.857143, 0, 20, 5, 0, 0, 1, 0, 1, 0, 46, 1, 2000, 2000, 1, 0, 0, 5, 0, 0, 0, 0, 3.5024, 4.8158, 100, 1, 1, 80508, 0, 100008, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9083, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 2, '');
 
 update creature_template set loot_id = 1128 where entry = 80508;
 update creature_template set scale = 0.7 where entry in (80507, 80508);
 
 delete from creature_loot_template where entry = 80507 and item = 80232;
-replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (80507, 80232, -100, 1, 1, 1);	 
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values 
+(80507, 80232, -100, 1, 1, 1),
+(80507, 117, 17.4022, 0, 1, 2),
+(80507, 769, 0.0081, 0, 1, 1),
+(80507, 805, 0.25, 0, 1, 1),
+(80507, 828, 0.25, 0, 1, 1),
+(80507, 4496, 0.25, 0, 1, 1),
+(80507, 4865, 48.6375, 0, 1, 2),
+(80507, 5571, 0.25, 0, 1, 1),
+(80507, 5572, 0.25, 0, 1, 1),
+(80507, 7098, 48.9298, 0, 1, 2),
+(80507, 30017, 2.5, 0, -30017, 1);
 
 delete from creature_loot_template where entry = 80508 and item = 80233;
-replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (80508, 80233, -100, 1, 1, 1);	 
-
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values 
+(80508, 80233, -100, 1, 1, 1),
+(80508, 765, 0.12, 0, 1, 1),
+(80508, 774, 0.66, 0, 1, 1),
+(80508, 805, 0.25, 0, 1, 1),
+(80508, 818, 0.26, 0, 1, 1),
+(80508, 828, 0.25, 0, 1, 1),
+(80508, 1210, 0.02, 0, 1, 1),
+(80508, 2406, 0.02, 0, 1, 1),
+(80508, 2407, 0.02, 0, 1, 1),
+(80508, 2408, 0.02, 0, 1, 1),
+(80508, 2447, 0.06, 0, 1, 1),
+(80508, 2449, 0.02, 0, 1, 1),
+(80508, 2553, 0.02, 0, 1, 1);
  
 set @quest_entry = 80217;
 set @quest_zone = 1519;
 set @title = 'Pelts and Tusks';
-set @description = 'To prove yourself to me, $N, I will have you go around the lodge and search for the many piglets and cubs that made their home close to here, your kin will also need clothes, and armor, while I am not the best leatherworker I could still make a few.\n\nFive pelts of the bear cubs and five chunks of meat from the piglets, it will be enough to prove your worth, do not, I repeat do not try to fight their mother, too strong for you, for now maybe.\n\nCome back when you have everything.';
+set @description = 'To prove yourself to me, $N, I will have you go around the lodge and search for the many piglets and cubs that made their home close to here.\n\nYour kin will also need clothes, and armor, while I am not the best leatherworker I could still make a few.\n\nFive pelts of the bear cubs and five chunks of meat from the piglets, it will be enough to prove your worth.\n\nCome back when you have everything.';
 set @objective = 'Bring 5 Young Bear Pelt and 5 pieces of Young Boar Meat to Marek Ironheart in the Farstrider Lodge.';
 set @completetext = 'Ah yes, while these weren\'t harvested by an expert you did a pretty good job, very well, $N, you\'ve proven to be a capable $R, you know some might not see them as very dangerous but oh indeed they are, here some coin for your troubles, and I made you a cape from the remaining of a pelt.';
 set @incompletetext = 'Are you done yet, $N? My patience is short.';
