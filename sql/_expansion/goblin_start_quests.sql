@@ -425,6 +425,8 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '1', '1', '0', '0', '25', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
+ 
+update item_template set sheath = 3 where entry = 80113;
 
 SET @quest_entry = 80102;
 SET @quest_zone = 406;
