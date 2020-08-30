@@ -1892,6 +1892,123 @@ replace into item_template values
  '-1', '0', '0', '0', '0', '0', '0', '7', '0', '0', '0', '25', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
+-- Pelts and Tusks 
+
+replace into item_template values
+ ('80232', '0', '15', '0', 'Young Boar Meat', '', '25472', '1', '0', '1', '0', '0', '0', '-1', '-1', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '4', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+ 
+replace into item_template values
+ ('80233', '0', '15', '0', 'Young Bear Pelt', '', '1495', '1', '0', '1', '0', '0', '0', '-1', '-1', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '4', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+ 
+replace into `item_template` values (80234, 0, 4, 1, 'Bear Hide Cape', '', 23054, 0, 0, 1, 11, 2, 16, -1, -1, 3, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+
+REPLACE INTO `creature_template` VALUES (80507, 7, 8869, 503, 607, 0, 'Young Boar', NULL, 0, 1, 2, 42, 54, 0, 0, 16, 189, 0, 1, 0.857143, 0, 20, 5, 0, 0, 1, 0, 1, 0, 46, 1, 2000, 2000, 1, 0, 0, 5, 0, 0, 0, 0, 3.5024, 4.8158, 100, 1, 1, 1984, 0, 100008, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9083, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 2, '');
+
+REPLACE INTO `creature_template` VALUES (80508, 7, 1006, 8843, 719, 0, 'Young Bear', NULL, 0, 1, 2, 42, 54, 0, 0, 16, 189, 0, 1, 0.857143, 0, 20, 5, 0, 0, 1, 0, 1, 0, 46, 1, 2000, 2000, 1, 0, 0, 5, 0, 0, 0, 0, 3.5024, 4.8158, 100, 1, 1, 1984, 0, 100008, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9083, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 2, '');
+
+update creature_template set loot_id = 1128 where entry = 80508;
+update creature_template set scale = 0.7 where entry in (80507, 80508);
+
+delete from creature_loot_template where entry = 80507 and item = 80232;
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (80507, 80232, -100, 1, 1, 1);	 
+
+delete from creature_loot_template where entry = 80508 and item = 80233;
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (80508, 80233, -100, 1, 1, 1);	 
+
+ 
+set @quest_entry = 80217;
+set @quest_zone = 1519;
+set @title = 'Pelts and Tusks';
+set @description = 'To prove yourself to me, $N, I will have you go around the lodge and search for the many piglets and cubs that made their home close to here, your kin will also need clothes, and armor, while I am not the best leatherworker I could still make a few.\n\nFive pelts of the bear cubs and five chunks of meat from the piglets, it will be enough to prove your worth, do not, I repeat do not try to fight their mother, too strong for you, for now maybe.\n\nCome back when you have everything.';
+set @objective = 'Bring 5 Young Bear Pelt and 5 pieces of Young Boar Meat to Marek Ironheart in the Farstrider Lodge.';
+set @completetext = 'Ah yes, while these weren\'t harvested by an expert you did a pretty good job, very well, $N, you\'ve proven to be a capable $R, you know some might not see them as very dangerous but oh indeed they are, here some coin for your troubles, and I made you a cape from the remaining of a pelt.';
+set @incompletetext = 'Are you done yet, $N? My patience is short.';
+set @faction_id = 0;
+set @faction_count = 0;
+set @xp_or_money = 185;
+set @reward_money = 80; 
+set @quest_level = 2;
+set @min_level = 2;
+set @questgiver_id = 1154;
+set @quest_finisher = 1154;
+set @nextquest = 0;
+set @nextquestinchain = 0;
+set @prevquest = 0;
+set @RewChoiceItemId1 = 0; 
+set @RewChoiceItemId2 = 0; 
+set @RewChoiceItemId3 = 0;
+set @RewChoiceItemId4 = 0; 
+set @RewChoiceItemCount1 = 0;
+set @RewChoiceItemCount2 = 0;
+set @RewChoiceItemCount3 = 0;
+set @RewChoiceItemCount4 = 0;
+set @reward_item_1 = 80234;
+set @reward_item_2 = 0; 
+set @reward_item_3 = 0;
+set @reward_item_4 = 0;
+set @reward_item_1_count = 1;
+set @reward_item_2_count = 0;
+set @reward_item_3_count = 0;
+set @reward_item_4_count = 0;
+set @creature_to_kill_1 = 0;
+set @creature_to_kill_2 = 0; 
+set @creature_to_kill_3 = 0;
+set @creature_to_kill_4 = 0;
+set @creature_to_kill_1_count = 0;
+set @creature_to_kill_2_count = 0;
+set @creature_to_kill_3_count = 0;
+set @creature_to_kill_4_count = 0;
+set @required_item_1 = 80232; 
+set @required_item_2 = 80233;
+set @required_item_3 = 0;
+set @required_item_4 = 0;
+set @required_item_1_count = 5;
+set @required_item_2_count = 5;
+set @required_item_3_count = 0;
+set @required_item_4_count = 0;
+
+replace into quest_template values 
+
+(@quest_entry, '0', '2', @quest_zone, @min_level,  '0', @quest_level, '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @title, @description, @objective, @completetext, @incompletetext, '', '', '', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @faction_id, '0', '0', '0', '0', @faction_count, '0', '0', '0', '0', '0', @xp_or_money, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', 0, 0);
+     
+replace into creature_questrelation (id, quest, patch_min, patch_max) values (@questgiver_id, @quest_entry,'0','10'); 
+replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (@quest_finisher, @quest_entry,'0','10');
+	 
+update quest_template set 
+rewitemid1 = @reward_item_1, rewitemcount1 = @reward_item_1_count,
+rewitemid2 = @reward_item_2, rewitemcount2 = @reward_item_2_count,
+rewitemid3 = @reward_item_3, rewitemcount3 = @reward_item_3_count,
+rewitemid4 = @reward_item_4, rewitemcount4 = @reward_item_4_count,
+RewChoiceItemId1 = @RewChoiceItemId1, RewChoiceItemCount1 = @RewChoiceItemCount1,
+RewChoiceItemId2 = @RewChoiceItemId2, RewChoiceItemCount2 = @RewChoiceItemCount2,
+RewChoiceItemId3 = @RewChoiceItemId3, RewChoiceItemCount3 = @RewChoiceItemCount3,
+RewChoiceItemId4 = @RewChoiceItemId4, RewChoiceItemCount4 = @RewChoiceItemCount4,
+ReqCreatureOrGOId1 = @creature_to_kill_1, ReqCreatureOrGOCount1 = @creature_to_kill_1_count,
+ReqCreatureOrGOId2 = @creature_to_kill_2, ReqCreatureOrGOCount2 = @creature_to_kill_2_count,
+ReqCreatureOrGOId3 = @creature_to_kill_3, ReqCreatureOrGOCount3 = @creature_to_kill_3_count,
+ReqCreatureOrGOId4 = @creature_to_kill_4, ReqCreatureOrGOCount4 = @creature_to_kill_4_count,
+reqitemid1 = @required_item_1, reqitemcount1 = @required_item_1_count,
+reqitemid2 = @required_item_2, reqitemcount2 = @required_item_2_count,
+reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
+reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
+nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
+nextquestinchain = @nextquestinchain, prevquestid = @prevquest 
+where entry = @quest_entry;	 
+ 
 -- Populating the area:
 
 delete from creature where id in (80200,80202,80219,80221,80220,80208,80209,80208,80208,80209,80209,80209,80214,80215,80217,80213,80218,80201,80201,80201,80201,80201,80226,80226,10930,1686,1687,954,80223,80226,80226,80226,80226,80216,80216,80216,80208,80208,80226,80226,80208,80226,40009,80209,80209,80209,80208,80208,80208,80208,80216,80216,80216,80216,80216,80216,80216,80216,80227,1685,1155,40013,80216,80216,80216,80216,80216,80216,80216,80216,80216,80216,80216,80216,80250,80250,80250,40013,40013,40019,40013,40013,80209,40020,40013,40013,80250,80250,80216,80216,80216,80216,80216,40012,80216,80208,11480,11480,80506,40012,80228,14268,1194,1194,1194,1194,1194,80207,80205,80207,80207,80207,80207,80207,80207,80207,80207,80207,80207,80207,80207,80207,80207,80207,80208,80207,80207,80226,80226,80226,6491,80210,80224,80225,80222,1412,1412,1412,721,721,1412,721,80257,80257,80257,80257,80257,80257,80257,80257,80257,80257,80257,80257,80257,80257,80257,80257,80257,80257,80257,80257,80257);
