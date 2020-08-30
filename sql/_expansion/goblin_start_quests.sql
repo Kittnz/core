@@ -25,6 +25,13 @@ REPLACE INTO `creature_template` VALUES (80103, 8, 7185, 0, 0, 0, 'Venture Co. B
 
 REPLACE INTO `creature_template` VALUES (80104, 0, 7166, 0, 0, 0, 'Grizzie the Enforcer', 'Warrior Trainer', 523, 11, 11, 456, 456, 406, 406, 20, 29, 19, 1, 1.14286, 0, 20, 5, 0, 0, 1, 12, 14, 0, 64, 1, 2000, 2000, 1, 4864, 0, 0, 0, 0, 1, 0, 18.392, 25.289, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 3153, 0, 0, 0, 0, 524298, '');
 
+SET @gossip_menu_id = 56546;
+SET @magic_number = 80104; -- Warrior
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (ID, MaleText) values (@magic_number, 'Hey pal, back for some more training?\n\nRemember what I told you, first you go for the knees, once they at your level they won\'t look down on you anymore.\n\nThat advice will cost you a few more coppers.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
 REPLACE INTO `npc_trainer` VALUES (80104, 1343, 100, 0, 0, 6, 0, 5875);
 REPLACE INTO `npc_trainer` VALUES (80104, 1423, 100, 0, 0, 4, 0, 5875);
 REPLACE INTO `npc_trainer` VALUES (80104, 1738, 100, 0, 0, 4, 0, 5875);
@@ -32,6 +39,13 @@ REPLACE INTO `npc_trainer` VALUES (80104, 3128, 100, 0, 0, 6, 0, 5875);
 REPLACE INTO `npc_trainer` VALUES (80104, 6674, 10, 0, 0, 1, 0, 5875);
 
 REPLACE INTO `creature_template` VALUES (80105, 0, 7179, 0, 0, 0, 'Mayten Boomrifle', 'Hunter Trainer', 4648, 8, 8, 334, 334, 297, 297, 20, 126, 19, 1, 1.14286, 0, 20, 5, 0, 0, 1, 7, 10, 0, 58, 1, 2000, 2000, 1, 4864, 0, 0, 0, 0, 3, 0, 13.5872, 18.6824, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 3154, 0, 0, 0, 0, 524298, '');
+
+SET @gossip_menu_id = 56547;
+SET @magic_number = 80105; -- Hunter
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (ID, MaleText) values (@magic_number, 'Guns, man I love guns, don’t you, $N?\n\nEverytime I hear that boom, my heart beats faster, anyway back for more training, you got the coin right?');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
 REPLACE INTO `npc_trainer` VALUES (80105, 1547, 10, 0, 0, 1, 0, 5875);
 REPLACE INTO `npc_trainer` VALUES (80105, 2003, 100, 0, 0, 4, 0, 5875);
@@ -41,6 +55,13 @@ REPLACE INTO `npc_trainer` VALUES (80105, 13164, 50, 0, 0, 4, 0, 5875);
 
 REPLACE INTO `creature_template`VALUES (80106, 0, 15300, 0, 0, 0, 'Leyti Quicktongue', 'Rogue Trainer', 0, 8, 8, 334, 334, 297, 297, 20, 29, 18, 1, 1.14286, 0, 20, 5, 0, 0, 1, 7, 10, 0, 58, 1, 2000, 2000, 1, 4864, 0, 0, 0, 0, 4, 0, 13.5872, 18.6824, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 3155, 0, 0, 0, 0, 524298, '');
 
+SET @gossip_menu_id = 56548;
+SET @magic_number = 80106; -- Rogue
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (ID, MaleText) values (@magic_number, 'Why sell when you can steal, am I right bub?\n\nCome on let me teach a few things and don’t worry I already took the coin from your pockets.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
 REPLACE INTO `npc_trainer` VALUES (80106, 1762, 100, 0, 0, 6, 0, 5875);
 REPLACE INTO `npc_trainer` VALUES (80106, 1780, 100, 0, 0, 6, 0, 5875);
 REPLACE INTO `npc_trainer` VALUES (80106, 1789, 10, 0, 0, 1, 0, 5875);
@@ -48,6 +69,13 @@ REPLACE INTO `npc_trainer` VALUES (80106, 2592, 100, 0, 0, 4, 0, 5875);
 REPLACE INTO `npc_trainer` VALUES (80106, 5167, 100, 0, 0, 4, 0, 5875);
 
 REPLACE INTO `creature_template` VALUES (80107, 0, 9780, 0, 0, 0, 'Amri Demondeal', 'Warlock Trainer', 4670, 9, 9, 372, 372, 333, 333, 20, 29, 19, 1, 1.14286, 0, 20, 5, 0, 0, 1, 9, 13, 0, 60, 1, 2000, 2000, 1, 4864, 0, 0, 0, 0, 9, 0, 15.2064, 20.9088, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 3156, 0, 0, 0, 0, 524298, '');
+
+SET @gossip_menu_id = 56549;
+SET @magic_number = 80107; -- Warlock
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (ID, MaleText) values (@magic_number, 'Nobody thinks of the goblin, $N, nobody, so come here, let me teach you more dark arts, can’t wait to learn how to summon a succubus, anyway business before pleasure, give up the coin!');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
 REPLACE INTO `npc_trainer` VALUES (80107, 1374, 10, 0, 0, 1, 0, 5875);
 REPLACE INTO `npc_trainer` VALUES (80107, 1381, 100, 0, 0, 6, 0, 5875);
@@ -60,6 +88,13 @@ REPLACE INTO `creature_template` values (80129, 0, 4449, 0, 0, 0, 'Imp', '', 0, 
 update creature_template set faction = 35 where entry = 80129;
 
 REPLACE INTO `creature_template` VALUES (80108, 0, 10745, 0, 0, 0, 'Wizette Icewhistle', 'Mage Trainer', 64, 10, 10, 413, 413, 370, 370, 20, 126, 19, 1, 1.14286, 0, 20, 5, 0, 0, 1, 7, 7, 0, 62, 1, 2000, 2000, 1, 4864, 0, 0, 0, 0, 8, 0, 16.808, 23.111, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 5884, 0, 0, 0, 0, 524298, '');
+
+SET @gossip_menu_id = 56550;
+SET @magic_number = 80108; -- Mage
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (ID, MaleText) values (@magic_number, 'If it ain’t my best friend, $N, back for more spells, I admire you, you got the big brains like me, conjure water, food, portals, cha-ching, coin!\n\nSpeaking of coin, you know these spells ain’t free right?');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
 REPLACE INTO `npc_trainer` VALUES (80108, 1142, 100, 0, 0, 0, 0, 5875);
 REPLACE INTO `npc_trainer` VALUES (80108, 1173, 100, 0, 0, 0, 0, 5875);

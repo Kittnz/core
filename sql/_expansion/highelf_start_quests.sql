@@ -1713,7 +1713,7 @@ update creature_template set npc_flags = 19 where entry = 80223;
 SET @gossip_menu_id = 56545;
 SET @magic_number = 80223; -- Rogue
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
-replace into broadcast_text (ID, MaleText) values (@magic_number, 'Whether you want to steal from a noble\'s pocket, crawl into the shadows or lockpick\'s someones\' chest, remember the Sunwell.');
+replace into broadcast_text (ID, MaleText) values (@magic_number, 'Whether you want to steal from a noble\'s pocket, crawl into the shadows or lockpick someone\'s chest, remember the Sunwell.');
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
@@ -1752,6 +1752,14 @@ update creature_template set equipment_id = 1423 where entry = 80226;
 update creature_template set faction = 12 where entry = 80226;
 
 REPLACE INTO `creature_template` values (80227, 0, 17676, 0, 0, 0, 'Ashanya Quel\'belore', 'Innkeeper', 1293, 30, 30, 1605, 1605, 0, 0, 1200, 80, 135, 1, 1.14286, 0, 20, 5, 0, 0, 1, 42, 53, 0, 122, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 45.144, 62.073, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 6736, 0, 0, 0, 0, 524298, '');
+
+SET @gossip_menu_id = 56551;
+SET @magic_number = 80227; -- Innkeeper
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (ID, MaleText) values (@magic_number, 'You\'ve traveled a long way kin, rest your weary bones underneath our roof, and may the eternal sun shine upon you.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
 
 replace into`creature_template` values (80228, 0, 16818, 0, 0, 0, 'Toranial Mishulas', 'Weapon Master', 5271, 50, 50, 6830, 6830, 0, 0, 2999, 12, 17, 1, 1.14286, 0, 20, 5, 0, 1, 1, 292, 333, 0, 226, 1, 1500, 2000, 1, 4096, 0, 0, 2, 0, 0, 0, 55.36, 76.12, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 11867, 0, 0, 0, 0, 524298, '');
 
