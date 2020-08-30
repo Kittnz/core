@@ -141,13 +141,27 @@ update creature_template set faction = 35 where entry between 80100 and 80111;
 
 -- A New Ad-Venture
 
-REPLACE INTO `creature_template` VALUES (80112, 7, 1159, 0, 0, 0, 'Whirling Whizz-Bot', NULL, 0, 1, 2, 50, 60, 0, 0, 16, 189, 0, 1, 0.857143, 0, 20, 5, 0, 0, 1, 0, 1, 0, 46, 1, 2000, 2000, 1, 0, 0, 5, 0, 0, 0, 0, 1.76, 2.42, 100, 9, 1, 3098, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9074, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, '');
+REPLACE INTO `creature_template` VALUES (80112, 7, 1159, 0, 0, 0, 'Whirling Whizz-Bot', NULL, 0, 1, 2, 50, 60, 0, 0, 16, 189, 0, 1, 0.857143, 0, 20, 5, 0, 0, 1, 0, 1, 0, 46, 1, 2000, 2000, 1, 0, 0, 5, 0, 0, 0, 0, 1.76, 2.42, 100, 9, 1, 3098, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9074, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 'npc_whizzbot');
 
 update creature_template set 
 health_min = 60, health_max = 70, 
 armor = 76, dmg_min = 3, dmg_max = 6, attack_power = 50,
 spell_id1 = 0, gold_min = 1, gold_max = 7 
 where entry = 80112;
+
+replace into broadcast_text (ID, MaleText) values (70000, 'We are friends. Do not run.'); replace into npc_text (ID, BroadcastTextID0) values (70000, 70000);
+replace into broadcast_text (ID, MaleText) values (70001, 'We are friends. Do not run.'); replace into npc_text (ID, BroadcastTextID0) values (70001, 70001);
+replace into broadcast_text (ID, MaleText) values (70002, 'We are friends. Do not run.'); replace into npc_text (ID, BroadcastTextID0) values (70002, 70002);
+replace into broadcast_text (ID, MaleText) values (70003, 'We are friends. Do not run.'); replace into npc_text (ID, BroadcastTextID0) values (70003, 70003);
+replace into broadcast_text (ID, MaleText) values (70004, 'We are friends. Do not run.'); replace into npc_text (ID, BroadcastTextID0) values (70004, 70004);
+replace into broadcast_text (ID, MaleText) values (70005, 'We are friends. Do not run.'); replace into npc_text (ID, BroadcastTextID0) values (70005, 70005);
+
+replace into broadcast_text (ID, MaleText) values (70011, 'Error... Shutting down.'); replace into npc_text (ID, BroadcastTextID0) values (70011, 70011);
+replace into broadcast_text (ID, MaleText) values (70012, 'Error... Shutting down.'); replace into npc_text (ID, BroadcastTextID0) values (70012, 70012);
+replace into broadcast_text (ID, MaleText) values (70013, 'Error... Shutting down.'); replace into npc_text (ID, BroadcastTextID0) values (70013, 70013);
+replace into broadcast_text (ID, MaleText) values (70014, 'Error... Shutting down.'); replace into npc_text (ID, BroadcastTextID0) values (70014, 70014);
+replace into broadcast_text (ID, MaleText) values (70015, 'Error... Shutting down.'); replace into npc_text (ID, BroadcastTextID0) values (70015, 70015);
+
 
 update creature_template set scale = 0.8, type = 9 where entry = 80112;
 

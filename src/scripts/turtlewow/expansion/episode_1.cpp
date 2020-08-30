@@ -783,9 +783,49 @@ bool GOHello_go_portal_goldshire(Player* pPlayer, GameObject* pGo)
     return true;
 }
 
+struct npc_whizzbotAI : public ScriptedAI
+{
+    npc_whizzbotAI(Creature *c) : ScriptedAI(c)
+    {
+        Reset();
+    }
+
+    void Aggro(Unit *who)
+    {
+        m_creature->MonsterSay(urand(70000, 70005));
+    }
+
+    void Reset() {}
+
+    void KilledUnit(Unit* victim) {}
+
+    void JustDied(Unit*)
+    {
+        m_creature->MonsterSay(urand(70011, 70015));
+    }
+
+    void UpdateAI(const uint32 diff)
+    {
+        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+            return;
+        DoMeleeAttackIfReady();
+    }
+
+};
+
+CreatureAI* GetAI_npc_whizzbot(Creature *_Creature)
+{
+    return new npc_whizzbotAI(_Creature);
+}
+
 void AddSC_episode_1()
 {
     Script *newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_whizzbot";
+    newscript->GetAI = &GetAI_npc_whizzbot;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "go_portal_goldshire";
