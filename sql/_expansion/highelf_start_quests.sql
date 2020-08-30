@@ -1923,10 +1923,9 @@ REPLACE INTO `creature_template` VALUES (80507, 7, 8869, 503, 607, 0, 'Young Boa
 
 REPLACE INTO `creature_template` VALUES (80508, 7, 1006, 8843, 719, 0, 'Young Bear', NULL, 0, 1, 2, 42, 54, 0, 0, 16, 189, 0, 1, 0.857143, 0, 20, 5, 0, 0, 1, 0, 1, 0, 46, 1, 2000, 2000, 1, 0, 0, 5, 0, 0, 0, 0, 3.5024, 4.8158, 100, 1, 1, 80508, 0, 100008, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9083, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 2, '');
 
-update creature_template set loot_id = 1128 where entry = 80508;
 update creature_template set scale = 0.7 where entry in (80507, 80508);
 
-delete from creature_loot_template where entry = 80507 and item = 80232;
+delete from creature_loot_template where entry = 80507;
 replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values 
 (80507, 80232, -100, 1, 1, 1),
 (80507, 117, 17.4022, 0, 1, 2),
@@ -1940,21 +1939,19 @@ replace into creature_loot_template (entry, item, chanceorquestchance, groupid, 
 (80507, 7098, 48.9298, 0, 1, 2),
 (80507, 30017, 2.5, 0, -30017, 1);
 
-delete from creature_loot_template where entry = 80508 and item = 80233;
+delete from creature_loot_template where entry = 80508;
 replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values 
-(80508, 80233, -100, 0, 1, 1),
-(80508, 765, 0.12, 0, 1, 1),
-(80508, 774, 0.66, 0, 1, 1),
+(80508, 80233, -100, 1, 1, 1),
+(80508, 765, 17.4022, 0, 1, 1),
+(80508, 774, 0.0081, 0, 1, 1),
 (80508, 805, 0.25, 0, 1, 1),
-(80508, 818, 0.26, 0, 1, 1),
+(80508, 818, 0.25, 0, 1, 1),
 (80508, 828, 0.25, 0, 1, 1),
-(80508, 1210, 0.02, 0, 1, 1),
-(80508, 2406, 0.02, 0, 1, 1),
-(80508, 2407, 0.02, 0, 1, 1),
-(80508, 2408, 0.02, 0, 1, 1),
-(80508, 2447, 0.06, 0, 1, 1),
-(80508, 2449, 0.02, 0, 1, 1),
-(80508, 2553, 0.02, 0, 1, 1);
+(80508, 1210, 48.6375, 0, 1, 1),
+(80508, 2406, 0.25, 0, 1, 1),
+(80508, 2407, 0.25, 0, 1, 1),
+(80508, 2408, 48.9298, 0, 1, 1),
+(80508, 2447, 2.5, 0, -30017, 1);
  
 set @quest_entry = 80217;
 set @quest_zone = 1519;
