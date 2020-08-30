@@ -579,6 +579,15 @@ update creature_template set loot_id = 80116 where entry = 80116;
 replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (80116, 80114, 30, 0, 1, 1);
 replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (80116, 80112, -100, 1, 1, 1);
 
+update creature_template set 
+health_min = 80, health_max = 100, 
+armor = 76, dmg_min = 8, dmg_max = 10, attack_power = 60, 
+fire_res = 50, dmg_school = 2,
+spell_id1 = 11962, gold_min = 4, gold_max = 12, ai_name = "EventAI"
+where entry = 80116;
+
+-- Note: spell doesn't work, no idea why.
+
 SET @quest_entry = 80103;
 SET @quest_zone = 406;
 SET @title = 'Risen Oilblazes';
