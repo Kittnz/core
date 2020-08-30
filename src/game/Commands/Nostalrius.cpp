@@ -302,23 +302,6 @@ bool ChatHandler::HandleGoForwardCommand(char* args)
 	return true;
 }
 
-bool ChatHandler::HandleGoBackCommand(char* args)
-{
-    float x, y, z;
-    float add = -10.0f;
-    sscanf(args, "%f", &add);
-    if (Player* pPlayer = m_session->GetPlayer())
-    {
-        pPlayer->GetRelativePositions(add, 0.0f, 0.0f, x, y, z);
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_9_4
-        pPlayer->NearLandTo(x, y, z, pPlayer->GetOrientation());
-#else
-        pPlayer->NearTeleportTo(x, y, z, pPlayer->GetOrientation());
-#endif
-    }
-    return true;
-}
-
 bool ChatHandler::HandleGoUpCommand(char* args)
 {
 	float x, y, z;
@@ -334,23 +317,6 @@ bool ChatHandler::HandleGoUpCommand(char* args)
 #endif
 	}
 	return true;
-}
-
-bool ChatHandler::HandleGoDownCommand(char* args)
-{
-    float x, y, z;
-    float add_z = -10.0f;
-    sscanf(args, "%f", &add_z);
-    if (Player* pPlayer = m_session->GetPlayer())
-    {
-        pPlayer->GetRelativePositions(0.0f, 0.0f, add_z, x, y, z);
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_9_4
-        pPlayer->NearLandTo(x, y, z, pPlayer->GetOrientation());
-#else
-        pPlayer->NearTeleportTo(x, y, z, pPlayer->GetOrientation());
-#endif
-    }
-    return true;
 }
 
 bool ChatHandler::HandleGoRelativeCommand(char* args)
