@@ -602,6 +602,12 @@ replace into `item_template` values (80220, 0, 4, 2, 'Stitched Leather Gloves', 
 
 replace into`creature_template` values (80205, 0, 6055, 0, 0, 0, 'Shadowforge Fire Priest', NULL, 0, 5, 5, 109, 109, 138, 138, 105, 16, 0, 0.92, 1.14286, 0, 20, 5, 0, 0, 1, 4, 5, 0, 52, 1, 2000, 2156, 2, 32768, 0, 0, 0, 0, 0, 0, 8.624, 11.858, 100, 7, 0, 3183, 3183, 0, 0, 0, 0, 0, 0, 0, 172, 348, 0, 0, 31830, 0, 3, 9, 'EventAI', 0, 3, 0, 0, 3, 3183, 0, 0, 0, 0, 0, '');
 
+update creature_template set 
+health_min = 120, health_max = 160, dmg_school = 2,
+armor = 96, dmg_min = 12, dmg_max = 16, attack_power = 60,
+spell_id1 = 348, spell_list_id = 31830, gold_min = 9, gold_max = 29 
+where entry = 80205;
+
 update creature_template set loot_id = 80205 where entry = 80205; 
 
 delete from creature_loot_template where entry = 80205 and item = 80216;
