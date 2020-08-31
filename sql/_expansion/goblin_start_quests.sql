@@ -380,6 +380,14 @@ where entry = @quest_entry;
 
 REPLACE INTO `creature_template` VALUES (80114, 0, 4249, 4250, 4247, 4248, 'Stonetalon Environmentalist', NULL, 0, 2, 3, 74, 80, 0, 0, 49, 91, 0, 1, 0.857143, 0, 20, 5, 0, 0, 1, 3, 5, 0, 50, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 6.9344, 9.5348, 100, 7, 0, 38, 38, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 7, 'EventAI', 1, 3, 0, 0, 3, 38, 0, 0, 0, 0, 0, '');
 
+replace into `creature_template_addon` (`entry`, `auras`) values ('80114', '20580');
+
+update creature_template set 
+health_min = 80, health_max = 100, dmg_school = 3,
+armor = 76, dmg_min = 6, dmg_max = 10, attack_power = 50,
+spell_id1 = 0, gold_min = 1, gold_max = 7 
+where entry = 80114;
+
 REPLACE INTO `creature_template` VALUES (80115, 0, 8172, 0, 0, 0, 'Highpeak Lasher', NULL, 0, 3, 3, 40, 45, 0, 0, 50, 91, 0, 0.93, 1.14286, 1, 20, 5, 0, 0, 1, 10, 12, 0, 40, 1, 1960, 2156, 8, 0, 0, 0, 0, 0, 0, 0, 8.624, 11.858, 100, 4, 0, 3569, 0, 0, 0, 5, 5, 5, 10, 5, 0, 0, 0, 0, 0, 0, 1, 4, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 16384, 0, 0, '');
 
 replace into item_template values
@@ -910,12 +918,24 @@ where entry = @quest_entry;
 
 REPLACE INTO `creature_template` VALUES (80118, 0, 18322, 18323, 0, 0, 'Animated Shredder', NULL, 0, 5, 6, 100, 120, 0, 0, 147, 22, 0, 1, 0.857143, 0, 20, 5, 0, 0, 1, 7, 10, 0, 54, 1, 2000, 2000, 1, 0, 0, 3, 0, 0, 0, 0, 8.58, 11.7975, 100, 9, 1, 30, 0, 0, 0, 0, 0, 0, 0, 0, 744, 0, 0, 0, 0, 5880, 0, 0, 'EventAI', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, '');
 
+update creature_template set 
+health_min = 100, health_max = 130, dmg_school = 5,
+armor = 96, dmg_min = 10, dmg_max = 16, attack_power = 70,
+spell_id1 = 0, gold_min = 12, gold_max = 20 
+where entry = 80118;
+
 replace into `creature_template_addon` (`entry`, `auras`) values ('80118', '16592');
 
 REPLACE INTO creature_model_info VALUES (18315, 5875, 2, 2, 0, 0, 0),(18316, 5875, 2, 2, 0, 0, 0),(18317, 5875, 2, 2, 0, 0, 0),(18318, 5875, 2, 2, 0, 0, 0);
 REPLACE INTO creature_model_info VALUES (18322, 5875, 2, 2, 0, 0, 0),(18323, 5875, 2, 2, 0, 0, 0);
 
 REPLACE INTO `creature_template` VALUES (80119, 0, 1228, 0, 0, 0, 'Muttering Vulture', NULL, 0, 5, 7, 80, 100, 0, 0, 180, 73, 0, 1, 0.857143, 0, 20, 5, 0, 0, 1, 6, 11, 0, 56, 1, 2000, 2000, 1, 0, 0, 7, 0, 0, 0, 0, 13.4464, 18.4888, 100, 1, 1, 2969, 0, 0, 0, 0, 0, 0, 0, 0, 5708, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, '');
+	 
+update creature_template set 
+health_min = 100, health_max = 120, dmg_school = 5,
+armor = 76, dmg_min = 8, dmg_max = 12, attack_power = 60,
+spell_id1 = 0, gold_min = 9, gold_max = 20 
+where entry = 80119;
 	 
 replace into `creature_template_addon` (`entry`, `auras`) values ('80119', '16592');
 	 
@@ -943,7 +963,7 @@ SET @quest_entry = 80106;
 SET @quest_zone = 406;
 SET @title = 'The Grumbling Grove';
 SET @description = 'Okay, look. Any treasure hunter is gonna find some haunted treasure from time to time, see? And we CAN’T go back to the boss empty-handed. I mean CAN’T.\n\nLike, he’ll have us shipped off to the mines, can’t.\n\nSo here’s what we’re gonna do, okay? We’re gonna try and get this thing anyway. You’ve done good so far, kid, so you think you’re up for a little more “enforcing”? There seem to be more of the first expedition’s mechs in the little forest on the other side of the valley, and, uh, some vultures that don’t look real natural. Clear ‘em out, and we’ll see what’s in there.';
-SET @objective = 'Kill 7 Animated Shredders and 7 Muttering Vultures in the Grumbling Grove.';
+SET @objective = 'Kill 7 Animated Shredders and 5 Muttering Vultures in the Grumbling Grove.';
 SET @completetext = 'This place gives me the willies. The sooner we’re out of here, the better, right kid?';
 SET @incompletetext = 'I don’t like the look of ‘em any more than you do, kid. But what choice we got?';
 SET @faction_id = 0;
@@ -978,7 +998,7 @@ SET @creature_to_kill_2 = 80119;
 SET @creature_to_kill_3 = 0;
 SET @creature_to_kill_4 = 0;
 SET @creature_to_kill_1_count = 7;
-SET @creature_to_kill_2_count = 7;
+SET @creature_to_kill_2_count = 5;
 SET @creature_to_kill_3_count = 0;
 SET @creature_to_kill_4_count = 0;
 SET @required_item_1 = 0; 
@@ -1040,13 +1060,20 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '5', '0', '0', '0', '20', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
 
-REPLACE INTO `creature_template` VALUES (80120, 0, 12074, 0, 0, 0, 'Tomb Shadow', NULL, 0, 6, 7, 120, 136, 0, 0, 207, 21, 0, 0.888888, 0.857143, 0, 20, 5, 0, 0, 1, 7, 10, 0, 56, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 13.4464, 18.4888, 100, 6, 0, 1520, 1520, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 12, '', 1, 1, 0, 0, 3, 1520, 0, 0, 8602131, 0, 0, '');
+REPLACE INTO `creature_template` VALUES (80120, 0, 12074, 0, 0, 0, 'Tomb Shadow', NULL, 0, 6, 6, 120, 136, 0, 0, 207, 21, 0, 0.888888, 0.857143, 0, 20, 5, 0, 0, 1, 7, 10, 0, 56, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 13.4464, 18.4888, 100, 6, 0, 1520, 1520, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 12, '', 1, 1, 0, 0, 3, 1520, 0, 0, 8602131, 0, 0, '');
 	 
 update creature_template set script_name = "npc_tomb_shadow" where entry = 80120;
 	 
 update creature_template set faction = 22 where entry = 80120;
+update creature_template set scale = 2 where entry = 80120;
 update creature_template set loot_id = 1531 where entry = 80120;
 update creature_template set equipment_id = 0 where entry = 80120;
+
+update creature_template set 
+health_min = 120, health_max = 160, dmg_school = 5,
+armor = 96, dmg_min = 12, dmg_max = 16, attack_power = 60,
+spell_id1 = 0, gold_min = 9, gold_max = 29 
+where entry = 80120;
 
 update creature_template set script_name = "npc_nert_blastentom" where entry = 80100;
 	 
@@ -1294,7 +1321,7 @@ SET @quest_zone = 14;
 SET @title = 'Zug-zug Or Somethin’';
 SET @description = 'Our situation ain’t good. If the Horde won’t help us, I don’t know where else we could go. But I’ve got a plan, see.\n\nAn old orc friend of mine is the cook in Razor Hill, the orc town just down below us. We write every now and then, and from what he tells me, the head of the guard there just goes nuts for roasted boar.\n\nWhy don’t you hunt some of the boar around here, take them to him? I bet he can put in a good word. And as any good goblin knows, one good word is all you need to take it all the way to the top!';
 SET @objective = 'Collect 5 Chunks of Boar Meat and bring them to Cook Torka in Razor Hill.';
-SET @completetext = 'Boar meat? How did you know to bring boar...oh.\n\nYou’re friends with Nert, aren’t you.';
+SET @completetext = 'Boar meat? How did you know to bring boar... oh.\n\nYou’re friends with Nert, aren’t you.';
 SET @incompletetext = 'Oh, hello there! It’s been a long time since I’ve seen a goblin around here!';
 SET @faction_id = 0;
 SET @faction_count = 0;
