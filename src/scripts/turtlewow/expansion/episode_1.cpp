@@ -801,7 +801,7 @@ struct npc_whizzbotAI : public ScriptedAI
 
     void JustDied(Unit*)
     {
-        m_creature->MonsterSay(urand(70011, 70015));
+        m_creature->MonsterSay(urand(70011, 70016));
     }
 
     void UpdateAI(const uint32 diff)

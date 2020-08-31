@@ -150,17 +150,18 @@ spell_id1 = 0, gold_min = 1, gold_max = 7
 where entry = 80112;
 
 replace into broadcast_text (ID, MaleText) values (70000, 'We are friends. Do not run.'); replace into npc_text (ID, BroadcastTextID0) values (70000, 70000);
-replace into broadcast_text (ID, MaleText) values (70001, 'We are friends. Do not run.'); replace into npc_text (ID, BroadcastTextID0) values (70001, 70001);
-replace into broadcast_text (ID, MaleText) values (70002, 'We are friends. Do not run.'); replace into npc_text (ID, BroadcastTextID0) values (70002, 70002);
-replace into broadcast_text (ID, MaleText) values (70003, 'We are friends. Do not run.'); replace into npc_text (ID, BroadcastTextID0) values (70003, 70003);
-replace into broadcast_text (ID, MaleText) values (70004, 'We are friends. Do not run.'); replace into npc_text (ID, BroadcastTextID0) values (70004, 70004);
-replace into broadcast_text (ID, MaleText) values (70005, 'We are friends. Do not run.'); replace into npc_text (ID, BroadcastTextID0) values (70005, 70005);
+replace into broadcast_text (ID, MaleText) values (70001, 'Target unrecognized. Proceed with extermination.'); replace into npc_text (ID, BroadcastTextID0) values (70001, 70001);
+replace into broadcast_text (ID, MaleText) values (70002, 'Target acquired. Termination activated.'); replace into npc_text (ID, BroadcastTextID0) values (70002, 70002);
+replace into broadcast_text (ID, MaleText) values (70003, 'Threat detected, activating protocol 66.'); replace into npc_text (ID, BroadcastTextID0) values (70003, 70003);
+replace into broadcast_text (ID, MaleText) values (70004, 'Exterminate hostile.'); replace into npc_text (ID, BroadcastTextID0) values (70004, 70004);
+replace into broadcast_text (ID, MaleText) values (70005, 'Function IsFriend() not found.'); replace into npc_text (ID, BroadcastTextID0) values (70005, 70005);
 
-replace into broadcast_text (ID, MaleText) values (70011, 'Error... Shutting down.'); replace into npc_text (ID, BroadcastTextID0) values (70011, 70011);
-replace into broadcast_text (ID, MaleText) values (70012, 'Error... Shutting down.'); replace into npc_text (ID, BroadcastTextID0) values (70012, 70012);
-replace into broadcast_text (ID, MaleText) values (70013, 'Error... Shutting down.'); replace into npc_text (ID, BroadcastTextID0) values (70013, 70013);
-replace into broadcast_text (ID, MaleText) values (70014, 'Error... Shutting down.'); replace into npc_text (ID, BroadcastTextID0) values (70014, 70014);
+replace into broadcast_text (ID, MaleText) values (70011, 'Error 132: Memory cannot be read.'); replace into npc_text (ID, BroadcastTextID0) values (70011, 70011);
+replace into broadcast_text (ID, MaleText) values (70012, 'Error 132: Fatal Exception.'); replace into npc_text (ID, BroadcastTextID0) values (70012, 70012);
+replace into broadcast_text (ID, MaleText) values (70013, 'Error 134: Failed to open required archive...'); replace into npc_text (ID, BroadcastTextID0) values (70013, 70013);
+replace into broadcast_text (ID, MaleText) values (70014, 'Error 132: Access Violation.'); replace into npc_text (ID, BroadcastTextID0) values (70014, 70014);
 replace into broadcast_text (ID, MaleText) values (70015, 'Error... Shutting down.'); replace into npc_text (ID, BroadcastTextID0) values (70015, 70015);
+replace into broadcast_text (ID, MaleText) values (70016, 'System processing. Error. Error. Error.>'); replace into npc_text (ID, BroadcastTextID0) values (70016, 70016);
 
 
 update creature_template set scale = 0.8, type = 9 where entry = 80112;
