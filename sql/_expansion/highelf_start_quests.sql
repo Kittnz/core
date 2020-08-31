@@ -88,8 +88,14 @@ where entry = @quest_entry;
 
 replace into gameobject_template values 
 (3000200, 0, 3, 1248, 'Bundle of Wood', 0, 0, 0.7, 57, 3000200, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+update gameobject_template set flags = 4 where entry = 3000200;
+update gameobject_template set data0 = 43 where entry = 3000200;
+update gameobject_template set data2 = 0 where entry = 3000200;
+update gameobject_template set data3 = 1 where entry = 3000200;
+
 replace into `gameobject_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`, `patch_min`, `patch_max`) values 
-(3000200, 80200, 100, 1, 1, 1, 0, 0, 10);
+(3000200, 80200, -100, 1, 1, 1, 0, 0, 10);
 
 replace into item_template values
  ('80200', '0', '0', '0', 'Bundle of Wood', '', '929', '1', '0', '1', '0', '0', '0', '-1', '-1', '0',
@@ -914,10 +920,20 @@ replace into gameobject_template values
 replace into `gameobject_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`, `patch_min`, `patch_max`) values 
 (3000206, 80224, -100, 1, 1, 1, 0, 0, 10);
 
+update gameobject_template set flags = 4 where entry = 3000206;
+update gameobject_template set data0 = 43 where entry = 3000206;
+update gameobject_template set data2 = 0 where entry = 3000206;
+update gameobject_template set data3 = 1 where entry = 3000206;
+
 replace into gameobject_template values 
 (3000207, 0, 3, 28, 'Loch Modan Berry Bush', 0, 0, 0.3, 57, 3000207, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
 replace into `gameobject_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`, `patch_min`, `patch_max`) values 
 (3000207, 80225, -100, 1, 1, 1, 0, 0, 10);
+
+update gameobject_template set flags = 4 where entry = 3000207;
+update gameobject_template set data0 = 43 where entry = 3000207;
+update gameobject_template set data2 = 0 where entry = 3000207;
+update gameobject_template set data3 = 1 where entry = 3000207;
 
 replace into item_template values
  ('80224', '0', '0', '0', 'Loch Modan Pumpkin', '', '3225', '1', '0', '1', '0', '0', '0', '-1', '-1', '0',
