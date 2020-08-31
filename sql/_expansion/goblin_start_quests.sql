@@ -732,7 +732,7 @@ replace into item_template values
  '0', '1', NULL);      
 
 update creature_template set loot_id = 80117 where entry = 80117; 
-replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (80117, 80119, -50, 0, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (80117, 80119, -100, 0, 1, 1);
 	 
 SET @quest_entry = 80104;
 SET @quest_zone = 406;
