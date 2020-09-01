@@ -586,6 +586,10 @@ REPLACE INTO `creature_template` VALUES (80116, 0, 1070, 0, 0, 0, 'Risen Oilblaz
 
 update creature_template set loot_id = 80116 where entry = 80116; 
 replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (80116, 80114, 30, 0, 1, 1);
+
+-- update creature_loot_template set condition_id = 90100 where item = 80114;
+-- replace into `conditions` (`condition_entry`, `type`, `value1`, `value2`, flags) values ('90100', '2', '80114', '0', '1');
+
 replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (80116, 80112, -100, 1, 1, 1);
 
 update creature_template set 
@@ -738,8 +742,8 @@ replace into creature_loot_template (entry, item, chanceorquestchance, groupid, 
 SET @quest_entry = 80104;
 SET @quest_zone = 406;
 SET @title = 'The Other White Mech';
-SET @description = 'If there’s one thing I like better than cookin’ up buzzards, it’s cookin’ up brand-new mechanical marvels. There’s a whole butcher’s shop of parts out there in those burnt woods, and buddy, my mouth is waterin’ for a big old mechanical feast!\n\nI don’t know why the other expedition would leave so much behind and I don’t care - bring me some of those parts!';
-SET @objective = 'Collect 5 Mechanical Drumsticks from the mechanical chickens in the Scorched Stand and return to Sprat Nozzleton.';
+SET @description = 'If there’s one thing I like better than crackin\' skulls for profit, it’s cookin’ up brand-new mechanical marvels. There’s a whole butcher’s shop of parts out there in those burnt woods, and buddy, my mouth is waterin’ for a big old mechanical feast!\n\nI don’t know why the other expedition would leave so much behind and I don’t care - bring me some of those parts!';
+SET @objective = 'Collect 5 Mechanical Drumsticks from the mechanical chickens and return to Sprat Nozzleton.';
 SET @completetext = 'You know, sometimes farmers tell me their chickens are better than mine because their chickens don\'t blow up.\n\nPersonally, I think my chickens are better - for the exact same reason. Anyway, thanks for picking me up some parts.\n\nHopefully I can whip something up that might be helpful against... whatever is going on in this valley.';
 SET @incompletetext = 'Well, what are you waiting for?\n\nYou’re supposed to be some kind of big tough enforcer now, right? Go get me some parts!';
 SET @faction_id = 0;
@@ -1676,4 +1680,7 @@ replace into `creature` (`id`, `map`, `modelid`, `equipment_id`, `position_x`, `
 update creature set spawntimesecsmin = 60, spawntimesecsmax = 120 where id between 80101 and 80125;
 update creature set spawntimesecsmin = 1, spawntimesecsmax = 4 where id = 80100;
 
+-- Delete later:
 
+update gameobject set id = 2008164 where id = 1000261;
+-- Add door: 176594
