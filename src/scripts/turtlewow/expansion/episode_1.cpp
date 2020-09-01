@@ -820,7 +820,7 @@ bool GOHello_go_crypt_door(Player* pPlayer, GameObject* pGo)
     if (pPlayer->GetQuestStatus(QUEST_SHADOW_ON_THE_PLATEAU) == QUEST_STATUS_INCOMPLETE)
     {
         pGo->UseDoorOrButton();
-        pGo->SummonCreature(NPC_TOMB_SHADOW, 1626.74F, 1698.38F, 146.65F, 5.68F, TEMPSUMMON_TIMED_DESPAWN, 60 * 1000);
+        pGo->SummonCreature(NPC_TOMB_SHADOW, 1626.74F, 1698.38F, 146.65F, 5.708F, TEMPSUMMON_TIMED_DESPAWN, 60 * 1000);
 
         DoAfterTime(pPlayer, 20 * IN_MILLISECONDS,
             [GObjectGuid = pGo->GetObjectGuid()]()
