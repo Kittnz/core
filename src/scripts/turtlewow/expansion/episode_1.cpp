@@ -516,10 +516,6 @@ bool GOHello_go_farstrider_well(Player* pPlayer, GameObject* pGo)
         pPlayer->RemoveItemCurrency(EMPTY_BARREL, 1); 
         pPlayer->AddItem(FILLED_BARREL); 
         pPlayer->HandleEmote(EMOTE_ONESHOT_KNEEL);
-
-        pGo->SetRespawnTime(1 * MINUTE);
-        pGo->Despawn();
-        pGo->UpdateObjectVisibility();
     }
     else
         pPlayer->GetSession()->SendNotification("Requires Empty Barrel.");
