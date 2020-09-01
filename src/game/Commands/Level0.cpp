@@ -156,7 +156,6 @@ bool ChatHandler::HandleServerInfoCommand(char* /*args*/)
     uint32 maxQueuedClientsNum = sWorld.GetMaxQueuedSessionCount();
     std::string str = secsToTimeString(sWorld.GetUptime());
 
-    SendSysMessage("Core revision: " _FULLVERSION);
     PSendSysMessage("Players online: %i (%i queued). Max online: %i (%i queued).", activeClientsNum, queuedClientsNum, maxActiveClientsNum, maxQueuedClientsNum);
     PSendSysMessage(LANG_UPTIME, str.c_str());
 
