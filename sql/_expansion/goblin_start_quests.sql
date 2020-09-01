@@ -154,7 +154,7 @@ replace into broadcast_text (ID, MaleText) values (70001, 'Target unrecognized. 
 replace into broadcast_text (ID, MaleText) values (70002, 'Target acquired. Termination activated.'); replace into npc_text (ID, BroadcastTextID0) values (70002, 70002);
 replace into broadcast_text (ID, MaleText) values (70003, 'Threat detected, activating protocol 66.'); replace into npc_text (ID, BroadcastTextID0) values (70003, 70003);
 replace into broadcast_text (ID, MaleText) values (70004, 'Exterminate hostile.'); replace into npc_text (ID, BroadcastTextID0) values (70004, 70004);
-replace into broadcast_text (ID, MaleText) values (70005, 'Function IsFriend() not found. Exterminate.'); replace into npc_text (ID, BroadcastTextID0) values (70005, 70005);
+replace into broadcast_text (ID, MaleText) values (70005, 'Exterminate.'); replace into npc_text (ID, BroadcastTextID0) values (70005, 70005);
 
 replace into broadcast_text (ID, MaleText) values (70011, 'Error 132: Memory cannot be read.'); replace into npc_text (ID, BroadcastTextID0) values (70011, 70011);
 replace into broadcast_text (ID, MaleText) values (70012, 'Error 132: Fatal Exception.'); replace into npc_text (ID, BroadcastTextID0) values (70012, 70012);
