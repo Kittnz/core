@@ -924,5 +924,5 @@ REPLACE INTO `creature_loot_template` VALUES (12056, 30349, 100, 0, -30349, 1, 0
 REPLACE INTO `creature_loot_template` VALUES (12056, 30350, 100, 0, -30350, 1, 0, 0, 10);
 REPLACE INTO `creature_loot_template` VALUES (12056, 30351, 100, 0, -30351, 1, 0, 0, 10);
 
-
+delete from creature_questrelation where id = 16547;
  
