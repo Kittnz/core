@@ -94,7 +94,8 @@ enum GoblinStartingZone
     QUEST_GREEN_GOES_RED         = 80110,
     QUEST_SHADOW_ON_THE_PLATEAU  = 80107,
     ZONE_STONETALON_MOUNTAINS    = 406,
-    ZONE_DUROTAR                 = 14
+    ZONE_DUROTAR                 = 14,
+    NPC_TOMB_SHADOW              = 80120
 };
 
 class DemorphAfterTime : public BasicEvent
@@ -634,7 +635,7 @@ bool GossipSelect_npc_malvinah_sunblade(Player* pPlayer, Creature* pCreature, ui
             if (!creature)
                 return;
 
-            creature->HandleEmote(EMOTE_ONESHOT_CHEER);
+            creature->HandleEmote(EMOTE_ONESHOT_CRY);
             creature->MonsterSay("You've saved my sister!");
             creature->SummonCreature(NPC_ALISHA_SUNBLADE, -5628.99F, -4319.46F, 401.18F, 4.4F, TEMPSUMMON_TIMED_DESPAWN, 25 * 1000);
         });
@@ -814,9 +815,32 @@ CreatureAI* GetAI_npc_whizzbot(Creature *_Creature)
     return new npc_whizzbotAI(_Creature);
 }
 
+bool GOHello_go_crypt_door(Player* pPlayer, GameObject* pGo)
+{
+    if (pPlayer->GetQuestStatus(QUEST_SHADOW_ON_THE_PLATEAU) == QUEST_STATUS_INCOMPLETE)
+    {
+        pGo->UseDoorOrButton();
+        pGo->SummonCreature(NPC_TOMB_SHADOW, 1626.74F, 1698.38F, 146.65F, 5.68F, TEMPSUMMON_TIMED_DESPAWN, 60 * 1000);
+
+        DoAfterTime(pPlayer, 20 * IN_MILLISECONDS,
+            [GObjectGuid = pGo->GetObjectGuid()]()
+        {
+            Map* map = sMapMgr.FindMap(1);
+            GameObject* object = map->GetGameObject(GObjectGuid);
+            object->ResetDoorOrButton();
+        });
+    }
+    return false;
+}
+
 void AddSC_episode_1()
 {
     Script *newscript;
+
+    newscript = new Script;
+    newscript->Name = "go_crypt_door";
+    newscript->pGOHello = &GOHello_go_crypt_door;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_whizzbot";
