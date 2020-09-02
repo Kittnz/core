@@ -925,4 +925,156 @@ REPLACE INTO `creature_loot_template` VALUES (12056, 30350, 100, 0, -30350, 1, 0
 REPLACE INTO `creature_loot_template` VALUES (12056, 30351, 100, 0, -30351, 1, 0, 0, 10);
 
 delete from creature_questrelation where id = 16547;
+
+-- Anub
+
+
+DELETE FROM `script_texts` WHERE `entry` IN (-1533000, -1533001, -1533002, -1533003, -1533004, -1533005, -1533006, -1533007,
+                                             -1533008, -1000003, -1533010, -1533011, -1533012, -1533013, -1533014, -1533015,
+                                             -1533016, -1533044, -1533045, -1533046, -1533047, -1533048, -1533049, -1533050,
+                                             -1533065, -1533066, -1533067, -1533068, -1533069, -1533070, -1533071, -1533072,
+                                             -1533073, -1533074, -1533155, -1533154, -1533153, -1533051, -1533052, -1533053,
+                                             -1533054, -1533055, -1533056, -1533057, -1533058, -1533059, -1533060, -1533061,
+                                             -1533062, -1533063, -1533064, -1533119, -1533152, -1533040, -1533140, -1533141,
+                                             -1533142, -1533041, -1533042, -1533043, -1533109, -1533110, -1533111, -1533112,
+                                             -1533113, -1533114, -1533115, -1533117, -1533116, -1533105, -1533135, -1533094,
+                                             -1533095, -1533096, -1533097, -1533098, -1533099, -1533100, -1533101, -1533102,
+                                             -1533103, -1533104, -1533143, -1533145, -1533144, -1533146, -1533147, -1533148,
+                                             -1533130, -1533131, -1533132, -1533133, -1533075, -1533076, -1533077, -1533078,
+                                             -1533079, -1533080, -1533081, -1533017, -1533018, -1533019, -1533020, -1533021,
+                                             -1533022, -1533120, -1533121, -1533122, -1533123, -1533124, -1533125, -1533126,
+                                             -1533127, -1533128, -1533129, -1533159, -1533082, -1533083, -1533023, -1533024,
+                                             -1533025, -1533026, -1533027, -1533028, -1533151, -1533030, -1533031, -1533032,
+                                             -1533033, -1533034, -1533035, -1533149, -1533150, -1533036, -1533037, -1533038,
+                                             -1533039, -1533090, -1533091, -1533092, -1533093, -1533089, -1533084, -1533085,
+                                             -1533086, -1533087, -1533088, -1533009, -1533029, -1533052, -1533061, -1533073,
+                                             -1533047);
+
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8788 WHERE `ID` = 13004;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8785 WHERE `ID` = 13000;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8786 WHERE `ID` = 13002;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8787 WHERE `ID` = 13003;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8790 WHERE `ID` = 13006;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8791 WHERE `ID` = 13007;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8792 WHERE `ID` = 13008;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8793 WHERE `ID` = 13009;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8789 WHERE `ID` = 13005;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8794 WHERE `ID` = 12856;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8795 WHERE `ID` = 12857;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8796 WHERE `ID` = 12858;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8797 WHERE `ID` = 12859;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8800 WHERE `ID` = 12854;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8801 WHERE `ID` = 12855;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8798 WHERE `ID` = 12853;
+UPDATE `broadcast_text` SET `sound` = 8892 WHERE `ID` = 13010;
+UPDATE `broadcast_text` SET `type` = 6, `sound` = 8896 WHERE `ID` = 13014;
+UPDATE `broadcast_text` SET `type` = 6, `sound` = 8897 WHERE `ID` = 13015;
+UPDATE `broadcast_text` SET `type` = 6, `sound` = 8898 WHERE `ID` = 13016;
+UPDATE `broadcast_text` SET `sound` = 8895 WHERE `ID` = 13013;
+UPDATE `broadcast_text` SET `sound` = 8894 WHERE `ID` = 13014;
+UPDATE `broadcast_text` SET `sound` = 8893 WHERE `ID` = 13011;
+UPDATE `broadcast_text` SET `sound` = 8835 WHERE `ID` = 13051;
+UPDATE `broadcast_text` SET `sound` = 8836 WHERE `ID` = 13052;
+UPDATE `broadcast_text` SET `sound` = 8837 WHERE `ID` = 13053;
+UPDATE `broadcast_text` SET `sound` = 8839 WHERE `ID` = 13055;
+UPDATE `broadcast_text` SET `sound` = 8840 WHERE `ID` = 13056;
+UPDATE `broadcast_text` SET `sound` = 8841 WHERE `ID` = 13057;
+UPDATE `broadcast_text` SET `sound` = 8842 WHERE `ID` = 13058;
+UPDATE `broadcast_text` SET `sound` = 8843 WHERE `ID` = 13059;
+UPDATE `broadcast_text` SET `type` = 6, `sound` = 8844 WHERE `ID` = 13060;
+UPDATE `broadcast_text` SET `sound` = 8838 WHERE `ID` = 13054;
+UPDATE `broadcast_text` SET `sound` = 8899 WHERE `ID` = 13034;
+UPDATE `broadcast_text` SET `type` = 6, `sound` = 8903 WHERE `ID` = 13038;
+UPDATE `broadcast_text` SET `type` = 6, `sound` = 8904 WHERE `ID` = 13039;
+UPDATE `broadcast_text` SET `sound` = 8905 WHERE `ID` = 13040;
+UPDATE `broadcast_text` SET `sound` = 8902 WHERE `ID` = 13037;
+UPDATE `broadcast_text` SET `sound` = 8901 WHERE `ID` = 13036;
+UPDATE `broadcast_text` SET `sound` = 8900 WHERE `ID` = 13035;
+UPDATE `broadcast_text` SET `sound` = 8913 WHERE `ID` = 13097;
+UPDATE `broadcast_text` SET `type` = 6, `sound` = 8917 WHERE `ID` = 13101;
+UPDATE `broadcast_text` SET `type` = 6, `sound` = 8918 WHERE `ID` = 13102;
+UPDATE `broadcast_text` SET `type` = 6, `sound` = 8919 WHERE `ID` = 13103;
+UPDATE `broadcast_text` SET `sound` = 8916 WHERE `ID` = 13100;
+UPDATE `broadcast_text` SET `sound` = 8915 WHERE `ID` = 13099;
+UPDATE `broadcast_text` SET `sound` = 8914 WHERE `ID` = 13098;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8807 WHERE `ID` = 13029;
+UPDATE `broadcast_text` SET `type` = 1 WHERE `ID` = 13031;
+UPDATE `broadcast_text` SET `type` = 1 WHERE `ID` = 13032;
+UPDATE `broadcast_text` SET `type` = 1 WHERE `ID` = 13033;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8806 WHERE `ID` = 13027;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8805 WHERE `ID` = 13026;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8808 WHERE `ID` = 13028;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8825 WHERE `ID` = 13041;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8826 WHERE `ID` = 13042;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8827 WHERE `ID` = 13043;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8829 WHERE `ID` = 13045;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8830 WHERE `ID` = 13046;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8831 WHERE `ID` = 13047;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8832 WHERE `ID` = 13048;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8834 WHERE `ID` = 13050;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8833 WHERE `ID` = 13049;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8819 WHERE `ID` = 12999;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8809 WHERE `ID` = 12995;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8810 WHERE `ID` = 12996;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8811 WHERE `ID` = 12997;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8817 WHERE `ID` = 13021;
+UPDATE `broadcast_text` SET `sound` = 8818 WHERE `ID` = 13022;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8814 WHERE `ID` = 13019;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8812 WHERE `ID` = 13017;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8813 WHERE `ID` = 13018;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8815 WHERE `ID` = 13020;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8816 WHERE `ID` = 12998;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8824 WHERE `ID` = 12994;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8845 WHERE `ID` = 13061;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8846 WHERE `ID` = 13062;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8847 WHERE `ID` = 13063;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8851 WHERE `ID` = 13067;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8849 WHERE `ID` = 13065;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8850 WHERE `ID` = 13066;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8848 WHERE `ID` = 13064;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8909 WHERE `ID` = 13068;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8910 WHERE `ID` = 13069;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8912 WHERE `ID` = 13071;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8911 WHERE `ID` = 13070;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8852 WHERE `ID` = 13072;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8853 WHERE `ID` = 13073;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8854 WHERE `ID` = 13074;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8861 WHERE `ID` = 13080;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8862 WHERE `ID` = 13081;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8855 WHERE `ID` = 13075;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8856 WHERE `ID` = 13076;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8858 WHERE `ID` = 13077;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8859 WHERE `ID` = 13078;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8860 WHERE `ID` = 13079;
+UPDATE `broadcast_text` SET `type` = 3 WHERE `ID` = 13082;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8864 WHERE `ID` = 13083;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8866 WHERE `ID` = 13085;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8865 WHERE `ID` = 13084;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8802 WHERE `ID` = 13023;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8804 WHERE `ID` = 13025;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8803 WHERE `ID` = 13024;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8867 WHERE `ID` = 13086;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8868 WHERE `ID` = 13087;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8869 WHERE `ID` = 13088;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8877 WHERE `ID` = 13096;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8871 WHERE `ID` = 13090;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8870 WHERE `ID` = 13089;
+UPDATE `broadcast_text` SET `type` = 3 WHERE `ID` = 12156;
+UPDATE `broadcast_text` SET `type` = 3 WHERE `ID` = 12178;
+UPDATE `broadcast_text` SET `type` = 6, `sound` = 8873 WHERE `ID` = 13092;
+UPDATE `broadcast_text` SET `type` = 6, `sound` = 8874 WHERE `ID` = 13093;
+UPDATE `broadcast_text` SET `type` = 6, `sound` = 8875 WHERE `ID` = 13094;
+UPDATE `broadcast_text` SET `type` = 6, `sound` = 8876 WHERE `ID` = 13095;
+UPDATE `broadcast_text` SET `type` = 6, `sound` = 8820 WHERE `ID` = 12984;
+UPDATE `broadcast_text` SET `type` = 6, `sound` = 8821 WHERE `ID` = 12985;
+UPDATE `broadcast_text` SET `type` = 6, `sound` = 8822 WHERE `ID` = 12986;
+UPDATE `broadcast_text` SET `type` = 6, `sound` = 8823 WHERE `ID` = 12987;
+UPDATE `broadcast_text` SET `type` = 6 WHERE `ID` = 13150;
+UPDATE `broadcast_text` SET `type` = 6, `sound` = 8878 WHERE `ID` = 12990;
+UPDATE `broadcast_text` SET `type` = 6, `sound` = 8881 WHERE `ID` = 12988;
+UPDATE `broadcast_text` SET `type` = 6, `sound` = 8879 WHERE `ID` = 12991;
+UPDATE `broadcast_text` SET `type` = 6, `sound` = 8882 WHERE `ID` = 12989;
+UPDATE `broadcast_text` SET `type` = 6, `sound` = 8880 WHERE `ID` = 12992;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8799 WHERE `ID` = 12852;
+UPDATE `broadcast_text` SET `type` = 1, `sound` = 8872 WHERE `ID` = 13091;
  
