@@ -6244,8 +6244,17 @@ Pet* Unit::GetPet() const
 {
     if (ObjectGuid pet_guid = GetPetGuid())
     {
-        if (Pet* pet = GetMap()->GetPet(pet_guid))
-            return pet;
+		if (Map* map = FindMap())
+		{
+			if (Pet* pet = map->GetPet(pet_guid))
+			{
+				return pet;
+			}
+		}
+		else
+		{
+			sLog.outError("Unit::GetPet: %s does not have a map to get pet!", GetName());
+		}
 
         sLog.outError("Unit::GetPet: %s not exist.", pet_guid.GetString().c_str());
         const_cast<Unit*>(this)->SetPet(nullptr);
