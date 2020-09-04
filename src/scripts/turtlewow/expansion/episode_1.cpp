@@ -11,7 +11,7 @@ void DoAfterTime(Player* player, uint32 p_time, Functor&& function)
 enum AlahthalasQuests
 {
     ASSISTING_CHILDREN_OF_THE_SUN                      = 80250,
-    NPC_CUSTOM_OBJECTIVE_ASSISTING_CHILDREN_OF_THE_SUN = 80250,
+    NPC_CUSTOM_OBJECTIVE_ASSISTING_CHILDREN_OF_THE_SUN = 80229,
     TO_ALAHTHALAS                                      = 80251,
     CRYSTAL_CLEAR_TASK                                 = 80002,
     RELICS_IN_FERALAS                                  = 80003
