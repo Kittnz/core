@@ -8,12 +8,11 @@ void DoAfterTime(Player* player, uint32 p_time, Functor&& function)
     player->m_Events.AddEvent(new LambdaBasicEvent<Functor>(std::move(function)), player->m_Events.CalculateTime(p_time));
 }
 
-
 enum AlahthalasQuests
 {
     ASSISTING_CHILDREN_OF_THE_SUN                      = 80250,
     NPC_CUSTOM_OBJECTIVE_ASSISTING_CHILDREN_OF_THE_SUN = 80250,
-    TO_ALAHTHALAS                                      = 80001,
+    TO_ALAHTHALAS                                      = 80251,
     CRYSTAL_CLEAR_TASK                                 = 80002,
     RELICS_IN_FERALAS                                  = 80003
 };
@@ -144,7 +143,7 @@ bool GossipHello_npc_elsharin(Player* pPlayer, Creature* pCreature)
     }
 
     pPlayer->PrepareQuestMenu(pCreature->GetGUID());
-    pPlayer->SEND_GOSSIP_MENU(300001, pCreature->GetGUID());
+    pPlayer->SEND_GOSSIP_MENU(90371, pCreature->GetGUID());
     return true;
 }
 
@@ -159,8 +158,8 @@ bool GossipSelect_npc_elsharin(Player* pPlayer, Creature* pCreature, uint32 /*ui
         pPlayer->GetSafePosition(x, y, z);
         x += dis * cos(pPlayer->GetOrientation());
         y += dis * sin(pPlayer->GetOrientation());
-        pPlayer->SummonGameObject(3000001, x, y, z + 0.5F, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 30, true);
-        pPlayer->SummonGameObject(3000002, x, y, z - 1.5F, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 30, true);
+        pPlayer->SummonGameObject(3000220, x, y, z + 0.5F, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 30, true);
+        pPlayer->SummonGameObject(3000221, x, y, z - 1.5F, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 30, true);
 
         pCreature->HandleEmote(EMOTE_STATE_SUBMERGED);
     }
