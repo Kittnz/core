@@ -305,7 +305,7 @@ replace into gameobject_template values
 
 replace into `gameobject_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`, `patch_min`, `patch_max`)  values (3000223, 80241, -100, 1, 1, 1, 0, 0, 10);
 
-set @quest_entry = 80252;
+set @quest_entry = 80253;
 set @quest_zone = 1519;
 set @title = 'Relics in Feralas';
 set @description = 'Well well... So far you’ve proven useful so perhaps I can give you a more important task than fetching crystals.\n\nMy people descend from the Highborne, we were once the pinnacle of Kaldorei society, ruling a great empire… While few traces remain of that here in the Eastern Kingdoms, Kalimdor is filled to the brim with ruins, ruins that have not been looted!\n\nI need you to travel to the jungle of Feralas, once home to the city state of Eldre’thalas. In the area just south of Eldre’thalas there should be some ruins...\n\nI believe the locals call it the High Wilderness. Our scouts have reported that the Ogres holding the ruins have inadvertently dug up some valuable Arcane artifacts. I want you to go down there and get me those artifacts...\n\nBefore those big oafs crush them with their feet! Now get going, quickly!';
@@ -322,7 +322,7 @@ set @questgiver_id = 80231;
 set @quest_finisher = 80231;
 set @nextquest = 0;
 set @nextquestinchain = 0;
-set @prevquest = 80251;
+set @prevquest = 80252;
 set @RewChoiceItemId1 = 0; 
 set @RewChoiceItemId2 = 0; 
 set @RewChoiceItemId3 = 0;
