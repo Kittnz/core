@@ -558,6 +558,15 @@ nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
 objectivetext1='Horde players slain'  
 where entry = @quest_entry;	
 
+-- Additional NPCs:
+
+replace into `creature_template` values (80234, 0, 15517, 16047, 15523, 15531, 'Alah\'Thalas Magister', NULL, 0, 57, 58, 5842, 6078, 5340, 5461, 1742, 103, 0, 0.888888, 1.14286, 0, 20, 5, 0, 1, 1, 460, 593, 0, 262, 1, 2000, 2000, 8, 64, 0, 0, 0, 0, 0, 0, 65.7432, 90.3969, 100, 2, 0, 7437, 0, 7437, 0, 0, 0, 85, 0, 170, 15784, 15043, 0, 0, 0, 0, 357, 472, '', 1, 1, 0, 0, 3, 7437, 0, 0, 0, 0, 0, 'generic_spell_ai');
+update creature_template set faction = 371 where entry = 80234;
+update creature_template set type = 7 where entry = 80234;
+
+REPLACE INTO `creature_template` VALUES (80235, 0, 16036, 16038, 16182, 16184, 'Alah\'Thalas Citizen', NULL, 0, 10, 10, 413, 413, 0, 0, 20, 80, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 9, 13, 0, 62, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 16.808, 23.111, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, '');
+update creature_template set faction = 371 where entry = 80235;
+
 -- Everything below this line is a draft. Do not use!
 
 -- AIDING THE SUNBORNE // Night Elf
