@@ -28,7 +28,7 @@ set @quest_zone = 1519;
 set @title = 'Assisting the Children of the Sun';
 set @description = 'Bal\'a dash, malanore, $R! I represent a group of my people who seek to restore our former glory.\n\nWe seek to settle a new home for us and your assistance would be more than welcome.\n\nWhen you have the time, journey to Stormwind and speak to Caledra Dawnbreeze in the Stormwind Keep.\n\nTrust that you will be well compensated for your aid!';
 set @objective = 'Speak to Caledra Dawnbreeze in Stormwind Keep.';
-set @completetext = 'Ahh, so you seek to assist us in our effort?\n\nWonderful…\n\nOur people have set up a new settlement called Alah\'thalas on the coast north of Stratholme, bordering Quel\'thalas.However, setting up a new home is difficult and we have run into our share of issues.\n\nYour help will definitely be appreciated! I shall sum up our situation for you.';
+set @completetext = 'Ahh, so you seek to assist us in our effort?\n\nWonderful…\n\nOur people have set up a new settlement called Alah\'thalas on the coast north of Stratholme, bordering Quel\'thalas. However, setting up a new home is difficult and we have run into our share of issues.\n\nYour help will definitely be appreciated! I shall sum up our situation for you.';
 set @incompletetext = 'Yes? What can I do for you, stranger?';
 set @faction_id = 269;
 set @faction_count = 250;
@@ -214,6 +214,11 @@ update item_template set stackable = 10 where entry = 80240;
 replace into gameobject_template values 
 (3000222, 0, 3, 2971, 'Arcane Crystal', 0, 0, 0.5, 57, 3000222, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
 
+update gameobject_template set flags = 4 where entry = 3000222;
+update gameobject_template set data0 = 43 where entry = 3000222;
+update gameobject_template set data2 = 0 where entry = 3000222;
+update gameobject_template set data3 = 1 where entry = 3000222;
+
 replace into `gameobject_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`, `patch_min`, `patch_max`)  values (3000222, 80240, -100, 1, 1, 1, 0, 0, 10);
 
 set @quest_entry = 80252;
@@ -305,6 +310,11 @@ update item_template set stackable = 10 where entry = 80241;
 replace into gameobject_template values 
 (3000223, 0, 3, 2652, 'Arcane Artefact', 0, 0, 0.7, 57, 3000223, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
 
+update gameobject_template set flags = 4 where entry = 3000223;
+update gameobject_template set data0 = 43 where entry = 3000223;
+update gameobject_template set data2 = 0 where entry = 3000223;
+update gameobject_template set data3 = 1 where entry = 3000223;
+
 replace into `gameobject_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`, `patch_min`, `patch_max`)  values (3000223, 80241, -100, 1, 1, 1, 0, 0, 10);
 
 set @quest_entry = 80253;
@@ -317,7 +327,7 @@ set @incompletetext = 'What are you waiting for?\n\nEvery moment you delay some 
 set @faction_id = 269;
 set @faction_count = 250;
 set @xp_or_money = 4600;
-set @reward_money = 500; 
+set @reward_money = 5000; 
 set @quest_level = 50;
 set @min_level = 40;
 set @questgiver_id = 80231;
@@ -391,6 +401,7 @@ where entry = @quest_entry;
 REPLACE INTO `creature_template` VALUES (80232, 0, 18214, 0, 0, 0, 'Ranger-Captain Nasuna Dawnbringer', NULL, 0, 60, 60, 4146, 4146, 0, 0, 3791, 1576, 0, 1, 1.14286, 0, 20, 5, 0, 4, 1, 546, 705, 0, 272, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 61.732, 84.8815, 100, 7, 0, 10824, 0, 0, 0, 0, 0, 0, 0, 0, 15547, 12057, 11978, 0, 108240, 0, 139, 187, 'EventAI', 1, 3, 0, 0, 3, 10824, 0, 0, 0, 0, 0, '');
 
 update creature_template set faction = 371 where entry = 80232;
+update creature_template set rank = 1 where entry = 80232;
 update creature_template set npc_flags = 2 where entry = 80232;    
 
 replace into creature_model_info values (18214, 5875, 2, 2, 0, 0, 0);
@@ -574,6 +585,7 @@ REPLACE INTO `creature_template` VALUES (80237, 0, 18003, 0, 0, 0, 'Teslinah', N
 update creature_template set faction = 371 where entry = 80237;
 
 REPLACE INTO `creature_template` VALUES (80238, 0, 18329, 0, 0, 0, 'Joalar Solar', 'Innkeeper', 56551, 30, 30, 1605, 1605, 0, 0, 1200, 371, 135, 1, 1.14286, 0, 20, 5, 0, 0, 1, 42, 53, 0, 122, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 45.144, 62.073, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 6736, 0, 0, 0, 0, 524298, '');
+replace into creature_model_info values (18329, 5875, 2, 2, 0, 0, 0);
 
 REPLACE INTO `creature_template` VALUES (80239, 0, 10199, 0, 0, 0, 'Tanilaeh Sunkiss', 'Teleportation', 4660, 50, 50, 3517, 3517, 2103, 2103, 2344, 12, 19, 1, 1.14286, 0, 20, 5, 0, 0, 1, 85, 109, 0, 226, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 8, 0, 66.44, 91.355, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 5498, 0, 0, 0, 0, 524298, '');
 update creature_template set faction = 371 where entry = 80239;
