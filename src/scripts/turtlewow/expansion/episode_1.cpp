@@ -2,17 +2,18 @@
 #include "scriptPCH.h"
 #include "Utilities/EventProcessor.h"
 
-enum EI_Quests
+enum AlahthalasQuests
 {
-    INTRODUCTION          = 80000,
-    TO_ALAHTHALAS         = 80001,
-    CRYSTAL_CLEAR_TASK    = 80002,
-    RELICS_IN_FERALAS     = 80003
+    ASSISTING_CHILDREN_OF_THE_SUN                      = 80250,
+    NPC_CUSTOM_OBJECTIVE_ASSISTING_CHILDREN_OF_THE_SUN = 80250,
+    TO_ALAHTHALAS                                      = 80001,
+    CRYSTAL_CLEAR_TASK                                 = 80002,
+    RELICS_IN_FERALAS                                  = 80003
 };
 
 bool GossipHello_npc_caledra(Player* pPlayer, Creature* pCreature)
 {
-    if (pPlayer->GetQuestStatus(INTRODUCTION) == QUEST_STATUS_INCOMPLETE)
+    if (pPlayer->GetQuestStatus(ASSISTING_CHILDREN_OF_THE_SUN) == QUEST_STATUS_INCOMPLETE)
     {
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Greetings! I'm here to help.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     }
@@ -26,20 +27,102 @@ bool GossipSelect_npc_caledra(Player* pPlayer, Creature* pCreature, uint32 /*uiS
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1) 
     { 
-        // TODO: Make a timer.
+        DoAfterTime(pPlayer, 5 * IN_MILLISECONDS,
+            [CreatureGuid = pCreature->GetObjectGuid()]()
+        {
+            Map* map = sMapMgr.FindMap(0);
+            Creature* creature = map->GetCreature(CreatureGuid);
 
-        pCreature->MonsterSay("I’m glad that you wish to assist us...I will do my best to recap where we stand..");
-        pCreature->MonsterSay("I should explain the situation better. I am Caledra Dawnbreeze, formerly a Ranger-Captain of the Farstriders during the Second war, but now merely a citizen of Stormwind. After the loss of Quel\'thalas our people suffered deeply due to our addiction to magic...Some of us led by our former Prince Kael\'thas were seduced by dark magic and from what I\'ve heard they betrayed the Alliance siding with the creatures known as the Naga and left.");
-        pCreature->MonsterSay("I've heard other more...troubling stories but regardless, they are gone and we should focus on those of us who remain in the Alliance. A few months ago, I've managed to gather representatives of our people from all outlying settlements such as the Farstrider lodges.");
-        pCreature->MonsterSay("We've had a meeting where we agreed that the time has come for our people to come together so that we may create a home for ourselves where we could rebuild our people in time, a military lodge or cities belonging to other races simply isn't the way to rebuild.");
-        pCreature->MonsterSay("Thankfully Dalaran's surviving archives provided an opportunity, roughly a century ago an outpost was built on a peninsula near Quel'thalas. The Outpost is powered by an Arcane crystal infused with the energies of the Sunwell itself.");
-        pCreature->MonsterSay("In other words, it's a way for us to cope with the addiction to magic we've been suffering from. The crystal will not last forever but it will buy us time to find a cure. Our Scouts have managed to find the site, and they've confirmed that it is intact. Our people has begun to settle the Outpost and they have named it Alah'thalas, the Land of Light in our tongue.");
-        pCreature->MonsterSay("However, the buildings are old and have not been maintained properly, we lack the reagents and materials to sustain the enchantments that protect the Outpost. Likewise the local mine has been infested with creatures...In other words, any help you provide would be greatly appreciated!");
+            if (!creature)
+                return;
 
-        pCreature->HandleEmoteCommand(EMOTE_ONESHOT_TALK);
-        CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80003); // Caledra Gossip Trigger
-        if (cInfo != nullptr)
-            pPlayer->KilledMonster(cInfo, ObjectGuid());
+            creature->HandleEmote(EMOTE_ONESHOT_TALK);
+            creature->MonsterSay("I’m glad that you wish to assist us...I will do my best to recap where we stand..");
+        });
+
+        DoAfterTime(pPlayer, 10 * IN_MILLISECONDS,
+            [CreatureGuid = pCreature->GetObjectGuid()]()
+        {
+            Map* map = sMapMgr.FindMap(0);
+            Creature* creature = map->GetCreature(CreatureGuid);
+
+            if (!creature)
+                return;
+
+            creature->HandleEmote(EMOTE_ONESHOT_TALK);
+            creature->MonsterSay("I should explain the situation better. I am Caledra Dawnbreeze, formerly a Ranger-Captain of the Farstriders during the Second war, but now merely a citizen of Stormwind. After the loss of Quel\'thalas our people suffered deeply due to our addiction to magic...Some of us led by our former Prince Kael\'thas were seduced by dark magic and from what I\'ve heard they betrayed the Alliance siding with the creatures known as the Naga and left.");
+        });
+
+        DoAfterTime(pPlayer, 20 * IN_MILLISECONDS,
+            [CreatureGuid = pCreature->GetObjectGuid()]()
+        {
+            Map* map = sMapMgr.FindMap(0);
+            Creature* creature = map->GetCreature(CreatureGuid);
+
+            if (!creature)
+                return;
+
+            creature->HandleEmote(EMOTE_ONESHOT_TALK);
+            creature->MonsterSay("I've heard other more...troubling stories but regardless, they are gone and we should focus on those of us who remain in the Alliance. A few months ago, I've managed to gather representatives of our people from all outlying settlements such as the Farstrider lodges.");
+        });
+
+
+        DoAfterTime(pPlayer, 30 * IN_MILLISECONDS,
+            [CreatureGuid = pCreature->GetObjectGuid()]()
+        {
+            Map* map = sMapMgr.FindMap(0);
+            Creature* creature = map->GetCreature(CreatureGuid);
+
+            if (!creature)
+                return;
+
+            creature->HandleEmote(EMOTE_ONESHOT_TALK);
+            creature->MonsterSay("We've had a meeting where we agreed that the time has come for our people to come together so that we may create a home for ourselves where we could rebuild our people in time, a military lodge or cities belonging to other races simply isn't the way to rebuild.");
+        });
+
+
+        DoAfterTime(pPlayer, 40 * IN_MILLISECONDS,
+            [CreatureGuid = pCreature->GetObjectGuid()]()
+        {
+            Map* map = sMapMgr.FindMap(0);
+            Creature* creature = map->GetCreature(CreatureGuid);
+
+            if (!creature)
+                return;
+
+            creature->HandleEmote(EMOTE_ONESHOT_TALK);
+            creature->MonsterSay("Thankfully Dalaran's surviving archives provided an opportunity, roughly a century ago an outpost was built on a peninsula near Quel'thalas. The Outpost is powered by an Arcane crystal infused with the energies of the Sunwell itself.");
+        });
+
+        DoAfterTime(pPlayer, 50 * IN_MILLISECONDS,
+            [CreatureGuid = pCreature->GetObjectGuid()]()
+        {
+            Map* map = sMapMgr.FindMap(0);
+            Creature* creature = map->GetCreature(CreatureGuid);
+
+            if (!creature)
+                return;
+
+            creature->HandleEmote(EMOTE_ONESHOT_TALK);
+            creature->MonsterSay("In other words, it's a way for us to cope with the addiction to magic we've been suffering from. The crystal will not last forever but it will buy us time to find a cure. Our Scouts have managed to find the site, and they've confirmed that it is intact. Our people has begun to settle the Outpost and they have named it Alah'thalas, the Land of Light in our tongue.");
+        });
+
+        DoAfterTime(pPlayer, 60 * IN_MILLISECONDS,
+            [CreatureGuid = pCreature->GetObjectGuid(), player = pPlayer]()
+        {
+            Map* map = sMapMgr.FindMap(0);
+            Creature* creature = map->GetCreature(CreatureGuid);
+
+            if (!creature)
+                return;
+
+            CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(NPC_CUSTOM_OBJECTIVE_ASSISTING_CHILDREN_OF_THE_SUN);
+            if (cInfo != nullptr)
+                player->KilledMonster(cInfo, ObjectGuid());
+
+            creature->HandleEmote(EMOTE_ONESHOT_TALK);
+            creature->MonsterSay("However, the buildings are old and have not been maintained properly, we lack the reagents and materials to sustain the enchantments that protect the Outpost. Likewise the local mine has been infested with creatures...In other words, any help you provide would be greatly appreciated!");
+        });
     }
 
     pPlayer->CLOSE_GOSSIP_MENU();
