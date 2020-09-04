@@ -2,6 +2,13 @@
 #include "scriptPCH.h"
 #include "Utilities/EventProcessor.h"
 
+template <typename Functor>
+void DoAfterTime(Player* player, uint32 p_time, Functor&& function)
+{
+    player->m_Events.AddEvent(new LambdaBasicEvent<Functor>(std::move(function)), player->m_Events.CalculateTime(p_time));
+}
+
+
 enum AlahthalasQuests
 {
     ASSISTING_CHILDREN_OF_THE_SUN                      = 80250,
@@ -221,12 +228,6 @@ bool GOSelect_go_fm_acquisition(Player* pPlayer, GameObject* pGo, uint32 sender,
 }
 
 // Durotar
-
-template <typename Functor>
-void DoAfterTime(Player* player, uint32 p_time, Functor&& function)
-{
-    player->m_Events.AddEvent(new LambdaBasicEvent<Functor>(std::move(function)), player->m_Events.CalculateTime(p_time));
-}
 
 enum RefugeeNPCs
 {
