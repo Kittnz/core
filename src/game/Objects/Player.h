@@ -1087,6 +1087,7 @@ class MANGOS_DLL_SPEC Player final: public Unit
         void SetIgnoringTitles(bool shouldIgnore);
         bool IsScarletCrusade();
         void RewardBountyHuntKill(Unit* pVictim);
+        void RewardExpansionPvPQuest(Unit* pVictim);
         void MoveItemFromInventory(uint8 bag, uint8 slot, bool update);
         bool IsInMainCity();
         void SetFlying(bool apply);
