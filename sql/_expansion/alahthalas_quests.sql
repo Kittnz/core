@@ -238,7 +238,7 @@ set @questgiver_id = 80231;
 set @quest_finisher = 80231;
 set @nextquest = 0;
 set @nextquestinchain = 0;
-set @prevquest = 80251;
+set @prevquest = 80251; -- Change it later to "Welcome to Alah'Thalas"
 set @RewChoiceItemId1 = 0; 
 set @RewChoiceItemId2 = 0; 
 set @RewChoiceItemId3 = 0;
@@ -601,7 +601,95 @@ REPLACE INTO `creature_template` VALUES (80506, 1, 10315, 0, 0, 0, 'Arcane Guard
 update creature_template set scale = 1.5 where entry = 80506;
 update creature_template set loot_id = 0 where entry = 80506;
 
+-- Welcome to Alah’Thalas
+
+replace into gameobject_template values 
+(3000224, 0, 1, 29624, 'Translocation Orb', 35, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_translocation_orb');
+
+replace into`creature_template` values (80242, 0, 0, 0, 0, 0, 'Quest 80256 Custom Objective', '', 0, 5, 5, 319, 319, 0, 0, 852, 84, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 24, 31, 0, 90, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 31.856, 43.802, 100, 7, 4096, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 4276, 0, 0, 0, 0, 2, '');
+
+set @quest_entry = 80256;
+set @quest_zone = 1519;
+set @title = 'Welcome to Alah’Thalas';
+set @description = 'I am Tanilaeh Sunkiss, Ley-technician and operator of the Portal connecting Alah’thalas to the Stormwind Mage tower, when you need to return to Stormwind, I am the one you should speak to.\n\nThis place is the Golden Dawn Institute, here we house lodgings and welcome new travelers. In front of me is the Orb of Translocation, you can use that to go down to Alah’thalas proper.\n\nArcanist Anu’delen in the tower below us has requested help with a problem in the mine. There is also  innkeeper Joalar in the institute should you wish for a meal or to attune your hearthstone here.\n\nThe large floating structure is known as the Citadel of the Sun. It houses the new Magistry, the headquarters of the Rangers, and the seat of the Council.\n\nAnyway I shouldn’t keep you anymore, go speak to the Arcanist!';
+set @objective = 'Speak to Arcanist Anu’delen in the tower below the Golden Dawn Institute, use the Orb of Translocation to teleport to the land below.';
+set @completetext = 'You wish to assist me?... I suppose I can spare a moment to explain what you must do.';
+set @incompletetext = 'More interruptions! What is it?';
+set @faction_id = 269;
+set @faction_count = 25;
+set @xp_or_money = 600;
+set @reward_money = 100; 
+set @quest_level = 10;
+set @min_level = 10;
+set @questgiver_id = 80239;
+set @quest_finisher = 80231;
+set @nextquest = 0;
+set @nextquestinchain = 0;
+set @prevquest = 80251;
+set @RewChoiceItemId1 = 0; 
+set @RewChoiceItemId2 = 0; 
+set @RewChoiceItemId3 = 0;
+set @RewChoiceItemId4 = 0; 
+set @RewChoiceItemCount1 = 0;
+set @RewChoiceItemCount2 = 0;
+set @RewChoiceItemCount3 = 0;
+set @RewChoiceItemCount4 = 0;
+set @reward_item_1 = 0;
+set @reward_item_2 = 0; 
+set @reward_item_3 = 0;
+set @reward_item_4 = 0;
+set @reward_item_1_count = 0;
+set @reward_item_2_count = 0;
+set @reward_item_3_count = 0;
+set @reward_item_4_count = 0;
+set @creature_to_kill_1 = 80256;
+set @creature_to_kill_2 = 0;
+set @creature_to_kill_3 = 0;
+set @creature_to_kill_4 = 0;
+set @creature_to_kill_1_count = 1;
+set @creature_to_kill_2_count = 0;
+set @creature_to_kill_3_count = 0;
+set @creature_to_kill_4_count = 0;
+set @required_item_1 = 0; 
+set @required_item_2 = 0;
+set @required_item_3 = 0;
+set @required_item_4 = 0;
+set @required_item_1_count = 0;
+set @required_item_2_count = 0;
+set @required_item_3_count = 0;
+set @required_item_4_count = 0;
+
+replace into quest_template values 
+
+(@quest_entry, '0', '2', @quest_zone, @min_level,  '0', @quest_level, '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @title, @description, @objective, @completetext, @incompletetext, '', '', '', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @faction_id, '0', '0', '0', '0', @faction_count, '0', '0', '0', '0', '0', @xp_or_money, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', 0, 0);
+     
+replace into creature_questrelation (id, quest, patch_min, patch_max) values (@questgiver_id, @quest_entry,'0','10'); 
+replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (@quest_finisher, @quest_entry,'0','10');
+	 
+update quest_template set 
+rewitemid1 = @reward_item_1, rewitemcount1 = @reward_item_1_count,
+rewitemid2 = @reward_item_2, rewitemcount2 = @reward_item_2_count,
+rewitemid3 = @reward_item_3, rewitemcount3 = @reward_item_3_count,
+rewitemid4 = @reward_item_4, rewitemcount4 = @reward_item_4_count,
+RewChoiceItemId1 = @RewChoiceItemId1, RewChoiceItemCount1 = @RewChoiceItemCount1,
+RewChoiceItemId2 = @RewChoiceItemId2, RewChoiceItemCount2 = @RewChoiceItemCount2,
+RewChoiceItemId3 = @RewChoiceItemId3, RewChoiceItemCount3 = @RewChoiceItemCount3,
+RewChoiceItemId4 = @RewChoiceItemId4, RewChoiceItemCount4 = @RewChoiceItemCount4,
+ReqCreatureOrGOId1 = @creature_to_kill_1, ReqCreatureOrGOCount1 = @creature_to_kill_1_count,
+ReqCreatureOrGOId2 = @creature_to_kill_2, ReqCreatureOrGOCount2 = @creature_to_kill_2_count,
+ReqCreatureOrGOId3 = @creature_to_kill_3, ReqCreatureOrGOCount3 = @creature_to_kill_3_count,
+ReqCreatureOrGOId4 = @creature_to_kill_4, ReqCreatureOrGOCount4 = @creature_to_kill_4_count,
+reqitemid1 = @required_item_1, reqitemcount1 = @required_item_1_count,
+reqitemid2 = @required_item_2, reqitemcount2 = @required_item_2_count,
+reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
+reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
+nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
+nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
+objectivetext1='Use the Orb of Translocation'  
+where entry = @quest_entry;	
+
 -- Everything below this line is a draft. Do not use!
+
 
 -- AIDING THE SUNBORNE // Night Elf
 
