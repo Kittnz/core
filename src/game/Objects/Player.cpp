@@ -19488,6 +19488,9 @@ void Player::RewardSinglePlayerAtKill(Unit* pVictim)
         // Turtle WoW custom feature:
         if (sWorld.getConfig(CONFIG_BOOL_BOUNTY))
             RewardBountyHuntKill(pVictim);  
+
+        if (sWorld.getConfig(CONFIG_BOOL_EXPANSION_CONTENT))
+            RewardExpansionPvPQuest(pVictim);
     }    
 }
 
@@ -21882,6 +21885,17 @@ void Player::RewardBountyHuntKill(Unit* pVictim)
             dummy_player = DUMMY_NPC_ALLIANCE_PLAYER;
 
         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(dummy_player);
+
+        if (cInfo != nullptr)
+            KilledMonster(cInfo, ObjectGuid());
+    }
+}
+
+void Player::RewardExpansionPvPQuest(Unit* pVictim)
+{
+    if ((GetQuestStatus(80255) == QUEST_STATUS_INCOMPLETE))
+    {
+        CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80233);
 
         if (cInfo != nullptr)
             KilledMonster(cInfo, ObjectGuid());

@@ -204,6 +204,8 @@ replace into `creature_template` values (80231, 0, 16037, 0, 0, 0, 'Arcanist Anu
 
 update creature_template set faction = 371 where entry = 80230;
 
+replace into creature_model_info values (16037, 5875, 2, 2, 0, 0, 0);
+
 replace into item_template values
 ('80240', '0', '0', '0', 'Arcane Crystal', '', '3273', '1', '0', '1', '0', '0', '0', '-1', '-1', '0','0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0','0','0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0','0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0','0', '-1', '0','-1', '4', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '1', NULL);
 
@@ -384,485 +386,328 @@ nextquestid = @nextquest, RewOrReqMoney = @reward_money,
 nextquestinchain = @nextquestinchain, prevquestid = @prevquest
 where entry = @quest_entry;	
 
--- Everything below this line is a draft. Do not use!
+-- Smashing Zul'Mashar
 
-('80004', '0', '0', '0', 'Silver Whistle', '', '31205', '0', '0', '1', '0', '0', '0', '-1', '-1', '0','0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0','0','0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0','0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0','0', '-1', '0','-1', '4', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '1', NULL);
+REPLACE INTO `creature_template` VALUES (80232, 0, 18214, 0, 0, 0, 'Ranger-Captain Nasuna Dawnbringer', NULL, 0, 60, 60, 4146, 4146, 0, 0, 3791, 1576, 0, 1, 1.14286, 0, 20, 5, 0, 4, 1, 546, 705, 0, 272, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 61.732, 84.8815, 100, 7, 0, 10824, 0, 0, 0, 0, 0, 0, 0, 0, 15547, 12057, 11978, 0, 108240, 0, 139, 187, 'EventAI', 1, 3, 0, 0, 3, 10824, 0, 0, 0, 0, 0, '');
 
--- AIDING THE SUNBORNE // Night Elf
+update creature_template set faction = 371 where entry = 80232;
+update creature_template set npc_flags = 2 where entry = 80232;    
 
-SET @quest_entry = 80000;
-SET @quest_zone = 141;
-SET @faction_id = 269;
-SET @faction_count = 250;
-SET @xp_or_money = 650;
-SET @quest_level = 15;
-SET @min_level = 10;
-SET @questgiver_id = 80002;
-SET @quest_finisher = 1752;
-SET @nextquest = 80001;
-SET @nextquestinchain = 80001;
-SET @prevquest = 0;
-SET @reward_item_1 = 0;
-SET @reward_item_2 = 0;
-SET @reward_item_3 = 0;
-SET @reward_item_4 = 0;
-SET @reward_item_1_count = 0;
-SET @reward_item_2_count = 0;
-SET @reward_item_3_count = 0;
-SET @reward_item_4_count = 0;
-SET @creature_to_kill_1 = 80003;
-SET @creature_to_kill_2 = 0;
-SET @creature_to_kill_3 = 0;
-SET @creature_to_kill_4 = 0;
-SET @creature_to_kill_1_count = 1;
-SET @creature_to_kill_2_count = 0;
-SET @creature_to_kill_3_count = 0;
-SET @creature_to_kill_4_count = 0;
-SET @required_item_1 = 0;
-SET @required_item_2 = 0;
-SET @required_item_3 = 0;
-SET @required_item_4 = 0;
-SET @required_item_1_count = 0;
-SET @required_item_2_count = 0;
-SET @required_item_3_count = 0;
-SET @required_item_4_count = 0;
+replace into creature_model_info values (18214, 5875, 2, 2, 0, 0, 0);
 
-replace into quest_template (entry, patch, Method, ZoneOrSort, MinLevel, QuestLevel, MaxLevel, Type, RequiredClasses, RequiredRaces, RequiredSkill,
-RequiredSkillValue, RepObjectiveFaction, RepObjectiveValue, RequiredMinRepFaction, RequiredMinRepValue,RequiredMaxRepFaction,
-RequiredMaxRepValue, SuggestedPlayers, LimitTime, QuestFlags, SpecialFlags, PrevQuestId, NextQuestId, ExclusiveGroup, NextQuestInChain,
-SrcItemId, SrcItemCount, SrcSpell, Title, Details, Objectives, OfferRewardText, RequestItemsText, EndText, ObjectiveText1, ObjectiveText2,
-ObjectiveText3, ObjectiveText4, ReqItemId1, ReqItemId2, ReqItemId3, ReqItemId4, ReqItemCount1, ReqItemCount2, ReqItemCount3,
-ReqItemCount4, ReqSourceId1, ReqSourceId2, ReqSourceId3, ReqSourceId4, ReqSourceCount1, ReqSourceCount2, ReqSourceCount3,
-ReqSourceCount4, ReqCreatureOrGOId1, ReqCreatureOrGOId2, ReqCreatureOrGOId3, ReqCreatureOrGOId4, ReqCreatureOrGOCount1,
-ReqCreatureOrGOCount2, ReqCreatureOrGOCount3, ReqCreatureOrGOCount4, ReqSpellCast1, ReqSpellCast2, ReqSpellCast3,
-ReqSpellCast4, RewChoiceItemId1, RewChoiceItemId2, RewChoiceItemId3, RewChoiceItemId4, RewChoiceItemId5, RewChoiceItemId6,
-RewChoiceItemCount1, RewChoiceItemCount2, RewChoiceItemCount3, RewChoiceItemCount4, RewChoiceItemCount5, RewChoiceItemCount6,
-RewItemId1, RewItemId2, RewItemId3, RewItemId4, RewItemCount1, RewItemCount2, RewItemCount3, RewItemCount4, RewRepFaction1,
-RewRepFaction2, RewRepFaction3, RewRepFaction4, RewRepFaction5, RewRepValue1, RewRepValue2, RewRepValue3, RewRepValue4,
-RewRepValue5, RewOrReqMoney, RewMoneyMaxLevel, RewSpell, RewSpellCast, RewMailTemplateId, RewMailMoney, RewMailDelaySecs,
-PointMapId, PointX, PointY, PointOpt, DetailsEmote1, DetailsEmote2, DetailsEmote3, DetailsEmote4, DetailsEmoteDelay1,
-DetailsEmoteDelay2, DetailsEmoteDelay3, DetailsEmoteDelay4, IncompleteEmote, CompleteEmote, OfferRewardEmote1, OfferRewardEmote2,
-OfferRewardEmote3, OfferRewardEmote4, OfferRewardEmoteDelay1, OfferRewardEmoteDelay2, OfferRewardEmoteDelay3,OfferRewardEmoteDelay4,
-StartScript, CompleteScript) values
+set @quest_entry = 80254;
+set @quest_zone = 1519;
+set @title = 'Smashing Zul’Mashar';
+set @description = 'Greetings, $N! I see that you have done quite a lot of work for Anu’delen, but now the time has come for something more serious than fetching artifacts.\n\nAlah’thalas is not far from the Scourge or the Amani, after the fall of Quel’thalas our people can no longer keep the rampaging Forest Trolls in check.\n\nOur scouts have reported that the Troll population of Zul’mashar in the Eastern Plaguelands is being converted to the Undead at a rapid pace.\n\nWe cannot have this, Forest Trolls are bad enough, we don’t need to deal with an Undead version.\n\nGo there, exterminate both the living and the dead, we can’t allow those beasts to go out of control.';
+set @objective = 'Venture to Zul’mashar in the Eastern Plaguelands and kill Mossflayer Scouts, Mossflayer Shadowhunter, Infected Mossflayer, Mossflayer Canniva, five each.';
+set @completetext = 'Well done friend, well done indeed… Keep this up and we will continue the work started by our ancestors.\n\nThe vile Forest Trolls and the Scourge cannot be allowed to grow in numbers, it is our duty to keep them both down and eventually exterminate them.';
+set @incompletetext = 'Well then? Is the deed done?';
+set @faction_id = 269;
+set @faction_count = 500;
+set @xp_or_money = 8000;
+set @reward_money = 500; 
+set @quest_level = 58;
+set @min_level = 58;
+set @questgiver_id = 80232;
+set @quest_finisher = 80232;
+set @nextquest = 0;
+set @nextquestinchain = 0;
+set @prevquest = 80253;
+set @RewChoiceItemId1 = 0; 
+set @RewChoiceItemId2 = 0; 
+set @RewChoiceItemId3 = 0;
+set @RewChoiceItemId4 = 0; 
+set @RewChoiceItemCount1 = 0;
+set @RewChoiceItemCount2 = 0;
+set @RewChoiceItemCount3 = 0;
+set @RewChoiceItemCount4 = 0;
+set @reward_item_1 = 0;
+set @reward_item_2 = 0; 
+set @reward_item_3 = 0;
+set @reward_item_4 = 0;
+set @reward_item_1_count = 0;
+set @reward_item_2_count = 0;
+set @reward_item_3_count = 0;
+set @reward_item_4_count = 0;
+set @creature_to_kill_1 = 8560;
+set @creature_to_kill_2 = 8561;
+set @creature_to_kill_3 = 12261;
+set @creature_to_kill_4 = 8562;
+set @creature_to_kill_1_count = 5;
+set @creature_to_kill_2_count = 5;
+set @creature_to_kill_3_count = 5;
+set @creature_to_kill_4_count = 5;
+set @required_item_1 = 0; 
+set @required_item_2 = 0;
+set @required_item_3 = 0;
+set @required_item_4 = 0;
+set @required_item_1_count = 0;
+set @required_item_2_count = 0;
+set @required_item_3_count = 0;
+set @required_item_4_count = 0;
 
-(@quest_entry, '0', '2', @quest_zone, @min_level, @quest_level, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', 
+replace into quest_template values 
 
-'Aiding the Sunborne', 
-
-'Ishnu-alah, traveller! While our people struggle with problems on our borders, they\'re not the only ones.\n\nSeven thousand years ago, my husband was exiled from Hyjal due to his use of the outlawed Arcane magics.\n\nHe and the other exiles created a new kingdom called Quel\'thalas, during the last conflict their home was entirely razed, and almost their entire people slaughtered.\n\nRecently I\'ve heard from our new allies across the sea that a group of them intends to consolidate and settle a new home... While we have our reservations about their past, they are still family and they should not bear the scorn for the actions of their ancestors. If you have the time or will, please assist them!\n\nI\'ve been told that Caledra Dawnbreeze in Stormwind Keep is the representative of this movement.\n\nOh and there\'s no need to mention me. It would appear far more amicable if the offer came from yourself.', 
-
-'Speak to Caledra Dawnbreeze in Stormwind Keep.', 
-
-'Y-You seek to assist us in our efforts? Truly?\n\nI am surprised but I would never turn away a helpful hand...I apologize for my earlier outburst, the Kaldorei in this city have not been kind to my people.\n\nPerhaps by working together we could change that in time, we are both part of the Alliance after all!\n\nOur people have setup a new settlement called \'thalas on the coast north of Stratholme, bordering Quel\'thalas.\n\nHowever, setting up a new home will be difficult and we have run into our share of issues. We\'re grateful for your help! I shall sum up our current situation for you.', 
-
-'What is it Kaldorei? I do not have the time for your lectures or scorn.', 
-
-'', '', '', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @faction_id, '0', '0', '0', '0', @faction_count, '0', '0', '0', '0', '0', @xp_or_money, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', 0, 0);
-      
+(@quest_entry, '0', '2', @quest_zone, @min_level,  '0', @quest_level, '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @title, @description, @objective, @completetext, @incompletetext, '', '', '', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @faction_id, '0', '0', '0', '0', @faction_count, '0', '0', '0', '0', '0', @xp_or_money, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', 0, 0);
+     
+replace into creature_questrelation (id, quest, patch_min, patch_max) values (@questgiver_id, @quest_entry,'0','10'); 
+replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (@quest_finisher, @quest_entry,'0','10');
+	 
 update quest_template set 
 rewitemid1 = @reward_item_1, rewitemcount1 = @reward_item_1_count,
 rewitemid2 = @reward_item_2, rewitemcount2 = @reward_item_2_count,
 rewitemid3 = @reward_item_3, rewitemcount3 = @reward_item_3_count,
 rewitemid4 = @reward_item_4, rewitemcount4 = @reward_item_4_count,
+RewChoiceItemId1 = @RewChoiceItemId1, RewChoiceItemCount1 = @RewChoiceItemCount1,
+RewChoiceItemId2 = @RewChoiceItemId2, RewChoiceItemCount2 = @RewChoiceItemCount2,
+RewChoiceItemId3 = @RewChoiceItemId3, RewChoiceItemCount3 = @RewChoiceItemCount3,
+RewChoiceItemId4 = @RewChoiceItemId4, RewChoiceItemCount4 = @RewChoiceItemCount4,
 ReqCreatureOrGOId1 = @creature_to_kill_1, ReqCreatureOrGOCount1 = @creature_to_kill_1_count,
 ReqCreatureOrGOId2 = @creature_to_kill_2, ReqCreatureOrGOCount2 = @creature_to_kill_2_count,
 ReqCreatureOrGOId3 = @creature_to_kill_3, ReqCreatureOrGOCount3 = @creature_to_kill_3_count,
 ReqCreatureOrGOId4 = @creature_to_kill_4, ReqCreatureOrGOCount4 = @creature_to_kill_4_count,
-reqitemid1 = @required_item_1, rewitemcount1 = @required_item_1_count,
-reqitemid2 = @required_item_2, rewitemcount2 = @required_item_2_count,
-reqitemid3 = @required_item_3, rewitemcount3 = @required_item_3_count,
-reqitemid4 = @required_item_4, rewitemcount4 = @required_item_4_count
-where entry = @quest_entry;
+reqitemid1 = @required_item_1, reqitemcount1 = @required_item_1_count,
+reqitemid2 = @required_item_2, reqitemcount2 = @required_item_2_count,
+reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
+reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
+nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
+nextquestinchain = @nextquestinchain, prevquestid = @prevquest
+where entry = @quest_entry;	
 
-update quest_template set nextquestid = @nextquest where entry = @quest_entry;
-update quest_template set nextquestinchain = @nextquestinchain where entry = @quest_entry;
-update quest_template set prevquestid = @prevquest where entry = @quest_entry;
-update quest_template set ObjectiveText1 = 'Listen to Caledra\'s Story' where entry = @quest_entry;
-update quest_template set RequiredRaces = 8 where entry = @quest_entry;
-	  
-replace into creature_questrelation (id, quest, patch_min, patch_max) values (@questgiver_id, @quest_entry,'10','10');
-replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (@quest_finisher, @quest_entry,'10','10');   
+-- Securing the Supply Lines
 
--- SMASHING ZUL’MASHAR
+replace into`creature_template` values (80233, 0, 0, 0, 0, 0, 'Quest 80255 Custom Objective', '', 0, 5, 5, 319, 319, 0, 0, 852, 84, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 24, 31, 0, 90, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 31.856, 43.802, 100, 7, 4096, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 4276, 0, 0, 0, 0, 2, '');
 
-SET @quest_entry = 80004;
-SET @quest_zone = 1519; 
-SET @faction_id = 269;
-SET @faction_count = 500;
-SET @xp_or_money = 8000;  
-SET @reward_money = 25000;  
-SET @quest_level = 58;
-SET @min_level = 58;
-SET @questgiver_id = 80006; 
-SET @quest_finisher = 80006;
-SET @nextquest = 0;
-SET @nextquestinchain = 0;
-SET @prevquest = 80003;
-SET @reward_item_1 = 0;
-SET @reward_item_2 = 0;
-SET @reward_item_3 = 0;
-SET @reward_item_4 = 0;
-SET @reward_item_1_count = 0;
-SET @reward_item_2_count = 0;
-SET @reward_item_3_count = 0;
-SET @reward_item_4_count = 0;
-SET @creature_to_kill_1 = 8560;
-SET @creature_to_kill_2 = 8561;
-SET @creature_to_kill_3 = 12261;
-SET @creature_to_kill_4 = 8562;
-SET @creature_to_kill_1_count = 5;
-SET @creature_to_kill_2_count = 5;
-SET @creature_to_kill_3_count = 5;
-SET @creature_to_kill_4_count = 5;
-SET @required_item_1 = 0;
-SET @required_item_2 = 0;
-SET @required_item_3 = 0;
-SET @required_item_4 = 0;
-SET @required_item_1_count = 0;
-SET @required_item_2_count = 0;
-SET @required_item_3_count = 0;
-SET @required_item_4_count = 0;
+set @quest_entry = 80255;
+set @quest_zone = 1519;
+set @title = 'Securing the Supply Lines';
+set @description = 'Greetings $R and thank you for assisting Alah’thalas’s efforts.\n\nWe’re happy to be a part of the Alliance, unfortunately our allegiance with you has put us at odds with the Horde.\n\nEven now Horde members are raiding and pillaging our supply lines and putting our territories and Alah’thalas itself at risk!\n\nPut an end to them $R it is imperative for our survival.';
+set @objective = 'Kill 8 Horde Players.';
+set @completetext = 'Thank you $R, I can’t imagine that this task was easy but your help is greatly appreciated. Without vital supplies, Alah’thalas cannot become self-sufficient.';
+set @incompletetext = 'How are you dealing with your mission?';
+set @faction_id = 269;
+set @faction_count = 250;
+set @xp_or_money = 8000;
+set @reward_money = 1050; 
+set @quest_level = 20;
+set @min_level = 20;
+set @questgiver_id = 80232;
+set @quest_finisher = 80232;
+set @nextquest = 0;
+set @nextquestinchain = 0;
+set @prevquest = 80254;
+set @RewChoiceItemId1 = 0; 
+set @RewChoiceItemId2 = 0; 
+set @RewChoiceItemId3 = 0;
+set @RewChoiceItemId4 = 0; 
+set @RewChoiceItemCount1 = 0;
+set @RewChoiceItemCount2 = 0;
+set @RewChoiceItemCount3 = 0;
+set @RewChoiceItemCount4 = 0;
+set @reward_item_1 = 0;
+set @reward_item_2 = 0; 
+set @reward_item_3 = 0;
+set @reward_item_4 = 0;
+set @reward_item_1_count = 0;
+set @reward_item_2_count = 0;
+set @reward_item_3_count = 0;
+set @reward_item_4_count = 0;
+set @creature_to_kill_1 = 80233;
+set @creature_to_kill_2 = 0;
+set @creature_to_kill_3 = 0;
+set @creature_to_kill_4 = 0;
+set @creature_to_kill_1_count = 8;
+set @creature_to_kill_2_count = 0;
+set @creature_to_kill_3_count = 0;
+set @creature_to_kill_4_count = 0;
+set @required_item_1 = 0; 
+set @required_item_2 = 0;
+set @required_item_3 = 0;
+set @required_item_4 = 0;
+set @required_item_1_count = 0;
+set @required_item_2_count = 0;
+set @required_item_3_count = 0;
+set @required_item_4_count = 0;
 
-replace into quest_template (entry, patch, Method, ZoneOrSort, MinLevel, QuestLevel, MaxLevel, Type, RequiredClasses, RequiredRaces, RequiredSkill,
-RequiredSkillValue, RepObjectiveFaction, RepObjectiveValue, RequiredMinRepFaction, RequiredMinRepValue,RequiredMaxRepFaction,
-RequiredMaxRepValue, SuggestedPlayers, LimitTime, QuestFlags, SpecialFlags, PrevQuestId, NextQuestId, ExclusiveGroup, NextQuestInChain,
-SrcItemId, SrcItemCount, SrcSpell, Title, Details, Objectives, OfferRewardText, RequestItemsText, EndText, ObjectiveText1, ObjectiveText2,
-ObjectiveText3, ObjectiveText4, ReqItemId1, ReqItemId2, ReqItemId3, ReqItemId4, ReqItemCount1, ReqItemCount2, ReqItemCount3,
-ReqItemCount4, ReqSourceId1, ReqSourceId2, ReqSourceId3, ReqSourceId4, ReqSourceCount1, ReqSourceCount2, ReqSourceCount3,
-ReqSourceCount4, ReqCreatureOrGOId1, ReqCreatureOrGOId2, ReqCreatureOrGOId3, ReqCreatureOrGOId4, ReqCreatureOrGOCount1,
-ReqCreatureOrGOCount2, ReqCreatureOrGOCount3, ReqCreatureOrGOCount4, ReqSpellCast1, ReqSpellCast2, ReqSpellCast3,
-ReqSpellCast4, RewChoiceItemId1, RewChoiceItemId2, RewChoiceItemId3, RewChoiceItemId4, RewChoiceItemId5, RewChoiceItemId6,
-RewChoiceItemCount1, RewChoiceItemCount2, RewChoiceItemCount3, RewChoiceItemCount4, RewChoiceItemCount5, RewChoiceItemCount6,
-RewItemId1, RewItemId2, RewItemId3, RewItemId4, RewItemCount1, RewItemCount2, RewItemCount3, RewItemCount4, RewRepFaction1,
-RewRepFaction2, RewRepFaction3, RewRepFaction4, RewRepFaction5, RewRepValue1, RewRepValue2, RewRepValue3, RewRepValue4,
-RewRepValue5, RewOrReqMoney, RewMoneyMaxLevel, RewSpell, RewSpellCast, RewMailTemplateId, RewMailMoney, RewMailDelaySecs,
-PointMapId, PointX, PointY, PointOpt, DetailsEmote1, DetailsEmote2, DetailsEmote3, DetailsEmote4, DetailsEmoteDelay1,
-DetailsEmoteDelay2, DetailsEmoteDelay3, DetailsEmoteDelay4, IncompleteEmote, CompleteEmote, OfferRewardEmote1, OfferRewardEmote2,
-OfferRewardEmote3, OfferRewardEmote4, OfferRewardEmoteDelay1, OfferRewardEmoteDelay2, OfferRewardEmoteDelay3,OfferRewardEmoteDelay4,
-StartScript, CompleteScript) values
+replace into quest_template values 
 
-(@quest_entry, '0', '2', @quest_zone, @min_level, @quest_level, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', 
-
-'Smashing Zul’mashar', 
-
-'Greetings $N! I see that you have done quite a lot of work for Anu’delen, but now the time has come for something more serious than fetching artifacts.\n\nAlah’thalas is not far from the Scourge or the Amani, after the fall of Quel’thalas our people can no longer keep the rampaging Forest Trolls in check.\n\nOur scouts have reported that the Troll population of Zul’mashar in the Eastern Plaguelands is being converted to the Undead at a rapid pace.\n\nWe cannot have this, Forest Trolls are bad enough, we don’t need to deal with an Undead version.\n\nGo there, exterminate both the living and the dead, we can’t allow those beasts to go out of control.
-', 
-
-'Venture to Zul’mashar in the Eastern Plaguelands and kill Mossflayer Scouts,  Mossflayer Shadowhunter, Infected Mossflayer, Mossflayer Canniva, five each.', 
-
-'Well done friend, well done indeed… Keep this up and we will continue the work started by our ancestors.\n\nThe vile Forest Trolls and the Scourge cannot be allowed to grow in numbers, it is our duty to keep them both down and eventually exterminate them.', 
-
-'Well then? Is the deed done?', 
-
-'', '', '', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @faction_id, '0', '0', '0', '0', @faction_count, '0', '0', '0', '0', '0', @xp_or_money, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', 0, 0);
-      
+(@quest_entry, '0', '2', @quest_zone, @min_level,  '0', @quest_level, '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @title, @description, @objective, @completetext, @incompletetext, '', '', '', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @faction_id, '0', '0', '0', '0', @faction_count, '0', '0', '0', '0', '0', @xp_or_money, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', 0, 0);
+     
+replace into creature_questrelation (id, quest, patch_min, patch_max) values (@questgiver_id, @quest_entry,'0','10'); 
+replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (@quest_finisher, @quest_entry,'0','10');
+	 
 update quest_template set 
 rewitemid1 = @reward_item_1, rewitemcount1 = @reward_item_1_count,
 rewitemid2 = @reward_item_2, rewitemcount2 = @reward_item_2_count,
 rewitemid3 = @reward_item_3, rewitemcount3 = @reward_item_3_count,
 rewitemid4 = @reward_item_4, rewitemcount4 = @reward_item_4_count,
-ReqCreatureOrGOId2 = @creature_to_kill_2, ReqCreatureOrGOCount1 = @creature_to_kill_1_count,
+RewChoiceItemId1 = @RewChoiceItemId1, RewChoiceItemCount1 = @RewChoiceItemCount1,
+RewChoiceItemId2 = @RewChoiceItemId2, RewChoiceItemCount2 = @RewChoiceItemCount2,
+RewChoiceItemId3 = @RewChoiceItemId3, RewChoiceItemCount3 = @RewChoiceItemCount3,
+RewChoiceItemId4 = @RewChoiceItemId4, RewChoiceItemCount4 = @RewChoiceItemCount4,
+ReqCreatureOrGOId1 = @creature_to_kill_1, ReqCreatureOrGOCount1 = @creature_to_kill_1_count,
 ReqCreatureOrGOId2 = @creature_to_kill_2, ReqCreatureOrGOCount2 = @creature_to_kill_2_count,
 ReqCreatureOrGOId3 = @creature_to_kill_3, ReqCreatureOrGOCount3 = @creature_to_kill_3_count,
 ReqCreatureOrGOId4 = @creature_to_kill_4, ReqCreatureOrGOCount4 = @creature_to_kill_4_count,
 reqitemid1 = @required_item_1, reqitemcount1 = @required_item_1_count,
 reqitemid2 = @required_item_2, reqitemcount2 = @required_item_2_count,
 reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
-reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count
-where entry = @quest_entry;
+reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
+nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
+nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
+objectivetext1='Horde players slain'  
+where entry = @quest_entry;	
 
-update quest_template set nextquestid = @nextquest where entry = @quest_entry;
-update quest_template set RewOrReqMoney = @reward_money where entry = @quest_entry;
-update quest_template set nextquestinchain = @nextquestinchain where entry = @quest_entry;
-update quest_template set prevquestid = @prevquest where entry = @quest_entry;
-	  
-replace into creature_questrelation (id, quest, patch_min, patch_max) values (@questgiver_id, @quest_entry,'10','10'); 
-replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (@quest_finisher, @quest_entry,'10','10');
+-- Everything below this line is a draft. Do not use!
 
--- SECURING THE SUPPLY LINES FROM THE HORDE
+-- AIDING THE SUNBORNE // Night Elf
 
-SET @quest_entry = 80005;
-SET @quest_zone = 1519; 
-SET @faction_id = 269;
-SET @faction_count = 250;
-SET @xp_or_money = 8000;  
-SET @reward_money = 1050;  
-SET @quest_level = 20;
-SET @min_level = 20;
-SET @questgiver_id = 80006; 
-SET @quest_finisher = 80006;
-SET @nextquest = 0;
-SET @nextquestinchain = 0;
-SET @prevquest = 80004;
-SET @reward_item_1 = 0;
-SET @reward_item_2 = 0;
-SET @reward_item_3 = 0;
-SET @reward_item_4 = 0;
-SET @reward_item_1_count = 0;
-SET @reward_item_2_count = 0;
-SET @reward_item_3_count = 0;
-SET @reward_item_4_count = 0;
-SET @creature_to_kill_1 = 80007;
-SET @creature_to_kill_2 = 0;
-SET @creature_to_kill_3 = 0;
-SET @creature_to_kill_4 = 0;
-SET @creature_to_kill_1_count = 7;
-SET @creature_to_kill_2_count = 0;
-SET @creature_to_kill_3_count = 0;
-SET @creature_to_kill_4_count = 0;
-SET @required_item_1 = 0;
-SET @required_item_2 = 0;
-SET @required_item_3 = 0;
-SET @required_item_4 = 0;
-SET @required_item_1_count = 0;
-SET @required_item_2_count = 0;
-SET @required_item_3_count = 0;
-SET @required_item_4_count = 0;
+-- SET @quest_entry = 80000;
+-- SET @quest_zone = 141;
+-- SET @faction_id = 269;
+-- SET @faction_count = 250;
+-- SET @xp_or_money = 650;
+-- SET @quest_level = 15;
+-- SET @min_level = 10;
+-- SET @questgiver_id = 80002;
+-- SET @quest_finisher = 1752;
+-- SET @nextquest = 80001;
+-- SET @nextquestinchain = 80001;
+-- SET @prevquest = 0;
+-- SET @reward_item_1 = 0;
+-- SET @reward_item_2 = 0;
+-- SET @reward_item_3 = 0;
+-- SET @reward_item_4 = 0;
+-- SET @reward_item_1_count = 0;
+-- SET @reward_item_2_count = 0;
+-- SET @reward_item_3_count = 0;
+-- SET @reward_item_4_count = 0;
+-- SET @creature_to_kill_1 = 80003;
+-- SET @creature_to_kill_2 = 0;
+-- SET @creature_to_kill_3 = 0;
+-- SET @creature_to_kill_4 = 0;
+-- SET @creature_to_kill_1_count = 1;
+-- SET @creature_to_kill_2_count = 0;
+-- SET @creature_to_kill_3_count = 0;
+-- SET @creature_to_kill_4_count = 0;
+-- SET @required_item_1 = 0;
+-- SET @required_item_2 = 0;
+-- SET @required_item_3 = 0;
+-- SET @required_item_4 = 0;
+-- SET @required_item_1_count = 0;
+-- SET @required_item_2_count = 0;
+-- SET @required_item_3_count = 0;
+-- SET @required_item_4_count = 0;
 
-replace into quest_template (entry, patch, Method, ZoneOrSort, MinLevel, QuestLevel, MaxLevel, Type, RequiredClasses, RequiredRaces, RequiredSkill,
-RequiredSkillValue, RepObjectiveFaction, RepObjectiveValue, RequiredMinRepFaction, RequiredMinRepValue,RequiredMaxRepFaction,
-RequiredMaxRepValue, SuggestedPlayers, LimitTime, QuestFlags, SpecialFlags, PrevQuestId, NextQuestId, ExclusiveGroup, NextQuestInChain,
-SrcItemId, SrcItemCount, SrcSpell, Title, Details, Objectives, OfferRewardText, RequestItemsText, EndText, ObjectiveText1, ObjectiveText2,
-ObjectiveText3, ObjectiveText4, ReqItemId1, ReqItemId2, ReqItemId3, ReqItemId4, ReqItemCount1, ReqItemCount2, ReqItemCount3,
-ReqItemCount4, ReqSourceId1, ReqSourceId2, ReqSourceId3, ReqSourceId4, ReqSourceCount1, ReqSourceCount2, ReqSourceCount3,
-ReqSourceCount4, ReqCreatureOrGOId1, ReqCreatureOrGOId2, ReqCreatureOrGOId3, ReqCreatureOrGOId4, ReqCreatureOrGOCount1,
-ReqCreatureOrGOCount2, ReqCreatureOrGOCount3, ReqCreatureOrGOCount4, ReqSpellCast1, ReqSpellCast2, ReqSpellCast3,
-ReqSpellCast4, RewChoiceItemId1, RewChoiceItemId2, RewChoiceItemId3, RewChoiceItemId4, RewChoiceItemId5, RewChoiceItemId6,
-RewChoiceItemCount1, RewChoiceItemCount2, RewChoiceItemCount3, RewChoiceItemCount4, RewChoiceItemCount5, RewChoiceItemCount6,
-RewItemId1, RewItemId2, RewItemId3, RewItemId4, RewItemCount1, RewItemCount2, RewItemCount3, RewItemCount4, RewRepFaction1,
-RewRepFaction2, RewRepFaction3, RewRepFaction4, RewRepFaction5, RewRepValue1, RewRepValue2, RewRepValue3, RewRepValue4,
-RewRepValue5, RewOrReqMoney, RewMoneyMaxLevel, RewSpell, RewSpellCast, RewMailTemplateId, RewMailMoney, RewMailDelaySecs,
-PointMapId, PointX, PointY, PointOpt, DetailsEmote1, DetailsEmote2, DetailsEmote3, DetailsEmote4, DetailsEmoteDelay1,
-DetailsEmoteDelay2, DetailsEmoteDelay3, DetailsEmoteDelay4, IncompleteEmote, CompleteEmote, OfferRewardEmote1, OfferRewardEmote2,
-OfferRewardEmote3, OfferRewardEmote4, OfferRewardEmoteDelay1, OfferRewardEmoteDelay2, OfferRewardEmoteDelay3,OfferRewardEmoteDelay4,
-StartScript, CompleteScript) values
+-- (@quest_entry, '0', '2', @quest_zone, @min_level, @quest_level, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', 
 
-(@quest_entry, '0', '2', @quest_zone, @min_level, @quest_level, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', 
+-- 'Aiding the Sunborne', 
 
-'Securing the supply lines from the Horde', 
+-- 'Ishnu-alah, traveller! While our people struggle with problems on our borders, they\'re not the only ones.\n\nSeven thousand years ago, my husband was exiled from Hyjal due to his use of the outlawed Arcane magics.\n\nHe and the other exiles created a new kingdom called Quel\'thalas, during the last conflict their home was entirely razed, and almost their entire people slaughtered.\n\nRecently I\'ve heard from our new allies across the sea that a group of them intends to consolidate and settle a new home... While we have our reservations about their past, they are still family and they should not bear the scorn for the actions of their ancestors. If you have the time or will, please assist them!\n\nI\'ve been told that Caledra Dawnbreeze in Stormwind Keep is the representative of this movement.\n\nOh and there\'s no need to mention me. It would appear far more amicable if the offer came from yourself.', 
 
-'Greetings $R and thank you for assisting Alah’thalas’s efforts.\n\nWe’re happy to be a part of the Alliance, unfortunately our allegiance with you has put us at odds with the Horde.\n\nEven now Horde members are raiding and pillaging our supply lines and putting our territories and Alah’thalas itself at risk!\n\nPut an end to them $R it is imperative for our survival.', 
+-- 'Speak to Caledra Dawnbreeze in Stormwind Keep.', 
 
-'Kill 8 Horde Players.', 
+-- 'Y-You seek to assist us in our efforts? Truly?\n\nI am surprised but I would never turn away a helpful hand...I apologize for my earlier outburst, the Kaldorei in this city have not been kind to my people.\n\nPerhaps by working together we could change that in time, we are both part of the Alliance after all!\n\nOur people have setup a new settlement called \'thalas on the coast north of Stratholme, bordering Quel\'thalas.\n\nHowever, setting up a new home will be difficult and we have run into our share of issues. We\'re grateful for your help! I shall sum up our current situation for you.', 
 
-'Thank you $R, I can’t imagine that this task was easy but your help is greatly appreciated. Without vital supplies, Alah’thalas cannot become self-sufficient.', 
+-- 'What is it Kaldorei? I do not have the time for your lectures or scorn.', 
 
-'How are you dealing with your mission?', 
-
-'', '', '', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @faction_id, '0', '0', '0', '0', @faction_count, '0', '0', '0', '0', '0', @xp_or_money, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', 0, 0);
+-- '', '', '', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @faction_id, '0', '0', '0', '0', @faction_count, '0', '0', '0', '0', '0', @xp_or_money, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', 0, 0);
       
-update quest_template set 
-rewitemid1 = @reward_item_1, rewitemcount1 = @reward_item_1_count,
-rewitemid2 = @reward_item_2, rewitemcount2 = @reward_item_2_count,
-rewitemid3 = @reward_item_3, rewitemcount3 = @reward_item_3_count,
-rewitemid4 = @reward_item_4, rewitemcount4 = @reward_item_4_count,
-ReqCreatureOrGOId2 = @creature_to_kill_2, ReqCreatureOrGOCount1 = @creature_to_kill_1_count,
-ReqCreatureOrGOId2 = @creature_to_kill_2, ReqCreatureOrGOCount2 = @creature_to_kill_2_count,
-ReqCreatureOrGOId3 = @creature_to_kill_3, ReqCreatureOrGOCount3 = @creature_to_kill_3_count,
-ReqCreatureOrGOId4 = @creature_to_kill_4, ReqCreatureOrGOCount4 = @creature_to_kill_4_count,
-reqitemid1 = @required_item_1, reqitemcount1 = @required_item_1_count,
-reqitemid2 = @required_item_2, reqitemcount2 = @required_item_2_count,
-reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
-reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count
-where entry = @quest_entry;
-
-update quest_template set nextquestid = @nextquest where entry = @quest_entry;
-update quest_template set ObjectiveText1 = "Horde players killed" where entry = @quest_entry;
-update quest_template set RewOrReqMoney = @reward_money where entry = @quest_entry;
-update quest_template set nextquestinchain = @nextquestinchain where entry = @quest_entry;
-update quest_template set prevquestid = @prevquest where entry = @quest_entry;
+-- update quest_template set nextquestid = @nextquest where entry = @quest_entry;
+-- update quest_template set nextquestinchain = @nextquestinchain where entry = @quest_entry;
+-- update quest_template set prevquestid = @prevquest where entry = @quest_entry;
+-- update quest_template set ObjectiveText1 = 'Listen to Caledra\'s Story' where entry = @quest_entry;
+-- update quest_template set RequiredRaces = 8 where entry = @quest_entry;
 	  
-replace into creature_questrelation (id, quest, patch_min, patch_max) values (@questgiver_id, @quest_entry,'10','10'); 
-replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (@quest_finisher, @quest_entry,'10','10');
+-- replace into creature_questrelation (id, quest, patch_min, patch_max) values (@questgiver_id, @quest_entry,'10','10');
+-- replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (@quest_finisher, @quest_entry,'10','10');   
 
 -- HELP WITH A COMPASSIONATE MATTER
 
-SET @quest_entry = 80006;
-SET @quest_zone = 1519; 
-SET @faction_id = 269;
-SET @faction_count = 50;
-SET @reward_money = 500; 
-SET @xp_or_money = 1000; 
-SET @quest_level = 20;
-SET @min_level = 20;
-SET @questgiver_id = 80001; 
-SET @quest_finisher = 80001;
-SET @nextquest = 0;
-SET @nextquestinchain = 0;
-SET @prevquest = 80002;
-SET @reward_item_1 = 0;
-SET @reward_item_2 = 0;
-SET @reward_item_3 = 0;
-SET @reward_item_4 = 0;
-SET @reward_item_1_count = 80004;
-SET @reward_item_2_count = 0;
-SET @reward_item_3_count = 0;
-SET @reward_item_4_count = 0;
-SET @creature_to_kill_1 = 0;
-SET @creature_to_kill_2 = 0;
-SET @creature_to_kill_3 = 0;
-SET @creature_to_kill_4 = 0;
-SET @creature_to_kill_1_count = 0;
-SET @creature_to_kill_2_count = 0;
-SET @creature_to_kill_3_count = 0;
-SET @creature_to_kill_4_count = 0;
-SET @required_item_1 = 0;
-SET @required_item_2 = 0;
-SET @required_item_3 = 0;
-SET @required_item_4 = 0;
-SET @required_item_1_count = 0;
-SET @required_item_2_count = 0;
-SET @required_item_3_count = 0;
-SET @required_item_4_count = 0;
+-- SET @quest_entry = 80006;
+-- SET @quest_zone = 1519; 
+-- SET @faction_id = 269;
+-- SET @faction_count = 50;
+-- SET @reward_money = 500; 
+-- SET @xp_or_money = 1000; 
+-- SET @quest_level = 20;
+-- SET @min_level = 20;
+-- SET @questgiver_id = 80001; 
+-- SET @quest_finisher = 80001;
+-- SET @nextquest = 0;
+-- SET @nextquestinchain = 0;
+-- SET @prevquest = 80002;
+-- SET @reward_item_1 = 0;
+-- SET @reward_item_2 = 0;
+-- SET @reward_item_3 = 0;
+-- SET @reward_item_4 = 0;
+-- SET @reward_item_1_count = 80004;
+-- SET @reward_item_2_count = 0;
+-- SET @reward_item_3_count = 0;
+-- SET @reward_item_4_count = 0;
+-- SET @creature_to_kill_1 = 0;
+-- SET @creature_to_kill_2 = 0;
+-- SET @creature_to_kill_3 = 0;
+-- SET @creature_to_kill_4 = 0;
+-- SET @creature_to_kill_1_count = 0;
+-- SET @creature_to_kill_2_count = 0;
+-- SET @creature_to_kill_3_count = 0;
+-- SET @creature_to_kill_4_count = 0;
+-- SET @required_item_1 = 0;
+-- SET @required_item_2 = 0;
+-- SET @required_item_3 = 0;
+-- SET @required_item_4 = 0;
+-- SET @required_item_1_count = 0;
+-- SET @required_item_2_count = 0;
+-- SET @required_item_3_count = 0;
+-- SET @required_item_4_count = 0;
 
-replace into quest_template (entry, patch, Method, ZoneOrSort, MinLevel, QuestLevel, MaxLevel, Type, RequiredClasses, RequiredRaces, RequiredSkill,
-RequiredSkillValue, RepObjectiveFaction, RepObjectiveValue, RequiredMinRepFaction, RequiredMinRepValue,RequiredMaxRepFaction,
-RequiredMaxRepValue, SuggestedPlayers, LimitTime, QuestFlags, SpecialFlags, PrevQuestId, NextQuestId, ExclusiveGroup, NextQuestInChain,
-SrcItemId, SrcItemCount, SrcSpell, Title, Details, Objectives, OfferRewardText, RequestItemsText, EndText, ObjectiveText1, ObjectiveText2,
-ObjectiveText3, ObjectiveText4, ReqItemId1, ReqItemId2, ReqItemId3, ReqItemId4, ReqItemCount1, ReqItemCount2, ReqItemCount3,
-ReqItemCount4, ReqSourceId1, ReqSourceId2, ReqSourceId3, ReqSourceId4, ReqSourceCount1, ReqSourceCount2, ReqSourceCount3,
-ReqSourceCount4, ReqCreatureOrGOId1, ReqCreatureOrGOId2, ReqCreatureOrGOId3, ReqCreatureOrGOId4, ReqCreatureOrGOCount1,
-ReqCreatureOrGOCount2, ReqCreatureOrGOCount3, ReqCreatureOrGOCount4, ReqSpellCast1, ReqSpellCast2, ReqSpellCast3,
-ReqSpellCast4, RewChoiceItemId1, RewChoiceItemId2, RewChoiceItemId3, RewChoiceItemId4, RewChoiceItemId5, RewChoiceItemId6,
-RewChoiceItemCount1, RewChoiceItemCount2, RewChoiceItemCount3, RewChoiceItemCount4, RewChoiceItemCount5, RewChoiceItemCount6,
-RewItemId1, RewItemId2, RewItemId3, RewItemId4, RewItemCount1, RewItemCount2, RewItemCount3, RewItemCount4, RewRepFaction1,
-RewRepFaction2, RewRepFaction3, RewRepFaction4, RewRepFaction5, RewRepValue1, RewRepValue2, RewRepValue3, RewRepValue4,
-RewRepValue5, RewOrReqMoney, RewMoneyMaxLevel, RewSpell, RewSpellCast, RewMailTemplateId, RewMailMoney, RewMailDelaySecs,
-PointMapId, PointX, PointY, PointOpt, DetailsEmote1, DetailsEmote2, DetailsEmote3, DetailsEmote4, DetailsEmoteDelay1,
-DetailsEmoteDelay2, DetailsEmoteDelay3, DetailsEmoteDelay4, IncompleteEmote, CompleteEmote, OfferRewardEmote1, OfferRewardEmote2,
-OfferRewardEmote3, OfferRewardEmote4, OfferRewardEmoteDelay1, OfferRewardEmoteDelay2, OfferRewardEmoteDelay3,OfferRewardEmoteDelay4,
-StartScript, CompleteScript) values
+-- (@quest_entry, '0', '2', @quest_zone, @min_level, @quest_level, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', 
 
-(@quest_entry, '0', '2', @quest_zone, @min_level, @quest_level, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', 
+-- 'Help With a Compassionate Matter', 
 
-'Help With a Compassionate Matter', 
+-- 'Hello $R I have a...troubling issue.\n\nA child was sent from Stormwind and she won’t stop babbling.\n\nQuite frankly she is interfering with my work, I was apparently the most qualified to take care of her but I’d appreciate it if you helped her out with her request since you’re a great hero and all.\n\nYes yes! I will pay you too! Please help!\n\n
+-- <Anu’delen clearly appears to be at his wits end!>', 
 
-'Hello $R I have a...troubling issue.\n\nA child was sent from Stormwind and she won’t stop babbling.\n\nQuite frankly she is interfering with my work, I was apparently the most qualified to take care of her but I’d appreciate it if you helped her out with her request since you’re a great hero and all.\n\nYes yes! I will pay you too! Please help!\n\n
-<Anu’delen clearly appears to be at his wits end!>', 
+-- 'Talk to Anu’delen again if you wish to help him out.', 
 
-'Talk to Anu’delen again if you wish to help him out.', 
+-- 'Thank the Sunwell! You have no idea how much this matters to me...\n\nPeace and quiet is important while doing this vital work.\n\nTalk to the girl and help her out, this whistle can call her.', 
 
-'Thank the Sunwell! You have no idea how much this matters to me...\n\nPeace and quiet is important while doing this vital work.\n\nTalk to the girl and help her out, this whistle can call her.', 
+-- 'So? Will you help me out?', 
 
-'So? Will you help me out?', 
-
-'', '', '', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @faction_id, '0', '0', '0', '0', @faction_count, '0', '0', '0', '0', '0', @xp_or_money, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', 0, 0);
-      
-update quest_template set 
-rewitemid1 = @reward_item_1, rewitemcount1 = @reward_item_1_count,
-rewitemid2 = @reward_item_2, rewitemcount2 = @reward_item_2_count,
-rewitemid3 = @reward_item_3, rewitemcount3 = @reward_item_3_count,
-rewitemid4 = @reward_item_4, rewitemcount4 = @reward_item_4_count,
-ReqCreatureOrGOId2 = @creature_to_kill_2, ReqCreatureOrGOCount1 = @creature_to_kill_1_count,
-ReqCreatureOrGOId2 = @creature_to_kill_2, ReqCreatureOrGOCount2 = @creature_to_kill_2_count,
-ReqCreatureOrGOId3 = @creature_to_kill_3, ReqCreatureOrGOCount3 = @creature_to_kill_3_count,
-ReqCreatureOrGOId4 = @creature_to_kill_4, ReqCreatureOrGOCount4 = @creature_to_kill_4_count,
-reqitemid1 = @required_item_1, reqitemcount1 = @required_item_1_count,
-reqitemid2 = @required_item_2, reqitemcount2 = @required_item_2_count,
-reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
-reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count
-where entry = @quest_entry;
-
-update quest_template set RewOrReqMoney = @reward_money where entry = @quest_entry;
-update quest_template set nextquestid = @nextquest where entry = @quest_entry;
-update quest_template set nextquestinchain = @nextquestinchain where entry = @quest_entry;
-update quest_template set prevquestid = @prevquest where entry = @quest_entry;
-	  
-replace into creature_questrelation (id, quest, patch_min, patch_max) values (@questgiver_id, @quest_entry,'10','10'); 
-replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (@quest_finisher, @quest_entry,'10','10');
+-- '', '', '', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @faction_id, '0', '0', '0', '0', @faction_count, '0', '0', '0', '0', '0', @xp_or_money, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', 0, 0);
 
 -- TESLINAH’S SEARCH
 
-SET @quest_entry = 80007;
-SET @quest_zone = 1519; 
-SET @faction_id = 269;
-SET @faction_count = 75;
-SET @reward_money = 50; 
-SET @xp_or_money = 1000; 
-SET @quest_level = 20;
-SET @min_level = 20;
-SET @questgiver_id = 40020; 
-SET @quest_finisher = 40020;
-SET @nextquest = 0;
-SET @nextquestinchain = 0;
-SET @prevquest = 80006;
-SET @reward_item_1 = 0;
-SET @reward_item_2 = 0;
-SET @reward_item_3 = 0;
-SET @reward_item_4 = 0;
-SET @reward_item_1_count = 80004;
-SET @reward_item_2_count = 0;
-SET @reward_item_3_count = 0;
-SET @reward_item_4_count = 0;
-SET @creature_to_kill_1 = 0;
-SET @creature_to_kill_2 = 0;
-SET @creature_to_kill_3 = 0;
-SET @creature_to_kill_4 = 0;
-SET @creature_to_kill_1_count = 0;
-SET @creature_to_kill_2_count = 0;
-SET @creature_to_kill_3_count = 0;
-SET @creature_to_kill_4_count = 0;
-SET @required_item_1 = 0;
-SET @required_item_2 = 0;
-SET @required_item_3 = 0;
-SET @required_item_4 = 0;
-SET @required_item_1_count = 0;
-SET @required_item_2_count = 0;
-SET @required_item_3_count = 0;
-SET @required_item_4_count = 0;
+-- SET @quest_entry = 80007;
+-- SET @quest_zone = 1519; 
+-- SET @faction_id = 269;
+-- SET @faction_count = 75;
+-- SET @reward_money = 50; 
+-- SET @xp_or_money = 1000; 
+-- SET @quest_level = 20;
+-- SET @min_level = 20;
+-- SET @questgiver_id = 40020; 
+-- SET @quest_finisher = 40020;
+-- SET @nextquest = 0;
+-- SET @nextquestinchain = 0;
+-- SET @prevquest = 80006;
+-- SET @reward_item_1 = 0;
+-- SET @reward_item_2 = 0;
+-- SET @reward_item_3 = 0;
+-- SET @reward_item_4 = 0;
+-- SET @reward_item_1_count = 80004;
 
-replace into quest_template (entry, patch, Method, ZoneOrSort, MinLevel, QuestLevel, MaxLevel, Type, RequiredClasses, RequiredRaces, RequiredSkill,
-RequiredSkillValue, RepObjectiveFaction, RepObjectiveValue, RequiredMinRepFaction, RequiredMinRepValue,RequiredMaxRepFaction,
-RequiredMaxRepValue, SuggestedPlayers, LimitTime, QuestFlags, SpecialFlags, PrevQuestId, NextQuestId, ExclusiveGroup, NextQuestInChain,
-SrcItemId, SrcItemCount, SrcSpell, Title, Details, Objectives, OfferRewardText, RequestItemsText, EndText, ObjectiveText1, ObjectiveText2,
-ObjectiveText3, ObjectiveText4, ReqItemId1, ReqItemId2, ReqItemId3, ReqItemId4, ReqItemCount1, ReqItemCount2, ReqItemCount3,
-ReqItemCount4, ReqSourceId1, ReqSourceId2, ReqSourceId3, ReqSourceId4, ReqSourceCount1, ReqSourceCount2, ReqSourceCount3,
-ReqSourceCount4, ReqCreatureOrGOId1, ReqCreatureOrGOId2, ReqCreatureOrGOId3, ReqCreatureOrGOId4, ReqCreatureOrGOCount1,
-ReqCreatureOrGOCount2, ReqCreatureOrGOCount3, ReqCreatureOrGOCount4, ReqSpellCast1, ReqSpellCast2, ReqSpellCast3,
-ReqSpellCast4, RewChoiceItemId1, RewChoiceItemId2, RewChoiceItemId3, RewChoiceItemId4, RewChoiceItemId5, RewChoiceItemId6,
-RewChoiceItemCount1, RewChoiceItemCount2, RewChoiceItemCount3, RewChoiceItemCount4, RewChoiceItemCount5, RewChoiceItemCount6,
-RewItemId1, RewItemId2, RewItemId3, RewItemId4, RewItemCount1, RewItemCount2, RewItemCount3, RewItemCount4, RewRepFaction1,
-RewRepFaction2, RewRepFaction3, RewRepFaction4, RewRepFaction5, RewRepValue1, RewRepValue2, RewRepValue3, RewRepValue4,
-RewRepValue5, RewOrReqMoney, RewMoneyMaxLevel, RewSpell, RewSpellCast, RewMailTemplateId, RewMailMoney, RewMailDelaySecs,
-PointMapId, PointX, PointY, PointOpt, DetailsEmote1, DetailsEmote2, DetailsEmote3, DetailsEmote4, DetailsEmoteDelay1,
-DetailsEmoteDelay2, DetailsEmoteDelay3, DetailsEmoteDelay4, IncompleteEmote, CompleteEmote, OfferRewardEmote1, OfferRewardEmote2,
-OfferRewardEmote3, OfferRewardEmote4, OfferRewardEmoteDelay1, OfferRewardEmoteDelay2, OfferRewardEmoteDelay3,OfferRewardEmoteDelay4,
-StartScript, CompleteScript) values
+-- 'Teslinah’s Search', 
 
-(@quest_entry, '0', '2', @quest_zone, @min_level, @quest_level, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', 
+-- 'Hello miss/mister my name is Teslinah… Please I need your help!\n\nMy mommy and I were in Farstrider Lodge after fleeing from all the bad up north...\n\nBut when we were in Stormwind we got separated! Miss Elsharin found me and took me here, believing my mommy would be here, but she’s not! Please miss/mister, will you help me?\n\nPretty please? The grumpy man over there only told me to sit in a corner and be silent, you will help me, won’t you?', 
 
-'Teslinah’s Search', 
+-- 'Talk to Anu’delen again if you wish to help him out.', 
 
-'Hello miss/mister my name is Teslinah… Please I need your help!\n\nMy mommy and I were in Farstrider Lodge after fleeing from all the bad up north...\n\nBut when we were in Stormwind we got separated! Miss Elsharin found me and took me here, believing my mommy would be here, but she’s not! Please miss/mister, will you help me?\n\nPretty please? The grumpy man over there only told me to sit in a corner and be silent, you will help me, won’t you?', 
+-- 'Her mom is missing you say? Let me see...\n\nThe girl’s name is Teslinah? We do have records of her and her mother’s arrival in Stormwind with the other refugees but she and her mother never showed up at the City hall for their registration.\n\nThis is troubling we can’t have people going missing in Stormwind, I will investigate, until my investigation is complete can I count on you to care for the girl?\n\nSince she was registered here in Stormwind I will issue some bonds to feed her properly.', 
 
-'Talk to Anu’delen again if you wish to help him out.', 
+-- 'Yes what can I do for you $R?', 
 
-'Her mom is missing you say? Let me see...\n\nThe girl’s name is Teslinah? We do have records of her and her mother’s arrival in Stormwind with the other refugees but she and her mother never showed up at the City hall for their registration.\n\nThis is troubling we can’t have people going missing in Stormwind, I will investigate, until my investigation is complete can I count on you to care for the girl?\n\nSince she was registered here in Stormwind I will issue some bonds to feed her properly.', 
-
-'Yes what can I do for you $R?', 
-
-'', '', '', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @faction_id, '0', '0', '0', '0', @faction_count, '0', '0', '0', '0', '0', @xp_or_money, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', 0, 0);
-      
-update quest_template set 
-rewitemid1 = @reward_item_1, rewitemcount1 = @reward_item_1_count,
-rewitemid2 = @reward_item_2, rewitemcount2 = @reward_item_2_count,
-rewitemid3 = @reward_item_3, rewitemcount3 = @reward_item_3_count,
-rewitemid4 = @reward_item_4, rewitemcount4 = @reward_item_4_count,
-ReqCreatureOrGOId2 = @creature_to_kill_2, ReqCreatureOrGOCount1 = @creature_to_kill_1_count,
-ReqCreatureOrGOId2 = @creature_to_kill_2, ReqCreatureOrGOCount2 = @creature_to_kill_2_count,
-ReqCreatureOrGOId3 = @creature_to_kill_3, ReqCreatureOrGOCount3 = @creature_to_kill_3_count,
-ReqCreatureOrGOId4 = @creature_to_kill_4, ReqCreatureOrGOCount4 = @creature_to_kill_4_count,
-reqitemid1 = @required_item_1, reqitemcount1 = @required_item_1_count,
-reqitemid2 = @required_item_2, reqitemcount2 = @required_item_2_count,
-reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
-reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count
-where entry = @quest_entry;
-
-update quest_template set RewOrReqMoney = @reward_money where entry = @quest_entry;
-update quest_template set nextquestid = @nextquest where entry = @quest_entry;
-update quest_template set nextquestinchain = @nextquestinchain where entry = @quest_entry;
-update quest_template set prevquestid = @prevquest where entry = @quest_entry;
-	  
-replace into creature_questrelation (id, quest, patch_min, patch_max) values (@questgiver_id, @quest_entry,'10','10'); 
-replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (@quest_finisher, @quest_entry,'10','10');
+-- '', '', '', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @faction_id, '0', '0', '0', '0', @faction_count, '0', '0', '0', '0', '0', @xp_or_money, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', 0, 0);
+    
 
