@@ -5,6 +5,8 @@ replace into`creature_template` values (80229, 0, 0, 0, 0, 0, 'Quest 80250 Custo
 
 replace into `creature_template` values (80230, 0, 18226, 0, 0, 0, 'High Elf Ranger', NULL, 0, 46, 47, 2038, 2062, 1587, 1640, 2278, 1576, 0, 1.1, 1.14286, 0, 20, 5, 0, 0, 1, 81, 105, 0, 212, 1, 1600, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 62.8672, 86.4424, 100, 7, 0, 2694, 2694, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 79, 108, 'EventAI', 1, 3, 0, 0, 3, 2694, 0, 0, 0, 0, 0, '');
 
+update creature_template set movement_type = 0 where entry = 80230;
+update creature set movementtype = 0 where id = 80230;
 update creature_template set npc_flags = 2 where entry = 80230;
 update creature_template set faction = 371 where entry = 80230;
 
@@ -19,7 +21,6 @@ SET @gossip_menu_id = 56556;
 SET @magic_number = 90372; 
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
 replace into broadcast_text (ID, MaleText) values (@magic_number, 'Setting up a new home is difficult and we have run into our share of issues. It’s important to remember what’s at stake.');
-replace into broadcast_text (ID, MaleText) values (@magic_number, 'Recently I\'ve heard from our new allies across the sea that a group of them intends to consolidate and settle a new home...\n\nWhile we have our reservations about their past, they are still family and they should not bear the scorn for the actions of their ancestors.');
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = 1752;
 
@@ -202,7 +203,7 @@ where entry = @quest_entry;
 
 replace into `creature_template` values (80231, 0, 16037, 0, 0, 0, 'Arcanist Anu\'delen', NULL, 0, 62, 62, 4079, 4079, 6015, 6015, 4091, 12, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 174, 224, 0, 284, 1, 1000, 2000, 8, 4608, 0, 0, 0, 0, 0, 0, 203.77, 104.278, 100, 7, 0, 0, 0, 0, 0, 10, 10, 10, 10, 10, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 5694, 0, 0, 0, 0, 524298, '');
 
-update creature_template set faction = 371 where entry = 80230;
+update creature_template set faction = 371 where entry = 80231;
 
 replace into creature_model_info values (16037, 5875, 2, 2, 0, 0, 0);
 
@@ -224,10 +225,10 @@ replace into `gameobject_loot_template` (`entry`, `item`, `ChanceOrQuestChance`,
 set @quest_entry = 80252;
 set @quest_zone = 1519;
 set @title = 'A Crystal Clear Task';
-set @description = 'Greetings, $R. Since you\'re here this means you’ve come to help so listen up. We have a situation here… You might be aware, our buildings operate with Arcane magic in use.\n\nWhile our central crystal is the main power source, we use smaller crystals to effectively channel the arcane energy from the nexus to the outlying Ley points of the structure.\n\nThe downside is that these crystals break down overtime, if we had found this outpost a decade later the entire Academy could have collapsed.\n\nFortunately, our predecessors built this site on a location with Arcane crystal deposits. While the automated constructs have long since stopped working or malfunctioned, the mine remains full of intact crystals.\n\nI need you to head down there and bring me some crystals... Eight should do for now.\n\n...Are you still here? Get moving.';
+set @description = 'Greetings, $R. Since you\'re here this means you’ve come to help so listen up. We have a situation here...You might be aware that our building use Arcane magic to operate.\n\nWhile our central crystal is the main power source, we use smaller crystals to effectively channel the arcane energy from the nexus to the outlying Ley points of the structure.\n\nThe downside is that these crystals break down overtime, if we had found this outpost a decade later the entire Academy could have collapsed.\n\nFortunately, our predecessors built this site on a location with Arcane crystal deposits. While the automated constructs have long since stopped working or malfunctioned, the mine remains full of intact crystals.\n\nI need you to head down there and bring me some crystals... Eight should do for now.\n\n...Are you still here? Get moving.';
 set @objective = 'Gather 8 Arcane Crystals from the Silver Sun Mine in Alah\'Thalas.';
-set @completetext = 'Oh? That\'s a nice haul... Good to see that you can be counted on, $R!\n\nAlright, time to calibrate these crystals so they can be integrated into the network...\n\nYou still here?... Oh right, you want a reward, yes, yes. Now move along.';
-set @incompletetext = 'Have you gotten the crystals yet?\n\nRats or whatever down there… I expect this task to be done!';
+set @completetext = 'Oh? That\'s a nice haul... Good to see that you can be counted on, $R!\n\nAlright, time to calibrate these crystals so they can be integrated into the network...\n\nYou are still here?... Oh right, you want a reward, yes, yes. Now move along.';
+set @incompletetext = 'Have you gotten the crystals yet?\n\nI don\'t care what you have to deal with...Rats or whatever\'s down there, I expect this task to be done!';
 set @faction_id = 269;
 set @faction_count = 75;
 set @xp_or_money = 650;
@@ -400,6 +401,8 @@ where entry = @quest_entry;
 
 REPLACE INTO `creature_template` VALUES (80232, 0, 18214, 0, 0, 0, 'Ranger-Captain Nasuna Dawnbringer', NULL, 0, 60, 60, 4146, 4146, 0, 0, 3791, 1576, 0, 1, 1.14286, 0, 20, 5, 0, 4, 1, 546, 705, 0, 272, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 61.732, 84.8815, 100, 7, 0, 10824, 0, 0, 0, 0, 0, 0, 0, 0, 15547, 12057, 11978, 0, 108240, 0, 139, 187, 'EventAI', 1, 3, 0, 0, 3, 10824, 0, 0, 0, 0, 0, '');
 
+update creature_template set movement_type = 0 where entry = 80232;
+update creature set movementtype = 0 where id = 80232;
 update creature_template set faction = 371 where entry = 80232;
 update creature_template set rank = 1 where entry = 80232;
 update creature_template set npc_flags = 2 where entry = 80232;    
@@ -574,6 +577,8 @@ where entry = @quest_entry;
 replace into `creature_template` values (80234, 0, 15517, 16047, 15523, 15531, 'Alah\'Thalas Magister', NULL, 0, 57, 58, 5842, 6078, 5340, 5461, 1742, 103, 0, 0.888888, 1.14286, 0, 20, 5, 0, 1, 1, 460, 593, 0, 262, 1, 2000, 2000, 8, 64, 0, 0, 0, 0, 0, 0, 65.7432, 90.3969, 100, 2, 0, 7437, 0, 7437, 0, 0, 0, 85, 0, 170, 15784, 15043, 0, 0, 0, 0, 357, 472, '', 1, 1, 0, 0, 3, 7437, 0, 0, 0, 0, 0, 'generic_spell_ai');
 update creature_template set faction = 371 where entry = 80234;
 update creature_template set type = 7 where entry = 80234;
+update creature_template set movement_type = 0 where entry = 80234;
+update creature set movementtype = 0 where id = 80234;
 
 REPLACE INTO `creature_template` VALUES (80235, 0, 16036, 16038, 16182, 16184, 'Alah\'Thalas Citizen', NULL, 0, 10, 10, 413, 413, 0, 0, 20, 80, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 9, 13, 0, 62, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 16.808, 23.111, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, '');
 update creature_template set faction = 371 where entry = 80235;
@@ -597,7 +602,10 @@ REPLACE INTO `creature_template` VALUES (80241, 0, 10381, 0, 0, 0, 'Amanaria Sun
 REPLACE INTO `creature_template` VALUES (80241, 0, 18022, 0, 0, 0, 'Malfunctioning Arcane Construct', '', 0, 10, 11, 221, 246, 0, 0, 556, 14, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 17, 22, 0, 66, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 12.7424, 17.5208, 100, 9, 0, 36, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 21, '', 1, 1, 0, 0, 3, 0, 0, 0, 8405008, 0, 0, '');
 replace into creature_model_info values (18022, 5875, 2, 2, 0, 0, 0);
 
+update creature_template set loot_id = 0 where entry = 80241;
+
 REPLACE INTO `creature_template` VALUES (80506, 1, 18019, 0, 0, 0, 'Arcane Guardian', NULL, 0, 60, 60, 16986, 17246, 9476, 9736, 3000, 834, 0, 3.2, 1.14286, 0, 20, 5, 0, 1, 1, 348, 450, 3, 272, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 60.5576, 83.2667, 100, 4, 0, 14399, 0, 0, 0, 60, 0, 120, 60, 300, 0, 0, 0, 0, 143990, 0, 157, 786, '', 1, 3, 0, 0, 3, 0, 0, 0, 16384, 8, 32, '');
+update creature_template set faction = 371 where entry = 80506;
 update creature_template set scale = 1.5 where entry = 80506;
 update creature_template set loot_id = 0 where entry = 80506;
 
