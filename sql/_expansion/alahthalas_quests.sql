@@ -619,6 +619,7 @@ replace into creature_model_info values (18326, 5875, 2, 2, 0, 0, 0);
 replace into creature_model_info values (18327, 5875, 2, 2, 0, 0, 0);
 replace into creature_model_info values (18328, 5875, 2, 2, 0, 0, 0);
 replace into creature_model_info values (18329, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (18209, 5875, 2, 2, 0, 0, 0);
 
 -- Welcome to Alah’Thalas
 
@@ -627,8 +628,6 @@ replace into gameobject_template values
 
 replace into gameobject_template values 
 (3000225, 0, 1, 29624, 'Translocation Orb', 35, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_translocation_orb');
-
-replace into`creature_template` values (80242, 0, 0, 0, 0, 0, 'Quest 80256 Custom Objective', '', 0, 5, 5, 319, 319, 0, 0, 852, 84, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 24, 31, 0, 90, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 31.856, 43.802, 100, 7, 4096, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 4276, 0, 0, 0, 0, 2, '');
 
 set @quest_entry = 80256;
 set @quest_zone = 1519;
@@ -664,11 +663,11 @@ set @reward_item_1_count = 0;
 set @reward_item_2_count = 0;
 set @reward_item_3_count = 0;
 set @reward_item_4_count = 0;
-set @creature_to_kill_1 = 80256;
+set @creature_to_kill_1 = 0;
 set @creature_to_kill_2 = 0;
 set @creature_to_kill_3 = 0;
 set @creature_to_kill_4 = 0;
-set @creature_to_kill_1_count = 1;
+set @creature_to_kill_1_count = 0;
 set @creature_to_kill_2_count = 0;
 set @creature_to_kill_3_count = 0;
 set @creature_to_kill_4_count = 0;
@@ -710,70 +709,94 @@ nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
 objectivetext1='Use the Orb of Translocation'  
 where entry = @quest_entry;	
 
--- Everything below this line is a draft. Do not use!
+-- Aiding the Sunborne
 
+replace into `creature_template` values (80242, 0, 18226, 0, 0, 0, 'Ashylah Starcaller', NULL, 0, 46, 47, 2038, 2062, 1587, 1640, 2278, 1576, 0, 1.1, 1.14286, 0, 20, 5, 0, 0, 1, 81, 105, 0, 212, 1, 1600, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 62.8672, 86.4424, 100, 7, 0, 2694, 2694, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 79, 108, 'EventAI', 1, 3, 0, 0, 3, 2694, 0, 0, 0, 0, 0, '');
 
--- AIDING THE SUNBORNE // Night Elf
+update creature_template set movement_type = 0 where entry = 80242;
+update creature set movementtype = 0 where id = 80242;
+update creature_template set npc_flags = 2 where entry = 80242;
+update creature_template set faction = 371 where entry = 80242;
 
--- SET @quest_entry = 80000;
--- SET @quest_zone = 141;
--- SET @faction_id = 269;
--- SET @faction_count = 250;
--- SET @xp_or_money = 650;
--- SET @quest_level = 15;
--- SET @min_level = 10;
--- SET @questgiver_id = 80002;
--- SET @quest_finisher = 1752;
--- SET @nextquest = 80001;
--- SET @nextquestinchain = 80001;
--- SET @prevquest = 0;
--- SET @reward_item_1 = 0;
--- SET @reward_item_2 = 0;
--- SET @reward_item_3 = 0;
--- SET @reward_item_4 = 0;
--- SET @reward_item_1_count = 0;
--- SET @reward_item_2_count = 0;
--- SET @reward_item_3_count = 0;
--- SET @reward_item_4_count = 0;
--- SET @creature_to_kill_1 = 80003;
--- SET @creature_to_kill_2 = 0;
--- SET @creature_to_kill_3 = 0;
--- SET @creature_to_kill_4 = 0;
--- SET @creature_to_kill_1_count = 1;
--- SET @creature_to_kill_2_count = 0;
--- SET @creature_to_kill_3_count = 0;
--- SET @creature_to_kill_4_count = 0;
--- SET @required_item_1 = 0;
--- SET @required_item_2 = 0;
--- SET @required_item_3 = 0;
--- SET @required_item_4 = 0;
--- SET @required_item_1_count = 0;
--- SET @required_item_2_count = 0;
--- SET @required_item_3_count = 0;
--- SET @required_item_4_count = 0;
+set @quest_entry = 80257;
+set @quest_zone = 1657;
+set @title = 'Aiding the Sunborne';
+set @description = 'Ishnu-alah, traveller! While our people struggle with problems on our borders, they\'re not the only ones.\n\nSeven thousand years ago, my husband was exiled from Hyjal due to his use of the outlawed Arcane magics.\n\nHe and the other exiles created a new kingdom called Quel\'thalas, during the last conflict their home was entirely razed, and almost their entire people slaughtered.\n\nRecently I\'ve heard from our new allies across the sea that a group of them intends to consolidate and settle a new home... While we have our reservations about their past, they are still family and they should not bear the scorn for the actions of their ancestors. If you have the time or will, please assist them!\n\nI\'ve been told that Caledra Dawnbreeze in Stormwind Keep is the representative of this movement.\n\nOh and there\'s no need to mention me. It would appear far more amicable if the offer came from yourself.';
+set @objective = 'Speak to Caledra Dawnbreeze in Stormwind Keep.';
+set @completetext = 'Y-You seek to assist us in our efforts? Truly?\n\nI am surprised but I would never turn away a helpful hand...I apologize for my earlier outburst, the Kaldorei in this city have not been kind to my people.\n\nPerhaps by working together we could change that in time, we are both part of the Alliance after all!\n\nOur people have setup a new settlement called \'thalas on the coast north of Stratholme, bordering Quel\'thalas.\n\nHowever, setting up a new home will be difficult and we have run into our share of issues. We\'re grateful for your help! I shall sum up our current situation for you.';
+set @incompletetext = 'What is it Kaldorei? I do not have the time for your lectures or scorn.';
+set @faction_id = 269;
+set @faction_count = 250;
+set @xp_or_money = 650;
+set @reward_money = 5; 
+set @quest_level = 15;
+set @min_level = 10;
+set @questgiver_id = 80242;
+set @quest_finisher = 1752;
+set @nextquest = 0;
+set @nextquestinchain = 0;
+set @prevquest = 0;
+set @RewChoiceItemId1 = 0; 
+set @RewChoiceItemId2 = 0; 
+set @RewChoiceItemId3 = 0;
+set @RewChoiceItemId4 = 0; 
+set @RewChoiceItemCount1 = 0;
+set @RewChoiceItemCount2 = 0;
+set @RewChoiceItemCount3 = 0;
+set @RewChoiceItemCount4 = 0;
+set @reward_item_1 = 0;
+set @reward_item_2 = 0; 
+set @reward_item_3 = 0;
+set @reward_item_4 = 0;
+set @reward_item_1_count = 0;
+set @reward_item_2_count = 0;
+set @reward_item_3_count = 0;
+set @reward_item_4_count = 0;
+set @creature_to_kill_1 = 80229;
+set @creature_to_kill_2 = 0; 
+set @creature_to_kill_3 = 0;
+set @creature_to_kill_4 = 0;
+set @creature_to_kill_1_count = 1;
+set @creature_to_kill_2_count = 0;
+set @creature_to_kill_3_count = 0;
+set @creature_to_kill_4_count = 0;
+set @required_item_1 = 0; 
+set @required_item_2 = 0;
+set @required_item_3 = 0;
+set @required_item_4 = 0;
+set @required_item_1_count = 0;
+set @required_item_2_count = 0;
+set @required_item_3_count = 0;
+set @required_item_4_count = 0;
 
--- (@quest_entry, '0', '2', @quest_zone, @min_level, @quest_level, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', 
+replace into quest_template values 
 
--- 'Aiding the Sunborne', 
-
--- 'Ishnu-alah, traveller! While our people struggle with problems on our borders, they\'re not the only ones.\n\nSeven thousand years ago, my husband was exiled from Hyjal due to his use of the outlawed Arcane magics.\n\nHe and the other exiles created a new kingdom called Quel\'thalas, during the last conflict their home was entirely razed, and almost their entire people slaughtered.\n\nRecently I\'ve heard from our new allies across the sea that a group of them intends to consolidate and settle a new home... While we have our reservations about their past, they are still family and they should not bear the scorn for the actions of their ancestors. If you have the time or will, please assist them!\n\nI\'ve been told that Caledra Dawnbreeze in Stormwind Keep is the representative of this movement.\n\nOh and there\'s no need to mention me. It would appear far more amicable if the offer came from yourself.', 
-
--- 'Speak to Caledra Dawnbreeze in Stormwind Keep.', 
-
--- 'Y-You seek to assist us in our efforts? Truly?\n\nI am surprised but I would never turn away a helpful hand...I apologize for my earlier outburst, the Kaldorei in this city have not been kind to my people.\n\nPerhaps by working together we could change that in time, we are both part of the Alliance after all!\n\nOur people have setup a new settlement called \'thalas on the coast north of Stratholme, bordering Quel\'thalas.\n\nHowever, setting up a new home will be difficult and we have run into our share of issues. We\'re grateful for your help! I shall sum up our current situation for you.', 
-
--- 'What is it Kaldorei? I do not have the time for your lectures or scorn.', 
-
--- '', '', '', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @faction_id, '0', '0', '0', '0', @faction_count, '0', '0', '0', '0', '0', @xp_or_money, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', 0, 0);
-      
--- update quest_template set nextquestid = @nextquest where entry = @quest_entry;
--- update quest_template set nextquestinchain = @nextquestinchain where entry = @quest_entry;
--- update quest_template set prevquestid = @prevquest where entry = @quest_entry;
--- update quest_template set ObjectiveText1 = 'Listen to Caledra\'s Story' where entry = @quest_entry;
--- update quest_template set RequiredRaces = 8 where entry = @quest_entry;
-	  
--- replace into creature_questrelation (id, quest, patch_min, patch_max) values (@questgiver_id, @quest_entry,'10','10');
--- replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (@quest_finisher, @quest_entry,'10','10');   
+(@quest_entry, '0', '2', @quest_zone, @min_level,  '0', @quest_level, '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @title, @description, @objective, @completetext, @incompletetext, '', '', '', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @faction_id, '0', '0', '0', '0', @faction_count, '0', '0', '0', '0', '0', @xp_or_money, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', 0, 0);
+     
+replace into creature_questrelation (id, quest, patch_min, patch_max) values (@questgiver_id, @quest_entry,'0','10'); 
+replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (@quest_finisher, @quest_entry,'0','10');
+	 
+update quest_template set 
+rewitemid1 = @reward_item_1, rewitemcount1 = @reward_item_1_count,
+rewitemid2 = @reward_item_2, rewitemcount2 = @reward_item_2_count,
+rewitemid3 = @reward_item_3, rewitemcount3 = @reward_item_3_count,
+rewitemid4 = @reward_item_4, rewitemcount4 = @reward_item_4_count,
+RewChoiceItemId1 = @RewChoiceItemId1, RewChoiceItemCount1 = @RewChoiceItemCount1,
+RewChoiceItemId2 = @RewChoiceItemId2, RewChoiceItemCount2 = @RewChoiceItemCount2,
+RewChoiceItemId3 = @RewChoiceItemId3, RewChoiceItemCount3 = @RewChoiceItemCount3,
+RewChoiceItemId4 = @RewChoiceItemId4, RewChoiceItemCount4 = @RewChoiceItemCount4,
+ReqCreatureOrGOId1 = @creature_to_kill_1, ReqCreatureOrGOCount1 = @creature_to_kill_1_count,
+ReqCreatureOrGOId2 = @creature_to_kill_2, ReqCreatureOrGOCount2 = @creature_to_kill_2_count,
+ReqCreatureOrGOId3 = @creature_to_kill_3, ReqCreatureOrGOCount3 = @creature_to_kill_3_count,
+ReqCreatureOrGOId4 = @creature_to_kill_4, ReqCreatureOrGOCount4 = @creature_to_kill_4_count,
+reqitemid1 = @required_item_1, reqitemcount1 = @required_item_1_count,
+reqitemid2 = @required_item_2, reqitemcount2 = @required_item_2_count,
+reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
+reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
+nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
+nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
+objectivetext1='Listen to Caledra\'s Story', requiredraces = 8  
+where entry = @quest_entry;	 
 
 -- HELP WITH A COMPASSIONATE MATTER
 
