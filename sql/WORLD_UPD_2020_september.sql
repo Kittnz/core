@@ -1,0 +1,1 @@
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (12296, 51860, -100, 0, 1, 1);
