@@ -609,6 +609,15 @@ update creature_template set faction = 371 where entry = 80506;
 update creature_template set scale = 1.5 where entry = 80506;
 update creature_template set loot_id = 0 where entry = 80506;
 
+replace into creature_model_info values (19024, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (19025, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (18324, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (18325, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (18326, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (18327, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (18328, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (18329, 5875, 2, 2, 0, 0, 0);
+
 -- Welcome to Alah’Thalas
 
 replace into gameobject_template values 
