@@ -298,7 +298,8 @@ reqitemid2 = @required_item_2, reqitemcount2 = @required_item_2_count,
 reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
 reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
 nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
-nextquestinchain = @nextquestinchain, prevquestid = @prevquest
+nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
+specialflags = 1
 where entry = @quest_entry;	 
 
 -- Relics in Feralas
@@ -335,7 +336,7 @@ set @questgiver_id = 80231;
 set @quest_finisher = 80231;
 set @nextquest = 0;
 set @nextquestinchain = 0;
-set @prevquest = 80252;
+set @prevquest = 80251;
 set @RewChoiceItemId1 = 0; 
 set @RewChoiceItemId2 = 0; 
 set @RewChoiceItemId3 = 0;
@@ -394,7 +395,8 @@ reqitemid2 = @required_item_2, reqitemcount2 = @required_item_2_count,
 reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
 reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
 nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
-nextquestinchain = @nextquestinchain, prevquestid = @prevquest
+nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
+specialflags = 1
 where entry = @quest_entry;	
 
 -- Smashing Zul'Mashar
