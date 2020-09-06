@@ -20,7 +20,7 @@ update creature_template set faction = 371 where entry = 1752;
 SET @gossip_menu_id = 56556;
 SET @magic_number = 90372; 
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
-replace into broadcast_text (ID, MaleText) values (@magic_number, 'Setting up a new home is difficult and we have run into our share of issues. It’s important to remember what’s at stake.');
+replace into broadcast_text (ID, MaleText) values (@magic_number, 'This may not be very obvious at first glance, $R, however, I assure you, we are glad to accept the help the Alliance is giving us in such dire times.');
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = 1752;
 
@@ -112,7 +112,7 @@ update creature_template set faction = 371 where entry = 549;
 SET @gossip_menu_id = 56555;
 SET @magic_number = 90371; 
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
-replace into broadcast_text (ID, MaleText) values (@magic_number, 'Recently I\'ve heard from our new allies across the sea that a group of them intends to consolidate and settle a new home...\n\nWhile we have our reservations about their past, they are still family and they should not bear the scorn for the actions of their ancestors.');
+replace into broadcast_text (ID, MaleText) values (@magic_number, 'Magic is always around us, $R. Learn to feel it, wield it and share it for the good of all of Azeroth. Do not make the same mistakes we\'ve all witnessed.');
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = 5498;
 
