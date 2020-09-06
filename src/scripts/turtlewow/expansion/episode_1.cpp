@@ -721,7 +721,7 @@ bool GossipSelect_npc_malvinah_sunblade(Player* pPlayer, Creature* pCreature, ui
 
             // Face player and render creature unselectable while speaking
             creature->SetCastingTarget(player);
-            creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+     //       creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
 
             creature->HandleEmote(EMOTE_ONESHOT_CRY);
             creature->MonsterSay("You've saved my sister!");
@@ -772,7 +772,7 @@ bool GossipSelect_npc_malvinah_sunblade(Player* pPlayer, Creature* pCreature, ui
             if (cInfo != nullptr)
                 player->KilledMonster(cInfo, ObjectGuid());
 
-            creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+    //        creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
         });
     }
 
