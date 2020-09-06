@@ -614,6 +614,9 @@ update creature_template set loot_id = 0 where entry = 80506;
 replace into gameobject_template values 
 (3000224, 0, 1, 29624, 'Translocation Orb', 35, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_translocation_orb');
 
+replace into gameobject_template values 
+(3000225, 0, 1, 29624, 'Translocation Orb', 35, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_translocation_orb');
+
 replace into`creature_template` values (80242, 0, 0, 0, 0, 0, 'Quest 80256 Custom Objective', '', 0, 5, 5, 319, 319, 0, 0, 852, 84, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 24, 31, 0, 90, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 31.856, 43.802, 100, 7, 4096, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 4276, 0, 0, 0, 0, 2, '');
 
 set @quest_entry = 80256;

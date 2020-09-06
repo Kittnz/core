@@ -14,7 +14,8 @@ enum AlahthalasQuests
     NPC_CUSTOM_OBJECTIVE_ASSISTING_CHILDREN_OF_THE_SUN = 80229,
     TO_ALAHTHALAS                                      = 80251,
     CRYSTAL_CLEAR_TASK                                 = 80002,
-    RELICS_IN_FERALAS                                  = 80003
+    RELICS_IN_FERALAS                                  = 80003,
+    WELCOME_TO_ALAHTHALAS                              = 80256
 };
 
 bool GossipHello_npc_caledra(Player* pPlayer, Creature* pCreature)
@@ -171,7 +172,7 @@ bool GossipSelect_npc_elsharin(Player* pPlayer, Creature* pCreature, uint32 /*ui
 bool GOHello_go_portal_alahthalas(Player* pPlayer, GameObject* pGo)
 {
     if (pPlayer->GetQuestRewardStatus(TO_ALAHTHALAS))
-        pPlayer->TeleportTo(0, 4309.09f, -2854.56f, 5.33926f, 2.35496f);
+        pPlayer->TeleportTo(0, 4225.31F, -2723.46F, 121.87F, 0.70F);
     return true;
 }
 
@@ -916,9 +917,26 @@ bool GOHello_go_crypt_door(Player* pPlayer, GameObject* pGo)
     return false;
 }
 
+bool GOHello_go_translocation_orb(Player* pPlayer, GameObject* pGo)
+{
+    switch (pGo->GetEntry())
+    {
+    case 3000224: pPlayer->TeleportTo(0, 4235.40F, -2778.20F, 20.65F, 6.25F); break;
+    case 3000225: pPlayer->TeleportTo(0, 4225.31F, -2723.46F, 121.87F, 0.70F); break;
+    default: break;
+    }
+
+    return true;
+}
+
 void AddSC_episode_1()
 {
     Script *newscript;
+
+    newscript = new Script;
+    newscript->Name = "go_translocation_orb";
+    newscript->pGOHello = &GOHello_go_translocation_orb;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "go_crypt_door";
