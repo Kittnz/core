@@ -10509,7 +10509,7 @@ void Unit::UpdateModelData()
     }
     else
     {
-        sLog.outError("UpdateModelData : pas / mauvaises infos pour le displayid %u de '%s'", GetDisplayId(), GetGuidStr().c_str());
+    //  sLog.outError("UpdateModelData : pas / mauvaises infos pour le displayid %u de '%s'", GetDisplayId(), GetGuidStr().c_str());
         SetFloatValue(UNIT_FIELD_COMBATREACH, 1.5f);
         SetFloatValue(UNIT_FIELD_BOUNDINGRADIUS, 1.5f);
     }

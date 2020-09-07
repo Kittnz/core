@@ -798,6 +798,62 @@ nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
 objectivetext1='Listen to Caledra\'s Story', requiredraces = 8  
 where entry = @quest_entry;	 
 
+replace into `creature_template` values (80243, 0, 17875, 0, 0, 0, 'High Priest Raemoran Alah\'belore', 'Priest Trainer', 4665, 5, 5, 166, 166, 190, 190, 20, 12, 19, 1, 1.14286, 0, 20, 5, 0, 0, 1, 6, 8, 0, 52, 1, 1500, 2000, 1, 4864, 0, 0, 0, 0, 5, 0, 8.624, 11.858, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 375, 0, 0, 0, 0, 524298, '');
+
+SET @gossip_menu_id = 59007;
+SET @magic_number = 80243; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (ID, MaleText) values (@magic_number, 'These are dark times, $N, but we must guide our kin to the Light, and we must tend to their wounds as best as we can.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+replace into `creature_template`  values (80244, 0, 16851 , 0, 0, 0, 'Ana\'ldeth Suncaller', 'Paladin Trainer', 4663, 5, 5, 166, 166, 190, 190, 20, 12, 19, 1, 1.14286, 0, 20, 5, 0, 0, 1, 6, 8, 0, 52, 1, 1500, 2000, 1, 4864, 0, 0, 0, 0, 2, 0, 8.624, 11.858, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 925, 0, 0, 0, 0, 524298, '');
+
+SET @gossip_menu_id = 59006;
+SET @magic_number = 80244; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (ID, MaleText) values (@magic_number, 'It is by the blessings of the Light we both stand here today, $N, we will be the ones to avenge our people, against the Scourge and other threads, but remember the teachings, vengeance by justice.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+replace into `creature_template` values (80245, 0, 4729, 0, 0, 0, 'Ranger-General Damilara Sunsorrow', 'Hunter Trainer', 4648, 8, 8, 334, 334, 297, 297, 20, 126, 19, 1, 1.14286, 0, 20, 5, 0, 0, 1, 7, 10, 0, 58, 1, 2000, 2000, 1, 4864, 0, 0, 0, 0, 3, 0, 13.5872, 18.6824, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 3154, 0, 0, 0, 0, 524298, '');
+
+SET @gossip_menu_id = 59005;
+SET @magic_number = 80245; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (ID, MaleText) values (@magic_number, 'The Farstriders were a proud group of rangers, with the fall of our land they too have been left behind, yet it is in us that their legacy will live on.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+replace into `creature_template` values (80246, 0, 17325, 0, 0, 0, 'Grand Magistrix Merisa Dawnbreaker', 'Mage Trainer', 64, 10, 10, 413, 413, 370, 370, 20, 126, 19, 1, 1.14286, 0, 20, 5, 0, 0, 1, 7, 7, 0, 62, 1, 2000, 2000, 1, 4864, 0, 0, 0, 0, 8, 0, 16.808, 23.111, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 5884, 0, 0, 0, 0, 524298, '');
+
+SET @gossip_menu_id = 59004;
+SET @magic_number = 80246; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (ID, MaleText) values (@magic_number, 'With the Sunwell gone, we strife to use as little mana as possible, we used to be a pillar of the Arcane, $N, now look at us.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+replace into `creature_template` values (80247, 0, 16685, 0, 0, 0, 'Larane Dawnbringer', 'Warrior Trainer', 523, 11, 11, 456, 456, 406, 406, 20, 29, 19, 1, 1.14286, 0, 20, 5, 0, 0, 1, 12, 14, 0, 64, 1, 2000, 2000, 1, 4864, 0, 0, 0, 0, 1, 0, 18.392, 25.289, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 3153, 0, 0, 0, 0, 524298, '');
+
+SET @gossip_menu_id = 59003;
+SET @magic_number = 80247; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (ID, MaleText) values (@magic_number, 'Our kin prides itself with intellect and magic, but you and I know that sometimes a more brutish approach is needed.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+REPLACE INTO `creature_template`VALUES (80248, 0, 16826, 0, 0, 0, 'Loriel', 'Rogue Trainer', 0, 8, 8, 334, 334, 297, 297, 20, 29, 18, 1, 1.14286, 0, 20, 5, 0, 0, 1, 7, 10, 0, 58, 1, 2000, 2000, 1, 4864, 0, 0, 0, 0, 4, 0, 13.5872, 18.6824, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 3155, 0, 0, 0, 0, 524298, '');
+
+SET @gossip_menu_id = 59002;
+SET @magic_number = 80248; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (ID, MaleText) values (@magic_number, 'Whether you want to steal from a noble\'s pocket, crawl into the shadows or lockpick someone\'s chest, remember the Sunwell.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+update creature_template set faction = 371 where entry in (80243,80244,80245,80246,80247,80248);
+
 -- HELP WITH A COMPASSIONATE MATTER
 
 -- SET @quest_entry = 80006;
