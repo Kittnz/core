@@ -818,6 +818,8 @@ update creature_template set gossip_menu_id = @gossip_menu_id where entry = @mag
 
 replace into `creature_template` values (80245, 0, 4729, 0, 0, 0, 'Ranger-General Damilara Sunsorrow', 'Hunter Trainer', 4648, 8, 8, 334, 334, 297, 297, 20, 126, 19, 1, 1.14286, 0, 20, 5, 0, 0, 1, 7, 10, 0, 58, 1, 2000, 2000, 1, 4864, 0, 0, 0, 0, 3, 0, 13.5872, 18.6824, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 3154, 0, 0, 0, 0, 524298, '');
 
+update creature_template set equipment_id = 15181 where entry = 80245;
+
 SET @gossip_menu_id = 59005;
 SET @magic_number = 80245; 
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
@@ -826,6 +828,9 @@ replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_numbe
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
 replace into `creature_template` values (80246, 0, 17325, 0, 0, 0, 'Grand Magistrix Merisa Dawnbreaker', 'Mage Trainer', 64, 10, 10, 413, 413, 370, 370, 20, 126, 19, 1, 1.14286, 0, 20, 5, 0, 0, 1, 7, 7, 0, 62, 1, 2000, 2000, 1, 4864, 0, 0, 0, 0, 8, 0, 16.808, 23.111, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 5884, 0, 0, 0, 0, 524298, '');
+
+update creature_template set scale = 1 where entry = 80246;
+update creature_template set equipment_id = 15191 where entry = 80246;
 
 SET @gossip_menu_id = 59004;
 SET @magic_number = 80246; 
@@ -844,6 +849,8 @@ replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_numbe
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
 REPLACE INTO `creature_template`VALUES (80248, 0, 16826, 0, 0, 0, 'Loriel', 'Rogue Trainer', 0, 8, 8, 334, 334, 297, 297, 20, 29, 18, 1, 1.14286, 0, 20, 5, 0, 0, 1, 7, 10, 0, 58, 1, 2000, 2000, 1, 4864, 0, 0, 0, 0, 4, 0, 13.5872, 18.6824, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 3155, 0, 0, 0, 0, 524298, '');
+
+update creature_template set equipment_id = 15182 where entry = 80248;
 
 SET @gossip_menu_id = 59002;
 SET @magic_number = 80248; 
