@@ -134,10 +134,15 @@ REPLACE INTO `npc_vendor` VALUES
 (80110, 2385, 0, 0, 0, 0),
 (80110, 17184, 0, 0, 0, 0);
 
-
 update creature_template set equipment_id = 0 where entry = 80110;
 
 REPLACE INTO `creature_template` VALUES (80111, 0, 7180, 0, 0, 0, 'Nagus', 'Venture Co. Field Cook', 0, 14, 14, 594, 594, 0, 0, 20, 29, 6, 1, 1.14286, 0, 20, 5, 0, 0, 1, 15, 19, 0, 70, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 23.0384, 31.6778, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 3881, 0, 0, 0, 0, 524298, '');
+
+REPLACE INTO `npc_vendor` VALUES
+(80111, 159, 0, 0, 0, 0),
+(80111, 16166, 0, 0, 0, 0),
+(80111, 6299, 0, 0, 0, 0),
+(80111, 19222, 0, 0, 0, 0);
 
 update creature_template set faction = 35 where entry between 80100 and 80111;
 
