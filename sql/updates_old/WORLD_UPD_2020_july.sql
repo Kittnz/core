@@ -1494,5 +1494,7 @@ reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
 reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
 nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
 nextquestinchain = @nextquestinchain, prevquestid = @prevquest 
-where entry = @quest_entry;	 
+where entry = @quest_entry;
+
+update item_template set class = 4, subclass = 0, spellcooldown_1 = 1200 where entry = 51861;
 	   
