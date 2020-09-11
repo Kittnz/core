@@ -2720,6 +2720,12 @@ void Player::GiveXP(uint32 xp, Unit* victim)
     if (xp < 1)
         return;
 
+    if (xp > 100000)
+    {
+        sLog.out(LOG_LEVELUP, "Character %s has attempted to get %u amount of experience.", GetName(), xp);
+        return;
+    }
+
     if (!isAlive())
         return;
 
