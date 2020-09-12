@@ -1674,7 +1674,7 @@ replace into item_template values
  '-1', '4', '80151', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);  
  
-replace into page_text values (80151, 'Thief, betrayer, son of a gnome!\n\nI heared you were around, $N, how can you show your face in the same place as I?\n\nYou stole my gig! It was my greatest theft, everyone would’ve known!\n\nUnlike you who got caught and now sent into labor like the fool you are! In any case, come give me back the money you owe me, $N!\n\nI will also teach you who the better rogue is.', 0);
+replace into page_text values (80151, 'Thief, betrayer, son of a gnome!\n\nI heard you were around, $N, how can you show your face in the same place as I?\n\nYou stole my gig! It was my greatest theft, everyone would’ve known!\n\nUnlike you who got caught and now sent into labor like the fool you are! In any case, come give me back the money you owe me, $N!\n\nI will also teach you who the better rogue is.', 0);
 
 set @quest_entry = 80116;
 set @quest_zone = 406;
