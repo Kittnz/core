@@ -1568,6 +1568,100 @@ REPLACE INTO `npc_trainer` VALUES
 (80130, 15991, 10000, 0, 0, 5, 0, 5875),
 (80130, 15995, 1000, 0, 0, 5, 0, 5875);
 
+-- Grease-stained letter (Warrior)
+
+replace into item_template values
+ ('80150', '0', '15', '0', 'Grease-stained Letter', '', '3029', '1', '0', '1', '0', '0', '0', '-1', '-1', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '4', '80150', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);  
+ 
+replace into page_text values (80150, 'Hey bub, it’s me Grizzie the Enforcer, from Undermine, remember me?\n\nProbably not but anyway, I am writing this here letter for you because I saw you swinging that weapon at them fools that tried to give you the gutter, and it reminded me of the good ol’ days in our childhood when you saved me from that Hobgoblin!\n\nAnyway pal, thanks to you I became a big bruiser, and am here to help teaching others how to smack, come learn a thing or two, but grab your purse too.', 0);
+
+set @quest_entry = 80115;
+set @quest_zone = 406;
+set @title = 'Grease-stained Letter';
+set @description = 'Hey, $N, while you were being the perfect employee doing my-, I mean your job. Grizzie the Enforcer was looking for you, said something about him owing you a favor or whatever, here he mentions it in this letter which I may or may have not dropped onto my buzzard wings, don’t take too long your break is very short!';
+set @objective = 'Read Grease-stained Letter and speak to Grizzie the Enforcer.';
+set @completetext = '$N, pal, great too see ya, let’s have a quick chat.';
+set @incompletetext = 'Move it $N! I am taking some coin out of your paycheck.';
+set @faction_id = 0;
+set @faction_count = 0;
+set @xp_or_money = 164;
+set @reward_money = 0; 
+set @quest_level = 2;
+set @min_level = 2;
+set @questgiver_id = 80100;
+set @quest_finisher = 80104;
+set @nextquest = 0;
+set @nextquestinchain = 0;
+set @prevquest = 80100;
+set @RewChoiceItemId1 = 0; 
+set @RewChoiceItemId2 = 0; 
+set @RewChoiceItemId3 = 0;
+set @RewChoiceItemId4 = 0; 
+set @RewChoiceItemCount1 = 0;
+set @RewChoiceItemCount2 = 0;
+set @RewChoiceItemCount3 = 0;
+set @RewChoiceItemCount4 = 0;
+set @reward_item_1 = 0;
+set @reward_item_2 = 0; 
+set @reward_item_3 = 0;
+set @reward_item_4 = 0;
+set @reward_item_1_count = 0;
+set @reward_item_2_count = 0;
+set @reward_item_3_count = 0;
+set @reward_item_4_count = 0;
+set @creature_to_kill_1 = 0;
+set @creature_to_kill_2 = 0; 
+set @creature_to_kill_3 = 0;
+set @creature_to_kill_4 = 0;
+set @creature_to_kill_1_count = 0;
+set @creature_to_kill_2_count = 0;
+set @creature_to_kill_3_count = 0;
+set @creature_to_kill_4_count = 0;
+set @required_item_1 = 80150;
+set @required_item_2 = 0;
+set @required_item_3 = 0;
+set @required_item_4 = 0;
+set @required_item_1_count = 1;
+set @required_item_2_count = 0;
+set @required_item_3_count = 0;
+set @required_item_4_count = 0;
+
+replace into quest_template values 
+
+(@quest_entry, '0', '2', @quest_zone, @min_level,  '0', @quest_level, '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @title, @description, @objective, @completetext, @incompletetext, '', '', '', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @faction_id, '0', '0', '0', '0', @faction_count, '0', '0', '0', '0', '0', @xp_or_money, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', 0, 0);
+     
+replace into creature_questrelation (id, quest, patch_min, patch_max) values (@questgiver_id, @quest_entry,'0','10'); 
+replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (@quest_finisher, @quest_entry,'0','10');
+	 
+update quest_template set 
+rewitemid1 = @reward_item_1, rewitemcount1 = @reward_item_1_count,
+rewitemid2 = @reward_item_2, rewitemcount2 = @reward_item_2_count,
+rewitemid3 = @reward_item_3, rewitemcount3 = @reward_item_3_count,
+rewitemid4 = @reward_item_4, rewitemcount4 = @reward_item_4_count,
+RewChoiceItemId1 = @RewChoiceItemId1, RewChoiceItemCount1 = @RewChoiceItemCount1,
+RewChoiceItemId2 = @RewChoiceItemId2, RewChoiceItemCount2 = @RewChoiceItemCount2,
+RewChoiceItemId3 = @RewChoiceItemId3, RewChoiceItemCount3 = @RewChoiceItemCount3,
+RewChoiceItemId4 = @RewChoiceItemId4, RewChoiceItemCount4 = @RewChoiceItemCount4,
+ReqCreatureOrGOId1 = @creature_to_kill_1, ReqCreatureOrGOCount1 = @creature_to_kill_1_count,
+ReqCreatureOrGOId2 = @creature_to_kill_2, ReqCreatureOrGOCount2 = @creature_to_kill_2_count,
+ReqCreatureOrGOId3 = @creature_to_kill_3, ReqCreatureOrGOCount3 = @creature_to_kill_3_count,
+ReqCreatureOrGOId4 = @creature_to_kill_4, ReqCreatureOrGOCount4 = @creature_to_kill_4_count,
+reqitemid1 = @required_item_1, reqitemcount1 = @required_item_1_count,
+reqitemid2 = @required_item_2, reqitemcount2 = @required_item_2_count,
+reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
+reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
+nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
+nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
+srcItemId = 80150, srcitemcount = 1, RequiredClasses = 1
+where entry = @quest_entry;	
+
 -- Populating the area:
 
 delete from creature where id between 80100 and 80130;
