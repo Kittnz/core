@@ -735,6 +735,8 @@ REPLACE INTO `creature_template` VALUES (80117, 0, 7920, 0, 0, 0, 'Haywire Battl
 
 update creature_template set scale = 3, type = 9 where entry = 80117;
 update creature_template set faction = 189, type = 9 where entry = 80117;
+update creature_model_info set bounding_radius = 0.5 where modelid = 7920;
+update creature_model_info set combat_reach = 0.5 where modelid = 7920;
 
 replace into item_template values
  ('80119', '0', '0', '0', 'Mechanical Drumstick', '', '17923', '1', '0', '1', '0', '0', '0', '-1', '-1', '0',
