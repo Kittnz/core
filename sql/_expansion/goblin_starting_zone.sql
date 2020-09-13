@@ -1,6 +1,13 @@
 
 REPLACE INTO `creature_template` VALUES (80100, 0, 7164, 0, 0, 0, 'Nert Blastentom', 'Venture Co. Foreman', 0, 5, 5, 319, 319, 0, 0, 852, 35, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 24, 31, 0, 90, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 31.856, 43.802, 100, 7, 4096, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 4276, 0, 0, 0, 0, 2, '');
 
+SET @gossip_menu_id = 59010;
+SET @magic_number = 80100; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (ID, MaleText) values (@magic_number, 'It\'ll be easy, they said.\n\n"No one even knows about the plateau," they said.\n\nI\'d have said the same thing, but it somehow seems less fair this way.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
 REPLACE INTO `creature_template` VALUES (80101, 0, 10746, 0, 0, 0, 'Sprat Nozzleton', 'Venture Co. Worker', 0, 3, 3, 219, 219, 0, 0, 852, 35, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 24, 31, 0, 90, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 31.856, 43.802, 100, 7, 4096, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 4276, 0, 0, 0, 0, 2, '');
 
 update creature_template set equipment_id = 0 where entry = 80100;
@@ -502,6 +509,11 @@ replace into item_template values
 
 REPLACE INTO `creature_template` VALUES (80115, 0, 8172, 0, 0, 0, 'Highpeak Lasher', NULL, 0, 3, 3, 40, 45, 0, 0, 50, 91, 0, 0.93, 1.14286, 1, 20, 5, 0, 0, 1, 10, 12, 0, 40, 1, 1960, 2156, 8, 0, 0, 0, 0, 0, 0, 0, 8.624, 11.858, 100, 4, 0, 3569, 0, 0, 0, 5, 5, 5, 10, 5, 0, 0, 0, 0, 0, 0, 1, 4, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 16384, 0, 0, '');
 
+update creature_template set faction = 189,
+health_min = 80, health_max = 100, 
+armor = 76, dmg_min = 8, dmg_max = 10, attack_power = 60, 
+dmg_school = 3 where entry = 80116;
+
 update creature_template set loot_id = 80115 where entry = 80115; 
 replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (80115, 80156, 20, 0, 1, 1);
 replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (80115, 80157, 80, 0, 1, 1);
@@ -764,7 +776,7 @@ replace into creature_loot_template (entry, item, chanceorquestchance, groupid, 
 update creature_template set faction = 189,
 health_min = 80, health_max = 100, 
 armor = 76, dmg_min = 8, dmg_max = 10, attack_power = 60, 
-fire_res = 50, dmg_school = 2,
+fire_res = 80, dmg_school = 2,
 spell_id1 = 11962, gold_min = 4, gold_max = 12, ai_name = "EventAI"
 where entry = 80116;
 
@@ -1266,8 +1278,21 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '5', '0', '0', '0', '20', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
+ 
+ replace into item_template values
+ ('80166', '0', '15', '0', 'Bone Shards', '', '1416', '0', '0', '1', '13', '13', '0', '-1', '-1', '6',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '5', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '2', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
 
 REPLACE INTO `creature_template` VALUES (80120, 0, 4629, 0, 0, 0, 'Tomb Shadow', NULL, 0, 6, 6, 120, 136, 0, 0, 207, 21, 0, 0.888888, 0.857143, 0, 20, 5, 0, 0, 1, 7, 10, 0, 56, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 13.4464, 18.4888, 100, 6, 0, 1520, 1520, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 12, '', 1, 1, 0, 0, 3, 1520, 0, 0, 8602131, 0, 0, '');
+	 
+update creature_template set loot_id = 80120 where entry = 80120; 
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (80120, 80166, 100, 1, 2, 3); 
 	 
 update creature_template set script_name = "npc_tomb_shadow" where entry = 80120;
 update creature_template set movement_type = 0 where entry = 80120;
@@ -1424,6 +1449,13 @@ update item_template set sheath = 3 where entry = 80129;
 REPLACE INTO `creature_template` VALUES (80121, 0, 7164, 0, 0, 0, 'Nert Blastentom', 'Venture Refugee', 0, 5, 5, 319, 319, 0, 0, 852, 35, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 24, 31, 0, 90, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 31.856, 43.802, 100, 7, 4096, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 4276, 0, 0, 0, 0, 2, '');
 
 update creature_template set equipment_id = 0 where entry = 80121;
+
+SET @gossip_menu_id = 59011;
+SET @magic_number = 80121; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (ID, MaleText) values (@magic_number, 'Durotar ain\'t exactly a vacation destination. Sand and scorpids and harpies, and they\'ve apparently added some sort of demonic cult since my last visit. Still, it\'s better than finding yourself on the wrong end of a Venture Co. brute squad.\n\n<Nert sighs.>\n\nI used to be the brute squad.\n\nAnyway, a good businessman is always looking forward. Where there\'s scarcity, there\'s opportunity. The Horde seems to specialize in colonizing the most hostile wastelands on the face of Azeroth, so with enough know-how, I bet I can make enough to vacation on the South Sea island of my choice.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
 REPLACE INTO `creature_template` VALUES (80122, 0, 10746, 0, 0, 0, 'Sprat Nozzleton', 'Venture Refugee', 0, 3, 3, 219, 219, 0, 0, 852, 35, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 24, 31, 0, 90, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 31.856, 43.802, 100, 7, 4096, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 4276, 0, 0, 0, 0, 2, '');
 
@@ -2544,9 +2576,13 @@ update creature set spawntimesecsmin = 1, spawntimesecsmax = 4 where id = 80100;
 
 update gameobject set id = 2008164 where id = 1000261;
 
--- Chest
+-- Chest:
 
 delete from gameobject where id = 106318 and position_x = 1708.94;
 REPLACE INTO `gameobject` (`id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`, `spawnFlags`, `visibilitymod`, `patch_min`, `patch_max`) VALUES (106318, 1, 1708.94, 1687.28, 138.855, 4.19877, 0, 0, 0.86352, -0.504315, 300, 900, 100, 1, 0, 0, 0, 10);
 
+-- Starting food items:
+
+REPLACE INTO `item_template` VALUES (80167, 0, 0, 0, 'Kaja\'Cola', '', 21794, 1, 0, 5, 25, 1, 0, -1, -1, 5, 1, 0, 0, 0, 0, 0, 0, 0, 0, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 430, 0, -1, 0, 0, 59, 1000, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+REPLACE INTO `item_template` VALUES (80168, 0, 0, 0, 'Crunchy Murloc Fin', '', 555, 1, 0, 5, 25, 1, 0, -1, -1, 5, 1, 0, 0, 0, 0, 0, 0, 0, 0, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 433, 0, -1, 0, 0, 11, 1000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 1, NULL);
 
