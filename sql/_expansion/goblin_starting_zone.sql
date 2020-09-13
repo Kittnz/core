@@ -2234,7 +2234,9 @@ update creature_template set npc_flags = 2 where entry = 80131;
 
 delete from creature where id = 80131;
 
-REPLACE INTO `creature` (`id`, `map`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `DeathState`, `MovementType`, `spawnFlags`, `visibilitymod`, `patch_min`, `patch_max`) VALUES (80131, 1, 0, 51261, 1852.5, 1418.99, 142.332, 4.95281, 25, 25, 0, 0, 100, 0, 0, 0, 0, 0, 0, 10);
+REPLACE INTO `creature` (`id`, `map`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `DeathState`, `MovementType`, `spawnFlags`, `visibilitymod`, `patch_min`, `patch_max`) VALUES (80131, 1, 0, 51261, 1864.54, 1377.61, 140.293, 1.47031, 25, 25, 0, 0, 100, 0, 0, 0, 0, 0, 0, 10);
+
+replace into creature_template_addon (entry, bytes1, emote) values ('80131', '1', 0); 
 
 replace into gameobject_template values 
 (3000227, 0, 3, 23550, 'Trash', 0, 0, 0.7, 57, 3000227, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
