@@ -232,7 +232,7 @@ SET @quest_entry = 80100;
 SET @quest_zone = 406;
 SET @title = 'A New Ad-Venture';
 SET @description = 'Alright, pal, listen up. I know this is your first mission for the Venture Company, so I’ll speak real slow.\n\nWe’re up here to find a special treasure, you hear? Supposed to be worth more than half the jewels in Undermine all by itself. Boss can’t wait to get his hands on it, but the last guys he sent up here never sent anything back. Thievin’ jerks think they’re gonna keep the boss’s treasure for themselves? Not if I have anything to say about it. Boss says don’t come home unless we get what we came for.\n\nWe busted up a few gizmos on our flyer gettin’ down here, but lucky for us, it seems like those other guys left some of their bots behind. Run around and grab some whizmagigs from them, would ya?';
-SET @objective = 'Gather 8 Whirling Whizmagigs from Whirling Whizzbots,then return to Nert Blastentom.';
+SET @objective = 'Gather 8 Whirling Whizmagigs from Whirling Whizz-Bots,then return to Nert Blastentom.';
 SET @completetext = 'Nice job, kid. You keep that up, you might be a foreman in, uh, eighteen or nineteen years.\n\nCompetition’s tough, you know.';
 SET @incompletetext = 'You know what they say. Time is money, employee.';
 SET @faction_id = 0;
@@ -340,6 +340,8 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '0', '0', '0', '0', '0', '0', '7', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
+ 
+update item_template set stackable = 10 where entry = 80161;
   
 update item_template set stackable = 10 where entry = 80103;
 update creature_template set loot_id = 80113 where entry = 80113; 
@@ -432,6 +434,7 @@ where entry = @quest_entry;
 
 REPLACE INTO `creature_template` VALUES (80114, 0, 4249, 4250, 4247, 4248, 'Stonetalon Environmentalist', NULL, 0, 3, 3, 74, 80, 0, 0, 49, 91, 0, 1, 0.857143, 0, 20, 5, 0, 0, 1, 3, 5, 0, 50, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 6.9344, 9.5348, 100, 7, 0, 38, 38, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 7, 'EventAI', 1, 3, 0, 0, 3, 38, 0, 0, 0, 0, 0, '');
 
+delete from creature_template_addon where entry = 80114;
 replace into `creature_template_addon` (`entry`, `auras`) values ('80114', '5916');
 
 update creature_template set loot_id = 80114 where entry = 80114; 
