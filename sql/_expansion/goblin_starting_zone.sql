@@ -87,7 +87,7 @@ REPLACE INTO `creature_template` values (80129, 0, 4449, 0, 0, 0, 'Imp', '', 0, 
 
 update creature_template set faction = 35 where entry = 80129;
 
-REPLACE INTO `creature_template` VALUES (80129, 0, 10745, 0, 0, 0, 'Wizette Icewhistle', 'Mage Trainer', 64, 10, 10, 413, 413, 370, 370, 20, 126, 19, 1, 1.14286, 0, 20, 5, 0, 0, 1, 7, 7, 0, 62, 1, 2000, 2000, 1, 4864, 0, 0, 0, 0, 8, 0, 16.808, 23.111, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 5884, 0, 0, 0, 0, 524298, '');
+REPLACE INTO `creature_template` VALUES (80108, 0, 10745, 0, 0, 0, 'Wizette Icewhistle', 'Mage Trainer', 64, 10, 10, 413, 413, 370, 370, 20, 126, 19, 1, 1.14286, 0, 20, 5, 0, 0, 1, 7, 7, 0, 62, 1, 2000, 2000, 1, 4864, 0, 0, 0, 0, 8, 0, 16.808, 23.111, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 5884, 0, 0, 0, 0, 524298, '');
 
 update creature_template set faction = 69 where entry = 80129;
 
@@ -168,7 +168,7 @@ replace into broadcast_text (ID, MaleText) values (70012, 'Error 132: Fatal Exce
 replace into broadcast_text (ID, MaleText) values (70013, 'Error 134: Failed to open required archive...'); replace into npc_text (ID, BroadcastTextID0) values (70013, 70013);
 replace into broadcast_text (ID, MaleText) values (70014, 'Error 132: Access Violation.'); replace into npc_text (ID, BroadcastTextID0) values (70014, 70014);
 replace into broadcast_text (ID, MaleText) values (70015, 'Error... Shutting down.'); replace into npc_text (ID, BroadcastTextID0) values (70015, 70015);
-replace into broadcast_text (ID, MaleText) values (70016, 'System processing. Error. Error. Error.>'); replace into npc_text (ID, BroadcastTextID0) values (70016, 70016);
+replace into broadcast_text (ID, MaleText) values (70016, 'System processing. Error. Error. Error.'); replace into npc_text (ID, BroadcastTextID0) values (70016, 70016);
 
 
 update creature_template set scale = 0.8, type = 9 where entry = 80112;
@@ -2065,7 +2065,7 @@ set @reward_money = 0;
 set @quest_level = 2;
 set @min_level = 2;
 set @questgiver_id = 80100;
-set @quest_finisher = 80129;
+set @quest_finisher = 80108;
 set @nextquest = 0;
 set @nextquestinchain = 0;
 set @prevquest = 80100;
