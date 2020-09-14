@@ -1132,6 +1132,7 @@ REPLACE INTO `creature_template` VALUES (80118, 0, 18322, 18323, 0, 0, 'Animated
 update creature_template set loot_id = 80118 where entry = 80118; 
 replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (80118, 80164, 30, 1, 1, 1);
 replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (80118, 80164, 70, 2, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (80118, 80170, -100, 3, 1, 1);
 
 update creature_template set 
 health_min = 100, health_max = 130, dmg_school = 5,
@@ -2423,6 +2424,98 @@ REPLACE INTO `gameobject` (`id`, `map`, `position_x`, `position_y`, `position_z`
 (3000229, 1, 1869.47, 1369.15, 143.694, 4.96434, 0, 0, 0.612659, -0.790348, 160, 350, 100, 1, 0, 0, 0, 10),
 (3000229, 1, 1829.37, 1337.33, 145.608, 0.640724, 0, 0, 0.31491, 0.949121, 160, 350, 100, 1, 0, 0, 0, 10),
 (3000229, 1, 1883.26, 1448.56, 142.644, 2.13376, 0, 0, 0.875698, 0.482859, 160, 350, 100, 1, 0, 0, 0, 10);
+
+-- This Is In My Contract (Warlock)
+
+replace into item_template values
+ ('80170', '0', '0', '0', 'Howling Crystal', '', '33448', '1', '0', '1', '0', '0', '0', '-1', '-1', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '4', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+
+set @quest_entry = 80121;
+set @quest_zone = 406;
+set @title = 'This Is In My Contract';
+set @description = 'Nert might be afraid of a little shadow magic, but not us, huh?\n\nIt’s time for you learn a little real demon-summoning. Yeah, I know we’re in the middle of a crisis, but there’s no time like the present! We’re warlocks!\n\nCrises are what we do! And besides, I’m contractually obligated to help you new enforcers out.\n\nSo here’s what you’re gonna do. You’re gonna go on Nert’s little expedition, but you’re gonna bring me something special. It looks like some of the creatures there have little shards of a purple crystal on them, and purple just so happens to be our favorite color.\n\nBring me one back, and I’ll teach ya to summon an imp, how’s that?';
+set @objective = 'Collect a Howling Crystal from one of the creatures of the Grumbling Grove.';
+set @completetext = 'Placeholder.';
+set @incompletetext = 'Placeholder.';
+set @faction_id = 0;
+set @faction_count = 0;
+set @xp_or_money = 184;
+set @reward_money = 0; 
+set @quest_level = 6;
+set @min_level = 4;
+set @questgiver_id = 80107;
+set @quest_finisher = 80107;
+set @nextquest = 0;
+set @nextquestinchain = 0;
+set @prevquest = 80100;
+set @RewChoiceItemId1 = 0; 
+set @RewChoiceItemId2 = 0; 
+set @RewChoiceItemId3 = 0;
+set @RewChoiceItemId4 = 0; 
+set @RewChoiceItemCount1 = 0;
+set @RewChoiceItemCount2 = 0;
+set @RewChoiceItemCount3 = 0;
+set @RewChoiceItemCount4 = 0;
+set @reward_item_1 = 6516;
+set @reward_item_2 = 0; 
+set @reward_item_3 = 0;
+set @reward_item_4 = 0;
+set @reward_item_1_count = 1;
+set @reward_item_2_count = 0;
+set @reward_item_3_count = 0;
+set @reward_item_4_count = 0;
+set @creature_to_kill_1 = 0;
+set @creature_to_kill_2 = 0; 
+set @creature_to_kill_3 = 0;
+set @creature_to_kill_4 = 0;
+set @creature_to_kill_1_count = 0;
+set @creature_to_kill_2_count = 0;
+set @creature_to_kill_3_count = 0;
+set @creature_to_kill_4_count = 0;
+set @required_item_1 = 80170;
+set @required_item_2 = 0;
+set @required_item_3 = 0;
+set @required_item_4 = 0;
+set @required_item_1_count = 1;
+set @required_item_2_count = 0;
+set @required_item_3_count = 0;
+set @required_item_4_count = 0;
+
+replace into quest_template values 
+
+(@quest_entry, '0', '2', @quest_zone, @min_level,  '0', @quest_level, '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @title, @description, @objective, @completetext, @incompletetext, '', '', '', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @faction_id, '0', '0', '0', '0', @faction_count, '0', '0', '0', '0', '0', @xp_or_money, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', 0, 0);
+     
+replace into creature_questrelation (id, quest, patch_min, patch_max) values (@questgiver_id, @quest_entry,'0','10'); 
+replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (@quest_finisher, @quest_entry,'0','10');
+	 
+update quest_template set 
+rewitemid1 = @reward_item_1, rewitemcount1 = @reward_item_1_count,
+rewitemid2 = @reward_item_2, rewitemcount2 = @reward_item_2_count,
+rewitemid3 = @reward_item_3, rewitemcount3 = @reward_item_3_count,
+rewitemid4 = @reward_item_4, rewitemcount4 = @reward_item_4_count,
+RewChoiceItemId1 = @RewChoiceItemId1, RewChoiceItemCount1 = @RewChoiceItemCount1,
+RewChoiceItemId2 = @RewChoiceItemId2, RewChoiceItemCount2 = @RewChoiceItemCount2,
+RewChoiceItemId3 = @RewChoiceItemId3, RewChoiceItemCount3 = @RewChoiceItemCount3,
+RewChoiceItemId4 = @RewChoiceItemId4, RewChoiceItemCount4 = @RewChoiceItemCount4,
+ReqCreatureOrGOId1 = @creature_to_kill_1, ReqCreatureOrGOCount1 = @creature_to_kill_1_count,
+ReqCreatureOrGOId2 = @creature_to_kill_2, ReqCreatureOrGOCount2 = @creature_to_kill_2_count,
+ReqCreatureOrGOId3 = @creature_to_kill_3, ReqCreatureOrGOCount3 = @creature_to_kill_3_count,
+ReqCreatureOrGOId4 = @creature_to_kill_4, ReqCreatureOrGOCount4 = @creature_to_kill_4_count,
+reqitemid1 = @required_item_1, reqitemcount1 = @required_item_1_count,
+reqitemid2 = @required_item_2, reqitemcount2 = @required_item_2_count,
+reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
+reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
+nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
+nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
+srcItemId = 80154, srcitemcount = 1, RequiredClasses = 256
+where entry = @quest_entry;	
 
 -- Populating the area:
 
