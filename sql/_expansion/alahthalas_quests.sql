@@ -949,6 +949,97 @@ update creature_template set faction = 371 where entry in (80243,80244,80245,802
 
 -- '', '', '', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @faction_id, '0', '0', '0', '0', @faction_count, '0', '0', '0', '0', '0', @xp_or_money, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', 0, 0);
     
+	
+-- Sidequest 1
+-- Quest name: Teslinah’s search
+-- Level 20 | Requires Friendly reputation with the Silvermoon Remnant
+-- Questgiver:  Thalassian Child
+
+-- Quest text:
+-- Hello miss/mister my name is Teslinah… Please I need your help! My mommy and I were at the Farstrider Lodge after fleeing from all the bad up north… But when we were in Stormwind we got separated! Miss Elsharin found me and took me here, believing my mommy would be here, but she’s not! Please miss/mister, will you help me?
+
+-- Pretty please? The grumpy man over there only told me to sit in a corner and be silent, will you help me, would you?
+
+-- Post-Questtext acceptance stuff
+-- Text: Yay! Thank you! Thank you, thank you, thank you! I am so happy! *sniffles* <Plays crying animation>
+-- You’re so sweet! We should go to Stormwind, let’s find someone important who can help! I believe miss Tanilaeh in the Golden Dawn Institute can take us back! What’s your name?… Ah it’s <name>! I like it!
+
+-- Post-Questtext Stormwind stuff
+
+-- *Once back in Stormwind’s mage tower* 
+-- Text: Ooh this place is huge! Where do we go now?
+
+-- *Mage District*
+-- Text: I feel the magic in the air! This place is nice but not as pretty or magical as Silvermoon!
+
+-- *Mage District Tavern*
+-- Text: Mommy isn’t here… Let’s keep moving!
+
+-- *Mage District Tavern Secret Basement*
+-- Text: This place is scary, there’s bad magic here and it smells horrible! Can we leave?! Please???
+
+-- *Stormwind Park Moonwell* 
+-- Text: <name>,  <name>! Look it’s a Night elf Priestess! And it’s a Moonwell! I love all the grass and glowing plants! This place is nice! I bet Mommy would like it! Let’s keep searching so we can show it to her!
+
+-- *Dwarf District*
+-- Text: Yuck! This place smells...Would Mommy really be here?
+
+-- *Dwarf District Embassy*
+-- Text: Oooh, this place looks much more civil… But I am sure my Mommy didn’t go to the Dwarf lands...
+
+-- *Little Silvermoon* (Cut throat alley)
+-- Text: Ooh our people have settled here! It’s pretty, not as pretty as Silvermoon but pretty!...This place isn’t large though and Mommy isn’t here...Let’s keep looking!
+
+-- *Deeprun Tram entrance*
+-- Text: That looks so weird! The Gnomes made this, right?… I’m sure Mommy isn’t there, that leads to the Dwarf city I think… It’s cold there, mommy hates the cold.
+
+-- *Stormwind Keep*
+-- Text :Ooh the King lives there! We shouldn’t disturb him...Mommy isn’t there either, they wouldn’t allow her in, we don’t have much… Mommy is pretty but we lost everything when Quel’thalas fell.
+
+-- *Old town*
+-- Text: I heard this place existed before the new town was built!! There’s so many shops but the streets are also so crammed it is a bit scary…
+
+-- *Old town Tavern*
+-- Text: This place smells strange… Hm… Mommy isn’t here either, I am worried <name>, where could she be?
+
+-- *Old town Barracks* 
+-- Text: The army is there… Could my mom have been arrested? But she didn’t commit any crime… I don’t think this is the place <name>, we can come back here if we don’t find her anywhere else.
+
+-- *Cathedral square*
+-- Text: It’s the Cathedral! It’s so huge! <name> that’s amazing!
+
+-- *Orphanage* 
+-- Text: ...If mommy is gone, I could end up there… I...I don’t want to think about that…It’s so...sad” <Crying animation plays>
+
+-- *Cathedral* 
+-- Text: Ooh! Look at this place! It’s...Amazing! Wow!! <name> look at how pretty this place is! I like the shiny Light, it heals wounds and the priests are all so sweet… 
+
+-- *Cathedral Basement*
+-- Text: This place...is not pretty, it smells and is scary, can we leave please? I don’t like how the man in red looks at me...
+
+-- *Cathedral Catacombs*
+-- Text: This is bad, this is bad, please let’s go? I’m scared...
+
+-- *Trade District*
+-- Text: Oh there’s so many people! I remember when we first arrived here by Gryphon! Their feathers were fluffy! Could Mom be here?
+
+
+-- *Stormwind Visitor Center*
+-- Text: Oh...In there <name> !! That’s the Visitor Center where we first checked in when we arrived, maybe they know something!!
+
+-- Objective: Find someone who can help in Stormwind! (Aldwin Laughlin in the Stormwind Visitor Center but this isn’t shown in the Objective, players have to search like in a classic Vanilla quest)
+
+-- Incomplete: Yes what can I do for you <race>?
+
+-- Completion: Her mom is missing you say? Let me see...The girl’s name is Teslinah? We do have records of her and her mother’s arrival in Stormwind with the other refugees but she and her mother never showed up at the City hall for their registration. This is troubling we can’t have people going missing in Stormwind, I will investigate, until my investigation is complete can I count on you to care for the girl? Since she was registered here in Stormwind I will issue some bonds to feed her properly.
+
+-- Reward: 5 silver 
+-- 75 Silvermoon remnant reputation 
+-- 75 Stormwind city reputation
+
+-- Postquest interaction:
+-- Text: Mommy is gone but mister Aldwin will find her! I am sure! Until then I am happy and excited to adventure with you <name> ! We’re the bestest friends now! We’re going to have a lot of fun seeing the world! Hehe! <plays laugh animation>
+
 
 update creature_template set unit_class = 4, level_min = 60, level_max = 60, health_min = 21426, health_max = 21426, mana_min = 0, mana_max = 0, rank = 1, dmg_min = 182, dmg_max = 430, base_attack_time = 1800, attack_power = 200, ranged_attack_power = 100, regeneration = 3, armor = 3621 where entry = 80248;
 update creature_template set unit_class = 1, level_min = 60, level_max = 60, health_min = 29322, health_max = 29322, mana_min = 0, mana_max = 0, rank = 1, dmg_min = 348, dmg_max = 543, base_attack_time = 2200, attack_power = 200, ranged_attack_power = 100, regeneration = 3, armor = 3821 where entry = 80247;
