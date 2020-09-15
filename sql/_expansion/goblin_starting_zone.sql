@@ -2533,9 +2533,9 @@ REPLACE INTO `creature_template` VALUES (80133, 0, 7338, 0, 0, 0, 'Szabo', 'Vent
 
 update creature_template set equipment_id = 51261 where entry = 80133;
 
-REPLACE INTO `creature_template` VALUES (80134, 0, 7164, 0, 0, 0, 'Nert Blastentom', '', 0, 5, 5, 319, 319, 0, 0, 852, 35, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 24, 31, 0, 90, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 31.856, 43.802, 100, 7, 4096, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 4276, 0, 0, 0, 0, 2, '');
+REPLACE INTO `creature_template` VALUES (80134, 0, 7164, 0, 0, 0, 'Nert Blastentom', '', 0, 5, 5, 319, 319, 0, 0, 852, 35, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 24, 31, 0, 90, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 31.856, 43.802, 100, 7, 4096, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 4276, 0, 0, 0, 0, 2, 'npc_nert_joining_horde');
 
-update creature_template set npc_flags = 2 where entry = 80134;
+update creature_template set npc_flags = 3 where entry = 80134;
 update creature_template set equipment_id = 0 where entry = 80134;
 
 update creature_template set gossip_menu_id = 59011 where entry = 80134;
