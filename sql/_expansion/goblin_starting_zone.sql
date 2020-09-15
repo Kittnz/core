@@ -1697,7 +1697,7 @@ SET @objective = 'Bring Torka’s Boarbecue Ribs to Gar’thok in Razor Hill and
 SET @completetext = '<You hand over the boar and begin to explain your situation. Gar’thok does not appear to be fully listening as he devours the food with relish. It takes him a moment to realize you’ve finished.>\n\n...huh? Oh, yes.\n\n<Gar’thok regains his composure.>\n\nAre you prepared to fight with honor?\n\nTo join the ranks of the Warchief’s forces?\n\nTo be his fist in lands unknown, and to serve the Horde without question?';
 SET @incompletetext = '<Gar’thok appears to be salivating slightly.>\n\nWhat are you doing here, and why do you smell like Torka’s cooking?';
 SET @faction_id = 76;
-SET @faction_count = 3500;
+SET @faction_count = 250;
 SET @xp_or_money = 200;
 SET @reward_money = 0; 
 SET @quest_level = 6;
@@ -2517,9 +2517,195 @@ nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
 srcItemId = 80154, srcitemcount = 1, RequiredClasses = 256
 where entry = @quest_entry;	
 
+-- Starting food items:
+
+REPLACE INTO `item_template` VALUES (80167, 0, 0, 0, 'Kaja\'Cola', '', 21794, 1, 0, 5, 25, 1, 0, -1, -1, 5, 1, 0, 0, 0, 0, 0, 0, 0, 0, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 430, 0, -1, 0, 0, 59, 1000, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+REPLACE INTO `item_template` VALUES (80168, 0, 0, 0, 'Crunchy Murloc Fin', '', 25473, 1, 0, 5, 25, 1, 0, -1, -1, 5, 1, 0, 0, 0, 0, 0, 0, 0, 0, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 433, 0, -1, 0, 0, 11, 1000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 1, NULL);
+
+-- Of Goblins and Future
+
+REPLACE INTO `creature_template` VALUES (80132, 0, 9132, 0, 0, 0, 'Greely', 'Venture Co. Refugee', 59010, 10, 10, 519, 519, 0, 0, 852, 35, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 24, 31, 0, 90, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 31.856, 43.802, 100, 7, 4096, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 2, '');
+
+update creature_template set equipment_id = 10468 where entry = 80132;
+update creature_template set npc_flags = 2 where entry = 80132;
+
+REPLACE INTO `creature_template` VALUES (80133, 0, 7338, 0, 0, 0, 'Szabo', 'Venture Co. Refugee', 59010, 10, 10, 519, 519, 0, 0, 852, 35, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 24, 31, 0, 90, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 31.856, 43.802, 100, 7, 4096, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 2, '');
+
+update creature_template set equipment_id = 51261 where entry = 80133;
+
+REPLACE INTO `creature_template` VALUES (80134, 0, 7164, 0, 0, 0, 'Nert Blastentom', '', 0, 5, 5, 319, 319, 0, 0, 852, 35, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 24, 31, 0, 90, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 31.856, 43.802, 100, 7, 4096, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 4276, 0, 0, 0, 0, 2, '');
+
+update creature_template set npc_flags = 2 where entry = 80134;
+update creature_template set equipment_id = 0 where entry = 80134;
+
+update creature_template set gossip_menu_id = 59011 where entry = 80134;
+
+set @quest_entry = 80122;
+set @quest_zone = 14;
+set @title = 'Of Goblins and Future';
+set @description = 'Heya sweetie, it seems you sticking back was a great idea, you made a name of yourself around this parts, helping these orcs how you could, honestly I am not very amused by their honor and whatever, as long as we got a place to get some coin, sleep and food, I am in.\n\nBut it is not my choice, eh. Anyway, $N, go talk to Nert, our former foreman, he’s in Orgrimmar waiting to speak with the big man himself, the warchief, hopefully your deeds and our skills will make him consider us joining.';
+set @objective = 'Speak to Nert in Orgrimmar and settle your future.';
+set @completetext = '$N, good to see you again pal, I hear you helped the Horde a lot, maybe this will not be a bust after all.';
+set @incompletetext = 'You should really go you know, without you there we might lose this chance.';
+SET @faction_id = 0;
+SET @faction_count = 0;
+set @xp_or_money = 384;
+set @reward_money = 0; 
+set @quest_level = 10;
+set @min_level = 10;
+set @questgiver_id = 80132;
+set @quest_finisher = 80134;
+set @nextquest = 0;
+set @nextquestinchain = 0;
+set @prevquest = 80100;
+set @RewChoiceItemId1 = 0; 
+set @RewChoiceItemId2 = 0; 
+set @RewChoiceItemId3 = 0;
+set @RewChoiceItemId4 = 0; 
+set @RewChoiceItemCount1 = 0;
+set @RewChoiceItemCount2 = 0;
+set @RewChoiceItemCount3 = 0;
+set @RewChoiceItemCount4 = 0;
+set @reward_item_1 = 0;
+set @reward_item_2 = 0; 
+set @reward_item_3 = 0;
+set @reward_item_4 = 0;
+set @reward_item_1_count = 0;
+set @reward_item_2_count = 0;
+set @reward_item_3_count = 0;
+set @reward_item_4_count = 0;
+set @creature_to_kill_1 = 0;
+set @creature_to_kill_2 = 0; 
+set @creature_to_kill_3 = 0;
+set @creature_to_kill_4 = 0;
+set @creature_to_kill_1_count = 0;
+set @creature_to_kill_2_count = 0;
+set @creature_to_kill_3_count = 0;
+set @creature_to_kill_4_count = 0;
+set @required_item_1 = 0;
+set @required_item_2 = 0;
+set @required_item_3 = 0;
+set @required_item_4 = 0;
+set @required_item_1_count = 0;
+set @required_item_2_count = 0;
+set @required_item_3_count = 0;
+set @required_item_4_count = 0;
+
+replace into quest_template values 
+
+(@quest_entry, '0', '2', @quest_zone, @min_level,  '0', @quest_level, '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @title, @description, @objective, @completetext, @incompletetext, '', '', '', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @faction_id, '0', '0', '0', '0', @faction_count, '0', '0', '0', '0', '0', @xp_or_money, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', 0, 0);
+     
+replace into creature_questrelation (id, quest, patch_min, patch_max) values (@questgiver_id, @quest_entry,'0','10'); 
+replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (@quest_finisher, @quest_entry,'0','10');
+	 
+update quest_template set 
+rewitemid1 = @reward_item_1, rewitemcount1 = @reward_item_1_count,
+rewitemid2 = @reward_item_2, rewitemcount2 = @reward_item_2_count,
+rewitemid3 = @reward_item_3, rewitemcount3 = @reward_item_3_count,
+rewitemid4 = @reward_item_4, rewitemcount4 = @reward_item_4_count,
+RewChoiceItemId1 = @RewChoiceItemId1, RewChoiceItemCount1 = @RewChoiceItemCount1,
+RewChoiceItemId2 = @RewChoiceItemId2, RewChoiceItemCount2 = @RewChoiceItemCount2,
+RewChoiceItemId3 = @RewChoiceItemId3, RewChoiceItemCount3 = @RewChoiceItemCount3,
+RewChoiceItemId4 = @RewChoiceItemId4, RewChoiceItemCount4 = @RewChoiceItemCount4,
+ReqCreatureOrGOId1 = @creature_to_kill_1, ReqCreatureOrGOCount1 = @creature_to_kill_1_count,
+ReqCreatureOrGOId2 = @creature_to_kill_2, ReqCreatureOrGOCount2 = @creature_to_kill_2_count,
+ReqCreatureOrGOId3 = @creature_to_kill_3, ReqCreatureOrGOCount3 = @creature_to_kill_3_count,
+ReqCreatureOrGOId4 = @creature_to_kill_4, ReqCreatureOrGOCount4 = @creature_to_kill_4_count,
+reqitemid1 = @required_item_1, reqitemcount1 = @required_item_1_count,
+reqitemid2 = @required_item_2, reqitemcount2 = @required_item_2_count,
+reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
+reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
+nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
+nextquestinchain = @nextquestinchain, prevquestid = @prevquest
+where entry = @quest_entry;	
+
+-- The Old Goblin and His Silver Tongue
+
+replace into`creature_template` values (80135, 0, 0, 0, 0, 0, 'Quest 80123 Custom Objective', '', 0, 5, 5, 319, 319, 0, 0, 852, 84, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 24, 31, 0, 90, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 31.856, 43.802, 100, 7, 4096, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 4276, 0, 0, 0, 0, 2, '');
+
+set @quest_entry = 80123;
+set @quest_zone = 14;
+set @title = 'The Old Goblin and His Silver Tongue';
+set @description = 'You did a great job kid, just as I instructed you, while you were out there pillaging, killing, collecting, wiping dust or whatever those orcs made you do to earn their trust I have been waiting to get an audience with the big guy here, you see I hear he has a big heart, so we might as well choose how to do this, do we beg for our lives or are we fighting for it?\n\nYou know us goblins have no real pride, shining coins it is where it is, but I think this warchief would take us more seriously if we told him what we have in store for him, how we can help them and why they should take us in, remember $N, we are no longer being paid but at the same time we can do our own stuff.\n\nBe at my right old pal, as we speak to the big boss himself, I need you there, for real.';
+set @objective = 'Sit through the talk between Nert and Thrall.';
+set @completetext = 'For a moment there, I thought I lost him, good thing he had history with goblins and knows our value.';
+set @incompletetext = 'Future awaits, coin awaits.';
+SET @faction_id = 76;
+SET @faction_count = 3000;
+set @xp_or_money = 384;
+set @reward_money = 0; 
+set @quest_level = 10;
+set @min_level = 10;
+set @questgiver_id = 80134;
+set @quest_finisher = 80134;
+set @nextquest = 0;
+set @nextquestinchain = 0;
+set @prevquest = 80122;
+set @RewChoiceItemId1 = 0; 
+set @RewChoiceItemId2 = 0; 
+set @RewChoiceItemId3 = 0;
+set @RewChoiceItemId4 = 0; 
+set @RewChoiceItemCount1 = 0;
+set @RewChoiceItemCount2 = 0;
+set @RewChoiceItemCount3 = 0;
+set @RewChoiceItemCount4 = 0;
+set @reward_item_1 = 0;
+set @reward_item_2 = 0; 
+set @reward_item_3 = 0;
+set @reward_item_4 = 0;
+set @reward_item_1_count = 0;
+set @reward_item_2_count = 0;
+set @reward_item_3_count = 0;
+set @reward_item_4_count = 0;
+set @creature_to_kill_1 = 80135;
+set @creature_to_kill_2 = 0; 
+set @creature_to_kill_3 = 0;
+set @creature_to_kill_4 = 0;
+set @creature_to_kill_1_count = 1;
+set @creature_to_kill_2_count = 0;
+set @creature_to_kill_3_count = 0;
+set @creature_to_kill_4_count = 0;
+set @required_item_1 = 0;
+set @required_item_2 = 0;
+set @required_item_3 = 0;
+set @required_item_4 = 0;
+set @required_item_1_count = 0;
+set @required_item_2_count = 0;
+set @required_item_3_count = 0;
+set @required_item_4_count = 0;
+
+replace into quest_template values 
+
+(@quest_entry, '0', '2', @quest_zone, @min_level,  '0', @quest_level, '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @title, @description, @objective, @completetext, @incompletetext, '', '', '', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @faction_id, '0', '0', '0', '0', @faction_count, '0', '0', '0', '0', '0', @xp_or_money, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', 0, 0);
+     
+replace into creature_questrelation (id, quest, patch_min, patch_max) values (@questgiver_id, @quest_entry,'0','10'); 
+replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (@quest_finisher, @quest_entry,'0','10');
+	 
+update quest_template set 
+rewitemid1 = @reward_item_1, rewitemcount1 = @reward_item_1_count,
+rewitemid2 = @reward_item_2, rewitemcount2 = @reward_item_2_count,
+rewitemid3 = @reward_item_3, rewitemcount3 = @reward_item_3_count,
+rewitemid4 = @reward_item_4, rewitemcount4 = @reward_item_4_count,
+RewChoiceItemId1 = @RewChoiceItemId1, RewChoiceItemCount1 = @RewChoiceItemCount1,
+RewChoiceItemId2 = @RewChoiceItemId2, RewChoiceItemCount2 = @RewChoiceItemCount2,
+RewChoiceItemId3 = @RewChoiceItemId3, RewChoiceItemCount3 = @RewChoiceItemCount3,
+RewChoiceItemId4 = @RewChoiceItemId4, RewChoiceItemCount4 = @RewChoiceItemCount4,
+ReqCreatureOrGOId1 = @creature_to_kill_1, ReqCreatureOrGOCount1 = @creature_to_kill_1_count,
+ReqCreatureOrGOId2 = @creature_to_kill_2, ReqCreatureOrGOCount2 = @creature_to_kill_2_count,
+ReqCreatureOrGOId3 = @creature_to_kill_3, ReqCreatureOrGOCount3 = @creature_to_kill_3_count,
+ReqCreatureOrGOId4 = @creature_to_kill_4, ReqCreatureOrGOCount4 = @creature_to_kill_4_count,
+reqitemid1 = @required_item_1, reqitemcount1 = @required_item_1_count,
+reqitemid2 = @required_item_2, reqitemcount2 = @required_item_2_count,
+reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
+reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
+nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
+nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
+objectivetext1='Sit through the talk between Nert and Thrall' 
+where entry = @quest_entry;	
+
 -- Populating the area:
 
-delete from creature where id between 80100 and 80130;
+delete from creature where id between 80100 and 80134;
 
 replace into `creature` (`id`, `map`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `deathstate`, `movementtype`, `spawnflags`, `visibilitymod`, `patch_min`, `patch_max`) values 
 (80100, 1, 0, 51260, 1839.5, 1382.96, 146.483, 3.01878, 1, 4, 0, 0, 100, 0, 0, 0, 0, 0, 0, 10),
@@ -2660,7 +2846,11 @@ replace into `creature` (`id`, `map`, `modelid`, `equipment_id`, `position_x`, `
 (80122, 1, 0, 0, 547.771, -4595.78, 42.5796, 2.4584, 60, 120, 0, 0, 100, 0, 0, 0, 0, 0, 0, 10),
 (80123, 1, 0, 0, 543.767, -4591.4, 43.6736, 6.17177, 60, 120, 0, 0, 100, 0, 0, 0, 0, 0, 0, 10),
 (80129, 1, 0, 0, 1959.58, 1327.49, 145.946, 4.8106, 25, 25, 0, 0, 100, 100, 0, 0, 0, 0, 0, 10),
-(80130, 1, 0, 11867, 1930.47, 1389.68, 148.812, 4.93874, 25, 25, 0, 0, 100, 0, 0, 0, 0, 0, 0, 10);
+(80130, 1, 0, 11867, 1930.47, 1389.68, 148.812, 4.93874, 25, 25, 0, 0, 100, 0, 0, 0, 0, 0, 0, 10),
+(80132, 1, 0, 10468, 382.551, -4761.31, 9.67964, 1.9672, 25, 25, 0, 0, 100, 0, 0, 0, 0, 0, 0, 10),
+(80133, 1, 0, 51261, 330.176, -4688.8, 16.4579, 6.16672, 25, 25, 0, 0, 100, 0, 0, 0, 0, 0, 0, 10),
+(80134, 1, 0, 0, 1920.33, -4139.72, 40.3646, 1.57527, 25, 25, 0, 0, 100, 0, 0, 0, 0, 0, 0, 10);
+
 
 update creature set spawntimesecsmin = 60, spawntimesecsmax = 120 where id between 80101 and 80125;
 update creature set spawntimesecsmin = 1, spawntimesecsmax = 4 where id = 80100;
@@ -2673,9 +2863,4 @@ update gameobject set id = 2008164 where id = 1000261;
 
 delete from gameobject where id = 106318 and position_x = 1708.94;
 REPLACE INTO `gameobject` (`id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`, `spawnFlags`, `visibilitymod`, `patch_min`, `patch_max`) VALUES (106318, 1, 1708.94, 1687.28, 138.855, 4.19877, 0, 0, 0.86352, -0.504315, 300, 900, 100, 1, 0, 0, 0, 10);
-
--- Starting food items:
-
-REPLACE INTO `item_template` VALUES (80167, 0, 0, 0, 'Kaja\'Cola', '', 21794, 1, 0, 5, 25, 1, 0, -1, -1, 5, 1, 0, 0, 0, 0, 0, 0, 0, 0, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 430, 0, -1, 0, 0, 59, 1000, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
-REPLACE INTO `item_template` VALUES (80168, 0, 0, 0, 'Crunchy Murloc Fin', '', 25473, 1, 0, 5, 25, 1, 0, -1, -1, 5, 1, 0, 0, 0, 0, 0, 0, 0, 0, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 433, 0, -1, 0, 0, 11, 1000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 1, NULL);
 
