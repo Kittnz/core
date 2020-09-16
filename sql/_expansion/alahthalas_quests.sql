@@ -35,7 +35,7 @@ set @faction_id = 269;
 set @faction_count = 250;
 set @xp_or_money = 650;
 set @reward_money = 5; 
-set @quest_level = 15;
+set @quest_level = 10;
 set @min_level = 10;
 set @questgiver_id = 80230;
 set @quest_finisher = 1752;
@@ -131,7 +131,7 @@ set @faction_id = 269;
 set @faction_count = 250;
 set @xp_or_money = 650;
 set @reward_money = 5; 
-set @quest_level = 15;
+set @quest_level = 10;
 set @min_level = 10;
 set @questgiver_id = 1752;
 set @quest_finisher = 5498;
@@ -233,7 +233,7 @@ set @faction_id = 269;
 set @faction_count = 75;
 set @xp_or_money = 650;
 set @reward_money = 5; 
-set @quest_level = 15;
+set @quest_level = 10;
 set @min_level = 10;
 set @questgiver_id = 80231;
 set @quest_finisher = 80231;
@@ -330,7 +330,7 @@ set @faction_id = 269;
 set @faction_count = 250;
 set @xp_or_money = 4600;
 set @reward_money = 5000; 
-set @quest_level = 50;
+set @quest_level = 40;
 set @min_level = 40;
 set @questgiver_id = 80231;
 set @quest_finisher = 80231;
@@ -422,8 +422,8 @@ set @faction_id = 269;
 set @faction_count = 500;
 set @xp_or_money = 8000;
 set @reward_money = 500; 
-set @quest_level = 58;
-set @min_level = 58;
+set @quest_level = 55;
+set @min_level = 55;
 set @questgiver_id = 80232;
 set @quest_finisher = 80232;
 set @nextquest = 0;
@@ -571,7 +571,7 @@ reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
 reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
 nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
 nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
-objectivetext1='Horde players slain'  
+objectivetext1='Horde players slain', type = 41
 where entry = @quest_entry;	
 
 -- Additional NPCs:

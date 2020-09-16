@@ -441,9 +441,6 @@ where entry = @quest_entry;
 
 REPLACE INTO `creature_template` VALUES (80114, 0, 4249, 4250, 4247, 4248, 'Stonetalon Environmentalist', NULL, 0, 3, 3, 74, 80, 0, 0, 49, 91, 0, 1, 0.857143, 0, 20, 5, 0, 0, 1, 3, 5, 0, 50, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 6.9344, 9.5348, 100, 7, 0, 38, 38, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 7, 'EventAI', 1, 3, 0, 0, 3, 38, 0, 0, 0, 0, 0, '');
 
-delete from creature_template_addon where entry = 80114;
-replace into `creature_template_addon` (`entry`, `auras`) values ('80114', '5916');
-
 update creature_template set loot_id = 80114 where entry = 80114; 
 replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (80114, 80156, 20, 0, 1, 1);
 replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (80114, 80157, 80, 0, 1, 1);
