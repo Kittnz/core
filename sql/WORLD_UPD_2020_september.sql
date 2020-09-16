@@ -148,3 +148,6 @@ REPLACE INTO creature_model_info VALUES
 -- Misc.
 
 update item_template set spelltrigger_1 = 1, spelltrigger_2 = 1 where entry = 51740;
+
+UPDATE `quest_template` SET `Details`='While my mission here is focused on the centaur, it is my duty as a Keeper to heal the world wherever it may suffer.\n\nSouthwest of here, there is a spirit in this land that cries out in pain. She had no name in life, but the Tauren know her spirit as Palkeote - “grey mother”, in their tongue.\n\nPalkeote lost one of her sons in this land long ago, before the sundering of the world. Yet she would not leave his side. She remained here for many long years, as the trees grew and the world changed around her, until at last she too passed at the side of her beloved child.\n\nShe remains here as a restless spirit. The long years of her life and her dedication to her single task make her mighty, but she has long passed from the warmth of love for kin. You will need many allies to lay her to rest, hero, but that is what I ask you to do.' WHERE `entry`='60135';
+
