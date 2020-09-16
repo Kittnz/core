@@ -1,10 +1,45 @@
 
--- Horde
 
-replace into`creature_template` values (80000, 0, 0, 0, 0, 0, 'Quest 80000 Custom Objective', '', 0, 5, 5, 319, 319, 0, 0, 852, 84, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 24, 31, 0, 90, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 31.856, 43.802, 100, 7, 4096, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 4276, 0, 0, 0, 0, 2, '');
+REPLACE INTO `creature_template` VALUES (80450, 0, 3387, 0, 0, 0, 'Pepin Ainsworth', 'Union of Magical Arts', 4660, 60, 60, 3139, 3139, 2620, 2620, 3075, 12, 19, 1, 1.14286, 0, 20, 5, 0, 0, 1, 110, 142, 0, 272, 1, 1500, 2000, 1, 4608, 0, 0, 0, 0, 8, 0, 74.448, 102.366, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 331, 0, 0, 0, 0, 0, '');
 
-replace into broadcast_text (ID, MaleText) values (80000, 'I am more than happy to have your aid and have you fight on our side for the time being, yet I do not need to remind you, you are a stranger in the house of your enemy, so tread carefully.');
-replace into npc_text (ID, BroadcastTextID0) values (80000, 80000);
+REPLACE INTO `creature_template` VALUES (80451, 0, 3108, 0, 0, 0, 'Koli Steamheart', 'Union of Magical Arts', 4660, 60, 60, 3139, 3139, 2620, 2620, 3075, 12, 19, 1, 1.14286, 0, 20, 5, 0, 0, 1, 110, 142, 0, 272, 1, 1500, 2000, 1, 4608, 0, 0, 0, 0, 8, 0, 74.448, 102.366, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 331, 0, 0, 0, 0, 0, '');
+
+REPLACE INTO `creature_template` VALUES (80452, 0, 4009, 0, 0, 0, 'Zenobia Blazecaller', 'Union of Magical Arts', 4660, 60, 60, 3139, 3139, 2620, 2620, 3075, 12, 19, 1, 1.14286, 0, 20, 5, 0, 0, 1, 110, 142, 0, 272, 1, 1500, 2000, 1, 4608, 0, 0, 0, 0, 8, 0, 74.448, 102.366, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 331, 0, 0, 0, 0, 0, '');
+
+REPLACE INTO `creature_template` VALUES (80453, 0, 12036, 0, 0, 0, 'Zanji', 'Union of Magical Arts', 4660, 60, 60, 3139, 3139, 2620, 2620, 3075, 12, 19, 1, 1.14286, 0, 20, 5, 0, 0, 1, 110, 142, 0, 272, 1, 1500, 2000, 1, 4608, 0, 0, 0, 0, 8, 0, 74.448, 102.366, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 331, 0, 0, 0, 0, 0, '');
+
+update creature_template set faction = 35 where entry in (80450, 80451, 80452, 80453); 
+update creature_template set npc_flags = 2 where entry in (80450, 80451, 80452, 80453); 
+
+SET @gossip_menu_id = 59030;
+SET @magic_number = 80450; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (ID, MaleText) values (@magic_number, 'Greetings, $C, are you here to aid us? If so I will be more than rejoiced, as soon as we stabilize the barrier or neutralize the targets, the better, you have no idea what crawls in there.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+SET @gossip_menu_id = 59031;
+SET @magic_number = 80451; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (ID, MaleText) values (@magic_number, 'Hi, how are you?\n\nI’m Koli, here to make sure we deal with this, please be friendly to one another, no time to squabble!\n\nThere will be enough violence when you reach inside.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+SET @gossip_menu_id = 59032;
+SET @magic_number = 80452; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (ID, MaleText) values (@magic_number, 'Come closer, $N, my sight was lacking in life and in death it is almost gone, I will not tell you how important cleansing that damned prison is, you should know that yourself, while your down there hit him a couple of times in my stead, that monster should have been buried alive long ago.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+SET @gossip_menu_id = 59033;
+SET @magic_number = 80453; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (ID, MaleText) values (@magic_number, '\'Ello mon! How ya be today? Not so good eh, yea mon, Zanji knows, this prison or somethin\' be bad, be very bad, Zanji wishes he came with ya, me arcane missiles be goin\' -woosh- when I cast them at the enemy!/n/nBut ya mon, good luck, ol’ Zanji waits for ya to come back.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+-- BELOW IS CRAP:
 
 replace into gameobject_template values 
 (3000226, 0, 1, 6696, 'Portal to Stormwind Vaults', 35, 0, 0.5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_portal_stormwind_vaults');
