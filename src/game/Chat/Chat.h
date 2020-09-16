@@ -437,8 +437,6 @@ class MANGOS_DLL_SPEC ChatHandler
         bool HandleInstanceContinentsCommand(char* args);
         bool HandleInstancePerfInfosCommand(char* args);
         bool HandleInstanceBindingMode(char* args);
-        bool HandlePBCastStatsCommand(char* args);
-        bool HandlePBCastSetThreadsCommand(char* args);
 
         bool HandleLearnCommand(char* args);
         bool HandleLearnAllCommand(char* args);

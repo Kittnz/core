@@ -466,13 +466,6 @@ ChatCommand * ChatHandler::getCommandTable()
         { MSTR, nullptr,          0,                  false, nullptr,                                        "", nullptr }
     };
 
-    static ChatCommand pbcastCommandTable[] =
-    {
-        { MSTR, "stats",          SEC_ADMINISTRATOR,  true,  &ChatHandler::HandlePBCastStatsCommand,         "", nullptr },
-        { MSTR, "setthreads",     SEC_ADMINISTRATOR,  true,  &ChatHandler::HandlePBCastSetThreadsCommand,    "", nullptr },
-        { MSTR, nullptr,          0,                  false, nullptr,                                        "", nullptr }
-    };
-
     static ChatCommand pdumpCommandTable[] =
     {
         { NODE, "load",           SEC_ADMINISTRATOR,  true,  &ChatHandler::HandlePDumpLoadCommand,           "", nullptr },
@@ -983,7 +976,6 @@ ChatCommand * ChatHandler::getCommandTable()
         { MSTR, "wr",             SEC_PLAYER,         false, &ChatHandler::HandleWhisperRestrictionCommand,  "", nullptr },
         { MSTR, "pinfo",          SEC_GAMEMASTER,     false, &ChatHandler::HandlePInfoCommand,               "", nullptr },
         { MSTR, "groupinfo",      SEC_GAMEMASTER,     true,  &ChatHandler::HandleGroupInfoCommand,           "", nullptr },
-        { MSTR, "pbcast",         SEC_ADMINISTRATOR,  true,  &ChatHandler::HandlePBCastStatsCommand,         "", pbcastCommandTable },
         { NODE, "addons",         SEC_GAMEMASTER,     false, &ChatHandler::HandleListAddonsCommand,          "", nullptr },
         { NODE, "respawn",        SEC_BASIC_ADMIN,    false, &ChatHandler::HandleRespawnCommand,             "", nullptr },
         { NODE, "send",           SEC_MODERATOR,      true, nullptr,                                         "", sendCommandTable     },

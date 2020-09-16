@@ -187,7 +187,6 @@ set (game_SRCS
     OutdoorPvP/OutdoorPvPEP.cpp
     OutdoorPvP/OutdoorPvPSI.cpp
     OutdoorPvP/Register.cpp
-    PacketBroadcast/ChatCommands.cpp
     PacketBroadcast/MovementBroadcaster.cpp
     PacketBroadcast/PlayerBroadcaster.cpp
     PlayerBots/PlayerBotAI.cpp
