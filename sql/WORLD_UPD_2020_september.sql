@@ -151,30 +151,3 @@ update item_template set spelltrigger_1 = 1, spelltrigger_2 = 1 where entry = 51
 
 UPDATE `quest_template` SET `Details`='While my mission here is focused on the centaur, it is my duty as a Keeper to heal the world wherever it may suffer.\n\nSouthwest of here, there is a spirit in this land that cries out in pain. She had no name in life, but the Tauren know her spirit as Palkeote - “grey mother”, in their tongue.\n\nPalkeote lost one of her sons in this land long ago, before the sundering of the world. Yet she would not leave his side. She remained here for many long years, as the trees grew and the world changed around her, until at last she too passed at the side of her beloved child.\n\nShe remains here as a restless spirit. The long years of her life and her dedication to her single task make her mighty, but she has long passed from the warmth of love for kin. You will need many allies to lay her to rest, hero, but that is what I ask you to do.' WHERE `entry`='60135';
 
--- ARENA SYSTEM / SKIRMISH ZONES
-
--- Arena door event
-replace into `battleground_events` (`map`, `event1`, `event2`, `description`) VALUES (35, 254, 0, 'Doors');
-
--- Add Stormwind Vault as BG map
-replace into `battleground_template` (`id`, `patch`, `MinPlayersPerTeam`, `MaxPlayersPerTeam`, `MinLvl`, `MaxLvl`, `AllianceWinSpell`, `AllianceLoseSpell`, `HordeWinSpell`, `HordeLoseSpell`, `AllianceStartLoc`, `AllianceStartO`, `HordeStartLoc`, `HordeStartO`) VALUES (4, 0, 2, 2, 60, 61, 0, 0, 0, 0, 9000, 0, 9001, 0);
-
--- Add custom portcullis door for arena
-replace into `gameobject_template` (`entry`, `patch`, `type`, `displayId`, `name`, `faction`, `flags`, `size`, `data0`, `data1`, `data2`, `data3`, `data4`, `data5`, `data6`, `data7`, `data8`, `data9`, `data10`, `data11`, `data12`, `data13`, `data14`, `data15`, `data16`, `data17`, `data18`, `data19`, `data20`, `data21`, `data22`, `data23`, `mingold`, `maxgold`, `ScriptName`) VALUES (1771652, 0, 0, 411, 'Arena Portcullis', 114, 36, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
-
--- Spawn arena game objects
-replace into `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`, `spawnFlags`, `visibilitymod`, `patch_min`, `patch_max`) VALUES (3998671, 1771652, 35, -63.0215, 149.878, -39.134, 6.28188, 0, 0, 0.000652464, -1, 0, 0, 100, 1, 0, 0, 0, 10);
-replace into `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`, `spawnFlags`, `visibilitymod`, `patch_min`, `patch_max`) VALUES (3998658, 180636, 35, -76.9176, 149.735, -40.384, 3.156, 0, 0, 0.999999, -0.00130956, 0, 0, 100, 1, 0, 0, 0, 10);
-replace into `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`, `spawnFlags`, `visibilitymod`, `patch_min`, `patch_max`) VALUES (3998657, 180636, 35, -117.381, 149.775, -40.384, 0.0340097, 0, 0, 0.0049958, 0.999988, 0, 0, 100, 1, 0, 0, 0, 10);
-
--- Add arena strings
-replace into `mangos_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES (704, 'The Arena battle has begun!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-replace into `mangos_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES (703, 'Fifteen seconds until the Arena battle begins!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-replace into `mangos_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES (702, 'Thirty seconds until the Arena battle begins!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-replace into `mangos_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES (701, 'One minute until the Arena battle begins!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-
-replace into `gameobject_battleground` (`guid`, `event1`, `event2`) VALUES (3998658, 254, 0);
-replace into `gameobject_battleground` (`guid`, `event1`, `event2`) VALUES (3998657, 254, 0);
-
-replace into `broadcast_text` (`ID`, `MaleText`, `FemaleText`, `Sound`, `Type`, `Language`, `EmoteId0`, `EmoteId1`, `EmoteId2`, `EmoteDelay0`, `EmoteDelay1`, `EmoteDelay2`) VALUES (195007, 'This is an experimental arena feature. There is not a rating system in place... yet.\r\n\r\nConditions for now:\r\n1.) It is Horde vs. Alliance\r\n2.) Consumables are allowed\r\n\r\nYou may now queue as a group.', 'This is an experimental arena feature. There is not a rating system in place... yet.\r\n\r\nConditions for now:\r\n1.) It is Horde vs. Alliance\r\n2.) Consumables are allowed\r\n\r\nYou may now queue as a group.', 0, 0, 0, 1, 1, 0, 0, 0, 0);
-+INSERT INTO `npc_text` (`ID`, `BroadcastTextID0`, `Probability0`, `BroadcastTextID1`, `Probability1`, `BroadcastTextID2`, `Probability2`, `BroadcastTextID3`, `Probability3`, `BroadcastTextID4`, `Probability4`, `BroadcastTextID5`, `Probability5`, `BroadcastTextID6`, `Probability6`, `BroadcastTextID7`, `Probability7`) VALUES (195007, 195007, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
