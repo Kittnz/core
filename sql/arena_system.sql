@@ -6,12 +6,12 @@ replace into `battleground_events` (`map`, `event1`, `event2`, `description`) VA
 replace into `battleground_template` VALUES (4, 0, 1, 1, 0, 60, 0, 0, 0, 0, 9000, 0, 9001, 0);
 
 -- Add custom portcullis door for arena
-replace into `gameobject_template` VALUES (1771652, 0, 0, 25426, 'Arena Door', 114, 36, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+replace into `gameobject_template` VALUES (1771652, 0, 0, 25426, 'Arena Door', 114, 36, 0.50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
 
 -- Spawn arena game objects
 -- replace into `gameobject` VALUES (3998671, 1771652, 37, -438.716, 492.486, 293.857, 1.31, 0, 0, 0.000652464, -1, 0, 0, 100, 1, 0, 0, 0, 10);
-replace into `gameobject` VALUES (3998658, 1771652, 37, -38.716, 192.486, 293.857, 1.31, 0, 0, 0.999999, -0.00130956, 0, 0, 100, 1, 0, 0, 0, 10);
-replace into `gameobject` VALUES (3998657, 1771652, 37, -17.73, 266.41, 291.53, 4.48, 0, 0, 0.0049958, 0.999988, 0, 0, 100, 1, 0, 0, 0, 10);
+replace into `gameobject` VALUES (3998658, 1771652, 37, -38.716, 192.486, 293.857, 0, 0, 0, 0.999999, -0.00130956, 0, 0, 100, 1, 0, 0, 0, 10);
+replace into `gameobject` VALUES (3998657, 1771652, 37, -17.73, 266.41, 291.53, 0, 0, 0, 0.0049958, 0.999988, 0, 0, 100, 1, 0, 0, 0, 10);
 
 -- Add arena strings
 replace into `mangos_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES (704, 'The Arena battle has begun!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
