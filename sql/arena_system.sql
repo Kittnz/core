@@ -26,7 +26,7 @@ replace into `broadcast_text` (`ID`, `MaleText`, `FemaleText`, `Sound`, `Type`, 
 replace into `npc_text` (`ID`, `BroadcastTextID0`, `Probability0`, `BroadcastTextID1`, `Probability1`, `BroadcastTextID2`, `Probability2`, `BroadcastTextID3`, `Probability3`, `BroadcastTextID4`, `Probability4`, `BroadcastTextID5`, `Probability5`, `BroadcastTextID6`, `Probability6`, `BroadcastTextID7`, `Probability7`) VALUES (195007, 195007, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
 replace into `creature_template`  VALUES (50099, 0, 10217, 0, 0, 0, 'Kameron Hale', 'Arena Battlemaster', 0, 60, 60, 7845, 7845, 0, 0, 0, 35, 5, 1, 1.14286, 1, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 50000, 0, 0, 0, 'arena_master');
-
+-- 1023 - Alfronpho Moralice -- Expansion.
 -- TODO: Arena MAster for every city!
 
 update `map_template` SET `map_type`='3' WHERE `entry`='37';
