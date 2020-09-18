@@ -1325,10 +1325,10 @@ void BattleGroundMgr::CreateInitialBattleGrounds()
         // Override for arena
         else if (start1 == 9000)
         {
-            AStartLoc[0] = -69.493f;
-            AStartLoc[1] = 149.628f;
-            AStartLoc[2] = -40.385f;
-            AStartLoc[3] = 3.156f;
+            AStartLoc[0] = -17.205f;
+            AStartLoc[1] = 268.258f;
+            AStartLoc[2] = 291.560f;
+            AStartLoc[3] = 4.459f;
         }
         else
         {
@@ -1348,10 +1348,10 @@ void BattleGroundMgr::CreateInitialBattleGrounds()
         }
         else if (start2 == 9001)
         {
-            HStartLoc[0] = -125.23f;
-            HStartLoc[1] = 149.71f;
-            HStartLoc[2] = -40.383f;
-            HStartLoc[3] = 0.0f;
+            HStartLoc[0] = -39.799f;
+            HStartLoc[1] = 189.351f;
+            HStartLoc[2] = 294.039f;
+            HStartLoc[3] = 1.297f;
         }
         else
         {
@@ -1363,7 +1363,14 @@ void BattleGroundMgr::CreateInitialBattleGrounds()
         char const* name;
 
         if (MapEntry const* mapEntry = sMapStorage.LookupEntry<MapEntry>(mapId))
-            name = mapEntry->name;
+        {
+            // Override for <unused>StormwindPrison. Give it a prettier name.
+            if (mapId == 35)
+                name = "Turtle WoW Arena";
+            else
+                name = mapEntry->name;
+        }
+
         else
         {
             sLog.outErrorDb("Table `battleground_template` for id %u associated with nonexistent map id %u.", bgTypeID, mapId);

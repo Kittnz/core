@@ -167,8 +167,8 @@ public:
 
             // Zone override for arena. See active players in arena in WHO list.
             // Necessary since map 35 is "unknown" it won't display updated loc.
-            if (pl->GetMapId() == 35)
-                pzoneid = 717;
+            //if (pl->GetMapId() == 37)
+            //    pzoneid = 717;
 
             bool z_show = true;
             for (uint32 i = 0; i < zones_count; ++i)
