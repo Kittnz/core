@@ -42,7 +42,7 @@ void BattleGroundSV::StartingEventCloseDoors()
     // Plummet visibility distance so you cannot see enemy players until the match begins.
     // May be better to just update visibility code instead of this...
     // 40 is roughly to the middle of the map -- perfect area to not be able to see other team.
-    GetBgMap()->SetVisibilityDistance(45.0f);
+    //GetBgMap()->SetVisibilityDistance(45.0f);
 }
 
 void BattleGroundSV::StartingEventOpenDoors()
