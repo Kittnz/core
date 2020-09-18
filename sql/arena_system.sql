@@ -3,7 +3,7 @@
 replace into `battleground_events` (`map`, `event1`, `event2`, `description`) VALUES (37, 254, 0, 'Doors');
 
 -- Add Stormwind Vault as BG map
-replace into `battleground_template` VALUES (4, 0, 1, 1, 60, 60, 0, 0, 0, 0, 9000, 0, 9001, 0);
+replace into `battleground_template` VALUES (4, 0, 1, 1, 0, 60, 0, 0, 0, 0, 9000, 0, 9001, 0);
 
 -- Add custom portcullis door for arena
 replace into `gameobject_template` VALUES (1771652, 0, 0, 411, 'Arena Portcullis', 114, 36, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
