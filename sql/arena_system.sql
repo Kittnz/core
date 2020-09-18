@@ -25,7 +25,9 @@ replace into `gameobject_battleground` (`guid`, `event1`, `event2`) VALUES (3998
 replace into `broadcast_text` (`ID`, `MaleText`, `FemaleText`, `Sound`, `Type`, `Language`, `EmoteId0`, `EmoteId1`, `EmoteId2`, `EmoteDelay0`, `EmoteDelay1`, `EmoteDelay2`) VALUES (195007, 'This… Crater isn\'t something you\'ve had as an experience before, that is certain.\n\nTelling you to get ready is just as futile as you trying to assess the real threat that lies within this battleground.\n\nBest you can do is either survive to tell the story or die as quickly as possible.', '', 0, 0, 0, 1, 1, 0, 0, 0, 0);
 replace into `npc_text` (`ID`, `BroadcastTextID0`, `Probability0`, `BroadcastTextID1`, `Probability1`, `BroadcastTextID2`, `Probability2`, `BroadcastTextID3`, `Probability3`, `BroadcastTextID4`, `Probability4`, `BroadcastTextID5`, `Probability5`, `BroadcastTextID6`, `Probability6`, `BroadcastTextID7`, `Probability7`) VALUES (195007, 195007, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
-replace into `creature_template`  VALUES (50099, 0, 4731, 0, 0, 0, 'Naire', 'Arena Battlemaster', 0, 60, 60, 7845, 7845, 0, 0, 0, 35, 5, 1, 1.14286, 1, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 50000, 0, 0, 0, 'arena_master');
+replace into `creature_template`  VALUES (50099, 0, 10217, 0, 0, 0, 'Kameron Hale', 'Arena Battlemaster', 0, 60, 60, 7845, 7845, 0, 0, 0, 35, 5, 1, 1.14286, 1, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 50000, 0, 0, 0, 'arena_master');
+
+-- TODO: Arena MAster for every city!
 
 update `map_template` SET `map_type`='3' WHERE `entry`='37';
 UPDATE `map_template` SET `level_min`='60', `level_max`='60' WHERE `entry`='37';
