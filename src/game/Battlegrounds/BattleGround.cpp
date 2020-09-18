@@ -283,7 +283,7 @@ void BattleGround::Update(uint32 diff)
     /*********************************************************/
 
     // if less then minimum players are in on one side, then start premature finish timer
-    if (GetTypeID() != BATTLEGROUND_AV && GetStatus() == STATUS_IN_PROGRESS && sBattleGroundMgr.GetPrematureFinishTime() && (GetPlayersCountByTeam(ALLIANCE) < GetMinPlayersPerTeam() || GetPlayersCountByTeam(HORDE) < GetMinPlayersPerTeam()))
+    if (!IsArena() && GetTypeID() != BATTLEGROUND_AV && GetStatus() == STATUS_IN_PROGRESS && sBattleGroundMgr.GetPrematureFinishTime() && (GetPlayersCountByTeam(ALLIANCE) < GetMinPlayersPerTeam() || GetPlayersCountByTeam(HORDE) < GetMinPlayersPerTeam()))
     {
         if (!m_PrematureCountDown)
         {
@@ -366,6 +366,18 @@ void BattleGround::Update(uint32 diff)
         {
             m_Events |= BG_STARTING_EVENT_4;
 
+                // If arena battle begins without all players, end game with no winner, except when in debug mode.
+                if (IsArena() && GetPlayersSize() < GetMaxPlayers() && !sBattleGroundMgr.isTesting())
+                {
+                    Map::PlayerList const& PlayerList = GetBgMap()->GetPlayers();
+                    for (Map::PlayerList::const_iterator it = PlayerList.begin(); it != PlayerList.end(); ++it)
+                        if (Player* player = it->getSource())
+                            ChatHandler(player).SendSysMessage("Not all players accepted queue. Match ended.");
+
+                    EndBattleGround(TEAM_NONE);
+                    return;
+                }
+
             StartingEventOpenDoors();
 
             ReturnPlayersToHomeGY();
@@ -379,7 +391,7 @@ void BattleGround::Update(uint32 diff)
                 PlaySoundToAll(SOUND_BG_START);
 
                 //Announce BG starting
-                if (sWorld.getConfig(CONFIG_BOOL_BATTLEGROUND_QUEUE_ANNOUNCER_START))
+                if (!IsArena() && sWorld.getConfig(CONFIG_BOOL_BATTLEGROUND_QUEUE_ANNOUNCER_START))
                     sWorld.SendWorldText(LANG_BG_STARTED_ANNOUNCE_WORLD, GetName(), GetMinLevel(), GetMaxLevel());
             }
         }
@@ -1017,6 +1029,8 @@ void BattleGround::AddPlayer(Player *plr)
     holder->SetAuraDuration(30000);
     holder->UpdateAuraDuration();
 
+    if (IsArena())
+        plr->RemoveArenaAuras(false);
 
     // Log
     DETAIL_LOG("BATTLEGROUND: Player %s joined the battle.", plr->GetName());

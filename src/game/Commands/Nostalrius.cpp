@@ -884,8 +884,15 @@ bool ChatHandler::HandleBGStatusCommand(char *args)
 	PSendSysMessage(DO_COLOR(COLOR_INFO, "-- Queues for your bracket"));
 	i = 0;
 
-	for (uint8 bgTypeId = BATTLEGROUND_AV; bgTypeId <= BATTLEGROUND_AB; ++bgTypeId)
+    for (uint8 bgTypeId = BATTLEGROUND_AV; bgTypeId < MAX_BATTLEGROUND_TYPE_ID; ++bgTypeId)
 	{
+        // Skip disabled arenas.
+        switch (bgTypeId)
+        {
+        case ARENA_SV:
+            continue;
+        }
+
 		++i;
 		uiAllianceCount = 0;
 		uiHordeCount = 0;
@@ -919,7 +926,7 @@ bool ChatHandler::HandleBGStartCommand(char *args)
 	BattleGround* pBg = chr->GetBattleGround();
 	if (!pBg)
 	{
-		SendSysMessage("Vous devez etre dans un champs de bataille pour utiliser cette commande.");
+        SendSysMessage("You must be in a battleground to use this command.");
 		SetSentErrorMessage(true);
 		return false;
 	}

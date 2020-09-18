@@ -1920,6 +1920,47 @@ uint32 Group::CanJoinBattleGroundQueue(BattleGroundTypeId bgTypeId, BattleGround
     return BG_JOIN_ERR_OK;
 }
 
+uint32 Group::CanJoinArenaQueue(BattleGroundQueueTypeId bgQueueTypeId, uint32 MinPlayerCount, uint32 MaxPlayerCount, Player* Leader)
+{
+    // check for min / max count
+    uint32 memberscount = GetMembersCount();
+    if (memberscount < MinPlayerCount)
+        return BG_JOIN_ERR_GROUP_NOT_ENOUGH;
+    if (memberscount > MaxPlayerCount)
+        return BG_JOIN_ERR_GROUP_TOO_MANY;
+
+    // no reference found, can't join this way
+    if (!Leader)
+        return BG_JOIN_ERR_OFFLINE_MEMBER;
+
+    Team team = Leader->GetTeam();
+
+    // check every member of the group to be able to join
+    for (GroupReference *itr = GetFirstMember(); itr != NULL; itr = itr->next())
+    {
+        Player *member = itr->getSource();
+        // offline member? don't let join
+        if (!member || !member->IsInWorld())
+            return BG_JOIN_ERR_OFFLINE_MEMBER;
+        // don't allow cross-faction join as group
+        if (member->GetTeam() != team)
+            return BG_JOIN_ERR_MIXED_FACTION;
+        // don't let join if someone from the group is already in that bg queue
+        if (member->InBattleGroundQueueForBattleGroundQueueType(bgQueueTypeId))
+            return BG_JOIN_ERR_GROUP_MEMBER_ALREADY_IN_QUEUE;
+        // check for deserter debuff
+        if (!member->CanJoinToBattleground())
+            return BG_JOIN_ERR_GROUP_DESERTER;
+        // check if member can join any more battleground queues
+        if (!member->HasFreeBattleGroundQueueId())
+            return BG_JOIN_ERR_ALL_QUEUES_USED;
+        if (!sWorld.getConfig(CONFIG_BOOL_TAG_IN_BATTLEGROUNDS) && member->InBattleGround())
+            return BG_JOIN_ERR_OFFLINE_MEMBER;
+    }
+    return BG_JOIN_ERR_OK;
+}
+
+
 bool Group::InCombatToInstance(uint32 instanceId)
 {
     for (GroupReference *itr = GetFirstMember(); itr != NULL; itr = itr->next())

@@ -367,6 +367,7 @@ class MANGOS_DLL_SPEC Map : public GridRefManager<NGridType>, public MaNGOS::Obj
         void MessageDistBroadcast(WorldObject const*, WorldPacket*, float dist);
 
         float GetVisibilityDistance() const { return m_VisibleDistance; }
+        void SetVisibilityDistance(float dist) { m_VisibleDistance = dist; }
         float GetGridActivationDistance() const { return m_GridActivationDistance; }
 
         //function for setting up visibility distance for maps on per-type/per-Id basis

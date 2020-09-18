@@ -1407,6 +1407,10 @@ void Player::OnDisconnected()
         SendHeartBeat(false);
     }
 
+     // If in active arena, immediately leave battleground.
+     if (InArena())
+         LeaveBattleground();
+
     // Player should be leave from channels
     CleanupChannels();
 }
@@ -18268,6 +18272,10 @@ void Player::LeaveBattleground(bool teleportToEntryPoint)
         // nor more Waiting to Resurrect
         RemoveAurasDueToSpell(2584);
 
+        // If this is an active arena, consider their departure from the game as a death (so it can end properly).
+        if (bg->IsArena() && bg->GetStatus() == STATUS_IN_PROGRESS)
+            bg->UpdatePlayerScore(this, SCORE_DEATHS, 1);
+
         if (!IsGameMaster() &&
                 sWorld.getConfig(CONFIG_BOOL_BATTLEGROUND_CAST_DESERTER) &&
                 !sWorld.IsStopped() &&
@@ -18660,6 +18668,10 @@ void Player::SendInitialPacketsAfterAddToMap(bool login)
     uint32 newzone, newarea;
     GetZoneAndAreaId(newzone, newarea);
     UpdateZone(newzone, newarea);                           // also call SendInitWorldStates();
+
+    // Set FFAPvP in arena map.
+    if (GetMapId() == 35)
+        SetFFAPvP(true);
 
     if (login)
         CastSpell(this, 836, true);                             // LOGINEFFECT
@@ -19730,6 +19742,10 @@ void Player::SendCorpseReclaimDelay(bool load) const
 {
     Corpse* corpse = GetCorpse();
     if (!corpse)
+        return;
+
+    // Do not allow resurrection inside arena.
+    if (InArena())
         return;
 
     uint32 delay;
@@ -22067,4 +22083,122 @@ void Player::CancelTaxiRide(Player* passenger)
 
         passenger->SetTaxiPassengerStatus(false);
     }
+}
+
+void Player::AddToArenaQueue(bool queuedAsGroup)
+{
+    if (!IsInWorld() || !isAlive())
+        return;
+
+    // only max level
+    if (getLevel() < sWorld.getConfig(CONFIG_UINT32_MAX_PLAYER_LEVEL))
+        return;
+
+    // check if in other queues
+    if (InBattleGroundQueue())
+    {
+        GetSession()->SendNotification("Unable to queue while currently in another queue");
+        return;
+    }
+
+    // is deserter?
+    if (!CanJoinToBattleground())
+    {
+        GetSession()->SendNotification("Unable to queue while you are marked as Deserter");
+        return;
+    }
+
+    // check existence
+    BattleGround* bg = nullptr;
+    if (!(bg = sBattleGroundMgr.GetBattleGroundTemplate(ARENA_SV)))
+    {
+        sLog.outError("Battleground: template BG (all arenas) not found");
+        return;
+    }
+
+    /* Disallow queue naked
+    for (int i = EQUIPMENT_SLOT_FINGER1; i < EQUIPMENT_SLOT_TRINKET2; i++)
+    {
+        Item* itemTarget = GetItemByPos(INVENTORY_SLOT_BAG_0, i);
+
+        if (!itemTarget)
+        {
+            GetSession()->SendNotification("Please equip all items before attempting to queue");
+            return;
+        }
+    }
+
+    // Check for talents
+    if (GetFreeTalentPoints() > 0)
+    {
+        GetSession()->SendNotification("Please spend all your talent points before attempting to queue");
+        return;
+    }
+    */
+
+    BattleGroundQueueTypeId bgQueueTypeId = sBattleGroundMgr.BGQueueTypeId(bg->GetTypeID());
+    BattleGroundTypeId bgTypeId = GetBattleGroundTypeIdByMapId(bg->GetMapId());
+    BattleGroundBracketId const bgBracketId = GetBattleGroundBracketIdFromLevel(bgTypeId);
+    uint32 arenaRating = 0;
+
+    // You can't queue as group
+    Group* grp = GetGroup();
+    if (grp)
+    {
+        uint32 err = grp->CanJoinArenaQueue(bgQueueTypeId, 2, 2, sObjectMgr.GetPlayer(grp->GetLeaderGuid()));
+        if (err == BG_JOIN_ERR_GROUP_DESERTER)
+        {
+            WorldPacket data;
+            sBattleGroundMgr.BuildGroupJoinedBattlegroundPacket(&data, BG_GROUPJOIN_DESERTERS);
+            GetSession()->SendPacket(&data);
+            GetSession()->SendBattleGroundJoinError(err);
+            return;
+        }
+        else if (err != BG_JOIN_ERR_OK)
+        {
+            GetSession()->SendBattleGroundJoinError(err);
+            return;
+        }
+    }
+
+    BattleGroundQueue& bgQueue = sBattleGroundMgr.m_BattleGroundQueues[bgQueueTypeId];
+    GroupQueueInfo * ginfo = bgQueue.AddGroup(this, grp ? grp : nullptr, bgTypeId, bgBracketId, false);
+    uint32 avgTime = bgQueue.GetAverageQueueWaitTime(ginfo, bgBracketId);
+    
+    if (grp && queuedAsGroup)
+    {
+        for (GroupReference *itr = grp->GetFirstMember(); itr != NULL; itr = itr->next())
+        {
+            Player *member = itr->getSource();
+            if (!member)
+                continue;  // this should never happen
+
+            uint32 queueSlot = member->AddBattleGroundQueueId(bgQueueTypeId);           // add to queue
+            member->SetBattleGroundEntryPoint(this, false);               // store entry point coords
+
+            WorldPacket data;
+            // send status packet (in queue)
+            sBattleGroundMgr.BuildBattleGroundStatusPacket(&data, bg, queueSlot, STATUS_WAIT_QUEUE, avgTime, 0);
+            member->GetSession()->SendPacket(&data);
+
+            if (grp->GetMembersCount() > 1)
+            {
+                sBattleGroundMgr.BuildGroupJoinedBattlegroundPacket(&data, bg->GetMapId());
+                member->GetSession()->SendPacket(&data);
+            }
+        }
+    }
+    else // solo
+    {
+        // already checked if queueSlot is valid, now just get it
+        uint32 queueSlot = AddBattleGroundQueueId(bgQueueTypeId);
+
+        SetBattleGroundEntryPoint(this, false);
+
+        WorldPacket data;
+        sBattleGroundMgr.BuildBattleGroundStatusPacket(&data, bg, queueSlot, STATUS_WAIT_QUEUE, avgTime, 0);
+        GetSession()->SendPacket(&data);
+    }
+
+    sBattleGroundMgr.ScheduleQueueUpdate(bgQueueTypeId, bgTypeId, bgBracketId);
 }

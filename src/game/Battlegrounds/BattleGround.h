@@ -102,7 +102,9 @@ enum BattleGroundStartTimeIntervals
 {
     BG_START_DELAY_2M               = 120000,               // ms (2 minutes)
     BG_START_DELAY_1M               = 60000,                // ms (1 minute)
+    BG_START_DELAY_35S              = 35000,                // ms (35 seconds)
     BG_START_DELAY_30S              = 30000,                // ms (30 seconds)
+    BG_START_DELAY_15S              = 15000,                // ms (15 seconds)
     BG_START_DELAY_NONE             = 0,                    // ms
 };
 
@@ -145,8 +147,9 @@ enum BattleGroundQueueTypeId
     BATTLEGROUND_QUEUE_AV       = 1,
     BATTLEGROUND_QUEUE_WS       = 2,
     BATTLEGROUND_QUEUE_AB       = 3,
+    ARENA_QUEUE_SV              = 4,
 };
-#define MAX_BATTLEGROUND_QUEUE_TYPES 4
+#define MAX_BATTLEGROUND_QUEUE_TYPES 5
 
 enum BattleGroundBracketId                                  // bracketId for level ranges
 {
@@ -286,6 +289,7 @@ class BattleGround
         // Get methods:
         char const* GetName() const         { return m_Name; }
         BattleGroundTypeId GetTypeID() const { return m_TypeID; }
+        bool IsArena() const { return GetTypeID() >= ARENA_SV ? true : false; }
         BattleGroundBracketId GetBracketId() const { return m_BracketId; }
         // the instanceId check is also used to determine a bg-template
         // that's why the m_map hack is here..
