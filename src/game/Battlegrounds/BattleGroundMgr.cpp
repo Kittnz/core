@@ -1365,9 +1365,9 @@ void BattleGroundMgr::CreateInitialBattleGrounds()
         if (MapEntry const* mapEntry = sMapStorage.LookupEntry<MapEntry>(mapId))
         {
             // Override for <unused>StormwindPrison. Give it a prettier name.
-            if (mapId == 35)
-                name = "Turtle WoW Arena";
-            else
+            //if (mapId == 37)
+            //    name = "Arena";
+            //else
                 name = mapEntry->name;
         }
 
