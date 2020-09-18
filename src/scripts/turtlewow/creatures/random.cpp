@@ -833,9 +833,39 @@ bool GossipSelect_npc_ropaw(Player* p_Player, Creature* p_Creature, uint32 /*uiS
     return true;
 }
 
+bool GossipHello_ArenaMaster(Player* player, Creature* creature)
+{
+    player->ADD_GOSSIP_ITEM(GOSSIP_ICON_BATTLE, "Queue for 2v2 (Solo)", GOSSIP_SENDER_MAIN, 1);
+    if (player->GetGroup())
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_BATTLE, "Queue for 2v2 (Group)", GOSSIP_SENDER_MAIN, 2);
+    player->PlayerTalkClass->SendGossipMenu(195007, creature->GetGUID());
+
+    return true;
+}
+
+bool GossipSelect_ArenaMaster(Player* player, Creature* creature, uint32 sender, uint32 action)
+{
+    switch (action)
+    {
+    case 1:
+    case 2:
+        player->AddToArenaQueue(action == 2 ? true : false);
+        break;
+    }
+
+    player->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
 void AddSC_random()
 {
     Script *newscript;
+
+    newscript = new Script;
+    newscript->Name = "arena_master";
+    newscript->pGossipHello = &GossipHello_ArenaMaster;
+    newscript->pGossipSelect = &GossipSelect_ArenaMaster;
+    newscript->RegisterSelf(false);
 
     newscript = new Script;
     newscript->Name = "npc_ropaw";

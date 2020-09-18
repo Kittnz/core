@@ -26,6 +26,7 @@
 #include "BattleGroundAV.h"
 #include "BattleGroundAB.h"
 #include "BattleGroundWS.h"
+#include "BattleGroundSV.h"
 #include "MapManager.h"
 #include "Map.h"
 #include "ObjectMgr.h"
@@ -475,6 +476,10 @@ large groups are disadvantageous, because they will be kicked first if invitatio
 */
 void BattleGroundQueue::FillPlayersToBG(BattleGround* bg, BattleGroundBracketId bracket_id)
 {
+    // Never allow players to join into an arena.
+    if (bg->IsArena())
+        return;
+
     int32 hordeFree = bg->GetFreeSlotsForTeam(HORDE);
     int32 aliFree   = bg->GetFreeSlotsForTeam(ALLIANCE);
 
@@ -1027,6 +1032,13 @@ void BattleGroundMgr::BuildPvpLogDataPacket(WorldPacket *data, BattleGround *bg)
         *data << uint8(bg->GetWinner());                    // who win
     }
 
+    // If the arena match has not started, write no player data and return until match begins.
+    if (bg->IsArena() && bg->GetStatus() == STATUS_WAIT_JOIN)
+    {
+        *data << uint32(0);
+        return;
+    }
+
     uint32 count = bg->GetPlayerScoresSize();
     if (count >= 80) // Client has a hard limit to 80. If we go beyond (but it should not happen ?!), WoW Error (happening !)
         count = 80;
@@ -1194,6 +1206,9 @@ BattleGround * BattleGroundMgr::CreateNewBattleGround(BattleGroundTypeId bgTypeI
         case BATTLEGROUND_AB:
             bg = new BattleGroundAB(*(BattleGroundAB*)bg_template);
             break;
+        case ARENA_SV:
+            bg = new BattleGroundSV(*(BattleGroundSV*)bg_template);
+            break;
         default:
             //error, but it is handled few lines above
             return 0;
@@ -1226,6 +1241,9 @@ uint32 BattleGroundMgr::CreateBattleGround(BattleGroundTypeId bgTypeId, uint32 M
             break;
         case BATTLEGROUND_AB:
             bg = new BattleGroundAB;
+            break;
+        case ARENA_SV:
+            bg = new BattleGroundSV;
             break;
         default:
             bg = new BattleGround;
@@ -1304,6 +1322,14 @@ void BattleGroundMgr::CreateInitialBattleGrounds()
             AStartLoc[2] = start->z;
             AStartLoc[3] = fields[10].GetFloat();
         }
+        // Override for arena
+        else if (start1 == 9000)
+        {
+            AStartLoc[0] = -69.493f;
+            AStartLoc[1] = 149.628f;
+            AStartLoc[2] = -40.385f;
+            AStartLoc[3] = 3.156f;
+        }
         else
         {
             sLog.outErrorDb("Table `battleground_template` for id %u have nonexistent WorldSafeLocs.dbc id %u in field `AllianceStartLoc`. BG not created.", bgTypeID, start1);
@@ -1319,6 +1345,13 @@ void BattleGroundMgr::CreateInitialBattleGrounds()
             HStartLoc[1] = start->y;
             HStartLoc[2] = start->z;
             HStartLoc[3] = fields[12].GetFloat();
+        }
+        else if (start2 == 9001)
+        {
+            HStartLoc[0] = -125.23f;
+            HStartLoc[1] = 149.71f;
+            HStartLoc[2] = -40.383f;
+            HStartLoc[3] = 0.0f;
         }
         else
         {
@@ -1415,6 +1448,8 @@ BattleGroundQueueTypeId BattleGroundMgr::BGQueueTypeId(BattleGroundTypeId bgType
             return BATTLEGROUND_QUEUE_AB;
         case BATTLEGROUND_AV:
             return BATTLEGROUND_QUEUE_AV;
+        case ARENA_SV:
+            return ARENA_QUEUE_SV;
         default:
             return BATTLEGROUND_QUEUE_NONE;
     }

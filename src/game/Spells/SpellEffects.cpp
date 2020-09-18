@@ -5326,6 +5326,13 @@ void Spell::EffectDuel(SpellEffectIndex eff_idx)
         return;
     }
 
+    // Disable dueling in arena. The areas we use aren't official maps and lack the AREA_FLAG_DUEL on them.
+    if (caster->InArena() || target->InArena())
+    {
+        SendCastResult(SPELL_FAILED_NO_DUELING);            // Dueling isn't allowed here
+        return;
+    }
+
     //CREATE DUEL FLAG OBJECT
     GameObject* pGameObj = new GameObject;
 
@@ -6014,6 +6021,14 @@ void Spell::EffectSelfResurrect(SpellEffectIndex eff_idx)
         return;
     if (!unitTarget->IsInWorld())
         return;
+
+    // Disallow resurrection in arena.
+    Player* player = unitTarget->ToPlayer();
+    if (player && player->InArena())
+    {
+        player->RepopAtGraveyard(); // not working?
+        return;
+    }
 
     uint32 health = 0;
     uint32 mana = 0;

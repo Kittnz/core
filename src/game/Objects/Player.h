@@ -2326,6 +2326,8 @@ class MANGOS_DLL_SPEC Player final: public Unit
         BgBattleGroundQueueID_Rec m_bgBattleGroundQueueID[PLAYER_MAX_BATTLEGROUND_QUEUES];
         BGData                    m_bgData;
     public:
+        void AddToArenaQueue(bool queuedAsGroup);
+        bool InArena()              const                { return InBattleGround() && GetBattleGround()->IsArena(); }
         bool InBattleGround()       const                { return m_bgData.bgInstanceID != 0; }
         uint32 GetBattleGroundId()  const                { return m_bgData.bgInstanceID; }
         BattleGroundTypeId GetBattleGroundTypeId() const { return m_bgData.bgTypeID; }

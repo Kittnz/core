@@ -280,7 +280,9 @@ void WorldSession::HandleCorpseQueryOpcode(WorldPacket & /*recv_data*/)
 
     Corpse *corpse = GetPlayer()->GetCorpse();
 
-    if (!corpse)
+
+    // no corpse, or in arena, send not found
+    if (!corpse || (GetPlayer() && GetPlayer()->InArena()))
     {
         WorldPacket data(MSG_CORPSE_QUERY, 1);
         data << uint8(0);                                   // corpse not found
