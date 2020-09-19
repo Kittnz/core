@@ -184,8 +184,8 @@ where entry = @quest_entry;
 
 replace into gameobject_template values 
 (3000226, 0, 5, 2290, 'Stormwind Vault', 0, 0, 1.4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
-(3000227 0, 5, 25, 'Stormwind Vault', 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+(3000227, 0, 5, 25, 'Stormwind Vault',    0, 0, 1,   1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
 
 delete from gameobject where id = 3000226;
 
-replace into`gameobject` (`id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`, `spawnFlags`, `visibilitymod`, `patch_min`, `patch_max`) values (3000226, 0, -8674.6, 633.4, 101, 5.37799, 0, 0, 0.437304, -0.899314, 0, 0, 100, 1, 0, 0, 0, 10);
+replace into `gameobject` (`id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`, `spawnFlags`, `visibilitymod`, `patch_min`, `patch_max`) values (3000226, 0, -8674.6, 633.4, 101, 5.37799, 0, 0, 0.437304, -0.899314, 0, 0, 100, 1, 0, 0, 0, 10);
