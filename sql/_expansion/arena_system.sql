@@ -1,0 +1,33 @@
+
+-- Arena door event
+replace into `battleground_events` (`map`, `event1`, `event2`, `description`) VALUES (37, 254, 0, 'Doors');
+
+-- Add Stormwind Vault as BG map
+replace into `battleground_template` VALUES (4, 0, 1, 1, 0, 60, 0, 0, 0, 0, 9000, 0, 9001, 0);
+
+-- Add custom portcullis door for arena
+replace into `gameobject_template` VALUES (1771652, 0, 0, 25426, 'Arena Door', 114, 36, 0.50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+-- Spawn arena game objects
+-- replace into `gameobject` VALUES (3998671, 1771652, 37, -438.716, 492.486, 293.857, 1.31, 0, 0, 0.000652464, -1, 0, 0, 100, 1, 0, 0, 0, 10);
+replace into `gameobject` VALUES (3998658, 1771652, 37, -38.716, 192.486, 293.857, 0, 0, 0, 0.999999, -0.00130956, 0, 0, 100, 1, 0, 0, 0, 10);
+replace into `gameobject` VALUES (3998657, 1771652, 37, -17.73, 266.41, 291.53, 0, 0, 0, 0.0049958, 0.999988, 0, 0, 100, 1, 0, 0, 0, 10);
+
+-- Add arena strings
+replace into `mangos_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES (704, 'The Arena battle has begun!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+replace into `mangos_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES (703, 'Fifteen seconds until the Arena battle begins!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+replace into `mangos_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES (702, 'Thirty seconds until the Arena battle begins!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+replace into `mangos_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES (701, 'One minute until the Arena battle begins!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+
+replace into `gameobject_battleground` (`guid`, `event1`, `event2`) VALUES (3998658, 254, 0);
+replace into `gameobject_battleground` (`guid`, `event1`, `event2`) VALUES (3998657, 254, 0);
+
+replace into `broadcast_text` (`ID`, `MaleText`, `FemaleText`, `Sound`, `Type`, `Language`, `EmoteId0`, `EmoteId1`, `EmoteId2`, `EmoteDelay0`, `EmoteDelay1`, `EmoteDelay2`) VALUES (195007, 'This… Crater isn\'t something you\'ve had as an experience before, that is certain.\n\nTelling you to get ready is just as futile as you trying to assess the real threat that lies within this battleground.\n\nBest you can do is either survive to tell the story or die as quickly as possible.', '', 0, 0, 0, 1, 1, 0, 0, 0, 0);
+replace into `npc_text` (`ID`, `BroadcastTextID0`, `Probability0`, `BroadcastTextID1`, `Probability1`, `BroadcastTextID2`, `Probability2`, `BroadcastTextID3`, `Probability3`, `BroadcastTextID4`, `Probability4`, `BroadcastTextID5`, `Probability5`, `BroadcastTextID6`, `Probability6`, `BroadcastTextID7`, `Probability7`) VALUES (195007, 195007, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+
+replace into `creature_template`  VALUES (50099, 0, 10217, 0, 0, 0, 'Kameron Hale', 'Arena Battlemaster', 0, 60, 60, 7845, 7845, 0, 0, 0, 35, 5, 1, 1.14286, 1, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 50000, 0, 0, 0, 'arena_master');
+-- 1023 - Alfronpho Moralice -- Expansion.
+-- TODO: Arena MAster for every city!
+
+update `map_template` SET `map_type`='3' WHERE `entry`='37';
+UPDATE `map_template` SET `level_min`='60', `level_max`='60' WHERE `entry`='37';
