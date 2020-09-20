@@ -248,30 +248,3 @@ bool ChatHandler::HandleAccountPasswordCommand(char* args)
     return false;
 }
 
-/// Display the 'Message of the day' for the realm
-bool ChatHandler::HandleServerMotdCommand(char* /*args*/)
-{
-    PSendSysMessage(LANG_MOTD_CURRENT, sWorld.GetMotd());
-    return true;
-}
-
-bool ChatHandler::HandleWhisperRestrictionCommand(char* args)
-{
-    if (!*args)
-    {
-        PSendSysMessage("Whisper restriction is %s", GetSession()->GetPlayer()->IsEnabledWhisperRestriction() ? "ON" : "OFF");
-        return true;
-    }
-
-    bool value;
-    if (!ExtractOnOff(&args, value))
-    {
-        SendSysMessage(LANG_USE_BOL);
-        SetSentErrorMessage(true);
-        return false;
-    }
-
-    GetSession()->GetPlayer()->SetWhisperRestriction(value);
-    PSendSysMessage("Whisper restriction is %s", value ? "ON" : "OFF");
-    return false;
-}

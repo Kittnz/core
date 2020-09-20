@@ -69,19 +69,6 @@ bool ChatHandler::HandleReloadAutoBroadcastCommand(char *args)
 	return true;
 }
 
-bool ChatHandler::HandleReloadSpellModsCommand(char *args)
-{
-	sSpellModMgr.LoadSpellMods();
-	SendSysMessage("DB table `spell_mod` reloaded.");
-	return true;
-}
-
-bool ChatHandler::HandleReloadMapLootDisabledCommand(char *args)
-{
-	sObjectMgr.LoadMapLootDisabled();
-	SendSysMessage("DB table `map_loot_disabled` reloaded.");
-	return true;
-}
 
 bool ChatHandler::HandleWorldUpdateCommand(char *args)
 {
@@ -150,18 +137,12 @@ bool ChatHandler::HandleWorldDetailCommand(char *args)
 	return true;
 }
 
-bool ChatHandler::HandlePossessCommand(char *args)
+bool ChatHandler::HandleReloadItemTemplate(char*)
 {
-	Unit *tar = GetSelectedUnit();
-	if (!tar)
-	{
-		SendSysMessage(LANG_SELECT_CHAR_OR_CREATURE);
-		return false;
-	}
-	m_session->GetPlayer()->CastSpell(tar, 530, true);
-	return true;
+    sObjectMgr.LoadItemPrototypes();
+    SendSysMessage(">> Table `item_template` reloaded.");
+    return true;
 }
-
 
 bool ChatHandler::HandleGameObjectTempAddCommand(char *args)
 {
@@ -326,6 +307,7 @@ bool ChatHandler::HandleCleanCharactersToDeleteCommand(char* args)
 	}
 	return true;
 }
+
 
 bool ChatHandler::HandleCleanCharactersItemsCommand(char* args)
 {
@@ -950,21 +932,6 @@ bool ChatHandler::HandleGodCommand(char* args)
 	return true;
 }
 
-// SPELL GROUPS
-
-bool ChatHandler::HandleReloadSpellGroupCommand(char*)
-{
-	sSpellMgr.LoadSpellGroups();
-	SendSysMessage("Table `spell_group` rechargee.");
-	return true;
-}
-
-bool ChatHandler::HandleReloadSpellGroupStackRulesCommand(char*)
-{
-	sSpellMgr.LoadSpellGroupStackRules();
-	SendSysMessage("Table `spell_group_stack_rules` rechargee.");
-	return true;
-}
 // --------------------------------
 // MMAPS
 // --------------------------------
@@ -1681,17 +1648,6 @@ bool ChatHandler::HandleFactionChangeItemsCommand(char* c)
 	return true;
 }
 
-bool ChatHandler::HandleReloadCharacterPetCommand(char *args)
-{
-	uint32 petId = 0;
-	if (!ExtractUInt32(&args, petId))
-		return false;
-	if (!petId)
-		return false;
-	sCharacterDatabaseCache.LoadAll(petId);
-	PSendSysMessage(">> Pet #%u reloaded from database.", petId);
-	return true;
-}
 
 bool ChatHandler::HandlePetListCommand(char* args)
 {
@@ -1777,21 +1733,6 @@ bool ChatHandler::HandlePetDeleteCommand(char* args)
 	return true;
 }
 
-bool ChatHandler::HandleReloadCreatureCommand(char* /*args*/)
-{
-	sLog.outString("Re-Loading `creature` table ...");
-	sObjectMgr.LoadCreatures(true);
-	SendSysMessage("DB table `creature` reloaded.");
-	return true;
-}
-
-bool ChatHandler::HandleReloadGameObjectCommand(char* /*args*/)
-{
-	sLog.outString("Re-Loading `gameobject` table ...");
-	sObjectMgr.LoadGameobjects(true);
-	SendSysMessage("DB table `gameobject` reloaded.");
-	return true;
-}
 
 
 bool ChatHandler::HandleInstanceContinentsCommand(char*)
@@ -1840,132 +1781,5 @@ bool ChatHandler::HandleInstancePerfInfosCommand(char* args)
 		}
 	}
 	PSendSysMessage("Units in client: %u pl, %u gobj, %u crea, %u corpses", playersInClient, gobjsInClient, unitsInClient, corpsesInClient);
-	return true;
-}
-
-
-bool ChatHandler::HandleReloadCreatureTemplate(char*)
-{
-	sObjectMgr.LoadCreatureTemplates();
-	SendSysMessage(">> Table `creature_template` reloaded.");
-	return true;
-}
-
-bool ChatHandler::HandleReloadItemTemplate(char*)
-{
-	sObjectMgr.LoadItemPrototypes();
-	SendSysMessage(">> Table `item_template` reloaded.");
-	return true;
-}
-
-bool ChatHandler::HandleReloadMapTemplate(char*)
-{
-	sObjectMgr.LoadMapTemplate();
-	SendSysMessage(">> Table `map_template` reloaded.");
-	return true;
-}
-
-bool ChatHandler::HandleReloadGameObjectTemplate(char*)
-{
-	sObjectMgr.LoadGameobjectInfo();
-	SendSysMessage(">> Table `gameobject_template` reloaded.");
-	return true;
-}
-
-bool ChatHandler::HandleReloadExplorationBaseXp(char*)
-{
-	sObjectMgr.LoadExplorationBaseXP();
-	SendSysMessage(">> Table `exploration_basexp` reloaded.");
-	return true;
-}
-
-bool ChatHandler::HandleReloadPetNameGeneration(char*)
-{
-	sObjectMgr.LoadPetNames();
-	SendSysMessage(">> Table `pet_name_generation` reloaded.");
-	return true;
-}
-
-bool ChatHandler::HandleReloadCreatureOnKillReputation(char*)
-{
-	sObjectMgr.LoadReputationOnKill();
-	SendSysMessage(">> Table `creature_onkill_reputation` reloaded.");
-	return true;
-}
-
-bool ChatHandler::HandleReloadGameWeather(char*)
-{
-	sWeatherMgr.LoadWeatherZoneChances();
-	SendSysMessage(">> Table `game_weather` reloaded.");
-	return true;
-}
-
-bool ChatHandler::HandleReloadFactionChangeReputations(char*)
-{
-	sObjectMgr.LoadFactionChangeReputations();
-	SendSysMessage(">> Table `player_factionchange_reputations` reloaded.");
-	return true;
-}
-
-bool ChatHandler::HandleReloadFactionChangeSpells(char*)
-{
-	sObjectMgr.LoadFactionChangeSpells();
-	SendSysMessage(">> Table `player_factionchange_spells` reloaded.");
-	return true;
-}
-
-bool ChatHandler::HandleReloadFactionChangeItems(char*)
-{
-	sObjectMgr.LoadFactionChangeItems();
-	SendSysMessage(">> Table `player_factionchange_items` reloaded.");
-	return true;
-}
-
-bool ChatHandler::HandleReloadFactionChangeQuests(char*)
-{
-	sObjectMgr.LoadFactionChangeQuests();
-	SendSysMessage(">> Table `player_factionchange_quests` reloaded.");
-	return true;
-}
-
-bool ChatHandler::HandleReloadFactionChangeMounts(char*)
-{
-	sObjectMgr.LoadFactionChangeMounts();
-	SendSysMessage(">> Table `player_factionchange_mounts` reloaded.");
-	return true;
-}
-
-bool ChatHandler::HandleReloadCreatureModelInfo(char*)
-{
-	sObjectMgr.LoadCreatureModelInfo();
-	SendSysMessage(">> Table `creature_model_info` reloaded.");
-	return true;
-}
-
-bool ChatHandler::HandleReloadIPBanList(char*)
-{
-	sAccountMgr.LoadIPBanList();
-	SendSysMessage(">> Table `ip_banned` reloaded.");
-	return true;
-}
-
-bool ChatHandler::HandleReloadAccountBanList(char*)
-{
-	sAccountMgr.LoadAccountBanList();
-	SendSysMessage(">> Table `account_banned` reloaded.");
-	return true;
-}
-
-bool ChatHandler::HandleReloadInstanceBuffRemoval(char*)
-{
-	sAuraRemovalMgr.LoadFromDB();
-	SendSysMessage(">> Table `instance_buff_removal` reloaded.");
-	return true;
-}
-
-bool ChatHandler::HandleReloadPetitions(char*)
-{
-	sGuildMgr.LoadPetitions();
-	SendSysMessage(">> Table `petition` reloaded.");
 	return true;
 }
