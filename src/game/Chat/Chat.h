@@ -176,7 +176,6 @@ class MANGOS_DLL_SPEC ChatHandler
         bool HandleWardenReadCommand(char *);
         bool HandleClientInfosCommand(char* );
         bool HandleClientSearchCommand(char* );
-        bool HandleReloadAnticheatCommand(char*);
         bool HandleViewLogCommand(char* );
         //Custom
         bool HandleListAddonsCommand(char *);
@@ -184,17 +183,8 @@ class MANGOS_DLL_SPEC ChatHandler
         bool HandleSendSpellVisualCommand(char *);
         bool HandleSendSpellImpactCommand(char *);
         bool HandleServiceDeleteCharacters(char* args);
-
-        bool HandleSpamerMute(char* args);
-        bool HandleSpamerUnmute(char* args);
-        bool HandleSpamerList(char* args);
-        bool HandleWhisperRestrictionCommand(char* args);
         bool HandleUnstuckCommand(char* args);
         bool HandleGoldRemoval(char* args);
-        bool HandleAntiSpamAdd(char* args);
-        bool HandleAntiSpamRemove(char* args);
-        bool HandleAntiSpamReplace(char* args);
-        bool HandleAntiSpamRemoveReplace(char* args);
 
         // Mmaps
         bool HandleMmap(char* args);
@@ -211,18 +201,11 @@ class MANGOS_DLL_SPEC ChatHandler
         bool HandleReloadSpellDisabledCommand(char *args);
         // AutoBroadCast
         bool HandleReloadAutoBroadcastCommand(char *args);
-        // SpellMods
-        bool HandleReloadSpellModsCommand(char *args);
-        // MapLootDisabled
-        bool HandleReloadMapLootDisabledCommand(char *args);
-        // Autres reload
-        bool HandleReloadCharacterPetCommand(char *args);
-        bool HandleReloadSpellGroupCommand(char *args);
-        bool HandleReloadSpellGroupStackRulesCommand(char *args);
         // World Gestion
         bool HandleWorldUpdateCommand(char *args);
         bool HandleWorldTestCommand(char *args);
         bool HandleWorldDetailCommand(char *args);
+        bool HandleReloadItemTemplate(char *);
         // Managing saved variables
         bool HandleVariableCommand(char* args);
         bool HandleReloadVariablesCommand(char* args);
@@ -232,8 +215,6 @@ class MANGOS_DLL_SPEC ChatHandler
         // Deplacement
         bool HandleGoForwardCommand(char* args);
         bool HandleGoUpCommand(char* args);
-        // Other
-        bool HandlePossessCommand(char* args);
 
         bool HandleGameObjectTempAddCommand(char *args);
         // Clean characters
@@ -263,27 +244,7 @@ class MANGOS_DLL_SPEC ChatHandler
         bool HandleUnfreezeCommand(char *args);
         bool HandleSpellIconFixCommand(char *args);
         bool HandleUnitStatCommand(char *args);
-        // Reload
-        bool HandleReloadCreatureTemplate(char* args);
-        bool HandleReloadItemTemplate(char* args);
-        bool HandleReloadMapTemplate(char* args);
-        bool HandleReloadGameObjectTemplate(char* args);
-        bool HandleReloadExplorationBaseXp(char* args);
-        bool HandleReloadPetNameGeneration(char* args);
-        bool HandleReloadCreatureOnKillReputation(char* args);
-        bool HandleReloadGameWeather(char* args);
-        bool HandleReloadFactionChangeReputations(char* args);
-        bool HandleReloadFactionChangeSpells(char* args);
-        bool HandleReloadFactionChangeItems(char* args);
-        bool HandleReloadFactionChangeQuests(char* args);
-        bool HandleReloadFactionChangeMounts(char* args);
-        bool HandleReloadCreatureModelInfo(char* args);
-        bool HandleReloadIPBanList(char* args);
-        bool HandleReloadAccountBanList(char* args);
-        bool HandleReloadCreatureCommand(char* args);
-        bool HandleReloadGameObjectCommand(char* args);
-        bool HandleReloadInstanceBuffRemoval(char* args);
-        bool HandleReloadPetitions(char* args);
+        // Reload        
         bool HandleReloadShopCommand(char* args);
         bool HandleReloadCustomPetEntries(char* args);
         bool HandleReloadCustomMountEntries(char* args);
@@ -416,88 +377,10 @@ class MANGOS_DLL_SPEC ChatHandler
         bool HandlePetRenameCommand(char* args);
         bool HandlePetDeleteCommand(char* args);
 
-        bool HandleReloadAllCommand(char* args);
-        bool HandleReloadAllAreaCommand(char* args);
-        bool HandleReloadAllGossipsCommand(char* args);
-        bool HandleReloadAllItemCommand(char* args);
-        bool HandleReloadAllLootCommand(char* args);
-        bool HandleReloadAllNpcCommand(char* args);
-        bool HandleReloadAllQuestCommand(char* args);
-        bool HandleReloadAllScriptsCommand(char* args);
-        bool HandleReloadAllSpellCommand(char* args);
-        bool HandleReloadAllLocalesCommand(char* args);
+        bool HandleReloadMangosStringCommand(char *);
 
         bool HandleReloadConfigCommand(char* args);
-
-        bool HandleReloadAreaTriggerTavernCommand(char* args);
-        bool HandleReloadAreaTriggerTeleportCommand(char* args);
-        bool HandleReloadEventScriptsCommand(char* args);
-        bool HandleReloadEventAIEventsCommand(char* args);
-        bool HandleReloadCommandCommand(char* args);
-        bool HandleReloadBattleEventCommand(char* args);
-        bool HandleReloadConditionsCommand(char* args);
-        bool HandleReloadCreatureSpellsCommand(char* args);
-        bool HandleReloadCreatureSpellScriptsCommand(char* args);
-        bool HandleReloadCreatureQuestRelationsCommand(char* args);
-        bool HandleReloadCreatureQuestInvRelationsCommand(char* args);
-        bool HandleReloadGameGraveyardZoneCommand(char* args);
-        bool HandleReloadGameObjectScriptsCommand(char* args);
-        bool HandleReloadGameTeleCommand(char* args);
-        bool HandleReloadTaxiPathTransitionsCommand(char* args);
-        bool HandleReloadGossipMenuCommand(char* args);
-        bool HandleReloadGossipMenuOptionCommand(char* args);
-        bool HandleReloadGossipScriptsCommand(char* args);
-        bool HandleReloadGOQuestRelationsCommand(char* args);
-        bool HandleReloadGORequirementsCommand(char* args);
-        bool HandleReloadGOQuestInvRelationsCommand(char* args);
-        bool HandleReloadItemEnchantementsCommand(char* args);
-        bool HandleReloadItemRequiredTragetCommand(char* args);
-        bool HandleReloadLocalesCreatureCommand(char* args);
-        bool HandleReloadLocalesGameobjectCommand(char* args);
-        bool HandleReloadLocalesGossipMenuOptionCommand(char* args);
-        bool HandleReloadLocalesItemCommand(char* args);
-        bool HandleReloadLocalesPageTextCommand(char* args);
-        bool HandleReloadLocalesPointsOfInterestCommand(char* args);
-        bool HandleReloadLocalesQuestCommand(char* args);
-        bool HandleReloadLootTemplatesCreatureCommand(char* args);
-        bool HandleReloadLootTemplatesDisenchantCommand(char* args);
-        bool HandleReloadLootTemplatesFishingCommand(char* args);
-        bool HandleReloadLootTemplatesGameobjectCommand(char* args);
-        bool HandleReloadLootTemplatesItemCommand(char* args);
-        bool HandleReloadLootTemplatesMailCommand(char* args);
-        bool HandleReloadLootTemplatesPickpocketingCommand(char* args);
-        bool HandleReloadLootTemplatesReferenceCommand(char* args);
-        bool HandleReloadLootTemplatesSkinningCommand(char* args);
-        bool HandleReloadMangosStringCommand(char* args);
-        bool HandleReloadNpcGossipCommand(char* args);
-        bool HandleReloadNpcTextCommand(char* args);
-        bool HandleReloadNpcTrainerCommand(char* args);
-        bool HandleReloadNpcVendorCommand(char* args);
-        bool HandleReloadPageTextsCommand(char* args);
-        bool HandleReloadPointsOfInterestCommand(char* args);
-        bool HandleReloadQuestAreaTriggersCommand(char* args);
-        bool HandleReloadQuestEndScriptsCommand(char* args);
-        bool HandleReloadQuestStartScriptsCommand(char* args);
         bool HandleReloadQuestTemplateCommand(char* args);
-        bool HandleReloadQuestGreetingCommand(char* args);
-        bool HandleReloadTrainerGreetingCommand(char* args);
-        bool HandleReloadReservedNameCommand(char* args);
-        bool HandleReloadReputationRewardRateCommand(char* args);
-        bool HandleReloadReputationSpilloverTemplateCommand(char* args);
-        bool HandleReloadSkillFishingBaseLevelCommand(char* args);
-        bool HandleReloadSpellAffectCommand(char* args);
-        bool HandleReloadSpellAreaCommand(char* args);
-        bool HandleReloadSpellBonusesCommand(char* args);
-        bool HandleReloadSpellChainCommand(char* args);
-        bool HandleReloadSpellElixirCommand(char* args);
-        bool HandleReloadSpellLearnSpellCommand(char* args);
-        bool HandleReloadSpellProcEventCommand(char* args);
-        bool HandleReloadSpellProcItemEnchantCommand(char* args);
-        bool HandleReloadSpellScriptTargetCommand(char* args);
-        bool HandleReloadSpellScriptsCommand(char* args);
-        bool HandleReloadSpellTargetPositionCommand(char* args);
-        bool HandleReloadSpellThreatsCommand(char* args);
-        bool HandleReloadSpellPetAurasCommand(char* args);
 
         bool HandleResetAllCommand(char* args);
         bool HandleResetHonorCommand(char* args);
@@ -511,19 +394,12 @@ class MANGOS_DLL_SPEC ChatHandler
         bool HandleSendMessageCommand(char* args);
         bool HandleSendMoneyCommand(char* args);
 
-        bool HandleSendMassItemsCommand(char* args);
-        bool HandleSendMassMailCommand(char* args);
-        bool HandleSendMassMoneyCommand(char* args);
 
         bool HandleServerCorpsesCommand(char* args);
         bool HandleServerExitCommand(char* args);
         bool HandleServerIdleRestartCommand(char* args);
         bool HandleServerIdleShutDownCommand(char* args);
         bool HandleServerInfoCommand(char* args);
-        bool HandleServerLogFilterCommand(char* args);
-        bool HandleServerLogLevelCommand(char* args);
-        bool HandleServerMotdCommand(char* args);
-        bool HandleServerPLimitCommand(char* args);
         bool HandleServerRestartCommand(char* args);
         bool HandleServerSetMotdCommand(char* args);
         bool HandleServerShutDownCommand(char* args);
@@ -535,9 +411,6 @@ class MANGOS_DLL_SPEC ChatHandler
         bool HandleTeleGroupCommand(char* args);
         bool HandleTeleNameCommand(char* args);
 
-        bool HandleTriggerActiveCommand(char* args);
-        bool HandleTriggerNearCommand(char* args);
-        bool HandleTriggerCommand(char* args);
 
         bool HandleUnBanAccountCommand(char* args);
         bool HandleUnBanCharacterCommand(char* args);
