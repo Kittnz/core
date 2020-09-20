@@ -54,7 +54,6 @@ class WorldSession;
 class WardenInterface;
 class BigNumber;
 class BehaviorAnalyzer;
-class NodeSession;
 class MasterPlayer;
 
 struct OpcodeHandler;
@@ -249,9 +248,6 @@ class WorldSessionFilter : public PacketFilter
         ~WorldSessionFilter() {}
 };
 
-class ForwardToMaster_Exception {};
-class ForwardToNode_Exception {};
-
 typedef std::map<uint8, std::string> ClientIdentifiersMap;
 
 class WorldSessionScript
@@ -333,7 +329,7 @@ class MANGOS_DLL_SPEC WorldSession
         // Session can be safely deleted if returns false
         bool ForcePlayerLogoutDelay();
 
-        void QueuePacket(WorldPacket* new_packet, NodeSession* from_node = NULL);
+        void QueuePacket(WorldPacket* new_packet);
 
         bool Update(PacketFilter& updater);
         /**
@@ -457,24 +453,6 @@ class MANGOS_DLL_SPEC WorldSession
         // Intentionally session-based to avoid login/logout hijinks
         time_t GetLastPubChanMsgTime() { return m_lastPubChannelMsgTime; }
         void SetLastPubChanMsgTime(time_t time) { m_lastPubChannelMsgTime = time; }
-
-        bool IsReplaying() const { return _pcktReading != nullptr; }
-        ObjectGuid GetRecorderGuid() const { return _recorderGuid; }
-        void ReplaySkipTime(int32 delay) { _pcktReadTimer += delay; }
-        void SetReplaySpeedRate(float r) { _pcktReadSpeedRate = r; }
-        void SetDumpPacket(const char* file);
-        void SetPacketsDumpFlags(uint32 flags) { _pcktDumpFlags = flags; }
-        void SetReadPacket(const char* file);
-        void SetDumpRecvPackets(const char* file);
-
-        FILE* _pcktReading;
-        FILE* _pcktWriting;
-        FILE* _pcktRecvDump;
-        uint32 _pcktDumpFlags;
-        float  _pcktReadSpeedRate;
-        uint32 _pcktReadTimer;
-        uint32 _pcktReadLastUpdate;
-        ObjectGuid _recorderGuid;
 
         // Bot system
         std::stringstream _chatBotHistory;
@@ -968,12 +946,6 @@ class MANGOS_DLL_SPEC WorldSession
     public:
         uint32 GenerateItemLowGuid();
         uint32 GeneratePetNumber();
-        NodeSession* GetMasterSession() const { return m_masterSession; }
-        void SetMasterSession(NodeSession* s) { m_masterSession = s; }
-        NodeSession* GetNodeSession() const { return m_nodeSession; }
-        void SetNodeSession(NodeSession* s) { m_nodeSession = s; }
-        bool IsNode() const { return m_nodeSession == nullptr; }
-        bool IsMaster() const { return m_masterSession == nullptr; }
         MasterPlayer* GetMasterPlayer() const { return m_masterPlayer; }
         PlayerPointer GetPlayerPointer() const
         {
@@ -983,26 +955,7 @@ class MANGOS_DLL_SPEC WorldSession
                 return PlayerPointer(new PlayerWrapper<MasterPlayer>(GetMasterPlayer()));
             return PlayerPointer(nullptr);
         }
-
-        /**
-         * @brief Interrupts current packet handler and forwards packet to Master.
-         * If we are the master, the function returns without doing anything.
-         */
-        void ForwardPacketToMaster();
-        /**
-         * @brief Interrupts current packet handler and forwards packet to Node.
-         * If we are the node, the function returns without doing anything.
-         */
-        void ForwardPacketToNode();
-        /**
-         * @brief Will login current player to given node.
-         * The player should not be on a map, SMSG_TRANSFER_PENDING has already been sent
-         * @param s
-         */
-        void LoginPlayerToNode(NodeSession* s);
     protected:
-        NodeSession*    m_masterSession;
-        NodeSession*    m_nodeSession;
         MasterPlayer*   m_masterPlayer;
         /// End of clustering system
 };

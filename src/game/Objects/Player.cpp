@@ -81,7 +81,6 @@
 #include "AccountMgr.h"
 #include "MoveSpline.h"
 #include "Anticheat.h"
-#include "NodeSession.h"
 #include "MovementBroadcaster.h"
 #include "PlayerBroadcaster.h"
 #include "GameEventMgr.h"
@@ -425,7 +424,7 @@ UpdateMask Player::updateVisualBits;
 
 Player::Player(WorldSession *session) : Unit(),
     m_mover(this), m_camera(this), m_reputationMgr(this),
-    m_enableInstanceSwitch(true), m_currentTicketCounter(0),
+    m_currentTicketCounter(0),
     m_honorMgr(this), m_bNextRelocationsIgnored(0), m_standStateTimer(0), m_newStandState(MAX_UNIT_STAND_STATE), m_foodEmoteTimer(0)
 {
     m_objectType |= TYPEMASK_PLAYER;
@@ -597,9 +596,6 @@ Player::Player(WorldSession *session) : Unit(),
 
     // GM variables
     m_gmInvisibilityLevel = session->GetSecurity();
-
-    if(session->GetSecurity() != SEC_PLAYER)
-        m_smartInstanceRebind = true;
 
     // TODO: remove it
     launched = false;
@@ -807,7 +803,6 @@ bool Player::Create(uint32 guidlow, const std::string& name, uint8 race, uint8 c
 
     // Phasing
     SetWorldMask(WORLD_DEFAULT_CHAR);
-    SetCustomFlags(CUSTOM_FLAG_IN_PEX | CUSTOM_FLAG_FROM_NOSTALRIUS_3);
 
     return true;
 }
@@ -1327,7 +1322,7 @@ void Player::Update(uint32 update_diff, uint32 p_time)
     if (!GetSession()->IsConnected())
         return;
 
-    if (m_enableInstanceSwitch && !IsTaxiFlying() && IsInWorld() && GetMap()->IsContinent() && !GetTransport() && !IsBeingTeleported())
+    if (!IsTaxiFlying() && IsInWorld() && GetMap()->IsContinent() && !GetTransport() && !IsBeingTeleported())
     {
         bool transition = false;
         uint16 newInstanceId = sMapMgr.GetContinentInstanceId(GetMap()->GetId(), GetPositionX(), GetPositionY(), &transition);
@@ -13103,9 +13098,7 @@ void Player::RewardQuest(Quest const *pQuest, uint32 reward, WorldObject* questE
 
     // Not give XP in case already completed once repeatable quest
     // Blizzlike:
-    // uint32 XP = q_status.m_rewarded ? 0 : uint32(pQuest->XPValue(this) * sWorld.getConfig(CONFIG_FLOAT_RATE_XP_QUEST));
-    // Quest check for Turtle WoW Arena Tournament:
-    uint32 XP = q_status.m_rewarded && (pQuest->GetQuestId() > 50226 || pQuest->GetQuestId() < 50222) ? 0 : uint32(pQuest->XPValue(this) *sWorld.getConfig(CONFIG_FLOAT_RATE_XP_QUEST));
+    uint32 XP = q_status.m_rewarded ? 0 : uint32(pQuest->XPValue(this) * sWorld.getConfig(CONFIG_FLOAT_RATE_XP_QUEST));
 
     if (getLevel() < sWorld.getConfig(CONFIG_UINT32_MAX_PLAYER_LEVEL))
         GiveXP(XP , NULL);
@@ -14469,62 +14462,6 @@ void Player::_LoadIntoDataField(const char* data, uint32 startOffset, uint32 cou
         m_uint32Values[startOffset + index] = atol((*iter).c_str());
 }
 
-void Player::LoadCustomFlags()
-{
-    RemoveCustomFlag(CUSTOM_FLAG_FROM_NOSTALRIUS | CUSTOM_FLAG_FROM_BLACKROCK | CUSTOM_FLAG_FROM_NOSTALRIUS_2
-                     | CUSTOM_FLAG_FROM_PRISMATIA | CUSTOM_FLAG_FROM_NOSTALRIUS_3 | CUSTOM_FLAG_PRISMATIA_BETA);
-
-    uint32 guidLow = GetGUIDLow();
-    // Sur quel royaume / Quand le perso a-t-il été créé ?
-    if (guidLow < 10000)
-        AddCustomFlag(CUSTOM_FLAG_FROM_NOSTALRIUS);
-    else if (guidLow <= 13350)
-        AddCustomFlag(CUSTOM_FLAG_FROM_BLACKROCK);
-    else if (guidLow < 20000)
-        AddCustomFlag(CUSTOM_FLAG_FROM_NOSTALRIUS_2);
-    else if (guidLow <= 29375)
-        AddCustomFlag(CUSTOM_FLAG_FROM_PRISMATIA);
-    else
-        AddCustomFlag(CUSTOM_FLAG_FROM_NOSTALRIUS_3);
-    // Beta testeur ?
-    if (HasItemCount(50001, 1))
-        AddCustomFlag(CUSTOM_FLAG_PRISMATIA_BETA);
-    // Load des 'phases'
-    // -- Pex termine
-    if (HasItemCount(19160, 1))
-    {
-        AddCustomFlag(CUSTOM_FLAG_HL | CUSTOM_FLAG_PEX_FINISHED);
-        RemoveCustomFlag(CUSTOM_FLAG_IN_PEX);
-    }
-    // -- Pas eu de pex
-    //else if (getLevel() > 56 && !HasCustomFlag(CUSTOM_FLAG_FROM_BLACKROCK))
-    //{
-    //    AddCustomFlag(CUSTOM_FLAG_HL);
-    //    RemoveCustomFlag(CUSTOM_FLAG_IN_PEX | CUSTOM_FLAG_PEX_FINISHED);
-    //}
-    // -- En cours de pex
-    if ((getLevel() < 55 && !HasCustomFlag(CUSTOM_FLAG_FROM_PRISMATIA)) ||
-            getLevel() < 40)
-    {
-        AddCustomFlag(CUSTOM_FLAG_IN_PEX);
-        RemoveCustomFlag(CUSTOM_FLAG_PEX_FINISHED | CUSTOM_FLAG_HL);
-    }
-    // Et finalement les autres
-    if (!HasCustomFlag(CUSTOM_FLAG_IN_PEX | CUSTOM_FLAG_PEX_FINISHED | CUSTOM_FLAG_HL | CUSTOM_FLAG_INSTANT60))
-    {
-        sLog.outInfo("[CustomFlag] Joueur %u (guid %u) flags inconnu ...", GetName(), GetGUIDLow());
-        AddCustomFlag(CUSTOM_FLAG_HL);
-    }
-    // Derniere verification pour ceux qui auraient exploit bug :
-    // 3 jours de /played mini pour upper
-    if (m_Played_time[PLAYED_TIME_TOTAL] < (60 * 60 * 24 * 3) && HasCustomFlag(CUSTOM_FLAG_PEX_FINISHED))
-    {
-        sLog.outInfo("[CustomFlag] Joueur %s en pex finished mais avec %u totaltime", GetName(), m_Played_time[PLAYED_TIME_TOTAL]);
-        AddCustomFlag(CUSTOM_FLAG_HL);
-        RemoveCustomFlag(CUSTOM_FLAG_IN_PEX | CUSTOM_FLAG_PEX_FINISHED);
-    }
-}
-
 bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
 {
     //       0     1        2     3     4      5       6      7   8      9            10            11
@@ -14822,8 +14759,8 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
         SetUInt32Value(PLAYER_FLAGS, 0 | old_safe_flags);
 
 
-    uint32 loadedCustomFlags = fields[58].GetUInt32();
-    SetCustomFlags(loadedCustomFlags);
+	// Unused
+    uint32 FlagsUnused = fields[58].GetUInt32();
 
     m_taxi.LoadTaxiMask(fields[17].GetString());
 
@@ -15075,7 +15012,6 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
     if (extraflags & PLAYER_EXTRA_WHISP_RESTRICTION)
         SetWhisperRestriction(true);
 
-    LoadCustomFlags();
     sBattleGroundMgr.PlayerLoggedIn(this); // Add to BG queue if needed
     CreatePacketBroadcaster();
 
@@ -16249,7 +16185,7 @@ void Player::SaveToDB(bool online, bool force)
     // Nostalrius
     uberInsert.addUInt32(GetAreaId());
     uberInsert.addUInt32(GetWorldMask());
-    uberInsert.addUInt32(GetCustomFlags());
+    uberInsert.addUInt32(0); // Custom flag from Nost. Not used anymore
     uberInsert.addUInt8(IsCityProtector() ? 1 : 0);
     uberInsert.addUInt8(IsIgnoringTitles() ? 1 : 0);
     uberInsert.Execute();
@@ -20769,7 +20705,6 @@ uint32 GetCapitalReputationForRace(uint8 race)
 
 bool Player::ConvertSpell(uint32 oldSpellId, uint32 newSpellId)
 {
-    ASSERT(GetSession()->IsMaster());
     // Conversion des boutons d'actions
     ActionButtonList& actions = GetSession()->GetMasterPlayer()->GetActionButtons();
     for (ActionButtonList::iterator itr = actions.begin(); itr != actions.end(); ++itr)

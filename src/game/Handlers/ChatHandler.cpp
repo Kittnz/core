@@ -40,6 +40,7 @@
 #include "CellImpl.h"
 #include "Anticheat.h"
 #include "AccountMgr.h"
+#include "Config/Config.h"
 
 bool WorldSession::ProcessChatMessageAfterSecurityCheck(std::string& msg, uint32 lang, uint32 msgType)
 {
@@ -156,7 +157,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
         SendNotification(LANG_UNKNOWN_LANGUAGE);
         return;
     }
-    if (_player && !IsReplaying() && langDesc->skill_id != 0 && !_player->HasSkill(langDesc->skill_id))
+    if (_player && langDesc->skill_id != 0 && !_player->HasSkill(langDesc->skill_id))
     {
         SendNotification(LANG_NOT_LEARNED_LANGUAGE);
         return;
@@ -297,7 +298,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 
             if (cMgr)
             {
-                if (Channel *chn = cMgr->GetChannel(channel, playerPointer, IsMaster()))
+                if (Channel *chn = cMgr->GetChannel(channel, playerPointer))
                 {
                     // Level channels restrictions
                     if (chn->IsLevelRestricted() && playerPointer->getLevel() < sWorld.getConfig(CONFIG_UINT32_WORLD_CHAN_MIN_LEVEL)
@@ -352,8 +353,6 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                         if (AntispamInterface *a = sAnticheatLib->GetAntispam())
                             a->addMessage(msg, type, GetPlayerPointer(), nullptr);
                 }
-                else // If it is not a global channel, forward to Node
-                    ForwardPacketToMaster();
             }
 
             if (lang != LANG_ADDON)
@@ -434,7 +433,6 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 
         case CHAT_MSG_WHISPER: // Master Side
         {
-            ForwardPacketToMaster();
             if (!normalizePlayerName(to))
             {
                 SendPlayerNotFoundNotice(to);
@@ -517,7 +515,6 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
         break;
         case CHAT_MSG_GUILD: // Master side
         {
-            ForwardPacketToMaster();
             if (GetMasterPlayer()->GetGuildId())
                 if (Guild* guild = sGuildMgr.GetGuildById(GetMasterPlayer()->GetGuildId()))
                     guild->BroadcastToGuild(this, msg, lang == LANG_ADDON ? LANG_ADDON : LANG_UNIVERSAL);
@@ -528,7 +525,6 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
         }
         case CHAT_MSG_OFFICER: // Master side
         {
-            ForwardPacketToMaster();
             if (GetMasterPlayer()->GetGuildId())
                 if (Guild* guild = sGuildMgr.GetGuildById(GetMasterPlayer()->GetGuildId()))
                     guild->BroadcastToOfficers(this, msg, lang == LANG_ADDON ? LANG_ADDON : LANG_UNIVERSAL);
@@ -594,7 +590,6 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 
         case CHAT_MSG_BATTLEGROUND: // Node side
         {
-            ForwardPacketToNode();
             // battleground raid is always in Player->GetGroup(), never in GetOriginalGroup()
             Group *group = GetPlayer()->GetGroup();
             if (!group || !group->isBGGroup())
@@ -611,7 +606,6 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 
         case CHAT_MSG_BATTLEGROUND_LEADER: // Node side
         {
-            ForwardPacketToNode();
             // battleground raid is always in Player->GetGroup(), never in GetOriginalGroup()
             Group *group = GetPlayer()->GetGroup();
             if (!group || !group->isBGGroup() || !group->IsLeader(GetPlayer()->GetObjectGuid()))
@@ -628,8 +622,6 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 
         case CHAT_MSG_AFK: // Node side (for combat Check)
         {
-            ForwardPacketToNode();
-
             if(_player && _player->isInCombat())
                 break;
 

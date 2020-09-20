@@ -43,20 +43,6 @@ bool registerPlayerToBg(WorldSession * sess, BattleGroundTypeId bgid)
     return true;
 }
 
-bool ChatHandler::HandleGoWarsongCommand(char * args)
-{
-    return registerPlayerToBg(m_session,  BattleGroundTypeId(BATTLEGROUND_WS));
-}
-bool ChatHandler::HandleGoArathiCommand(char *args)
-{
-    return registerPlayerToBg(m_session, BattleGroundTypeId(BATTLEGROUND_AB));
-}
-bool ChatHandler::HandleGoAlteracCommand(char *args)
-{
-    return registerPlayerToBg(m_session, BattleGroundTypeId(BATTLEGROUND_AV));
-}
-
-
 bool ChatHandler::HandleHelpCommand(char* args)
 {
     if (!*args)
@@ -204,37 +190,6 @@ bool ChatHandler::HandleSaveCommand(char* /*args*/)
     return true;
 }
 
-bool ChatHandler::HandleGMListIngameCommand(char* /*args*/)
-{
-    std::list< std::pair<std::string, bool> > names;
-
-    {
-        HashMapHolder<Player>::ReadGuard g(HashMapHolder<Player>::GetLock());
-        HashMapHolder<Player>::MapType &m = sObjectAccessor.GetPlayers();
-        for (HashMapHolder<Player>::MapType::const_iterator itr = m.begin(); itr != m.end(); ++itr)
-        {
-            AccountTypes itr_sec = itr->second->GetSession()->GetSecurity();
-            if ((itr->second->IsGameMaster() || (itr_sec > SEC_PLAYER && itr_sec <= (AccountTypes)sWorld.getConfig(CONFIG_UINT32_GM_LEVEL_IN_GM_LIST))) &&
-                    (!m_session || itr->second->IsVisibleGloballyFor(m_session->GetPlayer())))
-                names.push_back(std::make_pair<std::string, bool>(GetNameLink(itr->second), itr->second->IsAcceptWhispers()));
-        }
-    }
-
-    if (!names.empty())
-    {
-        SendSysMessage(LANG_GMS_ON_SRV);
-
-        char const* accepts = GetMangosString(LANG_GM_ACCEPTS_WHISPER);
-        char const* not_accept = GetMangosString(LANG_GM_NO_WHISPER);
-        for (std::list<std::pair< std::string, bool> >::const_iterator iter = names.begin(); iter != names.end(); ++iter)
-            PSendSysMessage("%s - %s", iter->first.c_str(), iter->second ? accepts : not_accept);
-    }
-    else
-        SendSysMessage(LANG_GMS_NOT_LOGGED);
-
-    return true;
-}
-
 bool ChatHandler::HandleAccountPasswordCommand(char* args)
 {
     // allow use from RA, but not from console (not have associated account id)
@@ -291,38 +246,6 @@ bool ChatHandler::HandleAccountPasswordCommand(char* args)
     SetSentErrorMessage(true);
     // Pas de log du nouveau mdp dans les logs GM par exemple.
     return false;
-}
-
-bool ChatHandler::HandleAccountLockCommand(char* args)
-{
-    // allow use from RA, but not from console (not have associated account id)
-    if (!GetAccountId())
-    {
-        SendSysMessage(LANG_RA_ONLY_COMMAND);
-        SetSentErrorMessage(true);
-        return false;
-    }
-
-    bool value;
-    if (!ExtractOnOff(&args, value))
-    {
-        SendSysMessage(LANG_USE_BOL);
-        SetSentErrorMessage(true);
-        return false;
-    }
-
-    if (value)
-    {
-        LoginDatabase.PExecute("UPDATE account SET locked = '1' WHERE id = '%u'", GetAccountId());
-        PSendSysMessage(LANG_COMMAND_ACCLOCKLOCKED);
-    }
-    else
-    {
-        LoginDatabase.PExecute("UPDATE account SET locked = '0' WHERE id = '%u'", GetAccountId());
-        PSendSysMessage(LANG_COMMAND_ACCLOCKUNLOCKED);
-    }
-
-    return true;
 }
 
 /// Display the 'Message of the day' for the realm

@@ -116,8 +116,6 @@ void WorldSession::HandleSendMail(WorldPacket & recv_data)
     if (!CheckMailBox(mailboxGuid))
         return;
 
-    ForwardPacketToMaster();
-
     WorldSession::AsyncMailSendRequest* req = new WorldSession::AsyncMailSendRequest();
     req->accountId = GetAccountId();
     req->senderGuid = GetMasterPlayer()->GetObjectGuid();
@@ -482,8 +480,6 @@ void WorldSession::HandleMailDelete(WorldPacket & recv_data)
     if (!CheckMailBox(mailboxGuid))
         return;
 
-    ForwardPacketToMaster();
-
     MasterPlayer* pl = GetMasterPlayer();
     ASSERT(pl);
     pl->MarkMailsUpdated();
@@ -519,8 +515,6 @@ void WorldSession::HandleMailReturnToSender(WorldPacket & recv_data)
 
     if (!CheckMailBox(mailboxGuid))
         return;
-
-    ForwardPacketToMaster();
 
     MasterPlayer *pl = GetMasterPlayer();
     ASSERT(pl);
@@ -579,8 +573,6 @@ void WorldSession::HandleMailTakeItem(WorldPacket & recv_data)
 
     if (!CheckMailBox(mailboxGuid))
         return;
-
-    ForwardPacketToMaster();
 
     MasterPlayer* pl = GetMasterPlayer();
     Player* loadedPlayer = GetPlayer();
@@ -711,8 +703,6 @@ void WorldSession::HandleMailTakeMoney(WorldPacket & recv_data)
     if (!CheckMailBox(mailboxGuid))
         return;
 
-    ForwardPacketToMaster();
-
     MasterPlayer* pl = GetMasterPlayer();
     Player* loadedPlayer = GetPlayer();
     ASSERT(pl);
@@ -750,7 +740,6 @@ void WorldSession::HandleGetMailList(WorldPacket & recv_data)
     if (!CheckMailBox(mailboxGuid))
         return;
 
-    ForwardPacketToMaster();
     MasterPlayer* pl = GetMasterPlayer();
     ASSERT(pl);
 
@@ -880,7 +869,6 @@ void WorldSession::HandleMailCreateTextItem(WorldPacket & recv_data)
     if (!CheckMailBox(mailboxGuid))
         return;
 
-    ForwardPacketToMaster();
     MasterPlayer* pl = GetMasterPlayer();
     ASSERT(pl);
     Player* loadedPlayer = _player;

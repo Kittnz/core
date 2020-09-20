@@ -35,7 +35,6 @@
 #include "ObjectGuid.h"
 #include "MapNodes/AbstractPlayer.h"
 #include "WorldPacket.h"
-#include "Objects/RateProfile.h"
 
 #include <map>
 #include <set>
@@ -383,7 +382,6 @@ enum eConfigBoolValues
 {
     CONFIG_BOOL_GRID_UNLOAD = 0,
     CONFIG_BOOL_OBJECT_HEALTH_VALUE_SHOW,
-    CONFIG_BOOL_IS_MAPSERVER,
     CONFIG_BOOL_GMS_ALLOW_PUBLIC_CHANNELS,
     CONFIG_BOOL_GMTICKETS_ENABLE,
     CONFIG_BOOL_TAG_IN_BATTLEGROUNDS,
@@ -722,18 +720,12 @@ class World
         /// Get a server configuration element (see #eConfigBoolValues)
         bool getConfig(eConfigBoolValues index) const { return m_configBoolValues[index]; }
 
-        /// Turtle WoW custom feature: progressive rates system
-        /// Get rate profile for specified player
-        float getRateConfig(RateConfig configId, Player* pPlayer);
-        void ScheduleRateReload();
-
         /// Are we on a "Player versus Player" server?
         bool IsPvPRealm() { return (getConfig(CONFIG_UINT32_GAME_TYPE) == REALM_TYPE_PVP || getConfig(CONFIG_UINT32_GAME_TYPE) == REALM_TYPE_RPPVP || getConfig(CONFIG_UINT32_GAME_TYPE) == REALM_TYPE_FFA_PVP); }
         bool IsFFAPvPRealm() { return getConfig(CONFIG_UINT32_GAME_TYPE) == REALM_TYPE_FFA_PVP; }
 
         void KickAll();
         void KickAllLess(AccountTypes sec);
-        void WarnAccount(uint32 accountId, std::string from, std::string reason, const char* type = "WARNING");
         void BanAccount(uint32 accountId, uint32 duration, std::string reason, std::string author);
         BanReturn BanAccount(BanMode mode, std::string nameOrIP, uint32 duration_secs, std::string reason, std::string author);
         bool RemoveBanAccount(BanMode mode, const std::string& source, const std::string& message, std::string nameOrIP);
@@ -864,8 +856,6 @@ class World
         int32 m_configInt32Values[CONFIG_INT32_VALUE_COUNT];
         float m_configFloatValues[CONFIG_FLOAT_VALUE_COUNT];
         bool m_configBoolValues[CONFIG_BOOL_VALUE_COUNT];
-        RateProfileMgr m_rateProfile;
-        bool m_rateProfileReloadScheduled;
 
         int32 m_playerLimit;
         uint8 m_wowPatch;

@@ -618,20 +618,15 @@ AuctionHouseEntry const* AuctionHouseMgr::GetAuctionHouseEntry(Unit* unit)
         else
         {
             Player* player = (Player*)unit;
-            if (player->GetAuctionAccessMode() > 0)
-                houseid = 7;
-            else
-            {
-                switch (((Player*)unit)->GetTeam())
-                {
-                    case ALLIANCE:
-                        houseid = player->GetAuctionAccessMode() == 0 ? 1 : 6;
-                        break;
-                    case HORDE:
-                        houseid = player->GetAuctionAccessMode() == 0 ? 6 : 1;
-                        break;
-                }
-            }
+			switch (((Player*)unit)->GetTeam())
+			{
+			case ALLIANCE:
+				houseid = 1;
+				break;
+			case HORDE:
+				houseid = 6;
+				break;
+			}
         }
     }
 

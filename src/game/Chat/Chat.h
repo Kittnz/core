@@ -52,16 +52,9 @@ enum CommandFlags
     COMMAND_FLAGS_CRITICAL          = 0x2,
 };
 
-enum CommandServer
-{
-    NODE,
-    MSTR,
-};
-
 class ChatCommand
 {
 public:
-        CommandServer      server;
         const char *       Name;
         uint32             SecurityLevel;                   // function pointer required correct align (use uint32)
         bool               AllowConsole;
@@ -148,7 +141,7 @@ class MANGOS_DLL_SPEC ChatHandler
             ObjectGuid const& targetGuid = ObjectGuid(), char const* targetName = nullptr,
             char const* channelName = nullptr, uint8 playerRank = 0);
     protected:
-        explicit ChatHandler() : m_session(nullptr), sentErrorMessage(false), m_cluster_is_master(true), m_cluster_is_node(true) {}      // for CLI subclass
+        explicit ChatHandler() : m_session(nullptr), sentErrorMessage(false) {}      // for CLI subclass
 
         bool hasStringAbbr(const char* name, const char* part);
 
@@ -165,9 +158,6 @@ class MANGOS_DLL_SPEC ChatHandler
         bool HasLowerSecurityAccount(WorldSession* target, uint32 account, bool strong = false);
 
         void SendGlobalSysMessage(const char *str);
-
-        void ForwardCommandToNode();
-        void ForwardCommandToMaster();
 
         bool SetDataForCommandInTable(ChatCommand *table, const char* text, uint32 security, std::string const& help, uint32 flags);
         void ExecuteCommand(const char* text);
@@ -206,12 +196,6 @@ class MANGOS_DLL_SPEC ChatHandler
         bool HandleAntiSpamReplace(char* args);
         bool HandleAntiSpamRemoveReplace(char* args);
 
-        // Packet dump
-        bool HandleReplayPlayCommand(char *);
-        bool HandleReplayRecordCommand(char *);
-        bool HandleReplayForwardCommand(char*);
-        bool HandleReplayStopCommand(char*);
-        bool HandleReplaySpeedCommand(char*);
         // Mmaps
         bool HandleMmap(char* args);
         bool HandleMmapConnection(char* args);
@@ -222,20 +206,6 @@ class MANGOS_DLL_SPEC ChatHandler
         bool HandleMmapLocCommand(char* args);
         bool HandleMmapLoadedTilesCommand(char* args);
         bool HandleMmapStatsCommand(char* args);
-
-        //Bg
-        bool HandleGoWarsongCommand(char *);
-        bool HandleGoArathiCommand(char *);
-        bool HandleGoAlteracCommand(char*);
-        // Bots commandes
-        bool HandleBotAddAllCommand(char *);
-        bool HandleBotAddRandomCommand(char *args);
-        bool HandleBotAddCommand(char * args);
-        bool HandleBotDeleteCommand(char * args);
-        bool HandleBotInfoCommand(char * args);
-        bool HandleBotReloadCommand(char * args);
-        bool HandleBotStopCommand(char * args);
-        bool HandleBotStartCommand(char * args);
 
         // spell_disabled
         bool HandleReloadSpellDisabledCommand(char *args);
@@ -249,8 +219,6 @@ class MANGOS_DLL_SPEC ChatHandler
         bool HandleReloadCharacterPetCommand(char *args);
         bool HandleReloadSpellGroupCommand(char *args);
         bool HandleReloadSpellGroupStackRulesCommand(char *args);
-        bool HandleGroupAddSpellCommand(char *args);
-        bool HandleGroupSetRuleCommand(char *args);
         // World Gestion
         bool HandleWorldUpdateCommand(char *args);
         bool HandleWorldTestCommand(char *args);
@@ -264,7 +232,6 @@ class MANGOS_DLL_SPEC ChatHandler
         // Deplacement
         bool HandleGoForwardCommand(char* args);
         bool HandleGoUpCommand(char* args);
-        bool HandleGoRelativeCommand(char* args);
         // Other
         bool HandlePossessCommand(char* args);
 
@@ -280,11 +247,8 @@ class MANGOS_DLL_SPEC ChatHandler
 
         bool HandleReloadCreatureGroupsCommand(char *args);
         // Characters
-        bool HandleCharacterCopySkinCommand(char *args);
         bool HandleCharacterFillFlysCommand(char *args);
-        bool HandleCharacterFlagsCommand(char *args);
         bool HandleFactionChangeItemsCommand(char *args);
-        bool HandleRecupCommand(char *args);
         // bg
         bool HandleBGStatusCommand(char *args);
         bool HandleBGStartCommand(char *args);
@@ -331,21 +295,10 @@ class MANGOS_DLL_SPEC ChatHandler
         bool HandleAccountCharactersCommand(char* args);
         bool HandleAccountCreateCommand(char* args);
         bool HandleAccountDeleteCommand(char* args);
-        bool HandleAccountLockCommand(char* args);
-        bool HandleAccountOnlineListCommand(char* args);
         bool HandleAccountPasswordCommand(char* args);
-        bool HandleAccountSetAddonCommand(char* args);
         bool HandleAccountSetGmLevelCommand(char* args);
         bool HandleAccountSetPasswordCommand(char* args);
-        bool HandleAccountSetLockedCommand(char* args);
 
-        bool HandleAuctionAllianceCommand(char* args);
-        bool HandleAuctionGoblinCommand(char* args);
-        bool HandleAuctionHordeCommand(char* args);
-        bool HandleAuctionCommand(char* args);
-
-        bool HandleWarnCharacterCommand(char *args);
-        bool HandleAddCharacterNoteCommand(char *args);
         bool HandleBanAccountCommand(char* args);
         bool HandleBanCharacterCommand(char* args);
         bool HandleBanIPCommand(char* args);
@@ -358,21 +311,14 @@ class MANGOS_DLL_SPEC ChatHandler
         bool HandleBanListIPCommand(char* args);
 
         bool HandleCastCommand(char* args);
-        bool HandleCastBackCommand(char* args);
-        bool HandleCastDistCommand(char* args);
         bool HandleCastSelfCommand(char* args);
         bool HandleCastTargetCommand(char* args);
 
-        bool HandleCharacterDeletedDeleteCommand(char* args);
         bool HandleCharacterDeletedListCommand(char* args, bool useName);
-        bool HandleCharacterDeletedListAccountCommand(char* args);
         bool HandleCharacterDeletedListNameCommand(char* args);
         bool HandleCharacterDeletedRestoreCommand(char* args);
-        bool HandleCharacterDeletedOldCommand(char* args);
         bool HandleCharacterEraseCommand(char* args);
-        bool HandleCharacterLevelCommand(char* args);
         bool HandleCharacterRenameCommand(char* args);
-        bool HandleCharacterReputationCommand(char* args);
         bool HandleCharacterHasItemCommand(char* args);
 
         bool HandleEventListCommand(char* args);
@@ -397,23 +343,13 @@ class MANGOS_DLL_SPEC ChatHandler
         GameObject* getSelectedGameObject();
 
         bool HandleGMCommand(char* args);
-        bool HandleGMChatCommand(char* args);
         bool HandleGMListFullCommand(char* args);
-        bool HandleGMListIngameCommand(char* args);
         bool HandleGMVisibleCommand(char* args);
 
         bool HandleGoCommand(char* args);
         bool HandleGoCreatureCommand(char* args);
-        bool HandleGoGraveyardCommand(char* args);
-        bool HandleGoGridCommand(char* args);
         bool HandleGoObjectCommand(char* args);
-        bool HandleGoTargetCommand(char* args);
-        bool HandleGoTaxinodeCommand(char* args);
-        bool HandleGoTriggerCommand(char* args);
-        bool HandleGoXYCommand(char* args);
         bool HandleGoXYZCommand(char* args);
-        bool HandleGoXYZOCommand(char* args);
-        bool HandleGoZoneXYCommand(char* args);
 
         bool HandleGuildCreateCommand(char* args);
         bool HandleGuildInviteCommand(char* args);
@@ -423,144 +359,54 @@ class MANGOS_DLL_SPEC ChatHandler
         bool HandleGuildRenameCommand(char* args);
 
         bool HandleHonorShow(char* args);
-        bool HandleHonorAddCommand(char* args);
-        bool HandleHonorAddKillCommand(char* args);
-        bool HandleHonorDebugScoresCommand(char*args);
-        bool HandleHonorSetRPCommand(char*args);
-        bool HandleHonorResetCommand(char*args);
 
         bool HandleInstanceListBindsCommand(char* args);
         bool HandleInstanceUnbindCommand(char* args);
         bool HandleInstanceStatsCommand(char* args);
-        bool HandleInstanceSaveDataCommand(char* args);
-        bool HandleInstanceSwitchCommand(char* args);
         bool HandleInstanceContinentsCommand(char* args);
         bool HandleInstancePerfInfosCommand(char* args);
-        bool HandleInstanceBindingMode(char* args);
 
         bool HandleLearnCommand(char* args);
-        bool HandleLearnAllCommand(char* args);
-        bool HandleLearnAllGMCommand(char* args);
-        bool HandleLearnAllCraftsCommand(char* args);
-        bool HandleLearnAllRecipesCommand(char* args);
-        bool HandleLearnAllDefaultCommand(char* args);
-        bool HandleLearnAllLangCommand(char* args);
-        bool HandleLearnAllMyClassCommand(char* args);
         bool HandleLearnAllMySpellsCommand(char* args);
-        bool HandleLearnAllMyTalentsCommand(char* args);
-        bool HandleLearnAllMyTaxisCommand(char* args);
 
-        bool HandleListAurasCommand(char* args);
-        bool HandleListCreatureCommand(char* args);
-        bool HandleListItemCommand(char* args);
-        bool HandleListObjectCommand(char* args);
-        bool HandleListTalentsCommand(char* args);
-
-        bool HandleLookupAccountEmailCommand(char* args);
-        bool HandleLookupAccountIpCommand(char* args);
-        bool HandleLookupAccountIponlineCommand(char* args);
-        bool HandleLookupAccountNameCommand(char* args);
-        bool HandleLookupAreaCommand(char* args);
         bool HandleLookupCreatureCommand(char* args);
-        bool HandleLookupCreatureModelCommand(char* args);
-        bool HandleLookupEventCommand(char* args);
         bool HandleLookupFactionCommand(char* args);
         bool HandleLookupItemCommand(char* args);
-        bool HandleLookupItemSetCommand(char* args);
         bool HandleLookupObjectCommand(char* args);
         bool HandleLookupPlayerIpCommand(char* args);
         bool HandleLookupPlayerAccountCommand(char* args);
         bool HandleLookupPlayerEmailCommand(char* args);
         bool HandleLookupPlayerNameCommand(char* args);
         bool HandleLookupPlayerCharacterCommand(char* args);
-        bool HandleLookupPoolCommand(char* args);
         bool HandleLookupQuestCommand(char* args);
         bool HandleLookupSkillCommand(char* args);
         bool HandleLookupSpellCommand(char* args);
-        bool HandleLookupSoundCommand(char* args);
-        bool HandleLookupTaxiNodeCommand(char* args);
-        bool HandleLookupTeleCommand(char* args);
-        bool HandleLookupGuildCommand(char* args);
 
-        bool HandleModifyHPCommand(char* args);
-        bool HandleModifyManaCommand(char* args);
-        bool HandleModifyRageCommand(char* args);
-        bool HandleModifyEnergyCommand(char* args);
         bool HandleModifyMoneyCommand(char* args);
         bool HandleModifyASpeedCommand(char* args);
-        bool HandleModifySpeedCommand(char* args);
-        bool HandleModifyBWalkCommand(char* args);
-        bool HandleModifyFlyCommand(char* args);
-        bool HandleModifySwimCommand(char* args);
         bool HandleModifyScaleCommand(char* args);
-        bool HandleModifyMountCommand(char* args);
         bool HandleModifyFactionCommand(char* args);
-        bool HandleModifyTalentCommand(char* args);
-        bool HandleModifyHonorCommand(char* args);
         bool HandleModifyRepCommand(char* args);
-        bool HandleModifyGenderCommand(char* args);
-        bool HandleModifyStrengthCommand(char* args);
-        bool HandleModifyAgilityCommand(char* args);
-        bool HandleModifyStaminaCommand(char* args);
-        bool HandleModifyIntellectCommand(char* args);
-        bool HandleModifySpiritCommand(char* args);
-        bool HandleModifyArmorCommand(char* args);
-        bool HandleModifyHolyCommand(char* args);
-        bool HandleModifyFireCommand(char* args);
-        bool HandleModifyNatureCommand(char* args);
-        bool HandleModifyFrostCommand(char* args);
-        bool HandleModifyShadowCommand(char* args);
-        bool HandleModifyArcaneCommand(char* args);
-        bool HandleModifyMeleeApCommand(char* args);
-        bool HandleModifyRangedApCommand(char* args);
-        bool HandleModifySpellPowerCommand(char* args);
-        bool HandleModifyMeleeCritCommand(char* args);
-        bool HandleModifyRangedCritCommand(char* args);
-        bool HandleModifySpellCritCommand(char* args);
-        bool HandleModifyMainSpeedCommand(char* args);
-        bool HandleModifyOffSpeedCommand(char* args);
-        bool HandleModifyRangedSpeedCommand(char* args);
-        bool HandleModifyCastSpeedCommand(char* args);
-        bool HandleModifyBlockCommand(char* args);
-        bool HandleModifyDodgeCommand(char* args);
-        bool HandleModifyParryCommand(char* args);
-
-        bool HandleModifyCrCommand(char *args);
-        bool HandleModifyBrCommand(char *args);
-
 
         //-----------------------Npc Commands-----------------------
         bool HandleNpcAddCommand(char* args);
         bool HandleNpcAddWeaponCommand(char* args);
-        bool HandleNpcSummonCommand(char* args);
         bool HandleNpcAddVendorItemCommand(char* args);
         bool HandleNpcAIInfoCommand(char* args);
         bool HandleNpcAllowMovementCommand(char* args);
-        bool HandleNpcChangeEntryCommand(char* args);
-        bool HandleNpcChangeLevelCommand(char* args);
         bool HandleNpcDeleteCommand(char* args);
         bool HandleNpcDelVendorItemCommand(char* args);
-        bool HandleNpcEvadeCommand(char* args);
         bool HandleNpcFactionIdCommand(char* args);
         bool HandleNpcFlagCommand(char* args);
-        bool HandleNpcFollowCommand(char* args);
         bool HandleNpcInfoCommand(char* args);
         bool HandleNpcMoveCommand(char* args);
         bool HandleNpcPlayEmoteCommand(char* args);
         bool HandleNpcSayCommand(char* args);
         bool HandleNpcSetDeathStateCommand(char* args);
-        bool HandleNpcSetModelCommand(char* args);
-        bool HandleNpcSetMoveTypeCommand(char* args);
-        bool HandleNpcSpawnDistCommand(char* args);
         bool HandleNpcSpawnTimeCommand(char* args);
-        bool HandleNpcTameCommand(char* args);
         bool HandleNpcTextEmoteCommand(char* args);
-        bool HandleNpcUnFollowCommand(char* args);
-        bool HandleNpcWhisperCommand(char* args);
         bool HandleNpcYellCommand(char* args);
 
-        bool HandlePDumpLoadCommand(char* args);
-        bool HandlePDumpWriteCommand(char* args);
         bool HandleQuestAddCommand(char* args);
         bool HandleQuestRemoveCommand(char* args);
         bool HandleQuestCompleteCommand(char* args);
@@ -735,7 +581,6 @@ class MANGOS_DLL_SPEC ChatHandler
         bool HandleRemoveRidingCommand(char* args);
         bool HandleGetDistanceCommand(char* args);
         bool HandleGetAngleCommand(char* args);
-        bool HandleModifyStandStateCommand(char* args);
         bool HandleDieCommand(char* args);
         bool HandleFearCommand(char* args);
         bool HandleDamageCommand(char* args);
@@ -758,9 +603,6 @@ class MANGOS_DLL_SPEC ChatHandler
         bool HandleBankCommand(char* args);
         bool HandleChangeWeatherCommand(char* args);
         bool HandleKickPlayerCommand(char* args);
-
-        bool HandleNodeServersListCommand(char* args);
-        bool HandleNodeServersSwitchCommand(char* args);
 
         // GM Tickets commands
         bool ViewTicketByIdOrName(char* ticketId, char* name);
@@ -817,8 +659,6 @@ class MANGOS_DLL_SPEC ChatHandler
         bool HandleModifySkinColorCommand(char* args);
         bool HandleModifyAccessoriesCommand(char* args);
         bool HandleFlyCommand(char* args);
-        bool HandleGameObjectUpCommand(char* args);
-        bool HandleGameObjectDownCommand(char* args);
 
         Player*   GetSelectedPlayer();
         Creature* GetSelectedCreature();
@@ -908,18 +748,12 @@ class MANGOS_DLL_SPEC ChatHandler
 
         void SetSentErrorMessage(bool val){ sentErrorMessage = val;};
 
-    protected:
-       bool HandleReloadRates(char* args);
-
     private:
         WorldSession * m_session;                           // != NULL for chat command call and NULL for CLI command
 
         // common global flag
         static bool load_command_table;
         bool sentErrorMessage;
-
-        bool m_cluster_is_node;
-        bool m_cluster_is_master;
 };
 
 class CliHandler : public ChatHandler

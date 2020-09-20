@@ -284,10 +284,6 @@ bool ChatHandler::HandleCharacterDeletedListNameCommand(char * args)
 {
     return HandleCharacterDeletedListCommand(args, true);
 }
-bool ChatHandler::HandleCharacterDeletedListAccountCommand(char * args)
-{
-    return HandleCharacterDeletedListCommand(args, false);
-}
 bool ChatHandler::HandleCharacterDeletedListCommand(char* args, bool useName)
 {
     DeletedInfoList foundList;
@@ -407,67 +403,6 @@ bool ChatHandler::HandleCharacterDeletedRestoreCommand(char* args)
     return true;
 }
 
-/**
- * Handles the '.character deleted delete' command, which completely deletes all deleted characters which matches the given search string
- *
- * @see Player::GetDeletedCharacterGUIDs
- * @see Player::DeleteFromDB
- * @see ChatHandler::HandleCharacterDeletedListCommand
- * @see ChatHandler::HandleCharacterDeletedRestoreCommand
- *
- * @param args the search string which either contains a player GUID or a part of the character-name
- */
-bool ChatHandler::HandleCharacterDeletedDeleteCommand(char* args)
-{
-    // It is required to submit at least one argument
-    if (!*args)
-        return false;
-
-    DeletedInfoList foundList;
-    if (!GetDeletedCharacterInfoList(foundList, args))
-        return false;
-
-    if (foundList.empty())
-    {
-        SendSysMessage(LANG_CHARACTER_DELETED_LIST_EMPTY);
-        return false;
-    }
-
-    SendSysMessage(LANG_CHARACTER_DELETED_DELETE);
-    HandleCharacterDeletedListHelper(foundList);
-
-    // Call the appropriate function to delete them (current account for deleted characters is 0)
-    for(DeletedInfoList::const_iterator itr = foundList.begin(); itr != foundList.end(); ++itr)
-        Player::DeleteFromDB(ObjectGuid(HIGHGUID_PLAYER, itr->lowguid), 0, false, true);
-
-    return true;
-}
-
-/**
- * Handles the '.character deleted old' command, which completely deletes all deleted characters deleted with some days ago
- *
- * @see Player::DeleteOldCharacters
- * @see Player::DeleteFromDB
- * @see ChatHandler::HandleCharacterDeletedDeleteCommand
- * @see ChatHandler::HandleCharacterDeletedListCommand
- * @see ChatHandler::HandleCharacterDeletedRestoreCommand
- *
- * @param args the search string which either contains a player GUID or a part of the character-name
- */
-bool ChatHandler::HandleCharacterDeletedOldCommand(char* args)
-{
-    int32 keepDays = sWorld.getConfig(CONFIG_UINT32_CHARDELETE_KEEP_DAYS);
-
-    if (!ExtractOptInt32(&args, keepDays, sWorld.getConfig(CONFIG_UINT32_CHARDELETE_KEEP_DAYS)))
-        return false;
-
-    if (keepDays < 0)
-        return false;
-
-    Player::DeleteOldCharacters((uint32)keepDays);
-    return true;
-}
-
 bool ChatHandler::HandleCharacterEraseCommand(char* args)
 {
     char* nameStr = ExtractLiteralArg(&args);
@@ -511,26 +446,6 @@ bool ChatHandler::HandleServerExitCommand(char* /*args*/)
 {
     SendSysMessage(LANG_COMMAND_EXIT);
     World::StopNow(SHUTDOWN_EXIT_CODE);
-    return true;
-}
-
-/// Display info on users currently in the realm
-bool ChatHandler::HandleAccountOnlineListCommand(char* args)
-{
-    uint32 limit;
-    if (!ExtractOptUInt32(&args, limit, 100))
-        return false;
-
-    ///- Get the list of accounts ID logged to the realm
-    //                                                 0   1         2        3        4
-    QueryResult *result = LoginDatabase.PQuery("SELECT id, username, last_ip, gmlevel, expansion FROM account WHERE current_realm = %u LIMIT %u", realmID, limit);
-
-    uint32 count = 0;
-    AccountSearchHandler::ShowAccountListHelper(result, *this, count, limit, true);
-
-    if (result)
-        delete result;
-
     return true;
 }
 

@@ -49,19 +49,7 @@
 #include <curl/curl.h>
 #endif
 
-#ifdef WIN32
-#include "ServiceWin32.h"
-char serviceName[] = "realmd";
-char serviceLongName[] = "MaNGOS realmd service";
-char serviceDescription[] = "Massive Network Game Object Server";
-/*
- * -1 - not in service mode
- *  0 - stopped
- *  1 - running
- *  2 - paused
- */
-int m_ServiceStatus = -1;
-#else
+#ifndef WIN32
 #include "PosixDaemon.h"
 #endif
 
@@ -153,23 +141,6 @@ extern int main(int argc, char **argv)
                 return 1;
         }
     }
-
-#ifdef WIN32                                                // windows service command need execute before config read
-    switch (serviceDaemonMode)
-    {
-        case 'i':
-            if (WinServiceInstall())
-                sLog.outString("Installing service");
-            return 1;
-        case 'u':
-            if (WinServiceUninstall())
-                sLog.outString("Uninstalling service");
-            return 1;
-        case 'r':
-            WinServiceRun();
-            break;
-    }
-#endif
 
     if (!sConfig.SetSource(cfg_file))
     {
@@ -369,10 +340,6 @@ extern int main(int argc, char **argv)
             DETAIL_LOG("Ping MySQL to keep connection alive");
             LoginDatabase.Ping();
         }
-#ifdef WIN32
-        if (m_ServiceStatus == 0) stopEvent = true;
-        while (m_ServiceStatus == 2) Sleep(1000);
-#endif
     }
 
     ///- Wait for the delay thread to exit
