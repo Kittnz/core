@@ -137,8 +137,11 @@ namespace MaNGOS
                 xp_gain *= pCreature->GetCreatureInfo()->xp_multiplier;
                 xp_gain *= pCreature->GetXPModifierDueToDamageOrigin();
 
-                // Turtle WoW custom feature: progressive rates system
-                return (uint32)(xp_gain * sWorld.getRateConfig(RateConfig::XP_KILL, pl));
+				if (pl->isHardcorePlayer())
+				{
+					xp_gain *= 0.5f;
+				}
+                return (uint32)(xp_gain);
             }
             
             return 0;
@@ -168,8 +171,18 @@ namespace MaNGOS
             if(isPet)
                 xp_gain *= 0.75f;
 
-            // Turtle WoW custom feature: progressive rates system
-            return (uint32)(xp_gain * sWorld.getRateConfig(RateConfig::XP_KILL, pet->GetOwner()->ToPlayer()));
+			if (Unit* Owner = pet->GetOwner())
+			{
+				if (Owner->IsPlayer())
+				{
+					Player* plOwner = Owner->ToPlayer();
+					if (plOwner->isHardcorePlayer())
+					{
+						xp_gain *= 0.5f;
+					}
+				}
+			}
+            return (uint32)(xp_gain);
         }
 
         inline float xp_in_group_rate(uint32 count, bool isRaid)

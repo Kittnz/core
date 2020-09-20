@@ -68,7 +68,7 @@ Channel *ChannelMgr::GetJoinChannel(std::string name, bool allowAreaDependantCha
     return channels[wname];
 }
 
-Channel *ChannelMgr::GetChannel(std::string name, PlayerPointer p, bool pkt)
+Channel *ChannelMgr::GetChannel(std::string name, PlayerPointer p)
 {
     std::wstring wname;
     Utf8toWStr(name, wname);
@@ -78,12 +78,9 @@ Channel *ChannelMgr::GetChannel(std::string name, PlayerPointer p, bool pkt)
 
     if (i == channels.end())
     {
-        if (pkt)
-        {
-            WorldPacket data;
-            Channel::MakeNotOnPacket(&data, name);
-            p->GetSession()->SendPacket(&data);
-        }
+		WorldPacket data;
+		Channel::MakeNotOnPacket(&data, name);
+		p->GetSession()->SendPacket(&data);
 
         return NULL;
     }

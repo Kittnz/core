@@ -56,42 +56,6 @@
 
 #define MAX_SPELL_EFFECTS 3
 
-bool ChatHandler::HandleHonorDebugScoresCommand(char *args)
-{
-	/*uint32 BeginFlushHonorDate = sWorld.GetDateToday() - 7; // Il y a une semaine
-	char side = 'n';
-	sscanf(args, "%c", &side);
-	if (side != 'h' && side != 'H' && side != 'a' && side != 'A')
-	{
-		PSendSysMessage("Faction %c incorecte. Doit etre h ou a.", side);
-		return false;
-	}
-	uint8 team = (side == 'h' || side == 'H') ? HORDE : ALLIANCE;
-	// Chargements
-	sObjectMgr.LoadStandingList(BeginFlushHonorDate);
-	HonorStandingList& teamList = sObjectMgr.GetStandingListBySide(team);
-
-	HonorScores sc = MaNGOS::Honor::GenerateScores(teamList);
-	for (uint8 i = 0; i < 14; ++i)
-	{
-		PSendSysMessage("----- Iter %u -----", i);
-		PSendSysMessage("* Breakpoint %f", sc.BRK[i]);
-		PSendSysMessage("* FX         %f", sc.FX[i]);
-		PSendSysMessage("* FY         %f", sc.FY[i]);
-	}*/
-	return true;
-}
-
-bool ChatHandler::HandleHonorSetRPCommand(char *args)
-{
-	float value = 0.0f;
-	sscanf(args, "%f", &value);
-	m_session->GetPlayer()->GetHonorMgr().SetRankPoints(value);
-	m_session->GetPlayer()->GetHonorMgr().Update();
-	PSendSysMessage("RankPoint set to %f", value);
-	return true;
-}
-
 bool ChatHandler::HandleReloadSpellDisabledCommand(char *args)
 {
 	sObjectMgr.LoadSpellDisabledEntrys();
@@ -319,24 +283,6 @@ bool ChatHandler::HandleGoUpCommand(char* args)
 	return true;
 }
 
-bool ChatHandler::HandleGoRelativeCommand(char* args)
-{
-	float x, y, z;
-	float fForwardBackward = 0.0f, fLeftRight = 0.0f, fUpDown = 0.0f;
-	sscanf(args, "%f %f %f", &fForwardBackward, &fLeftRight, &fUpDown);
-	if (Player* pPlayer = m_session->GetPlayer())
-	{
-		pPlayer->GetRelativePositions(fForwardBackward, fLeftRight, fUpDown, x, y, z);
-		PSendSysMessage("Teleportation : Forward-Backward %f Left-Right %f Up-Down %f", fForwardBackward, fLeftRight, fUpDown);
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_9_4
-		pPlayer->NearLandTo(x, y, z, pPlayer->GetOrientation());
-#else
-		pPlayer->NearTeleportTo(x, y, z, pPlayer->GetOrientation());
-#endif
-	}
-	return true;
-}
-
 
 /*
 CREATE TABLE `characters_guid_delete` (
@@ -458,80 +404,6 @@ bool ChatHandler::HandleCleanCharactersItemsCommand(char* args)
 	return true;
 }
 
-std::string GetCustomFlagName(customFlag flagId)
-{
-	switch (flagId)
-	{
-	case CUSTOM_FLAG_IN_PEX:
-		return "Pex en cours";
-		break;
-	case CUSTOM_FLAG_PEX_FINISHED:
-		return "Pex termine";
-		break;
-	case CUSTOM_FLAG_HL:
-		return "Haut niveau";
-		break;
-	case CUSTOM_FLAG_SPEECH_OK:
-		return "Speech pnj bienvenue ok";
-		break;
-	case CUSTOM_FLAG_TRANSITION_HL:
-		return "Transition vers chef de faction pour up";
-		break;
-
-	case CUSTOM_FLAG_FROM_NOSTALRIUS:
-		return "Nostalrius avant fusion Blackrock";
-		break;
-	case CUSTOM_FLAG_FROM_BLACKROCK:
-		return "Blackrock";
-		break;
-	case CUSTOM_FLAG_FROM_NOSTALRIUS_2:
-		return "Nostalrius apres fusion Blackrock";
-		break;
-	case CUSTOM_FLAG_FROM_PRISMATIA:
-		return "Prismatia";
-		break;
-	case CUSTOM_FLAG_FROM_NOSTALRIUS_3:
-		return "Apres fusion Prismatia-Nostalrius";
-		break;
-
-	case CUSTOM_FLAG_PRISMATIA_BETA:
-		return "Prismatia Beta-Testeur";
-		break;
-
-	default:
-		return "INEXISTANT_FLAG";
-		break;
-	}
-}
-
-bool ChatHandler::HandleCharacterCopySkinCommand(char* args)
-{
-	if (Player* target = GetSelectedPlayer())
-	{
-		std::string plName(args);
-		CharacterDatabase.escape_string(plName); // No SQL injection
-
-		QueryResult* result = CharacterDatabase.PQuery("SELECT playerBytes, playerBytes2 & 0xFF, gender FROM characters WHERE name='%s'", plName.c_str());
-		if (!result)
-		{
-			PSendSysMessage("Player %s not found.", args);
-			SetSentErrorMessage(true);
-			return false;
-		}
-		Field* fields = result->Fetch();
-		uint32 bytes = fields[0].GetUInt32();
-		uint32 bytes2 = fields[1].GetUInt32();
-		uint8 gender = fields[2].GetUInt8();
-		bytes2 |= (target->GetUInt32Value(PLAYER_BYTES_2) & 0xFFFFFF00);
-		target->SetUInt32Value(PLAYER_BYTES, bytes);
-		target->SetUInt32Value(PLAYER_BYTES_2, bytes2);
-		target->SetByteValue(UNIT_FIELD_BYTES_0, 2, gender);
-		SendSysMessage("Modification du skin/genre OK.");
-		return true;
-	}
-	return false;
-}
-
 bool ChatHandler::HandleCharacterFillFlysCommand(char* args)
 {
 	if (Player* player = GetSelectedPlayer())
@@ -542,40 +414,6 @@ bool ChatHandler::HandleCharacterFillFlysCommand(char* args)
 			player->GetTaxi().LoadTaxiMask("561714688 282102432 52408 0 0 0 0 0 ");
 		PSendSysMessage("Fly paths unlocked for %s.", player->GetName());
 		return true;
-	}
-	return false;
-}
-
-bool ChatHandler::HandleCharacterFlagsCommand(char *args)
-{
-	if (Player* pPlayer = GetSelectedPlayer())
-	{
-		uint32 newCustomFlags = 0;
-
-		char* newCustomFlagsStr = strtok(args, " ");
-		if (newCustomFlagsStr)
-		{
-			newCustomFlags = uint32(atoi(newCustomFlagsStr));
-			pPlayer->AddCustomFlag(newCustomFlags);
-			std::string flagName = GetCustomFlagName(customFlag(newCustomFlags));
-			PSendSysMessage("'%s' customFlags changed to %u", pPlayer->GetName(), pPlayer->GetCustomFlags());
-			PSendSysMessage("Added: %s (0x%x)", flagName.c_str(), newCustomFlags);
-			return true;
-		}
-		else
-		{
-			uint32 flags = pPlayer->GetCustomFlags();
-			PSendSysMessage("CustomFlags = 0x%x (%u)", flags, flags);
-			for (uint32 i = 1; i <= flags; i = i * 2)
-			{
-				if (flags & i)
-				{
-					std::string flagName = GetCustomFlagName(customFlag(i));
-					PSendSysMessage("-> Flag 0x%x (%s)", i, flagName.c_str());
-				}
-			}
-			return true;
-		}
 	}
 	return false;
 }
@@ -1113,41 +951,6 @@ bool ChatHandler::HandleGodCommand(char* args)
 }
 
 // SPELL GROUPS
-
-bool ChatHandler::HandleGroupAddSpellCommand(char *args)
-{
-	uint32 spellId = ExtractSpellIdFromLink(&args);
-	uint32 groupId = 0;
-	if (!spellId || !ExtractUInt32(&args, groupId))
-		return false;
-
-	SpellEntry const* pSpell = sSpellMgr.GetSpellEntry(spellId);
-	if (!pSpell)
-	{
-		PSendSysMessage("Spell %u does not exist.", spellId);
-		SetSentErrorMessage(true);
-		return false;
-	}
-	LocaleConstant loc = GetSessionDbcLocale();
-	ShowSpellListHelper(NULL, pSpell, loc);
-
-	WorldDatabase.PExecute("INSERT INTO `spell_group` SET id=%u, spell_id=%u", groupId, spellId);
-	PSendSysMessage("Spell added to group %u in DB.", groupId);
-	return true;
-}
-
-bool ChatHandler::HandleGroupSetRuleCommand(char *args)
-{
-	uint32 groupId = 0, ruleId = SPELL_GROUP_STACK_RULE_EXCLUSIVE;
-	if (!ExtractUInt32(&args, groupId))
-		return false;
-
-	// 'ruleId' optional
-	ExtractUInt32(&args, ruleId);
-	WorldDatabase.PExecute("REPLACE INTO `spell_group_stack_rules` SET group_id=%u, stack_rule=%u", groupId, ruleId);
-	PSendSysMessage("Group %u : rule %u.", groupId, ruleId);
-	return true;
-}
 
 bool ChatHandler::HandleReloadSpellGroupCommand(char*)
 {
@@ -1802,76 +1605,6 @@ bool ChatHandler::HandleChannelLeaveCommand(char* c)
 	return true;
 }
 
-bool ChatHandler::HandleReplayPlayCommand(char* c)
-{
-	if (!c || !*c || strchr(c, '/') != NULL || strchr(c, '.') != NULL)
-		return false;
-	WorldSession* sess = m_session;
-	if (Player* player = GetSelectedPlayer())
-		sess = player->GetSession();
-	std::string filename = "replays/";
-	filename += c;
-	sess->SetReadPacket(filename.c_str());
-	if (m_session->IsReplaying())
-		PSendSysMessage("Starting replay %s for %s", c, playerLink(sess->GetPlayerName()).c_str());
-	else
-		PSendSysMessage("Could not start replay %s", c);
-	return true;
-}
-
-bool ChatHandler::HandleReplayForwardCommand(char* c)
-{
-	if (!m_session->IsReplaying())
-	{
-		SendSysMessage("Not replaying currently");
-		SetSentErrorMessage(true);
-		return false;
-	}
-	int32 secsToSkip = 0;
-	ExtractInt32(&c, secsToSkip);
-	m_session->ReplaySkipTime(secsToSkip);
-	PSendSysMessage("Skipping %i ms", secsToSkip);
-	return true;
-}
-
-bool ChatHandler::HandleReplaySpeedCommand(char* c)
-{
-	if (!m_session->IsReplaying())
-	{
-		SendSysMessage("Not currently replaying");
-		SetSentErrorMessage(true);
-		return false;
-	}
-	float newRate = 1.0f;
-	ExtractFloat(&c, newRate);
-	m_session->SetReplaySpeedRate(newRate);
-	PSendSysMessage("Read speed rate changed to %f", newRate);
-	return true;
-}
-
-bool ChatHandler::HandleReplayStopCommand(char* c)
-{
-	if (!m_session->IsReplaying())
-	{
-		SendSysMessage("Not replaying currently");
-		SetSentErrorMessage(true);
-		return false;
-	}
-	m_session->SetReadPacket(NULL);
-	SendSysMessage("Replay stopped");
-	return true;
-}
-
-bool ChatHandler::HandleReplayRecordCommand(char* c)
-{
-	WorldSession* sess = m_session;
-	if (Player* player = GetSelectedPlayer())
-		sess = player->GetSession();
-	PSendSysMessage("Starting replay recording for %s", playerLink(sess->GetPlayerName()).c_str());
-	sess->SetDumpPacket(c);
-	return true;
-}
-
 bool IsSimilarItem(ItemPrototype const* proto1, ItemPrototype const* proto2)
 {
 	for (int i = 0; i < MAX_ITEM_PROTO_STATS; ++i)
@@ -1945,87 +1678,6 @@ bool ChatHandler::HandleFactionChangeItemsCommand(char* c)
 			PSendSysMessage("Item %u not handled ! Similar item : %u", proto1->ItemId, similar ? similar->ItemId : 0);
 		}
 	}
-	return true;
-}
-
-// Character recovery
-bool ChatHandler::HandleRecupCommand(char* c)
-{
-	Player* target = GetSelectedPlayer();
-	if (!target || !c)
-		return false;
-	uint32 recupId = uint32(atoi(c));
-	if (!recupId)
-		return false;
-	SetSentErrorMessage(true);
-
-	/// GENERAL
-	QueryResult* recups = CharacterDatabase.PQuery("SELECT level, lifeTimeHK, lifetimeHighestRank, currentRank, currentRankProgress, money "
-		"FROM recups WHERE recupId=%u", recupId);
-	PSendSysMessage("* Recovery ID %u on player #%u", recupId, target->GetGUIDLow());
-	if (!recups)
-	{
-		SendSysMessage("-> Recovery data not found.");
-		return false;
-	}
-	Field *fields = recups->Fetch();
-	// Level
-	target->GiveLevel(fields[0].GetUInt32());
-	// ... (Honor ?)
-	// Money
-	target->SetMoney(fields[5].GetUInt32());
-
-	/// REPUTATIONS
-	QueryResult* recupReputations = CharacterDatabase.PQuery("SELECT faction, standing "
-		"FROM recup_reputations WHERE recupId=%u", recupId);
-	if (recupReputations)
-	{
-		do
-		{
-			fields = recupReputations->Fetch();
-			uint32 faction = fields[0].GetUInt32();
-			uint32 standing = fields[1].GetUInt32();
-			FactionEntry const *factionEntry = sObjectMgr.GetFactionEntry(faction);
-			if (!factionEntry)
-				continue;
-			if (factionEntry->reputationListID < 0)
-				continue;
-			target->GetReputationMgr().SetReputation(factionEntry, standing);
-		} while (recupReputations->NextRow());
-	}
-
-	/// ITEMS
-	QueryResult* recupItems = CharacterDatabase.PQuery("SELECT item, quantity "
-		"FROM recup_items WHERE recupId=%u", recupId);
-	if (recupItems)
-	{
-		do
-		{
-			fields = recupItems->Fetch();
-			uint32 itemId = fields[0].GetUInt32();
-			uint32 quantity = fields[1].GetUInt32();
-			ItemPrototype const* item_proto = ObjectMgr::GetItemPrototype(itemId);
-			if (!item_proto)
-			{
-				PSendSysMessage("Item %u not found.", itemId);
-				continue;
-			}
-			Item* item = Item::CreateItem(itemId, quantity, target);
-			if (!item)
-			{
-				PSendSysMessage("Item %u x %u impossible to create.", itemId, quantity);
-				continue;
-			}
-			item->SaveToDB();
-
-			MailDraft draft;
-			draft.SetSubjectAndBody("Character import", "Welcome to our server.");
-			draft.AddItem(item);
-			MailSender sender(MAIL_NORMAL, m_session->GetPlayer()->GetObjectGuid().GetCounter(), MAIL_STATIONERY_GM);
-			draft.SendMailTo(MailReceiver(target, target->GetObjectGuid()), m_session->GetPlayer());
-		} while (recupItems->NextRow());
-	}
-	target->SaveToDB();
 	return true;
 }
 
@@ -2141,20 +1793,6 @@ bool ChatHandler::HandleReloadGameObjectCommand(char* /*args*/)
 	return true;
 }
 
-bool ChatHandler::HandleInstanceSwitchCommand(char* args)
-{
-	uint32 newInstanceId = 0;
-	Player* target = GetSelectedPlayer();
-	if (!target)
-		return false;
-	if (!ExtractUInt32(&args, newInstanceId))
-		return false;
-	uint32 oldInstance = target->GetInstanceId();
-	PSendSysMessage("Instance switch from #%u to %u: %s", oldInstance, newInstanceId, target->SwitchInstance(newInstanceId) ? "OK" : "FAILED");
-	target->SetAutoInstanceSwitch(false);
-	return true;
-}
-
 
 bool ChatHandler::HandleInstanceContinentsCommand(char*)
 {
@@ -2181,27 +1819,6 @@ bool ChatHandler::HandleInstanceContinentsCommand(char*)
 			}
 	}
 	return true;
-}
-
-bool ChatHandler::HandleInstanceBindingMode(char* args)
-{
-	Player* player = GetSession()->GetPlayer();
-
-	if (strcmp(args, "on") == 0)
-	{
-		player->SetSmartInstanceBindingMode(true);
-		PSendSysMessage("Smart rebinding has been enabled.");
-		return true;
-	}
-	else if (strcmp(args, "off") == 0)
-	{
-		player->SetSmartInstanceBindingMode(false);
-		PSendSysMessage("Smart rebinding has been disabled.");
-		return true;
-	}
-
-	PSendSysMessage("[Error] Invalid arguments - only 'on' or 'off' are accepted");
-	return false;
 }
 
 bool ChatHandler::HandleInstancePerfInfosCommand(char* args)

@@ -37,7 +37,6 @@ set (game_SRCS
     ObjectMgr.cpp
     ObjectPosSelector.cpp
     pchdef.cpp
-    PlayerDump.cpp
     QuestDef.cpp
     ReputationMgr.cpp
     ScriptMgr.cpp
@@ -80,7 +79,6 @@ set (game_SRCS
     Chat/ChannelMgr.cpp
     Chat/Chat.cpp
     Chat/AsyncCommandHandlers.cpp
-    Commands/debugcmds.cpp
     Commands/GMTicketCommands.cpp
     Commands/Level0.cpp
     Commands/Level1.cpp
@@ -126,19 +124,8 @@ set (game_SRCS
     Mail/Mail.cpp
     Mail/MassMailMgr.cpp
     MapNodes/AbstractPlayer.cpp
-    MapNodes/GMCommands.cpp
-    MapNodes/MapSocket.cpp
-    MapNodes/MapSocketMgr.cpp
     MapNodes/MasterPlayer.cpp
     MapNodes/MasterPlayerChat.cpp
-    MapNodes/NodeSession.cpp
-    MapNodes/NodesMgr.cpp
-    MapNodes/NodesOpcodes.cpp
-    MapNodes/Handlers/GuidsSynchronization.cpp
-    MapNodes/Handlers/Protocol.cpp
-    MapNodes/Handlers/SessionTransfert.cpp
-    MapNodes/Serializers/ItemSerializer.cpp
-    MapNodes/Serializers/PlayerSerializer.cpp
     Maps/GridMap.cpp
     Maps/GridNotifiers.cpp
     Maps/GridSearchers.cpp
@@ -180,7 +167,6 @@ set (game_SRCS
     Objects/Object.cpp
     Objects/Pet.cpp
     Objects/Player.cpp
-    Objects/RateProfile.cpp
     Objects/TemporarySummon.cpp
     Objects/Totem.cpp
     Objects/Unit.cpp
@@ -237,7 +223,6 @@ set (game_SRCS
     ObjectMgr.h
     ObjectPosSelector.h
     pchdef.h
-    PlayerDump.h
     QuestDef.h
     ReputationMgr.h
     ScriptedGossip.h
@@ -305,16 +290,6 @@ set (game_SRCS
     LFG/LFGMgr.h
     Mail/Mail.h
     Mail/MassMailMgr.h
-    MapNodes/AbstractPlayer.h
-    MapNodes/MapSocket.h
-    MapNodes/MapSocketMgr.h
-    MapNodes/MasterPlayer.h
-    MapNodes/NodeSession.h
-    MapNodes/NodesMgr.h
-    MapNodes/NodesOpcodes.h
-    MapNodes/Serializers/ItemSerializer.h
-    MapNodes/Serializers/PlayerSerializer.h
-    MapNodes/Serializers/Serializer.h
     Maps/Cell.h
     Maps/CellImpl.h
     Maps/GridDefines.h
@@ -370,7 +345,6 @@ set (game_SRCS
     Objects/Object.h
     Objects/Pet.h
     Objects/Player.h
-    Objects/RateProfile.h
     Objects/TemporarySummon.h
     Objects/Totem.h
     Objects/Unit.h
@@ -530,12 +504,6 @@ source_group("Server"
   REGULAR_EXPRESSION Socket|Session|Opcodes|DBC
   FILES
     SharedDefines.h
-)
-
-source_group("Chat Commands"
-  REGULAR_EXPRESSION Level[0-9]
-  FILES
-    debugcmds.cpp
 )
 
 source_group("Tool"

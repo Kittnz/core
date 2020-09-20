@@ -896,18 +896,6 @@ class MANGOS_DLL_SPEC Player final: public Unit
          */
         PlayerSocial* FindSocial() const;
 
-        // 0 = own auction, -1 = enemy auction, 1 = goblin auction
-        int GetAuctionAccessMode() const { return m_ExtraFlags & PLAYER_EXTRA_AUCTION_ENEMY ? -1 : (m_ExtraFlags & PLAYER_EXTRA_AUCTION_NEUTRAL ? 1 : 0); }
-        void SetAuctionAccessMode(int state)
-        {
-            m_ExtraFlags &= ~(PLAYER_EXTRA_AUCTION_ENEMY | PLAYER_EXTRA_AUCTION_NEUTRAL);
-
-            if (state < 0)
-                m_ExtraFlags |= PLAYER_EXTRA_AUCTION_ENEMY;
-            else if (state > 0)
-                m_ExtraFlags |= PLAYER_EXTRA_AUCTION_NEUTRAL;
-        }
-
         /*********************************************************/
         /***                 GAMEMASTER SYSTEM                 ***/
         /*********************************************************/
@@ -2174,14 +2162,6 @@ class MANGOS_DLL_SPEC Player final: public Unit
         // Nostalrius : Phasing
         virtual void SetWorldMask(uint32 newMask);
 
-        // Custom Flags
-        void LoadCustomFlags();
-        uint32 GetCustomFlags() { return customFlags; }
-        inline void SetCustomFlags(uint32 newFlags) { customFlags = newFlags; }
-        inline bool HasCustomFlag(uint32 flag) { return (customFlags & flag); }
-        inline void AddCustomFlag(uint32 flag) { customFlags |= flag; }
-        inline void RemoveCustomFlag(uint32 flag) { customFlags &= ~flag; }
-
         void RemoveDelayedOperation(uint32 operation)
         {
             m_DelayedOperations &= ~operation;
@@ -2463,8 +2443,6 @@ class MANGOS_DLL_SPEC Player final: public Unit
         /*********************************************************/
 
     private:
-        bool   m_enableInstanceSwitch;
-        bool   m_smartInstanceRebind;
         uint32 m_HomebindTimer;
     public:
         void SendTransferAborted(uint8 reason) const;
@@ -2492,9 +2470,6 @@ class MANGOS_DLL_SPEC Player final: public Unit
         void SendSavedInstances() const;
         static void ConvertInstancesToGroup(Player* player, Group* group = nullptr, ObjectGuid player_guid = ObjectGuid());
         DungeonPersistentState* GetBoundInstanceSaveForSelfOrGroup(uint32 mapid);
-        void SetAutoInstanceSwitch(bool v) { m_enableInstanceSwitch = v; }
-        bool GetSmartInstanceBindingMode() const { return m_smartInstanceRebind; }
-        void SetSmartInstanceBindingMode(bool smartRebinding) { m_smartInstanceRebind = smartRebinding; }
 
         /*********************************************************/
         /***                   GROUP SYSTEM                    ***/
@@ -2559,40 +2534,7 @@ class MANGOS_DLL_SPEC Player final: public Unit
         /*********************************************************/
         /***                       OTHER                       ***/
         /*********************************************************/
-
-    public:
-        /**
-         * @brief Handles serialization / unserialization of the Object.
-         * Should not be called directly. Cf Serializer.h
-         * @param buf
-         */
-        template <typename OP>
-        void Serialize(OP& buf);
-        /**
-         * @brief Call this before reading unserialization
-         * @return false iif the player is corrupt.
-         */
-        bool PrepareWakeUp(ObjectGuid guid);
-        /**
-         * @brief Call this once unserialized to get a proper Player (add to Map, etc ...)
-         * @return false iif the player is corrupt.
-         */
-        bool WakeUp();
     protected:
-        template <typename OP>
-        void SerializeAuras(OP& buf);
-        template <typename OP>
-        void SerializeInventory(OP& buf);
-        template <typename OP>
-        void SerializeItemLoot(OP& buf);
-        template <typename OP>
-        void SerializeQuestStatus(OP& buf);
-        template <typename OP>
-        void SerializeSkills(OP& buf);
-        template <typename OP>
-        void SerializeSpells(OP& buf);
-        template <typename OP>
-        void SerializeSpellCooldowns(OP& buf);
 
 		// Giperion TURTLE SPECIFIC Begin
 		public:

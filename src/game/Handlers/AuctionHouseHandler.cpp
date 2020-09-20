@@ -216,7 +216,7 @@ AuctionHouseEntry const* WorldSession::GetCheckedAuctionHouseForAuctioneer(Objec
     {
         // command case will return only if player have real access to command
         // using special access modes (1,-1) done at mode set in command, so not need recheck
-        if (GetPlayer()->GetAuctionAccessMode() == 0 && !ChatHandler(GetPlayer()).FindCommand("auction"))
+        if (!ChatHandler(GetPlayer()).FindCommand("auction"))
         {
             DEBUG_LOG("%s attempt open auction in cheating way.", guid.GetString().c_str());
             return NULL;

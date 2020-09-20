@@ -119,9 +119,8 @@ bool ChatHandler::HandleMuteCommand(char* args)
     ASSERT(playerData);
     std::stringstream reason;
     reason << playerData->sName << " muted " << notspeaktime << " minutes";
-    if (givenReason != "")
+    if (!givenReason.empty())
         reason << " for \"" << givenReason << "\"";
-    sWorld.WarnAccount(playerData->uiAccount, authorName, reason.str(), "WARNING");
     return true;
 }
 
@@ -400,78 +399,6 @@ bool ChatHandler::HandleTriggerNearCommand(char* args)
         SendSysMessage(LANG_COMMAND_NOTRIGGERFOUND);
 
     return true;
-}
-
-static char const* const areatriggerKeys[] =
-{
-    "Hareatrigger",
-    "Hareatrigger_target",
-    NULL
-};
-
-bool ChatHandler::HandleGoTriggerCommand(char* args)
-{
-    Player* _player = m_session->GetPlayer();
-
-    if (!*args)
-        return false;
-
-    char *atIdStr = ExtractKeyFromLink(&args, areatriggerKeys);
-    if (!atIdStr)
-        return false;
-
-    uint32 atId;
-    if (!ExtractUInt32(&atIdStr, atId))
-        return false;
-
-    if (!atId)
-        return false;
-
-    AreaTriggerEntry const* atEntry = sObjectMgr.GetAreaTrigger(atId);
-    if (!atEntry)
-    {
-        PSendSysMessage(LANG_COMMAND_GOAREATRNOTFOUND, atId);
-        SetSentErrorMessage(true);
-        return false;
-    }
-
-    bool to_target = ExtractLiteralArg(&args, "target");
-    if (!to_target && *args)                                // can be fail also at syntax error
-        return false;
-
-    if (to_target)
-    {
-        AreaTriggerTeleport const* at = sObjectMgr.GetAreaTriggerTeleport(atId);
-        if (!at)
-        {
-            PSendSysMessage(LANG_AREATRIGER_NOT_HAS_TARGET, atId);
-            SetSentErrorMessage(true);
-            return false;
-        }
-
-        return HandleGoHelper(_player, at->target_mapId, at->target_X, at->target_Y, &at->target_Z);
-    }
-    else
-        return HandleGoHelper(_player, atEntry->mapid, atEntry->x, atEntry->y, &atEntry->z);
-}
-
-bool ChatHandler::HandleGoGraveyardCommand(char* args)
-{
-    Player* _player = m_session->GetPlayer();
-
-    uint32 gyId;
-    if (!ExtractUInt32(&args, gyId))
-        return false;
-
-    WorldSafeLocsEntry const* gy = sWorldSafeLocsStore.LookupEntry(gyId);
-    if (!gy)
-    {
-        PSendSysMessage(LANG_COMMAND_GRAVEYARDNOEXIST, gyId);
-        SetSentErrorMessage(true);
-        return false;
-    }
-
-    return HandleGoHelper(_player, gy->map_id, gy->x, gy->y, &gy->z);
 }
 
 enum CreatureLinkType
@@ -1619,28 +1546,6 @@ bool ChatHandler::HandleNpcAddCommand(char* args)
     return true;
 }
 
-bool ChatHandler::HandleNpcSummonCommand(char* args)
-{
-    if (!*args)
-        return false;
-
-    uint32 id;
-    if (!ExtractUint32KeyFromLink(&args, "Hcreature_entry", id))
-        return false;
-
-    CreatureInfo const *cinfo = ObjectMgr::GetCreatureTemplate(id);
-    if (!cinfo)
-    {
-        PSendSysMessage(LANG_COMMAND_INVALIDCREATUREID, id);
-        SetSentErrorMessage(true);
-        return false;
-    }
-
-    Player *chr = m_session->GetPlayer();
-    chr->SummonCreature(id, chr->GetPositionX(), chr->GetPositionY(), chr->GetPositionZ(), chr->GetOrientation());
-    return true;
-}
-
 //add item in vendorlist
 bool ChatHandler::HandleNpcAddVendorItemCommand(char* args)
 {
@@ -1743,43 +1648,6 @@ bool ChatHandler::HandleNpcAIInfoCommand(char* /*args*/)
     PSendSysMessage(LANG_NPC_AI_ATTACK, GetOnOffStr(pTarget->AI()->IsMeleeAttackEnabled()));
     PSendSysMessage(LANG_NPC_MOTION_TYPE, pTarget->GetMotionMaster()->GetCurrentMovementGeneratorType());
     pTarget->AI()->GetAIInformation(*this);
-
-    return true;
-}
-
-//change level of creature or pet
-bool ChatHandler::HandleNpcChangeLevelCommand(char* args)
-{
-    if (!*args)
-        return false;
-
-    uint8 lvl = (uint8) atoi(args);
-    if (lvl < 1 || lvl > sWorld.getConfig(CONFIG_UINT32_MAX_PLAYER_LEVEL) + 3)
-    {
-        SendSysMessage(LANG_BAD_VALUE);
-        SetSentErrorMessage(true);
-        return false;
-    }
-
-    Creature* pCreature = GetSelectedCreature();
-    if (!pCreature)
-    {
-        SendSysMessage(LANG_SELECT_CREATURE);
-        SetSentErrorMessage(true);
-        return false;
-    }
-
-    if (pCreature->IsPet())
-        ((Pet*)pCreature)->GivePetLevel(lvl);
-    else
-    {
-        pCreature->SetMaxHealth(100 + 30 * lvl);
-        pCreature->SetHealth(100 + 30 * lvl);
-        pCreature->SetLevel(lvl);
-
-        if (pCreature->HasStaticDBSpawnData())
-            pCreature->SaveToDB();
-    }
 
     return true;
 }
@@ -1932,130 +1800,6 @@ bool ChatHandler::HandleNpcMoveCommand(char* args)
     return true;
 }
 
-/**HandleNpcSetMoveTypeCommand
- * Set the movement type for an NPC.<br/>
- * <br/>
- * Valid movement types are:
- * <ul>
- * <li> stay - NPC wont move </li>
- * <li> random - NPC will move randomly according to the spawndist </li>
- * <li> way - NPC will move with given waypoints set </li>
- * </ul>
- * additional parameter: NODEL - so no waypoints are deleted, if you
- *                       change the movement type
- */
-bool ChatHandler::HandleNpcSetMoveTypeCommand(char* args)
-{
-    // 3 arguments:
-    // GUID (optional - you can also select the creature)
-    // stay|random|way (determines the kind of movement)
-    // NODEL (optional - tells the system NOT to delete any waypoints)
-    //        this is very handy if you want to do waypoints, that are
-    //        later switched on/off according to special events (like escort
-    //        quests, etc)
-
-    uint32 lowguid;
-    Creature* pCreature;
-    if (!ExtractUInt32(&args, lowguid))                     // case .setmovetype $move_type (with selected creature)
-    {
-        pCreature = GetSelectedCreature();
-        if (!pCreature || !pCreature->HasStaticDBSpawnData())
-            return false;
-        lowguid = pCreature->GetGUIDLow();
-    }
-    else                                                    // case .setmovetype #creature_guid $move_type (with guid)
-    {
-        CreatureData const* data = sObjectMgr.GetCreatureData(lowguid);
-        if (!data)
-        {
-            PSendSysMessage(LANG_COMMAND_CREATGUIDNOTFOUND, lowguid);
-            SetSentErrorMessage(true);
-            return false;
-        }
-
-        Player* player = m_session->GetPlayer();
-
-        if (player->GetMapId() != data->mapid)
-        {
-            PSendSysMessage(LANG_COMMAND_CREATUREATSAMEMAP, lowguid);
-            SetSentErrorMessage(true);
-            return false;
-        }
-
-        pCreature = player->GetMap()->GetCreature(data->GetObjectGuid(lowguid));
-    }
-
-    MovementGeneratorType move_type;
-    char* type_str = ExtractLiteralArg(&args);
-    if (!type_str)
-        return false;
-
-    if (strncmp(type_str, "stay", strlen(type_str)) == 0)
-        move_type = IDLE_MOTION_TYPE;
-    else if (strncmp(type_str, "random", strlen(type_str)) == 0)
-        move_type = RANDOM_MOTION_TYPE;
-    else if (strncmp(type_str, "way", strlen(type_str)) == 0)
-        move_type = WAYPOINT_MOTION_TYPE;
-    else
-        return false;
-
-    bool doNotDelete = ExtractLiteralArg(&args, "NODEL") != NULL;
-    if (!doNotDelete && *args)                              // need fail if false in result wrong literal
-        return false;
-
-    // now lowguid is low guid really existing creature
-    // and pCreature point (maybe) to this creature or NULL
-
-    // update movement type
-    if (!doNotDelete)
-        sWaypointMgr.DeletePath(lowguid);
-
-    if (pCreature)
-    {
-        pCreature->SetDefaultMovementType(move_type);
-        pCreature->GetMotionMaster()->Initialize();
-        if (pCreature->isAlive())                           // dead creature will reset movement generator at respawn
-        {
-            pCreature->SetDeathState(JUST_DIED);
-            pCreature->Respawn();
-        }
-        pCreature->SaveToDB();
-    }
-
-    if (doNotDelete)
-        PSendSysMessage(LANG_MOVE_TYPE_SET_NODEL, type_str);
-    else
-        PSendSysMessage(LANG_MOVE_TYPE_SET, type_str);
-
-    return true;
-}
-
-//set model of creature
-bool ChatHandler::HandleNpcSetModelCommand(char* args)
-{
-    if (!*args)
-        return false;
-
-    uint32 displayId = (uint32) atoi(args);
-
-    Creature *pCreature = GetSelectedCreature();
-
-    if (!pCreature || pCreature->IsPet())
-    {
-        SendSysMessage(LANG_SELECT_CREATURE);
-        SetSentErrorMessage(true);
-        return false;
-    }
-
-    pCreature->SetDisplayId(displayId);
-    pCreature->SetNativeDisplayId(displayId);
-
-    if (pCreature->HasStaticDBSpawnData())
-        pCreature->SaveToDB();
-
-    return true;
-}
-
 //set faction of creature
 bool ChatHandler::HandleNpcFactionIdCommand(char* args)
 {
@@ -2095,44 +1839,6 @@ bool ChatHandler::HandleNpcFactionIdCommand(char* args)
 
     return true;
 }
-//set spawn dist of creature
-bool ChatHandler::HandleNpcSpawnDistCommand(char* args)
-{
-    if (!*args)
-        return false;
-
-    float option = (float)atof(args);
-    if (option < 0.0f)
-    {
-        SendSysMessage(LANG_BAD_VALUE);
-        return false;
-    }
-
-    MovementGeneratorType mtype = IDLE_MOTION_TYPE;
-    if (option > 0.0f)
-        mtype = RANDOM_MOTION_TYPE;
-
-    Creature *pCreature = GetSelectedCreature();
-    uint32 u_guidlow = 0;
-
-    if (pCreature)
-        u_guidlow = pCreature->GetGUIDLow();
-    else
-        return false;
-
-    pCreature->SetRespawnRadius((float)option);
-    pCreature->SetDefaultMovementType(mtype);
-    pCreature->GetMotionMaster()->Initialize();
-    if (pCreature->isAlive())                               // dead creature will reset movement generator at respawn
-    {
-        pCreature->SetDeathState(JUST_DIED);
-        pCreature->Respawn();
-    }
-
-    WorldDatabase.PExecuteLog("UPDATE creature SET spawndist=%f, MovementType=%i WHERE guid=%u", option, mtype, u_guidlow);
-    PSendSysMessage(LANG_COMMAND_SPAWNDIST, option);
-    return true;
-}
 //spawn time handling
 bool ChatHandler::HandleNpcSpawnTimeCommand(char* args)
 {
@@ -2154,86 +1860,6 @@ bool ChatHandler::HandleNpcSpawnTimeCommand(char* args)
     pCreature->SetRespawnDelay(stime);
     PSendSysMessage(LANG_COMMAND_SPAWNTIME, stime);
 
-    return true;
-}
-//npc follow handling
-bool ChatHandler::HandleNpcFollowCommand(char* /*args*/)
-{
-    Player *player = m_session->GetPlayer();
-    Creature *creature = GetSelectedCreature();
-
-    if (!creature)
-    {
-        PSendSysMessage(LANG_SELECT_CREATURE);
-        SetSentErrorMessage(true);
-        return false;
-    }
-
-    // Follow player - Using pet's default dist and angle
-    creature->GetMotionMaster()->MoveFollow(player, PET_FOLLOW_DIST, PET_FOLLOW_ANGLE);
-
-    PSendSysMessage(LANG_CREATURE_FOLLOW_YOU_NOW, creature->GetName());
-    return true;
-}
-//npc unfollow handling
-bool ChatHandler::HandleNpcUnFollowCommand(char* /*args*/)
-{
-    Player *player = m_session->GetPlayer();
-    Creature *creature = GetSelectedCreature();
-
-    if (!creature)
-    {
-        PSendSysMessage(LANG_SELECT_CREATURE);
-        SetSentErrorMessage(true);
-        return false;
-    }
-
-    if (creature->GetMotionMaster()->empty() ||
-            creature->GetMotionMaster()->GetCurrentMovementGeneratorType() != FOLLOW_MOTION_TYPE)
-    {
-        PSendSysMessage(LANG_CREATURE_NOT_FOLLOW_YOU);
-        SetSentErrorMessage(true);
-        return false;
-    }
-
-    FollowMovementGenerator<Creature> const* mgen
-        = static_cast<FollowMovementGenerator<Creature> const*>((creature->GetMotionMaster()->top()));
-
-    if (mgen->GetTarget() != player)
-    {
-        PSendSysMessage(LANG_CREATURE_NOT_FOLLOW_YOU);
-        SetSentErrorMessage(true);
-        return false;
-    }
-
-    // reset movement
-    creature->GetMotionMaster()->MovementExpired(true);
-
-    PSendSysMessage(LANG_CREATURE_NOT_FOLLOW_YOU_NOW, creature->GetName());
-    return true;
-}
-//npc tame handling
-bool ChatHandler::HandleNpcTameCommand(char* /*args*/)
-{
-    Creature *creatureTarget = GetSelectedCreature();
-
-    if (!creatureTarget || creatureTarget->IsPet())
-    {
-        PSendSysMessage(LANG_SELECT_CREATURE);
-        SetSentErrorMessage(true);
-        return false;
-    }
-
-    Player *player = m_session->GetPlayer();
-
-    if (player->GetPetGuid())
-    {
-        SendSysMessage(LANG_YOU_ALREADY_HAVE_PET);
-        SetSentErrorMessage(true);
-        return false;
-    }
-
-    player->CastSpell(creatureTarget, 13481, true);         // Tame Beast, triggered effect
     return true;
 }
 
@@ -3290,24 +2916,6 @@ bool ChatHandler::HandleCharacterRenameCommand(char* args)
     return true;
 }
 
-bool ChatHandler::HandleCharacterReputationCommand(char* args)
-{
-    Player* target;
-    if (!ExtractPlayerTarget(&args, &target))
-        return false;
-
-    LocaleConstant loc = GetSessionDbcLocale();
-
-    FactionStateList const& targetFSL = target->GetReputationMgr().GetStateList();
-    for (FactionStateList::const_iterator itr = targetFSL.begin(); itr != targetFSL.end(); ++itr)
-    {
-        FactionEntry const *factionEntry = sObjectMgr.GetFactionEntry(itr->second.ID);
-
-        ShowFactionListHelper(factionEntry, loc, &itr->second, target);
-    }
-    return true;
-}
-
 bool ChatHandler::HandleCharacterHasItemCommand(char* args)
 {
     if(!*args)
@@ -3354,21 +2962,6 @@ bool ChatHandler::HandleCharacterHasItemCommand(char* args)
     }
 
     PSendSysMessage("%s's amount of %s (id %u) is: %u", target_name.c_str(), GetItemLink(pItem).c_str(), itemId, itemCount);
-    return true;
-}
-
-//change standstate
-bool ChatHandler::HandleModifyStandStateCommand(char* args)
-{
-    uint32 anim_id;
-    if (!ExtractUInt32(&args, anim_id))
-        return false;
-
-    if (!sEmotesStore.LookupEntry(anim_id))
-        return false;
-
-    m_session->GetPlayer()->HandleEmoteState(anim_id);
-
     return true;
 }
 
@@ -3470,168 +3063,6 @@ bool ChatHandler::HandleHonorShow(char* /*args*/)
     PSendSysMessage(LANG_HONOR_THIS_WEEK, this_week_kills, this_week_honor);
     PSendSysMessage(LANG_HONOR_LAST_WEEK, last_week_kills, last_week_honor, last_week_standing);
     PSendSysMessage(LANG_HONOR_LIFE, target->GetHonorMgr().GetRankPoints(), honorable_kills, dishonorable_kills, highest_rank, hrank_name);
-
-    return true;
-}
-
-bool ChatHandler::HandleHonorAddCommand(char* args)
-{
-    if (!*args)
-        return false;
-
-    Player *target = GetSelectedPlayer();
-    if (!target)
-    {
-        SendSysMessage(LANG_PLAYER_NOT_FOUND);
-        SetSentErrorMessage(true);
-        return false;
-    }
-
-    // check online security
-    if (HasLowerSecurity(target))
-        return false;
-
-    float amount = (float)atof(args);
-    target->GetHonorMgr().Add(amount, OTHER);
-    return true;
-}
-
-bool ChatHandler::HandleHonorAddKillCommand(char* /*args*/)
-{
-    Unit *target = GetSelectedUnit();
-    if (!target)
-    {
-        SendSysMessage(LANG_PLAYER_NOT_FOUND);
-        SetSentErrorMessage(true);
-        return false;
-    }
-
-    if (target == m_session->GetPlayer())
-        return false;
-
-    m_session->GetPlayer()->RewardHonor(target, 1);
-    return true;
-}
-
-bool ChatHandler::HandleModifyHonorCommand(char* args)
-{
-    if (!*args)
-        return false;
-
-    Player *target = GetSelectedPlayer();
-    if (!target)
-    {
-        SendSysMessage(LANG_PLAYER_NOT_FOUND);
-        SetSentErrorMessage(true);
-        return false;
-    }
-
-    char* field = ExtractLiteralArg(&args);
-    if (!field)
-        return false;
-
-    int32 amount;
-    if (!ExtractInt32(&args, amount))
-        return false;
-
-    // hack code
-    if (hasStringAbbr(field, "points"))
-    {
-        if (amount < 0 || amount > 255)
-            return false;
-        // rank points is sent to client with same size of uint8(255) for each rank
-        target->SetByteValue(PLAYER_FIELD_BYTES2, 0, amount);
-    }
-    else if (hasStringAbbr(field, "rank"))
-    {
-        if (amount < 0 || amount >= HONOR_RANK_COUNT)
-            return false;
-        target->SetByteValue(PLAYER_BYTES_3, 3, amount);
-    }
-    else if (hasStringAbbr(field, "todaykills"))
-        target->SetUInt16Value(PLAYER_FIELD_SESSION_KILLS, 0, (uint32)amount);
-    else if (hasStringAbbr(field, "yesterdaykills"))
-        target->SetUInt32Value(PLAYER_FIELD_YESTERDAY_KILLS, (uint32)amount);
-    else if (hasStringAbbr(field, "yesterdayhonor"))
-        target->SetUInt32Value(PLAYER_FIELD_YESTERDAY_CONTRIBUTION, (uint32)amount);
-    else if (hasStringAbbr(field, "thisweekkills"))
-        target->SetUInt32Value(PLAYER_FIELD_THIS_WEEK_KILLS, (uint32)amount);
-    else if (hasStringAbbr(field, "thisweekhonor"))
-        target->SetUInt32Value(PLAYER_FIELD_THIS_WEEK_CONTRIBUTION, (uint32)amount);
-    else if (hasStringAbbr(field, "lastweekkills"))
-        target->SetUInt32Value(PLAYER_FIELD_LAST_WEEK_KILLS, (uint32)amount);
-    else if (hasStringAbbr(field, "lastweekhonor"))
-        target->SetUInt32Value(PLAYER_FIELD_LAST_WEEK_CONTRIBUTION, (uint32)amount);
-    else if (hasStringAbbr(field, "lastweekstanding"))
-        target->SetUInt32Value(PLAYER_FIELD_LAST_WEEK_RANK, (uint32)amount);
-    else if (hasStringAbbr(field, "lifetimedishonorablekills"))
-        target->SetUInt32Value(PLAYER_FIELD_LIFETIME_DISHONORABLE_KILLS, (uint32)amount);
-    else if (hasStringAbbr(field, "lifetimehonorablekills"))
-        target->SetUInt32Value(PLAYER_FIELD_LIFETIME_HONORABLE_KILLS, (uint32)amount);
-
-    PSendSysMessage(LANG_COMMAND_MODIFY_HONOR, field, target->GetName(), hasStringAbbr(field, "rank") ? amount : (uint32)amount);
-
-    return true;
-}
-
-bool ChatHandler::HandleHonorResetCommand(char* /*args*/)
-{
-    Player *target = GetSelectedPlayer();
-    if (!target)
-    {
-        SendSysMessage(LANG_PLAYER_NOT_FOUND);
-        SetSentErrorMessage(true);
-        return false;
-    }
-
-    target->GetHonorMgr().Reset();
-    return true;
-}
-
-bool ChatHandler::HandleLookupEventCommand(char* args)
-{
-    if (!*args)
-        return false;
-
-    std::string namepart = args;
-    std::wstring wnamepart;
-
-    // converting string that we try to find to lower case
-    if (!Utf8toWStr(namepart, wnamepart))
-        return false;
-
-    wstrToLower(wnamepart);
-
-    uint32 counter = 0;
-
-    GameEventMgr::GameEventDataMap const& events = sGameEventMgr.GetEventMap();
-
-    for (uint32 id = 1; id < events.size(); ++id)
-    {
-        if (!sGameEventMgr.IsValidEvent(id))
-            continue;
-
-        GameEventData const& eventData = events[id];
-
-        std::string descr = eventData.description;
-        if (descr.empty())
-            continue;
-
-        if (Utf8FitTo(descr, wnamepart))
-        {
-            char const* active = sGameEventMgr.IsActiveEvent(id) ? GetMangosString(LANG_ACTIVE) : "";
-
-            if (m_session)
-                PSendSysMessage(LANG_EVENT_ENTRY_LIST_CHAT, id, id, eventData.description.c_str(), active);
-            else
-                PSendSysMessage(LANG_EVENT_ENTRY_LIST_CONSOLE, id, eventData.description.c_str(), active);
-
-            ++counter;
-        }
-    }
-
-    if (counter == 0)
-        SendSysMessage(LANG_NOEVENTFOUND);
 
     return true;
 }
@@ -3931,153 +3362,6 @@ void ChatHandler::HandleLearnSkillRecipesHelper(Player* player, uint32 skill_id)
     }
 }
 
-bool ChatHandler::HandleLearnAllCraftsCommand(char* /*args*/)
-{
-    for (uint32 i = 0; i < sSkillLineStore.GetNumRows(); ++i)
-    {
-        SkillLineEntry const *skillInfo = sSkillLineStore.LookupEntry(i);
-        if (!skillInfo)
-            continue;
-
-        if (skillInfo->categoryId == SKILL_CATEGORY_PROFESSION || skillInfo->categoryId == SKILL_CATEGORY_SECONDARY)
-            HandleLearnSkillRecipesHelper(m_session->GetPlayer(), skillInfo->id);
-    }
-
-    SendSysMessage(LANG_COMMAND_LEARN_ALL_CRAFT);
-    return true;
-}
-
-bool ChatHandler::HandleLearnAllRecipesCommand(char* args)
-{
-    //  Learns all recipes of specified profession and sets skill to max
-    //  Example: .learn all_recipes enchanting
-
-    Player* target = GetSelectedPlayer();
-    if (!target)
-    {
-        SendSysMessage(LANG_PLAYER_NOT_FOUND);
-        return false;
-    }
-
-    if (!*args)
-        return false;
-
-    std::wstring wnamepart;
-
-    if (!Utf8toWStr(args, wnamepart))
-        return false;
-
-    // converting string that we try to find to lower case
-    wstrToLower(wnamepart);
-
-    std::string name;
-
-    SkillLineEntry const *targetSkillInfo = NULL;
-    for (uint32 i = 1; i < sSkillLineStore.GetNumRows(); ++i)
-    {
-        SkillLineEntry const *skillInfo = sSkillLineStore.LookupEntry(i);
-        if (!skillInfo)
-            continue;
-
-        if (skillInfo->categoryId != SKILL_CATEGORY_PROFESSION && skillInfo->categoryId != SKILL_CATEGORY_SECONDARY)
-            continue;
-
-        int loc = GetSessionDbcLocale();
-        name = skillInfo->name[loc];
-        if (name.empty())
-            continue;
-
-        if (!Utf8FitTo(name, wnamepart))
-        {
-            loc = 0;
-            for (; loc < MAX_DBC_LOCALE; ++loc)
-            {
-                if (loc == GetSessionDbcLocale())
-                    continue;
-
-                name = skillInfo->name[loc];
-                if (name.empty())
-                    continue;
-
-                if (Utf8FitTo(name, wnamepart))
-                    break;
-            }
-        }
-
-        if (loc < MAX_DBC_LOCALE)
-        {
-            targetSkillInfo = skillInfo;
-            break;
-        }
-    }
-
-    if (!targetSkillInfo)
-        return false;
-
-    HandleLearnSkillRecipesHelper(target, targetSkillInfo->id);
-
-    uint16 maxLevel = target->GetSkillMaxPure(targetSkillInfo->id);
-    target->SetSkill(targetSkillInfo->id, maxLevel, maxLevel);
-    PSendSysMessage(LANG_COMMAND_LEARN_ALL_RECIPES, name.c_str());
-    return true;
-}
-
-bool ChatHandler::HandleLookupAccountEmailCommand(char* args)
-{
-    char* emailStr = ExtractQuotedOrLiteralArg(&args);
-    if (!emailStr)
-        return false;
-
-    uint32 limit;
-    if (!ExtractOptUInt32(&args, limit, 100))
-        return false;
-
-    std::string email = emailStr;
-    LoginDatabase.escape_string(email);
-
-    // No wildcard in front, cannot use table index
-    LoginDatabase.AsyncPQuery(AccountSearchHandler::HandleAccountLookupResult, GetAccountId(), limit,
-        //      0   1         2        3        4
-        "SELECT id, username, last_ip, 0, expansion FROM account WHERE email " _LIKE_ " " _CONCAT2_("'%s'", "'%%'") " LIMIT %u",
-        email.c_str(), limit);
-
-    return true;
-}
-
-bool ChatHandler::HandleLookupAccountIpCommand(char* args)
-{
-    return ShowAccountIpListHelper(args, false);
-}
-
-bool ChatHandler::HandleLookupAccountIponlineCommand(char* args)
-{
-    return ShowAccountIpListHelper(args, true);
-}
-
-bool ChatHandler::HandleLookupAccountNameCommand(char* args)
-{
-    char* accountStr = ExtractQuotedOrLiteralArg(&args);
-    if (!accountStr)
-        return false;
-
-    uint32 limit;
-    if (!ExtractOptUInt32(&args, limit, 100))
-        return false;
-
-    std::string account = accountStr;
-    if (!AccountMgr::normalizeString(account))
-        return false;
-
-    LoginDatabase.escape_string(account);
-
-    LoginDatabase.AsyncPQuery(AccountSearchHandler::HandleAccountLookupResult, GetAccountId(), limit,
-        //      0   1         2        3        4
-        "SELECT id, username, last_ip, 0, expansion FROM account WHERE username " _LIKE_ " " _CONCAT3_("'%%'", "'%s'", "'%%'") " LIMIT %u",
-        account.c_str(), limit);
-
-    return true;
-}
-
 bool ChatHandler::ShowAccountIpListHelper(char* args, bool onlineonly)
 {
     char* ipStr = ExtractQuotedOrLiteralArg(&args);
@@ -4263,41 +3547,6 @@ void ChatHandler::ShowPoolListHelper(uint16 pool_id)
         PSendSysMessage(LANG_POOL_ENTRY_LIST_CONSOLE,
                         pool_id, pool_template.description.c_str(), pool_template.IsAutoSpawn() ? 1 : 0, pool_template.MaxLimit,
                         sPoolMgr.GetPoolCreatures(pool_id).size(), sPoolMgr.GetPoolGameObjects(pool_id).size(), sPoolMgr.GetPoolPools(pool_id).size());
-}
-
-bool ChatHandler::HandleLookupPoolCommand(char * args)
-{
-    if (!*args)
-        return false;
-
-    std::string namepart = args;
-
-    Player* player = m_session ? m_session->GetPlayer() : NULL;
-    MapPersistentState* mapState = player ? player->GetMap()->GetPersistentState() : NULL;
-
-    strToLower(namepart);
-
-    uint32 counter = 0;
-
-    // spawn pools for expected map or for not initialized shared pools state for non-instanceable maps
-    for (uint16 pool_id = 0; pool_id < sPoolMgr.GetMaxPoolId(); ++pool_id)
-    {
-        PoolTemplateData const& pool_template = sPoolMgr.GetPoolTemplate(pool_id);
-
-        std::string desc = pool_template.description;
-        strToLower(desc);
-
-        if (desc.find(namepart) == std::wstring::npos)
-            continue;
-
-        ShowPoolListHelper(pool_id);
-        ++counter;
-    }
-
-    if (counter == 0)
-        SendSysMessage(LANG_NO_POOL);
-
-    return true;
 }
 
 /// Triggering corpses expire check in world

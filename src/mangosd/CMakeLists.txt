@@ -17,22 +17,12 @@
 
 set(EXECUTABLE_NAME mangosd)
 set (EXECUTABLE_SRCS 
-	ChatSocket.h
 	CliRunnable.h
-	MaNGOSsoap.h
 	Master.h
-	RASocket.h
-	soapH.h
-	soapStub.h
 	WorldRunnable.h
-	ChatSocket.cpp
 	CliRunnable.cpp
 	Main.cpp
-	MaNGOSsoap.cpp
 	Master.cpp
-	RASocket.cpp
-	soapC.cpp
-	soapServer.cpp
 	WorldRunnable.cpp
 
 )
@@ -48,7 +38,6 @@ endif()
 
 include_directories(
   ${CMAKE_SOURCE_DIR}/src/shared
-  ${CMAKE_SOURCE_DIR}/dep/include/gsoap
   ${CMAKE_SOURCE_DIR}/dep/include/g3dlite
   ${CMAKE_SOURCE_DIR}/src/framework
   ${CMAKE_SOURCE_DIR}/src/framework/Network
@@ -111,7 +100,6 @@ if(SCRIPTS)
     shared
     framework
     g3dlite
-    gsoap
     ${ACE_LIBRARIES}
   )
 else()
@@ -121,7 +109,6 @@ else()
     shared
     framework
     g3dlite
-    gsoap
     ${ACE_LIBRARIES}
   )
 endif()

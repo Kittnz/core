@@ -49,8 +49,6 @@
 #include "Chat.h"
 #include "Channel.h"
 #include "AccountMgr.h"
-#include "NodeSession.h"
-#include "NodesOpcodes.h"
 #include "MasterPlayer.h"
 #include "turtlewow/transmog/transmog.h"
 
@@ -76,15 +74,13 @@ bool MapSessionFilter::Process(WorldPacket * packet)
 
 /// WorldSession constructor
 WorldSession::WorldSession(uint32 id, WorldSocket *sock, AccountTypes sec, time_t mute_time, LocaleConstant locale, const std::string& remote_ip) :
-    m_muteTime(mute_time),
-    _pcktReading(nullptr), _pcktWriting(nullptr), _pcktRecvDump(nullptr), _pcktDumpFlags(0), _pcktReadSpeedRate(1.0f),
-    _pcktReadTimer(0), _pcktReadLastUpdate(0), m_connected(true), m_disconnectTimer(0), m_who_recvd(false),
+    m_muteTime(mute_time), m_connected(true), m_disconnectTimer(0), m_who_recvd(false),
     m_ah_list_recvd(false), _scheduleBanLevel(0),
     _accountFlags(0), m_idleTime(WorldTimer::getMSTime()), _player(nullptr), m_Socket(sock), _security(sec), _accountId(id), _logoutTime(0), m_inQueue(false),
     m_playerLoading(false), m_playerLogout(false), m_playerRecentlyLogout(false), m_playerSave(false), m_sessionDbcLocale(sWorld.GetAvailableDbcLocale(locale)),
     m_sessionDbLocaleIndex(sObjectMgr.GetIndexForLocale(locale)), m_latency(0), m_tutorialState(TUTORIALDATA_UNCHANGED), m_warden(nullptr),
     m_bot(nullptr), m_lastReceivedPacketTime(0), _clientOS(CLIENT_OS_UNKNOWN), _gameBuild(0),
-    _charactersCount(10), _characterMaxLevel(0), _clientHashComputeStep(HASH_NOT_COMPUTED), m_masterSession(nullptr), m_nodeSession(nullptr),
+    _charactersCount(10), _characterMaxLevel(0), _clientHashComputeStep(HASH_NOT_COMPUTED),
     m_masterPlayer(nullptr), m_lastPubChannelMsgTime(NULL)
 {
     if (sock)
@@ -116,9 +112,6 @@ WorldSession::~WorldSession()
     for (int i = 0; i < PACKET_PROCESS_MAX_TYPE; ++i)
         while (_recvQueue[i].next(packet))
             delete packet;
-    SetDumpPacket(nullptr);
-    SetReadPacket(nullptr);
-    SetDumpRecvPackets(nullptr);
 
     if (m_warden)
         delete m_warden;
@@ -144,41 +137,6 @@ void WorldSession::SendPacket(WorldPacket const* packet)
     {
         // Packet will be rejected by client
         sLog.outInfo("[NETWORK] Packet %s size %u is too large. Not sent [Account %u Player %s]", LookupOpcodeName(packet->GetOpcode()), packet->size(), GetAccountId(), GetPlayerName());
-        return;
-    }
-    if (!m_Socket && !m_masterSession)
-    {
-        if (packet->GetOpcode() == SMSG_MESSAGECHAT)
-        {
-            WorldPacket packet2(*packet);
-            packet2.rpos(0);
-            uint8 msgtype;
-            uint32 lang;
-            ObjectGuid guid1;
-            std::string name1;
-            packet2 >> msgtype >> lang;
-            // Channels
-            if (msgtype == CHAT_MSG_CHANNEL)
-            {
-                std::string chanName, message;
-                uint32 unused;
-                packet2 >> chanName >> unused >> guid1 >> unused;
-                packet2 >> message;
-                if (sObjectMgr.GetPlayerNameByGUID(guid1, name1))
-                    _chatBotHistory << uint32(msgtype) << " " << name1 << " " << chanName << " " << message << std::endl;
-                return;
-            }
-            ObjectGuid guid2;
-            uint32 textLen;
-            std::string message;
-            uint8 chatTag;
-            packet2 >> guid1;
-            if (msgtype == CHAT_MSG_SAY || msgtype == CHAT_MSG_YELL || msgtype == CHAT_MSG_PARTY)
-                packet2 >> guid2;
-            packet2 >> textLen >> message >> chatTag;
-            if (guid1.IsEmpty() || sObjectMgr.GetPlayerNameByGUID(guid1, name1))
-                _chatBotHistory << uint32(msgtype) << " " << name1 << " NULL " << message << std::endl;
-        }
         return;
     }
 
@@ -223,30 +181,17 @@ void WorldSession::SendPacket(WorldPacket const* packet)
         DEBUG_UNIT_IF(packet->GetOpcode() != SMSG_MESSAGECHAT && packet->GetOpcode() != SMSG_WARDEN_DATA, player,
             DEBUG_PACKETS_SEND, "[%s] Send packet : %u/0x%x (%s)", player->GetName(), packet->GetOpcode(), packet->GetOpcode(), LookupOpcodeName(packet->GetOpcode()));
 
-
-    if (m_masterSession)
-    {
-        m_masterSession->SendPacketToGameClient(GetAccountId(), packet);
-        return;
-    }
+	if (m_Socket == nullptr)
+	{
+		return;
+	}
 
     if (m_Socket->SendPacket(*packet) == -1)
         m_Socket->CloseSocket();
-
-    // Log du paquet
-    if (_pcktWriting)
-    {
-        std::stringstream oss;
-        oss << WorldTimer::getMSTime() << ":" << packet->GetOpcode() << ":" << packet->size() << "|";
-        for (size_t i = 0; i < packet->size(); ++i)
-            oss << uint32(packet->read<uint8>(i)) << " ";
-        oss << "256\n";
-        fprintf(_pcktWriting, oss.str().c_str());
-    }
 }
 
 /// Add an incoming packet to the queue
-void WorldSession::QueuePacket(WorldPacket* newPacket, NodeSession* from_node)
+void WorldSession::QueuePacket(WorldPacket* newPacket)
 {
     OpcodeHandler const& opHandle = opcodeTable[newPacket->GetOpcode()];
     if (opHandle.packetProcessing >= PACKET_PROCESS_MAX_TYPE)
@@ -258,17 +203,7 @@ void WorldSession::QueuePacket(WorldPacket* newPacket, NodeSession* from_node)
     }
     m_lastReceivedPacketTime = newPacket->GetPacketTime();
 
-    if (m_nodeSession && m_nodeSession != from_node && sNodesOpcodes->IsOpcodeForwardedToNode(newPacket->GetOpcode()))
-    {
-        m_nodeSession->ForwardClientPacket(GetAccountId(), newPacket);
-        delete newPacket;
-        return;
-    }
     uint32 processing = opHandle.packetProcessing;
-    if (processing != PACKET_PROCESS_WORLD && processing != PACKET_PROCESS_DB_QUERY)
-        if (!IsNode() && GetMasterPlayer() && sNodesOpcodes->IsOpcodeHandledByMaster(newPacket->GetOpcode()))
-            processing = PACKET_PROCESS_MASTER_SAFE;
-
     _recvQueue[processing].add(newPacket);
 }
 
@@ -322,9 +257,6 @@ bool WorldSession::Update(PacketFilter& updater)
     if (sWorld.getConfig(CONFIG_UINT32_PERFLOG_SLOW_UNIQUE_SESSION_UPDATE) && sessionUpdateTime > sWorld.getConfig(CONFIG_UINT32_PERFLOG_SLOW_UNIQUE_SESSION_UPDATE))
         sLog.out(LOG_PERFORMANCE, "Slow session update: %ums. Account %u on IP %s", sessionUpdateTime, GetAccountId(), GetRemoteAddress().c_str());
 
-    if (m_masterSession)
-        return true;
-
     if (m_Socket && !m_Socket->IsClosed() && m_warden)
         m_warden->Update();
 
@@ -375,78 +307,11 @@ bool WorldSession::Update(PacketFilter& updater)
         // else
         // TODO: Broadcast MasterPlayer update to Master
     }
-
-    if (_pcktReading)
-    {
-        while (true)
-        {
-            long int pos = ftell(_pcktReading);
-            uint32 nextTime = 0;
-            fscanf(_pcktReading, "%u", &nextTime);
-            if (!nextTime)
-            {
-                SetReadPacket(nullptr);
-                break;
-            }
-            fseek(_pcktReading, pos, SEEK_SET);
-            uint32 now = WorldTimer::tickTime();
-            uint32 diff = WorldTimer::getMSTimeDiff(_pcktReadLastUpdate, now);
-            _pcktReadLastUpdate = now;
-            _pcktReadTimer += diff * _pcktReadSpeedRate;
-            if (nextTime > _pcktReadTimer) // Stop
-                break;
-            // Sinon on envoie encore un paquet.
-            uint32 size = 0;
-            uint32 opcode = 0;
-            int32 readValue = 0;
-            bool errorWhileReading = false;
-            if (fscanf(_pcktReading, "%u:%u:%u|%u", &nextTime, &opcode, &size, &readValue) != 4)
-                errorWhileReading = true;
-            else
-            {
-                WorldPacket data(opcode, size);
-                while (true)
-                {
-                    if (data.size() >= size && readValue != 256)
-                    {
-                        if (_player)
-                            ChatHandler(_player).PSendSysMessage("[Replay] Invalid packet size [opcode %s|size %u|time %u]", LookupOpcodeName(opcode), size, nextTime);
-                        errorWhileReading = true;
-                        break;
-                    }
-                    if (readValue == 256)
-                        break;
-                    data << uint8(readValue);
-                    int readCount = fscanf(_pcktReading, " %u", &readValue);
-                    if (!readCount)
-                    {
-                        if (_player)
-                            ChatHandler(_player).PSendSysMessage("[Replay] Invalid packet (truncated) [opcode %s|size %u|time %u]", LookupOpcodeName(opcode), size, nextTime);
-                        errorWhileReading = true;
-                        break;
-                    }
-                }
-                if (!errorWhileReading)
-                {
-                    SendPacket(&data);
-                    fscanf(_pcktReading, "\n");
-                }
-            }
-            // Got an error
-            if (errorWhileReading)
-            {
-                SetReadPacket(nullptr);
-                break;
-            }
-        }
-    }
     return true;
 }
 
 bool WorldSession::CanProcessPackets() const
 {
-    if (GetMasterSession())
-        return true;
     return ((m_Socket && !m_Socket->IsClosed()) || (_player && sPlayerBotMgr.IsChatBot(_player->GetGUIDLow())));
 }
 
@@ -460,39 +325,10 @@ void WorldSession::ProcessPackets(PacketFilter& updater)
         if (!AllowPacket(packet->GetOpcode()))
             break;
 
-        // Reading packets
-        if (_pcktReading)
-        {
-            switch (packet->GetOpcode())
-            {
-                case CMSG_MESSAGECHAT:
-                case MSG_MOVE_STOP:
-                case MSG_MOVE_HEARTBEAT:
-                case CMSG_ITEM_TEXT_QUERY:
-                case CMSG_ITEM_NAME_QUERY:
-                case CMSG_NAME_QUERY:
-                case CMSG_PET_NAME_QUERY:
-                case CMSG_ITEM_QUERY_SINGLE:
-                case CMSG_ITEM_QUERY_MULTIPLE:
-                    // Allow chat packets for GM commands (speed modification for example)
-                    // Allow movement packets to have exact position for "gm fly on" command
-                    break;
-                default:
-                    // Otherwise we simply ignore
-                    delete packet;
-                    continue;
-            }
-        }
         ALL_SESSION_SCRIPTS(this, OnPacket(packet->GetOpcode()));
         OpcodeHandler const& opHandle = opcodeTable[packet->GetOpcode()];
         try
         {
-            if (!IsNode() && GetMasterPlayer() && sNodesOpcodes->IsOpcodeHandledByMaster(packet->GetOpcode()))
-            {
-                ExecuteOpcode(opHandle, packet);
-                delete packet;
-                continue;
-            }
             uint32 packetTime = WorldTimer::getMSTime();
             switch (opHandle.status)
             {
@@ -557,16 +393,6 @@ void WorldSession::ProcessPackets(PacketFilter& updater)
             packetTime = WorldTimer::getMSTimeDiffToNow(packetTime);
             if (sWorld.getConfig(CONFIG_UINT32_PERFLOG_SLOW_PACKET) && packetTime > sWorld.getConfig(CONFIG_UINT32_PERFLOG_SLOW_PACKET))
                 sLog.out(LOG_PERFORMANCE, "Slow packet opcode %s: %ums. Account %u on IP %s", opHandle.name, packetTime, GetAccountId(), GetRemoteAddress().c_str());
-        }
-        catch (ForwardToMaster_Exception& )
-        {
-            ASSERT(GetMasterSession());
-            GetMasterSession()->ForwardClientPacket(GetAccountId(), packet);
-        }
-        catch (ForwardToNode_Exception& )
-        {
-            ASSERT(GetNodeSession());
-            GetMasterSession()->ForwardClientPacket(GetAccountId(), packet);
         }
         catch (ByteBufferException &)
         {
@@ -784,9 +610,6 @@ void WorldSession::LogoutPlayer(bool Save)
         }
 
         SetPlayer(nullptr);                                    // deleted in Remove/DeleteFromWorld call
-
-        if (GetMasterSession())
-            GetMasterSession()->SendPacket(NMSG_LOGOUT_COMPLETE, GetAccountId());
 
         ///- Send the 'logout complete' packet to the client
         WorldPacket data(SMSG_LOGOUT_COMPLETE, 0);
@@ -1012,32 +835,8 @@ void WorldSession::ExecuteOpcode(OpcodeHandler const& opHandle, WorldPacket* pac
     //sLog.outString("[%s] Recvd packet : %u/0x%x (%s)", GetUsername().c_str(), packet->GetOpcode(), packet->GetOpcode(), LookupOpcodeName(packet->GetOpcode()));
     if (Player* player = GetPlayer())
         DEBUG_UNIT(player, DEBUG_PACKETS_RECV, "[%s] Recvd packet : %u/0x%x (%s)", player->GetName(), packet->GetOpcode(), packet->GetOpcode(), LookupOpcodeName(packet->GetOpcode()));
-    if (_pcktRecvDump)
-    {
-        bool skipPacketAnalysis = false;
-        if (_pcktDumpFlags & PACKET_DUMP_SKIP_FREQUENT_OPCODES)
-        {
-            switch (packet->GetOpcode())
-            {
-            case CMSG_QUESTGIVER_STATUS_QUERY:
-            case CMSG_ITEM_QUERY_SINGLE:
-            case CMSG_NAME_QUERY:
-            case CMSG_SETSHEATHED:
-            case CMSG_WARDEN_DATA:
-            case CMSG_REQUEST_PARTY_MEMBER_STATS:
-            case CMSG_GUILD_QUERY:
-                skipPacketAnalysis = true;
-                break;
-            }
-        }
-        if (!skipPacketAnalysis)
-        {
-            fprintf(_pcktRecvDump, "%u:%s:%zu|", WorldTimer::getMSTime(), LookupOpcodeName(packet->GetOpcode()), packet->size());
-            for (size_t i = 0; i < packet->size(); ++i)
-                fprintf(_pcktRecvDump, "%u ", uint32(packet->read<uint8>(i)));
-            fprintf(_pcktRecvDump, "256\n");
-        }
-    }
+
+
     (this->*opHandle.handler)(*packet);
 
     if (_player)
@@ -1052,69 +851,6 @@ void WorldSession::ExecuteOpcode(OpcodeHandler const& opHandle, WorldPacket* pac
     }
     if (packet->rpos() < packet->wpos() && sLog.HasLogLevelOrHigher(LOG_LVL_DEBUG))
         LogUnprocessedTail(packet);
-}
-
-void WorldSession::SetDumpPacket(const char* file)
-{
-    if (!file)
-    {
-        if (_pcktWriting)
-            fclose(_pcktWriting);
-        _pcktWriting = nullptr;
-        return;
-    }
-    SetDumpPacket(nullptr); // Clean
-    _pcktWriting = fopen(file, "w+");
-    if (_pcktWriting)
-    {
-        fprintf(_pcktWriting, "BEGIN_TIME=%u\n", WorldTimer::getMSTime());
-        fprintf(_pcktWriting, "RECORDER_LOWGUID=%u\n", _player ? _player->GetGUIDLow() : 0);
-    }
-}
-
-void WorldSession::SetReadPacket(const char* file)
-{
-    if (!file)
-    {
-        if (_pcktReading)
-            fclose(_pcktReading);
-        _pcktReading = nullptr;
-        return;
-    }
-    SetReadPacket(nullptr); // Clean
-    _pcktReading = fopen(file, "r");
-    if (_pcktReading)
-    {
-        uint32 fileTime = 0;
-        uint32 recorderGuidLow = 0;
-        if (!fscanf(_pcktReading, "BEGIN_TIME=%u\n", &fileTime))
-        {
-            fclose(_pcktReading);
-            _pcktReading = nullptr;
-            return;
-        }
-        _pcktReadTimer = fileTime;
-        _pcktReadLastUpdate = WorldTimer::tickTime();
-        if (fscanf(_pcktReading, "RECORDER_LOWGUID=%u\n", &recorderGuidLow))
-            _recorderGuid = ObjectGuid(HIGHGUID_PLAYER, recorderGuidLow);
-        else
-            _recorderGuid = ObjectGuid();
-    }
-}
-
-void WorldSession::SetDumpRecvPackets(const char* file)
-{
-    if (!file)
-    {
-        if (_pcktRecvDump)
-            fclose(_pcktRecvDump);
-        _pcktRecvDump = nullptr;
-        return;
-    }
-    SetDumpRecvPackets(nullptr); // Clean
-    _pcktRecvDump = fopen(file, "w+");
-    if (_pcktRecvDump)
-        fprintf(_pcktRecvDump, "#Begin packet dump on %s [account %s]\n", GetPlayerName(), GetUsername().c_str());
 }
 
 void WorldSession::InitWarden(BigNumber* K)
@@ -1298,80 +1034,14 @@ bool WorldSession::ShouldBeBanned(uint32 currentLevel) const
     return _scheduleBanReason.size() && urand(2, _scheduleBanLevel) <= currentLevel;
 }
 
-void WorldSession::LoginPlayerToNode(NodeSession* session)
-{
-    ASSERT(IsNode());
-    ASSERT(IsMaster());
-    ASSERT(GetPlayer());
-
-    // Start loading display clientside:
-    WorldPacket data(SMSG_TRANSFER_PENDING, 4);
-    data << uint32(GetPlayer()->GetMapId());
-    SendPacket(&data);
-
-    // Set position on Node
-    GetPlayer()->GetTeleportDest().mapid = GetPlayer()->GetMapId();
-    GetPlayer()->GetTeleportDest().coord_x = GetPlayer()->GetPositionX();
-    GetPlayer()->GetTeleportDest().coord_y = GetPlayer()->GetPositionY();
-    GetPlayer()->GetTeleportDest().coord_z = GetPlayer()->GetPositionZ();
-    GetPlayer()->GetTeleportDest().orientation = GetPlayer()->GetOrientation();
-    GetPlayer()->SetSemaphoreTeleportFar(true);
-
-    m_nodeSession = session;
-    m_nodeSession->LoadSession(this);
-    //m_nodeSession->LoginPlayer(this, GetPlayer()->GetObjectGuid());
-    m_nodeSession->SendPlayer(this, GetPlayer());
-
-    // Make a kind of Logout from the master server
-    if (ObjectGuid lootGuid = GetPlayer()->GetLootGuid())
-        DoLootRelease(lootGuid);
-
-    // TODO: Handle battleground queues with MasterPlayer and not Player.
-    //sBattleGroundMgr.PlayerLoggedOut(_player);
-
-    ///- If the player is in a group (or invited), remove him. If the group if then only 1 person, disband the group.
-    _player->UninviteFromGroup();
-
-    ///- Send update to group
-    if (_player->GetGroup())
-        _player->GetGroup()->SendUpdate();
-
-    ///- Remove from Map
-    if (_player->IsInWorld())
-        _player->GetMap()->Remove(_player, true);
-    else
-    {
-        _player->CleanupsBeforeDelete();
-        Map::DeleteFromWorld(_player);
-    }
-
-    SetPlayer(nullptr);
-}
-
 uint32 WorldSession::GenerateItemLowGuid()
 {
-    if (m_masterSession)
-        return m_masterSession->GenerateItemLowGuid();
     return sObjectMgr.GenerateItemLowGuid();
 }
 
 uint32 WorldSession::GeneratePetNumber()
 {
-    if (m_masterSession)
-        return m_masterSession->GeneratePetNumber();
     return sObjectMgr.GeneratePetNumber();
-}
-
-void WorldSession::ForwardPacketToMaster()
-{
-    if (GetMasterSession())
-        throw ForwardToMaster_Exception();
-}
-
-void WorldSession::ForwardPacketToNode()
-{
-    if (GetNodeSession())
-        throw ForwardToNode_Exception();
 }
 
 bool WorldSession::CharacterScreenIdleKick(uint32 currTime)

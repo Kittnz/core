@@ -42,7 +42,6 @@ class Bag : public Item
 
         bool Create(uint32 guidlow, uint32 itemid, ObjectGuid ownerGuid = ObjectGuid());
 
-        void Clear();
         void StoreItem(uint8 slot, Item *pItem, bool update);
         void RemoveItem(uint8 slot, bool update);
 
@@ -66,12 +65,6 @@ class Bag : public Item
         void DeleteFromDB();
 
         void BuildCreateUpdateBlockForPlayer(UpdateData* data, Player* target) const;
-
-        /**
-         * @brief Call this before reading unserialization
-         * @return false iif the Item is corrupt.
-         */
-        bool PrepareWakeUp(uint32 low_guid, ItemPrototype const* proto, Player const* owner);
 
     protected:
 

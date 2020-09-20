@@ -28,7 +28,6 @@ set (shared_SRCS
     ProgressBar.h
     Progression.h
     revision.h
-    ServiceWin32.h
     SystemConfig.h
     Threading.h
     Timer.h
@@ -67,7 +66,6 @@ set (shared_SRCS
     Log.cpp
     PosixDaemon.cpp
     ProgressBar.cpp
-    ServiceWin32.cpp
     Threading.cpp
     Util.cpp
     Duration.h

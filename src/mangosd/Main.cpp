@@ -36,19 +36,7 @@
 #include <ace/Version.h>
 #include <ace/Get_Opt.h>
 
-#ifdef WIN32
-#include "ServiceWin32.h"
-char serviceName[] = "mangosd";
-char serviceLongName[] = "MaNGOS world service";
-char serviceDescription[] = "Massive Network Game Object Server";
-/*
- * -1 - not in service mode
- *  0 - stopped
- *  1 - running
- *  2 - paused
- */
-int m_ServiceStatus = -1;
-#else
+#ifndef WIN32
 #include "PosixDaemon.h"
 #endif
 
@@ -139,23 +127,6 @@ extern int main(int argc, char **argv)
                 return 1;
         }
     }
-
-#ifdef WIN32                                                // windows service command need execute before config read
-    switch (serviceDaemonMode)
-    {
-        case 'i':
-            if (WinServiceInstall())
-                sLog.outString("Installing service");
-            return 1;
-        case 'u':
-            if (WinServiceUninstall())
-                sLog.outString("Uninstalling service");
-            return 1;
-        case 'r':
-            WinServiceRun();
-            break;
-    }
-#endif
 
     if (!sConfig.SetSource(cfg_file))
     {
