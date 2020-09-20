@@ -183,8 +183,7 @@ nextquestinchain = @nextquestinchain, prevquestid = @prevquest
 where entry = @quest_entry;
 
 replace into gameobject_template values 
-(3000226, 0, 5, 2290, 'Stormwind Vault', 0, 0, 1.4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
-(3000227, 0, 5, 25, 'Stormwind Vault',    0, 0, 1,   1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+(3000226, 0, 5, 2290, 'Stormwind Vault', 0, 0, 1.4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
 
 delete from gameobject where id = 3000226;
 
