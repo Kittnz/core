@@ -70,73 +70,6 @@ bool ChatHandler::HandleReloadAutoBroadcastCommand(char *args)
 }
 
 
-bool ChatHandler::HandleWorldUpdateCommand(char *args)
-{
-	bool modify = true;
-	Unit* target = GetSelectedUnit();
-	if (!target)
-	{
-		SendSysMessage(LANG_SELECT_CHAR_OR_CREATURE);
-		SetSentErrorMessage(true);
-		return false;
-	}
-	if (!args)
-	{
-		// Afficher le World
-		modify = false;
-	}
-
-	char* newWorldStr = strtok((char*)args, " ");
-
-	if (!newWorldStr)
-		modify = false;
-
-	if (!modify)
-	{
-		PSendSysMessage("Target worldmask (GUID=%u) is 0x%x (%u)", target->GetGUIDLow(), target->GetWorldMask(), target->GetWorldMask());
-		return true;
-	}
-	uint32 newWorld = (uint32)atoi(newWorldStr);
-	target->SetWorldMask(newWorld);
-	PSendSysMessage("New worldMask=0x%x (%u) for selection (GUID=%u)", newWorld, newWorld, target->GetGUIDLow());
-	return true;
-}
-
-bool ChatHandler::HandleWorldTestCommand(char *args)
-{
-	Unit* target = GetSelectedUnit();
-	Player* me = m_session->GetPlayer();
-	if (!target)
-	{
-		SendSysMessage(LANG_SELECT_CHAR_OR_CREATURE);
-		SetSentErrorMessage(true);
-		return false;
-	}
-	PSendSysMessage("My worldmask is 0x%x. My target worldmask is 0x%x.", me->GetWorldMask(), target->GetWorldMask());
-	PSendSysMessage("I see the target ? %s", me->CanSeeInWorld(target) ? "oui" : "non");
-	PSendSysMessage("My target sees me ? %s", target->CanSeeInWorld(me) ? "oui" : "non");
-	return true;
-}
-
-bool ChatHandler::HandleWorldDetailCommand(char *args)
-{
-	Unit* target = GetSelectedUnit();
-	if (!target)
-	{
-		SendSysMessage(LANG_SELECT_CHAR_OR_CREATURE);
-		SetSentErrorMessage(true);
-		return false;
-	}
-	uint32 mask = target->GetWorldMask();
-	PSendSysMessage("WorldMask = 0x%x (%u)", mask, mask);
-	for (uint32 i = 1; i <= mask; i = i * 2)
-	{
-		if (mask & i)
-			PSendSysMessage("-> World 0x%x", i);
-	}
-	return true;
-}
-
 bool ChatHandler::HandleReloadItemTemplate(char*)
 {
     sObjectMgr.LoadItemPrototypes();
@@ -1550,25 +1483,6 @@ bool ChatHandler::HandleClientSearchCommand(char* args)
 		PSendSysMessage("Not result for hash %s", playerLink(searchedHash).c_str());
 	else
 		PSendSysMessage("%u result(s) for %s", i, playerLink(searchedHash).c_str());
-	return true;
-}
-
-bool ChatHandler::HandleChannelJoinCommand(char* c)
-{
-	WorldPacket pkt(CMSG_JOIN_CHANNEL, 4);
-	pkt << c;
-	pkt << ""; // Pass
-	m_session->HandleJoinChannelOpcode(pkt);
-	PSendSysMessage("Joined channel \"%s\"", c);
-	return true;
-}
-
-bool ChatHandler::HandleChannelLeaveCommand(char* c)
-{
-	WorldPacket pkt(CMSG_LEAVE_CHANNEL, 4);
-	pkt << c;
-	m_session->HandleLeaveChannelOpcode(pkt);
-	PSendSysMessage("Leaved channel \"%s\"", c);
 	return true;
 }
 
