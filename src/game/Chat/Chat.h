@@ -176,7 +176,6 @@ class MANGOS_DLL_SPEC ChatHandler
         bool HandleWardenReadCommand(char *);
         bool HandleClientInfosCommand(char* );
         bool HandleClientSearchCommand(char* );
-        bool HandleViewLogCommand(char* );
         //Custom
         bool HandleListAddonsCommand(char *);
         bool HandleUpdateWorldStateCommand(char *);
@@ -201,10 +200,6 @@ class MANGOS_DLL_SPEC ChatHandler
         bool HandleReloadSpellDisabledCommand(char *args);
         // AutoBroadCast
         bool HandleReloadAutoBroadcastCommand(char *args);
-        // World Gestion
-        bool HandleWorldUpdateCommand(char *args);
-        bool HandleWorldTestCommand(char *args);
-        bool HandleWorldDetailCommand(char *args);
         bool HandleReloadItemTemplate(char *);
         // Managing saved variables
         bool HandleVariableCommand(char* args);
@@ -248,9 +243,6 @@ class MANGOS_DLL_SPEC ChatHandler
         bool HandleReloadShopCommand(char* args);
         bool HandleReloadCustomPetEntries(char* args);
         bool HandleReloadCustomMountEntries(char* args);
-        // Channel
-        bool HandleChannelJoinCommand(char* );
-        bool HandleChannelLeaveCommand(char* );
 
         bool HandleAccountCommand(char* args);
         bool HandleAccountCharactersCommand(char* args);
@@ -401,7 +393,6 @@ class MANGOS_DLL_SPEC ChatHandler
         bool HandleServerIdleShutDownCommand(char* args);
         bool HandleServerInfoCommand(char* args);
         bool HandleServerRestartCommand(char* args);
-        bool HandleServerSetMotdCommand(char* args);
         bool HandleServerShutDownCommand(char* args);
         bool HandleServerShutDownCancelCommand(char* args);
 
@@ -430,7 +421,6 @@ class MANGOS_DLL_SPEC ChatHandler
         bool HandleNamegoCommand(char* args);
         bool HandleGonameCommand(char* args);
         bool HandleGroupgoCommand(char* args);
-        bool HandleGocorpseCommand(char* args);
         bool HandleRecallCommand(char* args);
         bool HandleAnnounceCommand(char* args);
         bool HandleNotifyCommand(char* args);
@@ -440,7 +430,6 @@ class MANGOS_DLL_SPEC ChatHandler
         bool HandleModifyDrunkCommand(char* args);
         bool HandleSetViewCommand(char* args);
 
-        bool HandleGUIDCommand(char* args);
         bool HandleItemMoveCommand(char* args);
         bool HandleDeMorphCommand(char* args);
         bool HandleGroupInfoCommand(char* args);
@@ -451,9 +440,7 @@ class MANGOS_DLL_SPEC ChatHandler
 
         bool HandleCooldownCommand(char* args);
         bool HandleUnLearnCommand(char* args);
-        bool HandleRemoveRidingCommand(char* args);
         bool HandleGetDistanceCommand(char* args);
-        bool HandleGetAngleCommand(char* args);
         bool HandleDieCommand(char* args);
         bool HandleFearCommand(char* args);
         bool HandleDamageCommand(char* args);
@@ -480,30 +467,9 @@ class MANGOS_DLL_SPEC ChatHandler
         // GM Tickets commands
         bool ViewTicketByIdOrName(char* ticketId, char* name);
         bool ViewTicket(GmTicket* ticket);
-        bool HandleGMTicketResponseResetCommand(char* args);
-        bool HandleGMTicketResponseAppendCommand(char* args);
-        bool HandleGMTicketResponseAppendLnCommand(char* args);
-        bool HandleGMTicketAssignToCommand(char* args);
-        bool HandleGMTicketCloseByIdCommand(char* args);
-        bool HandleGMTicketListClosedCommand(char* args);
-        bool HandleGMTicketCounterCommand(char* args);
-        bool HandleGMTicketCommentCommand(char* args);
-        bool HandleGMTicketCompleteCommand(char* args);
-        bool HandleGMTicketDeleteByIdCommand(char* args);
-        bool HandleGMTicketEscalateCommand(char* args);
-        bool HandleGMTicketListEscalatedCommand(char* args);
-        bool HandleGMTicketNextCommand(char* args);
-        bool HandleGMTicketNotifyCommand(char* args);
         bool HandleGMTicketListCommand(char* args);
-        bool HandleGMTicketListOnlineCommand(char* args);
-        bool HandleGMTicketReloadCommand(char* args);
-        bool HandleGMTicketPreviousCommand(char* args);
-        bool HandleGMTicketResetCommand(char* args);
-        bool HandleToggleGMTicketSystem(char* args);
-        bool HandleGMTicketUnAssignCommand(char* args);
         bool HandleGMTicketGetByIdOrNameCommand(char* args);
-        bool HandleGMTicketGetByIdCommand(char* args);
-        bool HandleGMTicketGetByNameCommand(char* args);
+        bool HandleGMTicketCloseByIdCommand(char* args);
 
         bool HandleMaxSkillCommand(char* args);
         bool HandleSetSkillCommand(char* args);
@@ -511,7 +477,6 @@ class MANGOS_DLL_SPEC ChatHandler
         bool HandleComeToMeCommand(char* args);
         bool HandleCombatStopCommand(char* args);
         bool HandleRepairitemsCommand(char* args);
-        bool HandleStableCommand(char* args);
         bool HandleWaterwalkCommand(char* args);
         bool HandleQuitCommand(char* args);
         bool HandleSaveAllCommand(char* args);
