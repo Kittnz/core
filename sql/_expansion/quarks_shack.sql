@@ -191,7 +191,7 @@ where entry = @quest_entry;
 
 -- Tobacco Thieves
 
- replace into item_template values
+replace into item_template values
 ('80401', '0', '0', '0', 'Tobacco Crate', '', '7913', '1', '0', '1', '0', '0', '0', '-1', '-1', '0',
 '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
 '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
@@ -199,9 +199,17 @@ where entry = @quest_entry;
 '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
 '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
 '-1', '4', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
-'0', '1', NULL);
- 
--- TODO: GO  AND GO LOOT
+'0', '1', NULL); 
+
+set @gameobject_entry = 3000235;
+set @gameobject_loot = 80401;
+set @gameobject_name = 'Quark\'s Cargo';
+set @gameobject_display = 336;
+
+replace into gameobject_template values 
+(@gameobject_entry, 0, 3, @gameobject_display, @gameobject_name, 0, 0, 0.7, 57,  @gameobject_entry, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+update gameobject_template set flags = 4, data0 = 43, data2 = 0, data3 = 1 where entry =  @gameobject_entry;
+replace into `gameobject_loot_template` values (@gameobject_entry, @gameobject_loot, -100, 1, 1, 1, 0, 0, 10);
 
 set @quest_entry = 80302;
 set @quest_zone = 1637;
@@ -304,7 +312,17 @@ replace into item_template values
  '-1', '4', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
--- TODO: GO AND GO LOOT
+set @gameobject_entry = 3000236;
+set @gameobject_loot = 80402;
+set @gameobject_loot2 = 80403;
+set @gameobject_name = 'Sturk\'s Chest';
+set @gameobject_display = 1;
+
+replace into gameobject_template values 
+(@gameobject_entry, 0, 3, @gameobject_display, @gameobject_name, 0, 0, 0.7, 57,  @gameobject_entry, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+update gameobject_template set flags = 4, data0 = 43, data2 = 0, data3 = 1 where entry =  @gameobject_entry;
+replace into `gameobject_loot_template` values (@gameobject_entry, @gameobject_loot, -100,  1, 1, 1, 0, 0, 10);
+replace into `gameobject_loot_template` values (@gameobject_entry, @gameobject_loot2, -100, 1, 1, 1, 0, 0, 10);
 
 set @quest_entry = 80303;
 set @quest_zone = 1637;
