@@ -9,7 +9,7 @@ replace into `creature_template` value (80604, 0, 7212, 0, 0, 0, 'Sturk the Rat'
 replace into `creature_template` value (80605, 0, 15577, 0, 0, 0, 'Odo', 'Inspector', 3701, 37, 37, 2192, 2192, 0, 0, 1340, 29, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 55, 70, 0, 144, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 53.3984, 73.4228, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 3216, 0, 0, 0, 0, 524298, '');
 
 replace into item_template values
- ('80400', '0', '15', '0', 'Quark\'s Shack Membership Card', 'Learn the customer\'s weaknesses, so that you can better take advantage of him.', '36082', '1', '0', '1', '0', '1500', '2', '-1', '-1', '15', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', NULL);
+ ('80400', '0', '15', '0', 'Quark\'s Shack Membership Card', 'Learn the customer\'s weaknesses, so that you can better take advantage of him.', '36082', '1', '0', '1', '0', '1500', '2', '-1', '-1', '15', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', NULL);
 
 set @quark = 80601;
 set @agne = 80602;
@@ -17,7 +17,7 @@ set @rov = 80603;
 set @sturk = 80604;
 set @odo = 80605;
 
-SET @gossip_menu_id = 65545;
+SET @gossip_menu_id = 59035;
 SET @magic_number = @quark; 
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
 replace into broadcast_text (ID, MaleText) values (@magic_number, 'Every once in a while, declare peace. It confuses the hell out of your enemies...\n\nHey, if you are not spending coins you might as well get out, you are bothering my customers.');
@@ -320,7 +320,7 @@ set @gameobject_display = 1;
 
 replace into gameobject_template values 
 (@gameobject_entry, 0, 3, @gameobject_display, @gameobject_name, 0, 0, 0.7, 57,  @gameobject_entry, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
-update gameobject_template set flags = 4, data0 = 43, data2 = 0, data3 = 1 where entry =  @gameobject_entry;
+update gameobject_template set flags = 4, data0 = 43, data2 = 0, data3 = 1 where entry = @gameobject_entry;
 replace into `gameobject_loot_template` values (@gameobject_entry, @gameobject_loot, -100,  1, 1, 1, 0, 0, 10);
 replace into `gameobject_loot_template` values (@gameobject_entry, @gameobject_loot2, -100, 1, 1, 1, 0, 0, 10);
 
@@ -486,6 +486,6 @@ reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
 reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
 nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
 nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
-objectivetext1='Get Sturk out of the bar',
+objectivetext1='Get Sturk out of the bar'
 where entry = @quest_entry;	
 
