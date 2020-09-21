@@ -636,26 +636,6 @@ bool ItemUseSpell_item_morph_murloc(Player* pPlayer, Item* pItem, const SpellCas
     return false;
 }
 
-bool ItemUseSpell_shop_morph_blood_elf(Player* pPlayer, Item* pItem, const SpellCastTargets&)
-{
-    if (!pPlayer)
-        return false;
-
-    if (pPlayer->GetNativeDisplayId() != pPlayer->GetDisplayId())
-    {
-        pPlayer->DeMorph();
-        return false;
-    }
-
-    int male[2] = { 6630, 7874 };
-    int female[2] = { 6631, 7922 };
-    int modelid = rand() % 2;
-    pPlayer->SetDisplayId(static_cast<uint32>((pPlayer->getGender() == GENDER_MALE) ? male[modelid] : female[modelid]));
-    
-    ChatHandler(pPlayer).SendSysMessage("Glory to the Sin'dorei. This disguise will work until logout.");
-    return false;
-}
-
 bool ItemUseSpell_shop_morph_ghost(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
     if (!pPlayer)
@@ -727,13 +707,6 @@ bool ItemUseSpell_shop_morph_succubus(Player* pPlayer, Item* pItem, const SpellC
     pPlayer->SetDisplayId(static_cast<uint32>(models[modelid]));
 
     ChatHandler(pPlayer).SendSysMessage("Next time, I'll be the master. This disguise will work until logout.");
-    return false;
-}
-
-bool ItemUseSpell_remove_rested(Player* pPlayer, Item* pItem, const SpellCastTargets&)
-{
-    pPlayer->SetRestBonus(0);
-    ChatHandler(pPlayer).SendSysMessage("You feel weary and exhausted as undead.");
     return false;
 }
 
@@ -1151,11 +1124,6 @@ void AddSC_item_scripts()
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "item_morph_bloodelf";
-    newscript->pItemUseSpell = &ItemUseSpell_shop_morph_blood_elf;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
     newscript->Name = "item_morph_highelf";
     newscript->pItemUseSpell = &ItemUseSpell_highborne_soul_mirror;
     newscript->RegisterSelf();
@@ -1183,11 +1151,6 @@ void AddSC_item_scripts()
     newscript = new Script;
     newscript->Name = "item_morph_succubus";
     newscript->pItemUseSpell = &ItemUseSpell_shop_morph_succubus;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "item_exhaustion_glyph";
-    newscript->pItemUseSpell = &ItemUseSpell_remove_rested;
     newscript->RegisterSelf();
 
     newscript = new Script;
