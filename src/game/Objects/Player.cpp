@@ -4932,9 +4932,12 @@ void Player::RepopAtGraveyard()
     switch (GetZoneId())
     {
     case CGZ_STRANGLETHORN_VALE:
-        if (InGurubashiArena(true)) // (inside the ring)
+        if (InGurubashiArena(true)) // (inside the whole arena)
         {
-            TeleportTo(GetTeam() == ALLIANCE ? 0, -13209.500977f, 221.450607f, 33.236431f, 2.956571f : 0, -13243.445312f, 239.786072f, 33.232769f, 5.375592f);
+            if (GetTeam() == ALLIANCE)
+                TeleportTo(0, -13209.500977f, 221.450607f, 33.236431f, 2.956571f);
+            else
+                TeleportTo(0, -13243.445312f, 239.786072f, 33.232769f, 5.375592f);
             isCustomGraveyard = true;
         }
         break;
