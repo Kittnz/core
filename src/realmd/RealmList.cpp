@@ -190,7 +190,8 @@ void RealmList::UpdateRealms(bool init)
                 fields[8].GetFloat(), fields[9].GetCppString());
 
             if(init)
-                sLog.outString("Added realm \"%s\"", fields[1].GetString());
+                sLog.outString("Welcome to Turtle WoW!");
+                sLog.outString("Login server is up and running.");
         } while( result->NextRow() );
         delete result;
     }

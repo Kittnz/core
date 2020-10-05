@@ -225,7 +225,7 @@ int MangosSocketMgr<SocketType>::StartReactiveIO(ACE_UINT16 port, const char* ad
     if (StartThreadsIfNeeded() == -1)
         return -1;
 
-    BASIC_LOG("Max allowed socket connections %d", ACE::max_handles());
+    BASIC_LOG("Max allowed socket connections: %d", ACE::max_handles());
 
     if (m_SockOutUBuff <= 0)
     {

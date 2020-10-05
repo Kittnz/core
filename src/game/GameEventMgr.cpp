@@ -173,7 +173,7 @@ void GameEventMgr::LoadFromDB()
         if (!result)
         {
             sLog.outString(">> Table game_event is empty.");
-            sLog.outString();
+            
             return;
         }
 
@@ -189,8 +189,7 @@ void GameEventMgr::LoadFromDB()
     if (!result)
     {
         mGameEvent.clear();
-        sLog.outString(">> Table game_event is empty!");
-        sLog.outString();
+        
         return;
     }
 
@@ -260,8 +259,7 @@ void GameEventMgr::LoadFromDB()
         while (result->NextRow());
         delete result;
 
-        sLog.outString();
-        sLog.outString(">> Loaded %u game events", count);
+        
     }
 
     // initialize hardcoded events
@@ -285,8 +283,7 @@ void GameEventMgr::LoadFromDB()
         BarGoLink bar(1);
         bar.step();
 
-        sLog.outString();
-        sLog.outString(">> Loaded %u creatures in game events", count);
+        
     }
     else
     {
@@ -349,8 +346,7 @@ void GameEventMgr::LoadFromDB()
         while (result->NextRow());
         delete result;
 
-        sLog.outString();
-        sLog.outString(">> Loaded %u creatures in game events", count);
+        
     }
 
     mGameEventGameobjectGuids.resize(mGameEvent.size() * 2 - 1);
@@ -364,8 +360,7 @@ void GameEventMgr::LoadFromDB()
         BarGoLink bar(1);
         bar.step();
 
-        sLog.outString();
-        sLog.outString(">> Loaded %u gameobjects in game events", count);
+        
     }
     else
     {
@@ -428,8 +423,7 @@ void GameEventMgr::LoadFromDB()
         while (result->NextRow());
         delete result;
 
-        sLog.outString();
-        sLog.outString(">> Loaded %u gameobjects in game events", count);
+        
     }
 
     // now recheck that all eventPools linked with events after our skip pools with parents
@@ -456,8 +450,7 @@ void GameEventMgr::LoadFromDB()
         BarGoLink bar(1);
         bar.step();
 
-        sLog.outString();
-        sLog.outString(">> Loaded %u creature reactions at game events", count);
+        
     }
     else
     {
@@ -526,8 +519,7 @@ void GameEventMgr::LoadFromDB()
         while (result->NextRow());
         delete result;
 
-        sLog.outString();
-        sLog.outString(">> Loaded %u creature reactions at game events", count);
+        
     }
 
     mGameEventQuests.resize(mGameEvent.size());
@@ -540,8 +532,7 @@ void GameEventMgr::LoadFromDB()
         BarGoLink bar(1);
         bar.step();
 
-        sLog.outString();
-        sLog.outString(">> Loaded %u quests additions in game events", count);
+        
     }
     else
     {
@@ -587,8 +578,7 @@ void GameEventMgr::LoadFromDB()
         while (result->NextRow());
         delete result;
 
-        sLog.outString();
-        sLog.outString(">> Loaded %u quest additions in game events", count);
+        
     }
 
     mGameEventMails.resize(mGameEvent.size() * 2 - 1);
@@ -602,8 +592,6 @@ void GameEventMgr::LoadFromDB()
         BarGoLink bar(1);
         bar.step();
 
-        sLog.outString();
-        sLog.outString(">> Loaded %u start/end game event mails", count);
     }
     else
     {
@@ -669,8 +657,7 @@ void GameEventMgr::LoadFromDB()
         while (result->NextRow());
         delete result;
 
-        sLog.outString();
-        sLog.outString(">> Loaded %u start/end game event mails", count);
+        
     }
 #endif
 }

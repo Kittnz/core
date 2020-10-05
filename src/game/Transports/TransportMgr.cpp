@@ -51,7 +51,6 @@ void TransportMgr::LoadTransportTemplates()
 
     if (!result)
     {
-        sLog.outString(">> Loaded 0 transport templates. DB table `gameobject_template` has no transports!");
         return;
     }
 
@@ -89,7 +88,6 @@ void TransportMgr::LoadTransportTemplates()
     while (result->NextRow());
 
     delete result;
-    sLog.outString(">> Loaded %u transport templates in %u ms", count, WorldTimer::getMSTimeDiffToNow(oldMSTime));
 }
 
 class SplineRawInitializer

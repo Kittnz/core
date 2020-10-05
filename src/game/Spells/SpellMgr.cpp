@@ -1088,8 +1088,7 @@ void SpellMgr::LoadSpellTargetPositions()
 
         bar.step();
 
-        sLog.outString();
-        sLog.outString(">> Loaded %u spell target destination coordinates", count);
+        
         return;
     }
 
@@ -1154,8 +1153,7 @@ void SpellMgr::LoadSpellTargetPositions()
 
     delete result;
 
-    sLog.outString();
-    sLog.outString(">> Loaded %u spell target destination coordinates", count);
+    
 }
 
 template <typename EntryType, typename WorkerType, typename StorageType>
@@ -1357,8 +1355,7 @@ void SpellMgr::LoadSpellProcEvents()
     {
         BarGoLink bar(1);
         bar.step();
-        sLog.outString();
-        sLog.outString(">> No spell proc event conditions loaded");
+        
         return;
     }
 
@@ -1396,8 +1393,7 @@ void SpellMgr::LoadSpellProcEvents()
 
     delete result;
 
-    sLog.outString();
-    sLog.outString(">> Loaded %u extra spell proc event conditions +%u custom proc (inc. +%u custom ranks)",  rankHelper.worker.count, rankHelper.worker.customProc, rankHelper.customRank);
+    
 }
 
 struct DoSpellProcItemEnchant
@@ -1427,8 +1423,7 @@ void SpellMgr::LoadSpellProcItemEnchant()
 
         bar.step();
 
-        sLog.outString();
-        sLog.outString(">> Loaded %u proc item enchant definitions", count);
+        
         return;
     }
 
@@ -1472,8 +1467,7 @@ void SpellMgr::LoadSpellProcItemEnchant()
 
     delete result;
 
-    sLog.outString();
-    sLog.outString(">> Loaded %u proc item enchant definitions", count);
+    
 }
 
 struct DoSpellBonuses
@@ -1498,8 +1492,7 @@ void SpellMgr::LoadSpellBonuses()
     {
         BarGoLink bar(1);
         bar.step();
-        sLog.outString();
-        sLog.outString(">> Loaded %u spell bonus data", count);
+        
         return;
     }
 
@@ -1621,8 +1614,7 @@ void SpellMgr::LoadSpellBonuses()
 
     delete result;
 
-    sLog.outString();
-    sLog.outString(">> Loaded %u extra spell bonus data",  count);
+    
 }
 
 bool SpellMgr::IsSpellProcEventCanTriggeredBy(SpellProcEventEntry const * spellProcEvent, uint32 EventProcFlag, SpellEntry const * procSpell, uint32 procFlags, uint32 procExtra)
@@ -1702,8 +1694,7 @@ void SpellMgr::LoadSpellGroups()
         BarGoLink bar(1);
         bar.step();
 
-        sLog.outString();
-        sLog.outString(">> Loaded %u spell group definitions", count);
+        
         return;
     }
 
@@ -1767,8 +1758,7 @@ void SpellMgr::LoadSpellGroups()
         }
     }
     delete result;
-    sLog.outString();
-    sLog.outString(">> Loaded %u spell group definitions", count);
+    
 }
 
 void SpellMgr::LoadSpellGroupStackRules()
@@ -1784,8 +1774,7 @@ void SpellMgr::LoadSpellGroupStackRules()
         BarGoLink bar(1);
         bar.step();
 
-        sLog.outString();
-        sLog.outString(">> Loaded %u spell group stack rules", count);
+        
         return;
     }
 
@@ -1820,8 +1809,7 @@ void SpellMgr::LoadSpellGroupStackRules()
 
     delete result;
 
-    sLog.outString();
-    sLog.outString(">> Loaded %u spell group stack rules", count);
+    
 }
 
 bool SpellMgr::ListMorePowerfullSpells(uint32 spellId, std::list<uint32>& list) const
@@ -1919,8 +1907,7 @@ void SpellMgr::LoadSpellElixirs()
 
         bar.step();
 
-        sLog.outString();
-        sLog.outString(">> Loaded %u spell elixir definitions", count);
+        
         return;
     }
 
@@ -1951,8 +1938,7 @@ void SpellMgr::LoadSpellElixirs()
 
     delete result;
 
-    sLog.outString();
-    sLog.outString(">> Loaded %u spell elixir definitions", count);
+    
 }
 
 struct DoSpellThreat
@@ -2027,8 +2013,7 @@ void SpellMgr::LoadSpellThreats()
     {
         BarGoLink bar(1);
         bar.step();
-        sLog.outString();
-        sLog.outString(">> No spell threat entries loaded.");
+        
         return;
     }
 
@@ -2058,8 +2043,7 @@ void SpellMgr::LoadSpellThreats()
 
     delete result;
 
-    sLog.outString();
-    sLog.outString(">> Loaded %u spell threat entries", rankHelper.worker.count);
+    
 }
 
 bool SpellMgr::IsRankSpellDueToSpell(SpellEntry const *spellInfo_1, uint32 spellId_2) const
@@ -2774,8 +2758,7 @@ void SpellMgr::LoadSpellChains()
         BarGoLink bar(1);
         bar.step();
 
-        sLog.outString();
-        sLog.outString(">> Loaded 0 spell chain records");
+        
         sLog.outErrorDb("`spell_chains` table is empty!");
         return;
     }
@@ -2991,8 +2974,7 @@ void SpellMgr::LoadSpellChains()
         }
     }
 
-    sLog.outString();
-    sLog.outString(">> Loaded %u spell chain records (%u from DBC data with %u req field updates, and %u loaded from table)", dbc_count + new_count, dbc_count, req_count, new_count);
+    
 }
 
 void SpellMgr::LoadSpellLearnSkills()
@@ -3030,8 +3012,7 @@ void SpellMgr::LoadSpellLearnSkills()
         }
     }
 
-    sLog.outString();
-    sLog.outString(">> Loaded %u Spell Learn Skills from DBC", dbc_count);
+    
 }
 
 void SpellMgr::LoadSpellEnchantCharges()
@@ -3047,8 +3028,7 @@ void SpellMgr::LoadSpellEnchantCharges()
         BarGoLink bar(1);
         bar.step();
 
-        sLog.outString();
-        sLog.outString(">> Loaded %u spell enchant charges", count);
+        
         return;
     }
 
@@ -3079,8 +3059,7 @@ void SpellMgr::LoadSpellEnchantCharges()
 
     delete result;
 
-    sLog.outString();
-    sLog.outString(">> Loaded %u spell enchant charges", count);
+    
 }
 
 void SpellMgr::LoadSpellLearnSpells()
@@ -3094,8 +3073,7 @@ void SpellMgr::LoadSpellLearnSpells()
         BarGoLink bar(1);
         bar.step();
 
-        sLog.outString();
-        sLog.outString(">> Loaded 0 spell learn spells");
+        
         sLog.outErrorDb("`spell_learn_spell` table is empty!");
         return;
     }
@@ -3190,8 +3168,7 @@ void SpellMgr::LoadSpellLearnSpells()
         }
     }
 
-    sLog.outString();
-    sLog.outString(">> Loaded %u spell learn spells + %u found in DBC", count, dbc_count);
+    
 }
 
 void SpellMgr::LoadSpellScriptTarget()
@@ -3227,8 +3204,7 @@ void SpellMgr::LoadSpellScriptTarget()
 
         bar.step();
 
-        sLog.outString();
-        sLog.outErrorDb(">> Loaded 0 SpellScriptTarget. DB table `spell_script_target` is empty.");
+        
         return;
     }
 
@@ -3366,8 +3342,7 @@ void SpellMgr::LoadSpellScriptTarget()
     }
     */
 
-    sLog.outString();
-    sLog.outString(">> Loaded %u Spell Script Targets", count);
+    
 }
 
 void SpellMgr::LoadSpellPetAuras()
@@ -3385,8 +3360,7 @@ void SpellMgr::LoadSpellPetAuras()
 
         bar.step();
 
-        sLog.outString();
-        sLog.outString(">> Loaded %u spell pet auras", count);
+        
         return;
     }
 
@@ -3443,8 +3417,7 @@ void SpellMgr::LoadSpellPetAuras()
 
     delete result;
 
-    sLog.outString();
-    sLog.outString(">> Loaded %u spell pet auras", count);
+    
 }
 
 /// Some checks for spells, to prevent adding deprecated/broken spells for trainers, spell book, etc
@@ -3541,8 +3514,7 @@ void SpellMgr::LoadSpellAreas()
 
         bar.step();
 
-        sLog.outString();
-        sLog.outString(">> Loaded %u spell area requirements", count);
+        
         return;
     }
 
@@ -3743,8 +3715,7 @@ void SpellMgr::LoadSpellAreas()
 
     delete result;
 
-    sLog.outString();
-    sLog.outString(">> Loaded %u spell area requirements", count);
+    
 }
 
 SpellCastResult SpellMgr::GetSpellAllowedInLocationError(SpellEntry const *spellInfo, Unit const* caster, Player const* player)
@@ -3878,8 +3849,7 @@ void SpellMgr::LoadSkillLineAbilityMaps()
         }
     }
 
-    sLog.outString();
-    sLog.outString(">> Loaded %u SkillLineAbility MultiMaps Data", count);
+    
 }
 
 void SpellMgr::LoadSkillRaceClassInfoMap()
@@ -3905,8 +3875,7 @@ void SpellMgr::LoadSkillRaceClassInfoMap()
         ++count;
     }
 
-    sLog.outString();
-    sLog.outString(">> Loaded %u SkillRaceClassInfo MultiMap Data", count);
+    
 }
 
 void SpellMgr::CheckUsedSpells(char const* table)
@@ -3923,7 +3892,7 @@ void SpellMgr::CheckUsedSpells(char const* table)
 
         bar.step();
 
-        sLog.outString();
+        
         sLog.outErrorDb("`%s` table is empty!", table);
         return;
     }
@@ -4160,7 +4129,7 @@ void SpellMgr::CheckUsedSpells(char const* table)
 
     delete result;
 
-    sLog.outString();
+    
     sLog.outString(">> Checked %u spells and %u spell masks", countSpells, countMasks);
 }
 
@@ -4232,8 +4201,7 @@ void SpellMgr::LoadSpellAffects()
 
         bar.step();
 
-        sLog.outString();
-        sLog.outString(">> Loaded %u spell affect definitions", count);
+        
         return;
     }
 
@@ -4292,8 +4260,7 @@ void SpellMgr::LoadSpellAffects()
 
     delete result;
 
-    sLog.outString();
-    sLog.outString(">> Loaded %u spell affect definitions", count);
+    
 
     for (uint32 id = 0; id < sSpellMgr.GetMaxSpellId(); ++id)
     {
@@ -4714,8 +4681,7 @@ void SpellMgr::LoadSpells()
         BarGoLink bar(1);
         bar.step();
 
-        sLog.outString();
-        sLog.outString(">> Loaded 0 spells. DB table `spell_template` is empty.");
+        
         return;
     }
     auto fields = result->Fetch();
@@ -4729,8 +4695,7 @@ void SpellMgr::LoadSpells()
         BarGoLink bar(1);
         bar.step();
 
-        sLog.outString();
-        sLog.outString(">> Loaded 0 spells. DB table `spell_template` is empty.");
+        
         return;
     }
     
@@ -5016,6 +4981,5 @@ void SpellMgr::LoadSpells()
 
     } while (result->NextRow());
 
-    sLog.outString();
-    sLog.outString(">> Loaded %u spells in %ums.", mSpellEntryMap.size(), WorldTimer::getMSTimeDiffToNow(oldMSTime));
+    
 }

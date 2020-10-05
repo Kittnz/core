@@ -456,10 +456,7 @@ void LoadDBCStores(const std::string& dataPath)
         sLog.outError("\nSome required *.dbc files (%u from %d) not found or not compatible:\n%s", (uint32)bad_dbc_files.size(), DBCFilesCount, str.c_str());
         Log::WaitBeforeContinueIfNeed();
         exit(1);
-    }
-
-    sLog.outString();
-    sLog.outString(">> Initialized %d data stores", DBCFilesCount);
+    }    
 }
 
 char const* GetPetName(uint32 petfamily, uint32 dbclang)

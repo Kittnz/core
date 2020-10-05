@@ -45,7 +45,6 @@
 #include "Util.h"
 #include "MassMailMgr.h"
 #include "DBCStores.h"
-#include "migrations_list.h"
 
 #include <ace/OS_NS_signal.h>
 #include <ace/TP_Reactor.h>
@@ -199,19 +198,14 @@ int Master::Run()
                         sLog.outError("Can't set used processors (hex): %x",curAff);
                 }
             }
-            sLog.outString();
+            
         }
 
         bool Prio = sConfig.GetBoolDefault("ProcessPriority", false);
 
 //        if(Prio && (m_ServiceStatus == -1)/* need set to default process priority class in service mode*/)
-        if(Prio)
-        {
-            if(SetPriorityClass(hProcess,HIGH_PRIORITY_CLASS))
-                sLog.outString("mangosd process priority class set to HIGH");
-            else
-                sLog.outError("Can't set mangosd process priority class.");
-        }
+        if(!Prio)
+            sLog.outError("Can't set mangosd process priority class.");
     }
     #endif
 
@@ -327,7 +321,7 @@ int Master::Run()
     return World::GetExitCode();
 }
 
-bool StartDB(std::string name, DatabaseType& database, const char **migrations)
+bool StartDB(std::string name, DatabaseType& database)
 {
     ///- Get database info from configuration file
     std::string dbstring = sConfig.GetStringDefault((name + "Database.Info").c_str(), "");
@@ -372,17 +366,12 @@ bool StartDB(std::string name, DatabaseType& database, const char **migrations)
         return false;
     }
 
-    sLog.outString("%s Database: %s, sync threads: %i, workers: %i", name.c_str(), dbStringLog.c_str(), nConnections, nAsyncConnections);
-
     ///- Initialise the world database
     if (!database.Initialize(dbstring.c_str(), nConnections, nAsyncConnections))
     {
         sLog.outError("Cannot connect to world database %s", name.c_str());
         return false;
     }
-
-    if (!database.CheckRequiredMigrations(migrations))
-        return false;
 
     return true;
 }
@@ -397,10 +386,10 @@ bool Master::_StartDB()
         return false;
     }
 
-    if (!StartDB("World", WorldDatabase, MIGRATIONS_WORLD) ||
-        !StartDB("Character", CharacterDatabase, MIGRATIONS_CHARACTERS) ||
-        !StartDB("Login", LoginDatabase, MIGRATIONS_LOGON) ||
-        !StartDB("Logs", LogsDatabase, MIGRATIONS_LOGS))
+    if (!StartDB("World", WorldDatabase) ||
+        !StartDB("Character", CharacterDatabase) ||
+        !StartDB("Login", LoginDatabase) ||
+        !StartDB("Logs", LogsDatabase))
     {
         WorldDatabase.HaltDelayThread();
         CharacterDatabase.HaltDelayThread();
@@ -409,12 +398,12 @@ bool Master::_StartDB()
         return false;
     }
 
-    sLog.outString("Realm running as realm ID %d", realmID);
+    sLog.outString("Welcome to Turtle WoW! Realm ID: %d", realmID);
 
     ///- Clean the database before starting
     clearOnlineAccounts();
 
-    sLog.outString();
+    
     return true;
 }
 

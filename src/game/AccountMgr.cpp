@@ -182,8 +182,6 @@ void AccountMgr::Load()
         BarGoLink bar(1);
         bar.step();
 
-        sLog.outString();
-        sLog.outString(">> Loaded 0 GM ranks");
         return;
     }
 
@@ -213,9 +211,6 @@ void AccountMgr::Load()
         }
     } while (result->NextRow());
 
-    sLog.outString();
-    sLog.outString(">> %u GM ranks loaded for realm %u", _accountSecurity.size(), realmID);
-    sLog.outString();
     LoadAccountBanList();
     LoadIPBanList();
 }
@@ -329,9 +324,6 @@ void AccountMgr::Update(uint32 diff)
 
 void AccountMgr::LoadIPBanList(bool silent)
 {
-    if (!silent)
-        sLog.outString("Loading ip_banned ...");
-
     std::unique_ptr<QueryResult> banresult(LoginDatabase.PQuery("SELECT `ip`, `unbandate`, `bandate` FROM `ip_banned` WHERE (`unbandate` > UNIX_TIMESTAMP() OR `bandate` = `unbandate`)"));
     
     if (!banresult)
@@ -340,9 +332,6 @@ void AccountMgr::LoadIPBanList(bool silent)
         {
             BarGoLink bar(1);
             bar.step();
-
-            sLog.outString();
-            sLog.outString(">> Loaded 0 ip bans");
         }
         return;
     }
@@ -362,18 +351,10 @@ void AccountMgr::LoadIPBanList(bool silent)
         _ipBanned[fields[0].GetString()] = unbandate;
     } while (banresult->NextRow());
 
-    if (!silent)
-    {
-        sLog.outString();
-        sLog.outString(">> Loaded %u ip bans", _ipBanned.size());
-    }
 }
 
 void AccountMgr::LoadAccountBanList(bool silent)
 {
-    if (!silent)
-        sLog.outString("Loading account_banned ...");
-
     std::unique_ptr<QueryResult> banresult(LoginDatabase.PQuery("SELECT `id`, `unbandate`, `bandate` FROM `account_banned` WHERE `active` = 1 AND (`unbandate` > UNIX_TIMESTAMP() OR `bandate` = `unbandate`)"));
     
     if (!banresult)
@@ -383,8 +364,6 @@ void AccountMgr::LoadAccountBanList(bool silent)
             BarGoLink bar(1);
             bar.step();
 
-            sLog.outString();
-            sLog.outString(">> Loaded 0 account bans");
         }
         return;
     }
@@ -404,11 +383,6 @@ void AccountMgr::LoadAccountBanList(bool silent)
         _accountBanned[fields[0].GetUInt32()] = unbandate;
     } while (banresult->NextRow());
 
-    if (!silent)
-    {
-        sLog.outString();
-        sLog.outString(">> Loaded %u account bans", _accountBanned.size());
-    }
 }
 
 bool AccountMgr::IsIPBanned(std::string const& ip) const

@@ -266,9 +266,6 @@ endif()
 set(supported_build ${SUPPORTED_CLIENT_BUILD})
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Progression.h.cmake ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/Progression.h)
 
-# Generate migrations list
-include(cmake/migrations.cmake)
-
 message(STATUS "")
 message(STATUS "Core revision: ${rev_hash} ${rev_date} ")
 message(STATUS "Supported version: ${supported_build}")

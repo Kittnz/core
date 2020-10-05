@@ -23,7 +23,6 @@ set (shared_SRCS
     Errors.h
     LockedQueue.h
     Log.h
-    migrations_list.h
     PosixDaemon.h
     ProgressBar.h
     Progression.h
@@ -106,7 +105,6 @@ if(WIN32)
     PosixDaemon.h
     PosixDaemon.cpp
     revision.h
-    migrations_list.h
   )
   
   set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /D__ACE_INLINE__")
@@ -117,7 +115,6 @@ else()
     ServiceWin32.cpp
     ServiceWin32.h
     revision.h
-    migrations_list.h
   )
 endif()
 

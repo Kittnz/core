@@ -30,8 +30,6 @@ void AutoBroadCastMgr::load()
         BarGoLink bar(1);
         bar.step();
 
-        sLog.outString();
-        sLog.outString(">> Loaded 0 AutoBroadCast message");
         return;
     }
 
@@ -53,8 +51,7 @@ void AutoBroadCastMgr::load()
     }
     while (result->NextRow());
 
-    sLog.outString();
-    sLog.outString(">> Loaded %u AutoBroadCast messages", count);
+    
 }
 
 void AutoBroadCastMgr::update(uint32 diff)

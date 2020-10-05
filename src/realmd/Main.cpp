@@ -33,7 +33,6 @@
 #include "SystemConfig.h"
 #include "revision.h"
 #include "Util.h"
-#include "migrations_list.h"
 #include <openssl/opensslv.h>
 #include <openssl/crypto.h>
 
@@ -162,10 +161,6 @@ extern int main(int argc, char **argv)
 #endif
 
     sLog.Initialize();
-
-    sLog.outString("Core revision: %s [realm-daemon]", _FULLVERSION);
-    sLog.outString("<Ctrl-C> to stop.\n" );
-    sLog.outString("Using configuration file %s.", cfg_file);
 
     ///- Check the version of the configuration file
     uint32 confVersion = sConfig.GetIntDefault("ConfVersion", 0);
@@ -299,19 +294,11 @@ extern int main(int argc, char **argv)
                         sLog.outError("Can't set used processors (hex): %x", curAff);
                 }
             }
-            sLog.outString();
+            
         }
 
         bool Prio = sConfig.GetBoolDefault("ProcessPriority", false);
 
-        if(Prio)
-        {
-            if(SetPriorityClass(hProcess,HIGH_PRIORITY_CLASS))
-                sLog.outString("realmd process priority class set to HIGH");
-            else
-                sLog.outError("Can't set realmd process priority class.");
-            sLog.outString();
-        }
     }
     #endif
 
@@ -415,17 +402,9 @@ bool StartDB()
         return false;
     }
 
-    sLog.outString("Database: %s", dbStringLog.c_str() );
     if(!LoginDatabase.Initialize(dbstring.c_str()))
     {
         sLog.outError("Cannot connect to database");
-        return false;
-    }
-
-    if (!LoginDatabase.CheckRequiredMigrations(MIGRATIONS_LOGON))
-    {
-        ///- Wait for already started DB delay threads to end
-        LoginDatabase.HaltDelayThread();
         return false;
     }
 

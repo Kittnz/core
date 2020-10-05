@@ -467,8 +467,7 @@ void WeatherMgr::LoadWeatherZoneChances()
         BarGoLink bar(1);
         bar.step();
 
-        sLog.outString();
-        sLog.outErrorDb(">> Loaded 0 weather definitions. DB table `game_weather` is empty.");
+        
         return;
     }
 
@@ -521,6 +520,5 @@ void WeatherMgr::LoadWeatherZoneChances()
     }
     while (result->NextRow());
 
-    sLog.outString();
-    sLog.outString(">> Loaded %u weather definitions", count);
+    
 }

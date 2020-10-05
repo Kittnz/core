@@ -63,7 +63,6 @@
 
 bool ChatHandler::HandleReloadMangosStringCommand(char* /*args*/)
 {
-    sLog.outString("Re-Loading mangos_string Table!");
     sObjectMgr.LoadMangosStrings();
     SendSysMessage("DB table `mangos_string` reloaded.");
     return true;
@@ -71,7 +70,6 @@ bool ChatHandler::HandleReloadMangosStringCommand(char* /*args*/)
 
 bool ChatHandler::HandleReloadConfigCommand(char* /*args*/)
 {
-    sLog.outString("Re-Loading config settings...");
     sWorld.LoadConfigSettings(true);
     SendSysMessage("World config settings reloaded.");
     return true;
@@ -79,12 +77,10 @@ bool ChatHandler::HandleReloadConfigCommand(char* /*args*/)
 
 bool ChatHandler::HandleReloadQuestTemplateCommand(char* /*args*/)
 {
-    sLog.outString("Re-Loading Quest Templates...");
     sObjectMgr.LoadQuests();
     SendSysMessage("DB table `quest_template` (quest definitions) reloaded.");
 
     /// dependent also from `gameobject` but this table not reloaded anyway
-    sLog.outString("Re-Loading GameObjects for quests...");
     sObjectMgr.LoadGameObjectForQuests();
     SendSysMessage("Data GameObjects for quests reloaded.");
     return true;
