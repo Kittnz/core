@@ -1262,6 +1262,8 @@ enum
 
     GO_ONYXIAS_HEAD_ALLY                = 179558,
 
+    ITEM_HEAD_ONY_ALLIANCE              = 18423, //Head of Onyxia
+
 };
 
 struct npc_major_mattinglyAI : public ScriptedAI
@@ -1358,6 +1360,38 @@ bool QuestRewarded_npc_major_mattingly(Player* pPlayer, Creature* pCreature, Que
     return true;
 }
 
+
+bool GossipHello_npc_major_mattingly(Player* pPlayer, Creature* pCreature)
+{
+	pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I have slain the beast again.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+	pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+	pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
+
+	return true;
+}
+
+bool GossipSelect_npc_major_mattingly(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1) {
+
+        if (pPlayer->HasItemCount(ITEM_HEAD_ONY_ALLIANCE, 1))
+        {
+
+			if (npc_major_mattinglyAI* pMattingly = dynamic_cast<npc_major_mattinglyAI*>(pCreature->AI()))
+				pMattingly->StartRallyEvent(pPlayer->GetObjectGuid());
+
+			pPlayer->RemoveItemCurrency(ITEM_HEAD_ONY_ALLIANCE, 1);
+        }
+        else
+        {
+            pCreature->MonsterWhisper("Head of Onyxia not found.", pPlayer);
+        }
+
+	}
+	pPlayer->CLOSE_GOSSIP_MENU();
+	return true;
+}
+
 /*######
 ## npc_field_marshal_afrasiabi
 ######*/
@@ -1370,6 +1404,8 @@ enum
     YELL_NEF_REWARD_2_ALLY          = -1900103,
 
     GO_NEFARIANS_HEAD_ALLY          = 179882,
+
+    ITEM_HEAD_NEF_ALLIANCE          = 19003, //Head of Nefarian
 };
 
 struct npc_field_marshal_afrasiabiAI : public ScriptedAI
@@ -1468,6 +1504,38 @@ bool QuestRewarded_npc_field_marshal_afrasiabi(Player* pPlayer, Creature* pCreat
             pAfrasiabi->StartRallyEvent(pPlayer->GetObjectGuid());
     }
     return true;
+}
+
+
+bool GossipHello_npc_field_marshal_afrasiabi(Player* pPlayer, Creature* pCreature)
+{
+	pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I have slain the beast again.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+	pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+	pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
+
+	return true;
+}
+
+bool GossipSelect_npc_field_marshal_afrasiabi(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+	if (uiAction == GOSSIP_ACTION_INFO_DEF + 1) {
+
+		if (pPlayer->HasItemCount(ITEM_HEAD_NEF_ALLIANCE, 1))
+		{
+
+			if (npc_field_marshal_afrasiabiAI* pAfrasiabi = dynamic_cast<npc_field_marshal_afrasiabiAI*>(pCreature->AI()))
+				pAfrasiabi->StartRallyEvent(pPlayer->GetObjectGuid());
+
+			pPlayer->RemoveItemCurrency(ITEM_HEAD_NEF_ALLIANCE, 1);
+		}
+		else
+		{
+			pCreature->MonsterWhisper("Head of Nefarian not found.", pPlayer);
+		}
+
+	}
+	pPlayer->CLOSE_GOSSIP_MENU();
+	return true;
 }
 
 /*######
@@ -1588,12 +1656,16 @@ void AddSC_stormwind_city()
     newscript->Name = "npc_major_mattingly";
     newscript->GetAI = &GetAI_npc_major_mattingly;
     newscript->pQuestRewardedNPC = &QuestRewarded_npc_major_mattingly;
+    newscript->pGossipHello = &GossipHello_npc_major_mattingly;
+    newscript->pGossipSelect = &GossipSelect_npc_major_mattingly;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_field_marshal_afrasiabi";
     newscript->GetAI = &GetAI_npc_field_marshal_afrasiabi;
     newscript->pQuestRewardedNPC = &QuestRewarded_npc_field_marshal_afrasiabi;
+    newscript->pGossipHello = &GossipHello_npc_field_marshal_afrasiabi;
+    newscript->pGossipSelect = &GossipSelect_npc_field_marshal_afrasiabi;
     newscript->RegisterSelf();
 
     newscript = new Script;
