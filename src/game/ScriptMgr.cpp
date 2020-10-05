@@ -130,8 +130,7 @@ void ScriptMgr::LoadScripts(ScriptMapMap& scripts, const char* tablename)
         BarGoLink bar(1);
         bar.step();
 
-        sLog.outString();
-        sLog.outString(">> Loaded %u script definitions", count);
+        
         return;
     }
 
@@ -1216,8 +1215,7 @@ void ScriptMgr::LoadScripts(ScriptMapMap& scripts, const char* tablename)
 
     delete result;
 
-    sLog.outString();
-    sLog.outString(">> Loaded %u script definitions", count);
+    
 }
 
 void ScriptMgr::LoadGameObjectScripts()
@@ -1430,8 +1428,7 @@ void ScriptMgr::LoadAreaTriggerScripts()
         BarGoLink bar(1);
         bar.step();
 
-        sLog.outString();
-        sLog.outString(">> Loaded %u scripted areatrigger", count);
+        
         return;
     }
 
@@ -1460,8 +1457,7 @@ void ScriptMgr::LoadAreaTriggerScripts()
 
     delete result;
 
-    sLog.outString();
-    sLog.outString(">> Loaded %u areatrigger scripts", count);
+    
 }
 
 void ScriptMgr::LoadEventIdScripts()
@@ -1476,8 +1472,7 @@ void ScriptMgr::LoadEventIdScripts()
         BarGoLink bar(1);
         bar.step();
 
-        sLog.outString();
-        sLog.outString(">> Loaded %u scripted event id", count);
+        
         return;
     }
 
@@ -1508,8 +1503,7 @@ void ScriptMgr::LoadEventIdScripts()
 
     delete result;
 
-    sLog.outString();
-    sLog.outString(">> Loaded %u scripted event id", count);
+    
 }
 
 void ScriptMgr::LoadScriptNames()
@@ -1532,8 +1526,7 @@ void ScriptMgr::LoadScriptNames()
     {
         BarGoLink bar(1);
         bar.step();
-        sLog.outString();
-        sLog.outErrorDb(">> Loaded empty set of Script Names!");
+        
         return;
     }
 
@@ -1550,8 +1543,7 @@ void ScriptMgr::LoadScriptNames()
     delete result;
 
     std::sort(m_scriptNames.begin(), m_scriptNames.end());
-    sLog.outString();
-    sLog.outString(">> Loaded %d Script Names", count);
+    
 }
 
 uint32 ScriptMgr::GetScriptId(const char *name) const
@@ -1984,7 +1976,6 @@ void ScriptMgr::Initialize()
     // Load database (must be called after SD2Config.SetSource).
     LoadDatabase();
 
-    sLog.outString("Loading C++ scripts");
     BarGoLink bar(1);
     bar.step();
     sLog.outString("");
@@ -2001,7 +1992,6 @@ void ScriptMgr::Initialize()
             sLog.outError("No script found for ScriptName '%s'.", GetScriptName(i));
     }
 
-    sLog.outString(">> Loaded %i C++ Scripts.", num_sc_scripts);
 }
 
 void ScriptMgr::LoadDatabase()
@@ -2014,12 +2004,10 @@ void ScriptMgr::LoadDatabase()
 
 void ScriptMgr::LoadScriptTexts()
 {
-    sLog.outString("Loading Script Texts...");
     LoadMangosStrings(WorldDatabase, "script_texts", TEXT_SOURCE_TEXT_START, TEXT_SOURCE_TEXT_END, true);
 
     QueryResult* result = WorldDatabase.PQuery("SELECT entry, sound, type, language, emote FROM script_texts WHERE entry BETWEEN %i AND %i", TEXT_SOURCE_TEXT_END, TEXT_SOURCE_TEXT_START);
 
-    sLog.outString("Loading Script Texts additional data...");
 
     if (result)
     {
@@ -2063,25 +2051,21 @@ void ScriptMgr::LoadScriptTexts()
         delete result;
 
         sLog.outString("");
-        sLog.outString(">> Loaded %u additional Script Texts data.", uiCount);
     }
     else
     {
         BarGoLink bar(1);
         bar.step();
         sLog.outString("");
-        sLog.outString(">> Loaded 0 additional Script Texts data. DB table `script_texts` is empty.");
     }
 }
 
 void ScriptMgr::LoadScriptTextsCustom()
 {
-    sLog.outString("Loading Custom Texts...");
     LoadMangosStrings(WorldDatabase, "custom_texts", TEXT_SOURCE_CUSTOM_START, TEXT_SOURCE_CUSTOM_END, true);
 
     QueryResult* result = WorldDatabase.PQuery("SELECT entry, sound, type, language, emote FROM custom_texts WHERE entry BETWEEN %i AND %i", TEXT_SOURCE_CUSTOM_END, TEXT_SOURCE_CUSTOM_START);
 
-    sLog.outString("Loading Custom Texts additional data...");
 
     if (result)
     {
@@ -2125,14 +2109,12 @@ void ScriptMgr::LoadScriptTextsCustom()
         delete result;
 
         sLog.outString("");
-        sLog.outString(">> Loaded %u additional Custom Texts data.", uiCount);
     }
     else
     {
         BarGoLink bar(1);
         bar.step();
         sLog.outString("");
-        sLog.outString(">> Loaded 0 additional Custom Texts data. DB table `custom_texts` is empty.");
     }
 }
 
@@ -2151,7 +2133,6 @@ void ScriptMgr::LoadScriptWaypoints()
         delete result;
     }
 
-    sLog.outString("Loading Script Waypoints for %u creature(s)...", uiCreatureCount);
 
     result = WorldDatabase.PQuery("SELECT entry, pointid, location_x, location_y, location_z, waittime FROM script_waypoint ORDER BY pointid");
 
@@ -2193,14 +2174,12 @@ void ScriptMgr::LoadScriptWaypoints()
         delete result;
 
         sLog.outString("");
-        sLog.outString(">> Loaded %u Script Waypoint nodes.", uiNodeCount);
     }
     else
     {
         BarGoLink bar(1);
         bar.step();
         sLog.outString("");
-        sLog.outString(">> Loaded 0 Script Waypoints. DB table `script_waypoint` is empty.");
     }
 }
 
@@ -2258,14 +2237,12 @@ void ScriptMgr::LoadEscortData()
         delete pResult;
 
         sLog.outString("");
-        sLog.outString(">> Loaded %u Escort Creature Data", EscortDataCount);
     }
     else
     {
         barGoLink bar(1);
         bar.step();
         sLog.outString("");
-        sLog.outString(">> Loaded 0 Escort Creature Data. DB table `script_escort_data` is empty.");
     }
 }
 

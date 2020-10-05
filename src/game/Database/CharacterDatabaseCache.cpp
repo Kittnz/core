@@ -37,7 +37,6 @@ void CharacterDatabaseCache::LoadCharacterPet(uint32 singlePetId)
     else if (!singlePetId)
     {
         m_petsByCharacter.clear();
-        sLog.outString("* Loading de `character_pet`");
         result.reset(CharacterDatabase.Query(
                      "SELECT id, entry, owner, modelid, level, exp, Reactstate, loyaltypoints, loyalty, trainpoint, "
                      "slot, name, renamed, curhealth, curmana, curhappiness, abdata, TeachSpelldata, savetime, resettalents_cost, "
@@ -101,7 +100,6 @@ void CharacterDatabaseCache::LoadPetSpell(uint32 singlePetId)
         for (PetGuidToPetMap::iterator it = m_petsByGuid.begin(); it != m_petsByGuid.end(); ++it)
             it->second->spells.clear();
 
-        sLog.outString("* Loading `pet_spell`");
         result.reset(CharacterDatabase.Query(
                      "SELECT guid,spell,active "
                      "FROM pet_spell ORDER BY guid ASC"
@@ -151,7 +149,6 @@ void CharacterDatabaseCache::LoadPetSpellCooldown(uint32 singlePetId)
         for (PetGuidToPetMap::iterator it = m_petsByGuid.begin(); it != m_petsByGuid.end(); ++it)
             it->second->spellCooldown.clear();
 
-        sLog.outString("* Loading `pet_spell_cooldown`");
         result.reset(CharacterDatabase.Query(
                      "SELECT guid,spell,time "
                      "FROM pet_spell_cooldown ORDER BY guid ASC"
@@ -203,7 +200,6 @@ void CharacterDatabaseCache::LoadPetAura(uint32 singlePetId)
         for (PetGuidToPetMap::iterator it = m_petsByGuid.begin(); it != m_petsByGuid.end(); ++it)
             it->second->auras.clear();
 
-        sLog.outString("* Loading table `pet_aura`");
         result.reset(CharacterDatabase.Query(
                                   //          0     1             2           3    4           5              6            7              8
                                   "SELECT guid, caster_guid, item_guid, spell, stackcount, remaincharges, maxduration, remaintime, effIndexMask, "

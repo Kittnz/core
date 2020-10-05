@@ -69,16 +69,12 @@ void CreatureLinkingMgr::LoadFromDB()
     m_eventGuidTriggers.clear();
 
     // Load `creature_linking_template`
-    sLog.outString("> Loading table `creature_linking_template`");
     uint32 count = 0;
     std::unique_ptr<QueryResult> result(WorldDatabase.Query("SELECT `entry`, `map`, `master_entry`, `flag`, `search_range` FROM `creature_linking_template`"));
     if (!result)
     {
         BarGoLink bar(1);
-        bar.step();
-
-        sLog.outString();
-        sLog.outString(">> Table creature_linking_template is empty.");
+        bar.step();        
     }
     else
     {
@@ -109,12 +105,10 @@ void CreatureLinkingMgr::LoadFromDB()
             m_eventTriggers.insert(tmp.masterId);
         } while (result->NextRow());
 
-        sLog.outString();
-        sLog.outString(">> Loaded creature linking for %u creature-entries", count);
+        
     }
 
     // Load `creature_linking`
-    sLog.outString("> Loading table `creature_linking`");
     count = 0;
     result.reset(WorldDatabase.Query("SELECT `guid`, `master_guid`, `flag` FROM `creature_linking`"));
     if (!result)
@@ -122,8 +116,7 @@ void CreatureLinkingMgr::LoadFromDB()
         BarGoLink bar(1);
         bar.step();
 
-        sLog.outString();
-        sLog.outString(">> Table creature_linking is empty.");
+        
         return;
     }
 
@@ -154,8 +147,7 @@ void CreatureLinkingMgr::LoadFromDB()
         m_eventGuidTriggers.insert(tmp.masterId);
     } while (result->NextRow());
 
-    sLog.outString();
-    sLog.outString(">> Loaded creature linking for %u creature-Guids", count);
+    
 }
 
 /** This function is used to check if a DB-Entry is valid

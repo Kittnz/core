@@ -573,64 +573,6 @@ bool Database::HasAsyncQuery()
     return hasQuery;
 }
 
-bool Database::CheckRequiredMigrations(const char **migrations)
-{
-    std::set<std::string> appliedMigrations;
-
-    QueryResult *result = Query("SELECT * FROM `migrations`");
-
-    if (result)
-    {
-        do
-        {
-            appliedMigrations.insert(result->Fetch()[0].GetString());
-        } while (result->NextRow());
-        delete result;
-    }
-
-    std::set<std::string> missingMigrations;
-
-    while (migrations && *migrations)
-    {
-        std::set<std::string>::iterator it = appliedMigrations.find(*migrations);
-
-        if (it == appliedMigrations.end())
-            missingMigrations.insert(*migrations);
-        else
-            appliedMigrations.erase(it);
-
-        migrations++;
-    }
-
-    result = Query("SELECT DATABASE()");
-
-    if (!result)
-        return false;
-
-    std::string dbName = result->Fetch()[0].GetString();
-    delete result;
-
-    if (!missingMigrations.empty())
-    {
-        sLog.outErrorDb("Database `%s` is missing the following migrations:", dbName.c_str());
-
-        for (std::set<std::string>::const_iterator it = missingMigrations.begin(); it != missingMigrations.end(); it++)
-            sLog.outErrorDb("\t%s", (*it).c_str());
-
-        return false;
-    }
-
-    if (!appliedMigrations.empty())
-    {
-        sLog.outErrorDb("WARNING! Database `%s` has the following extra migrations:", dbName.c_str());
-
-        for (std::set<std::string>::const_iterator it = appliedMigrations.begin(); it != appliedMigrations.end(); it++)
-            sLog.outErrorDb("\t%s", (*it).c_str());
-    }
-
-    return true;
-}
-
 bool Database::ExecuteStmt(const SqlStatementID& id, SqlStmtParameters * params)
 {
     if (!m_pAsyncConn)

@@ -331,14 +331,10 @@ void CreatureEventAIMgr::LoadCreatureEventAI_Events()
 
         delete result;
 
-        sLog.outString();
-        sLog.outString(">> Loaded %u CreatureEventAI events.", Count);
     }
     else
     {
         BarGoLink bar(1);
         bar.step();
-        sLog.outString();
-        sLog.outString(">> Loaded 0 CreatureEventAI events. DB table `creature_ai_events` is empty.");
     }
 }
