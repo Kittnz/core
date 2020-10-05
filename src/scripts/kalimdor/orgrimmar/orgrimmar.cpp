@@ -155,7 +155,9 @@ enum
     YELL_ONY_REWARD_1_HORDE             = -1900113,
     YELL_ONY_REWARD_2_HORDE             = -1900112,
 
-    GO_ONYXIAS_HEAD_HORDE               = 179556
+    GO_ONYXIAS_HEAD_HORDE               = 179556,
+
+    ITEM_HEAD_ONY_HORDE                 = 18422, //Head of Onyxia
 };
 
 struct npc_overlord_runthakAI : public ScriptedAI
@@ -289,6 +291,38 @@ bool QuestRewarded_npc_overlord_runthak(Player* pPlayer, Creature* pCreature, Qu
     return true;
 }
 
+
+bool GossipHello_npc_overlord_runthak(Player* pPlayer, Creature* pCreature)
+{
+	pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I have slain the beast again.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+	pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+	pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
+
+	return true;
+}
+
+bool GossipSelect_npc_overlord_runthak(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+	if (uiAction == GOSSIP_ACTION_INFO_DEF + 1) {
+
+		if (pPlayer->HasItemCount(ITEM_HEAD_ONY_HORDE, 1))
+		{
+
+			if (npc_overlord_runthakAI* pMattingly = dynamic_cast<npc_overlord_runthakAI*>(pCreature->AI()))
+				pMattingly->StartRallyEvent(pPlayer->GetObjectGuid());
+
+			pPlayer->RemoveItemCurrency(ITEM_HEAD_ONY_HORDE, 1);
+		}
+		else
+		{
+			pCreature->MonsterWhisper("Head of Onyxia not found.", pPlayer);
+		}
+
+	}
+	pPlayer->CLOSE_GOSSIP_MENU();
+	return true;
+}
+
 /*######
 ## npc_overlord_saurfang
 ######*/
@@ -307,7 +341,9 @@ enum
     YELL_NEF_REWARD_1_HORDE     = -1900106,
     YELL_NEF_REWARD_2_HORDE     = -1900105,
 
-    GO_NEFARIANS_HEAD_HORDE            = 179881,
+    GO_NEFARIANS_HEAD_HORDE     = 179881,
+
+    ITEM_HEAD_NEF_HORDE         = 19002, //Head of Nefarian
 };
 
 struct npc_overlord_saurfangAI : public ScriptedAI
@@ -527,6 +563,44 @@ bool QuestRewarded_npc_overlord_saurfang(Player* pPlayer, Creature* pCreature, Q
     return true;
 }
 
+
+bool GossipHello_npc_overlord_saurfang(Player* pPlayer, Creature* pCreature)
+{
+	pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I have slain the beast again.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+	pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+	pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
+
+	return true;
+}
+
+bool GossipSelect_npc_overlord_saurfang(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+	if (uiAction == GOSSIP_ACTION_INFO_DEF + 1) {
+
+		if (pPlayer->HasItemCount(ITEM_HEAD_NEF_HORDE, 1))
+		{
+
+			if (npc_overlord_saurfangAI* pMattingly = dynamic_cast<npc_overlord_saurfangAI*>(pCreature->AI()))
+				pMattingly->StartRallyEvent(pPlayer->GetObjectGuid());
+
+			pPlayer->RemoveItemCurrency(ITEM_HEAD_NEF_HORDE, 1);
+		}
+		else
+		{
+			pCreature->MonsterWhisper("Head of Nefarian not found.", pPlayer);
+		}
+
+	}
+	pPlayer->CLOSE_GOSSIP_MENU();
+	return true;
+}
+
+
+/*######
+## npc_eitrigg
+######*/
+
+
 bool GossipHello_npc_eitrigg(Player* pPlayer, Creature* pCreature)
 {
     if (pCreature->isQuestGiver())
@@ -558,11 +632,15 @@ void AddSC_orgrimmar()
     newscript->Name = "npc_overlord_runthak";
     newscript->GetAI = &GetAI_npc_overlord_runthak;
     newscript->pQuestRewardedNPC =  &QuestRewarded_npc_overlord_runthak;
+    newscript->pGossipHello = &GossipHello_npc_overlord_runthak;
+    newscript->pGossipSelect = &GossipSelect_npc_overlord_runthak;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_overlord_saurfang";
     newscript->GetAI = &GetAI_npc_overlord_saurfang;
     newscript->pQuestRewardedNPC = &QuestRewarded_npc_overlord_saurfang;
+    newscript->pGossipHello = &GossipHello_npc_overlord_saurfang;
+    newscript->pGossipSelect = &GossipSelect_npc_overlord_saurfang;
     newscript->RegisterSelf();
 }
