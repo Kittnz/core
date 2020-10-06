@@ -1336,7 +1336,7 @@ struct npc_major_mattinglyAI : public ScriptedAI
                 m_uiTick++;
             }
             else m_uiDialogueTimer -= uiDiff;
-        } 
+        }
 
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
@@ -1363,7 +1363,9 @@ bool QuestRewarded_npc_major_mattingly(Player* pPlayer, Creature* pCreature, Que
 
 bool GossipHello_npc_major_mattingly(Player* pPlayer, Creature* pCreature)
 {
-	pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I have slain the beast again.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+	if (pPlayer->GetQuestRewardStatus(QUEST_CELEBRATING_GOOD_TIMES) && pPlayer->HasItemCount(ITEM_HEAD_ONY_ALLIANCE, 1)) {
+		pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Onyxia. The beast is defeated.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+	}
 	pPlayer->PrepareQuestMenu(pCreature->GetGUID());
 	pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
 
@@ -1384,7 +1386,7 @@ bool GossipSelect_npc_major_mattingly(Player* pPlayer, Creature* pCreature, uint
         }
         else
         {
-            pCreature->MonsterWhisper("Head of Onyxia not found.", pPlayer);
+            pCreature->MonsterWhisper("Proof. I need a proof of your deed, hero. Do you have it on you?", pPlayer);
         }
 
 	}
@@ -1482,7 +1484,7 @@ struct npc_field_marshal_afrasiabiAI : public ScriptedAI
                 m_uiTick++;
             }
             else m_uiDialogueTimer -= uiDiff;
-        } 
+        }
 
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
@@ -1509,7 +1511,9 @@ bool QuestRewarded_npc_field_marshal_afrasiabi(Player* pPlayer, Creature* pCreat
 
 bool GossipHello_npc_field_marshal_afrasiabi(Player* pPlayer, Creature* pCreature)
 {
-	pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I have slain the beast again.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+	if (pPlayer->GetQuestRewardStatus(QUEST_LORD_OF_BLACKROCK_ALLY) && pPlayer->HasItemCount(ITEM_HEAD_NEF_ALLIANCE, 1)) {
+		pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Nefarian. The monster is defeated.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+	}
 	pPlayer->PrepareQuestMenu(pCreature->GetGUID());
 	pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
 
@@ -1530,7 +1534,7 @@ bool GossipSelect_npc_field_marshal_afrasiabi(Player* pPlayer, Creature* pCreatu
 		}
 		else
 		{
-			pCreature->MonsterWhisper("Head of Nefarian not found.", pPlayer);
+			pCreature->MonsterWhisper("Proof. I need a proof of your deed, hero. Do you have it on you?", pPlayer);
 		}
 
 	}
