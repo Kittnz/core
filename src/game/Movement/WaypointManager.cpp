@@ -75,8 +75,7 @@ void WaypointManager::Load()
     {
         BarGoLink bar(1);
         bar.step();
-        sLog.outString();
-        sLog.outString(">> Loaded 0 paths. DB table `creature_movement` is empty.");
+        
     }
     else
     {
@@ -95,7 +94,7 @@ void WaypointManager::Load()
         }
         while (result->NextRow());
 
-        sLog.outString();
+        
         sLog.outString(">> Paths loaded");
 
         delete result;
@@ -235,10 +234,9 @@ void WaypointManager::Load()
             }
         }
 
-        sLog.outString();
+        
         sLog.outString(">> Waypoints and behaviors loaded");
-        sLog.outString();
-        sLog.outString(">>> Loaded %u paths, %u nodes and %u behaviors", total_paths, total_nodes, total_behaviors);
+        
 
         delete result;
     }
@@ -253,8 +251,7 @@ void WaypointManager::Load()
     {
         BarGoLink bar(1);
         bar.step();
-        sLog.outString();
-        sLog.outString(">> Loaded 0 path templates. DB table `creature_movement_template` is empty.");
+        
     }
     else
     {
@@ -277,7 +274,7 @@ void WaypointManager::Load()
 
         delete result;
 
-        sLog.outString();
+        
         sLog.outString(">> Path templates loaded");
 
         //                                    0        1        2             3             4             5           6                  7
@@ -388,10 +385,9 @@ void WaypointManager::Load()
 
         delete result;
 
-        sLog.outString();
+        
         sLog.outString(">> Waypoint templates loaded");
-        sLog.outString();
-        sLog.outString(">>> Loaded %u path templates with %u nodes and %u behaviors", total_paths, total_nodes, total_behaviors);
+        
     }
 
     // /////////////////////////////////////////////////////
@@ -404,8 +400,7 @@ void WaypointManager::Load()
     {
         BarGoLink bar(1);
         bar.step();
-        sLog.outString();
-        sLog.outString(">> Loaded 0 paths. DB table `creature_movement_special` is empty.");
+        
     }
     else
     {
@@ -426,7 +421,7 @@ void WaypointManager::Load()
         }
         while (result->NextRow());
 
-        sLog.outString();
+        
         sLog.outString(">> Paths loaded");
 
         delete result;
@@ -529,10 +524,9 @@ void WaypointManager::Load()
         }
         while (result->NextRow());
 
-        sLog.outString();
+        
         sLog.outString(">> Special waypoints loaded");
-        sLog.outString();
-        sLog.outString(">>> Loaded %u paths, %u nodes and %u behaviors", total_paths, total_nodes, total_behaviors);
+        
 
         delete result;
     }

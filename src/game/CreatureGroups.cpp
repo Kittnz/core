@@ -220,7 +220,7 @@ void CreatureGroupsManager::Load()
         BarGoLink bar(1);
         bar.step();
 
-        sLog.outString();
+        
         sLog.outErrorDb(">>  Loaded 0 creature groups. DB table `creature_groups` is empty!");
         return;
     }
@@ -261,8 +261,7 @@ void CreatureGroupsManager::Load()
     }
     while (result->NextRow());
 
-    sLog.outString();
-    sLog.outString(">> Loaded %u creature groups in %u ms", count, WorldTimer::getMSTime() - oldMSTime);
+    
 }
 
 void CreatureGroupsManager::LoadCreatureGroup(Creature* creature, CreatureGroup*& group)

@@ -758,7 +758,7 @@ void MapPersistentStateManager::CleanupInstances()
     CharacterDatabase.CommitTransaction();
 
     bar.step();
-    sLog.outString();
+    
     sLog.outString(">> Instances cleaned up");
 }
 
@@ -819,7 +819,7 @@ void MapPersistentStateManager::PackInstances()
         bar.step();
     }
 
-    sLog.outString();
+    
     sLog.outString(">> Instance numbers remapped, next instance id is %u", InstanceNumber);
 }
 
@@ -989,8 +989,7 @@ void MapPersistentStateManager::LoadCreatureRespawnTimes()
         BarGoLink bar(1);
         bar.step();
 
-        sLog.outString();
-        sLog.outString(">> Loaded 0 creature respawn time.");
+        
         return;
     }
 
@@ -1053,8 +1052,7 @@ void MapPersistentStateManager::LoadCreatureRespawnTimes()
 
     delete result;
 
-    sLog.outString();
-    sLog.outString(">> Loaded %u creature respawn times", count);
+    
 }
 
 void MapPersistentStateManager::LoadGameobjectRespawnTimes()
@@ -1071,8 +1069,7 @@ void MapPersistentStateManager::LoadGameobjectRespawnTimes()
         BarGoLink bar(1);
         bar.step();
 
-        sLog.outString();
-        sLog.outString(">> Loaded 0 gameobject respawn time.");
+        
         return;
     }
 
@@ -1132,6 +1129,5 @@ void MapPersistentStateManager::LoadGameobjectRespawnTimes()
 
     delete result;
 
-    sLog.outString();
-    sLog.outString(">> Loaded %u gameobject respawn times", count);
+    
 }

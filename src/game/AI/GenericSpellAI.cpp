@@ -418,10 +418,6 @@ void LoadSpellCacheData(GenericAISpell* spellToModify, SpellEntry const* spellIn
     spellToModify->initialMaxCD = 0; //spellToModify->maxCD;
     spellToModify->targetAuraState = spellInfos->TargetAuraState;
 
-#ifdef DEBUG_ON
-    sLog.outString(">> Loading Spell %s (id=%u) !", spellInfos->SpellName[2].c_str(), spellToModify->spellId);
-#endif
-
     // Check de la portee
     SpellRangeEntry const* rangeEntry = GetSpellRangeStore()->LookupEntry(spellInfos->rangeIndex);
     if (spellInfos->rangeIndex != 0 && rangeEntry)
@@ -531,49 +527,7 @@ void LoadSpellCacheData(GenericAISpell* spellToModify, SpellEntry const* spellIn
 #endif
     }
 }
-/* this was never used
-void LoadGenericAISpellsData()
-{
-    GenericSpellMobData.clear();
-    QueryResult* pResult = WorldDatabase.PQuery("SELECT entry, spell, minCD, maxCD, target FROM creature_spells");
-    sLog.outString("Nostalrius: Loading 'creature_spells'");
 
-    if (pResult)
-    {
-        uint32 uiCount = 0;
-
-        do
-        {
-            Field* pFields = pResult->Fetch();
-            MobSpellEntry pTmp;
-
-            pTmp.entry          = pFields[0].GetUInt32();
-
-            pTmp.spell = BuildGenericAISpell(
-                             pFields[1].GetUInt32(), // spellId
-                             pFields[2].GetUInt32(), // minCD
-                             pFields[3].GetUInt32(), // maxCD
-                             pFields[4].GetUInt32()  // target
-                         );
-            if (pTmp.spell.spellId != 0)
-                GenericSpellMobData.push_back(pTmp);
-
-            ++uiCount;
-        }
-        while (pResult->NextRow());
-
-        delete pResult;
-
-        sLog.outString("");
-        sLog.outString(">> Loaded %u spells datas", uiCount);
-    }
-    else
-    {
-        sLog.outString("");
-        sLog.outString(">> Loaded 0 mob spells datas. DB table `creature_spells` is empty.");
-    }
-}
-*/
 void AddSC_generic_spell_ai()
 {
     Script *newscript;
