@@ -189,7 +189,6 @@ void GameEventMgr::LoadFromDB()
     if (!result)
     {
         mGameEvent.clear();
-        sLog.outString(">> Table game_event is empty!");
         
         return;
     }

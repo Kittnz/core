@@ -95,7 +95,6 @@ void WaypointManager::Load()
         while (result->NextRow());
 
         
-        sLog.outString(">> Paths loaded");
 
         delete result;
 
@@ -235,7 +234,6 @@ void WaypointManager::Load()
         }
 
         
-        sLog.outString(">> Waypoints and behaviors loaded");
         
 
         delete result;
@@ -275,7 +273,6 @@ void WaypointManager::Load()
         delete result;
 
         
-        sLog.outString(">> Path templates loaded");
 
         //                                    0        1        2             3             4             5           6                  7
         result = WorldDatabase.Query("SELECT `entry`, `point`, `position_x`, `position_y`, `position_z`, `waittime`, `wander_distance`, `script_id`,"
@@ -386,7 +383,6 @@ void WaypointManager::Load()
         delete result;
 
         
-        sLog.outString(">> Waypoint templates loaded");
         
     }
 
@@ -422,7 +418,6 @@ void WaypointManager::Load()
         while (result->NextRow());
 
         
-        sLog.outString(">> Paths loaded");
 
         delete result;
 
@@ -525,7 +520,6 @@ void WaypointManager::Load()
         while (result->NextRow());
 
         
-        sLog.outString(">> Special waypoints loaded");
         
 
         delete result;

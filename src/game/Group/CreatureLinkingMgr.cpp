@@ -74,10 +74,7 @@ void CreatureLinkingMgr::LoadFromDB()
     if (!result)
     {
         BarGoLink bar(1);
-        bar.step();
-
-        
-        sLog.outString(">> Table creature_linking_template is empty.");
+        bar.step();        
     }
     else
     {
@@ -120,7 +117,6 @@ void CreatureLinkingMgr::LoadFromDB()
         bar.step();
 
         
-        sLog.outString(">> Table creature_linking is empty.");
         return;
     }
 

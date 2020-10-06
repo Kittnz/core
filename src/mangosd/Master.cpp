@@ -398,7 +398,7 @@ bool Master::_StartDB()
         return false;
     }
 
-    sLog.outString("Realm running as realm ID %d", realmID);
+    sLog.outString("Welcome to Turtle WoW! Realm ID: %d", realmID);
 
     ///- Clean the database before starting
     clearOnlineAccounts();

@@ -78,7 +78,6 @@ void PlayerBotMgr::load()
     delete result;
 
     // 4- LoadFromDB
-    sLog.outString(">> [PlayerBotMgr] Loading Bots ...");
     result = CharacterDatabase.PQuery(
                  "SELECT char_guid, chance, ai"
                  " FROM playerbot");

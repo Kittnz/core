@@ -6783,7 +6783,6 @@ void ObjectMgr::PackGroupIds()
     m_GroupIds.Set(groupId);
 
     
-    sLog.outString(">> Group Ids remapped, next group id is %u", groupId);
 }
 
 void ObjectMgr::SetHighestGuids()
@@ -10798,9 +10797,7 @@ void ObjectMgr::LoadCustomMountCreatureEntries() {
             m_customMountItemCreatureEntryMap[item_entry] = creature_entry;
         } while (result->NextRow());
     }
-    else {
-        sLog.outString(">> DB table `custom_mount_entry_relation` is empty.");
-    }
+
     delete result;
 }
 
