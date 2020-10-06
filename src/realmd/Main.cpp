@@ -163,10 +163,6 @@ extern int main(int argc, char **argv)
 
     sLog.Initialize();
 
-    sLog.outString("Core revision: %s [realm-daemon]", _FULLVERSION);
-    sLog.outString("<Ctrl-C> to stop.\n" );
-    sLog.outString("Using configuration file %s.", cfg_file);
-
     ///- Check the version of the configuration file
     uint32 confVersion = sConfig.GetIntDefault("ConfVersion", 0);
     if (confVersion < _REALMDCONFVERSION)
@@ -304,14 +300,6 @@ extern int main(int argc, char **argv)
 
         bool Prio = sConfig.GetBoolDefault("ProcessPriority", false);
 
-        if(Prio)
-        {
-            if(SetPriorityClass(hProcess,HIGH_PRIORITY_CLASS))
-                sLog.outString("realmd process priority class set to HIGH");
-            else
-                sLog.outError("Can't set realmd process priority class.");
-            sLog.outString();
-        }
     }
     #endif
 
@@ -415,7 +403,6 @@ bool StartDB()
         return false;
     }
 
-    sLog.outString("Database: %s", dbStringLog.c_str() );
     if(!LoginDatabase.Initialize(dbstring.c_str()))
     {
         sLog.outError("Cannot connect to database");
