@@ -294,7 +294,9 @@ bool QuestRewarded_npc_overlord_runthak(Player* pPlayer, Creature* pCreature, Qu
 
 bool GossipHello_npc_overlord_runthak(Player* pPlayer, Creature* pCreature)
 {
-	pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I have slain the beast again.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+	if (pPlayer->GetQuestRewardStatus(QUEST_FOR_ALL_TO_SEE) && pPlayer->HasItemCount(ITEM_HEAD_ONY_HORDE, 1)) {
+		pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Onyxia. The beast is defeated.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+	}
 	pPlayer->PrepareQuestMenu(pCreature->GetGUID());
 	pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
 
@@ -315,7 +317,7 @@ bool GossipSelect_npc_overlord_runthak(Player* pPlayer, Creature* pCreature, uin
 		}
 		else
 		{
-			pCreature->MonsterWhisper("Head of Onyxia not found.", pPlayer);
+			pCreature->MonsterWhisper("Proof. I need a proof of your deed, hero. Do you have it on you?", pPlayer);
 		}
 
 	}
@@ -566,7 +568,9 @@ bool QuestRewarded_npc_overlord_saurfang(Player* pPlayer, Creature* pCreature, Q
 
 bool GossipHello_npc_overlord_saurfang(Player* pPlayer, Creature* pCreature)
 {
-	pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I have slain the beast again.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+	if (pPlayer->GetQuestRewardStatus(QUEST_LORD_OF_BLACKROCK_HORDE) && pPlayer->HasItemCount(ITEM_HEAD_NEF_HORDE, 1)) {
+		pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Nefarian. The monster is defeated.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+	}
 	pPlayer->PrepareQuestMenu(pCreature->GetGUID());
 	pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
 
@@ -587,7 +591,7 @@ bool GossipSelect_npc_overlord_saurfang(Player* pPlayer, Creature* pCreature, ui
 		}
 		else
 		{
-			pCreature->MonsterWhisper("Head of Nefarian not found.", pPlayer);
+			pCreature->MonsterWhisper("Proof. I need a proof of your deed, hero. Do you have it on you?", pPlayer);
 		}
 
 	}
