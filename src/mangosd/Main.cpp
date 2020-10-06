@@ -147,15 +147,10 @@ extern int main(int argc, char **argv)
     }
 #endif
 
-    sLog.outString("Core revision: %s [world-daemon]", _FULLVERSION);
-    sLog.outString( "<Ctrl-C> to stop." );
-    sLog.outString("Using configuration file %s.", cfg_file);
-
 #define STR(s) #s
 #define XSTR(s) STR(s)
 
-    sLog.outInfo("Alloc library: " MANGOS_ALLOC_LIB "");
-    sLog.outInfo("Core Revision: " _FULLVERSION);
+    sLog.outInfo("Release: " _FULLVERSION);
 
     DETAIL_LOG("%s (Library: %s)", OPENSSL_VERSION_TEXT, SSLeay_version(SSLEAY_VERSION));
     if (SSLeay() < 0x009080bfL )

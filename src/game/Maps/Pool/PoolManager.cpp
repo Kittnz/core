@@ -662,7 +662,7 @@ void PoolManager::LoadFromDB()
     if (!result)
     {
         sLog.outString(">> Table pool_template is empty.");
-        sLog.outString();
+        
         return;
     }
     else
@@ -679,7 +679,7 @@ void PoolManager::LoadFromDB()
     {
         mPoolTemplate.clear();
         sLog.outString(">> Table pool_template is empty:");
-        sLog.outString();
+        
         return;
     }
 
@@ -706,8 +706,7 @@ void PoolManager::LoadFromDB()
     }
     while (result->NextRow());
 
-    sLog.outString();
-    sLog.outString(">> Loaded %u objects pools", count);
+    
     delete result;
 
     PoolMapChecker mapChecker(mPoolTemplate);
@@ -729,8 +728,7 @@ void PoolManager::LoadFromDB()
         BarGoLink bar2(1);
         bar2.step();
 
-        sLog.outString();
-        sLog.outString(">> Loaded %u creatures in pools from `pool_creature`", count);
+        
     }
     else
     {
@@ -788,8 +786,7 @@ void PoolManager::LoadFromDB()
 
         }
         while (result->NextRow());
-        sLog.outString();
-        sLog.outString(">> Loaded %u creatures in pools from `pool_creature` and `pool_creature_template`", count);
+        
         delete result;
     }
 
@@ -808,8 +805,7 @@ void PoolManager::LoadFromDB()
         BarGoLink bar2(1);
         bar2.step();
 
-        sLog.outString();
-        sLog.outString(">> Loaded %u gameobject in pools from `pool_gameobject` and `pool_gameobject_template`", count);
+        
     }
     else
     {
@@ -875,8 +871,7 @@ void PoolManager::LoadFromDB()
 
         }
         while (result->NextRow());
-        sLog.outString();
-        sLog.outString(">> Loaded %u gameobject in pools from `pool_gameobject` and `pool_gameobject_template`", count);
+        
         delete result;
     }
 
@@ -891,8 +886,7 @@ void PoolManager::LoadFromDB()
         BarGoLink bar2(1);
         bar2.step();
 
-        sLog.outString();
-        sLog.outString(">> Loaded %u pools in pools", count);
+        
     }
     else
     {
@@ -975,8 +969,7 @@ void PoolManager::LoadFromDB()
             }
         }
 
-        sLog.outString();
-        sLog.outString(">> Loaded %u pools in mother pools", count);
+        
         delete result;
     }
 

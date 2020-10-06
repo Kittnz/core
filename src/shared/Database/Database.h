@@ -251,7 +251,6 @@ class MANGOS_DLL_SPEC Database
         // set database-wide result queue. also we should use object-bases and not thread-based result queues
         void ProcessResultQueue(uint32 maxTime = 0);
 
-        bool CheckRequiredMigrations(const char **migrations);
         uint32 GetPingIntervall() { return m_pingIntervallms; }
 
         //function to ping database connections

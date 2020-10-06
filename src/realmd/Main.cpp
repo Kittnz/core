@@ -33,7 +33,6 @@
 #include "SystemConfig.h"
 #include "revision.h"
 #include "Util.h"
-#include "migrations_list.h"
 #include <openssl/opensslv.h>
 #include <openssl/crypto.h>
 
@@ -295,7 +294,7 @@ extern int main(int argc, char **argv)
                         sLog.outError("Can't set used processors (hex): %x", curAff);
                 }
             }
-            sLog.outString();
+            
         }
 
         bool Prio = sConfig.GetBoolDefault("ProcessPriority", false);
@@ -406,13 +405,6 @@ bool StartDB()
     if(!LoginDatabase.Initialize(dbstring.c_str()))
     {
         sLog.outError("Cannot connect to database");
-        return false;
-    }
-
-    if (!LoginDatabase.CheckRequiredMigrations(MIGRATIONS_LOGON))
-    {
-        ///- Wait for already started DB delay threads to end
-        LoginDatabase.HaltDelayThread();
         return false;
     }
 

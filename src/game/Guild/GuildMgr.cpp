@@ -116,8 +116,7 @@ void GuildMgr::LoadGuilds()
 
         bar.step();
 
-        sLog.outString();
-        sLog.outString(">> Loaded %u guild definitions", count);
+        
         return;
     }
 
@@ -168,8 +167,7 @@ void GuildMgr::LoadGuilds()
     //you can comment these lines if you don't plan to change CONFIG_UINT32_GUILD_EVENT_LOG_COUNT
     CharacterDatabase.PExecute("DELETE FROM guild_eventlog WHERE LogGuid > '%u'", sWorld.getConfig(CONFIG_UINT32_GUILD_EVENT_LOG_COUNT));
 
-    sLog.outString();
-    sLog.outString(">> Loaded %u guild definitions", count);
+    
 }
 
 void GuildMgr::LoadPetitions()
@@ -186,8 +184,7 @@ void GuildMgr::LoadPetitions()
 
         bar.step();
 
-        sLog.outString();
-        sLog.outString(">> Loaded %u petitions", count);
+        
         return;
     }
 
@@ -251,8 +248,7 @@ void GuildMgr::LoadPetitions()
         delete petitionSignatures;
     }
 
-    sLog.outString();
-    sLog.outString(">> Loaded %u petitions", count);
+    
 }
 
 void GuildMgr::SaveGuildBankInventories()

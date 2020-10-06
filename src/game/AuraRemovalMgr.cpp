@@ -37,7 +37,7 @@ void AuraRemovalManager::LoadFromDB()
     {
         BarGoLink bar(1);
         bar.step();
-        sLog.outString();
+        
         sLog.outString(">> Table instance_buff_removal is empty.");
     }
     else
@@ -61,8 +61,6 @@ void AuraRemovalManager::LoadFromDB()
 
         } while (result->NextRow());
 
-        sLog.outString(">> Loaded %u entries from instance_buff_removal", count);
-        sLog.outString();
 
         delete result;
     }

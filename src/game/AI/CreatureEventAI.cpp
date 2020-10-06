@@ -102,8 +102,6 @@ CreatureEventAI::CreatureEventAI(Creature *c) : CreatureAI(c)
             }
         }
     }
-    else
-        sLog.outError("CreatureEventAI: EventMap for Creature %u is empty but creature is using CreatureEventAI.", m_creature->GetEntry());
 
     m_bEmptyList = m_CreatureEventAIList.empty();
     m_Phase = 0;

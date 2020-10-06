@@ -30,7 +30,6 @@ INSTANTIATE_SINGLETON_1(InstanceStatisticsMgr);
 void InstanceStatisticsMgr::LoadFromDB()
 {
     m_instanceWipes.clear();
-    sLog.outString("> Loading table `instance_wipes`");
     uint32 count = 0;
     std::unique_ptr<QueryResult> result(LogsDatabase.Query("SELECT `mapId`, `creatureEntry`, `count` FROM `instance_wipes`"));
     if (!result)
@@ -38,8 +37,7 @@ void InstanceStatisticsMgr::LoadFromDB()
         BarGoLink bar(1);
         bar.step();
 
-        sLog.outString();
-        sLog.outString(">> Table instance_wipes is empty.");
+        
     }
     else
     {
@@ -57,13 +55,11 @@ void InstanceStatisticsMgr::LoadFromDB()
             ++count;
         } while (result->NextRow());
 
-        sLog.outString();
-        sLog.outString(">> Loaded %u entries from `instance_wipes`", count);
+        
     }
 
 
     m_instanceCreatureKills.clear();
-    sLog.outString("> Loading table `instance_creature_kills`");
     count = 0;
     result.reset(LogsDatabase.Query("SELECT `mapId`, `creatureEntry`, `spellEntry`, `count` FROM `instance_creature_kills`"));
     if (!result)
@@ -71,8 +67,7 @@ void InstanceStatisticsMgr::LoadFromDB()
         BarGoLink bar(1);
         bar.step();
 
-        sLog.outString();
-        sLog.outString(">> Table instance_creature_kills is empty.");
+        
     }
     else
     {
@@ -102,14 +97,12 @@ void InstanceStatisticsMgr::LoadFromDB()
             ++count;
         } while (result->NextRow());
 
-        sLog.outString();
-        sLog.outString(">> Loaded %u entries from `instance_creature_kills`", count);
+        
     }
 
 
 
     m_instanceCustomCounters.clear();
-    sLog.outString("> Loading table `instance_custom_counters`");
     count = 0;
     result.reset(LogsDatabase.Query("SELECT `index`, `count` FROM `instance_custom_counters`"));
     if (!result)
@@ -117,7 +110,7 @@ void InstanceStatisticsMgr::LoadFromDB()
         BarGoLink bar(1);
         bar.step();
 
-        sLog.outString();
+        
         sLog.outString(">> Table `instance_custom_counters` is empty.");
     }
     else
@@ -135,8 +128,7 @@ void InstanceStatisticsMgr::LoadFromDB()
             ++count;
         } while (result->NextRow());
 
-        sLog.outString();
-        sLog.outString(">> Loaded %u entries from `instance_custom_counters`", count);
+        
     }
 }
 

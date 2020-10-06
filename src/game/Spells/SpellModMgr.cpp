@@ -65,8 +65,6 @@ inline void ModFloatValueIfExplicit(Field &f, float &value)
 
 void SpellModMgr::LoadSpellMods()
 {
-    sLog.outString();
-    sLog.outString("Loading spell mods ...");
 
     // 1 : Table spell_mod
     std::unique_ptr<QueryResult> result(WorldDatabase.Query(
@@ -83,9 +81,8 @@ void SpellModMgr::LoadSpellMods()
         BarGoLink bar(1);
         bar.step();
 
-        sLog.outString();
-        sLog.outString();
-        sLog.outString(">> Loaded %u spell modifications. Table spell_mod is empty.", total_count);
+        
+        
     }
     else
     {
@@ -183,12 +180,10 @@ void SpellModMgr::LoadSpellMods()
         }
         while (result->NextRow());
 
-        sLog.outString();
-        sLog.outString(">> Loaded %u spell modifications.", total_count);
+        
     }
 
     // 2 : Table spell_effect_mod
-    sLog.outString("Loading spell effect mods ...");
     result.reset(WorldDatabase.Query(
                  "SELECT Id, EffectIndex, Effect, EffectApplyAuraName, EffectMechanic, EffectImplicitTargetA, EffectImplicitTargetB, "
                  "EffectRadiusIndex, EffectItemType, EffectMiscValue, EffectTriggerSpell, "
@@ -203,8 +198,7 @@ void SpellModMgr::LoadSpellMods()
         BarGoLink bar(1);
         bar.step();
 
-        sLog.outString();
-        sLog.outString(">> Loaded %u spell effect modifications. Table spell_effect_mod is empty.", total_count);
+        
     }
     else
     {
@@ -262,8 +256,7 @@ void SpellModMgr::LoadSpellMods()
         }
         while (result->NextRow());
 
-        sLog.outString();
-        sLog.outString(">> Loaded %u spell effect modifications.", total_count);
+        
     }
 
     // Other modifications (no 'speed' field in spell_mod)
