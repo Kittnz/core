@@ -759,7 +759,6 @@ void MapPersistentStateManager::CleanupInstances()
 
     bar.step();
     
-    sLog.outString(">> Instances cleaned up");
 }
 
 void MapPersistentStateManager::PackInstances()
@@ -820,7 +819,6 @@ void MapPersistentStateManager::PackInstances()
     }
 
     
-    sLog.outString(">> Instance numbers remapped, next instance id is %u", InstanceNumber);
 }
 
 void MapPersistentStateManager::ScheduleInstanceResets()

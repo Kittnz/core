@@ -661,7 +661,6 @@ void PoolManager::LoadFromDB()
     QueryResult *result = WorldDatabase.PQuery("SELECT MAX(`entry`) FROM `pool_template` WHERE %u BETWEEN `patch_min` AND `patch_max`", sWorld.GetWowPatch());
     if (!result)
     {
-        sLog.outString(">> Table pool_template is empty.");
         
         return;
     }
@@ -678,7 +677,6 @@ void PoolManager::LoadFromDB()
     if (!result)
     {
         mPoolTemplate.clear();
-        sLog.outString(">> Table pool_template is empty:");
         
         return;
     }

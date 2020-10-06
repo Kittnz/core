@@ -1356,7 +1356,6 @@ void SpellMgr::LoadSpellProcEvents()
         BarGoLink bar(1);
         bar.step();
         
-        sLog.outString(">> No spell proc event conditions loaded");
         return;
     }
 
@@ -2015,7 +2014,6 @@ void SpellMgr::LoadSpellThreats()
         BarGoLink bar(1);
         bar.step();
         
-        sLog.outString(">> No spell threat entries loaded.");
         return;
     }
 

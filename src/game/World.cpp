@@ -835,7 +835,6 @@ void World::LoadConfigSettings(bool reload)
     else
     {
         m_honorPath = honorPath;
-        sLog.outString("Using HonorDir %s", m_honorPath.c_str());
     }
 
 
@@ -857,7 +856,6 @@ void World::LoadConfigSettings(bool reload)
     else
     {
         m_dataPath = dataPath;
-        sLog.outString("Using DataDir %s", m_dataPath.c_str());
     }
 
     setConfig(CONFIG_BOOL_VMAP_INDOOR_CHECK, "vmap.enableIndoorCheck", true);
@@ -874,10 +872,10 @@ void World::LoadConfigSettings(bool reload)
     VMAP::VMapFactory::createOrGetVMapManager()->setEnableHeightCalc(enableHeight);
     VMAP::VMapFactory::createOrGetVMapManager()->setDisableModelUnload(disableModelUnload);
     VMAP::VMapFactory::preventSpellsFromBeingTestedForLoS(ignoreSpellIds.c_str());
-    sLog.outString("WORLD: VMap support included. LineOfSight:%i, getHeight:%i, indoorCheck:%i", enableLOS, enableHeight, getConfig(CONFIG_BOOL_VMAP_INDOOR_CHECK) ? 1 : 0);
-    sLog.outString("WORLD: VMap data directory is: %svmaps", m_dataPath.c_str());
+    sLog.outString("VMap data directory: %svmaps.", m_dataPath.c_str());
+    sLog.outString("VMap support included. LineOfSight: %i | getHeight: %i | indoorCheck: %i.", enableLOS, enableHeight, getConfig(CONFIG_BOOL_VMAP_INDOOR_CHECK) ? 1 : 0);
     setConfig(CONFIG_BOOL_MMAP_ENABLED, "mmap.enabled", true);
-    sLog.outString("WORLD: mmap pathfinding %sabled", getConfig(CONFIG_BOOL_MMAP_ENABLED) ? "en" : "dis");
+    sLog.outString("MMap pathfinding %sabled.", getConfig(CONFIG_BOOL_MMAP_ENABLED) ? "en" : "dis");
 
     setConfig(CONFIG_UINT32_EMPTY_MAPS_UPDATE_TIME, "MapUpdate.Empty.UpdateTime", 0);
     setConfigMinMax(CONFIG_UINT32_MAP_OBJECTSUPDATE_THREADS, "MapUpdate.ObjectsUpdate.MaxThreads", 4, 1, 20);
@@ -988,8 +986,8 @@ void World::LoadConfigSettings(bool reload)
     setConfig(CONFIG_UINT32_PACKET_BCAST_FREQUENCY,                "Network.PacketBroadcast.Frequency", 50);
     setConfig(CONFIG_UINT32_PBCAST_DIFF_LOWER_VISIBILITY_DISTANCE, "Network.PacketBroadcast.ReduceVisDistance.DiffAbove", 0);
     
-    sLog.outString("* Anticrash : options 0x%x rearm after %usec", getConfig(CONFIG_UINT32_ANTICRASH_OPTIONS), getConfig(CONFIG_UINT32_ANTICRASH_REARM_TIMER) / 1000);
-    sLog.outString("* Pathfinding : [%s]", getConfig(CONFIG_BOOL_MMAP_ENABLED) ? "ON" : "OFF");
+    sLog.outString("Anticrash: 0x%x rearm after %u seconds.", getConfig(CONFIG_UINT32_ANTICRASH_OPTIONS), getConfig(CONFIG_UINT32_ANTICRASH_REARM_TIMER) / 1000);
+    sLog.outString("Pathfinding: [%s]", getConfig(CONFIG_BOOL_MMAP_ENABLED) ? "Enabled" : "Disabled");
 
     // Update packet broadcaster config
     if (reload) {
@@ -1383,14 +1381,12 @@ void World::SetInitialWorldSettings()
     sObjectMgr.LoadGossipMenuItemsLocales();                // must be after gossip menu items loading
     sObjectMgr.LoadPointOfInterestLocales();                // must be after POI loading
     sObjectMgr.LoadAreaLocales();
-    sLog.outString(">>> Localization strings loaded");
     
 
 	
 	sAuctionMgr.LoadAuctionHouses();
 	sAuctionMgr.LoadAuctionItems();
 	sAuctionMgr.LoadAuctions();
-	sLog.outString(">>> Auctions loaded");
 	
 
 	sGuildMgr.LoadGuilds();
@@ -1427,7 +1423,6 @@ void World::SetInitialWorldSettings()
     sScriptMgr.LoadGameObjectScripts();                     // must be after load Creature/Gameobject(Template/Data)
     sScriptMgr.LoadEventScripts();                          // must be after load Creature/Gameobject(Template/Data)
     sScriptMgr.LoadCreatureEventAIScripts();
-    sLog.outString(">>> Scripts loaded");
     
 
     sScriptMgr.CheckAllScriptTexts();
@@ -1574,7 +1569,7 @@ void World::DetectDBCLang()
 
     m_defaultDbcLocale = LocaleConstant(default_locale);
 
-    sLog.outString("Using %s DBC Locale as default. All available DBC locales: %s", localeNames[m_defaultDbcLocale], availableLocalsStr.empty() ? "<none>" : availableLocalsStr.c_str());
+    sLog.outString("Using %s DBC locale as default.", localeNames[m_defaultDbcLocale]);
     
 }
 

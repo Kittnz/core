@@ -108,10 +108,7 @@ void InstanceStatisticsMgr::LoadFromDB()
     if (!result)
     {
         BarGoLink bar(1);
-        bar.step();
-
-        
-        sLog.outString(">> Table `instance_custom_counters` is empty.");
+        bar.step();        
     }
     else
     {
