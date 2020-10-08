@@ -861,6 +861,103 @@ update creature_template set gossip_menu_id = @gossip_menu_id where entry = @mag
 
 update creature_template set faction = 371 where entry in (80243,80244,80245,80246,80247,80248);
 
+-- Tears of the Poppy
+
+replace into item_template values
+('80245', '0', '0', '0', 'Poppy', '', '2724', '1', '0', '1', '0', '0', '0', '-1', '-1', '0','0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0','0','0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0','0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0','0', '-1', '0','-1', '4', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '1', NULL);
+
+update item_template set stackable = 10 where entry = 80245;
+
+replace into gameobject_template values 
+(3000238, 0, 3, 268, 'Poppy', 0, 0, 0.7, 57, 3000238, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+update gameobject_template set flags = 4 where entry = 3000238;
+update gameobject_template set data0 = 43 where entry = 3000238;
+update gameobject_template set data2 = 0 where entry = 3000238;
+update gameobject_template set data3 = 1 where entry = 3000238;
+
+replace into `gameobject_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`, `patch_min`, `patch_max`)  values (3000238, 80245, -100, 1, 1, 1, 0, 0, 10);
+
+set @quest_entry = 80258;
+set @quest_zone = 1519;
+set @title = 'Tears of the Poppy';
+set @description = 'Sinu a’manore, $C.\n\nYou have answered our call for aid, for which we are truly grateful.\n\nWith the fall of Quel’Thalas we, the Quel’dorei, have been left without a home. It is here where we shall focus our wits and strengthen our will. This is the beginning of our quest for vengeance, and you shall be part of it, among others.\n\nYou see, as we prepare for a war against death itself we need to have as less casualties as possible but we can only prevent so many.\n\nWhere there is a battle there shall be dead and wounded. I ask of you on this day and many to come to aid us in our effort to supply our numbers with a means to mend and heal. There is a small and not so elegant flower growing nearby. We call it poppy. I shall not bore you with the alchemical details, you only need to know that the concoction will ease the pain of the wounded. I know it’s a simple task but it is not meaningless.\n\nReturn to me when you have a handful of them.';
+set @objective = 'Gather ten poppies.';
+set @completetext = 'These will do just fine. Not all of them are of the highest quality but they will be useful. Thank you $C.\n\nAh yes, here is your reward.\n\nReturn soon, $C.\n\nSelama Ashal’anore!';
+set @incompletetext = 'This will make a difference in the battle to come, please do not take it lightly.';
+set @faction_id = 269;
+set @faction_count = 250;
+set @xp_or_money = 4600;
+set @reward_money = 5000; 
+set @quest_level = 20;
+set @min_level = 20;
+set @questgiver_id = 80231;
+set @quest_finisher = 80231;
+set @nextquest = 0;
+set @nextquestinchain = 0;
+set @prevquest = 80251;
+set @RewChoiceItemId1 = 0; 
+set @RewChoiceItemId2 = 0; 
+set @RewChoiceItemId3 = 0;
+set @RewChoiceItemId4 = 0; 
+set @RewChoiceItemCount1 = 0;
+set @RewChoiceItemCount2 = 0;
+set @RewChoiceItemCount3 = 0;
+set @RewChoiceItemCount4 = 0;
+set @reward_item_1 = 0;
+set @reward_item_2 = 0; 
+set @reward_item_3 = 0;
+set @reward_item_4 = 0;
+set @reward_item_1_count = 0;
+set @reward_item_2_count = 0;
+set @reward_item_3_count = 0;
+set @reward_item_4_count = 0;
+set @creature_to_kill_1 = 0;
+set @creature_to_kill_2 = 0; 
+set @creature_to_kill_3 = 0;
+set @creature_to_kill_4 = 0;
+set @creature_to_kill_1_count = 0;
+set @creature_to_kill_2_count = 0;
+set @creature_to_kill_3_count = 0;
+set @creature_to_kill_4_count = 0;
+set @required_item_1 = 80245; 
+set @required_item_2 = 0;
+set @required_item_3 = 0;
+set @required_item_4 = 0;
+set @required_item_1_count = 10;
+set @required_item_2_count = 0;
+set @required_item_3_count = 0;
+set @required_item_4_count = 0;
+
+replace into quest_template values 
+
+(@quest_entry, '0', '2', @quest_zone, @min_level,  '0', @quest_level, '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @title, @description, @objective, @completetext, @incompletetext, '', '', '', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @faction_id, '0', '0', '0', '0', @faction_count, '0', '0', '0', '0', '0', @xp_or_money, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', 0, 0);
+     
+replace into creature_questrelation (id, quest, patch_min, patch_max) values (@questgiver_id, @quest_entry,'0','10'); 
+replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (@quest_finisher, @quest_entry,'0','10');
+	 
+update quest_template set 
+rewitemid1 = @reward_item_1, rewitemcount1 = @reward_item_1_count,
+rewitemid2 = @reward_item_2, rewitemcount2 = @reward_item_2_count,
+rewitemid3 = @reward_item_3, rewitemcount3 = @reward_item_3_count,
+rewitemid4 = @reward_item_4, rewitemcount4 = @reward_item_4_count,
+RewChoiceItemId1 = @RewChoiceItemId1, RewChoiceItemCount1 = @RewChoiceItemCount1,
+RewChoiceItemId2 = @RewChoiceItemId2, RewChoiceItemCount2 = @RewChoiceItemCount2,
+RewChoiceItemId3 = @RewChoiceItemId3, RewChoiceItemCount3 = @RewChoiceItemCount3,
+RewChoiceItemId4 = @RewChoiceItemId4, RewChoiceItemCount4 = @RewChoiceItemCount4,
+ReqCreatureOrGOId1 = @creature_to_kill_1, ReqCreatureOrGOCount1 = @creature_to_kill_1_count,
+ReqCreatureOrGOId2 = @creature_to_kill_2, ReqCreatureOrGOCount2 = @creature_to_kill_2_count,
+ReqCreatureOrGOId3 = @creature_to_kill_3, ReqCreatureOrGOCount3 = @creature_to_kill_3_count,
+ReqCreatureOrGOId4 = @creature_to_kill_4, ReqCreatureOrGOCount4 = @creature_to_kill_4_count,
+reqitemid1 = @required_item_1, reqitemcount1 = @required_item_1_count,
+reqitemid2 = @required_item_2, reqitemcount2 = @required_item_2_count,
+reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
+reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
+nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
+nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
+specialflags = 1
+where entry = @quest_entry;	
+
 -- HELP WITH A COMPASSIONATE MATTER
 
 -- SET @quest_entry = 80006;
