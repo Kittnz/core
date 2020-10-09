@@ -988,7 +988,7 @@ bool GossipHello_npc_agne_gambler(Player* pPlayer, Creature* pCreature)
     if (pPlayer->GetQuestStatus(80300) == QUEST_STATUS_INCOMPLETE) // What's Yours is Ours
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Roll dice!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
-    pPlayer->SEND_GOSSIP_MENU(80121, pCreature->GetGUID());
+    pPlayer->SEND_GOSSIP_MENU(80602, pCreature->GetGUID());
     return true;
 }
 
@@ -1016,9 +1016,64 @@ bool GossipSelect_npc_agne_gambler(Player* pPlayer, Creature* pCreature, uint32 
     return true;
 }
 
+bool GossipHello_npc_rov(Player* pPlayer, Creature* pCreature)
+{
+    if (pPlayer->GetQuestStatus(80304) == QUEST_STATUS_INCOMPLETE) // Quark's Justice
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "I hear Sturk owes The Rov a punching debt.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+
+    pPlayer->SEND_GOSSIP_MENU(80603, pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_rov(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {        
+        pCreature->MonsterSay("About time The Rov gets to shut that idiot down, The Rov will beat him up.");
+        pCreature->GetMotionMaster()->MovePoint(1, 2025.37, -4633.34, 29.55, 0, 1.0F);
+        pCreature->SetWalk(true);
+
+        DoAfterTime(pPlayer, 10 * IN_MILLISECONDS,
+            [CreatureGuid = pCreature->GetObjectGuid(), player = pPlayer]()
+        {
+            Map* map = sMapMgr.FindMap(1);
+            Creature* creature = map->GetCreature(CreatureGuid);
+
+            Creature* Sturk = player->FindNearestCreature(80604, 20.0F); // Sturk
+
+            if (!creature)
+                return;
+
+            creature->Attack(Sturk, true);
+
+            CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80606);
+            if (cInfo != nullptr)
+                player->KilledMonster(cInfo, ObjectGuid());
+        });
+
+
+
+    }
+
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
 void AddSC_episode_1()
 {
     Script *newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_rov";
+    newscript->pGossipHello = &GossipHello_npc_rov;
+    newscript->pGossipSelect = &GossipSelect_npc_rov;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_agne_gambler";
+    newscript->pGossipHello = &GossipHello_npc_agne_gambler;
+    newscript->pGossipSelect = &GossipSelect_npc_agne_gambler;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_agne_gambler";
