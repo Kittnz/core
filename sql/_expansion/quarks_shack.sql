@@ -122,8 +122,8 @@ replace into broadcast_text (ID, MaleText) values (@magic_number, 'Heya sweetie,
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
-update creature_template set script_name = 'npc_agne_gambler' where entry = @agne;
-update creature_template set script_name = 'npc_rov' where entry = @rov;
+update creature_template set script_name = 'npc_agne_gambler' where entry = 80602;
+update creature_template set script_name = 'npc_rov' where entry = 80603;
 
 update creature_template set equipment_id = 5610 where entry in (@sturk, @quark, @agne);
 update creature_template set equipment_id = 6929 where entry = @odo;
