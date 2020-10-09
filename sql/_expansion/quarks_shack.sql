@@ -82,14 +82,15 @@ where entry = @quest_entry;
 
 -- Shack quests:
 
-replace into `creature_template` value (80601, 0, 15278, 0, 0, 0, 'Quark', 'Bartender', 3701, 37, 37, 2192, 2192, 0, 0, 1340, 29, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 55, 70, 0, 144, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 53.3984, 73.4228, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 3216, 0, 0, 0, 0, 524298, '');
+replace into `creature_template` value (80601, 0, 15278, 0, 0, 0, 'Quark', 'Bartender', 0, 37, 37, 2192, 2192, 0, 0, 1340, 29, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 55, 70, 0, 144, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 53.3984, 73.4228, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 3216, 0, 0, 0, 0, 524298, '');
 
-replace into `creature_template` value (80602, 0, 15236, 0, 0, 0, 'Agne', 'Gambler', 3701, 37, 37, 2192, 2192, 0, 0, 1340, 29, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 55, 70, 0, 144, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 53.3984, 73.4228, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 3216, 0, 0, 0, 0, 524298, '');
+replace into `creature_template` value (80602, 0, 15236, 0, 0, 0, 'Agne', 'Gambler', 0, 37, 37, 2192, 2192, 0, 0, 1340, 29, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 55, 70, 0, 144, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 53.3984, 73.4228, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 3216, 0, 0, 0, 0, 524298, '');
 
-replace into `creature_template` value (80603, 0, 7211, 0, 0, 0, 'The Rov', 'Goblin Bruiser', 3701, 37, 37, 2192, 2192, 0, 0, 1340, 29, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 55, 70, 0, 144, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 53.3984, 73.4228, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 3216, 0, 0, 0, 0, 524298, '');
-replace into `creature_template` value (80604, 0, 7212, 0, 0, 0, 'Sturk the Rat', '', 3701, 37, 37, 2192, 2192, 0, 0, 1340, 29, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 55, 70, 0, 144, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 53.3984, 73.4228, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 3216, 0, 0, 0, 0, 524298, '');
+replace into `creature_template` value (80603, 0, 7211, 0, 0, 0, 'The Rov', 'Goblin Bruiser', 0, 37, 37, 2192, 2192, 0, 0, 1340, 29, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 55, 70, 0, 144, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 53.3984, 73.4228, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 3216, 0, 0, 0, 0, 524298, '');
 
-replace into `creature_template` value (80605, 0, 15577, 0, 0, 0, 'Odo', 'Inspector', 3701, 37, 37, 2192, 2192, 0, 0, 1340, 29, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 55, 70, 0, 144, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 53.3984, 73.4228, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 3216, 0, 0, 0, 0, 524298, '');
+replace into `creature_template` value (80604, 0, 7212, 0, 0, 0, 'Sturk the Rat', '', 0, 37, 37, 2192, 2192, 0, 0, 1340, 29, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 55, 70, 0, 144, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 53.3984, 73.4228, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 3216, 0, 0, 0, 0, 524298, '');
+
+replace into `creature_template` value (80605, 0, 15577, 0, 0, 0, 'Odo', 'Inspector', 0, 37, 37, 2192, 2192, 0, 0, 1340, 29, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 55, 70, 0, 144, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 53.3984, 73.4228, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 3216, 0, 0, 0, 0, 524298, '');
 
 replace into item_template values
  ('80400', '0', '15', '0', 'Quark\'s Shack Membership Card', 'Learn the customer\'s weaknesses, so that you can better take advantage of him.', '36082', '1', '0', '1', '0', '1500', '2', '-1', '-1', '15', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', NULL);
@@ -106,6 +107,12 @@ replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id,
 replace into broadcast_text (ID, MaleText) values (@magic_number, 'Every once in a while, declare peace. It confuses the hell out of your enemies...\n\nHey, if you are not spending coins you might as well get out, you are bothering my customers.');
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+update creature_template set script_name = 'npc_agne_gambler' where entry = @agne;
+update creature_template set script_name = 'npc_sturk' where entry = @sturk;
+
+update creature_template set equipment_id = 5610 where entry in (@sturk, @quark, @agne);
+update creature_template set equipment_id = 6929 where entry = @odo;
 
 -- What's Yours is Ours
 
@@ -145,7 +152,7 @@ set @reward_item_1_count = 0;
 set @reward_item_2_count = 0;
 set @reward_item_3_count = 0;
 set @reward_item_4_count = 0;
-set @creature_to_kill_1 = 80229;
+set @creature_to_kill_1 = 80600;
 set @creature_to_kill_2 = 0; 
 set @creature_to_kill_3 = 0;
 set @creature_to_kill_4 = 0;
@@ -284,6 +291,8 @@ replace into item_template values
 '-1', '4', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
 '0', '1', NULL); 
 
+update item_template set stackable = 20 where entry = 80401;
+
 set @gameobject_entry = 3000235;
 set @gameobject_loot = 80401;
 set @gameobject_name = 'Quark\'s Cargo';
@@ -405,7 +414,7 @@ replace into gameobject_template values
 (@gameobject_entry, 0, 3, @gameobject_display, @gameobject_name, 0, 0, 0.7, 57,  @gameobject_entry, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
 update gameobject_template set flags = 4, data0 = 43, data2 = 0, data3 = 1 where entry = @gameobject_entry;
 replace into `gameobject_loot_template` values (@gameobject_entry, @gameobject_loot, -100,  1, 1, 1, 0, 0, 10);
-replace into `gameobject_loot_template` values (@gameobject_entry, @gameobject_loot2, -100, 1, 1, 1, 0, 0, 10);
+replace into `gameobject_loot_template` values (@gameobject_entry, @gameobject_loot2, -100, 2, 1, 1, 0, 0, 10);
 
 set @quest_entry = 80303;
 set @quest_zone = 1637;

@@ -982,9 +982,49 @@ bool GossipSelect_npc_nert_joining_horde(Player* pPlayer, Creature* pCreature, u
     return true;
 }
 
+
+bool GossipHello_npc_agne_gambler(Player* pPlayer, Creature* pCreature)
+{
+    if (pPlayer->GetQuestStatus(80300) == QUEST_STATUS_INCOMPLETE) // What's Yours is Ours
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Roll dice!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+
+    pPlayer->SEND_GOSSIP_MENU(80121, pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_agne_gambler(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        if (pPlayer->GetMoney() < 500)
+        {
+            pCreature->MonsterSay("Hey, this game is not free!");
+            return false;
+        }
+
+        pPlayer->ModifyMoney(-500);
+
+        CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80600);
+        if (cInfo != nullptr)
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+
+        int32 coin = urand(100, 1000);
+        pPlayer->ModifyMoney(coin);
+    }
+
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
 void AddSC_episode_1()
 {
     Script *newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_agne_gambler";
+    newscript->pGossipHello = &GossipHello_npc_agne_gambler;
+    newscript->pGossipSelect = &GossipSelect_npc_agne_gambler;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_nert_joining_horde";
