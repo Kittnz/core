@@ -1028,31 +1028,57 @@ bool GossipHello_npc_rov(Player* pPlayer, Creature* pCreature)
 bool GossipSelect_npc_rov(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
-    {        
+    {     
+        Creature* sturk = pPlayer->FindNearestCreature(80604, 20.0F); // Sturk
+
+        if (!sturk)
+        {
+            pCreature->MonsterSay("Geeh, looks like this sneaky bastard is gone.");
+            return false;
+        }
+
         pCreature->MonsterSay("About time The Rov gets to shut that idiot down, The Rov will beat him up.");
-        pCreature->GetMotionMaster()->MovePoint(1, 2025.37, -4633.34, 29.55, 0, 1.0F);
+        pCreature->GetMotionMaster()->MovePoint(1, 2025.37, -4633.34, 29.55, 0, 2.0F);
         pCreature->SetWalk(true);
 
-        DoAfterTime(pPlayer, 10 * IN_MILLISECONDS,
-            [CreatureGuid = pCreature->GetObjectGuid(), player = pPlayer]()
+        DoAfterTime(pPlayer, 7 * IN_MILLISECONDS,
+            [CreatureGuid = pCreature->GetObjectGuid(), player = pPlayer, sturkGuid = sturk->GetObjectGuid()]()
         {
             Map* map = sMapMgr.FindMap(1);
             Creature* creature = map->GetCreature(CreatureGuid);
+            Creature* sturk_mob = map->GetCreature(sturkGuid);
 
-            Creature* Sturk = player->FindNearestCreature(80604, 20.0F); // Sturk
-
-            if (!creature)
+            if (!creature || !sturkGuid)
                 return;
 
-            creature->Attack(Sturk, true);
+            creature->Attack(sturk_mob, true);
 
             CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80606);
             if (cInfo != nullptr)
                 player->KilledMonster(cInfo, ObjectGuid());
         });
 
+        DoAfterTime(pPlayer, 6 * IN_MILLISECONDS,
+            [player = pPlayer, sturkGuid = sturk->GetObjectGuid()]()
+        {
+            Map* map = sMapMgr.FindMap(1);
+            Creature* sturk_mob = map->GetCreature(sturkGuid);
 
+            sturk_mob->MonsterSay("Aaaaaa! I did nothing, nothing!");
+            sturk_mob->GetMotionMaster()->MovePoint(1, 2026.39, -4645.33, 29.66, 0, 5.0F);
+            sturk_mob->SetWalk(false);
+        });
 
+        DoAfterTime(pPlayer, 13 * IN_MILLISECONDS,
+            [CreatureGuid = pCreature->GetObjectGuid(), player = pPlayer, sturkGuid = sturk->GetObjectGuid()]()
+        {
+            Map* map = sMapMgr.FindMap(1);
+            Creature* creature = map->GetCreature(CreatureGuid);
+            Creature* sturk_mob = map->GetCreature(sturkGuid);
+
+            creature->ForcedDespawn(300);
+            sturk_mob->ForcedDespawn(300);
+        });
     }
 
     pPlayer->CLOSE_GOSSIP_MENU();
