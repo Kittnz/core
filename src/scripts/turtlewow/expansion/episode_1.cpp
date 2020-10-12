@@ -1064,12 +1064,12 @@ bool GossipSelect_npc_rov(Player* pPlayer, Creature* pCreature, uint32 /*uiSende
             Map* map = sMapMgr.FindMap(1);
             Creature* sturk_mob = map->GetCreature(sturkGuid);
 
-            sturk_mob->MonsterSay("Aaaaaa! I did nothing, nothing!");
+            sturk_mob->MonsterSay("Hey, hey, not the face man!");
             sturk_mob->GetMotionMaster()->MovePoint(1, 2026.39, -4645.33, 29.66, 0, 5.0F);
             sturk_mob->SetWalk(false);
         });
 
-        DoAfterTime(pPlayer, 13 * IN_MILLISECONDS,
+        DoAfterTime(pPlayer, 11 * IN_MILLISECONDS,
             [CreatureGuid = pCreature->GetObjectGuid(), player = pPlayer, sturkGuid = sturk->GetObjectGuid()]()
         {
             Map* map = sMapMgr.FindMap(1);
