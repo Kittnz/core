@@ -242,20 +242,34 @@ void WorldSession::HandleWhoOpcode(WorldPacket & recv_data)
         return;
     //recv_data.hexlike();
 
-    WhoListClientQueryTask* task = new WhoListClientQueryTask();
-    task->accountId = GetAccountId();
+
     std::string player_name, guild_name;
 
+	uint32 TaskLevelMin;
+	uint32 TaskLevelMax;
 
-    recv_data >> task->level_min;                               // maximal player level, default 0
-    recv_data >> task->level_max;                               // minimal player level, default 100 (MAX_LEVEL)
+	uint32 TaskRacemask;
+	uint32 TaskClassmask;
+	uint32 TaskZonesCount;
+
+    recv_data >> TaskLevelMin;                               // maximal player level, default 0
+    recv_data >> TaskLevelMax;                               // minimal player level, default 100 (MAX_LEVEL)
     recv_data >> player_name;                                   // player name, case sensitive...
 
     recv_data >> guild_name;                                    // guild name, case sensitive...
 
-    recv_data >> task->racemask;                                // race mask
-    recv_data >> task->classmask;                               // class mask
-    recv_data >> task->zones_count;                             // zones count, client limit=10 (2.0.10)
+    recv_data >> TaskRacemask;                                // race mask
+    recv_data >> TaskClassmask;                               // class mask
+    recv_data >> TaskZonesCount;                             // zones count, client limit=10 (2.0.10)
+
+	WhoListClientQueryTask* task = new WhoListClientQueryTask();
+	task->accountId = GetAccountId();
+	task->level_min = TaskLevelMin;
+	task->level_max = TaskLevelMax;
+
+	task->racemask = TaskRacemask;
+	task->classmask = TaskClassmask;
+	task->zones_count = TaskZonesCount;
 
     if (task->zones_count > 10)
     {

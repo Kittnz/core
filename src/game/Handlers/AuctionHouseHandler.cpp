@@ -792,16 +792,38 @@ void WorldSession::HandleAuctionListItems(WorldPacket & recv_data)
 
     ObjectGuid auctioneerGuid;
     std::string searchedname;
-    AuctionHouseClientQueryTask* task = new AuctionHouseClientQueryTask(AUCTION_QUERY_LIST);
-    task->accountId = GetAccountId();
 
+	uint32 TaskListFrom;
     recv_data >> auctioneerGuid;
-    recv_data >> task->listfrom;                                  // start, used for page control listing by 50 elements
+    recv_data >> TaskListFrom;                                  // start, used for page control listing by 50 elements
     recv_data >> searchedname;
 
-    recv_data >> task->levelmin >> task->levelmax;
-    recv_data >> task->auctionSlotID >> task->auctionMainCategory >> task->auctionSubCategory >> task->quality;
-    recv_data >> task->usable;
+	uint8 LevelMin;
+	uint8 LevelMax;
+	uint32 AuctionSlotID;
+	uint32 AuctionMainCategory;
+	uint32 AuctionSubCategory;
+	uint32 Quality;
+	uint8 Usable;
+
+	recv_data >> LevelMin;
+	recv_data >> LevelMax;
+    recv_data >> AuctionSlotID;
+	recv_data >> AuctionMainCategory;
+	recv_data >> AuctionSubCategory;
+	recv_data >> Quality;
+    recv_data >> Usable;
+
+	AuctionHouseClientQueryTask* task = new AuctionHouseClientQueryTask(AUCTION_QUERY_LIST);
+	task->accountId = GetAccountId();
+	task->listfrom = TaskListFrom;
+	task->levelmin = LevelMin;
+	task->levelmax = LevelMax;
+	task->auctionSlotID = AuctionSlotID;
+	task->auctionMainCategory = AuctionMainCategory;
+	task->auctionSubCategory = AuctionSubCategory;
+	task->quality = Quality;
+	task->usable = Usable;
 
     AuctionHouseEntry const* auctionHouseEntry = GetCheckedAuctionHouseForAuctioneer(auctioneerGuid);
     if (!auctionHouseEntry)
