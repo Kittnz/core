@@ -28,6 +28,8 @@
 #include "Log.h"
 #include "Common.h"
 
+#include <filesystem>
+
 #include <ace/OS_NS_sys_socket.h>
 #include <ace/OS_NS_dirent.h>
 #include <ace/OS_NS_errno.h>
@@ -124,6 +126,8 @@ int PatchHandler::svc(void)
         {
             return -1;
         }
+
+		DEBUG_LOG("CMD_XFER_DATA Send patch chunk size: %d", r);
     }
 
     if(r == -1)
@@ -196,22 +200,28 @@ bool PatchCache::GetHash(const char * pat, ACE_UINT8 mymd5[MD5_DIGEST_LENGTH])
 
 void PatchCache::LoadPatchesInfo()
 {
-    ACE_DIR* dirp = ACE_OS::opendir(ACE_TEXT("./patches/"));
+	std::filesystem::path PatchesDir = "./patches/";
 
-    if(!dirp)
-        return;
+	if (!std::filesystem::exists(PatchesDir))
+	{
+		return;
+	}
 
-    ACE_DIRENT* dp;
+	std::filesystem::directory_iterator iter(PatchesDir);
 
-    while((dp = ACE_OS::readdir(dirp)) != NULL)
-    {
-        int l = strlen(dp->d_name);
-        if (l < 8)
-            continue;
+	for (const std::filesystem::directory_entry& DirEntry : std::filesystem::directory_iterator(PatchesDir))
+	{
+		const std::filesystem::path& filePath = DirEntry.path();
+		std::filesystem::path clearFilename = filePath.filename();
+		std::string strClearFilename = clearFilename.string();
 
-        if(!memcmp(&dp->d_name[l - 4], ".mpq", 4))
-            LoadPatchMD5(dp->d_name);
-    }
-
-    ACE_OS::closedir(dirp);
+		if (strClearFilename.size() < 8)
+		{
+			continue;
+		}
+		if (clearFilename.extension().compare("mpq"))
+		{
+			LoadPatchMD5(strClearFilename.c_str());
+		}
+	}
 }

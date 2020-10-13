@@ -7,49 +7,52 @@
 
 #define fs std::filesystem
 
+#define NEW_BUILD 5877u
+#define PATCH_FILE "Data\\patch-T.mpq"
+
 char* PatchVersionOffsets[] = {
-(char*)0x00003CAD,
-(char*)0x001567CD,
-(char*)0x001573B1,
-(char*)0x00157785,
-(char*)0x0015827D,
-(char*)0x00158EA1,
-(char*)0x00159275,
-(char*)0x00159D0D,
-(char*)0x0015A8A1,
-(char*)0x0015AC75,
-(char*)0x0015B74D,
-(char*)0x0015C371,
-(char*)0x0015C755,
-(char*)0x0015D21D,
-(char*)0x0015DE71,
-(char*)0x0015E255,
-(char*)0x0015ED6D,
-(char*)0x0015FB69,
-(char*)0x0015FF95,
-(char*)0x00160B1D,
-(char*)0x00161771,
-(char*)0x00161B55,
-(char*)0x0016272D,
-(char*)0x00163531,
-(char*)0x00163915,
-(char*)0x0016441D,
-(char*)0x00165071,
-(char*)0x00165455,
-(char*)0x00165F6D,
-(char*)0x00166B31,
-(char*)0x00166F05,
-(char*)0x00167A7D,
-(char*)0x00168781,
-(char*)0x00168B65,
-(char*)0x0016966D,
-(char*)0x0016A2C1,
-(char*)0x0016A6A5,
-(char*)0x0016B13D,
-(char*)0x0016BF60,
-(char*)0x0016C425,
-(char*)0x001B2122,
-(char*)0x001B408D,
+//(char*)0x00003CAD,
+//(char*)0x001567CD,
+//(char*)0x001573B1,
+//(char*)0x00157785,
+//(char*)0x0015827D,
+//(char*)0x00158EA1,
+//(char*)0x00159275, 
+//(char*)0x00159D0D, 
+//(char*)0x0015A8A1,
+//(char*)0x0015AC75,
+//(char*)0x0015B74D,
+//(char*)0x0015C371,
+//(char*)0x0015C755,
+//(char*)0x0015D21D,
+//(char*)0x0015DE71,
+//(char*)0x0015E255,
+//(char*)0x0015ED6D,
+//(char*)0x0015FB69,
+//(char*)0x0015FF95,
+//(char*)0x00160B1D,
+//(char*)0x00161771,
+//(char*)0x00161B55,
+//(char*)0x0016272D,
+//(char*)0x00163531,
+//(char*)0x00163915,
+//(char*)0x0016441D,
+//(char*)0x00165071,
+//(char*)0x00165455,
+//(char*)0x00165F6D,
+//(char*)0x00166B31,
+//(char*)0x00166F05,
+//(char*)0x00167A7D,
+//(char*)0x00168781,
+//(char*)0x00168B65,
+//(char*)0x0016966D,
+//(char*)0x0016A2C1,
+//(char*)0x0016A6A5,
+//(char*)0x0016B13D,
+//(char*)0x0016BF60, // START
+//(char*)0x0016C425,
+(char*)0x001B2122, // That's it
+//(char*)0x001B408D, // END
 };
 
 #include <iostream>
@@ -228,17 +231,17 @@ int WINAPI WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 		std::string strPathDir = PatchDir.u8string();
 		StormArchive PatchFile(strPathDir.c_str());
 
-		if (StormFile* pFile = PatchFile.OpenFile("Data\\patch-3.mpq"))
+		if (StormFile* pFile = PatchFile.OpenFile(PATCH_FILE))
 		{
 			std::unique_ptr<StormFile> patchData(pFile);
 
-			if (fs::exists("Data\\patch-3.mpq"))
+			if (fs::exists(PATCH_FILE))
 			{
-				fs::remove("Data\\patch-3.mpq");
+				fs::remove(PATCH_FILE);
 			}
 
 			// copy shit to target path
-			FILE* hTargetFile = fopen("Data\\patch-3.mpq", "wb");
+			FILE* hTargetFile = fopen(PATCH_FILE, "wb");
 			assert(hTargetFile != NULL);
 
 			// split to chunks
@@ -290,16 +293,16 @@ int WINAPI WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 		}
 		else
 		{
-			ErrorBox("Failed to open patch-3.mpq inside patch mpq");
+			ErrorBox("Failed to open patch-T.mpq inside patch mpq");
 			return 1;
 		}
 	}
 
 	if (hDialog == NULL)
 	{
-		if (fs::exists("Data\\patch-3.mpq"))
+		if (fs::exists(PATCH_FILE))
 		{
-			fs::remove("Data\\patch-3.mpq");
+			fs::remove(PATCH_FILE);
 		}
 
 		return 0;
@@ -308,6 +311,11 @@ int WINAPI WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 	{
 		DestroyWindow(hDialog);
 		hDialog = NULL;
+	}
+
+	if (!fs::exists("WoW_Old.exe"))
+	{
+		fs::copy_file("WoW.exe", "WoW_Old.exe");
 	}
 
 	// patch WoW.exe to allow unsigned interface
@@ -328,7 +336,7 @@ int WINAPI WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 		char FourthPatch[] = { 0xeb, 0xb2 };
 		fseek(hWoWBinary, 0x2f11f0, SEEK_SET);
 		fwrite(FourthPatch, sizeof(FourthPatch), 1, hWoWBinary);
-		PatchExe(hWoWBinary, 5877u);
+		PatchExe(hWoWBinary, NEW_BUILD);
 
 		fclose(hWoWBinary);
 	}
@@ -351,8 +359,11 @@ int WINAPI WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 	//BeginUpdateResource()
 
 	// everything ready, close dialog and start WoW.exe
-	DestroyWindow(hDialog);
-	hDialog = NULL;
+	if (hDialog != NULL)
+	{
+		DestroyWindow(hDialog);
+		hDialog = NULL;
+	}
 
 	STARTUPINFO info;
 	PROCESS_INFORMATION pInfo;
