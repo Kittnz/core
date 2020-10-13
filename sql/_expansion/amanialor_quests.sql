@@ -1,10 +1,9 @@
 
 -- A Tusken Affair 
 
-replace into `creature_template` values (80800, 0, 18226, 0, 0, 0, 'Revantusk Watcher', NULL, 0, 46, 47, 2038, 2062, 1587, 1640, 2278, 1576, 0, 1.1, 1.14286, 0, 20, 5, 0, 0, 1, 81, 105, 0, 212, 1, 1600, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 62.8672, 86.4424, 100, 7, 0, 2694, 2694, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 79, 108, 'EventAI', 1, 3, 0, 0, 3, 2694, 0, 0, 0, 0, 0, '');
+replace into `creature_template` values (80800, 0, 14760, 0, 0, 0, 'Revantusk Watcher', NULL, 0, 46, 47, 2038, 2062, 1587, 1640, 2278, 1576, 0, 1.1, 1.14286, 0, 20, 5, 0, 0, 1, 81, 105, 0, 212, 1, 1600, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 62.8672, 86.4424, 100, 7, 0, 2694, 2694, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 79, 108, 'EventAI', 1, 3, 0, 0, 3, 2694, 0, 0, 0, 0, 0, '');
 
 -- TODO: Located in the Ruins of Lordaeron, in the central bluff in Thunderbluff and inside Orgrimmar near the Bank.
--- TODO: Teleportation script similar to Elsharin's one.
 
 update creature_template set movement_type = 0 where entry = 80800;
 update creature set movementtype = 0 where id = 80800;
@@ -13,12 +12,16 @@ update creature_template set faction = 893 where entry = 80800;
 
 replace into creature_model_info values (18209, 5875, 2, 2, 0, 0, 0);
 
-update creature_template set npc_flags = 2 where entry = 5885;    
+update creature_template set npc_flags = 3 where entry = 5885;    
 update creature_template set script_name = 'npc_deino' where entry = 5885;  
+
+replace into gameobject_template values 
+(3000240, 0, 1, 2770, 'Portal to Amani\'Alor', 35, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_portal_amanialor'),
+(3000241, 0, 1, 6696, 'Portal to Amani\'Alor', 35, 0, 0.5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_portal_amanialor');
 
 set @quest_entry = 80300;
 set @quest_zone = 331;
-set @title = 'A Tusken Affair ';
+set @title = 'A Tusken Affair';
 set @description = 'Greetings Mon!\n\nI come with a proposal for you, some of my brethren are preparing to setup a new settlement in Kalimdor.\n\nIt be far away from home but da threat of da Undead an’ da Alliance cannot be ignored so we com’ here to make a new home.\n\nHowever, we hav’ run into some difficulties recently, if you can spare da time we would appreciate some help. Talk to Deino in Orgrimmar, the Mage Trainer in da Valley of Spirits.\n\nDon\'t worry, you will be rewarded!';
 set @objective = 'Talk to Deino, the Mage Trainer in the Valley of Spirits in Orgrimmar.';
 set @completetext = 'Da Revantusk sent you?\n\nAh...Amani\'alor. Dey came to Kalimdor in secret a few months ago and setup da village in da hills of Stonetalon Mountains.\n\nA secret new home for the people after da struggles in the other continent dey could use da help as settling in a new land be difficult.\n\nI will teleport you there when you be ready.';
