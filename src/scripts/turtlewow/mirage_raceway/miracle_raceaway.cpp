@@ -111,10 +111,10 @@ bool GossipHello_npc_dolores(Player* p_Player, Creature* p_Creature)
 {
     if (p_Player->GetQuestStatus(GOBLIN_TEST_QUEST) == QUEST_STATUS_INCOMPLETE)
     if (!p_Player->GetQuestRewardStatus(GOBLIN_TEST_QUEST))
-        p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I want a test drive of Goblin's Car!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I want to test drive the Goblin team's racecar.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     if (p_Player->GetQuestStatus(GNOME_TEST_QUEST) == QUEST_STATUS_INCOMPLETE)
     if (!p_Player->GetQuestRewardStatus(GNOME_TEST_QUEST))
-        p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I want a test drive of Gnome's Car!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I want to test drive the Gnomish team's racecar.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
     p_Player->SEND_GOSSIP_MENU(90251, p_Creature->GetGUID());
     return true;
 }
@@ -471,7 +471,7 @@ struct npc_race_car : public ScriptedAI
 bool GOHello_go_flying_machine(Player* pPlayer, GameObject* pGo)
 {
     if (pPlayer->GetQuestRewardStatus(50315))
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TAXI, "Set a course to Thousand Needles!\nMaximum warp!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TAXI, "Buy a flight to the Shimmering Flats in Thousand Needles to visit the Mirage Raceway.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
     pPlayer->SEND_GOSSIP_MENU(90254, pGo->GetGUID());
     return true;
