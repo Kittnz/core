@@ -210,6 +210,7 @@ replace into creature_model_info values (16037, 5875, 2, 2, 0, 0, 0);
 replace into item_template values
 ('80240', '0', '0', '0', 'Arcane Crystal', '', '3273', '1', '0', '1', '0', '0', '0', '-1', '-1', '0','0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0','0','0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0','0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0','0', '-1', '0','-1', '4', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '1', NULL);
 
+update item_template set material = 4 where entry = 80240;
 update item_template set stackable = 10 where entry = 80240;
 
 replace into gameobject_template values 
@@ -595,6 +596,7 @@ REPLACE INTO `creature_template` VALUES (80238, 0, 18329, 0, 0, 0, 'Joalar Solar
 replace into creature_model_info values (18329, 5875, 2, 2, 0, 0, 0);
 
 REPLACE INTO `creature_template` VALUES (80239, 0, 10199, 0, 0, 0, 'Tanilaeh Sunkiss', 'Teleportation', 4660, 50, 50, 3517, 3517, 2103, 2103, 2344, 12, 19, 1, 1.14286, 0, 20, 5, 0, 0, 1, 85, 109, 0, 226, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 8, 0, 66.44, 91.355, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 5498, 0, 0, 0, 0, 524298, '');
+update creature_template set npc_flags = 0 where entry = 80239;
 update creature_template set faction = 371 where entry = 80239;
 
 REPLACE INTO `creature_template` VALUES (80240, 0, 10381, 0, 0, 0, 'Amanaria Sunblade', 'Silvermoon Remnant Quartermaster', 0, 11, 11, 456, 456, 0, 0, 20, 371, 16388, 1.1, 1.14286, 0, 20, 5, 0, 0, 1, 12, 14, 0, 64, 1, 2000, 2090, 1, 4864, 0, 0, 0, 0, 0, 0, 18.392, 25.289, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, '');
