@@ -1085,9 +1085,60 @@ bool GossipSelect_npc_rov(Player* pPlayer, Creature* pCreature, uint32 /*uiSende
     return true;
 }
 
+bool GossipHello_npc_deino(Player* pPlayer, Creature* pCreature)
+{
+    if (pPlayer->GetQuestRewardStatus(80300)) // A Tusken Affair
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Open a portal to Amani'Alor.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    }
+
+    pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+    pPlayer->SEND_GOSSIP_MENU(pCreature->GetDefaultGossipMenuId(), pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_deino(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pCreature->MonsterSay("May the spirits be with ya and the Loa guide ya steps.");
+
+        float dis{ -3.0F };
+        float x, y, z;
+        pPlayer->GetSafePosition(x, y, z);
+        x += dis * cos(pPlayer->GetOrientation());
+        y += dis * sin(pPlayer->GetOrientation());
+        pPlayer->SummonGameObject(3000240, x, y, z + 0.5F, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 30, true);
+        pPlayer->SummonGameObject(3000241, x, y, z - 1.5F, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 30, true);
+
+        pCreature->HandleEmote(EMOTE_STATE_SUBMERGED);
+    }
+
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
+bool GOHello_go_portal_amanialor(Player* pPlayer, GameObject* pGo)
+{
+    if (pPlayer->GetQuestStatus(80300)) // A Tusken Affair
+        pPlayer->TeleportTo(1, 2922.58F, 2483.69F, 137.636F, 137.6F);
+    return true;
+}
+
 void AddSC_episode_1()
 {
     Script *newscript;
+
+    newscript = new Script;
+    newscript->Name = "go_portal_amanialor";
+    newscript->pGOHello = &GOHello_go_portal_amanialor;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_deino";
+    newscript->pGossipHello = &GossipHello_npc_deino;
+    newscript->pGossipSelect = &GossipSelect_npc_deino;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_rov";
