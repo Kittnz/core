@@ -243,3 +243,36 @@ update item_template set class = 13, subclass = 0, Bag_Family = 9 where entry in
 -- Custom quest fix:
 
 update quest_template set QuestFlags = 8 where entry in (60124, 60125);
+
+-- Grammar fixes:
+
+update quest_template set details = 'You are not the only one who came here seeking forgotten knowledge. However, just like everyone else, it will not simply be given to you. Fulfill my request and I will teach you what I know.\n\nYou will need the help of a good alchemist, one whom I have taught my secrets.' where title = 'A Rare Request';
+update quest_template set offerrewardtext = 'You have done well.' where title = 'A Rare Request';
+update quest_template set requestitemstext = 'What are you waiting for? Bring me 3 Refined Scales of Onyxia. Are you not eager for my knowledge?' where title = 'A Rare Request';
+
+update quest_template set offerrewardtext = 'You will need this Pendant to properly communicate with the other faction. It will allow you to join forces and trade with them, so make sure you have it on your key ring at all times.' where title = 'Alliance Diplomat';
+
+
+
+update quest_template set details = 'Bring what I desire and I will teach you how to craft a powerful breastplate made from the scales of Onyxia herself.\n\nYou will need the help of a good alchemist and a good enchanter, both of whom require specific knowledge taught by me.' where title = 'An Epic Request';
+update quest_template set objectives = 'Bring 3 Charged Scales of Onyxia to Aurelius and he will reward you with a powerful leatherworking pattern.
+' where title = 'An Epic Request';
+update quest_template set offerrewardtext = 'You have done well. Accept this pattern as your reward.' where title = 'An Epic Request';
+update quest_template set requestitemstext = 'Bring me 3 Charged Scales of Onyxia.' where title = 'An Epic Request';
+
+
+update quest_template set details = 'Fulfill my request and I will teach you ancient, powerful knowledge.' where title = 'An Uncommon Request';
+update quest_template set objectives = 'Bring 3 Scales of Onyxia to Aurelius and he will teach you how to transmute them into Refined Scales of Onyxia.' where title = 'An Uncommon Request';
+update quest_template set offerrewardtext = 'You have done well. I will now teach you what I know to uphold our agreement.' where title = 'An Uncommon Request';
+update quest_template set requestitemstext = 'Bring me 3 Scales of Onyxia.' where title = 'An Uncommon Request';
+
+
+update quest_template set details = 'Hey, $C, may I ask you for a favor? I know I am here with Grimrizz and all his Dark Magic, and this will sound strange but I have always wanted to be a blacksmith.\n\nYou probably are thinking most Gnomes go for engineering. Since I first laid eyes on the beauty of Ironforge, I dreamt of becoming a blacksmith.\n\nThe heat emitting from the forge, clanging of hammers to heated metal. The glint of a finely crafted blade, that is the life for me! $C, will you take this letter to Tormus Deepforge for me? It is my application to join the Blacksmith Guild in Ironforge.\n\nHe is probably near the Great Forge, working with the new Trainees.' where title = 'A Change of Heart';
+update quest_template set offerrewardtext = '<Tormus takes the letter and reads it.>\n\nA Gnome wants to become a blacksmith?\n\n<Tormus furrows his brows before giving a hearty laugh.>\n\nIt\'s been a long time since we had a Gnome join our craft! Thank you for your efforts, $R. Here, have a few extra stones for your weapon.' where title = 'A Change of Heart';
+update quest_template set requestitemstext = 'Oh, are you here to learn blacksmithing, friend?' where title = 'A Change of Heart';
+
+
+update quest_template set details = 'One of my esteemed colleagues set off to gather vital information about the plots that the nefarious archmage Arugal is hatching inside of Shadowfang Keep, but I have not gotten word from him since. I am concerned about the corrupting influence that place has on even the most powerful and capable mages, and I need to know the fate of Sorcerer Ashcrombe.\n\nTravel to Silverpine Forest and seek him out for me at the Keep. If the Light wills it, find out what he has learned.' where title = 'The Missing Sorcerer';
+update quest_template set objectives = 'High Sorcerer Andromath wants you to travel to Shadowfang Keep in Silverpine Forest and find out what happened to Sorcerer Ashcrombe.' where title = 'The Missing Sorcerer';
+update quest_template set offerrewardtext = 'High Sorcerer Andromath sent you?\n\nMy, how the time flies when you’re watching insanity and horror unfold from every angle.\n\nI will have to return with my findings and reassure him that I have not fallen to the same madness as those who are trapped here.' where title = 'The Missing Sorcerer';
+update quest_template set requestitemstext = 'There is untold darkness that will forever linger inside of these walls.' where title = 'The Missing Sorcerer';
