@@ -57,7 +57,7 @@ bool GossipSelect_npc_caledra(Player* pPlayer, Creature* pCreature, uint32 /*uiS
                 return;
 
             creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            creature->MonsterSay("I should explain the situation better. I am Caledra Dawnbreeze, formerly a Ranger-Captain of the Farstriders during the Second war, but now merely a citizen of Stormwind. After the loss of Quel\'thalas our people suffered deeply due to our addiction to magic...Some of us led by our former Prince Kael\'thas were seduced by dark magic and from what I\'ve heard they betrayed the Alliance siding with the creatures known as the Naga and left.");
+            creature->MonsterSay("I should explain the situation better. I am Caledra Dawnbreeze, formerly a Ranger-Captain of the Farstriders during the Second war, but now merely a citizen of Stormwind. After the loss of Quel\'thalas our people suffered deeply due to our addiction to magic...Some of us led by our former Prince Kael\'thas were seduced by dark magic and from what I\'ve heard they betrayed the Alliance by siding with the creatures known as the Naga.");
         });
 
         DoAfterTime(pPlayer, 20 * IN_MILLISECONDS,
@@ -84,7 +84,7 @@ bool GossipSelect_npc_caledra(Player* pPlayer, Creature* pCreature, uint32 /*uiS
                 return;
 
             creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            creature->MonsterSay("We've had a meeting where we agreed that the time has come for our people to come together so that we may create a home for ourselves where we could rebuild our people in time, a military lodge or cities belonging to other races simply isn't the way to rebuild.");
+            creature->MonsterSay("We've had a meeting where we agreed that the time has come for our people to come together so that we may create a home for ourselves where we could rebuild our people in time. A military lodge or cities belonging to other races simply isn't the way to rebuild.");
         });
 
 
@@ -98,7 +98,7 @@ bool GossipSelect_npc_caledra(Player* pPlayer, Creature* pCreature, uint32 /*uiS
                 return;
 
             creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            creature->MonsterSay("Thankfully Dalaran's surviving archives provided an opportunity, roughly a century ago an outpost was built on a peninsula near Quel'thalas. The Outpost is powered by an Arcane crystal infused with the energies of the Sunwell itself.");
+            creature->MonsterSay("Thankfully Dalaran's surviving archives provided an opportunity. Roughly a century ago an outpost was built on a peninsula near Quel'thalas. The Outpost is powered by an Arcane crystal infused with the energies of the Sunwell itself.");
         });
 
         DoAfterTime(pPlayer, 50 * IN_MILLISECONDS,
