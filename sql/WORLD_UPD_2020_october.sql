@@ -207,3 +207,20 @@ reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
 nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
 nextquestinchain = @nextquestinchain, prevquestid = @prevquest 
 where entry = @quest_entry;	 
+
+-- Fix some console spam:
+
+update item_template set Buy_Count = 1 where Buy_count = 0;
+
+-- Kaja's Ammo GO fix:
+
+replace into gameobject_template values 
+(1000389, 0, 3, 2350, 'Kaja\'s Ammunition Crate', 0, 0, 0.7, 57, 1000389, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+update gameobject_template set flags = 4 where entry = 1000389;
+update gameobject_template set data0 = 43 where entry = 1000389;
+update gameobject_template set data2 = 0 where entry = 1000389;
+update gameobject_template set data3 = 1 where entry = 1000389;
+
+delete from gameobject_loot_template where entry = 1000389;
+replace into `gameobject_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`, `patch_min`, `patch_max`) values (1000389, 51845, -100, 1, 1, 1, 0, 0, 10);
