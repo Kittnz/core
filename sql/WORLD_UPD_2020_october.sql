@@ -224,3 +224,14 @@ update gameobject_template set data3 = 1 where entry = 1000389;
 
 delete from gameobject_loot_template where entry = 1000389;
 replace into `gameobject_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`, `patch_min`, `patch_max`) values (1000389, 51845, -100, 1, 1, 1, 0, 0, 10);
+
+-- NPC family fix:
+
+update creature_template set type = 0 where entry = 15288;
+
+-- Xerron's Zanza fixes:
+
+update item_template set max_count = 5, stackable = 5, flags = 0 where entry in (20079, 20080, 20081);
+update item_template set max_count = 5, stackable = 5, flags = 0 where entry in (8410, 8411, 8412, 8423, 8424);
+
+
