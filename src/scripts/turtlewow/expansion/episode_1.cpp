@@ -1120,8 +1120,8 @@ bool GossipSelect_npc_deino(Player* pPlayer, Creature* pCreature, uint32 /*uiSen
 
 bool GOHello_go_portal_amanialor(Player* pPlayer, GameObject* pGo)
 {
-    if (pPlayer->GetQuestStatus(80300)) // A Tusken Affair
-        pPlayer->TeleportTo(1, 2922.58F, 2483.69F, 137.636F, 137.6F);
+    if (pPlayer->GetQuestRewardStatus(80300)) // A Tusken Affair
+        pPlayer->TeleportTo(1, 2862.1F, 2450.4F, 148.33F, 0.33F);
     return true;
 }
 
