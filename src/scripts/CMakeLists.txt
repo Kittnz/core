@@ -312,7 +312,6 @@ set (SCRIPTS_SRCS
     turtlewow/gardening.cpp
     turtlewow/object_scripts.cpp
     turtlewow/zonescript_gm_isle.cpp
-    turtlewow/zonescript_epl.cpp
     turtlewow/commands.cpp
     
     turtlewow/expansion/episode_1.cpp
