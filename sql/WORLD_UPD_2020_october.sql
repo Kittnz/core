@@ -19,9 +19,9 @@ offerrewardtext = 'Ah yes! \n\nThank you very much my friend, you made my day. H
 REPLACE INTO `creature_template` VALUES (51607, 9, 2557, 0, 0, 0, 'Ian Storm', NULL, 0, 43, 44, 2059, 2138, 0, 0, 2557, 35, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 68, 88, 0, 194, 1, 2000, 2000, 1, 32768, 0, 0, 0, 0, 0, 0, 201.913, 288.031, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 3, 0, 0, 3, 16399, 0, 0, 0, 0, 0, '');
 
 set @quest_entry = 60152;
-set @quest_zone = 5339;
+set @quest_zone = 33;
 set @title = 'They Call Him Ian the Storm';
-set @description = '$N, I hear you are on your way to slay the scoundrels they call leaders of the worst crew of pirates, the Bloodsail Buccaneers./n/nYou see these fools took a new member and they in their deluded mind think he will aid them greatly.\n\n<Baron Revilgaz scoffs.>\n\nI have a man on the inside, his name is Ian Storm, look for a fellow that won’t shank you on sight.';
+set @description = '$N, I hear you are on your way to slay the scoundrels they call leaders of the worst crew of pirates, the Bloodsail Buccaneers.\n\nYou see these fools took a new member and they in their deluded mind think he will aid them greatly.\n\n<Baron Revilgaz scoffs.>\n\nI have a man on the inside, his name is Ian Storm, look for a fellow that won’t shank you on sight.';
 set @objective = 'Find Ian the Storm.';
 set @completetext = 'The Baron sent you? How kind of him to actually send reinforcements, come hear mate, lend me your ear, can’t just say it out loud!';
 set @incompletetext = 'Rid me of these fools, my crew stands above all other.';
@@ -35,7 +35,7 @@ set @questgiver_id = 2496;
 set @quest_finisher = 51607;
 set @nextquest = 0;
 set @nextquestinchain = 0;
-set @prevquest = 0;
+set @prevquest = 604;
 set @RewChoiceItemId1 = 0; 
 set @RewChoiceItemId2 = 0; 
 set @RewChoiceItemId3 = 0;
@@ -130,7 +130,7 @@ replace into creature_loot_template (entry, item, chanceorquestchance, groupid, 
  '0', '1', NULL);
 
 set @quest_entry = 60153;
-set @quest_zone = 5339;
+set @quest_zone = 33;
 set @title = 'The Iron Patch';
 set @description = 'As a double agent, I’ve been on their ships when they took that orc on the ship, not much of a bright idea since I saw he has no real skill in combat, but if anything he’s the perfect pirate, liar, gambler, drunk, you name it.\n\nThey named him Captain of a small fleet and they hope his combat experience would rub off the new recruits, bunch of nonsense.\n\n<Ian spits on the ground.>\n\nYou’ll find him on one of the ships, kill him, and bring his head to the Baron, I will lay low, now go before anyone sees us!';
 set @objective = 'Kill Ironpatch and bring his head to Baron Revilgaz.';
