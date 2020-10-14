@@ -28,7 +28,11 @@
 #include "Log.h"
 #include "Common.h"
 
+#ifdef WIN32
 #include <filesystem>
+#else
+#include <experimental/filesystem>
+#endif
 
 #include <ace/OS_NS_sys_socket.h>
 #include <ace/OS_NS_dirent.h>
@@ -198,21 +202,28 @@ bool PatchCache::GetHash(const char * pat, ACE_UINT8 mymd5[MD5_DIGEST_LENGTH])
     return false;
 }
 
+#ifdef WIN32
+#define fssystem std::filesystem
+#else
+#define fssystem std:::experimental:filesystem
+#endif
+
+
 void PatchCache::LoadPatchesInfo()
 {
-	std::filesystem::path PatchesDir = "./patches/";
+	fssystem::path PatchesDir = "./patches/";
 
-	if (!std::filesystem::exists(PatchesDir))
+	if (!fssystem::exists(PatchesDir))
 	{
 		return;
 	}
 
-	std::filesystem::directory_iterator iter(PatchesDir);
+	fssystem::directory_iterator iter(PatchesDir);
 
-	for (const std::filesystem::directory_entry& DirEntry : std::filesystem::directory_iterator(PatchesDir))
+	for (const fssystem::directory_entry& DirEntry : fssystem::directory_iterator(PatchesDir))
 	{
-		const std::filesystem::path& filePath = DirEntry.path();
-		std::filesystem::path clearFilename = filePath.filename();
+		const fssystem::path& filePath = DirEntry.path();
+		fssystem::path clearFilename = filePath.filename();
 		std::string strClearFilename = clearFilename.string();
 
 		if (strClearFilename.size() < 8)
