@@ -3,8 +3,6 @@
 
 replace into `creature_template` values (80800, 0, 14760, 0, 0, 0, 'Revantusk Watcher', NULL, 0, 46, 47, 2038, 2062, 1587, 1640, 2278, 1576, 0, 1.1, 1.14286, 0, 20, 5, 0, 0, 1, 81, 105, 0, 212, 1, 1600, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 62.8672, 86.4424, 100, 7, 0, 2694, 2694, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 79, 108, 'EventAI', 1, 3, 0, 0, 3, 2694, 0, 0, 0, 0, 0, '');
 
--- TODO: Located in the Ruins of Lordaeron, in the central bluff in Thunderbluff and inside Orgrimmar near the Bank.
-
 update creature_template set movement_type = 0 where entry = 80800;
 update creature set movementtype = 0 where id = 80800;
 update creature_template set npc_flags = 2 where entry = 80800;
@@ -104,7 +102,8 @@ replace into `creature_template` values (80801, 0, 18334, 0, 0, 0, 'Mystic Guay�
 
 replace into`creature_template` values (80803, 0, 0, 0, 0, 0, 'Quest 80301 Custom Objective', '', 0, 5, 5, 319, 319, 0, 0, 852, 84, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 24, 31, 0, 90, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 31.856, 43.802, 100, 7, 4096, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 4276, 0, 0, 0, 0, 2, '');
 
--- TODO: Pyres script!
+replace into `gameobject_template` values
+(3000242, 0, 2, 759, 'Spirit Pyre', 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_spirit_pyre');
 
 update creature_template set movement_type = 0 where entry = 80801;
 update creature set movementtype = 0 where id = 80801;
@@ -202,7 +201,7 @@ update creature set movementtype = 0 where id = 80802;
 update creature_template set npc_flags = 2 where entry = 80802;
 update creature_template set faction = 893 where entry = 80802;
 
-set @quest_entry = 80301;
+set @quest_entry = 80302;
 set @quest_zone = 331;
 set @title = 'Unwanted Eyes';
 set @description = 'Greetings $R, it’s good to see your willingness to aid our cause.\n\nOur journey here wasn’t easy and we lost a lot of our supplies to the raging storms, and now the Alliance is after the rest. Most of us are preoccupied with settling on this new land so you’ll be the one to get rid of them.\n\nGo out there, slaughter their heroes, prove yourself to us.';
@@ -284,7 +283,7 @@ where entry = @quest_entry;
 
 -- Raiding Quel’lithen Lodge
 
-set @quest_entry = 80301;
+set @quest_entry = 80303;
 set @quest_zone = 331;
 set @title = 'Raiding Quel’lithen Lodge';
 set @description = 'It’s good to see you again $C, you have done so much for us yet our enemy never sleeps. Our scouts have reported increased activity in the Quel’lithen Lodge in the Eastern Plaguelands and that dey preparing for an expedition. Even though we don’t know why, it’s almost certain that they’re plotting against us. This is where you come into play, go into their lodge, leave no elf alive. Our heritage wills it.';
