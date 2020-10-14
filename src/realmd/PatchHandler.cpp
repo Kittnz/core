@@ -205,7 +205,7 @@ bool PatchCache::GetHash(const char * pat, ACE_UINT8 mymd5[MD5_DIGEST_LENGTH])
 #ifdef WIN32
 #define fssystem std::filesystem
 #else
-#define fssystem std:::experimental:filesystem
+#define fssystem std::experimental::filesystem
 #endif
 
 
