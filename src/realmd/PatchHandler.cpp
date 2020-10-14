@@ -30,8 +30,6 @@
 
 #ifdef WIN32
 #include <filesystem>
-#else
-#include <experimental/filesystem>
 #endif
 
 #include <ace/OS_NS_sys_socket.h>
@@ -204,13 +202,12 @@ bool PatchCache::GetHash(const char * pat, ACE_UINT8 mymd5[MD5_DIGEST_LENGTH])
 
 #ifdef WIN32
 #define fssystem std::filesystem
-#else
-#define fssystem std::experimental::filesystem
 #endif
 
 
 void PatchCache::LoadPatchesInfo()
 {
+#ifdef WIN32
 	fssystem::path PatchesDir = "./patches/";
 
 	if (!fssystem::exists(PatchesDir))
@@ -235,4 +232,24 @@ void PatchCache::LoadPatchesInfo()
 			LoadPatchMD5(strClearFilename.c_str());
 		}
 	}
+#else
+	ACE_DIR* dirp = ACE_OS::opendir(ACE_TEXT("./patches/"));
+
+	if (!dirp)
+		return;
+
+	ACE_DIRENT* dp;
+
+	while ((dp = ACE_OS::readdir(dirp)) != NULL)
+	{
+		int l = strlen(dp->d_name);
+		if (l < 8)
+			continue;
+
+		if (!memcmp(&dp->d_name[l - 4], ".mpq", 4))
+			LoadPatchMD5(dp->d_name);
+	}
+
+	ACE_OS::closedir(dirp);
+#endif
 }
