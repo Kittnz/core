@@ -1125,9 +1125,27 @@ bool GOHello_go_portal_amanialor(Player* pPlayer, GameObject* pGo)
     return true;
 }
 
+bool GOHello_go_spirit_pyre(Player* pPlayer, GameObject* pGo)
+{
+    if (pPlayer->GetQuestStatus(80301) == QUEST_STATUS_INCOMPLETE) // Lighting the Pyres
+    {
+        pGo->UseDoorOrButton(60);
+
+        CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80803);
+        if (cInfo != nullptr)
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+    }
+    return false;
+}
+
 void AddSC_episode_1()
 {
     Script *newscript;
+
+    newscript = new Script;
+    newscript->Name = "go_spirit_pyre";
+    newscript->pGOHello = &GOHello_go_spirit_pyre;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "go_portal_amanialor";
