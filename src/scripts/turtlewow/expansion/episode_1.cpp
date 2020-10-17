@@ -1204,7 +1204,7 @@ struct go_teslinah_search : public GameObjectAI
                     {                    
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80270);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSay("Ooh this place is huge! Where do we go now?");
+                        teslinah->MonsterSay("Ooh this place is huge! Where do we go now? ? Let's start in the mage district! We can try exploring the tavern and the tower.");
                         break;
                     }
                     case 3000251:
