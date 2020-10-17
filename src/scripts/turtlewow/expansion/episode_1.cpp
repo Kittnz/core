@@ -1138,9 +1138,120 @@ bool GOHello_go_spirit_pyre(Player* pPlayer, GameObject* pGo)
     return false;
 }
 
+bool QuestAccept_npc_teslinah(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver)
+        return false;
+
+    if (!pPlayer)
+        return false;
+
+    if (pQuest->GetQuestId() == 80261) // Teslinah’s Search I
+    {
+        pQuestGiver->HandleEmote(EMOTE_ONESHOT_CRY);
+        pQuestGiver->MonsterSay("Thank you, thank you, thank you! I am so happy! We should go to Stormwind, let\'s find someone important who can help! I believe miss Tanilaeh in the Golden Dawn Institute can take us back!");
+    }
+    return false;
+}
+
+bool QuestRewarded_npc_teslinah(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver)
+        return false;
+
+    if (!pPlayer)
+        return false;
+
+    if (pQuest->GetQuestId() == 80261) // Teslinah’s Search I
+    {
+        pQuestGiver->HandleEmote(EMOTE_ONESHOT_CHEER);
+        pQuestGiver->MonsterSay("Mommy is gone but we will find her! I am sure! Until then I am happy and excited to adventure with you! We\'re the bestest friends now! We\'re going to have a lot of fun seeing the world! He-he!");
+    }
+    return false;
+}
+
+struct go_teslinah_search : public GameObjectAI
+{
+    explicit go_teslinah_search(GameObject* pGo) : GameObjectAI(pGo)
+    {
+        m_uiUpdateTimer = 10000;
+    }
+
+    uint32 m_uiUpdateTimer;
+
+    void UpdateAI(uint32 const uiDiff) override
+    {
+        if (m_uiUpdateTimer < uiDiff)
+        {
+            std::list<Player*> players;
+            MaNGOS::AnyPlayerInObjectRangeCheck check(me, 20.0f, true, false);
+            MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
+
+            Cell::VisitWorldObjects(me, searcher, 20.0f);
+
+            for (Player* pPlayer : players)
+            {
+                if (pPlayer->GetQuestStatus(80261) == QUEST_STATUS_INCOMPLETE) // Teslinah’s Search I
+                {
+                    Creature* teslinah = pPlayer->GetMiniPet();
+
+                    if (!teslinah)
+                        break;
+
+                    switch (me->GetEntry())
+                    {
+                    case 3000250:
+                        CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80270);
+                        pPlayer->KilledMonster(cInfo, ObjectGuid());
+                        teslinah->MonsterSay("Ooh this place is huge! Where do we go now?");
+                        break;
+                    case 3000251:
+                        CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80271);
+                        pPlayer->KilledMonster(cInfo, ObjectGuid());
+                        teslinah->MonsterSay("Ooh this place is huge! Where do we go now?");
+                        break;
+                    case 3000252:
+                        CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80272);
+                        pPlayer->KilledMonster(cInfo, ObjectGuid());
+                        teslinah->MonsterSay("Ooh this place is huge! Where do we go now?");
+                        break;
+                    case 3000253:
+                        CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80273);
+                        pPlayer->KilledMonster(cInfo, ObjectGuid());
+                        teslinah->MonsterSay("Ooh this place is huge! Where do we go now?");
+                        break;
+                    }
+                }
+
+            }
+            m_uiUpdateTimer = 10000;
+        }
+        else
+        {
+            m_uiUpdateTimer -= uiDiff;
+        }
+    }
+};
+
+GameObjectAI* GetAI_go_teslinah_search(GameObject* gameobject)
+{
+    return new go_teslinah_search(gameobject);
+}
+
 void AddSC_episode_1()
 {
     Script *newscript;
+
+    newscript = new Script;
+    newscript->Name = "go_teslinah_search";
+    newscript->GOGetAI = &GetAI_go_teslinah_search;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_teslinah";
+    newscript->pQuestAcceptNPC = &QuestAccept_npc_teslinah;
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_teslinah;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "go_spirit_pyre";
