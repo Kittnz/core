@@ -685,9 +685,6 @@ bool ChatHandler::HandleModifyASpeedCommand(char* args)
         return false;
 
     float modSpeed = (float)atof(args);
-    
-    if (modSpeed > 4.0f && GetAccessLevel() < SEC_BASIC_ADMIN)
-        modSpeed = 4.0f;
 
     if (modSpeed > 100 || modSpeed < 0)
     {

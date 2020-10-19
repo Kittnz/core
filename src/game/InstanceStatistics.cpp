@@ -23,28 +23,17 @@
 #include "Player.h"
 #include "Creature.h"
 #include "SpellEntry.h"
-#include "ProgressBar.h"
 
 INSTANTIATE_SINGLETON_1(InstanceStatisticsMgr);
 
 void InstanceStatisticsMgr::LoadFromDB()
 {
     m_instanceWipes.clear();
-    uint32 count = 0;
     std::unique_ptr<QueryResult> result(LogsDatabase.Query("SELECT `mapId`, `creatureEntry`, `count` FROM `instance_wipes`"));
-    if (!result)
+    if (result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        
-    }
-    else
-    {
-        BarGoLink bar((int)result->GetRowCount());
         do
         {
-            bar.step();
             Field* fields = result->Fetch();
 
             uint32 mapId = fields[0].GetUInt32();
@@ -52,29 +41,15 @@ void InstanceStatisticsMgr::LoadFromDB()
             uint32 killCount = fields[2].GetUInt32();
 
             m_instanceWipes[std::make_pair(mapId, creatureEntry)] = InstanceWipes{ mapId,creatureEntry,killCount };
-            ++count;
         } while (result->NextRow());
-
-        
     }
-
 
     m_instanceCreatureKills.clear();
-    count = 0;
     result.reset(LogsDatabase.Query("SELECT `mapId`, `creatureEntry`, `spellEntry`, `count` FROM `instance_creature_kills`"));
-    if (!result)
+    if (result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        
-    }
-    else
-    {
-        BarGoLink bar((int)result->GetRowCount());
         do
         {
-            bar.step();
             Field* fields = result->Fetch();
 
             uint32 mapId = fields[0].GetUInt32();
@@ -94,29 +69,15 @@ void InstanceStatisticsMgr::LoadFromDB()
             {
                 it->second.killsBySpells[spellEntry] = killCount;
             }
-            ++count;
         } while (result->NextRow());
-
-        
     }
-
-
 
     m_instanceCustomCounters.clear();
-    count = 0;
     result.reset(LogsDatabase.Query("SELECT `index`, `count` FROM `instance_custom_counters`"));
-    if (!result)
+    if (result)
     {
-        BarGoLink bar(1);
-        bar.step();        
-    }
-    else
-    {
-        BarGoLink bar((int)result->GetRowCount());
         do
         {
-            bar.step();
-
             Field* fields = result->Fetch();
 
             uint32 index = fields[0].GetUInt32();
@@ -124,8 +85,6 @@ void InstanceStatisticsMgr::LoadFromDB()
             m_instanceCustomCounters[index] = count;
             ++count;
         } while (result->NextRow());
-
-        
     }
 }
 

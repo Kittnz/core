@@ -387,18 +387,6 @@ void WorldSession::HandleAuctionSellItem(WorldPacket & recv_data)
                 pl->GetShortDescription().c_str(), it->GetGuidStr().c_str(), it->GetEntry(), 
                 auctioneerGuid.GetString().c_str(), bid, buyout, auction_time, AH->GetHouseId());
 
-    // Log this transaction
-    PlayerTransactionData data;
-    data.type = "PlaceAuction";
-    data.parts[0].lowGuid = AH->owner;
-    data.parts[0].itemsEntries[0] = AH->itemTemplate;
-    data.parts[0].itemsCount[0] = it->GetCount();
-    data.parts[0].itemsGuid[0] = it->GetGUIDLow();
-    data.parts[0].money = bid;
-    data.parts[1].lowGuid = auctioneerGuid.GetCounter();
-    data.parts[1].money = buyout;
-    sWorld.LogTransaction(data);
-
     auctionHouse->AddAuction(AH);
 
     sAuctionMgr.AddAItem(it);
@@ -534,17 +522,6 @@ void WorldSession::HandleAuctionPlaceBid(WorldPacket & recv_data)
 
         auction->bidder = pl->GetGUIDLow();
         auction->bid = auction->buyout;
-
-        PlayerTransactionData data;
-        data.type = "Buyout";
-        data.parts[0].lowGuid = auction->owner;
-        data.parts[0].itemsEntries[0] = auction->itemTemplate;
-        Item* item = sAuctionMgr.GetAItem(auction->itemGuidLow);
-        data.parts[0].itemsCount[0] = item ? item->GetCount() : 0;
-        data.parts[0].itemsGuid[0] = auction->itemGuidLow;
-        data.parts[1].lowGuid = auction->bidder;
-        data.parts[1].money = auction->bid;
-        sWorld.LogTransaction(data);
 
         sAuctionMgr.SendAuctionSuccessfulMail(auction);
         sAuctionMgr.SendAuctionWonMail(auction);

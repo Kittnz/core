@@ -34,7 +34,6 @@
 
 #include "CreatureLinkingMgr.h"
 #include "Policies/Singleton.h"
-#include "ProgressBar.h"
 #include "Database/DatabaseEnv.h"
 #include "ObjectMgr.h"
 #include "SharedDefines.h"
@@ -71,17 +70,10 @@ void CreatureLinkingMgr::LoadFromDB()
     // Load `creature_linking_template`
     uint32 count = 0;
     std::unique_ptr<QueryResult> result(WorldDatabase.Query("SELECT `entry`, `map`, `master_entry`, `flag`, `search_range` FROM `creature_linking_template`"));
-    if (!result)
+    if (result)
     {
-        BarGoLink bar(1);
-        bar.step();        
-    }
-    else
-    {
-        BarGoLink bar((int)result->GetRowCount());
         do
         {
-            bar.step();
             Field* fields = result->Fetch();
 
             CreatureLinkingInfo tmp;
@@ -104,8 +96,6 @@ void CreatureLinkingMgr::LoadFromDB()
             // Store master_entry
             m_eventTriggers.insert(tmp.masterId);
         } while (result->NextRow());
-
-        
     }
 
     // Load `creature_linking`
@@ -113,18 +103,11 @@ void CreatureLinkingMgr::LoadFromDB()
     result.reset(WorldDatabase.Query("SELECT `guid`, `master_guid`, `flag` FROM `creature_linking`"));
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        
         return;
     }
 
-    BarGoLink guidBar((int)result->GetRowCount());
     do
     {
-        guidBar.step();
-
         Field* fields = result->Fetch();
         CreatureLinkingInfo tmp;
 
@@ -146,8 +129,6 @@ void CreatureLinkingMgr::LoadFromDB()
         // Store master_guid
         m_eventGuidTriggers.insert(tmp.masterId);
     } while (result->NextRow());
-
-    
 }
 
 /** This function is used to check if a DB-Entry is valid

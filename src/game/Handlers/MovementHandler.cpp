@@ -230,11 +230,7 @@ void WorldSession::HandleMoveTeleportAckOpcode(WorldPacket& recv_data)
 
     uint32 counter = 0;
     uint32 time = 0;
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_9_4
     recv_data >> counter >> time;
-#else
-    recv_data >> time;
-#endif
     DEBUG_LOG("Guid: %s", guid.GetString().c_str());
     DEBUG_LOG("Counter %u, time %u", counter, time / IN_MILLISECONDS);
 
@@ -352,45 +348,11 @@ void WorldSession::HandleMovementOpcodes(WorldPacket & recv_data)
 
     WorldPacket data(opcode, recv_data.size());
 
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
     data << _clientMoverGuid.WriteAsPacked();
-#else
-    data << _clientMoverGuid.GetRawValue();
-#endif
     movementInfo.Write(data);
 
 //    mover->SendMovementMessageToSet(std::move(data), true, exceptPlayer);
     mover->SendMovementMessageToSet(std::move(data), true, _player);
-
-    // Fix movement issue on older clients where if the player jumps while running,
-    // and then lets go of the key while in the air, he appears to continue moving
-    // forward on other people's screen. Once he moves for real, they will see him
-    // teleport back to where he was standing after he jumped.
-#if SUPPORTED_CLIENT_BUILD == CLIENT_BUILD_1_9_4
-    if (opcode == MSG_MOVE_FALL_LAND)
-    {
-        uint16 opcode2 = 0;
-        if (!movementInfo.HasMovementFlag(MOVEFLAG_MASK_MOVING))
-            opcode2 = MSG_MOVE_STOP;
-        else if (movementInfo.HasMovementFlag(MOVEFLAG_BACKWARD))
-            opcode2 = MSG_MOVE_START_BACKWARD;
-        else if (movementInfo.HasMovementFlag(MOVEFLAG_FORWARD))
-            opcode2 = MSG_MOVE_START_FORWARD;
-        else if (movementInfo.HasMovementFlag(MOVEFLAG_STRAFE_LEFT))
-            opcode2 = MSG_MOVE_START_STRAFE_LEFT;
-        else if (movementInfo.HasMovementFlag(MOVEFLAG_STRAFE_RIGHT))
-            opcode2 = MSG_MOVE_START_STRAFE_RIGHT;
-
-        if (opcode2)
-        {
-            WorldPacket data(opcode2, recv_data.size());
-            data << _clientMoverGuid.WriteAsPacked();             // write guid
-            movementInfo.Write(data);                             // write data
-
-            mover->SendMovementMessageToSet(std::move(data), true, _player);
-        }
-    }
-#endif
 }
 
 void WorldSession::HandleForceSpeedChangeAckOpcodes(WorldPacket &recv_data)
@@ -404,9 +366,7 @@ void WorldSession::HandleForceSpeedChangeAckOpcodes(WorldPacket &recv_data)
     float  newspeed;
 
     recv_data >> guid;
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_9_4
     recv_data >> Unused<uint32>();                          // counter or moveEvent
-#endif
     recv_data >> movementInfo;
     recv_data >> newspeed;
     movementInfo.UpdateTime(recv_data.GetPacketTime());
@@ -475,11 +435,7 @@ void WorldSession::HandleForceSpeedChangeAckOpcodes(WorldPacket &recv_data)
         // Maybe update movespeed using the spline packet. works for move splines
         // and normal movement, but reverted due to issues in same changeset
         WorldPacket data(SetSpeed2Opc_table[move_type], 31);
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
         data << _player->GetMover()->GetPackGUID();
-#else
-        data << _player->GetMover()->GetGUID();
-#endif
         data << movementInfo;
         data << float(newspeed);
         _player->SendMovementMessageToSet(std::move(data), false);
@@ -487,11 +443,7 @@ void WorldSession::HandleForceSpeedChangeAckOpcodes(WorldPacket &recv_data)
         if (!_player->GetMover()->movespline->Finalized())
         {
             WorldPacket splineData(SMSG_MONSTER_MOVE, 31);
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
             splineData << _player->GetMover()->GetPackGUID();
-#else
-            splineData << _player->GetMover()->GetGUID();
-#endif
             Movement::PacketBuilder::WriteMonsterMove(*(_player->GetMover()->movespline), splineData);
             _player->SendMovementMessageToSet(std::move(splineData), false);
         }
@@ -506,12 +458,6 @@ void WorldSession::HandleSetActiveMoverOpcode(WorldPacket &recv_data)
     recv_data >> guid;
 
     ObjectGuid serverMoverGuid = _player->GetMover()->GetObjectGuid();
-
-    // Before 1.10, client sends 0 as guid if it has no control.
-#if SUPPORTED_CLIENT_BUILD <= CLIENT_BUILD_1_9_4
-    if ((serverMoverGuid == _player->GetObjectGuid()) && !_player->HasSelfMovementControl())
-        serverMoverGuid = ObjectGuid();
-#endif
 
     if (serverMoverGuid != guid)
     {
@@ -545,7 +491,6 @@ void WorldSession::HandleMoveNotActiveMoverOpcode(WorldPacket &recv_data)
 
     MovementInfo mi;
 
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_9_4
     ObjectGuid old_mover_guid;
     recv_data >> old_mover_guid;
     recv_data >> mi;
@@ -561,10 +506,6 @@ void WorldSession::HandleMoveNotActiveMoverOpcode(WorldPacket &recv_data)
         recv_data.rpos(recv_data.wpos());                   // prevent warnings spam
         return;
     }
-#else
-    recv_data >> mi;
-    _clientMoverGuid = ObjectGuid();
-#endif
 
     _player->m_movementInfo = mi;
 }
@@ -597,9 +538,7 @@ void WorldSession::HandleMoveKnockBackAck(WorldPacket & recv_data)
     MovementInfo movementInfo;
 
     recv_data >> guid;
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_9_4
     recv_data >> Unused<uint32>();                          // knockback packets counter
-#endif
     recv_data >> movementInfo;
     movementInfo.UpdateTime(recv_data.GetPacketTime());
 
@@ -633,9 +572,7 @@ void WorldSession::HandleMoveHoverAck(WorldPacket& recv_data)
     MovementInfo movementInfo;
 
     recv_data >> Unused<uint64>();                          // guid
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_9_4
     recv_data >> Unused<uint32>();                          // unk
-#endif
     recv_data >> movementInfo;
     recv_data >> Unused<uint32>();                          // unk2
 }
@@ -647,9 +584,7 @@ void WorldSession::HandleMoveWaterWalkAck(WorldPacket& recv_data)
     MovementInfo movementInfo;
 
     recv_data.read_skip<uint64>();                          // guid
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_9_4
     recv_data.read_skip<uint32>();                          // unk
-#endif
     recv_data >> movementInfo;
     recv_data >> Unused<uint32>();                          // unk2
 }
@@ -842,7 +777,6 @@ void WorldSession::HandleMoveTimeSkippedOpcode(WorldPacket & recv_data)
         tr->SendOutOfRangeUpdateToPlayer(pl);
         tr->SendCreateUpdateToPlayer(pl);
     }
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
     else
     {
         WorldPacket data(MSG_MOVE_TIME_SKIPPED, 12);
@@ -850,7 +784,6 @@ void WorldSession::HandleMoveTimeSkippedOpcode(WorldPacket & recv_data)
         data << lag;
         pl->SendMovementMessageToSet(std::move(data), false);
     }
-#endif
 }
 
 void WorldSession::HandleFeatherFallAck(WorldPacket &recv_data)
@@ -860,9 +793,7 @@ void WorldSession::HandleFeatherFallAck(WorldPacket &recv_data)
     ObjectGuid guid;
     MovementInfo movementInfo;
     recv_data >> guid; // guid
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_9_4
     recv_data.read_skip<uint32>(); // counter
-#endif
     recv_data >> movementInfo;
     movementInfo.UpdateTime(recv_data.GetPacketTime());
 
@@ -898,9 +829,7 @@ void WorldSession::HandleMoveUnRootAck(WorldPacket& recv_data)
         return;
     }
     MovementInfo movementInfo;
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_9_4
     recv_data.read_skip<uint32>();                          // unk
-#endif
     recv_data >> movementInfo;
     movementInfo.UpdateTime(recv_data.GetPacketTime());
 
@@ -915,11 +844,7 @@ void WorldSession::HandleMoveUnRootAck(WorldPacket& recv_data)
     _player->UpdateFallInformationIfNeed(movementInfo, recv_data.GetOpcode());
 
     WorldPacket data(MSG_MOVE_UNROOT, recv_data.size());
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
     data << _player->GetPackGUID();
-#else
-    data << _player->GetGUID();
-#endif
     movementInfo.Write(data);
     _player->SendMovementMessageToSet(std::move(data), true, _player);
     
@@ -940,9 +865,7 @@ void WorldSession::HandleMoveRootAck(WorldPacket& recv_data)
         return;
     }
     MovementInfo movementInfo;
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_9_4
     recv_data.read_skip<uint32>();                          // unk
-#endif
     recv_data >> movementInfo;
     movementInfo.UpdateTime(recv_data.GetPacketTime());
 
@@ -957,11 +880,7 @@ void WorldSession::HandleMoveRootAck(WorldPacket& recv_data)
     _player->UpdateFallInformationIfNeed(movementInfo, recv_data.GetOpcode());
     
     WorldPacket data(MSG_MOVE_ROOT, recv_data.size());
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
     data << _player->GetPackGUID();
-#else
-    data << _player->GetGUID();
-#endif
     movementInfo.Write(data);
     _player->SendMovementMessageToSet(std::move(data), true, _player);
     

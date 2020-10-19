@@ -25,7 +25,6 @@
 #include "Database/DatabaseEnv.h"
 #include "Log.h"
 #include "ObjectMgr.h"
-#include "ProgressBar.h"
 #include <list>
 #include <vector>
 #include "Util.h"
@@ -54,37 +53,25 @@ void LoadRandomEnchantmentsTable()
 
     EnchantmentStore::const_iterator tab;
     uint32 entry, ench;
-    uint32 count = 0;
 
     QueryResult *result = WorldDatabase.PQuery("SELECT entry, ench, chance FROM item_enchantment_template WHERE ((%u >= patch_min) && (%u <= patch_max))", sWorld.GetWowPatch(), sWorld.GetWowPatch());
 
     if (result)
     {
-        BarGoLink bar(result->GetRowCount());
-
         do
         {
             Field *fields = result->Fetch();
-            bar.step();
 
             entry = fields[0].GetUInt32();
             ench = fields[1].GetUInt32();
             float chance = fields[2].GetFloat();
 
             if (chance > 0.000001f && chance <= 100.0f)
-                RandomItemEnch[entry].push_back(EnchStoreItem(ench, chance));
-
-            ++count;
+                RandomItemEnch[entry].emplace_back(EnchStoreItem(ench, chance));
         }
         while (result->NextRow());
 
         delete result;
-
-        
-    }
-    else
-    {
-        
     }
 }
 

@@ -22,12 +22,11 @@
 #include "ObjectGuid.h"
 #include "Database/DatabaseEnv.h"
 #include "Policies/SingletonImp.h"
-#include "ProgressBar.h"
 #include "World.h"
 #include "ObjectMgr.h"
 #include "Player.h"
 
-INSTANTIATE_SINGLETON_1(GuildMgr);
+GuildMgr sGuildMgr;
 
 GuildMgr::GuildMgr()
 {
@@ -103,8 +102,6 @@ std::string GuildMgr::GetGuildNameById(uint32 guildId) const
 
 void GuildMgr::LoadGuilds()
 {
-    uint32 count = 0;
-
     //                                                    0             1          2          3           4           5           6
     QueryResult *result = CharacterDatabase.Query("SELECT guild.guildid,guild.name,leaderguid,EmblemStyle,EmblemColor,BorderStyle,BorderColor,"
                           //   7               8    9    10
@@ -112,11 +109,6 @@ void GuildMgr::LoadGuilds()
 
     if (!result)
     {
-        BarGoLink bar(1);
-
-        bar.step();
-
-        
         return;
     }
 
@@ -131,15 +123,9 @@ void GuildMgr::LoadGuilds()
                                       "characters.name, characters.level, characters.class, characters.zone, characters.logout_time, characters.account "
                                       "FROM guild_member LEFT JOIN characters ON characters.guid = guild_member.guid ORDER BY guildid ASC");
 
-    BarGoLink bar(result->GetRowCount());
 
     do
     {
-        //Field *fields = result->Fetch();
-
-        bar.step();
-        ++count;
-
         Guild *newGuild = new Guild;
         if (!newGuild->LoadGuildFromDB(result) ||
                 !newGuild->LoadRanksFromDB(guildRanksResult) ||
@@ -173,18 +159,11 @@ void GuildMgr::LoadGuilds()
 void GuildMgr::LoadPetitions()
 {
     CleanUpPetitions(); // for reload
-    uint32 count = 0;
-
     //                                                    0          1             2            3
     QueryResult* result = CharacterDatabase.Query("SELECT ownerguid, petitionguid, charterguid, name FROM petition");
 
     if (!result)
     {
-        BarGoLink bar(1);
-
-        bar.step();
-
-        
         return;
     }
 
@@ -192,13 +171,8 @@ void GuildMgr::LoadPetitions()
     //                                                                0          1             2           3
     QueryResult* petitionSignatures = CharacterDatabase.Query("SELECT ownerguid, petitionguid, playerguid, player_account FROM petition_sign");
 
-    BarGoLink bar(result->GetRowCount());
-
     do
     {
-        bar.step();
-        ++count;
-
         Petition *petition = new Petition;
         if (!petition->LoadFromDB(result))
         {
@@ -247,8 +221,6 @@ void GuildMgr::LoadPetitions()
         } while (petitionSignatures->NextRow());
         delete petitionSignatures;
     }
-
-    
 }
 
 void GuildMgr::SaveGuildBankInventories()

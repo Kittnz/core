@@ -259,19 +259,13 @@ bool Unit::IsTriggeredAtSpellProcEvent(Unit *pVictim, SpellAuraHolder* holder, S
     /// Delete all these spells, and manage it via the DB (spell_proc_event)
     if (procSpell)
     {
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
         // Eye for an Eye
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_9_4
         if (spellProto->SpellIconID == 1820)
-#else
-        if (spellProto->SpellIconID == 1799)
-#endif
         {
             if (procFlag & PROC_FLAG_TAKEN_NEGATIVE_SPELL_HIT && procExtra & PROC_EX_CRITICAL_HIT)
                 return true;
             return false;
         }
-#endif
         // Improved Lay on Hands
         if (spellProto->SpellIconID == 79 && spellProto->SpellFamilyName == SPELLFAMILY_PALADIN)
         {
@@ -287,12 +281,6 @@ bool Unit::IsTriggeredAtSpellProcEvent(Unit *pVictim, SpellAuraHolder* holder, S
             if (!isVictim && (procSpell->DmgClass == SPELL_DAMAGE_CLASS_MAGIC) && !IsPositiveSpell(procSpell) && (procExtra & (PROC_EX_NORMAL_HIT | PROC_EX_CRITICAL_HIT)) && !(IsSpellAppliesAura(procSpell) && (procFlag & PROC_FLAG_ON_DO_PERIODIC)))
                 return roll_chance_f((float)spellProto->procChance);
         }
-#if SUPPORTED_CLIENT_BUILD <= CLIENT_BUILD_1_10_2
-        // World of Warcraft Client Patch 1.11.0 (2006-06-20)
-        // - Vengeance: Seal of Command critical hits can now trigger this ability
-        if ((procSpell->Id == 20424) && (spellProto->SpellIconID == 84))
-            return false;
-#endif
         // Zandalarian Hero Charm - Unstable Power
         if (spellProto->Id == 24658)
         {
@@ -305,13 +293,8 @@ bool Unit::IsTriggeredAtSpellProcEvent(Unit *pVictim, SpellAuraHolder* holder, S
             //   spell, heal over time spell, and area aura spells such as Blizzard
             //   and Consecration. Only one charge will be burned per area spell cast,
             //   rather than multiple charges per target hit as was previously the case.  
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_9_4
             if ((procFlag & (PROC_FLAG_SUCCESSFUL_MELEE_SPELL_HIT | PROC_FLAG_SUCCESSFUL_RANGED_SPELL_HIT | PROC_FLAG_SUCCESSFUL_AOE | PROC_FLAG_SUCCESSFUL_PERIODIC_SPELL_HIT)) && (procSpell->School != SPELL_SCHOOL_NORMAL))
                 return true;
-#else
-            if ((procFlag & (PROC_FLAG_ON_DO_PERIODIC)) && (procSpell->School != SPELL_SCHOOL_NORMAL))
-                return true;
-#endif
         }
         // DRUID
         // Omen of Clarity
@@ -473,7 +456,6 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, Aura
         {
             switch (dummySpell->Id)
             {
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
                 // Eye for an Eye
                 case 9799:
                 case 25988:
@@ -490,7 +472,6 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, Aura
                     triggered_spell_id = 25997;
                     break;
                 }
-#endif
                 // Sweeping Strikes
                 case 12292:
                 case 18765:
@@ -1338,7 +1319,6 @@ SpellAuraProcResult Unit::HandleProcTriggerSpellAuraProc(Unit *pVictim, uint32 d
         case SPELLFAMILY_DRUID:
             break;
         case SPELLFAMILY_HUNTER:
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
             switch (auraSpellInfo->Id)
             {
                 // Patch 1.9: Aspect of the Pack and Aspect of the Cheetah - Periodic damage will no longer trigger the Dazed effect.
@@ -1347,79 +1327,9 @@ SpellAuraProcResult Unit::HandleProcTriggerSpellAuraProc(Unit *pVictim, uint32 d
                     if (procFlags & (PROC_FLAG_ON_DO_PERIODIC | PROC_FLAG_ON_TAKE_PERIODIC | PROC_FLAG_SUCCESSFUL_PERIODIC_SPELL_HIT | PROC_FLAG_TAKEN_PERIODIC_SPELL_HIT))
                         return SPELL_AURA_PROC_FAILED;
             }
-#endif
             break;
         case SPELLFAMILY_PALADIN:
         {
-#if SUPPORTED_CLIENT_BUILD <= CLIENT_BUILD_1_9_4
-            if (auraSpellInfo->IsFitToFamilyMask<CF_PALADIN_SEALS>())
-            {
-                uint32 spellId = 0;
-                switch (auraSpellInfo->Id)
-                {
-                    case 21084:
-                        spellId = 25742;
-                        break; // Rank 1
-                    case 20287:
-                        spellId = 25740;
-                        break; // Rank 2
-                    case 20288:
-                        spellId = 25739;
-                        break; // Rank 3
-                    case 20289:
-                        spellId = 25738;
-                        break; // Rank 4
-                    case 20290:
-                        spellId = 25737;
-                        break; // Rank 5
-                    case 20291:
-                        spellId = 25736;
-                        break; // Rank 6
-                    case 20292:
-                        spellId = 25735;
-                        break; // Rank 7
-                    case 20293:
-                        spellId = 25713;
-                        break; // Rank 8
-                }
-                if (spellId)
-                {
-                    float MAX_WSP = 4.0f;
-                    float MIN_WSP = 1.5f;
-
-                    Item *item = static_cast<Player*>(this)->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_MAINHAND);
-                    float speed = (item ? item->GetProto()->Delay : BASE_ATTACK_TIME) / 1000.0f;
-
-                    float minDmg = triggerAmount / 87.0f;
-                    float maxDmg = triggerAmount / 25.0f;
-
-                    float damageBasePoints = (maxDmg - minDmg) * ((speed - MIN_WSP) / (MAX_WSP - MIN_WSP)) + minDmg;
-
-                    // Apply Improved Seal of Rightousness talent
-                    // Modifier is applied on base damage only (changed patch 2.1.0)
-                    uint32 impSoRList[] = { 20224, 20225, 20330, 20331, 20332 };
-                    for (int i = 0; i < 5; ++i) {
-                        SpellModifier *mod = static_cast<Player*>(this)->GetSpellMod(SPELLMOD_ALL_EFFECTS, impSoRList[i]);
-                        if (mod && mod->type == SPELLMOD_PCT && mod->value > 0)
-                            damageBasePoints += damageBasePoints*(float)mod->value / 100.0f;
-                    }
-
-                    int32 damagePoint = urand(0, 1) ? floor(damageBasePoints) : ceil(damageBasePoints);
-
-                    // apply damage bonuses manually
-                    if (damagePoint >= 0)
-                    {
-                        damagePoint = SpellDamageBonusDone(pVictim, auraSpellInfo, damagePoint, SPELL_DIRECT_DAMAGE);
-                        damagePoint = pVictim->SpellDamageBonusTaken(this, auraSpellInfo, damagePoint, SPELL_DIRECT_DAMAGE);
-                    }
-
-                    CastCustomSpell(pVictim, spellId, &damagePoint, nullptr, nullptr, true, nullptr, triggeredByAura);
-                    // Seal of Righteousness can proc weapon enchants. mechanic removed in 2.1.0
-                    static_cast<Player*>(this)->CastItemCombatSpell(pVictim, BASE_ATTACK);
-                    return SPELL_AURA_PROC_OK;                                // no hidden cooldown
-                }
-            }
-#endif
             // Judgement of Light and Judgement of Wisdom
             if (auraSpellInfo->IsFitToFamilyMask<CF_PALADIN_JUDGEMENT_OF_WISDOM_LIGHT>())
             {
@@ -1617,30 +1527,6 @@ SpellAuraProcResult Unit::HandleProcTriggerDamageAuraProc(Unit *pVictim, uint32 
     DEBUG_FILTER_LOG(LOG_FILTER_SPELL_CAST, "ProcDamageAndSpell: doing %u damage from spell id %u (triggered by auratype %u of spell %u)",
                      triggeredByAura->GetModifier()->m_amount, spellInfo->Id, triggeredByAura->GetModifier()->m_auraname, triggeredByAura->GetId());
     
-    // World of Warcraft Client Patch 1.9.0 (2006-01-03)
-    // - Seal of Righteousness - Now does holy damage on every swing.
-#if SUPPORTED_CLIENT_BUILD <= CLIENT_BUILD_1_8_4
-    if (spellInfo->IsFitToFamilyMask<CF_PALADIN_SEALS>())
-    {
-        switch (spellInfo->Id)
-        {
-            case 21084: // Rank 1
-            case 20287: // Rank 2
-            case 20288: // Rank 3
-            case 20289: // Rank 4
-            case 20290: // Rank 5
-            case 20291: // Rank 6
-            case 20292: // Rank 7
-            case 20293: // Rank 8
-            {
-                if (!roll_chance_i(75)) // made up value
-                    return SPELL_AURA_PROC_FAILED;
-            }
-            break; 
-        }
-    }
-#endif
-
     SpellNonMeleeDamage damageInfo(this, pVictim, spellInfo->Id, SpellSchools(spellInfo->School));
     damageInfo.damage = CalculateSpellDamage(pVictim, spellInfo, triggeredByAura->GetEffIndex());
     damageInfo.damage = SpellDamageBonusDone(pVictim, spellInfo, damageInfo.damage, SPELL_DIRECT_DAMAGE);

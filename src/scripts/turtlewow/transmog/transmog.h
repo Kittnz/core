@@ -49,8 +49,6 @@ enum
 class transmog
 {
 public:
-    static transmog& Instance();
-
     typedef std::unordered_map<uint32, const ItemPrototype*> FakeItemProtoMap;
 
     typedef std::unordered_map<uint32, uint32> FakeItemInstance;
@@ -88,5 +86,6 @@ private:
     FakeItemProtoMap m_fakeitemproto;
 };
 
-#define sTransmog transmog::Instance()
+extern transmog sTransmog;
+
 #endif

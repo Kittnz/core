@@ -1395,7 +1395,6 @@ void Aura::TriggerSpell()
                 if (urand(0, 20 * 5 - 1) != 0)
                     return;
                 break;
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
             case 9347:                                      // Mortal Strike
             {
                 // expected selection current fight target
@@ -1411,7 +1410,6 @@ void Aura::TriggerSpell()
 
                 break;
             }
-#endif
             case 1010:                                      // Curse of Idiocy
             {
                 // TODO: spell casted by result in correct way mostly
@@ -1744,18 +1742,6 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
             }
             case SPELLFAMILY_PALADIN:
             {
-#if SUPPORTED_CLIENT_BUILD <= CLIENT_BUILD_1_8_4
-                // Judgement of Command
-                if (GetSpellProto()->SpellIconID == 561)
-                {
-                    if (GetCaster() != GetTarget())
-                    {
-                        m_isPeriodic = true;
-                        m_modifier.periodictime = 2000; // guess
-                    }
-                    return;
-                }
-#endif
                 break;
             }
             case SPELLFAMILY_SHAMAN:
@@ -2061,7 +2047,6 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
         }
         case SPELLFAMILY_MAGE:
         {
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_10_2
             switch (GetId())
             {
                 // Frost Warding
@@ -2103,7 +2088,6 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
                     return;
                 }
             }
-#endif
             break;
         }
         case SPELLFAMILY_DRUID:
@@ -3096,11 +3080,6 @@ void Unit::ModPossess(Unit* target, bool apply, AuraRemoveMode m_removeMode)
         }
     }
     target->SetUnitMovementFlags(MOVEFLAG_NONE);
-
-#if SUPPORTED_CLIENT_BUILD <= CLIENT_BUILD_1_9_4
-    if (pPlayerCaster && pPlayerTarget)
-        pPlayerTarget->SendCreateUpdateToPlayer(pPlayerCaster);
-#endif
 }
 
 void Aura::HandleModPossessPet(bool apply, bool Real)
@@ -4257,9 +4236,7 @@ void Aura::HandlePeriodicHeal(bool apply, bool /*Real*/)
         //   their strength determined at the moment they are cast.Changing the
         //   amount of bonus healing you have during the duration of the periodic
         //   spell will have no impact on how much it heals for.
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_10_2
         m_modifier.m_amount = caster->SpellHealingBonusDone(target, GetSpellProto(), m_modifier.m_amount, DOT, GetStackAmount());
-#endif
     }
 }
 
@@ -4291,7 +4268,6 @@ uint32 Aura::CalculateDotDamage() const
         }
         case SPELLFAMILY_ROGUE:
         {
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_11_2
             // World of Warcraft Client Patch 1.12.0 (2006-08-22)
             // - Rupture: Rupture now increases in potency with greater attack power.
             if (spellProto->IsFitToFamilyMask<CF_ROGUE_RUPTURE>())
@@ -4304,13 +4280,6 @@ uint32 Aura::CalculateDotDamage() const
                     damage += int32(caster->GetTotalAttackPowerValue(BASE_ATTACK) * cp / 100);
                 }
             }
-#elif SUPPORTED_CLIENT_BUILD <= CLIENT_BUILD_1_11_2
-            // World of Warcraft Client Patch 1.12.0 (2006-08-22)
-            // - Garrote: The damage from this ability has been increased. In
-            //   addition, Garrote now increases in potency with greater attack power.
-            if (spellProto->IsFitToFamilyMask<CF_ROGUE_GARROTE>())
-                return damage;
-#endif
             break;
         }
         default:
@@ -4344,7 +4313,6 @@ void Aura::HandlePeriodicDamage(bool apply, bool Real)
     // World of Warcraft Client Patch 1.10.0 (2006-03-28)
     // - Damage over time spells are no longer affected by changes in
     //   equipment after the cast.
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_9_4
     Unit *target = GetTarget();
     SpellEntry const* spellProto = GetSpellProto();
 
@@ -4362,7 +4330,6 @@ void Aura::HandlePeriodicDamage(bool apply, bool Real)
 
         m_modifier.m_amount = CalculateDotDamage();
     }
-#endif
 }
 
 void Aura::HandlePeriodicDamagePCT(bool apply, bool /*Real*/)
@@ -5049,21 +5016,6 @@ void Aura::HandleAuraModAttackPower(bool apply, bool /*Real*/)
             modOwner->ApplySpellMod(GetSpellProto()->Id, SPELLMOD_ATTACK_POWER, amount);
 
     GetTarget()->HandleStatModifier(UNIT_MOD_ATTACK_POWER, TOTAL_VALUE, amount, apply);
-
-#if (SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_3_1) && (SUPPORTED_CLIENT_BUILD <= CLIENT_BUILD_1_8_4)
-    // Blood Fury- Add aura to decrease attack power on remove
-    if (!apply && GetId() == 23234 && (m_removeMode == AURA_REMOVE_BY_CANCEL || m_removeMode == AURA_REMOVE_BY_EXPIRE))
-    {
-        Unit* target = GetTarget();
-        // using delayed event because of an error in ExclusiveAuraUnapply
-        target->m_Events.AddLambdaEventAtOffset([target]
-        {
-            int32 attackPower = -25 * (target->GetInt32Value(UNIT_FIELD_ATTACK_POWER)) / 100;
-            if (attackPower < 0)
-                target->CastCustomSpell(target, 23230, &attackPower, nullptr, nullptr, true, nullptr);
-        }, 1);
-    }
-#endif
 }
 
 void Aura::HandleAuraModRangedAttackPower(bool apply, bool /*Real*/)
@@ -5094,7 +5046,6 @@ void Aura::HandleAuraModAttackPowerPercent(bool apply, bool /*Real*/)
 
 void Aura::HandleAuraModRangedAttackPowerPercent(bool apply, bool /*Real*/)
 {
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
     if ((GetTarget()->getClassMask() & CLASSMASK_WAND_USERS) != 0)
         return;
 
@@ -5106,7 +5057,6 @@ void Aura::HandleAuraModRangedAttackPowerPercent(bool apply, bool /*Real*/)
 
     // UNIT_FIELD_RANGED_ATTACK_POWER_MULTIPLIER = multiplier - 1
     GetTarget()->HandleStatModifier(UNIT_MOD_ATTACK_POWER_RANGED, TOTAL_PCT, amount, apply);
-#endif
 }
 
 /********************************/
@@ -5663,11 +5613,7 @@ void Aura::PeriodicTick(SpellEntry const* sProto, AuraType auraType, uint32 data
             else
             {
                 if (m_modifier.m_auraname == SPELL_AURA_PERIODIC_DAMAGE)
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_9_4
                     pdamage = (m_modifier.m_amount > 0 ? uint32(m_modifier.m_amount) : 0);
-#else
-                    pdamage = CalculateDotDamage();
-#endif
                 else
                     pdamage = uint32(target->GetMaxHealth() * (m_modifier.m_amount > 0 ? m_modifier.m_amount : 0) / 100);
             }
@@ -5863,21 +5809,8 @@ void Aura::PeriodicTick(SpellEntry const* sProto, AuraType auraType, uint32 data
             if (target != pCaster && spellProto->SpellVisual == 163 && !pCaster->isAlive())
                 return;
 
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_10_2
             // Ignore non positive values (can be result apply spellmods to aura damage).
             uint32 amount = m_modifier.m_amount > 0 ? m_modifier.m_amount : 0;
-#else
-            // Before 1.11 the heal bonuses were calculated each tick, not upon initial cast.
-            uint32 amount;
-            if (aura_type == SPELL_AURA_PERIODIC_HEAL)
-            {
-                int32 const intAmount = pCaster->SpellHealingBonusDone(target, GetSpellProto(), m_modifier.m_amount, DOT, GetStackAmount());
-                amount = intAmount > 0 ? intAmount : 0;
-            }
-            else
-                amount = m_modifier.m_amount > 0 ? m_modifier.m_amount : 0;
-#endif
-
             uint32 pdamage;
 
             if (m_modifier.m_auraname == SPELL_AURA_OBS_MOD_HEALTH)
@@ -6286,40 +6219,6 @@ void Aura::PeriodicDummyTick()
 
         case SPELLFAMILY_PALADIN:
         {
-#if SUPPORTED_CLIENT_BUILD <= CLIENT_BUILD_1_8_4
-            // Judgement of Command
-            if (spell->SpellIconID == 561)
-            {
-                if (target && target->hasUnitState(UNIT_STAT_STUNNED))
-                {
-                    if (Unit* pCaster = GetCaster())
-                    {
-                        uint32 spellId = 0;
-                        switch (spell->Id)
-                        {
-                            case 20425: // Rank 1
-                                spellId = 20467;
-                                break;
-                            case 20962: // Rank 2
-                                spellId = 20963;
-                                break;
-                            case 20961: // Rank 3
-                                spellId = 20964;
-                                break;
-                            case 20967: // Rank 4
-                                spellId = 20965;
-                                break;
-                            case 20968: // Rank 5
-                                spellId = 20966;
-                                break;
-                        }
-                        if (spellId)
-                            pCaster->CastSpell(target, spellId, true);
-                    }
-                }
-                return;
-            }
-#endif
             break;
         }
         default:

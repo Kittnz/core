@@ -910,7 +910,7 @@ class MANGOS_DLL_SPEC Player final: public Unit
 
         bool IsGameMaster() const { return m_ExtraFlags & PLAYER_EXTRA_GM_ON; }
         void SetGameMaster(bool on);
-        bool IsGMChat() const { return GetSession()->GetSecurity() >= SEC_MODERATOR && (m_ExtraFlags & PLAYER_EXTRA_GM_CHAT); }
+        bool IsGMChat() const { return GetSession()->GetSecurity() >= SEC_GAMEMASTER && (m_ExtraFlags & PLAYER_EXTRA_GM_CHAT); }
         void SetGMChat(bool on) { if(on) m_ExtraFlags |= PLAYER_EXTRA_GM_CHAT; else m_ExtraFlags &= ~PLAYER_EXTRA_GM_CHAT; }
         bool IsTaxiCheater() const { return m_ExtraFlags & PLAYER_EXTRA_TAXICHEAT; }
         void SetTaxiCheater(bool on) { if(on) m_ExtraFlags |= PLAYER_EXTRA_TAXICHEAT; else m_ExtraFlags &= ~PLAYER_EXTRA_TAXICHEAT; }
@@ -1100,11 +1100,8 @@ class MANGOS_DLL_SPEC Player final: public Unit
         Item* GetItemFromBuyBackSlot(uint32 slot);
         void RemoveItemFromBuyBackSlot(uint32 slot, bool del);
 
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_10_2
         uint32 GetMaxKeyringSize() const { return getLevel() < 40 ? 4 : (getLevel() < 50 ? 8 : 12); }
-#else
-        uint32 GetMaxKeyringSize() const { return 0; }
-#endif
+
         void SendEquipError(InventoryResult msg, Item* pItem, Item* pItem2 = nullptr, uint32 itemid = 0) const;
         void SendBuyError(BuyResult msg, Creature* pCreature, uint32 item, uint32 param) const;
         void SendSellError(SellResult msg, Creature* pCreature, ObjectGuid itemGuid, uint32 param) const;
@@ -1321,9 +1318,7 @@ class MANGOS_DLL_SPEC Player final: public Unit
         void _LoadQuestStatus(QueryResult* result);
         void _LoadGroup(QueryResult* result);
         void _LoadSkills(QueryResult* result);
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_10_2
         void _LoadForgottenSkills(QueryResult* result);
-#endif
         void LoadSkillsFromFields();
         void _LoadSpells(QueryResult* result);
         bool _LoadHomeBind(QueryResult* result);
@@ -1624,9 +1619,7 @@ class MANGOS_DLL_SPEC Player final: public Unit
         void UpdateOldRidingSkillToNew(bool has_epic_mount);
         void UpdateSkillsForLevel();
         SkillStatusMap mSkillStatus;
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_10_2
         std::unordered_map<uint16, uint16> m_mForgottenSkills;
-#endif
     public:
         uint32 GetFreePrimaryProfessionPoints() const { return GetUInt32Value(PLAYER_CHARACTER_POINTS2); }
         void SetFreePrimaryProfessions(uint16 profs) { SetUInt32Value(PLAYER_CHARACTER_POINTS2, profs); }
@@ -2583,12 +2576,10 @@ template <class T> T Player::ApplySpellMod(uint32 spellId, SpellModOp op, T &bas
             totalpct += mod->value;
         }
 
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_10_2
         // World of Warcraft Client Patch 1.11.0 (2006-06-20)
         // - Nature's Grace: You will no longer consume this effect when casting a 
         //   spell which was made instant by Nature's Swiftness.
         if (!((mod->op == SPELLMOD_CASTING_TIME) && (mod->type == SPELLMOD_FLAT) && HasInstantCastingSpellMod(spellInfo)))
-#endif
             DropModCharge(mod, spell);
 
         // Nostalrius : fix ecorce (22812 - +1sec incant) + rapidite nature (17116 - sorts instant) = 0sec de cast

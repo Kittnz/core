@@ -35,13 +35,13 @@ inline float GetAge(uint64 t) { return float(time(NULL) - t) / DAY; }
 // GM ticket
 GmTicket::GmTicket() : _id(0), _posX(0), _posY(0), _posZ(0), _mapId(0), _createTime(0), _lastModifiedTime(0),
                        _completed(false), _escalatedStatus(TICKET_UNASSIGNED), _viewed(false),
-                       _needResponse(false), _needMoreHelp(false), _securityNeeded(SEC_MODERATOR)
+                       _needResponse(false), _needMoreHelp(false), _securityNeeded(SEC_GAMEMASTER)
 {
 }
 
 GmTicket::GmTicket(Player* player) : _posX(0), _posY(0), _posZ(0), _mapId(0), _createTime(time(NULL)), _lastModifiedTime(time(NULL)),
                        _completed(false), _escalatedStatus(TICKET_UNASSIGNED), _viewed(false),
-                       _needResponse(false), _needMoreHelp(false), _securityNeeded(SEC_MODERATOR)
+                       _needResponse(false), _needMoreHelp(false), _securityNeeded(SEC_GAMEMASTER)
 {
     _id = sTicketMgr->GenerateTicketId();
     _playerName = player->GetName();

@@ -521,13 +521,8 @@ void Unit::SendHeartBeat(bool includingSelf)
 {
     //m_movementInfo.ChangePosition(GetPositionX(), GetPositionY(), GetPositionZ(), GetOrientation());
     m_movementInfo.UpdateTime(WorldTimer::getMSTime());
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
     WorldPacket data(MSG_MOVE_HEARTBEAT, 31);
     data << GetPackGUID();
-#else
-    WorldPacket data(MSG_MOVE_HEARTBEAT);
-    data << GetGUID();
-#endif
     data << m_movementInfo;
     SendMovementMessageToSet(std::move(data), includingSelf);
 }
@@ -659,27 +654,16 @@ void Unit::RemoveFearEffectsByDamageTaken(uint32 damage, uint32 exceptSpellId, D
     uint32 max_dmg = getLevel() > 8 ? 25 * getLevel() - 150 : 50;
 
     // Players are 3x more likely to break fears
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_10_2
     if (IsPlayer())
-#else
-    // World of Warcraft Client Patch 1.11.0 (2006-06-20)
-    // - Fear: The calculations to determine if Fear effects should break due 
-    //   to receiving damage have been changed. In addition, Intimidating 
-    //   Shout now follows that player versus non - player distinction, while
-    //   previously it did not.
-    if (IsPlayer() && !HasAura(5246))
-#endif
         max_dmg *= 0.333f;
 
     // World of Warcraft Client Patch 1.11.0 (2006-06-20)
     // - Fear: The calculations to determine if Fear effects should break due 
     //   to receiving damage have been changed. In addition, the chance for a 
     //   damage over time spell to break Fear is now significantly lower.
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_10_2
     // DOT spells are 3x less likely to break fears after 1.11
     if (damagetype == DOT)
         max_dmg *= 3;
-#endif
 
     // for players, this means max_dmg = 450 at level 60, or 1350 if the damage source is a dot
     // for mobs, this means max_dmg = 1350 at level 60, or 4050 if the damage source is a dot
@@ -784,13 +768,7 @@ uint32 Unit::DealDamage(Unit *pVictim, uint32 damage, CleanDamage const* cleanDa
             // Degats recus sous bouclier par exemple.
             if (cleanDamage->absorb)
             {
-                // Before 1.11 the calculation whether to break fear used base spell damage.
-                // Calling it from spell class for direct spell damage in this case.
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_10_2
                 if (!spellProto || !spellProto->IsAuraAddedBySpell(SPELL_AURA_MOD_FEAR))
-#else
-                if (!spellProto || ((damagetype != SPELL_DIRECT_DAMAGE) && !spellProto->IsAuraAddedBySpell(SPELL_AURA_MOD_FEAR)))
-#endif
                 {
                     if (!(GetTypeId() == TYPEID_UNIT && ((Creature*)this)->IsWorldBoss()))
                         pVictim->RemoveFearEffectsByDamageTaken(cleanDamage->absorb, spellProto ? spellProto->Id : 0, damagetype);
@@ -814,13 +792,7 @@ uint32 Unit::DealDamage(Unit *pVictim, uint32 damage, CleanDamage const* cleanDa
         return 0;
     }
 
-    // Before 1.11 the calculation whether to break fear used base spell damage.
-    // Calling it from spell class for direct spell damage in this case.
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_10_2
     if (!spellProto || !spellProto->IsAuraAddedBySpell(SPELL_AURA_MOD_FEAR))
-#else
-    if (!spellProto || ((damagetype != SPELL_DIRECT_DAMAGE) && !spellProto->IsAuraAddedBySpell(SPELL_AURA_MOD_FEAR)))
-#endif
     {
         if (!(GetTypeId() == TYPEID_UNIT && ((Creature*)this)->IsWorldBoss()))
             pVictim->RemoveFearEffectsByDamageTaken(damage, spellProto ? spellProto->Id : 0, damagetype);
@@ -2901,13 +2873,8 @@ void Unit::SendMeleeAttackStop(Unit* victim)
         return;
 
     WorldPacket data(SMSG_ATTACKSTOP, (8 + 8 + 4));         // guess size, max is 9+9+4
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
     data << GetPackGUID();
     data << victim->GetPackGUID();                          // can be 0x00...
-#else
-    data << GetGUID();
-    data << victim->GetGUID();                          // can be 0x00...
-#endif
     data << uint32(0);                                      // can be 0x1
     SendObjectMessageToSet(&data, true);
     DETAIL_FILTER_LOG(LOG_FILTER_COMBAT, "%s %u stopped attacking %s %u", (GetTypeId() == TYPEID_PLAYER ? "player" : "creature"), GetGUIDLow(), (victim->GetTypeId() == TYPEID_PLAYER ? "player" : "creature"), victim->GetGUIDLow());
@@ -3199,10 +3166,8 @@ float Unit::GetSpellResistChance(Unit const* victim, uint32 schoolMask, bool inn
 
     float resistModHitChance = baseResistance + selfResistance;
 
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
     if ((resistModHitChance < 0.0f) && (baseResistance >= 0.0f))
         resistModHitChance = 0.0f;
-#endif
 
     // Magic vulnerability calculation
     if (resistModHitChance < 0.0f)
@@ -5380,13 +5345,8 @@ void Unit::RemoveAllGameObjects()
 void Unit::SendSpellNonMeleeDamageLog(SpellNonMeleeDamage *log)
 {
     WorldPacket data(SMSG_SPELLNONMELEEDAMAGELOG, (16 + 4 + 4 + 1 + 4 + 4 + 1 + 1 + 4 + 4 + 1)); // we guess size
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
     data << log->target->GetPackGUID();
     data << log->attacker->GetPackGUID();
-#else
-    data << log->target->GetGUID();
-    data << log->attacker->GetGUID();
-#endif
     data << uint32(log->SpellID);
     data << uint32(log->damage);                            // damage amount
     data << uint8(log->school);                             // damage school
@@ -5425,13 +5385,8 @@ void Unit::SendPeriodicAuraLog(SpellPeriodicAuraLogInfo *pInfo, AuraType auraTyp
     AuraType auraType = auraTypeOverride ? auraTypeOverride : mod->m_auraname;
 
     WorldPacket data(SMSG_PERIODICAURALOG, 30);
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
     data << aura->GetTarget()->GetPackGUID();
     data << aura->GetCasterGuid().WriteAsPacked();
-#else
-    data << aura->GetTarget()->GetGUID();
-    data << aura->GetCasterGuid().GetRawValue();
-#endif
     data << uint32(aura->GetId());                          // spellId
     data << uint32(1);                                      // count
     data << uint32(auraType);                               // auraId
@@ -5499,18 +5454,15 @@ void Unit::ProcDamageAndSpell(Unit *pVictim, uint32 procAttacker, uint32 procVic
 
     // Now go on with a victim's events'n'auras
     // Not much to do if no flags are set or there is no victim
-    if (pVictim && pVictim->isAlive() && procVictim)
-
+	if (pVictim && pVictim->isAlive() && procVictim)
+	{
         // http://blue.cardplace.com/cache/wow-paladin/1069149.htm
         // "Charges will not generate off auto attacks or npc attacks by trying"
         // "to sit down and force a crit. However, ability crits from physical"
         // "abilities such as Sinister Strike, Hamstring, Auto-shot, Aimed shot,"
         // "etc will generate a charge if you're sitting."
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_7_1
         pVictim->ProcDamageAndSpellFor(true, this, procVictim, !procSpell && !pVictim->IsStandingUpForProc() ? procExtra & ~PROC_EX_CRITICAL_HIT : procExtra, attType, procSpell, amount, procTriggered, spell);
-#else
-        pVictim->ProcDamageAndSpellFor(true, this, procVictim, procExtra, attType, procSpell, amount, procTriggered, spell);
-#endif
+	}
 
     HandleTriggers(pVictim, procExtra, amount, procSpell, procTriggered);
 }
@@ -5636,13 +5588,9 @@ void Unit::SendAttackStateUpdate(CalcDamageInfo *damageInfo)
     WorldPacket data(SMSG_ATTACKERSTATEUPDATE, (16 + 45));  // we guess size
 
     data << uint32(damageInfo->HitInfo);
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
     data << GetPackGUID();
     data << damageInfo->target->GetPackGUID();
-#else
-    data << GetGUID();
-    data << damageInfo->target->GetGUID();
-#endif
+
     data << uint32(damageInfo->totalDamage);    // Total damage
 
     data << uint8(m_weaponDamageCount[damageInfo->attackType]);         // Sub damage count
@@ -6583,7 +6531,6 @@ Unit* Unit::SelectMagnetTarget(Unit *victim, Spell* spell, SpellEffectIndex eff)
 
 void Unit::SendHealSpellLog(Unit *pVictim, uint32 SpellID, uint32 Damage, bool critical)
 {
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_9_4
     // we guess size
     WorldPacket data(SMSG_SPELLHEALLOG, (8 + 8 + 4 + 4 + 1));
     data << pVictim->GetPackGUID();
@@ -6593,12 +6540,10 @@ void Unit::SendHealSpellLog(Unit *pVictim, uint32 SpellID, uint32 Damage, bool c
     data << uint8(critical ? 1 : 0);
     // data << uint8(0);                                    // [-ZERO]
     SendMessageToSet(&data, true);
-#endif
 }
 
 void Unit::SendEnergizeSpellLog(Unit *pVictim, uint32 SpellID, uint32 Damage, Powers powertype)
 {
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_9_4
     WorldPacket data(SMSG_SPELLENERGIZELOG, (8 + 8 + 4 + 4 + 4 + 1));
     data << pVictim->GetPackGUID();
     data << GetPackGUID();
@@ -6606,7 +6551,6 @@ void Unit::SendEnergizeSpellLog(Unit *pVictim, uint32 SpellID, uint32 Damage, Po
     data << uint32(powertype);
     data << uint32(Damage);
     SendMessageToSet(&data, true);
-#endif
 }
 
 void Unit::EnergizeBySpell(Unit *pVictim, uint32 SpellID, uint32 Damage, Powers powertype)
@@ -8626,18 +8570,9 @@ void Unit::SetSpeedRate(UnitMoveType mtype, float rate, bool forced)
         {
             if (Player* me = GetAffectingPlayer())
             {
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_9_4
                 WorldPacket dataForMe(SetSpeed2Opc_table[mtype][1], 18);
                 dataForMe << GetPackGUID();
                 dataForMe << uint32(0);
-#else
-                WorldPacket dataForMe(SetSpeed2Opc_table[mtype][1], 14);
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
-                dataForMe << GetPackGUID();
-#else
-                dataForMe << GetGUID();
-#endif
-#endif
                 dataForMe << float(GetSpeed(mtype));
                 me->GetSession()->SendPacket(&dataForMe);
                 me->GetCheatData()->OrderSent(&dataForMe);
@@ -9284,12 +9219,10 @@ int32 Unit::GetTotalResistanceValue(SpellSchools school) const
     // World of Warcraft Client Patch 1.9.0 (2006-01-03)
     // - Curse of Shadow and Curse of the Elements - These curses can no 
     //   longer cause resistance to become negative.
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
     // Auras can't cause resistances to dip below 0 since early vanilla
     // PS: Actually, they can, but only visually advertised in the fields, calculations ignore it, we limit both
     if (value < 0 && !vulnerability)
         value = 0;
-#endif
 
     return int32(value);
 }
@@ -9402,22 +9335,14 @@ float Unit::GetTotalAttackPowerValue(WeaponAttackType attType) const
         int32 ap = GetInt32Value(UNIT_FIELD_RANGED_ATTACK_POWER) + GetInt32Value(UNIT_FIELD_RANGED_ATTACK_POWER_MODS);
         if (ap < 0)
             return 0.0f;
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
         return ap * (1.0f + GetFloatValue(UNIT_FIELD_RANGED_ATTACK_POWER_MULTIPLIER));
-#else
-        return ap;
-#endif
     }
     else
     {
         int32 ap = GetInt32Value(UNIT_FIELD_ATTACK_POWER) + GetInt32Value(UNIT_FIELD_ATTACK_POWER_MODS);
         if (ap < 0)
             return 0.0f;
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
         return ap * (1.0f + GetFloatValue(UNIT_FIELD_ATTACK_POWER_MULTIPLIER));
-#else
-        return ap;
-#endif
     }
 }
 
@@ -9742,10 +9667,7 @@ void CharmInfo::InitPossessCreateSpells()
             // World of Warcraft Client Patch 1.10.0 (2006-03-28)
             // - Charm spells on charmed creatures are no longer available to the
             //   players that charm them.
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_9_4
             if (!IsCharmSpell(pSpellEntry))
-#endif
-
                 AddSpellToActionBar(pCreature->m_spells[x], ACT_PASSIVE);
     }
 }
@@ -9790,11 +9712,8 @@ void CharmInfo::InitCharmCreateSpells()
             // World of Warcraft Client Patch 1.10.0 (2006-03-28)
             // - Charm spells on charmed creatures are no longer available to the
             //   players that charm them.
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_9_4
             else if (IsCharmSpell(pSpellEntry))
                 continue;
-#endif
-
             for (uint32 i = 0; i < 3 && onlyselfcast; ++i)  //nonexistent spell will not make any problems as onlyselfcast would be false -> break right away
             {
                 if (pSpellEntry->EffectImplicitTargetA[i] != TARGET_SELF && pSpellEntry->EffectImplicitTargetA[i] != 0)
@@ -10078,14 +9997,6 @@ void Unit::ProcDamageAndSpellFor(bool isVictim, Unit* pTarget, uint32 procFlag, 
             // for victim
             if (isVictim)
             {
-#if SUPPORTED_CLIENT_BUILD <= CLIENT_BUILD_1_8_4
-                // if victim and got critted
-                if (procExtra & PROC_EX_CRITICAL_HIT)
-                {
-                    ModifyAuraState(AURA_STATE_BERSERKING, true);
-                    StartReactiveTimer(REACTIVE_CRIT, GetObjectGuid());
-                }
-#endif
                 // if victim and dodged attack
                 if (procExtra & PROC_EX_DODGE)
                 {
@@ -10215,7 +10126,6 @@ void Unit::SendPetActionFeedback(uint8 msg)
 
 void Unit::SendPetTalk(uint32 pettalk)
 {
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
     Unit* owner = GetOwner();
     if (!owner || owner->GetTypeId() != TYPEID_PLAYER)
         return;
@@ -10224,7 +10134,6 @@ void Unit::SendPetTalk(uint32 pettalk)
     data << GetObjectGuid();
     data << uint32(pettalk);
     ((Player*)owner)->GetSession()->SendPacket(&data);
-#endif
 }
 
 void Unit::SendPetAIReaction()
@@ -10560,11 +10469,6 @@ void Unit::ClearAllReactives()
         m_reactiveTarget[i].Clear();
     }
 
-#if SUPPORTED_CLIENT_BUILD <= CLIENT_BUILD_1_8_4
-    if (HasAuraState(AURA_STATE_BERSERKING))
-        ModifyAuraState(AURA_STATE_BERSERKING, false);
-#endif
-
     if (HasAuraState(AURA_STATE_DEFENSE))
         ModifyAuraState(AURA_STATE_DEFENSE, false);
     if (getClass() == CLASS_HUNTER && HasAuraState(AURA_STATE_HUNTER_PARRY))
@@ -10590,12 +10494,6 @@ void Unit::UpdateReactives(uint32 p_time)
 
             switch (reactive)
             {
-#if SUPPORTED_CLIENT_BUILD <= CLIENT_BUILD_1_8_4
-                case REACTIVE_CRIT:
-                    if (HasAuraState(AURA_STATE_BERSERKING))
-                        ModifyAuraState(AURA_STATE_BERSERKING, false);
-                    break;
-#endif
                 case REACTIVE_DEFENSE:
                     if (HasAuraState(AURA_STATE_DEFENSE))
                         ModifyAuraState(AURA_STATE_DEFENSE, false);
@@ -10844,10 +10742,6 @@ void Unit::ApplyAttackTimePercentMod(WeaponAttackType att, float val, bool apply
     }
     else
     {
-#if SUPPORTED_CLIENT_BUILD < CLIENT_BUILD_1_12_1
-        val = -val;
-        apply = !apply;
-#endif
         ApplyPercentModFloatVar(m_modAttackSpeedPct[att], -val, apply);
         ApplyPercentModFloatValue(UNIT_FIELD_BASEATTACKTIME + att, -val, apply);
 
@@ -10858,15 +10752,10 @@ void Unit::ApplyAttackTimePercentMod(WeaponAttackType att, float val, bool apply
 
 void Unit::ApplyCastTimePercentMod(float val, bool apply)
 {
-#if SUPPORTED_CLIENT_BUILD >= CLIENT_BUILD_1_12_1
     if (val > 0)
         SetFloatValue(UNIT_MOD_CAST_SPEED, GetFloatValue(UNIT_MOD_CAST_SPEED) * (apply ? 100.0f / (100.0f + val) : (100.0f + val) / 100.0f));
     else
         SetFloatValue(UNIT_MOD_CAST_SPEED, GetFloatValue(UNIT_MOD_CAST_SPEED) * (apply ? (100.0f - val) / 100.0f : 100.0f / (100.0f - val)));
-#else
-    int32 intval = round(val);
-    SetInt32Value(UNIT_MOD_CAST_SPEED, (GetInt32Value(UNIT_MOD_CAST_SPEED) + (apply ? -intval : intval)));
-#endif
 }
 
 void Unit::UpdateAuraForGroup(uint8 slot)
@@ -11003,11 +10892,7 @@ void Unit::NearLandTo(float x, float y, float z, float orientation)
     m_movementInfo.ctime = 0; // Not a client packet. Pauses interpolation.
 
     WorldPacket data(MSG_MOVE_FALL_LAND, 41);
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
     data << GetPackGUID();
-#else
-    data << GetGUID();
-#endif
     data << m_movementInfo;
     SendMovementMessageToSet(std::move(data), true);
     TeleportPositionRelocation(x, y, z, orientation);
@@ -11110,11 +10995,7 @@ void Unit::KnockBack(float angle, float horizontalSpeed, float verticalSpeed)
         float vsin = sin(angle);
         float vcos = cos(angle);
         WorldPacket data(SMSG_MOVE_KNOCK_BACK, 8 + 4 + 4 + 4 + 4 + 4);
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
         data << GetPackGUID();
-#else
-        data << GetGUID();
-#endif
         data << uint32(0);                                  // Sequence
         data << float(vcos);                                // x direction
         data << float(vsin);                                // y direction
@@ -11884,11 +11765,7 @@ void Unit::UpdateSplineMovement(uint32 t_diff)
     else if (!movespline->isCyclic() && movespline->getLastPointSent() >= 0 && movespline->getLastPointSent() < (movespline->currentPathIdx() + 3))
     {
         WorldPacket data(SMSG_MONSTER_MOVE, 64);
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
         data << GetPackGUID();
-#else
-        data << GetGUID();
-#endif
         movespline->setLastPointSent(Movement::PacketBuilder::WriteMonsterMove(*movespline, data, movespline->getLastPointSent() + 1));
         SendMovementMessageToSet(std::move(data), true);
     }
@@ -11935,11 +11812,7 @@ void Unit::SetWalk(bool enable, bool asDefault)
     else
         m_movementInfo.RemoveMovementFlag(MOVEFLAG_WALK_MODE);
 
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
     WorldPacket data(enable ? SMSG_SPLINE_MOVE_SET_WALK_MODE : SMSG_SPLINE_MOVE_SET_RUN_MODE, 9);
-#else
-    WorldPacket data(enable ? MSG_MOVE_SET_WALK_MODE : MSG_MOVE_SET_RUN_MODE, 9);
-#endif
     data << GetPackGUID();
 
     if (Player* me = ToPlayer())
@@ -12003,13 +11876,8 @@ void Unit::SendSpellGo(Unit* target, uint32 spellId)
     targets.setUnitTarget(target);
 
     WorldPacket data(SMSG_SPELL_GO, 53);
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
     data << GetPackGUID();
     data << GetPackGUID();
-#else
-    data << GetGUID();
-    data << GetGUID();
-#endif
     data << uint32(spellId);
     data << uint16(CAST_FLAG_UNKNOWN9);
 
@@ -12141,7 +12009,6 @@ void Unit::SetMovement(UnitMovementType pType)
         MovementData mvtData(this);
         switch (pType)
         {
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
             case MOVE_ROOT:
                 mvtData.SetSplineOpcode(SMSG_SPLINE_MOVE_ROOT, GetObjectGuid());
                 return;
@@ -12154,20 +12021,6 @@ void Unit::SetMovement(UnitMovementType pType)
             case MOVE_LAND_WALK:
                 mvtData.SetSplineOpcode(SMSG_SPLINE_MOVE_LAND_WALK, GetObjectGuid());
                 break;
-#else
-            case MOVE_ROOT:
-                mvtData.SetSplineOpcode(MSG_MOVE_ROOT, GetObjectGuid());
-                return;
-            case MOVE_UNROOT:
-                mvtData.SetSplineOpcode(MSG_MOVE_UNROOT, GetObjectGuid());
-                break;
-            case MOVE_WATER_WALK:
-                mvtData.SetSplineOpcode(SMSG_MOVE_WATER_WALK, GetObjectGuid());
-                break;
-            case MOVE_LAND_WALK:
-                mvtData.SetSplineOpcode(SMSG_MOVE_LAND_WALK, GetObjectGuid());
-                break;
-#endif
         }
         return;
     }
@@ -12183,7 +12036,6 @@ void Unit::SetMovement(UnitMovementType pType)
 
     switch (pType)
     {
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
         case MOVE_ROOT:
             data.Initialize(SMSG_FORCE_MOVE_ROOT,   GetPackGUID().size() + 4);
             break;
@@ -12196,29 +12048,11 @@ void Unit::SetMovement(UnitMovementType pType)
         case MOVE_LAND_WALK:
             data.Initialize(SMSG_MOVE_LAND_WALK,    GetPackGUID().size() + 4);
             break;
-#else
-        case MOVE_ROOT:
-            data.Initialize(SMSG_FORCE_MOVE_ROOT,   8 + 4);
-            break;
-        case MOVE_UNROOT:
-            data.Initialize(SMSG_FORCE_MOVE_UNROOT, 8 + 4);
-            break;
-        case MOVE_WATER_WALK:
-            data.Initialize(SMSG_MOVE_WATER_WALK,   8 + 4);
-            break;
-        case MOVE_LAND_WALK:
-            data.Initialize(SMSG_MOVE_LAND_WALK,    8 + 4);
-            break;
-#endif
         default:
             sLog.outError("Player::SetMovement: Unsupported move type (%d), data not sent to client.", pType);
             return;
     }
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
     data << GetPackGUID();
-#else
-    data << GetGUID();
-#endif
     data << uint32(WorldTimer::getMSTime()); // Peut etre msTime : WorldTimer::getMSTime() ?
     if (mePlayer)
     {

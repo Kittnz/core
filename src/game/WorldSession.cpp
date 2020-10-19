@@ -230,7 +230,6 @@ bool WorldSession::ForcePlayerLogoutDelay()
     if (!sWorld.IsStopped() && GetPlayer() && GetPlayer()->FindMap() && GetPlayer()->IsInWorld() && sPlayerBotMgr.ForceLogoutDelay())
     {
         sLog.out(LOG_CHAR, "Account: %d (IP: %s) Lost socket for character:[%s] (guid: %u)", GetAccountId(), GetRemoteAddress().c_str(), _player->GetName() , _player->GetGUIDLow());
-        sWorld.LogCharacter(GetPlayer(), "LostSocket");
         GetPlayer()->OnDisconnected();
         SetDisconnectedSession();
         m_disconnectTimer = 120000;
@@ -470,7 +469,6 @@ void WorldSession::LogoutPlayer(bool Save)
         bool inWorld = _player->IsInWorld() && _player->FindMap();
 
         sLog.out(LOG_CHAR, "Account: %d (IP: %s) Logout Character:[%s] (guid: %u)", GetAccountId(), GetRemoteAddress().c_str(), _player->GetName() , _player->GetGUIDLow());
-        sWorld.LogCharacter(_player, "Logout");
         if (ObjectGuid lootGuid = GetPlayer()->GetLootGuid())
             DoLootRelease(lootGuid);
 
@@ -989,22 +987,6 @@ bool WorldSession::AllowPacket(uint16 opcode)
     }
 
     return true;
-}
-
-/**
- * Add the i-th client unique identifier.
- */
-void WorldSession::AddClientIdentifier(uint32 i, std::string str)
-{
-    _clientIdentifiers[i] = str;
-    sLog.out(LOG_CLIENT_IDS, "%s:%s Player:%s #%u \"%s\"", GetUsername().c_str(), GetRemoteAddress().c_str(), GetPlayerName(), i, str.c_str());
-    bool all_identifiers_added = false; // To be implemented
-    if (all_identifiers_added)
-    {
-        ComputeClientHash();
-        _clientHashComputeStep = HASH_COMPUTED;
-        sLog.out(LOG_CLIENT_IDS, "%s:%s Player:%s hash computed: %s", GetUsername().c_str(), GetRemoteAddress().c_str(), GetPlayerName(), _clientHash.c_str());
-    }
 }
 
 /**

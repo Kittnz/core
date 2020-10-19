@@ -181,6 +181,7 @@ set (game_SRCS
     Protocol/Opcodes.cpp
     Protocol/WorldSocket.cpp
     Protocol/WorldSocketMgr.cpp
+	Protocol/Opcodes_1_12_1.h
     Spells/Spell.cpp
     Spells/SpellAuras.cpp
     Spells/SpellEffects.cpp

@@ -67,7 +67,6 @@
 #include "AutoTesting/AutoTestingMgr.h"
 #include "Transports/TransportMgr.h"
 #include "PlayerBotMgr.h"
-#include "ProgressBar.h"
 #include "ZoneScriptMgr.h"
 #include "CharacterDatabaseCache.h"
 #include "CreatureGroups.h"
@@ -82,8 +81,6 @@
 #include "GuardMgr.h"
 
 #include <chrono>
-
-INSTANTIATE_SINGLETON_1(World);
 
 volatile bool World::m_stopEvent = false;
 uint8 World::m_ExitCode = SHUTDOWN_EXIT_CODE;
@@ -104,10 +101,7 @@ uint32 World::m_creatureSummonCountLimit      = DEFAULT_CREATURE_SUMMON_LIMIT;
 
 void LoadGameObjectModelList();
 
-World& GetSWorld()
-{
-    return sWorld;
-}
+World sWorld;
 
 /// World constructor
 World::World()
@@ -725,7 +719,7 @@ void World::LoadConfigSettings(bool reload)
     setConfig(CONFIG_BOOL_OUTDOORPVP_SI_ENABLE, "OutdoorPvP.SI.Enable", true);
 
     setConfig(CONFIG_BOOL_PLAYER_COMMANDS, "PlayerCommands", true);
-    setConfig(CONFIG_UINT32_INSTANT_LOGOUT, "InstantLogout", SEC_MODERATOR);
+    setConfig(CONFIG_UINT32_INSTANT_LOGOUT, "InstantLogout", SEC_GAMEMASTER);
     setConfigMin(CONFIG_UINT32_GROUP_OFFLINE_LEADER_DELAY, "Group.OfflineLeaderDelay", 300, 0);
     setConfigMin(CONFIG_UINT32_GUILD_EVENT_LOG_COUNT, "Guild.EventLogRecordsCount", GUILD_EVENTLOG_MAX_RECORDS, GUILD_EVENTLOG_MAX_RECORDS);
 
@@ -2556,11 +2550,9 @@ bool World::configNoReload(bool reload, eConfigBoolValues index, char const* fie
 
 void World::InvalidatePlayerDataToAllClient(ObjectGuid guid)
 {
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
     WorldPacket data(SMSG_INVALIDATE_PLAYER, 8);
     data << guid;
     SendGlobalMessage(&data);
-#endif
 }
 
 void World::SetSessionDisconnected(WorldSession* sess)
@@ -2570,116 +2562,6 @@ void World::SetSessionDisconnected(WorldSession* sess)
     m_accountsLastLogout[sess->GetAccountId()] = time(nullptr);
     m_sessions.erase(itr);
     m_disconnectedSessions.insert(sess);
-}
-
-void World::LogMoneyTrade(ObjectGuid sender, ObjectGuid receiver, uint32 amount, const char* type, uint32 dataInt)
-{
-    if (!LogsDatabase || !sWorld.getConfig(CONFIG_BOOL_LOGSDB_TRADES))
-        return;
-    static SqlStatementID insLogMoney;
-    SqlStatement logStmt = LogsDatabase.CreateStatement(insLogMoney, "INSERT INTO logs_trade SET sender=?, senderType=?, senderEntry=?, receiver=?, amount=?, type=?, data=?");
-    logStmt.addUInt32(sender.GetCounter());
-    logStmt.addUInt32(sender.GetHigh());
-    logStmt.addUInt32(sender.GetEntry());
-    logStmt.addUInt32(receiver.GetCounter());
-    logStmt.addUInt32(amount);
-    logStmt.addString(type);
-    logStmt.addUInt32(dataInt);
-    logStmt.Execute();
-}
-
-void World::LogCharacter(Player* character, const char* action)
-{
-    if (!LogsDatabase || !sWorld.getConfig(CONFIG_BOOL_LOGSDB_CHARACTERS))
-        return;
-    ASSERT(character);
-    static SqlStatementID insLogChar;
-    SqlStatement logStmt = LogsDatabase.CreateStatement(insLogChar, "INSERT INTO logs_characters SET type=?, guid=?, account=?, name=?, ip=?, clientHash=?");
-    logStmt.addString(action);
-    logStmt.addUInt32(character->GetGUIDLow());
-    logStmt.addUInt32(character->GetSession()->GetAccountId());
-    logStmt.addString(character->GetName());
-    logStmt.addString(character->GetSession()->GetRemoteAddress());
-    character->GetSession()->ComputeClientHash();
-    logStmt.addString(character->GetSession()->GetClientHash());
-    logStmt.Execute();
-}
-
-void World::LogCharacter(WorldSession* sess, uint32 lowGuid, std::string const& charName, const char* action)
-{
-    if (!LogsDatabase || !sWorld.getConfig(CONFIG_BOOL_LOGSDB_CHARACTERS))
-        return;
-    ASSERT(sess);
-    static SqlStatementID insLogChar;
-    SqlStatement logStmt = LogsDatabase.CreateStatement(insLogChar, "INSERT INTO logs_characters SET type=?, guid=?, account=?, name=?, ip=?, clientHash=?");
-    logStmt.addString(action);
-    logStmt.addUInt32(lowGuid);
-    logStmt.addUInt32(sess->GetAccountId());
-    logStmt.addString(charName);
-    logStmt.addString(sess->GetRemoteAddress());
-    sess->ComputeClientHash();
-    logStmt.addString(sess->GetClientHash());
-    logStmt.Execute();
-}
-
-void World::LogChat(WorldSession* sess, const char* type, std::string const& msg, PlayerPointer target, uint32 chanId, const char* chanStr)
-{
-    ASSERT(sess);
-    PlayerPointer plr = sess->GetPlayerPointer();
-    ASSERT(plr);
-
-    if (target)
-        sLog.out(LOG_CHAT, "[%s] %s:%u -> %s:%u : %s", type, plr->GetName(), plr->GetObjectGuid().GetCounter(), target->GetName(), target->GetObjectGuid().GetCounter(), msg.c_str());
-    else if (chanId)
-        sLog.out(LOG_CHAT, "[%s:%u] %s:%u : %s", type, chanId, plr->GetName(), plr->GetObjectGuid().GetCounter(), msg.c_str());
-    else if (chanStr)
-        sLog.out(LOG_CHAT, "[%s:%s] %s:%u : %s", type, chanStr, plr->GetName(), plr->GetObjectGuid().GetCounter(), msg.c_str());
-    else
-        sLog.out(LOG_CHAT, "[%s] %s:%u : %s", type, plr->GetName(), plr->GetObjectGuid().GetCounter(), msg.c_str());
-
-    if (!LogsDatabase || !sWorld.getConfig(CONFIG_BOOL_LOGSDB_CHAT))
-        return;
-    static SqlStatementID insLogChat;
-    SqlStatement logStmt = LogsDatabase.CreateStatement(insLogChat,
-            "INSERT INTO logs_chat SET type=?, guid=?, target=?, channelId=?, channelName=?, message=?");
-    logStmt.addString(type);
-    logStmt.addUInt32(plr->GetObjectGuid().GetCounter());
-    logStmt.addUInt32(target ? target->GetObjectGuid().GetCounter() : 0);
-    logStmt.addUInt32(chanId);
-    logStmt.addString(chanStr ? chanStr : "");
-    logStmt.addString(msg);
-    logStmt.Execute();
-}
-
-void World::LogTransaction(PlayerTransactionData const& data)
-{
-    if (!LogsDatabase || !sWorld.getConfig(CONFIG_BOOL_LOGSDB_TRANSACTIONS))
-        return;
-
-    static SqlStatementID insLogTransaction;
-    SqlStatement logStmt = LogsDatabase.CreateStatement(insLogTransaction,
-        "INSERT INTO logs_transactions SET type=?, guid1=?, money1=?, spell1=?, items1=?, "
-        "guid2=?, money2=?, spell2=?, items2=?");
-    logStmt.addString(data.type);
-    for (int i = 0; i < 2; ++i)
-    {
-        TransactionPart const& part = data.parts[i];
-        logStmt.addUInt32(part.lowGuid);
-        logStmt.addUInt32(part.money);
-        logStmt.addUInt32(part.spell);
-        std::stringstream items;
-        for (int i = 0; i < TransactionPart::MAX_TRANSACTION_ITEMS; ++i)
-        {
-            if (part.itemsEntries[i])
-            {
-                if (i != 0)
-                    items << ";";
-                items << uint32(part.itemsEntries[i]) << ":" << uint32(part.itemsCount[i]) << ":" << part.itemsGuid[i];
-            }
-        }
-        logStmt.addString(items.str());
-    }
-    logStmt.Execute();
 }
 
 bool World::CanSkipQueue(WorldSession const* sess)

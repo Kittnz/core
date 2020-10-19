@@ -1248,11 +1248,7 @@ bool Pet::CreateBaseAtCreature(Creature* creature)
         SetByteValue(UNIT_FIELD_BYTES_2, 1, UNIT_BYTE2_FLAG_UNK3 | UNIT_BYTE2_FLAG_AURAS | UNIT_BYTE2_FLAG_UNK5);
         SetUInt32Value(UNIT_FIELD_FLAGS, UNIT_FLAG_PET_RENAME | UNIT_FLAG_PET_ABANDON);
 
-#if SUPPORTED_CLIENT_BUILD >= CLIENT_BUILD_1_12_1
         SetFloatValue(UNIT_MOD_CAST_SPEED, creature->GetFloatValue(UNIT_MOD_CAST_SPEED));
-#else
-        SetInt32Value(UNIT_MOD_CAST_SPEED, creature->GetInt32Value(UNIT_MOD_CAST_SPEED));
-#endif
         
         SetLoyaltyLevel(REBELLIOUS);
     }
@@ -1309,11 +1305,7 @@ bool Pet::InitStatsForLevel(uint32 petlevel, Unit* owner)
     SetAttackTime(BASE_ATTACK, cinfo->base_attack_time); //BASE_ATTACK_TIME);
     SetAttackTime(OFF_ATTACK, cinfo->base_attack_time); //BASE_ATTACK_TIME);
     SetAttackTime(RANGED_ATTACK, cinfo->ranged_attack_time); //BASE_ATTACK_TIME);
-#if SUPPORTED_CLIENT_BUILD >= CLIENT_BUILD_1_12_1
     SetFloatValue(UNIT_MOD_CAST_SPEED, 1.0f);
-#else
-    SetInt32Value(UNIT_MOD_CAST_SPEED, 0);
-#endif
     CreatureFamilyEntry const* cFamily = sCreatureFamilyStore.LookupEntry(cinfo->beast_family);
     if (cFamily && cFamily->minScale > 0.0f && getPetType() == HUNTER_PET)
     {

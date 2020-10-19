@@ -273,7 +273,6 @@ class BattleGround
         {
             return true;
         }
-        virtual void HandleCommand(Player* player, ChatHandler* handler, char* args);
         virtual void Reset();                               // resets all common properties for battlegrounds, must be implemented and called in BG subclass
         virtual void StartingEventCloseDoors()   {}
         virtual void StartingEventOpenDoors()    {}

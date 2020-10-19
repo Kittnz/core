@@ -5,11 +5,7 @@
 #include "GossipDef.h"
 #include <ctime>
 
-transmog& transmog::Instance()
-{
-    static transmog Instance;
-    return Instance;
-}
+transmog sTransmog;
 
 bool transmog::IsFakeItem(uint32 entry)
 {

@@ -179,17 +179,12 @@ void AccountMgr::Load()
 
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
         return;
     }
 
     Field *fields = nullptr;
-    BarGoLink bar(result->GetRowCount());
     do
     {
-        bar.step();
         fields = result->Fetch();
         uint32 accountId = fields[0].GetUInt32();
         AccountTypes secu = AccountTypes(fields[1].GetUInt32());
@@ -197,11 +192,7 @@ void AccountMgr::Load()
         {
         case SEC_PLAYER:
             break;
-        case SEC_MODERATOR:
-        case SEC_MODERATOR_CONF:
         case SEC_GAMEMASTER:
-        case SEC_BASIC_ADMIN:
-        case SEC_DEVELOPER:
         case SEC_ADMINISTRATOR:
             // Peut etre deja dans la liste ? On prend le plus haut gmlevel.
             if (_accountSecurity.find(accountId) == _accountSecurity.end() ||
@@ -328,21 +319,13 @@ void AccountMgr::LoadIPBanList(bool silent)
     
     if (!banresult)
     {
-        if (!silent)
-        {
-            BarGoLink bar(1);
-            bar.step();
-        }
         return;
     }
 
     _ipBanned.clear();
     Field *fields = nullptr;
-    std::unique_ptr<BarGoLink> bar = silent ? nullptr : std::make_unique<BarGoLink>(banresult->GetRowCount());
     do
     {
-        if (bar)
-            bar->step();
         Field *fields = banresult->Fetch();
         uint32 unbandate = fields[1].GetUInt32();
         uint32 bandate = fields[2].GetUInt32();
@@ -359,22 +342,13 @@ void AccountMgr::LoadAccountBanList(bool silent)
     
     if (!banresult)
     {
-        if (!silent)
-        {
-            BarGoLink bar(1);
-            bar.step();
-
-        }
         return;
     }
 
     _accountBanned.clear();
     Field *fields = nullptr;
-    std::unique_ptr<BarGoLink> bar = silent ? nullptr : std::make_unique<BarGoLink>(banresult->GetRowCount());
     do
     {
-        if (bar)
-            bar->step();
         Field *fields = banresult->Fetch();
         uint32 unbandate = fields[1].GetUInt32();
         uint32 bandate = fields[2].GetUInt32();

@@ -35,11 +35,7 @@
 #include "WorldSession.h"
 
 /// List of Opcodes
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
 #include "Opcodes_1_12_1.h"
-#else
-#include "Opcodes_1_8_X.h"
-#endif
 
 /// Player state
 enum SessionStatus

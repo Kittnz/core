@@ -2,7 +2,6 @@
 #include "World.h"
 #include "Util.h"
 #include "Log.h"
-#include "ProgressBar.h"
 #include "Policies/SingletonImp.h"
 
 #include "AutoBroadCastMgr.h"
@@ -27,20 +26,14 @@ void AutoBroadCastMgr::load()
 
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
         return;
     }
 
     uint32 count = 0;
-    BarGoLink bar(result->GetRowCount());
 
     Field *fields;
-
     do
     {
-        bar.step();
         AutoBroadCastEntry e;
         fields = result->Fetch();
 
@@ -50,8 +43,6 @@ void AutoBroadCastMgr::load()
         ++count;
     }
     while (result->NextRow());
-
-    
 }
 
 void AutoBroadCastMgr::update(uint32 diff)

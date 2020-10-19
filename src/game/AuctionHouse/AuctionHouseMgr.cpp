@@ -23,7 +23,6 @@
 #include "Database/DatabaseEnv.h"
 #include "SQLStorages.h"
 #include "DBCStores.h"
-#include "ProgressBar.h"
 
 #include "AccountMgr.h"
 #include "Item.h"
@@ -351,20 +350,12 @@ void AuctionHouseMgr::LoadAuctionItems()
 
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
         return;
     }
-
-    BarGoLink bar(result->GetRowCount());
-
-    uint32 count = 0;
 
     Field *fields;
     do
     {
-        bar.step();
-
         fields = result->Fetch();
         uint32 item_guid        = fields[10].GetUInt32();
         uint32 item_template    = fields[11].GetUInt32();
@@ -386,11 +377,9 @@ void AuctionHouseMgr::LoadAuctionItems()
         }
         AddAItem(item);
 
-        ++count;
     }
     while (result->NextRow());
     delete result;
-
 }
 
 void AuctionHouseMgr::LoadAuctions()
@@ -398,8 +387,6 @@ void AuctionHouseMgr::LoadAuctions()
     QueryResult *result = CharacterDatabase.Query("SELECT COUNT(*) FROM auction");
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
         return;
     }
 
@@ -409,26 +396,18 @@ void AuctionHouseMgr::LoadAuctions()
 
     if (!AuctionCount)
     {
-        BarGoLink bar(1);
-        bar.step();
         return;
     }
 
     result = CharacterDatabase.Query("SELECT id,houseid,itemguid,item_template,itemowner,buyoutprice,time,buyguid,lastbid,startbid,deposit FROM auction");
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
         return;
     }
-
-    BarGoLink bar(AuctionCount);
 
     do
     {
         fields = result->Fetch();
-
-        bar.step();
 
         AuctionEntry *auction = new AuctionEntry;
         auction->Id = fields[0].GetUInt32();
@@ -662,7 +641,6 @@ void AuctionHouseObject::Update()
                 data.parts[0].itemsGuid[0] = entry->itemGuidLow;
                 data.parts[1].lowGuid = entry->bidder;
                 data.parts[1].money = entry->bid;
-                sWorld.LogTransaction(data);
 
                 //we should send an "item sold" message if the seller is online
                 //we send the item to the winner

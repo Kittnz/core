@@ -112,9 +112,7 @@ struct boss_patchwerkAI : public ScriptedAI
             
         m_events.ScheduleEvent(EVENT_BERSERK, BERSERK_TIMER);
         m_events.ScheduleEvent(EVENT_HATEFULSTRIKE, HATEFUL_CD);
-#if SUPPORTED_CLIENT_BUILD >= CLIENT_BUILD_1_12_1
         m_events.ScheduleEvent(EVENT_SLIMEBOLT, SLIMEBOLT_INITIAL);
-#endif
     }
 
     void DoHatefulStrike()

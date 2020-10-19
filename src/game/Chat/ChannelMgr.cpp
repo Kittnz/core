@@ -118,7 +118,7 @@ void ChannelMgr::CreateDefaultChannels()
     GetJoinChannel("SAC")->SetSecurityLevel(SEC_GAMEMASTER);
     GetJoinChannel("MailsAC")->SetSecurityLevel(SEC_GAMEMASTER);
     GetJoinChannel("BotsDetector")->SetSecurityLevel(SEC_GAMEMASTER);
-    GetJoinChannel("ChatSpam")->SetSecurityLevel(SEC_MODERATOR);
+    GetJoinChannel("ChatSpam")->SetSecurityLevel(SEC_GAMEMASTER);
     GetJoinChannel("LowLevelBots")->SetSecurityLevel(SEC_GAMEMASTER);
 
     for (ChannelMap::iterator it = channels.begin(); it != channels.end(); ++it)

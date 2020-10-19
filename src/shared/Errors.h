@@ -45,15 +45,6 @@ if (!(CONDITION)) \
     assert(STRINGIZE(CONDITION) && 0); \
 }
 
-// Just warn.
-#define WPWarning(CONDITION) \
-if (!(CONDITION)) \
-{ \
-    ACE_Stack_Trace st; \
-    sLog.outError("%s:%i: Warning: Assertion in %s failed: %s",\
-        __FILE__, __LINE__, __FUNCTION__, STRINGIZE(CONDITION)); \
-    sLog.outError("%s", st.c_str()); \
-}
 #else
 // Normal assert.
 #define WPError(CONDITION) \
@@ -62,14 +53,6 @@ if (!(CONDITION)) \
     printf("%s:%i: Error: Assertion in %s failed: %s", \
         __FILE__, __LINE__, __FUNCTION__, STRINGIZE(CONDITION)); \
     assert(STRINGIZE(CONDITION) && 0); \
-}
-
-// Just warn.
-#define WPWarning(CONDITION) \
-if (!(CONDITION)) \
-{ \
-    printf("%s:%i: Warning: Assertion in %s failed: %s",\
-        __FILE__, __LINE__, __FUNCTION__, STRINGIZE(CONDITION)); \
 }
 #endif
 
