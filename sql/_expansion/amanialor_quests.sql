@@ -1,4 +1,21 @@
 
+replace into `creature_template` values (80805, 0, 18335, 18336, 18337, 0, 'Amani\'Alor Settler', NULL, 0, 10, 10, 413, 413, 0, 0, 20, 893, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 9, 13, 0, 62, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 16.808, 23.111, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, '');
+
+replace into creature_model_info values (18329, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (18330, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (18331, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (18332, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (18333, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (18334, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (18335, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (18336, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (18337, 5875, 2, 2, 0, 0, 0);
+
+REPLACE INTO `creature_template` VALUES (80806, 0, 6436, 6437, 0, 0, 'Risen Troll', NULL, 0, 11, 12, 220, 285, 0, 0, 560, 21, 0, 0.777776, 1.14286, 0, 20, 5, 0, 0, 1, 17, 22, 0, 66, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 21.2784, 29.2578, 100, 6, 0, 1866, 1866, 0, 0, 0, 0, 0, 0, 0, 7761, 0, 0, 0, 18660, 0, 12, 20, '', 1, 1, 0, 0, 3, 0, 0, 0, 8388624, 0, 0, '');
+
+replace into creature_model_info values (6436, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (6437, 5875, 2, 2, 0, 0, 0);
+
 -- A Tusken Affair 
 
 replace into `creature_template` values (80800, 0, 14760, 0, 0, 0, 'Revantusk Watcher', NULL, 0, 46, 47, 2038, 2062, 1587, 1640, 2278, 1576, 0, 1.1, 1.14286, 0, 20, 5, 0, 0, 1, 81, 105, 0, 212, 1, 1600, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 62.8672, 86.4424, 100, 7, 0, 2694, 2694, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 79, 108, 'EventAI', 1, 3, 0, 0, 3, 2694, 0, 0, 0, 0, 0, '');

@@ -332,3 +332,10 @@ update quest_template set requestitemstext = 'Splendid, new recruits! Just in ti
 -- update quest_template set objectives = '' where title = '';
 -- update quest_template set offerrewardtext = '' where title = '';
 -- update quest_template set requestitemstext = '' where title = '';
+
+
+-- Misc. fixes:
+
+update item_template set description = 'Creates a highly radioactive Wormhole with only 5 silver coins as a reagent. Most likely made by Goblins.' where entry = 51310;
+
+delete from npc_vendor where entry = 3962 and item = 5503;
