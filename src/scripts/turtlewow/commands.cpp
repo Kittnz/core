@@ -650,12 +650,12 @@ bool ChatHandler::HandleTransferCommand(char* args)
             // Account must exist
             if (!accountId)
             {
-                SendSysMessage("Account name not found.");
+                SendSysMessage("Account not found.");
                 return false;
             }
 
             CharacterDatabase.PExecute("UPDATE characters SET account = %u WHERE guid = '%u'", accountId, guid);
-            PSendSysMessage("You have successfully moved character %s to account with %s.", playerName.c_str(),
+            PSendSysMessage("You have successfully moved character %s to account %s.", playerName.c_str(),
                             accountName.c_str());
         }
     }
