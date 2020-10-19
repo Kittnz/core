@@ -147,20 +147,20 @@ set @quest_finisher = 2496;
 set @nextquest = 0;
 set @nextquestinchain = 0;
 set @prevquest = 60152;
-set @RewChoiceItemId1 = 0; 
-set @RewChoiceItemId2 = 0; 
+set @RewChoiceItemId1 = 51896; 
+set @RewChoiceItemId2 = 51897; 
 set @RewChoiceItemId3 = 0;
 set @RewChoiceItemId4 = 0; 
 set @RewChoiceItemCount1 = 0;
 set @RewChoiceItemCount2 = 0;
 set @RewChoiceItemCount3 = 0;
 set @RewChoiceItemCount4 = 0;
-set @reward_item_1 = 51896;
-set @reward_item_2 = 51897; 
+set @reward_item_1 = 0;
+set @reward_item_2 = 0; 
 set @reward_item_3 = 0;
 set @reward_item_4 = 0;
-set @reward_item_1_count = 1;
-set @reward_item_2_count = 1;
+set @reward_item_1_count = 0;
+set @reward_item_2_count = 0;
 set @reward_item_3_count = 0;
 set @reward_item_4_count = 0;
 set @creature_to_kill_1 = 0;
@@ -339,3 +339,5 @@ update quest_template set requestitemstext = 'Splendid, new recruits! Just in ti
 update item_template set description = 'Creates a highly radioactive Wormhole with only 5 silver coins as a reagent. Most likely made by Goblins.' where entry = 51310;
 
 delete from npc_vendor where entry = 3962 and item = 5503;
+
+update quest_template set method = 2 where entry in (8271, 8272);
