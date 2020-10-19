@@ -1,6 +1,7 @@
 #include "scriptPCH.h"
 #include "AccountMgr.h"
 #include <array>
+#include <Language.h>
 #include "MoveSplineInit.h"
 #include "MoveSpline.h"
 
@@ -608,27 +609,55 @@ bool ChatHandler::HandleMountCommand(char* /*args*/)
 
 bool ChatHandler::HandleTransferCommand(char* args)
 {
-    Player* target;
-    ObjectGuid target_guid;
-    std::string target_name;
+    if (!args || !*args)
+        return false;
 
-    if (!ExtractPlayerTarget(&args, &target, &target_guid, &target_name))
+    char* rawPlName = ExtractQuotedArg(&args);
+    char* rawAccountName = ExtractQuotedArg(&args);
+    if (!rawPlName || !rawAccountName)
     {
-        SendSysMessage("Syntax: .transfer character_name");
+        SendSysMessage("Syntax: .transfer player_name account_name");
         return false;
     }
 
-    uint32 account_id = m_session->GetAccountId();
+    std::string playerName(rawPlName);
+    std::string accountName(rawAccountName);
 
-    if (target)
+    // Player must be offline
+    // This will only return the player if it's ONLINE
+    if (ObjectAccessor::FindPlayerByName(playerName.c_str()))
     {
         SendSysMessage("Player must be offline.");
         return false;
     }
     else
     {
-        CharacterDatabase.PExecute("UPDATE characters SET account = %u WHERE guid = '%u'", account_id, target_guid.GetCounter());
-        PSendSysMessage("You have succesfully moved character to account with ID %u.", account_id);
+        QueryResult* result = CharacterDatabase.PQuery("SELECT `guid` FROM `characters` WHERE `name` = '%s'",
+                playerName.c_str());
+
+        if (!result)
+        {
+            SendSysMessage("Player not found.");
+            return false;
+        }
+        else
+        {
+            Field* fields = result->Fetch();
+            uint32 guid = fields[0].GetUInt32();
+
+            uint32 accountId = sAccountMgr.GetId(accountName);
+
+            // Account must exist
+            if (!accountId)
+            {
+                SendSysMessage("Account name not found.");
+                return false;
+            }
+
+            CharacterDatabase.PExecute("UPDATE characters SET account = %u WHERE guid = '%u'", accountId, guid);
+            PSendSysMessage("You have successfully moved character %s to account with %s.", playerName.c_str(),
+                            accountName.c_str());
+        }
     }
     return true;
 }
