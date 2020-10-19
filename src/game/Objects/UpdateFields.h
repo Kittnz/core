@@ -62,13 +62,8 @@ enum EContainerFields
     CONTAINER_FIELD_NUM_SLOTS                  = ITEM_END + 0x00, // Size:1
     CONTAINER_ALIGN_PAD                        = ITEM_END + 0x01, // Size:1
     CONTAINER_FIELD_SLOT_1                     = ITEM_END + 0x02,
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
     CONTAINER_FIELD_SLOT_LAST                  = ITEM_END + 0x48, // count=72
     CONTAINER_FIELD_SLOT_END,
-#else
-    CONTAINER_FIELD_SLOT_LAST                  = ITEM_END + 0x28, // count=40
-    CONTAINER_FIELD_SLOT_END,
-#endif
     CONTAINER_END,
 };
 
@@ -108,33 +103,17 @@ enum EUnitFields
     UNIT_VIRTUAL_ITEM_INFO_05                  = 0x27 + OBJECT_END,
     UNIT_FIELD_FLAGS                           = 0x28 + OBJECT_END, // Size:1
     UNIT_FIELD_AURA                            = 0x29 + OBJECT_END, // Size:48
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_9_4
     UNIT_FIELD_AURA_LAST                       = UNIT_FIELD_AURA + 47,
-#else
-    UNIT_FIELD_AURA_LAST                       = UNIT_FIELD_AURA + 63,
-#endif
     UNIT_FIELD_AURAFLAGS,                      // Size:6
     UNIT_FIELD_AURAFLAGS_01,
     UNIT_FIELD_AURAFLAGS_02,
     UNIT_FIELD_AURAFLAGS_03,
     UNIT_FIELD_AURAFLAGS_04,
     UNIT_FIELD_AURAFLAGS_05,
-#if SUPPORTED_CLIENT_BUILD <= CLIENT_BUILD_1_9_4
-    UNIT_FIELD_AURAFLAGS_06,
-    UNIT_FIELD_AURAFLAGS_07,
-#endif
     UNIT_FIELD_AURALEVELS,                     // Size:12
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_9_4
     UNIT_FIELD_AURALEVELS_LAST                 = UNIT_FIELD_AURALEVELS + 11,
-#else
-    UNIT_FIELD_AURALEVELS_LAST                 = UNIT_FIELD_AURALEVELS + 7,
-#endif
     UNIT_FIELD_AURAAPPLICATIONS,               // Size:12
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_9_4
     UNIT_FIELD_AURAAPPLICATIONS_LAST           = UNIT_FIELD_AURAAPPLICATIONS + 11,
-#else
-    UNIT_FIELD_AURAAPPLICATIONS_LAST           = UNIT_FIELD_AURAAPPLICATIONS + 15,
-#endif
     UNIT_FIELD_AURASTATE,                      // Size:1
     UNIT_FIELD_BASEATTACKTIME,                 // Size:1
     UNIT_FIELD_OFFHANDATTACKTIME,              // Size:1
@@ -172,25 +151,15 @@ enum EUnitFields
     UNIT_FIELD_RESISTANCES_04,
     UNIT_FIELD_RESISTANCES_05,
     UNIT_FIELD_RESISTANCES_06,
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
     UNIT_FIELD_BASE_MANA,                      // Size:1
     UNIT_FIELD_BASE_HEALTH,                    // Size:1
     UNIT_FIELD_BYTES_2,                        // Size:1
     UNIT_FIELD_ATTACK_POWER,                   // Size:1
     UNIT_FIELD_ATTACK_POWER_MODS,              // Size:1
     UNIT_FIELD_ATTACK_POWER_MULTIPLIER,        // Size:1
-#else
-    UNIT_FIELD_ATTACK_POWER,                   // Size:1
-    UNIT_FIELD_BASE_MANA,                      // Size:1
-    UNIT_FIELD_BASE_HEALTH,                    // Size:1
-    UNIT_FIELD_ATTACK_POWER_MODS,              // Size:1
-    UNIT_FIELD_BYTES_2,                        // Size:1
-#endif
     UNIT_FIELD_RANGED_ATTACK_POWER,            // Size:1
     UNIT_FIELD_RANGED_ATTACK_POWER_MODS,       // Size:1
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
     UNIT_FIELD_RANGED_ATTACK_POWER_MULTIPLIER, // Size:1
-#endif
     UNIT_FIELD_MINRANGEDDAMAGE,                // Size:1
     UNIT_FIELD_MAXRANGEDDAMAGE,                // Size:1
     UNIT_FIELD_POWER_COST_MODIFIER,            // Size:7
@@ -210,13 +179,7 @@ enum EUnitFields
     UNIT_FIELD_PADDING,
     UNIT_END,
 
-#if SUPPORTED_CLIENT_BUILD < CLIENT_BUILD_1_12_1
-    PLAYER_SELECTION                           = 0x00 + UNIT_END,
-    PLAYER_SELECTION_END                       = PLAYER_SELECTION + 1,
-    PLAYER_DUEL_ARBITER,
-#else
     PLAYER_DUEL_ARBITER                        = 0x00 + UNIT_END, // Size:2
-#endif
     
     PLAYER_DUEL_ARBITER_END,
     PLAYER_FLAGS,                              // Size:1
@@ -257,11 +220,9 @@ enum EUnitFields
     PLAYER_FIELD_VENDORBUYBACK_SLOT_1,         // Size:2 Count:12
     PLAYER_FIELD_VENDORBUYBACK_SLOT_LAST       = PLAYER_FIELD_VENDORBUYBACK_SLOT_1 + 22,
     PLAYER_FIELD_VENDORBUYBACK_SLOT_END,
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_10_2
     PLAYER_FIELD_KEYRING_SLOT_1 ,              // Size:2 Count:32
     PLAYER_FIELD_KEYRING_SLOT_LAST             = PLAYER_FIELD_KEYRING_SLOT_1 + 62,      // + (Count-1)*Size
     PLAYER_FIELD_KEYRING_SLOT_END,
-#endif
     PLAYER_FARSIGHT,                           // Size:2
     PLAYER_FARSIGHT_END,
     PLAYER_FIELD_COMBO_TARGET,                 // Size:2
@@ -322,10 +283,8 @@ enum EUnitFields
     PLAYER_FIELD_LAST_WEEK_RANK,               // Size:1
     PLAYER_FIELD_BYTES2,                       // Size:1
     PLAYER_FIELD_WATCHED_FACTION_INDEX,        // Size:1
-#if SUPPORTED_CLIENT_BUILD >= CLIENT_BUILD_1_12_1
     PLAYER_FIELD_COMBAT_RATING_1,              // Size:20
     PLAYER_FIELD_COMBAT_RATING_END             = PLAYER_FIELD_COMBAT_RATING_1 + 19,
-#endif
     PLAYER_END
 };
 
@@ -336,9 +295,7 @@ enum EGameObjectFields
     GAMEOBJECT_FLAGS                           = OBJECT_END + 0x03,
     GAMEOBJECT_ROTATION                        = OBJECT_END + 0x04,
     GAMEOBJECT_STATE                           = OBJECT_END + 0x08,
-#if SUPPORTED_CLIENT_BUILD <= CLIENT_BUILD_1_11_2
-    GAMEOBJECT_TIMESTAMP,
-#endif
+
     GAMEOBJECT_POS_X,
     GAMEOBJECT_POS_Y,
     GAMEOBJECT_POS_Z,
@@ -347,11 +304,9 @@ enum EGameObjectFields
     GAMEOBJECT_FACTION,
     GAMEOBJECT_TYPE_ID,
     GAMEOBJECT_LEVEL,
-#if SUPPORTED_CLIENT_BUILD >= CLIENT_BUILD_1_12_1
     GAMEOBJECT_ARTKIT,
     GAMEOBJECT_ANIMPROGRESS,
     GAMEOBJECT_PADDING,
-#endif
     GAMEOBJECT_END
 };
 

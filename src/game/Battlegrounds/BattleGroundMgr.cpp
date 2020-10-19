@@ -30,7 +30,6 @@
 #include "MapManager.h"
 #include "Map.h"
 #include "ObjectMgr.h"
-#include "ProgressBar.h"
 #include "Chat.h"
 #include "World.h"
 #include "WorldPacket.h"
@@ -983,17 +982,13 @@ void BattleGroundMgr::BuildBattleGroundStatusPacket(WorldPacket *data, BattleGro
     if (StatusID == 0 || !bg)
     {
         data->Initialize(SMSG_BATTLEFIELD_STATUS, 4 * 2);
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
         *data << uint32(QueueSlot);                         // queue id (0...2)
-#endif
         *data << uint32(0);
         return;
     }
 
     data->Initialize(SMSG_BATTLEFIELD_STATUS, (4 + 1 + 1 + 4 + 2 + 4 + 1 + 4 + 4 + 4));
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
     *data << uint32(QueueSlot);                             // queue id (0...2) - player can be in 3 queues in time
-#endif
     // uint64 in client
     *data << uint32(bg->GetMapId());                        // MapID
     *data << uint8(0);                                      // Unknown
@@ -1274,25 +1269,16 @@ uint32 BattleGroundMgr::CreateBattleGround(BattleGroundTypeId bgTypeId, uint32 M
 
 void BattleGroundMgr::CreateInitialBattleGrounds()
 {
-    uint32 count = 0;
-
     //                                                                0     1                       2                       3            4            5                     6                      7                  8                   9                          10                  11                      12    
     std::unique_ptr<QueryResult> result(WorldDatabase.PQuery("SELECT `id`, `min_players_per_team`, `max_players_per_team`, `min_level`, `max_level`, `alliance_win_spell`, `alliance_lose_spell`, `horde_win_spell`, `horde_lose_spell`, `alliance_start_location`, `alliance_start_o`, `horde_start_location`, `horde_start_o` FROM `battleground_template` t1 WHERE `patch`=(SELECT max(`patch`) FROM `battleground_template` t2 WHERE t1.`id`=t2.`id` && `patch` <= %u)", sWorld.GetWowPatch()));
 
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        
         return;
     }
 
-    BarGoLink bar(result->GetRowCount());
-
     do
     {
-        bar.step();
         Field *fields = result->Fetch();
 
         uint32 bgTypeID_ = fields[0].GetUInt32();
@@ -1379,8 +1365,6 @@ void BattleGroundMgr::CreateInitialBattleGrounds()
         //DETAIL_LOG("Creating battleground %s, %u-%u", bl->name[sWorld.GetDBClang()], MinLvl, MaxLvl);
         if (!CreateBattleGround(bgTypeID, MinPlayersPerTeam, MaxPlayersPerTeam, MinLvl, MaxLvl, AllianceWinSpell, AllianceLoseSpell, HordeWinSpell, HordeLoseSpell, name, mapId, AStartLoc[0], AStartLoc[1], AStartLoc[2], AStartLoc[3], HStartLoc[0], HStartLoc[1], HStartLoc[2], HStartLoc[3]))
             continue;
-
-        ++count;
     }
     while (result->NextRow());
 
@@ -1512,23 +1496,13 @@ void BattleGroundMgr::LoadBattleMastersEntry()
 
     QueryResult *result = WorldDatabase.Query("SELECT entry,bg_template FROM battlemaster_entry");
 
-    uint32 count = 0;
-
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
         return;
     }
 
-    BarGoLink bar(result->GetRowCount());
-
     do
     {
-        ++count;
-        bar.step();
-
         Field *fields = result->Fetch();
 
         uint32 entry = fields[0].GetUInt32();
@@ -1592,8 +1566,6 @@ void BattleGroundMgr::LoadBattleEventIndexes()
     m_CreatureBattleEventIndexMap.clear();               // need for reload case
     m_CreatureBattleEventIndexMap[-1].push_back(events);
 
-    uint32 count = 0;
-
     QueryResult *result =
         //                           0         1           2                3                4              5           6
         WorldDatabase.Query("SELECT data.typ, data.guid1, data.ev1 AS ev1, data.ev2 AS ev2, data.map AS m, data.guid2, description.map, "
@@ -1628,18 +1600,11 @@ void BattleGroundMgr::LoadBattleEventIndexes()
                             "ORDER BY m, ev1, ev2");
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        
         return;
     }
 
-    BarGoLink bar(result->GetRowCount());
-
     do
     {
-        bar.step();
         Field *fields = result->Fetch();
         if (fields[2].GetUInt8() == BG_EVENT_NONE || fields[3].GetUInt8() == BG_EVENT_NONE)
             continue;                                       // we don't need to add those to the eventmap
@@ -1685,8 +1650,6 @@ void BattleGroundMgr::LoadBattleEventIndexes()
             m_GameObjectBattleEventIndexMap[dbTableGuidLow].push_back(events);
         else
             m_CreatureBattleEventIndexMap[dbTableGuidLow].push_back(events);
-
-        ++count;
 
     }
     while (result->NextRow());

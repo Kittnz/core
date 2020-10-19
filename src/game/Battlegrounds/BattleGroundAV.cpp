@@ -1654,49 +1654,6 @@ void BattleGroundAV::CompleteQuestForAll(uint32 questId)
                 player->FullQuestComplete(questId);
 }
 
-
-void BattleGroundAV::HandleCommand(Player* player, ChatHandler* handler, char* args)
-{
-    std::stringstream in(args);
-    std::string commandType;
-    in >> commandType;
-    if (commandType == "reinforcement")
-    {
-        int factionId;
-        int value;
-        in >> commandType;
-        in >> value;
-        if (commandType == "a")
-            factionId = BG_TEAM_ALLIANCE;
-        else
-            factionId = BG_TEAM_HORDE;
-
-        setReinforcementLevelGroundUnit(factionId, value);
-        handler->PSendSysMessage("Reinforcement %s: added %i. Value now %u", factionId == BG_TEAM_ALLIANCE ? "Alliance" : "Horde", value, getReinforcementLevelGroundUnit(factionId));
-    }
-    else if (commandType == "quest")
-    {
-        int questId;
-        in >> questId;
-        if (Creature* target = player->GetSelectedCreature())
-        {
-            HandleQuestComplete(target, questId, player);
-            handler->PSendSysMessage("Quest #%u completed on target %s", questId, target->GetName());
-        }
-        else
-            handler->SendSysMessage(LANG_SELECT_CHAR_OR_CREATURE);
-    }
-    else if (commandType == "completequest")
-    {
-        int questId;
-        in >> questId;
-        CompleteQuestForAll(questId);
-        handler->PSendSysMessage("Called BattleGroundAV::CompleteQuestForAll(%u)", questId);
-    }
-    else
-        BattleGround::HandleCommand(player, handler, args);
-}
-
 SpellCastResult BattleGroundAV::CheckSpellCast(Player* caster, SpellEntry const* spell)
 {
     switch (spell->Id)

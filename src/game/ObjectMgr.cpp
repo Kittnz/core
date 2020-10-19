@@ -35,7 +35,6 @@
 #include "World.h"
 #include "Group.h"
 #include "Transport.h"
-#include "ProgressBar.h"
 #include "Language.h"
 #include "PoolManager.h"
 #include "GameEventMgr.h"
@@ -56,7 +55,7 @@
 
 #include <limits>
 
-INSTANTIATE_SINGLETON_1(ObjectMgr);
+ObjectMgr sObjectMgr;
 
 #include "utf8cpp/utf8.h"
 
@@ -300,22 +299,13 @@ void ObjectMgr::LoadSpellDisabledEntrys()
 
     std::unique_ptr<QueryResult> result(WorldDatabase.Query("SELECT `entry` FROM `spell_disabled`"));
 
-    uint32 total_count = 0;
-
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        
         return;
     }
 
-    BarGoLink bar(result->GetRowCount());
-
     do
     {
-        bar.step();
         Field* fields = result->Fetch();
 
         uint32 spellid = fields[0].GetUInt32();
@@ -326,11 +316,8 @@ void ObjectMgr::LoadSpellDisabledEntrys()
             continue;
         }
         m_DisabledSpells.insert(spellid);
-        ++total_count;
     }
     while (result->NextRow());
-
-    
 }
 
 void ObjectMgr::LoadMapLootDisabled()
@@ -339,31 +326,19 @@ void ObjectMgr::LoadMapLootDisabled()
 
     std::unique_ptr<QueryResult> result(WorldDatabase.Query("SELECT `map_id` FROM `map_loot_disabled`"));
 
-    uint32 total_count = 0;
-
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        
         return;
     }
 
-    BarGoLink bar(result->GetRowCount());
-
     do
     {
-        bar.step();
         Field* fields = result->Fetch();
 
         uint32 mapid = fields[0].GetUInt32();
         m_DisabledMapLoots.insert(mapid);
-        ++total_count;
     }
     while (result->NextRow());
-
-    
 }
 
 void ObjectMgr::LoadCinematicsWaypoints()
@@ -372,22 +347,13 @@ void ObjectMgr::LoadCinematicsWaypoints()
 
     std::unique_ptr<QueryResult> result(WorldDatabase.Query("SELECT `cinematic`, `timer`, `position_x`, `position_y`, `position_z` FROM `cinematic_waypoints`"));
 
-    uint32 total_count = 0;
-
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        
         return;
     }
 
-    BarGoLink bar(result->GetRowCount());
-
     do
     {
-        bar.step();
         Field* fields = result->Fetch();
 
         CinematicWaypointEntry tmp;
@@ -399,11 +365,8 @@ void ObjectMgr::LoadCinematicsWaypoints()
         tmp.position.z   = fields[4].GetFloat();
 
         m_CinematicWaypoints.push_back(tmp);
-        ++total_count;
     }
     while (result->NextRow());
-
-    
 }
 
 Position const* ObjectMgr::GetCinematicPosition(uint32 cinematicId, uint32 elapsed_time)
@@ -456,32 +419,20 @@ void ObjectMgr::LoadPlayerPhaseFromDb()
 
     std::unique_ptr<QueryResult> result(CharacterDatabase.Query("SELECT guid, world_phase_mask FROM characters"));
 
-    uint32 total_count = 0;
-
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        
         return;
     }
 
-    BarGoLink bar(result->GetRowCount());
-
     do
     {
-        bar.step();
         Field* fields = result->Fetch();
 
         uint32 guid = fields[0].GetUInt32();
         uint32 mask = fields[1].GetUInt32();
         m_PlayerPhases[guid] = mask;
-        ++total_count;
     }
     while (result->NextRow());
-
-    
 }
 
 uint32 ObjectMgr::GetPlayerWorldMaskByGUID(const uint64 guid)
@@ -494,7 +445,6 @@ void ObjectMgr::SetPlayerWorldMask(const uint64 guid, uint32 newWorldMask)
         return;
 
     m_PlayerPhases[GUID_LOPART(guid)] = newWorldMask;
-    //CharacterDatabase.PQuery("UPDATE characters SET world_phase_mask = %u WHERE guid = %u", newWorldMask, GUID_LOPART(guid));
 }
 
 uint32 ObjectMgr::GetSavedVariable(uint32 index, uint32 defaultValue, bool *exist)
@@ -550,19 +500,19 @@ void ObjectMgr::InitSavedVariable(uint32 index, uint32 value)
 
 void ObjectMgr::SetSavedVariable(uint32 index, uint32 value, bool autoSave)
 {
-    for (auto it = m_SavedVariables.begin(); it != m_SavedVariables.end(); ++it)
+    for (SavedVariable& vSavedVariable : m_SavedVariables)
     {
-        if (it->uiIndex == index)
+        if (vSavedVariable.uiIndex == index)
         {
             // If the value has not changed.
-            if (it->uiValue == value)
+            if (vSavedVariable.uiValue == value)
                 return;
 
-            it->uiValue = value;
+			vSavedVariable.uiValue = value;
             if (autoSave)
-                _SaveVariable(*it);
+                _SaveVariable(vSavedVariable);
             else
-                it->bSavedInDb = false;
+				vSavedVariable.bSavedInDb = false;
             return;
         }
     }
@@ -602,29 +552,17 @@ void ObjectMgr::LoadSavedVariable()
 
     std::unique_ptr<QueryResult> result(WorldDatabase.Query("SELECT `index`, `value` FROM `variables`"));
 
-    uint32 total_count = 0;
-
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        
         return;
     }
 
-    BarGoLink bar(result->GetRowCount());
-
     do
     {
-        bar.step();
         Field* fields = result->Fetch();
         _InsertVariable(fields[0].GetUInt32(), fields[1].GetUInt32(), true);
-        ++total_count;
     }
     while (result->NextRow());
-
-    
 }
 
 // Caching player data
@@ -638,22 +576,13 @@ void ObjectMgr::LoadPlayerCacheData()
         //       0       1       2        3         4          5       6        7       8      9             10            11            12             13
         "SELECT `guid`, `race`, `class`, `gender`, `account`, `name`, `level`, `zone`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `taxi_path` FROM `characters`;"));
 
-    uint32 total_count = 0;
-
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        
         return;
     }
 
-    BarGoLink bar(result->GetRowCount());
-
     do
     {
-        bar.step();
         Field* fields = result->Fetch();
 
         // guid, race, class, gender, account, name
@@ -666,11 +595,8 @@ void ObjectMgr::LoadPlayerCacheData()
             UpdatePlayerCachedPosition(data, fields[8].GetUInt32(), fields[9].GetFloat(), fields[10].GetFloat(),
                 fields[11].GetFloat(), fields[12].GetFloat(), !fields[13].GetCppString().empty());
         }
-        ++total_count;
     }
     while (result->NextRow());
-
-    
 }
 
 PlayerCacheData* ObjectMgr::GetPlayerDataByGUID(uint32 guidLow) const
@@ -698,7 +624,7 @@ ObjectGuid ObjectMgr::GetPlayerGuidByName(const std::string& name) const
 
 bool ObjectMgr::GetPlayerNameByGUID(ObjectGuid guid, std::string &name) const
 {
-    if (auto pData = sObjectMgr.GetPlayerDataByGUID(guid.GetCounter()))
+    if (PlayerCacheData* pData = sObjectMgr.GetPlayerDataByGUID(guid.GetCounter()))
     {
         name = pData->sName;
         return true;
@@ -708,10 +634,10 @@ bool ObjectMgr::GetPlayerNameByGUID(ObjectGuid guid, std::string &name) const
 
 Team ObjectMgr::GetPlayerTeamByGUID(ObjectGuid guid) const
 {
-    if (auto player = GetPlayer(guid))
+    if (Player* player = GetPlayer(guid))
         return Player::TeamForRace(player->getRace());
 
-    if (auto pData = sObjectMgr.GetPlayerDataByGUID(guid.GetCounter()))
+    if (PlayerCacheData* pData = sObjectMgr.GetPlayerDataByGUID(guid.GetCounter()))
         return Player::TeamForRace(pData->uiRace);
 
     return TEAM_NONE;
@@ -746,10 +672,10 @@ uint8 ObjectMgr::GetPlayerClassByGUID(ObjectGuid guid) const
 
 uint32 ObjectMgr::GetPlayerAccountIdByGUID(ObjectGuid guid) const
 {
-    if (auto player = GetPlayer(guid))
+    if (Player* player = GetPlayer(guid))
         return player->GetSession()->GetAccountId();
 
-    if (auto pData = sObjectMgr.GetPlayerDataByGUID(guid.GetCounter()))
+    if (PlayerCacheData* pData = sObjectMgr.GetPlayerDataByGUID(guid.GetCounter()))
         return pData->uiAccount;
 
     return 0;
@@ -757,17 +683,17 @@ uint32 ObjectMgr::GetPlayerAccountIdByGUID(ObjectGuid guid) const
 
 uint32 ObjectMgr::GetPlayerAccountIdByPlayerName(const std::string& name) const
 {
-    if (auto pData = sObjectMgr.GetPlayerDataByName(name))
+    if (PlayerCacheData* pData = sObjectMgr.GetPlayerDataByName(name))
         return pData->uiAccount;
     return 0;
 }
 
 PlayerCacheData* ObjectMgr::InsertPlayerInCache(Player *pPlayer)
 {
-    auto pSession = pPlayer->GetSession();
+    WorldSession* pSession = pPlayer->GetSession();
     if (!pSession)
         return nullptr;
-    auto accountId = pSession->GetAccountId();
+    uint32 accountId = pSession->GetAccountId();
 
     return InsertPlayerInCache(pPlayer->GetGUIDLow(), pPlayer->getRace(), pPlayer->getClass(), pPlayer->getGender(), accountId, pPlayer->GetName(), pPlayer->getLevel(), pPlayer->GetCachedZoneId());
 }
@@ -901,9 +827,9 @@ Group* ObjectMgr::GetGroupById(uint32 id) const
 
 Group* ObjectMgr::GetGroupByMember(ObjectGuid memberGuid)
 {
-    for (GroupMap::const_iterator itr = m_GroupMap.begin(); itr != m_GroupMap.end(); ++itr)
-        if (itr->second->IsMember(memberGuid))
-            return itr->second;
+    for (const std::pair<const uint32, Group*>& itr : m_GroupMap)
+        if (itr.second->IsMember(memberGuid))
+            return itr.second;
     return nullptr;
 }
 
@@ -920,18 +846,11 @@ void ObjectMgr::LoadCreatureLocales()
 
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        
         return;
     }
 
-    BarGoLink bar(result->GetRowCount());
-
     do
     {
-        bar.step();
         Field *fields = result->Fetch();
 
         uint32 entry = fields[0].GetUInt32();
@@ -973,8 +892,6 @@ void ObjectMgr::LoadCreatureLocales()
         }
     }
     while (result->NextRow());
-
-    
 }
 
 void ObjectMgr::LoadGossipMenuItemsLocales()
@@ -990,18 +907,11 @@ void ObjectMgr::LoadGossipMenuItemsLocales()
 
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        
         return;
     }
 
-    BarGoLink bar(result->GetRowCount());
-
     do
     {
-        bar.step();
         Field *fields = result->Fetch();
 
         uint16 menuId   = fields[0].GetUInt16();
@@ -1059,8 +969,6 @@ void ObjectMgr::LoadGossipMenuItemsLocales()
         }
     }
     while (result->NextRow());
-
-    
 }
 
 void ObjectMgr::LoadPointOfInterestLocales()
@@ -1071,18 +979,11 @@ void ObjectMgr::LoadPointOfInterestLocales()
 
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        sLog.outString("");
         return;
     }
 
-    BarGoLink bar(result->GetRowCount());
-
     do
     {
-        bar.step();
         Field *fields = result->Fetch();
 
         uint32 entry = fields[0].GetUInt32();
@@ -1112,8 +1013,6 @@ void ObjectMgr::LoadPointOfInterestLocales()
         }
     }
     while (result->NextRow());
-
-    
 }
 
 struct SQLCreatureLoader : public SQLStorageLoaderBase<SQLCreatureLoader, SQLStorage>
@@ -1130,14 +1029,11 @@ void ObjectMgr::LoadCreatureTemplates()
     SQLCreatureLoader loader;
     loader.LoadProgressive(sCreatureStorage, sWorld.GetWowPatch());
 
-    
-
     CheckCreatureTemplates();
 }
 
 void ObjectMgr::CorrectCreatureModels(uint32 entry, uint32& displayId)
 {
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_2_4
     if (sWorld.GetWowPatch() == WOW_PATCH_102)
     {
         // Rhahk'Zor
@@ -1153,8 +1049,6 @@ void ObjectMgr::CorrectCreatureModels(uint32 entry, uint32& displayId)
         if (entry == 5977 && displayId == 11540)
             displayId = 14401;
     }
-#endif
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_6_1
     if (sWorld.GetWowPatch() == WOW_PATCH_106)
     {
         // Grizzle Halfmane
@@ -1167,7 +1061,6 @@ void ObjectMgr::CorrectCreatureModels(uint32 entry, uint32& displayId)
         if (entry == 14982 && displayId == 15094)
             displayId = 15100;
     }
-#endif
 }
 
 void ObjectMgr::CheckCreatureTemplates()
@@ -1388,10 +1281,10 @@ void ObjectMgr::ConvertCreatureAddonAuras(CreatureDataAddon* addon, char const* 
     const_cast<uint32*&>(addon->auras) = new uint32[val.size() + 1];
 
     uint32 i = 0;
-    for (uint32 j = 0; j < val.size(); ++j)
+    for (int j : val)
     {
         uint32& cAura = const_cast<uint32&>(addon->auras[i]);
-        cAura = uint32(val[j]);
+        cAura = uint32(j);
 
         SpellEntry const *AdditionalSpellInfo = sSpellMgr.GetSpellEntry(cAura);
         if (!AdditionalSpellInfo)
@@ -1416,8 +1309,6 @@ void ObjectMgr::ConvertCreatureAddonAuras(CreatureDataAddon* addon, char const* 
 void ObjectMgr::LoadCreatureAddons(SQLStorage& creatureaddons, char const* entryName, char const* comment)
 {
     creatureaddons.LoadProgressive(sWorld.GetWowPatch());
-
-    
 
     // check data correctness and convert 'auras'
     for (uint32 i = 1; i < creatureaddons.GetMaxEntry(); ++i)
@@ -1513,8 +1404,6 @@ void ObjectMgr::LoadEquipmentTemplates()
             }
         }
     }
-
-    
 }
 
 CreatureModelInfo const* ObjectMgr::GetCreatureModelInfo(uint32 modelid)
@@ -1659,8 +1548,6 @@ void ObjectMgr::LoadCreatureModelInfo()
             sLog.outErrorDb("Table `creature_model_info` expect have data for character race %u male model id %u", race, raceEntry->model_m);
 
     }
-
-    
 }
 
 void ObjectMgr::LoadCreatureSpells()
@@ -1703,19 +1590,11 @@ void ObjectMgr::LoadCreatureSpells()
                                                      "`spellId_8`, `probability_8`, `castTarget_8`, `targetParam1_8`, `targetParam2_8`, `castFlags_8`, `delayInitialMin_8`, `delayInitialMax_8`, `delayRepeatMin_8`, `delayRepeatMax_8`, `scriptId_8` FROM `creature_spells`"));
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        
         return;
     }
 
-
-    BarGoLink bar(result->GetRowCount());
-
     do
     {
-        bar.step();
         Field* fields = result->Fetch();
 
         uint32 entry = fields[0].GetUInt32();;
@@ -1792,13 +1671,10 @@ void ObjectMgr::LoadCreatureSpells()
 
     for (std::set<uint32>::const_iterator itr = spellScriptSet.begin(); itr != spellScriptSet.end(); ++itr)
         sLog.outErrorDb("Table `creature_spells_scripts` contains unused script, id %u.", *itr);
-
-    
 }
 
 void ObjectMgr::LoadCreatures(bool reload)
 {
-    uint32 count = 0;
     //                                                                          0                  1     2      3
     std::unique_ptr<QueryResult> result(WorldDatabase.Query("SELECT `creature`.`guid`, `creature`.`id`, `map`, `modelid`,"
     //                      4               5             6             7             8              9                   10                  11           12
@@ -1814,18 +1690,11 @@ void ObjectMgr::LoadCreatures(bool reload)
 
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        
         return;
     }
 
-    BarGoLink bar(result->GetRowCount());
-
     do
     {
-        bar.step();
         Field *fields = result->Fetch();
 
         uint32 guid         = fields[ 0].GetUInt32();
@@ -1989,12 +1858,9 @@ void ObjectMgr::LoadCreatures(bool reload)
 
         if (!alreadyPresent && existsInPatch && gameEvent == 0 && GuidPoolId == 0 && EntryPoolId == 0) // if not this is to be managed by GameEvent System or Pool system
             AddCreatureToGrid(guid, &data);
-        ++count;
 
     }
     while (result->NextRow());
-
-    
 }
 
 void ObjectMgr::AddCreatureToGrid(uint32 guid, CreatureData const* data)
@@ -2021,8 +1887,6 @@ void ObjectMgr::RemoveCreatureFromGrid(uint32 guid, CreatureData const* data)
 
 void ObjectMgr::LoadGameobjects(bool reload)
 {
-    uint32 count = 0;
-
     //                                                                            0                    1     2      3             4             5             6
     std::unique_ptr<QueryResult> result(WorldDatabase.Query("SELECT `gameobject`.`guid`, `gameobject`.`id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`,"
     //                      7            8            9            10           11                12              13       14      15
@@ -2036,18 +1900,11 @@ void ObjectMgr::LoadGameobjects(bool reload)
 
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        
         return;
     }
 
-    BarGoLink bar(result->GetRowCount());
-
     do
     {
-        bar.step();
         Field *fields = result->Fetch();
 
         uint32 guid         = fields[ 0].GetUInt32();
@@ -2163,12 +2020,8 @@ void ObjectMgr::LoadGameobjects(bool reload)
 
         if (!alreadyPresent && gameEvent == 0 && GuidPoolId == 0 && EntryPoolId == 0) // if not this is to be managed by GameEvent System or Pool system
             AddGameobjectToGrid(guid, &data);
-        ++count;
-
     }
     while (result->NextRow());
-
-    
 }
 
 void ObjectMgr::AddGameobjectToGrid(uint32 guid, GameObjectData const* data)
@@ -2197,13 +2050,10 @@ void ObjectMgr::RemoveGameobjectFromGrid(uint32 guid, GameObjectData const* data
 // For cases where the spell data itself changed and we need to use a substitute spell id in later clients to recreate old item version.
 void ObjectMgr::CorrectItemEffects(uint32 itemId, _ItemSpell& itemSpell)
 {
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_9_4
     // Blade of Eternal Darkness
     // The spell data was changed, and the trigger became On Equip instead of On Use in 1.10.
     if ((itemSpell.SpellId == 21978) && (itemSpell.SpellTrigger == 0))
         itemSpell.SpellTrigger = 1;
-#endif
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_7_1
     // Rhok\'delar, Longbow of the Ancient Keepers
     // The spell data was changed and the spell id removed from this item in 1.8.
     if ((itemSpell.SpellId == 23193) && (itemId == 18713))
@@ -2212,15 +2062,11 @@ void ObjectMgr::CorrectItemEffects(uint32 itemId, _ItemSpell& itemSpell)
     // The spell data was changed and the spell id removed from this item in 1.8.
     if ((itemSpell.SpellId == 23194) && (itemId == 18715))
         itemSpell.SpellId = 0;
-#endif
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_9_4
     // Bonereaver's Edge
     // The spell data was changed in 1.10, so use a substitute spell id before content patch 1.10 when playing with a newer client.
     if ((itemSpell.SpellId == 21153) && (itemId == 17076) && (sWorld.GetWowPatch() < WOW_PATCH_110))
         itemSpell.SpellId = 15280;
-#endif
     // Substitute spell power spells that were changed in the 1.4 client.
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_3_1
     if (sWorld.GetWowPatch() < WOW_PATCH_104)
     {
         switch (itemSpell.SpellId)
@@ -2335,15 +2181,9 @@ void ObjectMgr::CorrectItemEffects(uint32 itemId, _ItemSpell& itemSpell)
             case 9317: // Increase Healing 28 (OLD) to Increase Healing 26 (NEW)
                 itemSpell.SpellId = 9315;
                 return;
-    #if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
             case 9318: // Increase Healing 30 (OLD) to Increase Healing 30 (NEW)
                 itemSpell.SpellId = 25067;
                 return;
-    #else
-            case 9318: // Increase Healing 30 (OLD) to Increase Healing 29 (NEW)
-                itemSpell.SpellId = 9316;
-                return;
-    #endif
             case 9324: // Increase Shadow Dam 11 (OLD) to Increase Shadow Dam 11 (NEW)
             case 9325: // Increase Shadow Dam 12 (OLD) to Increase Shadow Dam 11 (NEW)
                 itemSpell.SpellId = 9412;
@@ -2608,11 +2448,9 @@ void ObjectMgr::CorrectItemEffects(uint32 itemId, _ItemSpell& itemSpell)
             case 17847: // Increase Arcane Dam 54 (OLD) to Increase Arcane Dam 54 (NEW)
                 itemSpell.SpellId = 17849;
                 return;
-    #if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_9_4
             case 17848: // Increase Arcane Dam 56 (OLD) to Increase Arcane Dam 56 (NEW)
                 itemSpell.SpellId = 26704;
                 return;
-    #endif
             case 17866: // Increase Fire Dam 17 (OLD) to Increase Fire Dam 17 (NEW)
             case 17867: // Increase Fire Dam 18 (OLD) to Increase Fire Dam 17 (NEW)
                 itemSpell.SpellId = 9295;
@@ -2814,18 +2652,12 @@ void ObjectMgr::CorrectItemEffects(uint32 itemId, _ItemSpell& itemSpell)
             case 18026: // Increase Shadow Dam 54 (OLD) to Increase Shadow Dam 54 (NEW)
                 itemSpell.SpellId = 18028;
                 return;
-    #if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_9_4
             case 18027: // Increase Shadow Dam 56 (OLD) to Increase Shadow Dam 56 (NEW)
                 itemSpell.SpellId = 26728;
                 return;
             case 18028: // Increase Shadow Dam 58 (OLD) to Increase Shadow Dam 57 (NEW)
                 itemSpell.SpellId = 26729;
                 return;
-    #else
-            case 18027: // Increase Shadow Dam 56 (OLD) to Increase Shadow Dam 54 (NEW)
-                itemSpell.SpellId = 18028;
-                return;
-    #endif
             case 18029: // Increase Healing 32 (OLD) to Increase Healing 31 (NEW)
                 itemSpell.SpellId = 9317;
                 return;
@@ -3011,9 +2843,7 @@ void ObjectMgr::CorrectItemEffects(uint32 itemId, _ItemSpell& itemSpell)
                 return;
         }
     }
-#endif
     // Substitute Increased Defense spells that were changed in the 1.7 client.
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_6_1
     if (sWorld.GetWowPatch() < WOW_PATCH_107)
     {
         switch (itemSpell.SpellId)
@@ -3112,9 +2942,7 @@ void ObjectMgr::CorrectItemEffects(uint32 itemId, _ItemSpell& itemSpell)
                 return;
         }
     }
-#endif
     // Substitute Vitality spells that were changed in the 1.8 client.
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_7_1
     if (sWorld.GetWowPatch() < WOW_PATCH_108)
     {
         switch (itemSpell.SpellId)
@@ -3127,9 +2955,7 @@ void ObjectMgr::CorrectItemEffects(uint32 itemId, _ItemSpell& itemSpell)
                 return;
         }
     }
-#endif
     // Substitute Vitality spells that were changed in the 1.10 client.
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_9_4
     if (sWorld.GetWowPatch() < WOW_PATCH_110)
     {
         switch (itemSpell.SpellId)
@@ -3241,12 +3067,10 @@ void ObjectMgr::CorrectItemEffects(uint32 itemId, _ItemSpell& itemSpell)
                 return;
         }
     }
-#endif
 }
 
 void ObjectMgr::CorrectItemModels(uint32 itemId, uint32& displayId)
 {
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_5_1
     // Spry Boots
     if ((itemId == 18411) && (displayId == 31712) && (sWorld.GetWowPatch() == WOW_PATCH_105))
         displayId = 31732;
@@ -3256,7 +3080,6 @@ void ObjectMgr::CorrectItemModels(uint32 itemId, uint32& displayId)
     // Bloodseeker
     if ((itemId == 19107) && (displayId == 31713) && (sWorld.GetWowPatch() == WOW_PATCH_105))
         displayId = 32146;
-#endif
 }
 
 struct SQLItemLoader : public SQLStorageLoaderBase<SQLItemLoader, SQLStorage>
@@ -3552,21 +3375,12 @@ void ObjectMgr::LoadItemPrototypes()
 
         if (proto->BagFamily)
         {
-
-#if SUPPORTED_CLIENT_BUILD <= CLIENT_BUILD_1_10_2
-            // The keyring was added in 1.11.
-            if (proto->BagFamily == BAG_FAMILY_KEYS)
-                const_cast<ItemPrototype*>(proto)->BagFamily = 0;
-#endif
-
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
             ItemBagFamilyEntry const* bf = sItemBagFamilyStore.LookupEntry(proto->BagFamily);
             if (!bf)
             {
                 sLog.outErrorDb("Item (Entry: %u) has bag family %u not listed in ItemBagFamily.dbc, setted it to 0", i, proto->BagFamily);
                 const_cast<ItemPrototype*>(proto)->BagFamily = 0;
             }
-#endif
         }
 
         if (proto->DisenchantID)
@@ -3622,18 +3436,11 @@ void ObjectMgr::LoadItemLocales()
 
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        
         return;
     }
 
-    BarGoLink bar(result->GetRowCount());
-
     do
     {
-        bar.step();
         Field *fields = result->Fetch();
 
         uint32 entry = fields[0].GetUInt32();
@@ -3676,32 +3483,21 @@ void ObjectMgr::LoadItemLocales()
         }
     }
     while (result->NextRow());
-
-    
 }
 
 void ObjectMgr::LoadItemRequiredTarget()
 {
     m_ItemRequiredTarget.clear();                           // needed for reload case
 
-    uint32 count = 0;
-
     std::unique_ptr<QueryResult> result(WorldDatabase.Query("SELECT `entry`, `type`, `target_entry` FROM `item_required_target`"));
 
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        
         return;
     }
 
-    BarGoLink bar(result->GetRowCount());
-
     do
     {
-        bar.step();
         Field *fields = result->Fetch();
 
         uint32 uiItemId      = fields[0].GetUInt32();
@@ -3773,12 +3569,8 @@ void ObjectMgr::LoadItemRequiredTarget()
         }
 
         m_ItemRequiredTarget.insert(ItemRequiredTargetMap::value_type(uiItemId, ItemRequiredTarget(ItemRequiredTargetType(uiType), uiTargetEntry)));
-
-        ++count;
     }
     while (result->NextRow());
-
-    
 }
 
 void ObjectMgr::LoadPetLevelInfo()
@@ -3787,23 +3579,14 @@ void ObjectMgr::LoadPetLevelInfo()
         //                                                               0                 1        2     3       4      5      6      7       8      9
         std::unique_ptr<QueryResult> result(WorldDatabase.Query("SELECT `creature_entry`, `level`, `hp`, `mana`, `str`, `agi`, `sta`, `inte`, `spi`, `armor` FROM `pet_levelstats`"));
 
-        uint32 count = 0;
-
         if (!result)
         {
-            BarGoLink bar(1);
-            bar.step();
-
-            
             sLog.outErrorDb("Error loading `pet_levelstats` table or empty table.");
             return;
         }
 
-        BarGoLink bar(result->GetRowCount());
-
         do
         {
-            bar.step();
             Field* fields = result->Fetch();
 
             uint32 creature_id = fields[0].GetUInt32();
@@ -3822,7 +3605,6 @@ void ObjectMgr::LoadPetLevelInfo()
                 else
                 {
                     DETAIL_LOG("Unused (> MaxPlayerLevel in mangosd.conf) level %u in `pet_levelstats` table, ignoring.", current_level);
-                    ++count;                                // make result loading percent "expected" correct in case disabled detail mode for example.
                 }
                 continue;
             }
@@ -3846,12 +3628,8 @@ void ObjectMgr::LoadPetLevelInfo()
 
             for (int i = 0; i < MAX_STATS; i++)
                 pLevelInfo->stats[i] = fields[i + 4].GetUInt16();
-
-            ++count;
         }
         while (result->NextRow());
-
-        
     }
 
     // Fill gaps and check integrity
@@ -3881,7 +3659,7 @@ void ObjectMgr::LoadPetLevelInfo()
 
 ItemPrototype const* ObjectMgr::GetItemPrototype(uint32 id)
 {
-    auto fakeProto = sTransmog.GetFakeItemProto(id);
+    const ItemPrototype* fakeProto = sTransmog.GetFakeItemProto(id);
     return fakeProto ? fakeProto : sItemStorage.LookupEntry<ItemPrototype>(id);
 }
 
@@ -3904,24 +3682,15 @@ void ObjectMgr::LoadPlayerInfo()
         //                                                               0       1        2      3       4             5             6             7
         std::unique_ptr<QueryResult> result(WorldDatabase.Query("SELECT `race`, `class`, `map`, `zone`, `position_x`, `position_y`, `position_z`, `orientation` FROM `playercreateinfo`"));
 
-        uint32 count = 0;
-
         if (!result)
         {
-            BarGoLink bar(1);
-            bar.step();
-
-            
             sLog.outErrorDb("Error loading `playercreateinfo` table or empty table.");
             Log::WaitBeforeContinueIfNeed();
             exit(1);
         }
 
-        BarGoLink bar(result->GetRowCount());
-
         do
         {
-            bar.step();
             Field* fields = result->Fetch();
 
             uint32 current_race  = fields[0].GetUInt32();
@@ -3971,12 +3740,8 @@ void ObjectMgr::LoadPlayerInfo()
 
             pInfo->displayId_m = rEntry->model_m;
             pInfo->displayId_f = rEntry->model_f;
-            
-            ++count;
         }
         while (result->NextRow());
-
-        
     }
 
     // Load playercreateinfo_item
@@ -3984,22 +3749,10 @@ void ObjectMgr::LoadPlayerInfo()
         //                                                               0       1        2         3
         std::unique_ptr<QueryResult> result(WorldDatabase.Query("SELECT `race`, `class`, `itemid`, `amount` FROM `playercreateinfo_item`"));
 
-        uint32 count = 0;
-
-        if (!result)
+        if (result)
         {
-            BarGoLink bar(1);
-            bar.step();
-
-            
-        }
-        else
-        {
-            BarGoLink bar(result->GetRowCount());
-
             do
             {
-                bar.step();
                 Field* fields = result->Fetch();
 
                 uint32 current_race = fields[0].GetUInt32();
@@ -4037,13 +3790,9 @@ void ObjectMgr::LoadPlayerInfo()
                     continue;
                 }
 
-                pInfo->item.push_back(PlayerCreateInfoItem(item_id, amount));
-
-                ++count;
+                pInfo->item.emplace_back(item_id, amount);
             }
             while (result->NextRow());
-
-            
         }
     }
 
@@ -4052,23 +3801,14 @@ void ObjectMgr::LoadPlayerInfo()
         //                                                                0       1        2
         std::unique_ptr<QueryResult> result(WorldDatabase.PQuery("SELECT `race`, `class`, `spell` FROM `playercreateinfo_spell` WHERE %u BETWEEN `build_min` AND `build_max`", SUPPORTED_CLIENT_BUILD));
 
-        uint32 count = 0;
-
         if (!result)
         {
-            BarGoLink bar(1);
-            bar.step();
-
-            
             sLog.outErrorDb("Error loading `playercreateinfo_spell` table or empty table.");
         }
         else
         {
-            BarGoLink bar(result->GetRowCount());
-
             do
             {
-                bar.step();
                 Field* fields = result->Fetch();
 
                 uint32 current_race = fields[0].GetUInt32();
@@ -4097,12 +3837,8 @@ void ObjectMgr::LoadPlayerInfo()
 
                 PlayerInfo* pInfo = &m_PlayerInfo[current_race][current_class];
                 pInfo->spell.push_back(spell_id);
-
-                ++count;
             }
             while (result->NextRow());
-
-            
         }
     }
 
@@ -4111,23 +3847,14 @@ void ObjectMgr::LoadPlayerInfo()
         //                                                               0       1        2         3         4
         std::unique_ptr<QueryResult> result(WorldDatabase.Query("SELECT `race`, `class`, `button`, `action`, `type` FROM `playercreateinfo_action`"));
 
-        uint32 count = 0;
-
         if (!result)
         {
-            BarGoLink bar(1);
-            bar.step();
-
-            
             sLog.outErrorDb("Error loading `playercreateinfo_action` table or empty table.");
         }
         else
         {
-            BarGoLink bar(result->GetRowCount());
-
             do
             {
-                bar.step();
                 Field* fields = result->Fetch();
 
                 uint32 current_race = fields[0].GetUInt32();
@@ -4155,13 +3882,9 @@ void ObjectMgr::LoadPlayerInfo()
                     continue;
 
                 PlayerInfo* pInfo = &m_PlayerInfo[current_race][current_class];
-                pInfo->action.push_back(PlayerCreateInfoAction(action_button, action, action_type));
-
-                ++count;
+                pInfo->action.emplace_back(action_button, action, action_type);
             }
             while (result->NextRow());
-
-            
         }
     }
 
@@ -4170,24 +3893,15 @@ void ObjectMgr::LoadPlayerInfo()
         //                                                               0        1        2         3
         std::unique_ptr<QueryResult> result(WorldDatabase.Query("SELECT `class`, `level`, `basehp`, `basemana` FROM `player_classlevelstats`"));
 
-        uint32 count = 0;
-
         if (!result)
         {
-            BarGoLink bar(1);
-            bar.step();
-
-            
             sLog.outErrorDb("Error loading `player_classlevelstats` table or empty table.");
             Log::WaitBeforeContinueIfNeed();
             exit(1);
         }
 
-        BarGoLink bar(result->GetRowCount());
-
         do
         {
-            bar.step();
             Field* fields = result->Fetch();
 
             uint32 current_class = fields[0].GetUInt32();
@@ -4210,7 +3924,6 @@ void ObjectMgr::LoadPlayerInfo()
                 else
                 {
                     DETAIL_LOG("Unused (> MaxPlayerLevel in mangosd.conf) level %u in `player_classlevelstats` table, ignoring.", current_level);
-                    ++count;                                // make result loading percent "expected" correct in case disabled detail mode for example.
                 }
                 continue;
             }
@@ -4224,12 +3937,8 @@ void ObjectMgr::LoadPlayerInfo()
 
             pClassLevelInfo->basehealth = fields[2].GetUInt16();
             pClassLevelInfo->basemana   = fields[3].GetUInt16();
-
-            ++count;
         }
         while (result->NextRow());
-
-        
     }
 
     // Fill gaps and check integrity
@@ -4265,24 +3974,15 @@ void ObjectMgr::LoadPlayerInfo()
         //                                                               0       1        2        3      4      5      6       7
         std::unique_ptr<QueryResult> result(WorldDatabase.Query("SELECT `race`, `class`, `level`, `str`, `agi`, `sta`, `inte`, `spi` FROM `player_levelstats`"));
 
-        uint32 count = 0;
-
         if (!result)
         {
-            BarGoLink bar(1);
-            bar.step();
-
-            
             sLog.outErrorDb("Error loading `player_levelstats` table or empty table.");
             Log::WaitBeforeContinueIfNeed();
             exit(1);
         }
 
-        BarGoLink bar(result->GetRowCount());
-
         do
         {
-            bar.step();
             Field* fields = result->Fetch();
 
             uint32 current_race = fields[0].GetUInt32();
@@ -4310,7 +4010,6 @@ void ObjectMgr::LoadPlayerInfo()
                 else
                 {
                     DETAIL_LOG("Unused (> MaxPlayerLevel in mangosd.conf) level %u in `player_levelstats` table, ignoring.", current_level);
-                    ++count;                                // make result loading percent "expected" correct in case disabled detail mode for example.
                 }
                 continue;
             }
@@ -4324,12 +4023,8 @@ void ObjectMgr::LoadPlayerInfo()
 
             for (int i = 0; i < MAX_STATS; ++i)
                 pLevelInfo->stats[i] = fields[i + 3].GetUInt8();
-
-            ++count;
         }
         while (result->NextRow());
-
-        
     }
 
     // Fill gaps and check integrity
@@ -4380,24 +4075,15 @@ void ObjectMgr::LoadPlayerInfo()
         //                                                               0      1
         std::unique_ptr<QueryResult> result(WorldDatabase.Query("SELECT `lvl`, `xp_for_next_level` FROM `player_xp_for_level`"));
 
-        uint32 count = 0;
-
         if (!result)
         {
-            BarGoLink bar(1);
-            bar.step();
-
-            
             sLog.outErrorDb("Error loading `player_xp_for_level` table or empty table.");
             Log::WaitBeforeContinueIfNeed();
             exit(1);
         }
 
-        BarGoLink bar(result->GetRowCount());
-
         do
         {
-            bar.step();
             Field* fields = result->Fetch();
 
             uint32 current_level = fields[0].GetUInt32();
@@ -4410,17 +4096,13 @@ void ObjectMgr::LoadPlayerInfo()
                 else
                 {
                     DETAIL_LOG("Unused (> MaxPlayerLevel in mangosd.conf) level %u in `player_xp_for_levels` table, ignoring.", current_level);
-                    ++count;                                // make result loading percent "expected" correct in case disabled detail mode for example.
                 }
                 continue;
             }
             //PlayerXPperLevel
             m_PlayerXPperLevel[current_level] = current_xp;
-            ++count;
         }
         while (result->NextRow());;
-
-        
     }
 
     // fill level gaps
@@ -4539,27 +4221,17 @@ void ObjectMgr::BuildPlayerLevelInfo(uint8 race, uint8 _class, uint8 level, Play
 
 void ObjectMgr::LoadGroups()
 {
-    // -- loading groups --
-    uint32 count = 0;
     //                                                                   0           1                2             3             4                5        6        7        8        9        10       11       12       13        14            15
     std::unique_ptr<QueryResult> result(CharacterDatabase.Query("SELECT `mainTank`, `mainAssistant`, `lootMethod`, `looterGuid`, `lootThreshold`, `icon1`, `icon2`, `icon3`, `icon4`, `icon5`, `icon6`, `icon7`, `icon8`, `isRaid`, `leaderGuid`, `groupId` FROM `groups`"));
 
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        
         return;
     }
 
-    BarGoLink bar(result->GetRowCount());
-
     do
     {
-        bar.step();
         Field *fields = result->Fetch();
-        ++count;
         Group *group = new Group;
         if (!group->LoadGroupFromDB(fields))
         {
@@ -4571,28 +4243,16 @@ void ObjectMgr::LoadGroups()
     }
     while (result->NextRow());
 
-
-    
-
     // -- loading members --
-    count = 0;
     //                                            0             1            2           3
     result.reset(CharacterDatabase.Query("SELECT `memberGuid`, `assistant`, `subgroup`, `groupId` FROM `group_member` ORDER BY `groupId`"));
-    if (!result)
-    {
-        BarGoLink bar2(1);
-        bar2.step();
-    }
-    else
+    if (result)
     {
         Group* group = nullptr;                                // used as cached pointer for avoid relookup group for each member
 
-        BarGoLink bar2(result->GetRowCount());
         do
         {
-            bar2.step();
             Field *fields = result->Fetch();
-            count++;
 
             uint32 memberGuidlow = fields[0].GetUInt32();
             ObjectGuid memberGuid = ObjectGuid(HIGHGUID_PLAYER, memberGuidlow);
@@ -4621,8 +4281,6 @@ void ObjectMgr::LoadGroups()
         while (result->NextRow());
     }
 
-    
-
     // clean groups
     // TODO: maybe delete from the DB before loading in this case
     for (GroupMap::iterator itr = m_GroupMap.begin(); itr != m_GroupMap.end();)
@@ -4638,7 +4296,6 @@ void ObjectMgr::LoadGroups()
     }
 
     // -- loading instances --
-    count = 0;
     result.reset(CharacterDatabase.Query(
                  //                        0             1      2           3            4
                  "SELECT `group_instance`.`leaderGuid`, `map`, `instance`, `permanent`, `resettime`, "
@@ -4649,21 +4306,13 @@ void ObjectMgr::LoadGroups()
                  "FROM `group_instance` LEFT JOIN `instance` ON `instance` = `id` LEFT JOIN `groups` ON `groups`.`leaderGUID` = `group_instance`.`leaderGUID` ORDER BY `leaderGuid`"
              ));
 
-    if (!result)
-    {
-        BarGoLink bar2(1);
-        bar2.step();
-    }
-    else
+    if (result)
     {
         Group* group = nullptr;                                // used as cached pointer for avoid relookup group for each member
 
-        BarGoLink bar2(result->GetRowCount());
         do
         {
-            bar2.step();
             Field *fields = result->Fetch();
-            count++;
 
             uint32 leaderGuidLow = fields[0].GetUInt32();
             uint32 mapId = fields[1].GetUInt32();
@@ -4692,8 +4341,6 @@ void ObjectMgr::LoadGroups()
         }
         while (result->NextRow());
     }
-
-    
 }
 
 void ObjectMgr::LoadQuests()
@@ -4740,10 +4387,6 @@ void ObjectMgr::LoadQuests()
                           " FROM `quest_template` t1 WHERE `patch`=(SELECT max(`patch`) FROM `quest_template` t2 WHERE t1.`entry`=t2.`entry` && `patch` <= %u)", sWorld.GetWowPatch()));
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        
         sLog.outErrorDb("`quest_template` table is empty!");
         return;
     }
@@ -4751,11 +4394,9 @@ void ObjectMgr::LoadQuests()
     // create multimap previous quest for each existing quest
     // some quests can have many previous maps set by NextQuestId in previous quest
     // for example set of race quests can lead to single not race specific quest
-    BarGoLink bar(result->GetRowCount());
 
     do
     {
-        bar.step();
         Field *fields = result->Fetch();
 
         std::unique_ptr<Quest> newQuest = std::make_unique<Quest>(fields);
@@ -4767,9 +4408,9 @@ void ObjectMgr::LoadQuests()
 
     std::map<uint32, uint32> usedMailTemplates;
 
-    for (QuestMap::iterator iter = m_QuestTemplatesMap.begin(); iter != m_QuestTemplatesMap.end(); ++iter)
+    for (auto & iter : m_QuestTemplatesMap)
     {
-        const auto& qinfo = iter->second;
+        const std::unique_ptr<Quest>& qinfo = iter.second;
 
         // additional quest integrity checks (GO, creature_template and item_template must be loaded already)
 
@@ -5247,7 +4888,6 @@ void ObjectMgr::LoadQuests()
 
         if (qinfo->RewMailTemplateId)
         {
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_9_4
             uint32 mailTemplateId = abs(qinfo->RewMailTemplateId);
             if (!sMailTemplateStore.LookupEntry(mailTemplateId))
             {
@@ -5266,9 +4906,6 @@ void ObjectMgr::LoadQuests()
             }
             else
                 usedMailTemplates[mailTemplateId] = qinfo->GetQuestId();
-#else
-            qinfo->RewMailTemplateId = 0;
-#endif
         }
 
         if (qinfo->NextQuestInChain)
@@ -5338,8 +4975,6 @@ void ObjectMgr::LoadQuests()
             }
         }
     }
-
-    
 }
 
 uint32 ObjectMgr::GetQuestStartingItemID(uint32 quest_id) const
@@ -5370,18 +5005,11 @@ void ObjectMgr::LoadQuestLocales()
 
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        
         return;
     }
 
-    BarGoLink bar(result->GetRowCount());
-
     do
     {
-        bar.step();
         Field *fields = result->Fetch();
 
         uint32 entry = fields[0].GetUInt32();
@@ -5486,8 +5114,6 @@ void ObjectMgr::LoadQuestLocales()
         }
     }
     while (result->NextRow());
-
-    
 }
 
 void ObjectMgr::LoadPetCreateSpells()
@@ -5495,20 +5121,13 @@ void ObjectMgr::LoadPetCreateSpells()
     std::unique_ptr<QueryResult> result(WorldDatabase.PQuery("SELECT `entry`, `spell1`, `spell2`, `spell3`, `spell4` FROM `petcreateinfo_spell` WHERE %u BETWEEN `patch_min` AND `patch_max`", sWorld.GetWowPatch()));
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        
         return;
     }
 
-    uint32 count = 0;
-    BarGoLink bar(result->GetRowCount());
     m_PetCreateSpellMap.clear();
 
     do
     {
-        bar.step();
         Field *fields = result->Fetch();
 
         uint32 creature_id = fields[0].GetUInt32();
@@ -5566,7 +5185,6 @@ void ObjectMgr::LoadPetCreateSpells()
             continue;
 
         m_PetCreateSpellMap[creature_id] = PetCreateSpell;
-        ++count;
     }
     while (result->NextRow());
 
@@ -5588,7 +5206,6 @@ void ObjectMgr::LoadPetCreateSpells()
     }
 
     // fill data from DBC as more correct source if available
-    uint32 dcount = 0;
     for (uint32 cr_id = 1; cr_id < sCreatureStorage.GetMaxEntry(); ++cr_id)
     {
         CreatureInfo const* cInfo = sCreatureStorage.LookupEntry<CreatureInfo>(cr_id);
@@ -5615,48 +5232,29 @@ void ObjectMgr::LoadPetCreateSpells()
         }
 
         m_PetCreateSpellMap[cr_id] = PetCreateSpell;
-        ++dcount;
     }
-
-    
 }
 
 void ObjectMgr::LoadItemTexts()
 {
     std::unique_ptr<QueryResult> result(CharacterDatabase.Query("SELECT `id`, `text` FROM `item_text`"));
 
-    uint32 count = 0;
-
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        
         return;
     }
 
-    BarGoLink bar(result->GetRowCount());
-
     do
     {
-        bar.step();
         Field* fields = result->Fetch();
-
         m_ItemTextsMap[ fields[0].GetUInt32() ] = fields[1].GetCppString();
-
-        ++count;
-
     }
     while (result->NextRow());
-
-    
 }
 
 void ObjectMgr::LoadPageTexts()
 {
     sPageTextStore.Load();
-    
 
     for (uint32 i = 1; i < sPageTextStore.GetMaxEntry(); ++i)
     {
@@ -5702,18 +5300,11 @@ void ObjectMgr::LoadPageTextLocales()
 
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        
         return;
     }
 
-    BarGoLink bar(result->GetRowCount());
-
     do
     {
-        bar.step();
         Field *fields = result->Fetch();
 
         uint32 entry = fields[0].GetUInt32();
@@ -5741,11 +5332,8 @@ void ObjectMgr::LoadPageTextLocales()
                 data.Text[idx] = str;
             }
         }
-
     }
     while (result->NextRow());
-
-    
 }
 
 struct SQLMapLoader : public SQLStorageLoaderBase<SQLMapLoader, SQLStorage>
@@ -5815,8 +5403,6 @@ void ObjectMgr::LoadMapTemplate()
         if (itr->resetDelay)
             const_cast<MapEntry*>(*itr)->resetDelay = std::max((uint32)1, (uint32)(itr->resetDelay * sWorld.getConfig(CONFIG_FLOAT_RATE_INSTANCE_RESET_TIME)));
     }
-
-    
 }
 
 struct SQLWorldLoader : public SQLStorageLoaderBase<SQLWorldLoader, SQLStorage>
@@ -5837,22 +5423,13 @@ void ObjectMgr::LoadNPCText()
         "`BroadcastTextID0`, `BroadcastTextID1`, `BroadcastTextID2`, `BroadcastTextID3`, `BroadcastTextID4`, `BroadcastTextID5`, `BroadcastTextID6`, `BroadcastTextID7`"
         " FROM `npc_text`"));
 
-    int count = 0;
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        
         return;
     }
 
-    BarGoLink bar(result->GetRowCount());
-
     do
     {
-        ++count;
-        bar.step();
         Field *fields = result->Fetch();
 
         uint32 textID = fields[0].GetUInt32();
@@ -5892,8 +5469,6 @@ void ObjectMgr::LoadNPCText()
         }
     }
     while (result->NextRow());
-
-    
 }
 
 class SingleMailReturner
@@ -6045,18 +5620,12 @@ void ObjectMgr::LoadAreaTriggers()
 
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
         return;
     }
 
-    BarGoLink bar(result->GetRowCount());
-
     do
     {
-        bar.step();
-        auto fields = result->Fetch();
+        Field* fields = result->Fetch();
 
         AreaTriggerEntry areaTrigger;
 
@@ -6073,12 +5642,9 @@ void ObjectMgr::LoadAreaTriggers()
         areaTrigger.box_z = fields[9].GetFloat();
         areaTrigger.box_orientation = fields[10].GetFloat();
 
-
         m_AreaTriggersMap[triggerId] = areaTrigger;
 
     } while (result->NextRow());
-
-    
 }
 
 void ObjectMgr::LoadQuestAreaTriggers()
@@ -6087,23 +5653,13 @@ void ObjectMgr::LoadQuestAreaTriggers()
 
     std::unique_ptr<QueryResult> result(WorldDatabase.Query("SELECT `id`, `quest` FROM `areatrigger_involvedrelation`"));
 
-    uint32 count = 0;
-
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        
         return;
     }
 
-    BarGoLink bar(result->GetRowCount());
-
     do
     {
-        ++count;
-        bar.step();
         Field *fields = result->Fetch();
 
         uint32 trigger_ID = fields[0].GetUInt32();
@@ -6135,11 +5691,8 @@ void ObjectMgr::LoadQuestAreaTriggers()
         }
 
         m_QuestAreaTriggerMap[trigger_ID] = quest_ID;
-
     }
     while (result->NextRow());
-
-    
 }
 
 void ObjectMgr::LoadTavernAreaTriggers()
@@ -6148,23 +5701,13 @@ void ObjectMgr::LoadTavernAreaTriggers()
 
     std::unique_ptr<QueryResult> result(WorldDatabase.PQuery("SELECT `id` FROM `areatrigger_tavern` WHERE `patch_min` <= %u", sWorld.GetWowPatch()));
 
-    uint32 count = 0;
-
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        
         return;
     }
 
-    BarGoLink bar(result->GetRowCount());
-
     do
     {
-        ++count;
-        bar.step();
         Field *fields = result->Fetch();
 
         uint32 Trigger_ID      = fields[0].GetUInt32();
@@ -6179,41 +5722,25 @@ void ObjectMgr::LoadTavernAreaTriggers()
         m_TavernAreaTriggerSet.insert(Trigger_ID);
     }
     while (result->NextRow());
-
-    
 }
 
 void ObjectMgr::LoadBattlegroundEntranceTriggers()
 {
     m_BGEntranceTriggersMap.clear();                                  // need for reload case
 
-    uint32 count = 0;
-
     //                                                               0     1       2              3           4                  5                  6                  7
     std::unique_ptr<QueryResult> result(WorldDatabase.Query("SELECT `id`, `team`, `bg_template`, `exit_map`, `exit_position_x`, `exit_position_y`, `exit_position_z`, `exit_orientation` FROM `areatrigger_bg_entrance`"));
     if (!result)
     {
-
-        BarGoLink bar(1);
-        bar.step();
-
-        
         return;
     }
 
-    BarGoLink bar(result->GetRowCount());
-
     do
     {
-        ++count;
-        bar.step();
         Field *fields = result->Fetch();
-
-        uint32 Trigger_ID = fields[0].GetUInt32();
-
         BattlegroundEntranceTrigger bget;
 
-
+        uint32 Trigger_ID		= fields[0].GetUInt32();
         uint32 team             = fields[1].GetUInt32();
         uint8 bgTypeId          = fields[2].GetUInt8();
 
@@ -6260,8 +5787,6 @@ void ObjectMgr::LoadBattlegroundEntranceTriggers()
         m_BGEntranceTriggersMap[Trigger_ID] = bget;
     }
     while (result->NextRow());
-
-    
 }
 
 uint32 ObjectMgr::GetNearestTaxiNode(float x, float y, float z, uint32 mapid, Team team)
@@ -6371,23 +5896,13 @@ void ObjectMgr::LoadGraveyardZones()
 
     std::unique_ptr<QueryResult> result(WorldDatabase.PQuery("SELECT `id`, `ghost_zone`, `faction` FROM `game_graveyard_zone` WHERE `build_min` <= %u", SUPPORTED_CLIENT_BUILD));
 
-    uint32 count = 0;
-
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        
         return;
     }
 
-    BarGoLink bar(result->GetRowCount());
-
     do
     {
-        ++count;
-        bar.step();
         Field *fields = result->Fetch();
 
         uint32 safeLocId = fields[0].GetUInt32();
@@ -6424,8 +5939,6 @@ void ObjectMgr::LoadGraveyardZones()
             sLog.outErrorDb("Table `game_graveyard_zone` has a duplicate record for Graveyard (ID: %u) and Zone (ID: %u), skipped.", safeLocId, zoneId);
     }
     while (result->NextRow());
-
-    
 }
 
 WorldSafeLocsEntry const *ObjectMgr::GetClosestGraveYard(float x, float y, float z, uint32 MapId, Team team)
@@ -6577,8 +6090,6 @@ void ObjectMgr::LoadAreaTriggerTeleports()
 {
     m_AreaTriggerTeleportMap.clear();                                  // need for reload case
 
-    uint32 count = 0;
-
     std::unique_ptr<QueryResult> result(WorldDatabase.PQuery(
     //           0     1                 2                3                 4                      5
         "SELECT `id`, `required_level`, `required_item`, `required_item2`, `required_quest_done`, `required_team`, "
@@ -6590,20 +6101,11 @@ void ObjectMgr::LoadAreaTriggerTeleports()
     
     if (!result)
     {
-
-        BarGoLink bar(1);
-        bar.step();
-
-        
         return;
     }
 
-    BarGoLink bar(result->GetRowCount());
-
     do
     {
-        ++count;
-        bar.step();
         Field *fields = result->Fetch();
 
         uint32 Trigger_ID = fields[0].GetUInt32();
@@ -6685,8 +6187,6 @@ void ObjectMgr::LoadAreaTriggerTeleports()
 
     }
     while (result->NextRow());
-
-    
 }
 
 /*
@@ -6760,29 +6260,22 @@ void ObjectMgr::PackGroupIds()
         while (result->NextRow());
     }
 
-    BarGoLink bar(groupIds.size() + 1);
-    bar.step();
-
     uint32 groupId = 1;
     // we do assume std::set is sorted properly on integer value
-    for (std::set<uint32>::iterator i = groupIds.begin(); i != groupIds.end(); ++i)
+    for (uint32 i : groupIds)
     {
-        if (*i != groupId)
+        if (i != groupId)
         {
             // remap group id
             CharacterDatabase.BeginTransaction();
-            CharacterDatabase.PExecute("UPDATE `groups` SET `groupId` = '%u' WHERE `groupId` = '%u'", groupId, *i);
-            CharacterDatabase.PExecute("UPDATE `group_member` SET `groupId` = '%u' WHERE `groupId` = '%u'", groupId, *i);
+            CharacterDatabase.PExecute("UPDATE `groups` SET `groupId` = '%u' WHERE `groupId` = '%u'", groupId, i);
+            CharacterDatabase.PExecute("UPDATE `group_member` SET `groupId` = '%u' WHERE `groupId` = '%u'", groupId, i);
             CharacterDatabase.CommitTransaction();
         }
 
         ++groupId;
-        bar.step();
     }
-
     m_GroupIds.Set(groupId);
-
-    
 }
 
 void ObjectMgr::SetHighestGuids()
@@ -6875,18 +6368,11 @@ void ObjectMgr::LoadGameObjectLocales()
 
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        
         return;
     }
 
-    BarGoLink bar(result->GetRowCount());
-
     do
     {
-        bar.step();
         Field *fields = result->Fetch();
 
         uint32 entry = fields[0].GetUInt32();
@@ -6917,8 +6403,6 @@ void ObjectMgr::LoadGameObjectLocales()
 
     }
     while (result->NextRow());
-
-    
 }
 
 struct SQLGameObjectLoader : public SQLStorageLoaderBase<SQLGameObjectLoader, SQLHashStorage>
@@ -6999,7 +6483,6 @@ void ObjectMgr::LoadGameobjectInfo()
     SQLGameObjectLoader loader;
     loader.LoadProgressive(sGOStorage, sWorld.GetWowPatch());
     CheckGameObjectInfos();
-    
 }
 
 void ObjectMgr::CheckGameObjectInfos()
@@ -7163,24 +6646,16 @@ void ObjectMgr::CheckGameObjectInfos()
 
 void ObjectMgr::LoadGameobjectsRequirements()
 {
-    uint32 count = 0;
     std::unique_ptr<QueryResult> result(WorldDatabase.Query("SELECT `guid`, `reqType`, `reqGuid` FROM `gameobject_requirement`"));
     _gobjRequirements.clear();
 
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        
         return;
     }
 
-    BarGoLink bar(result->GetRowCount());
-
     do
     {
-        bar.step();
         Field *fields = result->Fetch();
 
         uint32 guid = fields[0].GetUInt32();
@@ -7220,11 +6695,8 @@ void ObjectMgr::LoadGameobjectsRequirements()
         }
 
         _gobjRequirements[guid] = entry;
-        ++count;
     }
     while (result->NextRow());
-
-    
 }
 
 GameObjectUseRequirement const* ObjectMgr::GetGameObjectUseRequirement(ObjectGuid guid) const
@@ -7237,24 +6709,15 @@ GameObjectUseRequirement const* ObjectMgr::GetGameObjectUseRequirement(ObjectGui
 
 void ObjectMgr::LoadExplorationBaseXP()
 {
-    uint32 count = 0;
     std::unique_ptr<QueryResult> result(WorldDatabase.Query("SELECT `level`, `basexp` FROM `exploration_basexp`"));
 
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        
         return;
     }
 
-    BarGoLink bar(result->GetRowCount());
-
     do
     {
-        ++count;
-        bar.step();
         Field *fields = result->Fetch();
 
         uint32 level  = fields[0].GetUInt32();
@@ -7262,8 +6725,6 @@ void ObjectMgr::LoadExplorationBaseXP()
         m_BaseXPMap[level] = basexp;
     }
     while (result->NextRow());
-
-    
 }
 
 uint32 ObjectMgr::GetBaseXP(uint32 level) const
@@ -7282,24 +6743,15 @@ uint32 ObjectMgr::GetXPForLevel(uint32 level) const
 
 void ObjectMgr::LoadPetNames()
 {
-    uint32 count = 0;
     std::unique_ptr<QueryResult> result(WorldDatabase.Query("SELECT `word`, `entry`, `half` FROM `pet_name_generation`"));
 
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        
         return;
     }
 
-    BarGoLink bar(result->GetRowCount());
-
     do
     {
-        ++count;
-        bar.step();
         Field *fields = result->Fetch();
 
         std::string word = fields[0].GetString();
@@ -7311,8 +6763,6 @@ void ObjectMgr::LoadPetNames()
             m_PetHalfNameMap0[entry].push_back(word);
     }
     while (result->NextRow());
-
-    
 }
 
 void ObjectMgr::LoadPetNumber()
@@ -7345,7 +6795,6 @@ std::string ObjectMgr::GeneratePetName(uint32 entry)
 
 void ObjectMgr::LoadCorpses()
 {
-    uint32 count = 0;
     //                                                                            0       1                  2                      3                      4                      5                       6
     std::unique_ptr<QueryResult> result(CharacterDatabase.Query("SELECT `corpse`.`guid`, `player`, `corpse`.`position_x`, `corpse`.`position_y`, `corpse`.`position_z`, `corpse`.`orientation`, `corpse`.`map`, "
     //                      7       8              9           10        11      12       13             14              15                16         17
@@ -7355,18 +6804,11 @@ void ObjectMgr::LoadCorpses()
 
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        
         return;
     }
 
-    BarGoLink bar(result->GetRowCount());
-
     do
     {
-        bar.step();
         Field *fields = result->Fetch();
 
         uint32 guid = fields[0].GetUInt32();
@@ -7379,12 +6821,8 @@ void ObjectMgr::LoadCorpses()
         }
 
         sObjectAccessor.AddCorpse(corpse);
-
-        ++count;
     }
     while (result->NextRow());
-
-    
 }
 
 void ObjectMgr::LoadFactions()
@@ -7395,19 +6833,12 @@ void ObjectMgr::LoadFactions()
 
         if (!result)
         {
-            BarGoLink bar(1);
-            bar.step();
-
-            
             return;
         }
 
-        BarGoLink bar(result->GetRowCount());
-
         do
         {
-            bar.step();
-            auto fields = result->Fetch();
+            Field* fields = result->Fetch();
 
             FactionEntry faction;
 
@@ -7460,19 +6891,12 @@ void ObjectMgr::LoadFactions()
 
         if (!result)
         {
-            BarGoLink bar(1);
-            bar.step();
-
-            
             return;
         }
 
-        BarGoLink bar(result->GetRowCount());
-
         do
         {
-            bar.step();
-            auto fields = result->Fetch();
+            Field* fields = result->Fetch();
 
             FactionTemplateEntry faction;
 
@@ -7504,23 +6928,15 @@ void ObjectMgr::LoadReputationRewardRate()
 {
     m_RepRewardRateMap.clear();                             // for reload case
 
-    uint32 count = 0;
     std::unique_ptr<QueryResult> result(WorldDatabase.Query("SELECT `faction`, `quest_rate`, `creature_rate`, `spell_rate` FROM `reputation_reward_rate`"));
 
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        
         return;
     }
 
-    BarGoLink bar(result->GetRowCount());
-
     do
     {
-        bar.step();
         Field *fields = result->Fetch();
 
         uint32 factionId        = fields[0].GetUInt32();
@@ -7557,18 +6973,12 @@ void ObjectMgr::LoadReputationRewardRate()
         }
 
         m_RepRewardRateMap[factionId] = repRate;
-
-        ++count;
     }
     while (result->NextRow());
-
-    
 }
 
 void ObjectMgr::LoadReputationOnKill()
 {
-    uint32 count = 0;
-
     //                                                               0              1                       2
     std::unique_ptr<QueryResult> result(WorldDatabase.PQuery("SELECT `creature_id`, `RewOnKillRepFaction1`, `RewOnKillRepFaction2`,"
     //                      3               4               5                     6               7               8                     9
@@ -7577,18 +6987,11 @@ void ObjectMgr::LoadReputationOnKill()
 
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        
         return;
     }
 
-    BarGoLink bar(result->GetRowCount());
-
     do
     {
-        bar.step();
         Field *fields = result->Fetch();
 
         uint32 creature_id = fields[0].GetUInt32();
@@ -7632,35 +7035,23 @@ void ObjectMgr::LoadReputationOnKill()
         }
 
         m_RepOnKillMap[creature_id] = repOnKill;
-
-        ++count;
     }
     while (result->NextRow());
-
-    
 }
 
 void ObjectMgr::LoadReputationSpilloverTemplate()
 {
     m_RepSpilloverTemplateMap.clear();                      // for reload case
 
-    uint32 count = 0;
     std::unique_ptr<QueryResult> result(WorldDatabase.Query("SELECT `faction`, `faction1`, `rate_1`, `rank_1`, `faction2`, `rate_2`, `rank_2`, `faction3`, `rate_3`, `rank_3`, `faction4`, `rate_4`, `rank_4` FROM `reputation_spillover_template`"));
 
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        
         return;
     }
 
-    BarGoLink bar(result->GetRowCount());
-
     do
     {
-        bar.step();
         Field *fields = result->Fetch();
 
         uint32 factionId                = fields[0].GetUInt32();
@@ -7740,37 +7131,24 @@ void ObjectMgr::LoadReputationSpilloverTemplate()
         }
 
         m_RepSpilloverTemplateMap[factionId] = repTemplate;
-
-        ++count;
     }
     while (result->NextRow());
-
-    
 }
 
 void ObjectMgr::LoadPointsOfInterest()
 {
     m_PointsOfInterestMap.clear();                              // need for reload case
 
-    uint32 count = 0;
-
     //                                                               0        1    2    3       4        5       6
     std::unique_ptr<QueryResult> result(WorldDatabase.Query("SELECT `entry`, `x`, `y`, `icon`, `flags`, `data`, `icon_name` FROM `points_of_interest`"));
 
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        
         return;
     }
 
-    BarGoLink bar(result->GetRowCount());
-
     do
     {
-        bar.step();
         Field *fields = result->Fetch();
 
         uint32 point_id = fields[0].GetUInt32();
@@ -7790,12 +7168,8 @@ void ObjectMgr::LoadPointsOfInterest()
         }
 
         m_PointsOfInterestMap[point_id] = POI;
-
-        ++count;
     }
     while (result->NextRow());
-
-    
 }
 
 void ObjectMgr::DeleteCreatureData(uint32 guid)
@@ -7838,24 +7212,15 @@ void ObjectMgr::LoadQuestRelationsHelper(QuestRelationsMap& map, char const* tab
 {
     map.clear();                                            // need for reload case
 
-    uint32 count = 0;
-
     std::unique_ptr<QueryResult> result(WorldDatabase.PQuery("SELECT `id`, `quest` FROM %s WHERE %u BETWEEN `patch_min` AND `patch_max`", table, sWorld.GetWowPatch()));
 
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        
         return;
     }
 
-    BarGoLink bar(result->GetRowCount());
-
     do
     {
-        bar.step();
         Field *fields = result->Fetch();
 
         uint32 id    = fields[0].GetUInt32();
@@ -7868,12 +7233,8 @@ void ObjectMgr::LoadQuestRelationsHelper(QuestRelationsMap& map, char const* tab
         }
 
         map.insert(QuestRelationsMap::value_type(id, quest));
-
-        ++count;
     }
     while (result->NextRow());
-
-    
 }
 
 void ObjectMgr::LoadGameobjectQuestRelations()
@@ -7939,14 +7300,10 @@ void ObjectMgr::LoadTaxiNodes()
 
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        
         return;
     }
 
-    auto fields = result->Fetch();
+    Field* fields = result->Fetch();
     uint32 maxTaxiNodeEntry = fields[0].GetUInt32() + 1;
 
     // Actually loading the taxi nodes.
@@ -7954,19 +7311,13 @@ void ObjectMgr::LoadTaxiNodes()
 
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        
         return;
     }
 
-    BarGoLink bar(result->GetRowCount());
     m_TaxiNodes.resize(maxTaxiNodeEntry);
 
     do
     {
-        bar.step();
         fields = result->Fetch();
 
         std::unique_ptr<TaxiNodesEntry> taxiNode = std::make_unique<TaxiNodesEntry>();
@@ -7992,32 +7343,21 @@ void ObjectMgr::LoadTaxiNodes()
         m_TaxiNodes[nodeId] = std::move(taxiNode);
 
     } while (result->NextRow());
-
-    
 }
 
 void ObjectMgr::LoadTaxiPathTransitions()
 {
     m_TaxiPathTransitions.clear();                                            // need for reload case
 
-    uint32 count = 0;
-
     std::unique_ptr<QueryResult> result(WorldDatabase.PQuery("SELECT `in_path`, `out_path`, `in_node`, `out_node` FROM `taxi_path_transitions` WHERE `build_min` <= %u", SUPPORTED_CLIENT_BUILD));
 
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        
         return;
     }
 
-    BarGoLink bar(result->GetRowCount());
-
     do
     {
-        bar.step();
         Field *fields = result->Fetch();
 
         uint32 inPath = fields[0].GetUInt32();
@@ -8064,11 +7404,7 @@ void ObjectMgr::LoadTaxiPathTransitions()
         transition.outNode = outNode;
 
         m_TaxiPathTransitions.insert(TaxiPathTransitionsMap::value_type(inPath, transition));
-
-        ++count;
     } while (result->NextRow());
-
-    
 }
 
 void ObjectMgr::LoadReservedPlayersNames()
@@ -8077,22 +7413,13 @@ void ObjectMgr::LoadReservedPlayersNames()
 
     std::unique_ptr<QueryResult> result(WorldDatabase.Query("SELECT `name` FROM `reserved_name`"));
 
-    uint32 count = 0;
-
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        
         return;
     }
 
-    BarGoLink bar(result->GetRowCount());
-
     do
     {
-        bar.step();
         Field* fields = result->Fetch();
 
         std::string name = fields[0].GetCppString();
@@ -8106,11 +7433,8 @@ void ObjectMgr::LoadReservedPlayersNames()
         wstrToLower(wstr);
 
         m_ReservedNames.insert(wstr);
-        ++count;
     }
     while (result->NextRow());
-
-    
 }
 
 bool ObjectMgr::IsReservedName(const std::string& name) const
@@ -8294,21 +7618,12 @@ void ObjectMgr::LoadGameObjectForQuests()
 
     if (!sGOStorage.GetMaxEntry())
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        
         return;
     }
-
-    BarGoLink bar(sGOStorage.GetRecordCount());
-    uint32 count = 0;
 
     // collect GO entries for GO that must activated
     for (auto itr = sGOStorage.begin<GameObjectInfo>(); itr < sGOStorage.end<GameObjectInfo>(); ++itr)
     {
-        bar.step();
-
         switch (itr->type)
         {
             case GAMEOBJECT_TYPE_QUESTGIVER:
@@ -8317,7 +7632,6 @@ void ObjectMgr::LoadGameObjectForQuests()
                         m_GOQuestInvolvedRelations.find(itr->id) != m_GOQuestInvolvedRelations.end())
                 {
                     m_GameObjectForQuestSet.insert(itr->id);
-                    ++count;
                 }
 
                 break;
@@ -8331,7 +7645,6 @@ void ObjectMgr::LoadGameObjectForQuests()
                 if (itr->chest.questId || LootTemplates_Gameobject.HaveQuestLootFor(loot_id))
                 {
                     m_GameObjectForQuestSet.insert(itr->id);
-                    ++count;
                 }
                 break;
             }
@@ -8340,7 +7653,6 @@ void ObjectMgr::LoadGameObjectForQuests()
                 if (itr->_generic.questID)               // quest related objects, has visual effects
                 {
                     m_GameObjectForQuestSet.insert(itr->id);
-                    count++;
                 }
                 break;
             }
@@ -8349,7 +7661,6 @@ void ObjectMgr::LoadGameObjectForQuests()
                 if (itr->spellFocus.questID)             // quest related objects, has visual effect
                 {
                     m_GameObjectForQuestSet.insert(itr->id);
-                    count++;
                 }
                 break;
             }
@@ -8358,7 +7669,6 @@ void ObjectMgr::LoadGameObjectForQuests()
                 if (itr->goober.questId)                 //quests objects
                 {
                     m_GameObjectForQuestSet.insert(itr->id);
-                    count++;
                 }
                 break;
             }
@@ -8366,8 +7676,6 @@ void ObjectMgr::LoadGameObjectForQuests()
                 break;
         }
     }
-
-    
 }
 
 void ObjectMgr::LoadSkillLineAbility()
@@ -8377,12 +7685,9 @@ void ObjectMgr::LoadSkillLineAbility()
 
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
         return;
     }
-    auto fields = result->Fetch();
+    Field* fields = result->Fetch();
     uint32 maxSkillLineAbilityId = fields[0].GetUInt32() + 1;
 
     // Actually loading the skills.
@@ -8390,18 +7695,13 @@ void ObjectMgr::LoadSkillLineAbility()
 
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
         return;
     }
 
-    BarGoLink bar(result->GetRowCount());
     m_SkillLineAbilities.resize(maxSkillLineAbilityId);
 
     do
     {
-        bar.step();
         fields = result->Fetch();
 
         std::unique_ptr<SkillLineAbilityEntry> skill = std::make_unique<SkillLineAbilityEntry>();
@@ -8422,8 +7722,6 @@ void ObjectMgr::LoadSkillLineAbility()
         m_SkillLineAbilities[id] = std::move(skill);
 
     } while (result->NextRow());
-
-    
 }
 
 void ObjectMgr::LoadSoundEntries()
@@ -8432,18 +7730,12 @@ void ObjectMgr::LoadSoundEntries()
 
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
         return;
     }
 
-    BarGoLink bar(result->GetRowCount());
-
     do
     {
-        bar.step();
-        auto fields = result->Fetch();
+        Field* fields = result->Fetch();
 
         SoundEntriesEntry sound;
         uint32 soundId = fields[0].GetUInt32();
@@ -8454,8 +7746,6 @@ void ObjectMgr::LoadSoundEntries()
         m_SoundEntriesMap[soundId] = sound;
 
     } while (result->NextRow());
-
-    
 }
 
 void ObjectMgr::LoadBroadcastTexts()
@@ -8466,19 +7756,13 @@ void ObjectMgr::LoadBroadcastTexts()
     std::unique_ptr<QueryResult> result(WorldDatabase.Query("SELECT `ID`, `MaleText`, `FemaleText`, `Sound`, `Type`, `Language`, `EmoteId0`, `EmoteId1`, `EmoteId2`, `EmoteDelay0`, `EmoteDelay1`, `EmoteDelay2` FROM `broadcast_text`"));
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        
         return;
     }
 
     m_BroadcastTextLocaleMap.rehash(result->GetRowCount());
-    BarGoLink bar(result->GetRowCount());
 
     do
     {
-        bar.step();
         Field* fields = result->Fetch();
 
         BroadcastText bct;
@@ -8495,17 +7779,6 @@ void ObjectMgr::LoadBroadcastTexts()
         bct.EmoteDelay0 = fields[9].GetUInt32();
         bct.EmoteDelay1 = fields[10].GetUInt32();
         bct.EmoteDelay2 = fields[11].GetUInt32();
-
-        // Prior to 1.12, the %s parameter was not used. Emotes have the source object's name automatically appended to the beginning.
-#if SUPPORTED_CLIENT_BUILD < CLIENT_BUILD_1_12_1
-        if ((bct.Type == CHAT_TYPE_TEXT_EMOTE))
-        {
-            if ((bct.MaleText[LOCALE_enUS].size() > 3) && (bct.MaleText[LOCALE_enUS].at(0) == '%') && (bct.MaleText[LOCALE_enUS].at(1) == 's'))
-                bct.MaleText[LOCALE_enUS] = bct.MaleText[LOCALE_enUS].substr(3, bct.MaleText[LOCALE_enUS].size() - 3);
-            if ((bct.FemaleText[LOCALE_enUS].size() > 3) && (bct.FemaleText[LOCALE_enUS].at(0) == '%') && (bct.FemaleText[LOCALE_enUS].at(1) == 's'))
-                bct.FemaleText[LOCALE_enUS] = bct.FemaleText[LOCALE_enUS].substr(3, bct.FemaleText[LOCALE_enUS].size() - 3);
-        }
-#endif  
 
         if (bct.SoundId)
         {
@@ -8557,8 +7830,6 @@ void ObjectMgr::LoadBroadcastTexts()
 
         m_BroadcastTextLocaleMap[bct.Id] = bct;
     } while (result->NextRow());
-
-    
 }
 
 void ObjectMgr::LoadBroadcastTextLocales()
@@ -8568,18 +7839,11 @@ void ObjectMgr::LoadBroadcastTextLocales()
 
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
         return;
     }
 
-    uint32 count = 0;
-    BarGoLink bar(result->GetRowCount());
-
     do
     {
-        bar.step();
         Field* fields = result->Fetch();
 
         uint32 id = fields[0].GetUInt32();
@@ -8599,13 +7863,6 @@ void ObjectMgr::LoadBroadcastTextLocales()
             std::string str = fields[i].GetCppString();
             if (!str.empty())
             {
-#if SUPPORTED_CLIENT_BUILD < CLIENT_BUILD_1_12_1
-                if ((bct->second.Type == CHAT_TYPE_TEXT_EMOTE))
-                {
-                    if ((str.size() > 3) && (str.at(0) == '%') && (str.at(1) == 's'))
-                        str = str.substr(3, str.size() - 3);
-                }
-#endif  
                 int idx = GetOrNewIndexForLocale(LocaleConstant(i));
                 if (idx >= 0)
                 {
@@ -8624,13 +7881,6 @@ void ObjectMgr::LoadBroadcastTextLocales()
             std::string str = fields[8 + i].GetCppString();
             if (!str.empty())
             {
-#if SUPPORTED_CLIENT_BUILD < CLIENT_BUILD_1_12_1
-                if ((bct->second.Type == CHAT_TYPE_TEXT_EMOTE))
-                {
-                    if ((str.size() > 3) && (str.at(0) == '%') && (str.at(1) == 's'))
-                        str = str.substr(3, str.size() - 3);
-                }
-#endif  
                 int idx = GetOrNewIndexForLocale(LocaleConstant(i));
                 if (idx >= 0)
                 {
@@ -8642,11 +7892,7 @@ void ObjectMgr::LoadBroadcastTextLocales()
                 }
             }
         }
-
-        ++count;
     } while (result->NextRow());
-
-    
 }
 
 const char *ObjectMgr::GetBroadcastText(uint32 id, int locale_index, uint8 gender, bool forceGender) const
@@ -8713,18 +7959,11 @@ bool ObjectMgr::LoadMangosStrings(DatabaseType& db, char const* table, int32 min
 
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
         return false;
     }
 
-    uint32 count = 0;
-    BarGoLink bar(result->GetRowCount());
-
     do
     {
-        bar.step();
         Field *fields = result->Fetch();
 
         int32 entry = fields[0].GetInt32();
@@ -8749,7 +7988,6 @@ bool ObjectMgr::LoadMangosStrings(DatabaseType& db, char const* table, int32 min
         }
 
         data.Content.resize(1);
-        ++count;
 
         // 0 -> default, idx in to idx+1
         data.Content[0] = fields[1].GetCppString();
@@ -8838,19 +8076,11 @@ bool ObjectMgr::LoadQuestGreetings()
 
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        
         return false;
     }
 
-    uint32 count = 0;
-    BarGoLink bar(result->GetRowCount());
-
     do
     {
-        bar.step();
         Field *fields = result->Fetch();
 
         uint32 entry = fields[0].GetUInt32();
@@ -8886,7 +8116,6 @@ bool ObjectMgr::LoadQuestGreetings()
         QuestGreetingLocale& data = m_QuestGreetingLocaleMap[type][entry];
 
         data.Content.resize(1);
-        ++count;
 
         // 0 -> default, idx in to idx+1
         data.Content[0] = fields[2].GetCppString();
@@ -8918,8 +8147,6 @@ bool ObjectMgr::LoadQuestGreetings()
         }
     } while (result->NextRow());
 
-    
-
     return true;
 }
 
@@ -8931,19 +8158,11 @@ bool ObjectMgr::LoadTrainerGreetings()
 
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        
         return false;
     }
 
-    uint32 count = 0;
-    BarGoLink bar(result->GetRowCount());
-
     do
     {
-        bar.step();
         Field *fields = result->Fetch();
         uint32 entry = fields[0].GetUInt32();
 
@@ -8957,7 +8176,6 @@ bool ObjectMgr::LoadTrainerGreetings()
         TrainerGreetingLocale& data = m_TrainerGreetingLocaleMap[entry];
 
         data.Content.resize(1);
-        ++count;
 
         // 0 -> default, idx in to idx+1
         data.Content[0] = fields[1].GetCppString();
@@ -8981,8 +8199,6 @@ bool ObjectMgr::LoadTrainerGreetings()
 
     } while (result->NextRow());
 
-    
-
     return true;
 }
 
@@ -8990,23 +8206,15 @@ void ObjectMgr::LoadFishingBaseSkillLevel()
 {
     m_FishingBaseSkillMap.clear();                            // for reload case
 
-    uint32 count = 0;
     std::unique_ptr<QueryResult> result(WorldDatabase.Query("SELECT `entry`, `skill` FROM `skill_fishing_base_level`"));
 
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        
         return;
     }
 
-    BarGoLink bar(result->GetRowCount());
-
     do
     {
-        bar.step();
         Field *fields = result->Fetch();
 
         uint32 entry  = fields[0].GetUInt32();
@@ -9020,11 +8228,8 @@ void ObjectMgr::LoadFishingBaseSkillLevel()
         }
 
         m_FishingBaseSkillMap[entry] = skill;
-        ++count;
     }
     while (result->NextRow());
-
-    
 }
 
 SkillRangeType GetSkillRangeType(SkillLineEntry const *pSkill, bool racial)
@@ -9067,23 +8272,15 @@ void ObjectMgr::LoadGameTele()
 {
     m_GameTeleMap.clear();                                  // for reload case
 
-    uint32 count = 0;
     std::unique_ptr<QueryResult> result(WorldDatabase.Query("SELECT `id`, `position_x`, `position_y`, `position_z`, `orientation`, `map`, `name` FROM `game_tele`"));
 
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        
         return;
     }
 
-    BarGoLink bar(result->GetRowCount());
-
     do
     {
-        bar.step();
         Field *fields = result->Fetch();
 
         uint32 id         = fields[0].GetUInt32();
@@ -9111,12 +8308,8 @@ void ObjectMgr::LoadGameTele()
         wstrToLower(gt.wnameLow);
 
         m_GameTeleMap[id] = gt;
-
-        ++count;
     }
     while (result->NextRow());
-
-    
 }
 
 GameTele const* ObjectMgr::GetGameTele(const std::string& name) const
@@ -9131,11 +8324,15 @@ GameTele const* ObjectMgr::GetGameTele(const std::string& name) const
 
     // Alternative first GameTele what contains wnameLow as substring in case no GameTele location found
     const GameTele* alt = nullptr;
-    for (GameTeleMap::const_iterator itr = m_GameTeleMap.begin(); itr != m_GameTeleMap.end(); ++itr)
-        if (itr->second.wnameLow == wname)
-            return &itr->second;
-        else if (alt == nullptr && itr->second.wnameLow.find(wname) != std::wstring::npos)
-            alt = &itr->second;
+	for (const std::pair<uint32, GameTele>& itr : m_GameTeleMap)
+	{
+		if (itr.second.wnameLow == wname)
+		{
+			return &(*m_GameTeleMap.find(itr.first)).second;
+		}
+        else if (alt == nullptr && itr.second.wnameLow.find(wname) != std::wstring::npos)
+            alt = &itr.second;
+	}
 
     return alt;
 }
@@ -9144,9 +8341,11 @@ bool ObjectMgr::AddGameTele(GameTele& tele)
 {
     // find max id
     uint32 new_id = 0;
-    for (GameTeleMap::const_iterator itr = m_GameTeleMap.begin(); itr != m_GameTeleMap.end(); ++itr)
-        if (itr->first > new_id)
-            new_id = itr->first;
+	for (const auto & itr : m_GameTeleMap)
+	{
+        if (itr.first > new_id)
+            new_id = itr.first;
+	}
 
     // use next
     ++new_id;
@@ -9190,8 +8389,10 @@ void ObjectMgr::LoadTrainers(char const* tableName, bool isTemplates)
     CacheTrainerSpellMap& trainerList = isTemplates ? m_CacheTrainerTemplateSpellMap : m_CacheTrainerSpellMap;
 
     // For reload case
-    for (CacheTrainerSpellMap::iterator itr = trainerList.begin(); itr != trainerList.end(); ++itr)
-        itr->second.Clear();
+	for (std::pair<const uint32, TrainerSpellData>& itr : trainerList)
+	{
+        itr.second.Clear();
+	}
     trainerList.clear();
 
     std::set<uint32> skip_trainers;
@@ -9200,20 +8401,13 @@ void ObjectMgr::LoadTrainers(char const* tableName, bool isTemplates)
 
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        
         return;
     }
 
-    BarGoLink bar(result->GetRowCount());
     std::set<uint32> talentIds;
 
-    uint32 count = 0;
     do
     {
-        bar.step();
         Field* fields = result->Fetch();
 
         uint32 entry  = fields[0].GetUInt32();
@@ -9308,13 +8502,8 @@ void ObjectMgr::LoadTrainers(char const* tableName, bool isTemplates)
 
         if (SpellMgr::IsProfessionSpell(spellinfo->EffectTriggerSpell[0]))
             data.trainerType = 2;
-
-        ++count;
-
     }
     while (result->NextRow());
-
-    
 }
 
 void ObjectMgr::LoadTrainerTemplates()
@@ -9365,19 +8554,11 @@ void ObjectMgr::LoadVendors(char const* tableName, bool isTemplates)
     std::unique_ptr<QueryResult> result(WorldDatabase.PQuery("SELECT `entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id` FROM %s WHERE (`item` NOT IN (SELECT `entry` FROM `forbidden_items` WHERE (`after_or_before` = 0 && `patch` <= %u) || (`after_or_before` = 1 && `patch` >= %u)))", tableName, sWorld.GetWowPatch(), sWorld.GetWowPatch()));
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        
         return;
     }
 
-    uint32 count = 0;
-    BarGoLink bar(result->GetRowCount());
-    
     do
     {
-        bar.step();
         Field* fields = result->Fetch();
 
         uint32 entry        = fields[0].GetUInt32();
@@ -9393,12 +8574,8 @@ void ObjectMgr::LoadVendors(char const* tableName, bool isTemplates)
         VendorItemData& vList = vendorList[entry];
 
         vList.AddItem(item_id, maxcount, incrtime, itemflags, conditionId);
-        ++count;
-
     }
     while (result->NextRow());
-
-    
 }
 
 
@@ -9443,20 +8620,13 @@ void ObjectMgr::LoadNpcGossips()
     std::unique_ptr<QueryResult> result(WorldDatabase.Query("SELECT `npc_guid`, `textid` FROM `npc_gossip`"));
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        
         return;
     }
 
-    uint32 count = 0;
     uint32 guid, textid;
-    BarGoLink bar(result->GetRowCount());
 
     do
     {
-        bar.step();
         Field* fields = result->Fetch();
 
         guid   = fields[0].GetUInt32();
@@ -9475,12 +8645,8 @@ void ObjectMgr::LoadNpcGossips()
         }
 
         m_CacheNpcTextIdMap[guid] = textid ;
-        ++count;
-
     }
     while (result->NextRow());
-
-    
 }
 
 void ObjectMgr::LoadGossipMenu()
@@ -9492,19 +8658,11 @@ void ObjectMgr::LoadGossipMenu()
 
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        
         return;
     }
 
-    uint32 count = 0;
-    BarGoLink bar(result->GetRowCount());
-
     do
     {
-        bar.step();
         Field* fields = result->Fetch();
 
         GossipMenus gMenu;
@@ -9530,12 +8688,8 @@ void ObjectMgr::LoadGossipMenu()
         }
 
         m_GossipMenusMap.insert(GossipMenusMap::value_type(gMenu.entry, gMenu));
-
-        ++count;
     }
     while (result->NextRow());
-
-    
 
     // post loading tests
     for (uint32 i = 1; i < sCreatureStorage.GetMaxEntry(); ++i)
@@ -9562,10 +8716,6 @@ void ObjectMgr::LoadGossipMenuItems()
 
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        
         return;
     }
 
@@ -9583,9 +8733,6 @@ void ObjectMgr::LoadGossipMenuItems()
     }
 
     // loading
-    BarGoLink bar(result->GetRowCount());
-
-    uint32 count = 0;
 
     std::set<uint32> gossipScriptSet;
 
@@ -9602,7 +8749,6 @@ void ObjectMgr::LoadGossipMenuItems()
 
     do
     {
-        bar.step();
         Field* fields = result->Fetch();
 
         GossipMenuItems gMenuItem;
@@ -9728,9 +8874,6 @@ void ObjectMgr::LoadGossipMenuItems()
         }
 
         m_GossipMenuItemsMap.insert(GossipMenuItemsMap::value_type(gMenuItem.menu_id, gMenuItem));
-
-        ++count;
-
     }
     while (result->NextRow());
 
@@ -9742,8 +8885,6 @@ void ObjectMgr::LoadGossipMenuItems()
         for (std::set<uint32>::const_iterator itr = menu_ids.begin(); itr != menu_ids.end(); ++itr)
             sLog.outErrorDb("Table `gossip_menu` contain unused (in creature or GO or menu options) menu id %u.", *itr);
     }
-
-    
 }
 
 void ObjectMgr::AddVendorItem(uint32 entry, uint32 item, uint32 maxcount, uint32 incrtime, uint32 itemflags)
@@ -10207,19 +9348,11 @@ void ObjectMgr::LoadFactionChangeReputations()
 
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        
         return;
     }
 
-    uint32 count = 0;
-    BarGoLink bar(result->GetRowCount());
-
     do
     {
-        bar.step();
         Field *fields = result->Fetch();
 
         uint32 alliance = fields[0].GetUInt32();
@@ -10231,12 +9364,8 @@ void ObjectMgr::LoadFactionChangeReputations()
         }
         else
             factionchange_reputations[alliance] = horde;
-
-        ++count;
     }
     while (result->NextRow());
-
-    
 }
 
 
@@ -10247,19 +9376,11 @@ void ObjectMgr::LoadFactionChangeSpells()
 
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        
         return;
     }
 
-    uint32 count = 0;
-    BarGoLink bar(result->GetRowCount());
-
     do
     {
-        bar.step();
         Field *fields = result->Fetch();
 
         uint32 alliance = fields[0].GetUInt32();
@@ -10271,12 +9392,8 @@ void ObjectMgr::LoadFactionChangeSpells()
         }
         else
             factionchange_spells[alliance] = horde;
-
-        ++count;
     }
     while (result->NextRow());
-
-    
 }
 
 
@@ -10287,19 +9404,11 @@ void ObjectMgr::LoadFactionChangeItems()
 
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        
         return;
     }
 
-    uint32 count = 0;
-    BarGoLink bar(result->GetRowCount());
-
     do
     {
-        bar.step();
         Field *fields = result->Fetch();
 
         uint32 alliance = fields[0].GetUInt32();
@@ -10312,12 +9421,8 @@ void ObjectMgr::LoadFactionChangeItems()
         }
         else
             factionchange_items[alliance] = horde;
-
-        ++count;
     }
     while (result->NextRow());
-
-    
 }
 
 void ObjectMgr::LoadFactionChangeQuests()
@@ -10327,19 +9432,11 @@ void ObjectMgr::LoadFactionChangeQuests()
 
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        
         return;
     }
 
-    uint32 count = 0;
-    BarGoLink bar(result->GetRowCount());
-
     do
     {
-        bar.step();
         Field *fields = result->Fetch();
 
         uint32 alliance = fields[0].GetUInt32();
@@ -10352,12 +9449,8 @@ void ObjectMgr::LoadFactionChangeQuests()
         }
         else
             factionchange_quests[alliance] = horde;
-
-        ++count;
     }
     while (result->NextRow());
-
-    
 }
 
 void ObjectMgr::LoadFactionChangeMounts()
@@ -10367,19 +9460,11 @@ void ObjectMgr::LoadFactionChangeMounts()
 
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        
         return;
     }
 
-    uint32 count = 0;
-    BarGoLink bar(result->GetRowCount());
-
     do
     {
-        bar.step();
         Field *fields = result->Fetch();
 
         uint8 RaceId     = fields[0].GetUInt8();
@@ -10398,33 +9483,23 @@ void ObjectMgr::LoadFactionChangeMounts()
             data.MountNum   = MountNum;
             data.ItemEntry  = ItemEntry;
             factionchange_mounts.push_back(data);
-            ++count;
         }
     }
     while (result->NextRow());
-
-    
 }
+
 void ObjectMgr::RestoreDeletedItems()
 {
     std::unique_ptr<QueryResult> result(CharacterDatabase.Query("SELECT `id`, `player_guid`, `item_entry`, `stack_count` FROM `character_deleted_items`"));
 
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        
         sLog.outString(">> Restored 0 prevously deleted items.");
         return;
     }
 
-    uint32 count = 0;
-    BarGoLink bar(result->GetRowCount());
-
     do
     {
-        bar.step();
         Field *fields = result->Fetch();
 
         uint32 id = fields[0].GetUInt32();
@@ -10453,15 +9528,11 @@ void ObjectMgr::RestoreDeletedItems()
                     .SendMailTo(MailReceiver(memberGuid), MailSender(MAIL_NORMAL, memberGuid.GetCounter(), MAIL_STATIONERY_GM), MAIL_CHECK_MASK_COPIED, 0, 30 * DAY);
 
                 CharacterDatabase.PExecute("DELETE FROM `character_deleted_items` WHERE `id` = %u", id);
-
-                count++;
             }
         }
     } while (result->NextRow());
-
-    
-    sLog.outString(">> Restored %u previously deleted items to players.", count);
 }
+
 uint32 GetRealMountEntry(uint32 entry)
 {
     switch (entry)
@@ -10579,8 +9650,6 @@ void ObjectMgr::LoadConditions()
             continue;
         }
     }
-
-    
 }
 
 
@@ -10645,20 +9714,14 @@ void ObjectMgr::LoadAreaLocales()
 
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
         return;
     }
 
-    BarGoLink bar(result->GetRowCount());
-
     do
     {
-        bar.step();
-        auto fields = result->Fetch();
+        Field* fields = result->Fetch();
 
-        auto entry = fields[0].GetUInt32();
+        uint32 entry = fields[0].GetUInt32();
 
         if (!AreaEntry::GetById(entry))
         {
@@ -10685,8 +9748,6 @@ void ObjectMgr::LoadAreaLocales()
         }
     }
     while (result->NextRow());
-
-    
 }
 
 void ObjectMgr::GetAreaLocaleString(uint32 entry, int32 loc_idx, std::string* namePtr) const
@@ -10695,7 +9756,7 @@ void ObjectMgr::GetAreaLocaleString(uint32 entry, int32 loc_idx, std::string* na
     {
         if (const auto *al = GetAreaLocale(entry))
             if (namePtr && al->Name.size() > size_t(loc_idx) && !al->Name[loc_idx].empty())
-                *namePtr = al->Name[loc_idx].c_str();
+                *namePtr = al->Name[loc_idx];
     }
 }
 

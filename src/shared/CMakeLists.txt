@@ -24,14 +24,12 @@ set (shared_SRCS
     LockedQueue.h
     Log.h
     PosixDaemon.h
-    ProgressBar.h
     Progression.h
     revision.h
     SystemConfig.h
     Threading.h
     Timer.h
     Util.h
-    WheatyExceptionReport.h
     WorldPacket.h
     Auth/AuthCrypt.h
     Auth/base32.h
@@ -64,11 +62,9 @@ set (shared_SRCS
     DelayExecutor.cpp
     Log.cpp
     PosixDaemon.cpp
-    ProgressBar.cpp
     Threading.cpp
     Util.cpp
     Duration.h
-    WheatyExceptionReport.cpp
     Auth/AuthCrypt.cpp
     Auth/base32.cpp
     Auth/BigNumber.cpp

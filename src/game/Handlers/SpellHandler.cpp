@@ -344,11 +344,9 @@ void WorldSession::HandleCastSpellOpcode(WorldPacket& recvPacket)
     // - Stealth and Invisibility effects will now be canceled at the
     //   beginning of an action(spellcast, ability use etc...), rather than
     //   at the completion of the action.
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_9_4
     // Remove invisibility except Gnomish Cloaking Device, since evidence suggests
     // it remains until cast finish
     _player->RemoveAurasWithInterruptFlags(AURA_INTERRUPT_FLAG_ON_CAST_SPELL, 4079);
-#endif
 
     if (_player->getRace() == RACE_TAUREN)
     {

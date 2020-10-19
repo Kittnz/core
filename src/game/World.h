@@ -51,8 +51,6 @@ class QueryResult;
 class World;
 class MovementBroadcaster;
 
-World& GetSWorld();
-
 // ServerMessages.dbc
 enum ServerMessageType
 {
@@ -775,11 +773,6 @@ class World
         /**
          * Database logs system
          */
-        void LogMoneyTrade(ObjectGuid sender, ObjectGuid receiver, uint32 amount, const char* type, uint32 dataInt);
-        void LogCharacter(Player* character, const char* action);
-        void LogCharacter(WorldSession* sess, uint32 lowGuid, std::string const& charName, const char* action);
-        void LogChat(WorldSession* sess, const char* type, std::string const& msg, PlayerPointer target = NULL, uint32 chanId = 0, const char* chanStr = NULL);
-        void LogTransaction(PlayerTransactionData const& data);
         void Shutdown();
         void AddSessionToSessionsMap(WorldSession* sess);
 
@@ -905,6 +898,9 @@ class World
 
 extern uint32 realmID;
 
-#define sWorld MaNGOS::Singleton<World>::Instance()
+//#define sWorld MaNGOS::Singleton<World>::Instance()
+
+extern World sWorld;
+
 #endif
 /// @}

@@ -217,10 +217,6 @@ void CreatureGroupsManager::Load()
 
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        
         sLog.outErrorDb(">>  Loaded 0 creature groups. DB table `creature_groups` is empty!");
         return;
     }
@@ -228,11 +224,9 @@ void CreatureGroupsManager::Load()
     uint32 count = 0;
     Field *fields;
     CreatureGroup *currentGroup = nullptr;
-    BarGoLink bar(result->GetRowCount());
 
     do
     {
-        bar.step();
         fields = result->Fetch();
 
         //Load group member data
@@ -260,8 +254,6 @@ void CreatureGroupsManager::Load()
         }
     }
     while (result->NextRow());
-
-    
 }
 
 void CreatureGroupsManager::LoadCreatureGroup(Creature* creature, CreatureGroup*& group)

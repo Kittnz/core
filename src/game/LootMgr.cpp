@@ -22,7 +22,6 @@
 #include "LootMgr.h"
 #include "Log.h"
 #include "ObjectMgr.h"
-#include "ProgressBar.h"
 #include "World.h"
 #include "Util.h"
 #include "Conditions.h"
@@ -92,24 +91,19 @@ void LootStore::Verify() const
 void LootStore::LoadLootTable()
 {
     LootTemplateMap::const_iterator tab;
-    uint32 count = 0;
 
     // Clearing store (for reloading case)
     Clear();
 
     sLog.outString("%s :", GetName());
-
     //                                                 0      1     2                    3        4              5         6
     QueryResult* result = WorldDatabase.PQuery("SELECT entry, item, ChanceOrQuestChance, groupid, mincountOrRef, maxcount, condition_id FROM %s WHERE ((%u >= patch_min) && (%u <= patch_max)) && ((mincountOrRef < 0) || (item NOT IN (SELECT entry FROM forbidden_items WHERE (after_or_before = 0 && patch <= %u) || (after_or_before = 1 && patch >= %u))))", GetName(), sWorld.GetWowPatch(), sWorld.GetWowPatch(), sWorld.GetWowPatch(), sWorld.GetWowPatch());
 
     if (result)
     {
-        BarGoLink bar(result->GetRowCount());
-
         do
         {
             Field *fields = result->Fetch();
-            bar.step();
 
             uint32 entry               = fields[0].GetUInt32();
             uint32 item                = fields[1].GetUInt32();
@@ -177,20 +171,12 @@ void LootStore::LoadLootTable()
 
             // Adds current row to the template
             tab->second->AddEntry(storeitem);
-            ++count;
-
         }
         while (result->NextRow());
 
         delete result;
 
         Verify();                                           // Checks validity of the loot store
-
-        
-    }
-    else
-    {
-        
     }
 }
 
@@ -1488,7 +1474,6 @@ void LoadLootTemplates_Pickpocketing()
 
 void LoadLootTemplates_Mail()
 {
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_9_4
     LootIdSet ids_set;
     LootTemplates_Mail.LoadAndCollectLootIds(ids_set);
 
@@ -1499,7 +1484,6 @@ void LoadLootTemplates_Mail()
 
     // output error for any still listed (not referenced from appropriate table) ids
     LootTemplates_Mail.ReportUnusedIds(ids_set);
-#endif
 }
 
 void LoadLootTemplates_Skinning()

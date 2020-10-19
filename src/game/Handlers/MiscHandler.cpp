@@ -218,9 +218,6 @@ public:
             data << uint32(race);                               // player race
             data << uint32(pzoneid);                            // player zone id
 
-#if SUPPORTED_CLIENT_BUILD <= CLIENT_BUILD_1_8_4
-            data << uint32(0);                                  // unknown
-#endif
             // 50 is maximum player count sent to client
             if ((++clientcount) == 49)
                 break;
@@ -568,7 +565,7 @@ void WorldSession::HandleAddFriendOpcode(WorldPacket & recv_data)
         uint32 otherWorldMask = sObjectMgr.GetPlayerWorldMaskByGUID(friendLowGuid);
         if (friendGuid == GetMasterPlayer()->GetObjectGuid())
             friendResult = FRIEND_SELF;
-        else if (GetMasterPlayer()->GetTeam() != team && !sWorld.getConfig(CONFIG_BOOL_ALLOW_TWO_SIDE_ADD_FRIEND) && GetSecurity() < SEC_MODERATOR)
+        else if (GetMasterPlayer()->GetTeam() != team && !sWorld.getConfig(CONFIG_BOOL_ALLOW_TWO_SIDE_ADD_FRIEND) && GetSecurity() < SEC_GAMEMASTER)
             friendResult = FRIEND_ENEMY;
         else if (GetMasterPlayer()->GetSocial()->HasFriend(friendGuid))
             friendResult = FRIEND_ALREADY;

@@ -22,7 +22,6 @@
 #include "Policies/SingletonImp.h"
 #include "Player.h"
 #include "SpellEntry.h"
-#include "ProgressBar.h"
 
 INSTANTIATE_SINGLETON_1(AuraRemovalManager);
 
@@ -35,18 +34,12 @@ void AuraRemovalManager::LoadFromDB()
     QueryResult* result = WorldDatabase.Query("SELECT map_id, spell_id, enabled, flags, comment FROM instance_buff_removal");
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-        
         sLog.outString(">> Table instance_buff_removal is empty.");
     }
     else
     {
-        BarGoLink bar((int)result->GetRowCount());
         do
         {
-            bar.step();
-
             Field* fields = result->Fetch();
 
             uint32 mapId  = fields[0].GetUInt32();
@@ -57,7 +50,7 @@ void AuraRemovalManager::LoadFromDB()
             ++count;
 
             if (enabled)
-                m_data[mapId].push_back(AuraRemovalEntry{ auraId, flags });
+                m_data[mapId].emplace_back(AuraRemovalEntry{ auraId, flags });
 
         } while (result->NextRow());
 

@@ -35,7 +35,6 @@
 #include "World.h"
 #include "Group.h"
 #include "InstanceData.h"
-#include "ProgressBar.h"
 
 INSTANTIATE_SINGLETON_1(MapPersistentStateManager);
 
@@ -733,9 +732,6 @@ void MapPersistentStateManager::_DelHelper(DatabaseType &db, const char *fields,
 
 void MapPersistentStateManager::CleanupInstances()
 {
-    BarGoLink bar(2);
-    bar.step();
-
     // load reset times and clean expired instances
     m_Scheduler.LoadResetTimes();
 
@@ -756,9 +752,6 @@ void MapPersistentStateManager::CleanupInstances()
     CharacterDatabase.PExecute("DELETE FROM gameobject_respawn WHERE instance >= %u AND instance NOT IN (SELECT id FROM instance)", RESERVED_INSTANCES_LAST);
     //execute transaction directly
     CharacterDatabase.CommitTransaction();
-
-    bar.step();
-    
 }
 
 void MapPersistentStateManager::PackInstances()
@@ -793,9 +786,6 @@ void MapPersistentStateManager::PackInstances()
         delete result;
     }
 
-    BarGoLink bar(InstanceSet.size() + 1);
-    bar.step();
-
     uint32 InstanceNumber = RESERVED_INSTANCES_LAST;
     // we do assume std::set is sorted properly on integer value
     for (std::set<uint32>::iterator i = InstanceSet.begin(); i != InstanceSet.end(); ++i)
@@ -815,10 +805,7 @@ void MapPersistentStateManager::PackInstances()
         }
 
         ++InstanceNumber;
-        bar.step();
     }
-
-    
 }
 
 void MapPersistentStateManager::ScheduleInstanceResets()
@@ -979,23 +966,14 @@ void MapPersistentStateManager::LoadCreatureRespawnTimes()
     // remove outdated data
     CharacterDatabase.DirectExecute("DELETE FROM creature_respawn WHERE respawntime <= UNIX_TIMESTAMP(NOW())");
 
-    uint32 count = 0;
-
     QueryResult *result = CharacterDatabase.Query("SELECT guid, respawntime, creature_respawn.map, instance, resettime FROM creature_respawn LEFT JOIN instance ON instance = id");
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        
         return;
     }
 
-    BarGoLink bar(result->GetRowCount());
-
     do
     {
-        bar.step();
         Field *fields = result->Fetch();
 
         uint32 loguid       = fields[0].GetUInt32();
@@ -1043,14 +1021,10 @@ void MapPersistentStateManager::LoadCreatureRespawnTimes()
             state->SetCreatureRespawnTime(loguid, time_t(respawn_time));
         }
 
-        ++count;
-
     }
     while (result->NextRow());
 
     delete result;
-
-    
 }
 
 void MapPersistentStateManager::LoadGameobjectRespawnTimes()
@@ -1058,24 +1032,15 @@ void MapPersistentStateManager::LoadGameobjectRespawnTimes()
     // remove outdated data
     CharacterDatabase.DirectExecute("DELETE FROM gameobject_respawn WHERE respawntime <= UNIX_TIMESTAMP(NOW())");
 
-    uint32 count = 0;
-
     QueryResult *result = CharacterDatabase.Query("SELECT guid, respawntime, gameobject_respawn.map, instance, resettime FROM gameobject_respawn LEFT JOIN instance ON instance = id");
 
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        
         return;
     }
 
-    BarGoLink bar(result->GetRowCount());
-
     do
     {
-        bar.step();
         Field *fields = result->Fetch();
 
         uint32 loguid       = fields[0].GetUInt32();
@@ -1119,13 +1084,8 @@ void MapPersistentStateManager::LoadGameobjectRespawnTimes()
 
             state->SetGORespawnTime(loguid, time_t(respawn_time));
         }
-
-        ++count;
-
     }
     while (result->NextRow());
 
     delete result;
-
-    
 }

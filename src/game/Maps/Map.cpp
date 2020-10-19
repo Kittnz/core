@@ -1992,7 +1992,6 @@ bool DungeonMap::CanEnter(Player *player)
     //   accommodate this change.Combat resurrections, soulstones,
     //   reincarnate, etc.will still work fine.This is primarily to combat
     //   graveyard rushing in instances.
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_10_2
     Group *pGroup = player->GetGroup();
     if (IsRaid() && GetInstanceData() && GetInstanceData()->IsEncounterInProgress() && 
         pGroup && pGroup->InCombatToInstance(GetInstanceId()) && player->isAlive() && !player->IsGameMaster())
@@ -2000,7 +1999,6 @@ bool DungeonMap::CanEnter(Player *player)
         player->SendTransferAborted(TRANSFER_ABORT_ZONE_IN_COMBAT);
         return false;
     }
-#endif
 
     if (GetId() == 509 || GetId() == 531)
     {
@@ -3390,7 +3388,6 @@ void Map::CrashUnload()
         {
             WorldSession* session = player->GetSession();
             sLog.out(LOG_CHAR, "Account: %d (IP: %s) Logout Character:[%s] (guid: %u)", session->GetAccountId(), session->GetRemoteAddress().c_str(), player->GetName() , player->GetGUIDLow());
-            sWorld.LogCharacter(player, "Logout");
             session->SetPlayer(NULL);
             player->SaveInventoryAndGoldToDB(); // Prevent possible exploits
             player->UninviteFromGroup();

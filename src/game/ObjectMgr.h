@@ -1602,7 +1602,9 @@ class ObjectMgr
         CacheTrainerSpellMap m_CacheTrainerSpellMap;
 };
 
-#define sObjectMgr MaNGOS::Singleton<ObjectMgr>::Instance()
+//#define sObjectMgr MaNGOS::Singleton<ObjectMgr>::Instance()
+
+extern ObjectMgr sObjectMgr;
 
 // scripting access functions
 MANGOS_DLL_SPEC bool LoadMangosStrings(DatabaseType& db, char const* table,int32 start_value, int32 end_value = std::numeric_limits<int32>::min(), bool extra_content = false);

@@ -325,12 +325,6 @@ void WorldSession::HandleAcceptTradeOpcode(WorldPacket& recvPacket)
 
     if (his_trade->IsAccepted())
     {
-        PlayerTransactionData log;
-        log.type = "Trade";
-        my_trade->FillTransactionLog(log.parts[0]);
-        his_trade->FillTransactionLog(log.parts[1]);
-        sWorld.LogTransaction(log);
-
         setAcceptTradeMode(my_trade, his_trade, myItems, hisItems);
 
         Spell* my_spell = NULL;

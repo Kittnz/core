@@ -25,7 +25,6 @@
 #include "CreatureEventAI.h"
 #include "CreatureEventAIMgr.h"
 #include "ObjectMgr.h"
-#include "ProgressBar.h"
 #include "Policies/SingletonImp.h"
 #include "ObjectGuid.h"
 #include "GridDefines.h"
@@ -47,12 +46,8 @@ void CreatureEventAIMgr::LoadCreatureEventAI_Events()
                           "FROM creature_ai_events");
     if (result)
     {
-        BarGoLink bar(result->GetRowCount());
-        uint32 Count = 0;
-
         do
         {
-            bar.step();
             Field *fields = result->Fetch();
 
             CreatureEventAI_Event temp;
@@ -325,16 +320,9 @@ void CreatureEventAIMgr::LoadCreatureEventAI_Events()
 
             //Add to list
             m_CreatureEventAI_Event_Map[creature_id].push_back(temp);
-            ++Count;
         }
         while (result->NextRow());
 
         delete result;
-
-    }
-    else
-    {
-        BarGoLink bar(1);
-        bar.step();
     }
 }

@@ -20,7 +20,6 @@
 #include "ScriptMgr.h"
 #include "Policies/SingletonImp.h"
 #include "Log.h"
-#include "ProgressBar.h"
 #include "ObjectMgr.h"
 #include "WaypointManager.h"
 #include "World.h"
@@ -123,23 +122,13 @@ void ScriptMgr::LoadScripts(ScriptMapMap& scripts, const char* tablename)
     //                                                  0    1       2         3         4          5          6         7           8             9          10        11        12        13        14    15 16 17 18       19
     QueryResult *result = WorldDatabase.PQuery("SELECT id, delay, command, datalong, datalong2, datalong3, datalong4, target_param1, target_param2, target_type, data_flags, dataint, dataint2, dataint3, dataint4, x, y, z, o, condition_id FROM %s", tablename);
 
-    uint32 count = 0;
-
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        
         return;
     }
 
-    BarGoLink bar(result->GetRowCount());
-
     do
     {
-        bar.step();
-
         Field *fields = result->Fetch();
         ScriptInfo tmp;
         tmp.id           = fields[0].GetUInt32();
@@ -1208,14 +1197,10 @@ void ScriptMgr::LoadScripts(ScriptMapMap& scripts, const char* tablename)
             scripts[tmp.id] = emptyMap;
         }
         scripts[tmp.id].insert(ScriptMap::value_type(tmp.delay, tmp));
-
-        ++count;
     }
     while (result->NextRow());
 
     delete result;
-
-    
 }
 
 void ScriptMgr::LoadGameObjectScripts()
@@ -1421,24 +1406,13 @@ void ScriptMgr::LoadAreaTriggerScripts()
     m_AreaTriggerScripts.clear();                           // need for reload case
     QueryResult *result = WorldDatabase.Query("SELECT entry, script_name FROM scripted_areatrigger");
 
-    uint32 count = 0;
-
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        
         return;
     }
 
-    BarGoLink bar(result->GetRowCount());
-
     do
     {
-        ++count;
-        bar.step();
-
         Field *fields = result->Fetch();
 
         uint32 triggerId       = fields[0].GetUInt32();
@@ -1456,8 +1430,6 @@ void ScriptMgr::LoadAreaTriggerScripts()
     while (result->NextRow());
 
     delete result;
-
-    
 }
 
 void ScriptMgr::LoadEventIdScripts()
@@ -1465,28 +1437,16 @@ void ScriptMgr::LoadEventIdScripts()
     m_EventIdScripts.clear();                           // need for reload case
     QueryResult *result = WorldDatabase.Query("SELECT id, script_name FROM scripted_event_id");
 
-    uint32 count = 0;
-
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        
         return;
     }
 
-    BarGoLink bar(result->GetRowCount());
-
     std::set<uint32> eventIds;                              // Store possible event ids
-
     CollectPossibleEventIds(eventIds);
 
     do
     {
-        ++count;
-        bar.step();
-
         Field *fields = result->Fetch();
 
         uint32 eventId          = fields[0].GetUInt32();
@@ -1502,13 +1462,11 @@ void ScriptMgr::LoadEventIdScripts()
     while (result->NextRow());
 
     delete result;
-
-    
 }
 
 void ScriptMgr::LoadScriptNames()
 {
-    m_scriptNames.push_back("");
+    m_scriptNames.emplace_back("");
     QueryResult *result = WorldDatabase.Query(
                               "SELECT DISTINCT(script_name) FROM creature_template WHERE script_name <> '' "
                               "UNION "
@@ -1524,26 +1482,17 @@ void ScriptMgr::LoadScriptNames()
 
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
-        
         return;
     }
 
-    BarGoLink bar(result->GetRowCount());
-    uint32 count = 0;
-
     do
     {
-        bar.step();
-        m_scriptNames.push_back((*result)[0].GetString());
-        ++count;
+        m_scriptNames.emplace_back((*result)[0].GetString());
     }
     while (result->NextRow());
     delete result;
 
     std::sort(m_scriptNames.begin(), m_scriptNames.end());
-    
 }
 
 uint32 ScriptMgr::GetScriptId(const char *name) const
@@ -1976,8 +1925,6 @@ void ScriptMgr::Initialize()
     // Load database (must be called after SD2Config.SetSource).
     LoadDatabase();
 
-    BarGoLink bar(1);
-    bar.step();
     sLog.outString("");
 
     // Resize script ids to needed ammount of assigned ScriptNames (from core)
@@ -2008,15 +1955,10 @@ void ScriptMgr::LoadScriptTexts()
 
     QueryResult* result = WorldDatabase.PQuery("SELECT entry, sound, type, language, emote FROM script_texts WHERE entry BETWEEN %i AND %i", TEXT_SOURCE_TEXT_END, TEXT_SOURCE_TEXT_START);
 
-
     if (result)
     {
-        BarGoLink bar(result->GetRowCount());
-        uint32 uiCount = 0;
-
         do
         {
-            bar.step();
             Field* pFields = result->Fetch();
             StringTextData pTemp;
 
@@ -2045,7 +1987,6 @@ void ScriptMgr::LoadScriptTexts()
                 sLog.outErrorDb("Entry %i in table `script_texts` has Type %u but this Chat Type does not exist.", iId, pTemp.Type);
 
             m_mTextDataMap[iId] = pTemp;
-            ++uiCount;
         } while (result->NextRow());
 
         delete result;
@@ -2054,8 +1995,6 @@ void ScriptMgr::LoadScriptTexts()
     }
     else
     {
-        BarGoLink bar(1);
-        bar.step();
         sLog.outString("");
     }
 }
@@ -2066,15 +2005,10 @@ void ScriptMgr::LoadScriptTextsCustom()
 
     QueryResult* result = WorldDatabase.PQuery("SELECT entry, sound, type, language, emote FROM custom_texts WHERE entry BETWEEN %i AND %i", TEXT_SOURCE_CUSTOM_END, TEXT_SOURCE_CUSTOM_START);
 
-
     if (result)
     {
-        BarGoLink bar(result->GetRowCount());
-        uint32 uiCount = 0;
-
         do
         {
-            bar.step();
             Field* pFields = result->Fetch();
             StringTextData pTemp;
 
@@ -2103,7 +2037,6 @@ void ScriptMgr::LoadScriptTextsCustom()
                 sLog.outErrorDb("Entry %i in table `custom_texts` has Type %u but this Chat Type does not exist.", iId, pTemp.Type);
 
             m_mTextDataMap[iId] = pTemp;
-            ++uiCount;
         } while (result->NextRow());
 
         delete result;
@@ -2112,8 +2045,6 @@ void ScriptMgr::LoadScriptTextsCustom()
     }
     else
     {
-        BarGoLink bar(1);
-        bar.step();
         sLog.outString("");
     }
 }
@@ -2133,17 +2064,12 @@ void ScriptMgr::LoadScriptWaypoints()
         delete result;
     }
 
-
     result = WorldDatabase.PQuery("SELECT entry, pointid, location_x, location_y, location_z, waittime FROM script_waypoint ORDER BY pointid");
 
     if (result)
     {
-        BarGoLink bar(result->GetRowCount());
-        uint32 uiNodeCount = 0;
-
         do
         {
-            bar.step();
             Field* pFields = result->Fetch();
             ScriptPointMove pTemp;
 
@@ -2168,18 +2094,9 @@ void ScriptMgr::LoadScriptWaypoints()
                 sLog.outErrorDb("DB table script_waypoint has waypoint for creature entry %u, but creature does not have script_name defined and then useless.", pTemp.uiCreatureEntry);
 
             m_mPointMoveMap[uiEntry].push_back(pTemp);
-            ++uiNodeCount;
         } while (result->NextRow());
 
         delete result;
-
-        sLog.outString("");
-    }
-    else
-    {
-        BarGoLink bar(1);
-        bar.step();
-        sLog.outString("");
     }
 }
 
@@ -2194,10 +2111,8 @@ void ScriptMgr::LoadEscortData()
 
     if (pResult)
     {
-        barGoLink bar(pResult->GetRowCount());
         do
         {
-            bar.step();
             Field* pFields = pResult->Fetch();
             CreatureEscortData pTemp;
 
@@ -2235,14 +2150,6 @@ void ScriptMgr::LoadEscortData()
         } while (pResult->NextRow());
 
         delete pResult;
-
-        sLog.outString("");
-    }
-    else
-    {
-        barGoLink bar(1);
-        bar.step();
-        sLog.outString("");
     }
 }
 

@@ -75,22 +75,11 @@ void SpellModMgr::LoadSpellMods()
                               "Stances, StancesNot, SpellVisual, ManaCostPercentage, StartRecoveryCategory, StartRecoveryTime, MaxTargetLevel, MaxAffectedTargets, DmgClass, "
                               "rangeIndex, RecoveryTime, CategoryRecoveryTime, procCharges, SpellFamilyName, SpellFamilyFlags, Mechanic, EquippedItemClass "
                               "FROM spell_mod"));
-    uint32 total_count = 0;
-    if (!result)
-    {
-        BarGoLink bar(1);
-        bar.step();
-
-        
-        
-    }
-    else
+    if (result)
     {
         Field* fields;
-        BarGoLink bar(result->GetRowCount());
         do
         {
-            bar.step();
             fields = result->Fetch();
             uint32 const spellid = fields[0].GetUInt32();
 
@@ -176,7 +165,6 @@ void SpellModMgr::LoadSpellMods()
             ModInt32ValueIfExplicit(fields[36], spell->EquippedItemClass);
 
             spell->InitCachedValues();
-            ++total_count;
         }
         while (result->NextRow());
 
@@ -191,22 +179,12 @@ void SpellModMgr::LoadSpellMods()
                  "EffectDicePerLevel, EffectRealPointsPerLevel, EffectPointsPerComboPoint, EffectMultipleValue " // Float
                  "FROM spell_effect_mod"
                 ));
-    total_count = 0;
 
-    if (!result)
-    {
-        BarGoLink bar(1);
-        bar.step();
-
-        
-    }
-    else
+    if (result)
     {
         Field* fields;
-        BarGoLink bar(result->GetRowCount());
         do
         {
-            bar.step();
             fields = result->Fetch();
             uint32 spellid = fields[0].GetUInt32();
             uint32 effect_idx = fields[1].GetUInt32();
@@ -252,11 +230,8 @@ void SpellModMgr::LoadSpellMods()
             ModFloatValueIfExplicit(fields[18], spell->EffectPointsPerComboPoint[effect_idx]);
             ModFloatValueIfExplicit(fields[19], spell->EffectMultipleValue[effect_idx]);
 
-            ++total_count;
         }
         while (result->NextRow());
-
-        
     }
 
     // Other modifications (no 'speed' field in spell_mod)

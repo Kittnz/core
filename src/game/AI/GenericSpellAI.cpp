@@ -1,4 +1,3 @@
-#include "ProgressBar.h"
 #include "SpellMgr.h"
 #include "ScriptedAI.h"
 #include "ScriptedInstance.h"

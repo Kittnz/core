@@ -24,7 +24,6 @@
 #include "World.h"
 #include "Database/DatabaseEnv.h"
 #include "DBCStores.h"
-#include "ProgressBar.h"
 #include "SpellMgr.h"
 
 void CharacterDatabaseCleaner::CleanDatabase()
@@ -61,11 +60,8 @@ void CharacterDatabaseCleaner::CheckUnique(const char* column, const char* table
 
     bool found = false;
     std::ostringstream ss;
-    BarGoLink bar(result->GetRowCount());
     do
     {
-        bar.step();
-
         Field *fields = result->Fetch();
 
         uint32 id = fields[0].GetUInt32();

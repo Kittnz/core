@@ -22,7 +22,6 @@
 #include "PoolManager.h"
 #include "ObjectMgr.h"
 #include "ObjectGuid.h"
-#include "ProgressBar.h"
 #include "Log.h"
 #include "MapPersistentStateMgr.h"
 #include "MapManager.h"
@@ -661,7 +660,6 @@ void PoolManager::LoadFromDB()
     QueryResult *result = WorldDatabase.PQuery("SELECT MAX(`entry`) FROM `pool_template` WHERE %u BETWEEN `patch_min` AND `patch_max`", sWorld.GetWowPatch());
     if (!result)
     {
-        
         return;
     }
     else
@@ -681,15 +679,9 @@ void PoolManager::LoadFromDB()
         return;
     }
 
-    uint32 count = 0;
-
-    BarGoLink bar(result->GetRowCount());
     do
     {
-        ++count;
         Field *fields = result->Fetch();
-
-        bar.step();
 
         uint16 pool_id = fields[0].GetUInt16();
 
@@ -703,7 +695,6 @@ void PoolManager::LoadFromDB()
 
     }
     while (result->NextRow());
-
     
     delete result;
 
@@ -720,23 +711,11 @@ void PoolManager::LoadFromDB()
             " SELECT `guid`, `pool_entry`, `chance`, `pool_creature_template`.`id`, `pool_creature_template`.`flags`, `pool_creature_template`.`patch_min`, `pool_creature_template`.`patch_max` "
             "FROM `pool_creature_template` LEFT JOIN `creature` ON `creature`.`id` = `pool_creature_template`.`id`;", sWorld.GetWowPatch());
 
-    count = 0;
-    if (!result)
+    if (result)
     {
-        BarGoLink bar2(1);
-        bar2.step();
-
-        
-    }
-    else
-    {
-
-        BarGoLink bar2(result->GetRowCount());
         do
         {
             Field *fields = result->Fetch();
-
-            bar2.step();
 
             uint32 guid    = fields[0].GetUInt32();
             uint16 pool_id = fields[1].GetUInt16();
@@ -773,8 +752,6 @@ void PoolManager::LoadFromDB()
 
             PoolTemplateData *pPoolTemplate = &mPoolTemplate[pool_id];
 
-            ++count;
-
             PoolObject plObject = PoolObject(guid, chance, flags);
             PoolGroup<Creature>& cregroup = mPoolCreatureGroups[pool_id];
             cregroup.SetPoolId(pool_id);
@@ -797,23 +774,11 @@ void PoolManager::LoadFromDB()
         "SELECT `guid`, `pool_entry`, `chance`, `pool_gameobject_template`.`id`, `pool_gameobject_template`.`flags`, `pool_gameobject_template`.`patch_min`, `pool_gameobject_template`.`patch_max` "
         "FROM `pool_gameobject_template` LEFT JOIN `gameobject` ON `gameobject`.`id` = `pool_gameobject_template`.`id`", sWorld.GetWowPatch());
 
-    count = 0;
-    if (!result)
+    if (result)
     {
-        BarGoLink bar2(1);
-        bar2.step();
-
-        
-    }
-    else
-    {
-
-        BarGoLink bar2(result->GetRowCount());
         do
         {
             Field *fields = result->Fetch();
-
-            bar2.step();
 
             uint32 guid    = fields[0].GetUInt32();
             uint16 pool_id = fields[1].GetUInt16();
@@ -858,8 +823,6 @@ void PoolManager::LoadFromDB()
 
             PoolTemplateData *pPoolTemplate = &mPoolTemplate[pool_id];
 
-            ++count;
-
             PoolObject plObject = PoolObject(guid, chance, flags);
             PoolGroup<GameObject>& gogroup = mPoolGameobjectGroups[pool_id];
             gogroup.SetPoolId(pool_id);
@@ -878,23 +841,11 @@ void PoolManager::LoadFromDB()
     //                                    1          2              3         4
     result = WorldDatabase.Query("SELECT `pool_id`, `mother_pool`, `chance`, `flags` FROM `pool_pool`");
 
-    count = 0;
-    if (!result)
+    if (result)
     {
-        BarGoLink bar2(1);
-        bar2.step();
-
-        
-    }
-    else
-    {
-
-        BarGoLink bar2(result->GetRowCount());
         do
         {
             Field *fields = result->Fetch();
-
-            bar2.step();
 
             uint16 child_pool_id  = fields[0].GetUInt16();
             uint16 mother_pool_id = fields[1].GetUInt16();
@@ -915,8 +866,6 @@ void PoolManager::LoadFromDB()
                 continue;
 
             PoolTemplateData *pPoolTemplateMother = &mPoolTemplate[mother_pool_id];
-
-            ++count;
 
             PoolObject plObject = PoolObject(child_pool_id, chance, flags);
             PoolGroup<Pool>& plgroup = mPoolPoolGroups[mother_pool_id];
@@ -944,7 +893,6 @@ void PoolManager::LoadFromDB()
                     {
                         mPoolPoolGroups[poolItr->second].RemoveOneRelation(poolItr->first);
                         mPoolSearchMap.erase(poolItr);
-                        --count;
                         break;
                     }
                 }
@@ -961,7 +909,6 @@ void PoolManager::LoadFromDB()
                     sLog.outErrorDb("%s", ss.str().c_str());
                     mPoolPoolGroups[poolItr->second].RemoveOneRelation(poolItr->first);
                     mPoolSearchMap.erase(poolItr);
-                    --count;
                     break;
                 }
             }

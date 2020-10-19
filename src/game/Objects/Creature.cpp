@@ -348,11 +348,8 @@ bool Creature::InitEntry(uint32 Entry, Team team, CreatureData const* data /*=NU
     }
 
     SetName(normalInfo->name);                              // at normal entry always
-#if SUPPORTED_CLIENT_BUILD >= CLIENT_BUILD_1_12_1
     SetFloatValue(UNIT_MOD_CAST_SPEED, 1.0f);
-#else
-    SetInt32Value(UNIT_MOD_CAST_SPEED, 0);
-#endif
+
     // update speed for the new CreatureInfo base speed mods
     UpdateSpeed(MOVE_WALK, false);
     UpdateSpeed(MOVE_RUN,  false);
@@ -1992,7 +1989,6 @@ bool Creature::IsImmuneToSpell(SpellEntry const *spellInfo, bool castOnSelf)
         if (spellInfo->IsFitToFamily<SPELLFAMILY_HUNTER, CF_HUNTER_SCORPID_STING>())
             return true;
 
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
         switch (spellInfo->Id)
         {
             case 67:              // Vindication
@@ -2000,7 +1996,6 @@ bool Creature::IsImmuneToSpell(SpellEntry const *spellInfo, bool castOnSelf)
             case 26018:
                 return true;
         }
-#endif
     }
 
     return Unit::IsImmuneToSpell(spellInfo, castOnSelf);
@@ -3911,12 +3906,9 @@ void Creature::SetFeatherFall(bool enable)
 {
     Unit::SetFeatherFall(enable);
 
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
     WorldPacket data(enable ? SMSG_SPLINE_MOVE_FEATHER_FALL : SMSG_SPLINE_MOVE_NORMAL_FALL);
-#else
-    WorldPacket data(enable ? SMSG_MOVE_FEATHER_FALL : SMSG_MOVE_NORMAL_FALL);
-#endif
     data << GetPackGUID();
+
     SendMessageToSet(&data, true);
 }
 
@@ -3924,13 +3916,8 @@ void Creature::SetHover(bool enable)
 {
     Unit::SetHover(enable);
 
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
     WorldPacket data(enable ? SMSG_SPLINE_MOVE_SET_HOVER : SMSG_SPLINE_MOVE_UNSET_HOVER, 9);
     data << GetPackGUID();
-#else
-    WorldPacket data(enable ? SMSG_MOVE_SET_HOVER : SMSG_MOVE_UNSET_HOVER, 9);
-    data << GetGUID();
-#endif
 
     SendMessageToSet(&data, false);
 }
@@ -3939,13 +3926,8 @@ void Creature::SetWaterWalk(bool enable)
 {
     Unit::SetWaterWalk(enable);
 
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
     WorldPacket data(enable ? SMSG_SPLINE_MOVE_WATER_WALK : SMSG_SPLINE_MOVE_LAND_WALK, 9);
     data << GetPackGUID();
-#else
-    WorldPacket data(enable ? SMSG_MOVE_WATER_WALK : SMSG_MOVE_LAND_WALK, 9);
-    data << GetGUID();
-#endif
 
     SendMessageToSet(&data, true);
 }

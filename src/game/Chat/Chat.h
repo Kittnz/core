@@ -185,17 +185,6 @@ class MANGOS_DLL_SPEC ChatHandler
         bool HandleUnstuckCommand(char* args);
         bool HandleGoldRemoval(char* args);
 
-        // Mmaps
-        bool HandleMmap(char* args);
-        bool HandleMmapConnection(char* args);
-        bool HandleMmapTestArea(char* args);
-        bool HandleMmapUnload(char *args);
-        bool HandleMmapLoad(char* args);
-        bool HandleMmapPathCommand(char* args);
-        bool HandleMmapLocCommand(char* args);
-        bool HandleMmapLoadedTilesCommand(char* args);
-        bool HandleMmapStatsCommand(char* args);
-
         // spell_disabled
         bool HandleReloadSpellDisabledCommand(char *args);
         // AutoBroadCast
@@ -229,15 +218,9 @@ class MANGOS_DLL_SPEC ChatHandler
         bool HandleBGStatusCommand(char *args);
         bool HandleBGStartCommand(char *args);
         bool HandleBGStopCommand(char *args);
-        bool HandleBGCustomCommand(char *args);
-        // Spell
-        bool HandleSpellEffectsCommand(char *args);
-        bool HandleSpellInfosCommand(char *args);
-        bool HandleSpellSearchCommand(char *args);
         // Other
         bool HandleFreezeCommand(char *args);
         bool HandleUnfreezeCommand(char *args);
-        bool HandleSpellIconFixCommand(char *args);
         bool HandleUnitStatCommand(char *args);
         // Reload        
         bool HandleReloadShopCommand(char* args);

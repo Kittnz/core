@@ -23,7 +23,6 @@
 #include "Database/DatabaseEnv.h"
 #include "GridDefines.h"
 #include "Policies/SingletonImp.h"
-#include "ProgressBar.h"
 #include "MapManager.h"
 #include "ObjectMgr.h"
 #include "ScriptMgr.h"
@@ -71,20 +70,12 @@ void WaypointManager::Load()
 
     QueryResult *result = WorldDatabase.Query("SELECT `id`, COUNT(`point`) FROM `creature_movement` GROUP BY `id`");
 
-    if (!result)
-    {
-        BarGoLink bar(1);
-        bar.step();
-        
-    }
-    else
+    if (result)
     {
         total_paths = (uint32)result->GetRowCount();
-        BarGoLink bar(total_paths);
 
         do
         {
-            bar.step();
             Field* fields = result->Fetch();
 
             // uint32 id    = fields[0].GetUInt32();
@@ -103,14 +94,12 @@ void WaypointManager::Load()
         //                             8          9          10         11         12         13       14       15             16        17
                                      "`textid1`, `textid2`, `textid3`, `textid4`, `textid5`, `emote`, `spell`, `orientation`, `model1`, `model2` FROM `creature_movement`");
 
-        BarGoLink barRow((int)result->GetRowCount());
 
         // error after load, we check if creature guid corresponding to the path id has proper MovementType
         std::set<uint32> creatureNoMoveType;
 
         do
         {
-            barRow.step();
             Field *fields = result->Fetch();
             uint32 id           = fields[0].GetUInt32();
             uint32 point        = fields[1].GetUInt32();
@@ -245,22 +234,14 @@ void WaypointManager::Load()
 
     result = WorldDatabase.Query("SELECT `entry`, COUNT(`point`) FROM `creature_movement_template` GROUP BY `entry`");
 
-    if (!result)
-    {
-        BarGoLink bar(1);
-        bar.step();
-        
-    }
-    else
+    if (result)
     {
         total_nodes = 0;
         total_behaviors = 0;
         total_paths = (uint32)result->GetRowCount();
-        BarGoLink barRow(total_paths);
 
         do
         {
-            barRow.step();
             Field* fields = result->Fetch();
 
             // uint32 entry = fields[0].GetUInt32();
@@ -279,11 +260,8 @@ void WaypointManager::Load()
         //                             8          9          10         11         12         13       14       15             16        17
                                      "`textid1`, `textid2`, `textid3`, `textid4`, `textid5`, `emote`, `spell`, `orientation`, `model1`, `model2` FROM `creature_movement_template`");
 
-        BarGoLink bar(result->GetRowCount());
-
         do
         {
-            bar.step();
             Field *fields = result->Fetch();
 
             uint32 entry        = fields[0].GetUInt32();
@@ -381,9 +359,6 @@ void WaypointManager::Load()
         while (result->NextRow());
 
         delete result;
-
-        
-        
     }
 
     // /////////////////////////////////////////////////////
@@ -392,22 +367,14 @@ void WaypointManager::Load()
 
     result = WorldDatabase.Query("SELECT `id`, COUNT(`point`) FROM `creature_movement_special` GROUP BY `id`");
 
-    if (!result)
-    {
-        BarGoLink bar(1);
-        bar.step();
-        
-    }
-    else
+    if (result)
     {
         total_nodes = 0;
         total_behaviors = 0;
         total_paths = (uint32)result->GetRowCount();
-        BarGoLink bar(total_paths);
 
         do
         {
-            bar.step();
             Field* fields = result->Fetch();
 
             // uint32 id    = fields[0].GetUInt32();
@@ -426,11 +393,8 @@ void WaypointManager::Load()
         //                             8          9          10         11         12         13       14       15             16        17
                                      "`textid1`, `textid2`, `textid3`, `textid4`, `textid5`, `emote`, `spell`, `orientation`, `model1`, `model2` FROM `creature_movement_special`");
 
-        BarGoLink barRow((int)result->GetRowCount());
-
         do
         {
-            barRow.step();
             Field *fields = result->Fetch();
             uint32 id           = fields[0].GetUInt32();
             uint32 point        = fields[1].GetUInt32();
@@ -518,9 +482,6 @@ void WaypointManager::Load()
                 node.behavior = nullptr;
         }
         while (result->NextRow());
-
-        
-        
 
         delete result;
     }

@@ -3656,8 +3656,7 @@ bool ChatHandler::HandleInstanceUnbindCommand(char* args)
         return false;
 
     Player* player = GetSelectedPlayer();
-    if (!player || GetAccessLevel() < SEC_BASIC_ADMIN)
-        player = m_session->GetPlayer();
+
     uint32 counter = 0;
     uint32 mapid = 0;
     bool got_map = false;

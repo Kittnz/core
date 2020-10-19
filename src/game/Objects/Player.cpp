@@ -707,11 +707,7 @@ bool Player::Create(uint32 guidlow, const std::string& name, uint8 race, uint8 c
     SetUInt32Value(UNIT_FIELD_FLAGS, UNIT_FLAG_PLAYER_CONTROLLED);
 
     // fix cast time showed in spell tooltip on client
-#if SUPPORTED_CLIENT_BUILD >= CLIENT_BUILD_1_12_1
     SetFloatValue(UNIT_MOD_CAST_SPEED, 1.0f);
-#else
-    SetInt32Value(UNIT_MOD_CAST_SPEED, 0);
-#endif
 
     SetInt32Value(PLAYER_FIELD_WATCHED_FACTION_INDEX, -1);  // -1 is default value
 
@@ -731,7 +727,7 @@ bool Player::Create(uint32 guidlow, const std::string& name, uint8 race, uint8 c
     SetUInt32Value(PLAYER_GUILD_TIMESTAMP, 0);
 
     // set starting level
-    if (GetSession()->GetSecurity() >= SEC_MODERATOR)
+    if (GetSession()->GetSecurity() >= SEC_GAMEMASTER)
         SetUInt32Value(UNIT_FIELD_LEVEL, sWorld.getConfig(CONFIG_UINT32_START_GM_LEVEL));
     else
         SetUInt32Value(UNIT_FIELD_LEVEL, sWorld.getConfig(CONFIG_UINT32_START_PLAYER_LEVEL));
@@ -1291,12 +1287,8 @@ void Player::Update(uint32 update_diff, uint32 p_time)
     // World of Warcraft Client Patch 1.11.0 (2006-06-20)
     // - Release timers have been be removed from instances. This includes 
     //   dungeons, battlegrounds, and raid instances.
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_10_2
     // not auto-free ghost from body in instances
     if (getDeathState() == CORPSE  && !GetMap()->Instanceable())
-#else
-    if (getDeathState() == CORPSE)
-#endif
     {
         if (p_time >= m_deathTimer)
         {
@@ -2991,11 +2983,7 @@ void Player::InitStatsForLevel(bool reapplyMods)
     UpdateSkillsForLevel();
 
     // set default cast time multiplier
-#if SUPPORTED_CLIENT_BUILD >= CLIENT_BUILD_1_12_1
     SetFloatValue(UNIT_MOD_CAST_SPEED, 1.0f);
-#else
-    SetInt32Value(UNIT_MOD_CAST_SPEED, 0);
-#endif
 
     // save base values (bonuses already included in stored stats)
     for (int i = STAT_STRENGTH; i < MAX_STATS; ++i)
@@ -3035,14 +3023,10 @@ void Player::InitStatsForLevel(bool reapplyMods)
 
     SetInt32Value(UNIT_FIELD_ATTACK_POWER,            0);
     SetInt32Value(UNIT_FIELD_ATTACK_POWER_MODS,       0);
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
     SetFloatValue(UNIT_FIELD_ATTACK_POWER_MULTIPLIER, 0.0f);
-#endif
     SetInt32Value(UNIT_FIELD_RANGED_ATTACK_POWER,     0);
     SetInt32Value(UNIT_FIELD_RANGED_ATTACK_POWER_MODS, 0);
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
     SetFloatValue(UNIT_FIELD_RANGED_ATTACK_POWER_MULTIPLIER, 0.0f);
-#endif
 
     // Base crit values (will be recalculated in UpdateAllStats() at loading and in _ApplyAllStatBonuses() at reset
     SetFloatValue(PLAYER_CRIT_PERCENTAGE, 0.0f);
@@ -4423,13 +4407,8 @@ void Player::SetFly(bool enable)
 void Player::SetWaterWalk(bool enable)
 {
     Unit::SetWaterWalk(enable);
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
     WorldPacket data(enable ? SMSG_MOVE_WATER_WALK : SMSG_MOVE_LAND_WALK, GetPackGUID().size() + 4);
     data << GetPackGUID();
-#else
-    WorldPacket data(enable ? SMSG_MOVE_WATER_WALK : SMSG_MOVE_LAND_WALK, 8 + 4);
-    data << GetGUID();
-#endif
     data << uint32(0);
     GetSession()->SendPacket(&data);
     GetCheatData()->OrderSent(&data);
@@ -4445,11 +4424,7 @@ void Player::SetFeatherFall(bool enable)
     else
         data.Initialize(SMSG_MOVE_NORMAL_FALL, 8 + 4);
 
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
     data << GetPackGUID();
-#else
-    data << GetGUID();
-#endif
     data << uint32(0);
     SendMessageToSet(&data, true);
     GetCheatData()->OrderSent(&data);
@@ -4469,11 +4444,7 @@ void Player::SetHover(bool enable)
     else
         data.Initialize(SMSG_MOVE_UNSET_HOVER, 8 + 4);
 
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
     data << GetPackGUID();
-#else
-    data << GetGUID();
-#endif
     data << uint32(0);
     SendMovementMessageToSet(std::move(data), true);
     GetCheatData()->OrderSent(&data);
@@ -5905,7 +5876,6 @@ void Player::UpdateSpellTrainedSkills(uint32 spellId, bool apply)
                             // - Two-Handed Axes/Maces (Enhancement Talent) - Skill levels gained 
                             //   with these two weapons will now be retained if you decide to unspend
                             //   this talent point and return to it later.
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_10_2
                             if (pSkill->categoryId == SKILL_CATEGORY_WEAPON)
                             {
                                 const auto savedValue = m_mForgottenSkills.find(pSkill->id);
@@ -5914,7 +5884,6 @@ void Player::UpdateSpellTrainedSkills(uint32 spellId, bool apply)
                                     if (savedValue->second <= GetSkillMaxForLevel())
                                         newSkillValue = savedValue->second;
                             }
-#endif
                             SetSkill(uint16(pSkill->id), newSkillValue, GetSkillMaxForLevel());
                             break;
                         }
@@ -5942,11 +5911,9 @@ void Player::UpdateSpellTrainedSkills(uint32 spellId, bool apply)
                     // - Two-Handed Axes/Maces (Enhancement Talent) - Skill levels gained 
                     //   with these two weapons will now be retained if you decide to unspend
                     //   this talent point and return to it later.
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_10_2
                     if (pSkill->categoryId == SKILL_CATEGORY_WEAPON)
                         if (GetSkillValuePure(pSkill->id) > m_mForgottenSkills[pSkill->id])
                             m_mForgottenSkills[pSkill->id] = GetSkillValuePure(pSkill->id);
-#endif
 
                     SetSkill(uint16(pSkill->id), 0, 0);
 
@@ -10367,17 +10334,14 @@ Item* Player::EquipItem(uint16 pos, Item *pItem, bool update)
             // - Switching weapons in combat triggers a 1 second global cooldown for
             //   all abilities for rogues and a 1.5 second global cooldown for
             //   everyone else.
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_6_1
             // Weapons and also Totem/Relic/Sigil/etc
             if (pProto && isInCombat() && (pProto->Class == ITEM_CLASS_WEAPON || pProto->InventoryType == INVTYPE_RELIC) && m_weaponChangeTimer == 0)
             {
                 uint32 cooldownSpell = SPELL_ID_WEAPON_SWITCH_COOLDOWN_1_5s;
 
                 // There doesn't appear to be a 1 sec combat swap cd spell before 1.9.
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
                 if (getClass() == CLASS_ROGUE)
                     cooldownSpell = SPELL_ID_WEAPON_SWITCH_COOLDOWN_1_0s;
-#endif
 
                 SpellEntry const* spellProto = sSpellMgr.GetSpellEntry(cooldownSpell);
 
@@ -10385,15 +10349,10 @@ Item* Player::EquipItem(uint16 pos, Item *pItem, bool update)
                     sLog.outError("Weapon switch cooldown spell %u couldn't be found in Spell.dbc", cooldownSpell);
                 else
                 {
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
                     m_weaponChangeTimer = spellProto->StartRecoveryTime;
-#else
-                    m_weaponChangeTimer = (getClass() == CLASS_ROGUE) ? 1000 : spellProto->StartRecoveryTime;
-#endif
                     SendSpellCooldown(cooldownSpell, 0, GetObjectGuid());
                 }
             }
-#endif
         }
 
         if (IsInWorld() && update)
@@ -11906,9 +11865,7 @@ void Player::SendNewItem(Item *item, uint32 count, bool received, bool created, 
     data << uint32(showInChat);                             // showInChat
     data << uint8(item->GetBagSlot());                      // bagslot
     // item slot, but when added to stack: 0xFFFFFFFF
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_10_2
     data << uint32((item->GetCount() == count) ? item->GetSlot() : -1);
-#endif
     data << uint32(item->GetEntry());                       // item id
     data << uint32(item->GetItemSuffixFactor());            // SuffixFactor
     data << uint32(item->GetItemRandomPropertyId());        // random item property id
@@ -14105,10 +14062,6 @@ void Player::LogModifyMoney(int32 d, const char* type, ObjectGuid fromGuid, uint
     if (uint32(abs(d)) > sWorld.getConfig(CONFIG_UINT32_LOG_MONEY_TRADES_TRESHOLD) || GetSession()->GetSecurity() > SEC_PLAYER)
     {
         sLog.out(LOG_MONEY_TRADES, "[%s] %s gets %ic (data: %u|%s)", type, GetShortDescription().c_str(), d, data, fromGuid.GetString().c_str());
-        if (d > 0)
-            sWorld.LogMoneyTrade(fromGuid, GetObjectGuid(), d, type, data);
-        else
-            sWorld.LogMoneyTrade(GetObjectGuid(), fromGuid, -d, type, data);
     }
     ModifyMoney(d);
 }
@@ -14838,9 +14791,7 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
     // load skills after InitStatsForLevel because it triggering aura apply also
     _LoadSkills(holder->GetResult(PLAYER_LOGIN_QUERY_LOADSKILLS));
 
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_10_2
     _LoadForgottenSkills(holder->GetResult(PLAYER_LOGIN_QUERY_FORGOTTEN_SKILLS));
-#endif
 
     // apply original stats mods before spell loading or item equipment that call before equip _RemoveStatsMods()
 
@@ -15859,7 +15810,6 @@ void Player::SendRaidInfo() const
 */
 void Player::SendSavedInstances() const
 {
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
     bool hasBeenSaved = false;
     WorldPacket data;
 
@@ -15889,7 +15839,6 @@ void Player::SendSavedInstances() const
             GetSession()->SendPacket(&data);
         }
     }
-#endif
 }
 
 /// convert the player's binds to the group
@@ -16575,8 +16524,6 @@ void Player::_SaveSkills()
         ++itr;
     }
 
-    
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_10_2
     // Forgotten weapon skills.
     static SqlStatementID forSkills;
 
@@ -16588,7 +16535,6 @@ void Player::_SaveSkills()
             stmt.PExecute(GetGUIDLow(), itr.first, itr.second);
         }
     }
-#endif
 }
 
 void Player::_SaveSpells()
@@ -16760,12 +16706,10 @@ void Player::SendExplorationExperience(uint32 Area, uint32 Experience) const
 
 void Player::SendFactionAtWar(uint32 reputationId, bool apply) const
 {
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
     WorldPacket data(SMSG_SET_FACTION_ATWAR, 4 + 1);
     data << uint32(reputationId);
     data << uint8(apply ? FACTION_FLAG_AT_WAR : 0);
     GetSession()->SendPacket(&data);
-#endif
 }
 
 void Player::SendResetFailedNotify()
@@ -16818,22 +16762,18 @@ void Player::ResetInstances(InstanceResetMethod method)
 
 void Player::SendResetInstanceSuccess(uint32 MapId) const
 {
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
     WorldPacket data(SMSG_INSTANCE_RESET, 4);
     data << uint32(MapId);
     GetSession()->SendPacket(&data);
-#endif
 }
 
 void Player::SendResetInstanceFailed(uint32 reason, uint32 MapId) const
 {
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
     // reason: see enum InstanceResetFailReason
     WorldPacket data(SMSG_INSTANCE_RESET_FAILED, 8);
     data << uint32(reason);
     data << uint32(MapId);
     GetSession()->SendPacket(&data);
-#endif
 }
 
 /** Implementation of hourly maximum instances per account */
@@ -18638,11 +18578,7 @@ void Player::SendInitialPacketsAfterAddToMap(bool login)
     if (HasAuraType(SPELL_AURA_MOD_ROOT))
     {
         WorldPacket data2(SMSG_FORCE_MOVE_ROOT, 10);
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
         data2 << GetPackGUID();
-#else
-        data2 << GetGUID();
-#endif
         data2 << (uint32)2;
         SendObjectMessageToSet(&data2, true);
         GetCheatData()->OrderSent(&data2);
@@ -18674,7 +18610,6 @@ void Player::SendTransferAborted(uint8 reason) const
 
 void Player::SendInstanceResetWarning(uint32 mapid, uint32 _time) const
 {
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
     // type of warning, based on the time remaining until reset
     uint32 type;
     if (_time > 3600)
@@ -18690,7 +18625,6 @@ void Player::SendInstanceResetWarning(uint32 mapid, uint32 _time) const
     data << uint32(mapid);
     data << uint32(_time);
     GetSession()->SendPacket(&data);
-#endif
 }
 
 void Player::ApplyEquipCooldown(Item * pItem)
@@ -19566,12 +19500,10 @@ void Player::ResurectUsingRequestData()
 
 void Player::SetClientControl(Unit* target, uint8 allowMove)
 {
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
     WorldPacket data(SMSG_CLIENT_CONTROL_UPDATE, target->GetPackGUID().size() + 1);
     data << target->GetPackGUID();
     data << uint8(allowMove);
     GetSession()->SendPacket(&data);
-#endif
 }
 
 bool Player::IsMoverOf(Object const* pObject) const
@@ -20073,7 +20005,6 @@ void Player::_LoadSkills(QueryResult *result)
     }
 }
 
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_10_2
 void Player::_LoadForgottenSkills(QueryResult *result)
 {
     //                                                                 0      1
@@ -20106,7 +20037,6 @@ void Player::_LoadForgottenSkills(QueryResult *result)
         while (result->NextRow());
     }
 }
-#endif
 
 void Player::LoadSkillsFromFields()
 {
@@ -20448,14 +20378,8 @@ void Player::BuildTeleportAckMsg(WorldPacket& data, float x, float y, float z, f
     mi.UpdateTime(WorldTimer::getMSTime());
     mi.ChangePosition(x, y, z, ang);
     data.Initialize(MSG_MOVE_TELEPORT_ACK, 41);
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
     data << GetPackGUID();
-#else
-    data << GetGUID();
-#endif
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_9_4
     data << uint32(0);                                      // this value increments every time
-#endif
     data << mi;
 }
 
@@ -21161,11 +21085,7 @@ void Player::RefreshBitsForVisibleUnits(UpdateMask* mask, uint32 objectTypeMask)
             ByteBuffer buff(50);
 
             buff << uint8(UPDATETYPE_VALUES);
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
             buff << obj->GetPackGUID();
-#else
-            buff << obj->GetGUID();
-#endif
             obj->BuildValuesUpdate(UPDATETYPE_VALUES, &buff, mask, this);
             data.AddUpdateBlock(buff);
         }

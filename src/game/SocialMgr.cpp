@@ -256,9 +256,7 @@ void SocialMgr::SendFriendStatus(MasterPlayer *player, FriendsResult result, Obj
     {
         case FRIEND_ADDED_ONLINE:
         case FRIEND_ONLINE:
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
             data << uint8(fi.Status);
-#endif
             data << uint32(fi.Area);
             data << uint32(fi.Level);
             data << uint32(fi.Class);

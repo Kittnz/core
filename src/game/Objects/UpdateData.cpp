@@ -144,13 +144,8 @@ bool UpdateData::BuildPacket(WorldPacket *packet, UpdatePacket const* updPacket,
         buf << (uint8) UPDATETYPE_OUT_OF_RANGE_OBJECTS;
         buf << (uint32) m_outOfRangeGUIDs.size();
 
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
         for (ObjectGuidSet::const_iterator i = m_outOfRangeGUIDs.begin(); i != m_outOfRangeGUIDs.end(); ++i)
             buf << i->WriteAsPacked();
-#else
-        for (ObjectGuidSet::const_iterator i = m_outOfRangeGUIDs.begin(); i != m_outOfRangeGUIDs.end(); ++i)
-            buf << *i;
-#endif
     }
 
     if (updPacket)
@@ -236,7 +231,6 @@ void MovementData::AddPacket(WorldPacket& data)
     _buffer.append(data.contents(), data.wpos());
 }
 
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
 bool MovementData::BuildPacket(WorldPacket& packet)
 {
     MANGOS_ASSERT(packet.empty()); // We want a clean packet !
@@ -257,4 +251,3 @@ bool MovementData::BuildPacket(WorldPacket& packet)
     packet.SetOpcode(SMSG_COMPRESSED_MOVES);
     return true;
 }
-#endif

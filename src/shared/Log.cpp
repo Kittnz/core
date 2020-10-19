@@ -25,7 +25,6 @@
 #include "Config/Config.h"
 #include "Util.h"
 #include "ByteBuffer.h"
-#include "ProgressBar.h"
 
 #include <stdarg.h>
 #include <fstream>
@@ -917,10 +916,8 @@ void Log::WaitBeforeContinueIfNeed()
     else if (mode > 0)
     {
         printf("\nWait %d secs for continue.\n",mode);
-        BarGoLink bar(mode);
         for(int i = 0; i < mode; ++i)
         {
-            bar.step();
             ACE_OS::sleep(1);
         }
     }

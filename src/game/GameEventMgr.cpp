@@ -26,7 +26,6 @@
 #include "Creature.h"
 #include "Object.h"
 #include "PoolManager.h"
-#include "ProgressBar.h"
 #include "Language.h"
 #include "Log.h"
 #include "MapManager.h"
@@ -193,16 +192,10 @@ void GameEventMgr::LoadFromDB()
         return;
     }
 
-    uint32 count = 0;
-
     {
-        BarGoLink bar(result->GetRowCount());
         do
         {
-            ++count;
             Field *fields = result->Fetch();
-
-            bar.step();
 
             uint16 event_id = fields[0].GetUInt16();
             if (event_id == 0)
@@ -258,8 +251,6 @@ void GameEventMgr::LoadFromDB()
         }
         while (result->NextRow());
         delete result;
-
-        
     }
 
     // initialize hardcoded events
@@ -277,23 +268,11 @@ void GameEventMgr::LoadFromDB()
     result = WorldDatabase.Query("SELECT creature.guid, game_event_creature.event "
                                  "FROM creature JOIN game_event_creature ON creature.guid = game_event_creature.guid");
 
-    count = 0;
-    if (!result)
+    if (result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        
-    }
-    else
-    {
-
-        BarGoLink bar(result->GetRowCount());
         do
         {
             Field *fields = result->Fetch();
-
-            bar.step();
 
             uint32 guid    = fields[0].GetUInt32();
             int16 event_id = fields[1].GetInt16();
@@ -311,8 +290,6 @@ void GameEventMgr::LoadFromDB()
             }
 
             int32 internal_event_id = mGameEvent.size() + event_id - 1;
-
-            ++count;
 
             // spawn objects at event can be grouped in pools and then affected pools have stricter requirements for this case
             if (event_id > 0)
@@ -345,8 +322,6 @@ void GameEventMgr::LoadFromDB()
         }
         while (result->NextRow());
         delete result;
-
-        
     }
 
     mGameEventGameobjectGuids.resize(mGameEvent.size() * 2 - 1);
@@ -354,23 +329,11 @@ void GameEventMgr::LoadFromDB()
     result = WorldDatabase.Query("SELECT gameobject.guid, game_event_gameobject.event "
                                  "FROM gameobject JOIN game_event_gameobject ON gameobject.guid=game_event_gameobject.guid");
 
-    count = 0;
-    if (!result)
+    if (result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        
-    }
-    else
-    {
-
-        BarGoLink bar(result->GetRowCount());
         do
         {
             Field *fields = result->Fetch();
-
-            bar.step();
 
             uint32 guid    = fields[0].GetUInt32();
             int16 event_id = fields[1].GetInt16();
@@ -388,8 +351,6 @@ void GameEventMgr::LoadFromDB()
             }
 
             int32 internal_event_id = mGameEvent.size() + event_id - 1;
-
-            ++count;
 
             // spawn objects at event can be grouped in pools and then affected pools have stricter requirements for this case
             if (event_id > 0)
@@ -422,8 +383,6 @@ void GameEventMgr::LoadFromDB()
         }
         while (result->NextRow());
         delete result;
-
-        
     }
 
     // now recheck that all eventPools linked with events after our skip pools with parents
@@ -444,23 +403,12 @@ void GameEventMgr::LoadFromDB()
                                  "game_event_creature_data.spell_start, game_event_creature_data.spell_end "
                                  "FROM creature JOIN game_event_creature_data ON creature.guid=game_event_creature_data.guid");
 
-    count = 0;
-    if (!result)
+    if (result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        
-    }
-    else
-    {
-
-        BarGoLink bar(result->GetRowCount());
         do
         {
             Field *fields = result->Fetch();
 
-            bar.step();
             uint32 guid     = fields[0].GetUInt32();
             uint16 event_id = fields[1].GetUInt16();
 
@@ -476,7 +424,6 @@ void GameEventMgr::LoadFromDB()
                 continue;
             }
 
-            ++count;
             GameEventCreatureDataList& equiplist = mGameEventCreatureData[event_id];
             GameEventCreatureData newData;
             newData.modelid = fields[2].GetUInt32();
@@ -526,23 +473,12 @@ void GameEventMgr::LoadFromDB()
 
     result = WorldDatabase.PQuery("SELECT quest, event FROM game_event_quest WHERE patch_min <= %u", sWorld.GetWowPatch());
 
-    count = 0;
-    if (!result)
+    if (result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-        
-    }
-    else
-    {
-
-        BarGoLink bar(result->GetRowCount());
         do
         {
             Field *fields = result->Fetch();
 
-            bar.step();
             uint32 quest    = fields[0].GetUInt32();
             uint16 event_id = fields[1].GetUInt16();
 
@@ -569,39 +505,24 @@ void GameEventMgr::LoadFromDB()
             // disable any event specific quest (for cases where creature is spawned, but event not active).
             const_cast<Quest*>(pQuest)->SetQuestActiveState(false);
 
-            ++count;
-
             QuestList& questlist = mGameEventQuests[event_id];
             questlist.push_back(quest);
 
         }
         while (result->NextRow());
         delete result;
-
-        
     }
 
     mGameEventMails.resize(mGameEvent.size() * 2 - 1);
 
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_9_4
     result = WorldDatabase.Query("SELECT event, raceMask, quest, mailTemplateId, senderEntry FROM game_event_mail");
 
-    count = 0;
-    if (!result)
+    if (result)
     {
-        BarGoLink bar(1);
-        bar.step();
-
-    }
-    else
-    {
-
-        BarGoLink bar(result->GetRowCount());
         do
         {
             Field *fields = result->Fetch();
 
-            bar.step();
             uint16 event_id = fields[0].GetUInt16();
 
             GameEventMail mail;
@@ -648,18 +569,13 @@ void GameEventMgr::LoadFromDB()
                 continue;
             }
 
-            ++count;
-
             MailList& maillist = mGameEventMails[internal_event_id];
             maillist.push_back(mail);
 
         }
         while (result->NextRow());
         delete result;
-
-        
     }
-#endif
 }
 
 uint32 GameEventMgr::Initialize()                           // return the next event delay in ms

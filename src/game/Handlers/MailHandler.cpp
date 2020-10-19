@@ -354,22 +354,6 @@ void WorldSession::HandleSendMailCallback(WorldSession::AsyncMailSendRequest* re
 
     MailDraft draft(req->subject, req->body);
 
-    if (!req->COD && (req->money || item))
-    {
-        PlayerTransactionData data;
-        data.type = "Mail";
-        data.parts[0].lowGuid = pl->GetGUIDLow();
-        if (item)
-        {
-            data.parts[0].itemsEntries[0] = item->GetEntry();
-            data.parts[0].itemsCount[0] = item->GetCount();
-            data.parts[0].itemsGuid[0] = item->GetGUIDLow();
-        }
-        data.parts[0].money = req->money;
-        data.parts[1].lowGuid = req->receiver.GetCounter();
-        sWorld.LogTransaction(data);
-    }
-
     if (req->itemGuid || req->money > 0)
     {
         if (item)
@@ -622,20 +606,6 @@ void WorldSession::HandleMailTakeItem(WorldPacket & recv_data)
         {
             ObjectGuid sender_guid = ObjectGuid(HIGHGUID_PLAYER, m->sender);
             Player *sender = sObjectMgr.GetPlayer(sender_guid);
-
-            // Transaction log
-            PlayerTransactionData data;
-            data.type = "MailCOD";
-            data.parts[0].lowGuid = sender_guid.GetCounter();
-            if (it)
-            {
-                data.parts[0].itemsEntries[0] = it->GetEntry();
-                data.parts[0].itemsCount[0] = it->GetCount();
-                data.parts[0].itemsGuid[0] = it->GetGUIDLow();
-            }
-            data.parts[1].lowGuid = _player->GetGUIDLow();
-            data.parts[1].money = m->COD;
-            sWorld.LogTransaction(data);
 
             uint32 sender_accId = 0;
 
