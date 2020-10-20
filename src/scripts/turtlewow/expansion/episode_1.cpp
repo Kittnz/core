@@ -223,6 +223,9 @@ bool GOSelect_go_fm_acquisition(Player* pPlayer, GameObject* pGo, uint32 sender,
         pPlayer->TeleportTo(1, 560.20F, -4576.21F, 142.0F, 4.08F);
         pPlayer->m_Events.AddEvent(new DemorphAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(15000));
         pPlayer->CastSpell(pPlayer, 130, true);
+
+        if (pPlayer->HasItemCount(6948, 1, 0))
+            pPlayer->RemoveItemCurrency(6948, 1);
     }   
     return true;
 }

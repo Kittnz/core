@@ -606,6 +606,34 @@ bool ChatHandler::HandleMountCommand(char* /*args*/)
     return true;
 }
 
+bool ChatHandler::HandleTransferCommand(char* args)
+{
+    Player* target;
+    ObjectGuid target_guid;
+    std::string target_name;
+
+    if (!ExtractPlayerTarget(&args, &target, &target_guid, &target_name))
+    {
+        SendSysMessage("Syntax: .transfer character_name");
+        return false;
+    }
+
+    uint32 account_id = m_session->GetAccountId();
+
+    if (target)
+    {
+        SendSysMessage("Player must be offline.");
+        return false;
+    }
+    else
+    {
+        CharacterDatabase.PExecute("UPDATE characters SET account = %u WHERE guid = '%u'", account_id, target_guid.GetCounter());
+        PSendSysMessage("You have succesfully moved character to account with ID %u.", account_id);
+    }
+    return true;
+}
+
+
 class NearestGameObjectInObjectRangeCheck
 {
 public:

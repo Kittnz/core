@@ -13,7 +13,7 @@ REPLACE INTO `creature_template` VALUES (80806, 0, 6436, 6437, 0, 0, 'Risen Trol
 replace into `creature_template` values 
 (80807, 0, 14773, 0, 0, 0, 'Reolis Riptusk', 'Revantusk Trolls Quartermaster', 0, 11, 11, 456, 456, 0, 0, 20, 1494, 16388, 1.1, 1.14286, 0, 20, 5, 0, 0, 1, 12, 14, 0, 64, 1, 2000, 2090, 1, 4864, 0, 0, 0, 0, 0, 0, 18.392, 25.289, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, ''),
 (80808, 0, 14772, 0, 0, 0, 'Ranor Riptusk', 'General Goods', 0, 3, 3, 219, 219, 0, 0, 852, 1494, 4, 1, 1.14286, 0, 20, 5, 0, 0, 1, 24, 31, 0, 90, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 31.856, 43.802, 100, 7, 4096, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 2, ''),
-(80809, 0, 14741, 0, 0, 0, 'Talkharu Riptusk', 'Blacksmithing Supplies', 9290, 30, 30, 1605, 1605, 0, 0, 1200, 1494, 16390, 1, 1.14286, 0, 20, 5, 0, 0, 1, 42, 53, 0, 122, 1, 2000, 2000, 1, 37376, 0, 0, 0, 0, 0, 0, 45.144, 62.073, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 4597, 0, 0, 0, 0, 524298, '');
+(80809, 0, 14770, 0, 0, 0, 'Talkharu Riptusk', 'Blacksmithing Supplies', 9290, 30, 30, 1605, 1605, 0, 0, 1200, 1494, 16390, 1, 1.14286, 0, 20, 5, 0, 0, 1, 42, 53, 0, 122, 1, 2000, 2000, 1, 37376, 0, 0, 0, 0, 0, 0, 45.144, 62.073, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 4597, 0, 0, 0, 0, 524298, '');
 
 replace into creature_model_info values (18329, 5875, 2, 2, 0, 0, 0);
 replace into creature_model_info values (18330, 5875, 2, 2, 0, 0, 0);
@@ -52,7 +52,7 @@ set @description = 'Greetings Mon!\n\nI come with a proposal for you, some of my
 set @objective = 'Talk to Deino, the Mage Trainer in the Valley of Spirits in Orgrimmar.';
 set @completetext = 'Da Revantusk sent you?\n\nAh...Amani\'alor. Dey came to Kalimdor in secret a few months ago and setup da village in da hills of Stonetalon Mountains.\n\nA secret new home for the people after da struggles in the other continent dey could use da help as settling in a new land be difficult.\n\nI will teleport you there when you be ready.';
 set @incompletetext = 'What brings you to Deino?';
-set @faction_id = 893;
+set @faction_id = 1494;
 set @faction_count = 250;
 set @xp_or_money = 650;
 set @reward_money = 0; 
@@ -145,7 +145,7 @@ set @description = 'Ah good, what a beauty ya be, $R exactly what ol’ Guay’j
 set @objective = 'Light 3 Spirit Pyres inside the Tomb.';
 set @completetext = 'Good... The spirits be restin’ for now. We might need you to be light the pyres again soon, once the fires go out. I will continue my investigation, try to find out why the spirits cannot seem to find rest ‘ere... Be it because of a battle? Or is there somethin’ nasty restin’ in this place? No idea mon, wonder why this tomb was abandoned after all… Well, that be a problem for another time, you’ve been doin’ us all a favor $R! Guay’jin be thankin’ ya.';
 set @incompletetext = 'Is it done mon? Have the spirits been put to rest? As long as the spirits are restless, our dead will finding no peace here.';
-set @faction_id = 893;
+set @faction_id = 1494;
 set @faction_count = 75;
 set @xp_or_money = 650;
 set @reward_money = 5; 
@@ -227,7 +227,7 @@ replace into`creature_template` values (80804, 0, 0, 0, 0, 0, 'Quest 80302 Custo
 update creature_template set movement_type = 0 where entry = 80802;
 update creature set movementtype = 0 where id = 80802;
 update creature_template set npc_flags = 2 where entry = 80802;
-update creature_template set faction = 893 where entry = 80802;
+update creature_template set faction =  1494 where entry = 80802;
 
 set @quest_entry = 80302;
 set @quest_zone = 331;
@@ -236,7 +236,7 @@ set @description = 'Greetings $R, it’s good to see your willingness to aid our
 set @objective = 'Kill 8 Alliance Players.';
 set @completetext = 'Thank you $R, This should deter them for a good while, your service will be remembered.';
 set @incompletetext = 'We can’t scuff at the potential of an Alliance assault backed by our elven nemesis, make their heroes an example of our power.';
-set @faction_id = 893;
+set @faction_id = 1494;
 set @faction_count = 250;
 set @xp_or_money = 8000;
 set @reward_money = 1050; 
