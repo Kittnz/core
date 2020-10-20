@@ -93,10 +93,13 @@ update creature_template set display_id1 = 18209 where entry = 1752;
 
 update gameobject set id = 2003390 where id = 165738 and guid > 4004321;
 
--- Mostlikely fix for faction only quests (include new races):
+-- Fix for faction only quests and items (include new races):
 
 UPDATE quest_template SET requiredraces = requiredraces + 512 WHERE requiredraces = 77;	
 UPDATE quest_template SET requiredraces = requiredraces + 256 WHERE requiredraces = 178;	
+
+UPDATE item_template SET allowable_race = allowable_race + 512 WHERE allowable_race = 77;	
+UPDATE item_template SET allowable_race = allowable_race + 256 WHERE allowable_race = 178;	
 
 -- New tabards:
 

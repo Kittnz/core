@@ -429,7 +429,7 @@ set @questgiver_id = 80232;
 set @quest_finisher = 80232;
 set @nextquest = 0;
 set @nextquestinchain = 0;
-set @prevquest = 80253;
+set @prevquest = 80256;
 set @RewChoiceItemId1 = 0; 
 set @RewChoiceItemId2 = 0; 
 set @RewChoiceItemId3 = 0;
@@ -864,6 +864,9 @@ update creature_template set gossip_menu_id = @gossip_menu_id where entry = @mag
 update creature_template set faction = 371 where entry in (80243,80244,80245,80246,80247,80248);
 
 -- Tears of the Poppy
+
+delete from creature_questrelation where quest = 80258;
+delete from creature_involvedrelation where quest = 80258;
 
 REPLACE INTO `creature_template` VALUES (80249, 0, 18331, 0, 0, 0, 'Ralonius Sundew', 'Herbalist', 4660, 50, 50, 3517, 3517, 2103, 2103, 2344, 12, 19, 1, 1.14286, 0, 20, 5, 0, 0, 1, 85, 109, 0, 226, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 8, 0, 66.44, 91.355, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 5498, 0, 0, 0, 0, 524298, '');
 update creature_template set npc_flags = 2 where entry = 80249;
