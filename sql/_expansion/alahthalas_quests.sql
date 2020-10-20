@@ -970,6 +970,13 @@ nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
 specialflags = 1
 where entry = @quest_entry;	
 
+-- Misc. NPCs:
+
+replace into `creature_template` values 
+(80266, 0, 16833, 0, 0, 0, 'Soalara Dawnstar', 'Silvermoon Remnant Quartermaster', 0, 11, 11, 456, 456, 0, 0, 20, 371, 16388, 1.1, 1.14286, 0, 20, 5, 0, 0, 1, 12, 14, 0, 64, 1, 2000, 2090, 1, 4864, 0, 0, 0, 0, 0, 0, 18.392, 25.289, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, ''),
+(80267, 0, 16746, 0, 0, 0, 'Torial Dawnrise ', 'General Goods', 0, 3, 3, 219, 219, 0, 0, 852, 371, 4, 1, 1.14286, 0, 20, 5, 0, 0, 1, 24, 31, 0, 90, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 31.856, 43.802, 100, 7, 4096, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 2, ''),
+(80268, 0, 16761 , 0, 0, 0, 'Melkolar Dawnrise', 'Blacksmithing & Mining Supplies', 9290, 30, 30, 1605, 1605, 0, 0, 1200, 371, 16390, 1, 1.14286, 0, 20, 5, 0, 0, 1, 42, 53, 0, 122, 1, 2000, 2000, 1, 37376, 0, 0, 0, 0, 0, 0, 45.144, 62.073, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 4597, 0, 0, 0, 0, 524298, '');
+
 update creature_template set unit_class = 4, level_min = 60, level_max = 60, health_min = 21426, health_max = 21426, mana_min = 0, mana_max = 0, rank = 1, dmg_min = 182, dmg_max = 430, base_attack_time = 1800, attack_power = 200, ranged_attack_power = 100, regeneration = 3, armor = 3621 where entry = 80248;
 update creature_template set unit_class = 1, level_min = 60, level_max = 60, health_min = 29322, health_max = 29322, mana_min = 0, mana_max = 0, rank = 1, dmg_min = 348, dmg_max = 543, base_attack_time = 2200, attack_power = 200, ranged_attack_power = 100, regeneration = 3, armor = 3821 where entry = 80247;
 update creature_template set unit_class = 8, level_min = 60, level_max = 60, health_min = 14611, health_max = 14611, mana_min = 12347, mana_max = 12347, rank = 1, dmg_min = 67, dmg_max = 123, base_attack_time = 2600, attack_power = 200, ranged_attack_power = 100, regeneration = 3, armor = 1621 where entry = 80245;
