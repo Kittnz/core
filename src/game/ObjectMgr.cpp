@@ -8324,15 +8324,12 @@ GameTele const* ObjectMgr::GetGameTele(const std::string& name) const
 
     // Alternative first GameTele what contains wnameLow as substring in case no GameTele location found
     const GameTele* alt = nullptr;
-	for (const std::pair<uint32, GameTele>& itr : m_GameTeleMap)
-	{
-		if (itr.second.wnameLow == wname)
-		{
-			return &(*m_GameTeleMap.find(itr.first)).second;
-		}
-        else if (alt == nullptr && itr.second.wnameLow.find(wname) != std::wstring::npos)
-            alt = &itr.second;
-	}
+
+    for (GameTeleMap::const_iterator itr = m_GameTeleMap.begin(); itr != m_GameTeleMap.end(); ++itr)
+        if (itr->second.wnameLow == wname)
+            return &itr->second;
+        else if (alt == nullptr && itr->second.wnameLow.find(wname) != std::wstring::npos)
+            alt = &itr->second;
 
     return alt;
 }
