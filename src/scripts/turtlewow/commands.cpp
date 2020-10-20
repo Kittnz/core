@@ -612,8 +612,8 @@ bool ChatHandler::HandleTransferCommand(char* args)
     if (!args || !*args)
         return false;
 
-    char* rawPlName = ExtractQuotedArg(&args);
-    char* rawAccountName = ExtractQuotedArg(&args);
+    char* rawPlName = ExtractArg(&args);
+    char* rawAccountName = ExtractArg(&args);
     if (!rawPlName || !rawAccountName)
     {
         SendSysMessage("Syntax: .transfer player_name account_name");
