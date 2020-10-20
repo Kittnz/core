@@ -1,3 +1,7 @@
+// Giperion April 2020
+// [EUREKA] 4.2
+// Turtle Server Project
+
 #include <windows.h>
 #include <filesystem>
 #include <assert.h>
@@ -7,66 +11,72 @@
 
 #define fs std::filesystem
 
-#define NEW_BUILD 5877u
+//#TODO: Read from config blob at the end of the file
+#define NEW_BUILD 5878u
+#define NEW_VISUAL_BUILD "5878"
+#define NEW_VISUAL_VERSION "1.14.0"
+#define NEW_BUILD_DATE "Oct 20 2020"
+
 #define PATCH_FILE "Data\\patch-T.mpq"
 
-char* PatchVersionOffsets[] = {
-//(char*)0x00003CAD,
-//(char*)0x001567CD,
-//(char*)0x001573B1,
-//(char*)0x00157785,
-//(char*)0x0015827D,
-//(char*)0x00158EA1,
-//(char*)0x00159275, 
-//(char*)0x00159D0D, 
-//(char*)0x0015A8A1,
-//(char*)0x0015AC75,
-//(char*)0x0015B74D,
-//(char*)0x0015C371,
-//(char*)0x0015C755,
-//(char*)0x0015D21D,
-//(char*)0x0015DE71,
-//(char*)0x0015E255,
-//(char*)0x0015ED6D,
-//(char*)0x0015FB69,
-//(char*)0x0015FF95,
-//(char*)0x00160B1D,
-//(char*)0x00161771,
-//(char*)0x00161B55,
-//(char*)0x0016272D,
-//(char*)0x00163531,
-//(char*)0x00163915,
-//(char*)0x0016441D,
-//(char*)0x00165071,
-//(char*)0x00165455,
-//(char*)0x00165F6D,
-//(char*)0x00166B31,
-//(char*)0x00166F05,
-//(char*)0x00167A7D,
-//(char*)0x00168781,
-//(char*)0x00168B65,
-//(char*)0x0016966D,
-//(char*)0x0016A2C1,
-//(char*)0x0016A6A5,
-//(char*)0x0016B13D,
-//(char*)0x0016BF60, // START
-//(char*)0x0016C425,
-(char*)0x001B2122, // That's it
-//(char*)0x001B408D, // END
-};
+// 2 bytes. Original value: unsigned short "5875"
+#define OFFSET_NET_VERSION 0x001B2122
+
+// string. Original value: "1.12.1"
+#define OFFSET_VISUAL_VERSION 0x00437C04
+
+// string. Original value: "5875"
+#define OFFSET_VISUAL_BUILD 0x00437BFC
+
+// string. Original value: "Sep 19 2006"
+#define OFFSET_VISUAL_BUILD_DATE 0x00434798
 
 #include <iostream>
 
-void PatchExe(FILE* hWoW, unsigned short Build)
+void PatchNetVersion(FILE* hWoW, unsigned short Build)
 {
-	int PatchOffsets = sizeof(PatchVersionOffsets) / sizeof(char*);
+	fseek(hWoW, (long)OFFSET_NET_VERSION, SEEK_SET);
+	fwrite(&Build, 2, 1, hWoW);
+}
 
-	for (int i = 0; i < PatchOffsets; i++)
-	{
-		fseek(hWoW, (long)PatchVersionOffsets[i], SEEK_SET);
-		fwrite(&Build, 2, 1, hWoW);
-	}
+void PatchVisualVersion(
+	FILE* hWoW, 
+	const std::string& VersionString, 
+	const std::string& BuildString, 
+	const std::string& DateString)
+{
+	// We can't exceed client restriction
+	assert(VersionString.size() <= 6);
+	assert(BuildString.size() == 4);
+	assert(DateString.size() == 11);
 
+	fseek(hWoW, OFFSET_VISUAL_VERSION, SEEK_SET);
+	fwrite(VersionString.c_str(), 1, VersionString.size(), hWoW);
+
+	fseek(hWoW, OFFSET_VISUAL_BUILD, SEEK_SET);
+	fwrite(BuildString.c_str(), 1, BuildString.size(), hWoW);
+
+	fseek(hWoW, OFFSET_VISUAL_BUILD_DATE, SEEK_SET);
+	fwrite(DateString.c_str(), 1, DateString.size(), hWoW);
+}
+
+void PatchUIUnlock(FILE* hWoW)
+{
+	fseek(hWoW, 0x2f113a, SEEK_SET);
+	char FirstPatch[] = { 0xeb, 0x19 };
+	fwrite(FirstPatch, sizeof(FirstPatch), 1, hWoW);
+
+	char SecondPatch[] = { 0x03 };
+	fseek(hWoW, 0x2f1158, SEEK_SET);
+	fwrite(SecondPatch, sizeof(SecondPatch), 1, hWoW);
+
+	char ThirdPatch[] = { 0x03 };
+	fseek(hWoW, 0x2f11a7, SEEK_SET);
+	fwrite(ThirdPatch, sizeof(ThirdPatch), 1, hWoW);
+
+	char FourthPatch[] = { 0xeb, 0xb2 };
+	fseek(hWoW, 0x2f11f0, SEEK_SET);
+	fwrite(FourthPatch, sizeof(FourthPatch), 1, hWoW);
 }
 
 constexpr int max_path = 260;
@@ -318,25 +328,16 @@ int WINAPI WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 		fs::copy_file("WoW.exe", "WoW_Old.exe");
 	}
 
-	// patch WoW.exe to allow unsigned interface
+	// patch WoW.exe
 	if (FILE* hWoWBinary = fopen("WoW.exe", "r+b"))
 	{
-		fseek(hWoWBinary, 0x2f113a, SEEK_SET);
-		char FirstPatch[] = { 0xeb, 0x19 };
-		fwrite(FirstPatch, sizeof(FirstPatch), 1, hWoWBinary);
+		PatchUIUnlock(hWoWBinary);
+		PatchNetVersion(hWoWBinary, NEW_BUILD);
 
-		char SecondPatch[] = { 0x03 };
-		fseek(hWoWBinary, 0x2f1158, SEEK_SET);
-		fwrite(SecondPatch, sizeof(SecondPatch), 1, hWoWBinary);
-
-		char ThirdPatch[] = { 0x03 };
-		fseek(hWoWBinary, 0x2f11a7, SEEK_SET);
-		fwrite(ThirdPatch, sizeof(ThirdPatch), 1, hWoWBinary);
-
-		char FourthPatch[] = { 0xeb, 0xb2 };
-		fseek(hWoWBinary, 0x2f11f0, SEEK_SET);
-		fwrite(FourthPatch, sizeof(FourthPatch), 1, hWoWBinary);
-		PatchExe(hWoWBinary, NEW_BUILD);
+		std::string Version(NEW_VISUAL_VERSION);
+		std::string Build(NEW_VISUAL_BUILD);
+		std::string Date(NEW_BUILD_DATE);
+		PatchVisualVersion(hWoWBinary, Version, Build, Date);
 
 		fclose(hWoWBinary);
 	}
@@ -364,6 +365,11 @@ int WINAPI WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 		DestroyWindow(hDialog);
 		hDialog = NULL;
 	}
+
+	// Remove downloaded patch, since we applied it
+#ifndef _DEBUG
+	fs::remove("wow-patch.mpq");
+#endif
 
 	STARTUPINFO info;
 	PROCESS_INFORMATION pInfo;
