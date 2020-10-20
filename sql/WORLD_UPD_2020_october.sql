@@ -327,12 +327,10 @@ update quest_template set objectives = 'Speak with Godrick Bell at Solliden’s 
 update quest_template set offerrewardtext = 'Well, initiate, you came all this way, didn’t you? Don\'t disappoint me.' where entry = 50301;
 update quest_template set requestitemstext = 'Splendid, new recruits! Just in time.' where entry = 50301;
 
-
 -- update quest_template set details = '' where title = '';
 -- update quest_template set objectives = '' where title = '';
 -- update quest_template set offerrewardtext = '' where title = '';
 -- update quest_template set requestitemstext = '' where title = '';
-
 
 -- Misc. fixes:
 
@@ -341,3 +339,5 @@ update item_template set description = 'Creates a highly radioactive Wormhole wi
 delete from npc_vendor where entry = 3962 and item = 5503;
 
 update quest_template set method = 2 where entry in (8271, 8272);
+
+update quest_template set title = 'The Tower of Althalaxx' where entry in (1167, 1143);
