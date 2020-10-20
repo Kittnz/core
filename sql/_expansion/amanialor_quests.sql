@@ -8,7 +8,7 @@ replace into `gameobject_template` values
 
 
 
-replace into `creature_template` values (80805, 0, 18335, 18336, 18337, 0, 'Amani\'Alor Settler', NULL, 0, 10, 10, 413, 413, 0, 0, 20, 893, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 9, 13, 0, 62, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 16.808, 23.111, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, '');
+replace into `creature_template` values (80805, 0, 18335, 18336, 18337, 0, 'Amani\'Alor Settler', NULL, 0, 10, 10, 413, 413, 0, 0, 20, 1494, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 9, 13, 0, 62, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 16.808, 23.111, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, '');
 
 replace into creature_model_info values (18329, 5875, 2, 2, 0, 0, 0);
 replace into creature_model_info values (18330, 5875, 2, 2, 0, 0, 0);
@@ -32,7 +32,7 @@ replace into `creature_template` values (80800, 0, 14760, 0, 0, 0, 'Revantusk Wa
 update creature_template set movement_type = 0 where entry = 80800;
 update creature set movementtype = 0 where id = 80800;
 update creature_template set npc_flags = 2 where entry = 80800;
-update creature_template set faction = 893 where entry = 80800;
+update creature_template set faction = 1494 where entry = 80800;
 
 replace into creature_model_info values (18209, 5875, 2, 2, 0, 0, 0);
 
@@ -134,7 +134,7 @@ replace into `gameobject_template` values
 update creature_template set movement_type = 0 where entry = 80801;
 update creature set movementtype = 0 where id = 80801;
 update creature_template set npc_flags = 2 where entry = 80801;
-update creature_template set faction = 893 where entry = 80801;
+update creature_template set faction = 1494 where entry = 80801;
 
 set @quest_entry = 80301;
 set @quest_zone = 331;
