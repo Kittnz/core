@@ -4,7 +4,7 @@
   <assemblyIdentity
       type="win32"
       name="TurtleTeam.TurtlePatcher"
-      version="1.0.1.0"
+      version="1.1.1.0"
       processorArchitecture="x86"
     />
   <description>Turtle WoW Patcher</description>
