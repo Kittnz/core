@@ -341,3 +341,5 @@ delete from npc_vendor where entry = 3962 and item = 5503;
 update quest_template set method = 2 where entry in (8271, 8272);
 
 update quest_template set title = 'The Tower of Althalaxx' where entry in (1167, 1143);
+
+update item_template set name = 'Portable Pocket Dimension', description = 'No matter how heavy the contents, this bag\'s shape and weight never seem to change.', display_id = 33942 where entry = 50004;
