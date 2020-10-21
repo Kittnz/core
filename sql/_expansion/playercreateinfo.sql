@@ -103,6 +103,7 @@ REPLACE INTO `playercreateinfo_spell` VALUES
 (9, 1, 196, 0, 5875, 'One-Handed Axes'),
 (9, 1, 197, 0, 5875, 'Two-Handed Axes'),
 (9, 1, 201, 0, 5875, 'One-Handed Swords'),
+(9, 1, 55, 0, 5875, 'Two-Handed Swords'),
 (9, 1, 203, 0, 5875, 'Unarmed'),
 (9, 1, 204, 0, 5875, 'Defense'),
 (9, 1, 522, 0, 5875, 'SPELLDEFENSE (DND)'),
