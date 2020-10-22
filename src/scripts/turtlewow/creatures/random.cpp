@@ -779,12 +779,6 @@ void AddSC_random()
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "npc_rholo";
-    newscript->pGossipHello = &GossipHello_npc_rholo;
-    newscript->pGossipSelect = &GossipSelect_npc_rholo;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
     newscript->Name = "npc_riding_gryphon";
     newscript->pGossipHello = &GossipHello_npc_riding_gryphon;
     newscript->pGossipSelect = &GossipSelect_npc_riding_gryphon;
@@ -794,12 +788,6 @@ void AddSC_random()
     newscript->Name = "npc_riding_horse";
     newscript->pGossipHello = &GossipHello_npc_riding_horse;
     newscript->pGossipSelect = &GossipSelect_npc_riding_horse;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "npc_dressing_room";
-    newscript->pGossipHello = &GossipHello_npc_dressing_room;
-    newscript->pGossipSelect = &GossipSelect_npc_dressing_room;
     newscript->RegisterSelf();
 
     newscript = new Script;
