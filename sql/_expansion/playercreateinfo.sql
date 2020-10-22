@@ -721,6 +721,8 @@ replace into playercreateinfo_spell values
 (10,  1, 21652, 0, 5875, 'Closing'),
 (10,  1, 22027, 0, 5875, 'Remove Insignia'),
 (10,  1, 22810, 0, 5875, 'Opening - No Text'),
+(10,  1, 26290, 0, 5875, 'Bow Specialization'),
+(10,  1, 20592, 0, 5875, 'Arcane Resistance'),
 (10,  2, 81, 0, 5875, 'Dodge'),
 (10,  2, 107, 0, 5875, 'Block'),
 (10,  2, 198, 0, 5875, 'One-Handed Maces'),
@@ -756,6 +758,8 @@ replace into playercreateinfo_spell values
 (10,  2, 22027, 0, 5875, 'Remove Insignia'),
 (10,  2, 22810, 0, 5875, 'Opening - No Text'),
 (10,  2, 27762, 5302, 5875, 'Libram'),
+(10,  2, 26290, 0, 5875, 'Bow Specialization'),
+(10,  2, 20592, 0, 5875, 'Arcane Resistance'),
 (10,  4, 81, 0, 5875, 'Dodge'),
 (10,  4, 203, 0, 5875, 'Unarmed'),
 (10,  4, 204, 0, 5875, 'Defense'),
@@ -789,6 +793,8 @@ replace into playercreateinfo_spell values
 (10,  4, 21652, 0, 5875, 'Closing'),
 (10,  4, 22027, 0, 5875, 'Remove Insignia'),
 (10,  4, 22810, 0, 5875, 'Opening - No Text'),
+(10,  4, 26290, 0, 5875, 'Bow Specialization'),
+(10,  4, 20592, 0, 5875, 'Arcane Resistance'),
 (10,  5, 81, 0, 5875, 'Dodge'),
 (10,  5, 198, 0, 5875, 'One-Handed Maces'),
 (10,  5, 203, 0, 5875, 'Unarmed'),
@@ -819,6 +825,8 @@ replace into playercreateinfo_spell values
 (10,  5, 21652, 0, 5875, 'Closing'),
 (10,  5, 22027, 0, 5875, 'Remove Insignia'),
 (10,  5, 22810, 0, 5875, 'Opening - No Text'),
+(10,  5, 26290, 0, 5875, 'Bow Specialization'),
+(10,  5, 20592, 0, 5875, 'Arcane Resistance'),
 (10,  8, 81, 0, 5875, 'Dodge'),
 (10,  8, 133, 0, 5875, 'Fireball'),
 (10,  8, 168, 0, 5875, 'Frost Armor'),
@@ -849,6 +857,8 @@ replace into playercreateinfo_spell values
 (10,  8, 21652, 0, 5875, 'Closing'),
 (10,  8, 22027, 0, 5875, 'Remove Insignia'),
 (10,  8, 22810, 0, 5875, 'Opening - No Text'),
+(10,  8, 26290, 0, 5875, 'Bow Specialization'),
+(10,  8, 20592, 0, 5875, 'Arcane Resistance'),
 (10, 3, 75, 0, 5875, 'Auto Shot'),
 (10, 3, 81, 0, 5875, 'Dodge'),
 (10, 3, 203, 0, 5875, 'Unarmed'),
@@ -881,7 +891,9 @@ replace into playercreateinfo_spell values
 (10, 3, 21652, 0, 5875, 'Closing'),
 (10, 3, 22027, 0, 5875, 'Remove Insignia'),
 (10, 3, 22810, 0, 5875, 'Opening - No Text'),
-(10, 3, 24949, 4878, 5875, 'Defensive State 2 (DND)');
+(10, 3, 24949, 4878, 5875, 'Defensive State 2 (DND)'),
+(10, 3, 26290, 0, 5875, 'Bow Specialization'),
+(10, 3, 20592, 0, 5875, 'Arcane Resistance');
 
 replace into player_levelstats values 
 
