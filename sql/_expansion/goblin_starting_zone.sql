@@ -1766,26 +1766,11 @@ nextquestid = @nextquest, RewOrReqMoney = @reward_money,
 nextquestinchain = @nextquestinchain, prevquestid = @prevquest 
 where entry = @quest_entry;
 
--- Weapon Trainer
+-- OLD Weapon Trainer
 
-replace into`creature_template` values (80130, 0, 10747, 0, 0, 0, 'Fareck', 'Weapon Master', 5271, 50, 50, 6830, 6830, 0, 0, 2999, 12, 17, 1, 1.14286, 0, 20, 5, 0, 1, 1, 292, 333, 0, 226, 1, 1500, 2000, 1, 4096, 0, 0, 2, 0, 0, 0, 55.36, 76.12, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 11867, 0, 0, 0, 0, 524298, '');
-
-SET @gossip_menu_id = 56552;
-SET @magic_number = 80130; -- Weapon Master
-replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
-replace into broadcast_text (ID, MaleText) values (@magic_number, 'What you actually want to learn how to use a weapon?!\n\nSure, sure pal, don\'t get me wrong it\'s just that these other guys are mostly cowards, ye know?');
-replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
-update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
-
+replace into`creature_template` values (80130, 0, 10747, 0, 0, 0, 'Fareck', 'Apprentice Weapon Master', 5271, 50, 50, 6830, 6830, 0, 0, 2999, 12, 17, 1, 1.14286, 0, 20, 5, 0, 1, 1, 292, 333, 0, 226, 1, 1500, 2000, 1, 4096, 0, 0, 2, 0, 0, 0, 55.36, 76.12, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 11867, 0, 0, 0, 0, 524298, '');
+update creature_template set npc_flags = 0, trainer_type = 0 where entry = 80130;
 update creature_template set faction = 35 where entry = 80130;
-
-REPLACE INTO `npc_trainer` VALUES 
-(80130, 1847, 1000, 0, 0, 5, 0, 5875),
-(80130, 15983, 1000, 0, 0, 5, 0, 5875),
-(80130, 15988, 1000, 0, 0, 5, 0, 5875),
-(80130, 15989, 1000, 0, 0, 5, 0, 5875),
-(80130, 15991, 10000, 0, 0, 5, 0, 5875),
-(80130, 15995, 1000, 0, 0, 5, 0, 5875);
 
 -- Grease-stained letter (Warrior)
 
