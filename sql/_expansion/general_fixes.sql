@@ -5,7 +5,7 @@ REPLACE INTO `creature_template` VALUES (80250, 0, 18027, 0, 0, 0, 'Crimson Lynx
 
 update creature_template set faction = 7 where entry = 80250;
 update creature_template set rank = 0 where entry = 80250;
-
+update creature_template set loot_id = 2043 where entry = 80250;
 
 REPLACE INTO `creature_template` VALUES (80252, 0, 18005, 0, 0, 0, 'Young Arctic Fox', NULL, 0, 7, 8, 141, 161, 0, 0, 316, 38, 0, 1, 0.857143, 0, 20, 5, 0, 0, 1, 9, 13, 0, 58, 1, 2000, 2000, 1, 0, 0, 1, 0, 0, 0, 0, 13.4464, 18.4888, 100, 1, 1, 1131, 0, 1131, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5940, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, '');
 
