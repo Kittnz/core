@@ -35,6 +35,16 @@ replace into `creature_template` values
 (80807, 0, 14773, 0, 0, 0, 'Reolis Riptusk', 'Revantusk Trolls Quartermaster', 0, 11, 11, 456, 456, 0, 0, 20, 1494, 16388, 1.1, 1.14286, 0, 20, 5, 0, 0, 1, 12, 14, 0, 64, 1, 2000, 2090, 1, 4864, 0, 0, 0, 0, 0, 0, 18.392, 25.289, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, ''),
 (80808, 0, 14772, 0, 0, 0, 'Ranor Riptusk', 'General Goods', 0, 3, 3, 219, 219, 0, 0, 852, 1494, 4, 1, 1.14286, 0, 20, 5, 0, 0, 1, 24, 31, 0, 90, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 31.856, 43.802, 100, 7, 4096, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 2, ''),
 
+(80809, 0, 14770, 0, 0, 0, 'Talkharu Riptusk', 'Blacksmithing Supplies', 9290, 30, 30, 1605, 1605, 0, 0, 1200, 1494, 16390, 1, 1.14286, 0, 20, 5, 0, 0, 1, 42, 53, 0, 122, 1, 2000, 2000, 1, 37376, 0, 0, 0, 0, 0, 0, 45.144, 62.073, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 4597, 0, 0, 0, 0, 524298, '');
+
+REPLACE INTO `npc_vendor` VALUES (80809, 2880, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80809, 2901, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80809, 3466, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80809, 3857, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80809, 5956, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80809, 18567, 0, 0, 0, 0);
+
+
 REPLACE INTO `npc_vendor` VALUES (80808, 159, 0, 0, 0, 0);
 REPLACE INTO `npc_vendor` VALUES (80808, 1205, 0, 0, 0, 0);
 REPLACE INTO `npc_vendor` VALUES (80808, 1645, 0, 0, 0, 0);
@@ -58,15 +68,6 @@ REPLACE INTO `npc_vendor` VALUES (80808, 11284, 0, 0, 0, 0);
 REPLACE INTO `npc_vendor` VALUES (80808, 11285, 0, 0, 0, 0);
 REPLACE INTO `npc_vendor` VALUES (80808, 15326, 0, 0, 0, 0);
 REPLACE INTO `npc_vendor` VALUES (80808, 15327, 0, 0, 0, 0);
-
-(80809, 0, 14770, 0, 0, 0, 'Talkharu Riptusk', 'Blacksmithing Supplies', 9290, 30, 30, 1605, 1605, 0, 0, 1200, 1494, 16390, 1, 1.14286, 0, 20, 5, 0, 0, 1, 42, 53, 0, 122, 1, 2000, 2000, 1, 37376, 0, 0, 0, 0, 0, 0, 45.144, 62.073, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 4597, 0, 0, 0, 0, 524298, '');
-
-REPLACE INTO `npc_vendor` VALUES (80809, 2880, 0, 0, 0, 0);
-REPLACE INTO `npc_vendor` VALUES (80809, 2901, 0, 0, 0, 0);
-REPLACE INTO `npc_vendor` VALUES (80809, 3466, 0, 0, 0, 0);
-REPLACE INTO `npc_vendor` VALUES (80809, 3857, 0, 0, 0, 0);
-REPLACE INTO `npc_vendor` VALUES (80809, 5956, 0, 0, 0, 0);
-REPLACE INTO `npc_vendor` VALUES (80809, 18567, 0, 0, 0, 0);
 
 replace into creature_model_info values (18329, 5875, 2, 2, 0, 0, 0);
 replace into creature_model_info values (18330, 5875, 2, 2, 0, 0, 0);
