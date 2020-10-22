@@ -8,9 +8,9 @@ update creature_template set equipment_id = 0 where entry = 80200;
 set @quest_entry = 80200;
 set @quest_zone = 1519;
 set @title = 'Farstrider Lodge';
-set @description = 'Ah, $N, you’re awake.\n\nThe journey south from the remnants of Lordaeron was filled with peril, but we have survived and this is our new home.\n\nThere is a lot of work to be done now that we have arrived. This lodge has only been used by a few dwarven hunters ever since the Second War, and it hasn’t been maintained properly.\n\nVyrin Swiftwind in the lodge has been here much longer than any of us. Why not talk to her to get started?';
+set @description = 'Ah, $N, you’re awake.\n\nThe journey south from the remnants of Lordaeron was filled with peril, but we have survived and this is our new home.\n\nThere is a lot of work to be done now that we have arrived. This lodge has only been used by a few dwarven hunters ever since the Second War, but it hasn’t been maintained properly.\n\nVyrin Swiftwind in the lodge has been here much longer than any of us. Why not talk to her to get started?';
 set @objective = 'Talk to Vyrin Swiftwind in the Farstrider Lodge.';
-set @completetext = 'You wish to assist?\n\nWell, your offer is welcomed. I was just a lone ranger who took refuge down here, and the next thing I know is that my homeland has fallen. Now, I have to contend with a hundred refugees.\n\nWe have a lot of work to do, friend, but it’s for the greater good. We Quel’dorei must stick together now!';
+set @completetext = 'You wish to assist?\n\nWell, your offer is welcomed. I was just a lone ranger who took refuge down here, and the next thing I know, my homeland has fallen. Now, I have to contend with a hundred refugees.\n\nWe have a lot of work to do, friend, but it’s for the greater good. We quel’dorei must stick together now!';
 set @incompletetext = 'Yes? What can I do for you?';
 set @faction_id = 269;
 set @faction_count = 75;
@@ -114,8 +114,8 @@ replace into `item_template` values (80203, 0, 4, 1, 'Ragged Cloth Pants', '', 1
 set @quest_entry = 80201;
 set @quest_zone = 1519;
 set @title = 'Stocking Up on Wood';
-set @description = 'Wagons full of refugees have arrived from the north, and we know more are on the way.\n\nBecause this was used as a dwarven hunting lodge, the larders are fully stocked with meat. Unfortunately, most of the meat was in the process of being salted, and the lodge does not have a great supply of firewood.\n\nGo out and collect some. You\'ll find plenty of wood in bundles just outside the lodge.\n\nOh, and a word of warning: do not leave the valley. There are things out there that are very dangerous, and you are not ready to face them.';
-set @objective = 'Collect 8 bundles of wood outside of the lodge.';
+set @description = 'Wagons full of refugees have arrived from the north, and we know more are on the way.\n\nBecause this was used as a dwarven hunting lodge, the larders are fully stocked with meat. Unfortunately, most of the meat was in the process of being salted and the lodge does not have a great supply of firewood.\n\nGo out and collect some. You\'ll find plenty of wood in bundles just outside the lodge.\n\nOh, and a word of warning: do not leave the valley. There are things out there that are very dangerous, and you are not yet ready to face them.';
+set @objective = 'Collect 8 Bundles of Wood outside of the Farstrider Lodge.';
 set @completetext = 'Thank you, $N. With this wood we can cook enough meat to satisfy many hungry bellies!';
 set @incompletetext = 'Do you have the wood, $N?';
 set @faction_id = 269;
@@ -217,8 +217,8 @@ update creature_template set equipment_id = 0 where entry = 80202;
 set @quest_entry = 80203;
 set @quest_zone = 1519;
 set @title = 'Clearing Out Vermin';
-set @description = 'Excuse me, $R, can I have your attention for a moment?\n\nI am Kathy Wake. I am apart of a branch of the Alliance military responsible for ensuring the safety and prosperity of Alliance lands. We\’ve recently been sent here with a large contingent of men. Although I personally believe we are needed more back home, it is not my place to question orders.\n\nOur mission has been to ensure your people arrived safely to the lodge, and also to get you settled in. However, it is not easy to keep everyone safe from the dangers out here. While my men have been dealing with the larger problematic elements in the region, smaller ones have been left unattended for too long, and they have been allowed to run rampant.\n\nThe refugee caravans could be in danger if something is not done quickly. I take it you can fight? If so, please go out there and take care of the trogg vermin that have been infesting the area around the Lodge!';
-set @objective = 'Kill 8 trogg vermin.';
+set @description = 'Excuse me, $R, can I have your attention for a moment?\n\nI am Kathy Wake. I am a part of a branch of the Alliance military responsible for ensuring the safety and prosperity of Alliance lands. We\’ve recently been sent here with a large contingent of men. Although I personally believe we are needed more back home, it is not my place to question orders.\n\nOur mission has been to ensure your people arrived safely to the lodge, and also to get you settled in. However, it is not easy to keep everyone safe from the dangers out here. While my men have been dealing with the larger problematic elements in the region, smaller ones have been left unattended for too long, and now they have been allowed to run rampant.\n\nThe refugee caravans could be in danger if something is not done quickly. I take it you can fight? If so, please go out there and take care of the troggs that have been infesting the area around the Lodge!';
+set @objective = 'Kill 8 Trogg Vermin.';
 set @completetext = 'Well done, $N. This is only the beginning, but removing those vermin will ensure the refugees remain safe for now.\n\nWe have more work to do, though. The more assistance we get from you, the more help we can provide your people.';
 set @incompletetext = 'Well, $R, has the deed been done?';
 set @faction_id = 269;
@@ -321,8 +321,8 @@ replace into areatrigger_involvedrelation values (80204, 5000);
 set @quest_entry = 80204;
 set @quest_zone = 1519;
 set @title = 'Gathering Intel';
-set @description = 'You\’re less wet behind the ears now which is good.\n\nThe vermin you\’ve defeated are only a nuisance compared to other things that lurk in this valley. Some of the recent refugees who arrived last night reported seeing a short-statured figure with glowing red eyes in the woods as it stalked the area.\n\nSome brushed it off as fatigue from the long travel, but I believe it may be the forward scout of a Shadowforge raiding party.\n\nThe Shadowforge are one of the Dark Iron clans. They are corrupted red-eyed dwarves who are at odds with the kingdom of Ironforge. Investigate the area to the west where the sighting happened, but do not stray too close to the digsite. It is infested with troggs far stronger than those vermin that you fought earlier.\n\nRemember: do not engage. If you find something, confirm your sighting and immediately return here.';
-set @objective = 'Investigate the area to the southwest of the the Lodge.';
+set @description = 'You\’re less wet behind the ears, now, which is good.\n\nThe vermin you\’ve defeated are only a nuisance compared to other things that lurk in this valley. Some of the recent refugees who arrived last night reported seeing a short-statured figure with glowing red eyes in the woods as it stalked the area.\n\nSome brushed it off as fatigue from the long travel, but I believe it may be the forward scout of a Shadowforge raiding party.\n\nThe Shadowforge are one of the Dark Iron clans. They are corrupted red-eyed dwarves who are at odds with the kingdom of Ironforge. Investigate the area to the west where the sighting happened, but do not stray too close to the digsite. It is infested with troggs far stronger than those vermin that you fought earlier.\n\nRemember: do not engage. If you find something, confirm your sighting and immediately return here.';
+set @objective = 'Investigate the area to the southwest of the the Farstrider Lodge.';
 set @completetext = 'A whole armed camp? Damn, this is a problem. We\’ll need to devote resources into dealing with it that we don\’t have. Thank you for your help, $N! We may call upon you again once we figure out how to handle this.';
 set @incompletetext = 'Have you spotted the Shadowforge scout?';
 set @faction_id = 72;
@@ -395,7 +395,7 @@ reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
 reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
 nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
 nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
-objectivetext1='Location scouting completed' 
+objectivetext1='Scouting completed' 
 where entry = @quest_entry;	
 
 -- Slaking Their Thirst
@@ -435,7 +435,7 @@ set @quest_entry = 80205;
 set @quest_zone = 1519;
 set @title = 'Slaking Their Thirst';
 set @description = 'Hello again, $N.\n\nThe wood you gathered helped feed many refugees. However, the situation is far from resolved.\n\nThe drinking water stores are running low. Soon, we will not be able to care for the refugees, but luckily there is a well to the north near the border of the valley. Go there and fill this barrel with water.\n\nThere are volunteers trying to dig a new well here, but that will take time.\n\nPlease, $N, I know I can count on you!';
-set @objective = 'Fill the barrel with water.';
+set @objective = 'Fill the Empty Barrel with water from the well.';
 set @completetext = 'You got the water?\n\nThank you, $N. At least that’s one less problem we have to deal with.\n\nThe children will have water, and the progress on the well is going wonderfully!';
 set @incompletetext = 'Did you get it? The children are thirsty.';
 set @faction_id = 269;
@@ -521,9 +521,9 @@ replace into npc_text (ID, BroadcastTextID0) values (100200, 100200);
 set @quest_entry = 80206;
 set @quest_zone = 1519;
 set @title = 'Burnt Wheels';
-set @description = '<Vyrin appears distressed as she looks in your direction.>\n\nWe found a wagon burned down with the corpses of the accompanying escorts nearby and no sign of the refugees. It’s... terrible, $N, it’s absolutely terrible!\n\nPlease speak to your companion, Malvinah, was it? I am trying to keep people calm as we figure this out, but she is very disturbed, spreading panic and confusion among the refugees.';
-set @objective = 'Speak to Malvinah Sunblade and report to Kathy Wake.';
-set @completetext = 'So, you know about it, then? My scouts have confirmed it.\n\nIt’s that damn Shadowforge raiding party you found. We should have struck right away, but instead I wanted to prepare... damn it!\n\nIt’s as if they knew we were onto them. You didn’t attack any of them, did you?\n\nWell, no matter. The time to regret is not now. It is time to act!\n\nThe refugees have been put in cages, and the Dark Irons are preparing to ritually sacrifice them to their god, the Firelord Ragnaros.\n\nWe can’t allow it, $N! I\’m going to need your help with this!';
+set @description = '<Vyrin appears distressed as she looks in your direction.>\n\nWe found a wagon burned down with the corpses of the accompanying escorts nearby and no sign of the refugees. It’s... terrible, $N, it’s absolutely terrible!\n\nPlease speak to your companion, Malvinah, was it? I am trying to keep people calm as we figure this out, but she is very disturbed. She\'s spreading panic and confusion among the refugees.';
+set @objective = 'Speak to Malvinah Sunblade, then report back to Kathy Wake.';
+set @completetext = 'So, you know about it, then? My scouts have confirmed it.\n\nIt’s that damn Shadowforge raiding party you found. We should have struck right away, but instead I wanted to prepare... damn it!\n\nIt’s as if they knew we were onto them. You didn\’t attack any of them, did you?\n\nWell, no matter. There is no time for regret. It is time to act!\n\nThe refugees have been put in cages, and the Dark Irons are preparing to ritually sacrifice them to their god, the Firelord Ragnaros.\n\nWe can\’t allow it, $N! I\’m going to need your help with this!';
 set @incompletetext = 'What is it, $N? Now is not the time.';
 set @faction_id = 269;
 set @faction_count = 250;
@@ -626,11 +626,11 @@ where entry = 80205;
 update creature_template set loot_id = 80205 where entry = 80205; 
 
 delete from creature_loot_template where entry = 80205 and item = 80216;
-replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (80205, 80216, -100, 1, 1, 1);	 
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (80205, 80216, 100, 1, 1, 1);	 
 
 replace into `creature_template` values (80206, 0, 0, 0, 0, 0, 'Quest 80207 Custom Objective', '', 0, 5, 5, 319, 319, 0, 0, 852, 84, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 24, 31, 0, 90, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 31.856, 43.802, 100, 7, 4096, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 4276, 0, 0, 0, 0, 2, '');
 
-replace into`creature_template` values (80207, 0, 6053, 6057, 0, 0, 'Shadowforge Prowler', NULL, 0, 5, 5, 109, 109, 138, 138, 105, 16, 0, 0.92, 1.14286, 0, 20, 5, 0, 0, 1, 4, 5, 0, 52, 1, 2000, 2156, 2, 32768, 0, 0, 0, 0, 0, 0, 8.624, 11.858, 100, 7, 0, 3183, 3183, 0, 0, 0, 0, 0, 0, 0, 172, 348, 0, 0, 31830, 0, 3, 9, 'EventAI', 0, 3, 0, 0, 3, 3183, 0, 0, 0, 0, 0, '');
+replace into`creature_template` values (80207, 0, 6053, 6057, 0, 0, 'Shadowforge Prowler', NULL, 0, 4, 5, 109, 109, 138, 138, 105, 16, 0, 0.92, 1.14286, 0, 20, 5, 0, 0, 1, 4, 5, 0, 52, 1, 2000, 2156, 2, 32768, 0, 0, 0, 0, 0, 0, 8.624, 11.858, 100, 7, 0, 3183, 3183, 0, 0, 0, 0, 0, 0, 0, 172, 348, 0, 0, 31830, 0, 3, 9, 'EventAI', 0, 3, 0, 0, 3, 3183, 0, 0, 0, 0, 0, '');
 
 replace into `creature_template` values (80208, 0, 16592, 16676, 16682, 16289, 'High Elf Refugee', '', 0, 5, 5, 319, 319, 0, 0, 852, 84, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 24, 31, 0, 90, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 31.856, 43.802, 100, 7, 4096, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 4276, 0, 0, 0, 0, 2, '');
 
@@ -1237,14 +1237,14 @@ replace into item_template values
  '-1', '4', '80228', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
-replace into page_text values (80228, 'Light be with you, $N.\n\nI am Maelah Sunsworn.\n\nI was once ordained in Temples of Quel\’Thalas, preaching the Light of the Sun. I walked the same halls as High Priest Belo\’vir.\n\nIt is with much sadness that those days are gone as our Temples lay in ruin, and the warmth of the Sun is forsaken.\n\nI have seen the spark of devotion and faith within you.\n\nCome speak with me at the lodge. I will gladly guide your path so that, one day, our people\’s faith may be restored not only in the Light, but in our future.', 0);
+replace into page_text values (80228, 'Light be with you, $N.\n\nI am Maelah Sunsworn.\n\nI was once ordained in Temples of Quel\’Thalas where I learned to preach the Light of the Sun. I walked the same halls as High Priest Belo\’vir.\n\nIt is with much sadness that those days are gone as our temples lay in ruin, and the warmth of the Sun is forsaken.\n\nI have seen the spark of devotion and faith within you.\n\nCome speak with me at the lodge. I will gladly guide your path so that, one day, our people\’s faith may be restored not only in the Light, but in our future.', 0);
 
 set @quest_entry = 80213;
 set @quest_zone = 1519;
 set @title = 'Seeking Further Guidance';
 set @description = '$N, the fall of our homeland has affected us all. But, even if our education down this path was cut short, there are still ways to learn.\n\nRecently, someone left a letter on the desk and it was addressed to you.\n\nPerhaps you should read it and see what it says?';
 set @objective = 'Read the Priest\'s Letter and speak to Maelah Sunsworn.';
-set @completetext = 'By the Sun, you\'ve come! I am so happy.\n\nMany of our people have lost their faith in the Light of the Sun as they wander like sheep lost in the dark. \n\nTogether, we can be the beacon guiding them to salvation and to the warmth of the Sun!\n\nI shall do my best to be your beacon, $N. Ask and I will teach you what I can.';
+set @completetext = 'By the Sun, you\'ve come!\n\nMany of our people have lost their faith in the Light of the Sun as they wander like sheep lost in the dark. Together, we can be the beacon guiding them to salvation and to the warmth of the Sun!\n\nI shall do my best to be your beacon, $N. Ask and I will teach you what I can.';
 set @incompletetext = 'May the Sun\’s Light shine upon you.';
 set @faction_id = 269;
 set @faction_count = 250;
@@ -1338,7 +1338,7 @@ set @quest_zone = 1519;
 set @title = 'Seeking Further Guidance';
 set @description = '$N, the fall of our homeland has affected us all. But, even if our education down this path was cut short, there are still ways to learn.\n\nRecently, someone left a letter on the desk and it was addressed to you.\n\nPerhaps you should read it and see what it says?';
 set @objective = 'Read the Magister\'s Letter and speak to Magister Ala\'shor.';
-set @completetext = 'Ah, $N, I take it you’re here to become my apprentice?\n\nIf so, then know that I will not coddle you. You will be serving under a proud member of the Magisterium.\n\nAs such, you will be taught what I deem necessary for your progress. Continue to perform adequately and I shall continue to guide you.\n\nEventually, you will be deemed fit enough for the Magisterium.\n\nTalk to me again once you are prepared.';
+set @completetext = 'Ah, $N, I take it you’re here to become my apprentice?\n\nIf so, then know that I will not coddle you. You will be serving under a proud member of the Magisterium.\n\nAs such, you will be taught what I deem necessary for your progress. Continue to perform adequately and I shall continue to guide you.\n\nEventually, you will be fit enough for the Magisterium.\n\nTalk to me again once you are prepared.';
 set @incompletetext = 'The Magisterium is the most prestigious group that a mage can be a part of.';
 set @faction_id = 269;
 set @faction_count = 250;
@@ -1430,9 +1430,9 @@ replace into page_text values (80230, 'Heya, $N. I write to you because you seem
 set @quest_entry = 80215;
 set @quest_zone = 1519;
 set @title = 'Seeking Further Guidance';
-set @description = '$N, the fall of our homeland has affected all of us. But even if our education and path was cut short, there are still ways…\n\nRecently someone left a letter on the desk, and it was addressed to you.\n\nPerhaps you should read it and see what it says?';
+set @description = '$N, the fall of our homeland has affected us all. But, even if our education down this path was cut short, there are still ways to learn.\n\nRecently, someone left a letter on the desk and it was addressed to you.\n\nPerhaps you should read it and see what it says?';
 set @objective = 'Read the Shady Letter and speak to Leela the Shadow.';
-set @completetext = 'So you really came, huh?\n\nAmusing... well you\’ve completed your first test, but don’t think it\’s the last one.\n\nLet\’s see how well you fare under my training. Talk to me again when you\’re ready and I\’ll teach you some tricks. If you continue to show potential, then expect me to continue teaching you.';
+set @completetext = 'So, you really came, huh?\n\nAmusing. Well, you\’ve completed your first test, but don’t think that it\’s your last.\n\nLet\’s see how well you fare under my training. Talk to me again when you\’re ready and I\’ll teach you some tricks. If you continue to show potential, then expect me to continue teaching you.';
 set @incompletetext = 'Stick to the shadows, protégé.';
 set @faction_id = 269;
 set @faction_count = 250;
@@ -1527,7 +1527,7 @@ set @title = 'Seeking Further Guidance';
 set @description = '$N, the fall of our homeland has affected us all. But, even if our education down this path was cut short, there are still ways to learn.\n\nRecently, someone left a letter on the desk and it was addressed to you.\n\nPerhaps you should read it and see what it says?';
 set @objective = 'Read the Swordsman\'s Letter and speak to Valanos Dawnfire.';
 set @completetext = 'I must say that your appearance gives me hope.\n\nFew of our people take on the path of the sword. It is a long and arduous journey, but I have faith that you can overcome it with my training.\n\nIt doesn\’t matter how many rangers or mages you have. In the end, you need someone on the frontlines to win battles.\n\nWhen you\’re ready to take up that mantle, talk to me again.';
-set @incompletetext = 'Wielding the sword is just as artistic as it is powerful.';
+set @incompletetext = 'Wielding the sword is just as majestic as it is powerful.';
 set @faction_id = 269;
 set @faction_count = 250;
 set @xp_or_money = 154;
@@ -1691,7 +1691,7 @@ update creature_template set faction = 371 where entry = 80219;
 SET @gossip_menu_id = 56542;
 SET @magic_number = 80219; -- Hunter
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
-replace into broadcast_text (ID, MaleText) values (@magic_number, 'The Farstriders were a proud group of rangers. With the fall of our land, they, too, have been left behind. It is within us that their legacy will live on.');
+replace into broadcast_text (ID, MaleText) values (@magic_number, 'The Farstriders were a proud group of rangers. With the fall of our homeland, they, too, have been left behind. It is within us that their legacy will live on.');
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
@@ -2065,9 +2065,9 @@ reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
 reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
 nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
 nextquestinchain = @nextquestinchain, prevquestid = @prevquest 
-where entry = @quest_entry;	  
+where entry = @quest_entry;	 
 
-update creature set spawntimesecsmin = 70, spawntimesecsmax = 160 where id in (80200,80202,80219,80221,80220,80208,80209,80208,80208,80209,80209,80209,80214,80215,80217,80213,80218,80201,80201,80201,80201,80201,80226,80226,10930,1686,1687,954,80223,80226,80226,80226,80226,80216,80216,80216,80208,80208,80226,80226,80208,80226,40009,80209,80209,80209,80208,80208,80208,80208,80216,80216,80216,80216,80216,80216,80216,80216,80227,1685,1155,40013,80216,80216,80216,80216,80216,80216,80216,80216,80216,80216,80216,80216,80250,80250,80250,40013,40013,40019,40013,40013,80209,40013,40013,80250,80250,80216,80216,80216,80216,80216,40012,80216,80208,80506,40012,80228,14268,1194,1194,1194,1194,1194,80207,80205,80207,80207,80207,80207,80207,80207,80207,80207,80207,80207,80207,80207,80207,80207,80207,80208,80207,80207,80226,80226,80226,6491,80210,80224,80225,80222,1412,1412,1412,721,721,1412,721,80257,80257,80257,80257,80257,80257,80257,80257,80257,80257,80257,80257,80257,80257,80257,80257,80257,80257,80257,80257,80257,80507,80508);
+update creature set spawntimesecsmin = 100, spawntimesecsmax = 200 where id in (80200,80202,80219,80221,80220,80208,80209,80208,80208,80209,80209,80209,80214,80215,80217,80213,80218,80201,80201,80201,80201,80201,80226,80226,10930,1686,1687,954,80223,80226,80226,80226,80226,80216,80216,80216,80208,80208,80226,80226,80208,80226,40009,80209,80209,80209,80208,80208,80208,80208,80216,80216,80216,80216,80216,80216,80216,80216,80227,1685,1155,40013,80216,80216,80216,80216,80216,80216,80216,80216,80216,80216,80216,80216,80250,80250,80250,40013,40013,40019,40013,40013,80209,40013,40013,80250,80250,80216,80216,80216,80216,80216,40012,80216,80208,80506,40012,80228,14268,1194,1194,1194,1194,1194,80207,80205,80207,80207,80207,80207,80207,80207,80207,80207,80207,80207,80207,80207,80207,80207,80207,80208,80207,80207,80226,80226,80226,6491,80210,80224,80225,80222,1412,1412,1412,721,721,1412,721,80257,80257,80257,80257,80257,80257,80257,80257,80257,80257,80257,80257,80257,80257,80257,80257,80257,80257,80257,80257,80257,80507,80508);
 
 -- Arisha respawn timer:
 
