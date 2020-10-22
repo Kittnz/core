@@ -1796,7 +1796,7 @@ update creature_template set gossip_menu_id = @gossip_menu_id where entry = @mag
 
 
 replace into`creature_template` values (80228, 0, 16818, 0, 0, 0, 'Toranial Mishulas', 'Apprentice Weapon Master', 5271, 50, 50, 6830, 6830, 0, 0, 2999, 12, 17, 1, 1.14286, 0, 20, 5, 0, 1, 1, 292, 333, 0, 226, 1, 1500, 2000, 1, 4096, 0, 0, 2, 0, 0, 0, 55.36, 76.12, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 11867, 0, 0, 0, 0, 524298, '');
-update creature_template set npc_flags = 0, trainer_type = 0 where entry = 80228;
+update creature_template set npc_flags = 0, trainer_type = 0, gossip_menu_id = 0 where entry = 80228;
 update creature_template set faction = 371 where entry = 80228;
 
 -- Misc. fixes.:
