@@ -15,7 +15,7 @@
 #define NEW_BUILD 5878u
 #define NEW_VISUAL_BUILD "5878"
 #define NEW_VISUAL_VERSION "1.14.0"
-#define NEW_BUILD_DATE "Oct 20 2020"
+#define NEW_BUILD_DATE "Oct 22 2020"
 
 #define PATCH_FILE "Data\\patch-T.mpq"
 
