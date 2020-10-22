@@ -222,11 +222,14 @@ inline void ErrorBox(const char* errorTxt)
 int WINAPI WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
 	gHInstance = hInstance;
+
+#ifndef _DEBUG
 	int UserResponse = MessageBox(NULL, "This program will patch your WoW 1.12.1 to Turtle version\n\nContinue?", "Warning", MB_YESNO | MB_ICONEXCLAMATION);
 	if (UserResponse != IDYES)
 	{
 		return 0;
 	}
+#endif
 
 	fs::path currentPath = fs::current_path();
 	fs::path PatchDir = currentPath / "wow-patch.mpq";
