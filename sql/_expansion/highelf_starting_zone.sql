@@ -728,6 +728,9 @@ where entry = @quest_entry;
 
 -- Sunblade Reunion
 
+delete from creature_questrelation where quest = 80208;
+delete from creature_involvedrelation where quest = 80208;
+
 replace into`creature_template` values (80211, 0, 0, 0, 0, 0, 'Quest 80208 Custom Objective', '', 0, 5, 5, 319, 319, 0, 0, 852, 84, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 24, 31, 0, 90, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 31.856, 43.802, 100, 7, 4096, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 4276, 0, 0, 0, 0, 2, '');
 
 replace into item_template values
@@ -754,7 +757,7 @@ set @reward_money = 100;
 set @quest_level = 5;
 set @min_level = 4;
 set @questgiver_id = 1156;
-set @quest_finisher = 1156;
+set @quest_finisher = 80202;
 set @nextquest = 0;
 set @nextquestinchain = 0;
 set @prevquest = 80207;
