@@ -390,3 +390,5 @@ INSERT INTO `game_event_gameobject` (`guid`, `event`) VALUES
 (131148, 12),
 (131149, 12),
 (131150, 12);
+
+UPDATE `broadcast_text` SET `MaleText`='Buy a flight to the Shimmering Flats in Thousand Needles, and talk to Gregor or Jizzle. Let them know you want to race!' WHERE `ID`=90254;
