@@ -615,11 +615,11 @@ replace into `item_template` values (80218, 0, 4, 3, 'Polished Scale Boots', '',
 replace into `item_template` values (80219, 0, 4, 1, 'Ragged Cloth Gloves', '', 16586, 1, 0, 1, 15, 15, 10, -1, -1, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 7, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
 replace into `item_template` values (80220, 0, 4, 2, 'Stitched Leather Gloves', '', 17184, 1, 0, 1, 15, 15, 10, -1, -1, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 33, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 8, 0, 0, 0, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
 
-replace into`creature_template` values (80205, 0, 6055, 0, 0, 0, 'Shadowforge Fire Priest', NULL, 0, 5, 5, 109, 109, 138, 138, 105, 16, 0, 0.92, 1.14286, 0, 20, 5, 0, 0, 1, 4, 5, 0, 52, 1, 2000, 2156, 2, 32768, 0, 0, 0, 0, 0, 0, 8.624, 11.858, 100, 7, 0, 3183, 3183, 0, 0, 0, 0, 0, 0, 0, 172, 348, 0, 0, 31830, 0, 3, 9, 'EventAI', 0, 3, 0, 0, 3, 3183, 0, 0, 0, 0, 0, '');
+replace into`creature_template` values (80205, 0, 6055, 0, 0, 0, 'Shadowforge Fire Priest', NULL, 0, 4, 4, 109, 109, 138, 138, 105, 16, 0, 0.92, 1.14286, 0, 20, 5, 0, 0, 1, 4, 5, 0, 52, 1, 2000, 2156, 2, 32768, 0, 0, 0, 0, 0, 0, 8.624, 11.858, 100, 7, 0, 3183, 3183, 0, 0, 0, 0, 0, 0, 0, 172, 348, 0, 0, 31830, 0, 3, 9, 'EventAI', 0, 3, 0, 0, 3, 3183, 0, 0, 0, 0, 0, '');
 
 update creature_template set 
-health_min = 120, health_max = 160, dmg_school = 2,
-armor = 96, dmg_min = 12, dmg_max = 16, attack_power = 60,
+health_min = 100, health_max = 130, dmg_school = 2,
+armor = 76, dmg_min = 12, dmg_max = 16, attack_power = 50,
 spell_id1 = 348, spell_list_id = 31830, gold_min = 9, gold_max = 29 
 where entry = 80205;
 
@@ -979,12 +979,12 @@ set @quest_finisher = 1156;
 set @nextquest = 0;
 set @nextquestinchain = 0;
 set @prevquest = 80201;
-set @RewChoiceItemId1 = 0; 
-set @RewChoiceItemId2 = 0; 
+set @RewChoiceItemId1 = 118; 
+set @RewChoiceItemId2 = 2455; 
 set @RewChoiceItemId3 = 0;
 set @RewChoiceItemId4 = 0; 
-set @RewChoiceItemCount1 = 0;
-set @RewChoiceItemCount2 = 0;
+set @RewChoiceItemCount1 = 5;
+set @RewChoiceItemCount2 = 5;
 set @RewChoiceItemCount3 = 0;
 set @RewChoiceItemCount4 = 0;
 set @reward_item_1 = 0;
@@ -1704,7 +1704,7 @@ replace into `npc_trainer` values (80219, 3048, 100, 0, 0, 6, 0, 5875);
 replace into `npc_trainer` values (80219, 5298, 100, 0, 0, 6, 0, 5875);
 replace into `npc_trainer` values (80219, 13164, 50, 0, 0, 4, 0, 5875);
 
-replace into `creature_template`  values (80220, 0, 16624 , 0, 0, 0, 'Lor\'thas the Holy', 'Paladin Trainer', 4663, 5, 5, 166, 166, 190, 190, 20, 12, 19, 1, 1.14286, 0, 20, 5, 0, 0, 1, 6, 8, 0, 52, 1, 1500, 2000, 1, 4864, 0, 0, 0, 0, 2, 0, 8.624, 11.858, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 925, 0, 0, 0, 0, 524298, '');
+replace into `creature_template`  values (80220, 0, 16851, 0, 0, 0, 'Lor\'thas the Holy', 'Paladin Trainer', 4663, 5, 5, 166, 166, 190, 190, 20, 12, 19, 1, 1.14286, 0, 20, 5, 0, 0, 1, 6, 8, 0, 52, 1, 1500, 2000, 1, 4864, 0, 0, 0, 0, 2, 0, 8.624, 11.858, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 925, 0, 0, 0, 0, 524298, '');
 
 update creature_template set faction = 371 where entry = 80220;
 
