@@ -581,7 +581,7 @@ struct boss_kelthuzadAI : public ScriptedAI
                     sLog.outBasic("(post)[%d] Spawn skele #%d, next in %dms", p1Timer, ++numSkeletons, nextBanshee);
                 }
 
-                DoScriptText(irand(SAY_AGGRO3, SAY_AGGRO1), m_creature);
+                DoScriptText(urand(SAY_AGGRO3, SAY_AGGRO1), m_creature);
                 m_creature->RemoveAurasDueToSpell(SPELL_VISUAL_CHANNEL);
                 DespawnAllIntroCreatures();
                 break;
