@@ -123,14 +123,6 @@ bool GossipSelect_npc_lordaeron_alice(Player* p_Player, Creature* p_Creature, ui
     return true;
 }
 
-bool GossipHello_npc_lordaeron_ike(Player* p_Player, Creature* p_Creature)
-{
-
-    p_Player->PrepareGossipMenu(p_Creature, p_Creature->GetCreatureInfo()->gossip_menu_id);
-    p_Player->SEND_GOSSIP_MENU(90202, p_Creature->GetGUID());
-    return true;
-}
-
 #define ELUNE_WINTER_QUEST 50318     
 #define EGGNOG_ITEM        17198      
 #define MOONKIN_FED        19705      
@@ -818,11 +810,6 @@ void AddSC_random()
     newscript->Name = "npc_lordaeron_alice";
     newscript->pGossipHello = &GossipHello_npc_lordaeron_alice;
     newscript->pGossipSelect = &GossipSelect_npc_lordaeron_alice;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "npc_lordaeron_ike";
-    newscript->pGossipHello = &GossipHello_npc_lordaeron_ike;
     newscript->RegisterSelf();
 
     newscript = new Script;
