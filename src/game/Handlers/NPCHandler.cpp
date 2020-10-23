@@ -422,11 +422,14 @@ void WorldSession::HandleGossipSelectOptionOpcode(WorldPacket & recv_data)
         // Turtle WoW Specific: required to make sure that companions with menu options will continue to follow players after option selection.
         if (pCreature->GetCharmInfo() == nullptr || !pCreature->GetCharmInfo()->IsFollowing())
         {
-            // Clear possible StopMoving motion
-            if (pCreature->IsStopped())
-                pCreature->GetMotionMaster()->Clear();
+            if (!(pCreature->GetCreatureInfo()->flags_extra & CREATURE_FLAG_EXTRA_NO_MOVEMENT_PAUSE))
+            {
+                // Clear possible StopMoving motion
+                if (pCreature->IsStopped())
+                    pCreature->GetMotionMaster()->Clear();
 
-            pCreature->StopMoving();
+                pCreature->StopMoving();
+            }
         }
 
         if (!sScriptMgr.OnGossipSelect(_player, pCreature, sender, action, code.empty() ? NULL : code.c_str()))
