@@ -153,7 +153,7 @@ struct boss_heiganAI : public ScriptedAI
         m_events.ScheduleEvent(EVENT_DOOR_CLOSE, Seconds(15));
         m_events.ScheduleEvent(EVENT_PORT_PLAYER,Seconds(40));
 
-        DoScriptText(irand(SAY_AGGRO3, SAY_AGGRO1), m_creature);
+        DoScriptText(urand(SAY_AGGRO3, SAY_AGGRO1), m_creature);
 
         if (m_pInstance)
             m_pInstance->SetData(TYPE_HEIGAN, IN_PROGRESS);
