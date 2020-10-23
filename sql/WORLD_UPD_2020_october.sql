@@ -1068,6 +1068,8 @@ DELIMITER ;
 CALL `?`();
 DROP PROCEDURE `?`;
 
+DELETE FROM `gameobject` WHERE `guid` BETWEEN 131140 AND 131150;
+DELETE FROM `game_event_gameobject` WHERE `guid` IN (131140, 131141, 131142, 131143, 131144, 131145, 131146, 131147, 131148, 131149, 131150) AND `event` = 12;
 
 -- Fix item Forsaken Stink Bomb Cluster.
 REPLACE INTO `creature` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `patch_min`, `patch_max`) VALUES (202776, 15415, 0, -854.598, -504.041, 11.3208, 3.64774, 6, 10);
