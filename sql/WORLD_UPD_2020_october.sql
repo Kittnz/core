@@ -1426,3 +1426,13 @@ UPDATE `quest_template` SET `IncompleteEmote`=6, `CompleteEmote`=6 WHERE `entry`
 UPDATE `quest_template` SET `IncompleteEmote`=1, `CompleteEmote`=1 WHERE `entry`=8359;
 UPDATE `quest_template` SET `IncompleteEmote`=6, `CompleteEmote`=6, `RequestItemsText`='You know how to dance, don\'t you?  Try by putting your right foot in... then your right foot out... your right foot in... shake it all about...' WHERE `entry`=8360;
 UPDATE `quest_template` SET `IncompleteEmote`=15, `CompleteEmote`=15, `RequestItemsText`='Those blasted Forsaken... it\'s already bad enough that they\'re undead, but then they get all riled up and start causing trouble in MY village!' WHERE `entry`=8373;
+
+-- Waypoints for Innkeeper Thulfram.
+UPDATE `creature` SET `movementtype`=2, `position_x`=394.657013, `position_y`=-2097.139893, `position_z`=131.561996 WHERE `guid`=92923;
+INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+(92923, 1, 394.657013, -2097.139893, 131.561996, 100.000000, 0, 0.000000, 0),
+(92923, 2, 399.725006, -2119.739990, 131.563995, 100.000000, 0, 0.000000, 0),
+(92923, 3, 396.190002, -2103.780029, 131.561996, 100.000000, 0, 0.000000, 0),
+(92923, 4, 394.209015, -2095.250000, 131.561996, 100.000000, 0, 0.000000, 0),
+(92923, 5, 390.916992, -2081.429932, 131.561996, 100.000000, 0, 0.000000, 0),
+(92923, 6, 391.851990, -2085.350098, 131.563004, 100.000000, 0, 0.000000, 0);
