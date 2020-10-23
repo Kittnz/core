@@ -361,7 +361,7 @@ update quest_template set method = 2 where entry in (8272, 8271);
 UPDATE `creature` SET `position_x` = 1732.310059, `position_y` = 520.874023, `position_z` = 36.332600, `orientation` = 1.309420 WHERE `guid` = 85634 AND `id` = 15195;
 
 DELETE FROM `gameobject` WHERE `guid` BETWEEN 131140 AND 131150;
-INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`, `spawnflags`, `visibilitymod`) VALUES
+REPLACE INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`, `spawnflags`, `visibilitymod`) VALUES
 (131140, 180432, 0, 1749.28, 507.611, 39.2312, 1.49635, 0, 0, 0.680301, 0.732933, 300, 300, 0, 1, 0, 0),
 (131141, 180432, 0, 1712.63, 507.05, 38.2495, 1.58824, 0, 0, 0.713246, 0.700914, 300, 300, 0, 1, 0, 0),
 
@@ -378,7 +378,7 @@ INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `posi
 (131150, 180437, 0, 1744.96, 496.25, 41.44, 1.24581, 0, 0, 0.583397, 0.812187, 300, 300, 0, 1, 0, 0);
 
 DELETE FROM `game_event_gameobject` WHERE `guid` IN (131140, 131141, 131142, 131143, 131144, 131145, 131146, 131147, 131148, 131149, 131150) AND `event` = 12;
-INSERT INTO `game_event_gameobject` (`guid`, `event`) VALUES
+REPLACE INTO `game_event_gameobject` (`guid`, `event`) VALUES
 (131140, 12),
 (131141, 12),
 (131142, 12),
@@ -975,7 +975,7 @@ UPDATE `creature_template` SET `faction`=1619 WHERE `entry`=16012;
 -- Waypoints for Soaring Razorbeak.
 UPDATE `creature_template` SET `inhabit_type`=5 WHERE `entry`=8276;
 UPDATE `creature` SET `movementtype`=2, `position_x`=1.323350, `position_y`=-2004.439941, `position_z`=255.783997 WHERE `guid`=92881;
-INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (92881, 1, 1.323350, -2004.439941, 255.783997, 100.000000, 0, 0.000000, 0), -- spline 0/76
 (92881, 2, 1.146700, -1992.199951, 256.144989, 100.000000, 0, 0.000000, 0), -- spline 1/76
 (92881, 3, 5.552030, -1982.819946, 254.923004, 100.000000, 0, 0.000000, 0), -- spline 2/76
@@ -1056,8 +1056,8 @@ INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `pos
 
 
 -- Add gossip menu for Spoops.
-INSERT INTO `conditions` (`condition_entry`, `type`, `value1`, `value2`, `value3`, `value4`, `flags`) VALUES (8312, 8, 8312, 0, 0, 0, 0);
-INSERT INTO `gossip_menu` (`entry`, `text_id`,  `condition_id`) VALUES
+REPLACE INTO `conditions` (`condition_entry`, `type`, `value1`, `value2`, `value3`, `value4`, `flags`) VALUES (8312, 8, 8312, 0, 0, 0, 0);
+REPLACE INTO `gossip_menu` (`entry`, `text_id`,  `condition_id`) VALUES
 (6591, 7808, 0),
 (6591, 7809, 8312);
 UPDATE `creature_template` SET `gossip_menu_id`=6591, `npc_flags`=3 WHERE `entry`=15309;
@@ -1066,9 +1066,9 @@ UPDATE `creature_template` SET `gossip_menu_id`=6591, `npc_flags`=3 WHERE `entry
 UPDATE `npc_vendor` SET `condition_id`=8312 WHERE `entry`=15354 && `item`=20557;
 
 -- Add gossip menu for Jesper.
-INSERT INTO `conditions` (`condition_entry`, `type`, `value1`, `value2`, `value3`, `value4`, `flags`) VALUES (8311, 8, 8311, 0, 0, 0, 0);
-INSERT INTO `npc_text` (`ID`, `Probability0`, `Probability1`, `Probability2`, `Probability3`, `Probability4`, `Probability5`, `Probability6`, `Probability7`, `BroadcastTextID0`, `BroadcastTextID1`, `BroadcastTextID2`, `BroadcastTextID3`, `BroadcastTextID4`, `BroadcastTextID5`, `BroadcastTextID6`, `BroadcastTextID7`) VALUES (7811, 1, 0, 0, 0, 0, 0, 0, 0, 10814, 0, 0, 0, 0, 0, 0, 0);
-INSERT INTO `gossip_menu` (`entry`, `text_id`,  `condition_id`) VALUES
+REPLACE INTO `conditions` (`condition_entry`, `type`, `value1`, `value2`, `value3`, `value4`, `flags`) VALUES (8311, 8, 8311, 0, 0, 0, 0);
+REPLACE INTO `npc_text` (`ID`, `Probability0`, `Probability1`, `Probability2`, `Probability3`, `Probability4`, `Probability5`, `Probability6`, `Probability7`, `BroadcastTextID0`, `BroadcastTextID1`, `BroadcastTextID2`, `BroadcastTextID3`, `BroadcastTextID4`, `BroadcastTextID5`, `BroadcastTextID6`, `BroadcastTextID7`) VALUES (7811, 1, 0, 0, 0, 0, 0, 0, 0, 10814, 0, 0, 0, 0, 0, 0, 0);
+REPLACE INTO `gossip_menu` (`entry`, `text_id`,  `condition_id`) VALUES
 (6592, 7810, 0),
 (6592, 7811, 8311);
 UPDATE `creature_template` SET `gossip_menu_id`=6592, `npc_flags`=3 WHERE `entry`=15310;
@@ -1077,11 +1077,11 @@ UPDATE `creature_template` SET `gossip_menu_id`=6592, `npc_flags`=3 WHERE `entry
 UPDATE `npc_vendor` SET `condition_id`=8311 WHERE `entry`=15353 && `item`=20557;
 
 -- Add gossip menu for Katrina Shimmerstar.
-INSERT INTO `gossip_menu` (`entry`, `text_id`) VALUES
+REPLACE INTO `gossip_menu` (`entry`, `text_id`) VALUES
 (6589, 7805),
 (6594, 7813);
-INSERT INTO `gossip_menu_option` (`menu_id`, `id`, `option_icon`, `option_text`, `OptionBroadcastTextID`, `option_id`, `npc_option_npcflag`, `action_menu_id`, `action_poi_id`, `box_coded`, `box_money`, `box_text`, `BoxBroadcastTextID`) VALUES (6589, 0, 1, 'What Hallow\'s End candy do you have for sale?', 10815, 3, 4, 0, 0, 0, 0, NULL, 0);
-INSERT INTO `gossip_menu_option` (`menu_id`, `id`, `option_icon`, `option_text`, `OptionBroadcastTextID`, `option_id`, `npc_option_npcflag`, `action_menu_id`, `action_poi_id`, `box_coded`, `box_money`, `box_text`, `BoxBroadcastTextID`) VALUES (6589, 1, 0, 'What is there to do on Hallow\'s End?', 10816, 1, 1, 6594, 0, 0, 0, NULL, 0);
+REPLACE INTO `gossip_menu_option` (`menu_id`, `id`, `option_icon`, `option_text`, `OptionBroadcastTextID`, `option_id`, `npc_option_npcflag`, `action_menu_id`, `action_poi_id`, `box_coded`, `box_money`, `box_text`, `BoxBroadcastTextID`) VALUES (6589, 0, 1, 'What Hallow\'s End candy do you have for sale?', 10815, 3, 4, 0, 0, 0, 0, NULL, 0);
+REPLACE INTO `gossip_menu_option` (`menu_id`, `id`, `option_icon`, `option_text`, `OptionBroadcastTextID`, `option_id`, `npc_option_npcflag`, `action_menu_id`, `action_poi_id`, `box_coded`, `box_money`, `box_text`, `BoxBroadcastTextID`) VALUES (6589, 1, 0, 'What is there to do on Hallow\'s End?', 10816, 1, 1, 6594, 0, 0, 0, NULL, 0);
 UPDATE `creature_template` SET `gossip_menu_id`=6589, `npc_flags`=5 WHERE `entry`=15353;
 
 -- The emote quests should be repeatable.
@@ -1094,7 +1094,7 @@ UPDATE `quest_template` SET `SpecialFlags`=0 WHERE `entry`=8312;
 UPDATE `quest_template` SET `SpecialFlags`=0 WHERE `entry`=1657;
 
 -- Add targets for Despawn Ice Block since i removed hack for it in core.
-INSERT INTO `spell_script_target` (`entry`, `type`, `targetEntry`, `conditionId`, `build_min`, `build_max`) VALUES (30132, 0, 181247, 0, 5464, 5875);
+REPLACE INTO `spell_script_target` (`entry`, `type`, `targetEntry`, `conditionId`, `build_min`, `build_max`) VALUES (30132, 0, 181247, 0, 5464, 5875);
 
 -- Add inverse effect mask to spell script targets.
 DROP PROCEDURE IF EXISTS `?`;
@@ -1113,12 +1113,12 @@ DROP PROCEDURE `?`;
 -- Fix item Forsaken Stink Bomb Cluster.
 REPLACE INTO `creature` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `patch_min`, `patch_max`) VALUES (202776, 15415, 0, -854.598, -504.041, 11.3208, 3.64774, 6, 10);
 DELETE FROM `event_scripts` WHERE `id`=9417;
-INSERT INTO `event_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (9417, 0, 83, 0, 0, 0, 0, 15415, 100, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Toss Stink Bomb - Quest Credit for Stinking Up Southshore');
+REPLACE INTO `event_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (9417, 0, 83, 0, 0, 0, 0, 15415, 100, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Toss Stink Bomb - Quest Credit for Stinking Up Southshore');
 UPDATE `creature_template` SET `unit_flags` = 256 + 512 + 33554432 WHERE `entry`=15415;
 
 -- Add targets for Stink Bomb Cleaner.
-INSERT INTO `spell_script_target` (`entry`, `type`, `targetEntry`, `conditionId`, `inverseEffectMask`, `build_min`, `build_max`) VALUES (24973, 0, 180449, 0, 2, 4878, 5875);
-INSERT INTO `spell_script_target` (`entry`, `type`, `targetEntry`, `conditionId`, `inverseEffectMask`, `build_min`, `build_max`) VALUES (24973, 0, 180450, 0, 4, 4878, 5875);
+REPLACE INTO `spell_script_target` (`entry`, `type`, `targetEntry`, `conditionId`, `inverseEffectMask`, `build_min`, `build_max`) VALUES (24973, 0, 180449, 0, 2, 4878, 5875);
+REPLACE INTO `spell_script_target` (`entry`, `type`, `targetEntry`, `conditionId`, `inverseEffectMask`, `build_min`, `build_max`) VALUES (24973, 0, 180450, 0, 4, 4878, 5875);
 
 -- Fix unusable Apple Bob objects.
 UPDATE `gameobject` SET `state` = 1 WHERE `guid` IN (332880, 332864) AND `id` = 180523;
@@ -1429,7 +1429,7 @@ UPDATE `quest_template` SET `IncompleteEmote`=15, `CompleteEmote`=15, `RequestIt
 
 -- Waypoints for Innkeeper Thulfram.
 UPDATE `creature` SET `movementtype`=2, `position_x`=394.657013, `position_y`=-2097.139893, `position_z`=131.561996 WHERE `guid`=92923;
-INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (92923, 1, 394.657013, -2097.139893, 131.561996, 100.000000, 0, 0.000000, 0),
 (92923, 2, 399.725006, -2119.739990, 131.563995, 100.000000, 0, 0.000000, 0),
 (92923, 3, 396.190002, -2103.780029, 131.561996, 100.000000, 0, 0.000000, 0),
@@ -1439,8 +1439,8 @@ INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `pos
 
 -- gina lang summon imp
 UPDATE `creature_template` SET `ai_name` = 'EventAI' WHERE `entry` = 5750;
-INSERT INTO `creature_ai_events` (`id`, `creature_id`, `condition_id`, `event_type`, `event_inverse_phase_mask`, `event_chance`, `event_flags`, `event_param1`, `event_param2`, `event_param3`, `event_param4`, `action1_script`, `action2_script`, `action3_script`, `comment`) VALUES (575001, 5750, 0, 11, 0, 100, 0, 0, 0, 0, 0, 575001, 0, 0, 'Gina Lang - Summon Imp on Spawn');
-INSERT INTO `creature_ai_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (575001, 0, 15, 11939, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gina Lang - Summon Imp on Spawn');
+REPLACE INTO `creature_ai_events` (`id`, `creature_id`, `condition_id`, `event_type`, `event_inverse_phase_mask`, `event_chance`, `event_flags`, `event_param1`, `event_param2`, `event_param3`, `event_param4`, `action1_script`, `action2_script`, `action3_script`, `comment`) VALUES (575001, 5750, 0, 11, 0, 100, 0, 0, 0, 0, 0, 575001, 0, 0, 'Gina Lang - Summon Imp on Spawn');
+REPLACE INTO `creature_ai_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (575001, 0, 15, 11939, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gina Lang - Summon Imp on Spawn');
 
 -- allow doreen beltis to roam
 UPDATE `creature` SET `movementtype` = 1, `wander_distance` = 2 WHERE `guid` = 31918;
@@ -1459,15 +1459,15 @@ DELETE FROM `creature` WHERE `guid` = 14369;
 
 -- junior apothecary holland - say OOC
 UPDATE `creature_template` SET `ai_name` = 'EventAI' WHERE `entry` = 10665;
-INSERT INTO `creature_ai_events` (`id`, `creature_id`, `condition_id`, `event_type`, `event_inverse_phase_mask`, `event_chance`, `event_flags`, `event_param1`, `event_param2`, `event_param3`, `event_param4`, `action1_script`, `action2_script`, `action3_script`, `comment`) VALUES (1066501, 10665, 0, 1, 0, 100, 1, 10000, 20000, 40000, 60000, 1066501, 0, 0, 'Junior Apothecary Holland - Say OOC');
-INSERT INTO `creature_ai_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066501, 0, 1, 5, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Junior Apothecary Holland - Emote');
-INSERT INTO `creature_ai_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066501, 0, 39, 1066501, 1066502, 0, 0, 0, 0, 0, 4, 50, 50, 0, 0, 0, 0, 0, 0, 0, 'Junior Apothecary Holland - Start Script');
-INSERT INTO `event_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066501, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 5955, 5956, 5957, 5958, 0, 0, 0, 0, 0, 'Junior Apothecary Holland - Talk');
-INSERT INTO `event_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066502, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 5959, 5960, 5961, 5962, 0, 0, 0, 0, 0, 'Junior Apothecary Holland - Talk');
+REPLACE INTO `creature_ai_events` (`id`, `creature_id`, `condition_id`, `event_type`, `event_inverse_phase_mask`, `event_chance`, `event_flags`, `event_param1`, `event_param2`, `event_param3`, `event_param4`, `action1_script`, `action2_script`, `action3_script`, `comment`) VALUES (1066501, 10665, 0, 1, 0, 100, 1, 10000, 20000, 40000, 60000, 1066501, 0, 0, 'Junior Apothecary Holland - Say OOC');
+REPLACE INTO `creature_ai_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066501, 0, 1, 5, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Junior Apothecary Holland - Emote');
+REPLACE INTO `creature_ai_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066501, 0, 39, 1066501, 1066502, 0, 0, 0, 0, 0, 4, 50, 50, 0, 0, 0, 0, 0, 0, 0, 'Junior Apothecary Holland - Start Script');
+REPLACE INTO `event_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066501, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 5955, 5956, 5957, 5958, 0, 0, 0, 0, 0, 'Junior Apothecary Holland - Talk');
+REPLACE INTO `event_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066502, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 5959, 5960, 5961, 5962, 0, 0, 0, 0, 0, 'Junior Apothecary Holland - Talk');
 
 -- deathguard lundmark waypoints
 DELETE FROM `creature_movement` WHERE `id` = 32028;
-INSERT INTO `creature_movement_template` (`entry`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement_template` (`entry`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (5725, 1, 2257.139893, 494.394989, 34.187599, 100.000000, 0, 0.000000, 0),
 (5725, 2, 2260.280029, 531.893982, 33.629799, 100.000000, 0, 0.000000, 0),
 (5725, 3, 2261.860107, 544.312988, 33.476501, 100.000000, 0, 0.000000, 0),
@@ -1547,7 +1547,7 @@ INSERT INTO `creature_movement_template` (`entry`, `point`, `position_x`, `posit
 
 -- creature 37920 waypoints
 UPDATE `creature` SET `movementtype` = 2 WHERE `guid` = 37920;
-INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (37920, 1, 2960.300049, -552.671997, 110.327003, 100.000000, 0, 0.000000, 0),
 (37920, 2, 2940.260010, -554.539001, 109.246002, 100.000000, 0, 0.000000, 0),
 (37920, 3, 2916.270020, -551.676025, 107.651001, 100.000000, 0, 0.000000, 0),
@@ -1574,9 +1574,9 @@ INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `pos
 (37920, 24, 2992.870117, -547.953003, 114.424004, 100.000000, 0, 0.000000, 0);
 
 -- creature 38931 waypoints
-INSERT INTO `creature` (`guid`, `id`, `id2`, `id3`, `id4`, `map`, `display_id`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `wander_distance`, `health_percent`, `mana_percent`, `movementtype`, `spawn_flags`, `visibility_mod`, `patch_min`, `patch_max`) VALUES
+REPLACE INTO `creature` (`guid`, `id`, `id2`, `id3`, `id4`, `map`, `display_id`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `wander_distance`, `health_percent`, `mana_percent`, `movementtype`, `spawn_flags`, `visibility_mod`, `patch_min`, `patch_max`) VALUES
 (38931, 1522, 0, 0, 0, 0, 0, 0, 2707.419922, 875.736023, 111.987999, 3.92368, 300, 300, 0, 100, 100, 2, 0, 0, 0, 10);
-INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (38931, 1, 2707.419922, 875.736023, 111.987999, 100.000000, 0, 0.000000, 0),
 (38931, 2, 2766.189941, 857.533997, 112.612000, 100.000000, 20000, 10, 0),
 (38931, 3, 2770.020020, 857.156006, 112.238998, 100.000000, 0, 0.000000, 0),
@@ -1606,7 +1606,7 @@ INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `pos
 
 -- creature 29903 waypoints
 UPDATE `creature` SET `movementtype` = 2 WHERE `guid` = 29903;
-INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (29903, 1, 1859.020020, 891.783997, 27.993500, 100.000000, 0, 0.000000, 0),
 (29903, 2, 1850.819946, 882.888000, 28.130100, 100.000000, 0, 0.000000, 0),
 (29903, 3, 1843.130005, 869.096985, 26.149599, 100.000000, 0, 0.000000, 0),
@@ -1647,9 +1647,9 @@ INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `pos
 (29903, 38, 1874.640015, 919.437012, 28.116301, 100.000000, 0, 0.000000, 0);
 
 -- creature 29903 waypoints
-INSERT INTO `creature` (`guid`, `id`, `id2`, `id3`, `id4`, `map`, `display_id`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `wander_distance`, `health_percent`, `mana_percent`, `movementtype`, `spawn_flags`, `visibility_mod`, `patch_min`, `patch_max`) VALUES
+REPLACE INTO `creature` (`guid`, `id`, `id2`, `id3`, `id4`, `map`, `display_id`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `wander_distance`, `health_percent`, `mana_percent`, `movementtype`, `spawn_flags`, `visibility_mod`, `patch_min`, `patch_max`) VALUES
 (45537, 1675, 0, 0, 0, 0, 0, 0, 2858.959961, 405.078003, 20.856701, 5.60251, 300, 300, 0, 100, 0, 2, 0, 0, 0, 10);
-INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (45537, 1, 2858.959961, 405.078003, 20.856701, 1.099560, 51000, 0.000000, 0),
 (45537, 2, 2892.489990, 394.360992, 25.856501, 100.000000, 0, 0.000000, 0),
 (45537, 3, 2892.129883, 371.907013, 28.258600, 100.000000, 0, 0.000000, 0),
@@ -1673,7 +1673,7 @@ INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `pos
 
 -- creature 31933 waypoints
 UPDATE `creature` SET `movementtype` = 2 WHERE `guid` = 31933;
-INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (31933, 1, 2937.719971, 603.598022, 92.083199, 100.000000, 0, 0.000000, 0),
 (31933, 2, 2941.719971, 604.002991, 92.110802, 100.000000, 0, 0.000000, 0),
 (31933, 3, 2968.020020, 621.635010, 93.472198, 100.000000, 0, 0.000000, 0),
@@ -1729,7 +1729,7 @@ INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `pos
 
 -- creature 44909 waypoints
 DELETE FROM `creature_movement` WHERE `id` = 44909;
-INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (44909, 1, 2385.620117, 1323.609985, 33.981098, 100.000000, 0, 0.000000, 0),
 (44909, 2, 2386.399902, 1343.880005, 34.517502, 100.000000, 0, 0.000000, 0),
 (44909, 3, 2385.860107, 1372.119995, 34.476398, 100.000000, 0, 0.000000, 0),
@@ -1752,7 +1752,7 @@ INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `pos
 
 -- deathguard mort waypoints
 DELETE FROM `creature_movement` WHERE `id` = 34113;
-INSERT INTO `creature_movement_template` (`entry`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement_template` (`entry`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (1744, 1, 2239.479980, 257.286987, 34.130798, 100.000000, 0, 0.000000, 0),
 (1744, 2, 2239.479980, 257.286987, 34.130798, 2.583090, 323000, 0.000000, 0),
 (1744, 3, 2235.439941, 256.790009, 34.036400, 100.000000, 0, 0.000000, 0),
@@ -1793,7 +1793,7 @@ INSERT INTO `creature_movement_template` (`entry`, `point`, `position_x`, `posit
 
 -- creature 41869 waypoints
 UPDATE `creature` SET `movementtype` = 2 WHERE `guid` = 41869;
-INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (41869, 1, 3022.620117, -151.882996, 5.190570, 100.000000, 1207000, 0.000000, 0),
 (41869, 2, 3032.129883, -114.461998, 7.233430, 100.000000, 0, 0.000000, 0),
 (41869, 3, 3032.229980, -86.128304, 7.417500, 100.000000, 0, 0.000000, 0),
@@ -1823,7 +1823,7 @@ INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `pos
 
 -- hamlin atkins waypoints
 DELETE FROM `creature_movement` WHERE `id` = 38292;
-INSERT INTO `creature_movement_template` (`entry`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement_template` (`entry`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (3547, 1, 2310.179932, 397.315002, 33.934700, 100.000000, 0, 0.000000, 0),
 (3547, 2, 2322.260010, 397.614990, 33.684700, 100.000000, 0, 0.000000, 0),
 (3547, 3, 2330.379883, 397.348999, 33.696602, 100.000000, 0, 0.000000, 0),
@@ -1893,7 +1893,7 @@ INSERT INTO `creature_movement_template` (`entry`, `point`, `position_x`, `posit
 
 -- creature 44963 waypoints
 UPDATE `creature` SET `position_x` = 2003.329956, `position_y` = 1607.270020, `position_z` = 76.560097, `movementtype` = 2 WHERE `guid` = 44963;
-INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (44963, 1, 2003.329956, 1607.270020, 76.560097, 100.000000, 0, 0.000000, 0),
 (44963, 2, 1996.469971, 1609.349976, 80.015198, 100.000000, 0, 0.000000, 0),
 (44963, 3, 1989.859985, 1602.010010, 82.430000, 100.000000, 0, 0.000000, 0),
@@ -1914,7 +1914,7 @@ INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `pos
 
 -- tormented spirit waypoints
 DELETE FROM `creature_movement` WHERE `id`  = 49222;
-INSERT INTO `creature_movement_template` (`entry`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement_template` (`entry`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (1533, 1, 2894.919922, 1012.919983, 108.181000, 100.000000, 0, 0.000000, 0),
 (1533, 2, 2897.300049, 977.080994, 113.988998, 100.000000, 0, 0.000000, 0),
 (1533, 3, 2899.770020, 952.999023, 115.272003, 100.000000, 0, 0.000000, 0),
@@ -1944,7 +1944,7 @@ INSERT INTO `creature_movement_template` (`entry`, `point`, `position_x`, `posit
 
 -- creature 44643 waypoints
 UPDATE `creature` SET `movementtype` = 2 WHERE `guid` = 44643;
-INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (44643, 1, 3023.610107, 382.687012, 1.393030, 100.000000, 0, 0.000000, 0),
 (44643, 2, 3021.739990, 374.898987, 0.437257, 100.000000, 0, 0.000000, 0),
 (44643, 3, 3018.409912, 373.253998, 1.340050, 100.000000, 0, 0.000000, 0),
@@ -1970,7 +1970,7 @@ INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `pos
 
 -- creature 44643 waypoints
 UPDATE `creature` SET `movementtype` = 2 WHERE `guid` = 44750;
-INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (44750, 1, 2188.929932, -427.028992, 76.109398, 100.000000, 0, 0.000000, 0),
 (44750, 2, 2179.550049, -439.601990, 75.794098, 100.000000, 0, 0.000000, 0),
 (44750, 3, 2173.409912, -471.147003, 75.735397, 100.000000, 0, 0.000000, 0),
@@ -2007,9 +2007,9 @@ INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `pos
 (44750, 34, 2204.870117, -417.312988, 75.509804, 100.000000, 0, 0.000000, 0);
 
 -- creature 53239 waypoints
-INSERT INTO `creature` (`guid`, `id`, `id2`, `id3`, `id4`, `map`, `display_id`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `wander_distance`, `health_percent`, `mana_percent`, `movementtype`, `spawn_flags`, `visibility_mod`, `patch_min`, `patch_max`) VALUES
+REPLACE INTO `creature` (`guid`, `id`, `id2`, `id3`, `id4`, `map`, `display_id`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `wander_distance`, `health_percent`, `mana_percent`, `movementtype`, `spawn_flags`, `visibility_mod`, `patch_min`, `patch_max`) VALUES
 (53239, 1675, 0, 0, 0, 0, 0, 0, 2883.449951, 385.436005, 24.978399, 5.60251, 300, 300, 0, 100, 0, 2, 0, 0, 0, 10);
-INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (53239, 1, 2883.449951, 385.436005, 24.978399, 100.000000, 36000, 10, 0),
 (53239, 2, 2849.020020, 371.700012, 23.793501, 100.000000, 0, 0.000000, 0),
 (53239, 3, 2813.689941, 352.257996, 23.857901, 100.000000, 0, 0.000000, 0),
@@ -2028,7 +2028,7 @@ INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `pos
 
 -- creature 42152 waypoints
 UPDATE `creature` SET `movementtype` = 2 WHERE `guid` = 42152;
-INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (42152, 1, 2320.310059, 1335.489990, 33.458302, 100.000000, 0, 0.000000, 0),
 (42152, 2, 2335.739990, 1338.939941, 33.406502, 100.000000, 0, 0.000000, 0),
 (42152, 3, 2363.919922, 1338.849976, 33.392502, 100.000000, 0, 0.000000, 0),
@@ -2055,7 +2055,7 @@ INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `pos
 
 -- creature 44682 waypoints
 UPDATE `creature` SET `movementtype` = 2 WHERE `guid` = 44682;
-INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (44682, 1, 2778.659912, 436.463989, 19.110300, 100.000000, 0, 0.000000, 0),
 (44682, 2, 2751.000000, 442.029999, 20.681000, 100.000000, 0, 0.000000, 0),
 (44682, 3, 2711.310059, 438.170990, 19.375200, 100.000000, 0, 0.000000, 0),
@@ -2072,7 +2072,7 @@ INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `pos
 
 -- creature 44918 waypoints
 UPDATE `creature` SET `movementtype` = 2 WHERE `guid` = 44918;
-INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (44918, 1, 2502.600098, 1586.709961, 34.294201, 100.000000, 0, 0.000000, 0),
 (44918, 2, 2499.409912, 1584.270020, 34.870899, 100.000000, 0, 0.000000, 0),
 (44918, 3, 2494.739990, 1553.709961, 34.626099, 100.000000, 0, 0.000000, 0),
@@ -2095,7 +2095,7 @@ INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `pos
 
 -- deathguard bartholomew waypoints
 DELETE FROM `creature_movement` WHERE `id`  = 34111;
-INSERT INTO `creature_movement_template` (`entry`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement_template` (`entry`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (1742, 1, 2289.300049, 391.420990, 34.200100, 2.722710, 329000, 0.000000, 0),
 (1742, 2, 2308.040039, 396.177002, 33.968300, 100.000000, 0, 0.000000, 0),
 (1742, 3, 2328.250000, 396.539001, 33.684700, 100.000000, 0, 0.000000, 0),
@@ -2129,7 +2129,7 @@ INSERT INTO `creature_movement_template` (`entry`, `point`, `position_x`, `posit
 -- gordo waypoints
 UPDATE `creature` SET `position_x` = 2190.060059, `position_y` = 1087.359985, `position_z` = 29.801800 WHERE `guid` = 28413;
 DELETE FROM `creature_movement` WHERE `id`  = 28413;
-INSERT INTO `creature_movement_template` (`entry`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement_template` (`entry`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (10666, 1, 2190.06, 1087.36, 29.8018, 100, 0, 0, 0),
 (10666, 2, 2194.54, 1078.85, 29.3607, 100, 0, 0, 0),
 (10666, 3, 2198.55, 1067.45, 29.0648, 100, 0, 0, 0),
@@ -2322,89 +2322,89 @@ INSERT INTO `creature_movement_template` (`entry`, `point`, `position_x`, `posit
 (10666, 190, 2186.88, 1095.04, 29.9807, 100, 0, 0, 0);
 
 -- 106601
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066601, 0, 25, 1, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Run');
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066601, 1, 16, 6273, 2, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Play Sound');
+REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066601, 0, 25, 1, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Run');
+REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066601, 1, 16, 6273, 2, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Play Sound');
 
 -- 1066602
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066602, 0, 25, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Walk');
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066602, 1, 81, 25531, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Despawn GameObject');
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066602, 1, 0, 2, 0, 0, 0, 0, 0, 0, 4, 6893, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Talk');
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066602, 1, 1, 36, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Emote Attack1H');
+REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066602, 0, 25, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Walk');
+REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066602, 1, 81, 25531, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Despawn GameObject');
+REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066602, 1, 0, 2, 0, 0, 0, 0, 0, 0, 4, 6893, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Talk');
+REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066602, 1, 1, 36, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Emote Attack1H');
 
 -- 1066603
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066603, 0, 25, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Walk');
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066603, 1, 81, 25549, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Despawn GameObject');
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066603, 1, 0, 2, 0, 0, 0, 0, 0, 0, 4, 6893, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Talk');
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066603, 1, 1, 36, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Emote Attack1H');
+REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066603, 0, 25, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Walk');
+REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066603, 1, 81, 25549, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Despawn GameObject');
+REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066603, 1, 0, 2, 0, 0, 0, 0, 0, 0, 4, 6893, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Talk');
+REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066603, 1, 1, 36, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Emote Attack1H');
 
 -- 1066604
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066604, 0, 25, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Walk');
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066604, 1, 81, 25552, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Despawn GameObject');
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066604, 1, 0, 2, 0, 0, 0, 0, 0, 0, 4, 6893, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Talk');
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066604, 1, 1, 36, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Emote Attack1H');
+REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066604, 0, 25, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Walk');
+REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066604, 1, 81, 25552, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Despawn GameObject');
+REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066604, 1, 0, 2, 0, 0, 0, 0, 0, 0, 4, 6893, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Talk');
+REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066604, 1, 1, 36, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Emote Attack1H');
 
 -- 1066605
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066605, 0, 25, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Walk');
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066605, 1, 81, 25518, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Despawn GameObject');
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066605, 1, 0, 2, 0, 0, 0, 0, 0, 0, 4, 6893, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Talk');
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066605, 1, 1, 36, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Emote Attack1H');
+REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066605, 0, 25, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Walk');
+REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066605, 1, 81, 25518, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Despawn GameObject');
+REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066605, 1, 0, 2, 0, 0, 0, 0, 0, 0, 4, 6893, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Talk');
+REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066605, 1, 1, 36, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Emote Attack1H');
 
 -- 1066606
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066606, 0, 25, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Walk');
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066606, 1, 81, 25513, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Despawn GameObject');
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066606, 1, 0, 2, 0, 0, 0, 0, 0, 0, 4, 6893, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Talk');
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066606, 1, 1, 36, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Emote Attack1H');
+REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066606, 0, 25, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Walk');
+REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066606, 1, 81, 25513, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Despawn GameObject');
+REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066606, 1, 0, 2, 0, 0, 0, 0, 0, 0, 4, 6893, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Talk');
+REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066606, 1, 1, 36, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Emote Attack1H');
 
 -- 1066607
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066607, 0, 25, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Walk');
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066607, 1, 81, 25550, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Despawn GameObject');
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066607, 1, 0, 2, 0, 0, 0, 0, 0, 0, 4, 6893, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Talk');
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066607, 1, 1, 36, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Emote Attack1H');
+REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066607, 0, 25, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Walk');
+REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066607, 1, 81, 25550, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Despawn GameObject');
+REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066607, 1, 0, 2, 0, 0, 0, 0, 0, 0, 4, 6893, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Talk');
+REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066607, 1, 1, 36, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Emote Attack1H');
 
 -- 1066608
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066608, 0, 25, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Walk');
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066608, 1, 81, 25508, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Despawn GameObject');
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066608, 1, 0, 2, 0, 0, 0, 0, 0, 0, 4, 6893, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Talk');
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066608, 1, 1, 36, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Emote Attack1H');
+REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066608, 0, 25, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Walk');
+REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066608, 1, 81, 25508, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Despawn GameObject');
+REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066608, 1, 0, 2, 0, 0, 0, 0, 0, 0, 4, 6893, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Talk');
+REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066608, 1, 1, 36, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Emote Attack1H');
 
 -- 1066609
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066609, 0, 25, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Walk');
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066609, 1, 81, 25569, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Despawn GameObject');
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066609, 1, 0, 2, 0, 0, 0, 0, 0, 0, 4, 6893, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Talk');
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066609, 1, 1, 36, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Emote Attack1H');
+REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066609, 0, 25, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Walk');
+REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066609, 1, 81, 25569, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Despawn GameObject');
+REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066609, 1, 0, 2, 0, 0, 0, 0, 0, 0, 4, 6893, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Talk');
+REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066609, 1, 1, 36, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Emote Attack1H');
 
 -- 1066610
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066610, 0, 25, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Walk');
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066610, 1, 81, 25556, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Despawn GameObject');
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066610, 1, 0, 2, 0, 0, 0, 0, 0, 0, 4, 6893, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Talk');
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066610, 1, 1, 36, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Emote Attack1H');
+REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066610, 0, 25, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Walk');
+REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066610, 1, 81, 25556, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Despawn GameObject');
+REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066610, 1, 0, 2, 0, 0, 0, 0, 0, 0, 4, 6893, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Talk');
+REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066610, 1, 1, 36, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Emote Attack1H');
 
 -- 1066611
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066611, 0, 25, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Walk');
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066611, 1, 81, 25558, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Despawn GameObject');
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066611, 1, 0, 2, 0, 0, 0, 0, 0, 0, 4, 6893, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Talk');
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066611, 1, 1, 36, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Emote Attack1H');
+REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066611, 0, 25, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Walk');
+REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066611, 1, 81, 25558, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Despawn GameObject');
+REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066611, 1, 0, 2, 0, 0, 0, 0, 0, 0, 4, 6893, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Talk');
+REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066611, 1, 1, 36, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Emote Attack1H');
 
 -- 1066612
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066612, 0, 25, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Walk');
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066612, 1, 81, 25560, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Despawn GameObject');
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066612, 1, 0, 2, 0, 0, 0, 0, 0, 0, 4, 6893, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Talk');
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066612, 1, 1, 36, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Emote Attack1H');
+REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066612, 0, 25, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Walk');
+REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066612, 1, 81, 25560, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Despawn GameObject');
+REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066612, 1, 0, 2, 0, 0, 0, 0, 0, 0, 4, 6893, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Talk');
+REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066612, 1, 1, 36, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Emote Attack1H');
 
 -- 1066613
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066613, 0, 25, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Walk');
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066613, 1, 81, 25565, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Despawn GameObject');
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066613, 1, 0, 2, 0, 0, 0, 0, 0, 0, 4, 6893, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Talk');
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066613, 1, 1, 36, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Emote Attack1H');
+REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066613, 0, 25, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Walk');
+REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066613, 1, 81, 25565, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Despawn GameObject');
+REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066613, 1, 0, 2, 0, 0, 0, 0, 0, 0, 4, 6893, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Talk');
+REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066613, 1, 1, 36, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Emote Attack1H');
 
 -- 1066614
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066614, 0, 25, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Walk');
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066614, 1, 81, 25562, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Despawn GameObject');
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066614, 1, 0, 2, 0, 0, 0, 0, 0, 0, 4, 6893, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Talk');
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066614, 1, 1, 36, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Emote Attack1H');
+REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066614, 0, 25, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Walk');
+REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066614, 1, 81, 25562, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Despawn GameObject');
+REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066614, 1, 0, 2, 0, 0, 0, 0, 0, 0, 4, 6893, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Talk');
+REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066614, 1, 1, 36, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Emote Attack1H');
 
 -- add gloom weed gameobjects
-INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`, `spawn_flags`, `visibility_mod`, `patch_min`, `patch_max`) VALUES
+REPLACE INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`, `spawn_flags`, `visibility_mod`, `patch_min`, `patch_max`) VALUES
 (25562, 175566, 0, 2204.14, 1120.06, 34.8163, 4.01426, 0, 0, -0.906307, 0.422619, 900, 900, 255, 1, 4, 0, 0, 10),
 (25565, 175566, 0, 2220.39, 1165.71, 36.1008, 4.24115, 0, 0, -0.85264, 0.522499, 900, 900, 255, 1, 4, 0, 0, 10),
 (25560, 175566, 0, 2179.86, 1073.21, 33.8257, 4.50295, 0, 0, -0.777145, 0.629321, 900, 900, 255, 1, 4, 0, 0, 10),
@@ -2423,7 +2423,7 @@ DELETE FROM `pool_gameobject` WHERE `guid` IN (45278, 45282, 45246, 45276, 45292
 
 -- sahvan bloodshadow waypoints
 DELETE FROM `creature_movement` WHERE `id` = 31919;
-INSERT INTO `creature_movement_template` (`entry`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement_template` (`entry`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (2314, 1, 2287.419922, 395.809998, 34.075100, 100.000000, 0, 0.000000, 0),
 (2314, 2, 2285.330078, 392.347992, 34.142601, 100.000000, 0, 0.000000, 0),
 (2314, 3, 2283.580078, 352.665985, 34.208599, 100.000000, 0, 0.000000, 0),
@@ -2451,7 +2451,7 @@ INSERT INTO `creature_movement_template` (`entry`, `point`, `position_x`, `posit
 
 -- creature 44259 waypoints
 UPDATE `creature` SET `movementtype` = 2 WHERE `guid` = 44259;
-INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (44259, 1, 2353.760010, 1577.239990, 33.952801, 100.000000, 0, 0.000000, 0),
 (44259, 2, 2332.899902, 1541.939941, 36.025600, 100.000000, 0, 0.000000, 0),
 (44259, 3, 2335.570068, 1535.569946, 36.679798, 100.000000, 0, 0.000000, 0),
@@ -2469,7 +2469,7 @@ INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `pos
 
 -- creature 38393 waypoints
 UPDATE `creature` SET `movementtype` = 2 WHERE `guid` = 38393;
-INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (38393, 1, 2064.659912, -392.214996, 37.768501, 100.000000, 0, 0.000000, 0),
 (38393, 2, 2058.280029, -427.962006, 37.115601, 100.000000, 0, 0.000000, 0),
 (38393, 3, 2052.979980, -438.463013, 35.741402, 100.000000, 0, 0.000000, 0),
@@ -2512,7 +2512,7 @@ INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `pos
 
 -- creature 4463 waypoints
 UPDATE `creature` SET `position_x` = 2666.379883, `position_y` = 301.924988, `position_z` = 28.222300, `movementtype` = 2 WHERE `guid` = 44663;
-INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (44663, 1, 2666.379883, 301.924988, 28.222300, 100.000000, 10000, 0.000000, 0),
 (44663, 2, 2682.649902, 290.020996, 28.229500, 100.000000, 0, 0.000000, 0),
 (44663, 3, 2720.939941, 278.582001, 28.204201, 100.000000, 0, 0.000000, 0),
@@ -2528,7 +2528,7 @@ INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `pos
 -- lost soul waypoints
 DELETE FROM `creature_movement` WHERE `id` = 44864;
 UPDATE `creature` SET `position_x` = 2617.129883, `position_y` = 1017.789978, `position_z` = 101.825996 WHERE `guid` = 44864;
-INSERT INTO `creature_movement_template` (`entry`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement_template` (`entry`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (1531, 1, 2617.129883, 1017.789978, 101.825996, 100.000000, 0, 0.000000, 0),
 (1531, 2, 2619.919922, 1017.669983, 101.841003, 100.000000, 0, 0.000000, 0),
 (1531, 3, 2619.060059, 1014.789978, 102.273003, 100.000000, 15000, 10, 0),
@@ -2588,7 +2588,7 @@ INSERT INTO `creature_movement_template` (`entry`, `point`, `position_x`, `posit
 
 -- creature 44615 waypoints
 UPDATE `creature` SET `movementtype` = 2 WHERE `guid` = 44615;
-INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (44615, 1, 2707.699951, 386.022003, 26.434500, 100.000000, 36000, 0.000000, 0),
 (44615, 2, 2709.419922, 393.842010, 25.545300, 100.000000, 0, 0.000000, 0),
 (44615, 3, 2746.050049, 400.851013, 22.995300, 100.000000, 0, 0.000000, 0),
@@ -2617,7 +2617,7 @@ INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `pos
 
 -- creature 45096 waypoints
 UPDATE `creature` SET `movementtype` = 2 WHERE `guid` = 45096;
-INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (45096, 1, 2821.360107, -750.877991, 146.612000, 100.000000, 0, 0.000000, 0),
 (45096, 2, 2813.520020, -742.497009, 143.341003, 100.000000, 0, 0.000000, 0),
 (45096, 3, 2788.439941, -736.979980, 134.171005, 100.000000, 0, 0.000000, 0),
@@ -2654,7 +2654,7 @@ INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `pos
 
 -- creature 45096 waypoints
 UPDATE `creature` SET `movementtype` = 2 WHERE `guid` = 44737;
-INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (44737, 1, 2351.199951, 559.291016, 26.581699, 100.000000, 0, 0.000000, 0),
 (44737, 2, 2344.219971, 569.080017, 27.967400, 100.000000, 0, 0.000000, 0),
 (44737, 3, 2321.800049, 569.758972, 24.784000, 100.000000, 0, 0.000000, 0),
@@ -2670,7 +2670,7 @@ INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `pos
 
 -- creature 38176 waypoints
 UPDATE `creature` SET `movementtype` = 2 WHERE `guid` = 38276;
-INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (38276, 1, 3013.639893, -330.230988, 7.411860, 100.000000, 0, 0.000000, 0),
 (38276, 2, 3012.860107, -307.825989, 7.411860, 100.000000, 14000, 0.000000, 0),
 (38276, 3, 3029.739990, -297.825012, 7.279790, 100.000000, 0, 0.000000, 0),
@@ -2690,7 +2690,7 @@ INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `pos
 -- junior apothecary holland waypoints
 DELETE FROM `creature_movement` WHERE `id` = 28412;
 UPDATE `creature` SET `position_x` = 2365.969971, `position_y` = 437.618011, `position_z` = 33.407398 WHERE `guid` = 28412;
-INSERT INTO `creature_movement_template` (`entry`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement_template` (`entry`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (10665, 1, 2365.969971, 437.618011, 33.407398, 100.000000, 0, 0.000000, 0),
 (10665, 2, 2367.060059, 433.787994, 33.544498, 100.000000, 0, 0.000000, 0),
 (10665, 3, 2369.090088, 431.032013, 33.676498, 100.000000, 0, 0.000000, 0),
@@ -2765,7 +2765,7 @@ INSERT INTO `creature_movement_template` (`entry`, `point`, `position_x`, `posit
 
 -- muad waypoints
 DELETE FROM `creature_movement` WHERE `id` = 43909;
-INSERT INTO `creature_movement_template` (`entry`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement_template` (`entry`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (1910, 1, 2531.540039, 1394.829956, 3.200680, 100.000000, 0, 0.000000, 0),
 (1910, 2, 2539.020020, 1391.949951, 4.296310, 100.000000, 0, 0.000000, 0),
 (1910, 3, 2556.389893, 1399.160034, 2.862530, 100.000000, 0, 0.000000, 0),
@@ -2800,7 +2800,7 @@ INSERT INTO `creature_movement_template` (`entry`, `point`, `position_x`, `posit
 
 -- creature 44602 waypoints
 UPDATE `creature` SET `movementtype` = 2 WHERE `guid` = 44602;
-INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (44602, 1, 2553.739990, 613.882996, 25.597700, 100.000000, 0, 0.000000, 0),
 (44602, 2, 2529.320068, 601.940002, 26.394100, 100.000000, 0, 0.000000, 0),
 (44602, 3, 2489.729980, 604.429016, 30.867800, 100.000000, 20000, 0.000000, 0),
@@ -2820,7 +2820,7 @@ INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `pos
 
 -- creature 43614 waypoints
 UPDATE `creature` SET `movementtype` = 2 WHERE `guid` = 43614;
-INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (43614, 1, 2579.050049, 1390.079956, 1.873540, 100.000000, 0, 0.000000, 0),
 (43614, 2, 2550.020020, 1391.989990, 4.783650, 100.000000, 0, 0.000000, 0),
 (43614, 3, 2520.879883, 1392.170044, 3.834610, 100.000000, 0, 0.000000, 0),
@@ -2844,7 +2844,7 @@ INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `pos
 
 -- creature 44956 waypoints
 UPDATE `creature` SET `movementtype` = 2 WHERE `guid` = 44956;
-INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (44956, 1, 1999.319946, 1552.959961, 78.188202, 100.000000, 0, 0.000000, 0),
 (44956, 2, 1999.359985, 1544.939941, 77.811996, 100.000000, 0, 0.000000, 0),
 (44956, 3, 1992.000000, 1534.160034, 80.641403, 100.000000, 0, 0.000000, 0),
@@ -2868,7 +2868,7 @@ INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `pos
 
 -- fellicent shade waypoints
 DELETE FROM `creature_movement` WHERE `id` = 42143;
-INSERT INTO `creature_movement_template` (`entry`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement_template` (`entry`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (10358, 1, 1998.459961, -444.433014, 34.650002, 100.000000, 0, 0.000000, 0),
 (10358, 2, 2016.390015, -444.684998, 35.136501, 100.000000, 0, 0.000000, 0),
 (10358, 3, 2026.780029, -437.490997, 34.967400, 100.000000, 0, 0.000000, 0),
@@ -2886,7 +2886,7 @@ INSERT INTO `creature_movement_template` (`entry`, `point`, `position_x`, `posit
 
 -- creature 44904 waypoints
 UPDATE `creature` SET `movementtype` = 2 WHERE `guid` = 44904;
-INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (44904, 1, 2921.399902, -666.919983, 141.957001, 100.000000, 0, 0.000000, 0),
 (44904, 2, 2912.080078, -659.835022, 139.822006, 100.000000, 0, 0.000000, 0),
 (44904, 3, 2900.649902, -659.629028, 138.507004, 100.000000, 0, 0.000000, 0),
@@ -2916,9 +2916,9 @@ INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `pos
 (44904, 27, 2923.389893, -665.919006, 142.460007, 100.000000, 0, 0.000000, 0);
 
 -- creature 127800 waypoints
-INSERT INTO `creature` (`guid`, `id`, `id2`, `id3`, `id4`, `map`, `display_id`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `wander_distance`, `health_percent`, `mana_percent`, `movementtype`, `spawn_flags`, `visibility_mod`, `patch_min`, `patch_max`) VALUES
+REPLACE INTO `creature` (`guid`, `id`, `id2`, `id3`, `id4`, `map`, `display_id`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `wander_distance`, `health_percent`, `mana_percent`, `movementtype`, `spawn_flags`, `visibility_mod`, `patch_min`, `patch_max`) VALUES
 (127800, 1529, 0, 0, 0, 0, 0, 0, 1984.689941, -421.868988, 35.517899, 4.84612, 300, 300, 5, 100, 100, 2, 0, 0, 0, 10);
-INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (127800, 1, 1984.689941, -421.868988, 35.517899, 100.000000, 0, 0.000000, 0),
 (127800, 2, 2004.699951, -424.294006, 35.467400, 100.000000, 0, 0.000000, 0),
 (127800, 3, 2016.750000, -424.872986, 35.458099, 100.000000, 0, 0.000000, 0),
@@ -2991,7 +2991,7 @@ INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `pos
 
 -- creature 38034 waypoints
 UPDATE `creature` SET `position_x` = 1973.520020, `position_y` = -441.774994, `position_z` = 35.389900, `movementtype` = 2 WHERE `guid` = 38034;
-INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (38034, 1, 1973.520020, -441.774994, 35.389900, 100.000000, 0, 0.000000, 0),
 (38034, 2, 1957.410034, -441.023010, 35.499802, 100.000000, 0, 0.000000, 0),
 (38034, 3, 1952.300049, -448.950012, 35.525002, 100.000000, 0, 0.000000, 0),
@@ -3013,7 +3013,7 @@ INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `pos
 
 -- creature 44787 waypoints
 UPDATE `creature` SET `movementtype` = 2 WHERE `guid` = 44787;
-INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (44787, 1, 2938.719971, -700.862976, 148.848007, 100.000000, 0, 0.000000, 0),
 (44787, 2, 2936.370117, -693.372986, 147.589996, 100.000000, 0, 0.000000, 0),
 (44787, 3, 2923.370117, -679.312012, 142.516998, 100.000000, 0, 0.000000, 0),
@@ -3052,9 +3052,9 @@ INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `pos
 (44787, 36, 2938.530029, -710.724976, 150.296997, 100.000000, 0, 0.000000, 0);
 
 -- creature 112617 waypoints
-INSERT INTO `creature` (`guid`, `id`, `id2`, `id3`, `id4`, `map`, `display_id`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `wander_distance`, `health_percent`, `mana_percent`, `movementtype`, `spawn_flags`, `visibility_mod`, `patch_min`, `patch_max`) VALUES
+REPLACE INTO `creature` (`guid`, `id`, `id2`, `id3`, `id4`, `map`, `display_id`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `wander_distance`, `health_percent`, `mana_percent`, `movementtype`, `spawn_flags`, `visibility_mod`, `patch_min`, `patch_max`) VALUES
 (112617, 1537, 0, 0, 0, 0, 0, 0, 2154.770020, -569.606995, 78.793098, 1.18866, 300, 300, 5, 100, 0, 2, 0, 0, 0, 10);
-INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (112617, 1, 2154.770020, -569.606995, 78.793098, 1.692970, 35000, 0.000000, 0),
 (112617, 2, 2156.199951, -573.388977, 79.002800, 100.000000, 0, 0.000000, 0),
 (112617, 3, 2177.790039, -612.132996, 80.850304, 100.000000, 0, 0.000000, 0),
@@ -3066,7 +3066,7 @@ INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `pos
 
  -- gregor agamand waypoints
 DELETE FROM `creature_movement` WHERE `id` = 44626;
-INSERT INTO `creature_movement_template` (`entry`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement_template` (`entry`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (1654, 1, 2959.070068, 922.611023, 113.945000, 100.000000, 0, 0.000000, 0),
 (1654, 2, 2962.919922, 931.072998, 115.188004, 100.000000, 0, 0.000000, 0),
 (1654, 3, 2965.489990, 949.255981, 117.987000, 100.000000, 0, 0.000000, 0),
@@ -3101,7 +3101,7 @@ INSERT INTO `creature_movement_template` (`entry`, `point`, `position_x`, `posit
 
 -- creature 44580 waypoints
 UPDATE `creature` SET `movementtype` = 2 WHERE `guid` = 44580;
-INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (44580, 1, 1795.670044, 670.215027, 41.477001, 100.000000, 0, 0.000000, 0),
 (44580, 2, 1800.339966, 650.656982, 39.173599, 100.000000, 0, 0.000000, 0),
 (44580, 3, 1801.479980, 630.968994, 38.703201, 100.000000, 0, 0.000000, 0),
@@ -3119,7 +3119,7 @@ INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `pos
 
 -- creature 33699 waypoints
 UPDATE `creature` SET `movementtype` = 2 WHERE `guid` = 33699;
-INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (33699, 1, 2490.500000, -897.067017, 59.759102, 100.000000, 0, 0.000000, 0),
 (33699, 2, 2493.520020, -908.606995, 61.444901, 100.000000, 0, 0.000000, 0),
 (33699, 3, 2502.090088, -926.525024, 64.801498, 100.000000, 0, 0.000000, 0),
@@ -3142,7 +3142,7 @@ INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `pos
 
 -- creature 44809 waypoints
 UPDATE `creature` SET `movementtype` = 2 WHERE `guid` = 44809;
-INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (44809, 1, 2967.570068, 333.307007, 7.976890, 5.689770, 87000, 0.000000, 0),
 (44809, 2, 2967.110107, 329.322998, 7.833770, 100.000000, 0, 0.000000, 0),
 (44809, 3, 2959.030029, 323.513000, 7.900030, 100.000000, 0, 0.000000, 0),
@@ -3160,7 +3160,7 @@ INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `pos
 
 -- creature 44975 waypoints
 UPDATE `creature` SET `movementtype` = 2 WHERE `guid` = 44975;
-INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (44975, 1, 1787.050049, 1392.479980, 90.802101, 100.000000, 0, 0.000000, 0),
 (44975, 2, 1797.520020, 1394.219971, 85.092201, 100.000000, 0, 0.000000, 0),
 (44975, 3, 1835.949951, 1399.420044, 80.087898, 100.000000, 0, 0.000000, 0),
@@ -3173,7 +3173,7 @@ INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `pos
 
 -- creature 45178 waypoints
 UPDATE `creature` SET `movementtype` = 2 WHERE `guid` = 45178;
-INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (45178, 1, 2200.639893, 558.809021, 31.001900, 100.000000, 0, 0.000000, 0),
 (45178, 2, 2201.800049, 570.721985, 28.703600, 100.000000, 0, 0.000000, 0),
 (45178, 3, 2203.590088, 590.739014, 26.728800, 100.000000, 0, 0.000000, 0),
@@ -3191,7 +3191,7 @@ INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `pos
 
 -- thurman agaman waypoints
 DELETE FROM `creature_movement` WHERE `id`  = 44988;
-INSERT INTO `creature_movement_template` (`entry`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement_template` (`entry`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (1656, 1, 2878.919922, 1073.579956, 109.378998, 100.000000, 0, 0.000000, 0),
 (1656, 2, 2868.330078, 1056.849976, 112.879997, 100.000000, 0, 0.000000, 0),
 (1656, 3, 2825.260010, 1050.829956, 110.727997, 100.000000, 0, 0.000000, 0),
@@ -3219,7 +3219,7 @@ INSERT INTO `creature_movement_template` (`entry`, `point`, `position_x`, `posit
 
 -- creature 44932 waypoints
 UPDATE `creature` SET `position_x` = 2542.379883, `position_y` = 764.119019, `position_z` = 110.902000, `movementtype` = 2 WHERE `guid` = 44932;
-INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (44932, 1, 2542.379883, 764.119019, 110.902000, 100.000000, 0, 0.000000, 0),
 (44932, 2, 2553.320068, 785.750977, 110.858002, 100.000000, 0, 0.000000, 0),
 (44932, 3, 2558.610107, 796.822021, 110.907997, 100.000000, 0, 0.000000, 0),
@@ -3234,7 +3234,7 @@ INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `pos
 
 -- creature 45120 waypoints
 UPDATE `creature` SET `movementtype` = 2 WHERE `guid` = 45120;
-INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (45120, 1, 2562.260010, -82.175903, 28.055000, 100.000000, 0, 0.000000, 0),
 (45120, 2, 2584.909912, -81.114700, 26.993999, 100.000000, 0, 0.000000, 0),
 (45120, 3, 2591.580078, -73.672302, 26.804199, 100.000000, 0, 0.000000, 0),
@@ -3246,7 +3246,7 @@ INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `pos
 
 -- creature 37899 waypoints
 UPDATE `creature` SET `movementtype` = 2 WHERE `guid` = 37899;
-INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (37899, 1, 2488.020020, 1718.949951, 24.124201, 100.000000, 0, 0.000000, 0),
 (37899, 2, 2481.689941, 1720.260010, 27.117901, 100.000000, 0, 0.000000, 0),
 (37899, 3, 2476.300049, 1713.479980, 27.976200, 100.000000, 14000, 0.000000, 0),
@@ -3277,7 +3277,7 @@ INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `pos
 
 -- creature 45157 waypoints
 UPDATE `creature` SET `position_x` = 2333.610107, `position_y` = 497.816986, `position_z` = 34.459400, `movementtype` = 2 WHERE `guid` = 45157;
-INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (45157, 1, 2333.610107, 497.816986, 34.459400, 100.000000, 22000, 10, 0),
 (45157, 2, 2334.409912, 505.347992, 33.217701, 100.000000, 0, 0.000000, 0),
 (45157, 3, 2341.310059, 519.439026, 30.977200, 100.000000, 0, 0.000000, 0),
@@ -3293,7 +3293,7 @@ INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `pos
 
 -- creature 37899 waypoints
 UPDATE `creature` SET `movementtype` = 2 WHERE `guid` = 44229;
-INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (44229, 1, 2291.040039, 1499.560059, 33.467701, 100.000000, 0, 0.000000, 0),
 (44229, 2, 2268.979980, 1492.410034, 33.217899, 100.000000, 0, 0.000000, 0),
 (44229, 3, 2260.530029, 1485.339966, 33.440899, 100.000000, 0, 0.000000, 0),
@@ -3306,7 +3306,7 @@ INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `pos
 
 -- creature 28454 waypoints
 UPDATE `creature` SET `movementtype` = 2 WHERE `guid` = 28454;
-INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (28454, 1, 2509.129883, -864.439026, 54.823700, 100.000000, 0, 0.000000, 0),
 (28454, 2, 2525.620117, -882.630981, 56.274601, 100.000000, 0, 0.000000, 0),
 (28454, 3, 2542.979980, -891.825989, 56.289200, 100.000000, 0, 0.000000, 0),
@@ -3322,7 +3322,7 @@ INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `pos
 -- maquell ebonwood waypoints
 DELETE FROM `creature_movement_template` WHERE `entry` = 2315;
 DELETE FROM `creature_movement` WHERE `id` = 31916;
-INSERT INTO `creature_movement_template` (`entry`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement_template` (`entry`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (2315, 1, 1857.400024, 1575.160034, 94.313599, 6.265730, 20000, 0.000000, 0),
 (2315, 2, 1861.300049, 1585.260010, 92.496902, 100.000000, 10000, 0.000000, 0),
 (2315, 3, 1843.454224, 1600.525757, 94.543236, 100.000000, 0, 0.000000, 0),
@@ -3335,7 +3335,7 @@ INSERT INTO `creature_movement_template` (`entry`, `point`, `position_x`, `posit
 
 -- creature 37919 waypoints
 UPDATE `creature` SET `movementtype` = 2 WHERE `guid` = 37919;
-INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (37919, 1, 2859.989990, -484.187988, 99.644203, 100.000000, 0, 0.000000, 0),
 (37919, 2, 2870.120117, -496.726990, 101.156998, 100.000000, 0, 0.000000, 0),
 (37919, 3, 2876.959961, -515.161011, 103.242996, 100.000000, 0, 0.000000, 0),
@@ -3354,7 +3354,7 @@ INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `pos
 
 -- creature 44942 waypoints
 UPDATE `creature` SET `movementtype` = 2 WHERE `guid` = 44942;
-INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (44942, 1, 1901.760010, 1571.540039, 89.079498, 100.000000, 24000, 2, 0),
 (44942, 2, 1905.939941, 1569.449951, 89.077599, 100.000000, 0, 0.000000, 0),
 (44942, 3, 1909.270020, 1539.800049, 87.776001, 100.000000, 0, 0.000000, 0),
@@ -3365,13 +3365,13 @@ INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `pos
 (44942, 8, 1925.989990, 1577.430054, 83.438904, 100.000000, 0, 0.000000, 0),
 (44942, 9, 1909.189941, 1585.239990, 85.855003, 100.000000, 0, 0.000000, 0),
 (44942, 10, 1889.449951, 1586.270020, 88.909302, 100.000000, 2000, 0.000000, 4494201);
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (4494201, 0, 22, 634, 1, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Mindless Zombie - Set Faction');
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (4494201, 0, 26, 0, 0, 0, 0, 28711, 0, 9, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Mindless Zombie - Start Attack');
+REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (4494201, 0, 22, 634, 1, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Mindless Zombie - Set Faction');
+REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (4494201, 0, 26, 0, 0, 0, 0, 28711, 0, 9, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Mindless Zombie - Start Attack');
 
 -- deathguard phillip waypoints
 DELETE FROM `creature_movement_template` WHERE `entry` = 1739;
 DELETE FROM `creature_movement` WHERE `id` = 28705;
-INSERT INTO `creature_movement_template` (`entry`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement_template` (`entry`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (1739, 1, 1829.630005, 1573.890015, 95.663498, 100.000000, 0, 0.000000, 0),
 (1739, 2, 1832.540039, 1581.150024, 95.092697, 100.000000, 0, 0.000000, 0),
 (1739, 3, 1839.189941, 1583.469971, 94.247101, 100.000000, 0, 0.000000, 0),
@@ -3391,7 +3391,7 @@ INSERT INTO `creature_movement_template` (`entry`, `point`, `position_x`, `posit
 
 -- creature 44961 waypoints
 UPDATE `creature` SET `movementtype` = 2 WHERE `guid` = 44961;
-INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (44961, 1, 1901.729980, 1550.719971, 88.967400, 100.000000, 28000, 5, 0),
 (44961, 2, 1907.219971, 1549.189941, 88.926003, 100.000000, 0, 0.000000, 0),
 (44961, 3, 1919.839966, 1555.310059, 86.585999, 100.000000, 0, 0.000000, 0),
@@ -3399,43 +3399,43 @@ INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `pos
 (44961, 5, 1929.410034, 1582.859985, 82.770103, 100.000000, 0, 0.000000, 0),
 (44961, 6, 1914.099976, 1587.369995, 84.952301, 100.000000, 0, 0.000000, 0),
 (44961, 7, 1890.880005, 1588.619995, 88.666298, 100.000000, 1000, 0.000000, 4496101);
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (4496101, 0, 22, 634, 1, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Mindless Zombie - Set Faction');
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (4496101, 0, 26, 0, 0, 0, 0, 28711, 0, 9, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Mindless Zombie - Start Attack');
+REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (4496101, 0, 22, 634, 1, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Mindless Zombie - Set Faction');
+REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (4496101, 0, 26, 0, 0, 0, 0, 28711, 0, 9, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Mindless Zombie - Start Attack');
 
 -- creature 41905 waypoints
 UPDATE `creature` SET `movementtype` = 2 WHERE `guid` = 41905;
-INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (41905, 1, 1969.439941, 1592.829956, 82.408302, 100.000000, 0, 0.000000, 0),
 (41905, 2, 1961.199951, 1584.989990, 81.571800, 100.000000, 0, 0.000000, 0),
 (41905, 3, 1937.949951, 1579.780029, 82.075600, 100.000000, 0, 0.000000, 0),
 (41905, 4, 1914.010010, 1585.699951, 85.023201, 100.000000, 1000, 0.000000, 4190501);
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (4190501, 0, 22, 634, 1, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Wretched Zombie - Set Faction');
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (4190501, 0, 26, 0, 0, 0, 0, 28711, 0, 9, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Wretched Zombie - Start Attack');
+REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (4190501, 0, 22, 634, 1, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Wretched Zombie - Set Faction');
+REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (4190501, 0, 26, 0, 0, 0, 0, 28711, 0, 9, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Wretched Zombie - Start Attack');
 
 -- creature 44965 waypoints
 UPDATE `creature` SET `movementtype` = 2 WHERE `guid` = 44965;
-INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (44965, 1, 1939.000000, 1579.939941, 81.942596, 100.000000, 0, 0.000000, 0),
 (44965, 2, 1916.030029, 1585.040039, 84.625702, 100.000000, 0, 0.000000, 0),
 (44965, 3, 1892.300049, 1586.680054, 88.442299, 100.000000, 1000, 0.000000, 4496501);
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (4496501, 0, 22, 634, 1, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Wretched Zombie - Set Faction');
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (4496501, 0, 26, 0, 0, 0, 0, 28711, 0, 9, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Wretched Zombie - Start Attack');
+REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (4496501, 0, 22, 634, 1, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Wretched Zombie - Set Faction');
+REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (4496501, 0, 26, 0, 0, 0, 0, 28711, 0, 9, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Wretched Zombie - Start Attack');
 
 -- creature 44965 waypoints
 UPDATE `creature` SET `movementtype` = 2 WHERE `guid` = 44958;
-INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (44958, 1, 1905.900024, 1561.900024, 88.127296, 100.000000, 0, 0.000000, 0),
 (44958, 2, 1919.849976, 1568.430054, 86.115997, 100.000000, 0, 0.000000, 0),
 (44958, 3, 1924.920044, 1573.989990, 84.230003, 100.000000, 0, 0.000000, 0),
 (44958, 4, 1922.790039, 1583.670044, 83.584297, 100.000000, 0, 0.000000, 0),
 (44958, 5, 1912.339966, 1588.599976, 85.280197, 100.000000, 0, 0.000000, 0),
 (44958, 6, 1892.930054, 1588.000000, 88.241898, 100.000000, 1000, 0.000000, 4495801);
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (4495801, 0, 22, 634, 1, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Wretched Zombie - Set Faction');
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (4495801, 0, 26, 0, 0, 0, 0, 28711, 0, 9, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Wretched Zombie - Start Attack');
+REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (4495801, 0, 22, 634, 1, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Wretched Zombie - Set Faction');
+REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (4495801, 0, 26, 0, 0, 0, 0, 28711, 0, 9, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Wretched Zombie - Start Attack');
 
 -- creature 45013 waypoints
 DELETE FROM `creature_movement` WHERE `id` = 45013;
-INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (45013, 1, 2824.870117, 855.538025, 111.950996, 100.000000, 0, 0.000000, 0),
 (45013, 2, 2811.320068, 830.109985, 111.964996, 100.000000, 0, 0.000000, 0),
 (45013, 3, 2803.479980, 823.388977, 111.913002, 100.000000, 0, 0.000000, 0),
@@ -3449,7 +3449,7 @@ INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `pos
 
 -- creature 45149 waypoints
 UPDATE `creature` SET `position_x` = 2206.649902, `position_y` = 623.914001, `position_z` = 24.827101, `movementtype` = 2 WHERE `guid` = 45149;
-INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (45149, 1, 2206.649902, 623.914001, 24.827101, 100.000000, 0, 0.000000, 0),
 (45149, 2, 2205.590088, 595.729004, 26.290600, 100.000000, 0, 0.000000, 0),
 (45149, 3, 2206.520020, 583.742981, 27.259399, 100.000000, 0, 0.000000, 0),
@@ -3465,7 +3465,7 @@ INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `pos
 
 -- lieutenant sanders waypoints
 UPDATE `creature` SET `movementtype` = 2 WHERE `guid` = 28495;
-INSERT INTO `creature_movement_template` (`entry`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement_template` (`entry`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (13158, 1, 2514.500000, -908.416992, 56.090900, 100.000000, 0, 0.000000, 0),
 (13158, 2, 2514.500000, -908.416992, 56.090900, 2.862340, 52000, 0.000000, 0),
 (13158, 3, 2510.659912, -901.776001, 56.343700, 100.000000, 0, 0.000000, 0),
@@ -3486,7 +3486,7 @@ INSERT INTO `creature_movement_template` (`entry`, `point`, `position_x`, `posit
 
 -- creature 37880 waypoints
 UPDATE `creature` SET `movementtype` = 2 WHERE `guid` = 37880;
-INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (37880, 1, 1901.810059, 901.916016, 29.363600, 100.000000, 0, 0.000000, 0),
 (37880, 2, 1893.160034, 893.356018, 29.349400, 100.000000, 0, 0.000000, 0),
 (37880, 3, 1886.150024, 883.671021, 29.286400, 100.000000, 0, 0.000000, 0),
@@ -3503,7 +3503,7 @@ INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `pos
 -- deathguard oliver waypoints
 DELETE FROM `creature_movement_template` WHERE `entry` = 1737;
 DELETE FROM `creature_movement` WHERE `id` = 28706;
-INSERT INTO `creature_movement_template` (`entry`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement_template` (`entry`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (1737, 1, 1799.530029, 1603.170044, 103.109001, 100.000000, 0, 0.000000, 0),
 (1737, 2, 1796.180054, 1601.430054, 102.984001, 100.000000, 0, 0.000000, 0),
 (1737, 3, 1808.969971, 1591.949951, 98.716499, 100.000000, 0, 0.000000, 0),
@@ -3519,7 +3519,7 @@ INSERT INTO `creature_movement_template` (`entry`, `point`, `position_x`, `posit
 
 -- creature 44762 waypoint
 UPDATE `creature` SET `movementtype` = 2 WHERE `guid` = 44762;
-INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (44762, 1, 3060.959961, -544.895996, 126.663002, 100.000000, 0, 0.000000, 0),
 (44762, 2, 3069.909912, -537.846008, 126.605003, 100.000000, 0, 0.000000, 0),
 (44762, 3, 3085.120117, -539.187988, 126.662003, 100.000000, 0, 0.000000, 0),
@@ -3547,7 +3547,7 @@ INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `pos
 
  -- creature 45144 waypoints
 UPDATE `creature` SET `movementtype` = 2 WHERE `guid` = 45144;
-INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (45144, 1, 2590.570068, -74.000198, 26.553200, 100.000000, 0, 0.000000, 0),
 (45144, 2, 2571.770020, -83.213097, 27.632099, 100.000000, 0, 0.000000, 0),
 (45144, 3, 2556.120117, -62.418499, 28.495800, 100.000000, 0, 0.000000, 0),
@@ -3558,7 +3558,7 @@ INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `pos
 
  -- creature 44764 waypoints
 UPDATE `creature` SET `movementtype` = 2 WHERE `guid` = 44764;
-INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (44764, 1, 2142.800049, -505.647003, 81.667801, 100.000000, 60000, 0.000000, 0),
 (44764, 2, 2143.399902, -509.673004, 81.647499, 100.000000, 0, 0.000000, 0),
 (44764, 3, 2137.739990, -519.406006, 81.640404, 100.000000, 0, 0.000000, 0),
@@ -3576,7 +3576,7 @@ INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `pos
 
  -- creature 45147 waypoints
 UPDATE `creature` SET `movementtype` = 2 WHERE `guid` = 45147;
-INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (45147, 1, 2251.139893, 642.057007, 24.874701, 100.000000, 0, 0.000000, 0),
 (45147, 2, 2247.120117, 641.861023, 24.874701, 100.000000, 0, 0.000000, 0),
 (45147, 3, 2244.260010, 640.252014, 24.874701, 100.000000, 0, 0.000000, 0),
@@ -3590,7 +3590,7 @@ INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `pos
 
  -- creature 28417 waypoints
 DELETE FROM `creature_movement` WHERE `id` = 28417;
-INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (28417, 1, 1794.579956, -725.888977, 59.433201, 100.000000, 0, 0.000000, 0),
 (28417, 2, 1791.260010, -723.583008, 59.433201, 100.000000, 0, 0.000000, 0),
 (28417, 3, 1780.209961, -719.125000, 59.194000, 100.000000, 0, 0.000000, 0),
