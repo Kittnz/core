@@ -3626,7 +3626,7 @@ void Unit::_UpdateSpells(uint32 time)
 void Unit::_UpdateAutoRepeatSpell()
 {
     //check "realtime" interrupts
-    if ((GetTypeId() == TYPEID_PLAYER && ((Player*)this)->IsMoving()) || IsNonMeleeSpellCasted(false, false, true))
+    if ((IsPlayer() && IsMoving()) || IsNonMeleeSpellCasted(false, false, true))
     {
         // cancel wand shoot
         if (m_currentSpells[CURRENT_AUTOREPEAT_SPELL]->m_spellInfo->Category == 351)
@@ -3647,7 +3647,10 @@ void Unit::_UpdateAutoRepeatSpell()
         // We need to update pointers before calling CheckCast !
         m_currentSpells[CURRENT_AUTOREPEAT_SPELL]->UpdatePointers();
         SpellCastResult result = m_currentSpells[CURRENT_AUTOREPEAT_SPELL]->CheckCast(true);
-        if (result == SPELL_FAILED_MOVING) // Just delay it if moving
+
+        // Just delay it if moving
+        if (result == SPELL_FAILED_MOVING ||
+            result == SPELL_FAILED_NOT_READY)
             return;
 
         if (result != SPELL_CAST_OK)
