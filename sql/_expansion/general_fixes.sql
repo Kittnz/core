@@ -71,10 +71,6 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
- 
- replace into custom_mount_entry_relation values (80173, 80301);
- replace into custom_mount_entry_relation values (80174, 80302);
- replace into custom_mount_entry_relation values (80175, 80300); 
 
 -- Mount NPCs:
 
