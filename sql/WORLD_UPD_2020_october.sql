@@ -350,47 +350,6 @@ update creature_template set base_attack_time = 2200 where entry in (50014, 5001
 
 update quest_template set method = 2 where entry in (8272, 8271);
 
-
- UPDATE `gameobject` SET `state` = 1 WHERE `guid` IN (332880, 332864) AND `id` = 180523; 
- UPDATE `quest_template` SET `RequestItemsText` = "I'm waiting..." WHERE `entry` = 8353; 
- UPDATE `quest_template` SET `RequestItemsText` = "Have you gone up to Tirisfal Glade and checked things out? They usually hold the festival close to the Undercity..." WHERE `entry` = 1658; 
- UPDATE `quest_template` SET `RequestItemsText` = "Those blasted Forsaken... it's already bad enough that they're undead, but then they get all riled up and start causing trouble in MY village!" WHERE `entry` = 8373; 
- UPDATE `quest_template` SET `RequestItemsText` = "I'm waiting..." WHERE `entry` = 8354; 
- 
- UPDATE `creature` SET `position_x` = 1760.689941, `position_y` = 510.542999, `position_z` = 36.015301, `orientation` = 6.259000 WHERE `guid` = 160014 AND `id` = 15197;
-UPDATE `creature` SET `position_x` = 1732.310059, `position_y` = 520.874023, `position_z` = 36.332600, `orientation` = 1.309420 WHERE `guid` = 85634 AND `id` = 15195;
-
-DELETE FROM `gameobject` WHERE `guid` BETWEEN 131140 AND 131150;
-REPLACE INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`, `spawnflags`, `visibilitymod`) VALUES
-(131140, 180432, 0, 1749.28, 507.611, 39.2312, 1.49635, 0, 0, 0.680301, 0.732933, 300, 300, 0, 1, 0, 0),
-(131141, 180432, 0, 1712.63, 507.05, 38.2495, 1.58824, 0, 0, 0.713246, 0.700914, 300, 300, 0, 1, 0, 0),
-
-(131142, 180433, 0, 1734.04, 504.05, 42.2861, 1.4131, 0, 0, 0.649213, 0.760607, 300, 300, 0, 0, 0, 0),
-
-(131143, 180434, 0, 1758.89, 513.276, 35.8655, 1.28897, 0, 0, 0.600788, 0.799409, 300, 300, 0, 1, 0, 0),
-(131144, 180434, 0, 1704.48, 518.689, 35.4045, 1.30704, 0, 0, 0.607984, 0.793949, 300, 300, 0, 1, 0, 0),
-(131145, 180434, 0, 1739.78, 473.238, 61.6565, 1.59371, 0, 0, 0.71516, 0.698961, 300, 300, 0, 1, 0, 0),
-(131146, 180434, 0, 1717.32, 472.723, 61.6566, 1.59371, 0, 0, 0.71516, 0.698961, 300, 300, 0, 1, 0, 0),
-
-(131147, 180437, 0, 1744.62, 504.954, 40.8518, 1.23403, 0, 0, 0.578603, 0.81561, 300, 300, 0, 1, 0, 0),
-(131148, 180437, 0, 1729.13, 510.378, 40.8719, 1.23403, 0, 0, 0.578603, 0.81561, 300, 300, 0, 1, 0, 0),
-(131149, 180437, 0, 1721.77, 503.938, 41.1381, 1.23403, 0, 0, 0.578603, 0.81561, 300, 300, 0, 1, 0, 0),
-(131150, 180437, 0, 1744.96, 496.25, 41.44, 1.24581, 0, 0, 0.583397, 0.812187, 300, 300, 0, 1, 0, 0);
-
-DELETE FROM `game_event_gameobject` WHERE `guid` IN (131140, 131141, 131142, 131143, 131144, 131145, 131146, 131147, 131148, 131149, 131150) AND `event` = 12;
-REPLACE INTO `game_event_gameobject` (`guid`, `event`) VALUES
-(131140, 12),
-(131141, 12),
-(131142, 12),
-(131143, 12),
-(131144, 12),
-(131145, 12),
-(131146, 12),
-(131147, 12),
-(131148, 12),
-(131149, 12),
-(131150, 12);
-
 UPDATE `broadcast_text` SET `MaleText`='Buy a flight to the Shimmering Flats in Thousand Needles, and talk to Gregor or Jizzle. Let them know you want to race!' WHERE `ID`=90254;
 
 -- Correct unit flags for Heart of Hakkar.
