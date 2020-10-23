@@ -90,6 +90,15 @@ replace into `creature_template` values
 (80311, 0, 18317, 0, 0, 0, 'Green Pounder Vehicle', '', 0, 1, 2, 64, 55, 53, 53, 30, 35, 0, 1, 1.38571, 0, 20, 5, 0, 0, 1, 2, 2, 0, 44, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 1.76, 2.42, 100, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 2, ''),
 (80312, 0, 18318, 0, 0, 0, 'Red Pounder Vehicle', '', 0, 1, 2, 64, 55, 53, 53, 30, 35, 0, 1, 1.38571, 0, 20, 5, 0, 0, 1, 2, 2, 0, 44, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 1.76, 2.42, 100, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 2, '');
 
+-- TODO: Using Orgrimmar dialog + dialog conditions as placeholder. Add proper dialogs and conditions once Goblin faction is added.
+-- Goblin Riding Trainer
+REPLACE INTO `creature_template` VALUES (80136,0,7194,0,0,0,'Gaxx Speedcrank','Driving Instructor',4020,50,50,3517,3517,100,100,2999,29,17,1,1.38571,0,20,5,0,0,1,85,109,0,226,1,2000,2000,1,4608,0,0,1,0,0,2,66.44,91.355,100,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'EventAI',0,3,0,0,3,4752,3,0,0,0,524298,''),(4752,10,4464,0,0,0,'Kildar','Riding Trainer',4020,50,50,3517,3517,100,100,2999,29,17,1,1.38571,0,20,5,0,0,1,85,109,0,226,1,2000,2000,1,4608,0,0,1,0,0,2,66.44,91.355,100,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'EventAI',0,3,0,0,3,4752,1,0,0,0,524298,'');
+update creature_template set faction = 35, equipment_id = 0 where entry = 80136;
+
+-- Goblin Mount Vendor
+REPLACE INTO `creature_template` VALUES (80137,0,7177,0,0,0,'Dizzle Fuelbopper','Car Seller',3161,45,45,2972,2972,0,0,2725,29,7,1,1.14286,0,20,5,0,0,1,72,93,0,204,1,2000,2000,1,4608,0,0,0,0,0,0,61.776,84.942,100,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'',0,3,0,0,3,3362,0,0,0,0,524298,'');
+update creature_template set faction = 35, equipment_id = 0 where entry = 80137;
+
 -- Re-scaling some NPCs:
 
 update creature_template set scale = 0.6 where display_id1 = 18004;
