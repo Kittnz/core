@@ -469,6 +469,12 @@ struct npc_captured_arkonarinAI : npc_escortAI
         m_uiCleaveTimer = urand(1000, 4000);
     }
 
+    void JustRespawned() override
+    {
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+        npc_escortAI::JustRespawned();
+    }
+
     void Aggro(Unit* pWho) override
     {
         if (pWho->GetEntry() == NPC_SPIRT_TREY)
@@ -496,7 +502,6 @@ struct npc_captured_arkonarinAI : npc_escortAI
                 if (Player* pPlayer = GetPlayerForEscort())
                 {
                     DoScriptText(SAY_ESCORT_START, m_creature, pPlayer);
-                    m_creature->SetFactionTemporary(250, TEMPFACTION_RESTORE_RESPAWN);
                 }
                 break;
             case 14:
@@ -520,7 +525,8 @@ struct npc_captured_arkonarinAI : npc_escortAI
                 m_bCanAttack = true;
                 DoScriptText(SAY_FOUND_EQUIPMENT, m_creature);
                 m_creature->UpdateEntry(NPC_ARKO_NARIN);
-                m_creature->SetFactionTemporary(250, TEMPFACTION_RESTORE_RESPAWN);
+                m_creature->SetFactionTemporary(FACTION_ESCORT_N_NEUTRAL_ACTIVE, TEMPFACTION_RESTORE_RESPAWN);
+                m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
                 break;
             case 41:
                 DoScriptText(SAY_ESCAPE_DEMONS, m_creature);
@@ -599,7 +605,7 @@ bool QuestAccept_npc_captured_arkonarin(Player* pPlayer, Creature* pCreature, co
             pEscortAI->Start(false, pPlayer->GetGUID(), pQuest);
 
             pCreature->SetStandState(UNIT_STAND_STATE_STAND);
-            pCreature->SetFactionTemporary(FACTION_ESCORT_N_NEUTRAL_ACTIVE, TEMPFACTION_RESTORE_RESPAWN);
+            pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
 
             if (GameObject* pCage = GetClosestGameObjectWithEntry(pCreature, GO_ARKONARIN_CAGE, 5.0f))
                 pCage->Use(pCreature);

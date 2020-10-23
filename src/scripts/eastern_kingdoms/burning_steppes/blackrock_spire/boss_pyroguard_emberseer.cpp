@@ -76,7 +76,7 @@ struct boss_pyroguard_emberseerAI : public ScriptedAI
             {
                 if (!pCanaliser->isAlive())
                     pCanaliser->Respawn();
-                pCanaliser->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_PASSIVE);
+                pCanaliser->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_NPC);
             }
     }
 
@@ -144,7 +144,7 @@ struct boss_pyroguard_emberseerAI : public ScriptedAI
             Creature *currCanaliseur = m_creature->GetMap()->GetCreature(*it);
             if (!currCanaliseur)
                 continue;
-            currCanaliseur->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_PASSIVE);
+            currCanaliseur->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_NPC);
             currCanaliseur->InterruptNonMeleeSpells(false);
             if (currCanaliseur->AI())
             {
@@ -165,7 +165,7 @@ struct boss_pyroguard_emberseerAI : public ScriptedAI
         m_creature->CastSpell(m_creature, SPELL_GROWTH, true);
         m_creature->MonsterSay(SAY_BOSS_FREE, LANG_UNIVERSAL, 0);
 
-        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_PASSIVE);
+        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_NPC);
         // On attaque tout le monde.
         Map::PlayerList const &pl = m_creature->GetMap()->GetPlayers();
         for (Map::PlayerList::const_iterator it2 = pl.begin(); it2 != pl.end(); ++it2)
@@ -204,7 +204,7 @@ struct boss_pyroguard_emberseerAI : public ScriptedAI
         bCanalisationEnCours = true;
         bBossEnferme = true;
 
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_PASSIVE);
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_NPC);
     }
 
     void AttackStart(Unit *target)
