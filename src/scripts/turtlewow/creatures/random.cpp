@@ -614,7 +614,7 @@ struct palkeoteAI : public ScriptedAI
     void Reset()
     {
         m_events.Reset();
-        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_PASSIVE);
+        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_NPC);
         m_creature->setFaction(m_creature->GetCreatureInfo()->faction);
         calfActive = false;
     }
@@ -642,7 +642,7 @@ struct palkeoteAI : public ScriptedAI
             m_creature->CombatStop(true);
             m_creature->ClearInCombat();
             m_creature->setFaction(35);
-            m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_PASSIVE);
+            m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_NPC);
 
 
             ThreatList const& tList = m_creature->getThreatManager().getThreatList();

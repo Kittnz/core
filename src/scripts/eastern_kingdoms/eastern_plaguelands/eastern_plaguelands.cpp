@@ -124,7 +124,7 @@ enum
     SPELL_INVOC_PAYSANTS    = 23119,
     SPELL_PORTE_MORT        = 23127,
     SPELL_FUFU              = 23196,
-    SPELL_SEE               = 23199,        // Pas sur de son utilité
+    SPELL_SEE               = 23199,        // Pas sur de son utilitï¿½
 
     SAY_PEASANT_RANDOM_3    = -1900118,
     SAY_PEASANT_RANDOM_2    = -1900119,
@@ -1124,7 +1124,7 @@ struct npc_darrowshire_triggerAI : public ScriptedAI
 {
     explicit npc_darrowshire_triggerAI(Creature* pCreature) : ScriptedAI(pCreature), _cleanupDone(false), _initialized(false)
     {
-        DefenderFaction = 113;  // Faction Escortee : heal possible mais... n'attaque pas à vue malgré les bons flags :/
+        DefenderFaction = 113;  // Faction Escortee : heal possible mais... n'attaque pas ï¿½ vue malgrï¿½ les bons flags :/
         Reset();
         m_creature->SetCreatureSummonLimit(200);
     }
@@ -1143,7 +1143,7 @@ struct npc_darrowshire_triggerAI : public ScriptedAI
 
     void Reset()
     {
-        // Changement de faction nécessaire pour permettre l'aggro à vue
+        // Changement de faction nï¿½cessaire pour permettre l'aggro ï¿½ vue
         Map::PlayerList const &pl = m_creature->GetMap()->GetPlayers();
         uint32 myArea = m_creature->GetAreaId();
         if (!pl.isEmpty() && myArea)
@@ -1241,7 +1241,7 @@ struct npc_darrowshire_triggerAI : public ScriptedAI
                 summoned->GetMotionMaster()->MovePoint(2, DarrowshireEvent[4].X, DarrowshireEvent[4].Y, DarrowshireEvent[4].Z, MOVE_PATHFINDING, 5.0f);
                 break;
             case NPC_MARDUK_THE_BLACK:
-                summoned->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_PASSIVE | UNIT_FLAG_NON_ATTACKABLE);
+                summoned->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_IMMUNE_TO_NPC | UNIT_FLAG_NON_ATTACKABLE);
                 summoned->ForcedDespawn(12000);
                 break;
             default:
@@ -1554,7 +1554,7 @@ struct npc_darrowshire_triggerAI : public ScriptedAI
                     }
                     break;
                 }
-                case 1: // 2:30 - 3 mn après que Joueur pose le sac
+                case 1: // 2:30 - 3 mn aprï¿½s que Joueur pose le sac
                 {
                     if (Creature* davilLightfire = m_creature->SummonCreature(NPC_DAVIL_LIGHTFIRE, DarrowshireEvent[7].X, DarrowshireEvent[7].Y, DarrowshireEvent[7].Z, 0.0f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 120000))
                     {
@@ -1591,7 +1591,7 @@ struct npc_darrowshire_triggerAI : public ScriptedAI
                     }
                     break;
                 }
-                case 3: // Horgus the Ravager est tué, Davil disparait et Redpath pop
+                case 3: // Horgus the Ravager est tuï¿½, Davil disparait et Redpath pop
                 {
                     if (Creature* davil = m_creature->GetMap()->GetCreature(davilGuid))
                     {
@@ -1612,7 +1612,7 @@ struct npc_darrowshire_triggerAI : public ScriptedAI
                     }
                     break;
                 }
-                case 4: // Marduk spawn, Redpath est tué et Redpath corrompu pop
+                case 4: // Marduk spawn, Redpath est tuï¿½ et Redpath corrompu pop
                 {
                     Creature* marduk = m_creature->GetMap()->GetCreature(mardukGuid);
                     if (marduk)

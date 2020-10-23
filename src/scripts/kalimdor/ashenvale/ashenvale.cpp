@@ -317,7 +317,8 @@ enum
     NPC_T_TOTEMIC           = 3922,
     NPC_T_PATHFINDER        = 3926,
     SAY_RUUL_END            = -1780189,
-    BEAR_AURA               = 20514
+    BEAR_AURA               = 20514,
+    FACTION_ESCORTEE        = 33,
 };
 
 struct npc_ruul_snowhoofAI : public npc_escortAI
@@ -367,7 +368,7 @@ bool QuestAccept_npc_ruul_snowhoof(Player* pPlayer, Creature* pCreature, const Q
 {
     if (pQuest->GetQuestId() == QUEST_FREEDOM_TO_RUUL)
     {
-        pCreature->setFaction(106);//supposed to be able to get killed by alliance players.
+        pCreature->setFaction(FACTION_ESCORTEE);
         pCreature->SetStandState(UNIT_STAND_STATE_STAND);
 
         if (npc_ruul_snowhoofAI* pEscortAI = dynamic_cast<npc_ruul_snowhoofAI*>(pCreature->AI()))
