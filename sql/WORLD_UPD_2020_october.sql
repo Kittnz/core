@@ -3590,3 +3590,12 @@ REPLACE INTO gameobject_template (entry, patch, type, displayId, name, faction, 
 
 REPLACE INTO gameobject (guid, id, map, position_x, position_y, position_z, orientation, rotation0, rotation1, rotation2, rotation3, spawntimesecsmin, spawntimesecsmax, animprogress, state) VALUES
 (150000, 178225, 1, -4033.24, 1345.66, 152.989, 3.14159, 0, 0, 1, 0, 900, 900, 100, 1);
+
+-- Remove Immune to NPC flag from Theramore Combat Dummy and prevent it from targeting enemies.
+UPDATE `creature_template` SET `unit_flags`=256, `flags_extra`=`flags_extra`|131072 WHERE `entry`=4952;
+
+-- Disable attack and movement for Theramore Combat Dummy.
+DELETE FROM `creature_ai_scripts` WHERE `id`=495201;
+REPLACE INTO `creature_ai_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (495201, 0, 52, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Theramore Combat Dummy - Set Unkillable');
+REPLACE INTO `creature_ai_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (495201, 0, 42, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Theramore Combat Dummy - Disable Melee Attack');
+REPLACE INTO `creature_ai_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (495201, 0, 43, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Theramore Combat Dummy - Disable Combat Movement');
