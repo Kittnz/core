@@ -3613,3 +3613,9 @@ UPDATE `creature` SET `position_x`=1373.54, `position_y`=-1539.18, `position_z`=
 UPDATE `creature` SET `position_x`=1381.89, `position_y`=-1539.46, `position_z`=58.6867, `orientation`=1.50098 WHERE `guid`=45252;
 UPDATE `creature` SET `position_x`=1376.74, `position_y`=-1542.95, `position_z`=58.2789, `orientation`=5.55015 WHERE `guid`=45250;
 UPDATE `creature` SET `position_x`=1385.66, `position_y`=-1544.23, `position_z`=59.1008, `orientation`=4.79965 WHERE `guid`=45247;
+
+-- Kriss Goldenlight
+UPDATE `creature` SET `position_x`=3166.53, `position_y`=-4372.88, `position_z`=139.715, `orientation`=1.22173 WHERE `guid`=53732;
+
+-- Aurora Skycaller
+UPDATE `creature` SET `position_x`=3172.21, `position_y`=-4372.37, `position_z`=139.715, `orientation`=1.85005 WHERE `guid`=53733;
