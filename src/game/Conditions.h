@@ -221,6 +221,15 @@ enum ConditionType
     CONDITION_DB_GUID               = 52,                   // Checks source object's db guid.
                                                             // Requirement: WorldObject Source
                                                             // Value1: guid
+                                                            // Value2: guid (optional)
+                                                            // Value3: guid (optional)
+                                                            // Value4: guid (optional)
+    CONDITION_LOCAL_TIME            = 53,                   // Checks if the current time is in the specified range
+                                                            // Requirement: None
+                                                            // Value1: start_hour
+                                                            // Value2: start_minutes
+                                                            // Value3: end_hour
+                                                            // Value4: end_minutes
 };
 
 enum ConditionFlags
