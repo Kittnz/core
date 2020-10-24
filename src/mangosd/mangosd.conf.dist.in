@@ -2815,8 +2815,9 @@ PlayerBot.ShowInWhoList = 0
 ###################################################################################################################
 #    Map Bots
 ###################################################################################################################
-MapBot.Enable = true
-MapBot.UseMapBotLoader = false
+MapBot.Enable = false
+MapBot.UseLoader = false
+MapBot.UseChat = true
 MapBot.MaxHordeBots = 100
 MapBot.MaxAllianceBots = 100
 
