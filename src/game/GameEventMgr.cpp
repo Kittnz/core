@@ -1044,7 +1044,7 @@ void GameEventMgr::UpdateSilithusPVP()
     time_t rawtime;
     time(&rawtime);
 
-    struct tm *timeinfo;
+    struct tm* timeinfo;
     timeinfo = localtime(&rawtime);
 
     uint32 TodayOfMonth = timeinfo->tm_mday;
