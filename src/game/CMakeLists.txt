@@ -22,6 +22,7 @@ set (game_SRCS
     Camera.cpp
     Conditions.cpp
     CreatureGroups.cpp
+    DailyQuestHandler.cpp
     GameEventMgr.cpp
     GuardMgr.cpp
     GMTicketMgr.cpp
