@@ -3725,3 +3725,13 @@ INSERT INTO `event_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, 
 INSERT INTO `event_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (15193, 37, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10665, 0, 0, 0, 0, 0, 0, 0, 0, 'The Banshee Queen - Say Text');
 INSERT INTO `event_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (15193, 45, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10667, 0, 0, 0, 0, 0, 0, 0, 0, 'The Banshee Queen - Say Text');
 INSERT INTO `event_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (15193, 54, 1, 51, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'The Banshee Queen - Emote OneShotSpellCast');
+
+
+CREATE TABLE `daily_quest_timer` (
+	`nextResetTime` BIGINT UNSIGNED NOT NULL DEFAULT '0'
+)
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB
+;
+
+INSERT INTO `daily_quest_timer` VALUES (0);
