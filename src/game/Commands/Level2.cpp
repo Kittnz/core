@@ -1766,6 +1766,130 @@ bool ChatHandler::HandleModifyMorphCommand(char* args)
     return true;
 }
 
+//Edit Player money
+bool ChatHandler::HandleModifyMoneyCommand(char* args)
+{
+    if (!*args)
+        return false;
+
+    Player *chr = GetSelectedPlayer();
+    if (chr == NULL)
+    {
+        SendSysMessage(LANG_NO_CHAR_SELECTED);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    // check online security
+    if (HasLowerSecurity(chr))
+        return false;
+
+    int32 addmoney = atoi(args);
+
+    uint32 moneyuser = chr->GetMoney();
+
+    if (addmoney < 0)
+    {
+        int32 newmoney = int32(moneyuser) + addmoney;
+
+        DETAIL_LOG(GetMangosString(LANG_CURRENT_MONEY), moneyuser, addmoney, newmoney);
+        if (newmoney <= 0)
+        {
+            PSendSysMessage(LANG_YOU_TAKE_ALL_MONEY, GetNameLink(chr).c_str());
+            if (needReportToTarget(chr))
+                ChatHandler(chr).PSendSysMessage(LANG_YOURS_ALL_MONEY_GONE, GetNameLink().c_str());
+
+            chr->SetMoney(0);
+        }
+        else
+        {
+            if (newmoney > MAX_MONEY_AMOUNT)
+                newmoney = MAX_MONEY_AMOUNT;
+
+            PSendSysMessage(LANG_YOU_TAKE_MONEY, abs(addmoney), GetNameLink(chr).c_str());
+            if (needReportToTarget(chr))
+                ChatHandler(chr).PSendSysMessage(LANG_YOURS_MONEY_TAKEN, GetNameLink().c_str(), abs(addmoney));
+            chr->SetMoney(newmoney);
+        }
+    }
+    else
+    {
+        PSendSysMessage(LANG_YOU_GIVE_MONEY, addmoney, GetNameLink(chr).c_str());
+        if (needReportToTarget(chr))
+            ChatHandler(chr).PSendSysMessage(LANG_YOURS_MONEY_GIVEN, GetNameLink().c_str(), addmoney);
+
+        if (addmoney >= MAX_MONEY_AMOUNT)
+            chr->SetMoney(MAX_MONEY_AMOUNT);
+        else
+            chr->LogModifyMoney(addmoney, "GM", m_session->GetPlayer()->GetObjectGuid());
+    }
+
+    DETAIL_LOG(GetMangosString(LANG_NEW_MONEY), moneyuser, addmoney, chr->GetMoney());
+
+    return true;
+}
+
+bool ChatHandler::HandleModifyHonorCommand(char* args)
+{
+    if (!*args)
+        return false;
+
+    Player* target = GetSelectedPlayer();
+    if (!target)
+    {
+        SendSysMessage(LANG_PLAYER_NOT_FOUND);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    char* field = ExtractLiteralArg(&args);
+    if (!field)
+        return false;
+
+    int32 amount;
+    if (!ExtractInt32(&args, amount))
+        return false;
+
+    // hack code
+    if (hasStringAbbr(field, "points"))
+    {
+        if (amount < 0 || amount > 255)
+            return false;
+        // rank points is sent to client with same size of uint8(255) for each rank
+        target->SetByteValue(PLAYER_FIELD_BYTES2, 0, amount);
+    }
+    else if (hasStringAbbr(field, "rank"))
+    {
+        if (amount < 0 || amount >= HONOR_RANK_COUNT)
+            return false;
+        target->SetByteValue(PLAYER_BYTES_3, 3, amount);
+    }
+    else if (hasStringAbbr(field, "todaykills"))
+        target->SetUInt16Value(PLAYER_FIELD_SESSION_KILLS, 0, (uint32)amount);
+    else if (hasStringAbbr(field, "yesterdaykills"))
+        target->SetUInt32Value(PLAYER_FIELD_YESTERDAY_KILLS, (uint32)amount);
+    else if (hasStringAbbr(field, "yesterdayhonor"))
+        target->SetUInt32Value(PLAYER_FIELD_YESTERDAY_CONTRIBUTION, (uint32)amount);
+    else if (hasStringAbbr(field, "thisweekkills"))
+        target->SetUInt32Value(PLAYER_FIELD_THIS_WEEK_KILLS, (uint32)amount);
+    else if (hasStringAbbr(field, "thisweekhonor"))
+        target->SetUInt32Value(PLAYER_FIELD_THIS_WEEK_CONTRIBUTION, (uint32)amount);
+    else if (hasStringAbbr(field, "lastweekkills"))
+        target->SetUInt32Value(PLAYER_FIELD_LAST_WEEK_KILLS, (uint32)amount);
+    else if (hasStringAbbr(field, "lastweekhonor"))
+        target->SetUInt32Value(PLAYER_FIELD_LAST_WEEK_CONTRIBUTION, (uint32)amount);
+    else if (hasStringAbbr(field, "lastweekstanding"))
+        target->SetUInt32Value(PLAYER_FIELD_LAST_WEEK_RANK, (uint32)amount);
+    else if (hasStringAbbr(field, "lifetimedishonorablekills"))
+        target->SetUInt32Value(PLAYER_FIELD_LIFETIME_DISHONORABLE_KILLS, (uint32)amount);
+    else if (hasStringAbbr(field, "lifetimehonorablekills"))
+        target->SetUInt32Value(PLAYER_FIELD_LIFETIME_HONORABLE_KILLS, (uint32)amount);
+
+    PSendSysMessage(LANG_COMMAND_MODIFY_HONOR, field, target->GetName(), hasStringAbbr(field, "rank") ? amount : (uint32)amount);
+
+    return true;
+}
+
 //kick player
 bool ChatHandler::HandleKickPlayerCommand(char *args)
 {

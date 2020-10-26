@@ -256,18 +256,27 @@ ChatCommand * ChatHandler::getCommandTable()
 		{ "player",         SEC_GAMEMASTER, true,  nullptr,                                        "", lookupPlayerCommandTable },
 		{ "skill",          SEC_GAMEMASTER, true,  &ChatHandler::HandleLookupSkillCommand,         "", nullptr },
 		{ "spell",          SEC_GAMEMASTER, true,  &ChatHandler::HandleLookupSpellCommand,         "", nullptr },
-		{ nullptr,          0,                  false, nullptr,                                        "", nullptr }
+        { "itemset",        SEC_GAMEMASTER, true,  &ChatHandler::HandleLookupItemSetCommand,       "", nullptr },
+        { "event",          SEC_GAMEMASTER, true,  &ChatHandler::HandleLookupEventCommand,         "", nullptr },
+        { "guild",          SEC_GAMEMASTER, true,  &ChatHandler::HandleLookupGuildCommand,         "", nullptr },
+		{ nullptr,          0,                  false, nullptr,                                    "", nullptr }
     };
 
     static ChatCommand modifyCommandTable[] =
     {
-        { "money",          SEC_GAMEMASTER,     false, &ChatHandler::HandleModifyMoneyCommand,         "", nullptr },
+        { "hp",             SEC_GAMEMASTER,     false, &ChatHandler::HandleModifyHPCommand,            "", nullptr },
+        { "mana",           SEC_GAMEMASTER,     false, &ChatHandler::HandleModifyManaCommand,          "", nullptr },
+        { "money",          SEC_ADMINISTRATOR,     false, &ChatHandler::HandleModifyMoneyCommand,         "", nullptr },
         { "speed",          SEC_GAMEMASTER, false, &ChatHandler::HandleModifyASpeedCommand,         "", nullptr },
         { "scale",          SEC_GAMEMASTER,     false, &ChatHandler::HandleModifyScaleCommand,         "", nullptr },
         { "faction",        SEC_GAMEMASTER,     false, &ChatHandler::HandleModifyFactionCommand,       "", nullptr },
         { "rep",            SEC_GAMEMASTER,     false, &ChatHandler::HandleModifyRepCommand,           "", nullptr },
         { "drunk",          SEC_GAMEMASTER,      false, &ChatHandler::HandleModifyDrunkCommand,         "", nullptr },
         { "morph",          SEC_GAMEMASTER,     false, &ChatHandler::HandleModifyMorphCommand,         "", nullptr },
+        { "gender",         SEC_GAMEMASTER,     false, &ChatHandler::HandleModifyGenderCommand,        "", nullptr },
+        { "ap",             SEC_GAMEMASTER,    false, &ChatHandler::HandleModifyMeleeApCommand,       "", nullptr },
+        { "spellpower",     SEC_GAMEMASTER,    false, &ChatHandler::HandleModifySpellPowerCommand,    "", nullptr },
+        { "honor",          SEC_ADMINISTRATOR,    false, &ChatHandler::HandleModifyHonorCommand,         "", nullptr },
         // Turtle WoW
         { "xp",             SEC_GAMEMASTER,    false, &ChatHandler::HandleModifyXpCommand,            "", nullptr },
         { "hairstyle",      SEC_GAMEMASTER,    false, &ChatHandler::HandleModifyHairStyleCommand,     "", nullptr },
