@@ -1004,6 +1004,144 @@ bool ChatHandler::HandleLookupSpellCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleLookupItemSetCommand(char* args)
+{
+    if (!*args)
+        return false;
+
+    std::string namepart = args;
+    std::wstring wnamepart;
+
+    if (!Utf8toWStr(namepart, wnamepart))
+        return false;
+
+    // converting string that we try to find to lower case
+    wstrToLower(wnamepart);
+
+    uint32 counter = 0;                                     // Counter for figure out that we found smth.
+
+    // Search in ItemSet.dbc
+    for (uint32 id = 0; id < sItemSetStore.GetNumRows(); id++)
+    {
+        ItemSetEntry const* set = sItemSetStore.LookupEntry(id);
+        if (set)
+        {
+            int loc = GetSessionDbcLocale();
+            std::string name = set->name[loc];
+            if (name.empty())
+                continue;
+
+            if (!Utf8FitTo(name, wnamepart))
+            {
+                loc = 0;
+                for (; loc < MAX_DBC_LOCALE; ++loc)
+                {
+                    if (loc == GetSessionDbcLocale())
+                        continue;
+
+                    name = set->name[loc];
+                    if (name.empty())
+                        continue;
+
+                    if (Utf8FitTo(name, wnamepart))
+                        break;
+                }
+            }
+
+            if (loc < MAX_DBC_LOCALE)
+            {
+                // send item set in "id - [namedlink locale]" format
+                if (m_session)
+                    PSendSysMessage(LANG_ITEMSET_LIST_CHAT, id, id, name.c_str(), localeNames[loc]);
+                else
+                    PSendSysMessage(LANG_ITEMSET_LIST_CONSOLE, id, name.c_str(), localeNames[loc]);
+                ++counter;
+            }
+        }
+    }
+    if (counter == 0)                                       // if counter == 0 then we found nth
+        SendSysMessage(LANG_COMMAND_NOITEMSETFOUND);
+    return true;
+}
+
+bool ChatHandler::HandleLookupEventCommand(char* args)
+{
+    if (!*args)
+        return false;
+
+    std::string namepart = args;
+    std::wstring wnamepart;
+
+    // converting string that we try to find to lower case
+    if (!Utf8toWStr(namepart, wnamepart))
+        return false;
+
+    wstrToLower(wnamepart);
+
+    uint32 counter = 0;
+
+    GameEventMgr::GameEventDataMap const& events = sGameEventMgr.GetEventMap();
+
+    for (uint32 id = 1; id < events.size(); ++id)
+    {
+        if (!sGameEventMgr.IsValidEvent(id))
+            continue;
+
+        GameEventData const& eventData = events[id];
+
+        std::string descr = eventData.description;
+        if (descr.empty())
+            continue;
+
+        if (Utf8FitTo(descr, wnamepart))
+        {
+            char const* active = sGameEventMgr.IsActiveEvent(id) ? GetMangosString(LANG_ACTIVE) : "";
+
+            if (m_session)
+                PSendSysMessage(LANG_EVENT_ENTRY_LIST_CHAT, id, id, eventData.description.c_str(), active);
+            else
+                PSendSysMessage(LANG_EVENT_ENTRY_LIST_CONSOLE, id, eventData.description.c_str(), active);
+
+            ++counter;
+        }
+    }
+
+    if (counter == 0)
+        SendSysMessage(LANG_NOEVENTFOUND);
+
+    return true;
+}
+
+bool ChatHandler::HandleLookupGuildCommand(char* args)
+{
+    if (!args || !*args)
+        return false;
+
+    char* name = ExtractQuotedArg(&args);
+    if (!name)
+        return false;
+
+    std::string nameStr(name);
+    Guild* guild = sGuildMgr.GetGuildByName(nameStr);
+    if (!guild)
+    {
+        SendSysMessage(LANG_GUILD_NOT_FOUND);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    PSendSysMessage("Guild %s (ID %u):", guild->GetName().c_str(), guild->GetId());
+    std::string leaderName;
+    sObjectMgr.GetPlayerNameByGUID(guild->GetLeaderGuid(), leaderName);
+    PSendSysMessage("- Leader: %s, created: %u-%u-%u", leaderName.c_str(),
+                    guild->GetCreatedYear(), guild->GetCreatedMonth(),
+                    guild->GetCreatedDay());
+    PSendSysMessage("- Members: %u (%u accounts)", guild->GetMemberSize(), guild->GetAccountsNumber());
+    PSendSysMessage("- MOTD: %s", guild->GetMOTD().c_str());
+    PSendSysMessage("- INFO: %s", guild->GetGINFO().c_str());
+
+    return true;
+}
 
 void ChatHandler::ShowQuestListHelper(uint32 questId, int32 loc_idx, Player* target /*= NULL*/)
 {

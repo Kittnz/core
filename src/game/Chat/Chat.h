@@ -317,12 +317,21 @@ class MANGOS_DLL_SPEC ChatHandler
         bool HandleLookupQuestCommand(char* args);
         bool HandleLookupSkillCommand(char* args);
         bool HandleLookupSpellCommand(char* args);
+        bool HandleLookupItemSetCommand(char* args);
+        bool HandleLookupEventCommand(char* args);
+        bool HandleLookupGuildCommand(char* args);
 
+        bool HandleModifyHPCommand(char* args);
+        bool HandleModifyManaCommand(char* args);
         bool HandleModifyMoneyCommand(char* args);
         bool HandleModifyASpeedCommand(char* args);
         bool HandleModifyScaleCommand(char* args);
         bool HandleModifyFactionCommand(char* args);
         bool HandleModifyRepCommand(char* args);
+        bool HandleModifyGenderCommand(char* args);
+        bool HandleModifyMeleeApCommand(char* args);
+        bool HandleModifySpellPowerCommand(char* args);
+        bool HandleModifyHonorCommand(char* args);
 
         //-----------------------Npc Commands-----------------------
         bool HandleNpcAddCommand(char* args);
