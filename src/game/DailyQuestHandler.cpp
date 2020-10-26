@@ -1,6 +1,9 @@
 #include "DailyQuestHandler.h"
 #include "Database/DatabaseEnv.h"
 #include "World.h"
+#include "QuestDef.h"
+#include "WorldSession.h"
+#include "Player.h"
 
 #include <memory>
 #include <sstream>
