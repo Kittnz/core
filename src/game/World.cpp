@@ -79,6 +79,7 @@
 #include "AuraRemovalMgr.h"
 #include "InstanceStatistics.h"
 #include "GuardMgr.h"
+#include "DailyQuestHandler.h"
 
 #include <chrono>
 
@@ -1429,6 +1430,8 @@ void World::SetInitialWorldSettings()
 
     sAuraRemovalMgr.LoadFromDB();
 
+    sDailyQuestHandler->LoadFromDB();
+
     ///- Initialize game time and timers
     m_gameTime = time(nullptr);
     m_startTime = m_gameTime;
@@ -1716,6 +1719,8 @@ void World::Update(uint32 diff)
     sAutoBroadCastMgr.update(diff);
     // Update liste des ban si besoin
     sAccountMgr.Update(diff);
+
+    sDailyQuestHandler->Update(diff);
 
     // And last, but not least handle the issued cli commands
     ProcessCliCommands();
