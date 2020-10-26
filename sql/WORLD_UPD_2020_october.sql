@@ -1404,13 +1404,13 @@ REPLACE INTO `creature_ai_events` (`id`, `creature_id`, `condition_id`, `event_t
 REPLACE INTO `creature_ai_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (575001, 0, 15, 11939, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gina Lang - Summon Imp on Spawn');
 
 -- allow doreen beltis to roam
-UPDATE `creature` SET `movementtype` = 1, `wander_distance` = 2 WHERE `guid` = 31918;
+UPDATE `creature` SET `movementtype` = 1, `spawndist` = 2 WHERE `guid` = 31918;
 
 -- allow jamie nore to roam
-UPDATE `creature` SET `movementtype` = 1, `wander_distance` = 2 WHERE `guid` = 31921;
+UPDATE `creature` SET `movementtype` = 1, `spawndist` = 2 WHERE `guid` = 31921;
 
 -- allow shelene rhobart to roam
-UPDATE `creature` SET `movementtype` = 1, `wander_distance` = 2 WHERE `guid` = 38289;
+UPDATE `creature` SET `movementtype` = 1, `spawndist` = 2 WHERE `guid` = 38289;
 
 -- set oliver dwor orientation
 UPDATE `creature` SET `orientation` = 4.72669 WHERE `guid` = 38290;
@@ -1535,8 +1535,8 @@ REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `po
 (37920, 24, 2992.870117, -547.953003, 114.424004, 100.000000, 0, 0.000000, 0);
 
 -- creature 38931 waypoints
-REPLACE INTO `creature` (`guid`, `id`, `id2`, `id3`, `id4`, `map`, `display_id`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `wander_distance`, `health_percent`, `mana_percent`, `movementtype`, `spawn_flags`, `visibility_mod`, `patch_min`, `patch_max`) VALUES
-(38931, 1522, 0, 0, 0, 0, 0, 0, 2707.419922, 875.736023, 111.987999, 3.92368, 300, 300, 0, 100, 100, 2, 0, 0, 0, 10);
+REPLACE INTO `creature` (`guid`, `id`, `map`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `spawndist`, `curhealth`, `curmana`, `movementtype`, `spawnflags`, `visibilitymod`, `patch_min`, `patch_max`) VALUES
+(38931, 1522, 0, 0, 0, 2707.419922, 875.736023, 111.987999, 3.92368, 300, 300, 0, 100, 100, 2, 0, 0, 0, 10);
 REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (38931, 1, 2707.419922, 875.736023, 111.987999, 100.000000, 0, 0.000000, 0),
 (38931, 2, 2766.189941, 857.533997, 112.612000, 100.000000, 20000, 10, 0),
@@ -1608,8 +1608,8 @@ REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `po
 (29903, 38, 1874.640015, 919.437012, 28.116301, 100.000000, 0, 0.000000, 0);
 
 -- creature 29903 waypoints
-REPLACE INTO `creature` (`guid`, `id`, `id2`, `id3`, `id4`, `map`, `display_id`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `wander_distance`, `health_percent`, `mana_percent`, `movementtype`, `spawn_flags`, `visibility_mod`, `patch_min`, `patch_max`) VALUES
-(45537, 1675, 0, 0, 0, 0, 0, 0, 2858.959961, 405.078003, 20.856701, 5.60251, 300, 300, 0, 100, 0, 2, 0, 0, 0, 10);
+REPLACE INTO `creature` (`guid`, `id`, `map`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `spawndist`, `curhealth`, `curmana`, `movementtype`, `spawnflags`, `visibilitymod`, `patch_min`, `patch_max`) VALUES
+(45537, 1675, 0, 0, 0, 2858.959961, 405.078003, 20.856701, 5.60251, 300, 300, 0, 100, 0, 2, 0, 0, 0, 10);
 REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (45537, 1, 2858.959961, 405.078003, 20.856701, 1.099560, 51000, 0.000000, 0),
 (45537, 2, 2892.489990, 394.360992, 25.856501, 100.000000, 0, 0.000000, 0),
@@ -1968,8 +1968,8 @@ REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `po
 (44750, 34, 2204.870117, -417.312988, 75.509804, 100.000000, 0, 0.000000, 0);
 
 -- creature 53239 waypoints
-REPLACE INTO `creature` (`guid`, `id`, `id2`, `id3`, `id4`, `map`, `display_id`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `wander_distance`, `health_percent`, `mana_percent`, `movementtype`, `spawn_flags`, `visibility_mod`, `patch_min`, `patch_max`) VALUES
-(53239, 1675, 0, 0, 0, 0, 0, 0, 2883.449951, 385.436005, 24.978399, 5.60251, 300, 300, 0, 100, 0, 2, 0, 0, 0, 10);
+REPLACE INTO `creature` (`guid`, `id`, `map`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `spawndist`, `curhealth`, `curmana`, `movementtype`, `spawnflags`, `visibilitymod`, `patch_min`, `patch_max`) VALUES
+(53239, 1675, 0, 0, 0, 2883.449951, 385.436005, 24.978399, 5.60251, 300, 300, 0, 100, 0, 2, 0, 0, 0, 10);
 REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (53239, 1, 2883.449951, 385.436005, 24.978399, 100.000000, 36000, 10, 0),
 (53239, 2, 2849.020020, 371.700012, 23.793501, 100.000000, 0, 0.000000, 0),
@@ -2365,7 +2365,7 @@ REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, 
 REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066614, 1, 1, 36, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Emote Attack1H');
 
 -- add gloom weed gameobjects
-REPLACE INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`, `spawn_flags`, `visibility_mod`, `patch_min`, `patch_max`) VALUES
+REPLACE INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`, `spawnflags`, `visibilitymod`, `patch_min`, `patch_max`) VALUES
 (25562, 175566, 0, 2204.14, 1120.06, 34.8163, 4.01426, 0, 0, -0.906307, 0.422619, 900, 900, 255, 1, 4, 0, 0, 10),
 (25565, 175566, 0, 2220.39, 1165.71, 36.1008, 4.24115, 0, 0, -0.85264, 0.522499, 900, 900, 255, 1, 4, 0, 0, 10),
 (25560, 175566, 0, 2179.86, 1073.21, 33.8257, 4.50295, 0, 0, -0.777145, 0.629321, 900, 900, 255, 1, 4, 0, 0, 10),
@@ -2877,8 +2877,8 @@ REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `po
 (44904, 27, 2923.389893, -665.919006, 142.460007, 100.000000, 0, 0.000000, 0);
 
 -- creature 127800 waypoints
-REPLACE INTO `creature` (`guid`, `id`, `id2`, `id3`, `id4`, `map`, `display_id`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `wander_distance`, `health_percent`, `mana_percent`, `movementtype`, `spawn_flags`, `visibility_mod`, `patch_min`, `patch_max`) VALUES
-(127800, 1529, 0, 0, 0, 0, 0, 0, 1984.689941, -421.868988, 35.517899, 4.84612, 300, 300, 5, 100, 100, 2, 0, 0, 0, 10);
+REPLACE INTO `creature` (`guid`, `id`, `map`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `spawndist`, `curhealth`, `curmana`, `movementtype`, `spawnflags`, `visibilitymod`, `patch_min`, `patch_max`) VALUES
+(127800, 1529, 0, 0, 0, 1984.689941, -421.868988, 35.517899, 4.84612, 300, 300, 5, 100, 100, 2, 0, 0, 0, 10);
 REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (127800, 1, 1984.689941, -421.868988, 35.517899, 100.000000, 0, 0.000000, 0),
 (127800, 2, 2004.699951, -424.294006, 35.467400, 100.000000, 0, 0.000000, 0),
@@ -3013,8 +3013,8 @@ REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `po
 (44787, 36, 2938.530029, -710.724976, 150.296997, 100.000000, 0, 0.000000, 0);
 
 -- creature 112617 waypoints
-REPLACE INTO `creature` (`guid`, `id`, `id2`, `id3`, `id4`, `map`, `display_id`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `wander_distance`, `health_percent`, `mana_percent`, `movementtype`, `spawn_flags`, `visibility_mod`, `patch_min`, `patch_max`) VALUES
-(112617, 1537, 0, 0, 0, 0, 0, 0, 2154.770020, -569.606995, 78.793098, 1.18866, 300, 300, 5, 100, 0, 2, 0, 0, 0, 10);
+REPLACE INTO `creature` (`guid`, `id`, `map`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `spawndist`, `curhealth`, `curmana`, `movementtype`, `spawnflags`, `visibilitymod`, `patch_min`, `patch_max`) VALUES
+(112617, 1537, 0, 0, 0, 2154.770020, -569.606995, 78.793098, 1.18866, 300, 300, 5, 100, 0, 2, 0, 0, 0, 10);
 REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (112617, 1, 2154.770020, -569.606995, 78.793098, 1.692970, 35000, 0.000000, 0),
 (112617, 2, 2156.199951, -573.388977, 79.002800, 100.000000, 0, 0.000000, 0),
@@ -3642,9 +3642,9 @@ UPDATE `creature_template` SET `unit_flags`=768 WHERE `entry` IN (7784, 7807, 78
 DELETE FROM `quest_start_scripts` WHERE `id` IN (648, 836, 2767) AND `comments` like '%Remove Immune to NPC flag';
 INSERT INTO `quest_start_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (648, 3, 4, 46, 512, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Rescue OOX-17/TN!: Homing Robot OOX-17/TN - Remove Immune to NPC flag');
 INSERT INTO `quest_start_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (836, 3, 4, 46, 512, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Rescue OOX-09/HL!: Homing Robot OOX-09/HL - Remove Immune to NPC flag');
-INSERT INTO `quest_start_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (2767, 3, 4, 46, 512, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Rescue OOX-22/FE!: Homing Robot OOX-22/FE - Remove Immune to NPC flag");
+INSERT INTO `quest_start_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (2767, 3, 4, 46, 512, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Rescue OOX-22/FE!: Homing Robot OOX-22/FE - Remove Immune to NPC flag');
 
-update quest_template set OfferRewardText = "Greetings young $C, I'm glad to see you ready and eager to learn about the curing of poisons.$B$BWhile most druids in the past were put through pre-planned trials, your work will involve no such thing. There has been a rash of animal poisonings in Auberdine, and the village there has been unable to cure it. To that end, a representative there has asked Moonglade for aid and we are sending you there to aid them.  This is no exercise - the work you'll do is quite real.  Bear this in mind." where entry = 6121;
+update quest_template set OfferRewardText = 'Greetings young $C, I\'m glad to see you ready and eager to learn about the curing of poisons.$B$BWhile most druids in the past were put through pre-planned trials, your work will involve no such thing. There has been a rash of animal poisonings in Auberdine, and the village there has been unable to cure it. To that end, a representative there has asked Moonglade for aid and we are sending you there to aid them.  This is no exercise - the work you\'ll do is quite real.  Bear this in mind.' where entry = 6121;
 
 -- Set chat type and emotes for texts.
 UPDATE `broadcast_text` SET `type`=1 WHERE `ID` IN (10856, 10859, 10860, 10861, 10662, 10663, 10664, 10665, 10666, 10667);
@@ -3727,11 +3727,12 @@ INSERT INTO `event_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, 
 INSERT INTO `event_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (15193, 54, 1, 51, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'The Banshee Queen - Emote OneShotSpellCast');
 
 
-CREATE TABLE `daily_quest_timer` (
+CREATE TABLE IF NOT EXISTS`daily_quest_timer` (
 	`nextResetTime` BIGINT UNSIGNED NOT NULL DEFAULT '0'
 )
 COLLATE='utf8_general_ci'
 ENGINE=InnoDB
 ;
 
-INSERT INTO `daily_quest_timer` VALUES (0);
+DELETE FROM daily_quest_timer;
+REPLACE INTO `daily_quest_timer` VALUES (0);
