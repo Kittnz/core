@@ -1056,17 +1056,7 @@ UPDATE `quest_template` SET `SpecialFlags`=0 WHERE `entry`=1657;
 REPLACE INTO `spell_script_target` (`entry`, `type`, `targetEntry`, `conditionId`, `build_min`, `build_max`) VALUES (30132, 0, 181247, 0, 5464, 5875);
 
 -- Add inverse effect mask to spell script targets.
-DROP PROCEDURE IF EXISTS `?`;
-DELIMITER //
-CREATE PROCEDURE `?`()
-BEGIN
-  DECLARE CONTINUE HANDLER FOR SQLEXCEPTION BEGIN END;
-  ALTER TABLE `spell_script_target`
-	ADD COLUMN `inverseEffectMask` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT '0' AFTER `conditionId`;
-END //
-DELIMITER ;
-CALL `?`();
-DROP PROCEDURE `?`;
+ALTER TABLE `spell_script_target` ADD COLUMN `inverseEffectMask` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT '0' AFTER `conditionId`;
 
 DELETE FROM `gameobject` WHERE `guid` BETWEEN 131140 AND 131150;
 DELETE FROM `game_event_gameobject` WHERE `guid` IN (131140, 131141, 131142, 131143, 131144, 131145, 131146, 131147, 131148, 131149, 131150) AND `event` = 12;
