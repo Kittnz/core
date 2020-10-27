@@ -35,7 +35,7 @@ REPLACE INTO `creature_template` VALUES (80104, 0, 7166, 0, 0, 0, 'Grizzie the E
 SET @gossip_menu_id = 56546;
 SET @magic_number = 80104; -- Warrior
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
-replace into broadcast_text (ID, MaleText) values (@magic_number, 'Hey pal, back for some more training?\n\nRemember what I told you, first you go for the knees, once they at your level they won\'t look down on you anymore.\n\nThat advice will cost you a few more coppers.');
+replace into broadcast_text (ID, MaleText) values (@magic_number, 'Hey pal, back for some more training?\n\nRemember what I told you: first, you go for the knees. Once they at your level, they won\'t look down on you anymore.\n\nThat advice will cost you a few more coppers.');
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
@@ -50,7 +50,7 @@ REPLACE INTO `creature_template` VALUES (80105, 0, 7179, 0, 0, 0, 'Mayten Boomri
 SET @gossip_menu_id = 56547;
 SET @magic_number = 80105; -- Hunter
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
-replace into broadcast_text (ID, MaleText) values (@magic_number, 'Guns, man I love guns, don’t you, $N?\n\nEverytime I hear that boom, my heart beats faster, anyway back for more training, you got the coin right?');
+replace into broadcast_text (ID, MaleText) values (@magic_number, 'Guns, man, I love guns, don’t you, $N?\n\nEverytime I hear that boom, my heart beats faster. Back for more training? You got the coin, right?');
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
@@ -65,7 +65,7 @@ REPLACE INTO `creature_template`VALUES (80106, 0, 15300, 0, 0, 0, 'Leyti Quickto
 SET @gossip_menu_id = 56548;
 SET @magic_number = 80106; -- Rogue
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
-replace into broadcast_text (ID, MaleText) values (@magic_number, 'Why sell when you can steal, am I right bub?\n\nCome on let me teach a few things and don’t worry I already took the coin from your pockets.');
+replace into broadcast_text (ID, MaleText) values (@magic_number, 'Why sell when you can steal, am I right, bub?\n\nCome on, let me teach you a few things. And don’t worry, I already took the coin from your pockets.');
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
@@ -80,7 +80,7 @@ REPLACE INTO `creature_template` VALUES (80107, 0, 9780, 0, 0, 0, 'Amri Demondea
 SET @gossip_menu_id = 56549;
 SET @magic_number = 80107; -- Warlock
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
-replace into broadcast_text (ID, MaleText) values (@magic_number, 'Nobody thinks of the goblin, $N, nobody, so come here, let me teach you more dark arts, can’t wait to learn how to summon a succubus, anyway business before pleasure, give up the coin!');
+replace into broadcast_text (ID, MaleText) values (@magic_number, 'Nobody ever suspects the goblins, $N. Nobody. So come here and let me teach you about the dark arts. Can\’t wait to learn how to summon a succubus! Business before pleasure, though, so give me your coin!');
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
@@ -101,7 +101,7 @@ update creature_template set faction = 69 where entry = 80129;
 SET @gossip_menu_id = 56550;
 SET @magic_number = 80108; -- Mage
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
-replace into broadcast_text (ID, MaleText) values (@magic_number, 'If it ain’t my best friend, $N, back for more spells, I admire you, you got the big brains like me, conjure water, food, portals, cha-ching, coin!\n\nSpeaking of coin, you know these spells ain’t free right?');
+replace into broadcast_text (ID, MaleText) values (@magic_number, 'If it ain\’t my best pal, $N, back for more spells. I admire you. You\'ve got the big brains like me. Conjure water, food, portals, cha-ching, coin!\n\nSpeaking of coin, you know these spells ain\’t free, right?');
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
@@ -238,9 +238,9 @@ replace into creature_loot_template (entry, item, chanceorquestchance, groupid, 
 SET @quest_entry = 80100;
 SET @quest_zone = 406;
 SET @title = 'A New Ad-Venture';
-SET @description = 'Alright, pal, listen up. I know this is your first mission for the Venture Company, so I’ll speak real slow.\n\nWe’re up here to find a special treasure, you hear? Supposed to be worth more than half the jewels in Undermine all by itself. Boss can’t wait to get his hands on it, but the last guys he sent up here never sent anything back. Thievin’ jerks think they’re gonna keep the boss’s treasure for themselves? Not if I have anything to say about it. Boss says don’t come home unless we get what we came for.\n\nWe busted up a few gizmos on our flyer gettin’ down here, but lucky for us, it seems like those other guys left some of their bots behind. Run around and grab some whizmagigs from them, would ya?';
-SET @objective = 'Gather 8 Whirling Whizmagigs from Whirling Whizz-Bots,then return to Nert Blastentom.';
-SET @completetext = 'Nice job, kid. You keep that up, you might be a foreman in, uh, eighteen or nineteen years.\n\nCompetition’s tough, you know.';
+SET @description = 'Alright, pal, listen up. I know this is your first mission for the Venture Company, so I\’ll speak real slow.\n\nWe\’re up here to find a special treasure, y\'hear? Supposed to be worth more than half the jewels in Undermine all by itself. Boss can\’t wait to get his hands on it, but the last guys he sent up here never sent anything back. Thievin\’ jerks think they\’re gonna keep the boss\’s treasure for themselves? Not if I have anything to say about it. Boss says don’t come home unless we get what we came for.\n\nWe busted up a few gizmos on our flyer gettin\’ down here, but luckily for us, it seems like those other guys left some of their bots behind. Run around and grab some whizmagigs from them, would ya?';
+SET @objective = 'Gather 8 Whirling Whizmagigs from Whirling Whizz-Bots, then return to Nert Blastentom.';
+SET @completetext = 'Nice job, kid. If you keep that up, you might be a foreman in, uh, eighteen or nineteen years.\n\nCompetition\’s tough, y\'know.';
 SET @incompletetext = 'You know what they say. Time is money, employee.';
 SET @faction_id = 0;
 SET @faction_count = 0;
@@ -361,9 +361,9 @@ REPLACE INTO `item_template` VALUES (80104, 0, 0, 0, 'Sprat’s Crunchy Vulture 
 SET @quest_entry = 80101;
 SET @quest_zone = 406;
 SET @title = 'Venture Vultures';
-SET @description = 'This is the wooooorst!\n\nThe Venture Co. was supposed to be about fun and adventure and sweet sweet profits, but all we’ve done so far is fly up to the middle of nowhere and sit around without any food.\n\nListen, I don’t care what Nert says, I’m not workin’ any more without dinner. You’re going out into the forest, arentcha? Then you’re gonna bring me back some meat from those buzzards. It’s no Booty Bay steak, but you let ol’ Sprat show ya how it’s cooked!';
+SET @description = 'This is the wooooorst!\n\nThe Venture Co. was supposed to be about fun, adventure, and sweet, sweet profits, but all we\’ve done so far is fly up to the middle of nowhere and sit around without any food.\n\nListen, I don\’t care what Nert says. I\’m not workin\’ any more without dinner. You\’re going out into the forest, aren\'t\'cha? Then, you\’re gonna bring me back some meat from those buzzards. It\’s no Booty Bay steak, but you let ol\’ Sprat show ya how it\’s cooked!';
 SET @objective = 'Bring Sprat Nozzleton 6 pieces of Plateau Vulture Meat.';
-SET @completetext = 'Nice! You just wait, mama Sprat’s gonna make magic out of these here buzzard bits.\n\nYou won’t even know you’re basically eatin’ a bird that eats rotting stuff!\n\nUh, forget I said that.';
+SET @completetext = 'Nice! You just wait, mama Sprat\’s gonna make magic out of these here buzzard bits.\n\nYou won\’t even know you\’re basically eatin\’ a bird that eats rotting stuff!\n\nUh, forget I said that.';
 SET @incompletetext = 'I’ve got the best meals anywhere!';
 SET @faction_id = 0;
 SET @faction_count = 0;
@@ -598,10 +598,10 @@ update item_template set sheath = 3 where entry = 80113;
 SET @quest_entry = 80102;
 SET @quest_zone = 406;
 SET @title = 'Green Versus Green';
-SET @description = 'You gotta be kidding me. Here we are, a mile above every mountain pass, and there’s elves up here?\n\nListen, kid, elves are the most irrational creatures in the world. A good goblin, he looks at a forest and he sees profit! But what does an elf see? Bears? Owls? Little baby squirrels with the big eyes? It makes me sick.\n\nCongratulations, you get to be the muscle today. Go out and cut down a few tree-huggers, would ya? And some of their weird living plants while you’re at it. I don’t trust anything that walks around on vines.';
+SET @description = 'You\'ve gotta be kidding me. Here we are, a mile above every mountain pass, and there\’s elves up here?\n\nListen, kid, elves are the most irrational creatures in the world. A good goblin, he looks at a forest and he sees profit! But what does an elf see? Bears? Owls? Little baby squirrels with the big eyes? It makes me sick.\n\nCongratulations, you get to be the muscle today. Go out and cut down a few tree-huggers, would ya? And some of their weird living plants while you\’re at it. I don\’t trust anything that walks around on vines.';
 SET @objective = 'Kill 7 Stonetalon Environmentalists and 5 Highpeak Lashers, then return to Nert Blastentom.';
-SET @completetext = 'Alright then, recruit, you’re officially on my good list. Stick with old Nert and you’re gonna go far!\n\nOh, uh, I guess if you’re gonna be fighting stuff it might be good for you to have a weapon. But don’t tell anyone I gave you one for free!';
-SET @incompletetext = 'Stupid elves love trees so much. You know they grew themselves a giant tree to live in off the coast?\n\nThey got the magic to grow a tree the size of a city and they never think of the lumber market. It’s madness.';
+SET @completetext = 'Alright then, recruit, you\’re officially on my good list. Stick with old Nert and you\’re gonna go far!\n\nOh, uh, I guess if you\’re gonna be fighting stuff, it might be good for you to have a weapon. But don\’t tell anyone I gave you one for free!';
+SET @incompletetext = 'Stupid elves love trees so much. You know they grew themselves a giant tree to live in off the coast?\n\nThey got the magic to grow a tree the size of a city and they never think of the lumber market. It\’s madness.';
 SET @faction_id = 0;
 SET @faction_count = 0;
 SET @xp_or_money = 130;
@@ -689,7 +689,7 @@ replace into item_template values
  update item_template set stackable = 10 where entry = 80112;
  
  replace into item_template values
- ('80114', '0', '0', '0', 'Oil-Scorched Note', '', '3020', '1', '0', '1', '0', '0', '0', '-1', '-1', '3',
+ ('80114', '0', '0', '0', 'Oil-scorched Note', '', '3020', '1', '0', '1', '0', '0', '0', '-1', '-1', '3',
  '4', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
@@ -711,7 +711,7 @@ replace into item_template values
  '0', '1', NULL);
  
  replace into item_template values
- ('80109', '0', '4', '1', 'Oil Splattered Robe', '', '12648', '1', '0', '1', '12', '12', '5', '-1', '-1', '9',
+ ('80109', '0', '4', '1', 'Oil-splattered Robe', '', '12648', '1', '0', '1', '12', '12', '5', '-1', '-1', '9',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '16', '0', '0', '0',
@@ -731,7 +731,7 @@ replace into item_template values
  '0', '1', NULL); 
  
 replace into item_template values
- ('80111', '0', '4', '1', 'Ash Covered Tunic', '', '8717', '1', '0', '1', '12', '12', '5', '-1', '-1', '9',
+ ('80111', '0', '4', '1', 'Ash-covered Tunic', '', '8717', '1', '0', '1', '12', '12', '5', '-1', '-1', '9',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '16', '0', '0', '0',
@@ -781,10 +781,10 @@ where entry = 80116;
 SET @quest_entry = 80103;
 SET @quest_zone = 406;
 SET @title = 'Risen Oilblazes';
-SET @description = 'Well, I guess we figured out why the elves are up here. The whole dang forest up ahead is on fire! And it’s gotta be goblin-made, too, because no one else uses the same kind of oil! That’s Undermine stuff, kid, there’s not a gnome in the world that can buy that.\n\nI don’t know what’s goin’ on, but I don’t like it. Go out and get some of that oil. Maybe it’ll tell us what’s goin’ on, or at least it’ll be a nice prize when we go back if not.';
-SET @objective = 'Collect 8 Living Petroleum from Risen Oilblazes in the Scorched Stand, then return to Nerd Blasentom.';
-SET @completetext = 'This doesn’t make any sense. Why would they leave such valuable stuff behind?\n\nWhere the heck did everybody go?';
-SET @incompletetext = 'This stuff will burn for years if you let it. There’s a reason it’s a goblin trade secret. There’s no profit in burning down a whole forest!';
+SET @description = 'Well, I guess we figured out why the elves are up here. The whole dang forest up ahead is on fire! And it\’s gotta be goblin-made, too, because no one else uses the same kind of oil! That\’s Undermine stuff, kid. There\’s not a gnome in the world that can buy that.\n\nI don\’t know what\’s goin\’ on, but I don\’t like it. Go out and get some of that oil. Maybe it\’ll tell us what\’s happening, or at least it\’ll be a nice prize when we go back if not.';
+SET @objective = 'Collect 8 Living Petroleums from Risen Oilblazes in the Scorched Stand, then return to Nert Blastentom.';
+SET @completetext = 'This doesn\’t make any sense. Why would they leave such valuable stuff behind?\n\nWhere the heck did everybody go?';
+SET @incompletetext = 'This stuff will burn for years if you let it. There\’s a reason it\’s a goblin trade secret. But there\’s no profit in burning down a whole forest!';
 SET @faction_id = 0;
 SET @faction_count = 0;
 SET @xp_or_money = 150;
@@ -924,10 +924,10 @@ replace into creature_loot_template (entry, item, chanceorquestchance, groupid, 
 SET @quest_entry = 80104;
 SET @quest_zone = 406;
 SET @title = 'The Other White Mech';
-SET @description = 'If there’s one thing I like better than crackin\' skulls for profit, it’s cookin’ up brand-new mechanical marvels. There’s a whole butcher’s shop of parts out there in those burnt woods, and buddy, my mouth is waterin’ for a big old mechanical feast!\n\nI don’t know why the other expedition would leave so much behind and I don’t care - bring me some of those parts!';
+SET @description = 'If there’s one thing I like better than crackin\' skulls for profit, it\’s cookin\’ up brand-new mechanical marvels. There\’s a whole butcher\’s shop of parts out there in those burnt woods, and buddy, my mouth is waterin\’ for a big old mechanical feast!\n\nI don\’t know why the other expedition would leave so much behind and I don\’t care - bring me some of those parts!';
 SET @objective = 'Collect 5 Mechanical Drumsticks from the mechanical chickens and return to Sprat Nozzleton.';
-SET @completetext = 'You know, sometimes farmers tell me their chickens are better than mine because their chickens don\'t blow up.\n\nPersonally, I think my chickens are better - for the exact same reason. Anyway, thanks for picking me up some parts.\n\nHopefully I can whip something up that might be helpful against... whatever is going on in this valley.';
-SET @incompletetext = 'Well, what are you waiting for?\n\nYou’re supposed to be some kind of big tough enforcer now, right? Go get me some parts!';
+SET @completetext = 'You know, sometimes farmers tell me their chickens are better than mine because their chickens don\'t blow up.\n\nPersonally, I think my chickens are better - for the exact same reason. Anyways, thanks for picking me up some parts.\n\nHopefully I can whip something up that might be helpful against... whatever is going on in this valley.';
+SET @incompletetext = 'Well, what are you waiting for?\n\nYou\’re supposed to be some kind of big tough enforcer now, right? Go get me some parts!';
 SET @faction_id = 0;
 SET @faction_count = 0;
 SET @xp_or_money = 160;
@@ -1025,10 +1025,10 @@ replace into item_template values
 SET @quest_entry = 80105;
 SET @quest_zone = 406;
 SET @title = 'Ventured Too Far';
-SET @description = '<The note is soaked in oil and scorched by the elemental among whose remains you found it. It’s difficult to make out most of the writing, but you can decipher one critical fragment.>\n\n...stupid boss didn’t tell us anythin’ about...place. Not a norm-…...tomb. Somethin’ bad buried...-enter of forest...\n\n<This seems like it’s worth reporting back to the expedition.>';
-SET @objective = 'Bring the Oil-Scorched Note to Nert Blastentom back at the landing site.';
-SET @completetext = '<Nert reads the note over.>\n\nWell. That probably ain’t good, but we didn’t come here to be stopped now, did we? Can’t, uh. Can’t go back to the boss empty-handed, right?\n\n<Nert seems like he’s trying to convince himself as much as he is you.>';
-SET @incompletetext = 'Why are you bringin’ me a piece of paper, kid? I look like your teacher?';
+SET @description = '<The note is soaked in oil and scorched by the elemental among whose remains you\'ve found it. It\’s difficult to make out most of the writing, but you can decipher one critical fragment.>\n\n...stupid boss didn\’t tell us anythin\’ about...place. Not a norm-…...tomb. Somethin\’ bad buried...-enter of forest...\n\n<This seems like i\t’s worth reporting back to the expedition.>';
+SET @objective = 'Bring the Oil-scorched Note to Nert Blastentom back at the landing site.';
+SET @completetext = '<Nert reads the note over.>\n\nWell. That probably ain\’t good, but we didn\’t come here to be stopped now, did we? Can\’t go back to the boss empty-handed, right?\n\n<Nert seems like he’s trying to convince himself as much as he is you.>';
+SET @incompletetext = 'Why are you bringin\’ me a piece of paper, kid? Do I look like your teacher?';
 SET @faction_id = 0;
 SET @faction_count = 0;
 SET @xp_or_money = 200;
@@ -1178,10 +1178,10 @@ replace into item_template values
 SET @quest_entry = 80106;
 SET @quest_zone = 406;
 SET @title = 'The Grumbling Grove';
-SET @description = 'Okay, look. Any treasure hunter is gonna find some haunted treasure from time to time, see? And we CAN’T go back to the boss empty-handed. I mean CAN’T.\n\nLike, he’ll have us shipped off to the mines, can’t.\n\nSo here’s what we’re gonna do, okay? We’re gonna try and get this thing anyway. You’ve done good so far, kid, so you think you’re up for a little more “enforcing”? There seem to be more of the first expedition’s mechs in the little forest on the other side of the valley, and, uh, some vultures that don’t look real natural. Clear ‘em out, and we’ll see what’s in there.';
+SET @description = 'Okay, look. Any treasure hunter is gonna find some haunted treasure from time to time, see? And we can\’t go back to the boss empty-handed. I mean CAN\’T.\n\nLike, he\’ll have us shipped off to the mines, can\’t.\n\nSo here\’s what we\’re gonna do, okay? We\’re gonna try and get this thing anyway. You\’ve done good so far, kid, so you think you\’re up for a little more “enforcing”? There seem to be more of the first expedition\’s mechs in the little forest on the other side of the valley, and, uh, some vultures that don’t look real natural. Clear \‘em out, and we\’ll see what\’s in there.';
 SET @objective = 'Kill 5 Animated Shredders and 5 Muttering Vultures in the Grumbling Grove.';
-SET @completetext = 'This place gives me the willies. The sooner we’re out of here, the better, right kid?';
-SET @incompletetext = 'I don’t like the look of ‘em any more than you do, kid. But what choice we got?';
+SET @completetext = 'This place gives me the willies. The sooner we\’re out of here, the better, right kid?';
+SET @incompletetext = 'I don’t like the look of \‘em any more than you do, kid. But what choice we got?';
 SET @faction_id = 0;
 SET @faction_count = 0;
 SET @xp_or_money = 200;
@@ -1313,9 +1313,9 @@ replace into `gameobject_template` values
 SET @quest_entry = 80107;
 SET @quest_zone = 406;
 SET @title = 'Shadow On The Plateau';
-SET @description = 'I don’t envy you right now, kid.\n\nSee, those weird vultures aren’t the worst thing in the woods. Some of the other bruisers were havin’ a look around, and they found a tomb that looks like it\'s from Suramar for how old it is.\n\nTried to get close, but they heard some kind of unholy sound from inside. These guys have been around for some of the boss\' persuasive interviews before, and they\'ve never heard sounds like that.\n\nSaid it echoed around the hills all unnatural-like, like it was bouncin\' off trees that weren\'t there.\n\nI\'ll fight elves, I\'ll fight plant monsters, I\'ll fight our own blasted tanks, but I am not messing with some ancient cursed tomb. You go out there and find out what\'s inside so you can kill it, and you and me are friends for good, alright?';
+SET @description = 'I don\’t envy you right now, kid.\n\nSee, those weird vultures aren\’t the worst thing in the woods. Some of the other bruisers were havin\’ a look around, and they found a tomb that looks like it\'s from Uldaman for how old it is.\n\nTried to get close, but they heard some kind of unholy sound from inside. These guys have been around for some of the boss\' "persuasive" interviews before, and they\'ve never heard sounds like that.\n\nSaid it echoed around the hills all unnatural-like, like it was bouncin\' off trees that weren\'t there.\n\nI\'ll fight elves, I\'ll fight plant monsters, I\'ll fight our own blasted tanks, but I am not messing with some ancient cursed tomb. You go out there and find out what\'s inside so you can kill it, and you and me are friends for good, alright?';
 SET @objective = 'Investigate the tomb in the Grumbling Grove, then return to Nert Blastentom.';
-SET @completetext = 'The first of many? Nope, nope, nope. I don’t care what the boss says, I am not gettin’ cursed by some angry ghost. We gotta get out of here, kid.';
+SET @completetext = 'The first of many? Nope, nope, nope. I don\’t care what the boss says, I am not gettin\’ cursed by some angry ghost. We gotta get outta here, kid.';
 SET @incompletetext = 'This place gives me the heebie-jeebies.';
 SET @faction_id = 0;
 SET @faction_count = 0;
@@ -1396,7 +1396,7 @@ where entry = @quest_entry;
 replace into `gameobject_template` values 
 (3000100, 0, 1, 330, 'FM Acquisition, Blastentom\'s Property', 0, 0, 0.8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_fm_acquisition');
 
-replace into broadcast_text (ID, MaleText) values (100100, 'As you inspect the plane more carefully, you notice the words "Property of Nert Blastentom" scribbled onto the side.\n\nThe plane is decorated with small stickers, among them a small coin, a yellow parrot, and a hammer.\n\nThe words "FM Acquisition" are inscribed on the bottom.');
+replace into broadcast_text (ID, MaleText) values (100100, 'As you inspect the plane more carefully, you notice the words "Property of Nert Blastentom" scribbled onto the side.\n\nThe plane is decorated with small stickers. Among them are a small coin, a yellow parrot, and a hammer.\n\nThe words "FM Acquisition" are inscribed onto the bottom.');
 replace into npc_text (ID, BroadcastTextID0) values (100100, 100100);
 
 replace into item_template values
@@ -1450,7 +1450,7 @@ update creature_template set equipment_id = 0 where entry = 80121;
 SET @gossip_menu_id = 59011;
 SET @magic_number = 80121; 
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
-replace into broadcast_text (ID, MaleText) values (@magic_number, 'Durotar ain\'t exactly a vacation destination. Sand and scorpids and harpies, and they\'ve apparently added some sort of demonic cult since my last visit. Still, it\'s better than finding yourself on the wrong end of a Venture Co. brute squad.\n\n<Nert sighs.>\n\nI used to be the brute squad.\n\nAnyway, a good businessman is always looking forward. Where there\'s scarcity, there\'s opportunity. The Horde seems to specialize in colonizing the most hostile wastelands on the face of Azeroth, so with enough know-how, I bet I can make enough to vacation on the South Sea island of my choice.');
+replace into broadcast_text (ID, MaleText) values (@magic_number, 'Durotar ain\'t exactly a vacation destination. Sand and scorpids and harpies, and apparently they\'ve added some sort of demonic cult since my last visit. Still, it\'s better than finding yourself on the wrong end of a Venture Co. brute squad.\n\n<Nert sighs.>\n\nI used to be the brute squad.\n\nAnyways, a good businessman is always looking forward. Where there\'s scarcity, there\'s opportunity. The Horde seems to specialize in colonizing the most hostile wastelands on the face of Azeroth, so with enough know-how, I bet I can make enough to vacation on the South Sea island of my choice.');
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
@@ -1480,7 +1480,7 @@ replace into creature_template_addon (entry, bytes1, emote) values ('80122', '1'
 SET @quest_entry = 80108;
 SET @quest_zone = 406;
 SET @title = 'Me Not Any Kind Of Orc';
-SET @description = 'There’s only one place in the world that would take in a bunch of smelly refugees with nothing to contribute, kid. The Horde.\n\nYeah, I know they don’t like us. But they don’t like us less than our former associates, get it? We got a chance of winning them over, and there’s no way the Venture Co is gonna get us if we’re holed up inside Orgrimmar!\n\nIt’s time to go straight, little buddy.';
+SET @description = 'There\’s only one place in the world that would take in a bunch of smelly refugees with nothing to contribute, kid. The Horde.\n\nYeah, I know they don\’t like us. But they don\’t like us less than our former associates, get it? We got a chance of winning them over, and there\’s no way the Venture Co. is gonna get us if we\’re holed up inside of Orgrimmar!\n\nIt\’s time to go straight, little buddy.';
 SET @objective = 'Join Nert Blastentom and travel to Durotar to join the Horde.';
 SET @completetext = 'Alright.\n\nWe made it to Durotar. Step 1 complete.\n\nNow, for step 2 of my master plan that I just made up...';
 SET @incompletetext = 'Bit of a bumpy flight, but not as bumpy as being tossed off the cliffs of Mulgore, I bet.';
@@ -1560,11 +1560,11 @@ where entry = @quest_entry;
 	 
 SET @quest_entry = 80109;
 SET @quest_zone = 14;
-SET @title = 'Zug-zug Or Somethin’';
-SET @description = 'Our situation ain’t good. If the Horde won’t help us, I don’t know where else we could go. But I’ve got a plan, see.\n\nAn old orc friend of mine is the cook in Razor Hill, the orc town just down below us. We write every now and then, and from what he tells me, the head of the guard there just goes nuts for roasted boar.\n\nWhy don’t you hunt some of the boar around here, take them to him? I bet he can put in a good word. And as any good goblin knows, one good word is all you need to take it all the way to the top!';
+SET @title = 'Zug-zug Or Somethin\’';
+SET @description = 'Our situation ain\’t good. If the Horde won\’t help us, I don\’t know where else we could go. But I\’ve got a plan, see.\n\nAn old orc friend of mine is the cook in Razor Hill, the orc town just down below us. We write every now and then, and from what he tells me, the head of the guard there just goes nuts for roasted boar.\n\nWhy don\’t you hunt some of the boar around here, take them to him? I bet he can put in a good word. And as any good goblin knows, one good word is all you need to take it all the way to the top!';
 SET @objective = 'Collect 5 Chunks of Boar Meat and bring them to Cook Torka in Razor Hill.';
-SET @completetext = 'Boar meat? How did you know to bring boar... oh.\n\nYou’re friends with Nert, aren’t you.';
-SET @incompletetext = 'Oh, hello there! It’s been a long time since I’ve seen a goblin around here!';
+SET @completetext = 'Boar meat? How did you know to bring boar... oh.\n\nYou\’re friends with Nert, aren\’t you.';
+SET @incompletetext = 'Oh, hello there! It’s been a long time since I\’ve seen a goblin around here!';
 SET @faction_id = 0;
 SET @faction_count = 0;
 SET @xp_or_money = 200;
@@ -1688,10 +1688,10 @@ replace into `creature` (`id`, `map`, `modelid`, `equipment_id`, `position_x`, `
 SET @quest_entry = 80110;
 SET @quest_zone = 14;
 SET @title = 'Green Goes Red';
-SET @description = 'I owe Nert a favor, but getting you into the Horde is a tall order!\n\nI know Gar’thok likes boar meat, but I’d like to think he’s got a better head on his shoulders than to sign off on you as recruits just for a good lunch.\n\nOh well. Knock yourself out, I guess.\n\nAnd tell Nert I said hi!';
-SET @objective = 'Bring Torka’s Boarbecue Ribs to Gar’thok in Razor Hill and ask him to help you join the Horde.';
-SET @completetext = '<You hand over the boar and begin to explain your situation. Gar’thok does not appear to be fully listening as he devours the food with relish. It takes him a moment to realize you’ve finished.>\n\n...huh? Oh, yes.\n\n<Gar’thok regains his composure.>\n\nAre you prepared to fight with honor?\n\nTo join the ranks of the Warchief’s forces?\n\nTo be his fist in lands unknown, and to serve the Horde without question?';
-SET @incompletetext = '<Gar’thok appears to be salivating slightly.>\n\nWhat are you doing here, and why do you smell like Torka’s cooking?';
+SET @description = 'I owe Nert a favor, but getting you into the Horde is a tall order!\n\nI know Gar\’thok likes boar meat, but I\’d like to think he\’s got a better head on his shoulders than to sign off on you as recruits just for a good lunch.\n\nOh well. Knock yourself out, I guess.\n\nAnd tell Nert I said hi!';
+SET @objective = 'Bring Torka\’s Boarbecue Ribs to Gar\’thok in Razor Hill and ask him to help you join the Horde.';
+SET @completetext = '<You hand over the boar and begin to explain your situation. Gar\’thok does not appear to be fully listening as he devours the food with relish. It takes him a moment to realize you\’ve finished.>\n\n... Huh? Oh, yes.\n\n<Gar\’thok regains his composure.>\n\nAre you prepared to fight with honor?\n\nTo join the ranks of the Warchief\’s forces?\n\nTo be his fist in lands unknown, and to serve the Horde without question?';
+SET @incompletetext = '<Gar\’thok appears to be salivating slightly.>\n\nWhat are you doing here, and why do you smell like Torka\’s cooking?';
 SET @faction_id = 76;
 SET @faction_count = 250;
 SET @xp_or_money = 200;
@@ -1766,10 +1766,9 @@ nextquestid = @nextquest, RewOrReqMoney = @reward_money,
 nextquestinchain = @nextquestinchain, prevquestid = @prevquest 
 where entry = @quest_entry;
 
--- OLD Weapon Trainer
-
 replace into`creature_template` values (80130, 0, 10747, 0, 0, 0, 'Fareck', 'Apprentice Weapon Master', 5271, 50, 50, 6830, 6830, 0, 0, 2999, 12, 17, 1, 1.14286, 0, 20, 5, 0, 1, 1, 292, 333, 0, 226, 1, 1500, 2000, 1, 4096, 0, 0, 2, 0, 0, 0, 55.36, 76.12, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 11867, 0, 0, 0, 0, 524298, '');
 update creature_template set npc_flags = 0, trainer_type = 0 where entry = 80130;
+
 update creature_template set faction = 35 where entry = 80130;
 
 -- Grease-stained letter (Warrior)
@@ -1784,15 +1783,15 @@ replace into item_template values
  '-1', '4', '80150', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);  
  
-replace into page_text values (80150, 'Hey bub, it’s me Grizzie the Enforcer, from Undermine, remember me?\n\nProbably not but anyway, I am writing this here letter for you because I saw you swinging that weapon at them fools that tried to give you the gutter, and it reminded me of the good ol’ days in our childhood when you saved me from that Hobgoblin!\n\nAnyway pal, thanks to you I became a big bruiser, and am here to help teaching others how to smack, come learn a thing or two, but grab your purse too.', 0);
+replace into page_text values (80150, 'Hey bub, it\’s me, Grizzie the Enforcer, from Undermine, remember me?\n\nProbably not, but anyways, I am writing this here letter for you because I saw you swinging that weapon at them fools that tried to give you the gutter, and it reminded me of the good ol\’ days in our childhood when you saved me from that hobgoblin!\n\nThanks to you I became a big bruiser, and now I am here to help teach others how to smack. Come learn a thing or two, but make sure you bring your coin purse.', 0);
 
 set @quest_entry = 80115;
 set @quest_zone = 406;
 set @title = 'Grease-stained Letter';
-set @description = 'Hey, $N, while you were being the perfect employee doing my-, I mean your job. Grizzie the Enforcer was looking for you, said something about him owing you a favor or whatever, here he mentions it in this letter which I may or may have not dropped onto my buzzard wings, don’t take too long your break is very short!';
-set @objective = 'Read Grease-stained Letter and speak to Grizzie the Enforcer.';
-set @completetext = '$N, pal, great too see ya, let’s have a quick chat.';
-set @incompletetext = 'Move it $N! I am taking some coin out of your paycheck.';
+set @description = 'Hey, $N, while you were being the perfect employee doing my--I mean your job, Grizzie the Enforcer was looking for you. Said something about him owing you a favor or whatever. Here, he mentions it in this letter which I may or may have not dropped into my buzzard wings. Don\’t take too long, your break is short for a reason!';
+set @objective = 'Read the Grease-stained Letter and speak to Grizzie the Enforcer.';
+set @completetext = '$N, pal, great too see ya, let\’s have a quick chat.';
+set @incompletetext = 'Move it, $N, or I\'m gonna be taking some coin out of your paycheck.';
 set @faction_id = 0;
 set @faction_count = 0;
 set @xp_or_money = 164;
@@ -1878,15 +1877,15 @@ replace into item_template values
  '-1', '4', '80151', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);  
  
-replace into page_text values (80151, 'Thief, betrayer, son of a gnome!\n\nI heard you were around, $N, how can you show your face in the same place as I?\n\nYou stole my gig! It was my greatest theft, everyone would’ve known!\n\nUnlike you who got caught and now sent into labor like the fool you are! In any case, come give me back the money you owe me, $N!\n\nI will also teach you who the better rogue is.', 0);
+replace into page_text values (80151, 'Thief, betrayer, son of a gnome!\n\nI heard you were around, $N. How can you show your face in the same place as I?\n\nYou stole my gig! It was my greatest theft. I would\'ve reaped all of the rewards and fled in the wind!\n\nUnlike you who got caught, and then sent into labor like the fool that you are! In any case, come give me back the money you owe me, $N!\n\nI\'ll teach you who the better rogue is...', 0);
 
 set @quest_entry = 80116;
 set @quest_zone = 406;
 set @title = 'Ooze-covered Letter';
-set @description = 'You’re back, $N, hey why won’t you tell your friend here, me the last gossip of the moment eh?\n\nI hear you owe Leyti Quicktongue some money, did you gamble all your savings back home or what?\n\nIs that a loan shark, do I have to pay you health insurance, \'cause I ain\'t gonna, now here read this but be careful it has some ugly looking ooze on one its corners.\n\nShort break, and I mean it! Short!';
-set @objective = 'Read Ooze-covered Letter and speak to Leyti Quicktongue.';
-set @completetext = 'If it ain’t $N, you thieving scoundrel.\n\nWhat do you mean it was -your- gig?';
-set @incompletetext = 'Tick-tock, $N, move it or no lunch break!';
+set @description = 'You’re back, $N. Hey, why won\’t you tell your friend here, me, the latest gossip of the moment, eh?\n\nI hear you owe Leyti Quicktongue some money. Did you gamble all of your savings back home or what?\n\nIs that a loan shark? Do I have to pay you health insurance, \'cause I ain\'t gonna. Now here, read this, but be careful. It has some ugly looking ooze on one of the corners.\n\nShort break, and I mean it! Short!';
+set @objective = 'Read the Ooze-covered Letter and speak to Leyti Quicktongue.';
+set @completetext = 'If it ain’t $N, you thieving scoundrel.\n\nWhat do you mean it was your gig?';
+set @incompletetext = 'Tick-tock, $N. Move it or no lunch break!';
 set @faction_id = 0;
 set @faction_count = 0;
 set @xp_or_money = 164;
@@ -1972,15 +1971,15 @@ replace into item_template values
  '-1', '4', '80152', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);  
  
-replace into page_text values (80152, '$N, I am the local big game hunter, believe it or not I should’ve been with Nesingwary JR himself in the Stranglethorn Vale, but my debts to the Venture Co. dragged me here, while I can only shoot a buzzard or a crow in this place, I also saw you handling a gun, not the best way of shooting it but for some coin I can teach you to be a proper big game hunter!', 0);
+replace into page_text values (80152, '$N, I am the local big-game hunter. Believe it or not, I should\’ve been with Nesingwary himself in Stranglethorn Vale, but my debts to the Venture Co. dragged me here instead. While I can only shoot a buzzard or a crow out here, I also saw you handling a gun. Not the best way of shooting it, but for some coin, I can teach you to be a proper shot!', 0);
 
 set @quest_entry = 80117;
 set @quest_zone = 406;
 set @title = 'Leather-covered Letter';
-set @description = 'Back for more petty jobs, $N? While that id amazingly boring of you, the local hunter wanted me to give you this, said something about teaching you to shoot properly!\n\nHmph, that guy think he knows how to teach a goblin to blow and shoot stuff, the audacity!\n\nAnyway take this, go and return back quick, or no meals for you today.';
-set @objective = 'Read Leather-covered Letter and speak to Mayten Boomrifle.';
-set @completetext = 'Shhhh, $N, not so loud, I’m trying to take that buzzard out of the sky!';
-set @incompletetext = 'I hear we got buzzard wings on the menu tonight, I will enjoy your share too I guess.';
+set @description = 'Back for more petty jobs, $N? While that is amazingly boring of you, the local hunter wanted me to give you this. Said something about teaching you to shoot properly!\n\nHmph, that guy think he knows how to teach a goblin to blow and shoot stuff... the audacity!\n\nAnyways, take this. Return back quickly or no meal breaks for you today.';
+set @objective = 'Read the Leather-covered Letter and speak to Mayten Boomrifle.';
+set @completetext = 'Shhhh, $N, not so loud. I\’m trying to take that buzzard out of the sky.';
+set @incompletetext = 'I hear we\'ve got buzzard wings on the menu tonight. I\'ll enjoy your share, too, I guess.';
 set @faction_id = 0;
 set @faction_count = 0;
 set @xp_or_money = 164;
@@ -2054,10 +2053,10 @@ nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
 srcItemId = 80152, srcitemcount = 1, RequiredClasses = 4
 where entry = @quest_entry;	
 
--- Simply Fancy Letter(Mage)
+-- Fancy Letter(Mage)
 
 replace into item_template values
- ('80153', '0', '15', '0', 'Simply Fancy Letter', '', '3029', '1', '0', '1', '0', '0', '0', '-1', '-1', '0',
+ ('80153', '0', '15', '0', 'Fancy Letter', '', '3029', '1', '0', '1', '0', '0', '0', '-1', '-1', '0',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
@@ -2066,15 +2065,15 @@ replace into item_template values
  '-1', '4', '80153', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);  
  
-replace into page_text values (80153, 'Heya, $N, I hear you got the big brains just like I and one day you wished so much to blast something your hands were on fire!\n\nThat’s amazing, another mage in this goblin hole, ugh, come let’s have a big brain conversation while I teach you new stuff!\n\nBRING COIN!', 0);
+replace into page_text values (80153, 'Heya, $N. I hear you got big brains. One day you wished so much to blast something your hands were on fire, just like me, right?!\n\nThat\’s amazing. Another mage in this goblin hole. Ugh. Come, let\’s have a big-brain conversation while I teach you new stuff!\n\nBRING COIN!', 0);
 
 set @quest_entry = 80118;
 set @quest_zone = 406;
-set @title = 'Simply Fancy Letter';
-set @description = 'Good job on those jobs I sent you to do $N, as boring as they were, you did your best, can you conjure me some water, I am very thirsty!\n\nWhat, you don’t know how yet?\n\nSeriously man, here read this, she left it for you just for this reason, no go learn it and bring me some sparkling water!';
-set @objective = 'Read Simply Fancy Letter and speak to Wizette Icewhistle.';
-set @completetext = 'Heya sweetie, great to see ya, ready for mama to teach you all these spells?';
-set @incompletetext = 'No water, no job, no job, no coin.';
+set @title = 'Fancy Letter';
+set @description = 'Good job on those jobs that I sent you to do, $N. As boring as they were, you did your best. Can you conjure me some water? I\'m very thirsty!\n\nWhat, you don\’t know how to do that yet?\n\nSeriously man, here. Read this. Now, go learn something, and don\'t forget to bring me some sparkling water!';
+set @objective = 'Read the Fancy Letter and speak to Wizette Icewhistle.';
+set @completetext = 'Heya, sweetie, great to see ya. Ready for mama to teach you all these spells?';
+set @incompletetext = 'No water, no job. No job, no coin.';
 set @faction_id = 0;
 set @faction_count = 0;
 set @xp_or_money = 164;
@@ -2148,10 +2147,10 @@ nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
 srcItemId = 80153, srcitemcount = 1, RequiredClasses = 128
 where entry = @quest_entry;	
 
--- Awfully Looking Letter (Warlock)
+-- Awful-looking Letter (Warlock)
 
 replace into item_template values
- ('80154', '0', '15', '0', 'Awfully Looking Letter', '', '3029', '1', '0', '1', '0', '0', '0', '-1', '-1', '0',
+ ('80154', '0', '15', '0', 'Awful-looking Letter', '', '3029', '1', '0', '1', '0', '0', '0', '-1', '-1', '0',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
@@ -2160,15 +2159,15 @@ replace into item_template values
  '-1', '4', '80154', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);  
  
-replace into page_text values (80154, 'Hail, $N, I am Amri Demondeal,  aspiring dark arts practitioner and I felt this aura similar to mine from you, I think your potential excels mine when it comes to demon summoning and playing with felfire!\n\nI am very intrigued of your abilites, meet me in my cave and I will teach you more.', 0);
+replace into page_text values (80154, 'Hail, $N. I am Amri Demondeal, aspiring dark arts practitioner extraordinaire. When I first saw you, I felt an aura similar to mine. I think you\'ve got the chops for demon summoning and playing with felfire!\n\nI am very intrigued by your abilites, $N. Meet me in my cave and I will teach you more.', 0);
 
 set @quest_entry = 80119;
 set @quest_zone = 406;
-set @title = 'Awfully Looking Letter';
-set @description = 'Pal, $N, back so soon?\n\nEh, we’re pals right?\n\nWhy won’t you tell me then, why does  Amri Demondeal look for you?\n\nDo you also do the spooky demon stuff he does, with like green fire and all?\n\nAnyway, guess I’ll see, here, this for you, from her, I hope she never speaks to me again!';
-set @objective = 'Read Awfully Looking Letter and speak to Amri Demondeal.';
-set @completetext = '$N, welcome, welcome, the dark arts await man.';
-set @incompletetext = 'Don’t tell her I said that!';
+set @title = 'Awful-looking Letter';
+set @description = 'Pal, $N, back so soon?\n\nEh, we\’re pals, right?\n\nWhy did Amri Demondeal come looking for you? Why won\'t you tell me?\n\nDo you also do the spooky demon stuff like he does? With, like, green fire and all that?\n\nGuess I\’ll see, won\'t I? Here, this is for you from her. I hope she never speaks to me again!';
+set @objective = 'Read the Awful-looking Letter and speak to Amri Demondeal.';
+set @completetext = '$N, welcome, welcome. The dark arts await.';
+set @incompletetext = 'Don\’t tell Amri I said anything about her! I don\'t want her to burn my backside off.';
 set @faction_id = 0;
 set @faction_count = 0;
 set @xp_or_money = 164;
@@ -2295,8 +2294,8 @@ replace into item_template values
 set @quest_entry = 80120;
 set @quest_zone = 406;
 set @title = 'Garbage Man';
-set @description = 'Hey, you! I\'m talking to ya, pal!\n\nI\'ve been picking up our crew\'s trash all day long and I could really use a break.\n\nSay, how about you clean up for a while?\n\nI\'ll be over here in the shade taking a quick snooze. When I wake up, I expect this place to be spotless.\n\nNow get going!';
-set @objective = 'Kazznik has asked you to collect trash littered throughout the worksite.';
+set @description = 'Hey, you! Yeah, I\'m talkin\' to you, pal!\n\nI\'ve been picking up our crew\'s trash all day long and I could really use a break.\n\nSay, hows about you clean up for a while?\n\nI\'ll be over here in the shade takin\' a quick snooze. When I wake up, I expect this place to be spotless.\n\nNow get to work!';
+set @objective = 'Kazznik has asked you to collect the Trash littered throughout the worksite.';
 set @completetext = 'Good job!\n\nDon\'t tell the boss I was taking a break. ';
 set @incompletetext = 'Oh, you\'re back already?';
 set @faction_id = 0;
@@ -2421,7 +2420,7 @@ replace into item_template values
 set @quest_entry = 80121;
 set @quest_zone = 406;
 set @title = 'This Is In My Contract';
-set @description = 'Nert might be afraid of a little shadow magic, but not us, huh?\n\nIt’s time for you learn a little real demon-summoning. Yeah, I know we’re in the middle of a crisis, but there’s no time like the present! We’re warlocks!\n\nCrises are what we do! And besides, I’m contractually obligated to help you new enforcers out.\n\nSo here’s what you’re gonna do. You’re gonna go on Nert’s little expedition, but you’re gonna bring me something special. It looks like some of the creatures there have little shards of a purple crystal on them, and purple just so happens to be our favorite color.\n\nBring me one back, and I’ll teach ya to summon an imp, how’s that?';
+set @description = 'Nert might be afraid of a little shadow magic, but not us, huh?\n\nIt\’s time for you learn some real demon-summoning. Yeah, I know we\’re in the middle of a crisis, but there\’s no time like the present! We\’re warlocks!\n\nCrises are what we do! And besides, I\’m contractually obligated to help you new enforcers out.\n\nSo, here\’s what you\’re gonna do. You\’re gonna go on Nert\’s little expedition, but you\’re gonna bring me something special. It looks like some of the creatures there have little shards of a purple crystal on them, and purple just so happens to be our favorite color.\n\nBring me one back, and I\’ll teach ya to summon an imp. How\’s that?';
 set @objective = 'Collect a Howling Crystal from one of the creatures of the Grumbling Grove.';
 set @completetext = 'Nice! This will do nicely.\n\nNow, watch and learn, kid - you only get to rip a demon unwillingly from the void for the first time once.';
 set @incompletetext = 'I\'m sorry, did you not understand?\n\nI thought I was crystal clear that I needed a crystal to help you.';
@@ -2524,10 +2523,10 @@ update creature_template set gossip_menu_id = 59011 where entry = 80134;
 set @quest_entry = 80122;
 set @quest_zone = 14;
 set @title = 'Of Goblins and Future';
-set @description = 'Heya sweetie, it seems you sticking back was a great idea, you made a name of yourself around this parts, helping these orcs how you could, honestly I am not very amused by their honor and whatever, as long as we got a place to get some coin, sleep and food, I am in.\n\nBut it is not my choice, eh. Anyway, $N, go talk to Nert, our former foreman, he’s in Orgrimmar waiting to speak with the big man himself, the warchief, hopefully your deeds and our skills will make him consider us joining.';
-set @objective = 'Speak to Nert in Orgrimmar and settle your future.';
-set @completetext = '$N, good to see you again pal, I hear you helped the Horde a lot, maybe this will not be a bust after all.';
-set @incompletetext = 'You should really go you know, without you there we might lose this chance.';
+set @description = 'Heya, sweetie. It seems you sticking back was a great idea. You really made a name for yourself around these parts. The way these orcs value honor and whatever kinda gets on my nerves, but as long as we got a place to make a living, I\'m in.\n\n$N, go talk to Nert, our former foreman. He\’s in Orgrimmar waiting to speak with the big man himself, the warchief. Hopefully your deeds and our skills will make him consider us worthy of joining the Horde.';
+set @objective = 'Speak to Nert in Orgrimmar and settle our future.';
+set @completetext = '$N, good to see you again. pal. I hear you helped the Horde out a lot, and that\'s worth something. Maybe this won\'t be a bust after all.';
+set @incompletetext = 'You should really get going. Without you there, we might lose out on this chance.';
 SET @faction_id = 0;
 SET @faction_count = 0;
 set @xp_or_money = 384;
@@ -2607,9 +2606,9 @@ replace into`creature_template` values (80135, 0, 0, 0, 0, 0, 'Quest 80123 Custo
 set @quest_entry = 80123;
 set @quest_zone = 14;
 set @title = 'The Old Goblin and His Silver Tongue';
-set @description = 'You did a great job kid, just as I instructed you, while you were out there pillaging, killing, collecting, wiping dust or whatever those orcs made you do to earn their trust I have been waiting to get an audience with the big guy here, you see I hear he has a big heart, so we might as well choose how to do this, do we beg for our lives or are we fighting for it?\n\nYou know us goblins have no real pride, shining coins it is where it is, but I think this warchief would take us more seriously if we told him what we have in store for him, how we can help them and why they should take us in, remember $N, we are no longer being paid but at the same time we can do our own stuff.\n\nBe at my right old pal, as we speak to the big boss himself, I need you there, for real.';
+set @description = 'You did a great job, kid, just as I instructed you. While you were out there pillaging, killing, collecting, wiping dust, or whatever those orcs made you do to earn their trust, I\'ve been waiting to get an audience with the big guy, here. You see, I hear he has a big heart, so we might as well try to exploit it, am I right? Maybe we should beg for our lives?\n\nYou know, us goblins have no real pride. Shining coins is where it\'s at, but I think this warchief would take us more seriously if we told him what we have in store for him. How we can scratch their backs if they scratch ours. Remember, $N, we are no longer being paid by the Venture Co., but at the same time, that gives us the freedom to do our own stuff.\n\nBe at my right, old pal, as we speak to the big boss himself. I need you there for real.';
 set @objective = 'Sit through the talk between Nert and Thrall.';
-set @completetext = 'For a moment there, I thought I lost him, good thing he had history with goblins and knows our value.';
+set @completetext = 'For a moment, there, I thought I lost him. Good thing he had history with goblins and he knows our value.';
 set @incompletetext = 'Future awaits, coin awaits.';
 SET @faction_id = 76;
 SET @faction_count = 3000;
