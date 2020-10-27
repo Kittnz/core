@@ -54,48 +54,51 @@ void DailyQuestHandler::Update(uint32 diff)
 
     if (timeUnix >= m_nextResetTime) // update now
     {
-        const auto& sessions = sWorld.GetAllSessions();
-
-        for (auto& sessionPair : sessions)
+        if (!m_questIds.empty())
         {
-            auto session = sessionPair.second;
+            const auto& sessions = sWorld.GetAllSessions();
 
-            auto player = session->GetPlayer();
+            for (auto& sessionPair : sessions)
+            {
+                auto session = sessionPair.second;
 
-            if (!player || !player->IsInWorld())
-                continue;
+                auto player = session->GetPlayer();
+
+                if (!player || !player->IsInWorld())
+                    continue;
+
+                for (uint32 questId : m_questIds)
+                {
+                    if (player->GetQuestStatus(questId) == QUEST_STATUS_COMPLETE)
+                    {
+                        //remove quest
+                        player->RemoveQuest(questId);
+
+                        // set quest status to not started (will updated in DB at next save)
+                        player->SetQuestStatus(questId, QUEST_STATUS_NONE);
+
+                        // reset rewarded for restart repeatable quest
+                        player->getQuestStatusMap()[questId].m_rewarded = false;
+                    }
+                }
+            }
+
+            //build query for offline players
+
+            std::ostringstream ss;
+            ss << "DELETE FROM `character_queststatus` WHERE `status` = %u AND `quest` IN (";
 
             for (uint32 questId : m_questIds)
             {
-                if (player->GetQuestStatus(questId) == QUEST_STATUS_COMPLETE)
-                {
-                    //remove quest
-                    player->RemoveQuest(questId);
-
-                    // set quest status to not started (will updated in DB at next save)
-                    player->SetQuestStatus(questId, QUEST_STATUS_NONE);
-
-                    // reset rewarded for restart repeatable quest
-                    player->getQuestStatusMap()[questId].m_rewarded = false;
-                }
+                ss << questId << ",";
             }
+
+            ss.seekp(-1, std::ios_base::end); // remove last comma
+
+            ss << ")";
+
+            CharacterDatabase.PExecute(ss.str().c_str(), QUEST_STATUS_COMPLETE); // execute to remove all quests.
         }
-
-        //build query for offline players
-
-        std::ostringstream ss;
-        ss << "DELETE FROM `character_queststatus` WHERE `status` = %u AND `quest` IN (";
-
-        for (uint32 questId : m_questIds)
-        {
-            ss << questId << ",";
-        }
-
-        ss.seekp(-1, std::ios_base::end); // remove last comma
-
-        ss << ")";
-
-        CharacterDatabase.PExecute(ss.str().c_str(), QUEST_STATUS_COMPLETE); // execute to remove all quests.
 
 
         //now update next reset time to midnight next day.
