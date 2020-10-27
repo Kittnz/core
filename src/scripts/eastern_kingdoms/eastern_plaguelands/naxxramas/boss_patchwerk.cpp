@@ -131,29 +131,41 @@ struct boss_patchwerkAI : public ScriptedAI
 
         Unit* pTarget = nullptr;
         uint32 uiHighestHP = 0;
+        uint8 threatListPosition = 0;
 
         ThreatList const& tList = m_creature->getThreatManager().getThreatList();
-        for (ThreatList::const_iterator iter = tList.begin(); iter != tList.end(); ++iter)
+        for (const auto iter : tList)
         {
-            // Skipping maintank, only using him if there is no other viable target todo: not sure if this is correct. Should we target the MT over the offtanks, if the offtanks have less hp?
-            if ((*iter)->getUnitGuid() == mainTankGuid)
-                continue;
-            if (!(*iter)->getUnitGuid().IsPlayer())
+            // Only top 4 players on threat in melee range are targetted.
+            if (threatListPosition > 3)
+                break;
+
+            if (iter->getUnitGuid().IsPlayer())
                 continue;
 
-            if (Unit* pTempTarget = m_creature->GetMap()->GetUnit((*iter)->getUnitGuid()))
+            Player* pTempTarget = m_creature->GetMap()->GetPlayer(iter->getUnitGuid());
+            if (!pTempTarget)
+                continue;
+
+            if (!m_creature->IsInMap(pTempTarget))
+                continue;
+
+            if (!m_creature->CanReachWithMeleeSpellAttack(pTempTarget))
+                continue;
+
+            // Skipping maintank, only using him if there is no other viable target
+            // todo: not sure if this is correct. Should we target the MT over the offtanks, if the offtanks have less hp?
+            if (iter->getUnitGuid() != mainTankGuid)
             {
                 // target has higher hp than anyone checked so far
                 if (pTempTarget->GetHealth() > uiHighestHP)
                 {
-                    // target is in melee range, 2d distance will do
-                    if (m_creature->IsInMap(pTempTarget) && m_creature->GetDistance2d(pTempTarget) < MELEE_DISTANCE)
-                    {
-                        pTarget = pTempTarget;
-                        uiHighestHP = pTarget->GetHealth();
-                    }
+                    pTarget = pTempTarget;
+                    uiHighestHP = pTarget->GetHealth();
                 }
             }
+
+            threatListPosition++;
         }
 
         // If we found no viable target, we choose the maintank

@@ -180,6 +180,9 @@ where entry = @quest_entry;
 
 -- Lighting the Pyres
 
+delete from creature_questrelation where quest = 80301;
+delete from creature_involvedrelation where quest = 80301;
+
 replace into `creature_template` values (80801, 0, 18334, 0, 0, 0, 'Mystic Guay’Jin', NULL, 0, 62, 62, 4079, 4079, 6015, 6015, 4091, 12, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 174, 224, 0, 284, 1, 1000, 2000, 8, 4608, 0, 0, 0, 0, 0, 0, 203.77, 104.278, 100, 7, 0, 0, 0, 0, 0, 10, 10, 10, 10, 10, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 5694, 0, 0, 0, 0, 524298, '');
 
 replace into`creature_template` values (80803, 0, 0, 0, 0, 0, 'Quest 80301 Custom Objective', '', 0, 5, 5, 319, 319, 0, 0, 852, 84, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 24, 31, 0, 90, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 31.856, 43.802, 100, 7, 4096, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 4276, 0, 0, 0, 0, 2, '');
@@ -199,7 +202,7 @@ set @description = 'Ah good, what a beauty ya be, $R exactly what ol’ Guay’j
 set @objective = 'Light 3 Spirit Pyres inside the Tomb.';
 set @completetext = 'Good... The spirits be restin’ for now. We might need you to be light the pyres again soon, once the fires go out. I will continue my investigation, try to find out why the spirits cannot seem to find rest ‘ere... Be it because of a battle? Or is there somethin’ nasty restin’ in this place? No idea mon, wonder why this tomb was abandoned after all… Well, that be a problem for another time, you’ve been doin’ us all a favor $R! Guay’jin be thankin’ ya.';
 set @incompletetext = 'Is it done mon? Have the spirits been put to rest? As long as the spirits are restless, our dead will finding no peace here.';
-set @faction_id = 1494;
+set @faction_id = 893;
 set @faction_count = 75;
 set @xp_or_money = 650;
 set @reward_money = 5; 
@@ -269,10 +272,13 @@ reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
 reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
 nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
 nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
-specialflags = 1
+specialflags = 1, objectivetext1='Pyres Lit'  
 where entry = @quest_entry;	 
 
 -- Unwanted Eyes
+
+delete from creature_questrelation where quest = 80302;
+delete from creature_involvedrelation where quest = 80302;
 
 replace into `creature_template` values (80802, 0, 18332, 0, 0, 0, 'Warleader Wetnose', NULL, 0, 62, 62, 4079, 4079, 6015, 6015, 4091, 12, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 174, 224, 0, 284, 1, 1000, 2000, 8, 4608, 0, 0, 0, 0, 0, 0, 203.77, 104.278, 100, 7, 0, 0, 0, 0, 0, 10, 10, 10, 10, 10, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 5694, 0, 0, 0, 0, 524298, '');
 
@@ -296,8 +302,8 @@ set @xp_or_money = 8000;
 set @reward_money = 1050; 
 set @quest_level = 20;
 set @min_level = 20;
-set @questgiver_id = 80801;
-set @quest_finisher = 80801;
+set @questgiver_id = 80802;
+set @quest_finisher = 80802;
 set @nextquest = 0;
 set @nextquestinchain = 0;
 set @prevquest = 80300;
@@ -445,4 +451,210 @@ nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
 specialflags = 1
 where entry = @quest_entry;	 
 
+-- Da Means Tha Heal
+
+-- Todo: Toad drop.
+
+replace into item_template values
+ ('80420', '0', '0', '0', 'Rosemary Flower', '', '19496', '1', '0', '1', '0', '0', '0', '-1', '-1', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '10', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '4', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+ 
+ replace into item_template values
+ ('80421', '0', '0', '0', 'Toad Oil', '', '3152', '1', '0', '1', '0', '0', '0', '-1', '-1', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '10', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '4', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+ 
+ replace into gameobject_template values 
+(3000280, 0, 3, 358, 'Rosemary', 0, 0, 1, 57, 3000280, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+update gameobject_template set flags = 4 where entry = 3000280;
+update gameobject_template set data0 = 43 where entry = 3000280;
+update gameobject_template set data2 = 0 where entry = 3000280;
+update gameobject_template set data3 = 1 where entry = 3000280;
+
+replace into `gameobject_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`, `patch_min`, `patch_max`)  values (3000280, 80420, -100, 1, 1, 1, 0, 0, 10);
+
+set @quest_entry = 80304;
+set @quest_zone = 331;
+set @title = 'Da Means Tha Heal';
+set @description = 'Greetings mon, ja be back tha bein’ useful then?\n\nPerfect timin’, ye see ol’ Wetnose got a job fo’ ja!
+Ja see mon, we trolls, no’ just us, forest trolls but all trolls got an ability tha regenerate wounds, ya?\n\nBut sometimes even dat fails durin’ battle and we don’t know much ov ‘ow it be ‘appenin’, sometimes it be workin’ sometimes it be not!\n\nJa mission is tha go grab sum stuff for me tha turn into sum ‘ealin’ salve, ja know like potions but bettah!\n\nThere be this purple flowa growin’ ‘round Ashenvale, it be purple and green, think sum be callin’ it rosemary, we be callin’ it useful, grab a ‘andful and brin’ ‘em back tha me, but there be also a catch, tha mix dem we be needin’ a special kind ov’ oil mon, so ja be goin’ tha squeeze sum toads for da oil!\n\nDey be found ‘round da lake close tha da cave dat leads tha Stonetalon.\n\nCareful, sum toads be ‘avin’ nasty skin, ja might end up infected, but don’ worry mon, Guay’jin will cleanse ja!';
+set @objective = 'Collect ten Rosemary Flowers, obtain Toad Oil and bring it to Warleader.';
+set @completetext = 'Ya, mon, dis be da good stuff, ja did a great job!\n\nOl’ Wetnose might ‘ave forgotten but ja be doin’ this tomorrow too!';
+set @incompletetext = 'Don’ take da mission fo’ granted mon! This be very important, on ja feet, quickly as a monkey ja go!';
+set @faction_id = 893;
+set @faction_count = 250;
+set @xp_or_money = 8000;
+set @reward_money = 1050; 
+set @quest_level = 20;
+set @min_level = 20;
+set @questgiver_id = 80802;
+set @quest_finisher = 80802;
+set @nextquest = 0;
+set @nextquestinchain = 0;
+set @prevquest = 80300;
+set @RewChoiceItemId1 = 0; 
+set @RewChoiceItemId2 = 0; 
+set @RewChoiceItemId3 = 0;
+set @RewChoiceItemId4 = 0; 
+set @RewChoiceItemCount1 = 0;
+set @RewChoiceItemCount2 = 0;
+set @RewChoiceItemCount3 = 0;
+set @RewChoiceItemCount4 = 0;
+set @reward_item_1 = 0;
+set @reward_item_2 = 0; 
+set @reward_item_3 = 0;
+set @reward_item_4 = 0;
+set @reward_item_1_count = 0;
+set @reward_item_2_count = 0;
+set @reward_item_3_count = 0;
+set @reward_item_4_count = 0;
+set @creature_to_kill_1 = 0;
+set @creature_to_kill_2 = 0; 
+set @creature_to_kill_3 = 0;
+set @creature_to_kill_4 = 0;
+set @creature_to_kill_1_count = 0;
+set @creature_to_kill_2_count = 0;
+set @creature_to_kill_3_count = 0;
+set @creature_to_kill_4_count = 0;
+set @required_item_1 = 80420; 
+set @required_item_2 = 80421;
+set @required_item_3 = 0;
+set @required_item_4 = 0;
+set @required_item_1_count = 10;
+set @required_item_2_count = 5;
+set @required_item_3_count = 0;
+set @required_item_4_count = 0;
+
+replace into quest_template values 
+
+(@quest_entry, '0', '2', @quest_zone, @min_level,  '0', @quest_level, '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @title, @description, @objective, @completetext, @incompletetext, '', '', '', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @faction_id, '0', '0', '0', '0', @faction_count, '0', '0', '0', '0', '0', @xp_or_money, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', 0, 0);
+     
+replace into creature_questrelation (id, quest, patch_min, patch_max) values (@questgiver_id, @quest_entry,'0','10'); 
+replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (@quest_finisher, @quest_entry,'0','10');
+	 
+update quest_template set 
+rewitemid1 = @reward_item_1, rewitemcount1 = @reward_item_1_count,
+rewitemid2 = @reward_item_2, rewitemcount2 = @reward_item_2_count,
+rewitemid3 = @reward_item_3, rewitemcount3 = @reward_item_3_count,
+rewitemid4 = @reward_item_4, rewitemcount4 = @reward_item_4_count,
+RewChoiceItemId1 = @RewChoiceItemId1, RewChoiceItemCount1 = @RewChoiceItemCount1,
+RewChoiceItemId2 = @RewChoiceItemId2, RewChoiceItemCount2 = @RewChoiceItemCount2,
+RewChoiceItemId3 = @RewChoiceItemId3, RewChoiceItemCount3 = @RewChoiceItemCount3,
+RewChoiceItemId4 = @RewChoiceItemId4, RewChoiceItemCount4 = @RewChoiceItemCount4,
+ReqCreatureOrGOId1 = @creature_to_kill_1, ReqCreatureOrGOCount1 = @creature_to_kill_1_count,
+ReqCreatureOrGOId2 = @creature_to_kill_2, ReqCreatureOrGOCount2 = @creature_to_kill_2_count,
+ReqCreatureOrGOId3 = @creature_to_kill_3, ReqCreatureOrGOCount3 = @creature_to_kill_3_count,
+ReqCreatureOrGOId4 = @creature_to_kill_4, ReqCreatureOrGOCount4 = @creature_to_kill_4_count,
+reqitemid1 = @required_item_1, reqitemcount1 = @required_item_1_count,
+reqitemid2 = @required_item_2, reqitemcount2 = @required_item_2_count,
+reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
+reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
+nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
+nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
+specialflags = 1
+where entry = @quest_entry;	 
+
+-- Times be changin’
+
+ replace into item_template values
+ ('80422', '0', '0', '0', 'Juju of Kimbul', '', '32280', '1', '0', '1', '0', '0', '0', '-1', '-1', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '10', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '4', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+ 
+set @quest_entry = 80305;
+set @quest_zone = 331;
+set @title = 'Times be changin’';
+set @description = '‘ello mon, ja be a good asset fo da trolls, Guya’jin thanks ja, but she be also havin’ anotha mission fo ja, dere be a tribe ov’ forma jungle trolls dat now be called sand trolls, dose ov Zul’Farrak, dey be havin’ a connection wiv Kimbul da loa ov tigers, he usually be a loa ov the jungle trolls but it be time for the Amani tha praise a new loa.\n\nJa know, dis be takin’ time and sum jujus we lack, so ja will ‘ave tha go and obtain sum ov these jujus from dem, dey be not worthy ov ‘is blessings anymore, dey be toyin’ wiv bad mojo, ressurectin’ dey dead! Very bad mojo mon, but if the Amani could connect tha Kimbul he be a very powerful loa and one tha would be ‘elpful in da battles tha come.';
+set @objective = 'Obtain 10 Jujus of Kimbul and bring it to Mystic Guay’jin.';
+set @completetext = 'Ja make sure ja do  dat again soon, $N, da more da bettah, believe Guya’jin, Kimbul’s eyes be on ja now.';
+set @incompletetext = '‘avin’ a poweful loa on our side be best, $N, Kimbul believes in da predators, and ja be one, ja will be our way to commune with ‘im';
+set @faction_id = 893;
+set @faction_count = 250;
+set @xp_or_money = 4600;
+set @reward_money = 5000; 
+set @quest_level = 40;
+set @min_level = 40;
+set @questgiver_id = 80801;
+set @quest_finisher = 80801;
+set @nextquest = 0;
+set @nextquestinchain = 0;
+set @prevquest = 80300;
+set @RewChoiceItemId1 = 0; 
+set @RewChoiceItemId2 = 0; 
+set @RewChoiceItemId3 = 0;
+set @RewChoiceItemId4 = 0; 
+set @RewChoiceItemCount1 = 0;
+set @RewChoiceItemCount2 = 0;
+set @RewChoiceItemCount3 = 0;
+set @RewChoiceItemCount4 = 0;
+set @reward_item_1 = 0;
+set @reward_item_2 = 0; 
+set @reward_item_3 = 0;
+set @reward_item_4 = 0;
+set @reward_item_1_count = 0;
+set @reward_item_2_count = 0;
+set @reward_item_3_count = 0;
+set @reward_item_4_count = 0;
+set @creature_to_kill_1 = 0;
+set @creature_to_kill_2 = 0; 
+set @creature_to_kill_3 = 0;
+set @creature_to_kill_4 = 0;
+set @creature_to_kill_1_count = 0;
+set @creature_to_kill_2_count = 0;
+set @creature_to_kill_3_count = 0;
+set @creature_to_kill_4_count = 0;
+set @required_item_1 = 80422; 
+set @required_item_2 = 0;
+set @required_item_3 = 0;
+set @required_item_4 = 0;
+set @required_item_1_count = 10;
+set @required_item_2_count = 0;
+set @required_item_3_count = 0;
+set @required_item_4_count = 0;
+
+replace into quest_template values 
+
+(@quest_entry, '0', '2', @quest_zone, @min_level,  '0', @quest_level, '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @title, @description, @objective, @completetext, @incompletetext, '', '', '', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @faction_id, '0', '0', '0', '0', @faction_count, '0', '0', '0', '0', '0', @xp_or_money, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', 0, 0);
+     
+replace into creature_questrelation (id, quest, patch_min, patch_max) values (@questgiver_id, @quest_entry,'0','10'); 
+replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (@quest_finisher, @quest_entry,'0','10');
+	 
+update quest_template set 
+rewitemid1 = @reward_item_1, rewitemcount1 = @reward_item_1_count,
+rewitemid2 = @reward_item_2, rewitemcount2 = @reward_item_2_count,
+rewitemid3 = @reward_item_3, rewitemcount3 = @reward_item_3_count,
+rewitemid4 = @reward_item_4, rewitemcount4 = @reward_item_4_count,
+RewChoiceItemId1 = @RewChoiceItemId1, RewChoiceItemCount1 = @RewChoiceItemCount1,
+RewChoiceItemId2 = @RewChoiceItemId2, RewChoiceItemCount2 = @RewChoiceItemCount2,
+RewChoiceItemId3 = @RewChoiceItemId3, RewChoiceItemCount3 = @RewChoiceItemCount3,
+RewChoiceItemId4 = @RewChoiceItemId4, RewChoiceItemCount4 = @RewChoiceItemCount4,
+ReqCreatureOrGOId1 = @creature_to_kill_1, ReqCreatureOrGOCount1 = @creature_to_kill_1_count,
+ReqCreatureOrGOId2 = @creature_to_kill_2, ReqCreatureOrGOCount2 = @creature_to_kill_2_count,
+ReqCreatureOrGOId3 = @creature_to_kill_3, ReqCreatureOrGOCount3 = @creature_to_kill_3_count,
+ReqCreatureOrGOId4 = @creature_to_kill_4, ReqCreatureOrGOCount4 = @creature_to_kill_4_count,
+reqitemid1 = @required_item_1, reqitemcount1 = @required_item_1_count,
+reqitemid2 = @required_item_2, reqitemcount2 = @required_item_2_count,
+reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
+reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
+nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
+nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
+specialflags = 1
+where entry = @quest_entry;	 
 

@@ -764,14 +764,28 @@ bool ChatHandler::HandleModifyScaleCommand(char* args)
     return true;
 }
 
-//Edit Player money
-bool ChatHandler::HandleModifyMoneyCommand(char* args)
+bool ChatHandler::HandleModifyHPCommand(char* args)
 {
     if (!*args)
         return false;
 
-    Player *chr = GetSelectedPlayer();
-    if (chr == NULL)
+    int32 hp = 0;
+    int32 hpm = 0;
+    ExtractInt32(&args, hp);
+    ExtractInt32(&args, hpm);
+
+    if (hpm < hp)
+        hpm = hp;
+
+    if (hp <= 0)
+    {
+        SendSysMessage(LANG_BAD_VALUE);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    Unit* chr = GetSelectedUnit();
+    if (chr == nullptr)
     {
         SendSysMessage(LANG_NO_CHAR_SELECTED);
         SetSentErrorMessage(true);
@@ -779,50 +793,192 @@ bool ChatHandler::HandleModifyMoneyCommand(char* args)
     }
 
     // check online security
-    if (HasLowerSecurity(chr))
+    if (chr->GetTypeId() == TYPEID_PLAYER && HasLowerSecurity(chr->ToPlayer()))
         return false;
 
-    int32 addmoney = atoi(args);
+    PSendSysMessage(LANG_YOU_CHANGE_HP, chr->ToPlayer() ? GetNameLink(chr->ToPlayer()).c_str() : "<creature>", hp, hpm);
+    if (chr->GetTypeId() == TYPEID_PLAYER && needReportToTarget(chr->ToPlayer()))
+        ChatHandler(chr->ToPlayer()).PSendSysMessage(LANG_YOURS_HP_CHANGED, GetNameLink().c_str(), hp, hpm);
 
-    uint32 moneyuser = chr->GetMoney();
+    chr->SetMaxHealth(hpm);
+    chr->SetHealth(hp);
 
-    if (addmoney < 0)
+    return true;
+}
+
+bool ChatHandler::HandleModifyManaCommand(char* args)
+{
+    if (!*args)
+        return false;
+
+    int32 mana = 0;
+    int32 manam = 0;
+    ExtractInt32(&args, mana);
+    ExtractInt32(&args, manam);
+
+    if (manam < mana)
+        manam = mana;
+
+    if (mana <= 0)
     {
-        int32 newmoney = int32(moneyuser) + addmoney;
+        SendSysMessage(LANG_BAD_VALUE);
+        SetSentErrorMessage(true);
+        return false;
+    }
 
-        DETAIL_LOG(GetMangosString(LANG_CURRENT_MONEY), moneyuser, addmoney, newmoney);
-        if (newmoney <= 0)
-        {
-            PSendSysMessage(LANG_YOU_TAKE_ALL_MONEY, GetNameLink(chr).c_str());
-            if (needReportToTarget(chr))
-                ChatHandler(chr).PSendSysMessage(LANG_YOURS_ALL_MONEY_GONE, GetNameLink().c_str());
+    Unit* chr = GetSelectedUnit();
+    if (chr == nullptr)
+    {
+        SendSysMessage(LANG_NO_CHAR_SELECTED);
+        SetSentErrorMessage(true);
+        return false;
+    }
 
-            chr->SetMoney(0);
-        }
-        else
-        {
-            if (newmoney > MAX_MONEY_AMOUNT)
-                newmoney = MAX_MONEY_AMOUNT;
+    // check online security
+    if (chr->GetTypeId() == TYPEID_PLAYER && HasLowerSecurity(chr->ToPlayer()))
+        return false;
 
-            PSendSysMessage(LANG_YOU_TAKE_MONEY, abs(addmoney), GetNameLink(chr).c_str());
-            if (needReportToTarget(chr))
-                ChatHandler(chr).PSendSysMessage(LANG_YOURS_MONEY_TAKEN, GetNameLink().c_str(), abs(addmoney));
-            chr->SetMoney(newmoney);
-        }
+    PSendSysMessage(LANG_YOU_CHANGE_MANA, chr->ToPlayer() ? GetNameLink(chr->ToPlayer()).c_str() : "<creature>", mana, manam);
+    if (chr->GetTypeId() == TYPEID_PLAYER && needReportToTarget(chr->ToPlayer()))
+        ChatHandler(chr->ToPlayer()).PSendSysMessage(LANG_YOURS_MANA_CHANGED, GetNameLink().c_str(), mana, manam);
+
+    chr->SetMaxPower(POWER_MANA, manam);
+    chr->SetPower(POWER_MANA, mana);
+
+    return true;
+}
+
+bool ChatHandler::HandleModifyGenderCommand(char *args)
+{
+    if (!*args)
+        return false;
+
+    Player* player = GetSelectedPlayer();
+
+    if (!player)
+    {
+        PSendSysMessage(LANG_PLAYER_NOT_FOUND);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    PlayerInfo const* info = sObjectMgr.GetPlayerInfo(player->getRace(), player->getClass());
+    if (!info)
+        return false;
+
+    char* gender_str = args;
+    int gender_len = strlen(gender_str);
+
+    Gender gender;
+
+    if (!strncmp(gender_str, "male", gender_len))            // MALE
+    {
+        if (player->getGender() == GENDER_MALE)
+            return true;
+
+        gender = GENDER_MALE;
+    }
+    else if (!strncmp(gender_str, "female", gender_len))    // FEMALE
+    {
+        if (player->getGender() == GENDER_FEMALE)
+            return true;
+
+        gender = GENDER_FEMALE;
     }
     else
     {
-        PSendSysMessage(LANG_YOU_GIVE_MONEY, addmoney, GetNameLink(chr).c_str());
-        if (needReportToTarget(chr))
-            ChatHandler(chr).PSendSysMessage(LANG_YOURS_MONEY_GIVEN, GetNameLink().c_str(), addmoney);
-
-        if (addmoney >= MAX_MONEY_AMOUNT)
-            chr->SetMoney(MAX_MONEY_AMOUNT);
-        else
-            chr->LogModifyMoney(addmoney, "GM", m_session->GetPlayer()->GetObjectGuid());
+        SendSysMessage(LANG_MUST_MALE_OR_FEMALE);
+        SetSentErrorMessage(true);
+        return false;
     }
 
-    DETAIL_LOG(GetMangosString(LANG_NEW_MONEY), moneyuser, addmoney, chr->GetMoney());
+    // Set gender
+    player->SetByteValue(UNIT_FIELD_BYTES_0, 2, gender);
+    player->SetUInt16Value(PLAYER_BYTES_3, 0, uint16(gender) | (player->GetDrunkValue() & 0xFFFE));
+
+    // Change display ID
+    player->InitPlayerDisplayIds();
+
+    char const* gender_full = gender ? "female" : "male";
+
+    PSendSysMessage(LANG_YOU_CHANGE_GENDER, player->GetName(), gender_full);
+
+    if (needReportToTarget(player))
+        ChatHandler(player).PSendSysMessage(LANG_YOUR_GENDER_CHANGED, gender_full, GetNameLink().c_str());
+
+    return true;
+}
+
+bool ChatHandler::HandleModifyMeleeApCommand(char *args)
+{
+    if (!*args)
+        return false;
+
+    Unit* pTarget = GetSelectedUnit();
+
+    if (!pTarget)
+    {
+        PSendSysMessage(LANG_SELECT_CHAR_OR_CREATURE);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    int32 amount;
+    if (!ExtractInt32(&args, amount))
+        return false;
+
+    if (amount <= 0)
+    {
+        SendSysMessage(LANG_BAD_VALUE);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    pTarget->SetInt32Value(UNIT_FIELD_ATTACK_POWER, amount);
+    pTarget->UpdateDamagePhysical(BASE_ATTACK);
+    pTarget->UpdateDamagePhysical(OFF_ATTACK);
+
+    PSendSysMessage(LANG_YOU_CHANGE_MELEEAP, pTarget->GetName(), amount);
+
+    if (needReportToTarget(pTarget->ToPlayer()))
+        ChatHandler(pTarget->ToPlayer()).PSendSysMessage(LANG_YOURS_MELEEAP_CHANGED, GetNameLink().c_str(), amount);
+
+    return true;
+}
+
+bool ChatHandler::HandleModifySpellPowerCommand(char *args)
+{
+    if (!*args)
+        return false;
+
+    Unit* pTarget = GetSelectedUnit();
+
+    if (!pTarget)
+    {
+        PSendSysMessage(LANG_SELECT_CHAR_OR_CREATURE);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    int32 amount;
+    if (!ExtractInt32(&args, amount))
+        return false;
+
+    if (amount < 0)
+    {
+        SendSysMessage(LANG_BAD_VALUE);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    // dunno where spell power is stored so using a custom spell
+    pTarget->RemoveAurasDueToSpell(18058);
+    pTarget->CastCustomSpell(pTarget, 18058, &amount, &amount, nullptr, true);
+
+    PSendSysMessage(LANG_YOU_CHANGE_SP, pTarget->GetName(), amount);
+
+    if (needReportToTarget(pTarget->ToPlayer()))
+        ChatHandler(pTarget->ToPlayer()).PSendSysMessage(LANG_YOURS_SP_CHANGED, GetNameLink().c_str(), amount);
 
     return true;
 }
