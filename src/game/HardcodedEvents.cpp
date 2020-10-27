@@ -191,7 +191,7 @@ LeprithusEventState Leprithus::GetLeprithusState()
     time_t rawtime;
     time(&rawtime);
 
-    struct tm *timeinfo;
+    struct tm* timeinfo;
     timeinfo = localtime(&rawtime);
 
     if (timeinfo->tm_hour >= 22 || timeinfo->tm_hour <= 9)
@@ -233,7 +233,7 @@ MoonbrookEventState Moonbrook::GetMoonbrookState()
     time_t rawtime;
     time(&rawtime);
 
-    struct tm *timeinfo;
+    struct tm* timeinfo;
     timeinfo = localtime(&rawtime);
 
     if (timeinfo->tm_hour < 21 && timeinfo->tm_hour > 9)
@@ -444,7 +444,7 @@ DarkmoonState DarkmoonFaire::GetDarkmoonState()
     time_t rawtime;
     time(&rawtime);
 
-    struct tm *timeinfo;
+    struct tm* timeinfo;
     timeinfo = localtime(&rawtime);
     int weekOfTheYear = (((timeinfo->tm_yday - timeinfo->tm_wday + 7) / 7)) + 1;
 

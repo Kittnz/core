@@ -1056,17 +1056,7 @@ UPDATE `quest_template` SET `SpecialFlags`=0 WHERE `entry`=1657;
 REPLACE INTO `spell_script_target` (`entry`, `type`, `targetEntry`, `conditionId`, `build_min`, `build_max`) VALUES (30132, 0, 181247, 0, 5464, 5875);
 
 -- Add inverse effect mask to spell script targets.
-DROP PROCEDURE IF EXISTS `?`;
-DELIMITER //
-CREATE PROCEDURE `?`()
-BEGIN
-  DECLARE CONTINUE HANDLER FOR SQLEXCEPTION BEGIN END;
-  ALTER TABLE `spell_script_target`
-	ADD COLUMN `inverseEffectMask` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT '0' AFTER `conditionId`;
-END //
-DELIMITER ;
-CALL `?`();
-DROP PROCEDURE `?`;
+ALTER TABLE `spell_script_target` ADD COLUMN `inverseEffectMask` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT '0' AFTER `conditionId`;
 
 DELETE FROM `gameobject` WHERE `guid` BETWEEN 131140 AND 131150;
 DELETE FROM `game_event_gameobject` WHERE `guid` IN (131140, 131141, 131142, 131143, 131144, 131145, 131146, 131147, 131148, 131149, 131150) AND `event` = 12;
@@ -1404,19 +1394,19 @@ REPLACE INTO `creature_ai_events` (`id`, `creature_id`, `condition_id`, `event_t
 REPLACE INTO `creature_ai_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (575001, 0, 15, 11939, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gina Lang - Summon Imp on Spawn');
 
 -- allow doreen beltis to roam
-UPDATE `creature` SET `movementtype` = 1, `wander_distance` = 2 WHERE `guid` = 31918;
+UPDATE `creature` SET `movementtype` = 1, `spawndist` = 2 WHERE `guid` = 31918;
 
 -- allow jamie nore to roam
-UPDATE `creature` SET `movementtype` = 1, `wander_distance` = 2 WHERE `guid` = 31921;
+UPDATE `creature` SET `movementtype` = 1, `spawndist` = 2 WHERE `guid` = 31921;
 
 -- allow shelene rhobart to roam
-UPDATE `creature` SET `movementtype` = 1, `wander_distance` = 2 WHERE `guid` = 38289;
+UPDATE `creature` SET `movementtype` = 1, `spawndist` = 2 WHERE `guid` = 38289;
 
 -- set oliver dwor orientation
 UPDATE `creature` SET `orientation` = 4.72669 WHERE `guid` = 38290;
 
 -- remove incorrect deathguard elite
-DELETE FROM `creature` WHERE `guid` = 14369;
+DELETE FROM `creature` WHERE `guid` = 45204;
 
 -- junior apothecary holland - say OOC
 UPDATE `creature_template` SET `ai_name` = 'EventAI' WHERE `entry` = 10665;
@@ -1535,8 +1525,8 @@ REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `po
 (37920, 24, 2992.870117, -547.953003, 114.424004, 100.000000, 0, 0.000000, 0);
 
 -- creature 38931 waypoints
-REPLACE INTO `creature` (`guid`, `id`, `id2`, `id3`, `id4`, `map`, `display_id`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `wander_distance`, `health_percent`, `mana_percent`, `movementtype`, `spawn_flags`, `visibility_mod`, `patch_min`, `patch_max`) VALUES
-(38931, 1522, 0, 0, 0, 0, 0, 0, 2707.419922, 875.736023, 111.987999, 3.92368, 300, 300, 0, 100, 100, 2, 0, 0, 0, 10);
+REPLACE INTO `creature` (`guid`, `id`, `map`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `spawndist`, `curhealth`, `curmana`, `movementtype`, `spawnflags`, `visibilitymod`, `patch_min`, `patch_max`) VALUES
+(38931, 1522, 0, 0, 0, 2707.419922, 875.736023, 111.987999, 3.92368, 300, 300, 0, 100, 100, 2, 0, 0, 0, 10);
 REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (38931, 1, 2707.419922, 875.736023, 111.987999, 100.000000, 0, 0.000000, 0),
 (38931, 2, 2766.189941, 857.533997, 112.612000, 100.000000, 20000, 10, 0),
@@ -1608,8 +1598,8 @@ REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `po
 (29903, 38, 1874.640015, 919.437012, 28.116301, 100.000000, 0, 0.000000, 0);
 
 -- creature 29903 waypoints
-REPLACE INTO `creature` (`guid`, `id`, `id2`, `id3`, `id4`, `map`, `display_id`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `wander_distance`, `health_percent`, `mana_percent`, `movementtype`, `spawn_flags`, `visibility_mod`, `patch_min`, `patch_max`) VALUES
-(45537, 1675, 0, 0, 0, 0, 0, 0, 2858.959961, 405.078003, 20.856701, 5.60251, 300, 300, 0, 100, 0, 2, 0, 0, 0, 10);
+REPLACE INTO `creature` (`guid`, `id`, `map`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `spawndist`, `curhealth`, `curmana`, `movementtype`, `spawnflags`, `visibilitymod`, `patch_min`, `patch_max`) VALUES
+(45537, 1675, 0, 0, 0, 2858.959961, 405.078003, 20.856701, 5.60251, 300, 300, 0, 100, 0, 2, 0, 0, 0, 10);
 REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (45537, 1, 2858.959961, 405.078003, 20.856701, 1.099560, 51000, 0.000000, 0),
 (45537, 2, 2892.489990, 394.360992, 25.856501, 100.000000, 0, 0.000000, 0),
@@ -1968,8 +1958,8 @@ REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `po
 (44750, 34, 2204.870117, -417.312988, 75.509804, 100.000000, 0, 0.000000, 0);
 
 -- creature 53239 waypoints
-REPLACE INTO `creature` (`guid`, `id`, `id2`, `id3`, `id4`, `map`, `display_id`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `wander_distance`, `health_percent`, `mana_percent`, `movementtype`, `spawn_flags`, `visibility_mod`, `patch_min`, `patch_max`) VALUES
-(53239, 1675, 0, 0, 0, 0, 0, 0, 2883.449951, 385.436005, 24.978399, 5.60251, 300, 300, 0, 100, 0, 2, 0, 0, 0, 10);
+REPLACE INTO `creature` (`guid`, `id`, `map`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `spawndist`, `curhealth`, `curmana`, `movementtype`, `spawnflags`, `visibilitymod`, `patch_min`, `patch_max`) VALUES
+(53239, 1675, 0, 0, 0, 2883.449951, 385.436005, 24.978399, 5.60251, 300, 300, 0, 100, 0, 2, 0, 0, 0, 10);
 REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (53239, 1, 2883.449951, 385.436005, 24.978399, 100.000000, 36000, 10, 0),
 (53239, 2, 2849.020020, 371.700012, 23.793501, 100.000000, 0, 0.000000, 0),
@@ -2365,7 +2355,7 @@ REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, 
 REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1066614, 1, 1, 36, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Gordo - Emote Attack1H');
 
 -- add gloom weed gameobjects
-REPLACE INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`, `spawn_flags`, `visibility_mod`, `patch_min`, `patch_max`) VALUES
+REPLACE INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`, `spawnflags`, `visibilitymod`, `patch_min`, `patch_max`) VALUES
 (25562, 175566, 0, 2204.14, 1120.06, 34.8163, 4.01426, 0, 0, -0.906307, 0.422619, 900, 900, 255, 1, 4, 0, 0, 10),
 (25565, 175566, 0, 2220.39, 1165.71, 36.1008, 4.24115, 0, 0, -0.85264, 0.522499, 900, 900, 255, 1, 4, 0, 0, 10),
 (25560, 175566, 0, 2179.86, 1073.21, 33.8257, 4.50295, 0, 0, -0.777145, 0.629321, 900, 900, 255, 1, 4, 0, 0, 10),
@@ -2877,8 +2867,8 @@ REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `po
 (44904, 27, 2923.389893, -665.919006, 142.460007, 100.000000, 0, 0.000000, 0);
 
 -- creature 127800 waypoints
-REPLACE INTO `creature` (`guid`, `id`, `id2`, `id3`, `id4`, `map`, `display_id`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `wander_distance`, `health_percent`, `mana_percent`, `movementtype`, `spawn_flags`, `visibility_mod`, `patch_min`, `patch_max`) VALUES
-(127800, 1529, 0, 0, 0, 0, 0, 0, 1984.689941, -421.868988, 35.517899, 4.84612, 300, 300, 5, 100, 100, 2, 0, 0, 0, 10);
+REPLACE INTO `creature` (`guid`, `id`, `map`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `spawndist`, `curhealth`, `curmana`, `movementtype`, `spawnflags`, `visibilitymod`, `patch_min`, `patch_max`) VALUES
+(127800, 1529, 0, 0, 0, 1984.689941, -421.868988, 35.517899, 4.84612, 300, 300, 5, 100, 100, 2, 0, 0, 0, 10);
 REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (127800, 1, 1984.689941, -421.868988, 35.517899, 100.000000, 0, 0.000000, 0),
 (127800, 2, 2004.699951, -424.294006, 35.467400, 100.000000, 0, 0.000000, 0),
@@ -3013,8 +3003,8 @@ REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `po
 (44787, 36, 2938.530029, -710.724976, 150.296997, 100.000000, 0, 0.000000, 0);
 
 -- creature 112617 waypoints
-REPLACE INTO `creature` (`guid`, `id`, `id2`, `id3`, `id4`, `map`, `display_id`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `wander_distance`, `health_percent`, `mana_percent`, `movementtype`, `spawn_flags`, `visibility_mod`, `patch_min`, `patch_max`) VALUES
-(112617, 1537, 0, 0, 0, 0, 0, 0, 2154.770020, -569.606995, 78.793098, 1.18866, 300, 300, 5, 100, 0, 2, 0, 0, 0, 10);
+REPLACE INTO `creature` (`guid`, `id`, `map`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `spawndist`, `curhealth`, `curmana`, `movementtype`, `spawnflags`, `visibilitymod`, `patch_min`, `patch_max`) VALUES
+(112617, 1537, 0, 0, 0, 2154.770020, -569.606995, 78.793098, 1.18866, 300, 300, 5, 100, 0, 2, 0, 0, 0, 10);
 REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
 (112617, 1, 2154.770020, -569.606995, 78.793098, 1.692970, 35000, 0.000000, 0),
 (112617, 2, 2156.199951, -573.388977, 79.002800, 100.000000, 0, 0.000000, 0),
@@ -3643,3 +3633,98 @@ DELETE FROM `quest_start_scripts` WHERE `id` IN (648, 836, 2767) AND `comments` 
 INSERT INTO `quest_start_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (648, 3, 4, 46, 512, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Rescue OOX-17/TN!: Homing Robot OOX-17/TN - Remove Immune to NPC flag');
 INSERT INTO `quest_start_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (836, 3, 4, 46, 512, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Rescue OOX-09/HL!: Homing Robot OOX-09/HL - Remove Immune to NPC flag');
 INSERT INTO `quest_start_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (2767, 3, 4, 46, 512, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Rescue OOX-22/FE!: Homing Robot OOX-22/FE - Remove Immune to NPC flag');
+
+update quest_template set OfferRewardText = 'Greetings young $C, I\'m glad to see you ready and eager to learn about the curing of poisons.$B$BWhile most druids in the past were put through pre-planned trials, your work will involve no such thing. There has been a rash of animal poisonings in Auberdine, and the village there has been unable to cure it. To that end, a representative there has asked Moonglade for aid and we are sending you there to aid them.  This is no exercise - the work you\'ll do is quite real.  Bear this in mind.' where entry = 6121;
+
+-- Set chat type and emotes for texts.
+UPDATE `broadcast_text` SET `type`=1 WHERE `ID` IN (10856, 10859, 10860, 10861, 10662, 10663, 10664, 10665, 10666, 10667);
+UPDATE `broadcast_text` SET `emoteid1`=15 WHERE `ID`=10662;
+UPDATE `broadcast_text` SET `emoteid1`=1 WHERE `ID`=10663;
+UPDATE `broadcast_text` SET `emoteid1`=1 WHERE `ID`=10664;
+UPDATE `broadcast_text` SET `emoteid1`=1 WHERE `ID`=10666;
+UPDATE `broadcast_text` SET `emoteid1`=5 WHERE `ID`=10665;
+UPDATE `broadcast_text` SET `emoteid1`=15 WHERE `ID`=10667;
+
+-- Conditions to check the time.
+REPLACE INTO `conditions` (`condition_entry`, `type`, `value1`, `value2`, `value3`, `value4`, `flags`) VALUES
+(3711, 53, 19, 30, 19, 30, 0), -- Time is 19:30
+(3712, -1, 108, 3711, 0, 0, 0), -- Hallow's End Is Active and Time Is 19:30
+(3713, 53, 19, 45, 19, 45, 0), -- Time is 19:45
+(3714, -1, 108, 3713, 0, 0, 0), -- Hallow's End Is Active and Time Is 19:45
+(3715, 53, 19, 55, 19, 55, 0), -- Time is 19:55
+(3716, -1, 108, 3715, 0, 0, 0), -- Hallow's End Is Active and Time Is 19:55
+(3717, 53, 20, 00, 20, 00, 0), -- Time is 20:00
+(3718, -1, 108, 3717, 0, 0, 0); -- Hallow's End Is Active and Time Is 20:00
+
+-- Remove Interact Condition flag from Wickerman Ember.
+UPDATE `gameobject_template` SET `flags`=0 WHERE `entry`=180437;
+
+-- Correct unit flags for The Banshee Queen.
+UPDATE `creature_template` SET `unit_flags`=33600 WHERE `entry`=15193;
+
+-- Make Darkcaller Yanka an active spawn.
+UPDATE `creature` SET `spawnflags`=1 WHERE `id`=15197;
+
+-- Assign EventAI and correct unit flags for Darkcaller Yanka.
+UPDATE `creature_template` SET `unit_flags`=33536, `ai_name`='EventAI' WHERE `entry`=15197;
+
+-- Events list for Darkcaller Yanka.
+DELETE FROM `creature_ai_events` WHERE `creature_id`=15197;
+INSERT INTO `creature_ai_events` (`id`, `creature_id`, `condition_id`, `event_type`, `event_inverse_phase_mask`, `event_chance`, `event_flags`, `event_param1`, `event_param2`, `event_param3`, `event_param4`, `action1_script`, `action2_script`, `action3_script`, `comment`) VALUES (1519701, 15197, 3712, 1, 2, 100, 1, 0, 0, 60000, 60000, 1519701, 0, 0, 'Darkcaller Yanka - Yell at 7:30 for Wickerman Event (Phase 0)');
+INSERT INTO `creature_ai_events` (`id`, `creature_id`, `condition_id`, `event_type`, `event_inverse_phase_mask`, `event_chance`, `event_flags`, `event_param1`, `event_param2`, `event_param3`, `event_param4`, `action1_script`, `action2_script`, `action3_script`, `comment`) VALUES (1519702, 15197, 3714, 1, 2, 100, 1, 0, 0, 60000, 60000, 1519702, 0, 0, 'Darkcaller Yanka - Yell at 7:45 for Wickerman Event (Phase 0)');
+INSERT INTO `creature_ai_events` (`id`, `creature_id`, `condition_id`, `event_type`, `event_inverse_phase_mask`, `event_chance`, `event_flags`, `event_param1`, `event_param2`, `event_param3`, `event_param4`, `action1_script`, `action2_script`, `action3_script`, `comment`) VALUES (1519703, 15197, 3716, 1, 2, 100, 1, 0, 0, 60000, 60000, 1519703, 0, 0, 'Darkcaller Yanka - Yell at 7:55 for Wickerman Event (Phase 0)');
+INSERT INTO `creature_ai_events` (`id`, `creature_id`, `condition_id`, `event_type`, `event_inverse_phase_mask`, `event_chance`, `event_flags`, `event_param1`, `event_param2`, `event_param3`, `event_param4`, `action1_script`, `action2_script`, `action3_script`, `comment`) VALUES (1519704, 15197, 3718, 1, 2, 100, 1, 0, 0, 60000, 60000, 1519704, 0, 0, 'Darkcaller Yanka - Start Wickerman Event at 8:00 (Phase 0)');
+DELETE FROM `creature_ai_scripts` WHERE `id`=1519701;
+INSERT INTO `creature_ai_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1519701, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10856, 0, 0, 0, 0, 0, 0, 0, 0, 'Darkcaller Yanka - Say Text');
+INSERT INTO `creature_ai_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1519701, 0, 44, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Darkcaller Yanka - Set Phase to 1');
+INSERT INTO `creature_ai_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1519701, 0, 39, 15196, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 'Darkcaller Yanka - Start Script');
+DELETE FROM `creature_ai_scripts` WHERE `id`=1519702;
+INSERT INTO `creature_ai_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1519702, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10859, 0, 0, 0, 0, 0, 0, 0, 0, 'Darkcaller Yanka - Say Text');
+INSERT INTO `creature_ai_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1519702, 0, 44, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Darkcaller Yanka - Set Phase to 1');
+INSERT INTO `creature_ai_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1519702, 0, 39, 15196, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 'Darkcaller Yanka - Start Script');
+DELETE FROM `creature_ai_scripts` WHERE `id`=1519703;
+INSERT INTO `creature_ai_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1519703, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10860, 0, 0, 0, 0, 0, 0, 0, 0, 'Darkcaller Yanka - Say Text');
+INSERT INTO `creature_ai_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1519703, 0, 44, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Darkcaller Yanka - Set Phase to 1');
+INSERT INTO `creature_ai_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1519703, 0, 39, 15196, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 'Darkcaller Yanka - Start Script');
+DELETE FROM `event_scripts` WHERE `id`=15196;
+INSERT INTO `event_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (15196, 61, 44, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Darkcaller Yanka - Set Phase to 0');
+DELETE FROM `creature_ai_scripts` WHERE `id`=1519704;
+INSERT INTO `creature_ai_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1519704, 0, 39, 15197, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 'Darkcaller Yanka - Start Script');
+INSERT INTO `creature_ai_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1519704, 0, 44, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Darkcaller Yanka - Set Phase to 1');
+DELETE FROM `event_scripts` WHERE `id`=15197;
+INSERT INTO `event_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (15197, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10861, 0, 0, 0, 0, 0, 0, 0, 0, 'Darkcaller Yanka - Say Text');
+INSERT INTO `event_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (15197, 1, 10, 15193, 58000, 0, 0, 0, 0, 0, 0, 0, 15193, 6, 1, 1731.45, 512.753, 40.2189, 1.55334, 0, 'The Banshee Queen - Summon Creature The Banshee Queen');
+INSERT INTO `event_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (15197, 56, 1, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Darkcaller Yanka - Emote State');
+INSERT INTO `event_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (15197, 56, 76, 180437, 36000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1738.43, 512.016, 39.8172, 4.60767, 0, 'Wickerman Ember - Summon GameObject Wickerman Ember');
+INSERT INTO `event_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (15197, 56, 76, 180437, 36000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1741.12, 505.333, 41.3979, 4.64258, 0, 'Wickerman Ember - Summon GameObject Wickerman Ember');
+INSERT INTO `event_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (15197, 56, 76, 180437, 36000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1731.58, 500.123, 42.5049, 4.50295, 0, 'Wickerman Ember - Summon GameObject Wickerman Ember');
+INSERT INTO `event_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (15197, 56, 76, 180437, 36000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1721.45, 505.141, 40.8856, 4.95674, 0, 'Wickerman Ember - Summon GameObject Wickerman Ember');
+INSERT INTO `event_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (15197, 56, 76, 180437, 36000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1722.22, 512.332, 39.1567, 0.209439, 0, 'Wickerman Ember - Summon GameObject Wickerman Ember');
+INSERT INTO `event_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (15197, 56, 76, 180437, 36000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1731.56, 514.596, 39.3475, 5.70723, 0, 'Wickerman Ember - Summon GameObject Wickerman Ember');
+INSERT INTO `event_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (15197, 56, 80, 0, 0, 0, 0, 180433, 30, 11, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'The Wickerman - Set Go State to GO\_STATE\_ACTIVE');
+INSERT INTO `event_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (15197, 36000, 80, 1, 0, 0, 0, 180433, 30, 11, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'The Wickerman - Set Go State to GO\_STATE\_READY');
+INSERT INTO `event_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (15197, 36000, 1, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Darkcaller Yanka - Stop Dancing');
+INSERT INTO `event_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (15197, 36000, 44, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Darkcaller Yanka - Set Phase to 0');
+DELETE FROM `event_scripts` WHERE `id`=15193;
+INSERT INTO `event_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (15193, 0, 15, 17327, 2, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'The Banshee Queen - Cast Spell Spirit Particles');
+INSERT INTO `event_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (15193, 0, 15, 12980, 2, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'The Banshee Queen - Cast Spell Simple Teleport');
+INSERT INTO `event_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (15193, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10662, 0, 0, 0, 0, 0, 0, 0, 0, 'The Banshee Queen - Say Text');
+INSERT INTO `event_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (15193, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10663, 0, 0, 0, 0, 0, 0, 0, 0, 'The Banshee Queen - Say Text');
+INSERT INTO `event_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (15193, 17, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10664, 0, 0, 0, 0, 0, 0, 0, 0, 'The Banshee Queen - Say Text');
+INSERT INTO `event_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (15193, 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10666, 0, 0, 0, 0, 0, 0, 0, 0, 'The Banshee Queen - Say Text');
+INSERT INTO `event_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (15193, 37, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10665, 0, 0, 0, 0, 0, 0, 0, 0, 'The Banshee Queen - Say Text');
+INSERT INTO `event_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (15193, 45, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10667, 0, 0, 0, 0, 0, 0, 0, 0, 'The Banshee Queen - Say Text');
+INSERT INTO `event_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (15193, 54, 1, 51, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'The Banshee Queen - Emote OneShotSpellCast');
+
+
+CREATE TABLE IF NOT EXISTS`daily_quest_timer` (
+	`nextResetTime` BIGINT UNSIGNED NOT NULL DEFAULT '0'
+)
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB
+;
+
+DELETE FROM daily_quest_timer;
+REPLACE INTO `daily_quest_timer` VALUES (0);
+
+-- Jamey has smol pp

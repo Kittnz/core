@@ -1016,6 +1016,19 @@ REPLACE INTO `npc_vendor` VALUES (80268, 3857, 0, 0, 0, 0);
 REPLACE INTO `npc_vendor` VALUES (80268, 5956, 0, 0, 0, 0);
 REPLACE INTO `npc_vendor` VALUES (80268, 18567, 0, 0, 0, 0);
 
+-- High Elven mounts:
+
+REPLACE INTO `creature_template` VALUES (80452, 0, 16822, 0, 0, 0, 'Chaddus Suncarrier', 'Riding Trainer', 4019, 45, 45, 2972, 2972, 100, 100, 2725, 80, 17, 1, 1.14286, 0, 20, 5, 0, 0, 1, 72, 93, 0, 204, 1, 2000, 2000, 1, 4608, 0, 0, 1, 0, 0, 4, 61.776, 84.942, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 1, 0, 0, 0, 524298, '');
+
+update creature_template set faction = 371, equipment_id = 0 where entry = 80452;
+
+replace into `creature_template` values 
+(80453, 0, 16798, 0, 0, 0, 'Vanira Quel\'Belore ', 'Unicorn Breeder', 0, 11, 11, 456, 456, 0, 0, 20, 371, 16388, 1.1, 1.14286, 0, 20, 5, 0, 0, 1, 12, 14, 0, 64, 1, 2000, 2090, 1, 4864, 0, 0, 0, 0, 0, 0, 18.392, 25.289, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, '');
+
+replace into `creature_template` values 
+(80454, 0, 18240, 0, 0, 0, 'Unicorn', '', 0, 1, 2, 64, 55, 53, 53, 30, 35, 0, 1, 1.38571, 0, 20, 5, 0, 0, 1, 2, 2, 0, 44, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 1.76, 2.42, 100, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 2, ''),
+(80455, 0, 18270, 0, 0, 0, 'Armored Unicorn', '', 0, 1, 2, 64, 55, 53, 53, 30, 35, 0, 1, 1.38571, 0, 20, 5, 0, 0, 1, 2, 2, 0, 44, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 1.76, 2.42, 100, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 2, '');
+
 update creature_template set unit_class = 4, level_min = 60, level_max = 60, health_min = 21426, health_max = 21426, mana_min = 0, mana_max = 0, rank = 1, dmg_min = 182, dmg_max = 430, base_attack_time = 1800, attack_power = 200, ranged_attack_power = 100, regeneration = 3, armor = 3621 where entry = 80248;
 update creature_template set unit_class = 1, level_min = 60, level_max = 60, health_min = 29322, health_max = 29322, mana_min = 0, mana_max = 0, rank = 1, dmg_min = 348, dmg_max = 543, base_attack_time = 2200, attack_power = 200, ranged_attack_power = 100, regeneration = 3, armor = 3821 where entry = 80247;
 update creature_template set unit_class = 8, level_min = 60, level_max = 60, health_min = 14611, health_max = 14611, mana_min = 12347, mana_max = 12347, rank = 1, dmg_min = 67, dmg_max = 123, base_attack_time = 2600, attack_power = 200, ranged_attack_power = 100, regeneration = 3, armor = 1621 where entry = 80245;
