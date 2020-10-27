@@ -640,9 +640,8 @@ bool GOSelect_go_brainwashing_device(Player* pPlayer, GameObject* pGo, uint32 se
 {
     if (action == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        if (pPlayer->GetMoney() >= 50000)
+        if (pPlayer->GetMoney() >= pPlayer->GetResetTalentsCost())
         {
-            pPlayer->ModifyMoney(-50000);
             pPlayer->ResetTalents();
             pPlayer->AddAura(27880);
             pGo->Despawn();
