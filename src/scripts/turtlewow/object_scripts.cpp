@@ -640,19 +640,11 @@ bool GOSelect_go_brainwashing_device(Player* pPlayer, GameObject* pGo, uint32 se
 {
     if (action == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        if (pPlayer->GetMoney() >= pPlayer->GetResetTalentsCost())
-        {
             pPlayer->ResetTalents();
             pPlayer->AddAura(27880);
             pGo->Despawn();
             pGo->UpdateObjectVisibility();
             pPlayer->CLOSE_GOSSIP_MENU();
-        }
-        else
-        {
-            ChatHandler(pPlayer).PSendSysMessage("You don't have enough money!");
-            pPlayer->CLOSE_GOSSIP_MENU();
-        }
     }
     return true;
 }
