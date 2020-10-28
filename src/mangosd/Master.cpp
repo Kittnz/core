@@ -318,6 +318,8 @@ int Master::Run()
     }
 
     ///- Exit the process with specified return value
+	// WORLD SHUTDOWN
+	sWorld.InternalShutdown();
     return World::GetExitCode();
 }
 
