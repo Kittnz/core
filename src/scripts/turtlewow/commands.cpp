@@ -174,12 +174,14 @@ bool ChatHandler::HandleBalanceCommand(char* args)
 bool ChatHandler::HandleReloadCustomPetEntries(char* args)
 {
     sObjectMgr.LoadCustomPetCreatureEntries();
+    SendSysMessage(">> Table `custom_pet_entry_relation` reloaded.");
     return true;
 }
 
 bool ChatHandler::HandleReloadCustomMountEntries(char* args)
 {
     sObjectMgr.LoadCustomMountCreatureEntries();
+    SendSysMessage(">> Table `custom_mount_entry_relation` reloaded.");
     return true;
 }
 
