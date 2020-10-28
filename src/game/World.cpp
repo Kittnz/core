@@ -143,26 +143,6 @@ World::World()
 /// World destructor
 World::~World()
 {
-    ///- Empty the kicked session set
-    while (!m_sessions.empty())
-    {
-        // not remove from queue, prevent loading new sessions
-        delete m_sessions.begin()->second;
-        m_sessions.erase(m_sessions.begin());
-    }
-
-    CliCommandHolder* command = nullptr;
-    while (cliCmdQueue.next(command))
-        delete command;
-
-    VMAP::VMapFactory::clear();
-
-    if (m_charDbWorkerThread)
-    {
-        m_charDbWorkerThread->wait();
-        delete m_charDbWorkerThread;
-    }
-    //TODO free addSessQueue
 }
 
 void World::Shutdown()
@@ -172,6 +152,32 @@ void World::Shutdown()
     sWorld.UpdateSessions( 1 );                             // real players unload required UpdateSessions call
     if (m_charDbWorkerThread)
         m_charDbWorkerThread->wait();
+}
+
+void World::InternalShutdown()
+{
+	///- Empty the kicked session set
+	while (!m_sessions.empty())
+	{
+		// not remove from queue, prevent loading new sessions
+		delete m_sessions.begin()->second;
+		m_sessions.erase(m_sessions.begin());
+	}
+
+	CliCommandHolder* command = nullptr;
+	while (cliCmdQueue.next(command))
+		delete command;
+
+	VMAP::VMapFactory::clear();
+
+	if (m_charDbWorkerThread)
+	{
+		m_charDbWorkerThread->wait();
+		delete m_charDbWorkerThread;
+	}
+	//TODO free addSessQueue
+
+	m_broadcaster.reset();
 }
 
 /// Find a session by its id
