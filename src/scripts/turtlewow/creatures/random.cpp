@@ -339,7 +339,7 @@ bool GossipSelect_npc_lost_farm_sheep(Player* pPlayer, Creature* pCreature, uint
             return false;
 
         pCreature->MonsterSay("Ba-a-a-h!");
-        pCreature->MonsterTextEmote("Sheep quickly eats this truffle and starting to jump around your bags, in case if you want to share more!");
+        pCreature->MonsterTextEmote("The sheep scarfs down the truffle, and then it jumps into your bags to rifle around for more!");
         pCreature->ForcedDespawn();
         pPlayer->AddItem(LOST_FARM_SHEEP_ITEM);
         pPlayer->RemoveItemCurrency(DELICIOUS_ELWYNN_TRUFFLE, 1);
