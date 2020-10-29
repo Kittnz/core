@@ -123,3 +123,6 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', 'item_cenarion_hold_teleport');
 
+-- Vekniss Warrior should run while patrolling.
+UPDATE `creature_template` SET `flags_extra`=`flags_extra` | 33554432 WHERE `entry`=15230;
+
