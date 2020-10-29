@@ -2,6 +2,7 @@
 #include "AccountMgr.h"
 #include <array>
 #include <Language.h>
+#include <Battlegrounds/BattleGroundMgr.h>
 #include "MoveSplineInit.h"
 #include "MoveSpline.h"
 
@@ -169,6 +170,12 @@ bool ChatHandler::HandleBalanceCommand(char* args)
         return true;
     }
     return false;
+}
+
+bool ChatHandler::HandleBgTestCommand(char* args)
+{
+    sBattleGroundMgr.ToggleTesting();
+    return true;
 }
 
 bool ChatHandler::HandleReloadCustomPetEntries(char* args)
