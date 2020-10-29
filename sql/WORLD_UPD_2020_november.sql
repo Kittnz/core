@@ -59,3 +59,56 @@ UPDATE `quest_template` SET `StartScript`=4966 WHERE `entry`=4966;
 UPDATE `creature_template` SET `ai_name`='ReactorAI', `script_name`='' WHERE `entry`=10638;
 DELETE FROM `script_waypoint` WHERE `entry`=10638;
 DELETE FROM `script_texts` WHERE `entry`=-1000410;
+
+-- <The Warsong Outriders> guild NPCs:
+
+REPLACE INTO `creature_template` VALUES (51620, 0, 10653, 0, 0, 0, 'Innkeeper Hern', 'Innkeeper', 344, 30, 30, 1605, 1605, 0, 0, 1200, 104, 135, 1, 1.14286, 1.35, 20, 5, 0, 0, 1, 42, 53, 0, 122, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 45.144, 62.073, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 51620, 0, 100, 0, 0, 524298, '');
+
+SET @gossip_menu_id = 51620;
+SET @magic_number = 60010; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (ID, MaleText, Language) values (@magic_number, 'Welcome to the home of the Warsong Outriders.\n\nYou must be weary, honouring the Horde and our war efforts is thirsty work.\n\nStay a while and rest your bones.', 0);
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = 51620;
+
+update creature_template set equipment_id = 3934 where entry = 51620;
+
+REPLACE INTO `creature_template` VALUES 
+(51621, 0, 415, 0, 0, 0, 'Rell', 'Blacksmithing Supplies', 0, 45, 45, 2972, 2972, 0, 0, 2725, 29, 16390, 1, 1.14286, 0, 20, 5, 0, 0, 1, 72, 93, 0, 204, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 61.776, 84.942, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 8176, 0, 0, 0, 0, 524298, '');
+
+update creature_template set npc_flags = 5 where entry = 51621;
+
+SET @gossip_menu_id = 51621;
+SET @magic_number = 60011; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (ID, MaleText) values (@magic_number, 'It is not your words that give you weight, Your actions give you weight my friend.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = 51621;
+
+update creature_template set equipment_id = 5392 where entry = 51621;
+
+REPLACE INTO `npc_vendor` VALUES (51621, 2880, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (51621, 2901, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (51621, 3466, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (51621, 3857, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (51621, 5956, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (51621, 18567, 0, 0, 0, 0);
+
+REPLACE INTO `creature_template` VALUES (51622, 0, 4261, 4262, 4263, 4264, 'Grunt', 'Warsong Outriders', 0, 40, 40, 3026, 3026, 0, 0, 1200, 85, 0, 1, 1.14286, 1.35, 20, 5, 0, 0, 1, 355, 390, 0, 156, 1, 2000, 2000, 1, 4096, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 7, 0, 8016, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 8016, 0, 0, 0, 0, 524288, '');
+
+SET @gossip_menu_id = 51622;
+SET @magic_number = 60012; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (ID, MaleText) values (@magic_number, 'To be stationed here? No greater honour.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = 51622;
+
+update creature_template set npc_flags = 1 where entry = 51621;
+
+REPLACE INTO `creature_template` VALUES (51623, 0, 5585, 5555, 5556, 5586, 'Morgan', NULL, 0, 5, 5, 1064, 1064, 0, 0, 20, 188, 0, 1, 0.857143, 0, 20, 5, 0, 0, 1, 2, 2, 0, 44, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 1.76, 2.42, 100, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 2, 'npc_critter');
+
+update creature_template set faction = 35 where entry = 51623;
+
+REPLACE INTO `gameobject_template` VALUES (1000400, 0, 5, 715, 'Spear Tip Inn', 0, 0, 1.33, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+
