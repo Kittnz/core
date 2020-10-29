@@ -59,7 +59,6 @@ struct boss_huhuranAI : public ScriptedAI
 
     void MoveInLineOfSight(Unit* pWho) override
     {
-
         if (pWho->GetTypeId() == TYPEID_PLAYER
             && !m_creature->isInCombat()
             && m_creature->IsWithinDistInMap(pWho, 80.0f)
