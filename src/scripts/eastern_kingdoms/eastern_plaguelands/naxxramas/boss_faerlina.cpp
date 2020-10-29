@@ -214,11 +214,14 @@ struct boss_faerlinaAI : public ScriptedAI
 
     void MoveInLineOfSight(Unit* pWho)
     {
-        //todo aggro range
-        if (m_creature->IsWithinDistInMap(pWho, 60.0f))
+        if (pWho->GetTypeId() == TYPEID_PLAYER
+            && !m_creature->isInCombat()
+            && m_creature->IsWithinDistInMap(pWho, 60.0f)
+            && !pWho->HasAuraType(SPELL_AURA_FEIGN_DEATH)
+            && !pWho->HasAuraType(SPELL_AURA_MOD_UNATTACKABLE))
         {
+            AttackStart(pWho);
         }
-
         ScriptedAI::MoveInLineOfSight(pWho);
     }
 
