@@ -138,20 +138,22 @@ struct boss_razuviousAI : public ScriptedAI
     
     void MoveInLineOfSight(Unit* pWho) override
     {
-        if (!m_creature->IsWithinDistInMap(pWho, 33.0f))
+        if (!pWho)
             return;
 
-        if (m_creature->CanInitiateAttack() && pWho->isTargetableForAttack() && m_creature->IsHostileTo(pWho))
+        if (pWho->GetTypeId() == TYPEID_PLAYER
+            && !m_creature->isInCombat()
+            && m_creature->IsWithinDistInMap(pWho, 33.0f)
+            && m_creature->IsWithinLOSInMap(pWho)
+            && !pWho->HasAuraType(SPELL_AURA_FEIGN_DEATH)
+            && !pWho->HasAuraType(SPELL_AURA_MOD_UNATTACKABLE))
         {
-            if (pWho->isInAccessablePlaceFor(m_creature) && m_creature->IsWithinLOSInMap(pWho))
+            if (!m_creature->getVictim())
+                AttackStart(pWho);
+            else if (m_creature->GetMap()->IsDungeon())
             {
-                if (!m_creature->getVictim())
-                    AttackStart(pWho);
-                else if (m_creature->GetMap()->IsDungeon())
-                {
-                    pWho->SetInCombatWith(m_creature);
-                    m_creature->AddThreat(pWho);
-                }
+                pWho->SetInCombatWith(m_creature);
+                m_creature->AddThreat(pWho);
             }
         }
     }

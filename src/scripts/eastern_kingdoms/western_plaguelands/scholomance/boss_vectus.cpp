@@ -35,7 +35,7 @@ enum
 
     GO_DAWN_S_GAMBIT                                = 177304,
 
-    SPELL_VIEWING_ROOM_STUDENT_TRANSFORM_EFFECT     = 18115,    //spell qui transforme les étudiants élites en squelettes
+    SPELL_VIEWING_ROOM_STUDENT_TRANSFORM_EFFECT     = 18115,    //spell qui transforme les ï¿½tudiants ï¿½lites en squelettes
     SPELL_FLAMESTRIKE                               = 18399,
     SPELL_BLAST_WAVE                                = 16046
             //SPELL_FRENZY                                  = 28371     //spell is used by Gluth, confirm this is for this boss too
@@ -76,10 +76,17 @@ struct boss_vectusAI : public ScriptedAI
     }
 
     void MoveInLineOfSight(Unit* pWho) override
-    {        
+    {
+        if (!pWho)
+            return;
+
         if (!m_bStartedDialogue)
         {
-            if (pWho->IsPlayer() && m_creature->IsWithinDistInMap(pWho, 32.0f) && m_creature->IsWithinLOSInMap(pWho))
+            if (pWho->GetTypeId() == TYPEID_PLAYER
+                && m_creature->IsWithinDistInMap(pWho, 32.0f)
+                && m_creature->IsWithinLOSInMap(pWho)
+                && !pWho->HasAuraType(SPELL_AURA_FEIGN_DEATH)
+                && !pWho->HasAuraType(SPELL_AURA_MOD_UNATTACKABLE))
             {
                 m_creature->SetDefaultMovementType(WAYPOINT_MOTION_TYPE);
                 m_creature->GetMotionMaster()->Initialize();

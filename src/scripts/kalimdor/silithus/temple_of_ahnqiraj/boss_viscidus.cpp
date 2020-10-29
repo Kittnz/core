@@ -236,14 +236,19 @@ struct boss_viscidusAI : public ScriptedAI
         ResetViscidusState();
     }
 
-    void MoveInLineOfSight(Unit* who) override
+    void MoveInLineOfSight(Unit* pWho) override
     {
-        if (who->GetTypeId() == TYPEID_PLAYER && !m_creature->getVictim() && m_creature->IsWithinDistInMap(who, 95.0f, true))
+        if (pWho->GetTypeId() == TYPEID_PLAYER
+            && !m_creature->isInCombat()
+            && m_creature->IsWithinDistInMap(pWho, 95.0f, true)
+            && m_creature->IsWithinLOSInMap(pWho)
+            && !pWho->HasAuraType(SPELL_AURA_FEIGN_DEATH)
+            && !pWho->HasAuraType(SPELL_AURA_MOD_UNATTACKABLE))
         {
-            AttackStart(who);
+            AttackStart(pWho);
         }
 
-        ScriptedAI::MoveInLineOfSight(who);
+        ScriptedAI::MoveInLineOfSight(pWho);
     }
 
     void Aggro(Unit* /*pWho*/)
