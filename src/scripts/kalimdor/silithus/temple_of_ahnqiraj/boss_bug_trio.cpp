@@ -76,12 +76,12 @@ struct boss_bug_trioAI : public ScriptedAI
             m_pInstance->SetData(TYPE_BUG_TRIO, IN_PROGRESS);
     }
 
+
     void MoveInLineOfSight(Unit* pWho) override
     {
-        // The bug trio have a larger than normal aggro radius
         if (pWho->GetTypeId() == TYPEID_PLAYER
             && !m_creature->isInCombat()
-            && m_creature->IsWithinDistInMap(pWho, 60.0f)
+            && m_creature->IsWithinDistInMap(pWho, m_creature->GetEntry() == NPC_VEM ? 60.0f : 30.0f)
             && m_creature->IsWithinLOSInMap(pWho)
             && !pWho->HasAuraType(SPELL_AURA_FEIGN_DEATH)
             && !pWho->HasAuraType(SPELL_AURA_MOD_UNATTACKABLE))
