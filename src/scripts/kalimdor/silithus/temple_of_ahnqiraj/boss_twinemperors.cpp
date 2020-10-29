@@ -927,7 +927,6 @@ struct boss_veknilashAI : public boss_twinemperorsAI
 struct mob_mastersEye : public ScriptedAI {
     mob_mastersEye(Creature* pCreature) : ScriptedAI(pCreature)
     {
-        sLog.outBasic("Masters Eye ctor!");
         Reset();
     }
     
