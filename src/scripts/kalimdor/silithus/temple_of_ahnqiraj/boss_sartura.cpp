@@ -94,10 +94,9 @@ struct boss_sarturaAI : public ScriptedAI
 
     void MoveInLineOfSight(Unit* pWho) override
     {
-        // Sartura has a very large aggro radius
         if (pWho->GetTypeId() == TYPEID_PLAYER
             && !m_creature->isInCombat()
-            && m_creature->IsWithinDistInMap(pWho, 85.0f)
+            && m_creature->IsWithinDistInMap(pWho, 40.0f)
             && m_creature->IsWithinLOSInMap(pWho)
             && !pWho->HasAuraType(SPELL_AURA_FEIGN_DEATH)
             && !pWho->HasAuraType(SPELL_AURA_MOD_UNATTACKABLE))
