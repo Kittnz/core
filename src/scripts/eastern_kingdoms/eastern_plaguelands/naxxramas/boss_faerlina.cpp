@@ -216,7 +216,7 @@ struct boss_faerlinaAI : public ScriptedAI
     {
         if (pWho->GetTypeId() == TYPEID_PLAYER
             && !m_creature->isInCombat()
-            && m_creature->IsWithinDistInMap(pWho, 60.0f)
+            && m_creature->IsWithinDistInMap(pWho, 30.0f)
             && !pWho->HasAuraType(SPELL_AURA_FEIGN_DEATH)
             && !pWho->HasAuraType(SPELL_AURA_MOD_UNATTACKABLE))
         {

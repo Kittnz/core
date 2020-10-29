@@ -241,21 +241,24 @@ struct boss_twinemperorsAI : public ScriptedAI
         m_creature->clearUnitState(UNIT_STAT_STUNNED);
     }
 
-    void MoveInLineOfSight(Unit *who) override
+    void MoveInLineOfSight(Unit *pWho) override
     {
         // Only want to run this if we are not in combat
-        if (!who || m_creature->getVictim() || m_creature->isInCombat())
+        if (!pWho || m_creature->getVictim() || m_creature->isInCombat())
             return;
 
-        if (who->isTargetableForAttack() && who->isInAccessablePlaceFor(m_creature) && m_creature->IsHostileTo(who))
-        {
-            float attackRadius = m_creature->GetAttackDistance(who);
-            if (attackRadius < PULL_RANGE)
-                attackRadius = PULL_RANGE;
+        float attackRadius = m_creature->GetAttackDistance(pWho);
+        if (attackRadius < PULL_RANGE)
+            attackRadius = PULL_RANGE;
 
-            // CREATURE_Z_ATTACK_RANGE there are stairs
-            if (m_creature->IsWithinDistInMap(who, attackRadius) && m_creature->GetDistanceZ(who) <= 7)
-                AttackStart(who);
+        if (pWho->GetTypeId() == TYPEID_PLAYER
+            && m_creature->IsWithinDistInMap(pWho, attackRadius, true)
+            && m_creature->IsWithinLOSInMap(pWho)
+            && m_creature->GetDistanceZ(pWho) <= 7.0f // Because of stairs
+            && !pWho->HasAuraType(SPELL_AURA_FEIGN_DEATH)
+            && !pWho->HasAuraType(SPELL_AURA_MOD_UNATTACKABLE))
+        {
+            AttackStart(pWho);
         }
     }
 
