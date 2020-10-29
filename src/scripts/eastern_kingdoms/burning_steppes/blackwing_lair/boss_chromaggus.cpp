@@ -154,14 +154,21 @@ struct boss_chromaggusAI : public ScriptedAI
         m_vTimeLapseInfo.clear();
     }
 
-    void MoveInLineOfSight(Unit *pUnit)
+    void MoveInLineOfSight(Unit *pWho)
     {
-        if (!pUnit || m_creature->getVictim())
+        if (!pWho || m_creature->getVictim())
             return;
 
-        if (m_bEngagedOnce && pUnit->IsPlayer() && m_creature->GetDistance2d(pUnit) < 55.0f && m_creature->IsWithinLOSInMap(pUnit)
-          && pUnit->isTargetableForAttack() && pUnit->isInAccessablePlaceFor(m_creature))
-            AttackStart(pUnit);
+        if (m_bEngagedOnce
+            && pWho->GetTypeId() == TYPEID_PLAYER
+            && !m_creature->isInCombat()
+            && m_creature->IsWithinDistInMap(pWho, 55.0f)
+            && m_creature->IsWithinLOSInMap(pWho)
+            && !pWho->HasAuraType(SPELL_AURA_FEIGN_DEATH)
+            && !pWho->HasAuraType(SPELL_AURA_MOD_UNATTACKABLE))
+        {
+            AttackStart(pWho);
+        }
     }
 
     void Aggro(Unit* /*pWho*/)
