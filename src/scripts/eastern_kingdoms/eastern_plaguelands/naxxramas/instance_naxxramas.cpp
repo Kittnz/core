@@ -1551,7 +1551,7 @@ struct mob_naxxramasGarboyleAI : public ScriptedAI
                 && !m_creature->isInCombat()
                 && m_creature->IsWithinDistInMap(pWho, 17.0f)
                 && !pWho->HasAuraType(SPELL_AURA_FEIGN_DEATH)
-                && m_creature->IsWithinLOSInMap(pWho))
+                && !pWho->HasAuraType(SPELL_AURA_MOD_UNATTACKABLE))
             {
                 AttackStart(pWho);
             }
