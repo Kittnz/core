@@ -198,6 +198,8 @@ struct boss_nefarianAI : ScriptedAI
     }
     */
 
+    #define FIELD_REPAIR_BOT_75B 50041
+
     bool HandleClassCall(uint8 ClassCalled)
     {
         if (!ClassCalled)
@@ -216,6 +218,10 @@ struct boss_nefarianAI : ScriptedAI
             Player* pPlayer = itr->getSource();
             if (pPlayer && pPlayer->isAlive())
             {
+                // Remove Field Repair Bot 75B if summoned
+                if (pPlayer->GetMiniPet() && pPlayer->GetMiniPet()->GetEntry() == FIELD_REPAIR_BOT_75B)
+                    pPlayer->RemoveMiniPet();
+
                 if (pPlayer->getClass() == ClassCalled)
                 {
                     bClassFound = true;
