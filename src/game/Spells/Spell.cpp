@@ -6378,14 +6378,11 @@ SpellCastResult Spell::CheckCast(bool strict)
                 // Black Qiraji Battle Tank
                 if (m_spellInfo->Id == 26656)
                 {
-                    if (m_caster->IsMounted())
-                    {
-                        m_caster->RemoveSpellsCausingAura(SPELL_AURA_MOUNTED);
-                        return SPELL_FAILED_DONT_REPORT;
-                    }
-
                     if (m_caster->IsInWater())
                         return SPELL_FAILED_ONLY_ABOVEWATER;
+
+                    if (m_caster->isInCombat())
+                        return SPELL_FAILED_TARGET_IN_COMBAT;
 
                     if (m_caster->GetTypeId() == TYPEID_PLAYER && ((Player*)m_caster)->GetTransport())
                         return SPELL_FAILED_NO_MOUNTS_ALLOWED;

@@ -139,4 +139,4 @@ update creature_template set gossip_menu_id = @gossip_menu_id where entry = 5162
 
 update creature_template set name = 'Goar\'thrak', subname = 'Macrochelys', faction = 35, display_Id1 = 6873 where entry = 50511;
 
--- 6810 IMP
+update item_template set name = 'Depleted Stone of Ahn\'Qiraj', description = 'The stone is powerless. Now it\'s only a reminder of the events at the Scarab Wall.', spellid_1 = 0, quality = 0, script_name = '' where entry = 51900;
