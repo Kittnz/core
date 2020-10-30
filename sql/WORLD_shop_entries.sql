@@ -42,6 +42,7 @@ replace into shop_items values
 (110, 1, 50005, 'Field Repair Bot (Companion)', 160),
 (111, 1, 50007, 'Forworn Mule (Bank Companion)', 200),
 (112, 1, 51421, 'Caravan Kodo (Bank Companion)', 200),
+(113, 1, 51900, 'Runed Stone of Ahn\'Qiraj', 0),
 -- Pets ------------------------------------------------------------------------------------------------
 (201, 2, 13584, 'Diablo Stone', 60),
 (202, 2, 13583, 'Panda Collar', 60),
