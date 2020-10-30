@@ -346,7 +346,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "item_template",               SEC_ADMINISTRATOR,    true,  &ChatHandler::HandleReloadItemTemplate,                   "", nullptr },
         { "variables",                    SEC_ADMINISTRATOR,    true,  &ChatHandler::HandleReloadVariablesCommand,               "", nullptr },
         { "shop",                        SEC_ADMINISTRATOR, true,  &ChatHandler::HandleReloadShopCommand,                    "", nullptr },
-        { "companions",                  SEC_ADMINISTRATOR, true,  &ChatHandler::HandleReloadCustomPetEntries,               "", nullptr },
+        { "custom_pets",                  SEC_ADMINISTRATOR, true,  &ChatHandler::HandleReloadCustomPetEntries,               "", nullptr },
         { "custom_mounts",               SEC_ADMINISTRATOR, true,  &ChatHandler::HandleReloadCustomMountEntries,               "", nullptr },
         { "mangos_string",                SEC_ADMINISTRATOR,    true,  &ChatHandler::HandleReloadMangosStringCommand,            "", nullptr },
         { nullptr,                       0,                 false, nullptr,                                                  "", nullptr }
@@ -600,6 +600,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "mount",          SEC_GAMEMASTER,     false, &ChatHandler::HandleMountCommand,               "", nullptr },
         { "fly",            SEC_GAMEMASTER,     false, &ChatHandler::HandleFlyCommand,                 "", nullptr },
         { "transfer",       SEC_ADMINISTRATOR,  false, &ChatHandler::HandleTransferCommand,                 "", nullptr },
+        { "bgtest",         SEC_ADMINISTRATOR,  false, &ChatHandler::HandleBgTestCommand,                 "", nullptr },
         { nullptr,          0,                  false, nullptr,                                        "", nullptr }
     };
 

@@ -459,7 +459,13 @@ struct npc_ouro_spawnerAI : public Scripted_NoMovementAI
     void MoveInLineOfSight(Unit* pWho) override
     {
         // Spawn Ouro on LoS check
-        if (!m_bHasSummoned && pWho->GetTypeId() == TYPEID_PLAYER && !((Player*)pWho)->IsGameMaster() && m_creature->IsWithinDistInMap(pWho, 25.0f))
+        if (!m_bHasSummoned
+            && !((Player*) pWho)->IsGameMaster()
+            && pWho->GetTypeId() == TYPEID_PLAYER
+            && !m_creature->isInCombat()
+            && m_creature->IsWithinDistInMap(pWho, 25.0f)
+            && !pWho->HasAuraType(SPELL_AURA_FEIGN_DEATH)
+            && !pWho->HasAuraType(SPELL_AURA_MOD_UNATTACKABLE))
         {
             if (DoCastSpellIfCan(m_creature, SPELL_SUMMON_OURO) == CAST_OK)
             {

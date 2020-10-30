@@ -143,26 +143,6 @@ World::World()
 /// World destructor
 World::~World()
 {
-    ///- Empty the kicked session set
-    while (!m_sessions.empty())
-    {
-        // not remove from queue, prevent loading new sessions
-        delete m_sessions.begin()->second;
-        m_sessions.erase(m_sessions.begin());
-    }
-
-    CliCommandHolder* command = nullptr;
-    while (cliCmdQueue.next(command))
-        delete command;
-
-    VMAP::VMapFactory::clear();
-
-    if (m_charDbWorkerThread)
-    {
-        m_charDbWorkerThread->wait();
-        delete m_charDbWorkerThread;
-    }
-    //TODO free addSessQueue
 }
 
 void World::Shutdown()
@@ -172,6 +152,32 @@ void World::Shutdown()
     sWorld.UpdateSessions( 1 );                             // real players unload required UpdateSessions call
     if (m_charDbWorkerThread)
         m_charDbWorkerThread->wait();
+}
+
+void World::InternalShutdown()
+{
+	///- Empty the kicked session set
+	while (!m_sessions.empty())
+	{
+		// not remove from queue, prevent loading new sessions
+		delete m_sessions.begin()->second;
+		m_sessions.erase(m_sessions.begin());
+	}
+
+	CliCommandHolder* command = nullptr;
+	while (cliCmdQueue.next(command))
+		delete command;
+
+	VMAP::VMapFactory::clear();
+
+	if (m_charDbWorkerThread)
+	{
+		m_charDbWorkerThread->wait();
+		delete m_charDbWorkerThread;
+	}
+	//TODO free addSessQueue
+
+	m_broadcaster.reset();
 }
 
 /// Find a session by its id
@@ -2632,3 +2638,18 @@ void SessionPacketSendTask::run()
     }
 }
 
+void World::LogChat(WorldSession* sess, const char* type, std::string const& msg, PlayerPointer target, uint32 chanId, const char* chanStr)
+{
+    ASSERT(sess);
+    PlayerPointer plr = sess->GetPlayerPointer();
+    ASSERT(plr);
+
+    if (target)
+        sLog.out(LOG_CHAT, "[%s] %s:%u -> %s:%u : %s", type, plr->GetName(), plr->GetObjectGuid().GetCounter(), target->GetName(), target->GetObjectGuid().GetCounter(), msg.c_str());
+    else if (chanId)
+        sLog.out(LOG_CHAT, "[%s:%u] %s:%u : %s", type, chanId, plr->GetName(), plr->GetObjectGuid().GetCounter(), msg.c_str());
+    else if (chanStr)
+        sLog.out(LOG_CHAT, "[%s:%s] %s:%u : %s", type, chanStr, plr->GetName(), plr->GetObjectGuid().GetCounter(), msg.c_str());
+    else
+        sLog.out(LOG_CHAT, "[%s] %s:%u : %s", type, plr->GetName(), plr->GetObjectGuid().GetCounter(), msg.c_str());
+}

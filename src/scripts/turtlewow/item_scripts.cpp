@@ -1009,9 +1009,26 @@ bool ItemUseSpell_item_saddle(Player* pPlayer, Item* pItem, const SpellCastTarge
     return true;
 }
 
+bool ItemUseSpell_item_cenarion_hold_teleport(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+{
+    if (pPlayer->isInCombat() || pPlayer->IsBeingTeleported() || (pPlayer->getDeathState() == CORPSE) || pPlayer->IsMoving())
+    {
+        pPlayer->GetSession()->SendNotification("Can't use right now.");
+        return false;
+    }
+
+    pPlayer->TeleportTo(1, -6831.5F, 748.4F, 42.6F, 3.6F);
+    return true;
+}
+
 void AddSC_item_scripts()
 {
     Script *newscript;
+
+    newscript = new Script;
+    newscript->Name = "item_cenarion_hold_teleport";
+    newscript->pItemUseSpell = &ItemUseSpell_item_cenarion_hold_teleport;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "item_saddle";
