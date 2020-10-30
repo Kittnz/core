@@ -103,6 +103,6 @@ void DailyQuestHandler::Update(uint32 diff)
 
         //now update next reset time to midnight next day.
 
-        WorldDatabase.Execute("UPDATE `daily_quest_timer` SET `nextResetTime` = UNIX_TIMESTAMP(CURDATE() + 1)");
+        WorldDatabase.Execute("UPDATE `daily_quest_timer` SET `nextResetTime` = UNIX_TIMESTAMP(CURDATE() + INTERVAL 1 DAY)");
     }
 }
