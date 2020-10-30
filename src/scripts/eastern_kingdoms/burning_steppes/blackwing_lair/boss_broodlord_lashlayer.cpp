@@ -91,11 +91,18 @@ struct boss_broodlordAI : public ScriptedAI
         SetMobsDesactivated(false);
     }
 
-    void MoveInLineOfSight(Unit* who)
+    void MoveInLineOfSight(Unit* pWho)
     {
-        if (who->GetTypeId() == TYPEID_PLAYER && m_creature->IsWithinDistInMap(who, 40.0f) && m_creature->IsWithinLOSInMap(who) && !m_creature->isInCombat()
-                && who->isInAccessablePlaceFor(m_creature) && !who->HasStealthAura())
+        if (pWho->GetTypeId() == TYPEID_PLAYER
+            && !m_creature->isInCombat()
+            && m_creature->IsWithinDistInMap(pWho, 40.0f)
+            && m_creature->IsWithinLOSInMap(pWho)
+            && !pWho->HasStealthAura()
+            && !pWho->HasAuraType(SPELL_AURA_FEIGN_DEATH)
+            && !pWho->HasAuraType(SPELL_AURA_MOD_UNATTACKABLE))
+        {
             m_creature->SetInCombatWithZone();
+        }
     }
 
     void SpellHitTarget(Unit* pCaster, const SpellEntry* pSpell)

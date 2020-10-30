@@ -59,13 +59,13 @@ struct boss_huhuranAI : public ScriptedAI
 
     void MoveInLineOfSight(Unit* pWho) override
     {
-        
-        if (m_creature->canAttack(pWho)
+        if (pWho->GetTypeId() == TYPEID_PLAYER
             && !m_creature->isInCombat()
-            && m_creature->IsWithinDistInMap(pWho, 80.0f) 
-            && !pWho->HasAuraType(SPELL_AURA_FEIGN_DEATH))
+            && m_creature->IsWithinDistInMap(pWho, 80.0f)
+            && !pWho->HasAuraType(SPELL_AURA_FEIGN_DEATH)
+            && !pWho->HasAuraType(SPELL_AURA_MOD_UNATTACKABLE))
         {
-            AttackStart(pWho); 
+            AttackStart(pWho);
         }
         ScriptedAI::MoveInLineOfSight(pWho);
     }

@@ -555,14 +555,20 @@ struct npc_death_talon_CaptainAI : public ScriptedAI
         SetAuraFlames(false);
     }
 
-    void MoveInLineOfSight(Unit *pUnit)
+    void MoveInLineOfSight(Unit *pWho)
     {
-        if (!pUnit || m_creature->getVictim())
+        if (!pWho || m_creature->getVictim())
             return;
 
-        if (pUnit->IsPlayer() && m_creature->GetDistance2d(pUnit) < 29.0f && m_creature->IsWithinLOSInMap(pUnit)
-          && pUnit->isTargetableForAttack() && pUnit->isInAccessablePlaceFor(m_creature))
-            AttackStart(pUnit);
+        if (pWho->GetTypeId() == TYPEID_PLAYER
+            && !m_creature->isInCombat()
+            && m_creature->IsWithinDistInMap(pWho, 29.0f)
+            && m_creature->IsWithinLOSInMap(pWho)
+            && !pWho->HasAuraType(SPELL_AURA_FEIGN_DEATH)
+            && !pWho->HasAuraType(SPELL_AURA_MOD_UNATTACKABLE))
+        {
+            AttackStart(pWho);
+        }
     }
 
     void Aggro(Unit* /*pWho*/)

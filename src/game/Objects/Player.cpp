@@ -19853,36 +19853,20 @@ bool ItemPosCount::isContainedIn(ItemPosCountVec const& vec) const
 
 bool Player::CanUseBattleGroundObject() const
 {
+    if (IsGameMaster())
+        return false;
+
     // Spirit of redemption case
     if (getClass() == CLASS_PRIEST && HasAura(27827))
         return false;
-    if (IsGameMaster())
-        return false;
-    // TODO : some spells gives player ForceReaction to one faction (ReputationMgr::ApplyForceReaction)
-    // maybe gameobject code should handle that ForceReaction usage
-    return ( //InBattleGround() &&                          // in battleground - not need, check in other cases
-               !IsMounted() &&
-               //player cannot use object when he is invulnerable (immune)
-               !IsTotalImmune() &&                            // not totally immune
-               //i'm not sure if these two are correct, because invisible players should get visible when they click on flag
-               //!HasStealthAura() &&                           // not stealthed
-               //!HasInvisibilityAura() &&                      // not invisible
-               isAlive() &&                                   // live player
-               !hasUnitState(UNIT_STAT_CAN_NOT_REACT_OR_LOST_CONTROL)  // Nostalrius : en cecite ou fear par exemple
-           );
-}
 
-bool Player::IsTotalImmune() const
-{
-    AuraList const& immune = GetAurasByType(SPELL_AURA_SCHOOL_IMMUNITY);
-
-    uint32 immuneMask = 0;
-    for (AuraList::const_iterator itr = immune.begin(); itr != immune.end(); ++itr)
-    {
-        immuneMask |= (*itr)->GetModifier()->m_miscvalue;
-    }
-
-    return (immuneMask == SPELL_SCHOOL_MASK_ALL);
+    return (
+        !IsMounted() &&
+        // Player cannot use object when he is immune to any kind of damage.
+        !HasAuraType(SPELL_AURA_SCHOOL_IMMUNITY) &&
+        isAlive() &&
+        !hasUnitState(UNIT_STAT_CAN_NOT_REACT_OR_LOST_CONTROL)  // During fear, for example.
+    );
 }
 
 void Player::AutoStoreLoot(Loot& loot, bool broadcast, uint8 bag, uint8 slot)

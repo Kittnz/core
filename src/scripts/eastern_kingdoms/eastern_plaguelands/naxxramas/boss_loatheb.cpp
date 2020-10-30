@@ -88,23 +88,24 @@ struct mob_rottingMaggotAI : public ScriptedAI
 
     void MoveInLineOfSight(Unit* pWho) override
     {
-        // Custom, tiny aggro radius
-        if (!m_creature->IsWithinDistInMap(pWho, 1.5f))
+        if (!pWho)
             return;
 
-        if (m_creature->CanInitiateAttack() && pWho->isTargetableForAttack() && m_creature->IsHostileTo(pWho))
+        if (pWho->GetTypeId() == TYPEID_PLAYER
+            && !m_creature->isInCombat()
+            && m_creature->IsWithinDistInMap(pWho, 1.5f) // Custom, tiny aggro radius
+            && m_creature->IsWithinLOSInMap(pWho)
+            && !pWho->HasAuraType(SPELL_AURA_FEIGN_DEATH)
+            && !pWho->HasAuraType(SPELL_AURA_MOD_UNATTACKABLE))
         {
-            if (pWho->isInAccessablePlaceFor(m_creature) && m_creature->IsWithinLOSInMap(pWho))
-            {
-                m_creature->SetNoCallAssistance(true);
+            m_creature->SetNoCallAssistance(true);
 
-                if (!m_creature->getVictim())
-                    AttackStart(pWho);
-                else if (m_creature->GetMap()->IsDungeon())
-                {
-                    pWho->SetInCombatWith(m_creature);
-                    m_creature->AddThreat(pWho);
-                }
+            if (!m_creature->getVictim())
+                AttackStart(pWho);
+            else if (m_creature->GetMap()->IsDungeon())
+            {
+                pWho->SetInCombatWith(m_creature);
+                m_creature->AddThreat(pWho);
             }
         }
     }
@@ -164,21 +165,24 @@ struct mob_eyeStalkAI : public ScriptedAI
         if (timeSinceSpawn < 3000)
             return;
 
-        if (!m_creature->IsWithinDistInMap(pWho, 19.0f))
+        if (!pWho)
             return;
 
-        if (m_creature->CanInitiateAttack() && pWho->isTargetableForAttack() && m_creature->IsHostileTo(pWho))
+        if (pWho->GetTypeId() == TYPEID_PLAYER
+            && !m_creature->isInCombat()
+            && m_creature->IsWithinDistInMap(pWho, 19.0f)
+            && m_creature->IsWithinLOSInMap(pWho)
+            && !pWho->HasAuraType(SPELL_AURA_FEIGN_DEATH)
+            && !pWho->HasAuraType(SPELL_AURA_MOD_UNATTACKABLE))
         {
-            if (pWho->isInAccessablePlaceFor(m_creature) && m_creature->IsWithinLOSInMap(pWho))
+            m_creature->SetNoCallAssistance(true);
+
+            if (!m_creature->getVictim())
+                AttackStart(pWho);
+            else if (m_creature->GetMap()->IsDungeon())
             {
-                m_creature->SetNoCallAssistance(true);
-                if (!m_creature->getVictim())
-                    AttackStart(pWho);
-                else if (m_creature->GetMap()->IsDungeon())
-                {
-                    pWho->SetInCombatWith(m_creature);
-                    m_creature->AddThreat(pWho);
-                }
+                pWho->SetInCombatWith(m_creature);
+                m_creature->AddThreat(pWho);
             }
         }
     }

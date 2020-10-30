@@ -3726,3 +3726,5 @@ ENGINE=InnoDB
 
 DELETE FROM daily_quest_timer;
 REPLACE INTO `daily_quest_timer` VALUES (0);
+
+-- Jamey has smol pp

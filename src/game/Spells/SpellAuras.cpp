@@ -3938,6 +3938,11 @@ void Aura::HandleAuraModIncreaseMountedSpeed(bool /*apply*/, bool Real)
                 case 18248:
                 // Winterspring Frostsaber
                 case 13086:
+                // AQ Mounts
+                case 21218:
+                case 21323:
+                case 21321:
+                case 21324:
                     m_modifier.m_amount = 100;
                     break;
                 // Bronze Drake

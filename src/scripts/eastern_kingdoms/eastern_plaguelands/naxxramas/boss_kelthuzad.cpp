@@ -261,11 +261,17 @@ struct kt_p1AddAI : public ScriptedAI
         {
             ScriptedAI::MoveInLineOfSight(pWho);
         }
-        else if (m_creature->IsHostileTo(pWho) && m_creature->GetDistance2d(pWho) < ALCOVE_ADD_PULL_RADIUS) //todo: no idea what the pull range should be
+        else if (pWho->GetTypeId() == TYPEID_PLAYER
+            && !m_creature->isInCombat()
+            && m_creature->IsWithinDistInMap(pWho, ALCOVE_ADD_PULL_RADIUS)
+            && m_creature->IsWithinLOSInMap(pWho)
+            && !pWho->HasAuraType(SPELL_AURA_FEIGN_DEATH)
+            && !pWho->HasAuraType(SPELL_AURA_MOD_UNATTACKABLE))
         {
             ScriptedAI::MoveInLineOfSight(pWho);
         }
     }
+
     void SpellHit(Unit* unit, const SpellEntry*) override 
     {
         if(!hasAggroed)
