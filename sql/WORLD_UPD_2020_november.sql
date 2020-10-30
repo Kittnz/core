@@ -114,7 +114,7 @@ REPLACE INTO `gameobject_template` VALUES (1000400, 0, 5, 715, 'Spear Tip Inn', 
 -- Cenarion Hold teleport:
 
 replace into item_template values
- ('51900', '0', '4', '0', 'Runed Stone of Ahn\'Qiraj', 'The shifting sands of war await your arrival. In the end the victor will either be you or Quiraj.', '3131', '1', '0', '1', '0', '0', '12', '-1', '-1', '1',
+ ('51900', '0', '4', '0', 'Runed Stone of Ahn\'Qiraj', 'The shifting sands of war await your arrival. In the end the victor will either be you or Qiraji.', '3131', '1', '0', '1', '0', '0', '12', '-1', '-1', '1',
  '0', '0', '0', '0', '0', '0', '0', '0', '1', '1', '0', '0', '0', '0', '0',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
