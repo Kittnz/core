@@ -773,9 +773,7 @@ class World
         void AddAsyncTask(AsyncTask* task) { _asyncTasks.add(task); }
         bool GetNextAsyncTask(AsyncTask*& task) { return _asyncTasks.next(task); }
         ACE_Based::LockedQueue<AsyncTask*, ACE_Thread_Mutex> _asyncTasks;
-        /**
-         * Database logs system
-         */
+        void LogChat(WorldSession* sess, const char* type, std::string const& msg, PlayerPointer target = NULL, uint32 chanId = 0, const char* chanStr = NULL);
         void Shutdown();
         void AddSessionToSessionsMap(WorldSession* sess);
 
