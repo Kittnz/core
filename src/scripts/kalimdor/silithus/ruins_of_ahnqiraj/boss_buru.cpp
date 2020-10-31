@@ -242,12 +242,12 @@ struct boss_buruAI : public ScriptedAI
 
                 // Set armor and resistances back to normal
                 m_creature->SetArmor(m_creature->GetCreatureInfo()->armor);
-                m_creature->SetResistance(SPELL_SCHOOL_ARCANE, m_creature->GetCreateResistance(SPELL_SCHOOL_ARCANE));
-                m_creature->SetResistance(SPELL_SCHOOL_FIRE, m_creature->GetCreateResistance(SPELL_SCHOOL_ARCANE));
-                m_creature->SetResistance(SPELL_SCHOOL_FROST, m_creature->GetCreateResistance(SPELL_SCHOOL_ARCANE));
-                m_creature->SetResistance(SPELL_SCHOOL_HOLY, m_creature->GetCreateResistance(SPELL_SCHOOL_ARCANE));
-                m_creature->SetResistance(SPELL_SCHOOL_NATURE, m_creature->GetCreateResistance(SPELL_SCHOOL_ARCANE));
-                m_creature->SetResistance(SPELL_SCHOOL_SHADOW, m_creature->GetCreateResistance(SPELL_SCHOOL_ARCANE));
+                m_creature->SetResistance(SPELL_SCHOOL_ARCANE, m_creature->GetCreatureInfo()->arcane_res);
+                m_creature->SetResistance(SPELL_SCHOOL_FIRE, m_creature->GetCreatureInfo()->fire_res);
+                m_creature->SetResistance(SPELL_SCHOOL_FROST, m_creature->GetCreatureInfo()->frost_res);
+                m_creature->SetResistance(SPELL_SCHOOL_HOLY, m_creature->GetCreatureInfo()->holy_res);
+                m_creature->SetResistance(SPELL_SCHOOL_NATURE, m_creature->GetCreatureInfo()->nature_res);
+                m_creature->SetResistance(SPELL_SCHOOL_SHADOW, m_creature->GetCreatureInfo()->shadow_res);
 
                 m_creature->DeleteThreatList();
                 m_creature->SetInCombatWithZone();
