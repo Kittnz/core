@@ -135,8 +135,12 @@ SET @magic_number = 60010;
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
 replace into broadcast_text (ID, MaleText, Language) values (@magic_number, 'This be our plot of land, it\'s not much, but we call it home and home is where the heart is.', 0);
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
-update creature_template set gossip_menu_id = @gossip_menu_id where entry = 51620;
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = 51568;
 
 update creature_template set name = 'Goar\'thrak', subname = 'Macrochelys', faction = 35, display_Id1 = 6873 where entry = 50511;
 
 update item_template set name = 'Depleted Stone of Ahn\'Qiraj', description = 'The stone is powerless. Now it\'s only a reminder of the events at the Scarab Wall.', spellid_1 = 0, quality = 0, script_name = '' where entry = 51900;
+
+REPLACE INTO `item_template` VALUES (51901, 0, 4, 0, 'Scarab Lord\'s Garments', 'I squashed bugs for 10 hours and all I got was this lousy shirt.', 24610, 4, 0, 1, 0, 0, 4, -1, -1, 15, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+
+update item_template set bonding = 1 where entry = 51901;
