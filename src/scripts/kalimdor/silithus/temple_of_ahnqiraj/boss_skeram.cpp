@@ -67,6 +67,7 @@ struct boss_skeramAI : public ScriptedAI
     }
 
     ScriptedInstance* m_pInstance;
+    uint32 m_maxMeleeAllowed;
 
     uint32 ArcaneExplosion_Timer;
     uint32 EarthShock_Timer;
@@ -174,6 +175,11 @@ struct boss_skeramAI : public ScriptedAI
 
         if (m_pInstance)
             m_pInstance->SetData(TYPE_SKERAM, IN_PROGRESS);
+
+        // Prophet Skeram will only cast Arcane Explosion if a given number of players are in melee range
+        // Initial value was 4+ but it was changed in patch 1.12 to be less dependant on raid
+        // We assume value is number of players / 10 (raid of 40 people in Classic -> value of 4)
+        m_maxMeleeAllowed = m_pInstance->GetMap()->GetPlayersCountExceptGMs() / 10;
     }
 
     void JustReachedHome()
@@ -203,15 +209,19 @@ struct boss_skeramAI : public ScriptedAI
             std::list<Player*> players;
             GetPlayersWithinRange(players, m_creature->GetMeleeReach());
 
-            if (players.size() > 4)
+            if (players.size() > m_maxMeleeAllowed)
             {
                 if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_ARCANE_EXPLOSION) == CAST_OK)
-                    ArcaneExplosion_Timer = urand(6000, 14000);
+                    ArcaneExplosion_Timer = urand(8000, 18000);
             }
+            // Recheck in 1 second
+            else
+                ArcaneExplosion_Timer = 1000;
         }
-        else ArcaneExplosion_Timer -= diff;
+        else
+            ArcaneExplosion_Timer -= diff;
 
-        //If we are within range, melee the target
+        // If we are within range, melee the target
         if (m_creature->IsWithinMeleeRange(m_creature->getVictim()))
             DoMeleeAttackIfReady();
         else
@@ -220,7 +230,7 @@ struct boss_skeramAI : public ScriptedAI
             if (EarthShock_Timer < diff)
             {
                 if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_EARTH_SHOCK) == CAST_OK)
-                    EarthShock_Timer = 1000;
+                    EarthShock_Timer = 2500;
             }
             else
                 EarthShock_Timer -= diff;
@@ -240,7 +250,7 @@ struct boss_skeramAI : public ScriptedAI
                     m_creature->CastSpell(target, SPELL_TF_MOD_HEAL, true);
                     m_creature->CastSpell(target, SPELL_TF_IMMUNITY, true);
 
-                    FullFillment_Timer = urand(20500, 25000);
+                    FullFillment_Timer = urand(20000, 30000);
                     ControlledPlayerGUID = target->GetObjectGuid();
                 }
             }
@@ -264,7 +274,6 @@ struct boss_skeramAI : public ScriptedAI
 
                 NextSplitPercent -= 25.0f;
             }
-
     }
 
     void JustSummoned(Creature* skeramImage)
@@ -272,22 +281,25 @@ struct boss_skeramAI : public ScriptedAI
         if (m_creature->GetEntry() != skeramImage->GetEntry())
             return;
 
-        if (boss_skeramAI* imageAI = dynamic_cast<boss_skeramAI*>(skeramImage->AI()))
+        if (auto* imageAI = dynamic_cast<boss_skeramAI*>(skeramImage->AI()))
             imageAI->IsImage = true;
 
-        float skeramPercent = m_creature->GetHealthPercent()/100.0f;
+        float healthPct = m_creature->GetHealthPercent();
+        float maxHealthPct;
 
-        // Set health to look like the True Prophet. Will have 12.5%, 15% and 17.5% of max Skeram HP.
-        float percent = 0.2 * (1 - skeramPercent) + 0.1 * skeramPercent;
-        float maxHealth = m_creature->GetMaxHealth() * percent / skeramPercent;
+        // The max health depends on the split phase. It's percent * original boss health
+        if (healthPct < 25.0f)
+            maxHealthPct = 0.50f;
+        else if (healthPct < 50.0f)
+            maxHealthPct = 0.20f;
+        else
+            maxHealthPct = 0.10f;
 
-        skeramImage->SetMaxHealth(maxHealth);
-        skeramImage->SetHealthPercent(skeramPercent*100.0f);
+        // Set the same health percent as the original boss
+        skeramImage->SetMaxHealth(skeramImage->GetMaxHealth() * maxHealthPct);;
+        skeramImage->SetHealthPercent(healthPct);
         skeramImage->SetInCombatWithZone();
         skeramImage->SetVisibility(VISIBILITY_OFF);
-
-        // Set illusion mana to be the same as the real one
-        skeramImage->SetPower(POWER_MANA, m_creature->GetPower(POWER_MANA));
 
         if (!ImageA)
             ImageA = skeramImage;

@@ -5,6 +5,9 @@
 #include <mutex>
 #include <memory>
 
+// I need to check if creature is an image in order to avoid scaling it
+#include <kalimdor/silithus/temple_of_ahnqiraj/boss_skeram.cpp>
+
 using namespace AutoScaling;
 
 // Unused
@@ -152,6 +155,11 @@ void AutoScaler::ScaleCreature(Creature* creature, uint32 playerCount, uint32 ma
                 specificHPFactor = 0.65f;
                 specificDmgFactor = 0.5f;
             }
+            break;
+        case 15263:
+            if (auto* imageAI = dynamic_cast<boss_skeramAI*>(creature->AI()))
+                if (imageAI->IsImage)
+                    return;
             break;
     }
 
