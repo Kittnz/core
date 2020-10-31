@@ -215,7 +215,11 @@ struct boss_buruAI : public ScriptedAI
                 {
                     Creature* egg = m_pInstance->GetCreature(guid);
                     if (egg != nullptr && egg->isAlive())
+                    {
                         egg->DoKillUnit(egg);
+                        // Make sure eggs are properly despawned
+                        egg->ForcedDespawn(2000);
+                    }
                 }
             }
             else
