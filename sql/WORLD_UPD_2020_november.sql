@@ -135,7 +135,7 @@ SET @magic_number = 60010;
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
 replace into broadcast_text (ID, MaleText, Language) values (@magic_number, 'This be our plot of land, it\'s not much, but we call it home and home is where the heart is.', 0);
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
-update creature_template set gossip_menu_id = @gossip_menu_id where entry = 51620;
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = 51568;
 
 update creature_template set name = 'Goar\'thrak', subname = 'Macrochelys', faction = 35, display_Id1 = 6873 where entry = 50511;
 
