@@ -285,7 +285,7 @@ struct boss_buruAI : public ScriptedAI
             if (m_uiCreepingPlague_Timer < uiDiff)
             {
                 if (DoCastSpellIfCan(m_creature, SPELL_CREEPING_PLAGUE) == CAST_OK)
-                    m_uiCreepingPlague_Timer = 3000;
+                    m_uiCreepingPlague_Timer = 6000;
             }
             else
                 m_uiCreepingPlague_Timer -= uiDiff;
