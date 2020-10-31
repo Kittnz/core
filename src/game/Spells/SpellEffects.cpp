@@ -1094,8 +1094,8 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                         return;
 
                     float tempDamage = 0.0f;
-                    float distance = m_originalCaster->GetDistance(unitTarget);
-                    distance = 1.0 - (distance / 25.0f);
+                    float distance = m_originalCaster->GetDistance2d(unitTarget);
+                    distance = 1.0f - (distance / 25.0f);
 
                     if (unitTarget->isAlive())
                     {
@@ -1105,13 +1105,16 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                             if (tempDamage < 100)
                                 tempDamage = 100;
                         }
+                        /* NOT WORKING */
+                        /*
                         else
                         {
-                            if (unitTarget->GetEntry() == 15370 && unitTarget->GetHealthPercent() > 20.0f)
-                                tempDamage = 45000 * distance;
+                            // Buru itself
+                            if (unitTarget->GetEntry() == 15370 && unitTarget->GetHealthPercent() >= 20.0f)
+                                tempDamage = unitTarget->GetMaxHealth() * 0.15;
                             else
                                 return;
-                        }
+                        }*/
 
                         m_originalCaster->DealDamage(unitTarget, tempDamage, nullptr, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, nullptr, false);
                     }

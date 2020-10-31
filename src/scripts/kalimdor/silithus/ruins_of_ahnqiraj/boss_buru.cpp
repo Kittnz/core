@@ -16,7 +16,7 @@
 
 /* ScriptData
 SDName: Boss_Buru
-SD%Complete: 100%
+SD%Complete: 99%
 SDComment: Ras, en attente de tests.
 SDCategory: Ruins of Ahn'Qiraj
 EndScriptData */
@@ -43,17 +43,11 @@ enum
 
     NPC_HIVEZARA_HATCHLING      =   15521,
 
+    MODEL_BURU_NORMAL           =   15654,
     MODEL_INVISIBLE             =   11686
 };
 
 const float THREAT_LOCK = FLT_MAX;
-
-static SpawnLocations AddPop[] =
-{
-    { -9312.0f, 1281.0f, -62.0f },
-    { -9268.0f, 1249.0f, -62.0f },
-    { -9263.0f, 1292.0f, -63.0f }
-};
 
 static SpawnLocations Eggs[] =
 {
@@ -75,8 +69,8 @@ struct boss_buruAI : public ScriptedAI
 
     ScriptedInstance* m_pInstance;
 
-    bool m_bIsEnraged;
-    bool m_HatchPop;
+    bool m_bIsPhaseTwo;
+    bool m_bTransformationCompleted;
 
     uint32 m_uiDismember_Timer;
     uint32 m_uiSpeed_Timer;
@@ -88,13 +82,13 @@ struct boss_buruAI : public ScriptedAI
 
     void Reset()
     {
-        m_creature->SetDisplayId(15654);
+        m_creature->SetDisplayId(MODEL_BURU_NORMAL);
         m_creature->RemoveAllAuras();
-        m_creature->UpdateSpeed(MOVE_RUN, true, 0.5f);
-        m_bIsEnraged = false;
-        m_HatchPop = false;
+        m_creature->SetSpeedRate(MOVE_RUN,  0.5f, true);
+        m_bIsPhaseTwo = false;
+        m_bTransformationCompleted = false;
         m_uiDismember_Timer = 1000;
-        m_uiSpeed_Timer = 30000;
+        m_uiSpeed_Timer = 9000;
         m_uiCreepingPlague_Timer = 6000;
 
         for (int i = 0; i < 6; i++)
@@ -104,7 +98,7 @@ struct boss_buruAI : public ScriptedAI
         for (int i = 0; i < 6; i++)
         {
             egg = m_pInstance->GetCreature(m_eggsGUID[i]);
-            if (egg != NULL)
+            if (egg != nullptr)
                 egg->AddObjectToRemoveList();
             if (Creature* egg = m_creature->SummonCreature(NPC_BURU_EGG, Eggs[i].x, Eggs[i].y, Eggs[i].z, 0))
                 m_eggsGUID[i] = egg->GetGUID();
@@ -118,30 +112,73 @@ struct boss_buruAI : public ScriptedAI
     {
         m_creature->SetInCombatWithZone();
         DoCast(m_creature, SPELL_THORNS);
-        m_creature->SetArmor(20000);
+
+        m_creature->SetArmor(50000);
+        m_creature->SetResistance(SPELL_SCHOOL_ARCANE, 5000);
+        m_creature->SetResistance(SPELL_SCHOOL_FIRE, 5000);
+        m_creature->SetResistance(SPELL_SCHOOL_FROST, 5000);
+        m_creature->SetResistance(SPELL_SCHOOL_HOLY, 5000);
+        m_creature->SetResistance(SPELL_SCHOOL_NATURE, 5000);
+        m_creature->SetResistance(SPELL_SCHOOL_SHADOW, 5000);
+
         if (m_pInstance)
             m_pInstance->SetData(TYPE_BURU, IN_PROGRESS);
     }
 
     void JustDied(Unit* pKiller)
     {
-        // Le debuff fade quand il est mort, sinon le raid se fait decimer
-        Map::PlayerList const &liste = m_creature->GetMap()->GetPlayers();
-        for (Map::PlayerList::const_iterator i = liste.begin(); i != liste.end(); ++i)
-            i->getSource()->RemoveAurasDueToSpell(SPELL_CREEPING_PLAGUE);
+        // Remove Creeping Plague on boss death
+        Map::PlayerList const &playerList = m_creature->GetMap()->GetPlayers();
+        for (const auto & player : playerList)
+            player.getSource()->RemoveAurasDueToSpell(SPELL_CREEPING_PLAGUE);
 
         if (m_pInstance)
             m_pInstance->SetData(TYPE_BURU, DONE);
+    }
+
+    void ApplyFreeze()
+    {
+        if (SpellAuraHolder* aura = m_creature->AddAura(SPELL_SELF_FREEZE))
+        {
+            aura->SetAuraMaxDuration(3000);
+            aura->SetAuraDuration(3000);
+            aura->SetPassive(false);
+            aura->SetPermanent(false);
+        }
+    }
+
+    void OnEggExploded()
+    {
+        // Only handle this if boss is not in Phase 2
+        if (m_creature->GetHealthPercent() < 20)
+            return;
+
+        ApplyFreeze();
+
+        m_creature->RemoveAurasDueToSpell(SPELL_GAIN_SPEED);
+        m_creature->RemoveAurasDueToSpell(SPELL_FULL_SPEED);
+        m_creature->SetSpeedRate(MOVE_RUN, 0.5f, true);
+        m_uiSpeed_Timer = 9000;
+
+        if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
+        {
+            DoScriptText(EMOTE_TARGET, m_creature, pTarget);
+
+            // Reset aggro
+            m_creature->getThreatManager().modifyThreatPercent(m_creature->getVictim(), -100);
+            // Add a really high threat to lock boss to target
+            m_creature->getThreatManager().addThreat(pTarget, THREAT_LOCK);
+        }
     }
 
     void UpdateAI(const uint32 uiDiff)
     {
 
         Creature* egg;
-        for (int i = 0; i < 6 && !m_bIsEnraged; i++)
+        for (int i = 0; i < 6 && !m_bIsPhaseTwo; i++)
         {
             egg = m_pInstance->GetCreature(m_eggsGUID[i]);
-            if (egg == NULL)
+            if (egg == nullptr)
             {
                 if (Creature* egg = m_creature->SummonCreature(NPC_BURU_EGG, Eggs[i].x, Eggs[i].y, Eggs[i].z, 0))
                     m_eggsGUID[i] = egg->GetGUID();
@@ -159,144 +196,100 @@ struct boss_buruAI : public ScriptedAI
             }
         }
 
-        // Transition de phase. Tout ca pour avoir un joli visuel :)
-        if (m_bIsEnraged && m_creature->HasAura(SPELL_SELF_FREEZE))
+        // Phase transition
+        if (m_bIsPhaseTwo && !m_bTransformationCompleted)
         {
             if (!m_uiTransform_Timer)
                 return;
 
             if (m_uiTransform_Timer <= uiDiff)
             {
+                m_bTransformationCompleted = true;
                 m_creature->RemoveAllAuras(); // Delete Thorns ability during Phase 2
-                m_creature->AddAura(SPELL_BURU_TRANSFORM);
+                m_creature->CastSpell(m_creature, SPELL_BURU_TRANSFORM, true);
                 m_uiTransform_Timer = 0;
-                m_creature->SetInCombatWithZone(); // Arrive qu'il revienne a sa place si on ne le tape pas sans ca
+                m_creature->SetInCombatWithZone(); // Keep boss in combat (just in case)
+
+                // Kill remaining eggs
+                for (unsigned long guid : m_eggsGUID)
+                {
+                    Creature* egg = m_pInstance->GetCreature(guid);
+                    if (egg != nullptr && egg->isAlive())
+                        egg->DoKillUnit(egg);
+                }
             }
             else
                 m_uiTransform_Timer -= uiDiff;
             return;
         }
+        // Why?
         m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
 
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
 
-        // Si il n'est pas enrage et qu'il n'a plus de threat list, il choisi une personne a focus au hasard
-        if (!m_bIsEnraged)
+        // Check if boss should enrage or not.
+        if (!m_bIsPhaseTwo)
         {
-            if (m_creature->GetHealthPercent() < 20)
+            if (m_creature->GetHealthPercent() <= 20)
             {
-                m_bIsEnraged = true;
+                m_bIsPhaseTwo = true;
 
-                // Freeze
-                if (SpellAuraHolder* aura = m_creature->AddAura(SPELL_SELF_FREEZE))
-                {
-                    // m_uiTransform_Timer + temps du visuel cote client. Le visuel se casse en cas de mvt.
-                    aura->SetAuraMaxDuration(5600);
-                    aura->SetAuraDuration(5600);
-                    aura->SetPassive(false);
-                    aura->SetPermanent(false);
-                }
-                // Le sort de transformation ne doit pas etre lance tout de suite si on veut avoir le visuel.
-                m_uiTransform_Timer = 200;
+                ApplyFreeze();
 
-                // Suppression de son armure, enrage, reset de la liste d'aggro et vitesse remise à la normal
-                m_creature->SetArmor(0);
+                // Don't instantly change visuals in order to have a good animation.
+                m_uiTransform_Timer = 2000;
+
+                // Set armor and resistances back to normal
+                m_creature->SetArmor(m_creature->GetCreatureInfo()->armor);
+                m_creature->SetResistance(SPELL_SCHOOL_ARCANE, m_creature->GetCreateResistance(SPELL_SCHOOL_ARCANE));
+                m_creature->SetResistance(SPELL_SCHOOL_FIRE, m_creature->GetCreateResistance(SPELL_SCHOOL_ARCANE));
+                m_creature->SetResistance(SPELL_SCHOOL_FROST, m_creature->GetCreateResistance(SPELL_SCHOOL_ARCANE));
+                m_creature->SetResistance(SPELL_SCHOOL_HOLY, m_creature->GetCreateResistance(SPELL_SCHOOL_ARCANE));
+                m_creature->SetResistance(SPELL_SCHOOL_NATURE, m_creature->GetCreateResistance(SPELL_SCHOOL_ARCANE));
+                m_creature->SetResistance(SPELL_SCHOOL_SHADOW, m_creature->GetCreateResistance(SPELL_SCHOOL_ARCANE));
+
                 m_creature->DeleteThreatList();
+                m_creature->SetInCombatWithZone();
                 m_creature->RemoveAurasDueToSpell(SPELL_GAIN_SPEED);
-                m_creature->UpdateSpeed(MOVE_RUN, true, 1.0f);
+                m_creature->RemoveAurasDueToSpell(SPELL_FULL_SPEED);
+                m_creature->SetSpeedRate(MOVE_RUN, 1.0f, true);
 
                 if (m_creature->getVictim())
                     m_creature->SetFacingToObject(m_creature->getVictim());
-
-                // Despawn des oeufs lors de l'enrage
-                for (int i = 0 ; i < 6 ; i++)
-                {
-                    if (m_eggsGUID[i])
-                    {
-                        if (Creature* egg = m_pInstance->GetCreature(m_eggsGUID[i]))
-                            egg->AddObjectToRemoveList();
-
-                        m_eggsGUID[i] = 0;
-                    }
-                }
             }
-            else if (m_creature->getThreatManager().getThreat(m_creature->getVictim()) < (THREAT_LOCK / 1000))
+            else
             {
-                uint64 GUIDs[40];
-                for (int i = 0; i < 40; i++)
-                    GUIDs[i] = 0;
-
-                int var = 0;
-                ThreatList const& tList = m_creature->getThreatManager().getThreatList();
-                for (ThreatList::const_iterator itr = tList.begin(); itr != tList.end(); ++itr)
+                // Dismember - A stacking bleed effect that does 1248 damage every 2 second. Buru will use this if he catches up to whoever he is targeting.
+                if (m_uiDismember_Timer < uiDiff)
                 {
-                    Player* pPlayer = m_creature->GetMap()->GetPlayer((*itr)->getUnitGuid());
-                    if (pPlayer && pPlayer->isAlive())
-                    {
-                        GUIDs[var] = (*itr)->getUnitGuid();
-                        ++var;
-                    }
+                    if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_DISMEMBER) == CAST_OK)
+                        m_uiDismember_Timer = 6000;
                 }
+                else
+                    m_uiDismember_Timer -= uiDiff;
 
-                if (var)
+                // Gain speed
+                if (m_uiSpeed_Timer < uiDiff)
                 {
-
-                    if (Player* pTarget = m_creature->GetMap()->GetPlayer(GUIDs[urand(0, var - 1)]))
-                    {
-                        DoScriptText(EMOTE_TARGET, m_creature, pTarget);
-
-                        // Pour verouiller la cible, on applique une menace tres elevee
-                        m_creature->getThreatManager().addThreat(pTarget, THREAT_LOCK);
-
-                        m_creature->RemoveAurasDueToSpell(SPELL_GAIN_SPEED);
-                        m_creature->UpdateSpeed(MOVE_RUN, true, 0.5f);
-                        m_uiSpeed_Timer = 30000;
-                    }
+                    m_creature->CastSpell(m_creature, SPELL_GAIN_SPEED, true);
+                    m_uiSpeed_Timer = 9000;
                 }
+                else
+                    m_uiSpeed_Timer -= uiDiff;
             }
-        }
-
-        // Dismember - A stacking bleed effect that does 1248 damage every 2 second. Buru will use this if he catches up to whoever he is targeting.
-        if (m_uiDismember_Timer < uiDiff && !m_bIsEnraged)
-        {
-            if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_DISMEMBER) == CAST_OK)
-                m_uiDismember_Timer = 6000;
         }
         else
-            m_uiDismember_Timer -= uiDiff;
-
-        // Creeping plague
-        if (m_bIsEnraged)
         {
+            // Creeping plague
             if (m_uiCreepingPlague_Timer < uiDiff)
             {
                 if (DoCastSpellIfCan(m_creature, SPELL_CREEPING_PLAGUE) == CAST_OK)
-                    m_uiCreepingPlague_Timer = 6000;
+                    m_uiCreepingPlague_Timer = 3000;
             }
             else
                 m_uiCreepingPlague_Timer -= uiDiff;
-
-            // Pop des add lors de l'enrage (3, mais je ne suis pas sur de ce nombre et ne sait pas s'ils arrivent tous d'un coup)
-            if (!m_HatchPop)
-            {
-                for (int i = 0; i < 3; i++)
-                {
-                    if (Creature* summoned = m_creature->SummonCreature(NPC_HIVEZARA_HATCHLING, AddPop[i].x, AddPop[i].y, AddPop[i].z, 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000))
-                        summoned->SetInCombatWithZone();
-                }
-                m_HatchPop = true;
-            }
         }
-
-        // Gain speed
-        if (m_uiSpeed_Timer < uiDiff)
-        {
-            m_creature->CastSpell(m_creature, SPELL_GAIN_SPEED, true);
-            m_uiSpeed_Timer = 30000;
-        }
-        else
-            m_uiSpeed_Timer -= uiDiff;
 
         DoMeleeAttackIfReady();
     }
@@ -312,18 +305,17 @@ struct mob_buru_eggAI : public ScriptedAI
     }
 
     ScriptedInstance* m_pInstance;
-    Creature* pBuru;
 
     void Reset()
     {
-        // Empêche les oeufs d'aggro et de tourner
+        // Prevent eggs from rotating around
         SetCombatMovement(false);
         m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
     }
 
     void DamageTaken(Unit* pDoneBy, uint32 &uiDamage)
     {
-        // Aggro de Buru quand on tape un oeuf
+        // Aggro Buru on egg attack
         if (Creature* pBuru = m_pInstance->GetCreature(m_pInstance->GetData64(DATA_BURU)))
         {
             if (!pBuru->isInCombat())
@@ -336,23 +328,24 @@ struct mob_buru_eggAI : public ScriptedAI
         if (!m_pInstance)
             return;
 
-        // Explose et fait pop une creature quand il meurs
-        m_creature->CastSpell(m_creature, SPELL_EXPLODE, false);
+        // Make the egg explode
+        m_creature->CastSpell(m_creature, SPELL_EXPLODE, true);
 
         if (Creature* add = m_creature->SummonCreature(NPC_HIVEZARA_HATCHLING, m_creature->GetPositionX(), m_creature->GetPositionY(),
-            m_creature->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000))
+            m_creature->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 2000))
         {
             add->SetInCombatWithZone();
         }
 
-        // Si Buru est a portee, il inflige des degats a celui-ci et changement de cible
+        // Inflict damage to Buru (should be handled in SpellEffects...)
         if (Creature* pBuru = m_pInstance->GetCreature(m_pInstance->GetData64(DATA_BURU)))
         {
-            if (pBuru->isAlive() && pBuru->GetDistance2d(m_creature) < 5.0f && pBuru->GetHealthPercent() >= 20)
+            float distance = m_creature->GetDistance2d(pBuru);
+            float damageFactor = 1.0f - (distance / 25.0f);
+            if (pBuru->isAlive() && distance < 5.0f && pBuru->GetHealthPercent() >= 20)
             {
-                pBuru->getThreatManager().modifyThreatPercent(pBuru->getVictim(), -100);
-
-                pBuru->SetHealth(pBuru->GetHealth() - 45000);
+                pBuru->SetHealthPercent(pBuru->GetHealthPercent() - 10 * damageFactor);
+                static_cast<boss_buruAI*>(pBuru->AI())->OnEggExploded();
             }
         }
     }
