@@ -35,10 +35,9 @@ enum
 
     EMOTE_FRENZY                =  -1000002,
 
-    NPC_HIVEZARA_LARVA          =  15555,
-
     SPELL_FEED                  =  25721,
 
+    NPC_HIVEZARA_LARVA          =  15555,
     NPC_HIVEZARA_HORNET         =  15934,
     NPC_HIVEZARA_SWARMER        =  15546
 };
@@ -160,8 +159,6 @@ struct boss_ayamissAI : public ScriptedAI
             if (pCaster->GetTypeId() != TYPEID_PLAYER)
                 return;
 
-//                    DoTeleportPlayer(pCaster, -9717.2, 1517.81, 27.4683, pCaster->GetOrientation());
-
             m_uiSacrificeGuid = pCaster->GetObjectGuid();
             m_fSacrificeAggro = m_creature->getThreatManager().getThreat(pCaster);
             m_creature->getThreatManager().modifyThreatPercent(pCaster, -100);
@@ -172,6 +169,20 @@ struct boss_ayamissAI : public ScriptedAI
     void JustSummoned(Creature* pSummoned)
     {
         pSummoned->SetInCombatWithZone();
+    }
+
+    void MoveInLineOfSight(Unit* pWho) override
+    {
+        if (pWho->GetTypeId() == TYPEID_PLAYER
+            && !m_creature->isInCombat()
+            && m_creature->IsWithinDistInMap(pWho, 40.0f)
+            && !pWho->HasAuraType(SPELL_AURA_FEIGN_DEATH)
+            && !pWho->HasAuraType(SPELL_AURA_MOD_UNATTACKABLE))
+        {
+            AttackStart(pWho);
+        }
+
+        ScriptedAI::MoveInLineOfSight(pWho);
     }
 
     void UpdateAI(const uint32 uiDiff)
@@ -195,7 +206,7 @@ struct boss_ayamissAI : public ScriptedAI
         else
             m_uiRelocate_Timer -= uiDiff;
 
-        if (!m_bIsInPhaseTwo && ((m_creature->GetHealth() * 100) / m_creature->GetMaxHealth()) < 70)
+        if (m_creature->GetHealthPercent() <= 70 && !m_bIsInPhaseTwo)
         {
             SetCombatMovement(true);
             m_creature->GetMotionMaster()->MoveChase(m_creature->getVictim());
@@ -213,11 +224,13 @@ struct boss_ayamissAI : public ScriptedAI
             }
         }
 
-        if (!m_bIsEnraged && ((m_creature->GetHealth() * 100) / m_creature->GetMaxHealth()) < 20)
+        if (m_creature->GetHealthPercent() <= 20 && !m_bIsEnraged)
         {
-            DoCast(m_creature, SPELL_FRENZY);
-            DoScriptText(EMOTE_FRENZY, m_creature);
-            m_bIsEnraged = true;
+            if (DoCastSpellIfCan(m_creature, SPELL_FRENZY) == CAST_OK)
+            {
+                DoScriptText(EMOTE_FRENZY, m_creature);
+                m_bIsEnraged = true;
+            }
         }
 
         if (m_uiSummonSwarmer_Timer < uiDiff)
@@ -282,7 +295,7 @@ struct boss_ayamissAI : public ScriptedAI
             if (m_uiPoisonStinger_Timer < uiDiff)
             {
                 if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_POISONSTINGER) == CAST_OK)
-                    m_uiPoisonStinger_Timer = 3000;
+                    m_uiPoisonStinger_Timer = urand(2000, 3000);
             }
             else
                 m_uiPoisonStinger_Timer -= uiDiff;
@@ -290,7 +303,7 @@ struct boss_ayamissAI : public ScriptedAI
             if (m_uiStingerSpray_Timer < uiDiff)
             {
                 if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_STINGERSPRAY) == CAST_OK)
-                    m_uiStingerSpray_Timer = urand(10000, 15000);
+                    m_uiStingerSpray_Timer = urand(15000, 20000);
             }
             else
                 m_uiStingerSpray_Timer -= uiDiff;
@@ -301,7 +314,7 @@ struct boss_ayamissAI : public ScriptedAI
             if (m_uiStingerSpray_Timer < uiDiff)
             {
                 if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_STINGERSPRAY) == CAST_OK)
-                    m_uiStingerSpray_Timer = urand(10000, 15000);
+                    m_uiStingerSpray_Timer = urand(6000, 12000);
             }
             else
                 m_uiStingerSpray_Timer -= uiDiff;
@@ -309,7 +322,7 @@ struct boss_ayamissAI : public ScriptedAI
             if (m_uiLash_Timer < uiDiff)
             {
                 if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_LASH) == CAST_OK)
-                    m_uiLash_Timer = 10000 + rand() % 10000;
+                    m_uiLash_Timer = urand(8000, 15000);
             }
             else
                 m_uiLash_Timer -= uiDiff;
@@ -317,7 +330,7 @@ struct boss_ayamissAI : public ScriptedAI
             if (m_uiTrash_Timer < uiDiff)
             {
                 if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_TRASH) == CAST_OK)
-                    m_uiTrash_Timer = 10000 + rand() % 10000;
+                    m_uiTrash_Timer = urand(5000, 7000);
             }
             else
                 m_uiTrash_Timer -= uiDiff;
