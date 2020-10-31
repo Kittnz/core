@@ -26,15 +26,15 @@ EndScriptData */
 
 enum
 {
+    EMOTE_FRENZY            = -1000002,
+
     GO_TRAP                 =   180647,
 
     SPELL_MORTALWOUND       =   25646,
-    SPELL_SUMMON_SANDTRAP   =   25648,
-    SPELL_SANDTRAP_EFFECT   =   25656,
+    SPELL_SUMMON_SANDTRAP   =   26524,
     SPELL_ENRAGE            =   26527,
     SPELL_WIDE_SLASH        =   25814,
     SPELL_TRASH             =   3391,
-    SPELL_INVOCATION        =   26446,
 
     SAY_BREACHED            =   11720
 };
@@ -49,7 +49,6 @@ struct boss_kurinnaxxAI : public ScriptedAI
 
     ScriptedInstance* m_pInstance;
 
-    uint32 m_uiInvocation_Timer;
     uint32 m_uiMortalWound_Timer;
     uint32 m_uiSandTrap_Timer;
     uint32 m_uiCleanSandTrap_Timer;
@@ -59,12 +58,11 @@ struct boss_kurinnaxxAI : public ScriptedAI
 
     void Reset()
     {
-        m_uiInvocation_Timer = 10000;
-        m_uiMortalWound_Timer = 7000;
-        m_uiSandTrap_Timer = 7000;
+        m_uiMortalWound_Timer = urand(8000, 10000);
+        m_uiSandTrap_Timer = urand(5000, 10000);
         m_uiCleanSandTrap_Timer = 0;
-        m_uiTrash_Timer = 10000;
-        m_uiWideSlash_Timer = 15000;
+        m_uiTrash_Timer = urand(1000, 5000);
+        m_uiWideSlash_Timer = urand(10000, 15000);
         m_bHasEnraged = false;
         if (m_pInstance)
             m_pInstance->SetData(TYPE_KURINNAXX, NOT_STARTED);
@@ -87,15 +85,6 @@ struct boss_kurinnaxxAI : public ScriptedAI
         m_pInstance->SetData(TYPE_KURINNAXX, DONE);
     }
 
-    void DamageTaken(Unit* pDoneBy, uint32 &uiDamage)
-    {
-        if (!m_bHasEnraged && ((m_creature->GetHealth() * 100) / m_creature->GetMaxHealth()) <= 30 && !m_creature->IsNonMeleeSpellCasted(false))
-        {
-            DoCast(m_creature->getVictim(), SPELL_ENRAGE);
-            m_bHasEnraged = true;
-        }
-    }
-
     void UpdateAI(const uint32 uiDiff)
     {
         // if no one gets to the trap in 5 seconds delete the trap
@@ -113,15 +102,26 @@ struct boss_kurinnaxxAI : public ScriptedAI
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
 
-        /* Moral wound */
+        /* Enrage */
+        if (m_creature->GetHealthPercent() <= 30 && !m_bHasEnraged)
+        {
+            if (DoCastSpellIfCan(m_creature, SPELL_ENRAGE) == CAST_OK)
+            {
+                DoScriptText(EMOTE_FRENZY, m_creature);
+                m_bHasEnraged = true;
+            }
+        }
+
+        /* Mortal wound */
         if (m_uiMortalWound_Timer < uiDiff)
         {
             if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_MORTALWOUND) == CAST_OK)
-                m_uiMortalWound_Timer = 9000;
+                m_uiMortalWound_Timer = urand(8000, 10000);
         }
         else
             m_uiMortalWound_Timer -= uiDiff;
 
+        // TODO: Should use 26524 instead
         /* Summon trap */
         if (m_uiSandTrap_Timer < uiDiff)
         {
@@ -129,7 +129,7 @@ struct boss_kurinnaxxAI : public ScriptedAI
             {
                 if (GameObject* trap = m_creature->SummonGameObject(GO_TRAP, pUnit->GetPositionX(), pUnit->GetPositionY(), pUnit->GetPositionZ(), 0, 0, 0, 0, 0, 0))
                     trap->SetOwnerGuid(m_creature->GetObjectGuid());
-                m_uiSandTrap_Timer = urand(5100, 7000); /** Random timer for sandtrap between 1 and 7s */
+                m_uiSandTrap_Timer = urand(10000, 15000);
                 m_uiCleanSandTrap_Timer = 5000;
             }
         }
@@ -140,34 +140,16 @@ struct boss_kurinnaxxAI : public ScriptedAI
         if (m_uiWideSlash_Timer < uiDiff)
         {
             if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_WIDE_SLASH) == CAST_OK)
-                m_uiWideSlash_Timer = 10000 + (rand() % 10000);
+                m_uiWideSlash_Timer = urand(12000, 15000);
         }
         else
             m_uiWideSlash_Timer -= uiDiff;
-
-        /** Invoque player in front of him */
-        if (m_uiInvocation_Timer < uiDiff)
-        {
-            if (Unit* pUnit = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0, nullptr, SELECT_FLAG_PLAYER))
-            {
-
-            	float x, y, z;
-
-                m_creature->SendSpellGo(pUnit, 25681);
-            	m_creature->GetRelativePositions(10.0f, 0.0f, 0.0f, x, y, z);
-            	pUnit->NearLandTo(x, y, z+3.5f, pUnit->GetOrientation());
-                m_uiInvocation_Timer = urand(5000, 10000);
-            }
-        }
-        else
-            m_uiInvocation_Timer -= uiDiff;
-
 
         /* Trash */
         if (m_uiTrash_Timer < uiDiff)
         {
             if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_TRASH) == CAST_OK)
-                m_uiTrash_Timer = 10000 + (rand() % 10000);
+                m_uiTrash_Timer = urand(12000, 17000);
         }
         else
             m_uiTrash_Timer -= uiDiff;
