@@ -217,8 +217,6 @@ struct boss_buruAI : public ScriptedAI
                     if (egg != nullptr && egg->isAlive())
                     {
                         egg->DoKillUnit(egg);
-                        // Make sure eggs are properly despawned
-                        egg->ForcedDespawn(2000);
                     }
                 }
             }
@@ -254,7 +252,8 @@ struct boss_buruAI : public ScriptedAI
                 m_creature->SetResistance(SPELL_SCHOOL_SHADOW, m_creature->GetCreatureInfo()->shadow_res);
 
                 m_creature->DeleteThreatList();
-                m_creature->SetInCombatWithZone();
+                if (m_creature->CanHaveThreatList())
+                    m_creature->SetInCombatWithZone();
                 m_creature->RemoveAurasDueToSpell(SPELL_GAIN_SPEED);
                 m_creature->RemoveAurasDueToSpell(SPELL_FULL_SPEED);
                 m_creature->SetSpeedRate(MOVE_RUN, 1.0f, true);
