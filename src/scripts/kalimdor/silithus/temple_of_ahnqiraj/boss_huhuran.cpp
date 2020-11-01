@@ -160,9 +160,10 @@ struct boss_huhuranAI : public ScriptedAI
 
         if (m_creature->GetHealthPercent() < 30.0f && !m_bBerserk)
         {
+            m_creature->RemoveAurasDueToSpell(SPELL_FRENZY);
+
             if (DoCastSpellIfCan(m_creature, SPELL_BERSERK, CF_AURA_NOT_PRESENT))
             {
-                m_creature->RemoveAurasDueToSpell(SPELL_FRENZY);
                 DoScriptText(EMOTE_GENERIC_BERSERK, m_creature);
                 m_bBerserk = true;
             }
