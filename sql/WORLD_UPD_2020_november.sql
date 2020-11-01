@@ -144,3 +144,8 @@ update item_template set name = 'Depleted Stone of Ahn\'Qiraj', description = 'T
 REPLACE INTO `item_template` VALUES (51901, 0, 4, 0, 'Scarab Lord\'s Garments', 'I squashed bugs for 10 hours and all I got was this lousy shirt.', 24610, 4, 0, 1, 0, 0, 4, -1, -1, 15, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
 
 update item_template set bonding = 1 where entry = 51901;
+
+-- Delete some bad creature addon entries.
+DELETE FROM `creature_addon` WHERE `guid`=80419;
+DELETE FROM `creature_template_addon` WHERE `entry` IN (157, 454, 728, 731, 3862, 5427, 7384, 7456, 8960, 9696, 10200, 11361, 14832, 16117, 7550, 7560);
+DELETE FROM `creature_template_addon` WHERE `mount`=0 && `bytes1`=0 && `b2_0_sheath`=0 && `b2_1_flags`=0 && `emote`=0 && `moveflags`=0 && ((`auras`='') || (`auras` IS NULL));
