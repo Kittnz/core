@@ -113,6 +113,7 @@ struct boss_huhuranAI : public ScriptedAI
             {
                 DoScriptText(EMOTE_GENERIC_FRENZY_KILL, m_creature);
                 m_uiFrenzyTimer = urand(10000, 20000);
+                m_uiPoisonBoltTimer = 3000;
             }
         }
         else
@@ -166,6 +167,7 @@ struct boss_huhuranAI : public ScriptedAI
             {
                 DoScriptText(EMOTE_GENERIC_BERSERK, m_creature);
                 m_bBerserk = true;
+                m_uiPoisonBoltTimer = 3000;
             }
         }
 
