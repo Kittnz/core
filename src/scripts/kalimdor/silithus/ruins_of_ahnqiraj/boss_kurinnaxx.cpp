@@ -32,7 +32,7 @@ enum
 
     SPELL_MORTALWOUND       =   25646,
     SPELL_SUMMON_SANDTRAP   =   26524,
-    SPELL_ENRAGE            =   26527,
+    SPELL_ENRAGE            =   8269,
     SPELL_WIDE_SLASH        =   25814,
     SPELL_TRASH             =   3391,
 

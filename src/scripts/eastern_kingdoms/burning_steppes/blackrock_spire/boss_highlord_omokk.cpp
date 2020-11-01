@@ -33,6 +33,7 @@ enum
     SPELL_SLOW        = 22356
 };
 
+// TODO: enrage 8269 missing?
 struct boss_highlordomokkAI : public ScriptedAI
 {
     boss_highlordomokkAI(Creature* pCreature) : ScriptedAI(pCreature)
