@@ -6375,20 +6375,33 @@ SpellCastResult Spell::CheckCast(bool strict)
             }
             case SPELL_EFFECT_SCRIPT_EFFECT:
             {
+                if (!m_caster)
+                    break;
+
                 // Black Qiraji Battle Tank
                 if (m_spellInfo->Id == 26656)
                 {
+                    if (m_caster->IsMounted())
+                    {
+                        if (m_caster->GetMountID() == 15677)
+                        {
+                            m_caster->Unmount();
+                            m_caster->RemoveSpellsCausingAura(SPELL_AURA_MOUNTED);
+                        }
+                        return SPELL_FAILED_DONT_REPORT;
+                    }
+
                     if (m_caster->IsInWater())
                         return SPELL_FAILED_ONLY_ABOVEWATER;
 
-                    if (m_caster->isInCombat())
-                        return SPELL_FAILED_TARGET_IN_COMBAT;
+                    if (Player* pPlayer = m_caster->ToPlayer())
+                    {
+                        if (pPlayer->GetTransport())
+                            return SPELL_FAILED_NO_MOUNTS_ALLOWED;
 
-                    if (m_caster->GetTypeId() == TYPEID_PLAYER && ((Player*)m_caster)->GetTransport())
-                        return SPELL_FAILED_NO_MOUNTS_ALLOWED;
-
-                    if (m_caster->GetMapId() != 531 && m_caster->GetTypeId() == TYPEID_PLAYER && !sMapStorage.LookupEntry<MapEntry>(m_caster->GetMapId())->IsMountAllowed() && !m_IsTriggeredSpell)
-                        return SPELL_FAILED_NO_MOUNTS_ALLOWED;
+                        if (m_caster->GetMapId() != 531 && !sMapStorage.LookupEntry<MapEntry>(m_caster->GetMapId())->IsMountAllowed() && !m_IsTriggeredSpell)
+                            return SPELL_FAILED_NO_MOUNTS_ALLOWED;
+                    }
 
                     if (m_caster->GetAreaId() == 35)
                         return SPELL_FAILED_NO_MOUNTS_ALLOWED;
