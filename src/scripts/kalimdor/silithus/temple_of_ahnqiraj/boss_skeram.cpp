@@ -363,6 +363,8 @@ struct boss_skeramAI : public ScriptedAI
         }
 
         DoResetThreat();
+        // Reset Earthshock timer on blink.
+        static_cast<boss_skeramAI*>(caster->AI())->EarthShock_Timer = 2500;
         caster->SetVisibility(VISIBILITY_ON);
     }
 
