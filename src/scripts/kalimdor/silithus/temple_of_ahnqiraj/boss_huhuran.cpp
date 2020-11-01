@@ -95,7 +95,7 @@ struct boss_huhuranAI : public ScriptedAI
         m_uiWyvernTimer        = urand(18000, 28000);
         m_uiSpitTimer          = 8000;
         m_uiNoxiousPoisonTimer = urand(10000, 20000);
-        m_uiPoisonBoltTimer    = 4000;
+        m_uiPoisonBoltTimer    = 3000;
 
         m_bBerserk             = false;
     }
