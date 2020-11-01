@@ -84,7 +84,7 @@ struct boss_skeramAI : public ScriptedAI
     void Reset()
     {
         ArcaneExplosion_Timer = urand(6000, 12000);
-        EarthShock_Timer = 1200;
+        EarthShock_Timer = 2000;
         FullFillment_Timer = 15000;
         Blink_Timer = urand(15000, 20000);
 
@@ -176,10 +176,8 @@ struct boss_skeramAI : public ScriptedAI
         if (m_pInstance)
             m_pInstance->SetData(TYPE_SKERAM, IN_PROGRESS);
 
-        // Prophet Skeram will only cast Arcane Explosion if a given number of players are in melee range
-        // Initial value was 4+ but it was changed in patch 1.12 to be less dependant on raid
-        // We assume value is number of players / 10 (raid of 40 people in Classic -> value of 4)
-        m_maxMeleeAllowed = m_pInstance->GetMap()->GetPlayersCountExceptGMs() / 10;
+        // For scaling purposes
+        m_maxMeleeAllowed = m_pInstance->GetMap()->GetPlayersCountExceptGMs() > 30 ? 4 : 3;
     }
 
     void JustReachedHome()
@@ -205,7 +203,7 @@ struct boss_skeramAI : public ScriptedAI
 
         if (ArcaneExplosion_Timer < diff)
         {
-            // Only cast arcane explosion if there are more than 4 units within melee reach
+            // Only cast arcane explosion if there are more than m_maxMeleeAllowed units within melee reach
             std::list<Player*> players;
             GetPlayersWithinRange(players, m_creature->GetMeleeReach());
 
@@ -230,7 +228,7 @@ struct boss_skeramAI : public ScriptedAI
             if (EarthShock_Timer < diff)
             {
                 if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_EARTH_SHOCK) == CAST_OK)
-                    EarthShock_Timer = 2500;
+                    EarthShock_Timer = urand(1000, 2000);
             }
             else
                 EarthShock_Timer -= diff;
@@ -259,6 +257,7 @@ struct boss_skeramAI : public ScriptedAI
 
         if (Blink_Timer < diff)
         {
+            EarthShock_Timer = 1000;
             CastBlink(m_creature);
             Blink_Timer = urand(10000, 30000);
         }
@@ -267,6 +266,9 @@ struct boss_skeramAI : public ScriptedAI
 
         // Summon 2 Images and teleport for every 25% hp lost
         if (!IsImage && m_creature->GetHealthPercent() < NextSplitPercent)
+        {
+            EarthShock_Timer = 2000;
+
             if (DoCastSpellIfCan(m_creature, SPELL_SUMMON_IMAGES) == CAST_OK)
             {
                 if (NextSplitPercent < 26.0f)
@@ -274,6 +276,7 @@ struct boss_skeramAI : public ScriptedAI
 
                 NextSplitPercent -= 25.0f;
             }
+        }
     }
 
     void JustSummoned(Creature* skeramImage)
@@ -282,7 +285,11 @@ struct boss_skeramAI : public ScriptedAI
             return;
 
         if (auto* imageAI = dynamic_cast<boss_skeramAI*>(skeramImage->AI()))
+        {
             imageAI->IsImage = true;
+            // Reset Earthshock timer just in case
+            imageAI->EarthShock_Timer = 2000;
+        }
 
         float healthPct = m_creature->GetHealthPercent();
         float maxHealthPct;
@@ -363,8 +370,6 @@ struct boss_skeramAI : public ScriptedAI
         }
 
         DoResetThreat();
-        // Reset Earthshock timer on blink.
-        static_cast<boss_skeramAI*>(caster->AI())->EarthShock_Timer = 2500;
         caster->SetVisibility(VISIBILITY_ON);
     }
 
