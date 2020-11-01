@@ -138,16 +138,13 @@ struct mob_anubisath_guardianAI : public ScriptedAI
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
 
-        if (m_uiExplode_Timer < uiDiff && m_bIsExploding == true)
+        if (m_uiExplode_Timer < uiDiff && m_bIsExploding)
         {
             if (DoCastSpellIfCan(m_creature, SPELL_EXPLODE) == CAST_OK)
                 m_uiExplode_Timer = 15000;
         }
         else
             m_uiExplode_Timer -= uiDiff;
-
-
-
 
         if (m_uiSpell1_Timer < uiDiff)
         {
@@ -156,7 +153,6 @@ struct mob_anubisath_guardianAI : public ScriptedAI
             {
                 // Create visual animation of the spell
                 m_creature->SendSpellGo(m_creature, m_uiSpell1);
-
 
                 if (DoCastSpellIfCan(pUnit, m_uiSpell1) == CAST_OK)
                     m_uiSpell1_Timer = 15000;
@@ -175,7 +171,7 @@ struct mob_anubisath_guardianAI : public ScriptedAI
 
         if (m_uiSummon_Timer < uiDiff)
         {
-            if (m_uiSummonCount < 4)
+            if (m_uiSummonCount < 4 && m_creature->isAlive())
             {
                 m_creature->SummonCreature(m_uiNPCSummon,
                                            m_creature->GetPositionX(),
