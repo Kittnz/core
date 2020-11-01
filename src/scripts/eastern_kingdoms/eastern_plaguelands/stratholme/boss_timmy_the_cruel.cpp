@@ -26,7 +26,7 @@ EndScriptData */
 #define SAY_SPAWN               -1900160
 
 #define SPELL_RAVENOUSCLAW      17470
-#define SPELL_ENRAGE            8599
+#define SPELL_ENRAGE            8269
 
 #define TIMMY_ENTRY             10808
 

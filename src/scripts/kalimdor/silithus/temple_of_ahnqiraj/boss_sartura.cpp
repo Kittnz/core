@@ -40,7 +40,7 @@ enum
 
     // Sartura
     SPELL_CLEAVE                    = 25174,
-    SPELL_ENRAGE                    = 26527,
+    SPELL_ENRAGE                    = 8269,
     SPELL_ENRAGEHARD                = 27680,
 
     TAUNT_IMMUNE                    = 26602,
@@ -50,7 +50,7 @@ enum
 
     // Royal Guard
     SPELL_KNOCKBACK                 = 19813,
-    SPELL_GUARD_WHIRLWIND            = 26038,
+    SPELL_GUARD_WHIRLWIND           = 26038,
 
 };
 
