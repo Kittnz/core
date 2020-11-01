@@ -28,10 +28,6 @@ EndScriptData */
 
 enum
 {
-    SAY_SURPREME1               =    -1509018,
-    SAY_SURPREME2               =    -1509019,
-    SAY_SURPREME3               =    -1509020,
-
     SAY_AGGRO                   =    -1509025,
 
     SAY_SLAY                    =    -1509026,
@@ -89,7 +85,6 @@ struct boss_ossirianAI : public ScriptedAI
     std::vector<float> TmpThreatVal;
     std::vector<uint64> TornadoGUIDs;
 
-    std::list<uint32> pylonIndexHistory;
     bool m_bIsEnraged;
     bool m_bAggro;
 
@@ -162,6 +157,20 @@ struct boss_ossirianAI : public ScriptedAI
         }
     }
 
+    void MoveInLineOfSight(Unit* pWho) override
+    {
+        if (pWho->GetTypeId() == TYPEID_PLAYER
+            && !m_creature->isInCombat()
+            && m_creature->IsWithinDistInMap(pWho, 45.0f)
+            && !pWho->HasAuraType(SPELL_AURA_FEIGN_DEATH)
+            && !pWho->HasAuraType(SPELL_AURA_MOD_UNATTACKABLE))
+        {
+            AttackStart(pWho);
+        }
+
+        ScriptedAI::MoveInLineOfSight(pWho);
+    }
+
     void Aggro(Unit* pWho)
     {
         DoScriptText(SAY_AGGRO, m_creature);
@@ -229,7 +238,7 @@ struct boss_ossirianAI : public ScriptedAI
         if (m_uiCurseOfTongues_Timer < uiDiff)
         {
             if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_CURSE_OF_TONGUES) == CAST_OK)
-                m_uiCurseOfTongues_Timer = 10000 + rand() % 10000;
+                m_uiCurseOfTongues_Timer = urand(20000, 30000);
         }
         else
             m_uiCurseOfTongues_Timer -= uiDiff;
@@ -237,7 +246,7 @@ struct boss_ossirianAI : public ScriptedAI
         if (m_uiSpeed_Timer >= uiDiff)
         {
             m_uiSpeed_Timer -= uiDiff;
-            m_creature->SetSpeedRate(MOVE_RUN, (2.0f - m_uiSpeed_Timer*1.0f/10000), true);
+            m_creature->SetSpeedRate(MOVE_RUN, (2.0f - m_uiSpeed_Timer * 1.0f / 10000), true);
         }
 
         if (!m_bIsEnraged && m_uiStrengthOfOssirian_Timer < uiDiff)
@@ -253,7 +262,7 @@ struct boss_ossirianAI : public ScriptedAI
         if (m_uiWarStomp_Timer < uiDiff)
         {
             if (DoCastSpellIfCan(m_creature, SPELL_WAR_STOMP) == CAST_OK)
-                m_uiWarStomp_Timer = 25000 + (rand() % 10000);
+                m_uiWarStomp_Timer = 30000;
         }
         else
             m_uiWarStomp_Timer -= uiDiff;
@@ -261,7 +270,7 @@ struct boss_ossirianAI : public ScriptedAI
         if (m_uiEnvelopingWinds_Timer < uiDiff)
         {
             if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_ENVELOPING_WINDS) == CAST_OK)
-                m_uiEnvelopingWinds_Timer = 15000;
+                m_uiEnvelopingWinds_Timer = 20000;
         }
         else
             m_uiEnvelopingWinds_Timer -= uiDiff;
@@ -293,57 +302,6 @@ CreatureAI* GetAI_boss_ossirian(Creature* pCreature)
 {
     return new boss_ossirianAI(pCreature);
 }
-
-struct generic_random_moveAI : public ScriptedAI
-{
-    generic_random_moveAI(Creature* pCreature) : ScriptedAI(pCreature)
-    {
-        Reset();
-    }
-
-    uint32 m_uiTimer;
-
-    void Reset()
-    {
-        m_uiTimer = 5000;
-        SetCombatMovement(false);
-    }
-
-    void UpdateAI(const uint32 uiDiff)
-    {
-        if (m_uiTimer < uiDiff)
-        {
-            if (!urand(0, 2))
-            {
-                std::vector<Player*> PlayerList;
-                Map::PlayerList const &liste = m_creature->GetMap()->GetPlayers();
-                for (Map::PlayerList::const_iterator i = liste.begin(); i != liste.end(); ++i)
-                {
-                    if (i->getSource()->GetDistance2d(m_creature) < MAX_VISIBILITY_DISTANCE)
-                        PlayerList.push_back(i->getSource());
-                }
-                if (PlayerList.size())
-                {
-                    Player *tmp = PlayerList[urand(0, PlayerList.size() - 1)];
-                    m_creature->MonsterMove(tmp->GetPositionX(), tmp->GetPositionY(), tmp->GetPositionZ());
-                    m_uiTimer = (urand(5000, 20000));
-                }
-            }
-            else if (urand(0, 3))
-            {
-                float rx;
-                float ry;
-                float rz;
-                m_creature->GetRandomPoint(m_creature->GetPositionX(), m_creature->GetPositionY(), m_creature->GetPositionZ(), 50.0f, rx, ry, rz);
-                m_creature->MonsterMove(rx, ry, rz);
-                m_uiTimer = (urand(3000, 10000));
-            }
-            m_uiTimer = 2000;
-        }
-        else
-            m_uiTimer -= uiDiff;
-    }
-};
 
 struct ossirian_crystalAI : public GameObjectAI
 {
@@ -400,11 +358,6 @@ GameObjectAI* GetAI_ossirian_crystal(GameObject* pGo)
 }
 
 
-CreatureAI* GetAI_generic_random_move(Creature* pCreature)
-{
-    return new generic_random_moveAI(pCreature);
-}
-
 void AddSC_boss_ossirian()
 {
     Script *newscript;
@@ -412,12 +365,7 @@ void AddSC_boss_ossirian()
     newscript->Name = "boss_ossirian";
     newscript->GetAI = &GetAI_boss_ossirian;
     newscript->RegisterSelf();
-    /*
-    newscript = new Script;
-    newscript->Name = "generic_random_move";
-    newscript->GetAI = &GetAI_generic_random_move;
-    newscript->RegisterSelf();
-    */
+
     newscript = new Script;
     newscript->Name = "ossirian_crystal";
     newscript->GOGetAI = &GetAI_ossirian_crystal;
