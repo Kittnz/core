@@ -153,7 +153,7 @@ struct boss_huhuranAI : public ScriptedAI
             if (m_uiPoisonBoltTimer < uiDiff)
             {
                 if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_POISONBOLT) == CAST_OK)
-                    m_uiSpitTimer = 3000;
+                    m_uiPoisonBoltTimer = 3000;
             } else
                 m_uiPoisonBoltTimer -= uiDiff;
         }
