@@ -815,8 +815,20 @@ bool Player::StoreNewItemInBestSlots(uint32 titem_id, uint32 titem_amount)
         if (msg != EQUIP_ERR_OK)
             break;
 
-        EquipNewItem(eDest, titem_id, true);
-        AutoUnequipOffhandIfNeed();
+        if (Item* pItem = EquipNewItem(eDest, titem_id, true))
+        {
+            if (uint32 randomPropertyId = Item::GenerateItemRandomPropertyId(titem_id))
+                pItem->SetItemRandomProperties(randomPropertyId);
+
+            AutoUnequipOffhandIfNeed();
+
+            if ((titem_amount > 1) && (titem_amount <= pItem->GetProto()->GetMaxStackSize()))
+            {
+                pItem->SetCount(titem_amount);
+                titem_amount = 0;
+                break;
+            }
+        }
         --titem_amount;
     }
 
