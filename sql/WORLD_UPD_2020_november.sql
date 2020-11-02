@@ -992,3 +992,6 @@ update creature_template set speed_walk = 1, speed_run = 1.14286 where entry = 1
 
 update broadcast_text set maletext = 'My mission is complete. I may have some spare supplies if you need any.' where id = 11821;
 update creature_template set flags_extra=flags_extra|16777216 where entry = 15471;
+
+-- rogues should have 100 thrown items at start
+UPDATE `playercreateinfo_item` SET `amount` = 100 WHERE `class` = 4 AND `itemid` IN (2947, 3111);
