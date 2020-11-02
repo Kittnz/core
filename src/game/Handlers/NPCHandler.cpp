@@ -375,7 +375,7 @@ void WorldSession::HandleGossipHelloOpcode(WorldPacket & recv_data)
 
     GetPlayer()->RemoveAurasWithInterruptFlags(AURA_INTERRUPT_FLAG_TALK); // Removes stealth, feign death ...
 
-    if (!pCreature->IsStopped())
+    if (!pCreature->IsStopped() && !(pCreature->GetCreatureInfo()->flags_extra & CREATURE_FLAG_EXTRA_NO_MOVEMENT_PAUSE))
         pCreature->StopMoving();
 
     if (pCreature->isSpiritGuide())
