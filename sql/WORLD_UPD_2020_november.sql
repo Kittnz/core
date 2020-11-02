@@ -991,3 +991,4 @@ UPDATE `quest_template` SET `CompleteScript`=1271 WHERE `entry`=1271;
 update creature_template set speed_walk = 1, speed_run = 1.14286 where entry = 11583;
 
 update broadcast_text set maletext = 'My mission is complete. I may have some spare supplies if you need any.' where id = 11821;
+update creature_template set flags_extra=flags_extra|16777216 where entry = 15471;

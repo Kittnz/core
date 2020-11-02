@@ -409,7 +409,7 @@ void instance_ruins_of_ahnqiraj::SetData(uint32 uiType, uint32 uiData)
         case TYPE_KURINNAXX:
             /** Spawn Andorov 1 minute after Kurinaxx death */
             if (uiData == DONE)
-                SetAndorovSquadRespawnTime(AQ_RESPAWN_1_MINUTE);
+                SetAndorovSquadRespawnTime(1);//AQ_RESPAWN_1_MINUTE);
 
             m_auiEncounter[TYPE_KURINNAXX] = uiData;
             break;
@@ -420,8 +420,8 @@ void instance_ruins_of_ahnqiraj::SetData(uint32 uiType, uint32 uiData)
                 SetAndorovSquadFaction(1254);
                 if (Creature* pAndorov = instance->GetCreature(m_uiAndorovGUID))
                 {
-                    pAndorov->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
-                    pAndorov->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_VENDOR);
+                    //pAndorov->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
+                    //pAndorov->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_VENDOR);
                 }
             }
             m_auiEncounter[TYPE_GENERAL_ANDOROV] = uiData;
