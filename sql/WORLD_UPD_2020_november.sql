@@ -1040,3 +1040,8 @@ UPDATE `spell_template` SET `customFlags` = `customFlags` | 0x400 WHERE `entry`=
 UPDATE `spell_template` SET `customFlags` = `customFlags` | 0x400 WHERE `entry`=22788;
 -- Don't remove Root Self aura on evade.
 UPDATE `spell_template` SET `customFlags` = `customFlags` | 0x400 WHERE `entry`=23973;
+
+-- Fix completion text for quest 4297 (Food for Baby) in Hinterlands: add gender check for father/mother
+UPDATE `quest_template` SET `OfferRewardText`="These'll do nicely, and if I'm not mistaken, your little egg's just about ready to hatch. How does it feel? You know, you about to be a $gfather:mother;? Haha, didn't think ya'd have to deal with such responsibility, now did ya?" WHERE `entry`=4297;
+-- Fix completion text for quest 4298 (Becoming a Parent) in Hinterlands: add gender check for dadda/momma
+UPDATE `quest_template` SET `OfferRewardText`="Here, take the egg... better you have it so it bonds to you and looks to you to be its $gdadda:momma;.$B$BCongrats, $N. You're a parent... kinda." WHERE `entry`=4298;
