@@ -990,15 +990,4 @@ UPDATE `quest_template` SET `CompleteScript`=1271 WHERE `entry`=1271;
 
 update creature_template set speed_walk = 1, speed_run = 1.14286 where entry = 11583;
 
-SET @gossip_menu_id = 11025;
-SET @magic_number = 11025;
-replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0');
-replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
-update creature_template set gossip_menu_id = @gossip_menu_id where entry = 15471;
-
-SET @gossip_menu_id = 11821;
-SET @magic_number = 11821;
-replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0');
-replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
-
 update broadcast_text set maletext = 'My mission is complete. I may have some spare supplies if you need any.' where id = 11821;
