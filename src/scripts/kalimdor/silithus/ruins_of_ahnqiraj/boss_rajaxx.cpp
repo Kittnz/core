@@ -26,6 +26,7 @@ EndScriptData */
 #include "ruins_of_ahnqiraj.h"
 
 #define GOSSIP_START  "Let's find out."
+#define GOSSIP_VENDOR "Let me browse your goods."
 
 enum
 {
@@ -258,7 +259,7 @@ struct boss_rajaxxAI : public ScriptedAI
     void DamageTaken(Unit* pDoneBy, uint32 &uiDamage)
     {
         // Frenzy
-        if (!m_bHasEnraged && ((m_creature->GetHealth() * 100) / m_creature->GetMaxHealth()) < 30)
+        if (!m_bHasEnraged && m_creature->GetHealthPercent() <= 30)
         {
             if (DoCastSpellIfCan(m_creature, SPELL_FRENZY) == CAST_OK)
             {
@@ -305,10 +306,9 @@ struct boss_rajaxxAI : public ScriptedAI
                         continue;
 
                     uint32 current_reputation_rank1 = pGroupGuy->GetReputationMgr().GetRank(factionEntry);
-                    if (factionEntry && current_reputation_rank1 <= 7) {
+                    if (current_reputation_rank1 <= 7) {
                         for(int i = 0; i < alive; i++)
                             pGroupGuy->GetReputationMgr().ModifyReputation(factionEntry, 90);
-
                     }
                 }
             }
@@ -552,8 +552,20 @@ struct npc_andorovAI : public ScriptedAI
 
 bool GossipHello_npc_andorov(Player* pPlayer, Creature* pCreature)
 {
-    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_START , GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-    pPlayer->SEND_GOSSIP_MENU(14442, pCreature->GetGUID());
+    InstanceData *instanceData = pCreature->GetInstanceData();
+    if (!instanceData)
+        return false;
+
+    if (instanceData->GetData(TYPE_RAJAXX) == DONE)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, GOSSIP_VENDOR, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_TRADE);
+        pPlayer->SEND_GOSSIP_MENU(11821, pCreature->GetGUID());
+    }
+    else if (instanceData->GetData(TYPE_GENERAL_ANDOROV) == NOT_STARTED)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_START, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->SEND_GOSSIP_MENU(11025, pCreature->GetGUID());
+    }
 
     return true;
 }

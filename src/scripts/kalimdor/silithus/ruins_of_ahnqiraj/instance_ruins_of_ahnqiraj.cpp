@@ -407,9 +407,9 @@ void instance_ruins_of_ahnqiraj::SetData(uint32 uiType, uint32 uiData)
                 m_uiGladiatorDeath = 0;
             return;
         case TYPE_KURINNAXX:
-            /** Spawn Andorov 3 minutes after Kurinaxx death */
+            /** Spawn Andorov 1 minute after Kurinaxx death */
             if (uiData == DONE)
-                SetAndorovSquadRespawnTime(AQ_RESPAWN_3_MINUTES);
+                SetAndorovSquadRespawnTime(AQ_RESPAWN_1_MINUTE);
 
             m_auiEncounter[TYPE_KURINNAXX] = uiData;
             break;
@@ -441,13 +441,13 @@ void instance_ruins_of_ahnqiraj::SetData(uint32 uiType, uint32 uiData)
             {
                 if (Creature* pAndorov = instance->GetCreature(m_uiAndorovGUID))
                 {
-                    pAndorov->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
-
                     // World of Warcraft Client Patch 1.10.0 (2006-03-28)
                     // - Lieutenant General Andorov will now offer supplies if kept alive
                     //   through the battle.
                     if (sWorld.GetWowPatch() >= WOW_PATCH_110)
-                        pAndorov->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_VENDOR);
+                        pAndorov->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP | UNIT_NPC_FLAG_VENDOR);
+                    else
+                        pAndorov->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
 
                     pAndorov->SetRespawnTime(AQ_RESPAWN_FOUR_DAYS);
                 }
