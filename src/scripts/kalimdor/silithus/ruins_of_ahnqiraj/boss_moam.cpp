@@ -53,12 +53,9 @@ struct boss_moamAI : public ScriptedAI
     uint32 m_uiTrample_Timer;
     uint32 m_uiSummonManaFiend_Timer;
     uint32 m_uiTurnBackFromStone_Timer;
-    uint32 m_uiWait_Timer;
     uint32 m_uiArmorValue;
     uint32 m_uiDrainMana_Timer;
-    uint8 m_uiDrainCount;
     uint8 m_uiFiendCount;
-    std::vector<Player*> PlayerList;
     ObjectGuid m_OGvictim;          // Memorize last target before turning into stone, then take it back.
     bool m_bIsInCombat;
 
@@ -67,13 +64,11 @@ struct boss_moamAI : public ScriptedAI
         m_uiTrample_Timer = 6000;
         m_uiSummonManaFiend_Timer = 90000;
         m_uiTurnBackFromStone_Timer = 90000;
-        m_uiWait_Timer = 20000;
         m_uiDrainMana_Timer = 5000;
 
-        m_uiDrainCount = 0;
         m_uiFiendCount = 0;
         m_bIsInCombat = false;
-        m_uiArmorValue = m_creature->GetArmor();
+        m_uiArmorValue = m_creature->GetCreatureInfo()->armor;
 
         m_OGvictim.Clear();
 
@@ -128,6 +123,8 @@ struct boss_moamAI : public ScriptedAI
                 pSummoned->AI()->AttackStart(pTarget);
                 if (pSummoned->GetEntry() == NPC_MANA_FIEND)
                 {
+                    // Create visual animation of the teleportation spell
+                    pSummoned->SendSpellGo(pSummoned, 25681);
                     ++m_uiFiendCount;
                     return;
                 }
@@ -187,16 +184,13 @@ struct boss_moamAI : public ScriptedAI
                 m_creature->SetArmor(18000);
                 for (uint8 i = 0; i < 3; ++i)
                 {
-                    // Summon a Mana fiend which will disapear if Moam is reset
+                    // Summon a Mana fiend which will disappear if Moam is reset
                     m_creature->SummonCreature(NPC_MANA_FIEND,
                                                m_creature->GetPositionX() + 2,
                                                m_creature->GetPositionY(),
                                                m_creature->GetPositionZ(),
                                                m_creature->GetOrientation(),
                                                TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 10000);
-
-                    // Create visual animation of the teleportation spell
-                    m_creature->SendSpellGo(m_creature, 25681);
                 }
 
                 m_uiSummonManaFiend_Timer = 90000;
@@ -205,7 +199,6 @@ struct boss_moamAI : public ScriptedAI
                                       once the end of SPELL_ENERGIZE */
                 m_creature->AttackStop();
                 DoScriptText(EMOTE_DRAIN, m_creature);
-                m_uiWait_Timer = 10000;
             }
         }
         else
