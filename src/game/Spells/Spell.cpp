@@ -548,6 +548,19 @@ void Spell::FillTargetMap()
                                         ++itr;
                                 }
                                 break;
+                            case 25676:                                         // Drain Mana
+                            case 25754:
+                            case 26457:
+                            case 26559:
+                                // Avoid targeting players with no mana
+                                for (UnitList::iterator itr = tmpUnitMap.begin(); itr != tmpUnitMap.end();)
+                                {
+                                    if ((*itr)->getPowerType() != POWER_MANA || (*itr)->GetPowerPercent(POWER_MANA) < 1.0f)
+                                        itr = tmpUnitMap.erase(itr);
+                                    else
+                                        ++itr;
+                                }
+                                break;
                             case 27831:
                                 // Shadow Bolt volley which should only target players with the Shadow Mark debuff
                                 for (UnitList::iterator itr = tmpUnitMap.begin(); itr != tmpUnitMap.end();)
@@ -1957,6 +1970,12 @@ void Spell::SetTargetMap(SpellEffectIndex effIndex, uint32 targetMode, UnitList&
                 //case 28560:                                 // Summon Blizzard (Naxx, Sapphiron)
                     unMaxTargets = 1;
                     break;
+                case 25676:                                 // Drain Mana
+                case 25754:
+                    unMaxTargets = 6;
+                case 26457:                                 // Drain Mana
+                case 26559:
+                    unMaxTargets = 12;
                 case 10258:                                 // Awaken Vault Warder (Uldaman)
                     unMaxTargets = 2;
                     break;
