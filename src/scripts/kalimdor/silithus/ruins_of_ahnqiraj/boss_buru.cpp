@@ -141,7 +141,6 @@ struct boss_buruAI : public ScriptedAI
         if (m_creature->GetHealthPercent() < 20)
             return;
 
-
         m_creature->RemoveAurasDueToSpell(SPELL_GAIN_SPEED);
         m_creature->RemoveAurasDueToSpell(SPELL_FULL_SPEED);
         m_creature->SetSpeedRate(MOVE_RUN, 0.5f, true);
