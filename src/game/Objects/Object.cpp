@@ -2835,12 +2835,18 @@ void WorldObject::MonsterYell(const char* text, uint32 language, Unit const* tar
     SendMessageToSetInRange(&data, sWorld.getConfig(CONFIG_FLOAT_LISTEN_RANGE_YELL), true);
 }
 
-void WorldObject::MonsterTextEmote(const char* text, Unit const* target, bool IsBossEmote) const
+void WorldObject::MonsterTextEmote(const char* text, Unit const* target, bool IsBossEmote, float rangeOverride) const
 {
+    float range = 0.0f;
+    if (rangeOverride > 0.0f)
+        range = rangeOverride;
+    else
+        range = sWorld.getConfig(IsBossEmote ? CONFIG_FLOAT_LISTEN_RANGE_YELL : CONFIG_FLOAT_LISTEN_RANGE_TEXTEMOTE);
+
     WorldPacket data;
     ChatHandler::BuildChatPacket(data, IsBossEmote ? CHAT_MSG_RAID_BOSS_EMOTE : CHAT_MSG_MONSTER_EMOTE, text, LANG_UNIVERSAL, CHAT_TAG_NONE, GetObjectGuid(), GetName(),
         target ? target->GetObjectGuid() : ObjectGuid(), target ? target->GetName() : "");
-    SendMessageToSetInRange(&data, sWorld.getConfig(IsBossEmote ? CONFIG_FLOAT_LISTEN_RANGE_YELL : CONFIG_FLOAT_LISTEN_RANGE_TEXTEMOTE), true);
+    SendMessageToSetInRange(&data, range, true);
 }
 
 void WorldObject::MonsterWhisper(const char* text, Unit const* target, bool IsBossWhisper) const
@@ -2898,9 +2904,13 @@ void WorldObject::MonsterScriptToZone(int32 textId, ChatMsg type, uint32 languag
             say_do(itr->getSource());
 }
 
-void WorldObject::MonsterTextEmote(int32 textId, Unit const* target, bool IsBossEmote) const
+void WorldObject::MonsterTextEmote(int32 textId, Unit const* target, bool IsBossEmote, float rangeOverride) const
 {
-    float range = sWorld.getConfig(IsBossEmote ? CONFIG_FLOAT_LISTEN_RANGE_YELL : CONFIG_FLOAT_LISTEN_RANGE_TEXTEMOTE);
+    float range = 0.0f;
+    if (rangeOverride > 0.0f)
+        range = rangeOverride;
+    else
+        range = sWorld.getConfig(IsBossEmote ? CONFIG_FLOAT_LISTEN_RANGE_YELL : CONFIG_FLOAT_LISTEN_RANGE_TEXTEMOTE);
 
     MaNGOS::MonsterChatBuilder say_build(*this, IsBossEmote ? CHAT_MSG_RAID_BOSS_EMOTE : CHAT_MSG_MONSTER_EMOTE, textId, LANG_UNIVERSAL, target);
     MaNGOS::LocalizedPacketDo<MaNGOS::MonsterChatBuilder> say_do(say_build);

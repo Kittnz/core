@@ -71,11 +71,13 @@ struct boss_buruAI : public ScriptedAI
 
     bool m_bIsPhaseTwo;
     bool m_bTransformationCompleted;
+    bool m_bAwaitingNewTarget;
 
     uint32 m_uiDismember_Timer;
     uint32 m_uiSpeed_Timer;
     uint32 m_uiCreepingPlague_Timer;
     uint32 m_uiTransform_Timer;
+    uint32 m_uiNewTarget_Timer;
     uint32 m_uiRespawnEgg_Timer[6];
 
     uint64 m_eggsGUID[6];
@@ -87,9 +89,11 @@ struct boss_buruAI : public ScriptedAI
         m_creature->SetSpeedRate(MOVE_RUN,  0.5f, true);
         m_bIsPhaseTwo = false;
         m_bTransformationCompleted = false;
+        m_bAwaitingNewTarget = false;
         m_uiDismember_Timer = 1000;
         m_uiSpeed_Timer = 9000;
         m_uiCreepingPlague_Timer = 6000;
+        m_uiNewTarget_Timer = 2500;
 
         for (int i = 0; i < 6; i++)
             m_uiRespawnEgg_Timer[i] = 120000;
@@ -113,6 +117,7 @@ struct boss_buruAI : public ScriptedAI
         m_creature->SetInCombatWithZone();
         DoCast(m_creature, SPELL_THORNS);
 
+        /*
         m_creature->SetArmor(50000);
         m_creature->SetResistance(SPELL_SCHOOL_ARCANE, 5000);
         m_creature->SetResistance(SPELL_SCHOOL_FIRE, 5000);
@@ -120,6 +125,9 @@ struct boss_buruAI : public ScriptedAI
         m_creature->SetResistance(SPELL_SCHOOL_HOLY, 5000);
         m_creature->SetResistance(SPELL_SCHOOL_NATURE, 5000);
         m_creature->SetResistance(SPELL_SCHOOL_SHADOW, 5000);
+         */
+
+        LockTarget(pWho, false);
 
         if (m_pInstance)
             m_pInstance->SetData(TYPE_BURU, IN_PROGRESS);
@@ -160,15 +168,20 @@ struct boss_buruAI : public ScriptedAI
         m_creature->SetSpeedRate(MOVE_RUN, 0.5f, true);
         m_uiSpeed_Timer = 9000;
 
-        if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
-        {
-            DoScriptText(EMOTE_TARGET, m_creature, pTarget);
+        m_bAwaitingNewTarget = true;
+        m_uiNewTarget_Timer = 2500;
+    }
 
-            // Reset aggro
+    void LockTarget(Unit *pWho, bool resetAggro=true)
+    {
+        DoScriptText(EMOTE_TARGET, m_creature, pWho, -1, 300.0);
+
+        // Reset aggro
+        if (resetAggro)
             m_creature->getThreatManager().modifyThreatPercent(m_creature->getVictim(), -100);
-            // Add a really high threat to lock boss to target
-            m_creature->getThreatManager().addThreat(pTarget, THREAT_LOCK);
-        }
+        // Add a really high threat to lock boss to target
+        m_creature->getThreatManager().addThreat(pWho, THREAT_LOCK);
+        m_bAwaitingNewTarget = false;
     }
 
     void UpdateAI(const uint32 uiDiff)
@@ -205,7 +218,7 @@ struct boss_buruAI : public ScriptedAI
             if (m_uiTransform_Timer <= uiDiff)
             {
                 m_bTransformationCompleted = true;
-                m_creature->RemoveAllAuras(); // Delete Thorns ability during Phase 2
+                m_creature->RemoveAurasDueToSpell(SPELL_THORNS); // Delete Thorns ability during Phase 2
                 m_creature->CastSpell(m_creature, SPELL_BURU_TRANSFORM, true);
                 m_uiTransform_Timer = 0;
                 m_creature->SetInCombatWithZone(); // Keep boss in combat (just in case)
@@ -217,6 +230,7 @@ struct boss_buruAI : public ScriptedAI
                     if (egg != nullptr && egg->isAlive())
                     {
                         egg->DoKillUnit(egg);
+                        egg->AddObjectToRemoveList();
                     }
                 }
             }
@@ -226,6 +240,19 @@ struct boss_buruAI : public ScriptedAI
         }
         // Why?
         m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
+
+        if (m_bAwaitingNewTarget)
+        {
+            if (m_uiNewTarget_Timer <= uiDiff)
+            {
+                if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
+                {
+                    LockTarget(pTarget);
+                }
+            }
+            else
+                m_uiNewTarget_Timer -= uiDiff;
+        }
 
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
@@ -243,6 +270,7 @@ struct boss_buruAI : public ScriptedAI
                 m_uiTransform_Timer = 2000;
 
                 // Set armor and resistances back to normal
+                /*
                 m_creature->SetArmor(m_creature->GetCreatureInfo()->armor);
                 m_creature->SetResistance(SPELL_SCHOOL_ARCANE, m_creature->GetCreatureInfo()->arcane_res);
                 m_creature->SetResistance(SPELL_SCHOOL_FIRE, m_creature->GetCreatureInfo()->fire_res);
@@ -250,6 +278,7 @@ struct boss_buruAI : public ScriptedAI
                 m_creature->SetResistance(SPELL_SCHOOL_HOLY, m_creature->GetCreatureInfo()->holy_res);
                 m_creature->SetResistance(SPELL_SCHOOL_NATURE, m_creature->GetCreatureInfo()->nature_res);
                 m_creature->SetResistance(SPELL_SCHOOL_SHADOW, m_creature->GetCreatureInfo()->shadow_res);
+                 */
 
                 m_creature->DeleteThreatList();
                 if (m_creature->CanHaveThreatList())
