@@ -282,6 +282,7 @@ struct boss_buruAI : public ScriptedAI
                 m_bIsPhaseTwo = true;
 
                 Transform();
+                return;
             }
             else
             {
