@@ -53,9 +53,7 @@ struct boss_moamAI : public ScriptedAI
     uint32 m_uiTrample_Timer;
     uint32 m_uiSummonManaFiend_Timer;
     uint32 m_uiTurnBackFromStone_Timer;
-    uint32 m_uiArmorValue;
     uint32 m_uiDrainMana_Timer;
-    uint8 m_uiFiendCount;
     ObjectGuid m_OGvictim;          // Memorize last target before turning into stone, then take it back.
     bool m_bIsInCombat;
 
@@ -66,9 +64,7 @@ struct boss_moamAI : public ScriptedAI
         m_uiTurnBackFromStone_Timer = 90000;
         m_uiDrainMana_Timer = 5000;
 
-        m_uiFiendCount = 0;
         m_bIsInCombat = false;
-        m_uiArmorValue = m_creature->GetCreatureInfo()->armor;
 
         m_OGvictim.Clear();
 
@@ -124,7 +120,6 @@ struct boss_moamAI : public ScriptedAI
                 {
                     // Create visual animation of the teleportation spell
                     pSummoned->SendSpellGo(pSummoned, 25681);
-                    ++m_uiFiendCount;
                     return;
                 }
             }
@@ -161,7 +156,6 @@ struct boss_moamAI : public ScriptedAI
                 m_creature->RemoveAurasDueToSpell(SPELL_ENERGIZE);
                 DoCast(m_creature->getVictim(), SPELL_ARCANEERUPTION, true);
                 DoScriptText(EMOTE_MANA_FULL, m_creature);
-                m_creature->SetArmor(m_uiArmorValue);
             }
         }
 
@@ -180,7 +174,6 @@ struct boss_moamAI : public ScriptedAI
         {
             if (DoCastSpellIfCan(m_creature, SPELL_ENERGIZE) == CAST_OK)
             {
-                m_creature->SetArmor(18000);
                 for (uint8 i = 0; i < 3; ++i)
                 {
                     // Summon a Mana fiend which will disappear if Moam is reset
