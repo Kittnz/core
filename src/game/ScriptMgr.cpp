@@ -2362,7 +2362,7 @@ void ScriptMgr::CollectPossibleEventIds(std::set<uint32>& eventIds)
     }
 }
 
-void DoScriptText(int32 iTextEntry, WorldObject* pSource, Unit* pTarget, int32 chatTypeOverride)
+void DoScriptText(int32 iTextEntry, WorldObject* pSource, Unit* pTarget, int32 chatTypeOverride, float rangeOverride)
 {
     if (!pSource)
     {
@@ -2445,10 +2445,10 @@ void DoScriptText(int32 iTextEntry, WorldObject* pSource, Unit* pTarget, int32 c
             pSource->MonsterYell(iTextEntry, Language, pTarget);
             break;
         case CHAT_TYPE_TEXT_EMOTE:
-            pSource->MonsterTextEmote(iTextEntry, pTarget);
+            pSource->MonsterTextEmote(iTextEntry, pTarget, false, rangeOverride);
             break;
         case CHAT_TYPE_BOSS_EMOTE:
-            pSource->MonsterTextEmote(iTextEntry, pTarget, true);
+            pSource->MonsterTextEmote(iTextEntry, pTarget, true, rangeOverride);
             break;
         case CHAT_TYPE_WHISPER:
             if (pTarget && pTarget->GetTypeId() == TYPEID_PLAYER)
