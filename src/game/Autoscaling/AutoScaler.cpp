@@ -168,11 +168,11 @@ void AutoScaler::ScaleCreature(Creature* creature, uint32 playerCount, uint32 ma
     {
         return value / 100 * hpPercentage;
     };
-    float powerPercentage = (static_cast<float>(playerCount) / static_cast<float>(maxCount) * 100.f) + (maxCount - playerCount);
+    /*float powerPercentage = (static_cast<float>(playerCount) / static_cast<float>(maxCount) * 100.f) + (maxCount - playerCount);
     auto ScalePower = [powerPercentage](float value)
     {
         return value / 100 * powerPercentage;
-    };
+    };*/
     float dmgPercentage = (static_cast<float>(playerCount) / static_cast<float>(maxCount) * 100.f) + (maxCount - playerCount);
     auto ScaleDamage = [dmgPercentage](float value)
     {
@@ -180,7 +180,7 @@ void AutoScaler::ScaleCreature(Creature* creature, uint32 playerCount, uint32 ma
     };
 
     creature->SetMaxHealth(static_cast<uint32>(ScaleHp(creature->GetCreateHealth()) * specificHPFactor));
-    creature->SetMaxPower(POWER_MANA, static_cast<uint32>(ScalePower(creature->GetCreateMana()) * specificPowerFactor));
+    //creature->SetMaxPower(POWER_MANA, static_cast<uint32>(ScalePower(creature->GetCreateMana()) * specificPowerFactor));
 
     if (creature->GetEntry() == 13020) // Valestrasz the Corrupt, set his health to 30% to avoid visual bug before the first pull
         creature->SetHealthPercent(30.0);
