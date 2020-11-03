@@ -113,7 +113,6 @@ struct boss_moamAI : public ScriptedAI
             m_pInstance->SetData(TYPE_MOAM, DONE);
     }
 
-    /** This function seems to be unused, kept as it is in case of...*/
     void JustSummoned(Creature* pSummoned)
     {
         if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_TOPAGGRO, 0))
