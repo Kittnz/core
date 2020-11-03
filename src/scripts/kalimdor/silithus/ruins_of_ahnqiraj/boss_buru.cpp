@@ -34,13 +34,13 @@ enum
     SPELL_FULL_SPEED            =   1557,
     SPELL_THORNS                =   25640,
     SPELL_BURU_TRANSFORM        =   24721,
-    SPELL_SELF_FREEZE           =   29826,
-
-    NPC_BURU_EGG                =   15514,
+    SPELL_CREATURE_SPECIAL      =   7155,
+    SPELL_BURU_EGG_TRIGGER      =   26646,
     SPELL_SUMMON_HATCHLING      =   1881,
     SPELL_EXPLODE               =   19593,
-    NPC_BURU_EGG_TRIGGER        =   15964,
 
+    NPC_BURU_EGG                =   15514,
+    NPC_BURU_EGG_TRIGGER        =   15964,
     NPC_HIVEZARA_HATCHLING      =   15521,
 
     MODEL_BURU_NORMAL           =   15654,
@@ -90,10 +90,11 @@ struct boss_buruAI : public ScriptedAI
         m_bIsPhaseTwo = false;
         m_bTransformationCompleted = false;
         m_bAwaitingNewTarget = false;
+        m_uiTransform_Timer = 6000;
         m_uiDismember_Timer = 1000;
         m_uiSpeed_Timer = 9000;
         m_uiCreepingPlague_Timer = 6000;
-        m_uiNewTarget_Timer = 2500;
+        m_uiNewTarget_Timer = 3000;
 
         for (int i = 0; i < 6; i++)
             m_uiRespawnEgg_Timer[i] = 120000;
@@ -117,16 +118,6 @@ struct boss_buruAI : public ScriptedAI
         m_creature->SetInCombatWithZone();
         DoCast(m_creature, SPELL_THORNS);
 
-        /*
-        m_creature->SetArmor(50000);
-        m_creature->SetResistance(SPELL_SCHOOL_ARCANE, 5000);
-        m_creature->SetResistance(SPELL_SCHOOL_FIRE, 5000);
-        m_creature->SetResistance(SPELL_SCHOOL_FROST, 5000);
-        m_creature->SetResistance(SPELL_SCHOOL_HOLY, 5000);
-        m_creature->SetResistance(SPELL_SCHOOL_NATURE, 5000);
-        m_creature->SetResistance(SPELL_SCHOOL_SHADOW, 5000);
-         */
-
         LockTarget(pWho, false);
 
         if (m_pInstance)
@@ -144,32 +135,43 @@ struct boss_buruAI : public ScriptedAI
             m_pInstance->SetData(TYPE_BURU, DONE);
     }
 
-    void ApplyFreeze()
-    {
-        if (SpellAuraHolder* aura = m_creature->AddAura(SPELL_SELF_FREEZE))
-        {
-            aura->SetAuraMaxDuration(3000);
-            aura->SetAuraDuration(3000);
-            aura->SetPassive(false);
-            aura->SetPermanent(false);
-        }
-    }
-
     void OnEggExploded()
     {
         // Only handle this if boss is not in Phase 2
         if (m_creature->GetHealthPercent() < 20)
             return;
 
-        ApplyFreeze();
 
         m_creature->RemoveAurasDueToSpell(SPELL_GAIN_SPEED);
         m_creature->RemoveAurasDueToSpell(SPELL_FULL_SPEED);
         m_creature->SetSpeedRate(MOVE_RUN, 0.5f, true);
+
+        DisableMovement();
+        m_creature->CastSpell(m_creature, SPELL_CREATURE_SPECIAL, false);
+
         m_uiSpeed_Timer = 9000;
 
         m_bAwaitingNewTarget = true;
-        m_uiNewTarget_Timer = 2500;
+        m_uiNewTarget_Timer = 6000;
+    }
+
+    void EnableMovement()
+    {
+        m_creature->RemoveFlag(UNIT_FIELD_FLAGS,UNIT_FLAG_IMMUNE_TO_NPC);
+        SetCombatMovement(true);
+        m_creature->clearUnitState(UNIT_STAT_ROOT);
+        m_creature->SetMovement(MOVE_UNROOT);
+    }
+
+    void DisableMovement()
+    {
+        m_creature->SetFlag(UNIT_FIELD_FLAGS,UNIT_FLAG_IMMUNE_TO_NPC);
+        SetCombatMovement(false);
+        m_creature->RemoveAllAttackers();
+        m_creature->AttackStop();
+        m_creature->StopMoving();
+        m_creature->addUnitState(UNIT_STAT_ROOT);
+        m_creature->SetMovement(MOVE_ROOT);
     }
 
     void LockTarget(Unit *pWho, bool resetAggro=true)
@@ -184,9 +186,16 @@ struct boss_buruAI : public ScriptedAI
         m_bAwaitingNewTarget = false;
     }
 
+    void Transform()
+    {
+        m_creature->RemoveAurasDueToSpell(SPELL_THORNS); // Delete Thorns ability during Phase 2
+
+        DisableMovement();
+        m_creature->CastSpell(m_creature, SPELL_BURU_TRANSFORM, false);
+    }
+
     void UpdateAI(const uint32 uiDiff)
     {
-
         Creature* egg;
         for (int i = 0; i < 6 && !m_bIsPhaseTwo; i++)
         {
@@ -212,16 +221,21 @@ struct boss_buruAI : public ScriptedAI
         // Phase transition
         if (m_bIsPhaseTwo && !m_bTransformationCompleted)
         {
-            if (!m_uiTransform_Timer)
-                return;
-
             if (m_uiTransform_Timer <= uiDiff)
             {
+                EnableMovement();
+
                 m_bTransformationCompleted = true;
-                m_creature->RemoveAurasDueToSpell(SPELL_THORNS); // Delete Thorns ability during Phase 2
-                m_creature->CastSpell(m_creature, SPELL_BURU_TRANSFORM, true);
-                m_uiTransform_Timer = 0;
-                m_creature->SetInCombatWithZone(); // Keep boss in combat (just in case)
+
+                m_creature->DeleteThreatList();
+                if (m_creature->CanHaveThreatList())
+                    m_creature->SetInCombatWithZone();
+                m_creature->RemoveAurasDueToSpell(SPELL_GAIN_SPEED);
+                m_creature->RemoveAurasDueToSpell(SPELL_FULL_SPEED);
+                m_creature->SetSpeedRate(MOVE_RUN, 1.0f, true);
+
+                if (m_creature->getVictim())
+                    m_creature->SetFacingToObject(m_creature->getVictim());
 
                 // Kill remaining eggs
                 for (unsigned long guid : m_eggsGUID)
@@ -235,23 +249,27 @@ struct boss_buruAI : public ScriptedAI
                 }
             }
             else
+            {
                 m_uiTransform_Timer -= uiDiff;
-            return;
+                return;
+            }
         }
-        // Why?
-        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
 
-        if (m_bAwaitingNewTarget)
+        if (m_bAwaitingNewTarget && !m_bIsPhaseTwo)
         {
             if (m_uiNewTarget_Timer <= uiDiff)
             {
                 if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
                 {
+                    EnableMovement();
                     LockTarget(pTarget);
                 }
             }
             else
+            {
                 m_uiNewTarget_Timer -= uiDiff;
+                return;
+            }
         }
 
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
@@ -264,31 +282,7 @@ struct boss_buruAI : public ScriptedAI
             {
                 m_bIsPhaseTwo = true;
 
-                ApplyFreeze();
-
-                // Don't instantly change visuals in order to have a good animation.
-                m_uiTransform_Timer = 2000;
-
-                // Set armor and resistances back to normal
-                /*
-                m_creature->SetArmor(m_creature->GetCreatureInfo()->armor);
-                m_creature->SetResistance(SPELL_SCHOOL_ARCANE, m_creature->GetCreatureInfo()->arcane_res);
-                m_creature->SetResistance(SPELL_SCHOOL_FIRE, m_creature->GetCreatureInfo()->fire_res);
-                m_creature->SetResistance(SPELL_SCHOOL_FROST, m_creature->GetCreatureInfo()->frost_res);
-                m_creature->SetResistance(SPELL_SCHOOL_HOLY, m_creature->GetCreatureInfo()->holy_res);
-                m_creature->SetResistance(SPELL_SCHOOL_NATURE, m_creature->GetCreatureInfo()->nature_res);
-                m_creature->SetResistance(SPELL_SCHOOL_SHADOW, m_creature->GetCreatureInfo()->shadow_res);
-                 */
-
-                m_creature->DeleteThreatList();
-                if (m_creature->CanHaveThreatList())
-                    m_creature->SetInCombatWithZone();
-                m_creature->RemoveAurasDueToSpell(SPELL_GAIN_SPEED);
-                m_creature->RemoveAurasDueToSpell(SPELL_FULL_SPEED);
-                m_creature->SetSpeedRate(MOVE_RUN, 1.0f, true);
-
-                if (m_creature->getVictim())
-                    m_creature->SetFacingToObject(m_creature->getVictim());
+                Transform();
             }
             else
             {
@@ -311,7 +305,7 @@ struct boss_buruAI : public ScriptedAI
                     m_uiSpeed_Timer -= uiDiff;
             }
         }
-        else
+        else if (m_bTransformationCompleted)
         {
             // Creeping plague
             if (m_uiCreepingPlague_Timer < uiDiff)
@@ -368,6 +362,8 @@ struct mob_buru_eggAI : public ScriptedAI
         {
             add->SetInCombatWithZone();
         }
+
+        m_creature->CastSpell(m_creature, SPELL_BURU_EGG_TRIGGER, true);
 
         // Inflict damage to Buru (should be handled in SpellEffects...)
         if (Creature* pBuru = m_pInstance->GetCreature(m_pInstance->GetData64(DATA_BURU)))
