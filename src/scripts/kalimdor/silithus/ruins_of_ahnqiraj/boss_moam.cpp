@@ -95,6 +95,20 @@ struct boss_moamAI : public ScriptedAI
             m_pInstance->SetData(TYPE_MOAM, IN_PROGRESS);
     }
 
+    void MoveInLineOfSight(Unit* pWho) override
+    {
+        if (pWho->GetTypeId() == TYPEID_PLAYER
+            && !m_creature->isInCombat()
+            && m_creature->IsWithinDistInMap(pWho, 60.0f)
+            && !pWho->HasAuraType(SPELL_AURA_FEIGN_DEATH)
+            && !pWho->HasAuraType(SPELL_AURA_MOD_UNATTACKABLE))
+        {
+            AttackStart(pWho);
+        }
+
+        ScriptedAI::MoveInLineOfSight(pWho);
+    }
+
     void JustDied(Unit* pKiller)
     {
         if (GameObject *pObsidian = m_creature->SummonGameObject(181069, m_creature->GetPositionX(), m_creature->GetPositionY(), m_creature->GetPositionZ(), 0, 0, 0, 0, 0, -1, false))
