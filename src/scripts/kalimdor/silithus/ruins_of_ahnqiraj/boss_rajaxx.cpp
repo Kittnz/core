@@ -82,19 +82,7 @@ enum
 #endif
 
 #define ANDOROV_WAYPOINT_MAX  7
-#define OOC_BETWEEN_WAVE 1000
-
-struct RespawnAndEvadeHelper
-{
-    explicit RespawnAndEvadeHelper(Creature* _pCreature) : pCreature(_pCreature) {}
-    void operator()() const
-    {
-        if (!pCreature->isAlive())
-            pCreature->Respawn();
-        pCreature->AI()->EnterEvadeMode();
-    }
-    Creature* pCreature;
-};
+#define OOC_BETWEEN_WAVE 5000
 
 struct boss_rajaxxAI : public ScriptedAI
 {
@@ -147,8 +135,10 @@ struct boss_rajaxxAI : public ScriptedAI
         DEBUG_EMOTE_YELL(m_creature, "DEBUG : Wave Reset");
         uint64 leaderGUID = GetLeaderGuidFromWaveIndex(waveIndex);
         if (Creature* pLeader = m_pInstance->GetCreature(leaderGUID))
-            if (CreatureGroup* group = pLeader->GetCreatureGroup())
+        {
+            if (CreatureGroup *group = pLeader->GetCreatureGroup())
                 group->RespawnAll(m_creature);
+        }
     }
 
     void StartWave(uint8 waveIndex)
@@ -165,7 +155,19 @@ struct boss_rajaxxAI : public ScriptedAI
                 if (Creature* pLeader = m_pInstance->GetCreature(leaderGUID))
                 {
                     if (pLeader->isAlive())
+                    {
+                        // Make sure no creature will call for help
+                        pLeader->SetCallForHelpDist(0);
+                        if (CreatureGroup *group = pLeader->GetCreatureGroup())
+                        {
+                            for (auto const &groupMember : group->GetMembers())
+                            {
+                                if (Creature *mob = m_pInstance->GetCreature(groupMember.first))
+                                    mob->SetCallForHelpDist(0);
+                            }
+                        }
                         pLeader->SetInCombatWithZone();
+                    }
                 }
             }
 
@@ -275,10 +277,8 @@ struct boss_rajaxxAI : public ScriptedAI
             return false;
 
         // Count of dead mobs per wave is managed by instance script
-        if (m_pInstance->GetData(m_uiNextWaveIndex - 1 + WAVE_OFFSET) == 0)
-            return true;
+        return m_pInstance->GetData(m_uiNextWaveIndex - 1 + WAVE_OFFSET) == 0;
 
-        return false;
     }
 
     void OnKillReputationReward()
@@ -322,14 +322,13 @@ struct boss_rajaxxAI : public ScriptedAI
         {
             if (IsCurrentWaveDead())
                 m_uiNextWave_Timer += uiDiff;
-            else
-                m_uiNextWave_Timer = 0;
 
             if (m_uiNextWaveIndex < WAVE_MAX)
             {
-                if ((m_uiWave_Timer < uiDiff) || (m_uiNextWave_Timer > OOC_BETWEEN_WAVE))
+                if (m_uiWave_Timer < uiDiff || m_uiNextWave_Timer > OOC_BETWEEN_WAVE)
                 {
                     StartWave(m_uiNextWaveIndex);
+                    m_uiNextWave_Timer = 0;
                     m_uiNextWaveIndex++;
                     m_uiWave_Timer = DELAY_BETWEEN_WAVE;
                 }
