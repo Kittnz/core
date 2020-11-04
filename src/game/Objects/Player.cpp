@@ -6010,7 +6010,7 @@ bool Player::SetPosition(float x, float y, float z, float orientation, bool tele
         z = GetPositionZ();
 
         // group update
-        if (GetGroup() && (old_x != x || old_y != y))
+        if (GetGroup() && (uint16(old_x) != uint16(x) || uint16(old_y) != uint16(y)))
             SetGroupUpdateFlag(GROUP_UPDATE_FLAG_POSITION);
 
         if (GetTrader() && !IsWithinDistInMap(GetTrader(), INTERACTION_DISTANCE))
