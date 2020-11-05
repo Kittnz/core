@@ -729,9 +729,88 @@ bool GossipSelect_ArenaMaster(Player* player, Creature* creature, uint32 sender,
     {
     case 1:
     case 2:
-        player->AddToArenaQueue(action == 2 ? true : false);
+        player->AddToArenaQueue(action == 2);
         break;
     }
+
+    player->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
+#define MINING_PICK 2901
+#define ORNATE_SPLYGLASS 5507
+#define LIGHT_LEATHER 2318
+
+#define FACTION_RATCHET 470
+
+#define MINING_ENCHANT_5 906
+#define SPELL_VISUAL 14867
+
+#define DEFAULT_TEXT 80000
+#define UNAVAILABLE_TEXT 80001
+#define ALREADY_INSTALLED_TEXT 80002
+
+bool GossipHello_MiningEnchanter(Player* player, Creature* creature)
+{
+    if (player->GetReputationRank(FACTION_RATCHET) >= REP_FRIENDLY)
+    {
+        Item* item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_MAINHAND);
+        if (item && item->GetEnchantmentId(PERM_ENCHANTMENT_SLOT) == MINING_ENCHANT_5)
+        {
+            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I don't think I want it anymore...", GOSSIP_SENDER_MAIN,
+                                    GOSSIP_ACTION_INFO_DEF + 1);
+            player->SEND_GOSSIP_MENU(ALREADY_INSTALLED_TEXT, creature->GetGUID());
+        }
+        else
+        {
+            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Please, install the telescopic lens!", GOSSIP_SENDER_MAIN,
+                                    GOSSIP_ACTION_INFO_DEF + 2);
+            player->SEND_GOSSIP_MENU(DEFAULT_TEXT, creature->GetGUID());
+        }
+
+        return true;
+    }
+
+    player->SEND_GOSSIP_MENU(UNAVAILABLE_TEXT, creature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_MiningEnchanter(Player* player, Creature* creature, uint32 sender, uint32 action)
+{
+    bool error = false;
+    const char *text;
+
+    if (action == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        text = "Sorry, no refunds.";
+        error = true;
+    }
+
+    Item* item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_MAINHAND);
+    if (!error && (!item || item->GetEntry() != MINING_PICK))
+    {
+        text = "I can't inspect your pick if you don't equip it!";
+        error = true;
+    }
+
+    if (!error && (!player->HasItemCount(ORNATE_SPLYGLASS) || !player->HasItemCount(LIGHT_LEATHER, 10)))
+    {
+        text = "Either bring me the materials or quit wasting my time!";
+        error = true;
+    }
+
+    if (!error)
+    {
+        player->RemoveItemCurrency(ORNATE_SPLYGLASS, 1);
+        player->RemoveItemCurrency(LIGHT_LEATHER, 10);
+
+        creature->SendSpellGo(creature, SPELL_VISUAL);
+
+        item->ClearEnchantment(PERM_ENCHANTMENT_SLOT);
+        item->SetEnchantment(PERM_ENCHANTMENT_SLOT, MINING_ENCHANT_5, 0, 0);
+    }
+    else
+        creature->MonsterSay(text);
 
     player->CLOSE_GOSSIP_MENU();
     return true;
@@ -870,6 +949,12 @@ void AddSC_random()
     newscript->Name = "birthday_dragon";
     newscript->pGossipHello = &GossipHello_birthday_dragon;
     newscript->pGossipSelect = &GossipSelect_birthday_dragon;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "mining_enchanter";
+    newscript->pGossipHello = &GossipHello_MiningEnchanter;
+    newscript->pGossipSelect = &GossipSelect_MiningEnchanter;
     newscript->RegisterSelf();
 
 }
