@@ -1045,3 +1045,38 @@ UPDATE `spell_template` SET `customFlags` = `customFlags` | 0x400 WHERE `entry`=
 UPDATE `quest_template` SET `OfferRewardText`="These'll do nicely, and if I'm not mistaken, your little egg's just about ready to hatch. How does it feel? You know, you about to be a $gfather:mother;? Haha, didn't think ya'd have to deal with such responsibility, now did ya?" WHERE `entry`=4297;
 -- Fix completion text for quest 4298 (Becoming a Parent) in Hinterlands: add gender check for dadda/momma
 UPDATE `quest_template` SET `OfferRewardText`="Here, take the egg... better you have it so it bonds to you and looks to you to be its $gdadda:momma;.$B$BCongrats, $N. You're a parent... kinda." WHERE `entry`=4298;
+
+SET @magic_number = 80000;
+replace into broadcast_text (ID, MaleText) values (@magic_number, 'Who would have thought combining the usefulness of a telescope with a mining pick would be such a hit! I\'m sure a fine $r like you can see the appeal!$B$BIf you want one yourself, bring me an Ornate Spyglass and some Light Leather, let\'s say around... 10 pieces.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+
+SET @magic_number = 80001;
+replace into broadcast_text (ID, MaleText) values (@magic_number, 'Do you really think I\'m going to show my mining secrets to just anyone who wanders into town? Ha! Come back to me when people around here considers you a bit more friendlier.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+
+SET @magic_number = 80002;
+replace into broadcast_text (ID, MaleText) values (@magic_number, 'Oh! I see you are using one of my precious creations. Is it working fine?');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+
+replace into creature_equip_template values (51601, 0, 2901, 1911, 0);
+
+replace into creature_template (
+entry, patch, display_id1, display_id2, display_id3, display_id4, name, subname, gossip_menu_id, level_min, level_max,
+health_min, health_max, mana_min, mana_max, armor, faction, npc_flags, speed_walk, speed_run, scale, detection_range,
+call_for_help_range, leash_range, rank, xp_multiplier, dmg_min, dmg_max, dmg_school, attack_power, dmg_multiplier,
+base_attack_time, ranged_attack_time, unit_class, unit_flags, dynamic_flags, beast_family, trainer_type, trainer_spell,
+trainer_class, trainer_race, ranged_dmg_min, ranged_dmg_max, ranged_attack_power, type, type_flags, loot_id,
+pickpocket_loot_id, skinning_loot_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, spell_id1,
+spell_id2, spell_id3, spell_id4, spell_list_id, pet_spell_list_id, gold_min, gold_max, ai_name, movement_type,
+inhabit_type, civilian, racial_leader, regeneration, equipment_id, trainer_id, vendor_id, mechanic_immune_mask,
+school_immune_mask, flags_extra, script_name)
+values
+('51601', '0', '7112', '0', '0', '0', 'Traaz Ironfinger', 'Mining Hermit', '0', '42', '42',
+'6594', '6594', '0', '0', '1072', '69', '1', '1', '1.14286', '1', '20',
+'5', '0', '1', '1', '204', '312', '0', '241', '1',
+'2000', '0', '1', '0', '0', '1', '0', '0',
+'0', '0', '0', '0', '0', '7', '0', '0',
+'0', '0', '0', '0', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '1412', '2824', '', '0',
+'3', '0', '0', '1', '51601', '0', '0', '0',
+'0', '0', 'mining_enchanter');

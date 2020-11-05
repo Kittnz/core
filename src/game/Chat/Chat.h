@@ -256,6 +256,7 @@ class MANGOS_DLL_SPEC ChatHandler
         bool HandleCharacterDeletedRestoreCommand(char* args);
         bool HandleCharacterEraseCommand(char* args);
         bool HandleCharacterRenameCommand(char* args);
+        bool HandleCharacterReputationCommand(char* args);
         bool HandleCharacterHasItemCommand(char* args);
 
         bool HandleEventListCommand(char* args);

@@ -2838,6 +2838,24 @@ bool ChatHandler::HandleCharacterRenameCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleCharacterReputationCommand(char* args)
+{
+    Player* target;
+    if (!ExtractPlayerTarget(&args, &target))
+        return false;
+
+    LocaleConstant loc = GetSessionDbcLocale();
+
+    FactionStateList const& targetFSL = target->GetReputationMgr().GetStateList();
+    for (const auto& itr : targetFSL)
+    {
+        FactionEntry const* factionEntry = sObjectMgr.GetFactionEntry(itr.second.ID);
+
+        ShowFactionListHelper(factionEntry, loc, &itr.second, target);
+    }
+    return true;
+}
+
 bool ChatHandler::HandleCharacterHasItemCommand(char* args)
 {
     if(!*args)
