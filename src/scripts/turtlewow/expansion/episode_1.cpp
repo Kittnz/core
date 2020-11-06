@@ -285,7 +285,7 @@ bool QuestComplete_npc_garthok(Player* pPlayer, Creature* pQuestGiver, Quest con
                 return;
 
             creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            creature->MonsterSay("Barely any different for me! I hear you orcs like bashin' skills, I like bashin' skulls, we"re gonna get along just fine.");
+            creature->MonsterSay("Barely any different for me! I hear you orcs like bashin' skills, I like bashin' skulls, we're gonna get along just fine.");
         });
 
         DoAfterTime(pPlayer, 21 * IN_MILLISECONDS,
