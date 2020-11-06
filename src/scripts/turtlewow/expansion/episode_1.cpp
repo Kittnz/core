@@ -44,7 +44,7 @@ bool GossipSelect_npc_caledra(Player* pPlayer, Creature* pCreature, uint32 /*uiS
                 return;
 
             creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            creature->MonsterSay("I’m glad that you wish to assist us...I will do my best to recap where we stand..");
+            creature->MonsterSay("Iï¿½m glad that you wish to assist us...I will do my best to recap where we stand..");
         });
 
         DoAfterTime(pPlayer, 10 * IN_MILLISECONDS,
@@ -285,7 +285,7 @@ bool QuestComplete_npc_garthok(Player* pPlayer, Creature* pQuestGiver, Quest con
                 return;
 
             creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            creature->MonsterSay("Barely any different for me! I hear you orcs like bashin' skills, I like bashin' skulls, we’re gonna get along just fine.");
+            creature->MonsterSay("Barely any different for me! I hear you orcs like bashin' skills, I like bashin' skulls, weï¿½re gonna get along just fine.");
         });
 
         DoAfterTime(pPlayer, 21 * IN_MILLISECONDS,
@@ -873,6 +873,11 @@ bool GOHello_go_portal_goldshire(Player* pPlayer, GameObject* pGo)
     return true;
 }
 
+#define WHIZZBOT_MIN_AGGRO_TEXT 80000
+#define WHIZZBOT_MAX_AGGRO_TEXT 80005
+#define WHIZZBOT_MIN_DIE_TEXT   80011
+#define WHIZZBOT_MAX_DIE_TEXT   80016
+
 struct npc_whizzbotAI : public ScriptedAI
 {
     npc_whizzbotAI(Creature *c) : ScriptedAI(c)
@@ -882,7 +887,7 @@ struct npc_whizzbotAI : public ScriptedAI
 
     void Aggro(Unit *who)
     {
-        m_creature->MonsterSay(urand(70000, 70005));
+        m_creature->MonsterSay(irand(WHIZZBOT_MIN_AGGRO_TEXT, WHIZZBOT_MAX_AGGRO_TEXT));
     }
 
     void Reset() {}
@@ -891,7 +896,7 @@ struct npc_whizzbotAI : public ScriptedAI
 
     void JustDied(Unit*)
     {
-        m_creature->MonsterSay(urand(70011, 70016));
+        m_creature->MonsterSay(irand(WHIZZBOT_MIN_DIE_TEXT, WHIZZBOT_MAX_DIE_TEXT));
     }
 
     void UpdateAI(const uint32 diff)
@@ -957,23 +962,23 @@ bool GossipSelect_npc_nert_joining_horde(Player* pPlayer, Creature* pCreature, u
 
     //TODO:
 
-    //    Eitrigg: “Warchief, I present Nert Blastentom and his friend, <name>, a <class> that aided our troops and civilians back in Razor Hill against the menaces that were.
+    //    Eitrigg: ï¿½Warchief, I present Nert Blastentom and his friend, <name>, a <class> that aided our troops and civilians back in Razor Hill against the menaces that were.
 
     //    <Thrall nods as he motions the two of you to move closer.>
 
-    //    <Nert shows little signs of courtesy, this wasn’t a noble’s house, this was the home of warchief and he had to show pride and courage.> “Warchief Thrall, I am Nert and this here is my pal, <name>, we left the Venture Co, some would call us mad, some will call us traitors, we call ourselves survivors.
+    //    <Nert shows little signs of courtesy, this wasnï¿½t a nobleï¿½s house, this was the home of warchief and he had to show pride and courage.> ï¿½Warchief Thrall, I am Nert and this here is my pal, <name>, we left the Venture Co, some would call us mad, some will call us traitors, we call ourselves survivors.
     //    We know the sins the Company did in the past are not easy to forget, but we turned a new page, as you may have hard, <name> tried to aid your people in any way he could and he will not be the first one to do that.
 
     //    <Thrall raises his hand in the air, as a sign to stop.>
 
-    //    “Hold on goblin, indeed your friend aided us, but he was rewarded for his aid was he not? I truthfully think it will be hard to convince Cairne of your intentions, since they are at war with the Venture Co.as we speak, goblins have helped the Horde in the past, Gazlowe of Ratchet is a very good friend of mine, I know your worth, I am more than sure you will prove a good asset to the Horde, you will be able to settle in Orgrimmar for now, sell whatever you want within reason, and prove your worth to the Horde, I shall speak to Cairne, be sure to show them of all the people of the Horde that your intentions are good.”
+    //    ï¿½Hold on goblin, indeed your friend aided us, but he was rewarded for his aid was he not? I truthfully think it will be hard to convince Cairne of your intentions, since they are at war with the Venture Co.as we speak, goblins have helped the Horde in the past, Gazlowe of Ratchet is a very good friend of mine, I know your worth, I am more than sure you will prove a good asset to the Horde, you will be able to settle in Orgrimmar for now, sell whatever you want within reason, and prove your worth to the Horde, I shall speak to Cairne, be sure to show them of all the people of the Horde that your intentions are good.ï¿½
 
-    //    <Nert nods.> “Thank you warchief, we will prove ourselves useful in order to survive and we will make sure to show it to others aswell.”
+    //    <Nert nods.> ï¿½Thank you warchief, we will prove ourselves useful in order to survive and we will make sure to show it to others aswell.ï¿½
 
-    //    Thrall : “That you will, are you the one leading them Nert, or is the one next to you ? ”
+    //    Thrall : ï¿½That you will, are you the one leading them Nert, or is the one next to you ? ï¿½
 
-    //    Nert : “We don’t have a leader, goblins are only tied by a Trade Prince, you are our leader, if needed I will speak for the goblins of the Horde.”
-    //    Thrall : “Very well, I hereby acknowledge these goblins as members of the Horde, from this day forth we fight together side by side as brothers and sisters in arms, may our blades never dull, victory or death!”
+    //    Nert : ï¿½We donï¿½t have a leader, goblins are only tied by a Trade Prince, you are our leader, if needed I will speak for the goblins of the Horde.ï¿½
+    //    Thrall : ï¿½Very well, I hereby acknowledge these goblins as members of the Horde, from this day forth we fight together side by side as brothers and sisters in arms, may our blades never dull, victory or death!ï¿½
 
     //    <Rounds of applause and cheers and whatever.>
 
@@ -1149,7 +1154,7 @@ bool QuestAccept_npc_teslinah(Player* pPlayer, Creature* pQuestGiver, Quest cons
     if (!pPlayer)
         return false;
 
-    if (pQuest->GetQuestId() == 80261) // Teslinah’s Search I
+    if (pQuest->GetQuestId() == 80261) // Teslinahï¿½s Search I
     {
         pQuestGiver->HandleEmote(EMOTE_ONESHOT_CRY);
         pQuestGiver->MonsterSay("Thank you, thank you, thank you! I am so happy! We should go to Stormwind, let\'s find someone important who can help! I believe miss Tanilaeh in the Golden Dawn Institute can take us back!");
@@ -1165,7 +1170,7 @@ bool QuestRewarded_npc_teslinah(Player* pPlayer, Creature* pQuestGiver, Quest co
     if (!pPlayer)
         return false;
 
-    if (pQuest->GetQuestId() == 80261) // Teslinah’s Search I
+    if (pQuest->GetQuestId() == 80261) // Teslinahï¿½s Search I
     {
         pQuestGiver->HandleEmote(EMOTE_ONESHOT_CHEER);
         pQuestGiver->MonsterSay("Mommy is gone but we will find her! I am sure! Until then I am happy and excited to adventure with you! We\'re the bestest friends now! We\'re going to have a lot of fun seeing the world! He-he!");
@@ -1194,7 +1199,7 @@ struct go_teslinah_search : public GameObjectAI
 
             for (Player* pPlayer : players)
             {
-                if (pPlayer->GetQuestStatus(80261) == QUEST_STATUS_INCOMPLETE) // Teslinah’s Search I
+                if (pPlayer->GetQuestStatus(80261) == QUEST_STATUS_INCOMPLETE) // Teslinahï¿½s Search I
                 {
                     Creature* teslinah = pPlayer->GetMiniPet();
 
@@ -1221,7 +1226,7 @@ struct go_teslinah_search : public GameObjectAI
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80272);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSay("Mommy isn't here… Let's keep moving!");
+                        teslinah->MonsterSay("Mommy isn't hereï¿½ Let's keep moving!");
                         break;
                     }
                     case 3000253:
@@ -1233,7 +1238,7 @@ struct go_teslinah_search : public GameObjectAI
                     }
                     }
                 }
-                if (pPlayer->GetQuestStatus(80262) == QUEST_STATUS_INCOMPLETE) // Teslinah’s Search II
+                if (pPlayer->GetQuestStatus(80262) == QUEST_STATUS_INCOMPLETE) // Teslinahï¿½s Search II
                 {
                     Creature* teslinah = pPlayer->GetMiniPet();
 
@@ -1267,12 +1272,12 @@ struct go_teslinah_search : public GameObjectAI
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80277);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSay(" Ooh our people have settled here! It's pretty, not as pretty as Silvermoon but pretty!... This place isn’t large though and Mommy isn't here. Let's keep looking!");
+                        teslinah->MonsterSay(" Ooh our people have settled here! It's pretty, not as pretty as Silvermoon but pretty!... This place isnï¿½t large though and Mommy isn't here. Let's keep looking!");
                         break;
                     }
                     }
                 }
-                if (pPlayer->GetQuestStatus(80263) == QUEST_STATUS_INCOMPLETE) // Teslinah’s Search III
+                if (pPlayer->GetQuestStatus(80263) == QUEST_STATUS_INCOMPLETE) // Teslinahï¿½s Search III
                 {
                     Creature* teslinah = pPlayer->GetMiniPet();
 
@@ -1285,33 +1290,33 @@ struct go_teslinah_search : public GameObjectAI
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80278);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSay("That looks so weird! The Gnomes made this, right?… I'm sure Mommy isn't there, that leads to the Dwarf city I think… It's cold there, mommy hates the cold.");
+                        teslinah->MonsterSay("That looks so weird! The Gnomes made this, right?ï¿½ I'm sure Mommy isn't there, that leads to the Dwarf city I thinkï¿½ It's cold there, mommy hates the cold.");
                         break;
                     }
                     case 3000259:
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80279);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSay("Ooh the King lives there! We shouldn\'t disturb him... Mommy isn't there either, they wouldn’t allow her in, we don't have much… Mommy is pretty but we lost everything when Quel'thalas fell.");
+                        teslinah->MonsterSay("Ooh the King lives there! We shouldn\'t disturb him... Mommy isn't there either, they wouldnï¿½t allow her in, we don't have muchï¿½ Mommy is pretty but we lost everything when Quel'thalas fell.");
                         break;
                     }
                     case 3000260:
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80280);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSay("I heard this place existed before the new town was built! There's so many shops but the streets are also so crammed it is a bit scary…");
+                        teslinah->MonsterSay("I heard this place existed before the new town was built! There's so many shops but the streets are also so crammed it is a bit scaryï¿½");
                         break;
                     }
                     case 3000261:
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80281);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSay("This place smells strange… Mommy isn't here either, I am worried, where could she be?");
+                        teslinah->MonsterSay("This place smells strangeï¿½ Mommy isn't here either, I am worried, where could she be?");
                         break;
                     }
                     }
                 }
-                if (pPlayer->GetQuestStatus(80264) == QUEST_STATUS_INCOMPLETE) // Teslinah’s Search IV
+                if (pPlayer->GetQuestStatus(80264) == QUEST_STATUS_INCOMPLETE) // Teslinahï¿½s Search IV
                 {
                     Creature* teslinah = pPlayer->GetMiniPet();
 
@@ -1324,21 +1329,21 @@ struct go_teslinah_search : public GameObjectAI
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80282);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSay("The army is there… Could my mom have been arrested? But she didn't commit any crime… I don't think this is the place, we can come back here if we don't find her anywhere else.");
+                        teslinah->MonsterSay("The army is thereï¿½ Could my mom have been arrested? But she didn't commit any crimeï¿½ I don't think this is the place, we can come back here if we don't find her anywhere else.");
                         break;
                     }
                     case 3000263:
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80283);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSay("It's the Cathedral! It’s so huge! That’s amazing!");
+                        teslinah->MonsterSay("It's the Cathedral! Itï¿½s so huge! Thatï¿½s amazing!");
                         break;
                     }
                     case 3000264:
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80284);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSay("If mommy is gone, I could end up there... I don't want to think about that… It’s so sad.");
+                        teslinah->MonsterSay("If mommy is gone, I could end up there... I don't want to think about thatï¿½ Itï¿½s so sad.");
                         teslinah->HandleEmote(EMOTE_ONESHOT_CRY);
                     }
                         break;
@@ -1346,12 +1351,12 @@ struct go_teslinah_search : public GameObjectAI
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80285);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSay("Ooh! Look at this place! It’s... Amazing! Wow! Look at how pretty this place is!");
+                        teslinah->MonsterSay("Ooh! Look at this place! Itï¿½s... Amazing! Wow! Look at how pretty this place is!");
                         break;
                     }
                     }
                 }
-                if (pPlayer->GetQuestStatus(80265) == QUEST_STATUS_INCOMPLETE) // Teslinah’s Search V
+                if (pPlayer->GetQuestStatus(80265) == QUEST_STATUS_INCOMPLETE) // Teslinahï¿½s Search V
                 {
                     Creature* teslinah = pPlayer->GetMiniPet();
 
@@ -1364,14 +1369,14 @@ struct go_teslinah_search : public GameObjectAI
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80286);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSay("This place... is not pretty, it smells and is scary, can we leave please? I don’t like how the man in red looks at me.");
+                        teslinah->MonsterSay("This place... is not pretty, it smells and is scary, can we leave please? I donï¿½t like how the man in red looks at me.");
                         break;
                     }
                     case 3000267:
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80287);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSay("This is bad, this is bad, please let’s go? I’m scared.");
+                        teslinah->MonsterSay("This is bad, this is bad, please letï¿½s go? Iï¿½m scared.");
                         break;
                     }
                     case 3000268:
