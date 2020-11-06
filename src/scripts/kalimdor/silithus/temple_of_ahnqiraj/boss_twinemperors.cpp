@@ -313,14 +313,13 @@ struct boss_twinemperorsAI : public ScriptedAI
     {
         if (m_pInstance) 
         {
-            if (m_pInstance->GetData(TYPE_TWINS) == IN_PROGRESS) {
+            if (m_pInstance->GetData(TYPE_TWINS) == IN_PROGRESS)
                 return;
-            }
             m_pInstance->SetData(TYPE_TWINS, IN_PROGRESS);
-        }
 
-        if (GameObject* pGo = m_pInstance->GetSingleGameObjectFromStorage(GO_TWINS_ENTER_DOOR))
-            m_pInstance->DoResetDoor(pGo->GetGUID());
+            if (GameObject* pGo = m_pInstance->GetSingleGameObjectFromStorage(GO_TWINS_ENTER_DOOR))
+                m_pInstance->DoResetDoor(pGo->GetGUID());
+        }
 
         m_creature->SetInCombatWithZone();
 
