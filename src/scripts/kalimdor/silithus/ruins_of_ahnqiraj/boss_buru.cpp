@@ -179,7 +179,10 @@ struct boss_buruAI : public ScriptedAI
 
         // Reset aggro
         if (resetAggro)
+        {
             m_creature->getThreatManager().modifyThreatPercent(m_creature->getVictim(), -100);
+            m_creature->DeleteThreatList();
+        }
         // Add a really high threat to lock boss to target
         m_creature->getThreatManager().addThreat(pWho, THREAT_LOCK);
         m_bAwaitingNewTarget = false;
