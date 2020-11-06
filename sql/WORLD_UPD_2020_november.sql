@@ -1055,7 +1055,7 @@ replace into broadcast_text (ID, MaleText) values (@magic_number, 'Do you really
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 
 SET @magic_number = 80002;
-replace into broadcast_text (ID, MaleText) values (@magic_number, 'Oh! I see you are using one of my precious creations. Is it working fine?');
+replace into broadcast_text (ID, MaleText) values (@magic_number, 'Hey $r, I see you have there one of my creations. Probably your best choice yet.');
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 
 replace into creature_equip_template values (51601, 0, 2901, 1911, 0);
@@ -1071,7 +1071,7 @@ spell_id2, spell_id3, spell_id4, spell_list_id, pet_spell_list_id, gold_min, gol
 inhabit_type, civilian, racial_leader, regeneration, equipment_id, trainer_id, vendor_id, mechanic_immune_mask,
 school_immune_mask, flags_extra, script_name)
 values
-('51601', '0', '7112', '0', '0', '0', 'Traaz Ironfinger', 'Mining Hermit', '0', '42', '42',
+('51601', '0', '7112', '0', '0', '0', 'Traaz Ironfinger', 'Mining Engineer', '0', '42', '42',
 '6594', '6594', '0', '0', '1072', '69', '1', '1', '1.14286', '1', '20',
 '5', '0', '1', '1', '204', '312', '0', '241', '1',
 '2000', '0', '1', '0', '0', '1', '0', '0',
