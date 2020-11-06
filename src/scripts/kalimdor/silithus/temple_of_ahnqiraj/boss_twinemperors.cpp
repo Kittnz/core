@@ -319,6 +319,9 @@ struct boss_twinemperorsAI : public ScriptedAI
             m_pInstance->SetData(TYPE_TWINS, IN_PROGRESS);
         }
 
+        if (GameObject* pGo = m_pInstance->GetSingleGameObjectFromStorage(GO_TWINS_ENTER_DOOR))
+            m_pInstance->DoResetDoor(pGo->GetGUID());
+
         m_creature->SetInCombatWithZone();
 
         Creature *pOtherBoss = GetOtherBoss();
