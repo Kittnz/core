@@ -1046,15 +1046,15 @@ UPDATE `quest_template` SET `OfferRewardText`="These'll do nicely, and if I'm no
 -- Fix completion text for quest 4298 (Becoming a Parent) in Hinterlands: add gender check for dadda/momma
 UPDATE `quest_template` SET `OfferRewardText`="Here, take the egg... better you have it so it bonds to you and looks to you to be its $gdadda:momma;.$B$BCongrats, $N. You're a parent... kinda." WHERE `entry`=4298;
 
-SET @magic_number = 80000;
+SET @magic_number = 70000;
 replace into broadcast_text (ID, MaleText) values (@magic_number, 'Who would have thought combining the usefulness of a telescope with a mining pick would be such a hit! I\'m sure a fine $r like you can see the appeal!$B$BIf you want one yourself, bring me an Ornate Spyglass and some Light Leather, let\'s say around... 10 pieces.');
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 
-SET @magic_number = 80001;
+SET @magic_number = 70001;
 replace into broadcast_text (ID, MaleText) values (@magic_number, 'Do you really think I\'m going to show my mining secrets to just anyone who wanders into town? Ha! Come back to me when people around here considers you a bit more friendlier.');
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 
-SET @magic_number = 80002;
+SET @magic_number = 70002;
 replace into broadcast_text (ID, MaleText) values (@magic_number, 'Hey $r, I see you have there one of my creations. Probably your best choice yet.');
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 

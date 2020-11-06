@@ -163,19 +163,36 @@ armor = 76, dmg_min = 3, dmg_max = 6, attack_power = 50,
 spell_id1 = 0, gold_min = 1, gold_max = 7 
 where entry = 80112;
 
-replace into broadcast_text (ID, MaleText) values (70000, 'We are friends. Do not run.'); replace into npc_text (ID, BroadcastTextID0) values (70000, 70000);
-replace into broadcast_text (ID, MaleText) values (70001, 'Target unrecognized. Proceed with extermination.'); replace into npc_text (ID, BroadcastTextID0) values (70001, 70001);
-replace into broadcast_text (ID, MaleText) values (70002, 'Target acquired. Termination activated.'); replace into npc_text (ID, BroadcastTextID0) values (70002, 70002);
-replace into broadcast_text (ID, MaleText) values (70003, 'Threat detected, activating protocol 66.'); replace into npc_text (ID, BroadcastTextID0) values (70003, 70003);
-replace into broadcast_text (ID, MaleText) values (70004, 'Exterminate hostile.'); replace into npc_text (ID, BroadcastTextID0) values (70004, 70004);
-replace into broadcast_text (ID, MaleText) values (70005, 'Exterminate.'); replace into npc_text (ID, BroadcastTextID0) values (70005, 70005);
+delete from broadcast_text where id between 70000 and 70016;
+delete from npc_text where id between 70000 and 70016;
 
-replace into broadcast_text (ID, MaleText) values (70011, 'Error 132: Memory cannot be read.'); replace into npc_text (ID, BroadcastTextID0) values (70011, 70011);
-replace into broadcast_text (ID, MaleText) values (70012, 'Error 132: Fatal Exception.'); replace into npc_text (ID, BroadcastTextID0) values (70012, 70012);
-replace into broadcast_text (ID, MaleText) values (70013, 'Error 134: Failed to open required archive...'); replace into npc_text (ID, BroadcastTextID0) values (70013, 70013);
-replace into broadcast_text (ID, MaleText) values (70014, 'Error 132: Access Violation.'); replace into npc_text (ID, BroadcastTextID0) values (70014, 70014);
-replace into broadcast_text (ID, MaleText) values (70015, 'Error... Shutting down.'); replace into npc_text (ID, BroadcastTextID0) values (70015, 70015);
-replace into broadcast_text (ID, MaleText) values (70016, 'System processing. Error. Error. Error.'); replace into npc_text (ID, BroadcastTextID0) values (70016, 70016);
+/* THIS IS NOT RELATED TO GOBLIN ZONE, BUT SINCE WE ARE NOT USING MIGRATIONS BECAUSE TORTA IS A PUSSY, I MUST MAKE SURE THIS IS APPLIED IN CASE THEY ARE WRONGLY DELETED */
+SET @magic_number = 70000;
+replace into broadcast_text (ID, MaleText) values (@magic_number, 'Who would have thought combining the usefulness of a telescope with a mining pick would be such a hit! I\'m sure a fine $r like you can see the appeal!$B$BIf you want one yourself, bring me an Ornate Spyglass and some Light Leather, let\'s say around... 10 pieces.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+
+SET @magic_number = 70001;
+replace into broadcast_text (ID, MaleText) values (@magic_number, 'Do you really think I\'m going to show my mining secrets to just anyone who wanders into town? Ha! Come back to me when people around here considers you a bit more friendlier.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+
+SET @magic_number = 70002;
+replace into broadcast_text (ID, MaleText) values (@magic_number, 'Hey $r, I see you have there one of my creations. Probably your best choice yet.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+/* END OF SHITTY PREVENTION FIX BECAUSE OF NO MIGRATION */
+
+replace into broadcast_text (ID, MaleText) values (80000, 'We are friends. Do not run.'); replace into npc_text (ID, BroadcastTextID0) values (80000, 80000);
+replace into broadcast_text (ID, MaleText) values (80001, 'Target unrecognized. Proceed with extermination.'); replace into npc_text (ID, BroadcastTextID0) values (80001, 80001);
+replace into broadcast_text (ID, MaleText) values (80002, 'Target acquired. Termination activated.'); replace into npc_text (ID, BroadcastTextID0) values (80002, 80002);
+replace into broadcast_text (ID, MaleText) values (80003, 'Threat detected, activating protocol 66.'); replace into npc_text (ID, BroadcastTextID0) values (80003, 80003);
+replace into broadcast_text (ID, MaleText) values (80004, 'Exterminate hostile.'); replace into npc_text (ID, BroadcastTextID0) values (80004, 80004);
+replace into broadcast_text (ID, MaleText) values (80005, 'Exterminate.'); replace into npc_text (ID, BroadcastTextID0) values (80005, 80005);
+
+replace into broadcast_text (ID, MaleText) values (80011, 'Error 132: Memory cannot be read.'); replace into npc_text (ID, BroadcastTextID0) values (80011, 80011);
+replace into broadcast_text (ID, MaleText) values (80012, 'Error 132: Fatal Exception.'); replace into npc_text (ID, BroadcastTextID0) values (80012, 80012);
+replace into broadcast_text (ID, MaleText) values (80013, 'Error 134: Failed to open required archive...'); replace into npc_text (ID, BroadcastTextID0) values (80013, 80013);
+replace into broadcast_text (ID, MaleText) values (80014, 'Error 132: Access Violation.'); replace into npc_text (ID, BroadcastTextID0) values (80014, 80014);
+replace into broadcast_text (ID, MaleText) values (80015, 'Error... Shutting down.'); replace into npc_text (ID, BroadcastTextID0) values (80015, 80015);
+replace into broadcast_text (ID, MaleText) values (80016, 'System processing. Error. Error. Error.'); replace into npc_text (ID, BroadcastTextID0) values (80016, 80016);
 
 
 update creature_template set scale = 0.8, type = 9 where entry = 80112;

@@ -746,9 +746,9 @@ bool GossipSelect_ArenaMaster(Player* player, Creature* creature, uint32 sender,
 #define MINING_ENCHANT_5 906
 #define SPELL_VISUAL 14867
 
-#define DEFAULT_TEXT 80000
-#define UNAVAILABLE_TEXT 80001
-#define ALREADY_INSTALLED_TEXT 80002
+#define DEFAULT_TEXT 70000
+#define UNAVAILABLE_TEXT 70001
+#define ALREADY_INSTALLED_TEXT 70002
 
 bool GossipHello_MiningEnchanter(Player* player, Creature* creature)
 {
