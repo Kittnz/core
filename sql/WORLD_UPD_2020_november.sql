@@ -1153,7 +1153,7 @@ REPLACE INTO `creature_template` VALUES (51655, 0, 597, 0, 0, 0, 'Zeemo', '', 0,
 
 REPLACE INTO `creature_template` VALUES (51656, 0, 1369, 0, 0, 0, 'Rug', 'Alchemy Supplies', 0, 14, 14, 594, 594, 0, 0, 20, 126, 6, 1, 1.14286, 0, 20, 5, 0, 0, 1, 15, 19, 0, 70, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 23.0384, 31.6778, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 5942, 0, 0, 0, 0, 524298, '');
 
-update item_template set equipment_id = 0 where entry = 51656;
+update creature_template set equipment_id = 0 where entry = 51656;
 
 REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (51656, 3371, 0, 0, 0, 0);
 REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (51656, 3372, 0, 0, 0, 0);
@@ -1188,7 +1188,7 @@ REPLACE INTO `creature_template` (`entry`, `patch`, `display_id1`, `display_id2`
 SET @gossip_menu_id = 51662;
 SET @magic_number = 60016; 
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
-replace into broadcast_text (ID, MaleText) values (@magic_number, 'Welcome, weary traveler!\n\nWhat will be your guilty pleasure this time?  Drinking? Gossiping? Adventuring?\n\nWhats wrong? I\'m a mage and I serve drinks! Don\'t tell anyone, but it\'s the easiest way to make money that I\'ve ever heard of.');
+replace into broadcast_text (ID, MaleText) values (@magic_number, 'Welcome, weary traveler!\n\nWhat will be your guilty pleasure this time? Drinking? Gossiping? Adventuring?\n\nWhats wrong?\n\nI\'m a mage and I serve drinks! Don\'t tell anyone, but it\'s the easiest way to make money that I\'ve ever heard of.');
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = 51662;
 
@@ -1231,22 +1231,22 @@ REPLACE INTO `creature_template` (`entry`, `patch`, `display_id1`, `display_id2`
 
 delete from creature where id between 51650 and 51668;
 
-REPLACE INTO `creature` VALUES (51650, 1, 0, 0, 7551.73, -1524.02, 158.954, 3.48523, 25, 25, 0, 0, 100, 0, 0, 0, 0, 0, 0, 10);
-REPLACE INTO `creature` VALUES (51651, 1, 0, 0, 7512.87, -1529.68, 156.666, 2.24822, 25, 25, 0, 0, 100, 0, 0, 0, 0, 0, 0, 10);
-REPLACE INTO `creature` VALUES (51652, 1, 0, 5411, 7458.68, -1580.9, 177.659, 2.9393, 25, 25, 0, 0, 100, 0, 0, 0, 0, 0, 0, 10);
-REPLACE INTO `creature` VALUES (51653, 1, 0, 3332, 7431.65, -1512.87, 151.609, 5.00099, 25, 25, 0, 0, 100, 0, 0, 0, 0, 0, 0, 10);
-REPLACE INTO `creature` VALUES (51654, 1, 0, 5942, 7510.33, -1526.56, 156.741, 5.62062, 25, 25, 0, 0, 100, 0, 0, 0, 0, 0, 0, 10);
-REPLACE INTO `creature` VALUES (51655, 1, 0, 0, 7514.53, -1550.28, 156.145, 2.7223, 25, 25, 0, 0, 100, 0, 0, 0, 0, 0, 0, 10);
-REPLACE INTO `creature` VALUES (51656, 1, 0, 3348, 7499.12, -1527.14, 156.351, 0.900775, 25, 25, 0, 0, 100, 0, 0, 0, 0, 0, 0, 10);
-REPLACE INTO `creature` VALUES (51657, 1, 0, 0, 7512.91, -1539.72, 156.143, 3.63749, 25, 25, 0, 0, 100, 0, 0, 0, 0, 0, 0, 10);
-REPLACE INTO `creature` VALUES (51660, 0, 0, 0, -8854.23, 1076.53, 95.2576, 3.38899, 25, 25, 0, 0, 100, 0, 0, 0, 0, 0, 0, 10);
-REPLACE INTO `creature` VALUES (51661, 0, 0, 0, -8853.42, 1075.61, 95.2576, 3.38899, 25, 25, 0, 0, 100, 0, 0, 0, 0, 0, 0, 10);
-REPLACE INTO `creature` VALUES (51662, 0, 0, 0, -8857.58, 1076.79, 95.2061, 0.318087, 25, 25, 0, 0, 100, 0, 0, 0, 0, 0, 0, 10);
-REPLACE INTO `creature` VALUES (51663, 0, 0, 6142, -8868.8, 1083.23, 102.455, 0.322015, 25, 25, 0, 0, 100, 0, 0, 0, 0, 0, 0, 10);
-REPLACE INTO `creature` VALUES (51664, 0, 0, 0, -8867.67, 1084.92, 102.455, 0.236606, 25, 25, 0, 0, 100, 0, 0, 0, 0, 0, 0, 10);
-REPLACE INTO `creature` VALUES (51665, 0, 0, 0, -8864.32, 1070.69, 102.455, 0.276787, 25, 25, 5, 0, 100, 0, 0, 1, 0, 0, 0, 10);
-REPLACE INTO `creature` VALUES (51666, 0, 0, 0, -8855.32, 1086.54, 95.2099, 3.69563, 25, 25, 5, 0, 100, 0, 0, 1, 0, 0, 0, 10);
-REPLACE INTO `creature` VALUES (51667, 0, 0, 0, -8841.52, 1092.43, 95.2072, 1.67244, 25, 25, 5, 0, 100, 0, 0, 1, 0, 0, 0, 10);
-REPLACE INTO `creature` VALUES (51668, 0, 0, 0, -8873.05, 1088.43, 91.9111, 3.04689, 25, 25, 5, 0, 100, 0, 0, 1, 0, 0, 0, 10);
+REPLACE INTO `creature` (`id`, `map`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `DeathState`, `MovementType`, `spawnFlags`, `visibilitymod`, `patch_min`, `patch_max`)VALUES (51650, 1, 0, 0, 7551.73, -1524.02, 158.954, 3.48523, 25, 25, 0, 0, 100, 0, 0, 0, 0, 0, 0, 10);
+REPLACE INTO `creature` (`id`, `map`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `DeathState`, `MovementType`, `spawnFlags`, `visibilitymod`, `patch_min`, `patch_max`)VALUES (51651, 1, 0, 0, 7512.87, -1529.68, 156.666, 2.24822, 25, 25, 0, 0, 100, 0, 0, 0, 0, 0, 0, 10);
+REPLACE INTO `creature` (`id`, `map`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `DeathState`, `MovementType`, `spawnFlags`, `visibilitymod`, `patch_min`, `patch_max`)VALUES (51652, 1, 0, 5411, 7458.68, -1580.9, 177.659, 2.9393, 25, 25, 0, 0, 100, 0, 0, 0, 0, 0, 0, 10);
+REPLACE INTO `creature` (`id`, `map`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `DeathState`, `MovementType`, `spawnFlags`, `visibilitymod`, `patch_min`, `patch_max`)VALUES (51653, 1, 0, 3332, 7431.65, -1512.87, 151.609, 5.00099, 25, 25, 0, 0, 100, 0, 0, 0, 0, 0, 0, 10);
+REPLACE INTO `creature` (`id`, `map`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `DeathState`, `MovementType`, `spawnFlags`, `visibilitymod`, `patch_min`, `patch_max`)VALUES (51654, 1, 0, 5942, 7510.33, -1526.56, 156.741, 5.62062, 25, 25, 0, 0, 100, 0, 0, 0, 0, 0, 0, 10);
+REPLACE INTO `creature` (`id`, `map`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `DeathState`, `MovementType`, `spawnFlags`, `visibilitymod`, `patch_min`, `patch_max`)VALUES (51655, 1, 0, 0, 7514.53, -1550.28, 156.145, 2.7223, 25, 25, 0, 0, 100, 0, 0, 0, 0, 0, 0, 10);
+REPLACE INTO `creature` (`id`, `map`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `DeathState`, `MovementType`, `spawnFlags`, `visibilitymod`, `patch_min`, `patch_max`)VALUES (51656, 1, 0, 3348, 7499.12, -1527.14, 156.351, 0.900775, 25, 25, 0, 0, 100, 0, 0, 0, 0, 0, 0, 10);
+REPLACE INTO `creature` (`id`, `map`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `DeathState`, `MovementType`, `spawnFlags`, `visibilitymod`, `patch_min`, `patch_max`)VALUES (51657, 1, 0, 0, 7512.91, -1539.72, 156.143, 3.63749, 25, 25, 0, 0, 100, 0, 0, 0, 0, 0, 0, 10);
+REPLACE INTO `creature` (`id`, `map`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `DeathState`, `MovementType`, `spawnFlags`, `visibilitymod`, `patch_min`, `patch_max`)VALUES (51660, 0, 0, 0, -8854.23, 1076.53, 95.2576, 3.38899, 25, 25, 0, 0, 100, 0, 0, 0, 0, 0, 0, 10);
+REPLACE INTO `creature` (`id`, `map`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `DeathState`, `MovementType`, `spawnFlags`, `visibilitymod`, `patch_min`, `patch_max`)VALUES (51661, 0, 0, 0, -8853.42, 1075.61, 95.2576, 3.38899, 25, 25, 0, 0, 100, 0, 0, 0, 0, 0, 0, 10);
+REPLACE INTO `creature` (`id`, `map`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `DeathState`, `MovementType`, `spawnFlags`, `visibilitymod`, `patch_min`, `patch_max`)VALUES (51662, 0, 0, 0, -8857.58, 1076.79, 95.2061, 0.318087, 25, 25, 0, 0, 100, 0, 0, 0, 0, 0, 0, 10);
+REPLACE INTO `creature` (`id`, `map`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `DeathState`, `MovementType`, `spawnFlags`, `visibilitymod`, `patch_min`, `patch_max`)VALUES (51663, 0, 0, 6142, -8868.8, 1083.23, 102.455, 0.322015, 25, 25, 0, 0, 100, 0, 0, 0, 0, 0, 0, 10);
+REPLACE INTO `creature` (`id`, `map`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `DeathState`, `MovementType`, `spawnFlags`, `visibilitymod`, `patch_min`, `patch_max`)VALUES (51664, 0, 0, 0, -8867.67, 1084.92, 102.455, 0.236606, 25, 25, 0, 0, 100, 0, 0, 0, 0, 0, 0, 10);
+REPLACE INTO `creature` (`id`, `map`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `DeathState`, `MovementType`, `spawnFlags`, `visibilitymod`, `patch_min`, `patch_max`)VALUES (51665, 0, 0, 0, -8864.32, 1070.69, 102.455, 0.276787, 25, 25, 5, 0, 100, 0, 0, 1, 0, 0, 0, 10);
+REPLACE INTO `creature` (`id`, `map`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `DeathState`, `MovementType`, `spawnFlags`, `visibilitymod`, `patch_min`, `patch_max`)VALUES (51666, 0, 0, 0, -8855.32, 1086.54, 95.2099, 3.69563, 25, 25, 5, 0, 100, 0, 0, 1, 0, 0, 0, 10);
+REPLACE INTO `creature` (`id`, `map`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `DeathState`, `MovementType`, `spawnFlags`, `visibilitymod`, `patch_min`, `patch_max`)VALUES (51667, 0, 0, 0, -8841.52, 1092.43, 95.2072, 1.67244, 25, 25, 5, 0, 100, 0, 0, 1, 0, 0, 0, 10);
+REPLACE INTO `creature` (`id`, `map`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `DeathState`, `MovementType`, `spawnFlags`, `visibilitymod`, `patch_min`, `patch_max`)VALUES (51668, 0, 0, 0, -8873.05, 1088.43, 91.9111, 3.04689, 25, 25, 5, 0, 100, 0, 0, 1, 0, 0, 0, 10);
 
 
