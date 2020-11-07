@@ -271,6 +271,7 @@ bool GOHello_go_turtle_radio(Player* pPlayer, GameObject* pGo)
     pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "Play 'Dark Forest'", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 11);
     pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "Play 'Maexxna'", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 12);
     pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "Play 'Orgrimmar'", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 13);
+    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "Play 'Soggy Night'", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 14);
 
     pPlayer->SEND_GOSSIP_MENU(90300, pGo->GetGUID());
     return true;
@@ -304,6 +305,8 @@ bool GOSelect_go_turtle_radio(Player* pPlayer, GameObject* pGo, uint32 sender, u
         pPlayer->PlayDirectMusic(8887);
     if (action == GOSSIP_ACTION_INFO_DEF + 13)
         pPlayer->PlayDirectMusic(5055);
+    if (action == GOSSIP_ACTION_INFO_DEF + 14)
+        pPlayer->PlayDirectMusic(6836);
 
     pPlayer->CLOSE_GOSSIP_MENU();
     return true;
