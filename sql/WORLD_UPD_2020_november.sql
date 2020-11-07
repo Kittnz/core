@@ -1151,7 +1151,9 @@ REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`,
 
 REPLACE INTO `creature_template` VALUES (51655, 0, 597, 0, 0, 0, 'Zeemo', '', 0, 1, 1, 64, 64, 0, 0, 0, 35, 256, 1, 1.14286, 1, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, '');
 
-REPLACE INTO `creature_template` VALUES (51656, 0, 14589, 0, 0, 0, 'Rug', 'Alchemy Supplies', 9166, 30, 30, 1605, 1605, 0, 0, 1200, 29, 4, 1, 1.14286, 0, 20, 5, 0, 0, 1, 42, 53, 0, 122, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 45.144, 62.073, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 3348, 0, 0, 0, 0, 524298, '');
+REPLACE INTO `creature_template` VALUES (51656, 0, 1369, 0, 0, 0, 'Rug', 'Alchemy Supplies', 0, 14, 14, 594, 594, 0, 0, 20, 126, 6, 1, 1.14286, 0, 20, 5, 0, 0, 1, 15, 19, 0, 70, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 23.0384, 31.6778, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 5942, 0, 0, 0, 0, 524298, '');
+
+update item_template set equipment_id = 0 where entry = 51656;
 
 REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (51656, 3371, 0, 0, 0, 0);
 REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (51656, 3372, 0, 0, 0, 0);
@@ -1175,7 +1177,7 @@ update creature_template set npc_flags = 1 where entry = 51660;
 SET @gossip_menu_id = 51660;
 SET @magic_number = 60015; 
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
-replace into broadcast_text (ID, MaleText) values (@magic_number, 'Greetings! Amro, Hunter Excellent, at your service.\n\nWhile the boss is running around the world doing field work someone need to stay here and do the boring job.\n\nWhat is it that I do? I manage this whole operation, of course.');
+replace into broadcast_text (ID, MaleText) values (@magic_number, 'Greetings! Amro de Lux, Hunter Extraordinaire, at your service.\n\nWhile the boss is running around the world doing more exciting work, someone needs to stay behind and handle the boring parts of the job.\n\nWhat is it that I do? I manage this whole operation, of course.');
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = 51660;
 
@@ -1186,7 +1188,7 @@ REPLACE INTO `creature_template` (`entry`, `patch`, `display_id1`, `display_id2`
 SET @gossip_menu_id = 51662;
 SET @magic_number = 60016; 
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
-replace into broadcast_text (ID, MaleText) values (@magic_number, 'Welcome, weary traveler!\n\nWhat will it be, drinking, a new gossip, or perhaps looking for a group to start a new adventure?');
+replace into broadcast_text (ID, MaleText) values (@magic_number, 'Welcome, weary traveler!\n\nWhat will be your guilty pleasure this time?  Drinking? Gossiping? Adventuring?\n\nWhats wrong? I\'m a mage and I serve drinks! Don\'t tell anyone, but it\'s the easiest way to make money that I\'ve ever heard of.');
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = 51662;
 
@@ -1208,11 +1210,11 @@ REPLACE INTO `creature_template` (`entry`, `patch`, `display_id1`, `display_id2`
 
 SET @gossip_menu_id = 51663;
 SET @magic_number = 60017; 
-replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
-replace into broadcast_text (ID, MaleText) values (@magic_number, 'Mojo is merely my code name, if you truly wish to know.\n\nI have several vials of mojo of different troll nature, do you want some?');
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0');
+replace into broadcast_text (ID, MaleText) values (@magic_number, 'What?\n\nOf course Mojo isnt my real name... Only the boss knows it.\n\nAnd there is good reason for that. Now cease your interrogations and desist somewhere else!');
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = 51663;
-
+update creature_template set equipment_id = 0 where entry = 51663;
 update creature_template set npc_flags = 1 where entry = 51663;
 
 REPLACE INTO `creature_template` (`entry`, `patch`, `display_id1`, `display_id2`, `display_id3`, `display_id4`, `name`, `subname`, `gossip_menu_id`, `level_min`, `level_max`, `health_min`, `health_max`, `mana_min`, `mana_max`, `armor`, `faction`, `npc_flags`, `speed_walk`, `speed_run`, `scale`, `detection_range`, `call_for_help_range`, `leash_range`, `rank`, `xp_multiplier`, `dmg_min`, `dmg_max`, `dmg_school`, `attack_power`, `dmg_multiplier`, `base_attack_time`, `ranged_attack_time`, `unit_class`, `unit_flags`, `dynamic_flags`, `beast_family`, `trainer_type`, `trainer_spell`, `trainer_class`, `trainer_race`, `ranged_dmg_min`, `ranged_dmg_max`, `ranged_attack_power`, `type`, `type_flags`, `loot_id`, `pickpocket_loot_id`, `skinning_loot_id`, `holy_res`, `fire_res`, `nature_res`, `frost_res`, `shadow_res`, `arcane_res`, `spell_id1`, `spell_id2`, `spell_id3`, `spell_id4`, `spell_list_id`, `pet_spell_list_id`, `gold_min`, `gold_max`, `ai_name`, `movement_type`, `inhabit_type`, `civilian`, `racial_leader`, `regeneration`, `equipment_id`, `trainer_id`, `vendor_id`, `mechanic_immune_mask`, `school_immune_mask`, `flags_extra`, `script_name`) VALUES (51664, 0, 599, 0, 0, 0, 'Naire', '', 0, 60, 60, 64, 64, 0, 0, 0, 35, 0, 1, 1.14286, 0.8, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, '');
