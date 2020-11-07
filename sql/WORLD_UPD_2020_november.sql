@@ -930,11 +930,11 @@ REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `po
 (285061, 32, -4020.15, -1397.47, 153.434, 0, 0);
 
 -- Conditions to check if Feast gameobjects are spawned.
-INSERT INTO `conditions` (`condition_entry`, `type`, `value1`, `value2`, `value3`, `value4`, `flags`) VALUES (21145, 21, 21145, 30, 0, 0, 0);
-INSERT INTO `conditions` (`condition_entry`, `type`, `value1`, `value2`, `value3`, `value4`, `flags`) VALUES (21146, 21, 21146, 30, 0, 0, 0);
-INSERT INTO `conditions` (`condition_entry`, `type`, `value1`, `value2`, `value3`, `value4`, `flags`) VALUES (21147, 21, 21147, 30, 0, 0, 0);
-INSERT INTO `conditions` (`condition_entry`, `type`, `value1`, `value2`, `value3`, `value4`, `flags`) VALUES (21148, 21, 21148, 30, 0, 0, 0);
-INSERT INTO `conditions` (`condition_entry`, `type`, `value1`, `value2`, `value3`, `value4`, `flags`) VALUES (21149, -2, 21145, 21146, 21147, 21148, 0);
+replace into `conditions` (`condition_entry`, `type`, `value1`, `value2`, `value3`, `value4`, `flags`) VALUES (21145, 21, 21145, 30, 0, 0, 0);
+replace into `conditions` (`condition_entry`, `type`, `value1`, `value2`, `value3`, `value4`, `flags`) VALUES (21146, 21, 21146, 30, 0, 0, 0);
+replace into `conditions` (`condition_entry`, `type`, `value1`, `value2`, `value3`, `value4`, `flags`) VALUES (21147, 21, 21147, 30, 0, 0, 0);
+replace into `conditions` (`condition_entry`, `type`, `value1`, `value2`, `value3`, `value4`, `flags`) VALUES (21148, 21, 21148, 30, 0, 0, 0);
+replace into `conditions` (`condition_entry`, `type`, `value1`, `value2`, `value3`, `value4`, `flags`) VALUES (21149, -2, 21145, 21146, 21147, 21148, 0);
 
 -- Add completion script for quest Feast at the Blue Recluse.
 DELETE FROM `quest_end_scripts` WHERE `id`=1271;
@@ -1080,3 +1080,6 @@ values
 '0', '0', '0', '0', '0', '1412', '2824', '', '0',
 '3', '0', '0', '1', '51601', '0', '0', '0',
 '0', '0', 'mining_enchanter');
+
+-- Rush'n Attack guild NPCs:
+
