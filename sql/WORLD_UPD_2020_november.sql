@@ -1160,6 +1160,7 @@ REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`,
 REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (51656, 13478, 1, 7200, 3, 0);
 REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (51656, 18256, 0, 0, 0, 0);
 
-REPLACE INTO `creature_template`  VALUES (51657, 0, 10259, 0, 0, 0, 'Ramses', NULL, 0, 24, 24, 1172, 1172, 0, 0, 992, 35, 2, 1.05, 1.14286, 0.4, 20, 5, 0, 0, 1, 35, 43, 0, 104, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 37.3824, 51.4008, 100, 1, 0, 0, 0, 100006, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 2, '');
+REPLACE INTO `creature_template`  VALUES (51657, 0, 10259, 0, 0, 0, 'Ram', NULL, 0, 24, 24, 1172, 1172, 0, 0, 992, 35, 2, 1.05, 1.14286, 0.4, 20, 5, 0, 0, 1, 35, 43, 0, 104, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 37.3824, 51.4008, 100, 1, 0, 0, 0, 100006, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 2, '');
 
+update item_template set spellId_1 = 18282, script_name = 'item_guild_tabard' where entry = '5976';
 

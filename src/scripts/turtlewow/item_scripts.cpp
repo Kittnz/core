@@ -521,6 +521,24 @@ bool ItemUseSpell_bg_tabard(Player* pPlayer, Item* pItem, const SpellCastTargets
     return false;
 }
 
+bool ItemUseSpell_guild_tabard(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+{
+    if (pPlayer->isInCombat() || pPlayer->InBattleGround() || pPlayer->IsBeingTeleported() || (pPlayer->getDeathState() == CORPSE))
+    {
+        pPlayer->GetSession()->SendNotification("Can't use right now.");
+        return false;
+    }
+    switch (pPlayer->GetGuildId())
+    {
+    case 1: // Rush'n Attack (need Guild ID)
+        pPlayer->TeleportTo(1, 7301.3F, -1523.8F, 179.8F, 1.4F);
+        break;
+    default: 
+        break;
+    }
+    return true;
+}
+
 bool ItemUseSpell_highborne_soul_mirror(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
     if (!pPlayer)
@@ -1123,6 +1141,11 @@ void AddSC_item_scripts()
     newscript = new Script;
     newscript->Name = "item_bg_tabard";
     newscript->pItemUseSpell = &ItemUseSpell_bg_tabard;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "item_guild_tabard";
+    newscript->pItemUseSpell = &ItemUseSpell_guild_tabard;
     newscript->RegisterSelf();
 
     newscript = new Script;
