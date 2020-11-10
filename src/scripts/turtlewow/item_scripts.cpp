@@ -542,7 +542,7 @@ bool ItemUseSpell_guild_tabard(Player* pPlayer, Item* pItem, const SpellCastTarg
     }
     switch (pPlayer->GetGuildId())
     {
-    case 1: // Rush'n Attack (need Guild ID)
+    case 189: // Rush'n Attack (need Guild ID)
         pPlayer->TeleportTo(1, 7301.3F, -1523.8F, 179.8F, 1.4F);
         break;
     default: 
@@ -1053,7 +1053,7 @@ bool ItemUseSpell_item_cenarion_hold_teleport(Player* pPlayer, Item* pItem, cons
 
 bool GossipHello_npc_barber(Player* pPlayer, Creature* pCreature)
 {
-    if (pPlayer->HasItemCount(40003, 1))
+    if (pPlayer->HasItemCount(50600, 1))
     {
         switch (pPlayer->getRace())
         {
@@ -1071,7 +1071,7 @@ bool GossipHello_npc_barber(Player* pPlayer, Creature* pCreature)
             break;
         }
     }
-    pPlayer->SEND_GOSSIP_MENU(90370, pCreature->GetGUID());
+    pPlayer->SEND_GOSSIP_MENU(51670, pCreature->GetGUID());
     return true;
 }
 
@@ -1204,7 +1204,7 @@ bool GossipSelect_npc_barber(Player* pPlayer, Creature* pCreature, uint32 uiSend
 
 bool GossipHello_npc_surgeon(Player* pPlayer, Creature* pCreature)
 {
-    if (pPlayer->HasItemCount(40004, 1))
+    if (pPlayer->HasItemCount(50601, 1))
     {
         if (pPlayer->getRace() == RACE_TAUREN)
         {
@@ -1226,7 +1226,7 @@ bool GossipHello_npc_surgeon(Player* pPlayer, Creature* pCreature)
         }
     }
 
-    pPlayer->SEND_GOSSIP_MENU(90371, pCreature->GetGUID());
+    pPlayer->SEND_GOSSIP_MENU(51671, pCreature->GetGUID());
     return true;
 }
 
@@ -1432,7 +1432,7 @@ bool ItemUseSpell_shop_racechange(Player* pPlayer, Item* pItem, const SpellCastT
 
     switch (pItem->GetEntry())
     {
-    case 40013: // Human
+    case 50603: // Human
         if (pPlayer->getClass() == CLASS_DRUID || pPlayer->getClass() == CLASS_HUNTER || pPlayer->getClass() == CLASS_SHAMAN)
         {
             pPlayer->GetSession()->SendNotification("This race does not support your class.");
@@ -1441,7 +1441,7 @@ bool ItemUseSpell_shop_racechange(Player* pPlayer, Item* pItem, const SpellCastT
         bytes = pPlayer->getGender() == GENDER_MALE ? 101058307 : 100730885;
         race = RACE_HUMAN;
         break;
-    case 40014: // Gnome
+    case 50604: // Gnome
         if (pPlayer->getClass() == CLASS_DRUID || pPlayer->getClass() == CLASS_HUNTER || pPlayer->getClass() == CLASS_PRIEST || pPlayer->getClass() == CLASS_PALADIN || pPlayer->getClass() == CLASS_SHAMAN)
         {
             pPlayer->GetSession()->SendNotification("This race does not support your class.");
@@ -1450,7 +1450,7 @@ bool ItemUseSpell_shop_racechange(Player* pPlayer, Item* pItem, const SpellCastT
         bytes = pPlayer->getGender() == GENDER_MALE ? 67372546 : 131076;
         race = RACE_GNOME;
         break;
-    case 40015: // Dwarf
+    case 50605: // Dwarf
         if (pPlayer->getClass() == CLASS_DRUID || pPlayer->getClass() == CLASS_MAGE || pPlayer->getClass() == CLASS_WARLOCK || pPlayer->getClass() == CLASS_SHAMAN)
         {
             pPlayer->GetSession()->SendNotification("This race does not support your class.");
@@ -1459,7 +1459,7 @@ bool ItemUseSpell_shop_racechange(Player* pPlayer, Item* pItem, const SpellCastT
         bytes = pPlayer->getGender() == GENDER_MALE ? 50528773 : 34406912;
         race = RACE_DWARF;
         break;
-    case 40016: // Night Elf
+    case 50606: // Night Elf
         if (pPlayer->getClass() == CLASS_MAGE || pPlayer->getClass() == CLASS_WARLOCK || pPlayer->getClass() == CLASS_PALADIN || pPlayer->getClass() == CLASS_SHAMAN)
         {
             pPlayer->GetSession()->SendNotification("This race does not support your class.");
@@ -1468,7 +1468,7 @@ bool ItemUseSpell_shop_racechange(Player* pPlayer, Item* pItem, const SpellCastT
         bytes = pPlayer->getGender() == GENDER_MALE ? 132615 : 67503620;
         race = RACE_NIGHTELF;
         break;
-    case 40017: // Orc
+    case 50607: // Orc
         if (pPlayer->getClass() == CLASS_DRUID || pPlayer->getClass() == CLASS_PRIEST || pPlayer->getClass() == CLASS_PALADIN || pPlayer->getClass() == CLASS_MAGE)
         {
             pPlayer->GetSession()->SendNotification("This race does not support your class.");
@@ -1477,7 +1477,7 @@ bool ItemUseSpell_shop_racechange(Player* pPlayer, Item* pItem, const SpellCastT
         bytes = pPlayer->getGender() == GENDER_MALE ? 84214788 : 84214788;
         race = RACE_ORC;
         break;
-    case 40018: // Troll
+    case 50608: // Troll
         if (pPlayer->getClass() == CLASS_DRUID || pPlayer->getClass() == CLASS_WARLOCK || pPlayer->getClass() == CLASS_PALADIN)
         {
             pPlayer->GetSession()->SendNotification("This race does not support your class.");
@@ -1486,7 +1486,7 @@ bool ItemUseSpell_shop_racechange(Player* pPlayer, Item* pItem, const SpellCastT
         bytes = pPlayer->getGender() == GENDER_MALE ? 33751041 : 131587;
         race = RACE_TROLL;
         break;
-    case 40019: // Tauren
+    case 50609: // Tauren
         if (pPlayer->getClass() == CLASS_PRIEST || pPlayer->getClass() == CLASS_MAGE || pPlayer->getClass() == CLASS_ROGUE || pPlayer->getClass() == CLASS_PALADIN)
         {
             pPlayer->GetSession()->SendNotification("This race does not support your class.");
@@ -1495,7 +1495,7 @@ bool ItemUseSpell_shop_racechange(Player* pPlayer, Item* pItem, const SpellCastT
         bytes = pPlayer->getGender() == GENDER_MALE ? 17105153 : 393736;
         race = RACE_TAUREN;
         break;
-    case 40020: // Undead
+    case 50610: // Undead
         if (pPlayer->getClass() == CLASS_PALADIN || pPlayer->getClass() == CLASS_DRUID || pPlayer->getClass() == CLASS_SHAMAN || pPlayer->getClass() == CLASS_HUNTER)
         {
             pPlayer->GetSession()->SendNotification("This race does not support your class.");

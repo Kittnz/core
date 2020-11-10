@@ -1249,4 +1249,245 @@ REPLACE INTO `creature` (`id`, `map`, `modelid`, `equipment_id`, `position_x`, `
 REPLACE INTO `creature` (`id`, `map`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `DeathState`, `MovementType`, `spawnFlags`, `visibilitymod`, `patch_min`, `patch_max`)VALUES (51667, 0, 0, 0, -8841.52, 1092.43, 95.2072, 1.67244, 25, 25, 5, 0, 100, 0, 0, 1, 0, 0, 0, 10);
 REPLACE INTO `creature` (`id`, `map`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `DeathState`, `MovementType`, `spawnFlags`, `visibilitymod`, `patch_min`, `patch_max`)VALUES (51668, 0, 0, 0, -8873.05, 1088.43, 91.9111, 3.04689, 25, 25, 5, 0, 100, 0, 0, 1, 0, 0, 0, 10);
 
+-- New shop items:
+
+-- Summon: Barber
+
+set @entry = 50600;
+set @class = 15;
+set @subclass = 0;
+set @name = 'Summon: Barber';
+set @description = 'Summons your personal barber Sniptip, for when you need a quick style change.';
+set @display = 9825;
+set @quality = 1;
+set @bonding = 1;
+set @stackable = 20;
+set @spell = 28505;
+set @charges = 0;
+set @cooldown = 1000;
+set @script = '';
+
+replace into item_template (entry, class, subclass, name, description, displayid, quality, bonding, stackable, spellid_1, spellcharges_1, spellcooldown_1, scriptname) values (@entry, @class, @subclass, @name, @description, @display, @quality, @bonding, @stackable, @spell, @charges, @cooldown, @script);
+
+-- Summon: Surgeon
+
+set @entry = 50601;
+set @class = 15;
+set @subclass = 0;
+set @name = 'Summon: Surgeon';
+set @description = 'Summon Sharpshear, your own private surgeon. List of services include scar removal, broken nose fix and others.';
+set @display = 22464;
+set @quality = 1;
+set @bonding = 1;
+set @stackable = 20;
+set @spell = 28505;
+set @charges = 0;
+set @cooldown = 1000;
+set @script = '';
+
+replace into item_template (entry, class, subclass, name, description, displayid, quality, bonding, stackable, spellid_1, spellcharges_1, spellcooldown_1, scriptname) values (@entry, @class, @subclass, @name, @description, @display, @quality, @bonding, @stackable, @spell, @charges, @cooldown, @script);
+
+-- Summon: Auctioneer
+
+set @entry = 50602;
+set @class = 15;
+set @subclass = 0;
+set @name = 'Summon: Auctioneer';
+set @description = 'Summon your local Goblin entrepreneur. Buy, sell, bid — he’s got the best deals anywhere!';
+set @display = 7260;
+set @quality = 1;
+set @bonding = 1;
+set @stackable = 20;
+set @spell = 28505;
+set @charges = 0;
+set @cooldown = 1000;
+set @script = '';
+
+replace into item_template (entry, class, subclass, name, description, displayid, quality, bonding, stackable, spellid_1, spellcharges_1, spellcooldown_1, scriptname) values (@entry, @class, @subclass, @name, @description, @display, @quality, @bonding, @stackable, @spell, @charges, @cooldown, @script);
+
+-- Race Change Token: Human
+
+set @entry = 50603;
+set @class = 15;
+set @subclass = 0;
+set @name = 'Race Change Token: Human';
+set @description = 'Right click to use.';
+set @display = 30658;
+set @quality = 1;
+set @bonding = 1;
+set @stackable = 20;
+set @spell = 1575;
+set @charges = -1;
+set @cooldown = 1000;
+set @script = 'shop_racechange';
+
+replace into item_template (entry, class, subclass, name, description, displayid, quality, bonding, stackable, spellid_1, spellcharges_1, spellcooldown_1, scriptname) values (@entry, @class, @subclass, @name, @description, @display, @quality, @bonding, @stackable, @spell, @charges, @cooldown, @script);
+
+-- Race Change Token: Gnome
+
+set @entry = 50604;
+set @class = 15;
+set @subclass = 0;
+set @name = 'Race Change Token: Gnome';
+set @description = 'Right click to use.';
+set @display = 30658;
+set @quality = 1;
+set @bonding = 1;
+set @stackable = 20;
+set @spell = 1575;
+set @charges = -1;
+set @cooldown = 1000;
+set @script = 'shop_racechange';
+
+replace into item_template (entry, class, subclass, name, description, displayid, quality, bonding, stackable, spellid_1, spellcharges_1, spellcooldown_1, scriptname) values (@entry, @class, @subclass, @name, @description, @display, @quality, @bonding, @stackable, @spell, @charges, @cooldown, @script);
+
+-- Race Change Token: Dwarf
+
+set @entry = 50605;
+set @class = 15;
+set @subclass = 0;
+set @name = 'Race Change Token: Dwarf';
+set @description = 'Right click to use.';
+set @display = 30658;
+set @quality = 1;
+set @bonding = 1;
+set @stackable = 20;
+set @spell = 1575;
+set @charges = -1;
+set @cooldown = 1000;
+set @script = 'shop_racechange';
+
+replace into item_template (entry, class, subclass, name, description, displayid, quality, bonding, stackable, spellid_1, spellcharges_1, spellcooldown_1, scriptname) values (@entry, @class, @subclass, @name, @description, @display, @quality, @bonding, @stackable, @spell, @charges, @cooldown, @script);
+
+-- Race Change Token: Night Elf
+
+set @entry = 50606;
+set @class = 15;
+set @subclass = 0;
+set @name = 'Race Change Token: Night Elf';
+set @description = 'Right click to use.';
+set @display = 30658;
+set @quality = 1;
+set @bonding = 1;
+set @stackable = 20;
+set @spell = 1575;
+set @charges = -1;
+set @cooldown = 1000;
+set @script = 'shop_racechange';
+
+replace into item_template (entry, class, subclass, name, description, displayid, quality, bonding, stackable, spellid_1, spellcharges_1, spellcooldown_1, scriptname) values (@entry, @class, @subclass, @name, @description, @display, @quality, @bonding, @stackable, @spell, @charges, @cooldown, @script);
+
+-- Race Change Token: Orc
+
+set @entry = 50607;
+set @class = 15;
+set @subclass = 0;
+set @name = 'Race Change Token: Orc';
+set @description = 'Right click to use.';
+set @display = 30658;
+set @quality = 1;
+set @bonding = 1;
+set @stackable = 20;
+set @spell = 1575;
+set @charges = -1;
+set @cooldown = 1000;
+set @script = 'shop_racechange';
+
+replace into item_template (entry, class, subclass, name, description, displayid, quality, bonding, stackable, spellid_1, spellcharges_1, spellcooldown_1, scriptname) values (@entry, @class, @subclass, @name, @description, @display, @quality, @bonding, @stackable, @spell, @charges, @cooldown, @script);
+
+-- Race Change Token: Troll
+
+set @entry = 50608;
+set @class = 15;
+set @subclass = 0;
+set @name = 'Race Change Token: Troll';
+set @description = 'Right click to use.';
+set @display = 30658;
+set @quality = 1;
+set @bonding = 1;
+set @stackable = 20;
+set @spell = 1575;
+set @charges = -1;
+set @cooldown = 1000;
+set @script = 'shop_racechange';
+
+replace into item_template (entry, class, subclass, name, description, displayid, quality, bonding, stackable, spellid_1, spellcharges_1, spellcooldown_1, scriptname) values (@entry, @class, @subclass, @name, @description, @display, @quality, @bonding, @stackable, @spell, @charges, @cooldown, @script);
+
+-- Race Change Token: Tauren
+
+set @entry = 50609;
+set @class = 15;
+set @subclass = 0;
+set @name = 'Race Change Token: Tauren';
+set @description = 'Right click to use.';
+set @display = 30658;
+set @quality = 1;
+set @bonding = 1;
+set @stackable = 20;
+set @spell = 1575;
+set @charges = -1;
+set @cooldown = 1000;
+set @script = 'shop_racechange';
+
+replace into item_template (entry, class, subclass, name, description, displayid, quality, bonding, stackable, spellid_1, spellcharges_1, spellcooldown_1, scriptname) values (@entry, @class, @subclass, @name, @description, @display, @quality, @bonding, @stackable, @spell, @charges, @cooldown, @script);
+
+-- Race Change Token: Undead
+
+set @entry = 50610;
+set @class = 15;
+set @subclass = 0;
+set @name = 'Race Change Token: Undead';
+set @description = 'Right click to use.';
+set @display = 30658;
+set @quality = 1;
+set @bonding = 1;
+set @stackable = 20;
+set @spell = 1575;
+set @charges = -1;
+set @cooldown = 1000;
+set @script = 'shop_racechange';
+
+replace into item_template (entry, class, subclass, name, description, displayid, quality, bonding, stackable, spellid_1, spellcharges_1, spellcooldown_1, scriptname) values (@entry, @class, @subclass, @name, @description, @display, @quality, @bonding, @stackable, @spell, @charges, @cooldown, @script);
+
+-- Character: Change Gender
+
+set @entry = 50611;
+set @class = 15;
+set @subclass = 0;
+set @name = 'Character: Change Gender';
+set @description = 'Right click to use.';
+set @display = 30658;
+set @quality = 1;
+set @bonding = 1;
+set @stackable = 20;
+set @spell = 1575;
+set @charges = -1;
+set @cooldown = 1000;
+set @script = 'shop_changegender';
+
+replace into item_template (entry, class, subclass, name, description, displayid, quality, bonding, stackable, spellid_1, spellcharges_1, spellcooldown_1, scriptname) values (@entry, @class, @subclass, @name, @description, @display, @quality, @bonding, @stackable, @spell, @charges, @cooldown, @script);
+
+-- Misc. SQL:
+
+replace into broadcast_text (ID, MaleText) values (51670, 'Hair to cut, coins to count.\nThe busy life of a goblin.');
+replace into npc_text (ID, BroadcastTextID0) values (51670, 51670);
+
+replace into broadcast_text (ID, MaleText) values (51671, 'Can’t get no love with that face?\n\nI’ve got what you need.');
+replace into npc_text (ID, BroadcastTextID0) values (51671, 51671);
+
+
+replace into creature_template values 
+
+(51680, 0, 0, 0, 7993, 0, 0, 0, 'Drezbit', NULL, 0, 50, 50, 3517, 3517, 2103, 2103, 2999, 855, 855, 4096, 1.1, 1.14286, 0, 0, 72, 93, 0, 226, 1, 2000, 2000, 1, 4096, 0, 0, 0, 0, 0, 0, 66.44, 91.355, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 2, 0, ''),
+
+(51681, 0, 0, 0, 7909, 0, 0, 0, 'Sniptip', NULL, 0, 1, 1, 300, 400, 0, 0, 20, 35, 35, 1, 1, 1.14286, 1, 0, 2, 2, 0, 44, 1, 1400, 1900, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 1, 0, 0, 0, 0, 0, 2, 0, 'npc_barber'),
+
+(51682, 0, 0, 0, 7212, 0, 0, 0, 'Sharpshear', NULL, 0, 1, 1, 300, 400, 0, 0, 20, 35, 35, 1, 1, 1.14286, 1, 0, 2, 2, 0, 44, 1, 1400, 1900, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 1, 0, 0, 0, 0, 0, 2, 0, 'npc_surgeon');
+
+replace into custom_pet_entry_relation (item_entry, creature_entry) values (50602, 51680);
+replace into custom_pet_entry_relation (item_entry, creature_entry) values (50600, 51681);
+replace into custom_pet_entry_relation (item_entry, creature_entry) values (50601, 51682);
+
+UPDATE `broadcast_text` SET `MaleText`='Thank you for your continued support.' WHERE (`ID`='90001');
+
 
