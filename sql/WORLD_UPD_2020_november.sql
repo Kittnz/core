@@ -1267,7 +1267,7 @@ set @charges = 0;
 set @cooldown = 1000;
 set @script = '';
 
-replace into item_template (entry, class, subclass, name, description, displayid, quality, bonding, stackable, spellid_1, spellcharges_1, spellcooldown_1, scriptname) values (@entry, @class, @subclass, @name, @description, @display, @quality, @bonding, @stackable, @spell, @charges, @cooldown, @script);
+replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, stackable, spellid_1, spellcharges_1, spellcooldown_1, script_name) values (@entry, @class, @subclass, @name, @description, @display, @quality, @bonding, @stackable, @spell, @charges, @cooldown, @script);
 
 -- Summon: Surgeon
 
@@ -1275,7 +1275,7 @@ set @entry = 50601;
 set @class = 15;
 set @subclass = 0;
 set @name = 'Summon: Surgeon';
-set @description = 'Summon Sharpshear, your own private surgeon. List of services include scar removal, broken nose fix and others.';
+set @description = 'Summon Dr. Topnose, your own private surgeon. List of services include scar removal, broken nose fix and others.';
 set @display = 22464;
 set @quality = 1;
 set @bonding = 1;
@@ -1285,7 +1285,7 @@ set @charges = 0;
 set @cooldown = 1000;
 set @script = '';
 
-replace into item_template (entry, class, subclass, name, description, displayid, quality, bonding, stackable, spellid_1, spellcharges_1, spellcooldown_1, scriptname) values (@entry, @class, @subclass, @name, @description, @display, @quality, @bonding, @stackable, @spell, @charges, @cooldown, @script);
+replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, stackable, spellid_1, spellcharges_1, spellcooldown_1, script_name) values (@entry, @class, @subclass, @name, @description, @display, @quality, @bonding, @stackable, @spell, @charges, @cooldown, @script);
 
 -- Summon: Auctioneer
 
@@ -1303,7 +1303,7 @@ set @charges = 0;
 set @cooldown = 1000;
 set @script = '';
 
-replace into item_template (entry, class, subclass, name, description, displayid, quality, bonding, stackable, spellid_1, spellcharges_1, spellcooldown_1, scriptname) values (@entry, @class, @subclass, @name, @description, @display, @quality, @bonding, @stackable, @spell, @charges, @cooldown, @script);
+replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, stackable, spellid_1, spellcharges_1, spellcooldown_1, script_name) values (@entry, @class, @subclass, @name, @description, @display, @quality, @bonding, @stackable, @spell, @charges, @cooldown, @script);
 
 -- Race Change Token: Human
 
@@ -1321,7 +1321,7 @@ set @charges = -1;
 set @cooldown = 1000;
 set @script = 'shop_racechange';
 
-replace into item_template (entry, class, subclass, name, description, displayid, quality, bonding, stackable, spellid_1, spellcharges_1, spellcooldown_1, scriptname) values (@entry, @class, @subclass, @name, @description, @display, @quality, @bonding, @stackable, @spell, @charges, @cooldown, @script);
+replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, stackable, spellid_1, spellcharges_1, spellcooldown_1, script_name) values (@entry, @class, @subclass, @name, @description, @display, @quality, @bonding, @stackable, @spell, @charges, @cooldown, @script);
 
 -- Race Change Token: Gnome
 
@@ -1339,7 +1339,7 @@ set @charges = -1;
 set @cooldown = 1000;
 set @script = 'shop_racechange';
 
-replace into item_template (entry, class, subclass, name, description, displayid, quality, bonding, stackable, spellid_1, spellcharges_1, spellcooldown_1, scriptname) values (@entry, @class, @subclass, @name, @description, @display, @quality, @bonding, @stackable, @spell, @charges, @cooldown, @script);
+replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, stackable, spellid_1, spellcharges_1, spellcooldown_1, script_name) values (@entry, @class, @subclass, @name, @description, @display, @quality, @bonding, @stackable, @spell, @charges, @cooldown, @script);
 
 -- Race Change Token: Dwarf
 
@@ -1357,7 +1357,7 @@ set @charges = -1;
 set @cooldown = 1000;
 set @script = 'shop_racechange';
 
-replace into item_template (entry, class, subclass, name, description, displayid, quality, bonding, stackable, spellid_1, spellcharges_1, spellcooldown_1, scriptname) values (@entry, @class, @subclass, @name, @description, @display, @quality, @bonding, @stackable, @spell, @charges, @cooldown, @script);
+replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, stackable, spellid_1, spellcharges_1, spellcooldown_1, script_name) values (@entry, @class, @subclass, @name, @description, @display, @quality, @bonding, @stackable, @spell, @charges, @cooldown, @script);
 
 -- Race Change Token: Night Elf
 
@@ -1375,7 +1375,7 @@ set @charges = -1;
 set @cooldown = 1000;
 set @script = 'shop_racechange';
 
-replace into item_template (entry, class, subclass, name, description, displayid, quality, bonding, stackable, spellid_1, spellcharges_1, spellcooldown_1, scriptname) values (@entry, @class, @subclass, @name, @description, @display, @quality, @bonding, @stackable, @spell, @charges, @cooldown, @script);
+replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, stackable, spellid_1, spellcharges_1, spellcooldown_1, script_name) values (@entry, @class, @subclass, @name, @description, @display, @quality, @bonding, @stackable, @spell, @charges, @cooldown, @script);
 
 -- Race Change Token: Orc
 
@@ -1393,7 +1393,7 @@ set @charges = -1;
 set @cooldown = 1000;
 set @script = 'shop_racechange';
 
-replace into item_template (entry, class, subclass, name, description, displayid, quality, bonding, stackable, spellid_1, spellcharges_1, spellcooldown_1, scriptname) values (@entry, @class, @subclass, @name, @description, @display, @quality, @bonding, @stackable, @spell, @charges, @cooldown, @script);
+replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, stackable, spellid_1, spellcharges_1, spellcooldown_1, script_name) values (@entry, @class, @subclass, @name, @description, @display, @quality, @bonding, @stackable, @spell, @charges, @cooldown, @script);
 
 -- Race Change Token: Troll
 
@@ -1411,7 +1411,7 @@ set @charges = -1;
 set @cooldown = 1000;
 set @script = 'shop_racechange';
 
-replace into item_template (entry, class, subclass, name, description, displayid, quality, bonding, stackable, spellid_1, spellcharges_1, spellcooldown_1, scriptname) values (@entry, @class, @subclass, @name, @description, @display, @quality, @bonding, @stackable, @spell, @charges, @cooldown, @script);
+replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, stackable, spellid_1, spellcharges_1, spellcooldown_1, script_name) values (@entry, @class, @subclass, @name, @description, @display, @quality, @bonding, @stackable, @spell, @charges, @cooldown, @script);
 
 -- Race Change Token: Tauren
 
@@ -1429,7 +1429,7 @@ set @charges = -1;
 set @cooldown = 1000;
 set @script = 'shop_racechange';
 
-replace into item_template (entry, class, subclass, name, description, displayid, quality, bonding, stackable, spellid_1, spellcharges_1, spellcooldown_1, scriptname) values (@entry, @class, @subclass, @name, @description, @display, @quality, @bonding, @stackable, @spell, @charges, @cooldown, @script);
+replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, stackable, spellid_1, spellcharges_1, spellcooldown_1, script_name) values (@entry, @class, @subclass, @name, @description, @display, @quality, @bonding, @stackable, @spell, @charges, @cooldown, @script);
 
 -- Race Change Token: Undead
 
@@ -1447,7 +1447,7 @@ set @charges = -1;
 set @cooldown = 1000;
 set @script = 'shop_racechange';
 
-replace into item_template (entry, class, subclass, name, description, displayid, quality, bonding, stackable, spellid_1, spellcharges_1, spellcooldown_1, scriptname) values (@entry, @class, @subclass, @name, @description, @display, @quality, @bonding, @stackable, @spell, @charges, @cooldown, @script);
+replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, stackable, spellid_1, spellcharges_1, spellcooldown_1, script_name) values (@entry, @class, @subclass, @name, @description, @display, @quality, @bonding, @stackable, @spell, @charges, @cooldown, @script);
 
 -- Character: Change Gender
 
@@ -1465,24 +1465,22 @@ set @charges = -1;
 set @cooldown = 1000;
 set @script = 'shop_changegender';
 
-replace into item_template (entry, class, subclass, name, description, displayid, quality, bonding, stackable, spellid_1, spellcharges_1, spellcooldown_1, scriptname) values (@entry, @class, @subclass, @name, @description, @display, @quality, @bonding, @stackable, @spell, @charges, @cooldown, @script);
+replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, stackable, spellid_1, spellcharges_1, spellcooldown_1, script_name) values (@entry, @class, @subclass, @name, @description, @display, @quality, @bonding, @stackable, @spell, @charges, @cooldown, @script);
 
 -- Misc. SQL:
 
 replace into broadcast_text (ID, MaleText) values (51670, 'Hair to cut, coins to count.\nThe busy life of a goblin.');
 replace into npc_text (ID, BroadcastTextID0) values (51670, 51670);
 
-replace into broadcast_text (ID, MaleText) values (51671, 'Can’t get no love with that face?\n\nI’ve got what you need.');
+replace into broadcast_text (ID, MaleText) values (51671, 'You got a face that only a mother would probably love, I got a perfect fix for that!');
 replace into npc_text (ID, BroadcastTextID0) values (51671, 51671);
 
 
-replace into creature_template values 
+REPLACE INTO `creature_template` VALUES (51680, 7, 7993, 0, 0, 0, 'Auctioneer Drezbit', NULL, 0, 50, 50, 1900, 1900, 0, 0, 2999, 120, 4096, 1, 1.14286, 0, 20, 5, 0, 0, 1, 76, 90, 0, 226, 1, 2000, 2000, 1, 36864, 0, 0, 0, 0, 0, 0, 61.3, 82.9, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, '');
 
-(51680, 0, 0, 0, 7993, 0, 0, 0, 'Drezbit', NULL, 0, 50, 50, 3517, 3517, 2103, 2103, 2999, 855, 855, 4096, 1.1, 1.14286, 0, 0, 72, 93, 0, 226, 1, 2000, 2000, 1, 4096, 0, 0, 0, 0, 0, 0, 66.44, 91.355, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 2, 0, ''),
+REPLACE INTO `creature_template` VALUES (51681, 0, 7909, 0, 0, 0, 'Sniptip', '', 0, 30, 30, 1605, 1605, 0, 0, 1200, 35, 2, 1.08, 1.14286, 0, 20, 5, 0, 0, 1, 42, 53, 0, 122, 1, 1000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 45.144, 62.073, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 100, 0, 0, 10, 'npc_barber');
 
-(51681, 0, 0, 0, 7909, 0, 0, 0, 'Sniptip', NULL, 0, 1, 1, 300, 400, 0, 0, 20, 35, 35, 1, 1, 1.14286, 1, 0, 2, 2, 0, 44, 1, 1400, 1900, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 1, 0, 0, 0, 0, 0, 2, 0, 'npc_barber'),
-
-(51682, 0, 0, 0, 7212, 0, 0, 0, 'Sharpshear', NULL, 0, 1, 1, 300, 400, 0, 0, 20, 35, 35, 1, 1, 1.14286, 1, 0, 2, 2, 0, 44, 1, 1400, 1900, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 1, 0, 0, 0, 0, 0, 2, 0, 'npc_surgeon');
+REPLACE INTO `creature_template` VALUES (51682, 0,  7192, 0, 0, 0, 'Dr. Topnose', '', 0, 30, 30, 1605, 1605, 0, 0, 1200, 35, 2, 1.08, 1.14286, 0, 20, 5, 0, 0, 1, 42, 53, 0, 122, 1, 1000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 45.144, 62.073, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 100, 0, 0, 10, 'npc_surgeon');
 
 replace into custom_pet_entry_relation (item_entry, creature_entry) values (50602, 51680);
 replace into custom_pet_entry_relation (item_entry, creature_entry) values (50600, 51681);
@@ -1490,4 +1488,5 @@ replace into custom_pet_entry_relation (item_entry, creature_entry) values (5060
 
 UPDATE `broadcast_text` SET `MaleText`='Thank you for your continued support.' WHERE (`ID`='90001');
 
+update creature_template set npc_flags = 1 where entry in (51681, 51682);
 
