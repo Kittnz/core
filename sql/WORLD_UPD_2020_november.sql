@@ -1489,4 +1489,5 @@ replace into custom_pet_entry_relation (item_entry, creature_entry) values (5060
 UPDATE `broadcast_text` SET `MaleText`='Thank you for your continued support.' WHERE (`ID`='90001');
 
 update creature_template set npc_flags = 1 where entry in (51681, 51682);
+update item_template set max_count = 1 where entry in (50600, 50601, 50602);
 
