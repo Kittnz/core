@@ -19,14 +19,16 @@ create table shop_items (
 ) engine=innodb auto_increment=10 default charset=utf8;
 
 replace into shop_categories values
-(1,  'Gameplay'),
-(2,  'Companions'),
-(3,  'Rare Mounts'),
-(4,  'Epic Mounts'),
-(5,  'Tabards'),
-(6,  'Skins'),
-(7,  'Illusions'),
-(8,  'Glyphs');
+(1,  'Character: Name & Appearance'),
+(2,  'Character: Additional Skins'),
+(3,  'Character: Race & Faction'),
+(4,  'Gameplay: Miscellaneous'),
+(5,  'Gameplay: Riding Mounts I'),
+(6,  'Gameplay: Riding Mounts II'),
+(7,  'Gameplay: Glyphs'),
+(8,  'Gameplay: Companions'),
+(9,  'Vanity: Tabards'),
+(10,  'Vanity: Illusions');
 
 replace into shop_items values
 -- Gameplay --------------------------------------------------------------------------------------------
