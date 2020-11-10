@@ -21,7 +21,7 @@ create table shop_items (
 replace into shop_categories values
 (1,  'Character: Name & Appearance'),
 (2,  'Character: Additional Skins'),
-(3,  'Character: Race a Faction'),
+(3,  'Character: Race & Faction'),
 (4,  'Gameplay: Miscellaneous'),
 (5,  'Gameplay: Riding Mounts I'),
 (6,  'Gameplay: Riding Mounts II'),
