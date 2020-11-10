@@ -1234,12 +1234,12 @@ bool GossipSelect_npc_surgeon(Player* pPlayer, Creature* pCreature, uint32 uiSen
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        uint16 bytelimit_human = (pPlayer->getGender() == GENDER_FEMALE) ? 10 : 11;
+        uint16 bytelimit_human = (pPlayer->getGender() == GENDER_FEMALE) ? 9 : 9;
         uint16 bytelimit_elf = (pPlayer->getGender() == GENDER_FEMALE) ? 8 : 8;
-        uint16 bytelimit_gnome = (pPlayer->getGender() == GENDER_FEMALE) ? 5 : 6;
-        uint16 bytelimit_dwarf = (pPlayer->getGender() == GENDER_FEMALE) ? 10 : 17;
-        uint16 bytelimit_troll = (pPlayer->getGender() == GENDER_FEMALE) ? 14 : 14;
-        uint16 bytelimit_orc = (pPlayer->getGender() == GENDER_FEMALE) ? 9 : 12;
+        uint16 bytelimit_gnome = (pPlayer->getGender() == GENDER_FEMALE) ? 4 : 3;
+        uint16 bytelimit_dwarf = (pPlayer->getGender() == GENDER_FEMALE) ? 8 : 8;
+        uint16 bytelimit_troll = (pPlayer->getGender() == GENDER_FEMALE) ? 5 : 5;
+        uint16 bytelimit_orc = (pPlayer->getGender() == GENDER_FEMALE) ? 8 : 8;
         uint16 bytelimit_undead = (pPlayer->getGender() == GENDER_FEMALE) ? 5 : 7;
         uint16 bytelimit_tauren = (pPlayer->getGender() == GENDER_FEMALE) ? 10 : 18;
 
@@ -1248,9 +1248,7 @@ bool GossipSelect_npc_surgeon(Player* pPlayer, Creature* pCreature, uint32 uiSen
 
         switch (pPlayer->getRace())
         {
-        case RACE_HUMAN:
-            skintone = (curr_skintone == bytelimit_human) ? 0 : curr_skintone + pPlayer->getGender() == GENDER_MALE && curr_skintone == 9 ? 2 : 1;
-            break;
+        case RACE_HUMAN:    skintone = (curr_skintone == bytelimit_human) ? 0 : ++curr_skintone; break;
         case RACE_NIGHTELF: skintone = (curr_skintone == bytelimit_elf) ? 0 : ++curr_skintone; break;
         case RACE_GNOME:    skintone = (curr_skintone == bytelimit_gnome) ? 0 : ++curr_skintone; break;
         case RACE_DWARF:    skintone = (curr_skintone == bytelimit_dwarf) ? 0 : ++curr_skintone; break;
@@ -1266,12 +1264,12 @@ bool GossipSelect_npc_surgeon(Player* pPlayer, Creature* pCreature, uint32 uiSen
 
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
     {
-        uint16 bytelimit_human = (pPlayer->getGender() == GENDER_FEMALE) ? 10 : 11;
+        uint16 bytelimit_human = (pPlayer->getGender() == GENDER_FEMALE) ? 9 : 9;
         uint16 bytelimit_elf = (pPlayer->getGender() == GENDER_FEMALE) ? 8 : 8;
-        uint16 bytelimit_gnome = (pPlayer->getGender() == GENDER_FEMALE) ? 5 : 6;
-        uint16 bytelimit_dwarf = (pPlayer->getGender() == GENDER_FEMALE) ? 10 : 17;
-        uint16 bytelimit_troll = (pPlayer->getGender() == GENDER_FEMALE) ? 14 : 14;
-        uint16 bytelimit_orc = (pPlayer->getGender() == GENDER_FEMALE) ? 9 : 12;
+        uint16 bytelimit_gnome = (pPlayer->getGender() == GENDER_FEMALE) ? 4 : 3;
+        uint16 bytelimit_dwarf = (pPlayer->getGender() == GENDER_FEMALE) ? 8 : 8;
+        uint16 bytelimit_troll = (pPlayer->getGender() == GENDER_FEMALE) ? 5 : 5;
+        uint16 bytelimit_orc = (pPlayer->getGender() == GENDER_FEMALE) ? 8 : 8;
         uint16 bytelimit_undead = (pPlayer->getGender() == GENDER_FEMALE) ? 5 : 7;
         uint16 bytelimit_tauren = (pPlayer->getGender() == GENDER_FEMALE) ? 10 : 18;
 
@@ -1280,9 +1278,7 @@ bool GossipSelect_npc_surgeon(Player* pPlayer, Creature* pCreature, uint32 uiSen
 
         switch (pPlayer->getRace())
         {
-        case RACE_HUMAN:
-            skintone = (curr_skintone == 0) ? bytelimit_human : curr_skintone - pPlayer->getGender() == GENDER_MALE && curr_skintone == 11 ? 2 : 1;
-            break;
+        case RACE_HUMAN:    skintone = (curr_skintone == 0) ? bytelimit_human : --curr_skintone; break;
         case RACE_NIGHTELF: skintone = (curr_skintone == 0) ? bytelimit_elf : --curr_skintone; break;
         case RACE_GNOME:    skintone = (curr_skintone == 0) ? bytelimit_gnome : --curr_skintone; break;
         case RACE_DWARF:    skintone = (curr_skintone == 0) ? bytelimit_dwarf : --curr_skintone; break;
