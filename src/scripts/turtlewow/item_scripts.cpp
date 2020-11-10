@@ -58,12 +58,6 @@ bool ItemUseSpell_experimental_wormhole_generator(Player* pPlayer, Item* pItem, 
     return false;
 }
 
-bool ItemUseSpell_portable_meeting_stone(Player* pPlayer, Item* pItem, const SpellCastTargets&)
-{
-    ChatHandler(pPlayer).PSendSysMessage("You sense magic sipped away from this stone. Most likely the source of magic is gone. Try Portable Wormhole Generator instead.");
-    return false;
-}
-
 #define ALICE_GROW_LBOUNDARY 1.05f
 #define ALICE_GROW_RBOUNDARY 1.15f
 #define ALICE_BELITTLE_LBOUNDARY 0.85f
@@ -1586,11 +1580,6 @@ void AddSC_item_scripts()
     newscript = new Script;
     newscript->Name = "item_character_rename";
     newscript->pItemUseSpell = &ItemUseSpell_character_rename;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "item_roleplay_hub";
-    newscript->pItemUseSpell = &ItemUseSpell_portable_meeting_stone;
     newscript->RegisterSelf();
 
     newscript = new Script;

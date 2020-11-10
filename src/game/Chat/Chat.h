@@ -476,9 +476,6 @@ class MANGOS_DLL_SPEC ChatHandler
         bool HandleSaveAllCommand(char* args);
 
         // Turtle WoW
-        bool HandleSkinCommand(char* args);
-        bool HandleFactionCommand(char* args);
-        bool HandleRaceCommand(char* args);
         bool HandleBalanceCommand(char* args);
         bool HandleSaleCommand(char* args);
         bool HandleMountCommand(char* args);
