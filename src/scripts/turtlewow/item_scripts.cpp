@@ -1520,9 +1520,8 @@ bool ItemUseSpell_shop_changegender(Player* pPlayer, Item* pItem, const SpellCas
 
     uint8 player_gender = (pPlayer->getGender() == GENDER_MALE) ? GENDER_FEMALE : GENDER_MALE;
     pPlayer->SetByteValue(UNIT_FIELD_BYTES_0, 2, player_gender);
-    pPlayer->GetSession()->SendNotification("You will be disconnected in 5 seconds.");
+    pPlayer->InitPlayerDisplayIds();
     pPlayer->SaveToDB();
-    DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [player = pPlayer]() { player->GetSession()->KickPlayer(); });
     return true;
 }
 
