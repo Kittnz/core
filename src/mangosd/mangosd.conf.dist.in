@@ -2120,6 +2120,6 @@ Transmog.ReqMoneyRate = 1.0
 #    ExpansionContent 0 / 1. Enable new races: Goblins and High Elves with this option.
 ###################################################################################################################
 
-ExpansionContent = 0
+ExpansionContent = 1
 OpenHouse = 0
 
