@@ -1522,7 +1522,7 @@ bool ItemUseSpell_shop_changegender(Player* pPlayer, Item* pItem, const SpellCas
     pPlayer->SetByteValue(UNIT_FIELD_BYTES_0, 2, player_gender);
     pPlayer->GetSession()->SendNotification("You will be disconnected in 5 seconds.");
     pPlayer->SaveToDB();
-    DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [player = pPlayer]() { player->GetSession()->KickPlayer(); });
+    DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [player = pPlayer]() { player->GetSession()->LogoutPlayer(false); });
     return true;
 }
 
