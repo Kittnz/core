@@ -1491,3 +1491,6 @@ UPDATE `broadcast_text` SET `MaleText`='Thank you for your continued support.' W
 update creature_template set npc_flags = 1 where entry in (51681, 51682);
 update item_template set max_count = 1 where entry in (50600, 50601, 50602);
 
+REPLACE INTO `creature` VALUES (2556372,51601,1,0,51601,-899.249,-3763.86,11.8139,0.545087,25,25,0,0,100,0,0,0,0,0,0,10);
+
+
