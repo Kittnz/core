@@ -76,7 +76,7 @@ void instance_ruins_of_ahnqiraj::Initialize()
 bool instance_ruins_of_ahnqiraj::IsEncounterInProgress() const
 {
     for (uint8 i = 0; i < INSTANCE_RUINS_AQ_MAX_ENCOUNTER; ++i)
-        if (m_auiEncounter[i] == IN_PROGRESS || m_auiEncounter[i] == SPECIAL)
+        if (m_auiEncounter[i] == IN_PROGRESS)
             return true;
     return false;
 }

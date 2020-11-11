@@ -89,7 +89,7 @@ void instance_zulgurub::UpdateHakkarPowerStacks()
 bool instance_zulgurub::IsEncounterInProgress() const
 {
     for (uint8 i = 0; i < ZULGURUB_MAX_ENCOUNTER; ++i)
-        if (m_auiEncounter[i] == IN_PROGRESS || m_auiEncounter[i] == SPECIAL)
+        if (m_auiEncounter[i] == IN_PROGRESS)
             return true;
     return false;
 }
