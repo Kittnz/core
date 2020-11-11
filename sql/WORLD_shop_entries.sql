@@ -19,9 +19,9 @@ create table shop_items (
 ) engine=innodb auto_increment=10 default charset=utf8;
 
 replace into shop_categories values
-(1,  'Character: Name & Appearance'),
+(1,  'Character: Name & Look'),
 (2,  'Character: Additional Skins'),
-(3,  'Character: Race & Faction'),
+(3,  'Character: Race Change'),
 (4,  'Gameplay: Miscellaneous'),
 (5,  'Gameplay: Riding Mounts I'),
 (6,  'Gameplay: Riding Mounts II'),

@@ -272,7 +272,7 @@ reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
 reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
 nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
 nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
-specialflags = 1, objectivetext1='Pyres Lit'  
+specialflags = 4, objectivetext1='Pyres Lit'  
 where entry = @quest_entry;	 
 
 -- Unwanted Eyes
@@ -366,7 +366,7 @@ reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
 reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
 nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
 nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
-specialflags = 1
+specialflags = 4
 where entry = @quest_entry;	 
 
 -- Raiding Quel’lithen Lodge
@@ -448,7 +448,7 @@ reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
 reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
 nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
 nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
-specialflags = 1
+specialflags = 4
 where entry = @quest_entry;	 
 
 -- Da Means Tha Heal
@@ -563,7 +563,7 @@ reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
 reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
 nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
 nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
-specialflags = 1
+specialflags = 4
 where entry = @quest_entry;	 
 
 -- Times be changin’
@@ -655,6 +655,6 @@ reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
 reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
 nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
 nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
-specialflags = 1
+specialflags = 4
 where entry = @quest_entry;	 
 
