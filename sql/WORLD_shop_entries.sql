@@ -33,7 +33,7 @@ replace into shop_categories values
 replace into shop_items values
 -- Character: Name & Appearance
 (100, 1, 50000, 'Token: Rename', 160),
-(101, 1, 50611, 'Token: Change Genger', 160),
+(101, 1, 50611, 'Token: Change Gender', 160),
 (102, 1, 50600, 'Summon: Barber', 300),
 (103, 1, 50601, 'Summon: Surgeon', 300),
 -- Character: Additional Skins
