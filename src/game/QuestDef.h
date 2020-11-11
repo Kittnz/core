@@ -166,14 +166,13 @@ enum QuestSpecialFlags
     // Mangos flags for set SpecialFlags in DB if required but used only at server
     QUEST_SPECIAL_FLAG_REPEATABLE           = 0x001,        // |1 in SpecialFlags from DB
     QUEST_SPECIAL_FLAG_EXPLORATION_OR_EVENT = 0x002,        // |2 in SpecialFlags from DB (if required area explore, spell SPELL_EFFECT_QUEST_COMPLETE casting, table `*_script` command SCRIPT_COMMAND_QUEST_EXPLORED use, set from script DLL)
-    // reserved for future versions           0x004,        // |4 in SpecialFlags.
+    QUEST_SPECIAL_FLAG_DAILY                = 0x004,        // |4 in SpecialFlags | Internal flag for daily quests
 
     // Mangos flags for internal use only
     QUEST_SPECIAL_FLAG_DELIVER              = 0x008,        // Internal flag computed only
     QUEST_SPECIAL_FLAG_SPEAKTO              = 0x010,        // Internal flag computed only
     QUEST_SPECIAL_FLAG_KILL_OR_CAST         = 0x020,        // Internal flag computed only
-    QUEST_SPECIAL_FLAG_TIMED                = 0x040,        // Internal flag computed only
-    QUEST_SPECIAL_FLAG_DAILY                = 0x080         // Internal flag for daily quests
+    QUEST_SPECIAL_FLAG_TIMED                = 0x040         // Internal flag computed only
 };
 
 enum QuestMethod

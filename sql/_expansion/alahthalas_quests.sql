@@ -300,7 +300,7 @@ reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
 reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
 nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
 nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
-specialflags = 1
+specialflags = 4
 where entry = @quest_entry;	 
 
 -- Relics in Feralas
@@ -397,7 +397,7 @@ reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
 reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
 nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
 nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
-specialflags = 1
+specialflags = 4
 where entry = @quest_entry;	
 
 -- Smashing Zul'Mashar
@@ -572,7 +572,7 @@ reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
 reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
 nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
 nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
-objectivetext1='Horde players slain', type = 41
+objectivetext1='Horde players slain', type = 41, specialflags = 4
 where entry = @quest_entry;	
 
 -- Additional NPCs:
@@ -967,7 +967,7 @@ reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
 reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
 nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
 nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
-specialflags = 1
+specialflags = 4
 where entry = @quest_entry;	
 
 -- Misc. NPCs:
