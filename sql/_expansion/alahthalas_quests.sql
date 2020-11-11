@@ -214,7 +214,7 @@ update item_template set material = 4 where entry = 80240;
 update item_template set stackable = 10 where entry = 80240;
 
 replace into gameobject_template values 
-(3000222, 0, 3, 2590, 'Arcane Crystal', 0, 0, 0.5, 57, 3000222, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+(3000222, 0, 3, 2971, 'Arcane Crystal', 0, 0, 0.5, 57, 3000222, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
 
 update gameobject_template set flags = 4 where entry = 3000222;
 update gameobject_template set data0 = 43 where entry = 3000222;
