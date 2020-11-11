@@ -6076,7 +6076,7 @@ void Spell::EffectSummonCritter(SpellEffectIndex eff_idx)
 {
     if (m_caster->GetTypeId() != TYPEID_PLAYER)
         return;
-    Player* player = (Player*)m_caster;
+    Player* player = (Player*) m_caster;
 
     uint32 pet_entry = m_spellInfo->EffectMiscValue[eff_idx];
     if (!pet_entry)
@@ -6097,7 +6097,7 @@ void Spell::EffectSummonCritter(SpellEffectIndex eff_idx)
 
         if (creature_entry == FIELD_REPAIR_BOT_75B)
         {
-            if (player->GetInstanceData() && player->GetInstanceData()->IsEncounterInProgress())
+            if (player->GetMap() && player->GetMap()->IsRaid() && player->GetInstanceData() && player->GetInstanceData()->IsEncounterInProgress())
             {
                 player->GetSession()->SendNotification("You can't summon the repair bot during raid encounters.");
                 return;
