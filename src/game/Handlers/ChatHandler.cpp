@@ -470,15 +470,18 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                 if (!sWorld.getConfig(CONFIG_BOOL_WHISPER_RESTRICTION) || !toPlayer->IsEnabledWhisperRestriction())
                     allowSendWhisper = true;
 
-                if (masterPlr->IsGameMaster() || allowSendWhisper)
-                    masterPlr->Whisper(msg, lang, player);
-
-                if (toPlayer->GetTeam() != masterPlr->GetTeam()) {
-                    if (!toPlayer->IsDiplomat() && !masterPlr->IsGameMaster()) {
+                if (toPlayer->GetTeam() != masterPlr->GetTeam())
+                {
+                    if (!toPlayer->IsDiplomat() && !masterPlr->IsGameMaster())
+                    {
                         ChatHandler(this).PSendSysMessage(
                                 "|cffff8040The other adventurer is not interested in diplomacy at this moment.|r");
+                        allowSendWhisper = false;
                     }
                 }
+
+                if (masterPlr->IsGameMaster() || allowSendWhisper)
+                    masterPlr->Whisper(msg, lang, player);
 
                 if (lang != LANG_ADDON)
                 {
