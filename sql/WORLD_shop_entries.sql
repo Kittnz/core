@@ -34,8 +34,8 @@ replace into shop_items values
 -- Character: Name & Appearance
 (100, 1, 50000, 'Token: Rename', 160),
 (101, 1, 50611, 'Token: Change Gender', 160),
-(102, 1, 50600, 'Summon: Barber', 300),
-(103, 1, 50601, 'Summon: Surgeon', 300),
+(102, 1, 50600, 'Summon: Barber', 250),
+(103, 1, 50601, 'Summon: Surgeon', 250),
 -- Character: Additional Skins
 (200, 2, 50105, 'Human: Sally Whitemane', 160),
 (201, 2, 50106, 'Human, Gnome: Cultist', 160),
@@ -51,14 +51,14 @@ replace into shop_items values
 (211, 2, 51011, 'Troll: Ice', 160),
 (212, 2, 50212, 'Gnome: Leper', 160),
 -- Character: Race & Faction
-(300, 3, 50603, 'Race Change Token: Human', 200),
-(301, 3, 50604, 'Race Change Token: Gnome', 200),
-(302, 3, 50605, 'Race Change Token: Dwarf', 200),
-(303, 3, 50606, 'Race Change Token: Night Elf', 200),
-(304, 3, 50607, 'Race Change Token: Orc', 200),
-(305, 3, 50608, 'Race Change Token: Troll', 200),
-(306, 3, 50609, 'Race Change Token: Tauren', 200),
-(307, 3, 50610, 'Race Change Token: Undead', 200),
+(300, 3, 50603, 'Race Change Token: Human', 180),
+(301, 3, 50604, 'Race Change Token: Gnome', 180),
+(302, 3, 50605, 'Race Change Token: Dwarf', 180),
+(303, 3, 50606, 'Race Change Token: Night Elf', 180),
+(304, 3, 50607, 'Race Change Token: Orc', 180),
+(305, 3, 50608, 'Race Change Token: Troll', 180),
+(306, 3, 50609, 'Race Change Token: Tauren', 180),
+(307, 3, 50610, 'Race Change Token: Undead', 180),
 -- Gameplay: Miscellaneous
 (400, 4, 50003, 'Backpack: 28 slots', 180),
 (401, 4, 50004, 'Backpack: 36 slots', 200),
