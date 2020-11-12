@@ -1493,4 +1493,6 @@ update item_template set max_count = 1 where entry in (50600, 50601, 50602);
 
 REPLACE INTO `creature` VALUES (2556372,51601,1,0,51601,-899.249,-3763.86,11.8139,0.545087,25,25,0,0,100,0,0,0,0,0,0,10);
 
+update creature_template set faction = 1194 where entry in (14527, 14528);
+
 
