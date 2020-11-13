@@ -20508,10 +20508,35 @@ bool Player::ChangeRace(uint8 newRace, uint8 newGender, uint32 playerbyte1, uint
     uint8 oldRace = getRace();
     bool bChangeTeam = (TeamForRace(oldRace) != TeamForRace(newRace));
 
+	//Giperion Elysium: early check for guild leader
+	uint32 GuildId = GetGuildId();
+	if (GuildId != 0)
+	{
+		if (Guild* guild = sGuildMgr.GetGuildById(GetGuildId()))
+		{
+			if (guild->GetLeaderGuid() == GetObjectGuid())
+			{
+				CHANGERACE_ERR("Impossible due target is a guild leader.");
+				return false;
+			}
+		}
+	}
+
+	//Leave current group
+	RemoveFromGroup();
+
+	//Key - SkillId, Value - Skill value
+	std::unordered_map<uint32, uint16> SkillValues;
+	for (const auto& SkillElemPair : mSkillStatus)
+	{
+		uint32 SkillId = SkillElemPair.first;
+		SkillValues[SkillId] = GetSkillValue(SkillId);
+	}
+
     m_DbSaveDisabled = true;
     if (!ChangeSpellsForRace(oldRace, newRace))
     {
-        CHANGERACE_ERR("Impossible de changer les spells.");
+		CHANGERACE_ERR("Impossible due to spells.");
         return false;
     }
 
@@ -20544,6 +20569,22 @@ bool Player::ChangeRace(uint8 newRace, uint8 newGender, uint32 playerbyte1, uint
     }
 
     LearnDefaultSpells();
+
+	//Restore skill values
+	for (const auto& SkillElemPair : mSkillStatus)
+	{
+		uint32 SkillId = SkillElemPair.first;
+		if (!IsLanguageSkill(SkillId))
+		{
+			auto SkillValueIter = SkillValues.find(SkillId);
+			if (SkillValueIter != SkillValues.end())
+			{
+				uint16 MaxSkill = GetPureMaxSkillValue(SkillId);
+				SetSkill(SkillId, SkillValueIter->second, MaxSkill);
+			}
+		}
+	}
+
     SetFactionForRace(newRace);
 
     if (!ChangeReputationsForRace(oldRace, newRace))
@@ -20561,6 +20602,16 @@ bool Player::ChangeRace(uint8 newRace, uint8 newGender, uint32 playerbyte1, uint
         CHANGERACE_ERR("Impossible de changer les items.");
         return false;
     }
+
+	//Giperion Elysium: Drop current guild
+	if (GuildId != 0)
+	{
+		if (Guild* guild = sGuildMgr.GetGuildById(GetGuildId()))
+		{
+			guild->DelMember(GetObjectGuid());
+		}
+	}
+
     /*
     On sauvegarde le changement de faction, et apres faut deco-reco.
     */
@@ -22060,4 +22111,16 @@ void Player::AddToArenaQueue(bool queuedAsGroup)
     }
 
     sBattleGroundMgr.ScheduleQueueUpdate(bgQueueTypeId, bgTypeId, bgBracketId);
+}
+
+uint16 Player::GetPureMaxSkillValue(uint32 skill) const
+{
+	if (!skill)
+		return 0;
+
+	SkillStatusMap::const_iterator itr = mSkillStatus.find(skill);
+	if (itr == mSkillStatus.end() || itr->second.uState == SKILL_DELETED)
+		return 0;
+
+	return SKILL_MAX(GetUInt32Value(PLAYER_SKILL_VALUE_INDEX(itr->second.pos)));
 }

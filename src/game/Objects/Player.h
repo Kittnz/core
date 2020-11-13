@@ -1640,6 +1640,7 @@ class MANGOS_DLL_SPEC Player final: public Unit
 
         void SetSkill(uint16 id, uint16 currVal, uint16 maxVal, uint16 step = 0);
         uint16 GetSkill(uint16 id, bool bonusPerm, bool bonusTemp, bool max = false) const;
+		uint16 GetPureMaxSkillValue(uint32 skill) const;    // max
         inline uint16 GetSkillValue(uint16 id) const { return GetSkill(id, true, true); }           // skill value + perm. bonus + temp bonus
         inline uint16 GetSkillValueBase(uint16 id) const { return GetSkill(id, true, false); }      // skill value + perm. bonus
         inline uint16 GetSkillValuePure(uint16 id) const { return GetSkill(id, false, false); }     // skill value

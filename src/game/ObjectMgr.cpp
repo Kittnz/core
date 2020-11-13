@@ -112,6 +112,16 @@ LanguageDesc const* GetLanguageDescByID(uint32 lang)
     return nullptr;
 }
 
+bool IsLanguageSkill(uint32 Skill)
+{
+	for (int i = 0; i < LANGUAGES_COUNT; ++i)
+	{
+		if (lang_description[i].skill_id == Skill)
+			return true;
+	}
+	return false;
+}
+
 template<typename T>
 T IdGenerator<T>::Generate()
 {
