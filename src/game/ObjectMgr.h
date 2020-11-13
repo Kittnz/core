@@ -494,6 +494,9 @@ struct FactionChangeMountData
 };
 typedef std::vector<FactionChangeMountData> FactionChangeMountsData;
 
+
+bool IsLanguageSkill(uint32 Skill);
+
 enum PermVariables
 {
     // ITEM ID RANGES ARE USED FOR AQ WAR EFFORT
