@@ -1,3 +1,56 @@
+-- Oggleflint 11517
+-- Bazzalan 11519
+-- Rhahk'zor 644
+-- Sneed 643
+-- Cookie 645
+-- Lady Anacondra 3671
+-- Kresh 3653
+-- Lord Pythas 3670
+-- Skum 3674
+-- Rethilgore 3914
+-- Baron Silverlaine 3887
+-- Wolf Master Nandos 3927
+-- Commander Springvale 4278
+-- Ghamoo-ra 4887
+-- Twilight Lord Kelris 4832
+-- Gelihast 6243
+-- Targorr the Dread 1696
+-- Kam Deepfury 1666
+-- Hamhock 1717
+-- Dextren Ward 1663
+-- Bazil Thredd 1716
+-- Aggem Thorncurse 4424
+-- Overlord Ramtusk 4420
+-- Agathelos the Raging 4422
+-- Grubbis 7361
+-- Crowd Pummeler 9-60 6229
+-- Interrogater Vishas 3983
+-- Bloodmage Thalnos 4543
+-- Plaguemaw the Rotting 7356
+-- Glutton 8567
+-- Ancient Stone Keeper 7206
+-- Gahz'rilla 7273
+-- Mother Smolderweb 10596
+-- Quartermaster Zigris 9736
+-- Overlord Wyrmthalak 9568
+-- General Drakkisath 10363
+-- Ivus the Forest Lord 13419
+-- Lokholar the Ice Lord 13256
+-- Silithid Harvester 3253
+-- Felweaver Scorn 5822
+-- Captain Flat Tusk 5824
+-- Sister Hatelash 5785
+-- Geomancer Flintdagger 2609
+-- Narillasanz 2447
+-- Vengeful Ancient 4030
+-- Nal'taszar 4066
+-- Dragonmaw Battlemaster 1037
+-- Prince Raze 10647
+-- Lady Zephris 14277
+-- Vile Sting 5937
+-- Stone Fury 2258
+-- Azurous 10202
+
 -- Ragefire Chasm | Oggleflint
 
 replace into item_template values
