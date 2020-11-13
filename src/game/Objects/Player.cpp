@@ -20587,7 +20587,6 @@ bool Player::ChangeRace(uint8 newRace, uint8 newGender, uint32 playerbyte1, uint
     if (PlayerCacheData* data = sObjectMgr.GetPlayerDataByGUID(GetGUIDLow()))
         data->uiRace = newRace;
 
-    m_session->LogoutPlayer(false);
     return true;
 }
 
