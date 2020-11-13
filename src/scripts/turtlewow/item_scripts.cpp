@@ -173,7 +173,7 @@ bool ItemUseSpell_remote_mail_terminal(Player* pPlayer, Item* pItem, const Spell
     y += dis * sin(pPlayer->GetOrientation());
 
     pPlayer->HandleEmoteCommand(EMOTE_ONESHOT_CHEER);
-    pPlayer->SummonGameObject(144112, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 30, true);
+    pPlayer->SummonGameObject(144112, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 300, true);
     return true;
 }
 
