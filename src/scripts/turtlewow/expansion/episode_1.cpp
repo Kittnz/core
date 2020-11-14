@@ -990,7 +990,7 @@ bool GossipSelect_npc_nert_joining_horde(Player* pPlayer, Creature* pCreature, u
     return true;
 }
 
-#define GAMBLING_TEXT 120000
+#define GAMBLING_TEXT 80602
 #define OPT1 "10 silver coins."
 #define OPT2 "1 gold coin."
 #define OPT3 "10 gold coins."
