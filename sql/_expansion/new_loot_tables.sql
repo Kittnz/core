@@ -1799,8 +1799,20 @@ update item_template set name = 'Corrupter\'s Focus' where entry = 80748;
 update item_template set display_id = 21714 where entry = 80740;
 update item_template set max_durability = 90 where entry = 80740;
 update item_template set max_durability = 75 where entry = 80718;
-
-
+update item_template set display_id = 12971 where entry = 80704;
+update item_template set inventory_type = 5 where entry = 80704;
+update item_template set display_id = 25822 where entry = 80710;
+update item_template set sell_price = 874 where entry = 80710;
+update item_template set buy_price = 874 where entry = 80710;
+update item_template set display_id = 12701 where entry = 80708;
+update item_template set inventory_type = 5 where entry = 80708;
+update item_template set display_id = 31239 where entry = 80745;
+update item_template set rangedmodrange = 100 where entry = 80745;
+update item_template set display_id = 23271 where entry = 80716;
+update item_template set inventory_type = 21 where entry = 80716;
+update item_template set inventory_type = 5 where entry = 80729;
+update item_template set inventory_type = 5 where entry = 80713;
+update item_template set max_durability = 80 where entry = 80713;
 
 
 
