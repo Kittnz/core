@@ -1791,7 +1791,7 @@ update item_template set display_id = 80743 where entry = 17146;
 update item_template set display_id = 80744 where entry = 20373;
 update item_template set display_id = 80747 where entry = 16678;
 update item_template set display_id = 80750 where entry = 23742;
-update item_template set display_id = 80732 where entry = 28077
+update item_template set display_id = 80732 where entry = 28077;
 update item_template set display_id = 80712 where entry = 14615;
 update item_template set display_id = 80730 where entry = 10711;
 update item_template set display_id = 32685 where entry = 80748;
@@ -1807,12 +1807,13 @@ update item_template set buy_price = 874 where entry = 80710;
 update item_template set display_id = 12701 where entry = 80708;
 update item_template set inventory_type = 5 where entry = 80708;
 update item_template set display_id = 31239 where entry = 80745;
-update item_template set rangedmodrange = 100 where entry = 80745;
+update item_template set range_mod = 100 where entry = 80745;
 update item_template set display_id = 23271 where entry = 80716;
 update item_template set inventory_type = 21 where entry = 80716;
 update item_template set inventory_type = 5 where entry = 80729;
 update item_template set inventory_type = 5 where entry = 80713;
 update item_template set max_durability = 80 where entry = 80713;
+update item_template set spellid_1 = 25036, spellid_2 = 13674 where entry = 80746;
 
 
 
