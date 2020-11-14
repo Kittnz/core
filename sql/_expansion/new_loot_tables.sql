@@ -1814,6 +1814,15 @@ update item_template set inventory_type = 5 where entry = 80729;
 update item_template set inventory_type = 5 where entry = 80713;
 update item_template set max_durability = 80 where entry = 80713;
 update item_template set spellid_1 = 25036, spellid_2 = 13674 where entry = 80746;
+update item_template set inventory_type = 5 where entry = 80736;
 
-
-
+update item_template set name = 'Nail on a Plank' where entry = 80723;
+update item_template set bonding = 1 where entry = 80723;
+update item_template set sheath = 3 where entry = 80723;
+update item_template set sheath = 3 where entry = 80731;
+update item_template set sheath = 4 where entry = 80718;
+update item_template set sheath = 1 where entry = 80733;
+update item_template set sheath = 3 where entry = 80739;
+update item_template set sheath = 3 where entry = 80700;
+update item_template set sheath = 2 where entry = 80709;
+update item_template set sheath = 1 where entry = 80746;
