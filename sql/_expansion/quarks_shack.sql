@@ -118,7 +118,7 @@ update creature_template set gossip_menu_id = @gossip_menu_id where entry = @mag
 SET @gossip_menu_id = 59037;
 SET @magic_number = @agne; 
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
-replace into broadcast_text (ID, MaleText) values (@magic_number, 'Heya, sweetie. Here to make a long time investement?');
+replace into broadcast_text (ID, MaleText) values (@magic_number, 'Heya, sweetie. Here to make a long time investement?\n\nMaybe, you want to gamble, little $c? Tell me how much and I\'ll throw a dice, if the roll is above 50, I will double the bet. If lower than 50, it\'s gone forever.\n\nIf you win three times in a row using the same amount, the reward is tripled, but only if the 3rd roll is above 75, if below 75 on the 3rd roll, gold will be gone too.');
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
@@ -135,7 +135,7 @@ replace into`creature_template` values (80600, 0, 0, 0, 0, 0, 'Quest 80300 Custo
 set @quest_entry = 80300;
 set @quest_zone = 1637;
 set @title = 'What\'s Yours is Ours';
-set @description = 'Hey pal, watch it!\n\nOh what\'s this a proper customer, eh?\n\nWelcome to Quark's Shack. You here for business or for pleasure?\n\nYou see this here is a bar of mine made for coin connoisseurs, so if you are here to grab a quick coin and also have some fun you are in the right place.\n\nIf you are looking to gamble, speak to Agne, she handles the bones. What, you never rolled dice before? Nah, don't worry pal, you will be fine. Now, if you need anything to widen your eyes and numb your thoughts come back and see me.';
+set @description = 'Hey pal, watch it!\n\nOh what\'s this a proper customer, eh?\n\nWelcome to Quark\'s Shack. You here for business or for pleasure?\n\nYou see this here is a bar of mine made for coin connoisseurs, so if you are here to grab a quick coin and also have some fun you are in the right place.\n\nIf you are looking to gamble, speak to Agne, she handles the bones. What, you never rolled dice before? Nah, don\'t worry pal, you will be fine. Now, if you need anything to widen your eyes and numb your thoughts come back and see me.';
 set @objective = 'Speak to Agne to roll the dice for a quick coin.';
 set @completetext = 'The early investor reaps the most interest.';
 set @incompletetext = 'Hey there, sweetie. Wanna roll a quick dice with your local beauty, Agne?';
