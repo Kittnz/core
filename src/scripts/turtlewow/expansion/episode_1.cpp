@@ -990,37 +990,148 @@ bool GossipSelect_npc_nert_joining_horde(Player* pPlayer, Creature* pCreature, u
     return true;
 }
 
+#define GAMBLING_TEXT 120000
+#define OPT1 "10 silver coins."
+#define OPT2 "1 gold coin."
+#define OPT3 "10 gold coins."
+#define OPT4 "50 gold coins."
+
+#define COIN_SOUND 1204
+
+#define SPELL_FIREWORK 11543
+
+#define FIVE_MINUTES 5 * 60
+
+#define GAMBLING_QUEST 80300
+#define DUMMY_GAMBLING_OBJECTIVE 80600
+
+struct GamblerInfo
+{
+    uint32 betCount;
+    uint32 lastBet;
+    time_t timestamp;
+};
+
+std::unordered_map<uint64, GamblerInfo> gamblingRecords;
+
+uint32 handleRecords(Player* pPlayer, uint32 amount, int result)
+{
+    GamblerInfo currentInfo{};
+    uint32 newAmount = 0;
+    time_t currentTime = time(nullptr);
+
+    if (!gamblingRecords.count(pPlayer->GetGUID()))
+    {
+        currentInfo =
+        {
+            0,
+            amount,
+            currentTime
+        };
+    }
+    else
+        currentInfo = gamblingRecords[pPlayer->GetGUID()];
+
+    // Reset count if amount is different or last bet is older than 5 minutes.
+    if (currentInfo.lastBet != amount || currentInfo.timestamp < currentTime - FIVE_MINUTES)
+        currentInfo.betCount = 0;
+    currentInfo.betCount++;
+
+    if (currentInfo.betCount == 3 && currentInfo.lastBet == amount)
+    {
+        if (result > 75)
+            newAmount = amount * 3;
+
+        currentInfo.betCount = 0;
+    }
+    else if (result > 50)
+        newAmount = amount * 2;
+    else
+        currentInfo.betCount = 0;
+
+    currentInfo.lastBet = amount;
+    currentInfo.timestamp = currentTime;
+    gamblingRecords[pPlayer->GetGUID()] = currentInfo;
+
+    return newAmount;
+}
 
 bool GossipHello_npc_agne_gambler(Player* pPlayer, Creature* pCreature)
 {
-    if (pPlayer->GetQuestStatus(80300) == QUEST_STATUS_INCOMPLETE) // What's Yours is Ours
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Roll dice!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, OPT1, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, OPT2, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, OPT3, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, OPT4, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
 
-    pPlayer->SEND_GOSSIP_MENU(80602, pCreature->GetGUID());
+    pPlayer->SEND_GOSSIP_MENU(GAMBLING_TEXT, pCreature->GetGUID());
     return true;
 }
 
 bool GossipSelect_npc_agne_gambler(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
 {
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    uint32 amount;
+
+    switch (uiAction)
     {
-        if (pPlayer->GetMoney() < 500)
-        {
-            pCreature->MonsterSay("Hey, this game is not free!");
-            return false;
-        }
-
-        pPlayer->ModifyMoney(-500);
-
-        CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80600);
-        if (cInfo != nullptr)
-            pPlayer->KilledMonster(cInfo, ObjectGuid());
-
-        int32 coin = urand(100, 1000);
-        pPlayer->ModifyMoney(coin);
+        case GOSSIP_ACTION_INFO_DEF + 1:
+            amount = 1000;
+            break;
+        case GOSSIP_ACTION_INFO_DEF + 2:
+            amount = 10000;
+            break;
+        case GOSSIP_ACTION_INFO_DEF + 3:
+            amount = 100000;
+            break;
+        case GOSSIP_ACTION_INFO_DEF + 4:
+            amount = 500000;
+            break;
+        default:
+            return true;
     }
 
+    if (pPlayer->GetMoney() < amount)
+    {
+        pPlayer->GetSession()->SendNotification("You don't have enough money!");
+        pPlayer->PlayerTalkClass->CloseGossip();
+        return true;
+    }
+
+    pPlayer->ModifyMoney(amount * -1);
+
+    pCreature->HandleEmote(EMOTE_ONESHOT_ATTACK1H);
+    pCreature->PlayDirectSound(COIN_SOUND, pPlayer); // Coin sound
+
+    int result = irand(1, 100);
+    pCreature->PMonsterEmote("Agne rolls a dice for %s... %i!", nullptr, false,
+                             pPlayer->GetName(),
+                             result);
+
+    uint32 amountToAward = handleRecords(pPlayer, amount, result);
+    if (amountToAward > 0)
+    {
+        pPlayer->ModifyMoney(amountToAward);
+
+        if (amountToAward >= amount * 3)
+        {
+            pCreature->PMonsterEmote("STREAK!");
+            pPlayer->SendSpellGo(pPlayer, SPELL_FIREWORK);
+        }
+        else
+            pPlayer->HandleEmote(EMOTE_ONESHOT_CHEER);
+    }
+    else
+        pPlayer->HandleEmote(EMOTE_ONESHOT_CRY);
+
     pPlayer->CLOSE_GOSSIP_MENU();
+
+    // Complete quest if it's active and incomplete
+    if (pPlayer->GetQuestStatus(GAMBLING_QUEST) == QUEST_STATUS_INCOMPLETE) // What's Yours is Ours
+    {
+        CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(DUMMY_GAMBLING_OBJECTIVE);
+        if (cInfo != nullptr)
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+    }
+
     return true;
 }
 
