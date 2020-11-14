@@ -1,7 +1,3 @@
--- Oggleflint 11517
--- Bazzalan 11519
--- Rhahk'zor 644
--- Sneed 643
 -- Cookie 645
 -- Lady Anacondra 3671
 -- Kresh 3653
@@ -63,6 +59,8 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '2', '5', '0', '0', '50', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
+ replace into creature_loot_template values (11517, 80700, 35, 6, 1, 1, 0, 0, 10);
+ 
  replace into item_template values
  ('80701', '0', '4', '2', 'Dusty Leather Pants', '', '704', '2', '0', '1', '0', '560', '7', '-1', '-1', '18',
  '13', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '3', '7', '2',
@@ -73,6 +71,8 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '8', '0', '0', '0', '50', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
+ replace into creature_loot_template values (11517, 80701, 35, 6, 1, 1, 0, 0, 10);
+ 
  replace into item_template values
  ('80702', '0', '4', '1', 'Stitched Cloth Vest', '', '7845', '2', '0', '1', '0', '359', '4', '-1', '-1', '18',
  '13', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '3', '6', '3',
@@ -82,6 +82,8 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '7', '0', '0', '0', '55', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
+ 
+ replace into creature_loot_template values (11517, 80702, 30, 6, 1, 1, 0, 0, 10);
  
  -- Ragefire Chasm | Bazzalan
  
@@ -94,6 +96,8 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '8', '0', '0', '0', '20', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
+
+ replace into creature_loot_template values (11519, 80703, 30, 6, 1, 1, 0, 0, 10); 
  
  replace into item_template values
  ('80704', '0', '4', '3', 'Lavadrenched Chainmail', '', '1184', '2', '0', '1', '0', '622', '4', '-1', '-1', '18',
@@ -105,6 +109,8 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '5', '0', '0', '0', '80', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
+ replace into creature_loot_template values (11519, 80704, 30, 6, 1, 1, 0, 0, 10); 
+ 
  replace into item_template values
  ('80705', '1', '2', '6', 'Satyr Poker', '', '28672', '2', '0', '1', '0', '1264', '17', '-1', '-1', '18',
  '13', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
@@ -114,6 +120,8 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '1', '3', '0', '0', '60', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
+ 
+ replace into creature_loot_template values (11519, 80705, 30, 6, 1, 1, 0, 0, 10); 
  
 -- The Deadmines | Rhank'zor
  
@@ -127,6 +135,8 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '5', '0', '0', '0', '40', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
+ replace into creature_loot_template values (644, 80706, 50, 6, 1, 1, 0, 0, 10); 
+ 
 -- The Deadmines | Sneed
   
   replace into item_template values
@@ -138,6 +148,8 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '8', '0', '0', '0', '40', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
+ 
+ replace into creature_loot_template values (643, 80707, 60, 6, 1, 1, 0, 0, 10); 
  
 -- The Deadmines | Cookie
 
@@ -1783,17 +1795,17 @@ replace into item_template values
 -- Fixes, testing stage I 
 
 update item_template set max_durability = 90 where entry = 80733;
-update item_template set display_id = 80701 where entry = 27522;
-update item_template set display_id = 80702 where entry = 16718;
-update item_template set display_id = 80707 where entry = 1981;
-update item_template set display_id = 80712 where entry = 24615;
-update item_template set display_id = 80743 where entry = 17146;
-update item_template set display_id = 80744 where entry = 20373;
-update item_template set display_id = 80747 where entry = 16678;
-update item_template set display_id = 80750 where entry = 23742;
-update item_template set display_id = 80732 where entry = 28077;
-update item_template set display_id = 80712 where entry = 14615;
-update item_template set display_id = 80730 where entry = 10711;
+update item_template set display_id = 27522 where entry = 80701;
+update item_template set display_id = 16718 where entry = 80702;
+update item_template set display_id = 1981 where entry = 80707;
+update item_template set display_id = 24615 where entry = 80712;
+update item_template set display_id = 17146 where entry = 80743;
+update item_template set display_id = 20373 where entry = 80744;
+update item_template set display_id = 16678 where entry = 80747;
+update item_template set display_id = 23742 where entry = 80750;
+update item_template set display_id = 28077 where entry = 80732;
+update item_template set display_id = 14615 where entry = 80712;
+update item_template set display_id = 10711 where entry = 80730;
 update item_template set display_id = 32685 where entry = 80748;
 update item_template set name = 'Corrupter\'s Focus' where entry = 80748;
 update item_template set display_id = 21714 where entry = 80740;
@@ -1801,6 +1813,7 @@ update item_template set max_durability = 90 where entry = 80740;
 update item_template set max_durability = 75 where entry = 80718;
 update item_template set display_id = 12971 where entry = 80704;
 update item_template set inventory_type = 5 where entry = 80704;
+update item_template set inventory_type = 5 where entry = 80702;
 update item_template set display_id = 25822 where entry = 80710;
 update item_template set sell_price = 874 where entry = 80710;
 update item_template set buy_price = 874 where entry = 80710;
@@ -1815,7 +1828,6 @@ update item_template set inventory_type = 5 where entry = 80713;
 update item_template set max_durability = 80 where entry = 80713;
 update item_template set spellid_1 = 25036, spellid_2 = 13674 where entry = 80746;
 update item_template set inventory_type = 5 where entry = 80736;
-
 update item_template set name = 'Nail on a Plank' where entry = 80723;
 update item_template set bonding = 1 where entry = 80723;
 update item_template set sheath = 3 where entry = 80723;
