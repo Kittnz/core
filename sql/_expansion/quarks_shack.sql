@@ -209,7 +209,7 @@ reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
 reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
 nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
 nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
-objectivetext1='Invest 5 silver and roll the dice'  
+objectivetext1='Gamble with Agne'
 where entry = @quest_entry;	 
 
 -- Yet Another Smoke Cloud Above Orgrimmar
