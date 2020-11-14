@@ -1779,3 +1779,28 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '2', '0', '0', '0', '0', '0', '4', '2', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
+ 
+-- Fixes, testing stage I 
+
+update item_template set max_durability = 90 where entry = 80733;
+update item_template set display_id = 80701 where entry = 27522;
+update item_template set display_id = 80702 where entry = 16718;
+update item_template set display_id = 80707 where entry = 1981;
+update item_template set display_id = 80712 where entry = 24615;
+update item_template set display_id = 80743 where entry = 17146;
+update item_template set display_id = 80744 where entry = 20373;
+update item_template set display_id = 80747 where entry = 16678;
+update item_template set display_id = 80750 where entry = 23742;
+update item_template set display_id = 80732 where entry = 28077
+update item_template set display_id = 80712 where entry = 14615;
+update item_template set display_id = 80730 where entry = 10711;
+update item_template set display_id = 32685 where entry = 80748;
+update item_template set name = 'Corrupter\'s Focus' where entry = 80748;
+update item_template set display_id = 21714 where entry = 80740;
+update item_template set max_durability = 90 where entry = 80740;
+update item_template set max_durability = 75 where entry = 80718;
+
+
+
+
+
