@@ -1893,65 +1893,32 @@ void Unit::CalculateMeleeDamage(Unit *pVictim, uint32 damage, CalcDamageInfo *da
             damageInfo->HitInfo     |= HITINFO_GLANCING;
             damageInfo->TargetState  = VICTIMSTATE_NORMAL;
             damageInfo->procEx |= PROC_EX_NORMAL_HIT;
-            // int32 attackerWeaponSkill = GetWeaponSkillValue(damageInfo->attackType,pVictim);
-            // int32 victimDefenseSkill = pVictim->GetDefenseSkillValue(this);
-            int SkillDiff = 0;
-            SkillDiff = pVictim->GetDefenseSkillValue(this) - GetWeaponSkillValue(damageInfo->attackType, pVictim);
-            float reducePercent = 1.0f;
-            // (Youfie) Formule de calcul de la réduction de dégâts des érafles, influencée en pré-BC par le +skill au delà de [niveau du joueur * 5]
-            // Formule d'Athan retenue et supposée comme Blizz-like au regard des multiples sources et tests concordants
-            // float reducePercent = 1 - (5*(pow(2,(victimDefenseSkill/5) - (attackerWeaponSkill/5) - 1))/100);
-            // Après tentative d'implémentation "propre" de la formule et de nombreux échecs, mise en place de celle-ci après calcul manuel des différentes valeurs
-            // cf. http://nostalrius.org/forum/viewtopic.php?p=43964#p43964 pour infos et sources
-            if (SkillDiff >= 15)
-                reducePercent = 0.6500f;
-            if (SkillDiff <= 0)
-                reducePercent = 1;
-            switch (SkillDiff)
-            {
-                case 14 :
-                    reducePercent = 0.7018f;
-                    break;
-                case 13 :
-                    reducePercent = 0.7469f;
-                    break;
-                case 12 :
-                    reducePercent = 0.7860f;
-                    break;
-                case 11 :
-                    reducePercent = 0.8203f;
-                    break;
-                case 10 :
-                    reducePercent = 0.8500f;
-                    break;
-                case 9 :
-                    reducePercent = 0.8759f;
-                    break;
-                case 8 :
-                    reducePercent = 0.8984f;
-                    break;
-                case 7 :
-                    reducePercent = 0.9180f;
-                    break;
-                case 6 :
-                    reducePercent = 0.9351f;
-                    break;
-                case 5 :
-                    reducePercent = 0.9500f;
-                    break;
-                case 4 :
-                    reducePercent = 0.9629f;
-                    break;
-                case 3 :
-                    reducePercent = 0.9742f;
-                    break;
-                case 2 :
-                    reducePercent = 0.9840f;
-                    break;
-                case 1 :
-                    reducePercent = 0.9926f;
-                    break;
+
+            // Baeza formula: https://wowwiki.fandom.com/wiki/Weapon_skill?diff=349241&oldid=347613
+            // Low end : 1.3 - 0.05*(defense - skill) min of 0.01 and max of 0.91
+            // If the attacker is a caster then this is reduced by 0.7 and max of 0.6
+            // High end : 1.2 - 0.03*(defense - skill) min of 0.2 and max of 0.99
+            // If the attacker is a caster then this is reduced by 0.3
+
+            int32 skillDiff = pVictim->GetDefenseSkillValue(this) - GetWeaponSkillValue(damageInfo->attackType, pVictim);
+            float low = 1.3f - 0.05f * skillDiff;
+            float high = 1.2f - 0.03f * skillDiff;
+            float lowCap = 0.91f;
+            float highCap = 0.99f;
+
+            if ((getClassMask() & CLASSMASK_WAND_USERS) != 0) {
+                low -= 0.7f;
+                high -= 0.3f;
+                lowCap = 0.6f;
             }
+
+            if (low < 0.01f) low = 0.01f;
+            if (high < 0.2f) high = 0.2f;
+
+            if (low > lowCap) low = lowCap;
+            if (high > highCap) high = highCap;
+
+            float reducePercent = frand(low,high);
 
             // sLog.outString("SkillDiff = %i, reducePercent = %f", SkillDiff, reducePercent); // Pour tests & débug via la console
 
@@ -2930,14 +2897,35 @@ float Unit::MeleeSpellMissChance(Unit *pVictim, WeaponAttackType attType, int32 
 
     // Calculate hit chance (more correct for chance mod)
     float hitChance = 0.0f;
+    float missChance = 0.0f;
 
     // PvP - PvE melee chances
     if (pVictim->GetTypeId() == TYPEID_PLAYER)
-        hitChance = 95.0f + skillDiff * 0.04f;
+        missChance = 5.0f - skillDiff * 0.04f;
     else if (skillDiff < -10)
-        hitChance = 93.0f + (skillDiff + 10) * 0.4f;        // 7% base chance to miss for big skill diff
+        missChance = 5.0f - skillDiff * 0.2f;
     else
-        hitChance = 95.0f + skillDiff * 0.1f;
+        missChance = 5.0f - skillDiff * 0.1f;
+
+    // Low level reduction
+    if (!pVictim->IsPlayer() && pVictim->getLevel() < 10)
+        missChance *= pVictim->getLevel() / 10.0f;
+
+    // Spellmod from SPELLMOD_RESIST_MISS_CHANCE
+    if (Player *modOwner = GetSpellModOwner())
+        modOwner->ApplySpellMod(spell->Id, SPELLMOD_RESIST_MISS_CHANCE, hitChance, spellPtr);
+
+    // Bonuses from attacker aura and ratings
+    if (attType == RANGED_ATTACK)
+        hitChance += m_modRangedHitChance;
+    else
+        hitChance += m_modMeleeHitChance;
+
+    // There is some code in 1.12 that explicitly adds a modifier that causes the first 1% of +hit gained from
+    // talents or gear to be ignored against monsters with more than 10 Defense Skill above the attacking player’s Weapon Skill.
+    // https://us.forums.blizzard.com/en/wow/t/bug-hit-tables/185675/33
+    if (skillDiff < -10 && hitChance > 0)
+        hitChance -= 1.0f;
 
     // Hit chance depends from victim auras
     if (attType == RANGED_ATTACK)
@@ -2945,18 +2933,7 @@ float Unit::MeleeSpellMissChance(Unit *pVictim, WeaponAttackType attType, int32 
     else
         hitChance += pVictim->GetTotalAuraModifier(SPELL_AURA_MOD_ATTACKER_MELEE_HIT_CHANCE);
 
-    // Spellmod from SPELLMOD_RESIST_MISS_CHANCE
-    if (Player *modOwner = GetSpellModOwner())
-        modOwner->ApplySpellMod(spell->Id, SPELLMOD_RESIST_MISS_CHANCE, hitChance, spellPtr);
-
-    // Miss = 100 - hit
-    float missChance = 100.0f - hitChance;
-
-    // Bonuses from attacker aura and ratings
-    if (attType == RANGED_ATTACK)
-        missChance -= m_modRangedHitChance;
-    else
-        missChance -= m_modMeleeHitChance;
+    missChance -= hitChance;
 
     // Limit miss chance from 0 to 60%
     if (missChance < 0.0f)
@@ -2982,8 +2959,10 @@ SpellMissInfo Unit::MeleeSpellHitResult(Unit *pVictim, SpellEntry const *spell, 
     int32 attackerWeaponSkill = (spell->EquippedItemClass == ITEM_CLASS_WEAPON) ? int32(GetWeaponSkillValue(attType, pVictim)) : GetSkillMaxForLevel();
     int32 skillDiff = attackerWeaponSkill - int32(pVictim->GetSkillMaxForLevel(this));
     int32 fullSkillDiff = attackerWeaponSkill - int32(pVictim->GetDefenseSkillValue(this));
+    int32 minWeaponSkill = GetSkillMaxForLevel(pVictim) < attackerWeaponSkill ? GetSkillMaxForLevel(pVictim) : attackerWeaponSkill;
+    int32 cappedSkillDiff = minWeaponSkill - pVictim->GetSkillMaxForLevel(this);
 
-    uint32 roll = urand(0, 10000);
+    uint32 roll = urand(0, 9999);
 
     uint32 missChance = uint32(MeleeSpellMissChance(pVictim, attType, fullSkillDiff, spell, spellPtr) * 100.0f);
     // Roll miss
@@ -3040,11 +3019,15 @@ SpellMissInfo Unit::MeleeSpellHitResult(Unit *pVictim, SpellEntry const *spell, 
     if (canDodge)
     {
         // Roll dodge
-        int32 dodgeChance = int32(pVictim->GetUnitDodgeChance() * 100.0f) - skillDiff * 4;
+        int32 dodgeModifier = pVictim->IsPlayer() ? skillDiff * 4 : skillDiff * 10;
+        int32 dodgeChance = int32(pVictim->GetUnitDodgeChance() * 100.0f) - dodgeModifier;
 
         if (dodgeChance < 0)
             dodgeChance = 0;
 
+        // Low level reduction
+        if (!pVictim->IsPlayer() && pVictim->getLevel() < 10)
+            dodgeChance *= pVictim->getLevel() / 10.0f;
 
         tmp += dodgeChance;
         if (roll < tmp)
@@ -3054,10 +3037,15 @@ SpellMissInfo Unit::MeleeSpellHitResult(Unit *pVictim, SpellEntry const *spell, 
     if (canParry)
     {
         // Roll parry
-        int32 parryChance = int32(pVictim->GetUnitParryChance() * 100.0f)  - skillDiff * 4;
+        int32 parryModifier = pVictim->IsPlayer() ? skillDiff * 4 : cappedSkillDiff < -10 ? 60 * cappedSkillDiff : 20 * cappedSkillDiff;
+        int32 parryChance = int32(pVictim->GetUnitParryChance() * 100.0f) - parryModifier;
         // Can`t parry from behind
         if (parryChance < 0)
             parryChance = 0;
+
+        // Low level reduction
+        if (!pVictim->IsPlayer() && pVictim->getLevel() < 10)
+            parryChance *= pVictim->getLevel() / 10.0f;
 
         tmp += parryChance;
         if (roll < tmp)
@@ -3367,15 +3355,28 @@ float Unit::MeleeMissChanceCalc(const Unit *pVictim, WeaponAttackType attType) c
     if (pVictim->GetTypeId() == TYPEID_PLAYER)
         missChance -= skillDiff * 0.04f;
     else if (skillDiff < -10)
-        missChance -= (skillDiff + 10) * 0.4f - 2.0f;       // 7% base chance to miss for big skill diff
+        missChance -= skillDiff * 0.2f;
     else
         missChance -= skillDiff * 0.1f;
 
+    // Low level reduction
+    if (!pVictim->IsPlayer() && pVictim->getLevel() < 10)
+        missChance *= pVictim->getLevel() / 10.0f;
+
     // Hit chance bonus from attacker based on ratings and auras
+    float hitChance = 0.0f;
     if (attType == RANGED_ATTACK)
-        missChance -= m_modRangedHitChance;
+        hitChance = m_modRangedHitChance;
     else
-        missChance -= m_modMeleeHitChance;
+        hitChance = m_modMeleeHitChance;
+
+    // There is some code in 1.12 that explicitly adds a modifier that causes the first 1% of +hit gained from
+    // talents or gear to be ignored against monsters with more than 10 Defense Skill above the attacking player’s Weapon Skill.
+    // https://us.forums.blizzard.com/en/wow/t/bug-hit-tables/185675/33
+    if (skillDiff < -10 && hitChance > 0)
+        hitChance -= 1.0f;
+
+    missChance -= hitChance;
 
     // Modify miss chance by victim auras
     if (attType == RANGED_ATTACK)
@@ -3523,7 +3524,11 @@ float Unit::GetUnitCriticalChance(WeaponAttackType attackType, const Unit *pVict
         crit += pVictim->GetTotalAuraModifier(SPELL_AURA_MOD_ATTACKER_MELEE_CRIT_CHANCE);
 
     // Apply crit chance from defence skill
-    crit += (int32(GetSkillMaxForLevel(pVictim)) - int32(pVictim->GetDefenseSkillValue(this))) * 0.04f;
+    int32 skillDiff = int32(GetWeaponSkillValue(attackType, pVictim)) - int32(pVictim->GetDefenseSkillValue(this));
+    int32 minSkillValue = GetSkillMaxForLevel(pVictim) < GetWeaponSkillValue(attackType, pVictim) ? GetSkillMaxForLevel(pVictim) : GetWeaponSkillValue(attackType, pVictim);
+    int32 cappedSkillDiff = minSkillValue - pVictim->GetDefenseSkillValue(this);
+
+    crit += (pVictim->IsPlayer() || skillDiff > 0) ? skillDiff * 0.04f : cappedSkillDiff * 0.2f;
 
     if (crit < 0.0f)
         crit = 0.0f;
