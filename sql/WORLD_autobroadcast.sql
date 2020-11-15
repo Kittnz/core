@@ -29,7 +29,7 @@ replace into mangos_string (entry, content_default) values
 
 ('50013', 'Prepare yourself for an all-new, never-told chapter in the story of World of Warcraft: a three-part expansion storyline that will lead you on adventures never had and to depths never visited: turtle-wow.org/expansion'),
 
-('50014', 'If you want to help the server grow, check our shop for these donation rewards: exotic mounts, large bags, mysterious engineering devices, and much more. Visit turtle-wow.org/donate'),
+('50014', 'If you want to help the server grow, check our shop for these donation rewards: exotic mounts, large bags, mysterious engineering devices, and much more. Visit turtle-wow.org/donate');
 
 delete from autobroadcast where string_id between 50000 and 50018;
 replace into autobroadcast (string_Id) values

@@ -2199,3 +2199,15 @@ update item_template set sheath = 1 where entry = 80817;
 update item_template set display_id = 24039 where entry = 80788;
 update item_template set sheath = 0 where entry = 80788;
 update item_template set inventory_type = 23 where entry = 80788;
+update item_template set display_id = 26375 where entry = 80842;
+update item_template set display_id = 34605 where entry = 80843;
+update item_template set sheath = 2 where entry = 80705;
+update item_template set sheath = 0 where entry = 80724;
+update item_template set sheath = 3 where entry = 80727;
+update item_template set sheath = 2 where entry = 80728;
+update item_template set sheath = 2 where entry = 80811;
+update item_template set sheath = 2 where entry = 80744;
+update item_template set sheath = 0 where entry = 80750;
+update item_template set display_id = 26500 where entry = 80811;
+update item_template set armor = 46 where entry = 80818;
+
