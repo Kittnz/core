@@ -1,52 +1,3 @@
--- Cookie 645
--- Lady Anacondra 3671
--- Kresh 3653
--- Lord Pythas 3670
--- Skum 3674
--- Rethilgore 3914
--- Baron Silverlaine 3887
--- Wolf Master Nandos 3927
--- Commander Springvale 4278
--- Ghamoo-ra 4887
--- Twilight Lord Kelris 4832
--- Gelihast 6243
--- Targorr the Dread 1696
--- Kam Deepfury 1666
--- Hamhock 1717
--- Dextren Ward 1663
--- Bazil Thredd 1716
--- Aggem Thorncurse 4424
--- Overlord Ramtusk 4420
--- Agathelos the Raging 4422
--- Grubbis 7361
--- Crowd Pummeler 9-60 6229
--- Interrogater Vishas 3983
--- Bloodmage Thalnos 4543
--- Plaguemaw the Rotting 7356
--- Glutton 8567
--- Ancient Stone Keeper 7206
--- Gahz'rilla 7273
--- Mother Smolderweb 10596
--- Quartermaster Zigris 9736
--- Overlord Wyrmthalak 9568
--- General Drakkisath 10363
--- Ivus the Forest Lord 13419
--- Lokholar the Ice Lord 13256
--- Silithid Harvester 3253
--- Felweaver Scorn 5822
--- Captain Flat Tusk 5824
--- Sister Hatelash 5785
--- Geomancer Flintdagger 2609
--- Narillasanz 2447
--- Vengeful Ancient 4030
--- Nal'taszar 4066
--- Dragonmaw Battlemaster 1037
--- Prince Raze 10647
--- Lady Zephris 14277
--- Vile Sting 5937
--- Stone Fury 2258
--- Azurous 10202
-
 -- Ragefire Chasm | Oggleflint
 
 replace into item_template values
@@ -163,6 +114,8 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '7', '0', '0', '0', '65', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
+ replace into creature_loot_template values (645, 80708, 60, 6, 1, 1, 0, 0, 10); 
+
 -- Wailing Caverns | Lady Anacondra
 
 replace into item_template values
@@ -174,6 +127,8 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '2', '3', '0', '0', '65', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
+
+ replace into creature_loot_template values (3671, 80709, 60, 6, 1, 1, 0, 0, 10); 
  
 -- Wailing Caverns | Kresh
 
@@ -187,6 +142,8 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '5', '0', '0', '0', '55', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
+ replace into creature_loot_template values (3653, 80710, 40, 6, 1, 1, 0, 0, 10); 
+ 
 -- Wailing Caverns | Lord Pythas
 
 replace into item_template values
@@ -199,7 +156,9 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '8', '0', '0', '0', '35', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
--- Wailing Caverns | Scum
+ replace into creature_loot_template values (3670, 80711, 60, 6, 1, 1, 0, 0, 10); 
+ 
+-- Wailing Caverns | Skum
 
 replace into item_template values
  ('80712', '0', '4', '1', 'Charged Leggings', '', '24615', '3', '0', '1', '0', '927', '7', '-1', '-1', '0',
@@ -210,6 +169,8 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '7', '0', '0', '0', '50', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
+ 
+ replace into creature_loot_template values (3674, 80712, 60, 6, 1, 1, 0, 0, 10); 
  
 -- Shadowfang Keep | Rethilgore
 
@@ -223,6 +184,8 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
+ replace into creature_loot_template values (3914, 80713, 35, 6, 1, 1, 0, 0, 10); 
+ 
  replace into item_template values
  ('80714', '0', '4', '3', 'Binding Chain', '', '34241', '3', '0', '1', '0', '867', '6', '-1', '-1', '23',
  '18', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '2', '7', '7',
@@ -232,6 +195,8 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '5', '0', '0', '0', '40', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
+ 
+  replace into creature_loot_template values (3914, 80714, 35, 6, 1, 1, 0, 0, 10); 
  
 -- Shadowfang Keep | Baron Silverlaine
 
@@ -244,6 +209,8 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '8', '0', '0', '0', '40', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
+ 
+ replace into creature_loot_template values (3887, 80715, 35, 6, 1, 1, 0, 0, 10); 
 
 -- Shadowfang Keep | Wolf Master Nandos
 
@@ -257,6 +224,8 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '8', '0', '0', '0', '65', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
+ replace into creature_loot_template values (3927, 80716, 35, 6, 1, 1, 0, 0, 10); 
+ 
 -- Shadowfang Keep | Commander Springvale
 
 replace into item_template values
@@ -268,6 +237,8 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '5', '0', '0', '0', '50', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
+ 
+ replace into creature_loot_template values (4278, 80717, 35, 6, 1, 1, 0, 0, 10); 
  
 -- Blackfathom Deeps | Ghamoo-ra
 
@@ -281,6 +252,8 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
+ replace into creature_loot_template values (4887, 80718, 35, 6, 1, 1, 0, 0, 10); 
+ 
 -- Blackfathom Deeps | Twilight Lord Kelris
 
 replace into item_template values
@@ -292,6 +265,8 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
+ 
+ replace into creature_loot_template values (4832, 80719, 35, 6, 1, 1, 0, 0, 10); 
  
 -- Blackfathom Deeps | Gelihast
 
@@ -305,6 +280,8 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '7', '0', '0', '0', '45', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
+ replace into creature_loot_template values (6243, 80720, 35, 6, 1, 1, 0, 0, 10); 
+ 
 -- The Stockades | Targorr the Dread
 
 replace into item_template values
@@ -317,6 +294,8 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
+ replace into creature_loot_template values (1696, 80721, 35, 6, 1, 1, 0, 0, 10); 
+ 
  replace into item_template values
  ('80722', '0', '4', '2', 'Dreadskull Pauldrons', '', '1057', '2', '0', '1', '0', '1962', '3', '-1', '-1', '0',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '3', '3', '3',
@@ -326,6 +305,8 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '8', '0', '0', '0', '50', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
+ 
+ replace into creature_loot_template values (1696, 80722, 35, 6, 1, 1, 0, 0, 10); 
 
 -- The Stockades | Kam Deepfury
 
@@ -339,6 +320,8 @@ replace into item_template values
  '-1', '2', '0', '0', '0', '0', '0', '2', '1', '0', '0', '70', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
+replace into creature_loot_template values (1666, 80723, 35, 6, 1, 1, 0, 0, 10); 
+ 
 -- The Stockades | Hamhock
 
 replace into item_template values
@@ -351,6 +334,8 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '0', '2', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
+ replace into creature_loot_template values (1717, 80724, 35, 6, 1, 1, 0, 0, 10); 
+ 
  replace into item_template values
  ('80725', '0', '4', '0', 'Hamhock\'s Nose Ring', '', '9823', '2', '0', '1', '0', '874', '11', '-1', '-1', '30',
  '25', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '4', '6', '4',
@@ -360,6 +345,8 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '4', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
+ 
+replace into creature_loot_template values (1717, 80725, 35, 6, 1, 1, 0, 0, 10);  
  
 -- The Stockades | Dextren Ward
 
@@ -392,6 +379,41 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '1', '3', '0', '0', '85', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
+ 
+ 
+-- Dextren Ward 1663
+-- Bazil Thredd 1716
+-- Aggem Thorncurse 4424
+-- Overlord Ramtusk 4420
+-- Agathelos the Raging 4422
+-- Grubbis 7361
+-- Crowd Pummeler 9-60 6229
+-- Interrogater Vishas 3983
+-- Bloodmage Thalnos 4543
+-- Plaguemaw the Rotting 7356
+-- Glutton 8567
+-- Ancient Stone Keeper 7206
+-- Gahz'rilla 7273
+-- Mother Smolderweb 10596
+-- Quartermaster Zigris 9736
+-- Overlord Wyrmthalak 9568
+-- General Drakkisath 10363
+-- Ivus the Forest Lord 13419
+-- Lokholar the Ice Lord 13256
+-- Silithid Harvester 3253
+-- Felweaver Scorn 5822
+-- Captain Flat Tusk 5824
+-- Sister Hatelash 5785
+-- Geomancer Flintdagger 2609
+-- Narillasanz 2447
+-- Vengeful Ancient 4030
+-- Nal'taszar 4066
+-- Dragonmaw Battlemaster 1037
+-- Prince Raze 10647
+-- Lady Zephris 14277
+-- Vile Sting 5937
+-- Stone Fury 2258
+-- Azurous 10202
  
  -- The Stockades | Bazil Thredd
  
