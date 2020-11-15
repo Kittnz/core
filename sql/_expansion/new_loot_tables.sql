@@ -1533,7 +1533,7 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '4', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
- replace into creature_loot_template values (2447, 80824 35, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (2447, 80824, 35, 6, 1, 1, 0, 0, 10); 
  
  replace into item_template values
  ('80825', '0', '2', '2', 'Flamestring Bow', '', '20552', '3', '0', '1', '16756', '16756', '15', '-1', '-1', '47',
