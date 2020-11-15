@@ -360,6 +360,8 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '7', '0', '0', '0', '50', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
+ replace into creature_loot_template values (1663, 80726, 35, 6, 1, 1, 0, 0, 10);  
+ 
  replace into item_template values
  ('80727', '0', '2', '15', 'Broken Bottle', 'Darkshire Moonshine III', '23262', '2', '0', '1', '0', '2347', '13', '-1', '-1', '30',
  '25', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
@@ -369,6 +371,8 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '4', '5', '0', '0', '50', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
+ 
+ replace into creature_loot_template values (1663, 80727, 35, 6, 1, 1, 0, 0, 10);  
  
  replace into item_template values
  ('80728', '0', '2', '6', 'Stormwind Guard Spear', '', '18388', '2', '0', '1', '0', '2582', '17', '-1', '-1', '30',
@@ -380,40 +384,7 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '1', '3', '0', '0', '85', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
- 
--- Dextren Ward 1663
--- Bazil Thredd 1716
--- Aggem Thorncurse 4424
--- Overlord Ramtusk 4420
--- Agathelos the Raging 4422
--- Grubbis 7361
--- Crowd Pummeler 9-60 6229
--- Interrogater Vishas 3983
--- Bloodmage Thalnos 4543
--- Plaguemaw the Rotting 7356
--- Glutton 8567
--- Ancient Stone Keeper 7206
--- Gahz'rilla 7273
--- Mother Smolderweb 10596
--- Quartermaster Zigris 9736
--- Overlord Wyrmthalak 9568
--- General Drakkisath 10363
--- Ivus the Forest Lord 13419
--- Lokholar the Ice Lord 13256
--- Silithid Harvester 3253
--- Felweaver Scorn 5822
--- Captain Flat Tusk 5824
--- Sister Hatelash 5785
--- Geomancer Flintdagger 2609
--- Narillasanz 2447
--- Vengeful Ancient 4030
--- Nal'taszar 4066
--- Dragonmaw Battlemaster 1037
--- Prince Raze 10647
--- Lady Zephris 14277
--- Vile Sting 5937
--- Stone Fury 2258
--- Azurous 10202
+ replace into creature_loot_template values (1663, 80728, 50, 6, 1, 1, 0, 0, 10);  
  
  -- The Stockades | Bazil Thredd
  
@@ -427,6 +398,8 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '7', '0', '0', '0', '70', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
+  replace into creature_loot_template values (1716, 80729, 35, 6, 1, 1, 0, 0, 10);  
+ 
  replace into item_template values
  ('80730', '0', '4', '2', 'Convict Moccasins', '', '1861', '2', '0', '1', '0', '1293', '8', '-1', '-1', '0',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '5', '4', '5',
@@ -437,6 +410,8 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '8', '0', '0', '0', '45', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
+  replace into creature_loot_template values (1716, 80730, 35, 6, 1, 1, 0, 0, 10);  
+ 
  replace into item_template values
  ('80731', '0', '2', '7', 'Runed Hookblade', '', '20094', '3', '0', '1', '0', '2954', '21', '-1', '-1', '30',
  '25', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '5', '7', '2',
@@ -446,6 +421,8 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '1', '1', '0', '0', '90', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
+ 
+ replace into creature_loot_template values (1716, 80731, 35, 6, 1, 1, 0, 0, 10);  
  
 -- Razorfen Kraul | Aggem Thorncurse
 
@@ -459,6 +436,8 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '8', '0', '0', '0', '30', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
+ replace into creature_loot_template values (4424, 80732, 35, 6, 1, 1, 0, 0, 10);  
+ 
  replace into item_template values
  ('80733', '0', '2', '7', 'Cursed Thornblade', '', '20088', '3', '0', '1', '0', '7864', '21', '-1', '-1', '34',
  '29', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '5', '0', '0',
@@ -468,6 +447,8 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
+ 
+ replace into creature_loot_template values (4424, 80733, 35, 6, 1, 1, 0, 0, 10);  
  
 -- Razorfen Kraul | Overlord Ramtusk
 
@@ -481,6 +462,8 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '5', '0', '0', '0', '80', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
+ replace into creature_loot_template values (4420, 80734, 35, 6, 1, 1, 0, 0, 10);  
+ 
 -- Razorfen Kraul | Agathelos the Raging
 
 replace into item_template values
@@ -493,6 +476,8 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '40', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
+ replace into creature_loot_template values (4422, 80735, 50, 6, 1, 1, 0, 0, 10);  
+ 
  replace into item_template values
  ('80736', '0', '4', '2', 'Rageboar Harness', '', '12368', '3', '0', '1', '0', '3765', '4', '-1', '-1', '34',
  '29', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '10', '7', '11',
@@ -502,6 +487,8 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '8', '0', '0', '0', '100', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
+ 
+ replace into creature_loot_template values (4422, 80736, 50, 6, 1, 1, 0, 0, 10);  
  
 -- Gnomeregan | Grubbis
 
@@ -515,6 +502,8 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '4', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
+ replace into creature_loot_template values (7361, 80737, 30, 6, 1, 1, 0, 0, 10);  
+ 
  replace into item_template values
  ('80738', '0', '4', '2', 'Basilisk Scale Boots', 'Poor Chomper...', '6947', '3', '0', '1', '0', '2581', '8', '-1', '-1', '34',
  '29', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '8', '7', '3',
@@ -525,6 +514,8 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '8', '0', '0', '0', '65', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
+ replace into creature_loot_template values (7361, 80738, 35, 6, 1, 1, 0, 0, 10);  
+ 
  replace into item_template values
  ('80739', '0', '2', '0', 'Rockbiter', '', '8454', '3', '0', '1', '0', '7753', '21', '-1', '-1', '0',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '5', '3', '4',
@@ -534,6 +525,8 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '2', '5', '0', '0', '80', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
+ 
+ replace into creature_loot_template values (7361, 80739, 35, 6, 1, 1, 0, 0, 10);  
  
 -- Gnomeregan | Crowd Pummeler 9-60
 
@@ -547,6 +540,8 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
+ replace into creature_loot_template values (6229, 80740, 50, 6, 1, 1, 0, 0, 10); 
+ 
 -- Scarlet Monastery | Interrogator Vishas
 
 replace into item_template values
@@ -559,6 +554,8 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '8', '0', '0', '0', '40', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL); 
  
+ replace into creature_loot_template values (3983, 80741, 35, 6, 1, 1, 0, 0, 10); 
+ 
  replace into item_template values
  ('80742', '0', '4', '1', 'Searing Cowl', '', '15339', '3', '0', '1', '0', '2475', '1', '-1', '-1', '34',
  '29', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '7', '0', '0',
@@ -569,6 +566,8 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '7', '0', '0', '0', '50', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
+ replace into creature_loot_template values (3983, 80742, 35, 6, 1, 1, 0, 0, 10); 
+  
 -- Scarlet Monastery | Bloodmage Thalnos
 
 replace into item_template values
@@ -580,6 +579,8 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '7', '0', '0', '0', '30', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
+ 
+ replace into creature_loot_template values (4543, 80743, 35, 6, 1, 1, 0, 0, 10); 
  
 -- Razorfen Downs | Plaguemaw the Rotting
 
@@ -593,6 +594,8 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '2', '4', '0', '0', '100', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
+ replace into creature_loot_template values (7356, 80744, 35, 6, 1, 1, 0, 0, 10); 
+ 
 -- Razorfen Downs | Glutton
 
 replace into item_template values
@@ -605,6 +608,8 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '1', '3', '0', '0', '75', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
+ replace into creature_loot_template values (8567, 80745, 50, 6, 1, 1, 0, 0, 10); 
+
 -- Uldaman | Ancient Stone Keeper
 
 replace into item_template values
@@ -616,6 +621,8 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '1', '7', '0', '0', '100', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
+ 
+  replace into creature_loot_template values (7206, 80746, 30, 6, 1, 1, 0, 0, 10); 
  
 -- Zul’Farrak | Gahz'rilla
 
@@ -629,7 +636,9 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '8', '0', '0', '0', '40', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
--- Maraudon | All bosses
+ replace into creature_loot_template values (7273, 80747, 50, 6, 1, 1, 0, 0, 10); 
+ 
+-- Maraudon | All bosses (todo)
 
 replace into item_template values
  ('80748', '0', '2', '19', 'Corrupter\'s Foci', '', '5928', '3', '0', '1', '23451', '23451', '15', '-1', '-1', '52',
@@ -730,7 +739,7 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '2', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
- 
+  
 -- Lower Blackrock Spire | Mother Smolderweb
 
 replace into item_template values
@@ -742,6 +751,8 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '8', '0', '0', '0', '100', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
+ 
+ replace into creature_loot_template values (10596, 80758, 40, 6, 1, 1, 0, 0, 10); 
  
 -- Lower Blackrock Spire | Quartermaster Zigris
 
@@ -755,6 +766,8 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
+ replace into creature_loot_template values (9736, 80759, 40, 6, 1, 1, 0, 0, 10); 
+ 
 -- Lower Blackrock Spire | Overlord Wyrmthalak
 
 replace into item_template values
@@ -767,9 +780,25 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '4', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
--- Upper Blackrock Spire | General Drakkisath | Add item 13090 to the general loot table
+ replace into creature_loot_template values (9568, 80760, 35, 6, 1, 1, 0, 0, 10);  
 
--- Alterac Valley | Ivus the Forest Lord  | Lokholar the Ice Lord | Add items: 19111, 19110, 19112, 19113, 19105
+-- Upper Blackrock Spire | General Drakkisath 
+
+replace into creature_loot_template values (10363, 13090, 10, 6, 1, 1, 0, 0, 10);  
+
+-- Alterac Valley | Ivus the Forest Lord  | Lokholar the Ice Lord | Add items: , , 19112, 19113, 19105
+
+replace into creature_loot_template values (13419, 19111, 20, 6, 1, 1, 0, 0, 10);  
+replace into creature_loot_template values (13419, 19110, 20, 6, 1, 1, 0, 0, 10);  
+replace into creature_loot_template values (13419, 19112, 20, 6, 1, 1, 0, 0, 10);  
+replace into creature_loot_template values (13419, 19113, 20, 6, 1, 1, 0, 0, 10);  
+replace into creature_loot_template values (13419, 19105, 20, 6, 1, 1, 0, 0, 10);  
+
+replace into creature_loot_template values (13256, 19111, 20, 6, 1, 1, 0, 0, 10);  
+replace into creature_loot_template values (13256, 19110, 20, 6, 1, 1, 0, 0, 10);  
+replace into creature_loot_template values (13256, 19112, 20, 6, 1, 1, 0, 0, 10);  
+replace into creature_loot_template values (13256, 19113, 20, 6, 1, 1, 0, 0, 10);  
+replace into creature_loot_template values (13256, 19105, 20, 6, 1, 1, 0, 0, 10);  
 
 -- Stormwind Vault | Black Bride
 
@@ -1363,7 +1392,7 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '2', '0', '0', '0', '0', '0', '1', '1', '0', '0', '45', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
- 
+  
 -- Low level random drop
  
  replace into item_template values
@@ -1388,6 +1417,8 @@ replace into item_template values
  '-1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
+replace into creature_loot_template values (3253, 80815, 35, 6, 1, 1, 0, 0, 10);
+   
 -- Rare mobs specia loot | Felweaver Scornn
 
 replace into item_template values
@@ -1399,6 +1430,8 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '2', '0', '0', '0', '0', '0', '7', '0', '0', '0', '50', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
+ 
+ replace into creature_loot_template values (5822, 80816, 35, 6, 1, 1, 0, 0, 10); 
  
  replace into item_template values
  ('80817', '0', '2', '8', 'Scorched Bastard Sword', '', '5928', '2', '0', '1', '714', '714', '17', '-1', '-1', '13',
@@ -1422,6 +1455,8 @@ replace into item_template values
  '-1', '2', '0', '0', '0', '0', '0', '8', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
+ replace into creature_loot_template values (5824, 80818, 35, 6, 1, 1, 0, 0, 10); 
+ 
  replace into item_template values
  ('80819', '0', '2', '0', 'Serrated Handaxe', '', '19550', '2', '0', '1', '416', '416', '21', '-1', '-1', '13',
  '8', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
@@ -1431,7 +1466,9 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '2', '0', '0', '0', '0', '0', '1', '3', '0', '0', '40', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
-
+ 
+ replace into creature_loot_template values (5824, 80819, 35, 6, 1, 1, 0, 0, 10); 
+ 
 -- Rare mobs specia loot | Sister Hatelash
 
 replace into item_template values
@@ -1444,6 +1481,8 @@ replace into item_template values
  '-1', '2', '0', '0', '0', '0', '0', '2', '1', '0', '0', '35', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
+ replace into creature_loot_template values (5785, 80820, 35, 6, 1, 1, 0, 0, 10); 
+ 
  replace into item_template values
  ('80821', '0', '2', '15', 'Hatetalon', '', '20273', '2', '0', '1', '321', '321', '13', '-1', '-1', '13',
  '8', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '1', '3', '1',
@@ -1453,6 +1492,8 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '2', '0', '0', '0', '0', '0', '1', '3', '0', '0', '40', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
+ 
+ replace into creature_loot_template values (5785, 80821, 35, 6, 1, 1, 0, 0, 10); 
 
 -- Rare mobs specia loot | Geomancer Flintdagger
 
@@ -1466,6 +1507,8 @@ replace into item_template values
  '-1', '2', '0', '0', '0', '0', '0', '4', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
+ replace into creature_loot_template values (2609, 80822, 35, 6, 1, 1, 0, 0, 10); 
+ 
  replace into item_template values
  ('80823', '0', '2', '15', 'Gemstone Dagger', '', '20569', '2', '0', '1', '10770', '10770', '13', '-1', '-1', '40',
  '35', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
@@ -1475,6 +1518,8 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '2', '0', '0', '0', '0', '0', '4', '1', '0', '0', '55', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
+ 
+ replace into creature_loot_template values (2609, 80823, 35, 6, 1, 1, 0, 0, 10); 
 
 -- Rare mobs specia loot | Narillasanz
 
@@ -1488,6 +1533,8 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '4', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
+ replace into creature_loot_template values (2447, 80824 35, 6, 1, 1, 0, 0, 10); 
+ 
  replace into item_template values
  ('80825', '0', '2', '2', 'Flamestring Bow', '', '20552', '3', '0', '1', '16756', '16756', '15', '-1', '-1', '47',
  '42', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
@@ -1498,6 +1545,8 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
+ replace into creature_loot_template values (2447, 80825, 35, 6, 1, 1, 0, 0, 10); 
+ 
  replace into item_template values
  ('80826', '0', '4', '0', 'Scale of the Red Drake', '', '20952', '3', '0', '1', '10974', '10974', '12', '-1', '-1', '47',
  '42', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
@@ -1507,6 +1556,8 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '2', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
+ 
+ replace into creature_loot_template values (2447, 80826, 35, 6, 1, 1, 0, 0, 10); 
 
 -- Rare mobs specia loot | Vengeful Ancient
 
@@ -1520,6 +1571,8 @@ replace into item_template values
  '-1', '2', '0', '0', '0', '0', '0', '2', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
+ replace into creature_loot_template values (4030, 80827, 35, 6, 1, 1, 0, 0, 10); 
+ 
  replace into item_template values
  ('80828', '0', '2', '14', 'Ironbark Branch', '', '28475', '2', '0', '1', '2738', '2738', '23', '-1', '-1', '32',
  '26', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '6', '0', '0',
@@ -1529,6 +1582,8 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '2', '0', '0', '0', '0', '0', '2', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
+ 
+ replace into creature_loot_template values (4030, 80828, 35, 6, 1, 1, 0, 0, 10); 
 
 -- Rare mobs specia loot | Nal'taszar
 
@@ -1542,6 +1597,8 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '4', '1', '0', '0', '65', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
+ replace into creature_loot_template values (4066, 80829, 35, 6, 1, 1, 0, 0, 10); 
+ 
  replace into item_template values
  ('80830', '0', '4', '0', 'Fey Dreamcatcher', '', '19570', '3', '0', '1', '3475', '3475', '12', '-1', '-1', '33',
  '27', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
@@ -1551,6 +1608,8 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '2', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
+ 
+ replace into creature_loot_template values (4066, 80830, 35, 6, 1, 1, 0, 0, 10); 
 
 -- Rare mobs specia loot | Dragonmaw Battlemaster
 
@@ -1564,6 +1623,8 @@ replace into item_template values
  '-1', '2', '0', '0', '0', '0', '0', '8', '0', '0', '0', '30', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
+ replace into creature_loot_template values (1037, 80831, 35, 6, 1, 1, 0, 0, 10); 
+ 
  replace into item_template values
  ('80832', '0', '4', '3', 'Steelscale Shoulders', '', '10170', '2', '0', '1', '2416', '2416', '3', '-1', '-1', '33',
  '27', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '9', '0', '0',
@@ -1573,6 +1634,8 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '2', '0', '0', '0', '0', '0', '5', '0', '0', '0', '60', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
+ 
+ replace into creature_loot_template values (1037, 80832, 35, 6, 1, 1, 0, 0, 10); 
 
 -- Rare mobs specia loot | Prince Raze
 
@@ -1586,6 +1649,8 @@ replace into item_template values
  '-1', '2', '0', '0', '0', '0', '0', '4', '0', '0', '0', '45', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
+ replace into creature_loot_template values (10647, 80833, 35, 6, 1, 1, 0, 0, 10); 
+ 
  replace into item_template values
  ('80834', '0', '2', '13', 'Satyr Claw', '', '34896', '2', '0', '1', '6113', '6113', '21', '-1', '-1', '33',
  '28', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '4', '3', '4',
@@ -1595,6 +1660,8 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '2', '0', '0', '0', '0', '0', '2', '1', '0', '0', '65', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
+
+replace into creature_loot_template values (10647, 80834, 35, 6, 1, 1, 0, 0, 10); 
 
 -- Rare mobs specia loot | Lady Zephris
 
@@ -1608,6 +1675,8 @@ replace into item_template values
  '-1', '2', '0', '0', '0', '0', '0', '8', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
+ replace into creature_loot_template values (14277, 80835, 35, 6, 1, 1, 0, 0, 10); 
+ 
  replace into item_template values
  ('80836', '0', '2', '10', 'Staff of the Zephyr', '', '20336', '2', '0', '1', '9303', '9303', '17', '-1', '-1', '35',
  '30', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '9', '0', '0',
@@ -1617,6 +1686,8 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '2', '0', '0', '0', '0', '0', '2', '3', '0', '0', '85', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
+ 
+ replace into creature_loot_template values (14277, 80836, 35, 6, 1, 1, 0, 0, 10); 
 
 -- Rare mobs specia loot | Vile Sting
 
@@ -1630,6 +1701,8 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '8', '0', '0', '0', '50', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
+  replace into creature_loot_template values (5937, 80837, 35, 6, 1, 1, 0, 0, 10); 
+ 
  replace into item_template values
  ('80838', '0', '4', '2', 'Hardened Scorpid Boots', '', '30172', '3', '0', '1', '4627', '4627', '8', '-1', '-1', '37',
  '32', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '5', '7', '11',
@@ -1639,6 +1712,8 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '8', '0', '0', '0', '50', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
+ 
+  replace into creature_loot_template values (5937, 80838, 35, 6, 1, 1, 0, 0, 10); 
 
 -- Rare mobs specia loot | Stone Fury
 
@@ -1652,6 +1727,8 @@ replace into item_template values
  '-1', '2', '0', '0', '0', '0', '0', '4', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
+ replace into creature_loot_template values (2258, 80839, 35, 6, 1, 1, 0, 0, 10); 
+ 
  replace into item_template values
  ('80840', '0', '2', '14', 'Obsidian Sphere', 'An endless flicker is trapped inside the sphere.', '5928', '2', '0', '1', '5432', '5432', '23', '-1', '-1', '39',
  '34', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '5', '0', '0',
@@ -1661,6 +1738,8 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '2', '0', '0', '0', '0', '0', '4', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
+ 
+ replace into creature_loot_template values (2258, 80840, 35, 6, 1, 1, 0, 0, 10); 
 
 -- Rare mobs specia loot | Azurous
 
@@ -1674,6 +1753,8 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '7', '0', '0', '0', '50', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
+  replace into creature_loot_template values (10202, 80841, 35, 6, 1, 1, 0, 0, 10); 
+ 
  replace into item_template values
  ('80842', '0', '4', '0', 'Scale of the Blue Drake', '', '22641', '3', '0', '1', '20946', '20946', '12', '-1', '-1', '61',
  '56', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
@@ -1683,6 +1764,8 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
+ 
+  replace into creature_loot_template values (10202, 80842, 35, 6, 1, 1, 0, 0, 10); 
 
 -- Rare mobs specia loot | Princess Tempestria
 
