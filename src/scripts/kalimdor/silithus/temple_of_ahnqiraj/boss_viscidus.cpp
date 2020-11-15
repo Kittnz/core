@@ -72,9 +72,9 @@ enum
     MAX_VISCIDUS_GLOBS          = 20,                       // there are 20 summoned globs; each glob = 5% hp
 
     // hitcounts
-    HITCOUNT_SLOW               = 100,
-    HITCOUNT_SLOW_MORE          = 150,
-    HITCOUNT_FREEZE             = 200,
+    HITCOUNT_SLOW               = 1,//100,
+    HITCOUNT_SLOW_MORE          = 1,//150,
+    HITCOUNT_FREEZE             = 1,//200,
 
     // phases
     PHASE_NORMAL                = 1,
@@ -346,7 +346,10 @@ struct boss_viscidusAI : public ScriptedAI
 
     void SummonedMovementInform(Creature* pSummoned, uint32 uiType, uint32 uiPointId)
     {
-        if (pSummoned->GetEntry() != NPC_GLOB_OF_VISCIDUS || uiType != POINT_MOTION_TYPE || !uiPointId)
+        if (pSummoned->GetEntry() != NPC_GLOB_OF_VISCIDUS || uiType != POINT_MOTION_TYPE)
+            return;
+
+        if (uiPointId != 1)
             return;
 
         m_lGlobesGuidList.remove(pSummoned->GetObjectGuid());
@@ -362,7 +365,7 @@ struct boss_viscidusAI : public ScriptedAI
 
     void SpellHit(Unit* pCaster, const SpellEntry* pSpell)
     {
-        if (pSpell->Id == SPELL_VISCIDUS_EXPLODE)
+        if (pSpell->Id == SPELL_VISCIDUS_EXPLODE && m_uiPhase != PHASE_EXPLODED)
         {
             // suicide if required
             if (m_creature->GetHealthPercent() < 5.0f)
