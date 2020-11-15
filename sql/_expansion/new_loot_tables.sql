@@ -294,7 +294,7 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
- replace into creature_loot_template values (1696, 80721, 35, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (1696, 80721, 50, 6, 1, 1, 0, 0, 10); 
  
  replace into item_template values
  ('80722', '0', '4', '2', 'Dreadskull Pauldrons', '', '1057', '2', '0', '1', '0', '1962', '3', '-1', '-1', '0',
@@ -306,7 +306,7 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '8', '0', '0', '0', '50', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
- replace into creature_loot_template values (1696, 80722, 35, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (1696, 80722, 50, 6, 1, 1, 0, 0, 10); 
 
 -- The Stockades | Kam Deepfury
 
@@ -320,7 +320,7 @@ replace into item_template values
  '-1', '2', '0', '0', '0', '0', '0', '2', '1', '0', '0', '70', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
-replace into creature_loot_template values (1666, 80723, 35, 6, 1, 1, 0, 0, 10); 
+replace into creature_loot_template values (1666, 80723, 90, 6, 1, 1, 0, 0, 10); 
  
 -- The Stockades | Hamhock
 
@@ -334,7 +334,7 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '0', '2', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
- replace into creature_loot_template values (1717, 80724, 35, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (1717, 80724, 50, 6, 1, 1, 0, 0, 10); 
  
  replace into item_template values
  ('80725', '0', '4', '0', 'Hamhock\'s Nose Ring', '', '9823', '2', '0', '1', '0', '874', '11', '-1', '-1', '30',
@@ -346,7 +346,7 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '4', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
-replace into creature_loot_template values (1717, 80725, 35, 6, 1, 1, 0, 0, 10);  
+replace into creature_loot_template values (1717, 80725, 50, 6, 1, 1, 0, 0, 10);  
  
 -- The Stockades | Dextren Ward
 
@@ -384,7 +384,7 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '1', '3', '0', '0', '85', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
- replace into creature_loot_template values (1663, 80728, 50, 6, 1, 1, 0, 0, 10);  
+ replace into creature_loot_template values (1663, 80728, 30, 6, 1, 1, 0, 0, 10);  
  
  -- The Stockades | Bazil Thredd
  
@@ -422,7 +422,7 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '1', '1', '0', '0', '90', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
- replace into creature_loot_template values (1716, 80731, 35, 6, 1, 1, 0, 0, 10);  
+ replace into creature_loot_template values (1716, 80731, 30, 6, 1, 1, 0, 0, 10);  
  
 -- Razorfen Kraul | Aggem Thorncurse
 
@@ -1096,15 +1096,16 @@ replace into item_template values
  '-1', '2', '0', '0', '0', '0', '0', '4', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
- replace into item_template values
- ('80788', '0', '15', '', 'Basic Guide on Necromancy', '\"101 Ways to Raise a Skeleton', '8092', '3', '0', '1', '0', '1845', '22', '-1', '-1', '30',
- '25', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
- '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
- '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
- '0', '0', '0', '8853', '0', '0', '0', '900000', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
- '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
- '-1', '2', '0', '0', '0', '0', '0', '7', '2', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
- '0', '1', NULL);
+ delete from item_template where entry = 80788;
+ -- replace into item_template values
+ -- ('80788', '0', '15', '0', 'Basic Guide on Necromancy', '\"101 Ways to Raise a Skeleton', '8092', '3', '0', '1', '0', '1845', '22', '-1', '-1', '30',
+ -- '25', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ -- '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ -- '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ -- '0', '0', '0', '8853', '0', '0', '0', '900000', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ -- '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ -- '-1', '2', '0', '0', '0', '0', '0', '7', '2', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ -- '0', '1', NULL);
  
  replace into item_template values
  ('80789', '0', '4', '2', 'Sharpsight Eyepatch', '', '12404', '3', '0', '1', '0', '1874', '1', '-1', '-1', '30',
@@ -1240,15 +1241,16 @@ replace into item_template values
  
 -- Unassigned items (world drop or something else)
  
- replace into item_template values
- ('80800', '0', '2', '19', 'Dualcaster Wand', '', '2012', '4', '0', '1', '25374', '25374', '15', '-1', '-1', '51',
- '46', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
- '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1800', '0',
- '0', '38', '72', '4', '38', '72', '2', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
- '0', '0', '0', '7701', '1', '0', '0', '-1', '0', '-1', '7701', '1', '0', '0', '-1', '0', '-1', '0', '0',
- '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
- '-1', '2', '0', '0', '0', '0', '0', '1', '1', '0', '0', '70', '0', '0', '0', '0', '0', '0', '0', '0',
- '0', '1', NULL);
+ delete from item_template where entry = 80800;
+ -- replace into item_template values
+ -- ('80800', '0', '2', '19', 'Dualcaster Wand', '', '2012', '4', '0', '1', '25374', '25374', '15', '-1', '-1', '51',
+ -- '46', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ -- '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1800', '0',
+ -- '0', '38', '72', '4', '38', '72', '2', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ -- '0', '0', '0', '7701', '1', '0', '0', '-1', '0', '-1', '7701', '1', '0', '0', '-1', '0', '-1', '0', '0',
+ -- '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ -- '-1', '2', '0', '0', '0', '0', '0', '1', '1', '0', '0', '70', '0', '0', '0', '0', '0', '0', '0', '0',
+ -- '0', '1', NULL);
  
  replace into item_template values
  ('80801', '0', '4', '1', 'Cowl of Terror', '', '13805', '4', '0', '1', '24895', '24895', '1', '-1', '-1', '47',
@@ -1326,26 +1328,17 @@ replace into item_template values
  '-1', '2', '0', '0', '0', '0', '0', '1', '5', '0', '0', '40', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
- replace into item_template values
- ('80808', '0', '2', '1', 'Duskreaver', '', '25599', '3', '0', '1', '23145', '23145', '17', '-1', '-1', '40',
- '35', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
- '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '2900', '0',
- '0', '76', '114', '0', '3', '5', '5', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
- '0', '0', '0', '18138', '2', '0', '3', '300', '0', '-1', '0', '0', '0', '0', '0', '0', '-1', '0', '0',
- '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
- '-1', '2', '0', '0', '0', '0', '0', '1', '3', '0', '0', '100', '0', '0', '0', '0', '0', '0', '0', '0',
- '0', '1', NULL);
- 
- replace into item_template values
- ('80809', '0', '2', '13', 'Bloodhowler', '', '23271', '3', '0', '1', '7421', '7421', '21', '-1', '-1', '34',
- '29', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '5', '0', '0',
- '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1900', '0',
- '0', '32', '53', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
- '0', '0', '0', '3264', '2', '0', '3', '300', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
- '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
- '-1', '2', '0', '0', '0', '0', '0', '1', '3', '0', '0', '65', '0', '0', '0', '0', '0', '0', '0', '0',
- '0', '1', NULL);
- 
+ delete from item_template where entry = 80808;
+ -- replace into item_template values
+ -- ('80808', '0', '2', '1', 'Duskreaver', '', '25599', '3', '0', '1', '23145', '23145', '17', '-1', '-1', '40',
+ -- '35', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ -- '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '2900', '0',
+ -- '0', '76', '114', '0', '3', '5', '5', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ -- '0', '0', '0', '18138', '2', '0', '3', '300', '0', '-1', '0', '0', '0', '0', '0', '0', '-1', '0', '0',
+ -- '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ -- '-1', '2', '0', '0', '0', '0', '0', '1', '3', '0', '0', '100', '0', '0', '0', '0', '0', '0', '0', '0',
+ -- '0', '1', NULL);
+  
  replace into item_template values
  ('80810', '0', '4', '4', 'Lost Defender\'s Helmet', '', '11719', '3', '0', '1', '5409', '5409', '1', '-1', '-1', '46',
  '41', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '8', '7', '15',
@@ -1976,3 +1969,47 @@ update item_template set sheath = 3 where entry = 80764;
 update item_template set display_id = 28226 where entry = 80768;
 update item_template set sheath = 3 where entry = 80768;
 update item_template set inventory_type = 23 where entry = 80768;
+update item_template set display_id = 18728 where entry = 80850;
+update item_template set display_id = 28649 where entry = 80848;
+update item_template set display_id = 28435 where entry = 80846;
+update item_template set display_id = 31143 where entry = 80845;
+update item_template set display_id = 34605 where entry = 80842;
+update item_template set display_id = 26465 where entry = 80841;
+update item_template set display_id = 28472 where entry = 80840;
+update item_template set inventory_type = 23 where entry = 80844;
+update item_template set display_id = 33529 where entry = 80854;
+update item_template set inventory_type = 23 where entry = 80854;
+update item_template set inventory_type = 23 where entry = 80844;
+update item_template set display_id = 34323 where entry = 80790;
+update item_template set display_id = 8257 where entry = 80795;
+update item_template set display_id = 21600 where entry = 80804;
+update item_template set display_id = 15298 where entry = 80801;
+update item_template set display_id = 21024 where entry = 80799;
+update item_template set sheath = 1 where entry = 80812;
+update item_template set sheath = 2 where entry = 80813;
+update item_template set sheath = 2 where entry = 80814;
+update item_template set sheath = 0 where entry = 80824;
+update item_template set sheath = 2 where entry = 80836;
+update item_template set sheath = 3 where entry = 80823;
+update item_template set sheath = 3 where entry = 80798;
+update item_template set sheath = 3 where entry = 80733;
+update item_template set sheath = 1 where entry = 80781;
+update item_template set inventory_type = 5 where entry = 80816;
+update item_template set inventory_type = 5 where entry = 80791;
+update item_template set inventory_type = 5 where entry = 80783;
+update item_template set display_id = 15223 where entry = 80791;
+update item_template set display_id = 19893 where entry = 80783;
+update item_template set sheath = 2 where entry = 80812;
+update item_template set display_id = 26500 where entry = 80812;
+update item_template set sheath = 1 where entry = 80817;
+update item_template set display_id = 26500 where entry = 80817;
+update item_template set sheath = 3 where entry = 80792;
+update item_template set display_id = 28530 where entry = 80792;
+update item_template set max_count = 1 where entry = 80793;
+update item_template set display_id = 23270 where entry = 80807;
+update item_template set sheath = 0 where entry = 80807;
+update item_template set display_id = 20071 where entry = 80817;
+update item_template set sheath = 1 where entry = 80817;
+update item_template set display_id = 24039 where entry = 80788;
+update item_template set sheath = 0 where entry = 80788;
+update item_template set inventory_type = 23 where entry = 80788;
