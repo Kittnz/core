@@ -1070,6 +1070,7 @@ bool GossipHello_npc_agne_gambler(Player* pPlayer, Creature* pCreature)
 bool GossipSelect_npc_agne_gambler(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
 {
     uint32 amount;
+    int32 result = 0;
 
     switch (uiAction)
     {
@@ -1101,11 +1102,9 @@ bool GossipSelect_npc_agne_gambler(Player* pPlayer, Creature* pCreature, uint32 
     pCreature->HandleEmote(EMOTE_ONESHOT_ATTACK1H);
     pCreature->PlayDirectSound(COIN_SOUND, pPlayer); // Coin sound
 
-    int result = irand(1, 100);
-    pCreature->PMonsterEmote("Agne rolls a dice for %s... %i!", nullptr, false,
-                             pPlayer->GetName(),
-                             result);
-    // STOP FORMATTING LIKE YOU'RE CODING ON YOUR PHONE
+    result = urand(1, 100);
+
+    ChatHandler(pPlayer).PSendSysMessage("Agne rolls a dice for %s... %i!", pPlayer->GetName(), result);
 
     uint32 amountToAward = handleRecords(pPlayer, amount, result);
     if (amountToAward > 0)
@@ -1557,12 +1556,6 @@ void AddSC_episode_1()
     newscript->Name = "npc_rov";
     newscript->pGossipHello = &GossipHello_npc_rov;
     newscript->pGossipSelect = &GossipSelect_npc_rov;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "npc_agne_gambler";
-    newscript->pGossipHello = &GossipHello_npc_agne_gambler;
-    newscript->pGossipSelect = &GossipSelect_npc_agne_gambler;
     newscript->RegisterSelf();
 
     newscript = new Script;
