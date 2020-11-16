@@ -175,12 +175,9 @@ struct boss_chromieAI : public ScriptedAI
 
                 if (m_uiSecondPhaseDialog2 < diff && !saidDialog2)
                 {
-                    if (Creature* chronormu = m_creature->GetMap()->GetCreature(m_uiChronormuGuid))
-                    {
-                        saidDialog2 = true;
-                        m_creature->PMonsterSay(
-                                "NEVER! You are set on a final road, one ending timeline, while my hearth still throbs with the hopes of tomorrow. The Sands of Time flows different, shifting day by day, with every choice, yet yours is an never ending sea of still sand. These mortals, with every choice and every action they do they give birth to another future, I rather part of theirs than wither away with you.");
-                    }
+                    saidDialog2 = true;
+                    m_creature->PMonsterSay(
+                            "NEVER! You are set on a final road, one ending timeline, while my hearth still throbs with the hopes of tomorrow. The Sands of Time flows different, shifting day by day, with every choice, yet yours is an never ending sea of still sand. These mortals, with every choice and every action they do they give birth to another future, I rather part of theirs than wither away with you.");
                 } else m_uiSecondPhaseDialog2 -= diff;
 
                 if (m_uiSecondPhaseDialog3 < diff && !saidDialog3)
