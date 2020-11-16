@@ -1149,7 +1149,7 @@ replace into creature_loot_template (entry, item, chanceorquestchance, groupid, 
 
 update creature_template set 
 health_min = 100, health_max = 130, dmg_school = 5,
-armor = 96, dmg_min = 10, dmg_max = 16, attack_power = 60,
+armor = 60, dmg_min = 9, dmg_max = 13, attack_power = 50,
 spell_id1 = 0, gold_min = 12, gold_max = 20 
 where entry = 80118;
 
@@ -1162,7 +1162,7 @@ REPLACE INTO `creature_template` VALUES (80119, 0, 1228, 0, 0, 0, 'Muttering Vul
 	 
 update creature_template set faction = 189,
 health_min = 100, health_max = 120, dmg_school = 5,
-armor = 76, dmg_min = 8, dmg_max = 12, attack_power = 60,
+armor = 50, dmg_min = 6, dmg_max = 10, attack_power = 50,
 spell_id1 = 0, gold_min = 9, gold_max = 20 
 where entry = 80119;
 	 
