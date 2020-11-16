@@ -56,11 +56,11 @@ struct boss_chromieAI : public ScriptedAI
         m_uiLightningCloudTimer = 8000;
 
         m_uiChronormuTimer = 3000;
-        m_uiChronormuCombatStartTimer = 22500;
+        m_uiChronormuCombatStartTimer = 46000;
 
-        m_uiSecondPhaseDialog1 = 6500;
-        m_uiSecondPhaseDialog2 = 14000;
-        m_uiSecondPhaseDialog3 = 20000;
+        m_uiSecondPhaseDialog1 = 8000;
+        m_uiSecondPhaseDialog2 = 24000;
+        m_uiSecondPhaseDialog3 = 40000;
     }
 
     void JustRespawned()
@@ -74,7 +74,8 @@ struct boss_chromieAI : public ScriptedAI
         chronormuCombatStarted = false;
         stopCasting = false;
         isFriendly = false;
-        if (chronormu) {
+        if (chronormu)
+        {
             chronormu->DespawnOrUnsummon();
             chronormu->ForcedDespawn();
             chronormu = nullptr;
@@ -99,14 +100,14 @@ struct boss_chromieAI : public ScriptedAI
     void LeaveCombat() {
         m_creature->ClearTarget();
         m_creature->ClearInCombat();
-        m_creature->InterruptNonMeleeSpells(false);
         m_creature->CombatStop(true);
         m_creature->UpdateCombatState(false);
         m_creature->UpdateCombatWithZoneState(false);
     }
 
     void UpdateAI(const uint32 diff) {
-        if (m_creature->GetHealthPercent() <= 25 && !isFriendly) {
+        if (m_creature->GetHealthPercent() <= 25 && !isFriendly)
+        {
             isFriendly = true;
 
             m_creature->addUnitState(UNIT_STAT_ROOT);
@@ -130,64 +131,65 @@ struct boss_chromieAI : public ScriptedAI
             DoPlaySoundToSet(m_creature, SOUND_BODY_OF_KATHUNE);
         }
 
-        if (isFriendly) {
+        if (isFriendly)
+        {
             if (m_creature->SelectHostileTarget() || m_creature->getVictim())
                 LeaveCombat();
 
-            if (m_uiChronormuTimer < diff && !chronormuSummoned) {
+            if (m_uiChronormuTimer < diff && !chronormuSummoned)
+            {
                 chronormuSummoned = true;
 
                 chronormu = m_creature->SummonCreature(CREATURE_CHRONORMU, old_x, old_y,
-                                                                 old_z, 0, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 60000);
+                                                                 old_z, 0, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 300000);
 
                 chronormu->setFaction(35);
+                chronormu->ClearTarget();
+                chronormu->AI()->SetCombatMovement(false);
                 chronormu->CastSpell(chronormu, SPELL_TWIN_TELEPORT_VISUAL, true);
                 m_creature->SetFacingTo(m_creature->GetAngle(old_x, old_y));
 
                 chronormu->PMonsterYell("You have failed me, my puppet!");
             } else m_uiChronormuTimer -= diff;
 
-            if (chronormuSummoned) {
+            if (chronormuSummoned)
+            {
                 if (m_uiSecondPhaseDialog1 < diff && !saidDialog1) {
                     saidDialog1 = true;
                     chronormu->SetFacingToObject(m_creature);
-                    chronormu->PMonsterSay("Your time here has come to an end, mortals. The dragonflights won't tolerate living in a world inhabited by such evil, greedy and cynical beings.");
-                    chronormu->PMonsterSay("This world must be purged. We, the dragonflights, will rule with a firm and wise hand.");
-                    chronormu->PMonsterSay("I ask you again, \"Chromie\", why don't you join me? Why don't you join your wiser self?");
+                    chronormu->PMonsterSay("Your time here has come to an end, mortals. The dragonflights won't tolerate living in a world inhabited by such evil, greedy and cynical beings. I ask you again, \"Chromie\", why don't you join me? Why don't you join your wiser self?");
                 } else m_uiSecondPhaseDialog1 -= diff;
 
                 if (m_uiSecondPhaseDialog2 < diff && !saidDialog2) {
                     saidDialog2 = true;
-                    m_creature->PMonsterYell("NEVER!");
-                    m_creature->PMonsterSay("You are only seeing one side of the coin. These mortals you mention may have committed, "
-                                           "and will commit, acts of doubtful honor. But these people, will all of their imperfections, "
-                                           "can also be one of the most lovely beings ever created. You only talk about wisdom and punishment, "
-                                           "but have you ever tried to understand the love these creatures can also irradiate?");
-                    m_creature->PMonsterSay("We must live with them, protect them, teach them, but also learn from them.");
-                    m_creature->PMonsterSay("I won't ever let you corrupt me or play magic tricks with me again.");
+                    m_creature->PMonsterSay("NEVER! You are set on a final road, one ending timeline, while my hearth still throbs with the hopes of tomorrow. The Sands of Time flows different, shifting day by day, with every choice, yet yours is an never ending sea of still sand. These mortals, with every choice and every action they do they give birth to another future, I rather part of theirs than wither away with you.");
                 } else m_uiSecondPhaseDialog2 -= diff;
 
-                if (m_uiSecondPhaseDialog3 < diff && !saidDialog3) {
+                if (m_uiSecondPhaseDialog3 < diff && !saidDialog3)
+                {
                     saidDialog3 = true;
-                    chronormu->PMonsterSay("Don't make me laugh, little one. You speak about corruption but have you ever considered how corrupted is your pure heart by those mortals you seek to protect?");
-                    chronormu->PMonsterYell("Get out of my way! Let me carry on with my plans! Let me build my army! I want those orcs!");
-                    m_creature->PMonsterYell("Now, heroes! Attack now! I'll contain Chronormu's strength!");
+                    chronormu->PMonsterYell("How pitful... I truly believed you'd understand. Come then, mortals, witness your own demise. WITNESS THE CREATION OF A NEW ORCISH ARMY!");
                 } else m_uiSecondPhaseDialog3 -= diff;
 
-                if (m_uiChronormuCombatStartTimer < diff && !chronormuCombatStarted) {
+                if (m_uiChronormuCombatStartTimer < diff && !chronormuCombatStarted)
+                {
+                    m_creature->PMonsterYell("Now, heroes! Attack now! I'll contain Chronormu's strength!");
+
                     chronormuCombatStarted = true;
                     m_creature->RemoveAllAuras();
 
-                    DoCastSpellIfCan(m_creature, SPELL_GREEN_CHANNELING, CF_FORCE_CAST);
+                    DoCast(m_creature, SPELL_GREEN_CHANNELING, true);
                     chronormu->SetObjectScale(0.75);
                     chronormu->AddAura(SPELL_PARTICLES_GREEN);
 
                     chronormu->setFaction(38);
+                    chronormu->AI()->SetCombatMovement(true);
                 } else m_uiChronormuCombatStartTimer -= diff;
             }
         }
 
-        if (!isFriendly) {
+        if (!isFriendly)
+        {
             //Return since we have no target
             if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
                 return;
@@ -195,7 +197,8 @@ struct boss_chromieAI : public ScriptedAI
             if (m_creature->GetHealthPercent() <= 30 && !stopCasting)
                 stopCasting = true;
 
-            if (!stopCasting) {
+            if (!stopCasting)
+            {
                 // Teleport + Arcane explosion + Knockback
                 if (m_uiTeleportTimer < diff) {
                     if (Unit *pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0, nullptr,
@@ -210,7 +213,8 @@ struct boss_chromieAI : public ScriptedAI
                 } else m_uiTeleportTimer -= diff;
 
                 // Lightning Cloud
-                if (m_uiLightningCloudTimer < diff) {
+                if (m_uiLightningCloudTimer < diff)
+                {
                     if (Unit *pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0, nullptr,
                                                                           SELECT_FLAG_PLAYER)) {
                         DoCastSpellIfCan(pTarget, SPELL_LIGHTNING_CLOUD, CF_TRIGGERED);
@@ -220,7 +224,8 @@ struct boss_chromieAI : public ScriptedAI
                 } else m_uiLightningCloudTimer -= diff;
 
                 // Sleep AoE
-                if (m_uiAoESleepTimer < diff) {
+                if (m_uiAoESleepTimer < diff)
+                {
                     DoCastAOE(SPELL_AOE_SLEEP, CF_FORCE_CAST);
 
                     m_uiAoESleepTimer = 20000;
@@ -240,7 +245,8 @@ CreatureAI* GetAI_boss_chromie(Creature *_Creature)
 
 bool GossipHello_chromie(Player* pPlayer, Creature* pCreature)
 {
-    if (!isFriendly) {
+    if (!isFriendly)
+    {
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Chromie? What are you doing here? What is happening?",
                                  GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF);
         pPlayer->SEND_GOSSIP_MENU(100004, pCreature->GetGUID());

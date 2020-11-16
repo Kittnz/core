@@ -8,6 +8,7 @@ enum {
     SPELL_ENRAGE = 12686,
     SPELL_SAND_BREATH = 20717,
     SPELL_PARTICLES_GREEN = 18951,
+    SPELL_SLEEP_VISUAL = 25148,
 
     SOUND_CTHUNE_WOUND = 8698
 };
@@ -45,12 +46,17 @@ struct boss_chronormuAI : public ScriptedAI
 
     void JustDied(Unit* /*pKiller*/)
     {
-
+        m_creature->SetRespawnTime(604800000);
     }
 
     void EnterEvadeMode() {
-        m_creature->SetObjectScale(0.75);
-        m_creature->AddAura(SPELL_PARTICLES_GREEN);
+        if (m_creature->getFaction() != 35)
+        {
+            m_creature->SetObjectScale(0.75);
+            m_creature->AddAura(SPELL_PARTICLES_GREEN);
+            m_creature->AddAura(SPELL_SLEEP_VISUAL);
+            m_creature->SetStandState(UNIT_STAND_STATE_SLEEP);
+        }
     }
 
     void UpdateAI(const uint32 diff)
@@ -59,11 +65,17 @@ struct boss_chronormuAI : public ScriptedAI
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
 
+        if (m_creature->HasAura(SPELL_SLEEP_VISUAL))
+        {
+            m_creature->RemoveAurasDueToSpell(SPELL_SLEEP_VISUAL);
+            m_creature->SetStandState(UNIT_STAND_STATE_STAND);
+        }
+
         //Cleave
         if (Cleave_Timer < diff)
         {
             DoCast(m_creature->getVictim(), SPELL_CLEAVE);
-            Cleave_Timer = 6000 + rand() % 4000;
+            Cleave_Timer = irand(6000, 8000);
         }
         else
             Cleave_Timer -= diff;
