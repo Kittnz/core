@@ -1514,10 +1514,10 @@ bool ItemUseSpell_shop_racechange(Player* pPlayer, Item* pItem, const SpellCastT
 	{
 		uint32 Count = 1;
 		pPlayer->DestroyItemCount(pItem, Count, false);
+		pPlayer->SaveInventoryAndGoldToDB();
 		pPlayer->GetSession()->LogoutPlayer(false);
 		return true;
 	}
-
     return false;
 }
 
