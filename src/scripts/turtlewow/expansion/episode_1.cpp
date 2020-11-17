@@ -244,6 +244,13 @@ enum RefugeeNPCs
     NPC_SPRAT_NOZZLETON      = 80122
 };
 
+bool GossipHello_npc_nert_blastentom(Player* pPlayer, Creature* pCreature)
+{
+    pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+    pPlayer->SEND_GOSSIP_MENU(80100, pCreature->GetGUID());
+    return true;
+}
+
 bool QuestComplete_npc_garthok(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
 {
     if (!pQuestGiver)
@@ -1573,6 +1580,7 @@ void AddSC_episode_1()
     newscript = new Script;
     newscript->Name = "npc_nert_blastentom";
     newscript->pQuestRewardedNPC = &QuestComplete_npc_nert_blastentom;
+    newscript->pGossipHello = &GossipHello_npc_nert_blastentom;
     newscript->RegisterSelf();
 
     newscript = new Script;
