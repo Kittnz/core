@@ -582,6 +582,12 @@ public:
             pPortal = m_pInstance->GetCreature(portalGuid);
         if (!pPortal)
             return;
+        if (pPortal->AI())
+        {
+            pPortal->AI()->SetMeleeAttack(false);
+            pPortal->AI()->SetCombatMovement(false);
+        }
+
         uint32 portalEntry = pPortal->GetEntry();
         float radius;
         switch (portalEntry) {
