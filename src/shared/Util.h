@@ -117,6 +117,21 @@ inline bool roll_chance_i(int chance)
     return chance > irand(0, 99);
 }
 
+/* Select a random element from a container. Note: make sure you explicitly empty check the container */
+template <class C> typename C::value_type const& SelectRandomContainerElement(C const& container)
+{
+    typename C::const_iterator it = container.begin();
+    std::advance(it, urand(0, container.size() - 1));
+    return *it;
+}
+
+template<typename T, typename... Args>
+T PickRandomValue(T first, Args ...rest)
+{
+    T array[sizeof...(rest)+1] = { first, rest... };
+    return array[urand(0, (sizeof...(rest)))];
+}
+
 inline float round_float(float value)
 {
     float const remainder = value - floor(value);
@@ -415,13 +430,5 @@ bool IsIPAddress(char const* ipaddress);
 uint32 CreatePIDFile(const std::string& filename);
 
 void hexEncodeByteArray(uint8* bytes, uint32 arrayLen, std::string& result);
-
-/* Select a random element from a container. Note: make sure you explicitly empty check the container */
-template <class C> typename C::value_type const& SelectRandomContainerElement(C const& container)
-{
-    typename C::const_iterator it = container.begin();
-    std::advance(it, urand(0, container.size() - 1));
-    return *it;
-}
 
 #endif

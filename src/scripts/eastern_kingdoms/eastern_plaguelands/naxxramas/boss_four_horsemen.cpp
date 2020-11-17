@@ -366,26 +366,6 @@ struct boss_four_horsemen_shared : public ScriptedAI
         else
             m_uiMarkTimer -= uiDiff;
     }
-
-    void ScriptTextInRange(int32 msg)
-    {
-        m_creature->MonsterSay(msg);
-        const StringTextData* pData = sScriptMgr.GetTextData(msg);
-        if (!pData)
-            return;
-        if (!pData->SoundId)
-            return;
-        float range = sWorld.getConfig(CONFIG_FLOAT_LISTEN_RANGE_SAY);
-        Map::PlayerList const& players = m_pInstance->GetMap()->GetPlayers();
-        for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
-        {
-            Player* pPlayer = itr->getSource();
-            if (m_creature->IsWithinDistInMap(pPlayer, range))
-            {
-                m_creature->PlayDirectSound(pData->SoundId, pPlayer);
-            }
-        }
-    }
 };
 
 struct boss_lady_blaumeuxAI : public boss_four_horsemen_shared
@@ -477,7 +457,7 @@ struct boss_lady_blaumeuxAI : public boss_four_horsemen_shared
                         pVZ->SetSpeedRate(UnitMoveType::MOVE_WALK, 0.1f);
                         pVZ->GetMotionMaster()->MoveRandom();
 
-                        ScriptTextInRange(SAY_BLAU_SPECIAL);
+                        DoScriptText(SAY_BLAU_SPECIAL, m_creature);
                         m_events.Repeat(Seconds(12));
                         break;
                     }
@@ -561,7 +541,7 @@ struct boss_highlord_mograineAI : public boss_four_horsemen_shared
         boss_four_horsemen_shared::SpellHitTarget(pTarget, pSpell);
         if (pSpell->Id == 28882 && specialSayCooldown == 0) // Righteous Fire
         {
-            ScriptTextInRange(SAY_MOG_SPECIAL);
+            DoScriptText(SAY_MOG_SPECIAL, m_creature);
             specialSayCooldown = 12000;
         }
     }
@@ -678,7 +658,7 @@ struct boss_thane_korthazzAI : public boss_four_horsemen_shared
                 {
                     if ((DoCastSpellIfCan(pTarget, SPELL_METEOR)) == CAST_OK)
                     {
-                        ScriptTextInRange(SAY_KORT_SPECIAL);
+                        DoScriptText(SAY_KORT_SPECIAL, m_creature);
                         m_events.Repeat(Seconds(urand(12, 15)));
                         break;
                     }
@@ -776,7 +756,7 @@ struct boss_sir_zeliekAI : public boss_four_horsemen_shared
                     if (DoCastSpellIfCan(pTar, SPELL_HOLY_WRATH) == CAST_OK)
                     {
                         m_events.Repeat(Seconds(urand(10, 14)));
-                        ScriptTextInRange(SAY_ZELI_SPECIAL);
+                        DoScriptText(SAY_ZELI_SPECIAL, m_creature);
                         break;
                     }
                 }
