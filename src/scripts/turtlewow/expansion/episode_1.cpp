@@ -44,7 +44,7 @@ bool GossipSelect_npc_caledra(Player* pPlayer, Creature* pCreature, uint32 /*uiS
                 return;
 
             creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            creature->MonsterSay("I’m glad that you wish to assist us. I will do my best to recap where we stand.");
+            creature->MonsterSay("I'm glad that you wish to assist us. I will do my best to recap where we stand.");
         });
 
         DoAfterTime(pPlayer, 10 * IN_MILLISECONDS,
