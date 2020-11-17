@@ -651,7 +651,7 @@ bool GossipSelect_npc_malvinah_sunblade(Player* pPlayer, Creature* pCreature, ui
                 return;
 
             creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            creature->MonsterSay("We all knew there was a risk but...she was practically here! It could have been us!");
+            creature->MonsterSay("We all knew there was a risk, but... she was practically here already! It could have been any of us!");
         });
 
         DoAfterTime(pPlayer, 10 * IN_MILLISECONDS,
@@ -664,7 +664,7 @@ bool GossipSelect_npc_malvinah_sunblade(Player* pPlayer, Creature* pCreature, ui
                 return;
 
             creature->HandleEmote(EMOTE_ONESHOT_CRY);
-            creature->MonsterSay("How could this have happened?! We survived the Scourge, the Wetlands, the Horde... only for... them to have their possessions burnt while being kidnapped?! It's not fair!");
+            creature->MonsterSay("How could this have happened?! We survived the Scourge, the Wetlands, and the Horde only to have our possessions burned to a cinder while being kidnapped?! It's not fair!");
         });
 
         DoAfterTime(pPlayer, 15 * IN_MILLISECONDS,
@@ -677,7 +677,7 @@ bool GossipSelect_npc_malvinah_sunblade(Player* pPlayer, Creature* pCreature, ui
                 return;
 
             creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            creature->MonsterSay("I'm... sorry I shouldn't burden you with this, we've all struggled ever since we lost Quel'thalas but you've come through for us here...");
+            creature->MonsterSay("I'm sorry. I shouldn't burden you with this. We've all struggled ever since we lost Quel'Thalas, but you've provided so much support for us.");
         });
 
         DoAfterTime(pPlayer, 20 * IN_MILLISECONDS,
@@ -690,7 +690,7 @@ bool GossipSelect_npc_malvinah_sunblade(Player* pPlayer, Creature* pCreature, ui
                 return;
 
             creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            creature->MonsterSay("The wood, the water, you've even defeated those vile Trogg creatures... You're right, I must be calm, perhaps my sister is still out there, she is the only family I have left and if anyone can save her it's you.");
+            creature->MonsterSay("The wood, the water, you've even defeated those vile trogg creatures. You're right, I must be calm. Perhaps my sister is still out there. She is the only family I have left, and if anyone can save her, it's you.");
         });
 
         DoAfterTime(pPlayer, 25 * IN_MILLISECONDS,
@@ -703,11 +703,10 @@ bool GossipSelect_npc_malvinah_sunblade(Player* pPlayer, Creature* pCreature, ui
                 return;
 
             creature->HandleEmote(EMOTE_ONESHOT_EXCLAMATION);
-            creature->MonsterSay("Go speak to that rogueish Human woman who led the escorts, perhaps she can help!");
+            creature->MonsterSay("Go speak to that rogueish human woman who led the caravan escorts. Perhaps she can help!");
             CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(NPC_CUSTOM_OBJECTIVE_BURNT_WHEELS);
             if (cInfo != nullptr)
                 player->KilledMonster(cInfo, ObjectGuid());
-
         });
     }
 
@@ -722,10 +721,7 @@ bool GossipSelect_npc_malvinah_sunblade(Player* pPlayer, Creature* pCreature, ui
             if (!creature)
                 return;
 
-            // Face player and render creature unselectable while speaking
             creature->SetCastingTarget(player);
-     //       creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-
             creature->HandleEmote(EMOTE_ONESHOT_CRY);
             creature->MonsterSay("You've saved my sister!");
             creature->SummonCreature(NPC_ALISHA_SUNBLADE, -5628.99F, -4319.46F, 401.18F, 4.4F, TEMPSUMMON_TIMED_DESPAWN, 25 * 1000);
@@ -742,7 +738,7 @@ bool GossipSelect_npc_malvinah_sunblade(Player* pPlayer, Creature* pCreature, ui
                 return;
 
             creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            creature->MonsterSay("I can't overstate how honored I am to be able to call you my friend. Thanks to you little Arisha is safe. We're all so overwhelmed by your heroism...");
+            creature->MonsterSay("I can't overstate how honored I am to be able to call you my friend. Thanks to you, little Arisha is safe. We're all so overwhelmed by your heroism.");
         });
 
 
@@ -756,7 +752,7 @@ bool GossipSelect_npc_malvinah_sunblade(Player* pPlayer, Creature* pCreature, ui
                 return;
 
             creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            creature->MonsterSay("Several wagons have moved on to Stormwind while you were away but a lot of us have decided to stay here for the time being perhaps even forever. ");
+            creature->MonsterSay("Several wagons have moved on to Stormwind while you were away, but a lot of us have decided to stay here for the time being. Perhaps even forever. ");
         });
 
 
@@ -770,12 +766,10 @@ bool GossipSelect_npc_malvinah_sunblade(Player* pPlayer, Creature* pCreature, ui
                 return;
 
             creature->HandleEmote(EMOTE_ONESHOT_APPLAUD);
-            creature->MonsterSay("I also believe Kathy wishes to speak with you... Here is a present from me, take care, okay? Wherever you may end up, remember that we'll remains friends!");
+            creature->MonsterSay("I believe Kathy wishes to speak with you. Here is a present from me. Take care, okay? Wherever you may end up, remember that we'll always remain friends!");
             CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(NPC_CUSTOM_OBJECTIVE_SUNBLADE_RENUNION);
             if (cInfo != nullptr)
-                player->KilledMonster(cInfo, ObjectGuid());
-
-    //        creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                player->KilledMonster(cInfo, ObjectGuid());           
         });
     }
 
