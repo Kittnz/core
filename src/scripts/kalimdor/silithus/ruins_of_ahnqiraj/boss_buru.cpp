@@ -363,10 +363,10 @@ struct mob_buru_eggAI : public ScriptedAI
         if (Creature* add = m_creature->SummonCreature(NPC_HIVEZARA_HATCHLING, m_creature->GetPositionX(), m_creature->GetPositionY(),
             m_creature->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 2000))
         {
+            // TODO: This spell should actually be casted be Buru Egg Trigger I think.
+            add->CastSpell(m_creature, SPELL_BURU_EGG_TRIGGER, true);
             add->SetInCombatWithZone();
         }
-
-        m_creature->CastSpell(m_creature, SPELL_BURU_EGG_TRIGGER, true);
 
         // Inflict damage to Buru (should be handled in SpellEffects...)
         if (Creature* pBuru = m_pInstance->GetCreature(m_pInstance->GetData64(DATA_BURU)))
