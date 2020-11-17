@@ -1654,4 +1654,9 @@ REPLACE INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES
 -- Update animprogress to match existing spawns.
 UPDATE `gameobject` SET `animprogress`=100 wHERE `id`=175404;
 
+REPLACE INTO `gameobject_template` VALUES (1000450, 0, 1, 4394, 'Portal to Ironforge', 1735, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_portal_to_ironforge');
+REPLACE INTO `gameobject_template` VALUES (1000451, 0, 1, 4393, 'Portal to Darnassus', 1735, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_portal_to_darnassus');
 
+update gameobject set id = 1000060 where id = 176296;
+update gameobject set id = 1000450 where id = 176497;
+update gameobject set id = 1000451 where id = 176498;

@@ -346,6 +346,22 @@ bool GOHello_go_portal_to_stormwind(Player* pPlayer, GameObject* pGo)
     return true;
 }
 
+bool GOHello_go_portal_to_darnassus(Player* pPlayer, GameObject* pGo)
+{
+    if (pPlayer->GetTeam() == ALLIANCE)
+        pPlayer->TeleportTo(1, 9962.712891f, 2280.142822f, 1341.394409f, 0.0f);
+
+    return true;
+}
+
+bool GOHello_go_portal_to_ironforge(Player* pPlayer, GameObject* pGo)
+{
+    if (pPlayer->GetTeam() == ALLIANCE)
+        pPlayer->TeleportTo(0, -4917.0f, -955.0f, 502.0f, 0.0f);
+
+    return true;
+}
+
 bool GOHello_go_portal_to_orgrimmar(Player* pPlayer, GameObject* pGo)
 {
     if (pPlayer->GetTeam() == HORDE)
@@ -722,6 +738,16 @@ void AddSC_object_scripts()
     newscript->Name = "go_turtle_radio";
     newscript->pGOHello = &GOHello_go_turtle_radio;
     newscript->pGOGossipSelect = &GOSelect_go_turtle_radio;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "go_portal_to_darnassus";
+    newscript->pGOHello = &GOHello_go_portal_to_darnassus;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "go_portal_to_ironforge";
+    newscript->pGOHello = &GOHello_go_portal_to_darnassus;
     newscript->RegisterSelf();
 
     newscript = new Script;
