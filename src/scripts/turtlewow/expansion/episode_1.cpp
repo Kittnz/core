@@ -1070,6 +1070,7 @@ bool GossipHello_npc_agne_gambler(Player* pPlayer, Creature* pCreature)
 bool GossipSelect_npc_agne_gambler(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
 {
     uint32 amount;
+    uint32 amountToAward;
     uint8 result = 0;
 
     switch (uiAction)
@@ -1106,7 +1107,7 @@ bool GossipSelect_npc_agne_gambler(Player* pPlayer, Creature* pCreature, uint32 
 
     ChatHandler(pPlayer).PSendSysMessage("Agne rolls a dice for %s... %i!", pPlayer->GetName(), result);
 
-    uint32 amountToAward = handleRecords(pPlayer, amount, result);
+    amountToAward = handleRecords(pPlayer, amount, result);
     if (amountToAward > 0)
     {
         pPlayer->ModifyMoney(amountToAward);
