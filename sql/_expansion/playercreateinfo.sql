@@ -1258,6 +1258,7 @@ replace into player_levelstats values
 (10, 5, 59, 35, 40, 49, 118, 129),
 (10, 5, 60, 35, 40, 50, 120, 131);
 
+delete from playercreateinfo_spell where race = 7 and class = 3;
 replace into playercreateinfo_spell values 
 (7, 3, 75, 0, 5875, 'Auto Shot'),
 (7, 3, 81, 0, 5875, 'Dodge'),
@@ -1288,7 +1289,6 @@ replace into playercreateinfo_spell values
 (7, 3, 9078, 0, 5875, 'Cloth'),
 (7, 3, 9125, 0, 5875, 'Generic'),
 (7, 3, 13358, 0, 5875, 'Defensive State (DND)'),
-(7, 3, 20594, 0, 5875, 'Stoneform'),
 (7, 3, 20593, 0, 5875, 'Gun Specialization'),
 (7, 3, 20591, 0, 5875, 'Frost Resistance'),
 (7, 3, 21651, 0, 5875, 'Opening'),
@@ -1296,10 +1296,12 @@ replace into playercreateinfo_spell values
 (7, 3, 22027, 0, 5875, 'Remove Insignia'),
 (7, 3, 22810, 0, 5875, 'Opening - No Text'),
 (7, 3, 24949, 0, 5875, 'Defensive State 2 (DND)'),
+(7, 3, 1180, 0, 5875, 'Daggers'),
 (7, 3, 28738, 0, 5875, 'Summon Speedy');
 
+delete from playercreateinfo_item where race = 7 and class = 3;
 replace into playercreateinfo_item values 
-(7, 3, 37, 1),
+(7, 3, 2092, 1),
 (7, 3, 117, 4),
 (7, 3, 129, 1),
 (7, 3, 147, 1),
@@ -1310,15 +1312,16 @@ replace into playercreateinfo_item values
 (7, 3, 2516, 200),
 (7, 3, 6948, 1);
 
+delete from playercreateinfo_action where race = 7 and class = 3;
 replace into playercreateinfo_action values 
 (7, 3, 11, 117, 128),
 (7, 3, 10, 159, 128),
 (7, 3, 4, 20589, 0),
-(7, 3, 3, 20594, 0),
 (7, 3, 2, 75, 0),
 (7, 3, 1, 2973, 0),
 (7, 3, 0, 6603, 0);
 
+delete from playercreateinfo where race = 7 and class = 3;
 replace into playercreateinfo values 
 (7, 3, 0, 1, -6240.32, 331.033, 382.758, 6.17716);
 
