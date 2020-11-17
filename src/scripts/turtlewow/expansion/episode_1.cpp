@@ -937,53 +937,6 @@ bool GOHello_go_translocation_orb(Player* pPlayer, GameObject* pGo)
     return true;
 }
 
-bool GossipHello_npc_nert_joining_horde(Player* pPlayer, Creature* pCreature)
-{
-    if (pPlayer->GetQuestStatus(80135) == QUEST_STATUS_INCOMPLETE) // The Old Goblin and His Silver Tongue
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "He is waiting! Speak!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-
-    pPlayer->SEND_GOSSIP_MENU(80121, pCreature->GetGUID());
-    return true;
-}
-
-bool GossipSelect_npc_nert_joining_horde(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
-{
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
-    {
-        CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80135);
-        if (cInfo != nullptr)
-            pPlayer->KilledMonster(cInfo, ObjectGuid());
-
-    //TODO:
-
-    //    Eitrigg: "Warchief, I present Nert Blastentom and his friend, <name>, a <class> that aided our troops and civilians back in Razor Hill against the menaces that were.
-
-    //    <Thrall nods as he motions the two of you to move closer.>
-
-    //    <Nert shows little signs of courtesy, this wasn"t a noble"s house, this was the home of warchief and he had to show pride and courage.> "Warchief Thrall, I am Nert and this here is my pal, <name>, we left the Venture Co, some would call us mad, some will call us traitors, we call ourselves survivors.
-    //    We know the sins the Company did in the past are not easy to forget, but we turned a new page, as you may have hard, <name> tried to aid your people in any way he could and he will not be the first one to do that.
-
-    //    <Thrall raises his hand in the air, as a sign to stop.>
-
-    //    "Hold on goblin, indeed your friend aided us, but he was rewarded for his aid was he not? I truthfully think it will be hard to convince Cairne of your intentions, since they are at war with the Venture Co.as we speak, goblins have helped the Horde in the past, Gazlowe of Ratchet is a very good friend of mine, I know your worth, I am more than sure you will prove a good asset to the Horde, you will be able to settle in Orgrimmar for now, sell whatever you want within reason, and prove your worth to the Horde, I shall speak to Cairne, be sure to show them of all the people of the Horde that your intentions are good."
-
-    //    <Nert nods.> "Thank you warchief, we will prove ourselves useful in order to survive and we will make sure to show it to others aswell."
-
-    //    Thrall : "That you will, are you the one leading them Nert, or is the one next to you ? "
-
-    //    Nert : "We don't have a leader, goblins are only tied by a Trade Prince, you are our leader, if needed I will speak for the goblins of the Horde."
-    //    Thrall : "Very well, I hereby acknowledge these goblins as members of the Horde, from this day forth we fight together side by side as brothers and sisters in arms, may our blades never dull, victory or death!"
-
-    //    <Rounds of applause and cheers and whatever.>
-
-    //    Thrall : <Name> if you are free I might need your aid with something, stick around.
-
-    }
-
-    pPlayer->CLOSE_GOSSIP_MENU();
-    return true;
-}
-
 #define GAMBLING_TEXT 80602
 #define OPT1 "10 silver coins."
 #define OPT2 "1 gold coin."
@@ -1558,12 +1511,6 @@ void AddSC_episode_1()
     newscript->Name = "npc_agne_gambler";
     newscript->pGossipHello = &GossipHello_npc_agne_gambler;
     newscript->pGossipSelect = &GossipSelect_npc_agne_gambler;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "npc_nert_joining_horde";
-    newscript->pGossipHello = &GossipHello_npc_nert_joining_horde;
-    newscript->pGossipSelect = &GossipSelect_npc_nert_joining_horde;
     newscript->RegisterSelf();
 
     newscript = new Script;
