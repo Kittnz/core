@@ -1070,7 +1070,7 @@ bool GossipHello_npc_agne_gambler(Player* pPlayer, Creature* pCreature)
 bool GossipSelect_npc_agne_gambler(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
 {
     uint32 amount;
-    int32 result = 0;
+    uint8 result = 0;
 
     switch (uiAction)
     {
