@@ -1105,7 +1105,8 @@ bool GossipSelect_npc_agne_gambler(Player* pPlayer, Creature* pCreature, uint32 
 
     result = urand(1, 100);
 
-    ChatHandler(pPlayer).PSendSysMessage("Agne rolls a dice for %s... %i!", pPlayer->GetName(), result);
+    pCreature->PMonsterEmote("Agne rolls a dice for %s... %i!", nullptr, false, pPlayer->GetName(),
+            result);
 
     amountToAward = handleRecords(pPlayer, amount, result);
     if (amountToAward > 0)
