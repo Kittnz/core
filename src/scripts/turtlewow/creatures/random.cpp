@@ -548,7 +548,7 @@ bool GossipSelect_npc_riding_gryphon(Player* p_Player, Creature* p_Creature, uin
             p_Player->RemoveItemCurrency(422, 1);
         }
         else
-            p_Player->PMonsterEmote("Gryphon clearly looks hungry and frustrated. Perhaps handful of famous Dwarven Mild could do some good?", nullptr, false);
+            p_Player->PMonsterEmote("Gryphon clearly looks hungry and frustrated. Perhaps a handful of famous Dwarven Mild could do some good?", nullptr, false);
     }
     p_Player->CLOSE_GOSSIP_MENU();
     return true;
@@ -581,7 +581,7 @@ bool GossipSelect_npc_riding_gryphon_back(Player* p_Player, Creature* p_Creature
             p_Player->RemoveItemCurrency(422, 1);
         }
         else
-            p_Player->PMonsterEmote("Gryphon clearly looks hungry and frustrated. Perhaps handful of famous Dwarven Mild could do some good?", nullptr, false);
+            p_Player->PMonsterEmote("Gryphon clearly looks hungry and frustrated. Perhaps a handful of famous Dwarven Mild could do some good?", nullptr, false);
     }
     p_Player->CLOSE_GOSSIP_MENU();
     return true;
