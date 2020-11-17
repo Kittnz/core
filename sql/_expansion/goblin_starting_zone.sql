@@ -4,9 +4,9 @@ REPLACE INTO `creature_template` VALUES (80100, 0, 7164, 0, 0, 0, 'Nert Blastent
 SET @gossip_menu_id = 59010;
 SET @magic_number = 80100; 
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
-replace into broadcast_text (ID, MaleText) values (@magic_number, 'It\'ll be easy, they said.\n\n"No one even knows about the plateau," they said.\n\nI\'d have said the same thing, but it somehow seems less fair this way.');
+replace into broadcast_text (ID, MaleText) values (@magic_number, 'First day on the job, eh kid?\n\nYeah, I used to be young and green like you once, now I am mostly green, but what can you do.\n\nAnyway, enough slacking, back to work or I’ll have to cut your coin purse low.');
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
-update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = 80100;
 
 REPLACE INTO `creature_template` VALUES (80101, 0, 10746, 0, 0, 0, 'Sprat Nozzleton', 'Venture Co. Worker', 0, 3, 3, 219, 219, 0, 0, 852, 35, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 24, 31, 0, 90, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 31.856, 43.802, 100, 7, 4096, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 4276, 0, 0, 0, 0, 2, '');
 
@@ -2319,13 +2319,13 @@ set @faction_id = 0;
 set @faction_count = 0;
 set @xp_or_money = 178;
 set @reward_money = 50; 
-set @quest_level = 2;
-set @min_level = 2;
+set @quest_level = 1;
+set @min_level = 1;
 set @questgiver_id = 80131;
 set @quest_finisher = 80131;
 set @nextquest = 0;
 set @nextquestinchain = 0;
-set @prevquest = 80100;
+set @prevquest = 0;
 set @RewChoiceItemId1 = 0; 
 set @RewChoiceItemId2 = 0; 
 set @RewChoiceItemId3 = 0;
