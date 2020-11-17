@@ -1320,6 +1320,21 @@ struct cthunAI : public ScriptedAI
             m_pInstance->SetData(TYPE_CTHUN, FAIL);
     }
 
+    void DespawnTentacles()
+    {
+        // Force despawn any tentacles or portals alive.
+        std::list<Creature*> creaturesToDespawn;
+        GetCreatureListWithEntryInGrid(creaturesToDespawn, m_creature, allTentacleTypes, 2000.0f);
+        for (auto it = creaturesToDespawn.cbegin(); it != creaturesToDespawn.cend(); it++) {
+            if (cthunPortalTentacle* cpt = dynamic_cast<cthunPortalTentacle*>((*it)->AI())) {
+                cpt->DespawnPortal();
+            }
+            if (TemporarySummon* ts = dynamic_cast<TemporarySummon*>(*it)) {
+                ts->UnSummon();
+            }
+        }
+    }
+
     void Reset() override
     {
 #ifdef USE_POSTFIX_PRENERF_PULL_LOGIC
@@ -1358,17 +1373,7 @@ struct cthunAI : public ScriptedAI
             CheckRespawnEye();
         }
 
-        // Force despawn any tentacles or portals alive. 
-        std::list<Creature*> creaturesToDespawn;
-        GetCreatureListWithEntryInGrid(creaturesToDespawn, m_creature, allTentacleTypes, 2000.0f);
-        for (auto it = creaturesToDespawn.cbegin(); it != creaturesToDespawn.cend(); it++) {
-            if (cthunPortalTentacle* cpt = dynamic_cast<cthunPortalTentacle*>((*it)->AI())) {
-                cpt->DespawnPortal();
-            }
-            if (TemporarySummon* ts = dynamic_cast<TemporarySummon*>(*it)) {
-                ts->UnSummon();
-            }
-        }
+        DespawnTentacles();
         
         //if (m_pInstance && m_creature->isAlive())
         //    m_pInstance->SetData(TYPE_CTHUN, NOT_STARTED);
@@ -1430,7 +1435,7 @@ struct cthunAI : public ScriptedAI
 
     void UpdateAI(const uint32 diff) override
     {
-        if (!m_pInstance)
+        if (!m_pInstance || !m_creature->isAlive())
             return;
 
         // Delaying respawn of eye if it was a wipe so we get the re-emerge animation before spawn
@@ -1534,14 +1539,7 @@ struct cthunAI : public ScriptedAI
         if (m_pInstance) {
             currentPhase = PHASE_CTHUN_DONE;
             m_pInstance->SetData(TYPE_CTHUN, DONE);
-            std::list<Creature*> creaturesToDespawn;
-            GetCreatureListWithEntryInGrid(creaturesToDespawn, m_creature, MOB_FLESH_TENTACLE, 2000.0f);
-            for (auto it = creaturesToDespawn.cbegin(); it != creaturesToDespawn.cend(); it++) {
-                if (TemporarySummon* ts = dynamic_cast<TemporarySummon*>(*it)) {
-                    ts->UnSummon();
-                }
-            }
-
+            DespawnTentacles();
         }
     }
 
