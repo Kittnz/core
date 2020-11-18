@@ -352,6 +352,14 @@ struct mob_buru_eggAI : public ScriptedAI
         }
     }
 
+    void JustSummoned(Creature* pCreature)
+    {
+        if (pCreature->GetEntry() == NPC_BURU_EGG_TRIGGER)
+        {
+            pCreature->CastSpell(pCreature, SPELL_BURU_EGG_TRIGGER, true);
+        }
+    }
+
     void JustDied(Unit* pKiller)
     {
         if (!m_pInstance)
@@ -363,8 +371,6 @@ struct mob_buru_eggAI : public ScriptedAI
         if (Creature* add = m_creature->SummonCreature(NPC_HIVEZARA_HATCHLING, m_creature->GetPositionX(), m_creature->GetPositionY(),
             m_creature->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 2000))
         {
-            // TODO: This spell should actually be casted be Buru Egg Trigger I think.
-            add->CastSpell(m_creature, SPELL_BURU_EGG_TRIGGER, true);
             add->SetInCombatWithZone();
         }
 
