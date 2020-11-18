@@ -1662,3 +1662,5 @@ update gameobject set id = 1000450 where id = 176497;
 update gameobject set id = 1000451 where id = 176498;
 
 update creature_template set faction = 35 where entry in (51656, 51654, 51652, 10919, 11196, 51650, 51653);
+
+update creature_template set flags_extra = flags_extra - 128 where entry = 15964;
