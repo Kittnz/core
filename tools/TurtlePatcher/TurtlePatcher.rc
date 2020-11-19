@@ -73,7 +73,7 @@ END
 
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
-IDI_ICON3               ICON                    "C:\\Users\\Giperion\\Desktop\\turtle_icon_round.ico"
+IDI_ICON3               ICON                    "turtle_icon_round.ico"
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -81,7 +81,7 @@ IDI_ICON3               ICON                    "C:\\Users\\Giperion\\Desktop\\t
 // Bitmap
 //
 
-IDB_SPLASH              BITMAP                  "C:\\Users\\Giperion\\Desktop\\Splash.bmp"
+IDB_SPLASH              BITMAP                  "Splash.bmp"
 
 #endif    // Neutral (Default) resources
 /////////////////////////////////////////////////////////////////////////////
