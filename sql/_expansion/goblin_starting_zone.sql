@@ -1426,6 +1426,8 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '1', '3', '0', '0', '45', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
+update item_template set sheath = 1 where entry = 80126;
+ 
  replace into item_template values
  ('80127', '0', '2', '3', 'Polished Boomstick', '', '6600', '2', '0', '1', '213', '213', '15', '-1', '-1', '11',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
