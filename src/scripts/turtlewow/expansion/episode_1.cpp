@@ -377,7 +377,7 @@ bool QuestComplete_npc_garthok(Player* pPlayer, Creature* pQuestGiver, Quest con
     return false;
 }
 
-bool QuestComplete_npc_nert_blastentom(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+bool QuestAccept_npc_nert_blastentom(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
 {
     if (!pQuestGiver)
         return false;
@@ -385,7 +385,7 @@ bool QuestComplete_npc_nert_blastentom(Player* pPlayer, Creature* pQuestGiver, Q
     if (!pPlayer)
         return false;
 
-    if (pQuest->GetQuestId() == QUEST_SHADOW_ON_THE_PLATEAU)
+    if (pQuest->GetQuestId() == QUEST_ME_NOT_ANY_KIND_OF_ORC)
     {
         DoAfterTime(pPlayer, 2 * IN_MILLISECONDS,
             [CreatureGuid = pQuestGiver->GetObjectGuid()]()
@@ -1579,7 +1579,7 @@ void AddSC_episode_1()
 
     newscript = new Script;
     newscript->Name = "npc_nert_blastentom";
-    newscript->pQuestRewardedNPC = &QuestComplete_npc_nert_blastentom;
+    newscript->pQuestAcceptNPC = &QuestAccept_npc_nert_blastentom;
     newscript->pGossipHello = &GossipHello_npc_nert_blastentom;
     newscript->RegisterSelf();
 
