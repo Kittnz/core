@@ -1664,3 +1664,12 @@ update gameobject set id = 1000451 where id = 176498;
 update creature_template set faction = 35 where entry in (51656, 51654, 51652, 10919, 11196, 51650, 51653);
 
 update creature_template set flags_extra = flags_extra - 128 where entry = 15964;
+
+-- Cook Torta greetings text.
+
+SET @gossip_menu_id = 3191;
+SET @magic_number = 3191; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (ID, MaleText) values (@magic_number, 'Breakfast, lunch, dinner! Who cares which meal it is? It still has to be cooked by someone—namely me!');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
