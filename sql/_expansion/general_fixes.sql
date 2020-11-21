@@ -409,6 +409,9 @@ REPLACE INTO `creature_template` VALUES (80816, 0, 18339, 0, 0, 0, 'Hinterlands 
 
 replace into creature_model_info values (18338, 5875, 2, 2, 0, 0, 0);
 replace into creature_model_info values (18339, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (18218, 5875, 2, 2, 0, 0, 0);
  
 REPLACE INTO `item_template` VALUES (45001, 7, 0, 0, 'Delicious Pizza', '', 40144, 1, 0, 5, 5000, 250, 0, -1, -1, 65, 55, 0, 0, 0, 0, 0, 0, 0, 0, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 45024, 0, -1, 0, 0, 11, 1000, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, NULL);
 
+REPLACE INTO `creature_template` VALUES (80457, 0, 18218, 0, 0, 0, 'Andrelas Thas\'danil', 'Stable Master', 9538, 30, 30, 1605, 1605, 0, 0, 1200, 80, 8192, 1, 1.14286, 0, 20, 5, 0, 0, 1, 42, 53, 0, 122, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 45.144, 62.073, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, '');
+update creature_template set faction = 371 where entry = 80457;
