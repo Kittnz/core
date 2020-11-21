@@ -1037,3 +1037,6 @@ update creature_template set unit_class = 2, level_min = 60, level_max = 60, hea
 update creature_template set unit_class = 8, level_min = 60, level_max = 60, health_min = 18641, health_max = 18641, mana_min = 10328, mana_max = 10328, rank = 1, dmg_min = 72, dmg_max = 89, base_attack_time = 2800, attack_power = 200, ranged_attack_power = 100, regeneration = 3, armor = 2621 where entry = 80243;
 
 update creature_template set npc_flags = 16 where entry in (80248, 80247, 80246, 80245, 80244, 80243);
+
+REPLACE INTO `creature_template` VALUES (80457, 0, 18218, 0, 0, 0, 'Andrelas Thas\'danil', 'Stable Master', 9538, 30, 30, 1605, 1605, 0, 0, 1200, 80, 8192, 1, 1.14286, 0, 20, 5, 0, 0, 1, 42, 53, 0, 122, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 45.144, 62.073, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, '');
+update creature_template set faction = 371 where entry = 80457;

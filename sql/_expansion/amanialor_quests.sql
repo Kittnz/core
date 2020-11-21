@@ -658,3 +658,15 @@ nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
 specialflags = 4
 where entry = @quest_entry;	 
 
+-- Stable master and mount vendor:
+
+REPLACE INTO `creature_template` VALUES (80810, 0, 6486, 0, 0, 0, 'Rinja Scenttusk', 'Stable Master', 9538, 30, 30, 1605, 1605, 0, 0, 1200, 80, 8192, 1, 1.14286, 0, 20, 5, 0, 0, 1, 42, 53, 0, 122, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 45.144, 62.073, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, '');
+update creature_template set faction = 1494 where entry = 80810;
+
+replace into `creature_template` values 
+(80811, 0, 6479, 0, 0, 0, 'Zul\'Mabe Bearclaw', 'Bear Merchant', 0, 11, 11, 456, 456, 0, 0, 20, 371, 16388, 1.1, 1.14286, 0, 20, 5, 0, 0, 1, 12, 14, 0, 64, 1, 2000, 2090, 1, 4864, 0, 0, 0, 0, 0, 0, 18.392, 25.289, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, '');
+update creature_template set faction = 1494 where entry = 80811;
+
+REPLACE INTO `npc_vendor` VALUES (80811, 80436, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80811, 80438, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80811, 80433, 0, 0, 0, 0);
