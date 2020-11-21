@@ -403,4 +403,9 @@ REPLACE INTO `item_template` VALUES (80007, 0, 15, 0, 'Enchanted Broom', 'Create
 update item_template set bonding = 1 where entry between 80000 and 80007;
 update item_template set display_id = 2605 where entry = 30817;
 
+REPLACE INTO `creature_template` VALUES (80815, 0, 18338, 0, 0, 0, 'Amani Eagle', NULL, 0, 10, 12, 254, 284, 0, 0, 406, 15, 0, 1.11, 1.42857, 0, 20, 5, 0, 0, 1, 11, 15, 0, 60, 1, 2000, 2000, 1, 0, 0, 26, 0, 0, 0, 0, 15.048, 20.691, 100, 1, 1, 1997, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5860, 0, 0, '', 1, 3, 0, 0, 3, 0, 0, 0, 0, 0, 2, '');
 
+REPLACE INTO `creature_template` VALUES (80816, 0, 18339, 0, 0, 0, 'Hinterlands Eagle', NULL, 0, 35, 40, 2101, 2471, 0, 0, 2944, 7, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 83, 103, 0, 220, 1, 2000, 2000, 1, 0, 0, 26, 0, 0, 0, 0, 61.9344, 85.1598, 100, 1, 1, 7097, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8315, 0, 0, 'EventAI', 1, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, '');
+
+replace into creature_model_info values (18338, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (18339, 5875, 2, 2, 0, 0, 0);
