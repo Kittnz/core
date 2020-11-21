@@ -1,15 +1,15 @@
 
 -- Teslinah (Summon)
 
-set @teslinah = 80265;
+set @teslinah = 40020;
 
 REPLACE INTO `creature_template` VALUES (@teslinah, 0, 18003, 0, 0, 0, 'Teslinah', NULL, 0, 5, 5, 64, 64, 0, 0, 20, 12, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 2, 2, 0, 44, 1, 2000, 2000, 1, 768, 0, 0, 0, 0, 0, 0, 1.76, 2.42, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 2, '');
 update creature_template set faction = 371 where entry = @teslinah;
 update creature_template set npc_flags = 2 where entry = @teslinah;
 
 replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1, spellcooldown_1) values
-(80410, 15, 2, 'High Elf Orphan Whistle', 'Summon and dismiss the orphan you\'ve agreed to look after.', 15798, 2, 1, 28505, 1500);
-replace into custom_pet_entry_relation (item_entry, creature_entry) values (80410, @teslinah);
+(80410, 15, 2, 'High Elf Orphan Whistle', 'Summon and dismiss the orphan you\'ve agreed to look after.', 15798, 2, 1, 45022, 1500);
+delete from custom_pet_entry_relation where item_entry = 80410;
 update creature_template set script_name = 'npc_teslinah' where entry = @teslinah; 
 
 -- Help With a Compassionate Matter
