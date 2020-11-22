@@ -1224,7 +1224,7 @@ bool QuestAccept_npc_teslinah(Player* pPlayer, Creature* pQuestGiver, Quest cons
     if (pQuest->GetQuestId() == 80261) // Teslinah's Search I
     {
         pQuestGiver->HandleEmote(EMOTE_ONESHOT_CRY);
-        pQuestGiver->MonsterSay("Thank you, thank you, thank you! I am so happy! We should go to Stormwind, let\'s find someone important who can help! I believe miss Tanilaeh in the Golden Dawn Institute can take us back!");
+        pQuestGiver->MonsterSay("Thank you, thank you, thank you! I am so happy! We should go to Stormwind. Let\'s find someone important who can help! I believe miss Tanilaeh in the Golden Dawn Institute can take us back!");
     }
     return false;
 }
@@ -1240,7 +1240,7 @@ bool QuestRewarded_npc_teslinah(Player* pPlayer, Creature* pQuestGiver, Quest co
     if (pQuest->GetQuestId() == 80261) // Teslinah's Search I
     {
         pQuestGiver->HandleEmote(EMOTE_ONESHOT_CHEER);
-        pQuestGiver->MonsterSay("Mommy is gone but we will find her! I am sure! Until then I am happy and excited to adventure with you! We\'re the bestest friends now! We\'re going to have a lot of fun seeing the world! He-he!");
+        pQuestGiver->MonsterSay("Mommy is gone, but we will definitely find her! I am sure of it! Until then, I am happy and excited to adventure with you! We\'re the bestest friends now! We\'re going to have a lot of fun seeing the world! Hehe!");
     }
     return false;
 }
@@ -1276,17 +1276,17 @@ struct go_teslinah_search : public GameObjectAI
                     switch (me->GetEntry())
                     {
                     case 3000250:
-                    {                    
+                    {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80270);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSay("Ooh this place is huge! Where do we go now? ? Let's start in the mage district! We can also look at the pub, I heard people drink there when they're sad! My mom is definitely sad without me.");
+                        teslinah->MonsterSay("Oooh, this place is huge! Where do we go now? Let's start in the Mage District! We can also look at that weird-smelling place. The pub? I heard people drink special drinks there when they're sad! My mom is definitely sad without me.");
                         break;
                     }
                     case 3000251:
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80271);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSay("I feel the magic in the air! This place is nice but not as pretty or magical as Silvermoon!");
+                        teslinah->MonsterSay("I feel the magic in the air! This place is nice, but not as pretty or magical as Silvermoon!");
                         break;
                     }
                     case 3000252:
@@ -1300,7 +1300,7 @@ struct go_teslinah_search : public GameObjectAI
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80273);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSay("This place is scary, there's bad magic here and it smells horrible! Can we leave?! Please?");
+                        teslinah->MonsterSay("This place is scary. There's bad magic here, and it smells horrible! Can we leave?! Please?");
                         break;
                     }
                     }
@@ -1318,28 +1318,28 @@ struct go_teslinah_search : public GameObjectAI
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80274);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSay("Look it's a Night Elf Priestess! And it's a Moonwell! I love all the grass and glowing plants! This place is nice! I bet Mommy would like it! Let's keep searching so we can show it to her!");
+                        teslinah->MonsterSay("Look, it's a night elf priestess! And a moonwell! I love all the grass and glowing plants. This place is really nice. I bet Mommy would like it! Let's keep searching so that we can show it to her.");
                         break;
                     }
                     case 3000255:
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80275);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSay("Yuck! This place smells... Would Mommy really be here?");
+                        teslinah->MonsterSay("Yuck! This place smells. Would Mommy really be here?");
                         break;
                     }
                     case 3000256:
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80276);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSay("Oooh, this place looks much more civil... But I am sure my Mommy didn't go to the Dwarf lands...");
+                        teslinah->MonsterSay("Oooh, this place looks much kinder than the other one. But I’m sure my mom didn't go to the dwarf lands.");
                         break;
                     }
                     case 3000257:
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80277);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSay("Ooh our people have settled here! It's pretty, not as pretty as Silvermoon but pretty!... This place isn't large though and Mommy isn't here. Let's keep looking!");
+                        teslinah->MonsterSay("This is the place where our people settled! It's pretty. Not as pretty as Silvermoon, but pretty. This place isn't large though, and Mommy isn't here. Let's keep looking!");
                         break;
                     }
                     }
@@ -1357,28 +1357,28 @@ struct go_teslinah_search : public GameObjectAI
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80278);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSay("That looks so weird! The Gnomes made this, right? I'm sure Mommy isn't there, that leads to the Dwarf city I think... It's cold there, mommy hates the cold.");
+                        teslinah->MonsterSay("That looks so weird. The gnomes made this, right? I'm sure Mommy isn't here. That tram leads to the dwarf city, I think. It's cold there, and Mommy hates the cold.");
                         break;
                     }
                     case 3000259:
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80279);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSay("Ooh the King lives there! We shouldn't disturb him... Mommy isn't there either, they wouldn't allow her in, we don't have much... Mommy is pretty but we lost everything when Quel'thalas fell.");
+                        teslinah->MonsterSay("The king lives there! We shouldn't disturb him, though, even if finding my mommy is super important. I know she isn't there either because they wouldn't allow her in. We don't have much. Mommy is very pretty, but we lost everything when Quel'Thalas fell.");
                         break;
                     }
                     case 3000260:
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80280);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSay("I heard this place existed before the new town was built! There's so many shops but the streets are also so crammed it is a bit scary...");
+                        teslinah->MonsterSay("I heard that this place existed before the new town was built! There's so many shops, but the streets are all so crammed that it’s a little bit scary.");
                         break;
                     }
                     case 3000261:
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80281);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSay("This place smells strange... Mommy isn't here either, I am worried, where could she be?");
+                        teslinah->MonsterSay("This place is smelly. Mommy isn't here either. I am really worried. Where else could she be?");
                         break;
                     }
                     }
@@ -1396,29 +1396,29 @@ struct go_teslinah_search : public GameObjectAI
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80282);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSay("The army is there... Could my mom have been arrested? But she didn't commit any crime... I don't think this is the place, we can come back here if we don't find her anywhere else.");
+                        teslinah->MonsterSay("The army is there. Could my mom have been arrested? But she didn't commit any crimes. I don't think this is the place, but we can come back here if we don't find her anywhere else.");
                         break;
                     }
                     case 3000263:
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80283);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSay("It's the Cathedral! It's so huge! That's amazing!");
+                        teslinah->MonsterSay("It's the Cathedral! Wow, it's so huge! That's amazing!");
                         break;
                     }
                     case 3000264:
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80284);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSay("If mommy is gone, I could end up there... I don't want to think about that... It's so sad.");
+                        teslinah->MonsterSay("If Mommy is really gone, then I could end up in that place. I don't even want to think about that. It makes me so sad that I could cry.");
                         teslinah->HandleEmote(EMOTE_ONESHOT_CRY);
                     }
-                        break;
+                    break;
                     case 3000265:
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80285);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSay("Ooh! Look at this place! It's... Amazing! Wow! Look at how pretty this place is!");
+                        teslinah->MonsterSay("Look at this place! It's amazing! Wow, it's breathtaking!");
                         break;
                     }
                     }
@@ -1436,28 +1436,28 @@ struct go_teslinah_search : public GameObjectAI
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80286);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSay("This place... is not pretty, it smells and is scary, can we leave please? I don't like how the man in red looks at me.");
+                        teslinah->MonsterSay("This looks awful, and it's gross and scary. Can we leave, please? I don't like the way that man in red is looking at me.");
                         break;
                     }
                     case 3000267:
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80287);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSay("This is bad, this is bad, please let's go? I'm scared.");
+                        teslinah->MonsterSay("This is bad. This is really bad. I don't like it here. Let's go, please? I'm scared.");
                         break;
                     }
                     case 3000268:
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80288);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSay("Oh there's so many people! I remember when we first arrived here by Gryphon! Their feathers were fluffy! Could Mom be here?");
+                        teslinah->MonsterSay("Oh, there's so many people here! I remember when we first arrived after flying on gryphon’s back! Their feathers were really fluffy and soft. Could Mom be here?");
                         break;
                     }
                     case 3000269:
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80289);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSay("Oh... In there! That's the Visitor Center where we first checked in when we arrived, maybe they know something!");
+                        teslinah->MonsterSay("Oh, in there! That's the Visitor's Center where we first checked in when we arrived. Maybe they might know something!");
                         break;
                     }
                     }
