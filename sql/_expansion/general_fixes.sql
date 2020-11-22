@@ -355,7 +355,7 @@ REPLACE INTO `item_template` VALUES (80458, 10, 15, 0, 'Ornate Thalassian Unicor
 
 REPLACE INTO `item_template` VALUES (80459, 10, 15, 0, 'White Thalassian Unicorn', '', 13108, 3, 80, 1, 100000, 0, 0, -1, 589, 40, 40, 762, 75, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 45049, 0, 0, 0, -1, 330, 3000, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 1, NULL);
 
-update item_template set required_reputation_faction = 269, required_reputation_rank = 4  where entry = 8045);
+update item_template set required_reputation_faction = 269, required_reputation_rank = 4  where entry = 80459;
 update item_template set required_reputation_faction = 269, required_reputation_rank = 6  where entry in (80457, 80458);
 
 -- end
