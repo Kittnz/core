@@ -1429,7 +1429,6 @@ replace into playercreateinfo_spell values
 (2, 8, 6603, 0, 5875, 'attack'),
 (2, 8, 7266, 0, 5875, 'duel'),
 (2, 8, 7267, 0, 5875, 'grovel'),
-(2, 8, 7341, 0, 5875, 'language troll'),
 (2, 8, 7355, 0, 5875, 'stuck'),
 (2, 8, 8386, 0, 5875, 'attacking'),
 (2, 8, 9078, 0, 5875, 'cloth'),
