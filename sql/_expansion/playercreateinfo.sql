@@ -1387,8 +1387,10 @@ replace into player_levelstats values
 (7, 3, 59, 56, 119, 91, 63, 68),
 (7, 3, 60, 57, 121, 93, 64, 69);
 
+delete from playercreateinfo where race = 2 and class = 8;
 replace into playercreateinfo values (2, 8, 1, 14, -618.518, -4251.67, 38.718, 0);
 
+delete from playercreateinfo_item where race = 2 and class = 8;
 replace into playercreateinfo_item values 
 (2, 8, 35, 1),
 (2, 8, 55, 1),
@@ -1399,6 +1401,7 @@ replace into playercreateinfo_item values
 (2, 8, 6140, 1),
 (2, 8, 6948, 1);
 
+delete from playercreateinfo_action where race = 2 and class = 8;
 replace into playercreateinfo_action values 
 (2, 8, 0, 6603, 0),
 (2, 8, 1, 133, 0),
@@ -1406,6 +1409,7 @@ replace into playercreateinfo_action values
 (2, 8, 10, 159, 128),
 (2, 8, 11, 117, 128);
 
+delete from playercreateinfo_spell where race = 2 and class = 8;
 replace into playercreateinfo_spell values 
 (2, 8, 81, 0, 5875, 'dodge'),
 (2, 8, 133, 0, 5875, 'fireball'),
@@ -1442,6 +1446,7 @@ replace into playercreateinfo_spell values
 (2, 8, 20573, 5086, 5875, 'hardiness'),
 (2, 8, 28738, 0, 5875, 'summon speedy');
 
+delete from player_levelstats where race = 2 and class = 8;
 replace into player_levelstats values 
 (2, 8, 1, 21, 22, 21, 19, 23),
 (2, 8, 2, 21, 22, 21, 20, 24),
