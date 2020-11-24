@@ -15,3 +15,8 @@ update creature_template set faction = 927, equipment_id = 0 where entry = 80137
 REPLACE INTO `npc_vendor` VALUES (80137, 80460, 0, 0, 0, 0);
 REPLACE INTO `npc_vendor` VALUES (80137, 80461, 0, 0, 0, 0);
 REPLACE INTO `npc_vendor` VALUES (80137, 80462, 0, 0, 0, 0);
+
+-- Misc. fixes:
+
+replace into creature_model_info values (19023, 5875, 2, 2, 0, 0, 0);
+update creature_template set display_id1 = 18208 where entry = 10824;
