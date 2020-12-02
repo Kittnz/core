@@ -4,10 +4,10 @@
 set @quest_entry = 80305;
 set @quest_zone = 1637;
 set @title = 'Quark\'s Shack';
-set @description = 'Hey kid, enjoying yourself?\n\nNah, you\'re not, I can see it on your face. This place is pretty run-down and boring, no real stuff to do, eh.\n\nWell if you’re looking for some action, coin action mind you, I got something for ya! But, you know information doesn\'t come cheap, now does it?\n\nHow about a silver coin to loosen up my tongue?\n\n<The goblin waits, hand open and grinning at you.>\n\nWell, now that we are friends, I suppose I can let you in on this little something, something I\'ve heard around town. See, there\'s this bar that just opened up in the Valley of Honor. Quite ironic, don’t you think?\n\nI heard a goblin named Quark opened up a shop, but it’s supposed to be a membership enterprise only.\n\nAnyway, I wouldn\'t bother going there myself but I heard there\'s nice money to be made!\n\nNow, that\'ll be fifty more copper for wasting my time. Have a nice day, pal.';
+set @description = 'Hey kid, enjoying yourself?\n\nNah, you\'re really not. I can see it on your face. This place is pretty run-down and boring with no real stuff to do, eh?\n\nWell, if you’re looking for some action, coin-action, mind you, then I got something for ya! But, you know, info doesn\'t come cheap, now does it?\n\nHow about a silver coin to loosen up my tongue?\n\n<The goblin waits with an open hand while grinning at you.>\n\nWell, now that we are friends, I suppose I can let you in on this little something. Something that I\'ve heard around town. See, there\'s this bar that just opened up in the Valley of Honor. Quite ironic, don’t you think?\n\nI heard a goblin named Quark opened up a shop, but it’s supposed to be a membership-only enterprise.\n\nI wouldn\'t bother going there myself, but I heard there\'s good money to be made!\n\nNow, that\'ll be fifty copper for the intel. Have a nice day, pal.';
 set @objective = 'Go to the Valley of Honor and search for Quark\’s Shack.';
-set @completetext = 'Yeah, yeah, pal, in a minute!\n\nWhat’s the rush?       ';
-set @incompletetext = 'Why are you still here, $N?\n\nIf you want to buy me a drink, I apologize, but I don\’t fancy you at all. Unless, of course, you got enough coin. Then maybe something can be arranged.';
+set @completetext = 'Yeah, yeah, pal, in a minute!\n\nWhat’s the rush?';
+set @incompletetext = 'Why are you still here, $N?\n\nIf you wanted to buy me a drink, I’m sorry, but I you’re not my type. Unless, of course, you’ve got enough coin. Then, maybe something can be arranged.';
 set @faction_id = 0;
 set @faction_count = 0;
 set @xp_or_money = 650;
@@ -93,7 +93,7 @@ replace into `creature_template` value (80604, 0, 7212, 0, 0, 0, 'Sturk the Rat'
 replace into `creature_template` value (80605, 0, 15577, 0, 0, 0, 'Odo', 'Inspector', 0, 37, 37, 2192, 2192, 0, 0, 1340, 29, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 55, 70, 0, 144, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 53.3984, 73.4228, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 3216, 0, 0, 0, 0, 524298, '');
 
 replace into item_template values
- ('80400', '0', '15', '0', 'Quark\'s Shack Membership Card', 'Learn the customer\'s weaknesses, so that you can better take advantage of him.', '36082', '1', '0', '1', '0', '1500', '2', '-1', '-1', '15', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', NULL);
+ ('80400', '0', '15', '0', 'Quark\'s Shack Membership Card', 'Learn the customer\'s weaknesses so that you can better take advantage of him.', '36082', '1', '0', '1', '0', '1500', '2', '-1', '-1', '15', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', NULL);
 
 set @quark = 80601;
 set @agne = 80602;
@@ -104,21 +104,21 @@ set @odo = 80605;
 SET @gossip_menu_id = 59035;
 SET @magic_number = @quark; 
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
-replace into broadcast_text (ID, MaleText) values (@magic_number, 'Every once in a while, declare peace. It confuses the hell out of your enemies...\n\nHey, if you are not spending coins you might as well get out, you are bothering my customers.');
+replace into broadcast_text (ID, MaleText) values (@magic_number, 'Every once in a while, declare peace. It confuses the hell out of your enemies...\n\nHey, if you aren\'t spending coins, you might as well get out. You\'re bothering my real customers.');
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
 SET @gossip_menu_id = 59036;
 SET @magic_number = @rov; 
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
-replace into broadcast_text (ID, MaleText) values (@magic_number, '<The Goblin Bruiser stands with his chest puffed up and continues to mumble underneath his breath.>');
+replace into broadcast_text (ID, MaleText) values (@magic_number, '<The Goblin Bruiser stands with his chest puffed up and continues to mumble under his breath.>');
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
 SET @gossip_menu_id = 59037;
 SET @magic_number = @agne; 
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
-replace into broadcast_text (ID, MaleText) values (@magic_number, 'Heya, sweetie. Here to make a long time investement?\n\nMaybe, you want to gamble, little $c? Tell me how much and I\'ll throw a dice, if the roll is above 50, I will double the bet. If lower than 50, it\'s gone forever.\n\nIf you win three times in a row using the same amount, the reward is tripled, but only if the 3rd roll is above 75, if below 75 on the 3rd roll, gold will be gone too.');
+replace into broadcast_text (ID, MaleText) values (@magic_number, 'Heya, sweetie. Here to make a long time investement?\n\nMaybe you wanna gamble, little $c? Tell me how much and I\'ll throw the dice. If the roll is above 50, I will double the bet. If it’s lower than 50, it\'s gone forever.\n\nIf you win three times in a row using the same amount, the reward is tripled, but only if the 3rd roll is above 75. If it’s below 75 on the 3rd roll, your gold will be gone too.');
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
@@ -135,10 +135,10 @@ replace into`creature_template` values (80600, 0, 0, 0, 0, 0, 'Quest 80300 Custo
 set @quest_entry = 80300;
 set @quest_zone = 1637;
 set @title = 'What\'s Yours is Ours';
-set @description = 'Hey pal, watch it!\n\nOh what\'s this a proper customer, eh?\n\nWelcome to Quark\'s Shack. You here for business or for pleasure?\n\nYou see this here is a bar of mine made for coin connoisseurs, so if you are here to grab a quick coin and also have some fun you are in the right place.\n\nIf you are looking to gamble, speak to Agne, she handles the bones. What, you never rolled dice before? Nah, don\'t worry pal, you will be fine. Now, if you need anything to widen your eyes and numb your thoughts come back and see me.';
-set @objective = 'Speak to Agne to roll the dice for a quick coin.';
+set @description = 'Hey pal, watch it!\n\nOh, what\'s this? A proper customer, eh?\n\nWelcome to Quark\'s Shack. You here for business or pleasure?\n\nYou see, this here is a bar of mine made for coin connoisseurs, so if you’re here, then it’s time to grab some quick coin and also have some fun you’re at it.\n\nIf you’re looking to gamble, then speak to Agne. She handles the bones. What, you never rolled the dice before? Nah, no need to worry about your coins, pal. You’ll make back your losses in no time! Now, if you need anything to widen your eyes and numb your thoughts, come back and see me.';
+set @objective = 'Speak to Agne to roll the dice.';
 set @completetext = 'The early investor reaps the most interest.';
-set @incompletetext = 'Hey there, sweetie. Wanna roll a quick dice with your local beauty, Agne?';
+set @incompletetext = 'Hey there, sweetie. Wanna play a quick game of chance with your local beauty, Agne?';
 set @faction_id = 0;
 set @faction_count = 0;
 set @xp_or_money = 650;
@@ -217,10 +217,10 @@ where entry = @quest_entry;
 set @quest_entry = 80301;
 set @quest_zone = 1637;
 set @title = 'Yet Another Smoke Cloud Above Orgrimmar';
-set @description = 'Enjoying yourself, boss?\n\nGood, good. Now, you see, that was a free trial. Doesn\'t really matter to me if you won or not, but you see I did say coin connoisseurs, so you really gotta pay a membership.\n\nHey, hey, where you going man, come on, don’t be like that. I might be willing to give you a membership card if you repay me with some favors.\n\nSee, I ordered some new goods from the Undermine for our hookahs. This cargo is very important and valuable. I will throw in some coins too, which you are more than welcome to keep spending in my bar, if you go and fetch my goods for me. Now, the cargo should arrive at Ratchet right around today, so if you’d get a move on I’d really appreciate it.';
+set @description = 'Enjoying yourself, boss?\n\nGood, good. Now, you see, that was a free trial. Doesn\'t really matter to me if you won or not, but I did say ‘coin connoisseurs’, so you really gotta pay a membership fee.\n\nHey, hey, where’re you goin’ man? Come on, don’t be like that. I might be willing to give you a membership card if you repay me with some favors.\n\nSee, I ordered some new goods from the Undermine for our hookahs. This cargo is very important and valuable. I will throw in some coins, too, which you are more than welcome to keep spending in my bar, if you go and fetch my goods for me. Now, the cargo should arrive at Ratchet right around today, so if you’d get a move on, I’d really appreciate it.';
 set @objective = 'Speak to Innkeeper Wiley about Quark\'s cargo.';
-set @completetext = 'Quark\'s tobacco?\n\nWe might have a problem.\n\nWait! No reason to become aggressive, listen.\n\n<Wiley throws in a few coins to persuade you.>';
-set @incompletetext = 'Running really low on my supplies here, $N. Could seriously use that cargo right about now!';
+set @completetext = 'Quark\'s tobacco?\n\nWe might have a problem.\n\nWait! No reason to be aggressive. Listen.\n\n<Wiley throws in a few coins to dissuade you from violence with quivering little hands.>';
+set @incompletetext = 'I’m running really low on my supplies, here, $N. Could seriously use that cargo right about now!';
 set @faction_id = 0;
 set @faction_count = 0;
 set @xp_or_money = 650;
@@ -320,10 +320,10 @@ replace into `gameobject_loot_template` values (@gameobject_entry, @gameobject_l
 set @quest_entry = 80302;
 set @quest_zone = 1637;
 set @title = 'Tobacco Thieves';
-set @description = 'So, we might have a slight pirate infestation problem. While the Cargo was coming from the Undermine these damn pirates raided the boat and looted it. The crew escaped but the cargo didn\'t!\n\nHonestly it’s a lot of wasted coin, they probably sunk some and smoked some of my cargo. Quark wanted a big shipment and I fear you won\’t really be able to get all of it back.\n\nYou will find them just south down the coast, with the ships landed and tents set up. I hope you get what you need and what you came for.\n\nQuark\'s waiting for that cargo, you better hurry. At least get him something.';
-set @objective = 'Retrieve twenty tobacco crates.';
-set @completetext = 'What, pirates?! Pirates?!\n\nScrew pirates, sweet mother of goblins!\n\nFor crying out loud, argh, gnome turds!\n\nI guess these crates will do, I owe you one, $N, actually I don\’t. Here, take this membership card, you\’ve earned it. You\’re officially a member of Quark\’s Shack now. Gamble your heart away pal.';
-set @incompletetext = 'What, pirates?! Pirates?!\n\nScrew pirates, sweet mother of goblins!';
+set @description = 'So... we may have a slight pirate “infestation” problem. While cargo was being delivered from the Undermine, these damn pirates raided the boat and looted it. The crew escaped safely, but more importantly, the cargo was all gone!\n\nIt’s a lot of wasted coin. Quark is expecting a big shipment, but a lot of it has either been smoked or lost to the sea. Just try to get whatever you can back and I might be able to fudge some numbers.\n\nYou’ll find the pirates to the south, down the coastline.\n\nQuark\'s waiting for that cargo, so you’d better hurry. Something’s better than nothing.';
+set @objective = 'Retrieve 20 Tobacco Crates.';
+set @completetext = 'What, pirates?! Pirates?!\n\nScrew pirates, sweet mother of goblins!\n\nFor crying out loud, argh, gnomish bastards!\n\nI guess these crates will do. I owe you one, $N. Er—actually, I don\’t. Here, just take this membership card instead. You\’ve earned it. You\’re officially a member of Quark\’s Shack, now. Gamble your heart away, pal.';
+set @incompletetext = 'There\'s gonna be a big problem if I can\'t get my missing cargo shipments.';
 set @faction_id = 0;
 set @faction_count = 0;
 set @xp_or_money = 850;
@@ -433,10 +433,10 @@ replace into `gameobject_loot_template` values (@gameobject_entry, @gameobject_l
 set @quest_entry = 80303;
 set @quest_zone = 1637;
 set @title = 'Odo\'s Gut Feeling';
-set @description = '\'Ey mon, come \'ere real quick, Odo\'s got sum words fo\' ya, I see ya be crawlin\' \'round Quark\'s gamblin\' bar and I be havin\' this feelin\' in me gut that be tellin\' me somethin\' be at work \'ere.\n\nI be thinkin\' he be doin\' sumthin\' under tha\' table mon. A legit goblin be as rare as a beautiful troll woman, and let me tell ya, they do be pretty ugly.\n\nSo would ye keep an eye open for ol\' Odo?\n\nThis be official business and I be payin\' ya, jus\' go check tha\' cargo and maybe sum paperwork, keep an eye on tha\' mon called Sturk. He be an associate ov\' Quark, if anythin\' I think he be the one smugglin\' stuff.';
-set @objective = 'Inspect the cargo and the bar for incriminating documents.';
-set @completetext = 'So Odo be right again, never doubted my gut feelin\'. We should go speak to Quark and confront Sturk and arrest \'im.';
-set @incompletetext = 'I tell ya mon, my gut be fo\' real! Get th\'’ criminal.';
+set @description = '\'Ey, mon, come \'ere real quick, Odo\'s got sum words fo\' ya. I see ya be crawlin\' \'round Quark\'s gamblin\' bar and I be havin\' this feelin\' in me gut that be tellin\' me somethin\' be at work \'ere.\n\nI be thinkin\', he be doin\' sumthin\' under tha\' table, mon. A goblin ya can trust be as rare as a beautiful troll woman, and let me tell ya, they do be pretty ugly.\n\nSo, would ya keep an eye open for ol\' Odo?\n\nThis be official business, and I be payin\' ya. Jus\' go check tha\' cargo and maybe sum paperwork, and keep an eye on tha\' mon called Sturk. He be an associate of Quark. If anythin\', I think he be the one smugglin\' stuff.';
+set @objective = 'Inspect the cargo and the bar to find incriminating documents.';
+set @completetext = 'So Odo be right again. Never doubted my gut feelin\'. We should go speak to Quark and confront Sturk to arrest \'im.';
+set @incompletetext = 'I tell ya, mon, my gut be fo\' real! Get th\' criminal.';
 set @faction_id = 0;
 set @faction_count = 0;
 set @xp_or_money = 650;
@@ -508,7 +508,7 @@ reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
 nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
 nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
 objectivetext1='Proof of Sturk’s selling illegal merchandise in the bar',
-objectivetext2='Proof of Sturk arranging the pirate raid on the tobacco cargo'  
+objectivetext2='Proof of Sturk arranging the pirate raid on the tobacco cargo'
 where entry = @quest_entry;	
 
 -- Quark's Justice
@@ -518,9 +518,9 @@ replace into`creature_template` values (80606, 0, 0, 0, 0, 0, 'Quest 80304 Custo
 set @quest_entry = 80304;
 set @quest_zone = 1637;
 set @title = 'Quark\'s Justice';
-set @description = 'That damn rat, he stole from me did he now? I\’m handing him over all right but before that I want you to stare that mongrel in his eyes and tell him he got caught, beat him to a pulp and then hand him over to Odo.\n\nAfter you\’re done speak to The Rov and tell him to keep watch and tighten up the security around here. Can\’t just go around having thieves in my own shack, ya know? When you\’re all done with this come back to me, I will reward you.';
-set @objective = 'Arrest the Rat. Speak to the Rov about security details.';
-set @completetext = 'Now with that done, I have to recover the money I lost. Thanks for the help pal. Stick around, you\'re a valuable member now. Also, here, can\'t give you lots of cash but drinks are on me today.';
+set @description = 'That damn rat. He stole from me, did he now? I\’m handing him over, but before that, I want you to stare that mongrel in the eyes and tell him that he got caught. Beat him to a pulp, and then hand him over to Odo.\n\nAfter you\’re done, speak to The Rov. I want you to tell him to keep watch and tighten up the security around here. Can\’t just go around having thieves in my own shack, ya know? When you\’re all done, come back to me and there’ll be a reward in it for ya.';
+set @objective = 'Arrest the rat. Speak to The Rov about security details.';
+set @completetext = 'Now, with that done, I have to figure out a way to recover the money I lost. Thanks for the help, pal. Stick around. You\'re a valuable member, now. Also, here! Can\'t give ya loads of cash, but drinks are on me today.';
 set @incompletetext = 'Just get him out of my sight before I give him a good smackdown!';
 set @faction_id = 0;
 set @faction_count = 0;
