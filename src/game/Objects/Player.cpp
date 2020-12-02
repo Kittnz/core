@@ -21825,7 +21825,7 @@ void Player::RewardBountyHuntKill(Unit* pVictim)
 
 void Player::RewardExpansionPvPQuest(Unit* pVictim)
 {
-    if ((GetQuestStatus(80255) == QUEST_STATUS_INCOMPLETE)) // Securing the Supply Lines
+    if ((GetQuestStatus(80255) == QUEST_STATUS_INCOMPLETE) || (GetQuestStatus(80302) == QUEST_STATUS_INCOMPLETE)) // Securing the Supply Lines & Unwanted Eyes
     {
         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80233); 
 
