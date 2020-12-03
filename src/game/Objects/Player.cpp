@@ -5432,7 +5432,7 @@ void Player::UpdateWeaponSkill(WeaponAttackType attType)
 
     bool exhausted = false;
 
-    if (HasItemCount(50521, 1, false))
+    if (HasItemCount(50521, 1, false)) // Glyph of Exhaustion
         exhausted = true;
 
     uint32 weapon_skill_gain = exhausted ? sWorld.getConfig(CONFIG_UINT32_SKILL_GAIN_WEAPON) * 2 : sWorld.getConfig(CONFIG_UINT32_SKILL_GAIN_WEAPON);
