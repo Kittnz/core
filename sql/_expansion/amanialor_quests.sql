@@ -102,9 +102,9 @@ replace into gameobject_template values
 set @quest_entry = 80300;
 set @quest_zone = 331;
 set @title = 'A Tusken Affair';
-set @description = 'Greetings Mon!\n\nI come with a proposal for you, some of my brethren are preparing to setup a new settlement in Kalimdor.\n\nIt be far away from home but da threat of da Undead an’ da Alliance cannot be ignored so we com’ here to make a new home.\n\nHowever, we hav’ run into some difficulties recently, if you can spare da time we would appreciate some help. Talk to Deino in Orgrimmar, the Mage Trainer in da Valley of Spirits.\n\nDon\'t worry, you will be rewarded!';
-set @objective = 'Talk to Deino, the Mage Trainer in the Valley of Spirits in Orgrimmar.';
-set @completetext = 'Da Revantusk sent you?\n\nAh...Amani\'alor. Dey came to Kalimdor in secret a few months ago and setup da village in da hills of Stonetalon Mountains.\n\nA secret new home for the people after da struggles in the other continent dey could use da help as settling in a new land be difficult.\n\nI will teleport you there when you be ready.';
+set @description = 'Greetings, mon!\n\nI got an offer for you. Some of my brothers and I are setting up a new settlement in Kalimdor.\n\nIt will be far away from home, but the threat of the undead and the Alliance can’t be ignored.\n\nHowever, we are running into some difficulties doing that. If you can spare the time, we need your help. Talk to Deino in Orgrimmar. He is the mage trainer in the Valley of Spirits.\n\nYou be getting a nice reward for your time, too!';
+set @objective = 'Talk to the mage trainer Deino in the Valley of Spirits in Orgrimmar.';
+set @completetext = 'The Revantusk sent you?\n\nAh, Amani\'Alor. They came to Kalimdor in secret a few months ago and constructed a village in the hills of Stonetalon Mountains.\n\nEstablishing a secret new home for the trolls after struggling to survive in the other continent means the Revantusk could use all the help they can get.\n\nI will teleport you there when you be ready.';
 set @incompletetext = 'What brings you to Deino?';
 set @faction_id = 1494;
 set @faction_count = 250;
@@ -198,10 +198,10 @@ update creature_template set faction = 1494 where entry = 80801;
 set @quest_entry = 80301;
 set @quest_zone = 331;
 set @title = 'Lighting the Pyres';
-set @description = 'Ah good, what a beauty ya be, $R exactly what ol’ Guay’jin be needin’ today.\n\nWhen we first came to this land, we found an ancient Zandalari tomb dating the da ancient days when the mighty Zandalari were fightin’ da Aqiri menace… Ya see mon, we settled here, and received the blessing from the spirits and the loa that make our home here...Anyways, we discovered soon that dark forces are at play here, bad mojo be hiding in da tombs. Somethin’ be disturbin’ da dead, the spirits lash out in anger. I have prepared pyres that guide the disturbed back where they rest, enter the tomb and light the pyres, bring peace to the spirits $R!\n\nYa can find the tomb in the hills behind my hut, look for a stone entrance in the cliff.';
-set @objective = 'Light 3 Spirit Pyres inside the Tomb.';
-set @completetext = 'Good... The spirits be restin’ for now. We might need you to be light the pyres again soon, once the fires go out. I will continue my investigation, try to find out why the spirits cannot seem to find rest ‘ere... Be it because of a battle? Or is there somethin’ nasty restin’ in this place? No idea mon, wonder why this tomb was abandoned after all… Well, that be a problem for another time, you’ve been doin’ us all a favor $R! Guay’jin be thankin’ ya.';
-set @incompletetext = 'Is it done mon? Have the spirits been put to rest? As long as the spirits are restless, our dead will finding no peace here.';
+set @description = 'Ah, good. What a beauty you are, $R. Exactly what ol’ Guay’jin be needing today.\n\nWhen we first came to this land, we found an ancient Zandalari tomb dating back to the days when the mighty Zandalari were fighting the Aqiri menace...\n\nYou see, mon, we settled here and received a blessing from the spirits and the loa to make our home. We discovered soon after that dark forces are at play here. Bad mojo be hiding in the tombs. Something be disturbing the dead, and the spirits are lashing out in anger. I prepared pyres that guide the disturbed back to where they rest. Enter the tomb and light the pyres, then you’ll bring peace to the spirits, $R!\n\nYou can find the tomb in the hills behind my hut. Look for a stone entrance into the cliff.';
+set @objective = 'Light 3 Spirit Pyres inside of the tomb.';
+set @completetext = 'You did good. The spirits be resting for now. We might need you to be lighting the pyres again soon once the fires go out. I be continuing my investigation, so try to find out why the spirits cannot seem to find rest here. Be it because of a battle? Or is there something nasty resting in this place? I got no idea, mon. Wonder why dis tomb was abandoned after all?\n\nWell, that be a problem for another time. You been doing us all a favor, $R. Guay’jin be thanking you.';
+set @incompletetext = 'Is it done, mon? Have the spirits been put to rest? As long as the spirits are restless, our dead will finding no peace here.';
 set @faction_id = 893;
 set @faction_count = 75;
 set @xp_or_money = 650;
@@ -292,10 +292,10 @@ update creature_template set faction =  1494 where entry = 80802;
 set @quest_entry = 80302;
 set @quest_zone = 331;
 set @title = 'Unwanted Eyes';
-set @description = 'Greetings $R, it’s good to see your willingness to aid our cause.\n\nOur journey here wasn’t easy and we lost a lot of our supplies to the raging storms, and now the Alliance is after the rest. Most of us are preoccupied with settling on this new land so you’ll be the one to get rid of them.\n\nGo out there, slaughter their heroes, prove yourself to us.';
-set @objective = 'Kill 8 Alliance Players.';
-set @completetext = 'Thank you $R, This should deter them for a good while, your service will be remembered.';
-set @incompletetext = 'We can’t scuff at the potential of an Alliance assault backed by our elven nemesis, make their heroes an example of our power.';
+set @description = 'Greetings, $R. It’s good to see your willingness to aid our cause.\n\nOur journey to get here wasn’t easy, and we lost a lot of our supplies to the raging storms. Now, the Alliance is after the rest of what we have left. Most of us are preoccupied with settling on this new land, so you’ll have to be the one to get rid of them.\n\nGo out there and slaughter their heroes. Prove your worth to us.';
+set @objective = 'Kill 8 Alliance Players in PvP.';
+set @completetext = 'Thank you, $R. This should deter them for a good while. Your service will be remembered.';
+set @incompletetext = 'We can’t scoff at the potential of an Alliance assault backed by our elven nemesis. Make their heroes an example of our power.';
 set @faction_id = 1494;
 set @faction_count = 250;
 set @xp_or_money = 8000;
@@ -369,14 +369,14 @@ nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
 specialflags = 4
 where entry = @quest_entry;	 
 
--- Raiding Quel’lithen Lodge
+-- Raiding Quel’Lithen Lodge
 
 set @quest_entry = 80303;
 set @quest_zone = 331;
-set @title = 'Raiding Quel’lithen Lodge';
-set @description = 'It’s good to see you again $C, you have done so much for us yet our enemy never sleeps. Our scouts have reported increased activity in the Quel’lithen Lodge in the Eastern Plaguelands and that dey preparing for an expedition. Even though we don’t know why, it’s almost certain that they’re plotting against us. This is where you come into play, go into their lodge, leave no elf alive. Our heritage wills it.';
-set @objective = 'Venture to Quel’lithen Lodge in the Eastern Plaguelands and slay your enemies.';
-set @completetext = 'You have proven your worth to us again. These lands will return to their true owners in time, us.\n\nThe Amani will return to power once more... As part of the new Horde!';
+set @title = 'Raiding Quel’Lithen Lodge';
+set @description = 'It’s good to see you again, $C. You have done so much for us, yet our enemy never sleeps. Our scouts have reported increased activity in the Quel’Lithen Lodge in the Eastern Plaguelands and that they preparing for an expedition. Even though we don’t know why, it’s almost certain that they’re plotting against us. This is where you come into play, $N. Go into their lodge and leave no elf alive. Our heritage wills it.';
+set @objective = 'Venture to the Quel’Lithen Lodge in the Eastern Plaguelands and slay 6 Quel’Lithen Pathstriders, 6 Quel’Lithen Woodsmen, and 6 Quel’Lithen Rangers.';
+set @completetext = 'You have proven your worth to us yet again. These lands will return to their true owners in time, $R.\n\nThe Amani will return to power once more as part of the new Horde!';
 set @incompletetext = 'Is it done? Have our enemies been defeated?';
 set @faction_id = 893;
 set @faction_count = 500;
@@ -451,7 +451,7 @@ nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
 specialflags = 4
 where entry = @quest_entry;	 
 
--- Da Means Tha Heal
+-- The Means To Heal
 
 -- Todo: Toad drop.
 
@@ -487,12 +487,11 @@ replace into `gameobject_loot_template` (`entry`, `item`, `ChanceOrQuestChance`,
 
 set @quest_entry = 80304;
 set @quest_zone = 331;
-set @title = 'Da Means Tha Heal';
-set @description = 'Greetings mon, ja be back tha bein’ useful then?\n\nPerfect timin’, ye see ol’ Wetnose got a job fo’ ja!
-Ja see mon, we trolls, no’ just us, forest trolls but all trolls got an ability tha regenerate wounds, ya?\n\nBut sometimes even dat fails durin’ battle and we don’t know much ov ‘ow it be ‘appenin’, sometimes it be workin’ sometimes it be not!\n\nJa mission is tha go grab sum stuff for me tha turn into sum ‘ealin’ salve, ja know like potions but bettah!\n\nThere be this purple flowa growin’ ‘round Ashenvale, it be purple and green, think sum be callin’ it rosemary, we be callin’ it useful, grab a ‘andful and brin’ ‘em back tha me, but there be also a catch, tha mix dem we be needin’ a special kind ov’ oil mon, so ja be goin’ tha squeeze sum toads for da oil!\n\nDey be found ‘round da lake close tha da cave dat leads tha Stonetalon.\n\nCareful, sum toads be ‘avin’ nasty skin, ja might end up infected, but don’ worry mon, Guay’jin will cleanse ja!';
-set @objective = 'Collect ten Rosemary Flowers, obtain Toad Oil and bring it to Warleader.';
-set @completetext = 'Ya, mon, dis be da good stuff, ja did a great job!\n\nOl’ Wetnose might ‘ave forgotten but ja be doin’ this tomorrow too!';
-set @incompletetext = 'Don’ take da mission fo’ granted mon! This be very important, on ja feet, quickly as a monkey ja go!';
+set @title = 'The Means To Heal';
+set @description = 'Greetings, mon. You back to being useful, then? Perfect timing. Ol’ Wetnose got a job for ya!\n\nWe trolls, not just us forest trolls, but all trolls, got an ability that regenerates wounds, ya?But sometimes, even that fails during battle, and we don’t know much about how it be happening. Sometimes it be working, sometimes it be not!\n\nYour mission is to go grab some stuff for me that turns into some healing salve... like the potions—but better!\n\nThere be this purple flowa growing around Ashenvale. I think some call it rosemary, but we be calling it useful. Grab a handful and bring ‘em back to me. But wait, there’s also a catch. The mix we need is a special kind of oil, mon, so you be going to squeeze some toads for their juices!\n\nThey can be found around the lake close to the cave that leads to Stonetalon.\n\nCareful, some toads have nasty skin, and you might end up infected. Don’t worry, mon, Guay’jin will cleanse you!';
+set @objective = 'Collect 10 Rosemary Flowers and 10 Toad Oils, then bring everything to Warleader Wetnose.';
+set @completetext = 'Yeah, mon, this be the good stuff. You did a great job!\n\nOl’ Wetnose might have already forgotten about you, but you’ll do this enough times for him to remember your name soon.';
+set @incompletetext = 'Don’t take the mission for granted, mon! This is very important. Now, on your feet. Quickly as a monkey you go!';
 set @faction_id = 893;
 set @faction_count = 250;
 set @xp_or_money = 8000;
@@ -566,7 +565,7 @@ nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
 specialflags = 4
 where entry = @quest_entry;	 
 
--- Times be changin’
+-- Times Be Changing
 
  replace into item_template values
  ('80422', '0', '0', '0', 'Juju of Kimbul', '', '32280', '1', '0', '1', '0', '0', '0', '-1', '-1', '0',
@@ -580,11 +579,11 @@ where entry = @quest_entry;
  
 set @quest_entry = 80305;
 set @quest_zone = 331;
-set @title = 'Times be changin’';
-set @description = '‘ello mon, ja be a good asset fo da trolls, Guya’jin thanks ja, but she be also havin’ anotha mission fo ja, dere be a tribe ov’ forma jungle trolls dat now be called sand trolls, dose ov Zul’Farrak, dey be havin’ a connection wiv Kimbul da loa ov tigers, he usually be a loa ov the jungle trolls but it be time for the Amani tha praise a new loa.\n\nJa know, dis be takin’ time and sum jujus we lack, so ja will ‘ave tha go and obtain sum ov these jujus from dem, dey be not worthy ov ‘is blessings anymore, dey be toyin’ wiv bad mojo, ressurectin’ dey dead! Very bad mojo mon, but if the Amani could connect tha Kimbul he be a very powerful loa and one tha would be ‘elpful in da battles tha come.';
-set @objective = 'Obtain 10 Jujus of Kimbul and bring it to Mystic Guay’jin.';
-set @completetext = 'Ja make sure ja do  dat again soon, $N, da more da bettah, believe Guya’jin, Kimbul’s eyes be on ja now.';
-set @incompletetext = '‘avin’ a poweful loa on our side be best, $N, Kimbul believes in da predators, and ja be one, ja will be our way to commune with ‘im';
+set @title = 'Times Be Changing';
+set @description = 'Hello, mon. You be a good asset for the trolls. Guya’jin thanks you, but she also has another mission for you. There is a tribe of former jungle trolls that are now called sand trolls. Those of Zul’Farrak, they be having a connection with Kimbul, the loa of tigers. He usually is a loa of the jungle trolls, but it’s time for the Amani to praise a new loa.\n\nYou know, this is taking time and jujus that we lack, so you will have to go and obtain some of these jujus from them. They are not worthy of his blessings anymore. They’re toying with bad mojo, resurrecting their dead! Very bad mojo, mon, but if the Amani could connect to Kimbul again, he could be a very powerful loa and one that would be helpful in the battles to come.';
+set @objective = 'Obtain 10 Jujus of Kimbul and bring them to Mystic Guay’jin.';
+set @completetext = 'You make sure you do that again, soon, $N. The more, the better, believe Guya’jin. Kimbul’s eyes be on you now!';
+set @incompletetext = 'Having a poweful loa on our side is for the best, $N. Kimbul believes in the predators, and you are a mighty one yourself. You will be our only way to commune with him';
 set @faction_id = 893;
 set @faction_count = 250;
 set @xp_or_money = 4600;
