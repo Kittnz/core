@@ -5430,7 +5430,12 @@ void Player::UpdateWeaponSkill(WeaponAttackType attType)
     if (GetShapeshiftForm() == FORM_TREE)
         return;                                             // use weapon but not skill up
 
-    uint32 weapon_skill_gain = sWorld.getConfig(CONFIG_UINT32_SKILL_GAIN_WEAPON);
+    bool exhausted = false;
+
+    if (HasItemCount(50521, 1, false))
+        exhausted = true;
+
+    uint32 weapon_skill_gain = exhausted ? sWorld.getConfig(CONFIG_UINT32_SKILL_GAIN_WEAPON) * 2 : sWorld.getConfig(CONFIG_UINT32_SKILL_GAIN_WEAPON);
 
     switch (attType)
     {
