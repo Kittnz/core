@@ -33,7 +33,7 @@ replace into `item_template` values
 update creature_template set scale = 1.6 where entry = 80830;
 update creature_template set scale = 1.3, faction = 29 where entry = 80831;
 
-update item_template set sheathe = 1 where entry = 80775;
+update item_template set sheath = 1 where entry = 80775;
 update item_template set display_id = 1297 where entry = 30817;
 
 -- Level 10 Alliance Weapons
@@ -633,3 +633,117 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '1', '2', '0', '0', '100', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
+REPLACE INTO `creature_template` VALUES (80458, 0, 18214, 0, 0, 0, 'Ranger Canarah Kim\'Alah', 'Hunter Trainer', 59005, 63, 63, 675612, 675612, 6761, 6761, 4561, 371, 16, 1, 1.14286, 0, 20, 5, 0, 3, 1, 236, 348, 0, 200, 1, 1800, 2000, 4, 4864, 0, 0, 0, 0, 3, 0, 174, 747, 200, 7, 0, 0, 0, 0, 0, 0, 60, 0, 0, 60, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 1, 3, 15181, 0, 0, 2764783451, 0, 557064, '');
+
+-- Update quartermaster:
+
+replace into `creature_template` values 
+(80266, 0, 16833, 0, 0, 0, 'Soalara Dawnstar', 'Silvermoon Remnant Weapons Quartermaster', 0, 11, 11, 456, 456, 0, 0, 20, 371, 16388, 1.1, 1.14286, 0, 20, 5, 0, 0, 1, 12, 14, 0, 64, 1, 2000, 2090, 1, 4864, 0, 0, 0, 0, 0, 0, 18.392, 25.289, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, '');
+
+replace into `creature_template` values 
+(80459, 0, 18225, 0, 0, 0, 'Alinerenah Sunsparrow', 'Silvermoon Remnant Armor Quartermaster', 0, 11, 11, 456, 456, 0, 0, 20, 371, 16388, 1.1, 1.14286, 0, 20, 5, 0, 0, 1, 12, 14, 0, 64, 1, 2000, 2090, 1, 4864, 0, 0, 0, 0, 0, 0, 18.392, 25.289, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, '');
+ 
+ replace into creature_model_info values (18214, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18225, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (4033, 5875, 2, 2, 0, 0, 0);
+ 
+replace into `creature_template` values 
+(80807, 0, 14773, 0, 0, 0, 'Reolis Riptusk', 'Revantusk Trolls Weapons Quartermaster', 0, 11, 11, 456, 456, 0, 0, 20, 1494, 16388, 1.1, 1.14286, 0, 20, 5, 0, 0, 1, 12, 14, 0, 64, 1, 2000, 2090, 1, 4864, 0, 0, 0, 0, 0, 0, 18.392, 25.289, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, '');
+
+replace into `creature_template` values 
+(80812, 0, 4033 , 0, 0, 0, 'Partayblade Riptusk', 'Revantusk Trolls Armor Quartermaster', 0, 11, 11, 456, 456, 0, 0, 20, 1494, 16388, 1.1, 1.14286, 0, 20, 5, 0, 0, 1, 12, 14, 0, 64, 1, 2000, 2090, 1, 4864, 0, 0, 0, 0, 0, 0, 18.392, 25.289, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, '');
+
+-- Add faction weapons to weapon quartermasters:
+
+REPLACE INTO `npc_vendor` VALUES (80266, 80500, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80266, 80501, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80266, 80502, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80266, 80503, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80266, 80504, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80266, 80505, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80266, 80506, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80266, 80507, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80266, 80508, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80266, 80509, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80266, 80510, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80266, 80511, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80266, 80512, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80266, 80513, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80266, 80514, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80266, 80515, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80266, 80516, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80266, 80517, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80266, 80518, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80266, 80519, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80266, 80520, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80266, 80521, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80266, 80522, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80266, 80523, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80266, 80524, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80266, 80525, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80266, 80526, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80266, 80527, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80266, 80528, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80266, 80529, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80266, 80530, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80266, 80531, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80266, 80532, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80266, 80533, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80266, 80534, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80266, 80535, 0, 0, 0, 0);
+
+REPLACE INTO `npc_vendor` VALUES (80807, 80600, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80807, 80601, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80807, 80602, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80807, 80603, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80807, 80604, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80807, 80605, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80807, 80606, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80807, 80607, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80807, 80608, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80807, 80609, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80807, 80610, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80807, 80611, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80807, 80612, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80807, 80613, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80807, 80614, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80807, 80615, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80807, 80616, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80807, 80617, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80807, 80618, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80807, 80619, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80807, 80620, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80807, 80621, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80807, 80622, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80807, 80623, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80807, 80624, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80807, 80625, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80807, 80626, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80807, 80627, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80807, 80628, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80807, 80629, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80807, 80630, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80807, 80631, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80807, 80632, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80807, 80633, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80807, 80634, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80807, 80635, 0, 0, 0, 0);
+
+-- Little Silvermoon's pet quartermaster:
+
+replace into `creature_template` values 
+(80403, 0, 16814, 0, 0, 0, 'Tolif Valanor', 'Pet Collector', 0, 11, 11, 456, 456, 0, 0, 20, 371, 16388, 1.1, 1.14286, 0, 20, 5, 0, 0, 1, 12, 14, 0, 64, 1, 2000, 2090, 1, 4864, 0, 0, 0, 0, 0, 0, 18.392, 25.289, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, '');
+
+REPLACE INTO `npc_vendor` VALUES (80403, 80000, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80403, 80001, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80403, 80003, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80403, 80007, 0, 0, 0, 0);
+
+REPLACE INTO `item_template` VALUES (80007, 0, 15, 0, 'Enchanted Broom', 'Created by a high elf apprentice, this broom would be extremely useful if anyone could figure out how to make it stop.', 3509, 1, 0, 1, 6000, 1500, 0, -1, -1, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 45014, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+
+REPLACE INTO `item_template` VALUES (80000, 0, 15, 0, 'Golden Dragonhawk Hatchling', 'Once prized by dragonhawk breeders in Silvermoon. Stands out at night to predators, making it necessary to gain awareness at an early age.', 20629, 1, 0, 1, 6000, 1500, 0, -1, -1, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 45021, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+REPLACE INTO `item_template` VALUES (80001, 0, 15, 0, 'Thalassian Tender', 'It always wakes up dancing. What a happy little tree!', 19496, 1, 0, 1, 6000, 1500, 0, -1, -1, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 45015, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+
+REPLACE INTO `item_template` VALUES (80003, 0, 15, 0, 'Fox Kit', 'During frigid nights, these critters use their fluffy tails as a blanket to stay warm.', 40126 , 1, 0, 1, 6000, 1500, 0, -1, -1, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 45000, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+
+update item_template set required_reputation_faction = 269, required_reputation_rank = 6, buy_price = 250000, sell_price = 150000 where entry in (80000, 80001, 80003, 80007);
