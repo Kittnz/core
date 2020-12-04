@@ -746,4 +746,12 @@ REPLACE INTO `item_template` VALUES (80001, 0, 15, 0, 'Thalassian Tender', 'It a
 
 REPLACE INTO `item_template` VALUES (80003, 0, 15, 0, 'Fox Kit', 'During frigid nights, these critters use their fluffy tails as a blanket to stay warm.', 40126 , 1, 0, 1, 6000, 1500, 0, -1, -1, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 45000, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
 
-update item_template set required_reputation_faction = 269, required_reputation_rank = 6, buy_price = 250000, sell_price = 150000 where entry in (80000, 80001, 80003, 80007);
+update item_template set required_reputation_faction = 269, required_reputation_rank = 7, buy_price = 253000, sell_price = 150000 where entry in (80000, 80001, 80003, 80007);
+
+update creature_template set scale = 1 where entry = 80404;
+update creature_template set scale = 1 where entry = 80401;
+
+replace into `creature_template` values 
+(80460, 0, 18225, 0, 0, 0, 'Alinerenah Sunsparrow', 'Silvermoon Remnant Armor Quartermaster', 0, 11, 11, 456, 456, 0, 0, 20, 371, 16388, 1.1, 1.14286, 0, 20, 5, 0, 0, 1, 12, 14, 0, 64, 1, 2000, 2090, 1, 4864, 0, 0, 0, 0, 0, 0, 18.392, 25.289, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, '');
+
+REPLACE INTO `creature_template` VALUES (80460, 0, 9591, 0, 0, 0, 'Applebough', 'Fruit Vendor', 9503, 30, 30, 1605, 1605, 0, 0, 1200, 875, 6, 1, 1.14286, 1.15, 20, 5, 0, 0, 1, 42, 53, 0, 122, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 45.144, 62.073, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, '');
