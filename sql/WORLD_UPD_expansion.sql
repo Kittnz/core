@@ -244,3 +244,4 @@ nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
 srcItemId = 9566, srcitemcount = 1, RequiredClasses = 4, RequiredRaces = 64
 where entry = @quest_entry;	
 
+update quest_template set RequiredClasses = 4, RequiredRaces = 4 where entry = 3108;
