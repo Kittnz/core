@@ -231,7 +231,9 @@ update creature_template set faction = 470 where entry = 80856;
 update creature_template set name = 'Chok\'Garok' where entry = 80831;
 update creature_template set subname = 'Stonemaul Clan' where entry = 80831;
 
-set @ureda = 0;
+REPLACE INTO `creature_template` VALUES (80857, 0, 18187, 0, 0, 0, 'Ureda', 'Mage Trainer', 64, 60, 60, 3139, 3139, 2620, 2620, 8401, 29, 19, 1, 1.14286, 0, 20, 5, 0, 0, 1, 110, 142, 0, 272, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 8, 0, 74.448, 102.366, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 5882, 0, 0, 0, 0, 524298, '');
+
+set @ureda = 80857;
 
 -- Mastering the Arcane, Part I
 
@@ -458,3 +460,17 @@ replace into creature_loot_template (entry, item, chanceorquestchance, groupid, 
 replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (5055, 80862, -30, 6, 1, 1);
 replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (3673, 80863, -100, 6, 1, 1);
 replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (3670, 80864, -100, 6, 1, 1);
+
+update creature set modelid = 18213 where guid = 30639;
+update creature set modelid = 18212 where guid = 8487;
+update creature set modelid = 18213 where guid = 30639;
+
+update item_template set inventory_type = 23 where entry = 80724;
+
+update gameobject_template set script_name = 'stormwind_vault_portal', displayid = 23442, size = 1.6 where entry = 3000226;
+
+replace into gameobject_template values 
+(3000281, 0, 5, 23442, 'Stormwind Vault (Exit)', 0, 0, 1.6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'stormwind_vault_portal');
+
+replace into gameobject_template values 
+(3000282, 0, 5, 23443, 'Stormwind Vault (Collision)', 0, 0, 1.6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
