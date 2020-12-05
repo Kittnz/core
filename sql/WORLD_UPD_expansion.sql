@@ -317,6 +317,56 @@ where entry = @quest_entry;
 
 -- Mastering the Arcane, Part II
 
+replace into item_template values
+ ('80860', '0', '2', '10', 'Staff of the Arcane Path', '', '5540', '3', '0', '1', '0', '0', '13', '-1', '-1', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '6', '7', '8',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3100', '0',
+ '0', '52', '85', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '23727', '2', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '0', '2', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+ 
+ replace into item_template values
+ ('80861', '0', '2', '15', 'Spellweaving Dagger', '', '20425', '3', '0', '1', '0', '0', '13', '-1', '-1', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '9', '7', '4',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1800', '0',
+ '0', '29', '62', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '23727', '2', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '0', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('80862', '0', '12', '', 'Moontouched Wood', '', '929', '1', '0', '1', '0', '0', '0', '-1', '-1', '10',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '10', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '4', '0', '0', '0', '0', '0', '0', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+ 
+ replace into item_template values
+ ('80863', '0', '12', '', 'Crystal of the Serpent', '', '2935', '1', '0', '1', '0', '0', '0', '-1', '-1', '10',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '10', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '4', '0', '0', '0', '0', '0', '0', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('80864', '0', '12', '', 'Everchanging Essence', '', '24156', '1', '0', '1', '0', '0', '0', '-1', '-1', '10',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '10', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '4', '0', '0', '0', '0', '0', '0', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+
 set @quest_entry = 80312;
 set @quest_zone = 17;
 set @title = 'Mastering the Arcane (Part II)';
@@ -335,12 +385,12 @@ set @quest_finisher = 80831;
 set @nextquest = 0;
 set @nextquestinchain = 0;
 set @prevquest = 80311;
-set @RewChoiceItemId1 = 0; 
-set @RewChoiceItemId2 = 0; 
+set @RewChoiceItemId1 = 80860; 
+set @RewChoiceItemId2 = 80861; 
 set @RewChoiceItemId3 = 0;
 set @RewChoiceItemId4 = 0; 
-set @RewChoiceItemCount1 = 0;
-set @RewChoiceItemCount2 = 0;
+set @RewChoiceItemCount1 = 1;
+set @RewChoiceItemCount2 = 1;
 set @RewChoiceItemCount3 = 0;
 set @RewChoiceItemCount4 = 0;
 set @reward_item_1 = 0;
@@ -359,13 +409,13 @@ set @creature_to_kill_1_count = 0;
 set @creature_to_kill_2_count = 0;
 set @creature_to_kill_3_count = 0;
 set @creature_to_kill_4_count = 0;
-set @required_item_1 = 0;
-set @required_item_2 = 0;
-set @required_item_3 = 0;
+set @required_item_1 = 80862;
+set @required_item_2 = 80863;
+set @required_item_3 = 80864;
 set @required_item_4 = 0;
-set @required_item_1_count = 0;
-set @required_item_2_count = 0;
-set @required_item_3_count = 0;
+set @required_item_1_count = 5;
+set @required_item_2_count = 1;
+set @required_item_3_count = 1;
 set @required_item_4_count = 0;
 
 replace into quest_template values 
@@ -396,3 +446,15 @@ nextquestid = @nextquest, RewOrReqMoney = @reward_money,
 nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
 RequiredClasses = 128, RequiredRaces = 50
 where entry = @quest_entry;	
+
+-- Misc. DB fixes:
+
+update item_template set buy_price = 55000, sell_price = 5000 where entry in (80317, 80318, 80316, 80314, 80313, 80312, 80311, 80310, 80309, 80308, 80307, 80306, 80305, 80304, 80320, 80303, 80302, 80301, 80300);
+
+delete from item_template where entry = 50520;
+
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (5048, 80862, -30, 6, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (3637, 80862, -30, 6, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (5055, 80862, -30, 6, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (3673, 80863, -100, 6, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (3670, 80864, -100, 6, 1, 1);
