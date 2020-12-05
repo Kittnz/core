@@ -85,21 +85,6 @@ REPLACE INTO `npc_vendor` VALUES (80266, 80517, 0, 0, 0, 0);
 REPLACE INTO `npc_vendor` VALUES (80266, 80518, 0, 0, 0, 0);
 REPLACE INTO `npc_vendor` VALUES (80266, 80519, 0, 0, 0, 0);
 REPLACE INTO `npc_vendor` VALUES (80266, 80520, 0, 0, 0, 0);
-REPLACE INTO `npc_vendor` VALUES (80266, 80521, 0, 0, 0, 0);
-REPLACE INTO `npc_vendor` VALUES (80266, 80522, 0, 0, 0, 0);
-REPLACE INTO `npc_vendor` VALUES (80266, 80523, 0, 0, 0, 0);
-REPLACE INTO `npc_vendor` VALUES (80266, 80524, 0, 0, 0, 0);
-REPLACE INTO `npc_vendor` VALUES (80266, 80525, 0, 0, 0, 0);
-REPLACE INTO `npc_vendor` VALUES (80266, 80526, 0, 0, 0, 0);
-REPLACE INTO `npc_vendor` VALUES (80266, 80527, 0, 0, 0, 0);
-REPLACE INTO `npc_vendor` VALUES (80266, 80528, 0, 0, 0, 0);
-REPLACE INTO `npc_vendor` VALUES (80266, 80529, 0, 0, 0, 0);
-REPLACE INTO `npc_vendor` VALUES (80266, 80530, 0, 0, 0, 0);
-REPLACE INTO `npc_vendor` VALUES (80266, 80531, 0, 0, 0, 0);
-REPLACE INTO `npc_vendor` VALUES (80266, 80532, 0, 0, 0, 0);
-REPLACE INTO `npc_vendor` VALUES (80266, 80533, 0, 0, 0, 0);
-REPLACE INTO `npc_vendor` VALUES (80266, 80534, 0, 0, 0, 0);
-REPLACE INTO `npc_vendor` VALUES (80266, 80535, 0, 0, 0, 0);
 
 REPLACE INTO `npc_vendor` VALUES (80807, 80600, 0, 0, 0, 0);
 REPLACE INTO `npc_vendor` VALUES (80807, 80601, 0, 0, 0, 0);
@@ -122,21 +107,6 @@ REPLACE INTO `npc_vendor` VALUES (80807, 80617, 0, 0, 0, 0);
 REPLACE INTO `npc_vendor` VALUES (80807, 80618, 0, 0, 0, 0);
 REPLACE INTO `npc_vendor` VALUES (80807, 80619, 0, 0, 0, 0);
 REPLACE INTO `npc_vendor` VALUES (80807, 80620, 0, 0, 0, 0);
-REPLACE INTO `npc_vendor` VALUES (80807, 80621, 0, 0, 0, 0);
-REPLACE INTO `npc_vendor` VALUES (80807, 80622, 0, 0, 0, 0);
-REPLACE INTO `npc_vendor` VALUES (80807, 80623, 0, 0, 0, 0);
-REPLACE INTO `npc_vendor` VALUES (80807, 80624, 0, 0, 0, 0);
-REPLACE INTO `npc_vendor` VALUES (80807, 80625, 0, 0, 0, 0);
-REPLACE INTO `npc_vendor` VALUES (80807, 80626, 0, 0, 0, 0);
-REPLACE INTO `npc_vendor` VALUES (80807, 80627, 0, 0, 0, 0);
-REPLACE INTO `npc_vendor` VALUES (80807, 80628, 0, 0, 0, 0);
-REPLACE INTO `npc_vendor` VALUES (80807, 80629, 0, 0, 0, 0);
-REPLACE INTO `npc_vendor` VALUES (80807, 80630, 0, 0, 0, 0);
-REPLACE INTO `npc_vendor` VALUES (80807, 80631, 0, 0, 0, 0);
-REPLACE INTO `npc_vendor` VALUES (80807, 80632, 0, 0, 0, 0);
-REPLACE INTO `npc_vendor` VALUES (80807, 80633, 0, 0, 0, 0);
-REPLACE INTO `npc_vendor` VALUES (80807, 80634, 0, 0, 0, 0);
-REPLACE INTO `npc_vendor` VALUES (80807, 80635, 0, 0, 0, 0);
 
 -- Little Silvermoon's pet quartermaster:
 
@@ -245,3 +215,184 @@ srcItemId = 9566, srcitemcount = 1, RequiredClasses = 4, RequiredRaces = 64
 where entry = @quest_entry;	
 
 update quest_template set RequiredClasses = 4, RequiredRaces = 4 where entry = 3108;
+
+-- Misc. DB fixes:
+
+replace into `creature_template` values (80855, 0, 1890, 0, 0, 0, 'Clover Spinpistol', 'Hunter Trainer', 4648, 8, 8, 334, 334, 297, 297, 20, 126, 19, 1, 1.14286, 0, 20, 5, 0, 0, 1, 7, 10, 0, 58, 1, 2000, 2000, 1, 4864, 0, 0, 0, 0, 3, 0, 13.5872, 18.6824, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 3154, 0, 0, 0, 0, 524298, '');
+
+update creature_template set faction = 54 where entry = 80855;
+
+replace into `creature_template` values (80856, 0, 18330, 0, 0, 0, 'Twinkie Boomstick', 'Hunter Trainer', 4648, 8, 8, 334, 334, 297, 297, 20, 126, 19, 1, 1.14286, 0, 20, 5, 0, 0, 1, 7, 10, 0, 58, 1, 2000, 2000, 1, 4864, 0, 0, 0, 0, 3, 0, 13.5872, 18.6824, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 3154, 0, 0, 0, 0, 524298, '');
+
+update creature_template set faction = 470 where entry = 80856;
+
+-- New class quests for Orc Mages:
+
+update creature_template set name = 'Chok\'Garok' where entry = 80831;
+update creature_template set subname = 'Stonemaul Clan' where entry = 80831;
+
+set @ureda = 0;
+
+-- Mastering the Arcane, Part I
+
+set @quest_entry = 80311;
+set @quest_zone = 17;
+set @title = 'Mastering the Arcane (Part I)';
+set @description = '<Ureda glances at you with dismay.>\n\nYour skills still require some honing and your posture betrayes your arrogance. Typical of any new apprentice who bears overconfidence before his own wits. Not that it matters to me. It\'s your own problem.\n\nAny aspiring mage should have his spells ready at all time and think two steps ahead. That\'s why your lack of awareness should be compensated with at least something you could procure by yourself.\n\nThere is a… mage who resides on a bank of Southfury River, not far from the Thunder Ridge. Task you will recieve from this mage might be arduous at first glance yet most likely will bear fruit if you put your brain into it.';
+set @objective = 'Speak to Chok\'Garok on a bank of Southfury River in Barrens';
+set @completetext = 'Another one with thirst for knowledge. Good, good! I know what you need. I know what you want!\n\nYes, we know what you crave for!';
+set @incompletetext = 'Hrrm? Yes, what, huh?\n\nChok\'Garok. Yes, it\'s us! Yes, two heads! ';
+set @faction_id = 0;
+set @faction_count = 0;
+set @xp_or_money = 964;
+set @reward_money = 0; 
+set @quest_level = 16;
+set @min_level = 14;
+set @questgiver_id = @ureda;
+set @quest_finisher = 80831;
+set @nextquest = 0;
+set @nextquestinchain = 0;
+set @prevquest = 0;
+set @RewChoiceItemId1 = 0; 
+set @RewChoiceItemId2 = 0; 
+set @RewChoiceItemId3 = 0;
+set @RewChoiceItemId4 = 0; 
+set @RewChoiceItemCount1 = 0;
+set @RewChoiceItemCount2 = 0;
+set @RewChoiceItemCount3 = 0;
+set @RewChoiceItemCount4 = 0;
+set @reward_item_1 = 0;
+set @reward_item_2 = 0; 
+set @reward_item_3 = 0;
+set @reward_item_4 = 0;
+set @reward_item_1_count = 0;
+set @reward_item_2_count = 0;
+set @reward_item_3_count = 0;
+set @reward_item_4_count = 0;
+set @creature_to_kill_1 = 0;
+set @creature_to_kill_2 = 0; 
+set @creature_to_kill_3 = 0;
+set @creature_to_kill_4 = 0;
+set @creature_to_kill_1_count = 0;
+set @creature_to_kill_2_count = 0;
+set @creature_to_kill_3_count = 0;
+set @creature_to_kill_4_count = 0;
+set @required_item_1 = 0;
+set @required_item_2 = 0;
+set @required_item_3 = 0;
+set @required_item_4 = 0;
+set @required_item_1_count = 0;
+set @required_item_2_count = 0;
+set @required_item_3_count = 0;
+set @required_item_4_count = 0;
+
+replace into quest_template values 
+
+(@quest_entry, '0', '2', @quest_zone, @min_level,  '0', @quest_level, '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @title, @description, @objective, @completetext, @incompletetext, '', '', '', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @faction_id, '0', '0', '0', '0', @faction_count, '0', '0', '0', '0', '0', @xp_or_money, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', 0, 0);
+     
+replace into creature_questrelation (id, quest, patch_min, patch_max) values (@questgiver_id, @quest_entry,'0','10'); 
+replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (@quest_finisher, @quest_entry,'0','10');
+	 
+update quest_template set 
+rewitemid1 = @reward_item_1, rewitemcount1 = @reward_item_1_count,
+rewitemid2 = @reward_item_2, rewitemcount2 = @reward_item_2_count,
+rewitemid3 = @reward_item_3, rewitemcount3 = @reward_item_3_count,
+rewitemid4 = @reward_item_4, rewitemcount4 = @reward_item_4_count,
+RewChoiceItemId1 = @RewChoiceItemId1, RewChoiceItemCount1 = @RewChoiceItemCount1,
+RewChoiceItemId2 = @RewChoiceItemId2, RewChoiceItemCount2 = @RewChoiceItemCount2,
+RewChoiceItemId3 = @RewChoiceItemId3, RewChoiceItemCount3 = @RewChoiceItemCount3,
+RewChoiceItemId4 = @RewChoiceItemId4, RewChoiceItemCount4 = @RewChoiceItemCount4,
+ReqCreatureOrGOId1 = @creature_to_kill_1, ReqCreatureOrGOCount1 = @creature_to_kill_1_count,
+ReqCreatureOrGOId2 = @creature_to_kill_2, ReqCreatureOrGOCount2 = @creature_to_kill_2_count,
+ReqCreatureOrGOId3 = @creature_to_kill_3, ReqCreatureOrGOCount3 = @creature_to_kill_3_count,
+ReqCreatureOrGOId4 = @creature_to_kill_4, ReqCreatureOrGOCount4 = @creature_to_kill_4_count,
+reqitemid1 = @required_item_1, reqitemcount1 = @required_item_1_count,
+reqitemid2 = @required_item_2, reqitemcount2 = @required_item_2_count,
+reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
+reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
+nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
+nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
+RequiredClasses = 128, RequiredRaces = 50
+where entry = @quest_entry;	
+
+-- Mastering the Arcane, Part II
+
+set @quest_entry = 80312;
+set @quest_zone = 17;
+set @title = 'Mastering the Arcane (Part II)';
+set @description = 'Ureda sends only worthy mages! Ureda be nasty!\n\n<Heads stare at each other with a surprised look.>\n\nWe know what you really need as a mage, we know where to get parts. You bring us parts and essence too and we make you a weapon, yes!\n\nWhere you get parts? It\'s in the cave. Barrens!! Yes, yes. Wailing Caverns they call it. Caverns with druids and snakes! Yes. You find us 5 Moontouched Wood, Crystal of the Serpent and Everchanging Essence. Yes, the Essence!\n\nYou bring it all to us and we make it all a worthy weapon! Yes, you\'ll be thankful!';
+set @objective = 'Bring Chok\'Garok ingrigients for a staff from Wailing Caverns.';
+set @completetext = 'Yess, yesss!! That\'s what we need! The Arcane be strong to weave on this one! Yes, powerful casting!\n\nYou take this weapon now, be proud and strong! Yess, yesss!\n\nChok\'Garok powerful, yess!!!';
+set @incompletetext = 'You have the parts yet? Yes, yes, bring the parts!';
+set @faction_id = 0;
+set @faction_count = 0;
+set @xp_or_money = 2020;
+set @reward_money = 0; 
+set @quest_level = 18;
+set @min_level = 14;
+set @questgiver_id = 80831;
+set @quest_finisher = 80831;
+set @nextquest = 0;
+set @nextquestinchain = 0;
+set @prevquest = 80311;
+set @RewChoiceItemId1 = 0; 
+set @RewChoiceItemId2 = 0; 
+set @RewChoiceItemId3 = 0;
+set @RewChoiceItemId4 = 0; 
+set @RewChoiceItemCount1 = 0;
+set @RewChoiceItemCount2 = 0;
+set @RewChoiceItemCount3 = 0;
+set @RewChoiceItemCount4 = 0;
+set @reward_item_1 = 0;
+set @reward_item_2 = 0; 
+set @reward_item_3 = 0;
+set @reward_item_4 = 0;
+set @reward_item_1_count = 0;
+set @reward_item_2_count = 0;
+set @reward_item_3_count = 0;
+set @reward_item_4_count = 0;
+set @creature_to_kill_1 = 0;
+set @creature_to_kill_2 = 0; 
+set @creature_to_kill_3 = 0;
+set @creature_to_kill_4 = 0;
+set @creature_to_kill_1_count = 0;
+set @creature_to_kill_2_count = 0;
+set @creature_to_kill_3_count = 0;
+set @creature_to_kill_4_count = 0;
+set @required_item_1 = 0;
+set @required_item_2 = 0;
+set @required_item_3 = 0;
+set @required_item_4 = 0;
+set @required_item_1_count = 0;
+set @required_item_2_count = 0;
+set @required_item_3_count = 0;
+set @required_item_4_count = 0;
+
+replace into quest_template values 
+
+(@quest_entry, '0', '2', @quest_zone, @min_level,  '0', @quest_level, '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @title, @description, @objective, @completetext, @incompletetext, '', '', '', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @faction_id, '0', '0', '0', '0', @faction_count, '0', '0', '0', '0', '0', @xp_or_money, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', 0, 0);
+     
+replace into creature_questrelation (id, quest, patch_min, patch_max) values (@questgiver_id, @quest_entry,'0','10'); 
+replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (@quest_finisher, @quest_entry,'0','10');
+	 
+update quest_template set 
+rewitemid1 = @reward_item_1, rewitemcount1 = @reward_item_1_count,
+rewitemid2 = @reward_item_2, rewitemcount2 = @reward_item_2_count,
+rewitemid3 = @reward_item_3, rewitemcount3 = @reward_item_3_count,
+rewitemid4 = @reward_item_4, rewitemcount4 = @reward_item_4_count,
+RewChoiceItemId1 = @RewChoiceItemId1, RewChoiceItemCount1 = @RewChoiceItemCount1,
+RewChoiceItemId2 = @RewChoiceItemId2, RewChoiceItemCount2 = @RewChoiceItemCount2,
+RewChoiceItemId3 = @RewChoiceItemId3, RewChoiceItemCount3 = @RewChoiceItemCount3,
+RewChoiceItemId4 = @RewChoiceItemId4, RewChoiceItemCount4 = @RewChoiceItemCount4,
+ReqCreatureOrGOId1 = @creature_to_kill_1, ReqCreatureOrGOCount1 = @creature_to_kill_1_count,
+ReqCreatureOrGOId2 = @creature_to_kill_2, ReqCreatureOrGOCount2 = @creature_to_kill_2_count,
+ReqCreatureOrGOId3 = @creature_to_kill_3, ReqCreatureOrGOCount3 = @creature_to_kill_3_count,
+ReqCreatureOrGOId4 = @creature_to_kill_4, ReqCreatureOrGOCount4 = @creature_to_kill_4_count,
+reqitemid1 = @required_item_1, reqitemcount1 = @required_item_1_count,
+reqitemid2 = @required_item_2, reqitemcount2 = @required_item_2_count,
+reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
+reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
+nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
+nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
+RequiredClasses = 128, RequiredRaces = 50
+where entry = @quest_entry;	
