@@ -668,9 +668,58 @@ bool GOSelect_go_brainwashing_device(Player* pPlayer, GameObject* pGo, uint32 se
     return true;
 }
 
+struct stormwind_vault_portal : public GameObjectAI
+{
+    explicit stormwind_vault_portal(GameObject* pGo) : GameObjectAI(pGo)
+    {
+        m_uiUpdateTimer = 1000;
+    }
+
+    uint32 m_uiUpdateTimer;
+
+    void UpdateAI(uint32 const uiDiff) override
+    {
+        if (m_uiUpdateTimer < uiDiff)
+        {
+            std::list<Player*> players;
+            MaNGOS::AnyPlayerInObjectRangeCheck check(me, 3.0f, true, false);
+            MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
+
+            Cell::VisitWorldObjects(me, searcher, 3.0f);
+
+            for (Player* pPlayer : players)
+            {
+                if (!pPlayer->isAlive()) {
+                    pPlayer->ResurrectPlayer(0.5f);
+                    pPlayer->SpawnCorpseBones();
+                }
+                if (me->GetEntry() == 3000281)
+                    pPlayer->TeleportTo(0, -8677.60F, 637.04F, 96.90F, 5.3F);
+                else
+                    pPlayer->TeleportTo(35, -1.15F, 44.4F, -25.58F, 1.6F);
+            }
+            m_uiUpdateTimer = 1000;
+        }
+        else
+        {
+            m_uiUpdateTimer -= uiDiff;
+        }
+    }
+};
+
+GameObjectAI* GetAI_stormwind_vault_portal(GameObject* gameobject)
+{
+    return new stormwind_vault_portal(gameobject);
+}
+
 void AddSC_object_scripts()
 {
     Script *newscript;
+
+    newscript = new Script;
+    newscript->Name = "stormwind_vault_portal";
+    newscript->GOGetAI = &GetAI_stormwind_vault_portal;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "go_campfire_rested";
