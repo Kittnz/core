@@ -682,10 +682,10 @@ struct stormwind_vault_portal : public GameObjectAI
         if (m_uiUpdateTimer < uiDiff)
         {
             std::list<Player*> players;
-            MaNGOS::AnyPlayerInObjectRangeCheck check(me, 3.0f, true, false);
+            MaNGOS::AnyPlayerInObjectRangeCheck check(me, 1.0f, true, false);
             MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
 
-            Cell::VisitWorldObjects(me, searcher, 3.0f);
+            Cell::VisitWorldObjects(me, searcher, 1.0f);
 
             for (Player* pPlayer : players)
             {
