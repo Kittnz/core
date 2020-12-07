@@ -235,15 +235,16 @@ REPLACE INTO `creature_template` VALUES (80857, 0, 18187, 0, 0, 0, 'Ureda', 'Mag
 
 set @ureda = 80857;
 
--- Mastering the Arcane, Part I
+-- Mastering the Arcane
 
 set @quest_entry = 80311;
 set @quest_zone = 17;
-set @title = 'Mastering the Arcane (Part I)';
-set @description = '<Ureda glances at you with dismay.>\n\nYour skills still require some honing and your posture betrayes your arrogance. Typical of any new apprentice who bears overconfidence before his own wits. Not that it matters to me. It\'s your own problem.\n\nAny aspiring mage should have his spells ready at all time and think two steps ahead. That\'s why your lack of awareness should be compensated with at least something you could procure by yourself.\n\nThere is a… mage who resides on a bank of Southfury River, not far from the Thunder Ridge. Task you will recieve from this mage might be arduous at first glance yet most likely will bear fruit if you put your brain into it.';
-set @objective = 'Speak to Chok\'Garok on a bank of Southfury River in Barrens';
-set @completetext = 'Another one with thirst for knowledge. Good, good! I know what you need. I know what you want!\n\nYes, we know what you crave for!';
-set @incompletetext = 'Hrrm? Yes, what, huh?\n\nChok\'Garok. Yes, it\'s us! Yes, two heads! ';
+set @title = 'Mastering the Arcane';
+set @description = '<Ureda glances at you with dismay.>\n\nYour skills still require some honing, and your posture betrayes your arrogance. Typical of any new apprentice who bears overconfidence before his own wits. Not that it matters to me. It\'s your own problem.\n\nAny aspiring mage should have his spells ready at all times and think two steps ahead. That\'s why your lack of awareness should be compensated with at least something you could procure by yourself.\n\nThere is a… “mage” who resides on the bank of Southfury River, not far from Thunder Ridge. The task you will recieve from this mage might be arduous at first glance, yet most likely will bear fruit if you put your brain into it.';
+set @objective = 'Speak to Chok\'Garok on a bank of Southfury River in the Barrens';
+set @completetext = 'Another one with thirst for knowledge? Good, good! I know what you need. I know what you want!\n\nYes, we know what you crave for!';
+set @incompletetext = 'Hrrm? Yes, what, huh?\n\nChok\'Garok. Yes, it\'s us! Yes, two heads!';
+
 set @faction_id = 0;
 set @faction_count = 0;
 set @xp_or_money = 964;
@@ -317,7 +318,7 @@ nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
 RequiredClasses = 128, RequiredRaces = 50
 where entry = @quest_entry;	
 
--- Mastering the Arcane, Part II
+-- Arcane Arms
 
 replace into item_template values
  ('80860', '0', '2', '10', 'Staff of the Arcane Path', '', '5540', '3', '0', '1', '0', '0', '13', '-1', '-1', '0',
@@ -371,10 +372,10 @@ replace into item_template values
 
 set @quest_entry = 80312;
 set @quest_zone = 17;
-set @title = 'Mastering the Arcane (Part II)';
-set @description = 'Ureda sends only worthy mages! Ureda be nasty!\n\n<Heads stare at each other with a surprised look.>\n\nWe know what you really need as a mage, we know where to get parts. You bring us parts and essence too and we make you a weapon, yes!\n\nWhere you get parts? It\'s in the cave. Barrens!! Yes, yes. Wailing Caverns they call it. Caverns with druids and snakes! Yes. You find us 5 Moontouched Wood, Crystal of the Serpent and Everchanging Essence. Yes, the Essence!\n\nYou bring it all to us and we make it all a worthy weapon! Yes, you\'ll be thankful!';
-set @objective = 'Bring Chok\'Garok ingrigients for a staff from Wailing Caverns.';
-set @completetext = 'Yess, yesss!! That\'s what we need! The Arcane be strong to weave on this one! Yes, powerful casting!\n\nYou take this weapon now, be proud and strong! Yess, yesss!\n\nChok\'Garok powerful, yess!!!';
+set @title = 'Arcane Arms';
+set @description = 'Ureda sends only worthy mages! Ureda is the worst!\n\n<The two heads stare at each other with a surprised look.>\n\nWe know what you really need as a mage, and we know where to get parts. You bring us parts, and essence too, and we will make you a weapon, yes!\n\nWhere you get parts? It\'s in the cave. Barrens! Yes, yes. Wailing Caverns, they call it. Caverns with druids and snakes! Yes. You find us Moontouched Wood, a Crystal of the Serpent, and Everchanging Essence. Yes, the essence!\n\nYou bring it all to us, and we make it a worthy weapon! Yes, you\'ll be thankful!';
+set @objective = 'Bring Chok\'Garok 5 pieces of Moontouched Wood, a Crystal of the Serpent, and an Everchanging Essence from Wailing Caverns.';
+set @completetext = 'Yes, yes! That\'s what we need! The arcane is strong to weave on with this one! Yes, powerful casting!\n\nYou take this weapon now, go be proud and strong. Yes, yes.\n\nChok\'Garok powerful, yes!';
 set @incompletetext = 'You have the parts yet? Yes, yes, bring the parts!';
 set @faction_id = 0;
 set @faction_count = 0;
