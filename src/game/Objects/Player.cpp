@@ -4873,7 +4873,8 @@ enum CustomGraveyardZones
     CGZ_WETLANDS                = 11,
     CGZ_BLACK_MORASS            = 2366,
     CGZ_CAVERNS_OF_TIME         = 1941,
-    CGZ_LOCH_MODAN              = 38
+    CGZ_LOCH_MODAN              = 38,
+    CGZ_ALAH_THALAS             = 139
 };
 
 void Player::RepopAtGraveyard()
@@ -4962,6 +4963,13 @@ void Player::RepopAtGraveyard()
         if (getLevel() < 10)
         {
             TeleportTo(0, -5653.60F, -4181.42F, 391.90F, 1.09F);
+            isCustomGraveyard = true;
+        }
+        break;
+    case CGZ_ALAH_THALAS:
+        if (GetAreaId() == 139 && GetTeam() == TEAM_ALLIANCE)
+        {
+            TeleportTo(0, 4285.19F, -2859.71F, 5.16F, 5.06F);
             isCustomGraveyard = true;
         }
         break;
