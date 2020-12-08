@@ -462,3 +462,5 @@ REPLACE INTO `npc_trainer` VALUES
 (80401, 27875, 1200, 0, 0, 50, 5302, 5875),
 (80401, 27876, 1500, 0, 0, 60, 5302, 5875);
 
+
+update quest_template set RequiredRaces = 512 where entry between 80200 and 80220;
