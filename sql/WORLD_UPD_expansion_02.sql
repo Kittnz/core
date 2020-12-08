@@ -133,3 +133,7 @@ REPLACE INTO `item_template` VALUES ('80866', 6, 0, 0, 'Lovely Apple', 'A juicy 
 REPLACE INTO `creature_template` VALUES (80900, 0, 3296, 0, 0, 0, 'Iluria Nightwhisper', NULL, 0, 20, 20, 919, 919, 0, 0, 852, 80, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 24, 31, 0, 90, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 31.856, 43.802, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 4984, 0, 0, 0, 0, 524298, 'npc_iluria');
 
 update creature_template set npc_flags = 1 where entry = 80900;
+
+-- Misc. DB fixes:
+
+update item_template set display_id = 25496 where entry = 80764;
