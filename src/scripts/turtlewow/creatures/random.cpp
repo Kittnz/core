@@ -599,9 +599,9 @@ bool GossipSelect_npc_riding_wyvern(Player* p_Player, Creature* p_Creature, uint
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        p_Player->GetSession()->SendNotification("Your flight will last 30 seconds.");
+        p_Player->GetSession()->SendNotification("Your flight will last 45 seconds.");
         p_Player->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, 295);
-        p_Player->m_Events.AddEvent(new StopFlyingAfterTime(p_Player->GetGUID()), p_Player->m_Events.CalculateTime(30000));
+        p_Player->m_Events.AddEvent(new StopFlyingAfterTime(p_Player->GetGUID()), p_Player->m_Events.CalculateTime(45000));
         p_Player->SetFlying(true);
         p_Player->UpdateSpeed(MOVE_SWIM, true, 4.0F);
     }
