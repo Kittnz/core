@@ -1477,9 +1477,37 @@ GameObjectAI* GetAI_go_teslinah_search(GameObject* gameobject)
     return new go_teslinah_search(gameobject);
 }
 
+bool GossipHello_npc_iluria(Player* pPlayer, Creature* pCreature)
+{
+    if (pPlayer->GetQuestStatus(80315) == QUEST_STATUS_INCOMPLETE) // Apple a Day...
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Applebough doesn't look well!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    }
+    pPlayer->SEND_GOSSIP_MENU(1, pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_iluria(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pPlayer->AddItem(80865, 1);
+        pCreature->MonsterSay("Ahh… Applebough. Of course. Here's the balm that will help.");
+        pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+    }
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
 void AddSC_episode_1()
 {
     Script *newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_iluria";
+    newscript->pGossipHello = &GossipHello_npc_iluria;
+    newscript->pGossipSelect = &GossipSelect_npc_iluria;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "go_teslinah_search";
