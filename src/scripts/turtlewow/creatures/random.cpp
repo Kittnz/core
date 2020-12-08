@@ -587,6 +587,28 @@ bool GossipSelect_npc_riding_gryphon_back(Player* p_Player, Creature* p_Creature
     return true;
 }
 
+bool GossipHello_npc_riding_wyvern(Player* p_Player, Creature* p_Creature)
+{
+    p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Take me out of here.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    p_Player->PrepareQuestMenu(p_Creature->GetGUID());
+    p_Player->SEND_GOSSIP_MENU(1, p_Creature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_riding_wyvern(Player* p_Player, Creature* p_Creature, uint32 /*uiSender*/, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        p_Player->GetSession()->SendNotification("Your flight will last 30 seconds.");
+        p_Player->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, 295);
+        p_Player->m_Events.AddEvent(new StopFlyingAfterTime(p_Player->GetGUID()), p_Player->m_Events.CalculateTime(30000));
+        p_Player->SetFlying(true);
+        p_Player->UpdateSpeed(MOVE_SWIM, true, 4.0F);
+    }
+    p_Player->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
 #define KODO_CALFLING 51599
 
 enum palkeoteEvents
@@ -841,6 +863,12 @@ void AddSC_random()
     newscript->Name = "npc_chixpixx";
     newscript->pGossipHello = &GossipHello_npc_chixpixx;
     newscript->pGossipSelect = &GossipSelect_npc_chixpixx;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_riding_wyvern";
+    newscript->pGossipHello = &GossipHello_npc_riding_wyvern;
+    newscript->pGossipSelect = &GossipSelect_npc_riding_wyvern;
     newscript->RegisterSelf();
 
     newscript = new Script;
