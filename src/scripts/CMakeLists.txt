@@ -300,6 +300,7 @@ set (SCRIPTS_SRCS
     turtlewow/creatures/boss_turtlhu.cpp 
     turtlewow/creatures/boss_snowball.cpp 
     turtlewow/creatures/boss_nerubian_overseer.cpp
+    turtlewow/creatures/stormwind_vaults.cpp
 
     turtlewow/creatures/cot/black_morass/boss_gerastrasz.cpp 
     turtlewow/creatures/cot/instance_caverns_of_time.cpp 
