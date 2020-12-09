@@ -832,6 +832,11 @@ bool ItemUseSpell_item_zeaus(Player* pPlayer, Item* pItem, const SpellCastTarget
 
 bool ItemUseSpell_item_winter_tree(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
+    GameObject* other_tree = pPlayer->FindNearestGameObject(1000070, 15.0F);
+
+    if (other_tree)
+        other_tree->SetRespawnTime(1);
+
     float dis{ 2.0F };
     float x, y, z;
     pPlayer->GetSafePosition(x, y, z);
@@ -839,7 +844,6 @@ bool ItemUseSpell_item_winter_tree(Player* pPlayer, Item* pItem, const SpellCast
     y += dis * sin(pPlayer->GetOrientation());    
 
     pPlayer->SummonGameObject(1000070, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 300, true);
-    pPlayer->SendSpellCooldown(31726, 1600000, pPlayer->GetObjectGuid());
     return false;
 }
 
