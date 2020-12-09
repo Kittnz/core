@@ -8,9 +8,9 @@ update creature_template set name = 'Morgan the Storm' where entry = 51607;
 -- Winterveil Vale fixes:
 
 UPDATE `quest_template` SET `ObjectiveText1`='Throw snowball at Draxer' WHERE `entry`=50321;
-UPDATE `quest_template` SET `ObjectiveText1`='Throw snowball at Paulgreeneye' WHERE `entry`=50321;
-UPDATE `quest_template` SET `ObjectiveText1`='Throw snowball at Sangria' WHERE `entry`=50321;
-UPDATE `quest_template` SET `ObjectiveText1`='Throw snowball at Sucy' WHERE `entry`=50321;
+UPDATE `quest_template` SET `ObjectiveText2`='Throw snowball at Paulgreeneye' WHERE `entry`=50321;
+UPDATE `quest_template` SET `ObjectiveText3`='Throw snowball at Sangria' WHERE `entry`=50321;
+UPDATE `quest_template` SET `ObjectiveText4`='Throw snowball at Sucy' WHERE `entry`=50321;
 
 UPDATE `quest_template` SET `ReqCreatureOrGOId2`='70001' WHERE (`entry`='50321') AND (`patch`='0');
 UPDATE `quest_template` SET `ReqCreatureOrGOId2`='70001' WHERE (`entry`='60013') AND (`patch`='0');
