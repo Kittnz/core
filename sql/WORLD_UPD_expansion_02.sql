@@ -577,3 +577,5 @@ update quest_template set prevquestid = 80322 where entry = 80323;
       
 
 -- Small Durorar quest chain for goblins wirtten by Jam (end)
+
+update creature_template set display_id1 = 4492 where entry = 80857;
