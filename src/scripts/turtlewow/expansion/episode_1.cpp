@@ -1093,7 +1093,7 @@ bool GossipSelect_npc_agne_gambler(Player* pPlayer, Creature* pCreature, uint32 
 
 bool GossipHello_npc_rov(Player* pPlayer, Creature* pCreature)
 {
-    if (pPlayer->GetQuestStatus(80304) == QUEST_STATUS_INCOMPLETE) // Quark's Justice
+    if (pPlayer->GetQuestStatus(80310) == QUEST_STATUS_INCOMPLETE) // Quark's Justice
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "I hear Sturk owes The Rov a punching debt.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
     pPlayer->SEND_GOSSIP_MENU(80603, pCreature->GetGUID());
