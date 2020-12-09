@@ -4927,27 +4927,18 @@ void Player::RepopAtGraveyard()
         break;
     case CGZ_CAVERNS_OF_TIME:
     case CGZ_BLACK_MORASS:
-    {
-        TeleportTo(1, -8149.983398f, -4616.60887f, -126.431488f, 1.113609f);
-        isCustomGraveyard = true;
-    }
-    break;
+        {
+            TeleportTo(1, -8149.983398f, -4616.60887f, -126.431488f, 1.113609f);
+            isCustomGraveyard = true;
+        }
+        break;
     case CGZ_DUN_MOROGH:
-        if (GetAreaId() == 1 && GetPositionZ() > 380)
+    case CGZ_WETLANDS:
+        if ((GetAreaId() == 1 || GetAreaId() == 2365) && GetPositionZ() > 380)
         {
             if (GetDistance2d(-4828.36f, 587.81f) < GetDistance2d(ClosestGrave->x, ClosestGrave->y)) // Only if Winter Veil Vale is nearer than the nearest graveyard
             {
                 TeleportTo(0, -4828.36f, 587.81f, 428.40f, 0.76f); // Winter Veil Vale
-                isCustomGraveyard = true;
-            }
-        }
-        break;
-    case CGZ_WETLANDS:
-        if (GetAreaId() == 2361 && GetPositionZ() > 380)
-        {
-            if (GetDistance2d(-4828.36f, 587.81f) < GetDistance2d(ClosestGrave->x, ClosestGrave->y))
-            {
-                TeleportTo(0, -4828.36f, 587.81f, 428.40f, 0.76f); 
                 isCustomGraveyard = true;
             }
         }
