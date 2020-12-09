@@ -5989,6 +5989,14 @@ void Spell::EffectQuestComplete(SpellEffectIndex eff_idx)
         return;
 
     uint32 quest_id = m_spellInfo->EffectMiscValue[eff_idx];
+
+    if (sWorld.getConfig(CONFIG_BOOL_EXPANSION_CONTENT))
+    {
+        // Goblin hunter's Taming the Beast quest:
+        if (m_spellInfo->GetEffectMiscValue(eff_idx) == 6062 && unitTarget->ToPlayer()->GetQuestStatus(80331) == QUEST_STATUS_INCOMPLETE)
+            quest_id = 80331;
+    }
+
     ((Player*)unitTarget)->AreaExploredOrEventHappens(quest_id);
 }
 

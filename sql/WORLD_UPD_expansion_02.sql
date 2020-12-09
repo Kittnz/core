@@ -587,9 +587,6 @@ delete from creature_questrelation where id = 80601;
 
 -- Quark's Shack
 
-
--- Quark\s Shack
-
 set @quest_entry = 80305;
 set @quest_zone = 1637;
 set @title = 'Quark\'s Shack';
@@ -1184,3 +1181,296 @@ nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
 objectivetext1='Get Sturk out of the bar'
 where entry = @quest_entry;	
 
+-- Goblin Hunter quests:
+
+REPLACE INTO `creature_template` VALUES (80903, 0, 7204, 0, 0, 0, 'Viz Fizbeast', 'Hunter Trainer', 4017, 16, 16, 695, 695, 596, 596, 20, 29, 19, 1, 1.14286, 0, 20, 5, 0, 0, 1, 17, 23, 0, 76, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 3, 0, 26.048, 35.816, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 3171, 0, 0, 0, 0, 524298, '');
+
+UPDATE `item_template` SET `allowable_race`='-1' WHERE (`entry`='15917') AND (`patch`='0');
+
+REPLACE INTO `npc_trainer` VALUES (80903, 796, 2200, 0, 0, 20, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 1117, 600, 0, 0, 12, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 1424, 2200, 0, 0, 20, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 1547, 10, 0, 0, 1, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 1549, 1800, 0, 0, 16, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 1552, 2200, 0, 0, 20, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 1563, 1800, 0, 0, 50, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 1564, 18000, 0, 0, 40, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 1567, 1200, 0, 0, 14, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 1603, 10000, 0, 0, 32, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 2003, 100, 0, 0, 4, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 2898, 14000, 0, 0, 36, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 2899, 1200, 0, 0, 14, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 2979, 600, 0, 0, 12, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 3047, 6000, 0, 0, 22, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 3048, 100, 0, 0, 6, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 3049, 7000, 0, 0, 26, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 3128, 200, 0, 0, 8, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 3663, 8000, 0, 0, 28, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 3664, 14000, 0, 0, 36, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 5117, 200, 0, 0, 8, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 5131, 2200, 0, 0, 20, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 5298, 100, 0, 0, 6, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 5338, 2000, 0, 0, 18, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 5385, 8000, 0, 0, 30, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 6198, 1200, 0, 0, 14, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 6385, 400, 0, 0, 10, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 6791, 2200, 0, 0, 20, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 6792, 7000, 0, 0, 24, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 6999, 8000, 0, 0, 30, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 8738, 18000, 0, 0, 40, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 13160, 18000, 0, 0, 40, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 13162, 8000, 0, 0, 30, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 13164, 100, 0, 0, 4, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 13545, 26000, 0, 0, 44, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 13546, 40000, 0, 0, 52, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 13547, 50000, 0, 0, 60, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 13556, 400, 0, 0, 10, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 13557, 2000, 0, 0, 18, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 13558, 7000, 0, 0, 26, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 13559, 12000, 0, 0, 34, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 13560, 24000, 0, 0, 42, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 13561, 36000, 0, 0, 50, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 13562, 48000, 0, 0, 58, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 13799, 1800, 0, 0, 16, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 13811, 8000, 0, 0, 28, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 13814, 12000, 0, 0, 34, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 14332, 200, 0, 0, 8, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 14333, 1800, 0, 0, 16, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 14334, 7000, 0, 0, 24, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 14335, 10000, 0, 0, 32, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 14336, 18000, 0, 0, 40, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 14337, 32000, 0, 0, 48, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 14338, 46000, 0, 0, 56, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 14339, 16000, 0, 0, 38, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 14340, 5000, 0, 0, 60, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 14341, 8000, 0, 0, 30, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 14342, 26000, 0, 0, 44, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 14343, 48000, 0, 0, 58, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 14344, 12000, 0, 0, 34, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 14345, 32000, 0, 0, 48, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 14346, 2200, 0, 0, 20, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 14347, 10000, 0, 0, 32, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 14348, 24000, 0, 0, 42, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 14349, 40000, 0, 0, 52, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 14350, 28000, 0, 0, 46, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 14351, 46000, 0, 0, 56, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 14352, 600, 0, 0, 12, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 14353, 2200, 0, 0, 20, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 14354, 8000, 0, 0, 28, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 14355, 14000, 0, 0, 36, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 14356, 26000, 0, 0, 44, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 14357, 40000, 0, 0, 52, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 14358, 50000, 0, 0, 60, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 14359, 24000, 0, 0, 42, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 14360, 42000, 0, 0, 54, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 14361, 36000, 0, 0, 50, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 14362, 48000, 0, 0, 58, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 14364, 7000, 0, 0, 26, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 14365, 14000, 0, 0, 36, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 14366, 28000, 0, 0, 46, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 14367, 46000, 0, 0, 56, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 14368, 18000, 0, 0, 40, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 14370, 50000, 0, 0, 60, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 14372, 26000, 0, 0, 44, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 14373, 42000, 0, 0, 54, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 14374, 2000, 0, 0, 18, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 14375, 8000, 0, 0, 28, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 14376, 16000, 0, 0, 38, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 14377, 32000, 0, 0, 48, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 14378, 48000, 0, 0, 58, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 14431, 6000, 0, 0, 22, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 14432, 18000, 0, 0, 40, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 14434, 48000, 0, 0, 58, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 14445, 8000, 0, 0, 30, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 14446, 28000, 0, 0, 46, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 15637, 8000, 0, 0, 30, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 15638, 18000, 0, 0, 40, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 15639, 36000, 0, 0, 50, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 15640, 50000, 0, 0, 60, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 20044, 28000, 0, 0, 46, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 20155, 10000, 0, 0, 32, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 20156, 36000, 0, 0, 50, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 20157, 7000, 0, 0, 26, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 20158, 18000, 0, 0, 40, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 20159, 7000, 0, 0, 24, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 20160, 400, 0, 0, 10, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 20161, 2000, 0, 0, 18, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 20191, 46000, 0, 0, 56, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 20738, 600, 0, 0, 12, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 20931, 400, 0, 0, 28, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 20932, 700, 0, 0, 36, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 20933, 1300, 0, 0, 44, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 20934, 2000, 0, 0, 52, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 20935, 2500, 0, 0, 60, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 20938, 2500, 0, 0, 60, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 20940, 1800, 0, 0, 50, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 20941, 2500, 0, 0, 60, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 20942, 1200, 0, 0, 42, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80903, 20943, 2100, 0, 0, 54, 0, 5875);
+
+set @quest_entry = 80330;
+set @quest_zone = -261;
+set @title = 'The Hunter\'s Path';
+set @description = 'Greetings goblin, it seems your journey to become a proper hunter is going well, slowly and surely.\n\nWe hunters tend to have a pet by our side, yet I hear your kind have some uncommon means to tame one.';
+set @objective = 'Meet Viz Fizbeast in Razor Hill, he will be the one to guide you further on your path.';
+set @completetext = 'You want me to teach you to do what?';
+set @incompletetext = 'What now?';
+set @faction_id = 0;
+set @faction_count = 0;
+set @xp_or_money = 394;
+set @reward_money = 0; 
+set @quest_level = 10;
+set @min_level = 10;
+set @questgiver_id = 3171;
+set @quest_finisher = 80903;
+set @nextquest = 0;
+set @nextquestinchain = 0;
+set @prevquest = 0;
+set @RewChoiceItemId1 = 0; 
+set @RewChoiceItemId2 = 0; 
+set @RewChoiceItemId3 = 0;
+set @RewChoiceItemId4 = 0; 
+set @RewChoiceItemCount1 = 0;
+set @RewChoiceItemCount2 = 0;
+set @RewChoiceItemCount3 = 0;
+set @RewChoiceItemCount4 = 0;
+set @reward_item_1 = 0;
+set @reward_item_2 = 0; 
+set @reward_item_3 = 0;
+set @reward_item_4 = 0;
+set @reward_item_1_count = 0;
+set @reward_item_2_count = 0;
+set @reward_item_3_count = 0;
+set @reward_item_4_count = 0;
+set @creature_to_kill_1 = 0;
+set @creature_to_kill_2 = 0; 
+set @creature_to_kill_3 = 0;
+set @creature_to_kill_4 = 0;
+set @creature_to_kill_1_count = 0;
+set @creature_to_kill_2_count = 0;
+set @creature_to_kill_3_count = 0;
+set @creature_to_kill_4_count = 0;
+set @required_item_1 = 0;
+set @required_item_2 = 0;
+set @required_item_3 = 0;
+set @required_item_4 = 0;
+set @required_item_1_count = 0;
+set @required_item_2_count = 0;
+set @required_item_3_count = 0;
+set @required_item_4_count = 0;
+
+replace into quest_template values 
+
+(@quest_entry, '0', '2', @quest_zone, @min_level,  '0', @quest_level, '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @title, @description, @objective, @completetext, @incompletetext, '', '', '', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @faction_id, '0', '0', '0', '0', @faction_count, '0', '0', '0', '0', '0', @xp_or_money, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', 0, 0);
+     
+replace into creature_questrelation (id, quest, patch_min, patch_max) values (@questgiver_id, @quest_entry,'0','10'); 
+replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (@quest_finisher, @quest_entry,'0','10');
+	 
+update quest_template set 
+rewitemid1 = @reward_item_1, rewitemcount1 = @reward_item_1_count,
+rewitemid2 = @reward_item_2, rewitemcount2 = @reward_item_2_count,
+rewitemid3 = @reward_item_3, rewitemcount3 = @reward_item_3_count,
+rewitemid4 = @reward_item_4, rewitemcount4 = @reward_item_4_count,
+RewChoiceItemId1 = @RewChoiceItemId1, RewChoiceItemCount1 = @RewChoiceItemCount1,
+RewChoiceItemId2 = @RewChoiceItemId2, RewChoiceItemCount2 = @RewChoiceItemCount2,
+RewChoiceItemId3 = @RewChoiceItemId3, RewChoiceItemCount3 = @RewChoiceItemCount3,
+RewChoiceItemId4 = @RewChoiceItemId4, RewChoiceItemCount4 = @RewChoiceItemCount4,
+ReqCreatureOrGOId1 = @creature_to_kill_1, ReqCreatureOrGOCount1 = @creature_to_kill_1_count,
+ReqCreatureOrGOId2 = @creature_to_kill_2, ReqCreatureOrGOCount2 = @creature_to_kill_2_count,
+ReqCreatureOrGOId3 = @creature_to_kill_3, ReqCreatureOrGOCount3 = @creature_to_kill_3_count,
+ReqCreatureOrGOId4 = @creature_to_kill_4, ReqCreatureOrGOCount4 = @creature_to_kill_4_count,
+reqitemid1 = @required_item_1, reqitemcount1 = @required_item_1_count,
+reqitemid2 = @required_item_2, reqitemcount2 = @required_item_2_count,
+reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
+reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
+nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
+nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
+RequiredRaces = 256, RequiredClasses = 4
+where entry = @quest_entry;	
+
+-- Part II
+
+set @quest_entry = 80331;
+set @quest_zone = -261;
+set @title = 'Taming the Beast';
+set @description = 'Woah, woah, easy there champ, you see, whoever sent you to me knew exactly what he was doing, us goblins don’t get along that well with nature, know what I mean?\n\n<Viz winks slyly to you.>\n\nAnyway, fun times aside, I’m gonna teach you the right way to tame a pet, take this rod, it has this special collar I call “the Friend Request”, you put this on their neck and you\'re done, they’re yours forever.\n\nLet’s see you have a go, and don’t come back without a dire mottled boar, because if you do, you’re not worth my time.\n\nYou’ll see they are hanging around just outside Razor Hill, won’t be that hard to find.\n\nNow buzz off, I see a customer approaching.';
+set @objective = 'Use the Taming Rod to tame a Dire Mottled Boar. Practice your skills, then return to Viz Fizbeast in Razor Hill.';
+set @completetext = 'So you\'re not completely incompetent, let’s see you complete the next task.';
+set @incompletetext = 'Go on then, show them who\'s boss.';
+set @faction_id = 0;
+set @faction_count = 0;
+set @xp_or_money = 500;
+set @reward_money = 0; 
+set @quest_level = 10;
+set @min_level = 10;
+set @questgiver_id = 80903;
+set @quest_finisher = 80903;
+set @nextquest = 0;
+set @nextquestinchain = 0;
+set @prevquest = 80330;
+set @RewChoiceItemId1 = 0; 
+set @RewChoiceItemId2 = 0; 
+set @RewChoiceItemId3 = 0;
+set @RewChoiceItemId4 = 0; 
+set @RewChoiceItemCount1 = 0;
+set @RewChoiceItemCount2 = 0;
+set @RewChoiceItemCount3 = 0;
+set @RewChoiceItemCount4 = 0;
+set @reward_item_1 = 0;
+set @reward_item_2 = 0; 
+set @reward_item_3 = 0;
+set @reward_item_4 = 0;
+set @reward_item_1_count = 0;
+set @reward_item_2_count = 0;
+set @reward_item_3_count = 0;
+set @reward_item_4_count = 0;
+set @creature_to_kill_1 = 0;
+set @creature_to_kill_2 = 0; 
+set @creature_to_kill_3 = 0;
+set @creature_to_kill_4 = 0;
+set @creature_to_kill_1_count = 0;
+set @creature_to_kill_2_count = 0;
+set @creature_to_kill_3_count = 0;
+set @creature_to_kill_4_count = 0;
+set @required_item_1 = 15917;
+set @required_item_2 = 0;
+set @required_item_3 = 0;
+set @required_item_4 = 0;
+set @required_item_1_count = 1;
+set @required_item_2_count = 0;
+set @required_item_3_count = 0;
+set @required_item_4_count = 0;
+
+replace into quest_template values 
+
+(@quest_entry, '0', '2', @quest_zone, @min_level,  '0', @quest_level, '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @title, @description, @objective, @completetext, @incompletetext, '', '', '', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @faction_id, '0', '0', '0', '0', @faction_count, '0', '0', '0', '0', '0', @xp_or_money, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', 0, 0);
+     
+replace into creature_questrelation (id, quest, patch_min, patch_max) values (@questgiver_id, @quest_entry,'0','10'); 
+replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (@quest_finisher, @quest_entry,'0','10');
+	 
+update quest_template set 
+rewitemid1 = @reward_item_1, rewitemcount1 = @reward_item_1_count,
+rewitemid2 = @reward_item_2, rewitemcount2 = @reward_item_2_count,
+rewitemid3 = @reward_item_3, rewitemcount3 = @reward_item_3_count,
+rewitemid4 = @reward_item_4, rewitemcount4 = @reward_item_4_count,
+RewChoiceItemId1 = @RewChoiceItemId1, RewChoiceItemCount1 = @RewChoiceItemCount1,
+RewChoiceItemId2 = @RewChoiceItemId2, RewChoiceItemCount2 = @RewChoiceItemCount2,
+RewChoiceItemId3 = @RewChoiceItemId3, RewChoiceItemCount3 = @RewChoiceItemCount3,
+RewChoiceItemId4 = @RewChoiceItemId4, RewChoiceItemCount4 = @RewChoiceItemCount4,
+ReqCreatureOrGOId1 = @creature_to_kill_1, ReqCreatureOrGOCount1 = @creature_to_kill_1_count,
+ReqCreatureOrGOId2 = @creature_to_kill_2, ReqCreatureOrGOCount2 = @creature_to_kill_2_count,
+ReqCreatureOrGOId3 = @creature_to_kill_3, ReqCreatureOrGOCount3 = @creature_to_kill_3_count,
+ReqCreatureOrGOId4 = @creature_to_kill_4, ReqCreatureOrGOCount4 = @creature_to_kill_4_count,
+reqitemid1 = @required_item_1, reqitemcount1 = @required_item_1_count,
+reqitemid2 = @required_item_2, reqitemcount2 = @required_item_2_count,
+reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
+reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
+nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
+nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
+RequiredRaces = 256, RequiredClasses = 4,
+questflags = 2, specialflags = 2,
+srcitemid = 15917, srcitemcount = 1,
+detailsemote1 = 1, offerrewardemote1 = 273
+where entry = @quest_entry;	
+
+-- Goblin hunter quests (end)
