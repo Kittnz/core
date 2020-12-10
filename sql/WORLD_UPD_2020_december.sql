@@ -45,3 +45,7 @@ REPLACE INTO `npc_vendor` VALUES (51656, 15327, 0, 0, 0, 0);
 
 REPLACE INTO `creature_template` VALUES (51685, 0, 295, 0, 0, 0, 'Riding Wyvern', NULL, 0, 29, 29, 1528, 1528, 1126, 1126, 0, 35, 1, 1.07, 1.14286, 0, 20, 5, 0, 0, 1, 9, 10, 0, 120, 1, 1720, 1892, 1, 0, 0, 0, 0, 0, 0, 0, 43.8944, 60.3548, 100, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 17, 86, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 2, 'npc_riding_wyvern');
 
+-- Misc. DB fixes:
+
+update item_template set armor = 56 where name = 'Greenpaw\'s Sash';
+UPDATE `quest_template` SET `RewItemId1`='0', `RewItemCount1`='0' WHERE (`entry`='60114') AND (`patch`='0');
