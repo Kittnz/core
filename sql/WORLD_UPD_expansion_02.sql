@@ -467,7 +467,7 @@ update quest_template set RequiredRaces = 512 where entry between 80200 and 8022
 
 -- Small Durorar quest chain for goblins wirtten by Jam
 
-REPLACE INTO `creature_template` VALUES (80901, 0, 13342, 0, 0, 0, 'Knobby Tinfault', NULL, 0, 12, 12, 218, 218, 537, 537, 305, 554, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 16, 18, 0, 66, 1, 2000, 2046, 8, 0, 0, 0, 0, 0, 0, 0, 21.2784, 29.2578, 100, 7, 0, 80901, 0, 0, 0, 0, 0, 0, 0, 0, 7290, 11939, 20791, 0, 32030, 0, 12, 21, 'EventAI', 0, 3, 0, 0, 3, 3203, 0, 0, 0, 0, 0, '');
+REPLACE INTO `creature_template` VALUES (80901, 0, 7198, 0, 0, 0, 'Knobby Tinfault', NULL, 0, 12, 12, 218, 218, 537, 537, 305, 554, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 16, 18, 0, 66, 1, 2000, 2046, 8, 0, 0, 0, 0, 0, 0, 0, 21.2784, 29.2578, 100, 7, 0, 80901, 0, 0, 0, 0, 0, 0, 0, 0, 7290, 11939, 20791, 0, 32030, 0, 12, 21, 'EventAI', 0, 3, 0, 0, 3, 3203, 0, 0, 0, 0, 0, '');
 
 REPLACE INTO `creature_template` VALUES (80902, 0, 8630, 0, 0, 0, 'Miley Wildbit', '', 0, 5, 5, 166, 166, 0, 0, 20, 69, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 6, 8, 0, 52, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 8.624, 11.858, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 3293, 0, 0, 0, 0, 2, '');
 
@@ -484,10 +484,10 @@ replace into item_template values
  replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (80901, 80868, -100, 6, 1, 1);
  
 replace into quest_template values
- ('80320', '1', '2', '0', '7', '0', '60', '0', '0', '0', '0',
+ ('80320', '1', '2', '14', '7', '0', '60', '0', '0', '0', '0',
 '0', '0', '0', '0', '0','0',
 '0', '0', '0', '0', '0', '0', '0', '0', '0',
-'0', '0', '0', 'Burning Bridges', 'Heya $C! Fizzle isn\'t the only goblin playin\' with fire around here. Gazlowe got word that another defector has joined up with those burning blade boys and we need to deal with it! Knobby Tinfault is in Dustwind Cave, north of here.\n\nFind him and wring the little bastard\'s neck. Bring me anything he\'s carryin\' that has so much as a strange mark on it.\n\nWe need to get it back to Gazlowe so we can find out if there was more to him and Fizzle decidin\' to come to Durotar.', 'Kill Knobby Tinfault and bring anything he drops back to Miley.', 'A belt, eh?\n\nCrafty and clever, I\'m embarrassed I didn\'t think of it. I\'ll get this to Gazlowe so he can further analyze it. Thanks!', 'Is it done? Did you find anything?', '', '', '',
+'0', '0', '0', 'Burning Bridges', 'Heya $C! Fizzle isn\'t the only goblin playin\' with fire around here. Gazlowe got word that another defector has joined up with those burning blade boys and we need to deal with it! Knobby Tinfault is in Dustwind Cave, on top of the Drygulch Canyon.\n\nFind him and wring the little bastard\'s neck. Bring me anything he\'s carryin\' that has so much as a strange mark on it.\n\nWe need to get it back to Gazlowe so we can find out if there was more to him and Fizzle decidin\' to come to Durotar.', 'Kill Knobby Tinfault and bring anything he drops back to Miley.', 'A belt, eh?\n\nCrafty and clever, I\'m embarrassed I didn\'t think of it. I\'ll get this to Gazlowe so he can further analyze it. Thanks!', 'Is it done? Did you find anything?', '', '', '',
 '', '', '80868', '0', '0', '0', '1', '0', '0',
 '0', '0', '0', '0', '0', '0', '0', '0',
 '0', '0', '0', '0', '0', '0',
@@ -508,7 +508,7 @@ replace into quest_template values
  ('80321', '0', '2', '1637', '13', '0', '60', '0', '0', '0', '0',
 '0', '0', '0', '0', '0','0',
 '0', '0', '0', '0', '0', '60150', '0', '0', '0',
-'80868', '1', '0', 'The Lies that Bind Us', 'You\'re the one that helped Miley find this, yeah?\n\nGazlowe holds up the belt you found in Dustwind Cave.\n\nI\'ve had a bit of diggin done and I know who made it. Kiro in Orgrimmar. Nice enough gal, if a tad aggressive.\n\nI\'m sure it is a long shot but I need you to check with her and find out if she knows anything about this inscription. I\'ve already had it deciphered but Kiro might know more.', 'Give Knobby\'s Belt to Kiro in the Valley of Honor.', 'Yes, $C, I made this. What of it?', 'What are you looking for?', '', '', '',
+'80868', '1', '0', 'The Lies that Bind Us', 'You\'re the one that helped Miley find this, yeah?\n\n<Gazlowe holds up the belt you found in Dustwind Cave.>\n\nI\'ve had a bit of diggin done and I know who made it. Kiro in Orgrimmar. Nice enough gal, if a tad aggressive.\n\nI\'m sure it is a long shot but I need you to check with her and find out if she knows anything about this inscription. I\'ve already had it deciphered but Kiro might know more.', 'Give Knobby\'s Belt to Kiro in the Valley of Honor.', 'Yes, $C, I made this. What of it?', 'What are you looking for?', '', '', '',
 '', '', '80868', '0', '0', '0', '1', '0', '0',
 '0', '0', '0', '0', '0', '0', '0', '0',
 '0', '0', '0', '0', '0', '0',
@@ -533,7 +533,7 @@ replace into quest_template values
  ('80322', '0', '2', '17', '13', '0', '60', '0', '0', '0', '0',
 '0', '0', '0', '0', '0','0',
 '0', '0', '0', '0', '0', '60151', '0', '0', '0',
-'80868', '1', '0', 'The Lies That Bind Us (Part II)', 'Hah! No leatherworker made these marks.\n\nThis is fel magic. There\'s an outcast in the barrens, a blacksmith from our world. He has a gift when it comes to the fel, he can sense the origin.\n\nYou\'ll need payment, if you seek him out, and you\'ll need luck.\n\nKiro\'s visage darkens.\n\nSome of us don\'t like reliving our past. The taint that was in our blood haunts him still, as it does many of us. Leave me now.\n\nSeek Vrang west of the road along the Barrens northern foothills.', 'Take Knobby\'s Belt and 20 silver to Vrang Wildgore in the Barrens.', 'Kiro sent you, no doubt. I didn\'t tell that cursed woman about my ability so she would send me customers.\n\nVery well, give me the coin and show me what you have.', 'A visitor! Greetings $C. Take a look at what I have on offer.', '', '', '',
+'80868', '1', '0', 'The Lies That Bind Us', 'Hah! No leatherworker made these marks.\n\nThis is fel magic. There\'s an outcast in the barrens, a blacksmith from our world. He has a gift when it comes to the fel, he can sense the origin.\n\nYou\'ll need payment, if you seek him out, and you\'ll need luck.\n\nKiro\'s visage darkens.\n\nSome of us don\'t like reliving our past. The taint that was in our blood haunts him still, as it does many of us. Leave me now.\n\nSeek Vrang west of the road along the Barrens northern foothills.', 'Take Knobby\'s Belt and 20 silver to Vrang Wildgore in the Barrens.', 'Kiro sent you, no doubt. I didn\'t tell that cursed woman about my ability so she would send me customers.\n\nVery well, give me the coin and show me what you have.', 'A visitor! Greetings $C. Take a look at what I have on offer.', '', '', '',
 '', '', '80868', '0', '0', '0', '1', '0', '0',
 '0', '0', '0', '0', '0', '0', '0', '0',
 '0', '0', '0', '0', '0', '0',
@@ -556,7 +556,7 @@ replace into quest_template values
  ('80323', '0', '2', '392', '13', '0', '60', '0', '0', '0', '0',
 '0', '0', '0', '0', '0','0',
 '0', '0', '0', '0', '0', '60152', '0', '0', '0',
-'80868', '1', '0', 'The Lies That Bind Us (Part III)', 'The magic that etched this belt came from Neeru Fireblade. I still cannot read the inscription but with Neeru\'s hand in this I assure you it is powerful. Go on your way now, $C. I don\'t need the wrath of Neeru or his minions targeting me.', 'Return to Gazlowe with Knobby\'s Belt.', 'Interesting.\n\nGazlowe turns the belt over and over in his hands.\n\nNeeru Fireblade, eh? I wonder what Neeru is trying to pull right under Thrall\'s nose.\n\nGo on now, $n. I\'ve got a few contacts to make. I\'ll get in touch with you when the next step is to be taken.', 'Welcome back, $n. You still have the belt?', '', '', '',
+'80868', '1', '0', 'The Lies That Bind Us', 'The magic that etched this belt came from Neeru Fireblade. I still cannot read the inscription but with Neeru\'s hand in this I assure you it is powerful. Go on your way now, $C. I don\'t need the wrath of Neeru or his minions targeting me.', 'Return to Gazlowe with Knobby\'s Belt.', 'Interesting.\n\nGazlowe turns the belt over and over in his hands.\n\nNeeru Fireblade, eh? I wonder what Neeru is trying to pull right under Thrall\'s nose.\n\nGo on now, $n. I\'ve got a few contacts to make. I\'ll get in touch with you when the next step is to be taken.', 'Welcome back, $n. You still have the belt?', '', '', '',
 '', '', '80868', '0', '0', '0', '1', '0', '0',
 '0', '0', '0', '0', '0', '0', '0', '0',
 '0', '0', '0', '0', '0', '0',
