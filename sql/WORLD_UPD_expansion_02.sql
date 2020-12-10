@@ -1736,3 +1736,348 @@ rewspell = 23357, rewspellcast = 5300
 where entry = @quest_entry;	
 
 -- Goblin hunter quests (end)
+
+-- Gnome hunter quests 
+
+set @quest_entry = 80340;
+set @quest_zone = -261;
+set @title = 'Taming the Beast';
+set @description = 'I am Clover Spinpistol, Mountaineer Sniper. We’re good shots, but unfortunately, as you may have noticed, we’re not too sturdy if something comes up close. But that won’t be a problem anymore! Instead, we can have a beast take the hits for us! Tinker Town recently had an amazing scientific breakthrough that I am ready to share with you.\n\nTell you what, as an investment into retaking Gnomeregan, I’ll teach you how to use a patented G.N.O.E.M.R Taming rod. Take this and try to use it on a Large Crag Boar. Make sure it’s large! ';
+set @objective = 'Use the Taming Rod to tame a Large Crag Boar. Practice your skills, then return the Taming Rod to Clover Spinpistol in Kharanos.';
+set @completetext = 'Oh, my! Well done. This rod definitely requires further testing, and you can get a better choice of companion in the process.';
+set @incompletetext = 'Did you tame it yet? Did it work? Don’t worry, you can tame another one if you don’t like the attitude of this particular boar.';
+set @faction_id = 0;
+set @faction_count = 0;
+set @xp_or_money = 500;
+set @reward_money = 0; 
+set @quest_level = 10;
+set @min_level = 10;
+set @questgiver_id = 80855;
+set @quest_finisher = 80855;
+set @nextquest = 0;
+set @nextquestinchain = 0;
+set @prevquest = 0;
+set @RewChoiceItemId1 = 0; 
+set @RewChoiceItemId2 = 0; 
+set @RewChoiceItemId3 = 0;
+set @RewChoiceItemId4 = 0; 
+set @RewChoiceItemCount1 = 0;
+set @RewChoiceItemCount2 = 0;
+set @RewChoiceItemCount3 = 0;
+set @RewChoiceItemCount4 = 0;
+set @reward_item_1 = 0;
+set @reward_item_2 = 0; 
+set @reward_item_3 = 0;
+set @reward_item_4 = 0;
+set @reward_item_1_count = 0;
+set @reward_item_2_count = 0;
+set @reward_item_3_count = 0;
+set @reward_item_4_count = 0;
+set @creature_to_kill_1 = 0;
+set @creature_to_kill_2 = 0; 
+set @creature_to_kill_3 = 0;
+set @creature_to_kill_4 = 0;
+set @creature_to_kill_1_count = 0;
+set @creature_to_kill_2_count = 0;
+set @creature_to_kill_3_count = 0;
+set @creature_to_kill_4_count = 0;
+set @required_item_1 = 15917;
+set @required_item_2 = 0;
+set @required_item_3 = 0;
+set @required_item_4 = 0;
+set @required_item_1_count = 1;
+set @required_item_2_count = 0;
+set @required_item_3_count = 0;
+set @required_item_4_count = 0;
+
+replace into quest_template values 
+
+(@quest_entry, '0', '2', @quest_zone, @min_level,  '0', @quest_level, '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @title, @description, @objective, @completetext, @incompletetext, '', '', '', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @faction_id, '0', '0', '0', '0', @faction_count, '0', '0', '0', '0', '0', @xp_or_money, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', 0, 0);
+     
+replace into creature_questrelation (id, quest, patch_min, patch_max) values (@questgiver_id, @quest_entry,'0','10'); 
+replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (@quest_finisher, @quest_entry,'0','10');
+	 
+update quest_template set 
+rewitemid1 = @reward_item_1, rewitemcount1 = @reward_item_1_count,
+rewitemid2 = @reward_item_2, rewitemcount2 = @reward_item_2_count,
+rewitemid3 = @reward_item_3, rewitemcount3 = @reward_item_3_count,
+rewitemid4 = @reward_item_4, rewitemcount4 = @reward_item_4_count,
+RewChoiceItemId1 = @RewChoiceItemId1, RewChoiceItemCount1 = @RewChoiceItemCount1,
+RewChoiceItemId2 = @RewChoiceItemId2, RewChoiceItemCount2 = @RewChoiceItemCount2,
+RewChoiceItemId3 = @RewChoiceItemId3, RewChoiceItemCount3 = @RewChoiceItemCount3,
+RewChoiceItemId4 = @RewChoiceItemId4, RewChoiceItemCount4 = @RewChoiceItemCount4,
+ReqCreatureOrGOId1 = @creature_to_kill_1, ReqCreatureOrGOCount1 = @creature_to_kill_1_count,
+ReqCreatureOrGOId2 = @creature_to_kill_2, ReqCreatureOrGOCount2 = @creature_to_kill_2_count,
+ReqCreatureOrGOId3 = @creature_to_kill_3, ReqCreatureOrGOCount3 = @creature_to_kill_3_count,
+ReqCreatureOrGOId4 = @creature_to_kill_4, ReqCreatureOrGOCount4 = @creature_to_kill_4_count,
+reqitemid1 = @required_item_1, reqitemcount1 = @required_item_1_count,
+reqitemid2 = @required_item_2, reqitemcount2 = @required_item_2_count,
+reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
+reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
+nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
+nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
+RequiredRaces = 64, RequiredClasses = 4,
+questflags = 2, specialflags = 2,
+srcitemid = 15917, srcitemcount = 1,
+detailsemote1 = 1, offerrewardemote1 = 273
+where entry = @quest_entry;	
+
+set @quest_entry = 80341;
+set @quest_zone = -261;
+set @title = 'Taming the Beast';
+set @description = 'Haha my, that Boar is quite a bulky one isn’t it? I bet you’d want something more suited to a Gnome, a quick-thinking beautiful Snow Leopard should do right?\n\nSouth and East of here you can find them, I’ve recharged your taming rod, get out there and grab one! Watch out, they’re far more feisty than the boar!';
+set @objective = 'Use the Taming Rod to tame a Snow Leopard. Practice your skills, then return the Taming Rod to Clover Spinpistol in Kharanos. ';
+set @completetext = 'Wonderful! Now that’s a pretty feline! Of course in the end I’ll leave it up to you what beast you would like to tame!';
+set @incompletetext = 'Well then? Did you find one? Did you like the Snow Leopard?';
+set @faction_id = 0;
+set @faction_count = 0;
+set @xp_or_money = 800;
+set @reward_money = 0; 
+set @quest_level = 10;
+set @min_level = 10;
+set @questgiver_id = 80855;
+set @quest_finisher = 80855;
+set @nextquest = 0;
+set @nextquestinchain = 0;
+set @prevquest = 80340;
+set @RewChoiceItemId1 = 0; 
+set @RewChoiceItemId2 = 0; 
+set @RewChoiceItemId3 = 0;
+set @RewChoiceItemId4 = 0; 
+set @RewChoiceItemCount1 = 0;
+set @RewChoiceItemCount2 = 0;
+set @RewChoiceItemCount3 = 0;
+set @RewChoiceItemCount4 = 0;
+set @reward_item_1 = 0;
+set @reward_item_2 = 0; 
+set @reward_item_3 = 0;
+set @reward_item_4 = 0;
+set @reward_item_1_count = 0;
+set @reward_item_2_count = 0;
+set @reward_item_3_count = 0;
+set @reward_item_4_count = 0;
+set @creature_to_kill_1 = 0;
+set @creature_to_kill_2 = 0; 
+set @creature_to_kill_3 = 0;
+set @creature_to_kill_4 = 0;
+set @creature_to_kill_1_count = 0;
+set @creature_to_kill_2_count = 0;
+set @creature_to_kill_3_count = 0;
+set @creature_to_kill_4_count = 0;
+set @required_item_1 = 15919;
+set @required_item_2 = 0;
+set @required_item_3 = 0;
+set @required_item_4 = 0;
+set @required_item_1_count = 1;
+set @required_item_2_count = 0;
+set @required_item_3_count = 0;
+set @required_item_4_count = 0;
+
+replace into quest_template values 
+
+(@quest_entry, '0', '2', @quest_zone, @min_level,  '0', @quest_level, '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @title, @description, @objective, @completetext, @incompletetext, '', '', '', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @faction_id, '0', '0', '0', '0', @faction_count, '0', '0', '0', '0', '0', @xp_or_money, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', 0, 0);
+     
+replace into creature_questrelation (id, quest, patch_min, patch_max) values (@questgiver_id, @quest_entry,'0','10'); 
+replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (@quest_finisher, @quest_entry,'0','10');
+	 
+update quest_template set 
+rewitemid1 = @reward_item_1, rewitemcount1 = @reward_item_1_count,
+rewitemid2 = @reward_item_2, rewitemcount2 = @reward_item_2_count,
+rewitemid3 = @reward_item_3, rewitemcount3 = @reward_item_3_count,
+rewitemid4 = @reward_item_4, rewitemcount4 = @reward_item_4_count,
+RewChoiceItemId1 = @RewChoiceItemId1, RewChoiceItemCount1 = @RewChoiceItemCount1,
+RewChoiceItemId2 = @RewChoiceItemId2, RewChoiceItemCount2 = @RewChoiceItemCount2,
+RewChoiceItemId3 = @RewChoiceItemId3, RewChoiceItemCount3 = @RewChoiceItemCount3,
+RewChoiceItemId4 = @RewChoiceItemId4, RewChoiceItemCount4 = @RewChoiceItemCount4,
+ReqCreatureOrGOId1 = @creature_to_kill_1, ReqCreatureOrGOCount1 = @creature_to_kill_1_count,
+ReqCreatureOrGOId2 = @creature_to_kill_2, ReqCreatureOrGOCount2 = @creature_to_kill_2_count,
+ReqCreatureOrGOId3 = @creature_to_kill_3, ReqCreatureOrGOCount3 = @creature_to_kill_3_count,
+ReqCreatureOrGOId4 = @creature_to_kill_4, ReqCreatureOrGOCount4 = @creature_to_kill_4_count,
+reqitemid1 = @required_item_1, reqitemcount1 = @required_item_1_count,
+reqitemid2 = @required_item_2, reqitemcount2 = @required_item_2_count,
+reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
+reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
+nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
+nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
+RequiredRaces = 64, RequiredClasses = 4,
+questflags = 2, specialflags = 2,
+srcitemid = 15919, srcitemcount = 1,
+detailsemote1 = 1, offerrewardemote1 = 273
+where entry = @quest_entry;	
+
+UPDATE `item_template` SET `allowable_race`='-1' WHERE (`entry`='15919') AND (`patch`='0');
+
+-- Part IV
+
+set @quest_entry = 80342;
+set @quest_zone = -261;
+set @title = 'Taming the Beast';
+set @description = 'Hmm, both the Boar and the Leopard are offensive pets but they leave a little to be desired in defensive capabilities. Surely our ranged weapons can pop ANY enemy with ease! What we need is something to keep them busy. hmm… I’ve got it!\n\nThe Ice Claw Bear is sturdy, and when facing a huge bear who would choose to go after a tiny Gnome?\n\nIt can be found east of Kharanos, go grab one for me please? Once you’re done I’ll give you access to the Taming Rod so you can tame your own pet!';
+set @objective = 'Use the Taming Rod to tame an Ice Claw Bear. Practice your skills, then return the Taming Rod to Clover Spinpistol in Kharanos.';
+set @completetext = 'Well Done! Look at this! I can finally prove to those arrogant Dwarves that I am a real Mountaineer too now!\n\nThank you for your help $N! As promised, here’s the schematic and instructions for the G.N.O.E.M.R Taming Rod!\n\nGet out there and find yourself a companion!';
+set @incompletetext = 'Did you get an Ice Claw Bear yet?';
+set @faction_id = 0;
+set @faction_count = 0;
+set @xp_or_money = 1000;
+set @reward_money = 0; 
+set @quest_level = 10;
+set @min_level = 10;
+set @questgiver_id = 80855;
+set @quest_finisher = 80855;
+set @nextquest = 0;
+set @nextquestinchain = 0;
+set @prevquest = 80341;
+set @RewChoiceItemId1 = 0; 
+set @RewChoiceItemId2 = 0; 
+set @RewChoiceItemId3 = 0;
+set @RewChoiceItemId4 = 0; 
+set @RewChoiceItemCount1 = 0;
+set @RewChoiceItemCount2 = 0;
+set @RewChoiceItemCount3 = 0;
+set @RewChoiceItemCount4 = 0;
+set @reward_item_1 = 0;
+set @reward_item_2 = 0; 
+set @reward_item_3 = 0;
+set @reward_item_4 = 0;
+set @reward_item_1_count = 0;
+set @reward_item_2_count = 0;
+set @reward_item_3_count = 0;
+set @reward_item_4_count = 0;
+set @creature_to_kill_1 = 0;
+set @creature_to_kill_2 = 0; 
+set @creature_to_kill_3 = 0;
+set @creature_to_kill_4 = 0;
+set @creature_to_kill_1_count = 0;
+set @creature_to_kill_2_count = 0;
+set @creature_to_kill_3_count = 0;
+set @creature_to_kill_4_count = 0;
+set @required_item_1 = 15920;
+set @required_item_2 = 0;
+set @required_item_3 = 0;
+set @required_item_4 = 0;
+set @required_item_1_count = 1;
+set @required_item_2_count = 0;
+set @required_item_3_count = 0;
+set @required_item_4_count = 0;
+
+replace into quest_template values 
+
+(@quest_entry, '0', '2', @quest_zone, @min_level,  '0', @quest_level, '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @title, @description, @objective, @completetext, @incompletetext, '', '', '', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @faction_id, '0', '0', '0', '0', @faction_count, '0', '0', '0', '0', '0', @xp_or_money, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', 0, 0);
+     
+replace into creature_questrelation (id, quest, patch_min, patch_max) values (@questgiver_id, @quest_entry,'0','10'); 
+replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (@quest_finisher, @quest_entry,'0','10');
+	 
+update quest_template set 
+rewitemid1 = @reward_item_1, rewitemcount1 = @reward_item_1_count,
+rewitemid2 = @reward_item_2, rewitemcount2 = @reward_item_2_count,
+rewitemid3 = @reward_item_3, rewitemcount3 = @reward_item_3_count,
+rewitemid4 = @reward_item_4, rewitemcount4 = @reward_item_4_count,
+RewChoiceItemId1 = @RewChoiceItemId1, RewChoiceItemCount1 = @RewChoiceItemCount1,
+RewChoiceItemId2 = @RewChoiceItemId2, RewChoiceItemCount2 = @RewChoiceItemCount2,
+RewChoiceItemId3 = @RewChoiceItemId3, RewChoiceItemCount3 = @RewChoiceItemCount3,
+RewChoiceItemId4 = @RewChoiceItemId4, RewChoiceItemCount4 = @RewChoiceItemCount4,
+ReqCreatureOrGOId1 = @creature_to_kill_1, ReqCreatureOrGOCount1 = @creature_to_kill_1_count,
+ReqCreatureOrGOId2 = @creature_to_kill_2, ReqCreatureOrGOCount2 = @creature_to_kill_2_count,
+ReqCreatureOrGOId3 = @creature_to_kill_3, ReqCreatureOrGOCount3 = @creature_to_kill_3_count,
+ReqCreatureOrGOId4 = @creature_to_kill_4, ReqCreatureOrGOCount4 = @creature_to_kill_4_count,
+reqitemid1 = @required_item_1, reqitemcount1 = @required_item_1_count,
+reqitemid2 = @required_item_2, reqitemcount2 = @required_item_2_count,
+reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
+reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
+nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
+nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
+RequiredRaces = 64, RequiredClasses = 4,
+questflags = 2, specialflags = 2,
+srcitemid = 15920, srcitemcount = 1,
+detailsemote1 = 1, offerrewardemote1 = 273,
+rewspell = 23356, rewspellcast = 1579
+where entry = @quest_entry;	
+
+UPDATE `item_template` SET `allowable_race`='-1' WHERE (`entry`='15920') AND (`patch`='0');
+
+-- Part V
+
+set @quest_entry = 80343;
+set @quest_zone = -261;
+set @title = 'Training the Beast';
+set @description = '$N, now that you’ve got your rod and all, you can get a companion to help advance the cause of Gnomekind!\n\nHowever taming these pets isn’t enough, they also need training. Sadly I cannot train your pet for you, I can train you alright, but for your pet you need someone else.\n\nGo to Ironforge, Belia Thundergranite in the Hall of Arms should be able to help you out! Tell her I sent you! Good luck!';
+set @completetext = 'A new recruit from Spinpistol? That lass actually managed to accomplish her crazy scheme of taming beasts with a stick? I’ll be damned, and you helped her? You\'re clearly on your way to becoming a great $C, I see.\n\nVery well, I can bestow you with the skills you need to train and guide your pet. Not only will you be able to teach your pet new abilities, you will now be able to feed your pet, as well as revive it, should it fall in battle.\n\nRemember that the key to getting the most from your new pet is to respect it and treat it well. In turn, your pet will be your most loyal friend.';
+set @incompletetext = 'Yes?';
+set @faction_id = 0;
+set @faction_count = 0;
+set @xp_or_money = 400;
+set @reward_money = 0; 
+set @quest_level = 10;
+set @min_level = 10;
+set @questgiver_id = 80855;
+set @quest_finisher = 10090;
+set @nextquest = 0;
+set @nextquestinchain = 0;
+set @prevquest = 80342;
+set @RewChoiceItemId1 = 0; 
+set @RewChoiceItemId2 = 0; 
+set @RewChoiceItemId3 = 0;
+set @RewChoiceItemId4 = 0; 
+set @RewChoiceItemCount1 = 0;
+set @RewChoiceItemCount2 = 0;
+set @RewChoiceItemCount3 = 0;
+set @RewChoiceItemCount4 = 0;
+set @reward_item_1 = 0;
+set @reward_item_2 = 0; 
+set @reward_item_3 = 0;
+set @reward_item_4 = 0;
+set @reward_item_1_count = 0;
+set @reward_item_2_count = 0;
+set @reward_item_3_count = 0;
+set @reward_item_4_count = 0;
+set @creature_to_kill_1 = 0;
+set @creature_to_kill_2 = 0; 
+set @creature_to_kill_3 = 0;
+set @creature_to_kill_4 = 0;
+set @creature_to_kill_1_count = 0;
+set @creature_to_kill_2_count = 0;
+set @creature_to_kill_3_count = 0;
+set @creature_to_kill_4_count = 0;
+set @required_item_1 = 0;
+set @required_item_2 = 0;
+set @required_item_3 = 0;
+set @required_item_4 = 0;
+set @required_item_1_count = 0;
+set @required_item_2_count = 0;
+set @required_item_3_count = 0;
+set @required_item_4_count = 0;
+
+replace into quest_template values 
+
+(@quest_entry, '0', '2', @quest_zone, @min_level,  '0', @quest_level, '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @title, @description, @objective, @completetext, @incompletetext, '', '', '', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @faction_id, '0', '0', '0', '0', @faction_count, '0', '0', '0', '0', '0', @xp_or_money, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', 0, 0);
+     
+replace into creature_questrelation (id, quest, patch_min, patch_max) values (@questgiver_id, @quest_entry,'0','10'); 
+replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (@quest_finisher, @quest_entry,'0','10');
+	 
+update quest_template set 
+rewitemid1 = @reward_item_1, rewitemcount1 = @reward_item_1_count,
+rewitemid2 = @reward_item_2, rewitemcount2 = @reward_item_2_count,
+rewitemid3 = @reward_item_3, rewitemcount3 = @reward_item_3_count,
+rewitemid4 = @reward_item_4, rewitemcount4 = @reward_item_4_count,
+RewChoiceItemId1 = @RewChoiceItemId1, RewChoiceItemCount1 = @RewChoiceItemCount1,
+RewChoiceItemId2 = @RewChoiceItemId2, RewChoiceItemCount2 = @RewChoiceItemCount2,
+RewChoiceItemId3 = @RewChoiceItemId3, RewChoiceItemCount3 = @RewChoiceItemCount3,
+RewChoiceItemId4 = @RewChoiceItemId4, RewChoiceItemCount4 = @RewChoiceItemCount4,
+ReqCreatureOrGOId1 = @creature_to_kill_1, ReqCreatureOrGOCount1 = @creature_to_kill_1_count,
+ReqCreatureOrGOId2 = @creature_to_kill_2, ReqCreatureOrGOCount2 = @creature_to_kill_2_count,
+ReqCreatureOrGOId3 = @creature_to_kill_3, ReqCreatureOrGOCount3 = @creature_to_kill_3_count,
+ReqCreatureOrGOId4 = @creature_to_kill_4, ReqCreatureOrGOCount4 = @creature_to_kill_4_count,
+reqitemid1 = @required_item_1, reqitemcount1 = @required_item_1_count,
+reqitemid2 = @required_item_2, reqitemcount2 = @required_item_2_count,
+reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
+reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
+nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
+nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
+RequiredRaces = 64, RequiredClasses = 4,
+questflags = 0, specialflags = 0,
+srcitemid = 0, srcitemcount = 0,
+detailsemote1 = 1, offerrewardemote1 = 273,
+rewspell = 23357, rewspellcast = 5300
+where entry = @quest_entry;	
+
+-- Gnome hunter quests (end)
