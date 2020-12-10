@@ -49,3 +49,9 @@ REPLACE INTO `creature_template` VALUES (51685, 0, 295, 0, 0, 0, 'Riding Wyvern'
 
 update item_template set armor = 56 where name = 'Greenpaw\'s Sash';
 UPDATE `quest_template` SET `RewItemId1`='0', `RewItemCount1`='0' WHERE (`entry`='60114') AND (`patch`='0');
+
+replace into broadcast_text (ID, MaleText) values (70001, 'Do you really think I\'m going to show my mining secrets to just anyone who wanders into town? Ha! Come back to me when people around here consider you a bit more friendly.');
+
+UPDATE `quest_template` SET `Details`='Trust is something you can\'t buy, $R.\n\nHere\'s the deal, lad. You earn trust of this gryphon over here and you\'ll get your ride to the camp. Fail and he\'ll have you as his breakfast.\n\nHah! Of course I\'m pulling your leg here, lad, this winged beast won\'t even nudge unless it\'s trust you completely.\n\nHow, you ask? Food, of course. And a toy. Go figure.' WHERE (`entry`='60070') AND (`patch`='0');
+
+UPDATE `item_template` SET `description`='You hear crackling thunder and gryphon screeches within.' WHERE (`entry`='51755') AND (`patch`='0');
