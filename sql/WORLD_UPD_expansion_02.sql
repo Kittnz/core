@@ -1739,6 +1739,10 @@ where entry = @quest_entry;
 
 -- Gnome hunter quests 
 
+replace into `creature_template` values (80855, 0, 1890, 0, 0, 0, 'Clover Spinpistol', 'Hunter Trainer', 4648, 8, 8, 334, 334, 297, 297, 20, 126, 19, 1, 1.14286, 0, 20, 5, 0, 0, 1, 7, 10, 0, 58, 1, 2000, 2000, 1, 4864, 0, 0, 0, 0, 3, 0, 13.5872, 18.6824, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 3154, 0, 0, 0, 0, 524298, '');
+
+update creature_template set faction = 875 where entry = 80855;
+
 set @quest_entry = 80340;
 set @quest_zone = -261;
 set @title = 'Taming the Beast';
@@ -1781,7 +1785,7 @@ set @creature_to_kill_1_count = 0;
 set @creature_to_kill_2_count = 0;
 set @creature_to_kill_3_count = 0;
 set @creature_to_kill_4_count = 0;
-set @required_item_1 = 15917;
+set @required_item_1 = 15911;
 set @required_item_2 = 0;
 set @required_item_3 = 0;
 set @required_item_4 = 0;
@@ -1818,7 +1822,7 @@ nextquestid = @nextquest, RewOrReqMoney = @reward_money,
 nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
 RequiredRaces = 64, RequiredClasses = 4,
 questflags = 2, specialflags = 2,
-srcitemid = 15917, srcitemcount = 1,
+srcitemid = 15911, srcitemcount = 1,
 detailsemote1 = 1, offerrewardemote1 = 273
 where entry = @quest_entry;	
 
@@ -1864,7 +1868,7 @@ set @creature_to_kill_1_count = 0;
 set @creature_to_kill_2_count = 0;
 set @creature_to_kill_3_count = 0;
 set @creature_to_kill_4_count = 0;
-set @required_item_1 = 15919;
+set @required_item_1 = 15913;
 set @required_item_2 = 0;
 set @required_item_3 = 0;
 set @required_item_4 = 0;
@@ -1901,7 +1905,7 @@ nextquestid = @nextquest, RewOrReqMoney = @reward_money,
 nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
 RequiredRaces = 64, RequiredClasses = 4,
 questflags = 2, specialflags = 2,
-srcitemid = 15919, srcitemcount = 1,
+srcitemid = 15913, srcitemcount = 1,
 detailsemote1 = 1, offerrewardemote1 = 273
 where entry = @quest_entry;	
 
@@ -1951,7 +1955,7 @@ set @creature_to_kill_1_count = 0;
 set @creature_to_kill_2_count = 0;
 set @creature_to_kill_3_count = 0;
 set @creature_to_kill_4_count = 0;
-set @required_item_1 = 15920;
+set @required_item_1 = 15908;
 set @required_item_2 = 0;
 set @required_item_3 = 0;
 set @required_item_4 = 0;
@@ -1988,7 +1992,7 @@ nextquestid = @nextquest, RewOrReqMoney = @reward_money,
 nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
 RequiredRaces = 64, RequiredClasses = 4,
 questflags = 2, specialflags = 2,
-srcitemid = 15920, srcitemcount = 1,
+srcitemid = 15908, srcitemcount = 1,
 detailsemote1 = 1, offerrewardemote1 = 273,
 rewspell = 23356, rewspellcast = 1579
 where entry = @quest_entry;	
