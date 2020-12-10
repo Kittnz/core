@@ -2088,6 +2088,7 @@ where entry = @quest_entry;
 
 -- Remove race restrictions from some items:
 
+UPDATE `item_template` SET `allowable_race`='-1' WHERE allowable_race = 1101;
 UPDATE `item_template` SET `allowable_race`='-1' WHERE name in (
 
 "Ornate Thorium Handaxe",
