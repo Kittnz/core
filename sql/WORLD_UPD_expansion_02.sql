@@ -2167,3 +2167,8 @@ UPDATE `item_template` SET `allowable_race`='-1' WHERE name in (
 "Graccu's Homemade Meat Pie",
 "Green Garden Tea"
 );
+
+-- Edited Vault map template.
+
+UPDATE `map_template` SET `level_min`='60', `level_max`='60', `player_limit`='5', `ghost_entrance_map`='0' WHERE (`entry`='35') AND (`patch`='0');
+UPDATE `map_template` SET `map_type`='1' WHERE (`entry`='35') AND (`patch`='0');
