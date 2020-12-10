@@ -6001,6 +6001,16 @@ void Spell::EffectQuestComplete(SpellEffectIndex eff_idx)
         // Goblin hunter's Taming the Beast III:
         if (m_spellInfo->GetEffectMiscValue(eff_idx) == 6082 && unitTarget->ToPlayer()->GetQuestStatus(80333) == QUEST_STATUS_INCOMPLETE)
             quest_id = 80333;
+
+        // Gnome hunter's Taming the Beast I:
+        if (m_spellInfo->GetEffectMiscValue(eff_idx) == 6064 && unitTarget->ToPlayer()->GetQuestStatus(80340) == QUEST_STATUS_INCOMPLETE)
+            quest_id = 80340;
+        // Gnome hunter's Taming the Beast II:
+        if (m_spellInfo->GetEffectMiscValue(eff_idx) == 6084 && unitTarget->ToPlayer()->GetQuestStatus(80341) == QUEST_STATUS_INCOMPLETE)
+            quest_id = 80341;
+        // Gnome hunter's Taming the Beast III:
+        if (m_spellInfo->GetEffectMiscValue(eff_idx) == 6085 && unitTarget->ToPlayer()->GetQuestStatus(80342) == QUEST_STATUS_INCOMPLETE)
+            quest_id = 80342;
     }
 
     ((Player*)unitTarget)->AreaExploredOrEventHappens(quest_id);
