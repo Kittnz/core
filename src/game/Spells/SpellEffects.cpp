@@ -5992,9 +5992,15 @@ void Spell::EffectQuestComplete(SpellEffectIndex eff_idx)
 
     if (sWorld.getConfig(CONFIG_BOOL_EXPANSION_CONTENT))
     {
-        // Goblin hunter's Taming the Beast quest:
+        // Goblin hunter's Taming the Beast I:
         if (m_spellInfo->GetEffectMiscValue(eff_idx) == 6062 && unitTarget->ToPlayer()->GetQuestStatus(80331) == QUEST_STATUS_INCOMPLETE)
             quest_id = 80331;
+        // Goblin hunter's Taming the Beast II:
+        if (m_spellInfo->GetEffectMiscValue(eff_idx) == 6083 && unitTarget->ToPlayer()->GetQuestStatus(80332) == QUEST_STATUS_INCOMPLETE)
+            quest_id = 80332;
+        // Goblin hunter's Taming the Beast III:
+        if (m_spellInfo->GetEffectMiscValue(eff_idx) == 6082 && unitTarget->ToPlayer()->GetQuestStatus(80333) == QUEST_STATUS_INCOMPLETE)
+            quest_id = 80333;
     }
 
     ((Player*)unitTarget)->AreaExploredOrEventHappens(quest_id);
