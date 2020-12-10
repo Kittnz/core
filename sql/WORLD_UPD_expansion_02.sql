@@ -2173,3 +2173,5 @@ UPDATE `item_template` SET `allowable_race`='-1' WHERE name in (
 UPDATE `map_template` SET `level_min`='60', `level_max`='60', `player_limit`='5', `ghost_entrance_map`='0' WHERE (`entry`='35') AND (`patch`='0');
 UPDATE `map_template` SET `map_type`='1' WHERE (`entry`='35') AND (`patch`='0');
 UPDATE `map_template` SET `map_name`='Stormwind Vault' WHERE (`entry`='35') AND (`patch`='0');
+
+UPDATE `quest_template` SET `RequestItemsText`='<She pauses in the middle of packing orders to look at you hopefully.> Your empty hands cause a scowl.' WHERE (`entry`='60122') AND (`patch`='1');
