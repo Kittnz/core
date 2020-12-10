@@ -1308,6 +1308,8 @@ REPLACE INTO `npc_trainer` VALUES (80903, 20941, 2500, 0, 0, 60, 0, 5875);
 REPLACE INTO `npc_trainer` VALUES (80903, 20942, 1200, 0, 0, 42, 0, 5875);
 REPLACE INTO `npc_trainer` VALUES (80903, 20943, 2100, 0, 0, 54, 0, 5875);
 
+delete from creature_questrelation where quest = 80330;
+
 set @quest_entry = 80330;
 set @quest_zone = -261;
 set @title = 'The Hunter\'s Path';
@@ -1321,7 +1323,7 @@ set @xp_or_money = 394;
 set @reward_money = 0; 
 set @quest_level = 10;
 set @min_level = 10;
-set @questgiver_id = 3171;
+set @questgiver_id = 3407;
 set @quest_finisher = 80903;
 set @nextquest = 0;
 set @nextquestinchain = 0;
@@ -1407,7 +1409,7 @@ set @questgiver_id = 80903;
 set @quest_finisher = 80903;
 set @nextquest = 0;
 set @nextquestinchain = 0;
-set @prevquest = 80330;
+set @prevquest = 0;
 set @RewChoiceItemId1 = 0; 
 set @RewChoiceItemId2 = 0; 
 set @RewChoiceItemId3 = 0;
@@ -1739,6 +1741,86 @@ where entry = @quest_entry;
 
 -- Gnome hunter quests 
 
+set @quest_entry = 80339;
+set @quest_zone = -261;
+set @title = 'The Hunter\'s Path';
+set @description = 'Hello, young hunter. You look to me like you are skilled enough to handle a beast and train it as your companion.\n\nNormally I’d send you to Grif Wildheart, but I believe you need the help of one of your own kin. Clover Spinpistol in Kharanos should be able to help ya.';
+set @objective = 'Speak with Clover Spinpistol in Kharanos.';
+set @completetext = 'Oh hello there! Hmm...I believe I can help you, yes!';
+set @incompletetext = 'Hello?';
+set @faction_id = 0;
+set @faction_count = 0;
+set @xp_or_money = 394;
+set @reward_money = 0; 
+set @quest_level = 10;
+set @min_level = 10;
+set @questgiver_id = 5116;
+set @quest_finisher = 80855;
+set @nextquest = 0;
+set @nextquestinchain = 0;
+set @prevquest = 0;
+set @RewChoiceItemId1 = 0; 
+set @RewChoiceItemId2 = 0; 
+set @RewChoiceItemId3 = 0;
+set @RewChoiceItemId4 = 0; 
+set @RewChoiceItemCount1 = 0;
+set @RewChoiceItemCount2 = 0;
+set @RewChoiceItemCount3 = 0;
+set @RewChoiceItemCount4 = 0;
+set @reward_item_1 = 0;
+set @reward_item_2 = 0; 
+set @reward_item_3 = 0;
+set @reward_item_4 = 0;
+set @reward_item_1_count = 0;
+set @reward_item_2_count = 0;
+set @reward_item_3_count = 0;
+set @reward_item_4_count = 0;
+set @creature_to_kill_1 = 0;
+set @creature_to_kill_2 = 0; 
+set @creature_to_kill_3 = 0;
+set @creature_to_kill_4 = 0;
+set @creature_to_kill_1_count = 0;
+set @creature_to_kill_2_count = 0;
+set @creature_to_kill_3_count = 0;
+set @creature_to_kill_4_count = 0;
+set @required_item_1 = 0;
+set @required_item_2 = 0;
+set @required_item_3 = 0;
+set @required_item_4 = 0;
+set @required_item_1_count = 0;
+set @required_item_2_count = 0;
+set @required_item_3_count = 0;
+set @required_item_4_count = 0;
+
+replace into quest_template values 
+
+(@quest_entry, '0', '2', @quest_zone, @min_level,  '0', @quest_level, '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @title, @description, @objective, @completetext, @incompletetext, '', '', '', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @faction_id, '0', '0', '0', '0', @faction_count, '0', '0', '0', '0', '0', @xp_or_money, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', 0, 0);
+     
+replace into creature_questrelation (id, quest, patch_min, patch_max) values (@questgiver_id, @quest_entry,'0','10'); 
+replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (@quest_finisher, @quest_entry,'0','10');
+	 
+update quest_template set 
+rewitemid1 = @reward_item_1, rewitemcount1 = @reward_item_1_count,
+rewitemid2 = @reward_item_2, rewitemcount2 = @reward_item_2_count,
+rewitemid3 = @reward_item_3, rewitemcount3 = @reward_item_3_count,
+rewitemid4 = @reward_item_4, rewitemcount4 = @reward_item_4_count,
+RewChoiceItemId1 = @RewChoiceItemId1, RewChoiceItemCount1 = @RewChoiceItemCount1,
+RewChoiceItemId2 = @RewChoiceItemId2, RewChoiceItemCount2 = @RewChoiceItemCount2,
+RewChoiceItemId3 = @RewChoiceItemId3, RewChoiceItemCount3 = @RewChoiceItemCount3,
+RewChoiceItemId4 = @RewChoiceItemId4, RewChoiceItemCount4 = @RewChoiceItemCount4,
+ReqCreatureOrGOId1 = @creature_to_kill_1, ReqCreatureOrGOCount1 = @creature_to_kill_1_count,
+ReqCreatureOrGOId2 = @creature_to_kill_2, ReqCreatureOrGOCount2 = @creature_to_kill_2_count,
+ReqCreatureOrGOId3 = @creature_to_kill_3, ReqCreatureOrGOCount3 = @creature_to_kill_3_count,
+ReqCreatureOrGOId4 = @creature_to_kill_4, ReqCreatureOrGOCount4 = @creature_to_kill_4_count,
+reqitemid1 = @required_item_1, reqitemcount1 = @required_item_1_count,
+reqitemid2 = @required_item_2, reqitemcount2 = @required_item_2_count,
+reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
+reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
+nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
+nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
+RequiredRaces = 256, RequiredClasses = 4
+where entry = @quest_entry;	
+
 replace into `creature_template` values (80855, 0, 1890, 0, 0, 0, 'Clover Spinpistol', 'Hunter Trainer', 4648, 8, 8, 334, 334, 297, 297, 20, 126, 19, 1, 1.14286, 0, 20, 5, 0, 0, 1, 7, 10, 0, 58, 1, 2000, 2000, 1, 4864, 0, 0, 0, 0, 3, 0, 13.5872, 18.6824, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 3154, 0, 0, 0, 0, 524298, '');
 
 update creature_template set faction = 875 where entry = 80855;
@@ -2005,6 +2087,7 @@ set @quest_entry = 80343;
 set @quest_zone = -261;
 set @title = 'Training the Beast';
 set @description = '$N, now that you’ve got your rod and all, you can get a companion to help advance the cause of Gnomekind!\n\nHowever taming these pets isn’t enough, they also need training. Sadly I cannot train your pet for you, I can train you alright, but for your pet you need someone else.\n\nGo to Ironforge, Belia Thundergranite in the Hall of Arms should be able to help you out! Tell her I sent you! Good luck!';
+set @objective = 'Speak with Belia Thundergranite in Ironforge.';
 set @completetext = 'A new recruit from Spinpistol? That lass actually managed to accomplish her crazy scheme of taming beasts with a stick? I’ll be damned, and you helped her? You\'re clearly on your way to becoming a great $C, I see.\n\nVery well, I can bestow you with the skills you need to train and guide your pet. Not only will you be able to teach your pet new abilities, you will now be able to feed your pet, as well as revive it, should it fall in battle.\n\nRemember that the key to getting the most from your new pet is to respect it and treat it well. In turn, your pet will be your most loyal friend.';
 set @incompletetext = 'Yes?';
 set @faction_id = 0;
@@ -2175,3 +2258,12 @@ UPDATE `map_template` SET `map_type`='1' WHERE (`entry`='35') AND (`patch`='0');
 UPDATE `map_template` SET `map_name`='Stormwind Vault' WHERE (`entry`='35') AND (`patch`='0');
 
 UPDATE `quest_template` SET `RequestItemsText`='<She pauses in the middle of packing orders to look at you hopefully.> Your empty hands cause a scowl.' WHERE (`entry`='60122') AND (`patch`='1');
+
+update creature_template set faction = 76 where entry = 80856;
+
+UPDATE `quest_template` SET `RequiredRaces`='4' WHERE (`entry`='6074') AND (`patch`='0');
+
+UPDATE `creature_template` SET `gossip_menu_id`='0' WHERE (`entry`='80855') AND (`patch`='0');
+
+UPDATE `playercreateinfo_item` SET `itemid`='2508' WHERE (`race`='9') AND (`class`='3') AND (`itemid`='2504') AND (`amount`='1') LIMIT 1;
+UPDATE `playercreateinfo_item` SET `itemid`='2516' WHERE (`race`='9') AND (`class`='3') AND (`itemid`='2512') AND (`amount`='200') LIMIT 1;
