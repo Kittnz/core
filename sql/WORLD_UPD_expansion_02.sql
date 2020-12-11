@@ -2267,3 +2267,23 @@ UPDATE `creature_template` SET `gossip_menu_id`='0' WHERE (`entry`='80855') AND 
 
 UPDATE `playercreateinfo_item` SET `itemid`='2508' WHERE (`race`='9') AND (`class`='3') AND (`itemid`='2504') AND (`amount`='1') LIMIT 1;
 UPDATE `playercreateinfo_item` SET `itemid`='2516' WHERE (`race`='9') AND (`class`='3') AND (`itemid`='2512') AND (`amount`='200') LIMIT 1;
+
+-- Arena system fixes:
+
+replace into `battleground_events` (`map`, `event1`, `event2`, `description`) VALUES (25, 254, 0, 'Doors');
+
+replace into `gameobject_template` VALUES (1771652, 0, 0, 25426, 'Arena Door', 114, 36, 0.50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+replace into `gameobject` VALUES (3998658, 1771652, 25, 15780.8, 16746.8, 3.35, 0, 0, 0, 0.999999, -0.00130956, 0, 0, 100, 1, 0, 0, 0, 10);
+replace into `gameobject` VALUES (3998657, 1771652, 25, 15688.6, 16796.4, 3.43, 0, 0, 0, 0.0049958, 0.999988, 0, 0, 100, 1, 0, 0, 0, 10);
+
+replace into `gameobject_battleground` (`guid`, `event1`, `event2`) VALUES (3998658, 254, 0);
+replace into `gameobject_battleground` (`guid`, `event1`, `event2`) VALUES (3998657, 254, 0);
+
+replace into `broadcast_text` (`ID`, `MaleText`, `FemaleText`, `Sound`, `Type`, `Language`, `EmoteId0`, `EmoteId1`, `EmoteId2`, `EmoteDelay0`, `EmoteDelay1`, `EmoteDelay2`) VALUES (195007, 'This… Crater isn\'t something you\'ve had as an experience before, that is certain.\n\nTelling you to get ready is just as futile as you trying to assess the real threat that lies within this battleground.\n\nBest you can do is either survive to tell the story or die as quickly as possible.', '', 0, 0, 0, 1, 1, 0, 0, 0, 0);
+replace into `npc_text` (`ID`, `BroadcastTextID0`, `Probability0`, `BroadcastTextID1`, `Probability1`, `BroadcastTextID2`, `Probability2`, `BroadcastTextID3`, `Probability3`, `BroadcastTextID4`, `Probability4`, `BroadcastTextID5`, `Probability5`, `BroadcastTextID6`, `Probability6`, `BroadcastTextID7`, `Probability7`) VALUES (195007, 195007, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+
+replace into `creature_template`  VALUES (50099, 0, 18071, 0, 0, 0, 'Gorug', 'Arena Battlemaster', 0, 60, 60, 7845, 7845, 0, 0, 0, 35, 5, 1, 1.14286, 1, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 50000, 0, 0, 0, 'arena_master');
+
+update `map_template` SET `map_type`='3' WHERE `entry`='25';
+UPDATE `map_template` SET `level_min`='60', `level_max`='60' WHERE `entry`='25';

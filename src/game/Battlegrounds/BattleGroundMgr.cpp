@@ -1310,10 +1310,10 @@ void BattleGroundMgr::CreateInitialBattleGrounds()
         // Override for arena
         else if (start1 == 9000)
         {
-            AStartLoc[0] = -17.205f;
-            AStartLoc[1] = 268.258f;
-            AStartLoc[2] = 291.560f;
-            AStartLoc[3] = 4.459f;
+            AStartLoc[0] = 15682.37F;
+            AStartLoc[1] = 16796.68F;
+            AStartLoc[2] = 3.317F;
+            AStartLoc[3] = 6.23F;
         }
         else
         {
@@ -1333,10 +1333,10 @@ void BattleGroundMgr::CreateInitialBattleGrounds()
         }
         else if (start2 == 9001)
         {
-            HStartLoc[0] = -39.799f;
-            HStartLoc[1] = 189.351f;
-            HStartLoc[2] = 294.039f;
-            HStartLoc[3] = 1.297f;
+            HStartLoc[0] = 15792.27F;
+            HStartLoc[1] = 16747.01F;
+            HStartLoc[2] = 3.284F;
+            HStartLoc[3] = 3.17F;
         }
         else
         {
@@ -1349,10 +1349,10 @@ void BattleGroundMgr::CreateInitialBattleGrounds()
 
         if (MapEntry const* mapEntry = sMapStorage.LookupEntry<MapEntry>(mapId))
         {
-            // Override for <unused>StormwindPrison. Give it a prettier name.
-            //if (mapId == 37)
-            //    name = "Arena";
-            //else
+            // Override for arena map. Give it a prettier name.
+            if (mapId == 25)
+                name = "Ring of Bones";
+            else
                 name = mapEntry->name;
         }
 
