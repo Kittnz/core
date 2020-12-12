@@ -2444,7 +2444,7 @@ inline BattleGroundTypeId GetBattleGroundTypeIdByMapId(uint32 mapId)
         case 30:    return BATTLEGROUND_AV;
         case 489:   return BATTLEGROUND_WS;
         case 529:   return BATTLEGROUND_AB;
-        case 25:    return ARENA_SV;
+        case 26:    return ARENA_SV;
         default:    return BATTLEGROUND_TYPE_NONE;
     }
 }
@@ -2456,7 +2456,7 @@ inline uint32 GetBattleGrounMapIdByTypeId(BattleGroundTypeId bgTypeId)
         case BATTLEGROUND_AV:   return 30;
         case BATTLEGROUND_WS:   return 489;
         case BATTLEGROUND_AB:   return 529;
-        case ARENA_SV:          return 25;
+        case ARENA_SV:          return 26;
         default:                return 0;   //none
     }
 

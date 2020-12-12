@@ -1350,8 +1350,8 @@ void BattleGroundMgr::CreateInitialBattleGrounds()
         if (MapEntry const* mapEntry = sMapStorage.LookupEntry<MapEntry>(mapId))
         {
             // Override for arena map. Give it a prettier name.
-            if (mapId == 25)
-                name = "Ring of Bones";
+            if (mapId == 26)
+                name = "Blood Ring";
             else
                 name = mapEntry->name;
         }

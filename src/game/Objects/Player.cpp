@@ -18571,7 +18571,7 @@ void Player::SendInitialPacketsAfterAddToMap(bool login)
     UpdateZone(newzone, newarea);                           // also call SendInitWorldStates();
 
     // Set FFAPvP in arena map.
-    if (GetMapId() == 25)
+    if (GetMapId() == 26)
         SetFFAPvP(true);
 
     if (login)
