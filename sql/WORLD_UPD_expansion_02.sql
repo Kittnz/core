@@ -2272,7 +2272,8 @@ UPDATE `playercreateinfo_item` SET `itemid`='2516' WHERE (`race`='9') AND (`clas
 
 replace into `battleground_events` (`map`, `event1`, `event2`, `description`) VALUES (25, 254, 0, 'Doors');
 
-replace into `gameobject_template` VALUES (1771652, 0, 0, 25426, 'Arena Door', 114, 36, 0.50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+replace into `gameobject_template` VALUES (1771652, 0, 0, 32875, 'Arena Door', 114, 36, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+replace into `gameobject_template` VALUES (1771653, 0, 0, 32874, 'Arena Door (Passive)', 114, 36, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
 
 replace into `gameobject` VALUES (3998658, 1771652, 25, 15780.8, 16746.8, 3.35, 0, 0, 0, 0.999999, -0.00130956, 0, 0, 100, 1, 0, 0, 0, 10);
 replace into `gameobject` VALUES (3998657, 1771652, 25, 15688.6, 16796.4, 3.43, 0, 0, 0, 0.0049958, 0.999988, 0, 0, 100, 1, 0, 0, 0, 10);
