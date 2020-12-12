@@ -956,7 +956,7 @@ bool GOHello_go_translocation_orb(Player* pPlayer, GameObject* pGo)
 
 #define FIVE_MINUTES 5 * 60
 
-#define GAMBLING_QUEST 80300
+#define GAMBLING_QUEST 80306
 #define DUMMY_GAMBLING_OBJECTIVE 80600
 
 struct GamblerInfo
