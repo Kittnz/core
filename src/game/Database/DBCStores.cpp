@@ -191,7 +191,7 @@ inline void LoadDBC(uint32& availableDbcLocales, StoreProblemList& errlist, DBCS
 
 void LoadDBCStores(const std::string& dataPath)
 {
-    std::string dbcPath = dataPath + "dbc/";
+    std::string dbcPath = dataPath;
 
     const uint32 DBCFilesCount = 41;
 
