@@ -19,3 +19,8 @@ update creature_template set armor = 76, dmg_min = 2, dmg_max = 5, attack_power 
 update creature_template set armor = 76, dmg_min = 3, dmg_max = 7, attack_power = 50 where entry = 80507;
 update creature_template set armor = 76, dmg_min = 4, dmg_max = 8, attack_power = 50 where entry = 80508;
 
+update creature_template set scale = 0.5 where entry = 80861;
+update creature_template set scale = 1.2 where entry = 80863;
+update creature_template set scale = 1.2 where entry = 80871;
+
+UPDATE creature_template SET display_id1 = 18002 WHERE entry = 80860;
