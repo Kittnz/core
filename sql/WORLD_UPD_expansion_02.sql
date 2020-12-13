@@ -37,15 +37,15 @@ REPLACE INTO `npc_vendor` VALUES (80811, 80436, 0, 0, 0, 0);
 REPLACE INTO `npc_vendor` VALUES (80811, 80438, 0, 0, 0, 0);
 REPLACE INTO `npc_vendor` VALUES (80811, 80433, 0, 0, 0, 0);
 
--- Apple a Day...
+-- Apple a Day
 
 set @quest_entry = 80315;
 set @quest_zone = 1519;
-set @title = 'Apple a Day...';
-set @description = 'My leaves. They fall. Big sad. Want leaves grow.\n\n';
-set @objective = 'Inspect Applebough and help him grow his leaves again. Perhaps it\'s the environment that affects the growth or a parasite? Ask local druids, they might know more.\n\nHelp Applebough!';
-set @completetext = 'My deepest respect and gratitude, $R! This is what I really needed the most! I\'d like to reward you, my friend, here…';
-set @incompletetext = 'Was green. Had fruits. Was happy...';
+set @title = 'Apple a Day';
+set @description = 'I’ve only experienced a few blooms in my time, but this season, things are different. At the ends of my leaves, there are usually pink petals sprouting by now, but instead, my branches are barren! I don’t think this is normal. Maybe a druid might know what’s wrong with me? They’re much older and wiser anyhow.';
+set @objective = 'Inspect Applebough and help him grow back his fruit. Speak with a nearby druid to find out Applebough’s ailment.';
+set @completetext = 'I can feel the life flowing back into my leaves, $R. That druid really worked some magic with that salve. I wonder what’s inside? I’ll study it closely until I find out so that other trees like me don’t get sick, too!';
+set @incompletetext = 'Please hurry, $R. I don’t know how much longer my leaves have before they completely fall away.';
 set @faction_id = 269;
 set @faction_count = 150;
 set @xp_or_money = 650;
@@ -487,7 +487,7 @@ replace into quest_template values
  ('80320', '1', '2', '14', '7', '0', '60', '0', '0', '0', '0',
 '0', '0', '0', '0', '0','0',
 '0', '0', '0', '0', '0', '0', '0', '0', '0',
-'0', '0', '0', 'Burning Bridges', 'Heya $C! Fizzle isn\'t the only goblin playin\' with fire around here. Gazlowe got word that another defector has joined up with those burning blade boys and we need to deal with it! Knobby Tinfault is in Dustwind Cave, on top of the Drygulch Canyon.\n\nFind him and wring the little bastard\'s neck. Bring me anything he\'s carryin\' that has so much as a strange mark on it.\n\nWe need to get it back to Gazlowe so we can find out if there was more to him and Fizzle decidin\' to come to Durotar.', 'Kill Knobby Tinfault and bring anything he drops back to Miley.', 'A belt, eh?\n\nCrafty and clever, I\'m embarrassed I didn\'t think of it. I\'ll get this to Gazlowe so he can further analyze it. Thanks!', 'Is it done? Did you find anything?', '', '', '',
+'0', '0', '0', 'Burning Bridges', 'Heya, $C! Fizzle isn\'t the only goblin playin\' with fire around here. Gazlowe got word that another defector has joined up with those Burning Blade boys, and now we have to deal with it! Knobby Tinfault is in Dustwind Cave on top of the Drygulch Canyon.\n\nFind him and wring the little bastard\'s neck. Bring me anything he\'s carryin\' that has so much as a strange mark on it.\n\nWe need to get it back to Gazlowe so we can find out if there was more to him and Fizzle decidin\' to come to Durotar.', 'Kill Knobby Tinfault and bring anything he drops back to Miley.', 'A belt, eh?\n\nCrafty and clever, I\'m embarrassed I didn\'t think of it. I\'ll get this to Gazlowe so he can further analyze it. Thanks!', 'Is it done? Did you find anything?', '', '', '',
 '', '', '80868', '0', '0', '0', '1', '0', '0',
 '0', '0', '0', '0', '0', '0', '0', '0',
 '0', '0', '0', '0', '0', '0',
@@ -508,7 +508,7 @@ replace into quest_template values
  ('80321', '0', '2', '1637', '13', '0', '60', '0', '0', '0', '0',
 '0', '0', '0', '0', '0','0',
 '0', '0', '0', '0', '0', '60150', '0', '0', '0',
-'80868', '1', '0', 'The Lies that Bind Us', 'You\'re the one that helped Miley find this, yeah?\n\n<Gazlowe holds up the belt you found in Dustwind Cave.>\n\nI\'ve had a bit of diggin done and I know who made it. Kiro in Orgrimmar. Nice enough gal, if a tad aggressive.\n\nI\'m sure it is a long shot but I need you to check with her and find out if she knows anything about this inscription. I\'ve already had it deciphered but Kiro might know more.', 'Give Knobby\'s Belt to Kiro in the Valley of Honor.', 'Yes, $C, I made this. What of it?', 'What are you looking for?', '', '', '',
+'80868', '1', '0', 'The Lies that Bind Us', 'You\'re the one that helped Miley find this, yeah?\n\n<Gazlowe holds up the belt you found in Dustwind Cave.>\n\nI\'ve had a bit of diggin’ done and I know who made it. Name’s Kiro in Orgrimmar. Nice enough gal, even if she’s a tad aggressive.\n\nI\'m sure it’s a long shot, but I need you to check with her and find out if she knows anything about this inscription. I\'ve already had it deciphered, but Kiro might know more.', 'Give Knobby\'s Belt to Kiro in the Valley of Honor.', 'Yes, $C, I made this. What of it?', 'What are you looking for?', '', '', '',
 '', '', '80868', '0', '0', '0', '1', '0', '0',
 '0', '0', '0', '0', '0', '0', '0', '0',
 '0', '0', '0', '0', '0', '0',
@@ -533,7 +533,7 @@ replace into quest_template values
  ('80322', '0', '2', '17', '13', '0', '60', '0', '0', '0', '0',
 '0', '0', '0', '0', '0','0',
 '0', '0', '0', '0', '0', '60151', '0', '0', '0',
-'80868', '1', '0', 'The Lies That Bind Us', 'Hah! No leatherworker made these marks.\n\nThis is fel magic. There\'s an outcast in the barrens, a blacksmith from our world. He has a gift when it comes to the fel, he can sense the origin.\n\nYou\'ll need payment, if you seek him out, and you\'ll need luck.\n\nKiro\'s visage darkens.\n\nSome of us don\'t like reliving our past. The taint that was in our blood haunts him still, as it does many of us. Leave me now.\n\nSeek Vrang west of the road along the Barrens northern foothills.', 'Take Knobby\'s Belt and 20 silver to Vrang Wildgore in the Barrens.', 'Kiro sent you, no doubt. I didn\'t tell that cursed woman about my ability so she would send me customers.\n\nVery well, give me the coin and show me what you have.', 'A visitor! Greetings $C. Take a look at what I have on offer.', '', '', '',
+'80868', '1', '0', 'The Lies That Bind Us', 'Hah! No leatherworker made these marks.\n\nThis is fel magic. There\'s an outcast located in the Barrens. It’s a blacksmith from our world. He has a gift when it comes to fel magic; he can sense the origin.\n\nYou\'ll need payment if you seek him out, and you\'ll need luck on your side.\n\nSome of us don\'t like reliving our past. The taint that was in our blood haunts him still, as it does for many of us. Leave me be, now.\n\nSeek Vrang west of the road along the Barrens’ northern foothills.', 'Take Knobby\'s Belt and 20 silver to Vrang Wildgore in the Barrens.', 'Kiro sent you, no doubt. I didn\'t tell that cursed woman about my ability for her to send me customers!\n\nIf she has an urgent enough reason, then just give me the coin and show me the mark of fel. But I don’t promise you’ll like the answer I have to give about its source.', 'A customer! Greetings, $C. Take a look at what I have to offer.', '', '', '',
 '', '', '80868', '0', '0', '0', '1', '0', '0',
 '0', '0', '0', '0', '0', '0', '0', '0',
 '0', '0', '0', '0', '0', '0',
@@ -556,8 +556,7 @@ replace into quest_template values
  ('80323', '0', '2', '392', '13', '0', '60', '0', '0', '0', '0',
 '0', '0', '0', '0', '0','0',
 '0', '0', '0', '0', '0', '60152', '0', '0', '0',
-'80868', '1', '0', 'The Lies That Bind Us', 'The magic that etched this belt came from Neeru Fireblade. I still cannot read the inscription but with Neeru\'s hand in this I assure you it is powerful. Go on your way now, $C. I don\'t need the wrath of Neeru or his minions targeting me.', 'Return to Gazlowe with Knobby\'s Belt.', 'Interesting.\n\nGazlowe turns the belt over and over in his hands.\n\nNeeru Fireblade, eh? I wonder what Neeru is trying to pull right under Thrall\'s nose.\n\nGo on now, $n. I\'ve got a few contacts to make. I\'ll get in touch with you when the next step is to be taken.', 'Welcome back, $n. You still have the belt?', '', '', '',
-'', '', '80868', '0', '0', '0', '1', '0', '0',
+'80868', '1', '0', 'The Lies That Bind Us', 'The magic that etched this belt came from Neeru Fireblade. I still cannot read the inscription, but with Neeru\'s hand in this, I can assure you that it is powerful. Go on your way now, $C. I don\'t need the wrath of Neeru or his minions targeting me.', 'Return to Gazlowe with Knobby\'s Belt.', 'Interesting.\n\n<Gazlowe turns the belt over in his hands.>\n\nNeeru Fireblade, eh? I wonder what Neeru is trying to pull right under Thrall\'s nose?\n\nGo on, now, $n. I\'ve got a few contacts to reach out to. I\'ll get in touch with you when the next step is to be taken.', 'Welcome back, $n. You still have the belt?', '', '', '','', '', '80868', '0', '0', '0', '1', '0', '0',
 '0', '0', '0', '0', '0', '0', '0', '0',
 '0', '0', '0', '0', '0', '0',
 '0', '0', '0', '0', '0', '0',
@@ -1313,8 +1312,8 @@ delete from creature_questrelation where quest = 80330;
 set @quest_entry = 80330;
 set @quest_zone = -261;
 set @title = 'The Hunter\'s Path';
-set @description = 'Greetings goblin, it seems your journey to become a proper hunter is going well, slowly and surely.\n\nWe hunters tend to have a pet by our side, yet I hear your kind have some uncommon means to tame one.';
-set @objective = 'Meet Viz Fizbeast in Razor Hill, he will be the one to guide you further on your path.';
+set @description = 'Greetings, goblin. It seems your journey to becoming a proper hunter is going well, slowly and surely.\n\nWe hunters tend to have a pet by our side, yet I hear your kind have some uncommon means to tame one.';
+set @objective = 'Meet Viz Fizbeast in Razor Hill for his guidance on your path.';
 set @completetext = 'You want me to teach you to do what?';
 set @incompletetext = 'What now?';
 set @faction_id = 0;
@@ -1395,10 +1394,10 @@ where entry = @quest_entry;
 set @quest_entry = 80331;
 set @quest_zone = -261;
 set @title = 'Taming the Beast';
-set @description = 'Woah, woah, easy there champ, you see, whoever sent you to me knew exactly what he was doing, us goblins don’t get along that well with nature, know what I mean?\n\n<Viz winks slyly to you.>\n\nAnyway, fun times aside, I’m gonna teach you the right way to tame a pet, take this rod, it has this special collar I call “the Friend Request”, you put this on their neck and you\'re done, they’re yours forever.\n\nLet’s see you have a go, and don’t come back without a dire mottled boar, because if you do, you’re not worth my time.\n\nYou’ll see they are hanging around just outside Razor Hill, won’t be that hard to find.\n\nNow buzz off, I see a customer approaching.';
+set @description = 'Woah, woah, easy there, champ. Whoever sent you to me knew exactly what they were doing. You know, us goblins don’t exactly “get along” with nature, know what I mean?\n\n<Viz winks slyly to you.>\n\nI’m gonna teach you how a goblin tames a pet. The right way. Take this rod. It has a special collar that I call the “Friend Request”. You put this around their neck and you\'re done, get me? They’ll be yours forever.\n\nLet’s see you have a go at it, and don’t come back without a Dire Mottled Boar because if you do, then you’re not worth my time.\n\nYou’ll see they are hanging around just outside of Razor Hill. Not that hard to find.\n\nNow, buzz off. I see a customer approaching.';
 set @objective = 'Use the Taming Rod to tame a Dire Mottled Boar. Practice your skills, then return to Viz Fizbeast in Razor Hill.';
-set @completetext = 'So you\'re not completely incompetent, let’s see you complete the next task.';
-set @incompletetext = 'Go on then, show them who\'s boss.';
+set @completetext = 'So, you\'re not completely incompetent? Let’s see you complete the next task.';
+set @incompletetext = 'Go on, then. Show ‘em who\'s boss.';
 set @faction_id = 0;
 set @faction_count = 0;
 set @xp_or_money = 500;
@@ -1480,10 +1479,10 @@ where entry = @quest_entry;
 set @quest_entry = 80332;
 set @quest_zone = -261;
 set @title = 'Taming the Beast';
-set @description = 'You see kid, every time you add a pet to your collection you become stronger, so basically you gotta teach it that you own it and that means it’s being part of you.\n\nWe are not the strongest, but we got the big brains you know? And being smart is being strong.\n\nNow for your next mission you’re gonna have to get your boots wet, this next tool I’m sending you to get likes water, you’re gonna find it across that troll village, you know, Sen’jin, near those Echo Isles, you’ll be looking for a crab called surf crawler, same thing as with the boar, use your rod and make it your own.';
+set @description = 'Kid, every time you add a pet to your collection, you become stronger, so basically, you gotta teach it that you own it and that means it’s being a part of you.\n\nWe’re not the strongest, but we got the biggest brains, you know? And being smart is being strong.\n\nNow, for your next mission, you’re gonna have to really get your boots wet. This next tool I’m sending you to get really likes water. You’re gonna find it across that troll village, you know, Sen’jin? It’s near those Echo Isles. You’ll be looking for a crab called the Surf Crawler. Do the same thing that you did to the boar. Use the rod and make it your own.';
 set @objective = 'Use the Taming Rod to tame a Surf Crawler. Practice your skills, then return the Taming Rod to Viz Fizbeast in Razor Hill.';
-set @completetext = 'You got a bright future in this business pal, you’ll be doing great things sooner than later, listen to the man, I got a good intuition about this sort of thing.';
-set @incompletetext = 'Come on kid, you gotta go do this, if you’re not capable of taming a crab you’ll never get your own crocolisk.';
+set @completetext = 'You got a bright future in this business, pal. You’ll be doing great things sooner than later. Listen to your man on this one. I got a good intuition about these sorta things.';
+set @incompletetext = 'Come on kid, you gotta go do this. If you’re not capable of taming a crab, then kiss your dreams of getting a crocolisk goodbye!';
 set @faction_id = 0;
 set @faction_count = 0;
 set @xp_or_money = 800;
@@ -1567,10 +1566,10 @@ UPDATE `item_template` SET `allowable_race`='-1' WHERE (`entry`='15919') AND (`p
 set @quest_entry = 80333;
 set @quest_zone = -261;
 set @title = 'Taming the Beast';
-set @description = 'This gonna be the last task I’m gonna give you champ, you better be ready, ‘cause if you’re not, you won’t be coming back breathing.\n\nOur partners, the orcs call these babies Armored Scorpions, you see this beast it’s quick on its tiny feet, their carapace durable, if that wasn’t clear enough when I said Armored, and they got a deadly sting, if you get your hands one of these pups you won’t have to worry about any other pet, ever.\n\nDon’t worry about the collar, it will manage.\n\nWhen you’re back, I’m gonna show you my skills and let me tell you pal, these skills are beyond mad!\n\nYou will be able to tame whatever beast you want, all you need is confidence and it will treat you as its master, eventually.\n\nThis beast will grow with you kid, you will be a fierce duo, the experience you get while you’re out there in the wild, they will get it too.\n\nI’m gonna also teach you how to make them obey whether you call them in or send them out.';
+set @description = 'This gonna be the last task I’m giving you, champ. You better be ready, ‘cause if you’re not, you won’t come back breathing.\n\nOur partners, the orcs, call these babies Armored Scorpions. This beast’s quick on its tiny feet, and their carapace is light yet durable if that wasn’t clear enough when I said “armored”. And they got a deadly sting, so if you get your hands one of these pups, you won’t have to worry about getting pushed around anymore, ever.\n\nDon’t worry about the collar, it will manage I think.\n\nWhen you get back, I’m gonna show you my skills. Let me tell you, pal, these skills are beyond mad!\n\nYou will be able to tame whatever beast you want. All you need is the right amount of confidence and animals will eat it up. It won’t be long before they’ll be treating you as their master.\n\nThe beasts you tame will grow with you, kid, and you’ll become a fearsome duo. The experience you get while you’re out there in the wild, they’ll get it along with you.\n\nI’m gonna also teach you how to call them in or send them out.';
 set @objective = 'Use the Taming Rod to tame an Armored Scorpid. Practice your skills, then return the Taming Rod to Thotar in Razor Hill.';
-set @completetext = 'Man, you learned all the good stuff so fast, you make this old goblin feel weak in the knees, I’d almost tear up but you can’t afford it.\n\nAnyway thanks for the merchandise, you’re gonna have to go choose one of your own now.\n\nHere champ, I’ve teached you all I know and given you my spare collar, it’s pretty much unbreakable but be careful yea?\n\nYou will be able to summon and dismiss a pet whenever it suits you from now on.\n\nUse these skills however you see fit man but don’t forget something! This was no free lecture, you’re gonna have to pay me back someday.';
-set @incompletetext = 'Move it kid, you’re gonna miss out if you don’t.\n\nI mean, you’re gonna miss out if you died too so try no to, yea?';
+set @completetext = 'Man, you learned all the good stuff so fast. You make this old goblin feel weak in the knees. I’d almost tear up, but you wouldn’t be able to afford it.\n\nThanks for the merchandise. Now, you’re gonna have to choose one of your own.\n\nHere, champ, I’ve taught you all I know and given you my spare collar. It’s pretty much unbreakable, but still, be careful with it, alright?\n\nYou will be able to summon and dismiss a pet whenever it suits you from now on.\n\nUse these skills however you see fit, but don’t forget! This lecture doesn’t come for free, so you’ll have to pay me back someday.';
+set @incompletetext = 'Move it, kid. You’re gonna miss out if you don’t.\n\nI mean, you’re gonna miss out if you die, too, so try no to do that, yeah?';
 set @faction_id = 0;
 set @faction_count = 0;
 set @xp_or_money = 1000;
@@ -1655,10 +1654,9 @@ UPDATE `item_template` SET `allowable_race`='-1' WHERE (`entry`='15920') AND (`p
 set @quest_entry = 80334;
 set @quest_zone = -261;
 set @title = 'Training the Beast';
-set @description = 'One last tip kid, I’m adding this to your debt too though!
-There’s an orc in Orgrimmar, goes by the name of Ormak Grimshot, from him you’re gonna get the ability to train your beasts.\n\nHe’ll be in the so-called Valley of Honor.\n\nNow buzz off, I’m tired, we’ll meet again, when I show up at your doorstep to collect what’s mine!';
+set @description = 'One last tip, kid—and I’m adding this to your tab!—but there’s an orc in Orgrimmar who goes by the name of Ormak Grimshot. You’re gonna talk to him to get the ability to train your beasts.\n\nHe’ll be in the so-called Valley of Honor.\n\nNow, buzz off, I’m tired. We’ll meet again when I show up at your doorstep to collect what’s mine!';
 set @objective = 'Speak with Ormak Grimshot in Orgrimmar.';
-set @completetext = 'A young $C, I see. Yes, I will grant you the skills you need to train and guide your pet.\n\nNot only will you be able to teach your pet new abilities, you will now be able to feed your pet, as well as revive it, should it fall in battle.\n\nNow, go, $C. We will speak again, at a later date.';
+set @completetext = 'A young $C, I see. Yes, I will grant you the skills you need to train and guide your pet.\n\nNot only will you be able to teach your pet new abilities, but you will now be able to feed your pet as well as revive it should it fall in battle.\n\nNow, go, $C. We will speak again at a later date.';
 set @incompletetext = 'Yes?';
 set @faction_id = 0;
 set @faction_count = 0;
@@ -1744,10 +1742,10 @@ where entry = @quest_entry;
 set @quest_entry = 80339;
 set @quest_zone = -261;
 set @title = 'The Hunter\'s Path';
-set @description = 'Hello, young hunter. You look to me like you are skilled enough to handle a beast and train it as your companion.\n\nNormally I’d send you to Grif Wildheart, but I believe you need the help of one of your own kin. Clover Spinpistol in Kharanos should be able to help ya.';
+set @description = 'Hello, young hunter. You look to me like you are skilled enough to handle a beast and train it as your companion.\n\nNormally, I’d send you to Grif Wildheart, but I believe you need the help of one of your own kin. Clover Spinpistol in Kharanos should be able to help ya.';
 set @objective = 'Speak with Clover Spinpistol in Kharanos.';
-set @completetext = 'Oh hello there! Hmm...I believe I can help you, yes!';
-set @incompletetext = 'Hello?';
+set @completetext = 'Oh, hello there! Hmm... I believe I can help you, yes!';
+set @incompletetext = 'Hello, who are you?';
 set @faction_id = 0;
 set @faction_count = 0;
 set @xp_or_money = 394;
@@ -1911,10 +1909,10 @@ where entry = @quest_entry;
 set @quest_entry = 80341;
 set @quest_zone = -261;
 set @title = 'Taming the Beast';
-set @description = 'Haha my, that Boar is quite a bulky one isn’t it? I bet you’d want something more suited to a Gnome, a quick-thinking beautiful Snow Leopard should do right?\n\nSouth and East of here you can find them, I’ve recharged your taming rod, get out there and grab one! Watch out, they’re far more feisty than the boar!';
+set @description = 'Haha. My, that boar is quite a bulky one isn’t it? I bet you’d want something more suited to a gnome, right? What about a quick-thinking, beautiful snow leopard?\n\nTo both the south and east of here, you can find them. I’ve recharged your taming rod, so get out there and grab one! Watch out, though. They’re far more feisty than that boar!';
 set @objective = 'Use the Taming Rod to tame a Snow Leopard. Practice your skills, then return the Taming Rod to Clover Spinpistol in Kharanos. ';
-set @completetext = 'Wonderful! Now that’s a pretty feline! Of course in the end I’ll leave it up to you what beast you would like to tame!';
-set @incompletetext = 'Well then? Did you find one? Did you like the Snow Leopard?';
+set @completetext = 'Wonderful! Now that’s a pretty feline! Of course, in the end, I’ll leave it up to you what beast you would like to tame.';
+set @incompletetext = 'Snow leopards are white and spotted to blend into the snow. They might be hard to find.';
 set @faction_id = 0;
 set @faction_count = 0;
 set @xp_or_money = 800;
@@ -1998,9 +1996,9 @@ UPDATE `item_template` SET `allowable_race`='-1' WHERE (`entry`='15919') AND (`p
 set @quest_entry = 80342;
 set @quest_zone = -261;
 set @title = 'Taming the Beast';
-set @description = 'Hmm, both the Boar and the Leopard are offensive pets but they leave a little to be desired in defensive capabilities. Surely our ranged weapons can pop ANY enemy with ease! What we need is something to keep them busy. hmm… I’ve got it!\n\nThe Ice Claw Bear is sturdy, and when facing a huge bear who would choose to go after a tiny Gnome?\n\nIt can be found east of Kharanos, go grab one for me please? Once you’re done I’ll give you access to the Taming Rod so you can tame your own pet!';
+set @description = 'One thing you should know is that both the boar and the leopard are offensive pets, but they leave a little to be desired in defensive capabilities. Surely, our ranged weapons can pop ANY enemy with ease! What we need is something to keep them busy. Hmm… I’ve got it!\n\nThe Ice Claw Bear is sturdy, and when facing a huge bear, who would choose to go after a tiny gnome?\n\nIt can be found east of Kharanos. You have enough skill from the other two to bring one back here for me, right? Once you’re done, I’ll give you access to the Taming Rod so you can tame your own pet!';
 set @objective = 'Use the Taming Rod to tame an Ice Claw Bear. Practice your skills, then return the Taming Rod to Clover Spinpistol in Kharanos.';
-set @completetext = 'Well Done! Look at this! I can finally prove to those arrogant Dwarves that I am a real Mountaineer too now!\n\nThank you for your help $N! As promised, here’s the schematic and instructions for the G.N.O.E.M.R Taming Rod!\n\nGet out there and find yourself a companion!';
+set @completetext = 'Well done! Look at this. I can finally prove to those arrogant dwarves that I am a real Mountaineer now, too!\n\nThank you for your help, $N. As promised, here’s the schematic and instructions for the G.N.O.E.M.R Taming Rod!\n\nGet out there and find yourself a companion!';
 set @incompletetext = 'Did you get an Ice Claw Bear yet?';
 set @faction_id = 0;
 set @faction_count = 0;
@@ -2086,10 +2084,10 @@ UPDATE `item_template` SET `allowable_race`='-1' WHERE (`entry`='15920') AND (`p
 set @quest_entry = 80343;
 set @quest_zone = -261;
 set @title = 'Training the Beast';
-set @description = '$N, now that you’ve got your rod and all, you can get a companion to help advance the cause of Gnomekind!\n\nHowever taming these pets isn’t enough, they also need training. Sadly I cannot train your pet for you, I can train you alright, but for your pet you need someone else.\n\nGo to Ironforge, Belia Thundergranite in the Hall of Arms should be able to help you out! Tell her I sent you! Good luck!';
+set @description = '$N, now that you’ve got your rod and all, you can get a companion to help advance the cause of gnomekind!\n\nHowever, taming these pets isn’t enough. They also need training. Sadly, I cannot train your pet for you. Even though my mentorship of you has gone well, your pet is a different case. For your pet, you need to find someone else.\n\nGo to Ironforge and locate Belia Thundergranite in the Hall of Arms. She should be able to help you out. Tell her I sent you. Good luck!';
 set @objective = 'Speak with Belia Thundergranite in Ironforge.';
-set @completetext = 'A new recruit from Spinpistol? That lass actually managed to accomplish her crazy scheme of taming beasts with a stick? I’ll be damned, and you helped her? You\'re clearly on your way to becoming a great $C, I see.\n\nVery well, I can bestow you with the skills you need to train and guide your pet. Not only will you be able to teach your pet new abilities, you will now be able to feed your pet, as well as revive it, should it fall in battle.\n\nRemember that the key to getting the most from your new pet is to respect it and treat it well. In turn, your pet will be your most loyal friend.';
-set @incompletetext = 'Yes?';
+set @completetext = 'A new recruit from Spinpistol? That lass you trained with actually managed to accomplish her crazy scheme of taming beasts with a stick? I’ll be damned, and you helped her? You\'re clearly on your way to becoming a great $C, I see.\n\nVery well, I can bestow you with the skills you need to train and guide your pet. Not only will you be able to teach your pet new abilities, but you will also be able to feed your pet as well as revive it if it falls in battle.\n\nRemember that the key to getting the most from your new pet is to respect it and treat it well. In turn, your pet will be your most loyal friend.';
+set @incompletetext = 'Spinpistol sent you to me? That must mean her hairbrained scheme panned out after all.';
 set @faction_id = 0;
 set @faction_count = 0;
 set @xp_or_money = 400;
@@ -2257,7 +2255,7 @@ UPDATE `map_template` SET `level_min`='60', `level_max`='60', `player_limit`='5'
 UPDATE `map_template` SET `map_type`='1' WHERE (`entry`='35') AND (`patch`='0');
 UPDATE `map_template` SET `map_name`='Stormwind Vault' WHERE (`entry`='35') AND (`patch`='0');
 
-UPDATE `quest_template` SET `RequestItemsText`='<She pauses in the middle of packing orders to look at you hopefully.> Your empty hands cause a scowl.' WHERE (`entry`='60122') AND (`patch`='1');
+UPDATE `quest_template` SET `RequestItemsText`='<She pauses in the middle of packing orders to look at you hopefully. Your empty hands cause a scowl.>' WHERE (`entry`='60122') AND (`patch`='1');
 
 update creature_template set faction = 76 where entry = 80856;
 
