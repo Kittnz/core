@@ -24,3 +24,5 @@ update creature_template set scale = 1.2 where entry = 80863;
 update creature_template set scale = 1.2 where entry = 80871;
 
 UPDATE creature_template SET display_id1 = 18002 WHERE entry = 80860;
+
+delete from creature_questrelation where quest = 80305 and id = 80801;
