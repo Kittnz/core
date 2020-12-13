@@ -13,4 +13,9 @@ replace into `gameobject` VALUES (3998657, 1771652, 26, 15688.6, 16796.4, 3.43, 
 replace into `battleground_events` (`map`, `event1`, `event2`, `description`) VALUES (26, 254, 0, 'Doors');
 
 update quest_template set requiredraces = -1 where entry in (2382,2379,2458,2479,2480,2378,2381,2478,2460);
+update quest_template set requiredraces = requiredraces + 256 where entry = 1858;
+
+update creature_template set armor = 76, dmg_min = 2, dmg_max = 5, attack_power = 50 where entry = 80201;
+update creature_template set armor = 76, dmg_min = 3, dmg_max = 7, attack_power = 50 where entry = 80507;
+update creature_template set armor = 76, dmg_min = 4, dmg_max = 8, attack_power = 50 where entry = 80508;
 
