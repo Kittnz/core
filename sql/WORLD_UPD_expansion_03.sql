@@ -50,5 +50,17 @@ update item_template set sheath = 0 where entry = 80127;
  update quest_template set rewrepvalue1 = 200 where entry in (80301, 80302, 80303, 80304, 80305);
  update quest_template set rewrepvalue1 = 100  where entry in (80300);
  
+-- Misc. DB fixes:
+
+update creature_template set scale = 1 where entry = 80402;
+
+SET @gossip_menu_id = 59137;
+SET @magic_number = 80903; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (ID, MaleText) values (@magic_number, 'I teach goblins to use both their muscles and brain.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+
  
  
