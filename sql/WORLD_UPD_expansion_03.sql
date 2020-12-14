@@ -42,3 +42,13 @@ REPLACE INTO `creature_template` VALUES
 update item_template set sheath = 0 where entry = 80106;
 update item_template set sheath = 0 where entry = 80127;
  
+-- AH and AA daily quest reputation values:
+ 
+ update quest_template set rewrepvalue1 = 200 where entry in (80252, 80253, 80254, 80255, 80258);
+ update quest_template set rewrepvalue1 = 100  where entry in (80250, 80251, 80256, 80257);
+   
+ update quest_template set rewrepvalue1 = 200 where entry in (80301, 80302, 80303, 80304, 80305);
+ update quest_template set rewrepvalue1 = 100  where entry in (80300);
+ 
+ 
+ 
