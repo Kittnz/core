@@ -26,3 +26,9 @@ update creature_template set scale = 1.2 where entry = 80871;
 UPDATE creature_template SET display_id1 = 18002 WHERE entry = 80860;
 
 delete from creature_questrelation where quest = 80305 and id = 80801;
+
+update quest_template set requiredraces = 4 where entry in (6074, 6075, 6076);
+
+replace into creature_questrelation (id, quest, patch_min, patch_max) values (895, 80339,'0','10'); 
+replace into creature_questrelation (id, quest, patch_min, patch_max) values (5117, 80339,'0','10'); 
+replace into creature_questrelation (id, quest, patch_min, patch_max) values (5515, 80339,'0','10'); 
