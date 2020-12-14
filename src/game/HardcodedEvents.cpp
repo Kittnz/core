@@ -451,7 +451,7 @@ DarkmoonState DarkmoonFaire::GetDarkmoonState()
     // Even week of the year = Horde, otherwise Alliance
     bool isHorde = weekOfTheYear % 2 == 0;
 
-    if (timeinfo->tm_wday == 0) // Sunday is installation time! :P
+    if (timeinfo->tm_wday == 3) // Wednesday is installation time! :P
         return isHorde ? DARKMOON_H2_INSTALLATION : DARKMOON_A2_INSTALLATION;
     else
         return isHorde ? DARKMOON_H2 : DARKMOON_A2;
