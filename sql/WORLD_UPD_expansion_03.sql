@@ -32,3 +32,9 @@ update quest_template set requiredraces = 4 where entry in (6074, 6075, 6076);
 replace into creature_questrelation (id, quest, patch_min, patch_max) values (895, 80339,'0','10'); 
 replace into creature_questrelation (id, quest, patch_min, patch_max) values (5117, 80339,'0','10'); 
 replace into creature_questrelation (id, quest, patch_min, patch_max) values (5515, 80339,'0','10'); 
+
+-- Dummy NPCS for Xecc and Elodia lul
+
+REPLACE INTO `creature_template` VALUES 
+(80910, 0, 18001, 0, 0, 0, 'Xecc', '', 0, 1, 1, 64, 64, 0, 0, 0, 35, 0, 1, 1.14286, 0.8, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, ''),
+(80911, 0, 18037, 0, 0, 0, 'Elodia', '', 0, 1, 1, 64, 64, 0, 0, 0, 35, 0, 1, 1.14286, 0.8, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, '');
