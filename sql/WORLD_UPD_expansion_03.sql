@@ -155,4 +155,26 @@ nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
 specialflags = 4
 where entry = @quest_entry;	
 
+-- Fixed Alah'Thalas and Goblin's riding trainers:
 
+REPLACE INTO `creature_template` VALUES (80452, 0, 16822, 0, 0, 0, 'Chaddus Suncarrier', 'Riding Trainer', 4018, 10, 10, 413, 413, 100, 100, 464, 12, 17, 1, 1.14286, 0, 20, 5, 0, 0, 1, 9, 13, 0, 62, 1, 2000, 2000, 1, 4608, 0, 0, 1, 0, 0, 1, 16.808, 23.111, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 1, 0, 0, 0, 524298, '');
+
+UPDATE `creature_template` SET `trainer_race`='10' WHERE (`entry`='80452') AND (`patch`='0');
+
+SET @gossip_menu_id = 59138;
+SET @magic_number = 80452; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (ID, MaleText) values (@magic_number, 'I teach only elves of Silvermoon Remnants and their allies.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+REPLACE INTO `creature_template` VALUES (80136, 0, 7179, 0, 0, 0, 'Gaxx Speedcrank', 'Driving Instructor', 4018, 10, 10, 413, 413, 100, 100, 464, 12, 17, 1, 1.14286, 0, 20, 5, 0, 0, 1, 9, 13, 0, 62, 1, 2000, 2000, 1, 4608, 0, 0, 1, 0, 0, 1, 16.808, 23.111, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 1, 0, 0, 0, 524298, '');
+
+UPDATE `creature_template` SET `trainer_race`='9', faction = 35 WHERE (`entry`='80136') AND (`patch`='0');
+
+SET @gossip_menu_id = 59139;
+SET @magic_number = 80136; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (ID, MaleText) values (@magic_number, 'My lessons are only for the best and most trustable customers, pal.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
