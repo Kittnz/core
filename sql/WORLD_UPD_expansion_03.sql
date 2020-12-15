@@ -175,7 +175,7 @@ UPDATE `creature_template` SET `trainer_race`='9', faction = 35 WHERE (`entry`='
 SET @gossip_menu_id = 59139;
 SET @magic_number = 80136; 
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
-replace into broadcast_text (ID, MaleText) values (@magic_number, 'My lessons are only for the best and most trustable customers, pal.');
+replace into broadcast_text (ID, MaleText) values (@magic_number, 'I don’t just teach anyone, pal. Come back to me when we’re on better terms.');
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
