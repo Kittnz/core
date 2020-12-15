@@ -1041,7 +1041,7 @@ void World::LoadConfigSettings(bool reload)
     setConfig(CONFIG_FLOAT_TRANSMOG_REQ_MONEY_RATE, "Transmog.ReqMoneyRate", 0.0);
 
     setConfig(CONFIG_BOOL_EXPANSION_CONTENT, "ExpansionContent", false);
-    setConfig(CONFIG_BOOL_BOUNTY, "PvPBounryBoards", false);
+    setConfig(CONFIG_BOOL_BOUNTY, "PvPBountyBoards", false);
     setConfig(CONFIG_BOOL_OPENHOUSE, "OpenHouse", false);
 }
 
