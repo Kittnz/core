@@ -182,3 +182,20 @@ update creature_template set gossip_menu_id = @gossip_menu_id where entry = @mag
 -- Misc. DB fixes:
 
 update quest_template set objectivetext1='Alliance players slain' where entry = 80302;
+
+-- Fix too much experience from daily quests:
+
+update quest_template set rewmoneymaxlevel = 540 where entry = 80252;  -- 10
+update quest_template set rewmoneymaxlevel = 690 where entry = 80255;  -- 20 PvP
+update quest_template set rewmoneymaxlevel = 690 where entry = 80258;  -- 20
+update quest_template set rewmoneymaxlevel = 1530 where entry = 80253; -- 40
+update quest_template set rewmoneymaxlevel = 3390 where entry = 80254; -- 55
+
+update quest_template set rewmoneymaxlevel = 540 where entry = 80301;  -- 10
+update quest_template set rewmoneymaxlevel = 690 where entry = 80302;  -- 20 PvP
+update quest_template set rewmoneymaxlevel = 690 where entry = 80304;  -- 20
+update quest_template set rewmoneymaxlevel = 1530 where entry = 80305; -- 40
+update quest_template set rewmoneymaxlevel = 3390 where entry = 80303; -- 55
+
+
+
