@@ -289,6 +289,7 @@ update creature_template set script_name = '' where script_name = 'npc_dressing_
 update creature_template set script_name = '' where script_name = 'npc_farm_sheep';
 update creature_template set script_name = '' where script_name = 'npc_lordaeron_ike';
 update creature_template set script_name = '' where script_name = 'npc_nert_joining_horde';
+update creature_template set script_name = '' where script_name = 'npc_rholo';
 
 update item_template set script_name = '' where script_name = 'item_roleplay_hub';
 update item_template set script_name = '' where script_name = 'item_transmog';
@@ -351,7 +352,4 @@ update creature set spawntimesecsmax = 300 where guid = 2560858;
 update creature set spawntimesecsmax = 300 where guid = 2560859; 
 update creature set spawntimesecsmax = 300 where guid = 2560860; 
 update creature set spawntimesecsmax = 300 where guid = 2560861; 
-
-update creature set spawndist = 0 where movementtype = 0;
-update creature set movementtype = 0 where spawndist = 0;
 
