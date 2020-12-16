@@ -231,6 +231,13 @@ update creature_template set faction = 1682, subname = '' where entry = 80125;
 update creature_template set faction = 1682, subname = '' where entry = 80126;
 update creature_template set faction = 1682, subname = '' where entry = 80127;
 update creature_template set faction = 1682, subname = '' where entry = 80128;
+update creature_template set faction = 1682 where entry = 80903;
+update creature_template set faction = 1682 where entry = 80902;
+update creature_template set faction = 1682 where entry = 80601;
+update creature_template set faction = 1682 where entry = 80602;
+update creature_template set faction = 1682 where entry = 80603;
+update creature_template set faction = 1682 where entry = 80604;
+update creature_template set faction = 1682 where entry = 80605;
 
 -- Durotar quest chains:
 update quest_template set rewrepfaction1 = 1001, rewrepvalue1 = 350, rewrepfaction2 = 0, rewrepvalue2 = 0 where entry = 80108;
