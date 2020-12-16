@@ -262,3 +262,8 @@ update quest_template set rewrepfaction1 = 1001, rewrepvalue1 = 150, rewrepfacti
 update quest_template set rewrepfaction1 = 1001, rewrepvalue1 = 150, rewrepfaction2 = 76, rewrepvalue2 = 75 where entry = 80310;
 
 delete from quest_template where entry = 80123;
+
+-- Misc. DB fixes:
+
+UPDATE `item_template` SET `display_id`='31403' WHERE (`entry`='16678') AND (`patch`='3');
+UPDATE `item_template` SET `display_id`='31403' WHERE (`entry`='16678') AND (`patch`='0');
