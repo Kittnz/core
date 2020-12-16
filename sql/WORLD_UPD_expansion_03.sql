@@ -212,3 +212,46 @@ update creature_template set equipment_id = 80458 where entry = 80458;
 replace into creature_equip_template values (80458, 0, 80876, 0, 0);
 
 REPLACE INTO `item_template` VALUES (80876, 0, 2, 2, 'Silvermoon Bow', '', 40053, 1, 0, 1, 29, 5, 15, -1, -1, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2300, 100, 2, 2, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+
+-- Assign Goblin's faction IDs to where it belongs:
+-- Quests and items: 1001
+-- Creatures: 1682
+
+-- Rocket cars:
+update item_template set required_reputation_faction = 1001, required_reputation_rank = 4 where entry = 80460;
+update item_template set required_reputation_faction = 1001, required_reputation_rank = 4 where entry = 80461;
+update item_template set required_reputation_faction = 1001, required_reputation_rank = 4 where entry = 80462;
+
+-- First quitter's team in Durotar:
+update creature_template set faction = 1682, subname = '' where entry = 80121;
+update creature_template set faction = 1682, subname = '' where entry = 80122;
+update creature_template set faction = 1682, subname = '' where entry = 80123;
+update creature_template set faction = 1682, subname = '' where entry = 80124;
+update creature_template set faction = 1682, subname = '' where entry = 80125;
+update creature_template set faction = 1682, subname = '' where entry = 80126;
+update creature_template set faction = 1682, subname = '' where entry = 80127;
+update creature_template set faction = 1682, subname = '' where entry = 80128;
+
+-- Durotar quest chains:
+update quest_template set rewrepfaction1 = 1001, rewrepvalue1 = 350, rewrepfaction2 = 0, rewrepvalue2 = 0 where entry = 80108;
+update quest_template set rewrepfaction1 = 1001, rewrepvalue1 = 350, rewrepfaction2 = 0, rewrepvalue2 = 0 where entry = 80109;
+update quest_template set rewrepfaction1 = 1001, rewrepvalue1 = 350, rewrepfaction2 = 76, rewrepvalue2 = 3000 where entry = 80110;
+update quest_template set rewrepfaction1 = 1001, rewrepvalue1 = 75, rewrepfaction2 = 76, rewrepvalue2 = 75 where entry = 80320;
+update quest_template set rewrepfaction1 = 1001, rewrepvalue1 = 75, rewrepfaction2 = 76, rewrepvalue2 = 75 where entry = 80321;
+update quest_template set rewrepfaction1 = 1001, rewrepvalue1 = 75, rewrepfaction2 = 76, rewrepvalue2 = 75 where entry = 80322;
+update quest_template set rewrepfaction1 = 1001, rewrepvalue1 = 75, rewrepfaction2 = 76, rewrepvalue2 = 75 where entry = 80323;
+update quest_template set rewrepfaction1 = 1001, rewrepvalue1 = 75, rewrepfaction2 = 76, rewrepvalue2 = 75 where entry = 80330;
+update quest_template set rewrepfaction1 = 1001, rewrepvalue1 = 75, rewrepfaction2 = 76, rewrepvalue2 = 75 where entry = 80331;
+update quest_template set rewrepfaction1 = 1001, rewrepvalue1 = 75, rewrepfaction2 = 76, rewrepvalue2 = 75 where entry = 80332;
+update quest_template set rewrepfaction1 = 1001, rewrepvalue1 = 75, rewrepfaction2 = 76, rewrepvalue2 = 75 where entry = 80333;
+update quest_template set rewrepfaction1 = 1001, rewrepvalue1 = 150, rewrepfaction2 = 76, rewrepvalue2 = 75 where entry = 60121;
+update quest_template set rewrepfaction1 = 1001, rewrepvalue1 = 150, rewrepfaction2 = 76, rewrepvalue2 = 75 where entry = 60122;
+-- Quark's quests:
+update quest_template set rewrepfaction1 = 1001, rewrepvalue1 = 75, rewrepfaction2 = 76, rewrepvalue2 = 75 where entry = 80305;
+update quest_template set rewrepfaction1 = 1001, rewrepvalue1 = 150, rewrepfaction2 = 76, rewrepvalue2 = 75 where entry = 80306;
+update quest_template set rewrepfaction1 = 1001, rewrepvalue1 = 150, rewrepfaction2 = 76, rewrepvalue2 = 75 where entry = 80307;
+update quest_template set rewrepfaction1 = 1001, rewrepvalue1 = 150, rewrepfaction2 = 76, rewrepvalue2 = 75 where entry = 80308;
+update quest_template set rewrepfaction1 = 1001, rewrepvalue1 = 150, rewrepfaction2 = 76, rewrepvalue2 = 75 where entry = 80309;
+update quest_template set rewrepfaction1 = 1001, rewrepvalue1 = 150, rewrepfaction2 = 76, rewrepvalue2 = 75 where entry = 80310;
+
+delete from quest_template where entry = 80123;
