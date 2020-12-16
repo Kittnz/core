@@ -1499,9 +1499,57 @@ bool GossipSelect_npc_iluria(Player* pPlayer, Creature* pCreature, uint32 /*uiSe
     return true;
 }
 
+bool QuestAccept_npc_applebough(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver)
+        return false;
+
+    if (!pPlayer)
+        return false;
+
+    if (pQuest->GetQuestId() == 80315) // Apple a Day
+    {        
+        pQuestGiver->CastSpell(pQuestGiver, 5570, true); // Insects
+        pQuestGiver->HandleEmote(EMOTE_ONESHOT_CRY);
+
+        if (pQuestGiver->GetDisplayId() == 18356) // Green
+        {
+            pQuestGiver->SetDisplayId(18029); // Yellow
+            pQuestGiver->MonsterSay("My leaves. They fall. Big sad.");
+        }
+        else
+            pQuestGiver->MonsterSay("Was green. Had fruits. Was happy...");
+    }
+    return false;
+}
+
+bool QuestRewarded_npc_applebough(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver)
+        return false;
+
+    if (!pPlayer)
+        return false;
+
+    if (pQuest->GetQuestId() == 80315) // Apple a Day
+    {
+        pQuestGiver->HandleEmote(EMOTE_ONESHOT_CHEER);
+        // I don't understand why he's not cheering? Model has /cheer animation.
+        pQuestGiver->SetDisplayId(18356); // Green
+        pQuestGiver->MonsterSay("This is what I needed the most!");
+        return true;
+    }
+}
+
 void AddSC_episode_1()
 {
     Script *newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_applebough";
+    newscript->pQuestAcceptNPC = &QuestAccept_npc_applebough;
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_applebough;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_iluria";
