@@ -267,3 +267,18 @@ delete from quest_template where entry = 80123;
 
 UPDATE `item_template` SET `display_id`='31403' WHERE (`entry`='16678') AND (`patch`='3');
 UPDATE `item_template` SET `display_id`='31403' WHERE (`entry`='16678') AND (`patch`='0');
+
+UPDATE `quest_template` SET `ReqCreatureOrGOCount1`='14' WHERE (`entry`='518') AND (`patch`='0');
+UPDATE `quest_template` SET `RewRepFaction1`='68', `RewRepValue1`='100' WHERE (`entry`='518') AND (`patch`='0');
+-- ^ TODO: need the right values for EXP. I don't know it.
+
+-- Exclusive group for Holy Strike quests:
+UPDATE `quest_template` SET `ExclusiveGroup`='60011' WHERE (`entry`='60012') AND (`patch`='0');
+UPDATE `quest_template` SET `ExclusiveGroup`='60011' WHERE (`entry`='60011') AND (`patch`='0');
+
+
+-- Fix target for script to despawn ooze for quest A Little Slime Goes a Long Way Part 2.
+DELETE FROM `spell_scripts` WHERE `id`=15702;
+INSERT INTO `spell_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (15702, 0, 17, 11954, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Empty Pure Sample Jar - Create Item Filled Pure Sample Jar');
+INSERT INTO `spell_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (15702, 0, 18, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Empty Pure Sample Jar - Despawn Creature');
+
