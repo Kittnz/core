@@ -283,3 +283,75 @@ INSERT INTO `spell_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, 
 INSERT INTO `spell_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (15702, 0, 18, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Empty Pure Sample Jar - Despawn Creature');
 
 update creature_template set display_id1 = 18029, script_name = 'npc_applebough' where entry = 80460;
+
+update creature_template set script_name = '' where script_name = 'NULL';
+update creature_template set script_name = '' where script_name = 'npc_dressing_room';
+update creature_template set script_name = '' where script_name = 'npc_farm_sheep';
+update creature_template set script_name = '' where script_name = 'npc_lordaeron_ike';
+update creature_template set script_name = '' where script_name = 'npc_nert_joining_horde';
+
+update item_template set script_name = '' where script_name = 'item_roleplay_hub';
+update item_template set script_name = '' where script_name = 'item_transmog';
+
+delete from creature_movement where guid = 81282;
+delete from creature_movement where guid = 81282;
+delete from creature_movement where guid = 81282;
+delete from creature_movement where guid = 81282;
+delete from creature_movement where guid = 81282;
+delete from creature_movement where guid = 81282;
+delete from creature_movement where guid = 81282;
+delete from creature_movement where guid = 81282;
+delete from creature_movement where guid = 81282;
+delete from creature_movement where guid = 81282;
+delete from creature_movement where guid = 81282;
+delete from creature_movement where guid = 81282;
+delete from creature_movement where guid = 81282;
+delete from creature_movement where guid = 81282;
+delete from creature_movement where guid = 81282;
+delete from creature_movement where guid = 81282;
+delete from creature_movement where guid = 81282;
+delete from creature_movement where guid = 81282;
+delete from creature_movement where guid = 81282;
+delete from creature_movement where guid = 81282;
+delete from creature_movement where guid = 81282;
+delete from creature_movement where guid = 81282;
+delete from creature_movement where guid = 81282;
+delete from creature_movement where guid = 81282;
+
+update creature set spawntimesecsmax = 300 where guid = 2560814; 
+update creature set spawntimesecsmax = 25000 where guid = 2560624; 
+update creature set spawntimesecsmax = 300 where guid = 202776; 
+update creature set spawntimesecsmax = 300 where guid = 2560816;
+update creature set spawntimesecsmax = 300 where guid = 2560817; 
+update creature set spawntimesecsmax = 300 where guid = 2560818;
+update creature set spawntimesecsmax = 300 where guid = 2560819; 
+update creature set spawntimesecsmax = 300 where guid = 2560820;
+update creature set spawntimesecsmax = 300 where guid = 2560821;
+update creature set spawntimesecsmax = 300 where guid = 2560822; 
+update creature set spawntimesecsmax = 300 where guid = 2560823; 
+update creature set spawntimesecsmax = 300 where guid = 2560824;
+update creature set spawntimesecsmax = 300 where guid = 2560825; 
+update creature set spawntimesecsmax = 300 where guid = 2560826; 
+update creature set spawntimesecsmax = 300 where guid = 2560827; 
+update creature set spawntimesecsmax = 300 where guid = 2560828; 
+update creature set spawntimesecsmax = 300 where guid = 2560829; 
+update creature set spawntimesecsmax = 300 where guid = 2560830; 
+update creature set spawntimesecsmax = 300 where guid = 2560831; 
+update creature set spawntimesecsmax = 300 where guid = 2560832; 
+update creature set spawntimesecsmax = 300 where guid = 2560834;
+update creature set spawntimesecsmax = 300 where guid = 2560835; 
+update creature set spawntimesecsmax = 300 where guid = 2560846; 
+update creature set spawntimesecsmax = 300 where guid = 2560848;
+update creature set spawntimesecsmax = 300 where guid = 2560849;
+update creature set spawntimesecsmax = 300 where guid = 2560850; 
+update creature set spawntimesecsmax = 300 where guid = 2560851; 
+update creature set spawntimesecsmax = 300 where guid = 2560853;
+update creature set spawntimesecsmax = 300 where guid = 2560856;
+update creature set spawntimesecsmax = 300 where guid = 2560858;
+update creature set spawntimesecsmax = 300 where guid = 2560859; 
+update creature set spawntimesecsmax = 300 where guid = 2560860; 
+update creature set spawntimesecsmax = 300 where guid = 2560861; 
+
+update creature set spawndist = 0 where movementtype = 0;
+update creature set movementtype = 0 where spawndist = 0;
+
