@@ -1174,14 +1174,7 @@ void World::SetInitialWorldSettings()
     sObjectMgr.LoadSkillLineAbility();
 
     ///- Load the DBC files
-
-#ifdef _WIN32
-    std::string dbcPath = m_dataPath + std::to_string(SUPPORTED_CLIENT_BUILD) + std::string("\\");
-#else
-    std::string dbcPath = m_dataPath + std::to_string(SUPPORTED_CLIENT_BUILD) + std::string("/");
-#endif
-
-    LoadDBCStores(dbcPath);
+    LoadDBCStores(m_dataPath);
     DetectDBCLang();
     sObjectMgr.SetDBCLocaleIndex(GetDefaultDbcLocale());    // Get once for all the locale index of DBC language (console/broadcasts)
 
