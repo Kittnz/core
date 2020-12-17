@@ -361,6 +361,6 @@ REPLACE INTO `item_template` VALUES (80878, 0, 15, 0, 'Amani Eagle', 'These bird
 
 update item_template set required_reputation_faction = 893, required_reputation_rank = 7  where entry = 80878;
 
-update item_template set description = 'This glyph prevents you from ever receiving rested experience. Exhausted mind tends to optimize actions and practice makes perfect.', quality = 2 where entry = 50521;
+update item_template set description = 'This glyph prevents you from ever receiving rested experience. Exhausted mind tends to optimize actions and practice makes perfect.', quality = 2, bonding = 1 where entry = 50521;
 
 update item_template set quality = 3 where entry = 50010;
