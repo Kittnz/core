@@ -35,7 +35,7 @@ bool GossipSelect_npc_caledra(Player* pPlayer, Creature* pCreature, uint32 /*uiS
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1) 
     { 
         DoAfterTime(pPlayer, 5 * IN_MILLISECONDS,
-            [CreatureGuid = pCreature->GetObjectGuid()]()
+            [CreatureGuid = pCreature->GetObjectGuid(), player = pPlayer]()
         {
             Map* map = sMapMgr.FindMap(0);
             Creature* creature = map->GetCreature(CreatureGuid);
@@ -44,11 +44,11 @@ bool GossipSelect_npc_caledra(Player* pPlayer, Creature* pCreature, uint32 /*uiS
                 return;
 
             creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            creature->MonsterSay("I'm glad that you wish to assist us. I will do my best to recap where we stand.");
+            creature->MonsterSayToPlayer("I'm glad that you wish to assist us. I will do my best to recap where we stand.", player);
         });
 
         DoAfterTime(pPlayer, 10 * IN_MILLISECONDS,
-            [CreatureGuid = pCreature->GetObjectGuid()]()
+            [CreatureGuid = pCreature->GetObjectGuid(), player = pPlayer]()
         {
             Map* map = sMapMgr.FindMap(0);
             Creature* creature = map->GetCreature(CreatureGuid);
@@ -57,11 +57,11 @@ bool GossipSelect_npc_caledra(Player* pPlayer, Creature* pCreature, uint32 /*uiS
                 return;
 
             creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            creature->MonsterSay("I will explain the situation. I am Caledra Dawnbreeze, formerly a Ranger-Captain of the Farstriders during the Second War, but now merely a citizen of Stormwind. After the loss of Quel\'Thalas, our people suffered deeply due to our addiction to magic. Some of us, led by our former prince, Kael\'thas, were seduced by dark magic, and, from what I\'ve heard, they betrayed the Alliance by siding with the creatures known as the Naga.");
+            creature->MonsterSayToPlayer("I will explain the situation. I am Caledra Dawnbreeze, formerly a Ranger-Captain of the Farstriders during the Second War, but now merely a citizen of Stormwind. After the loss of Quel\'Thalas, our people suffered deeply due to our addiction to magic. Some of us, led by our former prince, Kael\'thas, were seduced by dark magic, and, from what I\'ve heard, they betrayed the Alliance by siding with the creatures known as the Naga.", player);
         });
 
         DoAfterTime(pPlayer, 20 * IN_MILLISECONDS,
-            [CreatureGuid = pCreature->GetObjectGuid()]()
+            [CreatureGuid = pCreature->GetObjectGuid(), player = pPlayer]()
         {
             Map* map = sMapMgr.FindMap(0);
             Creature* creature = map->GetCreature(CreatureGuid);
@@ -70,12 +70,12 @@ bool GossipSelect_npc_caledra(Player* pPlayer, Creature* pCreature, uint32 /*uiS
                 return;
 
             creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            creature->MonsterSay("I've heard other... more troubling accounts, but regardless, they are lost to us. We should focus on those who have chosen to remain in the Alliance. A few months ago, I managed to gather representatives of our people from all outlying settlements such as the Farstrider lodges.");
+            creature->MonsterSayToPlayer("I've heard other... more troubling accounts, but regardless, they are lost to us. We should focus on those who have chosen to remain in the Alliance. A few months ago, I managed to gather representatives of our people from all outlying settlements such as the Farstrider lodges.", player);
         });
 
 
         DoAfterTime(pPlayer, 30 * IN_MILLISECONDS,
-            [CreatureGuid = pCreature->GetObjectGuid()]()
+            [CreatureGuid = pCreature->GetObjectGuid(), player = pPlayer]()
         {
             Map* map = sMapMgr.FindMap(0);
             Creature* creature = map->GetCreature(CreatureGuid);
@@ -84,12 +84,12 @@ bool GossipSelect_npc_caledra(Player* pPlayer, Creature* pCreature, uint32 /*uiS
                 return;
 
             creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            creature->MonsterSay("There was a meeting meeting where it was agreed upon that the time has come for our people to join their efforts so that we may create a home for ourselves. One where we could rebuild our people in time. Living in a military lodge or cities belonging to other races simply isn't the way to make progress in reforming our culture.");
+            creature->MonsterSayToPlayer("There was a meeting meeting where it was agreed upon that the time has come for our people to join their efforts so that we may create a home for ourselves. One where we could rebuild our people in time. Living in a military lodge or cities belonging to other races simply isn't the way to make progress in reforming our culture.", player);
         });
 
 
         DoAfterTime(pPlayer, 40 * IN_MILLISECONDS,
-            [CreatureGuid = pCreature->GetObjectGuid()]()
+            [CreatureGuid = pCreature->GetObjectGuid(), player = pPlayer]()
         {
             Map* map = sMapMgr.FindMap(0);
             Creature* creature = map->GetCreature(CreatureGuid);
@@ -98,11 +98,11 @@ bool GossipSelect_npc_caledra(Player* pPlayer, Creature* pCreature, uint32 /*uiS
                 return;
 
             creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            creature->MonsterSay("Thankfully Dalaran's surviving archives provided an opportunity. Roughly a century ago, an outpost was built on a peninsula near Quel'Thalas. The outpost is powered by an arcane crystal infused with the energies of the Sunwell itself.");
+            creature->MonsterSayToPlayer("Thankfully Dalaran's surviving archives provided an opportunity. Roughly a century ago, an outpost was built on a peninsula near Quel'Thalas. The outpost is powered by an arcane crystal infused with the energies of the Sunwell itself.", player);
         });
 
         DoAfterTime(pPlayer, 50 * IN_MILLISECONDS,
-            [CreatureGuid = pCreature->GetObjectGuid()]()
+            [CreatureGuid = pCreature->GetObjectGuid(), player = pPlayer]()
         {
             Map* map = sMapMgr.FindMap(0);
             Creature* creature = map->GetCreature(CreatureGuid);
@@ -111,7 +111,7 @@ bool GossipSelect_npc_caledra(Player* pPlayer, Creature* pCreature, uint32 /*uiS
                 return;
 
             creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            creature->MonsterSay("In other words, it's a way for us to cope with the addiction to magic that we've been suffering from. The crystal will not last forever, but it will buy us time to find a cure. Our scouts have managed to find the site, and they've confirmed that it is inhabitable. Our people have begun to settle the outpost, and they have named it Alah'Thalas, the Land of Light in our tongue.");
+            creature->MonsterSayToPlayer("In other words, it's a way for us to cope with the addiction to magic that we've been suffering from. The crystal will not last forever, but it will buy us time to find a cure. Our scouts have managed to find the site, and they've confirmed that it is inhabitable. Our people have begun to settle the outpost, and they have named it Alah'Thalas, the Land of Light in our tongue.", player);
         });
 
         DoAfterTime(pPlayer, 60 * IN_MILLISECONDS,
@@ -128,7 +128,7 @@ bool GossipSelect_npc_caledra(Player* pPlayer, Creature* pCreature, uint32 /*uiS
                 player->KilledMonster(cInfo, ObjectGuid());
 
             creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            creature->MonsterSay("However, the buildings are old and have not been maintained properly. We lack the reagents and materials to sustain the enchantments that protect the outpost. Likewise, the local mine has been infested with creatures. In other words, any help you provide would be greatly appreciated!");
+            creature->MonsterSayToPlayer("However, the buildings are old and have not been maintained properly. We lack the reagents and materials to sustain the enchantments that protect the outpost. Likewise, the local mine has been infested with creatures. In other words, any help you provide would be greatly appreciated!", player);
         });
     }
 
@@ -270,7 +270,7 @@ bool QuestComplete_npc_garthok(Player* pPlayer, Creature* pQuestGiver, Quest con
         Creature* SpratNozzleton    = pQuestGiver->SummonCreature(NPC_SPRAT_NOZZLETON,      293.27F, -4719.20F, 12.74F, 2.87F, TEMPSUMMON_TIMED_DESPAWN, 1 * MINUTE * IN_MILLISECONDS);
 
         DoAfterTime(pPlayer, 5 * IN_MILLISECONDS,
-            [CreatureGuid = NertBlastenton->GetObjectGuid()]()
+            [CreatureGuid = NertBlastenton->GetObjectGuid(), player = pPlayer]()
         {
             Map* map = sMapMgr.FindMap(1);
             Creature* creature = map->GetCreature(CreatureGuid);
@@ -279,11 +279,11 @@ bool QuestComplete_npc_garthok(Player* pPlayer, Creature* pQuestGiver, Quest con
                 return;
 
             creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            creature->MonsterSay("Mister Gar'thok, may I introduce ya to my crew? We've all got nowhere else to go, and we hear that's as good a reason as any to join the Horde.");
+            creature->MonsterSayToPlayer("Mister Gar'thok, may I introduce ya to my crew? We've all got nowhere else to go, and we hear that's as good a reason as any to join the Horde.", player);
         });
 
         DoAfterTime(pPlayer, 13 * IN_MILLISECONDS,
-            [CreatureGuid = GrizzleEnforcer->GetObjectGuid()]()
+            [CreatureGuid = GrizzleEnforcer->GetObjectGuid(), player = pPlayer]()
         {
             Map* map = sMapMgr.FindMap(1);
             Creature* creature = map->GetCreature(CreatureGuid);
@@ -292,11 +292,11 @@ bool QuestComplete_npc_garthok(Player* pPlayer, Creature* pQuestGiver, Quest con
                 return;
 
             creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            creature->MonsterSay("Barely any different for me! I hear you orcs like bashin' skills, I like bashin' skulls, we're gonna get along just fine.");
+            creature->MonsterSayToPlayer("Barely any different for me! I hear you orcs like bashin' skills, I like bashin' skulls, we're gonna get along just fine.", player);
         });
 
         DoAfterTime(pPlayer, 21 * IN_MILLISECONDS,
-            [CreatureGuid = MaytenBoomfire->GetObjectGuid()]()
+            [CreatureGuid = MaytenBoomfire->GetObjectGuid(), player = pPlayer]()
         {
             Map* map = sMapMgr.FindMap(1);
             Creature* creature = map->GetCreature(CreatureGuid);
@@ -305,7 +305,7 @@ bool QuestComplete_npc_garthok(Player* pPlayer, Creature* pQuestGiver, Quest con
                 return;
 
             creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            creature->MonsterSay("Is what I hear true? You guys use bows? Buddy, buddy. Get with the century! I'll show you some real weapons.");
+            creature->MonsterSayToPlayer("Is what I hear true? You guys use bows? Buddy, buddy. Get with the century! I'll show you some real weapons.", player);
         });
 
         DoAfterTime(pPlayer, 23 * IN_MILLISECONDS,
@@ -322,7 +322,7 @@ bool QuestComplete_npc_garthok(Player* pPlayer, Creature* pQuestGiver, Quest con
         });
 
         DoAfterTime(pPlayer, 31 * IN_MILLISECONDS,
-            [CreatureGuid = WizetteIcewhistle->GetObjectGuid()]()
+            [CreatureGuid = WizetteIcewhistle->GetObjectGuid(), player = pPlayer]()
         {
             Map* map = sMapMgr.FindMap(1);
             Creature* creature = map->GetCreature(CreatureGuid);
@@ -331,11 +331,11 @@ bool QuestComplete_npc_garthok(Player* pPlayer, Creature* pQuestGiver, Quest con
                 return;
 
             creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            creature->MonsterSay("Do ya even have a mage to help out around here? Well, I guess I can set up shop, conjure up some water. For a price, of course, but also for the Horde!");
+            creature->MonsterSayToPlayer("Do ya even have a mage to help out around here? Well, I guess I can set up shop, conjure up some water. For a price, of course, but also for the Horde!", player);
         });
 
         DoAfterTime(pPlayer, 39 * IN_MILLISECONDS,
-            [CreatureGuid = AmriDemondeal->GetObjectGuid()]()
+            [CreatureGuid = AmriDemondeal->GetObjectGuid(), player = pPlayer]()
         {
             Map* map = sMapMgr.FindMap(1);
             Creature* creature = map->GetCreature(CreatureGuid);
@@ -344,11 +344,11 @@ bool QuestComplete_npc_garthok(Player* pPlayer, Creature* pQuestGiver, Quest con
                 return;
 
             creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            creature->MonsterSay("I've made some bad deals with demons, and I know you orcs have too. Thanks for takin' us in.");
+            creature->MonsterSayToPlayer("I've made some bad deals with demons, and I know you orcs have too. Thanks for takin' us in.", player);
         });
 
         DoAfterTime(pPlayer, 48 * IN_MILLISECONDS,
-            [CreatureGuid = SpratNozzleton->GetObjectGuid()]()
+            [CreatureGuid = SpratNozzleton->GetObjectGuid(), player = pPlayer]()
         {
             Map* map = sMapMgr.FindMap(1);
             Creature* creature = map->GetCreature(CreatureGuid);
@@ -357,11 +357,11 @@ bool QuestComplete_npc_garthok(Player* pPlayer, Creature* pQuestGiver, Quest con
                 return;
 
             creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            creature->MonsterSay("Who cares about honor? Where's the food!?");
+            creature->MonsterSayToPlayer("Who cares about honor? Where's the food!?", player);
         });
 
         DoAfterTime(pPlayer, 53 * IN_MILLISECONDS,
-            [CreatureGuid = pQuestGiver->GetObjectGuid()]()
+            [CreatureGuid = pQuestGiver->GetObjectGuid(), player = pPlayer]()
         {
             Map* map = sMapMgr.FindMap(1);
             Creature* creature = map->GetCreature(CreatureGuid);
@@ -371,7 +371,7 @@ bool QuestComplete_npc_garthok(Player* pPlayer, Creature* pQuestGiver, Quest con
 
             creature->HandleEmote(EMOTE_ONESHOT_LAUGH);
             creature->MonsterTextEmote("Gar'thok laughs.");
-            creature->MonsterSay("Very well, goblins, I'm giving you a chance to prove yourself worthy of the Horde, there is work for you here or further up the road in Orgrimmar, earn the respect of your possible allies. Go now, all around Durotar and honor the Horde.");
+            creature->MonsterSayToPlayer("Very well, goblins, I'm giving you a chance to prove yourself worthy of the Horde, there is work for you here or further up the road in Orgrimmar, earn the respect of your possible allies. Go now, all around Durotar and honor the Horde.", player);
         });
     }
     return false;
@@ -388,7 +388,7 @@ bool QuestAccept_npc_nert_blastentom(Player* pPlayer, Creature* pQuestGiver, Que
     if (pQuest->GetQuestId() == QUEST_ME_NOT_ANY_KIND_OF_ORC)
     {
         DoAfterTime(pPlayer, 2 * IN_MILLISECONDS,
-            [CreatureGuid = pQuestGiver->GetObjectGuid()]()
+            [CreatureGuid = pQuestGiver->GetObjectGuid(), player = pPlayer]()
         {
             Map* map = sMapMgr.FindMap(1);
             Creature* creature = map->GetCreature(CreatureGuid);
@@ -397,11 +397,11 @@ bool QuestAccept_npc_nert_blastentom(Player* pPlayer, Creature* pQuestGiver, Que
                 return;
 
             creature->HandleEmote(EMOTE_ONESHOT_NO);
-            creature->MonsterSay("Alright, I'll be honest with you. The boss isn't gonna be happy we're not bringing him back his treasure. But I've seen enough, and I think you have too, right?");
+            creature->MonsterSayToPlayer("Alright, I'll be honest with you. The boss isn't gonna be happy we're not bringing him back his treasure. But I've seen enough, and I think you have too, right?", player);
         });
 
         DoAfterTime(pPlayer, 10 * IN_MILLISECONDS,
-            [CreatureGuid = pQuestGiver->GetObjectGuid()]()
+            [CreatureGuid = pQuestGiver->GetObjectGuid(), player = pPlayer]()
         {
             Map* map = sMapMgr.FindMap(1);
             Creature* creature = map->GetCreature(CreatureGuid);
@@ -410,12 +410,12 @@ bool QuestAccept_npc_nert_blastentom(Player* pPlayer, Creature* pQuestGiver, Que
                 return;
 
             creature->HandleEmote(EMOTE_ONESHOT_QUESTION);
-            creature->MonsterSay("We can't go back to the Venture Co, or the boss'll find us. And there's no way the Steamwheedle Cartel will trust us, not after the Venture Co puts out the word that we took off with their loot, right?");
+            creature->MonsterSayToPlayer("We can't go back to the Venture Co, or the boss'll find us. And there's no way the Steamwheedle Cartel will trust us, not after the Venture Co puts out the word that we took off with their loot, right?", player);
         });
 
 
         DoAfterTime(pPlayer, 17 * IN_MILLISECONDS,
-            [CreatureGuid = pQuestGiver->GetObjectGuid()]()
+            [CreatureGuid = pQuestGiver->GetObjectGuid(), player = pPlayer]()
         {
             Map* map = sMapMgr.FindMap(1);
             Creature* creature = map->GetCreature(CreatureGuid);
@@ -424,7 +424,7 @@ bool QuestAccept_npc_nert_blastentom(Player* pPlayer, Creature* pQuestGiver, Que
                 return;
 
             creature->HandleEmote(EMOTE_ONESHOT_LAUGH);
-            creature->MonsterSay("So here we are. A bunch of smelly, grimy refugees without a single coin to our name. Who in the world would take us in?");
+            creature->MonsterSayToPlayer("So here we are. A bunch of smelly, grimy refugees without a single coin to our name. Who in the world would take us in?", player);
         });
 
 
@@ -441,7 +441,7 @@ bool QuestAccept_npc_nert_blastentom(Player* pPlayer, Creature* pQuestGiver, Que
         });
 
         DoAfterTime(pPlayer, 23 * IN_MILLISECONDS,
-            [CreatureGuid = pQuestGiver->GetObjectGuid()]()
+            [CreatureGuid = pQuestGiver->GetObjectGuid(), player = pPlayer]()
         {
             Map* map = sMapMgr.FindMap(1);
             Creature* creature = map->GetCreature(CreatureGuid);
@@ -449,7 +449,7 @@ bool QuestAccept_npc_nert_blastentom(Player* pPlayer, Creature* pQuestGiver, Que
             if (!creature)
                 return;
 
-            creature->MonsterSay("I think I have just the place... Get the team and hop in the plane.");
+            creature->MonsterSayToPlayer("I think I have just the place... Get the team and hop in the plane.", player);
         });
 
         DoAfterTime(pPlayer, 21 * IN_MILLISECONDS,
@@ -542,7 +542,7 @@ bool QuestAccept_npc_kathy_wake(Player* pPlayer, Creature* pQuestGiver, Quest co
     if (pQuest->GetQuestId() == QUEST_CLEARING_OUT_VERMINS)
     {
         pQuestGiver->HandleEmote(EMOTE_ONESHOT_NO);
-        pQuestGiver->MonsterSay("Do not be frightened, these troggs are small and weak. They're easy to take out alone. However, if they swarm the caravans, people could get hurt, and we cannot spare more men to deal with them while keeping the other threats out there away from the lodge.");
+        pQuestGiver->MonsterSayToPlayer("Do not be frightened, these troggs are small and weak. They're easy to take out alone. However, if they swarm the caravans, people could get hurt, and we cannot spare more men to deal with them while keeping the other threats out there away from the lodge.", pPlayer);
     }
     return false;
 }
@@ -636,7 +636,7 @@ bool GossipSelect_npc_malvinah_sunblade(Player* pPlayer, Creature* pCreature, ui
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
         DoAfterTime(pPlayer, 1 * IN_MILLISECONDS,
-            [CreatureGuid = pCreature->GetObjectGuid()]()
+            [CreatureGuid = pCreature->GetObjectGuid(), player = pPlayer]()
         {
             Map* map = sMapMgr.FindMap(0);
             Creature* creature = map->GetCreature(CreatureGuid);
@@ -645,11 +645,11 @@ bool GossipSelect_npc_malvinah_sunblade(Player* pPlayer, Creature* pCreature, ui
                 return;
 
             creature->HandleEmote(EMOTE_ONESHOT_CRY);
-            creature->MonsterSay("My sister was on that wagon!");
+            creature->MonsterSayToPlayer("My sister was on that wagon!", player);
         });
 
         DoAfterTime(pPlayer, 5 * IN_MILLISECONDS,
-            [CreatureGuid = pCreature->GetObjectGuid()]()
+            [CreatureGuid = pCreature->GetObjectGuid(), player = pPlayer]()
         {
             Map* map = sMapMgr.FindMap(0);
             Creature* creature = map->GetCreature(CreatureGuid);
@@ -658,11 +658,11 @@ bool GossipSelect_npc_malvinah_sunblade(Player* pPlayer, Creature* pCreature, ui
                 return;
 
             creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            creature->MonsterSay("We all knew there was a risk, but... she was practically here already! It could have been any of us!");
+            creature->MonsterSayToPlayer("We all knew there was a risk, but... she was practically here already! It could have been any of us!", player);
         });
 
         DoAfterTime(pPlayer, 10 * IN_MILLISECONDS,
-            [CreatureGuid = pCreature->GetObjectGuid()]()
+            [CreatureGuid = pCreature->GetObjectGuid(), player = pPlayer]()
         {
             Map* map = sMapMgr.FindMap(0);
             Creature* creature = map->GetCreature(CreatureGuid);
@@ -671,11 +671,11 @@ bool GossipSelect_npc_malvinah_sunblade(Player* pPlayer, Creature* pCreature, ui
                 return;
 
             creature->HandleEmote(EMOTE_ONESHOT_CRY);
-            creature->MonsterSay("How could this have happened?! We survived the Scourge, the Wetlands, and the Horde only to have our possessions burned to a cinder while being kidnapped?! It's not fair!");
+            creature->MonsterSayToPlayer("How could this have happened?! We survived the Scourge, the Wetlands, and the Horde only to have our possessions burned to a cinder while being kidnapped?! It's not fair!", player);
         });
 
         DoAfterTime(pPlayer, 15 * IN_MILLISECONDS,
-            [CreatureGuid = pCreature->GetObjectGuid()]()
+            [CreatureGuid = pCreature->GetObjectGuid(), player = pPlayer]()
         {
             Map* map = sMapMgr.FindMap(0);
             Creature* creature = map->GetCreature(CreatureGuid);
@@ -684,11 +684,11 @@ bool GossipSelect_npc_malvinah_sunblade(Player* pPlayer, Creature* pCreature, ui
                 return;
 
             creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            creature->MonsterSay("I'm sorry. I shouldn't burden you with this. We've all struggled ever since we lost Quel'Thalas, but you've provided so much support for us.");
+            creature->MonsterSayToPlayer("I'm sorry. I shouldn't burden you with this. We've all struggled ever since we lost Quel'Thalas, but you've provided so much support for us.", player);
         });
 
         DoAfterTime(pPlayer, 20 * IN_MILLISECONDS,
-            [CreatureGuid = pCreature->GetObjectGuid()]()
+            [CreatureGuid = pCreature->GetObjectGuid(), player = pPlayer]()
         {
             Map* map = sMapMgr.FindMap(0);
             Creature* creature = map->GetCreature(CreatureGuid);
@@ -697,7 +697,7 @@ bool GossipSelect_npc_malvinah_sunblade(Player* pPlayer, Creature* pCreature, ui
                 return;
 
             creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            creature->MonsterSay("The wood, the water, you've even defeated those vile trogg creatures. You're right, I must be calm. Perhaps my sister is still out there. She is the only family I have left, and if anyone can save her, it's you.");
+            creature->MonsterSayToPlayer("The wood, the water, you've even defeated those vile trogg creatures. You're right, I must be calm. Perhaps my sister is still out there. She is the only family I have left, and if anyone can save her, it's you.", player);
         });
 
         DoAfterTime(pPlayer, 25 * IN_MILLISECONDS,
@@ -710,7 +710,7 @@ bool GossipSelect_npc_malvinah_sunblade(Player* pPlayer, Creature* pCreature, ui
                 return;
 
             creature->HandleEmote(EMOTE_ONESHOT_EXCLAMATION);
-            creature->MonsterSay("Go speak to that rogueish human woman who led the caravan escorts. Perhaps she can help!");
+            creature->MonsterSayToPlayer("Go speak to that rogueish human woman who led the caravan escorts. Perhaps she can help!", player);
             CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(NPC_CUSTOM_OBJECTIVE_BURNT_WHEELS);
             if (cInfo != nullptr)
                 player->KilledMonster(cInfo, ObjectGuid());
@@ -730,7 +730,7 @@ bool GossipSelect_npc_malvinah_sunblade(Player* pPlayer, Creature* pCreature, ui
 
             creature->SetCastingTarget(player);
             creature->HandleEmote(EMOTE_ONESHOT_CRY);
-            creature->MonsterSay("You've saved my sister!");
+            creature->MonsterSayToPlayer("You've saved my sister!", player);
             creature->SummonCreature(NPC_ALISHA_SUNBLADE, -5628.99F, -4319.46F, 401.18F, 4.4F, TEMPSUMMON_TIMED_DESPAWN, 25 * 1000);
         });
 
@@ -745,7 +745,7 @@ bool GossipSelect_npc_malvinah_sunblade(Player* pPlayer, Creature* pCreature, ui
                 return;
 
             creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            creature->MonsterSay("I can't overstate how honored I am to be able to call you my friend. Thanks to you, little Arisha is safe. We're all so overwhelmed by your heroism.");
+            creature->MonsterSayToPlayer("I can't overstate how honored I am to be able to call you my friend. Thanks to you, little Arisha is safe. We're all so overwhelmed by your heroism.", player);
         });
 
 
@@ -759,7 +759,7 @@ bool GossipSelect_npc_malvinah_sunblade(Player* pPlayer, Creature* pCreature, ui
                 return;
 
             creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            creature->MonsterSay("Several wagons have moved on to Stormwind while you were away, but a lot of us have decided to stay here for the time being. Perhaps even forever. ");
+            creature->MonsterSayToPlayer("Several wagons have moved on to Stormwind while you were away, but a lot of us have decided to stay here for the time being. Perhaps even forever.", player);
         });
 
 
@@ -773,7 +773,7 @@ bool GossipSelect_npc_malvinah_sunblade(Player* pPlayer, Creature* pCreature, ui
                 return;
 
             creature->HandleEmote(EMOTE_ONESHOT_APPLAUD);
-            creature->MonsterSay("I believe Kathy wishes to speak with you. Here is a present from me. Take care, okay? Wherever you may end up, remember that we'll always remain friends!");
+            creature->MonsterSayToPlayer("I believe Kathy wishes to speak with you. Here is a present from me. Take care, okay? Wherever you may end up, remember that we'll always remain friends!", player);
             CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(NPC_CUSTOM_OBJECTIVE_SUNBLADE_RENUNION);
             if (cInfo != nullptr)
                 player->KilledMonster(cInfo, ObjectGuid());           
@@ -801,7 +801,7 @@ bool GOHello_go_shadowforge_cage(Player* pPlayer, GameObject* pGo)
 
         if (Alisha)
         {
-            Alisha->MonsterSay("I thought I'd never see my sister again. Thank you, hero!");
+            Alisha->MonsterSayToPlayer("I thought I'd never see my sister again. Thank you, hero!", pPlayer);
             // Change it later to real coords.
             float fX, fY, fZ;
             Alisha->GetRandomPoint(Alisha->GetPositionX(), Alisha->GetPositionY(), Alisha->GetPositionZ(), 15.0f, fX, fY, fZ);
@@ -1176,7 +1176,7 @@ bool GossipSelect_npc_deino(Player* pPlayer, Creature* pCreature, uint32 /*uiSen
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        pCreature->MonsterSay("May the spirits be with ya and the Loa guide ya steps.");
+        pCreature->MonsterSayToPlayer("May the spirits be with ya and the Loa guide ya steps.", pPlayer);
 
         float dis{ -3.0F };
         float x, y, z;
@@ -1224,7 +1224,7 @@ bool QuestAccept_npc_teslinah(Player* pPlayer, Creature* pQuestGiver, Quest cons
     if (pQuest->GetQuestId() == 80261) // Teslinah's Search I
     {
         pQuestGiver->HandleEmote(EMOTE_ONESHOT_CRY);
-        pQuestGiver->MonsterSay("Thank you, thank you, thank you! I am so happy! We should go to Stormwind. Let\'s find someone important who can help! I believe miss Tanilaeh in the Golden Dawn Institute can take us back!");
+        pQuestGiver->MonsterSayToPlayer("Thank you, thank you, thank you! I am so happy! We should go to Stormwind. Let\'s find someone important who can help! I believe miss Tanilaeh in the Golden Dawn Institute can take us back!", pPlayer);
     }
     return false;
 }
@@ -1240,7 +1240,7 @@ bool QuestRewarded_npc_teslinah(Player* pPlayer, Creature* pQuestGiver, Quest co
     if (pQuest->GetQuestId() == 80261) // Teslinah's Search I
     {
         pQuestGiver->HandleEmote(EMOTE_ONESHOT_CHEER);
-        pQuestGiver->MonsterSay("Mommy is gone, but we will definitely find her! I am sure of it! Until then, I am happy and excited to adventure with you! We\'re the bestest friends now! We\'re going to have a lot of fun seeing the world! Hehe!");
+        pQuestGiver->MonsterSayToPlayer("Mommy is gone, but we will definitely find her! I am sure of it! Until then, I am happy and excited to adventure with you! We\'re the bestest friends now! We\'re going to have a lot of fun seeing the world! Hehe!", pPlayer);
     }
     return false;
 }
@@ -1279,28 +1279,28 @@ struct go_teslinah_search : public GameObjectAI
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80270);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSay("Oooh, this place is huge! Where do we go now? Let's start in the Mage District! We can also look at that weird-smelling place. The pub? I heard people drink special drinks there when they're sad! My mom is definitely sad without me.");
+                        teslinah->MonsterSayToPlayer("Oooh, this place is huge! Where do we go now? Let's start in the Mage District! We can also look at that weird-smelling place. The pub? I heard people drink special drinks there when they're sad! My mom is definitely sad without me.", pPlayer);
                         break;
                     }
                     case 3000251:
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80271);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSay("I feel the magic in the air! This place is nice, but not as pretty or magical as Silvermoon!");
+                        teslinah->MonsterSayToPlayer("I feel the magic in the air! This place is nice, but not as pretty or magical as Silvermoon!", pPlayer);
                         break;
                     }
                     case 3000252:
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80272);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSay("Mommy isn't here... Let's keep moving!");
+                        teslinah->MonsterSayToPlayer("Mommy isn't here... Let's keep moving!", pPlayer);
                         break;
                     }
                     case 3000253:
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80273);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSay("This place is scary. There's bad magic here, and it smells horrible! Can we leave?! Please?");
+                        teslinah->MonsterSayToPlayer("This place is scary. There's bad magic here, and it smells horrible! Can we leave?! Please?", pPlayer);
                         break;
                     }
                     }
@@ -1318,28 +1318,28 @@ struct go_teslinah_search : public GameObjectAI
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80274);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSay("Look, it's a night elf priestess! And a moonwell! I love all the grass and glowing plants. This place is really nice. I bet Mommy would like it! Let's keep searching so that we can show it to her.");
+                        teslinah->MonsterSayToPlayer("Look, it's a night elf priestess! And a moonwell! I love all the grass and glowing plants. This place is really nice. I bet Mommy would like it! Let's keep searching so that we can show it to her.", pPlayer);
                         break;
                     }
                     case 3000255:
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80275);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSay("Yuck! This place smells. Would Mommy really be here?");
+                        teslinah->MonsterSayToPlayer("Yuck! This place smells. Would Mommy really be here?", pPlayer);
                         break;
                     }
                     case 3000256:
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80276);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSay("Oooh, this place looks much kinder than the other one. But I’m sure my mom didn't go to the dwarf lands.");
+                        teslinah->MonsterSayToPlayer("Oooh, this place looks much kinder than the other one. But I’m sure my mom didn't go to the dwarf lands.", pPlayer);
                         break;
                     }
                     case 3000257:
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80277);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSay("This is the place where our people settled! It's pretty. Not as pretty as Silvermoon, but pretty. This place isn't large though, and Mommy isn't here. Let's keep looking!");
+                        teslinah->MonsterSayToPlayer("This is the place where our people settled! It's pretty. Not as pretty as Silvermoon, but pretty. This place isn't large though, and Mommy isn't here. Let's keep looking!", pPlayer);
                         break;
                     }
                     }
@@ -1357,28 +1357,28 @@ struct go_teslinah_search : public GameObjectAI
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80278);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSay("That looks so weird. The gnomes made this, right? I'm sure Mommy isn't here. That tram leads to the dwarf city, I think. It's cold there, and Mommy hates the cold.");
+                        teslinah->MonsterSayToPlayer("That looks so weird. The gnomes made this, right? I'm sure Mommy isn't here. That tram leads to the dwarf city, I think. It's cold there, and Mommy hates the cold.", pPlayer);
                         break;
                     }
                     case 3000259:
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80279);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSay("The king lives there! We shouldn't disturb him, though, even if finding my mommy is super important. I know she isn't there either because they wouldn't allow her in. We don't have much. Mommy is very pretty, but we lost everything when Quel'Thalas fell.");
+                        teslinah->MonsterSayToPlayer("The king lives there! We shouldn't disturb him, though, even if finding my mommy is super important. I know she isn't there either because they wouldn't allow her in. We don't have much. Mommy is very pretty, but we lost everything when Quel'Thalas fell.", pPlayer);
                         break;
                     }
                     case 3000260:
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80280);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSay("I heard that this place existed before the new town was built! There's so many shops, but the streets are all so crammed that it’s a little bit scary.");
+                        teslinah->MonsterSayToPlayer("I heard that this place existed before the new town was built! There's so many shops, but the streets are all so crammed that it’s a little bit scary.", pPlayer);
                         break;
                     }
                     case 3000261:
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80281);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSay("This place is smelly. Mommy isn't here either. I am really worried. Where else could she be?");
+                        teslinah->MonsterSayToPlayer("This place is smelly. Mommy isn't here either. I am really worried. Where else could she be?", pPlayer);
                         break;
                     }
                     }
@@ -1396,21 +1396,21 @@ struct go_teslinah_search : public GameObjectAI
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80282);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSay("The army is there. Could my mom have been arrested? But she didn't commit any crimes. I don't think this is the place, but we can come back here if we don't find her anywhere else.");
+                        teslinah->MonsterSayToPlayer("The army is there. Could my mom have been arrested? But she didn't commit any crimes. I don't think this is the place, but we can come back here if we don't find her anywhere else.", pPlayer);
                         break;
                     }
                     case 3000263:
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80283);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSay("It's the Cathedral! Wow, it's so huge! That's amazing!");
+                        teslinah->MonsterSayToPlayer("It's the Cathedral! Wow, it's so huge! That's amazing!", pPlayer);
                         break;
                     }
                     case 3000264:
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80284);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSay("If Mommy is really gone, then I could end up in that place. I don't even want to think about that. It makes me so sad that I could cry.");
+                        teslinah->MonsterSayToPlayer("If Mommy is really gone, then I could end up in that place. I don't even want to think about that. It makes me so sad that I could cry.", pPlayer);
                         teslinah->HandleEmote(EMOTE_ONESHOT_CRY);
                     }
                     break;
@@ -1418,7 +1418,7 @@ struct go_teslinah_search : public GameObjectAI
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80285);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSay("Look at this place! It's amazing! Wow, it's breathtaking!");
+                        teslinah->MonsterSayToPlayer("Look at this place! It's amazing! Wow, it's breathtaking!", pPlayer);
                         break;
                     }
                     }
@@ -1436,28 +1436,28 @@ struct go_teslinah_search : public GameObjectAI
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80286);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSay("This looks awful, and it's gross and scary. Can we leave, please? I don't like the way that man in red is looking at me.");
+                        teslinah->MonsterSayToPlayer("This looks awful, and it's gross and scary. Can we leave, please? I don't like the way that man in red is looking at me.", pPlayer);
                         break;
                     }
                     case 3000267:
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80287);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSay("This is bad. This is really bad. I don't like it here. Let's go, please? I'm scared.");
+                        teslinah->MonsterSayToPlayer("This is bad. This is really bad. I don't like it here. Let's go, please? I'm scared.", pPlayer);
                         break;
                     }
                     case 3000268:
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80288);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSay("Oh, there's so many people here! I remember when we first arrived after flying on gryphon’s back! Their feathers were really fluffy and soft. Could Mom be here?");
+                        teslinah->MonsterSayToPlayer("Oh, there's so many people here! I remember when we first arrived after flying on gryphon’s back! Their feathers were really fluffy and soft. Could Mom be here?", pPlayer);
                         break;
                     }
                     case 3000269:
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80289);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSay("Oh, in there! That's the Visitor's Center where we first checked in when we arrived. Maybe they might know something!");
+                        teslinah->MonsterSayToPlayer("Oh, in there! That's the Visitor's Center where we first checked in when we arrived. Maybe they might know something!", pPlayer);
                         break;
                     }
                     }
@@ -1492,7 +1492,7 @@ bool GossipSelect_npc_iluria(Player* pPlayer, Creature* pCreature, uint32 /*uiSe
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
         pPlayer->AddItem(80865, 1);
-        pCreature->MonsterSay("Ahh… Applebough. Of course. Here's the balm that will help.");
+        pCreature->MonsterSayToPlayer("Ahh… Applebough. Of course. Here's the balm that will help.", pPlayer);
         pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
     }
     pPlayer->CLOSE_GOSSIP_MENU();
@@ -1515,10 +1515,10 @@ bool QuestAccept_npc_applebough(Player* pPlayer, Creature* pQuestGiver, Quest co
         if (pQuestGiver->GetDisplayId() == 18356) // Green
         {
             pQuestGiver->SetDisplayId(18029); // Yellow
-            pQuestGiver->MonsterSay("My leaves. They fall. Big sad.");
+            pQuestGiver->MonsterSayToPlayer("My leaves. They fall. Big sad.", pPlayer);
         }
         else
-            pQuestGiver->MonsterSay("Was green. Had fruits. Was happy...");
+            pQuestGiver->MonsterSayToPlayer("Was green. Had fruits. Was happy...", pPlayer);
     }
     return false;
 }
@@ -1536,7 +1536,7 @@ bool QuestRewarded_npc_applebough(Player* pPlayer, Creature* pQuestGiver, Quest 
         pQuestGiver->HandleEmote(EMOTE_ONESHOT_CHEER);
         // I don't understand why he's not cheering? Model has /cheer animation.
         pQuestGiver->SetDisplayId(18356); // Green
-        pQuestGiver->MonsterSay("This is what I needed the most!");
+        pQuestGiver->MonsterSayToPlayer("This is what I needed the most!", pPlayer);
         return true;
     }
 }

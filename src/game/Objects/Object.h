@@ -833,6 +833,7 @@ m_obj->m_updateTracker.Reset();
         void MonsterYell(const char* text, uint32 language = 0, Unit const* target = nullptr) const;
         void MonsterTextEmote(const char* text, Unit const* target = nullptr, bool IsBossEmote = false, float rangeOverride=0.0f) const;
         void MonsterWhisper(const char* text, Unit const* target = nullptr, bool IsBossWhisper = false) const;
+        void MonsterSayToPlayer(const char* text, Unit const* target = nullptr, bool IsBossWhisper = false) const;
         void MonsterSay(int32 textId, uint32 language = 0, Unit const* target = nullptr) const;
         void MonsterYell(int32 textId, uint32 language = 0, Unit const* target = nullptr) const;
         void MonsterTextEmote(int32 textId, Unit const* target = nullptr, bool IsBossEmote = false, float rangeOverride=0.0f) const;
