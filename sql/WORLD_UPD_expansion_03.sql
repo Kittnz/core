@@ -282,7 +282,7 @@ DELETE FROM `spell_scripts` WHERE `id`=15702;
 INSERT INTO `spell_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (15702, 0, 17, 11954, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Empty Pure Sample Jar - Create Item Filled Pure Sample Jar');
 INSERT INTO `spell_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (15702, 0, 18, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Empty Pure Sample Jar - Despawn Creature');
 
-update creature_template set display_id1 = 18029, script_name = 'npc_applebough' where entry = 80460;
+update creature_template set display_id1 = 18029, script_name = 'npc_applebough', faction = 371 where entry = 80460;
 
 update creature_template set script_name = '' where script_name = 'NULL';
 update creature_template set script_name = '' where script_name = 'npc_dressing_room';
@@ -360,3 +360,7 @@ REPLACE INTO `npc_vendor` VALUES (80912, 80878, 0, 0, 0, 0);
 REPLACE INTO `item_template` VALUES (80878, 0, 15, 0, 'Amani Eagle', 'These birds often prey on turtles by dropping them from great heights to break open their shell.', 5696 , 1, 0, 1, 6000, 1500, 0, -1, -1, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 45000, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
 
 update item_template set required_reputation_faction = 893, required_reputation_rank = 7  where entry = 80878;
+
+update item_template set description = 'This glyph prevents you from ever receiving rested experience. Exhausted mind tends to optimize actions and practice makes perfect.', quality = 2 where entry = 50521;
+
+update item_template set quality = 3 where entry = 50010;
