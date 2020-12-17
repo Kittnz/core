@@ -364,3 +364,12 @@ update item_template set required_reputation_faction = 893, required_reputation_
 update item_template set description = 'This glyph prevents you from ever receiving rested experience. Exhausted mind tends to optimize actions and practice makes perfect.', quality = 2, bonding = 1 where entry = 50521;
 
 update item_template set quality = 3 where entry = 50010;
+
+update creature_template set subname = '' where entry = 5498;
+
+UPDATE `quest_template` SET `Objectives`='Speak to Elsharin, she can be in the Little Silvermoon district of Stormwind.' WHERE (`entry`='80251') AND (`patch`='0');
+
+UPDATE `quest_template` SET `Details`='Now that you know what we’re dealing with and our history...\n\nThe time has come to act. If you’re truly interested in helping us, then this is the way.\n\nOne of our most talented mages has established a leyline connection to Alah\'thalas.\n\nGo to the Little Silvermoon district, and speak to Elsharin. She will be able to take you there, once you arrive I am sure someone will tend to you.' WHERE (`entry`='80251') AND (`patch`='0');
+
+UPDATE `quest_template` SET `MinLevel`='8', `QuestLevel`='8' WHERE (`entry`='80315') AND (`patch`='0');
+
