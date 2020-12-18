@@ -903,3 +903,5 @@ update quest_template set zoneorsort = -241 where entry in (80252, 80253, 80255,
 
 UPDATE `creature_template` SET `ai_name`='0' WHERE (`entry`='80457') AND (`patch`='0');
 UPDATE `creature_template` SET `gossip_menu_id`='0' WHERE (`entry`='80457') AND (`patch`='0');
+
+update gameobject_template set type = 5 where entry = 2010653;
