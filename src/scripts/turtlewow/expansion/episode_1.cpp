@@ -169,6 +169,30 @@ bool GossipSelect_npc_elsharin(Player* pPlayer, Creature* pCreature, uint32 /*ui
     return true;
 }
 
+bool GossipHello_npc_sunkiss(Player* pPlayer, Creature* pCreature)
+{
+    if (pPlayer->GetQuestRewardStatus(TO_ALAHTHALAS))
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Please open a portal to Stormwind.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    }
+
+    pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+    pPlayer->SEND_GOSSIP_MENU(90371, pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_sunkiss(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pCreature->MonsterSay("Al diel shala!", 10);
+        pPlayer->TeleportTo(0, -8541.88F, 554.10F, 102.87F, 2.95F);
+    }
+
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
 bool GOHello_go_portal_alahthalas(Player* pPlayer, GameObject* pGo)
 {
     if (pPlayer->GetQuestRewardStatus(TO_ALAHTHALAS))
@@ -1544,6 +1568,12 @@ bool QuestRewarded_npc_applebough(Player* pPlayer, Creature* pQuestGiver, Quest 
 void AddSC_episode_1()
 {
     Script *newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_sunkiss";
+    newscript->pGossipHello = &GossipHello_npc_sunkiss;
+    newscript->pGossipSelect = &GossipSelect_npc_sunkiss;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_applebough";
