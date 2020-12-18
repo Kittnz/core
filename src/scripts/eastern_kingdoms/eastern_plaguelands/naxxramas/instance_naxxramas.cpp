@@ -23,7 +23,6 @@ EndScriptData */
 
 #include "scriptPCH.h"
 #include "naxxramas.h"
-#include "InstanceStatistics.h"
 
 enum NaxxEvents
 {
@@ -1034,26 +1033,6 @@ void instance_naxxramas::SetData(uint32 uiType, uint32 uiData)
             entry = NPC_KELTHUZAD;
         break;
         }
-
-        if (entry)
-        {
-            if (Creature* pCreature = GetSingleCreatureFromStorage(entry))
-            {
-                // Crude check to to avoid silly data clogging up our statistics
-                // We only update the wipe counter if the boss has been in combat for at least 10 seconds
-                if (pCreature->GetCombatTime(false) > 10)
-                {
-                    sInstanceStatistics.IncrementWipeCounter(533, entry);
-                    if (entry == NPC_ZELIEK)
-                    {
-                        // special case handling for these 4hm buggers
-                        sInstanceStatistics.IncrementWipeCounter(533, NPC_MOGRAINE);
-                        sInstanceStatistics.IncrementWipeCounter(533, NPC_BLAUMEUX);
-                        sInstanceStatistics.IncrementWipeCounter(533, NPC_THANE);
-                    }
-                }
-            }
-        }
     }
 
     if (uiData == DONE)
@@ -1243,7 +1222,6 @@ void instance_naxxramas::OnCreatureDeath(Creature* pCreature)
         if(GetData(TYPE_KELTHUZAD) != DONE)
         {
             m_events.ScheduleEvent(EVENT_BIGGLESWORTH_DIED_YELL, 1000);
-            sInstanceStatistics.IncrementCustomCounter(MR_BIGGLESWORTH_KILLS, true);
         }
         break;
     }
