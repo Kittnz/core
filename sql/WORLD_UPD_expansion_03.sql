@@ -943,3 +943,7 @@ REPLACE INTO `gameobject_template` VALUES
 (3000320, 0, 5, 32897, 'Goblin_BeachParasol_06', 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
 (3000321, 0, 5, 32898, 'Goblin_BeachTowel_01', 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
 (3000322, 0, 5, 32899, 'Goblin_BeachTowel_02', 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+-- unlock items
+
+UPDATE item_template SET allowable_race = -1 WHERE allowable_race = 255;
