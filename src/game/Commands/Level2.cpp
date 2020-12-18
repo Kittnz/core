@@ -1407,6 +1407,10 @@ bool ChatHandler::HandleNpcScaleCommand(char* args)
     uint32 npc_entry = npc ? npc->GetEntry() : 0;
 
     WorldDatabase.PExecuteLog("UPDATE `creature_template` set `scale` = %f where entry = %u", scale, npc_entry);
+
+    npc->SetObjectScale(scale);
+    npc->UpdateModelData();
+
     return true;
 }
 
