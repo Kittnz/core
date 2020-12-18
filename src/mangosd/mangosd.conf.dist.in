@@ -30,7 +30,6 @@ ConfVersion=2010100901
 #    LoginDatabase.Info
 #    WorldDatabase.Info
 #    CharacterDatabase.Info
-#    LogsDatabase.Info
 #        Database connection settings for the world server.
 #        Default:
 #                ---MYSQL---
@@ -45,14 +44,12 @@ ConfVersion=2010100901
 #	LoginDatabase.Connections
 #	WorldDatabase.Connections
 #	CharacterDatabase.Connections
-#   LogsDatabase.Connections
 #		 Amount of connections to database which will be used for SELECT queries. Maximum 16 connections per database.
 #		 Default: 1 connection for SELECT statements
 #
 #   LoginDatabase.WorkerThreads
 #   WorldDatabase.WorkerThreads
 #   CharacterDatabase.WorkerThreads
-#   LogsDatabase.WorkerThreads
 #        Amount of async threads (with dedicated connection) which will be used for async SELECT, executes, and transactions.
 #        Default: 1 async worker
 #
@@ -83,9 +80,6 @@ WorldDatabase.WorkerThreads     = 1
 CharacterDatabase.Info          = "127.0.0.1;3306;mangos;mangos;characters"
 CharacterDatabase.Connections   = 1
 CharacterDatabase.WorkerThreads = 1
-LogsDatabase.Info               = "127.0.0.1;3306;mangos;mangos;logs"
-LogsDatabase.Connections        = 1
-LogsDatabase.WorkerThreads      = 1
 MaxPingTime = 30
 WorldServerPort = 8085
 BindIP = "0.0.0.0"
@@ -603,25 +597,6 @@ DebuffLimit = 0
 #        Default: "" - none colors
 #        Example: "13 7 11 9"
 #
-#    LogsDB.Chat
-#        Enable or disable database chat logs.
-#        Default: 0
-#
-#    LogsDB.Characters
-#        Enable or disable database character logs.
-#        Default: 0
-#
-#    LogsDB.Trades
-#        Enable or disable database trade logs.
-#        Default: 0
-#
-#    LogsDB.Transactions
-#        Enable or disable database transaction logs.
-#        Default: 0
-#
-#    LogsDB.Battlegrounds
-#        Enable or disable database battleground logs.
-#        Default: 0
 #
 ###################################################################################################################
 
@@ -675,12 +650,6 @@ RaLogFile = ""
 NostalriusLogFile = "Info.log"
 NostalriusLogTimestamp = 0
 LogColors = ""
-
-LogsDB.Chat                 = 0
-LogsDB.Characters           = 0
-LogsDB.Trades               = 0
-LogsDB.Transactions         = 0
-LogsDB.Battlegrounds        = 0
 
 PerformanceLog.File                     = "perf.log"
 PerformanceLog.SlowWorldUpdate          = 100

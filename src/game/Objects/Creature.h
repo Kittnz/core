@@ -753,13 +753,10 @@ class MANGOS_DLL_SPEC Creature : public Unit
         bool CantPathToVictim() const;
 
         // Smartlog
-        time_t GetCombatTime(bool total) const;
+        time_t GetCombatTime() const;
         void ResetCombatTime(bool combat = false);
         void UpdateCombatState(bool combat) { m_combatState = combat; }
         void UpdateCombatWithZoneState(bool combat) { m_combatWithZoneState = combat; }
-        void LogDeath(Unit* pKiller) const;
-        void LogLongCombat() const;
-        void LogScriptInfo(std::ostringstream &data) const;
         // Smartlog end
 
         Unit* SelectAttackingTarget(AttackingTarget target, uint32 position, uint32 spellId, uint32 selectFlags = SELECT_FLAG_NO_TOTEM) const;
