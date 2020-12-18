@@ -947,3 +947,5 @@ REPLACE INTO `gameobject_template` VALUES
 -- unlock items
 
 UPDATE item_template SET allowable_race = -1 WHERE allowable_race = 255;
+
+UPDATE `map_template` SET `map_type`='0', `level_min`='0', `level_max`='0' WHERE (`entry`='25') AND (`patch`='0');
