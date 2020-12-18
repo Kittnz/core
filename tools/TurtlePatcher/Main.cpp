@@ -12,10 +12,10 @@
 #define fs std::filesystem
 
 //#TODO: Read from config blob at the end of the file
-#define NEW_BUILD 5910u
-#define NEW_VISUAL_BUILD "5910"
-#define NEW_VISUAL_VERSION "1.14.1"
-#define NEW_BUILD_DATE "Dec 11 2020"
+#define NEW_BUILD 5920u
+#define NEW_VISUAL_BUILD "5920"
+#define NEW_VISUAL_VERSION "1.14.2"
+#define NEW_BUILD_DATE "Dec 18 2020"
 
 #define PATCH_FILE "Data\\patch-T.mpq"
 
