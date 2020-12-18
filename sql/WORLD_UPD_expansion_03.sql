@@ -218,9 +218,9 @@ REPLACE INTO `item_template` VALUES (80876, 0, 2, 2, 'Silvermoon Bow', '', 40053
 -- Creatures: 1682
 
 -- Rocket cars:
-update item_template set required_reputation_faction = 1001, required_reputation_rank = 4 where entry = 80460;
-update item_template set required_reputation_faction = 1001, required_reputation_rank = 4 where entry = 80461;
-update item_template set required_reputation_faction = 1001, required_reputation_rank = 4 where entry = 80462;
+update item_template set required_reputation_faction = 1001, required_reputation_rank = 5 where entry = 80460;
+update item_template set required_reputation_faction = 1001, required_reputation_rank = 5 where entry = 80461;
+update item_template set required_reputation_faction = 1001, required_reputation_rank = 5 where entry = 80462;
 
 -- First quitter's team in Durotar:
 update creature_template set faction = 1682, subname = '' where entry = 80121;
