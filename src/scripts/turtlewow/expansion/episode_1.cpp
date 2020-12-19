@@ -142,7 +142,6 @@ bool GossipHello_npc_elsharin(Player* pPlayer, Creature* pCreature)
     {
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Please open a portal to Alah'Thalas.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     }
-
     pPlayer->PrepareQuestMenu(pCreature->GetGUID());
     pPlayer->SEND_GOSSIP_MENU(90371, pCreature->GetGUID());
     return true;
@@ -152,17 +151,14 @@ bool GossipSelect_npc_elsharin(Player* pPlayer, Creature* pCreature, uint32 /*ui
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
+        pCreature->HandleEmote(EMOTE_ONESHOT_LAND);
         pCreature->MonsterSay("Safe travels!");
-
-        float dis{ -3.0F };
-        float x, y, z;
-        pPlayer->GetSafePosition(x, y, z);
-        x += dis * cos(pPlayer->GetOrientation());
-        y += dis * sin(pPlayer->GetOrientation());
-        pPlayer->SummonGameObject(3000220, x, y, z + 0.5F, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 30, true);
-        pPlayer->SummonGameObject(3000221, x, y, z - 1.5F, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 30, true);
-
-        pCreature->HandleEmote(EMOTE_STATE_SUBMERGED);
+        //float dis{ 1.0F };
+        //float x, y, z;
+        //pPlayer->GetSafePosition(x, y, z);
+        //x += dis * cos(pPlayer->GetOrientation());
+        //y += dis * sin(pPlayer->GetOrientation());
+        pPlayer->SummonGameObject(3000220, -8543.34F, 554.28F, 102.9F, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 30, true);
     }
 
     pPlayer->CLOSE_GOSSIP_MENU();
@@ -868,17 +864,9 @@ bool GossipSelect_npc_magistrix_ishalah(Player* pPlayer, Creature* pCreature, ui
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
+        pCreature->HandleEmote(EMOTE_ONESHOT_SPELLPRECAST);
         pCreature->MonsterSay("Safe travels, friend!");
-
-        float dis{ -3.0F };
-        float x, y, z;
-        pPlayer->GetSafePosition(x, y, z);
-        x += dis * cos(pPlayer->GetOrientation());
-        y += dis * sin(pPlayer->GetOrientation());
-        pPlayer->SummonGameObject(3000204, x, y, z + 0.5F, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 30, true);
-        pPlayer->SummonGameObject(3000205, x, y, z - 1.5F, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 30, true);
-
-        pCreature->HandleEmote(EMOTE_STATE_SUBMERGED);
+        pPlayer->SummonGameObject(3000204, -5660.109F, -4258.419F, 407.899F, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 30, true);
     }
 
     pPlayer->CLOSE_GOSSIP_MENU();
