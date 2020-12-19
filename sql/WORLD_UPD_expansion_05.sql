@@ -55,3 +55,47 @@ REPLACE INTO `playercreateinfo_spell` VALUES
 (10, 4, 46021, 0, 5875, 'Enchanting Specialization'),
 (10, 5, 46021, 0, 5875, 'Enchanting Specialization'),
 (10, 8, 46021, 0, 5875, 'Enchanting Specialization');
+
+replace into item_template values
+ ('80526', '0', '4', '3', 'Quel\'dorei Ranger\'s Legguards', '', '5928', '3', '0', '1', '41074', '10269', '7', '4', '-1', '65',
+ '60', '0', '0', '0', '0', '0', '269', '6', '0', '1', '0', '3', '13', '5', '11',
+ '7', '13', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '9334', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '5', '1', '0', '0', '90', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+ replace into item_template values
+ ('80626', '0', '4', '3', 'Revantusk Shadow Hunter\'s Legguards', '', '5928', '3', '0', '1', '41074', '10269', '7', '68', '-1', '65',
+ '60', '0', '0', '0', '0', '0', '893', '6', '0', '1', '0', '3', '13', '5', '11',
+ '7', '13', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '9334', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '5', '1', '0', '0', '90', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+
+update item_template set name = 'Crude Channeling Staff' where entry = 80602;
+update item_template set name = 'Quel\'dorei Magister\'s Focus' where entry = 80539;
+update item_template set name = 'Quel\'dorei Defender\'s Deflector"' where entry = 80535;
+
+update item_template set display_id = 60725 where entry = 80529;
+update item_template set display_id = 40048 where entry = 80502;
+update item_template set display_id = 36958 where entry = 80535;
+update item_template set display_id = 36387 where entry = 80512;
+update item_template set display_id = 60666 where entry = 80606;
+update item_template set display_id = 60670 where entry = 80505;
+update item_template set display_id = 60669 where entry = 80527;
+update item_template set display_id = 60667 where entry = 80506;
+update item_template set display_id = 40102 where entry = 80626;
+
+update item_template set display_id = 50543 where entry = 80630;
+update item_template set display_id = 50544 where entry = 80632;
+
+update item_template set display_id = 50555 where entry = 80646;
+update item_template set display_id = 50549 where entry = 80640;
+
+update item_template set display_id = 50584 where entry = 80644;
+update item_template set display_id = 50580 where entry = 80645;
+
+
