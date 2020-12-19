@@ -4,6 +4,8 @@ update gameobject_template set displayid = 22748, size = 1 where entry = 3000204
 
 update item_template set spellid_1 = 46033 where entry = 80878;
 
+REPLACE INTO `creature_template` VALUES (80920, 0, 18338, 0, 0, 0, 'Amani Eagle', '', 0, 1, 1, 64, 64, 0, 0, 0, 35, 0, 1, 1.14286, 0.7, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, '');
+
 -- Revantusk Trolls Armor Quartermaster
 
 REPLACE INTO `creature_template` VALUES (80915, 0, 14768, 0, 0, 0, 'Tan\'Pogo', 'Revantusk Trolls Armor Quartermaster', 0, 11, 11, 456, 456, 0, 0, 20, 1494, 16388, 1.1, 1.14286, 0, 20, 5, 0, 0, 1, 12, 14, 0, 64, 1, 2000, 2090, 1, 4864, 0, 0, 0, 0, 0, 0, 18.392, 25.289, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, '');
