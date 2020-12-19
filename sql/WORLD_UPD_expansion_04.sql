@@ -886,3 +886,16 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '1', '1', '0', '0', '100', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
+ 
+ -- Misc. fixes:
+ 
+ update item_template set display_id = 23110 where entry = 80505;
+ update item_template set display_id = 23069 where entry = 80506;
+ update item_template set display_id = 23069 where entry = 80527;
+ update item_template set material = 4 where entry = 80805;
+ 
+ update creature_template set movement_type = 0 where entry = 80506;
+ 
+update item_template set sheath = 0 where entry in (80545, 80544, 80645, 80644, 80799, 51820);
+
+UPDATE `gameobject_template` SET `name`='Something sparkling in the bottom...' WHERE (`entry`='1000312') AND (`patch`='0');
