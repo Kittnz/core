@@ -98,4 +98,11 @@ update item_template set display_id = 50549 where entry = 80640;
 update item_template set display_id = 50584 where entry = 80644;
 update item_template set display_id = 50580 where entry = 80645;
 
+UPDATE `item_template` SET `stat_value3`='5' WHERE (`entry`='80528') AND (`patch`='0');
+UPDATE `item_template` SET `stat_value3`='5' WHERE (`entry`='80628') AND (`patch`='0');
+UPDATE `item_template` SET `inventory_type`='17' WHERE (`entry`='80860') AND (`patch`='0');
+
+update creature_template set subname = 'Mage Trainer' where entry = 5498;
+
+
 
