@@ -108,5 +108,7 @@ UPDATE `quest_template` SET `Objectives`='Speak to Elsharin, she can be found be
 
 UPDATE `quest_template` SET `Details`='Now that you know what we’re dealing with and our history...\n\nThe time has come to act. If you’re truly interested in helping us, then this is the way.\n\nOne of our most talented mages has established a leyline connection to Alah\'thalas.\n\nGo to the Mage Tower in the Mage District, and speak to Elsharin. She will be able to take you there, once you arrive I am sure someone will tend to you.' WHERE (`entry`='80251') AND (`patch`='0');
 
+REPLACE INTO `gameobject_template` VALUES 
+(3000325, 0, 5, 32876, 'BE_Tent_Red_01', 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
 
 
