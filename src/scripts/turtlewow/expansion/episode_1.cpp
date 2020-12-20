@@ -151,14 +151,13 @@ bool GossipSelect_npc_elsharin(Player* pPlayer, Creature* pCreature, uint32 /*ui
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        pCreature->HandleEmote(EMOTE_ONESHOT_LAND);
         pCreature->MonsterSay("Safe travels!");
         //float dis{ 1.0F };
         //float x, y, z;
         //pPlayer->GetSafePosition(x, y, z);
         //x += dis * cos(pPlayer->GetOrientation());
         //y += dis * sin(pPlayer->GetOrientation());
-        pPlayer->SummonGameObject(3000220, -8543.34F, 554.28F, 102.9F, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 30, true);
+        pPlayer->SummonGameObject(3000220, -9002.817F, 883.549F, 29.58F, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 30, true);
     }
 
     pPlayer->CLOSE_GOSSIP_MENU();
