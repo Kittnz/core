@@ -104,5 +104,9 @@ UPDATE `item_template` SET `inventory_type`='17' WHERE (`entry`='80860') AND (`p
 
 update creature_template set subname = 'Mage Trainer' where entry = 5498;
 
+UPDATE `quest_template` SET `Objectives`='Speak to Elsharin, she can be found beyond the portal in the Mage Tower in Stormwind.' WHERE (`entry`='80251') AND (`patch`='0');
+
+UPDATE `quest_template` SET `Details`='Now that you know what we’re dealing with and our history...\n\nThe time has come to act. If you’re truly interested in helping us, then this is the way.\n\nOne of our most talented mages has established a leyline connection to Alah\'thalas.\n\nGo to the Mage Tower in the Mage District, and speak to Elsharin. She will be able to take you there, once you arrive I am sure someone will tend to you.' WHERE (`entry`='80251') AND (`patch`='0');
+
 
 
