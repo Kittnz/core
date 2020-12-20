@@ -181,7 +181,7 @@ bool GossipSelect_npc_sunkiss(Player* pPlayer, Creature* pCreature, uint32 /*uiS
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
         pCreature->MonsterSay("Al diel shala!", 10);
-        pPlayer->TeleportTo(0, -8541.88F, 554.10F, 102.87F, 2.95F);
+        pPlayer->TeleportTo(0, -9009.26F, 883.30F, 29.62F, 0.57F);
     }
 
     pPlayer->CLOSE_GOSSIP_MENU();
