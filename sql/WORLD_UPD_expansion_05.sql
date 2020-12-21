@@ -126,3 +126,6 @@ update creature_template set faction = 12 where entry = 80927;
 replace into broadcast_text (ID, MaleText) values
 ('90004', 'Even the best blade will rust and grow dull unless it is cared for. You have chosen your weapon, so fight!');
 
+update item_template set sheath = 1 where entry = 51849;
+update item_template set sell_price = 152, buy_price = 152 where entry = 51817;
+update item_template set sell_price = 221, buy_price = 221 where entry = 51816 ;
