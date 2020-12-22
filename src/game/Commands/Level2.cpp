@@ -1385,6 +1385,35 @@ bool ChatHandler::HandleNpcAddVendorItemCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleNpcScaleCommand(char* args)
+{
+    if (!*args)
+        return false;
+
+    float scale = (float)atof(args);
+
+    if (scale > 100.0F || scale <= 0.0F)
+    {
+        SendSysMessage(LANG_BAD_VALUE);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    Creature* npc = GetSelectedCreature();
+
+    if (!npc)
+        return false;
+
+    uint32 npc_entry = npc ? npc->GetEntry() : 0;
+
+    WorldDatabase.PExecuteLog("UPDATE `creature_template` set `scale` = %f where entry = %u", scale, npc_entry);
+
+    npc->SetObjectScale(scale);
+    npc->UpdateModelData();
+
+    return true;
+}
+
 //del item from vendor list
 bool ChatHandler::HandleNpcDelVendorItemCommand(char* args)
 {

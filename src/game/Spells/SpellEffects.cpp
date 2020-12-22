@@ -1498,7 +1498,7 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                             // Change this part: 
                             #define SNOWBALL_TARGET_1 68542 // Draxer
                             #define SNOWBALL_TARGET_2 56012 // Paulgreeneye
-                            #define SNOWBALL_TARGET_3 97647 // Sangria
+                            #define SNOWBALL_TARGET_3 65251 // Skrimmshaw
                             #define SNOWBALL_TARGET_4 87830 // Sucy
                             
                             int32 dummy_player{0};

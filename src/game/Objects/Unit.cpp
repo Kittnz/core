@@ -62,7 +62,6 @@
 #include "Chat.h"
 #include "Anticheat.h"
 #include "CreatureLinkingMgr.h"
-#include "InstanceStatistics.h"
 
 #include "Autoscaling/AutoScaler.hpp"
 
@@ -1334,7 +1333,6 @@ void Unit::Kill(Unit* pVictim, SpellEntry const *spellProto, bool durabilityLoss
 
         if (!pCreatureVictim->IsPet())
         {
-            pCreatureVictim->LogDeath(this);
             pCreatureVictim->UpdateCombatState(false);
             pCreatureVictim->UpdateCombatWithZoneState(false);
 
@@ -1377,12 +1375,6 @@ void Unit::Kill(Unit* pVictim, SpellEntry const *spellProto, bool durabilityLoss
             if (playerKiller)
                 pCreatureVictim->GetMap()->BindToInstanceOrRaid(playerKiller, pCreatureVictim->GetRespawnTimeEx(), pCreatureVictim->GetCreatureInfo()->flags_extra & CREATURE_FLAG_EXTRA_INSTANCE_BIND);
         }
-    }
-
-    // If we're in a dungeon, the killer is a pCreatureVictim and the victim is a player
-    if (GetInstanceId() && GetMapId() > 1 && this->IsCreature() && pPlayerVictim)
-    {
-        sInstanceStatistics.IncrementKillCounter(this->ToCreature(), pPlayerVictim, spellProto);
     }
 
     // battleground things (do this at the end, so the death state flag will be properly set to handle in the bg->handlekill)
