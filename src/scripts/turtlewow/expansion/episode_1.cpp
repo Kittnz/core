@@ -1492,7 +1492,7 @@ bool GossipHello_npc_iluria(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->GetQuestStatus(80315) == QUEST_STATUS_INCOMPLETE) // Apple a Day...
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Applebough doesn't look well!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "A young tree with few rings named Applebough came to us for guidance and expertise with his leaves. Will you offer your time to help us find a cure for his ailment?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     }
     pPlayer->SEND_GOSSIP_MENU(1, pCreature->GetGUID());
     return true;
