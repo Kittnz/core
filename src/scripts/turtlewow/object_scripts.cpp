@@ -689,14 +689,16 @@ struct stormwind_vault_portal : public GameObjectAI
 
             for (Player* pPlayer : players)
             {
-                if (!pPlayer->isAlive()) {
-                    pPlayer->ResurrectPlayer(0.5f);
-                    pPlayer->SpawnCorpseBones();
-                }
-                if (me->GetEntry() == 3000281)
-                    pPlayer->TeleportTo(0, -8677.60F, 637.04F, 96.90F, 5.3F);
-                else
-                    pPlayer->TeleportTo(35, -1.15F, 44.4F, -25.58F, 1.6F);
+                pPlayer->GetSession()->SendNotification("This dungeon is currently not avaiable.");
+                //if (!pPlayer->isAlive()) 
+                //{
+                //    pPlayer->ResurrectPlayer(0.5f);
+                //    pPlayer->SpawnCorpseBones();
+                //}
+                //if (me->GetEntry() == 3000281)
+                //    pPlayer->TeleportTo(0, -8677.60F, 637.04F, 96.90F, 5.3F);
+                //else
+                //    pPlayer->TeleportTo(35, -1.15F, 44.4F, -25.58F, 1.6F);
             }
             m_uiUpdateTimer = 1000;
         }
