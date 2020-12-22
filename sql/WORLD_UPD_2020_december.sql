@@ -55,3 +55,9 @@ replace into broadcast_text (ID, MaleText) values (70001, 'Do you really think I
 UPDATE `quest_template` SET `Details`='Trust is something you can\'t buy, $R.\n\nHere\'s the deal, lad. You earn trust of this gryphon over here and you\'ll get your ride to the camp. Fail and he\'ll have you as his breakfast.\n\nHah! Of course I\'m pulling your leg here, lad, this winged beast won\'t even nudge unless it\'s trust you completely.\n\nHow, you ask? Food, of course. And a toy. Go figure.' WHERE (`entry`='60070') AND (`patch`='0');
 
 UPDATE `item_template` SET `description`='You hear crackling thunder and gryphon screeches within.' WHERE (`entry`='51755') AND (`patch`='0');
+
+update quest_template set MinLevel = 55 where entry = 6642; -- Dark Iron Ore
+update quest_template set MinLevel = 55 where entry = 6643; -- Fiery Core
+update quest_template set MinLevel = 55 where entry = 6644; -- Lava Core
+update quest_template set MinLevel = 55 where entry = 6645; -- Core Leather
+update quest_template set MinLevel = 55 where entry = 6646; -- Blood of the Mountain
