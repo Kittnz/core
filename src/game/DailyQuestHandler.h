@@ -17,7 +17,7 @@ public:
         return &instance;
     }
 
-    void LoadFromDB();
+    void LoadFromDB(bool quests);
     void Update(uint32 diff);
 
 private:

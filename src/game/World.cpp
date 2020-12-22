@@ -1436,7 +1436,7 @@ void World::SetInitialWorldSettings()
 
     sAuraRemovalMgr.LoadFromDB();
 
-    sDailyQuestHandler->LoadFromDB();
+    sDailyQuestHandler->LoadFromDB(true);
 
     ///- Initialize game time and timers
     m_gameTime = time(nullptr);

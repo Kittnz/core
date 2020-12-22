@@ -8,7 +8,7 @@
 #include <memory>
 #include <sstream>
 
-void DailyQuestHandler::LoadFromDB()
+void DailyQuestHandler::LoadFromDB(bool quests)
 {
     {
         auto resetTimeResult = std::unique_ptr<QueryResult>(WorldDatabase.Query("SELECT `nextResetTime` FROM `daily_quest_timer` LIMIT 1"));
@@ -21,7 +21,10 @@ void DailyQuestHandler::LoadFromDB()
         }
     }
 
-    //load quests with daily quest status flag
+    if (!quests)
+        return;
+
+    //load quests with daily quest status flag if quests, initial load
 
     {
         auto questResult = std::unique_ptr<QueryResult>(
@@ -103,6 +106,7 @@ void DailyQuestHandler::Update(uint32 diff)
 
         //now update next reset time to midnight next day.
 
-        WorldDatabase.Execute("UPDATE `daily_quest_timer` SET `nextResetTime` = UNIX_TIMESTAMP(CURDATE() + INTERVAL 1 DAY)");
+        WorldDatabase.DirectExecute("UPDATE `daily_quest_timer` SET `nextResetTime` = UNIX_TIMESTAMP(CURDATE() + INTERVAL 1 DAY)");
+        LoadFromDB(false);
     }
 }
