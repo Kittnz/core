@@ -692,34 +692,6 @@ void BattleGround::EndBattleGround(Team winner)
         BattleGroundQueueTypeId bgQueueTypeId = BattleGroundMgr::BGQueueTypeId(GetTypeID());
         sBattleGroundMgr.BuildBattleGroundStatusPacket(&data, this, plr->GetBattleGroundQueueIndex(bgQueueTypeId), STATUS_IN_PROGRESS, TIME_TO_AUTOREMOVE, GetStartTime());
         plr->GetSession()->SendPacket(&data);
-
-        if (LogsDatabase && sWorld.getConfig(CONFIG_BOOL_LOGSDB_BATTLEGROUNDS))
-        {
-            BattleGroundScoreMap::const_iterator score = m_PlayerScores.find(itr->first);
-            if (score != m_PlayerScores.end())
-            {
-                static SqlStatementID insLogBg;
-                SqlStatement logStmt = LogsDatabase.CreateStatement(insLogBg,
-                        "INSERT INTO logs_battleground SET "
-                        "bgid=?, bgtype=?, bgduration=?, bgteamcount=?, "
-                        "playerGuid=?, team=?, deaths=?, honorBonus=?, "
-                        "honorableKills=?");
-
-                logStmt.addUInt32(GetInstanceID());
-                logStmt.addUInt32(GetTypeID());
-                logStmt.addUInt32(GetStartTime() / 1000);
-                logStmt.addUInt32(GetPlayersCountByTeam(team));
-
-                logStmt.addUInt32(itr->first);
-                logStmt.addUInt32(team);
-                logStmt.addUInt32(score->second->Deaths);
-                logStmt.addUInt32(score->second->BonusHonor);
-
-                logStmt.addUInt32(score->second->HonorableKills);
-
-                logStmt.Execute();
-            }
-        }
     }
 
     if (winmsg_id)

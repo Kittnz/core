@@ -796,12 +796,6 @@ void Creature::Update(uint32 update_diff, uint32 diff)
             bool leash = false;
             if (m_combatState)
             {
-                if (GetCombatTime(false) > sWorld.getConfig(CONFIG_UINT32_LONGCOMBAT))
-                {
-                    LogLongCombat();
-                    ResetCombatTime(true);
-                }
-
                 if (WorldTimer::tickTime() % 3000 <= update_diff)
                 {
                     // Leash prevents mobs from chasing any further than specified range
@@ -1192,6 +1186,12 @@ bool Creature::IsTrainerOf(Player* pPlayer, bool msg) const
                             break;
                         case RACE_UNDEAD:
                             pPlayer->PlayerTalkClass->SendGossipMenu(624, GetObjectGuid());
+                            break;
+                        case RACE_HIGH_ELF:
+                            pPlayer->PlayerTalkClass->SendGossipMenu(5861, GetObjectGuid());
+                            break;
+                        case RACE_GOBLIN:
+                            pPlayer->PlayerTalkClass->SendGossipMenu(5861, GetObjectGuid());
                             break;
                     }
                 }
@@ -2648,137 +2648,6 @@ bool Creature::MeetsSelectAttackingRequirement(Unit* pTarget, SpellEntry const* 
     return true;
 }
 
-
-void Creature::LogDeath(Unit* pKiller) const
-{
-    if (!LogsDatabase || !sWorld.getConfig(CONFIG_BOOL_SMARTLOG_DEATH))
-        return;
-
-    // by default we log bosses only
-    if (!IsWorldBoss())
-    {
-        if (sLog.m_smartlogExtraEntries.empty() && sLog.m_smartlogExtraGuids.empty())
-            return;
-
-        // if entry or guid matches one of extra values from config we log too
-        bool extraEntry = std::find(sLog.m_smartlogExtraEntries.begin(), sLog.m_smartlogExtraEntries.end(), GetEntry()) != sLog.m_smartlogExtraEntries.end();
-        bool extraGuid = std::find(sLog.m_smartlogExtraGuids.begin(), sLog.m_smartlogExtraGuids.end(), GetGUIDLow()) != sLog.m_smartlogExtraGuids.end();
-
-        if (!extraEntry && !extraGuid)
-            return;
-    }
-
-    static SqlStatementID insLogDeath;
-    SqlStatement logStmt = LogsDatabase.CreateStatement(insLogDeath, "INSERT INTO smartlog_creature SET type=?, entry=?, guid=?, specifier=?, combatTime=?, content=?");
-
-    logStmt.addString("Death");
-    logStmt.addInt32(GetEntry());
-    logStmt.addInt32(GetGUIDLow());
-
-    const MapEntry* mapEntry = sMapStorage.LookupEntry<MapEntry>(GetMapId());
-    std::string result0 = mapEntry->name;
-
-    logStmt.addString(result0 + "." + GetName());
-    logStmt.addInt32(GetCombatTime(true));
-
-    if (pKiller)
-    {
-        // 1: we try to extract player from last hit
-        auto pPlayer = pKiller->GetCharmerOrOwnerPlayerOrPlayerItself();
-        bool lasthit = true;
-
-        // 2: we try to extract player from threat list
-        Unit* pUnit = nullptr;
-        if (!pPlayer)
-        {
-            pUnit = SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0, nullptr, SELECT_FLAG_PLAYER);
-            lasthit = false;
-
-            if (pUnit)
-                pPlayer = static_cast<Player*>(pUnit);
-        }
-
-        if (pPlayer)
-        {
-            std::string result1 = lasthit ? "Last hit by player: <" : "One of players: <";
-            result1 += pPlayer->GetName();
-
-            if (pPlayer->GetMap()->Instanceable())
-                result1 += "> with instanceId <" + std::to_string(pPlayer->GetInstanceId());
-
-            result1 += ">.";
-
-            logStmt.addString(result1);
-        }
-        else if (pUnit)
-        {
-            if (auto pCreature = pUnit->ToCreature())
-            {
-                std::string result1 = "Last hit by creature: <";
-                result1 += pCreature->GetName();
-                result1 += "> with entry <";
-                result1 += pCreature->GetEntry();
-                result1 += ">.";
-                logStmt.addString(result1);
-            }
-            else
-                logStmt.addString("Dead not by creature or player, unit exists though.");
-        }
-        else
-            logStmt.addString("Dead not by creature or player, unit not exists.");
-    }
-    else
-    {
-        logStmt.addString("Unknown death reason (no argument passed).");
-    }
-
-    logStmt.Execute();
-}
-
-void Creature::LogLongCombat() const
-{
-    if (!LogsDatabase || !sWorld.getConfig(CONFIG_BOOL_SMARTLOG_LONGCOMBAT))
-        return;
-
-    static SqlStatementID insLogDeath;
-    SqlStatement logStmt = LogsDatabase.CreateStatement(insLogDeath, "INSERT INTO smartlog_creature SET type=?, entry=?, guid=?, specifier=?, combatTime=?, content=?");
-
-    logStmt.addString("LongCombat");
-    logStmt.addInt32(GetEntry());
-    logStmt.addInt32(GetGUIDLow());
-
-    const MapEntry* mapEntry = sMapStorage.LookupEntry<MapEntry>(GetMapId());
-    std::string result0 = mapEntry->name;
-
-    logStmt.addString(result0 + "." + GetName());
-    logStmt.addInt32(GetCombatTime(true));
-    logStmt.addString("");
-
-    logStmt.Execute();
-}
-
-void Creature::LogScriptInfo(std::ostringstream &data) const
-{
-    if (!LogsDatabase || !sWorld.getConfig(CONFIG_BOOL_SMARTLOG_SCRIPTINFO))
-        return;
-
-    static SqlStatementID insLogDeath;
-    SqlStatement logStmt = LogsDatabase.CreateStatement(insLogDeath, "INSERT INTO smartlog_creature SET type=?, entry=?, guid=?, specifier=?, combatTime=?, content=?");
-
-    logStmt.addString("ScriptInfo");
-    logStmt.addInt32(GetEntry());
-    logStmt.addInt32(GetGUIDLow());
-
-    const MapEntry* mapEntry = sMapStorage.LookupEntry<MapEntry>(GetMapId());
-    std::string result0 = mapEntry->name;
-
-    logStmt.addString(result0 + "." + GetName());
-    logStmt.addInt32(GetCombatTime(true));
-    logStmt.addString(data);
-
-    logStmt.Execute();
-}
-
 Unit* Creature::SelectAttackingTarget(AttackingTarget target, uint32 position, uint32 spellId, uint32 selectFlags) const
 {
     return SelectAttackingTarget(target, position, sSpellMgr.GetSpellEntry(spellId), selectFlags);
@@ -3703,11 +3572,11 @@ bool Creature::canCreatureAttack(Unit const *pVictim, bool force) const
     return true;
 }
 
-time_t Creature::GetCombatTime(bool total) const
+time_t Creature::GetCombatTime() const
 {
-    auto diff = time(nullptr) - m_combatStartTime;
+    time_t diff = time(nullptr) - m_combatStartTime;
 
-    return total ? sWorld.getConfig(CONFIG_UINT32_LONGCOMBAT) * m_combatResetCount + diff : diff;
+    return diff;
 }
 
 void Creature::ResetCombatTime(bool combat)

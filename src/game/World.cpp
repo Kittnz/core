@@ -77,7 +77,6 @@
 #include "HonorMgr.h"
 #include "Anticheat/Anticheat.h"
 #include "AuraRemovalMgr.h"
-#include "InstanceStatistics.h"
 #include "GuardMgr.h"
 #include "DailyQuestHandler.h"
 
@@ -960,16 +959,6 @@ void World::LoadConfigSettings(bool reload)
     setConfig(CONFIG_UINT32_YELLRANGE_QUADRATICSCALE_MAXLEVEL, "YellRange.QuadraticScale.MaxLevel", 0);
     setConfig(CONFIG_UINT32_YELLRANGE_MIN, "YellRange.Min", 0);
 
-    setConfig(CONFIG_BOOL_LOGSDB_BATTLEGROUNDS, "LogsDB.Battlegrounds", 0);
-    setConfig(CONFIG_BOOL_LOGSDB_CHARACTERS, "LogsDB.Characters", 1);
-    setConfig(CONFIG_BOOL_LOGSDB_CHAT, "LogsDB.Chat", 1);
-    setConfig(CONFIG_BOOL_LOGSDB_TRADES, "LogsDB.Trades", 1);
-    setConfig(CONFIG_BOOL_LOGSDB_TRANSACTIONS, "LogsDB.Transactions", 0);
-    setConfig(CONFIG_BOOL_SMARTLOG_DEATH, "Smartlog.Death", 1);
-    setConfig(CONFIG_BOOL_SMARTLOG_LONGCOMBAT, "Smartlog.LongCombat", 1);
-    setConfig(CONFIG_BOOL_SMARTLOG_SCRIPTINFO, "Smartlog.ScriptInfo", 1);
-    setConfig(CONFIG_UINT32_LONGCOMBAT, "Smartlog.LongCombatDuration", 30 * MINUTE);
-
     setConfig(CONFIG_UINT32_ITEM_INSTANTSAVE_QUALITY, "Item.InstantSaveQuality", ITEM_QUALITY_ARTIFACT);
     setConfig(CONFIG_BOOL_PREVENT_ITEM_DATAMINING, "Item.PreventDataMining", true);
 
@@ -1041,7 +1030,7 @@ void World::LoadConfigSettings(bool reload)
     setConfig(CONFIG_FLOAT_TRANSMOG_REQ_MONEY_RATE, "Transmog.ReqMoneyRate", 0.0);
 
     setConfig(CONFIG_BOOL_EXPANSION_CONTENT, "ExpansionContent", false);
-    setConfig(CONFIG_BOOL_BOUNTY, "PvPBounryBoards", false);
+    setConfig(CONFIG_BOOL_BOUNTY, "PvPBountyBoards", false);
     setConfig(CONFIG_BOOL_OPENHOUSE, "OpenHouse", false);
 }
 
@@ -1142,8 +1131,6 @@ void World::SetInitialWorldSettings()
     ///- Loads existing IDs in the database.
     sObjectMgr.LoadAllIdentifiers();
 
-    sInstanceStatistics.LoadFromDB();
-
     ///- Chargements des variables (necessaire pour le OutdoorJcJ)
     sObjectMgr.LoadSavedVariable();
 
@@ -1174,14 +1161,7 @@ void World::SetInitialWorldSettings()
     sObjectMgr.LoadSkillLineAbility();
 
     ///- Load the DBC files
-
-#ifdef _WIN32
-    std::string dbcPath = m_dataPath + std::to_string(SUPPORTED_CLIENT_BUILD) + std::string("\\");
-#else
-    std::string dbcPath = m_dataPath + std::to_string(SUPPORTED_CLIENT_BUILD) + std::string("/");
-#endif
-
-    LoadDBCStores(dbcPath);
+    LoadDBCStores(m_dataPath);
     DetectDBCLang();
     sObjectMgr.SetDBCLocaleIndex(GetDefaultDbcLocale());    // Get once for all the locale index of DBC language (console/broadcasts)
 

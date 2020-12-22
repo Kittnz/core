@@ -2860,6 +2860,17 @@ void WorldObject::MonsterWhisper(const char* text, Unit const* target, bool IsBo
     ((Player*)target)->GetSession()->SendPacket(&data);
 }
 
+void WorldObject::MonsterSayToPlayer(const char* text, Unit const* target, bool IsBossWhisper) const
+{
+    if (!target || target->GetTypeId() != TYPEID_PLAYER)
+        return;
+
+    WorldPacket data;
+    ChatHandler::BuildChatPacket(data, IsBossWhisper ? CHAT_MSG_RAID_BOSS_WHISPER : CHAT_MSG_MONSTER_SAY, text, LANG_UNIVERSAL, CHAT_TAG_NONE, GetObjectGuid(), GetName(),
+        target->GetObjectGuid(), target->GetName());
+    ((Player*)target)->GetSession()->SendPacket(&data);
+}
+
 void WorldObject::MonsterSay(int32 textId, uint32 language, Unit const* target) const
 {
     float range = sWorld.getConfig(CONFIG_FLOAT_LISTEN_RANGE_SAY);
