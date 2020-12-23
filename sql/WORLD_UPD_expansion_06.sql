@@ -61,3 +61,14 @@ REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`,
 REPLACE INTO `creature_template` VALUES (80932, 0, 7337, 0, 0, 0, 'Drazzit Dripvalve', NULL, 922, 40, 40, 2471, 2471, 0, 0, 1890, 474, 7, 1, 1.14286, 0, 20, 5, 0, 0, 1, 61, 78, 0, 156, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 56.672, 77.924, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 7564, 0, 0, 0, 0, 10, '');
 
 REPLACE INTO `creature_template` VALUES (80933, 0, 7179, 0, 0, 0, 'Gizzix Grimegurgle', NULL, 922, 40, 40, 2471, 2471, 0, 0, 1890, 474, 7, 1, 1.14286, 0, 20, 5, 0, 0, 1, 61, 78, 0, 156, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 56.672, 77.924, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 7564, 0, 0, 0, 0, 10, '');
+
+REPLACE INTO `creature_template` VALUES (80934, 0, 7211, 0, 0, 0, 'Razbo Rustgear', 'Blacksmithing Supplies', 0, 40, 40, 3900, 3900, 0, 0, 560, 474, 16391, 1, 1.14286, 0, 20, 5, 0, 0, 1, 61, 78, 0, 156, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 56.672, 77.924, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 5411, 0, 0, 0, 0, 10, '');
+
+update creature_template set faction =  474 where entry = 80934;
+
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80933, 2880, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80933, 2901, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80933, 3466, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80933, 3857, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80933, 5956, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80933, 18567, 0, 0, 0, 0);
