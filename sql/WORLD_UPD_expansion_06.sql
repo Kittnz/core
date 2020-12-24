@@ -72,3 +72,14 @@ REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`,
 REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80934, 3857, 0, 0, 0, 0);
 REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80934, 5956, 0, 0, 0, 0);
 REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80934, 18567, 0, 0, 0, 0);
+
+-- Guild Tabard new spell:
+-- update item_template set spellid_1 = 46010 where entry = 5976;
+
+ should sheathe on your side (3)
+ should have a displayID of 
+
+update item_template set sheath = 3 where entry = 80775;
+update item_template set display_id = 29916 where entry = 80627;
+
+update gameobject_template set size = 1.2 where entry = 3000222;
