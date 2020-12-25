@@ -76,9 +76,6 @@ REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`,
 -- Guild Tabard new spell:
 -- update item_template set spellid_1 = 46010 where entry = 5976;
 
- should sheathe on your side (3)
- should have a displayID of 
-
 update item_template set sheath = 3 where entry = 80775;
 update item_template set display_id = 29916 where entry = 80627;
 
@@ -317,7 +314,11 @@ REPLACE INTO area_template (entry, map_id, zone_id, explore_flag, flags, area_le
 (3702, 562, 0, 1326, 128, 0, 'Blade\'s Edge Arena', 0, 0),
 (3703, 530, 0, 1327, 1032, 0, 'Shattrath City', 0, 0),
 (4010, 1, 15, 1645, 64, 38, 'Mudsprocket', 0, 0),
-(4011, 1, 406, 0, 0, 0, 'Venture Camp', 0, 0),
+(4011, 1, 406, 1646, 64, 0, 'Venture Camp', 0, 0),
 (4012, 0, 139, 0, 0, 0, 'Scarlet Enclave', 0, 0),
 (4013, 25, 0, 0, 128, 0, 'Lordaeron Arena', 0, 0),
 (4014, 25, 0, 0, 128, 0, 'Blood Ring', 0, 0);
+
+-- Export query:
+
+-- select id, continentid, parentareaid, areabit, flags, explorationlevel, areaname_enus, factiongroupmask, liquidtypeid from db_areatable_5875 where id > 3486;
