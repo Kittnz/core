@@ -214,6 +214,29 @@ INT_PTR CALLBACK Dlgproc(HWND Arg1, UINT Message, WPARAM wParam, LPARAM lParam)
 	return FALSE;
 }
 
+HANDLE hLogFile = NULL;
+
+void WriteLog(const char* format, ...)
+{
+	if (hLogFile == NULL)
+	{
+		return;
+	}
+
+	va_list ap;
+	va_start(ap, format);
+	char Message[4096] = {0};
+
+	int NumBytes = vsnprintf_s(Message, sizeof(Message), format, ap);
+
+	va_end(ap);
+	Message[NumBytes] = '\n';
+	Message[NumBytes + 1] = '\0';
+
+	DWORD bytesWritten = 0;
+	WriteFile(hLogFile, Message, NumBytes + 1, &bytesWritten, NULL);
+}
+
 inline void ErrorBox(const char* errorTxt)
 {
 	MessageBox(NULL, errorTxt, "Error", MB_OK | MB_ICONERROR);
@@ -223,7 +246,43 @@ int WINAPI WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 {
 	gHInstance = hInstance;
 
+	// create log file
+	// By default we try to create a log in working directory.
+	// But if that not possible - create in temp dir
+	
 	fs::path currentPath = fs::current_path();
+	const char* LogFilename = "TurtlePatcher.log";
+
+	fs::path LogFilePlace1 = currentPath / LogFilename;
+	std::wstring LogFilePlace1str = LogFilePlace1.wstring();
+
+	hLogFile = CreateFileW(LogFilePlace1str.c_str(), GENERIC_WRITE, FILE_SHARE_READ, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+
+	if (hLogFile == NULL)
+	{
+		fs::path TempPath = fs::temp_directory_path();
+		TempPath = TempPath / LogFilename;
+		std::wstring TempPathStr = TempPath.wstring();
+		hLogFile = CreateFileW(TempPathStr.c_str(), GENERIC_WRITE, FILE_SHARE_READ, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+		if (hLogFile == NULL)
+		{
+			ErrorBox("Can't create log file. Perhaps you don't have enough free space on disk, or something wrong happened.\nPatcher will try to work anyway.");
+		}
+	}
+
+	struct AutoLogCloser
+	{
+		~AutoLogCloser()
+		{
+			if (hLogFile != NULL)
+			{
+				CloseHandle(hLogFile);
+			}
+		}
+	} closer;
+
+	WriteLog("Log file created!");
+
 	fs::path PatchDir = currentPath / "wow-patch.mpq";
 
 	// create a dialog
@@ -234,20 +293,40 @@ int WINAPI WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 	// unpack mpq
 	{
 		std::string strPathDir = PatchDir.u8string();
+		WriteLog("Trying open downloaded path file \"%S\"", PatchDir.c_str());
 		StormArchive PatchFile(strPathDir.c_str());
+
+		if (!PatchFile.IsValid())
+		{
+			WriteLog("ERROR: Can't open patch \"%S\"", PatchDir.c_str());
+		}
+		else
+		{
+			WriteLog("Opened \"%S\"", PatchDir.c_str());
+		}
 
 		if (StormFile* pFile = PatchFile.OpenFile(PATCH_FILE))
 		{
+			WriteLog("Opened \"%s\" inside \"%S\"", PATCH_FILE, PatchDir.c_str());
 			std::unique_ptr<StormFile> patchData(pFile);
 
 			if (fs::exists(PATCH_FILE))
 			{
-				fs::remove(PATCH_FILE);
+				WriteLog("Patch \"%s\" existed, removing", PATCH_FILE);
+				if (!fs::remove(PATCH_FILE))
+				{
+					WriteLog("ERROR: Can't remove patch \"%s\"", PATCH_FILE);
+				}
 			}
 
 			// copy shit to target path
 			FILE* hTargetFile = fopen(PATCH_FILE, "wb");
-			assert(hTargetFile != NULL);
+			if (hTargetFile == NULL)
+			{
+				WriteLog("Can't create \"%s\" for writting", PATCH_FILE);
+				assert(hTargetFile != NULL);
+				return 1;
+			}
 
 			// split to chunks
 			const DWORD chunkSize = 4096;
@@ -298,6 +377,7 @@ int WINAPI WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 		}
 		else
 		{
+			WriteLog("ERROR: Failed to open patch-T.mpq inside patch mpq");
 			ErrorBox("Failed to open patch-T.mpq inside patch mpq");
 			return 1;
 		}
@@ -305,8 +385,10 @@ int WINAPI WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 
 	if (hDialog == NULL)
 	{
+		WriteLog("INFO: User decide to abandon patch progress. Removing patch.");
 		if (fs::exists(PATCH_FILE))
 		{
+			WriteLog("Trying remove existing turtle patch.");
 			fs::remove(PATCH_FILE);
 		}
 
@@ -318,9 +400,16 @@ int WINAPI WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 		hDialog = NULL;
 	}
 
+	WriteLog("Unpacking complete, now we try to patch WoW.exe");
+
 	if (!fs::exists("WoW_Old.exe"))
 	{
+		WriteLog("Create WoW.exe backup - WoW_Old.exe");
 		fs::copy_file("WoW.exe", "WoW_Old.exe");
+	}
+	else
+	{
+		WriteLog("WoW_Old.exe is exist, we don't touch it");
 	}
 
 	// patch WoW.exe
@@ -338,6 +427,7 @@ int WINAPI WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 	}
 	else
 	{
+		WriteLog("ERROR: Can't patch WoW.exe");
 		ErrorBox("Can't patch WoW.exe");
 		return 1;
 	}
@@ -353,6 +443,7 @@ int WINAPI WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 	LPVOID pVerInfo  = LockResource(hVersionInfoHandle);
 #endif
 	//BeginUpdateResource()
+	WriteLog("Everything is done. Now, we try to run a new WoW.exe");
 
 	// everything ready, close dialog and start WoW.exe
 	if (hDialog != NULL)
@@ -372,7 +463,10 @@ int WINAPI WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 	ZeroMemory(&pInfo, sizeof(pInfo));
 
 	char WoWExe[24] = "WoW.exe";
-	CreateProcess(NULL, WoWExe, NULL, NULL, FALSE, NORMAL_PRIORITY_CLASS, NULL, NULL, &info, &pInfo);
+	if (!CreateProcess(NULL, WoWExe, NULL, NULL, FALSE, NORMAL_PRIORITY_CLASS, NULL, NULL, &info, &pInfo))
+	{
+		WriteLog("ERROR: Failed to run WoW.exe");
+	}
 
 	return 0;
 }
