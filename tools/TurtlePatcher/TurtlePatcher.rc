@@ -24,15 +24,15 @@ LANGUAGE LANG_NEUTRAL, SUBLANG_DEFAULT
 // Dialog
 //
 
-IDD_DIALOGBAR DIALOGEX 0, 0, 831, 486
+IDD_DIALOGBAR DIALOGEX 0, 0, 457, 295
 STYLE DS_SETFONT | DS_FIXEDSYS | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Turtle WoW Patcher"
 FONT 8, "MS Shell Dlg", 400, 0, 0x0
 BEGIN
-    CONTROL         "",IDC_PROGRESS1,"msctls_progress32",WS_BORDER,17,427,791,14
-    LTEXT           "Installing...",IDC_PROGRESSTXT,17,446,38,8
-    PUSHBUTTON      "Cancel",IDC_CANCELBTN,758,451,50,14
-    CONTROL         IDB_SPLASH,IDC_STATIC,"Static",SS_BITMAP,15,17,793,399
+    CONTROL         "",IDC_PROGRESS1,"msctls_progress32",WS_BORDER,15,238,426,14
+    LTEXT           "Installing...",IDC_PROGRESSTXT,16,263,38,8
+    PUSHBUTTON      "Cancel",IDC_CANCELBTN,392,262,50,14
+    CONTROL         113,IDC_STATIC,"Static",SS_BITMAP,15,14,427,215
 END
 
 
@@ -47,9 +47,9 @@ BEGIN
     IDD_DIALOGBAR, DIALOG
     BEGIN
         LEFTMARGIN, 6
-        RIGHTMARGIN, 824
+        RIGHTMARGIN, 450
         TOPMARGIN, 7
-        BOTTOMMARGIN, 479
+        BOTTOMMARGIN, 288
     END
 END
 #endif    // APSTUDIO_INVOKED
@@ -81,7 +81,7 @@ IDI_ICON3               ICON                    "turtle_icon_round.ico"
 // Bitmap
 //
 
-IDB_SPLASH              BITMAP                  "Splash.bmp"
+IDB_SPLASH_SMALL        BITMAP                  "Splash_Small.bmp"
 
 #endif    // Neutral (Default) resources
 /////////////////////////////////////////////////////////////////////////////
