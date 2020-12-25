@@ -242,14 +242,14 @@ inline void ErrorBox(const char* errorTxt)
 	MessageBox(NULL, errorTxt, "Error", MB_OK | MB_ICONERROR);
 }
 
-int WINAPI WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+int GuardedMain(HINSTANCE hInstance)
 {
 	gHInstance = hInstance;
 
 	// create log file
 	// By default we try to create a log in working directory.
 	// But if that not possible - create in temp dir
-	
+
 	fs::path currentPath = fs::current_path();
 	const char* LogFilename = "TurtlePatcher.log";
 
@@ -341,7 +341,7 @@ int WINAPI WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 
 			for (DWORD i = 0; i < chunks; i++)
 			{
-				if (hDialog == NULL) 
+				if (hDialog == NULL)
 				{
 					break;
 				}
@@ -440,7 +440,7 @@ int WINAPI WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 	HRSRC VersionInfo = FindResourceEx(hWoW, MAKEINTRESOURCE(16), MAKEINTRESOURCE(1), MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL));
 
 	HGLOBAL hVersionInfoHandle = LoadResource(hWoW, VersionInfo);
-	LPVOID pVerInfo  = LockResource(hVersionInfoHandle);
+	LPVOID pVerInfo = LockResource(hVersionInfoHandle);
 #endif
 	//BeginUpdateResource()
 	WriteLog("Everything is done. Now, we try to run a new WoW.exe");
@@ -469,4 +469,31 @@ int WINAPI WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 	}
 
 	return 0;
+}
+
+int UnhandledExceptionFilter(unsigned int code, struct _EXCEPTION_POINTERS *ep)
+{
+	MessageBox(NULL, "Can't patch WoW", "Critical Error", MB_OK | MB_ICONERROR);
+	if (code == EXCEPTION_ACCESS_VIOLATION)
+	{
+		return EXCEPTION_EXECUTE_HANDLER;
+	}
+	else
+	{
+		return EXCEPTION_CONTINUE_SEARCH;
+	};
+}
+
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+{
+	int Result = 0;
+
+	__try
+	{
+		Result = GuardedMain(hInstance);
+	}
+	__except(UnhandledExceptionFilter(GetExceptionCode(), GetExceptionInformation()))
+	{}
+
+	return Result;
 }
