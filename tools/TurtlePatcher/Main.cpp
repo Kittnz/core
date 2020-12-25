@@ -13,9 +13,11 @@
 
 //#TODO: Read from config blob at the end of the file
 #define NEW_BUILD 5930u
-#define NEW_VISUAL_BUILD "5930"
-#define NEW_VISUAL_VERSION "1.14.3"
+#define NEW_VISUAL_BUILD "5931"
+#define NEW_VISUAL_VERSION "1.14.4"
 #define NEW_BUILD_DATE "Dec 19 2020"
+#define NEW_WEBSITE_FILTER "*.turtle-wow.org" // '*' symbol should be presented
+#define NEW_WEBSITE2_FILTER "*.discord.gg" // '*' symbol should be presented
 
 #define PATCH_FILE "Data\\patch-T.mpq"
 
@@ -31,6 +33,13 @@
 // string. Original value: "Sep 19 2006"
 #define OFFSET_VISUAL_BUILD_DATE 0x00434798
 
+// string. Original value: "*.worldofwarcraft.co.kr"
+#define OFFSET_KOREAN_WEBSITE_FILTER 0x0045CCD8
+
+//							*.discord.gg
+// string. Original value: "*.wowchina.com"
+#define OFFSET_CHINA_WEBSITE_FILTER 0x0045CC9C
+
 #include <iostream>
 
 void PatchNetVersion(FILE* hWoW, unsigned short Build)
@@ -43,7 +52,9 @@ void PatchVisualVersion(
 	FILE* hWoW, 
 	const std::string& VersionString, 
 	const std::string& BuildString, 
-	const std::string& DateString)
+	const std::string& DateString,
+	const std::string& WebsiteFilter,
+	const std::string& WebsiteFilter2)
 {
 	// We can't exceed client restriction
 	assert(VersionString.size() <= 6);
@@ -58,6 +69,15 @@ void PatchVisualVersion(
 
 	fseek(hWoW, OFFSET_VISUAL_BUILD_DATE, SEEK_SET);
 	fwrite(DateString.c_str(), 1, DateString.size(), hWoW);
+
+	// change website filter to allow turtle-wow.org and discord.gg
+	fseek(hWoW, OFFSET_KOREAN_WEBSITE_FILTER, SEEK_SET);
+	fwrite(WebsiteFilter.c_str(), 1, WebsiteFilter.size(), hWoW);
+	fwrite("\0", 1, 1, hWoW);
+
+	fseek(hWoW, OFFSET_CHINA_WEBSITE_FILTER, SEEK_SET);
+	fwrite(WebsiteFilter2.c_str(), 1, WebsiteFilter2.size(), hWoW);
+	fwrite("\0", 1, 1, hWoW);
 }
 
 void PatchUIUnlock(FILE* hWoW)
@@ -242,6 +262,33 @@ inline void ErrorBox(const char* errorTxt)
 	MessageBox(NULL, errorTxt, "Error", MB_OK | MB_ICONERROR);
 }
 
+int PatchWoWExe()
+{
+	// patch WoW.exe
+	if (FILE* hWoWBinary = fopen("WoW.exe", "r+b"))
+	{
+		PatchUIUnlock(hWoWBinary);
+		PatchNetVersion(hWoWBinary, NEW_BUILD);
+
+		std::string Version(NEW_VISUAL_VERSION);
+		std::string Build(NEW_VISUAL_BUILD);
+		std::string Date(NEW_BUILD_DATE);
+		std::string WebsiteFilter(NEW_WEBSITE_FILTER);
+		std::string WebsiteFilter2(NEW_WEBSITE2_FILTER);
+		PatchVisualVersion(hWoWBinary, Version, Build, Date, WebsiteFilter, WebsiteFilter2);
+
+		fclose(hWoWBinary);
+	}
+	else
+	{
+		WriteLog("ERROR: Can't patch WoW.exe");
+		ErrorBox("Can't patch WoW.exe");
+		return 1;
+	}
+
+	return 0;
+}
+
 int GuardedMain(HINSTANCE hInstance)
 {
 	gHInstance = hInstance;
@@ -424,25 +471,11 @@ int GuardedMain(HINSTANCE hInstance)
 		WriteLog("WoW_Old.exe is exist, we don't touch it");
 	}
 
-	// patch WoW.exe
-	if (FILE* hWoWBinary = fopen("WoW.exe", "r+b"))
+	if (int ErrCode = PatchWoWExe())
 	{
-		PatchUIUnlock(hWoWBinary);
-		PatchNetVersion(hWoWBinary, NEW_BUILD);
-
-		std::string Version(NEW_VISUAL_VERSION);
-		std::string Build(NEW_VISUAL_BUILD);
-		std::string Date(NEW_BUILD_DATE);
-		PatchVisualVersion(hWoWBinary, Version, Build, Date);
-
-		fclose(hWoWBinary);
+		return ErrCode;
 	}
-	else
-	{
-		WriteLog("ERROR: Can't patch WoW.exe");
-		ErrorBox("Can't patch WoW.exe");
-		return 1;
-	}
+
 
 	// modify version info
 

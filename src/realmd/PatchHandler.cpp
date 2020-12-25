@@ -129,7 +129,7 @@ int PatchHandler::svc(void)
             return -1;
         }
 
-		DEBUG_LOG("CMD_XFER_DATA Send patch chunk size: %d", r);
+		//DEBUG_LOG("CMD_XFER_DATA Send patch chunk size: %d", r);
     }
 
     if(r == -1)
