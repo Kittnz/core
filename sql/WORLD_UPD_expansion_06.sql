@@ -324,3 +324,10 @@ REPLACE INTO area_template (entry, map_id, zone_id, explore_flag, flags, area_le
 -- Export query:
 
 -- select id, continentid, parentareaid, areabit, flags, explorationlevel, areaname_enus, factiongroupmask, liquidtypeid from db_areatable_5875 where id > 3486;
+
+
+update creature_template set faction = 1682 where entry in (80934, 80933, 80932, 80931, 80930);
+UPDATE `quest_template` SET `ZoneOrSort`='796' WHERE (`entry`='60116') AND (`patch`='1');
+
+update item_template set sheath = 0 where entry = 80772;
+UPDATE `quest_template` SET `OfferRewardText`='<The Deathguard looks you over approvingly.>\n\nYes, yes you\'ll do. Come here $C.' WHERE (`entry`='60115') AND (`patch`='1')
