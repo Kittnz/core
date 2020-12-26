@@ -290,6 +290,19 @@ int GuardedMain(HINSTANCE hInstance)
 	ShowWindow(hDialog, SW_SHOW);
 	//DialogBox(hInstance, MAKEINTRESOURCE(IDD_DIALOGBAR), NULL, Dlgproc);
 
+	// Handle all dialog creation messages
+	MSG		msg;
+	while (PeekMessage(&msg, nullptr, 0U, 0U, PM_REMOVE))
+	{
+		if (!IsWindow(hDialog) || !IsDialogMessage(hDialog, &msg))
+		{
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
+		}
+	}
+	// Then sleep for 5 sec. because there is a strange error if we working too fast
+	Sleep(5000);
+
 	// unpack mpq
 	{
 		std::string strPathDir = PatchDir.u8string();
@@ -334,7 +347,6 @@ int GuardedMain(HINSTANCE hInstance)
 			chunks += (patchData->Size.QuadPart % chunkSize) != 0;
 			char ReadingBuffer[4096];
 
-			MSG		msg;
 			PeekMessage(&msg, nullptr, 0U, 0U, PM_NOREMOVE);
 
 			DWORD ExtractProgress = 0;
