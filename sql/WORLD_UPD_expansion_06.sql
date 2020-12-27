@@ -329,12 +329,12 @@ update creature_template set faction = 1682 where entry in (80934, 80933, 80932,
 UPDATE `quest_template` SET `ZoneOrSort`='796' WHERE (`entry`='60116') AND (`patch`='1');
 
 update item_template set sheath = 0 where entry = 80772;
-UPDATE `quest_template` SET `OfferRewardText`='<The Deathguard looks you over approvingly.>\n\nYes, yes you\'ll do. Come here $C.' WHERE (`entry`='60115') AND (`patch`='1')
+UPDATE `quest_template` SET `OfferRewardText`='<The Deathguard looks you over approvingly.>\n\nYes, yes you\'ll do. Come here $C.' WHERE (`entry`='60115') AND (`patch`='1');
 
 update creature_template set display_id1 = 18039 where entry = 50105;
 update creature_template set name = 'Durotar Labor Union Bruiser', faction = 1682 where entry = 16096;
 update creature_template set subname = 'Cenarion Circle Quartermaster' where entry = 15293;
-update item_template set disenchant_id = 21where entry = 51819;
+update item_template set disenchant_id = 21 where entry = 51819;
 update item_template set disenchant_id = 21 where entry = 51819;
 
 REPLACE INTO `creature_template` VALUES (80936, 0, 18357, 0, 0, 0, 'Dark Reaver', NULL, 0, 62, 62, 47064, 47866, 12840, 12840, 4091, 21, 0, 1, 1.14286, 0, 1, 5, 0, 1, 1, 605, 783, 0, 284, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 203.77, 289.86, 100, 6, 0, 10440, 0, 0, 0, 5, 5, 5, 5, 5, 0, 0, 0, 0, 104400, 0, 2057, 2692, 'EventAI', 1, 3, 0, 0, 3, 10440, 0, 0, 1053507419, 0, 0, '');
@@ -438,3 +438,15 @@ REPLACE INTO `creature_template` values
 -- Misc. DB stuff:
 
 update quest_template set zoneorsort = 357 where entry = 60020;
+
+
+REPLACE INTO `creature_template` VALUES (80960, 6, 18057, 0, 0, 0, 'Bourok', 'Bartender', 0, 30, 30, 3800, 3800, 0, 0, 1200, 35, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 198, 240, 0, 122, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 140.87, 196.385, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524290, '');
+
+update creature_template set movement_type = 0, npc_flags = 4 where entry = 80960;
+
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80960, 2593, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80960, 2594, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80960, 2595, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80960, 2596, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80960, 2723, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80960, 4600, 0, 0, 0, 0);
