@@ -450,3 +450,10 @@ REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`,
 REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80960, 2596, 0, 0, 0, 0);
 REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80960, 2723, 0, 0, 0, 0);
 REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80960, 4600, 0, 0, 0, 0);
+
+update item_template set required_reputation_faction = 609, required_reputation_rank = 7  where entry = 80002;
+
+update quest_template set RewOrReqMoney = 5500 where entry = 5421;
+
+-- Alien Egg
+UPDATE `quest_template` SET `DetailsEmote1`=2, `OfferRewardEmote1`=1 WHERE `entry`=4821 AND `patch`=0;
