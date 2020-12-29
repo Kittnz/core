@@ -301,7 +301,8 @@ ChatCommand * ChatHandler::getCommandTable()
     {
         { "add",            SEC_ADMINISTRATOR,     false, &ChatHandler::HandleNpcAddCommand,              "", nullptr },
         { "additem",        SEC_ADMINISTRATOR,     false, &ChatHandler::HandleNpcAddVendorItemCommand,    "", nullptr },
-        { "scale",        SEC_ADMINISTRATOR,     false, &ChatHandler::HandleNpcScaleCommand,    "", nullptr },
+        { "scale",          SEC_ADMINISTRATOR,     false, &ChatHandler::HandleNpcScaleCommand,    "", nullptr },
+        { "addloot",        SEC_ADMINISTRATOR,     false, &ChatHandler::HandleNpcAddLootCommand,    "", nullptr },
         { "addweapon",      SEC_GAMEMASTER,     false, &ChatHandler::HandleNpcAddWeaponCommand,        "", nullptr },
         { "aiinfo",         SEC_ADMINISTRATOR,      false, &ChatHandler::HandleNpcAIInfoCommand,           "", nullptr },
         { "allowmove",      SEC_ADMINISTRATOR,     false, &ChatHandler::HandleNpcAllowMovementCommand,    "", nullptr },
