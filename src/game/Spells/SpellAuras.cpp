@@ -5000,6 +5000,11 @@ void Aura::HandleRangedAmmoHaste(bool apply, bool /*Real*/)
     if (GetTarget()->GetTypeId() != TYPEID_PLAYER)
         return;
 
+    Item* ranged_weapon = GetTarget()->ToPlayer()->GetItemByPos(17);
+
+    if (ranged_weapon->GetProto()->AmmoType == 0)
+        return;
+
     float amount = m_modifier.m_amount;
 
     if (Unit* caster = GetCaster())
