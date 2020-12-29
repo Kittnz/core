@@ -337,7 +337,21 @@ update creature_template set subname = 'Cenarion Circle Quartermaster' where ent
 update item_template set disenchant_id = 21 where entry = 51819;
 update item_template set disenchant_id = 21 where entry = 51819;
 
-REPLACE INTO `creature_template` VALUES (80936, 0, 18357, 0, 0, 0, 'Dark Reaver', NULL, 0, 62, 62, 47064, 47866, 12840, 12840, 4091, 21, 0, 1, 1.14286, 0, 1, 5, 0, 1, 1, 605, 783, 0, 284, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 203.77, 289.86, 100, 6, 0, 10440, 0, 0, 0, 5, 5, 5, 5, 5, 0, 0, 0, 0, 104400, 0, 2057, 2692, 'EventAI', 1, 3, 0, 0, 3, 10440, 0, 0, 1053507419, 0, 0, '');
+REPLACE INTO `creature_template` VALUES (80936, 0, 18357, 0, 0, 0, 'Dark Reaver of Karazhan', NULL, 0, 62, 62, 80000, 80000, 12840, 12840, 4091, 21, 0, 1, 1.14286, 0, 1, 5, 0, 1, 1, 605, 783, 0, 284, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 203.77, 289.86, 100, 6, 0, 10440, 0, 0, 0, 5, 5, 5, 5, 5, 0, 0, 0, 0, 104400, 0, 2057, 2692, 'EventAI', 1, 3, 0, 0, 3, 10440, 0, 0, 1053507419, 0, 0, '');
+
+-- todo spells:
+-- https://classic.wowhead.com/spell=3109/presence-of-death
+-- https://classic.wowhead.com/spell=21077/shadow-bolt
+
+update creature_template set loot_id = 80936 where entry = 80936; 
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (80936, 81050, 4, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (80936, 81051, 4, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (80936, 81052, 4, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (80936, 81053, 4, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (80936, 81054, 4, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (80936, 81055, 4, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (80936, 81056, 4, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (80936, 81057, 4, 1, 1, 1);
 
 replace into item_template values
  ('81050', '0', '4', '4', 'Crown of the Dark Reaver', '', '40191', '3', '0', '1', '12055', '12055', '1', '-1', '-1', '62',
@@ -422,14 +436,14 @@ replace into item_template values
 -- Quartermasters:
 
 REPLACE INTO `creature_template` values 
-(80940, 0, 351, 0, 0, 0, 'Axis Spinpistol', 'Gnomeregan Quartermaster', 0, 11, 11, 456, 456, 0, 0, 20, 52, 16388, 1.1, 1.14286, 0, 20, 5, 0, 0, 1, 12, 14, 0, 64, 1, 2000, 2090, 1, 4864, 0, 0, 0, 0, 0, 0, 18.392, 25.289, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, ''),
+(80940, 0, 352, 0, 0, 0, 'Axis Spinpistol', 'Gnomeregan Quartermaster', 0, 11, 11, 456, 456, 0, 0, 20, 52, 16388, 1.1, 1.14286, 0, 20, 5, 0, 0, 1, 12, 14, 0, 64, 1, 2000, 2090, 1, 4864, 0, 0, 0, 0, 0, 0, 18.392, 25.289, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, ''),
 (80941, 0, 9429, 0, 0, 0, 'Earthcaller Jalyssa', 'Gelkis Quartermaster', 0, 11, 11, 456, 456, 0, 0, 20, 132, 16388, 1.1, 1.14286, 0, 20, 5, 0, 0, 1, 12, 14, 0, 64, 1, 2000, 2090, 1, 4864, 0, 0, 0, 0, 0, 0, 18.392, 25.289, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, ''),
 (80942, 0, 11637, 0, 0, 0, 'Deathcaller Aisha', 'Magram Quartermaster', 0, 11, 11, 456, 456, 0, 0, 20, 133, 16388, 1.1, 1.14286, 0, 20, 5, 0, 0, 1, 12, 14, 0, 64, 1, 2000, 2090, 1, 4864, 0, 0, 0, 0, 0, 0, 18.392, 25.289, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, ''),
 (80943, 0, 18120, 0, 0, 0, 'Drogon', 'Brood of Nozdormu Quartermaster', 0, 11, 11, 456, 456, 0, 0, 20, 776, 16388, 1.1, 1.14286, 0, 20, 5, 0, 0, 1, 12, 14, 0, 64, 1, 2000, 2090, 1, 4864, 0, 0, 0, 0, 0, 0, 18.392, 25.289, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, ''),
 (80944, 0, 18212, 0, 0, 0, 'Lorath Silverwing', 'Theramore Quartermaster', 0, 11, 11, 456, 456, 0, 0, 20, 149, 16388, 1.1, 1.14286, 0, 20, 5, 0, 0, 1, 12, 14, 0, 64, 1, 2000, 2090, 1, 4864, 0, 0, 0, 0, 0, 0, 18.392, 25.289, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, ''),
 (80945, 0, 7532, 0, 0, 0, 'Elisandra Spellbinder', 'Shen\'dralar Quartermaster', 0, 11, 11, 456, 456, 0, 0, 20, 1355, 16388, 1.1, 1.14286, 0, 20, 5, 0, 0, 1, 12, 14, 0, 64, 1, 2000, 2090, 1, 4864, 0, 0, 0, 0, 0, 0, 18.392, 25.289, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, ''),
 (80946, 0, 3643, 0, 0, 0, 'Anna Lacroix', 'Syndicate Quartermaster', 0, 11, 11, 456, 456, 0, 0, 20, 87, 16388, 1.1, 1.14286, 0, 20, 5, 0, 0, 1, 12, 14, 0, 64, 1, 2000, 2090, 1, 4864, 0, 0, 0, 0, 0, 0, 18.392, 25.289, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, ''),
-(80947, 0, 11741, 0, 0, 0, 'Alyssa Stormbolt', 'Wildhammer Quartermaster', 0, 11, 11, 456, 456, 0, 0, 20, 694, 16388, 1.1, 1.14286, 0, 20, 5, 0, 0, 1, 12, 14, 0, 64, 1, 2000, 2090, 1, 4864, 0, 0, 0, 0, 0, 0, 18.392, 25.289, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, ''),
+(80947, 0, 12054, 0, 0, 0, 'Alyssa Stormbolt', 'Wildhammer Quartermaster', 0, 11, 11, 456, 456, 0, 0, 20, 694, 16388, 1.1, 1.14286, 0, 20, 5, 0, 0, 1, 12, 14, 0, 64, 1, 2000, 2090, 1, 4864, 0, 0, 0, 0, 0, 0, 18.392, 25.289, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, ''),
 (80948, 0, 3813, 0, 0, 0, 'Spin', 'Thunderbluff Quartermaster', 0, 11, 11, 456, 456, 0, 0, 20, 105, 16388, 1.1, 1.14286, 0, 20, 5, 0, 0, 1, 12, 14, 0, 64, 1, 2000, 2090, 1, 4864, 0, 0, 0, 0, 0, 0, 18.392, 25.289, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, ''),
 (80949, 0, 299, 0, 0, 0, 'Trollo Torntusk', 'Darkspear Quartermaster', 0, 11, 11, 456, 456, 0, 0, 20, 126, 16388, 1.1, 1.14286, 0, 20, 5, 0, 0, 1, 12, 14, 0, 64, 1, 2000, 2090, 1, 4864, 0, 0, 0, 0, 0, 0, 18.392, 25.289, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, ''),
 (80950, 0, 1023, 0, 0, 0, 'Avum Brightplace', 'Scarlet Crusade Quartermaster', 0, 11, 11, 456, 456, 0, 0, 20, 67, 16388, 1.1, 1.14286, 0, 20, 5, 0, 0, 1, 12, 14, 0, 64, 1, 2000, 2090, 1, 4864, 0, 0, 0, 0, 0, 0, 18.392, 25.289, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, ''),
@@ -707,15 +721,15 @@ REPLACE INTO `item_template` VALUES (81078, 0, 0, 0, 'Dalaran Tabard', '', 10643
 
 update item_template set required_reputation_faction = 61, required_reputation_rank = 7  where entry = 81078;
 
-REPLACE INTO `item_template` VALUES (81079, 0, 0, 0, 'Hearthglen Tabard', '', 23954, 1, 0, 1, 0, 0, 19, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+REPLACE INTO `item_template` VALUES (81079, 0, 0, 0, 'Gilded Scarlet Crusade Tabard', '', 23954, 1, 0, 1, 0, 0, 19, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
 
 update item_template set required_reputation_faction = 56, required_reputation_rank = 7  where entry = 81079;
 
 update item_template set buy_price = 50000, sell_price = 50000 where entry in (81077, 81078, 81079);
 
-REPLACE INTO `item_template`  VALUES (81080, 0, 4, 2, 'Syndicate Mask', '', 10580, 1, 16, 1, 1621, 324, 1, -1, -1, 20, 15, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 40, 0, 0, 0, 0, 0, 0, 0, 0, 4, 1, NULL);
+REPLACE INTO `item_template`  VALUES (81080, 0, 4, 1, 'Syndicate Mask', '', 10580, 1, 16, 1, 1621, 324, 1, -1, -1, 20, 15, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 40, 0, 0, 0, 0, 0, 0, 0, 0, 4, 1, NULL);
 
-update item_template set required_reputation_faction = 67, required_reputation_rank = 4 where entry = 81080;
+update item_template set required_reputation_faction = 70, required_reputation_rank = 4 where entry = 81080;
 
 
 REPLACE INTO `item_template` VALUES 
@@ -730,3 +744,336 @@ REPLACE INTO `item_template` VALUES
 (81089, 10, 4, 0, 'Durotar Labor Union Tabard', '', 60767, 1, 0, 1, 50000, 12500, 19, -1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
 
 update item_template set required_reputation_faction = 1001, required_reputation_rank = 7 where entry = 81089;
+update item_template set required_reputation_faction = 809, required_reputation_rank = 7 where entry = 80006;
+
+replace into item_template values
+ ('81051', '0', '4', '4', 'Epaulets of the Dark Reaver', '', '50171', '3', '0', '1', '11047', '11047', '3', '-1', '-1', '62',
+ '60', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '19', '0', '0',
+ '7', '7', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '512', '0', '0', '0',
+ '0', '0', '0', '7597', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '6', '1', '0', '0', '80', '0', '0', '0', '0', '49', '0', '0', '0',
+ '0', '1', NULL);
+replace into item_template values
+ ('81056', '0', '4', '4', 'Greaves of the Dark Reaver', '', '50137', '3', '0', '1', '21047', '21047', '7', '-1', '-1', '62',
+ '60', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '27', '0', '0',
+ '3', '16', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '612', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '6', '1', '0', '0', '80', '0', '0', '0', '0', '49', '0', '0', '0',
+ '0', '1', NULL);
+replace into item_template values
+ ('81057', '0', '2', '8', 'Dark Reaver', '', '25652', '3', '0', '1', '61047', '61047', '17', '-1', '-1', '62',
+ '60', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3700', '0',
+ '0', '167', '251', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '17509', '2', '0', '2', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '6', '1', '0', '0', '80', '0', '0', '0', '0', '49', '0', '0', '0',
+ '0', '1', NULL);
+ 
+ update item_template set display_id = 22979, buy_price = 550, sell_price = 550 where entry = 40000;
+ update item_template set buy_price = 550, sell_price = 550 where entry = 30817;
+ 
+ update item_template set name = 'Steamwheedle Cartel Tabard' where entry = 80316;
+update creature_template set display_id1 = 18388 where entry = 80941; 	
+
+ replace into creature_model_info values (18388, 5875, 2, 2, 0, 0, 0);
+
+
+ replace into creature_model_info values (18340, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18341, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18342, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18343, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18344, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18345, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18346, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18347, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18348, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18349, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18350, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18351, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18352, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18353, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18354, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18355, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18356, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18357, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18358, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18359, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18360, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18361, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18362, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18363, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18364, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18365, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18366, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18367, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18368, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18369, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18370, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18371, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18372, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18373, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18374, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18375, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18376, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18377, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18378, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18379, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18380, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18381, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18382, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18383, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18384, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18385, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18386, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18387, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18388, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18389, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18390, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18391, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18392, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18393, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18394, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18395, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18396, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18397, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18398, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18399, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18400, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18401, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18402, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18403, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18404, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18405, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18406, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18407, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18408, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18409, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18410, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18411, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18412, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18413, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18414, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18415, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18416, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18417, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18418, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18419, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18420, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18421, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18422, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18423, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18424, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18425, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18426, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18427, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18428, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18429, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18430, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18431, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18432, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18433, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18434, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18435, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18436, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18437, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18438, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18439, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18440, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18441, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18442, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18443, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18444, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18445, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18446, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18447, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18448, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18449, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18450, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18451, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18452, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (19000, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (19001, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (19002, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (19003, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (19004, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (19005, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (19006, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (19007, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (19008, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (19009, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (19010, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (19011, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (19012, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (19013, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (19014, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (19015, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (19016, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (19017, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (19018, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (19019, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (19020, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (19021, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (19022, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (19023, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (19024, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (19025, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (19026, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (19027, 5875, 2, 2, 0, 0, 0);
+  
+REPLACE INTO `creature_template` VALUES (80964, 0, 18187, 0, 0, 0, 'Ewe\'luas ', 'Mage Trainer', 64, 60, 60, 3139, 3139, 2620, 2620, 8401, 29, 19, 1, 1.14286, 0, 20, 5, 0, 0, 1, 110, 142, 0, 272, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 8, 0, 74.448, 102.366, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 5882, 0, 0, 0, 0, 524298, '');
+
+REPLACE INTO `npc_trainer` VALUES (80964, 1035, 2000, 0, 0, 20, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 1142, 100, 0, 0, 4, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 1168, 200, 0, 0, 8, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 1173, 100, 0, 0, 6, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 1174, 400, 0, 0, 10, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 1176, 1800, 0, 0, 18, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 1191, 200, 0, 0, 8, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 1194, 400, 0, 0, 10, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 1196, 2000, 0, 0, 20, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 1198, 600, 0, 0, 12, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 1200, 2000, 0, 0, 20, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 1210, 7000, 0, 0, 28, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 1211, 900, 0, 0, 14, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 1214, 8000, 0, 0, 30, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 1225, 5000, 0, 0, 26, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 1228, 15000, 0, 0, 40, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 1241, 5000, 0, 0, 26, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 1249, 100, 0, 0, 6, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 1250, 600, 0, 0, 12, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 1251, 3000, 0, 0, 22, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 1266, 600, 0, 0, 12, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 1267, 1800, 0, 0, 18, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 1467, 900, 0, 0, 14, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 1472, 10, 0, 0, 1, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 1473, 900, 0, 0, 14, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 1474, 7000, 0, 0, 28, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 1475, 18000, 0, 0, 42, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 1481, 2000, 0, 0, 20, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 1811, 3000, 0, 0, 22, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 1830, 200, 0, 0, 24, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 2124, 1500, 0, 0, 16, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 2125, 4000, 0, 0, 24, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 2141, 100, 0, 0, 6, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 2142, 900, 0, 0, 14, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 2143, 3000, 0, 0, 22, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 2858, 1500, 0, 0, 16, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 3142, 1800, 0, 0, 18, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 3553, 14000, 0, 0, 38, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 3576, 4000, 0, 0, 24, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 5146, 200, 0, 0, 8, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 5147, 1500, 0, 0, 16, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 5148, 4000, 0, 0, 24, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 5499, 2000, 0, 0, 20, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 5507, 100, 0, 0, 4, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 5565, 400, 0, 0, 10, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 5566, 2000, 0, 0, 20, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 6121, 13000, 0, 0, 34, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 6128, 8000, 0, 0, 30, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 6130, 10000, 0, 0, 32, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 6132, 15000, 0, 0, 40, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 6142, 7000, 0, 0, 28, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 6144, 3000, 0, 0, 22, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 6493, 600, 0, 0, 12, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 7323, 2000, 0, 0, 20, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 8403, 4000, 0, 0, 24, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 8404, 8000, 0, 0, 30, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 8405, 13000, 0, 0, 36, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 8409, 5000, 0, 0, 26, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 8410, 10000, 0, 0, 32, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 8411, 14000, 0, 0, 38, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 8414, 8000, 0, 0, 30, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 8415, 14000, 0, 0, 38, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 8420, 10000, 0, 0, 32, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 8421, 15000, 0, 0, 40, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 8425, 10000, 0, 0, 32, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 8426, 15000, 0, 0, 40, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 8428, 13000, 0, 0, 36, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 8440, 3000, 0, 0, 22, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 8441, 8000, 0, 0, 30, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 8442, 14000, 0, 0, 38, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 8447, 7000, 0, 0, 28, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 8448, 12000, 0, 0, 34, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 8449, 15000, 0, 0, 40, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 8452, 4000, 0, 0, 24, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 8453, 13000, 0, 0, 36, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 8456, 8000, 0, 0, 30, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 8459, 8000, 0, 0, 30, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 8460, 15000, 0, 0, 40, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 8463, 10000, 0, 0, 32, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 8464, 18000, 0, 0, 42, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 8493, 12000, 0, 0, 34, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 8496, 7000, 0, 0, 28, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 8497, 13000, 0, 0, 36, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 10055, 28000, 0, 0, 48, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 10056, 40000, 0, 0, 58, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 10141, 15000, 0, 0, 40, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 10142, 32000, 0, 0, 50, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 10146, 18000, 0, 0, 42, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 10147, 35000, 0, 0, 52, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 10152, 18000, 0, 0, 42, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 10153, 28000, 0, 0, 48, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 10154, 36000, 0, 0, 54, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 10155, 42000, 0, 0, 60, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 10158, 38000, 0, 0, 56, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 10162, 18000, 0, 0, 42, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 10163, 32000, 0, 0, 50, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 10164, 40000, 0, 0, 58, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 10171, 18000, 0, 0, 42, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 10172, 36000, 0, 0, 54, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 10175, 28000, 0, 0, 48, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 10176, 42000, 0, 0, 60, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 10178, 35000, 0, 0, 52, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 10182, 23000, 0, 0, 44, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 10183, 32000, 0, 0, 50, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 10184, 38000, 0, 0, 56, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 10188, 23000, 0, 0, 44, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 10189, 35000, 0, 0, 52, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 10190, 42000, 0, 0, 60, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 10194, 23000, 0, 0, 44, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 10195, 35000, 0, 0, 52, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 10196, 42000, 0, 0, 60, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 10198, 26000, 0, 0, 46, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 10200, 36000, 0, 0, 54, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 10203, 26000, 0, 0, 46, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 10204, 36000, 0, 0, 54, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 10208, 26000, 0, 0, 46, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 10209, 35000, 0, 0, 52, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 10210, 40000, 0, 0, 58, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 10213, 28000, 0, 0, 48, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 10214, 38000, 0, 0, 56, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 10217, 28000, 0, 0, 48, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 10218, 38000, 0, 0, 56, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 10221, 32000, 0, 0, 50, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 10222, 42000, 0, 0, 60, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 10224, 32000, 0, 0, 50, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 10226, 42000, 0, 0, 60, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 10231, 36000, 0, 0, 54, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 12827, 2000, 0, 0, 20, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 12828, 15000, 0, 0, 40, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 12829, 42000, 0, 0, 60, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 13011, 400, 0, 0, 30, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 13012, 650, 0, 0, 36, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 13014, 900, 0, 0, 42, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 13015, 14000, 0, 0, 48, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 13016, 1800, 0, 0, 54, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 13017, 1890, 0, 0, 60, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 13023, 650, 0, 0, 36, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 13024, 1150, 0, 0, 44, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 13025, 1750, 0, 0, 52, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 13026, 2100, 0, 0, 60, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 13037, 1170, 0, 0, 46, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 13038, 1750, 0, 0, 52, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 13039, 2000, 0, 0, 58, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 22784, 28000, 0, 0, 46, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 22785, 40000, 0, 0, 58, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (80964, 28403, 2000, 0, 0, 20, 5464, 5875);
+
+REPLACE INTO `gameobject_template` VALUES 
+
+(3000292, 0, 5, 32869, 'g_thanksgivingtable_01', 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
