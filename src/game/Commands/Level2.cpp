@@ -1446,9 +1446,9 @@ bool ChatHandler::HandleNpcAddLootCommand(char* args)
 
     float chance = (float)atof(args);
 
-    if (chance > 99)
+    if (chance > 100 || chance < -100)
     {
-        SendSysMessage("Please consider using value lower than 100.");
+        SendSysMessage("Please use value between -100 for quest drop and 100 for normal drop.");
         return false;
     }
 
