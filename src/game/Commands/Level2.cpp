@@ -1414,6 +1414,60 @@ bool ChatHandler::HandleNpcScaleCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleNpcAddLootCommand(char* args)
+{
+    if (!*args)
+    {
+        SendSysMessage(LANG_BAD_VALUE);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    uint32 item = 0;
+
+    char* cId = ExtractKeyFromLink(&args, "Hitem");
+    if (!cId)
+        return false;
+
+    if (!ExtractUInt32(&cId, item))                     
+    {
+        std::string itemName = cId;
+        WorldDatabase.escape_string(itemName);
+        QueryResult* result = WorldDatabase.PQuery("SELECT entry FROM item_template WHERE name = '%s'", itemName.c_str());
+        if (!result)
+        {
+            PSendSysMessage(LANG_COMMAND_COULDNOTFIND, cId);
+            SetSentErrorMessage(true);
+            return false;
+        }
+        item = result->Fetch()->GetUInt16();
+        delete result;
+    }
+
+    float chance = (float)atof(args);
+
+    if (chance > 99)
+    {
+        SendSysMessage("Please consider using value lower than 100.");
+        return false;
+    }
+
+    Creature* npc = GetSelectedCreature();
+
+    if (!npc)
+    {
+        SendSysMessage("You need a target.");
+        return false;
+    }
+
+    uint32 creature = npc ? npc->GetEntry() : 0;
+
+    WorldDatabase.PExecuteLog("REPLACE INTO `creature_loot_template` (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) VALUES (%u, %u, %f, 5, 1, 1)", creature, item, chance);
+    PSendSysMessage("Item %u has been added to NPC %u loot table, group 5, chance %f.", item, creature, chance);
+    SendSysMessage("All changes will take place after the server restart");
+    return true;
+}
+
 //del item from vendor list
 bool ChatHandler::HandleNpcDelVendorItemCommand(char* args)
 {
