@@ -37,7 +37,7 @@ extern DatabaseType LoginDatabase;
 
 // list sorted from high to low build and first build used as low bound for accepted by default range (any > it will accepted by realmd at least)
 static RealmBuildInfo ExpectedRealmdClientBuilds[] = {
-	{5931,  1, 14, 4, ' ', {{}}, {{}}},
+	{5940,  1, 14, 5, ' ', {{}}, {{}}},
     {0,     0, 0, 0,  ' ', {{}}, {{}}}                                   // terminator
 };
 
