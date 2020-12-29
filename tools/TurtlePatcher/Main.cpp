@@ -13,9 +13,9 @@
 
 //#TODO: Read from config blob at the end of the file
 #define NEW_BUILD 5930u
-#define NEW_VISUAL_BUILD "5931"
-#define NEW_VISUAL_VERSION "1.14.4"
-#define NEW_BUILD_DATE "Dec 19 2020"
+#define NEW_VISUAL_BUILD "5940"
+#define NEW_VISUAL_VERSION "1.14.5"
+#define NEW_BUILD_DATE "Dec 29 2020"
 #define NEW_WEBSITE_FILTER "*.turtle-wow.org" // '*' symbol should be presented
 #define NEW_WEBSITE2_FILTER "*.discord.gg" // '*' symbol should be presented
 
