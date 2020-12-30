@@ -12,3 +12,9 @@ update creature_template set faction = 73, scale = 1.1 where entry = 80936;
 delete from quest_template where entry = 80122;
 
 update creature_loot_template set chanceorquestchance = 0.01 where entry = 6206 and item = 80798;
+
+delete from playercreateinfo_spell where race = 9 and class = 1 and spell = 198;
+delete from playercreateinfo_spell where race = 9 and class = 1 and spell = 199;
+insert into playercreateinfo_spell values
+(9, 1, 198, 0, 5875, 'One-Handed Maces'),
+(9, 1, 199, 0, 5875, 'Two-Handed Maces');
