@@ -100,3 +100,7 @@ replace into broadcast_text (ID, MaleText) values (100203, 'My unicorns are for 
 replace into npc_text (ID, BroadcastTextID0) values (100203, 100203);
 
 update creature_template set script_name = 'npc_vanira_unicorn_vendor' where entry = 80453;
+
+update item_template set description = 'Historians claim that these incorporeal beasts were created when Draenor exploded, unleashing energies that warped the world\'s flora and fauna.' where entry = 80430;
+
+update item_template set required_reputation_faction = 529, required_reputation_rank = 7  where entry = 22999;
