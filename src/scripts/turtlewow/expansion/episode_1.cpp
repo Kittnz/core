@@ -1547,7 +1547,7 @@ bool QuestRewarded_npc_applebough(Player* pPlayer, Creature* pQuestGiver, Quest 
         pQuestGiver->HandleEmote(EMOTE_ONESHOT_CHEER);
         // I don't understand why he's not cheering? Model has /cheer animation.
         pQuestGiver->SetDisplayId(18356); // Green
-        pQuestGiver->MonsterSayToPlayer("This is what I needed the most!", pPlayer);
+        pQuestGiver->MonsterSayToPlayer("I feel revitalized! The life is flowing back into my branches. Thank you, $N. This is a kindness that I won't soon forget!", pPlayer);
         return true;
     }
 }
