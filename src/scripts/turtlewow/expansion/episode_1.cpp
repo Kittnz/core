@@ -1555,9 +1555,26 @@ bool QuestRewarded_npc_applebough(Player* pPlayer, Creature* pQuestGiver, Quest 
     }
 }
 
+bool GossipHello_npc_vanira_unicorn_vendor(Player* pPlayer, Creature* pCreature)
+{
+    if (pPlayer->getRace() == RACE_HIGH_ELF || pPlayer->GetReputationRank(269) == 7)
+    {
+        pPlayer->SEND_VENDORLIST(pCreature->GetGUID());
+        return true;
+    }
+    pPlayer->CLOSE_GOSSIP_MENU();
+    pCreature->MonsterSayToPlayer("My unicorns are for sale only to the elves of the Silvermoon Remnants and to their exalted allies.", pPlayer);
+    return true;
+}
+
 void AddSC_episode_1()
 {
     Script *newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_vanira_unicorn_vendor";
+    newscript->pGossipHello = &GossipHello_npc_vanira_unicorn_vendor;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_sunkiss";
