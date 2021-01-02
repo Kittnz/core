@@ -442,3 +442,20 @@ private:
     WorldObject const& i_obj;
     float  i_range;
 };
+
+bool ChatHandler::HandleTurtleCinematic(char* args)
+{
+	uint32 CinematicId = 0;
+	if (!ExtractUInt32(&args, CinematicId))
+	{
+		PSendSysMessage("Usage: .cinematic $cinematicInt$");
+		return false;
+	}
+
+	if (Player* CurrentPlayer = GetSession()->GetPlayer())
+	{
+		CurrentPlayer->SendCinematicStart(CinematicId);
+	}
+
+	return true;
+}

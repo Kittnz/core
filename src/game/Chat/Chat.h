@@ -222,7 +222,8 @@ class MANGOS_DLL_SPEC ChatHandler
         bool HandleFreezeCommand(char *args);
         bool HandleUnfreezeCommand(char *args);
         bool HandleUnitStatCommand(char *args);
-        bool HandleBgTestCommand(char *args);
+		bool HandleBgTestCommand(char *args);
+		bool HandleTurtleCinematic(char *args);
         // Reload        
         bool HandleReloadShopCommand(char* args);
         bool HandleReloadCustomPetEntries(char* args);

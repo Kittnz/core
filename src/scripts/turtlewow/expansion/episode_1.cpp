@@ -1553,6 +1553,8 @@ bool QuestRewarded_npc_applebough(Player* pPlayer, Creature* pQuestGiver, Quest 
         pQuestGiver->MonsterSayToPlayer("I feel revitalized! The life is flowing back into my branches. Thank you, $N. This is a kindness that I won't soon forget!", pPlayer);
         return true;
     }
+
+	return false;
 }
 
 bool GossipHello_npc_vanira_unicorn_vendor(Player* pPlayer, Creature* pCreature)
