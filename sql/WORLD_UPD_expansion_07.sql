@@ -50,8 +50,8 @@ replace into creature_template values (80167, 0, 18304, 0, 0, 0, 'Riding Armored
 replace into creature_template values (80168, 0, 18228, 0, 0, 0, 'Dark Rider\'s Steed', NULL, 0, 5, 5, 64, 64, 0, 0, 20, 35, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 2, 2, 0, 44, 1, 2000, 2000, 1, 768, 0, 0, 0, 0, 0, 0, 1.76, 2.42, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 2, '');
 
 
-update item_template set displayid = 6947 where entry = 80218;
-update item_template set displayid = 60692, name = 'Quel\'dorei Defender\'s Deflector' where entry = 80535;
+update item_template set display_id = 6947 where entry = 80218;
+update item_template set display_id = 60692, name = 'Quel\'dorei Defender\'s Deflector' where entry = 80535;
 update item_template set class = 4, subclass = 6, inventory_type = 14 where entry = 80643;
 
 UPDATE `item_template` SET `dmg_type1`='5' WHERE (`entry`='80644') AND (`patch`='0');
@@ -68,3 +68,30 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '2', '0', '0', '0', '0', '0', '7', '1', '0', '0', '50', '0', '0', '0', '0', '41', '0', '0', '0',
  '0', '1', NULL);
+ 
+replace into item_template values
+ ('23556', '0', '2', '8', 'Battleworn Bastard Sword', '', '1542', '1', '0', '1', '1', '1', '17', '-1', '-1', '1',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '2900', '0',
+ '0', '3', '5', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '1', '1', '0', '0', '25', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+ 
+delete from playercreateinfo_item where race = 10 and class = 2; 
+insert `playercreateinfo_item` values 
+
+-- Paladin
+
+(10, 2, 24146, 1),
+(10, 2, 24145, 1),
+(10, 2, 24143, 1),
+(10, 2, 80250, 2),
+(10, 2, 80251, 4),
+(10, 2, 23556, 1),
+(10, 2, 6948, 1);
+
+
+replace into broadcast_text (ID, MaleText) values (100202, 'What can I do for you? I am quite busy right now.');
+replace into npc_text (ID, BroadcastTextID0) values (100202, 100202);
