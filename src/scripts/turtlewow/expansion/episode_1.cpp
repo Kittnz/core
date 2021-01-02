@@ -859,7 +859,7 @@ bool GossipHello_npc_magistrix_ishalah(Player* pPlayer, Creature* pCreature)
         return true;
     }
     pPlayer->SEND_GOSSIP_MENU(100202, pCreature->GetGUID());
-    return false;
+    return true;
 }
 
 bool GossipSelect_npc_magistrix_ishalah(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
