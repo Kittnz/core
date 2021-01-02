@@ -600,7 +600,8 @@ ChatCommand * ChatHandler::getCommandTable()
         { "mount",          SEC_GAMEMASTER,     false, &ChatHandler::HandleMountCommand,               "", nullptr },
         { "fly",            SEC_GAMEMASTER,     false, &ChatHandler::HandleFlyCommand,                 "", nullptr },
         { "transfer",       SEC_ADMINISTRATOR,  false, &ChatHandler::HandleTransferCommand,                 "", nullptr },
-        { "bgtest",         SEC_ADMINISTRATOR,  false, &ChatHandler::HandleBgTestCommand,                 "", nullptr },
+		{ "bgtest",         SEC_ADMINISTRATOR,  false, &ChatHandler::HandleBgTestCommand,                 "", nullptr },
+		{ "cinematic",      SEC_ADMINISTRATOR,  false, &ChatHandler::HandleTurtleCinematic,                 "", nullptr },
         { nullptr,          0,                  false, nullptr,                                        "", nullptr }
     };
 
