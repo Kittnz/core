@@ -104,3 +104,10 @@ update creature_template set script_name = 'npc_vanira_unicorn_vendor' where ent
 update item_template set description = 'Historians claim that these incorporeal beasts were created when Draenor exploded, unleashing energies that warped the world\'s flora and fauna.' where entry = 80430;
 
 update item_template set required_reputation_faction = 529, required_reputation_rank = 7  where entry = 22999;
+
+REPLACE INTO `creature_template` VALUES (80965, 0, 5379, 0, 0, 0, 'Lake Toad', '', 0, 21, 22, 527, 570, 0, 0, 900, 18, 0, 0.95, 1.14286, 0, 20, 5, 0, 0, 1, 31, 39, 0, 98, 1, 2000, 2000, 1, 32768, 0, 0, 0, 0, 0, 0, 35.6224, 48.9808, 100, 7, 0, 544, 0, 0, 0, 0, 0, 0, 0, 0, 7159, 7992, 0, 0, 5440, 0, 28, 41, '', 1, 3, 0, 0, 3, 544, 0, 0, 0, 0, 0, '');
+
+update creature_template set scale = 2 where entry = 80965;
+
+update creature_template set loot_id = 80965 where entry = 80965; 
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (80965, 80421, -100, 0, 1, 1);
