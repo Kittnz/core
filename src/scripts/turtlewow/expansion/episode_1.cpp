@@ -853,10 +853,13 @@ bool GOHello_go_shadowforge_cage(Player* pPlayer, GameObject* pGo)
 bool GossipHello_npc_magistrix_ishalah(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->GetQuestStatus(QUEST_PORTING_TO_GOLDSHIRE) == QUEST_STATUS_INCOMPLETE)
+    {
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I'm ready, Ishalah. Teleport me to Goldshire!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-
-    pPlayer->SEND_GOSSIP_MENU(100201, pCreature->GetGUID());
-    return true;
+        pPlayer->SEND_GOSSIP_MENU(100201, pCreature->GetGUID());
+        return true;
+    }
+    pPlayer->SEND_GOSSIP_MENU(100202, pCreature->GetGUID());
+    return false;
 }
 
 bool GossipSelect_npc_magistrix_ishalah(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
