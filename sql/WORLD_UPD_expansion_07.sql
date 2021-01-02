@@ -95,3 +95,8 @@ insert `playercreateinfo_item` values
 
 replace into broadcast_text (ID, MaleText) values (100202, 'What can I do for you? I am quite busy right now.');
 replace into npc_text (ID, BroadcastTextID0) values (100202, 100202);
+
+replace into broadcast_text (ID, MaleText) values (100203, 'My unicorns are for sale only to the elves of the Silvermoon Remnants and to their exalted allies.');
+replace into npc_text (ID, BroadcastTextID0) values (100203, 100203);
+
+update creature_template set script_name = 'npc_vanira_unicorn_vendor' where entry = 80453;
