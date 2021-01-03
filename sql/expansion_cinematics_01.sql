@@ -31,3 +31,14 @@ INSERT INTO `cinematic_waypoints` (`cinematic`, `timer`, `position_x`, `position
 INSERT INTO `cinematic_waypoints` (`cinematic`, `timer`, `position_x`, `position_y`, `position_z`, `comment`) VALUES ('164', '0', '-5480', '-4281', '499', 'Elf 9');
 INSERT INTO `cinematic_waypoints` (`cinematic`, `timer`, `position_x`, `position_y`, `position_z`, `comment`) VALUES ('164', '0', '-5628', '-4327', '418', 'Elf 10');
 INSERT INTO `cinematic_waypoints` (`cinematic`, `timer`, `position_x`, `position_y`, `position_z`, `comment`) VALUES ('164', '0', '-5630', '-4333', '406', 'Elf 11');
+
+UPDATE `cinematic_waypoints` SET `timer` = '4400' WHERE (`id` = '63');
+UPDATE `cinematic_waypoints` SET `timer` = '8800' WHERE (`id` = '64');
+UPDATE `cinematic_waypoints` SET `timer` = '13200' WHERE (`id` = '65');
+UPDATE `cinematic_waypoints` SET `timer` = '17600' WHERE (`id` = '66');
+UPDATE `cinematic_waypoints` SET `timer` = '22000' WHERE (`id` = '67');
+UPDATE `cinematic_waypoints` SET `timer` = '26400' WHERE (`id` = '68');
+UPDATE `cinematic_waypoints` SET `timer` = '30800' WHERE (`id` = '69');
+UPDATE `cinematic_waypoints` SET `timer` = '35200' WHERE (`id` = '70');
+UPDATE `cinematic_waypoints` SET `timer` = '44000' WHERE (`id` = '71');
+UPDATE `cinematic_waypoints` SET `timer` = '53000' WHERE (`id` = '72');

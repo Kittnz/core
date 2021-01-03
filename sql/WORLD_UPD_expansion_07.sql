@@ -153,7 +153,8 @@ insert `playercreateinfo_item` values
 
 update item_template set disenchant_id = 3 where entry = 2867;
 
-
+update item_template set sheath = 1, disenchant_id = 41 where entry = 51849;
+update item_template set disenchant_id = 41 where entry = 51848;
 
 delete from playercreateinfo_spell where race = 10 and class = 2 and spell = 202;
 insert into playercreateinfo_spell values
@@ -163,3 +164,4 @@ UPDATE `quest_template` SET `Objectives`='Seek out this High Elven district in S
 UPDATE `quest_template` SET `Details`='You’re a $R right?\n\nYou aren’t the first I\'ve seen around here recently. A lot of your people have arrived and have settled up in Stormwind.\n\nIn the outer section of the Dwarven district bordering the canal, there is an entrance with the banner of your people, go there and you can meet them should you wish to greet your own folk.' WHERE (`entry`='80220') AND (`patch`='0');
 
 REPLACE INTO `item_template` VALUES (81091, 10, 15, 0, 'Big Blizzard Bear', 'Just remeber to have your special little passanger straped in tightly before running off at top speed on an adventure.', 60856, 4, 64, 1, 0, 0, 0, -1, 32767, 20, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 46203, 0, 0, 0, 0, 330, 3000, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+
