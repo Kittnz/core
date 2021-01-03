@@ -150,3 +150,14 @@ insert `playercreateinfo_item` values
 (9, 3, 2504, 1),
 (9, 3, 2512, 200),
 (9, 3, 6948, 1);
+
+update item_template set disenchant_id = 3 where entry = 2867;
+
+
+
+delete from playercreateinfo_spell where race = 10 and class = 2 and spell = 202;
+insert into playercreateinfo_spell values
+(10, 2, 202, 0, 5875, 'Two-Handed Swords');
+
+UPDATE `quest_template` SET `Objectives`='Seek out this High Elven district in Stormwind, look for a blue banner in the outer section of the Dwarven district. Speak to their representative.' WHERE (`entry`='80220') AND (`patch`='0');
+UPDATE `quest_template` SET `Details`='You’re a $R right?\n\nYou aren’t the first I\'ve seen around here recently. A lot of your people have arrived and have settled up in Stormwind.\n\nIn the outer section of the Dwarven district bordering the canal, there is an entrance with the banner of your people, go there and you can meet them should you wish to greet your own folk.' WHERE (`entry`='80220') AND (`patch`='0');
