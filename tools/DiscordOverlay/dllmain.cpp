@@ -131,7 +131,7 @@ unsigned __stdcall DiscordThreadStart(void*)
 	discord::Activity DefaultAct;
 	DefaultAct.SetType(discord::ActivityType::Playing);
 	DefaultAct.SetState(u8"Playing Turtle WoW");
-	DefaultAct.SetDetails(u8"Sitting on main menu");
+	DefaultAct.SetDetails(u8"");
 
 	time_t StartTime;
 	std::time(&StartTime);
@@ -144,8 +144,8 @@ unsigned __stdcall DiscordThreadStart(void*)
 	DefaultAct.GetAssets().SetLargeText(u8"Turtle WoW — RP/PvE Vanilla WoW Server");
 	DefaultAct.GetAssets().SetSmallText("");
 	DefaultAct.GetParty().SetId("DummyPartyId");
-	DefaultAct.GetParty().GetSize().SetCurrentSize(1);
-	DefaultAct.GetParty().GetSize().SetMaxSize(1);
+	DefaultAct.GetParty().GetSize().SetCurrentSize(0);
+	DefaultAct.GetParty().GetSize().SetMaxSize(0);
 	DefaultAct.GetSecrets().SetMatch("");
 	DefaultAct.GetSecrets().SetJoin("");
 	DefaultAct.GetSecrets().SetSpectate("");
