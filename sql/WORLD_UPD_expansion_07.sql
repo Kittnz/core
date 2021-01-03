@@ -129,3 +129,24 @@ replace into creature_template values
 
 REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES 
 (80966, 12860, 0, 0, 0, 0);
+
+delete from creature_loot_template where item = 81004 and entry = 15340;
+
+update item_template set sheath = 1 where entry = 80105;
+update item_template set inventory_type = 5 where entry = 80803;
+
+delete from playercreateinfo_item where race = 9 and class = 3; 
+insert `playercreateinfo_item` values 
+
+-- Goblin Hunter
+
+(9, 3, 80168, 4),
+(9, 3, 129, 1),
+(9, 3, 147, 1),
+(9, 3, 148, 1),
+(9, 3, 80167, 2),
+(9, 3, 2092, 1),
+(9, 3, 2102, 1),
+(9, 3, 2504, 1),
+(9, 3, 2512, 200),
+(9, 3, 6948, 1);
