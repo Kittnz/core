@@ -106,6 +106,7 @@ unsigned __stdcall DiscordThreadStart(void*)
 
 	SetWindowsHook(WH_GETMESSAGE, GetMsgProc);
 
+	gState.Core = nullptr;
 	discord::Result result = discord::Core::Create(628349760813662218, DiscordCreateFlags_NoRequireDiscord, &gState.Core);
 	if (gState.Core == nullptr)
 	{
