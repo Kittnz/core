@@ -122,10 +122,10 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
- update item_template set name = 'Alah\'Thalas Library Book', quality = 1 where entry = 12860;
+ update item_template set name = 'Alah\'Thalas Library Book', quality = 1, buy_price = 13000, sell_price = 13000 where entry = 12860;
 
 replace into creature_template values
-(80966, 0, 16765, 0, 0, 0, 'Shanala Sunsorrow', 'Librarian', 0, 3, 3, 219, 219, 0, 0, 852, 371, 4, 1, 1.14286, 0, 20, 5, 0, 0, 1, 24, 31, 0, 90, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 31.856, 43.802, 100, 7, 4096, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 2, '');
+(80966, 0, 18216, 0, 0, 0, 'Shanala Sunsorrow', 'Librarian', 0, 3, 3, 219, 219, 0, 0, 852, 371, 4, 1, 1.14286, 0, 20, 5, 0, 0, 1, 24, 31, 0, 90, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 31.856, 43.802, 100, 7, 4096, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 2, '');
 
 REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES 
 (80966, 12860, 0, 0, 0, 0);
