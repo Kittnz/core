@@ -151,6 +151,14 @@ bool ItemUseSpell_city_protector_scroll(Player* pPlayer, Item* pItem, const Spel
             //Undercity
             pPlayer->TeleportTo(0, 1822.0999f, 238.638855f, 60.694809f, 0.0f);
             break;
+        case RACE_GOBLIN:
+            // Mudsprocket
+            pPlayer->TeleportTo(1, -4594.56f, -3208.2f, 34.9253f, 4.65f);
+            break;
+        case RACE_HIGH_ELF:
+            // Alah'Thalas
+            pPlayer->TeleportTo(0, 4226.82f, -2722.43f, 121.874f, 5.3f);
+            break;
         default: break;
         }
         return true;
