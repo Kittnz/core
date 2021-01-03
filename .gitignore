@@ -109,3 +109,7 @@ Progression.h
 Solution/
 tools/TurtlePatcher/Debug/
 tools/TurtlePatcher/Release/
+tools/DiscordOverlay/Debug/
+tools/DiscordOverlay/Release/
+tools/libDiscord/Debug/
+tools/libDiscord/Release/
