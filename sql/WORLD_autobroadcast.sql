@@ -27,9 +27,7 @@ replace into mangos_string (entry, content_default) values
 
 ('50012', 'Have you ever dreamed of setting up your own garden? Grow consumable food by planting the seed and watering it, then enjoy the results of your hard work once it’s fully grown! Speak to Kern Mosshoof in Mulgore or Mortimer Stansfield in Elwynn Forest.'),
 
-('50013', 'Prepare yourself for an all-new, never-told chapter in the story of World of Warcraft: a three-part expansion storyline that will lead you on adventures never had and to depths never visited: turtle-wow.org/expansion'),
-
-('50014', 'If you want to help the server grow, check our shop for these donation rewards: exotic mounts, large bags, mysterious engineering devices, and much more. Visit turtle-wow.org/donate');
+('50013', 'If you want to help the server grow, check our shop for these donation rewards: exotic mounts, large bags, mysterious engineering devices, and much more. Visit turtle-wow.org/donate');
 
 delete from autobroadcast where string_id between 50000 and 50018;
 replace into autobroadcast (string_Id) values
@@ -46,5 +44,4 @@ replace into autobroadcast (string_Id) values
 ('50010'),
 ('50011'),
 ('50012'),
-('50013'),
-('50014');
+('50013');
