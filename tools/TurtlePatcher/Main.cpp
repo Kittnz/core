@@ -15,7 +15,7 @@
 #define NEW_BUILD 5950u
 #define NEW_VISUAL_BUILD "5950"
 #define NEW_VISUAL_VERSION "1.14.6"
-#define NEW_BUILD_DATE "Jan 1 2021"
+#define NEW_BUILD_DATE "Jan 01 2021"
 #define NEW_WEBSITE_FILTER "*.turtle-wow.org" // '*' symbol should be presented
 #define NEW_WEBSITE2_FILTER "*.discord.gg" // '*' symbol should be presented
 
@@ -40,7 +40,41 @@
 // string. Original value: "*.wowchina.com"
 #define OFFSET_CHINA_WEBSITE_FILTER 0x0045CC9C
 
+// A small storage for code. We write our code in that 10h pocket
+#define OFFSET_SHELLCODE_LOAD_DLL 0x00004122
+
+const unsigned char LoadDLLShellcode[] =
+{
+	0x68, 0x60, 0xFF, 0x7F, 0x00,		// push 0x007FFF60 (offset to string "DiscordOverlay.dll")
+	0xFF, 0x15, 0xB4, 0xF2, 0x7F, 0x00, // call ds:LoadLibraryA
+	0xEb, 0xD1,							// jmp short _WinMain
+};
+
+// That's one byte from command that calling WinMain
+// We just shift calling address to our code, in order to load DLL
+#define OFFSET_WINMAIN_CALL_PART 0x0000999C
+
+// Original value is some kind of CRT error. It's not happening anyway
+#define OFFSET_STR_DISCORD_OVERLAY 0x003FFF60
+
+const char DiscordOverlayDllStr[] = "DiscordOverlay.dll";
+
 #include <iostream>
+
+void PatchDiscordOverlayDLL(FILE* hWoW)
+{
+	fseek(hWoW, (long)OFFSET_SHELLCODE_LOAD_DLL, SEEK_SET);
+	fwrite(LoadDLLShellcode, sizeof(LoadDLLShellcode), 1, hWoW);
+
+	fseek(hWoW, (long)OFFSET_WINMAIN_CALL_PART, SEEK_SET);
+	const unsigned char DifferentCallOffset = 0x82;
+	fwrite(&DifferentCallOffset, 1, 1, hWoW);
+
+	fseek(hWoW, (long)OFFSET_STR_DISCORD_OVERLAY, SEEK_SET);
+	fwrite(DiscordOverlayDllStr, sizeof(DiscordOverlayDllStr), 1, hWoW);
+	const unsigned char ZeroByte = 0x00;
+	fwrite(&ZeroByte, 1, 1, hWoW);
+}
 
 void PatchNetVersion(FILE* hWoW, unsigned short Build)
 {
@@ -269,6 +303,7 @@ int PatchWoWExe()
 	{
 		PatchUIUnlock(hWoWBinary);
 		PatchNetVersion(hWoWBinary, NEW_BUILD);
+		PatchDiscordOverlayDLL(hWoWBinary);
 
 		std::string Version(NEW_VISUAL_VERSION);
 		std::string Build(NEW_VISUAL_BUILD);
@@ -292,6 +327,8 @@ int PatchWoWExe()
 int GuardedMain(HINSTANCE hInstance)
 {
 	gHInstance = hInstance;
+
+	PatchWoWExe();
 
 	// create log file
 	// By default we try to create a log in working directory.
