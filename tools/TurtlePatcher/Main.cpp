@@ -317,7 +317,7 @@ int PatchWoWExe()
 	else
 	{
 		WriteLog("ERROR: Can't patch WoW.exe");
-		ErrorBox("Can't patch WoW.exe");
+//		ErrorBox("Can't patch WoW.exe");
 		return 1;
 	}
 
