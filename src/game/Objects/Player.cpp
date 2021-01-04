@@ -21831,9 +21831,17 @@ void Player::RewardBountyHuntKill(Unit* pVictim)
 
 void Player::RewardExpansionPvPQuest(Unit* pVictim)
 {
-    if ((GetQuestStatus(80255) == QUEST_STATUS_INCOMPLETE) || (GetQuestStatus(80302) == QUEST_STATUS_INCOMPLETE)) // Securing the Supply Lines & Unwanted Eyes
+    if (GetQuestStatus(80255) == QUEST_STATUS_INCOMPLETE) // Securing the Supply Lines 
     {
         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80233); 
+
+        if (cInfo != nullptr)
+            KilledMonster(cInfo, ObjectGuid());
+    }
+
+    if (GetQuestStatus(80302) == QUEST_STATUS_INCOMPLETE) //Unwanted Eyes (80804)
+    {
+        CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80804);
 
         if (cInfo != nullptr)
             KilledMonster(cInfo, ObjectGuid());
