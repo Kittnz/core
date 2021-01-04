@@ -191,3 +191,6 @@ update quest_template set method = 1 where entry = 80002;
 UPDATE `item_template` SET `allowable_race`='-1' WHERE entry in (17194, 17196);
 UPDATE `item_template` SET dmg_min1 = 0, dmg_max1 = 0 WHERE entry  = 12860;
 
+update quest_template set zoneorsort = -241 where entry = 80254;
+update quest_template set objectivetext2 = 'Search Dwarven District' where entry = 80262;
+update quest_template set prevquestid = 'Search Dwarven District' where entry = 80255;
