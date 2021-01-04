@@ -169,3 +169,25 @@ REPLACE INTO `creature_template` values
 (80967, 0, 18135, 0, 0, 0, 'Lord Darkhallow', 'Scourge Quartermaster', 0, 11, 11, 456, 456, 0, 0, 20, 21, 16388, 1.1, 1.14286, 0, 20, 5, 0, 0, 1, 12, 14, 0, 64, 1, 2000, 2090, 1, 4864, 0, 0, 0, 0, 0, 0, 18.392, 25.289, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, ''),
 (80968, 0, 18053, 0, 0, 0, 'Daemona Des', 'Burning Legion Quartermaster', 0, 11, 11, 456, 456, 0, 0, 20, 90, 16388, 1.1, 1.14286, 0, 20, 5, 0, 0, 1, 12, 14, 0, 64, 1, 2000, 2090, 1, 4864, 0, 0, 0, 0, 0, 0, 18.392, 25.289, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, '');
 
+update item_template set name = 'Quel\'dorei Assassin\'s Kris' where entry = 80528;
+update item_template set display_id = 32687 where entry = 80638;
+update item_template set inventory_type = 14 where entry = 80543;
+
+update item_template set required_reputation_faction = 269, required_reputation_rank = 6 where entry = 80521;
+update item_template set required_reputation_faction = 269, required_reputation_rank = 6 where entry = 80520;
+
+SET @gossip_menu_id = 59145;
+SET @magic_number = 80925; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (ID, MaleText) values (@magic_number, 'Why hello there, $c, is there anything I could do for you?');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+-- Disable Vault quests:
+
+update quest_template set method = 1 where entry = 80004;
+update quest_template set method = 1 where entry = 80002;
+
+UPDATE `item_template` SET `allowable_race`='-1' WHERE entry in (17194, 17196);
+UPDATE `item_template` SET dmg_min1 = 0, dmg_max1 = 0 WHERE entry  = 12860;
+
