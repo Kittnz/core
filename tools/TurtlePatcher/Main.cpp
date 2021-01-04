@@ -12,10 +12,10 @@
 #define fs std::filesystem
 
 //#TODO: Read from config blob at the end of the file
-#define NEW_BUILD 5950u
-#define NEW_VISUAL_BUILD "5950"
-#define NEW_VISUAL_VERSION "1.14.6"
-#define NEW_BUILD_DATE "Jan 01 2021"
+#define NEW_BUILD 6000u
+#define NEW_VISUAL_BUILD "6000"
+#define NEW_VISUAL_VERSION "1.15.0"
+#define NEW_BUILD_DATE "Jan 05 2021"
 #define NEW_WEBSITE_FILTER "*.turtle-wow.org" // '*' symbol should be presented
 #define NEW_WEBSITE2_FILTER "*.discord.gg" // '*' symbol should be presented
 
