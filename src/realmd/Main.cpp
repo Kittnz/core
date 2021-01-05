@@ -55,10 +55,13 @@
 bool StartDB();
 void UnhookSignals();
 void HookSignals();
+void UpdateConfigVariables();
 
 bool stopEvent = false;                                     ///< Setting it to true stops the server
 
 DatabaseType LoginDatabase;                                 ///< Accessor to the realm server database
+
+int32 PatchHandlerKBytesDownloadLimit = 1024 * 1024; // 1024 Mb/second
 
 /// Print out the usage string for this program on the console.
 void usage(const char *prog)
@@ -233,6 +236,7 @@ extern int main(int argc, char **argv)
         }
     }
 
+	UpdateConfigVariables();
     ///- Get the list of realms for the server
     sRealmList.Initialize(sConfig.GetIntDefault("RealmsStateUpdateDelay", 20));
     if (sRealmList.size() == 0)
@@ -326,6 +330,7 @@ extern int main(int argc, char **argv)
             loopCounter = 0;
             DETAIL_LOG("Ping MySQL to keep connection alive");
             LoginDatabase.Ping();
+			UpdateConfigVariables();
         }
     }
 
@@ -409,6 +414,48 @@ bool StartDB()
     }
 
     return true;
+}
+
+enum class ConfigId : int32
+{
+	SpeedLimit = 1,
+};
+
+void UpdateConfigVariables()
+{
+	QueryResult* Result = LoginDatabase.Query("SELECT id, value FROM config");
+	if (Result != nullptr)
+	{
+
+		do
+		{
+			Field* pFields = Result->Fetch();
+			ConfigId Id = (ConfigId)pFields[0].GetInt32();
+			std::string Value = pFields[1].GetCppString();
+
+			switch (Id)
+			{
+			case ConfigId::SpeedLimit:
+				// value - number of kbytes
+			{
+				int32 kBytes = atoi(Value.c_str());
+
+				if (PatchHandlerKBytesDownloadLimit != kBytes)
+				{
+					sLog.outString("Changing download speed limit from %d kB. to %d kB.", PatchHandlerKBytesDownloadLimit, kBytes);
+					PatchHandlerKBytesDownloadLimit = kBytes;
+				}
+			}
+				break;
+			default:
+				sLog.outError("Unexpected Config Id %d", (int32)Id);
+				break;
+			}
+
+		} while (Result->NextRow());
+
+		delete Result;
+	}
 }
 
 /// Define hook 'OnSignal' for all termination signals

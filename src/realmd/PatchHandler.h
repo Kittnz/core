@@ -91,6 +91,8 @@ class PatchHandler: public ACE_Svc_Handler<ACE_SOCK_STREAM, ACE_NULL_SYNCH>
     private:
         ACE_HANDLE patch_fd_;
 
+		int32 SecondLimitBytes = 0;
+		uint32 LastUpdateMs = 0;
 };
 
 #endif /* _BK_PATCHHANDLER_H__ */
