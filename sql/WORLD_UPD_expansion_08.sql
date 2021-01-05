@@ -17,3 +17,10 @@ insert into playercreateinfo_spell (race, class, spell, note) values
 (10, 4, 28738, 'Summon Speedy'),
 (10, 5, 28738, 'Summon Speedy'),
 (10, 8, 28738, 'Summon Speedy');
+
+REPLACE INTO `item_template` VALUES (81095, 0, 4, 6, 'Worn Thalassian Shield', '', 33291, 0, 0, 1, 7, 1, 14, -1, -1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 4, 0, 0, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+
+delete from playercreateinfo_item where race = 9 and class = 1 and itemid = 2362;
+delete from playercreateinfo_item where race = 9 and class = 1 and itemid = 81095;
+
+insert into `playercreateinfo_item` values (9, 1, 81095, 1);
