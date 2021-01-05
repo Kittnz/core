@@ -270,10 +270,10 @@ const Fvector CameraOrigin = { -5281.0f, -3686.0f, 330.0f };
 
  const CameraPoint sCameraPoints[] =
  {
-	 { {-4662.0f, -3242.0f, 289.0f}, { -4662.0f, -3286.0f, 313.0f}, 0},
-	 { {-4723.0f, -3383.0f, 360.0f}, { -4743.0f, -3412.0f, 358.0f}, 4400},
-	 { {-4876.0f, -3543.0f, 305.0f}, { -4903.0f, -3564.0f, 304.0f}, 8800},
-	 { {-4984.0f, -3675.0f, 356.0f}, { -5007.0f, -3725.0f, 365.0f}, 13200},
+	 { {-4662.0f, -3242.0f, 289.0f}, { -4662.0f, -3286.0f, 313.0f}, 0},		// P0
+	 { {-4723.0f, -3383.0f, 360.0f}, { -4743.0f, -3412.0f, 358.0f}, 4400},	// P1
+	 { {-4876.0f, -3543.0f, 305.0f}, { -4903.0f, -3564.0f, 304.0f}, 8800},  // P2
+	 { {-4984.0f, -3675.0f, 356.0f}, { -5007.0f, -3725.0f, 365.0f}, 13200}, // P3
 	 { {-5082.0f, -3881.0f, 407.0f}, { -5127.0f, -3921.0f, 406.0f}, 17600},
 	 { {-5231.0f, -3991.0f, 411.0f}, { -5252.0f, -4017.0f, 410.0f}, 22000},
 	 { {-5344.0f, -4136.0f, 456.0f}, { -5378.0f, -4167.0f, 498.0f}, 26400},
@@ -290,52 +290,53 @@ enum TargetBlock
 	TargetBlockTarget
 };
 
-void SmoothPointIn(Fvector BasePoint, Fvector NextPoint, Fvector& OutPoint)
+enum SmoothType
+{
+	SmoothIn,
+	SmoothOut
+};
+
+// Credit to Denis Voloshin
+void SmoothPoint(Fvector PrevPoint, Fvector BasePoint, Fvector NextPoint, SmoothType type, Fvector& OutPoint)
 {
 	// calc direction
-	Fvector dir;
-	dir.sub(NextPoint, BasePoint);
-	float len = dir.magnitude();
-	dir = dir.normalize();
-	float yaw = atan2f(dir.x, dir.z);
-	//float pitch = atan2f(dir.z, sqrtf(pow(dir.x, 2.0f) + pow(dir.y, 2.0f)));
-	float pitch = asinf(-dir.y);
+	Fvector Dir = BasePoint;
+	Dir.sub(PrevPoint);
+	float PrevLen = Dir.magnitude();
+	Dir.normalize();
 
-	DirectX::XMFLOAT3 floats;
-	floats.x = pitch;
-	floats.y = yaw;
-	floats.z = 0.0f;
-	DirectX::XMVECTOR Angles = DirectX::XMLoadFloat3(&floats);
-	DirectX::XMMATRIX RotMatrix = DirectX::XMMatrixRotationRollPitchYawFromVector(Angles);
-	DirectX::XMVECTOR RotQuater = DirectX::XMQuaternionRotationMatrix(RotMatrix);
+	Fvector NextDir = NextPoint;
+	NextDir.sub(BasePoint);
+	float NextLen = NextDir.magnitude();
+	NextDir.normalize();
 
-	//if (yaw > 0.0f)
-	//{
-	//	yaw += PI_DIV_4;
-	//}
-	//else
-	//{
-	//	yaw -= PI_DIV_4;
-	//}
-	//
-	//if (pitch > 0.0f)
-	//{
-	//	pitch += PI_DIV_4;
-	//}
-	//else
-	//{
-	//	pitch -= PI_DIV_4;
-	//}
+	Fvector Result = Dir;
+	Dir.add(NextDir);
+	Result.normalize();
 
-	OutPoint.x = len;
-	OutPoint.y = len;
-	OutPoint.z = len;
+	switch (type)
+	{
+	case SmoothIn:
+	{
+		float HalfMagn = PrevLen / 2.0f;
+		Result.mul(HalfMagn);
+		OutPoint = BasePoint;
+		OutPoint.sub(Result);
+	}
+		break;
+	case SmoothOut:
+	{
+		float HalfMagn = NextLen / 2.0f;
+		Result.mul(HalfMagn);
+		OutPoint = BasePoint;
+		OutPoint.add(Result);
+	}
+		break;
+	default:
+		break;
+	}
 
-	OutPoint.x = OutPoint.x * cos(yaw);
-	OutPoint.z = OutPoint.z * cos(yaw) + OutPoint.x * sin(yaw);
-
-	OutPoint.x = OutPoint.x * cos(pitch) - OutPoint.y * sin(pitch);
-	OutPoint.y = OutPoint.y * cos(pitch) + OutPoint.x * sin(pitch);
+	//OutPoint = Result;
 }
 
 void ModAnimationBlock(char* m2Content, AnimationBlock& InBlock, TargetBlock block)
@@ -357,8 +358,17 @@ void ModAnimationBlock(char* m2Content, AnimationBlock& InBlock, TargetBlock blo
 
 	Fvector* KeysArr = (Fvector*)(m2Content + InBlock.ofsKeys);
 
-	auto GetPointLambda = [block](int i) -> Fvector
+	auto GetPointLambda = [block, AnimPoints](int i) -> Fvector
 	{
+		if (i < 0)
+		{
+			return { 0.0f, 0.0f, 0.0f };
+		}
+		else if (i >= AnimPoints)
+		{
+			return { 0.0f, 0.0f, 0.0f };
+		}
+
 		Fvector OurPoint;
 		switch (block)
 		{
@@ -395,9 +405,8 @@ void ModAnimationBlock(char* m2Content, AnimationBlock& InBlock, TargetBlock blo
 		}
 		else
 		{
-			Fvector VecPreviousPoint = GetPointLambda(i - 1);
 			Fvector SmoothedIn;
-			SmoothedIn.lerp(VecPreviousPoint, OurPoint, 0.75f);
+			SmoothPoint(GetPointLambda(i - 1), OurPoint, GetPointLambda(i + 1), SmoothIn, SmoothedIn);
 			KeysArr[BaseIndex + 1] = SmoothedIn; // In
 		}
 
@@ -407,9 +416,8 @@ void ModAnimationBlock(char* m2Content, AnimationBlock& InBlock, TargetBlock blo
 		}
 		else
 		{
-			Fvector NextPoint = GetPointLambda(i + 1);
 			Fvector SmoothedOut;
-			SmoothedOut.lerp(OurPoint, NextPoint, 0.25f);
+			SmoothPoint(GetPointLambda(i - 1), OurPoint, GetPointLambda(i + 1), SmoothOut, SmoothedOut);
 			KeysArr[BaseIndex + 2] = SmoothedOut; // Out
 		}
 #endif
