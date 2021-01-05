@@ -27,3 +27,13 @@ delete from playercreateinfo_item where race = 9 and class = 1 and itemid = 8109
 
 insert into `playercreateinfo_item` values (10, 1, 81095, 1);
 insert into `playercreateinfo_item` values (9, 1, 2362, 1);
+
+UPDATE `quest_template` SET `ReqCreatureOrGOCount2`='1' WHERE (`entry`='50321') AND (`patch`='0');
+
+UPDATE `quest_template` SET `ObjectiveText1`='Throw snowball at Draxer' WHERE `entry`=50321;
+UPDATE `quest_template` SET `ObjectiveText2`='Throw snowball at Paulgreeneye' WHERE `entry`=50321;
+UPDATE `quest_template` SET `ObjectiveText3`='Throw snowball at Sangria' WHERE `entry`=50321;
+UPDATE `quest_template` SET `ObjectiveText4`='Throw snowball at Sucy' WHERE `entry`=50321;
+
+UPDATE `quest_template` SET `ReqCreatureOrGOId2`='70001' WHERE (`entry`='50321') AND (`patch`='0');
+UPDATE `quest_template` SET `ReqCreatureOrGOId2`='70001' WHERE (`entry`='60013') AND (`patch`='0');
