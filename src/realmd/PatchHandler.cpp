@@ -23,10 +23,11 @@
   \ingroup realmd
   */
 
-#include "PatchHandler.h"
 #include "AuthCodes.h"
 #include "Log.h"
 #include "Common.h"
+#include "Timer.h"
+#include "PatchHandler.h"
 
 #ifdef WIN32
 #include <filesystem>
@@ -49,6 +50,8 @@
 #pragma pack(push,1)
 #endif
 
+extern int32 PatchHandlerKBytesDownloadLimit;
+
 struct Chunk
 {
     ACE_UINT8 cmd;
@@ -67,6 +70,9 @@ PatchHandler::PatchHandler(ACE_HANDLE socket, ACE_HANDLE patch)
     reactor(NULL);
     set_handle(socket);
     patch_fd_ = patch;
+
+	LastUpdateMs = WorldTimer::getMSTime();
+	SecondLimitBytes = PatchHandlerKBytesDownloadLimit * 1024;
 }
 
 PatchHandler::~PatchHandler()
@@ -122,14 +128,38 @@ int PatchHandler::svc(void)
     {
         data.data_size = (ACE_UINT16)r;
 
-        if(peer().send((const char*)&data,
-                    ((size_t) r) + sizeof(data) - sizeof(data.data),
-                    flags) == -1)
-        {
-            return -1;
-        }
+		ssize_t sendedBytes = peer().send((const char*)&data,
+			((size_t)r) + sizeof(data) - sizeof(data.data),
+			flags);
 
-		//DEBUG_LOG("CMD_XFER_DATA Send patch chunk size: %d", r);
+		if (sendedBytes == -1)
+		{
+			return -1;
+		}
+
+		SecondLimitBytes -= sendedBytes;
+
+		if (SecondLimitBytes <= 0)
+		{
+			// check for time limit now
+			uint32 Diff = 0;
+			do 
+			{
+				uint32 CurrentTime = WorldTimer::getMSTime();
+				Diff = CurrentTime - LastUpdateMs;
+				if (Diff > 1000)
+				{
+					SecondLimitBytes = PatchHandlerKBytesDownloadLimit * 1024;
+					LastUpdateMs = CurrentTime;
+				}
+				else
+				{
+					ACE_Time_Value SleepValue;
+					SleepValue.set_msec(100u);
+					ACE_OS::sleep(SleepValue);
+				}
+			} while (Diff < 1000);
+		}
     }
 
     if(r == -1)
