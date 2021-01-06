@@ -58,6 +58,7 @@
 #include <typeinfo>
 #include "Formulas.h"
 #include "AsyncCommandHandlers.h"
+#include "AI/GameObjectAI.h"
 
 #include "TargetedMovementGenerator.h"                      // for HandleNpcUnFollowCommand
 
@@ -761,8 +762,21 @@ bool ChatHandler::HandleGameObjectInfoCommand(char* args)
         return false;
     }
     
-    PSendSysMessage("Entry: %u, GUID: %u\nName: %s\nType: %u, Display Id: %u\nGO State: %u, Loot State: %u", pGameObject->GetEntry(), pGameObject->GetGUIDLow(), pGameObject->GetGOInfo()->name, pGameObject->GetGoType(), pGameObject->GetDisplayId(), pGameObject->GetGoState(), pGameObject->getLootState());
+    PSendSysMessage("Entry: %u, GUID: %u\nName: %s\nType: %u, Display Id: %u\nGO State: %u, Loot State: %u", 
+		pGameObject->GetEntry(), 
+		pGameObject->GetGUIDLow(), 
+		pGameObject->GetGOInfo()->name, 
+		pGameObject->GetGoType(), 
+		pGameObject->GetDisplayId(), 
+		pGameObject->GetGoState(), 
+		pGameObject->getLootState());
     SendSysMessage(pGameObject->isSpawned() ? "Object is spawned." : "Not spawned.");
+
+	GameObjectAI* gAI = pGameObject->AI();
+	if (gAI != nullptr)
+	{
+		PSendSysMessage("AI class: %s. Debug info: %s", typeid(gAI).name(), gAI->GetDebugInfo());
+	}
 
     return true;
 }
