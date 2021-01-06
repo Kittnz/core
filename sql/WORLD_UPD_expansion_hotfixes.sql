@@ -98,7 +98,8 @@ nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
 RequiredRaces = 512, RequiredClasses = 3
 where entry = @quest_entry;	
 
-update quest_template set requiredraces = requiredraces + 512 where entry in (6064, 6074, 6075, 6076, 6084, 6085, 6086);
+update quest_template set requiredraces = 68 + 512 where entry in (6064, 6084, 6085, 6086);
+update quest_template set requiredraces = 4 + 512 where entry in (6074, 6075, 6076);
 
 -- Fixed.
  replace into creature_loot_template values (12219, 80748, 0.01, 6, 1, 1, 0, 0, 10); 
@@ -287,5 +288,5 @@ update quest_template set requiredraces = requiredraces + 512 where entry in (60
  replace into creature_loot_template values (11783, 80756, 0.01, 6, 1, 1, 0, 0, 10); 
  replace into creature_loot_template values (11783, 80757, 0.01, 6, 1, 1, 0, 0, 10); 
  
- update quest_template set requiredraces = requiredraces + 256 where entry in (1859, 1963, 1858);
+ update quest_template set requiredraces = 178 + 256 where entry in (1859, 1963, 1858);
  
