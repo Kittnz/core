@@ -805,12 +805,19 @@ bool GossipSelect_npc_malvinah_sunblade(Player* pPlayer, Creature* pCreature, ui
 
 #define DARK_KEY 80216
 
+#define ID_GOBJECT_SHADOWFORGECAGE_RESET 1
+
 bool GOHello_go_shadowforge_cage(Player* pPlayer, GameObject* pGo)
 {
     if (pPlayer->HasItemCount(DARK_KEY, 1))
     {
         pGo->UseDoorOrButton();
         pPlayer->HandleEmote(EMOTE_ONESHOT_KNEEL);
+
+		if (GameObjectAI* gAI = pGo->AI())
+		{
+			gAI->SetData(ID_GOBJECT_SHADOWFORGECAGE_RESET, 1);
+		}
 
         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(NPC_CUSTOM_OBJECTIVE_ITEM_SCRAPPING);
         if (cInfo != nullptr)
@@ -828,13 +835,10 @@ bool GOHello_go_shadowforge_cage(Player* pPlayer, GameObject* pGo)
             Alisha->SetWalk(false);
 
             DoAfterTime(pPlayer, 25 * IN_MILLISECONDS,
-                [CreatureGuid = Alisha->GetObjectGuid(), GObjectGuid = pGo->GetObjectGuid(),  player = pPlayer]()
+                [CreatureGuid = Alisha->GetObjectGuid()]()
             {
                 Map* map = sMapMgr.FindMap(0);
                 Creature* creature = map->GetCreature(CreatureGuid);
-                GameObject* object = map->GetGameObject(GObjectGuid);
-
-                object->ResetDoorOrButton();
 
                 if (!creature)
                     return;
@@ -847,6 +851,45 @@ bool GOHello_go_shadowforge_cage(Player* pPlayer, GameObject* pGo)
         pPlayer->GetSession()->SendNotification("Requires Dark Key.");
 
     return true;
+}
+
+struct go_shadowforge_cage : public GameObjectAI
+{
+	explicit go_shadowforge_cage(GameObject* pGo) : GameObjectAI(pGo)
+	{}
+
+	uint32 BackTimer = 0;
+
+	virtual void UpdateAI(uint32 const uiDiff) override
+	{
+		if (BackTimer != 0)
+		{
+			if (BackTimer < uiDiff)
+			{
+				BackTimer = 0;
+				me->ResetDoorOrButton();
+			}
+			else
+			{
+				BackTimer -= uiDiff;
+			}
+		}
+	}
+
+	virtual void SetData(uint32 id, uint32 value) override
+	{
+		if (id == ID_GOBJECT_SHADOWFORGECAGE_RESET)
+		{
+			BackTimer = 25 * IN_MILLISECONDS;
+		}
+		GameObjectAI::SetData(id, value);
+	}
+
+};
+
+GameObjectAI* GetAI_shadoforge_cage(GameObject* Obj)
+{
+	return new go_shadowforge_cage(Obj);
 }
 
 
@@ -1664,6 +1707,7 @@ void AddSC_episode_1()
     newscript = new Script;
     newscript->Name = "go_shadowforge_cage";
     newscript->pGOHello = &GOHello_go_shadowforge_cage;
+	newscript->GOGetAI = &GetAI_shadoforge_cage;
     newscript->RegisterSelf();
 
     newscript = new Script;
