@@ -159,6 +159,7 @@ unsigned __stdcall DiscordThreadStart(void*)
 	while (gShouldWork)
 	{
 		gState.Core->RunCallbacks();
+		Sleep(50);
 	}
 
 #ifdef _DEBUG
