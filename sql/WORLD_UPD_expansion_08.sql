@@ -25,8 +25,13 @@ delete from playercreateinfo_item where race = 9 and class = 1 and itemid = 2362
 delete from playercreateinfo_item where race = 10 and class = 1 and itemid = 81095;
 delete from playercreateinfo_item where race = 9 and class = 1 and itemid = 81095;
 
+delete from playercreateinfo_item where race = 9 and class = 3 and itemid = 2102;
+delete from playercreateinfo_item where race = 9 and class = 3 and itemid = 2101;
+insert into `playercreateinfo_item` values (9, 3, 2101, 1);
+
 insert into `playercreateinfo_item` values (10, 1, 81095, 1);
 insert into `playercreateinfo_item` values (9, 1, 2362, 1);
+
 
 UPDATE `quest_template` SET `ReqCreatureOrGOCount2`='1' WHERE (`entry`='50321') AND (`patch`='0');
 
