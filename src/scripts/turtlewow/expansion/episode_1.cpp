@@ -859,11 +859,13 @@ struct go_shadowforge_cage : public GameObjectAI
 	{}
 
 	uint32 BackTimer = 0;
+	char DebugInfo[32];
 
 	virtual void UpdateAI(uint32 const uiDiff) override
 	{
 		if (BackTimer != 0)
 		{
+			hotFix:
 			if (BackTimer < uiDiff)
 			{
 				BackTimer = 0;
@@ -872,6 +874,10 @@ struct go_shadowforge_cage : public GameObjectAI
 			else
 			{
 				BackTimer -= uiDiff;
+				if (BackTimer == 0)
+				{
+					goto hotFix;
+				}
 			}
 		}
 	}
@@ -883,6 +889,12 @@ struct go_shadowforge_cage : public GameObjectAI
 			BackTimer = 25 * IN_MILLISECONDS;
 		}
 		GameObjectAI::SetData(id, value);
+	}
+
+	virtual const char* GetDebugInfo() override
+	{
+		sprintf_s(DebugInfo, "BackTimer %u", BackTimer);
+		return DebugInfo;
 	}
 
 };
