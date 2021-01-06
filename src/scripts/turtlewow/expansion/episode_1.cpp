@@ -893,7 +893,7 @@ struct go_shadowforge_cage : public GameObjectAI
 
 	virtual const char* GetDebugInfo() override
 	{
-		sprintf_s(DebugInfo, "BackTimer %u", BackTimer);
+		sprintf(DebugInfo, "BackTimer %u", BackTimer);
 		return DebugInfo;
 	}
 
