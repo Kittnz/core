@@ -2,6 +2,7 @@ update item_template set inventory_type = 14, class = 4, subclass = 6 where entr
 update item_template set inventory_type = 13 where entry = 80635;
 update item_template set name = 'Codex: Divine Sanction' where entry = 81012;
 update item_template set display_id = 30412 where entry = 16718;
+update item_template set display_id =  1928 where entry = 80535;
 update item_template set allowable_race = -1 where entry = 19377;
 update item_template set allowable_race = -1 where entry = 8049;
 update item_template set allowable_race = -1 where allowable_race = 32767;
@@ -285,3 +286,6 @@ update quest_template set requiredraces = requiredraces + 512 where entry in (60
  replace into creature_loot_template values (11783, 80755, 0.01, 6, 1, 1, 0, 0, 10); 
  replace into creature_loot_template values (11783, 80756, 0.01, 6, 1, 1, 0, 0, 10); 
  replace into creature_loot_template values (11783, 80757, 0.01, 6, 1, 1, 0, 0, 10); 
+ 
+ update quest_template set requiredraces = requiredraces + 256 where entry in (1859, 1963, 1858);
+ 
