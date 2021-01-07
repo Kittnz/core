@@ -3,6 +3,7 @@ update item_template set inventory_type = 13 where entry = 80635;
 update item_template set name = 'Codex: Divine Sanction' where entry = 81012;
 update item_template set display_id = 30412 where entry = 16718;
 update item_template set allowable_race = -1 where entry = 19377;
+update item_template set allowable_race = -1 where entry = 8049;
 update item_template set allowable_race = -1 where allowable_race = 32767;
 update item_template set inventory_type = 17, class = 2, subclass = 8 where entry = 80534;
 update item_template set inventory_type = 26 where entry = 80207;
