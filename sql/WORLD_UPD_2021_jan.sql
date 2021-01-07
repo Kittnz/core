@@ -1389,3 +1389,5 @@ REPLACE INTO area_template (entry, map_id, zone_id, explore_flag, flags, area_le
 (4012, 0, 139, 2014, 0, 0, 'Scarlet Enclave', 0, 0),
 (4013, 25, 0, 2015, 128, 0, 'Lordaeron Arena', 0, 0),
 (4014, 25, 0, 2016, 128, 0, 'Blood Ring', 0, 0);
+
+update creature_template set npc_flags = 18 where entry = 80458;
