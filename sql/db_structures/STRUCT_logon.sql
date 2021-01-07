@@ -286,6 +286,14 @@ CREATE TABLE IF NOT EXISTS `uptime` (
   PRIMARY KEY (`realmid`,`starttime`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Uptime system';
 
+CREATE TABLE IF NOT EXISTS `config` (
+  `id` INT NOT NULL,
+  `value` VARCHAR(45) NULL,
+  `comment` VARCHAR(255) NULL,
+  PRIMARY KEY (`id`));
+
+INSERT INTO `config` (`id`, `value`, `comment`) VALUES ('1', '2048', 'Patch download speed limit. Number of Kbytes per client');
+
 -- Daten Export vom Benutzer nicht ausgewählt
 -- Exportiere Struktur von Trigger tw_logon.shop_delete
 -- SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
