@@ -865,7 +865,6 @@ struct go_shadowforge_cage : public GameObjectAI
 	{
 		if (BackTimer != 0)
 		{
-			hotFix:
 			if (BackTimer < uiDiff)
 			{
 				BackTimer = 0;
@@ -876,7 +875,7 @@ struct go_shadowforge_cage : public GameObjectAI
 				BackTimer -= uiDiff;
 				if (BackTimer == 0)
 				{
-					goto hotFix;
+					me->ResetDoorOrButton();
 				}
 			}
 		}
@@ -1275,11 +1274,67 @@ bool GOHello_go_spirit_pyre(Player* pPlayer, GameObject* pGo)
     {
         pGo->UseDoorOrButton(60);
 
+		if (GameObjectAI* GoAI = pGo->AI())
+		{
+			// reset gameobject after 25 sec.
+			GoAI->SetData(1, 1);
+		}
+
         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80803);
         if (cInfo != nullptr)
             pPlayer->KilledMonster(cInfo, ObjectGuid());
     }
     return false;
+}
+
+struct go_spirit_pyre : public GameObjectAI
+{
+	explicit go_spirit_pyre(GameObject* pGo) : GameObjectAI(pGo)
+	{}
+
+	uint32 BackTimer = 0;
+	char DebugInfo[32];
+
+	virtual void UpdateAI(uint32 const uiDiff) override
+	{
+		if (BackTimer != 0)
+		{
+			if (BackTimer < uiDiff)
+			{
+				BackTimer = 0;
+				me->ResetDoorOrButton();
+			}
+			else
+			{
+				BackTimer -= uiDiff;
+				if (BackTimer == 0)
+				{
+					me->ResetDoorOrButton();
+				}
+			}
+		}
+	}
+
+	virtual void SetData(uint32 id, uint32 value) override
+	{
+		if (id == ID_GOBJECT_SHADOWFORGECAGE_RESET)
+		{
+			BackTimer = 25 * IN_MILLISECONDS;
+		}
+		GameObjectAI::SetData(id, value);
+	}
+
+	virtual const char* GetDebugInfo() override
+	{
+		sprintf(DebugInfo, "BackTimer %u", BackTimer);
+		return DebugInfo;
+	}
+
+};
+
+GameObjectAI* GetAI_go_spirit_pyre(GameObject* Obj)
+{
+	return new go_spirit_pyre(Obj);
 }
 
 bool QuestAccept_npc_teslinah(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
@@ -1664,7 +1719,8 @@ void AddSC_episode_1()
 
     newscript = new Script;
     newscript->Name = "go_spirit_pyre";
-    newscript->pGOHello = &GOHello_go_spirit_pyre;
+	newscript->pGOHello = &GOHello_go_spirit_pyre;
+	newscript->GOGetAI = &GetAI_go_spirit_pyre;
     newscript->RegisterSelf();
 
     newscript = new Script;
