@@ -97,3 +97,190 @@ RequiredRaces = 512, RequiredClasses = 3
 where entry = @quest_entry;	
 
 update quest_template set requiredraces = requiredraces + 512 where entry in (6064, 6074, 6075, 6076, 6084, 6085, 6086);
+
+-- Fixed.
+ replace into creature_loot_template values (12219, 80748, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (12219, 80749, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (12219, 80750, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (12219, 80751, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (12219, 80752, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (12219, 80753, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (12219, 80754, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (12219, 80755, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (12219, 80756, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (12219, 80757, 0.01, 6, 1, 1, 0, 0, 10); 
+
+ replace into creature_loot_template values (12223, 80748, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (12223, 80749, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (12223, 80750, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (12223, 80751, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (12223, 80752, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (12223, 80753, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (12223, 80754, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (12223, 80755, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (12223, 80756, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (12223, 80757, 0.01, 6, 1, 1, 0, 0, 10); 
+ 
+ replace into creature_loot_template values (12224, 80748, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (12224, 80749, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (12224, 80750, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (12224, 80751, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (12224, 80752, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (12224, 80753, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (12224, 80754, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (12224, 80755, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (12224, 80756, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (12224, 80757, 0.01, 6, 1, 1, 0, 0, 10); 
+ 
+ replace into creature_loot_template values (11793, 80748, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (11793, 80749, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (11793, 80750, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (11793, 80751, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (11793, 80752, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (11793, 80753, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (11793, 80754, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (11793, 80755, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (11793, 80756, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (11793, 80757, 0.01, 6, 1, 1, 0, 0, 10);  
+ 
+ replace into creature_loot_template values (12220, 80748, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (12220, 80749, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (12220, 80750, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (12220, 80751, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (12220, 80752, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (12220, 80753, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (12220, 80754, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (12220, 80755, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (12220, 80756, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (12220, 80757, 0.01, 6, 1, 1, 0, 0, 10); 
+ 
+ replace into creature_loot_template values (12222, 80748, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (12222, 80749, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (12222, 80750, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (12222, 80751, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (12222, 80752, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (12222, 80753, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (12222, 80754, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (12222, 80755, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (12222, 80756, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (12222, 80757, 0.01, 6, 1, 1, 0, 0, 10); 
+ 
+ replace into creature_loot_template values (13141, 80748, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (13141, 80749, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (13141, 80750, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (13141, 80751, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (13141, 80752, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (13141, 80753, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (13141, 80754, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (13141, 80755, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (13141, 80756, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (13141, 80757, 0.01, 6, 1, 1, 0, 0, 10); 
+ 
+ replace into creature_loot_template values (13142, 80748, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (13142, 80749, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (13142, 80750, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (13142, 80751, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (13142, 80752, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (13142, 80753, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (13142, 80754, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (13142, 80755, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (13142, 80756, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (13142, 80757, 0.01, 6, 1, 1, 0, 0, 10); 
+ 
+ replace into creature_loot_template values (12221, 80748, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (12221, 80749, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (12221, 80750, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (12221, 80751, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (12221, 80752, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (12221, 80753, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (12221, 80754, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (12221, 80755, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (12221, 80756, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (12221, 80757, 0.01, 6, 1, 1, 0, 0, 10); 
+ 
+ replace into creature_loot_template values (12206, 80748, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (12206, 80749, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (12206, 80750, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (12206, 80751, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (12206, 80752, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (12206, 80753, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (12206, 80754, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (12206, 80755, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (12206, 80756, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (12206, 80757, 0.01, 6, 1, 1, 0, 0, 10); 
+ 
+ replace into creature_loot_template values (11790, 80748, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (11790, 80749, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (11790, 80750, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (11790, 80751, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (11790, 80752, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (11790, 80753, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (11790, 80754, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (11790, 80755, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (11790, 80756, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (11790, 80757, 0.01, 6, 1, 1, 0, 0, 10); 
+ 
+ replace into creature_loot_template values (11792, 80748, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (11792, 80749, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (11792, 80750, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (11792, 80751, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (11792, 80752, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (11792, 80753, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (11792, 80754, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (11792, 80755, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (11792, 80756, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (11792, 80757, 0.01, 6, 1, 1, 0, 0, 10); 
+ 
+ replace into creature_loot_template values (11791, 80748, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (11791, 80749, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (11791, 80750, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (11791, 80751, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (11791, 80752, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (11791, 80753, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (11791, 80754, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (11791, 80755, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (11791, 80756, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (11791, 80757, 0.01, 6, 1, 1, 0, 0, 10); 
+ 
+ replace into creature_loot_template values (11794, 80748, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (11794, 80748, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (11794, 80748, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (11794, 80748, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (11794, 80748, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (11794, 80748, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (11794, 80748, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (11794, 80748, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (11794, 80748, 0.01, 6, 1, 1, 0, 0, 10); 
+ 
+ replace into creature_loot_template values (13323, 80748, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (13323, 80749, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (13323, 80750, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (13323, 80751, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (13323, 80752, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (13323, 80753, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (13323, 80754, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (13323, 80755, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (13323, 80756, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (13323, 80757, 0.01, 6, 1, 1, 0, 0, 10); 
+ 
+ replace into creature_loot_template values (11784, 80748, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (11784, 80749, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (11784, 80750, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (11784, 80751, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (11784, 80752, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (11784, 80753, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (11784, 80754, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (11784, 80755, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (11784, 80756, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (11784, 80757, 0.01, 6, 1, 1, 0, 0, 10); 
+ 
+ replace into creature_loot_template values (11783, 80748, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (11783, 80749, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (11783, 80750, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (11783, 80751, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (11783, 80752, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (11783, 80753, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (11783, 80753, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (11783, 80755, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (11783, 80756, 0.01, 6, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (11783, 80757, 0.01, 6, 1, 1, 0, 0, 10); 
