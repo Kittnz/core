@@ -1391,3 +1391,4 @@ REPLACE INTO area_template (entry, map_id, zone_id, explore_flag, flags, area_le
 (4014, 25, 0, 2016, 128, 0, 'Blood Ring', 0, 0);
 
 update creature_template set npc_flags = 18 where entry = 80458;
+update item_template set allowable_race = -1 where entry in (21254, 21520);
