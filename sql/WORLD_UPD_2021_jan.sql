@@ -1390,7 +1390,8 @@ REPLACE INTO area_template (entry, map_id, zone_id, explore_flag, flags, area_le
 (4013, 25, 0, 2015, 128, 0, 'Lordaeron Arena', 0, 0),
 (4014, 25, 0, 2016, 128, 0, 'Blood Ring', 0, 0);
 
-update creature_template set npc_flags = 18 where entry = 80458;
+update creature_template set npc_flags = 19 where entry = 80458;
+update quest_template set requiredclasses = 4 where entry = 80366;
 update item_template set allowable_race = -1 where entry in (21254, 21520, 19577, 19823, 6183);
 
 UPDATE `quest_template` SET `ObjectiveText3`='Throw snowball at Skrimmshaw' WHERE `entry`=50321; 
