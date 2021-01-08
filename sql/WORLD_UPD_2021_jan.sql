@@ -1392,3 +1392,5 @@ REPLACE INTO area_template (entry, map_id, zone_id, explore_flag, flags, area_le
 
 update creature_template set npc_flags = 18 where entry = 80458;
 update item_template set allowable_race = -1 where entry in (21254, 21520, 19577, 19823, 6183);
+
+UPDATE `quest_template` SET `ObjectiveText3`='Throw snowball at Skrimmshaw' WHERE `entry`=50321; 
