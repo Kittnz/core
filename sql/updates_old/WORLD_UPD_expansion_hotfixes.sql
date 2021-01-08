@@ -290,3 +290,7 @@ update quest_template set requiredraces = 4 + 512 where entry in (6074, 6075, 60
  
  update quest_template set requiredraces = 178 + 256 where entry in (1859, 1963, 1858);
  
+update item_template set required_level = 29 where entry = 80737;
+update item_template set required_level = 29 where entry = 80739;
+
+ 
