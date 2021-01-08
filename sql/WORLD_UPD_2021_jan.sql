@@ -1395,8 +1395,8 @@ update item_template set allowable_race = -1 where entry in (21254, 21520, 19577
 
 UPDATE `quest_template` SET `ObjectiveText3`='Throw snowball at Skrimmshaw' WHERE `entry`=50321; 
 
- update quest_template set rewrepvalue1 = 100 where entry in (80252, 80253, 80254, 80255, 80258);
+ update quest_template set rewrepvalue1 = 150 where entry in (80252, 80253, 80254, 80255, 80258);
  update quest_template set rewrepvalue1 = 75  where entry in (80250, 80251, 80256, 80257);
 
- update quest_template set rewrepvalue1 = 100 where entry in (80301, 80302, 80303, 80304, 80305);
+ update quest_template set rewrepvalue1 = 150 where entry in (80301, 80302, 80303, 80304, 80305);
  update quest_template set rewrepvalue1 = 75  where entry in (80300);
