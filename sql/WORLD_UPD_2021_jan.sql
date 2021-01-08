@@ -14,6 +14,8 @@ update quest_template set requiredraces = 178 + 256 where entry in (1859, 1963, 
 update quest_template set requiredraces = 68 + 512 where entry in (6064, 6084, 6085, 6086);
 update quest_template set requiredraces = 4 + 512 where entry in (6074, 6075, 6076);
 
+update quest_template set requiredraces = 512 where entry  = 80366;
+
 update quest_template set requiredraces = 1 + 512 where entry = 1641;
 update quest_template set requiredraces = 77 + 512 where entry in (1793, 1642, 7638, 1661);
 

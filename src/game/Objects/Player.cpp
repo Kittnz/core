@@ -4874,7 +4874,7 @@ enum CustomGraveyardZones
     CGZ_BLACK_MORASS            = 2366,
     CGZ_CAVERNS_OF_TIME         = 1941,
     CGZ_LOCH_MODAN              = 38,
-    CGZ_ALAH_THALAS             = 139
+    CGZ_ALAH_THALAS             = 2037
 };
 
 void Player::RepopAtGraveyard()
@@ -4944,21 +4944,26 @@ void Player::RepopAtGraveyard()
         }
         break;
     case CGZ_STONETALON_MOUNTAINS:
-        if (getLevel() < 10)
+        if (GetAreaId() == 4011 || getLevel() < 10) // Venture Camp
         {
             TeleportTo(1, 1931.73F, 1363.91F, 149.9F, 6.13F);
             isCustomGraveyard = true;
         }
+        if (GetAreaId() == 2041) // Amani'Alor
+        {
+            TeleportTo(1, 2947.03F, 2557.98F, 139.30F, 2.3F);
+            isCustomGraveyard = true;
+        }
         break;
     case CGZ_LOCH_MODAN:
-        if (getLevel() < 10)
+        if (GetAreaId() == 147 || getLevel() < 10) // Farstrider's Lodge
         {
             TeleportTo(0, -5653.60F, -4181.42F, 391.90F, 1.09F);
             isCustomGraveyard = true;
         }
         break;
     case CGZ_ALAH_THALAS:
-        if (GetAreaId() == 139 && GetTeam() == TEAM_ALLIANCE)
+        if (GetAreaId() == 2040)
         {
             TeleportTo(0, 4285.19F, -2859.71F, 5.16F, 5.06F);
             isCustomGraveyard = true;
