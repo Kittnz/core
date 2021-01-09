@@ -689,7 +689,7 @@ struct stormwind_vault_portal : public GameObjectAI
 
             for (Player* pPlayer : players)
             {
-                pPlayer->GetSession()->SendNotification("This dungeon is currently not avaiable.");
+                pPlayer->GetSession()->SendNotification("This dungeon is currently not available.");
                 //if (!pPlayer->isAlive()) 
                 //{
                 //    pPlayer->ResurrectPlayer(0.5f);
