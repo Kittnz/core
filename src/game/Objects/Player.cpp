@@ -21836,8 +21836,12 @@ void Player::RewardBountyHuntKill(Unit* pVictim)
 
 void Player::RewardExpansionPvPQuest(Unit* pVictim)
 {
-    if (GetTeam() == pVictim->ToPlayer()->GetTeam())
-        return;
+
+    //if (!GetTeam() || !pVictim->ToPlayer()->GetTeam())
+    //    return;
+
+    //if (GetTeam() == pVictim->ToPlayer()->GetTeam())
+    //    return;
 
     if (GetQuestStatus(80255) == QUEST_STATUS_INCOMPLETE) // Securing the Supply Lines 
     {
