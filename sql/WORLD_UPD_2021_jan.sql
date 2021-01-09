@@ -15,6 +15,7 @@ update quest_template set requiredraces = 68 + 512 where entry in (6064, 6084, 6
 update quest_template set requiredraces = 4 + 512 where entry in (6074, 6075, 6076);
 
 update quest_template set requiredraces = 512 where entry  = 80366;
+update quest_template set requiredraces = 255 + 256 where entry  = 256;
 
 update quest_template set requiredraces = 1 + 512 where entry = 1641;
 update quest_template set requiredraces = 77 + 512 where entry in (1793, 1642, 7638, 1661);
@@ -1401,3 +1402,8 @@ UPDATE `quest_template` SET `ObjectiveText3`='Throw snowball at Skrimmshaw' WHER
 
  update quest_template set rewrepvalue1 = 150 where entry in (80301, 80302, 80303, 80304, 80305);
  update quest_template set rewrepvalue1 = 75  where entry in (80300);
+ 
+  update item_template set name = 'Standard Issue Tunic' where entry = 80729 ;
+  update item_template set display_id =  50488 where entry = 80646;
+  
+  UPDATE `item_template` SET `inventory_type`='21' WHERE (`entry`='80635') AND (`patch`='0');
