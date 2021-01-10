@@ -5424,7 +5424,7 @@ SpellCastResult Spell::CheckCast(bool strict)
 
                 // auto selection spell rank implemented in WorldSession::HandleCastSpellOpcode
                 // this case can be triggered if rank not found (too low-level target for first rank)
-                if (m_caster->GetTypeId() == TYPEID_PLAYER && !m_CastItem && !m_IsTriggeredSpell)
+                if (m_caster->GetTypeId() == TYPEID_PLAYER && !m_CastItem)
                 {
                     // spell expected to be auto-downranking in cast handle, so must be same
                     if (m_spellInfo != sSpellMgr.SelectAuraRankForLevel(m_spellInfo, target->getLevel()))
@@ -7748,6 +7748,13 @@ bool Spell::CheckTarget(Unit* target, SpellEffectIndex eff)
 {
     if (target != m_caster && IsPositiveSpell(m_spellInfo))
     {
+        // prevent buffing low level players with group wide buffs
+        if (m_caster->IsPlayer() && !m_CastItem && !m_IsTriggeredSpell && target != m_targets.getUnitTarget())
+        {
+            if (m_spellInfo != sSpellMgr.SelectAuraRankForLevel(m_spellInfo, target->getLevel()))
+                return false;
+        }
+
         Player* casterOwner = m_caster->GetCharmerOrOwnerPlayerOrPlayerItself();
         Player* targetOwner = target->GetCharmerOrOwnerPlayerOrPlayerItself();
         if (targetOwner && casterOwner != targetOwner && targetOwner->duel && casterOwner && !casterOwner->IsInDuelWith(targetOwner))
@@ -7824,7 +7831,7 @@ bool Spell::CheckTarget(Unit* target, SpellEffectIndex eff)
             break;
         default:                                            // normal case
             // Get GO cast coordinates if original caster -> GO
-            if (target != m_caster)
+            if (target != m_caster && !IsIgnoreLosTarget(m_spellInfo->EffectImplicitTargetA[eff]))
                 if (WorldObject *caster = GetCastingObject())
                     if (!(m_spellInfo->AttributesEx2 & SPELL_ATTR_EX2_IGNORE_LOS) && !target->IsWithinLOSInMap(caster))
                         return false;

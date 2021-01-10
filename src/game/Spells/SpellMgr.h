@@ -309,7 +309,6 @@ inline bool IsExplicitlySelectedUnitTarget(uint32 target)
         case TARGET_CHAIN_HEAL:
         case TARGET_CURRENT_ENEMY_COORDINATES :
         case TARGET_SINGLE_FRIEND_2:
-        //case TARGET_AREAEFFECT_PARTY_AND_CLASS:
             return true;
     }
     return false;
@@ -318,6 +317,18 @@ inline bool IsExplicitlySelectedUnitTarget(uint32 target)
 inline bool HasSingleTargetAura(SpellEntry const *spellInfo)
 {
     return spellInfo->Custom & SPELL_CUSTOM_SINGLE_TARGET_AURA;
+}
+
+inline bool IsIgnoreLosTarget(uint32 target)
+{
+    switch (target)
+    {
+        case TARGET_AREAEFFECT_PARTY:
+        case TARGET_AREAEFFECT_PARTY_AND_CLASS:
+            return true;
+    }
+
+    return false;
 }
 
 bool IsSingleTargetSpells(SpellEntry const *spellInfo1, SpellEntry const *spellInfo2);
