@@ -1503,3 +1503,19 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '1', '3', '0', '0', '50', '0', '0', '0', '0', '41', '0', '0', '0',
  '0', '1', NULL); 
+ 
+-- Misc. DB fixes:
+
+update item_template set required_reputation_faction = 0, required_reputation_rank = 0 where entry = 22999;
+
+update item_template set allowable_race = -1 where entry = 21232;
+update item_template set allowable_race = -1 where entry = 21364;
+update item_template set allowable_race = -1 where entry = 21359;
+update item_template set allowable_race = -1 where entry = 21683;
+
+update item_template set name = 'Quilflinger' where entry = 80820;
+update item_template set required_level = 17 where entry in (80802, 80803);
+
+UPDATE `quest_template` SET `Details`='Greetings $R and thank you for assisting Alah’thalas’s efforts.\n\nWe’re happy to be a part of the Alliance, unfortunately our allegiance to Alliance has put us at odds with the Horde.\n\nEven now Horde members are raiding and pillaging our supply lines and putting our territories and Alah’thalas itself at risk!\n\nPut an end to them $R it is imperative for our survival.' WHERE (`entry`='80255') AND (`patch`='0');
+
+
