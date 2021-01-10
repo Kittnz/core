@@ -464,6 +464,7 @@ void GameObject::Update(uint32 update_diff, uint32 /*p_time*/)
                             case 4491: // mortar in dun morogh
                             case 6785: // plague fissure
                             case 6747: // sapphiron birth
+                            case 6871: // Silithyst bring in
                                 SendGameObjectCustomAnim();
                                 break;
                         }

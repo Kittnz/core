@@ -1518,4 +1518,19 @@ update item_template set required_level = 17 where entry in (80802, 80803);
 
 UPDATE `quest_template` SET `Details`='Greetings $R and thank you for assisting Alah’thalas’s efforts.\n\nWe’re happy to be a part of the Alliance, unfortunately our allegiance to Alliance has put us at odds with the Horde.\n\nEven now Horde members are raiding and pillaging our supply lines and putting our territories and Alah’thalas itself at risk!\n\nPut an end to them $R it is imperative for our survival.' WHERE (`entry`='80255') AND (`patch`='0');
 
+-- Remove Speed limit from Traces of Silithyst (29534)
+DELETE FROM `spell_effect_mod` WHERE  `Id`=29534 AND `EffectIndex`=0;
 
+-- Buffs which are only active Silithus.
+INSERT INTO `spell_area` (`spell`, `area`, `quest_start`, `quest_start_active`, `quest_end`, `aura_spell`, `racemask`, `gender`, `autocast`) VALUES (29519, 1377, 0, 0, 0, 0, 0, 2, 0);
+INSERT INTO `spell_area` (`spell`, `area`, `quest_start`, `quest_start_active`, `quest_end`, `aura_spell`, `racemask`, `gender`, `autocast`) VALUES (29894, 1377, 0, 0, 0, 0, 0, 2, 0);
+INSERT INTO `spell_area` (`spell`, `area`, `quest_start`, `quest_start_active`, `quest_end`, `aura_spell`, `racemask`, `gender`, `autocast`) VALUES (29895, 1377, 0, 0, 0, 0, 0, 2, 0);
+INSERT INTO `spell_area` (`spell`, `area`, `quest_start`, `quest_start_active`, `quest_end`, `aura_spell`, `racemask`, `gender`, `autocast`) VALUES (30754, 1377, 0, 0, 0, 0, 0, 2, 0);
+
+-- Fix gameobjects
+UPDATE `gameobject_template` SET `size`='0.3', `data10`='29518' WHERE  `entry`=181597 AND `patch`=10;
+UPDATE `gameobject_template` SET `data10`='29518' WHERE  `entry`=181598 AND `patch`=10;
+
+-- Silithyst-bring-in animation
+INSERT INTO `spell_script_target` (`entry`, `type`, `targetEntry`, `conditionId`, `inverseEffectMask`, `build_min`, `build_max`) VALUES (29534, 0, 181603, 0, 0, 5875, 5875);
+INSERT INTO `spell_script_target` (`entry`, `type`, `targetEntry`, `conditionId`, `inverseEffectMask`, `build_min`, `build_max`) VALUES (29534, 0, 181617, 0, 0, 5875, 5875);
