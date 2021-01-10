@@ -1407,3 +1407,99 @@ UPDATE `quest_template` SET `ObjectiveText3`='Throw snowball at Skrimmshaw' WHER
   update item_template set display_id =  50488 where entry = 80646;
   
   UPDATE `item_template` SET `inventory_type`='21' WHERE (`entry`='80635') AND (`patch`='0');
+  
+-- Crab stuff:
+
+
+replace into quest_template values
+ ('60154', '0', '2', '12', '6', '0', '8', '0', '0', '0', '0',
+'0', '0', '0', '0', '0','0',
+'0', '0', '0', '0', '0', '76', '0', '0', '0',
+'0', '0', '0', 'Jasperlode Infestation', 'After your scouting mission at Jasperlode Mine I\'ve gotten reports that a stray brood of spiders from Duskwood have made the depths of the mine their home, using the kobolds to feed and increase their population.\n\nKobolds, the Defias and now spiders? We cannot afford to spread out our men thinner than it already is.\n\nGo back to the mine and clear out the infestation before they spread all over the forest!', 'Go to the aforementioned Jasperlode Mine northeast of Goldshire and clear out the spider infestation inside.', 'It\'s relieving to know those spiders will not be a future threat to us anymore, have a few coins for your trouble.', 'Their numbers are increasing every second you waste, we can\'t afford to wait any longer.', '', '', '',
+'', '', '0', '0', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0', '0', '0',
+'0', '43', '0', '0', '0', '8',
+'0', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0', '0', '0', '72',
+'0', '0', '0', '0', '150', '0', '0', '0',
+'0', '300', '378', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '25', '0', '0', '0', '1',
+'0', '0', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0','0',
+0, 0);
+replace into creature_questrelation values ('240','60154','10','10');
+replace into creature_involvedrelation values ('240','60154','10','10');
+    replace into quest_template values
+ ('60155', '0', '2', '33', '39', '0', '39', '0', '0', '0', '0',
+'0', '0', '0', '0', '0','0',
+'0', '0', '0', '0', '0', '0', '0', '0', '0',
+'0', '0', '0', 'South Seas Delicacy', 'Crab legs, such a delicious thing. They go well with everything! Undermine Claw Chowder, Goldthorn Tea, even other crab legs! Maybe you\'re strong enough to catch them and get the crab legs I need?\n\nYou can find them in the Wild Shore directly south of Booty Bay though be careful, I heard the shore got invaded by Bloodsail Buccaneers, that would explain why my supplier stopped coming.', 'Bring 10 Southern Sand Crawler Legs to Innkeeper Skindle in Booty Bay.', 'Oh wonderful legs! Grill \'em, boil \'em, put them in a pot.\n\nOh you want a reward? I think this should be enough.', 'Get a move on, my customers are waiting!', '', '', '',
+'', '', '81013', '0', '0', '0', '10', '0', '0',
+'0', '0', '0', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0',
+'0', '81014', '81015', '0', '0', '0', '0',
+'1', '1', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0', '0', '0', '21',
+'0', '0', '0', '0', '200', '0', '0', '0',
+'0', '4000', '1800', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0', '0', '0', '0',
+'0', '0', '0', '14', '0', '0', '0',
+'0', '0', '0', '0', '0','0',
+0, 0);
+replace into creature_questrelation values ('6807','60155','10','10');
+replace into creature_involvedrelation values ('6807','60155','10','10');
+
+-- Quest Rewards:
+
+replace into item_template values
+ ('81013', '0', '12', '0', 'Southern Sand Crawler Leg', '', '2598', '1', '0', '1', '0', '0', '0', '-1', '-1', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '10', '10', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '4', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+replace into item_template values
+ ('81014', '0', '4', '2', 'Crab Catcher\'s Hat', '', '28590', '2', '0', '1', '6124', '6124', '1', '-1', '-1', '46',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '12', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '110', '0', '0', '0',
+ '0', '0', '0', '13669', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '8', '1', '0', '0', '50', '0', '0', '0', '0', '7', '0', '0', '0',
+ '0', '1', NULL);
+replace into item_template values
+ ('81015', '0', '4', '1', 'Cook\'s Apron', 'Smells crabby.', '12654', '2', '0', '1', '6826', '6826', '5', '-1', '-1', '46',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '6', '7', '6',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '60', '0', '0', '0',
+ '0', '0', '0', '20969', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '1', '0', '0', '70', '0', '0', '0', '0', '8', '0', '0', '0',
+ '0', '1', NULL); 
+ replace into creature_loot_template values (2544, 81013, -40, 7, 1, 1, 0, 0, 10); 
+ 
+ -- Mage Quest Reward Fixes:
+ 
+ replace into item_template values
+ ('80860', '0', '2', '10', 'Staff of the Arcane Path', '', '5540', '3', '0', '1', '3564', '3564', '17', '-1', '-1', '24',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '10', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3300', '0',
+ '0', '53', '82', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '9398', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '2', '2', '0', '0', '90', '0', '0', '0', '0', '41', '0', '0', '0',
+ '0', '1', NULL);
+ replace into item_template values
+ ('80861', '0', '2', '15', 'Spellweaving Dagger', '', '6454', '3', '0', '1', '2512', '2512', '21', '-1', '-1', '24',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '3', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1700', '0',
+ '0', '18', '34', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '9394', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '1', '3', '0', '0', '50', '0', '0', '0', '0', '41', '0', '0', '0',
+ '0', '1', NULL); 
