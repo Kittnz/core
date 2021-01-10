@@ -354,7 +354,7 @@ struct boss_viscidusAI : public ScriptedAI
 
         m_lGlobesGuidList.remove(pSummoned->GetObjectGuid());
         pSummoned->CastSpell(m_creature, SPELL_REJOIN_VISCIDUS, true);
-        pSummoned->ForcedDespawn(650);
+        pSummoned->ForcedDespawn(3000);
         ++m_uiGrowCount; // should be done in spell script
 
         if (m_lGlobesGuidList.empty())
