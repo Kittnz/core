@@ -335,7 +335,7 @@ static constexpr uint32 TELEPORT_BURIED_DURATION               = 1000; // How lo
 *  A suggested way to make the pull slightly more challenging is tuning DELAYED_COMBAT_DURATION to 
 *  somewhere between 6 and 9 seconds.
 */
-#define USE_POSTFIX_PRENERF_PULL_LOGIC
+// #define USE_POSTFIX_PRENERF_PULL_LOGIC
 #ifdef USE_POSTFIX_PRENERF_PULL_LOGIC
 static constexpr uint32 DELAYED_COMBAT_DURATION = 9000;
 #endif
@@ -1164,7 +1164,7 @@ struct eye_of_cthunAI : public ScriptedAI
 
 #ifdef USE_POSTFIX_PRENERF_PULL_LOGIC
             target = SelectRandomAliveNotStomach(m_pInstance);
-#else 
+#else
             // We force the initial puller as the target for MAX_INITIAL_PULLER_HITS
             if (eyeBeamCastCount < MAX_INITIAL_PULLER_HITS) {
                 target = m_pInstance->GetMap()->GetPlayer(initialPullerGuid);
