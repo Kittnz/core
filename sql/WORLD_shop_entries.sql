@@ -106,6 +106,7 @@ replace into shop_items values
 (703, 7, 80449, 'Swift Alliance Steed', 400),
 (704, 7, 80447, 'Swift Horde Worg', 400),
 (705, 7, 81091, 'Big Blizzard Bear', 400),
+(706, 7, 81100, 'Swift Raven Lord', 500),
 -- Gameplay: Glyphs
 (800, 8, 50010, 'General: Glyph of Hardcore', 0),
 (801, 8, 50008, 'General: Glyph of Twinking', 0),
