@@ -1644,6 +1644,7 @@ REPLACE INTO `item_template` VALUES (81102, 10, 15, 0, 'Darkmoon Dancing Bear', 
 
 update creature set spawnflags = 1 where id in (4484, 5644, 10646);
 delete from creature where guid = 2556007;
+update creature set guid = 32783 where guid = 2554977;
 
 -- TODO: Faction "cloth" quests, kill me!
 -- Silvermoon Remnants:
