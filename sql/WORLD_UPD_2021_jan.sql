@@ -1602,3 +1602,13 @@ UPDATE `game_event` SET `start_time`="2020-03-20 10:00:00", `end_time`="2030-01-
 UPDATE `game_event` SET `start_time`="2020-09-08 04:00:00", `end_time`="2030-12-31 03:00:00" WHERE  `entry`=103;
 -- Night
 UPDATE `game_event` SET `start_time`="2020-01-02 00:00:00", `end_time`="2030-12-31 03:00:00" WHERE  `entry`=27;
+
+-- Misc. DB fixes:
+update item_template set required_level = 10 where entry = 80504;
+
+REPLACE INTO `creature_template` VALUES (50656, 0, 18180, 0, 0, 0, 'Raven Lord', '', 0, 1, 1, 64, 64, 0, 0, 0, 35, 0, 1, 1.14286, 1, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, '');
+
+REPLACE INTO `item_template` VALUES (81100, 10, 15, 0, 'Reins of the Raven Lord', 'The rest be forgotten to walk upon the ground, clipped wings and shame.', 19528, 4, 64, 1, 0, 0, 0, -1, -1, 20, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 45007, 0, 0, 0, 0, 330, 3000, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+
+replace into custom_mount_entry_relation values (81100, 50656);
+
