@@ -1612,3 +1612,5 @@ REPLACE INTO `item_template` VALUES (81100, 10, 15, 0, 'Reins of the Raven Lord'
 
 replace into custom_mount_entry_relation values (81100, 50656);
 
+update item_template set name = 'Tabard of Summer Skies' where entry = 81088;
+update item_template set name = 'Tabard of Summer Flames' where entry = 81087;
