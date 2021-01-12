@@ -17,6 +17,8 @@ update quest_template set requiredraces = 4 + 512 where entry in (6074, 6075, 60
 update quest_template set requiredraces = 512 where entry  = 80366;
 update quest_template set requiredraces = 255 + 256 where entry  = 256;
 
+update quest_template set requiredraces = 0 where entry in (50002, 50000, 50004, 50003);
+
 update quest_template set requiredraces = 1 + 512 where entry = 1641;
 update quest_template set requiredraces = 77 + 512 where entry in (1793, 1642, 7638, 1661);
 
@@ -1393,7 +1395,7 @@ REPLACE INTO area_template (entry, map_id, zone_id, explore_flag, flags, area_le
 
 update creature_template set npc_flags = 19 where entry = 80458;
 update quest_template set requiredclasses = 4 where entry = 80366;
-update item_template set allowable_race = -1 where entry in (21254, 21520, 19577, 19823, 6183);
+update item_template set allowable_race = -1 where entry in (21254, 21520, 19577, 19823, 6183, 23022);
 
 UPDATE `quest_template` SET `ObjectiveText3`='Throw snowball at Skrimmshaw' WHERE `entry`=50321; 
 
@@ -1624,3 +1626,14 @@ update item_template set spellid_1 = 46029 where name like '%Hair Dye:%';
 replace into npc_vendor (entry, item) values 
 (50053, 81101),
 (50054, 81101);
+UPDATE `item_template` SET `subclass`='0' WHERE (`entry`='51756') AND (`patch`='0');
+
+REPLACE INTO `creature_template` VALUES (80975, 0, 18229, 0, 0, 0, 'Dalaran Charger', '', 0, 1, 1, 64, 64, 0, 0, 0, 35, 0, 1, 1.14286, 1, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, '');
+
+replace into creature_model_info values (18229, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (18230, 5875, 2, 2, 0, 0, 0);
+
+
+REPLACE INTO `creature_template` VALUES (80976, 0, 18230, 0, 0, 0, 'Knight\'s Charger', '', 0, 1, 1, 64, 64, 0, 0, 0, 35, 0, 1, 1.14286, 1, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, '');
+
+update item_template set sheath = 4, spelltrigger_1 = 1 where entry = 80746;
