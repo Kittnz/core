@@ -222,6 +222,7 @@ bool ItemUseSpell_hairdye(Player* pPlayer, Item* pItem, const SpellCastTargets&)
     case 50112: color = 5; break; // Blue
     case 50113: color = 6; break; // Dark Blue
     case 50114: color = 7; break; // Purple
+    case 81101: color = 8; break; // Black
     // Humans
     case 50115: color = 0; break; // Black
     case 50116: color = 1; break; // Crushed Garnet
@@ -1092,7 +1093,7 @@ bool GossipSelect_npc_barber(Player* pPlayer, Creature* pCreature, uint32 uiSend
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
         uint16 bytelimit_human = 9;
-        uint16 bytelimit_elf = 7;
+        uint16 bytelimit_elf = 8;
         uint16 bytelimit_gnome = 8;
         uint16 bytelimit_dwarf = 8;
         uint16 bytelimit_troll = 9;
