@@ -134,8 +134,8 @@ replace into shop_items values
 (914, 9, 51007, 'Teldrassil Sproutling', 60),
 -- Vanity: Tabards
 (1000, 10, 23710, 'Darkmoon Faire Tabard', 180),
-(1002, 10, 81087, 'Tabard of Summer Skies', 180),
-(1003, 10, 81088, 'Tabard of Summer Flames', 180),
+(1002, 10, 81088, 'Tabard of Summer Skies', 180),
+(1003, 10, 81087, 'Tabard of Summer Flames', 180),
 (1004, 10, 23709, 'Tabard of Frost', 180),
 (1005, 10, 23705, 'Tabard of Flame', 180),
 (1006, 10, 81083, 'Tabard of Void', 180),
