@@ -1614,3 +1614,13 @@ replace into custom_mount_entry_relation values (81100, 50656);
 
 update item_template set name = 'Tabard of Summer Skies' where entry = 81088;
 update item_template set name = 'Tabard of Summer Flames' where entry = 81087;
+
+delete from quest_template where entry = 80257;
+
+REPLACE INTO `item_template` VALUES (81101, 0, 0, 0, 'Night Elf Hair Dye: Black', '', 33449, 2, 0, 1, 50000, 0, 0, -1, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1575, 0, -1, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 'item_hairdye');
+
+update item_template set spellid_1 = 46029 where name like '%Hair Dye:%';
+
+replace into npc_vendor (entry, item) values 
+(50053, 81101),
+(50054, 81101);
