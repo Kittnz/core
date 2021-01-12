@@ -1642,6 +1642,9 @@ REPLACE INTO `creature_template` VALUES (80978, 0, 18090, 0, 0, 0, 'Darkmoon Dan
 
 REPLACE INTO `item_template` VALUES (81102, 10, 15, 0, 'Darkmoon Dancing Bear', 'These fearsome mounts have a habit of suddenly breaking out into dance amid battle, much to the annoyance of their riders.', 20897, 4, 64, 1, 0, 0, 0, -1, -1, 20, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 45007, 0, 0, 0, 0, 330, 3000, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
 
+update creature set spawnflags = 1 where id in (4484, 5644, 10646);
+delete from creature where guid = 2556007;
+
 -- TODO: Faction "cloth" quests, kill me!
 -- Silvermoon Remnants:
 
