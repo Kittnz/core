@@ -1,1 +1,1 @@
--- 
+update item_template set allowable_race = -1 where entry in (5102, 4898, 4897);
