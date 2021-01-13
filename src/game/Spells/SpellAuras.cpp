@@ -5030,11 +5030,6 @@ void Aura::HandleRangedAmmoHaste(bool apply, bool /*Real*/)
 void Aura::HandleAuraModAttackPower(bool apply, bool /*Real*/)
 {
     float amount = m_modifier.m_amount;
-
-    if (Unit* caster = GetCaster())
-        if (Player* modOwner = caster->GetSpellModOwner())
-            modOwner->ApplySpellMod(GetSpellProto()->Id, SPELLMOD_ATTACK_POWER, amount);
-
     GetTarget()->HandleStatModifier(UNIT_MOD_ATTACK_POWER, TOTAL_VALUE, amount, apply);
 }
 
