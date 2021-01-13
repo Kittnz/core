@@ -1395,7 +1395,7 @@ REPLACE INTO area_template (entry, map_id, zone_id, explore_flag, flags, area_le
 
 update creature_template set npc_flags = 19 where entry = 80458;
 update quest_template set requiredclasses = 4 where entry = 80366;
-update item_template set allowable_race = -1 where entry in (21254, 21520, 19577, 19823, 6183, 23022);
+update item_template set allowable_race = -1 where entry in (21254, 21520, 19577, 19823, 6183, 23022, 8630);
 
 UPDATE `quest_template` SET `ObjectiveText3`='Throw snowball at Skrimmshaw' WHERE `entry`=50321; 
 
@@ -1647,6 +1647,11 @@ delete from creature where guid = 2556007;
 update creature set guid = 32783 where guid = 2554977;
 
 update item_template set buy_price = 1000, sell_price = 1000 where name like '%of the Templar%';
+
+REPLACE INTO spell_template VALUES (1, 5875, 0, 0, 0, 0, 0, 448, 268435456, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 101, 0, 0, 0, 0, 21, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 6, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 56, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'DummyFriendlyScarlet', '', '', '', '', '', '', '', 0, '', '', '', '', '', '', '', '', 0, '', '', '', '', '', '', '', '', 0, '', '', '', '', '', '', '', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0);
+
+replace into item_template (entry, name, inventory_type, display_id, quality, bonding, description, spellid_1, spelltrigger_1, allowable_race) values
+(50440, 'Scarlet Crusade Insignia', 11, 9834, 2, 1, "This ring marks the bearer as a fully fledged member of the Scarlet Crusade.", 1, 1, 1);
 
 -- TODO: Faction "cloth" quests, kill me!
 -- Silvermoon Remnants:
