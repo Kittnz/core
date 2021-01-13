@@ -344,6 +344,8 @@ void Player::UpdateAttackPowerAndDamage(bool ranged)
 
     float attPowerMultiplier = GetModifierValue(unitMod, TOTAL_PCT) - 1.0f;
 
+//  sLog.outError("BaseAP: %f, SpellMod: %f, Multiplier: %f", base_attPower, attPowerMod, attPowerMultiplier);
+
     SetInt32Value(index, (uint32)base_attPower);            //UNIT_FIELD_(RANGED)_ATTACK_POWER field
     SetInt32Value(index_mod, (uint32)attPowerMod);          //UNIT_FIELD_(RANGED)_ATTACK_POWER_MODS field
     SetFloatValue(index_mult, attPowerMultiplier);          //UNIT_FIELD_(RANGED)_ATTACK_POWER_MULTIPLIER field
