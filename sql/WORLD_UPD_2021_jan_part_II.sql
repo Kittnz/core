@@ -29,4 +29,7 @@ insert into playercreateinfo_spell values
 update quest_template set method = 1 where entry in (50300, 50301, 50302, 50303);
 
 replace into item_template (entry, name, inventory_type, display_id, quality, bonding, description, spellid_1, spelltrigger_1, allowable_race) values
-(50440, 'Scarlet Crusade Insignia', 11, 9834, 2, 0, "This ring marks the bearer as a fully fledged member of the Scarlet Crusade.", 0, 0, 0);
+(50440, 'Scarlet Crusade Insignia', 11, 9834, 2, 1, "This ring marks the bearer as a fully fledged member of the Scarlet Crusade.", 0, 0, 0);
+
+replace into broadcast_text (ID, MaleText) values ('90501', 'I’m a free knight! I don’t have a lord. You got a problem with that?\n\n<She glares at you for a moment before lighting up.>\n\nAh whatever... Welcome to our chapel! I can give you a sleeping bag or offer you some rations.');
+ 
