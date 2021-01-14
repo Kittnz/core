@@ -14609,6 +14609,11 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
     else
         SetByteValue(PLAYER_BYTES_3, 2, 0);
 
+    // Add Scarab Lord title
+    // TODO: Figure what to do if no PvP rank at all?
+    //if (HasItemCount(21176, 1, 1))
+    //    SetByteValue(PLAYER_BYTES_3, 2, 15);
+
     m_honorMgr.Load(holder->GetResult(PLAYER_LOGIN_QUERY_LOADHONORCP));
     _LoadBoundInstances(holder->GetResult(PLAYER_LOGIN_QUERY_LOADBOUNDINSTANCES));
     _LoadBGData(holder->GetResult(PLAYER_LOGIN_QUERY_LOADBGDATA));
