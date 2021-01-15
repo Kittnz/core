@@ -30,4 +30,4 @@ update skill_line_ability set race_mask = 434 where id = 5991;
 update skill_line_ability set race_mask = 434 where id = 5993;
 update skill_line_ability set race_mask = 434 where id = 5994;
 
-update creature_template set faction = 7, equipment_id = 0, gold_min = 0, gold_max = 0 where entry = 80965;
+update creature_template set faction = 7, equipment_id = 0, gold_min = 0, gold_max = 0, type = 10 where entry = 80965;
