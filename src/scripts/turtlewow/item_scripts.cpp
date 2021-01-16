@@ -435,24 +435,7 @@ bool ItemUseSpell_survival_tent(Player* pPlayer, Item* pItem, const SpellCastTar
                 float rot2 = sin(o_r / 2);
                 float rot3 = cos(o_r / 2);
 
-                uint32 tent = 1000001; // Human tent
-
-                switch (pPlayer->getRace())
-                {
-                case RACE_HUMAN: tent = 1000001; break;                    
-                case RACE_ORC: tent = 1000236; break;
-                case RACE_NIGHTELF: tent = 1000456; break;
-                case RACE_HIGH_ELF: tent = 1000459; break;
-                case RACE_DWARF: tent = 1000457; break;
-                case RACE_GNOME: tent = 1000458; break;
-                case RACE_TAUREN: tent = 1000461; break;
-                case RACE_UNDEAD: tent = 1000462; break;
-                case RACE_GOBLIN: tent = 1000463; break;
-                case RACE_TROLL: tent = 1000460; break;
-                default: break;
-                }
-
-                pPlayer->SummonGameObject(tent, x, y, z, o_r, 0.0f, 0.0f, rot2, rot3, 1200, true);
+                pPlayer->SummonGameObject((pPlayer->GetTeam() == ALLIANCE ? 1000001 : 1000236), x, y, z, o_r, 0.0f, 0.0f, rot2, rot3, 1200, true);
 
                 uint32 currvalue = 0;
                 currvalue = pPlayer->GetSkillValue(142);
