@@ -1066,7 +1066,7 @@ bool ItemUseSpell_item_cenarion_hold_teleport(Player* pPlayer, Item* pItem, cons
 
 bool GossipHello_npc_barber(Player* pPlayer, Creature* pCreature)
 {
-    if (pPlayer->HasItemCount(50600, 1))
+    if (pPlayer->HasItemCount(50600, 1) || pPlayer->getRace() == RACE_GOBLIN)
     {
         switch (pPlayer->getRace())
         {
@@ -1100,6 +1100,7 @@ bool GossipSelect_npc_barber(Player* pPlayer, Creature* pCreature, uint32 uiSend
         uint16 bytelimit_orc = 7;
         uint16 bytelimit_undead = 9;
         uint16 bytelimit_tauren = 9;
+        uint16 bytelimit_goblin = 3;
 
         uint16 color = 0;
         uint16 curr_color = pPlayer->GetByteValue(PLAYER_BYTES, 3);
@@ -1114,6 +1115,7 @@ bool GossipSelect_npc_barber(Player* pPlayer, Creature* pCreature, uint32 uiSend
         case RACE_ORC:      color = (curr_color == bytelimit_orc) ? 0 : ++curr_color; break;
         case RACE_UNDEAD:   color = (curr_color == bytelimit_undead) ? 0 : ++curr_color; break;
         case RACE_TAUREN:   color = (curr_color == bytelimit_tauren) ? 0 : ++curr_color; break;
+        case RACE_GOBLIN:   color = (curr_color == bytelimit_goblin) ? 0 : ++curr_color; break;
         }
         pPlayer->SetByteValue(PLAYER_BYTES, 3, color);
         pPlayer->SetDisplayId(15435);
@@ -1130,6 +1132,7 @@ bool GossipSelect_npc_barber(Player* pPlayer, Creature* pCreature, uint32 uiSend
         uint16 bytelimit_orc = 7;
         uint16 bytelimit_undead = 9;
         uint16 bytelimit_tauren = 9;
+        uint16 bytelimit_goblin = 3;
 
         uint16 color = 0;
         uint16 curr_color = pPlayer->GetByteValue(PLAYER_BYTES, 3);
@@ -1144,6 +1147,7 @@ bool GossipSelect_npc_barber(Player* pPlayer, Creature* pCreature, uint32 uiSend
         case RACE_ORC:      color = (curr_color == 0) ? bytelimit_orc : --curr_color; break;
         case RACE_UNDEAD:   color = (curr_color == 0) ? bytelimit_undead : --curr_color; break;
         case RACE_TAUREN:   color = (curr_color == 0) ? bytelimit_tauren : --curr_color; break;
+        case RACE_GOBLIN:   color = (curr_color == 0) ? bytelimit_goblin : --curr_color; break;
         }
         pPlayer->SetByteValue(PLAYER_BYTES, 3, color);
         pPlayer->SetDisplayId(15435);
@@ -1160,6 +1164,7 @@ bool GossipSelect_npc_barber(Player* pPlayer, Creature* pCreature, uint32 uiSend
         uint16 bytelimit_orc = (pPlayer->getGender() == GENDER_FEMALE) ? 6 : 6;
         uint16 bytelimit_undead = (pPlayer->getGender() == GENDER_FEMALE) ? 9 : 9;
         uint16 bytelimit_tauren = (pPlayer->getGender() == GENDER_FEMALE) ? 6 : 7;
+        uint16 bytelimit_goblin = (pPlayer->getGender() == GENDER_FEMALE) ? 3 : 3;
 
         uint16 style = 0;
         uint16 curr_style = pPlayer->GetByteValue(PLAYER_BYTES, 2);
@@ -1174,6 +1179,7 @@ bool GossipSelect_npc_barber(Player* pPlayer, Creature* pCreature, uint32 uiSend
         case RACE_ORC:      style = (curr_style == bytelimit_orc) ? 0 : ++curr_style; break;
         case RACE_UNDEAD:   style = (curr_style == bytelimit_undead) ? 0 : ++curr_style; break;
         case RACE_TAUREN:   style = (curr_style == bytelimit_tauren) ? 0 : ++curr_style; break;
+        case RACE_GOBLIN:   style = (curr_style == bytelimit_goblin) ? 0 : ++curr_style; break;
         }
         pPlayer->SetByteValue(PLAYER_BYTES, 2, style);
         pPlayer->SetDisplayId(15435);
@@ -1190,6 +1196,7 @@ bool GossipSelect_npc_barber(Player* pPlayer, Creature* pCreature, uint32 uiSend
         uint16 bytelimit_orc = (pPlayer->getGender() == GENDER_FEMALE) ? 6 : 6;
         uint16 bytelimit_undead = (pPlayer->getGender() == GENDER_FEMALE) ? 9 : 9;
         uint16 bytelimit_tauren = (pPlayer->getGender() == GENDER_FEMALE) ? 6 : 7;
+        uint16 bytelimit_goblin = (pPlayer->getGender() == GENDER_FEMALE) ? 3 : 3;
 
         uint16 style = 0;
         uint16 curr_style = pPlayer->GetByteValue(PLAYER_BYTES, 2);
@@ -1204,6 +1211,7 @@ bool GossipSelect_npc_barber(Player* pPlayer, Creature* pCreature, uint32 uiSend
         case RACE_ORC:      style = (curr_style == 0) ? bytelimit_orc : --curr_style; break;
         case RACE_UNDEAD:   style = (curr_style == 0) ? bytelimit_undead : --curr_style; break;
         case RACE_TAUREN:   style = (curr_style == 0) ? bytelimit_tauren : --curr_style; break;
+        case RACE_GOBLIN:   style = (curr_style == 0) ? bytelimit_tauren : --curr_style; break;
         }
         pPlayer->SetByteValue(PLAYER_BYTES, 2, style);
         pPlayer->SetDisplayId(15435);
@@ -1217,7 +1225,7 @@ bool GossipSelect_npc_barber(Player* pPlayer, Creature* pCreature, uint32 uiSend
 
 bool GossipHello_npc_surgeon(Player* pPlayer, Creature* pCreature)
 {
-    if (pPlayer->HasItemCount(50601, 1))
+    if (pPlayer->HasItemCount(50601, 1) || pPlayer->getRace() == RACE_GOBLIN)
     {
         if (pPlayer->getRace() == RACE_TAUREN)
         {
@@ -1255,6 +1263,7 @@ bool GossipSelect_npc_surgeon(Player* pPlayer, Creature* pCreature, uint32 uiSen
         uint16 bytelimit_orc = (pPlayer->getGender() == GENDER_FEMALE) ? 8 : 8;
         uint16 bytelimit_undead = (pPlayer->getGender() == GENDER_FEMALE) ? 5 : 7;
         uint16 bytelimit_tauren = (pPlayer->getGender() == GENDER_FEMALE) ? 10 : 18;
+        uint16 bytelimit_goblin = (pPlayer->getGender() == GENDER_FEMALE) ? 3 : 3;
 
         uint16 skintone = 0;
         uint16 curr_skintone = pPlayer->GetByteValue(PLAYER_BYTES, 0);
@@ -1269,6 +1278,7 @@ bool GossipSelect_npc_surgeon(Player* pPlayer, Creature* pCreature, uint32 uiSen
         case RACE_ORC:      skintone = (curr_skintone == bytelimit_orc) ? 0 : ++curr_skintone; break;
         case RACE_UNDEAD:   skintone = (curr_skintone == bytelimit_undead) ? 0 : ++curr_skintone; break;
         case RACE_TAUREN:   skintone = (curr_skintone == bytelimit_tauren) ? 0 : ++curr_skintone; break;
+        case RACE_GOBLIN:   skintone = (curr_skintone == bytelimit_goblin) ? 0 : ++curr_skintone; break;
         }
         pPlayer->SetByteValue(PLAYER_BYTES, 0, skintone);
         pPlayer->SetDisplayId(15435);
@@ -1285,6 +1295,7 @@ bool GossipSelect_npc_surgeon(Player* pPlayer, Creature* pCreature, uint32 uiSen
         uint16 bytelimit_orc = (pPlayer->getGender() == GENDER_FEMALE) ? 8 : 8;
         uint16 bytelimit_undead = (pPlayer->getGender() == GENDER_FEMALE) ? 5 : 7;
         uint16 bytelimit_tauren = (pPlayer->getGender() == GENDER_FEMALE) ? 10 : 18;
+        uint16 bytelimit_goblin = (pPlayer->getGender() == GENDER_FEMALE) ? 3 : 3;
 
         uint16 skintone = 0;
         uint16 curr_skintone = pPlayer->GetByteValue(PLAYER_BYTES, 0);
@@ -1299,6 +1310,7 @@ bool GossipSelect_npc_surgeon(Player* pPlayer, Creature* pCreature, uint32 uiSen
         case RACE_ORC:      skintone = (curr_skintone == 0) ? bytelimit_orc : --curr_skintone; break;
         case RACE_UNDEAD:   skintone = (curr_skintone == 0) ? bytelimit_undead : --curr_skintone; break;
         case RACE_TAUREN:   skintone = (curr_skintone == 0) ? bytelimit_tauren : --curr_skintone; break;
+        case RACE_GOBLIN:   skintone = (curr_skintone == 0) ? bytelimit_goblin : --curr_skintone; break;
         }
         pPlayer->SetByteValue(PLAYER_BYTES, 0, skintone);
         pPlayer->SetDisplayId(15435);
@@ -1315,6 +1327,7 @@ bool GossipSelect_npc_surgeon(Player* pPlayer, Creature* pCreature, uint32 uiSen
         uint16 bytelimit_orc = (pPlayer->getGender() == GENDER_FEMALE) ? 6 : 10;
         uint16 bytelimit_undead = (pPlayer->getGender() == GENDER_FEMALE) ? 7 : 16;
         uint16 bytelimit_tauren = (pPlayer->getGender() == GENDER_FEMALE) ? 4 : 6;
+        uint16 bytelimit_goblin = (pPlayer->getGender() == GENDER_FEMALE) ? 3 : 3;
 
         uint16 feature = 0;
         uint16 curr_feature = pPlayer->GetByteValue(PLAYER_BYTES_2, 0);
@@ -1329,6 +1342,7 @@ bool GossipSelect_npc_surgeon(Player* pPlayer, Creature* pCreature, uint32 uiSen
         case RACE_ORC:      feature = (curr_feature == bytelimit_orc) ? 0 : ++curr_feature; break;
         case RACE_UNDEAD:   feature = (curr_feature == bytelimit_undead) ? 0 : ++curr_feature; break;
         case RACE_TAUREN:   feature = (curr_feature == bytelimit_tauren) ? 0 : ++curr_feature; break;
+        case RACE_GOBLIN:   feature = (curr_feature == bytelimit_goblin) ? 0 : ++curr_feature; break;
         }
         pPlayer->SetByteValue(PLAYER_BYTES_2, 0, feature);
         pPlayer->SetDisplayId(15435);
@@ -1345,6 +1359,7 @@ bool GossipSelect_npc_surgeon(Player* pPlayer, Creature* pCreature, uint32 uiSen
         uint16 bytelimit_orc = (pPlayer->getGender() == GENDER_FEMALE) ? 6 : 10;
         uint16 bytelimit_undead = (pPlayer->getGender() == GENDER_FEMALE) ? 7 : 16;
         uint16 bytelimit_tauren = (pPlayer->getGender() == GENDER_FEMALE) ? 4 : 6;
+        uint16 bytelimit_goblin = (pPlayer->getGender() == GENDER_FEMALE) ? 3 : 3;
 
         uint16 feature = 0;
         uint16 curr_feature = pPlayer->GetByteValue(PLAYER_BYTES_2, 0);
@@ -1359,6 +1374,7 @@ bool GossipSelect_npc_surgeon(Player* pPlayer, Creature* pCreature, uint32 uiSen
         case RACE_ORC:      feature = (curr_feature == 0) ? bytelimit_orc : --curr_feature; break;
         case RACE_UNDEAD:   feature = (curr_feature == 0) ? bytelimit_undead : --curr_feature; break;
         case RACE_TAUREN:   feature = (curr_feature == 0) ? bytelimit_tauren : --curr_feature; break;
+        case RACE_GOBLIN:   feature = (curr_feature == 0) ? bytelimit_goblin : --curr_feature; break;
         }
         pPlayer->SetByteValue(PLAYER_BYTES_2, 0, feature);
         pPlayer->SetDisplayId(15435);
@@ -1375,6 +1391,7 @@ bool GossipSelect_npc_surgeon(Player* pPlayer, Creature* pCreature, uint32 uiSen
         uint16 bytelimit_orc = (pPlayer->getGender() == GENDER_FEMALE) ? 6 : 10;
         uint16 bytelimit_undead = (pPlayer->getGender() == GENDER_FEMALE) ? 7 : 16;
         uint16 bytelimit_tauren = (pPlayer->getGender() == GENDER_FEMALE) ? 7 : 16;
+        uint16 bytelimit_goblin = (pPlayer->getGender() == GENDER_FEMALE) ? 3 : 3;
 
         uint16 face = 0;
         uint16 curr_face = pPlayer->GetByteValue(PLAYER_BYTES, 1);
@@ -1389,6 +1406,7 @@ bool GossipSelect_npc_surgeon(Player* pPlayer, Creature* pCreature, uint32 uiSen
         case RACE_ORC:      face = (curr_face == bytelimit_orc) ? 0 : ++curr_face; break;
         case RACE_UNDEAD:   face = (curr_face == bytelimit_undead) ? 0 : ++curr_face; break;
         case RACE_TAUREN:   face = (curr_face == bytelimit_tauren) ? 0 : ++curr_face; break;
+        case RACE_GOBLIN:   face = (curr_face == bytelimit_goblin) ? 0 : ++curr_face; break;
         }
         pPlayer->SetByteValue(PLAYER_BYTES, 1, face);
         pPlayer->SetDisplayId(15435);
@@ -1405,6 +1423,7 @@ bool GossipSelect_npc_surgeon(Player* pPlayer, Creature* pCreature, uint32 uiSen
         uint16 bytelimit_orc = (pPlayer->getGender() == GENDER_FEMALE) ? 6 : 10;
         uint16 bytelimit_undead = (pPlayer->getGender() == GENDER_FEMALE) ? 7 : 16;
         uint16 bytelimit_tauren = (pPlayer->getGender() == GENDER_FEMALE) ? 7 : 16;
+        uint16 bytelimit_goblin = (pPlayer->getGender() == GENDER_FEMALE) ? 3 : 3;
 
         uint16 face = 0;
         uint16 curr_face = pPlayer->GetByteValue(PLAYER_BYTES, 1);
@@ -1419,6 +1438,7 @@ bool GossipSelect_npc_surgeon(Player* pPlayer, Creature* pCreature, uint32 uiSen
         case RACE_ORC:      face = (curr_face == 0) ? bytelimit_orc : --curr_face; break;
         case RACE_UNDEAD:   face = (curr_face == 0) ? bytelimit_undead : --curr_face; break;
         case RACE_TAUREN:   face = (curr_face == 0) ? bytelimit_tauren : --curr_face; break;
+        case RACE_GOBLIN:   face = (curr_face == 0) ? bytelimit_goblin : --curr_face; break;
         }
         pPlayer->SetByteValue(PLAYER_BYTES, 1, face);
         pPlayer->SetDisplayId(15435);
