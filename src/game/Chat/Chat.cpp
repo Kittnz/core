@@ -283,6 +283,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "hairstyle",      SEC_GAMEMASTER,    false, &ChatHandler::HandleModifyHairStyleCommand,     "", nullptr },
         { "haircolor",      SEC_GAMEMASTER,    false, &ChatHandler::HandleModifyHairColorCommand,     "", nullptr },
         { "skincolor",      SEC_GAMEMASTER,    false, &ChatHandler::HandleModifySkinColorCommand,     "", nullptr },
+        { "face",           SEC_GAMEMASTER,    false, &ChatHandler::HandleModifyFaceCommand,          "", nullptr },
         { "accessories",    SEC_GAMEMASTER,    false, &ChatHandler::HandleModifyAccessoriesCommand,   "", nullptr },
         { "title",          SEC_GAMEMASTER,    false, &ChatHandler::HandleModifyTitleCommand,         "", nullptr },
         { nullptr,          0,                  false, nullptr,                                        "", nullptr }

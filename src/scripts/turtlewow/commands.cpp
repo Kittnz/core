@@ -302,6 +302,26 @@ bool ChatHandler::HandleModifySkinColorCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleModifyFaceCommand(char* args)
+{
+    if (!*args)
+        return false;
+
+    uint8 face = (uint8)atoi(args);
+    Player* target = GetSelectedPlayer();
+
+    if (!target)
+        target = m_session->GetPlayer();
+
+    target->SetByteValue(PLAYER_BYTES, 1, face);
+    target->SetDisplayId(DISPLAY_ID_BOX);
+    target->DirectSendPublicValueUpdate(UNIT_FIELD_DISPLAYID);
+    target->DeMorph();
+
+    PSendSysMessage("Character's face has been changed to: %u", face);
+    return true;
+}
+
 bool ChatHandler::HandleModifyAccessoriesCommand(char* args)
 {
     if (!*args)
