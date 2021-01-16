@@ -31,3 +31,13 @@ update skill_line_ability set race_mask = 434 where id = 5993;
 update skill_line_ability set race_mask = 434 where id = 5994;
 
 update creature_template set faction = 7, equipment_id = 0, gold_min = 0, gold_max = 0, type = 10 where entry = 80965;
+
+update quest_template set requiredraces = 255 + 256 where requiredraces = 255;
+update quest_template set requiredraces = 511 + 512 where requiredraces = 256;
+
+update item_template set required_level = 23, item_level = 23, disenchant_id = 41 where entry = 80712;
+update item_template set required_level = 23 where entry = 80730;
+update item_template set class = 4,  subclass = 1 where entry = 80759;
+
+-- Childern's Week monthly:
+UPDATE game_event SET occurence = 42480 WHERE entry = 10;
