@@ -41,3 +41,5 @@ update item_template set class = 4,  subclass = 1 where entry = 80759;
 
 -- Childern's Week monthly:
 UPDATE game_event SET occurence = 42480 WHERE entry = 10;
+
+update quest_template set title = 'Defending the Supply Lines' where entry = 80255;
