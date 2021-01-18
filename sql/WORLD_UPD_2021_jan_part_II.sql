@@ -150,3 +150,6 @@ replace into creature_involvedrelation values ('80807','80378','10','10');
 replace into creature_involvedrelation values ('80807','80379','10','10');
 
 update creature_template set npc_flags = 7 where entry in (80807, 80370);
+
+-- Temporary update orphan orc display id:
+update creature_template set display_id1 = 14616 where entry = 14444;
