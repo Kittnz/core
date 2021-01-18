@@ -153,3 +153,11 @@ update creature_template set npc_flags = 7 where entry in (80807, 80370);
 
 -- Temporary update orphan orc display id:
 update creature_template set display_id1 = 14616 where entry = 14444;
+
+UPDATE `item_template` SET `max_durability`='100' WHERE (`entry`='51736') AND (`patch`='0');
+UPDATE `quest_template` SET `Objectives`='Obtain 5 Jujus of Kimbul and bring them to Mystic Guay’jin.' WHERE (`entry`='80360') AND (`patch`='0');
+
+delete from creature_questrelation where quest = 80360;
+delete from creature_involvedrelation where quest = 80360;
+replace into creature_questrelation values ('80801','80360','10','10');
+replace into creature_involvedrelation values ('80801','80360','10','10');

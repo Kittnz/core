@@ -937,6 +937,9 @@ bool GOHello_go_portal_goldshire(Player* pPlayer, GameObject* pGo)
         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(NPC_CUSTOM_OBJECTIVE_PORTING_TO_GOLDSHIRE);
         if (cInfo != nullptr)
             pPlayer->KilledMonster(cInfo, ObjectGuid());
+        // Remove Hearthstone:
+        if (pPlayer->HasItemCount(6948, 1, 0))
+            pPlayer->RemoveItemCurrency(6948, 1);
     }
 
     return true;
