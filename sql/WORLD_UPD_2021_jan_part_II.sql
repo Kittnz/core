@@ -161,3 +161,80 @@ delete from creature_questrelation where quest = 80360;
 delete from creature_involvedrelation where quest = 80360;
 replace into creature_questrelation values ('80801','80360','10','10');
 replace into creature_involvedrelation values ('80801','80360','10','10');
+
+-- Odo gossip.
+
+SET @gossip_menu_id = 59150;
+SET @magic_number =  80605; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (ID, MaleText) values (@magic_number, 'My gut feelin\' be tellin\' me there\'s something more going on \'round this bar.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+replace into creature_loot_template values (6229, 80740, 35, 6, 1, 1, 0, 0, 10); 
+
+REPLACE INTO `creature_template` VALUES (80977, 0, 18512, 0, 0, 0, 'Riding Sea Turtle', '', 0, 1, 1, 64, 64, 0, 0, 0, 35, 0, 1, 1.14286, 1, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, '');
+
+UPDATE `item_template` SET `required_reputation_faction`='269' WHERE (`entry`='80502') AND (`patch`='0');
+UPDATE `item_template` SET `required_reputation_faction`='269' WHERE (`entry`='80501') AND (`patch`='0');
+UPDATE `item_template` SET `required_reputation_rank`='4' WHERE (`entry`='80503') AND (`patch`='0');
+UPDATE `item_template` SET `required_reputation_rank`='4' WHERE (`entry`='80502') AND (`patch`='0');
+UPDATE `item_template` SET `required_reputation_rank`='4' WHERE (`entry`='80502') AND (`patch`='0');
+
+REPLACE INTO `npc_trainer` VALUES (4212, 2154, 500, 165, 50, 10, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (4212, 2155, 10, 0, 0, 5, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (4212, 2177, 100, 165, 55, 0, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (4212, 2178, 100, 165, 60, 0, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (4212, 2179, 1000, 165, 110, 0, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (4212, 2180, 1400, 165, 120, 0, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (4212, 2181, 650, 165, 100, 0, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (4212, 2338, 50, 165, 15, 0, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (4212, 2883, 100, 165, 40, 0, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (4212, 2884, 650, 165, 100, 0, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (4212, 2886, 550, 165, 85, 0, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (4212, 3781, 2000, 165, 150, 0, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (4212, 3782, 75, 165, 25, 0, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (4212, 3784, 150, 165, 55, 0, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (4212, 3786, 500, 165, 75, 0, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (4212, 3787, 2000, 165, 150, 0, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (4212, 3788, 550, 165, 85, 0, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (4212, 3789, 500, 165, 80, 0, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (4212, 3790, 1800, 165, 145, 0, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (4212, 3792, 1500, 165, 125, 0, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (4212, 3793, 1200, 165, 130, 0, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (4212, 3794, 1500, 165, 135, 0, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (4212, 3795, 2500, 165, 160, 0, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (4212, 3797, 2800, 165, 180, 0, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (4212, 3812, 5000, 165, 125, 20, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (4212, 3819, 650, 165, 100, 0, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (4212, 3820, 1800, 165, 150, 0, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (4212, 3821, 50, 165, 35, 0, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (4212, 6662, 2800, 165, 190, 0, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (4212, 7146, 1000, 165, 115, 0, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (4212, 7148, 2500, 165, 160, 0, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (4212, 7152, 2500, 165, 175, 0, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (4212, 7157, 2800, 165, 190, 0, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (4212, 9061, 100, 165, 30, 0, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (4212, 9063, 100, 165, 30, 0, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (4212, 9066, 450, 165, 70, 0, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (4212, 9069, 600, 165, 95, 0, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (4212, 9075, 1400, 165, 120, 0, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (4212, 9150, 1500, 165, 125, 0, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (4212, 9209, 2000, 165, 150, 0, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (4212, 9210, 2000, 165, 150, 0, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (4212, 9211, 2500, 165, 175, 0, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (4212, 9212, 2800, 165, 180, 0, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (4212, 9213, 2800, 165, 180, 0, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (4212, 9214, 2800, 165, 195, 0, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (4212, 10485, 2800, 165, 180, 0, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (4212, 10500, 3500, 165, 205, 0, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (4212, 10508, 3500, 165, 205, 0, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (4212, 10513, 4000, 165, 210, 0, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (4212, 10519, 4000, 165, 210, 0, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (4212, 10655, 3500, 165, 200, 0, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (4212, 14931, 4000, 165, 225, 0, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (4212, 14933, 4000, 165, 225, 0, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (4212, 20651, 500, 165, 100, 0, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (4212, 20652, 1800, 165, 150, 0, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (4212, 20653, 2800, 165, 180, 0, 0, 5875);
+
