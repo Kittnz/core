@@ -380,3 +380,7 @@ UPDATE `item_template` SET `display_id`='25221' WHERE `entry`='14615';
 
 REPLACE INTO `gameobject_template` VALUES (1000465, 0, 5, 381, 'Alah\'thals Rested Bonus', 0, 0, 0.01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_custom_rested');
 
+update creature_template set equipment_id = 0 where entry in (80605, 80604, 80603, 80602, 80601);
+update creature set equipment_id = 0 where id in (80605, 80604, 80603, 80602, 80601);
+
+update quest_template set requiredraces = 434 where entry in (80331, 80332, 80333, 80334);
