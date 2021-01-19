@@ -374,3 +374,9 @@ UPDATE `npc_vendor` SET `maxcount`='0', `incrtime`='0' WHERE (`entry`='10216') A
 UPDATE `npc_vendor` SET `maxcount`='0', `incrtime`='0' WHERE (`entry`='10216') AND (`item`='6529');
 
 update item_template set flags = 2048 where entry in (51895, 80868, 80216, 80114);
+
+update creature_loot_template set chanceorquestchance = 1.5 where item = 913;
+UPDATE `item_template` SET `display_id`='25221' WHERE `entry`='14615';
+
+REPLACE INTO `gameobject_template` VALUES (1000465, 0, 5, 381, 'Alah\'thals Rested Bonus', 0, 0, 0.01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_custom_rested');
+
