@@ -129,17 +129,16 @@ bool ChatHandler::HandleBalanceCommand(char* args)
 
     if (!AccountMgr::normalizeString(account_name))
     {
-        PSendSysMessage("Account doesn't exist.");
+        PSendSysMessage("Wrong account name.");
         SetSentErrorMessage(true);
         return false;
     }
 
     uint32 account_id;
     account_id = ExtractAccountId(&c_account_name, &account_name);
-
     int32 coins = (int32)atoi(args);
 
-    if (!coins)
+    if (!coins || !account_id)
         return false;
 
     QueryResult* result = LoginDatabase.PQuery("SELECT `coins` FROM `shop_coins` WHERE `id` = '%u'", account_id);
