@@ -104,7 +104,10 @@ struct go_custom_rested : public GameObjectAI
                 MaNGOS::AnyPlayerInObjectRangeCheck check(me, 22.0f);
                 MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
 
-                Cell::VisitWorldObjects(me, searcher, 22.0f);
+                if (me->GetEntry() == 1000465) // Large distance for Alah'Thalas.
+                    Cell::VisitWorldObjects(me, searcher, 100.0f);
+                else
+                    Cell::VisitWorldObjects(me, searcher, 22.0f);
 
                 for (Player* pPlayer : players)
                 {
