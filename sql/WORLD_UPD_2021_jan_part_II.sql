@@ -390,3 +390,7 @@ update quest_template set requiredraces = 434 where entry in (80331, 80332, 8033
 update spell_template SET attributesEx3 = 131072 WHERE entry = 5143 OR entry = 5144 OR entry = 5145 OR entry = 8416 OR entry = 8417 OR entry = 10211 OR entry = 10212 OR entry = 25345;
 
 delete from creature_loot_template where item = 80838;
+
+UPDATE `item_template` SET `required_reputation_rank`='4', allowable_race = 256 WHERE `entry`='80460';
+UPDATE `item_template` SET `required_reputation_rank`='4', allowable_race = 256 WHERE `entry`='80461';
+UPDATE `item_template` SET `required_reputation_rank`='4', allowable_race = 256 WHERE `entry`='80462';
