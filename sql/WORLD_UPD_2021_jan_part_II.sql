@@ -394,3 +394,5 @@ delete from creature_loot_template where item = 80838;
 UPDATE `item_template` SET `required_reputation_rank`='4', allowable_race = 256 WHERE `entry`='80460';
 UPDATE `item_template` SET `required_reputation_rank`='4', allowable_race = 256 WHERE `entry`='80461';
 UPDATE `item_template` SET `required_reputation_rank`='4', allowable_race = 256 WHERE `entry`='80462';
+
+REPLACE INTO `item_template` VALUES (80648, 0, 12, 0, 'Illusion: Gnoll', 'You wimpy human now, but maybe Gnoll in past life!', 1645, 1, 0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1300, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 31726, 0, 0, 0, 10, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 'item_player_engie');

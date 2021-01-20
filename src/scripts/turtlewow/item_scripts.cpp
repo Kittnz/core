@@ -801,6 +801,9 @@ bool ItemUseSpell_item_engie(Player* pPlayer, Item* pItem, const SpellCastTarget
     case 51209: // Rat
         displayid = 2176;
         break;
+    case 80648: // Gnoll
+        displayid = 491;
+        break;
     default:
         break;
     }
