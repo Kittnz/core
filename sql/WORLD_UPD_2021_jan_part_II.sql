@@ -44,8 +44,8 @@ UPDATE game_event SET occurence = 42480 WHERE entry = 10;
 
 update quest_template set title = 'Defending the Supply Lines' where entry = 80255;
 
-update gameobject_template set size = 1, name = 'Tent (Human)' where entry = 1000001; -- Human tent
-update gameobject_template set size = 1, displayid = 32215, name = 'Tent (Orc)' where entry = 1000236; -- Orc tent
+update gameobject_template set size = 1.1, name = 'Tent (Human)' where entry = 1000001; -- Human tent
+update gameobject_template set size = 1.1, displayid = 32215, name = 'Tent (Orc)' where entry = 1000236; -- Orc tent
 
 replace into `gameobject_template` values 
 -- Unused:
