@@ -384,3 +384,7 @@ update creature_template set equipment_id = 0 where entry in (80605, 80604, 8060
 update creature set equipment_id = 0 where id in (80605, 80604, 80603, 80602, 80601);
 
 update quest_template set requiredraces = 434 where entry in (80331, 80332, 80333, 80334);
+
+-- sly's AM change
+
+replace INTO spell_template SET attributesEx3 = 131072 WHERE entry = 5143 OR entry = 5144 OR entry = 5145 OR entry = 8416 OR entry = 8417 OR entry = 10211 OR entry = 10212 OR entry = 25345;
