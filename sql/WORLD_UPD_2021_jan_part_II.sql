@@ -431,5 +431,8 @@ REPLACE INTO `creature_spells` (`entry`, `name`, `spellId_1`, `probability_1`, `
 
 
 
+-- Flask of Petrification  should not stack with other flasks.
+UPDATE `spell_elixir` SET `mask`=3 WHERE `entry`=17624;
+
 -- Patch 1.12
 UPDATE `spell_template` SET `effectBonusCoefficient1`=0.80 WHERE (`entry` IN (1454, 1455, 1456, 11687, 11688, 11689)) && `build` = 5875;
