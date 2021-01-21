@@ -441,3 +441,4 @@ update item_template set name = 'Daisy Hot Pants', description = '' where entry 
 
 update quest_template set requiredraces = 256 where entry between 80100 and 80121;
 
+update creature_template set faction = 875 where entry = 80940;
