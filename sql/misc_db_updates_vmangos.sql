@@ -5839,3 +5839,15 @@ INSERT INTO `quest_greeting` (`entry`, `type`, `content_default`, `emote_id`, `e
 INSERT INTO `quest_greeting` (`entry`, `type`, `content_default`, `emote_id`, `emote_delay`) VALUES (4454, 0, 'Aha!  Did you see that!  I think this new auto-spanner is going to do just the trick for my new influx manifold design.', 1, 0);
 INSERT INTO `quest_greeting` (`entry`, `type`, `content_default`, `emote_id`, `emote_delay`) VALUES (11259, 0, 'Desolace is not such a bad place, if you don\'t mind the constant harassments from the centaurs.', 1, 0);
 
+UPDATE `quest_template` SET `DetailsEmote1`=1 WHERE `entry`=1820;
+UPDATE `quest_template` SET `DetailsEmote3`=1, `DetailsEmoteDelay1`=0 WHERE `entry`=5344;
+
+UPDATE `quest_template` SET `OfferRewardText`='You have served the Kingdom well, $C.  Thank you for assisting Corporal Keeshan with his escape from those dreaded Blackrock Orcs.  You shall be rewarded for your brave acts this day.' WHERE `entry`=219;
+UPDATE `quest_template` SET `OfferRewardEmote1`=1, `OfferRewardEmote2`=25, `OfferRewardText`='There is but one more task that I must ask of you, $N.' WHERE `entry`=5343;
+UPDATE `quest_template` SET `OfferRewardEmote1`=0 WHERE `entry`=5344;
+UPDATE `quest_template` SET `OfferRewardEmote2`=1, `OfferRewardEmote3`=1 WHERE `entry`=5382;
+UPDATE `quest_template` SET `OfferRewardEmote1`=1, `OfferRewardEmote2`=2 WHERE `entry`=8201;
+
+UPDATE `quest_template` SET `IncompleteEmote`=1, `CompleteEmote`=1, `RequestItemsText`='Ensure my future and I shall ensure yours.\n' WHERE `entry`=5343;
+UPDATE `quest_template` SET `IncompleteEmote`=0, `CompleteEmote`=0 WHERE `entry`=5344;
+UPDATE `quest_template` SET `CompleteEmote`=5 WHERE `entry`=5382;
