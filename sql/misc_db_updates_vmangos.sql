@@ -151,3 +151,12 @@ INSERT INTO `creature_ai_scripts` (`id`, `delay`, `command`, `datalong`, `datalo
 DELETE FROM `creature_ai_scripts` WHERE `id`=1292202;
 INSERT INTO `creature_ai_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1292202, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 751, 752, 753, 754, 0, 0, 0, 0, 0, 'Imp Minion - Say Text');
 
+
+
+-- Add missing coordinates for Coarse Dynamite.
+INSERT INTO `spell_target_position` (`id`, `target_map`, `target_position_x`, `target_position_y`, `target_position_z`) VALUES (9002, 0, -2625, -2423, 79);
+INSERT INTO `spell_target_position` (`id`, `target_map`, `target_position_x`, `target_position_y`, `target_position_z`) VALUES (9003, 0, -2607, -2434, 80);
+INSERT INTO `spell_target_position` (`id`, `target_map`, `target_position_x`, `target_position_y`, `target_position_z`) VALUES (9004, 0, -2634, -2411, 81);
+
+-- Remove Eranikus texts from custom table.
+DELETE FROM `script_texts` WHERE `entry` IN (-1001012, -1001013, -1001014, -1001015, -1001016, -1001017, -1001018, 1001019);
