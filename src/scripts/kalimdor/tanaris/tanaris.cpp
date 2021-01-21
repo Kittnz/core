@@ -653,8 +653,6 @@ struct npc_yehkinyaAI : public npc_escortAI
         Event_Timer = 0;
         m_creature->SetFly(false);
         m_creature->SetWalk(false);
-    if (HasEscortState(STATE_ESCORT_ESCORTING))
-            return;
     }
 
     void WaypointReached(uint32 i)
@@ -705,10 +703,10 @@ bool QuestRewarded_npc_yehkinya(Player* pPlayer, Creature* pCreature, Quest cons
         DoScriptText(QUEST_TEXT_HAKKAR_EVENT, pCreature);
 
         if (npc_yehkinyaAI* pEscortAI = dynamic_cast<npc_yehkinyaAI*>(pCreature->AI()))
-                {
-            pEscortAI->Start(true, NULL, NULL, true);
-                        pCreature->SetWalk(false);
-                }
+        {
+            pEscortAI->Start(true, 0, nullptr, true);
+            pCreature->SetWalk(false);        
+        }
     }
     return true;
 }

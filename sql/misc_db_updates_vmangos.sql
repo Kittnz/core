@@ -160,3 +160,7 @@ INSERT INTO `spell_target_position` (`id`, `target_map`, `target_position_x`, `t
 
 -- Remove Eranikus texts from custom table.
 DELETE FROM `script_texts` WHERE `entry` IN (-1001012, -1001013, -1001014, -1001015, -1001016, -1001017, -1001018, 1001019);
+
+
+-- Make Wizzlecrank's Shredder an active object so he can respawn in original grid.
+UPDATE `creature` SET `spawn_flags`=1 WHERE `id`=3439;

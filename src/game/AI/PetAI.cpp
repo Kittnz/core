@@ -566,7 +566,7 @@ void PetAI::DoAttack(Unit* target, bool chase)
             m_creature->SendPetAIReaction();
 
         // Imp pets have a small chance to say one of these texts on aggro.
-        if ((m_creature->GetEntry() == 416 || m_creature->GetEntry() == 12922) && !m_creature->isInCombat() && roll_chance_u(5))
+        if ((m_creature->GetEntry() == 416 || m_creature->GetEntry() == 12922) && !m_creature->isInCombat() && roll_chance_u(15))
             DoScriptText(PickRandomValue(746, 747, 749, 750, 751, 752, 753, 754), m_creature, target);
 
         if (chase)
