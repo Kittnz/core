@@ -163,7 +163,7 @@ DELETE FROM `script_texts` WHERE `entry` IN (-1001012, -1001013, -1001014, -1001
 
 
 -- Make Wizzlecrank's Shredder an active object so he can respawn in original grid.
-UPDATE `creature` SET `spawn_flags`=1 WHERE `id`=3439;
+UPDATE `creature` SET `spawnflags`=1 WHERE `id`=3439;
 
 
 
