@@ -7725,4 +7725,17 @@ DELETE FROM `creature_ai_scripts` WHERE `id`=312801;
 INSERT INTO `creature_ai_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (312801, 0, 15, 6268, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Kul Tiras Sailor - Cast Spell Rushing Charge');
 INSERT INTO `creature_ai_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (312801, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 1254, 0, 0, 0, 0, 0, 0, 0, 0, 'Kul Tiras Sailor - Say Emoted Text');
 
+INSERT INTO `conditions` (`condition_entry`, `type`, `value1`) VALUES (90003, 14, 256); -- Is goblin
+INSERT INTO `conditions` (`condition_entry`, `type`, `value1`) VALUES (90004, 14, 512); -- Is high elf
 
+INSERT INTO `conditions` (`condition_entry`, `type`, `value1`, `value2`) VALUES (90005, 5, 269, 7); -- Silvermoon Remnant Exalted
+
+INSERT INTO `conditions` (`condition_entry`, `type`, `value1`, `value2`) VALUES (90006, -2, 90003, 90005); -- High elf mount vendor condition
+
+INSERT INTO `gossip_menu_option` (`menu_id`, `id`, `option_icon`, `option_text`, `OptionBroadcastTextID`, `option_id`, `npc_option_npcflag`, `condition_id`) VALUES (50450, 0, 1, "I would like to buy from you.", 2583, 3, 4, 90006);
+
+INSERT INTO `gossip_menu` (`entry`, `text_id`, `condition_id`) VALUES (50450, 90668, 0);
+INSERT INTO `npc_text` (`ID`, `BroadcastTextID0`, `Probability0`) VALUES (90668, 90668, 0);
+INSERT INTO `broadcast_text` (`ID`, `FemaleText`) VALUES (90668, "My unicorns are for sale only to the elves of the Silvermoon Remnants and to their exalted allies.");
+
+UPDATE `creature_template` SET `gossip_menu_id` = 50450 WHERE `entry` = 80453;
