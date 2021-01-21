@@ -414,3 +414,13 @@ replace into creature_loot_template values (5937, 80649, 35, 6, 1, 1, 0, 0, 10);
 update item_template set spellid_1 = 0 where entry = 80842;
 
 UPDATE `item_template` SET `spellcooldown_1`='600000' WHERE (`entry`='81059') AND (`patch`='0');
+
+UPDATE `item_template` SET `allowable_race` = 434 WHERE `allowable_race` = 690;
+UPDATE `item_template` SET `allowable_race` = 434 WHERE `allowable_race` = 146;
+
+UPDATE `item_template` SET `allowable_race` = 589 WHERE `allowable_race` = 333;
+
+UPDATE `item_template` SET `allowable_race` = -1 WHERE `allowable_race` = 511;
+UPDATE `item_template` SET `allowable_race` = -1 WHERE `allowable_race` = 2047;
+UPDATE `item_template` SET `allowable_race` = -1 WHERE `allowable_race` = 223;
+UPDATE `item_template` SET `allowable_race` = -1 WHERE `allowable_race` = 0;
