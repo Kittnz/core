@@ -399,6 +399,12 @@ struct npc_dalinda_malemAI : public npc_escortAI
 
     void Reset() override {}
 
+    void JustRespawned() override
+    {
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+        npc_escortAI::JustRespawned();
+    }
+
     void JustStartedEscort() override
     {
         m_creature->SetStandState(UNIT_STAND_STATE_STAND);
@@ -425,8 +431,8 @@ bool QuestAccept_npc_dalinda_malem(Player* pPlayer, Creature* pCreature, const Q
     {
         if (npc_dalinda_malemAI* pEscortAI = dynamic_cast<npc_dalinda_malemAI*>(pCreature->AI()))
         {
-            // TODO This faction change needs confirmation, also possible that we need to drop her PASSIVE flag
-            pCreature->SetFactionTemporary(FACTION_ESCORT_A_NEUTRAL_PASSIVE, TEMPFACTION_RESTORE_RESPAWN);//TEMPFACTION_RESTORE_RESPAWN | TEMPFACTION_TOGGLE_PASSIVE
+            pCreature->SetFactionTemporary(FACTION_ESCORT_A_NEUTRAL_PASSIVE, TEMPFACTION_RESTORE_RESPAWN);
+            pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
             pEscortAI->Start(false, pPlayer->GetGUID(), pQuest);
         }
     }

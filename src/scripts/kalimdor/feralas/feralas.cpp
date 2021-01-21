@@ -106,6 +106,12 @@ struct npc_shay_leafrunnerAI : public FollowerAI
         m_bIsComplete = false;
     }
 
+    void JustRespawned() override
+    {
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+        FollowerAI::JustRespawned();
+    }
+
     void MoveInLineOfSight(Unit* pWho) override
     {
         FollowerAI::MoveInLineOfSight(pWho);
@@ -241,6 +247,7 @@ bool QuestAccept_npc_shay_leafrunner(Player* pPlayer, Creature* pCreature, const
     if (pQuest->GetQuestId() == QUEST_ID_WANDERING_SHAY)
     {
         DoScriptText(SAY_ESCORT_START, pCreature);
+        pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
         if (npc_shay_leafrunnerAI* leafrunnerAI = dynamic_cast<npc_shay_leafrunnerAI*>(pCreature->AI()))
             leafrunnerAI->BeforeStartFollow(pPlayer, pPlayer->getFaction(), pQuest);
     }
@@ -663,6 +670,12 @@ struct npc_kindal_moonweaverAI : public FollowerAI
             m_eventStarted = false;
     }
 
+    void JustRespawned() override
+    {
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+        FollowerAI::JustRespawned();
+    }
+
     void JustDied(Unit* pWho) override
     {
         FollowerAI::JustDied(pWho);
@@ -901,6 +914,7 @@ bool QuestAccept_npc_kindal_moonweaver(Player* pPlayer, Creature* pCreature, con
         if (auto pKindalAI = dynamic_cast<npc_kindal_moonweaverAI*>(pCreature->AI()))
         {
             pKindalAI->StartFollow(pPlayer, FACTION_ESCORT_N_FRIEND_PASSIVE, pQuest);
+            pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
             pCreature->SetStandState(UNIT_STAND_STATE_STAND);
             pKindalAI->BeginEvent();
         }
