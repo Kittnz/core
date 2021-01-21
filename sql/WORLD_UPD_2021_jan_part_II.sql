@@ -436,3 +436,8 @@ UPDATE `spell_elixir` SET `mask`=3 WHERE `entry`=17624;
 
 -- Patch 1.12
 UPDATE `spell_template` SET `effectmechanic1`=0.80 WHERE `entry` IN (1454, 1455, 1456, 11687, 11688, 11689);
+
+update item_template set name = 'Daisy Hot Pants', description = '' where entry = 51051;
+
+update quest_template set requiredraces = 256 where entry between 80100 and 80121;
+
