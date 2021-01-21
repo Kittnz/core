@@ -5851,3 +5851,16 @@ UPDATE `quest_template` SET `OfferRewardEmote1`=1, `OfferRewardEmote2`=2 WHERE `
 UPDATE `quest_template` SET `IncompleteEmote`=1, `CompleteEmote`=1, `RequestItemsText`='Ensure my future and I shall ensure yours.\n' WHERE `entry`=5343;
 UPDATE `quest_template` SET `IncompleteEmote`=0, `CompleteEmote`=0 WHERE `entry`=5344;
 UPDATE `quest_template` SET `CompleteEmote`=5 WHERE `entry`=5382;
+
+
+
+-- update progress text for Freedom for All Creatures (2969)
+UPDATE `quest_template` SET `RequestItemsText` = 'We cannot allow the Grimtotem clan to destroy these beautiful creatures. They must be released from captivity!' WHERE `entry` = 2969;
+
+-- update progress text for Agent of Hydraxis (6823)
+UPDATE `quest_template` SET `RequestItemsText` = 'Your campaign is not yet done, $n.  Go out and defeat our enemies, the servants of air and earth and fire, and one day perhaps you will earn a place in the hall of the Waterlords.' WHERE `entry` = 6823;
+
+-- update progress text for The Battle for Alterac (7142)
+UPDATE `quest_template` SET `RequestItemsText` = 'We will not suffer the dwarves in our home!  Fall upon our foes and defeat their leader, general Stormpike!' WHERE `entry` = 7142;
+
+
