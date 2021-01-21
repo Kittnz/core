@@ -827,3 +827,411 @@ INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (1638
 -- Missing spawns in Western Plaguelands.
 INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (16339, 176584, 0, 1857.36, -2116.71, 68.6316, 3.31614, 0, 0, -0.996194, 0.087165, 2700, 2700, 255, 1);
 INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (16339, 1260, 'Dreamfoil');
+
+
+
+
+-- Correct location of existing objects.
+UPDATE `gameobject` SET `position_x`=1901.47, `position_y`=734.731, `position_z`=36.8667, `orientation`=0.191985, `rotation0`=0, `rotation1`=0, `rotation2`=0.0958452, `rotation3`=0.995396 WHERE `guid`=1698;
+UPDATE `gameobject` SET `position_x`=1729.3, `position_y`=738.43, `position_z`=51.1099, `orientation`=0.750491, `rotation0`=0, `rotation1`=0, `rotation2`=0.366501, `rotation3`=0.930418 WHERE `guid`=1652;
+UPDATE `gameobject` SET `position_x`=2178.24, `position_y`=71.7921, `position_z`=28.6869, `orientation`=3.47321, `rotation0`=0, `rotation1`=0, `rotation2`=-0.986285, `rotation3`=0.16505 WHERE `guid`=1453;
+UPDATE `gameobject` SET `position_x`=2106.63, `position_y`=1055.04, `position_z`=33.1502, `orientation`=5.68977, `rotation0`=0, `rotation1`=0, `rotation2`=-0.292372, `rotation3`=0.956305 WHERE `guid`=1651;
+UPDATE `gameobject` SET `position_x`=1166.19, `position_y`=-4927.81, `position_z`=16.5958, `orientation`=4.13643, `rotation0`=0, `rotation1`=0, `rotation2`=-0.878817, `rotation3`=0.47716 WHERE `guid`=1352;
+UPDATE `gameobject` SET `position_x`=1317.86, `position_y`=-4986.07, `position_z`=2.62448, `orientation`=2.46091, `rotation0`=0, `rotation1`=0, `rotation2`=0.942641, `rotation3`=0.333808 WHERE `guid`=1676;
+UPDATE `gameobject` SET `position_x`=482.284, `position_y`=-4083.93, `position_z`=30.2554, `orientation`=2.87979, `rotation0`=0, `rotation1`=0, `rotation2`=0.991445, `rotation3`=0.130528 WHERE `guid`=1543;
+UPDATE `gameobject` SET `position_x`=1771.03, `position_y`=-506.915, `position_z`=40.7929, `orientation`=0.453785, `rotation0`=0, `rotation1`=0, `rotation2`=0.224951, `rotation3`=0.97437 WHERE `guid`=1549;
+UPDATE `gameobject` SET `position_x`=-1819.37, `position_y`=153.606, `position_z`=25.2146, `orientation`=0.226893, `rotation0`=0, `rotation1`=0, `rotation2`=0.113203, `rotation3`=0.993572 WHERE `guid`=1615;
+UPDATE `gameobject` SET `position_x`=1989.74, `position_y`=986.886, `position_z`=33.0626, `orientation`=1.0821, `rotation0`=0, `rotation1`=0, `rotation2`=0.515037, `rotation3`=0.857168 WHERE `guid`=1482;
+UPDATE `gameobject` SET `position_x`=-2483.92, `position_y`=-1381.26, `position_z`=7.91413, `orientation`=2.63544, `rotation0`=0, `rotation1`=0, `rotation2`=0.968147, `rotation3`=0.250381 WHERE `guid`=1530;
+UPDATE `gameobject` SET `position_x`=-1282.12, `position_y`=322.474, `position_z`=-0.953603, `orientation`=5.65487, `rotation0`=0, `rotation1`=0, `rotation2`=-0.309016, `rotation3`=0.951057 WHERE `guid`=1558;
+UPDATE `gameobject` SET `position_x`=-847.561, `position_y`=-718.053, `position_z`=-20.1135, `orientation`=1.23918, `rotation0`=0, `rotation1`=0, `rotation2`=0.580703, `rotation3`=0.814116 WHERE `guid`=1638;
+
+
+-- Missing spawns in Dun Morogh.
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (1313, 1618, 0, -5090.68, 442.544, 407.868, 6.03884, 0, 0, -0.121869, 0.992546, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (1313, 1017, 'Peacebloom');
+
+-- Missing spawns in Durotar.
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (1314, 1618, 1, 809.231, -5008.37, 10.3425, 0.436332, 0, 0, 0.216439, 0.976296, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (1314, 1020, 'Peacebloom');
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (1315, 1618, 1, 1049.16, -4971.99, 15.5962, 0.157079, 0, 0, 0.0784588, 0.996917, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (1315, 1020, 'Peacebloom');
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (1316, 1618, 1, 872.486, -4636.95, 14.7904, 5.63741, 0, 0, -0.317305, 0.948324, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (1316, 1020, 'Peacebloom');
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (1317, 1618, 1, 81.6812, -4855.03, 16.2339, 4.57276, 0, 0, -0.754709, 0.656059, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (1317, 1020, 'Peacebloom');
+
+-- Missing spawns in Elwynn Forest.
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (1318, 1618, 0, -9819.93, -1534.26, 38.1285, 0.506145, 0, 0, 0.25038, 0.968148, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (1318, 1012, 'Peacebloom');
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (1319, 1618, 0, -9401.43, -772.841, 63.7403, 2.37364, 0, 0, 0.927183, 0.374608, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (1319, 1012, 'Peacebloom');
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (1320, 1618, 0, -9724.51, -1535.47, 51.8514, 0.418879, 0, 0, 0.207912, 0.978148, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (1320, 1012, 'Peacebloom');
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (1321, 1618, 0, -9910.36, -1381.62, 30.7112, 0.85521, 0, 0, 0.414693, 0.909962, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (1321, 1012, 'Peacebloom');
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (1322, 1618, 0, -9824.13, -842.282, 40.8678, 1.64061, 0, 0, 0.731353, 0.681999, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (1322, 1012, 'Peacebloom');
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (1323, 1618, 0, -9965.29, 188.475, 32.6272, 3.76991, 0, 0, -0.951056, 0.309017, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (1323, 1012, 'Peacebloom');
+
+-- Missing spawns in Mulgore.
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (1324, 1618, 1, -1003.55, -983.244, 7.90341, 2.70526, 0, 0, 0.976295, 0.216442, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (1324, 1026, 'Peacebloom');
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (1325, 1618, 1, -1151.82, -648.848, -58.1973, 5.0091, 0, 0, -0.594823, 0.803857, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (1325, 1026, 'Peacebloom');
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (1326, 1618, 1, -1284.96, -776.862, -34.4384, 4.08407, 0, 0, -0.891007, 0.453991, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (1326, 1026, 'Peacebloom');
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (1327, 1618, 1, -1150.75, -917.353, -3.13117, 5.28835, 0, 0, -0.477158, 0.878817, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (1327, 1026, 'Peacebloom');
+
+-- Missing spawns in Silverpine Forest.
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (1328, 1618, 0, 1233.81, 933.051, 36.8226, 4.86947, 0, 0, -0.649447, 0.760406, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (1328, 1041, 'Peacebloom');
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (1329, 1618, 0, 1262.32, 1024.38, 43.5392, 2.54818, 0, 0, 0.956305, 0.292372, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (1329, 1041, 'Peacebloom');
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (1330, 1618, 0, 1298.74, 1153.24, 52.504, 0.401425, 0, 0, 0.199367, 0.979925, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (1330, 1041, 'Peacebloom');
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (1331, 1618, 0, 1348.36, 1005.2, 52.2037, 2.61799, 0, 0, 0.965925, 0.258821, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (1331, 1041, 'Peacebloom');
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (1332, 1618, 0, -246.822, 1142.97, 61.4903, 0.837758, 0, 0, 0.406736, 0.913545, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (1332, 1041, 'Peacebloom');
+
+-- Missing spawns in Teldrassil.
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (1333, 1618, 1, 9948.93, 1773.71, 1333.29, 0.890117, 0, 0, 0.43051, 0.902586, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (1333, 1002, 'Peacebloom');
+
+-- Missing spawns in Tirisfal Glades.
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (1334, 1618, 0, 2117.82, 295.336, 60.9441, 0.296705, 0, 0, 0.147809, 0.989016, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (1334, 1006, 'Peacebloom');
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (1335, 1618, 0, 1886.88, -220.493, 38.492, 4.83456, 0, 0, -0.66262, 0.748956, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (1335, 1006, 'Peacebloom');
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (1336, 1618, 0, 2363.27, 1298.64, 32.7865, 0.680677, 0, 0, 0.333806, 0.942642, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (1336, 1006, 'Peacebloom');
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (1337, 1618, 0, 2314.25, 49.2733, 31.3656, 4.93928, 0, 0, -0.622514, 0.782609, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (1337, 1006, 'Peacebloom');
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (1338, 1618, 0, 2314.62, 1553.87, 33.5216, 3.97936, 0, 0, -0.913545, 0.406738, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (1338, 1006, 'Peacebloom');
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (1339, 1618, 0, 1691.54, 646.112, 49.5556, 3.24635, 0, 0, -0.998629, 0.0523532, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (1339, 1006, 'Peacebloom');
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (1340, 1618, 0, 2458.25, 192.079, 32.4518, 4.62512, 0, 0, -0.737277, 0.675591, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (1340, 1006, 'Peacebloom');
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (1341, 1618, 0, 2689.26, 22.6892, 26.7711, 3.52557, 0, 0, -0.981627, 0.190812, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (1341, 1006, 'Peacebloom');
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (1342, 1618, 0, 2004.82, 430.121, 36.5728, 3.7001, 0, 0, -0.961261, 0.27564, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (1342, 1006, 'Peacebloom');
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (1343, 1618, 0, 2529.39, 1329.26, 28.9393, 4.06662, 0, 0, -0.894934, 0.446199, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (1343, 1006, 'Peacebloom');
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (1344, 1618, 0, 2006.02, 694.037, 41.9342, 6.0912, 0, 0, -0.0958452, 0.995396, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (1344, 1006, 'Peacebloom');
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (1354, 1618, 0, 2643.64, 916.569, 110.331, 5.044, 0, 0, -0.580703, 0.814116, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (1354, 1006, 'Peacebloom');
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (1359, 1618, 0, 2205.07, 438.51, 62.0898, 6.26573, 0, 0, -0.00872612, 0.999962, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (1359, 1006, 'Peacebloom');
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (1366, 1618, 0, 1631.95, -654.718, 47.0466, 1.39626, 0, 0, 0.642787, 0.766045, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (1366, 1006, 'Peacebloom');
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (1378, 1618, 0, 1636.3, -436.567, 44.9996, 1.02974, 0, 0, 0.492423, 0.870356, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (1378, 1006, 'Peacebloom');
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (1381, 1618, 0, 1801.63, -302.715, 37.7097, 0.436332, 0, 0, 0.216439, 0.976296, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (1381, 1006, 'Peacebloom');
+
+
+-- Correct location of existing objects.
+UPDATE `gameobject` SET `position_x`=-6451.54, `position_y`=-3418.86, `position_z`=229.71, `orientation`=2.00713, `rotation0`=0, `rotation1`=0, `rotation2`=0.843391, `rotation3`=0.5373 WHERE `guid`=15916;
+UPDATE `gameobject` SET `position_x`=-6930.42, `position_y`=-4351.05, `position_z`=11.3895, `orientation`=5.75959, `rotation0`=0, `rotation1`=0, `rotation2`=-0.258819, `rotation3`=0.965926 WHERE `guid`=17308;
+UPDATE `gameobject` SET `position_x`=-6964.21, `position_y`=-4412.08, `position_z`=10.5654, `orientation`=0.0174525, `rotation0`=0, `rotation1`=0, `rotation2`=0.00872612, `rotation3`=0.999962 WHERE `guid`=17305;
+UPDATE `gameobject` SET `position_x`=-4884.26, `position_y`=1158.3, `position_z`=81.752, `orientation`=1.0821, `rotation0`=0, `rotation1`=0, `rotation2`=0.515037, `rotation3`=0.857168 WHERE `guid`=15932;
+UPDATE `gameobject` SET `position_x`=3248.19, `position_y`=-4352.48, `position_z`=128.272, `orientation`=2.67035, `rotation0`=0, `rotation1`=0, `rotation2`=0.972369, `rotation3`=0.233448 WHERE `guid`=39933;
+UPDATE `gameobject` SET `position_x`=3435.67, `position_y`=-4595.98, `position_z`=104.199, `orientation`=1.64061, `rotation0`=0, `rotation1`=0, `rotation2`=0.731353, `rotation3`=0.681999 WHERE `guid`=39934;
+
+
+-- Missing spawns in Azshara.
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (15885, 142140, 1, 3655.02, -5225.06, 84.9615, 6.05629, 0, 0, -0.113203, 0.993572, 2700, 2700, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (15885, 1239, 'Purple Lotus');
+
+-- Missing spawns in Feralas.
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (15869, 142140, 1, -3093.81, 1941.48, 29.1315, 4.64258, 0, 0, -0.731354, 0.681998, 2700, 2700, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (15869, 1324, 'Purple Lotus');
+
+-- Missing spawns in The Hinterlands.
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (15807, 142140, 0, -195.593, -4092.25, 152.112, 0.610863, 0, 0, 0.300705, 0.953717, 2700, 2700, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (15807, 1254, 'Purple Lotus');
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (15796, 142140, 0, -170.906, -3785.24, 238.499, 0.837758, 0, 0, 0.406736, 0.913545, 2700, 2700, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (15796, 1254, 'Purple Lotus');
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (15791, 142140, 0, 330.611, -3794.22, 164.849, 0.750491, 0, 0, 0.366501, 0.930418, 2700, 2700, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (15791, 1254, 'Purple Lotus');
+
+
+
+-- Correct location of existing objects.
+UPDATE `gameobject` SET `position_x`=1316.55, `position_y`=680.78, `position_z`=35.2747, `orientation`=4.50295, `rotation0`=0, `rotation1`=0, `rotation2`=-0.777145, `rotation3`=0.629321 WHERE `guid`=2298;
+UPDATE `gameobject` SET `position_x`=-9495.91, `position_y`=-2337.42, `position_z`=69.3455, `orientation`=0.977383, `rotation0`=0, `rotation1`=0, `rotation2`=0.469471, `rotation3`=0.882948 WHERE `guid`=2243;
+UPDATE `gameobject` SET `position_x`=849.742, `position_y`=1241.85, `position_z`=33.9615, `orientation`=1.29154, `rotation0`=0, `rotation1`=0, `rotation2`=0.601814, `rotation3`=0.798636 WHERE `guid`=2251;
+UPDATE `gameobject` SET `position_x`=718.524, `position_y`=1453.72, `position_z`=61.1236, `orientation`=2.84488, `rotation0`=0, `rotation1`=0, `rotation2`=0.989016, `rotation3`=0.147811 WHERE `guid`=2090;
+UPDATE `gameobject` SET `position_x`=-81.7723, `position_y`=-770.163, `position_z`=56.3972, `orientation`=2.67035, `rotation0`=0, `rotation1`=0, `rotation2`=0.972369, `rotation3`=0.233448 WHERE `guid`=2399;
+UPDATE `gameobject` SET `position_x`=-9670.18, `position_y`=-1768.52, `position_z`=55.2737, `orientation`=4.7822, `rotation0`=0, `rotation1`=0, `rotation2`=-0.681998, `rotation3`=0.731354 WHERE `guid`=2288;
+
+
+-- Missing spawns in Ashenvale.
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (2014, 1620, 1, 2939.44, -3543.78, 109.3, 1.36136, 0, 0, 0.62932, 0.777146, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (2014, 1077, 'Mageroyal');
+
+-- Missing spawns in Durotar.
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (2015, 1620, 1, 1131.9, -4685.81, 20.0887, 4.2237, 0, 0, -0.857167, 0.515038, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (2015, 1023, 'Mageroyal');
+
+-- Missing spawns in Loch Modan.
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (2024, 1620, 0, -4799.45, -3015.7, 305.452, 4.57276, 0, 0, -0.754709, 0.656059, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (2024, 1163, 'Mageroyal');
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (2032, 1620, 0, -5042.01, -3358.18, 298.81, 5.48033, 0, 0, -0.390731, 0.920505, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (2032, 1163, 'Mageroyal');
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (2033, 1620, 0, -5856.29, -3448.97, 318.345, 3.71755, 0, 0, -0.958819, 0.284016, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (2033, 1163, 'Mageroyal');
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (2047, 1620, 0, -5011.31, -3508.53, 299.731, 0.95993, 0, 0, 0.461748, 0.887011, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (2047, 1163, 'Mageroyal');
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (2059, 1620, 0, -5407.17, -2842.9, 349.277, 5.77704, 0, 0, -0.25038, 0.968148, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (2059, 1163, 'Mageroyal');
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (2074, 1620, 0, -4992.66, -3306.73, 299.76, 5.65487, 0, 0, -0.309016, 0.951057, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (2074, 1163, 'Mageroyal');
+
+-- Missing spawns in Silverpine Forest.
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (2077, 1620, 0, 958.84, 1069.46, 36.558, 6.21337, 0, 0, -0.0348988, 0.999391, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (2077, 1043, 'Mageroyal');
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (2094, 1620, 0, 676.372, 1213.96, 65.2791, 4.67748, 0, 0, -0.719339, 0.694659, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (2094, 1043, 'Mageroyal');
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (2102, 1620, 0, 1212.28, 1081.24, 38.5364, 5.95157, 0, 0, -0.165047, 0.986286, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (2102, 1043, 'Mageroyal');
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (2132, 1620, 0, 1336.83, 743.906, 34.2843, 2.54818, 0, 0, 0.956305, 0.292372, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (2132, 1043, 'Mageroyal');
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (2157, 1620, 0, 809.661, 1477.3, 33.4895, 2.75761, 0, 0, 0.981627, 0.190812, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (2157, 1043, 'Mageroyal');
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (2215, 1620, 0, 805.578, 1547.65, 43.077, 4.57276, 0, 0, -0.754709, 0.656059, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (2215, 1043, 'Mageroyal');
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (2239, 1620, 0, 708.846, 1229.78, 62.9129, 4.34587, 0, 0, -0.824126, 0.566406, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (2239, 1043, 'Mageroyal');
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (2248, 1620, 0, 868.94, 1162.26, 35.5119, 4.13643, 0, 0, -0.878817, 0.47716, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (2248, 1043, 'Mageroyal');
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (2269, 1620, 0, -293.199, 1221.4, 47.9139, 3.78737, 0, 0, -0.948323, 0.317306, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (2269, 1043, 'Mageroyal');
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (2302, 1620, 0, 886.554, 1540.91, 26.2854, 2.3911, 0, 0, 0.930417, 0.366502, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (2302, 1043, 'Mageroyal');
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (2331, 1620, 0, 1123.37, 1095.89, 40.1016, 3.90954, 0, 0, -0.927183, 0.374608, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (2331, 1043, 'Mageroyal');
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (2364, 1620, 0, 1284.96, 910.183, 39.4659, 0.279252, 0, 0, 0.139173, 0.990268, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (2364, 1043, 'Mageroyal');
+
+-- Missing spawns in Wailing Caverns.
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (2368, 1620, 1, -545.644, -2245.66, 42.6309, 2.96704, 0, 0, 0.996194, 0.087165, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (2368, 1053, 'Mageroyal');
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (2371, 1620, 1, -652.396, -2330.84, 19.6195, 5.93412, 0, 0, -0.173648, 0.984808, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (2371, 1053, 'Mageroyal');
+
+-- Missing spawns in Wetlands.
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (2373, 1620, 0, -4232.42, -2674.76, 41.5726, 3.17653, 0, 0, -0.999847, 0.0174693, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (2373, 1154, 'Mageroyal');
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (2391, 1620, 0, -3065.17, -2583.33, 11.2463, 3.31614, 0, 0, -0.996194, 0.087165, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (2391, 1154, 'Mageroyal');
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (2396, 1620, 0, -3847.47, -2681.57, 31.1856, 5.39307, 0, 0, -0.43051, 0.902586, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (2396, 1154, 'Mageroyal');
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (2416, 1620, 0, -3918.23, -2716.54, 26.4426, 5.20108, 0, 0, -0.515037, 0.857168, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (2416, 1154, 'Mageroyal');
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (2435, 1620, 0, -3139.51, -2545.52, 9.23924, 2.30383, 0, 0, 0.913545, 0.406738, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (2435, 1154, 'Mageroyal');
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (2449, 1620, 0, -3348.16, -3278.91, 23.1451, 2.28638, 0, 0, 0.909961, 0.414694, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (2449, 1154, 'Mageroyal');
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (2465, 1620, 0, -2962.5, -2679.83, 13.754, 4.29351, 0, 0, -0.83867, 0.54464, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (2465, 1154, 'Mageroyal');
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (2484, 1620, 0, -3317.16, -2676.49, 14.5292, 6.02139, 0, 0, -0.130526, 0.991445, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (2484, 1154, 'Mageroyal');
+
+
+-- Correct location of existing objects.
+UPDATE `gameobject` SET `position_x`=3082.94, `position_y`=-3554.52, `position_z`=132.872, `orientation`=0.977383, `rotation0`=0, `rotation1`=0, `rotation2`=0.469471, `rotation3`=0.882948 WHERE `guid`=19970;
+UPDATE `gameobject` SET `position_x`=3181.9, `position_y`=-3130.97, `position_z`=154.537, `orientation`=1.16937, `rotation0`=0, `rotation1`=0, `rotation2`=0.551936, `rotation3`=0.833886 WHERE `guid`=20094;
+UPDATE `gameobject` SET `position_x`=2495.23, `position_y`=-4580.06, `position_z`=78.383, `orientation`=4.10152, `rotation0`=0, `rotation1`=0, `rotation2`=-0.887011, `rotation3`=0.461749 WHERE `guid`=19905;
+UPDATE `gameobject` SET `position_x`=2019.04, `position_y`=-4695.94, `position_z`=91.3082, `orientation`=2.94959, `rotation0`=0, `rotation1`=0, `rotation2`=0.995396, `rotation3`=0.0958512 WHERE `guid`=19955;
+UPDATE `gameobject` SET `position_x`=1711.95, `position_y`=-3935.5, `position_z`=130.9, `orientation`=4.55531, `rotation0`=0, `rotation1`=0, `rotation2`=-0.760405, `rotation3`=0.649449 WHERE `guid`=19910;
+UPDATE `gameobject` SET `position_x`=2239.62, `position_y`=-5264.17, `position_z`=75.2423, `orientation`=2.28638, `rotation0`=0, `rotation1`=0, `rotation2`=0.909961, `rotation3`=0.414694 WHERE `guid`=20127;
+
+
+-- Correct location of existing objects.
+UPDATE `gameobject` SET `position_x`=-6800.22, `position_y`=-4753.86, `position_z`=9.97542, `orientation`=5.42798, `rotation0`=0, `rotation1`=0, `rotation2`=-0.414693, `rotation3`=0.909962 WHERE `guid`=12252;
+UPDATE `gameobject` SET `position_x`=-7221.24, `position_y`=-1565.34, `position_z`=254.58, `orientation`=3.00195, `rotation0`=0, `rotation1`=0, `rotation2`=0.997563, `rotation3`=0.0697661 WHERE `guid`=31322;
+UPDATE `gameobject` SET `position_x`=-6551.81, `position_y`=-3283.02, `position_z`=241.864, `orientation`=2.11185, `rotation0`=0, `rotation1`=0, `rotation2`=0.870356, `rotation3`=0.492424 WHERE `guid`=12306;
+
+
+-- Missing spawns in Searing Gorge.
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (9980, 2866, 0, -6872.54, -1692.59, 247.038, 4.43314, 0, 0, -0.798635, 0.601815, 2700, 2700, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (9980, 1291, 'Firebloom');
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (9991, 2866, 0, -7319.13, -934.882, 244.218, 3.194, 0, 0, -0.999657, 0.0262017, 2700, 2700, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (9991, 1291, 'Firebloom');
+
+
+
+
+-- Correct location of existing objects.
+UPDATE `gameobject` SET `position_x`=461.656, `position_y`=202.05, `position_z`=42.4419, `orientation`=6.21337, `rotation0`=0, `rotation1`=0, `rotation2`=-0.0348988, `rotation3`=0.999391 WHERE `guid`=3853;
+UPDATE `gameobject` SET `position_x`=359.451, `position_y`=1396.92, `position_z`=132.017, `orientation`=0.802851, `rotation0`=0, `rotation1`=0, `rotation2`=0.390731, `rotation3`=0.920505 WHERE `guid`=3750;
+UPDATE `gameobject` SET `position_x`=-2585.17, `position_y`=-2386.27, `position_z`=80.2662, `orientation`=5.32326, `rotation0`=0, `rotation1`=0, `rotation2`=-0.461748, `rotation3`=0.887011 WHERE `guid`=3531;
+UPDATE `gameobject` SET `position_x`=-465.653, `position_y`=-1409.62, `position_z`=89.7087, `orientation`=5.72468, `rotation0`=0, `rotation1`=0, `rotation2`=-0.275637, `rotation3`=0.961262 WHERE `guid`=3833;
+UPDATE `gameobject` SET `position_x`=-9109.17, `position_y`=-2640.52, `position_z`=120.736, `orientation`=0.0523589, `rotation0`=0, `rotation1`=0, `rotation2`=0.0261765, `rotation3`=0.999657 WHERE `guid`=3182;
+UPDATE `gameobject` SET `position_x`=-4246.6, `position_y`=-2604.91, `position_z`=84.7081, `orientation`=2.51327, `rotation0`=0, `rotation1`=0, `rotation2`=0.951056, `rotation3`=0.309017 WHERE `guid`=2960;
+UPDATE `gameobject` SET `position_x`=-6059.98, `position_y`=-3502.83, `position_z`=-51.4185, `orientation`=4.13643, `rotation0`=0, `rotation1`=0, `rotation2`=-0.878817, `rotation3`=0.47716 WHERE `guid`=3647;
+UPDATE `gameobject` SET `position_x`=-4971.19, `position_y`=-1936.63, `position_z`=-37.8026, `orientation`=2.56563, `rotation0`=0, `rotation1`=0, `rotation2`=0.958819, `rotation3`=0.284016 WHERE `guid`=3616;
+UPDATE `gameobject` SET `position_x`=-271.263, `position_y`=-1279.71, `position_z`=83.612, `orientation`=6.14356, `rotation0`=0, `rotation1`=0, `rotation2`=-0.0697555, `rotation3`=0.997564 WHERE `guid`=3569;
+UPDATE `gameobject` SET `position_x`=-3872.2, `position_y`=-2602.69, `position_z`=52.5481, `orientation`=2.14675, `rotation0`=0, `rotation1`=0, `rotation2`=0.878817, `rotation3`=0.47716 WHERE `guid`=3581;
+UPDATE `gameobject` SET `position_x`=-870.382, `position_y`=1478.65, `position_z`=70.024, `orientation`=6.02139, `rotation0`=0, `rotation1`=0, `rotation2`=-0.130526, `rotation3`=0.991445 WHERE `guid`=3814;
+UPDATE `gameobject` SET `position_x`=-4331.15, `position_y`=-2649.06, `position_z`=96.4845, `orientation`=3.31614, `rotation0`=0, `rotation1`=0, `rotation2`=-0.996194, `rotation3`=0.087165 WHERE `guid`=3487;
+UPDATE `gameobject` SET `position_x`=-1676.69, `position_y`=1979.87, `position_z`=60.7538, `orientation`=6.26573, `rotation0`=0, `rotation1`=0, `rotation2`=-0.00872612, `rotation3`=0.999962 WHERE `guid`=3772;
+UPDATE `gameobject` SET `position_x`=-4399.95, `position_y`=-1006.17, `position_z`=-53.1422, `orientation`=4.2237, `rotation0`=0, `rotation1`=0, `rotation2`=-0.857167, `rotation3`=0.515038 WHERE `guid`=3697;
+UPDATE `gameobject` SET `position_x`=-9853.16, `position_y`=1047.78, `position_z`=33.4548, `orientation`=0.488691, `rotation0`=0, `rotation1`=0, `rotation2`=0.241921, `rotation3`=0.970296 WHERE `guid`=3795;
+
+
+INSERT INTO `pool_template` (`entry`, `max_limit`, `description`, `flags`, `instance`, `patch_min`, `patch_max`) VALUES (1052, 1, 'Bruiseweed in Arathi Highlands', 0, 0, 0, 10);
+INSERT INTO `pool_template` (`entry`, `max_limit`, `description`, `flags`, `instance`, `patch_min`, `patch_max`) VALUES (1053, 1, 'Herbs in Wailing Caverns', 0, 0, 0, 10);
+
+
+-- Missing spawns in Alterac Mountains.
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (2917, 1622, 0, -98.9951, 244.966, 53.2755, 4.67748, 0, 0, -0.719339, 0.694659, 1800, 1800, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (2917, 1056, 'Bruiseweed');
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (2929, 1622, 0, 49.357, 437.539, 41.9076, 5.49779, 0, 0, -0.382683, 0.92388, 1800, 1800, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (2929, 1056, 'Bruiseweed');
+
+-- Missing spawns in Arathi Highlands.
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (2941, 1622, 0, -1075.52, -2794.77, 42.197, 3.6652, 0, 0, -0.965925, 0.258821, 1800, 1800, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (2941, 1052, 'Bruiseweed');
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (3062, 1622, 0, -863.799, -2067.71, 34.5095, 4.90438, 0, 0, -0.636078, 0.771625, 1800, 1800, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (3062, 1052, 'Bruiseweed');
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (3074, 1622, 0, -1096.9, -2921.88, 42.197, 4.71239, 0, 0, -0.707107, 0.707107, 1800, 1800, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (3074, 1052, 'Bruiseweed');
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (3079, 1622, 0, -869.361, -2011.93, 34.3577, 1.78023, 0, 0, 0.777145, 0.629321, 1800, 1800, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (3079, 1052, 'Bruiseweed');
+
+-- Missing spawns in Ashenvale.
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (2957, 1622, 1, 2688.04, -3632.16, 99.4288, 4.53786, 0, 0, -0.766044, 0.642789, 1800, 1800, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (2957, 1072, 'Bruiseweed');
+
+-- Missing spawns in Hillsbrad Foothills.
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (2966, 1622, 0, -495.436, 128.488, 56.6126, 4.92183, 0, 0, -0.62932, 0.777146, 1800, 1800, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (2966, 1048, 'Bruiseweed');
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (2969, 1622, 0, -1032.7, -258.556, 24.9987, 4.27606, 0, 0, -0.843391, 0.5373, 1800, 1800, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (2969, 1048, 'Bruiseweed');
+
+-- Missing spawns in Silverpine Forest.
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (2970, 1622, 0, -195.068, 955.452, 65.7338, 3.76991, 0, 0, -0.951056, 0.309017, 1800, 1800, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (2970, 1047, 'Bruiseweed');
+
+-- Missing spawns in Stonetalon Mountains.
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (2972, 1622, 1, -185.075, -496.055, 9.14996, 3.57793, 0, 0, -0.976295, 0.216442, 1800, 1800, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (2972, 1086, 'Bruiseweed');
+
+-- Missing spawns in Thousand Needles.
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (2988, 1622, 1, -4755.94, -1052.56, -55.8106, 2.56563, 0, 0, 0.958819, 0.284016, 1800, 1800, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (2988, 1133, 'Bruiseweed');
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (3031, 1622, 1, -4652.88, -1281.84, -45.4742, 1.90241, 0, 0, 0.814116, 0.580703, 1800, 1800, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (3031, 1133, 'Bruiseweed');
+
+-- Missing spawns in Wailing Caverns.
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (3035, 1622, 1, -735.582, -2128.8, 66.6034, 3.45576, 0, 0, -0.987688, 0.156436, 1800, 1800, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (3035, 1053, 'Bruiseweed');
+
+-- Missing spawns in Wetlands.
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (3043, 1622, 0, -4212.26, -2354.9, 204.552, 4.32842, 0, 0, -0.829037, 0.559194, 1800, 1800, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (3043, 1150, 'Bruiseweed');
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (3059, 1622, 0, -3574.38, -2477.01, 72.7115, 1.76278, 0, 0, 0.771625, 0.636078, 1800, 1800, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (3059, 1150, 'Bruiseweed');
+
+
+
+
+-- Correct location of existing objects.
+UPDATE `gameobject` SET `position_x`=1570.34, `position_y`=-1310.87, `position_z`=63.0546, `orientation`=2.42601, `rotation0`=0, `rotation1`=0, `rotation2`=0.936672, `rotation3`=0.350207 WHERE `guid`=16002;
+UPDATE `gameobject` SET `position_x`=1748.99, `position_y`=-909.477, `position_z`=66.7775, `orientation`=3.85718, `rotation0`=0, `rotation1`=0, `rotation2`=-0.936671, `rotation3`=0.35021 WHERE `guid`=15980;
+UPDATE `gameobject` SET `position_x`=1270.88, `position_y`=-1507.6, `position_z`=58.8005, `orientation`=2.1293, `rotation0`=0, `rotation1`=0, `rotation2`=0.874619, `rotation3`=0.48481 WHERE `guid`=15968;
+
+
+-- Missing spawns in Western Plaguelands.
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (15892, 142141, 0, 1543.4, -1647.88, 69.2486, 5.0091, 0, 0, -0.594823, 0.803857, 2700, 2700, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (15892, 1259, "Arthas' Tears");
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (15948, 142141, 0, 1455.01, -1599.38, 67.2372, 3.927, 0, 0, -0.923879, 0.382686, 2700, 2700, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (15948, 1259, "Arthas' Tears");
+
+
+
+-- Correct location of existing objects.
+UPDATE `gameobject` SET `position_x`=-633.39, `position_y`=-1566.65, `position_z`=64.1649, `orientation`=0.418879, `rotation0`=0, `rotation1`=0, `rotation2`=0.207912, `rotation3`=0.978148 WHERE `guid`=2869;
+UPDATE `gameobject` SET `position_x`=502.74, `position_y`=1208.63, `position_z`=87.6672, `orientation`=1.51844, `rotation0`=0, `rotation1`=0, `rotation2`=0.688354, `rotation3`=0.725375 WHERE `guid`=2727;
+UPDATE `gameobject` SET `position_x`=9.14334, `position_y`=1086.47, `position_z`=68.8772, `orientation`=3.68265, `rotation0`=0, `rotation1`=0, `rotation2`=-0.96363, `rotation3`=0.267241 WHERE `guid`=42968;
+UPDATE `gameobject` SET `position_x`=-10273.4, `position_y`=841.916, `position_z`=42.2785, `orientation`=5.11382, `rotation0`=0, `rotation1`=0, `rotation2`=-0.551936, `rotation3`=0.833886 WHERE `guid`=2622;
+UPDATE `gameobject` SET `position_x`=-10448.7, `position_y`=-1362.45, `position_z`=79.5184, `orientation`=2.67035, `rotation0`=0, `rotation1`=0, `rotation2`=0.972369, `rotation3`=0.233448 WHERE `guid`=2595;
+
+
+-- Missing spawns in Duskwood.
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (2543, 1621, 0, -11105.6, -731.904, 56.4545, 0.820303, 0, 0, 0.398748, 0.91706, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (2543, 1113, 'Briarthorn');                        
+
+-- Missing spawns in Hillsbrad Foothills.
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (2568, 1621, 0, -952.438, 185.32, 39.5891, 1.27409, 0, 0, 0.594822, 0.803857, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (2568, 1050, 'Briarthorn');                        
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (2587, 1621, 0, -507.498, 242.908, 73.3424, 1.02974, 0, 0, 0.492423, 0.870356, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (2587, 1050, 'Briarthorn');                        
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (2588, 1621, 0, -523.583, 434.796, 85.6967, 4.27606, 0, 0, -0.843391, 0.5373, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (2588, 1050, 'Briarthorn');                        
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (2597, 1621, 0, -921.657, 75.1367, 36.0038, 3.35105, 0, 0, -0.994521, 0.104535, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (2597, 1050, 'Briarthorn');                        
+
+-- Missing spawns in Loch Modan.
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (2613, 1621, 0, -5259.97, -3520.82, 300.448, 6.07375, 0, 0, -0.104528, 0.994522, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (2613, 1165, 'Briarthorn');                        
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (2617, 1621, 0, -5177.44, -3443.42, 304.83, 3.22886, 0, 0, -0.999048, 0.0436193, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (2617, 1165, 'Briarthorn');                        
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (2626, 1621, 0, -5147.11, -3496.26, 304.571, 2.35619, 0, 0, 0.92388, 0.382683, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (2626, 1165, 'Briarthorn');                        
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (2658, 1621, 0, -4874.16, -3374.26, 308.717, 1.3439, 0, 0, 0.622514, 0.782609, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (2658, 1165, 'Briarthorn');                        
+
+-- Missing spawns in Redridge Mountains.
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (2692, 1621, 0, -9100.39, -2601.51, 117.783, 2.30383, 0, 0, 0.913545, 0.406738, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (2692, 1127, 'Briarthorn');                        
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (2693, 1621, 0, -9567.76, -2131.51, 74.0443, 0.890117, 0, 0, 0.43051, 0.902586, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (2693, 1127, 'Briarthorn');                        
+
+-- Missing spawns in Silverpine Forest.
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (2704, 1621, 0, 691.563, 1286.89, 74.3206, 4.04917, 0, 0, -0.898793, 0.438373, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (2704, 1046, 'Briarthorn');                        
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (2730, 1621, 0, 729.797, 1482.48, 62.22, 0.174532, 0, 0, 0.0871553, 0.996195, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (2730, 1046, 'Briarthorn');                        
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (2788, 1621, 0, -322.612, 1153.8, 70.5041, 2.77507, 0, 0, 0.983254, 0.182238, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (2788, 1046, 'Briarthorn');                        
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (2789, 1621, 0, -495.378, 1155, 63.7513, 4.5204, 0, 0, -0.771625, 0.636078, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (2789, 1046, 'Briarthorn');                        
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (2794, 1621, 0, -493.935, 1189.47, 61.2801, 2.61799, 0, 0, 0.965925, 0.258821, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (2794, 1046, 'Briarthorn');                        
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (2795, 1621, 0, -517.273, 1045.46, 91.7688, 5.20108, 0, 0, -0.515037, 0.857168, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (2795, 1046, 'Briarthorn');                        
+
+-- Missing spawns in Stonetalon Mountains.
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (2815, 1621, 1, -213.583, -511.994, 10.9339, 2.25147, 0, 0, 0.902585, 0.430512, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (2815, 1087, 'Briarthorn');                        
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (2823, 1621, 1, 284.004, 238.587, 68.6627, 3.76991, 0, 0, -0.951056, 0.309017, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (2823, 1087, 'Briarthorn');                        
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (2837, 1621, 1, 1839.3, 957.335, 149.863, 5.02655, 0, 0, -0.587785, 0.809017, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (2837, 1087, 'Briarthorn');                        
+
+-- Missing spawns in Westfall.
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (2853, 1621, 0, -10605.6, 1229.34, 33.087, 0.436332, 0, 0, 0.216439, 0.976296, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (2853, 1109, 'Briarthorn');                        
+
+-- Missing spawns in Wetlands.
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (2894, 1621, 0, -3925.27, -2591.35, 43.6762, 4.15388, 0, 0, -0.874619, 0.48481, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (2894, 1151, 'Briarthorn');                        
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (2895, 1621, 0, -3141.5, -2912.14, 21.8747, 4.15388, 0, 0, -0.874619, 0.48481, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (2895, 1151, 'Briarthorn');                        
+INSERT INTO `gameobject` (`guid`,`id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (2896, 1621, 0, -3326.56, -3155.95, 24.4531, 5.93412, 0, 0, -0.173648, 0.984808, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (2896, 1151, 'Briarthorn');                        
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (30009, 1621, 0, -3402.69, -3235.19, 23.3302, 4.10152, 0, 0, -0.887011, 0.461749, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (30009, 1151, 'Briarthorn');                        
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (48641, 1621, 0, -3334.19, -2619.98, 10.2918, 1.6057, 0, 0, 0.719339, 0.694659, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (48641, 1151, 'Briarthorn');                        
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES (48751, 1621, 0, -3526.27, -2432.7, 56.1001, 3.38594, 0, 0, -0.992546, 0.12187, 900, 900, 255, 1);
+INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `description`) VALUES (48751, 1151, 'Briarthorn');
