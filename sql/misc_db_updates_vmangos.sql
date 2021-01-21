@@ -7664,15 +7664,15 @@ INSERT INTO `gossip_menu_option` (`menu_id`, `id`, `option_icon`, `option_text`,
 UPDATE `creature_template` SET `gossip_menu_id`=7101 WHERE `entry` = 16131;
 
 -- Huntsman Leopold
-INSERT INTO `gossip_menu` VALUES (7102, 8356, 0);
-INSERT INTO `gossip_menu` VALUES (7144, 8408, 0);
-INSERT INTO `gossip_menu_option` (`menu_id`, `id`, `option_icon`, `option_text`, `OptionBroadcastTextID`, `option_id`, `npc_option_npcflag`, `action_menu_id`, `action_poi_id`, `action_script_id`, `box_coded`, `box_money`, `box_text`, `BoxBroadcastTextID`, `condition_id`) VALUES (7102, 1, 0, 'Where can I find crypt fiend parts, Leopold?', 12075, 1, 1, 7144, 0, 0, 0, 0, '', 0, 0);
-INSERT INTO `npc_text` (`ID`, `BroadcastTextID0`, `Probability0`, `BroadCastTextID1`, `Probability1`) VALUES (8369, 11979, 1, 0, 0);
+replace INTO`gossip_menu` VALUES (7102, 8356, 0);
+replace INTO `gossip_menu` VALUES (7144, 8408, 0);
+replace INTO `gossip_menu_option` (`menu_id`, `id`, `option_icon`, `option_text`, `OptionBroadcastTextID`, `option_id`, `npc_option_npcflag`, `action_menu_id`, `action_poi_id`, `action_script_id`, `box_coded`, `box_money`, `box_text`, `BoxBroadcastTextID`, `condition_id`) VALUES (7102, 1, 0, 'Where can I find crypt fiend parts, Leopold?', 12075, 1, 1, 7144, 0, 0, 0, 0, '', 0, 0);
+replace INTO `npc_text` (`ID`, `BroadcastTextID0`, `Probability0`, `BroadCastTextID1`, `Probability1`) VALUES (8369, 11979, 1, 0, 0);
 replace INTO `gossip_menu` VALUES (7111, 8369, 0);
-INSERT INTO `npc_text` (`ID`, `BroadcastTextID0`, `Probability0`, `BroadCastTextID1`, `Probability1`) VALUES (8370, 11981, 1, 0, 0);
-INSERT INTO `gossip_menu` VALUES (7112, 8370, 0);
-INSERT INTO `gossip_menu_option` (`menu_id`, `id`, `option_icon`, `option_text`, `OptionBroadcastTextID`, `option_id`, `npc_option_npcflag`, `action_menu_id`, `action_poi_id`, `action_script_id`, `box_coded`, `box_money`, `box_text`, `BoxBroadcastTextID`, `condition_id`) VALUES (7111, 0, 0, 'Continue please.', 11980, 1, 1, 7112, 0, 0, 0, 0, '', 0, 0);
-INSERT INTO `gossip_menu_option` (`menu_id`, `id`, `option_icon`, `option_text`, `OptionBroadcastTextID`, `option_id`, `npc_option_npcflag`, `action_menu_id`, `action_poi_id`, `action_script_id`, `box_coded`, `box_money`, `box_text`, `BoxBroadcastTextID`, `condition_id`) VALUES (7102, 0, 0, 'What is Cryptstalker armor?', 11978, 1, 1, 7111, 0, 0, 0, 0, '', 0, 0);
+replace INTO `npc_text` (`ID`, `BroadcastTextID0`, `Probability0`, `BroadCastTextID1`, `Probability1`) VALUES (8370, 11981, 1, 0, 0);
+replace INTO `gossip_menu` VALUES (7112, 8370, 0);
+replace INTO `gossip_menu_option` (`menu_id`, `id`, `option_icon`, `option_text`, `OptionBroadcastTextID`, `option_id`, `npc_option_npcflag`, `action_menu_id`, `action_poi_id`, `action_script_id`, `box_coded`, `box_money`, `box_text`, `BoxBroadcastTextID`, `condition_id`) VALUES (7111, 0, 0, 'Continue please.', 11980, 1, 1, 7112, 0, 0, 0, 0, '', 0, 0);
+replace INTO `gossip_menu_option` (`menu_id`, `id`, `option_icon`, `option_text`, `OptionBroadcastTextID`, `option_id`, `npc_option_npcflag`, `action_menu_id`, `action_poi_id`, `action_script_id`, `box_coded`, `box_money`, `box_text`, `BoxBroadcastTextID`, `condition_id`) VALUES (7102, 0, 0, 'What is Cryptstalker armor?', 11978, 1, 1, 7111, 0, 0, 0, 0, '', 0, 0);
 UPDATE `creature_template` SET `gossip_menu_id`=7102 WHERE `entry` = 16132;
 
 -- Mataus the Wrathcaster
@@ -7714,5 +7714,15 @@ UPDATE `creature_template` SET `gossip_menu_id`=7326 WHERE `entry` = 16817;
 
 -- Festival Talespinner
 UPDATE `creature_template` SET `gossip_menu_id`=9298 WHERE `entry` = 16818;
+
+
+
+-- Add missing emote when Kul Tiras Sailor charges.
+DELETE FROM `creature_ai_events` WHERE `creature_id`=3128;
+INSERT INTO `creature_ai_events` (`id`, `creature_id`, `condition_id`, `event_type`, `event_inverse_phase_mask`, `event_chance`, `event_flags`, `event_param1`, `event_param2`, `event_param3`, `event_param4`, `action1_script`, `action2_script`, `action3_script`, `comment`) VALUES (312801, 3128, 0, 9, 0, 100, 0, 5, 30, 0, 0, 312801, 0, 0, 'Kul Tiras Sailor - Cast Rushing Charge');
+INSERT INTO `creature_ai_events` (`id`, `creature_id`, `condition_id`, `event_type`, `event_inverse_phase_mask`, `event_chance`, `event_flags`, `event_param1`, `event_param2`, `event_param3`, `event_param4`, `action1_script`, `action2_script`, `action3_script`, `comment`) VALUES (312802, 3128, 0, 2, 0, 100, 0, 15, 0, 0, 0, 312802, 0, 0, 'Kul Tiras Sailor - Flee at 15% HP');
+DELETE FROM `creature_ai_scripts` WHERE `id`=312801;
+INSERT INTO `creature_ai_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (312801, 0, 15, 6268, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Kul Tiras Sailor - Cast Spell Rushing Charge');
+INSERT INTO `creature_ai_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (312801, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 1254, 0, 0, 0, 0, 0, 0, 0, 0, 'Kul Tiras Sailor - Say Emoted Text');
 
 
