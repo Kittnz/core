@@ -174,3 +174,9 @@ DELETE FROM `creature_ai_scripts` WHERE `id`=309801;
 INSERT INTO `creature_ai_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (309801, 0, 3, 2, 1000, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 'Mottled Boar - Run Away');
 INSERT INTO `conditions` (`condition_entry`, `type`, `value1`, `value2`, `value3`, `value4`, `flags`) VALUES (3098, -1, 85, 119, 0, 0, 0);
 UPDATE `creature_template` SET `ai_name`='EventAI' WHERE `entry`=3098;
+
+
+
+-- Gilthares Firebough is immune to both players and npcs by default.
+UPDATE `creature_template` SET `unit_flags`=768 WHERE `entry`=3465;
+
