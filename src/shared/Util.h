@@ -117,6 +117,11 @@ inline bool roll_chance_i(int chance)
     return chance > irand(0, 99);
 }
 
+inline bool roll_chance_u(uint32 chance)
+{
+    return chance > urand(0, 99);
+}
+
 /* Select a random element from a container. Note: make sure you explicitly empty check the container */
 template <class C> typename C::value_type const& SelectRandomContainerElement(C const& container)
 {
