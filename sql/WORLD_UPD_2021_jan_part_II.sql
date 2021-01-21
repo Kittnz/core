@@ -37,6 +37,7 @@ update quest_template set requiredraces = 589 where requiredraces = 256;
 
 update item_template set required_level = 23, item_level = 23, disenchant_id = 41 where entry = 80712;
 update item_template set required_level = 23 where entry = 80730;
+
 update item_template set class = 4,  subclass = 1 where entry = 80759;
 
 -- Childern's Week monthly:
@@ -395,4 +396,21 @@ UPDATE `item_template` SET `required_reputation_rank`='4', allowable_race = 256 
 UPDATE `item_template` SET `required_reputation_rank`='4', allowable_race = 256 WHERE `entry`='80461';
 UPDATE `item_template` SET `required_reputation_rank`='4', allowable_race = 256 WHERE `entry`='80462';
 
-REPLACE INTO `item_template` VALUES (80648, 0, 12, 0, 'Illusion: Gnoll', 'You wimpy human now, but maybe Gnoll in past life!', 1645, 1, 0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1300, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 31726, 0, 0, 0, 10, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 'item_player_engie');
+REPLACE INTO `item_template` VALUES (80648, 0, 12, 0, 'Illusion: Gnoll', 'You wimpy human now, but maybe Gnoll in past life!', 1645, 1, 0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1300, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 31726, 0, 0, 0, 10, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 'item_morph_gnoll');
+
+update item_template set required_level = 28 where entry = 80722;
+
+replace into item_template values
+ ('80649', '0', '2', '15', 'Vile Sting', '', '23791', '3', '0', '1', '10009', '10009', '21', '-1', '-1', '37',
+ '32', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1600', '0',
+ '0', '29', '51', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '3396', '2', '0', '5', '420', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '2', '0', '0', '0', '0', '0', '2', '1', '0', '0', '65', '0', '0', '0', '0', '44', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into creature_loot_template values (5937, 80649, 35, 6, 1, 1, 0, 0, 10); 
+update item_template set spellid_1 = 0 where entry = 80842;
+
+UPDATE `item_template` SET `spellcooldown_1`='600000' WHERE (`entry`='81059') AND (`patch`='0');
