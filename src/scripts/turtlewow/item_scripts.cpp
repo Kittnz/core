@@ -285,6 +285,17 @@ bool ItemUseSpell_hairdye(Player* pPlayer, Item* pItem, const SpellCastTargets&)
     case 50169: color = 7; break; // Light Teal 
     case 50170: color = 8; break; // Dirty Purple
     case 50171: color = 9; break; // Ash Black
+    // High Elves
+    case 80650: color = 0; break; // Sunflower Blond
+    case 80651: color = 1; break; // Ash Blond
+    case 80652: color = 2; break; // Ruby Rush
+    case 80653: color = 3; break; // Cinnamon
+    case 80654: color = 4; break; // Wheat Brown
+    case 80655: color = 5; break; // Sand Blond
+    case 80656: color = 6; break; // Coral Red
+    case 80657: color = 7; break; // Honey Blond
+    case 80658: color = 8; break; // Starry Night
+    case 80659: color = 9; break; // Crab Legs
     }
 
     pPlayer->SetByteValue(PLAYER_BYTES, 3, color);
