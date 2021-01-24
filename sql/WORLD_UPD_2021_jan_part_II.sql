@@ -474,4 +474,5 @@ UPDATE `gameobject_template` SET `data2`=175944, `script_name`='' WHERE `entry`=
 UPDATE `creature_template` SET `faction`=14 WHERE `entry`=10882;
 
 update creature_template set faction = 1194 where entry in (14527, 14528);
+update item_template set item_level = 22 , disenchant_id = 2 where entry = 80802;
 
