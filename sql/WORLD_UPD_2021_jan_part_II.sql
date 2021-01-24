@@ -473,3 +473,5 @@ INSERT INTO `event_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, 
 UPDATE `gameobject_template` SET `data2`=175944, `script_name`='' WHERE `entry`=175944;
 UPDATE `creature_template` SET `faction`=14 WHERE `entry`=10882;
 
+update creature_template set faction = 1194 where entry in (14527, 14528);
+
