@@ -476,3 +476,9 @@ UPDATE `creature_template` SET `faction`=14 WHERE `entry`=10882;
 update creature_template set faction = 1194 where entry in (14527, 14528);
 update item_template set item_level = 22 , disenchant_id = 2 where entry = 80802;
 
+-- Fix Lexlort (npc 9080) to provide shackles for players
+DELETE FROM `gossip_scripts` WHERE `id`=50406;
+INSERT INTO `gossip_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (50406, 0, 15, 22941, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Grark Lorkrub\'s Thorium Shackles');
+
+
+
