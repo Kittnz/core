@@ -494,3 +494,7 @@ UPDATE `item_template` SET `inventory_type`='15' WHERE (`entry`='80503') AND (`p
 -- HE Male / Female bonding radius: 
 UPDATE `creature_model_info` SET `bounding_radius`='0.389', `combat_reach`='1.5' WHERE (`modelid`='15476') AND (`build`='5875');
 UPDATE `creature_model_info` SET `bounding_radius`='0.306', `combat_reach`='1.5' WHERE (`modelid`='15475') AND (`build`='5875');
+
+-- Hot Pants (original).
+
+(51051, 0, 4, 1, 'Blue Summer Pants', '', 40151, 1, 0, 1, 5000, 0, 7, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL),
