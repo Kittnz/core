@@ -480,5 +480,6 @@ update item_template set item_level = 22 , disenchant_id = 2 where entry = 80802
 DELETE FROM `gossip_scripts` WHERE `id`=50406;
 INSERT INTO `gossip_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (50406, 0, 15, 22941, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Grark Lorkrub\'s Thorium Shackles');
 
+update item_template set item_level = 23, required_level = 18 where entry = 80712;
 
-
+update quest_template set rewrepfaction1 = 893, rewrepvalue1 = 150 where entry in (7830, 7842, 7844, 2935, 7850, 7816, 7829, 7862, 7845, 7840, 7841, 7846, 2782, 2742, 7849, 7815, 7828, 7843, 7839, 7861);
