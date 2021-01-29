@@ -87,6 +87,9 @@ class ZoneScriptMgr
         void AddScript(ZoneScript_Script* pScript) { m_ZoneScripts_Scripts.push_back(pScript); }
         void OnMapCrashed(Map* map);
 
+		// Turtle specific - fix crash, when some ZoneScripts might have a player pointer somewhere
+		void OnPlayerGettingDestroyed(Player* plr);
+
     private:
         // HACK : les scripts
         ZoneScript_ScriptSet m_ZoneScripts_Scripts;

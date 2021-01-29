@@ -44,8 +44,8 @@ class OutdoorPvPSI : public OutdoorPvP
 
         bool SetupZoneScript();
 
-        void OnPlayerEnter(Player* plr);
-        void OnPlayerLeave(Player* plr);
+        virtual void OnPlayerEnter(Player* plr);
+        virtual void OnPlayerLeave(Player* plr, bool bJustDestroy);
 
         void Update(uint32 diff);
 

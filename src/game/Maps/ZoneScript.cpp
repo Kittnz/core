@@ -45,10 +45,13 @@ bool OPvPCapturePoint::HandlePlayerEnter(Player * plr)
     return m_activePlayers[plr->GetTeamId()].insert(plr).second;
 }
 
-void OPvPCapturePoint::HandlePlayerLeave(Player * plr)
+void OPvPCapturePoint::HandlePlayerLeave(Player * plr, bool bJustDestroy)
 {
-    if (m_capturePoint)
-        plr->SendUpdateWorldState(m_capturePoint->GetGOInfo()->capturePoint.worldState1, 0);
+	if (!bJustDestroy)
+	{
+		if (m_capturePoint)
+			plr->SendUpdateWorldState(m_capturePoint->GetGOInfo()->capturePoint.worldState1, 0);
+	}
     m_activePlayers[plr->GetTeamId()].erase(plr);
 }
 
@@ -250,21 +253,24 @@ void ZoneScript::OnPlayerEnter(Player * plr)
     m_players[plr->GetTeamId()].insert(plr);
 }
 
-void ZoneScript::OnPlayerLeave(Player * plr)
+void ZoneScript::OnPlayerLeave(Player * plr, bool bJustDestroy)
 {
     // remove the world state information from the player (we can't keep everyone up to date, so leave out those who are not in the concerning zones)
-    if (!plr->GetSession()->PlayerLogout())
-        SendRemoveWorldStates(plr);
+	if (!bJustDestroy)
+	{
+		if (!plr->GetSession()->PlayerLogout())
+			SendRemoveWorldStates(plr);
+	}
     m_players[plr->GetTeamId()].erase(plr);
     DEBUG_LOG("Player %s left a ZoneScript zone", plr->GetName());
 }
 
-void OutdoorPvP::OnPlayerLeave(Player * plr)
+void OutdoorPvP::OnPlayerLeave(Player * plr, bool bJustDestroy)
 {
     // inform the objectives of the leaving
     for (OPvPCapturePointMap::iterator itr = m_capturePoints.begin(); itr != m_capturePoints.end(); ++itr)
-        itr->second->HandlePlayerLeave(plr);
-    ZoneScript::OnPlayerLeave(plr);
+        itr->second->HandlePlayerLeave(plr, bJustDestroy);
+    ZoneScript::OnPlayerLeave(plr, bJustDestroy);
 }
 
 void OutdoorPvP::OnPlayerEnter(Player* pPlayer)
@@ -299,12 +305,12 @@ bool OPvPCapturePoint::Update(uint32 diff)
             Player *player = *itr;
             ++itr;
             if (!m_capturePoint->IsWithinDistInMap(player, radius) || !player->IsOutdoorPvPActive())
-                HandlePlayerLeave(player);
+                HandlePlayerLeave(player, false);
         }
     }
 
     std::list<Player*> players;
-    MaNGOS::AnyPlayerInObjectRangeCheck checker(m_capturePoint, radius, false);
+    MaNGOS::AnyPlayerInObjectRangeCheck checker(m_capturePoint, radius, true);
     MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, checker);
     Cell::VisitWorldObjects(m_capturePoint, searcher, radius);
 

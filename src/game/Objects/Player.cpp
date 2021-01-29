@@ -611,6 +611,9 @@ Player::Player(WorldSession *session) : Unit(),
 
 Player::~Player()
 {
+	// Clear all pointers to this player in all zone scripts
+	sZoneScriptMgr.OnPlayerGettingDestroyed(this);
+
     DeletePacketBroadcaster();
 
     delete _cheatData;

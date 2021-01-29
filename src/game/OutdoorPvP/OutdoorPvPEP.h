@@ -197,8 +197,8 @@ class OPvPCapturePointEP_EWT : public OPvPCapturePoint
         uint32 FillInitialWorldStates(WorldPacket & data);
 
         // used when player is activated/inactivated in the area
-        bool HandlePlayerEnter(Player * plr);
-        void HandlePlayerLeave(Player * plr);
+        virtual bool HandlePlayerEnter(Player * plr);
+        virtual void HandlePlayerLeave(Player * plr, bool bJustDestroy);
 
     protected:
 
@@ -228,8 +228,8 @@ class OPvPCapturePointEP_NPT : public OPvPCapturePoint
         uint32 FillInitialWorldStates(WorldPacket & data);
 
         // used when player is activated/inactivated in the area
-        bool HandlePlayerEnter(Player * plr);
-        void HandlePlayerLeave(Player * plr);
+		virtual bool HandlePlayerEnter(Player * plr);
+		virtual void HandlePlayerLeave(Player * plr, bool bJustDestroy);
 
     protected:
 
@@ -259,8 +259,8 @@ class OPvPCapturePointEP_CGT : public OPvPCapturePoint
         uint32 FillInitialWorldStates(WorldPacket & data);
 
         // used when player is activated/inactivated in the area
-        bool HandlePlayerEnter(Player * plr);
-        void HandlePlayerLeave(Player * plr);
+        virtual bool HandlePlayerEnter(Player * plr);
+        virtual void HandlePlayerLeave(Player * plr, bool bJustDestroy);
 
     protected:
 
@@ -290,8 +290,8 @@ class OPvPCapturePointEP_PWT : public OPvPCapturePoint
         uint32 FillInitialWorldStates(WorldPacket & data);
 
         // used when player is activated/inactivated in the area
-        bool HandlePlayerEnter(Player * plr);
-        void HandlePlayerLeave(Player * plr);
+        virtual bool HandlePlayerEnter(Player * plr);
+        virtual void HandlePlayerLeave(Player * plr, bool bJustDestroy);
 
     protected:
 
@@ -319,8 +319,8 @@ class OutdoorPvPEP : public OutdoorPvP
 
         bool SetupZoneScript();
 
-        void OnPlayerEnter(Player *plr);
-        void OnPlayerLeave(Player *plr);
+		virtual void OnPlayerEnter(Player *plr);
+		virtual void OnPlayerLeave(Player *plr, bool bJustDestroy);
 
         void Update(uint32 diff);
 
