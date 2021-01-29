@@ -107,7 +107,7 @@ class OPvPCapturePoint
 
         // used when player is activated/inactivated in the area
         virtual bool HandlePlayerEnter(Player * plr);
-        virtual void HandlePlayerLeave(Player * plr);
+        virtual void HandlePlayerLeave(Player * plr, bool bJustDestroy);
 
         // checks if player is in range of a capture credit marker
         bool IsInsideObjective(Player * plr) const;
@@ -224,7 +224,7 @@ class ZoneScript
         virtual void OnCreatureDeath(Creature * /*creature*/)       {}
         virtual void OnCreatureSpellHit(Unit* /*caster*/,Creature* /*receiver*/, const SpellEntry*)    {}
         virtual void OnPlayerEnter(Player *);
-        virtual void OnPlayerLeave(Player *);
+        virtual void OnPlayerLeave(Player * plr, bool bJustDestroy = false);
         
         // send world state update to all players present
         void SendUpdateWorldState(uint32 field, uint32 value);
@@ -315,7 +315,7 @@ class OutdoorPvP : public ZoneScript
         bool HandleGossipOption(Player* plr, uint64 guid, uint32 gossipid) override;
 
         void OnPlayerEnter(Player* pPlayer) override;
-        void OnPlayerLeave(Player* pPlayer) override;
+        void OnPlayerLeave(Player* pPlayer, bool bJustDestroy) override;
 
     protected:
 

@@ -193,3 +193,11 @@ void ZoneScriptMgr::OnMapCrashed(Map* map)
         }
 }
 
+void ZoneScriptMgr::OnPlayerGettingDestroyed(Player* plr)
+{
+	for (const std::pair<const uint32, ZoneScript*>& ZoneScriptPair : m_ZoneScriptsMap)
+	{
+		ZoneScriptPair.second->OnPlayerLeave(plr, true);
+	}
+}
+

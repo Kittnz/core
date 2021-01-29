@@ -136,10 +136,13 @@ bool OPvPCapturePointEP_EWT::HandlePlayerEnter(Player *plr)
     return false;
 }
 
-void OPvPCapturePointEP_EWT::HandlePlayerLeave(Player *plr)
+void OPvPCapturePointEP_EWT::HandlePlayerLeave(Player *plr, bool bJustDestroy)
 {
-    plr->SendUpdateWorldState(EP_UI_TOWER_SLIDER_DISPLAY, 0);
-    OPvPCapturePoint::HandlePlayerLeave(plr);
+	if (!bJustDestroy)
+	{
+		plr->SendUpdateWorldState(EP_UI_TOWER_SLIDER_DISPLAY, 0);
+	}
+    OPvPCapturePoint::HandlePlayerLeave(plr, bJustDestroy);
 }
 
 void OPvPCapturePointEP_EWT::SummonSupportUnitAtNorthpassTower(uint32 team)
@@ -282,10 +285,13 @@ bool OPvPCapturePointEP_NPT::HandlePlayerEnter(Player *plr)
     return false;
 }
 
-void OPvPCapturePointEP_NPT::HandlePlayerLeave(Player *plr)
+void OPvPCapturePointEP_NPT::HandlePlayerLeave(Player *plr, bool bJustDestroy)
 {
-    plr->SendUpdateWorldState(EP_UI_TOWER_SLIDER_DISPLAY, 0);
-    OPvPCapturePoint::HandlePlayerLeave(plr);
+	if (!bJustDestroy)
+	{
+		plr->SendUpdateWorldState(EP_UI_TOWER_SLIDER_DISPLAY, 0);
+	}
+    OPvPCapturePoint::HandlePlayerLeave(plr, bJustDestroy);
 }
 
 void OPvPCapturePointEP_NPT::SummonGO(uint32 team)
@@ -411,10 +417,13 @@ bool OPvPCapturePointEP_CGT::HandlePlayerEnter(Player *plr)
     return false;
 }
 
-void OPvPCapturePointEP_CGT::HandlePlayerLeave(Player *plr)
+void OPvPCapturePointEP_CGT::HandlePlayerLeave(Player *plr, bool bJustDestroy)
 {
-    plr->SendUpdateWorldState(EP_UI_TOWER_SLIDER_DISPLAY, 0);
-    OPvPCapturePoint::HandlePlayerLeave(plr);
+	if (!bJustDestroy)
+	{
+		plr->SendUpdateWorldState(EP_UI_TOWER_SLIDER_DISPLAY, 0);
+	}
+    OPvPCapturePoint::HandlePlayerLeave(plr, bJustDestroy);
 }
 
 void OPvPCapturePointEP_CGT::LinkGraveYard(Team team)
@@ -547,10 +556,13 @@ bool OPvPCapturePointEP_PWT::HandlePlayerEnter(Player *plr)
     return false;
 }
 
-void OPvPCapturePointEP_PWT::HandlePlayerLeave(Player *plr)
+void OPvPCapturePointEP_PWT::HandlePlayerLeave(Player *plr, bool bJustDestroy)
 {
-    plr->SendUpdateWorldState(EP_UI_TOWER_SLIDER_DISPLAY, 0);
-    OPvPCapturePoint::HandlePlayerLeave(plr);
+	if (!bJustDestroy)
+	{
+		plr->SendUpdateWorldState(EP_UI_TOWER_SLIDER_DISPLAY, 0);
+	}
+    OPvPCapturePoint::HandlePlayerLeave(plr, bJustDestroy);
 }
 
 void OPvPCapturePointEP_PWT::SummonFlightMaster(uint32 team)
@@ -660,20 +672,23 @@ void OutdoorPvPEP::OnPlayerEnter(Player * plr)
     OutdoorPvP::OnPlayerEnter(plr);
 }
 
-void OutdoorPvPEP::OnPlayerLeave(Player * plr)
+void OutdoorPvPEP::OnPlayerLeave(Player * plr, bool bJustDestroy)
 {
-    // remove buffs
-    if (plr->GetTeam() == ALLIANCE)
-    {
-        for (int i = 0; i < 4; ++i)
-            plr->RemoveAurasDueToSpell(EP_AllianceBuffs[i]);
-    }
-    else
-    {
-        for (int i = 0; i < 4; ++i)
-            plr->RemoveAurasDueToSpell(EP_HordeBuffs[i]);
-    }
-    OutdoorPvP::OnPlayerLeave(plr);
+	if (!bJustDestroy)
+	{
+		// remove buffs
+		if (plr->GetTeam() == ALLIANCE)
+		{
+			for (int i = 0; i < 4; ++i)
+				plr->RemoveAurasDueToSpell(EP_AllianceBuffs[i]);
+		}
+		else
+		{
+			for (int i = 0; i < 4; ++i)
+				plr->RemoveAurasDueToSpell(EP_HordeBuffs[i]);
+		}
+	}
+    OutdoorPvP::OnPlayerLeave(plr, bJustDestroy);
 }
 
 void OutdoorPvPEP::BuffTeams()

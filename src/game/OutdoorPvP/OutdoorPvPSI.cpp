@@ -83,9 +83,9 @@ void OutdoorPvPSI::OnPlayerEnter(Player * plr)
     OutdoorPvP::OnPlayerEnter(plr);
 }
 
-void OutdoorPvPSI::OnPlayerLeave(Player * plr)
+void OutdoorPvPSI::OnPlayerLeave(Player * plr, bool bJustDestroy)
 {
-    OutdoorPvP::OnPlayerLeave(plr);
+    OutdoorPvP::OnPlayerLeave(plr, bJustDestroy);
 }
 
 bool OutdoorPvPSI::HandleAreaTrigger(Player *plr, uint32 trigger)
