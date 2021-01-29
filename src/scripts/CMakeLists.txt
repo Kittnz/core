@@ -311,6 +311,7 @@ set (SCRIPTS_SRCS
     turtlewow/mirage_raceway/miracle_raceaway.cpp
     turtlewow/transmog/transmog.cpp
     turtlewow/gardening.cpp
+    turtlewow/beach_party.cpp
     turtlewow/object_scripts.cpp
     turtlewow/commands.cpp
     

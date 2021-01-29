@@ -283,6 +283,7 @@ void AddSC_item_scripts();
 void AddSC_random();
 void AddSC_miracle_raceaway();
 void AddSC_gardening();
+void AddSC_beach_party();
 // Turtle WoW Expansion
 void AddSC_episode_1();
 
@@ -567,6 +568,7 @@ void AddScripts()
     AddSC_random();
     AddSC_miracle_raceaway();
     AddSC_gardening();
+    AddSC_beach_party();
 
     // Turtle WoW expansion
     AddSC_episode_1();
