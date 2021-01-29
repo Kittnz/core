@@ -483,3 +483,8 @@ INSERT INTO `gossip_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`,
 update item_template set item_level = 23, required_level = 18 where entry = 80712;
 
 update quest_template set rewrepfaction1 = 893, rewrepvalue1 = 150 where entry in (7830, 7842, 7844, 2935, 7850, 7816, 7829, 7862, 7845, 7840, 7841, 7846, 2782, 2742, 7849, 7815, 7828, 7843, 7839, 7861);
+
+-- Silvermoon Remnants quests:
+update quest_template set rewrepfaction1 = 269, rewrepvalue1 = 150 where entry in (5247, 5246, 1135);
+-- Silvermoon Remnants speak-to quests:
+update quest_template set rewrepfaction1 = 269, rewrepvalue1 = 75 where entry in (1132, 1133);
