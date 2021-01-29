@@ -488,3 +488,9 @@ update quest_template set rewrepfaction1 = 893, rewrepvalue1 = 150 where entry i
 update quest_template set rewrepfaction1 = 269, rewrepvalue1 = 150 where entry in (5247, 5246, 1135);
 -- Silvermoon Remnants speak-to quests:
 update quest_template set rewrepfaction1 = 269, rewrepvalue1 = 75 where entry in (1132, 1133);
+
+UPDATE `item_template` SET `inventory_type`='15' WHERE (`entry`='80503') AND (`patch`='0');
+
+-- HE Male / Female bonding radius: 
+UPDATE `creature_model_info` SET `bounding_radius`='0.389', `combat_reach`='1.5' WHERE (`modelid`='15476') AND (`build`='5875');
+UPDATE `creature_model_info` SET `bounding_radius`='0.306', `combat_reach`='1.5' WHERE (`modelid`='15475') AND (`build`='5875');
