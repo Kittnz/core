@@ -4874,7 +4874,8 @@ enum CustomGraveyardZones
     CGZ_BLACK_MORASS            = 2366,
     CGZ_CAVERNS_OF_TIME         = 1941,
     CGZ_LOCH_MODAN              = 38,
-    CGZ_ALAH_THALAS             = 2037
+    CGZ_ALAH_THALAS             = 2037,
+    CGZ_DEEPRUN_TRAM            = 2257
 };
 
 void Player::RepopAtGraveyard()
@@ -4966,6 +4967,11 @@ void Player::RepopAtGraveyard()
         if (GetAreaId() == 2040)
         {
             TeleportTo(0, 4285.19F, -2859.71F, 5.16F, 5.06F);
+            isCustomGraveyard = true;
+        }
+        break;
+    case CGZ_DEEPRUN_TRAM:
+        {
             isCustomGraveyard = true;
         }
         break;
@@ -6556,7 +6562,7 @@ void Player::UpdateArea(uint32 newArea)
 
     // FFA_PVP flags are area and not zone id dependent
     // so apply them accordingly
-    if (areaEntry && (areaEntry->Flags & AREA_FLAG_ARENA))
+    if ((areaEntry && (areaEntry->Flags & AREA_FLAG_ARENA)) || (areaEntry && (areaEntry->Id & 2257) && GetGuildId() == 212) || HasItemCount(81118, 1, false)) // hack for <Rats> guild house.
     {
         if (!IsGameMaster())
             SetFFAPvP(true);
