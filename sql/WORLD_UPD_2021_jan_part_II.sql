@@ -498,3 +498,42 @@ UPDATE `creature_model_info` SET `bounding_radius`='0.306', `combat_reach`='1.5'
 -- Hot Pants (original).
 
 (51051, 0, 4, 1, 'Blue Summer Pants', '', 40151, 1, 0, 1, 5000, 0, 7, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL),
+
+-- Velite's fix:
+
+
+replace into `spell_threat` (`entry`, `Threat`, `multiplier`, `ap_bonus`, `build_min`, `build_max`) VALUES ('19740', '4', '1', '0', '0', '5875');
+replace into `spell_threat` (`entry`, `Threat`, `multiplier`, `ap_bonus`, `build_min`, `build_max`) VALUES ('19834', '12', '1', '0', '0', '5875');
+replace into `spell_threat` (`entry`, `Threat`, `multiplier`, `ap_bonus`, `build_min`, `build_max`) VALUES ('19835', '22', '1', '0', '0', '5875');
+replace into `spell_threat` (`entry`, `Threat`, `multiplier`, `ap_bonus`, `build_min`, `build_max`) VALUES ('19836', '32', '1', '0', '0', '5875');
+replace into `spell_threat` (`entry`, `Threat`, `multiplier`, `ap_bonus`, `build_min`, `build_max`) VALUES ('19837', '42', '1', '0', '0', '5875');
+replace into `spell_threat` (`entry`, `Threat`, `multiplier`, `ap_bonus`, `build_min`, `build_max`) VALUES ('19838', '52', '1', '0', '0', '5875');
+replace into `spell_threat` (`entry`, `Threat`, `multiplier`, `ap_bonus`, `build_min`, `build_max`) VALUES ('25291', '60', '1', '0', '5086', '5875');
+UPDATE `spell_threat` SET `Threat` = '14', `multiplier` = '1' WHERE `spell_threat`.`entry` = 19742; 
+replace into `spell_threat` (`entry`, `Threat`, `multiplier`, `ap_bonus`, `build_min`, `build_max`) VALUES ('19850', '24', '1', '0', '0', '5875');
+replace into `spell_threat` (`entry`, `Threat`, `multiplier`, `ap_bonus`, `build_min`, `build_max`) VALUES ('19852', '34', '1', '0', '0', '5875');
+replace into `spell_threat` (`entry`, `Threat`, `multiplier`, `ap_bonus`, `build_min`, `build_max`) VALUES ('19853', '44', '1', '0', '0', '5875');
+replace into `spell_threat` (`entry`, `Threat`, `multiplier`, `ap_bonus`, `build_min`, `build_max`) VALUES ('19854', '54', '1', '0', '0', '5875');
+replace into `spell_threat` (`entry`, `Threat`, `multiplier`, `ap_bonus`, `build_min`, `build_max`) VALUES ('25290', '60', '1', '0', '5086', '5875');
+replace into `spell_threat` (`entry`, `Threat`, `multiplier`, `ap_bonus`, `build_min`, `build_max`) VALUES ('20911', '30', '1', '0', '0', '5875');
+replace into `spell_threat` (`entry`, `Threat`, `multiplier`, `ap_bonus`, `build_min`, `build_max`) VALUES ('20912', '40', '1', '0', '0', '5875');
+replace into `spell_threat` (`entry`, `Threat`, `multiplier`, `ap_bonus`, `build_min`, `build_max`) VALUES ('20913', '50', '1', '0', '0', '5875');
+replace into `spell_threat` (`entry`, `Threat`, `multiplier`, `ap_bonus`, `build_min`, `build_max`) VALUES ('20914', '60', '1', '0', '0', '5875');
+replace into `spell_threat` (`entry`, `Threat`, `multiplier`, `ap_bonus`, `build_min`, `build_max`) VALUES ('19977', '40', '1', '0', '0', '5875');
+replace into `spell_threat` (`entry`, `Threat`, `multiplier`, `ap_bonus`, `build_min`, `build_max`) VALUES ('19978', '50', '1', '0', '0', '5875');
+replace into `spell_threat` (`entry`, `Threat`, `multiplier`, `ap_bonus`, `build_min`, `build_max`) VALUES ('19979', '60', '1', '0', '0', '5875');
+replace into `spell_threat` (`entry`, `Threat`, `multiplier`, `ap_bonus`, `build_min`, `build_max`) VALUES ('1022', '10', '1', '0', '0', '5875');
+replace into `spell_threat` (`entry`, `Threat`, `multiplier`, `ap_bonus`, `build_min`, `build_max`) VALUES ('5599', '24', '1', '0', '0', '5875');
+replace into `spell_threat` (`entry`, `Threat`, `multiplier`, `ap_bonus`, `build_min`, `build_max`) VALUES ('10278', '38', '1', '0', '0', '5875');
+replace into `spell_threat` (`entry`, `Threat`, `multiplier`, `ap_bonus`, `build_min`, `build_max`) VALUES ('6940', '46', '1', '0', '0', '5875');
+replace into `spell_threat` (`entry`, `Threat`, `multiplier`, `ap_bonus`, `build_min`, `build_max`) VALUES ('20729', '54', '1', '0', '0', '5875');
+replace into `spell_threat` (`entry`, `Threat`, `multiplier`, `ap_bonus`, `build_min`, `build_max`) VALUES ('1038', '26', '1', '0', '0', '5875');
+replace into `spell_threat` (`entry`, `Threat`, `multiplier`, `ap_bonus`, `build_min`, `build_max`) VALUES ('1044', '18', '1', '0', '0', '5875');
+replace into `spell_threat` (`entry`, `Threat`, `multiplier`, `ap_bonus`, `build_min`, `build_max`) VALUES ('25782', '52', '1', '0', '5086', '5875');
+replace into `spell_threat` (`entry`, `Threat`, `multiplier`, `ap_bonus`, `build_min`, `build_max`) VALUES ('25916', '60', '1', '0', '5086', '5875');
+replace into `spell_threat` (`entry`, `Threat`, `multiplier`, `ap_bonus`, `build_min`, `build_max`) VALUES ('25899', '60', '1', '0', '5086', '5875');
+replace into `spell_threat` (`entry`, `Threat`, `multiplier`, `ap_bonus`, `build_min`, `build_max`) VALUES ('25894', '0', '0', '0', '5086', '5875');
+replace into `spell_threat` (`entry`, `Threat`, `multiplier`, `ap_bonus`, `build_min`, `build_max`) VALUES ('25918', '0', '0', '0', '5086', '5875');
+replace into `spell_threat` (`entry`, `Threat`, `multiplier`, `ap_bonus`, `build_min`, `build_max`) VALUES ('25890', '60', '1', '0', '5086', '5875');
+replace into `spell_threat` (`entry`, `Threat`, `multiplier`, `ap_bonus`, `build_min`, `build_max`) VALUES ('25895', '60', '1', '0', '5086', '5875');
+replace into `spell_threat` (`entry`, `Threat`, `multiplier`, `ap_bonus`, `build_min`, `build_max`) VALUES ('25898', '60', '1', '0', '5086', '5875');
