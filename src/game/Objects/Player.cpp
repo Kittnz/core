@@ -6565,7 +6565,7 @@ void Player::UpdateArea(uint32 newArea)
 
     // FFA_PVP flags are area and not zone id dependent
     // so apply them accordingly
-    if ((areaEntry && (areaEntry->Flags & AREA_FLAG_ARENA)) || (areaEntry && (areaEntry->Id & 2257) && GetGuildId() == 212) || HasItemCount(81118, 1, false)) // hack for <Rats> guild house.
+    if (areaEntry && (areaEntry->Flags & AREA_FLAG_ARENA))
     {
         if (!IsGameMaster())
             SetFFAPvP(true);
