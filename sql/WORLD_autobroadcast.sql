@@ -31,7 +31,7 @@ replace into mangos_string (entry, content_default) values
 
 ('50014', 'Shop items are half the price on till February 10. Exotic mounts, large bags, mysterious engineering devices and more: turtle-wow.org/donate'),
 
-('50015', 'Have you ever dreamed of setting up your own garden? Grow consumable food by planting the seed and watering it, then enjoy the results of your hard work once it’s fully grown! Speak to Kern Mosshoof in Mulgore or Mortimer Stansfield in Elwynn Forest.'),
+('50015', 'Have you ever dreamed of setting up your own garden? Grow consumable food by planting the seed and watering it, then enjoy the results of your hard work once it’s fully grown! Speak to Kern Mosshoof in Mulgore or Mortimer Stansfield in Elwynn Forest.');
 
 delete from autobroadcast where string_id between 50000 and 50018;
 replace into autobroadcast (string_Id) values
