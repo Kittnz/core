@@ -470,7 +470,7 @@ struct npc_race_car : public ScriptedAI
 
 bool GOHello_go_flying_machine(Player* pPlayer, GameObject* pGo)
 {
-    if (pPlayer->GetQuestRewardStatus(50315))
+	if (pPlayer->HasItemCount(81119, 1, false))
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TAXI, "Buy a flight to the Shimmering Flats in Thousand Needles to visit the Mirage Raceway.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
     pPlayer->SEND_GOSSIP_MENU(90254, pGo->GetGUID());
@@ -484,6 +484,7 @@ bool GOSelect_go_flying_machine(Player* pPlayer, GameObject* pGo, uint32 sender,
         pPlayer->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, 8011);
         pPlayer->TeleportTo(1, -6103.890000F, -3872.739700F, 145.055800F, 3.567656F);
         pPlayer->CastSpell(pPlayer, 130, true);
+		pPlayer->DestroyItemCount(81119, 1, true);
     }
     return true;
 }
