@@ -58,14 +58,8 @@ bool ChatHandler::HandleSaleCommand(char* args)
         WorldDatabase.PExecute("UPDATE shop_items SET price = price * 2;");
         SendSysMessage("Shop sale is OFF.");
     }
-    // Static prices for expansion mounts:
+    // Static price for Spectral Tiger:
     WorldDatabase.PExecute("UPDATE shop_items SET price = 2000 where item = 80430;");
-    WorldDatabase.PExecute("UPDATE shop_items SET price = 400 where item = 80431;");
-    WorldDatabase.PExecute("UPDATE shop_items SET price = 400 where item = 80455;");
-    WorldDatabase.PExecute("UPDATE shop_items SET price = 400 where item = 80449;");
-    WorldDatabase.PExecute("UPDATE shop_items SET price = 400 where item = 80447;");
-    WorldDatabase.PExecute("UPDATE shop_items SET price = 400 where item = 81091;");
-    WorldDatabase.PExecute("UPDATE shop_items SET price = 400 where item = 81100;");
 
     SendSysMessage("Use this command to update prices: |cff0ccaec.reload shop|r");
     return true;

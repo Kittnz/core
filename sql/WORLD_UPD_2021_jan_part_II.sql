@@ -830,7 +830,7 @@ replace into item_template values
  '0', '1', NULL);
  
 replace into item_template values
- ('81119', '0', '0', '0', 'Plane Ticket', 'One way ticket to Shimmering Flats.', '7629', '1', '0', '1', '0', '0', '0', '-1', '-1', '0',
+ ('81119', '0', '0', '0', 'Plane Ticket', 'A one way ticket to the Shimmering Flats.', '7629', '1', '0', '1', '0', '0', '0', '-1', '-1', '0',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
@@ -839,4 +839,43 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
+REPLACE INTO `page_text` (`entry`, `text`) VALUES ('50085', 'Blood be red, mon\r\nTroll skin be blue\r\nIf you be readin\' dis\r\nI put a hex on you');
+REPLACE INTO `page_text` (`entry`, `text`) VALUES ('50086', 'Berserking glow red\r\nHeartsong glow blue\r\nNobody enchant me\r\nDe way dat you do');
+REPLACE INTO `page_text` (`entry`, `text`) VALUES ('50087', 'Blood be red mon,\r\nThe sky above Zandalar be blue\r\nIf dis got you in da mood,\r\nCome get my voodoo');
+REPLACE INTO `page_text` (`entry`, `text`) VALUES ('50088', 'Roses are red\r\nIris\' are indigo\r\nAll I can say when I look at you\r\nIs Taz\'dingo');
+
  UPDATE `quest_template` SET `RewItemId2`='81119', `RewItemCount2`='1' WHERE (`entry`='50315') AND (`patch`='0');
+ 
+delete from item_loot_template where entry = 51255; 
+ 
+replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid) values
+-- Bad Troll Poetry
+(51255, 51278, 0, 1),
+(51255, 51279, 0, 1),
+(51255, 51280, 0, 1),
+(51255, 51281, 0, 1),
+-- Dresses
+(51255, 22278, 0, 2),
+(51255, 22276, 0, 2),
+(51255, 22279, 0, 2),
+(51255, 22280, 0, 2),
+-- Pets
+(51255, 51259, 0, 3),
+(51255, 51261, 0, 3),
+(51255, 51433, 0, 3),
+(51255, 51760, 0, 3),
+-- Bag
+(51255, 51257, 0, 4),
+(51255, 51258, 0, 4),
+-- Head
+(51255, 81110, 100, 5);
+
+
+REPLACE INTO `creature_template` VALUES (81005, 0, 18295, 0, 0, 0, 'Frayfeather Hippogryph', '', 0, 1, 1, 64, 64, 0, 0, 0, 35, 0, 1, 1.14286, 1, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, '');
+
+REPLACE INTO `item_template` VALUES (81120, 10, 15, 0, 'Frayfeather Hippogryph', 'Ancient mounts of the Highborne, they can rarely be found due to their latent magical powers.', 19528, 4, 64, 1, 0, 0, 0, -1, -1, 20, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 46221, 0, 0, 0, 0, 330, 3000, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+
+REPLACE INTO `item_template` VALUES (81121, 10, 15, 0, 'Cenarion War Hippogryph', 'Members of the Cenarion Circle have shared a long and prosperous partnership with their hippogryph allies. When conflict is unavoidable, the Cenarion War Hippogryph is called into service.', 19570, 4, 64, 1, 0, 0, 0, -1, -1, 20, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 46221, 0, 0, 0, 0, 330, 3000, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+
+replace into custom_mount_entry_relation values (81120, 81005);
+
