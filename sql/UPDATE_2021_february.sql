@@ -342,3 +342,5 @@ nextquestid = @nextquest, RewOrReqMoney = @reward_money,
 nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
 objectivetext1='Scare shark away'
 where entry = @quest_entry;	
+
+ UPDATE `quest_template` SET `RewItemId2`='0', `RewItemCount2`='0' WHERE (`entry`='50315') AND (`patch`='0');
