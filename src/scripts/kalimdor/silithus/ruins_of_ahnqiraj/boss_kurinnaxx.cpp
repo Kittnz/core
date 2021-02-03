@@ -129,8 +129,8 @@ struct boss_kurinnaxxAI : public ScriptedAI
             {
                 if (GameObject* trap = m_creature->SummonGameObject(GO_TRAP, pUnit->GetPositionX(), pUnit->GetPositionY(), pUnit->GetPositionZ(), 0, 0, 0, 0, 0, 0))
                     trap->SetOwnerGuid(m_creature->GetObjectGuid());
-                m_uiSandTrap_Timer = urand(5100, 7000); /** Random timer for sandtrap between 1 and 7s */
-                m_uiCleanSandTrap_Timer = m_uiSandTrap_Timer - 2000;
+                m_uiSandTrap_Timer = urand(5100, 7000);
+                m_uiCleanSandTrap_Timer = 5000;
             }
         }
         else
