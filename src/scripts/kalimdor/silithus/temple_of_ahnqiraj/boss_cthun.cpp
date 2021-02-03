@@ -279,7 +279,7 @@ static constexpr int32  MAX_INITIAL_PULLER_HITS         = 3;     // How many tim
                                                                  // puller with green beam before random target.
 static constexpr int32  P1_GREEN_BEAM_COOLDOWN          = 3000;  // Green beam has a 2 sec cast time. If this number is > 2000, 
                                                                  // the cooldown will be P1_GREEN_BEAM_COOLDOWN - 2000
-static const uint32 P1_CLAW_TENTACLE_RESPAWN_TIMER      = 5000;  // checked against old footage & current fight
+static const uint32 P1_CLAW_TENTACLE_RESPAWN_TIMER      = 8000;  // checked against old footage & current fight
 // =======================================================
 
 // ================= TRANSITION CONSTANTS ================
