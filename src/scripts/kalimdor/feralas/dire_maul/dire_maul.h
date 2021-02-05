@@ -116,7 +116,7 @@ class instance_dire_maul : public ScriptedInstance
         void Initialize();
 
         void OnPlayerEnter(Player* pPlayer);
-        void OnPlayerLeave(Player* pPlayer);
+        void OnPlayerLeave(Player* pPlayer, bool bJustDestroy);
         void OnObjectCreate(GameObject* pGo);
         void OnCreatureDeath(Creature* pCreature);
         void OnCreatureCreate(Creature* pCreature);

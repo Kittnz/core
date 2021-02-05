@@ -77,7 +77,7 @@ void instance_dire_maul::OnPlayerEnter(Player* pPlayer)
     }
 }
 
-void instance_dire_maul::OnPlayerLeave(Player* pPlayer)
+void instance_dire_maul::OnPlayerLeave(Player* pPlayer, bool bJustDestroy)
 {
     if (!pPlayer)
         return;
