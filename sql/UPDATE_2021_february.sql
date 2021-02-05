@@ -343,4 +343,13 @@ nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
 objectivetext1='Scare shark away'
 where entry = @quest_entry;	
 
- UPDATE `quest_template` SET `RewItemId2`='0', `RewItemCount2`='0' WHERE (`entry`='50315') AND (`patch`='0');
+UPDATE `quest_template` SET `RewItemId2`='0', `RewItemCount2`='0' WHERE (`entry`='50315') AND (`patch`='0');
+
+UPDATE `item_template` SET `buy_price`='0', `sell_price`='0' WHERE (`entry`='81087') AND (`patch`='10');
+
+update quest_template set type = 1 where entry = 60020;
+update item_template set display_id = 50663 where entry = 80626;
+UPDATE `item_template` SET `max_count`='1' WHERE (`entry`='80842') AND (`patch`='0');
+UPDATE `quest_template` SET `RequiredRaces`='418' WHERE (`entry`='1049') AND (`patch`='0');
+UPDATE `quest_template` SET `RequiredRaces`='589' WHERE entry in (2758, 2759);
+UPDATE `item_template` SET `required_reputation_rank`='4' WHERE (`entry`='80501') AND (`patch`='0');

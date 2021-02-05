@@ -109,9 +109,9 @@ ChatCommand * ChatHandler::getCommandTable()
 
     static ChatCommand castCommandTable[] =
     {
-        { "self",           SEC_ADMINISTRATOR,  false, &ChatHandler::HandleCastSelfCommand,               "", nullptr },
-        { "target",         SEC_ADMINISTRATOR,  false, &ChatHandler::HandleCastTargetCommand,             "", nullptr },
-        { "",               SEC_ADMINISTRATOR,  false, &ChatHandler::HandleCastCommand,                   "", nullptr },
+        { "self",           SEC_GAMEMASTER,  false, &ChatHandler::HandleCastSelfCommand,               "", nullptr },
+        { "target",         SEC_GAMEMASTER,  false, &ChatHandler::HandleCastTargetCommand,             "", nullptr },
+        { "",               SEC_GAMEMASTER,  false, &ChatHandler::HandleCastCommand,                   "", nullptr },
         { nullptr,          0,               false, nullptr,                                           "", nullptr }
     };
 
@@ -141,7 +141,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "deleted",        SEC_GAMEMASTER,     true, nullptr,                                          "", characterDeletedCommandTable},
         { "erase",          SEC_CONSOLE,        true,  &ChatHandler::HandleCharacterEraseCommand,      "", nullptr },
         { "rename",         SEC_GAMEMASTER,     true,  &ChatHandler::HandleCharacterRenameCommand,     "", nullptr },
-        { "reputation",     SEC_ADMINISTRATOR,  true,  &ChatHandler::HandleCharacterReputationCommand, "", nullptr },
+        { "reputation",     SEC_GAMEMASTER,  true,  &ChatHandler::HandleCharacterReputationCommand, "", nullptr },
         { "hasitem",        SEC_GAMEMASTER, true,  &ChatHandler::HandleCharacterHasItemCommand,    "", nullptr },
         { "fillflys",       SEC_GAMEMASTER,     true,  &ChatHandler::HandleCharacterFillFlysCommand,   "", nullptr },
         { "clean",          SEC_ADMINISTRATOR,  true,  nullptr,                                        "", characterCleanCommandTable },
