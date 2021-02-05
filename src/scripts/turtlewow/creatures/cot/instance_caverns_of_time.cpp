@@ -59,7 +59,7 @@ struct instance_caverns_of_time : public ScriptedInstance
         pPlayer->SetDisplayId(displayId);
     }
 
-    void OnPlayerLeave(Player* pPlayer)
+    void OnPlayerLeave(Player* pPlayer, bool bJustDestroy)
     {
         if (!pPlayer)
             return;
