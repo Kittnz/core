@@ -112,7 +112,7 @@ reqitemid2 = @required_item_2, reqitemcount2 = @required_item_2_count,
 reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
 reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
 nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
-nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
+nextquestinchain = @nextquestinchain, prevquestid = @prevquest
 where entry = @quest_entry;	 
 -- There's an NPC called Elodia. Elodia wants you to swim down in the ocean and bring her 20 Shimmering Shells. :shell:  She claims that those are VERY valuable pieces, yet people refused to see it, and she will pay you a lot of money for it. It needs to be a dumb mocking reference for bitcoins :slight_smile: You will receive some summer clothes for it.
 set @quest_entry = 80381;
@@ -187,7 +187,7 @@ reqitemid2 = @required_item_2, reqitemcount2 = @required_item_2_count,
 reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
 reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
 nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
-nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
+nextquestinchain = @nextquestinchain, prevquestid = @prevquest
 where entry = @quest_entry;	 
 -- There's an NPC called Risa Sandrocket, Goblin lady, she wants you to deliver invitation to the Beach Party to the following NPCs: Gazlowe, Baron Revilgaz, you will receive some summer clothing as reward.
 set @quest_entry = 80382;
