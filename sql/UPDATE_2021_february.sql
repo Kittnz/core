@@ -12,7 +12,11 @@ replace into creature_template values
 (80999, 0, 18354 , 0, 0, 0, 'Elodia', '', 0, 51, 51, 3632, 3632, 0, 0, 3026, 35, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 129, 174, 0, 230, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 67.32, 92.565, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 10, ''),
 (81000, 0, 18354 , 0, 0, 0, 'Quest trigger: invite Gazlowe', '', 0, 51, 51, 3632, 3632, 0, 0, 3026, 35, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 129, 174, 0, 230, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 67.32, 92.565, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 10, ''),
 (81001, 0, 18354 , 0, 0, 0, 'Quest trigger: invite Reviglaz', '', 0, 51, 51, 3632, 3632, 0, 0, 3026, 35, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 129, 174, 0, 230, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 67.32, 92.565, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 10, ''),
-(81002, 0, 18354 , 0, 0, 0, 'Quest trigger: save shark', '', 0, 51, 51, 3632, 3632, 0, 0, 3026, 35, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 129, 174, 0, 230, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 67.32, 92.565, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 10, '');
+(81002, 0, 18354 , 0, 0, 0, 'Quest trigger: save shark', '', 0, 51, 51, 3632, 3632, 0, 0, 3026, 35, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 129, 174, 0, 230, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 67.32, 92.565, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 10, ''),
+(81005, 0, 15595, 0, 0, 0, 'Shark', NULL, 0, 30, 45, 1264, 3564, 0, 0, 20, 188, 0, 1, 1.14286, 1, 20, 5, 0, 0, 1, 11, 11, 0, 44, 1, 2000, 2200, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 100, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, '', 0, 3, 0, 0, 1, 0, 0, 0, 0, 0, 2, 'npc_save_shark')
+
+update creature_template set npc_flags = 1 where entry = 81005;
+
 -- Quest rewards & quest-relate items:
 replace into item_template values 
 (81110, 0, 0, 0, 'Flourishing Lovely Rose', 'It won\'t last long, but it\'s lovely.', 50198, 1, 0, 1, 0, 0, 1, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL),
@@ -117,10 +121,10 @@ where entry = @quest_entry;
 set @quest_entry = 80381;
 set @quest_zone = 1446;
 set @title = 'Shellcoins';
-set @description = 'Everyone thinks I’m crazy, but I promise in like, 5 years, you’ll all be regretting it! I know for a fact that these shells will be a huge part of the new economy even if the so-called “economists” don’t believe me. The shimmering shells along the ocean floor, I call them “Shellcoins”, are going to be the next big thing. They all call me a fool for investing, but I’ll be filthy rich when the market blows up while they’ll be mining for my scraps.';
+set @description = 'Everyone thinks I’m crazy, but I promise in like, 5 years, you’ll all be regretting it! I know for a fact that these shells will be a huge part of the new economy even if the so-called “economists” don’t believe me.\n\nThe shimmering shells along the ocean floor, I call them “Shellcoins”, are going to be the next big thing.\n\nThey all call me a fool for investing, but I’ll be filthy rich when the market blows up while they’ll be mining for my scraps.';
 set @objective = 'Collect 20 Shimmering Shells to jumpstart the Shellcoin economy and return to Elodia.';
-set @completetext = 'Excellent work. I’ll give you a tour of the inside of my mansion when the Shellcoin value reaches 1000 gold. In the meantime, take some old hand-me-downs. They look like they might fit you.';
-set @incompletetext = 'What are you waiting for? Get in now. Buy buy buy! Hurry before the market value skyrockets!';
+set @completetext = 'Excellent work. I’ll give you a tour of the inside of my mansion when the Shellcoin value reaches 1000 gold.\n\nIn the meantime, take some old hand-me-downs. They look like they might fit you.';
+set @incompletetext = 'What are you waiting for? Get in now. Buy buy buy!\n\nHurry before the market value skyrockets!';
 set @faction_id = 0;
 set @faction_count = 0;
 set @xp_or_money = 850;
@@ -192,9 +196,9 @@ where entry = @quest_entry;
 set @quest_entry = 80382;
 set @quest_zone = 1446;
 set @title = 'VIP Invites';
-set @description = 'What would a beach party be without a couple of trade princes, huh? I need big names at this event or else it’ll be a flop! Put on your fanciest clothes and deliver these special invitations out to Trade Prince Gazlowe in Ratchet and Baron Revilgaz in Booty Bay. If they come, then more will be sure to follow. More bodies at the beach equals more gold lining my pockets, see? I’ll give you something real nice in return.';
+set @description = 'What would a beach party be without a couple of trade princes, huh? I need big names at this event or else it’ll be a flop!\n\nPut on your fanciest clothes and deliver these special invitations out to Trade Prince Gazlowe in Ratchet and Baron Revilgaz in Booty Bay.\n\nIf they come, then more will be sure to follow. More bodies at the beach equals more gold lining my pockets, see? I’ll give you something real nice in return.';
 set @objective = 'Deliver Risa’s beach party invitations to Gazlowe in Ratchet and Baron Revilgaz in Booty Bay.';
-set @completetext = 'Sweet, my party’s gonna rock! I can’t wait to see what kind of clout these boys bring. If they’re really high rollers, they’ll buy a whole bar’s worth of booze.\n\nThanks again for your help. Why don’t you join us on this beautiful beach front? Not looking like that, though. You’ve gotta have the right stitching to kick it with me. Take these and put them on.';
+set @completetext = 'Sweet, my party’s gonna rock! I can’t wait to see what kind of clout these boys bring.\n\nIf they’re really high rollers, they’ll buy a whole bar’s worth of booze.\n\nThanks again for your help. Why don’t you join us on this beautiful beach front? Not looking like that, though. You’ve gotta have the right stitching to kick it with me. Take these and put them on.';
 set @incompletetext = 'Hurry up or you’ll cramp my style! I don’t want these guys to think I left their invites for last.';
 set @faction_id = 0;
 set @faction_count = 0;
@@ -269,9 +273,9 @@ where entry = @quest_entry;
 set @quest_entry = 80383;
 set @quest_zone = 1446;
 set @title = 'Sharks Are Friends, Not Food';
-set @description = 'Do you see that dorsal fin rising out of the water? That’s a shark. It appears to have come too close to the shoreline which is an anomaly for this species. I’m a marine biologist by trade and I’ve been watching that poor creature for a while now. There could be a number of reasons that it’s trapped here, but the goblins want to kill it like a stuck pig! They think it’s a threat to people in the water, but it’s probably just scared and confused. I can’t let that happen. I need you to go into the water and shoo the shark away.';
+set @description = 'Do you see that dorsal fin rising out of the water? That’s a shark.\n\nIt appears to have come too close to the shoreline which is an anomaly for this species. I’m a marine biologist by trade and I’ve been watching that poor creature for a while now.\n\nThere could be a number of reasons that it’s trapped here, but the goblins want to kill it like a stuck pig!\n\nThey think it’s a threat to people in the water, but it’s probably just scared and confused.\n\nI can’t let that happen. I need you to go into the water and shoo the shark away.';
 set @objective = 'Scare the shark in the water away from the shore, then return to Toci Flipper.';
-set @completetext = 'You did it! Now that shark can get back to its lifestyle as the apex predator in the sea instead of being strung up like a trophy which is what these goblins would have done to it. I have a little memento for you as a reward. Take good care of it, okay?';
+set @completetext = 'You did it! Now that shark can get back to its lifestyle as the apex predator in the sea instead of being strung up like a trophy which is what these goblins would have done to it.\n\nI have a little memento for you as a reward. Take good care of it, okay?';
 set @incompletetext = 'Did you know that sharks have skeletons made of cartilage and not bones?';
 set @faction_id = 0;
 set @faction_count = 0;
