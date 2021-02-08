@@ -205,6 +205,29 @@ bool GossipSelect_npc_frosty(Player* pPlayer, Creature* pCreature, uint32 /*uiSe
     return true;
 }
 
+bool GossipHello_npc_save_shark(Player* pPlayer, Creature* pCreature)
+{
+    if (pPlayer->GetQuestStatus(50315) == QUEST_STATUS_INCOMPLETE)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Boo!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->SEND_GOSSIP_MENU(1, pCreature->GetGUID());
+        return true;
+    }
+    return false;
+}
+
+bool GossipSelect_npc_save_shark(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+            CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(81002);
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+    }
+
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
 struct npc_chihkoaAI : public ScriptedPetAI
 {
     npc_chihkoaAI(Creature* pCreature) : ScriptedPetAI(pCreature)
@@ -934,6 +957,12 @@ void AddSC_random()
     newscript->Name = "npc_frosty";
     newscript->pGossipHello = &GossipHello_npc_frosty;
     newscript->pGossipSelect = &GossipSelect_npc_frosty;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_save_shark";
+    newscript->pGossipHello = &GossipHello_npc_save_shark;
+    newscript->pGossipSelect = &GossipSelect_npc_save_shark;
     newscript->RegisterSelf();
 
     newscript = new Script;
