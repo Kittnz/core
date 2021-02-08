@@ -8,7 +8,7 @@ replace into creature_template values
 (80995, 0, 7032 , 0, 0, 0, 'Nanze', '', 0, 51, 51, 3632, 3632, 0, 0, 3026, 35, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 129, 174, 0, 230, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 67.32, 92.565, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 10, ''),
 (80996, 0, 7021 , 0, 0, 0, 'Kestren Rainmight', '', 0, 51, 51, 3632, 3632, 0, 0, 3026, 35, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 129, 174, 0, 230, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 67.32, 92.565, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 10, ''),
 (80997, 0, 7000 , 0, 0, 0, 'Toci Flipper', '', 0, 51, 51, 3632, 3632, 0, 0, 3026, 35, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 129, 174, 0, 230, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 67.32, 92.565, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 10, ''),
-(80998, 0, 18335 , 0, 0, 0, 'Xecc', '', 0, 51, 51, 3632, 3632, 0, 0, 3026, 35, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 129, 174, 0, 230, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 67.32, 92.565, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 10, ''),
+(80998, 0, 18355 , 0, 0, 0, 'Xecc', '', 0, 51, 51, 3632, 3632, 0, 0, 3026, 35, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 129, 174, 0, 230, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 67.32, 92.565, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 10, ''),
 (80999, 0, 18354 , 0, 0, 0, 'Elodia', '', 0, 51, 51, 3632, 3632, 0, 0, 3026, 35, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 129, 174, 0, 230, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 67.32, 92.565, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 10, ''),
 (81000, 0, 18354 , 0, 0, 0, 'Quest trigger: invite Gazlowe', '', 0, 51, 51, 3632, 3632, 0, 0, 3026, 35, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 129, 174, 0, 230, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 67.32, 92.565, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 10, ''),
 (81001, 0, 18354 , 0, 0, 0, 'Quest trigger: invite Reviglaz', '', 0, 51, 51, 3632, 3632, 0, 0, 3026, 35, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 129, 174, 0, 230, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 67.32, 92.565, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 10, ''),
@@ -42,11 +42,10 @@ replace into `gameobject_loot_template` (`entry`, `item`, `ChanceOrQuestChance`,
 -- There's an NPC called Lizzi Saltcrabs, she's a Goblin lady at the beach. She's a BBQ master and she's out of meat for it. Make a quest please to bring her 20 Tender Crab Meat, 20 Crocolisk Meat and 10 Cheap Beers, 10 Stag Meat (sold randomly in the world). You will receive Picnic Basket for this.
 set @quest_entry = 80380;
 set @quest_zone = 1446;
-set @title = 'Placeholder';
-set @description = 'Placeholder';
-set @objective = 'Placeholder';
-set @completetext = 'Placeholder';
-set @incompletetext = 'Placeholder';
+set @title = 'Lizzi’s Competitor;';
+set @description = 'I’ve got a whole party of people to feed, but one of my rivals cut me off from all of my meat suppliers! Whoever it is must be jealous of my deccadent, fall-off-the-bone ribs and beer-battered seafood supreme. With a name like mine, I have big boots to fill.\n\nI’ll make sure they regret crossing me by making the best barbeque anyone’s ever tasted! What’s in it for you? Well, I have a Saltcrabs family secret that I can impart to you. It’ll help you turn any venue into a great place for a picnic.\n\nRound up all of the little crab and crocolisk families and tell them to say their goodbyes, then bring me their insides. The stag meat that I need comes from a few vendors that you’ll find on your adventures, and I need some beer for basting. Hurry up, I gotta cook all of this before the party starts!';
+set @completetext = 'You got the goods? Sweet! I’ll get cookin’, but first, I promised you the Saltcrabs formula for a perfect brunch, didn’t I? Well first, you set down a blanket, then you put up an umbrella! That was worth the effort, now wasn’t it? Thanks for the meats, $N. I’m gonna knock the pants off these partygoers!';
+set @incompletetext = 'Time’s a-tickin’, bub. Can’t waste what’s left of it before this big palooza so I can surprise the culprit with my amazing spicy crab souffle. It’s a cutthroat cooking competition out here that drives people to do these crazy things, $N, but I’m always one step ahead.';
 set @faction_id = 0;
 set @faction_count = 0;
 set @xp_or_money = 850;
@@ -117,11 +116,11 @@ where entry = @quest_entry;
 -- There's an NPC called Elodia. Elodia wants you to swim down in the ocean and bring her 20 Shimmering Shells. :shell:  She claims that those are VERY valuable pieces, yet people refused to see it, and she will pay you a lot of money for it. It needs to be a dumb mocking reference for bitcoins :slight_smile: You will receive some summer clothes for it.
 set @quest_entry = 80381;
 set @quest_zone = 1446;
-set @title = 'Placeholder';
-set @description = 'Placeholder';
-set @objective = 'Placeholder';
-set @completetext = 'Placeholder';
-set @incompletetext = 'Placeholder';
+set @title = 'Shellcoins';
+set @description = 'Everyone thinks I’m crazy, but I promise in like, 5 years, you’ll all be regretting it! I know for a fact that these shells will be a huge part of the new economy even if the so-called “economists” don’t believe me. The shimmering shells along the ocean floor, I call them “Shellcoins”, are going to be the next big thing. They all call me a fool for investing, but I’ll be filthy rich when the market blows up while they’ll be mining for my scraps.';
+set @objective = 'Collect 20 Shimmering Shells to jumpstart the Shellcoin economy and return to Elodia.';
+set @completetext = 'Excellent work. I’ll give you a tour of the inside of my mansion when the Shellcoin value reaches 1000 gold. In the meantime, take some old hand-me-downs. They look like they might fit you.';
+set @incompletetext = 'What are you waiting for? Get in now. Buy buy buy! Hurry before the market value skyrockets!';
 set @faction_id = 0;
 set @faction_count = 0;
 set @xp_or_money = 850;
@@ -192,11 +191,11 @@ where entry = @quest_entry;
 -- There's an NPC called Risa Sandrocket, Goblin lady, she wants you to deliver invitation to the Beach Party to the following NPCs: Gazlowe, Baron Revilgaz, you will receive some summer clothing as reward.
 set @quest_entry = 80382;
 set @quest_zone = 1446;
-set @title = 'Placeholder';
-set @description = 'Placeholder';
-set @objective = 'Placeholder';
-set @completetext = 'Placeholder';
-set @incompletetext = 'Placeholder';
+set @title = 'VIP Invites';
+set @description = 'What would a beach party be without a couple of trade princes, huh? I need big names at this event or else it’ll be a flop! Put on your fanciest clothes and deliver these special invitations out to Trade Prince Gazlowe in Ratchet and Baron Revilgaz in Booty Bay. If they come, then more will be sure to follow. More bodies at the beach equals more gold lining my pockets, see? I’ll give you something real nice in return.';
+set @objective = 'Deliver Risa’s beach party invitations to Gazlowe in Ratchet and Baron Revilgaz in Booty Bay.';
+set @completetext = 'Sweet, my party’s gonna rock! I can’t wait to see what kind of clout these boys bring. If they’re really high rollers, they’ll buy a whole bar’s worth of booze.\n\nThanks again for your help. Why don’t you join us on this beautiful beach front? Not looking like that, though. You’ve gotta have the right stitching to kick it with me. Take these and put them on.';
+set @incompletetext = 'Hurry up or you’ll cramp my style! I don’t want these guys to think I left their invites for last.';
 set @faction_id = 0;
 set @faction_count = 0;
 set @xp_or_money = 850;
@@ -269,11 +268,11 @@ where entry = @quest_entry;
 -- There's an NPC called Toci Flipper, little Gnome lady, she wants you to save the shark. Shark is swimming too close to a coast and Goblin Bruisers want to kill it, yet she believes shark means no harm. Find Shark and scare her away. You will get a small Shark pet as reward.
 set @quest_entry = 80383;
 set @quest_zone = 1446;
-set @title = 'Placeholder';
-set @description = 'Placeholder';
-set @objective = 'Placeholder';
-set @completetext = 'Placeholder';
-set @incompletetext = 'Placeholder';
+set @title = 'Sharks Are Friends, Not Food';
+set @description = 'Do you see that dorsal fin rising out of the water? That’s a shark. It appears to have come too close to the shoreline which is an anomaly for this species. I’m a marine biologist by trade and I’ve been watching that poor creature for a while now. There could be a number of reasons that it’s trapped here, but the goblins want to kill it like a stuck pig! They think it’s a threat to people in the water, but it’s probably just scared and confused. I can’t let that happen. I need you to go into the water and shoo the shark away.';
+set @objective = 'Scare the shark in the water away from the shore, then return to Toci Flipper.';
+set @completetext = 'You did it! Now that shark can get back to its lifestyle as the apex predator in the sea instead of being strung up like a trophy which is what these goblins would have done to it. I have a little memento for you as a reward. Take good care of it, okay?';
+set @incompletetext = 'Did you know that sharks have skeletons made of cartilage and not bones?';
 set @faction_id = 0;
 set @faction_count = 0;
 set @xp_or_money = 850;
@@ -340,7 +339,7 @@ reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
 reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
 nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
 nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
-objectivetext1='Scare shark away'
+objectivetext1='Scare the shark away'
 where entry = @quest_entry;	
 
 UPDATE `quest_template` SET `RewItemId2`='0', `RewItemCount2`='0' WHERE (`entry`='50315') AND (`patch`='0');
@@ -353,3 +352,4 @@ UPDATE `item_template` SET `max_count`='1' WHERE (`entry`='80842') AND (`patch`=
 UPDATE `quest_template` SET `RequiredRaces`='418' WHERE (`entry`='1049') AND (`patch`='0');
 UPDATE `quest_template` SET `RequiredRaces`='589' WHERE entry in (2758, 2759);
 UPDATE `item_template` SET `required_reputation_rank`='4' WHERE (`entry`='80501') AND (`patch`='0');
+
