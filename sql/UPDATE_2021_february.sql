@@ -357,3 +357,4 @@ UPDATE `quest_template` SET `RequiredRaces`='418' WHERE (`entry`='1049') AND (`p
 UPDATE `quest_template` SET `RequiredRaces`='589' WHERE entry in (2758, 2759);
 UPDATE `item_template` SET `required_reputation_rank`='4' WHERE (`entry`='80501') AND (`patch`='0');
 
+update item_template set subclass = 1 where inventory_type = 16 and subclass = 0;
