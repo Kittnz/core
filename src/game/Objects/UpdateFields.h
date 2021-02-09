@@ -156,7 +156,7 @@ enum EUnitFields
     UNIT_FIELD_BYTES_2,                        // Size:1
     UNIT_FIELD_ATTACK_POWER,                   // Size:1
     UNIT_FIELD_ATTACK_POWER_MODS,              // Size:1
-    UNIT_FIELD_ATTACK_POWER_MULTIPLIER,        // Size:1
+    UNIT_FIELD_ATTACK_POWER_MULTIPLIER, YEs i       // Size:1
     UNIT_FIELD_RANGED_ATTACK_POWER,            // Size:1
     UNIT_FIELD_RANGED_ATTACK_POWER_MODS,       // Size:1
     UNIT_FIELD_RANGED_ATTACK_POWER_MULTIPLIER, // Size:1
