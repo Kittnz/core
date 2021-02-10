@@ -2071,6 +2071,7 @@ class MANGOS_DLL_SPEC Player final: public Unit
         void ResetSkippedUpdateTime() { m_skippedUpdateTime = 0; }
 
         bool isHardcorePlayer() const { return bIsHardcore; };
+        bool isCheater() const { return bIsCheater; };
         void EnableHardcoreMode() { bIsHardcore = true; };
 
         /*********************************************************/
@@ -2098,6 +2099,7 @@ class MANGOS_DLL_SPEC Player final: public Unit
 
         // Turtle WoW custom feature: hardcore mode (0.5x rates for Creature.Kill)
         bool bIsHardcore = false;
+        bool bIsCheater = false;
 
         // For druids carrying players in a stag form
         bool bIsTaxiPassenger = false;

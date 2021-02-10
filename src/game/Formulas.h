@@ -141,6 +141,10 @@ namespace MaNGOS
 				{
 					xp_gain *= 0.5f;
 				}
+                if (pl->isCheater())
+                {
+                    xp_gain *= 5.0f;
+                }
                 return (uint32)(xp_gain);
             }
             
