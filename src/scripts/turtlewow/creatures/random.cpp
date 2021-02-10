@@ -228,6 +228,45 @@ bool GossipSelect_npc_save_shark(Player* pPlayer, Creature* pCreature, uint32 /*
     return true;
 }
 
+bool GossipHello_npc_vip_invite(Player* pPlayer, Creature* pCreature)
+{
+    if (pPlayer->GetQuestStatus(80382) == QUEST_STATUS_INCOMPLETE)
+    {
+        switch (pCreature->GetEntry())
+        {
+        case 3391: // Gazlowe
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Sandrocket is hosting a beach party, please, pay her a visit!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            break;
+        case 2496: // Baron Revilgaz
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Risa Sandrocket is hosting a beach party, please, pay her a visit!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+            break;        
+        }
+
+        pPlayer->SEND_GOSSIP_MENU(pCreature->GetDefaultGossipMenuId(), pCreature->GetGUID());
+        return true;
+    }
+    return false;
+}
+
+bool GossipSelect_npc_vip_invite(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pCreature->MonsterSay("Ha! I will be there.");
+        CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(81000);
+        pPlayer->KilledMonster(cInfo, ObjectGuid());
+    }
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
+    {
+        pCreature->MonsterSay("Ha! I will be there.");
+        CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(81001);
+        pPlayer->KilledMonster(cInfo, ObjectGuid());
+    }
+
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
 struct npc_chihkoaAI : public ScriptedPetAI
 {
     npc_chihkoaAI(Creature* pCreature) : ScriptedPetAI(pCreature)
@@ -963,6 +1002,12 @@ void AddSC_random()
     newscript->Name = "npc_save_shark";
     newscript->pGossipHello = &GossipHello_npc_save_shark;
     newscript->pGossipSelect = &GossipSelect_npc_save_shark;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_vip_invite";
+    newscript->pGossipHello = &GossipHello_npc_vip_invite;
+    newscript->pGossipSelect = &GossipSelect_npc_vip_invite;
     newscript->RegisterSelf();
 
     newscript = new Script;
