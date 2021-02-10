@@ -207,7 +207,7 @@ bool GossipSelect_npc_frosty(Player* pPlayer, Creature* pCreature, uint32 /*uiSe
 
 bool GossipHello_npc_save_shark(Player* pPlayer, Creature* pCreature)
 {
-    if (pPlayer->GetQuestStatus(50315) == QUEST_STATUS_INCOMPLETE)
+    if (pPlayer->GetQuestStatus(80383) == QUEST_STATUS_INCOMPLETE)
     {
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Boo!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
         pPlayer->SEND_GOSSIP_MENU(1, pCreature->GetGUID());
@@ -222,6 +222,8 @@ bool GossipSelect_npc_save_shark(Player* pPlayer, Creature* pCreature, uint32 /*
     {
             CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(81002);
             pPlayer->KilledMonster(cInfo, ObjectGuid());
+            pCreature->MonsterTextEmote("Shark looks at you like you would be food.");
+            pCreature->GetMotionMaster()->MoveConfused();
     }
 
     pPlayer->CLOSE_GOSSIP_MENU();
