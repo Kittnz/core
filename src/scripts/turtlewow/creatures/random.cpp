@@ -207,10 +207,10 @@ bool GossipSelect_npc_frosty(Player* pPlayer, Creature* pCreature, uint32 /*uiSe
 
 bool GossipHello_npc_save_shark(Player* pPlayer, Creature* pCreature)
 {
-    if (pPlayer->GetQuestStatus(80383) == QUEST_STATUS_INCOMPLETE)
+    if (!pPlayer->GetQuestRewardStatus(80383))
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Boo!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-        pPlayer->SEND_GOSSIP_MENU(1, pCreature->GetGUID());
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Shark seems friendly and you are lured to it's soft skin to touch and pet it.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->SEND_GOSSIP_MENU(90670, pCreature->GetGUID());
         return true;
     }
     return false;
@@ -222,7 +222,7 @@ bool GossipSelect_npc_save_shark(Player* pPlayer, Creature* pCreature, uint32 /*
     {
             CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(81002);
             pPlayer->KilledMonster(cInfo, ObjectGuid());
-            pCreature->MonsterTextEmote("Shark looks at you like you would be food.");
+            pCreature->MonsterTextEmote("Shark seems eager to touch and you'd swear it could send out a satisfied purring were it a cat. Shark's skin is soft to the touch and seems to be irritating it a bit. You could tell from that fast tail swing on it's way off.");
             pCreature->GetMotionMaster()->MoveConfused();
     }
 
@@ -243,24 +243,22 @@ bool GossipHello_npc_vip_invite(Player* pPlayer, Creature* pCreature)
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Risa Sandrocket is hosting a beach party, please, pay her a visit!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
             break;        
         }
-
-        pPlayer->SEND_GOSSIP_MENU(pCreature->GetDefaultGossipMenuId(), pCreature->GetGUID());
+        pPlayer->SEND_GOSSIP_MENU(1, pCreature->GetGUID());
         return true;
     }
-    return false;
 }
 
 bool GossipSelect_npc_vip_invite(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        pCreature->MonsterSay("Ha! I will be there.");
+        pCreature->MonsterSay("Ah, so Risa is now the one who throw out these parties nowadays, eh? That's very nice to know, thank for that, my friend! Knowledge is power and power can bring you a lot of gold, right? Exactly. I'll see you around, partner.");
         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(81000);
         pPlayer->KilledMonster(cInfo, ObjectGuid());
     }
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
     {
-        pCreature->MonsterSay("Ha! I will be there.");
+        pCreature->MonsterSay("A beach party you say? By your looks there's not only me who will attend and definitely not only a party will be held either… A valuable and very much intersting invitation indeed! Vaulable is above all else! I'll take a look for sure, ya can bet on that!");
         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(81001);
         pPlayer->KilledMonster(cInfo, ObjectGuid());
     }

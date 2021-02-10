@@ -1,7 +1,7 @@
 -- Creatures:
 replace into creature_template values 
 (80990, 0, 15323, 0, 0, 0, 'Risa Sandrocket', '', 0, 51, 51, 3632, 3632, 0, 0, 3026, 35, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 129, 174, 0, 230, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 67.32, 92.565, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 10, ''),
-(80991, 0, 15266, 0, 0, 0, 'Lizzi Saltcrabs', '', 0, 51, 51, 3632, 3632, 0, 0, 3026, 35, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 129, 174, 0, 230, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 67.32, 92.565, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 10, ''),
+(80991, 0, 15300, 0, 0, 0, 'Lizzi Saltcrabs', '', 0, 51, 51, 3632, 3632, 0, 0, 3026, 35, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 129, 174, 0, 230, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 67.32, 92.565, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 10, ''),
 (80992, 0, 2218 , 0, 0, 0, 'Aelienne Summerbreeze', '', 0, 51, 51, 3632, 3632, 0, 0, 3026, 35, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 129, 174, 0, 230, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 67.32, 92.565, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 10, ''),
 (80993, 0, 7186 , 0, 0, 0, 'Ben Goldflame', '', 0, 51, 51, 3632, 3632, 0, 0, 3026, 35, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 129, 174, 0, 230, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 67.32, 92.565, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 10, ''),
 (80994, 0, 7172 , 0, 0, 0, 'Wildixle Fizzmind', '', 0, 51, 51, 3632, 3632, 0, 0, 3026, 35, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 129, 174, 0, 230, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 67.32, 92.565, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 10, ''),
@@ -57,10 +57,11 @@ replace into `gameobject_loot_template` (`entry`, `item`, `ChanceOrQuestChance`,
 -- There's an NPC called Lizzi Saltcrabs, she's a Goblin lady at the beach. She's a BBQ master and she's out of meat for it. Make a quest please to bring her 20 Tender Crab Meat, 20 Crocolisk Meat and 10 Cheap Beers, 10 Stag Meat (sold randomly in the world). You will receive Picnic Basket for this.
 set @quest_entry = 80380;
 set @quest_zone = 1446;
-set @title = 'Lizzi’s Competitor;';
+set @title = 'Lizzi’s Competitor';
 set @description = 'I’ve got a whole party of people to feed, but one of my rivals cut me off from all of my meat suppliers!\n\nWhoever it is must be jealous of my deccadent, fall-off-the-bone ribs and beer-battered seafood supreme. With a name like mine, I have big boots to fill.\n\nI’ll make sure they regret crossing me by making the best barbeque anyone’s ever tasted! What’s in it for you? Well, I have a Saltcrabs family secret that I can impart to you. It’ll help you turn any venue into a great place for a picnic.\n\nRound up all of the little crab and crocolisk families and tell them to say their goodbyes, then bring me their insides\n\nThe stag meat that I need comes from a few vendors that you’ll find on your adventures, and I need some beer for basting.\n\nHurry up, I gotta cook all of this before the party starts!';
 set @completetext = 'You got the goods? Sweet! I’ll get cookin’, but first, I promised you the Saltcrabs formula for a perfect brunch, didn’t I? Well first, you set down a blanket, then you put up an umbrella! That was worth the effort, now wasn’t it? Thanks for the meats, $N. I’m gonna knock the pants off these partygoers!';
 set @incompletetext = 'Time’s a-tickin’, bub. Can’t waste what’s left of it before this big palooza so I can surprise the culprit with my amazing spicy crab souffle. It’s a cutthroat cooking competition out here that drives people to do these crazy things, $N, but I’m always one step ahead.';
+set @objective = 'Help Lizzi to prepare the best barbeque anyone’s ever tasted.';
 set @faction_id = 0;
 set @faction_count = 0;
 set @xp_or_money = 850;
@@ -238,12 +239,12 @@ set @reward_item_1_count = 0;
 set @reward_item_2_count = 0;
 set @reward_item_3_count = 0;
 set @reward_item_4_count = 0;
-set @creature_to_kill_1 = 81000;
-set @creature_to_kill_2 = 81001; 
+set @creature_to_kill_1 = 81110;
+set @creature_to_kill_2 = 0; 
 set @creature_to_kill_3 = 0;
 set @creature_to_kill_4 = 0;
 set @creature_to_kill_1_count = 1;
-set @creature_to_kill_2_count = 1;
+set @creature_to_kill_2_count = 0;
 set @creature_to_kill_3_count = 0;
 set @creature_to_kill_4_count = 0;
 set @required_item_1 = 0; 
@@ -654,4 +655,6 @@ replace into item_template values
  '0', '1', NULL);
  replace into creature_loot_template values (14269, 81020, 10, 6, 1, 1, 0, 0, 60);
  replace into creature_loot_template values (14269, 81021, 10, 6, 1, 1, 0, 0, 35);
- 
+
+replace into broadcast_text (ID, MaleText) values (90670, 'Shark looks at you with curiosity and pry at your hands as if expecting something.');
+replace into npc_text (ID, BroadcastTextID0) values (90670, 90670);
