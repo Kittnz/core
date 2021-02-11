@@ -10,3 +10,4 @@ replace into item_template values
  '0', '1', 'item_cenarion_hold_teleport');
  
  UPDATE `item_template` SET `duration`='604800' WHERE (`entry`='81140') AND (`patch`='0');
+ update item_template set display_id = 40160 where entry = 81113;
