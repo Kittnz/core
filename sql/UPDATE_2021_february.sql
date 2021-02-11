@@ -569,7 +569,7 @@ update item_template set bonding = 2, disenchant_id = 43 where entry = 80830;
 update item_template set bonding = 2, disenchant_id = 43 where entry = 80829;
 -- Malor the Zealous New Items
 replace into item_template values
- ('81121', '0', '4', '4', 'Helmet of the Scarlet Avenger', 'A blazing heart and a pile of heretics at your feet.', '40193', '3', '0', '1', '20094', '20094', '1', '-1', '-1', '62',
+ ('81131', '0', '4', '4', 'Helmet of the Scarlet Avenger', 'A blazing heart and a pile of heretics at your feet.', '40193', '3', '0', '1', '20094', '20094', '1', '-1', '-1', '62',
  '57', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '13', '5', '10',
  '7', '14', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '519', '0', '0', '0',
@@ -632,7 +632,7 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '5', '1', '0', '0', '40', '0', '0', '0', '0', '49', '0', '0', '0',
  '0', '1', NULL);
  -- Malor the Zealous Item Drop SQL
-replace into creature_loot_template values (11032, 81121, 10, 6, 1, 1, 0, 0, 10);
+replace into creature_loot_template values (11032, 81131, 10, 6, 1, 1, 0, 0, 10);
 replace into creature_loot_template values (11032, 81122, 10, 6, 1, 1, 0, 0, 15);
 replace into creature_loot_template values (11032, 81123, 10, 6, 1, 1, 0, 0, 15);
 replace into creature_loot_template values (11032, 81016, 10, 6, 1, 1, 0, 0, 15);
