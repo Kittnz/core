@@ -13,9 +13,14 @@ replace into creature_template values
 (81000, 0, 18354 , 0, 0, 0, 'Quest trigger: invite Gazlowe', '', 0, 51, 51, 3632, 3632, 0, 0, 3026, 35, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 129, 174, 0, 230, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 67.32, 92.565, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 10, ''),
 (81001, 0, 18354 , 0, 0, 0, 'Quest trigger: invite Reviglaz', '', 0, 51, 51, 3632, 3632, 0, 0, 3026, 35, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 129, 174, 0, 230, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 67.32, 92.565, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 10, ''),
 (81002, 0, 18354 , 0, 0, 0, 'Quest trigger: save shark', '', 0, 51, 51, 3632, 3632, 0, 0, 3026, 35, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 129, 174, 0, 230, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 67.32, 92.565, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 10, ''),
-(81005, 0, 15595, 0, 0, 0, 'Shark', NULL, 0, 30, 45, 1264, 3564, 0, 0, 20, 188, 0, 1, 1.14286, 1, 20, 5, 0, 0, 1, 11, 11, 0, 44, 1, 2000, 2200, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 100, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, '', 0, 3, 0, 0, 1, 0, 0, 0, 0, 0, 2, 'npc_save_shark');
+(81006, 0, 15595, 0, 0, 0, 'Shark', NULL, 0, 30, 45, 1264, 3564, 0, 0, 20, 188, 0, 1, 1.14286, 1, 20, 5, 0, 0, 1, 11, 11, 0, 44, 1, 2000, 2200, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 100, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, '', 0, 3, 0, 0, 1, 0, 0, 0, 0, 0, 2, 'npc_save_shark');
 
-update creature_template set npc_flags = 1 where entry = 81005;
+update creature_template set npc_flags = 1 where entry = 81006;
+
+
+REPLACE INTO `creature_template` VALUES (81005, 0, 18295, 0, 0, 0, 'Frayfeather Hippogryph', '', 0, 1, 1, 64, 64, 0, 0, 0, 35, 0, 1, 1.14286, 1, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, '');
+
+
 
 -- Quest rewards & quest-relate items:
 replace into item_template values 
@@ -373,7 +378,9 @@ update item_template set subclass = 1 where inventory_type = 16 and subclass = 0
 
 update creature_template set script_name = 'npc_vip_invite' where entry in (3391, 2496);
 
-REPLACE INTO `item_template` VALUES (81120, 0, 13, 0, 'Glyph of Cheating.', 'Bad.', 7694, 1, 0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 0, 0, 0, 0, 0, 1, NULL);
+REPLACE INTO `item_template` VALUES (81120, 10, 15, 0, 'Frayfeather Hippogryph', 'Ancient mounts of the Highborne, they can rarely be found due to their latent magical powers.', 19528, 4, 64, 1, 0, 0, 0, -1, -1, 20, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 46221, 0, 0, 0, 0, 330, 3000, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+
+REPLACE INTO `item_template` VALUES (81130, 0, 13, 0, 'Glyph of Cheating.', 'Bad.', 7694, 1, 0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 0, 0, 0, 0, 0, 1, NULL);
 
 update item_template set spellid_2 = 21230, spelltrigger_2 = 2 where entry = 80826;
 
@@ -632,6 +639,12 @@ replace into creature_loot_template values (11032, 81016, 10, 6, 1, 1, 0, 0, 15)
 replace into creature_loot_template values (11032, 81017, 10, 6, 1, 1, 0, 0, 15);
 replace into creature_loot_template values (11032, 81018, 10, 6, 1, 1, 0, 0, 15);
 replace into creature_loot_template values (11032, 81019, 10, 6, 1, 1, 0, 0, 15);
+
+delete from creature_loot_template where item = 81121;
+
+
+REPLACE INTO `item_template` VALUES (81121, 10, 15, 0, 'Cenarion War Hippogryph', 'Members of the Cenarion Circle have shared a long and prosperous partnership with their hippogryph allies. When conflict is unavoidable, the Cenarion War Hippogryph is called into service.', 19570, 4, 64, 1, 0, 0, 0, -1, -1, 20, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 46221, 0, 0, 0, 0, 330, 3000, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+
 
 -- New Rare Mob Drops
 -- Seeker Aqualon Items
