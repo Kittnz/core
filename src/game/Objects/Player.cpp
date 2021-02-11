@@ -15019,7 +15019,7 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
     bIsHardcore = GetItemCount(50010, true) > 0;
 
     // For lazy me
-    bIsCheater = GetItemCount(81120, true) > 0;
+    bIsCheater = GetItemCount(81130, true) > 0;
 
     return true;
 }
