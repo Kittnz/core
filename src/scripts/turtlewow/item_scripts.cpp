@@ -1090,7 +1090,7 @@ bool ItemUseSpell_item_cenarion_hold_teleport(Player* pPlayer, Item* pItem, cons
         return false;
     }
 
-    pPlayer->TeleportTo(1, -6831.5F, 748.4F, 42.6F, 3.6F);
+    pPlayer->TeleportTo(1, -7074.00F, -4868.94F, 0.5F, 3.7F);
     return true;
 }
 
