@@ -9,5 +9,7 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', 'item_cenarion_hold_teleport');
  
- UPDATE `item_template` SET `duration`='604800' WHERE (`entry`='81140') AND (`patch`='0');
- update item_template set display_id = 18466 where entry = 81113;
+UPDATE `item_template` SET `duration`='604800' WHERE (`entry`='81140') AND (`patch`='0');
+update item_template set display_id = 18466 where entry = 81113;
+update item_template set display_id = 28577 where entry = 80544;
+ 
