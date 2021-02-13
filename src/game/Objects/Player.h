@@ -1067,7 +1067,10 @@ class MANGOS_DLL_SPEC Player final: public Unit
         // Turtle WoW, we use items as currency:
         bool RemoveItemCurrency(uint32 itemId, uint32 count);
         void MailHardcoreModeRewards(uint32 level);
+        // Titles
         bool IsCityProtector();
+        bool IsScarabLord();
+        // ---
         void MailCityProtectorScroll();
         void MailRidingTurtleGift();
         void MailOpenHouseGift();

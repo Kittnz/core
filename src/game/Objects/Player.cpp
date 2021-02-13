@@ -14615,13 +14615,6 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
     // Setting City Rank
     if (fields[59].GetBool())
         SetByteValue(PLAYER_BYTES_3, 2, getRace());
-    else
-        SetByteValue(PLAYER_BYTES_3, 2, 0);
-
-    // Add Scarab Lord title
-    // TODO: Figure what to do if no PvP rank at all?
-    //if (HasItemCount(21176, 1, 1))
-    //    SetByteValue(PLAYER_BYTES_3, 2, 15);
 
     m_honorMgr.Load(holder->GetResult(PLAYER_LOGIN_QUERY_LOADHONORCP));
     _LoadBoundInstances(holder->GetResult(PLAYER_LOGIN_QUERY_LOADBOUNDINSTANCES));
@@ -15020,6 +15013,11 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
 
     // For lazy me
     bIsCheater = GetItemCount(81130, true) > 0;
+
+    // Titles
+
+    if (HasItemCount(21176, 1, 0)) // Scarab Lord
+        SetByteValue(PLAYER_BYTES_3, 2, 15);
 
     return true;
 }
@@ -21708,9 +21706,10 @@ void Player::MailHardcoreModeRewards(uint32 level)
     }
 }
 
-bool Player::IsCityProtector() { return GetByteValue(PLAYER_BYTES_3, 2) > 0; }
+bool Player::IsCityProtector() { return GetByteValue(PLAYER_BYTES_3, 2) == getRace(); }
+bool Player::IsScarabLord() { return HasItemCount(21176, 1, 0); }
 
-void Player::MailCityProtectorScroll()
+void Player::MailCityProtectorScroll()  
 {
     std::string subject = "City Protector";
     std::string message = "Defend the weak, protect both young and old, never desert your friends. Give justice to all, be fearless in battle and always ready to defend the right.";
