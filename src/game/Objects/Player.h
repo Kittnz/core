@@ -1067,9 +1067,11 @@ class MANGOS_DLL_SPEC Player final: public Unit
         // Turtle WoW, we use items as currency:
         bool RemoveItemCurrency(uint32 itemId, uint32 count);
         void MailHardcoreModeRewards(uint32 level);
+        void AnnounceMortalModeLevelUp(uint32 level);
         // Titles
         bool IsCityProtector();
         bool IsScarabLord();
+        bool IsImmortal();
         // ---
         void MailCityProtectorScroll();
         void MailRidingTurtleGift();
@@ -2074,8 +2076,10 @@ class MANGOS_DLL_SPEC Player final: public Unit
         void ResetSkippedUpdateTime() { m_skippedUpdateTime = 0; }
 
         bool isHardcorePlayer() const { return bIsHardcore; };
+        bool isMortal() const { return bIsMortal; };
         bool isCheater() const { return bIsCheater; };
         void EnableHardcoreMode() { bIsHardcore = true; };
+        void EnableMortalMode() { bIsMortal = true; };
 
         /*********************************************************/
         /***                 MISC GAME SYSTEMS                 ***/
@@ -2102,6 +2106,7 @@ class MANGOS_DLL_SPEC Player final: public Unit
 
         // Turtle WoW custom feature: hardcore mode (0.5x rates for Creature.Kill)
         bool bIsHardcore = false;
+        bool bIsMortal = false;
         bool bIsCheater = false;
 
         // For druids carrying players in a stag form
