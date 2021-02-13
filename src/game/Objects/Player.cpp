@@ -2866,6 +2866,23 @@ void Player::GiveLevel(uint32 level)
     if (bIsHardcore)
         MailHardcoreModeRewards(level);
 
+    if (bIsMortal)
+    {
+        AnnounceMortalModeLevelUp(level);
+        if (level == 60)
+        {
+            SetByteValue(PLAYER_BYTES_3, 2, 52);
+            uint32 itemEntry = 80187;
+            std::string subject = "Tabard of the Immortal Guardian";
+            std::string message = "Greetings, hero! Like you I undertook the same journey you have. I weathered the greatest dangers and foes without ever losing consciousness or falling to the brink of death.\n\nNow I stand immortal, just as you do. I have reached the peak of my power!\n\nTo celebrate your ascension in the ranks of immortality, I have attached a tabard that only we can wear.\n\n Wear it with pride and continue to avoid death! If you continue on this path, we shall meet one day.";
+            Item* ToMailItem = Item::CreateItem(itemEntry, 1, this);
+            ToMailItem->SaveToDB();
+            MailDraft(subject, sObjectMgr.CreateItemText(message))
+                .AddItem(ToMailItem)
+                .SendMailTo(this, MailSender(MAIL_CREATURE, uint32(16547), MAIL_STATIONERY_DEFAULT), MAIL_CHECK_MASK_COPIED, 0, 30 * DAY);
+        }
+    }
+
     // Quick-fix for Slow and Steady Quest.
     if (level == 2)
         RemoveQuest(60118);
@@ -4608,6 +4625,12 @@ void Player::KillPlayer()
 
     // update visibility
     UpdateObjectVisibility();
+
+    if (bIsMortal && getLevel() < 60)
+    {
+        sWorld.SendWorldText(LANG_SYSTEMMESSAGE, "A tragedy has happened, %s has fallen in combat in mortal mode at level %u, may this sacrifice not be forgotten.", GetName(), getLevel());
+        RemoveItem(80188, 1, 1);
+    }
 }
 
 Corpse* Player::CreateCorpse()
@@ -15010,6 +15033,7 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
 
     // Turtle WoW custom feature : hardcore mode(0.5x rates for Creature.Kill)
     bIsHardcore = GetItemCount(50010, true) > 0;
+    bIsMortal = GetItemCount(80188, true) > 0;
 
     // For lazy me
     bIsCheater = GetItemCount(81130, true) > 0;
@@ -15018,6 +15042,9 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
 
     if (HasItemCount(21176, 1, 0)) // Scarab Lord
         SetByteValue(PLAYER_BYTES_3, 2, 15);
+
+    if (HasItemCount(80187, 1, 0) && getLevel() == 60) // Immortal (temp. check)
+        SetByteValue(PLAYER_BYTES_3, 2, 52);
 
     return true;
 }
@@ -21706,7 +21733,27 @@ void Player::MailHardcoreModeRewards(uint32 level)
     }
 }
 
+void Player::AnnounceMortalModeLevelUp(uint32 level)
+{
+    switch (level)
+    {
+    case 20:
+    case 30:
+    case 40:
+    case 50:
+        // todo: move line to mangos_string.
+        sWorld.SendWorldText(LANG_SYSTEMMESSAGE, "%s has reached level %u in mortal mode! Their ascendancy towards immortality continues, however so too does the dangers they will face!", GetName(), level);
+        break;
+    case 60:
+        sWorld.SendWorldText(LANG_SYSTEMMESSAGE, "%s has transcended death and reached level 60 on mortal mode without dying once! %s shall henceforth be known as the Immortal!", GetName(), GetName());
+        break;
+    default:
+        return;
+    }
+}
+
 bool Player::IsCityProtector() { return GetByteValue(PLAYER_BYTES_3, 2) == getRace(); }
+bool Player::IsImmortal() { return GetByteValue(PLAYER_BYTES_3, 2) == 52; }
 bool Player::IsScarabLord() { return HasItemCount(21176, 1, 0); }
 
 void Player::MailCityProtectorScroll()  
