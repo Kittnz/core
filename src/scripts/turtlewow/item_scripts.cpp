@@ -1082,18 +1082,6 @@ bool ItemUseSpell_item_saddle(Player* pPlayer, Item* pItem, const SpellCastTarge
     return true;
 }
 
-bool ItemUseSpell_item_cenarion_hold_teleport(Player* pPlayer, Item* pItem, const SpellCastTargets&)
-{
-    if (pPlayer->isInCombat() || pPlayer->IsBeingTeleported() || (pPlayer->getDeathState() == CORPSE) || pPlayer->IsMoving())
-    {
-        pPlayer->GetSession()->SendNotification("Can't use right now.");
-        return false;
-    }
-
-    pPlayer->TeleportTo(1, -7074.00F, -4868.94F, 0.5F, 3.7F);
-    return true;
-}
-
 bool GossipHello_npc_barber(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->HasItemCount(50600, 1) || pPlayer->getRace() == RACE_GOBLIN)
@@ -1619,11 +1607,6 @@ void AddSC_item_scripts()
     newscript = new Script;
     newscript->Name = "shop_racechange";
     newscript->pItemUseSpell = &ItemUseSpell_shop_racechange;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "item_cenarion_hold_teleport";
-    newscript->pItemUseSpell = &ItemUseSpell_item_cenarion_hold_teleport;
     newscript->RegisterSelf();
 
     newscript = new Script;

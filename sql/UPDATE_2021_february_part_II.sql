@@ -12,6 +12,7 @@ replace into item_template values
 UPDATE `item_template` SET `duration`='604800' WHERE (`entry`='81140') AND (`patch`='0');
 update item_template set display_id = 18466 where entry = 81113;
 update item_template set display_id = 28577 where entry = 80544;
+update item_template set script_name=null where entry = 80544;
  
  
 replace into item_template values
@@ -84,49 +85,52 @@ REPLACE INTO `item_template` VALUES (80187, 3, 4, 0, 'Tabard of the Immortal Gua
 REPLACE INTO `item_template` VALUES (80188, 0, 13, 0, 'Glyph of Mortality', 'This item is a reminder that nothing lasts forever.', 7694, 3, 0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 0, 0, 0, 0, 0, 1, NULL);
 
 -- Human Male
-UPDATE `creature_model_info` SET `bounding_radius`=0.306, `combat_reach`=1.5 WHERE `display_id`=49;
+UPDATE `creature_model_info` SET `bounding_radius`=0.306, `combat_reach`=1.5 WHERE `modelid`=49;
 
 -- Human Female
-UPDATE `creature_model_info` SET `bounding_radius`=0.208, `combat_reach`=1.5 WHERE `display_id`=50;
+UPDATE `creature_model_info` SET `bounding_radius`=0.208, `combat_reach`=1.5 WHERE `modelid`=50;
 
 -- Orc Male
-UPDATE `creature_model_info` SET `bounding_radius`=0.372, `combat_reach`=1.5 WHERE `display_id`=51;
+UPDATE `creature_model_info` SET `bounding_radius`=0.372, `combat_reach`=1.5 WHERE `modelid`=51;
 
 -- Orc Female
-UPDATE `creature_model_info` SET `bounding_radius`=0.236, `combat_reach`=1.5 WHERE `display_id`=52;
+UPDATE `creature_model_info` SET `bounding_radius`=0.236, `combat_reach`=1.5 WHERE `modelid`=52;
 
 -- Dwarf Male
-UPDATE `creature_model_info` SET `bounding_radius`=0.347, `combat_reach`=1.5 WHERE `display_id`=53;
+UPDATE `creature_model_info` SET `bounding_radius`=0.347, `combat_reach`=1.5 WHERE `modelid`=53;
 
 -- Dwarf Female
-UPDATE `creature_model_info` SET `bounding_radius`=0.347, `combat_reach`=1.5 WHERE `display_id`=54;
+UPDATE `creature_model_info` SET `bounding_radius`=0.347, `combat_reach`=1.5 WHERE `modelid`=54;
 
 -- Night Elf Male
-UPDATE `creature_model_info` SET `bounding_radius`=0.389, `combat_reach`=1.5 WHERE `display_id`=55;
+UPDATE `creature_model_info` SET `bounding_radius`=0.389, `combat_reach`=1.5 WHERE `modelid`=55;
 
 -- Night Elf Female
-UPDATE `creature_model_info` SET `bounding_radius`=0.306, `combat_reach`=1.5 WHERE `display_id`=56;
+UPDATE `creature_model_info` SET `bounding_radius`=0.306, `combat_reach`=1.5 WHERE `modelid`=56;
 
 -- Undead Male
-UPDATE `creature_model_info` SET `bounding_radius`=0.383, `combat_reach`=1.5 WHERE `display_id`=57;
+UPDATE `creature_model_info` SET `bounding_radius`=0.383, `combat_reach`=1.5 WHERE `modelid`=57;
 
 -- Undead Female
-UPDATE `creature_model_info` SET `bounding_radius`=0.383, `combat_reach`=1.5 WHERE `display_id`=58;
+UPDATE `creature_model_info` SET `bounding_radius`=0.383, `combat_reach`=1.5 WHERE `modelid`=58;
 
 -- Tauren Male
-UPDATE `creature_model_info` SET `bounding_radius`=0.9747, `combat_reach`=4.05 WHERE `display_id`=59;
+UPDATE `creature_model_info` SET `bounding_radius`=0.9747, `combat_reach`=4.05 WHERE `modelid`=59;
 
 -- Tauren Female
-UPDATE `creature_model_info` SET `bounding_radius`=0.8725, `combat_reach`=3.75 WHERE `display_id`=60;
+UPDATE `creature_model_info` SET `bounding_radius`=0.8725, `combat_reach`=3.75 WHERE `modelid`=60;
 
 -- Gnome Male
-UPDATE `creature_model_info` SET `bounding_radius`=0.3519, `combat_reach`=1.725 WHERE `display_id`=1563;
+UPDATE `creature_model_info` SET `bounding_radius`=0.3519, `combat_reach`=1.725 WHERE `modelid`=1563;
 
 -- Gnome Female
-UPDATE `creature_model_info` SET `bounding_radius`=0.3519, `combat_reach`=1.725 WHERE `display_id`=1564;
+UPDATE `creature_model_info` SET `bounding_radius`=0.3519, `combat_reach`=1.725 WHERE `modelid`=1564;
 
 -- Troll Male
-UPDATE `creature_model_info` SET `bounding_radius`=0.306, `combat_reach`=1.5 WHERE `display_id`=1478;
+UPDATE `creature_model_info` SET `bounding_radius`=0.306, `combat_reach`=1.5 WHERE `modelid`=1478;
 
 -- Troll Female
-UPDATE `creature_model_info` SET `bounding_radius`=0.306, `combat_reach`=1.5 WHERE `display_id`=1479;
+UPDATE `creature_model_info` SET `bounding_radius`=0.306, `combat_reach`=1.5 WHERE `modelid`=1479;
+
+update item_template set script_name=null where entry = 80544;
+update item_template set description =  "Broken. Doesn't look usable." where entry = 80544;
