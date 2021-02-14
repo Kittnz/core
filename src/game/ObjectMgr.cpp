@@ -1525,7 +1525,7 @@ void ObjectMgr::LoadCreatureModelInfo()
                 const_cast<CreatureModelInfo*>(minfo)->bounding_radius = DEFAULT_WORLD_OBJECT_SIZE;
             }
 
-            if (minfo->combat_reach != 1.5f)
+            if (minfo->combat_reach <= 0.0f)
             {
                 sLog.outErrorDb("Table `creature_model_info` have wrong combat_reach %f for character race %u female model id %u, expected always 1.5f", minfo->combat_reach, race, raceEntry->model_f);
                 const_cast<CreatureModelInfo*>(minfo)->combat_reach = 1.5f;
@@ -1548,7 +1548,7 @@ void ObjectMgr::LoadCreatureModelInfo()
                 const_cast<CreatureModelInfo*>(minfo)->bounding_radius = DEFAULT_WORLD_OBJECT_SIZE;
             }
 
-            if (minfo->combat_reach != 1.5f)
+            if (minfo->combat_reach <= 0.0f)
             {
                 sLog.outErrorDb("Table `creature_model_info` have wrong combat_reach %f for character race %u male model id %u, expected always 1.5f", minfo->combat_reach, race, raceEntry->model_m);
                 const_cast<CreatureModelInfo*>(minfo)->combat_reach = 1.5f;
