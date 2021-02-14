@@ -20,3 +20,6 @@ INSERT INTO `creature` VALUES (203309, 12396, 0, 0, 0, 0, 0, 0, -11863.4, -3146.
 -- Spawn Manahound
 INSERT INTO `creature` VALUES (203281, 8718, 0, 0, 0, 0, 0, 0, -11824.3, -3215.66, -30.9589, 5.23638, 900, 900, 40, 100, 0, 1, 0, 0, 0, 10);
 INSERT INTO `creature` VALUES (203304, 8718, 0, 0, 0, 0, 0, 0, -11827.2, -3154.9, -29.7552, 4.30938, 900, 900, 40, 100, 0, 1, 0, 0, 0, 10);
+
+-- Dark Iron Taskmaster Death should only target Slave Worker.
+INSERT INTO `spell_script_target` (`entry`, `type`, `targetEntry`, `conditionId`, `inverseEffectMask`, `build_min`, `build_max`) VALUES (12613, 1, 5843, 0, 0, 0, 5875);
