@@ -8619,6 +8619,9 @@ void Unit::SetDeathState(DeathState s)
         i_motionMaster.MoveIdle();
         StopMoving(true);
 
+        // Powers are cleared on death.
+        SetPower(getPowerType(), 0);
+
         ModifyAuraState(AURA_STATE_HEALTHLESS_20_PERCENT, false);
         ModifyAuraState(AURA_STATE_HEALTHLESS_15_PERCENT, false);
         ModifyAuraState(AURA_STATE_HEALTHLESS_10_PERCENT, false);
