@@ -42,3 +42,5 @@ replace into item_template values
  update item_template set spelltrigger_2 = 1  where entry = 80826;
  update item_template set spellid_1 = 9416 where entry = 81018;
  update item_template set spellid_1 = 0 where entry = 80715;
+ 
+ UPDATE `item_template` SET `inventory_type`='15' WHERE (`entry`='80546') AND (`patch`='0');
