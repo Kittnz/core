@@ -421,9 +421,25 @@ void WorldSession::HandlePlayerLoginOpcode(WorldPacket & recv_data)
     ObjectGuid playerGuid;
     recv_data >> playerGuid;
 
-    if (PlayerLoading() || GetPlayer() != NULL)
+    bool mortality_status_dead = false;
+
+    QueryResult* result = CharacterDatabase.PQuery("SELECT mortality_status FROM characters WHERE guid='%u'", playerGuid);
+    if (result)
     {
-        sLog.outError("Player tryes to login again, AccountId = %d", GetAccountId());
+        Field* fields = result->Fetch();
+        uint32 mortality_status = fields[0].GetUInt32();
+
+        if (mortality_status == 3)
+            mortality_status_dead = true;
+
+        delete result;
+    }
+
+    if (PlayerLoading() || GetPlayer() != NULL || mortality_status_dead)
+    {
+        WorldPacket data(SMSG_CHARACTER_LOGIN_FAILED, 1);
+        data << (uint8)1;
+        SendPacket(&data);
         return;
     }
     if (!playerGuid.IsPlayer())
