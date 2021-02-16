@@ -2871,6 +2871,7 @@ void Player::GiveLevel(uint32 level)
         AnnounceMortalModeLevelUp(level);
         if (level == 60)
         {
+            CharacterDatabase.PExecute("UPDATE `characters` SET mortality_status = 2 WHERE `guid` = '%u'", GetGUIDLow()); // 0: not mortal 1: mortal 2: immortal 3: dead
             SetByteValue(PLAYER_BYTES_3, 2, 52);
             uint32 itemEntry = 80187;
             std::string subject = "Tabard of the Immortal Guardian";
@@ -4628,8 +4629,9 @@ void Player::KillPlayer()
 
     if (bIsMortal && getLevel() < 60)
     {
-        sWorld.SendWorldText(LANG_SYSTEMMESSAGE, "A tragedy has happened, %s has fallen in combat in mortal mode at level %u, may this sacrifice not be forgotten.", GetName(), getLevel());
-        RemoveItem(80188, 1, 1);
+        CharacterDatabase.PExecute("UPDATE `characters` SET mortality_status = 3 WHERE `guid` = '%u'", GetGUIDLow()); // 0: not mortal 1: mortal 2: immortal 3: dead
+        sWorld.SendWorldText(50300, GetName(), getLevel());
+        DestroyItemCount(80188, -1, true, false);
     }
 }
 
@@ -21741,11 +21743,10 @@ void Player::AnnounceMortalModeLevelUp(uint32 level)
     case 30:
     case 40:
     case 50:
-        // todo: move line to mangos_string.
-        sWorld.SendWorldText(LANG_SYSTEMMESSAGE, "%s has reached level %u in mortal mode! Their ascendancy towards immortality continues, however so too does the dangers they will face!", GetName(), level);
+        sWorld.SendWorldText(50301, GetName(), getLevel() + 10);
         break;
     case 60:
-        sWorld.SendWorldText(LANG_SYSTEMMESSAGE, "%s has transcended death and reached level 60 on mortal mode without dying once! %s shall henceforth be known as the Immortal!", GetName(), GetName());
+        sWorld.SendWorldText(50302, GetName(), GetName());
         break;
     default:
         return;
