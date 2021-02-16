@@ -266,3 +266,9 @@ UPDATE `creature_loot_template` SET `ChanceOrQuestChance` = 0.01 WHERE `item` = 
 UPDATE `creature_loot_template` SET `ChanceOrQuestChance` = 0.01 WHERE `item` = 6661 AND `entry` = 5847;
 UPDATE `creature_loot_template` SET `ChanceOrQuestChance` = 0.01 WHERE `item` = 6661 AND `entry` = 5865;
 UPDATE `creature_loot_template` SET `ChanceOrQuestChance` = 0.01 WHERE `item` = 6661 AND `entry` = 6020;
+
+update item_template set display_id = 7694 where entry = 51702;
+update item_template set display_id = 40005 where entry = 81098;
+update item_template set quality = 1 where entry = 50521;
+
+UPDATE `item_template` SET `sheath`='2' WHERE (`entry`='80542') AND (`patch`='0');
