@@ -48,8 +48,8 @@ replace into item_template values
 -- Mortal mode stuff:
  
 replace into `mangos_string` (`entry`, `content_default`) VALUES 
-(50300, 'A tragedy has happened, %s has fallen in combat in mortal mode at level %u, may this sacrifice not be forgotten.'),
-(50301, '%s has reached level %u in mortal mode! Their ascendancy towards immortality continues, however so too does the dangers they will face'),
+(50300, 'A tragedy has occurred. %s has fallen in combat with mortal mode enabled at level %u. May this sacrifice not be forgotten.'),
+(50301, '%s has reached level %u in mortal mode! Their ascendance towards immortality continues, however, so do the dangers they will face'),
 (50302, '%s has transcended death and reached level 60 on mortal mode without dying once! %s shall henceforth be known as the Immortal!');
 
 -- Apply once:
