@@ -44,3 +44,14 @@ replace into item_template values
  update item_template set spellid_1 = 0 where entry = 80715;
  
  UPDATE `item_template` SET `inventory_type`='15' WHERE (`entry`='80546') AND (`patch`='0');
+
+-- Mortal mode stuff:
+ 
+replace into `mangos_string` (`entry`, `content_default`) VALUES 
+(50300, 'A tragedy has happened, %s has fallen in combat in mortal mode at level %u, may this sacrifice not be forgotten.'),
+(50301, '%s has reached level %u in mortal mode! Their ascendancy towards immortality continues, however so too does the dangers they will face'),
+(50302, '%s has transcended death and reached level 60 on mortal mode without dying once! %s shall henceforth be known as the Immortal!');
+
+-- Apply once:
+-- ALTER TABLE `characters` ADD `mortality_status` TINYINT(3) NOT NULL DEFAULT '0' AFTER `ignore_titles`;
+-- 0: not mortal 1: mortal 2: immortal 3: dead
