@@ -274,7 +274,7 @@ update item_template set quality = 1 where entry = 50521;
 UPDATE `item_template` SET `sheath`='2' WHERE (`entry`='80542') AND (`patch`='0');
 
 replace into item_template values
- ('81142', '0', '4', '0', 'Qiraji Ceremonial Shirt', 'February 13, 2021 — The day I defeated C\'thun (some other people were there too).', '8646', '3', '65568', '1', '0', '0', '4', '-1', '-1', '0',
+ ('81142', '0', '4', '0', 'Qiraji Ceremonial Shirt', 'February 13, 2021 — The day the Old God C\'thun was vanquished by me (some other people were there too).', '40164', '3', '65568', '1', '0', '0', '4', '-1', '-1', '0',
  '0', '0', '0', '0', '0', '0', '0', '0', '1', '1', '0', '0', '0', '0', '0',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1',
@@ -282,3 +282,6 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '7', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
+ 
+ delete from creature_template where entry = 50016;
+ delete from quest_template where entry in (50224, 50223, 50218, 50216, 50217, 	50219, );
