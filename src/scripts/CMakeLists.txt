@@ -292,21 +292,22 @@ set (SCRIPTS_SRCS
 
     turtlewow/creatures/random.cpp
     turtlewow/creatures/npc_turtle.cpp
-    turtlewow/creatures/npc_zebrian.cpp 
-    turtlewow/creatures/npc_drogon.cpp 
+    turtlewow/creatures/npc_zebrian.cpp
+    turtlewow/creatures/npc_drogon.cpp
     turtlewow/creatures/npc_battlemaster.cpp
     turtlewow/creatures/npc_arena.cpp
-    turtlewow/creatures/boss_pompa.cpp 
-    turtlewow/creatures/boss_turtlhu.cpp 
-    turtlewow/creatures/boss_snowball.cpp 
+    turtlewow/creatures/boss_pompa.cpp
+    turtlewow/creatures/boss_turtlhu.cpp
+    turtlewow/creatures/boss_snowball.cpp
     turtlewow/creatures/boss_nerubian_overseer.cpp
+    turtlewow/creatures/boss_dark_reaver.cpp
     turtlewow/creatures/instance_stormwind_vaults.cpp
 
-    turtlewow/creatures/cot/black_morass/boss_gerastrasz.cpp 
-    turtlewow/creatures/cot/instance_caverns_of_time.cpp 
-    turtlewow/creatures/cot/instance_caverns_of_time.h 
-    turtlewow/creatures/cot/black_morass/boss_chromie.cpp 
-    turtlewow/creatures/cot/black_morass/boss_chronormu.cpp   
+    turtlewow/creatures/cot/black_morass/boss_gerastrasz.cpp
+    turtlewow/creatures/cot/instance_caverns_of_time.cpp
+    turtlewow/creatures/cot/instance_caverns_of_time.h
+    turtlewow/creatures/cot/black_morass/boss_chromie.cpp
+    turtlewow/creatures/cot/black_morass/boss_chronormu.cpp
 
     turtlewow/mirage_raceway/miracle_raceaway.cpp
     turtlewow/transmog/transmog.cpp
