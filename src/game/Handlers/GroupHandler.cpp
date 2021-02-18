@@ -76,6 +76,13 @@ void WorldSession::HandleGroupInviteOpcode(WorldPacket & recv_data)
         return;
     }
 
+    // Only non HC or HC players can group together
+    if ((GetPlayer()->isMortal() ^ player->isMortal()))
+    {
+        SendPartyResult(PARTY_OP_INVITE, membername, ERR_NOT_IN_GROUP);
+        return;
+    }
+
     // Can't group with
     if (!sWorld.getConfig(CONFIG_BOOL_ALLOW_TWO_SIDE_INTERACTION_GROUP) && !GetPlayer()->IsDiplomat() && GetPlayer()->GetTeam() != player->GetTeam())
     {
