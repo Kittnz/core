@@ -40,6 +40,9 @@
 // void called when player click on auctioneer npc
 void WorldSession::HandleAuctionHelloOpcode(WorldPacket & recv_data)
 {
+    if (GetPlayer()->isMortal())
+        return;
+
     ObjectGuid auctioneerGuid;                              // NPC guid
     recv_data >> auctioneerGuid;
 
