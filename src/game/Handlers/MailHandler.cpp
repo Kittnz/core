@@ -195,6 +195,14 @@ void WorldSession::HandleSendMail(WorldPacket & recv_data)
 
     if (req->receiverPtr)
     {
+        // Only non HC or HC players can send mails between them
+        if (GetPlayer()->isMortal() ^ req->receiverPtr->isMortal())
+        {
+            pl->SendMailResult(0, MAIL_SEND, MAIL_ERR_RECIPIENT_NOT_FOUND);
+            delete req;
+            return;
+        }
+
         MasterPlayer* receiverMasterPlayer = req->receiverPtr->GetSession()->GetMasterPlayer();
         ASSERT(receiverMasterPlayer);
         req->rcTeam = receiverMasterPlayer->GetTeam();
