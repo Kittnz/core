@@ -630,6 +630,13 @@ void WorldSession::HandleInitiateTradeOpcode(WorldPacket& recvPacket)
         return;
     }
 
+    // Only non HC or HC players can trade between them
+    if (_player->isMortal() ^ pOther->isMortal())
+    {
+        SendTradeStatus(TRADE_STATUS_BUSY);
+        return;
+    }
+
     // OK start trade
     _player->m_trade = new TradeData(_player, pOther);
     pOther->m_trade = new TradeData(pOther, _player);
