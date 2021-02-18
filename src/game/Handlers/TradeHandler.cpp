@@ -630,7 +630,7 @@ void WorldSession::HandleInitiateTradeOpcode(WorldPacket& recvPacket)
         return;
     }
 
-    // Only non HC or HC players can trade between them
+    // Only non MM or MM players can trade between them
     if (_player->isMortal() ^ pOther->isMortal())
     {
         SendTradeStatus(TRADE_STATUS_BUSY);

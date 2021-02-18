@@ -195,7 +195,7 @@ void WorldSession::HandleSendMail(WorldPacket & recv_data)
 
     if (req->receiverPtr)
     {
-        // Only non HC or HC players can send mails between them
+        // Only non MM or MM players can send mails between them
         if (GetPlayer()->isMortal() ^ req->receiverPtr->isMortal())
         {
             pl->SendMailResult(0, MAIL_SEND, MAIL_ERR_RECIPIENT_NOT_FOUND);
