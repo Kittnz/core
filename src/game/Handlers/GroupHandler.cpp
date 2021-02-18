@@ -77,7 +77,7 @@ void WorldSession::HandleGroupInviteOpcode(WorldPacket & recv_data)
     }
 
     // Only non HC or HC players can group together
-    if ((GetPlayer()->isMortal() ^ player->isMortal()))
+    if (GetPlayer()->isMortal() ^ player->isMortal())
     {
         SendPartyResult(PARTY_OP_INVITE, membername, ERR_NOT_IN_GROUP);
         return;
