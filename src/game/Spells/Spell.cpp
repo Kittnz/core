@@ -1973,9 +1973,11 @@ void Spell::SetTargetMap(SpellEffectIndex effIndex, uint32 targetMode, UnitList&
                 case 25676:                                 // Drain Mana
                 case 25754:
                     unMaxTargets = 6;
+                    break;
                 case 26457:                                 // Drain Mana
                 case 26559:
                     unMaxTargets = 12;
+                    break;
                 case 10258:                                 // Awaken Vault Warder (Uldaman)
                     unMaxTargets = 2;
                     break;
