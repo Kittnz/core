@@ -394,3 +394,27 @@ replace into creature_loot_template values (80936, 51748, 10.5, 3, 1, 1, 0, 0, 1
 replace into creature_loot_template values (80936, 51749, 10.5, 3, 1, 1, 0, 0, 10); 
 
 update item_template set display_id = 30608, description = 'Dead or alive, you\'re coming with me.' where entry = 81090;
+
+REPLACE INTO `creature_template` VALUES (51688, 0, 2663, 0, 0, 0, 'Lamella', 'Mage Apprentice', 0, 20, 20, 919, 919, 0, 0, 852, 68, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 24, 31, 0, 90, 1, 2000, 2000, 1, 36864, 0, 0, 0, 0, 0, 0, 31.856, 43.802, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 5659, 0, 0, 0, 0, 524298, '');
+
+update creature_template set equipment_id = 2358 where entry = 51688;
+
+REPLACE INTO `creature_template` VALUES (51689, 0, 7624, 0, 0, 0, 'Bumper', 'Mail Armor Merchant', 9509, 30, 30, 1605, 1605, 0, 0, 1200, 104, 16388, 1, 1.14286, 1.35, 20, 5, 0, 0, 1, 42, 53, 0, 122, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 45.144, 62.073, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 524298, '');
+
+REPLACE INTO `npc_vendor` VALUES (51689, 285, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (51689, 286, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (51689, 287, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (51689, 718, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (51689, 847, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (51689, 848, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (51689, 849, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (51689, 850, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (51689, 1202, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (51689, 1845, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (51689, 1846, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (51689, 1852, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (51689, 1853, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (51689, 2445, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (51689, 17187, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (51689, 17188, 0, 0, 0, 0);
+
