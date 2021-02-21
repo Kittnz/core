@@ -434,7 +434,7 @@ struct SkillStatusData
 typedef std::unordered_map<uint32, SkillStatusData> SkillStatusMap;
 
 #define GNOMECAR_DISPLAYID 2490
-#define GOBLINCAR_DISPLAYID 10318
+#define GOBLINCAR_DISPLAYID 18320
 
 enum PlayerSlots
 {
