@@ -1139,6 +1139,8 @@ CREATE TABLE IF NOT EXISTS `worldstates` (
   UNIQUE KEY `key_entry` (`entry`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
+ALTER TABLE `characters` ADD `mortality_status` TINYINT(3) NOT NULL DEFAULT '0' AFTER `ignore_titles`;
+
 -- Daten Export vom Benutzer nicht ausgewählt
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
