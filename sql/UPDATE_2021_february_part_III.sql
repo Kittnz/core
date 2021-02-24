@@ -470,4 +470,7 @@ replace into custom_mount_entry_relation values (81158, 81017);
 
 REPLACE INTO `item_template` VALUES (51644, 0, 15, 0, 'Kazgrim\'s Silver Coin', 'I wish to be the true warchief.', 9649, 2, 0, 1, 4000, 4000, 0, -1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
 
+-- reaver fix
+
+update creature_template set health_min = 120000, health_max = 15000, nature_res = 30, shadow_res = 30, frost_res = 30, arcane_res = 30, armor = 5560 where entry = 80936;
 
