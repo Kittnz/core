@@ -468,3 +468,6 @@ replace into custom_mount_entry_relation values (81158, 81017);
 -- .cast 46202 Armored Frostmane Riding Bear
 -- .cast 46204 Armored Amani Riding Bear
 
+REPLACE INTO `item_template` VALUES (51644, 0, 15, 0, 'Kazgrim\'s Silver Coin', 'I wish to be the true warchief.', 9649, 2, 0, 1, 4000, 4000, 0, -1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+
+
