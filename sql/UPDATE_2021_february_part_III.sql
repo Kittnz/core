@@ -472,5 +472,5 @@ REPLACE INTO `item_template` VALUES (51644, 0, 15, 0, 'Kazgrim\'s Silver Coin', 
 
 -- reaver fix
 
-update creature_template set health_min = 120000, health_max = 15000, nature_res = 30, shadow_res = 30, frost_res = 30, arcane_res = 30, armor = 5560 where entry = 80936;
+update creature_template set health_min = 120000, health_max = 150000, nature_res = 30, shadow_res = 30, frost_res = 30, arcane_res = 30, armor = 5560 where entry = 80936;
 
