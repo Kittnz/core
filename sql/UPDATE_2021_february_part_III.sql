@@ -418,3 +418,45 @@ REPLACE INTO `npc_vendor` VALUES (51689, 2445, 0, 0, 0, 0);
 REPLACE INTO `npc_vendor` VALUES (51689, 17187, 0, 0, 0, 0);
 REPLACE INTO `npc_vendor` VALUES (51689, 17188, 0, 0, 0, 0);
 
+-- New non-combat pets:
+
+replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1, spellcooldown_1) values
+(81150, 15, 2, 'Phoenix Hatchling', 'A child of phoenix god Al\'ar, the hatchling takes flight immediately after birth.', 34374, 3, 1, 28505, 1500);
+replace into creature_template (entry, display_id1, display_id2, display_id3, name, subname, level_min, level_max, health_min, health_max, faction, script_name, scale) values
+(81008, 18179, 0, 0, 'Phoenix Hatchling', '', '1', '1', '64', '64', '35', '', 0.3);
+replace into custom_pet_entry_relation (item_entry, creature_entry) values 
+(81150, 81008);
+
+replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1, spellcooldown_1) values
+(81151, 15, 2, 'Spirit Darter', 'This unique species of faerie dragon is not usually found on Azeroth.', 22717, 3, 1, 28505, 1500);
+replace into creature_template (entry, display_id1, display_id2, display_id3, name, subname, level_min, level_max, health_min, health_max, faction, script_name, scale) values
+(81009, 18425, 0, 0, 'Spirit Darter', '', '1', '1', '64', '64', '35', '', 0.5);
+replace into custom_pet_entry_relation (item_entry, creature_entry) values 
+(81151, 81009);
+
+replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1, spellcooldown_1) values
+(81152, 15, 2, 'Tiny Pterodactyl', '', 20629, 2, 1, 28505, 1500);
+replace into creature_template (entry, display_id1, display_id2, display_id3, name, subname, level_min, level_max, health_min, health_max, faction, script_name, scale) values
+(81010, 18371, 0, 0, 'Tiny Pterodactyl', '', '1', '1', '64', '64', '35', '', 0.3);
+replace into custom_pet_entry_relation (item_entry, creature_entry) values 
+(81152, 81010);
+
+REPLACE INTO `item_template` VALUES (81153, 10, 15, 0, 'Reins of the Purple War Bear', 'This ursine mount\'s swiftness is enhanced by its heavy armor.', 28952, 4, 64, 1, 0, 0, 0, -1, -1, 20, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 46204, 0, 0, 0, 0, 330, 3000, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+REPLACE INTO `creature_template` VALUES (81012, 0, 18488, 0, 0, 0, 'Armored Purple War Bear', '', 0, 1, 1, 64, 64, 0, 0, 0, 35, 0, 1, 1.14286, 1, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, '');
+replace into custom_mount_entry_relation values (81153, 81012);
+
+REPLACE INTO `item_template` VALUES (81154, 10, 15, 0, 'Reins of the Brown War Bear', 'This ursine mount\'s swiftness is enhanced by its heavy armor.', 28952, 4, 64, 1, 0, 0, 0, -1, -1, 20, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 46204, 0, 0, 0, 0, 330, 3000, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+REPLACE INTO `creature_template` VALUES (81013, 0, 18481, 0, 0, 0, 'Armored Brown War Bear', '', 0, 1, 1, 64, 64, 0, 0, 0, 35, 0, 1, 1.14286, 1, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, '');
+replace into custom_mount_entry_relation values (81154, 81013);
+
+REPLACE INTO `item_template` VALUES (81155, 10, 15, 0, 'Reins of the Red War Bear', 'This ursine mount\'s swiftness is enhanced by its heavy armor.', 28952, 4, 64, 1, 0, 0, 0, -1, -1, 20, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 46204, 0, 0, 0, 0, 330, 3000, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+REPLACE INTO `creature_template` VALUES (81014, 0, 18484, 0, 0, 0, 'Armored Red War Bear', '', 0, 1, 1, 64, 64, 0, 0, 0, 35, 0, 1, 1.14286, 1, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, '');
+replace into custom_mount_entry_relation values (81155, 81014);
+
+REPLACE INTO `item_template` VALUES (81156, 10, 15, 0, 'Reins of the Armored Dragonhawk', 'Dragonhawks are among the deadliest known predators. They are able to spot prey from great distances, rush in, and rend with both talon and beak.', 34380, 4, 64, 1, 0, 0, 0, -1, -1, 20, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 46204, 0, 0, 0, 0, 330, 3000, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+REPLACE INTO `creature_template` VALUES (81015, 0, 18480, 0, 0, 0, 'Armored Dragonhawk', '', 0, 1, 1, 64, 64, 0, 0, 0, 35, 0, 1, 1.14286, 1, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, '');
+replace into custom_mount_entry_relation values (81156, 81015);
+
+-- .cast 46202 Armored Frostmane Riding Bear
+-- .cast 46204 Armored Amani Riding Bear
+
