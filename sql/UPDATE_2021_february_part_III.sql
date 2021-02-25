@@ -481,9 +481,9 @@ UPDATE creature_template SET faction = 1682 WHERE entry = 80856;
 update item_template set description = 'Who would leave such a cute shark behind?' where entry = 21168;
 
 replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1, spellcooldown_1) values
-(81159, 15, 2, 'Tiny Crab in a Bucket', 'These arthropods line many Azerothian shores and seek to fulfill their one true desire: to pinch.', 33467, 2, 1, 28505, 1500);
+(81159, 15, 2, 'Tiny Shore Crab', 'These arthropods line many Azerothian shores and seek to fulfill their one true desire: to pinch.', 33467, 2, 1, 28505, 1500);
 replace into creature_template (entry, display_id1, display_id2, display_id3, name, subname, level_min, level_max, health_min, health_max, faction, script_name, scale) values
-(81019, 1307, 0, 0, 'Tiny Shore Crab', '', '1', '1', '64', '64', '35', '', 0.3);
+(81019, 1307, 0, 0, 'Pinchy', '', '1', '1', '64', '64', '35', '', 0.3);
 replace into custom_pet_entry_relation (item_entry, creature_entry) values 
 (81159, 81019);
 
@@ -576,3 +576,34 @@ reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
 nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
 nextquestinchain = @nextquestinchain, prevquestid = @prevquest
 where entry = @quest_entry;	
+
+-- Darkspear stuff:
+
+update creature_template set name = 'Vuh\'sha Torntusk' where entry = 80949;
+
+update item_template set bonding = 1, spellid_1 = 4971, disenchant_id = 0, required_reputation_faction = 530, required_reputation_rank = 6 where entry = 80806;
+update item_template set bonding = 1, spellid_2 = 0, disenchant_id = 0, required_reputation_faction = 530, required_reputation_rank = 6, required_level = 35 where entry = 80785;
+
+update item_template set bonding = 1, disenchant_id = 0, required_reputation_faction = 530, required_reputation_rank = 6, required_level = 35 where entry = 80797;
+
+REPLACE INTO `item_template` VALUES (81182, 10, 15, 0, 'Swift Darkspear Raptor', 'Speed, cunning, and ferocity are the things trolls and raptors admire about each other.', 17494, 4, 64, 1, 1000000, 0, 0, -1, 434, 60, 60, 762, 150, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 45041, 0, 0, 0, 1, 330, 3000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+
+update item_template set required_reputation_faction = 530, required_reputation_rank = 7 where entry = 81182;
+
+
+replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1, spellcooldown_1) values
+(81183, 15, 2, 'Sunscale Hatchling', 'The bright scales of this rare wind serpent soak up the sunlight to keep it warm, even in shade.', 34380, 2, 1, 28505, 1500);
+replace into creature_template (entry, display_id1, display_id2, display_id3, name, subname, level_min, level_max, health_min, health_max, faction, script_name, scale) values
+(81020, 18386, 0, 0, 'Sunscale Hatchling', '', '1', '1', '64', '64', '35', '', 0.3);
+replace into custom_pet_entry_relation (item_entry, creature_entry) values 
+(81183, 81020);
+
+update item_template set required_reputation_faction = 530, required_reputation_rank = 7, buy_price = 55000, sell_price = 55000 where entry = 81183;
+
+REPLACE INTO `npc_vendor` VALUES (80949, 80806, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80949, 80785, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80949, 80797, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80949, 81183, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (80949, 81182, 0, 0, 0, 0);
+
+
