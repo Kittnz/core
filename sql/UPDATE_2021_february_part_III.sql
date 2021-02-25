@@ -626,7 +626,7 @@ delete from npc_vendor where entry = 80947;
 REPLACE INTO `npc_vendor` VALUES (80947, 80312, 0, 0, 0, 0); -- Tabard
 REPLACE INTO `npc_vendor` VALUES (80947, 51760, 0, 0, 0, 0); -- Beaky
 REPLACE INTO `npc_vendor` VALUES (80947, 81185, 0, 0, 0, 0); -- Gryphon
-REPLACE INTO `npc_vendor` VALUES (80947, 81185, 0, 0, 0, 0); -- Armored Gryphon
+REPLACE INTO `npc_vendor` VALUES (80947, 81186, 0, 0, 0, 0); -- Armored Gryphon
 REPLACE INTO `npc_vendor` VALUES (80947, 50204, 0, 0, 0, 0); -- Skin
 
 -- Wildhammer quest update: 471
