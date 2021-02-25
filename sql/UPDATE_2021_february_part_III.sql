@@ -474,3 +474,105 @@ REPLACE INTO `item_template` VALUES (51644, 0, 15, 0, 'Kazgrim\'s Silver Coin', 
 
 update creature_template set health_min = 120000, health_max = 150000, nature_res = 30, shadow_res = 30, frost_res = 30, arcane_res = 30, armor = 5560 where entry = 80936;
 
+UPDATE creature_template SET faction = 1682 WHERE entry = 80856;
+
+-- misc
+
+update item_template set description = 'Who would leave such a cute shark behind?' where entry = 21168;
+
+replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1, spellcooldown_1) values
+(81159, 15, 2, 'Tiny Crab in a Bucket', 'These arthropods line many Azerothian shores and seek to fulfill their one true desire: to pinch.', 33467, 2, 1, 28505, 1500);
+replace into creature_template (entry, display_id1, display_id2, display_id3, name, subname, level_min, level_max, health_min, health_max, faction, script_name, scale) values
+(81019, 1307, 0, 0, 'Tiny Shore Crab', '', '1', '1', '64', '64', '35', '', 0.3);
+replace into custom_pet_entry_relation (item_entry, creature_entry) values 
+(81159, 81019);
+
+replace into item_template values
+ ('81181', '0', '0', '0', 'Crab Shell', '', '8743', '1', '0', '1', '0', '0', '0', '-1', '-1', '1',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '4', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+ 
+ update item_template set stackable = 10 where entry in (81181);
+ 
+ replace into creature_loot_template values (3106, 81181, -70, 5, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (3107, 81181, -70, 5, 1, 1, 0, 0, 10); 
+
+set @quest_entry = 80384;
+set @quest_zone = 14;
+set @title = 'Pinch of Salt';
+set @description = 'Dese crabs, troublemakers dey are!\n\nCutting my nets with the claws, scaring all the fish away! Every time I chase them dey bury themselves to the sand, Lau\'Tiki isn\'t as nimble as his younger years.\n\nAbout time for some revenge, pesky shell-walkers will get what dey deserve for messin\' with Lau\'Tiki!\n\nHunt them, bring me their shells and I might let you in a little secret.';
+set @objective = 'Lau\'Tiki wants you to bring him 8 Crab Shells.';
+set @completetext = 'Ahahahhah! Good job, mon! For my part of the deal...\n\n<Lau\'Tiki crack opens one of the shells and extracts something from it.>\n\nHere\'s da secret, mon. This tiny pesky bastard might come in handy when ya tame it and feed it. Though never fully trust it, dey like nibbling on fingers.';
+set @incompletetext = 'Hunt them, bring me their shells!';
+set @faction_id = 530;
+set @faction_count = 250;
+set @xp_or_money = 465;
+set @reward_money = 0; 
+set @quest_level = 6;
+set @min_level = 6;
+set @questgiver_id = 5941;
+set @quest_finisher = 5941;
+set @nextquest = 0;
+set @nextquestinchain = 0;
+set @prevquest = 0;
+set @RewChoiceItemId1 = 0; 
+set @RewChoiceItemId2 = 0; 
+set @RewChoiceItemId3 = 0;
+set @RewChoiceItemId4 = 0; 
+set @RewChoiceItemCount1 = 0;
+set @RewChoiceItemCount2 = 0;
+set @RewChoiceItemCount3 = 0;
+set @RewChoiceItemCount4 = 0;
+set @reward_item_1 = 81159;
+set @reward_item_2 = 0; 
+set @reward_item_3 = 0;
+set @reward_item_4 = 0;
+set @reward_item_1_count = 1;
+set @reward_item_2_count = 0;
+set @reward_item_3_count = 0;
+set @reward_item_4_count = 0;
+set @creature_to_kill_1 = 0;
+set @creature_to_kill_2 = 0; 
+set @creature_to_kill_3 = 0;
+set @creature_to_kill_4 = 0;
+set @creature_to_kill_1_count = 0;
+set @creature_to_kill_2_count = 0;
+set @creature_to_kill_3_count = 0;
+set @creature_to_kill_4_count = 0;
+set @required_item_1 = 81181; 
+set @required_item_2 = 0;
+set @required_item_3 = 0;
+set @required_item_4 = 0;
+set @required_item_1_count = 8;
+set @required_item_2_count = 0;
+set @required_item_3_count = 0;
+set @required_item_4_count = 0;
+replace into quest_template values 
+(@quest_entry, '0', '2', @quest_zone, @min_level,  '0', @quest_level, '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @title, @description, @objective, @completetext, @incompletetext, '', '', '', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @faction_id, '0', '0', '0', '0', @faction_count, '0', '0', '0', '0', '0', @xp_or_money, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', 0, 0);
+replace into creature_questrelation (id, quest, patch_min, patch_max) values (@questgiver_id, @quest_entry,'0','10'); 
+replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (@quest_finisher, @quest_entry,'0','10');
+update quest_template set 
+rewitemid1 = @reward_item_1, rewitemcount1 = @reward_item_1_count,
+rewitemid2 = @reward_item_2, rewitemcount2 = @reward_item_2_count,
+rewitemid3 = @reward_item_3, rewitemcount3 = @reward_item_3_count,
+rewitemid4 = @reward_item_4, rewitemcount4 = @reward_item_4_count,
+RewChoiceItemId1 = @RewChoiceItemId1, RewChoiceItemCount1 = @RewChoiceItemCount1,
+RewChoiceItemId2 = @RewChoiceItemId2, RewChoiceItemCount2 = @RewChoiceItemCount2,
+RewChoiceItemId3 = @RewChoiceItemId3, RewChoiceItemCount3 = @RewChoiceItemCount3,
+RewChoiceItemId4 = @RewChoiceItemId4, RewChoiceItemCount4 = @RewChoiceItemCount4,
+ReqCreatureOrGOId1 = @creature_to_kill_1, ReqCreatureOrGOCount1 = @creature_to_kill_1_count,
+ReqCreatureOrGOId2 = @creature_to_kill_2, ReqCreatureOrGOCount2 = @creature_to_kill_2_count,
+ReqCreatureOrGOId3 = @creature_to_kill_3, ReqCreatureOrGOCount3 = @creature_to_kill_3_count,
+ReqCreatureOrGOId4 = @creature_to_kill_4, ReqCreatureOrGOCount4 = @creature_to_kill_4_count,
+reqitemid1 = @required_item_1, reqitemcount1 = @required_item_1_count,
+reqitemid2 = @required_item_2, reqitemcount2 = @required_item_2_count,
+reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
+reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
+nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
+nextquestinchain = @nextquestinchain, prevquestid = @prevquest
+where entry = @quest_entry;	
