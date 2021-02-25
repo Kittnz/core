@@ -629,7 +629,37 @@ REPLACE INTO `npc_vendor` VALUES (80947, 81185, 0, 0, 0, 0); -- Gryphon
 REPLACE INTO `npc_vendor` VALUES (80947, 81186, 0, 0, 0, 0); -- Armored Gryphon
 REPLACE INTO `npc_vendor` VALUES (80947, 50204, 0, 0, 0, 0); -- Skin
 
--- Wildhammer quest update: 471
+update quest_template set rewrepfaction2 = 471, rewrepvalue2 = 150  where entry = 2991; -- Nekrum's Medallion
+update quest_template set rewrepfaction2 = 471, rewrepvalue2 = 150  where entry = 1452; -- Rhapsody's Kalimdor Kocktail
+update quest_template set rewrepfaction2 = 471, rewrepvalue2 = 250  where entry = 2994; -- Saving Sharpbeak
+update quest_template set rewrepfaction2 = 471, rewrepvalue2 = 150  where entry = 2989; -- The Altar of Zul
+update quest_template set rewrepfaction2 = 471, rewrepvalue2 = 100  where entry = 2990; -- Thadius Grimshade
+update quest_template set rewrepfaction2 = 471, rewrepvalue2 = 100  where entry = 3843; -- The Newest Member of the Family
+update quest_template set rewrepfaction2 = 471, rewrepvalue2 = 100  where entry = 4298; -- Becoming a Parent
+update quest_template set rewrepfaction2 = 471, rewrepvalue2 = 250  where entry = 2880; -- Troll Necklace Bounty
+update quest_template set rewrepfaction2 = 471, rewrepvalue2 = 50   where entry = 2993; -- Return to the Hinterlands
+update quest_template set rewrepfaction2 = 471, rewrepvalue2 = 50   where entry = 2992; -- The Divination
+update quest_template set rewrepfaction2 = 471, rewrepvalue2 = 150  where entry = 4297; -- Food for Baby
+update quest_template set rewrepfaction2 = 471, rewrepvalue2 = 100  where entry = 2881; -- Troll Necklace Bounty (repeatable)
+update quest_template set rewrepfaction2 = 471, rewrepvalue2 = 200  where entry = 2877; -- Skulk Rock Clean-up
+update quest_template set rewrepfaction1 = 471, rewrepvalue1 = 250 where entry = 60071; -- Cracking the Witherbark
+update quest_template set rewrepfaction1 = 471, rewrepvalue1 = 300 where entry = 60072; -- Trimming the Vilebranch
+update quest_template set rewrepfaction1 = 471, rewrepvalue1 = 300 where entry = 60073; -- Decimate Their Ranks
+update quest_template set rewrepfaction1 = 471, rewrepvalue1 = 300 where entry = 60074; -- Bring Down the Priestess
+
+replace into creature_questrelation values (7884, 2881, 0, 10); -- Troll Necklace Bounty (repeatable)
+replace into creature_involvedrelation values (7884, 2881, 0, 10); -- Troll Necklace Bounty (repeatable)
+
+UPDATE `quest_template` SET `SpecialFlags`='1' WHERE (`entry`='2881') AND (`patch`='0');
+UPDATE `quest_template` SET `PrevQuestId`='2880' WHERE (`entry`='2881') AND (`patch`='0');
+
+UPDATE `creature_template` SET `npc_flags`='2' WHERE (`entry`='51566') AND (`patch`='1');
+UPDATE `creature_template` SET `unit_flags`='4608' WHERE (`entry`='51566') AND (`patch`='1');
+UPDATE `creature_template` SET `unit_class`='1' WHERE (`entry`='51566') AND (`patch`='1');
+UPDATE `creature_template` SET `dynamic_flags`='0' WHERE (`entry`='51566') AND (`patch`='1');
+UPDATE `creature_template` SET `beast_family`='0' WHERE (`entry`='51566') AND (`patch`='1');
+UPDATE `creature_template` SET `ai_name`='' WHERE (`entry`='51566') AND (`patch`='1');
+UPDATE `creature_template` SET `flags_extra`='524296' WHERE (`entry`='51566') AND (`patch`='1');
 
 -- Undercity quartermaster: https://database.turtle-wow.org/?npc=80951
 -- select * from character_inventory where item_template = 50013;
