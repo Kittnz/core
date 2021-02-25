@@ -761,6 +761,12 @@ delete from item_template where name like '%Rogue Test Dagger%';
 delete from item_template where entry = 4842;
 delete from item_template where entry = 12385;
 
+delete from item_template where entry = 3687;
+delete from item_template where entry = 18589;
+delete from item_template where entry = 18566;
+delete from item_template where entry = 17802;
+delete from item_template where entry = 18565;
+
 -- Undercity quartermaster: https://database.turtle-wow.org/?npc=80951
 -- select * from character_inventory where item_template = 50013;
 -- https://database.turtle-wow.org/?item=80453
