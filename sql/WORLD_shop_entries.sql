@@ -40,7 +40,6 @@ replace into shop_items values
 -- Character: Additional Skins
 (200, 2, 50105, 'Human: Sally Whitemane', 160),
 (201, 2, 50106, 'Human, Gnome: Cultist', 160),
-(202, 2, 50204, 'Dwarf: Wildhammer', 160),
 (203, 2, 50205, 'Dwarf: Dark Iron', 160),
 (204, 2, 50206, 'Dwarf: Earthen', 160),
 (205, 2, 50207, 'Orc: Blackrock Clan', 160),

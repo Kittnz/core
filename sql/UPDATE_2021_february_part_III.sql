@@ -606,4 +606,33 @@ REPLACE INTO `npc_vendor` VALUES (80949, 80797, 0, 0, 0, 0);
 REPLACE INTO `npc_vendor` VALUES (80949, 81183, 0, 0, 0, 0);
 REPLACE INTO `npc_vendor` VALUES (80949, 81182, 0, 0, 0, 0);
 
+-- Wildhammer
+
+update item_template set required_reputation_faction = 471, required_reputation_rank = 6, display_id = 18053, description = 'These hatchlings are descendants of the same gryphons ridden by Falstad and his entourage into Grim Batol.', buy_price = 55000, sell_price = 55000 where entry = 51760; 
+
+update creature_template set scale = 0.3 where entry = 51583;
+
+REPLACE INTO `item_template` VALUES (81185, 10, 15, 0, 'Aerie Peak Gryphon', 'Gryphons\' keen eyesight allows them to see over vast distances and warn their riders of any dangers that lie ahead.', 19529, 4, 64, 1, 1000000, 0, 0, -1, 589, 60, 60, 762, 150, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 46219, 0, 0, 0, 1, 330, 3000, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+
+REPLACE INTO `item_template` VALUES (81186, 10, 15, 0, 'Armored Aerie Peak Gryphon', 'This noble gryphon is as staunch a battle companion as any member of the Alliance could ask for.', 19529, 4, 64, 1, 1000000, 0, 0, -1, 589, 60, 60, 762, 150, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 46220, 0, 0, 0, 1, 330, 3000, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+
+update item_template set required_reputation_faction = 471, required_reputation_rank = 7  where entry = 81185; 
+update item_template set required_reputation_faction = 471, required_reputation_rank = 7  where entry = 81186; 
+
+update item_template set required_reputation_faction = 471, required_reputation_rank = 6, buy_price = 95000, sell_price = 95000, name = 'Wildhammer Warpaint', description = 'A set of blue dyes used by warriors of the Wildhammers to adorn themselves with whenever they march to war.', display_Id = 3665  where entry = 50204; 
+
+delete from npc_vendor where entry = 80947;
+
+REPLACE INTO `npc_vendor` VALUES (80947, 80312, 0, 0, 0, 0); -- Tabard
+REPLACE INTO `npc_vendor` VALUES (80947, 51760, 0, 0, 0, 0); -- Beaky
+REPLACE INTO `npc_vendor` VALUES (80947, 81185, 0, 0, 0, 0); -- Gryphon
+REPLACE INTO `npc_vendor` VALUES (80947, 81185, 0, 0, 0, 0); -- Armored Gryphon
+REPLACE INTO `npc_vendor` VALUES (80947, 50204, 0, 0, 0, 0); -- Skin
+
+-- Wildhammer quest update: 471
+
+-- Undercity quartermaster: https://database.turtle-wow.org/?npc=80951
+-- select * from character_inventory where item_template = 50013;
+-- https://database.turtle-wow.org/?item=80453
+-- Golem: 50013
 
