@@ -16816,6 +16816,13 @@ void Player::ResetInstances(InstanceResetMethod method)
             }
         }
 
+        // solo player cannot reset instance while inside
+        if (IsInWorld() && itr->first == GetMapId())
+        {
+            ++itr;
+            continue;
+        }
+
         // if the map is loaded, reset it
         if (Map *map = sMapMgr.FindMap(state->GetMapId(), state->GetInstanceId()))
             if (map->IsDungeon())

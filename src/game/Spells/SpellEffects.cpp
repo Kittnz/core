@@ -5762,6 +5762,12 @@ void Spell::EffectFeedPet(SpellEffectIndex eff_idx)
     if (!pet->isAlive())
         return;
 
+    if (!m_spellInfo->IsTargetInRange(_player, pet))
+    {
+        SendCastResult(SPELL_FAILED_OUT_OF_RANGE);
+        return;
+    }
+
     if (!pet->IsWithinLOSInMap(_player))
     {
         SendCastResult(SPELL_FAILED_LINE_OF_SIGHT);
