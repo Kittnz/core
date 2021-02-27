@@ -6349,10 +6349,6 @@ SpellCastResult Spell::CheckCast(bool strict)
                     {
                         if (m_caster->GetMap() != target->GetMap())
                             return SPELL_FAILED_TARGET_NOT_IN_INSTANCE;
-                        if (mapEntry->levelMin > target->getLevel())
-                            return SPELL_FAILED_LOWLEVEL;
-                        if (mapEntry->levelMax && mapEntry->levelMax < target->getLevel())
-                            return SPELL_FAILED_HIGHLEVEL;
                     }
                     else if (m_caster->ToPlayer()->InBattleGround())
                         return SPELL_FAILED_NOT_HERE;
@@ -6378,10 +6374,6 @@ SpellCastResult Spell::CheckCast(bool strict)
                 {
                     if (m_caster->GetMap() != target->GetMap())
                         return SPELL_FAILED_TARGET_NOT_IN_INSTANCE;
-                    if (mapEntry->levelMin > target->getLevel())
-                        return SPELL_FAILED_LOWLEVEL;
-                    if (mapEntry->levelMax && mapEntry->levelMax < target->getLevel())
-                        return SPELL_FAILED_HIGHLEVEL;
                 }
                 else if (m_caster->ToPlayer()->InBattleGround())
                     return SPELL_FAILED_NOT_HERE;

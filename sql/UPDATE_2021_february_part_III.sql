@@ -776,3 +776,6 @@ update item_template set inventory_type = 26 where subclass = 19 and inventory_t
 update creature_template set gold_min = gold_min*20, gold_max = gold_max*20 where entry in (15543, 15544, 15511);
 update creature_template set gold_min = 720000, gold_max = 880000 where entry = 15275;
 update creature_template set gold_min = 890000, gold_max = 1050000 where entry = 15275;
+
+ALTER TABLE `map_template` DROP COLUMN `level_min`;
+ALTER TABLE `map_template` DROP COLUMN `level_max`;
