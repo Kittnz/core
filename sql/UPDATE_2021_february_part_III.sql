@@ -772,3 +772,4 @@ delete from item_template where entry = 18565;
 -- https://database.turtle-wow.org/?item=80453
 -- Golem: 50013
 
+update item_template set inventory_type = 26 where subclass = 19 and inventory_type = 15;
