@@ -533,7 +533,7 @@ bool GOSelect_go_epl_flying_machine(Player* pPlayer, GameObject* pGo, uint32 sen
 
 bool GOHello_go_stormwind_fountain(Player* pPlayer, GameObject* pGo)
 {
-    int32 coin = 51600 + urand(0, 43);
+    int32 coin = 51600 + urand(0, 44);
     pPlayer->AddItem(coin);
     pPlayer->PlayDirectSound(1204, pPlayer);
     pPlayer->HandleEmote(EMOTE_ONESHOT_KNEEL);
