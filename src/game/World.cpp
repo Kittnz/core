@@ -79,6 +79,7 @@
 #include "AuraRemovalMgr.h"
 #include "GuardMgr.h"
 #include "DailyQuestHandler.h"
+#include "GuidObjectScaling.h"
 
 #include <chrono>
 
@@ -1278,7 +1279,9 @@ void World::SetInitialWorldSettings()
 
     
     sGameEventMgr.LoadFromDB();
-    
+
+
+    sGuidObjectScaling->LoadFromDB();
 
     // Load Conditions
     sObjectMgr.LoadConditions();
