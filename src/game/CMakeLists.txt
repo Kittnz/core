@@ -208,6 +208,7 @@ set (game_SRCS
     Conditions.h
     CreatureGroups.h
     Formulas.h
+    GuidObjectScaling.h
     GameEventMgr.h
     GuardMgr.h
     GMTicketMgr.h

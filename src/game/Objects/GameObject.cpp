@@ -46,6 +46,7 @@
 #include "ZoneScript.h"
 #include "DynamicTree.h"
 #include "vmap/GameObjectModel.h"
+#include "GuidObjectScaling.h"
 
 GameObject::GameObject() : WorldObject(),
     loot(this),
@@ -165,7 +166,7 @@ bool GameObject::Create(uint32 guidlow, uint32 name_id, Map *map, float x, float
         return false;
     }
 
-    SetObjectScale(goinfo->size);
+    SetObjectScale(sGuidObjectScaling->GetScale(GetGUID(), goinfo->size));
 
     SetFloatValue(GAMEOBJECT_POS_X, x);
     SetFloatValue(GAMEOBJECT_POS_Y, y);

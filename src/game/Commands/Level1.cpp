@@ -44,6 +44,8 @@
 #include "SQLStorages.h"
 #include "AsyncCommandHandlers.h"
 #include "WaypointMovementGenerator.h"
+#include "GuidObjectScaling.h"
+
 #ifdef _DEBUG_VMAPS
 #include "VMapFactory.h"
 #endif
@@ -731,7 +733,16 @@ bool ChatHandler::HandleModifyScaleCommand(char* args)
     if (!*args)
         return false;
 
-    float Scale = (float)atof(args);
+
+    float Scale;
+    if (!ExtractFloat(&args, Scale))
+        return false;
+    
+    //float Scale = (float)atof(args);
+
+    bool permanent = false;
+    bool permanentGiven = ExtractOnOff(&args, permanent);
+
     if (Scale > 100.0f || Scale <= 0.0f)
     {
         SendSysMessage(LANG_BAD_VALUE);
@@ -758,11 +769,68 @@ bool ChatHandler::HandleModifyScaleCommand(char* args)
             ChatHandler((Player*)target).PSendSysMessage(LANG_YOURS_SIZE_CHANGED, GetNameLink().c_str(), Scale);
     }
 
+    if (permanentGiven)
+    {
+        permanent ? sGuidObjectScaling->AddOrEdit(target->GetGUID(), Scale) : sGuidObjectScaling->Remove(target->GetGUID());
+    }
+
     target->SetObjectScale(Scale);
     target->UpdateModelData();
 
     return true;
 }
+
+bool ChatHandler::HandleScaleCommand(char* args)
+{
+    if (!*args)
+        return false;
+
+    float scale;
+    bool apply = ExtractFloat(&args, scale); // if scale exists, we apply scale, if none is given we remove existing scale.
+
+
+
+    Creature* selectedCreature = GetSelectedCreature();
+    GameObject* selectedObject = getSelectedGameObject();
+    Object* target = nullptr;
+
+    float oldScale = DEFAULT_OBJECT_SCALE;
+
+    if (selectedCreature)
+    {
+        target = selectedCreature;
+        oldScale = selectedCreature->GetCreatureInfo()->scale;
+    }
+
+    if (selectedObject && !target)
+    {
+        target = selectedObject;
+        oldScale = selectedObject->GetGOInfo()->size;
+    }
+
+    if (!target)
+    {
+        SendSysMessage("Can\'t find GameObject or Creature to change scale.");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    if (apply)
+    {
+        sGuidObjectScaling->AddOrEdit(target->GetGUID(), scale);
+        target->SetObjectScale(scale);
+    }
+    else
+    {
+        sGuidObjectScaling->Remove(target->GetGUID());
+        target->SetObjectScale(oldScale);
+    }
+
+    if (selectedCreature)
+        selectedCreature->UpdateModelData();
+    return true;
+}
+
 
 bool ChatHandler::HandleModifyHPCommand(char* args)
 {

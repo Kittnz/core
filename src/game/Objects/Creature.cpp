@@ -59,6 +59,7 @@
 #include "TemporarySummon.h"
 #include "ScriptedEscortAI.h"
 #include "GuardMgr.h"
+#include "GuidObjectScaling.h"
 
 #include "Autoscaling/AutoScaler.hpp"
 
@@ -286,7 +287,7 @@ bool Creature::InitEntry(uint32 Entry, Team team, CreatureData const* data /*=NU
     SetEntry(Entry);                                        // normal entry always
     m_creatureInfo = cinfo;                                 // map mode related always
 
-    SetObjectScale(cinfo->scale);
+    SetObjectScale(sGuidObjectScaling->GetScale(GetGUID(), cinfo->scale));
     // Reset native scale before we apply creature info multiplier, otherwise we are
     // stuck at 1 from the previous m_nativeScaleOverride if the unit's entry is
     // being changed
