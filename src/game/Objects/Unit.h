@@ -2098,6 +2098,7 @@ class MANGOS_DLL_SPEC Unit : public WorldObject
         GlobalCooldownMgr& GetGlobalCooldownMgr() { return m_GlobalCooldownMgr; }
 
         void RemoveAllSpellCooldown();
+        void RemoveAllArenaSpellCooldown();
 
         void setTransformScale(float scale);
         void resetTransformScale();
