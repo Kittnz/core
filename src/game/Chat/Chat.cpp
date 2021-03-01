@@ -606,6 +606,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "transfer",       SEC_GAMEMASTER,  false, &ChatHandler::HandleTransferCommand,                 "", nullptr },
 		{ "bgtest",         SEC_ADMINISTRATOR,  false, &ChatHandler::HandleBgTestCommand,                 "", nullptr },
 		{ "cinematic",      SEC_ADMINISTRATOR,  false, &ChatHandler::HandleTurtleCinematic,                 "", nullptr },
+        { "scale",          SEC_GAMEMASTER,     false,  &ChatHandler::HandleScaleCommand,                  "", nullptr},
         { nullptr,          0,                  false, nullptr,                                        "", nullptr }
     };
 

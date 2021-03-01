@@ -33,3 +33,15 @@ replace into `npc_vendor` values (80940, 81194, 0, 0, 0, 0);
 replace into `npc_vendor` values (80940, 81195, 0, 0, 0, 0);
 
 -- Gnome faction rewards (mechaspiders)(todo)
+
+
+-- object scaling table
+
+CREATE TABLE `object_scaling` (
+	`fullGuid` BIGINT(20) UNSIGNED NOT NULL,
+	`scale` FLOAT(12) NOT NULL DEFAULT '0',
+	PRIMARY KEY (`fullGuid`) USING BTREE
+)
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB
+;
