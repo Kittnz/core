@@ -136,3 +136,7 @@ reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
 nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
 nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
 specialflags = 1, requiredraces = 434, incompleteemote = 1, completeemote = 1, offerrewardemote1 = 4, offerrewardemote2 = 1  where entry = @quest_entry;	
+
+-- Cleanup some unused creatures:
+
+delete from creature_template where entry in (51298, 51294, 51297, 51295, 51296); -- Unused trasnmog. NPCs.
