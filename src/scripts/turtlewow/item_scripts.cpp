@@ -1012,7 +1012,7 @@ bool ItemUseSpell_item_brainwashing_device(Player* pPlayer, Item* pItem, const S
 
 enum PlayerMounting
 {
-    STAG_MOUNT_DISPLAY = 1991,
+    STAG_MOUNT_DISPLAY = 17158,
     SPELL_CHARM = 530,
     SPELL_TAXI_INVISIBILITY = 16380
 };

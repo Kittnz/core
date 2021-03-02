@@ -8,8 +8,15 @@ replace into custom_mount_entry_relation (item_entry, creature_entry) values (81
 
 update item_template set required_reputation_faction = 1001, required_reputation_rank = 7, required_skill = 202, required_skill_rank = 300, allowable_race = 256 where entry in (81190, 81191);
 
+replace into `item_template` values (81196, 7, 9, 3, 'Schematic: Goblin Radio', '', 15274, 2, 64, 1, 35000, 8875, 0, -1, -1, 45, 0, 202, 225, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 12775, 0, -1, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+
+replace into `item_template` values (10585, 0, 15, 0, 'Goblin Radio KABOOM-Box X23B76', 'Highly explosive tunes!', 22303, 3, 0, 1, 200000, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1300, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11593, 0, 0, 0, 900000, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 'item_radio');
+
+update item_template set required_reputation_faction = 1001, required_reputation_rank = 6, bonding = 1, quality = 3, description = 'Teaches you how to make a Goblin Radio.' where entry = 81196;
+
 replace into `npc_vendor` values (80961, 81190, 0, 0, 0, 0);
 replace into `npc_vendor` values (80961, 81191, 0, 0, 0, 0);
+replace into `npc_vendor` values (80961, 81196, 0, 0, 0, 0);
 
 -- Gnome faction rewards (mechaspiders):
 
@@ -38,3 +45,18 @@ update creature_template set display_id1 = 18317 where entry = 80308;
 update creature_template set display_id1 = 18318 where entry = 80305;
 
 -- Gnome faction rewards (mechaspiders)(todo)
+
+-- Cleanup useless items: 
+
+delete from item_template where name like '%[PH]%';
+delete from item_template where name like '%unused%';
+delete from item_template where name like '%epic%';
+delete from item_template where name like '%(old)%';
+
+delete from item_template where entry in (50237, 50238, 50239, 50240, 50241, 50242);
+
+replace into `item_template` values (11132, 0, 12, 0, 'Unused Scraping Vial', '', 20791, 1, 64, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13630, 0, -1, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, null);
+
+update item_template set quality = 4 where entry = 50094;
+update item_template set quality = 4 where entry = 50243;
+update item_template set quality = 4 where entry = 51838;
