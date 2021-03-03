@@ -23,8 +23,11 @@ enum EventStates
     STATE_ENRAGED   = 1,
 };
 
+// I can't do math so this will suffice.
+const int8 quikmafs[4][2] = { {5,0},{-5,0},{0,5},{0,-5} };
+
 constexpr auto AGGRO_TEXT_1 = "Mortals shall not defile these lands!";
-constexpr auto AGGRO_TEXT_2 = "You descrecate the Master's lands with your filthy footsteps!";
+constexpr auto AGGRO_TEXT_2 = "You desecrate the Master's lands with your filthy footsteps!";
 
 constexpr auto SUMMON_TEXT_1 = "Rise, spirits. Defend the Master's lands!";
 constexpr auto SUMMON_TEXT_2 = "Spirits, rise, and drive back this rabble!";
@@ -52,6 +55,7 @@ struct boss_dark_reaverAI : public ScriptedAI
     uint32 Summon_Announce_Timer;
     uint32 Summon_Timer;
     uint32 Reflex_Timer;
+    uint32 ScaleText_Timer;
 
     uint8 Event_State;
     uint8 Attackers_Count;
@@ -60,6 +64,7 @@ struct boss_dark_reaverAI : public ScriptedAI
 
     uint8 LastHealthPercentage;
 
+    uint32 maxHealth;
     float minDmg;
     float maxDmg;
     uint32 attackPower;
@@ -75,6 +80,7 @@ struct boss_dark_reaverAI : public ScriptedAI
         Summon_Announce_Timer = 18500;
         Summon_Timer = 20000;
         Reflex_Timer = 30000;
+        ScaleText_Timer = 0;
 
         Event_State = 0;
         Attackers_Count = 0;
@@ -83,6 +89,7 @@ struct boss_dark_reaverAI : public ScriptedAI
         LastHealthPercentage = 100;
 
         auto creatureInfo = GetCreatureTemplateStore(me->GetEntry());
+        maxHealth = creatureInfo->health_max;
         minDmg = creatureInfo->dmg_min;
         maxDmg = creatureInfo->dmg_max;
         attackPower = creatureInfo->attack_power;
@@ -124,7 +131,7 @@ struct boss_dark_reaverAI : public ScriptedAI
     {
         m_creature->MonsterYell(urand(0, 1) ? DEATH_TEXT_1 : DEATH_TEXT_2);
 
-        uint32 m_respawn_delay_Timer = 1 * DAY;
+        uint32 m_respawn_delay_Timer = urand(8 * HOUR, 12 * HOUR);
         m_creature->SetRespawnDelay(m_respawn_delay_Timer);
         m_creature->SetRespawnTime(m_respawn_delay_Timer);
         m_creature->SaveRespawnTime();
@@ -132,6 +139,11 @@ struct boss_dark_reaverAI : public ScriptedAI
 
     void ScaleStats(uint8 count)
     {
+        // Increase max health first, then apply buff to health.
+        me->SetMaxHealth(me->GetMaxHealth() + ((maxHealth / NORMAL_GROUP_SIZE) * count));
+        uint32 adjustedHealth = me->GetHealth() + (maxHealth / NORMAL_GROUP_SIZE) * count;
+        me->SetHealth(adjustedHealth);
+
         me->SetFloatValue(UNIT_FIELD_MINDAMAGE, (minDmg / NORMAL_GROUP_SIZE) * (NORMAL_GROUP_SIZE + count));
         me->SetFloatValue(UNIT_FIELD_MAXDAMAGE, (maxDmg / NORMAL_GROUP_SIZE) * (NORMAL_GROUP_SIZE + count));
         me->SetUInt32Value(UNIT_FIELD_ATTACK_POWER, (attackPower / NORMAL_GROUP_SIZE) * (NORMAL_GROUP_SIZE + count));
@@ -164,8 +176,16 @@ struct boss_dark_reaverAI : public ScriptedAI
         uint16 threatSize = me->getThreatManager().getThreatList().size();
         if (threatSize > NORMAL_GROUP_SIZE && threatSize > Attackers_Count)
         {
-            me->MonsterYell(urand(0, 1) ? SCALE_TEXT_1 : SCALE_TEXT_2);
             ScaleStats(threatSize - Attackers_Count);
+
+            // Only do text every 15 seconds if people join to not spam.
+            if (ScaleText_Timer < diff)
+            {
+                me->MonsterYell(urand(0, 1) ? SCALE_TEXT_1 : SCALE_TEXT_2);
+                ScaleText_Timer = 15000;
+            }
+            else
+                ScaleText_Timer -= diff;
         }
 
         if (threatSize != Attackers_Count)
@@ -215,16 +235,35 @@ struct boss_dark_reaverAI : public ScriptedAI
         // Summon Forlorn Spirit add (skeleton)
         if (Summon_Timer < diff)
         {
-            // I can't do math so this will suffice.
-            int8 quikmafs[4][2] = {{5,0},{-5,0},{0,5},{0,-5}};
+            // Pick a random, non-tank target within 25yds. If none, default to tank.
+            Unit* randomTarget = GetRandomNearbyEnemyPlayer(me);
+            if (!randomTarget)
+                randomTarget = me->getVictim();
+
+            // Random 50/50 the summons will be on boss or a random player;
+            float x, y, z, o;
+            if (urand(0, 1)) // boss
+            {
+                x = me->GetPositionX();
+                y = me->GetPositionY();
+                z = me->GetPositionZ();
+                o = me->GetOrientation();
+            }
+            else // player
+            {
+                x = randomTarget->GetPositionX();
+                y = randomTarget->GetPositionY();
+                z = randomTarget->GetPositionZ();
+                o = randomTarget->GetOrientation();
+            }
 
             for (uint8 i = 0; i < 4; ++i)
             {
                 Creature* spawn = me->SummonCreature(MOB_FORLORN_SPIRIT,
-                    me->GetPositionX() + quikmafs[i][0],
-                    me->GetPositionY() + quikmafs[i][1],
-                    me->GetPositionZ(),
-                    me->GetOrientation(),
+                    x + quikmafs[i][0],
+                    y + quikmafs[i][1],
+                    z,
+                    o,
                     TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN,
                     5000 // OOC Despawn time
                 );
@@ -232,21 +271,17 @@ struct boss_dark_reaverAI : public ScriptedAI
                 spawn->AddAura(SPELL_GHOST_VISUAL);
                 spawn->CastSpell(spawn, SPELL_TWISTING_NETHER, true); // for visual
 
-                // Pass boss threat on to adds. Prevents despawn if tank dies before others attack them.
+                // Pass boss threat list, but tiny amount to simply know all targets.
                 for (auto t : me->getThreatManager().getThreatList())
                 {
                     if (!t || !t->isOnline())
                         continue;
 
-                    spawn->getThreatManager().addThreatDirectly(t->getTarget(), t->getThreat());
+                    float threatAmount = t->getSourceUnit() == randomTarget ? 5.0f : 0.01f;
+                    spawn->getThreatManager().addThreatDirectly(t->getTarget(), threatAmount);
                 }
 
-                // Pick a random, non-tank target within 25yds. If none, default to tank.
-                Unit* randomTarget = GetRandomNearbyEnemyPlayer(spawn);
-                if (!randomTarget)
-                    randomTarget = me->getVictim();
-
-                // Some reason is not working...
+                // Set it combat with random target.
                 spawn->SetInCombatWith(randomTarget);
                 spawn->Attack(randomTarget, true);
                 spawn->GetMotionMaster()->MoveChase(randomTarget);
