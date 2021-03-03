@@ -220,3 +220,11 @@ replace into `npc_vendor` values (81028, 10647, 0, 0, 0, 0);
 replace into `npc_vendor` values (81028, 10648, 0, 0, 0, 0);
 
 update creature_template set faction = 169 where entry in (81022, 81023, 81024, 81025, 81026, 81027, 81028);
+
+-- Misc. DB fixes:
+
+update item_template set spellid_1 = 46010 where name = 'Guild Tabard';
+UPDATE `item_template` SET `spellcooldown_1`='3600000' WHERE (`entry`='5976') AND (`patch`='0');
+
+UPDATE `item_template` SET `quality`='0' WHERE (`entry`='81140') AND (`patch`='0');
+UPDATE `item_template` SET `spellid_1`='0' WHERE (`entry`='81140') AND (`patch`='0');
