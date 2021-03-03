@@ -44,7 +44,7 @@ update creature_template set display_id1 = 18316 where entry = 80307;
 update creature_template set display_id1 = 18317 where entry = 80308;
 update creature_template set display_id1 = 18318 where entry = 80305;
 update creature_template set display_id1 = 15236, npc_flags = 7 where entry = 80961;
-update creature_template set display_id1 = 8331 entry = 50099;
+update creature_template set display_id1 = 8331 where entry = 50099;
 
 -- Cleanup useless items: 
 
