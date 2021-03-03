@@ -52,6 +52,7 @@ delete from item_template where name like '%[PH]%';
 delete from item_template where name like '%unused%';
 delete from item_template where name like '%epic%';
 delete from item_template where name like '%(old)%';
+delete from item_template where name like '%debug%';
 
 delete from item_template where entry in (50237, 50238, 50239, 50240, 50241, 50242);
 
@@ -231,3 +232,7 @@ UPDATE `item_template` SET `spellid_1`='0' WHERE (`entry`='81140') AND (`patch`=
 
 update creature_template set npc_flags = 4 where entry = 80934;
 update creature_template set name = 'Innkeeper Frizzo' where entry = 80930;
+
+delete from npc_vendor where item = 5976 and entry in (51593, 51568, 50559, 50555, 50560, 51580, 50539, 50520, 50101);
+
+delete from creature_template where entry = 51580;
