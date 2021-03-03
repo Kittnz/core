@@ -12245,8 +12245,8 @@ void Unit::RemoveAllArenaSpellCooldown()
     for (auto itr = m_spellCooldowns.begin(); itr != m_spellCooldowns.end();)
     {
         auto spellEntry = sSpellMgr.GetSpellEntry(itr->first);
-        if (spellEntry && spellEntry->RecoveryTime <= 10 * MINUTE * IN_MILLISECONDS
-            && spellEntry->CategoryRecoveryTime <= 10 * MINUTE * IN_MILLISECONDS)
+        if (spellEntry && spellEntry->RecoveryTime < 10 * MINUTE * IN_MILLISECONDS
+            && spellEntry->CategoryRecoveryTime < 10 * MINUTE * IN_MILLISECONDS)
         {
             RemoveSpellCooldown((itr++)->first, true);
         }
