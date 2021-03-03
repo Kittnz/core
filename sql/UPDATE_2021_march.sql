@@ -228,3 +228,6 @@ UPDATE `item_template` SET `spellcooldown_1`='3600000' WHERE (`entry`='5976') AN
 
 UPDATE `item_template` SET `quality`='0' WHERE (`entry`='81140') AND (`patch`='0');
 UPDATE `item_template` SET `spellid_1`='0' WHERE (`entry`='81140') AND (`patch`='0');
+
+update creature_template set npc_flags = 4 where entry = 80934;
+update creature_template set name = 'Innkeeper Frizzo' where entry = 80930;
