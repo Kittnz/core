@@ -278,7 +278,7 @@ REPLACE INTO `item_template` VALUES (81200, 10, 4, 0, 'Tabard of Mortality', 'Th
 
 update item_template set quality = 1 where entry in (50010, 80188);
 
-replace into `creature_template` values (81030, 0, 18039, 0, 0, 0, 'Mysterious Stranger', NULL, 0, 60, 60, 1024000, 1024000, 826400, 826400, 0, 35, 0, 1, 1.14286, 1.32, 20, 5, 0, 3, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 2, 3, 0, 0, 3, 50105, 0, 0, 0, 0, 0, 'npc_mysterious_stranger');
+replace into `creature_template` values (81030, 0, 18039, 0, 0, 0, 'Mysterious Stranger', NULL, 0, 60, 60, 24000, 24000, 26400, 26400, 0, 35, 0, 1, 1.14286, 1.32, 20, 5, 0, 3, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 2, 3, 0, 0, 3, 50105, 0, 0, 0, 0, 0, 'npc_mysterious_stranger');
 
 update creature_template set npc_flags = 2 where entry = 81030;
 
