@@ -236,3 +236,19 @@ update creature_template set name = 'Innkeeper Frizzo' where entry = 80930;
 delete from npc_vendor where item = 5976 and entry in (51593, 51568, 50559, 50555, 50560, 51580, 50539, 50520, 50101);
 
 delete from creature_template where entry = 51580;
+
+-- Thunder Bluff reputation rewards: 
+
+REPLACE INTO `item_template` VALUES (81198, 10, 15, 0, 'Swift Thunder Bluff Kodo', 'An alpha member of the herd, this kodo is a prime example of the mighty creatures which thunder through Mulgore.', 29448, 4, 64, 1, 1000000, 0, 0, -1, 434, 40, 40, 762, 75, 0, 15, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 45044, 0, 0, 0, 1, 330, 3000, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+
+replace into `npc_vendor` values (80948, 81198, 0, 0, 0, 0);
+
+update item_template set required_reputation_faction = 81, required_reputation_rank = 7 where entry = 81198;
+
+update item_template set name = 'Thunder Bluff Tabard' where entry = 80308;
+update creature_template set name = 'Lansa Skyseer', subname = 'Thunder Bluff Quartermaster' where entry = 80948;
+
+delete from item_template where entry = 80454;
+
+UPDATE `item_template` SET `required_level`='60', `required_skill_rank`='150' WHERE (`entry`='81198') AND (`patch`='10');
+UPDATE `item_template` SET `required_honor_rank`='0' WHERE (`entry`='81198') AND (`patch`='10');
