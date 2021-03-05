@@ -913,8 +913,7 @@ bool QuestAccept_npc_mysterious_stranger(Player* pPlayer, Creature* pQuestGiver,
     {
         pQuestGiver->HandleEmote(EMOTE_ONESHOT_LAUGH);
         pQuestGiver->MonsterSayToPlayer("What would misery, frustration, and pain bring you? Fame? Glory?", pPlayer);
-        pPlayer->GetSession()->SendNotification("If you complete this quest you will become mortal. In this mode you only have one life and can only trade and group up with other mortal players. Your bag, bank and mail items will be destroyed.  ");
-        pPlayer->PlayDirectSound(12889, pPlayer);
+        pPlayer->GetSession()->SendNotification("If you complete this quest you will become mortal.\nIn this mode you only have one life and can only trade and group up with other mortal players.\nYour bag, bank and mail items will be destroyed.");
     }
     return false;
 }
@@ -933,7 +932,6 @@ bool QuestRewarded_npc_mysterious_stranger(Player* pPlayer, Creature* pQuestGive
         pQuestGiver->MonsterSayToPlayer("You are aware this won't be easy, now go and stay safe on your journey.", pPlayer);
         pPlayer->EnableMortalMode();
         CharacterDatabase.PExecute("UPDATE `characters` SET mortality_status = 1 WHERE `guid` = '%u'", pPlayer->GetGUIDLow());
-        pPlayer->PlayDirectSound(7197, pPlayer);
         return true;
     }
     return false;
