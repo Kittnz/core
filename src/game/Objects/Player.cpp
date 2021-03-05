@@ -4607,6 +4607,12 @@ void Player::ResurrectPlayer(float restore_percent, bool applySickness)
     }
 }
 
+template <typename Functor>
+void DoAfterTime(Player* player, uint32 p_time, Functor&& function)
+{
+    player->m_Events.AddEvent(new LambdaBasicEvent<Functor>(std::move(function)), player->m_Events.CalculateTime(p_time));
+}
+
 void Player::KillPlayer()
 {
     StopMirrorTimers();                                     //disable timers(bars)
@@ -4632,6 +4638,10 @@ void Player::KillPlayer()
         CharacterDatabase.PExecute("UPDATE `characters` SET mortality_status = 3 WHERE `guid` = '%u'", GetGUIDLow()); // 0: not mortal 1: mortal 2: immortal 3: dead
         sWorld.SendWorldText(50300, GetName(), getLevel());
         DestroyItemCount(80188, -1, true, false);
+        PlayDirectSound(1171, this);
+        SaveToDB();
+        GetSession()->SendNotification("YOU HAVE DIED.\nYou will be disconnected in 60 seconds.");
+        DoAfterTime(this, 60 * IN_MILLISECONDS, [this]() { GetSession()->KickPlayer(); });
     }
 }
 
