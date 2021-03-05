@@ -4489,6 +4489,9 @@ void Player::SetHover(bool enable)
 */
 void Player::BuildPlayerRepop()
 {
+    if (bIsMortal)
+        return;
+
     // Waiting to Resurrect (probably redundant cast, yet to check thoroughly)
     if (InBattleGround() || InGurubashiArena(true))
         CastSpell(this, 2584, true);
@@ -4543,6 +4546,10 @@ void Player::BuildPlayerRepop()
 
 void Player::ResurrectPlayer(float restore_percent, bool applySickness)
 {
+    // Don't ressurent permamently dead chracters.
+    if (bIsMortal)
+        return;
+
     // Interrupt resurrect spells
     InterruptSpellsCastedOnMe(false, true);
 
@@ -4637,10 +4644,9 @@ void Player::KillPlayer()
     {
         CharacterDatabase.PExecute("UPDATE `characters` SET mortality_status = 3 WHERE `guid` = '%u'", GetGUIDLow()); // 0: not mortal 1: mortal 2: immortal 3: dead
         sWorld.SendWorldText(50300, GetName(), getLevel());
-        DestroyItemCount(80188, -1, true, false);
-        PlayDirectSound(1171, this);
-        SaveToDB();
+        PlayDirectMusic(1171, this);
         GetSession()->SendNotification("YOU HAVE DIED.\nYou will be disconnected in 60 seconds.");
+        ChatHandler(this).PSendSysMessage("YOU HAVE DIED.\nYou will be disconnected in 60 seconds.");
         DoAfterTime(this, 60 * IN_MILLISECONDS, [this]() { GetSession()->KickPlayer(); });
     }
 }
