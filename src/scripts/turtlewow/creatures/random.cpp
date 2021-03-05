@@ -901,9 +901,54 @@ bool GossipSelect_MiningEnchanter(Player* player, Creature* creature, uint32 sen
     return true;
 }
 
+bool QuestAccept_npc_mysterious_stranger(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver)
+        return false;
+
+    if (!pPlayer)
+        return false;
+
+    if (pQuest->GetQuestId() == 80388) // Stay awhile and listen...
+    {
+        pQuestGiver->HandleEmote(EMOTE_ONESHOT_LAUGH);
+        pQuestGiver->MonsterSayToPlayer("What would misery, frustration, and pain bring you? Fame? Glory?", pPlayer);
+        pPlayer->GetSession()->SendNotification("If you complete this quest you will become mortal. In this mode you only have one life and can only trade and group up with other mortal players. Your bag, bank and mail items will be destroyed.  ");
+        pPlayer->PlayDirectSound(12889, pPlayer);
+    }
+    return false;
+}
+
+bool QuestRewarded_npc_mysterious_stranger(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver)
+        return false;
+
+    if (!pPlayer)
+        return false;
+
+    if (pQuest->GetQuestId() == 80388) // Stay awhile and listen...
+    {
+        pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+        pQuestGiver->MonsterSayToPlayer("You are aware this won't be easy, now go and stay safe on your journey.", pPlayer);
+        pPlayer->EnableMortalMode();
+        CharacterDatabase.PExecute("UPDATE `characters` SET mortality_status = 1 WHERE `guid` = '%u'", pPlayer->GetGUIDLow());
+        pPlayer->PlayDirectSound(7197, pPlayer);
+        return true;
+    }
+    return false;
+}
+
+
 void AddSC_random()
 {
     Script *newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_mysterious_stranger";
+    newscript->pQuestAcceptNPC = &QuestAccept_npc_mysterious_stranger;
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_mysterious_stranger;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "arena_master";
