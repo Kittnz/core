@@ -356,3 +356,8 @@ reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
 nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
 nextquestinchain = @nextquestinchain, prevquestid = @prevquest
 where entry = @quest_entry;	
+
+-- Rename old HC mode items to Turtle More items:
+
+update item_template set name = 'Glyph of the Turtle', description = 'You lose %5 of your experience on death and you get half experience from creature kills.' where entry = 50010;
+update item_template set name = 'Turtle WoW Tabard', description = 'I like it slow.' where entry = 19160;
