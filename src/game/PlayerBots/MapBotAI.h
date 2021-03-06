@@ -7,6 +7,31 @@
 #include "PartyBotAI.h"
 #include "PlayerBotMgr.h"
 
+struct MapBotChatData
+{
+    MapBotChatData(uint32 guid, uint32 type, std::string chat) : m_guid(guid), m_type(type), m_chat(chat) {}
+    uint32 m_type, m_guid = 0;
+    std::string m_chat = "";
+};
+
+struct MapBotChatRespondsQueue
+{
+    MapBotChatRespondsQueue(uint32 type, uint32 guid1, uint32 guid2, std::string msg, std::string chanName) : m_type(type), m_guid1(guid1), m_guid2(guid2), m_msg(msg), m_chanName(chanName) {}
+    uint32 m_type, m_guid1, m_guid2 = 0;
+    std::string m_msg, m_chanName = "";
+};
+
+enum MapBotChatDataType
+{
+    NOT_UNDERSTAND,
+    GRUDGE,
+    VICTIM,
+    ATTACKER,
+    HELLO_RESPOND,
+    NAME_RESPOND,
+    ADMIN_ABUSE
+};
+
 enum MapBotMapId
 {
     MAP_EASTERN_KINGDOMS = 0,
@@ -32,6 +57,8 @@ public:
     {
         m_updateTimer.Reset(2000);
         m_updateMoveTimer.Reset(1000);
+        m_updateChatTimer.Reset(1000);
+        BotLastChatTime = sWorld.GetGameTime();
     }
 
     bool OnSessionLoaded(PlayerBotEntry * entry, WorldSession * sess) override
@@ -107,6 +134,7 @@ public:
     bool m_wasDead = false;
     bool m_wasInBG = false;
     bool m_isBattleBot = false;
+    bool m_isMapBot = false;
 
     // Movement System
     void LoadDBWaypoints();
@@ -124,6 +152,17 @@ public:
     uint32 m_currentPoint = 0;
     MapBotPath* m_currentPath = nullptr;
     uint8 m_waitingSpot = MB_WSG_WAIT_SPOT_SPAWN;
+
+    // Chat System
+    void LoadBotChat();
+    void MakeBotChat(Player* me, uint8 msgtype, ObjectGuid guid1, ObjectGuid guid2, std::string message, std::string chanName, std::string name);
+    void DoBotChat(Player* me, uint32 type, uint32 guid1, uint32 guid2, std::string msg, std::string chanName, std::string name);
+    ShortTimeTracker m_updateChatTimer;
+    //uint8 m_BotChatCount = 0;
+    time_t BotLastChatTime;
+
+    /*void BotChatResponds(Player* me, uint32 type, uint32 guid1, uint32 guid2, std::string msg, std::string chanName);
+    void BotChatWorld(std::string const& text, uint32 const language);*/
 };
 
 #endif

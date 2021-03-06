@@ -150,14 +150,20 @@ void PlayerBotMgr::Load()
     if (mapBotEnabled)
     {
         MapBotAI* ai = nullptr;
+
+        // Load paths
         ai->LoadDBWaypoints();
 
+        // Load db characters
         m_useMapBotLoader = sWorld.getConfig(CONFIG_BOOL_MAPBOT_LOADER);
         if (m_useMapBotLoader)
         {
             MapBotLoader();
             MapBotCreator();
         }
+
+        // Load chat
+        ai->LoadBotChat();
     }
 }
 

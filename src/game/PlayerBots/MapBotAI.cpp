@@ -12,6 +12,9 @@
 #include "GridNotifiers.h"
 #include "GridNotifiersImpl.h"
 #include "TargetedMovementGenerator.h"
+#include "Channel.h"
+#include "ChannelMgr.h"
+#include <regex>
 #include <random>
 
 enum MapBotSpells
@@ -81,6 +84,16 @@ enum MapBotSpells
 
 #define GO_WSG_DROPPED_SILVERWING_FLAG 179785
 #define GO_WSG_DROPPED_WARSONG_FLAG 179786
+
+std::vector<MapBotChatData> m_chatDataNotUnderstand;
+std::vector<MapBotChatData> m_chatDataGrudge;
+std::vector<MapBotChatData> m_chatDataVictim;
+std::vector<MapBotChatData> m_chatDataAttacker;
+std::vector<MapBotChatData> m_chatDataHelloRespond;
+std::vector<MapBotChatData> m_chatDataNameRespond;
+std::vector<MapBotChatData> m_chatDataAdminAbuse;
+
+std::vector<MapBotChatRespondsQueue> m_chatRespondsQueue;
 
 static bool IsPhysicalDamageClass(uint8 playerClass)
 {
@@ -651,6 +664,7 @@ void MapBotAI::SendFakePacket(uint16 opcode)
             me->GetSession()->HandleGroupAcceptOpcode(data);
             return;
         }
+
     }
 
     CombatBotBaseAI::SendFakePacket(opcode);
@@ -702,6 +716,43 @@ void MapBotAI::OnPacketReceived(WorldPacket const* packet)
                 }
                 UpdateWaypointMovement();
             }
+            break;
+        }
+        case SMSG_MESSAGECHAT:
+        {
+            WorldPacket packet(*packet);
+            packet.rpos(0);
+            uint8 msgtype, chatTag;
+            uint32 lang, textLen, unused;
+            ObjectGuid guid1, guid2;
+            std::string name, chanName, message;
+            packet >> msgtype >> lang;
+
+            switch (msgtype)
+            {
+                case CHAT_MSG_SAY:
+                case CHAT_MSG_PARTY:
+                case CHAT_MSG_YELL:
+                case CHAT_MSG_WHISPER:
+                    packet >> guid1;
+                    packet >> guid2;
+                    packet >> textLen >> message >> chatTag;
+
+                    // do personal chat
+
+                    break;
+                case CHAT_MSG_CHANNEL:
+                    packet >> chanName >> unused >> guid1 >> unused;
+                    packet >> message;
+
+                    // do world chat
+                    MakeBotChat(me, msgtype, guid1, 0, message, chanName, name);
+
+                    break;
+                default:
+                    break;
+            }
+
             break;
         }
     }
@@ -862,24 +913,29 @@ bool MapBotAI::CheckForUnreachableTarget()
 
 void MapBotAI::UpdateAI(uint32 const diff)
 {
+    // General AI timer
     m_updateTimer.Update(diff);
     if (m_updateTimer.Passed())
         m_updateTimer.Reset(MB_UPDATE_INTERVAL);
     else
         return;
 
+    // Movement timer
     m_updateMoveTimer.Update(diff);
     if (m_updateMoveTimer.Passed())
     {
-        uint32 rand = urand(5000, 30000); // hold position for 5 to 30 seconds
-        m_updateMoveTimer.Reset(rand);
-
         if (!m_allowedToMove)
         {
             m_allowedToMove = true;
             MoveToNextPoint();
         }
+
+        uint32 rand = urand(5000, 30000); // hold position for 5 to 30 seconds
+        m_updateMoveTimer.Reset(rand);
     }
+
+    // Chat timer
+    m_updateChatTimer.Update(diff);
 
     if (!me->IsInWorld() || me->IsBeingTeleported() || m_doingGraveyardJump)
         return;
@@ -899,6 +955,10 @@ void MapBotAI::UpdateAI(uint32 const diff)
         me->SetTaxiCheater(true);
         me->SetMoney(10000000); // 1000g for taxis etc
 
+        // Make the bot join the world channel for chat
+        ChatHandler(me).HandleChannelJoinCommand("world");
+
+        // random hide helm and cloak
         if (urand(0, 1))
         {
             me->ToggleFlag(PLAYER_FLAGS, PLAYER_FLAGS_HIDE_HELM);
@@ -1351,7 +1411,7 @@ void MapBotAI::UpdateOutOfCombatAI_Paladin()
 
     if (m_isBuffing &&
        (!m_spells.paladin.pBlessingBuff ||
-        !me->GetGlobalCooldownMgr().HasGlobalCooldown(m_spells.paladin.pBlessingBuff)))
+        !me->HasGCD(m_spells.paladin.pBlessingBuff)))
     {
         m_isBuffing = false;
     }
@@ -2085,7 +2145,7 @@ void MapBotAI::UpdateOutOfCombatAI_Priest()
 
     if (m_isBuffing &&
        (!m_spells.priest.pPowerWordFortitude ||
-        !me->GetGlobalCooldownMgr().HasGlobalCooldown(m_spells.priest.pPowerWordFortitude)))
+        !me->HasGCD(m_spells.priest.pPowerWordFortitude)))
     {
         m_isBuffing = false;
     }
@@ -2284,7 +2344,7 @@ void MapBotAI::UpdateOutOfCombatAI_Warlock()
 
     if (m_isBuffing &&
        (!m_spells.warlock.pDetectInvisibility ||
-        !me->GetGlobalCooldownMgr().HasGlobalCooldown(m_spells.warlock.pDetectInvisibility)))
+        !me->HasGCD(m_spells.warlock.pDetectInvisibility)))
     {
         m_isBuffing = false;
     }
@@ -2786,7 +2846,7 @@ void MapBotAI::UpdateInCombatAI_Rogue()
                 (me->GetHealthPercent() < 10.0f))
             {
                 if (m_spells.rogue.pPreparation &&
-                    me->HasSpellCooldown(m_spells.rogue.pVanish->Id) &&
+                    me->IsSpellReady(m_spells.rogue.pVanish->Id) &&
                     CanTryToCastSpell(me, m_spells.rogue.pPreparation))
                 {
                     if (DoCastSpell(me, m_spells.rogue.pPreparation) == SPELL_CAST_OK)
@@ -2998,7 +3058,7 @@ void MapBotAI::UpdateOutOfCombatAI_Druid()
 
     if (m_isBuffing &&
        (!m_spells.druid.pMarkoftheWild ||
-        !me->GetGlobalCooldownMgr().HasGlobalCooldown(m_spells.druid.pMarkoftheWild)))
+        !me->HasGCD(m_spells.druid.pMarkoftheWild)))
     {
         m_isBuffing = false;
     }
@@ -3402,3 +3462,136 @@ void MapBotAI::UpdateInCombatAI_Druid()
         }
     }
 }
+
+void MapBotAI::LoadBotChat()
+{
+    QueryResult* result = WorldDatabase.PQuery("SELECT guid, type, chat FROM mapbot_chat ORDER BY guid, type ASC;");
+
+    if (result)
+    {
+        do
+        {
+            auto fields = result->Fetch();
+
+            uint32 guid = fields[0].GetUInt32();
+            uint32 type = fields[1].GetUInt32();
+            std::string chat = fields[2].GetString();
+
+            switch(type)
+            {
+                case MapBotChatDataType::NOT_UNDERSTAND:
+                {
+                    m_chatDataNotUnderstand.push_back(MapBotChatData(guid, type, chat));
+                    break;
+                }
+                case MapBotChatDataType::GRUDGE:
+                {
+                    m_chatDataGrudge.push_back(MapBotChatData(guid, type, chat));
+                    break;
+                }
+                case MapBotChatDataType::VICTIM:
+                {
+                    m_chatDataVictim.push_back(MapBotChatData(guid, type, chat));
+                    break;
+                }
+                case MapBotChatDataType::ATTACKER:
+                {
+                    m_chatDataAttacker.push_back(MapBotChatData(guid, type, chat));
+                    break;
+                }
+                case MapBotChatDataType::HELLO_RESPOND:
+                {
+                    m_chatDataHelloRespond.emplace_back(MapBotChatData(guid, type, chat));
+                    break;
+                }
+                case MapBotChatDataType::NAME_RESPOND:
+                {
+                    m_chatDataNameRespond.push_back(MapBotChatData(guid, type, chat));
+                    break;
+                }
+                case MapBotChatDataType::ADMIN_ABUSE:
+                {
+                    m_chatDataAdminAbuse.push_back(MapBotChatData(guid, type, chat));
+                    break;
+                }
+                default:
+                    break;
+            }
+
+        } while (result->NextRow());
+    }
+    else
+    {
+        sLog.outError("MapBot: unable to load chat.");
+        return;
+    }
+
+    delete result;
+}
+
+void MapBotAI::MakeBotChat(Player* me, uint8 msgtype, ObjectGuid guid1, ObjectGuid guid2, std::string message, std::string chanName, std::string name)
+{
+    if (m_updateChatTimer.Passed())
+    {
+        if (BotLastChatTime < sWorld.GetGameTime() - (uint32)3)
+        {
+            switch (msgtype)
+            {
+                case CHAT_MSG_SAY:
+                case CHAT_MSG_PARTY:
+                case CHAT_MSG_YELL:
+                case CHAT_MSG_WHISPER:
+                    break;
+                case CHAT_MSG_CHANNEL:
+                    //if (guid1 == me->GetObjectGuid())
+                        DoBotChat(me, msgtype, guid1, guid2, message, chanName, name);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        m_updateChatTimer.Reset(1000);
+    }
+}
+
+void MapBotAI::DoBotChat(Player* me, uint32 type, uint32 guid1, uint32 guid2, std::string msg, std::string chanName, std::string name)
+{
+    if (chanName == "World")
+    {
+        // Hello Responds
+        if (msg.find("hi") != std::string::npos)
+        {
+            std::string msg = SelectRandomContainerElement(m_chatDataHelloRespond).m_chat;
+            msg = std::regex_replace(msg, std::regex("$name"), name);
+            const char* c = msg.c_str();
+
+            if (ChannelMgr* cMgr = channelMgr(me->GetTeam()))
+            {
+                if (Channel* chn = cMgr->GetJoinChannel("world"))
+                    chn->Say(me->GetObjectGuid(), c, LANG_UNIVERSAL, true);
+            }
+        }
+        else // does not understand
+        {
+            std::string msg = SelectRandomContainerElement(m_chatDataNotUnderstand).m_chat;
+            msg = std::regex_replace(msg, std::regex("$name"), name);
+            const char* c = msg.c_str();
+
+            if (ChannelMgr* cMgr = channelMgr(me->GetTeam()))
+            {
+                if (Channel* chn = cMgr->GetJoinChannel("world"))
+                    chn->Say(me->GetObjectGuid(), c, LANG_UNIVERSAL, true);
+            }
+        }
+    }
+
+    BotLastChatTime = sWorld.GetGameTime();
+}
+
+/*
+bool MapBotAI::GetBotText()
+{
+    std::string msg = SelectRandomContainerElement(m_chatDataHelloRespond).m_chat;
+
+}*/
