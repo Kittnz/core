@@ -363,3 +363,4 @@ update item_template set name = 'Glyph of the Turtle', description = 'You lose %
 update item_template set name = 'Turtle WoW Tabard', description = 'I like it slow.' where entry = 19160;
 
 update creature_template set script_name = '', loot_id = 8959, skinning_loot_id = 8959, pet_spell_list_id = 5954, ai_name = 'EventAI', spell_id1 = 16460, spell_list_id = 0 where entry = 80259;
+REPLACE INTO `creature` VALUES (2558385,80259,0,0,0,-11183.3,-1996.48,47.0739,6.14454,300,360,5,0,100,0,0,1,0,0,0,10),(2558384,80259,0,0,0,-11162.8,-2083.55,48.0452,0.31139,300,360,5,0,100,0,0,1,0,0,0,10),(2558383,80259,0,0,0,-10475.9,-2142.27,90.7802,1.1659,300,360,5,0,100,0,0,1,0,0,0,10);
