@@ -361,3 +361,5 @@ where entry = @quest_entry;
 
 update item_template set name = 'Glyph of the Turtle', description = 'You lose %5 of your experience on death and you get half experience from creature kills.' where entry = 50010;
 update item_template set name = 'Turtle WoW Tabard', description = 'I like it slow.' where entry = 19160;
+
+update creature_template set script_name = '', loot_id = 8959, skinning_loot_id = 8959, pet_spell_list_id = 5954, ai_name = 'EventAI', spell_id1 = 16460, spell_list_id = 0 where entry = 80259;
