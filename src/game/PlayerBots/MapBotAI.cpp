@@ -943,6 +943,7 @@ void MapBotAI::UpdateAI(uint32 const diff)
             for (std::vector<MapBotChatRespondsQueue>::iterator itr = m_chatRespondsQueue.begin(); itr != m_chatRespondsQueue.end(); ++itr)
             {
                 HandleChat(me, itr->m_type, itr->m_guid1, itr->m_guid2, itr->m_msg, itr->m_chanName, itr->m_name);
+                m_chatRespondsQueue.erase(itr);
             }
         }
         m_updateChatTimer.Reset(3000);
@@ -967,7 +968,7 @@ void MapBotAI::UpdateAI(uint32 const diff)
         me->SetMoney(10000000); // 1000g for taxis etc
 
         // Make the bot join the world channel for chat
-        ChatHandler(me).HandleChannelJoinCommand("world");
+        ChatHandler(me).HandleChannelJoinCommand("World");
 
         // random hide helm and cloak
         if (urand(0, 1))
@@ -3555,7 +3556,7 @@ void MapBotAI::HandleChat(Player* me, uint32 type, uint32 guid1, uint32 guid2, s
     case CHAT_MSG_WHISPER:
         break;
     case CHAT_MSG_CHANNEL:
-        if (chanName == "world")
+        if (chanName == "World")
         {
             // Hello Responds
             if (msg.find("hi") != std::string::npos)
@@ -3567,7 +3568,7 @@ void MapBotAI::HandleChat(Player* me, uint32 type, uint32 guid1, uint32 guid2, s
 
                 if (ChannelMgr* cMgr = channelMgr(me->GetTeam()))
                 {
-                    std::string worldChan = "world";
+                    std::string worldChan = "World";
                     if (Channel* chn = cMgr->GetJoinChannel(worldChan.c_str()))
                         chn->Say(me->GetObjectGuid(), c, LANG_UNIVERSAL, true);
                 }
