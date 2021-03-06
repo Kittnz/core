@@ -114,7 +114,7 @@ replace into shop_items values
 (712, 7, 81157, 'Armored Green War Bear', 500),
 (713, 7, 81158, 'Armored White War Bear', 500),
 -- Gameplay: Glyphs
-(800, 8, 50010, 'General: Glyph of Hardcore', 0),
+(800, 8, 50010, 'General: Glyph of the Turtle', 0),
 (801, 8, 50008, 'General: Glyph of Twinking', 0),
 (802, 8, 50521, 'General: Glyph of Exhaustion', 0),
 (803, 8, 51055, 'Druid: Glyph of the Tree', 100),
