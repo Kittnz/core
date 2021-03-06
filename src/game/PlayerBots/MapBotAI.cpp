@@ -744,9 +744,9 @@ void MapBotAI::OnPacketReceived(WorldPacket const* packet)
                 case CHAT_MSG_CHANNEL:
                     packet >> chanName >> unused >> guid1 >> unused;
                     packet >> message;
-
+                    sObjectMgr.GetPlayerNameByGUID(guid1, name);
                     // do world chat
-                    MakeBotChat(me, msgtype, guid1, 0, message, chanName, name);
+                    MakeBotWorldChat(me, msgtype, guid1, 0, message, chanName, name);
 
                     break;
                 default:
@@ -936,6 +936,17 @@ void MapBotAI::UpdateAI(uint32 const diff)
 
     // Chat timer
     m_updateChatTimer.Update(diff);
+    if (m_updateChatTimer.Passed())
+    {
+        if (!m_chatRespondsQueue.empty())
+        {
+            for (std::vector<MapBotChatRespondsQueue>::iterator itr = m_chatRespondsQueue.begin(); itr != m_chatRespondsQueue.end(); ++itr)
+            {
+                HandleChat(me, itr->m_type, itr->m_guid1, itr->m_guid2, itr->m_msg, itr->m_chanName, itr->m_name);
+            }
+        }
+        m_updateChatTimer.Reset(3000);
+    }
 
     if (!me->IsInWorld() || me->IsBeingTeleported() || m_doingGraveyardJump)
         return;
@@ -3529,65 +3540,52 @@ void MapBotAI::LoadBotChat()
     delete result;
 }
 
-void MapBotAI::MakeBotChat(Player* me, uint8 msgtype, ObjectGuid guid1, ObjectGuid guid2, std::string message, std::string chanName, std::string name)
+void MapBotAI::MakeBotWorldChat(Player* me, uint8 msgtype, ObjectGuid guid1, ObjectGuid guid2, std::string message, std::string chanName, std::string name)
 {
-    if (m_updateChatTimer.Passed())
-    {
-        time_t gtime = sWorld.GetGameTime();
-        if (BotLastChatTime < (gtime - (uint32)3))
-        {
-            switch (msgtype)
-            {
-                case CHAT_MSG_SAY:
-                case CHAT_MSG_PARTY:
-                case CHAT_MSG_YELL:
-                case CHAT_MSG_WHISPER:
-                    break;
-                case CHAT_MSG_CHANNEL:
-                    //if (guid1 == me->GetObjectGuid())
-                        DoBotChat(me, msgtype, guid1, guid2, message, chanName, name);
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        m_updateChatTimer.Reset(3000);
-    }
+    m_chatRespondsQueue.push_back(MapBotChatRespondsQueue(msgtype, guid1, guid2, message, chanName, name));
 }
 
-void MapBotAI::DoBotChat(Player* me, uint32 type, uint32 guid1, uint32 guid2, std::string msg, std::string chanName, std::string name)
+void MapBotAI::HandleChat(Player* me, uint32 type, uint32 guid1, uint32 guid2, std::string msg, std::string chanName, std::string name)
 {
-    if (chanName == "World")
+    switch (type)
     {
-        // Hello Responds
-        if (msg.find("hi") != std::string::npos)
+    case CHAT_MSG_SAY:
+    case CHAT_MSG_PARTY:
+    case CHAT_MSG_YELL:
+    case CHAT_MSG_WHISPER:
+        break;
+    case CHAT_MSG_CHANNEL:
+        if (chanName == "world")
         {
-            std::string msg = SelectRandomContainerElement(m_chatDataHelloRespond).m_chat;
-            msg = std::regex_replace(msg, std::regex("$name"), name);
-            msg = std::regex_replace(msg, std::regex("%s"), name);
-            const char* c = msg.c_str();
-
-            if (ChannelMgr* cMgr = channelMgr(me->GetTeam()))
+            // Hello Responds
+            if (msg.find("hi") != std::string::npos)
             {
-                std::string worldChan = "world";
-                if (Channel* chn = cMgr->GetJoinChannel(worldChan.c_str()))
-                    chn->Say(me->GetObjectGuid(), c, LANG_UNIVERSAL, true);
+                std::string msg = SelectRandomContainerElement(m_chatDataHelloRespond).m_chat;
+                msg = std::regex_replace(msg, std::regex("$name"), name);
+                msg = std::regex_replace(msg, std::regex("%s"), name);
+                const char* c = msg.c_str();
+
+                if (ChannelMgr* cMgr = channelMgr(me->GetTeam()))
+                {
+                    std::string worldChan = "world";
+                    if (Channel* chn = cMgr->GetJoinChannel(worldChan.c_str()))
+                        chn->Say(me->GetObjectGuid(), c, LANG_UNIVERSAL, true);
+                }
             }
+            /*else // does not understand
+            {
+                std::string msg = SelectRandomContainerElement(m_chatDataNotUnderstand).m_chat;
+                msg = std::regex_replace(msg, std::regex("$name"), name);
+                const char* c = msg.c_str();
+
+                if (ChannelMgr* cMgr = channelMgr(me->GetTeam()))
+                {
+                    std::string worldChan = "world";
+                    if (Channel* chn = cMgr->GetJoinChannel(worldChan.c_str()))
+                        chn->Say(me->GetObjectGuid(), c, LANG_UNIVERSAL, true);
+                }
+            }*/
         }
-        /*else // does not understand
-        {
-            std::string msg = SelectRandomContainerElement(m_chatDataNotUnderstand).m_chat;
-            msg = std::regex_replace(msg, std::regex("$name"), name);
-            const char* c = msg.c_str();
-
-            if (ChannelMgr* cMgr = channelMgr(me->GetTeam()))
-            {
-                std::string worldChan = "world";
-                if (Channel* chn = cMgr->GetJoinChannel(worldChan.c_str()))
-                    chn->Say(me->GetObjectGuid(), c, LANG_UNIVERSAL, true);
-            }
-        }*/
     }
 
     time_t gtime = sWorld.GetGameTime();

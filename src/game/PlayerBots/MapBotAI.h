@@ -16,9 +16,13 @@ struct MapBotChatData
 
 struct MapBotChatRespondsQueue
 {
-    MapBotChatRespondsQueue(uint32 type, uint32 guid1, uint32 guid2, std::string msg, std::string chanName) : m_type(type), m_guid1(guid1), m_guid2(guid2), m_msg(msg), m_chanName(chanName) {}
-    uint32 m_type, m_guid1, m_guid2 = 0;
-    std::string m_msg, m_chanName = "";
+    MapBotChatRespondsQueue(uint32 type, uint32 guid1, uint32 guid2, std::string msg, std::string chanName, std::string name) : m_type(type), m_guid1(guid1), m_guid2(guid2), m_msg(msg), m_chanName(chanName), m_name(name) {}
+    uint32 m_type;
+    uint32 m_guid1;
+    uint32 m_guid2;
+    std::string m_msg;
+    std::string m_chanName;
+    std::string m_name;
 };
 
 enum MapBotChatDataType
@@ -155,14 +159,12 @@ public:
 
     // Chat System
     void LoadBotChat();
-    void MakeBotChat(Player* me, uint8 msgtype, ObjectGuid guid1, ObjectGuid guid2, std::string message, std::string chanName, std::string name);
-    void DoBotChat(Player* me, uint32 type, uint32 guid1, uint32 guid2, std::string msg, std::string chanName, std::string name);
+    void MakeBotWorldChat(Player* me, uint8 msgtype, ObjectGuid guid1, ObjectGuid guid2, std::string message, std::string chanName, std::string name);
+    void HandleChat(Player* me, uint32 type, uint32 guid1, uint32 guid2, std::string msg, std::string chanName, std::string name);
     ShortTimeTracker m_updateChatTimer;
     //uint8 m_BotChatCount = 0;
     time_t BotLastChatTime;
 
-    /*void BotChatResponds(Player* me, uint32 type, uint32 guid1, uint32 guid2, std::string msg, std::string chanName);
-    void BotChatWorld(std::string const& text, uint32 const language);*/
 };
 
 #endif
