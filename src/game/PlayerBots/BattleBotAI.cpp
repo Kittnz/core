@@ -968,7 +968,7 @@ void BattleBotAI::UpdateAI(uint32 const diff)
     }
     else
     {
-        if (!me->HasInArc(2 * M_PI_F / 3, pVictim) && !me->IsMoving())
+        if (!me->HasInArc(pVictim, 2 * M_PI_F / 3) && !me->IsMoving())
         {
             me->SetInFront(pVictim);
             me->SendMovementPacket(MSG_MOVE_SET_FACING, false);
@@ -1511,8 +1511,8 @@ void BattleBotAI::UpdateInCombatAI_Hunter()
             if (!me->IsStopped())
                 me->StopMoving();
             me->GetMotionMaster()->Clear();
-            me->GetMotionMaster()->MoveDistance(pVictim, 25.0f);
-            return;
+            if (me->GetMotionMaster()->MoveDistance(pVictim, 25.0f))
+                return;
         }
 
         if (me->HasSpell(BB_SPELL_AUTO_SHOT) &&
@@ -1636,9 +1636,8 @@ void BattleBotAI::UpdateInCombatAI_Mage()
                     DoCastSpell(me, m_spells.mage.pFrostNova);
                 }
 
-                me->GetMotionMaster()->MoveDistance(pVictim, 25.0f);
-
-                return;
+                if (me->GetMotionMaster()->MoveDistance(pVictim, 25.0f))
+                    return;
             }
         }
 
@@ -2544,8 +2543,8 @@ void BattleBotAI::UpdateInCombatAI_Rogue()
                 {
                     if (DoCastSpell(me, m_spells.rogue.pVanish) == SPELL_CAST_OK)
                     {
-                        me->GetMotionMaster()->MoveDistance(pVictim, 40.0f);
-                        return;
+                        if (me->GetMotionMaster()->MoveDistance(pVictim, 40.0f))
+                            return;
                     }
                 }
             }
@@ -3100,8 +3099,8 @@ void BattleBotAI::UpdateInCombatAI_Druid()
                             return;
                     }
                     me->SetCasterChaseDistance(25.0f);
-                    me->GetMotionMaster()->MoveDistance(pVictim, 25.0f);
-                    return;
+                    if (me->GetMotionMaster()->MoveDistance(pVictim, 25.0f))
+                        return;
                 }
 
                 if (m_spells.druid.pFaerieFire &&

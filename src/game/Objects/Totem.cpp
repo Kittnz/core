@@ -40,9 +40,7 @@ bool Totem::Create(uint32 guidlow, CreatureCreatePos& cPos, CreatureInfo const* 
 {
     SetMap(cPos.GetMap());
 
-    Team team = owner->GetTypeId() == TYPEID_PLAYER ? ((Player*)owner)->GetTeam() : TEAM_NONE;
-
-    if (!CreateFromProto(guidlow, cinfo, team, cinfo->entry))
+    if (!CreateFromProto(guidlow, cinfo, cinfo->entry))
         return false;
 
     cPos.SelectFinalPoint(this);
@@ -61,6 +59,8 @@ bool Totem::Create(uint32 guidlow, CreatureCreatePos& cPos, CreatureInfo const* 
         iData->OnCreatureCreate(this);
 
     LoadCreatureAddon();
+
+    SetWalk(true, true);
 
     return true;
 }
@@ -94,9 +94,7 @@ void Totem::Summon(Unit* owner)
     AIM_Initialize();
     owner->GetMap()->Add((Creature*)this);
 
-    WorldPacket data(SMSG_GAMEOBJECT_SPAWN_ANIM, 8);
-    data << GetObjectGuid();
-    SendObjectMessageToSet(&data, true);
+    SendObjectSpawnAnim();
 
     if (owner->GetTypeId() == TYPEID_UNIT && ((Creature*)owner)->AI())
         ((Creature*)owner)->AI()->JustSummoned((Creature*)this);
@@ -120,7 +118,7 @@ void Totem::Summon(Unit* owner)
 
 void Totem::UnSummon()
 {
-    SendObjectDeSpawnAnim(GetObjectGuid());
+    SendObjectDeSpawnAnim();
 
     CombatStop();
     RemoveAurasDueToSpell(GetSpell());

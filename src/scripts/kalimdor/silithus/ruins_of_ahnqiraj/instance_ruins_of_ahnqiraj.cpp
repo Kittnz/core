@@ -24,20 +24,6 @@ EndScriptData */
 #include "scriptPCH.h"
 #include "ruins_of_ahnqiraj.h"
 
-enum
-{
-    WAVE1_LINK_ID = 112,
-    WAVE2_LINK_ID = 115,
-    WAVE3_LINK_ID = 117,
-    WAVE4_LINK_ID = 116,
-    WAVE5_LINK_ID = 118,
-    WAVE6_LINK_ID = 120,
-    WAVE7_LINK_ID = 119,
-
-    GO_ENTRANCE = 210347
-};
-
-
 instance_ruins_of_ahnqiraj::instance_ruins_of_ahnqiraj(Map* pMap) : ScriptedInstance(pMap)
 {
     Initialize();
@@ -148,7 +134,7 @@ void instance_ruins_of_ahnqiraj::OnCreatureEnterCombat(Creature * pCreature)
         case NPC_QIRAJI_WARRIOR:
             /** Create Yeggeth list for Rajaxx Shield ability */
             if (CreatureGroup* g = pCreature->GetCreatureGroup())
-                if (g->GetLeaderGuid().GetEntry() == NPC_MAJOR_YEGGETH)
+                if (g->GetOriginalLeaderGuid().GetEntry() == NPC_MAJOR_YEGGETH)
                     m_lYeggethShieldList.push_back(pCreature->GetGUID());
             // If any creature from Rajaxx's wave enters combat, start Rajaxx event.
             if (m_auiEncounter[TYPE_RAJAXX] == NOT_STARTED)
@@ -342,7 +328,7 @@ void instance_ruins_of_ahnqiraj::OnCreatureDeath(Creature* pCreature)
                 pCreature->ForcedDespawn(3000);
                 pCreature->SetRespawnTime(AQ_RESPAWN_FOUR_DAYS);
             }
-            // Count deathes in Rajaxx's waves
+            // Count deaths in Rajaxx's waves
             if (GetWaveFromCreature(pCreature) > 0)
             {
                 uint8 waveIndex = GetWaveFromCreature(pCreature) - 1;
@@ -405,11 +391,10 @@ void instance_ruins_of_ahnqiraj::SetData(uint32 uiType, uint32 uiData)
             else
                 m_uiGladiatorDeath = 0;
             return;
-            break;
         case TYPE_KURINNAXX:
             /** Spawn Andorov 3 minutes after Kurinaxx death */
             if (uiData == DONE)
-                SetAndorovSquadRespawnTime(6);//AQ_RESPAWN_3_MINUTES);
+                SetAndorovSquadRespawnTime(AQ_RESPAWN_3_MINUTES);
 
             m_auiEncounter[TYPE_KURINNAXX] = uiData;
             break;
@@ -437,7 +422,7 @@ void instance_ruins_of_ahnqiraj::SetData(uint32 uiType, uint32 uiData)
                 if (m_auiEncounter[TYPE_KURINNAXX] == DONE)
                     SetAndorovSquadRespawnTime(AQ_RESPAWN_15_MINUTES);
 
-                /** Reset waves casualities count */
+                /** Reset waves casualties count */
                 for (uint32 & waveIndex : m_uiWaveMembersCount)
                     waveIndex = WAVE_MEMBERS_INIT_COUNT;
             }
@@ -575,7 +560,7 @@ uint8 instance_ruins_of_ahnqiraj::GetWaveFromCreature(Creature* creature)
         return 0;
     }
 //sLog.nostalrius("group leader : %u",group->GetLeaderGuid().GetEntry());
-    switch (group->GetLeaderGuid().GetEntry())
+    switch (group->GetOriginalLeaderGuid().GetEntry())
     {
         case NPC_CAPTAIN_QEEZ:
             return 1;

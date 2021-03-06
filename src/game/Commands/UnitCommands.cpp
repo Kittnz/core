@@ -294,7 +294,7 @@ bool ChatHandler::HandleUnitInfoCommand(char* args)
     PSendSysMessage("Mount display id: %u", pTarget->GetMountID());
     PSendSysMessage("Stand state: %hhu", pTarget->GetStandState());
     PSendSysMessage("Shapeshift form: %hhu", pTarget->GetShapeshiftForm());
-    PSendSysMessage("Byte flags: %hhu", pTarget->GetByteValue(UNIT_FIELD_BYTES_1, 3));
+    PSendSysMessage("Vis flags: %hhu", pTarget->GetByteValue(UNIT_FIELD_BYTES_1, UNIT_BYTES_1_OFFSET_VIS_FLAG));
     PSendSysMessage("Dynamic flags: %u", pTarget->GetUInt32Value(UNIT_DYNAMIC_FLAGS));
     if (auto pSpellEntry = sSpellMgr.GetSpellEntry(pTarget->GetUInt32Value(UNIT_CHANNEL_SPELL)))
         PSendSysMessage("Channel spell: %u - %s", pTarget->GetUInt32Value(UNIT_CHANNEL_SPELL), pSpellEntry->SpellName[0].c_str());
@@ -309,7 +309,29 @@ bool ChatHandler::HandleUnitInfoCommand(char* args)
     PSendSysMessage("Unit state flags: %u", pTarget->GetUnitState());
     PSendSysMessage("Death state: %hhu", pTarget->GetDeathState());
     PSendSysMessage("Sheath state: %hhu", pTarget->GetSheath());
-    PSendSysMessage("Byte flags 2: %hhu", pTarget->GetByteValue(UNIT_FIELD_BYTES_2, 1));
+    PSendSysMessage("Byte flags 2: %hhu", pTarget->GetByteValue(UNIT_FIELD_BYTES_2, UNIT_BYTES_2_OFFSET_MISC_FLAGS));
+
+    return true;
+}
+
+bool ChatHandler::HandleUnitSpeedInfoCommand(char* args)
+{
+    Unit* pTarget = GetSelectedUnit();
+
+    if (!pTarget)
+    {
+        SendSysMessage(LANG_SELECT_CHAR_OR_CREATURE);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    PSendSysMessage("Speed info for %s", pTarget->GetObjectGuid().GetString().c_str());
+    PSendSysMessage("Walk: %g", pTarget->GetSpeed(MOVE_WALK));
+    PSendSysMessage("Run: %g", pTarget->GetSpeed(MOVE_RUN));
+    PSendSysMessage("Run Back: %g", pTarget->GetSpeed(MOVE_RUN_BACK));
+    PSendSysMessage("Swim: %g", pTarget->GetSpeed(MOVE_SWIM));
+    PSendSysMessage("Swim Back: %g", pTarget->GetSpeed(MOVE_SWIM_BACK));
+    PSendSysMessage("Turn: %g", pTarget->GetSpeed(MOVE_TURN_RATE));
 
     return true;
 }
@@ -652,6 +674,25 @@ bool ChatHandler::HandleListAurasCommand(char* /*args*/)
             }
         }
     }
+
+    return true;
+}
+
+bool ChatHandler::HandleListMoveGensCommand(char* /*args*/)
+{
+    Unit* unit = GetSelectedUnit();
+    if (!unit)
+    {
+        SendSysMessage(LANG_SELECT_CHAR_OR_CREATURE);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    PSendSysMessage("List of move gens for %s:", unit->GetObjectGuid().GetString().c_str());
+    std::vector<MovementGeneratorType> generators;
+    unit->GetMotionMaster()->GetUsedMovementGeneratorsList(generators);
+    for (uint32 i = 0; i < generators.size(); i++)
+        PSendSysMessage("%u. %s (%u)", (i+1), MotionMaster::GetMovementGeneratorTypeName(generators[i]), generators[i]);
 
     return true;
 }

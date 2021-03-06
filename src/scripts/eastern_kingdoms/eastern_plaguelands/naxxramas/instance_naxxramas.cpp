@@ -152,7 +152,7 @@ bool instance_naxxramas::HandleEvadeOutOfHome(Creature* pWho)
             break;
         }
         case NPC_RAZUVIOUS:
-            if (pWho->GetPositionZ() > 275.0f)
+            if (pWho->GetPositionZ() > 285.0f)
             {
                 pWho->AI()->EnterEvadeMode();
                 return false;
@@ -484,41 +484,41 @@ void instance_naxxramas::OnObjectCreate(GameObject* pGo)
             m_alHeiganTrapGuids[0].push_back(pGo->GetObjectGuid());
         else if ((uiGoEntry >= 181510 && uiGoEntry <= 181516) || (uiGoEntry >= 181525 && uiGoEntry <= 181531) || uiGoEntry == 181533 || uiGoEntry == 181676)
             m_alHeiganTrapGuids[1].push_back(pGo->GetObjectGuid());
-		else if ((uiGoEntry >= 181534 && uiGoEntry <= 181544) || uiGoEntry == 181532 || uiGoEntry == 181677)
-		{
-			m_alHeiganTrapGuids[2].push_back(pGo->GetObjectGuid());
-		}
-		else if (uiGoEntry >= 181545 && uiGoEntry <= 181552)
-		{
-			if(pGo->GetDBTableGUIDLow() != 533119 && pGo->GetDBTableGUIDLow() != 533123) // duplicates
-				m_alHeiganTrapGuids[3].push_back(pGo->GetObjectGuid());
-		}
-		switch (pGo->GetDBTableGUIDLow())
-		{
-			case 533181:
-			case 533182:
-			case 533183:
-			case 533184:
-			case 533187:
-			case 533188:
-			case 533189:
-			case 533190:
-			case 533191:
-			case 533192:
-			case 533193:
-			case 533194:
-			case 533195:
-			case 533197:
-			case 533199:
-			case 533200:
-				m_alHeiganTrapGuids[3].push_back(pGo->GetObjectGuid());
-				break;
-			case 533185:
-			case 533196:
-			case 533198:
-				m_alHeiganTrapGuids[2].push_back(pGo->GetObjectGuid());
-			///case 533186:
-		}
+        else if ((uiGoEntry >= 181534 && uiGoEntry <= 181544) || uiGoEntry == 181532 || uiGoEntry == 181677)
+        {
+            m_alHeiganTrapGuids[2].push_back(pGo->GetObjectGuid());
+        }
+        else if (uiGoEntry >= 181545 && uiGoEntry <= 181552)
+        {
+            if(pGo->GetDBTableGUIDLow() != 533119 && pGo->GetDBTableGUIDLow() != 533123) // duplicates
+                m_alHeiganTrapGuids[3].push_back(pGo->GetObjectGuid());
+        }
+        switch (pGo->GetDBTableGUIDLow())
+        {
+            case 533181:
+            case 533182:
+            case 533183:
+            case 533184:
+            case 533187:
+            case 533188:
+            case 533189:
+            case 533190:
+            case 533191:
+            case 533192:
+            case 533193:
+            case 533194:
+            case 533195:
+            case 533197:
+            case 533199:
+            case 533200:
+                m_alHeiganTrapGuids[3].push_back(pGo->GetObjectGuid());
+                break;
+            case 533185:
+            case 533196:
+            case 533198:
+                m_alHeiganTrapGuids[2].push_back(pGo->GetObjectGuid());
+            ///case 533186:
+        }
     }
 
     switch (pGo->GetEntry())
@@ -1263,12 +1263,12 @@ void instance_naxxramas::Update(uint32 diff)
                 if (m_auiEncounter[TYPE_THADDIUS] != DONE)
                 {
                     if (m_auiEncounter[TYPE_THADDIUS] != IN_PROGRESS && m_auiEncounter[TYPE_THADDIUS] != SPECIAL)
-                        DoOrSimulateScriptTextForThisInstance(THADDIUS_SAY_SCREAM4 + urand(0, 3), NPC_THADDIUS);
+                        DoOrSimulateScriptTextForThisInstance(THADDIUS_SAY_SCREAM1 + urand(0, 3), NPC_THADDIUS);
                     m_events.ScheduleEvent(EVENT_THADDIUS_SCREAM, Minutes(urand(5,10)));
                 }
                 break;
             case EVENT_WINGBOSS_DEAD:
-                DoOrSimulateScriptTextForThisInstance(KELTHUZAD_SAY_TAUNT1 - GetNumEndbossDead()+1, NPC_KELTHUZAD);
+                DoOrSimulateScriptTextForThisInstance(KELTHUZAD_SAY_TAUNT1 + GetNumEndbossDead()-1, NPC_KELTHUZAD);
                 break;
             case EVENT_KT_LK_DIALOGUE_1:
                 DoOrSimulateScriptTextForThisInstance(SAY_SAPP_DIALOG1, NPC_KELTHUZAD);
@@ -1564,7 +1564,7 @@ struct mob_naxxramasGarboyleAI : public ScriptedAI
             if (DoCastSpellIfCan(m_creature, 28995) == CAST_OK)
             {
                 m_creature->CastSpell(m_creature, 28995, true); // Stoneskin
-                DoScriptText(-1531100, m_creature); // %s emits a strange noise.
+                DoScriptText(10755, m_creature); // %s emits a strange noise.
             }
         }
 

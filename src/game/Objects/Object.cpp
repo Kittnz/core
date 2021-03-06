@@ -283,6 +283,9 @@ void Object::BuildCreateUpdateBlockForPlayer(UpdateData* data, Player* target) c
     if (target == this)                                     // building packet for yourself
         updateFlags |= UPDATEFLAG_SELF;
 
+    if (IsUnit() && static_cast<Unit const*>(this)->HasUnitState(UNIT_STAT_MELEE_ATTACKING) && static_cast<Unit const*>(this)->GetVictim())
+        updateFlags |= UPDATEFLAG_MELEE_ATTACKING;
+
     if (m_isNewObject)
         updatetype = UPDATETYPE_CREATE_OBJECT2;
 #else
@@ -290,7 +293,7 @@ void Object::BuildCreateUpdateBlockForPlayer(UpdateData* data, Player* target) c
         updateFlags |= UPDATEFLAG_SELF;
 #endif
 
-    if (isType(TYPEMASK_GAMEOBJECT) && ((GameObject*)this)->GetGoType() == GAMEOBJECT_TYPE_TRANSPORT)
+    if (isType(TYPEMASK_GAMEOBJECT) && static_cast<GameObject const*>(this)->GetGoType() == GAMEOBJECT_TYPE_TRANSPORT)
         updateFlags |= UPDATEFLAG_TRANSPORT;
 
     //DEBUG_LOG("BuildCreateUpdate: update-type: %u, object-type: %u got updateFlags: %X", updatetype, m_objectTypeId, updateFlags);
@@ -310,7 +313,12 @@ void Object::BuildCreateUpdateBlockForPlayer(UpdateData* data, Player* target) c
     buf << uint32(updateFlags); // Flags
     buf << uint32(1); // AttackCycle (always 1 in sniffs)
     buf << uint32(0); // TimerId
-    buf << uint64(0); // VictimGuid
+
+    // VictimGuid
+    if (IsUnit() && static_cast<Unit const*>(this)->HasUnitState(UNIT_STAT_MELEE_ATTACKING) && static_cast<Unit const*>(this)->GetVictim())
+        buf << uint64(static_cast<Unit const*>(this)->GetVictim()->GetGUID());
+    else
+        buf << uint64(0);
 
     if (updateFlags & UPDATEFLAG_TRANSPORT)
     {
@@ -470,7 +478,7 @@ void Object::BuildMovementUpdate(ByteBuffer* data, uint8 updateFlags) const
         *data << uint32(1);
     }
 
-    if (updateFlags & UPDATEFLAG_FULLGUID)
+    if (updateFlags & UPDATEFLAG_MELEE_ATTACKING)
     {
         if (Unit const* me = ToUnit())
         {
@@ -573,6 +581,14 @@ void Object::BuildValuesUpdate(uint8 updatetype, ByteBuffer* data, UpdateMask* u
 
             updateMask->SetBit(GAMEOBJECT_DYN_FLAGS);
         }
+#if SUPPORTED_CLIENT_BUILD <= CLIENT_BUILD_1_6_1
+        else if (isType(TYPEMASK_ITEM))
+        {
+            // Force include flags field in create object packet,
+            // because the static flags need to sent in that field.
+            updateMask->SetBit(ITEM_FIELD_FLAGS);
+        }
+#endif
     }
     else                                                    // case UPDATETYPE_VALUES
     {
@@ -589,9 +605,8 @@ void Object::BuildValuesUpdate(uint8 updatetype, ByteBuffer* data, UpdateMask* u
     }
     if (isType(TYPEMASK_GAMEOBJECT))
     {
-        target->m_visibleGobjsQuestAct_lock.acquire();
+        std::unique_lock<std::mutex> lock(target->m_visibleGobjsQuestAct_lock);
         target->m_visibleGobjQuestActivated[GetObjectGuid()] = IsActivateToQuest;
-        target->m_visibleGobjsQuestAct_lock.release();
     }
 
     MANGOS_ASSERT(updateMask && updateMask->GetCount() == m_valuesCount);
@@ -833,7 +848,7 @@ void Object::BuildValuesUpdate(uint8 updatetype, ByteBuffer* data, UpdateMask* u
             }
         }
     }
-    else                                                    // other objects case (no special index checks)
+    else if (isType(TYPEMASK_CORPSE))
     {
         for (uint16 index = 0; index < m_valuesCount; ++index)
         {
@@ -856,6 +871,40 @@ void Object::BuildValuesUpdate(uint8 updatetype, ByteBuffer* data, UpdateMask* u
                 else
                     // send in current format (float as float, uint32 as uint32)
                     *data << m_uint32Values[index];
+            }
+        }
+    }
+#if SUPPORTED_CLIENT_BUILD <= CLIENT_BUILD_1_6_1
+    else if (isType(TYPEMASK_ITEM))
+    {
+        for (uint16 index = 0; index < m_valuesCount; ++index)
+        {
+            if (updateMask->GetBit(index))
+            {
+                // Static item flags are part of that field prior to patch 1.7.
+                if (index == ITEM_FIELD_FLAGS)
+                {
+                    if (ItemPrototype const* pProto = ObjectMgr::GetItemPrototype(GetEntry()))
+                        *data << uint16(pProto->Flags);
+                    else
+                        *data << uint16(0);
+                    *data << uint16(m_uint32Values[index]);
+                }
+                else
+                    // send in current format (float as float, uint32 as uint32)
+                    *data << m_uint32Values[index];
+            }
+        }
+    }
+#endif
+    else                                                    // other objects case (no special index checks)
+    {
+        for (uint16 index = 0; index < m_valuesCount; ++index)
+        {
+            if (updateMask->GetBit(index))
+            {
+                // send in current format (float as float, uint32 as uint32)
+                *data << m_uint32Values[index];
             }
         }
     }
@@ -1359,11 +1408,28 @@ float WorldObject::GetDistance2dToCenter(WorldObject const* target) const
     return (dist > 0 ? dist : 0);
 }
 
+float WorldObject::GetDistance2dToCenter(float x, float y) const
+{
+    float dx = GetPositionX() - x;
+    float dy = GetPositionY() - y;
+    float dist = sqrt((dx * dx) + (dy * dy));
+    return (dist > 0 ? dist : 0);
+}
+
 float WorldObject::GetDistance3dToCenter(WorldObject const* target) const
 {
     float dx = GetPositionX() - target->GetPositionX();
     float dy = GetPositionY() - target->GetPositionY();
     float dz = GetPositionZ() - target->GetPositionZ();
+    float dist = sqrt((dx * dx) + (dy * dy) + (dz * dz));
+    return (dist > 0 ? dist : 0);
+}
+
+float WorldObject::GetDistance3dToCenter(float x, float y, float z) const
+{
+    float dx = GetPositionX() - x;
+    float dy = GetPositionY() - y;
+    float dz = GetPositionZ() - z;
     float dist = sqrt((dx * dx) + (dy * dy) + (dz * dz));
     return (dist > 0 ? dist : 0);
 }
@@ -1589,12 +1655,13 @@ bool WorldObject::IsInRange3d(float x, float y, float z, float minRange, float m
     return distsq < maxdist * maxdist;
 }
 
-bool WorldObject::CanReachWithMeleeSpellAttack(Unit const* pVictim, float flat_mod /*= 0.0f*/) const
+bool WorldObject::CanReachWithMeleeSpellAttack(WorldObject const* pVictim, float flat_mod /*= 0.0f*/) const
 {
     if (!pVictim || !pVictim->IsInWorld())
         return false;
 
-    float reach = IsUnit() ? static_cast<Unit const*>(this)->GetCombatReach(pVictim, true, flat_mod) : ATTACK_DISTANCE;
+    float reach = IsUnit() && pVictim->IsUnit() ? 
+        static_cast<Unit const*>(this)->GetCombatReach(static_cast<Unit const*>(pVictim), true, flat_mod) : ATTACK_DISTANCE;
 
     // This check is not related to bounding radius
     float dx = GetPositionX() - pVictim->GetPositionX();
@@ -1604,19 +1671,25 @@ bool WorldObject::CanReachWithMeleeSpellAttack(Unit const* pVictim, float flat_m
     return dx * dx + dy * dy < reach * reach;
 }
 
+float WorldObject::GetLeewayBonusRangeForTargets(Player const* player, Unit const* target, bool ability)
+{
+    if (ability)
+        return (player->GetXZFlagBasedSpeed() > LEEWAY_MIN_MOVE_SPEED && target->GetXZFlagBasedSpeed() > LEEWAY_MIN_MOVE_SPEED) ? LEEWAY_BONUS_RANGE : 0.0f;
+
+    // auto attacks do not check speed, only flags
+    return (player->IsMovingButNotWalking() && target->IsMovingButNotWalking()) ? LEEWAY_BONUS_RANGE : 0.0f;
+}
+
 float WorldObject::GetLeewayBonusRange(Unit const* target, bool ability) const
 {
-    if (Player const* pPlayer = ToPlayer())
+    if (target && IsUnit())
     {
-        if (target)
-        {
-            if (ability)
-                return (pPlayer->GetXZFlagBasedSpeed() > LEEWAY_MIN_MOVE_SPEED && target->GetXZFlagBasedSpeed() > LEEWAY_MIN_MOVE_SPEED) ? LEEWAY_BONUS_RANGE : 0.0f;
-            else // auto attacks do not check speed, only flags
-                return (IsMovingButNotWalking() && target->IsMovingButNotWalking()) ? LEEWAY_BONUS_RANGE : 0.0f;
-        }
+        if (Player const* pPlayer = ToPlayer())
+            return GetLeewayBonusRangeForTargets(pPlayer, target, ability);
+        else if (Player const* pPlayer = target->ToPlayer())
+            return GetLeewayBonusRangeForTargets(pPlayer, static_cast<Unit const*>(this), ability);
     }
-    
+
     return 0.0f;
 }
 
@@ -1676,10 +1749,10 @@ bool WorldObject::HasInArc(float const arcangle, float const x, float const y) c
     return ((angle >= lborder) && (angle <= rborder));
 }
 
-bool WorldObject::HasInArc(float const arcangle, WorldObject const* obj, float offset) const
+bool WorldObject::HasInArc(WorldObject const* target, float const arcangle, float offset) const
 {
     // always have self in arc
-    if (obj == this)
+    if (target == this)
         return true;
 
     float arc = arcangle;
@@ -1687,7 +1760,7 @@ bool WorldObject::HasInArc(float const arcangle, WorldObject const* obj, float o
     // move arc to range 0.. 2*pi
     arc = MapManager::NormalizeOrientation(arc);
 
-    float angle = GetAngle(obj);
+    float angle = GetAngle(target);
     angle -= m_position.o + offset;
 
     // move angle to range -pi ... +pi
@@ -1702,22 +1775,22 @@ bool WorldObject::HasInArc(float const arcangle, WorldObject const* obj, float o
 
 bool WorldObject::isInFrontInMap(WorldObject const* target, float distance,  float arc) const
 {
-    return IsWithinDistInMap(target, distance) && HasInArc(arc, target);
+    return IsWithinDistInMap(target, distance) && HasInArc(target, arc);
 }
 
 bool WorldObject::isInBackInMap(WorldObject const* target, float distance, float arc) const
 {
-    return IsWithinDistInMap(target, distance) && !HasInArc(2 * M_PI_F - arc, target);
+    return IsWithinDistInMap(target, distance) && !HasInArc(target, 2 * M_PI_F - arc);
 }
 
 bool WorldObject::isInFront(WorldObject const* target, float distance,  float arc) const
 {
-    return IsWithinDist(target, distance) && HasInArc(arc, target);
+    return IsWithinDist(target, distance) && HasInArc(target, arc);
 }
 
 bool WorldObject::isInBack(WorldObject const* target, float distance, float arc) const
 {
-    return IsWithinDist(target, distance) && !HasInArc(2 * M_PI_F - arc, target);
+    return IsWithinDist(target, distance) && !HasInArc(target, 2 * M_PI_F - arc);
 }
 
 bool WorldObject::GetRandomPoint(float x, float y, float z, float distance, float &rand_x, float &rand_y, float &rand_z) const
@@ -1937,10 +2010,17 @@ void WorldObject::SendMessageToSetExcept(WorldPacket* data, Player const* skippe
     }
 }
 
-void WorldObject::SendObjectDeSpawnAnim(ObjectGuid guid) const
+void WorldObject::SendObjectSpawnAnim() const
+{
+    WorldPacket data(SMSG_GAMEOBJECT_SPAWN_ANIM, 8);
+    data << GetObjectGuid();
+    SendObjectMessageToSet(&data, true);
+}
+
+void WorldObject::SendObjectDeSpawnAnim() const
 {
     WorldPacket data(SMSG_GAMEOBJECT_DESPAWN_ANIM, 8);
-    data << ObjectGuid(guid);
+    data << GetObjectGuid();
     SendObjectMessageToSet(&data, true);
 }
 
@@ -2093,11 +2173,9 @@ Creature* Map::SummonCreature(uint32 entry, float x, float y, float z, float ang
 
     TemporarySummon* pCreature = new TemporarySummon();
 
-    Team team = TEAM_NONE;
-
     CreatureCreatePos pos(this, x, y, z, ang);
 
-    if (!pCreature->Create(GenerateLocalLowGuid(HIGHGUID_UNIT), pos, pInf, team, entry))
+    if (!pCreature->Create(GenerateLocalLowGuid(HIGHGUID_UNIT), pos, pInf, entry))
     {
         delete pCreature;
         return nullptr;
@@ -2141,16 +2219,12 @@ Creature* WorldObject::SummonCreature(uint32 id, float x, float y, float z, floa
 
     TemporarySummon* pCreature = new TemporarySummon(GetObjectGuid());
 
-    Team team = TEAM_NONE;
-    if (GetTypeId() == TYPEID_PLAYER)
-        team = ((Player*)this)->GetTeam();
-
     CreatureCreatePos pos(GetMap(), x, y, z, ang);
 
     if (x == 0.0f && y == 0.0f && z == 0.0f)
         pos = CreatureCreatePos(this, GetOrientation(), CONTACT_DISTANCE, ang);
 
-    if (!pCreature->Create(GetMap()->GenerateLocalLowGuid(cinfo->GetHighGuid()), pos, cinfo, team, id))
+    if (!pCreature->Create(GetMap()->GenerateLocalLowGuid(cinfo->GetHighGuid()), pos, cinfo, id))
     {
         delete pCreature;
         return nullptr;
@@ -3252,8 +3326,8 @@ ReputationRank WorldObject::GetReactionTo(WorldObject const* target) const
 
             // check FFA_PVP - not implemented that way on MaNGOS :/
             /*
-            if (GetByteValue(UNIT_FIELD_BYTES_2, 1) & UNIT_BYTE2_FLAG_FFA_PVP
-            && target->GetByteValue(UNIT_FIELD_BYTES_2, 1) & UNIT_BYTE2_FLAG_FFA_PVP)
+            if (GetByteValue(UNIT_FIELD_BYTES_2, UNIT_BYTES_2_OFFSET_MISC_FLAGS) & UNIT_BYTE2_FLAG_FFA_PVP
+            && target->GetByteValue(UNIT_FIELD_BYTES_2, UNIT_BYTES_2_OFFSET_MISC_FLAGS) & UNIT_BYTE2_FLAG_FFA_PVP)
             return REP_HOSTILE;
             */
         }
@@ -3616,7 +3690,7 @@ SpellMissInfo WorldObject::MeleeSpellHitResult(Unit* pVictim, SpellEntry const* 
     if (attType == RANGED_ATTACK)
         return SPELL_MISS_NONE;
 
-    bool from_behind = !pVictim->HasInArc(M_PI_F, this);
+    bool from_behind = !pVictim->HasInArc(this, M_PI_F);
 
     // Check for attack from behind
     if (from_behind)
@@ -4036,10 +4110,10 @@ uint32 WorldObject::CalcArmorReducedDamage(Unit* pVictim, uint32 const damage) c
     return (newdamage > 1) ? newdamage : 1;
 }
 
-int32 WorldObject::CalculateSpellDamage(Unit const* target, SpellEntry const* spellProto, SpellEffectIndex effect_index, int32 const* effBasePoints, Spell* spell)
+int32 WorldObject::CalculateSpellEffectValue(Unit const* target, SpellEntry const* spellProto, SpellEffectIndex effect_index, int32 const* effBasePoints, Spell* spell) const
 {
-    Unit* pUnit = ToUnit();
-    Player* pPlayer = ToPlayer();
+    Unit const* pUnit = ToUnit();
+    Player const* pPlayer = ToPlayer();
 
     uint8 comboPoints = pPlayer ? pPlayer->GetComboPoints() : 0;
 
@@ -4615,6 +4689,12 @@ int32 WorldObject::SpellBonusWithCoeffs(SpellEntry const* spellProto, SpellEffec
     {
         // Calculate level penalty
         float LvlPenalty = CalculateLevelPenalty(spellProto);
+
+        // Flame Wrath (16560) scales at 100% without any penalty, yet spell level is 1.
+        // Damage shield auras must not be subject to level penalty.
+        if ((spellProto->Effect[effectIndex] == SPELL_EFFECT_APPLY_AURA) &&
+            (spellProto->EffectApplyAuraName[effectIndex] == SPELL_AURA_DAMAGE_SHIELD))
+            LvlPenalty = 1.0f;
 
         // Calculate custom coefficient
         coeff = spellProto->CalculateCustomCoefficient(pCaster, damagetype, coeff, spell, donePart);
@@ -5585,4 +5665,78 @@ void WorldObject::PrintCooldownList(ChatHandler& chat) const
 
     chat.PSendSysMessage("Found %u cooldown%s.", cdCount, (cdCount > 1) ? "s" : "");
     chat.PSendSysMessage("Found %u permanent cooldown%s.", permCDCount, (permCDCount > 1) ? "s" : "");
+}
+
+// function based on function Unit::CanAttack from 13850 client
+bool WorldObject::IsValidAttackTarget(Unit const* target, bool checkAlive) const
+{
+    ASSERT(target);
+
+    // can't attack self
+    if (this == target)
+        return false;
+
+    if (FindMap() != target->FindMap())
+        return false;
+
+    if (!target->IsTargetable(true, IsCharmerOrOwnerPlayerOrPlayerItself(), false, checkAlive))
+        return false;
+
+    Unit const* pThisUnit = ToUnit();
+
+    // CvC case - can attack each other only when one of them is hostile
+    if ((!pThisUnit || !pThisUnit->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PLAYER_CONTROLLED)) && !target->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PLAYER_CONTROLLED))
+        return GetReactionTo(target) <= REP_HOSTILE || target->GetReactionTo(this) <= REP_HOSTILE;
+
+    // PvP, PvC, CvP case
+    // can't attack friendly targets
+    if (GetReactionTo(target) > REP_NEUTRAL
+            || target->GetReactionTo(this) > REP_NEUTRAL)
+        return false;
+
+    Player const* playerAffectingAttacker = GetAffectingPlayer();
+    Player const* playerAffectingTarget = target->GetAffectingPlayer();
+
+    // Not all neutral creatures can be attacked
+    if (GetReactionTo(target) == REP_NEUTRAL &&
+            target->GetReactionTo(this) == REP_NEUTRAL)
+    {
+        if (!(playerAffectingTarget && playerAffectingAttacker) &&
+                !(!playerAffectingTarget && !playerAffectingAttacker))
+        {
+            Player const* player = playerAffectingTarget ? playerAffectingTarget : playerAffectingAttacker;
+            WorldObject const* object = playerAffectingTarget ? this : target;
+
+            if (FactionTemplateEntry const* factionTemplate = object->getFactionTemplateEntry())
+            {
+                if (!(player->GetReputationMgr().GetForcedRankIfAny(factionTemplate)))
+                    if (FactionEntry const* factionEntry = sObjectMgr.GetFactionEntry(factionTemplate->faction))
+                        if (FactionState const* repState = player->GetReputationMgr().GetState(factionEntry))
+                            if (!(repState->Flags & FACTION_FLAG_AT_WAR))
+                                return false;
+
+            }
+        }
+    }
+
+    // PvP checks
+    if (playerAffectingAttacker && playerAffectingTarget)
+    {
+        if (playerAffectingAttacker->duel && playerAffectingAttacker->duel->opponent == playerAffectingTarget && playerAffectingAttacker->duel->startTime != 0)
+            return true;
+
+        if (playerAffectingTarget->IsPvP())
+            return true;
+
+        if ((playerAffectingAttacker->GetByteValue(UNIT_FIELD_BYTES_2, UNIT_BYTES_2_OFFSET_MISC_FLAGS) & UNIT_BYTE2_FLAG_FFA_PVP)
+                && (playerAffectingTarget->GetByteValue(UNIT_FIELD_BYTES_2, UNIT_BYTES_2_OFFSET_MISC_FLAGS) & UNIT_BYTE2_FLAG_FFA_PVP))
+            return true;
+
+        if (playerAffectingAttacker->IsFFAPvP() && playerAffectingTarget->IsFFAPvP())
+            return true;
+
+        return (playerAffectingAttacker->GetByteValue(UNIT_FIELD_BYTES_2, UNIT_BYTES_2_OFFSET_MISC_FLAGS) & UNIT_BYTE2_FLAG_UNK1)
+               || (playerAffectingTarget->GetByteValue(UNIT_FIELD_BYTES_2, UNIT_BYTES_2_OFFSET_MISC_FLAGS) & UNIT_BYTE2_FLAG_UNK1);
+    }
+    return true;
 }

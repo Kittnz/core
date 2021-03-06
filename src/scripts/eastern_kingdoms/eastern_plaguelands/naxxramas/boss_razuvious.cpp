@@ -142,7 +142,7 @@ struct boss_razuviousAI : public ScriptedAI
         if (!m_creature->IsWithinDistInMap(pWho, 33.0f))
             return;
 
-        if (m_creature->CanInitiateAttack() && pWho->IsTargetableForAttack() && m_creature->IsHostileTo(pWho))
+        if (m_creature->CanInitiateAttack() && pWho->IsTargetable(true, false) && m_creature->IsHostileTo(pWho))
         {
             if (pWho->IsInAccessablePlaceFor(m_creature) && m_creature->IsWithinLOSInMap(pWho))
             {
@@ -183,6 +183,7 @@ struct boss_razuviousAI : public ScriptedAI
                 if (i == 1)
                     rpBuddy = pAdd->GetObjectGuid();
                 summonedAdds.push_back(pAdd->GetObjectGuid());
+                pAdd->SetUInt32Value(UNIT_NPC_EMOTESTATE, EMOTE_STATE_READY1H);
             }
         }
     }
@@ -199,7 +200,7 @@ struct boss_razuviousAI : public ScriptedAI
     {
         if (urand(0, 3))
             return;
-        DoScriptText(urand(SAY_SLAY2, SAY_SLAY1), m_creature);
+        DoScriptText(urand(SAY_SLAY1, SAY_SLAY2), m_creature);
     }
 
     void JustDied(Unit* pKiller) override
@@ -212,7 +213,7 @@ struct boss_razuviousAI : public ScriptedAI
 
     void Aggro(Unit* pWho) override
     {
-        DoScriptText(urand(SAY_AGGRO3, SAY_AGGRO1), m_creature);
+        DoScriptText(urand(SAY_AGGRO1, SAY_AGGRO3), m_creature);
 
         if (m_pInstance)
             m_pInstance->SetData(TYPE_RAZUVIOUS, IN_PROGRESS);
@@ -333,7 +334,7 @@ struct boss_razuviousAI : public ScriptedAI
                     events.Repeat(Seconds(25));
                     break;
                 case EVENT_COMMAND:
-                    DoScriptText(urand(SAY_COMMAND4, SAY_COMMAND1), m_creature);
+                    DoScriptText(urand(SAY_COMMAND1, SAY_COMMAND4), m_creature);
                     events.Repeat(Seconds(urand(30,60)));
                     break;
             }

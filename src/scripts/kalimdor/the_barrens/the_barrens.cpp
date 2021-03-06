@@ -30,6 +30,15 @@ EndContentData */
 
 #include "scriptPCH.h"
 
+enum
+{
+    // TODO: implement random broadcast on spawn
+    //SAY_SPAWN_1 = 3164, 
+    //SAY_SPAWN_2 = 3170, 
+    SAY_CRACKER = 3167,
+    SAY_SQUAWK  = 3165
+};
+
 struct npc_pollyAI : public ScriptedAI
 {
     npc_pollyAI(Creature* pCreature) : ScriptedAI(pCreature)
@@ -48,8 +57,8 @@ struct npc_pollyAI : public ScriptedAI
     {
         if (!b_text)
         {
-            m_creature->MonsterSay("MmmmmMmmmm... Enormous chemically altered cracker...", 0, 0);
-            m_creature->MonsterSay("What the squawk? Squawk squawk, squawk? SQUAWK!", 0, 0);
+            DoScriptText(SAY_CRACKER, m_creature);
+            DoScriptText(SAY_SQUAWK, m_creature);
             b_text = true;
         }
     }
@@ -67,17 +76,17 @@ CreatureAI* GetAI_npc_polly(Creature* pCreature)
 
 enum
 {
-    SAY_GIL_START               = -1000370,
-    SAY_GIL_AT_LAST             = -1000371,
-    SAY_GIL_PROCEED             = -1000372,
-    SAY_GIL_FREEBOOTERS         = -1000373,
-    SAY_GIL_AGGRO_1             = -1000374,
-    SAY_GIL_AGGRO_2             = -1000375,
-    SAY_GIL_AGGRO_3             = -1000376,
-    SAY_GIL_AGGRO_4             = -1000377,
-    SAY_GIL_ALMOST              = -1000378,
-    SAY_GIL_SWEET               = -1000379,
-    SAY_GIL_FREED               = -1000380,
+    SAY_GIL_START               = 1065,
+    SAY_GIL_AT_LAST             = 1066, 
+    SAY_GIL_PROCEED             = 1067, 
+    SAY_GIL_FREEBOOTERS         = 1068, 
+    SAY_GIL_AGGRO_1             = 1074, 
+    SAY_GIL_AGGRO_2             = 1075, 
+    SAY_GIL_AGGRO_3             = 1072, 
+    SAY_GIL_AGGRO_4             = 1073, 
+    SAY_GIL_ALMOST              = 1069, 
+    SAY_GIL_SWEET               = 1070, 
+    SAY_GIL_FREED               = 1071, 
 
     QUEST_FREE_FROM_HOLD        = 898,
     AREA_MERCHANT_COAST         = 391
@@ -91,6 +100,12 @@ struct npc_giltharesAI : public npc_escortAI
     }
 
     void Reset() override { }
+
+    void JustRespawned() override
+    {
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+        npc_escortAI::JustRespawned();
+    }
 
     void WaypointReached(uint32 uiPointId) override
     {
@@ -162,6 +177,7 @@ bool QuestAccept_npc_gilthares(Player* pPlayer, Creature* pCreature, Quest const
     if (pQuest->GetQuestId() == QUEST_FREE_FROM_HOLD)
     {
         pCreature->SetFactionTemplateId(FACTION_ESCORT_H_NEUTRAL_ACTIVE);
+        pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
         pCreature->SetStandState(UNIT_STAND_STATE_STAND);
 
         DoScriptText(SAY_GIL_START, pCreature, pPlayer);
@@ -178,11 +194,12 @@ bool QuestAccept_npc_gilthares(Player* pPlayer, Creature* pCreature, Quest const
 
 enum
 {
-    SAY_BIG_WILL_READY = -1000123,
-    SAY_TWIGGY_BEGIN = -1000124,
-    SAY_TWIGGY_FRAY = -1000125,
-    SAY_TWIGGY_DOWN = -1000126,
-    SAY_TWIGGY_OVER = -1000127,
+    SAY_BIG_WILL_READY = 2421, 
+    SAY_TWIGGY_BEGIN   = 2310,  
+    SAY_TWIGGY_FRAY    = 2318,  
+    SAY_TWIGGY_DOWN    = 2355,  
+    SAY_TWIGGY_OVER    = 2320,  
+    SAY_QUEST_TURN_IN  = 2354, // TODO: implement Klannoc Macleod (id: 6236) yells after quest was turned in: Hail $n!  New Champion of The Affray!
 
     NPC_TWIGGY = 6248,
     NPC_BIG_WILL = 6238,
@@ -343,7 +360,7 @@ struct npc_twiggy_flatheadAI : public ScriptedAI
                     if (Unit *will = m_creature->GetMap()->GetUnit(BigWillGUID))
                     {
                         will->SetFactionTemplateId(FACTION_CREATURE);
-                        DoScriptText(SAY_BIG_WILL_READY, will, pPlayer);
+                        DoScriptText(SAY_BIG_WILL_READY, will);
                     }
                     Event_Timer = 5000;
                     ++Step;
@@ -421,14 +438,14 @@ bool AreaTrigger_at_twiggy_flathead(Player* pPlayer, AreaTriggerEntry const* pAt
 
 enum
 {
-    SAY_START           = -1000298,
-    SAY_STARTUP1        = -1000299,
-    SAY_STARTUP2        = -1000300,
-    SAY_MERCENARY       = -1000301,
-    SAY_PROGRESS_1      = -1000302,
-    SAY_PROGRESS_2      = -1000303,
-    SAY_PROGRESS_3      = -1000304,
-    SAY_END             = -1000305,
+    SAY_START           = 1031,
+    SAY_STARTUP1        = 1039, 
+    SAY_STARTUP2        = 1032, 
+    SAY_MERCENARY       = 1040, 
+    SAY_PROGRESS_1      = 1033, 
+    SAY_PROGRESS_2      = 1043, 
+    SAY_PROGRESS_3      = 1041, 
+    SAY_END             = 1044, 
 
     QUEST_ESCAPE        = 863,
     FACTION_RATCHET     = 637,
@@ -533,10 +550,9 @@ struct npc_wizzlecranks_shredderAI : public npc_escortAI
                             break;
                         case 3:
                             if (Player* pPlayer = GetPlayerForEscort())
-                            {
                                 pPlayer->GroupEventHappens(QUEST_ESCAPE, m_creature);
-                                m_creature->SummonCreature(NPC_PILOT_WIZZ, 0.0f, 0.0f, 0.0f, 0.0f, TEMPSUMMON_TIMED_DESPAWN, 180000);
-                            }
+                            m_creature->SummonCreature(NPC_PILOT_WIZZ, 0.0f, 0.0f, 0.0f, 0.0f, TEMPSUMMON_TIMED_DESPAWN, 180000);
+                            m_creature->ResetHomePosition();
                             break;
                     }
 
@@ -584,15 +600,18 @@ enum
 
     GOSSIP_ITEM_START       = 4793,
 
-    SAY_BEWARE              = -1780211,
-    SAY_DEFENDER_FALLEN     = -1780212,
-    EMOTE_CHARGE            = -1780213,
-    YELL_HALF_WAY           = -1780214,
-    SAY_DEFEND              = -1780215,
-    SAY_FOES                = -1780216,
-    SAY_HORDE               = -1780217,
-    YELL_KOLKAR_STRONGEST   = -1780218,
-    YELL_RETREATING         = -1780219,
+    SAY_BEWARE              = 4926,
+    SAY_DEFENDER_FALLEN     = 4757,
+    EMOTE_CHARGE            = 1254,
+    YELL_HALF_WAY           = 8439,
+    SAY_DEFEND              = 4922,
+    SAY_AGGRO_FOES          = 4925,
+    SAY_AGGRO_FOR_HORDE     = 8283,
+    SAY_AGGRO_BEWARE        = 4924,
+    YELL_WARLORD_KROMZAR    = 4919,
+    YELL_RETREATING         = 8897,
+
+    SOUND_HORDE_DEFENDER_AGGRO = 7120,
 
     QUEST_COUNTERATTACK     = 4021,
     GO_KOLKAR_BANNER        = 164690
@@ -843,7 +862,7 @@ struct npc_regthar_deathgateAI : public ScriptedAI
                             c->SetRespawnDelay(120);
                         }
                     }
-                    DoScriptText(YELL_KOLKAR_STRONGEST, kromzar);
+                    DoScriptText(YELL_WARLORD_KROMZAR, kromzar);
                 }
                 else
                 {
@@ -1065,9 +1084,31 @@ struct npc_axe_throwerAI : public ScriptedAI
     }
     void Aggro(Unit *who) override
     {
-        if (urand(0, 1))
-            DoScriptText(urand(0, 1) ? SAY_HORDE : SAY_FOES, m_creature);
+        /*
+         
+        TODO: Not sure when these texts are acutally broadcasted
+
+        uint32 aggroText = 0;
+        switch (urand(0, 3))
+        {
+        case 0:
+            aggroText = SAY_AGGRO_FOR_HORDE;
+            break;
+        case 1:
+            aggroText = SAY_AGGRO_FOES;
+            break;
+        case 2:
+            aggroText = SAY_AGGRO_BEWARE;
+            break;
+        }
+        DoScriptText(aggroText, m_creature);
+
+        */
+
+        if(urand(0, 1)) // not always play aggro sound, TODO: npc=9457/horde-defender should have this as aggro sound as well
+        m_creature->PlayDirectSound(SOUND_HORDE_DEFENDER_AGGRO);
     }
+
     uint32 throwTimer;
     void UpdateAI(uint32 const uiDiff) override
     {
@@ -1127,53 +1168,6 @@ struct npc_warlord_kromzarAI : public ScriptedAI
 CreatureAI* GetAI_npc_warlord_kromzar(Creature* pCreature)
 {
     return new npc_warlord_kromzarAI(pCreature);
-}
-
-/*######
-## npc_razormane_stalker
-######*/
-
-#define SPELL_STEALTH                1784
-#define SPELL_SINISTERSTRIKE         15667
-#define NPC_RAZORMANE_STALKER        3457
-
-struct npc_razormane_stalkerAI : public ScriptedAI
-{
-    npc_razormane_stalkerAI(Creature* pCreature) : ScriptedAI(pCreature) { Reset(); }
-
-    uint32 SinisterStrike_Timer;
-    uint32 SinisterStrike_Counter;
-
-    void Reset() override
-    {
-        SinisterStrike_Timer = 8000;
-        SinisterStrike_Counter = 0;
-        DoCastSpellIfCan(m_creature, SPELL_STEALTH);
-    }
-
-    void UpdateAI(uint32 const diff) override
-    {
-
-        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
-            return;
-
-        if (SinisterStrike_Timer < diff)
-        {
-            DoCastSpellIfCan(m_creature->GetVictim(), SPELL_SINISTERSTRIKE);
-            SinisterStrike_Counter += 1;
-            if (SinisterStrike_Counter == 1) SinisterStrike_Timer = 15000;
-            else if (SinisterStrike_Counter == 2) SinisterStrike_Timer = 12000;
-            else SinisterStrike_Timer = 15000;
-        }
-        else SinisterStrike_Timer -= diff;
-
-        DoMeleeAttackIfReady();
-    }
-};
-
-CreatureAI* GetAI_npc_razormane_stalker(Creature* pCreature)
-{
-    return new npc_razormane_stalkerAI(pCreature);
 }
 
 /*
@@ -1417,11 +1411,6 @@ void AddSC_the_barrens()
     newscript = new Script;
     newscript->Name = "npc_warlord_kromzar";
     newscript->GetAI = &GetAI_npc_warlord_kromzar;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "npc_razormane_stalker";
-    newscript->GetAI = &GetAI_npc_razormane_stalker;
     newscript->RegisterSelf();
 
     newscript = new Script;

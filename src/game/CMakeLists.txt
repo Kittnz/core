@@ -36,7 +36,6 @@ set (game_SRCS
     ObjectGuid.cpp
     ObjectMgr.cpp
     ObjectPosSelector.cpp
-    pchdef.cpp
     PlayerDump.cpp
     QuestDef.cpp
     ReputationMgr.cpp
@@ -237,7 +236,6 @@ set (game_SRCS
     ObjectGuid.h
     ObjectMgr.h
     ObjectPosSelector.h
-    pchdef.h
     PlayerDump.h
     QuestDef.h
     ReputationMgr.h
@@ -413,6 +411,13 @@ set (game_SRCS
 
 )
 
+if((${CMAKE_VERSION} VERSION_LESS "3.16") OR USE_PCH_OLD)
+  list(APPEND game_SRCS
+      pchdef.cpp
+      pchdef.h
+  )
+  include_directories(${CMAKE_CURRENT_BINARY_DIR})
+endif()
 
 if(WIN32)
   #allow exceptions in destructors
@@ -425,7 +430,7 @@ if(WIN32)
 endif()
 
 # Used in game ScriptMgr
-if(SCRIPTS)
+if(USE_SCRIPTS)
   list(APPEND game_SRCS
       ${CMAKE_SOURCE_DIR}/src/scripts/ScriptLoader.cpp
       ${CMAKE_SOURCE_DIR}/src/scripts/ScriptLoader.h
@@ -541,10 +546,6 @@ source_group("Anticheat"
   REGULAR_EXPRESSION Anticheat
 )
 
-if(PCH)
-  include_directories(${CMAKE_CURRENT_BINARY_DIR})
-endif()
-
 add_library(game STATIC
   ${game_SRCS}
 )
@@ -559,13 +560,37 @@ target_link_libraries(game
 #add_dependencies(game revision.h)
 
 # Generate precompiled header
-if(PCH)
-  if(MSVC OR XCODE)
-    if(MSVC)
-      set(game_pch "${CMAKE_CURRENT_SOURCE_DIR}/pchdef.cpp")
+if((${CMAKE_VERSION} VERSION_LESS "3.16") OR USE_PCH_OLD)
+  if(USE_PCH)
+    if(MSVC OR XCODE)
+      if(MSVC)
+        set(game_pch "${CMAKE_CURRENT_SOURCE_DIR}/pchdef.cpp")
+      endif()
+      add_native_precompiled_header(game ${CMAKE_CURRENT_SOURCE_DIR}/pchdef.h)
+    elseif(CMAKE_COMPILER_IS_GNUCXX)
+      add_precompiled_header(game ${CMAKE_CURRENT_SOURCE_DIR}/pchdef.h)
     endif()
-    add_native_precompiled_header(game ${CMAKE_CURRENT_SOURCE_DIR}/pchdef.h)
-  elseif(CMAKE_COMPILER_IS_GNUCXX)
-    add_precompiled_header(game ${CMAKE_CURRENT_SOURCE_DIR}/pchdef.h)
+  endif()
+else()
+  if(USE_PCH)
+      target_precompile_headers(game PRIVATE
+      Protocol/WorldSocket.h
+      ../shared/Common.h
+
+      Maps/MapManager.h
+      ../shared/Log.h
+      ObjectAccessor.h
+      ObjectGuid.h
+      Database/SQLStorages.h
+      Protocol/Opcodes.h
+      SharedDefines.h
+      Guild/GuildMgr.h
+      ObjectMgr.h
+      ScriptMgr.h
+      )
   endif()
 endif()
+
+
+
+

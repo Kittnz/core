@@ -86,8 +86,8 @@ struct point3o { float x, y, z, o; };
 // sentry guards spawn points(taken from DB)
 static const point3o guardsSpawn[] =
 {
-    { -2890.5f,	-3344.49f, 32.3878f, 2.15425f },
-    { -2889.18f, -3337.46f,	32.5128f, 3.67612f }
+    { -2890.5f, -3344.49f, 32.3878f, 2.15425f },
+    { -2889.18f, -3337.46f, 32.5128f, 3.67612f }
 };
 
 // ally spawn struct
@@ -921,6 +921,11 @@ struct npc_lady_jaina_proudmooreAI : public ScriptedAI
     {
         m_uiSpellTimer = 3000;
         m_uiSpecialTimer = 15000;
+    }
+
+    void EnterCombat(Unit* enemy) override
+    {
+        me->PlayDistanceSound(5882);
     }
 
     void UpdateAI(uint32 const uiDiff) override
