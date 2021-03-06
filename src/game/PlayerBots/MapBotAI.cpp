@@ -3533,7 +3533,8 @@ void MapBotAI::MakeBotChat(Player* me, uint8 msgtype, ObjectGuid guid1, ObjectGu
 {
     if (m_updateChatTimer.Passed())
     {
-        if (BotLastChatTime < sWorld.GetGameTime() - (uint32)3)
+        time_t gtime = sWorld.GetGameTime();
+        if (BotLastChatTime < (gtime - (uint32)3))
         {
             switch (msgtype)
             {
@@ -3551,7 +3552,7 @@ void MapBotAI::MakeBotChat(Player* me, uint8 msgtype, ObjectGuid guid1, ObjectGu
             }
         }
 
-        m_updateChatTimer.Reset(1000);
+        m_updateChatTimer.Reset(3000);
     }
 }
 
@@ -3564,15 +3565,17 @@ void MapBotAI::DoBotChat(Player* me, uint32 type, uint32 guid1, uint32 guid2, st
         {
             std::string msg = SelectRandomContainerElement(m_chatDataHelloRespond).m_chat;
             msg = std::regex_replace(msg, std::regex("$name"), name);
+            msg = std::regex_replace(msg, std::regex("%s"), name);
             const char* c = msg.c_str();
 
             if (ChannelMgr* cMgr = channelMgr(me->GetTeam()))
             {
-                if (Channel* chn = cMgr->GetJoinChannel("world"))
+                std::string worldChan = "world";
+                if (Channel* chn = cMgr->GetJoinChannel(worldChan.c_str()))
                     chn->Say(me->GetObjectGuid(), c, LANG_UNIVERSAL, true);
             }
         }
-        else // does not understand
+        /*else // does not understand
         {
             std::string msg = SelectRandomContainerElement(m_chatDataNotUnderstand).m_chat;
             msg = std::regex_replace(msg, std::regex("$name"), name);
@@ -3580,13 +3583,15 @@ void MapBotAI::DoBotChat(Player* me, uint32 type, uint32 guid1, uint32 guid2, st
 
             if (ChannelMgr* cMgr = channelMgr(me->GetTeam()))
             {
-                if (Channel* chn = cMgr->GetJoinChannel("world"))
+                std::string worldChan = "world";
+                if (Channel* chn = cMgr->GetJoinChannel(worldChan.c_str()))
                     chn->Say(me->GetObjectGuid(), c, LANG_UNIVERSAL, true);
             }
-        }
+        }*/
     }
 
-    BotLastChatTime = sWorld.GetGameTime();
+    time_t gtime = sWorld.GetGameTime();
+    BotLastChatTime = gtime;
 }
 
 /*

@@ -57,7 +57,7 @@ public:
     {
         m_updateTimer.Reset(2000);
         m_updateMoveTimer.Reset(1000);
-        m_updateChatTimer.Reset(1000);
+        m_updateChatTimer.Reset(3000);
         BotLastChatTime = sWorld.GetGameTime();
     }
 
