@@ -167,9 +167,7 @@ void PathInfo::BuildPolyPath(const Vector3 &startPos, const Vector3 &endPos)
             else
             {
                 BuildShortcut();
-                m_type = PathType(PATHFIND_NORMAL | PATHFIND_NOT_USING_PATH);
-                if (m_sourceUnit->CanFly())
-                    m_type |= PATHFIND_FLYPATH;
+                m_type = PathType(PATHFIND_NORMAL | PATHFIND_NOT_USING_PATH | PATHFIND_FLYPATH);
             }
             return;
         }
@@ -450,7 +448,7 @@ void PathInfo::BuildPointPath(const float *startPoint, const float *endPoint, fl
             BuildShortcut();
         }
 
-        m_type = PathType(PATHFIND_NORMAL | PATHFIND_NOT_USING_PATH | PATHFIND_DEST_FORCED);
+        m_type |= PATHFIND_DEST_FORCED;
         if (m_sourceUnit->CanFly())
             m_type |= PATHFIND_FLYPATH;
     }
