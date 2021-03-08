@@ -2863,16 +2863,17 @@ void Player::GiveLevel(uint32 level)
     if (sWorld.getConfig(CONFIG_BOOL_BEGINNERS_GUILD))
         CheckIfShouldBeInBeginnersGuild(level);
 
-    if (bIsHardcore)
+    if (bIsTurtle)
         MailHardcoreModeRewards(level);
 
-    if (bIsMortal)
+    if (isHardcore())
     {
         AnnounceMortalModeLevelUp(level);
         if (level == 60)
         {
             CharacterDatabase.PExecute("UPDATE `characters` SET mortality_status = 2 WHERE `guid` = '%u'", GetGUIDLow()); // 0: not mortal 1: mortal 2: immortal 3: dead
             SetByteValue(PLAYER_BYTES_3, 2, 52);
+            SetHardcoreMode(2);
             uint32 itemEntry = 80187;
             std::string subject = "Tabard of the Immortal Guardian";
             std::string message = "Greetings, hero! Like you I undertook the same journey you have. I weathered the greatest dangers and foes without ever losing consciousness or falling to the brink of death.\n\nNow I stand immortal, just as you do. I have reached the peak of my power!\n\nTo celebrate your ascension in the ranks of immortality, I have attached a tabard that only we can wear.\n\n Wear it with pride and continue to avoid death! If you continue on this path, we shall meet one day.";
@@ -4489,7 +4490,7 @@ void Player::SetHover(bool enable)
 */
 void Player::BuildPlayerRepop()
 {
-    if (bIsMortal)
+    if (isHardcore())
         return;
 
     // Waiting to Resurrect (probably redundant cast, yet to check thoroughly)
@@ -4547,7 +4548,7 @@ void Player::BuildPlayerRepop()
 void Player::ResurrectPlayer(float restore_percent, bool applySickness)
 {
     // Don't ressurent permamently dead chracters.
-    if (bIsMortal)
+    if (isHardcore())
         return;
 
     // Interrupt resurrect spells
@@ -4640,7 +4641,7 @@ void Player::KillPlayer()
     // update visibility
     UpdateObjectVisibility();
 
-    if (bIsMortal && getLevel() < 60)
+    if (isHardcore() && getLevel() < 60)
     {
         CharacterDatabase.PExecute("UPDATE `characters` SET mortality_status = 3 WHERE `guid` = '%u'", GetGUIDLow()); // 0: not mortal 1: mortal 2: immortal 3: dead
         sWorld.SendWorldText(50300, GetName(), getLevel());
@@ -15050,8 +15051,9 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
         UpdateOldRidingSkillToNew(has_epic_mount);
 
     // Turtle WoW custom feature : hardcore mode(0.5x rates for Creature.Kill)
-    bIsHardcore = GetItemCount(50010, true) > 0;
-    bIsMortal = GetItemCount(80188, true) > 0;
+    bIsTurtle = GetItemCount(50010, true) > 0;
+    //bIsMortal = GetItemCount(80188, true) > 0;
+    HardcoreStatus = fields[61].GetUInt8();
 
     // For lazy me
     bIsCheater = GetItemCount(81130, true) > 0;
@@ -15061,7 +15063,7 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
     if (HasItemCount(21176, 1, 0)) // Scarab Lord
         SetByteValue(PLAYER_BYTES_3, 2, 15);
 
-    if (HasItemCount(80187, 1, 0) && getLevel() == 60) // Immortal (temp. check)
+    if (HardcoreStatus == 2 && getLevel() == 60) // Immortal (temp. check)
         SetByteValue(PLAYER_BYTES_3, 2, 52);
 
     return true;
@@ -22236,4 +22238,126 @@ uint16 Player::GetPureMaxSkillValue(uint32 skill) const
 		return 0;
 
 	return SKILL_MAX(GetUInt32Value(PLAYER_SKILL_VALUE_INDEX(itr->second.pos)));
+}
+
+// for Hardcore mode
+bool Player::SetupHardcoreMode()
+{
+    if (isHardcore())
+        return false;
+
+    SetHardcoreMode(1);
+    CharacterDatabase.PExecute("UPDATE `characters` SET mortality_status = 1 WHERE `guid` = '%u'", GetGUIDLow());
+
+    // add to guild
+    Guild* guild = sGuildMgr.GetGuildById(1);
+    if (!guild)
+        return false;
+
+    if (guild->AddMember(GetGUID(), 0) != GuildAddStatus::OK)
+        return false;
+
+    // reset inventory and mails
+    QueryResult* resultMail = CharacterDatabase.PQuery("SELECT id,messageType,mailTemplateId,sender,subject,itemTextId,money,has_items FROM mail WHERE receiver='%u' AND has_items<>0 AND cod<>0", GetGUIDLow());
+    if (resultMail)
+    {
+        do
+        {
+            Field* fields = resultMail->Fetch();
+
+            uint32 mail_id = fields[0].GetUInt32();
+            uint16 mailType = fields[1].GetUInt16();
+            uint16 mailTemplateId = fields[2].GetUInt16();
+            uint32 sender = fields[3].GetUInt32();
+            std::string subject = fields[4].GetCppString();
+            uint32 itemTextId = fields[5].GetUInt32();
+            uint32 money = fields[6].GetUInt32();
+            bool has_items = fields[7].GetBool();
+
+            //we can return mail now
+            //so firstly delete the old one
+            CharacterDatabase.PExecute("DELETE FROM mail WHERE id = '%u'", mail_id);
+
+            // mail not from player
+            if (mailType != MAIL_NORMAL)
+            {
+                if (has_items)
+                    CharacterDatabase.PExecute("DELETE FROM mail_items WHERE mail_id = '%u'", mail_id);
+                continue;
+            }
+
+            MailDraft draft;
+            if (mailTemplateId)
+                draft.SetMailTemplate(mailTemplateId, false); // items already included
+            else
+                draft.SetSubjectAndBodyId(subject, itemTextId);
+
+            if (has_items)
+            {
+                // data needs to be at first place for Item::LoadFromDB
+                QueryResult* resultItems = CharacterDatabase.PQuery("SELECT creatorGuid, giftCreatorGuid, count, duration, charges, flags, enchantments, randomPropertyId, durability, text, item_guid, itemEntry, generated_loot FROM mail_items JOIN item_instance ON item_guid = guid WHERE mail_id='%u'", mail_id);
+                if (resultItems)
+                {
+                    do
+                    {
+                        Field* fields2 = resultItems->Fetch();
+
+                        uint32 item_guidlow = fields2[10].GetUInt32();
+                        uint32 item_template = fields2[11].GetUInt32();
+
+                        ItemPrototype const* itemProto = ObjectMgr::GetItemPrototype(item_template);
+                        if (!itemProto)
+                        {
+                            CharacterDatabase.PExecute("DELETE FROM item_instance WHERE guid = '%u'", item_guidlow);
+                            continue;
+                        }
+
+                        Item* pItem = NewItemOrBag(itemProto);
+                        if (!pItem->LoadFromDB(item_guidlow, GetGUID(), fields2, item_template))
+                        {
+                            pItem->FSetState(ITEM_REMOVED);
+                            pItem->SaveToDB();              // it also deletes item object !
+                            continue;
+                        }
+
+                        draft.AddItem(pItem);
+                    } while (resultItems->NextRow());
+
+                    delete resultItems;
+                }
+            }
+
+            CharacterDatabase.PExecute("DELETE FROM mail_items WHERE mail_id = '%u'", mail_id);
+
+            uint32 pl_account = sObjectMgr.GetPlayerAccountIdByGUID(GetGUID());
+
+            draft.SetMoney(money).SendReturnToSender(pl_account, GetGUID(), ObjectGuid(HIGHGUID_PLAYER, sender));
+        } while (resultMail->NextRow());
+
+        delete resultMail;
+    }
+
+    CharacterDatabase.PExecute("DELETE FROM character_deleted_items WHERE player_guid = '%u'", GetGUIDLow());
+    CharacterDatabase.PExecute("DELETE FROM character_inventory WHERE guid = '%u'", GetGUIDLow());
+
+    QueryResult* allPlayersItems = CharacterDatabase.PQuery("SELECT itemEntry FROM item_instance WHERE owner_guid = '%u'", GetGUIDLow());
+    if (!allPlayersItems)
+        return false;
+    uint32 totalItems = 0;
+    std::vector<uint32>::iterator itr;
+    CharacterDatabase.BeginTransaction();
+    do
+    {
+        ++totalItems;
+        Field* fields = allPlayersItems->Fetch();
+        uint32 item_entry = fields[0].GetUInt32();
+
+        DestroyItemCount(item_entry, 255, true);
+
+    } while (allPlayersItems->NextRow());
+    CharacterDatabase.CommitTransaction();
+
+    delete allPlayersItems;
+
+    return true;
 }

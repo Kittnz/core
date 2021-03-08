@@ -2075,11 +2075,13 @@ class MANGOS_DLL_SPEC Player final: public Unit
         uint32 GetSkippedUpdateTime() const { return m_skippedUpdateTime; }
         void ResetSkippedUpdateTime() { m_skippedUpdateTime = 0; }
 
-        bool isHardcorePlayer() const { return bIsHardcore; };
-        bool isMortal() const { return bIsMortal; };
+        bool isTurtle() const { return bIsTurtle; };
         bool isCheater() const { return bIsCheater; };
-        void EnableHardcoreMode() { bIsHardcore = true; };
-        void EnableMortalMode() { bIsMortal = true; };
+        void EnableTurtleMode() { bIsTurtle = true; };
+
+        void SetHardcoreMode(uint8 status) { HardcoreStatus = status; };
+        bool SetupHardcoreMode();
+        bool isHardcore() const{ return HardcoreStatus > 0; }
 
         /*********************************************************/
         /***                 MISC GAME SYSTEMS                 ***/
@@ -2104,10 +2106,11 @@ class MANGOS_DLL_SPEC Player final: public Unit
         ObjectGuid m_escortingGuid;
         uint32 customFlags;
 
-        // Turtle WoW custom feature: hardcore mode (0.5x rates for Creature.Kill)
-        bool bIsHardcore = false;
-        bool bIsMortal = false;
+        // Turtle WoW custom feature: turtle mode (0.5x rates for Creature.Kill)
+        bool bIsTurtle = false;
         bool bIsCheater = false;
+
+        uint8 HardcoreStatus = 0;
 
         // For druids carrying players in a stag form
         bool bIsTaxiPassenger = false;

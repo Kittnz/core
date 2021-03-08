@@ -40,11 +40,11 @@
 // void called when player click on auctioneer npc
 void WorldSession::HandleAuctionHelloOpcode(WorldPacket & recv_data)
 {
-    if (GetPlayer()->isMortal())
-        return;
-
     ObjectGuid auctioneerGuid;                              // NPC guid
     recv_data >> auctioneerGuid;
+
+    if (GetPlayer()->isHardcore())
+        return;
 
     Creature *unit = GetPlayer()->GetNPCIfCanInteractWith(auctioneerGuid, UNIT_NPC_FLAG_AUCTIONEER);
     if (!unit)

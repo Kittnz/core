@@ -1308,7 +1308,7 @@ void Unit::Kill(Unit* pVictim, SpellEntry const *spellProto, bool durabilityLoss
     PetOwnerKilledUnit(pVictim);
     
     // 10% XP loss on death in Hardcore Mode
-    if (pPlayerVictim && pPlayerVictim->isHardcorePlayer() && !pPlayerVictim->InBattleGround() && !pPlayerTap)
+    if (pPlayerVictim && pPlayerVictim->isTurtle() && !pPlayerVictim->InBattleGround() && !pPlayerTap)
     {
         pPlayerVictim->GiveNegativeXP(5, pPlayerVictim); // Percentage
     }

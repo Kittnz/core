@@ -137,7 +137,7 @@ namespace MaNGOS
                 xp_gain *= pCreature->GetCreatureInfo()->xp_multiplier;
                 xp_gain *= pCreature->GetXPModifierDueToDamageOrigin();
 
-				if (pl->isHardcorePlayer())
+				if (pl->isTurtle())
 				{
 					xp_gain *= 0.5f;
 				}
@@ -180,7 +180,7 @@ namespace MaNGOS
 				if (Owner->IsPlayer())
 				{
 					Player* plOwner = Owner->ToPlayer();
-					if (plOwner->isHardcorePlayer())
+					if (plOwner->isTurtle())
 					{
 						xp_gain *= 0.5f;
 					}
