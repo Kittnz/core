@@ -930,9 +930,8 @@ bool QuestRewarded_npc_mysterious_stranger(Player* pPlayer, Creature* pQuestGive
     {
         pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
         pQuestGiver->MonsterSayToPlayer("You are aware this won't be easy, now go and stay safe on your journey.", pPlayer);
-        pPlayer->EnableMortalMode();
-        CharacterDatabase.PExecute("UPDATE `characters` SET mortality_status = 1 WHERE `guid` = '%u'", pPlayer->GetGUIDLow());
-        return true;
+        if (pPlayer->SetupHardcoreMode())
+            return true;
     }
     return false;
 }
