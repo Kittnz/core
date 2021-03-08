@@ -22301,7 +22301,10 @@ bool Player::SetupHardcoreMode()
 
             // skip equipment
             if (item->IsEquipped())
+            {
+                item->ClearEnchantment(PERM_ENCHANTMENT_SLOT);
                 continue;
+            }
 
             DestroyItem(item->GetBagSlot(), item->GetSlot(), true);
         }
