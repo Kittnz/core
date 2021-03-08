@@ -107,7 +107,7 @@ enum CharacterFlags
     CHARACTER_FLAG_NONE                 = 0x00000000,
     CHARACTER_FLAG_UNK1                 = 0x00000001,
     CHARACTER_FLAG_UNK2                 = 0x00000002,
-    CHARACTER_LOCKED_FOR_TRANSFER       = 0x00000004,
+    CHARACTER_FLAG_LOCKED_FOR_TRANSFER  = 0x00000004,
     CHARACTER_FLAG_UNK4                 = 0x00000008,
     CHARACTER_FLAG_UNK5                 = 0x00000010,
     CHARACTER_FLAG_UNK6                 = 0x00000020,
@@ -1668,6 +1668,11 @@ bool Player::BuildEnumData(QueryResult * result, WorldPacket * p_data)
         char_flags |= CHARACTER_FLAG_GHOST;
     if (atLoginFlags & AT_LOGIN_RENAME)
         char_flags |= CHARACTER_FLAG_RENAME;
+
+    uint8 hardcoreStatus = fields[20].GetUInt8();
+
+    if (hardcoreStatus == 3)
+        char_flags |= CHARACTER_FLAG_LOCKED_FOR_TRANSFER;
 
     *p_data << uint32(char_flags);                          // character flags
 
@@ -4629,7 +4634,10 @@ void Player::KillPlayer()
     //SetFlag( UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_IN_PVP );
 
     SetUInt32Value(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_NONE);
-    ApplyModByteFlag(PLAYER_FIELD_BYTES, 0, PLAYER_FIELD_BYTE_RELEASE_TIMER, !sMapStorage.LookupEntry<MapEntry>(GetMapId())->Instanceable());
+    if (!isHardcore())
+        ApplyModByteFlag(PLAYER_FIELD_BYTES, 0, PLAYER_FIELD_BYTE_RELEASE_TIMER, !sMapStorage.LookupEntry<MapEntry>(GetMapId())->Instanceable());
+    else
+        ApplyModByteFlag(PLAYER_FIELD_BYTES, 0, PLAYER_FIELD_BYTE_NO_RELEASE_WINDOW, true);
 
     // 6 minutes until repop at graveyard
     m_deathTimer = 6 * MINUTE * IN_MILLISECONDS;
@@ -4644,6 +4652,7 @@ void Player::KillPlayer()
     if (isHardcore() && getLevel() < 60)
     {
         CharacterDatabase.PExecute("UPDATE `characters` SET mortality_status = 3 WHERE `guid` = '%u'", GetGUIDLow()); // 0: not mortal 1: mortal 2: immortal 3: dead
+        SetHardcoreMode(3);
         sWorld.SendWorldText(50300, GetName(), getLevel());
         PlayDirectMusic(1171, this);
         GetSession()->SendNotification("YOU HAVE DIED.\nYou will be disconnected in 60 seconds.");
@@ -22266,98 +22275,43 @@ bool Player::SetupHardcoreMode()
             Field* fields = resultMail->Fetch();
 
             uint32 mail_id = fields[0].GetUInt32();
-            uint16 mailType = fields[1].GetUInt16();
-            uint16 mailTemplateId = fields[2].GetUInt16();
-            uint32 sender = fields[3].GetUInt32();
-            std::string subject = fields[4].GetCppString();
-            uint32 itemTextId = fields[5].GetUInt32();
-            uint32 money = fields[6].GetUInt32();
-            bool has_items = fields[7].GetBool();
-
-            //we can return mail now
-            //so firstly delete the old one
             CharacterDatabase.PExecute("DELETE FROM mail WHERE id = '%u'", mail_id);
-
-            // mail not from player
-            if (mailType != MAIL_NORMAL)
-            {
-                if (has_items)
-                    CharacterDatabase.PExecute("DELETE FROM mail_items WHERE mail_id = '%u'", mail_id);
-                continue;
-            }
-
-            MailDraft draft;
-            if (mailTemplateId)
-                draft.SetMailTemplate(mailTemplateId, false); // items already included
-            else
-                draft.SetSubjectAndBodyId(subject, itemTextId);
-
-            if (has_items)
-            {
-                // data needs to be at first place for Item::LoadFromDB
-                QueryResult* resultItems = CharacterDatabase.PQuery("SELECT creatorGuid, giftCreatorGuid, count, duration, charges, flags, enchantments, randomPropertyId, durability, text, item_guid, itemEntry, generated_loot FROM mail_items JOIN item_instance ON item_guid = guid WHERE mail_id='%u'", mail_id);
-                if (resultItems)
-                {
-                    do
-                    {
-                        Field* fields2 = resultItems->Fetch();
-
-                        uint32 item_guidlow = fields2[10].GetUInt32();
-                        uint32 item_template = fields2[11].GetUInt32();
-
-                        ItemPrototype const* itemProto = ObjectMgr::GetItemPrototype(item_template);
-                        if (!itemProto)
-                        {
-                            CharacterDatabase.PExecute("DELETE FROM item_instance WHERE guid = '%u'", item_guidlow);
-                            continue;
-                        }
-
-                        Item* pItem = NewItemOrBag(itemProto);
-                        if (!pItem->LoadFromDB(item_guidlow, GetGUID(), fields2, item_template))
-                        {
-                            pItem->FSetState(ITEM_REMOVED);
-                            pItem->SaveToDB();              // it also deletes item object !
-                            continue;
-                        }
-
-                        draft.AddItem(pItem);
-                    } while (resultItems->NextRow());
-
-                    delete resultItems;
-                }
-            }
-
             CharacterDatabase.PExecute("DELETE FROM mail_items WHERE mail_id = '%u'", mail_id);
-
-            uint32 pl_account = sObjectMgr.GetPlayerAccountIdByGUID(GetGUID());
-
-            draft.SetMoney(money).SendReturnToSender(pl_account, GetGUID(), ObjectGuid(HIGHGUID_PLAYER, sender));
         } while (resultMail->NextRow());
 
         delete resultMail;
     }
 
-    CharacterDatabase.PExecute("DELETE FROM character_deleted_items WHERE player_guid = '%u'", GetGUIDLow());
-    CharacterDatabase.PExecute("DELETE FROM character_inventory WHERE guid = '%u'", GetGUIDLow());
-
-    QueryResult* allPlayersItems = CharacterDatabase.PQuery("SELECT itemEntry FROM item_instance WHERE owner_guid = '%u'", GetGUIDLow());
+    QueryResult* allPlayersItems = CharacterDatabase.PQuery("SELECT itemGuid, itemEntry FROM item_instance WHERE owner_guid = '%u'", GetGUIDLow());
     if (!allPlayersItems)
         return false;
-    uint32 totalItems = 0;
-    std::vector<uint32>::iterator itr;
+
     CharacterDatabase.BeginTransaction();
     do
     {
-        ++totalItems;
         Field* fields = allPlayersItems->Fetch();
-        uint32 item_entry = fields[0].GetUInt32();
+        ObjectGuid itemGuid = fields[0].GetUInt64();
+        uint32 item_entry = fields[1].GetUInt32();
 
-        DestroyItemCount(item_entry, 255, true);
+        if (Item* item = GetItemByGuid(itemGuid))
+        {
+            // skip Hearthstone
+            if (item->GetEntry() == 6948)
+                continue;
+
+            // skip equipment
+            if (item->IsEquipped())
+                continue;
+
+            DestroyItem(item->GetBagSlot(), item->GetSlot(), true);
+        }
 
     } while (allPlayersItems->NextRow());
     CharacterDatabase.CommitTransaction();
 
     delete allPlayersItems;
+
+    _SaveInventory();
 
     return true;
 }
