@@ -1512,7 +1512,6 @@ class MANGOS_DLL_SPEC Player final: public Unit
         bool m_canBlock;
         bool m_canDualWield;
         float m_ammoDPS;
-        bool isIgnoringTitles;
         uint32 m_foodEmoteTimer;
 
         void RegenerateAll();
@@ -2052,7 +2051,9 @@ class MANGOS_DLL_SPEC Player final: public Unit
         uint32 m_skippedUpdateTime;
         time_t m_logintime;
         time_t m_Last_tick;
+        bool m_isIgnoringTitles;
         uint32 m_Played_time[MAX_PLAYED_TIME_INDEX];
+        uint32 m_totalDeathCount;
     public:
         WorldSession* GetSession() const { return m_session; }
         void SetSession(WorldSession* s);
@@ -2082,6 +2083,9 @@ class MANGOS_DLL_SPEC Player final: public Unit
         void SetHardcoreMode(uint8 status) { HardcoreStatus = status; };
         bool SetupHardcoreMode();
         bool isHardcore() const{ return HardcoreStatus > 0; }
+
+        void UpdateTotalDeathCount();
+        uint32 GetTotalDeathCount() const { return m_totalDeathCount; };
 
         /*********************************************************/
         /***                 MISC GAME SYSTEMS                 ***/
