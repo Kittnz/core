@@ -369,3 +369,5 @@ INSERT INTO `spell_area` (`spell`, `area`) VALUES (18173, 2677);
 -- Delete obsolte items:
 
 delete from item_template where entry = 80188;
+
+update creature_loot_template set ChanceOrQuestChance = 20 where item = 9259;
