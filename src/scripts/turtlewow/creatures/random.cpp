@@ -259,7 +259,7 @@ bool GossipSelect_npc_vip_invite(Player* pPlayer, Creature* pCreature, uint32 /*
     }
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
     {
-        pCreature->MonsterSay("A beach party you say? By your looks there's not only me who will attend and definitely not only a party will be held either. A valuable and very much interesting invitation indeed! Valuable is above all else! I'll take a look for sure, ya can bet on that!");
+        pCreature->MonsterSay("You're telling me there's a beach party?! I get the feelin' that if I'm being invited this is no small get-together. Normally I'd say I'm too busy but I'm sensing an opportunity here - rest, relaxation, and revenue! I'll be there for sure, ya can bet on that.");
         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(81001);
         pPlayer->KilledMonster(cInfo, ObjectGuid());
     }
