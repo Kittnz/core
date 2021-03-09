@@ -606,7 +606,7 @@ Player::Player(WorldSession *session) : Unit(),
     m_longSightSpell = 0;
     m_longSightRange = 0.0f;
 
-    isIgnoringTitles = false;
+    m_isIgnoringTitles = false;
 }
 
 Player::~Player()
@@ -4648,6 +4648,9 @@ void Player::KillPlayer()
 
     // update visibility
     UpdateObjectVisibility();
+
+    // Update total death count
+    UpdateTotalDeathCount();
 
     if (isHardcore() && getLevel() < 60)
     {
@@ -14519,8 +14522,8 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
     //"honorRankPoints, honorRighestRank, honorStanding, honorLastWeekHK, honorLastWeekCP, honorStoredHK, honorStoredDK,"
     // 45               46     47      48      49      50      51      52      53             54              55      56
     //"watchedFaction,  drunk, health, power1, power2, power3, power4, power5, exploredZones, equipmentCache, ammoId, actionBars,"
-    // 57                58                59              60
-    //"world_phase_mask, customFlags, city_protector, ignore_titles FROM characters WHERE guid = '%u'", GUID_LOPART(m_guid));
+    // 57                58                59              60               61                62
+    //"world_phase_mask, customFlags, city_protector, ignore_titles, mortality_status, total_deaths FROM characters WHERE guid = '%u'", GUID_LOPART(m_guid));
 
     QueryResult *result = holder->GetResult(PLAYER_LOGIN_QUERY_LOADFROM);
 
@@ -14653,7 +14656,8 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
 
     _LoadGroup(holder->GetResult(PLAYER_LOGIN_QUERY_LOADGROUP));
 
-    isIgnoringTitles = fields[60].GetBool();
+    m_isIgnoringTitles = fields[60].GetBool();
+    m_totalDeathCount = fields[62].GetUInt32();
 
     m_honorMgr.SetRankPoints(fields[38].GetFloat());
     m_honorMgr.SetHighestRank(fields[39].GetUInt32());
@@ -16108,7 +16112,7 @@ void Player::SaveToDB(bool online, bool force)
                               "honorRankPoints, honorHighestRank, honorStanding, honorLastWeekHK, honorLastWeekCP, honorStoredHK, honorStoredDK, "
                               "watchedFaction, drunk, health, power1, power2, power3, "
                               "power4, power5, exploredZones, equipmentCache, ammoId, actionBars, "
-                              "area, world_phase_mask, customFlags, city_protector, ignore_titles) "
+                              "area, world_phase_mask, customFlags, city_protector, ignore_titles, total_deaths) "
                               "VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,"
                               "?, ?, ?, ?, ?, "
                               "?, ?, ?, "
@@ -16118,7 +16122,7 @@ void Player::SaveToDB(bool online, bool force)
                               "?, ?, ?, ?, ?, ?, ?, "
                               "?, ?, ?, ?, ?, ?, "
                               "?, ?, ?, ?, ?, ?, "
-                              "?, ?, ?, ?, ?) ");
+                              "?, ?, ?, ?, ?, ?) ");
 
     uberInsert.addUInt32(GetGUIDLow());
     uberInsert.addUInt32(GetSession()->GetAccountId());
@@ -16240,6 +16244,7 @@ void Player::SaveToDB(bool online, bool force)
     uberInsert.addUInt32(0); // Custom flag from Nost. Not used anymore
     uberInsert.addUInt8(IsCityProtector() ? 1 : 0);
     uberInsert.addUInt8(IsIgnoringTitles() ? 1 : 0);
+    uberInsert.addUInt32(GetTotalDeathCount());
     uberInsert.Execute();
 
     _SaveBGData();
@@ -21840,9 +21845,9 @@ void Player::MailOpenHouseGift()
     }
 }
 
-bool Player::IsIgnoringTitles() { return isIgnoringTitles; }
+bool Player::IsIgnoringTitles() { return m_isIgnoringTitles; }
 
-void Player::SetIgnoringTitles(bool shouldIgnore) { isIgnoringTitles = shouldIgnore; }
+void Player::SetIgnoringTitles(bool shouldIgnore) { m_isIgnoringTitles = shouldIgnore; }
 
 bool Player::IsScarletCrusade() { return HasItemWithIdEquipped(50440); }
 
@@ -22317,4 +22322,9 @@ bool Player::SetupHardcoreMode()
     _SaveInventory();
 
     return true;
+}
+
+void Player::UpdateTotalDeathCount()
+{
+    m_totalDeathCount++;
 }

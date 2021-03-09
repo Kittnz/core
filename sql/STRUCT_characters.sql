@@ -1140,6 +1140,7 @@ CREATE TABLE IF NOT EXISTS `worldstates` (
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 ALTER TABLE `characters` ADD `mortality_status` TINYINT(3) NOT NULL DEFAULT '0' AFTER `ignore_titles`;
+ALTER TABLE `characters` ADD `total_deaths` INT(11) NOT NULL DEFAULT '0' AFTER `mortality_status`;
 
 -- Daten Export vom Benutzer nicht ausgewählt
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
