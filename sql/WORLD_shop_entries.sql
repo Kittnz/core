@@ -98,7 +98,7 @@ replace into shop_items values
 (611, 6, 50402, 'Violet War Raptor', 360), 
 (612, 6, 50403, 'Red War Raptor', 360), 
 (613, 6, 80431, 'Swift Magic Rooster', 400),
-(614, 6, 81100, 'Swift Raven Lord', 600), 
+(614, 6, 81100, 'Swift Raven Lord', 500), 
 -- Gameplay: Riding Mounts III
 (700, 7, 81120, 'Frayfeather Hippogryph', 500),
 (701, 7, 81121, 'Cenarion Hippogryph', 500),
@@ -108,6 +108,7 @@ replace into shop_items values
 (705, 7, 81155, 'Armored Red War Bear', 500),
 (706, 7, 81157, 'Armored Green War Bear', 500),
 (707, 7, 81158, 'Armored White War Bear', 500),
+(708, 7, 80443, 'Swift Brewfest Ram', 400),
 -- Gameplay: Glyphs
 (800, 8, 50010, 'General: Glyph of the Turtle', 0),
 (801, 8, 50008, 'General: Glyph of Twinking', 0),
