@@ -51,6 +51,8 @@ delete from item_template where name like '%unused%';
 delete from item_template where name like '%epic%';
 delete from item_template where name like '%(old)%';
 delete from item_template where name like '%debug%';
+delete from item_template where name like '%Deprecated%';
+delete from item_template where name like '%QAEnchant%';
 
 delete from item_template where entry in (50237, 50238, 50239, 50240, 50241, 50242);
 
@@ -381,6 +383,23 @@ delete from creature_template where entry = 80967;
 REPLACE INTO `item_template` VALUES (80314, 10, 4, 0, 'Undead Scourge Tabard', '', 40015, 1, 0, 1, 50000, 12500, 19, -1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
 
 delete from item_template where entry = 81078;
+delete from item_template where entry = 51838;
+delete from item_template where entry = 12947;
+delete from item_template where entry = 6724;
+delete from item_template where entry = 6728;
+delete from item_template where entry = 6708;
+delete from item_template where entry = 6711;
+delete from item_template where entry = 6698;
+delete from item_template where entry = 20221;
+delete from item_template where entry = 16338;
+delete from item_template where entry = 80450;
+delete from item_template where entry = 23728;
+delete from item_template where entry = 17412;
+delete from item_template where entry = 16343;
+delete from item_template where entry = 901;
+delete from item_template where entry = 16344;
+
+update item_template set display_id = 7694, name = 'Glyph of Diplomacy' where entry = 50012;
 
 REPLACE INTO `item_template` VALUES (50089, 10, 4, 0, 'Dalaran Tabard', '', 10643, 1, 0, 1, 50000, 12500, 19, -1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
 
