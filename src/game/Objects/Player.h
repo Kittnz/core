@@ -2080,9 +2080,22 @@ class MANGOS_DLL_SPEC Player final: public Unit
         bool isCheater() const { return bIsCheater; };
         void EnableTurtleMode() { bIsTurtle = true; };
 
-        void SetHardcoreMode(uint8 status) { HardcoreStatus = status; };
+        void SetHardcoreStatus(uint8 status) { m_hardcoreStatus = status; };
+        bool isHardcore() const{ return getLevel() < 60 && (m_hardcoreStatus == 1 || m_hardcoreStatus == 3); }
+        bool isImmortal() const { return m_hardcoreStatus == 2; }
         bool SetupHardcoreMode();
-        bool isHardcore() const{ return HardcoreStatus > 0; }
+        bool CheckHardcoreInteract(Player* target)
+        {
+            if (!isHardcore() || !target->isHardcore())
+                return false;
+
+            int32 diff = getLevel() - target->getLevel();
+
+            if (abs(diff) > 5)
+                return false;
+
+            return true;
+        }
 
         void UpdateTotalDeathCount();
         uint32 GetTotalDeathCount() const { return m_totalDeathCount; };
@@ -2114,7 +2127,8 @@ class MANGOS_DLL_SPEC Player final: public Unit
         bool bIsTurtle = false;
         bool bIsCheater = false;
 
-        uint8 HardcoreStatus = 0;
+        uint8 m_hardcoreStatus;
+        uint32 m_hardcoreKickTimer;
 
         // For druids carrying players in a stag form
         bool bIsTaxiPassenger = false;
