@@ -77,7 +77,7 @@ void WorldSession::HandleGroupInviteOpcode(WorldPacket & recv_data)
     }
 
     // Only non MM or MM players can group together
-    if (GetPlayer()->isHardcore() ^ player->isHardcore())
+    if (!GetPlayer()->CheckHardcoreInteract(player))
     {
         SendPartyResult(PARTY_OP_INVITE, membername, ERR_NOT_IN_GROUP);
         return;

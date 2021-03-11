@@ -607,6 +607,10 @@ Player::Player(WorldSession *session) : Unit(),
     m_longSightRange = 0.0f;
 
     m_isIgnoringTitles = false;
+
+    // Hardcore mode
+    m_hardcoreStatus = 0;
+    m_hardcoreKickTimer = 0;
 }
 
 Player::~Player()
@@ -1382,6 +1386,22 @@ void Player::Update(uint32 update_diff, uint32 p_time)
                 c->SetFly(true);
                 c->SendHeartBeat();
             }*/
+        }
+    }
+
+    // Hardcore mode safe update
+    if (isHardcore())
+    {
+        if (m_hardcoreStatus == 3 && m_hardcoreKickTimer)
+        {
+            if (update_diff >= m_hardcoreKickTimer)
+            {
+                m_hardcoreKickTimer = 0;
+                GetSession()->LogoutPlayer(true);
+                return;
+            }
+            else
+                m_hardcoreKickTimer -= update_diff;
         }
     }
 
@@ -2876,9 +2896,8 @@ void Player::GiveLevel(uint32 level)
         AnnounceMortalModeLevelUp(level);
         if (level == 60)
         {
-            CharacterDatabase.PExecute("UPDATE `characters` SET mortality_status = 2 WHERE `guid` = '%u'", GetGUIDLow()); // 0: not mortal 1: mortal 2: immortal 3: dead
+            SetHardcoreStatus(2);
             SetByteValue(PLAYER_BYTES_3, 2, 52);
-            SetHardcoreMode(2);
             uint32 itemEntry = 80187;
             std::string subject = "Tabard of the Immortal Guardian";
             std::string message = "Greetings, hero! Like you I undertook the same journey you have. I weathered the greatest dangers and foes without ever losing consciousness or falling to the brink of death.\n\nNow I stand immortal, just as you do. I have reached the peak of my power!\n\nTo celebrate your ascension in the ranks of immortality, I have attached a tabard that only we can wear.\n\n Wear it with pride and continue to avoid death! If you continue on this path, we shall meet one day.";
@@ -4495,9 +4514,6 @@ void Player::SetHover(bool enable)
 */
 void Player::BuildPlayerRepop()
 {
-    if (isHardcore())
-        return;
-
     // Waiting to Resurrect (probably redundant cast, yet to check thoroughly)
     if (InBattleGround() || InGurubashiArena(true))
         CastSpell(this, 2584, true);
@@ -4509,25 +4525,29 @@ void Player::BuildPlayerRepop()
         CastSpell(this, 20584, true);                       // auras SPELL_AURA_INCREASE_SPEED(+speed in wisp form), SPELL_AURA_INCREASE_SWIM_SPEED(+swim speed in wisp form), SPELL_AURA_TRANSFORM (to wisp form)
     CastSpell(this, 8326, true);                            // auras SPELL_AURA_GHOST, SPELL_AURA_INCREASE_SPEED(why?), SPELL_AURA_INCREASE_SWIM_SPEED(why?)
 
-    // the player cannot have a corpse already, only bones which are not returned by GetCorpse
-    Corpse* corpse;
-    if (corpse = GetCorpse())
-    {
-        sLog.outInfo("[Player/Crash] 'BuildPlayerRepop' %s (%u) {%.2f %.2f %.2f %u,%u} a deja un corps {%.2f %.2f %.2f %u,%u}",
-                        GetName(), GetGUIDLow(), GetPositionX(), GetPositionY(), GetPositionZ(), GetMapId(), GetInstanceId(),
-                        corpse->GetPositionX(), corpse->GetPositionY(), corpse->GetPositionZ(), corpse->GetMapId(), corpse->GetInstanceId());
-        // La fonction s'en sort tres bien meme si y'a deja un corpse.
-        //return;
-    }
+    Corpse* corpse = nullptr;
 
-    // create a corpse and place it at the player's location
-    corpse = CreateCorpse();
-    if (!corpse)
+    if (!isHardcore())
     {
-        sLog.outError("Error creating corpse for Player %s [%u]", GetName(), GetGUIDLow());
-        return;
+        // the player cannot have a corpse already, only bones which are not returned by GetCorpse
+        if (corpse = GetCorpse())
+        {
+            sLog.outInfo("[Player/Crash] 'BuildPlayerRepop' %s (%u) {%.2f %.2f %.2f %u,%u} a deja un corps {%.2f %.2f %.2f %u,%u}",
+                GetName(), GetGUIDLow(), GetPositionX(), GetPositionY(), GetPositionZ(), GetMapId(), GetInstanceId(),
+                corpse->GetPositionX(), corpse->GetPositionY(), corpse->GetPositionZ(), corpse->GetMapId(), corpse->GetInstanceId());
+            // La fonction s'en sort tres bien meme si y'a deja un corpse.
+            //return;
+        }
+
+        // create a corpse and place it at the player's location
+        corpse = CreateCorpse();
+        if (!corpse)
+        {
+            sLog.outError("Error creating corpse for Player %s [%u]", GetName(), GetGUIDLow());
+            return;
+        }
+        GetMap()->Add(corpse);
     }
-    GetMap()->Add(corpse);
 
     // convert player body to ghost
     SetHealth(1);
@@ -4539,10 +4559,12 @@ void Player::BuildPlayerRepop()
     // BG - remove insignia related
     RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SKINNABLE);
 
-    SendCorpseReclaimDelay();
+    if (!isHardcore())
+        SendCorpseReclaimDelay();
 
     // to prevent cheating
-    corpse->ResetGhostTime();
+    if (corpse)
+        corpse->ResetGhostTime();
 
     StopMirrorTimers();                                     //disable timers(bars)
 
@@ -4654,13 +4676,12 @@ void Player::KillPlayer()
 
     if (isHardcore() && getLevel() < 60)
     {
-        CharacterDatabase.PExecute("UPDATE `characters` SET mortality_status = 3 WHERE `guid` = '%u'", GetGUIDLow()); // 0: not mortal 1: mortal 2: immortal 3: dead
-        SetHardcoreMode(3);
+        SetHardcoreStatus(3);
         sWorld.SendWorldText(50300, GetName(), getLevel());
         PlayDirectMusic(1171, this);
         GetSession()->SendNotification("YOU HAVE DIED.\nYou will be disconnected in 60 seconds.");
         ChatHandler(this).PSendSysMessage("YOU HAVE DIED.\nYou will be disconnected in 60 seconds.");
-        DoAfterTime(this, 60 * IN_MILLISECONDS, [this]() { GetSession()->KickPlayer(); });
+        m_hardcoreKickTimer = 10 * IN_MILLISECONDS;
     }
 }
 
@@ -15066,7 +15087,7 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
     // Turtle WoW custom feature : hardcore mode(0.5x rates for Creature.Kill)
     bIsTurtle = GetItemCount(50010, true) > 0;
     //bIsMortal = GetItemCount(80188, true) > 0;
-    HardcoreStatus = fields[61].GetUInt8();
+    m_hardcoreStatus = fields[61].GetUInt8();
 
     // For lazy me
     bIsCheater = GetItemCount(81130, true) > 0;
@@ -15076,7 +15097,7 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
     if (HasItemCount(21176, 1, 0)) // Scarab Lord
         SetByteValue(PLAYER_BYTES_3, 2, 15);
 
-    if (HardcoreStatus == 2 && getLevel() == 60) // Immortal (temp. check)
+    if (isImmortal()) // Immortal (temp. check)
         SetByteValue(PLAYER_BYTES_3, 2, 52);
 
     return true;
@@ -16112,7 +16133,7 @@ void Player::SaveToDB(bool online, bool force)
                               "honorRankPoints, honorHighestRank, honorStanding, honorLastWeekHK, honorLastWeekCP, honorStoredHK, honorStoredDK, "
                               "watchedFaction, drunk, health, power1, power2, power3, "
                               "power4, power5, exploredZones, equipmentCache, ammoId, actionBars, "
-                              "area, world_phase_mask, customFlags, city_protector, ignore_titles, total_deaths) "
+                              "area, world_phase_mask, customFlags, city_protector, ignore_titles, mortality_status, total_deaths) "
                               "VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,"
                               "?, ?, ?, ?, ?, "
                               "?, ?, ?, "
@@ -16122,7 +16143,7 @@ void Player::SaveToDB(bool online, bool force)
                               "?, ?, ?, ?, ?, ?, ?, "
                               "?, ?, ?, ?, ?, ?, "
                               "?, ?, ?, ?, ?, ?, "
-                              "?, ?, ?, ?, ?, ?) ");
+                              "?, ?, ?, ?, ?, ?, ?) ");
 
     uberInsert.addUInt32(GetGUIDLow());
     uberInsert.addUInt32(GetSession()->GetAccountId());
@@ -16244,6 +16265,7 @@ void Player::SaveToDB(bool online, bool force)
     uberInsert.addUInt32(0); // Custom flag from Nost. Not used anymore
     uberInsert.addUInt8(IsCityProtector() ? 1 : 0);
     uberInsert.addUInt8(IsIgnoringTitles() ? 1 : 0);
+    uberInsert.addUInt8(m_hardcoreStatus);
     uberInsert.addUInt32(GetTotalDeathCount());
     uberInsert.Execute();
 
@@ -22260,8 +22282,7 @@ bool Player::SetupHardcoreMode()
     if (isHardcore())
         return false;
 
-    SetHardcoreMode(1);
-    CharacterDatabase.PExecute("UPDATE `characters` SET mortality_status = 1 WHERE `guid` = '%u'", GetGUIDLow());
+    SetHardcoreStatus(1);
 
     // add to guild
     Guild* guild = sGuildMgr.GetGuildById(1);
@@ -22271,8 +22292,8 @@ bool Player::SetupHardcoreMode()
     if (guild->AddMember(GetGUID(), 0) != GuildAddStatus::OK)
         return false;
 
-    // reset inventory and mails
-    QueryResult* resultMail = CharacterDatabase.PQuery("SELECT id,messageType,mailTemplateId,sender,subject,itemTextId,money,has_items FROM mail WHERE receiver='%u' AND has_items<>0 AND cod<>0", GetGUIDLow());
+    // Delete mails
+    QueryResult* resultMail = CharacterDatabase.PQuery("SELECT id FROM mail WHERE receiver='%u'", GetGUIDLow());
     if (resultMail)
     {
         do
@@ -22282,42 +22303,53 @@ bool Player::SetupHardcoreMode()
             uint32 mail_id = fields[0].GetUInt32();
             CharacterDatabase.PExecute("DELETE FROM mail WHERE id = '%u'", mail_id);
             CharacterDatabase.PExecute("DELETE FROM mail_items WHERE mail_id = '%u'", mail_id);
+            if (MasterPlayer* pl = GetSession()->GetMasterPlayer())
+                pl->RemoveMail(mail_id);
         } while (resultMail->NextRow());
 
         delete resultMail;
     }
 
-    QueryResult* allPlayersItems = CharacterDatabase.PQuery("SELECT itemGuid, itemEntry FROM item_instance WHERE owner_guid = '%u'", GetGUIDLow());
-    if (!allPlayersItems)
-        return false;
-
-    CharacterDatabase.BeginTransaction();
-    do
+    // handle equipped
+    for (int i = EQUIPMENT_SLOT_START; i < EQUIPMENT_SLOT_END; ++i)
     {
-        Field* fields = allPlayersItems->Fetch();
-        ObjectGuid itemGuid = fields[0].GetUInt64();
-        uint32 item_entry = fields[1].GetUInt32();
-
-        if (Item* item = GetItemByGuid(itemGuid))
+        //if (Item* pItem = GetItemByPos(INVENTORY_SLOT_BAG_0, i))
+            //pItem->ClearEnchantment();
+    }
+    // destroy backpack
+    for (int i = INVENTORY_SLOT_ITEM_START; i < INVENTORY_SLOT_ITEM_END; ++i)
+    {
+        if (Item* pItem = GetItemByPos(INVENTORY_SLOT_BAG_0, i))
         {
-            // skip Hearthstone
-            if (item->GetEntry() == 6948)
+            if (pItem->GetEntry() == 6948)
                 continue;
 
-            // skip equipment
-            if (item->IsEquipped())
-            {
-                item->ClearEnchantment(PERM_ENCHANTMENT_SLOT);
-                continue;
-            }
-
-            DestroyItem(item->GetBagSlot(), item->GetSlot(), true);
+            DestroyItem(INVENTORY_SLOT_BAG_0, i, true);
         }
+    }
+    // destroy items from bags
+    for (int i = INVENTORY_SLOT_BAG_START; i < INVENTORY_SLOT_BAG_END; ++i)
+    {
+        if (Bag* pBag = (Bag*)GetItemByPos(INVENTORY_SLOT_BAG_0, i))
+        {
+            for (uint32 j = 0; j < pBag->GetBagSize(); ++j)
+            {
+                if (Item* pItem = pBag->GetItemByPos(j))
+                {
+                    if (pItem->GetEntry() == 6948)
+                        continue;
 
-    } while (allPlayersItems->NextRow());
-    CharacterDatabase.CommitTransaction();
-
-    delete allPlayersItems;
+                    DestroyItem(i, j, true);
+                }
+            }
+        }
+    }
+    // destroy bags
+    for (int i = INVENTORY_SLOT_BAG_START; i < INVENTORY_SLOT_BAG_END; ++i)
+    {
+        if (Bag* pBag = (Bag*)GetItemByPos(INVENTORY_SLOT_BAG_0, i))
+            DestroyItem(INVENTORY_SLOT_BAG_0, i, true);
+    }
 
     _SaveInventory();
 

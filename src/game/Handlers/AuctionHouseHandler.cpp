@@ -44,7 +44,10 @@ void WorldSession::HandleAuctionHelloOpcode(WorldPacket & recv_data)
     recv_data >> auctioneerGuid;
 
     if (GetPlayer()->isHardcore())
+    {
+        SendNotification("Auction gg wp");
         return;
+    }
 
     Creature *unit = GetPlayer()->GetNPCIfCanInteractWith(auctioneerGuid, UNIT_NPC_FLAG_AUCTIONEER);
     if (!unit)

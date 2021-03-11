@@ -631,7 +631,7 @@ void WorldSession::HandleInitiateTradeOpcode(WorldPacket& recvPacket)
     }
 
     // Only non MM or MM players can trade between them
-    if (_player->isHardcore() ^ pOther->isHardcore())
+    if (!_player->CheckHardcoreInteract(pOther))
     {
         SendTradeStatus(TRADE_STATUS_BUSY);
         return;

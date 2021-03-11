@@ -196,7 +196,7 @@ void WorldSession::HandleSendMail(WorldPacket & recv_data)
     if (req->receiverPtr)
     {
         // Only non MM or MM players can send mails between them
-        if (GetPlayer()->isHardcore() ^ req->receiverPtr->isHardcore())
+        if (!GetPlayer()->CheckHardcoreInteract(req->receiverPtr))
         {
             pl->SendMailResult(0, MAIL_SEND, MAIL_ERR_RECIPIENT_NOT_FOUND);
             delete req;
