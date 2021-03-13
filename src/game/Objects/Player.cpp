@@ -2912,11 +2912,11 @@ void Player::GiveLevel(uint32 level)
     }
 
     // Quick-fix for Slow and Steady Quest.
-    if (level == 2)
+    if (level >= 2)
         RemoveQuest(60118);
 
     // Hardcore quest.
-    if (level == 2)
+    if (level >= 2)
         RemoveQuest(80388);
 
     if (level == 5)
