@@ -1957,7 +1957,7 @@ bool ChatHandler::HandleModifyHonorCommand(char* args)
     }
     else if (hasStringAbbr(field, "rank"))
     {
-        if (amount < 0 || amount >= HONOR_RANK_COUNT)
+        if (amount < 0 || amount >= 20)
             return false;
         target->SetByteValue(PLAYER_BYTES_3, 3, amount);
     }
