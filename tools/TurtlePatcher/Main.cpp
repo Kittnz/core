@@ -15,14 +15,17 @@
 #define NEW_BUILD 6010u
 #define NEW_VISUAL_BUILD "6010"
 #define NEW_VISUAL_VERSION "1.15.1"
-#define NEW_BUILD_DATE "Jan 06 2021"
+#define NEW_BUILD_DATE "Mar 15 2021"
 #define NEW_WEBSITE_FILTER "*.turtle-wow.org" // '*' symbol should be presented
 #define NEW_WEBSITE2_FILTER "*.discord.gg" // '*' symbol should be presented
 
-#define PATCH_FILE "Data\\patch-T.mpq"
+#define PATCH_FILE "Data\\patch-U.mpq"
 
 // 2 bytes. Original value: unsigned short "5875"
 #define OFFSET_NET_VERSION 0x001B2122
+
+// 6 bytes. Remove check for PvP rank for player's title field.
+#define OFFSET_PVP_RANK_CHECK 0x002093B0
 
 // string. Original value: "1.12.1"
 #define OFFSET_VISUAL_VERSION 0x00437C04
@@ -131,6 +134,10 @@ void PatchUIUnlock(FILE* hWoW)
 	char FourthPatch[] = { 0xeb, 0xb2 };
 	fseek(hWoW, 0x2f11f0, SEEK_SET);
 	fwrite(FourthPatch, sizeof(FourthPatch), 1, hWoW);
+
+	char FifthPatch[] = { 0x90, 0x90, 0x90, 0x90, 0x90, 0x90 };
+	fseek(hWoW, OFFSET_PVP_RANK_CHECK, SEEK_SET);
+	fwrite(FifthPatch, sizeof(FifthPatch), 1, hWoW);
 }
 
 constexpr int max_path = 260;
@@ -473,8 +480,8 @@ int GuardedMain(HINSTANCE hInstance)
 		}
 		else
 		{
-			WriteLog("ERROR: Failed to open patch-T.mpq inside patch mpq");
-			ErrorBox("Failed to open patch-T.mpq inside patch mpq");
+			WriteLog("ERROR: Failed to open patch-U.mpq inside patch mpq");
+			ErrorBox("Failed to open patch-U.mpq inside patch mpq");
 			return 1;
 		}
 	}
