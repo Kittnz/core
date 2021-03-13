@@ -407,3 +407,10 @@ update item_template set display_id = 7694, name = 'Glyph of Diplomacy' where en
 
 REPLACE INTO `item_template` VALUES (50089, 10, 4, 0, 'Dalaran Tabard', '', 10643, 1, 0, 1, 50000, 12500, 19, -1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
 
+-- Mortal mode stuff:
+ 
+replace into `mangos_string` (`entry`, `content_default`) VALUES 
+(50300, 'A tragedy has occurred. Hardcore character %s has fallen in combat at level %u. May this sacrifice not be forgotten.'),
+(50301, '%s has reached level %u in Hardcore mode! Their ascendance towards immortality continues, however, so do the dangers they will face.'),
+(50302, '%s has transcended death and reached level 60 on Hardcore mode without dying once! %s shall henceforth be known as the Immortal!');
+
