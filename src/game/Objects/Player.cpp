@@ -609,8 +609,10 @@ Player::Player(WorldSession *session) : Unit(),
     m_isIgnoringTitles = false;
 
     // Hardcore mode
-    m_hardcoreStatus = 0;
+    m_hardcoreStatus = HARDCORE_MODE_STATUS_NONE;
     m_hardcoreKickTimer = 0;
+
+    m_totalDeathCount = 0;
 }
 
 Player::~Player()
@@ -1392,7 +1394,7 @@ void Player::Update(uint32 update_diff, uint32 p_time)
     // Hardcore mode safe update
     if (isHardcore())
     {
-        if (m_hardcoreStatus == 3 && m_hardcoreKickTimer)
+        if (m_hardcoreStatus == HARDCORE_MODE_STATUS_DEAD && m_hardcoreKickTimer)
         {
             if (update_diff >= m_hardcoreKickTimer)
             {
@@ -2893,10 +2895,10 @@ void Player::GiveLevel(uint32 level)
 
     if (isHardcore())
     {
-        AnnounceMortalModeLevelUp(level);
+        AnnounceHardcoreModeLevelUp(level);
         if (level == 60)
         {
-            SetHardcoreStatus(2);
+            SetHardcoreStatus(HARDCORE_MODE_STATUS_IMMORTAL);
             SetByteValue(PLAYER_BYTES_3, 2, 52);
             uint32 itemEntry = 80187;
             std::string subject = "Tabard of the Immortal Guardian";
@@ -4674,13 +4676,14 @@ void Player::KillPlayer()
     // Update total death count
     UpdateTotalDeathCount();
 
-    if (isHardcore() && getLevel() < 60)
+    if (isHardcore())
     {
-        SetHardcoreStatus(3);
+        SetHardcoreStatus(HARDCORE_MODE_STATUS_DEAD);
         sWorld.SendWorldText(50300, GetName(), getLevel());
         PlayDirectMusic(1171, this);
         GetSession()->SendNotification("YOU HAVE DIED.\nYou will be disconnected in 60 seconds.");
         ChatHandler(this).PSendSysMessage("YOU HAVE DIED.\nYou will be disconnected in 60 seconds.");
+        BuildPlayerRepop();
         m_hardcoreKickTimer = 10 * IN_MILLISECONDS;
     }
 }
@@ -21796,7 +21799,7 @@ void Player::MailHardcoreModeRewards(uint32 level)
     }
 }
 
-void Player::AnnounceMortalModeLevelUp(uint32 level)
+void Player::AnnounceHardcoreModeLevelUp(uint32 level)
 {
     switch (level)
     {
@@ -22282,7 +22285,7 @@ bool Player::SetupHardcoreMode()
     if (isHardcore())
         return false;
 
-    SetHardcoreStatus(1);
+    SetHardcoreStatus(HARDCORE_MODE_STATUS_ALIVE);
 
     // add to guild
     Guild* guild = sGuildMgr.GetGuildById(1);

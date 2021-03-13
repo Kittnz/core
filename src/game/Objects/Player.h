@@ -644,6 +644,14 @@ enum ReputationSource
     REPUTATION_SOURCE_SPELL
 };
 
+enum HardcoreStatus : uint8
+{
+    HARDCORE_MODE_STATUS_NONE     = 0,
+    HARDCORE_MODE_STATUS_ALIVE    = 1,
+    HARDCORE_MODE_STATUS_IMMORTAL = 2,
+    HARDCORE_MODE_STATUS_DEAD     = 3,
+};
+
 // Player summoning auto-decline time (in secs)
 #define MAX_PLAYER_SUMMON_DELAY                   (2*MINUTE)
 #define MAX_MONEY_AMOUNT                       (0x7FFFFFFF-1)
@@ -1067,7 +1075,7 @@ class MANGOS_DLL_SPEC Player final: public Unit
         // Turtle WoW, we use items as currency:
         bool RemoveItemCurrency(uint32 itemId, uint32 count);
         void MailHardcoreModeRewards(uint32 level);
-        void AnnounceMortalModeLevelUp(uint32 level);
+        void AnnounceHardcoreModeLevelUp(uint32 level);
         // Titles
         bool IsCityProtector();
         bool IsScarabLord();
@@ -2081,8 +2089,8 @@ class MANGOS_DLL_SPEC Player final: public Unit
         void EnableTurtleMode() { bIsTurtle = true; };
 
         void SetHardcoreStatus(uint8 status) { m_hardcoreStatus = status; };
-        bool isHardcore() const{ return getLevel() < 60 && (m_hardcoreStatus == 1 || m_hardcoreStatus == 3); }
-        bool isImmortal() const { return m_hardcoreStatus == 2; }
+        bool isHardcore() const{ return getLevel() < 60 && (m_hardcoreStatus == HARDCORE_MODE_STATUS_ALIVE || m_hardcoreStatus == HARDCORE_MODE_STATUS_DEAD); }
+        bool isImmortal() const { return m_hardcoreStatus == HARDCORE_MODE_STATUS_IMMORTAL; }
         bool SetupHardcoreMode();
         bool CheckHardcoreInteract(Player* target)
         {
