@@ -278,16 +278,18 @@ REPLACE INTO `item_template` VALUES (81200, 10, 4, 0, 'Tabard of Mortality', 'Th
 
 update item_template set quality = 1 where entry in (50010, 80188);
 
-replace into `creature_template` values (81030, 0, 18039, 0, 0, 0, 'Mysterious Stranger', NULL, 0, 60, 60, 24000, 24000, 26400, 26400, 0, 35, 0, 1, 1.14286, 1.32, 20, 5, 0, 3, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 2, 3, 0, 0, 3, 50105, 0, 0, 0, 0, 0, 'npc_mysterious_stranger');
+replace into creature_model_info values (18548, 5875, 2, 2, 0, 0, 0);
 
-update creature_template set npc_flags = 2 where entry = 81030;
+replace into `creature_template` values (81030, 0, 18548, 0, 0, 0, 'Mysterious Stranger', NULL, 0, 60, 60, 24000, 24000, 26400, 26400, 0, 35, 0, 1, 1.14286, 1.32, 20, 5, 0, 3, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 2, 3, 0, 0, 3, 50105, 0, 0, 0, 0, 0, 'npc_mysterious_stranger');
+
+update creature_template set npc_flags = 2, scale = 1 where entry = 81030;
 
 set @quest_entry = 80388;
 set @quest_zone = -344;
 set @title = 'Stay awhile and listen... ';
 set @description = 'Hmm, another one, eh? Alright then.\n\nRules are simple. You have only one life, so cherish it...\n\nForget this business. Lead a normal life, like any other. What would misery, frustration and pain bring you? Fame? Glory? Nothing lasts forever.';
 set @objective = 'Complete this quest to become Mortal. In this mode you only have one life and can only trade and group up with other mortal players.';
-set @completetext = 'Fine. Have it your way.\n\nHere, take this tabard, so others know of your absurd goal to live one life only.\n\nJust remember to stay safe on your road!\n\nIf you continue on this path, we shall meet one day.';
+set @completetext = 'Fine. Have it your way with your absurd goal to live one life only.\n\nJust remember to stay safe on your road!\n\nIf you continue on this path, we shall meet one day.';
 set @incompletetext = 'Still here? Oh well, I warned you.\n\nBecoming an Immortal won\'t be an easy walk in the park.\n\nOnly those who undertakes this path will be your help.\n\nNo mail will ever bring you good news.\n\nNo auction will take your money.';
 set @faction_id = 0;
 set @faction_count = 0;
@@ -308,12 +310,12 @@ set @RewChoiceItemCount1 = 0;
 set @RewChoiceItemCount2 = 0;
 set @RewChoiceItemCount3 = 0;
 set @RewChoiceItemCount4 = 0;
-set @reward_item_1 = 80188;
-set @reward_item_2 = 81200; 
+set @reward_item_1 = 0;
+set @reward_item_2 = 0; 
 set @reward_item_3 = 0;
 set @reward_item_4 = 0;
-set @reward_item_1_count = 1;
-set @reward_item_2_count = 1;
+set @reward_item_1_count = 0;
+set @reward_item_2_count = 0;
 set @reward_item_3_count = 0;
 set @reward_item_4_count = 0;
 set @creature_to_kill_1 = 0;
@@ -354,7 +356,8 @@ reqitemid2 = @required_item_2, reqitemcount2 = @required_item_2_count,
 reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
 reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
 nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
-nextquestinchain = @nextquestinchain, prevquestid = @prevquest
+nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
+rewspell = 50001
 where entry = @quest_entry;	
 
 -- Rename old HC mode items to Turtle More items:
@@ -371,6 +374,7 @@ INSERT INTO `spell_area` (`spell`, `area`) VALUES (18173, 2677);
 -- Delete obsolte items:
 
 delete from item_template where entry = 80188;
+delete from item_template where entry = 81200;
 
 update creature_loot_template set ChanceOrQuestChance = 20 where item = 9259;
 
