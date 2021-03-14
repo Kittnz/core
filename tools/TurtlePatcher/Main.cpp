@@ -20,6 +20,8 @@
 #define NEW_WEBSITE2_FILTER "*.discord.gg" // '*' symbol should be presented
 
 #define PATCH_FILE "Data\\patch-U.mpq"
+#define DISCORD_OVERLAY_FILE "DiscordOverlay.dll"
+#define DISCORD_GAME_SDK_FILE "discord_game_sdk.dll"
 
 // 2 bytes. Original value: unsigned short "5875"
 #define OFFSET_NET_VERSION 0x001B2122
@@ -394,7 +396,7 @@ int GuardedMain(HINSTANCE hInstance)
 	// Then sleep for 5 sec. because there is a strange error if we working too fast
 	Sleep(5000);
 
-	// unpack mpq
+	// unpack patch files
 	{
 		std::string strPathDir = PatchDir.u8string();
 		WriteLog("Trying open downloaded path file \"%S\"", PatchDir.c_str());
@@ -409,26 +411,82 @@ int GuardedMain(HINSTANCE hInstance)
 			WriteLog("Opened \"%S\"", PatchDir.c_str());
 		}
 
-		if (StormFile* pFile = PatchFile.OpenFile(PATCH_FILE))
+		auto OnOpenFileLambda = [&PatchDir](LPCSTR File)
 		{
-			WriteLog("Opened \"%s\" inside \"%S\"", PATCH_FILE, PatchDir.c_str());
-			std::unique_ptr<StormFile> patchData(pFile);
-
-			if (fs::exists(PATCH_FILE))
+			WriteLog("Opened \"%s\" inside \"%S\"", File, PatchDir.c_str());
+			if (fs::exists(File))
 			{
-				WriteLog("Patch \"%s\" existed, removing", PATCH_FILE);
-				if (!fs::remove(PATCH_FILE))
+				WriteLog("File \"%s\" existed, removing", File);
+				if (!fs::remove(File))
 				{
-					WriteLog("ERROR: Can't remove patch \"%s\"", PATCH_FILE);
+					WriteLog("ERROR: Can't remove file \"%s\"", File);
 				}
 			}
+		};
 
-			// copy shit to target path
-			FILE* hTargetFile = fopen(PATCH_FILE, "wb");
+		auto OpenFileWithLogLambda = [](LPCSTR File) -> FILE*
+		{
+			FILE* hTargetFile = fopen(File, "wb");
 			if (hTargetFile == NULL)
 			{
-				WriteLog("Can't create \"%s\" for writting", PATCH_FILE);
+				WriteLog("Can't create \"%s\" for writting", File);
 				assert(hTargetFile != NULL);
+				return nullptr;
+			}
+
+			return hTargetFile;
+		};
+
+		auto CopyFromMPQToFileLambda = [](StormFile* pFile, FILE* hTargetFile)
+		{
+			char* allFile = new char[pFile->Size.LowPart]; // Only 4GB files are supported
+			pFile->ReadToBuffer(allFile, pFile->Size.LowPart);
+			fwrite(allFile, pFile->Size.LowPart, 1, hTargetFile);
+
+			delete[] allFile;
+		};
+
+		// unpack discord overlay and discord game sdk
+		{
+			if (StormFile* pFile = PatchFile.OpenFile(DISCORD_OVERLAY_FILE))
+			{
+				OnOpenFileLambda(DISCORD_OVERLAY_FILE);
+				std::unique_ptr<StormFile> patchData(pFile);
+
+				FILE* hTargetFile = OpenFileWithLogLambda(DISCORD_OVERLAY_FILE);
+				if (hTargetFile == nullptr)
+				{
+					return 1;
+				}
+
+				CopyFromMPQToFileLambda(pFile, hTargetFile);
+			}
+
+			if (StormFile* pFile = PatchFile.OpenFile(DISCORD_GAME_SDK_FILE))
+			{
+				OnOpenFileLambda(DISCORD_GAME_SDK_FILE);
+				std::unique_ptr<StormFile> patchData(pFile);
+
+				FILE* hTargetFile = OpenFileWithLogLambda(DISCORD_GAME_SDK_FILE);
+				if (hTargetFile == nullptr)
+				{
+					return 1;
+				}
+
+				CopyFromMPQToFileLambda(pFile, hTargetFile);
+			}
+		}
+
+		// unpack mpq
+		if (StormFile* pFile = PatchFile.OpenFile(PATCH_FILE))
+		{
+			OnOpenFileLambda(PATCH_FILE);
+			std::unique_ptr<StormFile> patchData(pFile);
+
+			// copy shit to target path
+			FILE* hTargetFile = OpenFileWithLogLambda(PATCH_FILE);
+			if (hTargetFile == nullptr)
+			{
 				return 1;
 			}
 
