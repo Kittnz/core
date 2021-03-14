@@ -8,6 +8,7 @@
 #include "StormLib.h"
 #include "resource.h"
 #include <Commctrl.h>
+#include <iostream>
 
 #define fs std::filesystem
 
@@ -22,6 +23,7 @@
 #define PATCH_FILE "Data\\patch-U.mpq"
 #define DISCORD_OVERLAY_FILE "DiscordOverlay.dll"
 #define DISCORD_GAME_SDK_FILE "discord_game_sdk.dll"
+#define LFT_ADDON_FILE "LFT.mpq"
 
 // 2 bytes. Original value: unsigned short "5875"
 #define OFFSET_NET_VERSION 0x001B2122
@@ -64,7 +66,14 @@ const unsigned char LoadDLLShellcode[] =
 
 const char DiscordOverlayDllStr[] = "DiscordOverlay.dll";
 
-#include <iostream>
+void RemoveFilenameFromEnd(std::string& InOutStr)
+{
+	size_t LastTrailingSlash = InOutStr.find_last_of('\\');
+	if (LastTrailingSlash != std::string::npos)
+	{
+		InOutStr.erase(LastTrailingSlash, InOutStr.size() - LastTrailingSlash);
+	}
+}
 
 void PatchDiscordOverlayDLL(FILE* hWoW)
 {
@@ -221,6 +230,58 @@ struct StormArchive
 			SFileCloseArchive(mpq);
 		}
 	}
+
+	struct FileIterator
+	{
+		HANDLE ParentMPQ = NULL;
+		HANDLE hFind = NULL;
+		SFILE_FIND_DATA FileData;
+		bool bReachEnd = false;
+
+		FileIterator(HANDLE hMPQ)
+			: ParentMPQ(hMPQ)
+		{
+			ZeroMemory(&FileData, sizeof(FileData));
+
+			hFind = SFileFindFirstFile(ParentMPQ, "*", &FileData, nullptr);
+			if (hFind == NULL)
+			{
+				bReachEnd = true;
+			}
+		}
+
+		
+		FileIterator& operator++(int)
+		{
+			if (!bReachEnd)
+			{
+				bReachEnd = !SFileFindNextFile(hFind, &FileData);
+			}
+
+			return *this;
+		}
+
+		operator bool()
+		{
+			return !bReachEnd;
+		}
+
+		StormFile* OpenCurrentFile()
+		{
+			HANDLE hFile;
+			if (SFileOpenFileEx(ParentMPQ, FileData.cFileName, 0, &hFile))
+			{
+				return new StormFile(hFile);
+			}
+
+			return nullptr;
+		}
+
+		~FileIterator()
+		{
+			SFileFindClose(hFind);
+		}
+	};
 };
 
 HINSTANCE gHInstance;
@@ -460,6 +521,7 @@ int GuardedMain(HINSTANCE hInstance)
 				}
 
 				CopyFromMPQToFileLambda(pFile, hTargetFile);
+				fclose(hTargetFile);
 			}
 
 			if (StormFile* pFile = PatchFile.OpenFile(DISCORD_GAME_SDK_FILE))
@@ -474,6 +536,63 @@ int GuardedMain(HINSTANCE hInstance)
 				}
 
 				CopyFromMPQToFileLambda(pFile, hTargetFile);
+				fclose(hTargetFile);
+			}
+		}
+		
+		// Unpack LFT.mpq
+		{
+			if (StormFile* pFile = PatchFile.OpenFile(LFT_ADDON_FILE))
+			{
+				OnOpenFileLambda(LFT_ADDON_FILE);
+				std::unique_ptr<StormFile> patchData(pFile);
+
+				FILE* hTargetFile = OpenFileWithLogLambda(LFT_ADDON_FILE);
+				if (hTargetFile == nullptr)
+				{
+					return 1;
+				}
+
+				CopyFromMPQToFileLambda(pFile, hTargetFile);
+				fclose(hTargetFile);
+
+				fs::path LFTAddonPath = "Interface\\AddOns\\LFT";
+				if (fs::exists(LFTAddonPath))
+				{
+					fs::remove_all(LFTAddonPath);
+				}
+
+				fs::create_directories(LFTAddonPath);
+
+				{
+					StormArchive LFTArchive(LFT_ADDON_FILE);
+
+					for (StormArchive::FileIterator it(LFTArchive.mpq); it; it++)
+					{
+						std::unique_ptr<StormFile> FileInside( it.OpenCurrentFile());
+
+						WriteLog("Unpack LFT file %s", it.FileData.cFileName);
+
+						char FilePath[256] = {0};
+						sprintf(FilePath, "Interface\\AddOns\\LFT\\%s", it.FileData.cFileName);
+
+						std::string sFilePath = FilePath;
+						RemoveFilenameFromEnd(sFilePath);
+						fs::create_directories(sFilePath);
+
+						FILE* hTargetFile = OpenFileWithLogLambda(FilePath);
+						if (hTargetFile == nullptr)
+						{
+							continue;
+						}
+
+						CopyFromMPQToFileLambda(FileInside.get(), hTargetFile);
+
+						fclose(hTargetFile);
+					}
+				}
+
+				fs::remove(LFT_ADDON_FILE);
 			}
 		}
 
