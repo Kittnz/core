@@ -897,8 +897,8 @@ bool ItemUseSpell_item_roleplay_effect(Player* pPlayer, Item* pItem, const Spell
     float dis{ 20.0F };
     float x, y, z;
     pPlayer->GetSafePosition(x, y, z);
-    x += dis * cos(pPlayer->GetOrientation());
-    y += dis * sin(pPlayer->GetOrientation());
+    //x += dis * cos(pPlayer->GetOrientation());
+    //y += dis * sin(pPlayer->GetOrientation());
 
     switch (pItem->GetEntry())
     {
