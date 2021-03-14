@@ -16,7 +16,8 @@ struct MapBotChatData
 
 struct MapBotChatRespondsQueue
 {
-    MapBotChatRespondsQueue(uint32 type, uint32 guid1, uint32 guid2, std::string msg, std::string chanName, std::string name) : m_type(type), m_guid1(guid1), m_guid2(guid2), m_msg(msg), m_chanName(chanName), m_name(name) {}
+    MapBotChatRespondsQueue(ObjectGuid originguid, uint32 type, uint32 guid1, uint32 guid2, std::string msg, std::string chanName, std::string name) : m_originguid(originguid), m_type(type), m_guid1(guid1), m_guid2(guid2), m_msg(msg), m_chanName(chanName), m_name(name) {}
+    ObjectGuid m_originguid;
     uint32 m_type;
     uint32 m_guid1;
     uint32 m_guid2;
@@ -52,6 +53,8 @@ enum MapBotWsgWaitSpot
     MB_WSG_WAIT_SPOT_RIGHT
 };  
 
+typedef std::vector<std::string> Speech;
+
 class MapBotAI : public CombatBotBaseAI
 {
 public:
@@ -61,7 +64,7 @@ public:
     {
         m_updateTimer.Reset(2000);
         m_updateMoveTimer.Reset(1000);
-        m_updateChatTimer.Reset(3000);
+        m_updateChatTimer.Reset(2000);
         BotLastChatTime = sWorld.GetGameTime();
     }
 
@@ -158,8 +161,10 @@ public:
     uint8 m_waitingSpot = MB_WSG_WAIT_SPOT_SPAWN;
 
     // Chat System
+    std::vector<MapBotChatRespondsQueue> m_chatWorldRespondsQueue;
+    std::vector<MapBotChatRespondsQueue> m_chatPlayerRespondsQueue;
     void LoadBotChat();
-    void MakeBotWorldChat(Player* me, uint8 msgtype, ObjectGuid guid1, ObjectGuid guid2, std::string message, std::string chanName, std::string name);
+    void BotChatAddToQueue(Player* me, uint8 msgtype, ObjectGuid guid1, ObjectGuid guid2, std::string message, std::string chanName, std::string name);
     void HandleChat(Player* me, uint32 type, uint32 guid1, uint32 guid2, std::string msg, std::string chanName, std::string name);
     ShortTimeTracker m_updateChatTimer;
     //uint8 m_BotChatCount = 0;
