@@ -136,7 +136,7 @@ replace into shop_items values
 (912, 9, 51007, 'Teldrassil Sproutling', 80),
 (913, 9, 81150, 'Phoenix Hatchling', 150),
 (914, 9, 81151, 'Spirit Darter', 80),
-(915, 9, 81152, 'Tiny Pterodactyl', 80),
+(915, 9, 81207, 'Whimsyshire Cloud', 150),
 -- Vanity: Tabards
 (1000, 10, 23710, 'Darkmoon Faire Tabard', 180),
 (1001, 10, 81088, 'Tabard of Summer Skies', 180),
