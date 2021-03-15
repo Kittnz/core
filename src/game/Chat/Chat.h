@@ -495,6 +495,8 @@ class MANGOS_DLL_SPEC ChatHandler
         bool HandleFlyCommand(char* args);
         bool HandleTransferCommand(char* args);
 
+        bool HandleFastDebugCommand(char* args);
+
         Player*   GetSelectedPlayer();
         Creature* GetSelectedCreature();
         Unit*     GetSelectedUnit();

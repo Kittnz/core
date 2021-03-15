@@ -4247,3 +4247,13 @@ bool ChatHandler::HandleServiceDeleteCharacters(char* args)
     sLog.outString("Service: Removed %u characters", count);
     return true;
 }
+
+bool ChatHandler::HandleFastDebugCommand(char* /*args*/)
+{
+    if (m_session->GetPlayer()->SetupHardcoreMode())
+        PSendSysMessage("Test hardcore mode succeeded");
+    else
+        PSendSysMessage("Test hardcore mode failed");
+
+    return true;
+}

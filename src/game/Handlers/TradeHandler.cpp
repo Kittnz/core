@@ -631,9 +631,10 @@ void WorldSession::HandleInitiateTradeOpcode(WorldPacket& recvPacket)
     }
 
     // Only non MM or MM players can trade between them
-    if (!_player->CheckHardcoreInteract(pOther))
+    if (!_player->CheckHardcoreInteract(pOther, true))
     {
-        SendTradeStatus(TRADE_STATUS_BUSY);
+        _player->GetSession()->SendNotification("You are able to trade items and gold only with other Hardcore characters as long as the difference between your levels isn’t higher than 5.");
+        SendTradeStatus(TRADE_STATUS_TRIAL_ACCOUNT);
         return;
     }
 

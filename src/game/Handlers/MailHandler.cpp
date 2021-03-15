@@ -195,12 +195,23 @@ void WorldSession::HandleSendMail(WorldPacket & recv_data)
 
     if (req->receiverPtr)
     {
-        // Only non MM or MM players can send mails between them
-        if (!GetPlayer()->CheckHardcoreInteract(req->receiverPtr))
+        // mail interaction for hardcore players
+        if (!GetPlayer()->CheckHardcoreInteract(req->receiverPtr, false))
         {
             pl->SendMailResult(0, MAIL_SEND, MAIL_ERR_RECIPIENT_NOT_FOUND);
+            GetPlayer()->GetSession()->SendNotification("Hardcore characters can not receive attachments and gold in mail.");
             delete req;
             return;
+        }
+        else
+        {
+            if (GetPlayer()->isHardcore() && (req->money || req->COD || req->itemGuid))
+            {
+                pl->SendMailResult(0, MAIL_SEND, MAIL_ERR_DISABLED_FOR_TRIAL_ACC);
+                GetPlayer()->GetSession()->SendNotification("Hardcore characters can use mail, but with no attachments.");
+                delete req;
+                return;
+            }
         }
 
         MasterPlayer* receiverMasterPlayer = req->receiverPtr->GetSession()->GetMasterPlayer();

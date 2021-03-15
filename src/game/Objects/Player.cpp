@@ -4559,7 +4559,7 @@ void Player::BuildPlayerRepop()
     SetHealth(1);
 
     SetWaterWalk(true);
-    if (!GetSession()->isLogingOut())
+    if (!GetSession()->isLogingOut() && !isHardcore())
         SetMovement(MOVE_UNROOT);
 
     // BG - remove insignia related
@@ -4687,8 +4687,9 @@ void Player::KillPlayer()
         PlayDirectMusic(1171, this);
         GetSession()->SendNotification("YOU HAVE DIED.\nYou will be disconnected in 60 seconds.");
         ChatHandler(this).PSendSysMessage("YOU HAVE DIED.\nYou will be disconnected in 60 seconds.");
+        sLog.out(LOG_HARDCORE_MODE, "Player %s dead on %f %f %f %u, level %u", GetName(), GetPositionX(), GetPositionY(), GetPositionZ(), GetMapId(), getLevel());
         BuildPlayerRepop();
-        m_hardcoreKickTimer = 10 * IN_MILLISECONDS;
+        m_hardcoreKickTimer = 60 * IN_MILLISECONDS;
     }
 }
 
@@ -20228,10 +20229,17 @@ void Player::HandleFall(MovementInfo const& movementInfo)
 
             if (damage > 0)
             {
-                //Prevent fall damage from being more than the player maximum health
+                // Prevent fall damage from being more than the player maximum health
                 if (damage > GetMaxHealth())
                     damage = GetMaxHealth();
 
+                // handle hardcore potential fall damage
+                if (isHardcore())
+                {
+                    sLog.out(LOG_HARDCORE_MODE, "Player %s got a big fall damage on %f %f %f (real: %f %f %f) %u", GetName(), movementInfo.GetPos()->x, movementInfo.GetPos()->y, movementInfo.GetPos()->z, GetPositionX(), GetPositionY(), GetPositionZ(), GetMapId());
+                    damage /= 10;
+                }
+                
                 EnvironmentalDamage(DAMAGE_FALL, damage);
             }
 
@@ -22290,6 +22298,7 @@ bool Player::SetupHardcoreMode()
         return false;
 
     SetHardcoreStatus(HARDCORE_MODE_STATUS_ALIVE);
+    CastSpell(this, 50001, true);
 
     // add to guild
     Guild* guild = sGuildMgr.GetGuildById(1);
@@ -22317,6 +22326,8 @@ bool Player::SetupHardcoreMode()
         delete resultMail;
     }
 
+    SetMoney(0);
+
     // handle equipped
     for (int i = EQUIPMENT_SLOT_START; i < EQUIPMENT_SLOT_END; ++i)
     {
@@ -22342,12 +22353,7 @@ bool Player::SetupHardcoreMode()
             for (uint32 j = 0; j < pBag->GetBagSize(); ++j)
             {
                 if (Item* pItem = pBag->GetItemByPos(j))
-                {
-                    if (pItem->GetEntry() == 6948)
-                        continue;
-
                     DestroyItem(i, j, true);
-                }
             }
         }
     }
@@ -22357,6 +22363,33 @@ bool Player::SetupHardcoreMode()
         if (Bag* pBag = (Bag*)GetItemByPos(INVENTORY_SLOT_BAG_0, i))
             DestroyItem(INVENTORY_SLOT_BAG_0, i, true);
     }
+    // destroy items from bank
+    for (int i = BANK_SLOT_ITEM_START; i < BANK_SLOT_ITEM_END; ++i)
+    {
+        if (Item* pItem = GetItemByPos(INVENTORY_SLOT_BAG_0, i))
+            DestroyItem(INVENTORY_SLOT_BAG_0, i, true);
+    }
+    // destroy items from bank bags
+    for (int i = BANK_SLOT_BAG_START; i < BANK_SLOT_BAG_END; ++i)
+    {
+        if (Bag* pBag = (Bag*)GetItemByPos(INVENTORY_SLOT_BAG_0, i))
+        {
+            for (uint32 j = 0; j < pBag->GetBagSize(); ++j)
+            {
+                if (Item* pItem = pBag->GetItemByPos(j))
+                    DestroyItem(i, j, true);
+            }
+        }
+    }
+    // destroy bank bags
+    for (int i = BANK_SLOT_BAG_START; i < BANK_SLOT_BAG_END; ++i)
+    {
+        if (Bag* pBag = (Bag*)GetItemByPos(INVENTORY_SLOT_BAG_0, i))
+            DestroyItem(INVENTORY_SLOT_BAG_0, i, true);
+    }
+    // destroy buyback
+    for (int i = BUYBACK_SLOT_START; i < BUYBACK_SLOT_END; ++i)
+        RemoveItemFromBuyBackSlot(i, true);
 
     _SaveInventory();
 

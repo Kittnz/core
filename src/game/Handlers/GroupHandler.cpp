@@ -77,9 +77,10 @@ void WorldSession::HandleGroupInviteOpcode(WorldPacket & recv_data)
     }
 
     // Only non MM or MM players can group together
-    if (!GetPlayer()->CheckHardcoreInteract(player))
+    if (!GetPlayer()->CheckHardcoreInteract(player, true))
     {
-        SendPartyResult(PARTY_OP_INVITE, membername, ERR_NOT_IN_GROUP);
+        SendPartyResult(PARTY_OP_INVITE, membername, ERR_BAD_PLAYER_NAME_S);
+        GetPlayer()->GetSession()->SendNotification("You are able to group up only with other Hardcore characters as long as the difference between your levels isn’t higher than 5.");
         return;
     }
 

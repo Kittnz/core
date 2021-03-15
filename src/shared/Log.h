@@ -103,6 +103,7 @@ enum LogFile
     LOG_GM_CRITICAL,
     LOG_CHAT_SPAM,
     LOG_EXPLOITS,
+    LOG_HARDCORE_MODE,
     LOG_MAX_FILES
 };
 
