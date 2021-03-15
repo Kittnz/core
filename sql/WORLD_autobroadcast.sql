@@ -21,7 +21,7 @@ replace into mangos_string (entry, content_default) values
 
 ('50009', 'Speak to Karn Deepeye in Orgrimmar or Tarun Swifteagle in Stormwind to become a diplomat! You will be able to join a group and trade with the players of the opposite faction.'),
 
-('50010', 'If you really enjoy questing and leveling, play in hardcore mode. Your experience rates for killing monsters will be halved. Enjoy your journey and receive rewards every 10 levels!'),
+('50010', 'If you really enjoy questing and leveling, do it slow and steady with the Glyph of the Turtle! Your experience rates for killing monsters will be halved. Enjoy your journey and receive rewards every 10 levels.'),
 
 ('50011', 'Shop items are half the price on till March 17. Exotic mounts, large bags, mysterious engineering devices and more: turtle-wow.org/donate'),
 
@@ -31,7 +31,7 @@ replace into mangos_string (entry, content_default) values
 
 ('50014', 'Shop items are half the price on till March 17. Exotic mounts, large bags, mysterious engineering devices and more: turtle-wow.org/donate'),
 
-('50015', 'Have you ever dreamed of setting up your own garden? Grow consumable food by planting the seed and watering it, then enjoy the results of your hard work once it’s fully grown! Speak to Kern Mosshoof in Mulgore or Mortimer Stansfield in Elwynn Forest.'),
+('50015', 'Have you ever dreamed of setting up your own garden? Grow consumable food by planting the seed and watering it, then enjoy the results of your hard work once it’s fully grown! Speak to Kern Mosshoof in Mulgore or Mortimer Stansfield in Elwynn Forest.');
 
 delete from autobroadcast where string_id between 50000 and 50018;
 replace into autobroadcast (string_Id) values
