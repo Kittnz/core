@@ -1693,7 +1693,7 @@ bool GossipHello_npc_surgeon_go(Player* pPlayer, Creature* pCreature)
 
 bool GossipSelect_npc_surgeon_go(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
 {
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2) // goblin females | face
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1) // goblin females | face
     {
         uint16 face = 0;
         uint16 curr_face = pPlayer->GetByteValue(PLAYER_BYTES, 1);
