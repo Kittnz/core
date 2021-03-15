@@ -913,7 +913,7 @@ bool QuestAccept_npc_mysterious_stranger(Player* pPlayer, Creature* pQuestGiver,
     {
         pQuestGiver->HandleEmote(EMOTE_ONESHOT_LAUGH);
         pQuestGiver->MonsterSayToPlayer("What would misery, frustration, and pain bring you? Fame? Glory?", pPlayer);
-        pPlayer->GetSession()->SendNotification("If you complete this quest you will become mortal.\nIn this mode you only have one life and can only trade and group up with other mortal players.\nYour bag, bank and mail items will be destroyed.");
+        ChatHandler(pPlayer).PSendSysMessage("If you complete this quest you will become mortal. In this mode you only have one life and can only trade and group up with other mortal players. Your bag, bank and mail items will be destroyed.");
     }
     return false;
 }
