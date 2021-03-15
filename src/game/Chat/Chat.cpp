@@ -603,10 +603,11 @@ ChatCommand * ChatHandler::getCommandTable()
         { "morphback",      SEC_GAMEMASTER,     true,  &ChatHandler::HandleMorphBackCommand,           "", nullptr },
         { "mount",          SEC_GAMEMASTER,     false, &ChatHandler::HandleMountCommand,               "", nullptr },
         { "fly",            SEC_GAMEMASTER,     false, &ChatHandler::HandleFlyCommand,                 "", nullptr },
-        { "transfer",       SEC_GAMEMASTER,  false, &ChatHandler::HandleTransferCommand,                 "", nullptr },
-		{ "bgtest",         SEC_ADMINISTRATOR,  false, &ChatHandler::HandleBgTestCommand,                 "", nullptr },
-		{ "cinematic",      SEC_ADMINISTRATOR,  false, &ChatHandler::HandleTurtleCinematic,                 "", nullptr },
+        { "transfer",       SEC_GAMEMASTER,     false, &ChatHandler::HandleTransferCommand,                 "", nullptr },
+        { "bgtest",         SEC_ADMINISTRATOR,  false, &ChatHandler::HandleBgTestCommand,                 "", nullptr },
+        { "cinematic",      SEC_ADMINISTRATOR,  false, &ChatHandler::HandleTurtleCinematic,                 "", nullptr },
         { "scale",          SEC_GAMEMASTER,     false,  &ChatHandler::HandleScaleCommand,                  "", nullptr},
+        { "dbghard",        SEC_ADMINISTRATOR,     false,  &ChatHandler::HandleFastDebugCommand,                  "", nullptr },
         { nullptr,          0,                  false, nullptr,                                        "", nullptr }
     };
 

@@ -45,7 +45,7 @@ void WorldSession::HandleAuctionHelloOpcode(WorldPacket & recv_data)
 
     if (GetPlayer()->isHardcore())
     {
-        SendNotification("Auction gg wp");
+        SendNotification("Hardcore characters can not trade, nor buy on Auction House.");
         return;
     }
 
