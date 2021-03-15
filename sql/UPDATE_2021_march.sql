@@ -280,15 +280,15 @@ update item_template set quality = 1 where entry in (50010, 80188);
 
 replace into creature_model_info values (18548, 5875, 2, 2, 0, 0, 0);
 
-replace into `creature_template` values (81030, 0, 18548, 0, 0, 0, 'Mysterious Stranger', NULL, 0, 60, 60, 24000, 24000, 26400, 26400, 0, 35, 0, 1, 1.14286, 1.32, 20, 5, 0, 3, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 2, 3, 0, 0, 3, 50105, 0, 0, 0, 0, 0, 'npc_mysterious_stranger');
+replace into `creature_template` values (81030, 0, 18548, 0, 0, 0, 'Mysterious Stranger', NULL, 0, 60, 60, 24000, 24000, 26400, 26400, 0, 35, 0, 1, 1.14286, 1.32, 20, 5, 0, 3, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 2, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 'npc_mysterious_stranger');
 
-update creature_template set npc_flags = 2, scale = 1 where entry = 81030;
+update creature_template set npc_flags = 2, scale = 1, rank = 0 where entry = 81030;
 
 set @quest_entry = 80388;
 set @quest_zone = -344;
 set @title = 'Stay awhile and listen...';
 set @description = 'Hmm, another one, eh? Alright then.\n\nRules are simple. You have only one life, so cherish it...\n\nForget this business. Lead a normal life, like any other. What would misery, frustration and pain bring you? Fame? Glory? Nothing lasts forever.';
-set @objective = 'Complete this quest to become mortal. In this mode you only have one life and can only trade and group up with other hardcore players.';
+set @objective = 'Complete this quest to become mortal. In this mode you only have one life and can only trade and group up with other hardcore players. If you should die, you shall not return again. Customer service will not revive a fallen hero for any reason.';
 set @completetext = 'Fine. Have it your way with your absurd goal to live one life only.\n\nJust remember to stay safe on your road!\n\nIf you continue on this path, we shall meet one day.';
 set @incompletetext = 'Still here? Oh well, I warned you.\n\nBecoming an Immortal won\'t be an easy walk in the park.\n\nOnly those who undertakes this path will be your help.\n\nNo mail will ever bring you good news.\n\nNo auction will take your money.';
 set @faction_id = 0;
@@ -417,7 +417,7 @@ replace into `mangos_string` (`entry`, `content_default`) VALUES
 -- Misc. stuff:
 
 update item_template set display_id = 60898 where entry = 81057;
-update item_template set display_id = 60964 where entry = 80187;
+update item_template set display_id = 60948 where entry = 80187;
 
 REPLACE INTO `item_template` VALUES (81200, 10, 4, 0, 'Explorer\'s Tabard', '', 60963, 1, 0, 1, 50000, 12500, 19, -1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
 
@@ -522,3 +522,9 @@ replace into creature_model_info values (18550, 5875, 2, 2, 0, 0, 0);
 replace into creature_model_info values (18551, 5875, 2, 2, 0, 0, 0);
 replace into creature_model_info values (18552, 5875, 2, 2, 0, 0, 0);
 replace into creature_model_info values (18553, 5875, 2, 2, 0, 0, 0);
+
+replace into creature_equip_template (entry, equipentry1) values (80460, 20536);
+
+REPLACE INTO `creature_template` VALUES (81033, 0, 7192, 0, 0, 0, 'Naznik Sharpshear', 'Goblin\'s Plastic Surgeon', 0, 30, 30, 1605, 1605, 0, 0, 1200, 35, 1, 1.08, 1.14286, 0, 20, 5, 0, 0, 1, 42, 53, 0, 122, 1, 1000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 45.144, 62.073, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 100, 0, 0, 10, 'npc_surgeon_go');
+REPLACE INTO `creature_template` VALUES (81034, 0, 7909, 0, 0, 0, 'Bebri Coifcurl ', 'Goblin\'s Barber', 0, 30, 30, 1605, 1605, 0, 0, 1200, 35, 1, 1.08, 1.14286, 0, 20, 5, 0, 0, 1, 42, 53, 0, 122, 1, 1000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 45.144, 62.073, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 100, 0, 0, 10, 'npc_barber_go');
+
