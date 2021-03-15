@@ -22300,7 +22300,6 @@ bool Player::SetupHardcoreMode()
         return false;
 
     SetHardcoreStatus(HARDCORE_MODE_STATUS_ALIVE);
-    CastSpell(this, 50001, true);
 
     // add to guild
     Guild* guild = sGuildMgr.GetGuildById(1);

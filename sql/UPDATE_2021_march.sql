@@ -288,7 +288,7 @@ set @quest_entry = 80388;
 set @quest_zone = -344;
 set @title = 'Stay awhile and listen...';
 set @description = 'Hmm, another one, eh? Alright then.\n\nRules are simple. You have only one life, so cherish it...\n\nForget this business. Lead a normal life, like any other. What would misery, frustration and pain bring you? Fame? Glory? Nothing lasts forever.';
-set @objective = 'Complete this quest to become Mortal. In this mode you only have one life and can only trade and group up with other mortal players.';
+set @objective = 'Complete this quest to become mortal. In this mode you only have one life and can only trade and group up with other hardcore players.';
 set @completetext = 'Fine. Have it your way with your absurd goal to live one life only.\n\nJust remember to stay safe on your road!\n\nIf you continue on this path, we shall meet one day.';
 set @incompletetext = 'Still here? Oh well, I warned you.\n\nBecoming an Immortal won\'t be an easy walk in the park.\n\nOnly those who undertakes this path will be your help.\n\nNo mail will ever bring you good news.\n\nNo auction will take your money.';
 set @faction_id = 0;
@@ -357,7 +357,7 @@ reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
 reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
 nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
 nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
-rewspell = 50001, maxlevel = 1
+rewspell = 50006, maxlevel = 1
 where entry = @quest_entry;	
 
 -- Rename old HC mode items to Turtle More items:
