@@ -4561,6 +4561,8 @@ void Player::BuildPlayerRepop()
     SetWaterWalk(true);
     if (!GetSession()->isLogingOut() && !isHardcore())
         SetMovement(MOVE_UNROOT);
+    else if (isHardcore())
+        SetMovement(MOVE_ROOT);
 
     // BG - remove insignia related
     RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SKINNABLE);
