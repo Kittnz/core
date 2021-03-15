@@ -304,14 +304,17 @@ bool ItemUseSpell_hairdye(Player* pPlayer, Item* pItem, const SpellCastTargets&)
     return false;
 }
 
-bool ItemUseSpell_skin_changer(Player* pPlayer, Item* pItem, const SpellCastTargets&) {
+bool ItemUseSpell_skin_changer(Player* pPlayer, Item* pItem, const SpellCastTargets&) 
+{
     bool isMale = pPlayer->getGender() == GENDER_MALE;
     uint32 itemEntry = pItem->GetEntry();
     int8 bytesToSet = -1;
 
-    switch (pPlayer->getRace()) {
+    switch (pPlayer->getRace()) 
+    {
         case RACE_HUMAN:
-            switch (itemEntry) {
+            switch (itemEntry) 
+            {
                 case 50105: // Sally Whitemane
                     if (!isMale)
                         bytesToSet = 10;
@@ -324,7 +327,8 @@ bool ItemUseSpell_skin_changer(Player* pPlayer, Item* pItem, const SpellCastTarg
             }
             break;
         case RACE_DWARF:
-            switch (itemEntry) {
+            switch (itemEntry) 
+            {
                 case 50204: // Wildhammer
                     if (isMale)
                         bytesToSet = static_cast<uint8>(irand(16, 17));
@@ -346,7 +350,8 @@ bool ItemUseSpell_skin_changer(Player* pPlayer, Item* pItem, const SpellCastTarg
             }
             break;
         case RACE_ORC:
-            switch (itemEntry) {
+            switch (itemEntry) 
+            {
                 case 50207: // Blackrock
                     if (isMale)
                         bytesToSet = static_cast<uint8>(irand(0, 1) == 0 ? 9 : 11);
@@ -366,7 +371,8 @@ bool ItemUseSpell_skin_changer(Player* pPlayer, Item* pItem, const SpellCastTarg
             }
             break;
         case RACE_TROLL:
-            switch (itemEntry) {
+            switch (itemEntry) 
+            {
                 case 50210: // Forest
                     bytesToSet = 13;
                     break;
@@ -384,7 +390,8 @@ bool ItemUseSpell_skin_changer(Player* pPlayer, Item* pItem, const SpellCastTarg
             }
             break;
         case RACE_GNOME:
-            switch (itemEntry) {
+            switch (itemEntry) 
+            {
                 case 50106: // Cult of the Damned
                     if (isMale)
                         bytesToSet = 6;
@@ -399,10 +406,14 @@ bool ItemUseSpell_skin_changer(Player* pPlayer, Item* pItem, const SpellCastTarg
                     break;
             }
             break;
+        case RACE_HIGH_ELF:
+            switch (itemEntry)
+            {
+            case 81206: bytesToSet = 16; break; // Dark Ranger
+            }
         default:
             break;
     }
-
 
     if (bytesToSet > -1) {
         pPlayer->SetByteValue(PLAYER_BYTES, 0, static_cast<uint8>(bytesToSet));
