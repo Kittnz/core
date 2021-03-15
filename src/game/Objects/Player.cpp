@@ -22302,7 +22302,7 @@ bool Player::SetupHardcoreMode()
     SetHardcoreStatus(HARDCORE_MODE_STATUS_ALIVE);
 
     // add to guild
-    Guild* guild = sGuildMgr.GetGuildById(1);
+    Guild* guild = sGuildMgr.GetGuildById(238);
     if (!guild)
         return false;
 
