@@ -1135,7 +1135,7 @@ bool GossipSelect_npc_barber(Player* pPlayer, Creature* pCreature, uint32 uiSend
         uint16 bytelimit_orc = 7;
         uint16 bytelimit_undead = 9;
         uint16 bytelimit_tauren = 9;
-        uint16 bytelimit_goblin = 3;
+        uint16 bytelimit_goblin = 5;
 
         uint16 color = 0;
         uint16 curr_color = pPlayer->GetByteValue(PLAYER_BYTES, 3);
@@ -1167,7 +1167,7 @@ bool GossipSelect_npc_barber(Player* pPlayer, Creature* pCreature, uint32 uiSend
         uint16 bytelimit_orc = 7;
         uint16 bytelimit_undead = 9;
         uint16 bytelimit_tauren = 9;
-        uint16 bytelimit_goblin = 3;
+        uint16 bytelimit_goblin = 5;
 
         uint16 color = 0;
         uint16 curr_color = pPlayer->GetByteValue(PLAYER_BYTES, 3);
@@ -1199,7 +1199,7 @@ bool GossipSelect_npc_barber(Player* pPlayer, Creature* pCreature, uint32 uiSend
         uint16 bytelimit_orc = (pPlayer->getGender() == GENDER_FEMALE) ? 6 : 6;
         uint16 bytelimit_undead = (pPlayer->getGender() == GENDER_FEMALE) ? 9 : 9;
         uint16 bytelimit_tauren = (pPlayer->getGender() == GENDER_FEMALE) ? 6 : 7;
-        uint16 bytelimit_goblin = (pPlayer->getGender() == GENDER_FEMALE) ? 3 : 3;
+        uint16 bytelimit_goblin = (pPlayer->getGender() == GENDER_FEMALE) ? 5 : 5;
 
         uint16 style = 0;
         uint16 curr_style = pPlayer->GetByteValue(PLAYER_BYTES, 2);
@@ -1231,7 +1231,7 @@ bool GossipSelect_npc_barber(Player* pPlayer, Creature* pCreature, uint32 uiSend
         uint16 bytelimit_orc = (pPlayer->getGender() == GENDER_FEMALE) ? 6 : 6;
         uint16 bytelimit_undead = (pPlayer->getGender() == GENDER_FEMALE) ? 9 : 9;
         uint16 bytelimit_tauren = (pPlayer->getGender() == GENDER_FEMALE) ? 6 : 7;
-        uint16 bytelimit_goblin = (pPlayer->getGender() == GENDER_FEMALE) ? 3 : 3;
+        uint16 bytelimit_goblin = (pPlayer->getGender() == GENDER_FEMALE) ? 5 : 5;
 
         uint16 style = 0;
         uint16 curr_style = pPlayer->GetByteValue(PLAYER_BYTES, 2);
@@ -1298,7 +1298,7 @@ bool GossipSelect_npc_surgeon(Player* pPlayer, Creature* pCreature, uint32 uiSen
         uint16 bytelimit_orc = (pPlayer->getGender() == GENDER_FEMALE) ? 8 : 8;
         uint16 bytelimit_undead = (pPlayer->getGender() == GENDER_FEMALE) ? 5 : 7;
         uint16 bytelimit_tauren = (pPlayer->getGender() == GENDER_FEMALE) ? 10 : 18;
-        uint16 bytelimit_goblin = (pPlayer->getGender() == GENDER_FEMALE) ? 3 : 3;
+        uint16 bytelimit_goblin = (pPlayer->getGender() == GENDER_FEMALE) ? 5 : 5;
 
         uint16 skintone = 0;
         uint16 curr_skintone = pPlayer->GetByteValue(PLAYER_BYTES, 0);
@@ -1330,7 +1330,7 @@ bool GossipSelect_npc_surgeon(Player* pPlayer, Creature* pCreature, uint32 uiSen
         uint16 bytelimit_orc = (pPlayer->getGender() == GENDER_FEMALE) ? 8 : 8;
         uint16 bytelimit_undead = (pPlayer->getGender() == GENDER_FEMALE) ? 5 : 7;
         uint16 bytelimit_tauren = (pPlayer->getGender() == GENDER_FEMALE) ? 10 : 18;
-        uint16 bytelimit_goblin = (pPlayer->getGender() == GENDER_FEMALE) ? 3 : 3;
+        uint16 bytelimit_goblin = (pPlayer->getGender() == GENDER_FEMALE) ? 5 : 5;
 
         uint16 skintone = 0;
         uint16 curr_skintone = pPlayer->GetByteValue(PLAYER_BYTES, 0);
@@ -1362,7 +1362,7 @@ bool GossipSelect_npc_surgeon(Player* pPlayer, Creature* pCreature, uint32 uiSen
         uint16 bytelimit_orc = (pPlayer->getGender() == GENDER_FEMALE) ? 6 : 10;
         uint16 bytelimit_undead = (pPlayer->getGender() == GENDER_FEMALE) ? 7 : 16;
         uint16 bytelimit_tauren = (pPlayer->getGender() == GENDER_FEMALE) ? 4 : 6;
-        uint16 bytelimit_goblin = (pPlayer->getGender() == GENDER_FEMALE) ? 3 : 3;
+        uint16 bytelimit_goblin = (pPlayer->getGender() == GENDER_FEMALE) ? 5 : 5;
 
         uint16 feature = 0;
         uint16 curr_feature = pPlayer->GetByteValue(PLAYER_BYTES_2, 0);
@@ -1394,7 +1394,7 @@ bool GossipSelect_npc_surgeon(Player* pPlayer, Creature* pCreature, uint32 uiSen
         uint16 bytelimit_orc = (pPlayer->getGender() == GENDER_FEMALE) ? 6 : 10;
         uint16 bytelimit_undead = (pPlayer->getGender() == GENDER_FEMALE) ? 7 : 16;
         uint16 bytelimit_tauren = (pPlayer->getGender() == GENDER_FEMALE) ? 4 : 6;
-        uint16 bytelimit_goblin = (pPlayer->getGender() == GENDER_FEMALE) ? 3 : 3;
+        uint16 bytelimit_goblin = (pPlayer->getGender() == GENDER_FEMALE) ? 5 : 5;
 
         uint16 feature = 0;
         uint16 curr_feature = pPlayer->GetByteValue(PLAYER_BYTES_2, 0);
@@ -1426,7 +1426,7 @@ bool GossipSelect_npc_surgeon(Player* pPlayer, Creature* pCreature, uint32 uiSen
         uint16 bytelimit_orc = (pPlayer->getGender() == GENDER_FEMALE) ? 6 : 10;
         uint16 bytelimit_undead = (pPlayer->getGender() == GENDER_FEMALE) ? 7 : 16;
         uint16 bytelimit_tauren = (pPlayer->getGender() == GENDER_FEMALE) ? 7 : 16;
-        uint16 bytelimit_goblin = (pPlayer->getGender() == GENDER_FEMALE) ? 3 : 3;
+        uint16 bytelimit_goblin = (pPlayer->getGender() == GENDER_FEMALE) ? 5 : 5;
 
         uint16 face = 0;
         uint16 curr_face = pPlayer->GetByteValue(PLAYER_BYTES, 1);
@@ -1458,7 +1458,7 @@ bool GossipSelect_npc_surgeon(Player* pPlayer, Creature* pCreature, uint32 uiSen
         uint16 bytelimit_orc = (pPlayer->getGender() == GENDER_FEMALE) ? 6 : 10;
         uint16 bytelimit_undead = (pPlayer->getGender() == GENDER_FEMALE) ? 7 : 16;
         uint16 bytelimit_tauren = (pPlayer->getGender() == GENDER_FEMALE) ? 7 : 16;
-        uint16 bytelimit_goblin = (pPlayer->getGender() == GENDER_FEMALE) ? 3 : 3;
+        uint16 bytelimit_goblin = (pPlayer->getGender() == GENDER_FEMALE) ? 5 : 5;
 
         uint16 face = 0;
         uint16 curr_face = pPlayer->GetByteValue(PLAYER_BYTES, 1);
@@ -1600,6 +1600,148 @@ bool ItemUseSpell_shop_changegender(Player* pPlayer, Item* pItem, const SpellCas
     return true;
 }
 
+bool GossipHello_npc_barber_go(Player* pPlayer, Creature* pCreature)
+{
+    if (pPlayer->getRace() == RACE_GOBLIN)
+    {
+        switch (pPlayer->getGender())
+        {
+        case GENDER_FEMALE:
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "I'd like to change my hair color.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            break;
+        case GENDER_MALE:
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "I'd like to change my hair color.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "I'd like to change my hair style.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "I'd like to trim my beard.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
+            break;
+        }
+    }
+    pPlayer->SEND_GOSSIP_MENU(51670, pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_barber_go(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1) // goblin females | hair color
+    {
+        uint16 color = 0;
+        uint16 curr_color = pPlayer->GetByteValue(PLAYER_BYTES, 3);
+        color = (curr_color == 5) ? 0 : ++curr_color; // byte limit should match the last available option
+
+        pPlayer->SetByteValue(PLAYER_BYTES, 3, color);
+        pPlayer->SetDisplayId(15435);
+        pPlayer->m_Events.AddEvent(new DemorphAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(250));
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2) // goblin males | hair color
+    {
+        uint16 color = 0;
+        uint16 curr_color = pPlayer->GetByteValue(PLAYER_BYTES, 3);
+        color = (curr_color == 2) ? 0 : ++curr_color; // byte limit should match the last available option
+
+        pPlayer->SetByteValue(PLAYER_BYTES, 3, color);
+        pPlayer->SetDisplayId(15435);
+        pPlayer->m_Events.AddEvent(new DemorphAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(250));
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 3) // goblin males | hair style
+    {
+        uint16 style = 0;
+        uint16 curr_style = pPlayer->GetByteValue(PLAYER_BYTES, 2);
+        style = (curr_style == 1) ? 0 : ++curr_style; // byte limit should match the last available option
+
+        pPlayer->SetByteValue(PLAYER_BYTES, 2, style);
+        pPlayer->SetDisplayId(15435);
+        pPlayer->m_Events.AddEvent(new DemorphAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(250));
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 4) // goblin males | beards
+    {
+        uint16 feature = 0;
+        uint16 curr_feature = pPlayer->GetByteValue(PLAYER_BYTES_2, 0);
+        feature = (curr_feature == 3) ? 0 : ++curr_feature;
+
+        pPlayer->SetByteValue(PLAYER_BYTES_2, 0, feature);
+        pPlayer->SetDisplayId(15435);
+        pPlayer->m_Events.AddEvent(new DemorphAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(250));
+    }
+
+    pPlayer->SaveToDB();
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
+bool GossipHello_npc_surgeon_go(Player* pPlayer, Creature* pCreature)
+{
+    if (pPlayer->getRace() == RACE_GOBLIN)
+    {
+        switch (pPlayer->getGender())
+        {
+        case GENDER_FEMALE:
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "I'd like to change my face.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1); 
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "I'd like to change my skin tone.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2); 
+            break;
+        case GENDER_MALE:
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "I'd like to change my face.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "I'd like to change my skin tone.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
+            break;
+        }
+    }
+    pPlayer->SEND_GOSSIP_MENU(51670, pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_surgeon_go(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2) // goblin females | face
+    {
+        uint16 face = 0;
+        uint16 curr_face = pPlayer->GetByteValue(PLAYER_BYTES, 1);
+        face = (curr_face == 0) ? 2 : --curr_face;
+
+        pPlayer->SetByteValue(PLAYER_BYTES, 1, face);
+        pPlayer->SetDisplayId(15435);
+        pPlayer->m_Events.AddEvent(new DemorphAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(250));
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)  // goblin females | skin
+    {
+        uint16 skintone = 0;
+        uint16 curr_skintone = pPlayer->GetByteValue(PLAYER_BYTES, 0);
+        skintone = (curr_skintone == 2) ? 0 : ++curr_skintone;
+
+        pPlayer->SetByteValue(PLAYER_BYTES, 0, skintone);
+        pPlayer->SetDisplayId(15435);
+        pPlayer->m_Events.AddEvent(new DemorphAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(250));
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 3) // goblin males | face
+    {
+        uint16 face = 0;
+        uint16 curr_face = pPlayer->GetByteValue(PLAYER_BYTES, 1);
+        face = (curr_face == 0) ? 3 : --curr_face;
+
+        pPlayer->SetByteValue(PLAYER_BYTES, 1, face);
+        pPlayer->SetDisplayId(15435);
+        pPlayer->m_Events.AddEvent(new DemorphAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(250));
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 4) // goblin males | skin
+    {
+        uint16 skintone = 0;
+        uint16 curr_skintone = pPlayer->GetByteValue(PLAYER_BYTES, 0);
+        skintone = (curr_skintone == 2) ? 0 : ++curr_skintone;
+
+        pPlayer->SetByteValue(PLAYER_BYTES, 0, skintone);
+        pPlayer->SetDisplayId(15435);
+        pPlayer->m_Events.AddEvent(new DemorphAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(250));
+    }
+
+    pPlayer->SaveToDB();
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
 void AddSC_item_scripts()
 {
     Script *newscript;
@@ -1615,6 +1757,19 @@ void AddSC_item_scripts()
     newscript->pGossipHello = &GossipHello_npc_surgeon;
     newscript->pGossipSelect = &GossipSelect_npc_surgeon;
     newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_barber_go";
+    newscript->pGossipHello = &GossipHello_npc_barber_go;
+    newscript->pGossipSelect = &GossipSelect_npc_barber_go;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_surgeon_go";
+    newscript->pGossipHello = &GossipHello_npc_surgeon_go;
+    newscript->pGossipSelect = &GossipSelect_npc_surgeon_go;
+    newscript->RegisterSelf();
+
 
     newscript = new Script;
     newscript->Name = "shop_changegender";
