@@ -905,27 +905,44 @@ bool ItemUseSpell_item_winter_tree(Player* pPlayer, Item* pItem, const SpellCast
 
 bool ItemUseSpell_item_roleplay_effect(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
-    float dis{ 20.0F };
-    float x, y, z;
-    pPlayer->GetSafePosition(x, y, z);
-    //x += dis * cos(pPlayer->GetOrientation());
-    //y += dis * sin(pPlayer->GetOrientation());
 
-    switch (pItem->GetEntry())
+    if (!pPlayer)
+        return false;
+
+    // summon runes to mark the ground, helpful for raid enocunters
+    if (pPlayer->GetInstanceId())
     {
-    case 51410:
-        pPlayer->SummonGameObject(1000200, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 120, true);
-        break;
-    case 51411:
-        pPlayer->SummonGameObject(1000201, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 120, true);
-        break;
-    case 51412:
-        pPlayer->SummonGameObject(1000202, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 120, true);
-        break;
-    default:
-        break;
+        float dis{ 20.0F };
+        float x, y, z;
+        pPlayer->GetSafePosition(x, y, z);
+        //x += dis * cos(pPlayer->GetOrientation());
+        //y += dis * sin(pPlayer->GetOrientation());
+
+        switch (pItem->GetEntry())
+        {
+        case 51410:
+            // purple Raid Management: Purple Mark
+            pPlayer->SummonGameObject(2005013, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 120, true);
+            break;
+        case 51411:
+            // red Raid Management: Red Mark
+            pPlayer->SummonGameObject(2005012, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 120, true);
+            break;
+        case 51412:
+            // blue Raid Management: Blue Mark
+            pPlayer->SummonGameObject(2005011, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 120, true);
+            break;
+        default:
+            break;
+        }
+        return false;
     }
-    return false;
+    else
+    {
+        ChatHandler(pPlayer).SendSysMessage("Can't place rune here! You need to be in an instace or in a raid.");
+        return false;
+    }
+
 }
 
 bool ItemUseSpell_item_holy_strike_book(Player* pPlayer, Item* pItem, const SpellCastTargets&)
