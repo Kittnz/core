@@ -462,7 +462,7 @@ update item_template set display_id = 8668 where entry = 1981;
 replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1, spellcooldown_1) values
 (81207, 15, 2, 'Whimsyshire Cloud', 'It\'s moon is changing like a wind!', 60888, 2, 1, 28505, 1500);
 replace into creature_template (entry, display_id1, display_id2, display_id3, display_id4, name, subname, level_min, level_max, health_min, health_max, faction, script_name, scale) values
-(81031, 18527, 18524, 18525, 18526,  'Whimsyshire Cloud', '', '1', '1', '64', '64', '35', '', 0.4);
+(81031, 18527, 18524, 18523, 18526,  'Whimsyshire Cloud', '', '1', '1', '64', '64', '35', '', 0.4);
 replace into custom_pet_entry_relation (item_entry, creature_entry) values 
 (81207, 81031);
 
@@ -528,3 +528,4 @@ replace into creature_equip_template (entry, equipentry1) values (80460, 20536);
 REPLACE INTO `creature_template` VALUES (81033, 0, 7192, 0, 0, 0, 'Naznik Sharpshear', 'Goblin\'s Plastic Surgeon', 0, 30, 30, 1605, 1605, 0, 0, 1200, 35, 1, 1.08, 1.14286, 0, 20, 5, 0, 0, 1, 42, 53, 0, 122, 1, 1000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 45.144, 62.073, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 100, 0, 0, 10, 'npc_surgeon_go');
 REPLACE INTO `creature_template` VALUES (81034, 0, 7909, 0, 0, 0, 'Bebri Coifcurl', 'Goblin\'s Barber', 0, 30, 30, 1605, 1605, 0, 0, 1200, 35, 1, 1.08, 1.14286, 0, 20, 5, 0, 0, 1, 42, 53, 0, 122, 1, 1000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 45.144, 62.073, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 100, 0, 0, 10, 'npc_barber_go');
 
+update creature_template set name = 'Joseph Dalton' where entry = 50028;
