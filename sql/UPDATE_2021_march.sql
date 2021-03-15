@@ -462,7 +462,7 @@ update item_template set display_id = 8668 where entry = 1981;
 replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1, spellcooldown_1) values
 (81207, 15, 2, 'Whimsyshire Cloud', 'It\'s moon is changing like a wind!', 60888, 2, 1, 28505, 1500);
 replace into creature_template (entry, display_id1, display_id2, display_id3, display_id4, name, subname, level_min, level_max, health_min, health_max, faction, script_name, scale) values
-(81031, 18527, 18524, 18525, 18526,  'Whimsyshire', '', '1', '1', '64', '64', '35', '', 0.3);
+(81031, 18527, 18524, 18525, 18526,  'Whimsyshire Cloud', '', '1', '1', '64', '64', '35', '', 0.4);
 replace into custom_pet_entry_relation (item_entry, creature_entry) values 
 (81207, 81031);
 
