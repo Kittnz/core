@@ -274,7 +274,7 @@ REPLACE INTO `creature_template` (`entry`, `patch`, `display_id1`, `display_id2`
 
 update item_template set description = 'You\'re a mortal. In this mode you only have one life and can only trade and group up with other mortal players.' where entry = 80188;
 
-REPLACE INTO `item_template` VALUES (81200, 10, 4, 0, 'Tabard of Mortality', 'The path you chose is full of peril, thread carefully, a simple mistake will bring your journey to an end.', 20621, 1, 0, 1, 0, 0, 19, -1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+REPLACE INTO `item_template` VALUES (81200, 10, 4, 0, 'Tabard of Mortality', 'The path you chose is full of peril, thread carefully, a simple mistake will bring your journey to an end.', 60964, 1, 0, 1, 0, 0, 19, -1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
 
 update item_template set quality = 1 where entry in (50010, 80188);
 
@@ -414,3 +414,111 @@ replace into `mangos_string` (`entry`, `content_default`) VALUES
 (50301, '%s has reached level %u in Hardcore mode! Their ascendance towards immortality continues, however, so do the dangers they will face.'),
 (50302, '%s has transcended death and reached level 60 on Hardcore mode without dying once! %s shall henceforth be known as the Immortal!');
 
+-- Misc. stuff:
+
+update item_template set display_id = 60898 where entry = 81057;
+update item_template set display_id = 60964 where entry = 80187;
+
+REPLACE INTO `item_template` VALUES (81200, 10, 4, 0, 'Explorer\'s Tabard', '', 60963, 1, 0, 1, 50000, 12500, 19, -1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+
+REPLACE INTO `item_template` VALUES (81201, 10, 4, 0, 'Mag\'har Tabardd', '', 60948, 1, 0, 1, 50000, 12500, 19, -1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+
+REPLACE INTO `item_template` VALUES (81202, 10, 4, 0, 'Moro\'gai Tabard', '', 60949, 1, 0, 1, 50000, 12500, 19, -1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+
+REPLACE INTO `item_template` VALUES (81203, 10, 4, 0, 'Violet Eye Tabard', '', 60950, 1, 0, 1, 50000, 12500, 19, -1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+
+REPLACE INTO `item_template` VALUES (81204, 10, 4, 0, 'Illidari Tabard', '', 60951, 1, 0, 1, 50000, 12500, 19, -1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+
+REPLACE INTO `item_template` VALUES (81205, 10, 4, 0, 'Explorer\'s Tabard', '', 60963, 1, 0, 1, 50000, 12500, 19, -1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+
+update creature_template set display_id1 = 18546 where entry = 80959;
+update creature_template set display_id1 = 18514 where entry = 80948;
+update creature_template set display_id1 = 18550 where entry = 80961;
+update creature_template set display_id1 = 18551 where entry = 80995;
+
+REPLACE INTO `item_template` VALUES (81206, 0, 0, 0, 'Skin Change Token: Dark Ranger', '', 30658, 2, 0, 1, 0, 0, 0, -1, 512, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 12244, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 'item_skin_change');
+
+update item_template set display_id = 30658, quality = 1 where entry in (50207, 50208, 50205, 51010, 50206, 50210, 51011, 50212, 50209, 50211, 50105);
+
+update item_template set name = 'Skin Change Token: Blackrock Clan' where entry = 50207;
+update item_template set name = 'Skin Change Token: Chaos Orc' where entry = 50208;
+update item_template set name = 'Skin Change Token: Dark Iron Dwarf' where entry = 50205;
+update item_template set name = 'Skin Change Token: Dark Troll' where entry = 51010;
+update item_template set name = 'Skin Change Token: Earthen Dwarf' where entry = 50206;
+update item_template set name = 'Skin Change Token: Forest Troll' where entry = 50210;
+update item_template set name = 'Skin Change Token: Ice Troll' where entry = 51011;
+update item_template set name = 'Skin Change Token: Leper Gnome' where entry = 50212;
+update item_template set name = 'Skin Change Token: Mag\'Har Clan' where entry = 50209;
+update item_template set name = 'Skin Change Token: Sandfury Troll' where entry = 50211;
+update item_template set name = 'Skin Change Token: Sally Whitemane' where entry = 50105;
+update item_template set name = 'Skin Change Token: Scholomance Student' where entry = 50106;
+
+update item_template set description = 'This noble gryphon is as staunch a battle companion as any a member of the Alliance could ask for.' where entry = 81186;
+
+update item_template set display_id = 37425 where entry in (81185, 81186);
+update item_template set display_id = 9854 where entry = 10711;
+update item_template set display_id = 8668 where entry = 1981;
+
+replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1, spellcooldown_1) values
+(81207, 15, 2, 'Whimsyshire Cloud', 'It\'s moon is changing like a wind!', 60888, 2, 1, 28505, 1500);
+replace into creature_template (entry, display_id1, display_id2, display_id3, display_id4, name, subname, level_min, level_max, health_min, health_max, faction, script_name, scale) values
+(81031, 18527, 18524, 18525, 18526,  'Whimsyshire', '', '1', '1', '64', '64', '35', '', 0.3);
+replace into custom_pet_entry_relation (item_entry, creature_entry) values 
+(81207, 81031);
+
+update item_template set buy_price = 530, sell_price = 130 where entry = 40000;
+
+replace into creature_model_info values (18500, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (18501, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (18502, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (18503, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (18504, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (18505, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (18506, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (18507, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (18508, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (18509, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (18510, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (18511, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (18512, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (18513, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (18514, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (18515, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (18516, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (18517, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (18518, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (18519, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (18520, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (18521, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (18522, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (18523, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (18524, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (18525, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (18526, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (18527, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (18528, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (18529, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (18530, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (18531, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (18532, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (18533, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (18534, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (18535, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (18536, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (18537, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (18538, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (18539, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (18540, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (18541, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (18542, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (18543, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (18544, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (18545, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (18546, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (18547, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (18548, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (18549, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (18550, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (18551, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (18552, 5875, 2, 2, 0, 0, 0);
+replace into creature_model_info values (18553, 5875, 2, 2, 0, 0, 0);
