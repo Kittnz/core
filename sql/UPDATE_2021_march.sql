@@ -529,3 +529,7 @@ REPLACE INTO `creature_template` VALUES (81033, 0, 7192, 0, 0, 0, 'Naznik Sharps
 REPLACE INTO `creature_template` VALUES (81034, 0, 7909, 0, 0, 0, 'Bebri Coifcurl', 'Goblin\'s Barber', 0, 30, 30, 1605, 1605, 0, 0, 1200, 35, 1, 1.08, 1.14286, 0, 20, 5, 0, 0, 1, 42, 53, 0, 122, 1, 1000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 45.144, 62.073, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 100, 0, 0, 10, 'npc_barber_go');
 
 update creature_template set name = 'Joseph Dalton' where entry = 50028;
+
+update item_template set name = 'Raid Management: Purple Rune', display_id = 20794 where entry = 51410;
+update item_template set name = 'Raid Management: Green Rune', display_id = 20895 where entry = 51411;
+update item_template set name = 'Raid Management: Blue Rune', display_id = 20608 where entry = 51412;
