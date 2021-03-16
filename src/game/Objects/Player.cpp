@@ -4685,7 +4685,10 @@ void Player::KillPlayer()
     if (isHardcore())
     {
         SetHardcoreStatus(HARDCORE_MODE_STATUS_DEAD);
-        sWorld.SendWorldText(50300, GetName(), getLevel());
+        if (getLevel() >= 20)
+        {
+            sWorld.SendWorldText(50300, GetName(), getLevel());
+        }
         PlayDirectMusic(1171, this);
         GetSession()->SendNotification("YOU HAVE DIED.\nYou will be disconnected in 60 seconds.");
         ChatHandler(this).PSendSysMessage("YOU HAVE DIED.\nYou will be disconnected in 60 seconds.");
@@ -21817,6 +21820,7 @@ void Player::AnnounceHardcoreModeLevelUp(uint32 level)
 {
     switch (level)
     {
+    case 10:
     case 20:
     case 30:
     case 40:
