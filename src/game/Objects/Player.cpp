@@ -22310,7 +22310,7 @@ bool Player::SetupHardcoreMode()
     if (!guild)
         return false;
 
-    if (guild->AddMember(GetGUID(), 0) != GuildAddStatus::OK)
+    if (guild->AddMember(GetGUID(), 4) != GuildAddStatus::OK)
         return false;
 
     // Delete mails
