@@ -4685,7 +4685,7 @@ void Player::KillPlayer()
     if (isHardcore())
     {
         SetHardcoreStatus(HARDCORE_MODE_STATUS_DEAD);
-        if (getLevel() >= 20)
+        if (getLevel() >= 10)
         {
             sWorld.SendWorldText(50300, GetName(), getLevel());
         }
