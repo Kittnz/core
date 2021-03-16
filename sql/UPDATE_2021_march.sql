@@ -287,10 +287,14 @@ update creature_template set npc_flags = 2, scale = 1, rank = 0 where entry = 81
 set @quest_entry = 80388;
 set @quest_zone = -344;
 set @title = 'Stay awhile and listen...';
-set @description = 'Hmm, another one, eh? Alright then.\n\nRules are simple. You have only one life, so cherish it...\n\nForget this business. Lead a normal life, like any other. What would misery, frustration and pain bring you? Fame? Glory? Nothing lasts forever.';
-set @objective = 'Complete this quest to become mortal. In this mode you only have one life and can only trade and group up with other hardcore players. If you should die, you shall not return again. Customer service will not revive a fallen hero for any reason.';
-set @completetext = 'Fine. Have it your way with your absurd goal to live one life only.\n\nJust remember to stay safe on your road!\n\nIf you continue on this path, we shall meet one day.';
-set @incompletetext = 'Still here? Oh well, I warned you.\n\nBecoming an Immortal won\'t be an easy walk in the park.\n\nOnly those who undertakes this path will be your help.\n\nNo mail will ever bring you good news.\n\nNo auction will take your money.';
+
+set @description = 'Hmm, another one? Very well.\n\nYou wish to prove yourself to your people, to become the strongest, do you not? You wish to become more than just yet another fallen hero, do you not?\n\nI have an offer specifically for you.\n\nShould you accept it and endure the coming trials, you will become immortal.\n\nIf you die, you shall not return.\n\nI am only giving you this offer here and now. If you change your mind later, there is no coming back.';
+
+set @objective = 'Complete this quest to become mortal. In this mode you only have one life and can only trade and group up with other mortal players. If you should die, you shall not return again. Customer service will not revive a fallen hero for any reason.';
+
+set @completetext = 'Fine. Have it your way. Should you die, your soul will forever be mine.\n\nIf you survive on this path, we shall meet one day.';
+
+set @incompletetext = 'Well then, have you decided, $c?\n\nDo you have what it takes to become... immortal? Once you start walking this path you will not be able to abandon it, it will forever dominate your destiny. Only those who undertake this path will be your help.\n\nNo mail will ever bring you good news.\n\nNo auction will take your money.';
 set @faction_id = 0;
 set @faction_count = 0;
 set @xp_or_money = 0;
