@@ -4255,5 +4255,10 @@ bool ChatHandler::HandleFastDebugCommand(char* /*args*/)
     else
         PSendSysMessage("Test hardcore mode failed");
 
+    /*uint32 item = 25;
+    WorldPacket data(SMSG_ITEM_QUERY_SINGLE_RESPONSE, 4);
+    data << uint32(item | 0x80000000);
+    m_session->SendPacket(&data);*/
+
     return true;
 }

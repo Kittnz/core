@@ -2148,6 +2148,7 @@ class MANGOS_DLL_SPEC Player final: public Unit
 
         uint8 m_hardcoreStatus;
         uint32 m_hardcoreKickTimer;
+        uint32 m_hardcoreInvGuildTimer;
 
         // For druids carrying players in a stag form
         bool bIsTaxiPassenger = false;

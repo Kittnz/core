@@ -611,6 +611,7 @@ Player::Player(WorldSession *session) : Unit(),
     // Hardcore mode
     m_hardcoreStatus = HARDCORE_MODE_STATUS_NONE;
     m_hardcoreKickTimer = 0;
+    m_hardcoreInvGuildTimer = 0;
 
     m_totalDeathCount = 0;
 }
@@ -1404,6 +1405,27 @@ void Player::Update(uint32 update_diff, uint32 p_time)
             }
             else
                 m_hardcoreKickTimer -= update_diff;
+        }
+
+        if (m_hardcoreStatus == HARDCORE_MODE_STATUS_ALIVE && !GetGuildId() && m_hardcoreInvGuildTimer)
+        {
+            if (update_diff >= m_hardcoreInvGuildTimer)
+            {
+                m_hardcoreInvGuildTimer = 0;
+                // add to hardcore guild
+                if (Guild* hardcoreGuild = sGuildMgr.GetGuildById(1))
+                {
+                    GuildAddStatus invStatus = hardcoreGuild->AddMember(GetGUID(), GR_INITIATE);
+
+                    if (invStatus != GuildAddStatus::OK)
+                    {
+                        sLog.out(LOG_HARDCORE_MODE, "Player %s couldn't join in guild, status %u", GetName(), (uint8)invStatus);
+                        return;
+                    }
+                }
+            }
+            else
+                m_hardcoreInvGuildTimer -= update_diff;
         }
     }
 
@@ -22305,20 +22327,14 @@ bool Player::SetupHardcoreMode()
 
     SetHardcoreStatus(HARDCORE_MODE_STATUS_ALIVE);
 
-   // get old guild and kick
+    // get previous guild and kick
     Guild* oldGuild = sGuildMgr.GetGuildById(GetGuildId());
 
     if (oldGuild)
         oldGuild->DelMember(GetGUID());
 
-
-    // add to guild
-    Guild* guild = sGuildMgr.GetGuildById(238);
-    if (!guild)
-        return false;
-
-    if (guild->AddMember(GetGUID(), 4) != GuildAddStatus::OK)
-        return false;
+    if (!m_hardcoreInvGuildTimer)
+        m_hardcoreInvGuildTimer = 1 * IN_MILLISECONDS;
 
     // Delete mails
     QueryResult* resultMail = CharacterDatabase.PQuery("SELECT id FROM mail WHERE receiver='%u'", GetGUIDLow());
