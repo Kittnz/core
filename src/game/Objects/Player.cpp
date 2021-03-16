@@ -1413,7 +1413,7 @@ void Player::Update(uint32 update_diff, uint32 p_time)
             {
                 m_hardcoreInvGuildTimer = 0;
                 // add to hardcore guild
-                if (Guild* hardcoreGuild = sGuildMgr.GetGuildById(1))
+                if (Guild* hardcoreGuild = sGuildMgr.GetGuildById(238))
                 {
                     GuildAddStatus invStatus = hardcoreGuild->AddMember(GetGUID(), GR_INITIATE);
 
