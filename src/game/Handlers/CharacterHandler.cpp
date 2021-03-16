@@ -421,18 +421,7 @@ void WorldSession::HandlePlayerLoginOpcode(WorldPacket & recv_data)
     ObjectGuid playerGuid;
     recv_data >> playerGuid;
 
-    bool mortality_status_dead = false;
-
-    QueryResult* result = CharacterDatabase.PQuery("SELECT mortality_status FROM characters WHERE guid='%u'", playerGuid);
-    uint32 hardcoreStatus = 0;
-    if (result)
-    {
-        Field* fields = result->Fetch();
-        hardcoreStatus = fields[0].GetUInt32();
-        delete result;
-    }
-
-    if (PlayerLoading() || GetPlayer() != NULL || hardcoreStatus == 3)
+    if (PlayerLoading() || GetPlayer() != NULL)
     {
         WorldPacket data(SMSG_CHARACTER_LOGIN_FAILED, 1);
         data << (uint8)1;
