@@ -22305,6 +22305,13 @@ bool Player::SetupHardcoreMode()
 
     SetHardcoreStatus(HARDCORE_MODE_STATUS_ALIVE);
 
+   // get old guild and kick
+    Guild* oldGuild = sGuildMgr.GetGuildById(GetGuildId());
+
+    if (oldGuild)
+        oldGuild->DelMember(GetGUID());
+
+
     // add to guild
     Guild* guild = sGuildMgr.GetGuildById(238);
     if (!guild)
