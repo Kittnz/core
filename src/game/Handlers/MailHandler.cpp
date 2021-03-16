@@ -193,23 +193,27 @@ void WorldSession::HandleSendMail(WorldPacket & recv_data)
 
     req->receiverPtr = sObjectMgr.GetPlayer(req->receiver);
 
+    // hardcore players interaction (common check)
+    if (GetPlayer()->isHardcore() && (req->money || req->COD || req->itemGuid))
+    {
+        pl->SendMailResult(0, MAIL_SEND, MAIL_ERR_DISABLED_FOR_TRIAL_ACC);
+        GetPlayer()->GetSession()->SendNotification("Hardcore characters can use mail, but with no attachments.");
+        delete req;
+        return;
+    }
+
     if (req->receiverPtr)
     {
-        // mail interaction for hardcore players
-        if (!GetPlayer()->CheckHardcoreInteract(req->receiverPtr, false))
+        // hardcore players interaction (additional checks for online receivers)
+        if (!GetPlayer()->isHardcore() && req->receiverPtr->isHardcore())
         {
-            pl->SendMailResult(0, MAIL_SEND, MAIL_ERR_RECIPIENT_NOT_FOUND);
-            GetPlayer()->GetSession()->SendNotification("Hardcore characters can not receive attachments and gold in mail.");
-            delete req;
-            return;
-        }
-
-        if (GetPlayer()->isHardcore() && (req->money || req->COD || req->itemGuid))
-        {
-            pl->SendMailResult(0, MAIL_SEND, MAIL_ERR_DISABLED_FOR_TRIAL_ACC);
-            GetPlayer()->GetSession()->SendNotification("Hardcore characters can use mail, but with no attachments.");
-            delete req;
-            return;
+            if (req->money || req->COD || req->itemGuid)
+            {
+                pl->SendMailResult(0, MAIL_SEND, MAIL_ERR_RECIPIENT_NOT_FOUND);
+                GetPlayer()->GetSession()->SendNotification("Hardcore characters can not receive attachments and gold in mail.");
+                delete req;
+                return;
+            }
         }
 
         MasterPlayer* receiverMasterPlayer = req->receiverPtr->GetSession()->GetMasterPlayer();
@@ -220,6 +224,29 @@ void WorldSession::HandleSendMail(WorldPacket & recv_data)
     }
     else
     {
+        // hardcore players interaction (additional checks for offline receivers)
+        QueryResult* result = CharacterDatabase.PQuery("SELECT mortality_status FROM characters WHERE guid='%u'", req->receiver);
+        uint32 hardcoreStatus = 0;
+        if (result)
+        {
+            Field* fields = result->Fetch();
+            hardcoreStatus = fields[0].GetUInt32();
+            delete result;
+        }
+
+        bool receiverIsHardcore = (hardcoreStatus == HARDCORE_MODE_STATUS_ALIVE || hardcoreStatus == HARDCORE_MODE_STATUS_DEAD);
+
+        if (!GetPlayer()->isHardcore() && receiverIsHardcore)
+        {
+            if (req->money || req->COD || req->itemGuid)
+            {
+                pl->SendMailResult(0, MAIL_SEND, MAIL_ERR_RECIPIENT_NOT_FOUND);
+                GetPlayer()->GetSession()->SendNotification("Hardcore characters can not receive attachments and gold in mail.");
+                delete req;
+                return;
+            }
+        }
+
         req->rcTeam = sObjectMgr.GetPlayerTeamByGUID(req->receiver);
         // Unsafe query: can modify items, accesses online players ...
         CharacterDatabase.AsyncPQueryUnsafe(req, &WorldSession::AsyncMailSendRequest::Callback, "SELECT COUNT(*) FROM mail WHERE receiver = '%u'", req->receiver.GetCounter());
