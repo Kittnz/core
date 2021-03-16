@@ -21842,18 +21842,18 @@ void Player::AnnounceHardcoreModeLevelUp(uint32 level)
 {
     switch (level)
     {
-    case 10:
-    case 20:
-    case 30:
-    case 40:
-    case 50:
-        sWorld.SendWorldText(50301, GetName(), getLevel() + 10);
-        break;
-    case 60:
-        sWorld.SendWorldText(50302, GetName(), GetName());
-        break;
-    default:
-        return;
+        case 10:
+        case 20:
+        case 30:
+        case 40:
+        case 50:
+            sWorld.SendWorldText(50301, GetName(), level);
+            break;
+        case 60:
+            sWorld.SendWorldText(50302, GetName(), GetName());
+            break;
+        default:
+            return;
     }
 }
 
