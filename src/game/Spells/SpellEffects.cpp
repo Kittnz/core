@@ -6606,7 +6606,7 @@ void Spell::EffectSummonDemon(SpellEffectIndex eff_idx)
         Charmed->CastSpell(Charmed, 22703, true, nullptr);
     }
 
-    if (m_caster->GetTypeId() == TYPEID_PLAYER)
+    if (m_caster->GetTypeId() == TYPEID_PLAYER && m_spellInfo->Id == 1122)
         sLog.out(LOG_HARDCORE_MODE, "DANGER: Player %s (level: %u) cast summon infernal on %f %f %f %u", m_caster->GetName(), m_caster->getLevel(), px, py, pz, m_caster->GetMapId());
 
     AddExecuteLogInfo(eff_idx, ExecuteLogInfo(Charmed->GetObjectGuid()));
