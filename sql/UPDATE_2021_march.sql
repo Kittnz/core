@@ -537,3 +537,7 @@ update creature_template set name = 'Joseph Dalton' where entry = 50028;
 update item_template set name = 'Raid Management: Purple Rune', display_id = 20794 where entry = 51410;
 update item_template set name = 'Raid Management: Green Rune', display_id = 20895 where entry = 51411;
 update item_template set name = 'Raid Management: Blue Rune', display_id = 20608 where entry = 51412;
+
+update creature_template set level_min = 65, level_max = 65, health_min = 14263, health_max = 14263, armor = 4292, dmg_min = 480, dmg_max = 520, rank = 1 where entry in (1423, 1642, 853, 727, 3571, 12160, 5952, 3297, 5953, 68, 1976, 3296, 5624, 3084, 4262, 5595);
+update creature_template set level_min = 65, level_max = 65, health_min = 14263, health_max = 14263, armor = 4292, dmg_min = 480, dmg_max = 520, rank = 1 where entry in (select entry from creature_template where name like 'Brave %');
+update creature_template set level_min = 65, level_max = 65, health_min = 14263, health_max = 14263, armor = 4292, dmg_min = 480, dmg_max = 520, rank = 1 where entry in (select entry from creature_template where name like 'Deathguard %');
