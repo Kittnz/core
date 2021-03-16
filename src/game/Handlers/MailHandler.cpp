@@ -203,15 +203,13 @@ void WorldSession::HandleSendMail(WorldPacket & recv_data)
             delete req;
             return;
         }
-        else
+
+        if (GetPlayer()->isHardcore() && (req->money || req->COD || req->itemGuid))
         {
-            if (GetPlayer()->isHardcore() && (req->money || req->COD || req->itemGuid))
-            {
-                pl->SendMailResult(0, MAIL_SEND, MAIL_ERR_DISABLED_FOR_TRIAL_ACC);
-                GetPlayer()->GetSession()->SendNotification("Hardcore characters can use mail, but with no attachments.");
-                delete req;
-                return;
-            }
+            pl->SendMailResult(0, MAIL_SEND, MAIL_ERR_DISABLED_FOR_TRIAL_ACC);
+            GetPlayer()->GetSession()->SendNotification("Hardcore characters can use mail, but with no attachments.");
+            delete req;
+            return;
         }
 
         MasterPlayer* receiverMasterPlayer = req->receiverPtr->GetSession()->GetMasterPlayer();
