@@ -900,6 +900,13 @@ uint32 Unit::DealDamage(Unit *pVictim, uint32 damage, CleanDamage const* cleanDa
         }
     }
 
+    // hack for some bug damage from summons/pets
+    // Summon Infernal
+    if (GetTypeId() == TYPEID_UNIT && GetEntry() == 89 && pVictim->GetTypeId() == TYPEID_PLAYER && pVictim->ToPlayer()->isHardcore())
+        damage /= 10;
+    else if (GetTypeId() == TYPEID_PLAYER && ToPlayer()->isHardcore() && pVictim->GetTypeId() == TYPEID_UNIT && pVictim->GetEntry() == 89)
+        damage *= 10;
+
     if (health <= damage)
     {
         // Can't kill gods
@@ -1307,7 +1314,7 @@ void Unit::Kill(Unit* pVictim, SpellEntry const *spellProto, bool durabilityLoss
     // Call AI OwnerKilledUnit (for any current summoned minipet/guardian/protector)
     PetOwnerKilledUnit(pVictim);
     
-    // 10% XP loss on death in Hardcore Mode
+    // 10% XP loss on death in Turtle Mode
     if (pPlayerVictim && pPlayerVictim->isTurtle() && !pPlayerVictim->InBattleGround() && !pPlayerTap)
     {
         pPlayerVictim->GiveNegativeXP(5, pPlayerVictim); // Percentage
