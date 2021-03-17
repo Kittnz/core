@@ -128,6 +128,13 @@ void WorldSession::HandleGroupInviteOpcode(WorldPacket & recv_data)
             SendPartyResult(PARTY_OP_INVITE, "", ERR_GROUP_FULL);
             return;
         }
+        // check group members in hardcore state
+        if (!group->CheckInteractHardcore(player))
+        {
+            SendPartyResult(PARTY_OP_INVITE, membername, ERR_BAD_PLAYER_NAME_S);
+            GetPlayer()->GetSession()->SendNotification("You are able to group up only with other Hardcore characters as long as the difference between your levels isn’t higher than 5.");
+            return;
+        }
     }
 
     // ok, but group not exist, start a new group
