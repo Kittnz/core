@@ -559,3 +559,5 @@ REPLACE INTO creature_template (entry, patch, display_id1, display_id2, display_
  replace into creature_model_info values (18545, 5875, 2, 2, 0, 0, 0);
  replace into creature_model_info values (18503, 5875, 2, 2, 0, 0, 0);
  replace into creature_model_info values (18224, 5875, 2, 2, 0, 0, 0);
+
+update npc_flags = 0 where entry in between 81041 and 81047;
