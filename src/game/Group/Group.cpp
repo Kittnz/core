@@ -2390,3 +2390,40 @@ void Group::UpdateLooterGuid(WorldObject* pLootedObject, bool ifneed)
         }
     }
 }
+
+bool Group::CheckInteractHardcore(Player * invitee)
+{
+    for (member_citerator citr = m_memberSlots.begin(); citr != m_memberSlots.end(); ++citr)
+    {
+        if (Player* player = sObjectMgr.GetPlayer(citr->guid))
+        {
+            if (!player->CheckHardcoreInteract(invitee, true))
+                return false;
+        }
+        else
+        {
+            QueryResult* result = CharacterDatabase.PQuery("SELECT level, mortality_status FROM characters WHERE guid='%u'", citr->guid);
+            uint32 hardcoreStatus = 0;
+            uint8 level = 0;
+            if (result)
+            {
+                Field* fields = result->Fetch();
+                level = fields[0].GetUInt8();
+                hardcoreStatus = fields[1].GetUInt32();
+                delete result;
+            }
+
+            bool memberIsHardcore = (hardcoreStatus == HARDCORE_MODE_STATUS_ALIVE || hardcoreStatus == HARDCORE_MODE_STATUS_DEAD);
+
+            if (!invitee->isHardcore() && memberIsHardcore || invitee->isHardcore() && !memberIsHardcore)
+                return false;
+
+            int32 diff = invitee->getLevel() - level;
+
+            if (abs(diff) > 5)
+                return false;
+        }
+    }
+
+    return true;
+}
