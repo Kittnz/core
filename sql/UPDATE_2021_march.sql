@@ -565,3 +565,10 @@ REPLACE INTO creature_template (entry, patch, display_id1, display_id2, display_
  replace into creature_model_info values (18502, 5875, 2, 2, 0, 0, 0);
 
 update creature_template set npc_flags = 0 where entry between 81041 and 81047;
+
+update item_template set spellid_1 = 46443 where entry = 81100;
+
+delete from creature_template where entry = 50656;
+delete from custom_mount_entry_relation where item_entry = 81100;
+
+REPLACE INTO `creature_template` VALUES (81100, 0, 18180, 0, 0, 0, 'Raven Lord', '', 0, 1, 1, 64, 64, 0, 0, 0, 35, 0, 1, 1.14286, 1, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, '');
