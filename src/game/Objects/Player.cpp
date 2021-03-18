@@ -5060,7 +5060,7 @@ void Player::RepopAtGraveyard()
     case CGZ_STONETALON_MOUNTAINS:
         if (GetAreaId() == 4011 || getLevel() < 10) // Venture Camp
         {
-            TeleportTo(1, 1931.73F, 1363.91F, 149.9F, 6.13F);
+            TeleportTo(1, 1788.58F, 1335.74F, 144.35F, 4.0F);
             isCustomGraveyard = true;
         }
         if (GetAreaId() == 2041) // Amani'Alor

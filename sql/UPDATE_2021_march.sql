@@ -572,3 +572,5 @@ delete from creature_template where entry = 50656;
 delete from custom_mount_entry_relation where item_entry = 81100;
 
 REPLACE INTO `creature_template` VALUES (81100, 0, 18180, 0, 0, 0, 'Raven Lord', '', 0, 1, 1, 64, 64, 0, 0, 0, 35, 0, 1, 1.14286, 1, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, '');
+
+update creature set position_x = 1782.63, position_y = 1328.57, position_z =144.812, orientation = 1.08393 where guid = 2561359;
