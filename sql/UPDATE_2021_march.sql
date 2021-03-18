@@ -545,11 +545,11 @@ update creature_template set level_min = 65, level_max = 65, health_min = 14263,
 REPLACE INTO creature_template (entry, patch, display_id1, display_id2, display_id3, display_id4, name, subname, gossip_menu_id, level_min, level_max, health_min, health_max, mana_min, mana_max, armor, faction, npc_flags, speed_walk, speed_run, scale, detection_range, call_for_help_range, leash_range, rank, xp_multiplier, dmg_min, dmg_max, dmg_school, attack_power, dmg_multiplier, base_attack_time, ranged_attack_time, unit_class, unit_flags, dynamic_flags, beast_family, trainer_type, trainer_spell, trainer_class, trainer_race, ranged_dmg_min, ranged_dmg_max, ranged_attack_power, type, type_flags, loot_id, pickpocket_loot_id, skinning_loot_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, spell_id1, spell_id2, spell_id3, spell_id4, spell_list_id, pet_spell_list_id, gold_min, gold_max, ai_name, movement_type, inhabit_type, civilian, racial_leader, regeneration, equipment_id, trainer_id, vendor_id, mechanic_immune_mask, school_immune_mask, flags_extra, script_name) VALUES
 
 (81041, 0, 18544, 0, 0, 0, 'Kheyna Spinpistol', 'Medic', 0, 60, 60, 24182, 24182, 12364, 12364, 6340, 35, 3, 1, 1.14286, 0.9, 30, 5, 0, 0, 1, 1255, 1370, 0, 3844, 1, 1300, 1300, 1, 4608, 0, 0, 0, 0, 0, 0, 53.3984, 73.4228, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, ''),
- (81042, 0, 18477, 0, 0, 0, 'Loania', '', 0, 37, 37, 2192, 2192, 0, 0, 1340, 35, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 55, 70, 0, 144, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 53.3984, 73.4228, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, ''),
- (81043, 0, 18478, 0, 0, 0, 'Lieren', '', 0, 37, 37, 2192, 2192, 0, 0, 1340, 35, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 55, 70, 0, 144, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 53.3984, 73.4228, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, ''),
+ (81042, 0, 18448, 0, 0, 0, 'Loania', '', 0, 37, 37, 2192, 2192, 0, 0, 1340, 35, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 55, 70, 0, 144, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 53.3984, 73.4228, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, ''),
+ (81043, 0, 18447, 0, 0, 0, 'Lieren', '', 0, 37, 37, 2192, 2192, 0, 0, 1340, 35, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 55, 70, 0, 144, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 53.3984, 73.4228, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, ''),
  (81044, 0, 16777, 0, 0, 0, 'Voldana', '', 0, 37, 37, 2192, 2192, 0, 0, 1340, 35, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 55, 70, 0, 144, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 53.3984, 73.4228, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, ''),
 (81045, 0, 18545, 0, 0, 0, 'Julia of Dalaran', 'Mage', 0, 37, 37, 2192, 2192, 0, 0, 1340, 35, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 55, 70, 0, 144, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 53.3984, 73.4228, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, ''),
-(81046, 0, 18503, 0, 0, 0, 'Inunquaq', '', 0, 37, 37, 2192, 2192, 0, 0, 1340, 35, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 55, 70, 0, 144, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 53.3984, 73.4228, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, ''),
+(81046, 0, 18502, 0, 0, 0, 'Inunquaq', '', 0, 37, 37, 2192, 2192, 0, 0, 1340, 35, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 55, 70, 0, 144, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 53.3984, 73.4228, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, ''),
  (81047, 0, 18224, 0, 0, 0, 'Lanissa', 'Dark Ranger', 0, 37, 37, 2192, 2192, 0, 0, 1340, 35, 16, 1, 1.14286, 0, 20, 5, 0, 0, 1, 55, 70, 0, 144, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 53.3984, 73.4228, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, '');
  
  replace into creature_model_info values (18544, 5875, 2, 2, 0, 0, 0);
@@ -559,5 +559,9 @@ REPLACE INTO creature_template (entry, patch, display_id1, display_id2, display_
  replace into creature_model_info values (18545, 5875, 2, 2, 0, 0, 0);
  replace into creature_model_info values (18503, 5875, 2, 2, 0, 0, 0);
  replace into creature_model_info values (18224, 5875, 2, 2, 0, 0, 0);
+ 
+ replace into creature_model_info values (18447, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18448, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18502, 5875, 2, 2, 0, 0, 0);
 
 update creature_template set npc_flags = 0 where entry between 81041 and 81047;
