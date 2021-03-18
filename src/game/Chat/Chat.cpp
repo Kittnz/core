@@ -312,7 +312,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "factionid",      SEC_GAMEMASTER,     false, &ChatHandler::HandleNpcFactionIdCommand,        "", nullptr },
         { "flag",           SEC_GAMEMASTER,     false, &ChatHandler::HandleNpcFlagCommand,             "", nullptr },
         { "info",           SEC_GAMEMASTER,      false, &ChatHandler::HandleNpcInfoCommand,             "", nullptr },
-        { "move",           SEC_ADMINISTRATOR,     false, &ChatHandler::HandleNpcMoveCommand,             "", nullptr },
+        { "move",           SEC_GAMEMASTER,     false, &ChatHandler::HandleNpcMoveCommand,             "", nullptr },
         { "playemote",      SEC_GAMEMASTER, false, &ChatHandler::HandleNpcPlayEmoteCommand,        "", nullptr },
         { "spawntime",      SEC_GAMEMASTER,     false, &ChatHandler::HandleNpcSpawnTimeCommand,        "", nullptr },
         { "say",            SEC_GAMEMASTER, false, &ChatHandler::HandleNpcSayCommand,              "", nullptr },
