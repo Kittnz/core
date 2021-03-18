@@ -695,4 +695,12 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '0', '1', '0', '0', '65', '0', '0', '0', '0', '49', '0', '0', '0',
  '0', '1', NULL);
  
- UPDATE `map_template` SET `map_type`='0' WHERE (`entry`='37') AND (`patch`='0');
+UPDATE `map_template` SET `map_type`='0' WHERE (`entry`='37') AND (`patch`='0');
+
+SET @gossip_menu_id = 90671;
+SET @magic_number = 81030;
+replace into gossip_menu (entry, text_id) VALUES (@gossip_menu_id, @magic_number); 
+replace into broadcast_text (ID, MaleText) values (@magic_number, 'Well, well, now you got business with me? Too little too late.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
