@@ -36,7 +36,7 @@ constexpr auto DEATH_TEXT_1 = "Master, I am sorry... I have failed...";
 constexpr auto DEATH_TEXT_2 = "The Master... is not... well...";
 
 constexpr auto LEASH_TEXT_1 = "Cowards! I will hunt you if you ever return!";
-constexpr auto LEASH_TEXT_2 = "Leave--and never again enter these lands!";
+constexpr auto LEASH_TEXT_2 = "Leave and never again enter these lands!";
 
 constexpr auto SCALE_TEXT_1 = "Do you fools not realize you only empower me further?";
 constexpr auto SCALE_TEXT_2 = "How foolish of you to believe numbers will save you, it will only quicken your demise!";
