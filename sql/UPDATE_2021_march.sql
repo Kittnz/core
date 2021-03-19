@@ -721,3 +721,5 @@ update item_template set item_level = 22 where entry = 80803;
 
 replace into `map_template` (`entry`, `map_name`) VALUES ('49', 'Quel\'Thalas Cut Scene');
 replace into `map_template` (`entry`, `map_name`) VALUES ('50', 'Silvermoon City Raid');
+
+UPDATE `item_template` SET `class`='4', `subclass`='0', `inventory_type`='23' WHERE (`entry`='80785') AND (`patch`='0');
