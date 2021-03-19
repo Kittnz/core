@@ -590,7 +590,7 @@ bool GossipHello_npc_riding_gryphon(Player* p_Player, Creature* p_Creature)
 {
     if (p_Player->GetQuestRewardStatus(60070))
     {
-        p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Take me to Elwynn Uphills!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Take me up!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     }
     p_Player->PrepareQuestMenu(p_Creature->GetGUID());
     p_Player->SEND_GOSSIP_MENU(90366, p_Creature->GetGUID());
@@ -603,11 +603,10 @@ bool GossipSelect_npc_riding_gryphon(Player* p_Player, Creature* p_Creature, uin
     {
         if (p_Player->HasItemCount(422, 1))
         {
-            p_Player->GetSession()->SendNotification("You have 60 seconds to get to the Uphills!");
+            p_Player->GetSession()->SendNotification("You will be dismounted in 30 seconds.");
             p_Player->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, 6852);
-            p_Player->m_Events.AddEvent(new StopFlyingAfterTime(p_Player->GetGUID()), p_Player->m_Events.CalculateTime(1 * MINUTE * IN_MILLISECONDS));
+            p_Player->m_Events.AddEvent(new StopFlyingAfterTime(p_Player->GetGUID()), p_Player->m_Events.CalculateTime(30 * IN_MILLISECONDS));
             p_Player->SetFlying(true);
-            p_Player->UpdateSpeed(MOVE_SWIM, true, 4.0F);
             p_Player->RemoveItemCurrency(422, 1);
         }
         else
