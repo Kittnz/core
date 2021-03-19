@@ -726,7 +726,7 @@ UPDATE `item_template` SET `class`='4', `subclass`='0', `inventory_type`='23' WH
 UPDATE `item_template` SET `inventory_type`='15' WHERE (`entry`='80825') AND (`patch`='0');
 
 replace into item_template values
- ('81225', '0', '15', '', 'Basic Guide on Necromancy', '\"101 Ways to Raise a Skeleton', '8092', '3', '0', '1', '0', '1845', '23', '-1', '-1', '30',
+ ('81225', '0', '15', '', 'Basic Guide on Necromancy', '101 Ways to Raise a Skeleton.', '8092', '3', '0', '1', '0', '1845', '23', '-1', '-1', '30',
  '25', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
