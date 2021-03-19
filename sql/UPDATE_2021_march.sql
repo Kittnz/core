@@ -709,10 +709,10 @@ UPDATE `map_template` SET `map_type`='0' WHERE (`entry`='37') AND (`patch`='0');
 
 SET @gossip_menu_id = 90671;
 SET @magic_number = 81030;
-replace into gossip_menu (entry, text_id) VALUES (@gossip_menu_id, @magic_number); 
+replace into gossip_menu (entry, text_id) VALUES (65535, @magic_number); 
 replace into broadcast_text (ID, MaleText) values (@magic_number, 'Well, well, now you got business with me? Too little too late.');
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
-update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+update creature_template set gossip_menu_id = 65535 where entry = @magic_number;
 
 
 update spell_template SET attributesEx3 = 131072 WHERE entry = 5143 OR entry = 5144 OR entry = 5145 OR entry = 8416 OR entry = 8417 OR entry = 10211 OR entry = 10212 OR entry = 25345; 
