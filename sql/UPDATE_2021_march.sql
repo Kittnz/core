@@ -528,6 +528,7 @@ replace into creature_model_info values (18552, 5875, 2, 2, 0, 0, 0);
 replace into creature_model_info values (18553, 5875, 2, 2, 0, 0, 0);
 
 replace into creature_equip_template (entry, equipentry1) values (80460, 20536);
+replace into creature_equip_template (entry, equipentry1) values (80461, 81072);
 
 REPLACE INTO `creature_template` VALUES (81033, 0, 7192, 0, 0, 0, 'Naznik Sharpshear', 'Goblin\'s Plastic Surgeon', 0, 30, 30, 1605, 1605, 0, 0, 1200, 35, 1, 1.08, 1.14286, 0, 20, 5, 0, 0, 1, 42, 53, 0, 122, 1, 1000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 45.144, 62.073, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 100, 0, 0, 10, 'npc_surgeon_go');
 REPLACE INTO `creature_template` VALUES (81034, 0, 7909, 0, 0, 0, 'Bebri Coifcurl', 'Goblin\'s Barber', 0, 30, 30, 1605, 1605, 0, 0, 1200, 35, 1, 1.08, 1.14286, 0, 20, 5, 0, 0, 1, 42, 53, 0, 122, 1, 1000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 45.144, 62.073, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 100, 0, 0, 10, 'npc_barber_go');
@@ -550,7 +551,14 @@ REPLACE INTO creature_template (entry, patch, display_id1, display_id2, display_
  (81044, 0, 16777, 0, 0, 0, 'Voldana', '', 0, 37, 37, 2192, 2192, 0, 0, 1340, 35, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 55, 70, 0, 144, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 53.3984, 73.4228, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, ''),
 (81045, 0, 18545, 0, 0, 0, 'Julia of Dalaran', 'Mage', 0, 37, 37, 2192, 2192, 0, 0, 1340, 35, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 55, 70, 0, 144, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 53.3984, 73.4228, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, ''),
 (81046, 0, 18502, 0, 0, 0, 'Inunquaq', '', 0, 37, 37, 2192, 2192, 0, 0, 1340, 35, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 55, 70, 0, 144, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 53.3984, 73.4228, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, ''),
- (81047, 0, 18224, 0, 0, 0, 'Lanissa', 'Dark Ranger', 0, 37, 37, 2192, 2192, 0, 0, 1340, 35, 16, 1, 1.14286, 0, 20, 5, 0, 0, 1, 55, 70, 0, 144, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 53.3984, 73.4228, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, '');
+ (81047, 0, 18224, 0, 0, 0, 'Lanissa', 'Dark Ranger', 0, 37, 37, 2192, 2192, 0, 0, 1340, 35, 16, 1, 1.14286, 0, 20, 5, 0, 0, 1, 55, 70, 0, 144, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 53.3984, 73.4228, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, ''),
+ (81048, 0,  18495 , 0, 0, 0, 'Time Rift', '', 0, 37, 37, 2192, 2192, 0, 0, 1340, 35, 16, 1, 1.14286, 0, 20, 5, 0, 0, 1, 55, 70, 0, 144, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 53.3984, 73.4228, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, ''),
+ 
+ -- TODO: Level: 60 - Runspeed: 1.2 - Walkspeed: 0.5 - Attackspeed 0.8
+ (81049, 0,  18449 , 0, 0, 0, 'Strigoi', '', 0, 60, 60, 21192, 21192, 0, 0, 1340, 21, 16, 1, 1.14286, 0, 20, 5, 0, 0, 1, 55, 70, 0, 144, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 53.3984, 73.4228, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, ''),
+ (81050, 0,  18224 , 0, 0, 0, 'Dark Ranger Lanissa', 'Hunter Trainer', 0, 24, 24, 21192, 21192, 0, 0, 1340, 68, 16, 1, 1.14286, 0, 20, 5, 0, 0, 1, 55, 70, 0, 144, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 53.3984, 73.4228, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, '');
+ 
+ update creature_template set equipment_id = 80461 where entry = 81041;
  
  replace into creature_model_info values (18544, 5875, 2, 2, 0, 0, 0);
  replace into creature_model_info values (18477, 5875, 2, 2, 0, 0, 0);
@@ -559,10 +567,12 @@ REPLACE INTO creature_template (entry, patch, display_id1, display_id2, display_
  replace into creature_model_info values (18545, 5875, 2, 2, 0, 0, 0);
  replace into creature_model_info values (18503, 5875, 2, 2, 0, 0, 0);
  replace into creature_model_info values (18224, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18449, 5875, 2, 2, 0, 0, 0);
  
  replace into creature_model_info values (18447, 5875, 2, 2, 0, 0, 0);
  replace into creature_model_info values (18448, 5875, 2, 2, 0, 0, 0);
  replace into creature_model_info values (18502, 5875, 2, 2, 0, 0, 0);
+ replace into creature_model_info values (18495 , 5875, 2, 2, 0, 0, 0);
 
 update creature_template set npc_flags = 0 where entry between 81041 and 81047;
 
@@ -641,7 +651,7 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '0', '1', '0', '0', '60', '0', '0', '0', '0', '5', '0', '0', '0',
  '0', '1', NULL);
 replace into item_template values
- ('81218', '0', '4', '2', 'Chieftain\'s Ceremonial Harness', '', '60869', '2', '0', '', '85412', '85412', '5', '-1', '-1', '60',
+ ('81218', '0', '4', '2', 'Chieftain\'s Ceremonial Harness', '', '60869', '2', '0', '0', '85412', '85412', '5', '-1', '-1', '60',
  '55', '0', '0', '0', '0', '0', '81', '6', '0', '1', '0', '4', '16', '7', '17',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '155', '0', '0', '0',
@@ -650,7 +660,7 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '0', '1', '0', '0', '85', '0', '0', '0', '0', '10', '0', '0', '0',
  '0', '1', NULL);
 replace into item_template values
- ('81219', '0', '4', '2', 'Chieftain\'s Ceremonial Anklewraps', '', '60870', '2', '0', '', '64912', '64912', '8', '-1', '-1', '56',
+ ('81219', '0', '4', '2', 'Chieftain\'s Ceremonial Anklewraps', '', '60870', '2', '0', '0', '64912', '64912', '8', '-1', '-1', '56',
  '51', '0', '0', '0', '0', '0', '81', '6', '0', '1', '0', '5', '11', '3', '14',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '102', '0', '0', '0',
@@ -659,7 +669,7 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '0', '1', '0', '0', '45', '0', '0', '0', '0', '10', '0', '0', '0',
  '0', '1', NULL);
 replace into item_template values
- ('81220', '0', '4', '2', 'Chieftain\'s Ceremonial Legwraps', '', '60871', '2', '0', '', '37612', '37612', '7', '-1', '-1', '46',
+ ('81220', '0', '4', '2', 'Chieftain\'s Ceremonial Legwraps', '', '60871', '2', '0', '0', '37612', '37612', '7', '-1', '-1', '46',
  '41', '0', '0', '0', '0', '0', '81', '6', '0', '1', '0', '4', '15', '6', '7',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '109', '0', '0', '0',
@@ -668,7 +678,7 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '0', '1', '0', '0', '65', '0', '0', '0', '0', '8', '0', '0', '0',
  '0', '1', NULL);
 replace into item_template values
- ('81221', '0', '4', '2', 'Chieftain\'s Ceremonial Belt', '', '60872', '2', '0', '', '49200', '49200', '6', '-1', '-1', '60',
+ ('81221', '0', '4', '2', 'Chieftain\'s Ceremonial Belt', '', '60872', '2', '0', '0', '49200', '49200', '6', '-1', '-1', '60',
  '55', '0', '0', '0', '0', '0', '81', '6', '0', '1', '0', '3', '10', '7', '18',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '88', '0', '0', '0',
@@ -677,7 +687,7 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '0', '1', '0', '0', '35', '0', '0', '0', '0', '10', '0', '0', '0',
  '0', '1', NULL);
 replace into item_template values
- ('81222', '0', '4', '2', 'Chieftain\'s Ceremonial Handwraps', '', '60873', '2', '0', '', '37612', '37612', '10', '-1', '-1', '54',
+ ('81222', '0', '4', '2', 'Chieftain\'s Ceremonial Handwraps', '', '60873', '2', '0', '0', '37612', '37612', '10', '-1', '-1', '54',
  '48', '0', '0', '0', '0', '0', '81', '6', '0', '1', '0', '4', '7', '7', '19',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '88', '0', '0', '0',
@@ -686,7 +696,7 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '0', '1', '0', '0', '35', '0', '0', '0', '0', '9', '0', '0', '0',
  '0', '1', NULL);
 replace into item_template values
- ('81223', '0', '4', '2', 'Chieftain\'s Ceremonial Headdress', '', '40205', '3', '0', '', '203467', '203467', '1', '-1', '-1', '64',
+ ('81223', '0', '4', '2', 'Chieftain\'s Ceremonial Headdress', '', '40205', '3', '0', '0', '203467', '203467', '1', '-1', '-1', '64',
  '60', '0', '0', '0', '0', '0', '81', '7', '0', '1', '0', '5', '7', '0', '0',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '155', '0', '0', '0',
@@ -699,8 +709,117 @@ UPDATE `map_template` SET `map_type`='0' WHERE (`entry`='37') AND (`patch`='0');
 
 SET @gossip_menu_id = 90671;
 SET @magic_number = 81030;
-replace into gossip_menu (entry, text_id) VALUES (@gossip_menu_id, @magic_number); 
+replace into gossip_menu (entry, text_id) VALUES (65535, @magic_number); 
 replace into broadcast_text (ID, MaleText) values (@magic_number, 'Well, well, now you got business with me? Too little too late.');
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
-update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+update creature_template set gossip_menu_id = 65535 where entry = @magic_number;
 
+
+update spell_template SET attributesEx3 = 131072 WHERE entry = 5143 OR entry = 5144 OR entry = 5145 OR entry = 8416 OR entry = 8417 OR entry = 10211 OR entry = 10212 OR entry = 25345; 
+
+update item_template set item_level = 22 where entry = 80803;
+
+replace into `map_template` (`entry`, `map_name`) VALUES ('49', 'Quel\'Thalas Cut Scene');
+replace into `map_template` (`entry`, `map_name`) VALUES ('50', 'Silvermoon City Raid');
+
+UPDATE `item_template` SET `class`='4', `subclass`='0', `inventory_type`='23' WHERE (`entry`='80785') AND (`patch`='0');
+UPDATE `item_template` SET `inventory_type`='15' WHERE (`entry`='80825') AND (`patch`='0');
+
+replace into item_template values
+ ('81225', '0', '15', '0', 'Basic Guide on Necromancy', '101 Ways to Raise a Skeleton.', '8092', '3', '0', '1', '0', '1845', '23', '-1', '-1', '30',
+ '25', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '8853', '0', '0', '0', '900000', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '2', '0', '0', '0', '0', '0', '7', '2', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+ 
+ REPLACE INTO `creature_template` VALUES (80967, 0, 18135, 0, 0, 0, 'Lord Darkhallow', 'Scourge Quartermaster', 0, 11, 11, 456, 456, 0, 0, 20, 21, 16388, 1.1, 1.14286, 0, 20, 5, 0, 0, 1, 12, 14, 0, 64, 1, 2000, 2090, 1, 4864, 0, 0, 0, 0, 0, 0, 18.392, 25.289, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, '');
+
+
+-- ----------------------------
+-- Table structure for `variables`
+-- ----------------------------
+DROP TABLE IF EXISTS `variables`;
+CREATE TABLE `variables` (
+  `index` int(10) unsigned NOT NULL DEFAULT 0,
+  `value` int(10) unsigned NOT NULL DEFAULT 0,
+  PRIMARY KEY (`index`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- ----------------------------
+-- Records of variables
+-- ----------------------------
+INSERT INTO `variables` VALUES ('12', '1595378403');
+INSERT INTO `variables` VALUES ('13', '1595378403');
+INSERT INTO `variables` VALUES ('10', '440');
+INSERT INTO `variables` VALUES ('11', '4');
+INSERT INTO `variables` VALUES ('14', '0');
+INSERT INTO `variables` VALUES ('15', '0');
+INSERT INTO `variables` VALUES ('16', '0');
+INSERT INTO `variables` VALUES ('17', '0');
+INSERT INTO `variables` VALUES ('18', '0');
+INSERT INTO `variables` VALUES ('19', '0');
+INSERT INTO `variables` VALUES ('20', '0');
+INSERT INTO `variables` VALUES ('21', '0');
+INSERT INTO `variables` VALUES ('22', '0');
+INSERT INTO `variables` VALUES ('23', '0');
+INSERT INTO `variables` VALUES ('30002', '0');
+INSERT INTO `variables` VALUES ('30054', '1603586531');
+INSERT INTO `variables` VALUES ('30050', '5');
+INSERT INTO `variables` VALUES ('30016', '1603585473');
+INSERT INTO `variables` VALUES ('30017', '3');
+INSERT INTO `variables` VALUES ('30012', '7');
+INSERT INTO `variables` VALUES ('30008', '5');
+INSERT INTO `variables` VALUES ('30020', '3');
+INSERT INTO `variables` VALUES ('30015', '18');
+INSERT INTO `variables` VALUES ('30011', '5');
+INSERT INTO `variables` VALUES ('30019', '3');
+INSERT INTO `variables` VALUES ('30014', '0');
+INSERT INTO `variables` VALUES ('30010', '4');
+INSERT INTO `variables` VALUES ('30018', '3');
+INSERT INTO `variables` VALUES ('30013', '2');
+INSERT INTO `variables` VALUES ('30009', '5');
+INSERT INTO `variables` VALUES ('2318', '30000');
+INSERT INTO `variables` VALUES ('30032', '100000');
+INSERT INTO `variables` VALUES ('1251', '100000');
+INSERT INTO `variables` VALUES ('6450', '100000');
+INSERT INTO `variables` VALUES ('3575', '14000');
+INSERT INTO `variables` VALUES ('2447', '12000');
+INSERT INTO `variables` VALUES ('30027', '4340');
+INSERT INTO `variables` VALUES ('13935', '2500');
+INSERT INTO `variables` VALUES ('2319', '27500');
+INSERT INTO `variables` VALUES ('30028', '13340');
+INSERT INTO `variables` VALUES ('12359', '12000');
+INSERT INTO `variables` VALUES ('8836', '10000');
+INSERT INTO `variables` VALUES ('30033', '100000');
+INSERT INTO `variables` VALUES ('3820', '5500');
+INSERT INTO `variables` VALUES ('30026', '4340');
+INSERT INTO `variables` VALUES ('30029', '13340');
+INSERT INTO `variables` VALUES ('8544', '41680');
+INSERT INTO `variables` VALUES ('30024', '15000');
+INSERT INTO `variables` VALUES ('3576', '5500');
+INSERT INTO `variables` VALUES ('3860', '9000');
+INSERT INTO `variables` VALUES ('8170', '15000');
+INSERT INTO `variables` VALUES ('3530', '41680');
+INSERT INTO `variables` VALUES ('5095', '2340');
+INSERT INTO `variables` VALUES ('12210', '5000');
+INSERT INTO `variables` VALUES ('30030', '5680');
+INSERT INTO `variables` VALUES ('1', '0');
+INSERT INTO `variables` VALUES ('0', '0');
+INSERT INTO `variables` VALUES ('30025', '15000');
+INSERT INTO `variables` VALUES ('4234', '15000');
+INSERT INTO `variables` VALUES ('4625', '4760');
+INSERT INTO `variables` VALUES ('30031', '5680');
+INSERT INTO `variables` VALUES ('12209', '1680');
+INSERT INTO `variables` VALUES ('30022', '0');
+INSERT INTO `variables` VALUES ('30023', '1');
+INSERT INTO `variables` VALUES ('30021', '1603633121');
+INSERT INTO `variables` VALUES ('2313', '26');
+INSERT INTO `variables` VALUES ('2314', '0');
+INSERT INTO `variables` VALUES ('2317', '200');
+INSERT INTO `variables` VALUES ('30051', '1603912309');
+INSERT INTO `variables` VALUES ('30053', '1');
+INSERT INTO `variables` VALUES ('30052', '1604007207');
+INSERT INTO `variables` VALUES ('30055', '5');
