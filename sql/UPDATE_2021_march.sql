@@ -723,3 +723,4 @@ replace into `map_template` (`entry`, `map_name`) VALUES ('49', 'Quel\'Thalas Cu
 replace into `map_template` (`entry`, `map_name`) VALUES ('50', 'Silvermoon City Raid');
 
 UPDATE `item_template` SET `class`='4', `subclass`='0', `inventory_type`='23' WHERE (`entry`='80785') AND (`patch`='0');
+UPDATE `item_template` SET `inventory_type`='15' WHERE (`entry`='80825') AND (`patch`='0');
