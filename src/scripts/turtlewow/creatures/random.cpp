@@ -590,7 +590,7 @@ bool GossipHello_npc_riding_gryphon(Player* p_Player, Creature* p_Creature)
 {
     if (p_Player->GetQuestRewardStatus(60070))
     {
-        p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Take me up!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Feed the gryphon and see what will happen.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     }
     p_Player->PrepareQuestMenu(p_Creature->GetGUID());
     p_Player->SEND_GOSSIP_MENU(90366, p_Creature->GetGUID());
