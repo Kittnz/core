@@ -22336,8 +22336,8 @@ bool Player::SetupHardcoreMode()
     if (!m_hardcoreInvGuildTimer)
         m_hardcoreInvGuildTimer = 1 * IN_MILLISECONDS;
 
-    // Delete mails
-    QueryResult* resultMail = CharacterDatabase.PQuery("SELECT id FROM mail WHERE receiver='%u'", GetGUIDLow());
+    // Delete mails TO and FROM
+    QueryResult* resultMail = CharacterDatabase.PQuery("SELECT id FROM mail WHERE receiver='%u' OR sender='%u'", GetGUIDLow());
     if (resultMail)
     {
         do

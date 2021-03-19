@@ -107,9 +107,8 @@ replace into shop_items values
 (703, 7, 81153, 'Armored Purple War Bear', 500),
 (704, 7, 81154, 'Armored Brown War Bear', 500),
 (705, 7, 81155, 'Armored Red War Bear', 500),
-(706, 7, 81157, 'Armored Green War Bear', 500),
-(707, 7, 81158, 'Armored White War Bear', 500),
-(708, 7, 80443, 'Swift Brewfest Ram', 400),
+(706, 7, 81158, 'Armored White War Bear', 500),
+(707, 7, 80443, 'Swift Brewfest Ram', 400),
 -- Gameplay: Glyphs
 (800, 8, 50010, 'General: Glyph of the Turtle', 0),
 (801, 8, 50008, 'General: Glyph of Twinking', 0),
