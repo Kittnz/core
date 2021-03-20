@@ -1222,7 +1222,7 @@ REPLACE INTO `item_template` VALUES (81226, 10, 15, 0, 'Armored Amani Riding Bea
 
 update item_template set required_reputation_faction = 893, required_reputation_rank = 7 where entry = 81226;
 
-delete from item_template where entry in (81157, 80437, 80435, 80445, 80432, 21736, 51839, 80451, 80453, 80452);
+delete from item_template where entry in (81157, 80437, 80435, 80445, 80432, 21736, 51839, 80451, 80453, 80452, 8628, 8627);
 
 update item_template set name = 'Swift Riding Turtle', quality = 1, description = 'Slow and steady might not always win you the race but it\'ll get you there... eventually.' where entry = 23720;
 
@@ -1242,10 +1242,25 @@ update item_template set name = 'Winterspring Frostsaber', description = 'Taming
 
 update item_template set name = 'Armored Darnassian Nightsaber', description = 'When a night elf\'s mount perishes, it is custom for the rider to keep one of the saber\'s great fangs as a token of remembrance.' where entry = 80446;
 
-update item_template set name = 'Tawny Leopard', description = '' where entry = 12326;
-update item_template set name = 'Golden Leopard', description = '' where entry = 12327;
-update item_template set name = 'Stranglethorn Tiger', description = '' where entry = 8630;
-update item_template set name = 'Spotted Leopard', description = '' where entry = 12325;
+update item_template set name = 'Tawny Leopard', description = 'Meow.', required_level = 1, quality = 1 where entry = 12326;
+update item_template set name = 'Golden Leopard', description = 'Meow.' , required_level = 1 where entry = 12327;
+update item_template set name = 'Stranglethorn Tiger', description = 'The wonderful thing about tigers is tigers are wonderful things!' , required_level = 1 where entry = 8630;
+update item_template set name = 'Spotted Leopard', description = 'Meow.' , required_level = 1 where entry = 12325;
+
+update item_template set name = 'Armored Dawnsaber', quality = 4, description = 'Night elves once believed that seeing this light colored saber breed in the wild was an ill omen.', required_level = 1 where entry = 18768;
+
+REPLACE INTO `item_template` VALUES (81227, 10, 15, 0, 'Striped Dawnsaber', 'Night elves once believed that seeing this light colored saber breed in the wild was an ill omen.', 17607, 3, 80, 1, 100000, 0, 0, -1, -1, 40, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 45035, 0, 0, 0, -1, 330, 3000, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 1, NULL);
+
+update item_template set required_level = 1 where entry = 81227;
+
+REPLACE INTO `item_template` VALUES (12327, 10, 15, 0, 'Golden Leopard', 'Meow.', 17607, 3, 80, 1, 100000, 0, 0, -1, -1, 40, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16060, 0, 0, 0, -1, 330, 3000, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 1, NULL);
+
+update item_template set required_level = 1 where entry = 12327;
+
+
+REPLACE INTO `item_template` VALUES (80446, 10, 15, 0, 'Armored Nightsaber', 'When a night elf\'s mount perishes, it is custom for the rider to keep one of the saber\'s great fangs as a token of remembrance.', 17608, 4, 64, 1, 1000000, 0, 0, -1, 589, 60, 60, 762, 150, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 45036, 0, 0, 0, 0, 330, 3000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+
+replace into `npc_vendor` values (4730, 80446, 0, 0, 0, 0);
 
 delete from npc_vendor where item = 12302;
 delete from npc_vendor where item = 12303;
