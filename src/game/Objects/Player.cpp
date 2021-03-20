@@ -22336,6 +22336,17 @@ bool Player::SetupHardcoreMode()
     if (!m_hardcoreInvGuildTimer)
         m_hardcoreInvGuildTimer = 1 * IN_MILLISECONDS;
 
+    // Remove group and invites
+    if (Group* group = GetGroup())
+    {
+        group->RemoveAllInvites();
+        group->RemoveMember(GetObjectGuid(), GROUP_LEAVE);
+    }
+
+    // Remove trades
+    if (GetTradeData())
+        TradeCancel(true);
+
     // Delete mails TO and FROM
     QueryResult* resultMail = CharacterDatabase.PQuery("SELECT id FROM mail WHERE receiver='%u' OR sender='%u'", GetGUIDLow());
     if (resultMail)
