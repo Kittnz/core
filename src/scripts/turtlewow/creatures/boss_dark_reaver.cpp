@@ -131,7 +131,7 @@ struct boss_dark_reaverAI : public ScriptedAI
     {
         m_creature->MonsterYell(urand(0, 1) ? DEATH_TEXT_1 : DEATH_TEXT_2);
 
-        uint32 m_respawn_delay_Timer = urand(8 * HOUR, 12 * HOUR);
+        uint32 m_respawn_delay_Timer = urand(48 * HOUR, 64 * HOUR);
         m_creature->SetRespawnDelay(m_respawn_delay_Timer);
         m_creature->SetRespawnTime(m_respawn_delay_Timer);
         m_creature->SaveRespawnTime();
