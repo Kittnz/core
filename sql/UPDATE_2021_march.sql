@@ -1226,4 +1226,26 @@ delete from item_template where entry in (81157, 80437, 80435, 80445, 80432, 217
 
 update item_template set name = 'Swift Riding Turtle', quality = 1, description = 'Slow and steady might not always win you the race but it\'ll get you there... eventually.' where entry = 23720;
 
+update item_template set name = 'Armored Frostsaber', description = 'Night elves raise frostsaber cubs from infancy, forging lifelong bonds of trust between rider and beast.' where entry = 18766;
+update item_template set name = 'Armored Mistsaber', description = 'Some historians claim that this breed\'s misty grey coat is the result of ancient Highborne experiments conducted on nightsabers.' where entry = 18767;
+update item_template set name = 'Armored Stormsaber', description = 'Rumor has it that this breed was named after the renowned archdruid Malfurion Stormrage.' where entry = 18902;
 
+update item_template set name = 'Striped Nightsaber', description = 'Considered one of Azeroth\'s perfect predators, these agile beasts can sprint through dense forests without making a sound.' where entry = 8629;
+update item_template set name = 'Spotted Frostsaber', description = 'This hearty mount\'s ferocious appetite earned it the nickname "Dragon Belly" in the night elf language.' where entry = 8632;
+update item_template set name = 'Striped Frostsaber', description = 'This hearty mount\'s ferocious appetite earned it the nickname "Dragon Belly" in the night elf language.' where entry = 8631;
+
+update item_template set name = 'Ancient Nightsaber', description = 'The lack of spots or stripes marks this beast as a descendant of the most ancient nightsaber line.' where entry = 12303;
+
+update item_template set name = 'Ancient Frostsaber', description = 'The lack of spots or stripes marks this beast as a descendant of the most ancient frostsaber line.' where entry = 12302;
+
+update item_template set name = 'Winterspring Frostsaber', description = 'Taming this savage breed requires patience, strength, and a large supply of fake mice and twine.' where entry = 13086;
+
+update item_template set name = 'Armored Darnassian Nightsaber', description = 'When a night elf\'s mount perishes, it is custom for the rider to keep one of the saber\'s great fangs as a token of remembrance.' where entry = 80446;
+
+update item_template set name = 'Tawny Leopard', description = '' where entry = 12326;
+update item_template set name = 'Golden Leopard', description = '' where entry = 12327;
+update item_template set name = 'Stranglethorn Tiger', description = '' where entry = 8630;
+update item_template set name = 'Spotted Leopard', description = '' where entry = 12325;
+
+delete from npc_vendor where item = 12302;
+delete from npc_vendor where item = 12303;
