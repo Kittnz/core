@@ -1207,3 +1207,23 @@ replace into creature_loot_template values (14275, 51791, 65, 6, 1, 1, 0, 0, 10)
  replace into creature_loot_template values (80936, 51789, 4.76, 2, 1, 1, 0, 0, 10);
  -- Dark Rider's Steed Loottable
  replace into creature_loot_template values (80936, 81090, 1, 3, 1, 1, 0, 0, 10);
+ 
+REPLACE INTO `item_template` VALUES (81224, 10, 15, 0, 'Armored Dalaran Warhorse', 'The powerful and unyielding white stallion.', 25132, 4, 64, 1, 2500000, 0, 0, -1, 589, 60, 60, 762, 150, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 46441, 0, 0, 0, 1, 330, 3000, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+
+REPLACE INTO `item_template` VALUES (81225, 10, 15, 0, 'Armored Knight\'s Warhorse', 'Trained to withstand brutal hand-to-hand combat in the fiercest battlefields.', 25132, 4, 64, 1, 2500000, 0, 0, -1, 589, 60, 60, 762, 150, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 46442, 0, 0, 0, 1, 330, 3000, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+
+update item_template set required_reputation_faction = 61, required_reputation_rank = 7 where entry = 81224;
+update item_template set required_reputation_faction = 72, required_reputation_rank = 7 where entry = 81225;
+
+REPLACE INTO `creature_template` VALUES (90975, 0, 18229, 0, 0, 0, 'Armored Dalaran Warhorse', '', 0, 1, 2, 64, 55, 53, 53, 30, 35, 0, 1, 1.38571, 0, 20, 5, 0, 0, 1, 2, 2, 0, 44, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 1.76, 2.42, 100, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 2, '');
+REPLACE INTO `creature_template` VALUES (90976, 0, 18230, 0, 0, 0, 'Armored Knight\'s Warhorse', '', 0, 1, 2, 64, 55, 53, 53, 30, 35, 0, 1, 1.38571, 0, 20, 5, 0, 0, 1, 2, 2, 0, 44, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 1.76, 2.42, 100, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 2, '');
+
+REPLACE INTO `item_template` VALUES (81226, 10, 15, 0, 'Armored Amani Riding Bear', 'The Amani trolls decorate these ferocious mounts in magic amulets and ceremonial masks as a way to venerate the bear god Nalorakk.', 28952, 4, 64, 1, 3000000, 0, 0, -1, 434, 60, 60, 762, 150, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 46204, 0, 0, 0, 1, 330, 3000, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+
+update item_template set required_reputation_faction = 893, required_reputation_rank = 7 where entry = 81226;
+
+delete from item_template where entry in (81157, 80437, 80435, 80445, 80432, 21736, 51839, 80451, 80453, 80452);
+
+update item_template set name = 'Swift Riding Turtle', quality = 1, description = 'Slow and steady might not always win you the race but it\'ll get you there... eventually.' where entry = 23720;
+
+
