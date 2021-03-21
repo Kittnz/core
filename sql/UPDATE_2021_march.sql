@@ -1566,6 +1566,48 @@ REPLACE INTO `npc_trainer` VALUES (81047, 20941, 2500, 0, 0, 60, 0, 5875);
 REPLACE INTO `npc_trainer` VALUES (81047, 20942, 1200, 0, 0, 42, 0, 5875);
 REPLACE INTO `npc_trainer` VALUES (81047, 20943, 2100, 0, 0, 54, 0, 5875);
 
+-- <Traveler>'s guild NPCs:
 
+replace into `creature_template` values (81055, 0, 11750, 0, 0, 0, 'Ravika', 'Drinks', 0, 33, 33, 1846, 1846, 0, 0, 1200, 12, 6, 1, 1.14286, 0, 20, 5, 0, 0, 1, 46, 58, 0, 132, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 48.7872, 67.0824, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 1, 0, 3, 2364, 0, 0, 0, 0, 524298, '');
 
+replace into `npc_vendor` values (81055, 2593, 0, 0, 0, 0);
+replace into `npc_vendor` values (81055, 2594, 0, 0, 0, 0);
+replace into `npc_vendor` values (81055, 2595, 0, 0, 0, 0);
+replace into `npc_vendor` values (81055, 2596, 0, 0, 0, 0);
+replace into `npc_vendor` values (81055, 2723, 0, 0, 0, 0);
+replace into `npc_vendor` values (81055, 4600, 0, 0, 0, 0);
+
+update creature_template set npc_flags = 4, faction = 35 where entry = 81055;
+
+replace into `creature_template` values (81056, 0, 3354, 0, 0, 0, 'Blamen Ramen', 'Blacksmithing Supplies', 2242, 40, 40, 3900, 3900, 0, 0, 560, 1682, 16391, 1, 1.14286, 0, 20, 5, 0, 0, 1, 61, 78, 0, 156, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 56.672, 77.924, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 5411, 0, 0, 0, 0, 10, '');
+
+replace into `npc_vendor` values (81056, 2880, 0, 0, 0, 0);
+replace into `npc_vendor` values (81056, 2901, 0, 0, 0, 0);
+replace into `npc_vendor` values (81056, 3466, 0, 0, 0, 0);
+replace into `npc_vendor` values (81056, 3857, 0, 0, 0, 0);
+replace into `npc_vendor` values (81056, 5956, 0, 0, 0, 0);
+replace into `npc_vendor` values (81056, 18567, 0, 0, 0, 0);
+
+update creature_template set npc_flags = 4, faction = 35 where entry = 81056;
+
+replace into `creature_template` values (81057, 0, 15729, 0, 0, 0, 'Innkeeper Elino Embers', 'Innkeeper', 2890, 30, 30, 1605, 1605, 0, 0, 1200, 1682, 135, 1, 1.14286, 0, 20, 5, 0, 0, 1, 42, 53, 0, 122, 1, 2000, 2000, 1, 4096, 0, 0, 0, 0, 0, 0, 45.144, 62.073, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 7733, 0, 0, 0, 0, 524298, '');
+
+replace into `npc_vendor` values (81057, 117, 0, 0, 0, 0);
+replace into `npc_vendor` values (81057, 159, 0, 0, 0, 0);
+replace into `npc_vendor` values (81057, 1179, 0, 0, 0, 0);
+replace into `npc_vendor` values (81057, 1205, 0, 0, 0, 0);
+replace into `npc_vendor` values (81057, 1645, 0, 0, 0, 0);
+replace into `npc_vendor` values (81057, 1708, 0, 0, 0, 0);
+replace into `npc_vendor` values (81057, 2287, 0, 0, 0, 0);
+replace into `npc_vendor` values (81057, 3770, 0, 0, 0, 0);
+replace into `npc_vendor` values (81057, 3771, 0, 0, 0, 0);
+replace into `npc_vendor` values (81057, 4599, 0, 0, 0, 0);
+replace into `npc_vendor` values (81057, 8766, 0, 0, 0, 0);
+replace into `npc_vendor` values (81057, 8952, 0, 0, 0, 0);
+replace into `npc_vendor` values (81057, 18046, 0, 0, 0, 0);
+
+update creature_template set faction = 35 where entry = 81057;
  
+replace into `creature_template` values (81058, 0, 7935, 0, 0, 0, 'Crowley Jr.', '', 0, 5, 5, 2192, 2192, 0, 0, 1340, 1682, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 55, 70, 0, 144, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 53.3984, 73.4228, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, '');
+
+update creature_template set  movement_type = 1, faction = 35, npc_flags = 0 where entry = 81058;
