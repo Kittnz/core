@@ -442,7 +442,7 @@ update creature_template set display_id1 = 18551 where entry = 80995;
 
 REPLACE INTO `item_template` VALUES (81206, 0, 0, 0, 'Skin Change Token: Dark Ranger', '', 30658, 2, 0, 1, 0, 0, 0, -1, 512, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 12244, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 'item_skin_change');
 
-update item_template set display_id = 30658, quality = 1 where entry in (50207, 50208, 50205, 51010, 50206, 50210, 51011, 50212, 50209, 50211, 50105);
+update item_template set display_id = 30658, quality = 1 where entry in (50106, 50207, 50208, 50205, 51010, 50206, 50210, 51011, 50212, 50209, 50211, 50105);
 
 update item_template set name = 'Skin Change Token: Blackrock Clan' where entry = 50207;
 update item_template set name = 'Skin Change Token: Chaos Orc' where entry = 50208;
@@ -1618,5 +1618,5 @@ REPLACE INTO `item_template` VALUES (81209, 0, 0, 0, 'Skin Change Token: Blood E
 
 REPLACE INTO `item_template` VALUES (81210, 0, 0, 0, 'Skin Change Token: Death Knight', '', 30658, 2, 0, 1, 0, 0, 0, -1, 33, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 12244, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 'item_skin_change');
 
-update item_template set display_id = 30658, quality = 1 where entry in (81208, 81209, 81210);
+update item_template set display_id = 30658, quality = 1 where entry in (81208, 81209, 81210, 50106, 81206);
 
