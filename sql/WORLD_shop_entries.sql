@@ -40,6 +40,7 @@ replace into shop_items values
 -- Character: Additional Skins
 (200, 2, 50105, 'Token: Sally Whitemane', 160),
 (201, 2, 50106, 'Token: Scholomance Student', 160),
+(202, 2, 81210, 'Token: Death Knight', 160),
 (203, 2, 50205, 'Token: Dark Iron Dwarf', 160),
 (204, 2, 50206, 'Token: Earthen Dwarf', 160),
 (205, 2, 50207, 'Token: Blackrock Clan', 160),
@@ -50,8 +51,8 @@ replace into shop_items values
 (210, 2, 51010, 'Token: Dark Troll', 160),
 (211, 2, 51011, 'Token: Ice Troll', 160),
 (212, 2, 81208, 'Token: Zombie Troll', 160),
-(213, 2, 50212, 'Token: Leper Gnome', 160),
-(214, 2, 81206, 'Token: Dark Ranger', 160),
+(213, 2, 81206, 'Token: Dark Ranger', 160),
+(214, 2, 81208, 'Token: Blood Elf', 160),
 -- Character: Race & Faction
 (300, 3, 50603, 'Race Change Token: Human', 180),
 (301, 3, 50604, 'Race Change Token: Gnome', 180),
