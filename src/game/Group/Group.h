@@ -364,7 +364,7 @@ class MANGOS_DLL_SPEC Group
         Team GetTeam() const { return m_groupTeam; }
 
         // temp helpers for hardcore players checks
-        bool CheckInteractHardcore(Player* invitee);
+        bool HandleHardcoreInteraction(Player* invitee);
     protected:
         bool _addMember(ObjectGuid guid, const char* name, bool isAssistant=false);
         bool _addMember(ObjectGuid guid, const char* name, bool isAssistant, uint8 group);

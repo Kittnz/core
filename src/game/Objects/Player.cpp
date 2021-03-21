@@ -22320,6 +22320,30 @@ uint16 Player::GetPureMaxSkillValue(uint32 skill) const
 }
 
 // for Hardcore mode
+bool Player::HandleHardcoreInteraction(Player* target, bool checkLevelDiff)
+{
+    if (isHardcore())
+    {
+        if (!target->isHardcore())
+            return false;
+
+        if (checkLevelDiff)
+        {
+            int32 diff = getLevel() - target->getLevel();
+
+            if (abs(diff) > 5)
+                return false;
+        }
+    }
+    else
+    {
+        if (target->isHardcore())
+            return false;
+    }
+
+    return true;
+}
+
 bool Player::SetupHardcoreMode()
 {
     if (isHardcore())

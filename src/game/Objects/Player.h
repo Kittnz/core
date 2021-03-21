@@ -2091,30 +2091,8 @@ class MANGOS_DLL_SPEC Player final: public Unit
         void SetHardcoreStatus(uint8 status) { m_hardcoreStatus = status; };
         bool isHardcore() const{ return getLevel() < 60 && (m_hardcoreStatus == HARDCORE_MODE_STATUS_ALIVE || m_hardcoreStatus == HARDCORE_MODE_STATUS_DEAD); }
         bool isImmortal() const { return m_hardcoreStatus == HARDCORE_MODE_STATUS_IMMORTAL; }
+        bool HandleHardcoreInteraction(Player* target, bool checkLevelDiff);
         bool SetupHardcoreMode();
-        bool CheckHardcoreInteract(Player* target, bool checkLevelDiff)
-        {
-            if (isHardcore())
-            {
-                if (!target->isHardcore())
-                    return false;
-
-                if (checkLevelDiff)
-                {
-                    int32 diff = getLevel() - target->getLevel();
-
-                    if (abs(diff) > 5)
-                        return false;
-                }
-            }
-            else
-            {
-                if (target->isHardcore())
-                    return false;
-            }
-
-            return true;
-        }
 
         void UpdateTotalDeathCount();
         uint32 GetTotalDeathCount() const { return m_totalDeathCount; };
