@@ -49,8 +49,9 @@ replace into shop_items values
 (209, 2, 50211, 'Token: Sandfury Troll', 160),
 (210, 2, 51010, 'Token: Dark Troll', 160),
 (211, 2, 51011, 'Token: Ice Troll', 160),
-(212, 2, 50212, 'Token: Leper Gnome', 160),
-(213, 2, 81206, 'Token: Dark Ranger', 160),
+(212, 2, 81208, 'Token: Zombie Troll', 160),
+(213, 2, 50212, 'Token: Leper Gnome', 160),
+(214, 2, 81206, 'Token: Dark Ranger', 160),
 -- Character: Race & Faction
 (300, 3, 50603, 'Race Change Token: Human', 180),
 (301, 3, 50604, 'Race Change Token: Gnome', 180),

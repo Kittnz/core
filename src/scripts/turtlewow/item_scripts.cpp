@@ -306,123 +306,77 @@ bool ItemUseSpell_hairdye(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 
 bool ItemUseSpell_skin_changer(Player* pPlayer, Item* pItem, const SpellCastTargets&) 
 {
-    bool isMale = pPlayer->getGender() == GENDER_MALE;
-    uint32 itemEntry = pItem->GetEntry();
-    int8 bytesToSet = -1;
+    uint32 item_entry = pItem->GetEntry();
+    int8 bytes = -1;
+
+    bool male = pPlayer->getGender() == GENDER_MALE;
 
     switch (pPlayer->getRace()) 
     {
         case RACE_HUMAN:
-            switch (itemEntry) 
+            switch (item_entry)
             {
-                case 50105: // Sally Whitemane
-                    if (!isMale)
-                        bytesToSet = 10;
-                    break;
-                case 50106: // Cult of the Damned
-                    bytesToSet = 11;
-                    break;
-                default:
-                    break;
+            case 50105: if (!male) bytes = 10; break; // Human: Sally Whitemane
+            case 50106:            bytes = 11; break; // Human: Scholomance Student
+            case 81210:            bytes = 12; break; // Human: Death Knight
             }
             break;
         case RACE_DWARF:
-            switch (itemEntry) 
+            switch (item_entry)
             {
-                case 50204: // Wildhammer
-                    if (isMale)
-                        bytesToSet = static_cast<uint8>(irand(16, 17));
-                    else
-                        bytesToSet = 9;
-                    break;
-                case 50205: // Dark Iron
-                    if (isMale)
-                        bytesToSet = 9;
-                    else
-                        bytesToSet = 10;
-                    break;
-                case 50206: // Earthen
-                    if (isMale)
-                        bytesToSet = static_cast<uint8>(irand(10, 15));
-                    break;
-                default:
-                    break;
+            case 50204: if (male) bytes = static_cast<uint8>(irand(16, 17)); else bytes = 9; break; // Dwarf: Wildhammer Clan
+            case 50205: if (male) bytes = 9; else bytes = 10; break;                                // Dwarf: Dark Iron
+            case 50206: if (male) bytes = static_cast<uint8>(irand(10, 15)); break;                 // Dwarf: Earthen 
             }
             break;
         case RACE_ORC:
-            switch (itemEntry) 
+            switch (item_entry)
             {
-                case 50207: // Blackrock
-                    if (isMale)
-                        bytesToSet = static_cast<uint8>(irand(0, 1) == 0 ? 9 : 11);
-                    else
-                        bytesToSet = 9;
-                    break;
-                case 50208: // Chaos
-                    if (isMale)
-                        bytesToSet = 10;
-                    break;
-                case 50209: // Mag'Har
-                    if (isMale)
-                        bytesToSet = 12;
-                    break;
-                default:
-                    break;
+            case 50207: if (male) bytes = static_cast<uint8>(irand(0, 1) == 0 ? 9 : 11); else bytes = 9; break; // Orc: Blackrock Clan
+            case 50208: if (male) bytes = 10; break;                                                            // Orc: Chaos
+            case 50209: if (male) bytes = 12; break;                                                            // Orc: Mag'Har
             }
             break;
         case RACE_TROLL:
-            switch (itemEntry) 
+            switch (item_entry)
             {
-                case 50210: // Forest
-                    bytesToSet = 13;
-                    break;
-                case 50211: // Sandfury (Farraki), 14 is the zombie one.
-                    bytesToSet = static_cast<uint8>(irand(0, 1) == 0 ? static_cast<uint8>(irand(9, 11)) : 14);
-                    break;
-                case 51010: // Dark Troll
-                    bytesToSet = 6;
-                    break;
-                case 51011: // Ice Troll
-                    bytesToSet = 7;
-                    break;
-                default:
-                    break; 
+            case 50210: bytes = 13; break;                                                                           // Troll: Forest
+            case 50211: bytes = static_cast<uint8>(irand(0, 1) == 0 ? static_cast<uint8>(irand(9, 11)) : 14); break; // Troll: Sandfury Clan + zombie
+            case 51010: bytes = 12; break;                                                                           // Troll: Dark
+            case 51011: bytes = 13; break;                                                                           // Troll: Ice
+            case 81208: bytes = 20; break;                                                                           // Troll: Zombie
             }
             break;
         case RACE_GNOME:
-            switch (itemEntry) 
+            switch (item_entry)
             {
-                case 50106: // Cult of the Damned
-                    if (isMale)
-                        bytesToSet = 6;
-                    else
-                        bytesToSet = 5;
-                    break;
-                case 50212: // Leper
-                    if (isMale)
-                        bytesToSet = 5;
-                    break;
-                default:
-                    break;
+            case 50106: if (male) bytes = 6; else bytes = 5; break; // Gnome: Scholomanc Student
+            case 50212: if (male) bytes = 5; break;                 // Gnome: Leper
             }
             break;
         case RACE_HIGH_ELF:
-            switch (itemEntry)
+            switch (item_entry)
             {
-            case 81206: bytesToSet = 16; break; // Dark Ranger
+            case 81206: bytes = 16; break; // High Elf: Dark Ranger
+            case 81209: bytes = 15; break; // High Elf: Blood Elf
             }
-        default:
+            break;
+        case RACE_TAUREN:
+            switch (item_entry)
+            {
+            case 81210: bytes = 19; break; // Tauren: Death Knight
+            }
             break;
     }
 
-    if (bytesToSet > -1) {
-        pPlayer->SetByteValue(PLAYER_BYTES, 0, static_cast<uint8>(bytesToSet));
-        pPlayer->SetDisplayId(15435); // Invisible
+    if (bytes > -1) 
+    {
+        pPlayer->SetByteValue(PLAYER_BYTES, 0, static_cast<uint8>(bytes));
+        pPlayer->SetDisplayId(15435); 
         pPlayer->m_Events.AddEvent(new DemorphAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(250));
-    } else {
-        ChatHandler(pPlayer).SendSysMessage("You can't use this item.");
-    }
-
+    } 
+    else 
+        ChatHandler(pPlayer).SendSysMessage("You can't use this item.");    
     return false;
 }
 
