@@ -324,7 +324,7 @@ bool ItemUseSpell_skin_changer(Player* pPlayer, Item* pItem, const SpellCastTarg
         case RACE_DWARF:
             switch (item_entry)
             {
-            case 50204: if (male) bytes = static_cast<uint8>(irand(9, 12)); else bytes = 9; break; // Dwarf: Wildhammer Clan
+            case 50204: if (male) bytes = static_cast<uint8>(irand(9, 12)); else bytes = 9; break;  // Dwarf: Wildhammer Clan
             case 50205: if (male) bytes = 13; else bytes = 10; break;                               // Dwarf: Dark Iron
             case 50206: if (male) bytes = static_cast<uint8>(irand(16, 17)); break;                 // Dwarf: Earthen 
             }
@@ -340,11 +340,11 @@ bool ItemUseSpell_skin_changer(Player* pPlayer, Item* pItem, const SpellCastTarg
         case RACE_TROLL:
             switch (item_entry)
             {
-            case 50210: bytes = 13; break;                                                                           // Troll: Forest
+            case 50210: if (male) bytes = 13; else bytes = 8;  break;                                                // Troll: Forest
             case 50211: bytes = static_cast<uint8>(irand(0, 1) == 0 ? static_cast<uint8>(irand(9, 11)) : 14); break; // Troll: Sandfury Clan + zombie
             case 51010: bytes = 12; break;                                                                           // Troll: Dark
-            case 51011: bytes = 13; break;                                                                           // Troll: Ice
-            case 81208: bytes = 20; break;                                                                           // Troll: Zombie
+            case 51011: if (male) bytes = 13; else bytes = 7;  break;                                                // Troll: Ice
+            case 81208: if (male) bytes = 20; else bytes = 14; break;                                                // Troll: Zombie
             }
             break;
         case RACE_GNOME:
