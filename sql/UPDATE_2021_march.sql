@@ -1620,3 +1620,5 @@ REPLACE INTO `item_template` VALUES (81210, 0, 0, 0, 'Skin Change Token: Death K
 
 update item_template set display_id = 30658, quality = 1 where entry in (81208, 81209, 81210, 50106, 81206);
 
+update creature_template set npc_flags = 3 where entry = 51562;
+
