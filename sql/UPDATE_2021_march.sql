@@ -1633,3 +1633,7 @@ delete from creature_loot_template where entry = 2744 and item = 51763;
 replace into creature_loot_template values (8280, 51762, 50, 4, 1, 1, 0, 0, 10);
 replace into creature_loot_template values (8280, 51763, 50, 4, 1, 1, 0, 0, 10);
 update item_template set spellid_1 = 13679 where entry = 51763;	
+
+update item_template set spelltrigger_2 = 1 where entry = 80746;
+update item_template set inventory_type = 15 where entry = 80646;
+update item_template set allowable_race = -1 where entry = 8049;
