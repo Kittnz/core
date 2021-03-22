@@ -29,6 +29,8 @@
 #include "UnitEvents.h"
 #include "TargetedMovementGenerator.h"
 
+#include "Chat.h"
+
 //==============================================================
 //================= ThreatCalcHelper ===========================
 //==============================================================
@@ -421,7 +423,39 @@ void ThreatManager::addThreat(Unit* pVictim, float pThreat, bool crit, SpellScho
     float threat = ThreatCalcHelper::CalcThreat(pVictim, iOwner, pThreat, crit, schoolMask, pThreatSpell);
 
     addThreatDirectly(pVictim, threat);
+
+	sendThreatToVictim(pVictim, threat);
+	
 }
+
+void ThreatManager::sendThreatToVictim(Unit* pVictim, float threat)
+{
+	if (threat > 0.0f && pVictim->GetTypeId() == TYPEID_PLAYER) {
+
+		Creature* creature = (Creature*)getOwner();
+
+		if (!creature->IsElite()) {
+			return;
+		}
+
+		std::string creatureName = iOwner->GetName();
+		std::string pThreat = std::to_string((int)getThreat(pVictim));
+
+		WorldPacket data;
+		
+		std::string msg = "TWT:" + creatureName + ":" + std::to_string(iOwner->GetGUIDLow()) +
+			":" + pThreat + ":" + std::to_string((int)iOwner->GetHealthPercent());
+
+		Player* player = pVictim->GetMap()->GetPlayer(pVictim->GetGUID());
+
+		ChatHandler::BuildChatPacket(data, CHAT_MSG_RAID,
+			msg.c_str(), Language(LANG_ADDON), player->GetChatTag(),
+			player->GetObjectGuid(), player->GetName());
+
+		player->GetSession()->SendPacket(&data);
+	}
+}
+
 
 void ThreatManager::addThreatDirectly(Unit* pVictim, float threat)
 {
