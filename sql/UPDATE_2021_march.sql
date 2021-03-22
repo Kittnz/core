@@ -1639,3 +1639,7 @@ update item_template set inventory_type = 15 where entry = 80646;
 update item_template set allowable_race = -1 where entry = 8049;
 
 update item_template set disenchant_id = 0 where entry between 81211 and 81223;
+
+update creature_template set level_min = 60, level_max = 60, health_min = 12263, health_max = 12263, armor = 2892, dmg_min = 280, dmg_max = 320, rank = 1 where entry in (1423, 1642, 853, 727, 3571, 12160, 5952, 3297, 5953, 68, 1976, 3296, 5624, 3084, 4262, 5595);
+update creature_template set level_min = 60, level_max = 60, health_min = 12263, health_max = 12263, armor = 2892, dmg_min = 280, dmg_max = 320, rank = 1 where entry in (select entry from creature_template where name like 'Brave %');
+update creature_template set level_min = 60, level_max = 60, health_min = 12263, health_max = 12263, armor = 2892, dmg_min = 280, dmg_max = 320, rank = 1 where entry in (select entry from creature_template where name like 'Deathguard %');
