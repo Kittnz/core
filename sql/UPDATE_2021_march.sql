@@ -1637,3 +1637,5 @@ update item_template set spellid_1 = 13679 where entry = 51763;
 update item_template set spelltrigger_2 = 1 where entry = 80746;
 update item_template set inventory_type = 15 where entry = 80646;
 update item_template set allowable_race = -1 where entry = 8049;
+
+update item_template set disenchant_id = 0 where entry between 81211 and 81223;
