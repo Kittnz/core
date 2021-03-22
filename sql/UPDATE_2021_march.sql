@@ -1622,3 +1622,14 @@ update item_template set display_id = 30658, quality = 1 where entry in (81208, 
 
 update creature_template set npc_flags = 3 where entry = 51562;
 
+update item_template set max_durability = 120 where entry = 51779;
+update item_template set stat_value2 = 22, spellid_1 = 14798 where entry = 51777;
+update item_template set spelltrigger_4 = 0 where entry = 51778;
+update item_template set display_id = 20330 where entry = 51778;
+
+delete from creature_loot_template where entry = 2744 and item = 51762;
+delete from creature_loot_template where entry = 2744 and item = 51763;
+
+replace into creature_loot_template values (8280, 51762, 50, 4, 1, 1, 0, 0, 10);
+replace into creature_loot_template values (8280, 51763, 50, 4, 1, 1, 0, 0, 10);
+update item_template set spellid_1 = 13679 where entry = 51763;	
