@@ -1652,3 +1652,6 @@ update creature_loot_template set ChanceOrQuestChance = 0 where entry = 50056 an
 
 update item_template set spellid_1 = 21873, display_id = 30572, name = "Idol of the Wildshifter" where entry = 51798;
 update item_template set display_id = 21604 where entry = 51778;
+
+-- Fix wrong spells used by the warlock's Doomguard.
+UPDATE `creature_template` SET `spell_id1`=19474, `spell_id2`=19482, `spell_id3`=89 WHERE `entry`=11859;
