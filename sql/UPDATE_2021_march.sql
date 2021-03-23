@@ -1655,3 +1655,6 @@ update item_template set display_id = 21604 where entry = 51778;
 
 -- Fix wrong spells used by the warlock's Doomguard.
 UPDATE `creature_template` SET `spell_id1`=19474, `spell_id2`=19482, `spell_id3`=89 WHERE `entry`=11859;
+
+-- Fix flags for Invisible Trigger One.
+UPDATE `creature_template` SET `unit_flags`=33554944, `flags_extra`=2 WHERE `entry`=14495;
