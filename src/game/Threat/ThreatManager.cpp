@@ -444,7 +444,8 @@ void ThreatManager::sendThreatToVictim(Unit* pVictim, float threat)
 		WorldPacket data;
 		
 		std::string msg = "TWT:" + creatureName + ":" + std::to_string(iOwner->GetGUIDLow()) +
-			":" + pThreat + ":" + std::to_string((int)iOwner->GetHealthPercent());
+			":" + pThreat;
+
 
 		Player* player = pVictim->GetMap()->GetPlayer(pVictim->GetGUID());
 
