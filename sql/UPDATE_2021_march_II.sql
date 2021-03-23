@@ -209,3 +209,5 @@ reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
 nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
 nextquestinchain = @nextquestinchain, prevquestid = @prevquest
 where entry = @quest_entry;	
+
+update item_template set name = 'Armored Spectral Tiger' where entry =  80430;
