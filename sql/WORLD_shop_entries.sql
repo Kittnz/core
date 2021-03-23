@@ -82,8 +82,8 @@ replace into shop_items values
 (507, 5, 8630,  'Stranglethorn Tiger', 200),
 (508, 5, 12302, 'Ancient Frostsaber', 260), 
 (509, 5, 12303, 'Ancient Nightsaber', 260),
-(510, 5, 18768, 'Swift Dawnsaber', 260),
-(511, 5, 80430, 'Swift Spectral Tiger', 2000),
+(510, 5, 18768, 'Armored Dawnsaber', 260),
+(511, 5, 80430, 'Armored Spectral Tiger', 2000),
 (512, 5, 12353, 'Swift White Stallion', 260), 
 (513, 5, 80449, 'Ceremonial White Stallion', 400),
 -- Gameplay: Riding Mounts II
