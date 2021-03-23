@@ -1400,6 +1400,9 @@ void Player::Update(uint32 update_diff, uint32 p_time)
             if (update_diff >= m_hardcoreKickTimer)
             {
                 m_hardcoreKickTimer = 0;
+                // remove from hardcore guild
+                if (Guild* hardcoreGuild = sGuildMgr.GetGuildById(238))
+                    hardcoreGuild->DelMember(GetObjectGuid());
                 GetSession()->LogoutPlayer(true);
                 return;
             }
