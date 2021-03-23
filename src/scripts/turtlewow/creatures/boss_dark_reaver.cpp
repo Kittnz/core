@@ -46,7 +46,7 @@ const uint8 NORMAL_GROUP_SIZE = 5;
 
 struct boss_dark_reaverAI : public ScriptedAI
 {
-    boss_dark_reaverAI(Creature *c) : ScriptedAI(c)
+    boss_dark_reaverAI(Creature* c) : ScriptedAI(c)
     {
         Reset();
     }
@@ -61,6 +61,7 @@ struct boss_dark_reaverAI : public ScriptedAI
     uint8 Attackers_Count;
     uint32 Biggest_Hit;
     time_t Last_Pierce_Time;
+    uint32 RepeatingSummonTime;
 
     uint8 LastHealthPercentage;
 
@@ -85,6 +86,7 @@ struct boss_dark_reaverAI : public ScriptedAI
         Event_State = 0;
         Attackers_Count = 0;
         Last_Pierce_Time = 0;
+        RepeatingSummonTime = 45000;
 
         LastHealthPercentage = 100;
 
@@ -167,16 +169,37 @@ struct boss_dark_reaverAI : public ScriptedAI
         }
     }
 
+    uint16 GetPlayerCountInThreatList()
+    {
+        uint16 count = 0;
+        for (auto t : me->getThreatManager().getThreatList())
+        {
+            if (!t || !t->getTarget() || !t->getTarget()->IsPlayer())
+                continue;
+
+            count++;
+        }
+
+        return count;
+    }
+
     void UpdateAI(const uint32 diff)
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
 
         // If attackers exceeds normal party size, begin to scale up attack stats per player.
-        uint16 threatSize = me->getThreatManager().getThreatList().size();
+        uint16 threatSize = GetPlayerCountInThreatList();
         if (threatSize > NORMAL_GROUP_SIZE && threatSize > Attackers_Count)
         {
-            ScaleStats(threatSize - Attackers_Count);
+            auto numNewAttackers = threatSize - Attackers_Count;
+
+            ScaleStats(numNewAttackers);
+
+            // Reduce summon timer by 1 second for each additional player, but not
+            // any lower than 10 seconds.
+            if (RepeatingSummonTime > 10 * IN_MILLISECONDS)
+                RepeatingSummonTime -= numNewAttackers * IN_MILLISECONDS;
 
             // Only do text every 15 seconds if people join to not spam.
             if (ScaleText_Timer < diff)
@@ -187,6 +210,8 @@ struct boss_dark_reaverAI : public ScriptedAI
             else
                 ScaleText_Timer -= diff;
         }
+        else if (ScaleText_Timer >= diff)
+            ScaleText_Timer -= diff;
 
         if (threatSize != Attackers_Count)
             Attackers_Count = threatSize;
@@ -287,7 +312,7 @@ struct boss_dark_reaverAI : public ScriptedAI
                 spawn->GetMotionMaster()->MoveChase(randomTarget);
             }
 
-            Summon_Timer = 45000;
+            Summon_Timer = RepeatingSummonTime;
         }
         else
             Summon_Timer -= diff;
