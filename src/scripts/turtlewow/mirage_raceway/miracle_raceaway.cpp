@@ -488,7 +488,7 @@ bool GOSelect_go_flying_machine(Player* pPlayer, GameObject* pGo, uint32 sender,
 		if (pPlayer->GetMoney() >= cost)
 		{
 			pPlayer->ModifyMoney(-cost);
-			pPlayer->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, 8011);
+			pPlayer->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, 18510);
 			pPlayer->TeleportTo(1, -6103.890000F, -3872.739700F, 145.055800F, 3.567656F);
 			pPlayer->CastSpell(pPlayer, 130, true);
 		}
@@ -516,7 +516,7 @@ struct npc_landing_siteAI : public ScriptedAI
         if (pWho && pWho->IsPlayer()) 
         {
             if (Player* player = pWho->ToPlayer()) 
-                if (m_creature->IsWithinDistInMap(pWho, 200.0F) && pWho->GetMountID() == 8011 && !pWho->HasAura(130))
+                if (m_creature->IsWithinDistInMap(pWho, 200.0F) && pWho->GetMountID() == 18510 && !pWho->HasAura(130))
                 {
                     player->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, 0);
                     me->MonsterSay("Ugh, another one… Welcome to tha Mirage Raceway, $N!", 0U, pWho);
