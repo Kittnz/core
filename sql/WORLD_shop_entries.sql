@@ -52,7 +52,7 @@ replace into shop_items values
 (211, 2, 51011, 'Token: Ice Troll', 160),
 (212, 2, 81208, 'Token: Zombie Troll', 160),
 (213, 2, 81206, 'Token: Dark Ranger', 160),
-(214, 2, 81208, 'Token: Blood Elf', 160),
+(214, 2, 81209, 'Token: Blood Elf', 160),
 -- Character: Race & Faction
 (300, 3, 50603, 'Race Change Token: Human', 180),
 (301, 3, 50604, 'Race Change Token: Gnome', 180),
