@@ -217,7 +217,7 @@ update creature_template set display_id1 = 18545 where entry = 81045;
 update creature_template set display_id1 = 18448 where entry = 81042; 
 update creature_template set display_id1 = 18447 where entry = 81043; 
 
-update item_template display_id = 60954 where entry = 51792;
+update item_template set display_id = 60954 where entry = 51792;
 
 replace into item_template values
  ('80691', '0', '15', '0', 'Basic Guide on Necromancy', '101 Ways to Raise a Skeleton.', '8092', '3', '0', '1', '0', '1845', '23', '-1', '-1', '30',
