@@ -211,3 +211,4 @@ nextquestinchain = @nextquestinchain, prevquestid = @prevquest
 where entry = @quest_entry;	
 
 update item_template set name = 'Armored Spectral Tiger' where entry =  80430;
+delete from creature_loot_template where entry = 50056 and item = 50203;
