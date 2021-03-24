@@ -142,8 +142,8 @@ set @description = 'Greetings! Your company is welcome. I am Inunquaq of Moa\'ki
 set @objective = 'Collect 8 bunches of Crawler Meat.';
 set @completetext = 'My hunger has finally been sated, and my belly feels overjoyed!\n\nYou can have these odd objects I found while scavenging for tools as well as my friendship and gratitude. Hopefully in time I can find my way back to my homeland.\n\nThank you so much friend. I have the strength and soon I will have the tools to hunt for myself now as I seek a way home, you need not worry for me anymore, may our paths unite again one day.';
 set @incompletetext = 'Did you get the meat? I feel my strength vane...';
-set @faction_id = 69;
-set @faction_count = 25;
+set @faction_id = 0;
+set @faction_count = 0;
 set @xp_or_money = 1865;
 set @reward_money = 0; 
 set @quest_level = 18;
@@ -212,3 +212,19 @@ where entry = @quest_entry;
 
 update item_template set name = 'Armored Spectral Tiger' where entry =  80430;
 delete from creature_loot_template where entry = 50056 and item = 50203;
+
+update creature_template set display_id1 = 18545 where entry = 81045; 
+update creature_template set display_id1 = 18448 where entry = 81042; 
+update creature_template set display_id1 = 18447 where entry = 81043; 
+
+update item_template display_id = 60954 where entry = 51792;
+
+replace into item_template values
+ ('80691', '0', '15', '0', 'Basic Guide on Necromancy', '101 Ways to Raise a Skeleton.', '8092', '3', '0', '1', '0', '1845', '23', '-1', '-1', '30',
+ '25', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '8853', '0', '0', '0', '900000', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '2', '0', '0', '0', '0', '0', '7', '2', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
