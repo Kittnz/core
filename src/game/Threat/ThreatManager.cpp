@@ -434,26 +434,30 @@ void ThreatManager::sendThreatToVictim(Unit* pVictim, float threat)
 
 		Creature* creature = (Creature*)getOwner();
 
-		if (!creature->IsElite()) {
+		if (!creature->IsElite())
 			return;
-		}
-
-		std::string creatureName = iOwner->GetName();
-		std::string pThreat = std::to_string((int)getThreat(pVictim));
-
-		WorldPacket data;
 		
-		std::string msg = "TWT:" + creatureName + ":" + std::to_string(iOwner->GetGUIDLow()) +
-			":" + pThreat;
+		if (Player* player = pVictim->GetMap()->GetPlayer(pVictim->GetGUID())) {
 
+            if (!player->GetGroup())
+				return;
 
-		Player* player = pVictim->GetMap()->GetPlayer(pVictim->GetGUID());
+			bool inParty = player->GetGroup() && !player->GetGroup()->isRaidGroup();
 
-		ChatHandler::BuildChatPacket(data, CHAT_MSG_RAID,
-			msg.c_str(), Language(LANG_ADDON), player->GetChatTag(),
-			player->GetObjectGuid(), player->GetName());
+			std::string creatureName = iOwner->GetName();
+			std::string pThreat = std::to_string((int)getThreat(pVictim));
 
-		player->GetSession()->SendPacket(&data);
+			WorldPacket data;
+
+			std::string msg = "TWT:" + creatureName + ":" + std::to_string(iOwner->GetGUIDLow()) +
+				":" + pThreat;
+
+			ChatHandler::BuildChatPacket(data, inParty ? CHAT_MSG_PARTY : CHAT_MSG_RAID,
+				msg.c_str(), Language(LANG_ADDON), player->GetChatTag(),
+				player->GetObjectGuid(), player->GetName());
+
+			player->GetSession()->SendPacket(&data);
+		}
 	}
 }
 
