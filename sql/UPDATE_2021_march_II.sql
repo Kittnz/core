@@ -230,3 +230,5 @@ replace into item_template values
  '0', '1', NULL);
  
  delete from item_template where name like '%dummy item%';
+
+update creature set spawntimesecsmin = 9000, spawntimesecsmax = 9000 where id = 14268;
