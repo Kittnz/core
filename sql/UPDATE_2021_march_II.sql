@@ -255,7 +255,7 @@ set @incompletetext = 'Welcome to Quel\'Danil, how may I be of assistance?';
 set @faction_id = 269;
 set @faction_count = 250;
 set @xp_or_money = 2100;
-set @reward_money = 100; 
+set @reward_money = 1000; 
 set @quest_level = 41;
 set @min_level = 40;
 set @questgiver_id = 81043;
@@ -320,3 +320,80 @@ nextquestid = @nextquest, RewOrReqMoney = @reward_money,
 nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
 srcitemid = 80691, srcitemcount = 1
 where entry = @quest_entry;	
+
+set @quest_entry = 80393;
+set @quest_zone = 47;
+set @title = 'Errand for Quel\'Danil';
+set @description = 'I hope it is not too much to ask for, but you look like the strong type.\n\nThe people of Quel\'Danil are my family and they\'ve been at odds with the terrible Witherbark Trolls for a long time! I am asking you to reduce their numbers, I don\'t want to see any more suffering, we have all lost so much already.\n\nShandra\'lor hosts sadistic trolls and their pet spiders, I would like you to focus on those.\n\nOnce the job is done please report to my adoptive mother Voldana. She is deeper inside the lodge!';
+set @objective = 'Kill 10 Witherbark Sadist and 8 Witherbark Broodguards in Shadra\'alor.';
+set @completetext = 'You have my deepest gratitude, $c, and of course I\'ll make sure to thank Loania too.\n\nYou must be curious why a human among us. If you are interested, then I shall tell you...';
+set @incompletetext = 'Yes, $c? What brings you here?';
+set @faction_id = 269;
+set @faction_count = 500;
+set @xp_or_money = 2900;
+set @reward_money = 800; 
+set @quest_level = 41;
+set @min_level = 40;
+set @questgiver_id = 81042;
+set @quest_finisher = 81044;
+set @nextquest = 0;
+set @nextquestinchain = 0;
+set @prevquest = 80392;
+set @RewChoiceItemId1 = 51766; 
+set @RewChoiceItemId2 = 51767; 
+set @RewChoiceItemId3 = 51768;
+set @RewChoiceItemId4 = 0; 
+set @RewChoiceItemCount1 = 1;
+set @RewChoiceItemCount2 = 1;
+set @RewChoiceItemCount3 = 1;
+set @RewChoiceItemCount4 = 0;
+set @reward_item_1 = 0;
+set @reward_item_2 = 0; 
+set @reward_item_3 = 0;
+set @reward_item_4 = 0;
+set @reward_item_1_count = 0;
+set @reward_item_2_count = 0;
+set @reward_item_3_count = 0;
+set @reward_item_4_count = 0;
+set @creature_to_kill_1 = 2653;
+set @creature_to_kill_2 = 2686; 
+set @creature_to_kill_3 = 0;
+set @creature_to_kill_4 = 0;
+set @creature_to_kill_1_count = 10;
+set @creature_to_kill_2_count = 8;
+set @creature_to_kill_3_count = 0;
+set @creature_to_kill_4_count = 0;
+set @required_item_1 = 0; 
+set @required_item_2 = 0;
+set @required_item_3 = 0;
+set @required_item_4 = 0;
+set @required_item_1_count = 0;
+set @required_item_2_count = 0;
+set @required_item_3_count = 0;
+set @required_item_4_count = 0;
+replace into quest_template values 
+(@quest_entry, '0', '2', @quest_zone, @min_level,  '0', @quest_level, '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @title, @description, @objective, @completetext, @incompletetext, '', '', '', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @faction_id, '0', '0', '0', '0', @faction_count, '0', '0', '0', '0', '0', @xp_or_money, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', 0, 0);
+replace into creature_questrelation (id, quest, patch_min, patch_max) values (@questgiver_id, @quest_entry,'0','10'); 
+replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (@quest_finisher, @quest_entry,'0','10');
+update quest_template set 
+rewitemid1 = @reward_item_1, rewitemcount1 = @reward_item_1_count,
+rewitemid2 = @reward_item_2, rewitemcount2 = @reward_item_2_count,
+rewitemid3 = @reward_item_3, rewitemcount3 = @reward_item_3_count,
+rewitemid4 = @reward_item_4, rewitemcount4 = @reward_item_4_count,
+RewChoiceItemId1 = @RewChoiceItemId1, RewChoiceItemCount1 = @RewChoiceItemCount1,
+RewChoiceItemId2 = @RewChoiceItemId2, RewChoiceItemCount2 = @RewChoiceItemCount2,
+RewChoiceItemId3 = @RewChoiceItemId3, RewChoiceItemCount3 = @RewChoiceItemCount3,
+RewChoiceItemId4 = @RewChoiceItemId4, RewChoiceItemCount4 = @RewChoiceItemCount4,
+ReqCreatureOrGOId1 = @creature_to_kill_1, ReqCreatureOrGOCount1 = @creature_to_kill_1_count,
+ReqCreatureOrGOId2 = @creature_to_kill_2, ReqCreatureOrGOCount2 = @creature_to_kill_2_count,
+ReqCreatureOrGOId3 = @creature_to_kill_3, ReqCreatureOrGOCount3 = @creature_to_kill_3_count,
+ReqCreatureOrGOId4 = @creature_to_kill_4, ReqCreatureOrGOCount4 = @creature_to_kill_4_count,
+reqitemid1 = @required_item_1, reqitemcount1 = @required_item_1_count,
+reqitemid2 = @required_item_2, reqitemcount2 = @required_item_2_count,
+reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
+reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
+nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
+nextquestinchain = @nextquestinchain, prevquestid = @prevquest
+where entry = @quest_entry;	
+
+update creature_template set script_name = 'npc_voldana', npc_flags = 2 where entry = 81044;
