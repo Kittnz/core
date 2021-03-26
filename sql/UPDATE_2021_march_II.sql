@@ -232,3 +232,91 @@ replace into item_template values
  delete from item_template where name like '%dummy item%';
 
 update creature set spawntimesecsmin = 9000, spawntimesecsmax = 9000 where id = 14268;
+
+replace into item_template values
+ ('80691', '0', '15', '0', 'Lieren\'s Package', '', '7918', '1', '0', '1', '0', '0', '0', '-1', '-1', '1',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '4', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+ 
+update creature_template set npc_flags = 2 where entry in (81042, 81043);
+ 
+set @quest_entry = 80392;
+set @quest_zone = 47;
+set @title = 'Package to Quel\'Danil';
+set @description = 'Excuse me, may I have your attention for a second?\n\nMy name is Lieren and you look like a seasoned traveler. I have a task for you if you do not mind helping me, I am quite busy with my own, I need a package taken to Quel\'Danil Northwest of here.\n\nJust look for an Elf lodge there and take it to my sister.  My sister has similar features to mine, but she is all of elvish ancestry.\n\nI\'ve attached your payment to the package, now what do you say pipsqueak , will you help me out?';
+set @objective = 'Take Lieren\'s Package to Quel\'Danil and delier it to Loania.';
+set @completetext = 'A package for me? From my sister? thank you so much. Here is your payment as promised.\n\nActually there is one more thing I would like you to help me out with...';
+set @incompletetext = 'Welcome to Quel\'Danil, how may I be of assistance?';
+set @faction_id = 269;
+set @faction_count = 250;
+set @xp_or_money = 2100;
+set @reward_money = 100; 
+set @quest_level = 41;
+set @min_level = 40;
+set @questgiver_id = 81043;
+set @quest_finisher = 81042;
+set @nextquest = 0;
+set @nextquestinchain = 0;
+set @prevquest = 0;
+set @RewChoiceItemId1 = 0; 
+set @RewChoiceItemId2 = 0; 
+set @RewChoiceItemId3 = 0;
+set @RewChoiceItemId4 = 0; 
+set @RewChoiceItemCount1 = 0;
+set @RewChoiceItemCount2 = 0;
+set @RewChoiceItemCount3 = 0;
+set @RewChoiceItemCount4 = 0;
+set @reward_item_1 = 0;
+set @reward_item_2 = 0; 
+set @reward_item_3 = 0;
+set @reward_item_4 = 0;
+set @reward_item_1_count = 0;
+set @reward_item_2_count = 0;
+set @reward_item_3_count = 0;
+set @reward_item_4_count = 0;
+set @creature_to_kill_1 = 0;
+set @creature_to_kill_2 = 0; 
+set @creature_to_kill_3 = 0;
+set @creature_to_kill_4 = 0;
+set @creature_to_kill_1_count = 0;
+set @creature_to_kill_2_count = 0;
+set @creature_to_kill_3_count = 0;
+set @creature_to_kill_4_count = 0;
+set @required_item_1 = 80691; 
+set @required_item_2 = 0;
+set @required_item_3 = 0;
+set @required_item_4 = 0;
+set @required_item_1_count = 1;
+set @required_item_2_count = 0;
+set @required_item_3_count = 0;
+set @required_item_4_count = 0;
+replace into quest_template values 
+(@quest_entry, '0', '2', @quest_zone, @min_level,  '0', @quest_level, '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @title, @description, @objective, @completetext, @incompletetext, '', '', '', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @faction_id, '0', '0', '0', '0', @faction_count, '0', '0', '0', '0', '0', @xp_or_money, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', 0, 0);
+replace into creature_questrelation (id, quest, patch_min, patch_max) values (@questgiver_id, @quest_entry,'0','10'); 
+replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (@quest_finisher, @quest_entry,'0','10');
+update quest_template set 
+rewitemid1 = @reward_item_1, rewitemcount1 = @reward_item_1_count,
+rewitemid2 = @reward_item_2, rewitemcount2 = @reward_item_2_count,
+rewitemid3 = @reward_item_3, rewitemcount3 = @reward_item_3_count,
+rewitemid4 = @reward_item_4, rewitemcount4 = @reward_item_4_count,
+RewChoiceItemId1 = @RewChoiceItemId1, RewChoiceItemCount1 = @RewChoiceItemCount1,
+RewChoiceItemId2 = @RewChoiceItemId2, RewChoiceItemCount2 = @RewChoiceItemCount2,
+RewChoiceItemId3 = @RewChoiceItemId3, RewChoiceItemCount3 = @RewChoiceItemCount3,
+RewChoiceItemId4 = @RewChoiceItemId4, RewChoiceItemCount4 = @RewChoiceItemCount4,
+ReqCreatureOrGOId1 = @creature_to_kill_1, ReqCreatureOrGOCount1 = @creature_to_kill_1_count,
+ReqCreatureOrGOId2 = @creature_to_kill_2, ReqCreatureOrGOCount2 = @creature_to_kill_2_count,
+ReqCreatureOrGOId3 = @creature_to_kill_3, ReqCreatureOrGOCount3 = @creature_to_kill_3_count,
+ReqCreatureOrGOId4 = @creature_to_kill_4, ReqCreatureOrGOCount4 = @creature_to_kill_4_count,
+reqitemid1 = @required_item_1, reqitemcount1 = @required_item_1_count,
+reqitemid2 = @required_item_2, reqitemcount2 = @required_item_2_count,
+reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
+reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
+nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
+nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
+srcitemid = 80691, srcitemcount = 1
+where entry = @quest_entry;	
