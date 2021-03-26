@@ -1682,6 +1682,86 @@ bool GossipHello_npc_vanira_unicorn_vendor(Player* pPlayer, Creature* pCreature)
     return true;
 }
 
+bool QuestComplete_npc_voldana(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver)
+        return false;
+
+    if (!pPlayer)
+        return false;
+
+    if (pQuest->GetQuestId() == 80393)
+    {
+
+        DoAfterTime(pPlayer, 3 * IN_MILLISECONDS,
+            [CreatureGuid = pQuestGiver->GetObjectGuid(), player = pPlayer]()
+        {
+            Map* map = sMapMgr.FindMap(0);
+            Creature* creature = map->GetCreature(CreatureGuid);
+
+            if (!creature)
+                return;
+
+            creature->HandleEmote(EMOTE_ONESHOT_TALK);
+            creature->MonsterSayToPlayer("Loania and her sister Lieren are the daughters of a Human paladin named Dougan. I have known Dougan since the Second war when we fought the Horde together.", player);
+        });
+
+        DoAfterTime(pPlayer, 9 * IN_MILLISECONDS,
+            [CreatureGuid = pQuestGiver->GetObjectGuid(), player = pPlayer]()
+        {
+            Map* map = sMapMgr.FindMap(0);
+            Creature* creature = map->GetCreature(CreatureGuid);
+
+            if (!creature)
+                return;
+
+            creature->HandleEmote(EMOTE_ONESHOT_TALK);
+            creature->MonsterSayToPlayer("During the Second war, Dougan, myself, and a dwarf of the Wildhammer clan known as Kardan were close companions. After the war, Dougan and his wife Adena settled down in Grand Hamlet. ", player);
+        });
+
+        DoAfterTime(pPlayer, 15 * IN_MILLISECONDS,
+            [CreatureGuid = pQuestGiver->GetObjectGuid(), player = pPlayer]()
+        {
+            Map* map = sMapMgr.FindMap(0);
+            Creature* creature = map->GetCreature(CreatureGuid);
+
+            if (!creature)
+                return;
+
+            creature->HandleEmote(EMOTE_ONESHOT_TALK);
+            creature->MonsterSayToPlayer("Grand Hamlet later fell under a curse and became known as Darkshire, but I digress. One day, Dougan heard reports of villagers disappearing in the nearby cursed tower known as Karazhan. He summoned Kardan and I, and together we entered the tower to attempt a rescue.", player);
+        });
+
+        DoAfterTime(pPlayer, 23 * IN_MILLISECONDS,
+            [CreatureGuid = pQuestGiver->GetObjectGuid(), player = pPlayer]()
+        {
+            Map* map = sMapMgr.FindMap(0);
+            Creature* creature = map->GetCreature(CreatureGuid);
+
+            if (!creature)
+                return;
+
+            creature->HandleEmote(EMOTE_ONESHOT_CRY);
+            creature->MonsterSayToPlayer("It didn't go well, Karazhan was far more treacherous than we could have anticipated... Dougan didn't make it, and his wife subsequently lost the will to live. Kardan and I each adopted one of his infant twin daughters and raised them as our own.", player);
+        });
+
+        DoAfterTime(pPlayer, 30 * IN_MILLISECONDS,
+            [CreatureGuid = pQuestGiver->GetObjectGuid(), player = pPlayer]()
+        {
+            Map* map = sMapMgr.FindMap(0);
+            Creature* creature = map->GetCreature(CreatureGuid);
+
+            if (!creature)
+                return;
+
+            creature->HandleEmote(EMOTE_ONESHOT_TALK);
+            creature->MonsterSayToPlayer("I believe the girls have a destiny before them, perhaps you will play a part in it too. For now, take this as your reward with my blessing.", player);
+        });
+
+    }
+    return false;
+}
+
 void AddSC_episode_1()
 {
     Script *newscript;
@@ -1816,6 +1896,11 @@ void AddSC_episode_1()
     newscript = new Script;
     newscript->Name = "npc_garthok";
     newscript->pQuestRewardedNPC = &QuestComplete_npc_garthok;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_voldana";
+    newscript->pQuestRewardedNPC = &QuestComplete_npc_voldana;
     newscript->RegisterSelf();
 
     newscript = new Script;
