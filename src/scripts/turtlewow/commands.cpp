@@ -104,7 +104,7 @@ bool ChatHandler::HandleFlyCommand(char* args)
         target->UpdateSpeed(MOVE_SWIM, true, 1.0F);
         target->UpdateSpeed(MOVE_RUN,  true, 1.0F);
         target->UpdateSpeed(MOVE_WALK, true, 1.0F);
-        target->DeMorph();
+    //   target->DeMorph();
 
         target->m_movementInfo.UpdateTime(WorldTimer::getMSTime());
         WorldPacket hover(SMSG_MOVE_SET_HOVER, 31);
