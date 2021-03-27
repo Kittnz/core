@@ -397,3 +397,5 @@ nextquestinchain = @nextquestinchain, prevquestid = @prevquest
 where entry = @quest_entry;	
 
 update creature_template set script_name = 'npc_voldana', npc_flags = 2 where entry = 81044;
+
+update item_template set display_id = 37409 where entry = 51766;
