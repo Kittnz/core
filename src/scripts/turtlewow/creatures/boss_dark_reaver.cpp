@@ -141,9 +141,12 @@ struct boss_dark_reaverAI : public ScriptedAI
 
     void ScaleStats(uint8 count)
     {
-        // Increase max health first, then apply buff to health.
-        me->SetMaxHealth(me->GetMaxHealth() + ((maxHealth / NORMAL_GROUP_SIZE) * count));
-        uint32 adjustedHealth = me->GetHealth() + (maxHealth / NORMAL_GROUP_SIZE) * count;
+        // Increase max health first, then apply buff to health. Don't scale HP past 15 players.
+        uint8 hpCountOverride = count;
+        if (hpCountOverride > 15)
+            hpCountOverride = 15;
+        me->SetMaxHealth(me->GetMaxHealth() + ((maxHealth / NORMAL_GROUP_SIZE) * hpCountOverride));
+        uint32 adjustedHealth = me->GetHealth() + (maxHealth / NORMAL_GROUP_SIZE) * hpCountOverride;
         me->SetHealth(adjustedHealth);
 
         me->SetFloatValue(UNIT_FIELD_MINDAMAGE, (minDmg / NORMAL_GROUP_SIZE) * (NORMAL_GROUP_SIZE + count));
