@@ -670,30 +670,31 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
     }
 
 	// TWT Threat Guid Request handling
-	if (lang == LANG_ADDON && strstr(msg.c_str(), "TWTGUID") && 
-		(type == CHAT_MSG_PARTY || type == CHAT_MSG_RAID)) {
+	if (lang == LANG_ADDON && (type == CHAT_MSG_PARTY || type == CHAT_MSG_RAID)) {
 
-		//sLog.outInfo(msg.c_str());
-		//sLog.outInfo("have TWTGUID trigger, should send ");
-
-		Creature* target = _player->GetSelectedCreature();
-
-		if (!target) {
-			//sLog.outInfo("not target");
+		if (strstr(msg.c_str(), "TWT_HANDSHAKE")) {
+			_player->markWithThreatAddon();
 		}
-		else {
-			std::string guidMsg = "TWTGUID:" + std::to_string(target->GetGUIDLow());
 
-			//sLog.outInfo(" have target, should send message: %s", guidMsg);
+		if (strstr(msg.c_str(), "TWT_GUID")) {
 
-			WorldPacket guidData;
+			Creature* target = _player->GetSelectedCreature();
 
-			ChatHandler::BuildChatPacket(guidData, ChatMsg(type),
-				guidMsg.c_str(), Language(LANG_ADDON), _player->GetChatTag(),
-				_player->GetObjectGuid(), _player->GetName());
+			if (!target) {
+				return;
+			}
+			else {
+				std::string guidMsg = "TWTGUID:" + std::to_string(target->GetGUIDLow());
 
-			_player->GetSession()->SendPacket(&guidData);
+					WorldPacket guidData;
 
+					ChatHandler::BuildChatPacket(guidData, ChatMsg(type),
+						guidMsg.c_str(), Language(LANG_ADDON), _player->GetChatTag(),
+						_player->GetObjectGuid(), _player->GetName());
+
+				_player->GetSession()->SendPacket(&guidData);
+
+			}
 		}
 
 	}

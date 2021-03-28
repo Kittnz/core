@@ -439,6 +439,9 @@ void ThreatManager::sendThreatToVictim(Unit* pVictim, float threat)
 		
 		if (Player* player = pVictim->GetMap()->GetPlayer(pVictim->GetGUID())) {
 
+			if (!player->hasThreatAddon())
+				return;
+
             if (!player->GetGroup())
 				return;
 
