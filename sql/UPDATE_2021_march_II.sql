@@ -399,3 +399,6 @@ where entry = @quest_entry;
 update creature_template set script_name = 'npc_voldana', npc_flags = 2 where entry = 81044;
 
 update item_template set display_id = 37409 where entry = 51766;
+
+REPLACE INTO `item_template` VALUES (80692, 10, 15, 0, 'Armored Azure Drake', 'But the most important rule, the rule you can never forget, no matter how much he cries, no matter how much he begs, never feed him after midnight.', 31434, 4, 64, 1, 0, 0, 0, -1, -1, 60, 60, 762, 150, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 46216, 0, 0, 0, 0, 330, 3000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+update item_template set bonding = 6 where entry = 80692;
