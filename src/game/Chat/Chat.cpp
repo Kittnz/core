@@ -608,6 +608,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "cinematic",      SEC_ADMINISTRATOR,  false, &ChatHandler::HandleTurtleCinematic,                 "", nullptr },
         { "scale",          SEC_GAMEMASTER,     false,  &ChatHandler::HandleScaleCommand,                  "", nullptr},
         { "dbghard",        SEC_ADMINISTRATOR,     false,  &ChatHandler::HandleFastDebugCommand,                  "", nullptr },
+        { "fool",       SEC_GAMEMASTER,     false,  &ChatHandler::HandleFoolCommand,                  "", nullptr },
         { nullptr,          0,                  false, nullptr,                                        "", nullptr }
     };
 
