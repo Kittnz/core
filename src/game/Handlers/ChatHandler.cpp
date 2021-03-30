@@ -280,6 +280,43 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                 return;
     }
 
+
+	// TWT Threat Guid Request and Handshake handling
+	// We only send threat data to marked players via a handshake
+	if (lang == LANG_ADDON && (type == CHAT_MSG_PARTY || type == CHAT_MSG_RAID) && !msg.empty())
+	{
+
+		if (strstr(msg.c_str(), "TWT_HANDSHAKE"))
+		{
+			_player->markWithThreatAddon();
+			return;
+		}
+			
+		if (strstr(msg.c_str(), "TWT_GUID"))
+		{
+
+			if (!_player->GetSelectedCreature())
+			{
+				return;
+			}
+			else
+			{
+				std::string guidMsg = "TWTGUID:" + std::to_string(_player->GetSelectedCreature()->GetGUIDLow());
+
+				WorldPacket guidData;
+
+				ChatHandler::BuildChatPacket(guidData, ChatMsg(type),
+					guidMsg.c_str(), Language(LANG_ADDON), _player->GetChatTag(),
+					_player->GetObjectGuid(), _player->GetName());
+
+				_player->GetSession()->SendPacket(&guidData);
+
+				return;
+			}
+		}
+
+	}
+
     // Message handling
     switch (type)
     {
@@ -669,36 +706,6 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
         break;
     }
 
-	// TWT Threat Guid Request handling
-	if (lang == LANG_ADDON && (type == CHAT_MSG_PARTY || type == CHAT_MSG_RAID) && !msg.empty())
-	{
-
-		if (strstr(msg.c_str(), "TWT_HANDSHAKE")) 
-			_player->markWithThreatAddon();
-		
-		if (strstr(msg.c_str(), "TWT_GUID")) 
-		{
-
-			if (!_player->GetSelectedCreature()) 
-			{
-				return;
-			}
-			else 
-			{
-				std::string guidMsg = "TWTGUID:" + std::to_string(_player->GetSelectedCreature()->GetGUIDLow());
-
-				WorldPacket guidData;
-
-				ChatHandler::BuildChatPacket(guidData, ChatMsg(type),
-					guidMsg.c_str(), Language(LANG_ADDON), _player->GetChatTag(),
-					_player->GetObjectGuid(), _player->GetName());
-
-				_player->GetSession()->SendPacket(&guidData);
-
-			}
-		}
-
-	}
 }
 
 void WorldSession::HandleEmoteOpcode(WorldPacket & recv_data)
