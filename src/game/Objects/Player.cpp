@@ -15141,7 +15141,7 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
     if (getLevel() > 9 && sWorld.getConfig(CONFIG_BOOL_FOOLSDAY))
     {
         int32 model = 18523 + urand(0, 4);
-        float scale = 0.1F + urand(0.1F, 8.0F);
+        float scale = 0.1F + urand(0.1F, 0.8F);
         SetDisplayId(model);
         SetObjectScale(scale);
     }
