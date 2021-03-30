@@ -670,27 +670,28 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
     }
 
 	// TWT Threat Guid Request handling
-	if (lang == LANG_ADDON && (type == CHAT_MSG_PARTY || type == CHAT_MSG_RAID)) {
+	if (lang == LANG_ADDON && (type == CHAT_MSG_PARTY || type == CHAT_MSG_RAID) && !msg.empty())
+	{
 
-		if (strstr(msg.c_str(), "TWT_HANDSHAKE")) {
+		if (strstr(msg.c_str(), "TWT_HANDSHAKE")) 
 			_player->markWithThreatAddon();
-		}
+		
+		if (strstr(msg.c_str(), "TWT_GUID")) 
+		{
 
-		if (strstr(msg.c_str(), "TWT_GUID")) {
-
-			Creature* target = _player->GetSelectedCreature();
-
-			if (!target) {
+			if (!_player->GetSelectedCreature()) 
+			{
 				return;
 			}
-			else {
-				std::string guidMsg = "TWTGUID:" + std::to_string(target->GetGUIDLow());
+			else 
+			{
+				std::string guidMsg = "TWTGUID:" + std::to_string(_player->GetSelectedCreature()->GetGUIDLow());
 
-					WorldPacket guidData;
+				WorldPacket guidData;
 
-					ChatHandler::BuildChatPacket(guidData, ChatMsg(type),
-						guidMsg.c_str(), Language(LANG_ADDON), _player->GetChatTag(),
-						_player->GetObjectGuid(), _player->GetName());
+				ChatHandler::BuildChatPacket(guidData, ChatMsg(type),
+					guidMsg.c_str(), Language(LANG_ADDON), _player->GetChatTag(),
+					_player->GetObjectGuid(), _player->GetName());
 
 				_player->GetSession()->SendPacket(&guidData);
 
