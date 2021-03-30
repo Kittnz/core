@@ -449,11 +449,12 @@ void ThreatManager::sendThreatToVictim(Unit* pVictim, float threat)
 
 			std::string creatureName = iOwner->GetName();
 			std::string pThreat = std::to_string((int)getThreat(pVictim));
+			std::string pDistance = std::to_string((int)player->GetDistance2d(iOwner->GetPositionX(), iOwner->GetPositionY()));
 
 			WorldPacket data;
 
 			std::string msg = "TWT:" + creatureName + ":" + std::to_string(iOwner->GetGUIDLow()) +
-				":" + pThreat;
+				":" + pThreat + ":" + pDistance;
 
 			ChatHandler::BuildChatPacket(data, inParty ? CHAT_MSG_PARTY : CHAT_MSG_RAID,
 				msg.c_str(), Language(LANG_ADDON), player->GetChatTag(),
