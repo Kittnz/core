@@ -430,39 +430,29 @@ void ThreatManager::addThreat(Unit* pVictim, float pThreat, bool crit, SpellScho
 
 void ThreatManager::sendThreatToVictim(Unit* pVictim, float threat)
 {
-	if (threat > 0.0f && pVictim->GetTypeId() == TYPEID_PLAYER) {
+	if (!pVictim || pVictim == getOwner() || !pVictim->isAlive() || !pVictim->IsInMap(getOwner()) || 
+		threat <= 0.0f || pVictim->GetTypeId() != TYPEID_PLAYER || !iOwner->ToCreature()->IsElite() || 
+		!pVictim->ToPlayer()->hasThreatAddon() || !pVictim->ToPlayer()->GetGroup())
+		return;
+	
 
-		Creature* creature = (Creature*)getOwner();
+	bool inParty = pVictim->ToPlayer()->GetGroup() && !pVictim->ToPlayer()->GetGroup()->isRaidGroup();
 
-		if (!creature->IsElite())
-			return;
+	std::string creatureName = iOwner->GetName();
+	std::string pThreat = std::to_string((int)getThreat(pVictim));
+	std::string pDistance = std::to_string((int)pVictim->ToPlayer()->GetDistance2d(iOwner->GetPositionX(), iOwner->GetPositionY()));
+
+	WorldPacket data;
+
+	std::string msg = "TWT:" + creatureName + ":" + std::to_string(iOwner->GetGUIDLow()) +
+		":" + pThreat + ":" + pDistance;
+
+	ChatHandler::BuildChatPacket(data, inParty ? CHAT_MSG_PARTY : CHAT_MSG_RAID,
+		msg.c_str(), Language(LANG_ADDON), pVictim->ToPlayer()->GetChatTag(),
+		pVictim->ToPlayer()->GetObjectGuid(), pVictim->ToPlayer()->GetName());
+
+	pVictim->ToPlayer()->GetSession()->SendPacket(&data);
 		
-		if (Player* player = pVictim->GetMap()->GetPlayer(pVictim->GetGUID())) {
-
-			if (!player->hasThreatAddon())
-				return;
-
-            if (!player->GetGroup())
-				return;
-
-			bool inParty = player->GetGroup() && !player->GetGroup()->isRaidGroup();
-
-			std::string creatureName = iOwner->GetName();
-			std::string pThreat = std::to_string((int)getThreat(pVictim));
-			std::string pDistance = std::to_string((int)player->GetDistance2d(iOwner->GetPositionX(), iOwner->GetPositionY()));
-
-			WorldPacket data;
-
-			std::string msg = "TWT:" + creatureName + ":" + std::to_string(iOwner->GetGUIDLow()) +
-				":" + pThreat + ":" + pDistance;
-
-			ChatHandler::BuildChatPacket(data, inParty ? CHAT_MSG_PARTY : CHAT_MSG_RAID,
-				msg.c_str(), Language(LANG_ADDON), player->GetChatTag(),
-				player->GetObjectGuid(), player->GetName());
-
-			player->GetSession()->SendPacket(&data);
-		}
-	}
 }
 
 
