@@ -656,6 +656,25 @@ bool ItemUseSpell_shop_morph_gnoll(Player* pPlayer, Item* pItem, const SpellCast
     return false;
 }
 
+bool ItemUseSpell_shop_morph_scourge(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+{
+    if (!pPlayer)
+        return false;
+
+    if (pPlayer->GetNativeDisplayId() != pPlayer->GetDisplayId())
+    {
+        pPlayer->DeMorph();
+        return false;
+    }
+
+    int models[3] = { 158, 612, 733 };
+    int modelid = rand() % 3;
+    pPlayer->SetDisplayId(static_cast<uint32>(models[modelid]));
+
+    ChatHandler(pPlayer).SendSysMessage("Do you smell something? *sniff* Oh, it's just the troops! This disguise will work until logout.");
+    return false;
+}
+
 bool ItemUseSpell_item_morph_murloc(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
     if (!pPlayer)
@@ -1860,6 +1879,11 @@ void AddSC_item_scripts()
     newscript = new Script;
     newscript->Name = "item_morph_gnoll";
     newscript->pItemUseSpell = &ItemUseSpell_shop_morph_gnoll;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "item_morph_scourge";
+    newscript->pItemUseSpell = &ItemUseSpell_shop_morph_scourge;
     newscript->RegisterSelf();
 
     newscript = new Script;
