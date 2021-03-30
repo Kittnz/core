@@ -162,6 +162,7 @@ replace into shop_items values
 (1104, 11, 51065, 'Illusion: Shadow', 120),
 (1105, 11, 80648, 'Illusion: Gnoll', 120),
 (1106, 11, 51253, 'Illusion: Furbolg', 120),
-(1107, 11, 81145, 'Illusion: Pandanren', 160);
+(1107, 11, 81145, 'Illusion: Pandanren', 120),
+(1108, 11, 80694, 'Illusion: Scourge', 120);
 
 
