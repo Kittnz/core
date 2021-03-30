@@ -2556,7 +2556,7 @@ class MANGOS_DLL_SPEC Player final: public Unit
         /*********************************************************/
         /***                       OTHER                       ***/
         /*********************************************************/
-    protected:
+		protected:
 
 		// Giperion TURTLE SPECIFIC Begin
 		public:
@@ -2571,6 +2571,14 @@ class MANGOS_DLL_SPEC Player final: public Unit
 			std::list<ObjectGuid> m_exclusiveVisibleObjects;
 
 		// Giperion TURTLE SPECIFIC End
+
+		// Xerron Threat data
+		private:
+			bool pHasThreatAddon = false; // https://github.com/CosminPOP/TWThreat
+		public:
+			void markWithThreatAddon() { pHasThreatAddon = true; }
+			bool hasThreatAddon() { return pHasThreatAddon; }
+		// Xerron Threat data end
 };
 
 void AddItemsSetItem(Player*player,Item* item);

@@ -29,6 +29,8 @@
 #include "UnitEvents.h"
 #include "TargetedMovementGenerator.h"
 
+#include "Chat.h"
+
 //==============================================================
 //================= ThreatCalcHelper ===========================
 //==============================================================
@@ -421,7 +423,38 @@ void ThreatManager::addThreat(Unit* pVictim, float pThreat, bool crit, SpellScho
     float threat = ThreatCalcHelper::CalcThreat(pVictim, iOwner, pThreat, crit, schoolMask, pThreatSpell);
 
     addThreatDirectly(pVictim, threat);
+
+	sendThreatToVictim(pVictim, threat);
+	
 }
+
+void ThreatManager::sendThreatToVictim(Unit* pVictim, float threat)
+{
+	if (!pVictim || pVictim == getOwner() || !pVictim->isAlive() || !pVictim->IsInMap(getOwner()) || 
+		threat <= 0.0f || pVictim->GetTypeId() != TYPEID_PLAYER || !iOwner->ToCreature()->IsElite() || 
+		!pVictim->ToPlayer()->hasThreatAddon() || !pVictim->ToPlayer()->GetGroup())
+		return;
+	
+
+	bool inParty = pVictim->ToPlayer()->GetGroup() && !pVictim->ToPlayer()->GetGroup()->isRaidGroup();
+
+	std::string creatureName = iOwner->GetName();
+	std::string pThreat = std::to_string((int)getThreat(pVictim));
+	std::string pDistance = std::to_string((int)pVictim->ToPlayer()->GetDistance2d(iOwner->GetPositionX(), iOwner->GetPositionY()));
+
+	WorldPacket data;
+
+	std::string msg = "TWT:" + creatureName + ":" + std::to_string(iOwner->GetGUIDLow()) +
+		":" + pThreat + ":" + pDistance;
+
+	ChatHandler::BuildChatPacket(data, inParty ? CHAT_MSG_PARTY : CHAT_MSG_RAID,
+		msg.c_str(), Language(LANG_ADDON), pVictim->ToPlayer()->GetChatTag(),
+		pVictim->ToPlayer()->GetObjectGuid(), pVictim->ToPlayer()->GetName());
+
+	pVictim->ToPlayer()->GetSession()->SendPacket(&data);
+		
+}
+
 
 void ThreatManager::addThreatDirectly(Unit* pVictim, float threat)
 {
