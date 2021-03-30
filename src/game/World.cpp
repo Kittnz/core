@@ -1033,6 +1033,7 @@ void World::LoadConfigSettings(bool reload)
     setConfig(CONFIG_BOOL_EXPANSION_CONTENT, "ExpansionContent", true);
     setConfig(CONFIG_BOOL_BOUNTY, "PvPBountyBoards", false);
     setConfig(CONFIG_BOOL_OPENHOUSE, "OpenHouse", false);
+    setConfig(CONFIG_BOOL_FOOLSDAY, "FoolsDay", false);
 }
 
 class CharactersDatabaseWorkerThread : public ACE_Based::Runnable
