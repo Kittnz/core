@@ -511,3 +511,83 @@ bool ChatHandler::HandleTurtleCinematic(char* args)
 
 	return true;
 }
+
+bool ChatHandler::HandleCopyCommand(char* args)
+{
+    if (!args || !*args)
+    {
+        PSendSysMessage("You must specify the name of the character you want to look like.");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    if (Player* target = m_session->GetPlayer())
+    {
+        if (!target->HasItemCount(80699))
+        {
+            PSendSysMessage("You must purchase [Appearance Change Token] first.");
+            SetSentErrorMessage(true);
+            return false;
+        }
+
+        uint8 curr_race = target->getRace();
+        std::string plName = args;
+        CharacterDatabase.escape_string(plName);
+
+        std::wstring wPlName;
+
+        if (!Utf8toWStr(plName, wPlName))
+            return false;
+
+        wstrToLower(wPlName);
+
+        if (Utf8FitTo(target->GetName(), wPlName))
+        {
+            PSendSysMessage("You must specify a name of a character different than yourself!");
+            SetSentErrorMessage(true);
+            return false;
+        }
+
+        if (target->isInCombat() || target->InBattleGround() || target->HasSpellCooldown(20939) || (target->getDeathState() == CORPSE) || target->IsBeingTeleported())
+        {
+            PSendSysMessage("You can not change your appearance yet.");
+            SetSentErrorMessage(true);
+            return false;
+        }
+
+        auto result = std::unique_ptr<QueryResult>{ CharacterDatabase.PQuery("SELECT race, playerBytes, playerBytes2 & 0xFF, gender FROM characters WHERE name='%s'", plName.c_str()) };
+
+        if (!result)
+        {
+            PSendSysMessage("You must specify the name of the character you want to look like.");
+            SetSentErrorMessage(true);
+            return false;
+        }
+
+        Field* fields = result->Fetch();
+        uint8 race = fields[0].GetUInt8();
+        uint32 bytes = fields[1].GetUInt32();
+        uint32 bytes2 = fields[2].GetUInt32();
+        uint8 gender = fields[3].GetUInt8();
+
+        if (race != curr_race)
+        {
+            PSendSysMessage("It should be a character of the same race.");
+            SetSentErrorMessage(true);
+            return false;
+        }
+        else
+        {
+            bytes2 |= (target->GetUInt32Value(PLAYER_BYTES_2) & 0xFFFFFF00);
+            target->SetUInt32Value(PLAYER_BYTES, bytes);
+            target->SetUInt32Value(PLAYER_BYTES_2, bytes2);
+            target->SetByteValue(UNIT_FIELD_BYTES_0, 2, gender);
+            target->DestroyItemCount(80699, 1, true, false, true);
+            target->SaveInventoryAndGoldToDB();
+            target->SetDisplayId(15435); // Invisible
+            target->m_Events.AddEvent(new DemorphAfterTime(target->GetGUID()), target->m_Events.CalculateTime(250));
+            return true;
+        }
+    }
+    return false;
+}

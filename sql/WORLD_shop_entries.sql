@@ -19,9 +19,8 @@ create table shop_items (
 ) engine=innodb auto_increment=10 default charset=utf8;
 
 replace into shop_categories values
-(1,  'Character: Name & Look'),
+(1,  'Character: Name, Race & Look'),
 (2,  'Character: Additional Skins'),
-(3,  'Character: Race Change'),
 (4,  'Gameplay: Miscellaneous'),
 (5,  'Gameplay: Riding Mounts I'),
 (6,  'Gameplay: Riding Mounts II'),
@@ -32,11 +31,20 @@ replace into shop_categories values
 (11,  'Vanity: Illusions');
 
 replace into shop_items values
--- Character: Name & Appearance
+-- Character: Name, Race & Appearance
 (100, 1, 50000, 'Token: Rename', 160),
-(101, 1, 50611, 'Token: Change Gender', 160),
-(102, 1, 50600, 'Summon: Barber', 160),
-(103, 1, 50601, 'Summon: Surgeon', 160),
+(101, 1, 50611, 'Token: Change Gender', 100),
+(102, 1, 80699, 'Token: Appearance Change', 160),
+(103, 1, 50603, 'Race Change Token: Human', 180),
+(104, 1, 50604, 'Race Change Token: Gnome', 180),
+(105, 1, 50605, 'Race Change Token: Dwarf', 180),
+(106, 1, 50606, 'Race Change Token: Night Elf', 180),
+(107, 1, 50607, 'Race Change Token: Orc', 180),
+(108, 1, 50608, 'Race Change Token: Troll', 180),
+(109, 1, 50609, 'Race Change Token: Tauren', 180),
+(110, 1, 50610, 'Race Change Token: Undead', 180),
+(111, 1, 50612, 'Race Change Token: High Elf', 180),
+(112, 1, 50613, 'Race Change Token: Goblin', 180),
 -- Character: Additional Skins
 (200, 2, 50105, 'Token: Sally Whitemane', 160),
 (201, 2, 50106, 'Token: Scholomance Student', 160),
@@ -53,17 +61,6 @@ replace into shop_items values
 (212, 2, 81208, 'Token: Zombie Troll', 160),
 (213, 2, 81206, 'Token: Dark Ranger', 160),
 (214, 2, 81209, 'Token: Blood Elf', 160),
--- Character: Race & Faction
-(300, 3, 50603, 'Race Change Token: Human', 180),
-(301, 3, 50604, 'Race Change Token: Gnome', 180),
-(302, 3, 50605, 'Race Change Token: Dwarf', 180),
-(303, 3, 50606, 'Race Change Token: Night Elf', 180),
-(304, 3, 50607, 'Race Change Token: Orc', 180),
-(305, 3, 50608, 'Race Change Token: Troll', 180),
-(306, 3, 50609, 'Race Change Token: Tauren', 180),
-(307, 3, 50610, 'Race Change Token: Undead', 180),
-(308, 3, 50612, 'Race Change Token: High Elf', 180),
-(309, 3, 50613, 'Race Change Token: Goblin', 180),
 -- Gameplay: Miscellaneous
 (400, 4, 50003, 'Backpack: 28 slots', 180),
 (401, 4, 50004, 'Backpack: 36 slots', 200),
