@@ -20785,16 +20785,11 @@ uint32 GetPriestSpellForRace(uint8 race)
 {
     switch (race)
     {
-        case RACE_HUMAN:
-            return 19243; // Priere de desespoir
-        case RACE_UNDEAD:
-            return 19280; // Peste devorante
-        case RACE_DWARF:
-            return 6346; // Gardien de peur
-        case RACE_NIGHTELF:
-            return 2651; // Grace d'Elune
-        default:
-            return 0;
+        case RACE_HUMAN:  return 19243;
+        case RACE_UNDEAD: return 19280; 
+        case RACE_DWARF:  return 6346; 
+        case RACE_NIGHTELF: return 2651; 
+        default: return 0;
     }
 }
 
@@ -20802,23 +20797,15 @@ uint32 GetCapitalReputationForRace(uint8 race)
 {
     switch (race)
     {
-        case RACE_HUMAN:
-            return 72; // Hurlevent
-        case RACE_TROLL:
-        case RACE_ORC:
-            return 76; // Orgrimmar
-        case RACE_DWARF:
-        case RACE_GNOME:
-            return 47; // Ironforge
-        case RACE_NIGHTELF:
-            return 69; // Darnassus
-        case RACE_UNDEAD:
-            return 68; // Undercity
-        case RACE_TAUREN:
-            return 81; // Thunder Bluff
-
-        default:
-            return 0;
+        case RACE_HUMAN:                  return 72; // Hurlevent
+        case RACE_TROLL: case RACE_ORC:   return 76; // Orgrimmar
+        case RACE_DWARF: case RACE_GNOME: return 47; // Ironforge
+        case RACE_NIGHTELF:               return 69; // Darnassus
+        case RACE_UNDEAD:                 return 68; // Undercity
+        case RACE_TAUREN:                 return 81; // Thunder Bluff
+        case RACE_HIGH_ELF:               return 269; // Silvermoon Remamnts
+        case RACE_GOBLIN:                 return 1001; // Durotar Labor Union
+        default: return 0;
     }
 }
 

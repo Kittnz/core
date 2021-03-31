@@ -1571,6 +1571,15 @@ bool ItemUseSpell_shop_racechange(Player* pPlayer, Item* pItem, const SpellCastT
         bytes = pPlayer->getGender() == GENDER_MALE ? 132873 : 117768707;
         race = RACE_HIGH_ELF;
         break;
+    case 50613: // Goblin
+        if (pPlayer->getClass() == CLASS_PRIEST || pPlayer->getClass() == CLASS_SHAMAN || pPlayer->getClass() == CLASS_DRUID || pPlayer->getClass() == CLASS_PALADIN)
+        {
+            pPlayer->GetSession()->SendNotification("This race does not support your class.");
+            return false;
+        }
+        bytes = pPlayer->getGender() == GENDER_MALE ? 16843522 : 2;
+        race = RACE_GOBLIN;
+        break;
     }
 
     bytes2 |= (pPlayer->GetUInt32Value(PLAYER_BYTES_2) & 0xFFFFFF00);
