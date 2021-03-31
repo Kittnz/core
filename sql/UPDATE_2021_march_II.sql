@@ -408,3 +408,7 @@ update item_template set sell_price = 0, buy_price = 0 where entry = 81088;
 
 REPLACE INTO `item_template` VALUES (80694, 0, 12, 0, 'Illusion: Scourge', 'Do you smell something? *sniff* Oh, it\'s just the troops.', 37241, 1, 0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1300, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 31726, 0, 0, 0, 10, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 'item_morph_scourge');
 
+REPLACE INTO `creature_template` VALUES (81060, 1, 10374, 0, 0, 0, 'Prospector Brotalus', 'Explorer\'s League', 0, 45, 45, 1500, 1500, 2000, 2000, 4500, 694, 2, 1, 1.14286, 1, 16, 5, 30, 0, 1, 350, 275, 0, 300, 1, 2000, 0, 1, 4608, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 200, 300, '', 0, 3, 0, 0, 1, 23171, 0, 0, 0, 0, 524296, '');
+
+replace into `creature_equip_template` (`entry`, `equipentry1`, `equipentry2`) VALUES (80461, 9608, 2714);
+update creature_template set equipment_id = 80461, movement_type = 1 where entry = 81060;
