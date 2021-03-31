@@ -20677,23 +20677,6 @@ bool Player::ChangeRace(uint8 newRace, uint8 newGender, uint32 playerbyte1, uint
     uint8 oldRace = getRace();
     bool bChangeTeam = (TeamForRace(oldRace) != TeamForRace(newRace));
 
-	//Giperion Elysium: early check for guild leader
-	uint32 GuildId = GetGuildId();
-	if (GuildId != 0)
-	{
-		if (Guild* guild = sGuildMgr.GetGuildById(GetGuildId()))
-		{
-			if (guild->GetLeaderGuid() == GetObjectGuid())
-			{
-				CHANGERACE_ERR("Impossible due target is a guild leader.");
-				return false;
-			}
-		}
-	}
-
-	//Leave current group
-	RemoveFromGroup();
-
 	//Key - SkillId, Value - Skill value
 	std::unordered_map<uint32, uint16> SkillValues;
 	for (const auto& SkillElemPair : mSkillStatus)
@@ -20708,7 +20691,6 @@ bool Player::ChangeRace(uint8 newRace, uint8 newGender, uint32 playerbyte1, uint
 		CHANGERACE_ERR("Impossible due to spells.");
         return false;
     }
-
 
     SetByteValue(UNIT_FIELD_BYTES_0, 0, newRace);
 
@@ -20739,7 +20721,11 @@ bool Player::ChangeRace(uint8 newRace, uint8 newGender, uint32 playerbyte1, uint
 
     LearnDefaultSpells();
 
-	//Restore skill values
+    if (GetTeam() == ALLIANCE)
+        GetTaxi().LoadTaxiMask("3456411898 2148078928 49991 0 0 0 0 0 ");
+    else
+        GetTaxi().LoadTaxiMask("561714688 282102432 52408 0 0 0 0 0 ");
+
 	for (const auto& SkillElemPair : mSkillStatus)
 	{
 		uint32 SkillId = SkillElemPair.first;
@@ -20772,26 +20758,12 @@ bool Player::ChangeRace(uint8 newRace, uint8 newGender, uint32 playerbyte1, uint
         return false;
     }
 
-	//Giperion Elysium: Drop current guild
-	if (GuildId != 0)
-	{
-		if (Guild* guild = sGuildMgr.GetGuildById(GetGuildId()))
-		{
-			guild->DelMember(GetObjectGuid());
-		}
-	}
-
-    /*
-    On sauvegarde le changement de faction, et apres faut deco-reco.
-    */
     m_DbSaveDisabled = false;
-    // Suppression des montures mises
     RemoveSpellsCausingAura(SPELL_AURA_MOUNTED);
     SaveToDB();
     m_DbSaveDisabled = true;
     if (bChangeTeam)
     {
-        // Changement de HomeBind / Teleportation capitale
         if (TeamForRace(newRace) == ALLIANCE)
         {
             SavePositionInDB(GetObjectGuid(), 0, -8867.68f, 673.373f, 97.9034f, 0.0f, 1519);
@@ -20803,7 +20775,6 @@ bool Player::ChangeRace(uint8 newRace, uint8 newGender, uint32 playerbyte1, uint
             SetHomebindToLocation(WorldLocation(1, 1633.33f, -4439.11f, 15.7588f, 0.0f), 1637);
         }
     }
-    // Sauvegarde dans ObjectMgr aussi (sinon mauvaise faction prise en compte dans la distrib PvP)
     if (PlayerCacheData* data = sObjectMgr.GetPlayerDataByGUID(GetGUIDLow()))
         data->uiRace = newRace;
 
