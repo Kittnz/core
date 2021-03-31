@@ -2658,6 +2658,12 @@ void Aura::HandleAuraTransform(bool apply, bool Real)
                                 mod_x = DEFAULT_TAUREN_FEMALE_SCALE;
                             }
                             break;
+                        case RACE_HIGH_ELF:
+                            model_id = gender == GENDER_MALE ? 7242 : 18552;
+                            break;
+                        case RACE_GOBLIN:
+                            model_id = gender == GENDER_MALE ? 18226 : 18225;
+                            break;
                         default:
                             break;
                         }
