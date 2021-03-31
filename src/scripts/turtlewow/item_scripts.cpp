@@ -1601,7 +1601,7 @@ bool ItemUseSpell_shop_changegender(Player* pPlayer, Item* pItem, const SpellCas
 {
     if (!pPlayer) return false;
 
-    uint8 player_gender = (pPlayer->getGender() == GENDER_MALE) ? GENDER_FEMALE : GENDER_MALE;
+    uint8 player_gender = (pPlayer->getGender() == GENDER_MALE) ? 1 : 0;
     pPlayer->SetByteValue(UNIT_FIELD_BYTES_0, 2, player_gender);
     pPlayer->InitPlayerDisplayIds();
     pPlayer->SaveToDB();
