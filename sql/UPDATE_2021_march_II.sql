@@ -411,4 +411,8 @@ REPLACE INTO `item_template` VALUES (80694, 0, 12, 0, 'Illusion: Scourge', 'Do y
 REPLACE INTO `creature_template` VALUES (81060, 1, 10374, 0, 0, 0, 'Prospector Brotalus', 'Explorer\'s League', 0, 45, 45, 1500, 1500, 2000, 2000, 4500, 694, 2, 1, 1.14286, 1, 16, 5, 30, 0, 1, 350, 275, 0, 300, 1, 2000, 0, 1, 4608, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 200, 300, '', 0, 3, 0, 0, 1, 23171, 0, 0, 0, 0, 524296, '');
 
 replace into `creature_equip_template` (`entry`, `equipentry1`, `equipentry2`) VALUES (80461, 9608, 2714);
-update creature_template set equipment_id = 80461, movement_type = 1 where entry = 81060;
+update creature_template set equipment_id = 80461, movement_type = 1, npc_flags = 2, faction = 35 where entry = 81060;
+
+REPLACE INTO `creature_template` VALUES (81061, 1, 10575, 0, 0, 0, 'Noli', 'Explorer\'s League', 0, 45, 45, 1500, 1500, 2000, 2000, 4500, 694, 2, 1, 1.14286, 1, 16, 5, 30, 0, 1, 350, 275, 0, 300, 1, 2000, 0, 1, 4608, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 200, 300, '', 0, 3, 0, 0, 1, 23171, 0, 0, 0, 0, 524296, '');
+
+update creature_template set equipment_id = 11026, movement_type = 0, npc_flags = 0, faction = 35 where entry = 81061;
