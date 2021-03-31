@@ -35,8 +35,8 @@ replace into shop_items values
 -- Character: Name & Appearance
 (100, 1, 50000, 'Token: Rename', 160),
 (101, 1, 50611, 'Token: Change Gender', 160),
-(102, 1, 50600, 'Summon: Barber', 250),
-(103, 1, 50601, 'Summon: Surgeon', 250),
+(102, 1, 50600, 'Summon: Barber', 160),
+(103, 1, 50601, 'Summon: Surgeon', 160),
 -- Character: Additional Skins
 (200, 2, 50105, 'Token: Sally Whitemane', 160),
 (201, 2, 50106, 'Token: Scholomance Student', 160),
@@ -62,6 +62,8 @@ replace into shop_items values
 (305, 3, 50608, 'Race Change Token: Troll', 180),
 (306, 3, 50609, 'Race Change Token: Tauren', 180),
 (307, 3, 50610, 'Race Change Token: Undead', 180),
+(308, 3, 50612, 'Race Change Token: High Elf', 180),
+(309, 3, 50613, 'Race Change Token: Goblin', 180),
 -- Gameplay: Miscellaneous
 (400, 4, 50003, 'Backpack: 28 slots', 180),
 (401, 4, 50004, 'Backpack: 36 slots', 200),
