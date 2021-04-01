@@ -174,36 +174,6 @@ bool ChatHandler::HandleBalanceCommand(char* args)
     return false;
 }
 
-bool ChatHandler::HandleFoolCommand(char* args)
-{
-    if (!*args)
-    {
-        SendSysMessage("Syntax: .fool on / off");
-        SetSentErrorMessage(true);
-        return false;
-    }
-
-    bool value;
-
-    if (!ExtractOnOff(&args, value))
-    {
-        SetSentErrorMessage(true);
-        return false;
-    }
-
-    if (value)
-    {
-        sWorld.setConfig(CONFIG_BOOL_FOOLSDAY, true);
-        SendSysMessage("Fool's Day event is ON.");
-    }
-    else
-    {
-        sWorld.setConfig(CONFIG_BOOL_FOOLSDAY, false);
-        SendSysMessage("Fool's Day event is OFF.");
-    }
-    return true;
-}
-
 bool ChatHandler::HandleBgTestCommand(char* args)
 {
     sBattleGroundMgr.ToggleTesting();
