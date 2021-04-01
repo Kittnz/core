@@ -30,7 +30,7 @@ struct zebrian_the_madAI : public ScriptedAI
 
     void KilledUnit(Unit* victim)
     {
-        m_creature->MonsterYell("Looser!");
+        m_creature->MonsterYell("Loser!");
     }
 
     void JustDied(Unit* /*pKiller*/)
