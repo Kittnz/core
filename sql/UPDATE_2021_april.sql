@@ -112,7 +112,7 @@ REPLACE INTO `item_template` VALUES (81237, 10, 15, 0, 'Chieftain\'s Kodo', 'Thi
 replace into custom_mount_entry_relation values (81237, 81102);
 
 update item_template set name = 'Armored Black War Wolf', description = 'Prized by Orgrimmar guards for their keen sense of smell.' where entry = 18245;
-update item_template set name = 'Armored Black War Kodo', description = 'Bred for their aggressive, unpredictable demeanor by the Kor'kron stablemasters, the Black War Kodos' trumpeting call signifies that blood will soon be shed.' where entry = 18247;
+update item_template set name = 'Armored Black War Kodo', description = 'Bred for their aggressive, unpredictable demeanor by the Kor\'kron stablemasters, the Black War Kodos\' trumpeting call signifies that blood will soon be shed.' where entry = 18247;
 
 update item_template set name = 'Armored Black War Raptor', description = 'Bred from the same vicious line of raptors which sired Ohgan and brought victory to the Gurubashi Empire.' where entry = 18246;
 
