@@ -96,7 +96,7 @@ update item_template set name = 'Armored Thunder Bluff Kodo' where entry = 81198
 update item_template set name = 'Armored Brewfest Kodo' where entry = 80455;
 
 update item_template set spellid_1 = 46483 where entry = 51421;
-update item_template set spellid_1 = 46459, description = '"Carries all your worldly possessions, there and back.' where entry = 50007;
+update item_template set spellid_1 = 46459, description = 'Carries all your worldly possessions, there and back.' where entry = 50007;
 update item_template set spellid_1 = 46457 where entry = 50005;
 update item_template set spellid_1 = 46472 where entry = 50602;
 update item_template set spellid_1 = 46460 where entry = 50009;
@@ -115,7 +115,7 @@ update item_template set name = 'Armored Black War Wolf', description = 'Prized 
 
 update item_template set name = 'Armored Black War Raptor', description = 'Bred from the same vicious line of raptors which sired Ohgan and brought victory to the Gurubashi Empire.' where entry = 18246;
 
-delete from npc_vendor where item in (12330, 12351);
+delete from npc_vendor where item in (12330, 12351, 8586, 13317);
 
 update item_template set name = 'Armored Brown Wolf', description = 'The wolves of the Horde are befriended, not domesticated.' where entry = 18796;
 update item_template set name = 'Armored Gray Wolf', description = 'The wolves of the Horde are befriended, not domesticated.' where entry = 18798;
@@ -131,10 +131,26 @@ update item_template set name = 'Winter Wolf', description = 'Ancient furbolg le
 update item_template set name = 'Ancient Black Wolf', description = 'Once thought to be nearly extinct, this wolf can still occasionally be seen in the company of a few Horde veterans.' where entry = 1041;
 update item_template set name = 'Armored Horde Wolf', description = 'If asked to fetch, will most likely bring you back the head of a small mammal or humanoid.' where entry = 80447;
 
-delete from item_template where entry in (12330, 5663, 1133, 80448);
+delete from item_template where entry in (12330, 5663, 1133, 80448, 8586, 13317, 8590);
 
 REPLACE INTO `item_template` VALUES (5663, 10, 15, 0, 'Ancient Red Wolf', 'Almost none remain in the whole of Azeroth; only the most experienced will have seen one.', 16208, 3, 80, 1, 100000, 0, 0, -1, -1, 40, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 579, 0, 0, 0, -1, 330, 3000, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 1, NULL);
 
 REPLACE INTO `item_template` VALUES (12351, 10, 15, 0, 'Ancient Arctic Wolf', 'Ancient furbolg legends claim that wolves born with a white coat are blessed by Azeroth\'s two moons.', 16208, 3, 80, 1, 100000, 0, 0, -1, -1, 40, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16081, 0, 0, 0, -1, 330, 3000, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 1, NULL);
 
 REPLACE INTO `item_template` VALUES (51249, 0, 15, 0, 'Snowball', 'Happy New Year!', 16207, 3, 0, 1, 0, 0, 0, -1, -1, 60, 60, 762, 150, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 581, 0, 0, 0, 1, 330, 3000, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+
+update item_template set name = 'Armored Darkspear Raptor' where entry = 81182;
+update item_template set name = 'Armored Blue Raptor', description = 'Longtime allies of the trolls, these jungle hunters form a special bond with their masters. They become steed, guardian, and friend.' where entry = 18788;
+update item_template set name = 'Armored Olive Raptor', description = 'Longtime allies of the trolls, these jungle hunters form a special bond with their masters. They become steed, guardian, and friend.' where entry = 18789;
+update item_template set name = 'Armored Orange Raptor', description = 'Longtime allies of the trolls, these jungle hunters form a special bond with their masters. They become steed, guardian, and friend.' where entry = 18790;
+
+update item_template set name = 'Turquoise Raptor', description = 'Bred from the fiercest stock anywhere and guaranteed not to bite (much).' where entry = 8591;
+update item_template set name = 'Emerald Raptor', description = 'Bred from the fiercest stock anywhere and guaranteed not to bite (much).' where entry = 8588;
+update item_template set name = 'Violet Raptor', description = 'Bred from the fiercest stock anywhere and guaranteed not to bite (much).' where entry = 8592;
+
+update item_template set name = 'Armored Razzashi Raptor', description = 'The only known Razzashi Raptors were said to have been in the custody of Bloodlord Mandokir in Zul\'Gurub. This species of raptor has not been seen in many years.' where entry = 19872;
+
+update item_template set name = 'Armored Violet Raptor', description = 'Longtime allies of the trolls, these jungle hunters form a special bond with their masters. They become steed, guardian, and friend.', max_count = 1 where entry = 50402;
+update item_template set name = 'Armored Red Raptor', description = 'Longtime allies of the trolls, these jungle hunters form a special bond with their masters. They become steed, guardian, and friend.', max_count = 1 where entry = 50403;
+update item_template set name = 'Armored Ivory Raptor', description = 'Longtime allies of the trolls, these jungle hunters form a special bond with their masters. They become steed, guardian, and friend.', max_count = 1 where entry = 50401;
+update item_template set name = 'Armored Obsidian Raptor', description = 'Longtime allies of the trolls, these jungle hunters form a special bond with their masters. They become steed, guardian, and friend.', max_count = 1 where entry = 50404;
