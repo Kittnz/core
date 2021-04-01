@@ -1842,23 +1842,38 @@ bool ChatHandler::HandleDeMorphCommand(char* /*args*/)
     return true;
 }
 
+#define WEEB_MORPH_1 19000
+#define WEEB_MORPH_2 19023
+#define WEEB_MORPH_3 19032
+
 //morph creature or player
 bool ChatHandler::HandleModifyMorphCommand(char* args)
 {
     if (!*args)
         return false;
 
-    uint16 display_id = (uint16)atoi(args);
+    uint16 display_id = (uint16) atoi(args);
 
     Unit *target = GetSelectedUnit();
     if (!target)
         target = m_session->GetPlayer();
 
     // check online security
-    else if (target->GetTypeId() == TYPEID_PLAYER && HasLowerSecurity((Player*)target))
+    else if (target->GetTypeId() == TYPEID_PLAYER && HasLowerSecurity((Player*) target))
         return false;
 
-    target->SetDisplayId(display_id);
+     // Different actions for specific display_ids
+    switch (display_id)
+    {
+        case WEEB_MORPH_1:
+        case WEEB_MORPH_2:
+        case WEEB_MORPH_3:
+            // Prevent turning players or creatures into weird weeb stuff
+            if (target->GetTypeId() != TYPEID_PLAYER || ((Player*) target)->GetSession()->GetSecurity() == SEC_PLAYER)
+                return false;
+        default:
+            target->SetDisplayId(display_id);
+    }
 
     return true;
 }
