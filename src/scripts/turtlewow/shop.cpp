@@ -59,7 +59,6 @@ bool GossipHello_npc_shop(Player* pPlayer, Creature* pCreature)
         ++index;
     }
     
-    pPlayer->PrepareQuestMenu(pCreature->GetGUID());
     pPlayer->SEND_GOSSIP_MENU(90000, pCreature->GetGUID());
     return true;
 }
@@ -102,6 +101,15 @@ bool GossipSelect_npc_shop(Player* pPlayer, Creature* pCreature, uint32 uiSender
         break;
     case ACTION_CATEGORY_START + 11:
         SendEntriesInfoByCategory(pPlayer, 11);
+        break;
+    case ACTION_CATEGORY_START + 12:
+        SendEntriesInfoByCategory(pPlayer, 12);
+        break;
+    case ACTION_CATEGORY_START + 13:
+        SendEntriesInfoByCategory(pPlayer, 13);
+        break;
+    case ACTION_CATEGORY_START + 14:
+        SendEntriesInfoByCategory(pPlayer, 14);
         break;
     case ACTION_CATEGORY_START:
         pCreature->MonsterWhisper("If you'd like to purchase some items from me, you need Turtle Tokens! You can buy them via PayPal: info.turtlewow@gmail.com. Please include your account name. 1 euro gives you 10 tokens.", pPlayer);
