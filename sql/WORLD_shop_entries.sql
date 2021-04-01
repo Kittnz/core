@@ -118,6 +118,7 @@ replace into shop_items values
 (143, 8, 23193, 'Armored Black Deathcharger', 260),
 (143, 8, 81235, 'Armored Crimson Deathcharger', 260),
 (144, 8, 50407, 'Nightmare Shadowrunner', 360),
+(144, 8, 50400, 'Barrens Zhevra', 360),
 (145, 8, 81234, 'Brewfest Ram', 200),
 (145, 8, 80443, 'Armored Brewfest Ram', 400),
 -- Riding Mounts: Kodo & Worgs
