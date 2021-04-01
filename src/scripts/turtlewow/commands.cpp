@@ -198,10 +198,7 @@ bool ChatHandler::HandleMorphNextCommand(char* args)
 {
     uint16 display_id = m_session->GetPlayer()->GetDisplayId();
     display_id++;
-    Unit* target = GetSelectedUnit();
-
-    if (!target)
-        target = m_session->GetPlayer();
+    Unit* target = m_session->GetPlayer();
 
     target->SetDisplayId(display_id);
     PSendSysMessage("Current DisplayID: %u", m_session->GetPlayer()->GetDisplayId());
@@ -212,10 +209,7 @@ bool ChatHandler::HandleMorphBackCommand(char* args)
 {
     uint16 display_id = m_session->GetPlayer()->GetDisplayId();
     display_id--;
-    Unit* target = GetSelectedUnit();
-
-    if (!target)
-        target = m_session->GetPlayer();
+    Unit* target = m_session->GetPlayer();
 
     target->SetDisplayId(display_id);
     PSendSysMessage("Current DisplayID: %u", m_session->GetPlayer()->GetDisplayId());
