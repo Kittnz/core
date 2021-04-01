@@ -110,7 +110,7 @@ ChatCommand * ChatHandler::getCommandTable()
     static ChatCommand castCommandTable[] =
     {
         { "self",           SEC_GAMEMASTER,  false, &ChatHandler::HandleCastSelfCommand,               "", nullptr },
-        { "target",         SEC_GAMEMASTER,  false, &ChatHandler::HandleCastTargetCommand,             "", nullptr },
+        { "target",         SEC_ADMINISTRATOR,  false, &ChatHandler::HandleCastTargetCommand,             "", nullptr },
         { "",               SEC_GAMEMASTER,  false, &ChatHandler::HandleCastCommand,                   "", nullptr },
         { nullptr,          0,               false, nullptr,                                           "", nullptr }
     };

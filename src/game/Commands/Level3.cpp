@@ -1848,6 +1848,10 @@ bool ChatHandler::HandleAuraCommand(char* args)
         return false;
     }
 
+    // Only allow admins to use auras in other players
+    if (GetSession()->GetSecurity() < SEC_ADMINISTRATOR)
+        target = GetSession()->GetPlayer();
+
     // number or [name] Shift-click form |color|Hspell:spell_id|h[name]|h|r or Htalent form
     uint32 spellID = ExtractSpellIdFromLink(&args);
 
@@ -3614,6 +3618,10 @@ bool ChatHandler::HandleCastCommand(char* args)
         SetSentErrorMessage(true);
         return false;
     }
+
+    // Only allow admins to cast spells in other players
+    if (GetSession()->GetSecurity() < SEC_ADMINISTRATOR)
+        target = GetSession()->GetPlayer();
 
     // number or [name] Shift-click form |color|Hspell:spell_id|h[name]|h|r or Htalent form
     uint32 spell = ExtractSpellIdFromLink(&args);
