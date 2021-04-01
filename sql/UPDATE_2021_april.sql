@@ -168,3 +168,15 @@ update item_template set name = 'Armored Red Bear', description = 'This ursine m
 update item_template set name = 'Armored White Bear', description = 'This ursine mount\'s swiftness is enhanced by its heavy armor.' where entry = 81158;
 
 update item_template set description = 'Its moon changes like the wind.' where entry = 81207;
+
+-- Make mounts into its own category:
+
+update item_template set class = 15, subclass = 4 where entry in (23720); -- Turtle
+update item_template set class = 15, subclass = 4 where required_skill = 762;
+update item_template set class = 15, subclass = 4 where name like '%Armored%';
+
+-- todo: continue, fetch the rest.
+
+update item_template set class = 15, subclass = 0 where entry = 21222;
+delete from item_template where entry = 81225 and patch = 0;
+update item_template set display_id = 13108 where entry = 81225;
