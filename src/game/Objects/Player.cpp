@@ -15138,14 +15138,6 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
     if (isImmortal()) // Immortal (temp. check)
         SetByteValue(PLAYER_BYTES_3, 2, 52);
 
-    if (getLevel() > 9 && sWorld.getConfig(CONFIG_BOOL_FOOLSDAY))
-    {
-        int32 model = 18523 + urand(0, 4);
-        float scale = 0.3F + urand(0.1F, 0.6F);
-        SetDisplayId(model);
-        SetObjectScale(scale);
-    }
-
     return true;
 }
 

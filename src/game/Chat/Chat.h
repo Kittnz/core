@@ -494,7 +494,6 @@ class MANGOS_DLL_SPEC ChatHandler
         bool HandleModifyAccessoriesCommand(char* args);
         bool HandleFlyCommand(char* args);
         bool HandleTransferCommand(char* args);
-        bool HandleFoolCommand(char* args);
         bool HandleCopyCommand(char* args);
 
         bool HandleFastDebugCommand(char* args);
