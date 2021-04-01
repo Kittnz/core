@@ -27,9 +27,9 @@ replace into shop_categories values
 (6,  'Riding Mounts: Birds'),
 (7,  'Riding Mounts: Sabers'),
 (8,  'Riding Mounts: Horses'),
-(9,  'Riding Mounts: Kodo & Worgs'),
+(9,  'Riding Mounts: Kodo & Wolves'),
 (10, 'Riding Mounts: Raptors & Bears'),
-(11, 'Riding Mounts: Mechanic'),
+(11, 'Riding Mounts: Miscellaneous'),
 (12, 'Vanity: Companions'),
 (13, 'Vanity: Tabards'),
 (14, 'Vanity: Illusions');
@@ -112,22 +112,23 @@ replace into shop_items values
 (130, 7, 12303, 'Black Zulian Panther', 200),
 (131, 7, 81231, 'Tamed Rak\'Shiri', 200),
 -- Riding Mounts: Horses & Rams
-(144, 8, 50399, 'Ancient Quel\'dorei Steed', 360),
+(141, 8, 50399, 'Ancient Quel\'dorei Steed', 360),
 (142, 8, 80449, 'Armored Alliance Steed', 400),
-(142, 8, 81236, 'Armored Grey Steed', 400),
-(143, 8, 23193, 'Armored Black Deathcharger', 260),
-(143, 8, 81235, 'Armored Crimson Deathcharger', 260),
-(144, 8, 50407, 'Nightmare Shadowrunner', 200),
-(144, 8, 50400, 'Barrens Zhevra', 200),
-(145, 8, 81234, 'Brewfest Ram', 200),
-(145, 8, 80443, 'Armored Brewfest Ram', 400),
--- Riding Mounts: Kodo & Worgs
-(162, 9, 80455, 'Armored Brewfest Kodo', 400), 
+(143, 8, 81236, 'Armored Grey Steed', 400),
+(144, 8, 23193, 'Armored Black Deathcharger', 260),
+(145, 8, 81235, 'Armored Crimson Deathcharger', 260),
+(146, 8, 50407, 'Nightmare Shadowrunner', 200),
+(147, 8, 50400, 'Barrens Zhevra', 200),
+(148, 8, 81234, 'Brewfest Ram', 200),
+(149, 8, 80443, 'Armored Brewfest Ram', 400),
+-- Riding Mounts: Kodo & Wolves
 (162, 9, 15293, 'Ancient Teal Kodo', 400), 
 (162, 9, 15292, 'Ancient Green Kodo', 400), 
-(163, 9, 1041,  'Black Wolf', 160),
-(164, 9, 12351, 'Arctic Wolf', 260), 
-(165, 9, 80447, 'Swift Horde Worg', 400),
+(162, 9, 80455, 'Armored Brewfest Kodo', 400), 
+(164, 9, 12351, 'Ancient Arctic Wolf', 200), 
+(164, 9, 5663,  'Ancient Red Wolf', 200), 
+(163, 9, 1041,  'Ancient Black Wolf', 100),
+(165, 9, 80447, 'Armored Horde Wolf', 400),
 -- Riding Mounts: Raptors & Bears
 (181, 10, 8590,  'Obsidian Raptor', 160),
 (182, 10, 50404, 'Obsidian War Raptor', 360), 
@@ -139,7 +140,7 @@ replace into shop_items values
 (188, 10, 81154, 'Armored Brown War Bear', 500),
 (189, 10, 81155, 'Armored Red War Bear', 500),
 (190, 10, 81158, 'Armored White War Bear', 500),
--- Riding Mounts: Mechanic
+-- Riding Mounts: Mechanic & Others
 (221, 11, 13325, 'Fluorescent Mechanostrider', 160), 
 -- Vanity: Companions
 (241, 12, 13584, 'Diablo Stone', 80),
