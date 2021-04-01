@@ -171,7 +171,43 @@ update item_template set description = 'Its moon changes like the wind.' where e
 
 -- Make mounts into its own category:
 
-update item_template set class = 15, subclass = 4 where entry in (23720); -- Turtle
+update item_template set class = 15, subclass = 4 where entry in (23720, 50071,
+50072,
+50073,
+50076,
+50074,
+81100,
+81120,
+81121,
+12325,
+12326,
+8630,
+12302,
+12303,
+18768,
+80430,
+12353,
+80449,
+23193,
+50407,
+80443,
+15293,
+80455,
+1041,
+12351,
+80447,
+8590,
+50404,
+50401,
+50402,
+50403,
+81091,
+81153,
+81154,
+81155,
+81158,
+13325
+); -- Shop items
 update item_template set class = 15, subclass = 4 where required_skill = 762;
 update item_template set class = 15, subclass = 4 where name like '%Armored%';
 
