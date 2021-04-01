@@ -131,7 +131,7 @@ update item_template set name = 'Winter Wolf', description = 'Ancient furbolg le
 update item_template set name = 'Ancient Black Wolf', description = 'Once thought to be nearly extinct, this wolf can still occasionally be seen in the company of a few Horde veterans.' where entry = 1041;
 update item_template set name = 'Armored Horde Wolf', description = 'If asked to fetch, will most likely bring you back the head of a small mammal or humanoid.' where entry = 80447;
 
-delete from item_template where entry in (12330, 5663, 1133, 80448, 8586, 13317, 8590);
+delete from item_template where entry in (12330, 5663, 1133, 80448, 8586, 13317, 8590, 80436);
 
 REPLACE INTO `item_template` VALUES (5663, 10, 15, 0, 'Ancient Red Wolf', 'Almost none remain in the whole of Azeroth; only the most experienced will have seen one.', 16208, 3, 80, 1, 100000, 0, 0, -1, -1, 40, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 579, 0, 0, 0, -1, 330, 3000, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 1, NULL);
 
@@ -154,3 +154,13 @@ update item_template set name = 'Armored Violet Raptor', description = 'Longtime
 update item_template set name = 'Armored Red Raptor', description = 'Longtime allies of the trolls, these jungle hunters form a special bond with their masters. They become steed, guardian, and friend.', max_count = 1 where entry = 50403;
 update item_template set name = 'Armored Ivory Raptor', description = 'Longtime allies of the trolls, these jungle hunters form a special bond with their masters. They become steed, guardian, and friend.', max_count = 1 where entry = 50401;
 update item_template set name = 'Armored Obsidian Raptor', description = 'Longtime allies of the trolls, these jungle hunters form a special bond with their masters. They become steed, guardian, and friend.', max_count = 1 where entry = 50404;
+
+update item_template set name = 'Black Bear', description = 'He\'s big, he\'s ready for battle, and he\'s a bear. What more could you want in a mount?' where entry = 80433;
+update item_template set name = 'Brown Bear', description = 'He\'s big, he\'s ready for battle, and he\'s a bear. What more could you want in a mount?' where entry = 80438;
+update item_template set name = 'Armored Brown Bear', description = 'The Amani trolls decorate these ferocious mounts in magic amulets and ceremonial masks as a way to venerate the bear god Nalorakk.' where entry = 81226;
+
+update item_template set name = 'Armored Black Bear', description = 'This ursine mount\'s swiftness is enhanced by its heavy armor.' where entry = 81154;
+update item_template set name = 'Armored Purple Bear', description = 'This ursine mount\'s swiftness is enhanced by its heavy armor.' where entry = 81153;
+update item_template set name = 'Armored Red Bear', description = 'This ursine mount\'s swiftness is enhanced by its heavy armor.' where entry = 81155;
+update item_template set name = 'Armored White Bear', description = 'This ursine mount\'s swiftness is enhanced by its heavy armor.' where entry = 81158;
+
