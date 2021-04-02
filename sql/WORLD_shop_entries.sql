@@ -120,7 +120,8 @@ replace into shop_items values
 (146, 8, 50407, 'Nightmare Shadowrunner', 200),
 (147, 8, 50400, 'Barrens Zhevra', 200),
 (148, 8, 81234, 'Brewfest Ram', 200),
-(149, 8, 80443, 'Armored Brewfest Ram', 400),
+(149, 8, 80443, 'Armored Brewfest Ram', 200),
+(150, 8, 13328, 'Ancient Black Ram', 200),
 -- Riding Mounts: Kodo & Wolves
 (162, 9, 15293, 'Ancient Teal Kodo', 400), 
 (162, 9, 15292, 'Ancient Green Kodo', 400), 

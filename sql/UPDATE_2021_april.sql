@@ -206,13 +206,58 @@ update item_template set class = 15, subclass = 4 where entry in (23720, 50071,
 81154,
 81155,
 81158,
-13325
+13325,
+81190,
+81191,
+15292,
+81227,
+80431,
+81231,
+50075,
+81102,
+18796,
+18798, 
+18797,
+5668,
+5665, 
+1132,
+81234,
+13328,
+18786,
+18787,
+18785,
+13329,
+5873
 ); -- Shop items
 update item_template set class = 15, subclass = 4 where required_skill = 762;
 update item_template set class = 15, subclass = 4 where name like '%Armored%';
+update item_template set class = 15, subclass = 4 where name like '%Mechaspider%';
+update item_template set class = 15, subclass = 4 where name like '%Steed%';
+update item_template set class = 15, subclass = 4 where name like '%Leopard%';
 
 -- todo: continue, fetch the rest.
 
+delete from item_template where entry in (5875, 5874, 80456, 80442, 80444);
 update item_template set class = 15, subclass = 0 where entry = 21222;
+update item_template set class = 1, subclass = 0 where entry = 932;
 delete from item_template where entry = 81225 and patch = 0;
 update item_template set display_id = 13108 where entry = 81225;
+
+delete from npc_vendor where item in (13328, 13327, 13326);
+
+update item_template set name = 'Ancient Black Ram', description = 'I\'ve not seen this breed in in ages, but when they\'re ram tough they stick around. -Veron Amberstill.', required_skill = 0, required_level = 1, allowable_race = -1, quality = 3 where entry = 13328;
+
+update item_template set name = 'Armored Brown Ram', description = 'The Barak Tor\'ol ram\'s thick bony skull and massive horns make it the ideal mount for charging through groups of armored enemies.' where entry = 18786;
+update item_template set name = 'Armored Gray Ram', description = 'The Barak Tor\'ol ram\'s thick bony skull and massive horns make it the ideal mount for charging through groups of armored enemies.' where entry = 18787;
+update item_template set name = 'Armored White Ram', description = 'The Barak Tor\'ol ram\'s thick bony skull and massive horns make it the ideal mount for charging through groups of armored enemies.' where entry = 18785;
+
+update item_template set description = 'Male rams will often smash their thick skulls against each other for hours to impress a female. In that way, they\'re very similar to dwarves.' where entry in (5872, 13329, 5864, 5873);
+update item_template set description = 'We have made a lot of improvements, but they are still based on the Mekkatorque designs.' where entry in (18772, 18773, 18774, 5873);
+update item_template set description = 'The terradynamic exo-plotters are conjoined by hydraulic imaging to the equilibrium enhancers...' where entry in (8595, 13321, 8563);
+update item_template set description = 'Forced to recall the model after numerous complaints of an "uncontrollable throttle", Gnomish engineers now refer to a proto-type blunder as a "model B".' where entry = 13326;
+update item_template set description = 'This historic piece of gnomish engineering was forced into retirement due to its extremely "touchy" gyroscometer.' where entry = 13327;
+update item_template set description = 'It\'s green.' where entry = 13325;
+
+update item_template set name = 'Armored Green Mechanostrider' where entry = 18772;
+update item_template set name = 'Armored White Mechanostrider' where entry = 18773;
+update item_template set name = 'Armored Yellow Mechanostrider' where entry = 18774;
