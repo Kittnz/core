@@ -167,7 +167,7 @@ update item_template set name = 'Armored Purple Bear', description = 'This ursin
 update item_template set name = 'Armored Red Bear', description = 'This ursine mount\'s swiftness is enhanced by its heavy armor.' where entry = 81155;
 update item_template set name = 'Armored White Bear', description = 'This ursine mount\'s swiftness is enhanced by its heavy armor.' where entry = 81158;
 
-update item_template set description = 'Its mood changes like the wind.' where entry = 81207;
+update item_template set description = 'What a cute little fluff!' where entry = 81207;
 
 -- Make mounts into its own category:
 
