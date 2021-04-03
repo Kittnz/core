@@ -366,3 +366,36 @@ update item_template set sell_price =       3276 where entry = 80804;
 
 update item_template set buy_price = (sell_price * 4) where buy_price = 0 and sell_price > 0 and entry > 50000;
 update item_template set sell_price = (buy_price / 4) where sell_price > (buy_price / 4) and buy_price > 0 and entry > 50000;
+
+-- Fix more mounts:
+
+update item_template set name = 'Black Stallion', description = 'Rumored to be favored by SI:7 for night missions due to its dark coat.' where entry = 2411;
+
+update item_template set class = 15, subclass = 4 where entry in (5663, 81232);
+delete from item_template where entry = 50419;
+
+update item_template set name = 'Cenarion Hippogryph' where entry = 81121;
+update item_template set spellid_1 = 46451 where entry = 81120;
+update item_template set spellid_1 = 46444 where entry = 81102;
+
+update creature_template set name = 'Barrens Zhevra', display_id1 = 18243 where entry = 50091;
+
+REPLACE INTO `item_template` VALUES (81241, 10, 15, 0, 'Armored Orgrimmar Wolf', 'For a brief time, many orcs would declare themselves "hungry like an Orgrimmar wolf." Some blood elves still use the phrase ironically.', 36431, 4, 64, 1, 3500000, 0, 0, -1, 434, 60, 60, 762, 150, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 45038, 0, 0, 0, 1, 330, 3000, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+
+update item_template set required_reputation_faction = 76, required_reputation_rank = 7 where entry = 81241;
+
+update item_template set name = 'Bronze Drake', description = 'Lost time is never found again. Oh, never mind I found it...', required_reputation_faction = 910, spellid_1 = 46212, required_reputation_rank = 7, buy_price = 25000000, display_id = 30794 where entry = 51252;
+
+update creature_template set name = 'Nozari', display_id1 = 18033 where entry = 80943;
+
+delete from custom_mount_entry_relation where item_entry = 51252;
+
+REPLACE INTO `creature_template` VALUES (90980, 0, 18432, 0, 0, 0, 'Zulian Panther', '', 0, 1, 1, 64, 64, 0, 0, 0, 35, 0, 1, 1.14286, 1, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, '');
+
+UPDATE `spell_template` SET `effectMiscValue1`='90980' WHERE (`entry`='10787') AND (`build`='5875');
+
+REPLACE INTO `item_template` VALUES (81242, 10, 15, 0, 'Viridian Hippogryph', 'Ancient mounts of the Highborne, now left to run wild, they can rarely be found due to their latent magical powers.', 19570, 3, 80, 1, 100000, 0, 0, -1, -1, 40, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 46451, 0, 0, 0, -1, 330, 3000, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 1, NULL);
+
+REPLACE INTO `creature_template` VALUES (90981, 0, 18298, 0, 0, 0, 'Zulian Panther', '', 0, 1, 1, 64, 64, 0, 0, 0, 35, 0, 1, 1.14286, 1, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, '');
+
+replace into custom_mount_entry_relation values (81242, 90981);
