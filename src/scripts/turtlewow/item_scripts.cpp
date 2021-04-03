@@ -342,7 +342,7 @@ bool ItemUseSpell_skin_changer(Player* pPlayer, Item* pItem, const SpellCastTarg
             switch (item_entry)
             {
             case 50210: if (male) bytes = 13; else bytes = 8;  break;                                                // Troll: Forest
-            case 50211: bytes = static_cast<uint8>(irand(0, 1) == 0 ? static_cast<uint8>(irand(9, 11)) : 14); break; // Troll: Sandfury Clan + zombie
+            case 50211: if (male) bytes = 17; break;                                                                 // Troll: Sandfury Clan 
             case 51010: bytes = 12; break;                                                                           // Troll: Dark
             case 51011: if (male) bytes = 13; else bytes = 7;  break;                                                // Troll: Ice
             case 81208: if (male) bytes = 20; else bytes = 14; break;                                                // Troll: Zombie
