@@ -141,13 +141,13 @@ struct boss_dark_reaverAI : public ScriptedAI
 
     void ScaleStats(uint8 count)
     {
-        // Increase max health first, then apply buff to health. Don't scale HP past 15 players.
-        uint8 hpCountOverride = count;
-        if (hpCountOverride > 15)
-            hpCountOverride = 15;
-        me->SetMaxHealth(me->GetMaxHealth() + ((maxHealth / NORMAL_GROUP_SIZE) * hpCountOverride));
-        uint32 adjustedHealth = me->GetHealth() + (maxHealth / NORMAL_GROUP_SIZE) * hpCountOverride;
-        me->SetHealth(adjustedHealth);
+        // 10% more health per player
+        uint32 scaledMaxHealth = maxHealth + ((count - NORMAL_GROUP_SIZE) * 0.1 * maxHealth);
+        // Hard cap of 3 million (just in case)
+        if (scaledMaxHealth > 3000000) scaledMaxHealth = 3000000;
+        uint32 scaledCurrentHealth = scaledMaxHealth * (me->GetHealth() / me->GetMaxHealth());
+        me->SetMaxHealth(scaledMaxHealth);
+        me->SetHealth(scaledCurrentHealth);
 
         me->SetFloatValue(UNIT_FIELD_MINDAMAGE, (minDmg / NORMAL_GROUP_SIZE) * (NORMAL_GROUP_SIZE + count));
         me->SetFloatValue(UNIT_FIELD_MAXDAMAGE, (maxDmg / NORMAL_GROUP_SIZE) * (NORMAL_GROUP_SIZE + count));
@@ -193,15 +193,17 @@ struct boss_dark_reaverAI : public ScriptedAI
 
         // If attackers exceeds normal party size, begin to scale up attack stats per player.
         uint16 threatSize = GetPlayerCountInThreatList();
-        if (threatSize > NORMAL_GROUP_SIZE && threatSize > Attackers_Count)
+        if (threatSize < NORMAL_GROUP_SIZE)
+            threatSize = NORMAL_GROUP_SIZE;
+        if (threatSize > Attackers_Count)
         {
             auto numNewAttackers = threatSize - Attackers_Count;
 
             ScaleStats(numNewAttackers);
 
             // Reduce summon timer by 1 second for each additional player, but not
-            // any lower than 10 seconds.
-            if (RepeatingSummonTime > 10 * IN_MILLISECONDS)
+            // any lower than 12 seconds.
+            if (RepeatingSummonTime > 12 * IN_MILLISECONDS)
                 RepeatingSummonTime -= numNewAttackers * IN_MILLISECONDS;
 
             // Only do text every 15 seconds if people join to not spam.
@@ -230,7 +232,7 @@ struct boss_dark_reaverAI : public ScriptedAI
         if (Cleave_Timer < diff)
         {
             if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_CLEAVE) == CAST_OK)
-                Cleave_Timer = urand(15000, 22000);
+                Cleave_Timer = urand(14000, 20000);
         }
         else
             Cleave_Timer -= diff;
