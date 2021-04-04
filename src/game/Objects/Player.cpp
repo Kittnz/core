@@ -13136,6 +13136,15 @@ void Player::RemoveQuestAtSlot(uint32 slot)
             {
                 if (pQuest->HasSpecialFlag(QUEST_SPECIAL_FLAG_TIMED))
                     RemoveTimedQuest(quest);
+
+                for (int i = 0; i < QUEST_ITEM_OBJECTIVES_COUNT; i++)
+                {
+                    if (uint32 itemId = pQuest->ReqItemId[i])
+                        if (ItemPrototype const* pItem = sObjectMgr.GetItemPrototype(itemId))
+                            if (pItem->Bonding == BIND_QUEST_ITEM || pItem->Bonding == BIND_QUEST_ITEM1)
+                                if (uint32 count = GetItemCount(itemId, true))
+                                    DestroyItemCount(itemId, count, true, false, true);
+                }
             }
 
             SetQuestStatus(quest, QUEST_STATUS_NONE);
