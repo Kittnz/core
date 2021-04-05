@@ -403,3 +403,13 @@ replace into custom_mount_entry_relation values (81242, 90981);
 REPLACE INTO `creature_template` VALUES (90982, 0, 19032, 0, 0, 0, 'Kudryavka Noumi', '', 0, 1, 1, 64, 64, 0, 0, 0, 35, 0, 1, 1.14286, 1, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, '');
 
 update creature_ai_events set event_chance = 15 where id in (1510601, 1510501, 1499001, 1510301, 1510201, 1499101, 1624101, 1625501);
+
+REPLACE INTO `creature_template` VALUES (90983, 0, 100, 0, 0, 0, 'Aneka Konko', '', 0, 14, 14, 644, 644, 0, 0, 0, 35, 0, 1, 1.14286, 1, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, '');
+
+replace into item_template (entry, class, subclass, name, description, display_id, quality, bonding, spellid_1, spellcooldown_1) values
+(81243, 15, 2, 'Gryphon Hatchling', 'A gift from the Wildhammer dwarves to the heroes of the Alliance, these hatchlings are descendants of the same gryphons ridden by Falstad and his entourage into Grim Batol.', 1294, 3, 1, 28505, 1500);
+replace into creature_template (entry, display_id1, display_id2, display_id3, name, subname, level_min, level_max, health_min, health_max, faction, script_name, scale) values
+(51583, 6852, 0, 0, 'Beaky', '', '1', '1', '64', '64', '35', '', 0.3);
+replace into custom_pet_entry_relation (item_entry, creature_entry) values 
+(81243, 51583);
+
