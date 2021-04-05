@@ -425,7 +425,7 @@ void ThreatManager::addThreat(Unit* pVictim, float pThreat, bool crit, SpellScho
     addThreatDirectly(pVictim, threat);
 }
 
-void ThreatManager::UnitDetailedThreatSituation(Creature* creature, Player* requester)
+void ThreatManager::UnitDetailedThreatSituation(Creature* creature, Player* requester, bool TTTS)
 {
 
 	if (!creature || !creature->isInCombat() || !creature->IsElite())
@@ -461,14 +461,26 @@ void ThreatManager::UnitDetailedThreatSituation(Creature* creature, Player* requ
 	WorldPacket data;
 	bool inParty = requester->GetGroup() && !requester->GetGroup()->isRaidGroup();
 
+	int position = -1;
+
 	for (ThreatList::const_iterator iter = threatList.begin(); iter != threatList.end(); ++iter)
 	{
+		position++;
+
+		isTanking = (*iter)->getTarget()->GetName() == tankName;
+
+		if (TTTS) // tank targets threat situation
+		{
+			if (isTanking) // me
+				continue;
+			if (position != 1)
+				continue;
+		}
+
 		threatValue = (int)round((*iter)->getThreat());
 
 		if (threatValue <= 0) // dont care for negative or 0 threat
 			continue;
-
-		isTanking = (*iter)->getTarget()->GetName() == tankName;
 
 		isMelee   = (*iter)->getSourceUnit()->CanReachWithMeleeAttack((*iter)->getTarget());
 
@@ -484,6 +496,9 @@ void ThreatManager::UnitDetailedThreatSituation(Creature* creature, Player* requ
 		msg += separator + std::to_string(threatValue);               // player's threat value, rounded
 		msg += separator + std::to_string(threatPct);                 // player's threat percent, rounded
 		msg += separator + std::to_string(isMelee);                   // 1 if creature can reach player with melee
+
+		if (TTTS)
+			msg += separator + "TTTS";
 
 		ChatHandler::BuildChatPacket(data, inParty ? CHAT_MSG_PARTY : CHAT_MSG_RAID,
 			msg.c_str(), Language(LANG_ADDON), requester->GetChatTag(),
