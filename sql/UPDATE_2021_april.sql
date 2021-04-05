@@ -427,8 +427,8 @@ REPLACE INTO `creature_template` VALUES (18533, 0, 18533, 0, 0, 0, 'Armored Ivor
 
 update item_template set name = 'Armored Vermilion Deathcharger' where entry = 81235;
 
-replace into custom_pet_entry_relation (item_entry, creature_entry) values (81245, 80313);
-replace into custom_pet_entry_relation (item_entry, creature_entry) values (81246, 80314);
+replace into custom_mount_entry_relation (item_entry, creature_entry) values (81245, 80313);
+replace into custom_mount_entry_relation (item_entry, creature_entry) values (81246, 80314);
 
 REPLACE INTO `item_template` VALUES (81245, 10, 15, 0, 'Armored Crimson Deathcharger', 'Some horses merely adopt the dark. This horse was born in it.', 17786, 3, 80, 1, 100000, 0, 0, -1, -1, 40, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 46515, 0, 0, 0, -1, 330, 3000, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 1, NULL);
 
