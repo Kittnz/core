@@ -281,17 +281,10 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
     }
 
 
-	// TWT Threat Guid Request and Handshake handling
-	// We only send threat data to marked players via a handshake
+	// TWT Threat: Guid and UnitDetailedThreatSituation Request
 	if (lang == LANG_ADDON && (type == CHAT_MSG_PARTY || type == CHAT_MSG_RAID) && !msg.empty())
 	{
 
-		if (strstr(msg.c_str(), "TWT_HANDSHAKE"))
-		{
-			_player->markWithThreatAddon();
-			return;
-		}
-			
 		if (strstr(msg.c_str(), "TWT_GUID"))
 		{
 
@@ -313,6 +306,37 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 
 				return;
 			}
+		}
+
+		// UnitDetailedThreatSituation
+		if (strstr(msg.c_str(), "TWT_UDTS"))
+		{
+			
+			//guid=1234
+			std::string guidDelim = "guid=";
+			std::string s         = msg.c_str();
+
+			if (_player->IsGameMaster() || !s.find(guidDelim))
+			return;
+
+			int guidPos = s.find(guidDelim);
+
+			uint32 guid = std::stoi(s.substr(guidPos + guidDelim.length(), s.length()).c_str());
+
+			if (!guid)
+				return;
+
+			CreatureData const* data = sObjectMgr.GetCreatureData(guid);
+
+			if (!data)
+				return;
+
+			if (!_player->GetMap()->GetCreature(data->GetObjectGuid(guid)))
+				return;
+			
+			ThreatManager::UnitDetailedThreatSituation(_player->GetMap()->GetCreature(data->GetObjectGuid(guid)), _player);
+
+			return;
 		}
 
 	}
