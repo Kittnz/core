@@ -2572,13 +2572,6 @@ class MANGOS_DLL_SPEC Player final: public Unit
 
 		// Giperion TURTLE SPECIFIC End
 
-		// Xerron Threat data
-		private:
-			bool pHasThreatAddon = false; // https://github.com/CosminPOP/TWThreat
-		public:
-			void markWithThreatAddon() { pHasThreatAddon = true; }
-			bool hasThreatAddon() { return pHasThreatAddon; }
-		// Xerron Threat data end
 };
 
 void AddItemsSetItem(Player*player,Item* item);
