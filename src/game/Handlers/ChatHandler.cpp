@@ -42,6 +42,8 @@
 #include "AccountMgr.h"
 #include "Config/Config.h"
 
+#include <regex>
+
 bool WorldSession::ProcessChatMessageAfterSecurityCheck(std::string& msg, uint32 lang, uint32 msgType)
 {
     if (!IsLanguageAllowedForChatType(lang, msgType))
@@ -308,22 +310,39 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 			}
 		}
 
-		// UnitDetailedThreatSituation
-		if (strstr(msg.c_str(), "TWT_UDTS"))
+		// UnitDetailedThreatSituation or TankTargetsThreatSituation
+		if (strstr(msg.c_str(), "TWT_UDTS") || strstr(msg.c_str(), "TWT_TTTS"))
 		{
-			
-			//guid=1234
-			std::string guidDelim = "guid=";
-			std::string s         = msg.c_str();
 
-			if (_player->IsGameMaster() || !s.find(guidDelim))
-			return;
+			if (_player->IsGameMaster())
+				return;
 
-			int guidPos = s.find(guidDelim);
+			std::string s          = msg.c_str();
+			std::string guidString = std::regex_replace(
+				msg,
+				std::regex("[^0-9]*([0-9]+).*"),
+				std::string("$1")
+			);
 
-			uint32 guid = std::stoi(s.substr(guidPos + guidDelim.length(), s.length()).c_str());
+			if (guidString == msg)        // no numbers found
+				return;
 
-			if (!guid)
+			if (guidString.length() > 10) // int too long
+				return;
+
+			uint32 guid = 0;
+			// not sure if this try is needed with previous checks in place ¯\_(ツ)_/¯
+			// already extracted number if present and checked for length
+			try {
+				guid = std::stoi(guidString);
+			}
+			catch (...)
+			{
+				// cant convert guidString to int
+				return;
+			}
+
+			if (guid == 0)
 				return;
 
 			CreatureData const* data = sObjectMgr.GetCreatureData(guid);
@@ -334,7 +353,10 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 			if (!_player->GetMap()->GetCreature(data->GetObjectGuid(guid)))
 				return;
 			
-			ThreatManager::UnitDetailedThreatSituation(_player->GetMap()->GetCreature(data->GetObjectGuid(guid)), _player);
+			ThreatManager::UnitDetailedThreatSituation(
+				_player->GetMap()->GetCreature(data->GetObjectGuid(guid)), 
+				_player, 
+				strstr(msg.c_str(), "TWT_TTTS"));
 
 			return;
 		}
