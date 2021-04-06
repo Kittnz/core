@@ -33,6 +33,7 @@
 
 class Unit;
 class Creature;
+class Player;
 class ThreatManager;
 class SpellEntry;
 
