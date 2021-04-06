@@ -188,7 +188,7 @@ public:
     void addThreat(Unit* pVictim, float threat, bool crit, SpellSchoolMask schoolMask, SpellEntry const *threatSpell, bool isAssistThreat);
     void addThreat(Unit* pVictim, float threat) { addThreat(pVictim, threat, false, SPELL_SCHOOL_MASK_NONE, nullptr, false); }
 
-	void sendThreatToVictim(Unit* pVictim, float threat);
+	static void UnitDetailedThreatSituation(Creature* creature, Player* requester, bool TTTS, int limit);
 
     // add threat as raw value (ignore redirections and expection all mods applied already to it
     void addThreatDirectly(Unit* pVictim, float threat);

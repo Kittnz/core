@@ -423,38 +423,103 @@ void ThreatManager::addThreat(Unit* pVictim, float pThreat, bool crit, SpellScho
     float threat = ThreatCalcHelper::CalcThreat(pVictim, iOwner, pThreat, crit, schoolMask, pThreatSpell);
 
     addThreatDirectly(pVictim, threat);
-
-	sendThreatToVictim(pVictim, threat);
-	
 }
 
-void ThreatManager::sendThreatToVictim(Unit* pVictim, float threat)
+void ThreatManager::UnitDetailedThreatSituation(Creature* creature, Player* requester, bool TTTS, int limit)
 {
-	if (!pVictim || pVictim == getOwner() || !pVictim->isAlive() || !pVictim->IsInMap(getOwner()) || 
-		threat <= 0.0f || pVictim->GetTypeId() != TYPEID_PLAYER || !iOwner->ToCreature()->IsElite() || 
-		!pVictim->ToPlayer()->hasThreatAddon() || !pVictim->ToPlayer()->GetGroup())
+
+	if (!creature || !creature->isInCombat() || !creature->IsElite())
 		return;
-	
 
-	bool inParty = pVictim->ToPlayer()->GetGroup() && !pVictim->ToPlayer()->GetGroup()->isRaidGroup();
+	if (!requester || !requester->isAlive() || requester->GetTypeId() != TYPEID_PLAYER  || !requester->GetGroup())
+		return;
 
-	std::string creatureName = iOwner->GetName();
-	std::string pThreat = std::to_string((int)getThreat(pVictim));
-	std::string pDistance = std::to_string((int)pVictim->ToPlayer()->GetDistance2d(iOwner->GetPositionX(), iOwner->GetPositionY()));
+	std::string tankName     = creature->getThreatManager().getHostileTarget()->GetName();
+	std::string creatureName = creature->GetName();
+
+	bool isMelee = true;
+	bool isTanking = false;
+
+	int tankThreat  = 0;
+	int threatPct   = 0;
+	int threatValue = 0;
+
+	int myPos = tankName == requester->GetName() ? 0 : -1;
+
+	ThreatList const& threatList = creature->getThreatManager().getThreatList();
+
+	tankThreat = (int)round((*threatList.begin())->getThreat());  // already ordered
+
+	if (tankThreat == 0) // something went wrong, cant find tank threat
+		return;
+
+	if (myPos == -1)
+		for (ThreatList::const_iterator iter = threatList.begin(); iter != threatList.end(); ++iter)
+		{
+			myPos++;
+			if ((*iter)->getTarget()->GetName() == requester->GetName())
+				break;
+		}
 
 	WorldPacket data;
+	bool inParty = requester->GetGroup() && !requester->GetGroup()->isRaidGroup();
 
-	std::string msg = "TWT:" + creatureName + ":" + std::to_string(iOwner->GetGUIDLow()) +
-		":" + pThreat + ":" + pDistance;
+	int position = -1;
 
-	ChatHandler::BuildChatPacket(data, inParty ? CHAT_MSG_PARTY : CHAT_MSG_RAID,
-		msg.c_str(), Language(LANG_ADDON), pVictim->ToPlayer()->GetChatTag(),
-		pVictim->ToPlayer()->GetObjectGuid(), pVictim->ToPlayer()->GetName());
+	for (ThreatList::const_iterator iter = threatList.begin(); iter != threatList.end(); ++iter)
+	{
+		position++;
 
-	pVictim->ToPlayer()->GetSession()->SendPacket(&data);
-		
+		isTanking = (*iter)->getTarget()->GetName() == tankName;
+
+		// skips !
+		if (TTTS) // tank targets threat situation
+		{
+			if (isTanking)				// skip me if im tanking
+				continue;
+			if (position != 1)			// skip the rest except 2nd on threat
+				continue;
+		}
+		else
+		{
+			if (myPos < limit && position >= limit)							 // skip sending whats over the limit
+				continue;
+			if (myPos >= limit && position > limit - 2 && position != myPos) // skip sending whats not me
+				continue;
+		}
+
+		threatValue = (int)round((*iter)->getThreat());
+
+		if (threatValue <= 0) // dont care for negative or 0 threat
+			continue;
+
+		isMelee   = (*iter)->getSourceUnit()->CanReachWithMeleeAttack((*iter)->getTarget());
+
+		threatPct = isTanking ? 100 : (int)round(threatValue * 100 / (tankThreat * (isMelee ? 1.1 : 1.3)));
+
+		std::string separator = ":";
+		std::string msg;
+		msg = "TWTv2";                                                // threat api version
+		msg += separator + creatureName;                              // creature name
+		msg += separator + std::to_string(creature->GetGUIDLow());    // creature guid
+		msg += separator + (*iter)->getTarget()->GetName();           // player name
+		msg += separator + std::to_string((int)isTanking);            // 1 if player is tanking
+		msg += separator + std::to_string(threatValue);               // player's threat value, rounded
+		msg += separator + std::to_string(threatPct);                 // player's threat percent, rounded
+		msg += separator + std::to_string(isMelee);                   // 1 if creature can reach player with melee
+
+		if (TTTS)
+			msg += separator + "TTTS";
+
+		ChatHandler::BuildChatPacket(data, inParty ? CHAT_MSG_PARTY : CHAT_MSG_RAID,
+			msg.c_str(), Language(LANG_ADDON), requester->GetChatTag(),
+			requester->GetObjectGuid(), requester->GetName());
+
+		requester->GetSession()->SendPacket(&data);
+
+	}
+
 }
-
 
 void ThreatManager::addThreatDirectly(Unit* pVictim, float threat)
 {
