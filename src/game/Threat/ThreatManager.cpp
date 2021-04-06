@@ -425,7 +425,7 @@ void ThreatManager::addThreat(Unit* pVictim, float pThreat, bool crit, SpellScho
     addThreatDirectly(pVictim, threat);
 }
 
-void ThreatManager::UnitDetailedThreatSituation(Creature* creature, Player* requester, bool TTTS)
+void ThreatManager::UnitDetailedThreatSituation(Creature* creature, Player* requester, bool TTTS, int limit)
 {
 
 	if (!creature || !creature->isInCombat() || !creature->IsElite())
@@ -444,19 +444,22 @@ void ThreatManager::UnitDetailedThreatSituation(Creature* creature, Player* requ
 	int threatPct   = 0;
 	int threatValue = 0;
 
+	int myPos = tankName == requester->GetName() ? 0 : -1;
+
 	ThreatList const& threatList = creature->getThreatManager().getThreatList();
 
-	for (ThreatList::const_iterator iter = threatList.begin(); iter != threatList.end(); ++iter)
-	{
-		if ((*iter)->getTarget()->GetName() == tankName)
-		{
-			tankThreat = (int)round((*iter)->getThreat());
-			break;
-		}
-	}
+	tankThreat = (int)round((*threatList.begin())->getThreat());  // already ordered
 
-	if (tankThreat == 0) // something went wrong, cant find tank
+	if (tankThreat == 0) // something went wrong, cant find tank threat
 		return;
+
+	if (myPos == -1)
+		for (ThreatList::const_iterator iter = threatList.begin(); iter != threatList.end(); ++iter)
+		{
+			myPos++;
+			if ((*iter)->getTarget()->GetName() == requester->GetName())
+				break;
+		}
 
 	WorldPacket data;
 	bool inParty = requester->GetGroup() && !requester->GetGroup()->isRaidGroup();
@@ -469,11 +472,19 @@ void ThreatManager::UnitDetailedThreatSituation(Creature* creature, Player* requ
 
 		isTanking = (*iter)->getTarget()->GetName() == tankName;
 
+		// skips !
 		if (TTTS) // tank targets threat situation
 		{
-			if (isTanking) // me
+			if (isTanking)				// skip me if im tanking
 				continue;
-			if (position != 1)
+			if (position != 1)			// skip the rest except 2nd on threat
+				continue;
+		}
+		else
+		{
+			if (myPos < limit && position >= limit)							 // skip sending whats over the limit
+				continue;
+			if (myPos >= limit && position > limit - 2 && position != myPos) // skip sending whats not me
 				continue;
 		}
 
