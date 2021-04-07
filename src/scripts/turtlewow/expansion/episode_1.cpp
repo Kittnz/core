@@ -1762,9 +1762,30 @@ bool QuestComplete_npc_voldana(Player* pPlayer, Creature* pQuestGiver, Quest con
     return false;
 }
 
+bool GOHello_go_kheyna_wormhole(Player* pPlayer, GameObject* pGo)
+{
+    if (pPlayer->GetQuestStatus(80395) == QUEST_STATUS_INCOMPLETE || pPlayer->GetQuestStatus(80395) == QUEST_STATUS_COMPLETE) // A Glittering Opportunity
+    {   
+        if (Creature* other = pPlayer->FindNearestCreature(80938, 15.0F))
+            other->SetRespawnTime(1);
+
+        pGo->SummonCreature(81041, pGo->GetPositionX() + 1.0F, pGo->GetPositionY() + 1.0F, pGo->GetPositionZ(), pGo->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN, 60 * 1000);
+       
+        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80938)) 
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+    }
+
+    return false;
+}
+
 void AddSC_episode_1()
 {
     Script *newscript;
+
+    newscript = new Script;
+    newscript->Name = "go_kheyna_wormhole";
+    newscript->pGOHello = &GOHello_go_kheyna_wormhole;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_vanira_unicorn_vendor";
