@@ -627,3 +627,13 @@ update creature_template set scale = 0.4 where entry = 90985;
 replace into custom_pet_entry_relation values (81254, 90985);
 
 update item_template set required_reputation_faction = 749, required_reputation_rank = 7 where entry = 81254;
+
+UPDATE `item_template` SET `spellid_2`='15464', `spelltrigger_2`='1' WHERE (`entry`='81223') AND (`patch`='0');
+UPDATE `item_template` SET `stat_type1`='7' WHERE (`entry`='81223') AND (`patch`='0');
+
+REPLACE INTO `item_template` VALUES (81255, 0, 0, 0, 'Skin Change Token: Dreadskull Clan I', '', 30658, 1, 0, 1, 0, 0, 0, -1, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 12244, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 'item_skin_change');
+
+REPLACE INTO `item_template` VALUES (81256, 0, 0, 0, 'Skin Change Token: Dreadskull Clan II', '', 30658, 1, 0, 1, 0, 0, 0, -1, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 12244, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 'item_skin_change');
+
+update item_template set allowable_race = 2 where entry = 81255;
+update item_template set allowable_race = 2 where entry = 81256;
