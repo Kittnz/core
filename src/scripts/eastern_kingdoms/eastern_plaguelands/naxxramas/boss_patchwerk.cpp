@@ -140,7 +140,7 @@ struct boss_patchwerkAI : public ScriptedAI
             if (threatListPosition > 3)
                 break;
 
-            if (iter->getUnitGuid().IsPlayer())
+            if (!iter->getUnitGuid().IsPlayer())
                 continue;
 
             Player* pTempTarget = m_creature->GetMap()->GetPlayer(iter->getUnitGuid());
