@@ -539,3 +539,79 @@ nextquestinchain = @nextquestinchain, prevquestid = @prevquest,
 ObjectiveText1 = 'Investigate the mountain south of Ratchet'
 where entry = @quest_entry;	
 
+set @quest_entry = 80396;
+set @quest_zone = 17;
+set @title = 'A Bloody Good Deed';
+set @description = 'Placeholder';
+set @objective = 'Kill 6 Kolkar Bloodchargers, 4 Kolkar Pack Runners and  4 Kolkar Marauders.';
+set @completetext = 'Placeholder';
+set @incompletetext = 'Well, did you do it?';
+set @faction_id = 470;
+set @faction_count = 150;
+set @xp_or_money = 980;
+set @reward_money = 61; 
+set @quest_level = 13;
+set @min_level = 13;
+set @questgiver_id = 81041;
+set @quest_finisher = 81041;
+set @nextquest = 0;
+set @nextquestinchain = 0;
+set @prevquest = 80395;
+set @RewChoiceItemId1 = 51793; 
+set @RewChoiceItemId2 = 51794; 
+set @RewChoiceItemId3 = 51792;
+set @RewChoiceItemId4 = 0; 
+set @RewChoiceItemCount1 = 1;
+set @RewChoiceItemCount2 = 1;
+set @RewChoiceItemCount3 = 1;
+set @RewChoiceItemCount4 = 0;
+set @reward_item_1 = 0;
+set @reward_item_2 = 0; 
+set @reward_item_3 = 0;
+set @reward_item_4 = 0;
+set @reward_item_1_count = 0;
+set @reward_item_2_count = 0;
+set @reward_item_3_count = 0;
+set @reward_item_4_count = 0;
+set @creature_to_kill_1 = 3397;
+set @creature_to_kill_2 = 3274; 
+set @creature_to_kill_3 = 3275;
+set @creature_to_kill_4 = 0;
+set @creature_to_kill_1_count = 6;
+set @creature_to_kill_2_count = 6;
+set @creature_to_kill_3_count = 6;
+set @creature_to_kill_4_count = 0;
+set @required_item_1 = 0; 
+set @required_item_2 = 0;
+set @required_item_3 = 0;
+set @required_item_4 = 0;
+set @required_item_1_count = 0;
+set @required_item_2_count = 0;
+set @required_item_3_count = 0;
+set @required_item_4_count = 0;
+replace into quest_template values 
+(@quest_entry, '0', '2', @quest_zone, @min_level,  '0', @quest_level, '0', '0', '0', '0', '0', '0', '0', '0', '0','0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @title, @description, @objective, @completetext, @incompletetext, '', '', '', '', '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', @faction_id, '0', '0', '0', '0', @faction_count, '0', '0', '0', '0', '0', @xp_or_money, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0','0', 0, 0);
+replace into creature_questrelation (id, quest, patch_min, patch_max) values (@questgiver_id, @quest_entry,'0','10'); 
+replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (@quest_finisher, @quest_entry,'0','10');
+update quest_template set 
+rewitemid1 = @reward_item_1, rewitemcount1 = @reward_item_1_count,
+rewitemid2 = @reward_item_2, rewitemcount2 = @reward_item_2_count,
+rewitemid3 = @reward_item_3, rewitemcount3 = @reward_item_3_count,
+rewitemid4 = @reward_item_4, rewitemcount4 = @reward_item_4_count,
+RewChoiceItemId1 = @RewChoiceItemId1, RewChoiceItemCount1 = @RewChoiceItemCount1,
+RewChoiceItemId2 = @RewChoiceItemId2, RewChoiceItemCount2 = @RewChoiceItemCount2,
+RewChoiceItemId3 = @RewChoiceItemId3, RewChoiceItemCount3 = @RewChoiceItemCount3,
+RewChoiceItemId4 = @RewChoiceItemId4, RewChoiceItemCount4 = @RewChoiceItemCount4,
+ReqCreatureOrGOId1 = @creature_to_kill_1, ReqCreatureOrGOCount1 = @creature_to_kill_1_count,
+ReqCreatureOrGOId2 = @creature_to_kill_2, ReqCreatureOrGOCount2 = @creature_to_kill_2_count,
+ReqCreatureOrGOId3 = @creature_to_kill_3, ReqCreatureOrGOCount3 = @creature_to_kill_3_count,
+ReqCreatureOrGOId4 = @creature_to_kill_4, ReqCreatureOrGOCount4 = @creature_to_kill_4_count,
+reqitemid1 = @required_item_1, reqitemcount1 = @required_item_1_count,
+reqitemid2 = @required_item_2, reqitemcount2 = @required_item_2_count,
+reqitemid3 = @required_item_3, reqitemcount3 = @required_item_3_count,
+reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
+nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
+nextquestinchain = @nextquestinchain, prevquestid = @prevquest
+where entry = @quest_entry;	
+
+
