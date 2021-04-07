@@ -619,3 +619,11 @@ where entry = @quest_entry;
 update item_template set bonding = 1, spellid_1 = 28505, display_id = 19529 where entry = 80878;
 update creature_template set scale = 0.5 where entry = 80920;
 replace into custom_pet_entry_relation values (80878, 80920);
+
+REPLACE INTO `item_template` VALUES (81254, 0, 15, 0, 'Water Waveling', 'This Elemental has been formed personally by Duke Hydraxis as thanks for your help in fighting the Sulfuran Firelords.', 13689, 1, 0, 1, 6000, 1500, 0, -1, -1, 20, 0, 0, 0, 0, 0, 0, 893, 7, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 28505, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+
+REPLACE INTO `creature_template` VALUES (90985, 0, 525, 0, 0, 0, 'Water Waveling', '', 0, 1, 1, 64, 64, 0, 0, 0, 35, 0, 1, 1.14286, 1, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, '');
+update creature_template set scale = 0.4 where entry = 90985;
+replace into custom_pet_entry_relation values (81254, 90985);
+
+update item_template set required_reputation_faction = 749, required_reputation_rank = 7 where entry = 81254;
