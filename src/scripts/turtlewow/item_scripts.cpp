@@ -336,6 +336,8 @@ bool ItemUseSpell_skin_changer(Player* pPlayer, Item* pItem, const SpellCastTarg
             case 50207: if (male) bytes = static_cast<uint8>(irand(0, 1) == 0 ? 9 : 11); else bytes = 9; break; // Orc: Blackrock Clan
             case 50208: if (male) bytes = 10; break;                                                            // Orc: Chaos
             case 50209: if (male) bytes = 12; break;                                                            // Orc: Mag'Har
+            case 81255: if (male) bytes = 14; break;                                                            // Orc: Dreadskull Clan I
+            case 81256: if (male) bytes = 16; break;                                                            // Orc: Dreadskull Clan II
             }
             break;
         case RACE_TROLL:
