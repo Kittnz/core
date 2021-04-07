@@ -614,4 +614,8 @@ nextquestid = @nextquest, RewOrReqMoney = @reward_money,
 nextquestinchain = @nextquestinchain, prevquestid = @prevquest
 where entry = @quest_entry;	
 
+-- Misc. DB fixes:
 
+update item_template set bonding = 1, spellid_1 = 28505, display_id = 19529 where entry = 80878;
+update creature_template set scale = 0.5 where entry = 80920;
+replace into custom_pet_entry_relation values (80878, 80920);
