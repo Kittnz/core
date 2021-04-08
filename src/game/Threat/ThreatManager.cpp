@@ -448,7 +448,7 @@ void ThreatManager::UnitDetailedThreatSituation(Creature* creature, Player* requ
 
 	ThreatList const& threatList = creature->getThreatManager().getThreatList();
 
-	tankThreat = (int)round((*threatList.begin())->getThreat());  // already ordered
+	tankThreat = (int)round(creature->getThreatManager().getThreat(creature->getThreatManager().getHostileTarget()));
 
 	if (tankThreat == 0) // something went wrong, cant find tank threat
 		return;
