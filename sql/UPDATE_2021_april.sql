@@ -866,14 +866,16 @@ replace into item_template values
   
 replace into item_template values
  ('81275', '0', '12', '0', 'Intact Pounder Mainframe', '', '20625', '2', '0', '1', '0', '0', '0', '-1', '-1', '20',
- '0', '202', '125', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '30', '202', '125', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '80398', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
- '0', '1', NULL);  
-  
+ '0', '1', NULL);
+ 
+replace into creature_loot_template values (6229, 81275, 0.8, 13, 1, 1, 0, 0, 10);
+ 
 set @quest_entry = 80398;
 set @quest_zone = 721;
 set @title = 'A Pounding Brain';
@@ -884,7 +886,7 @@ set @incompletetext = 'Hello there, $r, are you here for one of my inventions?';
 set @faction_id = 21;
 set @faction_count = 150;
 set @xp_or_money = 980;
-set @reward_money = 250; 
+set @reward_money = 2500; 
 set @quest_level = 30;
 set @min_level = 30;
 set @questgiver_id = 0;
@@ -948,3 +950,5 @@ reqitemid4 = @required_item_4, reqitemcount4 = @required_item_4_count,
 nextquestid = @nextquest, RewOrReqMoney = @reward_money, 
 nextquestinchain = @nextquestinchain, prevquestid = @prevquest
 where entry = @quest_entry;	
+
+update item_template set required_skill = 0, required_skill_rank = 0 where entry in (81250, 81251, 81252, 81253);
