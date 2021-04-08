@@ -42,7 +42,7 @@ constexpr auto SCALE_TEXT_1 = "Do you fools not realize you only empower me furt
 constexpr auto SCALE_TEXT_2 = "How foolish of you to believe numbers will save you, it will only quicken your demise!";
 
 // Expected group size for encounter. Change if you need to debug -- scaling will change.
-const uint8 NORMAL_GROUP_SIZE = 5;
+const uint8 NORMAL_GROUP_SIZE = 1;
 
 struct boss_dark_reaverAI : public ScriptedAI
 {
@@ -145,7 +145,7 @@ struct boss_dark_reaverAI : public ScriptedAI
         uint32 scaledMaxHealth = maxHealth + ((count - NORMAL_GROUP_SIZE) * 0.1 * maxHealth);
         // Hard cap of 3 million (just in case)
         if (scaledMaxHealth > 3000000) scaledMaxHealth = 3000000;
-        uint32 scaledCurrentHealth = scaledMaxHealth * (me->GetHealth() / me->GetMaxHealth());
+        uint32 scaledCurrentHealth = scaledMaxHealth * (me->GetHealth() / (float) me->GetMaxHealth());
         me->SetMaxHealth(scaledMaxHealth);
         me->SetHealth(scaledCurrentHealth);
 
