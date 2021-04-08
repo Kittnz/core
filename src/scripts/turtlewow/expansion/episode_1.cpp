@@ -1764,7 +1764,7 @@ bool QuestComplete_npc_voldana(Player* pPlayer, Creature* pQuestGiver, Quest con
 
 bool GOHello_go_kheyna_wormhole(Player* pPlayer, GameObject* pGo)
 {
-    if (pPlayer->GetQuestStatus(80395) == QUEST_STATUS_INCOMPLETE || pPlayer->GetQuestStatus(80395) == QUEST_STATUS_COMPLETE) // A Glittering Opportunity
+    if (pPlayer->GetQuestStatus(80395) == QUEST_STATUS_INCOMPLETE || pPlayer->GetQuestStatus(80395) == QUEST_STATUS_COMPLETE || pPlayer->GetQuestStatus(80396) == QUEST_STATUS_COMPLETE) // A Glittering Opportunity
     {   
         if (Creature* other = pPlayer->FindNearestCreature(80938, 15.0F))
             other->SetRespawnTime(1);
