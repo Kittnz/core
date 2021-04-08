@@ -141,8 +141,13 @@ struct boss_dark_reaverAI : public ScriptedAI
 
     void ScaleStats(uint8 count)
     {
+        if (count >= NORMAL_GROUP_SIZE)
+            count = count - NORMAL_GROUP_SIZE;
+        else
+            count = 0;
+
         // 10% more health per player
-        uint32 scaledMaxHealth = maxHealth + ((count - NORMAL_GROUP_SIZE) * 0.1 * maxHealth);
+        uint32 scaledMaxHealth = maxHealth + (count * 0.1 * maxHealth);
         // Hard cap of 3 million (just in case)
         if (scaledMaxHealth > 3000000) scaledMaxHealth = 3000000;
         uint32 scaledCurrentHealth = scaledMaxHealth * (me->GetHealth() / (float) me->GetMaxHealth());
@@ -193,8 +198,6 @@ struct boss_dark_reaverAI : public ScriptedAI
 
         // If attackers exceeds normal party size, begin to scale up attack stats per player.
         uint16 threatSize = GetPlayerCountInThreatList();
-        if (threatSize < NORMAL_GROUP_SIZE)
-            threatSize = NORMAL_GROUP_SIZE;
         if (threatSize > Attackers_Count)
         {
             auto numNewAttackers = threatSize - Attackers_Count;
