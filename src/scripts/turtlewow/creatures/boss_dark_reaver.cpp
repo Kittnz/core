@@ -95,7 +95,7 @@ struct boss_dark_reaverAI : public ScriptedAI
         minDmg = creatureInfo->dmg_min;
         maxDmg = creatureInfo->dmg_max;
         attackPower = creatureInfo->attack_power;
-        ScaleStats(0);
+        ScaleStats(NORMAL_GROUP_SIZE);
     }
 
     void Aggro(Unit *who)
