@@ -42,7 +42,7 @@ constexpr auto SCALE_TEXT_1 = "Do you fools not realize you only empower me furt
 constexpr auto SCALE_TEXT_2 = "How foolish of you to believe numbers will save you, it will only quicken your demise!";
 
 // Expected group size for encounter. Change if you need to debug -- scaling will change.
-const uint8 NORMAL_GROUP_SIZE = 1;
+const uint8 NORMAL_GROUP_SIZE = 5;
 
 struct boss_dark_reaverAI : public ScriptedAI
 {
