@@ -860,4 +860,6 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '0', '1', '0', '0', '50', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
- 
+ update item_template set display_id = 60954, name = 'Over-Engineered Riffle', description = 'Failure to operate within strict safety guidelines may result in... double death? Turbo death? Aliveness?' where entry = 51794;
+ update item_template set display_id = 37046, name = 'Void-Linked Robe', description = 'This robe has runes you\'ve never seen before enblazoned on it, and the way it is woven is almost as if it from another world!' where entry = 51792;
+ update item_template set display_id = 60958, name = 'Void-Linked Blade', description = 'This crystalline blade pulsates with energy, you\'ve never seen anything like it before.' where entry = 51793;
