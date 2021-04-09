@@ -317,31 +317,29 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 			if (_player->IsGameMaster())
 				return;
 
-			std::string s          = msg.c_str();
+			std::string input = msg.c_str();
+			
 			std::string guidString = std::regex_replace(
-				msg,
-				std::regex("[^0-9]*([0-9]+).*"),
-				std::string("$1")
+				input, std::regex("[^0-9]*([0-9]+).*"),	std::string("$1")
 			);
+			input = input.substr(input.find(guidString) + guidString.length(), input.length());
 
-			if (guidString == msg)        // no numbers found
+			std::string limitString = std::regex_replace(
+				input, std::regex("[^0-9]*([0-9]+).*"),	std::string("$1")
+			);
+			input = input.substr(input.find(limitString) + limitString.length(), input.length());
+
+			if (guidString.length() > 10 || limitString.length() > 10) // int too long
 				return;
 
-			if (guidString.length() > 10) // int too long
-				return;
 
-			uint32 guid = 0;
-			// not sure if this try is needed with previous checks in place ¯\_(ツ)_/¯
-			// already extracted number if present and checked for length
-			try {
+			int guid = 0;
+			int limit= 0;
+
+			if (!guidString.empty() && guidString.length() <= 10)
 				guid = std::stoi(guidString);
-			}
-			catch (...)
-			{
-				// cant convert guidString to int
-				return;
-			}
-
+			if (!limitString.empty() && limitString.length() <= 10)
+				limit = std::stoi(limitString);
 			if (guid == 0)
 				return;
 
@@ -352,11 +350,23 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 
 			if (!_player->GetMap()->GetCreature(data->GetObjectGuid(guid)))
 				return;
+
+			if (!_player->GetMap()->GetCreature(data->GetObjectGuid(guid))->isAlive())
+			{
+				WorldPacket data;
+				std::string deadMsg = "TWTv2:" + guidString + ":dead";
+				ChatHandler::BuildChatPacket(data, ChatMsg(type),
+					deadMsg.c_str(), Language(LANG_ADDON), _player->GetChatTag(),
+					_player->GetObjectGuid(), _player->GetName());
+
+				_player->GetSession()->SendPacket(&data);
+				return;
+			}
 			
 			ThreatManager::UnitDetailedThreatSituation(
 				_player->GetMap()->GetCreature(data->GetObjectGuid(guid)), 
 				_player, 
-				strstr(msg.c_str(), "TWT_TTTS"));
+				strstr(msg.c_str(), "TWT_TTTS"), limit);
 
 			return;
 		}
