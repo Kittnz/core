@@ -952,3 +952,11 @@ nextquestinchain = @nextquestinchain, prevquestid = @prevquest
 where entry = @quest_entry;	
 
 update item_template set required_skill = 0, required_skill_rank = 0 where entry in (81250, 81251, 81252, 81253);
+
+-- After April 9th:
+
+update item_template set stat_type1 = 7, stat_type2 = 3, stat_value2 = 7, spellid_2 = 0 where entry = 81223;
+update creature_template set name = "Dronormu", display_id1 = 18120 where entry = 80943;
+update quest_template set requiredraces = 434 where entry = 80390;
+update quest_template set details = 'Pal, $N, back so soon? Eh, we’re pals, right?\n\nWhy did Amri Demondeal come looking for you? Why won\'t you tell me? Do you also do the spooky demon stuff like she does? With, like, green fire and all that?\n\nGuess I’ll see, won\'t I? Here, this is for you from her. I hope she never speaks to me again!', requestitemstext = 'Hurry up, we ain\'t got all day' where entry = 80119;
+replace into creature_model_info values (19032, 5875, 2, 2, 0, 0, 0);
