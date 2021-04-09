@@ -428,11 +428,14 @@ void ThreatManager::addThreat(Unit* pVictim, float pThreat, bool crit, SpellScho
 void ThreatManager::UnitDetailedThreatSituation(Creature* creature, Player* requester, bool TTTS, int limit)
 {
 
-	if (!creature || !creature->isInCombat() || !creature->IsElite())
-		return;
+	if (!creature || !creature->isInCombat() || !creature->IsElite() || !creature->isAlive() || !creature->CanHaveThreatList())
+        return;
 
-	if (!requester || !requester->isAlive() || requester->GetTypeId() != TYPEID_PLAYER  || !requester->GetGroup())
-		return;
+    if (!requester || !requester->isAlive() || requester->GetTypeId() != TYPEID_PLAYER || !requester->GetGroup())
+        return;
+
+    if (!creature->getThreatManager().getHostileTarget() || creature->getThreatManager().isThreatListEmpty())
+        return;
 
 	std::string tankName     = creature->getThreatManager().getHostileTarget()->GetName();
 	std::string creatureName = creature->GetName();
