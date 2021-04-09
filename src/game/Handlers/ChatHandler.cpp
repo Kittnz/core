@@ -314,6 +314,9 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 		if (strstr(msg.c_str(), "TWT_UDTS") || strstr(msg.c_str(), "TWT_TTTS"))
 		{
 
+            if (!_player)
+				return;
+
 			if (_player->IsGameMaster())
 				return;
 
