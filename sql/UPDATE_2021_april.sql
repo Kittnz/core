@@ -981,7 +981,7 @@ replace into creature_loot_template values (12101, 81264, 0.2, 13, 1, 1, 0, 0, 1
  
  update item_template set spellid_3 = 7597, spelltrigger_3 = 1 where entry = 81265;
  update item_template set display_id = 16539, name = "Demonic Scimitar" where entry = 81266;
- update item_template set script_name = 'item_illusion', display_id = 36521 where name like '%Illusion:%';
+ update item_template set script_name = 'item_illusion', description = 'This disguise will work until logout.', display_id = 36521 where name like '%Illusion:%';
  update item_template set script_name = 'item_illusion' where script_name = 'item_player_engie';
  update item_template set script_name = 'item_illusion' where script_name = 'item_player_zeaus';
  update item_template set name = 'Illusion: Dryad' where entry = 50408;
