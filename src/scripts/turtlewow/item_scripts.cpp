@@ -601,174 +601,6 @@ bool ItemUseSpell_dryad_acorn(Player* pPlayer, Item* pItem, const SpellCastTarge
     return false;
 }
 
-bool ItemUseSpell_shop_morph_goblin(Player* pPlayer, Item* pItem, const SpellCastTargets&)
-{
-    if (!pPlayer)
-        return false;
-
-    if (pPlayer->GetNativeDisplayId() != pPlayer->GetDisplayId())
-    {
-        pPlayer->DeMorph();
-        return false;
-    }
-    
-    int male[9] = { 7170, 7102, 8847, 7185, 7809, 15095, 15096, 15097, 7209 };
-    int female[9] = { 9553, 15094, 10744, 15094, 11675, 15094, 7175, 11689, 10651};
-    int modelid = rand() % 9;
-    pPlayer->SetDisplayId(static_cast<uint32>((pPlayer->getGender() == GENDER_MALE) ? male[modelid] : female[modelid]));
-
-    ChatHandler(pPlayer).SendSysMessage("Time is money, friend! This disguise will work until logout.");
-    return false;
-}
-
-bool ItemUseSpell_shop_morph_worgen(Player* pPlayer, Item* pItem, const SpellCastTargets&)
-{
-    if (!pPlayer)
-        return false;
-
-    if (pPlayer->GetNativeDisplayId() != pPlayer->GetDisplayId()) 
-    {
-        pPlayer->DeMorph();
-        return false;
-    }
-
-    int models[3] = { 522, 523, 524 };
-    int modelid = rand() % 3;
-    pPlayer->SetDisplayId(static_cast<uint32>(models[modelid]));
-
-    ChatHandler(pPlayer).SendSysMessage("Gilneas will be reborn from the blood of our enemies. Use necklace to return to your normal appearance.");
-    return false;
-}
-
-bool ItemUseSpell_shop_morph_gnoll(Player* pPlayer, Item* pItem, const SpellCastTargets&)
-{
-    if (!pPlayer)
-        return false;
-
-    if (pPlayer->GetNativeDisplayId() != pPlayer->GetDisplayId())
-    {
-        pPlayer->DeMorph();
-        return false;
-    }
-
-    int models[4] = { 487, 383, 384, 491 };
-    int modelid = rand() % 4;
-    pPlayer->SetDisplayId(static_cast<uint32>(models[modelid]));
-
-    ChatHandler(pPlayer).SendSysMessage("Grrrr! More bones to gnaw on... This disguise will work until logout.");
-    return false;
-}
-
-bool ItemUseSpell_shop_morph_scourge(Player* pPlayer, Item* pItem, const SpellCastTargets&)
-{
-    if (!pPlayer)
-        return false;
-
-    if (pPlayer->GetNativeDisplayId() != pPlayer->GetDisplayId())
-    {
-        pPlayer->DeMorph();
-        return false;
-    }
-
-    int models[3] = { 158, 612, 733 };
-    int modelid = rand() % 3;
-    pPlayer->SetDisplayId(static_cast<uint32>(models[modelid]));
-
-    ChatHandler(pPlayer).SendSysMessage("Do you smell something? *sniff* Oh, it's just the troops! This disguise will work until logout.");
-    return false;
-}
-
-bool ItemUseSpell_item_morph_murloc(Player* pPlayer, Item* pItem, const SpellCastTargets&)
-{
-    if (!pPlayer)
-        return false;
-
-    if (pPlayer->GetNativeDisplayId() != pPlayer->GetDisplayId())
-    {
-        pPlayer->DeMorph();
-        return false;
-    }
-
-    pPlayer->SetDisplayId(15393 + urand(0, 5));
-    pPlayer->PlayDirectMusic(8485);
-    ChatHandler(pPlayer).SendSysMessage("Mglrmglmglmgl! This disguise will work until logout.");
-    return false;
-}
-
-bool ItemUseSpell_shop_morph_ghost(Player* pPlayer, Item* pItem, const SpellCastTargets&)
-{
-    if (!pPlayer)
-        return false;
-
-    if (pPlayer->GetNativeDisplayId() != pPlayer->GetDisplayId())
-    {
-        pPlayer->DeMorph();
-        return false;
-    }
-
-    pPlayer->SetDisplayId(14368);
-    ChatHandler(pPlayer).SendSysMessage("Boo! This disguise will work until logout.");
-    return false;
-}
-
-bool ItemUseSpell_shop_morph_banshee(Player* pPlayer, Item* pItem, const SpellCastTargets&)
-{
-    if (!pPlayer)
-        return false;
-
-    if (pPlayer->GetNativeDisplayId() != pPlayer->GetDisplayId())
-    {
-        pPlayer->DeMorph();
-        return false;
-    }
-
-    int models[4] = { 8782, 10728, 10750, 10994 };
-    int modelid = rand() % 4;
-    pPlayer->SetDisplayId(static_cast<uint32>(models[modelid]));
-
-    ChatHandler(pPlayer).SendSysMessage("Let your cries chill the living. This disguise will work until logout.");
-    return false;
-}
-
-bool ItemUseSpell_shop_morph_druid_fang(Player* pPlayer, Item* pItem, const SpellCastTargets&)
-{
-    if (!pPlayer)
-        return false;
-
-    if (pPlayer->GetNativeDisplayId() != pPlayer->GetDisplayId())
-    {
-        pPlayer->DeMorph();
-        return false;
-    }
-
-    int male[5] = { 4232, 4214, 4215, 4212, 4213 };
-    int female[5] = { 4233, 4234, 4313, 4233, 4234 };
-    int modelid = rand() % 5;
-    pPlayer->SetDisplayId(static_cast<uint32>((pPlayer->getGender() == GENDER_MALE) ? male[modelid] : female[modelid]));
-
-    ChatHandler(pPlayer).SendSysMessage("None can stand against the Serpent Lords! This disguise will work until logout.");
-    return false;
-}
-
-bool ItemUseSpell_shop_morph_succubus(Player* pPlayer, Item* pItem, const SpellCastTargets&)
-{
-    if (!pPlayer)
-        return false;
-
-    if (pPlayer->GetNativeDisplayId() != pPlayer->GetDisplayId())
-    {
-        pPlayer->DeMorph();
-        return false;
-    }
-
-    int models[4] = { 10923, 10924, 10925, 10926 };
-    int modelid = rand() % 4;
-    pPlayer->SetDisplayId(static_cast<uint32>(models[modelid]));
-
-    ChatHandler(pPlayer).SendSysMessage("Next time, I'll be the master. This disguise will work until logout.");
-    return false;
-}
-
 bool ItemUseSpell_turtle_radio(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
     if (!pPlayer)
@@ -789,12 +621,12 @@ bool ItemUseSpell_turtle_party(Player* pPlayer, Item* pItem, const SpellCastTarg
     return false;
 }
 
-bool ItemUseSpell_item_engie(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+bool ItemUseSpell_item_illusion(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
-    if (!pPlayer)
-        return false;
+    if (!pPlayer) return false;
 
-    if (pPlayer->GetNativeDisplayId() != pPlayer->GetDisplayId()) {
+    if (pPlayer->GetNativeDisplayId() != pPlayer->GetDisplayId()) 
+    {
         pPlayer->DeMorph();
         return false;
     }
@@ -803,63 +635,73 @@ bool ItemUseSpell_item_engie(Player* pPlayer, Item* pItem, const SpellCastTarget
 
     switch (pItem->GetEntry())
     {
-    case 51246: // Sarah Sadwhistle 
-        displayid = 15458;
-        break;
-    case 51247: // Chromie
-        displayid = 10008;
-        break;
-    case 51055: // Tree Form
-        displayid = 9591;
-        break;
-    case 51065: // Shadow
-        displayid = 4629;
-        break;
-    case 51253: // Furbolg
-        displayid = 6746;
-        break;
-    case 51209: // Rat
-        displayid = 2176;
-        break;
-    case 81145: // Pandaren
-        displayid = 18251;
-        break;
-    default:
-        break;
-    }
-
-    pPlayer->SetDisplayId(displayid);
-    ChatHandler(pPlayer).SendSysMessage("This disguise will work until logout.");
-    return false;
-}
-
-bool ItemUseSpell_item_zeaus(Player* pPlayer, Item* pItem, const SpellCastTargets&)
-{
-    if (!pPlayer)
-        return false;
-
-    if (pPlayer->GetNativeDisplayId() != pPlayer->GetDisplayId()) {
-        pPlayer->DeMorph();
-        return false;
-    }
-
-    uint32 displayid{ 0 };
-
-    switch (pItem->GetEntry())
+    case 51246: displayid = 15458; break; // Sarah Sadwhistle 
+    case 51247: displayid = 10008; break; // Chromie
+    case 51055: displayid = 9591;  break; // Tree Form
+    case 51065: displayid = 4629;  break; // Shadow
+    case 51253: displayid = 6746;  break; // Furbolg
+    case 51209: displayid = 2176;  break; // Rat
+    case 81145: displayid = 18251; break; // Pandaren
+    case 51066: displayid = 12030; break; // Flamewaker
+    case 51067: displayid = 8053;  break; // Bone Serpent
+    case 51205: displayid = 14368; break; // Ghost
+    case 51836: displayid = (15393 + urand(0, 5)); break; // Murloc
+    case 80694: // Scourge
     {
-        case 51066: // Flamewaker
-            displayid = 12030;
-            break;
-        case 51067: // Bone Serpent
-            displayid = 8053;
-            break;
-        default:
-            break;
+        int models[3] = { 158, 612, 733 };
+        int modelid = rand() % 3;
+        displayid = static_cast<uint32>(models[modelid]);
+        break;
     }
-
+    case 51200: // Goblin
+    {
+        int male[9] = { 7170, 7102, 8847, 7185, 7809, 15095, 15096, 15097, 7209 };
+        int female[9] = { 9553, 15094, 10744, 15094, 11675, 15094, 7175, 11689, 10651 };
+        int modelid = rand() % 9;
+        displayid = static_cast<uint32>((pPlayer->getGender() == GENDER_MALE) ? male[modelid] : female[modelid]);
+        break;
+    }
+    case 51201: // Worgen
+    {
+        int models[3] = { 522, 523, 524 };
+        int modelid = rand() % 3;
+        displayid = static_cast<uint32>(models[modelid]);
+        break;
+    }
+    case 80648: // Gnoll
+    {
+        int models[4] = { 487, 383, 384, 491 };
+        int modelid = rand() % 4;
+        displayid = static_cast<uint32>(models[modelid]);
+        break;
+    }
+    case 51206: // Banshee
+    {
+        int models[4] = { 8782, 10728, 10750, 10994 };
+        int modelid = rand() % 4;
+        displayid = static_cast<uint32>(models[modelid]);
+        break;
+    }
+    case 51207: // Serpent Lord
+    {
+        int male[5] = { 4232, 4214, 4215, 4212, 4213 };
+        int female[5] = { 4233, 4234, 4313, 4233, 4234 };
+        int modelid = rand() % 5;
+        displayid = static_cast<uint32>((pPlayer->getGender() == GENDER_MALE) ? male[modelid] : female[modelid]);
+        break;
+    }
+    case 51208: // Succubus
+    {
+        int models[4] = { 10923, 10924, 10925, 10926 };
+        int modelid = rand() % 4;
+        displayid = static_cast<uint32>(models[modelid]);
+        break;
+    }
+    default: break;
+    }
     pPlayer->SetDisplayId(displayid);
     ChatHandler(pPlayer).SendSysMessage("This disguise will work until logout.");
-    return false;
+    return true;
 }
 
 bool ItemUseSpell_item_winter_tree(Player* pPlayer, Item* pItem, const SpellCastTargets&)
@@ -918,7 +760,6 @@ bool ItemUseSpell_item_roleplay_effect(Player* pPlayer, Item* pItem, const Spell
         ChatHandler(pPlayer).SendSysMessage("Can't place rune here! You need to be in an instace or in a raid.");
         return false;
     }
-
 }
 
 bool ItemUseSpell_item_holy_strike_book(Player* pPlayer, Item* pItem, const SpellCastTargets&)
@@ -1476,7 +1317,6 @@ bool GossipSelect_npc_surgeon(Player* pPlayer, Creature* pCreature, uint32 uiSen
     return true;
 }
 
-
 bool ItemUseSpell_shop_racechange(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
     if (pPlayer->isInCombat() || pPlayer->IsBeingTeleported() || (pPlayer->getDeathState() == CORPSE) || pPlayer->IsMoving())
@@ -1888,61 +1728,6 @@ void AddSC_item_scripts()
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "item_morph_goblin";
-    newscript->pItemUseSpell = &ItemUseSpell_shop_morph_goblin;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "item_morph_worgen";
-    newscript->pItemUseSpell = &ItemUseSpell_shop_morph_worgen;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "item_morph_gnoll";
-    newscript->pItemUseSpell = &ItemUseSpell_shop_morph_gnoll;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "item_morph_scourge";
-    newscript->pItemUseSpell = &ItemUseSpell_shop_morph_scourge;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "item_morph_murloc";
-    newscript->pItemUseSpell = &ItemUseSpell_item_morph_murloc;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "item_morph_highelf";
-    newscript->pItemUseSpell = &ItemUseSpell_highborne_soul_mirror;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "item_morph_dryad";
-    newscript->pItemUseSpell = &ItemUseSpell_dryad_acorn;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "item_morph_ghost";
-    newscript->pItemUseSpell = &ItemUseSpell_shop_morph_ghost;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "item_morph_banshee";
-    newscript->pItemUseSpell = &ItemUseSpell_shop_morph_banshee;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "item_morph_serpentlord";
-    newscript->pItemUseSpell = &ItemUseSpell_shop_morph_druid_fang;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "item_morph_succubus";
-    newscript->pItemUseSpell = &ItemUseSpell_shop_morph_succubus;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
     newscript->Name = "item_radio";
     newscript->pItemUseSpell = &ItemUseSpell_turtle_radio;
     newscript->RegisterSelf();
@@ -1953,13 +1738,8 @@ void AddSC_item_scripts()
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "item_player_engie";
-    newscript->pItemUseSpell = &ItemUseSpell_item_engie;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "item_player_zeaus";
-    newscript->pItemUseSpell = &ItemUseSpell_item_zeaus;
+    newscript->Name = "item_illusion";
+    newscript->pItemUseSpell = &ItemUseSpell_item_illusion;
     newscript->RegisterSelf();
 
     newscript = new Script;
