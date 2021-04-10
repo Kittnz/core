@@ -587,7 +587,7 @@ bool ItemUseSpell_item_illusion(Player* pPlayer, Item* pItem, const SpellCastTar
     case 51066: displayid = 12030; break; // Flamewaker
     case 51067: displayid = 8053;  break; // Bone Serpent
     case 51205: displayid = 14368; break; // Ghost
-    case 50408: displayid = (male) ? 150 : 876;  break; // Dryad
+    case 50408: displayid = ((male) ? 150 : 876);  break; // Dryad
     case 51836: displayid = (15393 + urand(0, 5)); break; // Murloc
     case 80694: // Scourge
     {
@@ -598,10 +598,10 @@ bool ItemUseSpell_item_illusion(Player* pPlayer, Item* pItem, const SpellCastTar
     }
     case 51200: // Goblin
     {
-        int male[9] = { 7170, 7102, 8847, 7185, 7809, 15095, 15096, 15097, 7209 };
-        int female[9] = { 9553, 15094, 10744, 15094, 11675, 15094, 7175, 11689, 10651 };
+        int m_male[9] = { 7170, 7102, 8847, 7185, 7809, 15095, 15096, 15097, 7209 };
+        int m_female[9] = { 9553, 15094, 10744, 15094, 11675, 15094, 7175, 11689, 10651 };
         int modelid = rand() % 9;
-        displayid = static_cast<uint32>((male) ? male[modelid] : female[modelid]);
+        displayid = static_cast<uint32>((male) ? m_male[modelid] : m_female[modelid]);
         break;
     }
     case 51201: // Worgen
@@ -627,10 +627,10 @@ bool ItemUseSpell_item_illusion(Player* pPlayer, Item* pItem, const SpellCastTar
     }
     case 51207: // Serpent Lord
     {
-        int male[5] = { 4232, 4214, 4215, 4212, 4213 };
-        int female[5] = { 4233, 4234, 4313, 4233, 4234 };
+        int m_male[5] = { 4232, 4214, 4215, 4212, 4213 };
+        int m_female[5] = { 4233, 4234, 4313, 4233, 4234 };
         int modelid = rand() % 5;
-        displayid = static_cast<uint32>((male) ? male[modelid] : female[modelid]);
+        displayid = static_cast<uint32>((male) ? m_male[modelid] : m_female[modelid]);
         break;
     }
     case 51208: // Succubus
@@ -640,21 +640,16 @@ bool ItemUseSpell_item_illusion(Player* pPlayer, Item* pItem, const SpellCastTar
         displayid = static_cast<uint32>(models[modelid]);
         break;
     }
+    case 50017: // Blood Elf
     case 51203: // High Elf
     {
-        switch (pPlayer->getClass())
-        {
-        case CLASS_WARRIOR: displayid = (male) ? 10375 : 4729; break;
-        case CLASS_PALADIN: displayid = (male) ? 4245 : 4729;  break;
-        case CLASS_MAGE:
-        case CLASS_WARLOCK: displayid = (male) ? 6779 : 3293;  break;
-        case CLASS_PRIEST:  displayid = (male) ? 14394 : 4730; break;
-        case CLASS_DRUID:
-        case CLASS_SHAMAN:
-        case CLASS_HUNTER:  displayid = (male) ? 11671 : 1643; break;
-        case CLASS_ROGUE:   displayid = (male) ? 6549 : 10381; break;
-        }
+        int m_male[6]   = { 10375, 4245, 6779, 14394, 11671, 6549 };
+        int m_female[6] = { 4729,  4729, 3293, 4730,  1643, 10381 };
+        int modelid = rand() % 6;
+        displayid = static_cast<uint32>((male) ? m_male[modelid] : m_female[modelid]);
+        break;
     }
+    default: break;
     }
     pPlayer->SetDisplayId(displayid);
     return true;
