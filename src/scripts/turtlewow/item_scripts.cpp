@@ -542,65 +542,6 @@ bool ItemUseSpell_guild_tabard(Player* pPlayer, Item* pItem, const SpellCastTarg
     return true;
 }
 
-bool ItemUseSpell_highborne_soul_mirror(Player* pPlayer, Item* pItem, const SpellCastTargets&)
-{
-    if (!pPlayer)
-        return false;
-
-    if (pPlayer->GetNativeDisplayId() != pPlayer->GetDisplayId()) {
-        pPlayer->DeMorph();
-        return false;
-    }
-
-    uint32 displayId = 0;
-    bool isMale = pPlayer->getGender() == GENDER_MALE;
-    switch (pPlayer->getClass())
-    {
-        case CLASS_WARRIOR:
-            displayId = isMale ? 10375 : 4729;
-            break;
-        case CLASS_PALADIN:
-            displayId = isMale ? 4245 : 4729;
-            break;
-        case CLASS_MAGE:
-        case CLASS_WARLOCK:
-            displayId = isMale ? 6779 : 3293;
-            break;
-        case CLASS_PRIEST:
-            displayId = isMale ? 14394 : 4730;
-            break;
-        case CLASS_DRUID:
-        case CLASS_SHAMAN:
-        case CLASS_HUNTER:
-            displayId = isMale ? 11671 : 1643;
-            break;
-        case CLASS_ROGUE:
-            displayId = isMale ? 6549 : 10381;
-            break;
-        default:
-            pPlayer->DeMorph();
-    }
-    pPlayer->SetDisplayId(displayId);
-
-    ChatHandler(pPlayer).SendSysMessage("Fel Magic was never an option. This disguise will work until logout.");
-    return false;
-}
-
-bool ItemUseSpell_dryad_acorn(Player* pPlayer, Item* pItem, const SpellCastTargets&)
-{
-    if (!pPlayer)
-        return false;
-
-    if (pPlayer->GetNativeDisplayId() != pPlayer->GetDisplayId()) {
-        pPlayer->DeMorph();
-        return false;
-    }
-
-    pPlayer->SetDisplayId(pPlayer->getGender() == GENDER_MALE ? 150 : 876);
-    ChatHandler(pPlayer).SendSysMessage("Fear the fearsome fury of the forest fawn! This disguise will work until logout.");
-    return false;
-}
-
 bool ItemUseSpell_turtle_radio(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
     if (!pPlayer)
@@ -632,6 +573,7 @@ bool ItemUseSpell_item_illusion(Player* pPlayer, Item* pItem, const SpellCastTar
     }
 
     uint32 displayid{ 0 };
+    bool male = pPlayer->getGender() == GENDER_MALE;
 
     switch (pItem->GetEntry())
     {
@@ -645,6 +587,7 @@ bool ItemUseSpell_item_illusion(Player* pPlayer, Item* pItem, const SpellCastTar
     case 51066: displayid = 12030; break; // Flamewaker
     case 51067: displayid = 8053;  break; // Bone Serpent
     case 51205: displayid = 14368; break; // Ghost
+    case 50408: displayid = (male) ? 150 : 876;  break; // Dryad
     case 51836: displayid = (15393 + urand(0, 5)); break; // Murloc
     case 80694: // Scourge
     {
@@ -658,7 +601,7 @@ bool ItemUseSpell_item_illusion(Player* pPlayer, Item* pItem, const SpellCastTar
         int male[9] = { 7170, 7102, 8847, 7185, 7809, 15095, 15096, 15097, 7209 };
         int female[9] = { 9553, 15094, 10744, 15094, 11675, 15094, 7175, 11689, 10651 };
         int modelid = rand() % 9;
-        displayid = static_cast<uint32>((pPlayer->getGender() == GENDER_MALE) ? male[modelid] : female[modelid]);
+        displayid = static_cast<uint32>((male) ? male[modelid] : female[modelid]);
         break;
     }
     case 51201: // Worgen
@@ -687,7 +630,7 @@ bool ItemUseSpell_item_illusion(Player* pPlayer, Item* pItem, const SpellCastTar
         int male[5] = { 4232, 4214, 4215, 4212, 4213 };
         int female[5] = { 4233, 4234, 4313, 4233, 4234 };
         int modelid = rand() % 5;
-        displayid = static_cast<uint32>((pPlayer->getGender() == GENDER_MALE) ? male[modelid] : female[modelid]);
+        displayid = static_cast<uint32>((male) ? male[modelid] : female[modelid]);
         break;
     }
     case 51208: // Succubus
@@ -697,10 +640,23 @@ bool ItemUseSpell_item_illusion(Player* pPlayer, Item* pItem, const SpellCastTar
         displayid = static_cast<uint32>(models[modelid]);
         break;
     }
-    default: break;
+    case 51203: // High Elf
+    {
+        switch (pPlayer->getClass())
+        {
+        case CLASS_WARRIOR: displayid = (male) ? 10375 : 4729; break;
+        case CLASS_PALADIN: displayid = (male) ? 4245 : 4729;  break;
+        case CLASS_MAGE:
+        case CLASS_WARLOCK: displayid = (male) ? 6779 : 3293;  break;
+        case CLASS_PRIEST:  displayid = (male) ? 14394 : 4730; break;
+        case CLASS_DRUID:
+        case CLASS_SHAMAN:
+        case CLASS_HUNTER:  displayid = (male) ? 11671 : 1643; break;
+        case CLASS_ROGUE:   displayid = (male) ? 6549 : 10381; break;
+        }
+    }
     }
     pPlayer->SetDisplayId(displayid);
-    ChatHandler(pPlayer).SendSysMessage("This disguise will work until logout.");
     return true;
 }
 
@@ -1090,7 +1046,6 @@ bool GossipSelect_npc_barber(Player* pPlayer, Creature* pCreature, uint32 uiSend
     pPlayer->CLOSE_GOSSIP_MENU();
     return true;
 }
-
 
 bool GossipHello_npc_surgeon(Player* pPlayer, Creature* pCreature)
 {
