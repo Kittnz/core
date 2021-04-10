@@ -468,8 +468,8 @@ set @quest_zone = 17;
 set @title = 'A Glittering Opportunity';
 set @description = 'Hey, $r! In addition to the usual weapons in my stock, I have an opportunity for you.\n\nWhile I was doing my run from Ratchet to the Crossroads I saw a weird light on the mountain just south of Ratchet. There seems to be a ramp up just outside Ratchet, some lions call the thing home though, so be careful.\n\nNow I don\'t know what it is, but you adventurin\' types like to dive right in when it comes to dangerous situations right? It could be some HUGE deal like a demon cult or whatever for all I know and them doing nasty stuff to Ratchet would be very bad for MY business. Consider whatever spoils you find as payment.';
 set @objective = 'Investigate the mountain south of Ratchet.';
-set @completetext = 'Oh you\'re an adventurer that has come to investigate the lights aren\'t you?\n\nDon\'t worry, I was merely experimenting with an advanced Arcane Wormhole Generator and it is of no danger to anyone! Fear not, my experiment will be of use to everyone if they succeed.\n\nOn the other hand, I have a task for you...';
-set @incompletetext = 'Greetings! Who are you?';
+set @completetext = 'Oh you\'re an adventurer that has come to investigate the lights aren\'t you? Don\'t worry, I was merely experimenting with a special matter transmitter and it is of no danger to anyone!\n\nFear not, my experiment will be of use to everyone once it succeeds! On the other hand, I have a task for you if you wish to keep this area safer!';
+set @incompletetext = 'Oh my, greetings! Who are you? ';
 set @faction_id = 470;
 set @faction_count = 25;
 set @xp_or_money = 700;
@@ -542,9 +542,10 @@ where entry = @quest_entry;
 set @quest_entry = 80396;
 set @quest_zone = 17;
 set @title = 'A Bloody Good Deed';
-set @description = 'I am Kheyna Spinpistol, mechanic, medic and the end of all evildoers!\n\nI am currently tracking a dangerous foe who will cause the deaths of an unknown number of people. I will ask for your help in dealing with it later… Maybe!\n\nFor now, I have a task for you, one that will have quite the generous reward! The nearby Kolkar tribe is preparing for a raid on the Crossroads, one that will lead to the deaths of countless innocents! I know because I\'ve used one of my tools and you could say I "snuck" up in their tent and heard their Khan order it.\n\nThis can be avoided however! You\'ll save many lives if you go down there and put an end to them all! It\'ll be fun… I hope!\n\nThey\'re all around the Oasis to the west! Once you\'re done come back to me, if I am not here simply touch the crystal again, I will know someone is here for me!';
+set @description = 'I am Kheyna Spinpistol! Mechanist, medic, and  killer of bad things!\n\nI am currently tracking a dangerous foe who will lead to the deaths of an untold number of innocent people. I may ask for your help in dealing with it later…\n\nFor now, I have a task for you, one that will have quite the generous reward! The nearby Kolkar tribe is preparing for a raid on the Crossroads. I know this because I\'ve used one of my tools, and you could say I "sneaked" into their tent and heard their Khan order it. This can be avoided however! You\'ll save many lives if you go down there and put an end to them all! It\'ll be fun… I hope!\n\nThey\'re all around the Oasis to the west. Once you\'re done come back to me. If I am not here simply touch the crystal again, I will know someone is waiting for me. Now get out there and KILL them all!';
 set @objective = 'Kill 6 Kolkar Bloodchargers, 4 Kolkar Pack Runners and  4 Kolkar Marauders. Use the crystal to summon Kheyna Spinpistol again.';
-set @completetext = 'Wonderful! I wonder what feelings you had while their blood was painting you red, or what came into your mind as you heard them scream in pain and probably beg for mercy.\n\nI wish I could have been there to see it for myself. However, know that thanks to this violence many lives were changed.\n\nNow of course I\'ll make sure to reward you… Hmm, let\'s see… Yes this will be something you can either use or sell!\n\nI\'ll make sure to tell others of your deeds! Hopefully we\'ll meet again. Bye for now!';
+set @completetext = 'Wonderful! I wonder what it felt like to have their blood splatter all over you, or what came into your mind as you heard them scream in pain and fall like the vermin they are.\n\nI wish I could have been there to see it for myself, heh. However, know that thanks to this violence many lives were saved! Now of course I\'ll be sure to reward you… Hmm, let\'s see… Yes, this will be something you can either use or sell!
+\n\nI\'ll make sure to tell others of your deeds. Hopefully we\'ll meet again, $n. Bye for now!';
 set @incompletetext = 'Well, did you do it?';
 set @faction_id = 470;
 set @faction_count = 250;
@@ -960,3 +961,24 @@ update creature_template set name = "Dronormu", display_id1 = 18120 where entry 
 update quest_template set requiredraces = 434 where entry = 80390;
 update quest_template set details = 'Pal, $N, back so soon? Eh, we’re pals, right?\n\nWhy did Amri Demondeal come looking for you? Why won\'t you tell me? Do you also do the spooky demon stuff like she does? With, like, green fire and all that?\n\nGuess I’ll see, won\'t I? Here, this is for you from her. I hope she never speaks to me again!', requestitemstext = 'Hurry up, we ain\'t got all day' where entry = 80119;
 replace into creature_model_info values (19032, 5875, 2, 2, 0, 0, 0);
+
+-- For April's 14 update:
+
+replace into creature_loot_template values (11668, 81264, 0.2, 13, 1, 1, 0, 0, 10);
+ replace into creature_loot_template values (12099, 81264, 0.2, 13, 1, 1, 0, 0, 10);
+ replace into creature_loot_template values (11666, 81264, 0.2, 13, 1, 1, 0, 0, 10);
+replace into creature_loot_template values (11667, 81264, 0.2, 13, 1, 1, 0, 0, 10);
+ replace into creature_loot_template values (11661, 81264, 0.2, 13, 1, 1, 0, 0, 10);
+ replace into creature_loot_template values (11664, 81264, 0.2, 13, 1, 1, 0, 0, 10);
+ replace into creature_loot_template values (11663, 81264, 0.2, 13, 1, 1, 0, 0, 10);
+ replace into creature_loot_template values (11662, 81264, 0.2, 13, 1, 1, 0, 0, 10);
+ replace into creature_loot_template values (12119, 81264, 0.2, 13, 1, 1, 0, 0, 10);
+replace into creature_loot_template values (11665, 81264, 0.2, 13, 1, 1, 0, 0, 10);
+replace into creature_loot_template values (12076, 81264, 0.2, 13, 1, 1, 0, 0, 10);
+ replace into creature_loot_template values (12100, 81264, 0.2, 13, 1, 1, 0, 0, 10);
+replace into creature_loot_template values (12101, 81264, 0.2, 13, 1, 1, 0, 0, 10);
+ replace into creature_loot_template values (11659, 81264, 0.2, 13, 1, 1, 0, 0, 10);
+ replace into creature_loot_template values (11658, 81264, 0.2, 13, 1, 1, 0, 0, 10);
+ 
+ update item_template set spellid_3 = 7597, spelltrigger_3 = 1 where entry = 81265;
+ update item_template set display_id = 16539, name = "Demonic Scimitar" where entry = 81266;
