@@ -542,10 +542,9 @@ where entry = @quest_entry;
 set @quest_entry = 80396;
 set @quest_zone = 17;
 set @title = 'A Bloody Good Deed';
-set @description = 'I am Kheyna Spinpistol! Mechanist, medic, and  killer of bad things!\n\nI am currently tracking a dangerous foe who will lead to the deaths of an untold number of innocent people. I may ask for your help in dealing with it later…\n\nFor now, I have a task for you, one that will have quite the generous reward! The nearby Kolkar tribe is preparing for a raid on the Crossroads. I know this because I\'ve used one of my tools, and you could say I "sneaked" into their tent and heard their Khan order it. This can be avoided however! You\'ll save many lives if you go down there and put an end to them all! It\'ll be fun… I hope!\n\nThey\'re all around the Oasis to the west. Once you\'re done come back to me. If I am not here simply touch the crystal again, I will know someone is waiting for me. Now get out there and KILL them all!';
+set @description = 'I am Kheyna Spinpistol. Mechanist, medic, and among other things.\n\nI am currently tracking a dangerous foe who threaten the lives of an untold number of innocents. I may ask for your help in dealing with this later…\n\nFor now, I have a task for you, one that will have quite the generous reward! The nearby Kolkar tribe is preparing for a raid on the Crossroads. I know this because I\'ve used one of my tools, and you could say I "sneaked" into their tent and heard their Khan ordering it. This can be avoided however. You\'ll save many lives if you go down there and put an end to them all.\n\nThey\'re all around the Oasis to the west. Once you\'re done come back to me. If I am not here simply touch the crystal again, I will know someone is waiting for me. Now get out there and KILL them all!';
 set @objective = 'Kill 6 Kolkar Bloodchargers, 4 Kolkar Pack Runners and  4 Kolkar Marauders. Use the crystal to summon Kheyna Spinpistol again.';
-set @completetext = 'Wonderful! I wonder what it felt like to have their blood splatter all over you, or what came into your mind as you heard them scream in pain and fall like the vermin they are.\n\nI wish I could have been there to see it for myself, heh. However, know that thanks to this violence many lives were saved! Now of course I\'ll be sure to reward you… Hmm, let\'s see… Yes, this will be something you can either use or sell!
-\n\nI\'ll make sure to tell others of your deeds. Hopefully we\'ll meet again, $n. Bye for now!';
+set @completetext = 'Wonderful. I wonder what it felt like to have their blood splatter all over you, or what came into your mind as you heard them scream in pain and fall like the vermin they are.\n\nI wish I could have been there to see it for myself, heh. However, know that thanks to this violence many lives were saved. Now of course I\'ll be sure to reward you… Hmm, let\'s see… Yes, this will be something you can either use or sell for compensation.\n\nI\'ll make sure to tell others of your deeds. Hopefully we\'ll meet again, $n.';
 set @incompletetext = 'Well, did you do it?';
 set @faction_id = 470;
 set @faction_count = 250;
@@ -982,3 +981,7 @@ replace into creature_loot_template values (12101, 81264, 0.2, 13, 1, 1, 0, 0, 1
  
  update item_template set spellid_3 = 7597, spelltrigger_3 = 1 where entry = 81265;
  update item_template set display_id = 16539, name = "Demonic Scimitar" where entry = 81266;
+ update item_template set script_name = 'item_illusion', display_id = 36521 where name like '%Illusion:%';
+ update item_template set script_name = 'item_illusion' where script_name = 'item_player_engie';
+ update item_template set script_name = 'item_illusion' where script_name = 'item_player_zeaus';
+ update item_template set name = 'Illusion: Dryad' where entry = 50408;
