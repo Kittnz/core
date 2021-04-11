@@ -987,3 +987,5 @@ replace into creature_loot_template values (12101, 81264, 0.2, 13, 1, 1, 0, 0, 1
  update item_template set name = 'Illusion: Dryad' where entry = 50408;
  
  REPLACE INTO `item_template` VALUES (8635, 10, 15, 4, 'Ancient Nightsaber', 'The lack of spots or stripes marks this beast as a descendant of the most ancient frostsaber line.', 17606, 3, 64, 1, 1000000, 0, 0, -1, -1, 60, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16055, 0, 0, 0, 1, 330, 3000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+
+update item_template set bonding = 1 where entry = 51740;
