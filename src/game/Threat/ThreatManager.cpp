@@ -425,7 +425,7 @@ void ThreatManager::addThreat(Unit* pVictim, float pThreat, bool crit, SpellScho
     addThreatDirectly(pVictim, threat);
 }
 
-void ThreatManager::UnitDetailedThreatSituation(Creature* creature, Player* requester, bool TTTS, int limit)
+void ThreatManager::UnitDetailedThreatSituation(Creature* creature, Player* requester, int limit)
 {
 
 	if (!creature || !creature->isInCombat() || !creature->IsElite() || !creature->isAlive() || !creature->CanHaveThreatList())
@@ -440,29 +440,27 @@ void ThreatManager::UnitDetailedThreatSituation(Creature* creature, Player* requ
 	std::string tankName     = creature->getThreatManager().getHostileTarget()->GetName();
 	std::string creatureName = creature->GetName();
 
-	bool isMelee = true;
-	bool isTanking = false;
+	bool isMelee    = true;
+	bool isTanking  = false;
 
 	int tankThreat  = 0;
 	int threatPct   = 0;
 	int threatValue = 0;
-
-	int myPos = tankName == requester->GetName() ? 0 : -1;
+	int myPos       = -1;
 
 	ThreatList const& threatList = creature->getThreatManager().getThreatList();
 
 	tankThreat = (int)round(creature->getThreatManager().getThreat(creature->getThreatManager().getHostileTarget()));
 
-	if (tankThreat == 0) // something went wrong, cant find tank threat
+	if (tankThreat == 0)
 		return;
 
-	if (myPos == -1)
-		for (ThreatList::const_iterator iter = threatList.begin(); iter != threatList.end(); ++iter)
-		{
-			myPos++;
-			if ((*iter)->getTarget()->GetName() == requester->GetName())
-				break;
-		}
+	for (ThreatList::const_iterator iter = threatList.begin(); iter != threatList.end(); ++iter)
+	{
+		myPos++;
+		if ((*iter)->getTarget()->GetName() == requester->GetName())
+			break;
+	}
 
 	WorldPacket data;
 	bool inParty = requester->GetGroup() && !requester->GetGroup()->isRaidGroup();
@@ -473,46 +471,31 @@ void ThreatManager::UnitDetailedThreatSituation(Creature* creature, Player* requ
 	{
 		position++;
 
-		isTanking = (*iter)->getTarget()->GetName() == tankName;
-
 		// skips !
-		if (TTTS) // tank targets threat situation
-		{
-			if (isTanking)				// skip me if im tanking
-				continue;
-			if (position != 1)			// skip the rest except 2nd on threat
-				continue;
-		}
-		else
-		{
-			if (myPos < limit && position >= limit)							 // skip sending whats over the limit
-				continue;
-			if (myPos >= limit && position > limit - 2 && position != myPos) // skip sending whats not me
-				continue;
-		}
+		if (myPos < limit && position >= limit)							 // skip sending whats over the limit
+			continue;
+		if (myPos >= limit && position > limit - 2 && position != myPos) // skip sending whats not me
+			continue;
 
 		threatValue = (int)round((*iter)->getThreat());
 
-		if (threatValue <= 0) // dont care for negative or 0 threat
+		if (threatValue < 0)                                             // dont care for negative
 			continue;
 
+		isTanking = (*iter)->getTarget()->GetName() == tankName;
 		isMelee   = (*iter)->getSourceUnit()->CanReachWithMeleeAttack((*iter)->getTarget());
 
 		threatPct = isTanking ? 100 : (int)round(threatValue * 100 / (tankThreat * (isMelee ? 1.1 : 1.3)));
+		threatPct = threatPct > 100 ? 100 : threatPct;
 
 		std::string separator = ":";
 		std::string msg;
-		msg = "TWTv2";                                                // threat api version
-		msg += separator + creatureName;                              // creature name
-		msg += separator + std::to_string(creature->GetGUIDLow());    // creature guid
+		msg = "TWTv3";                                                // threat api version
 		msg += separator + (*iter)->getTarget()->GetName();           // player name
 		msg += separator + std::to_string((int)isTanking);            // 1 if player is tanking
 		msg += separator + std::to_string(threatValue);               // player's threat value, rounded
 		msg += separator + std::to_string(threatPct);                 // player's threat percent, rounded
 		msg += separator + std::to_string(isMelee);                   // 1 if creature can reach player with melee
-
-		if (TTTS)
-			msg += separator + "TTTS";
 
 		ChatHandler::BuildChatPacket(data, inParty ? CHAT_MSG_PARTY : CHAT_MSG_RAID,
 			msg.c_str(), Language(LANG_ADDON), requester->GetChatTag(),
