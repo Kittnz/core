@@ -466,7 +466,7 @@ update creature_template set npc_flags = 2 where entry = 81041;
 set @quest_entry = 80395;
 set @quest_zone = 17;
 set @title = 'A Glittering Opportunity';
-set @description = 'Hey, $r! In addition to the usual weapons in my stock, I have an opportunity for you.\n\nWhile I was doing my run from Ratchet to the Crossroads I saw a weird light on the mountain just south of Ratchet. There seems to be a ramp up just outside Ratchet, some lions call the thing home though, so be careful.\n\nNow I don\'t know what it is, but you adventurin\' types like to dive right in when it comes to dangerous situations right? It could be some HUGE deal like a demon cult or whatever for all I know and them doing nasty stuff to Ratchet would be very bad for MY business. Consider whatever spoils you find as payment.';
+set @description = 'Hey, $r! In addition to the usual weapons in my stock, I have an opportunity for you.\n\nWhile I was doing my run from Ratchet to the Crossroads I saw a weird light on the mountain just south of Ratchet. There seems to be a ramp up just outside Ratchet, some raptors call the thing home though, so be careful.\n\nNow I don\'t know what it is, but you adventurin\' types like to dive right in when it comes to dangerous situations right? It could be some HUGE deal like a demon cult or whatever for all I know and them doing nasty stuff to Ratchet would be very bad for MY business. Consider whatever spoils you find as payment.';
 set @objective = 'Investigate the mountain south of Ratchet.';
 set @completetext = 'Oh you\'re an adventurer that has come to investigate the lights aren\'t you? Don\'t worry, I was merely experimenting with a special matter transmitter and it is of no danger to anyone!\n\nFear not, my experiment will be of use to everyone once it succeeds! On the other hand, I have a task for you if you wish to keep this area safer!';
 set @incompletetext = 'Oh my, greetings! Who are you? ';
@@ -860,7 +860,7 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '0', '1', '0', '0', '50', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
- update item_template set display_id = 60954, name = 'Over-Engineered Riffle', description = 'Failure to operate within strict safety guidelines may result in... double death? Turbo death? Aliveness?' where entry = 51794;
+ update item_template set display_id = 60954, name = 'Otherworldly Riffle', description = 'Failure to operate within strict safety guidelines may result in... double death? Turbo death? Aliveness?' where entry = 51794;
  update item_template set display_id = 37046, name = 'Otherworldly Robe', description = 'This robe has runes you\'ve never seen before enblazoned on it, and the way it is woven is almost as if it from another world!' where entry = 51792;
  update item_template set display_id = 60958, name = 'Otherworldly Blade', description = 'This crystalline blade pulsates with energy, you\'ve never seen anything like it before.' where entry = 51793;
   
@@ -991,3 +991,4 @@ replace into creature_loot_template values (12101, 81264, 0.2, 13, 1, 1, 0, 0, 1
 update item_template set bonding = 1 where entry = 51740;
 
 update quest_template set RewRepFaction2 = 76, RewRepFaction3 = 81, RewRepFaction4 = 108, RewRepValue2 = 125, RewRepValue3 = 50, RewRepValue4 = 50 where entry = 80396;
+update gameobject_template set type = 1, data4 = 0 where entry = 3000284;

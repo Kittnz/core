@@ -1459,7 +1459,7 @@ struct go_teslinah_search : public GameObjectAI
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80276);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSayToPlayer("Oooh, this place looks much kinder than the other one. But I’m sure my mom didn't go to the dwarf lands.", pPlayer);
+                        teslinah->MonsterSayToPlayer("Oooh, this place looks much kinder than the other one. But Iï¿½m sure my mom didn't go to the dwarf lands.", pPlayer);
                         break;
                     }
                     case 3000257:
@@ -1498,7 +1498,7 @@ struct go_teslinah_search : public GameObjectAI
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80280);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSayToPlayer("I heard that this place existed before the new town was built! There's so many shops, but the streets are all so crammed that it’s a little bit scary.", pPlayer);
+                        teslinah->MonsterSayToPlayer("I heard that this place existed before the new town was built! There's so many shops, but the streets are all so crammed that itï¿½s a little bit scary.", pPlayer);
                         break;
                     }
                     case 3000261:
@@ -1577,7 +1577,7 @@ struct go_teslinah_search : public GameObjectAI
                     {
                         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80288);
                         pPlayer->KilledMonster(cInfo, ObjectGuid());
-                        teslinah->MonsterSayToPlayer("Oh, there's so many people here! I remember when we first arrived after flying on gryphon’s back! Their feathers were really fluffy and soft. Could Mom be here?", pPlayer);
+                        teslinah->MonsterSayToPlayer("Oh, there's so many people here! I remember when we first arrived after flying on gryphonï¿½s back! Their feathers were really fluffy and soft. Could Mom be here?", pPlayer);
                         break;
                     }
                     case 3000269:
@@ -1619,7 +1619,7 @@ bool GossipSelect_npc_iluria(Player* pPlayer, Creature* pCreature, uint32 /*uiSe
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
         pPlayer->AddItem(80865, 1);
-        pCreature->MonsterSayToPlayer("Ahh… Applebough. Of course. Here's the balm that will help.", pPlayer);
+        pCreature->MonsterSayToPlayer("Ahhï¿½ Applebough. Of course. Here's the balm that will help.", pPlayer);
         pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
     }
     pPlayer->CLOSE_GOSSIP_MENU();
@@ -1764,18 +1764,17 @@ bool QuestComplete_npc_voldana(Player* pPlayer, Creature* pQuestGiver, Quest con
 
 bool GOHello_go_kheyna_wormhole(Player* pPlayer, GameObject* pGo)
 {
-    if (pPlayer->GetQuestStatus(80395) == QUEST_STATUS_INCOMPLETE || pPlayer->GetQuestStatus(80395) == QUEST_STATUS_COMPLETE || pPlayer->GetQuestStatus(80396) == QUEST_STATUS_COMPLETE) // A Glittering Opportunity
-    {   
-        if (Creature* other = pPlayer->FindNearestCreature(80938, 15.0F))
-            other->SetRespawnTime(1);
-
-        pGo->SummonCreature(81041, pGo->GetPositionX() + 1.0F, pGo->GetPositionY() + 1.0F, pGo->GetPositionZ(), pGo->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN, 60 * 1000);
-       
-        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80938)) 
+    if (pPlayer->GetQuestStatus(80395) == QUEST_STATUS_INCOMPLETE)
+        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80938))
             pPlayer->KilledMonster(cInfo, ObjectGuid());
-    }
 
-    return false;
+    if (pPlayer->FindNearestCreature(81041, 15.0F))
+        return true;
+
+    if (pPlayer->GetQuestStatus(80395) == QUEST_STATUS_INCOMPLETE || pPlayer->GetQuestStatus(80395) == QUEST_STATUS_COMPLETE || pPlayer->GetQuestStatus(80396) == QUEST_STATUS_COMPLETE) // A Glittering Opportunity
+        pGo->SummonCreature(81041, pGo->GetPositionX() + 1.0F, pGo->GetPositionY() + 1.0F, pGo->GetPositionZ(), pGo->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN, 60 * 1000);
+
+    return true;
 }
 
 void AddSC_episode_1()
