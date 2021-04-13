@@ -287,89 +287,45 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 	if (lang == LANG_ADDON && (type == CHAT_MSG_PARTY || type == CHAT_MSG_RAID) && !msg.empty())
 	{
 
-		if (strstr(msg.c_str(), "TWT_GUID"))
-		{
-
-			if (!_player->GetSelectedCreature())
-			{
-				return;
-			}
-			else
-			{
-				std::string guidMsg = "TWTGUID:" + std::to_string(_player->GetSelectedCreature()->GetGUIDLow());
-
-				WorldPacket guidData;
-
-				ChatHandler::BuildChatPacket(guidData, ChatMsg(type),
-					guidMsg.c_str(), Language(LANG_ADDON), _player->GetChatTag(),
-					_player->GetObjectGuid(), _player->GetName());
-
-				_player->GetSession()->SendPacket(&guidData);
-
-				return;
-			}
-		}
-
-		// UnitDetailedThreatSituation or TankTargetsThreatSituation
-		if (strstr(msg.c_str(), "TWT_UDTS") || strstr(msg.c_str(), "TWT_TTTS"))
+		// UnitDetailedThreatSituation
+		if (strstr(msg.c_str(), "TWT_UDTSv3"))
 		{
 
             if (!_player)
 				return;
-
 			if (_player->IsGameMaster())
 				return;
+			if (!_player->GetSelectedCreature())
+				return;
 
-			std::string input = msg.c_str();
+			// CanHaveThreatList checks isAlive too.
+			if (!_player->GetSelectedCreature()->CanHaveThreatList())
+				return;
+
+			std::string limitString = std::regex_replace(msg.c_str(), std::regex("[^0-9]*([0-9]+).*"), std::string("$1"));
+
+			if (limitString.empty() || limitString.length() > 2)
+				return;
+
+			int limit = 0;
 			
-			std::string guidString = std::regex_replace(
-				input, std::regex("[^0-9]*([0-9]+).*"),	std::string("$1")
-			);
-			input = input.substr(input.find(guidString) + guidString.length(), input.length());
-
-			std::string limitString = std::regex_replace(
-				input, std::regex("[^0-9]*([0-9]+).*"),	std::string("$1")
-			);
-			input = input.substr(input.find(limitString) + limitString.length(), input.length());
-
-			if (guidString.length() > 10 || limitString.length() > 10) // int too long
-				return;
-
-
-			int guid = 0;
-			int limit= 0;
-
-			if (!guidString.empty() && guidString.length() <= 10)
-				guid = std::stoi(guidString);
-			if (!limitString.empty() && limitString.length() <= 10)
-				limit = std::stoi(limitString);
-			if (guid == 0)
-				return;
-
-			CreatureData const* data = sObjectMgr.GetCreatureData(guid);
-
-			if (!data)
-				return;
-
-			if (!_player->GetMap()->GetCreature(data->GetObjectGuid(guid)))
-				return;
-
-			if (!_player->GetMap()->GetCreature(data->GetObjectGuid(guid))->isAlive())
+			try 
 			{
-				WorldPacket data;
-				std::string deadMsg = "TWTv2:" + guidString + ":dead";
-				ChatHandler::BuildChatPacket(data, ChatMsg(type),
-					deadMsg.c_str(), Language(LANG_ADDON), _player->GetChatTag(),
-					_player->GetObjectGuid(), _player->GetName());
-
-				_player->GetSession()->SendPacket(&data);
+				limit = std::stoi(limitString);
+			}
+			catch (...)
+			{
 				return;
 			}
 			
+
+			if (limit <= 0 || limit > 20) // 1-99, in practice 4-11
+				return;
+			
 			ThreatManager::UnitDetailedThreatSituation(
-				_player->GetMap()->GetCreature(data->GetObjectGuid(guid)), 
+				_player->GetSelectedCreature(),
 				_player, 
-				strstr(msg.c_str(), "TWT_TTTS"), limit);
+				limit);
 
 			return;
 		}
