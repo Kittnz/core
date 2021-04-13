@@ -307,7 +307,17 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 			if (limitString.empty() || limitString.length() > 2)
 				return;
 
-			int limit = std::stoi(limitString);
+			int limit = 0;
+			
+			try 
+			{
+				limit = std::stoi(limitString);
+			}
+			catch (...)
+			{
+				return;
+			}
+			
 
 			if (limit <= 0 || limit > 20) // 1-99, in practice 4-11
 				return;
