@@ -288,7 +288,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 	{
 
 		// UnitDetailedThreatSituation
-		if (strstr(msg.c_str(), "TWT_UDTS"))
+		if (strstr(msg.c_str(), "TWT_UDTSv3"))
 		{
 
             if (!_player)
