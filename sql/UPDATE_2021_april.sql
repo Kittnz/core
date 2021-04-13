@@ -557,13 +557,13 @@ set @quest_finisher = 81041;
 set @nextquest = 0;
 set @nextquestinchain = 0;
 set @prevquest = 80395;
-set @RewChoiceItemId1 = 51793; 
-set @RewChoiceItemId2 = 51794; 
-set @RewChoiceItemId3 = 51792;
+set @RewChoiceItemId1 = 51792;
+set @RewChoiceItemId2 = 0;
+set @RewChoiceItemId3 = 0;
 set @RewChoiceItemId4 = 0; 
 set @RewChoiceItemCount1 = 1;
-set @RewChoiceItemCount2 = 1;
-set @RewChoiceItemCount3 = 1;
+set @RewChoiceItemCount2 = 0;
+set @RewChoiceItemCount3 = 0;
 set @RewChoiceItemCount4 = 0;
 set @reward_item_1 = 0;
 set @reward_item_2 = 0; 
@@ -861,8 +861,8 @@ replace into item_template values
  '0', '1', NULL);
  
  update item_template set display_id = 60954, name = 'Over-Engineered Riffle', description = 'Failure to operate within strict safety guidelines may result in... double death? Turbo death? Aliveness?' where entry = 51794;
- update item_template set display_id = 37046, name = 'Void-Linked Robe', description = 'This robe has runes you\'ve never seen before enblazoned on it, and the way it is woven is almost as if it from another world!' where entry = 51792;
- update item_template set display_id = 60958, name = 'Void-Linked Blade', description = 'This crystalline blade pulsates with energy, you\'ve never seen anything like it before.' where entry = 51793;
+ update item_template set display_id = 37046, name = 'Otherworldly Robe', description = 'This robe has runes you\'ve never seen before enblazoned on it, and the way it is woven is almost as if it from another world!' where entry = 51792;
+ update item_template set display_id = 60958, name = 'Otherworldly Blade', description = 'This crystalline blade pulsates with energy, you\'ve never seen anything like it before.' where entry = 51793;
   
 replace into item_template values
  ('81275', '0', '12', '0', 'Intact Pounder Mainframe', '', '20625', '2', '0', '1', '0', '0', '0', '-1', '-1', '20',
@@ -989,3 +989,5 @@ replace into creature_loot_template values (12101, 81264, 0.2, 13, 1, 1, 0, 0, 1
  REPLACE INTO `item_template` VALUES (8635, 10, 15, 4, 'Ancient Nightsaber', 'The lack of spots or stripes marks this beast as a descendant of the most ancient frostsaber line.', 17606, 3, 64, 1, 1000000, 0, 0, -1, -1, 60, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16055, 0, 0, 0, 1, 330, 3000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
 
 update item_template set bonding = 1 where entry = 51740;
+
+update quest_template set RewRepFaction2 = 76, RewRepFaction3 = 81, RewRepFaction4 = 108, RewRepValue2 = 125, RewRepValue3 = 50, RewRepValue4 = 50 where entry = 80396;
