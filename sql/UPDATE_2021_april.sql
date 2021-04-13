@@ -990,5 +990,4 @@ replace into creature_loot_template values (12101, 81264, 0.2, 13, 1, 1, 0, 0, 1
 
 update item_template set bonding = 1 where entry = 51740;
 
-update quest_template set RewRepFaction2 = 76, RewRepFaction3 = 81, RewRepFaction4 = 108, RewRepValue2 = 125, RewRepValue3 = 50, RewRepValue4 = 50 where entry = 80396;
 update gameobject_template set type = 1, data4 = 0 where entry = 3000284;
