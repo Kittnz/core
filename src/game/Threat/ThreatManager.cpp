@@ -444,9 +444,9 @@ void ThreatManager::UnitDetailedThreatSituation(Creature* creature, Player* requ
 	bool isTanking  = false;
 
 	int tankThreat  = 0;
-	int threatPct   = 0;
 	int threatValue = 0;
 	int myPos       = -1;
+	float threatPct = 0;
 
 	ThreatList const& threatList = creature->getThreatManager().getThreatList();
 
@@ -485,7 +485,8 @@ void ThreatManager::UnitDetailedThreatSituation(Creature* creature, Player* requ
 		isTanking = (*iter)->getTarget()->GetName() == tankName;
 		isMelee   = (*iter)->getSourceUnit()->CanReachWithMeleeAttack((*iter)->getTarget());
 
-		threatPct = isTanking ? 100 : (int)round(threatValue * 100 / (tankThreat * (isMelee ? 1.1 : 1.3)));
+		threatPct = isTanking ? 100 : threatValue * 100 / (tankThreat * (isMelee ? 1.1 : 1.3));
+		threatPct = (float)((int)(threatPct * 10 + .5)) / 10;
 		threatPct = threatPct > 100 ? 100 : threatPct;
 
 		std::string separator = ":";
