@@ -302,26 +302,35 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 			if (!_player->GetSelectedCreature()->CanHaveThreatList())
 				return;
 
-			std::string limitString = std::regex_replace(msg.c_str(), std::regex("[^0-9]*([0-9]+).*"), std::string("$1"));
+			int limit;
 
-			if (limitString.empty() || limitString.length() > 2)
-				return;
+            if (msg.find("limit=") == std::string::npos)           //limit= key not found
+            {
+                limit = 4; // default low
+            }
+            else
+            {
+                msg = msg.substr(msg.find("limit=") + 6, 2);       // 6 = limit= length(), 2 = max 2 digits
 
-			int limit = 0;
-			
-			try 
-			{
-				limit = std::stoi(limitString);
-			}
-			catch (...)
-			{
-				return;
-			}
+                std::string limitString = std::regex_replace(msg.c_str(), std::regex("[^0-9]*([0-9]+).*"), std::string("$1"));
+
+                if (limitString.empty() || limitString.length() > 2)
+                    return;
+
+                try
+                {
+                    limit = std::stoi(limitString);
+                }
+                catch (...)
+                {
+                    return;
+                }
+            }
 			
 
 			if (limit <= 0 || limit > 20) // 1-99, in practice 4-11
 				return;
-			
+
 			ThreatManager::UnitDetailedThreatSituation(
 				_player->GetSelectedCreature(),
 				_player, 
