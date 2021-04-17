@@ -1194,6 +1194,12 @@ void instance_naxxramas::OnPlayerDeath(Player* p)
         // be called, thus we need to do it here.
         if (Creature* pAnub = GetSingleCreatureFromStorage(NPC_ANUB_REKHAN))
         {
+            // No need to spawn more than 100 scarabs...
+            std::list<Creature*> scarabs;
+            GetCreatureListWithEntryInGrid(scarabs, pAnub, 16698, 300.0f);
+            if (scarabs.size() > 100)
+                return;
+
             //pAnub->AI()->DoCast(p, 29105, true);
             pAnub->SendSpellGo(p, 28864);
             for (int i = 0; i < 5; i++)
