@@ -112,11 +112,14 @@ struct boss_anubrekhanAI : public ScriptedAI
         GetCreatureListWithEntryInGrid(scarabs, m_creature, MOB_CORPSE_SCARAB, 300.0f);
         for (auto it = scarabs.begin(); it != scarabs.end();)
         {
-            if (scarabs.size() < 31)
-                break;
+            //if (scarabs.size() < 31)
+            //    break;
             Creature* pC = *it;
-            static_cast<TemporarySummon*>(pC)->UnSummon();
-            it = scarabs.erase(it);
+            if (pC)
+            {
+                static_cast<TemporarySummon *>(pC)->UnSummon();
+                it = scarabs.erase(it);
+            }
         }
     }
 
