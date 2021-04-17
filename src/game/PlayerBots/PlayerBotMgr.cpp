@@ -5,17 +5,16 @@
 #include "World.h"
 #include "WorldSession.h"
 #include "AccountMgr.h"
-#include "Opcodes.h"
 #include "Config/Config.h"
 #include "Chat.h"
 #include "Player.h"
+#include "Group.h"
 #include "PlayerBotAI.h"
 #include "PartyBotAI.h"
 #include "BattleBotAI.h"
 #include "BattleBotWaypoints.h"
 #include "MapBotAI.h"
 #include "MapBotWaypoints.h"
-#include "Anticheat.h"
 #include "Language.h"
 
 INSTANTIATE_SINGLETON_1(PlayerBotMgr);
