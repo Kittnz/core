@@ -1129,7 +1129,7 @@ void AuthSocket::LoadRealmlist(ByteBuffer &pkt)
 				else
 					AmountOfCharacters = 0;
 
-				bool ok_build = std::find(i->second.realmbuilds.begin(), i->second.realmbuilds.end(), _build) != i->second.realmbuilds.end();
+				bool ok_build = i->second.realmBuildInfo.build == _build;
 
 				RealmBuildInfo const* buildInfo = ok_build ? FindBuildInfo(_build) : NULL;
 				if (!buildInfo)
