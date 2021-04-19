@@ -75,7 +75,7 @@ void RealmList::Initialize(uint32 updateInterval)
     UpdateRealms(true);
 }
 
-void RealmList::UpdateRealm( uint32 ID, const std::string& name, const std::string& address, uint32 port, uint8 icon, RealmFlags realmflags, uint8 timezone, AccountTypes allowedSecurityLevel, float popu, const std::string& builds)
+void RealmList::UpdateRealm( uint32 ID, const std::string& name, const std::string& address, uint32 port, uint8 icon, RealmFlags realmflags, uint8 timezone, AccountTypes allowedSecurityLevel, float popu)
 {
     ///- Create new if not exist or update existed
     Realm& realm = m_realms[name];
@@ -87,27 +87,12 @@ void RealmList::UpdateRealm( uint32 ID, const std::string& name, const std::stri
     realm.allowedSecurityLevel = allowedSecurityLevel;
     realm.populationLevel      = popu;
 
-    Tokens tokens = StrSplit(builds, " ");
-    Tokens::iterator iter;
-
-    for (iter = tokens.begin(); iter != tokens.end(); ++iter)
-    {
-        uint32 build = atol((*iter).c_str());
-        realm.realmbuilds.insert(build);
-    }
-
-    uint16 first_build = !realm.realmbuilds.empty() ? *realm.realmbuilds.begin() : 0;
-
-    realm.realmBuildInfo.build = first_build;
+    realm.realmBuildInfo.build = ExpectedRealmdClientBuilds[0].build;
     realm.realmBuildInfo.major_version = 0;
     realm.realmBuildInfo.minor_version = 0;
     realm.realmBuildInfo.bugfix_version = 0;
     realm.realmBuildInfo.hotfix_version = ' ';
-
-    if (first_build)
-        if (RealmBuildInfo const* bInfo = FindBuildInfo(first_build))
-            if (bInfo->build == first_build)
-                realm.realmBuildInfo = *bInfo;
+    realm.realmBuildInfo = ExpectedRealmdClientBuilds[0];
 
     ///- Append port to IP address.
     std::ostringstream ss;
@@ -137,8 +122,8 @@ void RealmList::UpdateRealms(bool init)
     QueryResult *result = LoginDatabase.Query(
         //      0   1       2       3       4   5           6
         "SELECT id, name, address, port, icon, realmflags, timezone, "
-        // 7                    8           9
-        "allowedSecurityLevel, population, realmbuilds FROM realmlist "
+        // 7                    8        
+        "allowedSecurityLevel, population FROM realmlist "
         "WHERE (realmflags & 1) = 0 ORDER BY name");
 
     // Auth config can't be reloaded. Make sure you use a valid address.
@@ -165,7 +150,7 @@ void RealmList::UpdateRealms(bool init)
                 fields[0].GetUInt32(), fields[1].GetCppString(), realmAddress, fields[3].GetUInt32(),
                 fields[4].GetUInt8(), RealmFlags(realmflags), fields[6].GetUInt8(),
                 (allowedSecurityLevel <= SEC_ADMINISTRATOR ? AccountTypes(allowedSecurityLevel) : SEC_ADMINISTRATOR),
-                fields[8].GetFloat(), fields[9].GetCppString());
+                fields[8].GetFloat());
 
             if(init)
                 sLog.outString("Welcome to Turtle WoW!");
