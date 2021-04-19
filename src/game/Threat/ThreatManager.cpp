@@ -30,6 +30,7 @@
 #include "TargetedMovementGenerator.h"
 
 #include "Chat.h"
+#include "GridSearchers.h"
 
 //==============================================================
 //================= ThreatCalcHelper ===========================
@@ -425,7 +426,7 @@ void ThreatManager::addThreat(Unit* pVictim, float pThreat, bool crit, SpellScho
     addThreatDirectly(pVictim, threat);
 }
 
-void ThreatManager::UnitDetailedThreatSituation(Creature* creature, Player* requester, int limit)
+void ThreatManager::UnitDetailedThreatSituation(Creature* creature, Player* requester, int limit, bool tankMode)
 {
 
 	if (!creature || !creature->isInCombat() || !creature->IsElite() || !creature->isAlive() || !creature->CanHaveThreatList())
@@ -437,22 +438,31 @@ void ThreatManager::UnitDetailedThreatSituation(Creature* creature, Player* requ
     if (!creature->getThreatManager().getHostileTarget() || creature->getThreatManager().isThreatListEmpty())
         return;
 
-	std::string tankName     = creature->getThreatManager().getHostileTarget()->GetName();
-	std::string creatureName = creature->GetName();
+	std::string tankName           = creature->getThreatManager().getHostileTarget()->GetName();
+	std::string creatureName       = creature->GetName();
+	std::string threatSeparator    = ":";
+	std::string rowSeparator       = ";";
+	std::string normalModePrefix   = "TWTv4=";  // threat api version
+	std::string tankModePrefix     = "TMTv1=";  // tankMode threat api version
+	std::string bigPacket		   = normalModePrefix;
 
 	bool isMelee    = true;
 	bool isTanking  = false;
+	bool inParty    = requester->GetGroup() && !requester->GetGroup()->isRaidGroup();
 
-	int tankThreat  = 0;
-	int threatValue = 0;
+	int tankThreat  =  0;
+	int threatValue =  0;
 	int myPos       = -1;
+	int position    = -1;                // for player iteration
+
 	float threatPct = 0;
+	
 
 	ThreatList const& threatList = creature->getThreatManager().getThreatList();
 
 	tankThreat = (int)round(creature->getThreatManager().getThreat(creature->getThreatManager().getHostileTarget()));
 
-	if (tankThreat == 0)
+	if (tankThreat <= 0)
 		return;
 
 	for (ThreatList::const_iterator iter = threatList.begin(); iter != threatList.end(); ++iter)
@@ -462,10 +472,10 @@ void ThreatManager::UnitDetailedThreatSituation(Creature* creature, Player* requ
 			break;
 	}
 
-	WorldPacket data;
-	bool inParty = requester->GetGroup() && !requester->GetGroup()->isRaidGroup();
-
-	int position = -1;
+	// packet struct:
+	// TWTv4=da:ta:1;da:ta:2;da:ta:3;...
+	// or with tankmode enabled, separated by #
+	// TWTv4=da:ta:1;da:ta:2;... # TMTv1=da:ta:1;da:ta2;...
 
 	for (ThreatList::const_iterator iter = threatList.begin(); iter != threatList.end(); ++iter)
 	{
@@ -479,7 +489,7 @@ void ThreatManager::UnitDetailedThreatSituation(Creature* creature, Player* requ
 
 		threatValue = (int)round((*iter)->getThreat());
 
-		if (threatValue < 0)                                             // dont care for negative
+		if (threatValue <= 0)                                             // dont care for negative
 			continue;
 
 		isTanking = (*iter)->getTarget()->GetName() == tankName;
@@ -489,22 +499,102 @@ void ThreatManager::UnitDetailedThreatSituation(Creature* creature, Player* requ
 		threatPct = (float)((int)(threatPct * 10 + .5)) / 10;
 		threatPct = threatPct > 100 ? 100 : threatPct;
 
-		std::string separator = ":";
-		std::string msg;
-		msg = "TWTv3";                                                // threat api version
-		msg += separator + (*iter)->getTarget()->GetName();           // player name
-		msg += separator + std::to_string((int)isTanking);            // 1 if player is tanking
-		msg += separator + std::to_string(threatValue);               // player's threat value, rounded
-		msg += separator + std::to_string(threatPct);                 // player's threat percent, rounded
-		msg += separator + std::to_string(isMelee);                   // 1 if creature can reach player with melee
+		bigPacket += (*iter)->getTarget()->GetName() + threatSeparator;           // player name
+		bigPacket += std::to_string((int)isTanking) + threatSeparator;            // 1 if player is tanking
+		bigPacket += std::to_string(threatValue) + threatSeparator;               // player's threat value, rounded
+		bigPacket += std::to_string(threatPct) + threatSeparator;                 // player's threat percent, rounded
+		bigPacket += std::to_string(isMelee);                                     // 1 if creature can reach player with melee
 
-		ChatHandler::BuildChatPacket(data, inParty ? CHAT_MSG_PARTY : CHAT_MSG_RAID,
-			msg.c_str(), Language(LANG_ADDON), requester->GetChatTag(),
-			requester->GetObjectGuid(), requester->GetName());
-
-		requester->GetSession()->SendPacket(&data);
-
+		bigPacket += rowSeparator;
 	}
+
+	if (bigPacket.length() > 3096 || bigPacket.empty())
+		return;
+
+	bigPacket.pop_back(); // remove last rowSeparator
+	
+	if (tankMode)
+	{
+		std::list<std::string> pSecondMessage;   // players that are 2nd on threat
+		pSecondMessage.clear();
+
+		std::list<Creature*> hCreatureNear;
+		GetHostileCreaturesListInRange(hCreatureNear, requester, 5.0f);
+
+		int creatureIndex = 0;
+
+		if (hCreatureNear.size() >= 2)
+			for (std::list<Creature*>::iterator iter = hCreatureNear.begin(); iter != hCreatureNear.end(); ++iter)
+			{
+				if (creatureIndex > 4)
+					break;
+
+				if (!(*iter)->CanHaveThreatList() || !(*iter)->IsElite() || !(*iter)->isInCombat())
+					continue;
+				if (!(*iter)->getThreatManager().getHostileTarget() || (*iter)->getThreatManager().isThreatListEmpty())
+					continue;
+				if ((*iter)->getThreatManager().getHostileTarget()->GetName() != requester->GetName())
+					continue;
+
+				ThreatList const& hThreatList = (*iter)->getThreatManager().getThreatList();
+
+				if (hThreatList.size() < 2)
+					continue;
+
+				ThreatList::const_iterator hatedPlayers = hThreatList.begin();
+
+				//if im 1st on threat, send 2nd, else im not 1st on threat, send 1st, begin()
+				if ((*hatedPlayers)->getTarget()->GetName() == requester->GetName())
+					++hatedPlayers;
+
+				int tTankThreat = 0;
+				for (ThreatList::const_iterator tankThreatIter = hThreatList.begin(); tankThreatIter != hThreatList.end(); ++tankThreatIter)
+					if ((*tankThreatIter)->getTarget()->GetName() == requester->GetName())
+					{
+						tTankThreat = (int)round((*tankThreatIter)->getThreat());
+						break;
+					}
+
+				if (tTankThreat <= 0)
+					continue;
+
+				bool tIsMelee = (*hatedPlayers)->getSourceUnit()->CanReachWithMeleeAttack((*hatedPlayers)->getTarget());
+
+				float tThreatPct = (*hatedPlayers)->getThreat() * 100 / (tTankThreat * (tIsMelee ? 1.1 : 1.3));
+				tThreatPct = (float)((int)(tThreatPct * 10 + .5)) / 10;
+				tThreatPct = tThreatPct > 100 ? 100 : tThreatPct;
+
+				std::string tMsg;
+				tMsg += (*iter)->GetName() + threatSeparator;						 // creature name
+				tMsg += std::to_string((*iter)->GetGUIDLow()) + threatSeparator;	 // creature guid
+				tMsg += (*hatedPlayers)->getTarget()->GetName() + threatSeparator;   // player name
+				tMsg += std::to_string(tThreatPct);                                  // player's threat percent
+
+				pSecondMessage.push_back(tMsg);
+
+				creatureIndex++;
+
+			}
+
+		if (pSecondMessage.size() > 1)
+		{
+			bigPacket += "#" + tankModePrefix;
+			for (std::list<std::string>::const_iterator itr = pSecondMessage.begin(); itr != pSecondMessage.end(); ++itr)
+				bigPacket += (*itr).c_str() + rowSeparator;
+
+			bigPacket.pop_back(); // remove last rowSeparator
+		}
+	}
+
+	if (bigPacket.length() > 3096 || bigPacket.empty())
+		return;
+
+	WorldPacket data;
+	ChatHandler::BuildChatPacket(data, inParty ? CHAT_MSG_PARTY : CHAT_MSG_RAID,
+		bigPacket.c_str(), Language(LANG_ADDON), requester->GetChatTag(),
+		requester->GetObjectGuid(), requester->GetName());
+
+	requester->GetSession()->SendPacket(&data);
 
 }
 
