@@ -1314,6 +1314,23 @@ namespace MaNGOS
             Unit const* pUnit;
     };
 
+	class AllHostileCreaturesInRange
+	{
+	public:
+		AllHostileCreaturesInRange(const WorldObject* pObject, float fMaxRange) : m_pObject(pObject), m_fRange(fMaxRange) {}
+		bool operator() (Unit* pUnit)
+		{
+			if (pUnit->isAlive() && !m_pObject->IsFriendlyTo(pUnit) && m_pObject->IsWithinDist(pUnit, m_fRange, false))
+				return true;
+
+			return false;
+		}
+
+	private:
+		const WorldObject* m_pObject;
+		float m_fRange;
+	};
+
     class AllGameObjectsWithEntryInRange
     {
         public:
