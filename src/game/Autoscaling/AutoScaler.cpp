@@ -60,6 +60,10 @@ void AutoScaler::Scale(DungeonMap* map)
     else if (maxCount == 40 && playerCount < 20)
         playerCount = 20;
 
+    // Naxxramas
+    if (map->GetId() == 533 && playerCount < 30)
+        playerCount = 30;
+
     auto& lock = map->GetObjectLock();
     Read_Mutex_Guard guard{ lock };
     auto& container = const_cast<TypeUnorderedMapContainer<AllMapStoredObjectTypes, ObjectGuid>&>(map->GetObjectStore());
