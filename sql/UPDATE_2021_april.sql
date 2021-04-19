@@ -1002,12 +1002,28 @@ replace into item_template values
  '-1', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
 
- update creature_template set equipment_id = 81041 where entry = 81041;
+update creature_template set equipment_id = 81041 where entry = 81041;
 
- replace into creature_equip_template (entry, patch, equipentry1) values (81041, 0, 81276);
+replace into creature_equip_template (entry, patch, equipentry1) values (81041, 0, 81276);
 
- update quest_template set entry = 60117, patch = 0 where entry = 60115 and patch = 1;
- update creature_involvedrelation set quest = 60117 where id = 1652 and quest = 60115;
- update creature_questrelation set quest = 60117 where id = 6741 and quest = 60115;
+update quest_template set entry = 60117, patch = 0 where entry = 60115 and patch = 1;
+update creature_involvedrelation set quest = 60117 where id = 1652 and quest = 60115;
+update creature_questrelation set quest = 60117 where id = 6741 and quest = 60115;
+
+-- Reputation Reward Wand Fixes.
+update item_template set RangedModRange = 100 where entry = 80645;
+update item_template set RangedModRange = 100 where entry = 80644;
+update item_template set RangedModRange = 100 where entry = 80545;
+update item_template set RangedModRange = 100 where entry = 80544;
+
+-- Reputation Reward Nerfs and fix.
+update item_template set spellid_2 = 0 where entry = 80607;
+update item_template set spellid_2 = 0 where entry = 80507;
+update item_template set spellid_1 = 14248 where entry = 80515;
+update item_template set spellid_1 = 14248 where entry = 80615;
+update item_template set description = '' where entry = 80544;
+
+-- Fix for Vile Sting sheathing
+update item_template set sheath = 3 where entry = 80649;
 
 
