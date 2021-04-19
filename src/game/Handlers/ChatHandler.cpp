@@ -288,7 +288,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 	{
 
 		// UnitDetailedThreatSituation
-		if (strstr(msg.c_str(), "TWT_UDTSv3"))
+		if (strstr(msg.c_str(), "TWT_UDTSv4"))
 		{
 
             if (!_player)
@@ -302,15 +302,13 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 			if (!_player->GetSelectedCreature()->CanHaveThreatList())
 				return;
 
-			int limit;
 
-            if (msg.find("limit=") == std::string::npos)           //limit= key not found
+			int limit     = 4;                                 // default low limit
+			bool tankMode = strstr(msg.c_str(), "_TM" );       // tank mode
+
+            if (msg.find("limit=") != std::string::npos)       // limit= key not found
             {
-                limit = 4; // default low
-            }
-            else
-            {
-                msg = msg.substr(msg.find("limit=") + 6, 2);       // 6 = limit= length(), 2 = max 2 digits
+                msg = msg.substr(msg.find("limit=") + 6, 2);   // 6 = "limit=".length(), 2 = read only 2 digits
 
                 std::string limitString = std::regex_replace(msg.c_str(), std::regex("[^0-9]*([0-9]+).*"), std::string("$1"));
 
@@ -334,7 +332,8 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 			ThreatManager::UnitDetailedThreatSituation(
 				_player->GetSelectedCreature(),
 				_player, 
-				limit);
+				limit,
+				tankMode);
 
 			return;
 		}
