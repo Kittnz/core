@@ -306,7 +306,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 			int limit     = 4;                                 // default low limit
 			bool tankMode = strstr(msg.c_str(), "_TM" );       // tank mode
 
-            if (msg.find("limit=") != std::string::npos)       // limit= key not found
+            if (msg.find("limit=") != std::string::npos)       // limit= key found
             {
                 msg = msg.substr(msg.find("limit=") + 6, 2);   // 6 = "limit=".length(), 2 = read only 2 digits
 
