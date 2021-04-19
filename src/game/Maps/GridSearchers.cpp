@@ -58,3 +58,12 @@ void GetCreatureListWithEntryInGrid(std::list<Creature*>& lList, WorldObject* pS
 
     Cell::VisitGridObjects(pSource, searcher, fMaxSearchRange);
 }
+
+void GetHostileCreaturesListInRange(std::list<Creature*>& lList, WorldObject* pSource, float fMaxSearchRange)
+{
+	ASSERT(pSource);
+	MaNGOS::AllHostileCreaturesInRange check(pSource, fMaxSearchRange);
+	MaNGOS::CreatureListSearcher<MaNGOS::AllHostileCreaturesInRange> searcher(lList, check);
+
+	Cell::VisitGridObjects(pSource, searcher, fMaxSearchRange);
+}
