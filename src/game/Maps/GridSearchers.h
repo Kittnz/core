@@ -44,6 +44,8 @@ void GetGameObjectListWithEntryInGrid(std::list<GameObject*>& lList , WorldObjec
 void GetCreatureListWithEntryInGrid(std::list<Creature*>& lList, WorldObject* pSource, uint32 uiEntry, float fMaxSearchRange);
 void GetCreatureListWithEntryInGrid(std::list<Creature*>& lList, WorldObject* pSource, const std::vector<uint32>& entries, float fMaxSearchRange);
 
+void GetHostileCreaturesListInRange(std::list<Creature*>& lList, WorldObject* pSource, float fMaxSearchRange);
+
 /*
 //Used in:
 //hyjalAI.cpp
