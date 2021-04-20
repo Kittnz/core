@@ -1011,10 +1011,10 @@ update creature_involvedrelation set quest = 60117 where id = 1652 and quest = 6
 update creature_questrelation set quest = 60117 where id = 6741 and quest = 60115;
 
 -- Reputation Reward Wand Fixes.
-update item_template set RangedModRange = 100 where entry = 80645;
-update item_template set RangedModRange = 100 where entry = 80644;
-update item_template set RangedModRange = 100 where entry = 80545;
-update item_template set RangedModRange = 100 where entry = 80544;
+update item_template set range_mod = 100 where entry = 80645;
+update item_template set range_mod = 100 where entry = 80644;
+update item_template set range_mod = 100 where entry = 80545;
+update item_template set range_mod = 100 where entry = 80544;
 
 -- Reputation Reward Nerfs and fix.
 update item_template set spellid_2 = 0 where entry = 80607;
