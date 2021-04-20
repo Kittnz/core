@@ -1026,4 +1026,6 @@ update item_template set description = '' where entry = 80544;
 -- Fix for Vile Sting sheathing
 update item_template set sheath = 3 where entry = 80649;
 
+update item_template set disenchant_id = 1 where entry = 6243;
+
 
