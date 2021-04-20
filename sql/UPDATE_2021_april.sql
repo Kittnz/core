@@ -1028,4 +1028,7 @@ update item_template set sheath = 3 where entry = 80649;
 
 update item_template set disenchant_id = 1 where entry = 6243;
 
+update item_template set spellid_1 = 10577 where entry = 80806;
+update item_template set spellid_3 = 0,  spellid_4 = 0 where entry = 51784;
+
 
