@@ -1093,3 +1093,30 @@ replace into creature_loot_template values (13157, 59996, -100, 6, 1, 1, 0, 0, 1
 replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, objectivetext1, objectivetext2, objectivetext3, objectivetext4, srcitemid, srcitemcount, reworreqmoney, rewmoneymaxlevel, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (0,80399,14,8,6,0,0,'Zalazane\'s Apprentice','That foolish mongrel Makasgar decided he no longer needs the aid of his master and has grown beyond my teachings.\n\n...\n\nThat mojo was required for a powerful ritual to help us take over the Sen’jin Village and later the whole of Durotar.\n\nGo do your master’s bidding and bring me his head!','After reading the letter you decide to find Zalazane’s former apprentice by yourself and spare him of his head.\n\nTaking his head and Zalazane’s mojo back to Master Gadrin in Sen’jin Village will earn you a reward.','What do you have there, $N?','Zalazane’s mojo and his apprentice’s head. A job well-done mon.\n\nHere, old Gadrin has a reward for you. Just pick which one you want.',59996,1,59995,1,0,0,0,0,'','','','',0,0,0,510,510,250,76,250,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,59993,1,59994,1,0,0,0,0);
 
 update creature_template set level_min = 9, level_max = 10 where entry = 13157;
+
+-- Re-assemble! 
+
+replace into item_template values
+ ('59997', '0', '12', '0', 'Dwarven Writings', 'These pages bear no meaning to you and while there\'s a text, it looks indecipherable.', '7694', '1', '0', '1', '0', '0', '0', '-1', '-1', '1',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '10', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '4', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+ 
+ replace into creature_loot_template values (6733, 59997, -20, 5, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (2893, 59997, -20, 5, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (2892, 59997, -20, 5, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (2894, 59997, -20, 5, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (2891, 59997, -20, 5, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (2890, 59997, -20, 5, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (2889, 59997, -20, 5, 1, 1, 0, 0, 10); 
+ 
+replace into creature_questrelation (id, quest, patch_min, patch_max) values (81060, 80400,'0','10'); 
+replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (81060, 80400,'0','10');
+
+replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, objectivetext1, objectivetext2, objectivetext3, objectivetext4, srcitemid, srcitemcount, reworreqmoney, rewmoneymaxlevel, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (0,80400,3,40,36,0,0,'Re-assembler!','<Mumbling under his nose, the dwarf looks disturbed, angry and frustrated.>\n\nBlast \'em all buggers to pieces.. Oh, hallo there. Perfect timing, my friend! Sure as hell I\'d have ya hand roit \'ere and now!\n\nSo, listen up, my friend. I\'ve had me book written recently and was about tae get me sum ingredients I needed fer mah new invention so I had tae leave me camp and waddayaknow?!\n\nBlasted troggs came over and only the Titans know what these rottin\' basterds were lookin\' for at me camp!\n\nAlas, me book got ripped to pieces it seems and judging by what\'s left of it all 25 pages of perfectly written patterns and schematics were lost.\n\nAll I need is them pages gathered and to get me book reassembled in no time… Blast \'em, scorch \'em, shoot \'em, slice and chop \'em… up to yar liking, lad!\n\nAll I care is me book returned and them blasted troggs suffer in the process. They be brainless as ghouls, alas, just like ghouls they tend to run in packs... just be careful and don\'t let \'em git ya!','Find stolen Dwarven Writings and return it to Prospector Brotalus.','Wrecking me camp, stealin\' me belongings, eatin\' me supplies and even settin\' my camp ablaze is nowhere near as horrible a crime compared to stealing me book!\n\nMake \'em suffer more than a gryphon forced to walk!','Oh, you’re back already? Why, you’re a quick one. Great job!',59997,25,0,0,0,0,0,0,'','','','',0,0,11900,2980,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+-- Todo: please add writing's drop to more troggs in Badlands.
