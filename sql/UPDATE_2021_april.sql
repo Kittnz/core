@@ -1031,4 +1031,65 @@ update item_template set disenchant_id = 1 where entry = 6243;
 update item_template set spellid_1 = 10577 where entry = 80806;
 update item_template set spellid_3 = 0,  spellid_4 = 0 where entry = 51784;
 
+-- Zalazane’s Apprentice
 
+replace into item_template values
+ ('59990', '0', '12', '0', 'Shabby Letter', 'A slightly torn and dirty letter.', '8927', '1', '65536', '1', '0', '0', '0', '-1', '-1', '0',
+ '6', '0', '0', '0', '0', '0', '0', '0', '1', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '80399', '0', '7', '1', '0', '0', '0', '0', '0', '0', '16384', '0', '0', '0', '0',
+ '0', '1', NULL);
+ 
+ replace into item_template values
+ ('59994', '0', '4', '0', 'Brawler\'s Ring', '', '24087', '2', '0', '1', '820', '205', '11', '-1', '-1', '11',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '1', '7', '1',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '10', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '4', '1', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0',
+ '0', '1', NULL);
+ 
+ replace into item_template values
+ ('59993', '0', '4', '0', 'Weak Voodoo Ring', '', '9833', '2', '0', '1', '820', '205', '11', '-1', '-1', '12',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '1', '6', '2',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '4', '1', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0',
+ '0', '1', NULL);
+ 
+replace into item_template values
+ ('59995', '0', '12', '0', 'Makasgar\'s Head', '', '10546', '1', '0', '1', '0', '0', '0', '-1', '-1', '1',
+ '0', '0', '0', '0', '0', '0', '0', '0', '1', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '4', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+ 
+ replace into item_template values
+ ('59996', '0', '12', '0', 'Zalazane\'s Mojo', '', '1275', '1', '0', '1', '0', '0', '0', '-1', '-1', '1',
+ '0', '0', '0', '0', '0', '0', '0', '0', '1', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '4', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+ 
+replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (3188, 80399, '0','10');
+ 
+replace into creature_loot_template values (3207, 59990, 20, 5, 1, 1, 0, 0, 10); 
+replace into creature_loot_template values (3206, 59990, 15, 5, 1, 1, 0, 0, 10); 
+replace into creature_loot_template values (13157, 59995, -100, 5, 1, 1, 0, 0, 10); 
+replace into creature_loot_template values (13157, 59996, -100, 6, 1, 1, 0, 0, 10); 
+  
+replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, objectivetext1, objectivetext2, objectivetext3, objectivetext4, srcitemid, srcitemcount, reworreqmoney, rewmoneymaxlevel, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (0,80399,14,8,6,0,0,'Zalazane\'s Apprentice','That foolish mongrel Makasgar decided he no longer needs the aid of his master and has grown beyond my teachings.\n\n...\n\nThat mojo was required for a powerful ritual to help us take over the Sen’jin Village and later the whole of Durotar.\n\nGo do your master’s bidding and bring me his head!','After reading the letter you decide to find Zalazane’s former apprentice by yourself and spare him of his head.\n\nTaking his head and Zalazane’s mojo back to Master Gadrin in Sen’jin Village will earn you a reward.','What do you have there, $N?','Zalazane’s mojo and his apprentice’s head. A job well-done mon.\n\nHere, old Gadrin has a reward for you. Just pick which one you want.',59996,1,59995,1,0,0,0,0,'','','','',0,0,0,510,510,250,76,250,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,59993,1,59994,1,0,0,0,0);
+
+update creature_template set level_min = 9, level_max = 10 where entry = 13157;
