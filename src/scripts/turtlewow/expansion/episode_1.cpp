@@ -390,7 +390,7 @@ bool QuestComplete_npc_garthok(Player* pPlayer, Creature* pQuestGiver, Quest con
 
             creature->HandleEmote(EMOTE_ONESHOT_LAUGH);
             creature->MonsterTextEmote("Gar'thok laughs.");
-            creature->MonsterSayToPlayer("Very well, goblins, I'm giving you a chance to prove yourself worthy of the Horde, there is work for you here or further up the road in Orgrimmar, earn the respect of your possible allies. Go now, all around Durotar and honor the Horde.", player);
+            creature->MonsterSayToPlayer("Very well, goblins. I am giving you a chance to prove yourself worthy of the Horde. There is work for you here and further up the road in Orgrimmar. Earn the respect of your new allies. Go now all around Durotar and honor the Horde.", player);
         });
     }
     return false;
