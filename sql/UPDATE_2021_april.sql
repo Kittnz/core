@@ -1106,17 +1106,57 @@ replace into item_template values
  '-1', '4', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
- replace into creature_loot_template values (6733, 59997, -20, 5, 1, 1, 0, 0, 10); 
- replace into creature_loot_template values (2893, 59997, -20, 5, 1, 1, 0, 0, 10); 
- replace into creature_loot_template values (2892, 59997, -20, 5, 1, 1, 0, 0, 10); 
- replace into creature_loot_template values (2894, 59997, -20, 5, 1, 1, 0, 0, 10); 
- replace into creature_loot_template values (2891, 59997, -20, 5, 1, 1, 0, 0, 10); 
- replace into creature_loot_template values (2890, 59997, -20, 5, 1, 1, 0, 0, 10); 
- replace into creature_loot_template values (2889, 59997, -20, 5, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (2893, 59997, -70, 5, 1, 1, 0, 0, 10); 
+ replace into creature_loot_template values (2894, 59997, -70, 5, 1, 1, 0, 0, 10); 
  
 replace into creature_questrelation (id, quest, patch_min, patch_max) values (81060, 80400,'0','10'); 
 replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (81060, 80400,'0','10');
 
 replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, objectivetext1, objectivetext2, objectivetext3, objectivetext4, srcitemid, srcitemcount, reworreqmoney, rewmoneymaxlevel, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (0,80400,3,40,36,0,0,'Re-assembler!','<Mumbling under his nose, the dwarf looks disturbed, angry and frustrated.>\n\nBlast \'em all buggers to pieces.. Oh, hallo there. Perfect timing, my friend! Sure as hell I\'d have ya hand roit \'ere and now!\n\nSo, listen up, my friend. I\'ve had me book written recently and was about tae get me sum ingredients I needed fer mah new invention so I had tae leave me camp and waddayaknow?!\n\nBlasted troggs came over and only the Titans know what these rottin\' basterds were lookin\' for at me camp!\n\nAlas, me book got ripped to pieces it seems and judging by what\'s left of it all 25 pages of perfectly written patterns and schematics were lost.\n\nAll I need is them pages gathered and to get me book reassembled in no time… Blast \'em, scorch \'em, shoot \'em, slice and chop \'em… up to yar liking, lad!\n\nAll I care is me book returned and them blasted troggs suffer in the process. They be brainless as ghouls, alas, just like ghouls they tend to run in packs... just be careful and don\'t let \'em git ya!','Find stolen Dwarven Writings and return it to Prospector Brotalus.','Wrecking me camp, stealin\' me belongings, eatin\' me supplies and even settin\' my camp ablaze is nowhere near as horrible a crime compared to stealing me book!\n\nMake \'em suffer more than a gryphon forced to walk!','Oh, you’re back already? Why, you’re a quick one. Great job!',59997,25,0,0,0,0,0,0,'','','','',0,0,11900,2980,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
 
--- Todo: please add writing's drop to more troggs in Badlands.
+-- Misc. DB fixes:
+
+update item_template set spellid_1 = 26142, stat_value1 = 10, stat_value2 = 10 where entry = 51738;
+
+-- To Build a Pounder 
+
+replace into item_template values
+ ('81280', '0', '12', '0', 'Thorium Tuned Servo', '', '7839', '1', '0', '1', '0', '0', '0', '-1', '-1', '1',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '4', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+ 
+ replace into creature_loot_template values (4295, 81280, -10, 5, 1, 1, 0, 0, 10); 
+ 
+ replace into item_template values
+ ('81281', '0', '12', '0', 'Perfect Golem Core', '', '23727', '1', '0', '1', '0', '0', '0', '-1', '-1', '1',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '4', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+ 
+ replace into creature_loot_template values (8983, 81281, -100, 5, 1, 1, 0, 0, 10); 
+ 
+ replace into item_template values
+ ('81282', '0', '12', '0', 'Adamantite Rod', '', '37054', '1', '0', '1', '0', '0', '0', '-1', '-1', '1',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '4', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+ 
+ replace into creature_loot_template values (11120, 81282, -100, 5, 1, 1, 0, 0, 10); 
+
+replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, objectivetext1, objectivetext2, objectivetext3, objectivetext4, srcitemid, srcitemcount, reworreqmoney, rewmoneymaxlevel, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (80398,80401,33,60,30,0,0,'To Build a Pounder','Unfortunately, building a Pounder isn\'t easy. I will supply most of the components, but I will need you to get me some special things. It is up to you how you go about acquiring them.\n\nI need the following:\n\nA thorium tuned servo for the chassis. I only know of one, and it\'s been locked up by those Scarlet fanatics. I think the armory is where they store objects they consider heretical. Go get it for me!\n\nIn addition to that, I also need a perfect core for the Pounder. The Dark Iron golems in the Blackrock Depths make a good source. Golem Lord Argelmach probably has one.\n\nThe last component I need is a high quality adamantite rod used for the endoskeleton. I believe Stratholme\'s forges used to make such rods in the past. I do not know the state of the city, but I believe the rods may still survive there.','Acquire Thorium Tuned Servo from the Scarlet Monastery\'s Armory, obtain the Perfect Golem Core in the Blackrocks Depths from Golem Lord Argelmach, find the Adamantite Rod in Stratholme. Return to Oglethorpe Obnoticus.','Welcome back! How did it go? Did you get the items yet?','That\'s all the components! Wonderful!\n\nWhile you were gone, I\'ve been busy engineering your Pounder. All that\'s left is to apply the components you\'ve brought and to paint it.\n\nI didn\'t do the paint job yet so you could pick a color!',81280,1,81281,1,81282,1,0,0,'','','','',0,0,10000,0,21,250,0,0,0,0,0,0,0,0,70,0,0,0,0,0,0,0,0,81253,1,81252,1,81251,1,81250,1);
+
+replace into creature_questrelation (id, quest, patch_min, patch_max) values (7406, 80401,'0','10'); 
+replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (7406, 80401,'0','10');
