@@ -1180,7 +1180,7 @@ replace into creature_loot_template values (15990, 81283, -100, 6, 1, 1, 0, 0, 1
 
 -- Correct companions class / subclass:
 
-update item_template set class = 15, subclass = 2, quality = 1 where entry in 
+update item_template set class = 15, subclass = 2, quality = 1, item_level = 1 where entry in 
 (
 81243,
 22781,
@@ -1272,7 +1272,28 @@ update item_template set class = 15, subclass = 2, quality = 1 where entry in
 8499,
 8498,
 81159,
-10822
+10822,
+80006,
+11023,
+21168,
+11110,
+50081,
+50080,
+80002,
+8500,
+8501,
+21308,
+50082,
+22235,
+10398,
+23712,
+8496,
+8492,
+8494, 
+8495,
+12264,
+21301,
+21305
 );
 
 update item_template set name = 'Corrupted Kitten' where entry = 11903;
@@ -1283,5 +1304,8 @@ update item_template set name = 'Bombay' where entry = 8485;
 update item_template set name = 'Cornish Rex' where entry = 8486;
 update item_template set name = 'Siamese' where entry = 8490;
 update item_template set name = 'Silver Tabby', description = 'Sleeping is this cat\'s second favorite activity. The first is yawning.' where entry = 8488;
+
+update item_template set class = 4, subclass = 0 where entry in (51857, 51240);
+update item_template set class = 15, subclass = 4 where entry = 21044;
 
 delete from item_template where entry = 80441;
