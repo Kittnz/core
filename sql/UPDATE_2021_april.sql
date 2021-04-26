@@ -1177,3 +1177,111 @@ update creature_template set scale = 0.6 where entry = 90986;
 replace into custom_pet_entry_relation values (81283, 90986);
 
 replace into creature_loot_template values (15990, 81283, -100, 6, 1, 1, 0, 0, 10); 
+
+-- Correct companions class / subclass:
+
+update item_template set class = 15, subclass = 2, quality = 1 where entry in 
+(
+81243,
+22781,
+81207,
+50006,
+50013,
+50014,
+50019,
+50058,
+50084,
+50200,
+50202,
+51002,
+51003,
+51007,
+51220,
+51240,
+51221,
+51251,
+51260,
+51259,
+51261,
+51433,
+80878,
+51700,
+51739,
+51857,
+51858,
+51891,
+50600,
+50601,
+81150,
+81151,
+81152,
+81159,
+81183,
+81254,
+81283,
+11903, 
+8489,
+13584,
+13583,
+20371, 
+23713,
+19055, 
+50013, 
+50019, 
+50083,
+50084, 
+22781,
+50085, 
+51007, 
+81150, 
+81151,
+81207,
+80003,
+81058,
+80878,
+51739,
+80007,
+80000, 
+80001,
+80410,
+81283,
+50077,
+22780,
+19054,
+50070,
+11903,
+8485,
+8486,
+8487,
+8488,
+8489,
+8491,
+8490,
+50067,
+10360,
+10361,
+10392,
+50068, 
+50069,
+10393,
+50078,
+50079,
+11026,
+11027,
+19450,
+8499,
+8498,
+81159,
+10822
+);
+
+update item_template set name = 'Corrupted Kitten' where entry = 11903;
+update item_template set name = 'White Kitten' where entry = 8489;
+update item_template set name = 'Orange Tabby' where entry = 8487;
+update item_template set name = 'Black Tabby' where entry = 8491;
+update item_template set name = 'Bombay' where entry = 8485;
+update item_template set name = 'Cornish Rex' where entry = 8486;
+update item_template set name = 'Siamese' where entry = 8490;
+update item_template set name = 'Silver Tabby', description = 'Sleeping is this cat\'s second favorite activity. The first is yawning.' where entry = 8488;
+
+delete from item_template where entry = 80441;
