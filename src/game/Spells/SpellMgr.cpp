@@ -872,11 +872,7 @@ bool IsPositiveEffect(SpellEntry const *spellproto, SpellEffectIndex effIndex, U
                     break;
                 case SPELL_AURA_MOD_STUN:                   //have positive and negative spells, we can't sort its correctly at this moment.
                     if (effIndex == EFFECT_INDEX_0 && spellproto->Effect[EFFECT_INDEX_1] == 0 && spellproto->Effect[EFFECT_INDEX_2] == 0)
-                        return false;                       // but all single stun aura spells is negative
-
-                    // Petrification
-                    if (spellproto->Id == 17624)
-                        return false;
+                        return false;                       // but all single stun aura spells is negativeb
                     break;
                 case SPELL_AURA_MOD_PACIFY_SILENCE:
                     if (spellproto->Id == 24740)            // Wisp Costume
