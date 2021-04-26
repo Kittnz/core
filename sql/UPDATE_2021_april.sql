@@ -1296,14 +1296,30 @@ update item_template set class = 15, subclass = 2, quality = 1, item_level = 1 w
 21305
 );
 
+update item_template set subclass = 2 where spellid_1 in (select entry from spell_template where description1 like 'Right Click to summon%') and class = 15 and subclass != 2;
+
+update item_template set name = 'Olive Snapjaw' where entry = 18967;
+update item_template set name = 'Loggerhead Snapjaw' where entry = 18964;
+update item_template set name = 'Hawksbill Snapjaw' where entry = 18965;
+update item_template set name = 'Albino Snapjaw' where entry = 18963;
+
 update item_template set name = 'Corrupted Kitten' where entry = 11903;
-update item_template set name = 'White Kitten' where entry = 8489;
-update item_template set name = 'Orange Tabby' where entry = 8487;
-update item_template set name = 'Black Tabby' where entry = 8491;
-update item_template set name = 'Bombay' where entry = 8485;
-update item_template set name = 'Cornish Rex' where entry = 8486;
+update item_template set name = 'White Kitten', description = 'The queen had three kittens. The first gave her a juicy rat. The second, a tasty hare. And the white, her favorite, presented the head of her rival.' where entry = 8489;
+update item_template set name = 'Orange Tabby', description = 'The last person who tried to housebreak this cat quickly learned that a soiled rug is better than a shredded everything-else.' where entry = 8487;
+update item_template set name = 'Black Tabby', description = 'Old Alterac saying: \'A cat has nine lives, but needs only one.\'' where entry = 8491;
+update item_template set name = 'Bombay', description = 'Donni Anthania plans to have a bombay buried with her when she dies. A wise adventurer can put its talents to much better use.' where entry = 8485;
+update item_template set name = 'Cornish Rex', description = 'Donni Anthania invites these cats to her tea parties. But she doesn\'t serve their favorite drink: the tears of their enemies.' where entry = 8486;
 update item_template set name = 'Siamese' where entry = 8490;
 update item_template set name = 'Silver Tabby', description = 'Sleeping is this cat\'s second favorite activity. The first is yawning.' where entry = 8488;
+
+update item_template set description = 'The brown snake is native to Horde-controlled territories. It seems unremarkable until its victims are within range.' where entry = 10361;
+update item_template set description = 'Xan\'tish fearlessly tracks, captures, and trains these noble snakes so they will aid their comrades in battle.' where entry = 10360;
+update item_template set description = 'The crimson snake is favored among the Darkspear trolls for not only its vicious nature, but also its steadfast loyalty.' where entry = 10392;
+update item_template set description = 'A favored companion of Kirin Tor magi, this reptile makes one wonder whether it\'s truly a snake or something else altogether.' where entry = 50067;
+update item_template set description = 'The legendary ale frog was believed to be extinct until the strange brews at the Darkmoon Faire brought them out of hiding.' where entry = 19450;
+update item_template set description = 'It thinks you taste like chicken too.' where entry = 11023;
+update item_template set name = 'Undercity Cockroach', description = 'The cockroach is usually an impulse buy. Its owners have a hard time parting with it even after numerous attempts.' where entry = 10393;
+update item_template set description = 'AND THE HEAVENS SHALL TREMBLE, AND MAN SHALL WEEP, AND THE END OF DAYS SHALL--wait, why are you so tall?' where entry = 13584;
 
 update item_template set class = 4, subclass = 0 where entry in (51857, 51240);
 update item_template set class = 15, subclass = 4 where entry = 21044;
