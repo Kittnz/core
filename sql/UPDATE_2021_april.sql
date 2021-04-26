@@ -1176,7 +1176,7 @@ REPLACE INTO `creature_template` VALUES (90986, 0, 16622, 0, 0, 0, 'Mr. Bigglesw
 update creature_template set scale = 0.6 where entry = 90986;
 replace into custom_pet_entry_relation values (81283, 90986);
 
-replace into creature_loot_template values (15990, 81283, -100, 6, 1, 1, 0, 0, 10); 
+replace into creature_loot_template values (15990, 81283, 100, 6, 1, 1, 0, 0, 10); 
 
 -- Correct companions class / subclass:
 
