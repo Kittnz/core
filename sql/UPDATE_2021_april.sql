@@ -1309,3 +1309,9 @@ update item_template set class = 4, subclass = 0 where entry in (51857, 51240);
 update item_template set class = 15, subclass = 4 where entry = 21044;
 
 delete from item_template where entry = 80441;
+
+-- New hardcore box:
+
+replace into `item_template` values (80189, 0, 15, 0, 'Lockbox of the Immortal Soul', '', 16028, 1, 4, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+
+replace into `item_loot_template` (`entry`, `item`, `chanceorquestchance`, `groupid`, `mincountorref`, `maxcount`, `condition_id`, `patch_min`, `patch_max`) values (80189, 80187, 100, 1, 1, 1, 0, 0, 10), (80189, 80692, 100, 2, 1, 1, 0, 0, 10);
