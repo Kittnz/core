@@ -1160,3 +1160,20 @@ replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minleve
 
 replace into creature_questrelation (id, quest, patch_min, patch_max) values (7406, 80401,'0','10'); 
 replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (7406, 80401,'0','10');
+
+-- Misc. DB fixes:
+
+update quest_template set name = 'A Gizmo a Day...' where entry = 80386;
+update creature_template set name = 'Abigale Rowe' where entry = 81045;
+
+-- New Naxxramas compation:
+
+REPLACE INTO `item_template` VALUES (81283, 0, 15, 0, 'Mr. Bigglesworth', 'Upon exiting the freezing necropolis of Naxxramas, Mr. Bigglesworth promptly found a warm spot in the sun to take a long nap in.', 32746, 1, 0, 1, 6000, 1500, 0, -1, -1, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 28505, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+
+update item_template set quality = 3 where entry = 81283;
+
+REPLACE INTO `creature_template` VALUES (90986, 0, 16622, 0, 0, 0, 'Mr. Bigglesworth', '', 0, 1, 1, 64, 64, 0, 0, 0, 35, 0, 1, 1.14286, 1, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, '');
+update creature_template set scale = 0.6 where entry = 90986;
+replace into custom_pet_entry_relation values (81283, 90986);
+
+replace into creature_loot_template values (15990, 81283, -100, 6, 1, 1, 0, 0, 10); 
