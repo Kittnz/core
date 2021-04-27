@@ -1370,5 +1370,16 @@ update item_template set name = 'Senegal', description = 'Favored pet of the gob
 update item_template set name = 'Scarlet Snake', description = 'Brave assassins sometimes capture these critters to use their highly toxic venom to poison weapons.' where entry = 50069;
 update item_template set name = 'Tiny Snowman', description = 'He loves to dance and wave and play with you! He melts after Winter Veil, but don\'t worry; he\'ll be back again someday!' where entry = 21309;
 
+update item_template set name = 'Gurky', description = 'Gurky is a born performer, though she remains elusive, making public appearances only on the rarest of occasions.' where entry = 22114;
+update item_template set name = 'Poley', description = 'This cub shares many traits with its relatives, but it\'s in a league of its own with its singing ability.' where entry = 22781;
+update item_template set name = 'Snowshoe', description = 'If you go chasing snowshoe rabbits, you know you\'re going to fall.' where entry = 8497;
+update item_template set name = 'Smolderweb Hatchling' where entry = 12529;
+update item_template set name = 'Sprite Darter Hatchling' where entry = 11474;
+update item_template set name = 'Tiny Red Dragon' where entry = 14756;
+update item_template set name = 'Tiny Green Dragon', description = 'Legends say that these vibrant emerald beings bring good fortune and safe travels to their owners.' where entry = 19055;
+update item_template set name = 'Whiskers the Rat', description = 'A clever tactician, Whiskers will feign death to fool predators and bill collectors.' where entry = 23015;
+update item_template set name = 'Worg Pup', description = 'Worgs are the favored companions of orcs and are fiercely loyal on the battlefield.' where entry = 12264;
+
+
 
 
