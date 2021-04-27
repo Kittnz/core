@@ -1322,7 +1322,6 @@ update item_template set name = 'Undercity Cockroach', description = 'The cockro
 update item_template set description = 'AND THE HEAVENS SHALL TREMBLE, AND MAN SHALL WEEP, AND THE END OF DAYS SHALL--wait, why are you so tall?' where entry = 13584;
 update item_template set description = 'These off-season allies work tirelessly to prepare for the Feast of Winter Veil, and would appreciate not being disturbed the rest of the year.' where entry = 21301;
 update item_template set description = 'During the majestic Winter Veil celebration, these faithful companions spread joy throughout the land. The rest of the year, they are busy.' where entry = 21305;
-update item_template set description = 'Although born in the warm heights of Blackrock Spire, the smolderweb hatchling can survive most environments.' where entry = 12529;
 update item_template set description = 'This pint-sized panda cub is highly sought after by adventurers around Azeroth - despite its narcoleptic nature.' where entry = 13583;
 update item_template set description = 'Many assume \'Wiggles\' refers to the motion of this pig\'s posterior. They discover the true meaning when they see their own entrails.' where entry = 23007;
 update item_template set description = 'A complex system of burrows protects the prairie dog from its neighbors\' massive hooves.' where entry = 10394;
@@ -1334,6 +1333,7 @@ update item_template set description = 'Said to bring good fortune when spotted 
 update item_template set description = 'A small, fierce member of the Zerg swarm, the zergling is not to be trifled with. Very dangerous in high numbers.' where entry = 13582;
 
 update item_template set class = 4, subclass = 0 where entry in (51857, 51240);
+
 update item_template set class = 15, subclass = 4 where entry = 21044;
 
 delete from creature_loot_template where item = 21308;
@@ -1360,6 +1360,7 @@ update item_template set name = 'Wood Frog', description = 'Vendors at the Darkm
 update item_template set name = 'Leatherback Snapjaw', description = 'Turtles are feared by the naga, who consider them bad luck and give them a wide berth on the shores of Azshara.' where entry = 18966;
 update item_template set description = 'Turtles are feared by the naga, who consider them bad luck and give them a wide berth on the shores of Azshara.' where entry = 18964;
 update item_template set description = 'Turtles are feared by the naga, who consider them bad luck and give them a wide berth on the shores of Azshara.' where entry = 18967;
+update item_template set description = 'Turtles are feared by the naga, who consider them bad luck and give them a wide berth on the shores of Azshara.' where entry = 12264;
 update item_template set name = 'Island Frog', description = 'Quack!' where entry = 50079;
 update item_template set name = 'Moonkin Hatchling' where entry = 50019;
 update item_template set name = 'Murki', description = 'Murki is one of the world\'s rarest species of murloc.' where entry = 20651;
@@ -1379,7 +1380,27 @@ update item_template set name = 'Tiny Red Dragon' where entry = 14756;
 update item_template set name = 'Tiny Green Dragon', description = 'Legends say that these vibrant emerald beings bring good fortune and safe travels to their owners.' where entry = 19055;
 update item_template set name = 'Whiskers the Rat', description = 'A clever tactician, Whiskers will feign death to fool predators and bill collectors.' where entry = 23015;
 update item_template set name = 'Worg Pup', description = 'Worgs are the favored companions of orcs and are fiercely loyal on the battlefield.' where entry = 12264;
+update item_template set name = 'Blitzen', description = 'Happy Winter Veil!' where entry = 50014;
+update item_template set name = 'Cottontail Rabbit', description = 'Mountain cottontails can leap up a steep incline with speed you would not believe.' where entry = 50081;
+update item_template set name = 'Dark Whelpling', display_id = 31434, description = 'Hopes that someday it can grow up to destroy villages, just like mommy.' where entry = 10822;
+update item_template set name = 'Darkmoon Tonk', description = 'A favorite of children across Azeroth, this tough little toy can withstand even the most aggressive imagination.' where entry = 10822;
+update item_template set name = 'Eagle Owl', description = 'Many owls nest high in the stone structures of Darnassus, hunting any pests that enter the night elves\' city.' where entry = 50080;
+update item_template set name = 'Great Horned Owl', description = 'Night elf children are given an owl feather on their first birthday as a token of good luck.' where entry = 8500;
+update item_template set name = 'Green Steam Tonk', description = 'A favorite of children across Azeroth, this tough little toy can withstand even the most aggressive imagination.' where entry = 51002;
+update item_template set name = 'Water Snake', description = 'Brought to Orgrimmar aboard merchant ships, these short-lived reptiles are considered pests by the city\'s residents.' where entry = 50068;
+update item_template set name = 'Hawk Owl', description = 'This dark-feathered bird of prey is often seen as a harbinger of doom amongst the druids of Teldrassil.' where entry = 8501;
+update item_template set description = 'These spiders are immensily cunning yet loyal to their brood. Handle with care and no pest will ever disturb your sound sleep.' where entry = 12529;
+update item_template set description = 'Turtles are feared by the naga, who consider them bad luck and give them a wide berth on the shores of Azshara.' where entry = 18965;
+update item_template set description = 'Adorable little sheep.' where entry = 51221;
+update item_template set description = 'Winterspring\'s furbolg prize the brilliant white feathers of these majestic creatures for ritual purposes.' where entry = 50082;
+update item_template set description = 'Known for its blue eyes. Also considered a delicacy by giant murlocs.' where entry = 8490;
+update item_template set name = 'Tirisfal Bat', description = 'This foreboding creature stalks the night skies of the Eastern Plaguelands, feeding on carrion.' where entry = 51858;
+update item_template set description = 'In older age, these little terrors eat everything they want to and are prey to almost no other species.' where entry = 81152;
+update item_template set name = 'Speedy',  description = 'Slow and steady wins the race.' where entry = 23712;
+update item_template set name = 'White Tiger Cub',  description = 'The thick snow near Dun Morogh acts as camouflage for snow cubs learning to hunt.' where entry = 23002;
+update item_template set name = 'Tree Frog',  description = 'Known for their powerful legs and keen eyesight.' where entry = 11026;
 
 
-
-
+update item_template set class = 4, subclass = 0 where entry = 20769;
+update item_template set class = 4, subclass = 0 where entry = 18598;
+update item_template set class = 4, subclass = 0 where entry = 18597;
