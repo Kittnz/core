@@ -1163,7 +1163,7 @@ replace into creature_involvedrelation (id, quest, patch_min, patch_max) values 
 
 -- Misc. DB fixes:
 
-update quest_template set name = 'A Gizmo a Day...' where entry = 80386;
+update quest_template set title = 'A Gizmo a Day...' where entry = 80386;
 update creature_template set name = 'Abigale Rowe' where entry = 81045;
 
 -- New Naxxramas compation:
@@ -1344,3 +1344,31 @@ delete from item_template where entry = 80441;
 replace into `item_template` values (80189, 0, 15, 0, 'Lockbox of the Immortal Soul', '', 16028, 1, 4, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
 
 replace into `item_loot_template` (`entry`, `item`, `chanceorquestchance`, `groupid`, `mincountorref`, `maxcount`, `condition_id`, `patch_min`, `patch_max`) values (80189, 80187, 100, 1, 1, 1, 0, 0, 10), (80189, 80692, 100, 2, 1, 1, 0, 0, 10);
+
+-- Misc. DB updates (post April 27):
+
+update item_template set name = 'Murky', description = 'A small, fierce member of the Zerg swarm, the zergling is not to be trifled with. Very dangerous in high numbers.' where entry = 20371;
+update item_template set name = 'Westfall Chicken', description = 'Don\'t call this bird chicken unless you want egg on your face.' where entry = 11110;
+update item_template set name = 'Dart Frog', description = 'Ouch!' where entry = 50078;
+update item_template set name = 'Bronze Whelpling', display_id = 20655, description = 'The Bronze Whelpling was lost in time until an unusual event allowed her to escape.' where entry = 50070;
+update item_template set name = 'Azure Whelpling', display_id = 31434, description = 'Like other members of the blue dragonflight, these whimsical little critters display an affinity to arcane magic.' where entry = 50083;
+update item_template set name = 'Crimson Whelpling', display_id = 31434, description = 'Hailing from the Wetlands, this young dragon is just learning how to hunt, breathe fire, and go on cute destructive rampages.' where entry = 8499;
+update item_template set name = 'Emerald Whelpling', display_id = 31434, description = 'Once bred and raised by the green dragon Itharius, this unique breed of dragon has settled in the jungles of Feralas.' where entry = 8498;
+update item_template set name = 'Peddlefeet', description = 'The power of love can be a dangerous thing, especially when wielded by an airborne, ill-tempered goblin.' where entry = 22235;
+update item_template set name = 'Terky', description = 'Terky is as shy as she is adorable, preferring the company of close friends over new ones.' where entry = 22780;
+update item_template set name = 'Wood Frog', description = 'Vendors at the Darkmoon Faire offer strange and exotic wonders. They also sell wood frogs.' where entry = 11027;
+update item_template set name = 'Leatherback Snapjaw', description = 'Turtles are feared by the naga, who consider them bad luck and give them a wide berth on the shores of Azshara.' where entry = 18966;
+update item_template set description = 'Turtles are feared by the naga, who consider them bad luck and give them a wide berth on the shores of Azshara.' where entry = 18964;
+update item_template set description = 'Turtles are feared by the naga, who consider them bad luck and give them a wide berth on the shores of Azshara.' where entry = 18967;
+update item_template set name = 'Island Frog', description = 'Quack!' where entry = 50079;
+update item_template set name = 'Moonkin Hatchling' where entry = 50019;
+update item_template set name = 'Murki', description = 'Murki is one of the world\'s rarest species of murloc.' where entry = 20651;
+update item_template set name = 'Cockatiel', description = 'Some say this clever bird can be taught to speak--but it\'s smart enough to keep its beak shut.' where entry = 8496;
+update item_template set name = 'Green Wing Macaw', description = 'Favored pet of the Defias pirates, this colorful bird is handy for remembering passwords, grocery lists, and cracker recipes.' where entry = 8492;
+update item_template set name = 'Hyacinth Macaw', description = 'The jungle trolls train these birds to mimic calls for help in order to lure unsuspecting travelers into traps.' where entry = 8494;
+update item_template set name = 'Senegal', description = 'Favored pet of the goblins of Booty Bay, this colorful bird is renowned for its ability to count coins, tally budgets, and lie about contracts.' where entry = 8495;
+update item_template set name = 'Scarlet Snake', description = 'Brave assassins sometimes capture these critters to use their highly toxic venom to poison weapons.' where entry = 50069;
+update item_template set name = 'Tiny Snowman', description = 'He loves to dance and wave and play with you! He melts after Winter Veil, but don\'t worry; he\'ll be back again someday!' where entry = 21309;
+
+
+
