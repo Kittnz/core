@@ -1296,7 +1296,7 @@ update item_template set class = 15, subclass = 2, quality = 1, item_level = 1 w
 21305
 );
 
-update item_template set subclass = 2 where spellid_1 in (select entry from spell_template where description1 like 'Right Click to summon%') and class = 15 and subclass != 2;
+update item_template set subclass = 2, quality = 1, item_level = 1 where spellid_1 in (select entry from spell_template where description1 like 'Right Click to summon%') and class = 15 and subclass != 2;
 
 update item_template set name = 'Olive Snapjaw' where entry = 18967;
 update item_template set name = 'Loggerhead Snapjaw' where entry = 18964;
@@ -1320,10 +1320,23 @@ update item_template set description = 'The legendary ale frog was believed to b
 update item_template set description = 'It thinks you taste like chicken too.' where entry = 11023;
 update item_template set name = 'Undercity Cockroach', description = 'The cockroach is usually an impulse buy. Its owners have a hard time parting with it even after numerous attempts.' where entry = 10393;
 update item_template set description = 'AND THE HEAVENS SHALL TREMBLE, AND MAN SHALL WEEP, AND THE END OF DAYS SHALL--wait, why are you so tall?' where entry = 13584;
+update item_template set description = 'These off-season allies work tirelessly to prepare for the Feast of Winter Veil, and would appreciate not being disturbed the rest of the year.' where entry = 21301;
+update item_template set description = 'During the majestic Winter Veil celebration, these faithful companions spread joy throughout the land. The rest of the year, they are busy.' where entry = 21305;
+update item_template set description = 'Although born in the warm heights of Blackrock Spire, the smolderweb hatchling can survive most environments.' where entry = 12529;
+update item_template set description = 'This pint-sized panda cub is highly sought after by adventurers around Azeroth - despite its narcoleptic nature.' where entry = 13583;
+update item_template set description = 'Many assume \'Wiggles\' refers to the motion of this pig\'s posterior. They discover the true meaning when they see their own entrails.' where entry = 23007;
+update item_template set description = 'A complex system of burrows protects the prairie dog from its neighbors\' massive hooves.' where entry = 10394;
+update item_template set description = 'These adorable critters love snuggling with their owners after a long day of brutal, bloody battle.' where entry = 11474;
+update item_template set description = 'Would rather not spend any more time inside a wrapped holiday gift box.' where entry = 21308;
+update item_template set description = 'After a harpy incursion in Feralas, several hippogryph nesting grounds were attacked. Hundreds of hatchlings were orphaned, and they have been entrusted to the care of the druids on Sardor Isle.' where entry = 23713;
+update item_template set description = 'Not to worry; the combat mechanisms and homing logic have been disabled on this unit, I think. (Oglethorpe Obnoticus)' where entry = 10398;
+update item_template set description = 'Said to bring good fortune when spotted in autumn. Known to hide from unfamiliar creatures.' where entry = 19054;
+update item_template set description = 'A small, fierce member of the Zerg swarm, the zergling is not to be trifled with. Very dangerous in high numbers.' where entry = 13582;
 
 update item_template set class = 4, subclass = 0 where entry in (51857, 51240);
 update item_template set class = 15, subclass = 4 where entry = 21044;
 
+delete from creature_loot_template where item = 21308;
 delete from item_template where entry = 80441;
 
 -- New hardcore box:
