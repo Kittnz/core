@@ -1383,7 +1383,7 @@ update item_template set name = 'Worg Pup', description = 'Worgs are the favored
 update item_template set name = 'Blitzen', description = 'Happy Winter Veil!' where entry = 50014;
 update item_template set name = 'Cottontail Rabbit', description = 'Mountain cottontails can leap up a steep incline with speed you would not believe.' where entry = 50081;
 update item_template set name = 'Dark Whelpling', display_id = 31434, description = 'Hopes that someday it can grow up to destroy villages, just like mommy.' where entry = 10822;
-update item_template set name = 'Darkmoon Tonk', description = 'A favorite of children across Azeroth, this tough little toy can withstand even the most aggressive imagination.' where entry = 10822;
+update item_template set name = 'Darkmoon Tonk', description = 'A favorite of children across Azeroth, this tough little toy can withstand even the most aggressive imagination.' where entry = 50200;
 update item_template set name = 'Eagle Owl', description = 'Many owls nest high in the stone structures of Darnassus, hunting any pests that enter the night elves\' city.' where entry = 50080;
 update item_template set name = 'Great Horned Owl', description = 'Night elf children are given an owl feather on their first birthday as a token of good luck.' where entry = 8500;
 update item_template set name = 'Green Steam Tonk', description = 'A favorite of children across Azeroth, this tough little toy can withstand even the most aggressive imagination.' where entry = 51002;
