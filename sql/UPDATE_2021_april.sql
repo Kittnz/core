@@ -1361,6 +1361,7 @@ update item_template set name = 'Leatherback Snapjaw', description = 'Turtles ar
 update item_template set description = 'Turtles are feared by the naga, who consider them bad luck and give them a wide berth on the shores of Azshara.' where entry = 18964;
 update item_template set description = 'Turtles are feared by the naga, who consider them bad luck and give them a wide berth on the shores of Azshara.' where entry = 18967;
 update item_template set description = 'Turtles are feared by the naga, who consider them bad luck and give them a wide berth on the shores of Azshara.' where entry = 12264;
+update item_template set description = 'Turtles are feared by the naga, who consider them bad luck and give them a wide berth on the shores of Azshara.' where entry = 18963;
 update item_template set name = 'Island Frog', description = 'Quack!' where entry = 50079;
 update item_template set name = 'Moonkin Hatchling' where entry = 50019;
 update item_template set name = 'Murki', description = 'Murki is one of the world\'s rarest species of murloc.' where entry = 20651;
@@ -1399,8 +1400,12 @@ update item_template set description = 'In older age, these little terrors eat e
 update item_template set name = 'Speedy',  description = 'Slow and steady wins the race.' where entry = 23712;
 update item_template set name = 'White Tiger Cub',  description = 'The thick snow near Dun Morogh acts as camouflage for snow cubs learning to hunt.' where entry = 23002;
 update item_template set name = 'Tree Frog',  description = 'Known for their powerful legs and keen eyesight.' where entry = 11026;
+update item_template set name = 'Armored Alliance Steed',  description = 'Armored to withstand collisions in battle.' where entry = 80449;
+update item_template set description = 'Although many varieties of Qiraji Battle Tank can still be found in the ruins of Ahn\'Qiraj today, the darkest of the species were only seen on the day the Scarab gong was rung.' where entry = 21176;
+update item_template set description = 'Although many varieties of Qiraji Battle Tank can still be found in the ruins of Ahn\'Qiraj today, the darkest of the species were only seen on the day the Scarab gong was rung.' where entry = 80457;
+update item_template set name = 'Black-Footed Fox' where entry = 80003;
 
-
+delete from item_template where entry = 81058;
 update item_template set class = 4, subclass = 0 where entry = 20769;
 update item_template set class = 4, subclass = 0 where entry = 18598;
 update item_template set class = 4, subclass = 0 where entry = 18597;
