@@ -1483,3 +1483,6 @@ replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minleve
 
 UPDATE `quest_template` SET `QuestFlags`='256' WHERE (`entry`='80369') AND (`patch`='0');
 UPDATE `quest_template` SET `IncompleteEmote`='1', `CompleteEmote`='1', `OfferRewardEmote1`='1' WHERE (`entry`='80369') AND (`patch`='0');
+
+replace into broadcast_text (ID, FemaleText) values (70003, 'placeholder text when player is in guild for Dinka Dinker npc');
+replace into broadcast_text (ID, FemaleText) values (70005, 'placeholder text when player is NOT in guild for Dinka Dinker npc');
