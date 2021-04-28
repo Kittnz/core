@@ -1770,10 +1770,9 @@ bool GOHello_go_kheyna_wormhole(Player* pPlayer, GameObject* pGo)
             if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(81252))
                 pPlayer->KilledMonster(cInfo, ObjectGuid());
 
-        if (pPlayer->FindNearestCreature(81041, 15.0F))
-            return true;
-
-        if (pPlayer->GetQuestStatus(80407) == QUEST_STATUS_INCOMPLETE)
+        if (pPlayer->GetQuestStatus(80407) == QUEST_STATUS_COMPLETE)
+            if (pPlayer->FindNearestCreature(81041, 15.0F))
+                return true;
             pGo->SummonCreature(81041, pGo->GetPositionX() + 1.0F, pGo->GetPositionY() + 1.0F, pGo->GetPositionZ(), pGo->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN, 60 * 1000);
         return true;
     }
