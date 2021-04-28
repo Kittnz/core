@@ -1409,3 +1409,11 @@ delete from item_template where entry = 81058;
 update item_template set class = 4, subclass = 0 where entry = 20769;
 update item_template set class = 4, subclass = 0 where entry = 18598;
 update item_template set class = 4, subclass = 0 where entry = 18597;
+
+-- Post April 28th:
+
+replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, objectivetext1, objectivetext2, objectivetext3, objectivetext4, srcitemid, srcitemcount, reworreqmoney, rewmoneymaxlevel, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (0,80403,15,35,30,0,0,'The Zeppelin Crash','Not long ago, a goblin zeppelin crashed to the east. A representative of the Steamwheedle Cartel passed through here a few days ago.\n\nShe was looking for information about the zeppelin\'s cargo and its pilot, Beezil, but none of us really got a good look at the crash. I doubt she\'ll be able to clean up after the wreck by herself, much less recover whatever cargo the vessel might have carried.\n\nIf you have time, you may want to check up on her out at Beezil\'s Wreck, due east of here, near the mountains.','Speak with Moxie Steelgrille at Beezil\'s Wreck.','How can I be sure that I can trust you?','I suppose I can use the help. There\'s not much here a $r would be interested in, anyway.',0,0,0,0,0,0,0,0,'','','','',0,0,0,810,1001,150,169,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+replace into creature_questrelation (id, quest, patch_min, patch_max) values (80932, 80403,'0','10'); 
+replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (81250, 80403,'0','10');
+
