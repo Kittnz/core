@@ -1417,3 +1417,22 @@ replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minleve
 replace into creature_questrelation (id, quest, patch_min, patch_max) values (80932, 80403,'0','10'); 
 replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (81250, 80403,'0','10');
 
+
+REPLACE INTO `creature_template` VALUES (81250, 0, 7337, 0, 0, 0, 'Moxie Steelgrille', NULL, 0, 35, 43, 1471, 2471, 0, 0, 1890, 1682, 7, 1, 1.14286, 0, 20, 5, 0, 0, 1, 61, 78, 0, 156, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 56.672, 77.924, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 7564, 0, 0, 0, 0, 10, '');
+
+update creature_template set npc_flags = 2 where entry in (81250, 80932);
+
+replace into item_template values
+ ('81284', '0', '12', '0', 'Zeppelin Cargo', 'It seems to have survived the crash intact... mostly.', '8928', '1', '0', '1', '0', '0', '0', '-1', '-1', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '4', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+ 
+ replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, objectivetext1, objectivetext2, objectivetext3, objectivetext4, srcitemid, srcitemcount, reworreqmoney, rewmoneymaxlevel, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (80405,80404,15,35,30,0,0,'Delivery for Drazzit','Drazzit will expect to hear something from me soon, but I don\'t think the site is secure enough for me to leave. If you have time, would you be willing to take some of the salvaged cargo down to him at Mudsprocket?','Take the Zeppelin Cargo to Drazzit Dripvalve at Mudsprocket.','Yes?','<Drazzit accepts the cargo from you.>\n\nI\'m so hungry, I could eat a dragon! Thank goodness Moxie finally got some of that cargo down here. We\'ve been reduced to playing dice against the ogre for whatever he\'s managed to kill on his hunting trips!',81284,1,0,0,0,0,0,0,'','','','',81284,1,0,980,1001,200,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+replace into creature_questrelation (id, quest, patch_min, patch_max) values (81250, 80404,'0','10'); 
+replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (80932, 80404,'0','10');
