@@ -1447,7 +1447,15 @@ replace into creature_questrelation (id, quest, patch_min, patch_max) values (81
 replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (81250, 80405,'0','10');
 
 replace into gameobject_template values 
-(3000245, 0, 3, 2350, 'Zeppelin Cargo', 0, 0, 1, 57, 3000245, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+(3000245, 0, 3, 336, 'Zeppelin Cargo', 0, 0, 1, 57, 3000245, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
 
 replace into `gameobject_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`, `patch_min`, `patch_max`)  values (3000245, 81284, -100, 1, 1, 1, 0, 0, 10);
 
+REPLACE INTO `gameobject_template` VALUES (3000246, 0, 0, 26165, 'Mysterious Glittering Object', 0, 32, 1, 0, 0, 0, 0, 21400, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_kheyna_wormhole');
+
+REPLACE INTO `creature_template` VALUES (81252, 0, 4, 0, 0, 0, 'Quest 80407 Trigger', '', 0, 1, 1, 644, 644, 0, 0, 0, 35, 0, 1, 1.14286, 1, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, '');
+
+replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, objectivetext1, objectivetext2, objectivetext3, objectivetext4, srcitemid, srcitemcount, reworreqmoney, rewmoneymaxlevel, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (80396,80407,440,46,40,0,0,'A Letter From a Friend','Hey!\n\nYou\'re $N, right? I received a letter from a certain Kheyna Spinpistol. She paid me handsomely to direct you to a crashed gnomish rocket car north west of town.\n\nShe said you\'ll know what to do when you find \'it\' .','Investigate the crashed Gnomish rocket car northwest of Gadgetzan.','Yes?','Hello again, $N! I see that Reas succeeded in her task.\n\nGood, good! I have need of your aid again! ',0,0,0,0,0,0,0,0,'Investigate the crashed gnomish rocket car','','','',0,0,0,910,369,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+replace into creature_questrelation (id, quest, patch_min, patch_max) values (51266, 80407,'0','10'); 
+replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (81041, 80407,'0','10');
