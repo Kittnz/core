@@ -1764,17 +1764,32 @@ bool QuestComplete_npc_voldana(Player* pPlayer, Creature* pQuestGiver, Quest con
 
 bool GOHello_go_kheyna_wormhole(Player* pPlayer, GameObject* pGo)
 {
-    if (pPlayer->GetQuestStatus(80395) == QUEST_STATUS_INCOMPLETE)
-        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80938))
-            pPlayer->KilledMonster(cInfo, ObjectGuid());
+    if (pGo->GetEntry() == 3000246)
+    {
+        if (pPlayer->GetQuestStatus(80407) == QUEST_STATUS_INCOMPLETE)
+            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(81252))
+                pPlayer->KilledMonster(cInfo, ObjectGuid());
 
-    if (pPlayer->FindNearestCreature(81041, 15.0F))
+        if (pPlayer->FindNearestCreature(81041, 15.0F))
+            return true;
+
+        if (pPlayer->GetQuestStatus(80407) == QUEST_STATUS_INCOMPLETE)
+            pGo->SummonCreature(81041, pGo->GetPositionX() + 1.0F, pGo->GetPositionY() + 1.0F, pGo->GetPositionZ(), pGo->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN, 60 * 1000);
         return true;
+    }
+    else
+    {
+        if (pPlayer->GetQuestStatus(80395) == QUEST_STATUS_INCOMPLETE)
+            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80938))
+                pPlayer->KilledMonster(cInfo, ObjectGuid());
 
-    if (pPlayer->GetQuestStatus(80395) == QUEST_STATUS_INCOMPLETE || pPlayer->GetQuestStatus(80395) == QUEST_STATUS_COMPLETE || pPlayer->GetQuestStatus(80396) == QUEST_STATUS_COMPLETE) // A Glittering Opportunity
-        pGo->SummonCreature(81041, pGo->GetPositionX() + 1.0F, pGo->GetPositionY() + 1.0F, pGo->GetPositionZ(), pGo->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN, 60 * 1000);
+        if (pPlayer->FindNearestCreature(81041, 15.0F))
+            return true;
 
-    return true;
+        if (pPlayer->GetQuestStatus(80395) == QUEST_STATUS_INCOMPLETE || pPlayer->GetQuestStatus(80395) == QUEST_STATUS_COMPLETE || pPlayer->GetQuestStatus(80396) == QUEST_STATUS_COMPLETE) // A Glittering Opportunity
+            pGo->SummonCreature(81041, pGo->GetPositionX() + 1.0F, pGo->GetPositionY() + 1.0F, pGo->GetPositionZ(), pGo->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN, 60 * 1000);
+        return true;
+    }
 }
 
 void AddSC_episode_1()
