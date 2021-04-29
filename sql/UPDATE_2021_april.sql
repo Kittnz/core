@@ -1513,3 +1513,30 @@ replace into gameobject_template values
 
 replace into `gameobject_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`, `patch_min`, `patch_max`)  values (3000246, 81285, -100, 1, 1, 1, 0, 0, 10);
 
+replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, objectivetext1, objectivetext2, objectivetext3, objectivetext4, srcitemid, srcitemcount, reworreqmoney, rewmoneymaxlevel, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (0,80353,15,60,30,0,1,'Unclear Instructions','Who would\'ve imagined asking an ogre to cut wood won\'t necessarily mean he will also pick it up?\n\nNumbskull brute started cutting and cutting but when he came back he didn\'t bring any of it back!\n\nI would go pick it up myself but I am busy with uh... stuff. So why don\'t you do it? People around here respect working folk and you will get paid what the action is worth, bub.\n\nGo pickup a few bundles.','Gather 10 bundles of freshly cut wood to Qik Peddlechin in Mudsprocket.','Can you believe it? He went back to cutting!\n\nPlease tell me you got a few back.','Ah yes, that\'s absolutely great bub. Just toss them right there, here\'s the pay.\n\nThere\'s always work for you here if you need it.',81286,10,0,0,0,0,0,0,'','','','',0,0,1000,910,1001,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+replace into item_template values
+ ('81286', '0', '12', '0', 'Freshly Cut Wood', '', '929', '1', '0', '1', '0', '0', '0', '-1', '-1', '1',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '10', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '4', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into creature_questrelation (id, quest, patch_min, patch_max) values (81259, 80353,'0','10'); 
+replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (81259, 80353,'0','10');
+
+replace into gameobject_template values 
+(3000247, 0, 3, 24459, 'Freshly Cut Wood', 0, 0, 1, 57, 3000247, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+replace into `gameobject_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`, `patch_min`, `patch_max`)  values (3000247, 81286, -100, 1, 1, 1, 0, 0, 10);
+
+REPLACE INTO `creature_template` VALUES (81259, 0, 13346, 0, 0, 0, 'Qik Peddlechin', NULL, 0, 35, 43, 1471, 2471, 0, 0, 1890, 1682, 7, 1, 1.14286, 0, 20, 5, 0, 0, 1, 61, 78, 0, 156, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 56.672, 77.924, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 7564, 0, 0, 0, 0, 10, '');
+
+REPLACE INTO `creature_template` VALUES (81260, 0, 18062, 0, 0, 0, 'Bulum', NULL, 0, 35, 43, 1471, 2471, 0, 0, 1890, 1682, 7, 1, 1.14286, 0, 20, 5, 0, 0, 1, 61, 78, 0, 156, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 56.672, 77.924, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 7564, 0, 0, 0, 0, 10, '');
+
+update creature_template set equipment_id = 842 where entry = 81260;
+update creature_template set npc_flags = 2 where entry in (81259);
+update creature_template set npc_flags = 0 where entry in (81260);
