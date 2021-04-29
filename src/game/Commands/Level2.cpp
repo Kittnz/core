@@ -918,6 +918,7 @@ bool ChatHandler::HandleGameObjectAddCommand(char* args)
 
     if (spawntimeSecs)
         pGameObj->SetRespawnTime(spawntimeSecs);
+    pGameObj->SetRespawnTime(300); // Default 5 min.
 
     // fill the gameobject data and save to the db
     pGameObj->SaveToDB(map->GetId());
@@ -934,7 +935,6 @@ bool ChatHandler::HandleGameObjectAddCommand(char* args)
     map->Add(pGameObj);
 
     sObjectMgr.AddGameobjectToGrid(db_lowGUID, sObjectMgr.GetGOData(db_lowGUID));
-
     PSendSysMessage(LANG_GAMEOBJECT_ADD, id, gInfo->name, db_lowGUID, x, y, z);
     return true;
 }
@@ -1355,6 +1355,7 @@ bool ChatHandler::HandleNpcAddCommand(char* args)
 
     map->Add(pCreature);
     sObjectMgr.AddCreatureToGrid(db_guid, sObjectMgr.GetCreatureData(db_guid));
+    pCreature->SetRespawnDelay(300);
     return true;
 }
 
