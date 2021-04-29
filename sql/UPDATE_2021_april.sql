@@ -1485,7 +1485,7 @@ UPDATE `quest_template` SET `QuestFlags`='256' WHERE (`entry`='80369') AND (`pat
 UPDATE `quest_template` SET `IncompleteEmote`='1', `CompleteEmote`='1', `OfferRewardEmote1`='1' WHERE (`entry`='80369') AND (`patch`='0');
 
 replace into broadcast_text (ID, FemaleText) values (70003, 'Oh, a true traveler, good to see you!');
-replace into broadcast_text (ID, FemaleText) values (70004, 'Oh my, we have a visitor here!$B$B<Dinka ponders>$B$BSadly my magic only works on those who''ve travelled enough, come back once you''ve seen enough world.');' ||
+replace into broadcast_text (ID, FemaleText) values (70004, 'Oh my, we have a visitor here!$B$B<Dinka ponders>$B$BSadly my magic only works on those who''ve travelled enough, come back once you''ve seen enough world.');
 replace into broadcast_text (ID, FemaleText) values (70005, 'Here, here, slow down, there''s no rush, I''m not going anywhere.');
 
 -- Post April 29th:
