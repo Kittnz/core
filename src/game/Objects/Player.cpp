@@ -22433,3 +22433,145 @@ void Player::UpdateTotalDeathCount()
 {
     m_totalDeathCount++;
 }
+
+
+void Player::SuspendWorldBuffs()
+{
+	// clear character_aura_suspended
+	CharacterDatabase.PExecute("DELETE FROM character_aura_suspended WHERE guid = '%u'", GetGUIDLow());
+
+	std::map<uint32, std::string> worldBuffs{
+		{ 22888, "Rallying Cry of the Dragonslayer" },
+		{ 24425, "Spirit of zandalar" },
+		{ 22818, "Mol'dar's Moxie" },
+		{ 22817, "Fengus' Ferocity" },
+		{ 22820, "Slip'kik's Savvy" },
+		{ 15366, "Songflower Serenade" },
+		{ 23768, "Sayge's Dark Fortune of Damage"}, // basepoints0 = % damage
+		{ 23736, "Sayge's Dark Fortune of Agility"},
+		{ 23767, "Sayge's Dark Fortune of Armor"},
+		{ 23766, "Sayge's Dark Fortune of Intelligence"},
+		{ 23769, "Sayge's Dark Fortune of Resistance"},
+		{ 23738, "Sayge's Dark Fortune of Spirit"},
+		{ 23737, "Sayge's Dark Fortune of Stamina"},
+		{ 23735, "Sayge's Dark Fortune of Strength"},
+		{ 16609, "Warchief's Blessing"}
+	};
+
+	std::string suspendMessage;
+
+	SpellAuraHolderMap const& auraHolders = GetSpellAuraHolderMap();
+
+	if (auraHolders.empty())
+		return;
+
+	AuraSaveStruct s;
+	for (SpellAuraHolderMap::const_iterator itr = auraHolders.begin(); itr != auraHolders.end(); ++itr)
+	{
+		SpellAuraHolder *holder = itr->second;
+
+		if (!SaveAura(holder, s))
+			continue;
+
+		for (std::pair<uint32, std::string> buff : worldBuffs)
+		{
+			if (s.spellid == buff.first)
+			{
+
+				static SqlStatementID insertAuras;
+
+				SqlStatement stmt = CharacterDatabase.CreateStatement(insertAuras, "INSERT INTO character_aura_suspended (guid, caster_guid, item_guid, spell, stackcount, remaincharges, "
+					"basepoints0, basepoints1, basepoints2, periodictime0, periodictime1, periodictime2, maxduration, remaintime, effIndexMask) "
+					"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+
+				stmt.addUInt32(GetGUIDLow());
+				stmt.addUInt64(s.caster_guid.GetRawValue());
+				stmt.addUInt32(s.item_lowguid);
+				stmt.addUInt32(s.spellid);
+				stmt.addUInt32(s.stackcount);
+				stmt.addUInt8(s.remaincharges);
+
+				for (uint32 i = 0; i < MAX_EFFECT_INDEX; ++i)
+					stmt.addInt32(s.damage[i]);
+
+				for (uint32 i = 0; i < MAX_EFFECT_INDEX; ++i)
+					stmt.addUInt32(s.periodicTime[i]);
+
+				stmt.addInt32(s.maxduration);
+				stmt.addInt32(s.remaintime);
+				stmt.addUInt32(s.effIndexMask);
+				stmt.Execute();
+
+				suspendMessage += "Supended " + buff.second;
+
+				if (s.spellid == 23768)
+					suspendMessage += " " + std::to_string(s.damage[0]) + "%%";
+
+				suspendMessage += " (" + std::to_string((int)round(s.remaintime / MINUTE / IN_MILLISECONDS)) + "m).\n";
+
+			}
+		}
+	}
+
+	if (suspendMessage.empty())
+	{
+		ChatHandler(this).PSendSysMessage("No world buffs found.");
+	}
+	else
+	{
+		for (std::pair<uint32, std::string> buff : worldBuffs)
+			RemoveAurasDueToSpell(buff.first);
+
+		ChatHandler(this).PSendSysMessage(suspendMessage.c_str());
+
+		// add item to restore buffs.
+	}
+
+}
+void Player::RestoreSuspendedWorldBuffs()
+{
+
+	QueryResult *auras = CharacterDatabase.PQuery("SELECT caster_guid,item_guid,spell,stackcount,remaincharges,basepoints0,basepoints1,"
+		"basepoints2,periodictime0,periodictime1,periodictime2,maxduration,remaintime,effIndexMask "
+		"FROM character_aura_suspended WHERE guid = '%u'", GetGUIDLow());
+
+	if (!auras)
+		return;
+
+	do
+	{
+		Field *fields = auras->Fetch();
+		AuraSaveStruct s;
+		s.caster_guid = ObjectGuid(fields[0].GetUInt64());
+		s.item_lowguid = fields[1].GetUInt32();
+		s.spellid = fields[2].GetUInt32();
+		s.stackcount = fields[3].GetUInt32();
+		s.remaincharges = fields[4].GetUInt32();
+
+		for (int32 i = 0; i < MAX_EFFECT_INDEX; ++i)
+		{
+			s.damage[i] = fields[i + 5].GetInt32();
+			s.periodicTime[i] = fields[i + 8].GetUInt32();
+		}
+
+		s.maxduration = fields[11].GetInt32();
+		s.remaintime = fields[12].GetInt32();
+		s.effIndexMask = fields[13].GetUInt32();
+
+		LoadAura(s, s.remaintime);
+
+		CharacterDatabase.PExecute("DELETE FROM character_aura_suspended WHERE guid = %u and spell = %u", s.caster_guid, s.spellid);
+
+		std::string fortunePercent = "";
+		if (s.spellid == 23768)
+			fortunePercent = " " + std::to_string(s.damage[0]) + "%";
+
+		ChatHandler(this).PSendSysMessage("Restored %s%s (%sm).",
+			sSpellMgr.GetSpellEntry(s.spellid)->SpellName[0].c_str(),
+			fortunePercent,
+			std::to_string((int)round(s.remaintime / MINUTE / IN_MILLISECONDS)).c_str());
+
+
+	} while (auras->NextRow());
+
+}

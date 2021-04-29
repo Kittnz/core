@@ -2572,6 +2572,12 @@ class MANGOS_DLL_SPEC Player final: public Unit
 
 		// Giperion TURTLE SPECIFIC End
 
+		// Xerron Suspend World Buffs Start
+		public:
+			void Player::SuspendWorldBuffs();
+			void Player::RestoreSuspendedWorldBuffs();
+		// Xerron Suspend World Buffs End
+
 };
 
 void AddItemsSetItem(Player*player,Item* item);
