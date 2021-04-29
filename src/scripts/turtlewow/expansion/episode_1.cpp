@@ -10,12 +10,12 @@ void DoAfterTime(Player* player, uint32 p_time, Functor&& function)
 
 enum AlahthalasQuests
 {
-    ASSISTING_CHILDREN_OF_THE_SUN                      = 80250,
+    ASSISTING_CHILDREN_OF_THE_SUN = 80250,
     NPC_CUSTOM_OBJECTIVE_ASSISTING_CHILDREN_OF_THE_SUN = 80229,
-    TO_ALAHTHALAS                                      = 80251,
-    CRYSTAL_CLEAR_TASK                                 = 80002,
-    RELICS_IN_FERALAS                                  = 80003,
-    WELCOME_TO_ALAHTHALAS                              = 80256
+    TO_ALAHTHALAS = 80251,
+    CRYSTAL_CLEAR_TASK = 80002,
+    RELICS_IN_FERALAS = 80003,
+    WELCOME_TO_ALAHTHALAS = 80256
 };
 
 bool GossipHello_npc_caledra(Player* pPlayer, Creature* pCreature)
@@ -32,8 +32,8 @@ bool GossipHello_npc_caledra(Player* pPlayer, Creature* pCreature)
 
 bool GossipSelect_npc_caledra(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
 {
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1) 
-    { 
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
         DoAfterTime(pPlayer, 5 * IN_MILLISECONDS,
             [CreatureGuid = pCreature->GetObjectGuid(), player = pPlayer]()
         {
@@ -200,11 +200,11 @@ bool GOHello_go_portal_alahthalas(Player* pPlayer, GameObject* pGo)
 enum GoblinStartingZone
 {
     QUEST_ME_NOT_ANY_KIND_OF_ORC = 80108,
-    QUEST_GREEN_GOES_RED         = 80110,
-    QUEST_SHADOW_ON_THE_PLATEAU  = 80107,
-    ZONE_STONETALON_MOUNTAINS    = 406,
-    ZONE_DUROTAR                 = 14,
-    NPC_TOMB_SHADOW              = 80120
+    QUEST_GREEN_GOES_RED = 80110,
+    QUEST_SHADOW_ON_THE_PLATEAU = 80107,
+    ZONE_STONETALON_MOUNTAINS = 406,
+    ZONE_DUROTAR = 14,
+    NPC_TOMB_SHADOW = 80120
 };
 
 class DemorphAfterTime : public BasicEvent
@@ -228,8 +228,8 @@ private:
 bool GOHello_go_fm_acquisition(Player* pPlayer, GameObject* pGo)
 {
     if (pPlayer->GetZoneId() != ZONE_DUROTAR && pPlayer->GetQuestStatus(QUEST_ME_NOT_ANY_KIND_OF_ORC) == QUEST_STATUS_COMPLETE)
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TAXI, "Set a course to Durotar! Full speed!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-    
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TAXI, "Set a course to Durotar! Full speed!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+
     pPlayer->SEND_GOSSIP_MENU(100100, pGo->GetGUID());
     return true;
 }
@@ -245,22 +245,20 @@ bool GOSelect_go_fm_acquisition(Player* pPlayer, GameObject* pGo, uint32 sender,
 
         if (pPlayer->HasItemCount(6948, 1, 0))
             pPlayer->RemoveItemCurrency(6948, 1);
-    }   
+    }
     return true;
 }
 
-// Durotar
-
 enum RefugeeNPCs
 {
-    NPC_NERT_STONETALON      = 80100,
-    NPC_NERT_BLASTENTOM      = 80121,
+    NPC_NERT_STONETALON = 80100,
+    NPC_NERT_BLASTENTOM = 80121,
     NPC_GRIZZLE_THE_ENFORCER = 80124,
-    NPC_MAYTEN_BOOMRIFLE     = 80125,
-    NPC_LEYTI_QUICKTONGUEM   = 80126, 
-    NPC_WIZETTE_ICEWHISTLE   = 80128,
-    NPC_AMRI_DEMONDEAL       = 80127, 
-    NPC_SPRAT_NOZZLETON      = 80122
+    NPC_MAYTEN_BOOMRIFLE = 80125,
+    NPC_LEYTI_QUICKTONGUEM = 80126,
+    NPC_WIZETTE_ICEWHISTLE = 80128,
+    NPC_AMRI_DEMONDEAL = 80127,
+    NPC_SPRAT_NOZZLETON = 80122
 };
 
 bool GossipHello_npc_nert_blastentom(Player* pPlayer, Creature* pCreature)
@@ -280,13 +278,13 @@ bool QuestComplete_npc_garthok(Player* pPlayer, Creature* pQuestGiver, Quest con
 
     if (pQuest->GetQuestId() == QUEST_GREEN_GOES_RED)
     {
-        Creature* NertBlastenton    = pQuestGiver->SummonCreature(NPC_NERT_BLASTENTOM,      286.33F, -4717.00F, 13.78F, 2.68F, TEMPSUMMON_TIMED_DESPAWN, 1 * MINUTE * IN_MILLISECONDS);
-        Creature* GrizzleEnforcer   = pQuestGiver->SummonCreature(NPC_GRIZZLE_THE_ENFORCER, 288.25F, -4721.18F, 13.34F, 2.50F, TEMPSUMMON_TIMED_DESPAWN, 1 * MINUTE * IN_MILLISECONDS);
-        Creature* MaytenBoomfire    = pQuestGiver->SummonCreature(NPC_MAYTEN_BOOMRIFLE,     290.45F, -4717.65F, 13.34F, 2.59F, TEMPSUMMON_TIMED_DESPAWN, 1 * MINUTE * IN_MILLISECONDS);
-        Creature* LeytiQuicktongue  = pQuestGiver->SummonCreature(NPC_LEYTI_QUICKTONGUEM,   293.18F, -4716.50F, 13.09F, 2.59F, TEMPSUMMON_TIMED_DESPAWN, 1 * MINUTE * IN_MILLISECONDS);
-        Creature* WizetteIcewhistle = pQuestGiver->SummonCreature(NPC_WIZETTE_ICEWHISTLE,   290.78F, -4720.42F, 13.08F, 2.29F, TEMPSUMMON_TIMED_DESPAWN, 1 * MINUTE * IN_MILLISECONDS);
-        Creature* AmriDemondeal     = pQuestGiver->SummonCreature(NPC_AMRI_DEMONDEAL,       289.36F, -4723.89F, 12.91F, 2.80F, TEMPSUMMON_TIMED_DESPAWN, 1 * MINUTE * IN_MILLISECONDS);
-        Creature* SpratNozzleton    = pQuestGiver->SummonCreature(NPC_SPRAT_NOZZLETON,      293.27F, -4719.20F, 12.74F, 2.87F, TEMPSUMMON_TIMED_DESPAWN, 1 * MINUTE * IN_MILLISECONDS);
+        Creature* NertBlastenton = pQuestGiver->SummonCreature(NPC_NERT_BLASTENTOM, 286.33F, -4717.00F, 13.78F, 2.68F, TEMPSUMMON_TIMED_DESPAWN, 1 * MINUTE * IN_MILLISECONDS);
+        Creature* GrizzleEnforcer = pQuestGiver->SummonCreature(NPC_GRIZZLE_THE_ENFORCER, 288.25F, -4721.18F, 13.34F, 2.50F, TEMPSUMMON_TIMED_DESPAWN, 1 * MINUTE * IN_MILLISECONDS);
+        Creature* MaytenBoomfire = pQuestGiver->SummonCreature(NPC_MAYTEN_BOOMRIFLE, 290.45F, -4717.65F, 13.34F, 2.59F, TEMPSUMMON_TIMED_DESPAWN, 1 * MINUTE * IN_MILLISECONDS);
+        Creature* LeytiQuicktongue = pQuestGiver->SummonCreature(NPC_LEYTI_QUICKTONGUEM, 293.18F, -4716.50F, 13.09F, 2.59F, TEMPSUMMON_TIMED_DESPAWN, 1 * MINUTE * IN_MILLISECONDS);
+        Creature* WizetteIcewhistle = pQuestGiver->SummonCreature(NPC_WIZETTE_ICEWHISTLE, 290.78F, -4720.42F, 13.08F, 2.29F, TEMPSUMMON_TIMED_DESPAWN, 1 * MINUTE * IN_MILLISECONDS);
+        Creature* AmriDemondeal = pQuestGiver->SummonCreature(NPC_AMRI_DEMONDEAL, 289.36F, -4723.89F, 12.91F, 2.80F, TEMPSUMMON_TIMED_DESPAWN, 1 * MINUTE * IN_MILLISECONDS);
+        Creature* SpratNozzleton = pQuestGiver->SummonCreature(NPC_SPRAT_NOZZLETON, 293.27F, -4719.20F, 12.74F, 2.87F, TEMPSUMMON_TIMED_DESPAWN, 1 * MINUTE * IN_MILLISECONDS);
 
         DoAfterTime(pPlayer, 5 * IN_MILLISECONDS,
             [CreatureGuid = NertBlastenton->GetObjectGuid(), player = pPlayer]()
@@ -307,7 +305,7 @@ bool QuestComplete_npc_garthok(Player* pPlayer, Creature* pQuestGiver, Quest con
             Map* map = sMapMgr.FindMap(1);
             Creature* creature = map->GetCreature(CreatureGuid);
 
-            if (!creature) 
+            if (!creature)
                 return;
 
             creature->HandleEmote(EMOTE_ONESHOT_TALK);
@@ -501,12 +499,12 @@ bool QuestAccept_npc_nert_blastentom(Player* pPlayer, Creature* pQuestGiver, Que
 
 struct npc_tomb_shadowAI : public ScriptedAI
 {
-    npc_tomb_shadowAI(Creature *c) : ScriptedAI(c)
+    npc_tomb_shadowAI(Creature* c) : ScriptedAI(c)
     {
         Reset();
     }
 
-    void Aggro(Unit *who)
+    void Aggro(Unit* who)
     {
         m_creature->MonsterSay("You will not disturb what lays here!");
     }
@@ -529,25 +527,25 @@ struct npc_tomb_shadowAI : public ScriptedAI
 
 };
 
-CreatureAI* GetAI_npc_tomb_shadow(Creature *_Creature)
+CreatureAI* GetAI_npc_tomb_shadow(Creature* _Creature)
 {
     return new npc_tomb_shadowAI(_Creature);
 }
 
 enum HighElfStartingZone
 {
-    QUEST_CLEARING_OUT_VERMINS                = 80203,
-    QUEST_GATHERING_INTEL                      = 80204,
-    NPC_CUSTOM_OBJECTIVE_GATHERING_INTEL       = 80203,
-    NPC_CUSTOM_OBJECTIVE_BURNT_WHEELS          = 80204,
-    QUEST_SLAKING_THEIR_THIRST                 = 80205,
-    QUEST_BURNT_WHEELS                         = 80206,
-    NPC_CUSTOM_OBJECTIVE_ITEM_SCRAPPING        = 80206,
-    NPC_ALISHA_SUNBLADE                        = 80210,
-    NPC_CUSTOM_OBJECTIVE_SUNBLADE_RENUNION     = 80211,
-    QUEST_SUNBLADE_RENUNION                    = 80208,
-    QUEST_PORTING_TO_GOLDSHIRE                 = 80209,
-    NPC_CUSTOM_OBJECTIVE_PORTING_TO_GOLDSHIRE  = 80212
+    QUEST_CLEARING_OUT_VERMINS = 80203,
+    QUEST_GATHERING_INTEL = 80204,
+    NPC_CUSTOM_OBJECTIVE_GATHERING_INTEL = 80203,
+    NPC_CUSTOM_OBJECTIVE_BURNT_WHEELS = 80204,
+    QUEST_SLAKING_THEIR_THIRST = 80205,
+    QUEST_BURNT_WHEELS = 80206,
+    NPC_CUSTOM_OBJECTIVE_ITEM_SCRAPPING = 80206,
+    NPC_ALISHA_SUNBLADE = 80210,
+    NPC_CUSTOM_OBJECTIVE_SUNBLADE_RENUNION = 80211,
+    QUEST_SUNBLADE_RENUNION = 80208,
+    QUEST_PORTING_TO_GOLDSHIRE = 80209,
+    NPC_CUSTOM_OBJECTIVE_PORTING_TO_GOLDSHIRE = 80212
 };
 
 bool QuestAccept_npc_kathy_wake(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
@@ -627,8 +625,8 @@ bool GOHello_go_farstrider_well(Player* pPlayer, GameObject* pGo)
 {
     if (pPlayer->HasItemCount(EMPTY_BARREL, 1))
     {
-        pPlayer->RemoveItemCurrency(EMPTY_BARREL, 1); 
-        pPlayer->AddItem(FILLED_BARREL); 
+        pPlayer->RemoveItemCurrency(EMPTY_BARREL, 1);
+        pPlayer->AddItem(FILLED_BARREL);
         pPlayer->HandleEmote(EMOTE_ONESHOT_KNEEL);
     }
     else
@@ -795,7 +793,7 @@ bool GossipSelect_npc_malvinah_sunblade(Player* pPlayer, Creature* pCreature, ui
             creature->MonsterSayToPlayer("I believe Kathy wishes to speak with you. Here is a present from me. Take care, okay? Wherever you may end up, remember that we'll always remain friends!", player);
             CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(NPC_CUSTOM_OBJECTIVE_SUNBLADE_RENUNION);
             if (cInfo != nullptr)
-                player->KilledMonster(cInfo, ObjectGuid());           
+                player->KilledMonster(cInfo, ObjectGuid());
         });
     }
 
@@ -814,10 +812,10 @@ bool GOHello_go_shadowforge_cage(Player* pPlayer, GameObject* pGo)
         pGo->UseDoorOrButton();
         pPlayer->HandleEmote(EMOTE_ONESHOT_KNEEL);
 
-		if (GameObjectAI* gAI = pGo->AI())
-		{
-			gAI->SetData(ID_GOBJECT_SHADOWFORGECAGE_RESET, 1);
-		}
+        if (GameObjectAI* gAI = pGo->AI())
+        {
+            gAI->SetData(ID_GOBJECT_SHADOWFORGECAGE_RESET, 1);
+        }
 
         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(NPC_CUSTOM_OBJECTIVE_ITEM_SCRAPPING);
         if (cInfo != nullptr)
@@ -855,52 +853,52 @@ bool GOHello_go_shadowforge_cage(Player* pPlayer, GameObject* pGo)
 
 struct go_shadowforge_cage : public GameObjectAI
 {
-	explicit go_shadowforge_cage(GameObject* pGo) : GameObjectAI(pGo)
-	{}
+    explicit go_shadowforge_cage(GameObject* pGo) : GameObjectAI(pGo)
+    {}
 
-	uint32 BackTimer = 0;
-	char DebugInfo[32];
+    uint32 BackTimer = 0;
+    char DebugInfo[32];
 
-	virtual void UpdateAI(uint32 const uiDiff) override
-	{
-		if (BackTimer != 0)
-		{
-			if (BackTimer < uiDiff)
-			{
-				BackTimer = 0;
-				me->ResetDoorOrButton();
-			}
-			else
-			{
-				BackTimer -= uiDiff;
-				if (BackTimer == 0)
-				{
-					me->ResetDoorOrButton();
-				}
-			}
-		}
-	}
+    virtual void UpdateAI(uint32 const uiDiff) override
+    {
+        if (BackTimer != 0)
+        {
+            if (BackTimer < uiDiff)
+            {
+                BackTimer = 0;
+                me->ResetDoorOrButton();
+            }
+            else
+            {
+                BackTimer -= uiDiff;
+                if (BackTimer == 0)
+                {
+                    me->ResetDoorOrButton();
+                }
+            }
+        }
+    }
 
-	virtual void SetData(uint32 id, uint32 value) override
-	{
-		if (id == ID_GOBJECT_SHADOWFORGECAGE_RESET)
-		{
-			BackTimer = 25 * IN_MILLISECONDS;
-		}
-		GameObjectAI::SetData(id, value);
-	}
+    virtual void SetData(uint32 id, uint32 value) override
+    {
+        if (id == ID_GOBJECT_SHADOWFORGECAGE_RESET)
+        {
+            BackTimer = 25 * IN_MILLISECONDS;
+        }
+        GameObjectAI::SetData(id, value);
+    }
 
-	virtual const char* GetDebugInfo() override
-	{
-		sprintf(DebugInfo, "BackTimer %u", BackTimer);
-		return DebugInfo;
-	}
+    virtual const char* GetDebugInfo() override
+    {
+        sprintf(DebugInfo, "BackTimer %u", BackTimer);
+        return DebugInfo;
+    }
 
 };
 
 GameObjectAI* GetAI_shadoforge_cage(GameObject* Obj)
 {
-	return new go_shadowforge_cage(Obj);
+    return new go_shadowforge_cage(Obj);
 }
 
 
@@ -952,12 +950,12 @@ bool GOHello_go_portal_goldshire(Player* pPlayer, GameObject* pGo)
 
 struct npc_whizzbotAI : public ScriptedAI
 {
-    npc_whizzbotAI(Creature *c) : ScriptedAI(c)
+    npc_whizzbotAI(Creature* c) : ScriptedAI(c)
     {
         Reset();
     }
 
-    void Aggro(Unit *who)
+    void Aggro(Unit* who)
     {
         m_creature->MonsterSay(irand(WHIZZBOT_MIN_AGGRO_TEXT, WHIZZBOT_MAX_AGGRO_TEXT));
     }
@@ -980,7 +978,7 @@ struct npc_whizzbotAI : public ScriptedAI
 
 };
 
-CreatureAI* GetAI_npc_whizzbot(Creature *_Creature)
+CreatureAI* GetAI_npc_whizzbot(Creature* _Creature)
 {
     return new npc_whizzbotAI(_Creature);
 }
@@ -1100,20 +1098,20 @@ bool GossipSelect_npc_agne_gambler(Player* pPlayer, Creature* pCreature, uint32 
 
     switch (uiAction)
     {
-        case GOSSIP_ACTION_INFO_DEF + 1:
-            amount = 1000;
-            break;
-        case GOSSIP_ACTION_INFO_DEF + 2:
-            amount = 10000;
-            break;
-        case GOSSIP_ACTION_INFO_DEF + 3:
-            amount = 100000;
-            break;
-        case GOSSIP_ACTION_INFO_DEF + 4:
-            amount = 500000;
-            break;
-        default:
-            return true;
+    case GOSSIP_ACTION_INFO_DEF + 1:
+        amount = 1000;
+        break;
+    case GOSSIP_ACTION_INFO_DEF + 2:
+        amount = 10000;
+        break;
+    case GOSSIP_ACTION_INFO_DEF + 3:
+        amount = 100000;
+        break;
+    case GOSSIP_ACTION_INFO_DEF + 4:
+        amount = 500000;
+        break;
+    default:
+        return true;
     }
 
     if (pPlayer->GetMoney() < amount)
@@ -1131,7 +1129,7 @@ bool GossipSelect_npc_agne_gambler(Player* pPlayer, Creature* pCreature, uint32 
     result = urand(1, 100);
 
     pCreature->PMonsterEmote("Agne rolls a dice for %s... %u!", nullptr, false, pPlayer->GetName(),
-            result);
+        result);
 
     amountToAward = handleRecords(pPlayer, amount, result);
     if (amountToAward > 0)
@@ -1174,7 +1172,7 @@ bool GossipHello_npc_rov(Player* pPlayer, Creature* pCreature)
 bool GossipSelect_npc_rov(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
-    {     
+    {
         Creature* sturk = pPlayer->FindNearestCreature(80604, 20.0F); // Sturk
 
         if (!sturk)
@@ -1277,11 +1275,11 @@ bool GOHello_go_spirit_pyre(Player* pPlayer, GameObject* pGo)
     {
         pGo->UseDoorOrButton(60);
 
-		if (GameObjectAI* GoAI = pGo->AI())
-		{
-			// reset gameobject after 25 sec.
-			GoAI->SetData(1, 1);
-		}
+        if (GameObjectAI* GoAI = pGo->AI())
+        {
+            // reset gameobject after 25 sec.
+            GoAI->SetData(1, 1);
+        }
 
         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80803);
         if (cInfo != nullptr)
@@ -1292,52 +1290,52 @@ bool GOHello_go_spirit_pyre(Player* pPlayer, GameObject* pGo)
 
 struct go_spirit_pyre : public GameObjectAI
 {
-	explicit go_spirit_pyre(GameObject* pGo) : GameObjectAI(pGo)
-	{}
+    explicit go_spirit_pyre(GameObject* pGo) : GameObjectAI(pGo)
+    {}
 
-	uint32 BackTimer = 0;
-	char DebugInfo[32];
+    uint32 BackTimer = 0;
+    char DebugInfo[32];
 
-	virtual void UpdateAI(uint32 const uiDiff) override
-	{
-		if (BackTimer != 0)
-		{
-			if (BackTimer < uiDiff)
-			{
-				BackTimer = 0;
-				me->ResetDoorOrButton();
-			}
-			else
-			{
-				BackTimer -= uiDiff;
-				if (BackTimer == 0)
-				{
-					me->ResetDoorOrButton();
-				}
-			}
-		}
-	}
+    virtual void UpdateAI(uint32 const uiDiff) override
+    {
+        if (BackTimer != 0)
+        {
+            if (BackTimer < uiDiff)
+            {
+                BackTimer = 0;
+                me->ResetDoorOrButton();
+            }
+            else
+            {
+                BackTimer -= uiDiff;
+                if (BackTimer == 0)
+                {
+                    me->ResetDoorOrButton();
+                }
+            }
+        }
+    }
 
-	virtual void SetData(uint32 id, uint32 value) override
-	{
-		if (id == ID_GOBJECT_SHADOWFORGECAGE_RESET)
-		{
-			BackTimer = 25 * IN_MILLISECONDS;
-		}
-		GameObjectAI::SetData(id, value);
-	}
+    virtual void SetData(uint32 id, uint32 value) override
+    {
+        if (id == ID_GOBJECT_SHADOWFORGECAGE_RESET)
+        {
+            BackTimer = 25 * IN_MILLISECONDS;
+        }
+        GameObjectAI::SetData(id, value);
+    }
 
-	virtual const char* GetDebugInfo() override
-	{
-		sprintf(DebugInfo, "BackTimer %u", BackTimer);
-		return DebugInfo;
-	}
+    virtual const char* GetDebugInfo() override
+    {
+        sprintf(DebugInfo, "BackTimer %u", BackTimer);
+        return DebugInfo;
+    }
 
 };
 
 GameObjectAI* GetAI_go_spirit_pyre(GameObject* Obj)
 {
-	return new go_spirit_pyre(Obj);
+    return new go_spirit_pyre(Obj);
 }
 
 bool QuestAccept_npc_teslinah(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
@@ -1635,7 +1633,7 @@ bool QuestAccept_npc_applebough(Player* pPlayer, Creature* pQuestGiver, Quest co
         return false;
 
     if (pQuest->GetQuestId() == 80315) // Apple a Day
-    {        
+    {
         pQuestGiver->CastSpell(pQuestGiver, 5570, true); // Insects
         pQuestGiver->HandleEmote(EMOTE_ONESHOT_CRY);
 
@@ -1667,7 +1665,7 @@ bool QuestRewarded_npc_applebough(Player* pPlayer, Creature* pQuestGiver, Quest 
         return true;
     }
 
-	return false;
+    return false;
 }
 
 bool GossipHello_npc_vanira_unicorn_vendor(Player* pPlayer, Creature* pCreature)
@@ -1773,6 +1771,25 @@ bool GOHello_go_kheyna_wormhole(Player* pPlayer, GameObject* pGo)
         if (pPlayer->GetQuestStatus(80407) == QUEST_STATUS_COMPLETE)
             if (pPlayer->FindNearestCreature(81041, 15.0F))
                 return true;
+        if (pPlayer->GetQuestRewardStatus(80408))
+        {
+            if (pPlayer->FindNearestCreature(10667, 15.0F))
+                return true;
+
+            Creature* chromie = pGo->SummonCreature(10667, pGo->GetPositionX() + 1.0F, pGo->GetPositionY() + 1.0F, pGo->GetPositionZ(), pGo->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN, 60 * 1000);
+
+            DoAfterTime(pPlayer, 2 * IN_MILLISECONDS,
+                [CreatureGuid = chromie->GetObjectGuid(), player = pPlayer]()
+            {
+                Map* map = sMapMgr.FindMap(1);
+                Creature* creature = map->GetCreature(CreatureGuid);
+                if (!creature)
+                    return;
+                creature->HandleEmote(EMOTE_ONESHOT_TALK);
+                creature->MonsterSayToPlayer("We need to talk!");
+            });
+        }
+        else
             pGo->SummonCreature(81041, pGo->GetPositionX() + 1.0F, pGo->GetPositionY() + 1.0F, pGo->GetPositionZ(), pGo->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN, 60 * 1000);
         return true;
     }
@@ -1793,7 +1810,7 @@ bool GOHello_go_kheyna_wormhole(Player* pPlayer, GameObject* pGo)
 
 void AddSC_episode_1()
 {
-    Script *newscript;
+    Script* newscript;
 
     newscript = new Script;
     newscript->Name = "go_kheyna_wormhole";
@@ -1836,8 +1853,8 @@ void AddSC_episode_1()
 
     newscript = new Script;
     newscript->Name = "go_spirit_pyre";
-	newscript->pGOHello = &GOHello_go_spirit_pyre;
-	newscript->GOGetAI = &GetAI_go_spirit_pyre;
+    newscript->pGOHello = &GOHello_go_spirit_pyre;
+    newscript->GOGetAI = &GetAI_go_spirit_pyre;
     newscript->RegisterSelf();
 
     newscript = new Script;
@@ -1892,7 +1909,7 @@ void AddSC_episode_1()
     newscript = new Script;
     newscript->Name = "go_shadowforge_cage";
     newscript->pGOHello = &GOHello_go_shadowforge_cage;
-	newscript->GOGetAI = &GetAI_shadoforge_cage;
+    newscript->GOGetAI = &GetAI_shadoforge_cage;
     newscript->RegisterSelf();
 
     newscript = new Script;
@@ -1942,8 +1959,8 @@ void AddSC_episode_1()
     newscript->pGOHello = &GOHello_go_fm_acquisition;
     newscript->pGOGossipSelect = &GOSelect_go_fm_acquisition;
     newscript->RegisterSelf();
-	
-	newscript = new Script;
+
+    newscript = new Script;
     newscript->Name = "go_portal_alahthalas";
     newscript->pGOHello = &GOHello_go_portal_alahthalas;
     newscript->RegisterSelf();
