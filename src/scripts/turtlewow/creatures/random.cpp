@@ -938,13 +938,14 @@ bool QuestRewarded_npc_mysterious_stranger(Player* pPlayer, Creature* pQuestGive
 #define SPELL_SLOW_FALL 14867
 #define OK_TEXT 70003
 #define NOT_GUILD_TEXT 70004
+#define ON_CAST_TEXT 70005
 #define TRAVELER_GUILD_ID 172
 
 bool GossipHello_DinkaDinker(Player* player, Creature* creature)
 {
     if (player->GetGuildId() == TRAVELER_GUILD_ID)
     {
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Please, help me jump safely!", GOSSIP_SENDER_MAIN,
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Please, use your magic on me!", GOSSIP_SENDER_MAIN,
                                 GOSSIP_ACTION_INFO_DEF + 1);
         player->SEND_GOSSIP_MENU(OK_TEXT, creature->GetGUID());
         return true;
@@ -957,7 +958,10 @@ bool GossipHello_DinkaDinker(Player* player, Creature* creature)
 bool GossipSelect_DinkaDinker(Player* player, Creature* creature, uint32 sender, uint32 action)
 {
     if (action == GOSSIP_ACTION_INFO_DEF + 1)
+    {
         creature->CastSpell(player, SPELL_SLOW_FALL, true);
+        creature->MonsterSay(ON_CAST_TEXT);
+    }
 
     player->CLOSE_GOSSIP_MENU();
     return true;
@@ -1129,4 +1133,9 @@ void AddSC_random()
     newscript->pGossipSelect = &GossipSelect_MiningEnchanter;
     newscript->RegisterSelf();
 
+    newscript = new Script;
+    newscript->Name = "dinka_dinker";
+    newscript->pGossipHello = &GossipHello_DinkaDinker;
+    newscript->pGossipSelect = &GossipSelect_DinkaDinker;
+    newscript->RegisterSelf();
 }
