@@ -1486,3 +1486,30 @@ UPDATE `quest_template` SET `IncompleteEmote`='1', `CompleteEmote`='1', `OfferRe
 
 replace into broadcast_text (ID, FemaleText) values (70003, 'placeholder text when player is in guild for Dinka Dinker npc');
 replace into broadcast_text (ID, FemaleText) values (70005, 'placeholder text when player is NOT in guild for Dinka Dinker npc');
+
+-- Post April 29th:
+
+replace into item_template values
+ ('81285', '0', '12', '0', 'Barrel of Oil', 'Full of Dustwallow Marsh mud.', '40136', '1', '0', '1', '0', '0', '0', '-1', '-1', '1',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '10', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '4', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, objectivetext1, objectivetext2, objectivetext3, objectivetext4, srcitemid, srcitemcount, reworreqmoney, rewmoneymaxlevel, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (0,80352,15,60,30,0,1,'Money Down The Drain','They had one job, $N, one!\n\nI asked those fools to be careful while transporting the oil and look at what they did. They probably had the mindless ogre on the ship\'s wheel!\n\nPlease sweety, do me a favour will you? Get as much oil as you can from the barrels, we need it for our machinery to work. This swamp doesn\'t forgive us at all, we need to defend ourselves, you know.\n\nAnyway good luck comes with good coin so as soon as you have it come back.','Bring 5 Barrels of Oil to Vixie Dampknob in Mudsprocket.','Any luck finding the oil?','$N, you\'re a doll! This is great, I can\'t thank you enough.\n\nIf you get any more you know where to find me.',81285,5,0,0,0,0,0,0,'','','','',0,0,1000,910,1001,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+replace into creature_questrelation (id, quest, patch_min, patch_max) values (81258, 80352,'0','10'); 
+replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (81258, 80352,'0','10');
+
+REPLACE INTO `creature_template` VALUES (81258, 0, 11389, 0, 0, 0, 'Vixie Dampknob', NULL, 0, 35, 43, 1471, 2471, 0, 0, 1890, 1682, 7, 1, 1.14286, 0, 20, 5, 0, 0, 1, 61, 78, 0, 156, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 56.672, 77.924, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 7564, 0, 0, 0, 0, 10, '');
+
+update creature_template set npc_flags = 2 where entry in (81258);
+
+replace into gameobject_template values 
+(3000246, 0, 3, 32882, 'Barrel of Oil', 0, 0, 1, 57, 3000246, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+replace into `gameobject_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`, `patch_min`, `patch_max`)  values (3000246, 81285, -100, 1, 1, 1, 0, 0, 10);
+
