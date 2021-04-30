@@ -286,15 +286,6 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 	// TWT Threat: Guid and UnitDetailedThreatSituation Request
 	if (lang == LANG_ADDON && (type == CHAT_MSG_PARTY || type == CHAT_MSG_RAID) && !msg.empty())
 	{
-
-		//temp to test, be in a raid group and type:
-		// /run SendAddonMessage("bSave", "penus", "RAID")
-		// /run SendAddonMessage("bRestore", "penus", "RAID")
-		if (strstr(msg.c_str(), "bSave"))
-			_player->SuspendWorldBuffs();
-		if (strstr(msg.c_str(), "bRestore"))
-			_player->RestoreSuspendedWorldBuffs();
-
 		// UnitDetailedThreatSituation
 		if (strstr(msg.c_str(), "TWT_UDTSv4"))
 		{
