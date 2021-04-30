@@ -1577,3 +1577,5 @@ replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minleve
 
 replace into creature_questrelation (id, quest, patch_min, patch_max) values (16135, 80410,'0','10'); 
 replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (10667, 80410,'0','10');
+
+update item_template set dmg_min1 = 46, dmg_max1 = 84 where entry = 51753;
