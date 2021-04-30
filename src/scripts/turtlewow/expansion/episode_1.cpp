@@ -1771,7 +1771,7 @@ bool GOHello_go_kheyna_wormhole(Player* pPlayer, GameObject* pGo)
         if (pPlayer->GetQuestStatus(80407) == QUEST_STATUS_COMPLETE)
             if (pPlayer->FindNearestCreature(81041, 15.0F))
                 return true;
-        if (pPlayer->GetQuestRewardStatus(80408))
+        if (pPlayer->GetQuestStatus(80409) == QUEST_STATUS_COMPLETE)
         {
             if (pPlayer->FindNearestCreature(10667, 15.0F))
                 return true;
@@ -1786,7 +1786,7 @@ bool GOHello_go_kheyna_wormhole(Player* pPlayer, GameObject* pGo)
                 if (!creature)
                     return;
                 creature->HandleEmote(EMOTE_ONESHOT_TALK);
-                creature->MonsterSayToPlayer("We need to talk!");
+                creature->MonsterSay("We need to talk!");
             });
         }
         else
