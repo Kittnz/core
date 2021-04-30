@@ -1647,3 +1647,4 @@ update creature_template set name = 'Eliana Firestorm', display_id1 = 15712 wher
 
 update item_template set required_reputation_faction = 471, required_reputation_rank = 7, buy_price = 50000, sell_price = 2500, name = 'Beaky' where entry = 81243;
 update item_template set buy_price = 50000, sell_price = 2500, display_id = 23175 where entry = 81257;
+update item_template set buy_price = 12500, sell_price = 2500 where entry = 7070;
