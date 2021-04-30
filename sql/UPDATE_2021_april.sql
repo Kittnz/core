@@ -1653,10 +1653,14 @@ update item_template set buy_price = 12500, sell_price = 2500 where entry = 7070
 
 delete from item_template where entry = 50089 and patch = 0;
 
-REPLACE INTO `item_template` VALUES (81289, 0, 0, 0, 'Tabard of the Kirin Tor', 'Kirin Tor is a sect of wizards, stationed in Dalaran, that study and record all of humanity\'s magic and artifacts.', 10643, 1, 0, 1, 0, 0, 19, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+REPLACE INTO `item_template` VALUES (81289, 0, 0, 0, 'Dalaran Tabard', '', 10643, 1, 0, 1, 0, 0, 19, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+
+update item_template set name = 'Pilfered Dalaran Tabard', description = '' where entry = 50089;
 
 update item_template set required_reputation_faction = 61, required_reputation_rank = 7, buy_price = 50000, sell_price = 2500 where entry = 81289;
 update item_template set required_reputation_faction = 349, required_reputation_rank = 5 where entry = 4116;
 
 update quest_template set rewrepfaction1 = 470, rewrepvalue1 = 250,  rewrepfaction2 = 76 , rewrepvalue2 = 125, rewrepfaction3 = 108, rewrepvalue3 = 50 where entry = 80396;
+
+update quest_template set quest_level = 60 where entry in ();
 
