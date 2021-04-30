@@ -2135,6 +2135,9 @@ class MANGOS_DLL_SPEC Player final: public Unit
         void SendMountResult(PlayerMountResult result) const;
         void SendDismountResult(PlayerDismountResult result) const;
         void UpdateCorpseReclaimDelay();
+
+		// For chronoboon item
+		uint32 m_worldBuffCheckTimer;
     public:
         void ScheduleStandStateChange(uint8 state);
         void ClearScheduledStandState() { m_newStandState = MAX_UNIT_STAND_STATE; m_standStateTimer = 0; }
@@ -2576,6 +2579,7 @@ class MANGOS_DLL_SPEC Player final: public Unit
 		public:
 			void Player::SuspendWorldBuffs();
 			void Player::RestoreSuspendedWorldBuffs();
+			void Player::RemoveWorldBuffsIfAlreadySuspended();
 		// Xerron Suspend World Buffs End
 
 };

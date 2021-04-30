@@ -139,6 +139,27 @@ enum CharacterFlags
     CHARACTER_FLAG_UNK32                = 0x80000000
 };
 
+// world buffs
+#define MAX_WORLD_BUFFS 15
+static uint32 WorldBuffs[MAX_WORLD_BUFFS]
+{
+	22888, // Rallying Cry of the Dragonslayer
+	24425, // Spirit of zandalar
+	22818, // Mol'dar's Moxie
+	22817, // Fengus' Ferocity
+	22820, // Slip'kik's Savvy
+	15366, // Songflower Serenade
+	23768, // Sayge's Dark Fortune of Damage  basepoints0 = % damage
+	23736, // Sayge's Dark Fortune of Agility
+	23767, // Sayge's Dark Fortune of Armor
+	23766, // Sayge's Dark Fortune of Intelligence
+	23769, // Sayge's Dark Fortune of Resistance
+	23738, // Sayge's Dark Fortune of Spirit
+	23737, // Sayge's Dark Fortune of Stamina
+	23735, // Sayge's Dark Fortune of Strength
+	16609, // Warchief's Blessing
+};
+
 // corpse reclaim times
 #define DEATH_EXPIRE_STEP (5*MINUTE)
 #define MAX_DEATH_COUNT 3
@@ -614,6 +635,7 @@ Player::Player(WorldSession *session) : Unit(),
     m_hardcoreInvGuildTimer = 0;
 
     m_totalDeathCount = 0;
+    m_worldBuffCheckTimer = 0;
 }
 
 Player::~Player()
@@ -1431,6 +1453,15 @@ void Player::Update(uint32 update_diff, uint32 p_time)
                 m_hardcoreInvGuildTimer -= update_diff;
         }
     }
+
+	// Prevent player from getting a world buff if its already suspended in character_aura_suspended
+	if (update_diff >= m_worldBuffCheckTimer)
+	{
+		RemoveWorldBuffsIfAlreadySuspended();
+		m_worldBuffCheckTimer = MINUTE * IN_MILLISECONDS;
+	}
+	else
+		m_worldBuffCheckTimer -= update_diff;
 
     // Anticheat sanction
     std::stringstream reason;
@@ -22435,28 +22466,13 @@ void Player::UpdateTotalDeathCount()
 }
 
 
+/* Chronoboon */
+
+/* Saves buffs that match WorldBuffs id in character_aura_suspended and clears them from player. */
 void Player::SuspendWorldBuffs()
 {
 	// clear character_aura_suspended
 	CharacterDatabase.PExecute("DELETE FROM character_aura_suspended WHERE guid = '%u'", GetGUIDLow());
-
-	std::map<uint32, std::string> worldBuffs{
-		{ 22888, "Rallying Cry of the Dragonslayer" },
-		{ 24425, "Spirit of zandalar" },
-		{ 22818, "Mol'dar's Moxie" },
-		{ 22817, "Fengus' Ferocity" },
-		{ 22820, "Slip'kik's Savvy" },
-		{ 15366, "Songflower Serenade" },
-		{ 23768, "Sayge's Dark Fortune of Damage"}, // basepoints0 = % damage
-		{ 23736, "Sayge's Dark Fortune of Agility"},
-		{ 23767, "Sayge's Dark Fortune of Armor"},
-		{ 23766, "Sayge's Dark Fortune of Intelligence"},
-		{ 23769, "Sayge's Dark Fortune of Resistance"},
-		{ 23738, "Sayge's Dark Fortune of Spirit"},
-		{ 23737, "Sayge's Dark Fortune of Stamina"},
-		{ 23735, "Sayge's Dark Fortune of Strength"},
-		{ 16609, "Warchief's Blessing"}
-	};
 
 	std::string suspendMessage;
 
@@ -22473,9 +22489,9 @@ void Player::SuspendWorldBuffs()
 		if (!SaveAura(holder, s))
 			continue;
 
-		for (std::pair<uint32, std::string> buff : worldBuffs)
+		for (int i = 0; i < MAX_WORLD_BUFFS; i++)
 		{
-			if (s.spellid == buff.first)
+			if (s.spellid == WorldBuffs[i])
 			{
 
 				static SqlStatementID insertAuras;
@@ -22502,7 +22518,7 @@ void Player::SuspendWorldBuffs()
 				stmt.addUInt32(s.effIndexMask);
 				stmt.Execute();
 
-				suspendMessage += "Supended " + buff.second;
+				suspendMessage += "Suspended " + sSpellMgr.GetSpellEntry(s.spellid)->SpellName[0];
 
 				if (s.spellid == 23768)
 					suspendMessage += " " + std::to_string(s.damage[0]) + "%%";
@@ -22519,15 +22535,21 @@ void Player::SuspendWorldBuffs()
 	}
 	else
 	{
-		for (std::pair<uint32, std::string> buff : worldBuffs)
-			RemoveAurasDueToSpell(buff.first);
+		for (int i = 0; i < MAX_WORLD_BUFFS; i++)
+			RemoveAurasDueToSpell(WorldBuffs[i]);
 
 		ChatHandler(this).PSendSysMessage(suspendMessage.c_str());
+		ChatHandler(this).PSendSysMessage("While a world effect is suspended, you cannot benefit from it.");
 
-		// add item to restore buffs.
+		// remove Chronoboon Displacer
+		DestroyItemCount(83000, 1, true);
+		// add Supercharged Chronoboon Displacer
+		AddItem(83001);
+		
 	}
-
 }
+
+/* Buffs the player whith WorldBuffs are saved in character_aura_suspended and clears them from character_aura_suspended */
 void Player::RestoreSuspendedWorldBuffs()
 {
 
@@ -22574,4 +22596,61 @@ void Player::RestoreSuspendedWorldBuffs()
 
 	} while (auras->NextRow());
 
+	// remove supercharged chronoboon displacer
+	DestroyItemCount(83001, 1, true);
+
+}
+
+/* Removes buffs from player if he has them in character_aura_suspended */
+void Player::RemoveWorldBuffsIfAlreadySuspended()
+{
+	// only if player has item that restores them, Supercharged Chronoboon Displacer id 83001
+	if (HasItemCount(83001, 1, true))
+	{
+		// get current buffs
+		SpellAuraHolderMap const& auraHolders = GetSpellAuraHolderMap();
+
+		uint32 WorldBuffsToRemove[MAX_WORLD_BUFFS];
+		for (int i = 0; i < MAX_WORLD_BUFFS; i++)
+			WorldBuffsToRemove[i] = 0;
+
+		if (!auraHolders.empty())
+		{
+			AuraSaveStruct s;
+			for (SpellAuraHolderMap::const_iterator itr = auraHolders.begin(); itr != auraHolders.end(); ++itr)
+			{
+				SpellAuraHolder *holder = itr->second;
+
+				if (!SaveAura(holder, s))
+					continue;
+
+				for (int i = 0; i < MAX_WORLD_BUFFS; i++)
+				{
+					// check if buff is suspendable worldbuff
+					if (s.spellid == WorldBuffs[i])
+					{
+						// check if its alreayd suspended
+						QueryResult *auras = CharacterDatabase.PQuery("SELECT spell "
+							"FROM character_aura_suspended "
+							"WHERE guid = '%u' and spell = '%u'", GetGUIDLow(), s.spellid);
+
+						if (!auras)
+							continue;
+
+						if (auras->GetRowCount() > 0)
+							WorldBuffsToRemove[i] = s.spellid;
+							
+					}
+				}
+			}
+		}
+		for (int i = 0; i < MAX_WORLD_BUFFS; i++)
+		{
+			if (WorldBuffsToRemove[i] != 0)
+			{
+				RemoveAurasDueToSpell(WorldBuffsToRemove[i]);
+				ChatHandler(this).PSendSysMessage("Cannot benefit from %s, buff already suspended.", sSpellMgr.GetSpellEntry(WorldBuffsToRemove[i])->SpellName[0].c_str());
+			}
+		}
+	}
 }
