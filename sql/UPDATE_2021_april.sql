@@ -1579,3 +1579,42 @@ replace into creature_questrelation (id, quest, patch_min, patch_max) values (16
 replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (10667, 80410,'0','10');
 
 update item_template set dmg_min1 = 46, dmg_max1 = 84 where entry = 51753;
+
+-- TODO:
+
+-- <Once you use the crystal Kheyna appears and an event plays>
+-- Kheyna: <name>, you're early! What fortune! I believe I've finally tracked-
+-- Chromie appears
+-- Chromie: I've found you villain! There is no escape!
+-- Two bronze Drakonids appear behind Kheyna
+-- Kheyna: No wait! Listen to me! I am here to hunt a larger threat and she's on the way. I'm not the one you should be after!
+-- In that moment a massive Infinite Dragon called Antnormi appears, the two Drakonids attack her but are instantly killed.
+-- Chromie: What is that?!
+-- Kheyna: It's her who I've been hunting! Her name is Antnormi. We're not ready yet to face her, but we've got no choice!
+-- Chromie: Adventurer, I'll weaken it, but you must finish her.
+-- Kheyna: I'll help you! Let's KILL!
+
+-- <A battle begins here, you'll fight Antnormi alongside Chromie and Kheyna, once you get her to 90% Antnormi speaks>
+-- Antnormi: Enough of this! I have no time for insects like you. The master's plan is almost complete and my diversion was a success!
+-- <Antnormi teleports away, Chromie turns towards Kheyna>
+-- Chromie: We have much to talk about Kheyna. Adventurer, return to Andorhal and speak to me.
+
+replace into item_template values
+ ('81288', '0', '2', '7', 'Mechanist\'s Bonechopper Replica', '', '50189', '3', '0', '1', '54632', '13658', '13', '-1', '-1', '63',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '5', '3', '5',
+ '7', '5', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '2600', '0',
+ '0', '76', '139', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '16433', '2', '0', '15', '480', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '1', '3', '0', '0', '90', '0', '0', '0', '0', '48', '0', '0', '0',
+ '0', '1', NULL);
+ 
+replace into creature_questrelation (id, quest, patch_min, patch_max) values (10667, 80411,'0','10'); 
+replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (10667, 80411,'0','10');
+ 
+replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, objectivetext1, objectivetext2, objectivetext3, objectivetext4, srcitemid, srcitemcount, reworreqmoney, rewmoneymaxlevel, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (80410,80411,0,0,0,0,0,'An Infinite Hunt','I have been hunting her for a while now, but she is extremely elusive!\n\nEvery time we get close, she escapes. However, she intends to contact you again. This time we\'ll set a trap. Go to Seradane, avoid the Emerald Portal and proceed to the largest temple.\n\nYou\'ll find another of her corrupted time crystals. Use it and summon her. Then I will appear and we will defeat her together!','Go to Seradane\'s Temple and defeat Antnormi, return to Chromi in Andoral.','There you are. I have been given much to ponder on.','It seems that this mysterious dragon seeks to corrupt the timeways. I have my disagreements with Kheyna over her disruptive actions, but I\'ve put them aside now because of this greater threat. It seems that this dragon she was hunting has caused a major disruption at a specific point in time.\n\nShe also mentioned a master so there may be more of them. I hope I can count on you when the time comes. For now, we will do our best to keep things stable as we figure out how to move ahead from here. Kheyna will cooperate with us under strict supervision. Her fate will be decided after this is dealt with.\n\nWe have prepared this replica sword as your reward. ',0,0,0,0,0,0,0,0,'','','','',0,0,20000,0,910,250,0,0,0,0,0,0,0,0,0,81288,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+ 
+update quest_template set reqcreatureorgoid1 = 81265, reqcreatureorgocount1 = 1 where entry = 80411;
+
+REPLACE INTO `creature_template` VALUES (81265, 0, 6373, 0, 0, 0, 'Antnormi', NULL, 0, 59, 59, 8958, 8958, 0, 0, 3489, 32, 0, 1, 1.14286, 0, 20, 5, 0, 2, 1, 372, 479, 0, 268, 1, 1158, 1274, 1, 0, 0, 0, 0, 0, 0, 0, 61.152, 84.084, 100, 2, 0, 10202, 0, 10202, 0, 0, 0, 295, 0, 0, 0, 0, 0, 0, 102020, 0, 715, 938, '', 0, 3, 0, 0, 3, 0, 0, 0, 16, 64, 0, '');
+
