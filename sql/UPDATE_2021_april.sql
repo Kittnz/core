@@ -1485,8 +1485,11 @@
 	UPDATE `quest_template` SET `IncompleteEmote`='1', `CompleteEmote`='1', `OfferRewardEmote1`='1' WHERE (`entry`='80369') AND (`patch`='0');
 
 	replace into broadcast_text (ID, FemaleText) values (70003, 'Oh, a true traveler, good to see you!');
+	replace into npc_text (ID, BroadcastTextID0) values (70003, 70003);
 	replace into broadcast_text (ID, FemaleText) values (70004, 'Oh my, we have a visitor here!$B$B<Dinka ponders>$B$BSadly my magic only works on those who''ve travelled enough, come back once you''ve seen enough world.');
-	replace into broadcast_text (ID, FemaleText) values (70005, 'Here, here, slow down, there''s no rush, I''m not going anywhere.');
+	replace into npc_text (ID, BroadcastTextID0) values (70004, 70004);
+	replace into broadcast_text (ID, FemaleText) values (70005, 'Here, here, slow down, there''s no rush, I''m not going anywhere!');
+	replace into npc_text (ID, BroadcastTextID0) values (70005, 70005);
 
 	-- Post April 29th:
 
@@ -1617,4 +1620,25 @@ replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minleve
 update quest_template set reqcreatureorgoid1 = 81265, reqcreatureorgocount1 = 1 where entry = 80411;
 
 REPLACE INTO `creature_template` VALUES (81265, 0, 6373, 0, 0, 0, 'Antnormi', NULL, 0, 59, 59, 8958, 8958, 0, 0, 3489, 32, 0, 1, 1.14286, 0, 20, 5, 0, 2, 1, 372, 479, 0, 268, 1, 1158, 1274, 1, 0, 0, 0, 0, 0, 0, 0, 61.152, 84.084, 100, 2, 0, 10202, 0, 10202, 0, 0, 0, 295, 0, 0, 0, 0, 0, 0, 102020, 0, 715, 938, '', 0, 3, 0, 0, 3, 0, 0, 0, 16, 64, 0, '');
+
+replace into creature_template (
+entry, patch, display_id1, display_id2, display_id3, display_id4, name, subname, gossip_menu_id, level_min, level_max,
+health_min, health_max, mana_min, mana_max, armor, faction, npc_flags, speed_walk, speed_run, scale, detection_range,
+call_for_help_range, leash_range, rank, xp_multiplier, dmg_min, dmg_max, dmg_school, attack_power, dmg_multiplier,
+base_attack_time, ranged_attack_time, unit_class, unit_flags, dynamic_flags, beast_family, trainer_type, trainer_spell,
+trainer_class, trainer_race, ranged_dmg_min, ranged_dmg_max, ranged_attack_power, type, type_flags, loot_id,
+pickpocket_loot_id, skinning_loot_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, spell_id1,
+spell_id2, spell_id3, spell_id4, spell_list_id, pet_spell_list_id, gold_min, gold_max, ai_name, movement_type,
+inhabit_type, civilian, racial_leader, regeneration, equipment_id, trainer_id, vendor_id, mechanic_immune_mask,
+school_immune_mask, flags_extra, script_name)
+values
+('81261', '0', '5018', '0', '0', '0', 'Dinka Dinker', 'Traveler', '0', '55', '55',
+'3457', '3457', '5022', '5022', '1568', '35', '1', '1', '1.14286', '1', '20',
+'5', '0', '0', '1', '124', '169', '0', '232', '1',
+'2000', '0', '8', '0', '0', '1', '0', '0',
+'0', '0', '0', '0', '0', '7', '0', '0',
+'0', '0', '0', '0', '0', '0', '0', '0', '0',
+'0', '0', '0', '0', '0', '0', '0', '', '0',
+'3', '0', '0', '2', '0', '0', '0', '0',
+'0', '0', 'dinka_dinker');
 
