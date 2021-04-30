@@ -1656,3 +1656,4 @@ delete from item_template where entry = 50089 and patch = 0;
 REPLACE INTO `item_template` VALUES (81289, 0, 0, 0, 'Tabard of the Kirin Tor', 'Kirin Tor is a sect of wizards, stationed in Dalaran, that study and record all of humanity\'s magic and artifacts.', 10643, 1, 0, 1, 0, 0, 19, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
 
 update item_template set required_reputation_faction = 61, required_reputation_rank = 7, buy_price = 50000, sell_price = 2500 where entry = 81289;
+update item_template set required_reputation_faction = 349, required_reputation_rank = 6 where entry = 4116;
