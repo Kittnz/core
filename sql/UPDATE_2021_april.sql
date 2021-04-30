@@ -1643,4 +1643,5 @@ values
 '0', '0', 'dinka_dinker');
 
 update creature_template set name = 'Eliana Firestorm', display_id1 = 15712 where entry = 81057;
+update item_template set buy_price = 10000, sell_price = 2500 where entry = 50081;
 
