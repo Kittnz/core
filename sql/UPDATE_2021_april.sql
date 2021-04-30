@@ -1642,3 +1642,5 @@ values
 '3', '0', '0', '2', '0', '0', '0', '0',
 '0', '0', 'dinka_dinker');
 
+update creature_template set name = 'Eliana Firestorm', display_id1 = 15712 where entry = 81057;
+
