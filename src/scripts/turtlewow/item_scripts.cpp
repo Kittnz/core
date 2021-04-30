@@ -1543,6 +1543,20 @@ bool GossipSelect_npc_surgeon_go(Player* pPlayer, Creature* pCreature, uint32 ui
     return true;
 }
 
+bool ItemUseSpell_item_supercharged_chronoboon_displacer(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+{
+	if (!pPlayer) return false;	
+	pPlayer->RestoreSuspendedWorldBuffs();
+	return true;
+}
+
+bool ItemUseSpell_item_chronoboon_displacer(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+{
+	if (!pPlayer) return false;
+	pPlayer->SuspendWorldBuffs();
+	return true;
+}
+
 void AddSC_item_scripts()
 {
     Script *newscript;
@@ -1706,4 +1720,14 @@ void AddSC_item_scripts()
     newscript->Name = "item_holystrike_libram";
     newscript->pItemUseSpell = &ItemUseSpell_item_holy_strike_book;
     newscript->RegisterSelf();
+
+	newscript = new Script;
+	newscript->Name = "item_supercharged_chronoboon_displacer";
+	newscript->pItemUseSpell = &ItemUseSpell_item_supercharged_chronoboon_displacer;
+	newscript->RegisterSelf();
+
+	newscript = new Script;
+	newscript->Name = "item_chronoboon_displacer";
+	newscript->pItemUseSpell = &ItemUseSpell_item_chronoboon_displacer;
+	newscript->RegisterSelf();
 }
