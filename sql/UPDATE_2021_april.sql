@@ -1657,3 +1657,6 @@ REPLACE INTO `item_template` VALUES (81289, 0, 0, 0, 'Tabard of the Kirin Tor', 
 
 update item_template set required_reputation_faction = 61, required_reputation_rank = 7, buy_price = 50000, sell_price = 2500 where entry = 81289;
 update item_template set required_reputation_faction = 349, required_reputation_rank = 5 where entry = 4116;
+
+update quest_template set rewrepfaction1 = 470, rewrepvalue1 = 250,  rewrepfaction2 = 76 , rewrepvalue2 = 125, rewrepfaction3 = 108, rewrepvalue3 = 50 where entry = 80396;
+
