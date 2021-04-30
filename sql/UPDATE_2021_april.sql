@@ -1662,5 +1662,5 @@ update item_template set required_reputation_faction = 349, required_reputation_
 
 update quest_template set rewrepfaction1 = 470, rewrepvalue1 = 250,  rewrepfaction2 = 76 , rewrepvalue2 = 125, rewrepfaction3 = 108, rewrepvalue3 = 50 where entry = 80396;
 
--- update quest_template set quest_level = 60 where entry in ();
+update quest_template set questlevel = 60, rewmoneymaxlevel = 0 where zoneorsort = -241;
 
