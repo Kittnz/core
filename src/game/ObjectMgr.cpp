@@ -24,7 +24,6 @@
 #include "Database/DatabaseImpl.h"
 #include "Database/SQLStorageImpl.h"
 #include "Policies/SingletonImp.h"
-
 #include "SQLStorages.h"
 #include "Log.h"
 #include "MapManager.h"
@@ -34,6 +33,7 @@
 #include "UpdateMask.h"
 #include "World.h"
 #include "Group.h"
+#include "Bag.h"
 #include "Transport.h"
 #include "ProgressBar.h"
 #include "Language.h"
@@ -52,6 +52,7 @@
 #include "InstanceData.h"
 #include "CharacterDatabaseCache.h"
 #include "HardcodedEvents.h"
+#include "Conditions.h"
 
 #include <limits>
 
@@ -2233,6 +2234,12 @@ void ObjectMgr::CorrectItemEffects(uint32 itemId, _ItemSpell& itemSpell)
     // The spell data was changed and the spell id removed from this item in 1.8.
     if ((itemSpell.SpellId == 23194) && (itemId == 18715))
         itemSpell.SpellId = 0;
+#endif
+#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_2_4
+    // Goblin Rocket Helmet and Horned Viking Helmet
+    // Charge effect was removed from spell 13327 and moved to 22641 in 1.3.
+    if (itemSpell.SpellId == 13327 && (itemId == 9394 || itemId == 10588))
+        itemSpell.SpellId = 22641;
 #endif
 #if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_9_4
     // Bonereaver's Edge
@@ -10779,16 +10786,6 @@ void ObjectMgr::LoadConditions()
 
     sLog.outString(">> Loaded %u Condition definitions", sConditionStorage.GetRecordCount());
     sLog.outString();
-}
-
-
-// Check if a player meets condition conditionId
-bool ObjectMgr::IsConditionSatisfied(uint32 conditionId, WorldObject const* target, Map const* map, WorldObject const* source, ConditionSource conditionSourceType) const
-{
-    if (ConditionEntry const* condition = sConditionStorage.LookupEntry<ConditionEntry>(conditionId))
-        return condition->Meets(target, map, source, conditionSourceType);
-
-    return false;
 }
 
 uint32 ObjectMgr::GenerateAuctionID()

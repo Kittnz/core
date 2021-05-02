@@ -20,15 +20,12 @@
  */
 
 #include "Totem.h"
-#include "WorldPacket.h"
-#include "Log.h"
 #include "Group.h"
 #include "Player.h"
-#include "ObjectMgr.h"
 #include "SpellMgr.h"
-#include "DBCStores.h"
 #include "CreatureAI.h"
 #include "InstanceData.h"
+#include "ObjectAccessor.h"
 
 Totem::Totem() : Creature(CREATURE_SUBTYPE_TOTEM)
 {
@@ -68,7 +65,7 @@ bool Totem::Create(uint32 guidlow, CreatureCreatePos& cPos, CreatureInfo const* 
 void Totem::Update(uint32 update_diff, uint32 time)
 {
     Unit* owner = GetOwner();
-    if (!owner || !owner->IsAlive() || !IsAlive())
+    if (!owner || !owner->IsAlive() || !IsAlive() || !isWithinVisibilityDistanceOf(owner, owner))
     {
         UnSummon();                                         // remove self
         return;

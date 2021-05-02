@@ -24,20 +24,15 @@
 #include "WorldSession.h"
 #include "Opcodes.h"
 #include "Log.h"
-#include "Corpse.h"
 #include "Player.h"
 #include "MapManager.h"
 #include "Transport.h"
 #include "BattleGround.h"
 #include "WaypointMovementGenerator.h"
 #include "MapPersistentStateMgr.h"
-#include "ObjectMgr.h"
-
 #include "World.h"
 #include "Anticheat.h"
 #include "packet_builder.h"
-#include "MoveSpline.h"
-#include "MovementBroadcaster.h"
 #include "MovementPacketSender.h"
 
 
@@ -329,9 +324,20 @@ void WorldSession::HandleMovementOpcodes(WorldPacket& recvData)
         }
     }
 
-    // Interrupt spell cast at move
+    // This is required for proper movement extrapolation
+    if (opcode == MSG_MOVE_JUMP)
+        pMover->SetJumpInitialSpeed(7.95797334f);
+    else if (opcode == MSG_MOVE_FALL_LAND)
+        pMover->SetJumpInitialSpeed(-9.645f);
+
     if (movementInfo.HasMovementFlag(MOVEFLAG_MASK_MOVING))
+    {
+        // Interrupt spell cast at move
         pMover->InterruptSpellsWithInterruptFlags(SPELL_INTERRUPT_FLAG_MOVEMENT);
+        // Fix bug after 1.11 where client doesn't send stand state update while casting.
+        // Test case: Begin eating or drinking, then start casting Hearthstone and run.
+        pMover->SetStandState(UNIT_STAND_STATE_STAND);
+    }
 
     HandleMoverRelocation(pMover, movementInfo);
 
@@ -586,6 +592,9 @@ void WorldSession::HandleMovementFlagChangeToggleAck(WorldPacket& recvData)
             _player->GetCheatData()->OnWrongAckData();
         return;
     }
+
+    if (opcode == CMSG_MOVE_FEATHER_FALL_ACK)
+        pMover->SetJumpInitialSpeed(std::max(pMover->GetJumpInitialSpeed(), 7.0f));
 
     // Use fake loop here to handle movement position checks separately from change ACK.
     do

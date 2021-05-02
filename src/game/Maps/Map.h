@@ -23,24 +23,20 @@
 #define MANGOS_MAP_H
 
 #include "Common.h"
-#include "Platform/Define.h"
 #include "Policies/ThreadingModel.h"
-
-#include "DBCStructure.h"
+#include "SharedDefines.h"
 #include "GridDefines.h"
 #include "Cell.h"
 #include "Object.h"
-#include "Timer.h"
-#include "SharedDefines.h"
 #include "GridMap.h"
 #include "GameSystem/GridRefManager.h"
 #include "MapRefManager.h"
 #include "Utilities/TypeList.h"
-#include "ScriptMgr.h"
 #include "vmap/DynamicTree.h"
 #include "MoveSplineInitArgs.h"
 #include "WorldSession.h"
 #include "SQLStorages.h"
+#include "ScriptCommands.h"
 #include "CreatureLinkingMgr.h"
 
 #include <bitset>
@@ -56,19 +52,13 @@ class Creature;
 class Unit;
 class WorldPacket;
 class InstanceData;
-class Group;
-
 class CreatureGroup;
-
 class MapPersistentState;
 class WorldPersistentState;
 class DungeonPersistentState;
 class BattleGroundPersistentState;
 class ChatHandler;
-
-struct ScriptInfo;
 class BattleGround;
-class GridMap;
 class WeatherSystem;
 class Transport;
 
@@ -381,7 +371,7 @@ class Map : public GridRefManager<NGridType>
         virtual void InitVisibilityDistance();
 
         void PlayerRelocation(Player*, float x, float y, float z, float angl);
-        // Used at interpolation.
+        // Used at extrapolation.
         void DoPlayerGridRelocation(Player*, float x, float y, float z, float angl);
         void CreatureRelocation(Creature* creature, float x, float y, float z, float orientation);
 
@@ -480,9 +470,9 @@ class Map : public GridRefManager<NGridType>
         ScriptedEvent* StartScriptedEvent(uint32 id, WorldObject* source, WorldObject* target, uint32 timelimit, uint32 failureCondition, uint32 failureScript, uint32 successCondition, uint32 successScript);
 
         // Adds all commands that are part of the provided script id to the queue.
-        void ScriptsStart(std::map<uint32, std::multimap<uint32, ScriptInfo> > const& scripts, uint32 id, WorldObject* source, WorldObject* target);
+        void ScriptsStart(std::map<uint32, std::multimap<uint32, ScriptInfo> > const& scripts, uint32 id, ObjectGuid sourceGuid, ObjectGuid targetGuid);
         // Adds the provided command to the queue. Will be handled by ScriptsProcess.
-        void ScriptCommandStart(ScriptInfo const& script, uint32 delay, WorldObject* source, WorldObject* target);
+        void ScriptCommandStart(ScriptInfo const& script, uint32 delay, ObjectGuid sourceGuid, ObjectGuid targetGuid);
         // Immediately executes the provided command.
         void ScriptCommandStartDirect(ScriptInfo const& script, WorldObject* source, WorldObject* target);
         // Removes all parts of script from the queue.

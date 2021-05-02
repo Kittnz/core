@@ -17,9 +17,7 @@
  */
 
 #include "Creature.h"
-#include "MapManager.h"
 #include "RandomMovementGenerator.h"
-#include "Map.h"
 #include "Util.h"
 #include "MoveSplineInit.h"
 #include "MoveSpline.h"
@@ -55,7 +53,7 @@ void RandomMovementGenerator::_setRandomLocation(Creature &creature)
     creature.AddUnitState(UNIT_STAT_ROAMING_MOVE);
     Movement::MoveSplineInit init(creature, "RandomMovementGenerator");
     init.MoveTo(destX, destY, destZ, MOVE_PATHFINDING | MOVE_EXCLUDE_STEEP_SLOPES);
-    init.SetWalk(true);
+    init.SetWalk(!creature.HasExtraFlag(CREATURE_FLAG_EXTRA_ALWAYS_RUN));
     init.Launch();
 
     if (i_wanderSteps) // Creature has yet to do steps before pausing
