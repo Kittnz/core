@@ -49,10 +49,6 @@ void AutoScaler::Scale(DungeonMap* map)
     //if (disabledScaling.find(map->GetId()) != disabledScaling.end())
     //    return;
 
-    // Don't scale Naxxramas at all
-    if (map->GetId() == 533)
-        return;
-
     uint32 playerCount = map->GetPlayersCountExceptGMs();
     uint32 maxCount = map->GetMaxPlayers();
 
@@ -63,6 +59,10 @@ void AutoScaler::Scale(DungeonMap* map)
         playerCount = 12;
     else if (maxCount == 40 && playerCount < 20)
         playerCount = 20;
+
+    // Naxxramas specific scaling
+    if (map->GetId() == 533 && playerCount < 35)
+        playerCount = 35;
 
     auto& lock = map->GetObjectLock();
     Read_Mutex_Guard guard{ lock };
