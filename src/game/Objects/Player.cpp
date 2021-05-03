@@ -17723,7 +17723,31 @@ bool Player::ActivateTaxiPathTo(std::vector<uint32> const& nodes, Creature* npc 
 
             // add previous path nodes
             for (uint32 i = lastOutNode; i <= inNode; ++i)
-                m_taxi.AddTaxiPathNode(sTaxiPathNodesByPath[lastPath][i]);
+            {
+                if (sTaxiPathNodesByPath.size() <= lastPath)
+                {
+                    sLog.outError("Player \"%s\" tried activate invalid taxi! sTaxiPathNodesByPath has size %zu, while trying get %u index", GetName(), sTaxiPathNodesByPath.size(), lastPath);
+					WorldPacket data(SMSG_ACTIVATETAXIREPLY, 4);
+					data << uint32(ERR_TAXIUNSPECIFIEDSERVERERROR);
+					GetSession()->SendPacket(&data);
+					m_taxi.ClearTaxiDestinations();
+					return false;
+                }
+                TaxiPathNodeList& NodeList = sTaxiPathNodesByPath[lastPath];
+
+                if (NodeList.size() <= i)
+                {
+					sLog.outError("Player \"%s\" tried activate invalid taxi! sTaxiPathNodesByPath has size %zu, while trying get %u index, and we trying to get NodeEntry with id %u, while have %zu", 
+                            GetName(), sTaxiPathNodesByPath.size(), lastPath, i, NodeList.size());
+					WorldPacket data(SMSG_ACTIVATETAXIREPLY, 4);
+					data << uint32(ERR_TAXIUNSPECIFIEDSERVERERROR);
+					GetSession()->SendPacket(&data);
+					m_taxi.ClearTaxiDestinations();
+					return false;
+                }
+                const TaxiPathNodeEntry& NodeEntry = NodeList[i];
+                m_taxi.AddTaxiPathNode(NodeEntry);
+            }
             m_taxi.AddTaxiDestination(lastNode);
 
             lastNode = nextNode;
