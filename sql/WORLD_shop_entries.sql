@@ -190,5 +190,5 @@ replace into shop_items values
 (295, 14, 51065, 'Illusion: Shadow', 120),
 (296, 14, 80648, 'Illusion: Gnoll', 120),
 (297, 14, 51253, 'Illusion: Furbolg', 120),
-(298, 14, 81145, 'Illusion: Pandanren', 120),
+(298, 14, 81145, 'Illusion: Pandaren', 120),
 (299, 14, 80694, 'Illusion: Scourge', 120);
