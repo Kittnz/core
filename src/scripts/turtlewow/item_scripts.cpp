@@ -1572,7 +1572,7 @@ bool ItemUseSpell_item_mage_refreshment_table(Player* pPlayer, Item* pItem, cons
 
 	if (castResult == SPELL_CAST_OK)
 	{
-		// reagent Arcane Powder
+		// reagent Arcane Powder 2
 		int tableReagent = 17020;
 		int reagentCount = 2;
 		if (!pPlayer->HasItemCount(tableReagent, reagentCount))
