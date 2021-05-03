@@ -17717,7 +17717,19 @@ bool Player::ActivateTaxiPathTo(std::vector<uint32> const& nodes, Creature* npc 
 
             // default values in database, init them to n-1 -> 1
             if (!inNode)
-                inNode = sTaxiPathNodesByPath[lastPath].size() - 2;
+            {
+                size_t TotalNodesInLastPath = sTaxiPathNodesByPath[lastPath].size();
+                if (TotalNodesInLastPath < 2)
+                {
+					sLog.outError("Player \"%s\" tried activate invalid taxi! Invalid node count in %u \"lastPath\"", GetName(), lastPath);
+					WorldPacket data(SMSG_ACTIVATETAXIREPLY, 4);
+					data << uint32(ERR_TAXIUNSPECIFIEDSERVERERROR);
+					GetSession()->SendPacket(&data);
+					m_taxi.ClearTaxiDestinations();
+					return false;
+                }
+                inNode = TotalNodesInLastPath - 2;
+            }
             if (!outNode)
                 outNode = 1;
 
