@@ -30,3 +30,5 @@ replace into item_template values
 update quest_template set details = 'Zalazane\'s Apprentice','That foolish mongrel Makasgar decided he no longer needs the aid of his master and has grown beyond my teachings.\n\n...\n\nThat mojo was required for a powerful ritual to help us take over the Sen’jin Village and later the whole of Durotar.\n\nOur scouts reported seeing him fleeing to mainland, follow the coast and find him. Go do your master’s bidding and bring me his head!' where entry = 59995;
 
 update item_template set name = 'Winterspring Tea Leaf' where entry = 80880;
+
+delete from quest_template where entry in (7676, 7671, 7675, 7664, 7672, 7665);
