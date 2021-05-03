@@ -935,7 +935,7 @@ bool QuestRewarded_npc_mysterious_stranger(Player* pPlayer, Creature* pQuestGive
     return false;
 }
 
-#define SPELL_SLOW_FALL 14867
+#define SPELL_SLOW_FALL 130
 #define OK_TEXT 70003
 #define NOT_GUILD_TEXT 70004
 #define ON_CAST_TEXT 70005
@@ -959,7 +959,8 @@ bool GossipSelect_DinkaDinker(Player* player, Creature* creature, uint32 sender,
 {
     if (action == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        creature->CastSpell(player, SPELL_SLOW_FALL, true);
+        creature->CastSpell(player, SPELL_VISUAL, true);
+        player->AddAura(SPELL_SLOW_FALL);
         creature->MonsterSay(ON_CAST_TEXT);
     }
 

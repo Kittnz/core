@@ -1,0 +1,1 @@
+update creature_template set name = 'Eliana Firestorm', display_id1 = 10214 where entry = 81057;
