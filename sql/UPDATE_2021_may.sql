@@ -34,3 +34,10 @@ update item_template set name = 'Winterspring Tea Leaf' where entry = 80880;
 delete from quest_template where entry in (7676, 7671, 7675, 7664, 7672, 7665);
 
 update item_template set description = 'Male rams will often smash their thick skulls against each other for hours to impress a female. In that way, they\'re very similar to dwarves.' where entry in (5872, 13329, 5864, 5873);
+
+update quest_template set requiredraces = 434 where entry = 4982;
+
+update creature set spawntimesecsmin = 300, spawntimesecsmax = 600 where id in (40000,40004,80252,80253,80254,80255,80256,80257,80258,80259,80260,40025,80152);
+
+
+
