@@ -34,7 +34,7 @@ REPLACE INTO `item_template` VALUES
 -- Game Objects
 REPLACE INTO `gameobject_template` VALUES
 (1000083, 0, 1, 1327, 'Refreshment Portal', 35, 0, 0.7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_refreshment_portal'),
-(1000084, 0, 18, 24183, 'Refreshment Table', 35, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_refreshment_table');
+(1000084, 0, 18, 621, 'Refreshment Table', 35, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_refreshment_table');
 
 
 -- WARLOCK
