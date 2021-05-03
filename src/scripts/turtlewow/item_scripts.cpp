@@ -1546,6 +1546,22 @@ bool GossipSelect_npc_surgeon_go(Player* pPlayer, Creature* pCreature, uint32 ui
 bool ItemUseSpell_item_supercharged_chronoboon_displacer(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
 	if (!pPlayer) return false;	
+
+	if (pPlayer->isInCombat())
+	{
+		pPlayer->GetSession()->SendNotification("You can't do that while in combat.");
+
+		if (SpellEntry const* spellInfo = sSpellMgr.GetSpellEntry(pItem->GetProto()->Spells[0].SpellId))
+		{
+			DoAfterTime(pPlayer, 250, [player = pPlayer, spellId = spellInfo->Id]()
+			{
+				player->RemoveSpellCooldown(spellId, true);
+			}
+			);
+		}
+		return false;
+	}
+
 	pPlayer->RestoreSuspendedWorldBuffs();
 	return true;
 }
@@ -1553,6 +1569,22 @@ bool ItemUseSpell_item_supercharged_chronoboon_displacer(Player* pPlayer, Item* 
 bool ItemUseSpell_item_chronoboon_displacer(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
 	if (!pPlayer) return false;
+
+	if (pPlayer->isInCombat())
+	{
+		pPlayer->GetSession()->SendNotification("You can't do that while in combat.");
+
+		if (SpellEntry const* spellInfo = sSpellMgr.GetSpellEntry(pItem->GetProto()->Spells[0].SpellId))
+		{
+			DoAfterTime(pPlayer, 250, [player = pPlayer, spellId = spellInfo->Id]()
+			{
+				player->RemoveSpellCooldown(spellId, true);
+			}
+			);
+		}
+		return false;
+	}
+
 	pPlayer->SuspendWorldBuffs();
 	return true;
 }
