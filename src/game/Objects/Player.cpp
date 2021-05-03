@@ -17715,6 +17715,16 @@ bool Player::ActivateTaxiPathTo(std::vector<uint32> const& nodes, Creature* npc 
             if (!transitionFound)
                 sLog.outErrorDb("Table `taxi_path_transitions` is missing a transition between paths %u and %u", lastPath, nextPath);
 
+            if (sTaxiPathNodesByPath.size() < lastPath)
+            {
+				sLog.outError("Player \"%s\" tried activate invalid taxi! Invalid sTaxiPathNodesByPath %u \"lastPath\"", GetName(), lastPath);
+				WorldPacket data(SMSG_ACTIVATETAXIREPLY, 4);
+				data << uint32(ERR_TAXIUNSPECIFIEDSERVERERROR);
+				GetSession()->SendPacket(&data);
+				m_taxi.ClearTaxiDestinations();
+				return false;
+            }
+
             // default values in database, init them to n-1 -> 1
             if (!inNode)
             {
