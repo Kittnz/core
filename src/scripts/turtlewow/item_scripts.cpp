@@ -1557,6 +1557,114 @@ bool ItemUseSpell_item_chronoboon_displacer(Player* pPlayer, Item* pItem, const 
 	return true;
 }
 
+
+bool ItemUseSpell_item_mage_refreshment_table(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+{
+
+	SpellCastResult castResult = SPELL_CAST_OK;
+
+	if (pPlayer->IsMoving() || pPlayer->IsBeingTeleported())
+		castResult = SPELL_FAILED_MOVING;
+	if (pPlayer->isInCombat())
+		castResult = SPELL_FAILED_AFFECTING_COMBAT;
+	if (pPlayer->getDeathState() == CORPSE)
+		castResult = SPELL_FAILED_CASTER_DEAD;
+
+	if (castResult == SPELL_CAST_OK)
+	{
+		// reagent Arcane Powder
+		int tableReagent = 17020;
+		int reagentCount = 2;
+		if (!pPlayer->HasItemCount(tableReagent, reagentCount))
+		{
+			pPlayer->GetSession()->SendNotification("Missing reagent: Arcane Powder(%i)", reagentCount);
+			castResult = SPELL_CAST_OK;
+		}
+		else
+		{
+			float dis{ 2.0F };
+			float x, y, z;
+			pPlayer->GetSafePosition(x, y, z);
+			x += dis * cos(pPlayer->GetOrientation());
+			y += dis * sin(pPlayer->GetOrientation());
+			pPlayer->PMonsterEmote("%s begins to conjure a refreshment table.", nullptr, false, pPlayer->GetName());
+			pPlayer->SummonGameObject(1000083, x, y, z + 0.5F, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0, true);
+			pPlayer->RemoveItemCurrency(tableReagent, reagentCount);
+
+			return true;
+		}
+	}
+
+	ItemPrototype const* proto = pItem->GetProto();
+
+	if (SpellEntry const* spellInfo = sSpellMgr.GetSpellEntry(proto->Spells[0].SpellId))
+	{
+		if (castResult != SPELL_CAST_OK)
+			Spell::SendCastResult(pPlayer, spellInfo, castResult);
+
+		DoAfterTime(pPlayer, 250, [player = pPlayer, spellId = spellInfo->Id]()
+		{
+			player->RemoveSpellCooldown(spellId, true);
+		}
+		);
+	}
+	return true;
+}
+
+
+bool ItemUseSpell_item_warlock_soulwell_ritual(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+{
+	
+	SpellCastResult castResult = SPELL_CAST_OK;
+
+	if (pPlayer->IsMoving() || pPlayer->IsBeingTeleported())
+		castResult = SPELL_FAILED_MOVING;
+	if (pPlayer->isInCombat())
+		castResult = SPELL_FAILED_AFFECTING_COMBAT;
+	if (pPlayer->getDeathState() == CORPSE)
+		castResult = SPELL_FAILED_CASTER_DEAD;
+
+	if (castResult == SPELL_CAST_OK)
+	{
+		// reagent soul shard 5
+		int ritualReagent = 6265;
+		int reagentCount  = 5;
+		if (!pPlayer->HasItemCount(ritualReagent, reagentCount))
+		{
+			pPlayer->GetSession()->SendNotification("Missing reagent: Soul Shard(%i)", reagentCount);
+			castResult = SPELL_CAST_OK;
+		}
+		else
+		{
+			float dis{ 2.0F };
+			float x, y, z;
+			pPlayer->GetSafePosition(x, y, z);
+			x += dis * cos(pPlayer->GetOrientation());
+			y += dis * sin(pPlayer->GetOrientation());
+			pPlayer->PMonsterEmote("%s begins a Soulwell ritual.", nullptr, false, pPlayer->GetName());
+			pPlayer->SummonGameObject(1000087, x, y, z + 0.5F, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0, true);
+			pPlayer->RemoveItemCurrency(ritualReagent, reagentCount);
+
+			return true;
+		}
+	}
+
+	ItemPrototype const* proto = pItem->GetProto();
+
+	if (SpellEntry const* spellInfo = sSpellMgr.GetSpellEntry(proto->Spells[0].SpellId))
+	{
+		if (castResult != SPELL_CAST_OK)
+			Spell::SendCastResult(pPlayer, spellInfo, castResult);
+
+		DoAfterTime(pPlayer, 250, [player = pPlayer, spellId = spellInfo->Id]()
+		{
+			player->RemoveSpellCooldown(spellId, true);
+		}
+		);
+	}
+	return true;
+}
+
 void AddSC_item_scripts()
 {
     Script *newscript;
@@ -1729,5 +1837,16 @@ void AddSC_item_scripts()
 	newscript = new Script;
 	newscript->Name = "item_chronoboon_displacer";
 	newscript->pItemUseSpell = &ItemUseSpell_item_chronoboon_displacer;
+	newscript->RegisterSelf();
+
+
+	newscript = new Script;
+	newscript->Name = "item_mage_refreshment_table";
+	newscript->pItemUseSpell = &ItemUseSpell_item_mage_refreshment_table;
+	newscript->RegisterSelf();
+
+	newscript = new Script;
+	newscript->Name = "item_warlock_soulwell_ritual";
+	newscript->pItemUseSpell = &ItemUseSpell_item_warlock_soulwell_ritual;
 	newscript->RegisterSelf();
 }
