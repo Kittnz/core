@@ -26,3 +26,7 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '7', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
+
+update quest_template set details = 'Zalazane\'s Apprentice','That foolish mongrel Makasgar decided he no longer needs the aid of his master and has grown beyond my teachings.\n\n...\n\nThat mojo was required for a powerful ritual to help us take over the Sen’jin Village and later the whole of Durotar.\n\nOur scouts reported seeing him fleeing to mainland, follow the coast and find him. Go do your master’s bidding and bring me his head!' where entry = 59995;
+
+update item_template set name = 'Winterspring Tea Leaf' where entry = 80880;
