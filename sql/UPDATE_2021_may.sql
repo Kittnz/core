@@ -32,3 +32,5 @@ update quest_template set details = 'Zalazane\'s Apprentice','That foolish mongr
 update item_template set name = 'Winterspring Tea Leaf' where entry = 80880;
 
 delete from quest_template where entry in (7676, 7671, 7675, 7664, 7672, 7665);
+
+update item_template set description = 'Male rams will often smash their thick skulls against each other for hours to impress a female. In that way, they\'re very similar to dwarves.' where entry in (5872, 13329, 5864, 5873);
