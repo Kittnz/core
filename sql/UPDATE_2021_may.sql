@@ -40,6 +40,14 @@ update quest_template set requiredraces = 0 where entry = 3321;
 
 update creature set spawntimesecsmin = 300, spawntimesecsmax = 600 where id in (40000,40004,80252,80253,80254,80255,80256,80257,80258,80259,80260,40025,80152);
 
+update item_template set description = 'Just remember to have your special little passenger straped in tightly before running off at top speed on an adventure.' where entry = 81091;
+
+-- Prevent triggers in ZG from aggroing players.
+UPDATE `creature_template` SET `ai_name`='NullAI', `flags_extra`=133122 WHERE `entry` IN (14758, 15091);
+INSERT INTO `spell_script_target` (`entry`, `type`, `targetEntry`, `conditionId`, `inverseEffectMask`, `build_min`, `build_max`) VALUES (24211, 1, 15101, 0, 0, 4695, 5875);
+
+
+
 -- Ashenvale Quest Rewards
 replace into item_template values
  ('70003', '0', '4', '0', 'Hawkspear\'s Necklace', 'Assorted bones on a string.', '9852', '2', '0', '1', '5011', '1253', '2', '-1', '-1', '30',
