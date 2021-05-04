@@ -597,6 +597,12 @@ struct go_exploration_trigger : public GameObjectAI
                         if (cInfo != nullptr)
                             pPlayer->KilledMonster(cInfo, ObjectGuid());
                     }
+                    if (pPlayer->GetQuestStatus(70029) == QUEST_STATUS_INCOMPLETE) // What We Know (Ashenvale)
+                    {
+                        CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(70028);
+                        if (cInfo != nullptr)
+                            pPlayer->KilledMonster(cInfo, ObjectGuid());
+                    }
                 }
                 m_uiUpdateTimer = 2500;
             }
