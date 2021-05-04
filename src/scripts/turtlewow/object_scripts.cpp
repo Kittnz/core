@@ -758,7 +758,7 @@ struct refreshment_portal_clicks : public GameObjectAI
 					me->SummonGameObject(1000084, x, y, z + 0.375f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0, true);
 
 					// despawn portal
-					me->Despawn();
+					me->Delete();
 				}
 				else
 					hold += IN_MILLISECONDS;
