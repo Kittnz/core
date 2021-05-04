@@ -285,6 +285,7 @@ void AddSC_miracle_raceaway();
 void AddSC_gardening();
 void AddSC_beach_party();
 void AddSC_boss_dark_reaver();
+void AddSC_boss_ostarius();
 // Turtle WoW Expansion
 void AddSC_episode_1();
 
@@ -571,6 +572,7 @@ void AddScripts()
     AddSC_gardening();
     AddSC_beach_party();
     AddSC_boss_dark_reaver();
+    AddSC_boss_ostarius();
 
     // Turtle WoW expansion
     AddSC_episode_1();
