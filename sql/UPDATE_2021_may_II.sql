@@ -168,3 +168,6 @@ replace into creature_loot_template values (11697, 70027, 10, 7, 1, 1, 0, 0, 10)
 
 replace into creature_template_addon (entry, bytes1) values (70022, 3);
 update creature_template set script_name = 'npc_norvok' where entry = 70022;
+
+UPDATE `creature_spells` SET `spellId_1` = 15623 WHERE `entry` = 169840;
+UPDATE `creature_template` SET `mechanic_immune_mask` = 1023391482 WHERE `entry` = 16573;
