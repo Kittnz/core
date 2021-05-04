@@ -301,6 +301,7 @@ set (SCRIPTS_SRCS
     turtlewow/creatures/boss_snowball.cpp
     turtlewow/creatures/boss_nerubian_overseer.cpp
     turtlewow/creatures/boss_dark_reaver.cpp
+    turtlewow/creatures/boss_ostarius.cpp
     turtlewow/creatures/instance_stormwind_vaults.cpp
 
     turtlewow/creatures/cot/black_morass/boss_gerastrasz.cpp
