@@ -1814,9 +1814,50 @@ bool GOHello_go_kheyna_wormhole(Player* pPlayer, GameObject* pGo)
     }
 }
 
+bool QuestRewarded_npc_norvok(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver)
+        return false;
+
+    if (!pPlayer)
+        return false;
+
+    if (pQuest->GetQuestId() == 70022) 
+    {
+        pQuestGiver->MonsterSay("I will go find my spear right this momen- <argh> -nt!");
+
+        Creature* Taupo = pPlayer->FindNearestCreature(70020, 10.0F);
+
+        if (Taupo && Taupo->isAlive())
+        {
+            DoAfterTime(pPlayer, 3 * IN_MILLISECONDS,
+                [CreatureGuid = pQuestGiver->GetObjectGuid(), player = pPlayer]()
+            {
+                Map* map = sMapMgr.FindMap(1);
+                Creature* creature = map->GetCreature(CreatureGuid);
+
+                if (!creature)
+                    return;
+
+                creature->HandleEmote(EMOTE_ONESHOT_TALK);
+                creature->MonsterSay("You're not going anywhere until fully healed Norvok, I am more than certain our friend will keep an eye out for your spear.");
+            });
+        } 
+
+        return true;
+    }
+
+    return false;
+}
+
 void AddSC_episode_1()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_norvok";
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_norvok;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "go_kheyna_wormhole";
