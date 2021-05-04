@@ -695,8 +695,6 @@ bool GOHello_go_expansion_radio(Player* pPlayer, GameObject* pGo)
     pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "Play 'Pandaria'", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
     pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "Play 'Wilderness'", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
     pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "Play 'Cozy Tavern'", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
-    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "Play 'Level70ETC'", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 6);
-    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "Play 'Level70ETC'", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 6);
 
     pPlayer->SEND_GOSSIP_MENU(90300, pGo->GetGUID());
     return true;
@@ -709,7 +707,6 @@ bool GOSelect_go_expansion_radio(Player* pPlayer, GameObject* pGo, uint32 sender
     if (action == GOSSIP_ACTION_INFO_DEF + 3) pPlayer->PlayDirectMusic(30218);
     if (action == GOSSIP_ACTION_INFO_DEF + 4) pPlayer->PlayDirectMusic(30217);
     if (action == GOSSIP_ACTION_INFO_DEF + 5) pPlayer->PlayDirectMusic(30216);
-    if (action == GOSSIP_ACTION_INFO_DEF + 6) pPlayer->PlayDirectMusic(11803);
 
     pPlayer->CLOSE_GOSSIP_MENU();
     return true;
