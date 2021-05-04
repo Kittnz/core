@@ -69,3 +69,5 @@ update quest_template set questlevel = 26, minlevel = 24 where entry = 70023;
 update quest_template set questlevel = 27, minlevel = 24 where entry = 70024;
 update quest_template set questlevel = 27, minlevel = 24 where entry = 70025;
 update quest_template set questlevel = 27, minlevel = 24 where entry = 70026;
+
+update item_template set flags = 2048 where entry in (59995, 59996); 
