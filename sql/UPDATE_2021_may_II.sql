@@ -171,3 +171,6 @@ update creature_template set script_name = 'npc_norvok' where entry = 70022;
 
 UPDATE `creature_spells` SET `spellId_1` = 15623 WHERE `entry` = 169840;
 UPDATE `creature_template` SET `mechanic_immune_mask` = 1023391482 WHERE `entry` = 16573;
+
+REPLACE INTO `gameobject_template` VALUES (3000105, 0, 1, 2091, 'Zeppelin\'s Shortwave Radio', 0, 0, 0.4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_expansion_radio');
+
