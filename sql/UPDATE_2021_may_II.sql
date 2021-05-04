@@ -26,7 +26,7 @@ replace into creature_questrelation (id, quest, patch_min, patch_max) values (70
 replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (70022, 70022,'0','10');
 
 update quest_template set reqcreatureorgoid1 = 6073, reqcreatureorgocount1 = 10 where entry = 70022;
-update quest_template set reqcreatureorgoid1 = 6115, reqcreatureorgocount1 = 10 where entry = 70022;
+update quest_template set reqcreatureorgoid2 = 6115, reqcreatureorgocount2 = 10 where entry = 70022;
 
 REPLACE INTO `creature_template` VALUES (70023, 0, 3511, 0, 0, 0, 'Commander Grushak', '', 0, 27, 33, 1400, 3400, 0, 0, 3791, 29, 3, 1, 1.38571, 0, 20, 5, 0, 1, 1, 166, 241, 0, 272, 1, 2000, 2000, 1, 36864, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 70023, 0, 0, 0, 0, 524298, '');
 
@@ -80,3 +80,12 @@ replace into creature_questrelation (id, quest, patch_min, patch_max) values (70
 replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (70027, 70027,'0','10');
 
 REPLACE INTO `creature_template` VALUES (70027, 0, 3869, 0, 0, 0, 'Farseer Grimeye', NULL, 0, 35, 38, 2210, 2210, 0, 0, 1200, 29, 3, 1, 1.14286, 0, 20, 5, 0, 1, 1, 129, 166, 0, 122, 1, 2000, 2000, 1, 4096, 0, 0, 0, 0, 0, 0, 37.608, 51.711, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 127370, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 12737, 0, 0, 2, 0, 524288, '');
+
+replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, objectivetext1, objectivetext2, objectivetext3, objectivetext4, srcitemid, srcitemcount, reworreqmoney, rewmoneymaxlevel, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (70027,70028,331,28,25,0,0,'Demon Fall Canyon','What do you see here $N? I will tell you what I see; a roaming pack without its Alpha. Simple minded buffoons who lost their commander. Sometimes I ask myself what would have happened if Hellscream … doesn\'t matter now.\n\nFalling down into the Demon Fall Canyon you will see numerous spawns of the Burning Legion. As you should know, a great demon fell there, hence the namesake, I suppose.\n\nYour mission is clear, yet, not so simple. Wreak havoc and cull their numbers. I expect you do whatever you see fit to leave none alive.','Slay 10 Mannoroc Lashers, 10 Searing Infernals and 10 Felguards. Report to Farseer Grimeye.','I take it you\'re not a coward, so why are you still here?','Good. While their numbers are Legions and our arms never rest, we will prevail thanks to the sheer desire to survive overcoming their plans to conquer.\n\nCome, I have few items saved as payment. Choose whichever fits you best.',70023,1,0,0,0,0,0,0,'','','','',70023,1,0,360,76,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,70010,1,70011,1,0,0,0,0);
+
+replace into creature_questrelation (id, quest, patch_min, patch_max) values (70027, 70028,'0','10'); 
+replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (70027, 70028,'0','10');
+
+update quest_template set reqcreatureorgoid1 = 11697, reqcreatureorgocount1 = 10 where entry = 70028;
+update quest_template set reqcreatureorgoid2 = 6073, reqcreatureorgocount2 = 10 where entry = 70028;
+update quest_template set reqcreatureorgoid3 = 6115, reqcreatureorgocount3 = 10 where entry = 70028;
