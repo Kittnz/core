@@ -697,12 +697,13 @@ struct refreshment_portal_clicks : public GameObjectAI
 {
 	explicit refreshment_portal_clicks(GameObject* pGo) : GameObjectAI(pGo)
 	{
-		m_uiUpdateTimer = 1000;
-		portal_life     = 25 * IN_MILLISECONDS;
-		clickers        = 0;
-		needed_clickers = 3;
-		hold            = 0;
-		needed_hold     = 3 * IN_MILLISECONDS;
+		m_uiUpdateTimer  = 1000;
+		portal_life      = 25 * IN_MILLISECONDS;
+		clickers         = 0;
+		needed_clickers  = 3;
+		hold             = 0;
+		needed_hold      = 3 * IN_MILLISECONDS;
+		portal_timed_out = false;
 	}
 
 	uint32 m_uiUpdateTimer;
@@ -711,15 +712,14 @@ struct refreshment_portal_clicks : public GameObjectAI
 	int needed_clickers;
 	int hold;
 	int needed_hold;
+	
+	bool portal_timed_out;
 
 	void UpdateAI(uint32 const uiDiff) override
 	{
 
 		if (portal_life < uiDiff)
-		{
-			me->Delete();
-			return;
-		}
+			portal_timed_out = true;
 		else
 			portal_life -= uiDiff;
 
@@ -731,23 +731,33 @@ struct refreshment_portal_clicks : public GameObjectAI
 
 			Cell::VisitWorldObjects(me, searcher, 1.0f);
 
+			if (portal_timed_out)
+			{
+				// stop players channeling in case nobody clicks
+				for (auto clicker : players)
+					if (clicker->HasAura(29423))
+						clicker->RemoveAurasDueToSpell(29423);
+				me->Delete();
+				return;
+			}
+
 			clickers = 0;
 
-			for (Player* pPlayer : players)
-				if (pPlayer->HasAura(29423))
+			for (auto clicker : players)
+				if (clicker->HasAura(29423))
 					clickers++;
 
 			if (clickers >= needed_clickers)
 			{
 				if (hold >= needed_hold)
 				{
-					for (Player* pPlayer : players)
-						if (pPlayer->HasAura(29423))
+					for (auto clicker : players)
+						if (clicker->HasAura(29423))
 						{
 							// stop players channeling
-							pPlayer->RemoveAurasDueToSpell(29423);
+							clicker->RemoveAurasDueToSpell(29423);
 							// cast visual arcane explosion
-							pPlayer->CastSpell(pPlayer, 16510, false);
+							clicker->CastSpell(clicker, 16510, false);
 						}
 							
 					float x = me->GetPositionX();
@@ -759,6 +769,7 @@ struct refreshment_portal_clicks : public GameObjectAI
 
 					// despawn portal
 					me->Delete();
+					return;
 				}
 				else
 					hold += IN_MILLISECONDS;
@@ -775,10 +786,11 @@ struct refreshment_portal_clicks : public GameObjectAI
 		if (!Unit->ToPlayer())
 			return false;
 
-		Player* pPlayer = Unit->ToPlayer();
-
-		if (!pPlayer->isInCombat() && !pPlayer->IsBeingTeleported() && pPlayer->getDeathState() != CORPSE && !pPlayer->IsMoving())
-			pPlayer->CastSpell(pPlayer, 29423, false);
+		if (!Unit->ToPlayer()->isInCombat() && !Unit->ToPlayer()->IsBeingTeleported()
+			&& Unit->ToPlayer()->getDeathState() != CORPSE && !Unit->ToPlayer()->IsMoving())
+		{
+			Unit->ToPlayer()->CastSpell(Unit->ToPlayer(), 29423, false);
+		}
 		
 		return true;
 	}
@@ -858,14 +870,15 @@ struct soulwell_portal_clicks : public GameObjectAI
 
 	explicit soulwell_portal_clicks(GameObject* pGo) : GameObjectAI(pGo)
 	{
-		m_uiUpdateTimer = 1000;
-		clickers        = 0;
-		needed_clickers = 3;
-		hold            = 0;
-		needed_hold     = 3 * IN_MILLISECONDS;
-		portal_life     = 25 * IN_MILLISECONDS;
-		rune_time       = 0;
-		rune_summoned   = false;
+		m_uiUpdateTimer  = 1000;
+		clickers         = 0;
+		needed_clickers  = 3;
+		hold             = 0;
+		needed_hold      = 3 * IN_MILLISECONDS;
+		portal_life      = 25 * IN_MILLISECONDS;
+		rune_time        = 0;
+		rune_summoned    = false;
+		portal_timed_out = false;
 	}
 
 	uint32 m_uiUpdateTimer;
@@ -877,6 +890,7 @@ struct soulwell_portal_clicks : public GameObjectAI
 	int rune_time;
 
 	bool rune_summoned;
+	bool portal_timed_out;
 
 	GameObject* purple_rune_big;
 
@@ -884,26 +898,32 @@ struct soulwell_portal_clicks : public GameObjectAI
 	{
 
 		if (portal_life < uiDiff)
-		{
-			me->Delete();
-			return;
-		}
+			portal_timed_out = true;
 		else
 			portal_life -= uiDiff;
 
 		if (m_uiUpdateTimer < uiDiff)
 		{
-
 			std::list<Player*> players;
 			MaNGOS::AnyPlayerInObjectRangeCheck check(me, 5.0f, true, false);
 			MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
 
 			Cell::VisitWorldObjects(me, searcher, 1.0f);
 
+			if (portal_timed_out)
+			{
+				// stop players channeling in case nobody clicks
+				for (auto clicker : players)
+					if (clicker->HasAura(23642))
+						clicker->RemoveAura(23642, EFFECT_INDEX_0);
+				me->Delete();
+				return;
+			}
+
 			clickers = 0;
 
-			for (Player* pPlayer : players)
-				if (pPlayer->HasAura(23642))
+			for (auto clicker : players)
+				if (clicker->HasAura(23642))
 					clickers++;
 
 			if (rune_summoned)
@@ -921,6 +941,7 @@ struct soulwell_portal_clicks : public GameObjectAI
 					soulwell->SetOwnerGuid(me->GetOwnerGuid());
 					purple_rune_big->Delete();
 					me->Delete();
+					return;
 				}
 			}
 
@@ -929,20 +950,20 @@ struct soulwell_portal_clicks : public GameObjectAI
 				if (hold >= needed_hold)
 				{
 					// stop players channeling
-					for (Player* pPlayer : players)
-						if (pPlayer->HasAura(23642))
-							pPlayer->RemoveAura(23642, EFFECT_INDEX_0);
+					for (auto clicker : players)
+						if (clicker->HasAura(23642))
+							clicker->RemoveAura(23642, EFFECT_INDEX_0);
 
 					float x = me->GetPositionX();
 					float y = me->GetPositionY();
 					float z = me->GetPositionZ();
 
-					// purple shit
-					purple_rune_big = me->SummonGameObject(2005014, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0, true);
+					// purple rune on the ground
+					if (purple_rune_big = me->SummonGameObject(2005014, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0, true))
+						rune_summoned = true;
 
 					me->SetVisible(false);
-
-					rune_summoned = true;
+					
 				}
 				else
 					hold += IN_MILLISECONDS;
@@ -959,12 +980,11 @@ struct soulwell_portal_clicks : public GameObjectAI
 		if (!Unit->ToPlayer())
 			return false;
 
-		Player* pPlayer = Unit->ToPlayer();
-
-		if (!pPlayer->isInCombat() && !pPlayer->IsBeingTeleported() && pPlayer->getDeathState() != CORPSE && !pPlayer->IsMoving())
+		if (!Unit->ToPlayer()->isInCombat() && !Unit->ToPlayer()->IsBeingTeleported() 
+			&& Unit->ToPlayer()->getDeathState() != CORPSE && !Unit->ToPlayer()->IsMoving())
 		{
-			pPlayer->AddAura(23642);
-			pPlayer->HandleEmoteCommand(EMOTE_STATE_POINT);
+			Unit->ToPlayer()->AddAura(23642);
+			Unit->ToPlayer()->HandleEmoteCommand(EMOTE_STATE_POINT);
 		}
 
 		return true;
