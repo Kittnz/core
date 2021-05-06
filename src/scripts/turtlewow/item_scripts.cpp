@@ -1547,22 +1547,18 @@ bool ItemUseSpell_item_supercharged_chronoboon_displacer(Player* pPlayer, Item* 
 {
 	if (!pPlayer) return false;	
 
-	if (pPlayer->isInCombat())
-	{
-		pPlayer->GetSession()->SendNotification("You can't do that while in combat.");
-
+	if (!pPlayer->RestoreSuspendedWorldBuffs())
+	{ 
 		if (SpellEntry const* spellInfo = sSpellMgr.GetSpellEntry(pItem->GetProto()->Spells[0].SpellId))
 		{
-			DoAfterTime(pPlayer, 250, [player = pPlayer, spellId = spellInfo->Id]()
+			DoAfterTime(pPlayer, 1500, [player = pPlayer, spellId = spellInfo->Id]()
 			{
 				player->RemoveSpellCooldown(spellId, true);
 			}
 			);
 		}
-		return false;
 	}
-
-	pPlayer->RestoreSuspendedWorldBuffs();
+	
 	return true;
 }
 
@@ -1570,22 +1566,18 @@ bool ItemUseSpell_item_chronoboon_displacer(Player* pPlayer, Item* pItem, const 
 {
 	if (!pPlayer) return false;
 
-	if (pPlayer->isInCombat())
+	if (!pPlayer->SuspendWorldBuffs())
 	{
-		pPlayer->GetSession()->SendNotification("You can't do that while in combat.");
-
 		if (SpellEntry const* spellInfo = sSpellMgr.GetSpellEntry(pItem->GetProto()->Spells[0].SpellId))
 		{
-			DoAfterTime(pPlayer, 250, [player = pPlayer, spellId = spellInfo->Id]()
+			DoAfterTime(pPlayer, 1500, [player = pPlayer, spellId = spellInfo->Id]()
 			{
 				player->RemoveSpellCooldown(spellId, true);
 			}
 			);
 		}
-		return false;
 	}
 
-	pPlayer->SuspendWorldBuffs();
 	return true;
 }
 
@@ -1597,20 +1589,20 @@ bool ItemUseSpell_item_mage_refreshment_table(Player* pPlayer, Item* pItem, cons
 
 	if (pPlayer->IsMoving() || pPlayer->IsBeingTeleported())
 		castResult = SPELL_FAILED_MOVING;
-	if (pPlayer->isInCombat())
+	else if (pPlayer->isInCombat())
 		castResult = SPELL_FAILED_AFFECTING_COMBAT;
-	if (pPlayer->getDeathState() == CORPSE)
+	else if (pPlayer->getDeathState() == CORPSE)
 		castResult = SPELL_FAILED_CASTER_DEAD;
 
 	if (castResult == SPELL_CAST_OK)
 	{
 		// reagent Arcane Powder 2
-		int tableReagent = 17020;
-		int reagentCount = 2;
-		if (!pPlayer->HasItemCount(tableReagent, reagentCount))
+		uint32 tableReagent = 17020;
+		uint32 reagentCount = 2;
+		if (!pPlayer->HasItemCount(tableReagent, reagentCount, false))
 		{
-			pPlayer->GetSession()->SendNotification("Missing reagent: Arcane Powder(%i)", reagentCount);
-			castResult = SPELL_CAST_OK;
+			pPlayer->GetSession()->SendNotification("Missing reagent: Arcane Powder(%u)", reagentCount);
+			castResult = SPELL_CAST_OK; // to should remove accidental cooldown
 		}
 		else
 		{
@@ -1622,6 +1614,7 @@ bool ItemUseSpell_item_mage_refreshment_table(Player* pPlayer, Item* pItem, cons
 			pPlayer->PMonsterEmote("%s begins to conjure a refreshment table.", nullptr, false, pPlayer->GetName());
 			pPlayer->SummonGameObject(1000083, x, y, z + 0.5F, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0, true);
 			pPlayer->RemoveItemCurrency(tableReagent, reagentCount);
+			pPlayer->SaveInventoryAndGoldToDB();
 
 			return true;
 		}
@@ -1634,7 +1627,7 @@ bool ItemUseSpell_item_mage_refreshment_table(Player* pPlayer, Item* pItem, cons
 		if (castResult != SPELL_CAST_OK)
 			Spell::SendCastResult(pPlayer, spellInfo, castResult);
 
-		DoAfterTime(pPlayer, 250, [player = pPlayer, spellId = spellInfo->Id]()
+		DoAfterTime(pPlayer, 1500, [player = pPlayer, spellId = spellInfo->Id]()
 		{
 			player->RemoveSpellCooldown(spellId, true);
 		}
@@ -1651,20 +1644,20 @@ bool ItemUseSpell_item_warlock_soulwell_ritual(Player* pPlayer, Item* pItem, con
 
 	if (pPlayer->IsMoving() || pPlayer->IsBeingTeleported())
 		castResult = SPELL_FAILED_MOVING;
-	if (pPlayer->isInCombat())
+	else if (pPlayer->isInCombat())
 		castResult = SPELL_FAILED_AFFECTING_COMBAT;
-	if (pPlayer->getDeathState() == CORPSE)
+	else if (pPlayer->getDeathState() == CORPSE)
 		castResult = SPELL_FAILED_CASTER_DEAD;
 
 	if (castResult == SPELL_CAST_OK)
 	{
 		// reagent soul shard 5
-		int ritualReagent = 6265;
-		int reagentCount  = 5;
-		if (!pPlayer->HasItemCount(ritualReagent, reagentCount))
+		uint32 ritualReagent = 6265;
+		uint32 reagentCount  = 5;
+		if (!pPlayer->HasItemCount(ritualReagent, reagentCount, false))
 		{
-			pPlayer->GetSession()->SendNotification("Missing reagent: Soul Shard(%i)", reagentCount);
-			castResult = SPELL_CAST_OK;
+			pPlayer->GetSession()->SendNotification("Missing reagent: Soul Shard(%u)", reagentCount);
+			castResult = SPELL_CAST_OK;  // to remove accidental cooldown
 		}
 		else
 		{
@@ -1676,6 +1669,7 @@ bool ItemUseSpell_item_warlock_soulwell_ritual(Player* pPlayer, Item* pItem, con
 			pPlayer->PMonsterEmote("%s begins a Soulwell ritual.", nullptr, false, pPlayer->GetName());
 			pPlayer->SummonGameObject(1000087, x, y, z + 0.5F, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0, true);
 			pPlayer->RemoveItemCurrency(ritualReagent, reagentCount);
+			pPlayer->SaveInventoryAndGoldToDB();
 
 			return true;
 		}
@@ -1688,7 +1682,7 @@ bool ItemUseSpell_item_warlock_soulwell_ritual(Player* pPlayer, Item* pItem, con
 		if (castResult != SPELL_CAST_OK)
 			Spell::SendCastResult(pPlayer, spellInfo, castResult);
 
-		DoAfterTime(pPlayer, 250, [player = pPlayer, spellId = spellInfo->Id]()
+		DoAfterTime(pPlayer, 1500, [player = pPlayer, spellId = spellInfo->Id]()
 		{
 			player->RemoveSpellCooldown(spellId, true);
 		}
