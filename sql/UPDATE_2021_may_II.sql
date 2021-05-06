@@ -176,3 +176,4 @@ REPLACE INTO `gameobject_template` VALUES (3000105, 0, 1, 2091, 'Zeppelin\'s Sho
 
 update gameobject set spawntimesecsmin = 36000, spawntimesecsmax = 40000 where id = 153464 and spawntimesecsmin < 18000;
 
+UPDATE `battleground_template` SET `min_players_per_team`='2', `max_players_per_team`='2' WHERE (`id`='4') AND (`patch`='0');
