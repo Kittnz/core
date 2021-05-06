@@ -2577,8 +2577,8 @@ class MANGOS_DLL_SPEC Player final: public Unit
 
 		// Xerron Suspend World Buffs Start
 		public:
-			void Player::SuspendWorldBuffs();
-			void Player::RestoreSuspendedWorldBuffs();
+			bool Player::SuspendWorldBuffs();
+			bool Player::RestoreSuspendedWorldBuffs();
 			void Player::RemoveWorldBuffsIfAlreadySuspended();
 		// Xerron Suspend World Buffs End
 
