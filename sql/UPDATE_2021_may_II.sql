@@ -188,3 +188,9 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '2', '0', '0', '0', '65', '0', '0', '0', '0', '43', '0', '0', '0',
  '0', '1', NULL);
+ 
+update item_template set item_level = 20 where entry in (80730, 80739);
+update quest_template set requiredraces = 589 where entry = 5001;
+update quest_template set requiredraces = 434 where entry = 4982;
+
+delete from creature_loot_template where item = 20697;
