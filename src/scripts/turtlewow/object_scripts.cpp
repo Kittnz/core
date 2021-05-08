@@ -712,6 +712,370 @@ bool GOSelect_go_expansion_radio(Player* pPlayer, GameObject* pGo, uint32 sender
     return true;
 }
 
+// Refreshment Portal GO
+
+struct refreshment_portal_clicks : public GameObjectAI
+{
+	explicit refreshment_portal_clicks(GameObject* pGo) : GameObjectAI(pGo)
+	{
+		m_uiUpdateTimer  = 1000;
+		portal_life      = 25 * IN_MILLISECONDS;
+		clickers         = 0;
+		needed_clickers  = 3;
+		hold             = 0;
+		needed_hold      = 3 * IN_MILLISECONDS;
+		portal_timed_out = false;
+	}
+
+	uint32 m_uiUpdateTimer;
+	uint32 portal_life;
+	int clickers;
+	int needed_clickers;
+	int hold;
+	int needed_hold;
+	
+	bool portal_timed_out;
+
+	void UpdateAI(uint32 const uiDiff) override
+	{
+
+		if (portal_life < uiDiff)
+			portal_timed_out = true;
+		else
+			portal_life -= uiDiff;
+
+		if (m_uiUpdateTimer < uiDiff)
+		{
+			std::list<Player*> players;
+			MaNGOS::AnyPlayerInObjectRangeCheck check(me, 5.0f, true, false);
+			MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
+
+			Cell::VisitWorldObjects(me, searcher, 1.0f);
+
+			if (portal_timed_out)
+			{
+				// stop players channeling in case nobody clicks
+				for (auto clicker : players)
+					if (clicker->HasAura(29423))
+						clicker->RemoveAurasDueToSpell(29423);
+				me->Delete();
+				return;
+			}
+
+			clickers = 0;
+
+			for (auto clicker : players)
+				if (clicker->HasAura(29423))
+					clickers++;
+
+			if (clickers >= needed_clickers)
+			{
+				if (hold >= needed_hold)
+				{
+					for (auto clicker : players)
+						if (clicker->HasAura(29423))
+						{
+							// stop players channeling
+							clicker->RemoveAurasDueToSpell(29423);
+							// cast visual arcane explosion
+							clicker->CastSpell(clicker, 16510, false);
+						}
+							
+					float x = me->GetPositionX();
+					float y = me->GetPositionY();
+					float z = me->GetPositionZ();
+
+					// summon orange basket clickable object
+					me->SummonGameObject(1000084, x, y, z + 0.375f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0, true);
+
+					// despawn portal
+					me->Delete();
+					return;
+				}
+				else
+					hold += IN_MILLISECONDS;
+			}
+			m_uiUpdateTimer = 1000;
+		}
+		else
+			m_uiUpdateTimer -= uiDiff;
+	}
+
+	bool OnUse(Unit* Unit) override
+	{
+
+		if (!Unit->ToPlayer())
+			return false;
+
+		if (!Unit->ToPlayer()->isInCombat() && !Unit->ToPlayer()->IsBeingTeleported()
+			&& Unit->ToPlayer()->getDeathState() != CORPSE && !Unit->ToPlayer()->IsMoving())
+		{
+			Unit->ToPlayer()->CastSpell(Unit->ToPlayer(), 29423, false);
+		}
+		
+		return true;
+	}
+
+};
+
+GameObjectAI* GetAI_refreshment_portal_clicks(GameObject* gameobject)
+{
+	return new refreshment_portal_clicks(gameobject);
+}
+
+// Refreshment table GO
+
+struct refreshment_table_clicks : public GameObjectAI
+{
+
+	explicit refreshment_table_clicks(GameObject* pGo) : GameObjectAI(pGo)
+	{
+		max_stacks        = 40 * 4;                       // 40 players, 4 stacks per player
+		stacks_handed_out = 0;
+		table_life        = 3 * MINUTE * IN_MILLISECONDS;
+		stand			  = NULL;
+	}
+
+	int max_stacks;
+	int stacks_handed_out;
+	int table_life;
+	GameObject* stand;
+
+	void UpdateAI(uint32 const uiDiff) override
+	{
+
+		if (!stand)
+		{
+			// summon table under the food
+			float x = me->GetPositionX();
+			float y = me->GetPositionY();
+			float z = me->GetPositionZ();
+
+			stand = me->SummonGameObject(2008758, x, y, z - 0.88f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0, true);
+		}
+
+		if (table_life < uiDiff || stacks_handed_out >= max_stacks)
+		{
+			stand->Delete();
+			me->Delete();
+		}
+		else
+			table_life -= uiDiff;
+	}
+
+	bool OnUse(Unit* Unit) override
+	{
+
+		if (!Unit->ToPlayer())
+			return false;
+
+		if (stacks_handed_out < max_stacks && Unit->ToPlayer()->GetItemCount(83004, true) < 80)
+			if (Unit->ToPlayer()->AddItem(83004, 20))
+				stacks_handed_out++;
+
+		return true;
+	}
+
+};
+
+GameObjectAI* GetAI_refreshment_table_clicks(GameObject* gameobject)
+{
+	return new refreshment_table_clicks(gameobject);
+}
+
+
+// Soulwell Portal GO
+
+struct soulwell_portal_clicks : public GameObjectAI
+{
+
+	explicit soulwell_portal_clicks(GameObject* pGo) : GameObjectAI(pGo)
+	{
+		m_uiUpdateTimer  = 1000;
+		clickers         = 0;
+		needed_clickers  = 3;
+		hold             = 0;
+		needed_hold      = 3 * IN_MILLISECONDS;
+		portal_life      = 25 * IN_MILLISECONDS;
+		rune_time        = 0;
+		rune_summoned    = false;
+		portal_timed_out = false;
+	}
+
+	uint32 m_uiUpdateTimer;
+	int clickers;
+	int needed_clickers;
+	int hold;
+	int needed_hold;
+	int portal_life;
+	int rune_time;
+
+	bool rune_summoned;
+	bool portal_timed_out;
+
+	GameObject* purple_rune_big;
+
+	void UpdateAI(uint32 const uiDiff) override
+	{
+
+		if (portal_life < uiDiff)
+			portal_timed_out = true;
+		else
+			portal_life -= uiDiff;
+
+		if (m_uiUpdateTimer < uiDiff)
+		{
+			std::list<Player*> players;
+			MaNGOS::AnyPlayerInObjectRangeCheck check(me, 5.0f, true, false);
+			MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
+
+			Cell::VisitWorldObjects(me, searcher, 1.0f);
+
+			if (portal_timed_out)
+			{
+				// stop players channeling in case nobody clicks
+				for (auto clicker : players)
+					if (clicker->HasAura(23642))
+						clicker->RemoveAura(23642, EFFECT_INDEX_0);
+				me->Delete();
+				return;
+			}
+
+			clickers = 0;
+
+			for (auto clicker : players)
+				if (clicker->HasAura(23642))
+					clickers++;
+
+			if (rune_summoned)
+				rune_time++;
+
+			if (rune_time > 2)
+			{
+				float x = me->GetPositionX();
+				float y = me->GetPositionY();
+				float z = me->GetPositionZ();
+
+				//soulwell
+				if (GameObject* soulwell = me->SummonGameObject(1000089, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0, true))
+				{
+					soulwell->SetOwnerGuid(me->GetOwnerGuid());
+					purple_rune_big->Delete();
+					me->Delete();
+					return;
+				}
+			}
+
+			if (clickers >= needed_clickers)
+			{
+				if (hold >= needed_hold)
+				{
+					// stop players channeling
+					for (auto clicker : players)
+						if (clicker->HasAura(23642))
+							clicker->RemoveAura(23642, EFFECT_INDEX_0);
+
+					float x = me->GetPositionX();
+					float y = me->GetPositionY();
+					float z = me->GetPositionZ();
+
+					// purple rune on the ground
+					if (purple_rune_big = me->SummonGameObject(2005014, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0, true))
+						rune_summoned = true;
+
+					me->SetVisible(false);
+					
+				}
+				else
+					hold += IN_MILLISECONDS;
+			}
+			m_uiUpdateTimer = 1000;
+		}
+		else
+			m_uiUpdateTimer -= uiDiff;
+	}
+
+	bool OnUse(Unit* Unit) override
+	{
+
+		if (!Unit->ToPlayer())
+			return false;
+
+		if (!Unit->ToPlayer()->isInCombat() && !Unit->ToPlayer()->IsBeingTeleported() 
+			&& Unit->ToPlayer()->getDeathState() != CORPSE && !Unit->ToPlayer()->IsMoving())
+		{
+			Unit->ToPlayer()->AddAura(23642);
+			Unit->ToPlayer()->HandleEmoteCommand(EMOTE_STATE_POINT);
+		}
+
+		return true;
+	}
+
+};
+
+GameObjectAI* GetAI_soulwell_portal_clicks(GameObject* gameobject)
+{
+	return new soulwell_portal_clicks(gameobject);
+}
+
+// soulwell GO
+
+struct soulwell_clicks : public GameObjectAI
+{
+
+	explicit soulwell_clicks(GameObject* pGo) : GameObjectAI(pGo)
+	{
+		max_healthstones        = 40;
+		healthstones_handed_out = 0;
+		soulwell_life           = 3 * MINUTE * IN_MILLISECONDS;
+		itemSoulStone           = 9421; // untalented
+	}
+
+	int max_healthstones;
+	int healthstones_handed_out;
+	int soulwell_life;
+	int itemSoulStone;
+
+	void UpdateAI(uint32 const uiDiff) override
+	{
+
+		if (soulwell_life < uiDiff || healthstones_handed_out >= max_healthstones)
+			me->Delete();
+		else
+			soulwell_life -= uiDiff;
+	}
+
+	bool OnUse(Unit* Unit) override
+	{
+
+		if (!Unit->ToPlayer())
+			return false;
+
+		if (me->GetOwner() && me->GetOwner()->ToPlayer()) 
+		{
+			if (me->GetOwner()->ToPlayer()->HasSpell(18692))        // 1/2 improved healthstone talent
+				itemSoulStone = 19012;
+			if (me->GetOwner()->ToPlayer()->HasSpell(18693))        // 2/2 improved healthstone talent
+				itemSoulStone = 19013;
+		}
+
+		if (healthstones_handed_out < max_healthstones && Unit->ToPlayer()->GetItemCount(itemSoulStone, true) == 0)
+		{
+			Unit->ToPlayer()->AddItem(itemSoulStone, 1);
+			healthstones_handed_out++;
+		}
+
+		return true;
+	}
+
+};
+
+GameObjectAI* GetAI_soulwell_clicks(GameObject* gameobject)
+{
+	return new soulwell_clicks(gameobject);
+}
+
+
 void AddSC_object_scripts()
 {
     Script *newscript;
@@ -721,7 +1085,6 @@ void AddSC_object_scripts()
     newscript->pGOHello = &GOHello_go_expansion_radio;
     newscript->pGOGossipSelect = &GOSelect_go_expansion_radio;
     newscript->RegisterSelf();
-
 
     newscript = new Script;
     newscript->Name = "stormwind_vault_portal";
@@ -827,6 +1190,26 @@ void AddSC_object_scripts()
     newscript->pGOHello = &GOHello_go_winter_radio;
     newscript->pGOGossipSelect = &GOSelect_go_winter_radio;
     newscript->RegisterSelf();
+
+	newscript = new Script;
+	newscript->Name = "go_refreshment_portal";
+	newscript->GOGetAI = &GetAI_refreshment_portal_clicks;
+	newscript->RegisterSelf();
+
+	newscript = new Script;
+	newscript->Name = "go_refreshment_table";
+	newscript->GOGetAI = &GetAI_refreshment_table_clicks;
+	newscript->RegisterSelf();
+
+	newscript = new Script;
+	newscript->Name = "go_soulwell_portal";
+	newscript->GOGetAI = &GetAI_soulwell_portal_clicks;
+	newscript->RegisterSelf();
+
+	newscript = new Script;
+	newscript->Name = "go_soulwell";
+	newscript->GOGetAI = &GetAI_soulwell_clicks;
+	newscript->RegisterSelf();
 }
 
 
