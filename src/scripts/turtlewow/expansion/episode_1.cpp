@@ -1831,7 +1831,7 @@ bool QuestRewarded_npc_norvok(Player* pPlayer, Creature* pQuestGiver, Quest cons
         if (Taupo && Taupo->isAlive())
         {
             DoAfterTime(pPlayer, 3 * IN_MILLISECONDS,
-                [CreatureGuid = pQuestGiver->GetObjectGuid(), player = pPlayer]()
+                [CreatureGuid = Taupo->GetObjectGuid(), player = pPlayer]()
             {
                 Map* map = sMapMgr.FindMap(1);
                 Creature* creature = map->GetCreature(CreatureGuid);
