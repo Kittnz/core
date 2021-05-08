@@ -286,7 +286,6 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 	// TWT Threat: Guid and UnitDetailedThreatSituation Request
 	if (lang == LANG_ADDON && (type == CHAT_MSG_PARTY || type == CHAT_MSG_RAID) && !msg.empty())
 	{
-
 		// UnitDetailedThreatSituation
 		if (strstr(msg.c_str(), "TWT_UDTSv4"))
 		{

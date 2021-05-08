@@ -139,6 +139,27 @@ enum CharacterFlags
     CHARACTER_FLAG_UNK32                = 0x80000000
 };
 
+// world buffs
+#define MAX_WORLD_BUFFS 15
+static uint32 WorldBuffs[MAX_WORLD_BUFFS]
+{
+	22888, // Rallying Cry of the Dragonslayer
+	24425, // Spirit of zandalar
+	22818, // Mol'dar's Moxie
+	22817, // Fengus' Ferocity
+	22820, // Slip'kik's Savvy
+	15366, // Songflower Serenade
+	23768, // Sayge's Dark Fortune of Damage  basepoints0 = % damage
+	23736, // Sayge's Dark Fortune of Agility
+	23767, // Sayge's Dark Fortune of Armor
+	23766, // Sayge's Dark Fortune of Intelligence
+	23769, // Sayge's Dark Fortune of Resistance
+	23738, // Sayge's Dark Fortune of Spirit
+	23737, // Sayge's Dark Fortune of Stamina
+	23735, // Sayge's Dark Fortune of Strength
+	16609, // Warchief's Blessing
+};
+
 // corpse reclaim times
 #define DEATH_EXPIRE_STEP (5*MINUTE)
 #define MAX_DEATH_COUNT 3
@@ -614,6 +635,7 @@ Player::Player(WorldSession *session) : Unit(),
     m_hardcoreInvGuildTimer = 0;
 
     m_totalDeathCount = 0;
+    m_worldBuffCheckTimer = 0;
 }
 
 Player::~Player()
@@ -1265,6 +1287,18 @@ void Player::Update(uint32 update_diff, uint32 p_time)
         m_regenTimer -= update_diff;
         HandleFoodEmotes(update_diff);
         RegenerateAll();
+
+		if (IsInWorld())
+		{
+			// Prevent player from getting a world buff if its already suspended in character_aura_suspended
+			if (update_diff >= m_worldBuffCheckTimer)
+			{
+				RemoveWorldBuffsIfAlreadySuspended();
+				m_worldBuffCheckTimer = 3 * MINUTE * IN_MILLISECONDS;
+			}
+			else
+				m_worldBuffCheckTimer -= update_diff;
+		}
     }
     else
     {
@@ -1431,6 +1465,7 @@ void Player::Update(uint32 update_diff, uint32 p_time)
                 m_hardcoreInvGuildTimer -= update_diff;
         }
     }
+
 
     // Anticheat sanction
     std::stringstream reason;
@@ -22478,4 +22513,269 @@ bool Player::SetupHardcoreMode()
 void Player::UpdateTotalDeathCount()
 {
     m_totalDeathCount++;
+}
+
+
+/* Chronoboon */
+
+/* Saves buffs that match WorldBuffs id in character_aura_suspended and clears them from player. */
+bool Player::SuspendWorldBuffs()
+{
+
+	if (HasItemCount(83001, 1, true))
+	{
+		ChatHandler(this).PSendSysMessage("You already have suspended world effects.");
+		return false;
+	}
+
+	if (isInCombat())
+	{
+		GetSession()->SendNotification("You can't do that while in combat.");
+		return false;
+	} 
+	else if (InArena())
+	{
+		GetSession()->SendNotification("You can't do that while in Arena.");
+		return false;
+	}
+	else if (InBattleGround())
+	{
+		GetSession()->SendNotification("You can't do that while in a Battleground.");
+		return false;
+	}
+	else if (GetMap() && GetMap()->IsRaid() && GetInstanceData() && GetInstanceData()->IsEncounterInProgress())
+	{
+		GetSession()->SendNotification("You can't do that during raid encounters.");
+		return false;
+	}
+
+	std::string suspendMessage;
+
+	SpellAuraHolderMap const& auraHolders = GetSpellAuraHolderMap();
+
+	if (auraHolders.empty())
+		return false;
+
+	AuraSaveStruct s;
+	bool suspended_cleared = false;
+	for (SpellAuraHolderMap::const_iterator itr = auraHolders.begin(); itr != auraHolders.end(); ++itr)
+	{
+		SpellAuraHolder *holder = itr->second;
+
+		if (!SaveAura(holder, s))
+			continue;
+
+		for (int i = 0; i < MAX_WORLD_BUFFS; i++)
+		{
+			if (s.spellid == WorldBuffs[i])
+			{
+
+				if (!suspended_cleared)
+				{
+					// found at least one world buff, clear character_aura_suspended 
+					CharacterDatabase.PExecute("DELETE FROM character_aura_suspended WHERE guid = '%u'", GetGUIDLow());
+					ChatHandler(this).PSendSysMessage("All previously suspended world effects have been cleared.");
+					suspended_cleared = true;
+				}
+
+				static SqlStatementID insertAuras;
+
+				SqlStatement stmt = CharacterDatabase.CreateStatement(insertAuras, "INSERT INTO character_aura_suspended (guid, caster_guid, item_guid, spell, stackcount, remaincharges, "
+					"basepoints0, basepoints1, basepoints2, periodictime0, periodictime1, periodictime2, maxduration, remaintime, effIndexMask) "
+					"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+
+				stmt.addUInt32(GetGUIDLow());
+				stmt.addUInt64(s.caster_guid.GetRawValue());
+				stmt.addUInt32(s.item_lowguid);
+				stmt.addUInt32(s.spellid);
+				stmt.addUInt32(s.stackcount);
+				stmt.addUInt8(s.remaincharges);
+
+				for (uint32 i = 0; i < MAX_EFFECT_INDEX; ++i)
+					stmt.addInt32(s.damage[i]);
+
+				for (uint32 i = 0; i < MAX_EFFECT_INDEX; ++i)
+					stmt.addUInt32(s.periodicTime[i]);
+
+				stmt.addInt32(s.maxduration);
+				stmt.addInt32(s.remaintime);
+				stmt.addUInt32(s.effIndexMask);
+				stmt.Execute();
+
+				suspendMessage += "Suspended " + sSpellMgr.GetSpellEntry(s.spellid)->SpellName[0];
+
+				if (s.spellid == 23768)
+					suspendMessage += " " + std::to_string(s.damage[0]) + "%%";
+
+				suspendMessage += " (" + std::to_string((int)round(s.remaintime / MINUTE / IN_MILLISECONDS)) + "m).\n";
+
+			}
+		}
+	}
+
+	if (suspendMessage.empty())
+	{
+		ChatHandler(this).PSendSysMessage("No world effects found.");
+		return false;
+	}
+	else
+	{
+		for (int i = 0; i < MAX_WORLD_BUFFS; i++)
+			RemoveAurasDueToSpell(WorldBuffs[i]);
+
+		ChatHandler(this).PSendSysMessage(suspendMessage.c_str());
+		ChatHandler(this).PSendSysMessage("While a world effect is suspended, you cannot benefit from it.");
+
+		// remove Chronoboon Displacer
+		DestroyItemCount(83000, 1, true);
+		SaveInventoryAndGoldToDB();
+
+		// add Supercharged Chronoboon Displacer
+		AddItem(83001);
+
+		CastSpell(this, 14867, true);
+		
+	}
+
+	return true;
+}
+
+/* Buffs the player whith WorldBuffs are saved in character_aura_suspended and clears them from character_aura_suspended */
+bool Player::RestoreSuspendedWorldBuffs()
+{
+
+	if (isInCombat())
+	{
+		GetSession()->SendNotification("You can't do that while in combat.");
+		return false;
+	}
+	else if (InArena())
+	{
+		GetSession()->SendNotification("You can't do that while in Arena.");
+		return false;
+	}
+	else if (InBattleGround())
+	{
+		GetSession()->SendNotification("You can't do that while in a Battleground.");
+		return false;
+	}
+	else if (GetMap() && GetMap()->IsRaid() && GetInstanceData() && GetInstanceData()->IsEncounterInProgress())
+	{
+		GetSession()->SendNotification("You can't do that during raid encounters.");
+		return false;
+	}
+
+	QueryResult *auras = CharacterDatabase.PQuery("SELECT caster_guid,item_guid,spell,stackcount,remaincharges,basepoints0,basepoints1,"
+		"basepoints2,periodictime0,periodictime1,periodictime2,maxduration,remaintime,effIndexMask "
+		"FROM character_aura_suspended WHERE guid = '%u'", GetGUIDLow());
+
+	if (!auras)
+	{
+		ChatHandler(this).PSendSysMessage("No suspended world effects found.");
+		// remove supercharged chronoboon displacer
+		DestroyItemCount(83001, 1, true);
+		SaveInventoryAndGoldToDB();
+		return true;
+	}
+		
+	do
+	{
+		Field *fields = auras->Fetch();
+		AuraSaveStruct s;
+		s.caster_guid = ObjectGuid(fields[0].GetUInt64());
+		s.item_lowguid = fields[1].GetUInt32();
+		s.spellid = fields[2].GetUInt32();
+		s.stackcount = fields[3].GetUInt32();
+		s.remaincharges = fields[4].GetUInt32();
+
+		for (int32 i = 0; i < MAX_EFFECT_INDEX; ++i)
+		{
+			s.damage[i] = fields[i + 5].GetInt32();
+			s.periodicTime[i] = fields[i + 8].GetUInt32();
+		}
+
+		s.maxduration = fields[11].GetInt32();
+		s.remaintime = fields[12].GetInt32();
+		s.effIndexMask = fields[13].GetUInt32();
+
+		LoadAura(s, s.remaintime);
+
+		CharacterDatabase.PExecute("DELETE FROM character_aura_suspended WHERE guid = %u and spell = %u", s.caster_guid, s.spellid);
+
+		std::string fortunePercent = "";
+		if (s.spellid == 23768)
+			fortunePercent = " " + std::to_string(s.damage[0]) + "%";
+
+		ChatHandler(this).PSendSysMessage("Restored %s%s (%sm).",
+			sSpellMgr.GetSpellEntry(s.spellid)->SpellName[0].c_str(),
+			fortunePercent,
+			std::to_string((int)round(s.remaintime / MINUTE / IN_MILLISECONDS)).c_str());
+
+
+	} while (auras->NextRow());
+
+	delete auras;
+
+	// remove supercharged chronoboon displacer
+	DestroyItemCount(83001, 1, true);
+	SaveInventoryAndGoldToDB();
+
+	CastSpell(this, 14867, true);
+
+	return true;
+}
+
+/* Removes buffs from player if he has them in character_aura_suspended */
+void Player::RemoveWorldBuffsIfAlreadySuspended()
+{
+	// only if player has item that restores them, Supercharged Chronoboon Displacer id 83001
+	if (HasItemCount(83001, 1, true))
+	{
+		// get current buffs
+		SpellAuraHolderMap const& auraHolders = GetSpellAuraHolderMap();
+
+		uint32 WorldBuffsToRemove[MAX_WORLD_BUFFS];
+		for (int i = 0; i < MAX_WORLD_BUFFS; i++)
+			WorldBuffsToRemove[i] = 0;
+
+		if (!auraHolders.empty())
+		{
+			AuraSaveStruct s;
+			for (SpellAuraHolderMap::const_iterator itr = auraHolders.begin(); itr != auraHolders.end(); ++itr)
+			{
+				SpellAuraHolder *holder = itr->second;
+
+				if (!SaveAura(holder, s))
+					continue;
+
+				for (int i = 0; i < MAX_WORLD_BUFFS; i++)
+				{
+					// check if buff is suspendable worldbuff
+					if (s.spellid == WorldBuffs[i])
+					{
+						// check if its alreayd suspended
+						QueryResult *auras = CharacterDatabase.PQuery("SELECT spell "
+							"FROM character_aura_suspended "
+							"WHERE guid = '%u' and spell = '%u'", GetGUIDLow(), s.spellid);
+
+						if (!auras)
+							continue;
+
+						if (auras->GetRowCount() > 0)
+							WorldBuffsToRemove[i] = s.spellid;
+							
+						delete auras;
+					}
+				}
+			}
+		}
+		for (int i = 0; i < MAX_WORLD_BUFFS; i++)
+		{
+			if (WorldBuffsToRemove[i] != 0)
+			{
+				RemoveAurasDueToSpell(WorldBuffsToRemove[i]);
+				ChatHandler(this).PSendSysMessage("Cannot benefit from %s, world effect already suspended.", sSpellMgr.GetSpellEntry(WorldBuffsToRemove[i])->SpellName[0].c_str());
+			}
+		}
+	}
 }
