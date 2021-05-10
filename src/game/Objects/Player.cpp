@@ -19180,13 +19180,16 @@ float Player::GetReputationPriceDiscount(Creature const* pCreature) const
         case 47:  // Ironforge
         case 54:  // Gnomeregan
         case 69:  // Darnassus
+        case 269: // Silvermoon Remnants
         case 730: // Stormpike Guard
         // Horde
-        case 68:  // Undercity
-        case 76:  // Orgrimmar
-        case 81:  // Thunder Bluff
-        case 530: // Darkspear
-        case 729: // Frostwolf Clan
+        case 68:   // Undercity
+        case 76:   // Orgrimmar
+        case 81:   // Thunder Bluff
+        case 530:  // Darkspear
+        case 1001: // Durotar Labor Union
+        case 893:  // Revantusk Trolls
+        case 729:  // Frostwolf Clan
         {
             // honor rank >= 3
             if (m_honorMgr.GetRank().visualRank >= 3)
