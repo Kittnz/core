@@ -194,3 +194,5 @@ update quest_template set requiredraces = 589 where entry = 5001;
 update quest_template set requiredraces = 434 where entry = 4982;
 
 delete from creature_loot_template where item = 20697;
+
+update item_template set description = 'Appearances of this beloved and ultra-reclusive murloc are sure to draw a crowd.' where entry = 20371;
