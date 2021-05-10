@@ -196,3 +196,7 @@ update quest_template set requiredraces = 434 where entry = 4982;
 delete from creature_loot_template where item = 20697;
 
 update item_template set description = 'Appearances of this beloved and ultra-reclusive murloc are sure to draw a crowd.' where entry = 20371;
+
+-- Theramore Deserters that were added in TBC.
+DELETE FROM `creature` WHERE `guid` IN (30741, 30769, 30770, 30742, 30772, 30773, 30771, 30774, 30776);
+DELETE FROM `creature_addon` WHERE `guid` = 30741;
