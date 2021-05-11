@@ -175,7 +175,7 @@ UPDATE `creature_template` SET `mechanic_immune_mask` = 1023391482 WHERE `entry`
 
 REPLACE INTO `gameobject_template` VALUES (3000105, 0, 1, 2091, 'Zeppelin\'s Shortwave Radio', 0, 0, 0.4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_expansion_radio');
 
-update gameobject set spawntimesecsmin = 36000, spawntimesecsmax = 40000 where id = 153464 and spawntimesecsmin < 18000;
+update gameobject set spawntimesecsmin = 36000, spawntimesecsmax = 40000 where id in (153464, 2843) and spawntimesecsmin < 18000;
 
 UPDATE `battleground_template` SET `min_players_per_team`='2', `max_players_per_team`='2' WHERE (`id`='4') AND (`patch`='0');
 
