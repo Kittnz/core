@@ -385,3 +385,4 @@ INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `pos
 (46825, 31, 8647.808, 868.63934, 23.212633, 100, 0, 0),
 (46825, 32, 8644.208, 853.2105, 22.355267, 100, 0, 0);
 
+UPDATE `quest_template` SET `RequiredSkillValue`='70' WHERE (`entry`='1582') AND (`patch`='0');
