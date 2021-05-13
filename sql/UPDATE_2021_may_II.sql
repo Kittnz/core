@@ -200,3 +200,7 @@ update item_template set description = 'Appearances of this beloved and ultra-re
 -- Theramore Deserters that were added in TBC.
 DELETE FROM `creature` WHERE `guid` IN (30741, 30769, 30770, 30742, 30772, 30773, 30771, 30774, 30776);
 DELETE FROM `creature_addon` WHERE `guid` = 30741;
+
+-- Post May 13.
+
+UPDATE `creature_template` SET `level_min`='8', `level_max`='11', `health_min`='432', `health_max`='619', `armor`='10', `rank`='1', `dmg_min`='27', `dmg_max`='43', `attack_power`='40', `regeneration`='1' WHERE (`entry`='5435') AND (`patch`='0');
