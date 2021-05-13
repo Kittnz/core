@@ -489,7 +489,7 @@ bool GOSelect_go_flying_machine(Player* pPlayer, GameObject* pGo, uint32 sender,
 		{
 			pPlayer->ModifyMoney(-cost);
 			pPlayer->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, 18510);
-			pPlayer->TeleportTo(1, -6103.890000F, -3872.739700F, 145.055800F, 3.567656F);
+			pPlayer->TeleportTo(1, -6103.890000F, -3872.739700F, 125.055800F, 3.567656F);
 			pPlayer->CastSpell(pPlayer, 130, true);
 		}
 		else
