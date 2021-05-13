@@ -14,14 +14,14 @@ REPLACE INTO `item_template` VALUES (70021, 0, 12, 0, 'Bog Creature Core', '', 1
 replace into creature_loot_template values (3782, 70021, -100, 6, 1, 1, 0, 0, 10); 
 replace into creature_loot_template values (3784, 70021, -100, 6, 1, 1, 0, 0, 10); 
 
-replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, objectivetext1, objectivetext2, objectivetext3, objectivetext4, srcitemid, srcitemcount, reworreqmoney, rewmoneymaxlevel, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (70020,70021,331,20,18,0,0,'Taupo\’s Duty','It was Earthmother’s blessing to be born with such a worried elder brother, and as fate has it there you are, just the help that I needed.\n\nWhile I was making my way to the Lumber Camp I saw this Tauren bravely fight those demons and I have stopped to tend to his wounds. My skills helped stop his bleeding, but we need a salve to fully mend him.\n\nIn the river you will find Boglings, slay them and bring me the cores, they will help bring our newest friend back on his feet, and do not worry $N, this is all in the name of balance.','Bring Kaga 10 Bog Creatures Core.','Yes?','Thank you $N, this will mend our friend.',70021,10,0,0,0,0,0,0,'','','','',0,0,0,1050,81,75,0,0,0,0,0,0,0,0,0,1970,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, objectivetext1, objectivetext2, objectivetext3, objectivetext4, srcitemid, srcitemcount, reworreqmoney, rewmoneymaxlevel, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (70020,70021,331,20,18,0,0,'Taupo\’s Duty','It was Earthmother’s blessing to be born with such a worried elder brother, and as fate has it there you are, just the help that I needed.\n\nWhile I was making my way to the Lumber Camp I saw this Tauren bravely fight those demons and I have stopped to tend to his wounds. My skills helped stop his bleeding, but we need a salve to fully mend him.\n\nIn the river you will find Boglings, slay them and bring me the cores, they will help bring our newest friend back on his feet, and do not worry $N, this is all in the name of balance.','Bring Taupo 10 Bog Creatures\' Cores.','Yes?','Thank you $N, this will mend our friend.',70021,10,0,0,0,0,0,0,'','','','',0,0,0,1050,81,75,0,0,0,0,0,0,0,0,0,1970,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
 
 replace into creature_questrelation (id, quest, patch_min, patch_max) values (70020, 70021,'0','10'); 
 replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (70020, 70021,'0','10');
 
 REPLACE INTO `creature_template` VALUES (70022, 0, 2951, 0, 0, 0, 'Norvok Hawkspear', NULL, 0, 25, 34, 2868, 2868, 0, 0, 2463, 104, 2, 1, 1.14286, 1.35, 20, 5, 0, 0, 1, 68, 88, 0, 194, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 60.7904, 83.5868, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, '');
 
-replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, objectivetext1, objectivetext2, objectivetext3, objectivetext4, srcitemid, srcitemcount, reworreqmoney, rewmoneymaxlevel, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (70021,70022,331,21,19,0,0,'Norvok of the Spear','I was on my way to the Warsong Lumber Camp when I had my encounter with the demons, were it not for this druid I wouldn’t have made it.\n\nI have a very important report addressed to the stationary Commander in charge, Commander Grushak, I would hurry right away but the wounds have yet to release me of my pain and my spear was lost in the battle.\n\nI ask you to find while it Taupo heals me, and $n, while you do this, spare no demon.','Kill 10 Searing Infernals and 10 Felguards, return to Norvok. ','Yes?','My horns are ready and sharpened, alas my spear was stolen by those demons, the vermin felt the blessings of the Earthmother on it!\n\nIt’s not your fault $N, you’ve bravely fought them and for that I am in your debt, here, have this necklace as a token of my gratitude.',0,0,0,0,0,0,0,0,'','','','',0,0,0,1050,81,75,0,0,0,0,0,0,0,0,0,70003,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, objectivetext1, objectivetext2, objectivetext3, objectivetext4, srcitemid, srcitemcount, reworreqmoney, rewmoneymaxlevel, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (70021,70022,331,21,19,0,0,'Norvok of the Spear','I was on my way to the Warsong Lumber Camp when I had my encounter with the demons, were it not for this druid I wouldn’t have made it.\n\nI have a very important report addressed to the stationary Commander in charge, Commander Grushak, I would hurry right away but the wounds have yet to release me of my pain and my spear was lost in the battle.\n\nI ask you to find it while Taupo heals me. While you search for it - spare no demon.','Kill 10 Searing Infernals and 10 Felguards.','Yes?','My horns are ready and sharpened, alas my spear was stolen by those demons, the vermin felt the blessings of the Earthmother on it!\n\nIt’s not your fault $N, you’ve bravely fought them and for that I am in your debt, here, have this necklace as a token of my gratitude.',0,0,0,0,0,0,0,0,'','','','',0,0,0,1050,81,75,0,0,0,0,0,0,0,0,0,70003,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
 
 replace into creature_questrelation (id, quest, patch_min, patch_max) values (70022, 70022,'0','10'); 
 replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (70022, 70022,'0','10');
@@ -204,3 +204,184 @@ DELETE FROM `creature_addon` WHERE `guid` = 30741;
 -- Post May 13.
 
 UPDATE `creature_template` SET `level_min`='8', `level_max`='11', `health_min`='432', `health_max`='619', `armor`='10', `rank`='1', `dmg_min`='27', `dmg_max`='43', `attack_power`='40', `regeneration`='1' WHERE (`entry`='5435') AND (`patch`='0');
+
+-- Down the Ridge quest zone:
+update quest_template set zoneorsort = 9 where entry = 60145;
+
+-- Knobby's spawntimer:
+update creature set spawntimesecsmin = 36000, spawntimesecsmax = 40000 where id = 80901;
+
+-- Fix wrong quest id for A Donation of Wool.
+
+UPDATE `creature_questrelation` SET `quest`=7792 WHERE `quest`=7797;
+UPDATE `creature_involvedrelation` SET `quest`=7792 WHERE `quest`=7797;
+UPDATE `quest_template` SET `PrevQuestId`=7792 WHERE `PrevQuestId`=7797;
+UPDATE `quest_template` SET `NextQuestId`=7792 WHERE `NextQuestId`=7797;
+UPDATE `quest_template` SET `NextQuestInChain`=7792 WHERE `NextQuestInChain`=7797;
+UPDATE `quest_template` SET `ExclusiveGroup`=-7792 WHERE `ExclusiveGroup`=-7797;
+UPDATE `quest_template` SET `entry`=7792 WHERE `entry`=7797;
+
+-- mana surge should not drop loot 
+UPDATE `creature_template` SET `gold_min` = 0, `gold_max` = 0 WHERE `entry` = 6550;
+
+-- quest 813 should be repeatable
+UPDATE `quest_template` SET `SpecialFlags` = 1 WHERE `entry` = 813;
+
+-- Witherbark Bloodling should not drop loot
+UPDATE `creature_template` SET `gold_min` = 0, `gold_max` = 0 WHERE `entry`= 7768;
+
+-- musty tome must despawn after used (has that flag set up.. but with restock timer it will never happen)
+-- UPDATE `gameobject_template` SET `data2`=0 WHERE `entry` IN (176150,176151);
+UPDATE `gameobject` SET `spawntimesecsmin` = 60, `spawntimesecsmax` = 60 WHERE id = 176151;
+UPDATE `gameobject` SET `spawntimesecsmin` = 60, `spawntimesecsmax` = 60 WHERE id = 176150;
+
+
+-- Events list for Venture Co. Drudger
+DELETE FROM `creature_ai_events` WHERE `creature_id`=3284;
+INSERT INTO `creature_ai_events` (`id`, `creature_id`, `condition_id`, `event_type`, `event_inverse_phase_mask`, `event_chance`, `event_flags`, `event_param1`, `event_param2`, `event_param3`, `event_param4`, `action1_script`, `action2_script`, `action3_script`, `comment`) VALUES (328401, 3284, 0, 2, 0, 100, 0, 20, 0, 0, 0, 328401, 0, 0, 'Venture Co. Drudger - Flee at 20% HP');
+INSERT INTO `creature_ai_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (328401, 0, 47, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Venture Co. Drudger - Flee');
+
+-- Events list for Venture Co. Peon
+DELETE FROM `creature_ai_events` WHERE `creature_id`=3285;
+INSERT INTO `creature_ai_events` (`id`, `creature_id`, `condition_id`, `event_type`, `event_inverse_phase_mask`, `event_chance`, `event_flags`, `event_param1`, `event_param2`, `event_param3`, `event_param4`, `action1_script`, `action2_script`, `action3_script`, `comment`) VALUES (328501, 3285, 0, 2, 0, 100, 0, 20, 0, 0, 0, 328501, 0, 0, 'Venture Co. Peon - Flee at 20% HP');
+INSERT INTO `creature_ai_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (328501, 0, 47, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Venture Co. Peon - Flee');
+
+-- Events list for  Theramore Marine
+DELETE FROM `creature_ai_events` WHERE `creature_id`=3385;
+INSERT INTO `creature_ai_events` (`id`, `creature_id`, `condition_id`, `event_type`, `event_inverse_phase_mask`, `event_chance`, `event_flags`, `event_param1`, `event_param2`, `event_param3`, `event_param4`, `action1_script`, `action2_script`, `action3_script`, `comment`) VALUES (338501, 3385, 0, 2, 0, 100, 0, 20, 0, 0, 0, 338501, 0, 0, 'Theramore Marine - Flee at 20% HP');
+INSERT INTO `creature_ai_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (338501, 0, 47, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Theramore Marine - Flee');
+
+
+-- make some of npcs walk correctly on theirs path (credit cmangos)
+-- chepi 8361
+UPDATE `creature_template` SET `inhabit_type` = 3 WHERE `entry` = 8361;
+
+-- bluff runner windstrider 10881
+UPDATE `creature_template` SET `inhabit_type` = 3 WHERE `entry` = 10881;
+
+-- hunter sagewind 14440
+UPDATE `creature_template` SET `inhabit_type` = 3 WHERE `entry` = 14440;
+
+-- hunter ragetotem 14441
+UPDATE `creature_template` SET `inhabit_type` = 3 WHERE `entry` = 14441; 
+
+UPDATE `creature_template` SET `school_immune_mask`= 8 WHERE `entry` = 5855;
+
+-- make weaver immune to nature (credit cmangos)
+UPDATE `creature_template` SET `school_immune_mask` = 8 WHERE `entry` = 5720;
+
+-- add SrcSpell to bring the light (credit cmangos)
+UPDATE `quest_template` SET `SrcSpell` = 2791 WHERE `entry` = 3636;
+
+-- update bluff runner windstrider waypoints (credit cmangos)
+UPDATE `creature` SET `position_x` = -1258.878, `position_y` = 53.962566, `position_z` = 126.969604 WHERE id = 10881;
+DELETE FROM `creature_movement` WHERE `id` IN (SELECT `guid` FROM `creature` WHERE `id` = 10881);
+DELETE FROM `creature_movement_template` WHERE `entry` = 10881;
+INSERT INTO `creature_movement_template` (`entry`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `script_id`) VALUES
+(10881, 1, -1258.878, 53.962566, 126.969604, 100, 0, 0),
+(10881, 2, -1246.9214, 65.498535, 127.314575, 100, 0, 0),
+(10881, 3, -1224.9215, 87.38759, 131.42007, 100, 0, 0),
+(10881, 4, -1210.0996, 106.45025, 134.02478, 100, 0, 0),
+(10881, 5, -1205.4197, 118.94437, 134.62341, 100, 0, 0),
+(10881, 6, -1210.4836, 129.97784, 134.47864, 100, 0, 0),
+(10881, 7, -1224.1403, 138.96002, 133.51216, 100, 0, 0),
+(10881, 8, -1242.7533, 133.13496, 132.38449, 100, 0, 0),
+(10881, 9, -1263.6498, 129.13365, 131.77036, 100, 0, 0),
+(10881, 10, -1278.4678, 122.21289, 131.34344, 100, 0, 0),
+(10881, 11, -1292.0016, 108.51972, 131.21844, 100, 0, 0),
+(10881, 12, -1279.579, 89.99417, 129.15378, 100, 0, 0),
+(10881, 13, -1265.1466, 72.79845, 127.73132, 100, 0, 0),
+(10881, 14, -1246.938, 66.752495, 127.50574, 100, 0, 0),
+(10881, 15, -1225.2654, 87.69873, 131.45486, 100, 0, 0),
+(10881, 16, -1209.452, 106.00795, 134.10266, 100, 0, 0),
+(10881, 17, -1204.6263, 118.88873, 134.81384, 100, 0, 0),
+(10881, 18, -1209.9927, 130.29185, 134.53772, 100, 0, 0),
+(10881, 19, -1224.5853, 137.18607, 133.47163, 100, 0, 0),
+(10881, 20, -1242.8, 133.86388, 132.55144, 100, 0, 0),
+(10881, 21, -1264.6481, 129.59421, 131.83456, 100, 0, 0),
+(10881, 22, -1291.852, 107.38696, 131.2923, 100, 0, 0),
+(10881, 23, -1263.6343, 73.05393, 127.68298, 100, 0, 0),
+(10881, 24, -1271.1027, 62.49056, 127.41394, 100, 0, 0),
+(10881, 25, -1297.4215, 60.88097, 128.78162, 100, 0, 0),
+(10881, 26, -1323.3235, 55.73557, 129.12485, 100, 0, 0),
+(10881, 27, -1331.5046, 43.56836, 129.24985, 100, 0, 0),
+(10881, 28, -1328.7695, 28.182346, 129.32643, 100, 0, 0),
+(10881, 29, -1321.5947, 15.010742, 130.22414, 100, 0, 0),
+(10881, 30, -1313.2676, 5.03125, 132.57643, 100, 0, 0),
+(10881, 31, -1298.2849, 0.096191, 133.16522, 100, 0, 0),
+(10881, 32, -1285.0809, -2.094455, 134.23892, 100, 0, 0),
+(10881, 33, -1278.8915, -16.228027, 140.63223, 100, 0, 0),
+(10881, 34, -1279.4957, -21.175594, 142.65372, 100, 0, 0),
+(10881, 35, -1280.5413, -31.30919, 146.36734, 100, 0, 0),
+(10881, 36, -1280.6606, -36.26666, 148.2692, 100, 0, 0),
+(10881, 37, -1281.3783, -47.740993, 152.14688, 100, 0, 0),
+(10881, 38, -1281.7482, -58.54069, 155.19382, 100, 0, 0),
+(10881, 39, -1282.2838, -70.57406, 157.78886, 100, 0, 0),
+(10881, 40, -1267.4594, -79.44803, 162.63017, 100, 0, 0),
+(10881, 41, -1254.8102, -78.07655, 162.99677, 100, 0, 0),
+(10881, 42, -1230.3444, -67.61344, 162.36197, 100, 0, 0),
+(10881, 43, -1228.4113, -82.74897, 162.67325, 100, 0, 0),
+(10881, 44, -1219.8137, -97.4598, 162.8417, 100, 0, 0),
+(10881, 45, -1201.5387, -100.09386, 162.89145, 100, 0, 0),
+(10881, 46, -1192.1188, -91.5574, 162.72011, 100, 0, 0),
+(10881, 47, -1185.5045, -81.63634, 162.54579, 100, 0, 0),
+(10881, 48, -1184.0348, -66.65267, 161.89906, 100, 0, 0),
+(10881, 49, -1188.6537, -50.857475, 161.88515, 100, 0, 0), 
+(10881, 50, -1200.2048, -36.68023, 162.40787, 100, 0, 0),
+(10881, 51, -1212.2988, -33.86388, 163.08316, 100, 0, 0),
+(10881, 52, -1222.895, -45.217556, 162.96524, 100, 0, 0),
+(10881, 53, -1229.6758, -59.198895, 162.7106, 100, 0, 0),
+(10881, 54, -1232.1641, -69.4713, 162.50626, 100, 0, 0),
+(10881, 55, -1253.0083, -78.41298, 162.99677, 100, 0, 0),
+(10881, 56, -1267.7615, -80.29845, 162.65508, 100, 0, 0),
+(10881, 57, -1282.3258, -71.691734, 158.1978, 100, 0, 0),
+(10881, 58, -1282.0757, -58.58692, 155.54141, 100, 0, 0),
+(10881, 59, -1282.3276, -48.19157, 152.46475, 100, 0, 0),
+(10881, 60, -1281.4308, -31.95459, 146.76236, 100, 0, 0),
+(10881, 61, -1279.5905, -15.625922, 140.13492, 100, 0, 0),
+(10881, 62, -1286.704, -1.506185, 134.09781, 100, 0, 0),
+(10881, 63, -1300.445, 0.512207, 133.07643, 100, 0, 0),
+(10881, 64, -1314.4199, 5.9609375, 132.32643, 100, 0, 0),
+(10881, 65, -1328.3633, 27.155544, 129.32643, 100, 0, 0),
+(10881, 66, -1332.2041, 43.451225, 129.24985, 100, 0, 0),
+(10881, 67, -1323.8455, 55.51096, 129.12485, 100, 0, 0),
+(10881, 68, -1297.5516, 61.62397, 128.66028, 100, 0, 0),
+(10881, 69, -1271.4805, 63.266655, 127.550415, 100, 0, 0);
+
+-- update darnassus sentinel waypoints (credit cmangos)
+UPDATE `creature` SET `position_x` = 8644.208, `position_y` = 853.2105, `position_z` = 22.355267, `orientation` = 1.50239 WHERE `guid` = 46825;
+DELETE FROM `creature_movement` WHERE `id` = 46825;
+INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime` , `script_id`) VALUES
+(46825, 1, 8647.808, 868.63934, 23.212633, 100, 0, 0),
+(46825, 2, 8657.981, 873.3514, 22.37611, 100, 0, 0),
+(46825, 3, 8670.864, 876.9106, 22.123152, 100, 0, 0),
+(46825, 4, 8680.514, 881.326, 23.230516, 100, 0, 0),
+(46825, 5, 8685.484, 889.3323, 22.422583, 100, 0, 0),
+(46825, 6, 8686.014, 904.0842, 21.40408, 100, 0, 0),
+(46825, 7, 8687.324, 922.13214, 16.083908, 100, 0, 0),
+(46825, 8, 8689.776, 930.66925, 15.553102, 100, 0, 0),
+(46825, 9, 8696.605, 941.5968, 13.781057, 100, 0, 0),
+(46825, 10, 8696.757, 949.54407, 13.006399, 100, 0, 0),
+(46825, 11, 8695.549, 956.4781, 12.202627, 100, 0, 0),
+(46825, 12, 8691.133, 966.0688, 11.514212, 100, 0, 0),
+(46825, 13, 8684.711, 974.0922, 10.755286, 100, 0, 0),
+(46825, 14, 8676.798, 984.3464, 8.006629, 100, 0, 0),
+(46825, 15, 8682.726, 987.4831, 9.514258, 100, 0, 0),
+(46825, 16, 8689.632, 988.9705, 11.368621, 100, 0, 0),
+(46825, 17, 8682.726, 987.4831, 9.514258, 100, 0, 0),
+(46825, 18, 8676.798, 984.3464, 8.006629, 100, 0, 0),
+(46825, 19, 8684.711, 974.0922, 10.755286, 100, 0, 0),
+(46825, 20, 8691.133, 966.0688, 11.514212, 100, 0, 0),
+(46825, 21, 8695.549, 956.4781, 12.202627, 100, 0, 0),
+(46825, 22, 8696.757, 949.54407, 13.006399, 100, 0, 0),
+(46825, 23, 8696.605, 941.5968, 13.781057, 100, 0, 0),
+(46825, 24, 8689.776, 930.66925, 15.553102, 100, 0, 0),
+(46825, 25, 8687.324, 922.13214, 16.083908, 100, 0, 0),
+(46825, 26, 8686.014, 904.0842, 21.40408, 100, 0, 0),
+(46825, 27, 8685.484, 889.3323, 22.422583, 100, 0, 0),
+(46825, 28, 8680.514, 881.326, 23.230516, 100, 0, 0),
+(46825, 29, 8670.864, 876.9106, 22.123152, 100, 0, 0),
+(46825, 30, 8657.981, 873.3514, 22.37611, 100, 0, 0),
+(46825, 31, 8647.808, 868.63934, 23.212633, 100, 0, 0),
+(46825, 32, 8644.208, 853.2105, 22.355267, 100, 0, 0);
+
