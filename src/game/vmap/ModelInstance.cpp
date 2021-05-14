@@ -21,8 +21,17 @@
 #include "MapTree.h"
 #include "VMapDefinitions.h"
 
+#include <array>
+
 using G3D::Vector3;
 using G3D::Ray;
+
+//Hackfix for some no LoS M2's, should re-extract vmaps :(
+static std::array<std::string, 2> NoLosM2s =
+{
+    "brokengateside01.m2",
+    "brokengateside02.m2"
+};
 
 namespace VMAP
 {
@@ -222,6 +231,11 @@ bool ModelSpawn::readFromFile(FILE* rf, ModelSpawn& spawn)
         return false;
     }
     spawn.name = std::string(nameBuff, nameLen);
+
+    //Hackfix for some no-LoS M2s
+    if (std::find(NoLosM2s.begin(), NoLosM2s.end(), spawn.name) != NoLosM2s.end())
+        spawn.flags |= MOD_NO_BREAK_LOS;
+
     return true;
 }
 
