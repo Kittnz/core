@@ -22711,7 +22711,7 @@ bool Player::RestoreSuspendedWorldBuffs()
 
 		ChatHandler(this).PSendSysMessage("Restored %s%s (%sm).",
 			sSpellMgr.GetSpellEntry(s.spellid)->SpellName[0].c_str(),
-			fortunePercent,
+			fortunePercent.c_str(),
 			std::to_string((int)round(s.remaintime / MINUTE / IN_MILLISECONDS)).c_str());
 
 
