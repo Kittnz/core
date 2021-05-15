@@ -393,4 +393,6 @@ REPLACE INTO `creature_template` VALUES (70018, 0, 15595, 0, 0, 0, 'Finn', '', 0
 
 update creature_template set scale = 0.4 where entry = 70018;
 
+update item_template set class = 15, subclass = 2, quality = 1 where entry = 81248;
+
 replace into custom_pet_entry_relation values (81248, 70018);
