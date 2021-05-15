@@ -386,3 +386,11 @@ INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `pos
 (46825, 32, 8644.208, 853.2105, 22.355267, 100, 0, 0);
 
 UPDATE `quest_template` SET `RequiredSkillValue`='70' WHERE (`entry`='1582') AND (`patch`='0');
+
+REPLACE INTO `item_template` VALUES (81248, 0, 15, 0, 'Finn the Shark', 'Big and safe to have at your side if you want to discover the world underneath the sea.', 33467, 1, 0, 1, 6000, 1500, 0, -1, -1, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 28505, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+
+REPLACE INTO `creature_template` VALUES (70018, 0, 15595, 0, 0, 0, 'Finn', '', 0, 1, 1, 64, 64, 0, 0, 0, 35, 0, 1, 1.14286, 1, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, '');
+
+update creature_template set scale = 0.4 where entry = 70018;
+
+replace into custom_pet_entry_relation values (81248, 70018);
