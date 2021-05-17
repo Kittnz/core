@@ -274,11 +274,50 @@ CreatureAI* GetAI_boss_dark_reaver(Creature *creature)
     return new boss_dark_reaverAI(creature);
 }
 
+struct lurking_shadowAI : public ScriptedAI
+{
+    lurking_shadowAI(Creature *c) : ScriptedAI(c)
+    {
+        Reset();
+    }
+
+    void Reset()
+    {
+
+    }
+
+    void JustDied(Unit* /*pKiller*/)
+    {
+
+    }
+
+    void DamageTaken(Unit* /*done_by*/, uint32& damage)
+    {
+
+    }
+
+    void UpdateAI(const uint32 diff)
+    {
+
+    }
+};
+
+CreatureAI* GetAI_lurking_shadow(Creature *creature)
+{
+    return new lurking_shadowAI(creature);
+}
+
 void AddSC_boss_dark_reaver()
 {
     Script *newscript;
+
     newscript = new Script;
     newscript->Name = "boss_dark_reaver";
     newscript->GetAI = &GetAI_boss_dark_reaver;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "lurking_shadow";
+    newscript->GetAI = &GetAI_lurking_shadow;
     newscript->RegisterSelf();
 }
