@@ -408,3 +408,5 @@ replace into creature_questrelation (id, quest, patch_min, patch_max) values (46
 replace into creature_involvedrelation (id, quest, patch_min, patch_max) values (2140, 70040,'0','10');
 
 update creature_template set npc_flags = 6 where entry = 2140;
+
+update creature_template set health_min = 1610432, health_max = 1610432, dmg_min = 3420, dmg_max = 4236, level_min = 63, level_max = 63, shadow_res = 100 where entry = 15956;
