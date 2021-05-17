@@ -409,4 +409,6 @@ replace into creature_involvedrelation (id, quest, patch_min, patch_max) values 
 
 update creature_template set npc_flags = 6 where entry = 2140;
 
-update creature_template set health_min = 1610432, health_max = 1610432, dmg_min = 3420, dmg_max = 4236, level_min = 63, level_max = 63, shadow_res = 100 where entry = 15956;
+update creature_template set health_min = 1610432, health_max = 1610432, dmg_min = 3420, dmg_max = 4236, level_min = 63, level_max = 63, shadow_res = 100, script_name='boss_dark_reaver' where entry = 80936;
+update creature_template set mechanic_immune_mask = 0 where entry = 80937;
+REPLACE INTO `creature_template` VALUES (81266,0,12430,12431,13949,13950,'Lurking Shadow','',0,60,60,10348,10348,0,0,3640,21,0,1,1.14286,0,20,5,0,0,1,712,2422,0,272,1,1800,2000,2,0,0,0,0,0,0,0,71.9664,98.9538,100,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'',1,3,0,0,3,0,0,0,3167436667,0,256,'lurking_shadow');

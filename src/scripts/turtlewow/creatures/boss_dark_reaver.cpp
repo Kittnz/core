@@ -4,23 +4,27 @@
 
 enum
 {
-    SPELL_MOUNT             = 46224,
-    SPELL_CLEAVE            = 20684,
-    SPELL_STRIKE            = 26613,
-    SPELL_FURIOUS_ANGER     = 16791,
-    SPELL_NIMBLE_REFLEXES   = 6264,
-    SPELL_PIERCE_ARMOR      = 6016,
-    SPELL_DETERRENCE        = 19263,
+    // Dark Reaver spells
+    SPELL_MOUNT                      = 46224,
+    SPELL_CLEAVE                     = 20684,
+    SPELL_STRIKE                     = 26613,
+    SPELL_FURIOUS_ANGER              = 16791,
+    SPELL_NIMBLE_REFLEXES            = 6264,
+    SPELL_PIERCE_ARMOR               = 6016,
+    SPELL_DETERRENCE                 = 19263,
 
-    SPELL_GHOST_VISUAL      = 22650,
-    SPELL_TWISTING_NETHER   = 23700,
+    SPELL_GHOST_VISUAL               = 22650,
+    SPELL_TWISTING_NETHER            = 23700,
 
-    MOB_FORLORN_SPIRIT      = 80937,
+    MOB_FORLORN_SPIRIT               = 80937,
+    MOB_LURKING_SHADOW               = 81266,
+
+    DEADWIND_PASS_ZONE               = 41
 };
 
 enum EventStates
 {
-    STATE_ENRAGED   = 1,
+    STATE_ENRAGED   = 1
 };
 
 // I can't do math so this will suffice.
@@ -48,11 +52,11 @@ struct boss_dark_reaverAI : public ScriptedAI
 
     uint32 Cleave_Timer;
     uint32 Summon_Announce_Timer;
-    uint32 Summon_Timer;
     uint32 Reflex_Timer;
+    uint32 SummonLurkingShadow_Timer;
 
     time_t Last_Pierce_Time;
-    uint32 RepeatingSummonTime;
+    uint32 SkeletonSummonTime;
 
     uint8 Event_State;
     uint8 LastHealthPercentage;
@@ -66,11 +70,11 @@ struct boss_dark_reaverAI : public ScriptedAI
         DoCast(me, SPELL_MOUNT, true);
 
         Cleave_Timer = 12000;
-        Summon_Timer = 20000;
-        Reflex_Timer = 30000;
+        SummonLurkingShadow_Timer = 30000;
+        Reflex_Timer = 28500;
         Last_Pierce_Time = 0;
-        RepeatingSummonTime = 25000;
-        Summon_Announce_Timer = RepeatingSummonTime - 1500;
+        SkeletonSummonTime = 25000;
+        Summon_Announce_Timer = 23500;
 
         Event_State = 0;
         LastHealthPercentage = 100;
@@ -79,6 +83,8 @@ struct boss_dark_reaverAI : public ScriptedAI
     void Aggro(Unit *who)
     {
         m_creature->MonsterYell(urand(0, 1) ? AGGRO_TEXT_1 : AGGRO_TEXT_2);
+        if (who->IsPlayer())
+            SetGroupFFAPvP(who->ToPlayer());
 
         me->RemoveAurasDueToSpell(SPELL_MOUNT);
     }
@@ -86,6 +92,11 @@ struct boss_dark_reaverAI : public ScriptedAI
     void Reset()
     {
         SetDefaults();
+        // Make sure we despawn all Lurking Shadows on Reset.
+        std::list<Creature *> lCreature;
+        m_creature->GetCreatureListWithEntryInGrid(lCreature, MOB_LURKING_SHADOW, 200.0f);
+        for (std::list<Creature *>::iterator itr = lCreature.begin(); itr != lCreature.end(); ++itr)
+            (*itr)->ForcedDespawn();
     }
 
     void JustRespawned()
@@ -95,7 +106,8 @@ struct boss_dark_reaverAI : public ScriptedAI
 
     void JustReachedHome()
     {
-        DoCast(me, SPELL_MOUNT);
+        if (!m_creature->isInCombat())
+            DoCast(me, SPELL_MOUNT);
     }
 
     void KilledUnit(Unit* victim)
@@ -137,7 +149,7 @@ struct boss_dark_reaverAI : public ScriptedAI
             return;
 
         // Anti-leash protection
-        if (m_creature->GetZoneId() != 41) // Deadwind Pass
+        if (m_creature->GetZoneId() != DEADWIND_PASS_ZONE)
         {
             m_creature->MonsterYell(urand(0, 1) ? LEASH_TEXT_1 : LEASH_TEXT_2);
             EnterEvadeMode();
@@ -172,13 +184,13 @@ struct boss_dark_reaverAI : public ScriptedAI
         if (Summon_Announce_Timer < diff)
         {
             me->MonsterYell(urand(0, 1) ? SUMMON_TEXT_1 : SUMMON_TEXT_2);
-            Summon_Announce_Timer = RepeatingSummonTime - 1500;
+            Summon_Announce_Timer = 23500;
         }
         else
             Summon_Announce_Timer -= diff;
 
         // Summon Forlorn Spirit add (skeleton)
-        if (Summon_Timer < diff)
+        if (SkeletonSummonTime < diff)
         {
             // Pick a random, non-tank target within 25yds. If none, default to tank.
             Unit* randomTarget = GetRandomNearbyEnemyPlayer(me);
@@ -204,38 +216,66 @@ struct boss_dark_reaverAI : public ScriptedAI
 
             for (uint8 i = 0; i < 4; ++i)
             {
-                Creature* spawn = me->SummonCreature(MOB_FORLORN_SPIRIT,
+                if (Creature* spawn = me->SummonCreature(MOB_FORLORN_SPIRIT,
                     x + quikmafs[i][0],
                     y + quikmafs[i][1],
                     z,
                     o,
-                    TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN,
+                    TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT,
                     5000 // OOC Despawn time
-                );
-
-                spawn->AddAura(SPELL_GHOST_VISUAL);
-                spawn->CastSpell(spawn, SPELL_TWISTING_NETHER, true); // for visual
-
-                // Pass boss threat list, but tiny amount to simply know all targets.
-                for (auto t : me->getThreatManager().getThreatList())
+                ))
                 {
-                    if (!t || !t->isOnline())
-                        continue;
 
-                    float threatAmount = t->getSourceUnit() == randomTarget ? 5.0f : 0.01f;
-                    spawn->getThreatManager().addThreatDirectly(t->getTarget(), threatAmount);
+                    spawn->AddAura(SPELL_GHOST_VISUAL);
+                    spawn->CastSpell(spawn, SPELL_TWISTING_NETHER, true); // for visual
+
+                    // Pass boss threat list, but tiny amount to simply know all targets.
+                    for (auto t : me->getThreatManager().getThreatList())
+                    {
+                        if (!t || !t->isOnline())
+                            continue;
+
+                        float threatAmount = t->getSourceUnit() == randomTarget ? 5.0f : 0.01f;
+                        spawn->getThreatManager().addThreatDirectly(t->getTarget(), threatAmount);
+                    }
+
+                    // Set it combat with random target.
+                    spawn->SetInCombatWith(randomTarget);
+                    spawn->AI()->AttackStart(randomTarget);
                 }
-
-                // Set it combat with random target.
-                spawn->SetInCombatWith(randomTarget);
-                spawn->Attack(randomTarget, true);
-                spawn->GetMotionMaster()->MoveChase(randomTarget);
             }
 
-            Summon_Timer = RepeatingSummonTime;
+            SkeletonSummonTime = 25000;
         }
         else
-            Summon_Timer -= diff;
+            SkeletonSummonTime -= diff;
+
+        // Summon Lurking Shadow
+        if (SummonLurkingShadow_Timer < diff)
+        {
+            // Pick a random, non-tank target within 25yds. If none, default to tank.
+            Unit* randomTarget = GetRandomNearbyEnemyPlayer(me);
+            if (!randomTarget)
+                randomTarget = me->getVictim();
+
+            if (Creature* lurkingShadow = me->SummonCreature(MOB_LURKING_SHADOW,
+                                     randomTarget->GetPositionX(),
+                                     randomTarget->GetPositionY(),
+                                     randomTarget->GetPositionZ(),
+                                     randomTarget->GetAngle(randomTarget->GetPositionX(), randomTarget->GetPositionY()),
+                                     TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT,
+                                     5000 // OOC Despawn time
+            ))
+            {
+                lurkingShadow->getThreatManager().addThreatDirectly(randomTarget, 10000.0f);
+                lurkingShadow->SetInCombatWith(randomTarget);
+                lurkingShadow->AI()->AttackStart(randomTarget);
+            }
+
+            SummonLurkingShadow_Timer = urand(SkeletonSummonTime + 2000, SkeletonSummonTime + 10000);
+        }
+        else
+            SummonLurkingShadow_Timer -= diff;
 
         // Furious Anger (baby enrage) at 15%.
         if (me->GetHealthPercent() < 15 && !(Event_State & STATE_ENRAGED))
@@ -267,6 +307,25 @@ struct boss_dark_reaverAI : public ScriptedAI
 
         return random;
     }
+
+    void SetGroupFFAPvP(Player* pPlayer)
+    {
+        Group* pGroup = pPlayer->GetGroup();
+        if (!pGroup)
+        {
+            pPlayer->SetFFAPvP(true);
+            return;
+        }
+
+        for (GroupReference* itr = pGroup->GetFirstMember(); itr != nullptr; itr = itr->next())
+        {
+            if (Player *pMember = itr->getSource())
+            {
+                if (pMember->GetZoneId() == DEADWIND_PASS_ZONE)
+                    pMember->SetFFAPvP(true);
+            }
+        }
+    }
 };
 
 CreatureAI* GetAI_boss_dark_reaver(Creature *creature)
@@ -281,24 +340,35 @@ struct lurking_shadowAI : public ScriptedAI
         Reset();
     }
 
+    uint8 currentClass;
+
     void Reset()
     {
-
+        currentClass = -1;
     }
 
-    void JustDied(Unit* /*pKiller*/)
+    void Aggro(Unit* pWho)
     {
+        if (!pWho->IsPlayer())
+            return;
 
+        m_creature->MonsterTextEmote("A $c shadow appears next to $N...", pWho);
+        // Make the creature use the same weapon as the aggroer.
+        if (Item* aggroerWeapon = pWho->ToPlayer()->GetWeaponForAttack(BASE_ATTACK, false, true))
+            m_creature->SetVirtualItem(VIRTUAL_ITEM_SLOT_0, aggroerWeapon->GetEntry());
+        currentClass = pWho->ToPlayer()->getClass();
     }
 
-    void DamageTaken(Unit* /*done_by*/, uint32& damage)
+    void DamageTaken(Unit* source, uint32& damage)
     {
-
+        // Only allow damage from players being the same class as the one who aggroed the mob.
+        if (!source->IsPlayer() || source->ToPlayer()->getClass() != currentClass && currentClass != -1)
+            damage = 0;
     }
 
     void UpdateAI(const uint32 diff)
     {
-
+        DoMeleeAttackIfReady();
     }
 };
 
