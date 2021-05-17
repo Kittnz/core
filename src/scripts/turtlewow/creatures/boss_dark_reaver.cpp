@@ -38,11 +38,6 @@ constexpr auto DEATH_TEXT_2 = "The Master... is not... well...";
 constexpr auto LEASH_TEXT_1 = "Cowards! I will hunt you if you ever return!";
 constexpr auto LEASH_TEXT_2 = "Leave and never again enter these lands!";
 
-constexpr auto SCALE_TEXT_1 = "Do you fools not realize you only empower me further?";
-constexpr auto SCALE_TEXT_2 = "How foolish of you to believe numbers will save you, it will only quicken your demise!";
-
-// Expected group size for encounter. Change if you need to debug -- scaling will change.
-const uint8 NORMAL_GROUP_SIZE = 5;
 
 struct boss_dark_reaverAI : public ScriptedAI
 {
@@ -55,20 +50,13 @@ struct boss_dark_reaverAI : public ScriptedAI
     uint32 Summon_Announce_Timer;
     uint32 Summon_Timer;
     uint32 Reflex_Timer;
-    uint32 ScaleText_Timer;
 
-    uint8 Event_State;
-    uint8 Attackers_Count;
-    uint32 Biggest_Hit;
     time_t Last_Pierce_Time;
     uint32 RepeatingSummonTime;
 
+    uint8 Event_State;
     uint8 LastHealthPercentage;
-
-    uint32 maxHealth;
-    float minDmg;
-    float maxDmg;
-    uint32 attackPower;
+    uint32 Biggest_Hit;
 
     void SetDefaults()
     {
@@ -78,24 +66,14 @@ struct boss_dark_reaverAI : public ScriptedAI
         DoCast(me, SPELL_MOUNT, true);
 
         Cleave_Timer = 12000;
-        Summon_Announce_Timer = 18500;
         Summon_Timer = 20000;
         Reflex_Timer = 30000;
-        ScaleText_Timer = 0;
+        Last_Pierce_Time = 0;
+        RepeatingSummonTime = 25000;
+        Summon_Announce_Timer = RepeatingSummonTime - 1500;
 
         Event_State = 0;
-        Attackers_Count = 0;
-        Last_Pierce_Time = 0;
-        RepeatingSummonTime = 45000;
-
         LastHealthPercentage = 100;
-
-        auto creatureInfo = GetCreatureTemplateStore(me->GetEntry());
-        maxHealth = creatureInfo->health_max;
-        minDmg = creatureInfo->dmg_min;
-        maxDmg = creatureInfo->dmg_max;
-        attackPower = creatureInfo->attack_power;
-        ScaleStats(NORMAL_GROUP_SIZE);
     }
 
     void Aggro(Unit *who)
@@ -139,30 +117,6 @@ struct boss_dark_reaverAI : public ScriptedAI
         m_creature->SaveRespawnTime();
     }
 
-    void ScaleStats(uint8 count)
-    {
-        if (count >= NORMAL_GROUP_SIZE)
-            count = count - NORMAL_GROUP_SIZE;
-        else
-            count = 0;
-
-        // 10% more health per player
-        uint32 scaledMaxHealth = maxHealth + (count * 0.1 * maxHealth);
-        // Hard cap of 3 million (just in case)
-        if (scaledMaxHealth > 3000000) scaledMaxHealth = 3000000;
-        uint32 scaledCurrentHealth = scaledMaxHealth * (me->GetHealth() / (float) me->GetMaxHealth());
-        me->SetMaxHealth(scaledMaxHealth);
-        me->SetHealth(scaledCurrentHealth);
-
-        me->SetFloatValue(UNIT_FIELD_MINDAMAGE, (minDmg / NORMAL_GROUP_SIZE) * (NORMAL_GROUP_SIZE + count));
-        me->SetFloatValue(UNIT_FIELD_MAXDAMAGE, (maxDmg / NORMAL_GROUP_SIZE) * (NORMAL_GROUP_SIZE + count));
-        me->SetUInt32Value(UNIT_FIELD_ATTACK_POWER, (attackPower / NORMAL_GROUP_SIZE) * (NORMAL_GROUP_SIZE + count));
-
-        me->ForceValuesUpdateAtIndex(UNIT_FIELD_MINDAMAGE);
-        me->ForceValuesUpdateAtIndex(UNIT_FIELD_MAXDAMAGE);
-        me->ForceValuesUpdateAtIndex(UNIT_FIELD_ATTACK_POWER);
-    }
-
     void DamageTaken(Unit* /*done_by*/, uint32& damage)
     {
         if (damage < 300 || damage < Biggest_Hit)
@@ -177,52 +131,10 @@ struct boss_dark_reaverAI : public ScriptedAI
         }
     }
 
-    uint16 GetPlayerCountInThreatList()
-    {
-        uint16 count = 0;
-        for (auto t : me->getThreatManager().getThreatList())
-        {
-            if (!t || !t->getTarget() || !t->getTarget()->IsPlayer())
-                continue;
-
-            count++;
-        }
-
-        return count;
-    }
-
     void UpdateAI(const uint32 diff)
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
-
-        // If attackers exceeds normal party size, begin to scale up attack stats per player.
-        uint16 threatSize = GetPlayerCountInThreatList();
-        if (threatSize > Attackers_Count)
-        {
-            auto numNewAttackers = threatSize - Attackers_Count;
-
-            ScaleStats(numNewAttackers);
-
-            // Reduce summon timer by 1 second for each additional player, but not
-            // any lower than 12 seconds.
-            if (RepeatingSummonTime > 12 * IN_MILLISECONDS)
-                RepeatingSummonTime -= numNewAttackers * IN_MILLISECONDS;
-
-            // Only do text every 15 seconds if people join to not spam.
-            if (ScaleText_Timer < diff)
-            {
-                me->MonsterYell(urand(0, 1) ? SCALE_TEXT_1 : SCALE_TEXT_2);
-                ScaleText_Timer = 15000;
-            }
-            else
-                ScaleText_Timer -= diff;
-        }
-        else if (ScaleText_Timer >= diff)
-            ScaleText_Timer -= diff;
-
-        if (threatSize != Attackers_Count)
-            Attackers_Count = threatSize;
 
         // Anti-leash protection
         if (m_creature->GetZoneId() != 41) // Deadwind Pass
@@ -260,7 +172,7 @@ struct boss_dark_reaverAI : public ScriptedAI
         if (Summon_Announce_Timer < diff)
         {
             me->MonsterYell(urand(0, 1) ? SUMMON_TEXT_1 : SUMMON_TEXT_2);
-            Summon_Announce_Timer = 43500;
+            Summon_Announce_Timer = RepeatingSummonTime - 1500;
         }
         else
             Summon_Announce_Timer -= diff;
@@ -328,7 +240,7 @@ struct boss_dark_reaverAI : public ScriptedAI
         // Furious Anger (baby enrage) at 15%.
         if (me->GetHealthPercent() < 15 && !(Event_State & STATE_ENRAGED))
         {
-            me->MonsterTextEmote("Dark Reaver of Karazhan becomes angered!", nullptr, true);
+            me->MonsterTextEmote("$n becomes angered!", me, true);
 
             DoCast(me, SPELL_FURIOUS_ANGER, true);
             DoCast(me, SPELL_DETERRENCE, true);
