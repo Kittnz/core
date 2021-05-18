@@ -288,9 +288,8 @@ set (SCRIPTS_SRCS
     # Turtle WoW
 
     turtlewow/shop.cpp
-    turtlewow/item_scripts.cpp
+    turtlewow/tw_random.cpp
 
-    turtlewow/creatures/random.cpp
     turtlewow/creatures/npc_turtle.cpp
     turtlewow/creatures/npc_zebrian.cpp
     turtlewow/creatures/npc_drogon.cpp
@@ -313,11 +312,7 @@ set (SCRIPTS_SRCS
     turtlewow/mirage_raceway/miracle_raceaway.cpp
     turtlewow/transmog/transmog.cpp
     turtlewow/gardening.cpp
-    turtlewow/beach_party.cpp
-    turtlewow/object_scripts.cpp
     turtlewow/commands.cpp
-    
-    turtlewow/expansion/episode_1.cpp
 )
 
 # Used in game ScriptMgr, not need here

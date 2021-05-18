@@ -480,3 +480,10 @@ delete from creature_loot_template where entry = 80936;
  REPLACE INTO `gameobject_template` VALUES (1000077, 0, 1, 2091, 'KABOOM-Box X23B76', 0, 0, 0.4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_radio');
 
 
+update gameobject_template set script_name = '' where script_name = 'go_epl_growing_tree';
+update gameobject_template set script_name = '' where script_name = 'go_epl_growing_tree';
+update gameobject_template set script_name = '' where script_name = 'go_portal_to_orgrimmar';
+update item_template set script_name = '' where script_name = 'item_cenarion_hold_teleport';
+update item_template set script_name = '' where script_name = 'item_saddle';
+
+

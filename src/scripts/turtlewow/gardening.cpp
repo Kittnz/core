@@ -331,5 +331,3 @@ void AddSC_gardening()
     newscript->pItemUseSpell = &ItemUseSpell_item_wooden_planter;
     newscript->RegisterSelf();
 }
-
-

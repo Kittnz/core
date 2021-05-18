@@ -1,6 +1,4 @@
 
-// Make sure to apply the contents of /sql/shop onto your database.
-
 #include "scriptPCH.h"
 #include "AccountMgr.h"
 #include <array>
