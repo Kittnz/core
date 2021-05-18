@@ -412,3 +412,65 @@ update creature_template set npc_flags = 6 where entry = 2140;
 update creature_template set health_min = 1610432, health_max = 1610432, dmg_min = 3420, dmg_max = 4236, level_min = 63, level_max = 63, shadow_res = 100, script_name='boss_dark_reaver' where entry = 80936;
 update creature_template set mechanic_immune_mask = 0 where entry = 80937;
 REPLACE INTO `creature_template` VALUES (81266,0,12430,12431,13949,13950,'Lurking Shadow','',0,60,60,10348,10348,0,0,3640,21,0,1,1.14286,0,20,5,0,0,1,712,2422,0,272,1,1800,2000,2,0,0,0,0,0,0,0,71.9664,98.9538,100,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'',1,3,0,0,3,0,0,0,3167436667,0,256,'lurking_shadow');
+
+-- update quest_template set rewitemid1 = 2881, rewitemcount1 = 1 where entry = 70040;
+
+delete from creature_loot_template where entry = 80936;
+
+-- Lootable 1
+ replace into creature_loot_template values (80936, 51769, 0, 1, 1, 1, 0, 0, 10);
+ replace into creature_loot_template values (80936, 51770, 0, 1, 1, 1, 0, 0, 10);
+ replace into creature_loot_template values (80936, 51771, 0, 1, 1, 1, 0, 0, 10);
+ replace into creature_loot_template values (80936, 51772, 0, 1, 1, 1, 0, 0, 10);
+ replace into creature_loot_template values (80936, 51773, 0, 1, 1, 1, 0, 0, 10);
+ replace into creature_loot_template values (80936, 51774, 0, 1, 1, 1, 0, 0, 10);
+ replace into creature_loot_template values (80936, 51775, 0, 1, 1, 1, 0, 0, 10);
+ replace into creature_loot_template values (80936, 51776, 0, 1, 1, 1, 0, 0, 10);
+ replace into creature_loot_template values (80936, 51777, 0, 1, 1, 1, 0, 0, 10);
+ replace into creature_loot_template values (80936, 51778, 0, 1, 1, 1, 0, 0, 10);
+ replace into creature_loot_template values (80936, 51779, 0, 1, 1, 1, 0, 0, 10);
+ replace into creature_loot_template values (80936, 51780, 0, 1, 1, 1, 0, 0, 10);
+ replace into creature_loot_template values (80936, 51781, 0, 1, 1, 1, 0, 0, 10);
+ replace into creature_loot_template values (80936, 51782, 0, 1, 1, 1, 0, 0, 10);
+ replace into creature_loot_template values (80936, 51783, 0, 1, 1, 1, 0, 0, 10);
+ replace into creature_loot_template values (80936, 51784, 0, 1, 1, 1, 0, 0, 10);
+ replace into creature_loot_template values (80936, 51785, 0, 1, 1, 1, 0, 0, 10);
+ replace into creature_loot_template values (80936, 51786, 0, 1, 1, 1, 0, 0, 10);
+ replace into creature_loot_template values (80936, 51787, 0, 1, 1, 1, 0, 0, 10);
+ replace into creature_loot_template values (80936, 51788, 0, 1, 1, 1, 0, 0, 10);
+ replace into creature_loot_template values (80936, 51789, 0, 1, 1, 1, 0, 0, 10);
+ replace into creature_loot_template values (80936, 51796, 0, 1, 1, 1, 0, 0, 10);
+ replace into creature_loot_template values (80936, 51797, 0, 1, 1, 1, 0, 0, 10);
+ replace into creature_loot_template values (80936, 51798, 0, 1, 1, 1, 0, 0, 10);
+ replace into creature_loot_template values (80936, 51799, 0, 1, 1, 1, 0, 0, 10);
+ replace into creature_loot_template values (80936, 51800, 0, 1, 1, 1, 0, 0, 10);
+ -- Loottable 2
+ replace into creature_loot_template values (80936, 51769, 0, 2, 1, 1, 0, 0, 10);
+ replace into creature_loot_template values (80936, 51770, 0, 2, 1, 1, 0, 0, 10);
+ replace into creature_loot_template values (80936, 51771, 0, 2, 1, 1, 0, 0, 10);
+ replace into creature_loot_template values (80936, 51772, 0, 2, 1, 1, 0, 0, 10);
+ replace into creature_loot_template values (80936, 51773, 0, 2, 1, 1, 0, 0, 10);
+ replace into creature_loot_template values (80936, 51774, 0, 2, 1, 1, 0, 0, 10);
+ replace into creature_loot_template values (80936, 51775, 0, 2, 1, 1, 0, 0, 10);
+ replace into creature_loot_template values (80936, 51776, 0, 2, 1, 1, 0, 0, 10);
+ replace into creature_loot_template values (80936, 51777, 0, 2, 1, 1, 0, 0, 10);
+ replace into creature_loot_template values (80936, 51778, 0, 2, 1, 1, 0, 0, 10);
+ replace into creature_loot_template values (80936, 51779, 0, 2, 1, 1, 0, 0, 10);
+ replace into creature_loot_template values (80936, 51780, 0, 2, 1, 1, 0, 0, 10);
+ replace into creature_loot_template values (80936, 51781, 0, 2, 1, 1, 0, 0, 10);
+ replace into creature_loot_template values (80936, 51782, 0, 2, 1, 1, 0, 0, 10);
+ replace into creature_loot_template values (80936, 51783, 0, 2, 1, 1, 0, 0, 10);
+ replace into creature_loot_template values (80936, 51784, 0, 2, 1, 1, 0, 0, 10);
+ replace into creature_loot_template values (80936, 51785, 0, 2, 1, 1, 0, 0, 10);
+ replace into creature_loot_template values (80936, 51786, 0, 2, 1, 1, 0, 0, 10);
+ replace into creature_loot_template values (80936, 51787, 0, 2, 1, 1, 0, 0, 10);
+ replace into creature_loot_template values (80936, 51788, 0, 2, 1, 1, 0, 0, 10);
+ replace into creature_loot_template values (80936, 51789, 0, 2, 1, 1, 0, 0, 10);
+ replace into creature_loot_template values (80936, 51796, 0, 2, 1, 1, 0, 0, 10);
+ replace into creature_loot_template values (80936, 51797, 0, 2, 1, 1, 0, 0, 10);
+ replace into creature_loot_template values (80936, 51798, 0, 2, 1, 1, 0, 0, 10);
+ replace into creature_loot_template values (80936, 51799, 0, 2, 1, 1, 0, 0, 10);
+ replace into creature_loot_template values (80936, 51800, 0, 2, 1, 1, 0, 0, 10);
+ -- Dark Rider's Steed Loottable
+ replace into creature_loot_template values (80936, 81090, 1, 3, 1, 1, 0, 0, 10);
+
