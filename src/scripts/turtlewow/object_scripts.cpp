@@ -561,80 +561,6 @@ bool GOHello_go_stormwind_fountain(Player* pPlayer, GameObject* pGo)
     return true;
 }
 
-bool GOHello_go_epl_tree_of_life(Player* pPlayer, GameObject* pGo)
-{
-    if (!pPlayer->HasItemCount(51701)) // VANGUARD_SEED
-        return false;
-
-    float x, y, z;
-    pGo->GetSafePosition(x, y, z);
-
-    pPlayer->SummonGameObject(1000321, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 25, true);    // Aura
-    pPlayer->SummonGameObject(1000222, x, y, z-1.0F, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 18000, true); // Tree Bush
-    pPlayer->SummonGameObject(1000322, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 5, true); // Tree 
-
-    pPlayer->CastSpell(pPlayer, 740, false);
-    pPlayer->PlayDirectMusic(4536);
-    pPlayer->HandleEmote(EMOTE_ONESHOT_KNEEL);
-
-    pGo->SetRespawnTime(4320 * MINUTE); // 3 days
-    pGo->Despawn();
-    pGo->UpdateObjectVisibility();
-    return true;
-}
-
-struct go_epl_growing_tree : public GameObjectAI
-{
-    explicit go_epl_growing_tree(GameObject* pGo) : GameObjectAI(pGo)
-    {
-        m_bUsed = false;
-        m_uiJustUsedTimer = 1;
-        m_uiUpdateTimer = 3000;
-    }
-
-    bool m_bUsed;
-    uint32 m_uiJustUsedTimer;
-    uint32 m_uiUpdateTimer;
-
-    void UpdateAI(uint32 const uiDiff) override
-    {
-        if (m_uiJustUsedTimer < uiDiff)
-        {
-            if (m_uiUpdateTimer < uiDiff)
-            {
-                float x, y, z;
-                me->GetSafePosition(x, y, z);
-
-                switch (me->GetEntry())
-                {
-                case 1000322: me->SummonGameObject(1000323, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 5, true); me->Despawn(); me->UpdateObjectVisibility(); break;
-                case 1000323: me->SummonGameObject(1000324, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 5, true); me->Despawn(); me->UpdateObjectVisibility(); break;
-                case 1000324: me->SummonGameObject(1000325, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 5, true); me->Despawn(); me->UpdateObjectVisibility(); break;
-                case 1000325: me->SummonGameObject(1000326, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 5, true); me->Despawn(); me->UpdateObjectVisibility(); break;
-                case 1000326: me->SummonGameObject(1000327, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 5, true); me->Despawn(); me->UpdateObjectVisibility(); break;
-                case 1000327: me->SummonGameObject(1000328, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 5, true); me->Despawn(); me->UpdateObjectVisibility(); break;
-                case 1000328: me->SummonGameObject(1000329, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 18000, true); me->Despawn(); me->UpdateObjectVisibility(); break;
-                }                  
-                m_uiUpdateTimer = 3000;
-            }
-            else
-            {
-                m_uiUpdateTimer -= uiDiff;
-            }
-            m_bUsed = true;
-        }
-        else
-        {
-            m_uiJustUsedTimer -= uiDiff;
-        }
-    }
-};
-
-GameObjectAI* GetAI_go_epl_growing_tree(GameObject* gameobject)
-{
-    return new go_epl_growing_tree(gameobject);
-}
-
 bool GOHello_go_brainwashing_device(Player* pPlayer, GameObject* pGo)
 {
     if (pPlayer->getLevel() >= 10 && pPlayer->HasItemCount(51715, 1))
@@ -1085,16 +1011,6 @@ void AddSC_object_scripts()
     newscript->Name = "go_brainwashing_device";
     newscript->pGOHello = &GOHello_go_brainwashing_device;
     newscript->pGOGossipSelect = &GOSelect_go_brainwashing_device;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "go_epl_growing_tree";
-    newscript->GOGetAI = &GetAI_go_epl_growing_tree;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "go_epl_tree_of_life";
-    newscript->pGOHello = &GOHello_go_epl_tree_of_life;
     newscript->RegisterSelf();
 
     newscript = new Script;
