@@ -5768,10 +5768,13 @@ ReputationRank Unit::GetReactionTo(Unit const* target) const
                 return *repRank;
     }
 
-    if (HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PLAYER_CONTROLLED))
+	bool isPossessed = HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_POSSESSED) || target->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_POSSESSED);
+
+    if (HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PLAYER_CONTROLLED) || isPossessed)
     {
-        if (target->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PLAYER_CONTROLLED))
+        if (target->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PLAYER_CONTROLLED) || isPossessed)
         {
+
             if (selfPlayerOwner && targetPlayerOwner)
             {
                 // always friendly to other unit controlled by player, or to the player himself
