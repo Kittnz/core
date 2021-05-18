@@ -2994,8 +2994,9 @@ void Unit::ModPossess(Unit* target, bool apply, AuraRemoveMode m_removeMode)
 		// crossfaction hackfixes
 		if (sWorld.getConfig(CONFIG_BOOL_ALLOW_TWO_SIDE_INTERACTION_GROUP))
 		{
-			if (target->GetEntry() == 16803 ||       //Deathknight Understudy 
-				target->GetEntry() == 9098)          //Scarshield Spellbinder
+			if (target->GetEntry() == 16803)       // Deathknight Understudy 
+				target->setFaction(529);
+			else if (target->GetEntry() == 9098)   // Scarshield Spellbinder
 				target->setFaction(35);
 		}
 		
