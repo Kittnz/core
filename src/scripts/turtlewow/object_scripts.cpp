@@ -291,7 +291,8 @@ bool GOHello_go_radio(Player* pPlayer, GameObject* pGo)
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "Play 'Cozy Tavern'", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
         break;
     case 1000077: // Goblin Radio KABOOM-Box X23B76
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "Play 'Mudsprocket'", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "<Switch: 204.3 FM>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "<Switch: 204.5 FM>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
         break;
     }
     pPlayer->SEND_GOSSIP_MENU(90300, pGo->GetGUID());
@@ -343,6 +344,7 @@ bool GOSelect_go_radio(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 a
         switch (action)
         {
         case GOSSIP_ACTION_INFO_DEF + 1: sound = 30221; break;
+        case GOSSIP_ACTION_INFO_DEF + 2: sound = 30215; break;
         }
         break;
     }
