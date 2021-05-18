@@ -344,7 +344,7 @@ bool ItemUseSpell_skin_changer(Player* pPlayer, Item* pItem, const SpellCastTarg
             switch (item_entry)
             {
             case 50210: if (male) bytes = 19; else bytes = 8;  break;                                                // Troll: Forest
-            case 50211: if (male) bytes = 17; break;                                                                 // Troll: Sandfury Clan 
+            case 50211: if (male) bytes = 16; break;                                                                 // Troll: Sandfury Clan 
             case 51010: bytes = 12; break;                                                                           // Troll: Dark
             case 51011: if (male) bytes = 13; else bytes = 7;  break;                                                // Troll: Ice
             case 81208: if (male) bytes = 20; else bytes = 14; break;                                                // Troll: Zombie
@@ -542,17 +542,20 @@ bool ItemUseSpell_guild_tabard(Player* pPlayer, Item* pItem, const SpellCastTarg
     return true;
 }
 
-bool ItemUseSpell_turtle_radio(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+bool ItemUseSpell_item_radio(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
-    if (!pPlayer)
-        return false;
-
-    float dis{ 2.0F };
+    if (!pPlayer) return false;
+    int object = 0;
     float x, y, z;
     pPlayer->GetSafePosition(x, y, z);
-    x += dis * cos(pPlayer->GetOrientation());
-    y += dis * sin(pPlayer->GetOrientation());
-    pPlayer->SummonGameObject(1000055, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 600, true);
+    x += 2.0F * cos(pPlayer->GetOrientation());
+    y += 2.0F * sin(pPlayer->GetOrientation());
+    switch (pItem->GetEntry())
+    {
+    case 51021: object = 1000055; break; // Speedy's Jukebox
+    case 10585: object = 1000077; break; // Goblin Radio KABOOM-Box X23B76
+    }
+    pPlayer->SummonGameObject(object, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 600, true);
     return true;
 }
 
@@ -1827,7 +1830,7 @@ void AddSC_item_scripts()
 
     newscript = new Script;
     newscript->Name = "item_radio";
-    newscript->pItemUseSpell = &ItemUseSpell_turtle_radio;
+    newscript->pItemUseSpell = &ItemUseSpell_item_radio;
     newscript->RegisterSelf();
 
     newscript = new Script;

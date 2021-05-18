@@ -259,79 +259,94 @@ struct go_cot_exit_trigger : public GameObjectAI
     }
 };
 
-bool GOHello_go_turtle_radio(Player* pPlayer, GameObject* pGo)
+bool GOHello_go_radio(Player* pPlayer, GameObject* pGo)
 {
-    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "Play 'Teldrassil'", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "Play 'Brill's Tavern'", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
-    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "Play 'Ashenvale'", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
-    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "Play 'Darkmoon Faire'", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
-    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "Play 'Thunderbluff'", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
-    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "Play 'Goldshire Inn'", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 6);
-    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "Play 'Magic'", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 7);
-    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "Play 'Baby Murloc Song'", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 8);
-    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "Play 'Barrens'", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 9);
-    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "Play 'Tinker Town'", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 10);
-    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "Play 'Dark Forest'", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 11);
-    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "Play 'Maexxna'", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 12);
-    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "Play 'Orgrimmar'", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 13);
-    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "Play 'Soggy Night'", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 14);
-
+    switch (pGo->GetEntry())
+    {
+    case 1000055: // Speedy's Jukebox
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "Play 'Teldrassil'", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "Play 'Brill's Tavern'", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "Play 'Ashenvale'", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "Play 'Darkmoon Faire'", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "Play 'Thunderbluff'", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "Play 'Goldshire Inn'", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 6);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "Play 'Magic'", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 7);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "Play 'Baby Murloc Song'", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 8);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "Play 'Barrens'", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 9);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "Play 'Tinker Town'", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 10);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "Play 'Dark Forest'", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 11);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "Play 'Maexxna'", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 12);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "Play 'Orgrimmar'", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 13);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "Play 'Soggy Night'", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 14);
+        break;
+    case 1000078: // Frosty's Jukebox
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "<Switch: 100.3 FM>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "<Switch: 101.5 FM>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        break;
+    case 3000105: // Zeppelin's Shortwave Radio
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "Play 'Mudsprocket'", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "Play 'Emerald Forest'", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "Play 'Pandaria'", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "Play 'Wilderness'", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "Play 'Cozy Tavern'", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
+        break;
+    case 1000077: // Goblin Radio KABOOM-Box X23B76
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "Play 'Mudsprocket'", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        break;
+    }
     pPlayer->SEND_GOSSIP_MENU(90300, pGo->GetGUID());
     return true;
 }
 
-bool GOSelect_go_turtle_radio(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 action)
+bool GOSelect_go_radio(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 action)
 {
-    if (action == GOSSIP_ACTION_INFO_DEF + 1)
-        pPlayer->PlayDirectMusic(4536);
-    if (action == GOSSIP_ACTION_INFO_DEF + 2)
-        pPlayer->PlayDirectMusic(5355);
-    if (action == GOSSIP_ACTION_INFO_DEF + 3)
-        pPlayer->PlayDirectMusic(5532);
-    if (action == GOSSIP_ACTION_INFO_DEF + 4)
-        pPlayer->PlayDirectMusic(8440);
-    if (action == GOSSIP_ACTION_INFO_DEF + 5)
-        pPlayer->PlayDirectMusic(7077);
-    if (action == GOSSIP_ACTION_INFO_DEF + 6)
-        pPlayer->PlayDirectMusic(4516);
-    if (action == GOSSIP_ACTION_INFO_DEF + 7)
-        pPlayer->PlayDirectMusic(6669);
-    if (action == GOSSIP_ACTION_INFO_DEF + 8)
-        pPlayer->PlayDirectMusic(8485);
-    if (action == GOSSIP_ACTION_INFO_DEF + 9)
-        pPlayer->PlayDirectMusic(2536);
-    if (action == GOSSIP_ACTION_INFO_DEF + 10)
-        pPlayer->PlayDirectMusic(7196);
-    if (action == GOSSIP_ACTION_INFO_DEF + 11)
-        pPlayer->PlayDirectMusic(5376);
-    if (action == GOSSIP_ACTION_INFO_DEF + 12)
-        pPlayer->PlayDirectMusic(8887);
-    if (action == GOSSIP_ACTION_INFO_DEF + 13)
-        pPlayer->PlayDirectMusic(5055);
-    if (action == GOSSIP_ACTION_INFO_DEF + 14)
-        pPlayer->PlayDirectMusic(6836);
-
-    pPlayer->CLOSE_GOSSIP_MENU();
-    return true;
-}
-
-bool GOHello_go_winter_radio(Player* pPlayer, GameObject* pGo)
-{
-    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "<Switch: 100.3 FM>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "<Switch: 101.5 FM>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
-
-
-    pPlayer->SEND_GOSSIP_MENU(90300, pGo->GetGUID());
-    return true;
-}
-
-bool GOSelect_go_winter_radio(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 action)
-{
-    if (action == GOSSIP_ACTION_INFO_DEF + 1)
-        pPlayer->PlayDirectMusic(4516);
-    if (action == GOSSIP_ACTION_INFO_DEF + 2)
-        pPlayer->PlayDirectMusic(8440);
-
+    int sound = 0;
+    switch (pGo->GetEntry())
+    {
+    case 1000055: // Speedy's Jukebox
+        switch (action)
+        {
+        case GOSSIP_ACTION_INFO_DEF + 1: sound = 4536; break;
+        case GOSSIP_ACTION_INFO_DEF + 2: sound = 5355; break;
+        case GOSSIP_ACTION_INFO_DEF + 3: sound = 5532; break;
+        case GOSSIP_ACTION_INFO_DEF + 4: sound = 8440; break;
+        case GOSSIP_ACTION_INFO_DEF + 5: sound = 7077; break;
+        case GOSSIP_ACTION_INFO_DEF + 6: sound = 4516; break;
+        case GOSSIP_ACTION_INFO_DEF + 7: sound = 6669; break;
+        case GOSSIP_ACTION_INFO_DEF + 8: sound = 8485; break;
+        case GOSSIP_ACTION_INFO_DEF + 9: sound = 2536; break;
+        case GOSSIP_ACTION_INFO_DEF + 10: sound = 7196; break;
+        case GOSSIP_ACTION_INFO_DEF + 11: sound = 5376; break;
+        case GOSSIP_ACTION_INFO_DEF + 12: sound = 8887; break;
+        case GOSSIP_ACTION_INFO_DEF + 13: sound = 5055; break;
+        case GOSSIP_ACTION_INFO_DEF + 14: sound = 6836; break;
+        }
+        break;
+    case 1000078: // Frosty's Jukebox
+        switch (action)
+        {
+        case GOSSIP_ACTION_INFO_DEF + 1: sound = 4516; break;
+        case GOSSIP_ACTION_INFO_DEF + 2: sound = 8440; break;
+        }
+        break;
+    case 3000105: // Zeppelin's Shortwave Radio
+        switch (action)
+        {
+        case GOSSIP_ACTION_INFO_DEF + 1: sound = 30221; break;
+        case GOSSIP_ACTION_INFO_DEF + 2: sound = 30220; break;
+        case GOSSIP_ACTION_INFO_DEF + 3: sound = 30218; break;
+        case GOSSIP_ACTION_INFO_DEF + 4: sound = 30217; break;
+        case GOSSIP_ACTION_INFO_DEF + 5: sound = 30216; break;
+        }
+        break;
+    case 1000077: // Goblin Radio KABOOM-Box X23B76
+        switch (action)
+        {
+        case GOSSIP_ACTION_INFO_DEF + 1: sound = 30221; break;
+        }
+        break;
+    }
+    pPlayer->PlayDirectMusic(sound);
     pPlayer->CLOSE_GOSSIP_MENU();
     return true;
 }
@@ -686,30 +701,6 @@ struct stormwind_vault_portal : public GameObjectAI
 GameObjectAI* GetAI_stormwind_vault_portal(GameObject* gameobject)
 {
     return new stormwind_vault_portal(gameobject);
-}
-
-bool GOHello_go_expansion_radio(Player* pPlayer, GameObject* pGo)
-{
-    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "Play 'Mudsprocket'", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "Play 'Emerald Forest'", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
-    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "Play 'Pandaria'", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
-    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "Play 'Wilderness'", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
-    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "Play 'Cozy Tavern'", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
-
-    pPlayer->SEND_GOSSIP_MENU(90300, pGo->GetGUID());
-    return true;
-}
-
-bool GOSelect_go_expansion_radio(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 action)
-{
-    if (action == GOSSIP_ACTION_INFO_DEF + 1) pPlayer->PlayDirectMusic(30221);
-    if (action == GOSSIP_ACTION_INFO_DEF + 2) pPlayer->PlayDirectMusic(30220);
-    if (action == GOSSIP_ACTION_INFO_DEF + 3) pPlayer->PlayDirectMusic(30218);
-    if (action == GOSSIP_ACTION_INFO_DEF + 4) pPlayer->PlayDirectMusic(30217);
-    if (action == GOSSIP_ACTION_INFO_DEF + 5) pPlayer->PlayDirectMusic(30216);
-
-    pPlayer->CLOSE_GOSSIP_MENU();
-    return true;
 }
 
 // Refreshment Portal GO
@@ -1081,12 +1072,6 @@ void AddSC_object_scripts()
     Script *newscript;
 
     newscript = new Script;
-    newscript->Name = "go_expansion_radio";
-    newscript->pGOHello = &GOHello_go_expansion_radio;
-    newscript->pGOGossipSelect = &GOSelect_go_expansion_radio;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
     newscript->Name = "stormwind_vault_portal";
     newscript->GOGetAI = &GetAI_stormwind_vault_portal;
     newscript->RegisterSelf();
@@ -1154,9 +1139,9 @@ void AddSC_object_scripts()
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "go_turtle_radio";
-    newscript->pGOHello = &GOHello_go_turtle_radio;
-    newscript->pGOGossipSelect = &GOSelect_go_turtle_radio;
+    newscript->Name = "go_radio";
+    newscript->pGOHello = &GOHello_go_radio;
+    newscript->pGOGossipSelect = &GOSelect_go_radio;
     newscript->RegisterSelf();
 
     newscript = new Script;
@@ -1183,12 +1168,6 @@ void AddSC_object_scripts()
     newscript->Name = "go_bounty";
     newscript->pGOHello = &GOHello_go_bounty;
     newscript->pGOGossipSelect = &GOSelect_go_bounty;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "go_winter_radio";
-    newscript->pGOHello = &GOHello_go_winter_radio;
-    newscript->pGOGossipSelect = &GOSelect_go_winter_radio;
     newscript->RegisterSelf();
 
 	newscript = new Script;

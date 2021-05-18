@@ -473,4 +473,10 @@ delete from creature_loot_template where entry = 80936;
  replace into creature_loot_template values (80936, 51800, 0, 2, 1, 1, 0, 0, 10);
  -- Dark Rider's Steed Loottable
  replace into creature_loot_template values (80936, 81090, 1, 3, 1, 1, 0, 0, 10);
+ 
+ update gameobject_template set script_name = 'go_radio' where script_name like '%radio%';
+ update item_template set script_name = 'item_radio' where script_name like '%radio%';
+ 
+ REPLACE INTO `gameobject_template` VALUES (1000077, 0, 1, 2091, 'KABOOM-Box X23B76', 0, 0, 0.4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_radio');
+
 
