@@ -486,4 +486,5 @@ update gameobject_template set script_name = '' where script_name = 'go_portal_t
 update item_template set script_name = '' where script_name = 'item_cenarion_hold_teleport';
 update item_template set script_name = '' where script_name = 'item_saddle';
 
+update item_template set spellid_1 = 26158, stat_value1 = 8, stat_value2 = 8 where entry = 51738;
 
