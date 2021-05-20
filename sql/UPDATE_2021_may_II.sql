@@ -488,3 +488,35 @@ update item_template set script_name = '' where script_name = 'item_saddle';
 
 update item_template set spellid_1 = 26158, stat_value1 = 8, stat_value2 = 8 where entry = 51738;
 
+-- Theramore Deserters that were added in TBC.
+DELETE FROM `creature` WHERE `guid` IN (30741, 30769, 30770, 30742, 30772, 30773, 30771, 30774, 30776);
+DELETE FROM `creature_addon` WHERE `guid` IN (30741, 30769, 30770, 30742, 30772, 30773, 30771, 30774, 30776);
+
+-- Fix damage and armor of starting mobs.
+UPDATE `creature_template` SET `dmg_min` = 1, `dmg_max` = 2, `armor` = 16 WHERE `entry` IN (6, 707, 1512, 2955, 3098);
+UPDATE `creature_template` SET `dmg_min` = 1, `dmg_max` = 2, `armor` = 15 WHERE `entry` = 1501;
+
+-- Shadowforge Commander shouldn't drop Blue Pearls (it was obviously an error since the Giant Clam gameobject has the
+-- same entry as this NPC).
+DELETE FROM `creature_loot_template` WHERE `item` = 4611 AND `entry` = 2744;
+
+-- Fix loot template of Giant Clam gameobject
+-- https://www.youtube.com/watch?v=iujWLpMG2s4
+-- https://classic.wowhead.com/object=2744/giant-clam#contains
+UPDATE `gameobject_loot_template` SET `ChanceOrQuestChance` = 100, `groupid` = 1 WHERE `entry` = 2264 AND `item` = 4611;
+UPDATE `gameobject_loot_template` SET `ChanceOrQuestChance` = 35 WHERE `entry` = 2264 AND `item` = 4655;
+
+-- Jer'kai Moonweaver is only a quest giver.
+UPDATE `creature_template` SET `npc_flags` = 2 WHERE `entry` = 7957;
+
+UPDATE `quest_template` SET `RequestItemsText` = 'Ah, yes. Another traveler seeking something from the dwarves.$B$B$G Sir:Ma''am;, I''m truly sorry, but I''ve no time to answer meaningless questions right now.' WHERE `entry` = 724;
+
+-- Reduce Kindal Moonweaver's respawn time.
+UPDATE `creature` SET `spawntimesecsmin`=30, `spawntimesecsmax`=30 WHERE `id`=7956;
+
+-- Both creatures have the exact same skinning loot table.
+UPDATE `creature_template` SET `skinning_loot_id` = 4343 WHERE `entry` = 4342;
+
+-- [Silver Piffeny Band] shouldn't appear in chests.
+DELETE FROM `gameobject_loot_template` WHERE `item` = 7342;
+
