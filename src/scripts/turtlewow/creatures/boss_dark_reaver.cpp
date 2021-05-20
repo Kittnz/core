@@ -349,7 +349,7 @@ struct lurking_shadowAI : public ScriptedAI
         Reset();
     }
 
-    uint8 currentClass;
+    int8 currentClass;
 
     void Reset()
     {
@@ -362,9 +362,11 @@ struct lurking_shadowAI : public ScriptedAI
             return;
 
         m_creature->MonsterTextEmote("A $c shadow appears next to $N...", pWho);
-        // Make the creature use the same weapon as the aggroer.
-        if (Item* aggroerWeapon = pWho->ToPlayer()->GetWeaponForAttack(BASE_ATTACK, false, true))
-            m_creature->SetVirtualItem(VIRTUAL_ITEM_SLOT_0, aggroerWeapon->GetEntry());
+        // Make the creature use the same weapons as the aggroer.
+        if (Item* mainItem = pWho->ToPlayer()->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_MAINHAND))
+            m_creature->SetVirtualItem(VIRTUAL_ITEM_SLOT_0, mainItem->GetEntry());
+        if (Item* offHand = pWho->ToPlayer()->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND))
+            m_creature->SetVirtualItem(VIRTUAL_ITEM_SLOT_1, offHand->GetEntry());
         currentClass = pWho->ToPlayer()->getClass();
     }
 
