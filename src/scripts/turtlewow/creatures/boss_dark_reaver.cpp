@@ -363,8 +363,8 @@ struct lurking_shadowAI : public ScriptedAI
 
         m_creature->MonsterTextEmote("A $c shadow appears next to $N...", pWho);
         // Make the creature use the same weapons as the aggroer.
-        if (Item* mainItem = pWho->ToPlayer()->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_MAINHAND))
-            m_creature->SetVirtualItem(VIRTUAL_ITEM_SLOT_0, mainItem->GetEntry());
+        if (Item* mainHand = pWho->ToPlayer()->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_MAINHAND))
+            m_creature->SetVirtualItem(VIRTUAL_ITEM_SLOT_0, mainHand->GetEntry());
         if (Item* offHand = pWho->ToPlayer()->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND))
             m_creature->SetVirtualItem(VIRTUAL_ITEM_SLOT_1, offHand->GetEntry());
         currentClass = pWho->ToPlayer()->getClass();
