@@ -15182,6 +15182,9 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
     if (HasItemCount(17182, 1, 0)) // Sulfuron Champion
         SetByteValue(PLAYER_BYTES_3, 2, 49);
 
+    if (HasItemCount(19019, 1, 0)) // Stormwielder
+        SetByteValue(PLAYER_BYTES_3, 2, 48);
+
     if (isImmortal()) // Immortal (temp. check)
         SetByteValue(PLAYER_BYTES_3, 2, 52);
 
