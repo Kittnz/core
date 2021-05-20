@@ -69,12 +69,12 @@ struct boss_dark_reaverAI : public ScriptedAI
 
         DoCast(me, SPELL_MOUNT, true);
 
-        Cleave_Timer = 12000;
-        SummonLurkingShadow_Timer = 30000;
-        Reflex_Timer = 28500;
+        Cleave_Timer = 10000;
+        SummonLurkingShadow_Timer = 25000;
+        Reflex_Timer = 26500;
         Last_Pierce_Time = 0;
-        SkeletonSummonTime = 25000;
-        Summon_Announce_Timer = 23500;
+        SkeletonSummonTime = 22000;
+        Summon_Announce_Timer = 20000;
 
         Event_State = 0;
         LastHealthPercentage = 100;
@@ -159,7 +159,7 @@ struct boss_dark_reaverAI : public ScriptedAI
         if (Cleave_Timer < diff)
         {
             if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_CLEAVE) == CAST_OK)
-                Cleave_Timer = urand(14000, 20000);
+                Cleave_Timer = urand(10000, 16000);
         }
         else
             Cleave_Timer -= diff;
@@ -168,7 +168,7 @@ struct boss_dark_reaverAI : public ScriptedAI
         if (Reflex_Timer < diff)
         {
             if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_NIMBLE_REFLEXES) == CAST_OK)
-                Reflex_Timer = 30000;
+                Reflex_Timer = urand(26500, 30000);
         }
         else
             Reflex_Timer -= diff;
@@ -184,7 +184,7 @@ struct boss_dark_reaverAI : public ScriptedAI
         if (Summon_Announce_Timer < diff)
         {
             me->MonsterYell(urand(0, 1) ? SUMMON_TEXT_1 : SUMMON_TEXT_2);
-            Summon_Announce_Timer = 23500;
+            Summon_Announce_Timer = 20000;
         }
         else
             Summon_Announce_Timer -= diff;
@@ -245,7 +245,7 @@ struct boss_dark_reaverAI : public ScriptedAI
                 }
             }
 
-            SkeletonSummonTime = 25000;
+            SkeletonSummonTime = 22000;
         }
         else
             SkeletonSummonTime -= diff;
@@ -308,12 +308,19 @@ struct boss_dark_reaverAI : public ScriptedAI
         return random;
     }
 
+    void SetPvPDesired(Player* pPlayer)
+    {
+        if (!pPlayer->HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_PVP_DESIRED))
+            pPlayer->SetFlag(PLAYER_FLAGS, PLAYER_FLAGS_PVP_DESIRED);
+        pPlayer->UpdatePvP(true);
+    }
+
     void SetGroupFFAPvP(Player* pPlayer)
     {
         Group* pGroup = pPlayer->GetGroup();
         if (!pGroup)
         {
-            pPlayer->SetFFAPvP(true);
+            SetPvPDesired(pPlayer);
             return;
         }
 
@@ -322,7 +329,9 @@ struct boss_dark_reaverAI : public ScriptedAI
             if (Player *pMember = itr->getSource())
             {
                 if (pMember->GetZoneId() == DEADWIND_PASS_ZONE)
-                    pMember->SetFFAPvP(true);
+                {
+                    SetPvPDesired(pMember);
+                }
             }
         }
     }
@@ -347,9 +356,9 @@ struct lurking_shadowAI : public ScriptedAI
         currentClass = -1;
     }
 
-    void Aggro(Unit* pWho)
+    void SetClassIfNeeded(Unit* pWho)
     {
-        if (!pWho->IsPlayer())
+        if (currentClass != -1 || !pWho->IsPlayer())
             return;
 
         m_creature->MonsterTextEmote("A $c shadow appears next to $N...", pWho);
@@ -359,11 +368,22 @@ struct lurking_shadowAI : public ScriptedAI
         currentClass = pWho->ToPlayer()->getClass();
     }
 
+    void Aggro(Unit* pWho)
+    {
+        SetClassIfNeeded(pWho);
+    }
+
     void DamageTaken(Unit* source, uint32& damage)
     {
         // Only allow damage from players being the same class as the one who aggroed the mob.
         if (!source->IsPlayer() || source->ToPlayer()->getClass() != currentClass && currentClass != -1)
             damage = 0;
+    }
+
+    void DamageDeal(Unit* source, uint32& damage)
+    {
+        // Just in case class is not set on Aggro
+        SetClassIfNeeded(source);
     }
 
     void UpdateAI(const uint32 diff)
