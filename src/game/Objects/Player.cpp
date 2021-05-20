@@ -15176,8 +15176,20 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
 
     // Titles
 
+    if (GetGUIDLow() == 1 || GetGUIDLow() == 11549) // Torta, Pompa
+        SetByteValue(PLAYER_BYTES_3, 2, 12); // Developer
+
+    if (GetGUIDLow() == 121365) // Gheor
+        SetByteValue(PLAYER_BYTES_3, 2, 14); // Turtle God
+
     if (HasItemCount(21176, 1, 0)) // Scarab Lord
         SetByteValue(PLAYER_BYTES_3, 2, 15);
+
+    if (HasItemCount(17182, 1, 0)) // Sulfuron Champion
+        SetByteValue(PLAYER_BYTES_3, 2, 49);
+
+    if (HasItemCount(19019, 1, 0)) // Stormwielder
+        SetByteValue(PLAYER_BYTES_3, 2, 48);
 
     if (isImmortal()) // Immortal (temp. check)
         SetByteValue(PLAYER_BYTES_3, 2, 52);
