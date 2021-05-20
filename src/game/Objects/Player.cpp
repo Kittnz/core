@@ -15179,6 +15179,9 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
     if (HasItemCount(21176, 1, 0)) // Scarab Lord
         SetByteValue(PLAYER_BYTES_3, 2, 15);
 
+    if (HasItemCount(17182, 1, 0)) // Sulfuron Champion
+        SetByteValue(PLAYER_BYTES_3, 2, 49);
+
     if (isImmortal()) // Immortal (temp. check)
         SetByteValue(PLAYER_BYTES_3, 2, 52);
 
