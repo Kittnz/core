@@ -520,3 +520,8 @@ UPDATE `creature_template` SET `skinning_loot_id` = 4343 WHERE `entry` = 4342;
 -- [Silver Piffeny Band] shouldn't appear in chests.
 DELETE FROM `gameobject_loot_template` WHERE `item` = 7342;
 
+UPDATE `item_template` SET `min_money_loot`=50,  `max_money_loot`=100 WHERE `entry`=20708; -- Tightly Sealed Trunk
+UPDATE `item_template` SET `min_money_loot`=100, `max_money_loot`=200 WHERE `entry`=21113; -- Watertight Trunk
+UPDATE `item_template` SET `min_money_loot`=100, `max_money_loot`=200 WHERE `entry`=21150; -- Iron Bound Trunk
+UPDATE `item_template` SET `min_money_loot`=100, `max_money_loot`=200 WHERE `entry`=21228; -- Mithril Bound Trunk
+
