@@ -294,36 +294,7 @@ CREATE TABLE IF NOT EXISTS `config` (
 
 INSERT INTO `config` (`id`, `value`, `comment`) VALUES ('1', '2048', 'Patch download speed limit. Number of Kbytes per client');
 
--- Daten Export vom Benutzer nicht ausgewählt
--- Exportiere Struktur von Trigger tw_logon.shop_delete
--- SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
--- DELIMITER //
--- CREATE TRIGGER `shop_delete` AFTER DELETE ON `shop_coins` FOR EACH ROW BEGIN
--- INSERT INTO `shop_diff` (prev_bonus, new_bonus, accountid, date, query) VALUES (OLD.coins, 0, OLD.id, UNIX_TIMESTAMP(now()), "DELETE");
--- END//
--- DELIMITER ;
--- SET SQL_MODE=@OLDTMP_SQL_MODE;
-
--- Exportiere Struktur von Trigger tw_logon.shop_insert
--- SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
--- DELIMITER //
--- CREATE TRIGGER `shop_insert` AFTER INSERT ON `shop_coins` FOR EACH ROW BEGIN
--- INSERT INTO `shop_diff` (prev_bonus, new_bonus, accountid, date, query) VALUES (0, NEW.coins, NEW.id, UNIX_TIMESTAMP(now()), "INSERT");
--- END//
--- DELIMITER ;
--- SET SQL_MODE=@OLDTMP_SQL_MODE;
-
--- Exportiere Struktur von Trigger tw_logon.shop_update
--- SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
--- DELIMITER //
--- CREATE TRIGGER `shop_update` AFTER UPDATE ON `shop_coins` FOR EACH ROW BEGIN
--- IF OLD.coins != NEW.coins THEN  
--- INSERT INTO `shop_diff` (prev_bonus, new_bonus, accountid, date, query) VALUES (OLD.coins, NEW.coins, NEW.id, UNIX_TIMESTAMP(now()), "UPDATE");
--- END IF;
--- END//
--- DELIMITER ;
--- SET SQL_MODE=@OLDTMP_SQL_MODE;
-
-/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
-/*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+ALTER TABLE account_access
+  DROP COLUMN IF EXISTS name;
+ALTER TABLE account_access
+  ADD name VARCHAR(255);
