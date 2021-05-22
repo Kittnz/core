@@ -88,7 +88,7 @@ class AccountMgr
 
         void Load();
         AccountTypes GetSecurity(uint32 acc_id);
-        void SetSecurity(uint32 accId, AccountTypes sec);
+        void SetSecurity(uint32 accId, AccountTypes sec, std::string name);
 
         bool GetName(uint32 acc_id, std::string &name);
         uint32 GetCharactersCount(uint32 acc_id);

@@ -104,6 +104,14 @@ bool ChatHandler::HandleAccountSetGmLevelCommand(char* args)
     if (!ExtractInt32(&args, gm))
         return false;
 
+    char* comment = ExtractArg(&args);
+
+    if (!comment)
+        return false;
+
+    std::string name(comment);  
+    AccountMgr::normalizeString(name);
+
     if (gm < SEC_PLAYER || gm > SEC_ADMINISTRATOR)
     {
         SendSysMessage(LANG_BAD_VALUE);
@@ -132,7 +140,7 @@ bool ChatHandler::HandleAccountSetGmLevelCommand(char* args)
     }
 
     PSendSysMessage(LANG_YOU_CHANGE_SECURITY, targetAccountName.c_str(), gm);
-    sAccountMgr.SetSecurity(targetAccountId, AccountTypes(gm));
+    sAccountMgr.SetSecurity(targetAccountId, AccountTypes(gm), name);
 
     return true;
 }
