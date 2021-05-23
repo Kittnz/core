@@ -19657,7 +19657,6 @@ void Player::RewardSinglePlayerAtKill(Unit* pVictim)
         if (sWorld.getConfig(CONFIG_BOOL_BOUNTY))
             RewardBountyHuntKill(pVictim);  
 
-        if (sWorld.getConfig(CONFIG_BOOL_EXPANSION_CONTENT))
             RewardExpansionPvPQuest(pVictim);
     }    
 }

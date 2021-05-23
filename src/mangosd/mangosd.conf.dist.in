@@ -2864,14 +2864,8 @@ Transmog.ReqMoneyRate = 0
 #
 ###################################################################################################
 
-###################################################################################################
-# EXPANSION
-#
-#    ExpansionContent
-#        Enable new races: Goblins and High Elves with this option.
-#        TW-Default: 1
+# TW Misc. 
 
-ExpansionContent = 1
 StaticObjectLOS = 1
 PvPBounryBoards = 1
 OpenHouse = 0
