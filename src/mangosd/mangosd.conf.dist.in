@@ -34,12 +34,10 @@ ConfVersion=2010100901
 # EXPANSION
 ###################################################################################################################
 
-###################################################################################################################
+
 # CONNECTIONS AND DIRECTORIES
 #
-#    RealmID
-#        RealmID must match the realmlist inside the realmd database.
-#        TW-Default: 1
+# RealmID | RealmID must match the realmlist inside the realmd database.
 
 RealmID = 1
 
@@ -2874,7 +2872,7 @@ Transmog.ReqMoneyRate = 0
 #        TW-Default: 1
 
 ExpansionContent = 1
-
+StaticObjectLOS = 1
 PvPBounryBoards = 1
 OpenHouse = 0
 

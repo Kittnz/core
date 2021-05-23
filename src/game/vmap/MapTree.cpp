@@ -37,7 +37,7 @@ public:
     bool operator()(const G3D::Ray& ray, uint32 entry, float& distance, bool pStopAtFirstHit = true)
     {
         // Nostalrius: pas de LoS pour certains models (arbres, ...)
-        if (los && prims[entry].flags & MOD_NO_BREAK_LOS)
+        if (los && prims[entry].flags & sWorld.getConfig(CONFIG_BOOL_STATIC_OBJECT_LOS) ? MOD_NO_BREAK_LOS : MOD_NO_BREAK_LOS_BLIZZLIKE)
             return false;
 
         bool result = prims[entry].intersectRay(ray, distance, pStopAtFirstHit);
@@ -62,7 +62,7 @@ public:
     bool operator()(const G3D::Ray& ray, uint32 entry, float& distance, bool pStopAtFirstHit = true)
     {
         bool hit = prims[entry].intersectRay(ray, distance, pStopAtFirstHit);
-        if (hit && (!result || result->flags & MOD_NO_BREAK_LOS))
+        if (hit && (!result || result->flags & sWorld.getConfig(CONFIG_BOOL_STATIC_OBJECT_LOS) ? MOD_NO_BREAK_LOS : MOD_NO_BREAK_LOS_BLIZZLIKE))
             result = &prims[entry];
         return hit;
     }
