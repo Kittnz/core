@@ -23,7 +23,6 @@
 #include "GMTicketMgr.h"
 #include "GameEventMgr.h"
 #include "GameObject.h"
-#include "GameObject.h"
 #include "GridNotifiers.h"
 #include "GridNotifiersImpl.h"
 #include "Guild.h"
