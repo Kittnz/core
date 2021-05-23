@@ -2614,73 +2614,6 @@ Network.PacketBroadcast.ReduceVisDistance.DiffAbove = 0
 
 Console.Enable = 1
 
-#    Ra.Enable
-#        Enable remote console.
-#        Default: 0 (Disabled)
-#                 1 (Enabled)
-
-Ra.Enable = 0
-
-#
-#    Ra.IP
-#        Default remote console ip address, use 0.0.0.0 for every address.
-#        TW-Default: 0.0.0.0
-
-Ra.IP = 0.0.0.0
-
-#
-#    Ra.Port
-#        Default remote console port.
-#        TW-Default: 3443
-
-Ra.Port = 3443
-
-#
-#    Ra.MinLevel
-#        Minimum level that's required to login,3 by default.
-#        TW-Default: 3 (Administrator)
-
-Ra.MinLevel = 3
-
-#
-#    Ra.Secure
-#        Kick client on wrong pass.
-#        TW-Default: 1 (Enabled)
-#                    0 (Disabled)
-
-Ra.Secure = 1
-
-#
-#    Ra.Stricted
-#        Not allow execute console level only commands remotly by RA.
-#        TW-Default: 1 (Enabled)
-#                    0 (Disabled)
-
-Ra.Stricted = 1
-
-#
-#    SOAP.Enable
-#        Enable soap service.
-#        Default: 0 (Disabled)
-#                 1 (Enabled)
-
-SOAP.Enabled = 0
-
-#
-#    SOAP.IP
-#        Bound SOAP service ip address, use 0.0.0.0 to access from everywhere.
-#        TW-Default: 127.0.0.1
-
-SOAP.IP = 127.0.0.1
-
-#
-#    SOAP.Port
-#        SOAP port.
-#        TW-Default: 7878
-
-SOAP.Port = 7878
-
-#
 ###################################################################################################################
 
 ###################################################################################################################
@@ -2709,47 +2642,6 @@ CharDelete.MinLevel = 10
 #                     0 (Don't delete any characters, they stay in the database forever)
 
 CharDelete.KeepDays = 90
-
-#
-###################################################################################################################
-
-###################################################################################################################
-# AUCTION HOUSE BOT
-#
-#    AHBot.Enable
-#        Enable AH bot.
-#        Default: 0 (Disabled)
-#                 1 (Enabled)
-
-AHBot.Enable = 0
-
-#
-#    AHBot.ah.id
-#        The ID of the auction house from AuctionHouse.dbc into which to put items.
-#        Default: 7 (Blackwater Auction House)
-
-AHBot.ah.id = 7
-
-#
-#    AHBot.ah.fid
-#        The faction template ID of the virtual auctioneer.
-#        Default: 120 (Booty Bay)
-
-AHBot.ah.fid = 120
-
-#
-#    AHBot.itemcount
-#        How many items to put into the auction house.
-#        Default: 50 (Items)
-
-AHBot.itemcount = 50
-
-#
-#    AHBot.bot.guid
-#    AHBot.bot.account
-
-#AHBot.bot.guid = 1123
-#AHBot.bot.account = 32377
 
 #
 ###################################################################################################################
