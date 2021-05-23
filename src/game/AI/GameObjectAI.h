@@ -2,10 +2,14 @@
 #define _HEADER_GAMEOBJECT_AI
 
 #include "SharedDefines.h"
+#include "ObjectGuid.h"
 
+class Creature;
 class GameObject;
+class Unit;
+class ObjectGuid;
 
-class MANGOS_DLL_SPEC GameObjectAI
+class GameObjectAI
 {
     public:
         explicit GameObjectAI(GameObject* pGo): me(pGo) {}
@@ -20,7 +24,7 @@ class MANGOS_DLL_SPEC GameObjectAI
         // Called if a temporary summoned of m_creature reach a move point
         virtual void SummonedMovementInform(Creature* /*summoned*/, uint32 /*motion_type*/, uint32 /*point_id*/) {}
 
-		virtual const char* GetDebugInfo() { return ""; }
+        virtual const char* GetDebugInfo() { return ""; }
 
     protected:
         GameObject* me;

@@ -481,7 +481,7 @@ class ThreatListProcesser
         virtual bool Process(Unit* unit) = 0;
 };
 
-class MANGOS_DLL_SPEC Creature : public Unit
+class Creature : public Unit
 {
     CreatureAI *i_AI;
 

@@ -113,7 +113,7 @@ bool EffectDummyCreature_npc_kitten(Unit* pCaster, uint32 uiSpellId, SpellEffect
     if (uiSpellId == SPELL_CORRUPT_SABER_VISUAL && effIndex == EFFECT_INDEX_0)
     {
         // Not nice way, however using UpdateEntry will not be correct.
-        if (const CreatureInfo* pTemp = GetCreatureTemplateStore(NPC_CORRUPT_SABER))
+        if (CreatureInfo const* pTemp = sObjectMgr.GetCreatureTemplate(NPC_CORRUPT_SABER))
         {
             pCreatureTarget->SetEntry(pTemp->entry);
             pCreatureTarget->SetDisplayId(Creature::ChooseDisplayId(pTemp));

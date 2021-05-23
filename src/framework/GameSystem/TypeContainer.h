@@ -61,13 +61,10 @@ class TypeUnorderedMapContainer
         struct RangeProxy
         {
             using it_t = typename std::unordered_map<KEY_TYPE, SPECIFIC_TYPE*>::iterator;
-
             std::pair<it_t, it_t> valPair;
             bool valid;
-
             RangeProxy() : valid(false) {}
             RangeProxy(std::pair<it_t, it_t> itrs) : valPair(itrs), valid(true) {}
-
             operator bool() const
             {
                 return valid;
@@ -75,7 +72,6 @@ class TypeUnorderedMapContainer
         };
 
     public:
-
         template<class SPECIFIC_TYPE>
         bool insert(KEY_TYPE handle, SPECIFIC_TYPE* obj)
         {
@@ -85,7 +81,7 @@ class TypeUnorderedMapContainer
         template<class SPECIFIC_TYPE>
         bool erase(KEY_TYPE handle, SPECIFIC_TYPE* /*obj*/)
         {
-            return TypeUnorderedMapContainer::erase(i_elements, handle, (SPECIFIC_TYPE*)NULL);
+            return TypeUnorderedMapContainer::erase(i_elements, handle, (SPECIFIC_TYPE*)nullptr);
         }
 
         template<class SPECIFIC_TYPE>
@@ -93,14 +89,11 @@ class TypeUnorderedMapContainer
         {
             return TypeUnorderedMapContainer::find(i_elements, hdl, (SPECIFIC_TYPE*)NULL);
         }
-
         
         template<typename SPECIFIC_TYPE>
         using maptype_itr_t = typename std::unordered_map<KEY_TYPE, SPECIFIC_TYPE*>::iterator;
-
         template <typename SPECIFIC_TYPE>
         using sptype_pair_t = typename std::pair<maptype_itr_t<SPECIFIC_TYPE>, maptype_itr_t<SPECIFIC_TYPE>>;
-
         //it's outrageous that this is the way we have to go.
         template<class SPECIFIC_TYPE>
         sptype_pair_t<SPECIFIC_TYPE> range()
@@ -112,40 +105,32 @@ class TypeUnorderedMapContainer
         }
 
     private:
-
         ContainerUnorderedMap<OBJECT_TYPES, KEY_TYPE> i_elements;
 
-
+        // Helpers
         template <typename SPECIFIC_TYPE>
         using rangeproxy_t = RangeProxy<SPECIFIC_TYPE>;
-
         // Helpers for range
         template<class SPECIFIC_TYPE>
         static rangeproxy_t<SPECIFIC_TYPE> range(ContainerUnorderedMap<SPECIFIC_TYPE, KEY_TYPE>& elements, SPECIFIC_TYPE* /*obj*/)
         {
             return rangeproxy_t<SPECIFIC_TYPE>((std::make_pair(elements._element.begin(), elements._element.end())));
         }
-
-
         template<class SPECIFIC_TYPE>
         static rangeproxy_t<SPECIFIC_TYPE> range(ContainerUnorderedMap<TypeNull, KEY_TYPE>& elements, SPECIFIC_TYPE* /*obj*/)
         {
-            return rangeproxy_t<SPECIFIC_TYPE>();
         }
-
         template<class SPECIFIC_TYPE, class T>
         static rangeproxy_t<SPECIFIC_TYPE> range(ContainerUnorderedMap<T, KEY_TYPE>& elements, SPECIFIC_TYPE* /*obj*/)
         {
             return rangeproxy_t<SPECIFIC_TYPE>();
         }
-
         template<class SPECIFIC_TYPE, class H, class T>
         static rangeproxy_t<SPECIFIC_TYPE> range(ContainerUnorderedMap< TypeList<H, T>, KEY_TYPE >& elements, SPECIFIC_TYPE* /*obj*/)
         {
             auto proxy = TypeUnorderedMapContainer::range(elements._elements, (SPECIFIC_TYPE*)nullptr);
             return proxy.valid ? proxy : TypeUnorderedMapContainer::range(elements._TailElements, (SPECIFIC_TYPE*)nullptr);
         }
-
 
         // Insert helpers
         template<class SPECIFIC_TYPE>
@@ -189,7 +174,7 @@ class TypeUnorderedMapContainer
         {
             typename std::unordered_map<KEY_TYPE, SPECIFIC_TYPE*>::iterator i = elements._element.find(hdl);
             if (i == elements._element.end())
-                return NULL;
+                return nullptr;
             else
                 return i->second;
         }
@@ -197,20 +182,20 @@ class TypeUnorderedMapContainer
         template<class SPECIFIC_TYPE>
         static SPECIFIC_TYPE* find(ContainerUnorderedMap<TypeNull, KEY_TYPE>& /*elements*/, KEY_TYPE /*hdl*/, SPECIFIC_TYPE* /*obj*/)
         {
-            return NULL;
+            return nullptr;
         }
 
         template<class SPECIFIC_TYPE, class T>
         static SPECIFIC_TYPE* find(ContainerUnorderedMap<T, KEY_TYPE>& /*elements*/, KEY_TYPE /*hdl*/, SPECIFIC_TYPE* /*obj*/)
         {
-            return NULL;
+            return nullptr;
         }
 
         template<class SPECIFIC_TYPE, class H, class T>
         static SPECIFIC_TYPE* find(ContainerUnorderedMap< TypeList<H, T>, KEY_TYPE >& elements, KEY_TYPE hdl, SPECIFIC_TYPE* /*obj*/)
         {
-            SPECIFIC_TYPE* ret = TypeUnorderedMapContainer::find(elements._elements, hdl, (SPECIFIC_TYPE*)NULL);
-            return ret ? ret : TypeUnorderedMapContainer::find(elements._TailElements, hdl, (SPECIFIC_TYPE*)NULL);
+            SPECIFIC_TYPE* ret = TypeUnorderedMapContainer::find(elements._elements, hdl, (SPECIFIC_TYPE*)nullptr);
+            return ret ? ret : TypeUnorderedMapContainer::find(elements._TailElements, hdl, (SPECIFIC_TYPE*)nullptr);
         }
 
         // Erase helpers
@@ -237,8 +222,8 @@ class TypeUnorderedMapContainer
         template<class SPECIFIC_TYPE, class H, class T>
         static bool erase(ContainerUnorderedMap< TypeList<H, T>, KEY_TYPE >& elements, KEY_TYPE handle, SPECIFIC_TYPE* /*obj*/)
         {
-            bool ret = TypeUnorderedMapContainer::erase(elements._elements, handle, (SPECIFIC_TYPE*)NULL);
-            return ret ? ret : TypeUnorderedMapContainer::erase(elements._TailElements, handle, (SPECIFIC_TYPE*)NULL);
+            bool ret = TypeUnorderedMapContainer::erase(elements._elements, handle, (SPECIFIC_TYPE*)nullptr);
+            return ret ? ret : TypeUnorderedMapContainer::erase(elements._TailElements, handle, (SPECIFIC_TYPE*)nullptr);
         }
 };
 
@@ -275,19 +260,19 @@ struct ContainerMapList<TypeList<H, T> >
  */
 
 template<class OBJECT_TYPES>
-class MANGOS_DLL_DECL TypeMapContainer
+class TypeMapContainer
 {
     public:
 
         template<class SPECIFIC_TYPE>
-        size_t Count() const { return MaNGOS::Count(i_elements, (SPECIFIC_TYPE*)NULL); }
+        size_t Count() const { return MaNGOS::Count(i_elements, (SPECIFIC_TYPE*)nullptr); }
 
         /// inserts a specific object into the container
         template<class SPECIFIC_TYPE>
         bool insert(SPECIFIC_TYPE *obj)
         {
             SPECIFIC_TYPE* t = MaNGOS::Insert(i_elements, obj);
-            return (t != NULL);
+            return (t != nullptr);
         }
 
         ///  Removes the object from the container, and returns the removed object
@@ -295,7 +280,7 @@ class MANGOS_DLL_DECL TypeMapContainer
         bool remove(SPECIFIC_TYPE* obj)
         {
             SPECIFIC_TYPE* t = MaNGOS::Remove(i_elements, obj);
-            return (t != NULL);
+            return (t != nullptr);
         }
 
         ContainerMapList<OBJECT_TYPES> & GetElements() { return i_elements; }

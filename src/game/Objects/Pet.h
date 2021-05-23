@@ -142,7 +142,7 @@ extern const uint32 LevelStartLoyalty[6];
 class Player;
 struct CharacterPetCache;
 
-class MANGOS_DLL_SPEC Pet : public Creature
+class Pet : public Creature
 {
     public:
         explicit Pet(PetType type = MAX_PET_TYPE);

@@ -80,7 +80,7 @@ enum PlayerChatTag
     CHAT_TAG_GM                 = 3,
 };
 
-class MANGOS_DLL_SPEC ChatHandler
+class ChatHandler
 {
     public:
         explicit ChatHandler(WorldSession* session);

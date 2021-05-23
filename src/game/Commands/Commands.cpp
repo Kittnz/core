@@ -1,4 +1,4 @@
-﻿#include "AI/GameObjectAI.h"
+﻿#include "GameObjectAI.h"
 #include "AccountMgr.h"
 #include "Anticheat.h"
 #include "AsyncCommandHandlers.h"
@@ -56,6 +56,7 @@
 #include "ScriptMgr.h"
 #include "SpellMgr.h"
 #include "SpellModMgr.h"
+#include "SQLStorages.h"
 #include "SystemConfig.h"
 #include "TargetedMovementGenerator.h"
 #include "TemporarySummon.h"
@@ -71,12 +72,11 @@
 #include "revision.h"
 #include <cctype>
 #include <fstream>
-#include <fstream>
 #include <iostream>
-#include <map>
 #include <map>
 #include <string.h>
 #include <typeinfo>
+#include <regex>
 
 bool ChatHandler::HandleReloadMangosStringCommand(char* /*args*/)
 {
@@ -4638,11 +4638,6 @@ bool ChatHandler::HandleAccountPasswordCommand(char* args)
     SetSentErrorMessage(true);   
     return false;
 }
-
-#ifdef _DEBUG_VMAPS
-#include "VMapFactory.h"
-#endif
-#include <regex>
 
 bool ChatHandler::HandleNpcSayCommand(char* args)
 {

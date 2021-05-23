@@ -63,7 +63,7 @@ struct CreatureAISpellsEntry : CreatureSpellsEntry
     CreatureAISpellsEntry(const CreatureSpellsEntry& EntryStruct) : CreatureSpellsEntry(EntryStruct), cooldown(urand(EntryStruct.delayInitialMin, EntryStruct.delayInitialMax)) {}
 };
 
-class MANGOS_DLL_SPEC CreatureAI
+class CreatureAI
 {
     public:
         explicit CreatureAI(Creature* creature) : m_creature(creature), m_bUseAiAtControl(false), m_uLastAlertTime(0), m_uiCastingDelay(0), m_bMeleeAttack(true), m_bCombatMovement(true)
