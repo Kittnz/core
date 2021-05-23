@@ -21750,36 +21750,38 @@ bool Player::IsReturning()
 
 void Player::CheckIfShouldBeInBeginnersGuild(uint32 level)
 {
-        // In an effort to assist new players, the Turtle WoW team has decided to implement a new feature called "The Beginner’s Guild". 
-        // This new feature will auto invite players into a guild, helping them easily find players who are also just starting out fresh.
-        // Once players reach level 15 they will be removed from the guild, and thrown back into the wild!
+    // In an effort to assist new players, the Turtle WoW team has decided to implement a new feature called "The Beginner’s Guild". 
+    // This new feature will auto invite players into a guild, helping them easily find players who are also just starting out fresh.
+    // Once players reach level 15 they will be removed from the guild, and thrown back into the wild!
 
-        uint32 GuildId = GetGuildId();
-        uint32 BeginnersGuildId = 0;
+    const uint32 cui_GuildId = GetGuildId();
+    uint32 ui_BeginnersGuildId = 0;
 
-        BeginnersGuildId = (GetTeam() == ALLIANCE) ? sWorld.getConfig(CONFIG_INT32_BEGINNERS_GUILD_ALLIANCE) : sWorld.getConfig(CONFIG_INT32_BEGINNERS_GUILD_HORDE);
+    ui_BeginnersGuildId = (GetTeam() == ALLIANCE) ? sWorld.getConfig(CONFIG_INT32_BEGINNERS_GUILD_ALLIANCE) : sWorld.getConfig(CONFIG_INT32_BEGINNERS_GUILD_HORDE);
+    if (!ui_BeginnersGuildId)
+        return;
 
-        // Warn at level 14:
-
-        if (level == 14 && GetSession()->GetSecurity() == SEC_PLAYER && GuildId == BeginnersGuildId)
+    // Warn at level 14:
+    if (level == 14 && GetSession()->GetSecurity() == SEC_PLAYER && cui_GuildId == ui_BeginnersGuildId)
         ChatHandler(this).PSendSysMessage("|cff00FF00You will be automatically removed from beginner's guild when you reach level 15!|r");
 
-        // Back into the wild:
-
-        if (level == 15 && GetSession()->GetSecurity() == SEC_PLAYER && GuildId == BeginnersGuildId)
+    // Back into the wild:
+    if (level == 15 && GetSession()->GetSecurity() == SEC_PLAYER && cui_GuildId == ui_BeginnersGuildId)
+    {
+        if (Guild* pNoobSquad = sGuildMgr.GetGuildById(ui_BeginnersGuildId))
         {
-            if (Guild* NoobSquad = sGuildMgr.GetGuildById(BeginnersGuildId))
-            {
-                NoobSquad->DelMember(GetGUIDLow());
-                ChatHandler(this).PSendSysMessage("|cff00FF00You've made it to the water, time for you to find your own way!|r");
-            }
+            pNoobSquad->DelMember(GetGUIDLow());
+            ChatHandler(this).PSendSysMessage("|cff00FF00You've made it to the water, time for you to find your own way!|r");
         }
+    }
 }
 
 void Player::JoinBeginnersGuild()
 {
-    Guild* BeginnersGuild = (GetTeam() == ALLIANCE) ? sGuildMgr.GetGuildById(sWorld.getConfig(CONFIG_INT32_BEGINNERS_GUILD_ALLIANCE)) : sGuildMgr.GetGuildById(sWorld.getConfig(CONFIG_INT32_BEGINNERS_GUILD_HORDE));
-    BeginnersGuild->AddMember(GetObjectGuid(), BeginnersGuild->GetLowestRank());
+    Guild* pBeginnersGuild = nullptr;
+    pBeginnersGuild = (GetTeam() == ALLIANCE) ? sGuildMgr.GetGuildById(sWorld.getConfig(CONFIG_INT32_BEGINNERS_GUILD_ALLIANCE)) : sGuildMgr.GetGuildById(sWorld.getConfig(CONFIG_INT32_BEGINNERS_GUILD_HORDE));
+    if (pBeginnersGuild)
+        pBeginnersGuild->AddMember(GetObjectGuid(), pBeginnersGuild->GetLowestRank());
 }
 
 bool Player::InGurubashiArena(bool checkOutsideArea) const 
