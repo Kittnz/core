@@ -24,6 +24,7 @@
 #include <G3D/AABox.h>
 #include <G3D/Ray.h>
 
+#include <World.h>
 #include "Platform/Define.h"
 
 namespace VMAP
