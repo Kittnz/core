@@ -290,26 +290,27 @@ set (SCRIPTS_SRCS
     turtlewow/shop.cpp
     turtlewow/tw_random.cpp
 
-    turtlewow/creatures/npc_turtle.cpp
     turtlewow/creatures/npc_zebrian.cpp
     turtlewow/creatures/npc_drogon.cpp
     turtlewow/creatures/npc_battlemaster.cpp
     turtlewow/creatures/npc_arena.cpp
-    turtlewow/creatures/boss_pompa.cpp
-    turtlewow/creatures/boss_turtlhu.cpp
-    turtlewow/creatures/boss_snowball.cpp
-    turtlewow/creatures/boss_nerubian_overseer.cpp
-    turtlewow/creatures/boss_dark_reaver.cpp
-    turtlewow/creatures/boss_ostarius.cpp
-    turtlewow/creatures/instance_stormwind_vaults.cpp
 
-    turtlewow/creatures/cot/black_morass/boss_gerastrasz.cpp
-    turtlewow/creatures/cot/instance_caverns_of_time.cpp
-    turtlewow/creatures/cot/instance_caverns_of_time.h
-    turtlewow/creatures/cot/black_morass/boss_chromie.cpp
-    turtlewow/creatures/cot/black_morass/boss_chronormu.cpp
+    turtlewow/world_bosses/boss_pompa.cpp
+    turtlewow/world_bosses/boss_turtlhu.cpp
+    turtlewow/world_bosses/boss_snowball.cpp
+    turtlewow/world_bosses/boss_nerubian_overseer.cpp
+    turtlewow/world_bosses/boss_dark_reaver.cpp
+    turtlewow/world_bosses/boss_ostarius.cpp
 
-    turtlewow/mirage_raceway/miracle_raceaway.cpp
+    turtlewow/dungeons/stormwind_vaults/instance_stormwind_vaults.cpp
+
+    turtlewow/dungeons/caverns_of_time/black_morass/boss_gerastrasz.cpp
+    turtlewow/dungeons/caverns_of_time/instance_caverns_of_time.cpp
+    turtlewow/dungeons/caverns_of_time/instance_caverns_of_time.h
+    turtlewow/dungeons/caverns_of_time/black_morass/boss_chromie.cpp
+    turtlewow/dungeons/caverns_of_time/black_morass/boss_chronormu.cpp
+
+    turtlewow/mirage_raceway.cpp
     turtlewow/transmog/transmog.cpp
     turtlewow/gardening.cpp
 )
