@@ -234,7 +234,7 @@ bool ModelSpawn::readFromFile(FILE* rf, ModelSpawn& spawn)
 
     //Hackfix for some no-LoS M2s
     if (std::find(NoLosM2s.begin(), NoLosM2s.end(), spawn.name) != NoLosM2s.end())
-        spawn.flags |= MOD_NO_BREAK_LOS;
+        spawn.flags |= sWorld.getConfig(CONFIG_BOOL_STATIC_OBJECT_LOS) ? MOD_NO_BREAK_LOS : MOD_NO_BREAK_LOS_BLIZZLIKE;
 
     return true;
 }
