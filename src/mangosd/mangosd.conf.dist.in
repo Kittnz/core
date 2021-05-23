@@ -5,46 +5,14 @@
 [MangosdConf]
 ConfVersion=2010100901
 
-###################################################################################################################
-# CONNECTIONS AND DIRECTORIES
-# PERFORMANCE SETTINGS
-# OPTIMIZATION TWEAKS
-# ANTICRASH CONFIGURATION
-# PROGRESSION CONFIG
-# SERVER LOGGING
-# SERVER SETTINGS
-# PLAYER INTERACTION
-# CREATURE AND GAMEOBJECT SETTINGS
-# CHAT SETTINGS
-# GAME MASTER SETTINGS
-# VISIBILITY
-# SERVER RATES
-# BATTLEGROUND CONFIG
-# OUTDOOR PVP CONFIG
-# NETWORK CONFIG
-# CONSOLE
-# CHARACTER DELETION
-# AUCTION HOUSE BOT
-# PLAYER BOTS
-# MAIL FLOOTING
-# DYNAMIC RESPAWN
-# BEGINNER GUILD
-# AUTOBROADCAST
-# TRANSMOG
-# EXPANSION
-###################################################################################################################
-
-
-# CONNECTIONS AND DIRECTORIES
-#
-# RealmID | RealmID must match the realmlist inside the realmd database.
+#    RealmID
+#        RealmID must match the realmlist inside the realmd database.
 
 RealmID = 1
 
 #
 #    DataDir
 #        Data directory setting.
-#        TW-Default: "../data/"
 
 DataDir = "../data/"
 
@@ -52,223 +20,168 @@ DataDir = "../data/"
 #    LogsDir
 #        Logs directory setting.
 #        Important: Logs dir must exists, or all logs need to be disabled
-#        TW-Default: "../logs/"
-#                    ""         (If no path is decleared, the logs will be stored where the binaries are)
 
 LogsDir = "../logs/"
 
 #
 #	HonorDir
 #        Folder to store HCR files. These are logs of weekly honor calculation.
-#        TW-Default: "../honor/"
-#                    ""         (If no path is decleared, the logs will be stored where the binaries are)
 
 HonorDir = "../honor/"
 
 #
 #	HardcoreModeLogFile
 #        HardcoreModeLogFile name.
-#        TW-Default: "hardcore.log"
 
 HardcoreModeLogFile = "hardcore.log"
 
 #
-#    LoginDatabase.Info
-#    WorldDatabase.Info
-#    CharacterDatabase.Info
+#    Database.Info
 #        Database connection settings for the world server.
-#        Example: hostname;port;username;password;database
 
-LoginDatabase.Info     = ""
-WorldDatabase.Info     = ""
+LoginDatabase.Info = ""
+WorldDatabase.Info = ""
 CharacterDatabase.Info = ""
 
 #
-#	LoginDatabase.Connections
-#	WorldDatabase.Connections
-#	CharacterDatabase.Connections
+#	Database.Connections
 #		 Amount of connections to database which will be used for SELECT queries. Maximum 16 connections per database.
 
-LoginDatabase.Connections     = 10
-WorldDatabase.Connections     = 1
+LoginDatabase.Connections = 10
+WorldDatabase.Connections = 1
 CharacterDatabase.Connections = 10
 
 #
-#   LoginDatabase.WorkerThreads
-#   WorldDatabase.WorkerThreads
-#   CharacterDatabase.WorkerThreads
+#   Database.WorkerThreads
 #        Amount of async threads (with dedicated connection) which will be used for async SELECT, executes, and transactions.
-#        TW-Default: 1 async worker
 
-LoginDatabase.WorkerThreads     = 1
-WorldDatabase.WorkerThreads     = 1
+LoginDatabase.WorkerThreads = 1
+WorldDatabase.WorkerThreads = 1
 CharacterDatabase.WorkerThreads = 1
 
 #
 #    MaxPingTime
 #        Settings for maximum database-ping interval.
-#        TW-Default: 30 (Minutes)
 
 MaxPingTime = 30
 
 #
 #    WorldServerPort
 #        Port on which the server will listen.
-#        TW-Default: 8090
 
 WorldServerPort = 8090
 
 #
 #    BindIP
-#        Bind World Server to IP/hostname
-#        This option is useful for running multiple worldd/realmd instances
-#        on different IP addresses using default ports.
-#        TW-Default: "51.89.212.98"
+#        This option is useful for running multiple worldd/realmd instances on different IP addresses using default ports.
 
 BindIP = "51.89.212.98"
 
 #
-###################################################################################################################
-
-###################################################################################################################
-# PERFORMANCE SETTINGS
-#
 #    UseProcessors
 #        Used processors mask for multi-processors system. (Used only at Windows)
-#        TW-Default: 0 (selected by OS)
 
 UseProcessors = 0
 
 #
 #    ProcessPriority
 #        Process priority setting. (Used only at Windows)
-#        TW-Default: 1 (HIGH)
-#                    0 (Normal)
 
 ProcessPriority = 1
 
 #
 #    Compression
 #        Compression level for update packages sent to client. (1-9)
-#        TW-Default: 1 (Speed)
-#                    9 (Best compression)
 
 Compression = 1
 
 #
 #    PlayerLimit
 #        Initial realm capacity. (Excluding Mods, GMs and Admins)
-#        TW-Default: 0 (Infinite players)
-#                   -1 (Mods, GMs and Admins only)
-#                   -2 (GMs and Admins only)
-#                   -3 (Admins only)
 
 PlayerLimit = 0
 
 #
 #    PlayerHardLimit
 #        Maximum number of players in the world, after increasing PlayerLimit with LoginPerTick.
-#        TW-Default: 4000 (Disabled)
 
 PlayerHardLimit = 4000
 
 #
 #    LoginQueue.GracePeriodSecs
 #        How many seconds after last logout can we login and skip the queue.
-#        TW-Default: 0 (Disabled)
 
 LoginQueue.GracePeriodSecs = 0
 
 #
 #    LoginPerTick
-#        Maximum number of players allowed to login from the queue during a world update tick. (~every 100 ms)
-#        WARNING: Overwrites $PlayerLimit value.
-#        TW-Default: 9 (Players)
+#        Maximum number of players allowed to login from the queue during a world update tick. (~ Every 100 ms)
 
 LoginPerTick = 9
 
 #
 #    CharacterScreenMaxIdleTime
 #        Number of seconds to allow for players to remain on the character screen before disconnecting.
-#        TW-Default: 900 (Seconds)
-#                      0 (Disabled)
 
 CharacterScreenMaxIdleTime = 900
 
 #
 #    SaveRespawnTimeImmediately
 #        Save respawn time for creatures at death and for gameobjects at use.
-#        TW-Default: 1 (Save creature & gameobject respawn time without waiting grid unload)
-#                    0 (Save creature & gameobject respawn time at grid unload)
 
 SaveRespawnTimeImmediately = 1
 
 #
 #    MaxOverspeedPings
 #        Maximum overspeed ping count before player kick.
-#        TW-Default: 15
-#                    2 (Minimum)
-#                    0 (Disabled)
 
 MaxOverspeedPings = 15
 
 #
 #    GridUnload
 #        Unload grids. (If you have lot memory you can disable it to speed up player move to new grids second time)
-#        TW-Default: 0 (Do not unload grids)
-#                    1 (Unload grids)
 
 GridUnload = 0
 
 #
 #    CleanupTerrain
 #        Enable / Disable CleanupTerrain.
-#        TW-Default: 1 (Enabled)
-#                    0 (Disabled)
 
 CleanupTerrain = 1
 
 #
 #    GridCleanUpDelay
 #        Grid clean up delay.
-#        TW-Default: 300000 (Milliseconds)
 
 GridCleanUpDelay = 300000
 
 #
 #    MapUpdateInterval
 #        Map update interval.
-#        TW-Default: 100 (Milliseconds)
 
-MapUpdateInterval = 50
+MapUpdateInterval = 100
 
 #
 #    ChangeWeatherInterval
 #        Weather update interval.
-#        TW-Default: 1200000 (Milliseconds)
 
 ChangeWeatherInterval = 1200000
 
 #
 #    PlayerSave.Interval
 #        Player save interval.
-#        TW-Default: 60000 (Milliseconds)
 
 PlayerSave.Interval = 60000
 
 #
 #    PlayerSave.Stats.MinLevel
 #        Minimum level for saving character stats for external usage in database.
-#        TW-Default: 0  (Do not save character stats)
-#                    1+ (Save stats for characters with level 1+)
 
 PlayerSave.Stats.MinLevel = 0
 
 #
 #    PlayerSave.Stats.SaveOnlyOnLogout
 #        Enable/Disable saving of character stats only on logout.
-#        TW-Default: 1 (Only save on logout)
-#                    0 (Save on every player save)
 
 PlayerSave.Stats.SaveOnlyOnLogout = 1
 
@@ -277,7 +190,6 @@ PlayerSave.Stats.SaveOnlyOnLogout = 1
 #    Terrain.Preload.Instances
 #        Enable/Disable to load all terrain data on server startup.
 #        Recommended value: 1. Else, can cause crashes if 'MapUpdate.Threads' > 1. (One map loads a tile, while the other uses pathfinding etc ...)
-#        TW-Default: 1
 
 Terrain.Preload.Continents = 1
 Terrain.Preload.Instances  = 1
@@ -286,8 +198,6 @@ Terrain.Preload.Instances  = 1
 #    vmap.enableLOS
 #    vmap.enableHeight
 #        Enable/Disable VMaps support for line of sight and height calculation.
-#        TW-Default: 1 (Enabled)
-#                    0 (Disabled)
 
 vmap.enableLOS = 1
 vmap.enableHeight = 1
@@ -295,15 +205,12 @@ vmap.enableHeight = 1
 #
 #    vmap.ignoreSpellIds
 #        These spells are ignored for LoS calculation. (List of ids with delimiter ',')
-#        TW-Default: "7720"
 
 vmap.ignoreSpellIds = "7720"
 
 #
 #    vmap.enableIndoorCheck
 #        Enable / Disable VMap based indoor check to remove outdoor-only auras.
-#        TW-Default: 1 (Enabled)
-#                    0 (Disabled)
 
 vmap.enableIndoorCheck = 1
 vmap.petLOS = 1
@@ -311,24 +218,18 @@ vmap.petLOS = 1
 #
 #    mmap.enabled
 #        Enable / Disable pathfinding using mmaps.
-#        TW-Default: 1 (Enabled)
-#                    0 (Disabled)
 
 mmap.enabled = 1
 
 #
 #    Collision.Models.Unload
 #        Free model when no one uses it anymore.
-#        TW-Default: 1 (Enabled)
-#                    0 (Disabled)
 
 Collision.Models.Unload = 1
 
 #
 #    DetectPosCollision
 #        Check final move position, summon position, etc. For visible collision with other objects or walls.
-#        TW-Default: 1 (Enable, requires more CPU power)
-#                    0 (Disable, poor position selection but will require less CPU power)
 
 DetectPosCollision = 1
 
@@ -337,64 +238,43 @@ DetectPosCollision = 1
 #        Max distance from movement target point (+moving unit size) and targeted object (+size)
 #        after that new target movement point calculated. Max: melee attack range (5), min: contact range (0.5)
 #        More distance let have better performence, less distance let have more sensitive reaction at target move.
-#        TW-Default: 1.5
 
 TargetPosRecalculateRange = 1.5
 
 #
 #    UpdateUptimeInterval
 #        Update realm uptime period for save data in 'uptime' table. (Must be > 0)
-#        TW-Default: 10 (Minutes)
 
 UpdateUptimeInterval = 10
 
 #
 #    MaxCoreStuckTime
-#        Periodically check if the process got freezed, if this is the case force crash after the specified
-#        amount of seconds. Must be > 0. Recommended > 10 secs if you use this.
-#        TW-Default: 0 (Disabled)
+#        Periodically check if the process got freezed, if this is the case force crash after the specified amount of seconds.
+#        Must be > 0. Recommended > 10 secs if you use this.
 
 MaxCoreStuckTime = 0
 
 #
 #    BanListReloadTimer
 #        Time between 'ip_banned' / 'account_banned' reload. Useful in multi realm cases.
-#        TW-Default: 120
 
 BanListReloadTimer = 120
 
 #
 #    AddonChannel
-#        Permit/disable the use of the addon channel through the server
-#        (some client side addons can stop work correctly with disabled addon channel)
-#        TW-Default: 1 (permit addon channel)
-#                    0 (do not permit addon channel)
+#        Enable / Disable the use of the addon channel through the server.
+#        (Some client side addons can stop work correctly with disabled addon channel)
 
 AddonChannel = 1
 
 #
 #    CleanCharacterDB
 #        Perform character db cleanups on start up
-#        TW-Default: 1 (Enable)
-#                    0 (Disabled)
 
 CleanCharacterDB = 1
 
 #
-###################################################################################################################
-
-###################################################################################################################
-# OPTIMIZATION TWEAKS
-#
-#    Continents.Instanciate
-#    Continents.InactivePlayers.SkipUpdates
-#    MapUpdate.ReduceGridActivationDist.Tick
-#    MapUpdate.IncreaseGridActivationDist.Tick
-#    MapUpdate.MinGridActivationDistance
-#    MapUpdate.ReduceVisDist.Tick
-#    MapUpdate.IncreaseVisDist.Tick
-#    MapUpdate.MinVisibilityDistance
-#        TW-Default: 0, 0, 0, 0, 0, 0, 0, 0
+#    Continents & MapUpdate
 
 Continents.Instanciate = 0
 Continents.InactivePlayers.SkipUpdates = 0
@@ -408,14 +288,12 @@ MapUpdate.MinVisibilityDistance = 0
 #
 #    MapUpdate.Empty.UpdateTime
 #        Maps with no player for more than $UpdateTime (Milliseconds) will no longer be updated.
-#        TW-Default: 0 (Disabled)
 
 MapUpdate.Empty.UpdateTime = 0
 
 #
 #    MapUpdate.Instanced.UpdateThreads
 #        Per-map threading.
-#        TW-Default: 2
 
 MapUpdate.Instanced.UpdateThreads = 2
 
@@ -425,7 +303,6 @@ MapUpdate.Instanced.UpdateThreads = 2
 #    MapUpdate.VisibilityUpdate.MaxThreads
 #    MapUpdate.VisibilityUpdate.Timeout
 #        Per-map subthreads. (Not for instanced maps)
-#        TW-Default: 4, 100, 4, 100
 
 MapUpdate.ObjectsUpdate.MaxThreads = 4
 MapUpdate.ObjectsUpdate.Timeout = 100
@@ -437,7 +314,6 @@ MapUpdate.VisibilityUpdate.Timeout = 100
 #    MapUpdate.UpdatePlayersDiff
 #    MapUpdate.UpdateCellsDiff
 #        Hardcode multithreading options.
-#        TW-Default: 100, 100, 100
 
 MapUpdate.UpdatePacketsDiff = 100
 MapUpdate.UpdatePlayersDiff = 100
@@ -446,19 +322,16 @@ MapUpdate.UpdateCellsDiff = 100
 #
 #    MapUpdate.Continents.MTCells.Threads
 #        Number of different cells to update at the sametime.
-#        TW-Default: 1
 
 MapUpdate.Continents.MTCells.Threads = 1
 
 #    MapUpdate.Continents.MTCells.SafeDistance
 #        2 cells wont be updated at the same time if they are at an inferior distance from each other. (Thread race issues)
-#        TW-Default: 1066
 
 MapUpdate.Continents.MTCells.SafeDistance = 1066
 
 #    Continents.MotionUpdate.Threads
 #        Parallelized execution of cells from same map.
-#        TW-Default: 0
 
 Continents.MotionUpdate.Threads = 0
 
@@ -466,7 +339,6 @@ Continents.MotionUpdate.Threads = 0
 #    AsyncTasks.Threads
 #    AsyncQueriesTickTimeout
 #        Number of threads for async tasks. (/who, list AH items ...)
-#        TW-Default: 1, 0
 
 AsyncTasks.Threads = 1
 AsyncQueriesTickTimeout = 0
@@ -475,71 +347,43 @@ AsyncQueriesTickTimeout = 0
 #    Movement.RelocationVmapsCheckDelay
 #    Movement.MaxPointsPerPacket
 #        Delayed repositionning checks. (Mounts inside / swimming ...)
-#        TW-Default: 0, 80
 
 Movement.RelocationVmapsCheckDelay = 0
 Movement.MaxPointsPerPacket = 80
 
 #
-###################################################################################################################
-
-###################################################################################################################
-# ANTICRASH CONFIGURATION
-#
 #    Anticrash.Options
 #        Flag values: 1 Announce, 2 Save all, 4 Crash instances, 8 Crash continents, Coredump 16.
-#        TW-Default: 28
 
 Anticrash.Options = 28
 
 #
 #    Anticrash.Rearm.Timer
 #        Timer between 2 crashes to be protected by anticrash.
-#        TW-Default: 60000 (Milliseconds)
-#                        0 (Disable automatic rearm)
 
 Anticrash.Rearm.Timer = 60000
 
 #
-###################################################################################################################
-
-###################################################################################################################
-# PROGRESSION CONFIG
-#
 #    WowPatch
 #        The current patch the server targets for quest, NPC, dungeon and raid availability.
-#        1.2   = 0
-#        1.3   = 1
-#        1.4   = 2
-#        1.5   = 3
-#        1.6   = 4
-#        1.7   = 5
-#        1.8   = 6
-#        1.9   = 7
-#        1.10  = 8
-#        1.11  = 9
-#        1.12  = 10
 
 WowPatch = 10
 
 #
 #    PvP.AccurateEquipRequirements
 #        Whether to enforce Blizzlike PVP rank requirements to equip PVP gear before patch 1.6.
-#        TW-Default: 1
 
 PvP.AccurateEquipRequirements = 1
 
 #
 #    PvP.AccuratePurchaseRequirements
 #        Whether to enforce Blizzlike PVP rank requirements to purchase PVP gear (i.e. lifetime or current rank).
-#        TW-Default: 1 (require current rank)
 
 PvP.AccuratePurchaseRequirements = 1
 
 #
 #    PvP.AccurateZoneRequirements
 #        Whether to enforce Blizzlike PVP rank requirements to zone into the Champion and Legends halls.
-#        TW-Default: 1
 
 PvP.AccurateZoneRequirements = 1
 
@@ -547,35 +391,30 @@ PvP.AccurateZoneRequirements = 1
 #    PvP.AccurateTimeline
 #        Whether to enforce accurate PVP timelines. eg. the honour system was not implemented before patch 1.4.
 #        If set, players will be unable to gain rank until the appropriate patch.
-#        TW-Default: 1
 
 PvP.AccurateTimeline = 1
 
 #
 #    PvP.AccurateRewards
 #        Whether to alter PVP reputation and honorable kill rewards based on patch (changed several times).
-#        TW-Default: 1
 
 PvP.AccurateRewards = 1
 
 #
 #    PvP.DishonorableKills
 #        Whether to give dishonorable kills to players who kill civilians.
-#        TW-Default: 1
 
 PvP.DishonorableKills = 1
 
 #
 #    Progression.AccuratePetStatistics
 #        Whether to allow Blizzlike pet statistic (damage, speed, resists) progression.
-#        TW-Default: 1
 
 Progression.RestoreDeletedItems = 1
 
 #
 #    Progression.AccurateLFGAvailability
 #        If set, disables the LFG system pre-1.3
-#        TW-Default: 1
 
 Progression.AccuratePetStatistics = 1
 
@@ -583,7 +422,6 @@ Progression.AccuratePetStatistics = 1
 #    Progression.AccuratePVEEvents
 #        Whether to apply progressional changes in PVE events (NOT boss scripts). These are events which
 #        affect quests and other scripted scenes.
-#        TW-Default: 1
 
 Progression.AccurateLFGAvailability = 1
 
@@ -592,44 +430,37 @@ Progression.AccurateLFGAvailability = 1
 #        Whether to accurately portray changes in spell effects (eg. Deviate Fish). NOT applicable to effects
 #        which change their functionality (eg. spell changed) or values between patches. Only affects
 #        spells which had effects added or removed which still exist in the game client.
-#        TW-Default: 1
 
 Progression.AccuratePVEEvents = 1
 
 #
 #    Progression.RestoreDeletedItems
 #        Whether to automatically restore items which were previously deleted because no item template with
-#        this entry existed on that content patch. Players will receive the item in the mail once it has been
-#        added to the game.
-#        TW-Default: 1
+#        this entry existed on that content patch. Players will receive the item in the mail once it has been added to the game.
 
 Progression.AccurateSpellEffects = 1
 
 #
 #    Progression.NoRespecPriceDecay
 #        If set, the talent respec cost will not decay until patch 1.11 when the monthly reduction was added.
-#        TW-Default: 1
 
 Progression.NoRespecPriceDecay = 1
 
 #
 #    Progression.NoQuestXpToGold
 #        If set, quest xp gained at max level will not be converted to gold until patch 1.10 when the feature was added.
-#        TW-Default: 1
 
 Progression.NoQuestXpToGold = 1
 
 #
 #    Progression.UnlinkedAuctionHouses
 #        If set, every auction house is separate until patch 1.9. Does not apply to goblin auction houses.
-#        TW-Default: 1
 
 Progression.UnlinkedAuctionHouses = 1
 
 #
 #    DebuffLimit
 #        How many debuffs can be present on a target simultaneously
-#        TW-Default: 0 (Decide automatically based on patch)
 
 DebuffLimit = 0
 
@@ -642,16 +473,12 @@ DebuffLimit = 0
 #    LogSQL
 #        Enable logging of GM commands. (All SQL code will be written to a log file)
 #        If a new day starts (00:00:00), a new file is created, the old file will not be deleted.
-#        TW-Default: 1 (Write SQL code to logfile)
-#                    0 (Do not log)
 
 LogSQL = 1
 
 #
 #    PidFile
 #        World daemon PID file.
-#        TW-Default: "twlive.pid"
-#                    ""           (Do not create PID file)
 
 PidFile = "twlive.pid"
 
@@ -659,31 +486,24 @@ PidFile = "twlive.pid"
 #    LogLevel
 #        Server console level of logging
 #        0 = Minimum; 1 = Basic&Error; 2 = Detail; 3 = Full/Debug
-#        TW-Default: 1
 
 LogLevel = 1
 
 #
 #    LogTime
 #        Include time in server console output.
-#        TW-Default: 0 (No time)
-#                    1 (Print time)
 
 LogTime = 0
 
 #
 #    LogFile
 #        Logfile name.
-#        TW-Default: "server.log"
-#                    ""           (Empty name disable creating log file)
 
 LogFile = "server.log"
 
 #
 #    LogTimestamp
 #        Logfile with timestamp of server start in name.
-#        TW-Default: 1 (Add timestamp in name in form Logname_YYYY-MM-DD_HH-MM-SS.Ext for Logname.Ext)
-#                    0 (No timestamp)
 
 LogTimestamp = 1
 
@@ -691,42 +511,23 @@ LogTimestamp = 1
 #    LogFileLevel
 #        Server file level of logging.
 #        0 = Minimum; 1 = Error; 2 = Detail; 3 = Full/Debug
-#        TW-Default: 1
 
 LogFileLevel = 1
 
 #
 #    HonorLogFile
 #        HonorLogFile name.
-#        TW-Default: "honor.log"
-#                    ""          (Empty name disable creating log file)
 
 HonorLogFile = "honor.log"
 
 #
 #    HonorLogTimestamp
 #        HonorLogTimestamp with timestamp of server start in name.
-#        TW-Default: 0 (No timestamp)
-#                    1 (Add timestamp in name in form Logname_YYYY-MM-DD_HH-MM-SS.Ext for Logname.Ext)
 
 HonorLogTimestamp = 0
 
 #
-#    LogFilter_TransportMoves
-#    LogFilter_CreatureMoves
-#    LogFilter_VisibilityChanges
-#    LogFilter_DbStrictedCheck
-#    LogFilter_Honor
-#    LogFilter_PeriodicAffects
-#    LogFilter_PlayerMoves
-#    LogFilter_SQLText
-#    LogFilter_AIAndMovegens
-#    LogFilter_PlayerStats
-#    LogFilter_Damage
-#    LogFilter_Combat
-#    LogFilter_SpellCast
-#    LogFilter_Pathfinding
-#    LogFilter_Weather
+#    LogFilter
 #        Log filters.
 
 LogFilter_TransportMoves = 1
@@ -748,44 +549,36 @@ LogFilter_Weather = 0
 #
 #    WorldLogFile
 #        Packet logging file for the worldserver.
-#        TW-Default: ""
 
 WorldLogFile = ""
 
 #
 #    WorldLogTimestamp
 #        Logfile with timestamp of server start in name.
-#        TW-Default: 0 (No timestamp in name)
-#                    1 (Add timestamp in name in form Logname_YYYY-MM-DD_HH-MM-SS.Ext for Logname.Ext)
 
 WorldLogTimestamp = 0
 
 #
 #    DBErrorLogFile
 #        Log file of DB errors detected at server run.
-#        TW-Default: "errors.log"
 
 DBErrorLogFile = "errors.log"
 
 #
 #    DBErrorFixFile
 #        Log file of SQL requests to apply to fix detected database errors.
-#        TW-Default: ""
 
 DBErrorFixFile = ""
 
 #
 #    CharLogFile
 #        Character operations logfile name.
-#        TW-Default: "char.log"
 
 CharLogFile = "char.log"
 
 #
 #    CharLogTimestamp
 #        Log file with timestamp of server start in name.
-#        TW-Default: 0 (No timestamp in name)
-#                    1 (Add timestamp in name in form Logname_YYYY-MM-DD_HH-MM-SS.Ext for Logname.Ext)
 
 CharLogTimestamp = 0
 
@@ -794,102 +587,84 @@ CharLogTimestamp = 0
 #        Write character dump before deleting in Char.log.
 #        For restoration, cut character data from log starting from
 #        line == START DUMP == to line == END DUMP == (without its) in file and load it using loadpdump command
-#        TW-Default: 0 (Do not include dumping chars to log)
-#                    1 (Include dumping chars to log)
 
 CharLogDump = 0
 
 #
 #    ChatLogEnable
 #        Enable or disable logging of player chat.
-#        TW-Default: 1
 
 ChatLogEnable = 1
 
 #
 #    ChatLogFile
 #        Log file for player chat.
-#        TW-Default: "chat.log"
 
 ChatLogFile = "chat.log"
 
 #
 #    ChatLogTimestamp
 #        Add time stamp to logged chat messages.
-#        TW-Default: 0
 
 ChatLogTimestamp = 0
 
 #
 #    BgLogFile
 #        Log file for battlegrounds system.
-#        TW-Default: "bg.log"
 
 BgLogFile = "bg.log"
 
 #
 #    BgLogTimestamp
 #        Add time stamp to battleground logs.
-#        TW-Default: 0
 
 BgLogTimestamp = 0
 
 #
 #    GmLogFile
 #        GM Log file of gm commands.
-#        TW-Default: "gm.log"
 
 GmLogFile = "gm.log"
 
 #
 #    GmLogTimestamp
 #        GM Logfile with timestamp of server start in name
-#        TW-Default: 0 (No timestamp in name)
-#                    1 (Add timestamp in name in form Logname_YYYY-MM-DD_HH-MM-SS.Ext for Logname.Ext)
 
 GmLogTimestamp = 0
 
 #
 #    GmLogPerAccount
 #        GM Logfiles with GM account id. (Note: logs not created if GmLogFile not set)
-#        TW-Default: 0 (Add gm log data to single log file)
-#                    1 (Add gm log data to account specific log files with name)
 
 GmLogPerAccount = 0
 
 #
 #    CriticalCommandsLogFile
 #        Log file for commands marked as critical, when used on own character. (Same IP for example)
-#        TW-Default: "gm_critical.log"
-#                    ""                (Empty name for disable)
 
 CriticalCommandsLogFile = "gm_critical.log"
 
 #
 #    ExploitsLogFile
 #        Log file for possible exploits for abuse detection.
-#        TW-Default: ""
 
 ExploitsLogFile = ""
 
 #
 #    ClientIdsLogFile
 #        Log file for client traffic.
-#        TW-Default: "client.log"
 
 ClientIdsLogFile = "client.log"
 
 #
 #    LootsLogFile
 #        Log file for loot.
-#        TW-Default: "loot.log"
 
 LootsLogFile = "loot.log"
 
 #
 #    LevelupLogFile
 #        Log file for level ups.
-#        TW-Default: "levelup.log"
 
 LevelupLogFile = "levelup.log"
 
@@ -897,8 +672,6 @@ LevelupLogFile = "levelup.log"
 #    LogMoneyTrades
 #    LogMoneyTreshold
 #        Log file for trades.
-#        TW-Default: "trades.log"
-#        TW-Default: 10000 (copper)
 
 LogMoneyTrades = "trades.log"
 LogMoneyTreshold = 10000
@@ -906,38 +679,33 @@ LogMoneyTreshold = 10000
 #
 #    NostalriusLogFile
 #        Log file for various logs.
-#        TW-Default: "info.log"
 
 NostalriusLogFile = "info.log"
 
 #
 #    NostalriusLogTimestamp
 #        Nostalrius Logfile with timestamp of server start in name
-#        TW-Default: 0 (No timestamp in name)
-#                       1 (Add timestamp in name in form Logname_YYYY-MM-DD_HH-MM-SS.Ext for Logname.Ext)
 
 NostalriusLogTimestamp = 0
 
 #
 #    PerformanceLog
 #        Log file for performance.
-#        TW-Default: "perf.log"
 
-PerformanceLog.File                    = "perf.log"
-PerformanceLog.SlowWorldUpdate         = 250
-PerformanceLog.SlowMapSystemUpdate     = 200
-PerformanceLog.SlowSessionsUpdate      = 200
+PerformanceLog.File = "perf.log"
+PerformanceLog.SlowWorldUpdate = 250
+PerformanceLog.SlowMapSystemUpdate = 200
+PerformanceLog.SlowSessionsUpdate = 200
 PerformanceLog.SlowUniqueSessionUpdate = 100
-PerformanceLog.SlowMapUpdate           = 200
-PerformanceLog.SlowAsynQueries         = 200
-PerformanceLog.SlowPackets             = 100
-PerformanceLog.SlowMapPackets          = 100
-PerformanceLog.SlowPacketBroadcast     = 0
+PerformanceLog.SlowMapUpdate = 200
+PerformanceLog.SlowAsynQueries = 200
+PerformanceLog.SlowPackets = 100
+PerformanceLog.SlowMapPackets = 100
+PerformanceLog.SlowPacketBroadcast = 0
 
 #
 #    RaLogFile
 #        Log file of RA commands.
-#        TW-Default: ""
 
 RaLogFile = ""
 
@@ -946,20 +714,13 @@ RaLogFile = ""
 #        Color for messages. (Format "normal_color details_color debug_color error_color")
 #        Colors: 0 - BLACK, 1 - RED, 2 - GREEN,  3 - BROWN, 4 - BLUE, 5 - MAGENTA, 6 -  CYAN, 7 - GREY,
 #                8 - YELLOW, 9 - LRED, 10 - LGREEN, 11 - LBLUE, 12 - LMAGENTA, 13 - LCYAN, 14 - WHITE
-#        TW-Default: ""
 
 LogColors = ""
 
 #
-###################################################################################################################
-
-###################################################################################################################
-# SERVER SETTINGS
-#
 #    GameType
 #        Server realm style.
 #        0 = NORMAL; 1 = PVP; 4 = NORMAL; 6 = RP; 8 = RPPVP; 16 = FFA_PVP
-#        TW-Default: 6
 
 GameType = 6
 
@@ -967,44 +728,12 @@ GameType = 6
 #    RealmZone
 #        Server realm zone (set allowed alphabet in character names/etc). See also Strict*Names options.
 #        Be careful when changing this as it can cause the realm to not be visible on certain clients.
-#        TW-Default: 1
-#
-#    1 Development    - any language (Default)
-#    2 United States  - extended-Latin
-#    3 Oceanic        - extended-Latin
-#    4 Latin America  - extended-Latin
-#    5 Tournament     - basic-Latin at create, any at login
-#    6 Korea          - East-Asian
-#    7 Tournament     - basic-Latin at create, any at login
-#    8 English        - extended-Latin
-#    9 German         - extended-Latin
-#    10 French        - extended-Latin
-#    11 Spanish       - extended-Latin
-#    12 Russian       - Cyrillic
-#    13 Tournament    - basic-Latin at create, any at login
-#    14 Taiwan        - East-Asian
-#    15 Tournament    - basic-Latin at create, any at login
-#    16 China         - East-Asian
-#    17 CN1           - basic-Latin at create, any at login
-#    18 CN2           - basic-Latin at create, any at login
-#    19 CN3           - basic-Latin at create, any at login
-#    20 CN4           - basic-Latin at create, any at login
-#    21 CN5           - basic-Latin at create, any at login
-#    22 CN6           - basic-Latin at create, any at login
-#    23 CN7           - basic-Latin at create, any at login
-#    24 CN8           - basic-Latin at create, any at login
-#    25 Tournament    - basic-Latin at create, any at login
-#    26 Test Server   - any language
-#    27 Tournament    - basic-Latin at create, any at login
-#    28 QA Server     - any language
-#    29 CN9           - basic-Latin at create, any at login
 
 RealmZone = 1
 
 #
 #    TimeZoneOffset
 #        Time zone offset in hours.
-#        TW-Default: 0 (UTC)
 
 TimeZoneOffset = 0
 
@@ -1012,194 +741,150 @@ TimeZoneOffset = 0
 #    DBC.Locale
 #        DBC Language Settings.
 #        0 = English; 1 = Korean; 2 = French; 3 = German; 4 = Chinese; 5 = Taiwanese; 6 = Spanish;
-#        TW-Default: 255 = Auto Detect (Default)
 
 DBC.Locale = 255
 
 #
 #    StrictPlayerNames
 #        Limit player name to language specific symbols set, not allow create characters, and set rename request and disconnect at not allowed symbols name.
-#        TW-Default: 0 (Disabled, but limited server timezone dependent client check)
-#                    1 (Basic latin characters)
-#                    2 (Realm zone specific)
-#                    3 (Basic latin characters + Server timezone specific)
 
 StrictPlayerNames = 1
 
 #
 #    StrictCharterNames
 #        Limit guild team charter names to language specific symbols set, not allow create charters with not allowed symbols in name
-#        TW-Default: 0 (Disabled, but limited server timezone dependent client check)
-#                    1 (Basic latin characters)
-#                    2 (Realm zone specific)
-#                    3 (Basic latin characters + Server timezone specific)
 
 StrictCharterNames = 1
 
 #
 #    StrictPetNames
 #        Limit pet names to language specific symbols set
-#        TW-Default: 0 (Disabled, but limited server timezone dependent client check)
-#                    1 (Basic latin characters)
-#                    2 (Realm zone specific)
-#                    3 (Basic latin characters + Server timezone specific)
 
 StrictPetNames = 1
 
 #
 #    MinPlayerName
 #        Minimal name length. (1 - 12)
-#        TW-Default: 2
 
 MinPlayerName = 2
 
 #
 #    MinCharterName
 #        Minimal name length. (1 - 24)
-#        TW-Default: 2
 
 MinCharterName = 2
 
 #
 #    MinPetName
 #        Minimal name length. (1 - 12)
-#        TW-Default: 2
 
 MinPetName = 2
 
 #
 #    CharactersCreatingDisabled
 #        Disable characters creating for specific team or any.
-#        TW-Default: 0 (Enabled)
-#                    1 (Disabled only for Alliance)
-#                    2 (Disabled only for Horde)
-#                    3 (Disabled for both teams)
 
 CharactersCreatingDisabled = 0
 
 #
 #    CharactersPerAccount
 #        Limit numbers of characters per account.
-#        TW-Default: 50
 
 CharactersPerAccount = 50
 
 #
 #    CharactersPerRealm
 #        Limit numbers of characters for account at realm. (The number must be between 1 and 10)
-#        TW-Default: 10 (Client limitation)
 
 CharactersPerRealm = 10
 
 #
 #    SkipCinematics
 #        Disable intro movie at first character's login.
-#        TW-Default: 0 (Show intro for each new character)
-#                    1 (Show intro only for first character of selected race)
-#                    2 (Disable intro in all cases)
 
 SkipCinematics = 0
 
 #
 #    ShowHealthValues
 #        Show real NPC & player health values instead of percentages.
-#        TW-Default: 0 (Hide values)
-#                    1 (Show values)
 
 ShowHealthValues = 0
 
 #
 #    MaxPlayerLevel
 #        Max level that can be reached by a player for experience. (1 - 255)
-#        TW-Default: 60
 
 MaxPlayerLevel = 60
 
 #
 #    StartPlayerLevel
 #        Staring level that have character at creating.
-#        TW-Default: 1
 
 StartPlayerLevel = 1
 
 #
 #    StartPlayerMoney
 #        Amount of money that new players will start with. (In copper)
-#        TW-Default: 0
 
 StartPlayerMoney = 0
 
 #
 #    MaxHonorPoints
 #        Max honor points that player can have.
-#        TW-Default: 75000
 
 MaxHonorPoints = 75000
 
 #
 #    StartHonorPoints
 #        Amount of honor that new players will start with.
-#        TW-Default: 0
 
 StartHonorPoints = 0
 
 #
 #    MinHonorKills
 #        Min kills that players must obtain to enter in weekly honor calculation.
-#        TW-Default: 1
 
 MinHonorKills = 1
 
 #
 #    MaintenanceDay
 #        The day of the week is performed server maintenance.
-#        TW-Default: 3 (Wednesday in EU)
 
 MaintenanceDay = 3
 
 #
 #    InstantLogout
 #        Enable or disable instant logout for security level (0 - 4) or high.
-#        TW-Default: 1 (Mods/GMs/Admins)
 
 InstantLogout = 1
 
 #
 #    AutoHonorRestart
 #        Server will schedule a restart on its own when it's time to perform PvP rank calculations.
-#        TW-Default: 1
 
 AutoHonorRestart = 1
 
 #
 #    AllFlightPaths
 #        Players will start with all flight paths.
-#        TW-Default: 0 (Disabled)
-#                    1 (Enabled)
 
 AllFlightPaths = 0
 
 #
 #    AlwaysMaxSkillForLevel
 #        Players will automatically gain max level dependent (weapon/defense) skill when logging in, leveling up etc.
-#        TW-Default: 0 (Disabled)
-#                    1 (Enabled)
 
 AlwaysMaxSkillForLevel = 0
 
 #
 #    ActivateWeather
 #        Activate weather system.
-#        TW-Default: 1 (Enabled)
-#                    0 (Disabled)
 
 ActivateWeather = 1
 
 #
 #    CastUnstuck
 #        Allow cast Unstuck spell at .start or client Help option use.
-#        TW-Default: 1 (Enabled)
-#                    0 (Disabled)
 
 CastUnstuck = 1
 
@@ -1207,85 +892,66 @@ CastUnstuck = 1
 #    MaxSpellCastsInChain
 #        Max amount triggered spell casts in chain by one caster, prevent stack overflow crash.
 #        Too Low value will make some correct triggered casts fail.
-#        TW-Default: 10
 
 MaxSpellCastsInChain = 10
 
 #
 #    Instance.IgnoreLevel
 #        Ignore level requirement to enter instance.
-#        TW-Default: 0 (Disabled)
-#                    1 (Enabled)
 
 Instance.IgnoreLevel = 0
 
 #
 #    Instance.IgnoreRaid
 #        Ignore raid requirement to enter instance.
-#        TW-Default: 0 (Disabled)
-#                    1 (Enabled)
 
 Instance.IgnoreRaid = 0
 
 #
 #    Instance.ResetTimeHour
 #        The hour of the day (0-23) when the global instance resets occur.
-#        TW-Default: 4
 
 Instance.ResetTimeHour = 4
 
 #
 #    Instance.UnloadDelay
 #        Unload the instance map from memory after some time if no players are inside.
-#        TW-Default: 1800000 (Miliseconds)
-#                          0 (Instance maps are kept in memory until they are reset)
 
 Instance.UnloadDelay = 1800000
 
 #
 #    Item.InstantSaveQuality
 #        Save character inventory instantly on receiving item of this quality or higher.
-#        TW-Default: 6 (Artifact)
 
 Item.InstantSaveQuality = 6
 
 #
 #    Item.PreventDataMining
 #        Forbid querying information about items that have never been obtained.
-#        TW-Default: 0 (Disabled)
-#                    1 (Enabled)
 
 Item.PreventDataMining = 0
 
 #
 #    Quests.LowLevelHideDiff
 #    Level difference wheater to show the quest mark above the NPC or not.
-#        TW-Default: -1 (show all available quests marks)
-#                     4 (Blizzlike)
 
 Quests.LowLevelHideDiff = -1
 
 #
 #    Quests.HighLevelHideDiff
 #    Level difference wheater to show the quest mark above the NPC or not.
-#        TW-Default: -1 (show all available quests marks)
-#                     7 (Blizzlike)
 
 Quests.HighLevelHideDiff = -1
 
 #
 #    Quests.IgnoreRaid
 #        Non-raid quests allowed in raids.
-#        TW-Default: 0 (Disabled)
-#                    1 (Enabled)
 
 Quests.IgnoreRaid = 0
 
 #
 #    Group.OfflineLeaderDelay
 #        A grace period for an offline group leader to reconnect before tranfering leadership to a next suitable member of the group.
-#        TW-Default: 300 (Seconds)
-#                      0 (Do not transfer group leadership)
 
 Group.OfflineLeaderDelay = 300
 
@@ -1294,80 +960,66 @@ Group.OfflineLeaderDelay = 300
 #        Count of guild event log records stored in guild_eventlog table.
 #        Increase to store more guild events in table.
 #        You can set it to very high value to prevent oldest guild events to be rewritten by latest guild events, but it can slow down performance.
-#        TW-Default: 100 (Minimum)
 
 Guild.EventLogRecordsCount = 100
 
 #
 #    TimerBar.Fatigue.GMLevel
 #        Disable / Enable fatigue for security level (0 - 4) or higher.
-#        TW-Default: 4 (None)
 
 TimerBar.Fatigue.GMLevel = 4
 
 #
 #    TimerBar.Fatigue.Max
 #        Fatigue max timer value.
-#        TW-Default: 60 (Seconds)
-#                     0 (Instant death)
 
 TimerBar.Fatigue.Max = 60
 
 #
 #    TimerBar.Breath.GMLevel
 #        Disable / Enable waterbreathing for security level (0 - 4) or higher.
-#        TW-Default: 4 (None)
 
 TimerBar.Breath.GMLevel = 4
 
 #
 #    TimerBar.Breath.Max
 #        Waterbreathing max timer value.
-#        TW-Default: 60 (Seconds)
-#                     0 (Instant underwater breathing damage start)
 
 TimerBar.Breath.Max = 60
 
 #
 #    TimerBar.Fire.GMLevel
 #        Disable / Enable lava fire damage for security level (0 - 4) or higher.
-#        TW-Default: 4 (None)
 
 TimerBar.Fire.GMLevel = 4
 
 #
 #    TimerBar.Fire.Max
 #        Lava damage delay max timer value.
-#        TW-Default: 1 (Seconds)
-#                    0 (Instant in lava damage start)
 
 TimerBar.Fire.Max = 1
 
 #
 #    MaxPrimaryTradeSkill
 #        Max count that player can learn the primary trade skill. (Max 10)
-#        TW-Default: 2
 
 MaxPrimaryTradeSkill = 2
 
 #
 #    MinPetitionSigns
 #        Min signatures count to creating guild. (0 - 9)
-#        TW-Default: 9
 
 MinPetitionSigns = 9
 
 #
 #    MaxGroupXPDistance
 #        Max distance to creature for group memeber to get XP at creature death.
-#        TW-Default: 74
 
 MaxGroupXPDistance = 74
 
 #
 #    MailDeliveryDelay
 #        Mail delivery delay time for item sending.
-#        TW-Default: 3600 (Seconds)
 
 MailDeliveryDelay = 3600
 
@@ -1375,101 +1027,71 @@ MailDeliveryDelay = 3600
 #    Mails.COD.ForceTag.MaxLevel
 #        Prevent COD scam attempts by adding "COD" prefix to the mail subject.
 #        Only affects senders below given level.
-#        TW-Default: 0
 
 Mails.COD.ForceTag.MaxLevel = 0
 
 #
 #    MassMailer.SendPerTick
 #        Max amount mail send each tick from mails list scheduled for mass mailer proccesing.
-#        TW-Default: 10
 
 MassMailer.SendPerTick = 10
 
 #
 #    PetUnsummonAtMount
 #        Permanent pet will unsummoned at player mount.
-#        TW-Default: 0 (Disable)
-#                    1 (Enable)
 
 PetUnsummonAtMount = 0
 
 #
 #    PetDefaultLoyalty
 #        Initial loyalty level for newly tamed pets.
-#        TW-Default: 1
 
 PetDefaultLoyalty = 1
 
 #
 #    PlayerCommands
 #        Should player chat be parsed for GM commands.
-#        TW-Default: 1 (Enabled)
-#                    0 (Disabled)
 
 PlayerCommands = 1
 
 #
 #    Event.Announce
 #        Announce game events in everyone's chat.
-#        TW-Default: 0 (Disable)
-#                    1 (Enable)
 
 Event.Announce = 0
 
 #
 #    BeepAtStart
 #        Beep at mangosd start finished. (Linux systems)
-#        TW-Default: 1 (Enabled)
-#                    0 (Disabled)
 
 BeepAtStart = 1
 
 #
 #    ShowProgressBars
 #        Control show progress bars for load steps at server startup.
-#        TW-Default: 0 (Disabled)
-#                    1 (Enabled)
 
 ShowProgressBars = 0
 
 #
 #    WaitAtStartupError
 #        After startup error report wait <Enter> or some time before continue.
-#                   -1 (Wait until <Enter> press)
-#        TW-Default: 0 (Do not wait)
-#                    N (>0, Wait N secs)
 
 WaitAtStartupError = 0
 
 #
 #    Motd
 #        Message of the Day. Displayed at worldlogin for every user ('@' for a newline).
-#        TW-Default: "Welcome to Turtle WoW! @/join world to connect with the community around you!"
 
 Motd = "Welcome to Turtle WoW! @/join world to connect with the community around you!"
 
 #
-###################################################################################################################
-
-###################################################################################################################
-# PLAYER INTERACTION
-#
 #    AllowTwoSide.Accounts
 #        Allow accounts to create characters in both teams in any game type.
-#        Default: 1 (Enabled)
-#                 0 (Disabled)
 
 AllowTwoSide.Accounts = 1
 
 #
-#    AllowTwoSide.Interaction.Chat
-#    AllowTwoSide.Interaction.Channel
-#    AllowTwoSide.Interaction.Group
-#    AllowTwoSide.Interaction.Guild
-#    AllowTwoSide.Interaction.Trade
-#    AllowTwoSide.Interaction.Auction
-#    AllowTwoSide.Interaction.Mail
+#    AllowTwoSide.Interaction
 #        Allow interaction with the hostiled faction.
 
 AllowTwoSide.Interaction.Chat = 0
@@ -1483,136 +1105,103 @@ AllowTwoSide.Interaction.Mail = 0
 #
 #    AllowTwoSide.WhoList
 #        Allow show player from both team in who list.
-#        Default: 1 (Enabled)
-#                 0 (Disabled)
 
 AllowTwoSide.WhoList = 1
 
 #
 #    AllowTwoSide.AddFriend
 #        Allow adding friends from other team in friend list.
-#        Default: 1 (Enabled)
-#                 0 (Disabled)
 
 AllowTwoSide.AddFriend = 1
 
 #
 #    GM.JoinOppositeFactionChannels
 #        Allow GMs to join both faction channels.
-#        Default: 0 (Disabled)
-#                 1 (Enabled)
 
 GM.JoinOppositeFactionChannels = 0
 
 #
-###################################################################################################################
-
-###################################################################################################################
-# CREATURE AND GAMEOBJECT SETTINGS
-#
 #    ThreatRadius
 #        Radius for creature to evade after being pulled away from combat start point.
 #        If ThreatRadius is less than creature aggro radius then aggro radius will be used.
-#        TW-Default: 100 (Yards)
 
 ThreatRadius = 100
 
 #
 #    MaxCreaturesAttackRadius
 #        Creatures won't search for target farther than this.
-#        TW-Default: 35 (Yards)
 
 MaxCreaturesAttackRadius = 35
 
 #
 #    MaxPlayersStealthDetectRange
 #        Players won't search for stealthed units farther than this.
-#        TW-Default: 40 (Yards)
 
 MaxPlayersStealthDetectRange = 40
 
 #
 #    MaxCreaturesStealthDetectRange
 #        Creatures won't search for stealthed units farther than this.
-#        TW-Default: 10 (Yards)
 
 MaxCreaturesStealthDetectRange = 10
 
 #
 #    MaxCreatureSummonLimit
 #       Game objects (and other creatures) won't be able to summon more creatures than this limit
-#       TW-Default: 100 (Yards)
 
 MaxCreatureSummonLimit = 100
 
 #
 #    Rate.Creature.Aggro
 #        Aggro radius percent or off.
-#        TW-Default: 1   (100%)
-#                    1.5 (150%)
-#                    0   (No aggro)
 
 Rate.Creature.Aggro = 1
 
 #
 #    CreatureFamilyFleeAssistanceRadius
 #        Radius which creature will use to seek for a near creature for assistance. Creature will flee to this creature.
-#        TW-Default: 30 (Yards)
 
 CreatureFamilyFleeAssistanceRadius = 30
 
 #
 #    CreatureFamilyAssistanceRadius
 #        Radius which creature will use to call assistance without moving.
-#        TW-Default: 10 (Yards)
 
 CreatureFamilyAssistanceRadius = 10
 
 #
 #    CreatureFamilyAssistanceDelay
 #        Reaction time for creature assistance call.
-#        TW-Default: 1500 (Seconds)
 
 CreatureFamilyAssistanceDelay = 1500
 
 #
 #    CreatureFamilyFleeDelay
 #        Time during which creature can flee when no assistant found.
-#        TW-Default: 7000 (Milliseconds)
 
 CreatureFamilyFleeDelay = 7000
 
 #
 #    WorldBossLevelDiff
 #        Difference for boss dynamic level with target.
-#        TW-Default: 3
 
 WorldBossLevelDiff = 3
 
 #
 #    SendLootRollUponReconnect
 #         Send active loot roll windows when a player reconnects.
-#         TW-Default: 0 (Disabled)
-#                     1 (Enabled)
 
 SendLootRollUponReconnect = 0
 
 #
 #    Corpse.EmptyLootShow
 #        If target can have loot or can be skining after loot, but no loot generated still show loot window.
-#        TW-Default: 1 (Enabled)
-#                    0 (Disabled)
 
 Corpse.EmptyLootShow = 1
 
 #
-#    Corpse.Decay.NORMAL
-#    Corpse.Decay.RARE
-#    Corpse.Decay.ELITE
-#    Corpse.Decay.RAREELITE
-#    Corpse.Decay.WORLDBOSS
+#    Corpse.Decay
 #        Seconds until creature corpse will decay without being looted or skinned.
-#        TW-Default: 300, 900, 600, 1200, 3600
 
 Corpse.Decay.NORMAL = 300
 Corpse.Decay.RARE = 900
@@ -1623,18 +1212,12 @@ Corpse.Decay.WORLDBOSS = 3600
 #
 #    Rate.Corpse.Decay.Looted
 #         Controls how long the creature corpse stays after it had been looted, as a multiplier of its Corpse.Decay.* config.
-#         TW-Default: 0.0 (It will use modifier /3 of the creatures spawntimesecs when 0.0)
 
 Rate.Corpse.Decay.Looted = 0.0
 
 #
-#    Rate.Creature.Normal.Damage
-#    Rate.Creature.Elite.Elite.Damage
-#    Rate.Creature.Elite.RAREELITE.Damage
-#    Rate.Creature.Elite.WORLDBOSS.Damage
-#    Rate.Creature.Elite.RARE.Damage
+#    Rate.Creature
 #        Creature Damage Rates.
-#        TW-Default: 1
 
 Rate.Creature.Normal.Damage = 1
 Rate.Creature.Elite.Elite.Damage = 1
@@ -1643,13 +1226,7 @@ Rate.Creature.Elite.WORLDBOSS.Damage = 1
 Rate.Creature.Elite.RARE.Damage = 1
 
 #
-#    Rate.Creature.Normal.SpellDamage
-#    Rate.Creature.Elite.Elite.SpellDamage
-#    Rate.Creature.Elite.RAREELITE.SpellDamage
-#    Rate.Creature.Elite.WORLDBOSS.SpellDamag
-#    Rate.Creature.Elite.RARE.SpellDamage
-#        Creature Spell Damage Rates.
-#        TW-Default: 1
+#    Creature Spell Damage Rates.
 
 Rate.Creature.Normal.SpellDamage = 1
 Rate.Creature.Elite.Elite.SpellDamage = 1
@@ -1658,13 +1235,7 @@ Rate.Creature.Elite.WORLDBOSS.SpellDamage = 1
 Rate.Creature.Elite.RARE.SpellDamage = 1
 
 #
-#    Rate.Creature.Normal.HP
-#    Rate.Creature.Elite.Elite.HP
-#    Rate.Creature.Elite.RAREELITE.HP
-#    Rate.Creature.Elite.WORLDBOSS.HP
-#    Rate.Creature.Elite.RARE.HP
-#        Creature Health Ammount Modifier.
-#        TW-Default: 1
+#    Creature Health Ammount Modifier.
 
 Rate.Creature.Normal.HP = 1
 Rate.Creature.Elite.Elite.HP = 1
@@ -1675,21 +1246,18 @@ Rate.Creature.Elite.RARE.HP = 1
 #
 #    ListenRange.Say
 #        Distance a player can listen to "say".
-#        TW-Default: 40
 
 ListenRange.Say = 40
 
 #
 #    ListenRange.TextEmote
 #        Distance a player can listen to "emote".
-#        TW-Default: 40
 
 ListenRange.TextEmote = 40
 
 #
 #    ListenRange.Yell
 #        Distance a player can listen to "yell".
-#        TW-Default: 300
 
 ListenRange.Yell = 300
 
@@ -1700,87 +1268,63 @@ ListenRange.Yell = 300
 #        Commands .npc add/.gobject add can be used only for guids from this reserve and required server restart if all guids
 #        from reserve used before above commands can be used in like case. Less size increase amount guids for dynamic spawns
 #        in game from other side.
-#        TW-Default: 1000
 
 GuidReserveSize.Creature = 1000
 GuidReserveSize.GameObject = 1000
 
 #
-###################################################################################################################
-
-###################################################################################################################
-# CHAT SETTINGS
-#
 #    ChatFakeMessagePreventing
 #        Chat protection from creating fake messages using a lot spaces (other invisible symbols),
 #        not applied to addon language messages, but can prevent working old addons
 #        that use normal languages for sending data to another clients.
-#        TW-Default: 1 (Enabled)
-#                 0 (Disabled)
 
 ChatFakeMessagePreventing = 1
 
 #
 #    ChatStrictLinkChecking.Severity
 #        Check chat messages for ingame links to spells, items, quests, achievements etc.
-#        TW-Default: 0 (Disable link checking)
-#                 1 (Check if only valid pipe commands are used. This prevents posting pictures for example)
-#                 2 (Verifiy that pipe commands are used in a correct order)
-#                 3 (Check if color, entry and name don't contradict each other.
-#                    Assure you have extracted locale DBCs of every language specific client.)
 
 ChatStrictLinkChecking.Severity = 1
 
 #
 #    ChatStrictLinkChecking.Kick
 #        Defines, what should be done if a message is considered to contain invalid pipe commands.
-#        TW-Default: 0 (Ignore message)
-#                    1 (Kick player)
 
 ChatStrictLinkChecking.Kick = 0
 
 #
 #    ChatFlood.MessageCount
 #        Chat anti-flood protection, haste message count to activate protection.
-#        TW-Default: 10 (Messages)
-#                     0 (Disabled)
 
 ChatFlood.MessageCount = 10
 
 #
 #    ChatFlood.MessageDelay
 #        Chat anti-flood protection, minimum message delay to count message.
-#        TW-Default: 1 (Seconds)
 
 ChatFlood.MessageDelay = 1
 
 #
 #    ChatFlood.MuteTime
 #        Chat anti-flood protection, mute time at activation flood protection.
-#        TW-Default: 10 (Seconds)
 
 ChatFlood.MuteTime = 10
 
 #
 #    Channel.SilentlyGMJoin
 #        Should Mods or higher be announced if they join a channel.
-#        TW-Default: 0 (Disabled)
-#                    1 (Enabled)
 
 Channel.SilentlyGMJoin = 1
 
 #
 #    Channel.StrictLatinInGeneral
 #        Filter out messages using non-Latin characters in general channels.
-#        TW-Default: 0 (Disable)
-#                    1 (Enable)
 
 Channel.StrictLatinInGeneral = 0
 
 #
 #    WorldChan.MinLevel
 #        Minimum level to use world channels.
-#        TW-Default: 1
 
 WorldChan.MinLevel = 1
 
@@ -1789,7 +1333,6 @@ WorldChan.MinLevel = 1
 #    WorldChan.CooldownMaxLevel
 #    WorldChan.CooldownScaling
 #        Cooldown between messages on world channels.
-#        TW-Default: 0
 
 WorldChan.Cooldown = 0
 WorldChan.CooldownMaxLevel = 0
@@ -1798,14 +1341,12 @@ WorldChan.CooldownScaling = 0
 #
 #    WhisperDiffZone.MinLevel
 #        Minimum level to whisper players in other zones.
-#        TW-Default: 1
 
 WhisperDiffZone.MinLevel = 1
 
 #
 #    YellMinLevel
 #        Minimum level to /yell in chat.
-#        TW-Default: 1
 
 YellMinLevel = 1
 
@@ -1813,7 +1354,6 @@ YellMinLevel = 1
 #    YellRange.LinearScale.MaxLevel 
 #    YellRange.QuadraticScale.MaxLevel
 #        Limit yell range based on level.
-#        TW-Default: 0
 
 YellRange.LinearScale.MaxLevel = 0
 YellRange.QuadraticScale.MaxLevel = 0
@@ -1821,208 +1361,144 @@ YellRange.QuadraticScale.MaxLevel = 0
 #
 #    ChannelInvite.MinLevel
 #        Minimum level to invite other players into a private channel.
-#        TW-Default: 10
 
 ChannelInvite.MinLevel = 10
 
 #
 #    PublicChansMute.BypassLevel
 #        Required character level on account to bypass all chat restrictions.
-#        TW-Default: 20
 
 PublicChansMute.BypassLevel = 20
 
 #
 #    WhisperRestriction
 #        Allow players to prevent getting whispered with .wr command.
-#        TW-Default: 0 (Disabled)
-#                    1 (Enabled)
 
 WhisperRestriction = 0
 
 #
 #    SayMinLevel
 #        Minimum level to /say in chat.
-#        TW-Default: 1
 
 SayMinLevel = 1
 
 #
 #    SayEmoteMinLevel
 #        Minimum level to /emote in chat.
-#        TW-Default: 1
 
 SayEmoteMinLevel = 1
 
 #
 #    Antiflood.Sanction
 #        Sanction applied to a player if sending too many packets.
-#        TW-Default: 4 (Kick)
 
 Antiflood.Sanction = 4
 
 #
-###################################################################################################################
-
-###################################################################################################################
-# GAME MASTER SETTINGS
-#
 #    GM.LoginState
 #        GM mode at login.
-#        TW-Default: 1 (Enable)
-#                    2 (Last save state)
-#                    0 (Disable)
 
 GM.LoginState = 1
 
 #
 #    GM.Visible
 #        GM visibility at login.
-#        TW-Default: 0 (Invisible)
-#                    2 (Last save state)
-#                    1 (Visible)
 
 GM.Visible = 0
 
 #
 #    GM.AcceptTickets
 #        Is GM accepting tickets from player by default or not.
-#        TW-Default: 1 (Enable)
-#                    2 (Last save state)
-#                    0 (Disable)
 
 GM.AcceptTickets = 1
 
 #
 #    GM.Chat
 #        GM chat mode at login.
-#        TW-Default: 1 (Enable)
-#                    2 (Last save state)
-#                    0 (Disable)
 
 GM.Chat = 1
 
 #
 #    GM.WhisperingTo
 #        Is GM accepting whispers from player by default or not.
-#        TW-Default: 1 (Enable)
-#                    2 (Last save state)
-#                    0 (Disable)
 
 GM.WhisperingTo = 1
 
 #
 #    GM.InGMList.Level
 #        Max GM level showed in GM list (if visible) in non-GM state (.gm off)
-#                    0 (None)
-#                    1 (Only moderators)
-#                    2 (Only gamemasters)
-#        TW-Default: 3 (Anyone)
 
 GM.InGMList.Level = 3
 
 #
 #    GM.InWhoList.Level
 #        Max GM level showed in who list (if visible).
-#                    0 (Only players)
-#                    1 (Only moderators)
-#                    2 (Only gamemasters)
-#        TW-Default: 3 (Anyone)
 
 GM.InWhoList.Level = 3
 
 #
 #    GM.LogTrade
 #        Include GM trade and trade slot enchanting operations in GM log if it enable.
-#        TW-Default: 1 (Enabled)
-#                    0 (Disabled)
 
 GM.LogTrade = 1
 
 #
 #    GM.StartLevel
 #        GM starting level (1-255)
-#        TW-Default: 60
 
 GM.StartLevel = 60
 
 #
 #    GM.LowerSecurity
 #        Disallow a lower security member to interact with a higher one using commands.
-#        TW-Default: 1 (Enabled)
-#                    0 (Disabled)
 
 GM.LowerSecurity = 1
 
 #
 #    GM.CreditOnDie
 #        Give loot, money, reputation on ".die" command.
-#        TW-Default: 1 (Enabled)
-#                    0 (Disabled)
 
 GM.CreditOnDie = 1
 
 #
 #    GM.AllowTrades
 #        Allow trades, mailing, and using the auctionhouse.
-#        TW-Default: 1 (Enabled)
-#                    0 (Disabled)
 
 GM.AllowTrades = 1
 
 #
 #    GM.AllowPublicChannels
 #        Allow to speak in general or world channels.
-#        TW-Default: 1 (Enabled)
-#                    0 (Disabled)
 
 GM.AllowPublicChannels = 1
 
 #
 #    GMTickets.Enable
 #        Allow opening support tickets.
-#        TW-Default: 1 (Enabled)
-#                    0 (Disabled)
 
 GMTickets.Enable = 1
 
 #
 #    GMTickets.MinLevel
 #        Minimum required character level to open a ticket.
-#        TW-Default: 0 (Disabled)
 
 GMTickets.MinLevel = 0
 
 #
 #    GMTickets.Admin.Security
 #        Required security rank to assign ticket in escalation queue.
-#        TW-Default: 7 (Console)
 
 GMTickets.Admin.Security = 7
 
 #
-###################################################################################################################
-
-###################################################################################################################
-# VISIBILITY
-#
 #    Visibility.GroupMode
 #        Group visibility modes.
-#        TW-Default: 0 (Only members from same group can 100% auto detect invisible player)
-#                    1 (Raid members 100% auto detect invisible player from same raid)
-#                    2 (Players from same team can 100% auto detect invisible player)
 
 Visibility.GroupMode = 0
 
 #
-#    Visibility.Distance.Continents
-#    Visibility.Distance.Instances
-#    Visibility.Distance.BG
-#        Visibility distance for different ingame object in different maps.
-#        Visibility on continents on offy ~90 yards. In BG ~180. For instances default ~120.
-#        Max limited by active player zone: ~ 333
-#        Min limit is max aggro radius (45) * Rate.Creature.Aggro
-#        TW-Default: 250, 150, 180
+#    Visibility.Distance
+#        Visibility distance for different ingame object in different maps. (Max 333)
 
 Visibility.Distance.Continents = 250
 Visibility.Distance.Instances = 150
@@ -2031,31 +1507,24 @@ Visibility.Distance.BG = 180
 #
 #    Visibility.Distance.Continents.Min
 #        If bad performance, visibilityDistance may be reduced.
-#        TW-Default: 60
 
 Visibility.Distance.Continents.Min = 60
 
 #
 #    Visibility.Distance.InFlight
 #        Visible distance for player in flight.
-#        TW-Default: 120
 
 Visibility.Distance.InFlight = 120
 
 #
 #    Visibility.Distance.Grey.Unit
-#        Visibility grey distance for creatures/players (fast changing objects)
-#        addition to appropriate object type Visibility.Distance.* use in case visibility removing to
-#        object (except corpse around distances) If D is distance and G is grey distance then object
-#        make visible if distance to it <= D but make non visible if distance > D+G
-#        Default: 1 (Yard)
+#        Visibility grey distance for creatures and players.
 
 Visibility.Distance.Grey.Unit = 1
 
 #
 #    Visibility.Distance.Grey.Object
 #        Visibility grey distance for dynobjects/gameobjects/corpses/creature bodies.
-#        Default: 10 (Yards)
 
 Visibility.Distance.Grey.Object = 10
 
@@ -2063,32 +1532,18 @@ Visibility.Distance.Grey.Object = 10
 #    Visibility.RelocationLowerLimit
 #        Object's visibility update called, when distance between current object's position and position,
 #        where visiblity was updated last time, reaches RelocationLoverLimit value.
-#        Default: 10 (Yards)
 
 Visibility.RelocationLowerLimit = 10
 
 #
 #    Visibility.AIRelocationNotifyDelay
 #        Delay time between creature AI reactions on nearby movements.
-#        Default: 1000 (Milliseconds)
 
 Visibility.AIRelocationNotifyDelay = 1000
 
 #
-###################################################################################################################
-
-###################################################################################################################
-# SERVER RATES
-#
-#    Rate.Health
-#    Rate.Mana
-#    Rate.Rage.Income
-#    Rate.Rage.Loss
-#    Rate.Focus
-#    Rate.Loyalty
-#    Rate.Energy (Rogue)
+#    Rate
 #        Health and power regeneration and rage income from damage.
-#        TW-Default: 1
 
 Rate.Health = 1
 Rate.Mana = 1
@@ -2101,22 +1556,12 @@ Rate.Energy = 1
 #
 #    Rate.Skill.Discovery
 #         Skill Discovery Rates.
-#         TW-Default: 1
 
 Rate.Skill.Discovery = 1
 
 #
-#    Rate.Drop.Item.Poor
-#    Rate.Drop.Item.Normal
-#    Rate.Drop.Item.Uncommon
-#    Rate.Drop.Item.Rare
-#    Rate.Drop.Item.Epic
-#    Rate.Drop.Item.Legendary
-#    Rate.Drop.Item.Artifact
-#    Rate.Drop.Item.Referenced
-#    Rate.Drop.Money
+#    Rate.Drop
 #         Drop rates. (Items by quality and money)
-#         TW-Default: 1, 2
 
 Rate.Drop.Item.Poor = 1
 Rate.Drop.Item.Normal = 1
@@ -2129,22 +1574,16 @@ Rate.Drop.Item.Referenced = 1
 Rate.Drop.Money = 1
 
 #
-#    Rate.XP.Kill
-#    Rate.XP.Quest
-#    Rate.XP.Explore
+#    Rate.XP
 #        XP rates.
-#        TW-Default: 1
 
 Rate.XP.Kill = 1
 Rate.XP.Quest = 1
 Rate.XP.Explore = 1
 
 #
-#    Rate.Rest.InGame
-#    Rate.Rest.Offline.InTavernOrCity
-#    Rate.Rest.Offline.InWilderness
+#    Rate.Rest
 #        Resting points grow rates. (1 Standard, 2 Double rate, 0.5 Half rate)
-#        TW-Default: 1
 
 Rate.Rest.InGame = 1
 Rate.Rest.Offline.InTavernOrCity = 1
@@ -2153,16 +1592,12 @@ Rate.Rest.Offline.InWilderness = 1
 #
 #    Rate.Damage.Fall
 #        Damage after fall rate. (1 Standard, 2 Double damage, 0.5 Half damage)
-#        TW-Default: 1
 
 Rate.Damage.Fall = 1
 
 #
-#    Rate.Auction.Time
-#    Rate.Auction.Deposit
-#    Rate.Auction.Cut
+#    Rate.Auction
 #        Auction rates. (Auction time, deposit get at auction start, auction cut from price at auction end)
-#        TW-Default: 3, 0, 0
 
 Rate.Auction.Time = 3
 Rate.Auction.Deposit = 0
@@ -2171,7 +1606,6 @@ Rate.Auction.Cut = 0
 #
 #    Auction.Deposit.Min
 #        Minimum auction deposit size in copper.
-#        TW-Default: 0
 
 Auction.Deposit.Min = 0
 
@@ -2179,14 +1613,12 @@ Auction.Deposit.Min = 0
 #    Auction.AccountConcurrentLimit
 #        Maximum auctions (Per auction house, including shared) an account can have posted at once.
 #        eg. limit of 100 -> 100 on Alliance auction house, 100 on Neutral auction house.
-#        TW-Default: 0
 
 Auction.AccountConcurrentLimit = 0
 
 #
 #    Rate.Honor
 #        Honor gain rate.
-#        TW-Default: 1
 
 Rate.Honor = 1
 
@@ -2195,7 +1627,6 @@ Rate.Honor = 1
 #    Rate.Mining.Next
 #        Mining Rates (Mining.Amount changes minimum/maximum usetimes of a deposit,
 #        Mining.Next changes chance to have next use of a deposit)
-#        TW-Default: 1, 1
 
 Rate.Mining.Amount = 1
 Rate.Mining.Next   = 1
@@ -2203,63 +1634,54 @@ Rate.Mining.Next   = 1
 #
 #    Rate.Talent
 #        Talent Point rates.
-#        TW-Default: 1
 
 Rate.Talent = 1
 
 #
 #    Rate.RespecBaseCost
-#        Minimum cost for unlearning talents
-#        TW-Default: 1 (Gold)
+#        Minimum cost for unlearning talents. (Gold)
 
 Rate.RespecBaseCost = 1
 
 #
 #    Rate.RespecMultiplicativeCost
-#        Cost * multiplier = total cost of unlearning talents
-#        TW-Default: 5 (Gold)
+#        Cost * multiplier = total cost of unlearning talents. (Gold)
 
 Rate.RespecMultiplicativeCost = 5
 
 #
 #    Rate.RespecMaxMultiplier
-#        RespecMultiplicativeCost * RespecMaxMultiplier = maximum cost of unlearning talents.
-#        TW-Default: 1 (Gold)
+#        RespecMultiplicativeCost * RespecMaxMultiplier = maximum cost of unlearning talents. (Gold)
 
 Rate.RespecMaxMultiplier = 1
 
 #
 #    Rate.RespecMinMultiplier
 #        Once the player exceeds this multiplier value, they can never drop below it again.
-#        TW-Default: 2
 
 Rate.RespecMinMultiplier = 2
 
 #
 #    Rate.Reputation.Gain
-#         Reputation Gain rate
-#         TW-Default: 1
+#         Reputation Gain rate.
 
 Rate.Reputation.Gain = 1
 
 #
 #    Rate.Reputation.LowLevel.Kill
 #         Reputation Gain form low level kill. (Grey creture)
-#         TW-Default: 0.2
 
 Rate.Reputation.LowLevel.Kill = 0.2
 
 #
 #    Rate.Reputation.LowLevel.Quest
 #         Reputation Gain rate.
-#         TW-Default: 1
 
 Rate.Reputation.LowLevel.Quest = 1
 
 #
 #    Rate.InstanceResetTime
 #        Multiplier for the number of days in between global raid/heroic instance resets.
-#        TW-Default: 1
 
 Rate.InstanceResetTime = 1
 
@@ -2269,7 +1691,6 @@ Rate.InstanceResetTime = 1
 #    SkillGain.Gathering
 #    SkillGain.Weapon
 #         Crafting/defense/gathering/weapon skills gain at skill grow.
-#         TW-Default: 1, 1, 1, 1
 
 SkillGain.Crafting = 1
 SkillGain.Defense = 1
@@ -2281,8 +1702,7 @@ SkillGain.Weapon = 1
 #    SkillChance.Yellow
 #    SkillChance.Green
 #    SkillChance.Grey
-#        Skill chance values (0 - 100)
-#        TW-Default: 100, 75, 25, 0
+#        Skill chance values. (0 - 100)
 
 SkillChance.Orange = 100
 SkillChance.Yellow = 75
@@ -2293,8 +1713,6 @@ SkillChance.Grey = 0
 #    SkillChance.MiningSteps
 #    SkillChance.SkinningSteps
 #         For skinning and Mining chance decrease with skill level.
-#         TW-Default: 0 (No decrease)
-#                    75 (In 2 times each 75 skill points)
 
 SkillChance.MiningSteps = 0
 SkillChance.SkinningSteps = 0
@@ -2302,59 +1720,48 @@ SkillChance.SkinningSteps = 0
 #
 #    SkillFail.Loot.Fishing
 #         For fishing instead fail provided junk loot.
-#         TW-Default: 0 (Disabled)
-#                     1 (Enabled)
 
 SkillFail.Loot.Fishing = 0
 
 #
 #    SkillFail.Gain.Fishing
 #         For fishing skill gain possible at fail also.
-#         TW-Default: 0 (Disabled)
-#                     1 (Enabled)
 
 SkillFail.Gain.Fishing = 0
 
 #
 #    SkillFail.Possible.FishingPool
 #         For fishing pool impossible fail from low skill by default.
-#         TW-Default: 1 (Enabled)
-#                     0 (Disabled)
 
 SkillFail.Possible.FishingPool = 1
 
 #
 #    DurabilityLossChance.Damage
 #         Chance lost one from equiped items durability point at damage apply or receive.
-#         TW-Default: 0.5 (100/0.5 = 200)
 
 DurabilityLossChance.Damage = 0.5
 
 #
 #    DurabilityLossChance.Absorb
 #         Chance lost one from armor items durability point at damage absorb.
-#         TW-Default: 0.5 (100/0.5 = 200)
 
 DurabilityLossChance.Absorb = 0.5
 
 #
 #    DurabilityLossChance.Parry
 #         Chance lost weapon durability point at parry.
-#         TW-Default: 0.05 (100/0.05 = 2000)
 
 DurabilityLossChance.Parry = 0.05
 
 #
 #    DurabilityLossChance.Block
 #         Chance lost sheild durability point at damage block.
-#         TW-Default: 0.05 (100/0.05 = 2000)
 
 DurabilityLossChance.Block = 0.05
 
 #
 #    Death.SicknessLevel
-#         Start to add ressurection sickness on level and higher.
-#         TW-Default: 11 (Level)
+#         Start to add ressurection sickness on level and higher. (Level)
 
 Death.SicknessLevel = 11
 
@@ -2362,8 +1769,6 @@ Death.SicknessLevel = 11
 #    Death.CorpseReclaimDelay.PvP
 #    Death.CorpseReclaimDelay.PvE
 #         Enabled / Disabled increase corpse reclaim delay at often PvP / PvE deaths.
-#         TW-Default: 1 (Enabled)
-#                     0 (Disabled)
 
 Death.CorpseReclaimDelay.PvP = 1
 Death.CorpseReclaimDelay.PvE = 1
@@ -2372,8 +1777,6 @@ Death.CorpseReclaimDelay.PvE = 1
 #    Death.Bones.World
 #    Death.Bones.Battleground
 #         Enabled / Disabled creating bones instead corpse at resurrection. (In normal zones/instacnes, or battleground)
-#         TW-Default: 1 (Enabled)
-#                     0 (Disabled)
 
 Death.Bones.World = 1
 Death.Bones.Battleground = 1
@@ -2382,99 +1785,76 @@ Death.Bones.Battleground = 1
 #    Death.Ghost.RunSpeed.World
 #    Death.Ghost.RunSpeed.Battleground
 #         Modifies the speed of player's ghosts, removed upon reviving, not permanent/saved, in non-BG and BG maps.
-#         TW-Default: 1.0 (Normal speed)
 
 Death.Ghost.RunSpeed.World = 1.0
 Death.Ghost.RunSpeed.Battleground = 1.0
 
 #
 #    Corpses.UpdateMinutes
-#         TW-Default: 20 (Minutes)
 
 Corpses.UpdateMinutes = 20
 
 #
 #    Bones.ExpireMinutes
-#         TW-Default: 60 (Minutes)
 
 Bones.ExpireMinutes = 60
 
 #
 #    Rate.WarEffortResourceComplete
-#         TW-Default: 0.0
 
 Rate.WarEffortResourceComplete = 0.0
 
 #
 #    WarEffortResourceCompletePeriod
-#         TW-Default: 86400
 
 WarEffortResourceCompletePeriod = 86400
 
 #
-###################################################################################################################
-
-###################################################################################################################
-# BATTLEGROUND CONFIG
 #
 #    Battleground.CastDeserter
 #        Cast Deserter spell at player who leave battleground in progress.
-#        TW-Default: 1 (Enable)
-#                    0 (Disable)
 
 Battleground.CastDeserter = 1
 
 #
 #    Battleground.QueueAnnouncer.Join
 #        Enable queue announcer posting to chat at join.
-#        TW-Default: 0 (Disabled)
-#                    1 (Send to joined player only)
-#                    2 (Send to all players)
 
 Battleground.QueueAnnouncer.Join = 0
 
 #
 #    Battleground.QueueAnnouncer.Start
 #        Enable queue announcer posting to chat at BG start.
-#        TW-Default: 0 (Disable)
-#                    1 (Enable)
 
 Battleground.QueueAnnouncer.Start = 1
 
 #
 #    Battleground.QueuesCount
 #        Maximum battleground queues a player can join at the same time.
-#        TW-Default: 0 (Decide based on current content patch)
 
 BattleGround.QueuesCount = 0
 
 #
 #    Battleground.InvitationType
 #        Set Battleground invitation type.
-#        TW-Default: 1 (Experimental - Don't allow to invite much more players of one faction)
-#                    0 (Normal - Invite as much players to bg as possible, don't bother with ballance)
 
 Battleground.InvitationType = 1
 
 #
 #    Battleground.PrematureFinishTimer
 #        The time to end the bg if there are less than MinPlayersPerTeam on one side.
-#        TW-Default: 300000 (Milliseconds)
-#                         0 (Disabled)
 
 BattleGround.PrematureFinishTimer = 300000
 
 #
 #    BattleGround.PremadeGroupWaitForMatch
 #        The time in which premade group of 1 faction waits in BG Queue for premade group of other faction. (Milliseconds)
-#        TW-Default: 0 (Disable premade group matches)
 
 BattleGround.PremadeGroupWaitForMatch = 0
 
 #
 #    BattleGround.RandomizeQueues
 #        Randomize the queue positions.
-#        TW-Default: 0 (First players to queue will be invited first)
 
 BattleGround.RandomizeQueues = 0
 
@@ -2482,217 +1862,124 @@ BattleGround.RandomizeQueues = 0
 #    BattleGround.GroupQueueLimit
 #        The maximum number of players that can be queued as a group.
 #        If the group is bigger than this value, players are queued solo.
-#        TW-Default: 40
 
 BattleGround.GroupQueueLimit = 40
 
 #
 #    Alterac.MinPlayersInQueue
 #       Minimum players in queue per faction before starting a match.
-#       TW-Default: 0 (Use database value)
 
 Alterac.MinPlayersInQueue = 0
 
 #
 #    Alterac.InitMaxPlayers
 #       Maximum number of players at AV creation.
-#       TW-Default: 0 (Use database value)
 
 Alterac.InitMaxPlayers = 0
 
 #
 #    BattleGround.PremadeQueue.MinGroupSize
-#       TW-Default: 6
 
 BattleGround.PremadeQueue.MinGroupSize = 6
 
 #
 #    BattleGround.TagInBattleGrounds
-#       TW-Default: 1
 
 BattleGround.TagInBattleGrounds = 1
 
 #
-###################################################################################################################
-
-###################################################################################################################
-# OUTDOOR PVP CONFIG
-#
 #    OutdoorPvp.SIEnabled
 #        Enable Silithus Outdoor pvp.
-#        Default: 1 (Enable)
-#                 0 (Disable)
 
 OutdoorPvp.SIEnabled = 1
 
 #    OutdoorPvp.EPEnabled
 #        Enable Eastern Plaguelands Outdoor pvp.
-#        Default: 1 (Enable)
-#                 0 (Disable)
 
 OutdoorPvp.EPEnabled = 1
 
 #
-###################################################################################################################
-
-###################################################################################################################
-# NETWORK CONFIG
-#
 #    Network.Threads
 #         Number of threads for network, recommend 1 thread per 1000 connections.
-#         Default: 1
 
 Network.Threads = 1
 
 #
 #    Network.OutKBuff
 #         The size of the output kernel buffer used ( SO_SNDBUF socket option, tcp manual ).
-#         Default: -1 (Use system default setting)
 
 Network.OutKBuff = -1
 
 #
 #    Network.OutUBuff
 #         Userspace buffer for output. This is amount of memory reserved per each connection.
-#         TW-Default: 65536
 
 Network.OutUBuff = 65536
 
 #
 #    Network.TcpNoDelay:
 #         TCP Nagle algorithm setting.
-#         TW-Default: 0 (Enable Nagle algorithm, less traffic, more latency)
-#                     1 (TCP_NO_DELAY, disable Nagle algorithm, more traffic but less latency)
 
 Network.TcpNodelay = 1
 
 #
 #    Network.KickOnBadPacket
 #         Kick player on bad packet format.
-#         TW-Default: 0 (Do not kick)
-#                     1 (Kick)
 
 Network.KickOnBadPacket = 0
 
 #
 #    Network.PacketBroadcast.Threads
 #         Number of threads for packets broadcasting.
-#         TW-Default: 0 (Disabled)
 
 Network.PacketBroadcast.Threads = 0
 
 #
 #    Network.PacketBroadcast.Frequency
 #         How often packet broadcasting threads run in milliseconds.
-#         TW-Default: 50
 
 Network.PacketBroadcast.Frequency = 50
 
 #
 #    Network.Interval
 #         How often ACE will transmit the client's outbound packet buffer.
-#         TW-Default: 10 (Milliseconds)
 
 Network.Interval = 10
 
 #
 #    Network.PacketBroadcast.ReduceVisDistance.DiffAbove
-#         TW-Default: 0
 
 Network.PacketBroadcast.ReduceVisDistance.DiffAbove = 0
 
 #
-###################################################################################################################
-
-###################################################################################################################
-# CONSOLE
-#
 #    Console.Enable
 #        Enable console.
-#        TW-Default: 1 (Enabled)
-#                    0 (Disabled)
 
 Console.Enable = 1
 
-###################################################################################################################
-
-###################################################################################################################
-# CHARACTER DELETION
 #
 #    CharDelete.Method
 #        Character deletion behavior.
-#        TW-Default: 1 (Unlinking, the character gets unlinked from the account)
-#                    0 (Completely remove the character from the database)
 
 CharDelete.Method = 1
 
 #
 #    CharDelete.MinLevel
-#        Character gets deleted by CharDelete.Method=0 when the character
-#        hasn't the specified level yet.
-#        TW-Default: 10 (Only for players which have reached the specified level will be deleted)
-#                     0 (For all characters the specified mode will be used)
+#        Character gets deleted by CharDelete.Method=0 when the character hasn't the specified level yet.
 
 CharDelete.MinLevel = 10
 
 #
 #    CharDelete.KeepDays
 #        Define the amount of days for which the characters are kept in the database before they will be removed.
-#        TW-Default: 90 (Days)
-#                     0 (Don't delete any characters, they stay in the database forever)
 
 CharDelete.KeepDays = 90
 
-#
-###################################################################################################################
-
-###################################################################################################################
-# PLAYER BOTS
-###################################################################################################################
-PlayerBot.Enable = 1
-PlayerBot.Debug = 0
-PlayerBot.UpdateMs = 1000
-PlayerBot.MinBots = 0
-PlayerBot.MaxBots = 0
-PlayerBot.Refresh = 10000
-PlayerBot.ForceLogoutDelay = 1
-
-###################################################################################################################
-# MAIL FLOOTING
-###################################################################################################################
-MailSpam.ExpireSecs = 0
-MailSpam.MaxMails = 2
-MailSpam.Level = 1
-MailSpam.AccountCharLevel = 1
-MailSpam.Money = 0
-MailSpam.Item = 0
-
-###################################################################################################################
-# DYNAMIC RESPAWN
-###################################################################################################################
-DynamicRespawn.Range = -1
-DynamicRespawn.PercentPerPlayer = 0
-DynamicRespawn.MaxReductionRate = 0
-DynamicRespawn.MinRespawnTime = 0
-DynamicRespawn.AffectRespawnTimeBelow = 0
-DynamicRespawn.AffectLevelBelow = 0
-DynamicRespawn.PlayersThreshold = 0
-DynamicRespawn.PlayersMaxLevelDiff = 0
-
-###################################################################################################################
-#    Others settings
-###################################################################################################################
-
-Spells.CCDelay = 200
-
-###################################################################################################################
-# BEGINNER GUILD
 #
 #    BeginnersGuilds
 #        This feature will auto invite players into a guild,
 #        helping them easily find players who are also just starting out fresh.
 #        Once players reach level 15 they will be removed from the guild, and thrown back into the wild!
-#        TW-Default: 1 (Enabled)
 
 BeginnersGuilds = 1
 
@@ -2700,28 +1987,16 @@ BeginnersGuilds = 1
 #    BeginnersGuildHorde
 #    BeginnersGuildAlliance
 #        Specify guild ID for both factions.
-#        TW-Default: 126, 126
 
 BeginnersGuildHorde = 126
 BeginnersGuildAlliance = 126
 
 #
-###################################################################################################################
-
-###################################################################################################################
-# AUTOBROADCAST
-#
 #    AutoBroadcast.Timer
 #        Print broadcast messages in players chat.
-#        TW-Default: 2400000 (Milliseconds)
 
 AutoBroadcast.Timer = 2400000
 
-#
-###################################################################################################################
-
-###################################################################################################
-# TRANSMOG
 #
 #    Transmog.Enable
 #        Enable / Disable transmog feature.
@@ -2733,33 +2008,48 @@ Transmog.Enable = 0
 #
 #    Transmog.ReqItemID
 #        Adds/disables item cost.
-#        Default: 51217 (Require ItemID)
-#                     0 (Disabled)
 
 Transmog.ReqItemID = 51217
 
 #
 #    Transmog.ReqItemCount
 #        Count of required items.
-#        Default: 1 (Disabled)
 
 Transmog.ReqItemCount = 1
 
 #
 #    Transmog.ReqMoneyRate
 #        Required gold modificator.
-#        Default: 1.0 (100% of buy price item)
-#                 0.1 ( 10% of buy price item)
 
 Transmog.ReqMoneyRate = 0
 
-#
-###################################################################################################
-
-# TW Misc. 
 
 StaticObjectLOS = 1
 PvPBounryBoards = 1
 OpenHouse = 0
 
-###################################################################################################
+PlayerBot.Enable = 1
+PlayerBot.Debug = 0
+PlayerBot.UpdateMs = 1000
+PlayerBot.MinBots = 0
+PlayerBot.MaxBots = 0
+PlayerBot.Refresh = 10000
+PlayerBot.ForceLogoutDelay = 1
+
+MailSpam.ExpireSecs = 0
+MailSpam.MaxMails = 2
+MailSpam.Level = 1
+MailSpam.AccountCharLevel = 1
+MailSpam.Money = 0
+MailSpam.Item = 0
+
+DynamicRespawn.Range = -1
+DynamicRespawn.PercentPerPlayer = 0
+DynamicRespawn.MaxReductionRate = 0
+DynamicRespawn.MinRespawnTime = 0
+DynamicRespawn.AffectRespawnTimeBelow = 0
+DynamicRespawn.AffectLevelBelow = 0
+DynamicRespawn.PlayersThreshold = 0
+DynamicRespawn.PlayersMaxLevelDiff = 0
+
+Spells.CCDelay = 200

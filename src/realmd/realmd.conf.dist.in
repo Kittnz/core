@@ -5,7 +5,6 @@
 [RealmdConf]
 ConfVersion=2010062001
 
-###################################################################################################################
 # REALMD SETTINGS
 #
 #    LoginDatabaseInfo
@@ -17,39 +16,31 @@ LoginDatabaseInfo = ""
 #
 #    LogsDir
 #         Logs directory setting.
-#         TW-Default: "../logs/"
-#                     ""         (If no path is decleared, the logs will be stored where the binaries are)
 
 LogsDir = "../logs/"
 
 #
 #    MaxPingTime
 #         Settings for maximum database-ping interval.
-#         TW-Default: 3 (Minutes)
 
 MaxPingTime = 3
 
 #
 #    RealmServerPort
 #         Port on which the server will listen.
-#         TW-Default: 3724
 
 RealmServerPort = 3724
 
 #
 #    BindIP
 #         Bind Realm Server to IP/hostname.
-#         This option is useful for running multiple worldd/realmd instances
-#         on different IP addresses using default ports.
-#         TW-Default: 51.89.212.98
+#         This option is useful for running multiple worldd/realmd instances on different IP addresses using default ports.
 
 BindIP = "51.89.212.98"
 
 #
 #    PidFile
 #        Realmd daemon PID file.
-#        TW-Default: "twrealmd.pid" (Create PID file)
-#                    ""             (Empty name disable creating log file)
 
 PidFile = "twrealmd.pid"
 
@@ -57,31 +48,24 @@ PidFile = "twrealmd.pid"
 #    LogLevel
 #        Server console level of logging.
 #        0 = Minimum; 1 = Error; 2 = Detail; 3 = Full/Debug
-#        TW-Default: 1
 
 LogLevel = 1
 
 #
 #    LogTime
-#        Include time in server console output [hh:mm:ss].
-#        TW-Default: 0 (No time)
-#                    1 (Print time)
+#        Include time in server console output.
 
 LogTime = 0
 
 #
 #    LogFile
 #        Logfile name.
-#        TW-Default: "Realmd.log" (Create Realmd file)
-#                    ""           (Empty name disable creating log file)
 
 LogFile = "Realmd.log"
 
 #
 #    LogTimestamp
 #        Logfile with timestamp of server start in name.
-#        TW-Default: 0 (No timestamp in name)
-#                    1 (Add timestamp in name in form Logname_YYYY-MM-DD_HH-MM-SS.Ext for Logname.Ext)
 
 LogTimestamp = 0
 
@@ -89,7 +73,6 @@ LogTimestamp = 0
 #    LogFileLevel
 #        Server file level of logging.
 #        0 = Minimum; 1 = Error; 2 = Detail; 3 = Full/Debug
-#        TW-Default: 1
 
 LogFileLevel = 1
 
@@ -98,102 +81,78 @@ LogFileLevel = 1
 #        Color for messages (format "normal_color details_color debug_color error_color).
 #        Colors: 0 - BLACK, 1 - RED, 2 - GREEN,  3 - BROWN, 4 - BLUE, 5 - MAGENTA, 6 -  CYAN, 7 - GREY,
 #                8 - YELLOW, 9 - LRED, 10 - LGREEN, 11 - LBLUE, 12 - LMAGENTA, 13 - LCYAN, 14 - WHITE
-#        TW-Default: ""          (All white)
-#                    "13 7 11 9" (Example)
 
 LogColors = ""
 
 #
 #    UseProcessors
 #        Used processors mask for multi-processors system (Used only at Windows).
-#        TW-Default: 0 (Selected by OS)
 
 UseProcessors = 0
 
 #
 #    ProcessPriority
 #        Process proirity setting (Used only at Windows).
-#        TW-Default: 1 (HIGH)
-#                    0 (Normal)
 
 ProcessPriority = 1
 
 #
 #    WaitAtStartupError
 #        After startup error report wait <Enter> or some time before continue (and possible close console window).
-#                    -1 (Wait until <Enter> press)
-#        TW-Default:  0 (Not wait)
-#                     N (>0, wait N secs)
 
 WaitAtStartupError = 0
 
 #
 #    MinRealmListDelay
 #        Minimum amount of time that must pass before a second realm list request is considered legitimate.
-#        TW-Default: 1 (Second)
 
 MinRealmListDelay = 1
 
 #
 #    RealmsStateUpdateDelay
 #        Realm list update up delay.
-#        TW-Default: 10 (Seconds)
-#                     0 (Disabled)
 
 RealmsStateUpdateDelay = 10
 
 #
 #    WrongPass.MaxCount
 #        Number of login attemps with wrong password before the account or IP is banned.
-#        TW-Default: 10 (Times)
-#                     0  (Disabled)
 
 WrongPass.MaxCount = 10
 
 #
 #    WrongPass.BanTime
 #        Duration of the ban.
-#        TW-Default: 300 (Seconds)
-#                      0 (Permanent)
 
 WrongPass.BanTime = 300
 
 #
 #    WrongPass.BanType
 #        Ban the IP or account.
-#        TW-Default: 0 (Ban IP)
-#                    1 (Ban Account)
 
 WrongPass.BanType = 0
 
 #
 #    ReqEmailVerification
 #        Required verified email address before allowing to log on.
-#        TW-Default: 0 (No verification required)
-#                    1 (Verification required)
 
 ReqEmailVerification = 0
 
 #
 #    ReqEmailSince
 #        Require email verification since.
-#        TW-Default: 0          (Disabled)
-#                    1530302395 (Timestamp)
 
 ReqEmailSince = 0
 
 #
 #    GeoLocking
 #        Blocks account logins when a change in geographical location is detected.
-#        TW-Default: 0
 
 GeoLocking = 0
 
 #
 #    StrictVersionCheck
 #        Prevent modified clients from connnecting.
-#        TW-Default: 1 (Enabled)
-#                    0 (Disabled)
 
 StrictVersionCheck = 1
 
@@ -201,23 +160,18 @@ StrictVersionCheck = 1
 #    SendMail
 #        Whether the server is allowed to send emails.
 #        (The server must have been compiled with USE_SENDGRID)
-#        TW-Default: 0 (Disabled)
-#                    1 (Enabled)
 
 SendMail = 0
 
 #
 #    MailFrom
 #        Specify the email address to send mail from.
-#        TW-Default: "no-reply@turtle-wow.org"
 
 MailFrom = "no-reply@turtle-wow.org"
 
 #
 #    MailCertChecks
 #        Whether to validate the certificates of the mail server.
-#        TW-Default: 1 (Enabled)
-#                    0 (Disabled)
 
 MailCertChecks = 1
 
@@ -225,14 +179,12 @@ MailCertChecks = 1
 #    SendGridKey
 #        If SendGrid is being used for emailing, specify your API key here.
 #        (This option must be set if SendGrid is enabled)
-#        TW-Default: ""
 
 SendGridKey = ""
 
 #
 #    GeolockGUID
 #        The SendGrid template GUID for geolocking emails.
-#        TW-Default: ""
 
 GeolockGUID = ""
 
@@ -240,9 +192,5 @@ GeolockGUID = ""
 #    HostAddressOverride
 #        When set, the address forcibly overrides ALL addresses in realmlist table.
 #        This is not needed except for when proxies are being used.
-#        TW-Default: "0.0.0.0" (Use realmlist table addresses)
 
 HostAddressOverride = "0.0.0.0"
-
-#
-###################################################################################################################
