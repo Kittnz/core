@@ -312,7 +312,6 @@ set (SCRIPTS_SRCS
     turtlewow/mirage_raceway/miracle_raceaway.cpp
     turtlewow/transmog/transmog.cpp
     turtlewow/gardening.cpp
-    turtlewow/commands.cpp
 )
 
 # Used in game ScriptMgr, not need here

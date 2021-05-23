@@ -79,12 +79,7 @@ set (game_SRCS
     Chat/ChannelMgr.cpp
     Chat/Chat.cpp
     Chat/AsyncCommandHandlers.cpp
-    Commands/GMTicketCommands.cpp
-    Commands/Level0.cpp
-    Commands/Level1.cpp
-    Commands/Level2.cpp
-    Commands/Level3.cpp
-    Commands/Nostalrius.cpp
+    Commands/Commands.cpp
     Database/CharacterDatabaseCache.cpp
     Database/CharacterDatabaseCleaner.cpp
     Database/DBCStores.cpp
