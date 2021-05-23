@@ -1029,8 +1029,6 @@ void World::LoadConfigSettings(bool reload)
         setConfig(CONFIG_UINT32_TRANSMOG_REQ_ITEM_COUNT, 1);
     }
     setConfig(CONFIG_FLOAT_TRANSMOG_REQ_MONEY_RATE, "Transmog.ReqMoneyRate", 0.0);
-
-    setConfig(CONFIG_BOOL_EXPANSION_CONTENT, "ExpansionContent", true);
     setConfig(CONFIG_BOOL_BOUNTY, "PvPBountyBoards", false);
     setConfig(CONFIG_BOOL_OPENHOUSE, "OpenHouse", false);
     setConfig(CONFIG_BOOL_STATIC_OBJECT_LOS, "StaticObjectLOS", true);
