@@ -21,8 +21,7 @@
 
 #include "MovementGenerator.h"
 
-class MANGOS_DLL_SPEC RandomMovementGenerator
-: public MovementGeneratorMedium< Creature, RandomMovementGenerator >
+class RandomMovementGenerator : public MovementGeneratorMedium< Creature, RandomMovementGenerator >
 {
     public:
         explicit RandomMovementGenerator(const Creature &creature, bool use_current_position = false, float wander_distance = 0.0f, uint32 expire_time = 0) : i_nextMoveTime(1000), i_positionX(0.0f), i_positionY(0.0f), i_positionZ(0.0f), i_wanderDistance(5.0f), i_expireTime(expire_time)

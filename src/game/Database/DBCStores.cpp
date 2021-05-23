@@ -655,24 +655,6 @@ uint32 GetCreatureModelRace(uint32 model_id)
     return extraEntry ? extraEntry->Race : 0;
 }
 
-// script support functions
-MANGOS_DLL_SPEC DBCStorage <SpellRangeEntry>    const* GetSpellRangeStore()
-{
-    return &sSpellRangeStore;
-}
-MANGOS_DLL_SPEC DBCStorage <CreatureDisplayInfoEntry> const* GetCreatureDisplayStore()
-{
-    return &sCreatureDisplayInfoStore;
-}
-MANGOS_DLL_SPEC DBCStorage <EmotesEntry>        const* GetEmotesStore()
-{
-    return &sEmotesStore;
-}
-MANGOS_DLL_SPEC DBCStorage <EmotesTextEntry>    const* GetEmotesTextStore()
-{
-    return &sEmotesTextStore;
-}
-
 SkillRaceClassInfoEntry const* GetSkillRaceClassInfo(uint32 skill, uint8 race, uint8 class_)
 {
     SkillRaceClassInfoBounds bounds = SkillRaceClassInfoBySkill.equal_range(skill);

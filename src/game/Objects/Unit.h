@@ -987,7 +987,7 @@ enum MovementModType
     MOV_MOD_CONFUSED            = 2
 };
 
-class MANGOS_DLL_SPEC Unit : public WorldObject
+class Unit : public WorldObject
 {
     public:
         static Unit* GetUnit(WorldObject &obj, uint64 const &Guid);

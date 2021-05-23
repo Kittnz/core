@@ -187,6 +187,4 @@ RequestedEventType* GameEventMgr::GetHardcodedEvent()
 
 #define sGameEventMgr MaNGOS::Singleton<GameEventMgr>::Instance()
 
-MANGOS_DLL_SPEC bool IsHolidayActive(HolidayIds id);
-
 #endif

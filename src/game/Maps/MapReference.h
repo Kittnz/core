@@ -25,7 +25,7 @@
 #include "Utilities/LinkedReference/Reference.h"
 #include "Map.h"
 
-class MANGOS_DLL_SPEC MapReference : public Reference<Map, Player>
+class MapReference : public Reference<Map, Player>
 {
     protected:
         inline void targetObjectBuildLink();
