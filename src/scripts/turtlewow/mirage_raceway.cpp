@@ -583,7 +583,7 @@ bool QuestAccepted_npc_daisy(Player* player, Creature* creature, const Quest* qu
 	return true;
 }
 
-void AddSC_miracle_raceaway()
+void AddSC_mirage_raceway()
 {
     Script *newscript;
 

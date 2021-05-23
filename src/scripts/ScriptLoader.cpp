@@ -265,7 +265,6 @@ void AddSC_npc_j_eevee();                            // J'Eevee, the Imp in a Ja
 // Turtle WoW
 void AddSC_shop();
 void AddSC_arena_tournament();
-void AddSC_lost_turtles();
 void AddSC_battlemaster();
 void AddSC_boss_avatar_of_pompa();
 void AddSC_boss_turtlhu();
@@ -279,7 +278,7 @@ void AddSC_boss_chronormu();
 void AddSC_instance_caverns_of_time();
 void AddSC_zebrian_the_mad();
 void AddSC_tw_random();
-void AddSC_miracle_raceaway();
+void AddSC_mirage_raceway();
 void AddSC_gardening();
 void AddSC_boss_dark_reaver();
 void AddSC_boss_ostarius();
@@ -547,7 +546,6 @@ void AddScripts()
 
     AddSC_shop();
     AddSC_arena_tournament();
-    AddSC_lost_turtles();
     AddSC_battlemaster();
     AddSC_boss_avatar_of_pompa();
     AddSC_boss_turtlhu();
@@ -561,7 +559,7 @@ void AddScripts()
     AddSC_instance_caverns_of_time();
     AddSC_zebrian_the_mad();
     AddSC_tw_random();
-    AddSC_miracle_raceaway();
+    AddSC_mirage_raceway();
     AddSC_gardening();
     AddSC_boss_dark_reaver();
     AddSC_boss_ostarius();
