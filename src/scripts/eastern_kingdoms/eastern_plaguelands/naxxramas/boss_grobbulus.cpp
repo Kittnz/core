@@ -237,12 +237,14 @@ struct grob_poison_cloud : public ScriptedAI
     {
         Reset();
     }
+
     uint32 untilDespawn;
+
     void Reset() override
     {
         m_creature->addUnitState(UNIT_STAT_ROOT);
         m_creature->StopMoving();
-        m_creature->SetMovement(MOVE_ROOT);
+        m_creature->SetRooted(true);
         untilDespawn = 70000;
     }
 
@@ -253,6 +255,7 @@ struct grob_poison_cloud : public ScriptedAI
     {
         if (untilDespawn == 70000)
             m_creature->CastSpell(m_creature, SPELL_POISON_CLOUD_PASSIVE, true);
+
         if (untilDespawn < uiDiff)
         {
             m_creature->ForcedDespawn();

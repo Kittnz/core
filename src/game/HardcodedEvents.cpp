@@ -1704,7 +1704,7 @@ void RaceSubEvent::Start()
 		player.GoRaceMode();
 		if (Player* pPlayer = sObjectMgr.GetPlayer(player.guid))
 		{
-			pPlayer->SetMovement(MOVE_ROOT);
+			pPlayer->SetRooted(true);
             pPlayer->ModifyHealth(3000);
 		}
 	}
@@ -1731,7 +1731,7 @@ void RaceSubEvent::Update(uint32 deltaTime)
 			{
 				if (Player* pPlayer = sObjectMgr.GetPlayer(player.guid))
 				{
-					pPlayer->SetMovement(MOVE_UNROOT);
+					pPlayer->SetRooted(false);
 					
 					if (theMap == nullptr)
 					{
@@ -1990,7 +1990,7 @@ void RacePlayer::GoRaceMode()
 					controllerNPC = CarController->GetObjectGuid();
 					CarController->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_POSSESSED);
 					CarController->SetCharmerGuid(pl->GetObjectGuid());
-					CarController->SetPossesorGuid(pl->GetObjectGuid());
+					CarController->SetPossessorGuid(pl->GetObjectGuid());
 					CharmInfo* pSpells = CarController->InitCharmInfo(CarController);
 					for (uint32 spellId : CarController->m_spells)
 					{
@@ -2058,7 +2058,7 @@ void RacePlayer::LeaveRaceMode()
 			pl->SetFly(false);
 			pl->TeleportTo(savedPlPos);
 			pl->SetDisplayId(pl->GetNativeDisplayId());
-			pl->SetMovement(MOVE_UNROOT);
+			pl->SetRooted(false);
 			pl->Unmount();
 			pl->RemoveExclusiveVisibleObject(checkpointEffectGuid);
 			pl->SetSpeedRatePersistance(MOVE_RUN, 1.0f);

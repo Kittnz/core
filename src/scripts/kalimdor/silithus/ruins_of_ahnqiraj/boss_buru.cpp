@@ -86,7 +86,7 @@ struct boss_buruAI : public ScriptedAI
     {
         m_creature->SetDisplayId(MODEL_BURU_NORMAL);
         m_creature->RemoveAllAuras();
-        m_creature->SetSpeedRate(MOVE_RUN,  0.5f, true);
+        m_creature->SetSpeedRate(MOVE_RUN,  0.5f);
         m_bIsPhaseTwo = false;
         m_bTransformationCompleted = false;
         m_bAwaitingNewTarget = false;
@@ -143,7 +143,7 @@ struct boss_buruAI : public ScriptedAI
 
         m_creature->RemoveAurasDueToSpell(SPELL_GAIN_SPEED);
         m_creature->RemoveAurasDueToSpell(SPELL_FULL_SPEED);
-        m_creature->SetSpeedRate(MOVE_RUN, 0.5f, true);
+        m_creature->SetSpeedRate(MOVE_RUN, 0.5f);
 
         DisableMovement();
         m_creature->CastSpell(m_creature, SPELL_CREATURE_SPECIAL, false);
@@ -159,7 +159,7 @@ struct boss_buruAI : public ScriptedAI
         m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
         SetCombatMovement(true);
         m_creature->clearUnitState(UNIT_STAT_ROOT);
-        m_creature->SetMovement(MOVE_UNROOT);
+        m_creature->SetRooted(false);
     }
 
     void DisableMovement()
@@ -170,7 +170,7 @@ struct boss_buruAI : public ScriptedAI
         m_creature->AttackStop();
         m_creature->StopMoving();
         m_creature->addUnitState(UNIT_STAT_ROOT);
-        m_creature->SetMovement(MOVE_ROOT);
+        m_creature->SetRooted(true);
     }
 
     void LockTarget(Unit *pWho, bool resetAggro=true)
@@ -234,7 +234,7 @@ struct boss_buruAI : public ScriptedAI
                     m_creature->SetInCombatWithZone();
                 m_creature->RemoveAurasDueToSpell(SPELL_GAIN_SPEED);
                 m_creature->RemoveAurasDueToSpell(SPELL_FULL_SPEED);
-                m_creature->SetSpeedRate(MOVE_RUN, 1.0f, true);
+                m_creature->SetSpeedRate(MOVE_RUN, 1.0f);
 
                 if (m_creature->getVictim())
                     m_creature->SetFacingToObject(m_creature->getVictim());
