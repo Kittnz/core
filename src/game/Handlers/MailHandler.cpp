@@ -109,8 +109,8 @@ public:
 void WorldSession::HandleSendMail(WorldPacket & recv_data)
 {
     ObjectGuid mailboxGuid;
-    uint64 unk3;
     uint32 unk1, unk2;
+    uint64 unk3;
     uint8 unk4;
     recv_data >> mailboxGuid;
     if (!CheckMailBox(mailboxGuid))
@@ -120,17 +120,12 @@ void WorldSession::HandleSendMail(WorldPacket & recv_data)
     req->accountId = GetAccountId();
     req->senderGuid = GetMasterPlayer()->GetObjectGuid();
     recv_data >> req->receiverName;
-
     recv_data >> req->subject;
-
     recv_data >> req->body;
-
     recv_data >> unk1;                                      // stationery?
     recv_data >> unk2;                                      // 0x00000000
-
     recv_data >> req->itemGuid;
-
-    recv_data >> req->money >> req->COD;                              // money and cod
+    recv_data >> req->money >> req->COD;                    // money and cod
     recv_data >> unk3;                                      // const 0
     recv_data >> unk4;                                      // const 0
 
