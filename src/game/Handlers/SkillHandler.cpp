@@ -71,12 +71,14 @@ void WorldSession::HandleUnlearnSkillOpcode(WorldPacket & recv_data)
     uint32 skill_id;
     recv_data >> skill_id;
     SkillRaceClassInfoEntry const* rcEntry = GetSkillRaceClassInfo(skill_id, GetPlayer()->getRace(), GetPlayer()->getClass());
+    
     if (!rcEntry || !(rcEntry->flags & SKILL_FLAG_UNLEARNABLE))
     {
         std::stringstream reason;
         reason << "Attempt to unlearn not unlearnable skill #" << skill_id;
-        ProcessAnticheatAction("SAC", reason.str().c_str(), CHEAT_ACTION_LOG);
+        ProcessAnticheatAction("PassiveAnticheat", reason.str().c_str(), CHEAT_ACTION_LOG | CHEAT_ACTION_REPORT_GMS);
         return;
     }
+    
     GetPlayer()->SetSkill(skill_id, 0, 0);
 }
