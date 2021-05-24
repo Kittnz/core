@@ -7719,16 +7719,9 @@ bool ChatHandler::HandleNpcMoveCommand(char* args)
 
     if (pCreature)
     {
-        if (CreatureData const* data = sObjectMgr.GetCreatureData(pCreature->GetGUIDLow()))
-        {
-            const_cast<CreatureData*>(data)->posX = x;
-            const_cast<CreatureData*>(data)->posY = y;
-            const_cast<CreatureData*>(data)->posZ = z;
-            const_cast<CreatureData*>(data)->orientation = o;
-        }
-        pCreature->GetMap()->CreatureRelocation(pCreature, x, y, z, o);
-        pCreature->GetMotionMaster()->Initialize();
-        if (pCreature->isAlive())                           // dead creature will reset movement generator at respawn
+        pCreature->SetHomePosition(x, y, z, o);
+
+        if (pCreature->isAlive()) // Dead creature will reset movement generator at respawn
         {
             pCreature->SetDeathState(JUST_DIED);
             pCreature->Respawn();
