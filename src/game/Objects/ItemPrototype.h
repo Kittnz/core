@@ -165,32 +165,20 @@ enum ItemClass
 
 enum ItemSubclassConsumable
 {
-    ITEM_SUBCLASS_CONSUMABLE                    = 0,
-    ITEM_SUBCLASS_POTION                        = 1,
-    ITEM_SUBCLASS_ELIXIR                        = 2,
-    ITEM_SUBCLASS_FLASK                         = 3,
-    ITEM_SUBCLASS_SCROLL                        = 4,
-    ITEM_SUBCLASS_FOOD                          = 5,
-    ITEM_SUBCLASS_ITEM_ENHANCEMENT              = 6,
-    ITEM_SUBCLASS_BANDAGE                       = 7,
-    ITEM_SUBCLASS_CONSUMABLE_OTHER              = 8
+    ITEM_SUBCLASS_CONSUMABLE = 0
 };
 
-#define MAX_ITEM_SUBCLASS_CONSUMABLE              9
+#define MAX_ITEM_SUBCLASS_CONSUMABLE 1
 
 enum ItemSubclassContainer
 {
-    ITEM_SUBCLASS_CONTAINER                     = 0,
-    ITEM_SUBCLASS_SOUL_CONTAINER                = 1,
-    ITEM_SUBCLASS_HERB_CONTAINER                = 2,
-    ITEM_SUBCLASS_ENCHANTING_CONTAINER          = 3,
-    ITEM_SUBCLASS_ENGINEERING_CONTAINER         = 4,
-    ITEM_SUBCLASS_GEM_CONTAINER                 = 5,
-    ITEM_SUBCLASS_MINING_CONTAINER              = 6,
-    ITEM_SUBCLASS_LEATHERWORKING_CONTAINER      = 7
+    ITEM_SUBCLASS_CONTAINER = 0,
+    ITEM_SUBCLASS_SOUL_CONTAINER = 1,
+    ITEM_SUBCLASS_HERB_CONTAINER = 2,
+    ITEM_SUBCLASS_ENCHANTING_CONTAINER = 3
 };
 
-#define MAX_ITEM_SUBCLASS_CONTAINER               8
+#define MAX_ITEM_SUBCLASS_CONTAINER 4
 
 enum ItemSubclassWeapon
 {
@@ -257,21 +245,13 @@ enum ItemSubclassProjectile
 
 enum ItemSubclassTradeGoods
 {
-    ITEM_SUBCLASS_TRADE_GOODS                   = 0,
-    ITEM_SUBCLASS_PARTS                         = 1,
-    ITEM_SUBCLASS_EXPLOSIVES                    = 2,
-    ITEM_SUBCLASS_DEVICES                       = 3,
-    ITEM_SUBCLASS_CLOTH                         = 5,
-    ITEM_SUBCLASS_LEATHER                       = 6,
-    ITEM_SUBCLASS_METAL_STONE                   = 7,
-    ITEM_SUBCLASS_MEAT                          = 8,
-    ITEM_SUBCLASS_HERB                          = 9,
-    ITEM_SUBCLASS_ELEMENTAL                     = 10,
-    ITEM_SUBCLASS_TRADE_GOODS_OTHER             = 11,
-    ITEM_SUBCLASS_ENCHANTING                    = 12
+    ITEM_SUBCLASS_TRADE_GOODS = 0,
+    ITEM_SUBCLASS_PARTS = 1,
+    ITEM_SUBCLASS_EXPLOSIVES = 2,
+    ITEM_SUBCLASS_DEVICES = 3
 };
 
-#define MAX_ITEM_SUBCLASS_TRADE_GOODS             14
+#define MAX_ITEM_SUBCLASS_TRADE_GOODS 4
 
 enum ItemSubclassGeneric
 {
@@ -282,19 +262,19 @@ enum ItemSubclassGeneric
 
 enum ItemSubclassRecipe
 {
-    ITEM_SUBCLASS_BOOK                          = 0,
-    ITEM_SUBCLASS_LEATHERWORKING_PATTERN        = 1,
-    ITEM_SUBCLASS_TAILORING_PATTERN             = 2,
-    ITEM_SUBCLASS_ENGINEERING_SCHEMATIC         = 3,
-    ITEM_SUBCLASS_BLACKSMITHING                 = 4,
-    ITEM_SUBCLASS_COOKING_RECIPE                = 5,
-    ITEM_SUBCLASS_ALCHEMY_RECIPE                = 6,
-    ITEM_SUBCLASS_FIRST_AID_MANUAL              = 7,
-    ITEM_SUBCLASS_ENCHANTING_FORMULA            = 8,
-    ITEM_SUBCLASS_FISHING_MANUAL                = 9,
+    ITEM_SUBCLASS_BOOK = 0,
+    ITEM_SUBCLASS_LEATHERWORKING_PATTERN = 1,
+    ITEM_SUBCLASS_TAILORING_PATTERN = 2,
+    ITEM_SUBCLASS_ENGINEERING_SCHEMATIC = 3,
+    ITEM_SUBCLASS_BLACKSMITHING = 4,
+    ITEM_SUBCLASS_COOKING_RECIPE = 5,
+    ITEM_SUBCLASS_ALCHEMY_RECIPE = 6,
+    ITEM_SUBCLASS_FIRST_AID_MANUAL = 7,
+    ITEM_SUBCLASS_ENCHANTING_FORMULA = 8,
+    ITEM_SUBCLASS_FISHING_MANUAL = 9,
 };
 
-#define MAX_ITEM_SUBCLASS_RECIPE                  11
+#define MAX_ITEM_SUBCLASS_RECIPE 10
 
 enum ItemSubclassMoney
 {
@@ -337,15 +317,10 @@ enum ItemSubclassPermanent
 
 enum ItemSubclassJunk
 {
-    ITEM_SUBCLASS_JUNK                          = 0,
-    ITEM_SUBCLASS_JUNK_REAGENT                  = 1,
-    ITEM_SUBCLASS_JUNK_PET                      = 2,
-    ITEM_SUBCLASS_JUNK_HOLIDAY                  = 3,
-    ITEM_SUBCLASS_JUNK_OTHER                    = 4,
-    ITEM_SUBCLASS_JUNK_MOUNT                    = 5
+    ITEM_SUBCLASS_JUNK = 0
 };
 
-#define MAX_ITEM_SUBCLASS_JUNK                    6
+#define MAX_ITEM_SUBCLASS_JUNK 1
 
 const uint32 MaxItemSubclassValues[MAX_ITEM_CLASS] =
 {
@@ -516,7 +491,6 @@ struct ItemPrototype
 
     uint32 GetMaxStackSize() const { return Stackable; }
 
-    bool IsPotion() const { return Class==ITEM_CLASS_CONSUMABLE && SubClass==ITEM_SUBCLASS_POTION; }
     bool IsConjuredConsumable() const { return Class == ITEM_CLASS_CONSUMABLE && (Flags & ITEM_FLAG_CONJURED); }
     bool IsWeapon() const { return Class == ITEM_CLASS_WEAPON; }
     bool IsRangedWeapon() const { return IsWeapon() && (InventoryType == INVTYPE_RANGED || InventoryType == INVTYPE_THROWN || InventoryType == INVTYPE_RANGEDRIGHT); }
