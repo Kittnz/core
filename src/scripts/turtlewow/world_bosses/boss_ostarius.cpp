@@ -124,7 +124,7 @@ struct boss_ostariusAI : public ScriptedAI
         me->SetFloatValue(UNIT_FIELD_COMBATREACH, originalCombatReach * me->GetObjectScale() * 6);
         me->ForceValuesUpdateAtIndex(UNIT_FIELD_COMBATREACH);
 
-        me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISABLE_ROTATE | UNIT_FLAG_DISABLE_MOVE);
+        me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_STUNNED | UNIT_FLAG_DISABLE_MOVE);
         me->ForceValuesUpdateAtIndex(UNIT_FIELD_FLAGS);
 
         me->AddAura(SPELL_ROOT_FOREVER); // core support for NPC rooting broken?
@@ -219,7 +219,7 @@ struct boss_ostariusAI : public ScriptedAI
 
         me->ApplySpellImmune(0, IMMUNITY_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, false);
 
-        me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISABLE_ROTATE | UNIT_FLAG_DISABLE_MOVE);
+        me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_STUNNED | UNIT_FLAG_DISABLE_MOVE);
         me->ForceValuesUpdateAtIndex(UNIT_FIELD_FLAGS);
     }
 

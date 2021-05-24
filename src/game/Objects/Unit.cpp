@@ -3867,8 +3867,7 @@ Spell* Unit::FindCurrentSpellBySpellId(uint32 spell_id) const
 
 void Unit::SetInFront(Unit const* pTarget)
 {
-    if (!HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISABLE_ROTATE))
-        SetOrientation(GetAngle(pTarget));
+    SetOrientation(GetAngle(pTarget));
 }
 
 void Unit::SetFacingTo(float ori)
@@ -3898,7 +3897,7 @@ bool Unit::IsBehindTarget(Unit const* pTarget, bool strict) const
         {
             // Mobs always face their currect victim, unless incapacitated.
             if (!pCreature->m_castingTargetGuid && (pCreature->getVictim() == this) &&
-                !pTarget->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISABLE_ROTATE | UNIT_FLAG_STUNNED | UNIT_FLAG_CONFUSED | UNIT_FLAG_FLEEING | UNIT_FLAG_POSSESSED) &&
+                !pTarget->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_STUNNED | UNIT_FLAG_CONFUSED | UNIT_FLAG_FLEEING | UNIT_FLAG_POSSESSED) &&
                 !pTarget->hasUnitState(UNIT_STAT_CAN_NOT_REACT_OR_LOST_CONTROL))
                 return false;
         }
@@ -7911,7 +7910,7 @@ bool Unit::IsValidAttackTarget(Unit const* target) const
         return false;
 
     // check flags
-    if (target->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_TAXI_FLIGHT | UNIT_FLAG_NOT_ATTACKABLE_1 | UNIT_FLAG_UNK_16))
+    if (target->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_TAXI_FLIGHT | UNIT_FLAG_NOT_ATTACKABLE_1 | UNIT_FLAG_NON_ATTACKABLE_2))
         return false;
 
     if (IsPlayer() && target->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PLAYER))
