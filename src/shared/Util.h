@@ -104,7 +104,6 @@ float rand_chance_f(void);
 
 Milliseconds randtime(Milliseconds const& min, Milliseconds const& max);
 
-/* Return true if a random roll fits in the specified chance (range 0-100). */
 inline bool roll_chance_f(float chance)
 {
     return chance > rand_chance();

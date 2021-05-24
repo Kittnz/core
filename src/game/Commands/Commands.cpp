@@ -938,7 +938,7 @@ void ChatHandler::ShowSpellListHelper(Player* target, SpellEntry const* spellInf
     uint32 talentCost = GetTalentSpellCost(id);
 
     bool talent = (talentCost > 0);
-    bool passive = IsPassiveSpell(spellInfo);
+    bool passive = spellInfo->IsPassiveSpell();
     bool active = target && target->HasAura(id);
 
     // unit32 used to prevent interpreting uint8 as char at output
@@ -1727,8 +1727,7 @@ bool ChatHandler::HandleFearCommand(char* /*args*/)
     if (!spellInfo)
         return false;
 
-    if (!IsSpellAppliesAura(spellInfo, (1 << EFFECT_INDEX_0) | (1 << EFFECT_INDEX_1) | (1 << EFFECT_INDEX_2)) &&
-        !IsSpellHaveEffect(spellInfo, SPELL_EFFECT_PERSISTENT_AREA_AURA))
+    if (!spellInfo->IsSpellAppliesAura((1 << EFFECT_INDEX_0) | (1 << EFFECT_INDEX_1) | (1 << EFFECT_INDEX_2)) && !spellInfo->HasEffect(SPELL_EFFECT_PERSISTENT_AREA_AURA))
     {
         PSendSysMessage(LANG_SPELL_NO_HAVE_AURAS, fearID);
         SetSentErrorMessage(true);
@@ -1742,9 +1741,8 @@ bool ChatHandler::HandleFearCommand(char* /*args*/)
         uint8 eff = spellInfo->Effect[i];
         if (eff >= TOTAL_SPELL_EFFECTS)
             continue;
-        if (IsAreaAuraEffect(eff) ||
-            eff == SPELL_EFFECT_APPLY_AURA ||
-            eff == SPELL_EFFECT_PERSISTENT_AREA_AURA)
+
+        if (Spells::IsAreaAuraEffect(eff) || eff == SPELL_EFFECT_APPLY_AURA || eff == SPELL_EFFECT_PERSISTENT_AREA_AURA)
         {
             Aura *aur = CreateAura(spellInfo, SpellEffectIndex(i), NULL, holder, target);
             holder->AddAura(aur, SpellEffectIndex(i));
@@ -1884,8 +1882,7 @@ bool ChatHandler::HandleAuraCommand(char* args)
     if (!spellInfo)
         return false;
 
-    if (!IsSpellAppliesAura(spellInfo, (1 << EFFECT_INDEX_0) | (1 << EFFECT_INDEX_1) | (1 << EFFECT_INDEX_2)) &&
-            !IsSpellHaveEffect(spellInfo, SPELL_EFFECT_PERSISTENT_AREA_AURA))
+    if (!spellInfo->IsSpellAppliesAura((1 << EFFECT_INDEX_0) | (1 << EFFECT_INDEX_1) | (1 << EFFECT_INDEX_2)) && !spellInfo->HasEffect(SPELL_EFFECT_PERSISTENT_AREA_AURA))
     {
         PSendSysMessage(LANG_SPELL_NO_HAVE_AURAS, spellID);
         SetSentErrorMessage(true);
@@ -1905,14 +1902,14 @@ bool ChatHandler::HandleAuraCommand(char* args)
         uint8 eff = spellInfo->Effect[i];
         if (eff >= TOTAL_SPELL_EFFECTS)
             continue;
-        if (IsAreaAuraEffect(eff)           ||
-                eff == SPELL_EFFECT_APPLY_AURA  ||
-                eff == SPELL_EFFECT_PERSISTENT_AREA_AURA)
+
+        if (Spells::IsAreaAuraEffect(eff) || eff == SPELL_EFFECT_APPLY_AURA  || eff == SPELL_EFFECT_PERSISTENT_AREA_AURA)
         {
             Aura *aur = CreateAura(spellInfo, SpellEffectIndex(i), NULL, holder, target);
             holder->AddAura(aur, SpellEffectIndex(i));
         }
     }
+
     if (!target->AddSpellAuraHolder(holder))
         holder = nullptr;
 
@@ -10184,7 +10181,7 @@ bool ChatHandler::HandleSendSpellVisualCommand(char* args)
     m_session->GetPlayer()->SendSpellGo(pTarget, uiPlayId);
 
     // Channeled case
-    if (IsChanneledSpell(proto))
+    if (proto->IsChanneledSpell())
     {
         m_session->GetPlayer()->SetUInt32Value(UNIT_CHANNEL_SPELL, uiPlayId);
         m_session->GetPlayer()->SetChannelObjectGuid(pTarget->GetObjectGuid());

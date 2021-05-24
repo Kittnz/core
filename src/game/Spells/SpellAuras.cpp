@@ -54,6 +54,8 @@
 #include "PlayerAI.h"
 #include "Anticheat.h"
 
+using namespace Spells;
+
 #define NULL_AURA_SLOT 0xFF
 
 /**
@@ -273,7 +275,7 @@ Aura::Aura(SpellEntry const* spellproto, SpellEffectIndex eff, int32 *currentBas
 
     m_currentBasePoints = currentBasePoints ? *currentBasePoints : spellproto->CalculateSimpleValue(eff);
 
-    m_positive = IsPositiveEffect(spellproto, m_effIndex);
+    m_positive = spellproto->IsPositiveEffect(m_effIndex);
     m_applyTime = time(nullptr);
 
     int32 damage;
@@ -2725,7 +2727,7 @@ void Aura::HandleAuraTransform(bool apply, bool Real)
                 for (Unit::AuraList::const_reverse_iterator i = otherTransforms.rbegin(); i != otherTransforms.rend(); ++i)
                 {
                     // negative auras are preferred
-                    if (!IsPositiveSpell((*i)->GetSpellProto()->Id))
+                    if (!(*i)->GetSpellProto()->IsPositiveSpell())
                     {
                         handledAura = *i;
                         break;
@@ -2953,7 +2955,7 @@ void Aura::HandleModPossess(bool apply, bool Real)
         return;
 
     caster->ModPossess(target, apply, m_removeMode);
-    target->AddThreat(caster,target->GetHealth(), false, GetSpellSchoolMask(GetSpellProto()));
+    target->AddThreat(caster,target->GetHealth(), false, GetSpellProto()->GetSpellSchoolMask());
 
     if (!apply && GetId() == 24937) // Controlling Steam Tonk
     {
@@ -3482,7 +3484,7 @@ void Aura::HandleAuraModStun(bool apply, bool Real)
         // Stun/roots effects apply at charge end
         bool inCharge = target->GetMotionMaster()->GetCurrentMovementGeneratorType() == CHARGE_MOTION_TYPE;
         // Frost stun aura -> freeze/unfreeze target
-        if (GetSpellSchoolMask(GetSpellProto()) & SPELL_SCHOOL_MASK_FROST)
+        if (GetSpellProto()->GetSpellSchoolMask() & SPELL_SCHOOL_MASK_FROST)
             target->ModifyAuraState(AURA_STATE_FROZEN, apply);
 
         target->addUnitState(inCharge ? UNIT_STAT_PENDING_STUNNED : UNIT_STAT_STUNNED);
@@ -3513,7 +3515,7 @@ void Aura::HandleAuraModStun(bool apply, bool Real)
     else
     {
         // Frost stun aura -> freeze/unfreeze target
-        if (GetSpellSchoolMask(GetSpellProto()) & SPELL_SCHOOL_MASK_FROST)
+        if (GetSpellProto()->GetSpellSchoolMask() & SPELL_SCHOOL_MASK_FROST)
         {
             bool found_another = false;
             for (AuraType const* itr = &frozenAuraTypes[0]; *itr != SPELL_AURA_NONE; ++itr)
@@ -3521,12 +3523,13 @@ void Aura::HandleAuraModStun(bool apply, bool Real)
                 Unit::AuraList const& auras = target->GetAurasByType(*itr);
                 for (Unit::AuraList::const_iterator i = auras.begin(); i != auras.end(); ++i)
                 {
-                    if (GetSpellSchoolMask((*i)->GetSpellProto()) & SPELL_SCHOOL_MASK_FROST)
+                    if ((*i)->GetSpellProto()->GetSpellSchoolMask() & SPELL_SCHOOL_MASK_FROST)
                     {
                         found_another = true;
                         break;
                     }
                 }
+
                 if (found_another)
                     break;
             }
@@ -3744,7 +3747,7 @@ void Aura::HandleAuraModRoot(bool apply, bool Real)
         // Stun/roots effects apply at charge end
         bool inCharge = target->GetMotionMaster()->GetCurrentMovementGeneratorType() == CHARGE_MOTION_TYPE;
         // Frost root aura -> freeze/unfreeze target
-        if (GetSpellSchoolMask(GetSpellProto()) & SPELL_SCHOOL_MASK_FROST)
+        if (GetSpellProto()->GetSpellSchoolMask() & SPELL_SCHOOL_MASK_FROST)
             target->ModifyAuraState(AURA_STATE_FROZEN, apply);
 
         target->addUnitState(inCharge ? UNIT_STAT_PENDING_ROOT : UNIT_STAT_ROOT);
@@ -3761,7 +3764,7 @@ void Aura::HandleAuraModRoot(bool apply, bool Real)
     else
     {
         // Frost root aura -> freeze/unfreeze target
-        if (GetSpellSchoolMask(GetSpellProto()) & SPELL_SCHOOL_MASK_FROST)
+        if (GetSpellProto()->GetSpellSchoolMask() & SPELL_SCHOOL_MASK_FROST)
         {
             bool found_another = false;
             for (AuraType const* itr = &frozenAuraTypes[0]; *itr != SPELL_AURA_NONE; ++itr)
@@ -3769,12 +3772,13 @@ void Aura::HandleAuraModRoot(bool apply, bool Real)
                 Unit::AuraList const& auras = target->GetAurasByType(*itr);
                 for (Unit::AuraList::const_iterator i = auras.begin(); i != auras.end(); ++i)
                 {
-                    if (GetSpellSchoolMask((*i)->GetSpellProto()) & SPELL_SCHOOL_MASK_FROST)
+                    if ((*i)->GetSpellProto()->GetSpellSchoolMask() & SPELL_SCHOOL_MASK_FROST)
                     {
                         found_another = true;
                         break;
                     }
                 }
+
                 if (found_another)
                     break;
             }
@@ -4108,7 +4112,7 @@ void Aura::HandleAuraModSchoolImmunity(bool apply, bool Real)
             next = iter;
             ++next;
             SpellEntry const *spell = iter->second->GetSpellProto();
-            if ((GetSpellSchoolMask(spell) & school_mask) //Check for school mask
+            if ((spell->GetSpellSchoolMask() & school_mask) //Check for school mask
                     && !(spell->Attributes & SPELL_ATTR_UNAFFECTED_BY_INVULNERABILITY)    //Spells unaffected by invulnerability
                     && !iter->second->IsPositive()          //Don't remove positive spells
                     && spell->Id != GetId())                //Don't remove self
@@ -4313,7 +4317,7 @@ uint32 Aura::CalculateDotDamage() const
         // MeleeDamagebonusDone for weapon based spells
         else
         {
-            WeaponAttackType attackType = GetWeaponAttackType(GetSpellProto());
+            WeaponAttackType attackType = GetSpellProto()->GetWeaponAttackType();
             damage = caster->MeleeDamageBonusDone(target, damage, attackType, GetSpellProto(), DOT, GetStackAmount());
         }
     }
@@ -5351,11 +5355,16 @@ void Aura::HandleShapeshiftBoosts(bool apply)
             const PlayerSpellMap& sp_list = ((Player *)target)->GetSpellMap();
             for (PlayerSpellMap::const_iterator itr = sp_list.begin(); itr != sp_list.end(); ++itr)
             {
-                if (itr->second.state == PLAYERSPELL_REMOVED) continue;
-                if (itr->first == spellId1 || itr->first == spellId2) continue;
-                SpellEntry const *spellInfo = sSpellMgr.GetSpellEntry(itr->first);
-                if (!spellInfo || !IsNeedCastSpellAtFormApply(spellInfo, form))
+                if (itr->second.state == PLAYERSPELL_REMOVED)
                     continue;
+
+                if (itr->first == spellId1 || itr->first == spellId2)
+                    continue;
+
+                SpellEntry const *spellInfo = sSpellMgr.GetSpellEntry(itr->first);
+                if (!spellInfo || !spellInfo->IsNeedCastSpellAtFormApply(form))
+                    continue;
+
                 target->CastSpell(target, itr->first, true, nullptr, this);
             }
 
@@ -5405,7 +5414,7 @@ void Aura::HandleShapeshiftBoosts(bool apply)
         // Interrupt current shape specific spells
         for (uint32 i = CURRENT_MELEE_SPELL; i < CURRENT_MAX_SPELL; ++i)
             if (Spell* spell = target->GetCurrentSpell(CurrentSpellTypes(i)))
-                if (IsRemovedOnShapeLostSpell(spell->m_spellInfo))
+                if (spell->m_spellInfo->IsRemovedOnShapeLostSpell())
                     target->InterruptSpell(CurrentSpellTypes(i), false);
     }
 }
@@ -5556,7 +5565,7 @@ void Aura::HandleSchoolAbsorb(bool apply, bool Real)
                     if (spellProto->IsFitToFamilyMask<CF_PRIEST_POWER_WORD_SHIELD>())
                     {
                         //+10% from +healing bonus
-                        DoneActualBenefit = caster->SpellBaseHealingBonusDone(GetSpellSchoolMask(spellProto)) * 0.1f;
+                        DoneActualBenefit = caster->SpellBaseHealingBonusDone(spellProto->GetSpellSchoolMask()) * 0.1f;
                         break;
                     }
                     break;
@@ -5565,7 +5574,7 @@ void Aura::HandleSchoolAbsorb(bool apply, bool Real)
                     if (spellProto->IsFitToFamilyMask<CF_MAGE_FIRE_WARD, CF_MAGE_FROST_WARD>())
                     {
                         //+10% from +spd bonus
-                        DoneActualBenefit = caster->SpellBaseDamageBonusDone(GetSpellSchoolMask(spellProto)) * 0.1f;
+                        DoneActualBenefit = caster->SpellBaseDamageBonusDone(spellProto->GetSpellSchoolMask()) * 0.1f;
                         break;
                     }
                     break;
@@ -5574,7 +5583,7 @@ void Aura::HandleSchoolAbsorb(bool apply, bool Real)
                     if (spellProto->SpellIconID == 207 && spellProto->Category == 56)
                     {
                         //+10% from +spd bonus
-                        DoneActualBenefit = caster->SpellBaseDamageBonusDone(GetSpellSchoolMask(spellProto)) * 0.1f;
+                        DoneActualBenefit = caster->SpellBaseDamageBonusDone(spellProto->GetSpellSchoolMask()) * 0.1f;
                         break;
                     }
                     break;
@@ -5617,7 +5626,7 @@ void Aura::PeriodicTick(SpellEntry const* sProto, AuraType auraType, uint32 data
                 return;
 
             // Check for immune (not use charges)
-            if (target->IsImmuneToDamage(GetSpellSchoolMask(spellProto), spellProto))
+            if (target->IsImmuneToDamage(spellProto->GetSpellSchoolMask(), spellProto))
                 return;
 
             uint32 absorb = 0;
@@ -5650,13 +5659,13 @@ void Aura::PeriodicTick(SpellEntry const* sProto, AuraType auraType, uint32 data
             // MeleeDamagebonus for weapon based spells
             else
             {
-                WeaponAttackType attackType = GetWeaponAttackType(spellProto);
+                WeaponAttackType attackType = spellProto->GetWeaponAttackType();
                 pdamage = target->MeleeDamageBonusTaken(pCaster, pdamage, attackType, spellProto, DOT, GetStackAmount());
             }
 
             // Calculate armor mitigation if it is a physical spell
             // But not for bleed mechanic spells
-            if (GetSpellSchoolMask(spellProto) & SPELL_SCHOOL_MASK_NORMAL && GetEffectMechanic(spellProto, m_effIndex) != MECHANIC_BLEED && !(spellProto->Custom & SPELL_CUSTOM_IGNORE_ARMOR))
+            if (spellProto->GetSpellSchoolMask() & SPELL_SCHOOL_MASK_NORMAL && spellProto->GetEffectMechanic(m_effIndex) != MECHANIC_BLEED && !(spellProto->Custom & SPELL_CUSTOM_IGNORE_ARMOR))
             {
                 uint32 pdamageReductedArmor = pCaster->CalcArmorReducedDamage(target, pdamage);
                 cleanDamage.damage += pdamage - pdamageReductedArmor;
@@ -5688,7 +5697,7 @@ void Aura::PeriodicTick(SpellEntry const* sProto, AuraType auraType, uint32 data
             }
 
 
-            target->CalculateDamageAbsorbAndResist(pCaster, GetSpellSchoolMask(spellProto), DOT, pdamage, &absorb, &resist, spellProto);
+            target->CalculateDamageAbsorbAndResist(pCaster, spellProto->GetSpellSchoolMask(), DOT, pdamage, &absorb, &resist, spellProto);
 
             DETAIL_FILTER_LOG(LOG_FILTER_PERIODIC_AFFECTS, "PeriodicTick: %s attacked %s for %u dmg inflicted by %u",
                               GetCasterGuid().GetString().c_str(), target->GetGuidStr().c_str(), pdamage, GetId());
@@ -5714,7 +5723,7 @@ void Aura::PeriodicTick(SpellEntry const* sProto, AuraType auraType, uint32 data
 
             cleanDamage.absorb = absorb;
             cleanDamage.resist = resist;
-            pCaster->DealDamage(target, pdamage, &cleanDamage, DOT, GetSpellSchoolMask(spellProto), spellProto, true);
+            pCaster->DealDamage(target, pdamage, &cleanDamage, DOT, spellProto->GetSpellSchoolMask(), spellProto, true);
             // Curse of Doom: If the target dies from this damage, there is a chance that a Doomguard will be summoned.
             if (spellProto->Id == 603 && !target->isAlive() && !urand(0, 9))
                 pCaster->CastSpell(pCaster, 18662, true);
@@ -5739,7 +5748,7 @@ void Aura::PeriodicTick(SpellEntry const* sProto, AuraType auraType, uint32 data
                 return;
 
             // Check for immune
-            if (target->IsImmuneToDamage(GetSpellSchoolMask(spellProto), spellProto))
+            if (target->IsImmuneToDamage(spellProto->GetSpellSchoolMask(), spellProto))
                 return;
 
             uint32 absorb = 0;
@@ -5749,7 +5758,7 @@ void Aura::PeriodicTick(SpellEntry const* sProto, AuraType auraType, uint32 data
             uint32 pdamage = (m_modifier.m_amount > 0 ? uint32(m_modifier.m_amount) : 0);
 
             //Calculate armor mitigation if it is a physical spell
-            if (GetSpellSchoolMask(spellProto) & SPELL_SCHOOL_MASK_NORMAL)
+            if (spellProto->GetSpellSchoolMask() & SPELL_SCHOOL_MASK_NORMAL)
             {
                 uint32 pdamageReductedArmor = pCaster->CalcArmorReducedDamage(target, pdamage);
                 cleanDamage.damage += pdamage - pdamageReductedArmor;
@@ -5758,14 +5767,14 @@ void Aura::PeriodicTick(SpellEntry const* sProto, AuraType auraType, uint32 data
 
             pdamage = target->SpellDamageBonusTaken(pCaster, spellProto, pdamage, DOT, GetStackAmount());
 
-            target->CalculateDamageAbsorbAndResist(pCaster, GetSpellSchoolMask(spellProto), DOT, pdamage, &absorb, &resist, spellProto);
+            target->CalculateDamageAbsorbAndResist(pCaster, spellProto->GetSpellSchoolMask(), DOT, pdamage, &absorb, &resist, spellProto);
 
             DETAIL_FILTER_LOG(LOG_FILTER_PERIODIC_AFFECTS, "PeriodicTick: %s health leech of %s for %u dmg inflicted by %u abs is %u",
                               GetCasterGuid().GetString().c_str(), target->GetGuidStr().c_str(), pdamage, GetId(), absorb);
 
             pCaster->DealDamageMods(target, pdamage, &absorb);
 
-            pCaster->SendSpellNonMeleeDamageLog(target, GetId(), pdamage, GetSpellSchoolMask(spellProto), absorb, resist, true, 0);
+            pCaster->SendSpellNonMeleeDamageLog(target, GetId(), pdamage, spellProto->GetSpellSchoolMask(), absorb, resist, true, 0);
 
             float multiplier = spellProto->EffectMultipleValue[GetEffIndex()] > 0 ? spellProto->EffectMultipleValue[GetEffIndex()] : 1;
 
@@ -5787,7 +5796,7 @@ void Aura::PeriodicTick(SpellEntry const* sProto, AuraType auraType, uint32 data
             cleanDamage.resist = resist;
 
             pCaster->ProcDamageAndSpell(target, procAttacker, procVictim, PROC_EX_NORMAL_HIT, pdamage, BASE_ATTACK, spellProto);
-            int32 new_damage = pCaster->DealDamage(target, pdamage, &cleanDamage, DOT, GetSpellSchoolMask(spellProto), spellProto, false);
+            int32 new_damage = pCaster->DealDamage(target, pdamage, &cleanDamage, DOT, spellProto->GetSpellSchoolMask(), spellProto, false);
 
             if (!target->isAlive() && pCaster->IsNonMeleeSpellCasted(false))
                 for (uint32 i = CURRENT_FIRST_NON_MELEE_SPELL; i < CURRENT_MAX_SPELL; ++i)
@@ -5876,10 +5885,10 @@ void Aura::PeriodicTick(SpellEntry const* sProto, AuraType auraType, uint32 data
                     uint32 damage = gain;
                     uint32 absorb = 0;
                     pCaster->DealDamageMods(pCaster, damage, &absorb);
-                    pCaster->SendSpellNonMeleeDamageLog(pCaster, GetId(), damage, GetSpellSchoolMask(spellProto), absorb, 0, true, 0, false);
+                    pCaster->SendSpellNonMeleeDamageLog(pCaster, GetId(), damage, spellProto->GetSpellSchoolMask(), absorb, 0, true, 0, false);
 
                     CleanDamage cleanDamage =  CleanDamage(0, BASE_ATTACK, MELEE_HIT_NORMAL, absorb, 0);
-                    pCaster->DealDamage(pCaster, damage, &cleanDamage, NODAMAGE, GetSpellSchoolMask(spellProto), spellProto, true);
+                    pCaster->DealDamage(pCaster, damage, &cleanDamage, NODAMAGE, spellProto->GetSpellSchoolMask(), spellProto, true);
                 }
             }
             break;
@@ -5911,7 +5920,7 @@ void Aura::PeriodicTick(SpellEntry const* sProto, AuraType auraType, uint32 data
                 return;
 
             // Check for immune (not use charges)
-            if (target->IsImmuneToDamage(GetSpellSchoolMask(spellProto), spellProto))
+            if (target->IsImmuneToDamage(spellProto->GetSpellSchoolMask(), spellProto))
                 return;
 
             // ignore non positive values (can be result apply spellmods to aura damage
@@ -5943,8 +5952,9 @@ void Aura::PeriodicTick(SpellEntry const* sProto, AuraType auraType, uint32 data
             {
                 float threat = pCaster->ModifyPower(power, gain_amount) * sSpellMgr.GetSpellThreatMultiplier(spellProto);
                 threat *= 0.5; // Mana Drain
-                target->AddThreat(pCaster, threat, false, GetSpellSchoolMask(spellProto), spellProto);
+                target->AddThreat(pCaster, threat, false, spellProto->GetSpellSchoolMask(), spellProto);
             }
+
             if (target->GetPower(power) == 0)
             {
                 if (spellProto->Id == 21056) //Marque de Kazzak
@@ -6035,7 +6045,7 @@ void Aura::PeriodicTick(SpellEntry const* sProto, AuraType auraType, uint32 data
                 return;
 
             // Check for immune (not use charges)
-            if (target->IsImmuneToDamage(GetSpellSchoolMask(spellProto), spellProto))
+            if (target->IsImmuneToDamage(spellProto->GetSpellSchoolMask(), spellProto))
                 return;
 
             int32 pdamage = m_modifier.m_amount > 0 ? m_modifier.m_amount : 0;
@@ -6325,14 +6335,14 @@ SpellAuraHolder::SpellAuraHolder(SpellEntry const* spellproto, Unit *target, Wor
         m_casterGuid = caster->GetObjectGuid();
     }
 
-    m_applyTime      = time(nullptr);
-    m_isPassive      = IsPassiveSpell(GetId()) || spellproto->Attributes == 0x80;
-    m_isDeathPersist = IsDeathPersistentSpell(spellproto);
-    m_isSingleTarget = HasSingleTargetAura(spellproto);
-    m_procCharges    = spellproto->procCharges;
-    m_isChanneled    = IsChanneledSpell(spellproto);
+    m_applyTime = time(nullptr);
+    m_isPassive = IsPassiveSpell(GetId()) || spellproto->Attributes == 0x80;
+    m_isDeathPersist = spellproto->IsDeathPersistentSpell();
+    m_isSingleTarget = spellproto->HasSingleTargetAura();
+    m_procCharges = spellproto->procCharges;
+    m_isChanneled = spellproto->IsChanneledSpell();
 
-    m_isRemovedOnShapeLost = m_casterGuid == m_target->GetObjectGuid() && IsRemovedOnShapeLostSpell(m_spellProto);
+    m_isRemovedOnShapeLost = m_casterGuid == m_target->GetObjectGuid() && m_spellProto->IsRemovedOnShapeLostSpell();
 
     // Exceptions
     // Attaques circulaires
@@ -6341,7 +6351,7 @@ SpellAuraHolder::SpellAuraHolder(SpellEntry const* spellproto, Unit *target, Wor
 
     Unit* unitCaster = caster && caster->isType(TYPEMASK_UNIT) ? (Unit*)caster : NULL;
 
-    m_duration = m_maxDuration = CalculateSpellDuration(spellproto, unitCaster);
+    m_duration = m_maxDuration = spellproto->CalculateDuration(unitCaster);
 
     if (m_maxDuration == -1 || (m_isPassive && spellproto->DurationIndex == 0))
         m_permanent = true;
@@ -6373,9 +6383,9 @@ SpellAuraHolder::SpellAuraHolder(SpellEntry const* spellproto, Unit *target, Wor
 
     for (int32 i = 0; i < MAX_EFFECT_INDEX; ++i)
         m_auras[i] = nullptr;
-    m_makesTargetSecondaryFocus = !IsPositiveSpell(GetSpellProto()) && (GetSpellProto()->AuraInterruptFlags & AURA_INTERRUPT_FLAG_DAMAGE
-                                                                    ||  IsSpellHaveAura(m_spellProto, SPELL_AURA_MOD_CONFUSE)
-                                                                    ||  IsSpellHaveAura(m_spellProto, SPELL_AURA_MOD_FEAR));
+
+    m_makesTargetSecondaryFocus = !GetSpellProto()->IsPositiveSpell() && (GetSpellProto()->AuraInterruptFlags & AURA_INTERRUPT_FLAG_DAMAGE ||
+                                    m_spellProto->HasAura(SPELL_AURA_MOD_CONFUSE) || m_spellProto->HasAura(SPELL_AURA_MOD_FEAR));
 }
 
 void SpellAuraHolder::AddAura(Aura *aura, SpellEffectIndex index)
@@ -6476,7 +6486,7 @@ void SpellAuraHolder::_AddSpellAuraHolder()
         m_target->ApplyDiminishingAura(getDiminishGroup(), true);
 
     // Update Seals information
-    if (IsSealSpell(GetSpellProto()))
+    if (GetSpellProto()->IsSealSpell())
         m_target->ModifyAuraState(AURA_STATE_JUDGEMENT, true);
 
     // Break stealth on target
@@ -6538,7 +6548,7 @@ void SpellAuraHolder::_RemoveSpellAuraHolder()
         switch (m_spellProto->SpellFamilyName)
         {
             case SPELLFAMILY_PALADIN:
-                if (IsSealSpell(m_spellProto))
+                if (m_spellProto->IsSealSpell())
                     removeState = AURA_STATE_JUDGEMENT;     // Update Seals information
                 break;
         }
@@ -6586,13 +6596,13 @@ void SpellAuraHolder::CleanupTriggeredSpells()
         if (!tProto)
             continue;
 
-        if (GetSpellDuration(tProto) != -1)
+        if (tProto->GetDuration() != -1)
             continue;
 
         // needed for spell 43680, maybe others
         // TODO: is there a spell flag, which can solve this in a more sophisticated way?
         if (m_spellProto->EffectApplyAuraName[i] == SPELL_AURA_PERIODIC_TRIGGER_SPELL &&
-                GetSpellDuration(m_spellProto) == int32(m_spellProto->EffectAmplitude[i]))
+                m_spellProto->GetDuration() == int32(m_spellProto->EffectAmplitude[i]))
             continue;
 
         m_target->RemoveAurasDueToSpell(tSpellId);

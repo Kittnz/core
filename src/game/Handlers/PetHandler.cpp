@@ -245,7 +245,7 @@ void WorldSession::HandlePetAction(WorldPacket& recv_data)
             }
 
             // do not cast not learned spells
-            if (!pCharmedUnit->HasSpell(spellid) || IsPassiveSpell(spellInfo))
+            if (!pCharmedUnit->HasSpell(spellid) || spellInfo->IsPassiveSpell())
                 return;
 
             pCharmedUnit->clearUnitState(UNIT_STAT_MOVING);
@@ -698,7 +698,7 @@ void WorldSession::HandlePetSpellAutocastOpcode(WorldPacket& recvPacket)
     }
 
     // do not add not learned spells/ passive spells
-    if (!pet->HasSpell(spellid) || IsPassiveSpell(spellid))
+    if (!pet->HasSpell(spellid) || Spells::IsPassiveSpell(spellid))
         return;
 
     CharmInfo* charmInfo = pet->GetCharmInfo();
@@ -747,7 +747,7 @@ void WorldSession::HandlePetCastSpellOpcode(WorldPacket& recvPacket)
         return;
 
     // do not cast not learned spells
-    if (!pet->HasSpell(spellid) || IsPassiveSpell(spellInfo))
+    if (!pet->HasSpell(spellid) || spellInfo->IsPassiveSpell())
         return;
 
     SpellCastTargets targets;

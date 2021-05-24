@@ -33,7 +33,7 @@ enum class InteractType
     Yell
 };
 
-enum class SpellTarget
+enum class TargetSpell
 {
     Me,
     Victim
@@ -44,7 +44,7 @@ struct SpellEventData
     uint32 step;
     float healthPercentage;
     InteractType interactType;
-    SpellTarget spellTargetType;
+    TargetSpell targetSpellType;
     std::string text;
 };
 
@@ -78,13 +78,13 @@ bool ExecuteSpellEventData(SpellEventDataMap& eventData, SpellEventHolder& event
 
             Unit* target = nullptr;
 
-            switch (elem.second.spellTargetType)
+            switch (elem.second.targetSpellType)
             {
-            case SpellTarget::Me:
+            case TargetSpell::Me:
                 target = me;
                 break;
 
-            case SpellTarget::Victim:
+            case TargetSpell::Victim:
                 target = me->getVictim();
                 break;
 
@@ -251,11 +251,11 @@ struct boss_volkan_cruelbladeAI : public ScriptedAI
         Reset();
 
         m_data = {
-            {SPELL_BLOODLUST, {m_holder.GetNextStep(SPELL_BLOODLUST), 70.f, InteractType::Yell, SpellTarget::Me, "Feel the heat of the Burning Blade!"}},
-            {SPELL_BLOODLUST, {m_holder.GetNextStep(SPELL_BLOODLUST), 40.f, InteractType::Yell, SpellTarget::Me, "I will see you fall! Trk’hsk!"}},
-            {SPELL_BLOODLUST, {m_holder.GetNextStep(SPELL_BLOODLUST), 10.f, InteractType::Yell, SpellTarget::Me, "Lok’tar Ogar!"}},
+            {SPELL_BLOODLUST, {m_holder.GetNextStep(SPELL_BLOODLUST), 70.f, InteractType::Yell, TargetSpell::Me, "Feel the heat of the Burning Blade!"}},
+            {SPELL_BLOODLUST, {m_holder.GetNextStep(SPELL_BLOODLUST), 40.f, InteractType::Yell, TargetSpell::Me, "I will see you fall! Trkï¿½hsk!"}},
+            {SPELL_BLOODLUST, {m_holder.GetNextStep(SPELL_BLOODLUST), 10.f, InteractType::Yell, TargetSpell::Me, "Lokï¿½tar Ogar!"}},
 
-            {SPELL_BLADESTORM, {m_holder.GetNextStep(SPELL_BLADESTORM), 5.f, InteractType::Yell, SpellTarget::Me, "Feel the wrath of the Cruelblade!"}}
+            {SPELL_BLADESTORM, {m_holder.GetNextStep(SPELL_BLADESTORM), 5.f, InteractType::Yell, TargetSpell::Me, "Feel the wrath of the Cruelblade!"}}
         };
     }
 
@@ -273,7 +273,7 @@ struct boss_volkan_cruelbladeAI : public ScriptedAI
 
     void JustDied(Unit* killer) override
     {
-        me->MonsterSay("Lok’tar *whimpers* O-Ogar.");
+        me->MonsterSay("Lokï¿½tar *whimpers* O-Ogar.");
     }
 
     void UpdateAI(uint32 diff) override
