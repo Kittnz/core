@@ -1752,7 +1752,7 @@ class Unit : public WorldObject
         void SetInFront(Unit const* pTarget);
         void SetFacingTo(float ori);
         void SetFacingToObject(WorldObject* pObject);
-        bool IsBehindTarget(Unit const* pTarget) const;
+        bool IsBehindTarget(Unit const* pTarget, bool strict = true) const;
 
         // Visibility system
         UnitVisibility GetVisibility() const { return m_Visibility; }
