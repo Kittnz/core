@@ -603,10 +603,6 @@ class Creature : public Unit
         CreatureAI const* AI() const { return i_AI; }
         void SetAInitializeOnRespawn(bool initialize) { m_AI_InitializeOnRespawn = initialize; }
 
-        void SetFeatherFall(bool enable) override;
-        void SetHover(bool enable) override;
-        void SetWaterWalk(bool enable) override;
-
         uint32 GetShieldBlockValue() const override
         {
             return getLevel() / 2 + uint32(GetStat(STAT_STRENGTH) / 20); // dunno mob block value

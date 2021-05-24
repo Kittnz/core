@@ -143,6 +143,7 @@ set (game_SRCS
     Movement/IdleMovementGenerator.cpp
     Movement/MotionMaster.cpp
     Movement/MovementGenerator.cpp
+    Movement/MovementPacketSender.cpp
     Movement/PointMovementGenerator.cpp
     Movement/RandomMovementGenerator.cpp
     Movement/TargetedMovementGenerator.cpp
@@ -318,6 +319,7 @@ set (game_SRCS
     Movement/MotionMaster.h
     Movement/MovementGenerator.h
     Movement/MovementGeneratorImpl.h
+    Movement/MovementPacketSender.h
     Movement/PointMovementGenerator.h
     Movement/RandomMovementGenerator.h
     Movement/TargetedMovementGenerator.h

@@ -534,39 +534,30 @@ class WorldSession
         void HandlePlayerLoginOpcode(WorldPacket& recvPacket);
         void HandleCharEnum(QueryResult * result);
         void HandlePlayerLogin(LoginQueryHolder * holder);
-
-        // played time
         void HandlePlayedTime(WorldPacket& recvPacket);
 
-        // new
-        void HandleMoveUnRootAck(WorldPacket& recvPacket);
+        // Movement
         void HandleMoveRootAck(WorldPacket& recvPacket);
-
-        // new inspect
-        void HandleInspectOpcode(WorldPacket& recvPacket);
-
-        // new party stats
-        void HandleInspectHonorStatsOpcode(WorldPacket& recvPacket);
-
-        void HandleMoveWaterWalkAck(WorldPacket& recvPacket);
-        void HandleFeatherFallAck(WorldPacket &recv_data);
-
-        void HandleMoveHoverAck( WorldPacket & recv_data );
-
+        void HandleMoveKnockBackAck(WorldPacket& recvPacket);
+        void HandleMoveTeleportAckOpcode(WorldPacket& recvPacket);
+        void HandleForceSpeedChangeAckOpcodes(WorldPacket & recv_data);
+        void HandleMoveWorldportAckOpcode(WorldPacket& recvPacket);
+        void HandleMoveWorldportAckOpcode();                // for server-side calls
+        void HandleMovementOpcodes(WorldPacket& recvPacket);
+        void HandleSetActiveMoverOpcode(WorldPacket &recv_data);
+        void HandleMoveNotActiveMoverOpcode(WorldPacket &recv_data);
+        void HandleMoveTimeSkippedOpcode(WorldPacket &recv_data);
+        void HandleMovementFlagChangeToggleAck(WorldPacket& recvData);
+        void HandleMoveSplineDoneOpcode(WorldPacket& recvPacket);
+        void HandleMoveSetRawPosition(WorldPacket& recv_data);
+        void HandleWorldTeleportOpcode(WorldPacket& recv_data);
         void HandleMountSpecialAnimOpcode(WorldPacket &recvdata);
 
-        // character view
+        void HandleInspectOpcode(WorldPacket& recvPacket);
+        void HandleInspectHonorStatsOpcode(WorldPacket& recvPacket);
         void HandleShowingHelmOpcode(WorldPacket& recv_data);
         void HandleShowingCloakOpcode(WorldPacket& recv_data);
-
-        // repair
         void HandleRepairItemOpcode(WorldPacket& recvPacket);
-
-        // Knockback
-        void HandleMoveKnockBackAck(WorldPacket& recvPacket);
-
-        void HandleMoveTeleportAckOpcode(WorldPacket& recvPacket);
-        void HandleForceSpeedChangeAckOpcodes( WorldPacket & recv_data );
 
         void HandlePingOpcode(WorldPacket& recvPacket);
         void HandleAuthSessionOpcode(WorldPacket& recvPacket);
@@ -624,21 +615,9 @@ class WorldSession
         void HandleMeetingStoneInfoOpcode(WorldPacket& recPacket);
 
         void HandleNameQueryOpcode(WorldPacket& recvPacket);
-
         void HandleQueryTimeOpcode(WorldPacket& recvPacket);
-
         void HandleCreatureQueryOpcode(WorldPacket& recvPacket);
-
         void HandleGameObjectQueryOpcode(WorldPacket& recvPacket);
-
-        void HandleMoveWorldportAckOpcode(WorldPacket& recvPacket);
-        void HandleMoveWorldportAckOpcode();                // for server-side calls
-
-        void HandleMovementOpcodes(WorldPacket& recvPacket);
-        void HandleSetActiveMoverOpcode(WorldPacket &recv_data);
-        void HandleMoveNotActiveMoverOpcode(WorldPacket &recv_data);
-        void HandleMoveTimeSkippedOpcode(WorldPacket &recv_data);
-
         void HandleRequestRaidInfoOpcode( WorldPacket & recv_data );
 
         void HandleGroupInviteOpcode(WorldPacket& recvPacket);
@@ -693,7 +672,6 @@ class WorldSession
         void HandleTaxiQueryAvailableNodes(WorldPacket& recvPacket);
         void HandleActivateTaxiOpcode(WorldPacket& recvPacket);
         void HandleActivateTaxiExpressOpcode(WorldPacket& recvPacket);
-        void HandleMoveSplineDoneOpcode(WorldPacket& recvPacket);
 
         void HandleTabardVendorActivateOpcode(WorldPacket& recvPacket);
         void HandleBankerActivateOpcode(WorldPacket& recvPacket);
@@ -779,7 +757,7 @@ class WorldSession
         void HandleCancelAuraOpcode(WorldPacket& recvPacket);
         void HandleCancelGrowthAuraOpcode(WorldPacket& recvPacket);
         void HandleCancelAutoRepeatSpellOpcode(WorldPacket& recvPacket);
-
+        void HandleSetActionBarTogglesOpcode(WorldPacket& recv_data);
         void HandleLearnTalentOpcode(WorldPacket& recvPacket);
         void HandleTalentWipeConfirmOpcode(WorldPacket& recvPacket);
         void HandleUnlearnSkillOpcode(WorldPacket& recvPacket);
@@ -853,8 +831,7 @@ class WorldSession
         void HandlePetUnlearnOpcode( WorldPacket& recvPacket );
         void HandlePetSpellAutocastOpcode( WorldPacket& recvPacket );
         void HandlePetCastSpellOpcode( WorldPacket& recvPacket );
-
-        void HandleSetActionBarTogglesOpcode(WorldPacket& recv_data);
+        void HandleRequestPetInfoOpcode(WorldPacket& recv_data);
 
         void HandleCharRenameOpcode(WorldPacket& recv_data);
         static void HandleChangePlayerNameOpcodeCallBack(QueryResult *result, uint32 accountId, std::string newname);
@@ -871,8 +848,6 @@ class WorldSession
         void HandleLeaveBattlefieldOpcode( WorldPacket &recv_data );
 
         void HandleWardenDataOpcode(WorldPacket& recv_data);
-        void HandleWorldTeleportOpcode(WorldPacket& recv_data);
-        void HandleMoveSetRawPosition(WorldPacket& recv_data);
         void HandleMinimapPingOpcode(WorldPacket& recv_data);
         void HandleRandomRollOpcode(WorldPacket& recv_data);
         void HandleFarSightOpcode(WorldPacket& recv_data);
@@ -882,7 +857,7 @@ class WorldSession
         void HandleAreaSpiritHealerQueryOpcode(WorldPacket& recv_data);
         void HandleAreaSpiritHealerQueueOpcode(WorldPacket& recv_data);
         void HandleSelfResOpcode(WorldPacket& recv_data);
-        void HandleRequestPetInfoOpcode(WorldPacket& recv_data);
+
     private:
         // private trade methods
         void moveItems(Item* myItems[], Item* hisItems[]);

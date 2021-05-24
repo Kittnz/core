@@ -5300,14 +5300,12 @@ bool ChatHandler::HandleModifyASpeedCommand(char* args)
         SetSentErrorMessage(true);
         return false;
     }
+
     PSendSysMessage(LANG_YOU_CHANGE_ASPEED, modSpeed, chrNameLink.c_str());
-    /*if (needReportToTarget(chr))
-        ChatHandler(chr).PSendSysMessage(LANG_YOURS_ASPEED_CHANGED, GetNameLink().c_str(), modSpeed);
-    */
-    chr->UpdateSpeed(MOVE_WALK, true, modSpeed);
-    chr->UpdateSpeed(MOVE_RUN, true, modSpeed);
-    chr->UpdateSpeed(MOVE_SWIM, true, modSpeed);
-    //chr->UpdateSpeed(MOVE_TURN,   true, modSpeed);
+
+    chr->UpdateSpeed(MOVE_WALK, false, modSpeed);
+    chr->UpdateSpeed(MOVE_RUN, false, modSpeed);
+    chr->UpdateSpeed(MOVE_SWIM, false, modSpeed);
     return true;
 }
 
@@ -9705,9 +9703,9 @@ bool ChatHandler::HandleWaterwalkCommand(char* args)
         return false;
 
     if (value)
-        player->SetMovement(MOVE_WATER_WALK);               // ON
+        player->SetWaterWalking(true);
     else
-        player->SetMovement(MOVE_LAND_WALK);                // OFF
+        player->SetWaterWalking(false);
 
     PSendSysMessage(LANG_YOU_SET_WATERWALK, args, GetNameLink(player).c_str());
     if (needReportToTarget(player))
@@ -10914,7 +10912,7 @@ bool ChatHandler::HandleFlyCommand(char* args)
         target->SetFlying(true);
         target->SetDisplayId(target->GetTeam() == ALLIANCE ? 6299 : 4566); // Black and Brown Owls
         target->SetObjectScale(0.7F);
-        target->UpdateSpeed(MOVE_SWIM, true, 6.0F);
+        target->UpdateSpeed(MOVE_SWIM, false, 6.0F);
         // Looks better if bird doesn't appear on the ground:
         target->NearLandTo(target->GetPositionX(), target->GetPositionY(), target->GetPositionZ() + 4.0F, target->GetOrientation());
     }
@@ -10922,9 +10920,9 @@ bool ChatHandler::HandleFlyCommand(char* args)
     {
         target->SetFlying(false);
         target->SetObjectScale(target->getNativeScale());
-        target->UpdateSpeed(MOVE_SWIM, true, 1.0F);
-        target->UpdateSpeed(MOVE_RUN, true, 1.0F);
-        target->UpdateSpeed(MOVE_WALK, true, 1.0F);
+        target->UpdateSpeed(MOVE_SWIM, false, 1.0F);
+        target->UpdateSpeed(MOVE_RUN, false, 1.0F);
+        target->UpdateSpeed(MOVE_WALK, false, 1.0F);
         target->DeMorph();
 
         target->m_movementInfo.UpdateTime(WorldTimer::getMSTime());
