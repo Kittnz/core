@@ -4141,21 +4141,28 @@ void Player::BuildCreateUpdateBlockForPlayer(UpdateData *data, Player *target) c
     {
         for (int i = 0; i < EQUIPMENT_SLOT_END; ++i)
         {
-            if (m_items[i] == NULL)
+            if (m_items[i] == nullptr)
                 continue;
 
             m_items[i]->BuildCreateUpdateBlockForPlayer(data, target);
         }
         for (int i = INVENTORY_SLOT_BAG_START; i < BANK_SLOT_BAG_END; ++i)
         {
-            if (m_items[i] == NULL)
+            if (m_items[i] == nullptr)
+                continue;
+
+            m_items[i]->BuildCreateUpdateBlockForPlayer(data, target);
+        }
+        for (int i = BUYBACK_SLOT_START; i < BUYBACK_SLOT_END; ++i)
+        {
+            if (m_items[i] == nullptr)
                 continue;
 
             m_items[i]->BuildCreateUpdateBlockForPlayer(data, target);
         }
         for (int i = KEYRING_SLOT_START; i < KEYRING_SLOT_END; ++i)
         {
-            if (m_items[i] == NULL)
+            if (m_items[i] == nullptr)
                 continue;
 
             m_items[i]->BuildCreateUpdateBlockForPlayer(data, target);
