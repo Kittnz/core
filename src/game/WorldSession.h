@@ -880,6 +880,7 @@ class WorldSession
 
         Player *_player;
         ObjectGuid _clientMoverGuid;
+        uint32 m_moveRejectTime;
         WorldSocket *m_Socket;
         std::string m_Address;
 
