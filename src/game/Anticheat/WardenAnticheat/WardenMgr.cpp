@@ -18,7 +18,6 @@
 #include "World.h"
 #include "WorldPacket.h"
 #include "WorldSession.h"
-#include "ProgressBar.h"
 #include "Util.h"
 #include "Log.h"
 #include "Database/DatabaseEnv.h"
@@ -47,33 +46,19 @@ void WardenMgr::LoadWardenChecks()
 {
     // Check if Warden is enabled by config before loading anything
     if (!sWorld.getConfig(CONFIG_BOOL_AC_WARDEN_WIN_ENABLED) && !sWorld.getConfig(CONFIG_BOOL_AC_WARDEN_OSX_ENABLED))
-    {
-        BarGoLink bar(1);
-        bar.step();
-        sLog.outString();
-        sLog.outString(">> Warden disabled, loading checks skipped.");
         return;
-    }
 
     //                                                                0     1        2       3       4         5          6         7      8          9
     std::unique_ptr<QueryResult> result (WorldDatabase.Query("SELECT `id`, `build`, `type`, `data`, `result`, `address`, `length`, `str`, `penalty`, `comment` FROM `warden_checks` ORDER BY `build` ASC, `id` ASC"));
 
     if (!result)
-    {
-        BarGoLink bar(1);
-        bar.step();
-        sLog.outString();
-        sLog.outString(">> Loaded 0 warden data and results");
         return;
-    }
 
     uint32 count = 0;
     Field* fields;
-    BarGoLink bar(result->GetRowCount());
 
     do
     {
-        bar.step();
         fields = result->Fetch();
 
         uint16 id               = fields[0].GetUInt16();
@@ -159,15 +144,8 @@ void WardenMgr::LoadWardenModules()
 {
     // Check if Warden is enabled by config before loading anything
     if (!sWorld.getConfig(CONFIG_BOOL_AC_WARDEN_WIN_ENABLED) && !sWorld.getConfig(CONFIG_BOOL_AC_WARDEN_OSX_ENABLED))
-    {
-        BarGoLink bar(1);
-        bar.step();
-        sLog.outString();
-        sLog.outString(">> Warden disabled, loading modules skipped.");
         return;
-    }
 
-    BarGoLink bar(1);
     std::string moduleDirectory = sWorld.GetWardenModuleDirectory();
     ACE_DIR* pDirectory = ACE_OS::opendir(ACE_TEXT(moduleDirectory.c_str()));
 
@@ -179,8 +157,6 @@ void WardenMgr::LoadWardenModules()
             if (!memcmp(&pFile->d_name[strlen(pFile->d_name) - 4], ".bin", 4))
                 LoadWardenModule(moduleDirectory + "/" + pFile->d_name);
     }
-
-    bar.step();
 
     MANGOS_ASSERT(!(m_vWindowsModules.empty() && sWorld.getConfig(CONFIG_BOOL_AC_WARDEN_WIN_ENABLED)));
     MANGOS_ASSERT(!(m_vMacModules.empty() && sWorld.getConfig(CONFIG_BOOL_AC_WARDEN_OSX_ENABLED)));

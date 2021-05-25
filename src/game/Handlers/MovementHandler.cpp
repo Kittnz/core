@@ -276,6 +276,10 @@ void WorldSession::HandleMovementOpcodes(WorldPacket & recvData)
     uint32 const opcode = recvData.GetOpcode();
     DEBUG_LOG("WORLD: Recvd %s (%u, 0x%X) opcode", LookupOpcodeName(opcode), opcode, opcode);
 
+    // Do not accept packets sent before this time.
+    if (recvData.GetPacketTime() <= m_moveRejectTime)
+        return;
+
     Unit* pMover = _player->GetMover();
 
     if (pMover->GetObjectGuid() != _clientMoverGuid)
@@ -302,13 +306,13 @@ void WorldSession::HandleMovementOpcodes(WorldPacket & recvData)
 
     if (pPlayerMover)
     {
-        if (!_player->GetCheatData()->CheckTeleport(pPlayerMover, movementInfo, opcode))
+        if (!_player->GetCheatData()->CheckTeleport(pPlayerMover, movementInfo, opcode) ||
+            !_player->GetCheatData()->HandleAnticheatTests(pPlayerMover, movementInfo, opcode) ||
+            !_player->GetCheatData()->HandleMovementFlags(pPlayerMover, movementInfo))
+        {
+            m_moveRejectTime = WorldTimer::getMSTime();
             return;
-
-        if (!_player->GetCheatData()->HandleAnticheatTests(pPlayerMover, movementInfo, opcode))
-            return;
-
-        _player->GetCheatData()->CheckMovementFlags(pPlayerMover, movementInfo);
+        }
     }
 
     // Interrupt spell cast at move
@@ -426,21 +430,7 @@ void WorldSession::HandleForceSpeedChangeAckOpcodes(WorldPacket &recvData)
     if (!pMover)
         return;
 
-    Player* pPlayerMover = pMover->ToPlayer();
-
-    if (!VerifyMovementInfo(movementInfo))
-        return;
-
-    if (pPlayerMover)
-    {
-        if (!_player->GetCheatData()->CheckTeleport(pPlayerMover, movementInfo, opcode))
-            return;
-
-        if (!_player->GetCheatData()->HandleSpeedChangeAck(pPlayerMover, movementInfo, speedReceived, move_type, opcode))
-            return;
-    }
-
-    // verify that indeed the client is replying with the changes that were send to him
+    // Verify that indeed the client is replying with the changes that were send to him
     if (!pMover->HasPendingMovementChange())
     {
         sLog.outInfo("WorldSession::HandleForceSpeedChangeAck: Player %s from account id %u sent opcode %u, but no movement change ack was expected from this player", _player->GetName(), _player->GetSession()->GetAccountId(), opcode);
@@ -457,13 +447,38 @@ void WorldSession::HandleForceSpeedChangeAckOpcodes(WorldPacket &recvData)
 
     // The client data has been verified. let's do the actual change now
     float newSpeedRate = speedReceived / baseMoveSpeed[move_type];
-    HandleMoverRelocation(movementInfo);
-    
-    if (pPlayerMover)
-        pPlayerMover->UpdateFallInformationIfNeed(movementInfo, opcode);
     
     pMover->SetSpeedRateReal(move_type, newSpeedRate);
 
+    // Use lambda here to handle movement position checks separately from change ACK.
+    auto HandleMovementPositionChange = [&recvData, &pMover, &movementInfo, &speedReceived, &move_type, &opcode, this]()
+    {
+        // Do not accept packets sent before this time.
+        if (recvData.GetPacketTime() <= m_moveRejectTime)
+            return;
+
+        Player* pPlayerMover = pMover->ToPlayer();
+
+        if (!VerifyMovementInfo(movementInfo))
+            return;
+
+        if (pPlayerMover)
+        {
+            if (!_player->GetCheatData()->CheckTeleport(pPlayerMover, movementInfo, opcode) ||
+                !_player->GetCheatData()->HandleSpeedChangeAck(pPlayerMover, movementInfo, speedReceived, move_type, opcode) || 
+                !_player->GetCheatData()->HandleMovementFlags(pPlayerMover, movementInfo))
+            {
+                m_moveRejectTime = WorldTimer::getMSTime();
+                return;
+            }
+        }
+
+        HandleMoverRelocation(movementInfo);
+        if (pPlayerMover)
+            pPlayerMover->UpdateFallInformationIfNeed(movementInfo, opcode);
+    };
+
+    HandleMovementPositionChange();
     MovementPacketSender::SendSpeedChangeToObservers(pMover, move_type, speedReceived);
 }
 
@@ -500,20 +515,6 @@ void WorldSession::HandleMovementFlagChangeToggleAck(WorldPacket& recvData)
 
     if (!pMover)
         return;
-
-    Player* pPlayerMover = pMover->ToPlayer();
-
-    if (!VerifyMovementInfo(movementInfo))
-        return;
-
-    if (pPlayerMover)
-    {
-        if (!_player->GetCheatData()->CheckTeleport(pPlayerMover, movementInfo, opcode))
-            return;
-
-        if (!_player->GetCheatData()->HandleAnticheatTests(pPlayerMover, movementInfo, opcode))
-            return;
-    }
 
     // Verify that indeed the client is replying with the changes that were send to him
     if (!pMover->HasPendingMovementChange())
@@ -557,10 +558,35 @@ void WorldSession::HandleMovementFlagChangeToggleAck(WorldPacket& recvData)
         return;
     }
 
-    // Position change
-    HandleMoverRelocation(movementInfo);
-    if (pPlayerMover)
-        pPlayerMover->UpdateFallInformationIfNeed(movementInfo, opcode);
+    // Use lambda here to handle movement position checks separately from change ACK.
+    auto HandleMovementPositionChange = [&recvData, &pMover, &movementInfo, &opcode, this]()
+    {
+        // Do not accept packets sent before this time.
+        if (recvData.GetPacketTime() <= m_moveRejectTime)
+            return;
+
+        Player* pPlayerMover = pMover->ToPlayer();
+
+        if (!VerifyMovementInfo(movementInfo))
+            return;
+
+        if (pPlayerMover)
+        {
+            if (!_player->GetCheatData()->CheckTeleport(pPlayerMover, movementInfo, opcode) ||
+                !_player->GetCheatData()->HandleAnticheatTests(pPlayerMover, movementInfo, opcode))
+            {
+                m_moveRejectTime = WorldTimer::getMSTime();
+                return;
+            }
+        }
+
+        // Position change
+        HandleMoverRelocation(movementInfo);
+        if (pPlayerMover)
+            pPlayerMover->UpdateFallInformationIfNeed(movementInfo, opcode);
+    };
+
+    HandleMovementPositionChange();
 
     switch (changeTypeReceived)
     {
@@ -616,20 +642,6 @@ void WorldSession::HandleMoveRootAck(WorldPacket& recvData)
     if (!pMover)
         return;
 
-    if (!VerifyMovementInfo(movementInfo))
-        return;
-
-    Player* pPlayerMover = pMover->ToPlayer();
-
-    if (pPlayerMover)
-    {
-        if (!_player->GetCheatData()->CheckTeleport(pPlayerMover, movementInfo, opcode))
-            return;
-
-        if (!_player->GetCheatData()->HandleAnticheatTests(pPlayerMover, movementInfo, opcode))
-            return;
-    }
-
     // Verify that indeed the client is replying with the changes that were send to him
     if (!pMover->HasPendingMovementChange())
     {
@@ -647,13 +659,36 @@ void WorldSession::HandleMoveRootAck(WorldPacket& recvData)
         return;
     }
 
-    // Update position if it has changed
-    HandleMoverRelocation(movementInfo);
-    if (pPlayerMover)
-        pPlayerMover->UpdateFallInformationIfNeed(movementInfo, opcode);
+    // Use lambda here to handle movement position checks separately from change ACK.
+    auto HandleMovementPositionChange = [&recvData, &pMover, &movementInfo, &opcode, this]()
+    {
+        // Do not accept packets sent before this time.
+        if (recvData.GetPacketTime() <= m_moveRejectTime)
+            return;
 
+        if (!VerifyMovementInfo(movementInfo))
+            return;
+
+        Player* pPlayerMover = pMover->ToPlayer();
+
+        if (pPlayerMover)
+        {
+            if (!_player->GetCheatData()->CheckTeleport(pPlayerMover, movementInfo, opcode) ||
+                !_player->GetCheatData()->HandleAnticheatTests(pPlayerMover, movementInfo, opcode))
+            {
+                m_moveRejectTime = WorldTimer::getMSTime();
+                return;
+            }
+        }
+
+        // Update position if it has changed
+        HandleMoverRelocation(movementInfo);
+        if (pPlayerMover)
+            pPlayerMover->UpdateFallInformationIfNeed(movementInfo, opcode);
+    };
+
+    HandleMovementPositionChange();
     pMover->SetRootedReal(applyReceived);
-
     MovementPacketSender::SendMovementFlagChangeToObservers(pMover, MOVEFLAG_ROOT, applyReceived);
 
     // Set unit client state for brevity, though it should not be used
@@ -774,11 +809,11 @@ void WorldSession::HandleMoveNotActiveMoverOpcode(WorldPacket &recvData)
     DEBUG_LOG("WORLD: Recvd CMSG_MOVE_NOT_ACTIVE_MOVER");
     recvData.hexlike();
 
-    MovementInfo mi;
+    MovementInfo movementInfo;
 
     ObjectGuid old_mover_guid;
     recvData >> old_mover_guid;
-    recvData >> mi;
+    recvData >> movementInfo;
     _clientMoverGuid = ObjectGuid();
 
     // Client sent not active mover, but maybe the mover is actually set?
@@ -792,11 +827,18 @@ void WorldSession::HandleMoveNotActiveMoverOpcode(WorldPacket &recvData)
         return;
     }
 
-    // Prevent client from removing root flag.
-    if (_player->HasUnitMovementFlag(MOVEFLAG_ROOT) && !mi.HasMovementFlag(MOVEFLAG_ROOT))
-        mi.AddMovementFlag(MOVEFLAG_ROOT);
+    if (!_player->GetCheatData()->CheckTeleport(_player, movementInfo, recvData.GetOpcode()) ||
+        !_player->GetCheatData()->HandleAnticheatTests(_player, movementInfo, recvData.GetOpcode()) ||
+        !_player->GetCheatData()->HandleMovementFlags(_player, movementInfo))
+    {
+        return;
+    }
 
-    _player->m_movementInfo = mi;
+    // Prevent client from removing root flag.
+    if (_player->HasUnitMovementFlag(MOVEFLAG_ROOT) && !movementInfo.HasMovementFlag(MOVEFLAG_ROOT))
+        movementInfo.AddMovementFlag(MOVEFLAG_ROOT);
+
+    _player->m_movementInfo = movementInfo;
 }
 
 void WorldSession::HandleMountSpecialAnimOpcode(WorldPacket& /*recvdata*/)
