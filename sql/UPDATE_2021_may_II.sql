@@ -525,3 +525,6 @@ UPDATE `item_template` SET `min_money_loot`=100, `max_money_loot`=200 WHERE `ent
 UPDATE `item_template` SET `min_money_loot`=100, `max_money_loot`=200 WHERE `entry`=21150; -- Iron Bound Trunk
 UPDATE `item_template` SET `min_money_loot`=100, `max_money_loot`=200 WHERE `entry`=21228; -- Mithril Bound Trunk
 
+-- Give Dark Reaver of Karazhan World Boss status.
+UPDATE `creature_template` SET `rank` = 3 WHERE `entry` = 80936;
+
