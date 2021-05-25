@@ -60,6 +60,16 @@ replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minleve
 replace into creature_questrelation (id, quest) values (3453, 70052);
 replace into creature_involvedrelation (id, quest) values (3453, 70052);
 
+-- The Loch Menace
 
+replace into item_template values
+(70034, 0, 4, 0, 'Treshadon Trophy', '', 1503, 2, 0, 1, 1350, 1030, 12, -1, -1, 17, 13, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9137, 1, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, NULL);
+
+replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewmoneymaxlevel, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (0,70053,38,20,18,0,0,'The Loch Menace','Something\'s wrong with the threshadons, $N, they are out of their hiding place and for some reason they devour all the fish they can find.\n\nFor a while now, our local fishing business has been in a decline thanks to that. I am afraid we\'ll have to accept the fact that we must thin their numbers so we can maintain a certain balance.\n\nThey are beautiful creatures we\'ve shared the lake with for generations, it pains me we must take actions against them.\n\nIt\'s only fair of me to ask an outsider to do what we can\'t and are not willing to do.','Slay Threshadons in Loch Modan and return to Warg Deepwater in Loch Modan.','Are you done already, $N?','You\'re saying they were smaller in size?\n\nThat\'d explain their hunger, but what would make them leave their nest so early and why all of them.\n\n<Warg ponders the thought for a while and turns back to you.>\n\nHere\'s the payment as promised.\n\nI will investigate further.',0,0,0,0,0,0,0,0,1224,10,0,0,0,0,0,0,0,0,1000,1170,47,150,0,0,0,0,0,0,0,0,0,70034,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+replace into creature_questrelation (id, quest) values (1683, 70053);
+replace into creature_involvedrelation (id, quest) values (1683, 70053);
+
+update creature_template set npc_flags = 18 where entry = 1683;
 
 
