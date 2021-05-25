@@ -10626,7 +10626,7 @@ void Unit::UpdateModelData()
                 break;
             case 1563: // Gnome Male
             case 1564: // Gnome Female
-                nativeScale = DEFAULT_OBJECT_SCALE;
+                nativeScale = DEFAULT_GNOME_SCALE;
                 break;
             }
         }
@@ -12477,6 +12477,14 @@ void Unit::WritePetSpellsCooldown(WorldPacket& data)
     }
 }
 
+static float GetDefaultPlayerScale(uint8 race, uint8 gender)
+{
+    if (race == RACE_TAUREN)
+        return (gender == GENDER_FEMALE ? DEFAULT_TAUREN_FEMALE_SCALE : DEFAULT_TAUREN_MALE_SCALE);
+    if (race == RACE_GNOME)
+        return DEFAULT_GNOME_SCALE;
+    return DEFAULT_OBJECT_SCALE;
+}
 
 void Unit::InitPlayerDisplayIds()
 {
@@ -12486,23 +12494,17 @@ void Unit::InitPlayerDisplayIds()
 
     uint8 gender = getGender();
 
-    SetObjectScale(DEFAULT_OBJECT_SCALE);
+    SetObjectScale(GetDefaultPlayerScale(getRace(), gender));
     switch (gender)
     {
         case GENDER_FEMALE:
             SetNativeDisplayId(info->displayId_f);
             SetDisplayId(info->displayId_f);
-            if (getRace() == RACE_TAUREN)
-                setNativeScale(DEFAULT_TAUREN_FEMALE_SCALE);
             break;
         case GENDER_MALE:
             SetNativeDisplayId(info->displayId_m);
             SetDisplayId(info->displayId_m);
-            if (getRace() == RACE_TAUREN)
-                setNativeScale(DEFAULT_TAUREN_MALE_SCALE);
             break;
-        default:
-            return;
     }
 
 }
