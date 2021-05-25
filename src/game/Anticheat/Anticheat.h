@@ -108,7 +108,7 @@ public:
     virtual WardenInterface* CreateWardenFor(WorldSession* client, BigNumber* K)
     {
         return new WardenInterface();
-    
+    }
     
     virtual MovementAnticheatInterface* CreateAnticheatFor(Player* player)
     {

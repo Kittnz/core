@@ -345,6 +345,7 @@ enum eConfigInt32Values
     CONFIG_INT32_QUEST_HIGH_LEVEL_HIDE_DIFF,
     CONFIG_INT32_BEGINNERS_GUILD_ALLIANCE,
     CONFIG_INT32_BEGINNERS_GUILD_HORDE,
+    CONFIG_INT32_AC_ANTICHEAT_MAX_ALLOWED_DESYNC,
     CONFIG_INT32_VALUE_COUNT
 };
 
@@ -518,6 +519,37 @@ enum eConfigBoolValues
     CONFIG_BOOL_STATIC_OBJECT_LOS,
     CONFIG_BOOL_BOUNTY,
     CONFIG_BOOL_OPENHOUSE,
+    CONFIG_BOOL_AC_MOVEMENT_ENABLED,
+    CONFIG_BOOL_AC_MOVEMENT_PLAYERS_ONLY,
+    CONFIG_BOOL_AC_MOVEMENT_NOTIFY_CHEATERS,
+    CONFIG_BOOL_AC_MOVEMENT_LOG_DATA,
+    CONFIG_BOOL_AC_MOVEMENT_USE_INTERPOLATION,
+    CONFIG_BOOL_AC_MOVEMENT_CHEAT_MULTI_JUMP_ENABLED,
+    CONFIG_BOOL_AC_MOVEMENT_CHEAT_SPEED_HACK_ENABLED,
+    CONFIG_BOOL_AC_MOVEMENT_CHEAT_WATER_WALK_ENABLED,
+    CONFIG_BOOL_AC_MOVEMENT_CHEAT_FORBIDDEN_AREA_ENABLED,
+    CONFIG_BOOL_AC_MOVEMENT_CHEAT_UNREACHABLE_ENABLED,
+    CONFIG_BOOL_AC_MOVEMENT_CHEAT_REVERSE_TIME_ENABLED,
+    CONFIG_BOOL_AC_MOVEMENT_CHEAT_OVERSPEED_JUMP_ENABLED,
+    CONFIG_BOOL_AC_MOVEMENT_CHEAT_JUMP_SPEED_CHANGE_ENABLED,
+    CONFIG_BOOL_AC_MOVEMENT_CHEAT_FLY_ENABLED,
+    CONFIG_BOOL_AC_MOVEMENT_CHEAT_ROOT_MOVE_ENABLED,
+    CONFIG_BOOL_AC_MOVEMENT_CHEAT_OVERSPEED_DISTANCE_ENABLED,
+    CONFIG_BOOL_AC_MOVEMENT_CHEAT_TIME_DESYNC_ENABLED,
+    CONFIG_BOOL_AC_MOVEMENT_CHEAT_EXPLORE_ENABLED,
+    CONFIG_BOOL_AC_MOVEMENT_CHEAT_EXPLORE_HIGH_LEVEL_ENABLED,
+    CONFIG_BOOL_AC_MOVEMENT_CHEAT_OVERSPEED_Z_ENABLED,
+    CONFIG_BOOL_AC_MOVEMENT_CHEAT_SKIPPED_HEARTBEATS_ENABLED,
+    CONFIG_BOOL_AC_MOVEMENT_CHEAT_NUM_DESYNCS_ENABLED,
+    CONFIG_BOOL_AC_MOVEMENT_CHEAT_FAKE_TRANSPORT_ENABLED,
+    CONFIG_BOOL_AC_MOVEMENT_CHEAT_TELEPORT_ENABLED,
+    CONFIG_BOOL_AC_MOVEMENT_CHEAT_TELE_TO_TRANSPORT_ENABLED,
+    CONFIG_BOOL_AC_MOVEMENT_CHEAT_SLOW_FALL_ENABLED,
+    CONFIG_BOOL_AC_MOVEMENT_CHEAT_FIXED_Z_ENABLED,
+    CONFIG_BOOL_AC_MOVEMENT_CHEAT_WRONG_ACK_DATA_ENABLED,
+    CONFIG_BOOL_AC_MOVEMENT_CHEAT_PENDING_ACK_DELAY_ENABLED,
+    CONFIG_BOOL_AC_WARDEN_WIN_ENABLED,
+    CONFIG_BOOL_AC_WARDEN_OSX_ENABLED,
     CONFIG_BOOL_VALUE_COUNT
 };
 
@@ -777,18 +809,20 @@ class World
         bool RemoveBanAccount(BanMode mode, const std::string& source, const std::string& message, std::string nameOrIP);
 
         // for max speed access
-        static float GetMaxVisibleDistanceOnContinents()    { return m_MaxVisibleDistanceOnContinents; }
-        static float GetMaxVisibleDistanceInInstances()     { return m_MaxVisibleDistanceInInstances;  }
-        static float GetMaxVisibleDistanceInBG()            { return m_MaxVisibleDistanceInBG;         }
+        static float GetMaxVisibleDistanceOnContinents() { return m_MaxVisibleDistanceOnContinents; }
+        static float GetMaxVisibleDistanceInInstances() { return m_MaxVisibleDistanceInInstances; }
+        static float GetMaxVisibleDistanceInBG() { return m_MaxVisibleDistanceInBG; }
 
-        static float GetMaxVisibleDistanceInFlight()        { return m_MaxVisibleDistanceInFlight;    }
-        static float GetVisibleUnitGreyDistance()           { return m_VisibleUnitGreyDistance;       }
-        static float GetVisibleObjectGreyDistance()         { return m_VisibleObjectGreyDistance;     }
+        static float GetMaxVisibleDistanceInFlight() { return m_MaxVisibleDistanceInFlight; }
+        static float GetVisibleUnitGreyDistance() { return m_VisibleUnitGreyDistance; }
+        static float GetVisibleObjectGreyDistance() { return m_VisibleObjectGreyDistance; }
 
-        static float GetRelocationLowerLimitSq()            { return m_relocation_lower_limit_sq; }
-        static uint32 GetRelocationAINotifyDelay()          { return m_relocation_ai_notify_delay; }
+        static float GetRelocationLowerLimitSq() { return m_relocation_lower_limit_sq; }
+        static uint32 GetRelocationAINotifyDelay() { return m_relocation_ai_notify_delay; }
 
-        static uint32 GetCreatureSummonCountLimit()         { return m_creatureSummonCountLimit; }
+        static uint32 GetCreatureSummonCountLimit() { return m_creatureSummonCountLimit; }
+
+        std::string const& GetWardenModuleDirectory() const { return m_wardenModuleDirectory; }
 
         void ProcessCliCommands();
         void QueueCliCommand(CliCommandHolder* commandHolder) { cliCmdQueue.add(commandHolder); }
@@ -906,6 +940,7 @@ class World
         std::string m_motd;
         std::string m_dataPath;
         std::string m_honorPath;
+        std::string m_wardenModuleDirectory;
 
         // for max speed access
         static float m_MaxVisibleDistanceOnContinents;
