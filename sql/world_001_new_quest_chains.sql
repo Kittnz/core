@@ -72,4 +72,14 @@ replace into creature_involvedrelation (id, quest) values (1683, 70053);
 
 update creature_template set npc_flags = 18 where entry = 1683;
 
+-- Misc. item fixes from Dragunovi:
+
+update item_template set sheath = 0 where entry = 80745;
+update item_template set armor = 334 where entry = 80526;
+update item_template set armor = 334 where entry = 80626;
+
+-- Fix Wyvern Sting DoT effect appearing in a buff slot.
+
+replace into spell_mod (id, attributes, comment) VALUES (24135, 226492416, 'Wyvern Sting DoT effect should appear as debuff.');
+
 
