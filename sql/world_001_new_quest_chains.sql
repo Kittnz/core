@@ -46,6 +46,20 @@ replace into `gameobject` values
 (4009495, 1772001, 1, -327.75, -5264.84, -8.63313, 6.05699, 0, 0, 0.112858, -0.993611, 300, 300, 100, 1, 0, 0, 0, 10),
 (4009496, 1772001, 1, -220.906, -5326.64, -9.00828, 5.68, 0, 0, 0.297041, -0.954865, 300, 300, 100, 1, 0, 0, 0, 10);
 
+-- Trader's Misfortune
+
+replace into item_template values
+(70033, 0, 4, 0, 'Tazan\'s Tusk', 'Claimed Trophy from an enemy.', 3429, 2, 0, 1, 1450, 1025, 12, -1, -1, 17,
+0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9137, 1, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0,
+-1, 0, 0,0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 
+0, 0, 0, 1, 0, 0, 0, 0, 1, null);
+
+replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewmoneymaxlevel, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (0,70052,17,13,12,0,0,'Trader\'s Misfortune','These pirates are an infestation on our port, even worse than the rats we have to exterminate each month.\n\nIt\'s absolutely laughable, $N.\n\nWhat\'s even worse is the fact that a foolish trader decided to make business with them, whatever crossed his small brain to do that I won\'t ever know.\n\nWhile you\'re out there hunting for pirates might as well end his foolish attempt to make some coin.\n\nThere\'s no need to bring me proof, I am more than sure you will see it done.','Kill Tazan and return to Wharfmaster Dizzywig in Ratchet.','In life we make choices we sometimes regret and he will regret this one.','You\'re back, great.\n\nAnd I see you picked something up as a trophy, weird, but whatever floats your boat, bub!\n\nHere\'s some coin for your troubles.',0,0,0,0,0,0,0,0,6494,1,0,0,0,0,0,0,0,0,1500,940,470,150,1001,150,0,0,0,0,0,0,0,70033,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+replace into creature_questrelation (id, quest) values (3453, 70052);
+replace into creature_involvedrelation (id, quest) values (3453, 70052);
+
 
 
 
