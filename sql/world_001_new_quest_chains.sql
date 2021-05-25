@@ -82,4 +82,17 @@ update item_template set armor = 334 where entry = 80626;
 
 replace into spell_mod (id, attributes, comment) VALUES (24135, 226492416, 'Wyvern Sting DoT effect should appear as debuff.');
 
+-- Grave Injustice
+
+replace into item_template values
+(70035, 0, 12, 0, 'Rusty Shovel', 'The initials S.Y. are scribbled on the handle.', 7495, 1, 0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 4, 0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, null);
+
+update creature_template set npc_flags = 2 where entry = 499;
+
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (218, 70035, -20, 5, 1, 1);
+
+replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewmoneymaxlevel, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (0,70054,10,25,22,0,0,'Grave Injustice','These lands aren\'t what they used to be, $c. Monsters have taken what\'s left of it, both living and death.\n\nThere have been reports of Graver Robers in the cemetery of Raven Hill. A crime this vile and depraved cannot go unpunished, adventurer.\n\nPlease head west to the Cemetery and investigate this matter. If you find any grave robbers, rid the place of them.\n\nThe place was already descrated by the Scourge, the living shouldn\'t disturb the dead even further.','Investigate grave robber\'s activity at the cemetery.','A good deed during dark times, that\'s what you\'re about to do.','And what would I do with a shovel, $c?',70035,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1840,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+replace into creature_questrelation (id, quest) values (499, 70054);
+replace into creature_involvedrelation (id, quest) values (499, 70054);
 
