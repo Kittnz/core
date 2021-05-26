@@ -1625,37 +1625,37 @@ void Unit::CalculateSpellDamage(SpellNonMeleeDamage *damageInfo, int32 damage, S
     switch (spellInfo->DmgClass)
     {
         // Melee and Ranged Spells
-    case SPELL_DAMAGE_CLASS_RANGED:
-    case SPELL_DAMAGE_CLASS_MELEE:
-    {
-        //Calculate damage bonus
-        damage = MeleeDamageBonusDone(pVictim, damage, attackType, spellInfo, SPELL_DIRECT_DAMAGE, 1, spell);
-        damage = pVictim->MeleeDamageBonusTaken(this, damage, attackType, spellInfo, SPELL_DIRECT_DAMAGE, 1, spell);
-
-        // if crit add critical bonus
-        if (crit)
+        case SPELL_DAMAGE_CLASS_RANGED:
+        case SPELL_DAMAGE_CLASS_MELEE:
         {
-            damageInfo->HitInfo |= SPELL_HIT_TYPE_CRIT;
-            damage = SpellCriticalDamageBonus(spellInfo, damage, pVictim, spell);
-        }
-    }
-    break;
-    // Magical Attacks
-    case SPELL_DAMAGE_CLASS_NONE:
-    case SPELL_DAMAGE_CLASS_MAGIC:
-    {
-        // Calculate damage bonus
-        damage = SpellDamageBonusDone(pVictim, spellInfo, damage, SPELL_DIRECT_DAMAGE, 1, spell);
-        damage = pVictim->SpellDamageBonusTaken(this, spellInfo, damage, SPELL_DIRECT_DAMAGE, 1, spell);
+            //Calculate damage bonus
+            damage = MeleeDamageBonusDone(pVictim, damage, attackType, spellInfo, SPELL_DIRECT_DAMAGE, 1, spell);
+            damage = pVictim->MeleeDamageBonusTaken(this, damage, attackType, spellInfo, SPELL_DIRECT_DAMAGE, 1, spell);
 
-        // If crit add critical bonus
-        if (crit)
-        {
-            damageInfo->HitInfo |= SPELL_HIT_TYPE_CRIT;
-            damage = SpellCriticalDamageBonus(spellInfo, damage, pVictim, spell);
+            // if crit add critical bonus
+            if (crit)
+            {
+                damageInfo->HitInfo |= SPELL_HIT_TYPE_CRIT;
+                damage = SpellCriticalDamageBonus(spellInfo, damage, pVictim, spell);
+            }
+            break;
         }
-    }
-    break;
+        // Magical Attacks
+        case SPELL_DAMAGE_CLASS_NONE:
+        case SPELL_DAMAGE_CLASS_MAGIC:
+        {
+            // Calculate damage bonus
+            damage = SpellDamageBonusDone(pVictim, spellInfo, damage, SPELL_DIRECT_DAMAGE, 1, spell);
+            damage = pVictim->SpellDamageBonusTaken(this, spellInfo, damage, SPELL_DIRECT_DAMAGE, 1, spell);
+
+            // If crit add critical bonus
+            if (crit)
+            {
+                damageInfo->HitInfo |= SPELL_HIT_TYPE_CRIT;
+                damage = SpellCriticalDamageBonus(spellInfo, damage, pVictim, spell);
+            }
+            break;
+        }
     }
 
     // damage mitigation
@@ -1890,7 +1890,7 @@ void Unit::CalculateMeleeDamage(Unit *pVictim, uint32 damage, CalcDamageInfo *da
         }
         case MELEE_HIT_GLANCING:
         {
-            damageInfo->HitInfo     |= HITINFO_GLANCING;
+            damageInfo->HitInfo |= HITINFO_GLANCING;
             damageInfo->TargetState  = VICTIMSTATE_NORMAL;
             damageInfo->procEx |= PROC_EX_NORMAL_HIT;
 
@@ -1906,21 +1906,26 @@ void Unit::CalculateMeleeDamage(Unit *pVictim, uint32 damage, CalcDamageInfo *da
             float lowCap = 0.91f;
             float highCap = 0.99f;
 
-            if ((getClassMask() & CLASSMASK_WAND_USERS) != 0) {
+            if ((getClassMask() & CLASSMASK_WAND_USERS) != 0)
+            {
                 low -= 0.7f;
                 high -= 0.3f;
                 lowCap = 0.6f;
             }
 
-            if (low < 0.01f) low = 0.01f;
-            if (high < 0.2f) high = 0.2f;
+            if (low < 0.01f)
+                low = 0.01f;
 
-            if (low > lowCap) low = lowCap;
-            if (high > highCap) high = highCap;
+            if (high < 0.2f)
+                high = 0.2f;
+
+            if (low > lowCap)
+                low = lowCap;
+
+            if (high > highCap)
+                high = highCap;
 
             float reducePercent = frand(low,high);
-
-            // sLog.outString("SkillDiff = %i, reducePercent = %f", SkillDiff, reducePercent); // Pour tests & débug via la console
 
             damageInfo->cleanDamage += uint32((1.0f - reducePercent) * damageInfo->totalDamage);
             damageInfo->totalDamage = uint32(reducePercent * damageInfo->totalDamage);
@@ -2466,8 +2471,10 @@ void Unit::CalculateAbsorbResistBlock(Unit *pCaster, SpellNonMeleeDamage *damage
     if (blocked)
     {
         damageInfo->blocked = GetShieldBlockValue();
+
         if (damageInfo->damage < damageInfo->blocked)
             damageInfo->blocked = damageInfo->damage;
+
         damageInfo->damage -= damageInfo->blocked;
     }
     
@@ -2574,17 +2581,13 @@ MeleeHitOutcome Unit::RollMeleeOutcomeAgainst(const Unit *pVictim, WeaponAttackT
     int32 victimDefenseSkill = pVictim->GetDefenseSkillValue(this);
 
     // bonus from skills is 0.04%
-    int32    skillDiff = attackerWeaponSkill - victimMaxSkillValueForLevel;
-    int32    cappedSkillDiff = std::min(attackerMaxSkillValueForLevel, attackerWeaponSkill) - victimMaxSkillValueForLevel;
-    int32    blockSkillBonus = pVictim->IsPlayer() ? 4 * skillDiff : 10 * skillDiff;
-    int32    dodgeSkillBonus = pVictim->IsPlayer() ? 4 * skillDiff : 10 * skillDiff;
-    int32    parrySkillBonus = pVictim->IsPlayer() ? 4 * skillDiff : cappedSkillDiff < -10 ? 60 * cappedSkillDiff : 20 * cappedSkillDiff;
-    int32    sum = 0, tmp = 0;
-    int32    roll = urand(0, 9999);
-
-    //DEBUG_FILTER_LOG(LOG_FILTER_COMBAT, "RollMeleeOutcomeAgainst: skill bonus of %d for attacker", skillBonus);
-    //DEBUG_FILTER_LOG(LOG_FILTER_COMBAT, "RollMeleeOutcomeAgainst: rolled %d, miss %d, dodge %d, parry %d, block %d, crit %d", roll, miss_chance, dodge_chance, parry_chance, block_chance, crit_chance);
-
+    int32 skillDiff = attackerWeaponSkill - victimMaxSkillValueForLevel;
+    int32 cappedSkillDiff = std::min(attackerMaxSkillValueForLevel, attackerWeaponSkill) - victimMaxSkillValueForLevel;
+    int32 blockSkillBonus = pVictim->IsPlayer() ? 4 * skillDiff : 10 * skillDiff;
+    int32 dodgeSkillBonus = pVictim->IsPlayer() ? 4 * skillDiff : 10 * skillDiff;
+    int32 parrySkillBonus = pVictim->IsPlayer() ? 4 * skillDiff : cappedSkillDiff < -10 ? 60 * cappedSkillDiff : 20 * cappedSkillDiff;
+    int32 sum = 0, tmp = 0;
+    int32 roll = urand(0, 9999);
     tmp = miss_chance;
 
     if (tmp > 0 && roll < (sum += tmp))
@@ -2616,7 +2619,7 @@ MeleeHitOutcome Unit::RollMeleeOutcomeAgainst(const Unit *pVictim, WeaponAttackT
         if (!pVictim->IsPlayer() && pVictim->getLevel() < 10)
             dodge_chance *= pVictim->getLevel() / 10.0f;
 
-        if (dodge_chance > 0 &&                         // check if unit _can_ dodge
+        if (dodge_chance > 0 && // check if unit _can_ dodge
             (roll < (sum += dodge_chance)))
         {
             DEBUG_FILTER_LOG(LOG_FILTER_COMBAT, "RollMeleeOutcomeAgainst: DODGE <%d, %d)", sum - tmp, sum);
@@ -2636,7 +2639,7 @@ MeleeHitOutcome Unit::RollMeleeOutcomeAgainst(const Unit *pVictim, WeaponAttackT
             if (!pVictim->IsPlayer() && pVictim->getLevel() < 10)
                 parry_chance *= pVictim->getLevel() / 10.0f;
 
-            if (parry_chance > 0 &&                         // check if unit _can_ parry
+            if (parry_chance > 0 && // check if unit _can_ parry
                 (roll < (sum += parry_chance)))
             {
                 DEBUG_FILTER_LOG(LOG_FILTER_COMBAT, "RollMeleeOutcomeAgainst: PARRY <%d, %d)", sum - parry_chance, sum);
@@ -2690,7 +2693,7 @@ MeleeHitOutcome Unit::RollMeleeOutcomeAgainst(const Unit *pVictim, WeaponAttackT
             if (!pVictim->IsPlayer() && pVictim->getLevel() < 10)
                 block_chance *= pVictim->getLevel() / 10.0f;
 
-            if (block_chance > 0 &&                         // check if unit _can_ block
+            if (block_chance > 0 && // check if unit _can_ block
                 (roll < (sum += block_chance)))
             {
                 // Critical chance
@@ -2881,9 +2884,9 @@ bool Unit::IsSpellBlocked(Unit *pCaster, Unit *pVictim, SpellEntry const *spellE
     if (!pVictim->IsPlayer() && pVictim->getLevel() < 10)
         blockChance *= pVictim->getLevel() / 10.0f;
 
-    if ((IsPlayer() && ToPlayer()->HasOption(PLAYER_CHEAT_UNRANDOMIZE)) || (blockChance < 0) ||
-        (pCaster->IsPlayer() && pCaster->ToPlayer()->HasOption(PLAYER_CHEAT_UNRANDOMIZE)))
+    if ((IsPlayer() && ToPlayer()->HasOption(PLAYER_CHEAT_UNRANDOMIZE)) || (blockChance < 0) || (pCaster->IsPlayer() && pCaster->ToPlayer()->HasOption(PLAYER_CHEAT_UNRANDOMIZE)))
         blockChance = 0;
+
     return roll_chance_f(blockChance);
 }
 
@@ -3366,6 +3369,7 @@ float Unit::MeleeMissChanceCalc(const Unit *pVictim, WeaponAttackType attType) c
 
     // Hit chance bonus from attacker based on ratings and auras
     float hitChance = 0.0f;
+
     if (attType == RANGED_ATTACK)
         hitChance = m_modRangedHitChance;
     else
@@ -3399,9 +3403,7 @@ uint32 Unit::GetDefenseSkillValue(Unit const* target) const
     if (GetTypeId() == TYPEID_PLAYER)
     {
         // in PvP use full skill instead current skill value
-        uint32 value = (target && target->GetTypeId() == TYPEID_PLAYER)
-                       ? ((Player*)this)->GetSkillMax(SKILL_DEFENSE)
-                       : ((Player*)this)->GetSkillValue(SKILL_DEFENSE);
+        uint32 value = (target && target->GetTypeId() == TYPEID_PLAYER) ? ((Player*)this)->GetSkillMax(SKILL_DEFENSE) : ((Player*)this)->GetSkillValue(SKILL_DEFENSE);
         return value;
     }
     else
