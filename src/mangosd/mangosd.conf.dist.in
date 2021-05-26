@@ -1424,6 +1424,11 @@ Warden.WinEnabled = 0
 
 Warden.OSXEnabled = 0
 
+#    Warden.PlayersOnly
+#        Ignore game master accounts.
+
+Warden.PlayersOnly = 1
+
 #
 #    Warden.NumMemChecks
 #        Number of Warden memory checks that are sent to the client each cycle.
