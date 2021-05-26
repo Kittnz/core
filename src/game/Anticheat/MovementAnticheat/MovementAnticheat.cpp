@@ -730,6 +730,7 @@ bool MovementCheatData::HandleFlagTests(Player* pPlayer, MovementInfo& movementI
 
     if ((currentMoveFlags & MOVEFLAG_SWIMMING) &&
         (currentMoveFlags & MOVEFLAG_FLYING) &&
+        !me->IsTaxiFlying() &&
         !me->hasUnitState(UNIT_STAT_FLYING_ALLOWED))
     {
         APPEND_CHEAT(CHEAT_TYPE_FLY_HACK_SWIM);
@@ -772,6 +773,7 @@ bool MovementCheatData::HandleFlagTests(Player* pPlayer, MovementInfo& movementI
 
     if (ShouldRejectMovement(cheatFlags))
     {
+        me->RemoveUnitMovementFlag(removeMoveFlags);
         me->SendHeartBeat(true);
         return false;
     }
