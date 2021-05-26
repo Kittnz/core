@@ -348,8 +348,7 @@ HostileReference* ThreatContainer::selectNextVictim(Creature* pAttacker, Hostile
                     break;
                 }
 
-                if (currentRef->getThreat() > 1.3f * pCurrentVictim->getThreat() ||
-                        currentRef->getThreat() > 1.1f * pCurrentVictim->getThreat() && pAttacker->CanReachWithMeleeAttack(target))
+                if (currentRef->getThreat() > 1.3f * pCurrentVictim->getThreat() || currentRef->getThreat() > 1.1f * pCurrentVictim->getThreat() && pAttacker->CanReachWithMeleeAutoAttack(target))
                 {
                     //implement 110% threat rule for targets in melee range
                     found = true;                           //and 130% rule for targets in ranged distances
@@ -361,9 +360,11 @@ HostileReference* ThreatContainer::selectNextVictim(Creature* pAttacker, Hostile
                 found = true;
                 break;
             }
+
             ++iter;
         }
     }
+
     if (!found)
         currentRef = nullptr;
 
@@ -493,7 +494,7 @@ void ThreatManager::UnitDetailedThreatSituation(Creature* creature, Player* requ
 			continue;
 
 		isTanking = (*iter)->getTarget()->GetName() == tankName;
-		isMelee   = (*iter)->getSourceUnit()->CanReachWithMeleeAttack((*iter)->getTarget());
+		isMelee   = (*iter)->getSourceUnit()->CanReachWithMeleeAutoAttack((*iter)->getTarget());
 
 		threatPct = isTanking ? 100 : threatValue * 100 / (tankThreat * (isMelee ? 1.1 : 1.3));
 		threatPct = (float)((int)(threatPct * 10 + .5)) / 10;
@@ -558,7 +559,7 @@ void ThreatManager::UnitDetailedThreatSituation(Creature* creature, Player* requ
 				if (tTankThreat <= 0)
 					continue;
 
-				bool tIsMelee = (*hatedPlayers)->getSourceUnit()->CanReachWithMeleeAttack((*hatedPlayers)->getTarget());
+				bool tIsMelee = (*hatedPlayers)->getSourceUnit()->CanReachWithMeleeAutoAttack((*hatedPlayers)->getTarget());
 
 				float tThreatPct = (*hatedPlayers)->getThreat() * 100 / (tTankThreat * (tIsMelee ? 1.1 : 1.3));
 				tThreatPct = (float)((int)(tThreatPct * 10 + .5)) / 10;
