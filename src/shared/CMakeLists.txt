@@ -31,6 +31,7 @@ set (shared_SRCS
     Timer.h
     Util.h
     WorldPacket.h
+    Auth/ARC4.h
     Auth/AuthCrypt.h
     Auth/base32.h
     Auth/BigNumber.h
@@ -65,6 +66,7 @@ set (shared_SRCS
     Threading.cpp
     Util.cpp
     Duration.h
+    Auth/ARC4.cpp
     Auth/AuthCrypt.cpp
     Auth/base32.cpp
     Auth/BigNumber.cpp

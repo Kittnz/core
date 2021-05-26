@@ -32,12 +32,12 @@ OpcodesList const moveTypeToOpcode[MAX_MOVE_TYPE][3] =
     { SMSG_SPLINE_SET_TURN_RATE,         SMSG_FORCE_TURN_RATE_CHANGE,            MSG_MOVE_SET_TURN_RATE },
 };
 
-void MovementPacketSender::SendSpeedChangeToMover(Unit* unit, UnitMoveType mtype, float newRate)
+void MovementPacketSender::AddSpeedChangeToController(Unit* unit, UnitMoveType mtype, float newRate)
 {
     Player* mover = unit->GetPlayerMovingMe();
     if (!mover)
     {
-        sLog.outError("MovementPacketSender::SendSpeedChangeToMover: Incorrect use of the function. It was called on a unit controlled by the server!");
+        sLog.outError("MovementPacketSender::AddSpeedChangeToController: Incorrect use of the function. It was called on a unit controlled by the server!");
         return;
     }
 
@@ -47,16 +47,22 @@ void MovementPacketSender::SendSpeedChangeToMover(Unit* unit, UnitMoveType mtype
     pendingChange.movementCounter = mCounter;
     pendingChange.newValue = newSpeedFlat;
     pendingChange.movementChangeType = MovementPacketSender::GetChangeTypeByMoveType(mtype);
+    pendingChange.controller = mover->GetObjectGuid();
     unit->PushPendingMovementChange(pendingChange);
 
+    SendSpeedChangeToController(unit, mover, pendingChange);
+}
+
+void MovementPacketSender::SendSpeedChangeToController(Unit* unit, Player* mover, PlayerMovementPendingChange& pendingChange)
+{
+    UnitMoveType mtype = GetMoveTypeByChangeType(pendingChange.movementChangeType);
     WorldPacket data;
     data.Initialize(moveTypeToOpcode[mtype][1], 8 + 4 + 4);
     data << unit->GetPackGUID();
-    data << mCounter;
-    data << float(newSpeedFlat);
+    data << pendingChange.movementCounter;
+    data << float(pendingChange.newValue);
 
     mover->GetSession()->SendPacket(&data);
-    mover->GetCheatData()->OrderSent(&data);
 }
 
 MovementChangeType MovementPacketSender::GetChangeTypeByMoveType(UnitMoveType moveType)
@@ -76,7 +82,28 @@ MovementChangeType MovementPacketSender::GetChangeTypeByMoveType(UnitMoveType mo
         case MOVE_TURN_RATE:
             return RATE_CHANGE_TURN;
         default:
-            ASSERT(false && "MovementPacketSender::SendSpeedChangeToMover Unsupported UnitMoveType");
+            ASSERT(false && "MovementPacketSender::SendSpeedChangeToController Unsupported UnitMoveType");
+    }
+}
+
+UnitMoveType MovementPacketSender::GetMoveTypeByChangeType(MovementChangeType moveType)
+{
+    switch (moveType)
+    {
+        case SPEED_CHANGE_WALK:
+            return MOVE_WALK;
+        case SPEED_CHANGE_RUN:
+            return MOVE_RUN;
+        case SPEED_CHANGE_RUN_BACK:
+            return MOVE_RUN_BACK;
+        case SPEED_CHANGE_SWIM:
+            return MOVE_SWIM;
+        case SPEED_CHANGE_SWIM_BACK:
+            return MOVE_SWIM_BACK;
+        case RATE_CHANGE_TURN:
+            return MOVE_TURN_RATE;
+        default:
+            ASSERT(false && "MovementPacketSender::SendSpeedChangeToController Unsupported MovementChangeType");
     }
 }
 
@@ -106,12 +133,12 @@ void MovementPacketSender::SendSpeedChangeToAll(Unit* unit, UnitMoveType mtype, 
     unit->SendMovementMessageToSet(std::move(data), true);
 }
 
-void MovementPacketSender::SendKnockBackToMover(Unit* unit, float vcos, float vsin, float speedXY, float speedZ)
+void MovementPacketSender::SendKnockBackToController(Unit* unit, float vcos, float vsin, float speedXY, float speedZ)
 {
     Player* mover = unit->GetPlayerMovingMe();
     if (!mover)
     {
-        sLog.outError("MovementPacketSender::SendKnockBackToMover: Incorrect use of the function. It was called on a unit controlled by the server!");
+        sLog.outError("MovementPacketSender::SendKnockBackToController: Incorrect use of the function. It was called on a unit controlled by the server!");
         return;
     }
 
@@ -123,7 +150,7 @@ void MovementPacketSender::SendKnockBackToMover(Unit* unit, float vcos, float vs
     pendingChange.knockbackInfo.vsin = vsin;
     pendingChange.knockbackInfo.speedXY = speedXY;
     pendingChange.knockbackInfo.speedZ = speedZ;
-
+    pendingChange.controller = mover->GetObjectGuid();
     unit->PushPendingMovementChange(pendingChange);
 
     WorldPacket data(SMSG_MOVE_KNOCK_BACK, (8 + 4 + 4 + 4 + 4 + 4));
@@ -157,37 +184,40 @@ void MovementPacketSender::SendKnockBackToObservers(Unit* unit, float vcos, floa
     unit->SendMovementMessageToSet(std::move(data), false, mover);
 }
 
-void MovementPacketSender::SendMovementFlagChangeToMover(Unit* unit, MovementFlags mFlag, bool apply)
+void MovementPacketSender::AddMovementFlagChangeToController(Unit* unit, MovementFlags mFlag, bool apply)
 {
     Player* mover = unit->GetPlayerMovingMe();
     if (!mover)
     {
-        sLog.outError("MovementPacketSender::SendMovementFlagChangeToMover: Incorrect use of the function. It was called on a unit controlled by the server!");
+        sLog.outError("MovementPacketSender::AddMovementFlagChangeToController: Incorrect use of the function. It was called on a unit controlled by the server!");
         return;
     }
 
-    uint16 opcode;
     MovementChangeType movementChangeType;
     switch (mFlag)
     {
         case MOVEFLAG_ROOT:
-            opcode = apply ? SMSG_FORCE_MOVE_ROOT : SMSG_FORCE_MOVE_UNROOT;
+        {
             movementChangeType = ROOT;
             break;
+        }
         case MOVEFLAG_WATERWALKING:
-            opcode = apply ? SMSG_MOVE_WATER_WALK : SMSG_MOVE_LAND_WALK;
+        {
             movementChangeType = WATER_WALK;
             break;
+        }
         case MOVEFLAG_HOVER:
-            opcode = apply ? SMSG_MOVE_SET_HOVER : SMSG_MOVE_UNSET_HOVER;
+        {
             movementChangeType = SET_HOVER;
             break;
+        }
         case MOVEFLAG_SAFE_FALL:
-            opcode = apply ? SMSG_MOVE_FEATHER_FALL : SMSG_MOVE_NORMAL_FALL;
+        {
             movementChangeType = FEATHER_FALL;
             break;
+        }
         default:
-            sLog.outError("MovementPacketSender::SendMovementFlagChangeToMover: Unsupported MovementFlag (%d), data not sent to client.", mFlag);
+            sLog.outError("MovementPacketSender::AddMovementFlagChangeToController: Unsupported MovementFlag (%d), data not sent to client.", mFlag);
             return;
     }
 
@@ -196,14 +226,28 @@ void MovementPacketSender::SendMovementFlagChangeToMover(Unit* unit, MovementFla
     pendingChange.movementCounter = mCounter;
     pendingChange.movementChangeType = movementChangeType;
     pendingChange.apply = apply;
-
+    pendingChange.controller = mover->GetObjectGuid();
     unit->PushPendingMovementChange(pendingChange);
+
+    SendMovementFlagChangeToController(unit, mover, pendingChange);
+}
+
+void MovementPacketSender::SendMovementFlagChangeToController(Unit* unit, Player* mover, PlayerMovementPendingChange& pendingChange)
+{
+    uint16 opcode;
+    switch (pendingChange.movementChangeType)
+    {
+        case ROOT: opcode = pendingChange.apply ? SMSG_FORCE_MOVE_ROOT : SMSG_FORCE_MOVE_UNROOT; break;
+        case WATER_WALK: opcode = pendingChange.apply ? SMSG_MOVE_WATER_WALK : SMSG_MOVE_LAND_WALK; break;
+        case SET_HOVER: opcode = pendingChange.apply ? SMSG_MOVE_SET_HOVER : SMSG_MOVE_UNSET_HOVER; break;
+        case FEATHER_FALL: opcode = pendingChange.apply ? SMSG_MOVE_FEATHER_FALL : SMSG_MOVE_NORMAL_FALL; break;
+        default: sLog.outError("MovementPacketSender::SendMovementFlagChangeToController: Unsupported movement change (%u), data not sent to client.", pendingChange.movementChangeType);
+    }
 
     WorldPacket data(opcode, unit->GetPackGUID().size() + 4);
     data << unit->GetPackGUID();
-    data << mCounter;
+    data << pendingChange.movementCounter;
 
-    mover->GetCheatData()->OrderSent(&data);
     mover->GetSession()->SendPacket(&data);
 }
 
@@ -212,7 +256,7 @@ void MovementPacketSender::SendMovementFlagChangeToObservers(Unit* unit, Movemen
     Player* mover = unit->GetPlayerMovingMe();
     if (!mover)
     {
-        sLog.outError("MovementPacketSender::SendMovementFlagChangeToMover: Incorrect use of the function. It was called on a unit controlled by the server!");
+        sLog.outError("MovementPacketSender::AddMovementFlagChangeToController: Incorrect use of the function. It was called on a unit controlled by the server!");
         return;
     }
 

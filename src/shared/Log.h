@@ -90,7 +90,7 @@ enum Color
 
 enum LogFile
 {
-    LOG_CHAT            = 0,
+    LOG_CHAT = 0,
     LOG_BG,
     LOG_CHAR,
     LOG_RA,
@@ -100,7 +100,6 @@ enum LogFile
     LOG_LEVELUP,
     LOG_PERFORMANCE,
     LOG_MONEY_TRADES,
-    LOG_ANTICHEAT,
     LOG_GM_CRITICAL,
     LOG_CHAT_SPAM,
     LOG_EXPLOITS,
@@ -169,28 +168,20 @@ class Log : public MaNGOS::Singleton<Log, MaNGOS::ClassLevelLockable<Log, std::m
 
         void out(LogFile t, char const* format, ...) ATTR_PRINTF(3,4);
         void outCommand(uint32 account, char const* str, ...) ATTR_PRINTF(3,4);
-        void outString();                                   // any log level
-                                                            // any log level
-        void outString(char const* str, ...)      ATTR_PRINTF(2,3);
-        void outInfo(char const* str, ...)      ATTR_PRINTF(2,3);
-        void outHonor(char const* str, ...)       ATTR_PRINTF(2, 3);
-                                                            // any log level
-        void outError(char const* err, ...)       ATTR_PRINTF(2,3);
-                                                            // log level >= 1
-        void outBasic(char const* str, ...)       ATTR_PRINTF(2,3);
-                                                            // log level >= 2
-        void outDetail(char const* str, ...)      ATTR_PRINTF(2,3);
-                                                            // log level >= 3
-        void outDebug(char const* str, ...)       ATTR_PRINTF(2,3);
-        void outWarden(char const* wrd, ...)        ATTR_PRINTF(2,3);
-
-        void outErrorDb();                                  // any log level
-                                                            // any log level
-        void outErrorDb(char const* str, ...)     ATTR_PRINTF(2,3);
-                                                            // any log level
-        void outWorldPacketDump(ACE_HANDLE socketHandle, uint32 opcode,
-                                char const* opcodeName,
-                                ByteBuffer const* packet, bool incoming);
+        void outString(); // any log level
+        void outString(char const* str, ...) ATTR_PRINTF(2,3);
+        void outInfo(char const* str, ...) ATTR_PRINTF(2,3);
+        void outHonor(char const* str, ...) ATTR_PRINTF(2, 3);
+        void outError(char const* err, ...) ATTR_PRINTF(2,3);
+        void outBasic(char const* str, ...) ATTR_PRINTF(2,3); // log level >= 1
+        void outDetail(char const* str, ...) ATTR_PRINTF(2,3); // log level >= 2
+        void outDebug(char const* str, ...) ATTR_PRINTF(2,3); // log level >= 3
+        void outWarden(char const* wrd, ...) ATTR_PRINTF(2,3);
+        void outWardenDebug(const char * wrd, ...) ATTR_PRINTF(2,3);
+        void outAnticheat(const char* detector, const char* player, const char* reason, const char* penalty);
+        void outErrorDb(); // any log level
+        void outErrorDb(char const* str, ...) ATTR_PRINTF(2,3); // any log level
+        void outWorldPacketDump(ACE_HANDLE socketHandle, uint32 opcode, char const* opcodeName, ByteBuffer const* packet, bool incoming); // any log level
         // any log level
         uint32 GetLogLevel() const { return m_logLevel; }
         void SetLogLevel(char* Level);
@@ -218,6 +209,7 @@ class Log : public MaNGOS::Singleton<Log, MaNGOS::ClassLevelLockable<Log, std::m
         FILE* gmLogfile;
         FILE* dberLogfile;
         FILE* wardenLogfile;
+        FILE* anticheatLogfile;
         FILE* worldLogfile;
         FILE* nostalriusLogFile;
         FILE* honorLogfile;
@@ -231,6 +223,7 @@ class Log : public MaNGOS::Singleton<Log, MaNGOS::ClassLevelLockable<Log, std::m
         LogLevel m_logFileLevel;
         bool m_colored;
         bool m_includeTime;
+        bool m_wardenDebug;
         Color m_colors[LOG_TYPE_MAX];
         uint32 m_logFilter;
 
