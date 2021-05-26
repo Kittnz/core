@@ -1558,10 +1558,15 @@ Anticheat.NullTime.Penalty = 7
 Anticheat.SkippedHeartbeats.Enable = 1
 
 #
-#    Anticheat.SkippedHeartbeats.Threshold
-#        Detections needed to trigger a penalty.
+#    Anticheat.SkippedHeartbeats.Threshold.Tick
+#        Detections needed to trigger a penalty in one tick.
 
-Anticheat.SkippedHeartbeats.Threshold = 2
+Anticheat.SkippedHeartbeats.Threshold.Tick = 2
+
+#    Anticheat.SkippedHeartbeats.Threshold.Total
+#        Detections needed to trigger a penalty total.
+
+Anticheat.SkippedHeartbeats.Total = 11
 
 #
 #    Anticheat.SkippedHeartbeats.Penalty
