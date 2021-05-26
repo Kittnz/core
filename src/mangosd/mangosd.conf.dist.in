@@ -1720,7 +1720,7 @@ Anticheat.MultiJump.Reject = 1
 Anticheat.MultiJump.Threshold.Tick = 2
 
 #
-#    Anticheat.MultiJump.Threshold.Tick
+#    Anticheat.MultiJump.Threshold.Total
 #        Detections needed to trigger a penalty total.
 
 Anticheat.MultiJump.Threshold.Total = 10
@@ -1730,6 +1730,40 @@ Anticheat.MultiJump.Threshold.Total = 10
 #        Action to take upon failing this check.
 
 Anticheat.MultiJump.Penalty = 7
+
+#    Anticheat.WallClimb.Enable
+#        Check for players climbing a surface that is too steep.
+
+Anticheat.WallClimb.Enable = 1
+
+#
+#    Anticheat.WallClimb.Reject
+#        Do not accept movement info and teleport to old position.
+
+Anticheat.WallClimb.Reject = 1
+
+#    Anticheat.WallClimb.Angle
+#        Vertical angle in radians between two points that players are able to climb.
+
+Anticheat.WallClimb.Angle = 1.0
+
+#
+#    Anticheat.WallClimb.Threshold.Tick
+#        Detections needed to trigger a penalty in one tick.
+
+Anticheat.WallClimb.Threshold.Tick = 3
+
+#
+#    Anticheat.WallClimb.Threshold.Total
+#        Detections needed to trigger a penalty total.
+
+Anticheat.WallClimb.Threshold.Total = 30
+
+#
+#    Anticheat.WallClimb.Penalty
+#        Action to take upon failing this check.
+
+Anticheat.WallClimb.Penalty = 7
 
 #
 #    Anticheat.Unreachable.Enable
@@ -1773,6 +1807,29 @@ Anticheat.FlyHack.Threshold = 3
 
 Anticheat.FlyHack.Penalty = 7
 
+#    Anticheat.NoFallTime.Enable
+#        Check for players that walking in the air.
+
+Anticheat.NoFallTime.Enable = 1
+
+#
+#    Anticheat.NoFallTime.Reject
+#        Do not accept movement info and teleport to old position.
+
+Anticheat.NoFallTime.Reject = 1
+
+#
+#    Anticheat.NoFallTime.Threshold
+#        Detections needed to trigger a penalty.
+
+Anticheat.NoFallTime.Threshold = 10
+
+#
+#    Anticheat.NoFallTime.Penalty
+#        Action to take upon failing this check.
+
+Anticheat.NoFallTime.Penalty = 7
+
 #
 #    Anticheat.Teleport.Enable
 #        Check for players teleporting far away from their current position.
@@ -1784,6 +1841,11 @@ Anticheat.Teleport.Enable = 1
 #        Do not accept movement info and teleport to old position.
 
 Anticheat.Teleport.Reject = 1
+
+#    Anticheat.Teleport.Distance
+#        Yards that we allow players to travel in one packet. Setting this too low can cause false positives at high speeds.
+
+Anticheat.Teleport.Distance = 40.0
 
 #
 #    Anticheat.Teleport.Threshold
@@ -1964,6 +2026,29 @@ Anticheat.RootMove.Threshold.Total = 30
 #        Action to take upon failing this check.
 
 Anticheat.RootMove.Penalty = 7
+
+#    Anticheat.SelfRoot.Enable
+#        Check for players that have root flag but should not.
+
+Anticheat.SelfRoot.Enable = 1
+
+#
+#    Anticheat.SelfRoot.Reject
+#        Do not accept movement info and teleport to old position.
+
+Anticheat.SelfRoot.Reject = 1
+
+#
+#    Anticheat.SelfRoot.Threshold
+#        Detections needed to trigger a penalty in one tick.
+
+Anticheat.SelfRoot.Threshold = 1
+
+#
+#    Anticheat.SelfRoot.Penalty
+#        Action to take upon failing this check.
+
+Anticheat.SelfRoot.Penalty = 3
 
 #
 #    Anticheat.WrongAckData.Enable
