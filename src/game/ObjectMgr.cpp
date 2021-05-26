@@ -5678,7 +5678,9 @@ void ObjectMgr::LoadQuestAreaTriggers()
         AreaTriggerEntry const* atEntry = GetAreaTrigger(trigger_ID);
         if (!atEntry)
         {
-            sLog.outErrorDb("Table `areatrigger_involvedrelation` has area trigger (ID: %u) not listed in `AreaTrigger.dbc`.", trigger_ID);
+            if (!IsExistingAreaTriggerId(trigger_ID))
+                sLog.outErrorDb("Table `areatrigger_involvedrelation` has area trigger (ID: %u) not listed in `AreaTrigger.dbc`.", trigger_ID);
+
             continue;
         }
 

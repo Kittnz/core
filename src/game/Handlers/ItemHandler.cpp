@@ -621,11 +621,14 @@ void WorldSession::HandleSellItemOpcode(WorldPacket & recv_data)
 
         pItem->SetCount(pItem->GetCount() - count);
         _player->ItemRemovedQuestCheck(pItem->GetEntry(), count);
+
         if (_player->IsInWorld())
             pItem->SendCreateUpdateToPlayer(_player);
+
         pItem->SetState(ITEM_CHANGED, _player);
 
-        _player->AddItemToBuyBackSlot(pNewItem, money);
+        _player->AddItemToBuyBackSlot(pNewItem, money, vendorGuid);
+
         if (_player->IsInWorld())
             pNewItem->SendCreateUpdateToPlayer(_player);
     }
@@ -635,7 +638,7 @@ void WorldSession::HandleSellItemOpcode(WorldPacket & recv_data)
         _player->RemoveItem(pItem->GetBagSlot(), pItem->GetSlot(), true);
         _player->InterruptSpellsWithCastItem(pItem);
         pItem->RemoveFromUpdateQueueOf(_player);
-        _player->AddItemToBuyBackSlot(pItem, money);
+        _player->AddItemToBuyBackSlot(pItem, money, vendorGuid);
     }
 
     _player->LogModifyMoney(money, "SellItem", pCreature->GetObjectGuid(), pItem->GetEntry());
@@ -645,9 +648,9 @@ void WorldSession::HandleBuybackItem(WorldPacket & recv_data)
 {
     DEBUG_LOG("WORLD: Received CMSG_BUYBACK_ITEM");
     ObjectGuid vendorGuid;
-    uint32 slot;
-
-    recv_data >> vendorGuid >> slot;
+    recv_data >> vendorGuid;
+    uint32 slot = BUYBACK_SLOT_START;
+    recv_data >> slot;
 
     Creature *pCreature = GetPlayer()->GetNPCIfCanInteractWith(vendorGuid, UNIT_NPC_FLAG_VENDOR);
     if (!pCreature)
@@ -664,7 +667,7 @@ void WorldSession::HandleBuybackItem(WorldPacket & recv_data)
     Item *pItem = _player->GetItemFromBuyBackSlot(slot);
     if (pItem)
     {
-        uint32 price = _player->GetUInt32Value(PLAYER_FIELD_BUYBACK_PRICE_1 + slot - BUYBACK_SLOT_START);
+        uint32 price = _player->GetBuyBackItemPrice(slot);
         if (_player->GetMoney() < price)
         {
             _player->SendBuyError(BUY_ERR_NOT_ENOUGHT_MONEY, pCreature, pItem->GetEntry(), 0);
