@@ -501,6 +501,7 @@ class Creature : public Unit
         CreatureGroup* GetCreatureGroup() const { return _creatureGroup; }
         void SetCreatureGroup(CreatureGroup* group) { _creatureGroup = group; }
         void JoinCreatureGroup(Creature* leader, float dist, float angle, uint32 options);
+        void LeaveCreatureGroup();
         uint32 GetSpawnFlags() const;
 
         // Fonctions utilisees par les links, et appelle CreatureAI.
