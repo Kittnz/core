@@ -10,4 +10,4 @@ ConfVersion=2010062001
 #    Mod.Tbc.DiminishingDuration
 #        Enable/Disable duration of crowd control abilities on pvp target limited by 10 sec. (Patch 2.2.0 feature)
 
-Mod.Tbc.DiminishingDuration = 0
+Mod.Tbc.DiminishingDuration = 0;
