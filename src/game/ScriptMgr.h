@@ -324,6 +324,8 @@ enum eScriptCommand
                                                             // x = distance
                                                             // o = angle
     SCRIPT_COMMAND_LEAVE_CREATURE_GROUP     = 79,           // source = Creature
+    SCRIPT_COMMAND_SET_GO_STATE             = 80,           // source = GameObject
+                                                            // datalong = GOState
     SCRIPT_COMMAND_MAX,
 
     SCRIPT_COMMAND_DISABLED                 = 9999          // Script action was disabled during loading.
@@ -985,7 +987,10 @@ struct ScriptInfo
         } joinCreatureGroup;
 
                                                             // SCRIPT_COMMAND_LEAVE_CREATURE_GROUP (79)
-
+        struct                                              // SCRIPT_COMMAND_SET_GO_STATE (80)
+        {
+            uint32 state;                                   // datalong
+        } setGoState;
         struct
         {
             uint32 data[9];

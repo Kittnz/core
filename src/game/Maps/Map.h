@@ -895,6 +895,7 @@ class Map : public GridRefManager<NGridType>, public MaNGOS::ObjectLevelLockable
         bool ScriptCommand_SetFly(const ScriptInfo& script, WorldObject* source, WorldObject* target);
         bool ScriptCommand_JoinCreatureGroup(const ScriptInfo& script, WorldObject* source, WorldObject* target);
         bool ScriptCommand_LeaveCreatureGroup(const ScriptInfo& script, WorldObject* source, WorldObject* target);
+        bool ScriptCommand_SetGoState(const ScriptInfo& script, WorldObject* source, WorldObject* target);
 
         // Add any new script command functions to the array.
         const ScriptCommandFunction m_ScriptCommands[SCRIPT_COMMAND_MAX] =
@@ -979,6 +980,7 @@ class Map : public GridRefManager<NGridType>, public MaNGOS::ObjectLevelLockable
             &Map::ScriptCommand_SetFly,                 // 77
             &Map::ScriptCommand_JoinCreatureGroup,      // 78
             &Map::ScriptCommand_LeaveCreatureGroup,     // 79
+            &Map::ScriptCommand_SetGoState,             // 80
         };
 
     public:
