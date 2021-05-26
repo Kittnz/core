@@ -4698,7 +4698,7 @@ void Player::KillPlayer()
         ApplyModByteFlag(PLAYER_FIELD_BYTES, 0, PLAYER_FIELD_BYTE_NO_RELEASE_WINDOW, true);
 
     // 6 minutes until repop at graveyard
-    m_deathTimer = 6 * MINUTE * IN_MILLISECONDS;
+    m_deathTimer = CORPSE_REPOP_TIME;
 
     UpdateCorpseReclaimDelay();                             // dependent at use SetDeathPvP() call before kill
 
