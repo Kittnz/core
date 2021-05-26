@@ -4529,9 +4529,15 @@ void Player::DeleteOldCharacters(uint32 keepDays)
 void Player::SetFly(bool enable)
 {
     if (enable)
+    {
         m_movementInfo.moveFlags = (MOVEFLAG_LEVITATING | MOVEFLAG_SWIMMING | MOVEFLAG_CAN_FLY | MOVEFLAG_FLYING);
+        addUnitState(UNIT_STAT_FLYING_ALLOWED);
+    }
     else
+    {
         m_movementInfo.moveFlags = (MOVEFLAG_NONE);
+        clearUnitState(UNIT_STAT_FLYING_ALLOWED);
+    }
 
     SendHeartBeat(true);
 }
@@ -14990,7 +14996,7 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
         // problems with taxi path loading
         TaxiNodesEntry const* nodeEntry = NULL;
         if (uint32 node_id = m_taxi.GetTaxiSource())
-            nodeEntry = sObjectMgr.GeTaxiNodeEntry(node_id);
+            nodeEntry = sObjectMgr.GetTaxiNodeEntry(node_id);
 
         if (!nodeEntry)                                     // don't know taxi start node, to homebind
         {
@@ -15017,7 +15023,7 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
     if (uint32 node_id = m_taxi.GetTaxiSource())
     {
         // save source node as recall coord to prevent recall and fall from sky
-        TaxiNodesEntry const* nodeEntry = sObjectMgr.GeTaxiNodeEntry(node_id);
+        TaxiNodesEntry const* nodeEntry = sObjectMgr.GetTaxiNodeEntry(node_id);
         MANGOS_ASSERT(nodeEntry);                           // checked in m_taxi.LoadTaxiDestinationsFromString
         m_recallMap = nodeEntry->map_id;
         m_recallX = nodeEntry->x;
@@ -17633,7 +17639,7 @@ bool Player::ActivateTaxiPathTo(std::vector<uint32> const& nodes, Creature* npc 
     uint32 sourcenode = nodes[0];
 
     // starting node too far away (cheat?)
-    TaxiNodesEntry const* node = sObjectMgr.GeTaxiNodeEntry(sourcenode);
+    TaxiNodesEntry const* node = sObjectMgr.GetTaxiNodeEntry(sourcenode);
     if (!node)
     {
         WorldPacket data(SMSG_ACTIVATETAXIREPLY, 4);
@@ -21527,7 +21533,7 @@ void Player::TaxiStepFinished()
     if (!curDest)
         return;
 
-    TaxiNodesEntry const* curDestNode = sObjectMgr.GeTaxiNodeEntry(curDest);
+    TaxiNodesEntry const* curDestNode = sObjectMgr.GetTaxiNodeEntry(curDest);
 
     // far teleport case
     if (curDestNode && curDestNode->map_id != GetMapId())
