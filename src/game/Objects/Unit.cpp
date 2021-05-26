@@ -12274,7 +12274,8 @@ void Unit::DisableSpline()
 {
     if (Player* me = ToPlayer())
         me->SetFallInformation(0, me->GetPositionZ());
-    m_movementInfo.RemoveMovementFlag(MovementFlags(MOVEFLAG_SPLINE_ENABLED | MOVEFLAG_FORWARD));
+
+    m_movementInfo.RemoveMovementFlag(MOVEFLAG_SPLINE_ENABLED | MOVEFLAG_FORWARD);
     movespline->_Interrupt();
 }
 
