@@ -3976,21 +3976,24 @@ void Spell::update(uint32 difftime)
             ((m_spellInfo->Id != 24322) && (m_spellInfo->Id != 24323)))
     {
         // always cancel for channeled spells
-        if ((m_spellState == SPELL_STATE_CASTING) &&
+        if (m_spellState == SPELL_STATE_CASTING)
+        {
+            bool bInterrupt = true;
             // except if its a self root, since player could have moved a bit before root ack (ravager proc)
-            ([](SpellEntry const* spellInfo, Unit const* caster)
+            for (int i = 0; i < MAX_EFFECT_INDEX; ++i)
             {
-                for (int i = 0; i < MAX_EFFECT_INDEX; ++i)
+                if ((m_spellInfo->Effect[i] == SPELL_EFFECT_APPLY_AURA) &&
+                    ((m_spellInfo->EffectApplyAuraName[i] == SPELL_AURA_MOD_ROOT) || (m_spellInfo->EffectApplyAuraName[i] == SPELL_AURA_MOD_STUN)) &&
+                    (m_spellInfo->EffectImplicitTargetA[i] == TARGET_SELF))
                 {
-                    if ((spellInfo->Effect[i] == SPELL_EFFECT_APPLY_AURA) &&
-                        (spellInfo->EffectApplyAuraName[i] == SPELL_AURA_MOD_ROOT) &&
-                        (spellInfo->EffectImplicitTargetA[i] == TARGET_SELF))
-                        return !(caster->IsRooted());
+                    bInterrupt = !(m_caster->IsRooted() || m_caster->HasPendingMovementChange(ROOT));
+                    break;
                 }
+            }
 
-                return true;
-            }(m_spellInfo, m_caster)))
+            if (bInterrupt)
                 cancel();
+        }
         // don't cancel for melee, autorepeat, triggered and instant spells
         else if (!IsNextMeleeSwingSpell() && !IsAutoRepeat() && !m_IsTriggeredSpell && (m_spellInfo->InterruptFlags & SPELL_INTERRUPT_FLAG_MOVEMENT))
             cancel();
