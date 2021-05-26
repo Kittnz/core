@@ -4422,13 +4422,15 @@ bool ChatHandler::HandleGMTicketCloseByIdCommand(char* args)
     return true;
 }
 
-
-bool registerPlayerToBg(WorldSession* sess, BattleGroundTypeId bgid)
+bool RegisterPlayerToBG(WorldSession* sess, BattleGroundTypeId bgid)
 {
-    Player* pl = sess->GetPlayer();
-    if (!pl->GetBGAccessByLevel(bgid))
+    Player* pPlayer = sess->GetPlayer();
+    if (!pPlayer->GetBGAccessByLevel(bgid))
         return false;
-    sess->SendBattlegGroundList(uint64(0), bgid);
+
+    pPlayer->SetBattleGroundEntryPoint(pPlayer->GetMapId(), pPlayer->GetPositionX(), pPlayer->GetPositionY(), pPlayer->GetPositionZ(), pPlayer->GetOrientation());
+    sess->SendBattlegGroundList(pPlayer->GetObjectGuid(), bgid);
+
     return true;
 }
 
