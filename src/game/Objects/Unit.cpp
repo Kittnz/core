@@ -11430,7 +11430,7 @@ void Unit::KnockBackFrom(WorldObject* target, float horizontalSpeed, float verti
 
 void Unit::KnockBack(float angle, float horizontalSpeed, float verticalSpeed)
 {
-    if (IsRooted())
+    if (IsRooted() || !movespline->Finalized())
         return;
 
     InterruptNonMeleeSpells(false);
@@ -11441,7 +11441,9 @@ void Unit::KnockBack(float angle, float horizontalSpeed, float verticalSpeed)
         float vsin = sin(angle);
         float vcos = cos(angle);
         MovementPacketSender::SendKnockBackToController(this, vcos, vsin, horizontalSpeed, -verticalSpeed); // !! notice the - sign in front of speedZ !!
-        GetPlayerMovingMe()->GetCheatData()->KnockBack(horizontalSpeed, verticalSpeed, vcos, vsin);
+
+        if (Player* pPlayer = ToPlayer())
+            GetPlayerMovingMe()->GetCheatData()->KnockBack(pPlayer, horizontalSpeed, verticalSpeed, vcos, vsin);
     }
 }
 
