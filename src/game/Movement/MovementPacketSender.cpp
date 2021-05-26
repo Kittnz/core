@@ -121,7 +121,7 @@ void MovementPacketSender::SendSpeedChangeToObservers(Unit* unit, UnitMoveType m
     data << unit->GetPackGUID();
     data << unit->m_movementInfo;
     data << float(newRate);
-    unit->SendMovementMessageToSet(std::move(data), false, mover);
+    unit->SendMovementMessageToSet(std::move(data), true, mover);
 }
 
 void MovementPacketSender::SendSpeedChangeToAll(Unit* unit, UnitMoveType mtype, float newRate)
@@ -181,7 +181,7 @@ void MovementPacketSender::SendKnockBackToObservers(Unit* unit, float vcos, floa
     data << vsin;
     data << speedXY;
     data << speedZ;
-    unit->SendMovementMessageToSet(std::move(data), false, mover);
+    unit->SendMovementMessageToSet(std::move(data), true, mover);
 }
 
 void MovementPacketSender::AddMovementFlagChangeToController(Unit* unit, MovementFlags mFlag, bool apply)
@@ -283,7 +283,7 @@ void MovementPacketSender::SendMovementFlagChangeToObservers(Unit* unit, Movemen
     WorldPacket data(opcode, 64);
     data << unit->GetPackGUID();
     data << unit->m_movementInfo;
-    unit->SendMovementMessageToSet(std::move(data), false, mover);
+    unit->SendMovementMessageToSet(std::move(data), true, mover);
 }
 
 void MovementPacketSender::SendMovementFlagChangeToAll(Unit* unit, MovementFlags mFlag, bool apply)
