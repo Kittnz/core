@@ -397,54 +397,6 @@ bool ItemUseSpell_item_survival_outline(Player* pPlayer, Item* pItem, const Spel
     return true;
 }
 
-bool ItemUseSpell_survival_boat(Player* pPlayer, Item* pItem, const SpellCastTargets&)
-{
-    if (pPlayer) 
-    {
-        // reagents: Simple Wood (15), Handful of Copper Bolts (1)
-        if (pPlayer->HasItemCount(4470, 15, false) && pPlayer->HasItemCount(4359, 1, false)) 
-        {
-            // summon boat for 60 minutes
-            if (pPlayer->IsInWater() && !pPlayer->IsUnderWater()) {
-                pPlayer->SummonGameObject(1000002, pPlayer->GetPositionX(), pPlayer->GetPositionY(),
-                                          pPlayer->GetPositionZ() + 1.3f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 3600, true);
-                pPlayer->TeleportTo(pPlayer->GetMapId(), pPlayer->GetPositionX(), pPlayer->GetPositionY(),
-                                    pPlayer->GetPositionZ() + 3.5f, 3.0f);
-                pPlayer->AddAura((pPlayer->HasAura(8083)) ? 0 : 8083); // todo: add removal.
-                ChatHandler(pPlayer).SendSysMessage("You've gained +50 skill bonus to Fishing!");
-                pPlayer->DestroyItemCount(4470, 15, true);
-                pPlayer->DestroyItemCount(4359, 1, true);
-                uint32 currvalue = 0;
-                currvalue = pPlayer->GetSkillValue(142);
-                switch (currvalue) 
-{
-                    case 150:
-                        break;
-                    default:
-                        currvalue++;
-                        pPlayer->SetSkill(142, currvalue, 150);
-                        break;
-                }
-                return false;
-            } 
-            else 
-            {
-                ChatHandler(pPlayer).SendSysMessage("You need to be in a body of water surface!");
-                return true;
-            }
-
-        } 
-        else 
-        {
-            ChatHandler(pPlayer).SendSysMessage(
-                    "15 [Simple Wood] and 1 [Handful of Copper Bolts] are required to build this boat.");
-            pPlayer->RemoveSpellCooldown(14867, true);
-            return true;
-        }
-    }
-    return false;
-}
-
 bool ItemUseSpell_bg_tabard(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
     // Some spell checks might be obsolete, check it later.
