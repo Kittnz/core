@@ -548,17 +548,16 @@ bool ItemUseSpell_guild_tabard(Player* pPlayer, Item* pItem, const SpellCastTarg
 bool ItemUseSpell_item_radio(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
     if (!pPlayer) return false;
-    int object = 0;
     float x, y, z;
     pPlayer->GetSafePosition(x, y, z);
     x += 2.0F * cos(pPlayer->GetOrientation());
     y += 2.0F * sin(pPlayer->GetOrientation());
     switch (pItem->GetEntry())
     {
-    case 51021: object = 1000055; break; // Speedy's Jukebox
-    case 10585: object = 1000077; break; // Goblin Radio KABOOM-Box X23B76
+    case 51021: pPlayer->SummonGameObject(1000055, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 600, true); break; // Speedy's Jukebox
+    case 10585: pPlayer->SummonGameObject(1000077, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 600, true); break; // Goblin Radio KABOOM-Box X23B76
+    case 70043: pPlayer->PlayDirectSound(30218); break; // Delicate Music Box
     }
-    pPlayer->SummonGameObject(object, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 600, true);
     return true;
 }
 
