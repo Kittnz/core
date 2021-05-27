@@ -1625,9 +1625,61 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                     }
                     return;
                 }
-            }
+                case 46058: // Traveler's Tent
+                {
+                    if (m_caster && m_caster->IsPlayer())
+                    {
+                        float dis{ 4.0F };
+                        float x, y, z, ang, p_r, o_r;
+                        m_caster->GetSafePosition(x, y, z);
+                        x += dis * cos(m_caster->GetOrientation());
+                        y += dis * sin(m_caster->GetOrientation());
+                        p_r = m_caster->GetOrientation();
+                        o_r = remainderf(p_r + M_PI, M_PI * 2.0f);
+                        float rot2 = sin(o_r / 2);
+                        float rot3 = cos(o_r / 2);
 
-            //All IconID Check in there
+                        m_caster->SummonGameObject((m_caster->ToPlayer()->GetTeam() == ALLIANCE ? 1000001 : 1000236), x, y, z, o_r, 0.0f, 0.0f, rot2, rot3, 1200, true);
+
+                        uint32 currvalue = 0;
+                        currvalue = m_caster->ToPlayer()->GetSkillValue(142);
+
+                        switch (currvalue)
+                        {
+                        case 150: break;
+                        default:
+                            currvalue++;
+                            m_caster->ToPlayer()->SetSkill(142, currvalue, 150);
+                            break;
+                        }
+                    }
+                    return;
+                }
+                case 46060: // Traveler's Boat
+                {
+                    if (m_caster && m_caster->IsPlayer())
+                    {
+                        m_caster->SummonGameObject(1000002, m_caster->GetPositionX(), m_caster->GetPositionY(), m_caster->ToPlayer()->GetPositionZ() + 1.3f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 3600, true);
+                        m_caster->ToPlayer()->TeleportTo(m_caster->GetMapId(), m_caster->GetPositionX(), m_caster->GetPositionY(), m_caster->GetPositionZ() + 3.5f, 3.0f);
+                        m_caster->AddAura((m_caster->HasAura(8083)) ? 0 : 8083);
+                        ChatHandler(m_caster->ToPlayer()).SendSysMessage("You've gained +50 skill bonus to Fishing!");
+
+                        uint32 currvalue = 0;
+                        currvalue = m_caster->ToPlayer()->GetSkillValue(142);
+
+                        switch (currvalue)
+                        {
+                        case 150: break;
+                        default:
+                            currvalue++;
+                            m_caster->ToPlayer()->SetSkill(142, currvalue, 150);
+                            break;
+                        }
+                    }
+                    return;
+                }
+            }
+            // All IconID Check in there
             switch (m_spellInfo->SpellIconID)
             {
                 // Berserking (troll racial traits)
@@ -6542,16 +6594,14 @@ void Spell::EffectTransmitted(SpellEffectIndex eff_idx)
     pGameObj->SetOwnerGuid(m_caster->GetObjectGuid());
     if (m_caster->GetTypeId() == TYPEID_PLAYER)
     {
-        if (m_spellInfo->Id == 25085) { // If Spell is Bright Campfire, increase survival skill
+        if (m_spellInfo->Id == 25085) // Bright Campfire
+        {  
             uint32 currvalue = 0;
             currvalue = m_caster->ToPlayer()->GetSkillValue(142);
-            switch (currvalue) {
-                case 150:
-                    break;
-                default:
-                    currvalue++;
-                    m_caster->ToPlayer()->SetSkill(142, currvalue, 150);
-                    break;
+            switch (currvalue)
+            {
+            case 150: break;
+            default: currvalue++; m_caster->ToPlayer()->SetSkill(142, currvalue, 150); break;
             }
         }
         if(Group * group = ((Player*)m_caster)->GetGroup())
