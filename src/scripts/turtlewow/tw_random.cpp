@@ -386,68 +386,15 @@ bool ItemUseSpell_skin_changer(Player* pPlayer, Item* pItem, const SpellCastTarg
     return false;
 }
 
-bool ItemUseSpell_survival_kit(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+bool ItemUseSpell_item_survival_outline(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
-    pPlayer->SetSkill(142, 1, 150);
-    pPlayer->LearnSpell(25085, false);
-    ChatHandler(pPlayer).SendSysMessage("You have learned how to create a new item: Dim Torch");
-    return false;
-}
-
-bool ItemUseSpell_survival_tent(Player* pPlayer, Item* pItem, const SpellCastTargets&)
-{
-    if (pPlayer) 
+    switch (pItem->GetEntry())
     {
-        // reagents: Linen Cloth (5), Simple Wood (1)
-        if (pPlayer->HasItemCount(2589, 5, false) && pPlayer->HasItemCount(4470, 1, false)) 
-        {
-            // summon tent object for 20 minutes
-            if (!pPlayer->IsFalling() && !pPlayer->IsInWater() && !pPlayer->InGurubashiArena(false) &&
-                pPlayer->GetTerrain()->IsOutdoors(pPlayer->GetPositionX(), pPlayer->GetPositionY(), pPlayer->GetPositionZ()) &&
-                pPlayer->GetZoneId() != 1519 && pPlayer->GetZoneId() != 1637 && pPlayer->GetZoneId() != 1497 && pPlayer->GetZoneId() != 1537 &&
-                pPlayer->GetZoneId() != 1657 && pPlayer->GetZoneId() != 1638 && !pPlayer->GetInstanceId()) 
-            {                
-                float dis{ 4.0F };
-                float x, y, z, ang, p_r, o_r;
-                pPlayer->GetSafePosition(x, y, z);
-                x += dis * cos(pPlayer->GetOrientation());
-                y += dis * sin(pPlayer->GetOrientation());
-                p_r = pPlayer->GetOrientation();
-                o_r = remainderf(p_r + M_PI, M_PI * 2.0f);
-                float rot2 = sin(o_r / 2);
-                float rot3 = cos(o_r / 2);
-
-                pPlayer->SummonGameObject((pPlayer->GetTeam() == ALLIANCE ? 1000001 : 1000236), x, y, z, o_r, 0.0f, 0.0f, rot2, rot3, 1200, true);
-
-                uint32 currvalue = 0;
-                currvalue = pPlayer->GetSkillValue(142);
-                switch (currvalue) 
-                {
-                    case 150:
-                        break;
-                    default:
-                        currvalue++;
-                        pPlayer->SetSkill(142, currvalue, 150);
-                        break;
-                }
-                pPlayer->DestroyItemCount(2589, 5, true);
-                pPlayer->DestroyItemCount(4470, 1, true);
-                return false;
-            } 
-            else 
-            {
-                ChatHandler(pPlayer).SendSysMessage("Can't build here! You need to be outside.");
-                return true;
-            }
-        }
-        else 
-        {
-            ChatHandler(pPlayer).SendSysMessage("5 [Linen Cloth] and 1 [Simple Wood] are required to build a tent.");
-            pPlayer->RemoveSpellCooldown(24085, true);
-            return true;
-        }
+    case 50234: pPlayer->LearnSpell(46058, false); break; // Outline: Traveler's Tent 
+    case 50235: pPlayer->LearnSpell(46060, false); break; // Outline: Fishing Boat
+    case 50254: pPlayer->LearnSpell(25085, false); break; // Outline: Bright Campfire
     }
-    return false;
+    return true;
 }
 
 bool ItemUseSpell_survival_boat(Player* pPlayer, Item* pItem, const SpellCastTargets&)
@@ -6000,18 +5947,8 @@ void AddSC_tw_random()
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "item_survival_kit";
-    newscript->pItemUseSpell = &ItemUseSpell_survival_kit;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "item_survival_tent";
-    newscript->pItemUseSpell = &ItemUseSpell_survival_tent;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "item_survival_boat";
-    newscript->pItemUseSpell = &ItemUseSpell_survival_boat;
+    newscript->Name = "item_survival_outline";
+    newscript->pItemUseSpell = &ItemUseSpell_item_survival_outline;
     newscript->RegisterSelf();
 
     newscript = new Script;

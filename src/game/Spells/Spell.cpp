@@ -5965,6 +5965,24 @@ SpellCastResult Spell::CheckCast(bool strict)
                     if (int32(m_caster->GetHealth()) <= dmg)
                         return SPELL_FAILED_FIZZLE;
                 }
+                else if (m_spellInfo->Id == 46060) // Fishing Boat
+                {
+                    if (!m_caster->IsInWater() || m_caster->IsUnderWater())
+                    {
+                        m_caster->ToPlayer()->GetSession()->SendNotification("You need to be in a body of water surface!");
+                        return SPELL_FAILED_DONT_REPORT;
+                    }
+                }
+                else if (m_spellInfo->Id == 46058) // Traveler's Day
+                {
+                    if (m_caster->IsInWater() || !m_caster->GetTerrain()->IsOutdoors(m_caster->GetPositionX(), m_caster->GetPositionY(), m_caster->GetPositionZ()) || 
+                        m_caster->GetZoneId() == 1519 || m_caster->GetZoneId() == 1637 || m_caster->GetZoneId() == 1497 || m_caster->GetZoneId() == 1537 ||
+                        m_caster->GetZoneId() == 1657 || m_caster->GetZoneId() == 1638 || m_caster->GetInstanceId())
+                    {
+                        m_caster->ToPlayer()->GetSession()->SendNotification("Can't build here.");
+                        return SPELL_FAILED_DONT_REPORT;
+                    }
+                }
                 break;
             }
             case SPELL_EFFECT_SCHOOL_DAMAGE:
