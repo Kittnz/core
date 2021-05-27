@@ -119,6 +119,7 @@ class TypeUnorderedMapContainer
         template<class SPECIFIC_TYPE>
         static rangeproxy_t<SPECIFIC_TYPE> range(ContainerUnorderedMap<TypeNull, KEY_TYPE>& elements, SPECIFIC_TYPE* /*obj*/)
         {
+            return rangeproxy_t<SPECIFIC_TYPE>();
         }
         template<class SPECIFIC_TYPE, class T>
         static rangeproxy_t<SPECIFIC_TYPE> range(ContainerUnorderedMap<T, KEY_TYPE>& elements, SPECIFIC_TYPE* /*obj*/)
