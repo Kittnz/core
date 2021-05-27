@@ -1277,16 +1277,13 @@ void World::SetInitialWorldSettings()
     CharacterDatabase.PExecute("DELETE FROM corpse WHERE corpse_type = '0' OR time < (UNIX_TIMESTAMP()-'%u')", 3 * DAY);
 
     sSpellMgr.LoadSpells();
-
     sObjectMgr.LoadFactions();
-
     sObjectMgr.LoadSoundEntries();
-
     sObjectMgr.LoadTaxiNodes();
-
     sObjectMgr.LoadAreaTriggers();
-
     sObjectMgr.LoadSkillLineAbility();
+    sObjectMgr.LoadMailTemplate();
+    sObjectMgr.LoadPetSpellData();
 
     ///- Load the DBC files
     LoadDBCStores(m_dataPath);
