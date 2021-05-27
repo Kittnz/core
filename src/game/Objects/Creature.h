@@ -173,16 +173,6 @@ struct CreatureInfo
 
     ObjectGuid GetObjectGuid(uint32 lowguid) const { return ObjectGuid(GetHighGuid(), entry, lowguid); }
 
-    SkillType GetRequiredLootSkill() const
-    {
-        if(type_flags & CREATURE_TYPEFLAGS_HERBLOOT)
-            return SKILL_HERBALISM;
-        if(type_flags & CREATURE_TYPEFLAGS_MININGLOOT)
-            return SKILL_MINING;
-        return SKILL_SKINNING;
-        // normal case
-    }
-
     bool isTameable() const
     {
         return type == CREATURE_TYPE_BEAST && beast_family != 0 && type_flags & CREATURE_TYPEFLAGS_TAMEABLE;
@@ -915,6 +905,7 @@ class Creature : public Unit
 
         void SetEscortable(bool escortable) { _isEscortable = escortable; }
         bool IsEscortable() const { return _isEscortable; }
+        bool CanAssistPlayers() { return GetCreatureInfo()->flags_extra & CREATURE_FLAG_EXTRA_CAN_ASSIST; }
 
         bool CanSummonGuards() { return GetCreatureInfo()->flags_extra & CREATURE_FLAG_EXTRA_SUMMON_GUARD; }
 
