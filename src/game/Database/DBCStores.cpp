@@ -61,7 +61,6 @@ DBCStorage <CreatureDisplayInfoEntry> sCreatureDisplayInfoStore(CreatureDisplayI
 DBCStorage <CreatureDisplayInfoExtraEntry> sCreatureDisplayInfoExtraStore(CreatureDisplayInfoExtrafmt);
 DBCStorage <CreatureModelDataEntry> sCreatureModelDataStore(CreatureModelDatafmt);
 DBCStorage <CreatureFamilyEntry> sCreatureFamilyStore(CreatureFamilyfmt);
-DBCStorage <CreatureSpellDataEntry> sCreatureSpellDataStore(CreatureSpellDatafmt);
 DBCStorage <CreatureTypeEntry> sCreatureTypeStore(CreatureTypefmt);
 
 DBCStorage <DurabilityQualityEntry> sDurabilityQualityStore(DurabilityQualityfmt);
@@ -77,8 +76,6 @@ DBCStorage <ItemBagFamilyEntry>           sItemBagFamilyStore(ItemBagFamilyfmt);
 DBCStorage <ItemRandomPropertiesEntry> sItemRandomPropertiesStore(ItemRandomPropertiesfmt);
 DBCStorage <ItemSetEntry> sItemSetStore(ItemSetEntryfmt);
 DBCStorage <LockEntry> sLockStore(LockEntryfmt);
-
-DBCStorage <MailTemplateEntry> sMailTemplateStore(MailTemplateEntryfmt);
 
 DBCStorage <QuestSortEntry> sQuestSortStore(QuestSortEntryfmt);
 
@@ -193,7 +190,7 @@ void LoadDBCStores(const std::string& dataPath)
 {
     std::string dbcPath = dataPath + "dbc/";
 
-    const uint32 DBCFilesCount = 41;
+    const uint32 DBCFilesCount = 39;
 
     StoreProblemList bad_dbc_files;
 
@@ -211,7 +208,6 @@ void LoadDBCStores(const std::string& dataPath)
     LoadDBC(availableDbcLocales, bad_dbc_files, sCreatureDisplayInfoExtraStore, dbcPath, "CreatureDisplayInfoExtra.dbc");
     LoadDBC(availableDbcLocales, bad_dbc_files, sCreatureModelDataStore,   dbcPath, "CreatureModelData.dbc");
     LoadDBC(availableDbcLocales, bad_dbc_files, sCreatureFamilyStore,      dbcPath, "CreatureFamily.dbc");
-    LoadDBC(availableDbcLocales, bad_dbc_files, sCreatureSpellDataStore,   dbcPath, "CreatureSpellData.dbc");
     LoadDBC(availableDbcLocales, bad_dbc_files, sCreatureTypeStore,        dbcPath, "CreatureType.dbc");
     LoadDBC(availableDbcLocales, bad_dbc_files, sDurabilityCostsStore,     dbcPath, "DurabilityCosts.dbc");
     LoadDBC(availableDbcLocales, bad_dbc_files, sDurabilityQualityStore,   dbcPath, "DurabilityQuality.dbc");
@@ -222,7 +218,6 @@ void LoadDBCStores(const std::string& dataPath)
     LoadDBC(availableDbcLocales, bad_dbc_files, sItemRandomPropertiesStore, dbcPath, "ItemRandomProperties.dbc");
     LoadDBC(availableDbcLocales, bad_dbc_files, sItemSetStore,             dbcPath, "ItemSet.dbc");
     LoadDBC(availableDbcLocales, bad_dbc_files, sLockStore,                dbcPath, "Lock.dbc");
-    LoadDBC(availableDbcLocales, bad_dbc_files, sMailTemplateStore,        dbcPath, "MailTemplate.dbc");
     LoadDBC(availableDbcLocales, bad_dbc_files, sQuestSortStore,           dbcPath, "QuestSort.dbc");
     LoadDBC(availableDbcLocales, bad_dbc_files, sSkillLineStore,           dbcPath, "SkillLine.dbc");
     LoadDBC(availableDbcLocales, bad_dbc_files, sSkillRaceClassInfoStore,  dbcPath, "SkillRaceClassInfo.dbc");
@@ -422,7 +417,7 @@ void LoadDBCStores(const std::string& dataPath)
         if (WMOAreaTableEntry const* entry = sWMOAreaTableStore.LookupEntry(i))
             sWMOAreaInfoByTripple.insert(WMOAreaInfoByTripple::value_type(WMOAreaTableTripple(entry->rootId, entry->adtId, entry->groupId), entry));
     }
-    //LoadDBC(availableDbcLocales,bar,bad_dbc_files,sWorldMapOverlayStore,     dbcPath,"WorldMapOverlay.dbc");
+
     LoadDBC(availableDbcLocales, bad_dbc_files, sWorldSafeLocsStore,       dbcPath, "WorldSafeLocs.dbc");
 
     for (uint32 i = 0; i < sSkillRaceClassInfoStore.GetNumRows(); ++i)

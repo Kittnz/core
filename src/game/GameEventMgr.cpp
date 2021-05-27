@@ -557,7 +557,7 @@ void GameEventMgr::LoadFromDB()
                 continue;
             }
 
-            if (!sMailTemplateStore.LookupEntry(mail.mailTemplateId))
+            if (!sMailTemplateStorage.LookupEntry<MailTemplateEntry>(mail.mailTemplateId))
             {
                 sLog.outErrorDb("Table `game_event_mail` have invalid mailTemplateId (%u) for game event %i that invalid not include any player races, ignoring.", mail.mailTemplateId, event_id);
                 continue;

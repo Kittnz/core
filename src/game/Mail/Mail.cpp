@@ -110,6 +110,18 @@ MailReceiver::MailReceiver(Player* receiver, ObjectGuid receiver_guid) : m_recei
 }
 
 /**
+* Creates a new MailDraft object using mail template id.
+*
+* @param mailTemplateId The ID of the Template to be used.
+* @param a boolean specifying whether the mail needs items or not.
+*
+*/
+MailDraft::MailDraft(uint16 mailTemplateId, bool need_items, LocaleConstant locale_idx) : m_mailTemplateId(mailTemplateId), m_mailTemplateItemsNeed(need_items), m_bodyId(0), m_money(0), m_COD(0)
+{
+
+}
+
+/**
  * Creates a new MailDraft object using subject and contect texts.
  *
  * @param subject The subject of the mail.

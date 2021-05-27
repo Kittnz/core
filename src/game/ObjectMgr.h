@@ -840,6 +840,7 @@ class ObjectMgr
         bool LoadQuestGreetings();
         bool LoadTrainerGreetings();
         void LoadPetCreateSpells();
+        void LoadPetSpellData();
         void LoadCreatureLocales();
         void LoadCreatureTemplates();
         void CheckCreatureTemplates();
@@ -864,6 +865,7 @@ class ObjectMgr
         void LoadGossipMenuItemsLocales();
         void LoadPointOfInterestLocales();
         void LoadMapTemplate();
+        void LoadMailTemplate();
         void LoadConditions();
         void LoadAreaTemplate();
         void LoadAreaLocales();
@@ -1103,6 +1105,8 @@ class ObjectMgr
                     break;
         }
 
+        char const* GetMailTextTemplate(uint32 id, LocaleConstant locale_idx = LOCALE_enUS);
+
         BroadcastText const* GetBroadcastTextLocale(uint32 id) const
         {
             BroadcastTextLocaleMap::const_iterator itr = m_BroadcastTextLocaleMap.find(id);
@@ -1111,7 +1115,7 @@ class ObjectMgr
             return nullptr;
         }
 
-        const char *GetBroadcastText(uint32 id, int locale_idx = LOCALE_enUS, uint8 gender = GENDER_MALE, bool forceGender = false) const;
+        char const* GetBroadcastText(uint32 id, int locale_idx = DB_LOCALE_enUS, uint8 gender = GENDER_MALE, bool forceGender = false) const;
 
         MangosStringLocale const* GetMangosStringLocale(int32 entry) const
         {
