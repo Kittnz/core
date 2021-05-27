@@ -52,7 +52,7 @@ bool FollowerAI::AssistPlayerInCombat(Unit* pWho)
         return false;
 
     //experimental (unknown) flag not present
-    if (!(m_creature->GetCreatureInfo()->type_flags & CREATURE_TYPEFLAGS_CAN_ASSIST))
+    if (!m_creature->CanAssistPlayers())
         return false;
 
     if (m_creature->hasUnitState(UNIT_STAT_STUNNED | UNIT_STAT_DIED))
@@ -304,7 +304,7 @@ void FollowerAI::MovementInform(uint32 uiMotionType, uint32 uiPointId)
         }
         else
         {
-            // Ustaag <Nostalrius> : vilain fix des mobs qui voulaient pas respawn à leur point de spawn
+            // Ustaag <Nostalrius> : vilain fix des mobs qui voulaient pas respawn ï¿½ leur point de spawn
             SetFollowPaused(false);
             float x = 0.0f;
             float y = 0.0f;
