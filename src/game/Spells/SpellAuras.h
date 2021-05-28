@@ -87,10 +87,10 @@ struct ReapplyAffectedPassiveAurasHelper;
 class SpellAuraHolder
 {
     public:
-        SpellAuraHolder (SpellEntry const* spellproto, Unit *target, WorldObject *caster, Item *castItem);
+        SpellAuraHolder (SpellEntry const* spellproto, Unit* target, Unit* caster, Item* castItem, WorldObject* realCaster);
         Aura* m_auras[MAX_EFFECT_INDEX];
 
-        void AddAura(Aura *aura, SpellEffectIndex index);
+        void AddAura(Aura* aura, SpellEffectIndex index);
         void RemoveAura(SpellEffectIndex index);
         void ApplyAuraModifiers(bool apply, bool real = false);
         void _AddSpellAuraHolder();
@@ -115,8 +115,11 @@ class SpellAuraHolder
 
         ObjectGuid const& GetCasterGuid() const { return m_casterGuid; }
         void SetCasterGuid(ObjectGuid guid) { m_casterGuid = guid; }
+        ObjectGuid const& GetRealCasterGuid() const { return m_realCasterGuid; }
+        void SetRealCasterGuid(ObjectGuid guid) { m_realCasterGuid = guid; }
         ObjectGuid const& GetCastItemGuid() const { return m_castItemGuid; }
         Unit* GetCaster() const;
+        WorldObject* GetRealCaster() const;
         Unit* GetTarget() const { return m_target; }
         void SetTarget(Unit* target) { m_target = target; }
 
@@ -129,7 +132,7 @@ class SpellAuraHolder
         void CalculateForDebuffLimit();
         bool IsAffectedByDebuffLimit() const { return m_debuffLimitAffected; }
         void SetAffectedByDebuffLimit(bool isAffectedByDebuffLimit);
-        bool IsMoreImportantDebuffThan(SpellAuraHolder *other) const;
+        bool IsMoreImportantDebuffThan(SpellAuraHolder* other) const;
         bool m_debuffLimitAffected;
         uint32 m_debuffLimitScore; // + haut => + important
         // Refresh de buff
@@ -238,6 +241,7 @@ class SpellAuraHolder
 
         Unit* m_target;
         ObjectGuid m_casterGuid;
+        ObjectGuid m_realCasterGuid;
         ObjectGuid m_castItemGuid;                          // it is NOT safe to keep a pointer to the item because it may get deleted
         time_t m_applyTime;
 
@@ -285,7 +289,7 @@ typedef void(Aura::*pAuraHandler)(bool Apply, bool Real);
 class Aura
 {
     friend struct ReapplyAffectedPassiveAurasHelper;
-    friend Aura* CreateAura(SpellEntry const* spellproto, SpellEffectIndex eff, int32 *currentBasePoints, SpellAuraHolder *holder, Unit *target, Unit *caster, Item* castItem);
+    friend Aura* CreateAura(SpellEntry const* spellproto, SpellEffectIndex eff, int32* currentBasePoints, SpellAuraHolder* holder, Unit* target, Unit* caster, Item* castItem);
 
     public:
         //aura handlers
@@ -436,7 +440,9 @@ class Aura
         uint32 GetId() const{ return GetHolder()->GetSpellProto()->Id; }
         ObjectGuid const& GetCastItemGuid() const { return GetHolder()->GetCastItemGuid(); }
         ObjectGuid const& GetCasterGuid() const { return GetHolder()->GetCasterGuid(); }
+        ObjectGuid const& GetRealCasterGuid() const { return GetHolder()->GetRealCasterGuid(); }
         Unit* GetCaster() const { return GetHolder()->GetCaster(); }
+        WorldObject* GetRealCaster() const { return GetHolder()->GetRealCaster(); }
         Unit* GetTarget() const { return GetHolder()->GetTarget(); }
 
         SpellEffectIndex GetEffIndex() const{ return m_effIndex; }
@@ -454,7 +460,7 @@ class Aura
         }
         uint32 GetStackAmount() const { return GetHolder()->GetStackAmount(); }
 
-        void CalculatePeriodic(Player * modOwner, bool create);
+        void CalculatePeriodic(Player* modOwner, bool create);
         void SetLoadedState(int32 damage, uint32 periodicTime)
         {
             m_modifier.m_amount = damage;
@@ -518,8 +524,8 @@ class Aura
         void TriggerSpell();
 
         // more limited that used in future versions (spell_affect table based only), so need be careful with backporting uses
-        bool isAffectedOnSpell(SpellEntry const *spell) const;
-        bool CanProcFrom(SpellEntry const *spell, uint32 EventProcEx, uint32 procEx, bool active, bool useClassMask) const;
+        bool isAffectedOnSpell(SpellEntry const* spell) const;
+        bool CanProcFrom(SpellEntry const* spell, uint32 EventProcEx, uint32 procEx, bool active, bool useClassMask) const;
 
         //SpellAuraHolder const* GetHolder() const { return m_spellHolder; }
         SpellAuraHolder* GetHolder() { return m_spellAuraHolder; }
@@ -528,7 +534,7 @@ class Aura
         bool IsLastAuraOnHolder();
         SpellModifier* GetSpellModifier() const { return m_spellmod; }
     protected:
-        Aura(SpellEntry const* spellproto, SpellEffectIndex eff, int32 *currentBasePoints, SpellAuraHolder *holder, Unit *target, Unit *caster = NULL, Item* castItem = NULL);
+        Aura(SpellEntry const* spellproto, SpellEffectIndex eff, int32* currentBasePoints, SpellAuraHolder* holder, Unit* target, Unit* caster = nullptr, Item* castItem = nullptr);
 
         // must be called only from Aura::UpdateAura
         virtual void Update(uint32 diff);
@@ -568,7 +574,7 @@ class Aura
 class AreaAura : public Aura
 {
     public:
-        AreaAura(SpellEntry const* spellproto, SpellEffectIndex eff, int32 *currentBasePoints, SpellAuraHolder *holder, Unit *target, Unit *caster = NULL, Item* castItem = NULL);
+        AreaAura(SpellEntry const* spellproto, SpellEffectIndex eff, int32* currentBasePoints, SpellAuraHolder* holder, Unit* target, Unit* caster = nullptr, Item* castItem = nullptr);
         ~AreaAura();
     protected:
         void Update(uint32 diff);
@@ -581,7 +587,7 @@ class AreaAura : public Aura
 class PersistentAreaAura : public Aura
 {
     public:
-        PersistentAreaAura(SpellEntry const* spellproto, SpellEffectIndex eff, int32 *currentBasePoints, SpellAuraHolder *holder, Unit *target, Unit *caster = NULL, Item* castItem = NULL);
+        PersistentAreaAura(SpellEntry const* spellproto, SpellEffectIndex eff, int32* currentBasePoints, SpellAuraHolder* holder, Unit* target, Unit* caster = nullptr, Item* castItem = nullptr);
         ~PersistentAreaAura();
     protected:
         void Update(uint32 diff);
@@ -589,17 +595,17 @@ class PersistentAreaAura : public Aura
 
 class SingleEnemyTargetAura : public Aura
 {
-    friend Aura* CreateAura(SpellEntry const* spellproto, SpellEffectIndex eff, int32 *currentBasePoints, SpellAuraHolder *holder, Unit *target, Unit *caster, Item* castItem);
+    friend Aura* CreateAura(SpellEntry const* spellproto, SpellEffectIndex eff, int32* currentBasePoints, SpellAuraHolder* holder, Unit* target, Unit* caster, Item* castItem);
 
     public:
         ~SingleEnemyTargetAura();
         Unit* GetTriggerTarget() const;
 
     protected:
-        SingleEnemyTargetAura(SpellEntry const* spellproto, SpellEffectIndex eff, int32 *currentBasePoints, SpellAuraHolder *holder, Unit *target, Unit *caster  = NULL, Item* castItem = NULL);
+        SingleEnemyTargetAura(SpellEntry const* spellproto, SpellEffectIndex eff, int32* currentBasePoints, SpellAuraHolder* holder, Unit* target, Unit* caster = nullptr, Item* castItem = nullptr);
         ObjectGuid m_castersTargetGuid;
 };
 
-Aura* CreateAura(SpellEntry const* spellproto, SpellEffectIndex eff, int32 *currentBasePoints, SpellAuraHolder *holder, Unit *target, Unit *caster = NULL, Item* castItem = NULL);
-SpellAuraHolder* CreateSpellAuraHolder(SpellEntry const* spellproto, Unit *target, WorldObject *caster, Item *castItem = NULL);
+Aura* CreateAura(SpellEntry const* spellproto, SpellEffectIndex eff, int32* currentBasePoints, SpellAuraHolder* holder, Unit* target, Unit* caster = nullptr, Item* castItem = nullptr);
+SpellAuraHolder* CreateSpellAuraHolder(SpellEntry const* spellproto, Unit* target, Unit* caster, WorldObject* realCaster, Item* castItem = nullptr);
 #endif
