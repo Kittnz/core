@@ -1699,7 +1699,7 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                     {
                         m_caster->SummonGameObject(1000002, m_caster->GetPositionX(), m_caster->GetPositionY(), m_caster->ToPlayer()->GetPositionZ() + 1.3f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 3600, true);
                         m_caster->ToPlayer()->TeleportTo(m_caster->GetMapId(), m_caster->GetPositionX(), m_caster->GetPositionY(), m_caster->GetPositionZ() + 3.5f, 3.0f);
-                        m_caster->AddAura((m_caster->HasAura(8083)) ? 0 : 8083);
+                        unitTarget->AddAura((unitTarget->HasAura(8083)) ? 0 : 8083);
                         ChatHandler(m_caster->ToPlayer()).SendSysMessage("You've gained +50 skill bonus to Fishing!");
 
                         uint32 currvalue = 0;
