@@ -518,14 +518,22 @@ void WorldSession::HandleSetSelectionOpcode(WorldPacket & recv_data)
 
 void WorldSession::HandleStandStateChangeOpcode(WorldPacket & recv_data)
 {
-    // DEBUG_LOG( "WORLD: Received CMSG_STANDSTATECHANGE"  ); -- too many spam in log at lags/debug stop
     uint32 animstate;
     recv_data >> animstate;
 
-    // Delay stand state changes to recreate the retail trick which let
-    // things like Reckoning proc while sitting if you spam the X button.
-    if (animstate < MAX_UNIT_STAND_STATE)
-        _player->ScheduleStandStateChange(animstate);
+    switch (animstate)
+    {
+        case UNIT_STAND_STATE_STAND:
+        case UNIT_STAND_STATE_SIT:
+        case UNIT_STAND_STATE_SLEEP:
+        case UNIT_STAND_STATE_KNEEL:
+            break;
+        default:
+            return;
+    }
+
+    // Delay stand state changes to recreate the retail trick which let things like Reckoning proc while sitting if you spam the X button.
+    _player->ScheduleStandStateChange(animstate);
 }
 
 void WorldSession::HandleFriendListOpcode(WorldPacket & recv_data)
