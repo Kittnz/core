@@ -114,7 +114,7 @@ namespace MaNGOS
                 if (pCreature->GetCreatureInfo()->flags_extra & CREATURE_FLAG_EXTRA_NO_XP_AT_KILL)
                     return 0;
 
-                if (pCreature->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NO_KILL_REWARD))
+                if (pCreature->hasUnitState(UNIT_STAT_NO_KILL_REWARD))
                     return 0;
 
                 float xp_gain = BaseGain(pl->getLevel(), u->getLevel());
@@ -159,20 +159,19 @@ namespace MaNGOS
                 ((Creature*)u)->GetCreatureInfo()->type != CREATURE_TYPE_TOTEM &&
                 ((Creature*)u)->GetCreatureInfo()->health_min > 50;
 
-            if(u->GetTypeId()==TYPEID_UNIT && (
-                (u->GetUInt32Value(UNIT_CREATED_BY_SPELL) && !isPet) ||
+            if (u->GetTypeId()==TYPEID_UNIT && ((u->GetUInt32Value(UNIT_CREATED_BY_SPELL) && !isPet) ||
                 (((Creature*)u)->GetCreatureInfo()->flags_extra & CREATURE_FLAG_EXTRA_NO_XP_AT_KILL) ||
-                u->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NO_KILL_REWARD)))
+                u->hasUnitState(UNIT_STAT_NO_KILL_REWARD)))
                 return 0;
 
             uint32 xp_gain= BaseGain(pet->getLevel(), u->getLevel());
-            if( xp_gain == 0 )
+            if (xp_gain == 0)
                 return 0;
 
-            if(u->GetTypeId()==TYPEID_UNIT && ((Creature*)u)->IsElite())
+            if (u->GetTypeId()==TYPEID_UNIT && ((Creature*)u)->IsElite())
                 xp_gain *= 2;
 
-            if(isPet)
+            if (isPet)
                 xp_gain *= 0.75f;
 
 			if (Unit* Owner = pet->GetOwner())

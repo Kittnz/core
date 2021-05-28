@@ -1737,6 +1737,7 @@ void ObjectMgr::LoadCreatures(bool reload)
         for (int i = 0; i < MAX_SPAWN_ID; i++)
         {
             if (uint32 entry = fields[1 + i].GetUInt32())
+            {
                 CreatureInfo const* cInfo = GetCreatureTemplate(entry);
                 if (!cInfo)
                 {

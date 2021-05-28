@@ -5644,6 +5644,9 @@ SpellCastResult Spell::CheckCast(bool strict)
                 return goAIresult;
         }
 
+        if (goTarget->GetGOInfo()->CannotBeUsedUnderImmunity() && m_casterUnit && m_casterUnit->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE))
+            return SPELL_FAILED_DAMAGE_IMMUNE;
+
         // Require LOS to loot chests
         // For example, check LoS when opening a gobj (spell 6477).
         // Prevents abuse with object id 165554 for example.
@@ -6263,7 +6266,7 @@ SpellCastResult Spell::CheckCast(bool strict)
                         return SPELL_FAILED_TRY_AGAIN;
 
                     // Prevent looting chests while immune
-                    if (go->GetGoType() == GAMEOBJECT_TYPE_CHEST && m_caster->ToPlayer()->HasAuraType(SPELL_AURA_SCHOOL_IMMUNITY))
+                    if (go->GetGOInfo()->CannotBeUsedUnderImmunity() && m_caster->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE))
                         return SPELL_FAILED_DAMAGE_IMMUNE;
                 }
                 else if (Item* item = m_targets.getItemTarget())
