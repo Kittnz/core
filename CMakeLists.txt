@@ -34,6 +34,7 @@ option(USE_ANTICHEAT "Use anticheat" 0)
 option(SCRIPTS "Compile scripts" 1)
 option(USE_EXTRACTORS "Compile extractors" 0)
 option(USE_LIBCURL "Compile with libcurl for email support" 0)
+option(DEBUG_SYMBOLS "Compile with debug symbols" 1)
 
 find_package(PCHSupport)
 

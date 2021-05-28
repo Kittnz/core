@@ -2741,7 +2741,7 @@ bool Player::IsAllowedWhisperFrom(ObjectGuid guid) const
     return false;
 }
 
-bool Player::IsGroupVisibleFor(Player* p) const
+bool Player::IsGroupVisibleFor(Player const* p) const
 {
     switch (sWorld.getConfig(CONFIG_UINT32_GROUP_VISIBILITY))
     {
@@ -15395,7 +15395,7 @@ void Player::LoadAura(AuraSaveStruct& s, uint32 timediff)
     else if (!s.stackcount)
         s.stackcount = 1;
 
-    SpellAuraHolder *holder = CreateSpellAuraHolder(spellproto, this, NULL);
+    SpellAuraHolder *holder = CreateSpellAuraHolder(spellproto, this, nullptr, nullptr);
     holder->SetLoadedState(s.caster_guid, ObjectGuid(HIGHGUID_ITEM, s.item_lowguid), s.stackcount, s.remaincharges, s.maxduration, s.remaintime);
 
     for (int32 i = 0; i < MAX_EFFECT_INDEX; ++i)
@@ -18438,7 +18438,7 @@ bool Player::CanJoinToBattleground() const
     return true;
 }
 
-bool Player::IsVisibleInGridForPlayer(Player* pl) const
+bool Player::IsVisibleInGridForPlayer(Player const* pl) const
 {
     // gamemaster in GM mode see all, including ghosts
     if (pl->IsGameMaster() && GetSession()->GetSecurity() <= pl->GetSession()->GetSecurity())
@@ -21235,6 +21235,7 @@ bool Player::IsImmuneToSpellEffect(SpellEntry const *spellInfo, SpellEffectIndex
         default:
             break;
     }
+
     switch (spellInfo->EffectApplyAuraName[index])
     {
         case SPELL_AURA_MOD_TAUNT:
@@ -21242,32 +21243,9 @@ bool Player::IsImmuneToSpellEffect(SpellEntry const *spellInfo, SpellEffectIndex
         default:
             break;
     }
+
     return Unit::IsImmuneToSpellEffect(spellInfo, index, castOnSelf);
 }
-
-/* Appeler cette fonction pour memoriser le dernier sort lance par une unite.
-byclient = true si le sort est lance depuis le client du jeu. */
-void Player::SetLastCastedSpell(uint32 spell_id, bool byclient)
-{
-    if (spell_id != 23303 && spell_id != 836)
-    {
-        m_lastCastedSpellID = spell_id;
-        if (byclient)
-            m_lastFromClientCastedSpellID = spell_id;
-    }
-}
-
-/* Appeler cette fonction pour obtenir le dernier sort lance par une unite.
-byclientonly = true si on veut le dernier sort lance depuis le client,
-sinon inclut tous les sorts. */
-uint32 Player::GetLastCastedSpell(bool byclientonly)
-{
-    if (byclientonly)
-        return m_lastFromClientCastedSpellID;
-    else
-        return m_lastCastedSpellID;
-};
-
 
 Item* Player::AddItem(uint32 itemId, uint32 count)
 {
@@ -21289,6 +21267,7 @@ Item* Player::AddItem(uint32 itemId, uint32 count)
         SendNewItem(item, count, true, false);
     else
         return NULL;
+
     return item;
 }
 
