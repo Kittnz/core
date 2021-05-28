@@ -2140,8 +2140,11 @@ class Player final: public Unit
         void Mount(uint32 mount, uint32 spellId = 0) override;
         void Unmount(bool from_aura = false) override;
 
+        bool CanInteractWithQuestGiver(Object* questGiver) const;
         Creature* GetNPCIfCanInteractWith(ObjectGuid guid, uint32 npcflagmask) const;
+        bool CanInteractWithNPC(Creature* pCreature, uint32 npcflagmask) const;
         GameObject* GetGameObjectIfCanInteractWith(ObjectGuid guid, uint32 gameobject_type = MAX_GAMEOBJECT_TYPE) const;
+        bool CanInteractWithGameObject(GameObject* pGo, uint32 gameobject_type = MAX_GAMEOBJECT_TYPE) const;
 
         ObjectGuid const& GetSelectedGobj() const { return m_selectedGobj; }
         void SetSelectedGobj(ObjectGuid guid) { m_selectedGobj = guid; }
