@@ -21,9 +21,3 @@ replace into npc_vendor (entry, item) values (50070, 50254);
 -- Fixes for the Night's Exploration:
 
 update quest_template set rewitemid1 = 6183, rewitemcount1 = 1, rewitemid2 = 0, rewitemcount2 = 0, rewspellcast = 46052, rewspell = 46053 where entry = 50230;
-
--- Fixes for spells missing movement interruption & tradespell flags:
-
-replace into spell_mod (id, interruptflags) values (46060, 7);
-replace into spell_mod (id, interruptflags) values (46058, 7);
-
