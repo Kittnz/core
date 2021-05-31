@@ -7,7 +7,7 @@ replace into creature_loot_template values (11697, 70027, 40, 7, 1, 1, 0, 0, 10)
 
 -- Make quest 'Deviate Hide' available for both factions:
 
-update quest_template set requiredraces = 0 where entry = 1486; -- Deviate Hides
+update quest_template set requiredraces = 0 where entry = 1486; -- Deviate Hidides
 
 -- Fix mixed 'White Tiger's Cub' and 'Speedy' names:
 
@@ -40,7 +40,7 @@ replace into creature_loot_template (entry, item, chanceorquestchance, groupid, 
 (10393, 70060, 6, 5, 1, 1), -- Skul
 (10811, 70062, 6, 5, 1, 1), -- Archivist Galford
 (11032, 70063, 6, 5, 1, 1), -- Malor the Zealous
-(10516, 70064, 6, 5, 1, 1), -- The Unforgiven
+(10516, 70064, 6, 5, 1, 1); -- The Unforgiven
 
 replace into `item_template` values 
 
