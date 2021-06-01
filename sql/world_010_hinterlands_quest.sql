@@ -24,6 +24,11 @@ INSERT INTO `creature_template` VALUES (81265, 0, 18045, 0, 0, 0, 'Antnormi', NU
 -- Gameobject Templates
 DELETE FROM `gameobject_template` WHERE `entry` = 3000510;
 INSERT INTO `gameobject_template` VALUES (3000510, 0, 1, 5746, 'Corrupted Crystal', 35, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_corrupted_crystal');
+DELETE FROM `gameobject_template` WHERE `entry`=3000511 AND `patch`=0;
+INSERT INTO `gameobject_template` VALUES (3000511, 0, 1, 5692, 'Small Force Field', 35, 38, 0.005, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_corrupted_crystal');
+DELETE FROM `creature_template` WHERE `entry`=91001 AND `patch`=0;
+INSERT INTO `creature_template` VALUES (91001, 0, 18495, 0, 0, 0, 'Large Time Rift', '', 0, 37, 37, 2192, 2192, 0, 0, 1340, 35, 16, 1, 1.14286, 4, 20, 5, 0, 0, 1, 55, 70, 0, 144, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 53.3984, 73.4228, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, '');
+
 
 -- Gameobject Location
 DELETE FROM `gameobject` WHERE `guid` = 4009668;
