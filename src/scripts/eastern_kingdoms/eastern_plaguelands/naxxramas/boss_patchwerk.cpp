@@ -133,6 +133,8 @@ struct boss_patchwerkAI : public ScriptedAI
         uint32 uiHighestHP = 0;
         uint8 threatListPosition = 0;
 
+		std::list<Unit*> lExtraThreatTargets;
+
         ThreatList const& tList = m_creature->getThreatManager().getThreatList();
         for (const auto iter : tList)
         {
@@ -152,6 +154,8 @@ struct boss_patchwerkAI : public ScriptedAI
 
             if (!m_creature->CanReachWithMeleeSpellAttack(pTempTarget))
                 continue;
+
+			lExtraThreatTargets.push_back(pTempTarget);
 
             // Skipping maintank, only using him if there is no other viable target
             // todo: not sure if this is correct. Should we target the MT over the offtanks, if the offtanks have less hp?
@@ -177,7 +181,9 @@ struct boss_patchwerkAI : public ScriptedAI
             m_creature->SetTargetGuid(pTarget->GetObjectGuid());
             previousTarget = pTarget->GetObjectGuid();
         }
-        DoCastSpellIfCan(pTarget, SPELL_HATEFULSTRIKE, CF_TRIGGERED);
+		if (DoCastSpellIfCan(pTarget, SPELL_HATEFULSTRIKE, CF_TRIGGERED) == CAST_OK)
+			for (auto &soakerOrMT : lExtraThreatTargets)
+				m_creature->getThreatManager().addThreatDirectly(soakerOrMT, 500);
     }
 
     bool CustomGetTarget()
