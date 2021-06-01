@@ -1674,6 +1674,8 @@ class Player final: public Unit
         uint32 m_zoneUpdateTimer;
         uint32 m_areaUpdateId;
 
+        bool m_BGQueueAllowed;
+
         // Current teleport data
         WorldLocation m_teleport_dest;
         uint32 m_teleport_options;
@@ -1782,6 +1784,9 @@ class Player final: public Unit
         // _NOT_ thread-safe. Must be executed by the map manager after map updates, since we
         // remove objects from the map
         bool ExecuteTeleportFar(ScheduledTeleportData* data);
+
+        void SetBGQueueAllowed(bool allow) { m_BGQueueAllowed = allow; }
+        bool IsAllowedToQueueBGDueToTabard() { return m_BGQueueAllowed; };
 
         bool TeleportToBGEntryPoint();
         void RestorePendingTeleport();
