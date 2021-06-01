@@ -1,4 +1,3 @@
-
 #include "scriptPCH.h"
 #include "Utilities/EventProcessor.h"
 
@@ -399,27 +398,51 @@ bool ItemUseSpell_item_survival_outline(Player* pPlayer, Item* pItem, const Spel
 
 bool ItemUseSpell_bg_tabard(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
+    if (!pItem)
+        return false;
+
     // Some spell checks might be obsolete, check it later.
     if (pPlayer->isInCombat() || pPlayer->InBattleGround() || pPlayer->IsBeingTeleported() || pPlayer->HasSpellCooldown(20939) || pPlayer->HasSpellCooldown(26013) || (pPlayer->getDeathState() == CORPSE))
-        ChatHandler(pPlayer).PSendSysMessage("You are not meeting the conditions for joining!");
+        ChatHandler(pPlayer).PSendSysMessage("You are not meeting the conditions to queue for BGs!");
     else
     {
         pPlayer->SetBattleGroundEntryPoint();
-        switch (pItem->GetEntry()) {
-            case 19505:
-            case 19506:
+
+        static constexpr uint32 cui_BattleTabardDefilers = 20131;
+        static constexpr uint32 cui_BattleTabardArathor = 20132;
+        static constexpr uint32 cui_BattleTabardFrostworlf = 19031;
+        static constexpr uint32 cui_BattleTabardSilverwing = 19506;
+        static constexpr uint32 cui_BattleTabardStormpike = 19032;
+        static constexpr uint32 cui_BattleTabardWarsong = 19505;
+
+        switch (pItem->GetEntry())
+        {
+            case cui_BattleTabardWarsong:
+            case cui_BattleTabardSilverwing:
+            {
                 pPlayer->GetSession()->SendBattlegGroundList(pPlayer->GetObjectGuid(), BATTLEGROUND_WS);
+                pPlayer->SetBGQueueAllowed(true);
                 break;
-            case 20131:
-            case 20132:
+            }
+            case cui_BattleTabardDefilers:
+            case cui_BattleTabardArathor:
+            {
                 pPlayer->GetSession()->SendBattlegGroundList(pPlayer->GetObjectGuid(), BATTLEGROUND_AB);
+                pPlayer->SetBGQueueAllowed(true);
                 break;
-            case 19031:
-            case 19032:
+            }
+            case cui_BattleTabardFrostworlf:
+            case cui_BattleTabardStormpike:
+            {
                 pPlayer->GetSession()->SendBattlegGroundList(pPlayer->GetObjectGuid(), BATTLEGROUND_AV);
+                pPlayer->SetBGQueueAllowed(true);
                 break;
+            }
+            default:
+                sLog.outError("Player::IsAllowedToQueueBGDueToTabard(): Player %s [GUID: %u] is trying to queue BG with an unintentional item.", pPlayer->GetName(), pPlayer->GetGUIDLow());
         }
     }
+
     return false;
 }
 

@@ -92,6 +92,7 @@ void WorldSession::HandleBattlefieldJoinOpcode(WorldPacket & recv_data)
     HandleBattlemasterJoinOpcode(data);
     return;
 }
+
 void WorldSession::HandleBattlemasterJoinOpcode(WorldPacket & recv_data)
 {
     ObjectGuid guid;
@@ -135,7 +136,7 @@ void WorldSession::HandleBattlemasterJoinOpcode(WorldPacket & recv_data)
     }
     else
     {
-        if (!_player->GetNPCIfCanInteractWith(guid, UNIT_NPC_FLAG_BATTLEMASTER))
+        if (!_player->GetNPCIfCanInteractWith(guid, UNIT_NPC_FLAG_BATTLEMASTER) && !_player->IsAllowedToQueueBGDueToTabard())
         {
             ProcessAnticheatAction("PassiveAnticheat", "Attempt to queue for BG through invalid creature", CHEAT_ACTION_LOG | CHEAT_ACTION_REPORT_GMS);
             return;
