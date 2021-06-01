@@ -50,6 +50,9 @@
 // A small storage for code. We write our code in that 10h pocket
 #define OFFSET_SHELLCODE_LOAD_DLL 0x00004122
 
+// Original fov value
+#define OFFSET_ORIGINAL_FOV_VALUE 0x004089B4
+
 const unsigned char LoadDLLShellcode[] =
 {
 	0x68, 0x60, 0xFF, 0x7F, 0x00,		// push 0x007FFF60 (offset to string "DiscordOverlay.dll")
@@ -149,6 +152,10 @@ void PatchUIUnlock(FILE* hWoW)
 	char FifthPatch[] = { 0x90, 0x90, 0x90, 0x90, 0x90, 0x90 };
 	fseek(hWoW, OFFSET_PVP_RANK_CHECK, SEEK_SET);
 	fwrite(FifthPatch, sizeof(FifthPatch), 1, hWoW);
+
+	char SixPatch[] = { 0x66, 0x66, 0xF6, 0x3F };
+	fseek(hWoW, OFFSET_ORIGINAL_FOV_VALUE, SEEK_SET);
+	fwrite(SixPatch, sizeof(SixPatch), 1, hWoW);
 }
 
 constexpr int max_path = 260;
