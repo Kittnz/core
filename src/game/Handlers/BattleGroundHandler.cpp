@@ -33,7 +33,6 @@
 #include "BattleGround.h"
 #include "Language.h"
 #include "ScriptMgr.h"
-#include "Item.h"
 #include "World.h"
 #include "Anticheat.h"
 
