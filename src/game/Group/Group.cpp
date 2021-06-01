@@ -2134,6 +2134,7 @@ static void RewardGroupAtKill_helper(Player* pGroupGuy, Unit* pVictim, uint32 co
     if (pGroupGuy->isAlive())
     {
         pGroupGuy->RewardHonor(pVictim, count);
+        pGroupGuy->RewardExpansionPvPQuest(pVictim);
 
         // World of Warcraft Client Patch 1.10.0 (2006-03-28)
         // - Frostwolf and Stormpike faction will now be gained by killing

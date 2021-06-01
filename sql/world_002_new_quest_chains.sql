@@ -189,5 +189,13 @@ replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minleve
 replace into creature_questrelation (id, quest) values (264, 70058);
 replace into creature_involvedrelation (id, quest) values (264, 70058);
 
+-- WANTED: Redridgeboss!
+
+replace into creature_template (entry, display_id1, name) values (70030, 1, 'Redridgeboss');
+
+replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewmoneymaxlevel, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,type, objectivetext1) values (0,70059,44,60,17,0,0,'WANTED: Redridgeboss!','Recently a vile criminal named Redridgeboss has been sighted in the premises of Lakeshire, murdering local townsfolk, hunting down clueless adventurers that fall into his devious traps and has so far evaded capture.\n\nHis reign of terror on the town of Lakeshire must be stopped!\n\nOn behalf of Military forces and royalty combined we issue an order for this person elimination, a reward much higher than any other ordinary criminal.','Catch and kill Redridgeboss.','I hope you brought good news.','You actually caught him? We still don\'t understand how he evaded capture for long, no matter, a just reward must be given for this heroic act!',0,0,0,0,0,0,0,0,70030,1,0,0,0,0,0,0,0,0,54000,2800,72,250,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,41, 'Redridgeboss is dead');
+
+replace into creature_questrelation (id, quest) values (0, 70059);
+replace into creature_involvedrelation (id, quest) values (12480, 70059);
 
 
