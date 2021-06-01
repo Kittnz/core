@@ -26,21 +26,21 @@ EndScriptData */
 
 enum
 {
-    SAY_AGGRO1            = -1533017,
-    SAY_AGGRO2            = -1533018,
-    SAY_SLAY              = -1533019,
-    SAY_DEATH             = -1533020,
+    SAY_AGGRO1          = -1533017,
+    SAY_AGGRO2          = -1533018,
+    SAY_SLAY            = -1533019,
+    SAY_DEATH           = -1533020,
 
-    EMOTE_BERSERK         = -1533021,
-    EMOTE_ENRAGE          = -1533022,
+    EMOTE_BERSERK       = -1533021,
+    EMOTE_ENRAGE        = -1533022,
 
-    SPELL_HATEFULSTRIKE   = 28308,
-    SPELL_ENRAGE          = 28131, // 5% enrage soft enrage
-    SPELL_BERSERK         = 27680, // 7min hard enrage
-    SPELL_SLIMEBOLT       = 32309  // Added in patch 1.12
+    SPELL_HATEFULSTRIKE = 28308,
+    SPELL_ENRAGE        = 28131, // 5% enrage soft enrage
+    SPELL_BERSERK       = 27680, // 7min hard enrage
+    SPELL_SLIMEBOLT     = 32309  // Added in patch 1.12
 };
 
-constexpr float MELEE_DISTANCE = 5.0; 
+constexpr float MELEE_DISTANCE = 5.0f; 
 
 enum ePatchwerkEvents
 {
@@ -49,19 +49,19 @@ enum ePatchwerkEvents
     EVENT_SLIMEBOLT
 };
 
-static constexpr uint32 BERSERK_TIMER           = 7 * 60 * 1000; // 7 minutes enrage
-static constexpr uint32 HATEFUL_CD              = 1200;
+static constexpr uint32 BERSERK_TIMER = (7 * 60 * 1000); // 7 minutes enrage
+static constexpr uint32 HATEFUL_CD = 1200;
 
 // 30 sec after berserk he starts throwing slime at ppl
 // this was added in 1.12.1 to cope with guilds kiting him
-static constexpr uint32 SLIMEBOLT_INITIAL       = BERSERK_TIMER + 30000;
-static constexpr uint32 SLIMEBOLT_REPEAT_CD     = 5000; 
+static constexpr uint32 SLIMEBOLT_INITIAL = BERSERK_TIMER + (30 * 1000);
+static constexpr uint32 SLIMEBOLT_REPEAT_CD = 5000; 
 
 struct boss_patchwerkAI : public ScriptedAI
 {
-    boss_patchwerkAI(Creature* pCreature) : ScriptedAI(pCreature)
+    explicit boss_patchwerkAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
-        m_pInstance = (instance_naxxramas*)pCreature->GetInstanceData();
+        m_pInstance = static_cast<instance_naxxramas*>(pCreature->GetInstanceData());
         Reset();
     }
 
@@ -69,8 +69,8 @@ struct boss_patchwerkAI : public ScriptedAI
 
     EventMap m_events;
 
-    bool   m_bEnraged;
-    bool   m_bBerserk;
+    bool m_bEnraged;
+    bool m_bBerserk;
     ObjectGuid previousTarget;
 
     void Reset()
@@ -127,18 +127,19 @@ struct boss_patchwerkAI : public ScriptedAI
         // Shouldnt really be possible, but hey, weirder things have happened
         if (!mainTank)
             return;
+
         const ObjectGuid& mainTankGuid = mainTank->GetObjectGuid();
 
         Unit* pTarget = nullptr;
         uint32 uiHighestHP = 0;
         uint8 threatListPosition = 0;
 
-		std::list<Unit*> lExtraThreatTargets;
+        std::list<Unit*> lExtraThreatTargets;
 
         ThreatList const& tList = m_creature->getThreatManager().getThreatList();
         for (const auto iter : tList)
         {
-            // Only top 4 players on threat in melee range are targetted.
+            // Only top 4 players on threat in melee range are targeted.
             if (threatListPosition > 3)
                 break;
 
@@ -175,12 +176,14 @@ struct boss_patchwerkAI : public ScriptedAI
         // If we found no viable target, we choose the maintank
         if (!pTarget)
             pTarget = mainTank;
+
         if (pTarget->GetObjectGuid() != previousTarget)
         {
             m_creature->SetInFront(pTarget);
             m_creature->SetTargetGuid(pTarget->GetObjectGuid());
             previousTarget = pTarget->GetObjectGuid();
         }
+
 		if (DoCastSpellIfCan(pTarget, SPELL_HATEFULSTRIKE, CF_TRIGGERED) == CAST_OK)
 			for (auto &soakerOrMT : lExtraThreatTargets)
 				m_creature->getThreatManager().addThreatDirectly(soakerOrMT, 500);
@@ -191,10 +194,9 @@ struct boss_patchwerkAI : public ScriptedAI
         if (!m_creature->isAlive())
             return false;
 
-        Unit* target = nullptr;
-
         // No taunt aura or taunt aura caster is dead, standard target selection
-        if (!target && !m_creature->getThreatManager().isThreatListEmpty())
+        Unit* target = nullptr;
+        if (!m_creature->getThreatManager().isThreatListEmpty())
             target = m_creature->getThreatManager().getHostileTarget();
 
         if (target)
@@ -204,7 +206,7 @@ struct boss_patchwerkAI : public ScriptedAI
                 && (!m_creature->HasAuraType(SPELL_AURA_MOD_FEAR) || m_creature->HasAuraType(SPELL_AURA_PREVENTS_FLEEING)) && !m_creature->HasAuraType(SPELL_AURA_MOD_CONFUSE))
             {
                 
-                if (!m_creature->isAttackReady(BASE_ATTACK) && m_creature->IsWithinMeleeRange(target)) // he does not have offhand attack
+                if (!m_creature->isAttackReady(BASE_ATTACK) && m_creature->IsWithinMeleeRange(target)) // He does not have offhand attack
                     return true;
 
                 if (target->GetObjectGuid() != previousTarget)
@@ -213,17 +215,19 @@ struct boss_patchwerkAI : public ScriptedAI
                     m_creature->SetTargetGuid(target->GetObjectGuid());
                     previousTarget = target->GetObjectGuid();
                 }
+
                 AttackStart(target);
             }
+
             return true;
         }
 
-        // no target but something prevent go to evade mode // Nostalrius - fix evade quand CM.
+        // No target but something prevent go to evade mode // Nostalrius - fix evade quand CM.
         if (!m_creature->isInCombat() || m_creature->HasAuraType(SPELL_AURA_MOD_TAUNT) || m_creature->GetCharmerGuid())
             return false;
 
-        // last case when creature don't must go to evade mode:
-        // it in combat but attacker not make any damage and not enter to aggro radius to have record in threat list
+        // Last case when creature don't must go to evade mode:
+        // It in combat but attacker not make any damage and not enter to aggro radius to have record in threat list
         // for example at owner command to pet attack some far away creature
         // Note: creature not have targeted movement generator but have attacker in this case
         if (m_creature->GetMotionMaster()->GetCurrentMovementGeneratorType() != CHASE_MOTION_TYPE)
@@ -235,7 +239,7 @@ struct boss_patchwerkAI : public ScriptedAI
             }
         }
 
-        // enter in evade mode in other case
+        // Enter in evade mode in other case
         m_creature->OnLeaveCombat();
         return false;
     }
@@ -261,25 +265,31 @@ struct boss_patchwerkAI : public ScriptedAI
         {
             switch (l_EventId)
             {
-            case EVENT_BERSERK:
-                if (DoCastSpellIfCan(m_creature, SPELL_BERSERK) == CAST_OK)
+                case EVENT_BERSERK:
                 {
-                    DoScriptText(EMOTE_BERSERK, m_creature);
-                    m_bBerserk = true;
+                    if (DoCastSpellIfCan(m_creature, SPELL_BERSERK) == CAST_OK)
+                    {
+                        DoScriptText(EMOTE_BERSERK, m_creature);
+                        m_bBerserk = true;
+                    }
+                    else
+                        m_events.Repeat(100);
+                    break;
                 }
-                else
-                    m_events.Repeat(100);
-                break;
-            case EVENT_HATEFULSTRIKE:
-                DoHatefulStrike();
-                m_events.Repeat(HATEFUL_CD);
-                break;
-            case EVENT_SLIMEBOLT:
-                if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_SLIMEBOLT) == CAST_OK)
-                    m_events.Repeat(SLIMEBOLT_REPEAT_CD);
-                else
-                    m_events.Repeat(100);
-                break;
+                case EVENT_HATEFULSTRIKE:
+                {
+                    DoHatefulStrike();
+                    m_events.Repeat(HATEFUL_CD);
+                    break;
+                }
+                case EVENT_SLIMEBOLT:
+                {
+                    if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_SLIMEBOLT) == CAST_OK)
+                        m_events.Repeat(SLIMEBOLT_REPEAT_CD);
+                    else
+                        m_events.Repeat(100);
+                    break;
+                }
             }
         }
 
