@@ -297,7 +297,7 @@ static constexpr float eyeStalkPossitions[max_stalks][4] =
 class instance_naxxramas : public ScriptedInstance
 {
 public:
-    instance_naxxramas(Map* pMap);
+    explicit instance_naxxramas(Map* pMap);
     ~instance_naxxramas() {}
 
     void Initialize();

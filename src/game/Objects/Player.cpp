@@ -485,6 +485,8 @@ Player::Player(WorldSession *session) : Unit(),
     m_zoneUpdateId = 0;
     m_zoneUpdateTimer = 0;
 
+    m_BGQueueAllowed = false;
+
     m_areaUpdateId = 0;
 
     m_nextSave = sWorld.getConfig(CONFIG_UINT32_INTERVAL_SAVE);
