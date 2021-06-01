@@ -327,7 +327,9 @@ enum
 
     SPELL_TELEPORT = 26638,
 
-    GOB_CHROMIE_PORTAL = 81048
+    GOB_CHROMIE_PORTAL = 81048,
+    GOB_DRAGON_PORTAL = 91001,
+    GOB_FORCEFIELD = 3000511
     
 };
 
@@ -339,10 +341,13 @@ struct go_corrupted_crystal : public GameObjectAI
     }
     uint32 m_uiDialogueTimer;
     uint32 m_uiTick = 0;
-    bool state = 1;//0 = usual, can launch. //1 = in use, cannot launch
-    Player* m_player;
-    Creature* drakonidOne;
-    Creature* drakonidTwo;
+    bool state = true;//0 = usual, can launch. //1 = in use, cannot launch
+    ObjectGuid m_player;
+    ObjectGuid drakonidOne;
+    ObjectGuid drakonidTwo;
+    ObjectGuid antnormiPortal;
+    bool doOnce = true;
+    bool endPortal = false;
 
     void UpdateAI(const uint32 uiDiff)
     {
@@ -359,17 +364,20 @@ struct go_corrupted_crystal : public GameObjectAI
                         m_uiTick++;
                     m_uiDialogueTimer = 1000;
                 }
+                else Reset();
                 break;
             case 1:
                 if (Creature* kheyna = me->FindNearestCreature(NPC_KHEYNA, 100, true))
                 {
+                    Player* pPlayer = me->GetMap()->GetPlayer(m_player);
+
                     kheyna->MonsterMove(669.70f, -4094.36f, 100.70f);
-                    //kheyna->MonsterSay(SAY_KHEYNA_1); // %n, you're early! What fortune! I believe I've finally tracked-
-                    kheyna->PMonsterSay("%s, you're early! What fortune! I believe I've finally tracked-", m_player->GetName());
+                    kheyna->PMonsterSay("%s, you're early! What fortune! I believe I've finally tracked-", pPlayer->GetName());
                     me->SummonCreature(GOB_CHROMIE_PORTAL, 667.73f, -4086.49f, 100.71, 0, TEMPSUMMON_TIMED_DESPAWN, 5000);
                     m_uiDialogueTimer = 5000;
                     m_uiTick++;
                 }
+                else Reset();
                 break;
             case 2:
                 if (Creature* chromie = me->SummonCreature(NPC_CHROMIE, 667.73f, -4086.49f, 100.71f, 0, TEMPSUMMON_DEAD_DESPAWN))
@@ -381,19 +389,32 @@ struct go_corrupted_crystal : public GameObjectAI
                     m_uiDialogueTimer = 5000;
                     m_uiTick++;
                 }
+                else Reset();
                 break;
             case 3:
-                drakonidOne = me->SummonCreature(NPC_DRAKONID, 667.67f, -4095.81f, 100.70f, TEMPSUMMON_DEAD_DESPAWN);
-                drakonidTwo = me->SummonCreature(NPC_DRAKONID, 671.32f, -4097.37f, 100.70f, TEMPSUMMON_DEAD_DESPAWN);
-                if (drakonidOne && drakonidTwo)
+            {
+                Creature* drakonidOneptr = me->SummonCreature(NPC_DRAKONID, 666.65f, -4095.23f, 100.71f, TEMPSUMMON_DEAD_DESPAWN);
+                Creature* drakonidTwoptr = me->SummonCreature(NPC_DRAKONID, 671.32f, -4097.37f, 100.70f, TEMPSUMMON_DEAD_DESPAWN);
+                if (drakonidOneptr && drakonidTwoptr)
                 {
-                    drakonidOne->CastSpell(drakonidOne, SPELL_TELEPORT, false);
-                    drakonidTwo->CastSpell(drakonidOne, SPELL_TELEPORT, false);
+                    drakonidOne = drakonidOneptr->GetObjectGuid();
+                    drakonidTwo = drakonidTwoptr->GetObjectGuid();
+
+                    drakonidOneptr->CastSpell(drakonidOneptr, SPELL_TELEPORT, false);
+                    drakonidTwoptr->CastSpell(drakonidTwoptr, SPELL_TELEPORT, false);
+
+                    if (Creature* kheyna = me->FindNearestCreature(NPC_KHEYNA, 100, true))
+                    {
+                        drakonidOneptr->SetFacingToObject(kheyna);
+                        drakonidTwoptr->SetFacingToObject(kheyna);
+                        GameObject* forceField = drakonidOneptr->SummonGameObject(GOB_FORCEFIELD, kheyna->GetPositionX(), kheyna->GetPositionY(), kheyna->GetPositionZ() + .25, 0);
+                    }
                 }
-                m_uiDialogueTimer = 5000;
+                else Reset();
+                m_uiDialogueTimer = 2500;
                 m_uiTick++;
                 break;
-
+            }
             case 4:
                 if (Creature* kheyna = me->FindNearestCreature(NPC_KHEYNA, 100, true))
                 {
@@ -401,25 +422,42 @@ struct go_corrupted_crystal : public GameObjectAI
                     m_uiDialogueTimer = 7500;
                     m_uiTick++;
                 }
+                else Reset();
                 break;
 
             case 5:
-                if (Creature* antnormi = me->SummonCreature(NPC_ANTNORMI, 706.38f, -4089.93f, 100.72f, TEMPSUMMON_DEAD_DESPAWN))
+                if (Creature* antnormi = me->SummonCreature(NPC_ANTNORMI, 704.01f, -4090.40f, 100.71, TEMPSUMMON_DEAD_DESPAWN))
                 {
-                    antnormi->MonsterMove(702.387f, -4089.92f, 101.26f);
-                    antnormi->SetRooted(true);
+                    Creature* antnormiPortalSummon = antnormi->SummonCreature(GOB_DRAGON_PORTAL, 726.33f, -4089.56f, 101, 0, TEMPSUMMON_MANUAL_DESPAWN);
+
+                    antnormiPortal = antnormiPortalSummon->GetGUID();
+
+                    antnormi->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PLAYER);
+                    antnormi->MonsterMove(702.14f, -4090.37f, 100.71f);
                     m_uiDialogueTimer = 5000;
                     m_uiTick++;
                     break;
                 }
+                else Reset();
             case 6:
-                if (drakonidOne && drakonidTwo)
+            {
+                Creature* drakonidOneptr = me->GetMap()->GetCreature(drakonidOne);
+                Creature* drakonidTwoptr = me->GetMap()->GetCreature(drakonidTwo);
+                if (drakonidOneptr && drakonidTwoptr)
                 {
-                    drakonidOne->MonsterMove(700.94f, -4091.69f, 100.71f);
-                    drakonidTwo->MonsterMove(700.94f, -4091.69f, 100.71f);
+                    if (GameObject* forceField = drakonidOneptr->FindNearestGameObject(GOB_FORCEFIELD, 50))
+                        forceField->Despawn();
+
+                    if (Creature* antnormi = drakonidOneptr->FindNearestCreature(NPC_ANTNORMI, 200, true))
+                        antnormi->SetRooted(true);
+
+                    drakonidOneptr->MonsterMove(700.94f, -4091.69f, 100.71f);
+                    drakonidTwoptr->MonsterMove(700.94f, -4091.69f, 100.71f);
                     m_uiDialogueTimer = 1000;
                     m_uiTick++;
                     break;
+                }
+                else Reset();
                 }
             case 7:
                 if (Creature* chromie = me->FindNearestCreature(NPC_CHROMIE, 100, true))
@@ -429,6 +467,7 @@ struct go_corrupted_crystal : public GameObjectAI
                     m_uiTick++;
                     break;
                 }
+                else Reset();
             case 8:
                 if (Creature* antnormi = me->FindNearestCreature(NPC_ANTNORMI, 1000, true))
                 {
@@ -436,19 +475,22 @@ struct go_corrupted_crystal : public GameObjectAI
                         antnormi->CastSpell(target, 27567, true);
 
                     m_uiDialogueTimer = 1000;
-
-                    if (antnormi->FindNearestCreature(NPC_DRAKONID, 30, false))
-                        m_uiTick++;
+                    m_uiTick++;
                     break;
                 }
-
+                else Reset();
             case 9:
                 if (Creature* kheyna = me->FindNearestCreature(NPC_KHEYNA, 100, true))
                 {
                     kheyna->MonsterSay(SAY_KHEYNA_3); // It's her who I've been hunting! Her name is Antnormi. We're not ready yet to face her, but we've got no choice!
+                    
+                    if (Creature* antnormi = kheyna->FindNearestCreature(NPC_ANTNORMI, 500, true))
+                        antnormi->SetFacingToObject(kheyna);
+                    
                     m_uiDialogueTimer = 7500;
                     m_uiTick++;
                 }
+                else Reset();
                 break;
             case 10:
                 if (Creature* chromie = me->FindNearestCreature(NPC_CHROMIE, 100, true))
@@ -458,49 +500,73 @@ struct go_corrupted_crystal : public GameObjectAI
 
                     chromie->MonsterSay(SAY_CHROMIE_3); // Adventurer, I'll weaken it, but you must finish her.
                     chromie->setFaction(11);
-                    chromie->MonsterMoveWithSpeed(691.41f, -4086.98f, 100.71f, 0, 1, MOVE_WALK_MODE);
                     chromie->MonsterMove(691.41f, -4086.98f, 100.71f);
                     m_uiDialogueTimer = 5000;
                     m_uiTick++;
                 }
+                else Reset();
                 break;
             case 11:
                 if (Creature* kheyna = me->FindNearestCreature(NPC_KHEYNA, 100, true))
                 {
                     if (Creature* antnormi = me->FindNearestCreature(NPC_ANTNORMI, 1000, true))
                     {
+                        antnormi->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PLAYER);
                         antnormi->SetRooted(false);
                         kheyna->AddThreat(antnormi, 900);
                         kheyna->MonsterSay(SAY_KHEYNA_4); // I'll help you! Let's KILL!
                         kheyna->setFaction(11);
-                        kheyna->MonsterMove(antnormi->GetPositionX() + 1, antnormi->GetPositionY() + 1, antnormi->GetPositionZ());
+                        kheyna->MonsterMove(690.41f, -4087.98f, 100.71f);
                         kheyna->Attack(antnormi, true);
                     }
 
                     m_uiTick++;
-                    m_uiDialogueTimer = 10000;
+                    m_uiDialogueTimer = 5000;
                 }
+                else Reset();
                 break;
-
             case 12:
                 if (Creature* antnormi = me->FindNearestCreature(NPC_ANTNORMI, 1000, true))
                 {
-                    if (antnormi->GetHealthPercent() <= 90.0f)
+                    if (antnormi->GetHealthPercent() <= 90.0f && !endPortal)
+                        endPortal = true;
+
+                    if (endPortal)
                     {
-                        antnormi->MonsterYell(YELL_ANTNORMI); // Enough of this! I have no time for insects like you. The master's plan is almost complete and my diversion was a success!
-                        m_uiTick++;
-                        m_uiDialogueTimer = 5000;
+                        if (doOnce)
+                        {
+                            antnormi->MonsterYell(YELL_ANTNORMI); // Enough of this! I have no time for insects like you. The master's plan is almost complete and my diversion was a success!
+                            doOnce = false;
+                        }
+                        Creature* antnormiPortalptr = me->GetMap()->GetCreature(antnormiPortal);
+                        antnormi->MonsterMove(antnormiPortalptr->GetPositionX(), antnormiPortalptr->GetPositionY(), antnormiPortalptr->GetPositionZ());
+                        antnormi->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                        antnormi->DeleteThreatList();
+
+                        if (Creature* kheyna = me->FindNearestCreature(NPC_KHEYNA, 1000, true))
+                        {
+                            kheyna->MonsterMoveWithSpeed(690.09f, -4086.31f, 100.71f, 0, 1, MOVE_WALK_MODE);
+
+                            if (Creature* chromie = me->FindNearestCreature(NPC_CHROMIE, 1000, true))
+                            {
+                                chromie->MonsterMoveWithSpeed(690.40f, -4087.36f, 100.71f, 0, 1, MOVE_WALK_MODE);
+
+                                if (antnormiPortalptr->FindNearestCreature(antnormi->GetEntry(), 2, true))
+                                {
+                                    antnormi->ForcedDespawn();
+                                    antnormiPortalptr->DespawnOrUnsummon(2000);
+                                    m_uiTick++;
+                                }
+                            }
+                        }
+                        m_uiDialogueTimer = 3000;
                     }
                 }
+                else Reset();
                 break;
             case 13:
-                if (Creature* antnormi = me->FindNearestCreature(NPC_ANTNORMI, 1000, true))
-                {
-                    antnormi->CastSpell(antnormi, SPELL_TELEPORT, false);
-                    antnormi->ForcedDespawn(1000);
                     m_uiTick++;
                     m_uiDialogueTimer = 1000;
-                }
                 break;
             case 14:
                 if (Creature* chromie = me->FindNearestCreature(NPC_CHROMIE, 1000, true))
@@ -513,14 +579,16 @@ struct go_corrupted_crystal : public GameObjectAI
                         chromie->SummonCreature(GOB_CHROMIE_PORTAL, 681.30, -4090.56, 100.71, 0, TEMPSUMMON_TIMED_DESPAWN, 60000);
                         kheyna->MonsterMove(chromie->GetPositionX() + 1, chromie->GetPositionY() + 1, chromie->GetPositionZ());
 
+                        Player* pPlayer = me->GetMap()->GetPlayer(m_player);
 
-                        if (m_player && m_player->GetQuestStatus(QUEST_AN_INFINITE_HUNT) == QUEST_STATUS_INCOMPLETE)
-                            m_player->CompleteQuest(QUEST_AN_INFINITE_HUNT);
+                        if (pPlayer && pPlayer->GetQuestStatus(QUEST_AN_INFINITE_HUNT) == QUEST_STATUS_INCOMPLETE)
+                            pPlayer->CompleteQuest(QUEST_AN_INFINITE_HUNT);
 
                         m_uiDialogueTimer = 5000;
                         m_uiTick++;
                     }
                 }
+                else Reset();
                 break;
             case 15:
                 if (Creature* chromie = me->FindNearestCreature(NPC_CHROMIE, 1000, true))
@@ -553,23 +621,13 @@ struct go_corrupted_crystal : public GameObjectAI
                             }
                         }
                     }
-                    m_uiDialogueTimer = 1000;
+                    m_uiDialogueTimer = 5000;
                 }
+                else Reset();
                 break;
             case 16:
-            {
-                state = 1;
-                me->SetGoState(GO_STATE_READY);
-                me->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_IN_USE);
-                m_uiTick = 0;
-
-                if (drakonidOne && drakonidTwo)
-                {
-                    drakonidOne->ForcedDespawn();
-                    drakonidTwo->ForcedDespawn();
-                }
-            }
-            break;
+                Reset();
+                break;
             }
         }
         else
@@ -584,13 +642,40 @@ struct go_corrupted_crystal : public GameObjectAI
     {
         me->SetGoState(GO_STATE_ACTIVE);
         me->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_IN_USE);
-        state = 0;
+        state = false;
         m_uiDialogueTimer = 0;
     }
 
     void PassPlayer(Player* pPlayer)
     {
-        m_player = pPlayer;
+        m_player = pPlayer->GetObjectGuid();
+    }
+
+    void Reset()
+    {
+        bool doOnce = true;
+        endPortal = false;
+        state = true;
+        m_uiDialogueTimer = 0;
+        me->SetGoState(GO_STATE_READY);
+        me->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_IN_USE);
+
+        Creature* drakonidOneptr = me->GetMap()->GetCreature(drakonidOne);
+        Creature* drakonidTwoptr = me->GetMap()->GetCreature(drakonidTwo);
+        Creature* antinormiPortalptr = me->GetMap()->GetCreature(antnormiPortal);
+
+        if (drakonidOneptr)
+            drakonidOneptr->ForcedDespawn();
+        if (drakonidTwoptr)
+            drakonidTwoptr->ForcedDespawn();
+        if (antinormiPortalptr)
+            antinormiPortalptr->ForcedDespawn();
+
+        ObjectGuid m_player = NULL;
+        ObjectGuid drakonidOne = NULL;
+        ObjectGuid drakonidTwo = NULL;
+        ObjectGuid antnormiPortal = NULL;
+
     }
 };
 
