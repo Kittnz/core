@@ -186,7 +186,7 @@ WorldSession* World::FindSession(uint32 id) const
     SessionMap::const_iterator itr = m_sessions.find(id);
 
     if (itr != m_sessions.end())
-        return itr->second;                                 // also can return NULL for kicked session
+        return itr->second;                                 // also can return nullptr for kicked session
     else
         return nullptr;
 }
@@ -901,7 +901,7 @@ void World::LoadConfigSettings(bool reload)
     setConfig(CONFIG_BOOL_TERRAIN_PRELOAD_CONTINENTS, "Terrain.Preload.Continents", 1);
     setConfig(CONFIG_BOOL_TERRAIN_PRELOAD_INSTANCES, "Terrain.Preload.Instances", 1);
 
-    setConfig(CONFIG_BOOL_ENABLE_MOVEMENT_INTERP, "Movement.Interpolation", true);
+    setConfig(CONFIG_BOOL_ENABLE_MOVEMENT_INTERP, "Movement.Interpolation", false);
     setConfig(CONFIG_UINT32_MOVEMENT_CHANGE_ACK_TIME, "Movement.PendingAckResponseTime", 2000);
     setConfigMinMax(CONFIG_UINT32_MAX_POINTS_PER_MVT_PACKET, "Movement.MaxPointsPerPacket", 80, 5, 10000);
     setConfigMinMax(CONFIG_UINT32_RELOCATION_VMAP_CHECK_TIMER, "Movement.RelocationVmapsCheckDelay", 0, 0, 2000);

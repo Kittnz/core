@@ -150,6 +150,7 @@ replace into shop_items values
 (222, 11, 81238, 'Turbo-Charged Flying Machine', 350), 
 (223, 11, 81239, 'Happy Whimsyshire Cloud', 200), 
 (224, 11, 81240, 'Sad Whimsyshire Cloud', 200), 
+(225, 11, 23720, 'Swift Riding Turtle', 0), 
 -- Vanity: Companions
 (241, 12, 13584, 'Diablo Stone', 80),
 (242, 12, 13583, 'Panda Collar', 80),

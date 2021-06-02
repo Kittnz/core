@@ -91,7 +91,7 @@ class UpdateData
 class MovementData
 {
     public:
-        MovementData(WorldObject* owner = NULL) : _buffer(100), _owner(owner) {}
+        MovementData(WorldObject* owner = nullptr) : _buffer(100), _owner(owner) {}
         ~MovementData() {}
         void AddPacket(WorldPacket& data);
         void SetUnitSpeed(uint32 opcode, ObjectGuid const& unit, float value);
@@ -99,7 +99,7 @@ class MovementData
         bool BuildPacket(WorldPacket& data);
     protected:
         ByteBuffer _buffer;
-        WorldObject* _owner; // If not null, we dont compress data
+        WorldObject* _owner; // If not nullptr, we dont compress data
 };
 
 #endif

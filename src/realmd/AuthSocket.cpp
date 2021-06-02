@@ -605,7 +605,7 @@ bool AuthSocket::_HandleLogonProof()
     }
 
     ///- Check if the client has one of the expected version numbers
-    bool valid_version = FindBuildInfo(_build) != NULL;
+    bool valid_version = FindBuildInfo(_build) != nullptr;
 
     ///- Session is closed unless overriden
     _status = STATUS_CLOSED;
@@ -623,7 +623,7 @@ bool AuthSocket::_HandleLogonProof()
         snprintf(tmp, 24, "./patches/%d%s.mpq", _build, _localizationName.c_str());
 
         char filename[PATH_MAX];
-        if (ACE_OS::realpath(tmp, filename) != NULL)
+        if (ACE_OS::realpath(tmp, filename) != nullptr)
         {
             patch_ = ACE_OS::open(filename, GENERIC_READ | FILE_FLAG_SEQUENTIAL_SCAN);
         }
@@ -684,7 +684,7 @@ bool AuthSocket::_HandleLogonProof()
         return false;
 
     Sha1Hash sha;
-    sha.UpdateBigNumbers(&A, &B, NULL);
+    sha.UpdateBigNumbers(&A, &B, nullptr);
     sha.Finalize();
     BigNumber u;
     u.SetBinary(sha.GetDigest(), 20);
@@ -721,11 +721,11 @@ bool AuthSocket::_HandleLogonProof()
     uint8 hash[20];
 
     sha.Initialize();
-    sha.UpdateBigNumbers(&N, NULL);
+    sha.UpdateBigNumbers(&N, nullptr);
     sha.Finalize();
     memcpy(hash, sha.GetDigest(), 20);
     sha.Initialize();
-    sha.UpdateBigNumbers(&g, NULL);
+    sha.UpdateBigNumbers(&g, nullptr);
     sha.Finalize();
     for (int i = 0; i < 20; ++i)
     {
@@ -741,9 +741,9 @@ bool AuthSocket::_HandleLogonProof()
     memcpy(t4, sha.GetDigest(), SHA_DIGEST_LENGTH);
 
     sha.Initialize();
-    sha.UpdateBigNumbers(&t3, NULL);
+    sha.UpdateBigNumbers(&t3, nullptr);
     sha.UpdateData(t4, SHA_DIGEST_LENGTH);
-    sha.UpdateBigNumbers(&s, &A, &B, &K, NULL);
+    sha.UpdateBigNumbers(&s, &A, &B, &K, nullptr);
     sha.Finalize();
     BigNumber M;
     M.SetBinary(sha.GetDigest(), 20);
@@ -866,7 +866,7 @@ bool AuthSocket::_HandleLogonProof()
 
         ///- Finish SRP6 and send the final result to the client
         sha.Initialize();
-        sha.UpdateBigNumbers(&A, &M, &K, NULL);
+        sha.UpdateBigNumbers(&A, &M, &K, nullptr);
         sha.Finalize();
 
         SendProof(sha);
@@ -1022,7 +1022,7 @@ bool AuthSocket::_HandleReconnectProof()
     Sha1Hash sha;
     sha.Initialize();
     sha.UpdateData(_login);
-    sha.UpdateBigNumbers(&t1, &_reconnectProof, &K, NULL);
+    sha.UpdateBigNumbers(&t1, &_reconnectProof, &K, nullptr);
     sha.Finalize();
 
     if (!memcmp(sha.GetDigest(), lp.R2, SHA_DIGEST_LENGTH))
@@ -1131,7 +1131,7 @@ void AuthSocket::LoadRealmlist(ByteBuffer &pkt)
 
 				bool ok_build = i->second.realmBuildInfo.build == _build;
 
-				RealmBuildInfo const* buildInfo = ok_build ? FindBuildInfo(_build) : NULL;
+				RealmBuildInfo const* buildInfo = ok_build ? FindBuildInfo(_build) : nullptr;
 				if (!buildInfo)
 					buildInfo = &i->second.realmBuildInfo;
 
@@ -1310,7 +1310,7 @@ uint32 AuthSocket::GenerateTotpPin(const std::string& secret, int interval) {
     }
 
     // not guaranteed by the standard to be the UNIX epoch but it is on all supported platforms
-    auto time = std::time(NULL);
+    auto time = std::time(nullptr);
     uint64 now = static_cast<uint64>(time);
     uint64 step = static_cast<uint64>((floor(now / 30))) + interval;
     EndianConvertReverse(step);

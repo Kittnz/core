@@ -58,7 +58,7 @@ class PlayerAI
 class PlayerControlledAI: public PlayerAI
 {
     public:
-        explicit PlayerControlledAI(Player* pPlayer, Unit* caster = NULL);
+        explicit PlayerControlledAI(Player* pPlayer, Unit* caster = nullptr);
 
         virtual ~PlayerControlledAI();
 

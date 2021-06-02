@@ -49,7 +49,7 @@ void utf8print(void* arg, const char* str)
     if (!Utf8toWStr(temp_buf, wtemp_buf, 6000))
         return;
 
-    // Guarantee null termination
+    // Guarantee nullptr termination
     if (!temp_buf.empty())
     {
         wtemp_buf.push_back('\0');
@@ -84,7 +84,7 @@ bool ChatHandler::HandleAccountDeleteCommand(char* args)
     /// Commands not recommended call from chat, but support anyway
     /// can delete only for account with less security
     /// This is also reject self apply in fact
-    if (HasLowerSecurityAccount (NULL, account_id, true))
+    if (HasLowerSecurityAccount (nullptr, account_id, true))
         return false;
 
     AccountOpResult result = sAccountMgr.DeleteAccount(account_id);
@@ -127,7 +127,7 @@ bool ChatHandler::GetDeletedCharacterInfoList(DeletedInfoList& foundList, bool u
         {
             // search by GUID
             if (isNumeric(searchString))
-                resultChar = CharacterDatabase.PQuery("SELECT guid, deleteInfos_Name, deleteInfos_Account, deleteDate FROM characters WHERE deleteDate IS NOT NULL AND guid = %u LIMIT 0,50", uint32(atoi(searchString.c_str())));
+                resultChar = CharacterDatabase.PQuery("SELECT guid, deleteInfos_Name, deleteInfos_Account, deleteDate FROM characters WHERE deleteDate IS NOT nullptr AND guid = %u LIMIT 0,50", uint32(atoi(searchString.c_str())));
             // search by name
             else
             {
@@ -136,14 +136,14 @@ bool ChatHandler::GetDeletedCharacterInfoList(DeletedInfoList& foundList, bool u
 
                 CharacterDatabase.escape_string(searchString);
 
-                resultChar = CharacterDatabase.PQuery("SELECT guid, deleteInfos_Name, deleteInfos_Account, deleteDate FROM characters WHERE deleteDate IS NOT NULL AND deleteInfos_Name " _LIKE_ " " _CONCAT2_("'%s'", "'%%'") " LIMIT 0,50", searchString.c_str());
+                resultChar = CharacterDatabase.PQuery("SELECT guid, deleteInfos_Name, deleteInfos_Account, deleteDate FROM characters WHERE deleteDate IS NOT nullptr AND deleteInfos_Name " _LIKE_ " " _CONCAT2_("'%s'", "'%%'") " LIMIT 0,50", searchString.c_str());
             }
         }
         else
         {
             // search by account id
             if (isNumeric(searchString))
-                resultChar = CharacterDatabase.PQuery("SELECT guid, deleteInfos_Name, deleteInfos_Account, deleteDate FROM characters WHERE deleteDate IS NOT NULL AND deleteInfos_Account = %u LIMIT 0,50", uint32(atoi(searchString.c_str())));
+                resultChar = CharacterDatabase.PQuery("SELECT guid, deleteInfos_Name, deleteInfos_Account, deleteDate FROM characters WHERE deleteDate IS NOT nullptr AND deleteInfos_Account = %u LIMIT 0,50", uint32(atoi(searchString.c_str())));
             // search by account name
             else
             {
@@ -171,12 +171,12 @@ bool ChatHandler::GetDeletedCharacterInfoList(DeletedInfoList& foundList, bool u
                 std::copy(list.begin(), list.end(), std::ostream_iterator<int>(accountStream, ","));
                 std::string accounts = accountStream.str();
                 accounts.pop_back();
-                resultChar = CharacterDatabase.PQuery("SELECT guid, deleteInfos_Name, deleteInfos_Account, deleteDate FROM characters WHERE deleteDate IS NOT NULL AND deleteInfos_Account IN (%s) LIMIT 0,50", accounts.c_str());
+                resultChar = CharacterDatabase.PQuery("SELECT guid, deleteInfos_Name, deleteInfos_Account, deleteDate FROM characters WHERE deleteDate IS NOT nullptr AND deleteInfos_Account IN (%s) LIMIT 0,50", accounts.c_str());
             }
         }
     }
     else
-        resultChar = CharacterDatabase.Query("SELECT guid, deleteInfos_Name, deleteInfos_Account, deleteDate FROM characters WHERE deleteDate IS NOT NULL LIMIT 0,50");
+        resultChar = CharacterDatabase.Query("SELECT guid, deleteInfos_Name, deleteInfos_Account, deleteDate FROM characters WHERE deleteDate IS NOT nullptr LIMIT 0,50");
 
     if (resultChar)
     {
@@ -333,7 +333,7 @@ void ChatHandler::HandleCharacterDeletedRestoreHelper(DeletedInfo const& delInfo
         return;
     }
 
-    CharacterDatabase.PExecute("UPDATE characters SET name='%s', account='%u', deleteDate=NULL, deleteInfos_Name=NULL, deleteInfos_Account=NULL WHERE deleteDate IS NOT NULL AND guid = %u",
+    CharacterDatabase.PExecute("UPDATE characters SET name='%s', account='%u', deleteDate=nullptr, deleteInfos_Name=nullptr, deleteInfos_Account=nullptr WHERE deleteDate IS NOT nullptr AND guid = %u",
         delInfo.name.c_str(), delInfo.accountId, delInfo.lowguid);
 }
 
@@ -501,7 +501,7 @@ int kb_hit_return()
     tv.tv_usec = 0;
     FD_ZERO(&fds);
     FD_SET(STDIN_FILENO, &fds);
-    select(STDIN_FILENO+1, &fds, NULL, NULL, &tv);
+    select(STDIN_FILENO+1, &fds, nullptr, nullptr, &tv);
     return FD_ISSET(STDIN_FILENO, &fds);
 }
 #endif
@@ -536,7 +536,7 @@ void CliRunnable::run()
             break;
         #endif
         char *command_str = fgets(commandbuf,sizeof(commandbuf),stdin);
-        if (command_str != NULL)
+        if (command_str != nullptr)
         {
             for(int x=0;command_str[x];x++)
                 if(command_str[x]=='\r'||command_str[x]=='\n')
@@ -559,7 +559,7 @@ void CliRunnable::run()
                 continue;
             }
 
-            sWorld.QueueCliCommand(new CliCommandHolder(0, SEC_CONSOLE, NULL, command.c_str(), &utf8print, &commandFinished));
+            sWorld.QueueCliCommand(new CliCommandHolder(0, SEC_CONSOLE, nullptr, command.c_str(), &utf8print, &commandFinished));
         }
         else if (feof(stdin))
         {

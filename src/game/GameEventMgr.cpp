@@ -614,7 +614,7 @@ void GameEventMgr::Initialize(MapPersistentState* state)
 }
 
 // return the next event delay in ms
-uint32 GameEventMgr::Update(ActiveEvents const* activeAtShutdown /*= NULL*/)
+uint32 GameEventMgr::Update(ActiveEvents const* activeAtShutdown /*= nullptr*/)
 {
     // process hardcoded events
     time_t currenttime = time(nullptr);
@@ -900,9 +900,9 @@ struct GameEventUpdateCreatureDataInMapsWorker
     {
         if (Creature* pCreature = map->GetCreature(i_guid))
         {
-            pCreature->UpdateEntry(pCreature->GetOriginalEntry(), TEAM_NONE, i_data, i_activate ? i_event_data : NULL);
+            pCreature->UpdateEntry(pCreature->GetOriginalEntry(), TEAM_NONE, i_data, i_activate ? i_event_data : nullptr);
 
-            // spells not casted for event remove case (sent NULL into update), do it
+            // spells not casted for event remove case (sent nullptr into update), do it
             if (!i_activate)
                 pCreature->ApplyGameEventSpells(i_event_data, false);
         }
@@ -959,7 +959,7 @@ void GameEventMgr::SendEventMails(int16 event_id)
             ss << "SELECT characters.guid FROM characters, character_queststatus "
                "WHERE (1 << (characters.race - 1)) & "
                << itr->raceMask
-               << " AND characters.deleteDate IS NULL AND character_queststatus.guid = characters.guid AND character_queststatus.quest = "
+               << " AND characters.deleteDate IS nullptr AND character_queststatus.guid = characters.guid AND character_queststatus.quest = "
                << itr->questId
                << " AND character_queststatus.rewarded <> 0";
             sMassMailMgr.AddMassMailTask(new MailDraft(itr->mailTemplateId), MailSender(MAIL_CREATURE, itr->senderEntry), ss.str().c_str());

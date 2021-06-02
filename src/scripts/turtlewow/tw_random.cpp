@@ -2076,19 +2076,19 @@ bool GOSelect_go_bounty(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 
     if (action == GOSSIP_ACTION_INFO_DEF + 1) 
     {
         Quest const* pQuest = sObjectMgr.GetQuestTemplate(QUEST_HORDE_PLAYER);
-        pPlayer->AddQuest(pQuest, NULL);
+        pPlayer->AddQuest(pQuest, nullptr);
     }
 
     if (action == GOSSIP_ACTION_INFO_DEF + 2) 
     {
         Quest const* pQuest = sObjectMgr.GetQuestTemplate(QUEST_ALLIANCE_PLAYER);
-        pPlayer->AddQuest(pQuest, NULL);
+        pPlayer->AddQuest(pQuest, nullptr);
     }
 
     if (action == GOSSIP_ACTION_INFO_DEF + 3)
     {
         Quest const* pQuest = sObjectMgr.GetQuestTemplate(70059); // WANTED: Redridgeboss!
-        pPlayer->AddQuest(pQuest, NULL);
+        pPlayer->AddQuest(pQuest, nullptr);
     }
 
     pPlayer->CLOSE_GOSSIP_MENU();
@@ -2177,9 +2177,29 @@ bool GOHello_go_stormwind_fountain(Player* pPlayer, GameObject* pGo)
 
 bool GOHello_go_brainwashing_device(Player* pPlayer, GameObject* pGo)
 {
-    if (pPlayer->getLevel() >= 10 && pPlayer->HasItemCount(51715, 1))
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, "Click here to reset your talents.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+	if (pPlayer->getLevel() >= 10 && pPlayer->HasItemCount(51715, 1))
+	{
+		std::string activateText;
 
+		pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, "Reset my talents.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+
+		// primary
+		if (pPlayer->HasSavedTalentSpec(1))
+		{
+			activateText = "Activate Primary Specialization (" + pPlayer->SpecTalentPoints(1) + ")";
+			pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_1, activateText.c_str(), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+		}
+		pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, "Save Primary Specialization.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+
+		// secondary
+		if (pPlayer->HasSavedTalentSpec(2))
+		{
+			activateText = "Activate Secondary Specialization (" + pPlayer->SpecTalentPoints(2) + ")";
+			pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_1, activateText.c_str(), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
+		}
+		pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, "Save Secondary Specialization.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
+
+	}
     pPlayer->SEND_GOSSIP_MENU(90350, pGo->GetGUID());
     return true;
 }
@@ -2192,8 +2212,17 @@ bool GOSelect_go_brainwashing_device(Player* pPlayer, GameObject* pGo, uint32 se
         pPlayer->AddAura(27880);
         pGo->Despawn();
         pGo->UpdateObjectVisibility();
-        pPlayer->CLOSE_GOSSIP_MENU();
     }
+	else if (action == GOSSIP_ACTION_INFO_DEF + 2)
+		pPlayer->ActivateTalentSpec(1);
+	else if (action == GOSSIP_ACTION_INFO_DEF + 4)
+		pPlayer->ActivateTalentSpec(2);
+	else if (action == GOSSIP_ACTION_INFO_DEF + 3)
+		pPlayer->SaveTalentSpec(1);
+	else if (action == GOSSIP_ACTION_INFO_DEF + 5)
+		pPlayer->SaveTalentSpec(2);
+
+	pPlayer->CLOSE_GOSSIP_MENU();
     return true;
 }
 
@@ -2364,7 +2393,7 @@ struct refreshment_table_clicks : public GameObjectAI
         max_stacks = 40 * 4;                       // 40 players, 4 stacks per player
         stacks_handed_out = 0;
         table_life = 3 * MINUTE * IN_MILLISECONDS;
-        stand = NULL;
+        stand = nullptr;
     }
 
     int max_stacks;

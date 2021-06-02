@@ -125,7 +125,7 @@ struct go_urok_challengeAI: public GameObjectAI
     {
         Unit* massacrer = me->FindNearestCreature(NPC_UROK_MASSACRER, 20.0f);
         Unit* mage      = me->FindNearestCreature(NPC_UROK_MAGE, 20.0f);
-        Unit* target    = NULL;
+        Unit* target    = nullptr;
         if (!mage)
             target = massacrer;
         else if (massacrer)
@@ -137,7 +137,7 @@ struct go_urok_challengeAI: public GameObjectAI
         }
         else
             target = mage;
-        // Sinon, massacre=mage=NULL, aucune cible.
+        // Sinon, massacre=mage=nullptr, aucune cible.
         return target;
     }
 
@@ -334,7 +334,7 @@ CreatureAI* GetAI_npc_urok_ogre_magus(Creature* pCreature)
 //event 4777
 bool ProcessEventId_event_banner_destroyed(uint32 eventId, Object* source, Object* target, bool isStart)
 {
-    //we go through the source because target is null.... maybe because it is a summoned object.
+    //we go through the source because target is nullptr.... maybe because it is a summoned object.
     if(!target)
     {
         if(source && source->IsCreature())
@@ -362,7 +362,7 @@ void DefineGoChallenge(Creature * crea, uint64 gobjGUID)
         underlingAI->SetMoundGuid(gobjGUID);
     }
 }
-void AddSC_boss_urok() // Permet l'intégration dans la DB.
+void AddSC_boss_urok() // Permet l'intï¿½gration dans la DB.
 {
     Script *newscript;
 

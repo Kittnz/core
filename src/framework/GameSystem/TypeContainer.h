@@ -87,7 +87,7 @@ class TypeUnorderedMapContainer
         template<class SPECIFIC_TYPE>
         SPECIFIC_TYPE* find(KEY_TYPE hdl, SPECIFIC_TYPE* /*obj*/)
         {
-            return TypeUnorderedMapContainer::find(i_elements, hdl, (SPECIFIC_TYPE*)NULL);
+            return TypeUnorderedMapContainer::find(i_elements, hdl, (SPECIFIC_TYPE*)nullptr);
         }
         
         template<typename SPECIFIC_TYPE>
@@ -240,7 +240,7 @@ struct ContainerMapList
 };
 
 template<>
-struct ContainerMapList<TypeNull>                           /* nothing is in type null */
+struct ContainerMapList<TypeNull>                           /* nothing is in type nullptr */
 {
 };
 

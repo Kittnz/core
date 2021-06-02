@@ -67,7 +67,7 @@ struct Chunk
 
 PatchHandler::PatchHandler(ACE_HANDLE socket, ACE_HANDLE patch)
 {
-    reactor(NULL);
+    reactor(nullptr);
     set_handle(socket);
     patch_fd_ = patch;
 
@@ -270,7 +270,7 @@ void PatchCache::LoadPatchesInfo()
 
 	ACE_DIRENT* dp;
 
-	while ((dp = ACE_OS::readdir(dirp)) != NULL)
+	while ((dp = ACE_OS::readdir(dirp)) != nullptr)
 	{
 		int l = strlen(dp->d_name);
 		if (l < 8)

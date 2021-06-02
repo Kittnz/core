@@ -421,7 +421,7 @@ void WorldSession::HandlePlayerLoginOpcode(WorldPacket & recv_data)
     ObjectGuid playerGuid;
     recv_data >> playerGuid;
 
-    if (PlayerLoading() || GetPlayer() != NULL)
+    if (PlayerLoading() || GetPlayer() != nullptr)
     {
         WorldPacket data(SMSG_CHARACTER_LOGIN_FAILED, 1);
         data << (uint8)1;
@@ -486,7 +486,7 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
             m_playerLoading = false;
             return;
         }
-        pCurrChar->GetSession()->SetPlayer(NULL);
+        pCurrChar->GetSession()->SetPlayer(nullptr);
         pCurrChar->SetSession(this);
         // Need to attach packet bcaster to the new socket
         pCurrChar->m_broadcaster->ChangeSocket(GetSocket());
@@ -530,7 +530,7 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
     SetPlayer(pCurrChar);
     if (pCurrMasterPlayer)
     {
-        pCurrMasterPlayer->GetSession()->SetMasterPlayer(NULL);
+        pCurrMasterPlayer->GetSession()->SetMasterPlayer(nullptr);
         pCurrMasterPlayer->SetSession(this);
         m_masterPlayer = pCurrMasterPlayer;
     }
