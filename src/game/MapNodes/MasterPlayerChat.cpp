@@ -37,8 +37,7 @@ void MasterPlayer::UpdateSpeakTime()
     m_speakTime = current + sWorld.getConfig(CONFIG_UINT32_CHATFLOOD_MESSAGE_DELAY);
 }
 
-
-void MasterPlayer::Whisper(const std::string& text, uint32 language, MasterPlayer* receiver)
+void MasterPlayer::Whisper(std::string const& text, uint32 language, MasterPlayer* receiver)
 {
     if (language != LANG_ADDON)                             // if not addon data
         language = LANG_UNIVERSAL;                          // whispers should always be readable
