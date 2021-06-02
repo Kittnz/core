@@ -2626,18 +2626,19 @@ float Unit::MeleeMissChanceCalc(const Unit *pVictim, WeaponAttackType attType) c
     }
 
     int32 skillDiff = int32(GetWeaponSkillValue(attType, pVictim)) - int32(pVictim->GetDefenseSkillValue(this));
-
+    float skillDiffBonus = 0.0f;
     // PvP - PvE melee chances
     if (pVictim->GetTypeId() == TYPEID_PLAYER)
-        missChance -= skillDiff * 0.04f;
+        skillDiffBonus = skillDiff * 0.04f;
     else if (skillDiff < -10)
-        missChance -= skillDiff * 0.2f;
+        skillDiffBonus = skillDiff * 0.2f;
     else
-        missChance -= skillDiff * 0.1f;
+        skillDiffBonus = skillDiff * 0.1f;
+    missChance -= skillDiffBonus;
 
     // Low level reduction
-    if (!pVictim->IsPlayer() && pVictim->getLevel() < 10)
-        missChance *= pVictim->getLevel() / 10.0f;
+    float const levelDiffMultiplier = !pVictim->IsPlayer() && pVictim->getLevel() < 10 ? pVictim->getLevel() / 10.0f : 1.0f;
+    missChance *= levelDiffMultiplier;
 
     // Hit chance bonus from attacker based on ratings and auras
     float hitChance = 0.0f;
@@ -2650,7 +2651,7 @@ float Unit::MeleeMissChanceCalc(const Unit *pVictim, WeaponAttackType attType) c
     // There is some code in 1.12 that explicitly adds a modifier that causes the first 1% of +hit gained from
     // talents or gear to be ignored against monsters with more than 10 Defense Skill above the attacking player’s Weapon Skill.
     // https://us.forums.blizzard.com/en/wow/t/bug-hit-tables/185675/33
-    if (skillDiff < -10 && hitChance > 0)
+    if (skillDiff < -10 && hitChance > 0.0f)
         hitChance -= 1.0f;
 
     missChance -= hitChance;
@@ -7293,6 +7294,38 @@ void Unit::TauntFadeOut(Unit *taunter)
 
 //======================================================================
 
+Unit* Unit::GetTauntTarget() const
+{
+    const AuraList& tauntAuras = GetAurasByType(SPELL_AURA_MOD_TAUNT);
+    if (tauntAuras.empty())
+        return nullptr;
+
+    Unit* caster = nullptr;
+
+    // The last taunt aura caster is alive an we are happy to attack him
+    if ((caster = tauntAuras.back()->GetCaster()) && caster->isAlive() && IsValidAttackTarget(caster))
+        return caster;
+    else if (tauntAuras.size() > 1)
+    {
+        // We do not have last taunt aura caster but we have more taunt auras,
+        // so find first available target
+
+        // Auras are pushed_back, last caster will be on the end
+        AuraList::const_iterator aura = --tauntAuras.end();
+        do
+        {
+            --aura;
+            if ((caster = (*aura)->GetCaster()) && caster->IsInMap(this) && caster->isTargetableForAttack())
+            {
+                return caster;
+                break;
+            }
+        } while (aura != tauntAuras.begin());
+    }
+
+    return nullptr;
+}
+
 bool Unit::SelectHostileTarget()
 {
     //function provides main threat functionality
@@ -7312,36 +7345,7 @@ bool Unit::SelectHostileTarget()
     if (ToCreature()->IsTempPacified())
         return false;
 
-    Unit* target = nullptr;
-
-    // First checking if we have some taunt on us
-    const AuraList& tauntAuras = GetAurasByType(SPELL_AURA_MOD_TAUNT);
-    if (!tauntAuras.empty())
-    {
-        Unit* caster;
-
-        // The last taunt aura caster is alive an we are happy to attack him
-        if ((caster = tauntAuras.back()->GetCaster()) && caster->isAlive() && IsValidAttackTarget(caster))
-            return true;
-        else if (tauntAuras.size() > 1)
-        {
-            // We do not have last taunt aura caster but we have more taunt auras,
-            // so find first available target
-
-            // Auras are pushed_back, last caster will be on the end
-            AuraList::const_iterator aura = --tauntAuras.end();
-            do
-            {
-                --aura;
-                if ((caster = (*aura)->GetCaster()) && caster->IsInMap(this) && caster->isTargetableForAttack())
-                {
-                    target = caster;
-                    break;
-                }
-            }
-            while (aura != tauntAuras.begin());
-        }
-    }
+    Unit* target = GetTauntTarget();
 
     // No taunt aura or taunt aura caster is dead, standard target selection
     if (!target && !m_ThreatManager.isThreatListEmpty())
@@ -10312,6 +10316,11 @@ void Unit::RemoveAttackersThreat(Unit* owner)
         if (owner)
             (*itr)->AddThreat(owner, 1.0f);
     }
+}
+
+bool Unit::HasAuraPetShouldAvoidBreaking(Unit* excludeCasterChannel) const
+{
+    return HasBreakableByDamageCrowdControlAura(excludeCasterChannel);
 }
 
 bool Unit::HasBreakableByDamageAuraType(AuraType type, uint32 excludeAura) const

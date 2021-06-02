@@ -52,6 +52,9 @@ void PetEventAI::MoveInLineOfSight(Unit *pWho)
     if (m_creature->GetDistanceZ(pWho) > CREATURE_Z_ATTACK_RANGE)
         return;
 
+    if (m_creature->IsPet() && pWho->IsCreature() && static_cast<Creature*>(pWho)->IsCivilian())
+        return;
+
     if (m_creature->CanInitiateAttack() && pWho->isTargetableForAttack())
     {
         float const attackRadius = m_creature->GetAttackDistance(pWho);
@@ -75,7 +78,7 @@ void PetEventAI::AttackStart(Unit* pWho)
     if (m_creature->HasReactState(REACT_PASSIVE) && m_creature->GetCharmInfo() && !m_creature->GetCharmInfo()->IsCommandAttack())
         return;
 
-    if (pWho->HasBreakableByDamageCrowdControlAura() && m_creature->GetCharmerOrOwner() && m_creature->GetCharmerOrOwner()->isAlive())
+    if (pWho->HasAuraPetShouldAvoidBreaking() && m_creature->GetCharmerOrOwner() && m_creature->GetCharmerOrOwner()->isAlive())
         return;
 
     if (m_creature->Attack(pWho, m_bMeleeAttack))
@@ -122,6 +125,12 @@ void PetEventAI::AttackedBy(Unit* pAttacker)
 
 bool PetEventAI::FindTargetForAttack()
 {
+    if (Unit* pTaunter = m_creature->GetTauntTarget())
+    {
+        AttackStart(pTaunter);
+        return true;
+    }
+
     // Check if any of the Pet's attackers are valid targets.
     Unit::AttackerSet attackers = m_creature->getAttackers();
     for (const auto& itr : attackers)
@@ -142,7 +151,7 @@ bool PetEventAI::FindTargetForAttack()
     if (Unit * const pTarget = pOwner->getAttackerForHelper())
     {
         // Prevent pets from breaking CC effects
-        if (!pTarget->HasBreakableByDamageCrowdControlAura())
+        if (!pTarget->HasAuraPetShouldAvoidBreaking())
         {
             AttackStart(pTarget);
             return true;

@@ -1466,8 +1466,9 @@ void Spell::DoAllEffectOnTarget(TargetInfo *target)
     }
 
     // Tell any pets to stop attacking the target on application of breakable crowd control spells
-    if (m_spellInfo->AuraInterruptFlags & AURA_INTERRUPT_FLAG_DAMAGE && m_casterUnit && unit->HasBreakableByDamageCrowdControlAura(m_casterUnit))
+    if ((m_spellInfo->AuraInterruptFlags & AURA_INTERRUPT_FLAG_DAMAGE) && m_casterUnit && unit->HasAuraPetShouldAvoidBreaking(m_casterUnit))
     {
+        // Tell any pets to stop attacking the target on application of breakable crowd control spells
         Unit::AttackerSet attackers = unit->getAttackers();
         for (Unit::AttackerSet::iterator itr = attackers.begin(); itr != attackers.end(); ++itr)
         {
