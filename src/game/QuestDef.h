@@ -251,7 +251,9 @@ class Quest
         int32  GetRewOrReqMoney() const;
         uint32 GetRewMoneyMaxLevel() const { return RewMoneyMaxLevel; }
         int32 GetRewMoneyMaxLevelAtComplete() const;
-                                                            // use in XP calculation at client
+        uint32 GetRewXP() const { return RewXP; }
+
+        // Use in XP calculation at client
         uint32 GetRewSpell() const { return RewSpell; }
         uint32 GetRewSpellCast() const { return RewSpellCast; }
         int32 GetRewMailTemplateId() const { return RewMailTemplateId; }
@@ -349,6 +351,7 @@ class Quest
         std::string OfferRewardText;
         std::string RequestItemsText;
         std::string EndText;
+        uint32 RewXP;
         int32  RewOrReqMoney;
         uint32 RewMoneyMaxLevel;
         uint32 RewSpell;
