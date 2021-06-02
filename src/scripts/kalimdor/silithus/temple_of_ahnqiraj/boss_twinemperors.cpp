@@ -596,17 +596,20 @@ struct boss_veklorAI : public boss_twinemperorsAI
 
     void AttackStart(Unit* who) override
     {
-        float dist = m_creature->GetDistanceToCenter(who);
-        if (dist <= VEKLOR_DIST) {
+        float dist = m_creature->GetDistance3dToCenter(who);
+        if (dist <= VEKLOR_DIST)
+        {
             // if he is <= VEKLOR_DIST he should not start chasing again until
             // target is further away than shadowboltRange
             m_creature->SetCasterChaseDistance(shadowboltRange);
         }
-        else if (dist > shadowboltRange) {
+        else if (dist > shadowboltRange)
+        {
             // if he is further away than shadowboltRange we set
             // chase distance to VEKLOR_DIST
             m_creature->SetCasterChaseDistance(VEKLOR_DIST);
         }
+    
         ScriptedAI::AttackStart(who);
     }
 
