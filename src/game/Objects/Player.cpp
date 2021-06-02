@@ -22782,3 +22782,162 @@ void Player::RemoveWorldBuffsIfAlreadySuspended()
 		}
 	}
 }
+
+
+// Checks if player has primary or secondary spec saved
+bool Player::HasSavedTalentSpec(int primaryOrSecondary)
+{
+	QueryResult *talents = CharacterDatabase.PQuery("SELECT spec FROM character_spell_dual_spec "
+		" WHERE guid = '%u' and spec = '%i'", GetGUIDLow(), primaryOrSecondary);
+
+	if (!talents)
+		return false;
+
+	delete talents;
+	return true;
+}
+
+// Outputs n/m/q (eg: 21/30/0) number of talents points spent in each tree
+std::string Player::SpecTalentPoints(int primaryOrSecondary)
+{
+
+	QueryResult *savedTalents = CharacterDatabase.PQuery("SELECT spell FROM character_spell_dual_spec "
+		" WHERE guid = '%u' and spec = '%i'", GetGUIDLow(), primaryOrSecondary);
+
+	if (!savedTalents)
+		return "";
+
+	int treeTalents[3] = { 0, 0, 0 };
+
+	do
+	{
+		Field *fields = savedTalents->Fetch();
+		uint32 savedTalentID = fields[0].GetUInt32();
+
+		for (unsigned int i = 0; i < sTalentStore.GetNumRows(); ++i)
+		{
+			TalentEntry const *talentInfo = sTalentStore.LookupEntry(i);
+			if (!talentInfo) continue;
+
+			TalentTabEntry const* talentTabInfo = sTalentTabStore.LookupEntry(talentInfo->TalentTab);
+			if (!talentTabInfo)
+				continue;
+			if ((getClassMask() & talentTabInfo->ClassMask) == 0)
+				continue;
+
+			for (int j = 0; j < MAX_TALENT_RANK; ++j)
+				if (talentInfo->RankID[j] && talentInfo->RankID[j] == savedTalentID)
+					treeTalents[talentTabInfo->tabpage] += j + 1;
+		}
+
+	} while (savedTalents->NextRow());
+
+
+	delete savedTalents;
+
+	return std::to_string(treeTalents[0]) + "/" + std::to_string(treeTalents[1]) + "/" + std::to_string(treeTalents[2]);
+}
+
+// saves primary or secondary spec
+bool Player::SaveTalentSpec(int primaryOrSecondary)
+{
+	// prevent untalented saves
+	if (m_usedTalentCount == 0)
+	{
+		ChatHandler(this).PSendSysMessage("No learned talents found.");
+		return false;
+	}
+
+	// make sure dual spec table is empty for spec=primaryOrSecondary to avoid duplicates
+	CharacterDatabase.PExecute("DELETE FROM character_spell_dual_spec WHERE guid = %u and spec = %i", GetGUIDLow(), primaryOrSecondary);
+
+	for (unsigned int i = 0; i < sTalentStore.GetNumRows(); ++i)
+	{
+		TalentEntry const *talentInfo = sTalentStore.LookupEntry(i);
+
+		if (!talentInfo) continue;
+
+		TalentTabEntry const* talentTabInfo = sTalentTabStore.LookupEntry(talentInfo->TalentTab);
+
+		if (!talentTabInfo)
+			continue;
+
+		if ((getClassMask() & talentTabInfo->ClassMask) == 0)
+			continue;
+
+		for (int j = 0; j < MAX_TALENT_RANK; ++j)
+		{
+			SpellEntry const* pInfos = sSpellMgr.GetSpellEntry(talentInfo->RankID[j]);
+
+			if (talentInfo->RankID[j] && HasSpell(talentInfo->RankID[j]))
+			{
+				static SqlStatementID saveTalents;
+
+				SqlStatement stmt = CharacterDatabase.CreateStatement(saveTalents, "INSERT INTO character_spell_dual_spec (guid, spell, spec) "
+					"VALUES (?, ?, ?)");
+
+				stmt.addUInt32(GetGUIDLow());
+				stmt.addUInt32(talentInfo->RankID[j]);
+				stmt.addUInt8(primaryOrSecondary);
+				stmt.Execute();
+			}
+		}
+	}
+
+	if (primaryOrSecondary == 1)
+		ChatHandler(this).PSendSysMessage("Primary Specialization Saved.");
+	else
+		ChatHandler(this).PSendSysMessage("Secondary Specialization Saved.");
+
+	CastSpell(this, 14867, true); // visual
+
+	return true;
+}
+
+// activates primary or secondary spec
+bool Player::ActivateTalentSpec(int primaryOrSecondary)
+{
+
+	ResetTalents(true);
+
+	QueryResult *talents = CharacterDatabase.PQuery("SELECT spell "
+		"FROM character_spell_dual_spec WHERE guid = '%u' and spec = '%i'", GetGUIDLow(), primaryOrSecondary);
+
+	if (!talents)
+	{
+		// should not get here because we check HasSavedTalentSpec(1/2) in go script, gossip
+		if (primaryOrSecondary == 1)
+			ChatHandler(this).PSendSysMessage("Primary Specialization not saved.");
+		else
+			ChatHandler(this).PSendSysMessage("Secondary Specialization not saved.");
+		return false;
+	}
+
+	do
+	{
+		Field *fields = talents->Fetch();
+		uint32 talentSpellId = fields[0].GetUInt32();
+
+		LearnSpell(talentSpellId, false, true);
+
+	} while (talents->NextRow());
+
+	delete talents;
+
+	if (primaryOrSecondary == 1)
+		ChatHandler(this).PSendSysMessage("Primary Specialization Activated.");
+	else
+		ChatHandler(this).PSendSysMessage("Secondary Specialization Activated.");
+
+	// reset powers to avoid some bullshittery
+	if (getPowerType() == POWER_RAGE)
+		SetPower(POWER_RAGE, 0);
+	else if (getPowerType() == POWER_MANA)
+		SetPower(POWER_MANA, 0);
+
+	// short stun
+	AddAura(27880);
+
+	return true;
+}
+
