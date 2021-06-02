@@ -350,7 +350,7 @@ struct mob_brain_wash_totemAI : public ScriptedAI
         PlayerMCGuid = 0;
         CheckTimer = 0;
 
-        m_creature->AddAura(23198, ADD_AURA_PERMANENT); // Avoidance : pas touché par les AOE
+        m_creature->AddAura(23198, ADD_AURA_PERMANENT); // Avoidance : pas touchï¿½ par les AOE
         m_creature->addUnitState(UNIT_STAT_ROOT);
         SetCombatMovement(false);
     }
@@ -380,7 +380,7 @@ struct mob_brain_wash_totemAI : public ScriptedAI
             // Il faut au moins 2 personnes dans le threatlist de Jin'do, sinon il va reset !
             if (pJindo->SelectAttackingTarget(ATTACKING_TARGET_TOPAGGRO, 1))
             {
-                Unit* pTarget = pJindo ? pJindo->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0) : NULL;
+                Unit* pTarget = pJindo ? pJindo->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0) : nullptr;
                 if (pTarget && pTarget->isAlive() && pTarget->IsPlayer() && !pTarget->HasAura(SPELL_HEX) && !pTarget->HasAura(SPELL_BRAINWASH))
                 {
                     if (boss_jindoAI* pJindoAI = dynamic_cast<boss_jindoAI*>(pJindo->AI()))

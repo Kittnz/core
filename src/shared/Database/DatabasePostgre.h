@@ -40,7 +40,7 @@
 class PostgreSQLConnection : public SqlConnection
 {
     public:
-        PostgreSQLConnection() : mPGconn(NULL) {}
+        PostgreSQLConnection() : mPGconn(nullptr) {}
         ~PostgreSQLConnection();
 
         bool OpenConnection(bool reconnect);

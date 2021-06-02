@@ -155,7 +155,7 @@ class WeatherMgr
             if (itr != mWeatherZoneMap.end())
                 return &itr->second;
             else
-                return NULL;
+                return nullptr;
         }
 
     private:

@@ -2584,6 +2584,14 @@ class Player final: public Unit
 			void RemoveWorldBuffsIfAlreadySuspended();
 		// Xerron Suspend World Buffs End
 
+		// Xerron Dual Spec
+		public:
+			bool HasSavedTalentSpec(int primaryOrSecondary);
+			std::string SpecTalentPoints(int primaryOrSecondary);
+			bool ActivateTalentSpec(int primaryOrSecondary);
+			bool SaveTalentSpec(int primaryOrSecondary);
+		// Xerron Dual Spec End
+
 };
 
 void AddItemsSetItem(Player*player,Item* item);

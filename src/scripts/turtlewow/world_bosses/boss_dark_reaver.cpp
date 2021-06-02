@@ -135,10 +135,10 @@ struct boss_dark_reaverAI : public ScriptedAI
             return;
 
         // Don't allow to repeat within a 10 second period.
-        if (difftime(time(NULL), Last_Pierce_Time) >= 10)
+        if (difftime(time(nullptr), Last_Pierce_Time) >= 10)
         {
             DoCast(me->getVictim(), SPELL_PIERCE_ARMOR, true);
-            Last_Pierce_Time = time(NULL);
+            Last_Pierce_Time = time(nullptr);
             Biggest_Hit = damage;
         }
     }

@@ -830,7 +830,7 @@ struct QirajiWarriorAI : public ScriptedAI
         if (Creature* pTuubid = m_creature->GetMap()->GetCreature(m_uiTuubidGuid))
             if (pTuubid->isAlive())
                 return CAST_AI(TuubidAI, pTuubid->AI());
-        return NULL;
+        return nullptr;
     }
 
     void Reset()
@@ -938,7 +938,7 @@ struct SwarmguardNeedlerAI : public ScriptedAI
         if (Creature* pTuubid = m_creature->GetMap()->GetCreature(m_uiTuubidGuid))
             if (pTuubid->isAlive())
                 return CAST_AI(TuubidAI, pTuubid->AI());
-        return NULL;
+        return nullptr;
     }
 
     void Reset()

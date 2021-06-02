@@ -26,7 +26,7 @@ struct drogonAI : public ScriptedAI
 
         for (auto &player : players) {
             if (player && player->isAlive())
-                m_creature->DealDamage(player, player->GetHealth() * 2, NULL, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, NULL, false);
+                m_creature->DealDamage(player, player->GetHealth() * 2, nullptr, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, nullptr, false);
         }
     }
 

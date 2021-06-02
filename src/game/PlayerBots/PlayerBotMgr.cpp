@@ -291,7 +291,7 @@ bool PlayerBotMgr::addBot(PlayerBotAI* ai)
 bool PlayerBotMgr::addBot(uint32 playerGUID, bool chatBot)
 {
     uint32 accountId = 0;
-    PlayerBotEntry *e = NULL;
+    PlayerBotEntry *e = nullptr;
     std::map<uint32, PlayerBotEntry*>::iterator iter = m_bots.find(playerGUID);
     if (iter == m_bots.end())
         accountId = sObjectMgr.GetPlayerAccountIdByGUID(playerGUID);
@@ -314,12 +314,12 @@ bool PlayerBotMgr::addBot(uint32 playerGUID, bool chatBot)
         e->chance       = 10;
         e->accountId    = accountId;
         e->isChatBot    = chatBot;
-        e->ai           = new PlayerBotAI(NULL);
+        e->ai           = new PlayerBotAI(nullptr);
         m_bots[playerGUID] = e;
     }
 
     e->state = PB_STATE_LOADING;
-    WorldSession *session = new WorldSession(accountId, NULL, sAccountMgr.GetSecurity(accountId), 0, LOCALE_enUS, "<BOT>");
+    WorldSession *session = new WorldSession(accountId, nullptr, sAccountMgr.GetSecurity(accountId), 0, LOCALE_enUS, "<BOT>");
     session->SetBot(e);
     // "It's not because you are a bot that you are allowed cheat!"
     sAnticheatLib->SessionAdded(session);

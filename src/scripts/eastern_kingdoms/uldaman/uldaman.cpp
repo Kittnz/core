@@ -273,17 +273,7 @@ bool GossipSelect_npc_lore_keeper_of_norgannon(Player* pPlayer, Creature* pCreat
             pPlayer->AreaExploredOrEventHappens(2278);
             break;
     }
-    return true;
-}
 
-#define QUEST_HIDDEN_CHAMBER 2240
-
-bool OnTrigger_at_map_chamber(Player* pPlayer, const AreaTriggerEntry *at)
-{
-    if (pPlayer->GetQuestStatus(QUEST_HIDDEN_CHAMBER) == QUEST_STATUS_INCOMPLETE)
-    {
-        pPlayer->AreaExploredOrEventHappens(QUEST_HIDDEN_CHAMBER);
-    }
     return true;
 }
 
@@ -389,10 +379,5 @@ void AddSC_uldaman()
     newscript = new Script;
     newscript->Name = "event_awaken_stone_keeper";
     newscript->pProcessEventId = &ProcessEventId_event_awaken_stone_keeper;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "at_map_chamber";
-    newscript->pAreaTrigger = &OnTrigger_at_map_chamber;
     newscript->RegisterSelf();
 }

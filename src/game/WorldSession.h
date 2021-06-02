@@ -491,7 +491,7 @@ class WorldSession
         {
             SessionScriptsMap::iterator it = scripts.find(name);
             if (it == scripts.end())
-                return NULL;
+                return nullptr;
             return it->second;
         }
         SessionScriptsMap scripts;
