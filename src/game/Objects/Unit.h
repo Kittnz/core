@@ -1289,14 +1289,7 @@ class Unit : public WorldObject
         void SetStandState(uint8 state);
 
         bool IsMounted() const { return (GetMountID() != 0); }
-
-        uint32 GetMountID() const 
-        { 
-            if (!IsGameObject())
-                return GetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID);
-            return 0;
-        }
-
+        uint32 GetMountID() const { return GetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID); }
         virtual void Mount(uint32 mount, uint32 spellId = 0/*, bool IsTaxi = false*/);
         virtual void Unmount(bool from_aura = false);
 
