@@ -103,32 +103,12 @@ void PetAI::UpdateAI(const uint32 diff)
         m_updateAlliesTimer -= diff;
 
     // First checking if we have some taunt on us
-    Unit* tauntTarget = nullptr;
-    const Unit::AuraList& tauntAuras = m_creature->GetAurasByType(SPELL_AURA_MOD_TAUNT);
-    if (!tauntAuras.empty() && !playerControlled)
-    {
-        Unit* caster = nullptr;
-
-        // Auras are pushed_back, last caster will be on the end
-        Unit::AuraList::const_iterator aura = tauntAuras.end();
-        while (aura != tauntAuras.begin())
-        {
-            --aura;
-            caster = (*aura)->GetCaster();
-            if (caster && caster->isTargetableForAttack())
-            {
-                tauntTarget = caster;
-                break;
-            }
-        }
-
-        if (tauntTarget)
-            DoAttack(tauntTarget, true);
-    }
+    Unit* tauntTarget = !playerControlled ? m_creature->GetTauntTarget() : nullptr;
+    if (tauntTarget)
+        DoAttack(tauntTarget, true);
 
     if (m_creature->getVictim() && m_creature->getVictim()->isAlive())
     {
-
         if (_needToStop())
         {
             _stopAttack();
@@ -525,7 +505,7 @@ std::pair<Unit*, ePetSelectTargetReason> PetAI::SelectNextTarget(bool allowAutoS
 
     // Check owner attackers
     if (Unit* ownerAttacker = owner->getAttackerForHelper())
-        if (!ownerAttacker->HasBreakableByDamageCrowdControlAura() && owner->isInCombat())
+        if (!ownerAttacker->HasAuraPetShouldAvoidBreaking() && owner->isInCombat())
             return std::make_pair(ownerAttacker, PSTR_SUCCESS_OWNER_ATTACKER);
 
     // Check owner victim
@@ -540,7 +520,7 @@ std::pair<Unit*, ePetSelectTargetReason> PetAI::SelectNextTarget(bool allowAutoS
     {
         if (!m_creature->GetCharmInfo()->IsReturning() || m_creature->GetCharmInfo()->IsFollowing() || m_creature->GetCharmInfo()->IsAtStay())
         {
-            if (Unit* nearTarget = m_creature->ToCreature()->SelectNearestHostileUnitInAggroRange(true))
+            if (Unit* nearTarget = m_creature->ToCreature()->SelectNearestHostileUnitInAggroRange(true, true))
             {
                 return std::make_pair(nearTarget, PSTR_SUCCESS_AGGRO_RANGE);
             }
@@ -697,7 +677,7 @@ bool PetAI::CanAttack(Unit* target)
         return m_creature->GetCharmInfo()->IsCommandAttack();
 
     // CC - mobs under crowd control can be attacked if owner commanded
-    if (target->HasBreakableByDamageCrowdControlAura())
+    if (target->HasAuraPetShouldAvoidBreaking())
         return m_creature->GetCharmInfo()->IsCommandAttack();
         
     // Returning - pets ignore attacks only if owner clicked follow

@@ -105,12 +105,22 @@ struct boss_marliAI : public ScriptedAI
             sLog.outDebug("boss_marli, no Eggs with the entry %u were found", GO_EGG);
         else
         {
-            for (std::list<GameObject*>::iterator iter = lSpiderEggs.begin(); iter != lSpiderEggs.end(); ++iter)
+            for (const auto& pGo : lSpiderEggs)
             {
-                if ((*iter)->GetGoState() == GO_STATE_ACTIVE)
-                    (*iter)->SetGoState(GO_STATE_READY);
+                if (pGo->GetGoState() == GO_STATE_ACTIVE)
+                    pGo->SetGoState(GO_STATE_READY);
             }
         }
+
+        // High Priestess Mar'li will now despawn her summoned spiders when she returns from combat.
+        std::list<Creature*> lSummonedSpiders;
+        GetCreatureListWithEntryInGrid(lSummonedSpiders, m_creature, NPC_SPAWN_OF_MARLI, DEFAULT_VISIBILITY_INSTANCE);
+        for (const auto& pSpider : lSummonedSpiders)
+        {
+            if (pSpider->IsTemporarySummon())
+                static_cast<TemporarySummon*>(pSpider)->UnSummon();
+        }
+
         // Annule les changements de buffs de transition de phases.
         m_creature->ResetStats();
     }
