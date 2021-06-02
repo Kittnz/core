@@ -1,0 +1,3 @@
+
+ALTER TABLE `command`
+	CHANGE COLUMN `flags` `flags` TINYINT(3) UNSIGNED NOT NULL DEFAULT '0' AFTER `help`;
