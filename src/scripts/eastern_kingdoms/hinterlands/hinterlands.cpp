@@ -539,7 +539,7 @@ struct go_corrupted_crystal : public GameObjectAI
                             doOnce = false;
                         }
                         Creature* antnormiPortalptr = me->GetMap()->GetCreature(antnormiPortal);
-                        antnormi->MonsterMove(antnormiPortalptr->GetPositionX(), antnormiPortalptr->GetPositionY(), antnormiPortalptr->GetPositionZ());
+                        antnormi->MonsterMove(antnormiPortalptr->GetPositionX(), antnormiPortalptr->GetPositionY(), 100);
                         antnormi->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
                         antnormi->DeleteThreatList();
 
@@ -551,7 +551,7 @@ struct go_corrupted_crystal : public GameObjectAI
                             {
                                 chromie->MonsterMoveWithSpeed(690.40f, -4087.36f, 100.71f, 0, 1, MOVE_WALK_MODE);
 
-                                if (antnormiPortalptr->FindNearestCreature(antnormi->GetEntry(), 2, true))
+                                if (antnormiPortalptr->FindNearestCreature(antnormi->GetEntry(), 5, true))
                                 {
                                     antnormi->ForcedDespawn();
                                     antnormiPortalptr->DespawnOrUnsummon(2000);
