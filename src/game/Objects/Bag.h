@@ -49,7 +49,7 @@ class Bag : public Item
         // Turtle WoW custom feature:
         uint32 RemoveItems(uint32 itemId, uint32 ReqCount);
         Item* GetItemByEntry(uint32 item) const;
-        uint32 GetItemCount(uint32 item, Item* eItem = NULL) const;
+        uint32 GetItemCount(uint32 item, Item* eItem = nullptr) const;
 
         uint8 GetSlotByItemGUID(ObjectGuid guid) const;
         bool IsEmpty() const;

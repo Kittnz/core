@@ -93,7 +93,7 @@ public:
                 sLog.outError("World Thread hangs, kicking out server!");
                 signal(SIGSEGV, 0);
                 Master::m_handleSigvSignals = false;        // disable anticrash
-                *((uint32 volatile*)NULL) = 0;              // bang crash
+                *((uint32 volatile*)nullptr) = 0;              // bang crash
             }
 #endif
         }
@@ -162,7 +162,7 @@ int Master::Run()
         LoginDatabase.PExecute("UPDATE realmlist SET realmflags = realmflags & ~(%u), population = 0, realmbuilds = '%s'  WHERE id = '%u'", REALM_FLAG_OFFLINE, builds.c_str(), realmID);
     }
 
-    ACE_Based::Thread* cliThread = NULL;
+    ACE_Based::Thread* cliThread = nullptr;
 
     if (sConfig.GetBoolDefault("Console.Enable", true))
     {
@@ -209,7 +209,7 @@ int Master::Run()
     #endif
 
     ///- Start up freeze catcher thread
-    ACE_Based::Thread* freeze_thread = NULL;
+    ACE_Based::Thread* freeze_thread = nullptr;
     if(uint32 freeze_delay = sConfig.GetIntDefault("MaxCoreStuckTime", 0))
     {
         FreezeDetectorRunnable *fdr = new FreezeDetectorRunnable();
@@ -477,7 +477,7 @@ void Master::_OnSignal(int s)
                 sObjectAccessor.SaveAllPlayers();
                 ACE_Based::Thread::Sleep(25000); // Wait enough time to execute the SQL queries.
             }
-            *((int*)NULL) = 42; // Crash for real now.
+            *((int*)nullptr) = 42; // Crash for real now.
             return;
     }
 

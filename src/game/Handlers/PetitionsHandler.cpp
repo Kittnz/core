@@ -119,7 +119,7 @@ void WorldSession::HandlePetitionBuyOpcode(WorldPacket & recv_data)
     ItemPrototype const *pProto = ObjectMgr::GetItemPrototype(charterid);
     if (!pProto)
     {
-        _player->SendBuyError(BUY_ERR_CANT_FIND_ITEM, NULL, charterid, 0);
+        _player->SendBuyError(BUY_ERR_CANT_FIND_ITEM, nullptr, charterid, 0);
         return;
     }
 
@@ -134,7 +134,7 @@ void WorldSession::HandlePetitionBuyOpcode(WorldPacket & recv_data)
     InventoryResult msg = _player->CanStoreNewItem(NULL_BAG, NULL_SLOT, dest, charterid, pProto->BuyCount);
     if (msg != EQUIP_ERR_OK)
     {
-        _player->SendEquipError(msg, NULL, NULL, charterid);
+        _player->SendEquipError(msg, nullptr, nullptr, charterid);
         return;
     }
 

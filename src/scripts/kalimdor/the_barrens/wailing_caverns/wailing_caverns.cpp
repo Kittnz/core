@@ -621,12 +621,14 @@ bool GossipSelect_npc_disciple_of_naralex(Player* pPlayer, Creature* pCreature, 
     {
         if (npc_disciple_of_naralexAI* pEscortAI = dynamic_cast<npc_disciple_of_naralexAI*>(pCreature->AI()))
         {
-            pEscortAI->Start(false, /*pPlayer->GetGUID()*/NULL);//we don't want the out of range check.
+            pEscortAI->Start(false, 0); // We don't want the out of range check.
             pEscortAI->m_playerGuid = pPlayer->GetObjectGuid();
             pCreature->setFaction(FACTION_ESCORT_N_NEUTRAL_ACTIVE);
         }
+
         pPlayer->CLOSE_GOSSIP_MENU();
     }
+
     return true;
 }
 

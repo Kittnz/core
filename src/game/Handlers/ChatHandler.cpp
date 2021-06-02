@@ -118,7 +118,7 @@ uint32_t WorldSession::ChatCooldown()
 
     if (cooldown && cooldownMaxLvl > playerLevel)
     {
-        const auto currTime = time(NULL);
+        const auto currTime = time(nullptr);
         const auto delta = currTime - GetLastPubChanMsgTime();
 
         if (cooldownScaling)
@@ -216,7 +216,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 
         if (type != CHAT_MSG_AFK && type != CHAT_MSG_DND)
         {
-            auto currTime = time(NULL);
+            auto currTime = time(nullptr);
 
             if (m_muteTime > currTime) // Muted
             {
@@ -408,7 +408,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                     }
 
                     chn->Say(playerPointer->GetObjectGuid(), msg.c_str(), lang);
-                    SetLastPubChanMsgTime(time(NULL));
+                    SetLastPubChanMsgTime(time(nullptr));
 
                     if (lang != LANG_ADDON && chn->HasFlag(Channel::ChannelFlags::CHANNEL_FLAG_GENERAL))
                         if (AntispamInterface *a = sAnticheatLib->GetAntispam())
@@ -419,7 +419,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
             if (lang != LANG_ADDON)
             {
                 normalizePlayerName(channel);
-                sWorld.LogChat(this, "Chan", msg, NULL, 0, channel.c_str());
+                sWorld.LogChat(this, "Chan", msg, nullptr, 0, channel.c_str());
             }
         }
         break;
@@ -570,7 +570,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
             ChatHandler::BuildChatPacket(data, ChatMsg(type), msg.c_str(), Language(lang), _player->GetChatTag(), _player->GetObjectGuid(), _player->GetName());
 
             if (lang != LANG_ADDON)
-                sWorld.LogChat(this, "Group", msg, NULL, group->GetId());
+                sWorld.LogChat(this, "Group", msg, nullptr, group->GetId());
 
             group->BroadcastPacket(&data, false, group->GetMemberGroup(GetPlayer()->GetObjectGuid()));
         }
@@ -582,7 +582,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                     guild->BroadcastToGuild(this, msg, lang == LANG_ADDON ? LANG_ADDON : LANG_UNIVERSAL);
 
             if (lang != LANG_ADDON)
-                sWorld.LogChat(this, "Guild", msg, NULL, GetMasterPlayer()->GetGuildId());
+                sWorld.LogChat(this, "Guild", msg, nullptr, GetMasterPlayer()->GetGuildId());
 
             break;
         }
@@ -593,7 +593,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                     guild->BroadcastToOfficers(this, msg, lang == LANG_ADDON ? LANG_ADDON : LANG_UNIVERSAL);
 
             if (lang != LANG_ADDON)
-                sWorld.LogChat(this, "Officer", msg, NULL, GetMasterPlayer()->GetGuildId());
+                sWorld.LogChat(this, "Officer", msg, nullptr, GetMasterPlayer()->GetGuildId());
 
             break;
         }
@@ -613,7 +613,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
             group->BroadcastPacket(&data, false);
 
             if (lang != LANG_ADDON)
-                sWorld.LogChat(this, "Raid", msg, NULL, group->GetId());
+                sWorld.LogChat(this, "Raid", msg, nullptr, group->GetId());
 
         }
         break;
@@ -633,7 +633,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
             group->BroadcastPacket(&data, false);
 
             if (lang != LANG_ADDON)
-                sWorld.LogChat(this, "Raid", msg, NULL, group->GetId());
+                sWorld.LogChat(this, "Raid", msg, nullptr, group->GetId());
         }
         break;
 
@@ -650,7 +650,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
             group->BroadcastPacket(&data, false);
 
             if (lang != LANG_ADDON)
-                sWorld.LogChat(this, "Raid", msg, NULL, group->GetId());
+                sWorld.LogChat(this, "Raid", msg, nullptr, group->GetId());
         }
         break;
 
@@ -666,7 +666,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
             group->BroadcastPacket(&data, false);
 
             if (lang != LANG_ADDON)
-                sWorld.LogChat(this, "BG", msg, NULL, group->GetId());
+                sWorld.LogChat(this, "BG", msg, nullptr, group->GetId());
         }
         break;
 
@@ -682,7 +682,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
             group->BroadcastPacket(&data, false);
 
             if (lang != LANG_ADDON)
-                sWorld.LogChat(this, "BG", msg, NULL, group->GetId());
+                sWorld.LogChat(this, "BG", msg, nullptr, group->GetId());
         }
         break;
 
@@ -737,7 +737,7 @@ void WorldSession::HandleEmoteOpcode(WorldPacket & recv_data)
 
     if (!GetPlayer()->CanSpeak())
     {
-        std::string timeStr = secsToTimeString(m_muteTime - time(NULL));
+        std::string timeStr = secsToTimeString(m_muteTime - time(nullptr));
         SendNotification(GetMangosString(LANG_WAIT_BEFORE_SPEAKING), timeStr.c_str());
         return;
     }
@@ -762,7 +762,7 @@ public:
 
     void operator()(WorldPacket& data, int32 loc_idx)
     {
-        char const* nam = i_target ? i_target->GetNameForLocaleIdx(loc_idx) : NULL;
+        char const* nam = i_target ? i_target->GetNameForLocaleIdx(loc_idx) : nullptr;
         uint32 namlen = (nam ? strlen(nam) : 0) + 1;
 
         data.Initialize(SMSG_TEXT_EMOTE, (20 + namlen));
@@ -791,7 +791,7 @@ void WorldSession::HandleTextEmoteOpcode(WorldPacket & recv_data)
 
     if (!GetPlayer()->CanSpeak())
     {
-        std::string timeStr = secsToTimeString(m_muteTime - time(NULL));
+        std::string timeStr = secsToTimeString(m_muteTime - time(nullptr));
         SendNotification(GetMangosString(LANG_WAIT_BEFORE_SPEAKING), timeStr.c_str());
         return;
     }

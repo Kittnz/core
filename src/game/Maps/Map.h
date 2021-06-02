@@ -425,7 +425,7 @@ class Map : public GridRefManager<NGridType>, public MaNGOS::ObjectLevelLockable
         bool IsBattleGround() const { return i_mapEntry && i_mapEntry->IsBattleGround(); }
         bool IsContinent() const { return i_mapEntry && i_mapEntry->IsContinent(); }
 
-        // can't be NULL for loaded map
+        // can't be nullptr for loaded map
         MapPersistentState* GetPersistentState() const { return m_persistentState; }
 
         void AddObjectToRemoveList(WorldObject *obj);
@@ -996,7 +996,7 @@ class WorldMap : public Map
         WorldMap(uint32 id, time_t expiry, uint32 instance = 0) : Map(id, expiry, instance) {}
         ~WorldMap() {}
 
-        // can't be NULL for loaded map
+        // can't be nullptr for loaded map
         WorldPersistentState* GetPersistanceState() const;
 };
 
@@ -1021,7 +1021,7 @@ class DungeonMap : public Map
 
 
         decltype(m_objectsStore) const & GetObjectStore() const { return m_objectsStore; }
-        // can't be NULL for loaded map
+        // can't be nullptr for loaded map
         DungeonPersistentState* GetPersistanceState() const;
 
         void InitVisibilityDistance() override;
@@ -1051,7 +1051,7 @@ class BattleGroundMap : public Map
         BattleGround* GetBG() const { return m_bg; }
         void SetBG(BattleGround* bg) { m_bg = bg; }
 
-        // can't be NULL for loaded map
+        // can't be nullptr for loaded map
         BattleGroundPersistentState* GetPersistanceState() const;
 
     private:

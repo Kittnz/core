@@ -2076,19 +2076,19 @@ bool GOSelect_go_bounty(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 
     if (action == GOSSIP_ACTION_INFO_DEF + 1) 
     {
         Quest const* pQuest = sObjectMgr.GetQuestTemplate(QUEST_HORDE_PLAYER);
-        pPlayer->AddQuest(pQuest, NULL);
+        pPlayer->AddQuest(pQuest, nullptr);
     }
 
     if (action == GOSSIP_ACTION_INFO_DEF + 2) 
     {
         Quest const* pQuest = sObjectMgr.GetQuestTemplate(QUEST_ALLIANCE_PLAYER);
-        pPlayer->AddQuest(pQuest, NULL);
+        pPlayer->AddQuest(pQuest, nullptr);
     }
 
     if (action == GOSSIP_ACTION_INFO_DEF + 3)
     {
         Quest const* pQuest = sObjectMgr.GetQuestTemplate(70059); // WANTED: Redridgeboss!
-        pPlayer->AddQuest(pQuest, NULL);
+        pPlayer->AddQuest(pQuest, nullptr);
     }
 
     pPlayer->CLOSE_GOSSIP_MENU();
@@ -2393,7 +2393,7 @@ struct refreshment_table_clicks : public GameObjectAI
         max_stacks = 40 * 4;                       // 40 players, 4 stacks per player
         stacks_handed_out = 0;
         table_life = 3 * MINUTE * IN_MILLISECONDS;
-        stand = NULL;
+        stand = nullptr;
     }
 
     int max_stacks;
