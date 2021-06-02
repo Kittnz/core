@@ -351,6 +351,9 @@ AsyncQueriesTickTimeout = 15000
 Movement.RelocationVmapsCheckDelay = 200
 Movement.MaxPointsPerPacket = 80
 
+# Movement interpolation system - not stable now
+Movement.Interpolation = 0
+
 #
 #    Anticrash.Options
 #        Flag values: 1 Announce, 2 Save all, 4 Crash instances, 8 Crash continents, Coredump 16.
