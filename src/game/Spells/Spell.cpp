@@ -5659,7 +5659,7 @@ if (m_caster->IsPlayer() && !(m_spellInfo->Attributes & SPELL_ATTR_PASSIVE)
                     {
                         target_friendly_checked = true;
 						// Turtle specific - allow target friendly targets when you racing, BUT ONLY PLAYERS
-						if (m_casterUnit && m_casterUnit->GetMountID() == GNOMECAR_DISPLAYID || m_casterUnit->GetMountID() == GOBLINCAR_DISPLAYID) // here!
+						if (m_casterUnit && (m_casterUnit->GetMountID() == GNOMECAR_DISPLAYID || m_casterUnit->GetMountID() == GOBLINCAR_DISPLAYID)) // here!
 						{
 							if (!target->IsPlayer())
 							{
