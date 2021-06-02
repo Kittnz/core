@@ -1316,13 +1316,13 @@ float WorldObject::GetDistance3dToCenter(WorldObject const* target) const
     return (dist > 0 ? dist : 0);
 }
 
-float WorldObject::GetExactDistance(float x, float y, float z) const
+float WorldObject::GetDistance3dToCenter(float x, float y, float z) const
 {
     float dx = GetPositionX() - x;
     float dy = GetPositionY() - y;
     float dz = GetPositionZ() - z;
     float dist = sqrt((dx * dx) + (dy * dy) + (dz * dz));
-    return dist;
+    return (dist > 0 ? dist : 0);
 }
 
 float WorldObject::GetDistance(const WorldObject* obj) const

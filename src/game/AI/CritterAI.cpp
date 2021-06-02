@@ -34,6 +34,7 @@ void CritterAI::DamageTaken(Unit* pWho, uint32& uiDamage)
     {
         if (m_creature->GetMotionMaster()->GetCurrentMovementGeneratorType() != TIMED_FLEEING_MOTION_TYPE)
             m_creature->GetMotionMaster()->MoveFleeing(pWho, ESCAPE_TIMER);
+
         m_uiCombatTimer = ESCAPE_TIMER;
     }
 }
@@ -44,13 +45,14 @@ void CritterAI::SpellHit(Unit* pWho, const SpellEntry* pSpell)
     {
         if (m_creature->GetMotionMaster()->GetCurrentMovementGeneratorType() != TIMED_FLEEING_MOTION_TYPE)
             m_creature->GetMotionMaster()->MoveFleeing(pWho, ESCAPE_TIMER);
+
         m_uiCombatTimer = ESCAPE_TIMER;
     }
 }
 
 void CritterAI::UpdateAI(const uint32 diff)
 {
-    if (m_creature->IsInCombat())
+    if (m_creature->isInCombat())
     {
         if (m_uiCombatTimer <= diff)
         {

@@ -159,7 +159,7 @@ void PetAI::UpdateAI(const uint32 diff)
                     case PSTR_FAIL_NOT_ENABLED:
                     case PSTR_FAIL_NO_OWNER:
                     {
-                        if (m_creature->IsInCombat())
+                        if (m_creature->isInCombat())
                             m_creature->CombatStop();
 
                         HandleReturnMovement();
@@ -401,7 +401,7 @@ void PetAI::KilledUnit(Unit* victim)
             case PSTR_FAIL_NOT_ENABLED:
             case PSTR_FAIL_NO_OWNER:
             {
-                if (m_creature->IsInCombat())
+                if (m_creature->isInCombat())
                     m_creature->CombatStop();
 
                 HandleReturnMovement();
@@ -461,7 +461,7 @@ void PetAI::OwnerAttacked(Unit* target)
     // will not make the pet attack that target too. Tested on classic.
     // Defensive pet should not engage until it or its owner is damaged by
     // the enemy, and Aggressive pet aggroes based on proximity.
-    if (!m_creature->IsInCombat() && m_creature->GetOwnerGuid().IsPlayer())
+    if (!m_creature->isInCombat() && m_creature->GetOwnerGuid().IsPlayer())
         return;
 
     if (!m_creature->IsValidAttackTarget(target))
