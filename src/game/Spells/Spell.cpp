@@ -5657,20 +5657,22 @@ if (m_caster->IsPlayer() && !(m_spellInfo->Attributes & SPELL_ATTR_PASSIVE)
                 {
                     if (!target_friendly_checked)
                     {
-                        target_friendly_checked = true;
-						// Turtle specific - allow target friendly targets when you racing, BUT ONLY PLAYERS
-						if (m_casterUnit->GetMountID() == GNOMECAR_DISPLAYID || m_casterUnit->GetMountID() == GOBLINCAR_DISPLAYID) // here!
-						{
-							if (!target->IsPlayer())
-							{
-								return SPELL_FAILED_BAD_TARGETS;
-							}
-						}
-						else
-						{
-							if (!m_caster->IsValidAttackTarget(target))
-								return SPELL_FAILED_BAD_TARGETS;
-						}
+      //                  target_friendly_checked = true;
+						//// Turtle specific - allow target friendly targets when you racing, BUT ONLY PLAYERS
+						//if (m_casterUnit->GetMountID() == GNOMECAR_DISPLAYID || m_casterUnit->GetMountID() == GOBLINCAR_DISPLAYID) // here!
+						//{
+						//	if (!target->IsPlayer())
+						//	{
+						//		return SPELL_FAILED_BAD_TARGETS;
+						//	}
+						//}
+						//else
+						//{
+						//	if (!m_caster->IsValidAttackTarget(target))
+						//		return SPELL_FAILED_BAD_TARGETS;
+						//}
+                        if (!m_caster->IsValidAttackTarget(target))
+                            return SPELL_FAILED_BAD_TARGETS;
                     }
                     explicit_target_mode = true;
                 }
