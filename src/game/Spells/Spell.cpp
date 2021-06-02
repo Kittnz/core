@@ -6528,7 +6528,7 @@ if (m_caster->IsPlayer() && !(m_spellInfo->Attributes & SPELL_ATTR_PASSIVE)
             case SPELL_EFFECT_TELEPORT_UNITS_FACE_CASTER:
             {
                 // not allow use this effect at battleground until battleground start (Nostalrius: Blizzlike)
-                if (!m_caster->IsPlayer())
+                if (m_caster->IsPlayer())
                     if (BattleGround const *bg = ((Player*)m_caster)->GetBattleGround())
                         if (bg->GetStatus() != STATUS_IN_PROGRESS)
                             return SPELL_FAILED_TRY_AGAIN;
