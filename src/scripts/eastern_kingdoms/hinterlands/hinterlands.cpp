@@ -309,7 +309,7 @@ enum
     QUEST_AN_INFINITE_HUNT = 80411,
 
     NPC_KHEYNA = 81041,
-    NPC_CHROMIE = 50116,
+    NPC_CHROMIE = 91002,
     NPC_ANTNORMI = 81265,
     NPC_DRAKONID = 91000,
 
@@ -326,6 +326,7 @@ enum
     YELL_ANTNORMI = -1780407,
 
     SPELL_TELEPORT = 26638,
+    SPELL_BRONZE_AFFLICTION = 23170,
 
     GOB_CHROMIE_PORTAL = 81048,
     GOB_DRAGON_PORTAL = 91001,
@@ -337,15 +338,19 @@ struct go_corrupted_crystal : public GameObjectAI
 {
     go_corrupted_crystal(GameObject* pGo) : GameObjectAI(pGo)
     {
-        // Reset
+        Reset();
     }
     uint32 m_uiDialogueTimer;
     uint32 m_uiTick = 0;
-    bool state = true;//0 = usual, can launch. //1 = in use, cannot launch
+    bool state = true;//true = usual, can launch. //false = in use, cannot launch
     ObjectGuid m_player;
     ObjectGuid drakonidOne;
     ObjectGuid drakonidTwo;
     ObjectGuid antnormiPortal;
+    ObjectGuid chromieGuid;
+    ObjectGuid kheynaGuid;
+    ObjectGuid chromiePortalGuid;
+
     bool doOnce = true;
     bool endPortal = false;
 
@@ -358,6 +363,8 @@ struct go_corrupted_crystal : public GameObjectAI
             case 0:
                 if (Creature* kheyna = me->FindNearestCreature(NPC_KHEYNA, 100, true))
                 {
+                    kheynaGuid = kheyna->GetGUIDLow(); // save guid for ObjectGuid access
+
                     kheyna->MonsterMove(669.26f, -4105.60f, 99.43f);
 
                     if (kheyna->GetPositionX() == 669.26f)
@@ -382,6 +389,8 @@ struct go_corrupted_crystal : public GameObjectAI
             case 2:
                 if (Creature* chromie = me->SummonCreature(NPC_CHROMIE, 667.73f, -4086.49f, 100.71f, 0, TEMPSUMMON_DEAD_DESPAWN))
                 {
+                    chromieGuid = chromie->GetGUIDLow(); // save guid for ObjectGuid access
+
                     chromie->CastSpell(chromie, SPELL_TELEPORT, false);
                     chromie->MonsterSay(SAY_CHROMIE_1); // I've found you villain! There is no escape!
                     chromie->SetFacingTo(4.88f);
@@ -431,6 +440,9 @@ struct go_corrupted_crystal : public GameObjectAI
                     Creature* antnormiPortalSummon = antnormi->SummonCreature(GOB_DRAGON_PORTAL, 726.33f, -4089.56f, 101, 0, TEMPSUMMON_MANUAL_DESPAWN);
 
                     antnormiPortal = antnormiPortalSummon->GetGUID();
+
+                    Creature* drakonidOnePtr = me->GetMap()->GetCreature(drakonidOne);
+                    drakonidOnePtr->PMonsterEmote("");
 
                     antnormi->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PLAYER);
                     antnormi->MonsterMove(702.14f, -4090.37f, 100.71f);
@@ -518,6 +530,7 @@ struct go_corrupted_crystal : public GameObjectAI
                         kheyna->setFaction(11);
                         kheyna->MonsterMove(690.41f, -4087.98f, 100.71f);
                         kheyna->Attack(antnormi, true);
+                        antnormi->AddAura(SPELL_BRONZE_AFFLICTION);
                     }
 
                     m_uiTick++;
@@ -536,6 +549,10 @@ struct go_corrupted_crystal : public GameObjectAI
                         if (doOnce)
                         {
                             antnormi->MonsterYell(YELL_ANTNORMI); // Enough of this! I have no time for insects like you. The master's plan is almost complete and my diversion was a success!
+
+                            if (antnormi->HasAura(SPELL_BRONZE_AFFLICTION))
+                                antnormi->RemoveAurasDueToSpell(SPELL_BRONZE_AFFLICTION);
+
                             doOnce = false;
                         }
                         Creature* antnormiPortalptr = me->GetMap()->GetCreature(antnormiPortal);
@@ -559,14 +576,14 @@ struct go_corrupted_crystal : public GameObjectAI
                                 }
                             }
                         }
-                        m_uiDialogueTimer = 3000;
+                        m_uiDialogueTimer = 1000;
                     }
                 }
                 else Reset();
+
                 break;
             case 13:
                     m_uiTick++;
-                    m_uiDialogueTimer = 1000;
                 break;
             case 14:
                 if (Creature* chromie = me->FindNearestCreature(NPC_CHROMIE, 1000, true))
@@ -576,7 +593,7 @@ struct go_corrupted_crystal : public GameObjectAI
                         chromie->SetFacingToObject(kheyna);
                         kheyna->SetFacingToObject(chromie);
                         chromie->MonsterSay(SAY_CHROMIE_4); // We have much to talk about Kheyna. Adventurer, return to Andorhal and speak to me.
-                        chromie->SummonCreature(GOB_CHROMIE_PORTAL, 681.30, -4090.56, 100.71, 0, TEMPSUMMON_TIMED_DESPAWN, 60000);
+                        chromie->SummonCreature(GOB_CHROMIE_PORTAL, 673.74f, -4090.49, 100.71, 0, TEMPSUMMON_TIMED_DESPAWN, 60000);
                         kheyna->MonsterMove(chromie->GetPositionX() + 1, chromie->GetPositionY() + 1, chromie->GetPositionZ());
 
                         Player* pPlayer = me->GetMap()->GetPlayer(m_player);
@@ -591,40 +608,48 @@ struct go_corrupted_crystal : public GameObjectAI
                 else Reset();
                 break;
             case 15:
-                if (Creature* chromie = me->FindNearestCreature(NPC_CHROMIE, 1000, true))
+            {
+                if (Creature* portal = me->FindNearestCreature(GOB_CHROMIE_PORTAL, 100, true))
                 {
-                    if (Creature* kheyna = chromie->FindNearestCreature(NPC_KHEYNA, 50, true))
+                    chromiePortalGuid = portal->GetGUIDLow();
+
+                    if (Creature* chromie = me->FindNearestCreature(NPC_CHROMIE, 100, true))
                     {
-                        if (Creature* portal = chromie->FindNearestCreature(GOB_CHROMIE_PORTAL, 15, true))
+                        if (Creature* kheyna = me->FindNearestCreature(NPC_KHEYNA, 100, true))
                         {
-                            chromie->MonsterMoveWithSpeed(portal->GetPositionX(), portal->GetPositionY(), portal->GetPositionZ(), 0, 1, MOVE_WALK);
-                            kheyna->MonsterMoveWithSpeed(portal->GetPositionX(), portal->GetPositionY(), portal->GetPositionZ(), 0, 1, MOVE_WALK);
+                            if (chromie)
+                                chromie->MonsterMoveWithSpeed(portal->GetPositionX(), portal->GetPositionY(), portal->GetPositionZ(), 0, 1, MOVE_WALK);
 
-                            if (portal->FindNearestCreature(chromie->GetEntry(), 1, true))
-                            {
-                                chromie->CastSpell(chromie, SPELL_TELEPORT, false);
-                                chromie->ForcedDespawn(1000);
-                            }
-
-                            if (portal->FindNearestCreature(kheyna->GetEntry(), 3, true))
-                                kheyna->HandleEmote(3);
-                            if (portal->FindNearestCreature(kheyna->GetEntry(), 1, true))
-                            {
-                                kheyna->CastSpell(kheyna, SPELL_TELEPORT, false);
-                                kheyna->ForcedDespawn(1000);
-                            }
-
-                            if (!kheyna && !chromie)
-                            {
-                                portal->ForcedDespawn();
-                                m_uiTick++;
-                            }
+                            if (kheyna)
+                                kheyna->MonsterMoveWithSpeed(portal->GetPositionX(), portal->GetPositionY(), portal->GetPositionZ(), 0, 1, MOVE_WALK);
                         }
                     }
-                    m_uiDialogueTimer = 5000;
+
+                    if (Creature* chromie = portal->FindNearestCreature(NPC_CHROMIE, 1, true))
+                    {
+                        chromie->CastSpell(chromie, SPELL_TELEPORT, false);
+                        chromie->ForcedDespawn(500);
+                    }
+
+                    if (Creature* kheyna = portal->FindNearestCreature(NPC_KHEYNA, 3, true))
+                        kheyna->HandleEmote(3);
+
+                    if (Creature* kheyna = portal->FindNearestCreature(NPC_KHEYNA, 1, true))
+                    {
+                        kheyna->CastSpell(kheyna, SPELL_TELEPORT, false);
+                        kheyna->ForcedDespawn(500);
+                    }
+
+                    if (!portal->FindNearestCreature(NPC_CHROMIE, 100, true) && !portal->FindNearestCreature(NPC_KHEYNA, 100, true))
+                    {
+                    m_uiTick++;
+                    m_uiDialogueTimer = 1000;
+                    portal->ForcedDespawn();
+                    }
                 }
                 else Reset();
                 break;
+            }
             case 16:
                 Reset();
                 break;
@@ -651,31 +676,29 @@ struct go_corrupted_crystal : public GameObjectAI
         m_player = pPlayer->GetObjectGuid();
     }
 
+    void DespawnGuid(ObjectGuid& g)
+    {
+        if (Creature* c = me->GetMap()->GetCreature(g))
+            c->ForcedDespawn();
+        g.Clear();
+    }
+
     void Reset()
     {
         bool doOnce = true;
         endPortal = false;
         state = true;
         m_uiDialogueTimer = 0;
+        m_uiTick = 0;
         me->SetGoState(GO_STATE_READY);
         me->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_IN_USE);
 
-        Creature* drakonidOneptr = me->GetMap()->GetCreature(drakonidOne);
-        Creature* drakonidTwoptr = me->GetMap()->GetCreature(drakonidTwo);
-        Creature* antinormiPortalptr = me->GetMap()->GetCreature(antnormiPortal);
-
-        if (drakonidOneptr)
-            drakonidOneptr->ForcedDespawn();
-        if (drakonidTwoptr)
-            drakonidTwoptr->ForcedDespawn();
-        if (antinormiPortalptr)
-            antinormiPortalptr->ForcedDespawn();
-
-        ObjectGuid m_player = NULL;
-        ObjectGuid drakonidOne = NULL;
-        ObjectGuid drakonidTwo = NULL;
-        ObjectGuid antnormiPortal = NULL;
-
+        DespawnGuid(drakonidOne);
+        DespawnGuid(drakonidTwo);
+        DespawnGuid(antnormiPortal);
+        DespawnGuid(chromieGuid);
+        DespawnGuid(kheynaGuid);
+        DespawnGuid(chromiePortalGuid);
     }
 };
 
@@ -686,8 +709,14 @@ GameObjectAI* GetAI_go_corrupted_crystal(GameObject* gameobject)
 
 bool GOHello_go_corrupted_crystal(Player* pPlayer, GameObject* pGO)
 {
-    if (pPlayer->GetQuestStatus(QUEST_AN_INFINITE_HUNT) == QUEST_STATUS_INCOMPLETE)
+    if (pPlayer->GetQuestStatus(QUEST_AN_INFINITE_HUNT) != QUEST_STATUS_INCOMPLETE)
     {
+        pGO->SetGoState(GO_STATE_READY);
+        pGO->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_IN_USE);
+        pGO->Respawn();
+
+        return false;
+    }
         if (go_corrupted_crystal* gobAI = dynamic_cast<go_corrupted_crystal*>(pGO->AI()))
         {
             if (gobAI->CheckCanStartEvent())
@@ -699,7 +728,6 @@ bool GOHello_go_corrupted_crystal(Player* pPlayer, GameObject* pGO)
             }
         }
         return false;
-    }
 }
 
 
