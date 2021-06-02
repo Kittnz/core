@@ -1288,7 +1288,7 @@ InstanceData* WorldObject::GetInstanceData() const
     return GetMap()->GetInstanceData();
 }
 
-float WorldObject::GetCombatDistance(const WorldObject* target) const
+float WorldObject::GetCombatDistance(WorldObject const* target) const
 {
     float radius = target->GetCombatReach() + GetCombatReach();
     float dx = GetPositionX() - target->GetPositionX();
@@ -1298,7 +1298,16 @@ float WorldObject::GetCombatDistance(const WorldObject* target) const
     return (dist > 0 ? dist : 0);
 }
 
-float WorldObject::GetDistanceToCenter(const WorldObject* target) const
+float WorldObject::GetDistance2dToCenter(WorldObject const* target) const
+{
+    float dx = GetPositionX() - target->GetPositionX();
+    float dy = GetPositionY() - target->GetPositionY();
+    float dist = sqrt((dx * dx) + (dy * dy));
+    return (dist > 0 ? dist : 0);
+}
+//slow
+
+float WorldObject::GetDistance3dToCenter(WorldObject const* target) const
 {
     float dx = GetPositionX() - target->GetPositionX();
     float dy = GetPositionY() - target->GetPositionY();
@@ -1306,18 +1315,6 @@ float WorldObject::GetDistanceToCenter(const WorldObject* target) const
     float dist = sqrt((dx * dx) + (dy * dy) + (dz * dz));
     return (dist > 0 ? dist : 0);
 }
-//slow
-
-float WorldObject::GetExactDistance(const WorldObject* obj) const
-{
-    ASSERT(obj);
-    float dx = GetPositionX() - obj->GetPositionX();
-    float dy = GetPositionY() - obj->GetPositionY();
-    float dz = GetPositionZ() - obj->GetPositionZ();
-    float dist = sqrt((dx * dx) + (dy * dy) + (dz * dz));
-    return dist;
-}
-
 
 float WorldObject::GetExactDistance(float x, float y, float z) const
 {
@@ -1327,7 +1324,6 @@ float WorldObject::GetExactDistance(float x, float y, float z) const
     float dist = sqrt((dx * dx) + (dy * dy) + (dz * dz));
     return dist;
 }
-
 
 float WorldObject::GetDistance(const WorldObject* obj) const
 {
@@ -1369,7 +1365,7 @@ float WorldObject::GetDistanceSqr(float x, float y, float z) const
     return (dist > 0 ? dist : 0);
 }
 
-float WorldObject::GetDistance2d(const WorldObject* obj) const
+float WorldObject::GetDistance2d(WorldObject const* obj) const
 {
     ASSERT(obj);
     float dx = GetPositionX() - obj->GetPositionX();
@@ -1379,7 +1375,7 @@ float WorldObject::GetDistance2d(const WorldObject* obj) const
     return (dist > 0 ? dist : 0);
 }
 
-float WorldObject::GetDistanceZ(const WorldObject* obj) const
+float WorldObject::GetDistanceZ(WorldObject const* obj) const
 {
     ASSERT(obj);
     float dz = fabs(GetPositionZ() - obj->GetPositionZ());
@@ -1413,7 +1409,7 @@ bool WorldObject::IsWithinDist2d(float x, float y, float dist2compare) const
     return distsq < maxdist * maxdist;
 }
 
-bool WorldObject::IsInMap(const WorldObject* obj) const
+bool WorldObject::IsInMap(WorldObject const* obj) const
 {
     return IsInWorld() && obj->IsInWorld() && (GetMap() == obj->GetMap());
 }
@@ -1429,13 +1425,14 @@ bool WorldObject::_IsWithinDist(WorldObject const* obj, float dist2compare, bool
         float dz = GetPositionZ() - obj->GetPositionZ();
         distsq += dz * dz;
     }
+
     float sizefactor = GetObjectBoundingRadius() + obj->GetObjectBoundingRadius();
     float maxdist = dist2compare + sizefactor;
 
     return distsq < maxdist * maxdist;
 }
 
-bool WorldObject::IsWithinLOSInMap(const WorldObject* obj, bool checkDynLos) const
+bool WorldObject::IsWithinLOSInMap(WorldObject const* obj, bool checkDynLos) const
 {
     ASSERT(obj);
     if (!IsInMap(obj))
@@ -1592,7 +1589,7 @@ float WorldObject::GetLeewayBonusRadius() const
     return 0.0f;
 }
 
-float WorldObject::GetAngle(const WorldObject* obj) const
+float WorldObject::GetAngle(WorldObject const* obj) const
 {
     if (!obj) return 0;
     return GetAngle(obj->GetPositionX(), obj->GetPositionY());
@@ -1637,7 +1634,7 @@ bool WorldObject::HasInArc(const float arcangle, const float x, const float y) c
     return ((angle >= lborder) && (angle <= rborder));
 }
 
-bool WorldObject::HasInArc(const float arcangle, const WorldObject* obj, float offset) const
+bool WorldObject::HasInArc(const float arcangle, WorldObject const* obj, float offset) const
 {
     // always have self in arc
     if (obj == this)

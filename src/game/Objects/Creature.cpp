@@ -2625,7 +2625,7 @@ Unit* Creature::SelectAttackingTarget(AttackingTarget target, uint32 position, S
                 pTarget = GetMap()->GetUnit((*itr)->getUnitGuid());
                 if (pTarget && MeetsSelectAttackingRequirement(pTarget, pSpellInfo, selectFlags))
                 {
-                    combatDistance = GetDistanceToCenter(pTarget);
+                    combatDistance = GetDistance3dToCenter(pTarget);
                     if (!suitableTarget || combatDistance < distance)
                     {
                         distance = combatDistance;
