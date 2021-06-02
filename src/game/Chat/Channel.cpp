@@ -28,7 +28,7 @@
 #include "Config/Config.h"
 #include "Util.h"
 
-Channel::Channel(const std::string& name)
+Channel::Channel(std::string const& name)
     : m_announce(true), m_moderate(false), m_name(name), m_flags(0), m_channelId(0),
         m_securityLevel(0), m_area_dependant(true), m_levelRestricted(true)
 {
@@ -871,7 +871,7 @@ void Channel::MakeOwnerChanged(WorldPacket *data, ObjectGuid guid)
     *data << ObjectGuid(guid);
 }
 
-void Channel::MakePlayerNotFound(WorldPacket *data, const std::string& name)
+void Channel::MakePlayerNotFound(WorldPacket *data, std::string const& name)
 {
     MakeNotifyPacket(data, CHAT_PLAYER_NOT_FOUND_NOTICE);
     *data << name;
@@ -956,7 +956,7 @@ void Channel::MakePlayerUnbanned(WorldPacket *data, ObjectGuid target, ObjectGui
     *data << ObjectGuid(source);
 }
 
-void Channel::MakePlayerNotBanned(WorldPacket *data, const std::string& name)
+void Channel::MakePlayerNotBanned(WorldPacket *data, std::string const& name)
 {
     MakeNotifyPacket(data, CHAT_PLAYER_NOT_BANNED_NOTICE);
     *data << name;
@@ -994,13 +994,13 @@ void Channel::MakeNotModerated(WorldPacket *data)
     MakeNotifyPacket(data, CHAT_NOT_MODERATED_NOTICE);
 }
 
-void Channel::MakePlayerInvited(WorldPacket *data, const std::string& name)
+void Channel::MakePlayerInvited(WorldPacket *data, std::string const& name)
 {
     MakeNotifyPacket(data, CHAT_PLAYER_INVITED_NOTICE);
     *data << name;
 }
 
-void Channel::MakePlayerInviteBanned(WorldPacket *data, const std::string& name)
+void Channel::MakePlayerInviteBanned(WorldPacket *data, std::string const& name)
 {
     MakeNotifyPacket(data, CHAT_PLAYER_INVITE_BANNED_NOTICE);
     *data << name;

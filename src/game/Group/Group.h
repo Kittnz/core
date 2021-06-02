@@ -226,7 +226,7 @@ class Group
         // member manipulation methods
         bool IsMember(ObjectGuid guid) const { return _getMemberCSlot(guid) != m_memberSlots.end(); }
         bool IsLeader(ObjectGuid guid) const { return GetLeaderGuid() == guid; }
-        ObjectGuid GetMemberGuid(const std::string& name)
+        ObjectGuid GetMemberGuid(std::string const& name)
         {
             for(member_citerator itr = m_memberSlots.begin(); itr != m_memberSlots.end(); ++itr)
                 if (itr->name == name)
@@ -234,6 +234,7 @@ class Group
 
             return ObjectGuid();
         }
+
         bool IsAssistant(ObjectGuid guid) const
         {
             member_citerator mslot = _getMemberCSlot(guid);
@@ -242,8 +243,9 @@ class Group
 
             return mslot->assistant;
         }
+
         Player* GetInvited(ObjectGuid guid) const;
-        Player* GetInvited(const std::string& name) const;
+        Player* GetInvited(std::string const& name) const;
 
         bool HasFreeSlotSubGroup(uint8 subgroup) const
         {

@@ -43,7 +43,7 @@
     -FIX sending PartyMemberStats
 */
 
-void WorldSession::SendPartyResult(PartyOperation operation, const std::string& member, PartyResult res)
+void WorldSession::SendPartyResult(PartyOperation operation, std::string const& member, PartyResult res)
 {
     WorldPacket data(SMSG_PARTY_COMMAND_RESULT, (4 + member.size() + 1 + 4));
     data << uint32(operation);
@@ -80,7 +80,7 @@ void WorldSession::HandleGroupInviteOpcode(WorldPacket & recv_data)
     if (!GetPlayer()->HandleHardcoreInteraction(player, true))
     {
         SendPartyResult(PARTY_OP_INVITE, membername, ERR_BAD_PLAYER_NAME_S);
-        GetPlayer()->GetSession()->SendNotification("You are able to group up only with other Hardcore characters as long as the difference between your levels isn’t higher than 5.");
+        GetPlayer()->GetSession()->SendNotification("You are able to group up only with other Hardcore characters as long as the difference between your levels isnï¿½t higher than 5.");
         return;
     }
 
@@ -132,7 +132,7 @@ void WorldSession::HandleGroupInviteOpcode(WorldPacket & recv_data)
         if (!group->HandleHardcoreInteraction(player))
         {
             SendPartyResult(PARTY_OP_INVITE, membername, ERR_BAD_PLAYER_NAME_S);
-            GetPlayer()->GetSession()->SendNotification("You are able to group up only with other Hardcore characters as long as the difference between your levels isn’t higher than 5.");
+            GetPlayer()->GetSession()->SendNotification("You are able to group up only with other Hardcore characters as long as the difference between your levels isnï¿½t higher than 5.");
             return;
         }
     }
