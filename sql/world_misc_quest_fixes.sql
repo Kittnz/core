@@ -6,7 +6,9 @@ UPDATE `quest_template` SET `Method` = 0, `Objectives` = '', `Details` = '', `Of
 DELETE FROM `creature_questrelation` WHERE `quest`=5641;
 INSERT INTO `creature_questrelation` VALUES (11406, 5641, 0, 10);
 UPDATE `quest_template` SET `Method` = 0, `Objectives` = '', `Details` = ''  WHERE `entry`=5641;
+DELETE FROM `creature_questrelation` WHERE `quest`=5652;
 INSERT INTO `creature_questrelation` VALUES (6018, 5652, 0, 10);
+DELETE FROM `creature_involvedrelation` WHERE `quest`=5652;
 INSERT INTO `creature_involvedrelation` VALUES (6018, 5652, 0, 10);
 UPDATE `quest_template` SET `Method` = 0, `Objectives` = '', `Details` = ''  WHERE `entry`=5652;
 DELETE FROM `creature_questrelation` WHERE `quest`=5658;
@@ -316,7 +318,9 @@ UPDATE `quest_template` SET `RewChoiceItemCount2` = 5 WHERE `entry`=8981;
 */
 
 -- Troll Necklace Bounty (Repeatable)
+DELETE FROM `creature_questrelation` WHERE `quest`=2881;
 INSERT INTO `creature_questrelation` (`id`, `quest`, `patch_min`, `patch_max`) VALUES (7884, 2881, 0, 10);
+DELETE FROM `creature_involvedrelation` WHERE `quest`=2881;
 INSERT INTO `creature_involvedrelation` (`id`, `quest`, `patch_min`, `patch_max`) VALUES (7884, 2881, 0, 10);
 UPDATE `quest_template` SET `PrevQuestId`=2880, `SpecialFlags`=1 WHERE `entry`=2881;
 -- The Key to Scholomance (Ally)

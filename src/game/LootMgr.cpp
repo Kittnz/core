@@ -66,7 +66,7 @@ private:
     LootStoreItemList ExplicitlyChanced;                // Entries with chances defined in DB
     LootStoreItemList EqualChanced;                     // Zero chances - every entry takes the same chance
 
-    LootStoreItem const * Roll(Loot const& loot) const;                 // Rolls an item from the group, returns NULL if all miss their chances
+    LootStoreItem const * Roll(Loot const& loot) const;                 // Rolls an item from the group, returns nullptr if all miss their chances
     bool hasConditionalEqualChancedItem;
 };
 
@@ -205,7 +205,7 @@ LootTemplate const* LootStore::GetLootFor(uint32 loot_id) const
     LootTemplateMap::const_iterator tab = m_LootTemplates.find(loot_id);
 
     if (tab == m_LootTemplates.end())
-        return NULL;
+        return nullptr;
 
     return tab->second;
 }
@@ -492,7 +492,7 @@ bool Loot::FillLoot(uint32 loot_id, LootStore const& store, Player* loot_owner, 
     {
         roundRobinPlayer = loot_owner->GetGUID();
         _personal        = false;
-        for (GroupReference *itr = group->GetFirstMember(); itr != NULL; itr = itr->next())
+        for (GroupReference *itr = group->GetFirstMember(); itr != nullptr; itr = itr->next())
             if (Player* pl = itr->getSource())
             {
                 if (!looted || (pl->IsInWorld() && pl->IsAtGroupRewardDistance(looted)))
@@ -547,7 +547,7 @@ void Loot::FillNotNormalLootFor(Player* pl)
 QuestItemList* Loot::FillFFALoot(Player* player)
 {
     if (!player->IsInWorld())
-        return NULL;
+        return nullptr;
 
     QuestItemList *ql = new QuestItemList();
 
@@ -563,7 +563,7 @@ QuestItemList* Loot::FillFFALoot(Player* player)
     if (ql->empty())
     {
         delete ql;
-        return NULL;
+        return nullptr;
     }
 
     m_playerFFAItems[player->GetGUIDLow()] = ql;
@@ -573,9 +573,9 @@ QuestItemList* Loot::FillFFALoot(Player* player)
 QuestItemList* Loot::FillQuestLoot(Player* player)
 {
     if (!player->IsInWorld())
-        return NULL;
+        return nullptr;
 
-    if (items.size() == MAX_NR_LOOT_ITEMS) return NULL;
+    if (items.size() == MAX_NR_LOOT_ITEMS) return nullptr;
     QuestItemList *ql = new QuestItemList();
 
     for (uint8 i = 0; i < m_questItems.size(); ++i)
@@ -601,7 +601,7 @@ QuestItemList* Loot::FillQuestLoot(Player* player)
     if (ql->empty())
     {
         delete ql;
-        return NULL;
+        return nullptr;
     }
 
     m_playerQuestItems[player->GetGUIDLow()] = ql;
@@ -611,7 +611,7 @@ QuestItemList* Loot::FillQuestLoot(Player* player)
 QuestItemList* Loot::FillNonQuestNonFFAConditionalLoot(Player* player)
 {
     if (!player->IsInWorld())
-        return NULL;
+        return nullptr;
 
     QuestItemList *ql = new QuestItemList();
 
@@ -631,7 +631,7 @@ QuestItemList* Loot::FillNonQuestNonFFAConditionalLoot(Player* player)
     if (ql->empty())
     {
         delete ql;
-        return NULL;
+        return nullptr;
     }
 
     m_playerNonQuestNonFFAConditionalItems[player->GetGUIDLow()] = ql;
@@ -720,7 +720,7 @@ void Loot::generateMoneyLoot(uint32 minAmount, uint32 maxAmount)
 
 LootItem* Loot::LootItemInSlot(uint32 lootSlot, uint32 playerGuid, QuestItem **qitem, QuestItem **ffaitem, QuestItem **conditem)
 {
-    LootItem* item = NULL;
+    LootItem* item = nullptr;
     bool is_looted = true;
     if (lootSlot >= items.size())
     {
@@ -776,7 +776,7 @@ LootItem* Loot::LootItemInSlot(uint32 lootSlot, uint32 playerGuid, QuestItem **q
     }
 
     if (is_looted)
-        return NULL;
+        return nullptr;
 
     return item;
 }
@@ -1048,7 +1048,7 @@ void LootTemplate::LootGroup::AddEntry(LootStoreItem& item)
     }
 }
 
-// Rolls an item from the group, returns NULL if all miss their chances
+// Rolls an item from the group, returns nullptr if all miss their chances
 LootStoreItem const * LootTemplate::LootGroup::Roll(Loot const& loot) const
 {
     if (!ExplicitlyChanced.empty())                         // First explicitly chanced entries are checked
@@ -1085,7 +1085,7 @@ LootStoreItem const * LootTemplate::LootGroup::Roll(Loot const& loot) const
             return &EqualChanced[indexesOk[urand(0, indexesOk.size() - 1)]];
     }
 
-    return NULL;                                            // Empty drop from the group
+    return nullptr;                                            // Empty drop from the group
 }
 
 // True if group includes at least 1 quest drop entry
@@ -1116,7 +1116,7 @@ bool LootTemplate::LootGroup::HasQuestDropForPlayer(Player const * player) const
 void LootTemplate::LootGroup::Process(Loot& loot) const
 {
     LootStoreItem const * item = Roll(loot);
-    if (item != NULL)
+    if (item != nullptr)
         loot.AddItem(*item);
 }
 

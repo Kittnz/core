@@ -395,7 +395,7 @@ struct mob_prowlerAI : public ScriptedAI
         if (Creature* pArlokk = m_creature->GetMap()->GetCreature(m_uiArlokkGuid))
             if (pArlokk->isAlive())
                 return CAST_AI(boss_arlokkAI, pArlokk->AI());
-        return NULL;
+        return nullptr;
     }
     void Reset()
     {
@@ -414,7 +414,7 @@ struct mob_prowlerAI : public ScriptedAI
     {
         if (m_uiUpdateTarget_Timer <= uiDiff)
         {
-            Unit *pMarkedTarget = NULL;
+            Unit *pMarkedTarget = nullptr;
             if (boss_arlokkAI* pArlokkAI = GetArlokkAI())
                 pMarkedTarget = m_creature->GetMap()->GetUnit(pArlokkAI->m_uiMarkedGUID);
             else

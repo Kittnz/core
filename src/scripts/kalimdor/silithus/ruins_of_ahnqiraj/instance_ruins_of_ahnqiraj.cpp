@@ -114,23 +114,23 @@ uint64 instance_ruins_of_ahnqiraj::GetData64(uint32 uiData)
             return m_uiZerranGUID;
         case DATA_RAJAXX:
             return m_uiRajaxxGUID;
-
         case DATA_YEGGETH_SHIELD:
+        {
             m_uiGUIDvalue = 0;
             m_uiYeggethSizeList = m_lYeggethShieldList.size();
             m_uiRandomYeggethList = urand(0, m_uiYeggethSizeList);
             m_uiIterator = 0;
 
-            for (std::list<uint64>::const_iterator itr = m_lYeggethShieldList.begin();
-                    itr != m_lYeggethShieldList.end() || m_uiIterator != m_uiRandomYeggethList; itr++)
+            for (std::list<uint64>::const_iterator itr = m_lYeggethShieldList.begin(); itr != m_lYeggethShieldList.end() || m_uiIterator != m_uiRandomYeggethList; itr++)
             {
                 m_uiGUIDvalue = instance->GetCreature(*itr)->GetObjectGuid();
                 m_uiIterator++;
             }
-            return m_uiGUIDvalue;
 
+            return m_uiGUIDvalue;
+        }
         default:
-            return NULL;
+            return 0;
     }
 }
 

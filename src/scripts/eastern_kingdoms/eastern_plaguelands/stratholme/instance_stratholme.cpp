@@ -1,24 +1,6 @@
 #include "scriptPCH.h"
 #include "stratholme.h"
 
-/*
-UPDATE `creature_template` SET `script_name`='mobs_rat_pestifere' WHERE (`entry`='10441');
-UPDATE `gameobject_template` SET `script_name`='go_entree_de_service' WHERE (`entry`='175368');
-INSERT INTO `creature_ai_texts` (`entry` ,`content_default` ,`content_loc1` ,`content_loc2` ,`content_loc3` ,`content_loc4` ,`content_loc5` ,`content_loc6` ,`content_loc7` ,`content_loc8` ,`sound` ,`type` ,`language` ,`emote` ,`comment`) VALUES
-('-20000', 'Des intrus ! Encore des marionnettes de l''Aube d''argent, sans doute. J''en ai d�j� une parmi mes prisonniers. H�tez-vous de quitter nom domaine, sans quoi elle sera ex�cut�e !', NULL , NULL , NULL , NULL , NULL , NULL , NULL , NULL , '0', '0', '0', '0', NULL),
-('-20001', 'Je vais prendre beaucoup de plaisir � tuer cette pauvre femme ! Il n''est pas trop tard, Il n''est pas n�cessaire qu''elle souffre pour rien. Allez-vous-en et sa mort sera mis�ricordieuse !', NULL , NULL , NULL , NULL , NULL , NULL , NULL , NULL , '0', '0', '0', '0', NULL),
-('-20002', 'Ne vous inqui�tez pas de moi ! Tuez cette b�te odieuse ! Lib�rez le monde de sa vile corruption !', NULL , NULL , NULL , NULL , NULL , NULL , NULL , NULL , '0', '0', '0', '0', NULL),
-('-20003', 'Un Cristal d''Ash''ari vient d''�tre renvers� ! Restaurez la ziggourat avant que la n�cropole ne soit vuln�rable.', NULL , NULL , NULL , NULL , NULL , NULL , NULL , NULL , '0', '0', '0', '0', NULL),
-('-20004', 'Les cristaux d''Ash''ari ont �t� d�truits ! L''abattoir est vuln�rable !', NULL , NULL , NULL , NULL , NULL , NULL , NULL , NULL , '0', '0', '0', '0', NULL);
-DELETE FROM gameobject WHERE guid = '82644';
-INSERT INTO gameobject VALUES ( 82644, 181072, 329, 4044.34, -3334.23, 115.06, 2.61058, 0, 0, 0.877461, -0.479649, 180, 100, 1);
-DELETE FROM gameobject WHERE guid = '82643';
-INSERT INTO gameobject VALUES ( 82643, 181071, 329, 4044.34, -3334.22, 115.06, 2.61058, 0, 0, 0.964959, 0.2624, 0, 255, 1);
-UPDATE creature SET position_x = '4044.34', position_y = '-3334.23', position_z = '115.06', orientation = '4.1421' WHERE id = '16031';
-DELETE FROM creature WHERE id = '10558';
-UPDATE `creature_template` SET `MovementType` = '0',`InhabitType` = '4',`script_name` = 'mobs_cristal_zuggurat' WHERE `entry` =10415;
-*/
-
 enum
 {
     GO_SERVICE_ENTRANCE         = 175368,
