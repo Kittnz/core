@@ -796,6 +796,7 @@ class WorldObject : public Object
         float GetCombatDistance(WorldObject const* target) const;
         float GetDistance2dToCenter(WorldObject const* target) const;
         float GetDistance3dToCenter(WorldObject const* target) const;
+        float GetDistance3dToCenter(float x, float y, float z) const;
         float GetDistance(WorldObject const* obj) const;
         float GetDistance(float x, float y, float z) const;
         float GetDistance2d(WorldObject const* obj) const;

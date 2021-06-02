@@ -135,7 +135,7 @@ bool PetEventAI::FindTargetForAttack()
     Unit::AttackerSet attackers = m_creature->getAttackers();
     for (const auto& itr : attackers)
     {
-        if (itr->IsInMap(m_creature) && itr->IsTargetableForAttack() && !itr->HasAuraPetShouldAvoidBreaking())
+        if (itr->IsInMap(m_creature) && itr->isTargetableForAttack() && !itr->HasAuraPetShouldAvoidBreaking())
         {
             AttackStart(itr);
             return true;
@@ -162,7 +162,7 @@ bool PetEventAI::FindTargetForAttack()
             Unit::AttackerSet owner_attackers = pOwner->getAttackers();
             for (const auto& itr : owner_attackers)
             {
-                if (itr->IsInMap(m_creature) && itr->IsTargetableForAttack() && !itr->HasAuraPetShouldAvoidBreaking())
+                if (itr->IsInMap(m_creature) && itr->isTargetableForAttack() && !itr->HasAuraPetShouldAvoidBreaking())
                 {
                     AttackStart(itr);
                     return true;

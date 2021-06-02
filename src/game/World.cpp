@@ -1968,6 +1968,7 @@ void World::SendGMTicketText(int32 string_id, ...)
             }
         }
     }
+}
 
 void World::SendGMText(int32 string_id, ...)
 {
@@ -1990,6 +1991,7 @@ void World::SendGMText(int32 string_id, ...)
             }
         }
     }
+}
 
 /// DEPRICATED, only for debug purpose. Send a System Message to all players (except self if mentioned)
 void World::SendGlobalText(const char* text, WorldSession *self)
