@@ -21951,11 +21951,11 @@ void Player::MailRidingTurtleGift()
 
 void Player::MailOpenHouseGift()
 {
-    std::string subject = "Open House 2020";
+    std::string subject = "Open House 2021";
     std::string message = "Thanks for joining the Open House event!\n\nWe hope you enjoy rest of the journey and continue being a part of our amazing community!";
 
     {
-        Item* ToMailItem = Item::CreateItem(51892, 1, this);
+        Item* ToMailItem = Item::CreateItem(51893, 1, this);
         ToMailItem->SaveToDB();
 
         MailDraft(subject, sObjectMgr.CreateItemText(message))
