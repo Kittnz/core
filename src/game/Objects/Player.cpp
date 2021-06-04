@@ -5041,7 +5041,8 @@ enum CustomGraveyardZones
     CGZ_CAVERNS_OF_TIME         = 1941,
     CGZ_LOCH_MODAN              = 38,
     CGZ_ALAH_THALAS             = 2037,
-    CGZ_DEEPRUN_TRAM            = 2257
+    CGZ_DEEPRUN_TRAM            = 2257,
+    CGZ_MUDSPROCKET             = 15
 };
 
 void Player::RepopAtGraveyard()
@@ -5138,6 +5139,13 @@ void Player::RepopAtGraveyard()
         break;
     case CGZ_DEEPRUN_TRAM:
         {
+            isCustomGraveyard = true;
+        }
+        break;
+    case CGZ_MUDSPROCKET:
+        if (GetTeam() == HORDE)
+        {
+            TeleportTo(1, -4634.16F, -3135.34F, 34.92F, 3.9F);
             isCustomGraveyard = true;
         }
         break;
