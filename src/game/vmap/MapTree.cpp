@@ -20,6 +20,7 @@
 #include "ModelInstance.h"
 #include "VMapManager2.h"
 #include "VMapDefinitions.h"
+#include "World.h"
 
 #include <string>
 #include <sstream>
@@ -37,15 +38,17 @@ public:
     bool operator()(const G3D::Ray& ray, uint32 entry, float& distance, bool pStopAtFirstHit = true)
     {
         // Nostalrius: pas de LoS pour certains models (arbres, ...)
-        if (los && prims[entry].flags & (sWorld.getConfig(CONFIG_BOOL_STATIC_OBJECT_LOS) ? MOD_NO_BREAK_LOS : MOD_NO_BREAK_LOS_BLIZZLIKE))
+        if (los && prims[entry].flags & MOD_NO_BREAK_LOS)
             return false;
 
         bool result = prims[entry].intersectRay(ray, distance, pStopAtFirstHit);
         if (result)
             hit = true;
+
         return result;
     }
-    bool didHit()
+
+    bool didHit() const
     {
         return hit;
     }
@@ -62,11 +65,14 @@ public:
     bool operator()(const G3D::Ray& ray, uint32 entry, float& distance, bool pStopAtFirstHit = true)
     {
         bool hit = prims[entry].intersectRay(ray, distance, pStopAtFirstHit);
-        if (hit && (!result || result->flags & (sWorld.getConfig(CONFIG_BOOL_STATIC_OBJECT_LOS) ? MOD_NO_BREAK_LOS : MOD_NO_BREAK_LOS_BLIZZLIKE)))
+        if (hit && (!result || result->flags & MOD_NO_BREAK_LOS))
             result = &prims[entry];
+
         return hit;
     }
+
     ModelInstance* result;
+
 protected:
     ModelInstance* prims;
 };
@@ -122,6 +128,7 @@ bool StaticMapTree::getAreaInfo(Vector3& pos, uint32& flags, int32& adtId, int32
 {
     AreaInfoCallback intersectionCallBack(iTreeValues);
     iTree.intersectPoint(pos, intersectionCallBack);
+
     if (intersectionCallBack.aInfo.result)
     {
         flags = intersectionCallBack.aInfo.flags;
@@ -129,8 +136,10 @@ bool StaticMapTree::getAreaInfo(Vector3& pos, uint32& flags, int32& adtId, int32
         rootId = intersectionCallBack.aInfo.rootId;
         groupId = intersectionCallBack.aInfo.groupId;
         pos.z = intersectionCallBack.aInfo.ground_Z;
+
         return true;
     }
+
     return false;
 }
 
@@ -143,11 +152,14 @@ public:
         float newOut = -1;
         float newIn = -1;
         prims[entry].isUnderModel(point, &newOut, &newIn);
+
         if (outDist < 0 || (newOut >= 0 && newOut < outDist))
             outDist = newOut;
+
         if (inDist < 0 || (newIn >= 0 && newIn < inDist))
             inDist = newIn;
     }
+
     bool UnderModel() const
     {
         return (outDist < 0 && inDist >= 0) || (0 <= inDist && inDist < outDist);
@@ -163,10 +175,13 @@ bool StaticMapTree::isUnderModel(Vector3& pos, float* outDist, float* inDist) co
 {
     UnderModelCallback intersectionCallBack(iTreeValues);
     iTree.intersectPoint(pos, intersectionCallBack);
+
     if (outDist)
         *outDist = intersectionCallBack.outDist;
+
     if (inDist)
         *inDist = intersectionCallBack.inDist;
+
     return intersectionCallBack.UnderModel();
 }
 
@@ -174,6 +189,7 @@ bool StaticMapTree::GetLocationInfo(const Vector3& pos, LocationInfo& info) cons
 {
     LocationInfoCallback intersectionCallBack(iTreeValues, info);
     iTree.intersectPoint(pos, intersectionCallBack);
+
     return intersectionCallBack.result;
 }
 
@@ -202,8 +218,10 @@ bool StaticMapTree::getIntersectionTime(const G3D::Ray& pRay, float& pMaxDist, b
     float distance = pMaxDist;
     MapRayCallback intersectionCallBack(iTreeValues, isLosCheck);
     iTree.intersectRay(pRay, intersectionCallBack, distance, pStopAtFirstHit);
+
     if (intersectionCallBack.didHit())
         pMaxDist = distance;
+
     return intersectionCallBack.didHit();
 }
 //=========================================================
@@ -218,10 +236,7 @@ bool StaticMapTree::isInLineOfSight(const Vector3& pos1, const Vector3& pos2) co
         return true;
     // direction with length of 1
     G3D::Ray ray = G3D::Ray::fromOriginAndDirection(pos1, (pos2 - pos1) / maxDist);
-    if (getIntersectionTime(ray, maxDist, true, true))
-        return false;
-
-    return true;
+    return !getIntersectionTime(ray, maxDist, true, true);
 }
 //=========================================================
 /**
@@ -231,7 +246,6 @@ Return the hit pos or the original dest pos
 
 bool StaticMapTree::getObjectHitPos(const Vector3& pPos1, const Vector3& pPos2, Vector3& pResultHitPos, float pModifyDist) const
 {
-    bool result = false;
     float maxDist = (pPos2 - pPos1).magnitude();
     // valid map coords should *never ever* produce float overflow, but this would produce NaNs too:
     MANGOS_ASSERT(maxDist < std::numeric_limits<float>::max());
@@ -241,6 +255,7 @@ bool StaticMapTree::getObjectHitPos(const Vector3& pPos1, const Vector3& pPos2, 
         pResultHitPos = pPos2;
         return false;
     }
+
     Vector3 dir = (pPos2 - pPos1) / maxDist;            // direction with length of 1
     G3D::Ray ray(pPos1, dir);
     float dist = maxDist;
@@ -256,14 +271,12 @@ bool StaticMapTree::getObjectHitPos(const Vector3& pPos1, const Vector3& pPos2, 
         }
         else
             pResultHitPos = pResultHitPos + dir * pModifyDist;
-        result = true;
+
+        return true;
     }
-    else
-    {
-        pResultHitPos = pPos2;
-        result = false;
-    }
-    return result;
+
+    pResultHitPos = pPos2;
+    return false;
 }
 
 ModelInstance* StaticMapTree::FindCollisionModel(const G3D::Vector3& pos1, const G3D::Vector3& pos2)
@@ -271,12 +284,15 @@ ModelInstance* StaticMapTree::FindCollisionModel(const G3D::Vector3& pos1, const
     float maxDist = (pos2 - pos1).magnitude();
     if (maxDist < 1e-10f)
         return nullptr;
+
     G3D::Ray ray = G3D::Ray::fromOriginAndDirection(pos1, (pos2 - pos1) / maxDist);
 
     MapIntersectionFinderCallback intersectionCallBack(iTreeValues);
     iTree.intersectRay(ray, intersectionCallBack, maxDist, true);
+
     if (intersectionCallBack.result)
         return intersectionCallBack.result;
+
     return nullptr;
 }
 
@@ -288,8 +304,10 @@ float StaticMapTree::getHeight(const Vector3& pPos, float maxSearchDist) const
     Vector3 dir = Vector3(0, 0, -1);
     G3D::Ray ray(pPos, dir);   // direction with length of 1
     float maxDist = maxSearchDist;
+
     if (getIntersectionTime(ray, maxDist, false, false))
         height = pPos.z - maxDist;
+
     return height;
 }
 
@@ -300,6 +318,7 @@ bool StaticMapTree::CanLoadMap(std::string const& vmapPath, uint32 mapID, uint32
     std::string basePath = vmapPath;
     if (basePath.length() > 0 && (basePath[basePath.length() - 1] != '/' && basePath[basePath.length() - 1] != '\\'))
         basePath.append("/");
+
     std::string fullname = basePath + VMapManager2::getMapFileName(mapID);
     bool success = true;
     FILE* rf = fopen(fullname.c_str(), "rb");
@@ -308,11 +327,13 @@ bool StaticMapTree::CanLoadMap(std::string const& vmapPath, uint32 mapID, uint32
     // TODO: check magic number when implemented...
     char tiled;
     char chunk[8];
+
     if (!readChunk(rf, chunk, VMAP_MAGIC, 8) || fread(&tiled, sizeof(char), 1, rf) != 1)
     {
         fclose(rf);
         return false;
     }
+
     if (tiled)
     {
         std::string tilefile = basePath + getTileFileName(mapID, tileX, tileY);
@@ -326,6 +347,7 @@ bool StaticMapTree::CanLoadMap(std::string const& vmapPath, uint32 mapID, uint32
             fclose(tf);
         }
     }
+
     fclose(rf);
     return success;
 }
@@ -344,20 +366,29 @@ bool StaticMapTree::InitMap(std::string const& fname, VMapManager2* vm)
     {
         char chunk[8];
         // general info
-        if (!readChunk(rf, chunk, VMAP_MAGIC, 8)) success = false;
+        if (!readChunk(rf, chunk, VMAP_MAGIC, 8))
+            success = false;
+
         char tiled;
-        if (success && fread(&tiled, sizeof(char), 1, rf) != 1) success = false;
+        if (success && fread(&tiled, sizeof(char), 1, rf) != 1)
+            success = false;
+
         iIsTiled = bool(tiled);
         // Nodes
-        if (success && !readChunk(rf, chunk, "NODE", 4)) success = false;
-        if (success) success = iTree.readFromFile(rf);
+        if (success && !readChunk(rf, chunk, "NODE", 4))
+            success = false;
+
+        if (success)
+            success = iTree.readFromFile(rf);
+
         if (success)
         {
             iNTreeValues = iTree.primCount();
             iTreeValues = new ModelInstance[iNTreeValues];
         }
 
-        if (success && !readChunk(rf, chunk, "GOBJ", 4)) success = false;
+        if (success && !readChunk(rf, chunk, "GOBJ", 4))
+            success = false;
         // global model spawns
         // only non-tiled maps have them, and if so exactly one (so far at least...)
         ModelSpawn spawn;
@@ -383,6 +414,7 @@ bool StaticMapTree::InitMap(std::string const& fname, VMapManager2* vm)
 
         fclose(rf);
     }
+
     return success;
 }
 
@@ -390,12 +422,13 @@ bool StaticMapTree::InitMap(std::string const& fname, VMapManager2* vm)
 
 void StaticMapTree::UnloadMap(VMapManager2* vm)
 {
-    for (loadedSpawnMap::iterator i = iLoadedSpawns.begin(); i != iLoadedSpawns.end(); ++i)
+    for (auto& iLoadedSpawn : iLoadedSpawns)
     {
-        iTreeValues[i->first].setUnloaded();
-        for (uint32 refCount = 0; refCount < i->second; ++refCount)
-            vm->releaseModelInstance(iTreeValues[i->first].name);
+        iTreeValues[iLoadedSpawn.first].setUnloaded();
+        for (uint32 refCount = 0; refCount < iLoadedSpawn.second; ++refCount)
+            vm->releaseModelInstance(iTreeValues[iLoadedSpawn.first].name);
     }
+
     iLoadedSpawns.clear();
     iLoadedTiles.clear();
 }
@@ -411,11 +444,13 @@ bool StaticMapTree::LoadMapTile(uint32 tileX, uint32 tileY, VMapManager2* vm)
         iLoadedTiles[packTileID(tileX, tileY)] = false;
         return true;
     }
+
     if (!iTreeValues)
     {
         ERROR_LOG("StaticMapTree::LoadMapTile(): Tree has not been initialized! [%u,%u]", tileX, tileY);
         return false;
     }
+
     bool result = true;
 
     std::string tilefile = iBasePath + getTileFileName(iMapID, tileX, tileY);
@@ -425,9 +460,11 @@ bool StaticMapTree::LoadMapTile(uint32 tileX, uint32 tileY, VMapManager2* vm)
         char chunk[8];
         if (!readChunk(tf, chunk, VMAP_MAGIC, 8))
             result = false;
+
         uint32 numSpawns;
         if (result && fread(&numSpawns, sizeof(uint32), 1, tf) != 1)
             result = false;
+
         for (uint32 i = 0; i < numSpawns && result; ++i)
         {
             // read model spawns
@@ -446,13 +483,12 @@ bool StaticMapTree::LoadMapTile(uint32 tileX, uint32 tileY, VMapManager2* vm)
                 fread(&referencedVal, sizeof(uint32), 1, tf);
                 if (!iLoadedSpawns.count(referencedVal))
                 {
-#ifdef VMAP_DEBUG
                     if (referencedVal > iNTreeValues)
                     {
-                        DEBUG_LOG("invalid tree element! (%u/%u)", referencedVal, iNTreeValues);
+                        ERROR_LOG("invalid tree element! (%u/%u)", referencedVal, iNTreeValues);
                         continue;
                     }
-#endif
+
                     iTreeValues[referencedVal] = ModelInstance(spawn, model);
                     iLoadedSpawns[referencedVal] = 1;
                 }
@@ -468,11 +504,13 @@ bool StaticMapTree::LoadMapTile(uint32 tileX, uint32 tileY, VMapManager2* vm)
                 }
             }
         }
+
         iLoadedTiles[packTileID(tileX, tileY)] = true;
         fclose(tf);
     }
     else
         iLoadedTiles[packTileID(tileX, tileY)] = false;
+
     return result;
 }
 
@@ -487,6 +525,7 @@ void StaticMapTree::UnloadMapTile(uint32 tileX, uint32 tileY, VMapManager2* vm)
         ERROR_LOG("StaticMapTree::UnloadMapTile(): Trying to unload non-loaded tile. Map:%u X:%u Y:%u", iMapID, tileX, tileY);
         return;
     }
+
     if (tile->second) // file associated with tile
     {
         std::string tilefile = iBasePath + getTileFileName(iMapID, tileX, tileY);
@@ -497,9 +536,11 @@ void StaticMapTree::UnloadMapTile(uint32 tileX, uint32 tileY, VMapManager2* vm)
             char chunk[8];
             if (!readChunk(tf, chunk, VMAP_MAGIC, 8))
                 result = false;
+
             uint32 numSpawns;
             if (fread(&numSpawns, sizeof(uint32), 1, tf) != 1)
                 result = false;
+
             for (uint32 i = 0; i < numSpawns && result; ++i)
             {
                 // read model spawns
@@ -523,9 +564,11 @@ void StaticMapTree::UnloadMapTile(uint32 tileX, uint32 tileY, VMapManager2* vm)
                     }
                 }
             }
+
             fclose(tf);
         }
     }
+
     iLoadedTiles.erase(tile);
 }
 }

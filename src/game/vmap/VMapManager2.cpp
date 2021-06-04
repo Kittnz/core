@@ -16,7 +16,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <iostream>
 #include <iomanip>
 #include <string>
 #include <sstream>
@@ -41,10 +40,11 @@ VMapManager2::VMapManager2()
 
 VMapManager2::~VMapManager2(void)
 {
-    for (InstanceTreeMap::iterator i = iInstanceMapTrees.begin(); i != iInstanceMapTrees.end(); ++i)
-        delete i->second;
-    for (ModelFileMap::iterator i = iLoadedModelFiles.begin(); i != iLoadedModelFiles.end(); ++i)
-        delete i->second.getModel();
+    for (auto& iInstanceMapTree : iInstanceMapTrees)
+        delete iInstanceMapTree.second;
+
+    for (auto& iLoadedModelFile : iLoadedModelFiles)
+        delete iLoadedModelFile.second.getModel();
 }
 
 //=========================================================
@@ -74,6 +74,7 @@ std::string VMapManager2::getMapFileName(unsigned int pMapId)
 VMAPLoadResult VMapManager2::loadMap(const char* pBasePath, unsigned int pMapId, int x, int y)
 {
     VMAPLoadResult result = VMAP_LOAD_RESULT_IGNORED;
+
     if (isMapLoadingEnabled())
     {
         if (_loadMap(pMapId, pBasePath, x, y))
@@ -81,6 +82,7 @@ VMAPLoadResult VMapManager2::loadMap(const char* pBasePath, unsigned int pMapId,
         else
             result = VMAP_LOAD_RESULT_ERROR;
     }
+
     return result;
 }
 
@@ -94,8 +96,12 @@ bool VMapManager2::_loadMap(unsigned int pMapId, std::string const& basePath, ui
     {
         std::string mapFileName = getMapFileName(pMapId);
         StaticMapTree* newTree = new StaticMapTree(pMapId, basePath);
+
         if (!newTree->InitMap(mapFileName, this))
+        {
+            delete newTree;
             return false;
+        }
 
         instanceTree = iInstanceMapTrees.insert(InstanceTreeMap::value_type(pMapId, newTree)).first;
     }
@@ -142,27 +148,36 @@ bool VMapManager2::isInLineOfSight(unsigned int pMapId, float x1, float y1, floa
     if (!isLineOfSightCalcEnabled()) return true;
     bool result = true;
     InstanceTreeMap::iterator instanceTree = iInstanceMapTrees.find(pMapId);
+
     if (instanceTree != iInstanceMapTrees.end())
     {
         Vector3 pos1 = convertPositionToInternalRep(x1, y1, z1);
         Vector3 pos2 = convertPositionToInternalRep(x2, y2, z2);
+
         if (pos1 != pos2)
             result = instanceTree->second->isInLineOfSight(pos1, pos2);
     }
+
     return result;
 }
+
 ModelInstance* VMapManager2::FindCollisionModel(unsigned int mapId, float x0, float y0, float z0, float x1, float y1, float z1)
 {
-    if (!isLineOfSightCalcEnabled()) return nullptr;
+    if (!isLineOfSightCalcEnabled())
+        return nullptr;
+
     ModelInstance* result = nullptr;
     InstanceTreeMap::iterator instanceTree = iInstanceMapTrees.find(mapId);
+
     if (instanceTree != iInstanceMapTrees.end())
     {
         Vector3 pos1 = convertPositionToInternalRep(x0, y0, z0);
         Vector3 pos2 = convertPositionToInternalRep(x1, y1, z1);
+
         if (pos1 != pos2)
             result = instanceTree->second->FindCollisionModel(pos1, pos2);
     }
+
     return result;
 }
 //=========================================================
@@ -176,6 +191,7 @@ bool VMapManager2::getObjectHitPos(unsigned int pMapId, float x1, float y1, floa
     rx = x2;
     ry = y2;
     rz = z2;
+
     if (isLineOfSightCalcEnabled())
     {
         InstanceTreeMap::iterator instanceTree = iInstanceMapTrees.find(pMapId);
@@ -191,6 +207,7 @@ bool VMapManager2::getObjectHitPos(unsigned int pMapId, float x1, float y1, floa
             rz = resultPos.z;
         }
     }
+
     return result;
 }
 
@@ -209,12 +226,14 @@ float VMapManager2::getHeight(unsigned int pMapId, float x, float y, float z, fl
         {
             Vector3 pos = convertPositionToInternalRep(x, y, z);
             height = instanceTree->second->getHeight(pos, maxSearchDist);
+
             if (!(height < G3D::inf()))
             {
                 height = VMAP_INVALID_HEIGHT_VALUE;     // no height
             }
         }
     }
+
     return height;
 }
 
@@ -231,6 +250,7 @@ bool VMapManager2::getAreaInfo(unsigned int pMapId, float x, float y, float& z, 
         // z is not touched by convertPositionToMangosRep(), so just copy
         z = pos.z;
     }
+
     return result;
 }
 
@@ -243,6 +263,7 @@ bool VMapManager2::isUnderModel(unsigned int pMapId, float x, float y, float z, 
         Vector3 pos = convertPositionToInternalRep(x, y, z);
         result = instanceTree->second->isUnderModel(pos, outDist, inDist);
     }
+
     return result;
 }
 
@@ -257,12 +278,15 @@ bool VMapManager2::GetLiquidLevel(uint32 pMapId, float x, float y, float z, uint
         {
             floor = info.ground_Z;
             type = info.hitModel->GetLiquidType();
+
             if (ReqLiquidType && !(type & ReqLiquidType))
                 return false;
+
             if (info.hitInstance->GetLiquidLevel(pos, info, level))
                 return true;
         }
     }
+
     return false;
 }
 
@@ -296,6 +320,7 @@ WorldModel* VMapManager2::acquireModelInstance(std::string const& basepath, std:
         model = iLoadedModelFiles.insert(std::pair<std::string, ManagedModel>(filename, ManagedModel())).first;
         model->second.setModel(worldmodel);
     }
+
     model->second.incRefCount();
     m_modelsLock.release();
     return model->second.getModel();
@@ -331,6 +356,7 @@ void VMapManager2::releaseModelInstance(std::string const& filename)
             iLoadedModelFiles.erase(model);
         }
     }
+
     m_modelsLock.release();
 }
 //=========================================================
