@@ -24,7 +24,6 @@
 #include <set>
 #include <iomanip>
 #include <sstream>
-#include <iomanip>
 
 using G3D::Vector3;
 using G3D::AABox;
@@ -94,6 +93,7 @@ bool TileAssembler::convertWorld2()
                 // entry->second.iPos += Vector3(533.33333f*32, 533.33333f*32, 0.f);
                 entry->second.iBound = entry->second.iBound + Vector3(533.33333f * 32, 533.33333f * 32, 0.f);
             }
+
             mapSpawns.push_back(&(entry->second));
             spawnedModelFiles.insert(entry->second.name);
         }
@@ -119,14 +119,21 @@ bool TileAssembler::convertWorld2()
         }
 
         // general info
-        if (success && fwrite(VMAP_MAGIC, 1, 8, mapfile) != 8) success = false;
+        if (success && fwrite(VMAP_MAGIC, 1, 8, mapfile) != 8)
+            success = false;
+
         uint32 globalTileID = StaticMapTree::packTileID(65, 65);
         pair<TileMap::iterator, TileMap::iterator> globalRange = map_iter->second->TileEntries.equal_range(globalTileID);
         char isTiled = globalRange.first == globalRange.second; // only maps without terrain (tiles) have global WMO
-        if (success && fwrite(&isTiled, sizeof(char), 1, mapfile) != 1) success = false;
+    
+        if (success && fwrite(&isTiled, sizeof(char), 1, mapfile) != 1)
+            success = false;
         // Nodes
-        if (success && fwrite("NODE", 4, 1, mapfile) != 1) success = false;
-        if (success) success = pTree.writeToFile(mapfile);
+        if (success && fwrite("NODE", 4, 1, mapfile) != 1)
+            success = false;
+
+        if (success)
+            success = pTree.writeToFile(mapfile);
         // global map spawns (WDT), if any (most instances)
         if (success && fwrite("GOBJ", 4, 1, mapfile) != 1) success = false;
 
@@ -145,6 +152,7 @@ bool TileAssembler::convertWorld2()
             const ModelSpawn& spawn = map_iter->second->UniqueEntries[tile->second];
             if (spawn.flags & MOD_WORLDSPAWN)           // WDT spawn, saved as tile 65/65 currently...
                 continue;
+
             uint32 nSpawns = tileEntries.count(tile->first);
             std::stringstream tilefilename;
             tilefilename.fill('0');
@@ -162,14 +170,17 @@ bool TileAssembler::convertWorld2()
             {
                 if (s)
                     ++tile;
+
                 if (tile == tileEntries.end())
                     break;
+
                 const ModelSpawn& spawn2 = map_iter->second->UniqueEntries[tile->second];
                 success = success && ModelSpawn::writeToFile(tilefile, spawn2);
                 // MapTree nodes to update when loading tile:
                 std::map<uint32, uint32>::iterator nIdx = modelNodeIdx.find(spawn2.ID);
                 if (success && fwrite(&nIdx->second, sizeof(uint32), 1, tilefile) != 1) success = false;
             }
+
             fclose(tilefile);
         }
         // break; // test, extract only first map; TODO: remvoe this line
@@ -180,20 +191,21 @@ bool TileAssembler::convertWorld2()
 
     // export objects
     std::cout << "\nConverting Model Files" << std::endl;
-    for (std::set<std::string>::iterator mfile = spawnedModelFiles.begin(); mfile != spawnedModelFiles.end(); ++mfile)
+    for (const auto& spawnedModelFile : spawnedModelFiles)
     {
-        std::cout << "Converting " << *mfile << std::endl;
-        if (!convertRawFile(*mfile))
+        std::cout << "Converting " << spawnedModelFile << std::endl;
+        if (!convertRawFile(spawnedModelFile))
         {
-            std::cout << "error converting " << *mfile << std::endl;
+            std::cout << "error converting " << spawnedModelFile << std::endl;
             success = false;
             break;
         }
     }
 
     // cleanup:
-    for (MapData::iterator map_iter = mapData.begin(); map_iter != mapData.end(); ++map_iter)
-        delete map_iter->second;
+    for (auto& map_iter : mapData)
+        delete map_iter.second;
+
     return success;
 }
 
@@ -206,17 +218,18 @@ bool TileAssembler::readMapSpawns()
         printf("Could not read dir_bin file!\n");
         return false;
     }
+
     printf("Read coordinate mapping...\n");
-    uint32 mapID, tileX, tileY, check = 0;
-    G3D::Vector3 v1, v2;
+    uint32 mapID = 0, tileX = 0, tileY = 0;
     ModelSpawn spawn;
+
     while (!feof(dirf))
     {
-        check = 0;
         // read mapID, tileX, tileY, Flags, adtID, ID, Pos, Rot, Scale, Bound_lo, Bound_hi, name
-        check += fread(&mapID, sizeof(uint32), 1, dirf);
+        uint32 check = fread(&mapID, sizeof(uint32), 1, dirf);
         if (check == 0) // EoF...
             break;
+
         check += fread(&tileX, sizeof(uint32), 1, dirf);
         check += fread(&tileY, sizeof(uint32), 1, dirf);
         if (!ModelSpawn::readFromFile(dirf, spawn))
@@ -226,13 +239,16 @@ bool TileAssembler::readMapSpawns()
         MapData::iterator map_iter = mapData.find(mapID);
         if (map_iter == mapData.end())
         {
-            printf("spawning Map %d\n", mapID);
+            printf("spawning Map %u\n", mapID);
             mapData[mapID] = current = new MapSpawns();
         }
-        else current = (*map_iter).second;
+        else
+            current = (*map_iter).second;
+
         current->UniqueEntries.insert(pair<uint32, ModelSpawn>(spawn.ID, spawn));
         current->TileEntries.insert(pair<uint32, uint32>(StaticMapTree::packTileID(tileX, tileY), spawn.ID));
     }
+
     bool success = (ferror(dirf) == 0);
     fclose(dirf);
     return success;
@@ -276,6 +292,7 @@ bool TileAssembler::calculateTransformedBound(ModelSpawn& spawn)
                 modelBound.merge(v);
         }
     }
+
     spawn.iBound = modelBound + spawn.iPos;
     spawn.flags |= MOD_HAS_BOUND;
     return true;
@@ -292,7 +309,6 @@ struct WMOLiquidHeader
 //=================================================================
 bool TileAssembler::convertRawFile(std::string const& pModelFilename)
 {
-    bool success = true;
     std::string filename = iSrcDir;
     if (filename.length() > 0)
         filename.append("/");
@@ -306,7 +322,7 @@ bool TileAssembler::convertRawFile(std::string const& pModelFilename)
     // write WorldModel
     WorldModel model;
     model.setRootWmoID(raw_model.RootWMOID);
-    if (raw_model.groupsArray.size())
+    if (!raw_model.groupsArray.empty())
     {
         std::vector<GroupModel> groupsArray;
 
@@ -322,10 +338,7 @@ bool TileAssembler::convertRawFile(std::string const& pModelFilename)
         model.setGroupModels(groupsArray);
     }
 
-    success = model.writeFile(iDestDir + "/" + pModelFilename + ".vmo");
-
-    //std::cout << "readRawFile2: '" << pModelFilename << "' tris: " << nElements << " nodes: " << nNodes << std::endl;
-    return success;
+    return model.writeFile(iDestDir + "/" + pModelFilename + ".vmo");
 }
 
 void TileAssembler::exportGameobjectModels()
@@ -365,9 +378,9 @@ void TileAssembler::exportGameobjectModels()
 
         AABox bounds;
         bool boundEmpty = true;
-        for (uint32 g = 0; g < raw_model.groupsArray.size(); ++g)
+        for (auto& g : raw_model.groupsArray)
         {
-            std::vector<Vector3>& vertices = raw_model.groupsArray[g].vertexArray;
+            std::vector<Vector3>& vertices = g.vertexArray;
 
             uint32 nvectors = vertices.size();
             for (uint32 i = 0; i < nvectors; ++i)
@@ -386,6 +399,7 @@ void TileAssembler::exportGameobjectModels()
         fwrite(&bounds.low(), sizeof(Vector3), 1, model_list_copy);
         fwrite(&bounds.high(), sizeof(Vector3), 1, model_list_copy);
     }
+
     fclose(model_list);
     fclose(model_list_copy);
 }
@@ -432,6 +446,7 @@ bool GroupModel_Raw::Read(FILE* rf)
     READ_OR_RETURN(&blocksize, sizeof(int));
     uint32 nindexes;
     READ_OR_RETURN(&nindexes, sizeof(uint32));
+
     if (nindexes > 0)
     {
         uint16* indexarray = new uint16[nindexes];
@@ -442,9 +457,12 @@ bool GroupModel_Raw::Read(FILE* rf)
             printf("readfail, op = %i\n", readOperation);
             return false;
         }
+    
         triangles.reserve(nindexes / 3);
+    
         for (uint32 i = 0; i < nindexes; i += 3)
             triangles.push_back(MeshTriangle(indexarray[i], indexarray[i + 1], indexarray[i + 2]));
+
         delete[] indexarray;
     }
 
@@ -468,11 +486,12 @@ bool GroupModel_Raw::Read(FILE* rf)
 
         for (uint32 i = 0; i < nvectors; ++i)
             vertexArray.push_back(Vector3(vectorarray + 3 * i));
+
         delete[] vectorarray;
     }
 
     // ----- liquid
-    liquid = 0;
+    liquid = nullptr;
     if (liquidflags & 1)
     {
         WMOLiquidHeader hlq;
@@ -486,6 +505,7 @@ bool GroupModel_Raw::Read(FILE* rf)
         size = hlq.xtiles * hlq.ytiles;
         READ_OR_RETURN(liquid->GetFlagsStorage(), size);
     }
+
     return true;
 }
 
@@ -518,6 +538,7 @@ bool WorldModel_Raw::Read(const char* path)
     READ_OR_RETURN(&RootWMOID, sizeof(uint32));
 
     groupsArray.resize(groups);
+
     bool succeed = true;
     for (uint32 g = 0; g < groups && succeed; ++g)
         succeed = groupsArray[g].Read(rf);
