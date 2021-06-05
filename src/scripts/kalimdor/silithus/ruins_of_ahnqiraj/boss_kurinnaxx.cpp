@@ -26,17 +26,17 @@ EndScriptData */
 
 enum
 {
-    EMOTE_FRENZY            = -1000002,
+    EMOTE_FRENZY = -1000002,
 
-    GO_TRAP                 =   180647,
+    GO_TRAP = 180647,
 
-    SPELL_MORTALWOUND       =   25646,
-    SPELL_SUMMON_SANDTRAP   =   26524,
-    SPELL_ENRAGE            =   8269,
-    SPELL_WIDE_SLASH        =   25814,
-    SPELL_TRASH             =   3391,
+    SPELL_MORTALWOUND = 25646,
+    SPELL_SUMMON_SANDTRAP = 26524,
+    SPELL_ENRAGE = 8269,
+    SPELL_WIDE_SLASH = 25814,
+    SPELL_TRASH = 3391,
 
-    SAY_BREACHED            =   11720
+    SAY_BREACHED = 11720
 };
 
 struct boss_kurinnaxxAI : public ScriptedAI
@@ -56,7 +56,7 @@ struct boss_kurinnaxxAI : public ScriptedAI
     uint32 m_uiWideSlash_Timer;
     bool m_bHasEnraged;
 
-    void Reset()
+    void Reset() override
     {
         m_uiMortalWound_Timer = urand(8000, 10000);
         m_uiSandTrap_Timer = 7000;
@@ -68,14 +68,14 @@ struct boss_kurinnaxxAI : public ScriptedAI
             m_pInstance->SetData(TYPE_KURINNAXX, NOT_STARTED);
     }
 
-    void Aggro(Unit* pPuller)
+    void Aggro(Unit* pPuller) override
     {
         m_creature->SetInCombatWithZone();
         if (m_pInstance)
             m_pInstance->SetData(TYPE_KURINNAXX, IN_PROGRESS);
     }
 
-    void JustDied(Unit* pKiller)
+    void JustDied(Unit* pKiller) override
     {
         if (!m_pInstance)
             return;
@@ -85,7 +85,7 @@ struct boss_kurinnaxxAI : public ScriptedAI
         m_pInstance->SetData(TYPE_KURINNAXX, DONE);
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         // if no one gets to the trap in 5 seconds delete the trap
         if (m_uiCleanSandTrap_Timer < uiDiff)
@@ -99,7 +99,7 @@ struct boss_kurinnaxxAI : public ScriptedAI
         else
             m_uiCleanSandTrap_Timer -= uiDiff;
 
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         /* Enrage */
@@ -115,7 +115,7 @@ struct boss_kurinnaxxAI : public ScriptedAI
         /* Mortal wound */
         if (m_uiMortalWound_Timer < uiDiff)
         {
-            if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_MORTALWOUND) == CAST_OK)
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_MORTALWOUND) == CAST_OK)
                 m_uiMortalWound_Timer = urand(8000, 10000);
         }
         else
@@ -139,7 +139,7 @@ struct boss_kurinnaxxAI : public ScriptedAI
         /* WideSlash */
         if (m_uiWideSlash_Timer < uiDiff)
         {
-            if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_WIDE_SLASH) == CAST_OK)
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_WIDE_SLASH) == CAST_OK)
                 m_uiWideSlash_Timer = urand(12000, 15000);
         }
         else
@@ -148,7 +148,7 @@ struct boss_kurinnaxxAI : public ScriptedAI
         /* Trash */
         if (m_uiTrash_Timer < uiDiff)
         {
-            if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_TRASH) == CAST_OK)
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_TRASH) == CAST_OK)
                 m_uiTrash_Timer = urand(12000, 17000);
         }
         else

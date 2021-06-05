@@ -28,7 +28,6 @@
 #include "Chat.h"
 #include "GameEventMgr.h"
 #include "ScriptMgr.h"
-#include "SpellMgr.h"
 #include "AccountMgr.h"
 #include "DBCStores.h"
 #include "Util.h"
@@ -48,11 +47,11 @@ void PInfoHandler::HandlePInfoCommand(WorldSession *session, Player *target, Obj
         data->accId = target->GetSession()->GetAccountId();
         data->money = target->GetMoney();
         data->total_player_time = target->GetTotalPlayedTime();
-        data->level = target->getLevel();
+        data->level = target->GetLevel();
         data->latency = target->GetSession()->GetLatency();
         data->loc = target->GetSession()->GetSessionDbcLocale();
-        data->race = target->getRace();
-        data->class_ = target->getClass();
+        data->race = target->GetRace();
+        data->class_ = target->GetClass();
 
         data->target_guid = target->GetObjectGuid();
         data->online = true;
@@ -219,7 +218,9 @@ void PInfoHandler::HandleResponse(WorldSession* session, PInfoData *data)
     uint32 gold_out = mail_gold_outbox / GOLD;
     uint32 silv_out = (mail_gold_outbox % GOLD) / SILVER;
     uint32 copp_out = (mail_gold_outbox % GOLD) % SILVER;
-    cHandler.PSendSysMessage(LANG_PINFO_LEVEL, timeStr.c_str(), data->level, gold, silv, copp, gold_in, silv_in, silv_out, gold_out, silv_out, copp_out);
+
+    cHandler.PSendSysMessage(LANG_PINFO_LEVEL, timeStr.c_str(), data->level, gold, silv, copp, gold_in, silv_in, copp_in, gold_out, silv_out, copp_out);
+
     if (Guild* guild = sGuildMgr.GetPlayerGuild(data->target_guid))
         cHandler.PSendSysMessage("Guild: %s", cHandler.playerLink(guild->GetName()).c_str());
 

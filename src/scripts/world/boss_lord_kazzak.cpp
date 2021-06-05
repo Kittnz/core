@@ -87,9 +87,9 @@ enum
     SPELL_TWISTEDREFLECTION     = 21063
 
                                   // Others :
-                                  // - Il y a un gangregarde elite a ses pieds, assez relou si on foire le pull. C'est parce que Lord Kazzak est a coté du PnJ de la quete demoniste. Il devrait patrouiller autour du cratere au sud ouest.
-                                  // - Il passe en evade lorsqu'on s'eloigne trop. En fait il ne devrait jamais evade. Du coup impossible de verif' si ses shadowbolt ont bien 100yards de portée.
-                                  // - Il repop instantanement apres avoir été looté. (Perso j'suis pas contre, il a des jambieres sympa :lol: )
+                                  // - Il y a un gangregarde elite a ses pieds, assez relou si on foire le pull. C'est parce que Lord Kazzak est a cotï¿½ du PnJ de la quete demoniste. Il devrait patrouiller autour du cratere au sud ouest.
+                                  // - Il passe en evade lorsqu'on s'eloigne trop. En fait il ne devrait jamais evade. Du coup impossible de verif' si ses shadowbolt ont bien 100yards de portï¿½e.
+                                  // - Il repop instantanement apres avoir ï¿½tï¿½ lootï¿½. (Perso j'suis pas contre, il a des jambieres sympa :lol: )
                                   // - Il a une hitbox bizarre, comme Azuregos, c'est certainement du au pathfinding. Le tank approche, aggro... le WB ne tape pas, se TP 3metres en arriere, reviens... le tank s'approche ou se recule un peu pour lui poser un fracasse, des fois ca marche, d'autre fois c'est plus long.
 };
 
@@ -176,7 +176,7 @@ struct boss_lordkazzakAI : public ScriptedAI
                 affectedPlayer = victim->GetAffectingPlayer();
                 if (!affectedPlayer)
                     return;
-                if (affectedPlayer->getLevel() < 50)
+                if (affectedPlayer->GetLevel() < 50)
                     return;
                 break;
 
@@ -187,7 +187,7 @@ struct boss_lordkazzakAI : public ScriptedAI
                     return;
 
                 /** Prevent Kazzak to use his healing spell if the pet got a level lower than 50 */
-                if (creature->getLevel() < 50)
+                if (creature->GetLevel() < 50)
                     return;
                 break;
 
@@ -209,7 +209,7 @@ struct boss_lordkazzakAI : public ScriptedAI
     void UpdateAI(const uint32 diff)
     {
         //Return since we have no target
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         //ShadowVolley_Timer
@@ -227,7 +227,7 @@ struct boss_lordkazzakAI : public ScriptedAI
         //Cleave_Timer
         if (Cleave_Timer < diff)
         {
-            if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_CLEAVE) == CAST_OK)
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_CLEAVE) == CAST_OK)
                 Cleave_Timer = urand(7000, 10000);
         }
         else
@@ -236,7 +236,7 @@ struct boss_lordkazzakAI : public ScriptedAI
         //ThunderClap_Timer
         if (ThunderClap_Timer < diff)
         {
-            if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_THUNDERCLAP) == CAST_OK)
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_THUNDERCLAP) == CAST_OK)
                 ThunderClap_Timer = urand(7500, 12000);
         }
         else
@@ -245,7 +245,7 @@ struct boss_lordkazzakAI : public ScriptedAI
         //VoidBolt_Timer
         if (VoidBolt_Timer < diff)
         {
-            if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_VOIDBOLT) == CAST_OK)
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_VOIDBOLT) == CAST_OK)
                 VoidBolt_Timer = urand(9000, 12000);
         }
         else

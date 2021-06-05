@@ -14,24 +14,16 @@ enum
     TEXT_3 = 9357,
     TEXT_4 = 9360,
     TEXT_5 = 9363,
-    MOVE_SPEED       =  20,
+    MOVE_SPEED =  20,
 };
-/*
-INSERT INTO nostalrius_string (entry, content_default)
-VALUES
-(50, "Si vous voulez la clé, il va falloir m'attraper !"),
-(51, "Poursuivez moi si vous l'osez, je m'enfuis sans hésiter !"),
-(52, "Pourquoi voudriez vous me faire souffrir ? Venez. L'amitié peut nous réunir !"),
-(53, "MEURS ? Vous faîtes pleurer Pusilin !"),
-(54, "Dites bonjour à mes petits amis !");
-*/
+
 struct npc_pusillinAI : public ScriptedAI
 {
     npc_pusillinAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
         m_pInstance = (instance_dire_maul*) pCreature->GetInstanceData();
         ME->SetObjectScale(0.5f);
-        ME->setFaction(35);
+        ME->SetFactionTemplateId(35);
         uiStep = 0;
         bInCombat = false;
         Reset();
@@ -43,11 +35,11 @@ struct npc_pusillinAI : public ScriptedAI
     float fNextPositions[3];
     uint32 uiGlobalCD;
 
-    void Reset()
+    void Reset() override
     {
     }
 
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* pWho) override
     {
         std::list<Creature*> m_impList;
         GetCreatureListWithEntryInGrid(m_impList, ME, 13276, 100.0f);
@@ -55,36 +47,35 @@ struct npc_pusillinAI : public ScriptedAI
             (*it)->Attack(pWho,true);
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
-        if (!ME->SelectHostileTarget() || !ME->getVictim())
+        if (!ME->SelectHostileTarget() || !ME->GetVictim())
             return;
-
-//        if (!ME->getVictim())
-//            return;
 
         if (uiGlobalCD < uiDiff)
         {
             switch (urand(1, 3))
             {
                 case 1: // Boule de feu
-                    ME->CastSpell(ME->getVictim(), 15228, false);
+                    ME->CastSpell(ME->GetVictim(), 15228, false);
                     uiGlobalCD = 6000;
                     break;
                 case 2: // Trait de feu
-                    ME->CastSpell(ME->getVictim(), 14145, false);
+                    ME->CastSpell(ME->GetVictim(), 14145, false);
                     uiGlobalCD = 4000;
                     break;
                 case 3: // Vague explosive
-                    ME->CastSpell(ME->getVictim(), 22424, false);
+                    ME->CastSpell(ME->GetVictim(), 22424, false);
                     uiGlobalCD = 9000;
                     break;
             }
         }
         else
             uiGlobalCD -= uiDiff;
+
         DoMeleeAttackIfReady();
     }
+
     bool PlayerOpenGossip(Player* player)
     {
         switch (uiStep)
@@ -110,8 +101,10 @@ struct npc_pusillinAI : public ScriptedAI
                 player->SEND_GOSSIP_MENU(ME->GetEntry() + 4, ME->GetGUID());
                 break;
         }
+    
         return true;
     }
+
     bool PlayerSelectGossip(Player* pl)
     {
         switch (uiStep)
@@ -135,7 +128,7 @@ struct npc_pusillinAI : public ScriptedAI
             case 4:
                 ME->SetHomePosition(18.19f, -701.15f, -12.64f, 0);
                 ME->MonsterSay(TEXT_5, 0, 0);
-                ME->setFaction(14);
+                ME->SetFactionTemplateId(14);
                 ME->SetObjectScale(0.7f);
                 ME->CastSpell(ME, 22735, false); // Spirit of Runn Tum
                 bInCombat = true;
@@ -178,6 +171,7 @@ struct npc_pusillinAI : public ScriptedAI
                 }
                 break;
         }
+    
         uiStep++;
         return true;
     }

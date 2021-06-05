@@ -2,14 +2,14 @@
 
 enum
 {
-    SPELL_WEB_SPRAY          = 29484,
-    SPELL_POISON_CLOUD       = 24840,
-    SPELL_VENOM_SPIT         = 25053,
-    SPELL_CORROSIVE_POISON   = 24111,
-    SPELL_SHADOW_SHOCK       = 20603,
+    SPELL_WEB_SPRAY = 29484,
+    SPELL_POISON_CLOUD = 24840,
+    SPELL_VENOM_SPIT = 25053,
+    SPELL_CORROSIVE_POISON = 24111,
+    SPELL_SHADOW_SHOCK = 20603,
     SPELL_SHADOW_BOLT_VOLLEY = 28407,
 
-    CREATURE_NERUBLING       = 51539
+    CREATURE_NERUBLING = 51539
 };
 
 struct boss_nerubian_overseerAI : public ScriptedAI
@@ -27,7 +27,8 @@ struct boss_nerubian_overseerAI : public ScriptedAI
 
     Unit* webTarget;
 
-    void SetDefaults() {
+    void SetDefaults()
+    {
         WebSpray_Timer = 20000;
         WebExplode_Timer = 9000;
         VenomSpit_Timer = 5000;
@@ -37,25 +38,25 @@ struct boss_nerubian_overseerAI : public ScriptedAI
         webTarget = nullptr;
     }
 
-    void Aggro(Unit *who)
+    void Aggro(Unit *who) override
     {
     }
 
-    void Reset()
-    {
-        SetDefaults();
-    }
-
-    void JustRespawned()
+    void Reset() override
     {
         SetDefaults();
     }
 
-    void KilledUnit(Unit* victim)
+    void JustRespawned() override
+    {
+        SetDefaults();
+    }
+
+    void KilledUnit(Unit* victim) override
     {
     }
 
-    void JustDied(Unit* /*pKiller*/)
+    void JustDied(Unit* /*pKiller*/) override
     {
         // A bit of trolling :P
         DoCast(m_creature, SPELL_SHADOW_BOLT_VOLLEY, true);
@@ -66,7 +67,7 @@ struct boss_nerubian_overseerAI : public ScriptedAI
         if (m_creature->GetSpawnFlags() & SPAWN_FLAG_DYNAMIC_RESPAWN_TIME &&
             sWorld.GetActiveSessionCount() > BLIZZLIKE_REALM_POPULATION)
 
-            m_respawn_delay_Timer *= float(BLIZZLIKE_REALM_POPULATION) / float(sWorld.GetActiveSessionCount());
+        m_respawn_delay_Timer *= float(BLIZZLIKE_REALM_POPULATION) / float(sWorld.GetActiveSessionCount());
 
         m_creature->SetRespawnDelay(m_respawn_delay_Timer);
         m_creature->SetRespawnTime(m_respawn_delay_Timer);
@@ -85,8 +86,8 @@ struct boss_nerubian_overseerAI : public ScriptedAI
         Unit* nerublingTarget = m_creature->GetNearestVictimInRange(0, 30, false);
         for (int i = 0; i < 4; i++)
         {
-            Unit* nerubling = m_creature->SummonCreature(CREATURE_NERUBLING, x, y, z,
-                    0,TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 30000);
+            Unit* nerubling = m_creature->SummonCreature(CREATURE_NERUBLING, x, y, z, 0,TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 30000);
+
             if (nerublingTarget)
             {
                 nerubling->SetInCombatWith(nerublingTarget);
@@ -97,10 +98,10 @@ struct boss_nerubian_overseerAI : public ScriptedAI
         webTarget = nullptr;
     }
 
-    void UpdateAI(const uint32 diff)
+    void UpdateAI(const uint32 diff) override
     {
         // Return since we have no target
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         if (WebSpray_Timer < diff)
@@ -108,6 +109,7 @@ struct boss_nerubian_overseerAI : public ScriptedAI
             webTarget = m_creature->GetFarthestVictimInRange(0, 45, false);
             if (webTarget && !webTarget->IsImmuneToDamage(SPELL_SCHOOL_MASK_NORMAL))
                 webTarget->AddAura(SPELL_WEB_SPRAY, 0, m_creature);
+
             WebSpray_Timer = 24000;
         }
         else
@@ -118,7 +120,7 @@ struct boss_nerubian_overseerAI : public ScriptedAI
                 if (WebExplode_Timer < diff)
                 {
                     WebExplode_Timer = 8000;
-                    if (!webTarget->isAlive())
+                    if (!webTarget->IsAlive())
                         webTarget = nullptr;
                     else if (webTarget->HasAura(SPELL_WEB_SPRAY))
                         WebExplosion();
@@ -140,7 +142,7 @@ struct boss_nerubian_overseerAI : public ScriptedAI
 
         if (CorrosivePoison_Timer < diff)
         {
-            DoCast(m_creature->getVictim(), SPELL_CORROSIVE_POISON, true);
+            DoCast(m_creature->GetVictim(), SPELL_CORROSIVE_POISON, true);
             CorrosivePoison_Timer = 30000;
         }
         else

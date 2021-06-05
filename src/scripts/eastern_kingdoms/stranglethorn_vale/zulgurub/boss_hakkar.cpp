@@ -32,10 +32,10 @@ enum
     // Emotes
     // ------
 
-    SAY_AGGRO                   = -1309020,
-    SAY_FLEEING                 = -1309021,
-    SAY_MINION_DESTROY          = -1309022,                //where does it belong?
-    SAY_PROTECT_ALTAR           = -1309023,                //where does it belong?
+    SAY_AGGRO = -1309020,
+    SAY_FLEEING = -1309021,
+    SAY_MINION_DESTROY = -1309022, //where does it belong?
+    SAY_PROTECT_ALTAR = -1309023, //where does it belong?
     /*
     /run PlaySoundFile("SOUND\\CREATURE\\HAKKAR\\VO_ZG2_HAKKAR_DEFEAT_01.ogg");
     /run PlaySoundFile("SOUND\\CREATURE\\HAKKAR\\VO_ZG2_HAKKAR_DEFEAT_02.ogg");
@@ -48,7 +48,7 @@ enum
 
     SPELL_BLOODSIPHON_STUN       = 24324, // Joueur assomme
     SPELL_BLOODSIPHON_DAMAGE     = 24323, // "Votre sang est empoisonne"
-    SPELL_BLOODSIPHON_HEAL       = 24322, // "Inflige 200 points de dégâts par seconde. Donne à Hakkar 1000 points de vie par seconde." -> Rend de la vie aux joueurs ...
+    SPELL_BLOODSIPHON_HEAL       = 24322, // "Inflige 200 points de dï¿½gï¿½ts par seconde. Donne ï¿½ Hakkar 1000 points de vie par seconde." -> Rend de la vie aux joueurs ...
     SPELL_CORRUPTEDBLOOD         = 24328,
     SPELL_CAUSEINSANITY          = 24327,
     SPELL_WILLOFHAKKAR           = 24178,
@@ -60,7 +60,7 @@ enum
 
     SPELL_ASPECT_OF_JEKLIK       = 24687, // silence 4 sec
     SPELL_ASPECT_OF_VENOXIS      = 24688, // poison
-    SPELL_ASPECT_OF_MARLI        = 24686, // étourdi 5 sec
+    SPELL_ASPECT_OF_MARLI        = 24686, // ï¿½tourdi 5 sec
     SPELL_ASPECT_OF_THEKAL       = 24689, // enrage qqs sec
     SPELL_ASPECT_OF_ARLOKK       = 24690, // vanish qqs secs
 
@@ -95,7 +95,7 @@ struct boss_hakkarAI : public ScriptedAI
 
     bool Enraged;
 
-    void Reset()
+    void Reset() override
     {
         BloodSiphon_Timer = 90000;
         CorruptedBlood_Timer = 15000;
@@ -117,7 +117,7 @@ struct boss_hakkarAI : public ScriptedAI
             m_pInstance->SetData(TYPE_HAKKAR, NOT_STARTED);
     }
 
-    void Aggro(Unit *who)
+    void Aggro(Unit *who) override
     {
         if (m_pInstance)
             m_pInstance->SetData(TYPE_HAKKAR, IN_PROGRESS);
@@ -126,15 +126,15 @@ struct boss_hakkarAI : public ScriptedAI
         ScriptedAI::Aggro(who);
     }
 
-    void JustDied(Unit* Killer)
+    void JustDied(Unit* Killer) override
     {
         if (m_pInstance)
             m_pInstance->SetData(TYPE_HAKKAR, DONE);
     }
 
-    void UpdateAI(const uint32 diff)
+    void UpdateAI(const uint32 diff) override
     {
-        if (!m_pInstance || !m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_pInstance || !m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         /** Prevent exploit */
@@ -152,8 +152,8 @@ struct boss_hakkarAI : public ScriptedAI
                 {
                     if (!pTarget->HasAura(SPELL_CAUSEINSANITY))
                     {
-                        m_creature->getThreatManager().modifyThreatPercent(pTarget, -100);
-                        m_creature->getThreatManager().addThreatDirectly(pTarget, InsanePlayerAggro);
+                        m_creature->GetThreatManager().modifyThreatPercent(pTarget, -100);
+                        m_creature->GetThreatManager().addThreatDirectly(pTarget, InsanePlayerAggro);
 
                         InsanePlayerGuid = 0;
                         InsanePlayerAggro = 0;
@@ -198,12 +198,12 @@ struct boss_hakkarAI : public ScriptedAI
         // CAUSEINSANITY
         if (CauseInsanity_Timer < diff)
         {
-            if (Unit* pTarget = m_creature->getVictim())
+            if (Unit* pTarget = m_creature->GetVictim())
             {
                 InsanePlayerGuid = pTarget->GetGUID();
-                InsanePlayerAggro = m_creature->getThreatManager().getThreat(pTarget);
+                InsanePlayerAggro = m_creature->GetThreatManager().getThreat(pTarget);
 
-                if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_CAUSEINSANITY) == CAST_OK)
+                if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_CAUSEINSANITY) == CAST_OK)
                 {
                     CCDelayInsanity_Timer = 4000;
                     //DoScriptText(SAY_FLEEING, m_creature);
@@ -229,7 +229,7 @@ struct boss_hakkarAI : public ScriptedAI
         {
             if (AspectOfJeklik_Timer < diff)
             {
-                if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_ASPECT_OF_JEKLIK) == CAST_OK)
+                if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_ASPECT_OF_JEKLIK) == CAST_OK)
                     AspectOfJeklik_Timer = urand(10000, 14000);
             }
             else
@@ -241,7 +241,7 @@ struct boss_hakkarAI : public ScriptedAI
         {
             if (AspectOfVenoxis_Timer < diff)
             {
-                if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_ASPECT_OF_VENOXIS) == CAST_OK)
+                if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_ASPECT_OF_VENOXIS) == CAST_OK)
                     AspectOfVenoxis_Timer = 8000;
             }
             else
@@ -253,7 +253,7 @@ struct boss_hakkarAI : public ScriptedAI
         {
             if (AspectOfMarli_Timer < diff)
             {
-                if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_ASPECT_OF_MARLI) == CAST_OK)
+                if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_ASPECT_OF_MARLI) == CAST_OK)
                     AspectOfMarli_Timer = 10000;
             }
             else

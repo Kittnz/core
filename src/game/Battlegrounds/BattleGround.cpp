@@ -587,7 +587,7 @@ void BattleGround::RewardExperienceToPlayers(Team winnerTeam) {
         if (!team) team = plr->GetTeam();
 
         float factor = team == winnerTeam ? 0.05f : 0.025f;
-        plr->GiveXP(static_cast<uint32>(sObjectMgr.GetXPForLevel(plr->getLevel()) * factor), plr);
+        plr->GiveXP(static_cast<uint32>(sObjectMgr.GetXPForLevel(plr->GetLevel()) * factor), plr);
     }
 }
 
@@ -609,14 +609,11 @@ void BattleGround::EndBattleGround(Team winner)
 {
     uint32 bgTypeID = BATTLEGROUND_TYPE_NONE;
 
-    if (this->m_MaxPlayers == 40)
+    if (m_MaxPlayers == 40)
         bgTypeID = BATTLEGROUND_AV;
 
+    RemoveFromBGFreeSlotQueue();
 
-    this->RemoveFromBGFreeSlotQueue();
-
-    uint32 loser_rating = 0;
-    uint32 winner_rating = 0;
     WorldPacket data;
     int32 winmsg_id = 0;
 
@@ -662,7 +659,7 @@ void BattleGround::EndBattleGround(Team winner)
         if (plr->HasAuraType(SPELL_AURA_SPIRIT_OF_REDEMPTION))
             plr->RemoveSpellsCausingAura(SPELL_AURA_MOD_SHAPESHIFT);
 
-        if (!plr->isAlive())
+        if (!plr->IsAlive())
         {
             plr->ResurrectPlayer(1.0f);
             plr->SpawnCorpseBones();
@@ -671,7 +668,7 @@ void BattleGround::EndBattleGround(Team winner)
         {
             //needed cause else in av some creatures will kill the players at the end
             plr->CombatStop();
-            plr->getHostileRefManager().deleteReferences();
+            plr->GetHostileRefManager().deleteReferences();
         }
 
         if (team == winner)
@@ -860,7 +857,7 @@ void BattleGround::RemovePlayerAtLeave(ObjectGuid guid, bool Transport, bool Sen
     if (plr && plr->HasAuraType(SPELL_AURA_SPIRIT_OF_REDEMPTION))
         plr->RemoveSpellsCausingAura(SPELL_AURA_MOD_SHAPESHIFT);
 
-    if (plr && !plr->isAlive())                             // resurrect on exit
+    if (plr && !plr->IsAlive())                             // resurrect on exit
     {
         plr->ResurrectPlayer(1.0f);
         plr->SpawnCorpseBones();
@@ -1617,7 +1614,7 @@ void BattleGround::HandleKillPlayer(Player *player, Player *killer)
     // - Apres la fin du buff - a ce moment la killer=nullptr
 
     // add +1 kills to group and +1 killing_blows to killer
-    if (killer && player->getFaction() != killer->getFaction())
+    if (killer && player->GetFactionTemplateId() != killer->GetFactionTemplateId())
     {
         UpdatePlayerScore(killer, SCORE_HONORABLE_KILLS, 1);
         UpdatePlayerScore(killer, SCORE_KILLING_BLOWS, 1);
@@ -1685,7 +1682,7 @@ uint32 BattleGround::GetAlivePlayersCountByTeam(Team team) const
         if (itr->second.PlayerTeam == team)
         {
             Player * pl = sObjectMgr.GetPlayer(itr->first);
-            if (pl && pl->isAlive())
+            if (pl && pl->IsAlive())
                 ++count;
         }
     }

@@ -26,8 +26,8 @@ EndScriptData */
 
 enum
 {
-    SPELL_FIERYBURST        = 13900,
-    SPELL_WARSTOMP          = 24375
+    SPELL_FIERYBURST = 13900,
+    SPELL_WARSTOMP = 24375
 };
 
 struct boss_magmusAI : public ScriptedAI
@@ -45,40 +45,40 @@ struct boss_magmusAI : public ScriptedAI
     uint32 m_uiWarStomp_Timer;
     bool Engaged;
 
-    void Reset()
+    void Reset() override
     {
         m_uiFieryBurst_Timer = 5000;
         m_uiWarStomp_Timer = 0;
 
         if (Engaged)
             m_pInstance->SetData(TYPE_IRON_HALL, FAIL);
+
         Engaged = false;
     }
 
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* pWho) override
     {
         Engaged = true;
         if (m_pInstance)
             m_pInstance->SetData(TYPE_IRON_HALL, IN_PROGRESS);
-
     }
 
-    void JustDied(Unit* pVictim)
+    void JustDied(Unit* pVictim) override
     {
         if (m_pInstance)
             m_pInstance->SetData(TYPE_IRON_HALL, DONE);
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         //Return since we have no target
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         //FieryBurst_Timer
         if (m_uiFieryBurst_Timer < uiDiff)
         {
-            DoCastSpellIfCan(m_creature->getVictim(), SPELL_FIERYBURST);
+            DoCastSpellIfCan(m_creature->GetVictim(), SPELL_FIERYBURST);
             m_uiFieryBurst_Timer = 6000;
         }
         else
@@ -89,7 +89,7 @@ struct boss_magmusAI : public ScriptedAI
         {
             if (m_uiWarStomp_Timer < uiDiff)
             {
-                DoCastSpellIfCan(m_creature->getVictim(), SPELL_WARSTOMP);
+                DoCastSpellIfCan(m_creature->GetVictim(), SPELL_WARSTOMP);
                 m_uiWarStomp_Timer = 8000;
             }
             else

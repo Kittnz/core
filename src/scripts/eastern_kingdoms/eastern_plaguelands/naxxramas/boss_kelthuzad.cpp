@@ -63,10 +63,6 @@ enum
     SPELL_DISPELL_SHACKLES              = 28471,            // not used, doing it "manually"
 };
 
-static float M_F_ANGLE = 0.2f;                              // to adjust for map rotation
-static float M_F_HEIGHT = 2.0f;                             // adjust for height difference
-static float M_F_RANGE = 55.0f;                             // ~ range from center of chamber to center of alcove
-static float centerCoord[3] = { 3716.379883f, -5106.779785f, 141.289993f };
 enum AddSpells
 {
     // guardian of icecrown
@@ -79,7 +75,7 @@ enum AddSpells
     SPELL_DARK_BLAST_AUR  = 28458,
     SPELL_DARK_BLAST_TRIG = 28457,
 
-    // Abomination
+    // Abominationvirtual
     SPELL_MORTAL_WOUND = 28467,
 };
 
@@ -234,7 +230,7 @@ struct kt_p1AddAI : public ScriptedAI
         hasAggroed = false;
     }
     bool hasAggroed;
-    virtual void Reset() = 0;
+    void Reset() override = 0;
     void ActualAttack(Unit* target)
     {
         m_creature->AddThreat(target, 300.0f);
@@ -262,7 +258,7 @@ struct kt_p1AddAI : public ScriptedAI
             ScriptedAI::MoveInLineOfSight(pWho);
         }
         else if (pWho->GetTypeId() == TYPEID_PLAYER
-            && !m_creature->isInCombat()
+            && !m_creature->IsInCombat()
             && m_creature->IsWithinDistInMap(pWho, ALCOVE_ADD_PULL_RADIUS)
             && m_creature->IsWithinLOSInMap(pWho)
             && !pWho->HasAuraType(SPELL_AURA_FEIGN_DEATH)
@@ -307,7 +303,7 @@ struct boss_kelthuzadAI : public ScriptedAI
     uint32 timeSinceLastAEFrostBolt;
     uint32 killSayTimer;
 
-    void Reset()
+    void Reset() override
     {
         m_creature->SetHealth(m_creature->GetMaxHealth());
         events.Reset();
@@ -347,7 +343,7 @@ struct boss_kelthuzadAI : public ScriptedAI
         }
     }
 
-    void KilledUnit(Unit* pVictim)
+    void KilledUnit(Unit* pVictim) override
     {
         if (!killSayTimer)
         {
@@ -356,7 +352,7 @@ struct boss_kelthuzadAI : public ScriptedAI
         }
     }
 
-    void JustDied(Unit* pKiller)
+    void JustDied(Unit* pKiller) override
     {
         DoScriptText(SAY_DEATH, m_creature);
         if (m_pInstance)
@@ -385,7 +381,7 @@ struct boss_kelthuzadAI : public ScriptedAI
         m_creature->SetInCombatWithZone();
     }
 
-    void JustReachedHome()
+    void JustReachedHome() override
     {
         if (m_pInstance)
         {
@@ -534,9 +530,6 @@ struct boss_kelthuzadAI : public ScriptedAI
             {
                 if (numSkeletons < 120)
                 {
-
-                    float t = 3.0f / 150.0f * (p1Timer / 1000.0f - 150.0f);
-                    uint32 repeat_next = std::max(uint32(t * 1000 + 2000), uint32(2000));
                     if (SpawnAndSendP1Creature(NPC_SOLDIER_FROZEN))
                     {
                         uint32 repeat_next = std::max(uint32(3750 - 25 * numSkeletons), uint32(2000));
@@ -636,7 +629,7 @@ struct boss_kelthuzadAI : public ScriptedAI
         timeSinceLastShadowFissure += diff;
         timeSinceLastAEFrostBolt += diff;
 
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         if (m_creature->GetHealthPercent() < 40.0f && !p3Started)
@@ -735,7 +728,7 @@ struct boss_kelthuzadAI : public ScriptedAI
             case EVENT_FROSTBOLT:
             {
                 events.Repeat(Seconds(urand(5, 7))); // todo: this is guesswork
-                DoCastSpellIfCan(m_creature->getVictim(), SPELL_FROST_BOLT);
+                DoCastSpellIfCan(m_creature->GetVictim(), SPELL_FROST_BOLT);
                 break;
             }
             case EVENT_SHADOW_FISSURE:
@@ -792,7 +785,7 @@ struct boss_kelthuzadAI : public ScriptedAI
         DoMeleeAttackIfReady();
     }
 
-    void UpdateAI(const uint32 diff)
+    void UpdateAI(const uint32 diff) override
     {
         if (!m_pInstance)
             return;
@@ -800,7 +793,7 @@ struct boss_kelthuzadAI : public ScriptedAI
         if (hasPutInCombat)
         {
             // won't have a victim if we are in p1, even if selectHostileTarget returns true, so check that before return
-            if (!m_creature->SelectHostileTarget() || (!m_creature->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE) && !m_creature->getVictim()))
+            if (!m_creature->SelectHostileTarget() || (!m_creature->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE) && !m_creature->GetVictim()))
                 return;
         }
         
@@ -845,13 +838,13 @@ struct mob_abomAI : public kt_p1AddAI
     }
     void UpdateAI(const uint32 diff) override
     {
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         if (mortalWoundTimer < diff)
         {
-            if(m_creature->getVictim() && m_creature->IsWithinMeleeRange(m_creature->getVictim()))
-                if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_MORTAL_WOUND) == CAST_OK)
+            if(m_creature->GetVictim() && m_creature->IsWithinMeleeRange(m_creature->GetVictim()))
+                if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_MORTAL_WOUND) == CAST_OK)
                     mortalWoundTimer = 7500;
         }
         else
@@ -871,22 +864,22 @@ struct mob_soldierAI : public kt_p1AddAI
     }
     void UpdateAI(const uint32 diff) override
     {
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
         if (!m_creature->HasAura(SPELL_DARK_BLAST_AUR))
             m_creature->CastSpell(m_creature, SPELL_DARK_BLAST_AUR, true);
 
-        //if (m_creature->getVictim() && m_creature->getVictim()->IsPlayer()) 
+        //if (m_creature->GetVictim() && m_creature->GetVictim()->IsPlayer()) 
         //{
-        //    bool inVisibleList = m_creature->getVictim()->ToPlayer()->IsInVisibleList(m_creature);
-        //    sLog.outBasic("%s visible: %d", m_creature->getVictim()->GetName(), inVisibleList);
+        //    bool inVisibleList = m_creature->GetVictim()->ToPlayer()->IsInVisibleList(m_creature);
+        //    sLog.outBasic("%s visible: %d", m_creature->GetVictim()->GetName(), inVisibleList);
         //}
         //m_creature->ForceValuesUpdateAtIndex(UNIT_FIELD_TARGET);
 
         // to avoid melees being able to dps while casters hold aggro, this is most likely a logic that's supposed to exist
         if (Unit* pNearest = m_creature->SelectAttackingTarget(ATTACKING_TARGET_NEAREST, 0))
         {
-            if (m_creature->getVictim() != pNearest && m_creature->CanReachWithMeleeAutoAttack(pNearest))
+            if (m_creature->GetVictim() != pNearest && m_creature->CanReachWithMeleeAutoAttack(pNearest))
             {
                 ScriptedAI::AttackStart(pNearest);
             }
@@ -906,7 +899,7 @@ struct mob_soulweaverAI : public kt_p1AddAI
     }
     void UpdateAI(const uint32 diff) override
     {
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
         if (!m_creature->HasAura(SPELL_WAIL_SOULS_AUR))
             m_creature->CastSpell(m_creature, SPELL_WAIL_SOULS_AUR, true);
@@ -914,7 +907,7 @@ struct mob_soulweaverAI : public kt_p1AddAI
         // to avoid melees being able to dps while casters hold aggro, this is most likely a logic that's supposed to exist
         if (Unit* pNearest = m_creature->SelectAttackingTarget(ATTACKING_TARGET_NEAREST, 0))
         {
-            if (m_creature->getVictim() != pNearest && m_creature->CanReachWithMeleeAutoAttack(pNearest))
+            if (m_creature->GetVictim() != pNearest && m_creature->CanReachWithMeleeAutoAttack(pNearest))
             {
                 ScriptedAI::AttackStart(pNearest);
             }
@@ -991,12 +984,12 @@ struct mob_guardian_icecrownAI : public ScriptedAI
 
     void UpdateAI(const uint32 diff) override
     {
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         if (bloodTapTimer < diff)
         {
-            if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_BLOOD_TAP) == CAST_OK)
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_BLOOD_TAP) == CAST_OK)
                 bloodTapTimer = 15000;
         }
         else bloodTapTimer -= diff;

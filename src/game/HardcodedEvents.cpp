@@ -366,7 +366,7 @@ void DragonsOfNightmare::GetAliveCountAndUpdateRespawnTime(std::vector<ObjectGui
             continue;
         }
 
-        if (pCreature->isDead())
+        if (pCreature->IsDead())
             map->GetPersistentState()->SaveCreatureRespawnTime(guid.GetCounter(), respawnTime);
         else
             ++alive;
@@ -677,7 +677,6 @@ void ScourgeInvasionEvent::Update()
 
     time_t now = time(nullptr);
 
-    bool attackStateChange = false;
     for (auto it = invasionPoints.begin(); it != invasionPoints.end(); ++it)
     {
         uint32 numNecrosAlive = 0;
@@ -813,7 +812,6 @@ void ScourgeInvasionEvent::HandleActiveZone(uint32 attackTimeVar, uint32 attackZ
 bool ScourgeInvasionEvent::OnEnable(uint32 attackZoneVar, uint32 attackTimeVar)
 {
     uint32 current1 = sObjectMgr.GetSavedVariable(attackZoneVar);
-    uint32 current2 = sObjectMgr.GetSavedVariable(attackZoneVar);
 
     if (!isValidZoneId(current1))
     {
@@ -821,7 +819,8 @@ bool ScourgeInvasionEvent::OnEnable(uint32 attackZoneVar, uint32 attackTimeVar)
         sObjectMgr.SetSavedVariable(attackTimeVar, 0);
         StartNewInvasionIfTime(attackTimeVar, attackZoneVar);
     }
-    else {
+    else
+    {
         InvasionZone* oldZone = GetZone(current1);
         // If there were remaining necropolises in the old zone before shutdown, we
         // restore that zone
@@ -837,6 +836,7 @@ bool ScourgeInvasionEvent::OnEnable(uint32 attackZoneVar, uint32 attackTimeVar)
             StartNewInvasionIfTime(attackTimeVar, attackZoneVar);
         }
     }
+
     return true;
 }
 
@@ -1002,8 +1002,6 @@ uint32 ScourgeInvasionEvent::GetNewRandomZone(uint32 curr1, uint32 curr2)
 void ScourgeInvasionEvent::UpdateWorldState()
 {
     // Updating map icon worlstate
-    int ATTACK_ZONE1 = sObjectMgr.GetSavedVariable(VARIABLE_NAXX_ATTACK_ZONE1);
-    int ATTACK_ZONE2 = sObjectMgr.GetSavedVariable(VARIABLE_NAXX_ATTACK_ZONE2);
     int VICTORIES = sObjectMgr.GetSavedVariable(VARIABLE_NAXX_ATTACK_COUNT);
     
     int REMAINING_AZSHARA = sObjectMgr.GetSavedVariable(VARIABLE_SI_AZSHARA_REMAINING);

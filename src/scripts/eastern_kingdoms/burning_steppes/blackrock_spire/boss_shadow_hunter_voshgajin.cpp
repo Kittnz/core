@@ -26,8 +26,8 @@ EndScriptData */
 enum
 {
     SPELL_CURSEOFBLOOD = 24673,
-    SPELL_HEX          = 16708,
-    SPELL_CLEAVE       = 20691
+    SPELL_HEX = 16708,
+    SPELL_CLEAVE = 20691
 };
 
 struct boss_shadowvoshAI : public ScriptedAI
@@ -41,19 +41,17 @@ struct boss_shadowvoshAI : public ScriptedAI
     uint32 m_uiHexTimer;
     uint32 m_uiCleaveTimer;
 
-    void Reset()
+    void Reset() override
     {
         m_uiCurseOfBloodTimer = 2000;
-        m_uiHexTimer          = 8000;
-        m_uiCleaveTimer       = 14000;
-
-        //m_creature->CastSpell(m_creature,SPELL_ICEARMOR,true);
+        m_uiHexTimer = 8000;
+        m_uiCleaveTimer = 14000;
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         // Return since we have no target
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         // Curse Of Blood
@@ -80,7 +78,7 @@ struct boss_shadowvoshAI : public ScriptedAI
         // Cleave
         if (m_uiCleaveTimer < uiDiff)
         {
-            DoCastSpellIfCan(m_creature->getVictim(), SPELL_CLEAVE);
+            DoCastSpellIfCan(m_creature->GetVictim(), SPELL_CLEAVE);
             m_uiCleaveTimer = 7000;
         }
         else

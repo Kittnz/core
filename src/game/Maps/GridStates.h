@@ -34,29 +34,29 @@ class GridState
 class InvalidState : public GridState
 {
     public:
-        virtual ~InvalidState() {}
-        void Update(Map &, NGridType &, GridInfo &, const uint32 &x, const uint32 &y, const uint32 &t_diff) const;
+        virtual ~InvalidState() override {}
+        void Update(Map &, NGridType &, GridInfo &, const uint32 &x, const uint32 &y, const uint32 &t_diff) const override;
 };
 
 class ActiveState : public GridState
 {
     public:
-        virtual ~ActiveState() {}
-        void Update(Map &, NGridType &, GridInfo &, const uint32 &x, const uint32 &y, const uint32 &t_diff) const;
+        virtual ~ActiveState() override {}
+        void Update(Map &, NGridType &, GridInfo &, const uint32 &x, const uint32 &y, const uint32 &t_diff) const override;
 };
 
 class IdleState : public GridState
 {
     public:
-        virtual ~IdleState() {}
-        void Update(Map &, NGridType &, GridInfo &, const uint32 &x, const uint32 &y, const uint32 &t_diff) const;
+        virtual ~IdleState() override {}
+        void Update(Map &, NGridType &, GridInfo &, const uint32 &x, const uint32 &y, const uint32 &t_diff) const override;
 };
 
 class RemovalState : public GridState
 {
     public:
-        virtual ~RemovalState() {}
-        void Update(Map &, NGridType &, GridInfo &, const uint32 &x, const uint32 &y, const uint32 &t_diff) const;
+        virtual ~RemovalState() override {}
+        void Update(Map &, NGridType &, GridInfo &, const uint32 &x, const uint32 &y, const uint32 &t_diff) const override;
 };
 
 #endif

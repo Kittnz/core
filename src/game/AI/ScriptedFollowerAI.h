@@ -24,7 +24,7 @@ class FollowerAI : public ScriptedAI
 {
     public:
         explicit FollowerAI(Creature* pCreature);
-        ~FollowerAI() {}
+        ~FollowerAI() override {}
 
         //virtual void WaypointReached(uint32 uiPointId) = 0;
 

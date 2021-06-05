@@ -16,11 +16,11 @@ public:
     {
         Player* player = ObjectAccessor::FindPlayer(player_guid);
         if (player) 
-        {
             player->DeMorph();
-        }
+
         return false;
     }
+
 private:
     uint64 player_guid;
 };
@@ -38,7 +38,7 @@ bool ItemUseSpell_character_rename(Player* pPlayer, Item* pItem, const SpellCast
 
 bool ItemUseSpell_portable_wormhole_generator(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
-    if (pPlayer->isInCombat() || pPlayer->IsBeingTeleported() || (pPlayer->getDeathState() == CORPSE) || pPlayer->IsMoving())
+    if (pPlayer->IsInCombat() || pPlayer->IsBeingTeleported() || (pPlayer->GetDeathState() == CORPSE) || pPlayer->IsMoving())
         ChatHandler(pPlayer).PSendSysMessage("Warning! High radiation emission detected! Wormhole Generator failsafe system shutting device down! Please use later!");
     else
     {
@@ -61,7 +61,7 @@ bool ItemUseSpell_portable_wormhole_generator(Player* pPlayer, Item* pItem, cons
 
 bool ItemUseSpell_experimental_wormhole_generator(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
-    if (pPlayer->isInCombat() || pPlayer->IsBeingTeleported() || (pPlayer->getDeathState() == CORPSE) || pPlayer->IsMoving())
+    if (pPlayer->IsInCombat() || pPlayer->IsBeingTeleported() || (pPlayer->GetDeathState() == CORPSE) || pPlayer->IsMoving())
         ChatHandler(pPlayer).PSendSysMessage("Warning! High radiation emission detected! Wormhole Generator failsafe system shutting device down! Please use later!");
     else
     {
@@ -73,6 +73,7 @@ bool ItemUseSpell_experimental_wormhole_generator(Player* pPlayer, Item* pItem, 
         pPlayer->PMonsterEmote("%s just opened a wormhole.", nullptr, false, pPlayer->GetName());
         pPlayer->SummonGameObject(1000081, x, y, z + 0.5F, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 8, true);
     }
+
     return false;
 }
 
@@ -82,36 +83,45 @@ bool ItemUseSpell_experimental_wormhole_generator(Player* pPlayer, Item* pItem, 
 #define ALICE_BELITTLE_RBOUNDARY 0.95f
 bool ItemUseSpell_alice_wonderland_scale(Player* pPlayer, Item* pItem, const SpellCastTargets&) {
     float scale;
-    float taurenVariance = pPlayer->getRace() == RACE_TAUREN ? (pPlayer->getGender() == GENDER_MALE ? 0.35f : 0.25f) : 0;
+    float taurenVariance = pPlayer->GetRace() == RACE_TAUREN ? (pPlayer->GetGender() == GENDER_MALE ? 0.35f : 0.25f) : 0;
     float currentNormalizedScale = pPlayer->GetObjectScale() - taurenVariance;
-    if (pItem->GetEntry() == 50021) { // Strange Bottle
-        if (currentNormalizedScale == ALICE_BELITTLE_LBOUNDARY) {
+
+    if (pItem->GetEntry() == 50021) // Strange Bottle
+    {
+        if (currentNormalizedScale == ALICE_BELITTLE_LBOUNDARY)
+        {
             ChatHandler(pPlayer).PSendSysMessage("|cffff8040You can't be smaller!|r");
             return true;
         }
-        scale = frand(ALICE_BELITTLE_LBOUNDARY, currentNormalizedScale == 1 ?
-                                                ALICE_BELITTLE_RBOUNDARY : currentNormalizedScale);
-    } else {
-        if (currentNormalizedScale == ALICE_GROW_RBOUNDARY) {
+
+        scale = frand(ALICE_BELITTLE_LBOUNDARY, currentNormalizedScale == 1 ? ALICE_BELITTLE_RBOUNDARY : currentNormalizedScale);
+    }
+    else
+    {
+        if (currentNormalizedScale == ALICE_GROW_RBOUNDARY)
+        {
             ChatHandler(pPlayer).PSendSysMessage("|cffff8040You can't grow more!|r");
             return true;
         }
-        scale = frand(currentNormalizedScale == 1 ?
-                      ALICE_GROW_LBOUNDARY : currentNormalizedScale, ALICE_GROW_RBOUNDARY);
+
+        scale = frand(currentNormalizedScale == 1 ? ALICE_GROW_LBOUNDARY : currentNormalizedScale, ALICE_GROW_RBOUNDARY);
     }
+
     pPlayer->SetObjectScale(static_cast<float>(floor((scale * 100) + 0.5) / 100) + taurenVariance);
     return false;
 }
 
-class DanceAfterTime : public BasicEvent {
+class DanceAfterTime : public BasicEvent
+{
 public:
     explicit DanceAfterTime(uint64 player_guid) : BasicEvent(), player_guid(player_guid) {}
 
-    bool Execute(uint64 e_time, uint32 p_time) override {
+    bool Execute(uint64 e_time, uint32 p_time) override
+    {
         Player* player = ObjectAccessor::FindPlayer(player_guid);
-        if (player) {
+        if (player)
             player->HandleEmoteCommand(EMOTE_ONESHOT_DANCE);
-        }
+
         return false;
     }
 
@@ -127,7 +137,7 @@ bool ItemUseSpell_summer_vestment(Player* pPlayer, Item* pItem, const SpellCastT
 
 bool ItemUseSpell_city_protector_scroll(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
-    if (!pPlayer->IsCityProtector() || pPlayer->isInCombat() || pPlayer->IsBeingTeleported() || (pPlayer->getDeathState() == CORPSE))
+    if (!pPlayer->IsCityProtector() || pPlayer->IsInCombat() || pPlayer->IsBeingTeleported() || (pPlayer->GetDeathState() == CORPSE))
     {
         ChatHandler(pPlayer).PSendSysMessage("|cffff8040You are not a City Protector anymore.|r");
         pPlayer->RemoveSpellCooldown(7794, true);
@@ -135,7 +145,7 @@ bool ItemUseSpell_city_protector_scroll(Player* pPlayer, Item* pItem, const Spel
     }
     else
     {
-        switch (pPlayer->getRace())
+        switch (pPlayer->GetRace())
         {
         case RACE_HUMAN:
             // Stormwind City
@@ -177,8 +187,10 @@ bool ItemUseSpell_city_protector_scroll(Player* pPlayer, Item* pItem, const Spel
             // Alah'Thalas
             pPlayer->TeleportTo(0, 4226.82f, -2722.43f, 121.874f, 5.3f);
             break;
-        default: break;
+        default:
+            break;
         }
+
         return true;
     }
 }
@@ -192,7 +204,7 @@ bool ItemUseSpell_remote_mail_terminal(Player* pPlayer, Item* pItem, const Spell
     if (other_mailbox)
         other_mailbox->SetRespawnTime(1);
 
-    float dis{ 2.0F };
+    float dis{2.0F};
     float x, y, z;
     pPlayer->GetSafePosition(x, y, z);
     x += dis * cos(pPlayer->GetOrientation());
@@ -311,9 +323,9 @@ bool ItemUseSpell_skin_changer(Player* pPlayer, Item* pItem, const SpellCastTarg
     uint32 item_entry = pItem->GetEntry();
     int8 bytes = -1;
 
-    bool male = pPlayer->getGender() == GENDER_MALE;
+    bool male = pPlayer->GetGender() == GENDER_MALE;
 
-    switch (pPlayer->getRace()) 
+    switch (pPlayer->GetRace()) 
     {
         case RACE_HUMAN:
             switch (item_entry)
@@ -402,7 +414,7 @@ bool ItemUseSpell_bg_tabard(Player* pPlayer, Item* pItem, const SpellCastTargets
         return false;
 
     // Some spell checks might be obsolete, check it later.
-    if (pPlayer->isInCombat() || pPlayer->InBattleGround() || pPlayer->IsBeingTeleported() || pPlayer->HasSpellCooldown(20939) || pPlayer->HasSpellCooldown(26013) || (pPlayer->getDeathState() == CORPSE))
+    if (pPlayer->IsInCombat() || pPlayer->InBattleGround() || pPlayer->IsBeingTeleported() || pPlayer->HasSpellCooldown(20939) || pPlayer->HasSpellCooldown(26013) || (pPlayer->GetDeathState() == CORPSE))
         ChatHandler(pPlayer).PSendSysMessage("You are not meeting the conditions to queue for BGs!");
     else
     {
@@ -448,7 +460,7 @@ bool ItemUseSpell_bg_tabard(Player* pPlayer, Item* pItem, const SpellCastTargets
 
 bool ItemUseSpell_guild_tabard(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
-    if (pPlayer->isInCombat() || pPlayer->InBattleGround() || pPlayer->IsBeingTeleported() || (pPlayer->getDeathState() == CORPSE))
+    if (pPlayer->IsInCombat() || pPlayer->InBattleGround() || pPlayer->IsBeingTeleported() || (pPlayer->GetDeathState() == CORPSE))
     {
         pPlayer->GetSession()->SendNotification("Can't use right now.");
         return false;
@@ -500,7 +512,7 @@ bool ItemUseSpell_item_illusion(Player* pPlayer, Item* pItem, const SpellCastTar
     }
 
     uint32 displayid{ 0 };
-    bool male = pPlayer->getGender() == GENDER_MALE;
+    bool male = pPlayer->GetGender() == GENDER_MALE;
 
     switch (pItem->GetEntry())
     {
@@ -645,7 +657,7 @@ bool ItemUseSpell_item_holy_strike_book(Player* pPlayer, Item* pItem, const Spel
     if (pPlayer->IsMoving())
         return false;
 
-    if (!pPlayer->getClass() == CLASS_PALADIN)
+    if (!pPlayer->GetClass() == CLASS_PALADIN)
         return false;
 
     switch (pItem->GetEntry())
@@ -721,7 +733,7 @@ bool ItemUseSpell_item_holy_wings(Player* pPlayer, Item* pItem, const SpellCastT
 
 bool ItemUseSpell_item_brainwashing_device(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
-    if (pPlayer->isInCombat() || pPlayer->IsBeingTeleported() || (pPlayer->getDeathState() == CORPSE) || pPlayer->IsMoving())
+    if (pPlayer->IsInCombat() || pPlayer->IsBeingTeleported() || (pPlayer->GetDeathState() == CORPSE) || pPlayer->IsMoving())
         ChatHandler(pPlayer).PSendSysMessage("Warning! Failsafe system shutting device down!");
     else
     {
@@ -763,7 +775,7 @@ private:
 
 bool ItemUseSpell_item_saddle(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
-    if (pPlayer->isInCombat() || pPlayer->IsBeingTeleported() || (pPlayer->getDeathState() == CORPSE) || pPlayer->IsMoving())
+    if (pPlayer->IsInCombat() || pPlayer->IsBeingTeleported() || (pPlayer->GetDeathState() == CORPSE) || pPlayer->IsMoving())
     {        
         pPlayer->GetSession()->SendNotification("You can't use this yet.");
         return false;
@@ -813,9 +825,9 @@ bool ItemUseSpell_item_saddle(Player* pPlayer, Item* pItem, const SpellCastTarge
 
 bool GossipHello_npc_barber(Player* pPlayer, Creature* pCreature)
 {
-    if (pPlayer->HasItemCount(50600, 1) || pPlayer->getRace() == RACE_GOBLIN)
+    if (pPlayer->HasItemCount(50600, 1) || pPlayer->GetRace() == RACE_GOBLIN)
     {
-        switch (pPlayer->getRace())
+        switch (pPlayer->GetRace())
         {
         case RACE_TAUREN:
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Horn Color Next", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
@@ -852,7 +864,7 @@ bool GossipSelect_npc_barber(Player* pPlayer, Creature* pCreature, uint32 uiSend
         uint16 color = 0;
         uint16 curr_color = pPlayer->GetByteValue(PLAYER_BYTES, 3);
 
-        switch (pPlayer->getRace())
+        switch (pPlayer->GetRace())
         {
         case RACE_HUMAN:    color = (curr_color == bytelimit_human) ? 0 : ++curr_color; break;
         case RACE_NIGHTELF: color = (curr_color == bytelimit_elf) ? 0 : ++curr_color; break;
@@ -884,7 +896,7 @@ bool GossipSelect_npc_barber(Player* pPlayer, Creature* pCreature, uint32 uiSend
         uint16 color = 0;
         uint16 curr_color = pPlayer->GetByteValue(PLAYER_BYTES, 3);
 
-        switch (pPlayer->getRace())
+        switch (pPlayer->GetRace())
         {
         case RACE_HUMAN:    color = (curr_color == 0) ? bytelimit_human : --curr_color; break;
         case RACE_NIGHTELF: color = (curr_color == 0) ? bytelimit_elf : --curr_color; break;
@@ -903,20 +915,20 @@ bool GossipSelect_npc_barber(Player* pPlayer, Creature* pCreature, uint32 uiSend
 
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
     {
-        uint16 bytelimit_human = (pPlayer->getGender() == GENDER_FEMALE) ? 18 : 11;
-        uint16 bytelimit_elf = (pPlayer->getGender() == GENDER_FEMALE) ? 6 : 6;
-        uint16 bytelimit_gnome = (pPlayer->getGender() == GENDER_FEMALE) ? 6 : 6;
-        uint16 bytelimit_dwarf = (pPlayer->getGender() == GENDER_FEMALE) ? 13 : 10;
-        uint16 bytelimit_troll = (pPlayer->getGender() == GENDER_FEMALE) ? 4 : 5;
-        uint16 bytelimit_orc = (pPlayer->getGender() == GENDER_FEMALE) ? 6 : 6;
-        uint16 bytelimit_undead = (pPlayer->getGender() == GENDER_FEMALE) ? 9 : 9;
-        uint16 bytelimit_tauren = (pPlayer->getGender() == GENDER_FEMALE) ? 6 : 7;
-        uint16 bytelimit_goblin = (pPlayer->getGender() == GENDER_FEMALE) ? 5 : 5;
+        uint16 bytelimit_human = (pPlayer->GetGender() == GENDER_FEMALE) ? 18 : 11;
+        uint16 bytelimit_elf = (pPlayer->GetGender() == GENDER_FEMALE) ? 6 : 6;
+        uint16 bytelimit_gnome = (pPlayer->GetGender() == GENDER_FEMALE) ? 6 : 6;
+        uint16 bytelimit_dwarf = (pPlayer->GetGender() == GENDER_FEMALE) ? 13 : 10;
+        uint16 bytelimit_troll = (pPlayer->GetGender() == GENDER_FEMALE) ? 4 : 5;
+        uint16 bytelimit_orc = (pPlayer->GetGender() == GENDER_FEMALE) ? 6 : 6;
+        uint16 bytelimit_undead = (pPlayer->GetGender() == GENDER_FEMALE) ? 9 : 9;
+        uint16 bytelimit_tauren = (pPlayer->GetGender() == GENDER_FEMALE) ? 6 : 7;
+        uint16 bytelimit_goblin = (pPlayer->GetGender() == GENDER_FEMALE) ? 5 : 5;
 
         uint16 style = 0;
         uint16 curr_style = pPlayer->GetByteValue(PLAYER_BYTES, 2);
 
-        switch (pPlayer->getRace())
+        switch (pPlayer->GetRace())
         {
         case RACE_HUMAN:    style = (curr_style == bytelimit_human) ? 0 : ++curr_style; break;
         case RACE_NIGHTELF: style = (curr_style == bytelimit_elf) ? 0 : ++curr_style; break;
@@ -935,20 +947,20 @@ bool GossipSelect_npc_barber(Player* pPlayer, Creature* pCreature, uint32 uiSend
 
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 4)
     {
-        uint16 bytelimit_human = (pPlayer->getGender() == GENDER_FEMALE) ? 18 : 11;
-        uint16 bytelimit_elf = (pPlayer->getGender() == GENDER_FEMALE) ? 6 : 6;
-        uint16 bytelimit_gnome = (pPlayer->getGender() == GENDER_FEMALE) ? 6 : 6;
-        uint16 bytelimit_dwarf = (pPlayer->getGender() == GENDER_FEMALE) ? 13 : 10;
-        uint16 bytelimit_troll = (pPlayer->getGender() == GENDER_FEMALE) ? 4 : 5;
-        uint16 bytelimit_orc = (pPlayer->getGender() == GENDER_FEMALE) ? 6 : 6;
-        uint16 bytelimit_undead = (pPlayer->getGender() == GENDER_FEMALE) ? 9 : 9;
-        uint16 bytelimit_tauren = (pPlayer->getGender() == GENDER_FEMALE) ? 6 : 7;
-        uint16 bytelimit_goblin = (pPlayer->getGender() == GENDER_FEMALE) ? 5 : 5;
+        uint16 bytelimit_human = (pPlayer->GetGender() == GENDER_FEMALE) ? 18 : 11;
+        uint16 bytelimit_elf = (pPlayer->GetGender() == GENDER_FEMALE) ? 6 : 6;
+        uint16 bytelimit_gnome = (pPlayer->GetGender() == GENDER_FEMALE) ? 6 : 6;
+        uint16 bytelimit_dwarf = (pPlayer->GetGender() == GENDER_FEMALE) ? 13 : 10;
+        uint16 bytelimit_troll = (pPlayer->GetGender() == GENDER_FEMALE) ? 4 : 5;
+        uint16 bytelimit_orc = (pPlayer->GetGender() == GENDER_FEMALE) ? 6 : 6;
+        uint16 bytelimit_undead = (pPlayer->GetGender() == GENDER_FEMALE) ? 9 : 9;
+        uint16 bytelimit_tauren = (pPlayer->GetGender() == GENDER_FEMALE) ? 6 : 7;
+        uint16 bytelimit_goblin = (pPlayer->GetGender() == GENDER_FEMALE) ? 5 : 5;
 
         uint16 style = 0;
         uint16 curr_style = pPlayer->GetByteValue(PLAYER_BYTES, 2);
 
-        switch (pPlayer->getRace())
+        switch (pPlayer->GetRace())
         {
         case RACE_HUMAN:    style = (curr_style == 0) ? bytelimit_human : --curr_style; break;
         case RACE_NIGHTELF: style = (curr_style == 0) ? bytelimit_elf : --curr_style; break;
@@ -971,9 +983,9 @@ bool GossipSelect_npc_barber(Player* pPlayer, Creature* pCreature, uint32 uiSend
 
 bool GossipHello_npc_surgeon(Player* pPlayer, Creature* pCreature)
 {
-    if (pPlayer->HasItemCount(50601, 1) || pPlayer->getRace() == RACE_GOBLIN)
+    if (pPlayer->HasItemCount(50601, 1) || pPlayer->GetRace() == RACE_GOBLIN)
     {
-        if (pPlayer->getRace() == RACE_TAUREN)
+        if (pPlayer->GetRace() == RACE_TAUREN)
         {
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Fur Color Next ", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Fur Color Previous", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
@@ -1001,20 +1013,20 @@ bool GossipSelect_npc_surgeon(Player* pPlayer, Creature* pCreature, uint32 uiSen
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        uint16 bytelimit_human = (pPlayer->getGender() == GENDER_FEMALE) ? 9 : 9;
-        uint16 bytelimit_elf = (pPlayer->getGender() == GENDER_FEMALE) ? 8 : 8;
-        uint16 bytelimit_gnome = (pPlayer->getGender() == GENDER_FEMALE) ? 4 : 3;
-        uint16 bytelimit_dwarf = (pPlayer->getGender() == GENDER_FEMALE) ? 8 : 8;
-        uint16 bytelimit_troll = (pPlayer->getGender() == GENDER_FEMALE) ? 5 : 5;
-        uint16 bytelimit_orc = (pPlayer->getGender() == GENDER_FEMALE) ? 8 : 8;
-        uint16 bytelimit_undead = (pPlayer->getGender() == GENDER_FEMALE) ? 5 : 7;
-        uint16 bytelimit_tauren = (pPlayer->getGender() == GENDER_FEMALE) ? 10 : 18;
-        uint16 bytelimit_goblin = (pPlayer->getGender() == GENDER_FEMALE) ? 5 : 5;
+        uint16 bytelimit_human = (pPlayer->GetGender() == GENDER_FEMALE) ? 9 : 9;
+        uint16 bytelimit_elf = (pPlayer->GetGender() == GENDER_FEMALE) ? 8 : 8;
+        uint16 bytelimit_gnome = (pPlayer->GetGender() == GENDER_FEMALE) ? 4 : 3;
+        uint16 bytelimit_dwarf = (pPlayer->GetGender() == GENDER_FEMALE) ? 8 : 8;
+        uint16 bytelimit_troll = (pPlayer->GetGender() == GENDER_FEMALE) ? 5 : 5;
+        uint16 bytelimit_orc = (pPlayer->GetGender() == GENDER_FEMALE) ? 8 : 8;
+        uint16 bytelimit_undead = (pPlayer->GetGender() == GENDER_FEMALE) ? 5 : 7;
+        uint16 bytelimit_tauren = (pPlayer->GetGender() == GENDER_FEMALE) ? 10 : 18;
+        uint16 bytelimit_goblin = (pPlayer->GetGender() == GENDER_FEMALE) ? 5 : 5;
 
         uint16 skintone = 0;
         uint16 curr_skintone = pPlayer->GetByteValue(PLAYER_BYTES, 0);
 
-        switch (pPlayer->getRace())
+        switch (pPlayer->GetRace())
         {
         case RACE_HUMAN:    skintone = (curr_skintone == bytelimit_human) ? 0 : ++curr_skintone; break;
         case RACE_NIGHTELF: skintone = (curr_skintone == bytelimit_elf) ? 0 : ++curr_skintone; break;
@@ -1033,20 +1045,20 @@ bool GossipSelect_npc_surgeon(Player* pPlayer, Creature* pCreature, uint32 uiSen
 
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
     {
-        uint16 bytelimit_human = (pPlayer->getGender() == GENDER_FEMALE) ? 9 : 9;
-        uint16 bytelimit_elf = (pPlayer->getGender() == GENDER_FEMALE) ? 8 : 8;
-        uint16 bytelimit_gnome = (pPlayer->getGender() == GENDER_FEMALE) ? 4 : 3;
-        uint16 bytelimit_dwarf = (pPlayer->getGender() == GENDER_FEMALE) ? 8 : 8;
-        uint16 bytelimit_troll = (pPlayer->getGender() == GENDER_FEMALE) ? 5 : 5;
-        uint16 bytelimit_orc = (pPlayer->getGender() == GENDER_FEMALE) ? 8 : 8;
-        uint16 bytelimit_undead = (pPlayer->getGender() == GENDER_FEMALE) ? 5 : 7;
-        uint16 bytelimit_tauren = (pPlayer->getGender() == GENDER_FEMALE) ? 10 : 18;
-        uint16 bytelimit_goblin = (pPlayer->getGender() == GENDER_FEMALE) ? 5 : 5;
+        uint16 bytelimit_human = (pPlayer->GetGender() == GENDER_FEMALE) ? 9 : 9;
+        uint16 bytelimit_elf = (pPlayer->GetGender() == GENDER_FEMALE) ? 8 : 8;
+        uint16 bytelimit_gnome = (pPlayer->GetGender() == GENDER_FEMALE) ? 4 : 3;
+        uint16 bytelimit_dwarf = (pPlayer->GetGender() == GENDER_FEMALE) ? 8 : 8;
+        uint16 bytelimit_troll = (pPlayer->GetGender() == GENDER_FEMALE) ? 5 : 5;
+        uint16 bytelimit_orc = (pPlayer->GetGender() == GENDER_FEMALE) ? 8 : 8;
+        uint16 bytelimit_undead = (pPlayer->GetGender() == GENDER_FEMALE) ? 5 : 7;
+        uint16 bytelimit_tauren = (pPlayer->GetGender() == GENDER_FEMALE) ? 10 : 18;
+        uint16 bytelimit_goblin = (pPlayer->GetGender() == GENDER_FEMALE) ? 5 : 5;
 
         uint16 skintone = 0;
         uint16 curr_skintone = pPlayer->GetByteValue(PLAYER_BYTES, 0);
 
-        switch (pPlayer->getRace())
+        switch (pPlayer->GetRace())
         {
         case RACE_HUMAN:    skintone = (curr_skintone == 0) ? bytelimit_human : --curr_skintone; break;
         case RACE_NIGHTELF: skintone = (curr_skintone == 0) ? bytelimit_elf : --curr_skintone; break;
@@ -1065,20 +1077,20 @@ bool GossipSelect_npc_surgeon(Player* pPlayer, Creature* pCreature, uint32 uiSen
 
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
     {
-        uint16 bytelimit_human = (pPlayer->getGender() == GENDER_FEMALE) ? 6 : 8;
-        uint16 bytelimit_elf = (pPlayer->getGender() == GENDER_FEMALE) ? 9 : 5;
-        uint16 bytelimit_gnome = (pPlayer->getGender() == GENDER_FEMALE) ? 6 : 7;
-        uint16 bytelimit_dwarf = (pPlayer->getGender() == GENDER_FEMALE) ? 8 : 10;
-        uint16 bytelimit_troll = (pPlayer->getGender() == GENDER_FEMALE) ? 5 : 10;
-        uint16 bytelimit_orc = (pPlayer->getGender() == GENDER_FEMALE) ? 6 : 10;
-        uint16 bytelimit_undead = (pPlayer->getGender() == GENDER_FEMALE) ? 7 : 16;
-        uint16 bytelimit_tauren = (pPlayer->getGender() == GENDER_FEMALE) ? 4 : 6;
-        uint16 bytelimit_goblin = (pPlayer->getGender() == GENDER_FEMALE) ? 5 : 5;
+        uint16 bytelimit_human = (pPlayer->GetGender() == GENDER_FEMALE) ? 6 : 8;
+        uint16 bytelimit_elf = (pPlayer->GetGender() == GENDER_FEMALE) ? 9 : 5;
+        uint16 bytelimit_gnome = (pPlayer->GetGender() == GENDER_FEMALE) ? 6 : 7;
+        uint16 bytelimit_dwarf = (pPlayer->GetGender() == GENDER_FEMALE) ? 8 : 10;
+        uint16 bytelimit_troll = (pPlayer->GetGender() == GENDER_FEMALE) ? 5 : 10;
+        uint16 bytelimit_orc = (pPlayer->GetGender() == GENDER_FEMALE) ? 6 : 10;
+        uint16 bytelimit_undead = (pPlayer->GetGender() == GENDER_FEMALE) ? 7 : 16;
+        uint16 bytelimit_tauren = (pPlayer->GetGender() == GENDER_FEMALE) ? 4 : 6;
+        uint16 bytelimit_goblin = (pPlayer->GetGender() == GENDER_FEMALE) ? 5 : 5;
 
         uint16 feature = 0;
         uint16 curr_feature = pPlayer->GetByteValue(PLAYER_BYTES_2, 0);
 
-        switch (pPlayer->getRace())
+        switch (pPlayer->GetRace())
         {
         case RACE_HUMAN:    feature = (curr_feature == bytelimit_human) ? 0 : ++curr_feature; break;
         case RACE_NIGHTELF: feature = (curr_feature == bytelimit_elf) ? 0 : ++curr_feature; break;
@@ -1097,20 +1109,20 @@ bool GossipSelect_npc_surgeon(Player* pPlayer, Creature* pCreature, uint32 uiSen
 
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 4)
     {
-        uint16 bytelimit_human = (pPlayer->getGender() == GENDER_FEMALE) ? 6 : 8;
-        uint16 bytelimit_elf = (pPlayer->getGender() == GENDER_FEMALE) ? 9 : 5;
-        uint16 bytelimit_gnome = (pPlayer->getGender() == GENDER_FEMALE) ? 6 : 7;
-        uint16 bytelimit_dwarf = (pPlayer->getGender() == GENDER_FEMALE) ? 8 : 10;
-        uint16 bytelimit_troll = (pPlayer->getGender() == GENDER_FEMALE) ? 5 : 10;
-        uint16 bytelimit_orc = (pPlayer->getGender() == GENDER_FEMALE) ? 6 : 10;
-        uint16 bytelimit_undead = (pPlayer->getGender() == GENDER_FEMALE) ? 7 : 16;
-        uint16 bytelimit_tauren = (pPlayer->getGender() == GENDER_FEMALE) ? 4 : 6;
-        uint16 bytelimit_goblin = (pPlayer->getGender() == GENDER_FEMALE) ? 5 : 5;
+        uint16 bytelimit_human = (pPlayer->GetGender() == GENDER_FEMALE) ? 6 : 8;
+        uint16 bytelimit_elf = (pPlayer->GetGender() == GENDER_FEMALE) ? 9 : 5;
+        uint16 bytelimit_gnome = (pPlayer->GetGender() == GENDER_FEMALE) ? 6 : 7;
+        uint16 bytelimit_dwarf = (pPlayer->GetGender() == GENDER_FEMALE) ? 8 : 10;
+        uint16 bytelimit_troll = (pPlayer->GetGender() == GENDER_FEMALE) ? 5 : 10;
+        uint16 bytelimit_orc = (pPlayer->GetGender() == GENDER_FEMALE) ? 6 : 10;
+        uint16 bytelimit_undead = (pPlayer->GetGender() == GENDER_FEMALE) ? 7 : 16;
+        uint16 bytelimit_tauren = (pPlayer->GetGender() == GENDER_FEMALE) ? 4 : 6;
+        uint16 bytelimit_goblin = (pPlayer->GetGender() == GENDER_FEMALE) ? 5 : 5;
 
         uint16 feature = 0;
         uint16 curr_feature = pPlayer->GetByteValue(PLAYER_BYTES_2, 0);
 
-        switch (pPlayer->getRace())
+        switch (pPlayer->GetRace())
         {
         case RACE_HUMAN:    feature = (curr_feature == 0) ? bytelimit_human : --curr_feature; break;
         case RACE_NIGHTELF: feature = (curr_feature == 0) ? bytelimit_elf : --curr_feature; break;
@@ -1129,20 +1141,20 @@ bool GossipSelect_npc_surgeon(Player* pPlayer, Creature* pCreature, uint32 uiSen
 
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 5)
     {
-        uint16 bytelimit_human = (pPlayer->getGender() == GENDER_FEMALE) ? 6 : 8;
-        uint16 bytelimit_elf = (pPlayer->getGender() == GENDER_FEMALE) ? 9 : 5;
-        uint16 bytelimit_gnome = (pPlayer->getGender() == GENDER_FEMALE) ? 6 : 7;
-        uint16 bytelimit_dwarf = (pPlayer->getGender() == GENDER_FEMALE) ? 8 : 10;
-        uint16 bytelimit_troll = (pPlayer->getGender() == GENDER_FEMALE) ? 5 : 10;
-        uint16 bytelimit_orc = (pPlayer->getGender() == GENDER_FEMALE) ? 6 : 10;
-        uint16 bytelimit_undead = (pPlayer->getGender() == GENDER_FEMALE) ? 7 : 16;
-        uint16 bytelimit_tauren = (pPlayer->getGender() == GENDER_FEMALE) ? 7 : 16;
-        uint16 bytelimit_goblin = (pPlayer->getGender() == GENDER_FEMALE) ? 5 : 5;
+        uint16 bytelimit_human = (pPlayer->GetGender() == GENDER_FEMALE) ? 6 : 8;
+        uint16 bytelimit_elf = (pPlayer->GetGender() == GENDER_FEMALE) ? 9 : 5;
+        uint16 bytelimit_gnome = (pPlayer->GetGender() == GENDER_FEMALE) ? 6 : 7;
+        uint16 bytelimit_dwarf = (pPlayer->GetGender() == GENDER_FEMALE) ? 8 : 10;
+        uint16 bytelimit_troll = (pPlayer->GetGender() == GENDER_FEMALE) ? 5 : 10;
+        uint16 bytelimit_orc = (pPlayer->GetGender() == GENDER_FEMALE) ? 6 : 10;
+        uint16 bytelimit_undead = (pPlayer->GetGender() == GENDER_FEMALE) ? 7 : 16;
+        uint16 bytelimit_tauren = (pPlayer->GetGender() == GENDER_FEMALE) ? 7 : 16;
+        uint16 bytelimit_goblin = (pPlayer->GetGender() == GENDER_FEMALE) ? 5 : 5;
 
         uint16 face = 0;
         uint16 curr_face = pPlayer->GetByteValue(PLAYER_BYTES, 1);
 
-        switch (pPlayer->getRace())
+        switch (pPlayer->GetRace())
         {
         case RACE_HUMAN:    face = (curr_face == bytelimit_human) ? 0 : ++curr_face; break;
         case RACE_NIGHTELF: face = (curr_face == bytelimit_elf) ? 0 : ++curr_face; break;
@@ -1161,20 +1173,20 @@ bool GossipSelect_npc_surgeon(Player* pPlayer, Creature* pCreature, uint32 uiSen
 
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 6)
     {
-        uint16 bytelimit_human = (pPlayer->getGender() == GENDER_FEMALE) ? 6 : 8;
-        uint16 bytelimit_elf = (pPlayer->getGender() == GENDER_FEMALE) ? 9 : 5;
-        uint16 bytelimit_gnome = (pPlayer->getGender() == GENDER_FEMALE) ? 6 : 7;
-        uint16 bytelimit_dwarf = (pPlayer->getGender() == GENDER_FEMALE) ? 8 : 10;
-        uint16 bytelimit_troll = (pPlayer->getGender() == GENDER_FEMALE) ? 5 : 10;
-        uint16 bytelimit_orc = (pPlayer->getGender() == GENDER_FEMALE) ? 6 : 10;
-        uint16 bytelimit_undead = (pPlayer->getGender() == GENDER_FEMALE) ? 7 : 16;
-        uint16 bytelimit_tauren = (pPlayer->getGender() == GENDER_FEMALE) ? 7 : 16;
-        uint16 bytelimit_goblin = (pPlayer->getGender() == GENDER_FEMALE) ? 5 : 5;
+        uint16 bytelimit_human = (pPlayer->GetGender() == GENDER_FEMALE) ? 6 : 8;
+        uint16 bytelimit_elf = (pPlayer->GetGender() == GENDER_FEMALE) ? 9 : 5;
+        uint16 bytelimit_gnome = (pPlayer->GetGender() == GENDER_FEMALE) ? 6 : 7;
+        uint16 bytelimit_dwarf = (pPlayer->GetGender() == GENDER_FEMALE) ? 8 : 10;
+        uint16 bytelimit_troll = (pPlayer->GetGender() == GENDER_FEMALE) ? 5 : 10;
+        uint16 bytelimit_orc = (pPlayer->GetGender() == GENDER_FEMALE) ? 6 : 10;
+        uint16 bytelimit_undead = (pPlayer->GetGender() == GENDER_FEMALE) ? 7 : 16;
+        uint16 bytelimit_tauren = (pPlayer->GetGender() == GENDER_FEMALE) ? 7 : 16;
+        uint16 bytelimit_goblin = (pPlayer->GetGender() == GENDER_FEMALE) ? 5 : 5;
 
         uint16 face = 0;
         uint16 curr_face = pPlayer->GetByteValue(PLAYER_BYTES, 1);
 
-        switch (pPlayer->getRace())
+        switch (pPlayer->GetRace())
         {
         case RACE_HUMAN:    face = (curr_face == 0) ? bytelimit_human : --curr_face; break;
         case RACE_NIGHTELF: face = (curr_face == 0) ? bytelimit_elf : --curr_face; break;
@@ -1196,108 +1208,108 @@ bool GossipSelect_npc_surgeon(Player* pPlayer, Creature* pCreature, uint32 uiSen
 
 bool ItemUseSpell_shop_racechange(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
-    if (pPlayer->isInCombat() || pPlayer->IsBeingTeleported() || (pPlayer->getDeathState() == CORPSE) || pPlayer->IsMoving())
+    if (pPlayer->IsInCombat() || pPlayer->IsBeingTeleported() || (pPlayer->GetDeathState() == CORPSE) || pPlayer->IsMoving())
     {
         pPlayer->GetSession()->SendNotification("Can't change race at this moment!");
         return false;
     }
 
-    uint32 race = pPlayer->getRace();
+    uint32 race = pPlayer->GetRace();
     uint32 bytes = pPlayer->GetUInt32Value(PLAYER_BYTES);
     uint32 bytes2 = pPlayer->GetUInt32Value(PLAYER_BYTES_2);
-    uint8 player_class = pPlayer->getClass();
-    uint8 player_gender = pPlayer->getGender();
+    uint8 player_class = pPlayer->GetClass();
+    uint8 player_gender = pPlayer->GetGender();
 
     switch (pItem->GetEntry())
     {
     case 50603: // Human
-        if (pPlayer->getClass() == CLASS_DRUID || pPlayer->getClass() == CLASS_HUNTER || pPlayer->getClass() == CLASS_SHAMAN)
+        if (pPlayer->GetClass() == CLASS_DRUID || pPlayer->GetClass() == CLASS_HUNTER || pPlayer->GetClass() == CLASS_SHAMAN)
         {
             pPlayer->GetSession()->SendNotification("This race does not support your class.");
             return false;
         }
-        bytes = pPlayer->getGender() == GENDER_MALE ? 101058307 : 100730885;
+        bytes = pPlayer->GetGender() == GENDER_MALE ? 101058307 : 100730885;
         race = RACE_HUMAN;
         break;
     case 50604: // Gnome
-        if (pPlayer->getClass() == CLASS_DRUID || pPlayer->getClass() == CLASS_PRIEST || pPlayer->getClass() == CLASS_PALADIN || pPlayer->getClass() == CLASS_SHAMAN)
+        if (pPlayer->GetClass() == CLASS_DRUID || pPlayer->GetClass() == CLASS_PRIEST || pPlayer->GetClass() == CLASS_PALADIN || pPlayer->GetClass() == CLASS_SHAMAN)
         {
             pPlayer->GetSession()->SendNotification("This race does not support your class.");
             return false;
         }
-        bytes = pPlayer->getGender() == GENDER_MALE ? 67372546 : 131076;
+        bytes = pPlayer->GetGender() == GENDER_MALE ? 67372546 : 131076;
         race = RACE_GNOME;
         break;
     case 50605: // Dwarf
-        if (pPlayer->getClass() == CLASS_DRUID || pPlayer->getClass() == CLASS_MAGE || pPlayer->getClass() == CLASS_WARLOCK || pPlayer->getClass() == CLASS_SHAMAN)
+        if (pPlayer->GetClass() == CLASS_DRUID || pPlayer->GetClass() == CLASS_MAGE || pPlayer->GetClass() == CLASS_WARLOCK || pPlayer->GetClass() == CLASS_SHAMAN)
         {
             pPlayer->GetSession()->SendNotification("This race does not support your class.");
             return false;
         }
-        bytes = pPlayer->getGender() == GENDER_MALE ? 50528773 : 34406912;
+        bytes = pPlayer->GetGender() == GENDER_MALE ? 50528773 : 34406912;
         race = RACE_DWARF;
         break;
     case 50606: // Night Elf
-        if (pPlayer->getClass() == CLASS_MAGE || pPlayer->getClass() == CLASS_WARLOCK || pPlayer->getClass() == CLASS_PALADIN || pPlayer->getClass() == CLASS_SHAMAN)
+        if (pPlayer->GetClass() == CLASS_MAGE || pPlayer->GetClass() == CLASS_WARLOCK || pPlayer->GetClass() == CLASS_PALADIN || pPlayer->GetClass() == CLASS_SHAMAN)
         {
             pPlayer->GetSession()->SendNotification("This race does not support your class.");
             return false;
         }
-        bytes = pPlayer->getGender() == GENDER_MALE ? 132615 : 67503620;
+        bytes = pPlayer->GetGender() == GENDER_MALE ? 132615 : 67503620;
         race = RACE_NIGHTELF;
         break;
     case 50607: // Orc
-        if (pPlayer->getClass() == CLASS_DRUID || pPlayer->getClass() == CLASS_PRIEST || pPlayer->getClass() == CLASS_PALADIN)
+        if (pPlayer->GetClass() == CLASS_DRUID || pPlayer->GetClass() == CLASS_PRIEST || pPlayer->GetClass() == CLASS_PALADIN)
         {
             pPlayer->GetSession()->SendNotification("This race does not support your class.");
             return false;
         }
-        bytes = pPlayer->getGender() == GENDER_MALE ? 84214788 : 84214788;
+        bytes = pPlayer->GetGender() == GENDER_MALE ? 84214788 : 84214788;
         race = RACE_ORC;
         break;
     case 50608: // Troll
-        if (pPlayer->getClass() == CLASS_DRUID || pPlayer->getClass() == CLASS_WARLOCK || pPlayer->getClass() == CLASS_PALADIN)
+        if (pPlayer->GetClass() == CLASS_DRUID || pPlayer->GetClass() == CLASS_WARLOCK || pPlayer->GetClass() == CLASS_PALADIN)
         {
             pPlayer->GetSession()->SendNotification("This race does not support your class.");
             return false;
         }
-        bytes = pPlayer->getGender() == GENDER_MALE ? 33751041 : 131587;
+        bytes = pPlayer->GetGender() == GENDER_MALE ? 33751041 : 131587;
         race = RACE_TROLL;
         break;
     case 50609: // Tauren
-        if (pPlayer->getClass() == CLASS_PRIEST || pPlayer->getClass() == CLASS_MAGE || pPlayer->getClass() == CLASS_ROGUE || pPlayer->getClass() == CLASS_PALADIN)
+        if (pPlayer->GetClass() == CLASS_PRIEST || pPlayer->GetClass() == CLASS_MAGE || pPlayer->GetClass() == CLASS_ROGUE || pPlayer->GetClass() == CLASS_PALADIN)
         {
             pPlayer->GetSession()->SendNotification("This race does not support your class.");
             return false;
         }
-        bytes = pPlayer->getGender() == GENDER_MALE ? 17105153 : 393736;
+        bytes = pPlayer->GetGender() == GENDER_MALE ? 17105153 : 393736;
         race = RACE_TAUREN;
         break;
     case 50610: // Undead
-        if (pPlayer->getClass() == CLASS_PALADIN || pPlayer->getClass() == CLASS_DRUID || pPlayer->getClass() == CLASS_SHAMAN || pPlayer->getClass() == CLASS_HUNTER)
+        if (pPlayer->GetClass() == CLASS_PALADIN || pPlayer->GetClass() == CLASS_DRUID || pPlayer->GetClass() == CLASS_SHAMAN || pPlayer->GetClass() == CLASS_HUNTER)
         {
             pPlayer->GetSession()->SendNotification("This race does not support your class.");
             return false;
         }
-        bytes = pPlayer->getGender() == GENDER_MALE ? 117703426 : 151126786;
+        bytes = pPlayer->GetGender() == GENDER_MALE ? 117703426 : 151126786;
         race = RACE_UNDEAD;
         break;
     case 50612: // High Elf
-        if (pPlayer->getClass() == CLASS_WARLOCK || pPlayer->getClass() == CLASS_SHAMAN || pPlayer->getClass() == CLASS_DRUID)
+        if (pPlayer->GetClass() == CLASS_WARLOCK || pPlayer->GetClass() == CLASS_SHAMAN || pPlayer->GetClass() == CLASS_DRUID)
         {
             pPlayer->GetSession()->SendNotification("This race does not support your class.");
             return false;
         }
-        bytes = pPlayer->getGender() == GENDER_MALE ? 132873 : 117768707;
+        bytes = pPlayer->GetGender() == GENDER_MALE ? 132873 : 117768707;
         race = RACE_HIGH_ELF;
         break;
     case 50613: // Goblin
-        if (pPlayer->getClass() == CLASS_PRIEST || pPlayer->getClass() == CLASS_SHAMAN || pPlayer->getClass() == CLASS_DRUID || pPlayer->getClass() == CLASS_PALADIN)
+        if (pPlayer->GetClass() == CLASS_PRIEST || pPlayer->GetClass() == CLASS_SHAMAN || pPlayer->GetClass() == CLASS_DRUID || pPlayer->GetClass() == CLASS_PALADIN)
         {
             pPlayer->GetSession()->SendNotification("This race does not support your class.");
             return false;
         }
-        bytes = pPlayer->getGender() == GENDER_MALE ? 16843522 : 2;
+        bytes = pPlayer->GetGender() == GENDER_MALE ? 16843522 : 2;
         race = RACE_GOBLIN;
         break;
     }
@@ -1321,7 +1333,7 @@ bool ItemUseSpell_shop_changegender(Player* pPlayer, Item* pItem, const SpellCas
 {
     if (!pPlayer) return false;
 
-    uint8 player_gender = (pPlayer->getGender() == GENDER_MALE) ? 1 : 0;
+    uint8 player_gender = (pPlayer->GetGender() == GENDER_MALE) ? 1 : 0;
     pPlayer->SetByteValue(UNIT_FIELD_BYTES_0, 2, player_gender);
     pPlayer->InitPlayerDisplayIds();
     pPlayer->SaveToDB();
@@ -1330,9 +1342,9 @@ bool ItemUseSpell_shop_changegender(Player* pPlayer, Item* pItem, const SpellCas
 
 bool GossipHello_npc_barber_go(Player* pPlayer, Creature* pCreature)
 {
-    if (pPlayer->getRace() == RACE_GOBLIN)
+    if (pPlayer->GetRace() == RACE_GOBLIN)
     {
-        switch (pPlayer->getGender())
+        switch (pPlayer->GetGender())
         {
         case GENDER_FEMALE:
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "I'd like to change my hair color.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
@@ -1401,9 +1413,9 @@ bool GossipSelect_npc_barber_go(Player* pPlayer, Creature* pCreature, uint32 uiS
 
 bool GossipHello_npc_surgeon_go(Player* pPlayer, Creature* pCreature)
 {
-    if (pPlayer->getRace() == RACE_GOBLIN)
+    if (pPlayer->GetRace() == RACE_GOBLIN)
     {
-        switch (pPlayer->getGender())
+        switch (pPlayer->GetGender())
         {
         case GENDER_FEMALE:
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "I'd like to change my face.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1); 
@@ -1516,9 +1528,9 @@ bool ItemUseSpell_item_mage_refreshment_table(Player* pPlayer, Item* pItem, cons
 
 	if (pPlayer->IsMoving() || pPlayer->IsBeingTeleported())
 		castResult = SPELL_FAILED_MOVING;
-	else if (pPlayer->isInCombat())
+	else if (pPlayer->IsInCombat())
 		castResult = SPELL_FAILED_AFFECTING_COMBAT;
-	else if (pPlayer->getDeathState() == CORPSE)
+	else if (pPlayer->GetDeathState() == CORPSE)
 		castResult = SPELL_FAILED_CASTER_DEAD;
 
 	if (castResult == SPELL_CAST_OK)
@@ -1571,9 +1583,9 @@ bool ItemUseSpell_item_warlock_soulwell_ritual(Player* pPlayer, Item* pItem, con
 
 	if (pPlayer->IsMoving() || pPlayer->IsBeingTeleported())
 		castResult = SPELL_FAILED_MOVING;
-	else if (pPlayer->isInCombat())
+	else if (pPlayer->IsInCombat())
 		castResult = SPELL_FAILED_AFFECTING_COMBAT;
-	else if (pPlayer->getDeathState() == CORPSE)
+	else if (pPlayer->GetDeathState() == CORPSE)
 		castResult = SPELL_FAILED_CASTER_DEAD;
 
 	if (castResult == SPELL_CAST_OK)
@@ -1628,7 +1640,7 @@ bool GOHello_go_orb_of_the_bronze_dragonflight(Player* pPlayer, GameObject* pGo)
 
 bool GOHello_go_portable_wormhole(Player* pPlayer, GameObject* pGo)
 {
-    if (pPlayer->isInCombat() || pPlayer->IsBeingTeleported() || (pPlayer->getDeathState() == CORPSE) || pPlayer->IsMoving())
+    if (pPlayer->IsInCombat() || pPlayer->IsBeingTeleported() || (pPlayer->GetDeathState() == CORPSE) || pPlayer->IsMoving())
         ChatHandler(pPlayer).PSendSysMessage("The wormhole is currently unstable.");
     else
     {
@@ -1674,9 +1686,9 @@ struct go_survival_tent : public GameObjectAI
                 {
                     pPlayer->SetFlag(PLAYER_FLAGS, PLAYER_FLAGS_RESTING);
                     if (pPlayer->isTurtle())
-                        pPlayer->SetRestBonus(static_cast<float>(pPlayer->GetRestBonus() + (sObjectMgr.GetXPForLevel(pPlayer->getLevel()) * 0.000060)));
+                        pPlayer->SetRestBonus(static_cast<float>(pPlayer->GetRestBonus() + (sObjectMgr.GetXPForLevel(pPlayer->GetLevel()) * 0.000060)));
                     else
-                        pPlayer->SetRestBonus(static_cast<float>(pPlayer->GetRestBonus() + (sObjectMgr.GetXPForLevel(pPlayer->getLevel()) * 0.000125)));
+                        pPlayer->SetRestBonus(static_cast<float>(pPlayer->GetRestBonus() + (sObjectMgr.GetXPForLevel(pPlayer->GetLevel()) * 0.000125)));
                 }
                 m_uiUpdateTimer = 1000;
             }
@@ -1780,7 +1792,7 @@ struct go_campfire_rested : public GameObjectAI
                 for (Player* pPlayer : players)
                 {
                     pPlayer->SetFlag(PLAYER_FLAGS, PLAYER_FLAGS_RESTING);
-                    pPlayer->SetRestBonus(static_cast<float>(pPlayer->GetRestBonus() + (sObjectMgr.GetXPForLevel(pPlayer->getLevel()) * 0.000125)));
+                    pPlayer->SetRestBonus(static_cast<float>(pPlayer->GetRestBonus() + (sObjectMgr.GetXPForLevel(pPlayer->GetLevel()) * 0.000125)));
                 }
                 m_uiUpdateTimer = 2500;
             }
@@ -1823,7 +1835,7 @@ struct go_cot_enter_trigger : public GameObjectAI
 
             for (Player* pPlayer : players)
             {
-                if (!pPlayer->isAlive()) {
+                if (!pPlayer->IsAlive()) {
                     pPlayer->ResurrectPlayer(0.5f);
                     pPlayer->SpawnCorpseBones();
                 }
@@ -2097,7 +2109,7 @@ bool GOSelect_go_bounty(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 
 
 bool GOHello_go_epl_flying_machine(Player* pPlayer, GameObject* pGo)
 {
-    if (pPlayer->getLevel() >= 25)
+    if (pPlayer->GetLevel() >= 25)
     {
         if (pPlayer->GetZoneId() == 139 || pPlayer->GetZoneId() == 1377)
         {
@@ -2180,7 +2192,7 @@ bool GOHello_go_stormwind_fountain(Player* pPlayer, GameObject* pGo)
 
 bool GOHello_go_brainwashing_device(Player* pPlayer, GameObject* pGo)
 {
-	if (pPlayer->getLevel() >= 10 && pPlayer->HasItemCount(51715, 1))
+	if (pPlayer->GetLevel() >= 10 && pPlayer->HasItemCount(51715, 1))
 	{
 		std::string activateText;
 
@@ -2251,7 +2263,7 @@ struct stormwind_vault_portal : public GameObjectAI
             for (Player* pPlayer : players)
             {
                 pPlayer->GetSession()->SendNotification("This dungeon is currently not available.");
-                //if (!pPlayer->isAlive()) 
+                //if (!pPlayer->IsAlive()) 
                 //{
                 //    pPlayer->ResurrectPlayer(0.5f);
                 //    pPlayer->SpawnCorpseBones();
@@ -2370,8 +2382,8 @@ struct refreshment_portal_clicks : public GameObjectAI
         if (!Unit->ToPlayer())
             return false;
 
-        if (!Unit->ToPlayer()->isInCombat() && !Unit->ToPlayer()->IsBeingTeleported()
-            && Unit->ToPlayer()->getDeathState() != CORPSE && !Unit->ToPlayer()->IsMoving())
+        if (!Unit->ToPlayer()->IsInCombat() && !Unit->ToPlayer()->IsBeingTeleported()
+            && Unit->ToPlayer()->GetDeathState() != CORPSE && !Unit->ToPlayer()->IsMoving())
         {
             Unit->ToPlayer()->CastSpell(Unit->ToPlayer(), 29423, false);
         }
@@ -2564,8 +2576,8 @@ struct soulwell_portal_clicks : public GameObjectAI
         if (!Unit->ToPlayer())
             return false;
 
-        if (!Unit->ToPlayer()->isInCombat() && !Unit->ToPlayer()->IsBeingTeleported()
-            && Unit->ToPlayer()->getDeathState() != CORPSE && !Unit->ToPlayer()->IsMoving())
+        if (!Unit->ToPlayer()->IsInCombat() && !Unit->ToPlayer()->IsBeingTeleported()
+            && Unit->ToPlayer()->GetDeathState() != CORPSE && !Unit->ToPlayer()->IsMoving())
         {
             Unit->ToPlayer()->AddAura(23642);
             Unit->ToPlayer()->HandleEmoteCommand(EMOTE_STATE_POINT);
@@ -2896,7 +2908,7 @@ struct npc_chihkoaAI : public ScriptedPetAI
 
     void ReceiveEmote(Player* pPlayer, uint32 uiEmote)
     {
-        if (m_creature && m_creature->isAlive())
+        if (m_creature && m_creature->IsAlive())
         {
             if (uiEmote == TEXTEMOTE_DANCE)
                 m_creature->MonsterSay("Yeee-ha!");
@@ -2933,7 +2945,7 @@ struct npc_scripted_companionAI : public ScriptedPetAI
 
     void UpdatePetOOCAI(const uint32 uiDiff)
     {
-        if (!init && m_creature && m_creature->isAlive() && m_creature->IsPet())
+        if (!init && m_creature && m_creature->IsAlive() && m_creature->IsPet())
         {
             init = true;
             m_creature->GetMotionMaster()->MoveFollow(m_creature->GetCharmerOrOwnerPlayerOrPlayerItself(),
@@ -2944,7 +2956,7 @@ struct npc_scripted_companionAI : public ScriptedPetAI
 
     void ReceiveEmote(Player* pPlayer, uint32 uiEmote)
     {
-        if (m_creature && m_creature->isAlive() && m_creature->IsPet())
+        if (m_creature && m_creature->IsAlive() && m_creature->IsPet())
         {
             if (uiEmote == TEXTEMOTE_DANCE)
                 m_creature->HandleEmoteCommand(EMOTE_ONESHOT_DANCE);
@@ -2968,7 +2980,7 @@ struct lil_foot_petAI : public ScriptedPetAI
 
     void UpdatePetOOCAI(const uint32 uiDiff)
     {
-        if (!init && m_creature && m_creature->isAlive() && m_creature->IsPet())
+        if (!init && m_creature && m_creature->IsAlive() && m_creature->IsPet())
         {
             init = true;
             m_creature->PMonsterSay("Aww! I hate being little!");
@@ -3318,8 +3330,8 @@ struct palkeoteAI : public ScriptedAI
     void Reset()
     {
         m_events.Reset();
-        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_NPC);
-        m_creature->setFaction(m_creature->GetCreatureInfo()->faction);
+        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_PASSIVE);
+        m_creature->SetFactionTemplateId(m_creature->GetCreatureInfo()->faction);
         calfActive = false;
     }
 
@@ -3345,11 +3357,11 @@ struct palkeoteAI : public ScriptedAI
 
             m_creature->CombatStop(true);
             m_creature->ClearInCombat();
-            m_creature->setFaction(35);
-            m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_NPC);
+            m_creature->SetFactionTemplateId(35);
+            m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_PASSIVE);
 
 
-            ThreatList const& tList = m_creature->getThreatManager().getThreatList();
+            ThreatList const& tList = m_creature->GetThreatManager().getThreatList();
             for (ThreatList::const_iterator i = tList.begin(); i != tList.end(); ++i)
             {
                 Unit* pUnit = m_creature->GetMap()->GetUnit((*i)->getUnitGuid());
@@ -3371,7 +3383,7 @@ struct palkeoteAI : public ScriptedAI
         }
 
         //Return since we have no target
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         m_events.Update(diff);
@@ -3380,11 +3392,11 @@ struct palkeoteAI : public ScriptedAI
             switch (eventId)
             {
             case EVENT_WEAKNESS:
-                DoCastSpellIfCan(m_creature->getVictim(), SPELL_CURSE_OF_WEAKNESS);
+                DoCastSpellIfCan(m_creature->GetVictim(), SPELL_CURSE_OF_WEAKNESS);
                 m_events.Repeat(Seconds(urand(4, 8)));
                 break;
             case EVENT_FEAR:
-                DoCastSpellIfCan(m_creature->getVictim(), SPELL_FEAR);
+                DoCastSpellIfCan(m_creature->GetVictim(), SPELL_FEAR);
                 m_events.Repeat(Seconds(urand(8, 12)));
                 break;
             }
@@ -4082,7 +4094,7 @@ struct npc_tomb_shadowAI : public ScriptedAI
 
     void UpdateAI(const uint32 diff)
     {
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
         DoMeleeAttackIfReady();
     }
@@ -4539,7 +4551,7 @@ struct npc_whizzbotAI : public ScriptedAI
 
     void UpdateAI(const uint32 diff)
     {
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
         DoMeleeAttackIfReady();
     }
@@ -5238,7 +5250,7 @@ bool QuestRewarded_npc_applebough(Player* pPlayer, Creature* pQuestGiver, Quest 
 
 bool GossipHello_npc_vanira_unicorn_vendor(Player* pPlayer, Creature* pCreature)
 {
-    if (pPlayer->getRace() == RACE_HIGH_ELF || pPlayer->GetReputationRank(269) == 7)
+    if (pPlayer->GetRace() == RACE_HIGH_ELF || pPlayer->GetReputationRank(269) == 7)
     {
         pPlayer->SEND_VENDORLIST(pCreature->GetGUID());
         return true;
@@ -5390,7 +5402,7 @@ bool QuestRewarded_npc_norvok(Player* pPlayer, Creature* pQuestGiver, Quest cons
 
         Creature* Taupo = pPlayer->FindNearestCreature(70020, 10.0F);
 
-        if (Taupo && Taupo->isAlive())
+        if (Taupo && Taupo->IsAlive())
         {
             DoAfterTime(pPlayer, 3 * IN_MILLISECONDS,
                 [CreatureGuid = Taupo->GetObjectGuid(), player = pPlayer]()

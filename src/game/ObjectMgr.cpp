@@ -137,12 +137,12 @@ template uint32 IdGenerator<uint32>::Generate();
 template uint64 IdGenerator<uint64>::Generate();
 
 ObjectMgr::ObjectMgr() :
-    m_FirstTemporaryCreatureGuid(1),
-    m_FirstTemporaryGameObjectGuid(1),
     m_GuildIds("Guild ids"),
     m_MailIds("Mail ids"),
     m_GroupIds("Group ids"),
     m_PetitionIds("Petition ids"),
+    m_FirstTemporaryCreatureGuid(1),
+    m_FirstTemporaryGameObjectGuid(1),
     // Nostalrius
     DBCLocaleIndex(0),
     m_OldMailCounter(0)
@@ -645,7 +645,7 @@ bool ObjectMgr::GetPlayerNameByGUID(ObjectGuid guid, std::string &name) const
 Team ObjectMgr::GetPlayerTeamByGUID(ObjectGuid guid) const
 {
     if (Player* player = GetPlayer(guid))
-        return Player::TeamForRace(player->getRace());
+        return Player::TeamForRace(player->GetRace());
 
     if (PlayerCacheData* pData = sObjectMgr.GetPlayerDataByGUID(guid.GetCounter()))
         return Player::TeamForRace(pData->uiRace);
@@ -658,7 +658,7 @@ uint8 ObjectMgr::GetPlayerClassByGUID(ObjectGuid guid) const
     // Prevent DB access for online player.
     if (Player* player = GetPlayer(guid))
     {
-        return player->getClass();
+        return player->GetClass();
     }
 
     uint32 lowguid = guid.GetCounter();
@@ -705,7 +705,7 @@ PlayerCacheData* ObjectMgr::InsertPlayerInCache(Player *pPlayer)
         return nullptr;
     uint32 accountId = pSession->GetAccountId();
 
-    return InsertPlayerInCache(pPlayer->GetGUIDLow(), pPlayer->getRace(), pPlayer->getClass(), pPlayer->getGender(), accountId, pPlayer->GetName(), pPlayer->getLevel(), pPlayer->GetCachedZoneId());
+    return InsertPlayerInCache(pPlayer->GetGUIDLow(), pPlayer->GetRace(), pPlayer->GetClass(), pPlayer->GetGender(), accountId, pPlayer->GetName(), pPlayer->GetLevel(), pPlayer->GetCachedZoneId());
 }
 
 void ObjectMgr::UpdatePlayerCachedPosition(Player *pPlayer)
@@ -755,7 +755,7 @@ void ObjectMgr::UpdatePlayerCache(Player* pPlayer)
     if (!data)
         return;
     if (pPlayer->GetSession())
-        UpdatePlayerCache(data, pPlayer->getRace(), pPlayer->getClass(), pPlayer->getGender(), pPlayer->GetSession()->GetAccountId(), pPlayer->GetName(), pPlayer->getLevel(), pPlayer->GetCachedZoneId());
+        UpdatePlayerCache(data, pPlayer->GetRace(), pPlayer->GetClass(), pPlayer->GetGender(), pPlayer->GetSession()->GetAccountId(), pPlayer->GetName(), pPlayer->GetLevel(), pPlayer->GetCachedZoneId());
 
     UpdatePlayerCachedPosition(data, pPlayer->GetMapId(), pPlayer->GetPositionX(), pPlayer->GetPositionY(), pPlayer->GetPositionZ(), pPlayer->GetOrientation(), pPlayer->IsTaxiFlying());
 }

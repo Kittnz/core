@@ -28,38 +28,41 @@
 #include "UpdateData.h"
 #include "ObjectGuid.h"
 #include "Camera.h"
-#include "SpellEntry.h"
+#include "SharedDefines.h"
+#include "SpellDefines.h"
+#include "DBCEnums.h"
 #include "Utilities/EventProcessor.h"
 
 #include <set>
 #include <string>
+#include <array>
 
-#define CONTACT_DISTANCE            0.5f
-#define INTERACTION_DISTANCE        5.0f
-#define ATTACK_DISTANCE             5.0f
-#define MAX_VISIBILITY_DISTANCE     333.0f      // max distance for visible object show, limited in 333 yards
-#define DEFAULT_VISIBILITY_DISTANCE 90.0f       // default visible distance, 90 yards on continents
-#define DEFAULT_VISIBILITY_INSTANCE 120.0f      // default visible distance in instances, 120 yards
-#define DEFAULT_VISIBILITY_BG       180.0f      // default visible distance in BG, 180 yards
-#define DEFAULT_VISIBILITY_MODIFIER 0.0f        // default visibility modifier on some units that should be seen beyond normal visibility distances
-#define DEFAULT_CREATURE_SUMMON_LIMIT  100      // default maximum number of creatures an object can have summoned at once
+#define CONTACT_DISTANCE 0.5f
+#define INTERACTION_DISTANCE 5.0f
+#define ATTACK_DISTANCE 5.0f
+#define MAX_VISIBILITY_DISTANCE 333.0f // max distance for visible object show, limited in 333 yards
+#define DEFAULT_VISIBILITY_DISTANCE 90.0f // default visible distance, 90 yards on continents
+#define DEFAULT_VISIBILITY_INSTANCE 120.0f // default visible distance in instances, 120 yards
+#define DEFAULT_VISIBILITY_BG 180.0f // default visible distance in BG, 180 yards
+#define DEFAULT_VISIBILITY_MODIFIER 0.0f // default visibility modifier on some units that should be seen beyond normal visibility distances
+#define DEFAULT_CREATURE_SUMMON_LIMIT 100 // default maximum number of creatures an object can have summoned at once
 
-#define DEFAULT_WORLD_OBJECT_SIZE   0.388999998569489f      // currently used (correctly?) for any non Unit world objects. This is actually the bounding_radius, like player/creature from creature_model_data
-#define DEFAULT_OBJECT_SCALE        1.0f                    // player/item scale as default, npc/go from database, pets from dbc
-#define DEFAULT_GNOME_SCALE         1.15f
-#define DEFAULT_TAUREN_MALE_SCALE   1.35f                   // Tauren Male Player Scale by default
-#define DEFAULT_TAUREN_FEMALE_SCALE 1.25f                   // Tauren Female Player Scale by default
+#define DEFAULT_WORLD_OBJECT_SIZE 0.388999998569489f // currently used (correctly?) for any non Unit world objects. This is actually the bounding_radius, like player/creature from creature_model_data
+#define DEFAULT_OBJECT_SCALE 1.0f // player/item scale as default, npc/go from database, pets from dbc
+#define DEFAULT_GNOME_SCALE 1.15f
+#define DEFAULT_TAUREN_MALE_SCALE 1.35f // Tauren Male Player Scale by default
+#define DEFAULT_TAUREN_FEMALE_SCALE 1.25f // Tauren Female Player Scale by default
 
-#define MAX_STEALTH_DETECT_RANGE    45.0f
+#define MAX_STEALTH_DETECT_RANGE 45.0f
 
 // TrinityCore
-#define DEFAULT_COMBAT_REACH        1.5f
-#define MIN_MELEE_REACH             2.0f
-#define NOMINAL_MELEE_RANGE         5.0f
-#define MELEE_RANGE                 (NOMINAL_MELEE_RANGE - MIN_MELEE_REACH * 2)
+#define DEFAULT_COMBAT_REACH 1.5f
+#define MIN_MELEE_REACH 2.0f
+#define NOMINAL_MELEE_RANGE 5.0f
+#define MELEE_RANGE (NOMINAL_MELEE_RANGE - MIN_MELEE_REACH * 2)
 
-#define LEEWAY_MIN_MOVE_SPEED       4.97f
-#define LEEWAY_BONUS_RANGE          2.66f
+#define LEEWAY_MIN_MOVE_SPEED 4.97f
+#define LEEWAY_BONUS_RANGE 2.66f
 
 enum TempSummonType
 {
@@ -90,6 +93,10 @@ class InstanceData;
 class TerrainInfo;
 class ZoneScript;
 class Transport;
+class SpellEntry;
+class Spell;
+
+struct FactionTemplateEntry;
 
 typedef std::unordered_map<Player*, UpdateData> UpdateDataMapType;
 
@@ -728,7 +735,7 @@ class WorldObject : public Object
                 WorldObject * const m_obj;
         };
 
-        virtual ~WorldObject ( ) {}
+        ~WorldObject ( ) override {}
 
         virtual void Update(uint32 /*update_diff*/, uint32 /*time_diff*/);
 
@@ -789,7 +796,7 @@ class WorldObject : public Object
         void SetName(std::string const& newname) { m_name=newname; }
 
         virtual const char* GetNameForLocaleIdx(int32 /*locale_idx*/) const { return GetName(); }
-        virtual uint8 getGender() const { return 0; } // used in chat builder
+        virtual uint8 GetGender() const { return 0; } // used in chat builder
 
         virtual uint32 GetDefaultGossipMenuId() const { return 0; }
 
@@ -914,12 +921,12 @@ class WorldObject : public Object
 
         virtual bool IsHostileTo(WorldObject const* target) const =0;
         virtual bool IsFriendlyTo(WorldObject const* target) const =0;
-        virtual uint32 getFaction() const = 0;
+        virtual uint32 GetFactionTemplateId() const = 0;
         FactionTemplateEntry const* getFactionTemplateEntry() const;
         virtual ReputationRank GetReactionTo(WorldObject const* target) const;
         ReputationRank static GetFactionReactionTo(FactionTemplateEntry const* factionTemplateEntry, WorldObject const* target);
         virtual bool IsValidAttackTarget(Unit const* target) const { return false; }
-        virtual bool isVisibleForOrDetect(WorldObject const* pDetector, WorldObject const* viewPoint, bool detect, bool inVisibleList = false, bool* alert = nullptr) const { return isVisibleForInState(pDetector, viewPoint, inVisibleList); }
+        virtual bool IsVisibleForOrDetect(WorldObject const* pDetector, WorldObject const* viewPoint, bool detect, bool inVisibleList = false, bool* alert = nullptr) const { return IsVisibleForInState(pDetector, viewPoint, inVisibleList); }
 
         bool IsControlledByPlayer() const;
         bool IsLikePlayer() const;
@@ -937,7 +944,7 @@ class WorldObject : public Object
         bool isVisibleFor(Player const* u, WorldObject const* viewPoint) const;
 
         // low level function for visibility change code, must be define in all main world object subclasses
-        virtual bool isVisibleForInState(WorldObject const* pDetector, WorldObject const* viewPoint, bool inVisibleList) const = 0;
+        virtual bool IsVisibleForInState(WorldObject const* pDetector, WorldObject const* viewPoint, bool inVisibleList) const = 0;
 
         void SetMap(Map * map);
         Map * GetMap() const;
@@ -1002,7 +1009,7 @@ class WorldObject : public Object
         uint32 GetCreatureSummonLimit() const { return m_creatureSummonLimit; }
         void SetCreatureSummonLimit(uint32 limit);
 
-virtual uint32 getLevel() const = 0;
+virtual uint32 GetLevel() const = 0;
         uint32 GetLevelForTarget(WorldObject const* target = nullptr) const;
         uint16 GetSkillMaxForLevel(WorldObject const* target = nullptr) const { return GetLevelForTarget(target) * 5; };
         uint32 GetWeaponSkillValue(WeaponAttackType attType, WorldObject const* target = nullptr) const;
@@ -1052,7 +1059,7 @@ virtual uint32 getLevel() const = 0;
         void ProcDamageAndSpell(Unit *pVictim, uint32 procAttacker, uint32 procVictim, uint32 procEx, uint32 amount, WeaponAttackType attType = BASE_ATTACK, SpellEntry const *procSpell = nullptr, Spell* spell = nullptr);
         void CalculateSpellDamage(SpellNonMeleeDamage *damageInfo, int32 damage, SpellEntry const *spellInfo, WeaponAttackType attackType = BASE_ATTACK, Spell* spell = nullptr);
         int32 CalculateSpellDamage(Unit const* target, SpellEntry const* spellProto, SpellEffectIndex effect_index, int32 const* basePoints = nullptr, Spell* spell = nullptr);
-        int32 SpellBonusWithCoeffs(SpellEntry const *spellProto, int32 total, int32 benefit, int32 ap_benefit, DamageEffectType damagetype, bool donePart, WorldObject *pCaster, Spell* spell = nullptr);
+        int32 SpellBonusWithCoeffs(SpellEntry const *spellProto, int32 total, int32 benefit, int32 ap_benefit, DamageEffectType damagetype, bool donePart, WorldObject *pCaster, Spell* spell = nullptr) const;
         static float CalculateLevelPenalty(SpellEntry const* spellProto);
         uint32 SpellDamageBonusDone(Unit *pVictim, SpellEntry const *spellProto, uint32 pdamage, DamageEffectType damagetype, uint32 stack = 1, Spell* spell = nullptr);
         int32 SpellBaseDamageBonusDone(SpellSchoolMask schoolMask);

@@ -125,7 +125,7 @@ struct instance_blackrock_depths : ScriptedInstance
     {
         pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
         pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-        pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+        pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
     }
 
     void Initialize() override
@@ -217,7 +217,7 @@ struct instance_blackrock_depths : ScriptedInstance
         }
     }
 
-    void OnCreatureCreate(Creature* pCreature)
+    void OnCreatureCreate(Creature* pCreature) override
     {
         switch (pCreature->GetEntry())
         {
@@ -319,7 +319,7 @@ struct instance_blackrock_depths : ScriptedInstance
         }
     }
 
-    void OnObjectCreate(GameObject* pGo)
+    void OnObjectCreate(GameObject* pGo) override
     {
         switch (pGo->GetEntry())
         {
@@ -432,7 +432,7 @@ struct instance_blackrock_depths : ScriptedInstance
         }
     }
 
-    void OnCreatureDeath(Creature* pCreature)
+    void OnCreatureDeath(Creature* pCreature) override
     {
         switch (pCreature->GetEntry())
         {
@@ -443,7 +443,7 @@ struct instance_blackrock_depths : ScriptedInstance
                 {
                     uint32 uiTextId;
 
-                    if (!pDagran->isAlive())
+                    if (!pDagran->IsAlive())
                         return;
 
                     if (m_uiDagranTimer > 0)
@@ -626,7 +626,7 @@ struct instance_blackrock_depths : ScriptedInstance
         }
     }
 
-    void CustomSpellCasted(uint32 spellId, Unit* caster, Unit* target)
+    void CustomSpellCasted(uint32 spellId, Unit* caster, Unit* target) override
     {
         sLog.outString("Spell %u caste par '%s' sur '%s'", spellId, caster->GetName(), (target) ? target->GetName() : "<Personne>");
         switch (spellId)
@@ -678,7 +678,7 @@ struct instance_blackrock_depths : ScriptedInstance
         {
             crea->SetInCombatWithZone();
             crea->AI()->AttackStart(who);
-            crea->setFaction(16);
+            crea->SetFactionTemplateId(16);
         }
     }
 
@@ -714,7 +714,7 @@ struct instance_blackrock_depths : ScriptedInstance
         }
     }
 
-    void SetData(uint32 uiType, uint32 uiData)
+    void SetData(uint32 uiType, uint32 uiData) override
     {
         sLog.outDebug("Instance Blackrock Depths: SetData update (Type: %u Data %u)", uiType, uiData);
 
@@ -727,8 +727,8 @@ struct instance_blackrock_depths : ScriptedInstance
                     {
                         if (Creature* pCreature = instance->GetCreature(*itr))
                         {
-                            if (pCreature->isAlive())
-                                pCreature->setFaction(674);
+                            if (pCreature->IsAlive())
+                                pCreature->SetFactionTemplateId(674);
                         }
                     }
                 }
@@ -832,10 +832,10 @@ struct instance_blackrock_depths : ScriptedInstance
                     {
                         if (Creature* pCreature = instance->GetCreature(*itr))
                         {
-                            if (pCreature->isAlive())
+                            if (pCreature->IsAlive())
                             {
-                                pCreature->setFaction(14);
-                                Unit* pVictim = pCreature->getVictim();
+                                pCreature->SetFactionTemplateId(14);
+                                Unit* pVictim = pCreature->GetVictim();
                                 if (pCreature->AI())
                                     pCreature->AI()->AttackStart(pVictim);
                             }
@@ -848,10 +848,10 @@ struct instance_blackrock_depths : ScriptedInstance
                 if (uiData == IN_PROGRESS)
                 {
                     if (Creature* argelmach = instance->GetCreature(m_uiGolemLordArgelmachGUID))
-                        if (Unit* pVictim = argelmach->getVictim())
+                        if (Unit* pVictim = argelmach->GetVictim())
                             for (std::list<uint64>::const_iterator itr = m_lArgelmachProtectorsMobGUIDList.begin(); itr != m_lArgelmachProtectorsMobGUIDList.end(); itr++)
                                 if (Creature* protector = instance->GetCreature(*itr))
-                                    if (protector->isAlive() && protector->AI() && protector->IsWithinDist(argelmach, 80.0f))
+                                    if (protector->IsAlive() && protector->AI() && protector->IsWithinDist(argelmach, 80.0f))
                                         protector->AI()->AttackStart(pVictim);
                 }
                 m_auiEncounter[DATA_ARGELMACH_AGGRO] = uiData;
@@ -944,7 +944,7 @@ struct instance_blackrock_depths : ScriptedInstance
         return false;
     }
 
-    uint32 GetData(uint32 uiType)
+    uint32 GetData(uint32 uiType) override
     {
         switch (uiType)
         {
@@ -1001,7 +1001,7 @@ struct instance_blackrock_depths : ScriptedInstance
         return 0;
     }
 
-    uint64 GetData64(uint32 uiData)
+    uint64 GetData64(uint32 uiData) override
     {
         switch (uiData)
         {
@@ -1089,7 +1089,7 @@ struct instance_blackrock_depths : ScriptedInstance
         return 0;
     }
 
-    void Update(uint32 uiDiff)
+    void Update(uint32 uiDiff) override
     {
         if (m_uiDagranTimer)
         {
@@ -1132,12 +1132,12 @@ struct instance_blackrock_depths : ScriptedInstance
         }
     }
 
-    const char* Save()
+    const char* Save() override
     {
         return strInstData.c_str();
     }
 
-    void Load(const char* in)
+    void Load(const char* in) override
     {
         if (!in)
         {

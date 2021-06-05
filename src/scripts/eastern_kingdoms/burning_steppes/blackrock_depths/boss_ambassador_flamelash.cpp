@@ -26,14 +26,13 @@ EndScriptData */
 
 enum
 {
-    // SPELL_FIREBLAST             = 15573,                    // creature_template_addon
-    SPELL_BURNING_SPIRIT        = 13489,
-    SPELL_BURNING_SPIRIT_BUFF   = 14744,
+    SPELL_BURNING_SPIRIT = 13489,
+    SPELL_BURNING_SPIRIT_BUFF = 14744,
 
-    NPC_BURNING_SPIRIT          = 9178,
+    NPC_BURNING_SPIRIT = 9178,
 
-    DWARF_RUNES_MAX             = 7,
-    BURNING_SPIRIT_MAX          = 30,                       // What is a good maximum and should there be any?
+    DWARF_RUNES_MAX = 7,
+    BURNING_SPIRIT_MAX = 30, // What is a good maximum and should there be any?
 };
 
 
@@ -52,7 +51,7 @@ struct boss_ambassador_flamelashAI : public ScriptedAI
 
     GuidList lBurningSpirits;
 
-    void Reset()
+    void Reset() override
     {
         for (uint8 i = 0; i < DWARF_RUNES_MAX; i++)
             m_uiSpiritTimer[i] = 5 * IN_MILLISECONDS;
@@ -109,14 +108,14 @@ struct boss_ambassador_flamelashAI : public ScriptedAI
     {
         ScriptedAI::MoveInLineOfSight(pWho);
 
-        if (pWho->GetEntry() == NPC_BURNING_SPIRIT && pWho->isAlive() && !pWho->isInCombat() && pWho->IsWithinDistInMap(m_creature, 4 * CONTACT_DISTANCE))
+        if (pWho->GetEntry() == NPC_BURNING_SPIRIT && pWho->IsAlive() && !pWho->IsInCombat() && pWho->IsWithinDistInMap(m_creature, 4 * CONTACT_DISTANCE))
             pWho->CastSpell(m_creature, SPELL_BURNING_SPIRIT, true);
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         //Return since we have no target
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         // Burning Spirit

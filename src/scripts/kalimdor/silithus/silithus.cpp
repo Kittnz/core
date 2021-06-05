@@ -45,28 +45,28 @@
 
 enum
 {
-    QUEST_EXAMINE_THE_VESSEL        =   7785,
-    QUEST_THUNDERAAN_WINDSEEKER     =   7786,
-    QUEST_RISE_THUNDERFURY          =   7787,
-    ITEM_BINDINGS_WINDSEEKER_LEFT   =   18563,
-    ITEM_BINDINGS_WINDSEEKER_RIGHT  =   18564,
-    ITEM_VESSEL_OF_REBIRTH          =   19016,
-    ITEM_DORMANT_BLADE              =   19018,
-    GOSSIP_TEXTID_DEMITRIAN1        =   6842,
-    GOSSIP_TEXTID_DEMITRIAN2        =   6843,
-    GOSSIP_TEXTID_DEMITRIAN3        =   6844,
-    GOSSIP_TEXTID_DEMITRIAN4        =   6867,
-    GOSSIP_TEXTID_DEMITRIAN5        =   6868,
-    GOSSIP_TEXTID_DEMITRIAN6        =   6869,
-    GOSSIP_TEXTID_DEMITRIAN7        =   6870,
-    GOSSIP_TEXTID_DEMITRIAN8        =   6984,
-    BROADCAST_TEXTID_DEMITRIAN      =   9574,
-    NPC_PRINCE_THUNDERAAN           =   14435
+    QUEST_EXAMINE_THE_VESSEL = 7785,
+    QUEST_THUNDERAAN_WINDSEEKER = 7786,
+    QUEST_RISE_THUNDERFURY = 7787,
+    ITEM_BINDINGS_WINDSEEKER_LEFT = 18563,
+    ITEM_BINDINGS_WINDSEEKER_RIGHT = 18564,
+    ITEM_VESSEL_OF_REBIRTH = 19016,
+    ITEM_DORMANT_BLADE = 19018,
+    GOSSIP_TEXTID_DEMITRIAN1 = 6842,
+    GOSSIP_TEXTID_DEMITRIAN2 = 6843,
+    GOSSIP_TEXTID_DEMITRIAN3 = 6844,
+    GOSSIP_TEXTID_DEMITRIAN4 = 6867,
+    GOSSIP_TEXTID_DEMITRIAN5 = 6868,
+    GOSSIP_TEXTID_DEMITRIAN6 = 6869,
+    GOSSIP_TEXTID_DEMITRIAN7 = 6870,
+    GOSSIP_TEXTID_DEMITRIAN8 = 6984,
+    BROADCAST_TEXTID_DEMITRIAN = 9574,
+    NPC_PRINCE_THUNDERAAN = 14435
 };
 
 bool GossipHello_npc_highlord_demitrian(Player* pPlayer, Creature* pCreature)
 {
-    if (pCreature->isQuestGiver())
+    if (pCreature->IsQuestGiver())
         pPlayer->PrepareQuestMenu(pCreature->GetGUID());
 
     if (pPlayer->GetQuestStatus(QUEST_EXAMINE_THE_VESSEL) == QUEST_STATUS_NONE &&
@@ -241,7 +241,7 @@ struct go_pierre_ventsAI: public GameObjectAI
 
     void UseFailed(Unit* user)
     {
-        if (user->isAlive())
+        if (user->IsAlive())
         {
             user->CastSpell(user, SPELL_RED_LIGHTNING, true);
             user->DealDamage(user, user->GetHealth() > 1000 ? 1000 : user->GetHealth(), nullptr, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, nullptr, false);
@@ -282,7 +282,7 @@ struct go_pierre_ventsAI: public GameObjectAI
         return true;
     }
 
-    bool OnUse(Unit* user)
+    bool OnUse(Unit* user) override
     {
         Player* player = user->ToPlayer();
         if (!CanUse(player))
@@ -454,7 +454,7 @@ struct npc_solenorAI : public ScriptedAI
     uint32 m_uiCastSoulFlame_Timer;
     uint32 m_uiDespawn_Timer;
 
-    void Reset()
+    void Reset() override
     {
         switch (m_creature->GetEntry())
         {
@@ -512,9 +512,9 @@ struct npc_solenorAI : public ScriptedAI
     }
 
     /** Solenor the Slayer */
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* pWho) override
     {
-        if (pWho->getClass() == CLASS_HUNTER && (m_hunterGuid.IsEmpty() || m_hunterGuid == pWho->GetObjectGuid())/*&& pWho->GetQuestStatus(QUEST_STAVE_OF_THE_ANCIENTS) == QUEST_STATUS_INCOMPLETE*/)
+        if (pWho->GetClass() == CLASS_HUNTER && (m_hunterGuid.IsEmpty() || m_hunterGuid == pWho->GetObjectGuid())/*&& pWho->GetQuestStatus(QUEST_STAVE_OF_THE_ANCIENTS) == QUEST_STATUS_INCOMPLETE*/)
         {
             m_hunterGuid = pWho->GetObjectGuid();
         }
@@ -531,11 +531,11 @@ struct npc_solenorAI : public ScriptedAI
 
     void JustSummoned(Creature* pSummoned) override
     {
-        if (m_creature->getVictim())
-            pSummoned->AI()->AttackStart(m_creature->getVictim());
+        if (m_creature->GetVictim())
+            pSummoned->AI()->AttackStart(m_creature->GetVictim());
     }
 
-    void JustDied(Unit* /*pKiller*/)
+    void JustDied(Unit* /*pKiller*/) override
     {
         m_creature->SetHomePosition(-7724.21f, 1676.43f, 7.0571f, 4.80044f);
         // DRSS
@@ -561,13 +561,13 @@ struct npc_solenorAI : public ScriptedAI
             Creature* pCleaner = m_creature->SummonCreature(NPC_THE_CLEANER, m_creature->GetPositionX(), m_creature->GetPositionY(), m_creature->GetPositionZ(), m_creature->GetAngle(m_creature), TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 20*MINUTE*IN_MILLISECONDS);
             if (pCleaner)
             {
-                ThreatList const& tList = m_creature->getThreatManager().getThreatList();
+                ThreatList const& tList = m_creature->GetThreatManager().getThreatList();
 
                 for (ThreatList::const_iterator itr = tList.begin();itr != tList.end(); ++itr)
                 {
                     if (Unit* pUnit = m_creature->GetMap()->GetUnit((*itr)->getUnitGuid()))
                     {
-                        if (pUnit->isAlive())
+                        if (pUnit->IsAlive())
                         {
                             pCleaner->SetInCombatWith(pUnit);
                             pCleaner->AddThreat(pUnit);
@@ -581,7 +581,7 @@ struct npc_solenorAI : public ScriptedAI
         m_creature->ForcedDespawn();
     }
 
-    void SpellHit(Unit* pCaster, const SpellEntry* pSpell)
+    void SpellHit(Unit* pCaster, const SpellEntry* pSpell) override
     {
 
         if (pSpell && pSpell->Id == 14268)   // Wing Clip (Rank 3)
@@ -591,7 +591,7 @@ struct npc_solenorAI : public ScriptedAI
         }
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         /** Nelson the Nice */
         if (m_bTransform)
@@ -621,7 +621,7 @@ struct npc_solenorAI : public ScriptedAI
         {
             if (m_uiDespawn_Timer <= uiDiff)
             {
-                if (m_creature->isAlive() && !m_creature->isInCombat())
+                if (m_creature->IsAlive() && !m_creature->IsInCombat())
                     DemonDespawn(false);
             }
             else
@@ -640,13 +640,13 @@ struct npc_solenorAI : public ScriptedAI
                 m_uiCastSoulFlame_Timer -= uiDiff;
         }
 
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         if (m_creature->HasAura(SPELL_SOUL_FLAME) && m_creature->HasAura(SPELL_FROST_TRAP))
                 m_creature->RemoveAurasDueToSpell(SPELL_SOUL_FLAME);
 
-        if (m_creature->getThreatManager().getThreatList().size() > 1 /*|| pHunter->isDead()*/)
+        if (m_creature->GetThreatManager().getThreatList().size() > 1 /*|| pHunter->IsDead()*/)
             DemonDespawn();
 
         if (m_uiCreepingDoom_Timer < uiDiff)
@@ -659,7 +659,7 @@ struct npc_solenorAI : public ScriptedAI
 
         if (m_uiDreadfulFright_Timer < uiDiff)
         {
-            if (Unit* pUnit = m_creature->getVictim())
+            if (Unit* pUnit = m_creature->GetVictim())
             {
                 if (m_creature->GetDistance2d(pUnit) > 5.0f)
                 {
@@ -678,7 +678,7 @@ struct npc_solenorAI : public ScriptedAI
 bool GossipHello_npc_solenor(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->GetQuestStatus(QUEST_STAVE_OF_THE_ANCIENTS) == QUEST_STATUS_INCOMPLETE ||
-        (pPlayer->getLevel() >= 60 && pPlayer->getClass() == CLASS_HUNTER && pPlayer->HasItemCount(51636, 1)))
+        (pPlayer->GetLevel() >= 60 && pPlayer->GetClass() == CLASS_HUNTER && pPlayer->HasItemCount(51636, 1)))
         pPlayer->ADD_GOSSIP_ITEM(0, GOSSIP_ITEM , GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF);
 
     pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetObjectGuid());
@@ -705,7 +705,7 @@ struct npc_creeping_doomAI : public ScriptedAI
 {
     npc_creeping_doomAI(Creature* pCreature) : ScriptedAI(pCreature) { Reset(); }
 
-    void Reset() {};
+    void Reset() override {};
 
     void DamageTaken(Unit* pDoneBy, uint32 &uiDamage) override
     {
@@ -748,22 +748,22 @@ struct npc_prince_thunderaanAI : public ScriptedAI
     bool engaged;
     bool emerged;
 
-    void Reset()
+    void Reset() override
     {
-        m_uiTendrilsTimer   = 8000;
-        m_uiTearsTimer      = 15000;
+        m_uiTendrilsTimer = 8000;
+        m_uiTearsTimer = 15000;
     }
 
-    void SpellHitTarget(Unit* pCaster, const SpellEntry* pSpell)
+    void SpellHitTarget(Unit* pCaster, const SpellEntry* pSpell) override
     {
         if (pCaster->GetTypeId() != TYPEID_PLAYER)
             return;
 
         if (pSpell->Id == SPELL_TENDRILS_OF_AIR)
-            m_creature->getThreatManager().modifyThreatPercent(pCaster, -100);
+            m_creature->GetThreatManager().modifyThreatPercent(pCaster, -100);
     }
 
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* pWho) override
     {
         if (!engaged)
         {
@@ -772,7 +772,7 @@ struct npc_prince_thunderaanAI : public ScriptedAI
         }
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (!emerged)
         {
@@ -780,7 +780,7 @@ struct npc_prince_thunderaanAI : public ScriptedAI
             emerged = true;
         }
 
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         if (m_uiTendrilsTimer < uiDiff)
@@ -815,10 +815,10 @@ CreatureAI* GetAI_npc_prince_thunderaan(Creature* pCreature)
 
 enum
 {
-    SPELL_COLOSSAL_SMASH            = 26167, // Maxi KB
-    NPC_COLOSSUS_ZORA               = 15740,
-    NPC_COLOSSUS_REGAL              = 15741,
-    NPC_COLOSSUS_ASHI               = 15742,
+    SPELL_COLOSSAL_SMASH = 26167, // Maxi KB
+    NPC_COLOSSUS_ZORA = 15740,
+    NPC_COLOSSUS_REGAL = 15741,
+    NPC_COLOSSUS_ASHI = 15742,
 
     TEXT_COLOSSUS_ASHI = -1000009,
     TEXT_COLOSSUS_REGAL = -1000016,
@@ -853,22 +853,22 @@ struct npc_colossusAI : public ScriptedAI
     uint32 m_uiColossalSmashEmoteTimer;
     bool firstSmash;
 
-    void Reset()
+    void Reset() override
     {
         firstSmash = true;
         m_uiColossalSmashTimer = 60000;
         m_uiColossalSmashEmoteTimer = 0;
     }
 
-    void SpellHitTarget(Unit* pCaster, const SpellEntry* pSpell)
+    void SpellHitTarget(Unit* pCaster, const SpellEntry* pSpell) override
     {
     }
 
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* pWho) override
     {
     }
 
-    void EnterEvadeMode()
+    void EnterEvadeMode() override
     {
         // Ustaag <Nostalrius> : Must neither resume life if Evade, nor return to its starting point
         m_creature->RemoveAllAuras();
@@ -877,9 +877,9 @@ struct npc_colossusAI : public ScriptedAI
         m_creature->GetMotionMaster()->MoveIdle();
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         if (m_uiColossalSmashTimer < uiDiff)
@@ -910,7 +910,7 @@ struct npc_colossusAI : public ScriptedAI
         DoMeleeAttackIfReady();
     }
 
-    void JustDied(Unit* pKiller)
+    void JustDied(Unit* pKiller) override
     {
         // Spawn the event quest that lets players attain a reward for the
         // death of the colossus.
@@ -976,7 +976,7 @@ struct npc_Geologist_LarksbaneAI : public ScriptedAI
     uint32 uiNextActionTimer;
     uint32 uiCurrAction;
 
-    void Reset()
+    void Reset() override
     {
         m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
         m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
@@ -1217,7 +1217,7 @@ struct npc_Geologist_LarksbaneAI : public ScriptedAI
         ++uiCurrAction;
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (uiCurrAction)
         {
@@ -1248,17 +1248,11 @@ bool QuestComplete_npc_Geologist_Larksbane(Player* pPlayer, Creature* pQuestGive
  ## npc_Emissary_Romankhan
  ###*/
 
-/*
- UPDATE `creature_template` SET `minmana` = 432240, `maxmana` = 434240, `armor` = 3769, `speed_walk` = 1.24, `speed_run` = 1.24, `base_attack_time` = 1280,
- `resistance1` = 0, `mingold` = 4031, `maxgold` = 4031, `mechanic_immune_mask` = 650854367, `MovementType` = 1,
- `script_name` = 'npc_Emissary_Romankhan' WHERE `entry` = 14862;
- */
-
 enum
 {
-    SPELL_WILT                  = 23772,
-    SPELL_SUFFERING_OF_SANITY   = 23773,
-    SPELL_SYSTEM_SHOCK          = 23774
+    SPELL_WILT = 23772,
+    SPELL_SUFFERING_OF_SANITY = 23773,
+    SPELL_SYSTEM_SHOCK = 23774
 };
 
 struct npc_Emissary_RomankhanAI : public ScriptedAI
@@ -1267,7 +1261,7 @@ struct npc_Emissary_RomankhanAI : public ScriptedAI
     {
         pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
         pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-        pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+        pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
         pCreature->SetVisibility(VISIBILITY_OFF);
 
         OverlordCount = 0;
@@ -1289,7 +1283,7 @@ struct npc_Emissary_RomankhanAI : public ScriptedAI
 
     bool m_bNeedCheck;
 
-    void Reset()
+    void Reset() override
     {
         m_uiWiltTimer = urand(3000, 5000);
         m_uiSchockTimer = urand(8000, 12000);
@@ -1303,19 +1297,19 @@ struct npc_Emissary_RomankhanAI : public ScriptedAI
             PlayerGuids[i] = 0;
     }
 
-    void SummonedCreatureJustDied(Creature* unit)
+    void SummonedCreatureJustDied(Creature* unit) override
     {
         ++OverlordCount;
         if (OverlordCount >= 3)
         {
             m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
             m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-            m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+            m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
             m_creature->SetVisibility(VISIBILITY_ON);
         }
     }
 
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* pWho) override
     {
         m_creature->AllowManaRegen(true);
     }
@@ -1325,7 +1319,7 @@ struct npc_Emissary_RomankhanAI : public ScriptedAI
         return (((float)m_creature->GetPower(POWER_MANA) / (float)m_creature->GetMaxPower(POWER_MANA)) * 100);
     }
 
-    void SpellHitTarget(Unit* target, const SpellEntry* pSpell)
+    void SpellHitTarget(Unit* target, const SpellEntry* pSpell) override
     {
         if (!target || !target->IsPlayer())
             return;
@@ -1348,9 +1342,9 @@ struct npc_Emissary_RomankhanAI : public ScriptedAI
         }
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         if (m_uiSchockTimer < uiDiff)
@@ -1409,7 +1403,7 @@ struct npc_Emissary_RomankhanAI : public ScriptedAI
                 if (Unit* pTarget = m_creature->GetMap()->GetUnit(PlayerGuids[i]))
                 {
                     pTarget->SetInCombatWith(m_creature);
-                    if (pTarget->isDead())
+                    if (pTarget->IsDead())
                     {
                         // + 2% MP at each death
                         float currMana = m_creature->GetPower(POWER_MANA);
@@ -1607,7 +1601,7 @@ struct npc_anachronos_the_ancientAI : public ScriptedAI
     // Needed to restore gate to state before scene
     bool AQopen;
 
-    void Reset()
+    void Reset() override
     {
         // We summon the rest of the dragons on timer
         m_uiEventTimer = 0;
@@ -1664,7 +1658,7 @@ struct npc_anachronos_the_ancientAI : public ScriptedAI
         m_creature->ForcedDespawn(SCENE_BLOCK_TIME);
     }
 
-    void JustDied(Unit* killer)
+    void JustDied(Unit* killer) override
     {
         AbortScene();
     }
@@ -1793,7 +1787,7 @@ struct npc_anachronos_the_ancientAI : public ScriptedAI
 
     }
 
-    void JustSummoned(Creature* pSummoned)
+    void JustSummoned(Creature* pSummoned) override
     {
         // Also remove npc flags where needed
         switch (pSummoned->GetEntry())
@@ -1817,7 +1811,7 @@ struct npc_anachronos_the_ancientAI : public ScriptedAI
             case NPC_QIRAJI_WASP:
             case NPC_QIRAJI_DRONE:
             case NPC_QIRAJI_TANK:
-                pSummoned->setFaction(14);
+                pSummoned->SetFactionTemplateId(14);
                 //pSummoned->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                 m_lQirajiWarriorsList.push_back(pSummoned->GetObjectGuid());
 
@@ -1835,11 +1829,11 @@ struct npc_anachronos_the_ancientAI : public ScriptedAI
                     target->AI()->AttackStart(pSummoned);
                 }
 
-                pSummoned->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+                pSummoned->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
 
                 break;
             case NPC_KALDOREI_INFANTRY:
-                pSummoned->setFaction(1608);
+                pSummoned->SetFactionTemplateId(1608);
                 m_lQirajiWarriorsList.push_back(pSummoned->GetObjectGuid());
                 break;
         }
@@ -1891,7 +1885,7 @@ struct npc_anachronos_the_ancientAI : public ScriptedAI
         }
     }
 
-    void MovementInform(uint32 uiType, uint32 uiPointId)
+    void MovementInform(uint32 uiType, uint32 uiPointId) override
     {
         if (uiType != POINT_MOTION_TYPE)
             return;
@@ -1926,7 +1920,7 @@ struct npc_anachronos_the_ancientAI : public ScriptedAI
         }
     }
 
-    void SummonedMovementInform(Creature* pSummoned, uint32 uiType, uint32 uiPointId)
+    void SummonedMovementInform(Creature* pSummoned, uint32 uiType, uint32 uiPointId) override
     {
         if (uiType != POINT_MOTION_TYPE)
             return;
@@ -1970,7 +1964,7 @@ struct npc_anachronos_the_ancientAI : public ScriptedAI
         }
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (m_uiEventTimer)
         {
@@ -2047,7 +2041,7 @@ struct npc_anachronos_the_ancientAI : public ScriptedAI
                                 pMerithra->GetMotionMaster()->MovePoint(POINT_ID_DRAGON_ATTACK, pTrigger->GetPositionX(), pTrigger->GetPositionY(), pTrigger->GetPositionZ());
                                 pMerithra->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                                 pMerithra->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-                                pMerithra->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+                                pMerithra->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
                             }
                         }
                         m_uiEventTimer = 0;
@@ -2101,7 +2095,7 @@ struct npc_anachronos_the_ancientAI : public ScriptedAI
                                 pArygos->GetMotionMaster()->MovePoint(POINT_ID_DRAGON_ATTACK, pTrigger->GetPositionX(), pTrigger->GetPositionY(), pTrigger->GetPositionZ());
                                 pArygos->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                                 pArygos->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-                                pArygos->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+                                pArygos->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
                             }
                         }
                         m_uiEventTimer = 0;
@@ -2158,7 +2152,7 @@ struct npc_anachronos_the_ancientAI : public ScriptedAI
                                 pCaelestrasz->GetMotionMaster()->MovePoint(POINT_ID_DRAGON_ATTACK, pTrigger->GetPositionX(), pTrigger->GetPositionY(), pTrigger->GetPositionZ());
                                 pCaelestrasz->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                                 pCaelestrasz->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-                                pCaelestrasz->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+                                pCaelestrasz->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
                             }
                         }
                         m_uiEventTimer = 0;
@@ -2361,7 +2355,7 @@ struct npc_anachronos_the_ancientAI : public ScriptedAI
                         m_creature->SetWalk(true);
                         m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                         m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-                        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+                        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
                         m_creature->CastSpell(m_creature, SPELL_BRONZE_DRAGON_TRANSFORM, false);
                         m_uiEventTimer = 1000;
                         break;
@@ -2449,7 +2443,7 @@ struct scarab_gongAI: public GameObjectAI
     // Invisible AQ barrier
     GameObject* go_aq_ghost_gate;
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (eventTimer)
         {
@@ -2712,7 +2706,7 @@ struct mob_HiveRegal_HunterKillerAI : public ScriptedAI
         m_bReachedCamp = false;
         m_uiMoveTimer = 0;
         m_uiWaypoint = 0;
-        pCreature->setFaction(35);
+        pCreature->SetFactionTemplateId(35);
     }
 
     uint32 m_uiThunderClapTimer;
@@ -2735,7 +2729,7 @@ struct mob_HiveRegal_HunterKillerAI : public ScriptedAI
 
     Unit* GetVictimInRangePlayerOnly(float min, float max)
     {
-        ThreatList const& tList = m_creature->getThreatManager().getThreatList();
+        ThreatList const& tList = m_creature->GetThreatManager().getThreatList();
         for (ThreatList::const_iterator itr = tList.begin(); itr != tList.end(); ++itr)
         {
             if (ObjectGuid uiTargetGuid = (*itr)->getUnitGuid())
@@ -2758,7 +2752,7 @@ struct mob_HiveRegal_HunterKillerAI : public ScriptedAI
             {
                 if (m_uiWaypoint == HUNTERKILLER_WAYPOINTS_NUMBER)
                 {
-                    m_creature->setFaction(14);
+                    m_creature->SetFactionTemplateId(14);
                     if (Creature* krug = GetClosestCreatureWithEntry(m_creature, NPC_KRUG_SKULLSPLIT, 50.0f))
                         AttackStart(krug);
 
@@ -2783,7 +2777,7 @@ struct mob_HiveRegal_HunterKillerAI : public ScriptedAI
             return;
         }
 
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         if (m_creature->IsNonMeleeSpellCasted(false))
@@ -2792,7 +2786,7 @@ struct mob_HiveRegal_HunterKillerAI : public ScriptedAI
         // THUNDERCLAP
         if (m_uiThunderClapTimer <= uiDiff)
         {
-            DoCastSpellIfCan(m_creature->getVictim(), SPELL_THUNDERCLAP);
+            DoCastSpellIfCan(m_creature->GetVictim(), SPELL_THUNDERCLAP);
             m_uiThunderClapTimer = 20000;
         }
         else
@@ -2813,7 +2807,7 @@ struct mob_HiveRegal_HunterKillerAI : public ScriptedAI
         // CLEAVE
         if (m_uiCleaveTimer <= uiDiff)
         {
-            DoCastSpellIfCan(m_creature->getVictim(), SPELL_CLEAVE);
+            DoCastSpellIfCan(m_creature->GetVictim(), SPELL_CLEAVE);
             m_uiCleaveTimer = urand(5000, 12000);
         }
         else
@@ -2822,7 +2816,7 @@ struct mob_HiveRegal_HunterKillerAI : public ScriptedAI
         // FEAR
         if (m_uiFearTimer <= uiDiff)
         {
-            DoCastSpellIfCan(m_creature->getVictim(), SPELL_FEAR);
+            DoCastSpellIfCan(m_creature->GetVictim(), SPELL_FEAR);
             m_uiFearTimer = urand(58000, 63000);
         }
         else
@@ -2927,7 +2921,7 @@ struct npc_Krug_SkullSplitAI : public ScriptedAI
                 m_bAlreadyMoved = false;
                 m_uiHunterKillerGUID = pHunterKiller->GetObjectGuid();
                 InitOtherNPCsGuids();
-                pHunterKiller->setFaction(35);
+                pHunterKiller->SetFactionTemplateId(35);
             }
 
             m_creature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
@@ -3073,7 +3067,7 @@ struct npc_Krug_SkullSplitAI : public ScriptedAI
                 {
                     for (std::list<Creature*>::iterator itr = gruntList.begin(); itr != gruntList.end(); ++itr)
                     {
-                        if ((*itr)->isAlive())
+                        if ((*itr)->IsAlive())
                             DoScriptText(SAY_LINE_9, (*itr));
                     }
                 }
@@ -3101,7 +3095,7 @@ struct npc_Krug_SkullSplitAI : public ScriptedAI
         }
 
         /* Start of combat script */
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         DoMeleeAttackIfReady();
@@ -3133,7 +3127,7 @@ bool GossipHello_npc_Krug_SkullSplit(Player* pPlayer, Creature* pCreature)
     else if ((pPlayer->GetQuestStatus(QUEST_FIELD_DUTY) == QUEST_STATUS_INCOMPLETE)
              && (eEventStatus == EVENT_COMPLETE))
     {
-        if (pCreature->isQuestGiver())
+        if (pCreature->IsQuestGiver())
             pPlayer->PrepareQuestMenu(pCreature->GetGUID());
         pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
     }
@@ -3176,7 +3170,7 @@ struct npc_MerokAI : public ScriptedAI
 
     void UpdateAI(const uint32 uiDiff) override
     {
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         if (m_creature->IsNonMeleeSpellCasted(false))
@@ -3215,14 +3209,14 @@ struct npc_ShaiAI : public ScriptedAI
 
     uint32 m_uiFlashHeal;
 
-    void Reset()
+    void Reset() override
     {
         m_uiFlashHeal = 12000;
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         if (m_creature->IsNonMeleeSpellCasted(false))
@@ -3273,7 +3267,7 @@ struct boss_vamAI : public ScriptedAI
 
     bool Enraged;
 
-    void Reset()
+    void Reset() override
     {
         Charge_Timer = urand(15000, 27000);
         KnockBack_Timer = urand(8000, 20000);
@@ -3282,18 +3276,18 @@ struct boss_vamAI : public ScriptedAI
         Enraged = false;
     }
 
-    void Aggro(Unit *who)
+    void Aggro(Unit *who) override
     {
     }
 
-    void JustDied(Unit* Killer)
+    void JustDied(Unit* Killer) override
     {
     }
 
-    void UpdateAI(const uint32 diff)
+    void UpdateAI(const uint32 diff) override
     {
         //Return since we have no target
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         //Charge_Timer

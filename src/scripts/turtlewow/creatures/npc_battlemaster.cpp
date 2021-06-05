@@ -1,29 +1,32 @@
 #include "scriptPCH.h"
 #include <array>
 
-#define MENU_WSG       "Warsong Gulch"
-#define MENU_AB        "Arathi Basin"
-#define MENU_AV        "Alterac Valley"
-#define GREETINGS       90100
-#define IN_QUEUE        90101
+#define MENU_WSG "Warsong Gulch"
+#define MENU_AB "Arathi Basin"
+#define MENU_AV "Alterac Valley"
+#define GREETINGS 90100
+#define IN_QUEUE 90101
 
 bool GossipHello_npc_battlemaster(Player* p_Player, Creature* p_Creature)
 {
     p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_BATTLE, MENU_WSG, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-    if (p_Player->getLevel() > 9)
+    if (p_Player->GetLevel() > 9)
         p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_BATTLE, MENU_AB, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
-    if (p_Player->getLevel() > 50)
+
+    if (p_Player->GetLevel() > 50)
         p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_BATTLE, MENU_AV, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
 
     p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, GOSSIP_TEXT_BROWSE_GOODS, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
 	p_Player->SEND_GOSSIP_MENU(GREETINGS, p_Creature->GetGUID());
+
 	p_Creature->HandleEmote(1);
+
 	return true;
 }
 
 bool GossipSelect_npc_battlemaster(Player* p_Player, Creature* p_Creature, uint32 uiSender, uint32 uiAction)
 {
-	if (p_Player->isInCombat() || p_Player->InBattleGround() || p_Player->IsBeingTeleported() || p_Player->HasSpellCooldown(20939) || p_Player->HasSpellCooldown(26013) || (p_Player->getDeathState() == CORPSE))		
+	if (p_Player->IsInCombat() || p_Player->InBattleGround() || p_Player->IsBeingTeleported() || p_Player->HasSpellCooldown(20939) || p_Player->HasSpellCooldown(26013) || (p_Player->GetDeathState() == CORPSE))		
         ChatHandler(p_Player).PSendSysMessage("You are not meeting the conditions for joining!");
     else
     {
@@ -57,7 +60,7 @@ bool GossipSelect_wsg_arena(Player* p_Player, Creature* p_Creature, uint32 uiSen
     if (!p_Player)
         return false;
 
-    if (p_Player->isInCombat() || p_Player->InBattleGround() || p_Player->IsBeingTeleported() || p_Player->HasSpellCooldown(20939) || p_Player->HasSpellCooldown(26013) || (p_Player->getDeathState() == CORPSE))
+    if (p_Player->IsInCombat() || p_Player->InBattleGround() || p_Player->IsBeingTeleported() || p_Player->HasSpellCooldown(20939) || p_Player->HasSpellCooldown(26013) || (p_Player->GetDeathState() == CORPSE))
         ChatHandler(p_Player).PSendSysMessage("You are not meeting the conditions for joining!");
     else
     {

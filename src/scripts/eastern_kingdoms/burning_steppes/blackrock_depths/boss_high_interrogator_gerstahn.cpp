@@ -25,10 +25,10 @@ EndScriptData */
 
 enum
 {
-    SPELL_SHADOWWORDPAIN        = 14032,
-    SPELL_MANABURN              = 14033,
-    SPELL_PSYCHICSCREAM         = 13704,
-    SPELL_SHADOWSHIELD          = 12040
+    SPELL_SHADOWWORDPAIN = 14032,
+    SPELL_MANABURN = 14033,
+    SPELL_PSYCHICSCREAM = 13704,
+    SPELL_SHADOWSHIELD = 12040
 };
 
 struct boss_high_interrogator_gerstahnAI : public ScriptedAI
@@ -43,7 +43,7 @@ struct boss_high_interrogator_gerstahnAI : public ScriptedAI
     uint32 m_uiPsychicScream_Timer;
     uint32 m_uiShadowShield_Timer;
 
-    void Reset()
+    void Reset() override
     {
         m_uiShadowWordPain_Timer = 4000;
         m_uiManaBurn_Timer = 14000;
@@ -51,10 +51,10 @@ struct boss_high_interrogator_gerstahnAI : public ScriptedAI
         m_uiShadowShield_Timer = 8000;
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         //Return since we have no target
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         //ShadowWordPain_Timer
@@ -82,7 +82,7 @@ struct boss_high_interrogator_gerstahnAI : public ScriptedAI
         //PsychicScream_Timer
         if (m_uiPsychicScream_Timer < uiDiff)
         {
-            DoCastSpellIfCan(m_creature->getVictim(), SPELL_PSYCHICSCREAM);
+            DoCastSpellIfCan(m_creature->GetVictim(), SPELL_PSYCHICSCREAM);
             m_uiPsychicScream_Timer = 30000;
         }
         else

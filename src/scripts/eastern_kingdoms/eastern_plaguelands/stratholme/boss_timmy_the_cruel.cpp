@@ -39,21 +39,21 @@ struct boss_timmy_the_cruelAI : public ScriptedAI
 
     uint32 m_uiRavenousClawTimer;
 
-    void Reset()
+    void Reset() override
     {
         m_uiRavenousClawTimer = 7000;
     }
 
-    void UpdateAI(const uint32 diff)
+    void UpdateAI(const uint32 diff) override
     {
         // Return since we have no target
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         // Ravenous Claw
         if (m_uiRavenousClawTimer < diff)
         {
-            if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_RAVENOUSCLAW) == CAST_OK)
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_RAVENOUSCLAW) == CAST_OK)
                 m_uiRavenousClawTimer = 12000;
         }
         else
@@ -65,7 +65,7 @@ struct boss_timmy_the_cruelAI : public ScriptedAI
         DoMeleeAttackIfReady();
     }
 
-    void CorpseRemoved(uint32 &respawnDelay)
+    void CorpseRemoved(uint32 &respawnDelay) override
     {
         m_creature->DeleteLater();
     }
@@ -92,14 +92,14 @@ struct npc_crimson_guardsmanAI : public ScriptedAI
     uint32 m_uiShieldBashTimer;
     uint32 m_uiShieldChargeTimer;
 
-    void Reset()
+    void Reset() override
     {
         m_uiDisarmTimer = 6000;
         m_uiShieldBashTimer = 4000;
         m_uiShieldChargeTimer = 1000;
     }
 
-    void JustDied(Unit* pKiller)
+    void JustDied(Unit* pKiller) override
     {
         if (m_bIsTimmySpawner)
         {
@@ -119,15 +119,15 @@ struct npc_crimson_guardsmanAI : public ScriptedAI
         }
     }
 
-    void UpdateAI(const uint32 diff)
+    void UpdateAI(const uint32 diff) override
     {
         // Return since we have no target
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         if (m_uiDisarmTimer < diff)
         {
-            if (DoCastSpellIfCan(m_creature->getVictim(), 6713) == CAST_OK)
+            if (DoCastSpellIfCan(m_creature->GetVictim(), 6713) == CAST_OK)
                 m_uiDisarmTimer = 15000;
         }
         else
@@ -135,7 +135,7 @@ struct npc_crimson_guardsmanAI : public ScriptedAI
 
         if (m_uiShieldBashTimer < diff)
         {
-            if (DoCastSpellIfCan(m_creature->getVictim(), 11972) == CAST_OK)
+            if (DoCastSpellIfCan(m_creature->GetVictim(), 11972) == CAST_OK)
                 m_uiShieldBashTimer = 8000;
         }
         else
@@ -143,7 +143,7 @@ struct npc_crimson_guardsmanAI : public ScriptedAI
 
         if (m_uiShieldChargeTimer < diff)
         {
-            if (DoCastSpellIfCan(m_creature->getVictim(), 15749) == CAST_OK)
+            if (DoCastSpellIfCan(m_creature->GetVictim(), 15749) == CAST_OK)
                 m_uiShieldChargeTimer = 12000;
         }
         else

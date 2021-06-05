@@ -776,7 +776,6 @@ void ChatHandler::SendGlobalSysMessage(const char *str)
     // need copy to prevent corruption by strtok call in LineFromMessage original string
     char* buf = mangos_strdup(str);
     char* pos = buf;
-    ObjectGuid guid = m_session ? m_session->GetPlayer()->GetObjectGuid() : ObjectGuid();
 
     while (char* line = LineFromMessage(pos))
     {
@@ -1580,9 +1579,6 @@ bool ChatHandler::isValidChatMessage(const char* message)
                         // there can only be two. One permanent, one temporary
                         if (!hasRandomProperty && properties.size() > 2)
                             return false;
-
-                        int dbLocale = m_session->GetSessionDbLocaleIndex();
-                        LocaleConstant dbcLocale = m_session->GetSessionDbcLocale();
 
                         const ItemRandomPropertiesEntry* iProp = nullptr;
                         for (auto iter = properties.begin(); iter != properties.end(); ++iter)

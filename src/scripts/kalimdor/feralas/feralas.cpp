@@ -29,10 +29,10 @@ EndScriptData */
 
 bool GossipHello_npc_gregan_brewspewer(Player* pPlayer, Creature* pCreature)
 {
-    if (pCreature->isQuestGiver())
+    if (pCreature->IsQuestGiver())
         pPlayer->PrepareQuestMenu(pCreature->GetGUID());
 
-    if (pCreature->isVendor() && pPlayer->GetQuestStatus(3909) == QUEST_STATUS_INCOMPLETE)
+    if (pCreature->IsVendor() && pPlayer->GetQuestStatus(3909) == QUEST_STATUS_INCOMPLETE)
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Buy somethin', will ya?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
     pPlayer->SEND_GOSSIP_MENU(2433, pCreature->GetGUID());
@@ -69,21 +69,21 @@ bool GossipHello_npc_screecher_spirit(Player* pPlayer, Creature* pCreature)
 
 enum
 {
-    SAY_ESCORT_START                    = -1001106,
-    SAY_WANDER_1                        = -1001107,
-    SAY_WANDER_2                        = -1001108,
-    SAY_WANDER_3                        = -1001109,
-    SAY_WANDER_4                        = -1001110,
-    SAY_WANDER_DONE_1                   = -1001111,
-    SAY_WANDER_DONE_2                   = -1001112,
-    SAY_WANDER_DONE_3                   = -1001113,
-    EMOTE_WANDER                        = -1001114,
-    SAY_EVENT_COMPLETE_1                = -1001115,
-    SAY_EVENT_COMPLETE_2                = -1001116,
+    SAY_ESCORT_START = -1001106,
+    SAY_WANDER_1 = -1001107,
+    SAY_WANDER_2 = -1001108,
+    SAY_WANDER_3 = -1001109,
+    SAY_WANDER_4 = -1001110,
+    SAY_WANDER_DONE_1 = -1001111,
+    SAY_WANDER_DONE_2 = -1001112,
+    SAY_WANDER_DONE_3 = -1001113,
+    EMOTE_WANDER = -1001114,
+    SAY_EVENT_COMPLETE_1 = -1001115,
+    SAY_EVENT_COMPLETE_2 = -1001116,
 
-    SPELL_SHAYS_BELL                    = 11402,
-    NPC_ROCKBITER                       = 7765,
-    QUEST_ID_WANDERING_SHAY             = 2845,
+    SPELL_SHAYS_BELL = 11402,
+    NPC_ROCKBITER = 7765,
+    QUEST_ID_WANDERING_SHAY = 2845,
 };
 
 struct npc_shay_leafrunnerAI : public FollowerAI
@@ -108,7 +108,7 @@ struct npc_shay_leafrunnerAI : public FollowerAI
 
     void JustRespawned() override
     {
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
         FollowerAI::JustRespawned();
     }
 
@@ -159,7 +159,7 @@ struct npc_shay_leafrunnerAI : public FollowerAI
             }
         }
     }
-    void JustDied(Unit* killer)
+    void JustDied(Unit* killer) override
     {
         m_uiWanderTimer = 0;
         m_uiDespawnTimer = 0;
@@ -180,7 +180,7 @@ struct npc_shay_leafrunnerAI : public FollowerAI
         SetFollowPaused(false);
     }
 
-    void UpdateFollowerAI(const uint32 uiDiff)
+    void UpdateFollowerAI(const uint32 uiDiff) override
     {
         if (m_uiDespawnTimer)
         {
@@ -194,7 +194,7 @@ struct npc_shay_leafrunnerAI : public FollowerAI
                 m_uiDespawnTimer -= uiDiff;
         }
 
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
         {
             if (m_uiWanderTimer)
             {
@@ -247,9 +247,9 @@ bool QuestAccept_npc_shay_leafrunner(Player* pPlayer, Creature* pCreature, const
     if (pQuest->GetQuestId() == QUEST_ID_WANDERING_SHAY)
     {
         DoScriptText(SAY_ESCORT_START, pCreature);
-        pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+        pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
         if (npc_shay_leafrunnerAI* leafrunnerAI = dynamic_cast<npc_shay_leafrunnerAI*>(pCreature->AI()))
-            leafrunnerAI->BeforeStartFollow(pPlayer, pPlayer->getFaction(), pQuest);
+            leafrunnerAI->BeforeStartFollow(pPlayer, pPlayer->GetFactionTemplateId(), pQuest);
     }
     return true;
 }
@@ -294,7 +294,7 @@ struct MushgogAI : public ScriptedAI
     bool m_bEnrage;
     bool m_bAggro;
 
-    void Reset()
+    void Reset() override
     {
     	m_uiInvocation_Timer  = 1000;
         m_uiSporeCloud_Timer  = 6000;
@@ -304,7 +304,7 @@ struct MushgogAI : public ScriptedAI
         m_bAggro              = false;
     }
 
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* pWho) override
     {
         m_creature->SetInCombatWithZone();
         if (!m_bAggro)
@@ -313,14 +313,14 @@ struct MushgogAI : public ScriptedAI
             GetCreatureListWithEntryInGrid(m_AggroList, m_creature, 14395, 1800.0f);
             for (std::list<Creature*>::iterator it = m_AggroList.begin(); it != m_AggroList.end(); ++it)
             {
-                if ((*it)->isAlive())
+                if ((*it)->IsAlive())
                      (*it)->MonsterYell("Leaf him alone Mushgog!");
             }
             m_bAggro = true;
         }
     }
 
-    void JustDied(Unit* pKiller)
+    void JustDied(Unit* pKiller) override
     {
     	uint32 chanceToSpawn = urand(0,5);
     	if (chanceToSpawn==0)
@@ -335,9 +335,9 @@ struct MushgogAI : public ScriptedAI
     	}
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         if (m_uiSporeCloud_Timer < uiDiff)
@@ -351,7 +351,7 @@ struct MushgogAI : public ScriptedAI
 
         if (m_uiRoots_Timer < uiDiff)
         {
-            if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_ROOTS) == CAST_OK)
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_ROOTS) == CAST_OK)
             	m_uiRoots_Timer = urand(8000, 12000);
         }
         else
@@ -359,7 +359,7 @@ struct MushgogAI : public ScriptedAI
 
         if (m_uiThornVolley_Timer < uiDiff)
         {
-            if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_THORN_VOLLEY) == CAST_OK)
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_THORN_VOLLEY) == CAST_OK)
             	m_uiThornVolley_Timer = urand(5000, 9000);
         }
         else
@@ -414,7 +414,7 @@ struct TheRazzaAI : public ScriptedAI
     uint32 m_uiInvocation_Timer;
     bool m_bAggro;
 
-    void Reset()
+    void Reset() override
     {
     	m_uiInvocation_Timer     = 1000;
         m_uiPoisonBolt_Timer     = 5000;
@@ -422,7 +422,7 @@ struct TheRazzaAI : public ScriptedAI
         m_bAggro                 = false;
     }
 
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* pWho) override
     {
         m_creature->SetInCombatWithZone();
         if (!m_bAggro)
@@ -431,21 +431,21 @@ struct TheRazzaAI : public ScriptedAI
             GetCreatureListWithEntryInGrid(m_AggroList, m_creature, 14395, 1800.0f);
             for (std::list<Creature*>::iterator it = m_AggroList.begin(); it != m_AggroList.end(); ++it)
             {
-                if ((*it)->isAlive())
+                if ((*it)->IsAlive())
                      (*it)->MonsterYell("Woohoo! They are into it now!");
             }
             m_bAggro = true;
         }
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         if (m_uiPoisonBolt_Timer < uiDiff)
         {
-            if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_POISON_BOLT) == CAST_OK)
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_POISON_BOLT) == CAST_OK)
             	m_uiPoisonBolt_Timer = 6000;
         }
         else
@@ -453,7 +453,7 @@ struct TheRazzaAI : public ScriptedAI
 
         if (m_uiChainLightning_Timer < uiDiff)
         {
-            if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_CHAIN_LIGHTNING) == CAST_OK)
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_CHAIN_LIGHTNING) == CAST_OK)
             	m_uiChainLightning_Timer = urand(4000, 7000);
         }
         else
@@ -505,7 +505,7 @@ struct SkarrTheUnbreakableAI : public ScriptedAI
     uint32 m_uiInvocation_Timer;
     bool m_bAggro;
 
-    void Reset()
+    void Reset() override
     {
     	m_uiInvocation_Timer    = 1000;
         m_uiCleave_Timer        = urand(7000,10000);
@@ -514,7 +514,7 @@ struct SkarrTheUnbreakableAI : public ScriptedAI
         m_bAggro                = false;
     }
 
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* pWho) override
     {
         m_creature->SetInCombatWithZone();
         if (!m_bAggro)
@@ -523,21 +523,21 @@ struct SkarrTheUnbreakableAI : public ScriptedAI
             GetCreatureListWithEntryInGrid(m_AggroList, m_creature, 14395, 1800.0f);
             for (std::list<Creature*>::iterator it = m_AggroList.begin(); it != m_AggroList.end(); ++it)
             {
-                if ((*it)->isAlive())
+                if ((*it)->IsAlive())
                      (*it)->MonsterYell("Looks like Skarr has found his next challenger! Wouldn't want to be in that poor fool's shoes!");
             }
             m_bAggro = true;
         }
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         if (m_uiCleave_Timer < uiDiff)
         {
-            if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_CLEAVE) == CAST_OK)
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_CLEAVE) == CAST_OK)
             	m_uiCleave_Timer = urand(7000,10000);
         }
         else
@@ -545,7 +545,7 @@ struct SkarrTheUnbreakableAI : public ScriptedAI
 
         if (m_uiMortalStrike_Timer < uiDiff)
         {
-            if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_MORTAL_STRIKE) == CAST_OK)
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_MORTAL_STRIKE) == CAST_OK)
             	m_uiMortalStrike_Timer = urand(9000, 15000);
         }
         else
@@ -553,7 +553,7 @@ struct SkarrTheUnbreakableAI : public ScriptedAI
 
         if (m_uiKnockdown_Timer < uiDiff)
         {
-            if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_KNOCKDOWN) == CAST_OK)
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_KNOCKDOWN) == CAST_OK)
             	m_uiKnockdown_Timer = urand(10000, 13000);
         }
         else
@@ -672,7 +672,7 @@ struct npc_kindal_moonweaverAI : public FollowerAI
 
     void JustRespawned() override
     {
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
         FollowerAI::JustRespawned();
     }
 
@@ -733,7 +733,7 @@ struct npc_captured_sprite_darterAI : public ScriptedAI
 
     void JustDied(Unit* /*pWho*/) override
     {
-        if (m_creature->isDead())
+        if (m_creature->IsDead())
         {
             if (Creature * pKindal = m_creature->GetMap()->GetCreature(m_uiKindalGUID))
             {
@@ -747,7 +747,7 @@ struct npc_captured_sprite_darterAI : public ScriptedAI
 
     void UpdateAI(const uint32 uiDiff) override
     {
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
         {
             if (!m_uiKindalGUID || !m_uiGateGUID)
                 return;
@@ -806,11 +806,11 @@ struct npc_captured_sprite_darterAI : public ScriptedAI
             return;
         }
 
-        if (m_creature->getVictim()->getPowerType() == POWER_MANA)
+        if (m_creature->GetVictim()->GetPowerType() == POWER_MANA)
         {
             if (m_uiManaBurnTimer < uiDiff)
             {
-                if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_MANA_BURN) == CAST_OK)
+                if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_MANA_BURN) == CAST_OK)
                     m_uiManaBurnTimer = urand(7000, 10000);
             }
             else
@@ -914,7 +914,7 @@ bool QuestAccept_npc_kindal_moonweaver(Player* pPlayer, Creature* pCreature, con
         if (auto pKindalAI = dynamic_cast<npc_kindal_moonweaverAI*>(pCreature->AI()))
         {
             pKindalAI->StartFollow(pPlayer, FACTION_ESCORT_N_FRIEND_PASSIVE, pQuest);
-            pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+            pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
             pCreature->SetStandState(UNIT_STAND_STATE_STAND);
             pKindalAI->BeginEvent();
         }

@@ -24,15 +24,20 @@
 #include "Policies/Singleton.h"
 #include "ObjectGuid.h"
 #include "DBCEnums.h"
+#include "SpellDefines.h"
 #include "ace/Atomic_Op.h"
-#include "SpellMgr.h"
-#include "Creature.h"
-#include <memory> //for shared_ptr
+
+#include <memory>
 
 struct AreaTriggerEntry;
 class Aura;
+class Object;
+class Unit;
+class Player;
+class Creature;
 class CreatureAI;
 class GameObject;
+class WorldObject;
 class GameObjectAI;
 class InstanceData;
 class Item;

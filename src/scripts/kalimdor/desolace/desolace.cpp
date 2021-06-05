@@ -32,23 +32,23 @@ EndContentData */
 
 enum
 {
-    SAY_SMEED_HOME_1                = -1000348,
-    SAY_SMEED_HOME_2                = -1000349,
-    SAY_SMEED_HOME_3                = -1000350,
+    SAY_SMEED_HOME_1 = -1000348,
+    SAY_SMEED_HOME_2 = -1000349,
+    SAY_SMEED_HOME_3 = -1000350,
 
-    QUEST_KODO                      = 5561,
+    QUEST_KODO = 5561,
 
-    NPC_SMEED                       = 11596,
-    NPC_AGED_KODO                   = 4700,
-    NPC_DYING_KODO                  = 4701,
-    NPC_ANCIENT_KODO                = 4702,
-    NPC_TAMED_KODO                  = 11627,
+    NPC_SMEED = 11596,
+    NPC_AGED_KODO = 4700,
+    NPC_DYING_KODO = 4701,
+    NPC_ANCIENT_KODO = 4702,
+    NPC_TAMED_KODO = 11627,
 
-    SPELL_KODO_KOMBO_ITEM           = 18153,
-    SPELL_KODO_KOMBO_PLAYER_BUFF    = 18172,
-    SPELL_KODO_KOMBO_DESPAWN_BUFF   = 18377,
-    SPELL_KODO_KOMBO_GOSSIP         = 18362,
-    SPELL_KODO_DESPAWN              = 18269
+    SPELL_KODO_KOMBO_ITEM = 18153,
+    SPELL_KODO_KOMBO_PLAYER_BUFF = 18172,
+    SPELL_KODO_KOMBO_DESPAWN_BUFF = 18377,
+    SPELL_KODO_KOMBO_GOSSIP = 18362,
+    SPELL_KODO_DESPAWN = 18269
 
 };
 
@@ -140,7 +140,7 @@ struct npc_aged_dying_ancient_kodoAI : ScriptedAI
         if (m_creature->GetEntry() == NPC_TAMED_KODO)
             return;
 
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         DoMeleeAttackIfReady();
@@ -358,7 +358,7 @@ struct npc_melizza_brimbuzzleAI : public npc_escortAI
     {
         Dialogue(uiDiff);
         npc_escortAI::UpdateAI(uiDiff);
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         DoMeleeAttackIfReady();
@@ -401,7 +401,7 @@ struct npc_dalinda_malemAI : public npc_escortAI
 
     void JustRespawned() override
     {
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
         npc_escortAI::JustRespawned();
     }
 
@@ -432,7 +432,7 @@ bool QuestAccept_npc_dalinda_malem(Player* pPlayer, Creature* pCreature, const Q
         if (npc_dalinda_malemAI* pEscortAI = dynamic_cast<npc_dalinda_malemAI*>(pCreature->AI()))
         {
             pCreature->SetFactionTemporary(FACTION_ESCORT_A_NEUTRAL_PASSIVE, TEMPFACTION_RESTORE_RESPAWN);
-            pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+            pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
             pEscortAI->Start(false, pPlayer->GetGUID(), pQuest);
         }
     }
@@ -457,7 +457,7 @@ struct go_serpent_statueAI: public GameObjectAI
     uint32 timer;
     bool state;//0 = usual, can launch. //1 = in use, cannot launch
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (state)
         {
@@ -559,7 +559,7 @@ struct go_ghost_magnetAI: public GameObjectAI
     uint16 nbToSpawn;
     bool state;//0 = already are functioning magnets, do not spawn spectre. //1 = spawning.
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (state)
         {
@@ -614,7 +614,7 @@ struct npc_magrami_spetreAI : public ScriptedAI
         corpseTimer = 20000;
         Reset();
     }
-    void Reset()
+    void Reset() override
     {
         timer=0;
         curseTimer = urand(5000, 9000);
@@ -629,7 +629,7 @@ struct npc_magrami_spetreAI : public ScriptedAI
     uint64 guidMagnet;
     bool isGreen;
 
-    void MovementInform(uint32 uiType, uint32 uiPointId)
+    void MovementInform(uint32 uiType, uint32 uiPointId) override
     {
         if(isGreen)
             return;
@@ -637,7 +637,7 @@ struct npc_magrami_spetreAI : public ScriptedAI
             return;
         turnGreen();
     }
-    void JustReachedHome()
+    void JustReachedHome() override
     {
         if(!isGreen)
             turnGreen();
@@ -646,22 +646,22 @@ struct npc_magrami_spetreAI : public ScriptedAI
     {
         m_creature->RemoveAurasDueToSpell(SPELL_BLUE_AURA);
         m_creature->AddAura(SPELL_GREEN_AURA);
-        m_creature->setFaction(FACTION_ENNEMY);
+        m_creature->SetFactionTemplateId(FACTION_ENNEMY);
         isGreen=true;
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         if ( curseTimer < uiDiff)
         {
-            if(m_creature->getVictim()->HasAura(SPELL_CURSE_OF_THE_FALLEN_MAGRAM))
+            if(m_creature->GetVictim()->HasAura(SPELL_CURSE_OF_THE_FALLEN_MAGRAM))
                 curseTimer = 5000;
             else
             {
-                if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_CURSE_OF_THE_FALLEN_MAGRAM) == CAST_OK)
+                if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_CURSE_OF_THE_FALLEN_MAGRAM) == CAST_OK)
                     curseTimer = urand(15000, 21000);
             }
         }
@@ -722,13 +722,13 @@ struct go_demon_portalAI: public GameObjectAI
     {
     }
     ObjectGuid _demonGuid;
-    bool OnUse(Unit* caster)
+    bool OnUse(Unit* caster) override
     {
         Unit* demon;
         if (_demonGuid)
         {
             demon = me->GetMap()->GetCreature(_demonGuid);
-            if (demon && demon->isAlive())
+            if (demon && demon->IsAlive())
                 return true;
         }
         demon = me->SummonCreature(NPC_PORTAL_DEMON_DEMON, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), caster ? me->GetAngle(caster) : 0.0, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 60000);
@@ -837,9 +837,9 @@ const Coords Ambusher[] =
 
 const CaravanMember Caravan[] =
 {
-    { NPC_CARAVAN_KODO,     -1887.26f, 2465.12f, 59.8224f, 4.48f, { 26.0f, 3.14f } },
-    { NPC_RIGGER_GIZELTON,  -1883.63f, 2471.68f, 59.8224f, 4.48f, { 18.0f, 3.14f } },
-    { NPC_CARAVAN_KODO,     -1882.11f, 2476.80f, 59.8224f, 4.48f, { 8.0f,  3.14f } }
+    { {NPC_CARAVAN_KODO,     -1887.26f, 2465.12f, 59.8224f, 4.48f}, { 26.0f, 3.14f } },
+    { {NPC_RIGGER_GIZELTON,  -1883.63f, 2471.68f, 59.8224f, 4.48f}, { 18.0f, 3.14f } },
+    { {NPC_CARAVAN_KODO,     -1882.11f, 2476.80f, 59.8224f, 4.48f}, { 8.0f,  3.14f } }
 };
 
 struct npc_cork_gizeltonAI : npc_escortAI
@@ -948,29 +948,31 @@ struct npc_cork_gizeltonAI : npc_escortAI
         {
             if (*itr != m_creature->GetObjectGuid())
             {
-                if (auto pCreature = m_creature->GetMap()->GetCreature(*itr))
+                if (Creature* pCreature = m_creature->GetMap()->GetCreature(*itr))
+                {
                     if (apply)
                     {
                         pCreature->SetFactionTemporary(FACTION_ESCORT_N_FRIEND_ACTIVE, TEMPFACTION_NONE);
-                        pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+                        pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
                     }
                     else
                     {
                         pCreature->ClearTemporaryFaction();
-                        pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+                        pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
                     }
+                }
             }
         }
 
         if (apply)
         {
             m_creature->SetFactionTemporary(FACTION_ESCORT_N_FRIEND_ACTIVE, TEMPFACTION_NONE);
-            m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+            m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
         }
         else
         {
             m_creature->ClearTemporaryFaction();
-            m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+            m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
         }
     }
 

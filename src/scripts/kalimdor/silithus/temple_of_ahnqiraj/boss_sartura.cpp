@@ -95,7 +95,7 @@ struct boss_sarturaAI : public ScriptedAI
     void MoveInLineOfSight(Unit* pWho) override
     {
         if (pWho->GetTypeId() == TYPEID_PLAYER
-            && !m_creature->isInCombat()
+            && !m_creature->IsInCombat()
             && m_creature->IsWithinDistInMap(pWho, 40.0f)
             && m_creature->IsWithinLOSInMap(pWho)
             && !pWho->HasAuraType(SPELL_AURA_FEIGN_DEATH)
@@ -147,7 +147,7 @@ struct boss_sarturaAI : public ScriptedAI
             if (m_creature->IsWithinDist(pTarget, VISIBLE_RANGE))
             {
                 DoResetThreat();
-                m_creature->getThreatManager().addThreatDirectly(pTarget, urand(1000, 2000));
+                m_creature->GetThreatManager().addThreatDirectly(pTarget, urand(1000, 2000));
             }
         }
     }
@@ -160,14 +160,14 @@ struct boss_sarturaAI : public ScriptedAI
         {
             if (Creature* pRoyalGuard = m_creature->GetMap()->GetCreature(*itr))
             {
-                if (pRoyalGuard->isDead()) pRoyalGuard->Respawn(); else pRoyalGuard->AI()->EnterEvadeMode();
+                if (pRoyalGuard->IsDead()) pRoyalGuard->Respawn(); else pRoyalGuard->AI()->EnterEvadeMode();
             }
         }
     }
 
     void UpdateAI(const uint32 uiDiff) override
     {
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         if (m_uiWhirlWindEndTimer)                          // Is in Whirlwind
@@ -189,7 +189,7 @@ struct boss_sarturaAI : public ScriptedAI
                 m_uiAggroResetTimer = urand(3000, 7000); 
                 // Remove the negative haste modifier from Whirlwind to restore Sartura's auto attack
                 m_creature->ApplyAttackTimePercentMod(BASE_ATTACK, 0, true);
-                m_creature->setAttackTimer(BASE_ATTACK, 100);
+                m_creature->SetAttackTimer(BASE_ATTACK, 100);
                 m_creature->RemoveAurasByCasterSpell(TAUNT_IMMUNE, m_creature->GetObjectGuid());
             }
             else
@@ -224,7 +224,7 @@ struct boss_sarturaAI : public ScriptedAI
             // Sundering Cleave
             if (m_uiCleaveTimer < uiDiff)
             {
-                if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_CLEAVE) == CAST_OK)
+                if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_CLEAVE) == CAST_OK)
                     m_uiCleaveTimer = urand(3000, 4000);
             }
             else
@@ -314,7 +314,7 @@ struct mob_sartura_royal_guardAI : public ScriptedAI
         if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
         {
             DoResetThreat();
-            m_creature->getThreatManager().addThreatDirectly(pTarget, urand(1000, 2000));
+            m_creature->GetThreatManager().addThreatDirectly(pTarget, urand(1000, 2000));
         }
     }
 
@@ -322,7 +322,7 @@ struct mob_sartura_royal_guardAI : public ScriptedAI
     {
         if (Creature* pSartura = m_pInstance->GetSingleCreatureFromStorage(NPC_BATTLEGUARD_SARTURA))
         {
-            if (pSartura->isAlive())
+            if (pSartura->IsAlive())
             {
                 pSartura->AI()->EnterEvadeMode();
 
@@ -332,7 +332,7 @@ struct mob_sartura_royal_guardAI : public ScriptedAI
                 {
                     if (Creature* pRoyalGuard = m_creature->GetMap()->GetCreature(*itr))
                     {
-                        if (pRoyalGuard->isDead()) pRoyalGuard->Respawn(); else pRoyalGuard->AI()->EnterEvadeMode();
+                        if (pRoyalGuard->IsDead()) pRoyalGuard->Respawn(); else pRoyalGuard->AI()->EnterEvadeMode();
                     }
                 }
             }
@@ -341,7 +341,7 @@ struct mob_sartura_royal_guardAI : public ScriptedAI
 
     void UpdateAI(const uint32 uiDiff) override
     {
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         
@@ -393,8 +393,8 @@ struct mob_sartura_royal_guardAI : public ScriptedAI
             // Knockback
             if (m_uiKnockbackTimer < uiDiff)
             {
-                if(m_creature->IsWithinMeleeRange(m_creature->getVictim()))
-                    if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_KNOCKBACK) == CAST_OK)
+                if(m_creature->IsWithinMeleeRange(m_creature->GetVictim()))
+                    if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_KNOCKBACK) == CAST_OK)
                         m_uiKnockbackTimer = urand(8000, 14000);
             }
             else
@@ -475,7 +475,7 @@ struct mob_vekniss_guardianAI : public ScriptedAI
     void MoveInLineOfSight(Unit* pWho) override
     {
         // Increased aggro radius
-        if (pWho->GetTypeId() == TYPEID_PLAYER && !m_creature->isInCombat() && m_creature->IsWithinDistInMap(pWho, 50.0f) && m_creature->IsWithinLOSInMap(pWho) && !pWho->HasAuraType(SPELL_AURA_FEIGN_DEATH))
+        if (pWho->GetTypeId() == TYPEID_PLAYER && !m_creature->IsInCombat() && m_creature->IsWithinDistInMap(pWho, 50.0f) && m_creature->IsWithinLOSInMap(pWho) && !pWho->HasAuraType(SPELL_AURA_FEIGN_DEATH))
         {
             AttackStart(pWho);
         }
@@ -502,7 +502,7 @@ struct mob_vekniss_guardianAI : public ScriptedAI
 
         DoCastSpellIfCan(m_creature, SPELL_IMPALE);
         m_creature->UpdateSpeed(MOVE_RUN, false);
-        DoStartMovement(m_creature->getVictim());
+        DoStartMovement(m_creature->GetVictim());
     }
 
     void DamageTaken(Unit* /*pDoneBy*/, uint32& uiDamage) override
@@ -519,7 +519,7 @@ struct mob_vekniss_guardianAI : public ScriptedAI
                 if ((*itr)->GetObjectGuid() == m_creature->GetObjectGuid())
                     continue;
 
-                if ((*itr)->isAlive() && m_creature->IsWithinLOSInMap((*itr)))
+                if ((*itr)->IsAlive() && m_creature->IsWithinLOSInMap((*itr)))
                 {
                     if (m_bIsAlone)
                         m_bIsAlone = false;
@@ -534,7 +534,7 @@ struct mob_vekniss_guardianAI : public ScriptedAI
 
     void UpdateAI(const uint32 uiDiff) override
     {
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         if (m_uiEvadeCheckTimer < uiDiff)
@@ -542,7 +542,7 @@ struct mob_vekniss_guardianAI : public ScriptedAI
             m_uiEvadeCheckTimer = 2500;
             if (m_creature->IsInEvadeMode())
             {
-                if (Unit* pTarget = m_creature->getVictim())
+                if (Unit* pTarget = m_creature->GetVictim())
                     m_creature->Relocate(pTarget->GetPositionX(), pTarget->GetPositionY(), pTarget->GetPositionZ());
             }
         }

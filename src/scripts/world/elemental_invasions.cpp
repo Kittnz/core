@@ -7,17 +7,17 @@
 
 enum
 {
-    NPC_INVADER_FIRE    = 14460,
-    NPC_BOSS_FIRE       = 14461,
+    NPC_INVADER_FIRE = 14460,
+    NPC_BOSS_FIRE = 14461,
 
-    NPC_INVADER_WATER   = 14458,
-    NPC_BOSS_WATER      = 14457,
+    NPC_INVADER_WATER = 14458,
+    NPC_BOSS_WATER = 14457,
 
-    NPC_INVADER_EARTH   = 14462,
-    NPC_BOSS_EARTH      = 14464,
+    NPC_INVADER_EARTH = 14462,
+    NPC_BOSS_EARTH = 14464,
 
-    NPC_INVADER_AIR     = 14455,
-    NPC_BOSS_AIR        = 14454,
+    NPC_INVADER_AIR = 14455,
+    NPC_BOSS_AIR = 14454,
 };
 
 struct InvasionDataStruct
@@ -32,15 +32,15 @@ struct InvasionDataStruct
 
 const static InvasionDataStruct InvasionData[] =
 {
-    { 68,   NPC_BOSS_FIRE,    NPC_INVADER_FIRE,    490,     VAR_FIRE_KILLS,     VAR_FIRE  },
-    { 69,   NPC_BOSS_AIR,     NPC_INVADER_AIR,     1377,    VAR_AIR_KILLS,      VAR_AIR   },
-    { 70,   NPC_BOSS_EARTH,   NPC_INVADER_EARTH,   16,      VAR_EARTH_KILLS,    VAR_EARTH },
-    { 71,   NPC_BOSS_WATER,   NPC_INVADER_WATER,   618,     VAR_WATER_KILLS,    VAR_WATER }
+    { 68, NPC_BOSS_FIRE, NPC_INVADER_FIRE, 490, VAR_FIRE_KILLS, VAR_FIRE  },
+    { 69, NPC_BOSS_AIR, NPC_INVADER_AIR, 1377, VAR_AIR_KILLS, VAR_AIR   },
+    { 70, NPC_BOSS_EARTH, NPC_INVADER_EARTH, 16, VAR_EARTH_KILLS, VAR_EARTH },
+    { 71, NPC_BOSS_WATER, NPC_INVADER_WATER, 618, VAR_WATER_KILLS, VAR_WATER }
 };
 
-const static uint32 MIN_RIFT_SPAWN = 3;     // initial spawned invaders per rift
-const static uint32 MAX_RIFT_SPAWN = 6;     // maximum spawned invaders per rift
-const static uint8 DEAD_INVADERS = 50;      // override spawn level immediately if X invaders killed
+const static uint32 MIN_RIFT_SPAWN = 3; // initial spawned invaders per rift
+const static uint32 MAX_RIFT_SPAWN = 6; // maximum spawned invaders per rift
+const static uint8 DEAD_INVADERS = 50; // override spawn level immediately if X invaders killed
 
 class elemental_invasion_riftAI: public GameObjectAI
 {
@@ -75,7 +75,7 @@ public:
         invader->SetRespawnRadius(30.f);
         invader->SetDefaultMovementType(RANDOM_MOTION_TYPE);
 
-        if (!invader->isInCombat())
+        if (!invader->IsInCombat())
         {
             invader->GetMotionMaster()->Clear(false, true);
             invader->GetMotionMaster()->MoveRandom(true, 30.0f);
@@ -206,7 +206,7 @@ struct npc_invaderAI : ScriptedAI
 
     void UpdateAI(const uint32 uiDiff) override
     {
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         switch (m_uiEventIndex)
@@ -222,7 +222,7 @@ struct npc_invaderAI : ScriptedAI
 
             if (m_uiBlastWaveTimer < uiDiff)
             {
-                auto pVictim = m_creature->getVictim();
+                auto pVictim = m_creature->GetVictim();
 
                 if (pVictim && m_creature->IsInRange(pVictim, 0.0f, 10.0f))
                     if (DoCastSpellIfCan(m_creature, SPELL_BLAST_WAVE) == CAST_OK)
@@ -243,7 +243,7 @@ struct npc_invaderAI : ScriptedAI
 
             if (m_uiWhirlwindTimer < uiDiff)
             {
-                auto pVictim = m_creature->getVictim();
+                auto pVictim = m_creature->GetVictim();
 
                 if (pVictim && m_creature->IsInRange(pVictim, 0.0f, 8.0f))
                     if (DoCastSpellIfCan(m_creature, SPELL_WHIRLWIND) == CAST_OK)
@@ -256,7 +256,7 @@ struct npc_invaderAI : ScriptedAI
         case EVENT_IND_EARTH:
             if (m_uiKnockdownTimer < uiDiff)
             {
-                auto pVictim = m_creature->getVictim();
+                auto pVictim = m_creature->GetVictim();
 
                 if (pVictim && m_creature->IsInRange(pVictim, 0.0f, 5.0f))
                     if (DoCastSpellIfCan(pVictim, SPELL_KNOCKDOWN) == CAST_OK)
@@ -267,7 +267,7 @@ struct npc_invaderAI : ScriptedAI
 
             if (m_uiShockTimer < uiDiff)
             {
-                if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_EARTH_SHOCK) == CAST_OK)
+                if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_EARTH_SHOCK) == CAST_OK)
                     m_uiShockTimer = urand(9000, 13000);
             }
             else
@@ -277,7 +277,7 @@ struct npc_invaderAI : ScriptedAI
         case EVENT_IND_WATER:
             if (m_uiChilledTimer < uiDiff)
             {
-                auto pVictim = m_creature->getVictim();
+                auto pVictim = m_creature->GetVictim();
 
                 if (pVictim && m_creature->IsInRange(pVictim, 0.0f, 5.0f))
                     if (DoCastSpellIfCan(pVictim, SPELL_CHILLED) == CAST_OK)
@@ -288,7 +288,7 @@ struct npc_invaderAI : ScriptedAI
 
             if (m_uiShockTimer < uiDiff)
             {
-                if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_FROST_SHOCK) == CAST_OK)
+                if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_FROST_SHOCK) == CAST_OK)
                     m_uiShockTimer = urand(8000, 15000);
             }
             else

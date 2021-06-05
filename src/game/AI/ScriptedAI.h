@@ -20,7 +20,7 @@ enum SCEquip
 struct ScriptedAI : CreatureAI
 {
     explicit ScriptedAI(Creature* pCreature);
-    ~ScriptedAI() {}
+    ~ScriptedAI() override {}
 
     //*************
     //CreatureAI Functions

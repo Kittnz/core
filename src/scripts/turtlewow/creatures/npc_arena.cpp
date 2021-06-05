@@ -60,6 +60,7 @@ bool RemovedBloodyCoins(Player* player, uint32 ReqCount)
         sLog.outInfo("Arena Tournament: Player %s (GUID: %llu) just spent %u Bloody Coins", player->GetName(), player->GetObjectGuid().GetRawValue(), ReqCount);
         return player->RemoveItemCurrency(BLOODY_COIN, ReqCount);
     }
+
     return false;
 }
 
@@ -108,47 +109,63 @@ bool GossipSelect_npc_arena_vendor(Player *player, Creature *_Creature, uint32 s
         switch (eAction)
         {
             case BloodyCoinRew_1: // Speed
+            {
                 spell = 2379;
                 coins = 1;
                 buff = "Speed";
                 break;
+            }
             case BloodyCoinRew_2: // Stamina
+            {
                 spell = 12178;
                 coins = 3;
                 buff = "Stamina";
                 break;
+            }
             case BloodyCoinRew_3: // Intellect
+            {
                 spell = 12176;
                 coins = 3;
                 buff = "Intellect";
                 break;
+            }
             case BloodyCoinRew_4: // Agility
+            {
                 spell = 12174;
                 coins = 3;
                 buff = "Agility";
                 break;
+            }
             case BloodyCoinRew_5: // Strength
+            {
                 spell = 12179;
                 coins = 3;
                 buff = "Strength";
                 break;
+            }
             case BloodyCoinRew_6: // Spirit
+            {
                 spell = 12177;
                 coins = 3;
                 buff = "Spirit";
                 break;
+            }
             default:
                 break;
         }
 
-        if (RemovedBloodyCoins(player, coins)) {
+        if (RemovedBloodyCoins(player, coins))
+        {
             _Creature->CastSpell(_Creature, 14867, true); // NPC Visual Cast
             player->CastSpell(player, spell, true);
             sLog.outInfo("Arena Tournament: Player %s (GUID: %llu) has purchased %s buff", player->GetName(), player->GetObjectGuid().GetRawValue(), buff);
-        } else {
+        }
+        else
+        {
             _Creature->PMonsterSay("You don't have enough coins! Fight for your life! Yarrrr!");
         }
     }
+
     player->CLOSE_GOSSIP_MENU();
     return true;
 }

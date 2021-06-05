@@ -166,10 +166,10 @@ struct boss_ragnarosAI : ScriptedAI
 
         HasAura = true;
 
-        if (m_pInstance && m_creature->isAlive())
+        if (m_pInstance && m_creature->IsAlive())
         {
             m_pInstance->SetData(TYPE_RAGNAROS, NOT_STARTED);
-            m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+            m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
         }
 
         // clean up dummy visual if raid wiped during P2
@@ -185,8 +185,8 @@ struct boss_ragnarosAI : ScriptedAI
         if (m_pInstance)
         {
             m_pInstance->SetData(TYPE_RAGNAROS, IN_PROGRESS);
-            if (m_creature->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC))
-                m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+            if (m_creature->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE))
+                m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
             if (m_creature->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE))
                 m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
         }
@@ -230,7 +230,7 @@ struct boss_ragnarosAI : ScriptedAI
                 m_creature->ProcessThreatList(dataCopier);
                 if (Unit* randomTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
                 {
-                    Crea->getThreatManager().modifyThreatPercent(randomTarget, 90);
+                    Crea->GetThreatManager().modifyThreatPercent(randomTarget, 90);
                     Crea->AI()->AttackStart(randomTarget);
                     Crea->GetMotionMaster()->MoveChase(randomTarget);
                 }
@@ -321,7 +321,7 @@ struct boss_ragnarosAI : ScriptedAI
         if (m_creature->GetUInt32Value(UNIT_FIELD_FLAGS) == UNIT_FLAG_NON_ATTACKABLE)
             return;
 
-        if (m_creature->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC))
+        if (m_creature->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE))
             return;
 
         // For transition back to P1, return during emerge visual cast animation
@@ -342,7 +342,7 @@ struct boss_ragnarosAI : ScriptedAI
         {
             m_creature->RemoveAurasDueToSpell(SPELL_SUBMERGE_FADE);
             m_creature->RemoveAurasDueToSpell(SPELL_SUBMERGE_EFFECT);
-            m_creature->setFaction(14);
+            m_creature->SetFactionTemplateId(14);
             m_creature->SetVisibility(VISIBILITY_ON);
 
             if (DoCastSpellIfCan(m_creature, SPELL_EMERGE_VISUAL) == CAST_OK)
@@ -373,9 +373,9 @@ struct boss_ragnarosAI : ScriptedAI
 
                 for (std::list<Creature*>::iterator itr = FilsListe.begin(); itr != FilsListe.end(); ++itr)
                 {
-                    if ((*itr)->isAlive())
+                    if ((*itr)->IsAlive())
                     {
-                        if (!(*itr)->hasUnitState(UNIT_STAT_ISOLATED)) // banished
+                        if (!(*itr)->HasUnitState(UNIT_STAT_ISOLATED)) // banished
                         {
                             Allbanished = false;
                             break;
@@ -401,7 +401,7 @@ struct boss_ragnarosAI : ScriptedAI
                     }
 
                     m_creature->SetVisibility(VISIBILITY_OFF);
-                    m_creature->setFaction(35);
+                    m_creature->SetFactionTemplateId(35);
                     m_uiSubmergeStateTimer = 0;
                 }
                 else
@@ -415,7 +415,7 @@ struct boss_ragnarosAI : ScriptedAI
         }
 
         // Return since we have no target
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         // Phase 1 -----------------------------------------------------------------------------------
@@ -427,7 +427,7 @@ struct boss_ragnarosAI : ScriptedAI
         {
             if (m_uiRestoreTargetTimer <= diff)
             {
-                if (Unit *pTarget = m_creature->getVictim())
+                if (Unit *pTarget = m_creature->GetVictim())
                 {
                     m_creature->SetTargetGuid(pTarget->GetObjectGuid());
                     m_creature->SetFacingToObject(pTarget);
@@ -486,11 +486,11 @@ struct boss_ragnarosAI : ScriptedAI
         {
             std::vector<Player*> manaPlayers;
 
-            ThreatList const& tList = m_creature->getThreatManager().getThreatList();
+            ThreatList const& tList = m_creature->GetThreatManager().getThreatList();
             for (ThreatList::const_iterator itr = tList.begin(); itr != tList.end(); ++itr)
             {
                 Player* pPlayer = m_creature->GetMap()->GetPlayer((*itr)->getUnitGuid());
-                if (pPlayer && pPlayer->isAlive() && pPlayer->getPowerType() == POWER_MANA && !pPlayer->IsGameMaster())
+                if (pPlayer && pPlayer->IsAlive() && pPlayer->GetPowerType() == POWER_MANA && !pPlayer->IsGameMaster())
                     manaPlayers.push_back(pPlayer);
             }
             if (!manaPlayers.empty())
@@ -561,16 +561,16 @@ struct boss_ragnarosAI : ScriptedAI
     void CheckForMelee()
     {
         // at first we check for the current player-type target
-        Unit* pMainTarget = m_creature->getVictim();
+        Unit* pMainTarget = m_creature->GetVictim();
         if (pMainTarget->GetTypeId() == TYPEID_PLAYER && !pMainTarget->ToPlayer()->IsGameMaster() && 
             m_creature->IsWithinMeleeRange(pMainTarget) && m_creature->IsWithinLOSInMap(pMainTarget))
         {
             m_bInMelee = true;
 
-            if (m_creature->isAttackReady() && !m_creature->IsNonMeleeSpellCasted(false))
+            if (m_creature->IsAttackReady() && !m_creature->IsNonMeleeSpellCasted(false))
             {
                 m_creature->AttackerStateUpdate(pMainTarget);
-                m_creature->resetAttackTimer();
+                m_creature->ResetAttackTimer();
             }
 
             return;
@@ -583,15 +583,15 @@ struct boss_ragnarosAI : ScriptedAI
             m_bInMelee = true;
 
             // erase current target's threat as soon as we switch the target now
-            m_creature->getThreatManager().modifyThreatPercent(m_creature->getVictim(), -100);
+            m_creature->GetThreatManager().modifyThreatPercent(m_creature->GetVictim(), -100);
 
             // give the new target aggro
-            m_creature->getThreatManager().modifyThreatPercent(pTarget, 100);
+            m_creature->GetThreatManager().modifyThreatPercent(pTarget, 100);
 
-            if (m_creature->isAttackReady() && !m_creature->IsNonMeleeSpellCasted(false))
+            if (m_creature->IsAttackReady() && !m_creature->IsNonMeleeSpellCasted(false))
             {
                 m_creature->AttackerStateUpdate(pTarget);
-                m_creature->resetAttackTimer();
+                m_creature->ResetAttackTimer();
             }
 
             return;
@@ -605,15 +605,15 @@ struct boss_ragnarosAI : ScriptedAI
             SELECT_FLAG_PET | SELECT_FLAG_IN_LOS | SELECT_FLAG_IN_MELEE_RANGE))
         {
             // erase current target's threat as soon as we switch the target now
-            m_creature->getThreatManager().modifyThreatPercent(m_creature->getVictim(), -100);
+            m_creature->GetThreatManager().modifyThreatPercent(m_creature->GetVictim(), -100);
 
             // give the new target aggro
-            m_creature->getThreatManager().modifyThreatPercent(pTarget, 100);
+            m_creature->GetThreatManager().modifyThreatPercent(pTarget, 100);
 
-            if (m_creature->isAttackReady() && !m_creature->IsNonMeleeSpellCasted(false))
+            if (m_creature->IsAttackReady() && !m_creature->IsNonMeleeSpellCasted(false))
             {
                 m_creature->AttackerStateUpdate(pTarget);
-                m_creature->resetAttackTimer();
+                m_creature->ResetAttackTimer();
             }
 
             return;
@@ -624,15 +624,15 @@ struct boss_ragnarosAI : ScriptedAI
             SELECT_FLAG_NOT_PLAYER | SELECT_FLAG_IN_LOS | SELECT_FLAG_IN_MELEE_RANGE))
         {
             // erase current target's threat as soon as we switch the target now
-            m_creature->getThreatManager().modifyThreatPercent(m_creature->getVictim(), -100);
+            m_creature->GetThreatManager().modifyThreatPercent(m_creature->GetVictim(), -100);
 
             // give the new target aggro
-            m_creature->getThreatManager().modifyThreatPercent(pTarget, 100);
+            m_creature->GetThreatManager().modifyThreatPercent(pTarget, 100);
 
-            if (m_creature->isAttackReady() && !m_creature->IsNonMeleeSpellCasted(false))
+            if (m_creature->IsAttackReady() && !m_creature->IsNonMeleeSpellCasted(false))
             {
                 m_creature->AttackerStateUpdate(pTarget);
-                m_creature->resetAttackTimer();
+                m_creature->ResetAttackTimer();
             }
 
             //sLog.outError("[MoltenCore.Ragnaros] Target type #4 reached with name <%s> and entry <%u>.", pTarget->GetName(), pTarget->GetEntry());

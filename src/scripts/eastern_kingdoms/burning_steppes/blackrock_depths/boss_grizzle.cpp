@@ -23,10 +23,10 @@ EndScriptData */
 
 #include "scriptPCH.h"
 
-#define EMOTE_GENERIC_FRENZY_KILL   -1000001
+#define EMOTE_GENERIC_FRENZY_KILL -1000001
 
-#define SPELL_GROUNDTREMOR          6524
-#define SPELL_FRENZY                8269
+#define SPELL_GROUNDTREMOR 6524
+#define SPELL_FRENZY 8269
 
 struct boss_grizzleAI : public ScriptedAI
 {
@@ -38,16 +38,16 @@ struct boss_grizzleAI : public ScriptedAI
     uint32 GroundTremor_Timer;
     uint32 Frenzy_Timer;
 
-    void Reset()
+    void Reset() override
     {
         GroundTremor_Timer = 12000;
         Frenzy_Timer = 0;
     }
 
-    void UpdateAI(const uint32 diff)
+    void UpdateAI(const uint32 diff) override
     {
         //Return since we have no target
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         //GroundTremor_Timer
@@ -56,7 +56,8 @@ struct boss_grizzleAI : public ScriptedAI
             DoCastSpellIfCan(m_creature, SPELL_GROUNDTREMOR);
             GroundTremor_Timer = 8000;
         }
-        else GroundTremor_Timer -= diff;
+        else
+            GroundTremor_Timer -= diff;
 
         //Frenzy_Timer
         if (m_creature->GetHealthPercent() < 51.0f)
@@ -69,12 +70,14 @@ struct boss_grizzleAI : public ScriptedAI
                     Frenzy_Timer = 15000;
                 }
             }
-            else Frenzy_Timer -= diff;
+            else
+                Frenzy_Timer -= diff;
         }
 
         DoMeleeAttackIfReady();
     }
 };
+
 CreatureAI* GetAI_boss_grizzle(Creature* pCreature)
 {
     return new boss_grizzleAI(pCreature);

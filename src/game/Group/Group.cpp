@@ -35,7 +35,6 @@
 #include "MapPersistentStateMgr.h"
 #include "Util.h"
 #include "LootMgr.h"
-#include "SpellMgr.h"
 #include "LFGMgr.h"
 #include "LFGHandler.h"
 
@@ -49,7 +48,7 @@ GroupMemberStatus GetGroupMemberStatus(const Player *member = nullptr)
         flags |= MEMBER_STATUS_ONLINE;
         if (member->IsPvP())
             flags |= MEMBER_STATUS_PVP;
-        if (member->isDead())
+        if (member->IsDead())
             flags |= MEMBER_STATUS_DEAD;
         if (member->HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_GHOST))
             flags |= MEMBER_STATUS_GHOST;
@@ -79,9 +78,9 @@ void Roll::targetObjectBuildLink()
 //============== Group ==============================
 //===================================================
 
-Group::Group() : m_Id(0), m_groupType(GROUPTYPE_NORMAL),
-    m_bgGroup(nullptr), m_lootMethod(FREE_FOR_ALL), m_lootThreshold(ITEM_QUALITY_UNCOMMON),
-    m_subGroupsCounts(nullptr), m_groupTeam(TEAM_NONE), m_leaderLastOnline(0), m_LFGAreaId(0)
+Group::Group() : m_Id(0), m_leaderLastOnline(0), m_groupType(GROUPTYPE_NORMAL), 
+                 m_bgGroup(nullptr), m_lootMethod(FREE_FOR_ALL), m_lootThreshold(ITEM_QUALITY_UNCOMMON),
+                 m_subGroupsCounts(nullptr), m_groupTeam(TEAM_NONE), m_LFGAreaId(0)
 {
 }
 
@@ -215,11 +214,12 @@ bool Group::LoadMemberFromDB(uint32 guidLow, uint8 subgroup, bool assistant)
     SubGroupCounterIncrease(subgroup);
 
     Team playerTeam = Player::TeamForRace(data->uiRace);
-    if (m_groupTeam == ALLIANCE && playerTeam == HORDE ||
-        m_groupTeam == HORDE && playerTeam == ALLIANCE)
+    if ((m_groupTeam == ALLIANCE && playerTeam == HORDE) || (m_groupTeam == HORDE && playerTeam == ALLIANCE))
         m_groupTeam = TEAM_CROSSFACTION;
+
     if (m_groupTeam == TEAM_NONE)
         m_groupTeam = playerTeam;
+
     return true;
 }
 
@@ -320,9 +320,9 @@ bool Group::AddMember(ObjectGuid guid, const char* name, uint8 joinMethod)
 
     if (Player *player = sObjectMgr.GetPlayer(guid))
     {
-        if (m_groupTeam == ALLIANCE && player->GetTeam() == HORDE ||
-            m_groupTeam == HORDE && player->GetTeam() == ALLIANCE)
+        if ((m_groupTeam == ALLIANCE && player->GetTeam() == HORDE) || (m_groupTeam == HORDE && player->GetTeam() == ALLIANCE))
             m_groupTeam = TEAM_CROSSFACTION;
+
         if (m_groupTeam == TEAM_NONE)
             m_groupTeam = player->GetTeam();
 
@@ -580,8 +580,6 @@ bool Group::FillPremadeLFG(const ObjectGuid& plrGuid, Classes playerClass, Class
     uint32& DpsCount, std::list<ObjectGuid>& processed)
 {
     // We grant the role unless someone else in the group has higher priority for it
-    bool grantRole = true;
-
     RolesPriority priority = LFGQueue::getPriority(playerClass, requiredRole);
 
     for (member_citerator citr = GetMemberSlots().begin(); citr != GetMemberSlots().end(); ++citr)
@@ -1160,13 +1158,13 @@ void Group::ClearTargetIcon(ObjectGuid targetGuid)
 
 static void GetDataForXPAtKill_helper(Player* player, Unit const* victim, uint32& sum_level, Player* & member_with_max_level, Player* & not_gray_member_with_max_level)
 {
-    sum_level += player->getLevel();
-    if (!member_with_max_level || member_with_max_level->getLevel() < player->getLevel())
+    sum_level += player->GetLevel();
+    if (!member_with_max_level || member_with_max_level->GetLevel() < player->GetLevel())
         member_with_max_level = player;
 
-    uint32 gray_level = MaNGOS::XP::GetGrayLevel(player->getLevel());
-    if (victim->getLevel() > gray_level && (!not_gray_member_with_max_level
-                                            || not_gray_member_with_max_level->getLevel() < player->getLevel()))
+    uint32 gray_level = MaNGOS::XP::GetGrayLevel(player->GetLevel());
+    if (victim->GetLevel() > gray_level && (!not_gray_member_with_max_level
+                                            || not_gray_member_with_max_level->GetLevel() < player->GetLevel()))
         not_gray_member_with_max_level = player;
 }
 
@@ -1175,7 +1173,7 @@ void Group::GetDataForXPAtKill(Unit const* victim, uint32& count, uint32& sum_le
     for (GroupReference *itr = GetFirstMember(); itr != nullptr; itr = itr->next())
     {
         Player* member = itr->getSource();
-        if (!member || !member->isAlive() || !member->IsInWorld())                  // only for alive
+        if (!member || !member->IsAlive() || !member->IsInWorld())                  // only for alive
             continue;
 
         // will proccesed later
@@ -1962,7 +1960,7 @@ bool Group::InCombatToInstance(uint32 instanceId)
     for (GroupReference *itr = GetFirstMember(); itr != nullptr; itr = itr->next())
     {
         Player *pPlayer = itr->getSource();
-        if (pPlayer->isInCombat() && pPlayer->GetInstanceId() == instanceId)
+        if (pPlayer->IsInCombat() && pPlayer->GetInstanceId() == instanceId)
             return true;
     }
     return false;
@@ -2131,7 +2129,7 @@ void Group::_homebindIfInstance(Player *player)
 static void RewardGroupAtKill_helper(Player* pGroupGuy, Unit* pVictim, uint32 count, bool PvP, float group_rate, uint32 sum_level, bool is_dungeon, Player* not_gray_member_with_max_level, Player* member_with_max_level, uint32 xp)
 {
     // honor can be in PvP and !PvP (racial leader) cases (for alive)
-    if (pGroupGuy->isAlive())
+    if (pGroupGuy->IsAlive())
     {
         pGroupGuy->RewardHonor(pVictim, count);
         pGroupGuy->RewardExpansionPvPQuest(pVictim);
@@ -2162,15 +2160,15 @@ static void RewardGroupAtKill_helper(Player* pGroupGuy, Unit* pVictim, uint32 co
     // xp and reputation only in !PvP case
     if (!PvP)
     {
-        float rate = group_rate * float(pGroupGuy->getLevel()) / sum_level;
+        float rate = group_rate * float(pGroupGuy->GetLevel()) / sum_level;
 
         // if is in dungeon then all receive full reputation at kill
         // rewarded any alive/dead/near_corpse group member
         pGroupGuy->RewardReputation(pVictim, 1.0f);
 
         // XP updated only for alive group member
-        if (pGroupGuy->isAlive() && not_gray_member_with_max_level &&
-                pGroupGuy->getLevel() <= not_gray_member_with_max_level->getLevel())
+        if (pGroupGuy->IsAlive() && not_gray_member_with_max_level &&
+                pGroupGuy->GetLevel() <= not_gray_member_with_max_level->GetLevel())
         {
             uint32 itr_xp = (member_with_max_level == not_gray_member_with_max_level) ? uint32(xp * rate) : uint32((xp * rate / 2) + 1);
 
@@ -2180,7 +2178,7 @@ static void RewardGroupAtKill_helper(Player* pGroupGuy, Unit* pVictim, uint32 co
         }
 
         // quest objectives updated only for alive group member or dead but with not released body
-        if (pGroupGuy->isAlive() || !pGroupGuy->HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_GHOST))
+        if (pGroupGuy->IsAlive() || !pGroupGuy->HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_GHOST))
         {
             // normal creature (not pet/etc) can be only in !PvP case
             if (pVictim->GetTypeId() == TYPEID_UNIT)
@@ -2198,7 +2196,7 @@ static void RewardGroupAtKill_helper(Player* pGroupGuy, Unit* pVictim, uint32 co
  */
 void Group::RewardGroupAtKill(Unit* pVictim, Player* pPlayerTap)
 {
-    bool PvP = pVictim->isCharmedOwnedByPlayerOrPlayer();
+    bool PvP = pVictim->IsCharmedOwnedByPlayerOrPlayer();
 
     // prepare data for near group iteration (PvP and !PvP cases)
     uint32 xp = 0;
@@ -2421,7 +2419,7 @@ bool Group::HandleHardcoreInteraction(Player * invitee)
                 if (!invitee->isHardcore())
                     return false;
 
-                int32 diff = invitee->getLevel() - level;
+                int32 diff = invitee->GetLevel() - level;
 
                 if (abs(diff) > 5)
                     return false;

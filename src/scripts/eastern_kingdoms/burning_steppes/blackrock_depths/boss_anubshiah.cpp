@@ -42,7 +42,7 @@ struct boss_anubshiahAI : public ScriptedAI
     uint32 DemonArmor_Timer;
     uint32 EnvelopingWeb_Timer;
 
-    void Reset()
+    void Reset() override
     {
         ShadowBolt_Timer = 7000;
         CurseOfTongues_Timer = 24000;
@@ -51,16 +51,16 @@ struct boss_anubshiahAI : public ScriptedAI
         EnvelopingWeb_Timer = 16000;
     }
 
-    void UpdateAI(const uint32 diff)
+    void UpdateAI(const uint32 diff) override
     {
         //Return since we have no target
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         //ShadowBolt_Timer
         if (ShadowBolt_Timer < diff)
         {
-            DoCastSpellIfCan(m_creature->getVictim(), SPELL_SHADOWBOLT);
+            DoCastSpellIfCan(m_creature->GetVictim(), SPELL_SHADOWBOLT);
             ShadowBolt_Timer = 7000;
         }
         else ShadowBolt_Timer -= diff;
@@ -78,7 +78,7 @@ struct boss_anubshiahAI : public ScriptedAI
         //CurseOfWeakness_Timer
         if (CurseOfWeakness_Timer < diff)
         {
-            DoCastSpellIfCan(m_creature->getVictim(), SPELL_CURSEOFWEAKNESS);
+            DoCastSpellIfCan(m_creature->GetVictim(), SPELL_CURSEOFWEAKNESS);
             CurseOfWeakness_Timer = 45000;
         }
         else CurseOfWeakness_Timer -= diff;

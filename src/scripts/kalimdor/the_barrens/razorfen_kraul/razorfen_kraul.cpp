@@ -33,24 +33,24 @@ EndContentData */
 
 enum
 {
-    QUEST_WILLIX_THE_IMPORTER  = 1144,
+    QUEST_WILLIX_THE_IMPORTER = 1144,
 
-    SAY_WILLIX_READY           = -1047000,
-    SAY_WILLIX_1               = -1047001,
-    SAY_WILLIX_2               = -1047002,
-    SAY_WILLIX_3               = -1047003,
-    SAY_WILLIX_4               = -1047004,
-    SAY_WILLIX_5               = -1047005,
-    SAY_WILLIX_6               = -1047006,
-    SAY_WILLIX_7               = -1047007,
-    SAY_WILLIX_END             = -1047008,
+    SAY_WILLIX_READY = -1047000,
+    SAY_WILLIX_1 = -1047001,
+    SAY_WILLIX_2 = -1047002,
+    SAY_WILLIX_3 = -1047003,
+    SAY_WILLIX_4 = -1047004,
+    SAY_WILLIX_5 = -1047005,
+    SAY_WILLIX_6 = -1047006,
+    SAY_WILLIX_7 = -1047007,
+    SAY_WILLIX_END = -1047008,
 
-    SAY_WILLIX_AGGRO_1         = -1047009,
-    SAY_WILLIX_AGGRO_2         = -1047010,
-    SAY_WILLIX_AGGRO_3         = -1047011,
-    SAY_WILLIX_AGGRO_4         = -1047012,
+    SAY_WILLIX_AGGRO_1 = -1047009,
+    SAY_WILLIX_AGGRO_2 = -1047010,
+    SAY_WILLIX_AGGRO_3 = -1047011,
+    SAY_WILLIX_AGGRO_4 = -1047012,
 
-    NPC_RAGING_AGAMAR          = 4514
+    NPC_RAGING_AGAMAR = 4514
 };
 
 static const float aBoarSpawn[4][3] =
@@ -72,7 +72,7 @@ struct npc_willix_the_importerAI : public npc_escortAI
 
     void JustRespawned() override
     {
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
         npc_escortAI::JustRespawned();
     }
 
@@ -159,7 +159,7 @@ bool QuestAccept_npc_willix_the_importer(Player* pPlayer, Creature* pCreature, c
             pEscortAI->Start(false, pPlayer->GetGUID(), pQuest);
             DoScriptText(SAY_WILLIX_READY, pCreature, pPlayer);
             pCreature->SetFactionTemporary(FACTION_ESCORT_N_NEUTRAL_PASSIVE, TEMPFACTION_RESTORE_RESPAWN);
-            pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+            pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
         }
     }
 
@@ -204,8 +204,8 @@ struct npc_snufflenose_gopherAI : public FollowerAI
 
     void Reset() override
     {
-        m_creature->setFaction(35);
-        m_bIsMovementActive  = false;
+        m_creature->SetFactionTemplateId(35);
+        m_bIsMovementActive = false;
         m_followPausedTimer = 3000;
     }
 
@@ -353,9 +353,9 @@ bool EffectDummyCreature_npc_snufflenose_gopher(WorldObject* pCaster, uint32 uiS
 
 enum
 {
-    SPELL_DEFENSIVE_STANCE       =   7164,
-    SPELL_IMPROVED_BLOCKING      =   3248,
-    SPELL_SHIELD_BASH            =   11972,
+    SPELL_DEFENSIVE_STANCE = 7164,
+    SPELL_IMPROVED_BLOCKING = 3248,
+    SPELL_SHIELD_BASH = 11972,
 
 };
 
@@ -369,26 +369,26 @@ struct RazorfenDefenderAI : public ScriptedAI
     uint32 m_uiImprovedBlocking_Timer;
     uint32 m_uiShieldBash_Timer;
 
-    void Reset()
+    void Reset() override
     {
         m_uiImprovedBlocking_Timer = 1000;
-        m_uiShieldBash_Timer      = 6600;
+        m_uiShieldBash_Timer = 6600;
         DoCastSpellIfCan(m_creature, SPELL_DEFENSIVE_STANCE, true);
     }
 
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* pWho) override
     {
         m_creature->SetInCombatWithZone();
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         if (m_uiShieldBash_Timer < uiDiff)
         {
-            if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_SHIELD_BASH) == CAST_OK)
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_SHIELD_BASH) == CAST_OK)
                 m_uiShieldBash_Timer = 8100;
         }
         else

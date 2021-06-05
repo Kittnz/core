@@ -7,26 +7,26 @@
 
 enum
 {
-    SPELL_STOMP             = 27993,
-    SPELL_EARTHQUAKE        = 19798,
+    SPELL_STOMP = 27993,
+    SPELL_EARTHQUAKE = 19798,
 
-    SPELL_SONIC_BURST       = 23918,
-    SPELL_CHAIN_LIGHTNING   = 28293,
+    SPELL_SONIC_BURST = 23918,
+    SPELL_CHAIN_LIGHTNING = 28293,
 
-    SPELL_ROOT_FOREVER      = 31366,
-    SPELL_TELEPORT_VISUAL   = 26638,
+    SPELL_ROOT_FOREVER = 31366,
+    SPELL_TELEPORT_VISUAL = 26638,
 
-    MOB_ULDUM_CONSTRUCT     = 80938,
-    MOB_DEFENSE_SENTRY      = 80939,
+    MOB_ULDUM_CONSTRUCT = 80938,
+    MOB_DEFENSE_SENTRY = 80939,
 
-    GOB_DEFENSE_PORTAL      = 3000270,
+    GOB_DEFENSE_PORTAL = 3000270,
 };
 
 enum PhaseStates
 {
-    STATE_PHASE_1           = 1,
-    STATE_PHASE_2           = 2,
-    STATE_ENRAGED           = 4,
+    STATE_PHASE_1 = 1,
+    STATE_PHASE_2 = 2,
+    STATE_ENRAGED = 4,
 };
 
 enum Events
@@ -35,14 +35,16 @@ enum Events
     EVENT_PHASE_2_DELAY,
 };
 
-const double portalLocs[4][4] = {
+const double portalLocs[4][4] =
+{
     {-9613.08f, -2828.02f, 11.2f, 1.145f},
     {-9617.7f, -2743.983f, 15.3f, 5.265f},
     {-9572.8427f, -2840.13f, 10.62f, 4.65f},
     {-9581.63f, -2728.22f, 13.02f, 1.7f},
 };
 
-const double sentryLocs[4][4] = {
+const double sentryLocs[4][4] =
+{
     {-9592.858f, -2832.802f, 57.5f, 1.386f},
     {-9552.5566f, -2836.38f, 56.73f, 1.84f},
     {-9632.44f, -2755.29f, 58.67f, 5.76f},
@@ -128,7 +130,7 @@ struct boss_ostariusAI : public ScriptedAI
         me->ForceValuesUpdateAtIndex(UNIT_FIELD_FLAGS);
 
         me->AddAura(SPELL_ROOT_FOREVER); // core support for NPC rooting broken?
-        me->setAttackTimer(BASE_ATTACK, 1 * DAY); // never auto initially
+        me->SetAttackTimer(BASE_ATTACK, 1 * DAY); // never auto initially
 
         // Immune to all physical damage in phase 1 (because behind door, but hitbox is HUGE).
         me->ApplySpellImmune(0, IMMUNITY_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, true);
@@ -138,7 +140,7 @@ struct boss_ostariusAI : public ScriptedAI
         homeXPosition = x;
     }
 
-    void Reset()
+    void Reset() override
     {
         SetDefaults();
 
@@ -158,14 +160,14 @@ struct boss_ostariusAI : public ScriptedAI
         }
     }
 
-    void JustReachedHome()
+    void JustReachedHome() override
     {
         float x, y, z, o;
         me->GetHomePosition(x, y, z, o);
         homeXPosition = x;
     }
 
-    void Aggro(Unit *who)
+    void Aggro(Unit *who) override
     {
         m_creature->MonsterYell(urand(0, 1) ? AGGRO_TEXT_1 : AGGRO_TEXT_2);
 
@@ -183,20 +185,20 @@ struct boss_ostariusAI : public ScriptedAI
                 g->DeleteLater();
     }
 
-    void KilledUnit(Unit* victim)
+    void KilledUnit(Unit* victim) override
     {
         if (victim->GetTypeId() != TYPEID_PLAYER)
             return;
 
         if (urand(0, 1)) // don't spam on wipe
         {
-            uint8 unitsLeft = me->getThreatManager().getThreatList().size();
+            uint8 unitsLeft = me->GetThreatManager().getThreatList().size();
             if (unitsLeft)
                 me->PMonsterYell("THREAT ELIMINATED. %u REMAINING.", unitsLeft);
         }
     }
 
-    void JustDied(Unit* /*pKiller*/)
+    void JustDied(Unit* /*pKiller*/) override
     {
         DespawnSummons();
 
@@ -208,7 +210,7 @@ struct boss_ostariusAI : public ScriptedAI
         m_creature->SaveRespawnTime();
     }
 
-    void DamageTaken(Unit* /*done_by*/, uint32& damage) {}
+    void DamageTaken(Unit* /*done_by*/, uint32& damage) override {}
 
     void MakeNormal()
     {
@@ -223,7 +225,7 @@ struct boss_ostariusAI : public ScriptedAI
         me->ForceValuesUpdateAtIndex(UNIT_FIELD_FLAGS);
     }
 
-    void UpdateAI(const uint32 diff)
+    void UpdateAI(const uint32 diff) override
     {
         m_events.Update(diff);
 
@@ -231,7 +233,7 @@ struct boss_ostariusAI : public ScriptedAI
         if (me->GetPositionX() > (homeXPosition + 150))
             EnterEvadeMode();
 
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         // Timer events
@@ -249,8 +251,8 @@ struct boss_ostariusAI : public ScriptedAI
 
                 MakeNormal();
 
-                me->setAttackTimer(BASE_ATTACK, 2000);
-                me->SetInCombatWith(me->getVictim());
+                me->SetAttackTimer(BASE_ATTACK, 2000);
+                me->SetInCombatWith(me->GetVictim());
 
                 break;
             }
@@ -321,7 +323,7 @@ struct boss_ostariusAI : public ScriptedAI
         // Stomp and Earthquake every 10% HP loss.
         if (LastHealthPercentage - me->GetHealthPercent() >= 10)
         {
-            if (DoCastSpellIfCan(me->getVictim(), SPELL_STOMP) == CAST_OK)
+            if (DoCastSpellIfCan(me->GetVictim(), SPELL_STOMP) == CAST_OK)
             {
                 DoCast(me, SPELL_EARTHQUAKE, true);
                 LastHealthPercentage = me->GetHealthPercent();
@@ -428,8 +430,8 @@ struct boss_ostariusAI : public ScriptedAI
 
 enum SentrySpells
 {
-    SPELL_BLIZZARD          = 10187,
-    SPELL_RAIN_OF_FIRE      = 24669,
+    SPELL_BLIZZARD = 10187,
+    SPELL_RAIN_OF_FIRE = 24669,
 };
 
 struct mob_uldum_sentryAI : public ScriptedAI
@@ -455,7 +457,7 @@ struct mob_uldum_sentryAI : public ScriptedAI
         AoE_Timer = urand(0, 8000);
     }
 
-    void Reset()
+    void Reset() override
     {
         SetDefaults();
     }
@@ -465,9 +467,9 @@ struct mob_uldum_sentryAI : public ScriptedAI
         Reset();
     }
 
-    void KilledUnit(Unit* victim) {}
+    void KilledUnit(Unit* victim) override {}
 
-    void UpdateAI(const uint32 diff)
+    void UpdateAI(const uint32 diff) override
     {
         if (AoE_Timer < diff)
         {
@@ -509,7 +511,7 @@ struct go_uldum_portalAI : public GameObjectAI
         Summon_Timer = 2500; // for portal to render
     }
 
-    void UpdateAI(const uint32 diff)
+    void UpdateAI(const uint32 diff) override
     {
         if (Summon_Timer < diff)
         {

@@ -7,30 +7,30 @@ struct instance_caverns_of_time : public ScriptedInstance
         Initialize();
     };
 
-    void Initialize()
+    void Initialize() override
     {
     }
 
-    void OnCreatureCreate(Creature* pCreature)
+    void OnCreatureCreate(Creature* pCreature) override
     {
     }
 
-    void OnCreatureDeath(Creature *who)
+    void OnCreatureDeath(Creature *who) override
     {
     }
 
-    void OnObjectCreate(GameObject* pGo)
+    void OnObjectCreate(GameObject* pGo) override
     {
     }
 
-    void OnPlayerEnter(Player* pPlayer)
+    void OnPlayerEnter(Player* pPlayer) override
     {
         if (!pPlayer)
             return;
 
         uint32 displayId;
-        bool isMale = pPlayer->getGender() == GENDER_MALE;
-        switch (pPlayer->getClass())
+        bool isMale = pPlayer->GetGender() == GENDER_MALE;
+        switch (pPlayer->GetClass())
         {
             case CLASS_WARRIOR:
                 displayId = isMale ? 4446 : 3591;
@@ -56,10 +56,11 @@ struct instance_caverns_of_time : public ScriptedInstance
             default:
                 displayId = isMale ? 1541 : 4888;
         }
+
         pPlayer->SetDisplayId(displayId);
     }
 
-    void OnPlayerLeave(Player* pPlayer, bool bJustDestroy)
+    void OnPlayerLeave(Player* pPlayer, bool bJustDestroy) override
     {
         if (!pPlayer)
             return;
@@ -102,15 +103,15 @@ struct frostbitten_bronze_soldierAI : public ScriptedAI
 
     bool hasBegged;
 
-    void Reset()
+    void Reset() override
     {
         hasBegged = false;
         m_creature->SetHealth(1);
-        m_creature->addUnitState(UNIT_STAT_CAN_NOT_MOVE);
+        m_creature->AddUnitState(UNIT_STAT_CAN_NOT_MOVE);
         m_creature->SetStandState(UNIT_STAND_STATE_DEAD);
     }
 
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* pWho) override
     {
         DoPlaySoundToSet(m_creature, 7);
         pWho->DealDamage(m_creature, m_creature->GetHealth(), nullptr, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, nullptr, false);
@@ -119,9 +120,12 @@ struct frostbitten_bronze_soldierAI : public ScriptedAI
 
     void MoveInLineOfSight(Unit* pWho) override
     {
-        if (pWho && pWho->IsPlayer()) {
-            if (Player* player = pWho->ToPlayer()) {
-                if (!hasBegged && m_creature->IsWithinDistInMap(pWho, 12.0f)) {
+        if (pWho && pWho->IsPlayer())
+        {
+            if (Player* player = pWho->ToPlayer())
+            {
+                if (!hasBegged && m_creature->IsWithinDistInMap(pWho, 12.0f))
+                {
                     switch (urand(0, 4))
                     {
                         case 0:
@@ -140,6 +144,7 @@ struct frostbitten_bronze_soldierAI : public ScriptedAI
                             m_creature->MonsterSay("I can't handle this suffering anymore...");
                             break;
                     }
+
                     DoPlaySoundToSet(m_creature, 6931);
                     hasBegged = true;
                 }

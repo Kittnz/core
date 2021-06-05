@@ -37,21 +37,21 @@ struct boss_wushoolayAI : public ScriptedAI
     uint32 LightningCloud_Timer;
     uint32 LightningWave_Timer;
 
-    void Reset()
+    void Reset() override
     {
         LightningCloud_Timer = urand(5000, 10000);
         LightningWave_Timer = urand(8000, 16000);
     }
 
-    void UpdateAI(const uint32 diff)
+    void UpdateAI(const uint32 diff) override
     {
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         //LightningCloud_Timer
         if (LightningCloud_Timer < diff)
         {
-            DoCastSpellIfCan(m_creature->getVictim(), SPELL_LIGHTNINGCLOUD);
+            DoCastSpellIfCan(m_creature->GetVictim(), SPELL_LIGHTNINGCLOUD);
             LightningCloud_Timer = urand(15000, 20000);
         }
         else LightningCloud_Timer -= diff;

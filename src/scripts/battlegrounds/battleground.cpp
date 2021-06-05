@@ -37,11 +37,9 @@ EndScriptData */
 
 enum
 {
-    SPELL_SPIRIT_HEAL_CHANNEL       = 22011,                // Spirit Heal Channel
-
-    SPELL_SPIRIT_HEAL               = 22012,                // Spirit Heal
-
-    SPELL_WAITING_TO_RESURRECT      = 2584                  // players who cancel this aura don't want a resurrection
+    SPELL_SPIRIT_HEAL_CHANNEL = 22011, // Spirit Heal Channel
+    SPELL_SPIRIT_HEAL = 22012, // Spirit Heal
+    SPELL_WAITING_TO_RESURRECT = 2584 // players who cancel this aura don't want a resurrection
 };
 
 struct npc_spirit_guideAI : ScriptedAI
@@ -91,7 +89,7 @@ struct npc_spirit_guideAI : ScriptedAI
         for (Map::PlayerList::const_iterator itr = PlayerList.begin(); itr != PlayerList.end(); ++itr)
         {
             Player* pPlayer = itr->getSource();
-            if (!pPlayer || !pPlayer->IsWithinDistInMap(m_creature, 20.0f) || !pPlayer->HasAura(SPELL_WAITING_TO_RESURRECT) || pPlayer->isAlive())
+            if (!pPlayer || !pPlayer->IsWithinDistInMap(m_creature, 20.0f) || !pPlayer->HasAura(SPELL_WAITING_TO_RESURRECT) || pPlayer->IsAlive())
                 continue;
 
             // repop player again - now this node won't be counted and another node is searched
@@ -171,7 +169,7 @@ struct npc_etendardAI : NullCreatureAI
     {
         if (!m_bSpawned)
         {
-            m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+            m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
             m_creature->SetDefaultMovementType(IDLE_MOTION_TYPE);
             m_creature->CastSpell(m_creature, SPELL_SPAWN_EFFECT, true);
             m_creature->CastSpell(m_creature, m_bAutoRepeatSpell, true);

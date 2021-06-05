@@ -5,26 +5,26 @@
 enum
 {
     // Dark Reaver spells
-    SPELL_MOUNT                      = 46224,
-    SPELL_CLEAVE                     = 20684,
-    SPELL_STRIKE                     = 26613,
-    SPELL_FURIOUS_ANGER              = 16791,
-    SPELL_NIMBLE_REFLEXES            = 6264,
-    SPELL_PIERCE_ARMOR               = 6016,
-    SPELL_DETERRENCE                 = 19263,
+    SPELL_MOUNT = 46224,
+    SPELL_CLEAVE = 20684,
+    SPELL_STRIKE = 26613,
+    SPELL_FURIOUS_ANGER = 16791,
+    SPELL_NIMBLE_REFLEXES = 6264,
+    SPELL_PIERCE_ARMOR = 6016,
+    SPELL_DETERRENCE = 19263,
 
-    SPELL_GHOST_VISUAL               = 22650,
-    SPELL_TWISTING_NETHER            = 23700,
+    SPELL_GHOST_VISUAL = 22650,
+    SPELL_TWISTING_NETHER = 23700,
 
-    MOB_FORLORN_SPIRIT               = 80937,
-    MOB_LURKING_SHADOW               = 81266,
+    MOB_FORLORN_SPIRIT = 80937,
+    MOB_LURKING_SHADOW = 81266,
 
-    DEADWIND_PASS_ZONE               = 41
+    DEADWIND_PASS_ZONE = 41
 };
 
 enum EventStates
 {
-    STATE_ENRAGED   = 1
+    STATE_ENRAGED = 1
 };
 
 // I can't do math so this will suffice.
@@ -80,7 +80,7 @@ struct boss_dark_reaverAI : public ScriptedAI
         LastHealthPercentage = 100;
     }
 
-    void Aggro(Unit *who)
+    void Aggro(Unit *who) override
     {
         m_creature->MonsterYell(urand(0, 1) ? AGGRO_TEXT_1 : AGGRO_TEXT_2);
         if (who->IsPlayer())
@@ -89,7 +89,7 @@ struct boss_dark_reaverAI : public ScriptedAI
         me->RemoveAurasDueToSpell(SPELL_MOUNT);
     }
 
-    void Reset()
+    void Reset() override
     {
         SetDefaults();
         // Make sure we despawn all Lurking Shadows on Reset.
@@ -99,18 +99,18 @@ struct boss_dark_reaverAI : public ScriptedAI
             (*itr)->ForcedDespawn();
     }
 
-    void JustRespawned()
+    void JustRespawned() override
     {
         SetDefaults();
     }
 
-    void JustReachedHome()
+    void JustReachedHome() override
     {
-        if (!m_creature->isInCombat())
+        if (!m_creature->IsInCombat())
             DoCast(me, SPELL_MOUNT);
     }
 
-    void KilledUnit(Unit* victim)
+    void KilledUnit(Unit* victim) override
     {
         if (victim->GetTypeId() != TYPEID_PLAYER)
             return;
@@ -119,7 +119,7 @@ struct boss_dark_reaverAI : public ScriptedAI
             m_creature->MonsterYell("Join those below...");
     }
 
-    void JustDied(Unit* /*pKiller*/)
+    void JustDied(Unit* /*pKiller*/) override
     {
         m_creature->MonsterYell(urand(0, 1) ? DEATH_TEXT_1 : DEATH_TEXT_2);
 
@@ -129,7 +129,7 @@ struct boss_dark_reaverAI : public ScriptedAI
         m_creature->SaveRespawnTime();
     }
 
-    void DamageTaken(Unit* /*done_by*/, uint32& damage)
+    void DamageTaken(Unit* /*done_by*/, uint32& damage) override
     {
         if (damage < 300 || damage < Biggest_Hit)
             return;
@@ -137,15 +137,15 @@ struct boss_dark_reaverAI : public ScriptedAI
         // Don't allow to repeat within a 10 second period.
         if (difftime(time(nullptr), Last_Pierce_Time) >= 10)
         {
-            DoCast(me->getVictim(), SPELL_PIERCE_ARMOR, true);
+            DoCast(me->GetVictim(), SPELL_PIERCE_ARMOR, true);
             Last_Pierce_Time = time(nullptr);
             Biggest_Hit = damage;
         }
     }
 
-    void UpdateAI(const uint32 diff)
+    void UpdateAI(const uint32 diff) override
     {
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         // Anti-leash protection
@@ -158,7 +158,7 @@ struct boss_dark_reaverAI : public ScriptedAI
         // Cleave
         if (Cleave_Timer < diff)
         {
-            if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_CLEAVE) == CAST_OK)
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_CLEAVE) == CAST_OK)
                 Cleave_Timer = urand(10000, 16000);
         }
         else
@@ -167,7 +167,7 @@ struct boss_dark_reaverAI : public ScriptedAI
         // Nimble Reflexes
         if (Reflex_Timer < diff)
         {
-            if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_NIMBLE_REFLEXES) == CAST_OK)
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_NIMBLE_REFLEXES) == CAST_OK)
                 Reflex_Timer = urand(26500, 30000);
         }
         else
@@ -176,7 +176,7 @@ struct boss_dark_reaverAI : public ScriptedAI
         // Strike every 10% HP loss.
         if (LastHealthPercentage - me->GetHealthPercent() >= 10)
         {
-            if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_STRIKE) == CAST_OK)
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_STRIKE) == CAST_OK)
                 LastHealthPercentage = me->GetHealthPercent();
         }
 
@@ -195,7 +195,7 @@ struct boss_dark_reaverAI : public ScriptedAI
             // Pick a random, non-tank target within 25yds. If none, default to tank.
             Unit* randomTarget = GetRandomNearbyEnemyPlayer(me);
             if (!randomTarget)
-                randomTarget = me->getVictim();
+                randomTarget = me->GetVictim();
 
             // Random 50/50 the summons will be on boss or a random player;
             float x, y, z, o;
@@ -230,13 +230,13 @@ struct boss_dark_reaverAI : public ScriptedAI
                     spawn->CastSpell(spawn, SPELL_TWISTING_NETHER, true); // for visual
 
                     // Pass boss threat list, but tiny amount to simply know all targets.
-                    for (auto t : me->getThreatManager().getThreatList())
+                    for (auto t : me->GetThreatManager().getThreatList())
                     {
                         if (!t || !t->isOnline())
                             continue;
 
                         float threatAmount = t->getSourceUnit() == randomTarget ? 5.0f : 0.01f;
-                        spawn->getThreatManager().addThreatDirectly(t->getTarget(), threatAmount);
+                        spawn->GetThreatManager().addThreatDirectly(t->getTarget(), threatAmount);
                     }
 
                     // Set it combat with random target.
@@ -256,7 +256,7 @@ struct boss_dark_reaverAI : public ScriptedAI
             // Pick a random, non-tank target within 25yds. If none, default to tank.
             Unit* randomTarget = GetRandomNearbyEnemyPlayer(me);
             if (!randomTarget)
-                randomTarget = me->getVictim();
+                randomTarget = me->GetVictim();
 
             if (Creature* lurkingShadow = me->SummonCreature(MOB_LURKING_SHADOW,
                                      randomTarget->GetPositionX(),
@@ -267,7 +267,7 @@ struct boss_dark_reaverAI : public ScriptedAI
                                      5000 // OOC Despawn time
             ))
             {
-                lurkingShadow->getThreatManager().addThreatDirectly(randomTarget, 10000.0f);
+                lurkingShadow->GetThreatManager().addThreatDirectly(randomTarget, 10000.0f);
                 lurkingShadow->SetInCombatWith(randomTarget);
                 lurkingShadow->AI()->AttackStart(randomTarget);
             }
@@ -297,12 +297,12 @@ struct boss_dark_reaverAI : public ScriptedAI
         if (attempt > 5)
             return nullptr;
 
-        Unit* random = self->SelectRandomUnfriendlyTarget(me->getVictim(), 35.0f);
+        Unit* random = self->SelectRandomUnfriendlyTarget(me->GetVictim(), 35.0f);
         if (!random)
             return nullptr;
 
         // Recurse until we select a player (missing MaNGOS func to do this...)
-        if (!random->IsPlayer() || !self->canAttack(random))
+        if (!random->IsPlayer() || !self->CanAttack(random))
             return GetRandomNearbyEnemyPlayer(self, attempt);
 
         return random;
@@ -351,7 +351,7 @@ struct lurking_shadowAI : public ScriptedAI
 
     int8 currentClass;
 
-    void Reset()
+    void Reset() override
     {
         currentClass = -1;
     }
@@ -367,28 +367,29 @@ struct lurking_shadowAI : public ScriptedAI
             m_creature->SetVirtualItem(VIRTUAL_ITEM_SLOT_0, mainHand->GetEntry());
         if (Item* offHand = pWho->ToPlayer()->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND))
             m_creature->SetVirtualItem(VIRTUAL_ITEM_SLOT_1, offHand->GetEntry());
-        currentClass = pWho->ToPlayer()->getClass();
+
+        currentClass = pWho->ToPlayer()->GetClass();
     }
 
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* pWho) override
     {
         SetClassIfNeeded(pWho);
     }
 
-    void DamageTaken(Unit* source, uint32& damage)
+    void DamageTaken(Unit* source, uint32& damage) override
     {
         // Only allow damage from players being the same class as the one who aggroed the mob.
-        if (!source->IsPlayer() || source->ToPlayer()->getClass() != currentClass && currentClass != -1)
+        if (!source->IsPlayer() || source->ToPlayer()->GetClass() != currentClass && currentClass != -1)
             damage = 0;
     }
 
-    void DamageDeal(Unit* source, uint32& damage)
+    void DamageDeal(Unit* source, uint32& damage) override
     {
         // Just in case class is not set on Aggro
         SetClassIfNeeded(source);
     }
 
-    void UpdateAI(const uint32 diff)
+    void UpdateAI(const uint32 diff) override
     {
         DoMeleeAttackIfReady();
     }

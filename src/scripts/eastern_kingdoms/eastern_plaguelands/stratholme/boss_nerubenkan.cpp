@@ -24,9 +24,9 @@ EndScriptData */
 #include "scriptPCH.h"
 #include "stratholme.h"
 
-#define SPELL_ENCASINGWEBS          4962
-#define SPELL_PIERCEARMOR           6016
-#define SPELL_RAISEUNDEADSCARAB     17235
+#define SPELL_ENCASINGWEBS 4962
+#define SPELL_PIERCEARMOR 6016
+#define SPELL_RAISEUNDEADSCARAB 17235
 
 struct boss_nerubenkanAI : public ScriptedAI
 {
@@ -47,7 +47,7 @@ struct boss_nerubenkanAI : public ScriptedAI
     float WebbedPlayerAggro;
 
 
-    void Reset()
+    void Reset() override
     {
         EncasingWebs_Timer = 7000;
         PierceArmor_Timer = 15000;
@@ -89,15 +89,15 @@ struct boss_nerubenkanAI : public ScriptedAI
         }
     }
 
-    void JustDied(Unit* Killer)
+    void JustDied(Unit* Killer) override
     {
         if (m_pInstance)
             m_pInstance->SetData(TYPE_NERUB, DONE);
     }
 
-    void UpdateAI(const uint32 diff)
+    void UpdateAI(const uint32 diff) override
     {
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         if (WebbedPlayerGuid)
@@ -106,7 +106,7 @@ struct boss_nerubenkanAI : public ScriptedAI
             {
                 if (!pTarget->HasAura(SPELL_ENCASINGWEBS))
                 {
-                    m_creature->getThreatManager().addThreatDirectly(pTarget, WebbedPlayerAggro);
+                    m_creature->GetThreatManager().addThreatDirectly(pTarget, WebbedPlayerAggro);
                     WebbedPlayerGuid = 0;
                     WebbedPlayerAggro = 0;
                 }
@@ -121,13 +121,13 @@ struct boss_nerubenkanAI : public ScriptedAI
         //EncasingWebs
         if (EncasingWebs_Timer < diff)
         {
-            if (Unit* pTarget = m_creature->getVictim())
+            if (Unit* pTarget = m_creature->GetVictim())
             {
                 if (DoCastSpellIfCan(pTarget, SPELL_ENCASINGWEBS) == CAST_OK)
                 {
                     WebbedPlayerGuid = pTarget->GetGUID();
-                    WebbedPlayerAggro = m_creature->getThreatManager().getThreat(pTarget);
-                    m_creature->getThreatManager().modifyThreatPercent(pTarget, -100);
+                    WebbedPlayerAggro = m_creature->GetThreatManager().getThreat(pTarget);
+                    m_creature->GetThreatManager().modifyThreatPercent(pTarget, -100);
                     EncasingWebs_Timer = urand(10000, 15000);
                 }
             }
@@ -137,7 +137,7 @@ struct boss_nerubenkanAI : public ScriptedAI
         //PierceArmor
         if (PierceArmor_Timer < diff)
         {
-            if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_PIERCEARMOR) == CAST_OK)
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_PIERCEARMOR) == CAST_OK)
                 PierceArmor_Timer = urand(15000, 20000);
         }
         else

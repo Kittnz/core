@@ -361,7 +361,7 @@ bool ChatHandler::HandleCooldownCommand(char* args)
 bool ChatHandler::HandleLearnAllMySpellsCommand(char* /*args*/)
 {
     Player* pPlayer = m_session->GetPlayer();
-    ChrClassesEntry const* clsEntry = sChrClassesStore.LookupEntry(pPlayer->getClass());
+    ChrClassesEntry const* clsEntry = sChrClassesStore.LookupEntry(pPlayer->GetClass());
 
     if (!clsEntry)
         return true;
@@ -1698,7 +1698,7 @@ bool ChatHandler::HandleDieCommand(char* /*args*/)
             return false;
     }
 
-    if (target->isAlive())
+    if (target->IsAlive())
     {
         if (sWorld.getConfig(CONFIG_BOOL_DIE_COMMAND_CREDIT))
             m_session->GetPlayer()->DealDamage(target, target->GetHealth(), nullptr, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, nullptr, false);
@@ -1773,7 +1773,7 @@ bool ChatHandler::HandleDamageCommand(char* args)
         return false;
     }
 
-    if (!target->isAlive())
+    if (!target->IsAlive())
         return true;
 
     int32 damage_int;
@@ -2088,7 +2088,7 @@ bool ChatHandler::HandleNpcInfoCommand(char* /*args*/)
         return false;
     }
 
-    uint32 faction = target->getFaction();
+    uint32 faction = target->GetFactionTemplateId();
     uint32 npcflags = target->GetUInt32Value(UNIT_NPC_FLAGS);
     uint32 displayid = target->GetDisplayId();
     uint32 nativeid = target->GetNativeDisplayId();
@@ -2102,13 +2102,13 @@ bool ChatHandler::HandleNpcInfoCommand(char* /*args*/)
     std::string defRespawnDelayStr = secsToTimeString(target->GetRespawnDelay(), true);
 
     PSendSysMessage(LANG_NPCINFO_CHAR, target->GetGuidStr().c_str(), faction, npcflags, Entry, displayid, nativeid);
-    PSendSysMessage(LANG_NPCINFO_LEVEL, target->getLevel());
+    PSendSysMessage(LANG_NPCINFO_LEVEL, target->GetLevel());
     PSendSysMessage(LANG_NPCINFO_EQUIPMENT, target->GetCurrentEquipmentId());
     PSendSysMessage(LANG_NPCINFO_HEALTH, target->GetCreateHealth(), target->GetMaxHealth(), target->GetHealth());
-    if (target->getPowerType() == POWER_MANA)
+    if (target->GetPowerType() == POWER_MANA)
         PSendSysMessage(LANG_NPCINFO_MANA, target->GetCreateMana(), target->GetMaxPower(POWER_MANA), target->GetPower(POWER_MANA));
     PSendSysMessage(LANG_NPCINFO_INHABIT_TYPE, cInfo->inhabit_type);
-    PSendSysMessage(LANG_NPCINFO_FLAGS, target->GetUInt32Value(UNIT_FIELD_FLAGS), target->GetUInt32Value(UNIT_DYNAMIC_FLAGS), target->getFaction());
+    PSendSysMessage(LANG_NPCINFO_FLAGS, target->GetUInt32Value(UNIT_FIELD_FLAGS), target->GetUInt32Value(UNIT_DYNAMIC_FLAGS), target->GetFactionTemplateId());
     PSendSysMessage(LANG_COMMAND_RAWPAWNTIMES, defRespawnDelayStr.c_str(), curRespawnDelayStr.c_str());
     PSendSysMessage(LANG_NPCINFO_LOOT, cInfo->loot_id, cInfo->pickpocket_loot_id, cInfo->skinning_loot_id);
     PSendSysMessage(LANG_NPCINFO_ARMOR, target->GetArmor());
@@ -2287,7 +2287,7 @@ bool ChatHandler::HandleLevelUpCommand(char* args)
 
     if (Creature* pCreature = GetSelectedCreature())
     {
-        int32 newlevel = pCreature->getLevel() + addlevel;
+        int32 newlevel = pCreature->GetLevel() + addlevel;
 
         if (newlevel < 1)
             newlevel = 1;
@@ -2310,7 +2310,7 @@ bool ChatHandler::HandleLevelUpCommand(char* args)
         if (!ExtractPlayerTarget(&nameStr, &target, &target_guid, &target_name))
             return false;
 
-        int32 oldlevel = target ? target->getLevel() : Player::GetLevelFromDB(target_guid);
+        int32 oldlevel = target ? target->GetLevel() : Player::GetLevelFromDB(target_guid);
         int32 newlevel = oldlevel + addlevel;
 
         if (newlevel < 1)
@@ -2502,10 +2502,10 @@ bool ChatHandler::HandleResetHonorCommand(char* args)
 
 static bool HandleResetStatsOrLevelHelper(Player* player)
 {
-    ChrClassesEntry const* cEntry = sChrClassesStore.LookupEntry(player->getClass());
+    ChrClassesEntry const* cEntry = sChrClassesStore.LookupEntry(player->GetClass());
     if (!cEntry)
     {
-        sLog.outError("Class %u not found in DBC (Wrong DBC files?)", player->getClass());
+        sLog.outError("Class %u not found in DBC (Wrong DBC files?)", player->GetClass());
         return false;
     }
 
@@ -2518,7 +2518,7 @@ static bool HandleResetStatsOrLevelHelper(Player* player)
     player->SetFloatValue(UNIT_FIELD_BOUNDINGRADIUS, DEFAULT_WORLD_OBJECT_SIZE);
     player->SetFloatValue(UNIT_FIELD_COMBATREACH, 1.5f);
 
-    player->SetFactionForRace(player->getRace());
+    player->SetFactionForRace(player->GetRace());
 
     player->SetByteValue(UNIT_FIELD_BYTES_0, 3, powertype);
 
@@ -3003,7 +3003,7 @@ bool ChatHandler::HandleBanAllIPCommand(char* args)
     if (!ipStr)
         return false;
 
-    char* reason = ExtractQuotedOrLiteralArg(&args);
+    char const* reason = ExtractQuotedOrLiteralArg(&args);
     if (!reason)
         reason = "<no reason given>";
 
@@ -3528,7 +3528,7 @@ bool ChatHandler::HandleRespawnCommand(char* /*args*/)
             return false;
         }
 
-        if (target->isDead())
+        if (target->IsDead())
             ((Creature*)target)->Respawn();
         return true;
     }
@@ -3685,7 +3685,7 @@ bool ChatHandler::HandleCastTargetCommand(char* args)
         return false;
     }
 
-    if (!caster->getVictim())
+    if (!caster->GetVictim())
     {
         SendSysMessage(LANG_SELECTED_TARGET_NOT_HAVE_VICTIM);
         SetSentErrorMessage(true);
@@ -3703,7 +3703,7 @@ bool ChatHandler::HandleCastTargetCommand(char* args)
 
     caster->SetFacingToObject(m_session->GetPlayer());
 
-    caster->CastSpell(caster->getVictim(), spell, triggered);
+    caster->CastSpell(caster->GetVictim(), spell, triggered);
 
     return true;
 }
@@ -4482,7 +4482,7 @@ bool ChatHandler::HandleStartCommand(char* /*args*/)
         return false;
     }
 
-    if (chr->isInCombat())
+    if (chr->IsInCombat())
     {
         SendSysMessage(LANG_YOU_IN_COMBAT);
         SetSentErrorMessage(true);
@@ -4501,13 +4501,13 @@ bool ChatHandler::HandleUnstuckCommand(char* /*args*/)
     if (!pPlayer)
         return false;
 
-    if (pPlayer->isInCombat() || pPlayer->InBattleGround() || pPlayer->IsTaxiFlying() || pPlayer->HasSpellCooldown(20939) || (pPlayer->getDeathState() == CORPSE) || (pPlayer->getLevel() < 10))
+    if (pPlayer->IsInCombat() || pPlayer->InBattleGround() || pPlayer->IsTaxiFlying() || pPlayer->HasSpellCooldown(20939) || (pPlayer->GetDeathState() == CORPSE) || (pPlayer->GetLevel() < 10))
     {
         SendSysMessage(LANG_UNSTUCK_UNAVAILABLE);
         return false;
     }
 
-    if (pPlayer->isAlive())
+    if (pPlayer->IsAlive())
     {
         pPlayer->CastSpell(pPlayer, 20939, false);
         SendSysMessage(LANG_UNSTUCK_ALIVE);
@@ -5156,7 +5156,7 @@ bool ChatHandler::HandleRecallCommand(char* args)
 bool ChatHandler::HandleReplenishCommand(char* args)
 {
     Unit* pUnit = GetSelectedUnit();
-    if (!pUnit || !pUnit->isAlive())
+    if (!pUnit || !pUnit->IsAlive())
     {
         SendSysMessage(LANG_SELECT_CHAR_OR_CREATURE);
         SetSentErrorMessage(true);
@@ -5165,7 +5165,7 @@ bool ChatHandler::HandleReplenishCommand(char* args)
 
     pUnit->SetHealth(pUnit->GetMaxHealth());
 
-    if (pUnit->getPowerType() == POWER_MANA)
+    if (pUnit->GetPowerType() == POWER_MANA)
         pUnit->SetPower(POWER_MANA, pUnit->GetMaxPower(POWER_MANA));
 
     return true;
@@ -5186,7 +5186,7 @@ bool ChatHandler::HandleModifyFactionCommand(char* args)
     {
         if (chr)
         {
-            uint32 factionid = chr->getFaction();
+            uint32 factionid = chr->GetFactionTemplateId();
             uint32 flag = chr->GetUInt32Value(UNIT_FIELD_FLAGS);
             uint32 npcflag = chr->GetUInt32Value(UNIT_NPC_FLAGS);
             uint32 dyflag = chr->GetUInt32Value(UNIT_DYNAMIC_FLAGS);
@@ -5227,7 +5227,7 @@ bool ChatHandler::HandleModifyFactionCommand(char* args)
 
     PSendSysMessage(LANG_YOU_CHANGE_FACTION, chr->GetGUIDLow(), factionid, flag, npcflag, dyflag);
 
-    chr->setFaction(factionid);
+    chr->SetFactionTemplateId(factionid);
     chr->SetUInt32Value(UNIT_FIELD_FLAGS, flag);
     chr->SetUInt32Value(UNIT_NPC_FLAGS, npcflag);
     chr->SetUInt32Value(UNIT_DYNAMIC_FLAGS, dyflag);
@@ -5467,7 +5467,7 @@ bool ChatHandler::HandleModifyGenderCommand(char* args)
         return false;
     }
 
-    PlayerInfo const* info = sObjectMgr.GetPlayerInfo(player->getRace(), player->getClass());
+    PlayerInfo const* info = sObjectMgr.GetPlayerInfo(player->GetRace(), player->GetClass());
     if (!info)
         return false;
 
@@ -5478,14 +5478,14 @@ bool ChatHandler::HandleModifyGenderCommand(char* args)
 
     if (!strncmp(gender_str, "male", gender_len))            // MALE
     {
-        if (player->getGender() == GENDER_MALE)
+        if (player->GetGender() == GENDER_MALE)
             return true;
 
         gender = GENDER_MALE;
     }
     else if (!strncmp(gender_str, "female", gender_len))    // FEMALE
     {
-        if (player->getGender() == GENDER_FEMALE)
+        if (player->GetGender() == GENDER_FEMALE)
             return true;
 
         gender = GENDER_FEMALE;
@@ -7541,7 +7541,7 @@ bool ChatHandler::HandleNpcDelVendorItemCommand(char* args)
         return false;
 
     Creature* vendor = GetSelectedCreature();
-    if (!vendor || !vendor->isVendor())
+    if (!vendor || !vendor->IsVendor())
     {
         SendSysMessage(LANG_COMMAND_VENDORSELECTION);
         SetSentErrorMessage(true);
@@ -7726,7 +7726,7 @@ bool ChatHandler::HandleNpcMoveCommand(char* args)
     {
         pCreature->SetHomePosition(x, y, z, o);
 
-        if (pCreature->isAlive()) // Dead creature will reset movement generator at respawn
+        if (pCreature->IsAlive()) // Dead creature will reset movement generator at respawn
         {
             pCreature->SetDeathState(JUST_DIED);
             pCreature->Respawn();
@@ -7762,7 +7762,7 @@ bool ChatHandler::HandleNpcFactionIdCommand(char* args)
         return false;
     }
 
-    pCreature->setFaction(factionId);
+    pCreature->SetFactionTemplateId(factionId);
 
     // faction is set in creature_template - not inside creature
 
@@ -8532,7 +8532,7 @@ bool ChatHandler::HandleWpModifyCommand(char* args)
         {
             wpOwner->SetDefaultMovementType(RANDOM_MOTION_TYPE);
             wpOwner->GetMotionMaster()->Initialize();
-            if (wpOwner->isAlive())                         // Dead creature will reset movement generator at respawn
+            if (wpOwner->IsAlive())                         // Dead creature will reset movement generator at respawn
             {
                 wpOwner->SetDeathState(JUST_DIED);
                 wpOwner->Respawn();
@@ -9428,13 +9428,13 @@ bool ChatHandler::HandleCombatStopCommand(char* args)
         return false;
 
     target->CombatStop();
-    target->getHostileRefManager().deleteReferences();
+    target->GetHostileRefManager().deleteReferences();
     return true;
 }
 
 void ChatHandler::HandleLearnSkillRecipesHelper(Player* player, uint32 skill_id)
 {
-    uint32 classmask = player->getClassMask();
+    uint32 classmask = player->GetClassMask();
 
     for (uint32 j = 0; j < sObjectMgr.GetMaxSkillLineAbilityId(); ++j)
     {
@@ -10254,7 +10254,6 @@ bool ChatHandler::HandleBGStatusCommand(char* args)
             }
 
             std::string statusName;
-            bool bFull = it->second->HasFreeSlots();
             BattleGroundStatus status = it->second->GetStatus();
             switch (status)
             {
@@ -10454,13 +10453,13 @@ bool ChatHandler::HandleUnitStatCommand(char* args)
         return false;
     uint32 unitStat = 0x0;
     for (int i = 1; i < UNIT_STAT_IGNORE_PATHFINDING; i *= 2)
-        if (pTarget->hasUnitState(i))
+        if (pTarget->HasUnitState(i))
             unitStat |= i;
     PSendSysMessage("UnitState = 0x%x (%u)", unitStat, unitStat);
     if (ExtractUInt32(&args, unitStat))
     {
-        pTarget->clearUnitState(UNIT_STAT_ALL_STATE);
-        pTarget->addUnitState(unitStat);
+        pTarget->ClearUnitState(UNIT_STAT_ALL_STATE);
+        pTarget->AddUnitState(unitStat);
         PSendSysMessage("UnitState changed to 0x%x (%u)", unitStat, unitStat);
     }
     return true;
@@ -10918,7 +10917,7 @@ bool ChatHandler::HandleFlyCommand(char* args)
     else
     {
         target->SetFlying(false);
-        target->SetObjectScale(target->getNativeScale());
+        target->SetObjectScale(target->GetNativeScale());
         target->UpdateSpeed(MOVE_SWIM, false, 1.0F);
         target->UpdateSpeed(MOVE_RUN, false, 1.0F);
         target->UpdateSpeed(MOVE_WALK, false, 1.0F);
@@ -11292,7 +11291,7 @@ bool ChatHandler::HandleCopyCommand(char* args)
             return false;
         }
 
-        uint8 curr_race = target->getRace();
+        uint8 curr_race = target->GetRace();
         std::string plName = args;
         CharacterDatabase.escape_string(plName);
 
@@ -11310,7 +11309,7 @@ bool ChatHandler::HandleCopyCommand(char* args)
             return false;
         }
 
-        if (target->isInCombat() || target->InBattleGround() || target->HasSpellCooldown(20939) || (target->getDeathState() == CORPSE) || target->IsBeingTeleported())
+        if (target->IsInCombat() || target->InBattleGround() || target->HasSpellCooldown(20939) || (target->GetDeathState() == CORPSE) || target->IsBeingTeleported())
         {
             PSendSysMessage("You can not change your appearance yet.");
             SetSentErrorMessage(true);

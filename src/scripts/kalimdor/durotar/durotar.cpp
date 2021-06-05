@@ -28,15 +28,15 @@ EndScriptData */
 
 enum LazyPeon
 {
-    QUEST_LAZY_PEONS                              = 5441,
-    GO_LUMBERPILE                                 = 175784,        //300046,
-    SPELL_BUFF_SLEEP                              = 17743,
-    SPELL_AWAKEN_PEON                             = 19938,
-    SAY_SPELL_HIT                                 = -1000600,
-    SAY_SPELL_HIT2                                = -1000601, //Sleepy so sleepy
-    LAZY_PEON_ENTRY                               = 10556,
-    EMOTE_WORKING                                 = 234,
-    WORKING_DURATION                              = 120000
+    QUEST_LAZY_PEONS = 5441,
+    GO_LUMBERPILE = 175784,        //300046,
+    SPELL_BUFF_SLEEP = 17743,
+    SPELL_AWAKEN_PEON = 19938,
+    SAY_SPELL_HIT = -1000600,
+    SAY_SPELL_HIT2 = -1000601, //Sleepy so sleepy
+    LAZY_PEON_ENTRY = 10556,
+    EMOTE_WORKING = 234,
+    WORKING_DURATION = 120000
 };
 
 enum States
@@ -53,28 +53,28 @@ struct LazyPeonAI : public ScriptedAI
 {
     LazyPeonAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
-        timer_before_sleep   = 0;
+        timer_before_sleep = 0;
         timer_before_working = 3000;
-        state                = STATE_SLEEPING;
+        state = STATE_SLEEPING;
         timer_before_moving_to_lumberpile = 2000;
         playerGuid.Clear();
         Reset();
     }
 
-    uint32     timer_before_sleep;
-    uint32     timer_before_working;
-    uint32     timer_before_moving_to_lumberpile;
-    uint8      state;
+    uint32 timer_before_sleep;
+    uint32 timer_before_working;
+    uint32 timer_before_moving_to_lumberpile;
+    uint8 state;
     ObjectGuid playerGuid;
 
-    void DoAction(const uint32 state)
+    void DoAction(const uint32 state) override
     {
         this->state = state;
     }
 
-    void Reset() {}
+    void Reset() override {}
 
-    void SpellHit(Unit* caster, SpellEntry const* spell)
+    void SpellHit(Unit* caster, SpellEntry const* spell) override
     {
         if (spell->Id == SPELL_AWAKEN_PEON && m_creature->GetEntry() == LAZY_PEON_ENTRY && m_creature->HasAura(SPELL_BUFF_SLEEP))
         {
@@ -86,7 +86,7 @@ struct LazyPeonAI : public ScriptedAI
         }
     }
 
-    void UpdateAI(const uint32 diff)
+    void UpdateAI(const uint32 diff) override
     {
         switch (state)
         {

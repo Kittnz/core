@@ -35,7 +35,7 @@ class FleeingMovementGenerator : public MovementGeneratorMedium< T, FleeingMovem
         bool Update(T &, const uint32 &);
 
         void unitSpeedChanged() override { _forceUpdate = true; }
-        MovementGeneratorType GetMovementGeneratorType() const { return FLEEING_MOTION_TYPE; }
+        MovementGeneratorType GetMovementGeneratorType() const override { return FLEEING_MOTION_TYPE; }
 
     protected:
         bool _forceWalking;
@@ -56,7 +56,7 @@ class TimedFleeingMovementGenerator : public FleeingMovementGenerator<Creature>
             FleeingMovementGenerator<Creature>(fright),
             i_totalFleeTime(time) {}
 
-        MovementGeneratorType GetMovementGeneratorType() const { return TIMED_FLEEING_MOTION_TYPE; }
+        MovementGeneratorType GetMovementGeneratorType() const override { return TIMED_FLEEING_MOTION_TYPE; }
         bool Update(Unit &, const uint32 &);
         void Initialize(Unit &);
         void Finalize(Unit &);

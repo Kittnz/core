@@ -58,7 +58,7 @@ void WorldSession::HandleRepopRequestOpcode(WorldPacket & /*recv_data*/)
 
     auto player = GetPlayer();
 
-    if (player->isAlive() || player->HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_GHOST))
+    if (player->IsAlive() || player->HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_GHOST))
         return;
 
     // the world update order is sessions, players, creatures
@@ -66,7 +66,7 @@ void WorldSession::HandleRepopRequestOpcode(WorldPacket & /*recv_data*/)
     // creatures can kill players
     // so if the server is lagging enough the player can
     // release spirit after he's killed but before he is updated
-    if (player->getDeathState() == JUST_DIED)
+    if (player->GetDeathState() == JUST_DIED)
     {
         DEBUG_LOG("HandleRepopRequestOpcode: got request after player %s(%d) was killed and before he was updated", player->GetName(), player->GetGUIDLow());
         player->KillPlayer();
@@ -127,7 +127,7 @@ public:
                 continue;
 
             // check if target's level is in level range
-            uint32 lvl = pl->getLevel();
+            uint32 lvl = pl->GetLevel();
             if (lvl < level_min || lvl > level_max)
                 continue;
 
@@ -136,12 +136,12 @@ public:
                 continue;
 
             // check if class matches classmask
-            uint32 class_ = pl->getClass();
+            uint32 class_ = pl->GetClass();
             if (!(classmask & (1 << class_)))
                 continue;
 
             // check if race matches racemask
-            uint32 race = pl->getRace();
+            uint32 race = pl->GetRace();
             if (!(racemask & (1 << race)))
                 continue;
 
@@ -338,7 +338,7 @@ void WorldSession::HandleLogoutRequestOpcode(WorldPacket & /*recv_data*/)
 
     uint8 reason = 0;
 
-    if (GetPlayer()->isInCombat())
+    if (GetPlayer()->IsInCombat())
         reason = 1;
     else if (GetPlayer()->m_movementInfo.HasMovementFlag(MovementFlags(MOVEFLAG_JUMPING | MOVEFLAG_FALLINGFAR)))
         reason = 3;                                         // is jumping or falling
@@ -371,7 +371,7 @@ void WorldSession::HandleLogoutRequestOpcode(WorldPacket & /*recv_data*/)
     if (GetPlayer()->CanFreeMove())
     {
         float height = GetPlayer()->GetMap()->GetHeight(GetPlayer()->GetPositionX(), GetPlayer()->GetPositionY(), GetPlayer()->GetPositionZ());
-        if ((GetPlayer()->GetPositionZ() < height + 0.1f) && !(GetPlayer()->IsInWater()) && GetPlayer()->getStandState() == UNIT_STAND_STATE_STAND)
+        if ((GetPlayer()->GetPositionZ() < height + 0.1f) && !(GetPlayer()->IsInWater()) && GetPlayer()->GetStandState() == UNIT_STAND_STATE_STAND)
             GetPlayer()->SetStandState(UNIT_STAND_STATE_SIT);
 
         GetPlayer()->SetRooted(true);
@@ -451,7 +451,7 @@ void WorldSession::HandleZoneUpdateOpcode(WorldPacket & recv_data)
     if (_clientOS == CLIENT_OS_MAC && GetPlayer()->m_movementInfo.HasMovementFlag(MOVEFLAG_ONTRANSPORT))
     {
         WorldPacket data(SMSG_STANDSTATE_UPDATE, 1);
-        data << GetPlayer()->getStandState();
+        data << GetPlayer()->GetStandState();
         GetPlayer()->GetSession()->SendPacket(&data);
     }
 }
@@ -469,7 +469,7 @@ void WorldSession::HandleSetTargetOpcode(WorldPacket & recv_data)
     if (!unit)
         return;
 
-    if (FactionTemplateEntry const* factionTemplateEntry = sObjectMgr.GetFactionTemplateEntry(unit->getFaction()))
+    if (FactionTemplateEntry const* factionTemplateEntry = sObjectMgr.GetFactionTemplateEntry(unit->GetFactionTemplateId()))
         _player->GetReputationMgr().SetVisible(factionTemplateEntry);
 }
 
@@ -488,12 +488,12 @@ void WorldSession::HandleSetSelectionOpcode(WorldPacket & recv_data)
     Unit* unit = ObjectAccessor::GetUnit(*_player, guid);   // can select group members at diff maps
 
     if (unit)
-        if (FactionTemplateEntry const* factionTemplateEntry = sObjectMgr.GetFactionTemplateEntry(unit->getFaction()))
+        if (FactionTemplateEntry const* factionTemplateEntry = sObjectMgr.GetFactionTemplateEntry(unit->GetFactionTemplateId()))
             _player->GetReputationMgr().SetVisible(factionTemplateEntry);
 
     // Drop combo points only for rogues and druids
     // Warriors use combo points internally, do no reset for everyone
-    if ((_player->getClass() == CLASS_ROGUE || _player->getClass() == CLASS_DRUID) && unit && guid != _player->GetComboTargetGuid())
+    if ((_player->GetClass() == CLASS_ROGUE || _player->GetClass() == CLASS_DRUID) && unit && guid != _player->GetComboTargetGuid())
         _player->ClearComboPoints();
 
     // Update autoshot if need
@@ -570,7 +570,6 @@ void WorldSession::HandleAddFriendOpcode(WorldPacket & recv_data)
     FriendsResult friendResult = FRIEND_NOT_FOUND;
     if (friendGuid)
     {
-        uint32 otherWorldMask = sObjectMgr.GetPlayerWorldMaskByGUID(friendLowGuid);
         if (friendGuid == GetMasterPlayer()->GetObjectGuid())
             friendResult = FRIEND_SELF;
         else if (GetMasterPlayer()->GetTeam() != team && !sWorld.getConfig(CONFIG_BOOL_ALLOW_TWO_SIDE_ADD_FRIEND) && GetSecurity() < SEC_GAMEMASTER)
@@ -701,7 +700,7 @@ void WorldSession::HandleReclaimCorpseOpcode(WorldPacket &recv_data)
     ObjectGuid guid;
     recv_data >> guid;
 
-    if (GetPlayer()->isAlive())
+    if (GetPlayer()->IsAlive())
         return;
 
     // body not released yet
@@ -746,7 +745,7 @@ void WorldSession::HandleResurrectResponseOpcode(WorldPacket & recv_data)
         return;
     }
 
-    if (GetPlayer()->isAlive())
+    if (GetPlayer()->IsAlive())
         return;
 
     if (status == 0)
@@ -798,7 +797,7 @@ void WorldSession::HandleAreaTriggerOpcode(WorldPacket & recv_data)
         return;
 
     uint32 quest_id = sObjectMgr.GetQuestForAreaTrigger(Trigger_ID);
-    if (quest_id && pl->isAlive() && pl->IsActiveQuest(quest_id))
+    if (quest_id && pl->IsAlive() && pl->IsActiveQuest(quest_id))
     {
         Quest const* pQuest = sObjectMgr.GetQuestTemplate(quest_id);
         if (pQuest)
@@ -885,7 +884,7 @@ void WorldSession::HandleAreaTriggerOpcode(WorldPacket & recv_data)
         }
 
         // ghost resurrected at enter attempt to dungeon with corpse (including fail enter cases)
-        if (!pl->isAlive() && targetMapEntry->IsDungeon())
+        if (!pl->IsAlive() && targetMapEntry->IsDungeon())
         {
             int32 corpseMapId = 0;
             if (Corpse *corpse = pl->GetCorpse())
@@ -934,7 +933,7 @@ void WorldSession::HandleAreaTriggerOpcode(WorldPacket & recv_data)
         }
 
         uint32 missingLevel = 0;
-        if (GetPlayer()->getLevel() < at->requiredLevel && !sWorld.getConfig(CONFIG_BOOL_INSTANCE_IGNORE_LEVEL))
+        if (GetPlayer()->GetLevel() < at->requiredLevel && !sWorld.getConfig(CONFIG_BOOL_INSTANCE_IGNORE_LEVEL))
             missingLevel = at->requiredLevel;
 
         // must have one or the other, report the first one that's missing

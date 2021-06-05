@@ -3,11 +3,11 @@
 
 enum GardenObjects
 {
-    LIFESPAN_PLANTER       = 60 * MINUTE * IN_MILLISECONDS, 
-    LIFESPAN_GROWING       = 10 * MINUTE * IN_MILLISECONDS, 
-    LIFESPAN_GROWING_TICK  =  9 * MINUTE * IN_MILLISECONDS, 
-    LIFESPAN_BUTTON        =  5 * MINUTE * IN_MILLISECONDS, 
-    LIFESPAN_SPLASH        =  2,
+    LIFESPAN_PLANTER = 60 * MINUTE * IN_MILLISECONDS, 
+    LIFESPAN_GROWING = 10 * MINUTE * IN_MILLISECONDS, 
+    LIFESPAN_GROWING_TICK =  9 * MINUTE * IN_MILLISECONDS, 
+    LIFESPAN_BUTTON =  5 * MINUTE * IN_MILLISECONDS, 
+    LIFESPAN_SPLASH =  2,
 
     PUMPKIN_SEEDS = 51706,
     BERRY_SEEDS = 51707,
@@ -79,7 +79,7 @@ bool ItemUseSpell_item_wooden_planter(Player* pPlayer, Item* pItem, const SpellC
         return false;
     }
 
-    if (pPlayer->isInCombat() || pPlayer->IsBeingTeleported() || (pPlayer->getDeathState() == CORPSE) || pPlayer->IsMoving())
+    if (pPlayer->IsInCombat() || pPlayer->IsBeingTeleported() || (pPlayer->GetDeathState() == CORPSE) || pPlayer->IsMoving())
     {
         pPlayer->AddItem(PLANTER_ITEM_ENTRY);
         pPlayer->GetSession()->SendNotification("Leave battle or stop moving!");
@@ -123,28 +123,37 @@ bool GOSelect_go_simple_wooden_planter(Player* pPlayer, GameObject* pGo, uint32 
     float x, y, z;
     pGo->GetSafePosition(x, y, z);
 
-    uint32 static_go { 0 };
-    uint32 currency  { 0 };
+    uint32 static_go{0};
+    uint32 currency{0};
 
     switch (action)
     {
         case GOSSIP_ACTION_INFO_DEF + 1:
+        {
             currency = PUMPKIN_SEEDS;
             static_go = PUMPKIN_SPROUTLING;
             break;
+        }
         case GOSSIP_ACTION_INFO_DEF + 2:
+        {
             currency = BERRY_SEEDS;
             static_go = BERRY_SPROUTLING;
             break;
+        }
         case GOSSIP_ACTION_INFO_DEF + 3:
+        {
             currency = WATERMELON_SEEDS;
             static_go = WATERMELON_SPROUTLING;
             break;
+        }
         case GOSSIP_ACTION_INFO_DEF + 4:
+        {
             currency = MUSHROOM_SEEDS;
             static_go = MUSHROOM_SPROUTLING;
             break;
-        default: break;
+        }
+        default:
+            break;
     }
 
     pPlayer->RemoveItemCurrency(currency, 1);
@@ -180,23 +189,44 @@ struct go_farm_vegetable_growing_stage : public GameObjectAI
 
                 switch (me->GetEntry())
                 {
-                case PUMPKIN_SPROUTLING:    active_go = PUMPKIN_SPROUTLING_ACTIVE; break;
-                case PUMPKIN_SMALL:         active_go = PUMPKIN_SMALL_ACTIVE; break;
-                case PUMPKIN_MEDIUM:        active_go = PUMPKIN_MEDIUM_ACTIVE; break;
-
-                case BERRY_SPROUTLING:      active_go = BERRY_SPROUTLING_ACTIVE; break;
-                case BERRY_SMALL:           active_go = BERRY_SMALL_ACTIVE; break;
-                case BERRY_MEDIUM:          active_go = BERRY_MEDIUM_ACTIVE; break;
-
-                case WATERMELON_SPROUTLING: active_go = WATERMELON_SPROUTLING_ACTIVE; break;
-                case WATERMELON_SMALL:      active_go = WATERMELON_SMALL_ACTIVE; break;
-                case WATERMELON_MEDIUM:     active_go = WATERMELON_MEDIUM_ACTIVE; break;
-
-                case MUSHROOM_SPROUTLING: active_go = MUSHROOM_SPROUTLING_ACTIVE; break;
-                case MUSHROOM_SMALL:      active_go = MUSHROOM_SMALL_ACTIVE; break;
-                case MUSHROOM_MEDIUM:     active_go = MUSHROOM_MEDIUM_ACTIVE; break;
-
-                default: break;
+                case PUMPKIN_SPROUTLING:
+                    active_go = PUMPKIN_SPROUTLING_ACTIVE;
+                    break;
+                case PUMPKIN_SMALL:
+                    active_go = PUMPKIN_SMALL_ACTIVE;
+                    break;
+                case PUMPKIN_MEDIUM:
+                    active_go = PUMPKIN_MEDIUM_ACTIVE;
+                    break;
+                case BERRY_SPROUTLING:
+                    active_go = BERRY_SPROUTLING_ACTIVE;
+                    break;
+                case BERRY_SMALL:
+                    active_go = BERRY_SMALL_ACTIVE;
+                    break;
+                case BERRY_MEDIUM:
+                    active_go = BERRY_MEDIUM_ACTIVE;
+                    break;
+                case WATERMELON_SPROUTLING:
+                    active_go = WATERMELON_SPROUTLING_ACTIVE;
+                    break;
+                case WATERMELON_SMALL:
+                    active_go = WATERMELON_SMALL_ACTIVE;
+                    break;
+                case WATERMELON_MEDIUM:
+                    active_go = WATERMELON_MEDIUM_ACTIVE;
+                    break;
+                case MUSHROOM_SPROUTLING:
+                    active_go = MUSHROOM_SPROUTLING_ACTIVE;
+                    break;
+                case MUSHROOM_SMALL:
+                    active_go = MUSHROOM_SMALL_ACTIVE;
+                    break;
+                case MUSHROOM_MEDIUM:
+                    active_go = MUSHROOM_MEDIUM_ACTIVE;
+                    break;
+                default:
+                    break;
                 }
 
                 me->SummonGameObject(active_go, x, y, z, 0.0F, 0.0f, 0.0f, 0.0f, 0.0f, LIFESPAN_BUTTON, true);
@@ -208,6 +238,7 @@ struct go_farm_vegetable_growing_stage : public GameObjectAI
             {
                 m_uiUpdateTimer -= uiDiff;
             }
+
             m_bUsed = true;
         }
         else
@@ -227,69 +258,90 @@ bool GOHello_go_farm_grow_activate(Player* pPlayer, GameObject* pGo)
     float x, y, z;
     pGo->GetSafePosition(x, y, z);
 
-    uint32 static_go { 0 };
-    uint32 currency  { 0 };
-    bool harvest     { 0 };
+    uint32 static_go{0};
+    uint32 currency{0};
+    bool harvest{0};
 
     switch (pGo->GetEntry())
     {
     case PUMPKIN_SPROUTLING_ACTIVE:
+    {
         currency = UNGORO_SOIL;
         static_go = PUMPKIN_SMALL;
         break;
+    }
     case PUMPKIN_SMALL_ACTIVE:
+    {
         currency = REFRESHING_SPRING_WATER;
         static_go = PUMPKIN_MEDIUM;
         break;
+    }
     case PUMPKIN_MEDIUM_ACTIVE:
+    {
         currency = REFRESHING_SPRING_WATER;
         static_go = PUMPKIN_HARVEST;
         harvest = true;
         break;
-
+    }
     case BERRY_SPROUTLING_ACTIVE:
+    {
         currency = UNGORO_SOIL;
         static_go = BERRY_SMALL;
         break;
+    }
     case BERRY_SMALL_ACTIVE:
+    {
         currency = REFRESHING_SPRING_WATER;
         static_go = BERRY_MEDIUM;
         break;
+    }
     case BERRY_MEDIUM_ACTIVE:
+    {
         currency = REFRESHING_SPRING_WATER;
         static_go = BERRY_HARVEST;
         harvest = true;
         break;
-
+    }
     case WATERMELON_SPROUTLING_ACTIVE:
+    {
         currency = UNGORO_SOIL;
         static_go = WATERMELON_SMALL;
         break;
+    }
     case WATERMELON_SMALL_ACTIVE:
+    {
         currency = REFRESHING_SPRING_WATER;
         static_go = WATERMELON_MEDIUM;
         break;
+    }
     case WATERMELON_MEDIUM_ACTIVE:
+    {
         currency = REFRESHING_SPRING_WATER;
         static_go = WATERMELON_HARVEST;
         harvest = true;
         break;
-
+    }
     case MUSHROOM_SPROUTLING_ACTIVE:
+    {
         currency = UNGORO_SOIL;
         static_go = MUSHROOM_SMALL;
         break;
+    }
     case MUSHROOM_SMALL_ACTIVE:
+    {
         currency = REFRESHING_SPRING_WATER;
         static_go = MUSHROOM_MEDIUM;
         break;
+    }
     case MUSHROOM_MEDIUM_ACTIVE:
+    {
         currency = REFRESHING_SPRING_WATER;
         static_go = MUSHROOM_HARVEST;
         harvest = true;
         break;
-
-    default: break;
+    }
+    default:
+        break;
     }
 
     if (!pPlayer->HasItemCount(currency, 1))

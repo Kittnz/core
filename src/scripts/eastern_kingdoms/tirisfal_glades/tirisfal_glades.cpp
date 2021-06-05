@@ -36,10 +36,10 @@ EndContentData */
 
 enum
 {
-    QUEST_ULAG      = 1819,
-    NPC_ULAG        = 6390,
-    GO_TRIGGER      = 104593,
-    GO_DOOR         = 176594
+    QUEST_ULAG = 1819,
+    NPC_ULAG = 6390,
+    GO_TRIGGER = 104593,
+    GO_DOOR = 176594
 };
 
 bool GOHello_go_mausoleum_door(Player* pPlayer, GameObject* pGo)
@@ -52,7 +52,7 @@ bool GOHello_go_mausoleum_door(Player* pPlayer, GameObject* pGo)
         pTrigger->SetGoState(GO_STATE_READY);
 
         Creature* ulag = pPlayer->FindNearestCreature(NPC_ULAG, 100.0f);
-        if (!ulag || ulag->isDead())
+        if (!ulag || ulag->IsDead())
             pPlayer->SummonCreature(NPC_ULAG, 2390.26f, 336.47f, 40.01f, 2.26f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 300000);       
         return false;
     }

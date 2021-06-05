@@ -16,7 +16,7 @@
 
 #include "scriptPCH.h"
 #include "custom.h"
-
+#include "../eastern_kingdoms/burning_steppes/blackwing_lair/blackwing_lair.h"
 
 /* ScriptData
 SDName: Boss_Razorgore
@@ -27,55 +27,47 @@ implemented that Razorgore is unattackable during phase 1 instead of the use of 
 SDCategory: Blackwing Lair
 EndScriptData */
 
-#include "scriptPCH.h"
-#include "../eastern_kingdoms/burning_steppes/blackwing_lair/blackwing_lair.h"
-
 // Razorgore Phase 2 Script
-#define SAY_EGGS_BROKEN1        -1469022
-#define SAY_EGGS_BROKEN2        -1469023
-#define SAY_EGGS_BROKEN3        -1469024
-#define SAY_DEATH               -1469025
-#define SAY_AGGRO  "Intruders have breached the Hatchery! Sound the alarm! Protect the eggs at all costs!"
-
+#define SAY_EGGS_BROKEN1 -1469022
+#define SAY_EGGS_BROKEN2 -1469023
+#define SAY_EGGS_BROKEN3 -1469024
+#define SAY_DEATH -1469025
+#define SAY_AGGRO "Intruders have breached the Hatchery! Sound the alarm! Protect the eggs at all costs!"
 // Razorgore The Untamed Spells
-#define SPELL_CLEAVE             22540
-#define SPELL_WARSTOMP           24375
-#define SPELL_FIREBALLVOLLEY     22425
-#define SPELL_CONFLAGRATION      23023
-#define SPELL_PHASE_1            22663
-
+#define SPELL_CLEAVE 22540
+#define SPELL_WARSTOMP 24375
+#define SPELL_FIREBALLVOLLEY 22425
+#define SPELL_CONFLAGRATION 23023
+#define SPELL_PHASE_1 22663
 // Grethok The Controller Spells
-#define SPELL_GREATER_POLYMORPH  22274
-#define SPELL_DOMINATE_MIND      14515
-#define SPELL_ARCANE_MISSILES    22273 // Spell Doesn't Work 100%, should be three charges instead of one 
-#define SPELL_SLOW               13747
-
+#define SPELL_GREATER_POLYMORPH 22274
+#define SPELL_DOMINATE_MIND 14515
+#define SPELL_ARCANE_MISSILES 22273 // Spell Doesn't Work 100%, should be three charges instead of one 
+#define SPELL_SLOW 13747
 // Creature Spawns
-#define BLACKWING_LEGGIONAIRE      12416
-#define DEATH_TALON_DRAGONSPAWN    12422
-#define BLACKWING_MAGE             12420
-
+#define BLACKWING_LEGGIONAIRE 12416
+#define DEATH_TALON_DRAGONSPAWN 12422
+#define BLACKWING_MAGE 12420
 // North
-#define SPAWN_X1              -7540.8f
-#define SPAWN_Y1              -1052.6f
-#define SPAWN_Z1              408.490f
+#define SPAWN_X1 -7540.8f
+#define SPAWN_Y1 -1052.6f
+#define SPAWN_Z1 408.490f
 // South
-#define SPAWN_X2              -7648.8f
-#define SPAWN_Y2              -1053.8f
-#define SPAWN_Z2              408.490f
+#define SPAWN_X2 -7648.8f
+#define SPAWN_Y2 -1053.8f
+#define SPAWN_Z2 408.490f
 // Eeast
-#define SPAWN_X3              -7614.1f
-#define SPAWN_Y3              -1103.6f
-#define SPAWN_Z3              408.490f
+#define SPAWN_X3 -7614.1f
+#define SPAWN_Y3 -1103.6f
+#define SPAWN_Z3 408.490f
 // West
-#define SPAWN_X4              -7578.1f
-#define SPAWN_Y4              -1003.5f
-#define SPAWN_Z4              408.490f
+#define SPAWN_X4 -7578.1f
+#define SPAWN_Y4 -1003.5f
+#define SPAWN_Z4 408.490f
 // Razorgore Spawn
-#define RAZOR_SPAWN_X         -7570.6f
-#define RAZOR_SPAWN_Y         -1090.0f
-#define RAZOR_SPAWN_Z         413.559f
-
+#define RAZOR_SPAWN_X -7570.6f
+#define RAZOR_SPAWN_Y -1090.0f
+#define RAZOR_SPAWN_Z 413.559f
 
 struct Zero_boss_razorgoreAI : public ScriptedAI
 {
@@ -91,7 +83,6 @@ struct Zero_boss_razorgoreAI : public ScriptedAI
     uint32 WarStomp_Timer;
     uint32 FireballVolley_Timer;
     uint32 Conflagration_Timer;
-
     uint32 SpawnedAdds;
     uint32 AddSpawnTimer;
     uint32 SpawnType1;
@@ -100,12 +91,11 @@ struct Zero_boss_razorgoreAI : public ScriptedAI
     uint32 SpawnType4;
     uint32 Despawn_Timer;
     uint32 Razor_Spawn_Delay;
-
     uint32 Razor_Phase_1;
     uint32 Razor_Phase_2;
     uint32 Razor_Remove_Auras;
 
-    void Reset()
+    void Reset() override
     {
         Cleave_Timer = 15000;                               //These times are probably wrong
         WarStomp_Timer = 35000;
@@ -120,11 +110,9 @@ struct Zero_boss_razorgoreAI : public ScriptedAI
         Razor_Remove_Auras = 300000;
 
         m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-
-
     }
 
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* pWho) override
     {
         m_creature->SetInCombatWithZone();
 
@@ -132,30 +120,24 @@ struct Zero_boss_razorgoreAI : public ScriptedAI
         DoPlaySoundToSet(m_creature, 8272);
     }
 
-    void JustDied(Unit* Killer)
+    void JustDied(Unit* Killer) override
     {
         DoScriptText(SAY_DEATH, m_creature);
         m_pInstance->SetData(TYPE_RAZORGORE, DONE);
     }
 
-    void UpdateAI(const uint32 diff)
+    void UpdateAI(const uint32 diff) override
     {
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         if (Razor_Phase_1 == 1)
         {
-
-
-
             m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-
             m_creature->GetMap()->CreatureRelocation(m_creature, -7595, -1053, 408, 0.0f);
             DoCastSpellIfCan(m_creature, 31366);
             Razor_Phase_1 = 0;
-
         }
-
 
         if (Razor_Remove_Auras < diff)
         {
@@ -171,7 +153,8 @@ struct Zero_boss_razorgoreAI : public ScriptedAI
 
             Razor_Remove_Auras = 1000000;
         }
-        else Razor_Remove_Auras -= diff;
+        else
+            Razor_Remove_Auras -= diff;
 
         if (Razor_Phase_2 < diff)
         {
@@ -179,60 +162,62 @@ struct Zero_boss_razorgoreAI : public ScriptedAI
             //Cleave_Timer
             if (Cleave_Timer < diff)
             {
-                DoCastSpellIfCan(m_creature->getVictim(), SPELL_CLEAVE);
+                DoCastSpellIfCan(m_creature->GetVictim(), SPELL_CLEAVE);
                 Cleave_Timer = urand(7000, 10000);
             }
-            else Cleave_Timer -= diff;
-
+            else
+                Cleave_Timer -= diff;
 
             //WarStomp_Timer
             if (WarStomp_Timer < diff)
             {
-                DoCastSpellIfCan(m_creature->getVictim(), SPELL_WARSTOMP);
+                DoCastSpellIfCan(m_creature->GetVictim(), SPELL_WARSTOMP);
                 WarStomp_Timer = urand(15000, 25000);
             }
-            else WarStomp_Timer -= diff;
-
+            else
+                WarStomp_Timer -= diff;
 
             //FireballVolley_Timer
             if (FireballVolley_Timer < diff)
             {
-                DoCastSpellIfCan(m_creature->getVictim(), SPELL_FIREBALLVOLLEY);
+                DoCastSpellIfCan(m_creature->GetVictim(), SPELL_FIREBALLVOLLEY);
                 FireballVolley_Timer = urand(12000, 15000);
             }
-            else FireballVolley_Timer -= diff;
+            else
+                FireballVolley_Timer -= diff;
 
             //Conflagration_Timer
             if (Conflagration_Timer < diff)
             {
-                DoCastSpellIfCan(m_creature->getVictim(), SPELL_CONFLAGRATION);
+                DoCastSpellIfCan(m_creature->GetVictim(), SPELL_CONFLAGRATION);
 
                 Conflagration_Timer = 12000;
             }
-            else Conflagration_Timer -= diff;
+            else
+                Conflagration_Timer -= diff;
 
             // Aura Check. If the gamer is affected by confliguration we attack a random gamer.
-            if (m_creature->getVictim()->HasAura(SPELL_CONFLAGRATION, EFFECT_INDEX_0))
+            if (m_creature->GetVictim()->HasAura(SPELL_CONFLAGRATION, EFFECT_INDEX_0))
             {
                 Unit* target = nullptr;
                 target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 1);
                 if (target)
                     m_creature->TauntApply(target);
             }
+
             Razor_Phase_2 = 0;
         }
-        else Razor_Phase_2 -= diff;
+        else
+            Razor_Phase_2 -= diff;
 
 
         if (SpawnedAdds < 42)
         {
-
             // spawn add
             if (AddSpawnTimer < diff)
             {
                 // Spawn North (40% Blackwing_Mage, 40% Blackwing_Leggionaire 20% Death_Talon_Dragonspawn)
                 switch (urand(0, 4))
-
                 {
                     case 0 :
                         SpawnType1 = BLACKWING_MAGE;
@@ -250,10 +235,8 @@ struct Zero_boss_razorgoreAI : public ScriptedAI
                         SpawnType1 = DEATH_TALON_DRAGONSPAWN;
                         break;
                 }
-
                 // Spawn South (40% Blackwing_Mage, 40% Blackwing_Leggionaire 20% Death_Talon_Dragonspawn)
                 switch (urand(0, 4))
-
                 {
                     case 0 :
                         SpawnType2 = BLACKWING_MAGE;
@@ -271,10 +254,8 @@ struct Zero_boss_razorgoreAI : public ScriptedAI
                         SpawnType2 = DEATH_TALON_DRAGONSPAWN;
                         break;
                 }
-
                 // Spawn East (40% Blackwing_Mage, 40% Blackwing_Leggionaire 20% Death_Talon_Dragonspawn)
                 switch (urand(0, 4))
-
                 {
                     case 0 :
                         SpawnType3 = BLACKWING_MAGE;
@@ -292,10 +273,8 @@ struct Zero_boss_razorgoreAI : public ScriptedAI
                         SpawnType3 = DEATH_TALON_DRAGONSPAWN;
                         break;
                 }
-
                 // Spawn West (40% Blackwing_Mage, 40% Blackwing_Leggionaire 20% Death_Talon_Dragonspawn)
                 switch (urand(0, 4))
-
                 {
                     case 0 :
                         SpawnType4 = BLACKWING_MAGE;
@@ -327,7 +306,7 @@ struct Zero_boss_razorgoreAI : public ScriptedAI
                 if (target && Spawned)
                 {
                     Spawned->AI()->AttackStart(target);
-                    Spawned->setFaction(103);
+                    Spawned->SetFactionTemplateId(103);
                 }
 
                 ++SpawnedAdds;
@@ -341,9 +320,8 @@ struct Zero_boss_razorgoreAI : public ScriptedAI
                 if (target && Spawned)
                 {
                     Spawned->AI()->AttackStart(target);
-                    Spawned->setFaction(103);
+                    Spawned->SetFactionTemplateId(103);
                 }
-
 
                 ++SpawnedAdds;
 
@@ -356,7 +334,7 @@ struct Zero_boss_razorgoreAI : public ScriptedAI
                 if (target && Spawned)
                 {
                     Spawned->AI()->AttackStart(target);
-                    Spawned->setFaction(103);
+                    Spawned->SetFactionTemplateId(103);
 
                 }
 
@@ -371,19 +349,21 @@ struct Zero_boss_razorgoreAI : public ScriptedAI
                 if (target && Spawned)
                 {
                     Spawned->AI()->AttackStart(target);
-                    Spawned->setFaction(103);
+                    Spawned->SetFactionTemplateId(103);
                 }
+
                 Despawn_Timer = Despawn_Timer - 15000;
                 AddSpawnTimer = 15000;
             }
-            else AddSpawnTimer -= diff;
+            else
+                AddSpawnTimer -= diff;
         }
+
         DoMeleeAttackIfReady();
     }
 };
 
 // Grethok The Controller Script
-
 struct Mob_Grethok_The_ControllerAI : public ScriptedAI
 {
     Mob_Grethok_The_ControllerAI(Creature* pCreature) : ScriptedAI(pCreature)
@@ -399,7 +379,7 @@ struct Mob_Grethok_The_ControllerAI : public ScriptedAI
     uint32 Slow_Timer;
     uint32 Razorgore_Spawn;
 
-    void Reset()
+    void Reset() override
     {
         Greater_Polymorph_Timer = 3000;
         Dominate_Mind_Timer = 1000;
@@ -408,15 +388,16 @@ struct Mob_Grethok_The_ControllerAI : public ScriptedAI
         Razorgore_Spawn = 1;
     }
 
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* pWho) override
     {
         m_creature->SetInCombatWithZone();
 
     }
-    void UpdateAI(const uint32 diff)
+
+    void UpdateAI(const uint32 diff) override
     {
 
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         // Greater Polymorph
@@ -455,6 +436,7 @@ struct Mob_Grethok_The_ControllerAI : public ScriptedAI
         DoMeleeAttackIfReady();
     }
 };
+
 CreatureAI* GetZeroAI_boss_razorgore(Creature* pCreature)
 {
     return new Zero_boss_razorgoreAI(pCreature);
@@ -464,10 +446,6 @@ CreatureAI* GetZeroAI_Mob_Grethok_The_Controller(Creature* pCreature)
 {
     return new Mob_Grethok_The_ControllerAI(pCreature);
 }
-
-
-
-
 
 void AddSC_zero_creatures()
 {

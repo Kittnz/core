@@ -37,13 +37,13 @@ EndContentData */
 
 enum
 {
-    SAY_MOR_CHALLENGE               = -1000499,
-    SAY_MOR_SCARED                  = -1000500,
+    SAY_MOR_CHALLENGE = -1000499,
+    SAY_MOR_SCARED = -1000500,
 
-    QUEST_CHALLENGE_MOROKK          = 1173,
+    QUEST_CHALLENGE_MOROKK = 1173,
 
-    FACTION_MOR_HOSTILE             = 168,
-    FACTION_MOR_RUNNING             = 35
+    FACTION_MOR_HOSTILE = 168,
+    FACTION_MOR_RUNNING = 35
 };
 
 struct npc_morokkAI : public npc_escortAI
@@ -56,9 +56,9 @@ struct npc_morokkAI : public npc_escortAI
 
     bool m_bIsSuccess;
 
-    void Reset() {}
+    void Reset() override {}
 
-    void WaypointReached(uint32 uiPointId)
+    void WaypointReached(uint32 uiPointId) override
     {
         switch (uiPointId)
         {
@@ -77,9 +77,9 @@ struct npc_morokkAI : public npc_escortAI
         }
     }
 
-    void AttackedBy(Unit* pAttacker)
+    void AttackedBy(Unit* pAttacker) override
     {
-        if (m_creature->getVictim())
+        if (m_creature->GetVictim())
             return;
 
         if (m_creature->IsFriendlyTo(pAttacker))
@@ -88,7 +88,7 @@ struct npc_morokkAI : public npc_escortAI
         AttackStart(pAttacker);
     }
 
-    void DamageTaken(Unit* pDoneBy, uint32 &uiDamage)
+    void DamageTaken(Unit* pDoneBy, uint32 &uiDamage) override
     {
         if (HasEscortState(STATE_ESCORT_ESCORTING))
         {
@@ -97,7 +97,7 @@ struct npc_morokkAI : public npc_escortAI
                 if (Player* pPlayer = GetPlayerForEscort())
                     pPlayer->GroupEventHappens(QUEST_CHALLENGE_MOROKK, m_creature);
 
-                m_creature->setFaction(FACTION_MOR_RUNNING);
+                m_creature->SetFactionTemplateId(FACTION_MOR_RUNNING);
 
                 m_bIsSuccess = true;
                 EnterEvadeMode();
@@ -107,9 +107,9 @@ struct npc_morokkAI : public npc_escortAI
         }
     }
 
-    void UpdateEscortAI(const uint32 uiDiff)
+    void UpdateEscortAI(const uint32 uiDiff) override
     {
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
         {
             if (HasEscortState(STATE_ESCORT_PAUSED))
             {
@@ -117,7 +117,7 @@ struct npc_morokkAI : public npc_escortAI
                 {
                     m_bIsSuccess = false;
                     DoScriptText(SAY_MOR_CHALLENGE, m_creature, pPlayer);
-                    m_creature->setFaction(FACTION_MOR_HOSTILE);
+                    m_creature->SetFactionTemplateId(FACTION_MOR_HOSTILE);
                     AttackStart(pPlayer);
                 }
 
@@ -281,7 +281,7 @@ struct npc_private_hendelAI : public ScriptedAI
         Reset();
     }
 
-    void Reset()
+    void Reset() override
     {
         // if Hendel returns spawn point in MDQP_FIGHT phase, players have failed a quest.
         if (m_mdQuestPhase == MDQP_FIGHT)
@@ -295,13 +295,13 @@ struct npc_private_hendelAI : public ScriptedAI
         // reset player guid
         m_playerGuid.Clear();
         // reset private hendel's faction
-        m_creature->setFaction(FACTION_THERAMORE); // theramore faction
+        m_creature->SetFactionTemplateId(FACTION_THERAMORE); // theramore faction
         // reset his guards faction
         for (ptrdiff_t i = 0; i < 2; ++i)
         {
-            if (m_guards[i] && m_guards[i]->isAlive())
+            if (m_guards[i] && m_guards[i]->IsAlive())
             {
-                m_guards[i]->setFaction(FACTION_THERAMORE); // theramore faction
+                m_guards[i]->SetFactionTemplateId(FACTION_THERAMORE); // theramore faction
             }
         }
         // reset phase flags
@@ -314,12 +314,12 @@ struct npc_private_hendelAI : public ScriptedAI
         // case: When NPC respawns after previous event and looses quest giver flag for some players, so they need to relog to talk to him again.
         m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
         // reset unattackable flag from previous event
-        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_ATTACKABLE_1 | UNIT_FLAG_IMMUNE_TO_NPC);
+        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_ATTACKABLE_1 | UNIT_FLAG_PASSIVE);
     }
 
-    void AttackedBy(Unit* pAttacker)
+    void AttackedBy(Unit* pAttacker) override
     {
-        if (m_creature->getVictim())
+        if (m_creature->GetVictim())
             return;
 
         if (m_creature->IsFriendlyTo(pAttacker))
@@ -375,7 +375,7 @@ struct npc_private_hendelAI : public ScriptedAI
                         m_allies[i]->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
 
                     // rare case: horde players attack NPC during event so make them unattackable for them
-                    m_allies[i]->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_ATTACKABLE_1 | UNIT_FLAG_IMMUNE_TO_NPC);
+                    m_allies[i]->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_ATTACKABLE_1 | UNIT_FLAG_PASSIVE);
                     // visual teleport spell
                     m_allies[i]->CastSpell(m_allies[i], TELEPORT_VISUAL, false);
                     // move allies to the destination points
@@ -399,7 +399,7 @@ struct npc_private_hendelAI : public ScriptedAI
             {
                 Creature* guard = m_guards[guardIndex];
                 // if guard is valid
-                if (guard && guard->isAlive())
+                if (guard && guard->IsAlive())
                 {
                     if (first)
                         DoScriptText(guardTexts[0], guard);
@@ -461,7 +461,7 @@ struct npc_private_hendelAI : public ScriptedAI
         }
     }
 
-    void JustRespawned()
+    void JustRespawned() override
     {
         ScriptedAI::JustRespawned(); // calls Reset()
 
@@ -471,7 +471,7 @@ struct npc_private_hendelAI : public ScriptedAI
         {
             if (m_guards[i])
             {
-                if (m_guards[i]->isAlive())
+                if (m_guards[i]->IsAlive())
                     continue;
                 else
                     static_cast<TemporarySummon*>(m_guards[i])->UnSummon();
@@ -483,7 +483,7 @@ struct npc_private_hendelAI : public ScriptedAI
         }
     }
 
-    void DamageTaken(Unit* pDoneBy, uint32 &uiDamage)
+    void DamageTaken(Unit* pDoneBy, uint32 &uiDamage) override
     {
         // This is required to handle other fight cases For example if NPC is getting attacked by opposite faction, hostile creatures, etc.
         if (m_mdQuestPhase == MDQP_NONE)
@@ -498,7 +498,7 @@ struct npc_private_hendelAI : public ScriptedAI
             DoScriptText(EMOTE_SURRENDER, m_creature);
 
             m_creature->RemoveAllAuras();
-            m_creature->setFaction(35);
+            m_creature->SetFactionTemplateId(35);
             m_creature->DeleteThreatList();
             m_creature->CombatStop();
 
@@ -512,7 +512,7 @@ struct npc_private_hendelAI : public ScriptedAI
         }
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
 #ifdef ELYSIUM_CORE_JUST_RESPAWNED
         if (m_justCreated)
@@ -736,7 +736,7 @@ bool QuestAccept_npc_private_hendel(Player* pPlayer, Creature* pCreature, const 
         if (privateHendelAI)
         {
             // set npc_private_hendel's faction to hostile
-            pCreature->setFaction(FACTION_HOSTILE);
+            pCreature->SetFactionTemplateId(FACTION_HOSTILE);
             // prevents random player pick up a quest during event
             pCreature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
             // save player guid for later use(trigger quest completed)
@@ -753,11 +753,11 @@ bool QuestAccept_npc_private_hendel(Player* pPlayer, Creature* pCreature, const 
                 if (guard)
                 {
                     // if guard is alive, set his faction to hostile and make them attack player
-                    if (guard->isAlive())
+                    if (guard->IsAlive())
                     {
-                        guard->setFaction(FACTION_HOSTILE);
+                        guard->SetFactionTemplateId(FACTION_HOSTILE);
                         // rare case: players from opposite faction and hostile creatures can be used to distract guards before event starts
-                        if (!guard->isInCombat())
+                        if (!guard->IsInCombat())
                             guard->AI()->AttackStart(pPlayer);
                     }
                 }
@@ -822,7 +822,7 @@ struct npc_archmage_tervoshAI : public ScriptedAI
     // returns the current phase in the event
     const uint32 getCurrentPhase() const { return m_eventPhase; }
 
-    void Reset()
+    void Reset() override
     {
         m_eventStarted = false;
         m_eventPhase = MDQP_ARRIVE;
@@ -830,7 +830,7 @@ struct npc_archmage_tervoshAI : public ScriptedAI
         m_despawnDelayTimer = TERVOSH_SPAWN_DURATION;
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (m_eventStarted)
         {
@@ -875,7 +875,7 @@ struct npc_archmage_tervoshAI : public ScriptedAI
                     // make guards face private hendel
                     for (auto const& g : guards)
                     {
-                        if (!g->isInCombat() && g->isAlive())
+                        if (!g->IsInCombat() && g->IsAlive())
                         {
                             g->StopMoving(); // Movement will be restored automatically in the core
                             g->SetFacingToObject(m_creature);
@@ -950,7 +950,7 @@ CreatureAI* GetAI_npc_archmage_tervosh(Creature* pCreature)
 
 bool AreaTrigger_at_sentry_point(Player* pPlayer, AreaTriggerEntry const* /*pAt*/)
 {
-    if (!pPlayer || !pPlayer->isAlive() || pPlayer->IsGameMaster() ||
+    if (!pPlayer || !pPlayer->IsAlive() || pPlayer->IsGameMaster() ||
         pPlayer->GetQuestStatus(QUEST_MISSING_DIPLO_PT14) == QUEST_STATUS_COMPLETE ||
         pPlayer->GetQuestStatus(QUEST_MISSING_DIPLO_PT14) == QUEST_STATUS_NONE)
         return false;
@@ -971,7 +971,7 @@ bool AreaTrigger_at_sentry_point(Player* pPlayer, AreaTriggerEntry const* /*pAt*
             return false;
 
         // rare case: players from the opposite faction can attack the NPC during event. Set him unattackable like on official.
-        tervosh->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_ATTACKABLE_1 | UNIT_FLAG_IMMUNE_TO_NPC);
+        tervosh->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_ATTACKABLE_1 | UNIT_FLAG_PASSIVE);
 
         if (npc_archmage_tervoshAI* tervoshAI = dynamic_cast<npc_archmage_tervoshAI*>(tervosh->AI()))
             tervoshAI->m_eventStarted = true;
@@ -994,7 +994,7 @@ bool AreaTrigger_at_sentry_point(Player* pPlayer, AreaTriggerEntry const* /*pAt*
             // something weird happened
             if (!tervosh)
                 return false;
-            tervosh->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_ATTACKABLE_1 | UNIT_FLAG_IMMUNE_TO_NPC);
+            tervosh->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_ATTACKABLE_1 | UNIT_FLAG_PASSIVE);
             tervosh->SetVisibility(VISIBILITY_OFF);
             // start the event.
             if (npc_archmage_tervoshAI* tervoshNewAI = dynamic_cast<npc_archmage_tervoshAI*>(tervosh->AI()))
@@ -1039,15 +1039,15 @@ struct npc_lady_jaina_proudmooreAI : public ScriptedAI
     uint32 m_uiSpellTimer;
     uint32 m_uiSpecialTimer;
 
-    void Reset()
+    void Reset() override
     {
         m_uiSpellTimer = 3000;
         m_uiSpecialTimer = 15000;
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim() || m_creature->IsNonMeleeSpellCasted())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim() || m_creature->IsNonMeleeSpellCasted())
             return;
 
         if (m_uiSpecialTimer < uiDiff)
@@ -1059,7 +1059,7 @@ struct npc_lady_jaina_proudmooreAI : public ScriptedAI
             }
             else
             {
-                if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_JAINA_TELEPORT) == CAST_OK)
+                if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_JAINA_TELEPORT) == CAST_OK)
                 { 
                     m_uiSpecialTimer = urand(10, 30)*IN_MILLISECONDS;
 
@@ -1067,9 +1067,9 @@ struct npc_lady_jaina_proudmooreAI : public ScriptedAI
                     {
                         // If we don't remove target from threat list after teleporting,
                         // Jaina will try to chase him and evade despite having other targets.
-                        Unit* pOldVictim = m_creature->getVictim();
+                        Unit* pOldVictim = m_creature->GetVictim();
                         m_creature->_removeAttacker(pOldVictim);
-                        m_creature->getThreatManager().modifyThreatPercent(pOldVictim, -101.0f);
+                        m_creature->GetThreatManager().modifyThreatPercent(pOldVictim, -101.0f);
                     }
                 }
             }
@@ -1084,14 +1084,14 @@ struct npc_lady_jaina_proudmooreAI : public ScriptedAI
                 case 0:
                 case 1:
                 {
-                    if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_JAINA_FIREBALL) == CAST_OK)
+                    if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_JAINA_FIREBALL) == CAST_OK)
                         m_uiSpellTimer = urand(3, 10)*IN_MILLISECONDS;
                     break;
                 }
                 case 2:
                 case 3:
                 {
-                    if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_JAINA_FIREBLAST) == CAST_OK)
+                    if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_JAINA_FIREBLAST) == CAST_OK)
                         m_uiSpellTimer = urand(3, 10)*IN_MILLISECONDS;
                     break;
                 }
@@ -1120,7 +1120,7 @@ CreatureAI* GetAI_npc_lady_jaina_proudmoore(Creature* pCreature)
 
 bool GossipHello_npc_lady_jaina_proudmoore(Player* pPlayer, Creature* pCreature)
 {
-    if (pCreature->isQuestGiver())
+    if (pCreature->IsQuestGiver())
         pPlayer->PrepareQuestMenu(pCreature->GetGUID());
 
     if (pPlayer->GetQuestStatus(QUEST_JAINAS_AUTOGRAPH) == QUEST_STATUS_INCOMPLETE)
@@ -1185,15 +1185,15 @@ bool GossipSelect_npc_cassa_crimsonwing(Player* pPlayer, Creature* pCreature, ui
 
 enum
 {
-    QUEST_STINKYS_ESCAPE_A   = 1222,
-    QUEST_STINKYS_ESCAPE_H   = 1270,
-    SAY_IGNATZ_START         = -1780190,
-    SAY_IGNATZ_1             = -1780191,
-    SAY_IGNATZ_2             = -1780192,
-    SAY_IGNATZ_3             = -1780193,
-    SAY_IGNATZ_4             = -1780194,
-    SAY_IGNATZ_END           = -1780195,
-    GOBJ_BOGBEAN_PLANT       = 20939
+    QUEST_STINKYS_ESCAPE_A = 1222,
+    QUEST_STINKYS_ESCAPE_H = 1270,
+    SAY_IGNATZ_START = -1780190,
+    SAY_IGNATZ_1 = -1780191,
+    SAY_IGNATZ_2 = -1780192,
+    SAY_IGNATZ_3 = -1780193,
+    SAY_IGNATZ_4 = -1780194,
+    SAY_IGNATZ_END = -1780195,
+    GOBJ_BOGBEAN_PLANT = 20939
 };
 
 struct npc_stinky_ignatzAI : public npc_escortAI
@@ -1205,9 +1205,9 @@ struct npc_stinky_ignatzAI : public npc_escortAI
         Reset();
     }
 
-    void Reset() {}
+    void Reset() override {}
 
-    void JustRespawned()
+    void JustRespawned() override
     {
         currWaypoint = 0;
         timer = 21000;
@@ -1217,7 +1217,7 @@ struct npc_stinky_ignatzAI : public npc_escortAI
     uint32 currWaypoint;
     uint32 timer;
 
-    void WaypointReached(uint32 uiPointId)
+    void WaypointReached(uint32 uiPointId) override
     {
         currWaypoint = uiPointId;
 
@@ -1251,9 +1251,9 @@ struct npc_stinky_ignatzAI : public npc_escortAI
                 break;
         }
     }
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
         {
             if (timer < 20000)
             {
@@ -1302,7 +1302,7 @@ bool QuestAccept_npc_stinky_ignatz(Player* pPlayer, Creature* pCreature, const Q
 {
     if (pQuest->GetQuestId() == QUEST_STINKYS_ESCAPE_A || pQuest->GetQuestId() == QUEST_STINKYS_ESCAPE_H)
     {
-        pCreature->setFaction(113);
+        pCreature->SetFactionTemplateId(113);
         pCreature->SetStandState(UNIT_STAND_STATE_STAND);
         if (npc_stinky_ignatzAI* pEscortAI = dynamic_cast<npc_stinky_ignatzAI*>(pCreature->AI()))
             pEscortAI->Start(false, pPlayer->GetGUID(), pQuest);
@@ -1398,7 +1398,7 @@ struct npc_tabethaAI : ScriptedAI
         if (manaSurges.empty()) return;
 
         for (auto itr = manaSurges.begin(); itr != manaSurges.end(); ++itr)
-            if ((*itr)->isAlive())
+            if ((*itr)->IsAlive())
                 (*itr)->ForcedDespawn();
     }
 
@@ -1521,7 +1521,7 @@ struct npc_emberstrifeAI : ScriptedAI
     void UpdateAI(const uint32 uiDiff) override
     {
         // Return since we have no target
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         if (!m_bWeakened && m_creature->GetHealthPercent() < 11)
@@ -1533,7 +1533,7 @@ struct npc_emberstrifeAI : ScriptedAI
         // Cleave
         if (m_uiCleaveTimer < uiDiff)
         {
-            if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_CLEAVE) == CAST_OK)
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_CLEAVE) == CAST_OK)
                 m_uiCleaveTimer = urand(6000, 8000);
         }
         else
@@ -1542,7 +1542,7 @@ struct npc_emberstrifeAI : ScriptedAI
         // Flame Breath
         if (m_uiFlameBreathTimer < uiDiff)
         {
-            if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_FLAME_BREATH) == CAST_OK)
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_FLAME_BREATH) == CAST_OK)
                 m_uiFlameBreathTimer = urand(8000, 12000);
         }
         else
@@ -1650,7 +1650,7 @@ struct npc_balos_jackenAI : public ScriptedAI
     void SetDefaults()
     {
         resetFactionTimer = 90000;
-        m_creature->setFaction(54);
+        m_creature->SetFactionTemplateId(54);
     }
 
     void Reset()
@@ -1665,7 +1665,7 @@ struct npc_balos_jackenAI : public ScriptedAI
 
     void UpdateAI(const uint32 diff)
     {
-        if (m_creature->getFaction() == 35) {
+        if (m_creature->GetFactionTemplateId() == 35) {
             resetFactionTimer -= diff;
             if (resetFactionTimer < diff) {
                 m_creature->DisappearAndDie();
@@ -1673,11 +1673,11 @@ struct npc_balos_jackenAI : public ScriptedAI
             }
         }
 
-        if (m_creature->GetHealthPercent() <= 20.0f && m_creature->getFaction() != 35) {
+        if (m_creature->GetHealthPercent() <= 20.0f && m_creature->GetFactionTemplateId() != 35) {
             m_creature->MonsterSay(SAY_EVADE_BALOS_JACKEN, LANG_COMMON);
-            m_creature->setFaction(35);
-            if (m_creature->getVictim())
-                m_creature->getVictim()->CombatStop(true);
+            m_creature->SetFactionTemplateId(35);
+            if (m_creature->GetVictim())
+                m_creature->GetVictim()->CombatStop(true);
             m_creature->CombatStop(true);
             m_creature->UpdateCombatState(false);
 
@@ -1686,7 +1686,7 @@ struct npc_balos_jackenAI : public ScriptedAI
             m_creature->GetMotionMaster()->MovePoint(0, fRetX, fRetY, fRetZ, MOVE_PATHFINDING, 0, o);
         }
 
-        if (m_creature->getFaction() == 54)
+        if (m_creature->GetFactionTemplateId() == 54)
             DoMeleeAttackIfReady();
     }
 

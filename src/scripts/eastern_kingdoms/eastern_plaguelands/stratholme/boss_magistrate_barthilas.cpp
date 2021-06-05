@@ -29,7 +29,7 @@ struct boss_magistrate_barthilasAI : public ScriptedAI
     uint32 m_mvt_timer;
     char m_mvt_id;
 
-    void Reset()
+    void Reset() override
     {
         DrainingBlow_Timer = 16000;
         CrowdPummel_Timer = 12000;
@@ -39,13 +39,13 @@ struct boss_magistrate_barthilasAI : public ScriptedAI
         m_mvt_timer = 0;
         m_mvt_id = 0;
 
-        if (m_creature->isAlive())
+        if (m_creature->IsAlive())
             m_creature->SetDisplayId(MODEL_NORMAL);
         else
             m_creature->SetDisplayId(MODEL_HUMAN);
     }
 
-    void ReceiveEmote(Player* pPlayer, uint32 emote)
+    void ReceiveEmote(Player* pPlayer, uint32 emote) override
     {
         if (emote == 1000 && m_mvt_id == 0)
         {
@@ -67,7 +67,7 @@ struct boss_magistrate_barthilasAI : public ScriptedAI
         }
     }
 
-    void MoveInLineOfSight(Unit *pWho)
+    void MoveInLineOfSight(Unit *pWho) override
     {
         if (!pWho)
             return;
@@ -84,12 +84,12 @@ struct boss_magistrate_barthilasAI : public ScriptedAI
         ScriptedAI::MoveInLineOfSight(pWho);
     }
 
-    void JustDied(Unit* Killer)
+    void JustDied(Unit* Killer) override
     {
         m_creature->SetDisplayId(MODEL_HUMAN);
     }
 
-    void UpdateAI(const uint32 diff)
+    void UpdateAI(const uint32 diff) override
     {
         if (m_mvt_id > 0)
         {
@@ -123,7 +123,7 @@ struct boss_magistrate_barthilasAI : public ScriptedAI
             else m_mvt_timer -= diff;
         }
 
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         if (FuriousAnger_Timer < diff)
@@ -140,7 +140,7 @@ struct boss_magistrate_barthilasAI : public ScriptedAI
         //DrainingBlow
         if (DrainingBlow_Timer < diff)
         {
-            DoCastSpellIfCan(m_creature->getVictim(), SPELL_DRAININGBLOW);
+            DoCastSpellIfCan(m_creature->GetVictim(), SPELL_DRAININGBLOW);
             DrainingBlow_Timer = 15000;
         }
         else DrainingBlow_Timer -= diff;
@@ -148,7 +148,7 @@ struct boss_magistrate_barthilasAI : public ScriptedAI
         //CrowdPummel
         if (CrowdPummel_Timer < diff)
         {
-            DoCastSpellIfCan(m_creature->getVictim(), SPELL_CROWDPUMMEL);
+            DoCastSpellIfCan(m_creature->GetVictim(), SPELL_CROWDPUMMEL);
             CrowdPummel_Timer = 15000;
         }
         else CrowdPummel_Timer -= diff;
@@ -156,7 +156,7 @@ struct boss_magistrate_barthilasAI : public ScriptedAI
         //MightyBlow
         if (MightyBlow_Timer < diff)
         {
-            DoCastSpellIfCan(m_creature->getVictim(), SPELL_MIGHTYBLOW);
+            DoCastSpellIfCan(m_creature->GetVictim(), SPELL_MIGHTYBLOW);
             MightyBlow_Timer = 20000;
         }
         else MightyBlow_Timer -= diff;

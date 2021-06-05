@@ -24,13 +24,12 @@
 
 #include "Object.h"
 #include "DBCEnums.h"
-#include "Unit.h"
 
 enum DynamicObjectType
 {
-    DYNAMIC_OBJECT_PORTAL           = 0x0,      // unused
-    DYNAMIC_OBJECT_AREA_SPELL       = 0x1,
-    DYNAMIC_OBJECT_FARSIGHT_FOCUS   = 0x2,
+    DYNAMIC_OBJECT_PORTAL = 0x0, // unused
+    DYNAMIC_OBJECT_AREA_SPELL = 0x1,
+    DYNAMIC_OBJECT_FARSIGHT_FOCUS = 0x2,
 };
 
 class SpellEntry;
@@ -41,8 +40,8 @@ class DynamicObject : public WorldObject
         typedef std::map<ObjectGuid, uint32> AffectedMap;
         explicit DynamicObject();
 
-        void AddToWorld();
-        void RemoveFromWorld();
+        void AddToWorld() override;
+        void RemoveFromWorld() override;
 
         bool Create(uint32 guidlow, WorldObject* caster, uint32 spellId, SpellEffectIndex effIndex, float x, float y, float z, int32 duration, float radius, DynamicObjectType type);
         void Update(uint32 update_diff, uint32 p_time) override;
@@ -57,21 +56,21 @@ class DynamicObject : public WorldObject
         DynamicObjectType GetType() const { return (DynamicObjectType)GetByteValue(DYNAMICOBJECT_BYTES,0); }
         bool NeedsRefresh(Unit *unit) const;
         bool IsChanneled() const { return m_channeled; }
-        void AddAffected(Unit *unit) { m_affected[unit->GetObjectGuid()] = 0; }
-        void RemoveAffected(Unit *unit) { m_affected.erase(unit->GetObjectGuid()); }
+        void AddAffected(Unit* unit);
+        void RemoveAffected(Unit* unit);
         void Delay(int32 delaytime);
 
         bool IsHostileTo(WorldObject const* target) const override;
         bool IsFriendlyTo(WorldObject const* target) const override;
-        uint32 getFaction() const final override;
-        uint32 getLevel() const final override;
+        uint32 GetFactionTemplateId() const final;
+        uint32 GetLevel() const final;
 
-        float GetObjectBoundingRadius() const               // overwrite WorldObject version
+        float GetObjectBoundingRadius() const override // overwrite WorldObject version
         {
             return 0.0f;                                    // dynamic object not have real interact size
         }
 
-        bool isVisibleForInState(WorldObject const* pDetector, WorldObject const* viewPoint, bool inVisibleList) const override;
+        bool IsVisibleForInState(WorldObject const* pDetector, WorldObject const* viewPoint, bool inVisibleList) const override;
 
         GridReference<DynamicObject> &GetGridRef() { return m_gridRef; }
 

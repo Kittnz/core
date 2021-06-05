@@ -86,21 +86,21 @@ struct npc_rinjiAI : public npc_escortAI
     uint32 m_uiPostEventTimer;
     int m_iSpawnId;
 
-    void Reset()
+    void Reset() override
     {
         m_uiPostEventCount = 0;
         m_uiPostEventTimer = 3000;
     }
 
-    void JustRespawned()
+    void JustRespawned() override
     {
         m_bIsByOutrunner = false;
         m_iSpawnId = 0;
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
         npc_escortAI::JustRespawned();
     }
 
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* pWho) override
     {
         if (HasEscortState(STATE_ESCORT_ESCORTING))
         {
@@ -135,13 +135,13 @@ struct npc_rinjiAI : public npc_escortAI
         }
     }
 
-    void JustSummoned(Creature* pSummoned)
+    void JustSummoned(Creature* pSummoned) override
     {
         pSummoned->SetWalk(false);
         pSummoned->GetMotionMaster()->MovePoint(0, m_afAmbushMoveTo[m_iSpawnId].m_fX, m_afAmbushMoveTo[m_iSpawnId].m_fY, m_afAmbushMoveTo[m_iSpawnId].m_fZ);
     }
 
-    void WaypointReached(uint32 uiPointId)
+    void WaypointReached(uint32 uiPointId) override
     {
         Player* pPlayer = GetPlayerForEscort();
 
@@ -168,10 +168,10 @@ struct npc_rinjiAI : public npc_escortAI
         }
     }
 
-    void UpdateEscortAI(const uint32 uiDiff)
+    void UpdateEscortAI(const uint32 uiDiff) override
     {
         //Check if we have a current target
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
         {
             if (HasEscortState(STATE_ESCORT_ESCORTING) && m_uiPostEventCount)
             {
@@ -218,7 +218,7 @@ bool QuestAccept_npc_rinji(Player* pPlayer, Creature* pCreature, const Quest* pQ
             pGo->UseDoorOrButton();
 
         pCreature->SetFactionTemporary(FACTION_ESCORTEE, TEMPFACTION_RESTORE_RESPAWN);
-        pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+        pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
 
         if (npc_rinjiAI* pEscortAI = dynamic_cast<npc_rinjiAI*>(pCreature->AI()))
             pEscortAI->Start(false, pPlayer->GetGUID(), pQuest);
@@ -249,7 +249,7 @@ struct go_lards_picnic_basketAI: public GameObjectAI
     uint32 timer;
     bool state;//0 = usual, can launch. //1 = in use, cannot launch
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (state)
         {
@@ -511,7 +511,7 @@ struct go_corrupted_crystal : public GameObjectAI
                         chromie->AddThreat(antnormi, 1000);
 
                     chromie->MonsterSay(SAY_CHROMIE_3); // Adventurer, I'll weaken it, but you must finish her.
-                    chromie->setFaction(11);
+                    chromie->SetFactionTemplateId(11);
                     chromie->MonsterMove(691.41f, -4086.98f, 100.71f);
                     m_uiDialogueTimer = 5000;
                     m_uiTick++;
@@ -527,7 +527,7 @@ struct go_corrupted_crystal : public GameObjectAI
                         antnormi->SetRooted(false);
                         kheyna->AddThreat(antnormi, 900);
                         kheyna->MonsterSay(SAY_KHEYNA_4); // I'll help you! Let's KILL!
-                        kheyna->setFaction(11);
+                        kheyna->SetFactionTemplateId(11);
                         kheyna->MonsterMove(690.41f, -4087.98f, 100.71f);
                         kheyna->Attack(antnormi, true);
                         antnormi->AddAura(SPELL_BRONZE_AFFLICTION);

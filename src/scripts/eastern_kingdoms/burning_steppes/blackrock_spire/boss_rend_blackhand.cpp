@@ -29,11 +29,11 @@ In DB : change creature_template et creature_equip_template
 */
 enum
 {
-    NPC_RENDBLACKHAND     = 10429,
-    SPELL_MORTALSTRIKE    = 16856,
-    SPELL_CLEAVE          = 15284,
-    SPELL_WHIRLWIND       = 13736,
-    SPELL_FRENZY          = 8269
+    NPC_RENDBLACKHAND = 10429,
+    SPELL_MORTALSTRIKE = 16856,
+    SPELL_CLEAVE = 15284,
+    SPELL_WHIRLWIND = 13736,
+    SPELL_FRENZY = 8269
 };
 
 struct boss_rend_blackhandAI : public ScriptedAI
@@ -53,14 +53,14 @@ struct boss_rend_blackhandAI : public ScriptedAI
     uint32 m_uiCloseCombatCount;
     uint32 m_uiWhirlWindTimer;
 
-    void Reset()
+    void Reset() override
     {
-        m_uiMortalStrikeTimer       = 1000;
-        m_uiCleaveTimer             = 4000;
-        m_uiFrenzyTimer             = 0;
-        m_uiCloseCombatCheckTimer   = 1000;
-        m_uiCloseCombatCount        = 0;
-        m_uiWhirlWindTimer          = 0;
+        m_uiMortalStrikeTimer = 1000;
+        m_uiCleaveTimer = 4000;
+        m_uiFrenzyTimer = 0;
+        m_uiCloseCombatCheckTimer = 1000;
+        m_uiCloseCombatCount = 0;
+        m_uiWhirlWindTimer = 0;
     }
 
     void JustDied(Unit* pKiller)
@@ -69,17 +69,17 @@ struct boss_rend_blackhandAI : public ScriptedAI
             m_pInstance->SetData(TYPE_GYTH, DONE);
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         // Return since we have no target
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         // WhirlWind Check
         if (m_uiCloseCombatCheckTimer < uiDiff)
         {
             m_uiCloseCombatCount = 0;
-            ThreatList const& tList = m_creature->getThreatManager().getThreatList();
+            ThreatList const& tList = m_creature->GetThreatManager().getThreatList();
             for (ThreatList::const_iterator i = tList.begin(); i != tList.end(); ++i)
             {
                 Unit* pUnit = m_creature->GetMap()->GetUnit((*i)->getUnitGuid());
@@ -106,7 +106,7 @@ struct boss_rend_blackhandAI : public ScriptedAI
             // Mortal Strike
             if (m_uiMortalStrikeTimer < uiDiff)
             {
-                if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_MORTALSTRIKE) == CAST_OK)
+                if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_MORTALSTRIKE) == CAST_OK)
                     m_uiMortalStrikeTimer = urand(6000, 10000);
             }
             else
@@ -115,7 +115,7 @@ struct boss_rend_blackhandAI : public ScriptedAI
             // Cleave
             if (m_uiCleaveTimer < uiDiff)
             {
-                if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_CLEAVE) == CAST_OK)
+                if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_CLEAVE) == CAST_OK)
                     m_uiCleaveTimer = urand(4000, 6000);
             }
             else

@@ -25,16 +25,14 @@ EndScriptData */
 
 enum
 {
-    EMOTE_ALARM             = 5286,
+    EMOTE_ALARM = 5286,
 
-    // SPELL_FLURRY          = 15088,       // creature_template_addon
-    // SPELL_ENRAGE          = 15097,       // creature_template_addon
-    SPELL_SUNDER_ARMOR      = 15572,
+    SPELL_SUNDER_ARMOR = 15572,
 
-    NPC_ANVILRAGE_MEDIC     = 8894,
+    NPC_ANVILRAGE_MEDIC = 8894,
     NPC_ANVILRAGE_RESERVIST = 8901,
 
-    NPC_ADD_COUNT           = 10,
+    NPC_ADD_COUNT = 10,
 };
 
 struct sSpawnLocation
@@ -67,27 +65,27 @@ struct boss_general_angerforgeAI : public ScriptedAI
     uint32 m_uiSunderArmorTimer;
     uint32 m_uiAlarmTimer;
 
-    void Reset()
+    void Reset() override
     {
         m_uiSunderArmorTimer = urand(5 * IN_MILLISECONDS, 10 * IN_MILLISECONDS);
         m_uiAlarmTimer = 0;
     }
 
-    void JustSummoned(Creature* pSummoned)
+    void JustSummoned(Creature* pSummoned) override
     {
         pSummoned->GetMotionMaster()->MoveFollow(m_creature, 0.0f, 0.0f);
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         //Return since we have no target
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         // Sunder Armor
         if (m_uiSunderArmorTimer < uiDiff)
         {
-            if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_SUNDER_ARMOR) == CAST_OK)
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_SUNDER_ARMOR) == CAST_OK)
                 m_uiSunderArmorTimer = urand(5 * IN_MILLISECONDS, 15 * IN_MILLISECONDS);
         }
         else

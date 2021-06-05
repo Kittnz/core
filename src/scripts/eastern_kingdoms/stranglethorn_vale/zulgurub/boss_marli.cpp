@@ -26,29 +26,29 @@ EndScriptData */
 
 enum
 {
-    GO_EGG                      = 179985,
+    GO_EGG = 179985,
 
     // the spider
-    NPC_SPAWN_OF_MARLI          = 15041,
+    NPC_SPAWN_OF_MARLI = 15041,
 
-    SAY_AGGRO                   = -1309005,
-    SAY_TRANSFORM               = -1309006,
-    SAY_SPIDER_SPAWN            = -1309007,
-    SAY_DEATH                   = -1309008,
+    SAY_AGGRO = -1309005,
+    SAY_TRANSFORM = -1309006,
+    SAY_SPIDER_SPAWN = -1309007,
+    SAY_DEATH = -1309008,
 
-    SPELL_CHARGE                = 22911,
-    SPELL_ENVELOPINGWEBS        = 24110,
-    SPELL_POISONVOLLEY          = 24099,
-    SPELL_SPIDER_FORM           = 24084,
-    SPELL_DRAIN_LIFE            = 24300,
-    SPELL_CORROSIVE_POISON      = 24111,
-    SPELL_TRANSFORM_BACK        = 24085,
-    SPELL_TRASH                 = 3391,
-    SPELL_HATCH                 = 24083,                    //visual
-    SPELL_AGGRANDIR             = 24109,
+    SPELL_CHARGE = 22911,
+    SPELL_ENVELOPINGWEBS = 24110,
+    SPELL_POISONVOLLEY = 24099,
+    SPELL_SPIDER_FORM = 24084,
+    SPELL_DRAIN_LIFE = 24300,
+    SPELL_CORROSIVE_POISON = 24111,
+    SPELL_TRANSFORM_BACK = 24085,
+    SPELL_TRASH = 3391,
+    SPELL_HATCH = 24083, //visual
+    SPELL_AGGRANDIR = 24109,
 
     //The Spider Spells
-    SPELL_LEVELUP               = 24312                     //visual
+    SPELL_LEVELUP = 24312 //visual
 };
 
 struct boss_marliAI : public ScriptedAI
@@ -79,7 +79,7 @@ struct boss_marliAI : public ScriptedAI
 
     uint32 m_uiDefaultModel;
 
-    void Reset()
+    void Reset() override
     {
         m_uiPoisonVolley_Timer = 15000;
         m_uiSpawnSpider_Timer = 20000;
@@ -125,7 +125,7 @@ struct boss_marliAI : public ScriptedAI
         m_creature->ResetStats();
     }
 
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* pWho) override
     {
         DoScriptText(SAY_AGGRO, m_creature);
 
@@ -169,7 +169,7 @@ struct boss_marliAI : public ScriptedAI
         return nullptr;
     }
 
-    void JustSummoned(Creature* pSummoned)
+    void JustSummoned(Creature* pSummoned) override
     {
         if (pSummoned->GetEntry() == NPC_SPAWN_OF_MARLI)
         {
@@ -178,7 +178,7 @@ struct boss_marliAI : public ScriptedAI
         }
     }
 
-    void JustDied(Unit* pKiller)
+    void JustDied(Unit* pKiller) override
     {
         DoScriptText(SAY_DEATH, m_creature);
 
@@ -189,7 +189,7 @@ struct boss_marliAI : public ScriptedAI
         m_creature->CastSpell(m_creature, SPELL_HAKKAR_POWER_DOWN, true);
     }
 
-    void SpellHitTarget(Unit* pCaster, const SpellEntry* pSpell)
+    void SpellHitTarget(Unit* pCaster, const SpellEntry* pSpell) override
     {
         if (!pCaster)
             return;
@@ -199,13 +199,13 @@ struct boss_marliAI : public ScriptedAI
             if (pCaster->GetTypeId() != TYPEID_PLAYER)
                 return;
 
-            m_creature->getThreatManager().modifyThreatPercent(pCaster, -100);
+            m_creature->GetThreatManager().modifyThreatPercent(pCaster, -100);
         }
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         // Troll
@@ -213,7 +213,7 @@ struct boss_marliAI : public ScriptedAI
         {
             if (m_uiPoisonVolley_Timer < uiDiff)
             {
-                DoCastSpellIfCan(m_creature->getVictim(), SPELL_POISONVOLLEY);
+                DoCastSpellIfCan(m_creature->GetVictim(), SPELL_POISONVOLLEY);
                 m_uiPoisonVolley_Timer = urand(10000, 20000);
             }
             else
@@ -221,7 +221,7 @@ struct boss_marliAI : public ScriptedAI
 
             if (m_uiDrainLife_Timer < uiDiff)
             {
-                DoCastSpellIfCan(m_creature->getVictim(), SPELL_DRAIN_LIFE);
+                DoCastSpellIfCan(m_creature->GetVictim(), SPELL_DRAIN_LIFE);
                 m_uiDrainLife_Timer = urand(20000, 50000);
             }
             else
@@ -260,7 +260,7 @@ struct boss_marliAI : public ScriptedAI
         {
             if (!m_bHasWebbed && m_uiWebs_Timer < uiDiff)
             {
-                DoCastSpellIfCan(m_creature->getVictim(), SPELL_ENVELOPINGWEBS);
+                DoCastSpellIfCan(m_creature->GetVictim(), SPELL_ENVELOPINGWEBS);
                 m_uiWebs_Timer = urand(10000, 15000);
                 m_uiCharge_Timer = 1000;
                 m_bHasWebbed = true;
@@ -285,7 +285,7 @@ struct boss_marliAI : public ScriptedAI
                         {
                             ++i;                                    //not aggro leader
                             pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM,0);
-                            if (pTarget && pTarget->getPowerType() == POWER_MANA)
+                            if (pTarget && pTarget->GetPowerType() == POWER_MANA)
                                 i=5;
                         }
                     */
@@ -297,7 +297,7 @@ struct boss_marliAI : public ScriptedAI
 
             if (m_uiCorrosivePoison_Timer < uiDiff)
             {
-                DoCastSpellIfCan(m_creature->getVictim(), SPELL_CORROSIVE_POISON);
+                DoCastSpellIfCan(m_creature->GetVictim(), SPELL_CORROSIVE_POISON);
                 m_uiCorrosivePoison_Timer = urand(25000, 35000);
             }
             else
@@ -347,7 +347,7 @@ struct boss_marliAI : public ScriptedAI
 
         if (m_uiTrash_Timer < uiDiff)
         {
-            DoCastSpellIfCan(m_creature->getVictim(), SPELL_TRASH);
+            DoCastSpellIfCan(m_creature->GetVictim(), SPELL_TRASH);
             m_uiTrash_Timer = urand(10000, 20000);
         }
         else
@@ -369,20 +369,20 @@ struct mob_spawn_of_marliAI : public ScriptedAI
     ScriptedInstance* m_pInstance;
     uint32 m_uiLevelUp_Timer;
 
-    void Reset()
+    void Reset() override
     {
         m_uiLevelUp_Timer = 3000;
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         if (m_uiLevelUp_Timer < uiDiff)
         {
             DoCastSpellIfCan(m_creature, SPELL_LEVELUP);
-            m_creature->SetLevel(m_creature->getLevel() + 1);
+            m_creature->SetLevel(m_creature->GetLevel() + 1);
             m_uiLevelUp_Timer = 3000;
         }
         else

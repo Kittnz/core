@@ -161,41 +161,29 @@ INSERT INTO `gameobject` VALUES (3996187, 99540, 1, 2144.36, -4744.92, 51.5089, 
 
 #define SHOW_GOSSIP(a) player->SEND_GOSSIP_MENU(a, pCreature->GetObjectGuid())
 
-/*
-Last Updated le 17/02/13 13h!
-      Reste � faire :
-      - Si le joueur meurt, l'�vent doit s'arr�ter et le cadavre du joueur se fait teleporter hors de l'arene.
-      - Si le joueur est aid�, l'�vent doit s'arr�ter et les joueurs se font teleporter hors de l'arene.
-      - Les adds doivent despawn � la fin de l'event.
-      - Laska doit t�l�porter les joueurs, si l'event est annul� ou compl�t�, mais pas pendant que l'event est lanc�.
-      - L'event doit se stopper pas si la qu�te est echou� ou compl�t�.
-
-*/
-// corner, sud
 #define ADD_1X 2200.113281f
 #define ADD_1Y -4761.684570f
 #define ADD_1Z 54.910847f
 #define ADD_1O 3.573156f
-//corner, est
+
 #define ADD_2X 2184.825928f
 #define ADD_2Y -4786.309570f
 #define ADD_2Z 54.911507f
 #define ADD_2O 1.381106f
-// corner, nord
+
 #define ADD_3X 2162.641602f
 #define ADD_3Y -4780.766113f
 #define ADD_3Z 54.911507f
 #define ADD_3O 0.875304f
-//corner, ouest
+
 #define ADD_4X 2162.64160f
 #define ADD_4Y -4780.766113f
 #define ADD_4Z 54.911507f
 #define ADD_4O 0.875304f
 
-#define SPELL_KNOCKAWAY  10101
-#define SPELL_PUMMEL     15615
-//#define SPELL_SHOOT      20463
-#define SPELL_FAIL       91599
+#define SPELL_KNOCKAWAY 10101
+#define SPELL_PUMMEL 15615
+#define SPELL_FAIL 91599
 
 typedef enum
 {
@@ -225,7 +213,7 @@ struct arena_szerelmesAI : public ScriptedAI
     uint32 Shoot_Timer;
     uint32 add_Timer;
 
-    void Reset()
+    void Reset() override
     {
         Shoot_Timer = 15000;
         Pummel_Timer = 7000;
@@ -233,26 +221,26 @@ struct arena_szerelmesAI : public ScriptedAI
         add_Timer = 60000;
     }
 
-    void Aggro(Unit* pPlayer)
+    void Aggro(Unit* pPlayer) override
     {
         add_Timer = 1000;
-        DoCastSpellIfCan(m_creature->getVictim(), SPELL_FAIL);
+        DoCastSpellIfCan(m_creature->GetVictim(), SPELL_FAIL);
     }
 
-    void JustDied(Unit* Victim)
+    void JustDied(Unit* Victim) override
     {
         while (Creature* Add = m_creature->FindNearestCreature(NPC_ADD, 100.0f))
             Add->DisappearAndDie();
     }
 
-    void UpdateAI(const uint32 diff)
+    void UpdateAI(const uint32 diff) override
     {
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         if (Pummel_Timer < diff)
         {
-            if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_PUMMEL) == CAST_OK)
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_PUMMEL) == CAST_OK)
                 Pummel_Timer = 12000;
         }
         else
@@ -260,24 +248,11 @@ struct arena_szerelmesAI : public ScriptedAI
 
         if (KnockAway_Timer < diff)
         {
-            if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_KNOCKAWAY) == CAST_OK)
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_KNOCKAWAY) == CAST_OK)
                 KnockAway_Timer = 14000;
         }
         else
             KnockAway_Timer -= diff;
-
-        /* enlev� car trop dure!
-                if (Shoot_Timer < diff)
-                {
-                    DoCastSpellIfCan(m_creature->getVictim(),SPELL_SHOOT);
-                    Shoot_Timer = 2000;
-                }
-                else
-                    Shoot_Timer -= diff;
-        */
-        //---------------------------------------------------------------------------------------------------------
-        //                           LES ADDS !!!!!!!
-        //---------------------------------------------------------------------------------------------------------
 
         if (add_Timer < diff)
         {
@@ -323,7 +298,7 @@ enum
     npc_karlek_HELLO = 1,
     npc_karlek_ERROR = 1,
     npc_karlek_OK    = 1,
-    npc_szerelmes    = 31,
+    npc_szerelmes    = 31
 };
 
 struct npc_karlekAI : public ScriptedAI
@@ -340,7 +315,7 @@ struct npc_karlekAI : public ScriptedAI
     ArenaBossSzerelmesStatus eEventStatus;
     uint32 m_uiEventResetTimer;
 
-    void Reset()
+    void Reset() override
     {
     }
 
@@ -369,15 +344,13 @@ struct npc_karlekAI : public ScriptedAI
             pPlayer->TeleportTo(1, 2191.9f, -4773.4f, 54.9f, 2.56f);
         }
 
-        // Verifier que le mob ne soit pas deja pop!
-        // Le Boss pop et depop 25 secondes apr�s si il reste hors combat.
         if (Creature * pSzerelmes = m_creature->SummonCreature(npc_szerelmes, 2206.47f, -4741.44f, 54.90f, 3.88f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 25000))
         {
             m_uiSzerelmesGUID = pSzerelmes->GetObjectGuid();
             eEventStatus = EVENT_STARTED;
         }
     }
-// Ne fonctionne pas!
+
     void CompleteEvent()
     {
         m_uiEventResetTimer = 30000;
@@ -386,11 +359,11 @@ struct npc_karlekAI : public ScriptedAI
             char sMessage[200];
             sprintf(sMessage, "Nous avons un nouveau champion !");
         }
+
         eEventStatus = EVENT_COMPLETE;
     }
 
-    // L'event se reset si le boss despawn.
-    void SummonedCreatureDespawn(Creature* pSummoned)
+    void SummonedCreatureDespawn(Creature* pSummoned) override
     {
         if (pSummoned->GetObjectGuid() == m_uiSzerelmesGUID)
         {
@@ -399,15 +372,14 @@ struct npc_karlekAI : public ScriptedAI
         }
     }
 
-    // L'event se complete si le boss meurt.
-    void SummonedCreatureJustDied(Creature* pSummoned)
+    void SummonedCreatureJustDied(Creature* pSummoned) override
     {
         if (pSummoned->GetObjectGuid() == m_uiSzerelmesGUID)
             CompleteEvent();
     }
 
 
-    void UpdateAI(const uint32 diff, Player *pPlayer)
+    void UpdateAI(uint32 const diff) override
     {
         if (Creature* pSzerelmes = m_creature->GetMap()->GetCreature(m_uiSzerelmesGUID))
         {
@@ -420,11 +392,10 @@ struct npc_karlekAI : public ScriptedAI
                 ResetEvent();
         }
 
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         DoMeleeAttackIfReady();
-
     }
 };
 
@@ -438,14 +409,11 @@ bool GossipHello_npc_karlek(Player *player, Creature *pCreature)
 
 bool GossipSelect_npc_karlek(Player* player, Creature* pCreature, uint32 sender, uint32 action)
 {
-    ArenaBossSzerelmesStatus eEventStatus; // Penser � d�clarer la variable
-
-    // R�cup�rer l'�tat de la variable comme elle est dans l'IA (npc_karlekAI)
+    ArenaBossSzerelmesStatus eEventStatus;
     npc_karlekAI* pKarlekAI = dynamic_cast<npc_karlekAI*>(pCreature->AI());
     if (pKarlekAI)
-    {
-        eEventStatus = pKarlekAI->GetEventStatus(); // GetEventStatus c'est la fonction qu'il y a dans l'IA, et qui donne le eEventStatus
-    }
+        eEventStatus = pKarlekAI->GetEventStatus();
+
     if (sender != GOSSIP_SENDER_MAIN)
         return false;
 
@@ -460,6 +428,7 @@ bool GossipSelect_npc_karlek(Player* player, Creature* pCreature, uint32 sender,
                 pCreature->MonsterSay(sMessage, 0, 0);
                 if (pKarlekAI)
                     pKarlekAI->StartEvent(player);
+
                 SHOW_GOSSIP(npc_karlek_OK);
                 sprintf(sMessage, "Force et Honneur !");
                 pCreature->MonsterYell(sMessage, 0, 0);
@@ -472,8 +441,8 @@ bool GossipSelect_npc_karlek(Player* player, Creature* pCreature, uint32 sender,
                 SHOW_GOSSIP(npc_karlek_ERROR);
             }
 
+            break;
         }
-        break;
         case GOSSIP_ACTION_INFO_DEF+1:
         {
             char sMessage[200];
@@ -483,8 +452,8 @@ bool GossipSelect_npc_karlek(Player* player, Creature* pCreature, uint32 sender,
             SHOW_GOSSIP(npc_karlek_OK);
             return true;
         }
-        break;
     }
+
     SHOW_GOSSIP(npc_karlek_ERROR);
     return false;
 }
@@ -518,8 +487,10 @@ bool GossipSelect_npc_laska(Player *player, Creature *pCreature, uint32 sender, 
     npc_karlekAI* pKarlekAI = dynamic_cast<npc_karlekAI*>(pCreature->AI());
     if (pKarlekAI)
         eEventStatus = pKarlekAI->GetEventStatus();
+
     if (sender != GOSSIP_SENDER_MAIN)
         return false;
+
     if (GOSSIP_ACTION_INFO_DEF)
     {
         if (eEventStatus == EVENT_NOT_STARTED)
@@ -536,6 +507,7 @@ bool GossipSelect_npc_laska(Player *player, Creature *pCreature, uint32 sender, 
             pCreature->MonsterSay(sMessage, 0, 0);
         }
     }
+
     SHOW_GOSSIP(npc_laska_ERROR);
     return false;
 }
@@ -561,4 +533,3 @@ void AddSC_boss_arena_hardog()
     newscript->pGossipSelect  = &GossipSelect_npc_laska;
     newscript->RegisterSelf();
 };
-

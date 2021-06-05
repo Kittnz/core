@@ -24,9 +24,9 @@ EndScriptData */
 #include "scriptPCH.h"
 #include "maraudon.h"
 
-#define SPELL_WRATH                 21807
-#define SPELL_ENTANGLINGROOTS       12747
-#define SPELL_CORRUPT_FORCES        21968
+#define SPELL_WRATH 21807
+#define SPELL_ENTANGLINGROOTS 12747
+#define SPELL_CORRUPT_FORCES 21968
 
 enum
 {
@@ -62,22 +62,22 @@ struct celebras_the_cursedAI : public ScriptedAI
     uint32 EntanglingRoots_Timer;
     uint32 CorruptForces_Timer;
 
-    void Reset()
+    void Reset() override
     {
         Wrath_Timer = 8000;
         EntanglingRoots_Timer = 2000;
         CorruptForces_Timer = 30000;
     }
 
-    void JustDied(Unit* Killer)
+    void JustDied(Unit* Killer) override
     {
         if (m_pInstance)
             m_pInstance->SetData(TYPE_CELEBRAS, DONE);
     }
 
-    void UpdateAI(const uint32 diff)
+    void UpdateAI(const uint32 diff) override
     {
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         //Wrath
@@ -94,7 +94,7 @@ struct celebras_the_cursedAI : public ScriptedAI
         //EntanglingRoots
         if (EntanglingRoots_Timer < diff)
         {
-            DoCastSpellIfCan(m_creature->getVictim(), SPELL_ENTANGLINGROOTS);
+            DoCastSpellIfCan(m_creature->GetVictim(), SPELL_ENTANGLINGROOTS);
             EntanglingRoots_Timer = 20000;
         }
         else EntanglingRoots_Timer -= diff;
@@ -134,7 +134,7 @@ struct celebrasSpiritAI : public npc_escortAI
     uint64 auraGUID;
     bool m_bBookRead;
 
-    void Reset()
+    void Reset() override
     {
         m_uiPhase = 0;
         Event_Timer = 0;
@@ -142,7 +142,7 @@ struct celebrasSpiritAI : public npc_escortAI
         m_bBookRead = false;
     }
 
-    void WaypointReached(uint32 i)
+    void WaypointReached(uint32 i) override
     {
         std::list<GameObject*> scepterList;
         switch (i)
@@ -221,9 +221,9 @@ struct celebrasSpiritAI : public npc_escortAI
             Event_Timer = 1000;
     }
 
-    void UpdateEscortAI(const uint32 uiDiff)
+    void UpdateEscortAI(const uint32 uiDiff) override
     {
-        if (Event_Timer && !m_creature->getVictim())
+        if (Event_Timer && !m_creature->GetVictim())
         {
             if (Event_Timer <= uiDiff)
             {
@@ -282,7 +282,7 @@ struct celebrasSpiritAI : public npc_escortAI
                 Event_Timer -= uiDiff;
         }
 
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         DoMeleeAttackIfReady();

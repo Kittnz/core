@@ -44,13 +44,13 @@ struct mobs_spitelashesAI : public ScriptedAI
     uint32 morphtimer;
     bool spellhit;
 
-    void Reset()
+    void Reset() override
     {
         morphtimer = 0;
         spellhit = false;
     }
 
-    void SpellHit(Unit *Hitter, const SpellEntry *Spellkind)
+    void SpellHit(Unit *Hitter, const SpellEntry *Spellkind) override
     {
         if (!spellhit && Hitter->GetTypeId() == TYPEID_PLAYER)
         {
@@ -63,7 +63,7 @@ struct mobs_spitelashesAI : public ScriptedAI
         }
     }
 
-    void UpdateAI(const uint32 diff)
+    void UpdateAI(const uint32 diff) override
     {
         // we mustn't remove the creature in the same round in which we cast the summon spell, otherwise there will be no summons
         if (spellhit && morphtimer >= 5000)
@@ -91,10 +91,10 @@ struct mobs_spitelashesAI : public ScriptedAI
                         summoned->SetRespawnRadius(55.0f);
                     }
                 }
-
             }
         }
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         //TODO: add abilities for the different creatures
@@ -113,7 +113,7 @@ CreatureAI* GetAI_mobs_spitelashes(Creature* pCreature)
 
 bool GossipHello_npc_loramus_thalipedes(Player* pPlayer, Creature* pCreature)
 {
-    if (pCreature->isQuestGiver())
+    if (pCreature->IsQuestGiver())
         pPlayer->PrepareQuestMenu(pCreature->GetGUID());
 
     if (pPlayer->GetQuestStatus(2744) == QUEST_STATUS_INCOMPLETE)
@@ -218,7 +218,7 @@ struct mob_mawsAI : public ScriptedAI
     bool InCombat;
     bool PhaseTwo;
 
-    void MovementInform(uint32 uiType, uint32 uiPointId)
+    void MovementInform(uint32 uiType, uint32 uiPointId) override
     {
         if (!InCombat)
         {
@@ -231,11 +231,11 @@ struct mob_mawsAI : public ScriptedAI
             LastWayPoint = uiPointId;
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (InCombat)
         {
-            if (!m_creature->SelectHostileTarget() || !m_creature->getVictim() || LeaveCombatTimer < uiDiff) // m_creature->getThreatManager().isThreatListEmpty() ?
+            if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim() || LeaveCombatTimer < uiDiff)
             {
                 InCombat = 0;
                 Reset();
@@ -255,7 +255,7 @@ struct mob_mawsAI : public ScriptedAI
                 }
                 if (SaccagerTimer < uiDiff)
                 {
-                    DoCastSpellIfCan(m_creature->getVictim(), SACCAGER);
+                    DoCastSpellIfCan(m_creature->GetVictim(), SACCAGER);
                     if (!PhaseTwo)
                         SaccagerTimerMax = urand(20, 120) * 1000;
                     SaccagerTimer = SaccagerTimerMax;
@@ -281,25 +281,25 @@ struct mob_mawsAI : public ScriptedAI
                 }
 
                 if (m_creature->GetMotionMaster()->GetCurrentMovementGeneratorType() == IDLE_MOTION_TYPE)
-                    m_creature->GetMotionMaster()->MoveChase(m_creature->getVictim());
+                    m_creature->GetMotionMaster()->MoveChase(m_creature->GetVictim());
                 LeaveCombatTimer -= uiDiff;
                 DoMeleeAttackIfReady();
             }
         }
-        else if (m_creature->getVictim())
+        else if (m_creature->GetVictim())
             InCombat = 1;
     }
-    void DamageTaken(Unit *done_by, uint32 &damage)// l'empecher d'etre kittable infini. s'applique pas aux dégats de la charge.
+    void DamageTaken(Unit *done_by, uint32 &damage) override // l'empecher d'etre kittable infini. s'applique pas aux dégats de la charge.
     {
         LeaveCombatTimer = 30000;
     }
 
-    void JustDied(Unit* pKiller)
+    void JustDied(Unit* pKiller) override
     {
         sWorld.SendWorldText(EMOTE_THE_BEAST_RETURNS);
     }
 
-    void Reset()
+    void Reset() override
     {
         PhaseTwo = 0;
         InCombat = 0;

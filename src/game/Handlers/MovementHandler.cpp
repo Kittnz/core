@@ -251,6 +251,7 @@ void WorldSession::HandleMoveTeleportAckOpcode(WorldPacket& recvData)
     // because the client will request the name for the old pet guid and receive no answer
     // result would be a pet named "unknown"
     if (pPlayerMover->GetTemporaryUnsummonedPetNumber())
+    {
         if (sWorld.getConfig(CONFIG_BOOL_CONTINENTS_INSTANCIATE) && pPlayerMover->GetMap()->IsContinent())
         {
             bool transition = false;
@@ -259,12 +260,13 @@ void WorldSession::HandleMoveTeleportAckOpcode(WorldPacket& recvData)
         }
         else
             pPlayerMover->ResummonPetTemporaryUnSummonedIfAny();
+    }
 
     //lets process all delayed operations on successful teleport
     pPlayerMover->ProcessDelayedOperations();
 
     // Si le joueur est stun, il ne pourra pas envoyer sa position -> Fix desynchro ici.
-    if (pPlayerMover->hasUnitState(UNIT_STAT_NO_FREE_MOVE))
+    if (pPlayerMover->HasUnitState(UNIT_STAT_NO_FREE_MOVE))
     {
         pPlayerMover->m_movementInfo.moveFlags &= ~MOVEFLAG_MASK_MOVING_OR_TURN;
         pPlayerMover->SendHeartBeat(false);
@@ -351,7 +353,7 @@ void WorldSession::HandleMovementOpcodes(WorldPacket & recvData)
     {
         movementInfo.AddMovementFlag(MOVEFLAG_SWIMMING);
         plMover->m_movementInfo.AddMovementFlag(MOVEFLAG_SWIMMING);
-        plMover->clearUnitState(UNIT_STAT_MOVING);
+        plMover->ClearUnitState(UNIT_STAT_MOVING);
         movementInfo.RemoveMovementFlag(MOVEFLAG_MASK_MOVING);
         plMover->RemoveUnitMovementFlag(MOVEFLAG_MASK_MOVING);
         exceptPlayer = nullptr;
@@ -826,7 +828,7 @@ void WorldSession::HandleSetActiveMoverOpcode(WorldPacket &recvData)
     {
         if (Pet* pet = _player->GetPet())
         {
-            pet->clearUnitState(UNIT_STAT_POSSESSED);
+            pet->ClearUnitState(UNIT_STAT_POSSESSED);
             pet->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_POSSESSED);
             // out of range pet dismissed
             if (!pet->IsWithinDistInMap(_player, pet->GetMap()->GetGridActivationDistance()))
@@ -882,7 +884,7 @@ void WorldSession::HandleMountSpecialAnimOpcode(WorldPacket& /*recvdata*/)
 
 void WorldSession::HandleSummonResponseOpcode(WorldPacket& recvData)
 {
-    if (!_player->isAlive() || _player->isInCombat())
+    if (!_player->IsAlive() || _player->IsInCombat())
         return;
 
     ObjectGuid summonerGuid;
@@ -1030,8 +1032,9 @@ void WorldSession::HandleMoverRelocation(Unit* pMover, MovementInfo& movementInf
         pPlayerMover->m_movementInfo = movementInfo;
 
         // super smart decision; rework required
-        if (ObjectGuid lootGuid = pPlayerMover->GetLootGuid() && !lootGuid.IsItem())
-            pPlayerMover->SendLootRelease(lootGuid);
+        if (ObjectGuid lootGuid = pPlayerMover->GetLootGuid())
+            if (!lootGuid.IsItem())
+                pPlayerMover->SendLootRelease(lootGuid);
 
         // Nostalrius - antiundermap1
         if (movementInfo.HasMovementFlag(MOVEFLAG_FALLINGFAR))
@@ -1057,7 +1060,7 @@ void WorldSession::HandleMoverRelocation(Unit* pMover, MovementInfo& movementInf
             // NOTE: this is actually called many times while falling
             // even after the player has been teleported away
             // TODO: discard movement packets after the player is rooted
-            if (pPlayerMover->isAlive())
+            if (pPlayerMover->IsAlive())
             {
                 // Nostalrius : pas mort quand on chute
                 if (pPlayerMover->InBattleGround())
@@ -1065,7 +1068,7 @@ void WorldSession::HandleMoverRelocation(Unit* pMover, MovementInfo& movementInf
                 else
                     pPlayerMover->EnvironmentalDamage(DAMAGE_FALL_TO_VOID, pPlayerMover->GetHealth() / 2);
                 // pl can be alive if GM/etc
-                if (!pPlayerMover->isAlive())
+                if (!pPlayerMover->IsAlive())
                 {
                     // change the death state to CORPSE to prevent the death timer from
                     // starting in the next player update

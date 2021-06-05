@@ -42,13 +42,13 @@ struct mob_yennikuAI : public ScriptedAI
     uint32 Reset_Timer;
     bool bReset;
 
-    void Reset()
+    void Reset() override
     {
         Reset_Timer = 0;
         m_creature->SetUInt32Value(UNIT_NPC_EMOTESTATE, EMOTE_STATE_NONE);
     }
 
-    void SpellHit(Unit *caster, const SpellEntry *spell)
+    void SpellHit(Unit *caster, const SpellEntry *spell) override
     {
         if (caster->GetTypeId() == TYPEID_PLAYER)
         {
@@ -58,7 +58,7 @@ struct mob_yennikuAI : public ScriptedAI
                 m_creature->SetUInt32Value(UNIT_NPC_EMOTESTATE, EMOTE_STATE_STUN);
                 m_creature->CombatStop();                   //stop combat
                 m_creature->DeleteThreatList();             //unsure of this
-                m_creature->setFaction(83);                 //horde generic
+                m_creature->SetFactionTemplateId(83);                 //horde generic
 
                 bReset = true;
                 Reset_Timer = 60000;
@@ -67,21 +67,24 @@ struct mob_yennikuAI : public ScriptedAI
         return;
     }
 
-    void Aggro(Unit *who) {}
+    void Aggro(Unit *who) override {}
 
-    void UpdateAI(const uint32 diff)
+    void UpdateAI(const uint32 diff) override
     {
         if (bReset)
+        {
             if (Reset_Timer < diff)
             {
                 EnterEvadeMode();
                 bReset = false;
-                m_creature->setFaction(28);                     //troll, bloodscalp
+                m_creature->SetFactionTemplateId(28);                     //troll, bloodscalp
             }
-            else Reset_Timer -= diff;
+            else
+                Reset_Timer -= diff;
+        }
 
         //Return since we have no target
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         DoMeleeAttackIfReady();
@@ -101,13 +104,12 @@ struct mob_assistant_kryll : public ScriptedAI
 
     uint32 Speach_Timer;    
 
-    void Reset()
+    void Reset() override
     {
         Speach_Timer = 360000;
     }
 
-
-    void UpdateAI(const uint32 diff)
+    void UpdateAI(const uint32 diff) override
     {
         if (Speach_Timer < diff)
         {
@@ -134,14 +136,12 @@ CreatureAI* GetAI_mob_assistant_kryll(Creature *_Creature)
     return new mob_assistant_kryll(_Creature);
 }
 
-
-
 struct go_transpolyporterAI: public GameObjectAI
 {
     go_transpolyporterAI(GameObject* pGo) : GameObjectAI(pGo)
     {}
 
-    bool OnUse(Unit* user)
+    bool OnUse(Unit* user) override
     {
         if (user && user->IsPlayer())
         {
@@ -200,7 +200,7 @@ struct npc_molthorAI : public npc_escortAI
         m_uiPhase = 0;
     }
 
-    void WaypointReached(uint32 uiPointId)
+    void WaypointReached(uint32 uiPointId) override
     {
         if (uiPointId == 7)
         {
@@ -271,7 +271,7 @@ struct npc_molthorAI : public npc_escortAI
                 m_uiTimer -= uiDiff;
         }
 
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         DoMeleeAttackIfReady();
@@ -437,7 +437,7 @@ struct npc_servant_of_the_handAI : public ScriptedAI
                 m_uiSpawnOutTimer -= uiDiff;
         }
 
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         DoMeleeAttackIfReady();
@@ -547,7 +547,7 @@ struct npc_witch_doctor_unbagwaAI : ScriptedAI
 
     void SummonedCreatureDespawn(Creature* pCreature) override
     {
-        if (!m_bStartEvent || !pCreature->isAlive())
+        if (!m_bStartEvent || !pCreature->IsAlive())
             return;
 
         m_bResetEvent = true;
@@ -631,7 +631,7 @@ struct npc_witch_doctor_unbagwaAI : ScriptedAI
             }
         }
 
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         DoMeleeAttackIfReady();

@@ -52,7 +52,7 @@ void CritterAI::SpellHit(Unit* pWho, const SpellEntry* pSpell)
 
 void CritterAI::UpdateAI(const uint32 diff)
 {
-    if (m_creature->isInCombat())
+    if (m_creature->IsInCombat())
     {
         if (m_uiCombatTimer <= diff)
         {

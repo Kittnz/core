@@ -33,11 +33,11 @@ EndContentData */
 
 enum
 {
-    SAY_AT_HOME             = -1000323,
-    EMOTE_AT_HOME           = -1000324,
-    QUEST_MIST              = 938,
-    NPC_ARYNIA              = 3519,
-    FACTION_DARNASSUS       = 79
+    SAY_AT_HOME = -1000323,
+    EMOTE_AT_HOME = -1000324,
+    QUEST_MIST = 938,
+    NPC_ARYNIA = 3519,
+    FACTION_DARNASSUS = 79
 };
 
 struct npc_mistAI : public FollowerAI
@@ -47,19 +47,19 @@ struct npc_mistAI : public FollowerAI
         Reset();
     }
 
-    void Reset() { }
+    void Reset() override { }
 
     void JustRespawned() override
     {
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
         FollowerAI::JustRespawned();
     }
 
-    void MoveInLineOfSight(Unit *pWho)
+    void MoveInLineOfSight(Unit *pWho) override
     {
         FollowerAI::MoveInLineOfSight(pWho);
 
-        if (!m_creature->getVictim() && !HasFollowState(STATE_FOLLOW_COMPLETE) && pWho->GetEntry() == NPC_ARYNIA)
+        if (!m_creature->GetVictim() && !HasFollowState(STATE_FOLLOW_COMPLETE) && pWho->GetEntry() == NPC_ARYNIA)
         {
             if (m_creature->IsWithinDistInMap(pWho, 10.0f))
             {
@@ -86,7 +86,7 @@ struct npc_mistAI : public FollowerAI
     //call not needed here, no known abilities
     /*void UpdateFollowerAI(const uint32 uiDiff)
     {
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         DoMeleeAttackIfReady();
@@ -105,11 +105,11 @@ struct npc_sethirAI : public ScriptedAI
         Reset();
     }
 
-    void Reset()
+    void Reset() override
     {
     }
 
-    void Aggro(Unit* pUnit)
+    void Aggro(Unit* pUnit) override
     {
         m_creature->MonsterSay("Filfh! Filfh everywhere! The forests must be cleansed!");
         for (uint32 counter = 0; counter < 6; counter++)
@@ -120,9 +120,9 @@ struct npc_sethirAI : public ScriptedAI
         }
     }
 
-    void UpdateAI(const uint32 diff)
+    void UpdateAI(const uint32 diff) override
     {
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         DoMeleeAttackIfReady();
@@ -143,7 +143,7 @@ bool QuestAccept_npc_mist(Player* pPlayer, Creature* pCreature, const Quest* pQu
         if (npc_mistAI* pMistAI = dynamic_cast<npc_mistAI*>(pCreature->AI()))
         {
             pCreature->SetFactionTemporary(FACTION_DARNASSUS, TEMPFACTION_RESTORE_RESPAWN);
-            pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+            pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
             pMistAI->StartFollow(pPlayer, FACTION_DARNASSUS, pQuest);
         } 
     }
@@ -180,12 +180,12 @@ public:
 
     void UpdateAI(const uint32 uiDiff) override
     {
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         if (m_uiWrathTimer <= uiDiff)
         {
-            if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_WRATH) == CAST_OK)
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_WRATH) == CAST_OK)
                 m_uiWrathTimer = urand(1, 5) * 1000;
         }
         else

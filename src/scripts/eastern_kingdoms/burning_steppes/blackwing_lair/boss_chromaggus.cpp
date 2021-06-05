@@ -89,7 +89,7 @@ struct boss_chromaggusAI : public ScriptedAI
                 ++idx2;
             m_uiBreathTwoSpell = aPossibleBreaths[idx2 % NUM_BREATHS];
         }
-        pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_NPC);
+        pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_PASSIVE);
         m_bEngagedOnce = false;
         Reset();
     }
@@ -115,7 +115,7 @@ struct boss_chromaggusAI : public ScriptedAI
     AfflictionGuids m_lRedAfflictionPlayerGUID;
     AfflictionGuids m_lChromaticPlayerGUID;
 
-    void Reset()
+    void Reset() override
     {
         m_uiMovetoLeverTimer = 2000;
 
@@ -146,7 +146,7 @@ struct boss_chromaggusAI : public ScriptedAI
             if (pGO->GetGoState() == GO_STATE_ACTIVE) // Door open
                 m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
             else
-                m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_NPC);
+                m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_PASSIVE);
         }
 
         for (std::vector<TimeLapseInfo*>::iterator itr = m_vTimeLapseInfo.begin(); itr != m_vTimeLapseInfo.end(); ++itr)
@@ -154,14 +154,14 @@ struct boss_chromaggusAI : public ScriptedAI
         m_vTimeLapseInfo.clear();
     }
 
-    void MoveInLineOfSight(Unit *pWho)
+    void MoveInLineOfSight(Unit *pWho) override
     {
-        if (!pWho || m_creature->getVictim())
+        if (!pWho || m_creature->GetVictim())
             return;
 
         if (m_bEngagedOnce
             && pWho->GetTypeId() == TYPEID_PLAYER
-            && !m_creature->isInCombat()
+            && !m_creature->IsInCombat()
             && m_creature->IsWithinDistInMap(pWho, 55.0f)
             && m_creature->IsWithinLOSInMap(pWho)
             && !pWho->HasAuraType(SPELL_AURA_FEIGN_DEATH)
@@ -171,16 +171,16 @@ struct boss_chromaggusAI : public ScriptedAI
         }
     }
 
-    void Aggro(Unit* /*pWho*/)
+    void Aggro(Unit* /*pWho*/) override
     {
         if (m_pInstance)
             m_pInstance->SetData(TYPE_CHROMAGGUS, IN_PROGRESS);
 
-        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_NPC);
+        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_PASSIVE);
         m_creature->SetInCombatWithZone();
     }
 
-    void JustDied(Unit* /*pKiller*/)
+    void JustDied(Unit* /*pKiller*/) override
     {
         if (m_pInstance)
             m_pInstance->SetData(TYPE_CHROMAGGUS, DONE);
@@ -189,13 +189,13 @@ struct boss_chromaggusAI : public ScriptedAI
         m_vTimeLapseInfo.clear();
     }
 
-    void JustReachedHome()
+    void JustReachedHome() override
     {
         if (m_pInstance)
             m_pInstance->SetData(TYPE_CHROMAGGUS, FAIL);
     }
 
-    void SpellHitTarget(Unit* pTarget, const SpellEntry* pSpell)
+    void SpellHitTarget(Unit* pTarget, const SpellEntry* pSpell) override
     {
         if (!pTarget)
             return;
@@ -206,11 +206,11 @@ struct boss_chromaggusAI : public ScriptedAI
                 holder->SetTargetSecondaryThreatFocus(true);
             if (pTarget->GetTypeId() != TYPEID_PLAYER)
                 return;
-            m_vTimeLapseInfo.push_back(new TimeLapseInfo(pTarget->GetObjectGuid(), m_creature->getThreatManager().getThreat(pTarget), pTarget->GetHealth()));
+            m_vTimeLapseInfo.push_back(new TimeLapseInfo(pTarget->GetObjectGuid(), m_creature->GetThreatManager().getThreat(pTarget), pTarget->GetHealth()));
         }
     }
 
-    void MovementInform(uint32 uiType, uint32 uiPointId)
+    void MovementInform(uint32 uiType, uint32 uiPointId) override
     {
         if (uiType != POINT_MOTION_TYPE)
             return;
@@ -219,11 +219,11 @@ struct boss_chromaggusAI : public ScriptedAI
         {
             case 0:
                 // walk to Flamegor's room on first pull of lever
-                m_creature->GetMotionMaster()->MovePoint(1, -7379.223f, -1002.1122f, 477.0402f, 3.7662f);
+                m_creature->GetMotionMaster()->MovePoint(1, -7379.223f, -1002.1122f, 477.0402f, 0, 0.0f, 3.7662f);
                 break;
             case 1:
                 // didn't find anyone! walk back to home position
-                m_creature->GetMotionMaster()->MovePoint(2, -7484.609385f, -1075.678101f, 477.144623f, 0.616172f);
+                m_creature->GetMotionMaster()->MovePoint(2, -7484.609385f, -1075.678101f, 477.144623f, 0, 0.0f, 0.616172f);
                 break;
             case 2:
                 m_creature->GetMotionMaster()->MoveTargetedHome();
@@ -231,9 +231,9 @@ struct boss_chromaggusAI : public ScriptedAI
         }
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
-        if (!m_creature->isInCombat() && !m_bEngagedOnce)
+        if (!m_creature->IsInCombat() && !m_bEngagedOnce)
         {
             if (GameObject* pGO = m_creature->GetMap()->GetGameObject(m_pInstance->GetData64(DATA_DOOR_CHROMAGGUS_SIDE)))
             {
@@ -248,24 +248,24 @@ struct boss_chromaggusAI : public ScriptedAI
                         m_creature->SetHomePosition(x, y, z, o);
                         m_creature->SetWalk(true);
                         m_creature->GetMotionMaster()->MovePoint(0, x, y, z, MOVE_PATHFINDING);
-                        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_NPC);
+                        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_PASSIVE);
                         m_bEngagedOnce = true;
                     }
                     else
                         m_uiMovetoLeverTimer -= uiDiff;
                 }
                 else if (!m_creature->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE))
-                    m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_NPC);
+                    m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_PASSIVE);
             }
         }
 
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         for (std::vector<TimeLapseInfo*>::iterator itr = m_vTimeLapseInfo.begin(); itr != m_vTimeLapseInfo.end(); ++itr)
             if (Player* pTarget = m_creature->GetMap()->GetPlayer((*itr)->m_targetGuid))
             {
-                if (!pTarget->HasAura(SPELL_TIME_LAPSE) && pTarget->isAlive())
+                if (!pTarget->HasAura(SPELL_TIME_LAPSE) && pTarget->IsAlive())
                 {
                     if ((*itr)->m_targetHealth >= (pTarget->GetMaxHealth() / 2))
                         pTarget->SetHealth(pTarget->GetMaxHealth());
@@ -359,7 +359,7 @@ struct boss_chromaggusAI : public ScriptedAI
             }
 
             std::vector<ObjectGuid> m_vPossibleVictim;
-            ThreatList const& tList = m_creature->getThreatManager().getThreatList();
+            ThreatList const& tList = m_creature->GetThreatManager().getThreatList();
             for (ThreatList::const_iterator itr = tList.begin(); itr != tList.end(); ++itr)
                 if (Player* target = m_creature->GetMap()->GetPlayer((*itr)->getUnitGuid()))
                     m_vPossibleVictim.push_back(target->GetObjectGuid());
@@ -411,13 +411,13 @@ struct boss_chromaggusAI : public ScriptedAI
         for (AfflictionGuids::iterator itr = m_lRedAfflictionPlayerGUID.begin(); itr != m_lRedAfflictionPlayerGUID.end();)
         {
             Player* pTarget = m_creature->GetMap()->GetPlayer(*itr);
-            if (pTarget && pTarget->isAlive() && !pTarget->HasAura(SPELL_BROODAF_RED, EFFECT_INDEX_0))
+            if (pTarget && pTarget->IsAlive() && !pTarget->HasAura(SPELL_BROODAF_RED, EFFECT_INDEX_0))
             {
                 itr = m_lRedAfflictionPlayerGUID.erase(itr);
                 continue;
             }
 
-            if (!pTarget || pTarget->isDead())
+            if (!pTarget || pTarget->IsDead())
             {
                 if (DoCastSpellIfCan(m_creature, SPELL_CHROMA_HEAL) == CAST_OK) //Heal 150000 HP
                     m_lRedAfflictionPlayerGUID.erase(itr);
@@ -431,7 +431,7 @@ struct boss_chromaggusAI : public ScriptedAI
         {
             if (Player* pTarget = m_creature->GetMap()->GetPlayer(*itr))
             {
-                if (pTarget->isDead())
+                if (pTarget->IsDead())
                 {
                     pTarget->RemoveAurasDueToSpell(23175);
                     pTarget->RemoveAurasDueToSpell(23177);

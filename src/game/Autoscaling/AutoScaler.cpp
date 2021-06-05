@@ -72,7 +72,7 @@ void AutoScaler::Scale(DungeonMap* map)
     while (pairItr.first != pairItr.second)
     {
         auto creature = pairItr.first->second;
-        if (creature && !creature->isInCombat())
+        if (creature && !creature->IsInCombat())
             ScaleCreature(creature, playerCount, maxCount);
 
         ++pairItr.first;
@@ -84,7 +84,7 @@ void AutoScaler::ScaleCreature(Creature* creature, uint32 playerCount, uint32 ma
     if (creature->IsPet() && creature->GetOwner() && creature->GetOwner()->IsPlayer())
         return;
 
-    if (creature->isDead())
+    if (creature->IsDead())
         return;
 
     float specificHPFactor = 1;

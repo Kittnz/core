@@ -65,7 +65,6 @@ class PetAI : public CreatureAI
 
         void UpdateAllies();
 
-        bool inCombat;
         bool hasMelee;
         std::set<uint64> m_AllySet;
         uint32 m_updateAlliesTimer;

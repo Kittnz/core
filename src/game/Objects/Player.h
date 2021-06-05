@@ -115,11 +115,10 @@ typedef std::unordered_map<uint32, PlayerSpell> PlayerSpellMap;
 // Spell modifier (used to modify other spells)
 struct SpellModifier
 {
-    SpellModifier() : charges(0), ownerAura(nullptr), value(0), spellId(0), op(MAX_SPELLMOD), type(SPELLMOD_TYPE_NONE) {}
+    SpellModifier() : op(MAX_SPELLMOD), type(SPELLMOD_TYPE_NONE), charges(0), value(0), mask(0), spellId(0), ownerAura(nullptr) {}
 
-    SpellModifier(SpellModOp _op, SpellModType _type, int32 _value, uint32 _spellId, uint64 _mask, int16 _charges = 0)
-        : op(_op), type(_type), charges(_charges), value(_value), mask(_mask), spellId(_spellId), ownerAura(nullptr)
-    {}
+    SpellModifier(SpellModOp _op, SpellModType _type, int32 _value, uint32 _spellId, uint64 _mask, int16 _charges = 0) :
+        op(_op), type(_type), charges(_charges), value(_value), mask(_mask), spellId(_spellId), ownerAura(nullptr) {}
 
     SpellModifier(SpellModOp _op, SpellModType _type, int32 _value, SpellEntry const* spellEntry, SpellEffectIndex eff, int16 _charges = 0);
 
@@ -883,9 +882,9 @@ class Player final: public Unit
     friend void Item::RemoveFromUpdateQueueOf(Player* player);
     public:
         explicit Player (WorldSession* session);
-        ~Player();
+        ~Player() override;
 
-        void CleanupsBeforeDelete();
+        void CleanupsBeforeDelete() override;
 
         static UpdateMask updateVisualBits;
         static void InitVisibleBits();
@@ -1115,7 +1114,7 @@ class Player final: public Unit
         void RemoveItemFromBuyBackSlot(uint32 slot, bool del);
         uint32 GetBuyBackItemPrice(uint32 slot) const { return GetUInt32Value(PLAYER_FIELD_BUYBACK_PRICE_1 + slot - BUYBACK_SLOT_START); }
 
-        uint32 GetMaxKeyringSize() const { return getLevel() < 40 ? 4 : (getLevel() < 50 ? 8 : 12); }
+        uint32 GetMaxKeyringSize() const { return GetLevel() < 40 ? 4 : (GetLevel() < 50 ? 8 : 12); }
 
         void SendEquipError(InventoryResult msg, Item* pItem, Item* pItem2 = nullptr, uint32 itemid = 0) const;
         void SendBuyError(BuyResult msg, Creature* pCreature, uint32 item, uint32 param) const;
@@ -1226,7 +1225,7 @@ class Player final: public Unit
         void RemoveQuestSlotState(uint16 slot, uint8 state) { RemoveByteFlag(PLAYER_QUEST_LOG_1_1 + slot*MAX_QUEST_OFFSET + QUEST_COUNT_STATE_OFFSET, 3, state); }
         void SetQuestSlotTimer(uint16 slot, uint32 timer) { SetUInt32Value(PLAYER_QUEST_LOG_1_1 + slot*MAX_QUEST_OFFSET + QUEST_TIME_OFFSET, timer); }
     public:
-        uint32 GetQuestLevelForPlayer(Quest const* pQuest) const { return pQuest && (pQuest->GetQuestLevel() > 0) ? pQuest->GetQuestLevel() : getLevel(); }
+        uint32 GetQuestLevelForPlayer(Quest const* pQuest) const { return pQuest && (pQuest->GetQuestLevel() > 0) ? pQuest->GetQuestLevel() : GetLevel(); }
         void PrepareQuestMenu(ObjectGuid guid, uint32 exceptQuestId = 0);
         void SendPreparedQuest(ObjectGuid guid);
         bool IsActiveQuest(uint32 quest_id) const;        // can be taken or taken
@@ -1374,8 +1373,8 @@ class Player final: public Unit
         void _SaveBGData();
         void _SaveStats();
 
-        void _SetCreateBits(UpdateMask* updateMask, Player* target) const;
-        void _SetUpdateBits(UpdateMask* updateMask, Player* target) const;
+        void _SetCreateBits(UpdateMask* updateMask, Player* target) const override;
+        void _SetUpdateBits(UpdateMask* updateMask, Player* target) const override;
         uint32 m_nextSave;
     public:
         void SaveToDB(bool online = true, bool force = false);
@@ -1415,7 +1414,7 @@ class Player final: public Unit
 
         void RemovePet(PetSaveMode mode);
         void RemoveMiniPet();
-        Pet* GetMiniPet() const;
+        Pet* GetMiniPet() const override;
         void AutoReSummonPet();
 
         // use only in Pet::Unsummon/Spell::DoSummon
@@ -1426,7 +1425,7 @@ class Player final: public Unit
         void SetTemporaryUnsummonedPetNumber(uint32 petnumber) { m_temporaryUnsummonedPetNumber = petnumber; }
         void UnsummonPetTemporaryIfAny();
         void ResummonPetTemporaryUnSummonedIfAny();
-        bool IsPetNeedBeTemporaryUnsummoned() const { return !IsInWorld() || !isAlive() || IsMounted() /*+in flight*/; }
+        bool IsPetNeedBeTemporaryUnsummoned() const { return !IsInWorld() || !IsAlive() || IsMounted() /*+in flight*/; }
         
         /*********************************************************/
         /***                   SPELL SYSTEM                    ***/
@@ -1444,12 +1443,12 @@ class Player final: public Unit
         void SendInitialSpells() const;
         bool AddSpell(uint32 spell_id, bool active, bool learning, bool dependent, bool disabled);
     public:
-        bool HasSpell(uint32 spell) const;
+        bool HasSpell(uint32 spell) const override;
         bool HasActiveSpell(uint32 spell) const;            // show in spellbook
         TrainerSpellState GetTrainerSpellState(TrainerSpell const* trainer_spell) const;
         bool IsSpellFitByClassAndRace(uint32 spell_id, uint32* pReqlevel = nullptr) const;
-        bool IsImmuneToSpellEffect(SpellEntry const* spellInfo, SpellEffectIndex index, bool castOnSelf) const;
-        virtual void ProhibitSpellSchool(SpellSchoolMask idSchoolMask, uint32 unTimeMs);
+        bool IsImmuneToSpellEffect(SpellEntry const* spellInfo, SpellEffectIndex index, bool castOnSelf) const override;
+        void ProhibitSpellSchool(SpellSchoolMask idSchoolMask, uint32 unTimeMs) override;
         void SendClearCooldown(uint32 spell_id, Unit* target) const;
         void SendClearAllCooldowns(Unit* target) const;
         void SendSpellCooldown(uint32 spellId, uint32 cooldown, ObjectGuid target) const;
@@ -1481,6 +1480,7 @@ class Player final: public Unit
         void DropModCharge(SpellModifier* mod, Spell* spell);
 
         std::vector<ItemSetEffect*> m_ItemSetEff;
+        uint32 m_castingSpell; // Last spell cast by client, or combo points if player is rogue
 
         /*********************************************************/
         /***                   TALENT SYSTEM                   ***/
@@ -1557,15 +1557,15 @@ class Player final: public Unit
         void ClearComboPoints();
         void SetComboPoints();
 
-        bool UpdateStats(Stats stat);
-        bool UpdateAllStats();
-        void UpdateResistances(uint32 school);
-        void UpdateArmor();
-        void UpdateMaxHealth();
-        void UpdateMaxPower(Powers power);
+        bool UpdateStats(Stats stat) override;
+        bool UpdateAllStats() override;
+        void UpdateResistances(uint32 school) override;
+        void UpdateArmor() override;
+        void UpdateMaxHealth() override;
+        void UpdateMaxPower(Powers power) override;
         void UpdateManaRegen() override;
-        void UpdateAttackPowerAndDamage(bool ranged = false);
-        void UpdateDamagePhysical(WeaponAttackType attType);
+        void UpdateAttackPowerAndDamage(bool ranged = false) override;
+        void UpdateDamagePhysical(WeaponAttackType attType) override;
         void UpdateSpellDamageAndHealingBonus();
         void UpdateDefenseBonusesMod();
         void UpdateBlockPercentage();
@@ -1577,7 +1577,7 @@ class Player final: public Unit
         void UpdateSpellCritChance(uint32 school);
         void CalculateMinMaxDamage(WeaponAttackType attType, bool normalized, float& min_damage, float& max_damage, uint8 index = 0) const;
 
-        uint32 GetShieldBlockValue() const;                 // overwrite Unit version (virtual)
+        uint32 GetShieldBlockValue() const override;                 // overwrite Unit version (virtual)
         bool CanParry() const { return m_canParry; }
         void SetCanParry(bool value);
         bool CanBlock() const { return m_canBlock; }
@@ -1703,13 +1703,13 @@ class Player final: public Unit
         {
             // we should not execute delayed teleports for now dead players but has been alive at teleport
             // because we don't want player's ghost teleported from graveyard
-            return m_bHasDelayedTeleport && (isAlive() || !m_bHasBeenAliveAtDelayedTeleport);
+            return m_bHasDelayedTeleport && (IsAlive() || !m_bHasBeenAliveAtDelayedTeleport);
         }
 
         bool SetDelayedTeleportFlagIfCan()
         {
             m_bHasDelayedTeleport = m_bCanDelayTeleport;
-            m_bHasBeenAliveAtDelayedTeleport = isAlive();
+            m_bHasBeenAliveAtDelayedTeleport = IsAlive();
             return m_bHasDelayedTeleport;
         }
 
@@ -1767,8 +1767,8 @@ class Player final: public Unit
         void UpdateUnderwaterState();
         void CheckAreaExploreAndOutdoor(void);
     public:
-        void AddToWorld();
-        void RemoveFromWorld();
+        void AddToWorld() override;
+        void RemoveFromWorld() override;
 
         /* Switch from instanceId of same map.
         * Assumes that you can enter the map.
@@ -1867,9 +1867,9 @@ class Player final: public Unit
         void SetLongSight(const Aura* aura = nullptr);
         void UpdateLongSight();
 
-        bool CanWalk() const { return true; }
-        bool CanSwim() const { return true; }
-        bool CanFly() const { return IsFlying(); }
+        bool CanWalk() const override { return true; }
+        bool CanSwim() const override { return true; }
+        bool CanFly() const override { return IsFlying(); }
 
         void SetFly(bool enable) override;
 
@@ -1923,8 +1923,8 @@ class Player final: public Unit
         void SetXYSpeed(float speed) { xy_speed = speed; }
 
         void SetInWater(bool apply);
-        bool IsInWater() const { return m_isInWater; }
-        bool IsUnderWater() const;
+        bool IsInWater() const override { return m_isInWater; }
+        bool IsUnderWater() const override;
 
         void SendInitialPacketsBeforeAddToMap();
         void SendInitialPacketsAfterAddToMap(bool login = true);
@@ -1982,7 +1982,7 @@ class Player final: public Unit
     public:
         PlayerTaxi& GetTaxi() { return m_taxi; }
         PlayerTaxi const& GetTaxi() const { return m_taxi; }
-        void InitTaxiNodes() { m_taxi.InitTaxiNodes(getRace(), getLevel()); }
+        void InitTaxiNodes() { m_taxi.InitTaxiNodes(GetRace(), GetLevel()); }
         bool ActivateTaxiPathTo(std::vector<uint32> const& nodes, Creature* npc = nullptr, uint32 spellid = 0, bool nocheck = false);
         bool ActivateTaxiPathTo(uint32 taxi_path_id, uint32 spellid = 0, bool nocheck = false);
         void TaxiStepFinished();
@@ -2048,7 +2048,7 @@ class Player final: public Unit
         void RemoveAI();
         void ModPossessPet(Pet* pet, bool apply, AuraRemoveMode m_removeMode = AURA_REMOVE_BY_DEFAULT);
 
-        void SetDeathState(DeathState s);                   // overwrite Unit::SetDeathState
+        void SetDeathState(DeathState s) override;                   // overwrite Unit::SetDeathState
 
         /*********************************************************/
         /***                  SESSION SYSTEM                   ***/
@@ -2066,8 +2066,8 @@ class Player final: public Unit
         WorldSession* GetSession() const { return m_session; }
         void SetSession(WorldSession* s);
 
-        void BuildCreateUpdateBlockForPlayer(UpdateData* data, Player* target) const;
-        void DestroyForPlayer(Player* target) const;
+        void BuildCreateUpdateBlockForPlayer(UpdateData* data, Player* target) const override;
+        void DestroyForPlayer(Player* target) const override;
         void SendLogXPGain(uint32 GivenXP,Unit* victim,uint32 RestXP) const;
 
         void SendMessageToSet(WorldPacket* data, bool self) const override;
@@ -2089,7 +2089,7 @@ class Player final: public Unit
         void EnableTurtleMode() { bIsTurtle = true; };
 
         void SetHardcoreStatus(uint8 status) { m_hardcoreStatus = status; };
-        bool isHardcore() const{ return getLevel() < 60 && (m_hardcoreStatus == HARDCORE_MODE_STATUS_ALIVE || m_hardcoreStatus == HARDCORE_MODE_STATUS_DEAD); }
+        bool isHardcore() const{ return GetLevel() < 60 && (m_hardcoreStatus == HARDCORE_MODE_STATUS_ALIVE || m_hardcoreStatus == HARDCORE_MODE_STATUS_DEAD); }
         bool isImmortal() const { return m_hardcoreStatus == HARDCORE_MODE_STATUS_IMMORTAL; }
         bool HandleHardcoreInteraction(Player* target, bool checkLevelDiff);
         bool SetupHardcoreMode();
@@ -2188,7 +2188,7 @@ class Player final: public Unit
         void RepopAtGraveyard();
 
         // Nostalrius : Phasing
-        virtual void SetWorldMask(uint32 newMask);
+        void SetWorldMask(uint32 newMask) override;
 
         void RemoveDelayedOperation(uint32 operation)
         {
@@ -2444,16 +2444,14 @@ class Player final: public Unit
         /*********************************************************/
 
     public:
-        void UpdateSpeakTime();
         bool CanSpeak() const;
-        void ChangeSpeakTime(int utime);
         bool FallGround(uint8 fallMode);
 
         /// Anticheat
         MovementAnticheatInterface* GetCheatData() const { return m_session->GetCheatData(); }
         void OnDisconnected();
         void RelocateToLastClientPosition();
-        void GetSafePosition(float &x, float &y, float &z, Transport* onTransport = nullptr) const;
+        void GetSafePosition(float &x, float &y, float &z, Transport* onTransport = nullptr) const override;
 
         /*********************************************************/
         /***                 PACKET BROADCASTER                ***/

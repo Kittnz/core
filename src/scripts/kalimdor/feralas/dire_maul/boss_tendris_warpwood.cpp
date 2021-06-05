@@ -7,16 +7,16 @@
 
 enum
 {
-    SAY_TENDRIS_AGGRO          = -1900168,
+    SAY_TENDRIS_AGGRO = -1900168,
 
-    SPELL_TRAMPLE              = 5568,
-    SPELL_UPPERCUT             = 22916,
-    SPELL_GRASPING_VINES       = 22924,
-    SPELL_ENCHEVETREMENT       = 22994,
-    SPELL_ENRAGE               = 8269,
+    SPELL_TRAMPLE = 5568,
+    SPELL_UPPERCUT = 22916,
+    SPELL_GRASPING_VINES = 22924,
+    SPELL_ENCHEVETREMENT = 22994,
+    SPELL_ENRAGE = 8269,
     
-    NPC_IRONBARK_PROTECTOR     = 11459,
-    NPC_ANCIENT_EQUINE_SPIRIT  = 14566, 
+    NPC_IRONBARK_PROTECTOR = 11459,
+    NPC_ANCIENT_EQUINE_SPIRIT = 14566, 
 };
 
 // boss_tendris_warpwood
@@ -47,7 +47,7 @@ struct boss_tendris_warpwoodAI : public ScriptedAI
         return false;
     }
 
-    void JustDied(Unit* pKiller)
+    void JustDied(Unit* pKiller) override
     {
         m_creature->SummonCreature(NPC_ANCIENT_EQUINE_SPIRIT, 
                                    pKiller->GetPositionX(), 
@@ -57,7 +57,7 @@ struct boss_tendris_warpwoodAI : public ScriptedAI
                                    TEMPSUMMON_CORPSE_TIMED_DESPAWN, 60000);
     }
 
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* pWho) override
     {
         if (!m_uiAggroProtector)
         {
@@ -69,7 +69,7 @@ struct boss_tendris_warpwoodAI : public ScriptedAI
                 GetCreatureListWithEntryInGrid(m_AggroList, m_creature, NPC_IRONBARK_PROTECTOR, 1800.0f);
                 for (std::list<Creature*>::iterator it = m_AggroList.begin(); it != m_AggroList.end(); ++it)
                 {
-                    if ((*it)->isAlive())
+                    if ((*it)->IsAlive())
                         (*it)->SetInCombatWithZone();
                 }
             }
@@ -78,34 +78,34 @@ struct boss_tendris_warpwoodAI : public ScriptedAI
         }
     }
 
-    void Reset()
+    void Reset() override
     {
-        m_uiInvocation_Timer       = 0;
-        m_uiTrampleTimer           = urand(5000, 9000);
-        m_uiUppercutTimer          = urand(2000, 4000);
-        m_uiGraspingVinesTimer     = urand(9000, 12000);
-        m_uiAggroProtector         = false;
+        m_uiInvocation_Timer = 0;
+        m_uiTrampleTimer = urand(5000, 9000);
+        m_uiUppercutTimer = urand(2000, 4000);
+        m_uiGraspingVinesTimer = urand(9000, 12000);
+        m_uiAggroProtector = false;
     }
 
-    void AttackStart(Unit* Who)
+    void AttackStart(Unit* Who) override
     {
         ScriptedAI::AttackStart(Who);
         if (m_pInstance)
             m_pInstance->SetData(DATA_TENDRIS_AGGRO, IN_PROGRESS);
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim() || m_creature->IsNonMeleeSpellCasted(false))
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim() || m_creature->IsNonMeleeSpellCasted(false))
             return;
 
-        if (ManageTimer(uiDiff, &m_uiTrampleTimer,              urand(9000, 14000)))
+        if (ManageTimer(uiDiff, &m_uiTrampleTimer, urand(9000, 14000)))
             DoCastSpellIfCan(m_creature, SPELL_TRAMPLE);
 
-        if (ManageTimer(uiDiff, &m_uiUppercutTimer,             urand(12000, 15000)))
-            DoCastSpellIfCan(m_creature->getVictim(), SPELL_UPPERCUT);
+        if (ManageTimer(uiDiff, &m_uiUppercutTimer, urand(12000, 15000)))
+            DoCastSpellIfCan(m_creature->GetVictim(), SPELL_UPPERCUT);
 
-        if (ManageTimer(uiDiff, &m_uiGraspingVinesTimer,       urand(17000, 22000)))
+        if (ManageTimer(uiDiff, &m_uiGraspingVinesTimer, urand(17000, 22000)))
             DoCastSpellIfCan(m_creature, SPELL_GRASPING_VINES);
 
         if (m_creature->GetHealthPercent() < 30.0f && !m_creature->HasAura(SPELL_ENRAGE))
@@ -114,7 +114,7 @@ struct boss_tendris_warpwoodAI : public ScriptedAI
         /** Invoque player in front of him */
         if (m_uiInvocation_Timer < uiDiff)
         {
-            Unit* pUnit = m_creature->getVictim();
+            Unit* pUnit = m_creature->GetVictim();
             if (m_creature->GetDistance(pUnit) > 7.0f)
             {
                 float x = m_creature->GetPositionX();

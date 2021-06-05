@@ -580,7 +580,7 @@ AuctionHouseEntry const* AuctionHouseMgr::GetAuctionHouseEntry(Unit* unit)
             // FIXME: found way for proper auctionhouse selection by another way
             // AuctionHouse.dbc have faction field with _player_ factions associated with auction house races.
             // but no easy way convert creature faction to player race faction for specific city
-            houseid = GetAuctionHouseId(unit->getFaction());
+            houseid = GetAuctionHouseId(unit->GetFactionTemplateId());
         }
         else
         {
@@ -720,7 +720,6 @@ void AuctionHouseObject::BuildListAuctionItems(WorldPacket& data, Player* player
         return;
     }
 
-    time_t currTime = sWorld.GetGameTime();
     int loc_idx = player->GetSession()->GetSessionDbLocaleIndex();
     LocaleConstant dbc_loc = player->GetSession()->GetSessionDbcLocale();
 
@@ -745,7 +744,7 @@ void AuctionHouseObject::BuildListAuctionItems(WorldPacket& data, Player* player
                 continue;
 
             if (query.auctionSlotID != 0xffffffff && proto->InventoryType != query.auctionSlotID &&
-                    (query.auctionSlotID != INVTYPE_CHEST ||  query.auctionSlotID == INVTYPE_CHEST && proto->InventoryType != INVTYPE_ROBE))
+                    (query.auctionSlotID != INVTYPE_CHEST || (query.auctionSlotID == INVTYPE_CHEST && proto->InventoryType != INVTYPE_ROBE)))
                 continue;
 
             if (query.quality != 0xffffffff && proto->Quality < query.quality)

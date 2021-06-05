@@ -81,7 +81,7 @@ WorldSession::WorldSession(uint32 id, WorldSocket *sock, AccountTypes sec, time_
     m_sessionDbLocaleIndex(sObjectMgr.GetIndexForLocale(locale)), m_latency(0), m_tutorialState(TUTORIALDATA_UNCHANGED), m_warden(nullptr), m_cheatData(nullptr),
     m_bot(nullptr), m_lastReceivedPacketTime(0), _clientOS(CLIENT_OS_UNKNOWN), _gameBuild(0),
     _charactersCount(10), _characterMaxLevel(0), _clientHashComputeStep(HASH_NOT_COMPUTED),
-    m_masterPlayer(nullptr), m_lastPubChannelMsgTime(0), m_moveRejectTime(0)
+    m_lastPubChannelMsgTime(NULL), m_moveRejectTime(0), m_masterPlayer(nullptr)
 {
     if (sock)
     {
@@ -478,14 +478,14 @@ void WorldSession::LogoutPlayer(bool Save)
         ///- If the player just died before logging out, make him appear as a ghost
         if (inWorld && _player->GetDeathTimer())
         {
-            _player->getHostileRefManager().deleteReferences();
+            _player->GetHostileRefManager().deleteReferences();
             _player->BuildPlayerRepop();
             _player->RepopAtGraveyard();
         }
-        else if (inWorld && _player->isInCombat())
+        else if (inWorld && _player->IsInCombat())
         {
             _player->CombatStop();
-            _player->getHostileRefManager().setOnlineOfflineState(false);
+            _player->GetHostileRefManager().setOnlineOfflineState(false);
         }
         else if (inWorld && _player->HasAuraType(SPELL_AURA_SPIRIT_OF_REDEMPTION))
         {
@@ -524,7 +524,7 @@ void WorldSession::LogoutPlayer(bool Save)
             Save = false;
             sLog.outInfo("[CRASH] Joueur %s pas dans le monde a la deco.", _player->GetName());
         }
-        else if (ShouldBeBanned(_player->getLevel()))
+        else if (ShouldBeBanned(_player->GetLevel()))
             doBanPlayer = true;
 
         sBattleGroundMgr.PlayerLoggedOut(_player);

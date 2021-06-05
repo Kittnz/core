@@ -4,12 +4,11 @@
 #include "World.h"
 #include "Player.h"
 
-MovementBroadcaster::MovementBroadcaster(std::size_t threads, std::chrono::milliseconds frequency)
-    : m_sleep_timer(frequency), m_num_threads(threads)
+MovementBroadcaster::MovementBroadcaster(std::size_t threads, std::chrono::milliseconds frequency) : m_num_threads(threads), m_sleep_timer(frequency)
 {
     if (threads)
-        sLog.outInfo("[NETWORK] Movement broadcaster configured to run every %ums "
-                        "with %u threads", frequency.count(), threads);
+        sLog.outInfo("[NETWORK] Movement broadcaster configured to run every %ums with %u threads", frequency.count(), threads);
+
     StartThreads();
 }
 

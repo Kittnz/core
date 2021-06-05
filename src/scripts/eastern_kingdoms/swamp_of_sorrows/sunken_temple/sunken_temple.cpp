@@ -80,9 +80,9 @@ struct npc_malfurionAI : public ScriptedAI
     uint32 m_uiSpeech;
     bool m_inDungeon;
 
-    void Reset() {}
+    void Reset() override {}
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         // We are in Sunken Temple
         if (m_inDungeon)
@@ -148,7 +148,7 @@ CreatureAI* GetAI_npc_malfurion(Creature* pCreature)
 // Summon Malfurion trigger (AQ scepter quest)
 bool AreaTrigger_at_shade_of_eranikus(Player* pPlayer, AreaTriggerEntry const* pAt)
 {
-    if (!pPlayer || !pPlayer->isAlive() || !pAt)
+    if (!pPlayer || !pPlayer->IsAlive() || !pAt)
         return false;
 
     if (pAt->id != AREATRIGGER_MALFURION)
@@ -178,7 +178,7 @@ struct go_eternal_flameAI: public GameObjectAI
 {
     go_eternal_flameAI(GameObject* pGo) : GameObjectAI(pGo) {}
 
-    bool OnUse(Unit* pUser)
+    bool OnUse(Unit* pUser) override
     {
         if (me->GetGoState() == GO_STATE_ACTIVE)    // already used - script handler calls twice
             return true;
@@ -397,7 +397,7 @@ void npc_shade_hakkarAI::JustSummoned(Creature* summoned)
 
 void npc_shade_hakkarAI::SummonedMovementInform(Creature* pSummoned, uint32 uiMotionType, uint32 uiPointId)
 {
-    if (uiMotionType != POINT_MOTION_TYPE || !pSummoned->isAlive())
+    if (uiMotionType != POINT_MOTION_TYPE || !pSummoned->IsAlive())
         return;
 
     if (pSummoned->GetEntry() == NPC_HAKKARI_MINION)
@@ -460,7 +460,7 @@ void npc_shade_hakkarAI::SummonedMovementInform(Creature* pSummoned, uint32 uiMo
         {
             case 0:
                 pSummoned->GetMotionMaster()->MoveIdle();
-                if (pSummoned->isAlive())
+                if (pSummoned->IsAlive())
                     if (Creature* Shade = pSummoned->FindNearestCreature(8440, 150.0f)) // NPC_SHADE_OF_HAKKAR
                         pSummoned->CastSpell(Shade, SPELL_SUPPRESSION, false);
                 break;
@@ -484,7 +484,7 @@ void npc_shade_hakkarAI::UpdateAI(const uint32 uiDiff)
     else
         CheckTimer -= uiDiff;
 
-    if (!m_creature->SelectHostileTarget() || !m_creature->getVictim() || !m_pInstance)
+    if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim() || !m_pInstance)
         return;
 
     if (m_creature->HasAura(SPELL_SUPPRESSION))
@@ -589,7 +589,7 @@ struct go_atalai_lightAI: public GameObjectAI
 {
     go_atalai_lightAI(GameObject* pGo) : GameObjectAI(pGo) {}
 
-    bool OnUse(Unit* pUser)
+    bool OnUse(Unit* pUser) override
     {
         ScriptedInstance* pInstance = (ScriptedInstance*)me->GetInstanceData();
 

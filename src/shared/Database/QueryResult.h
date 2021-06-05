@@ -29,7 +29,7 @@
 class QueryResult
 {
     public:
-        QueryResult(uint64 rowCount, uint32 fieldCount) : mFieldCount(fieldCount), mRowCount(rowCount), mCurrentRow(nullptr){}
+        QueryResult(uint64 rowCount, uint32 fieldCount) : mCurrentRow(nullptr), mFieldCount(fieldCount), mRowCount(rowCount) {}
 
         virtual ~QueryResult() {}
 
@@ -43,7 +43,7 @@ class QueryResult
         uint64 GetRowCount() const { return mRowCount; }
 
     protected:
-        Field *mCurrentRow;
+        Field* mCurrentRow;
         uint32 mFieldCount;
         uint64 mRowCount;
 };

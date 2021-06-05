@@ -25,34 +25,34 @@ EndScriptData */
 
 enum
 {
-    SPELL_MENDING_BUFF =        2147,
-    SPELL_KNOCK_BUFF =          21737,
-    SPELL_KNOCK =               23382,
-    SPELL_MANAB_BUFF =          812,
-    SPELL_MANAB =               25779,
+    SPELL_MENDING_BUFF = 2147,
+    SPELL_KNOCK_BUFF = 21737,
+    SPELL_KNOCK = 23382,
+    SPELL_MANAB_BUFF = 812,
+    SPELL_MANAB = 25779,
 
-    SPELL_REFLECTAF_BUFF =      13022,
-    SPELL_REFLECTSFr_BUFF =     19595,
-    SPELL_THORNS_BUFF =         25777,
+    SPELL_REFLECTAF_BUFF = 13022,
+    SPELL_REFLECTSFr_BUFF = 19595,
+    SPELL_THORNS_BUFF = 25777,
 
-    SPELL_THUNDER_BUFF =        2834,
-    SPELL_THUNDER =             23931,
+    SPELL_THUNDER_BUFF = 2834,
+    SPELL_THUNDER = 23931,
 
-    SPELL_MSTRIKE_BUFF =        9347,
-    SPELL_MSTRIKE =             24573,
+    SPELL_MSTRIKE_BUFF = 9347,
+    SPELL_MSTRIKE = 24573,
 
-    SPELL_STORM_BUFF =          2148,
-    SPELL_STORM =               26546,
+    SPELL_STORM_BUFF = 2148,
+    SPELL_STORM = 26546,
 
-    SPELL_ENRAGE =              24318,
-    EMOTE_ENRAGE =              -1000003,
+    SPELL_ENRAGE = 24318,
+    EMOTE_ENRAGE = -1000003,
 
-    SPELL_TRANSFER =            2400,
-    EMOTE_TRANSFER =            -1388101,
+    SPELL_TRANSFER = 2400,
+    EMOTE_TRANSFER = -1388101,
 
-    SPELL_HEAL_BRETHREN =       26565,
+    SPELL_HEAL_BRETHREN = 26565,
 
-    NPC_SENTINEL =              15264
+    NPC_SENTINEL = 15264
 };
 
 struct aqsentinelAI;
@@ -113,7 +113,7 @@ struct aqsentinelAI : public ScriptedAI
     {
         // Increase aggro radius
         if (pWho->GetTypeId() == TYPEID_PLAYER
-            && !m_creature->isInCombat()
+            && !m_creature->IsInCombat()
             && m_creature->IsWithinDistInMap(pWho, 45.0f)
             && m_creature->IsWithinLOSInMap(pWho)
             && !pWho->HasAuraType(SPELL_AURA_FEIGN_DEATH)
@@ -174,7 +174,7 @@ struct aqsentinelAI : public ScriptedAI
         {
             if (Creature* creature = m_creature->GetMap()->GetCreature(*iter))
             {
-                if (creature->isInCombat())
+                if (creature->IsInCombat())
                     continue;
 
                 creature->SetNoCallAssistance(true);
@@ -238,15 +238,15 @@ struct aqsentinelAI : public ScriptedAI
         CallBuddiesToAttack(who);
     }
 
-    void Reset()
+    void Reset() override
     {
-        if (!m_creature->isDead())
+        if (!m_creature->IsDead())
         {
             for (auto iter = nearby.cbegin(); iter != nearby.cend(); ++iter)
             {
                 if (Creature* buddy = m_creature->GetMap()->GetCreature(*iter))
                 {
-                    if (buddy->isDead())
+                    if (buddy->IsDead())
                         buddy->Respawn();
                 }
             }
@@ -268,12 +268,12 @@ struct aqsentinelAI : public ScriptedAI
     {
         if ((pSpell->Id == SPELL_KNOCK) && pTarget->GetTypeId() == TYPEID_PLAYER)
         {
-            if (m_creature->getThreatManager().getThreat(m_creature->getVictim()))
-                m_creature->getThreatManager().modifyThreatPercent(m_creature->getVictim(), -20);
+            if (m_creature->GetThreatManager().getThreat(m_creature->GetVictim()))
+                m_creature->GetThreatManager().modifyThreatPercent(m_creature->GetVictim(), -20);
         }
     }
 
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* pWho) override
     {
         if (gatherOthersWhenAggro)
             GetOtherSentinels(pWho);
@@ -284,14 +284,14 @@ struct aqsentinelAI : public ScriptedAI
     }
 
     // Transfer powers on death
-    void JustDied(Unit* killer)
+    void JustDied(Unit* killer) override
     {
         m_bAlone = true;
         for (auto iter = nearby.cbegin(); iter != nearby.cend(); ++iter)
         {
             if (Creature* buddy = m_creature->GetMap()->GetCreature(*iter))
             {
-                if (buddy->isDead())
+                if (buddy->IsDead())
                     continue;
 
                 m_bAlone = false;
@@ -310,17 +310,17 @@ struct aqsentinelAI : public ScriptedAI
             DoScriptText(EMOTE_TRANSFER, m_creature);
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         //Return since we have no target
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         if (m_abilitySpellId == SPELL_KNOCK_BUFF)
         {
             if (m_uiKnock_Timer < uiDiff)
             {
-                DoCastSpellIfCan(m_creature->getVictim(), SPELL_KNOCK);
+                DoCastSpellIfCan(m_creature->GetVictim(), SPELL_KNOCK);
                 m_uiKnock_Timer = 13000;
             }
             else

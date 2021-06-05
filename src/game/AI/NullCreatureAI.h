@@ -30,9 +30,10 @@ class NullCreatureAI : public CreatureAI
     public:
         explicit NullCreatureAI(Creature* c) : CreatureAI(c)
         {
-            c->addUnitState(UNIT_STAT_IGNORE_MOVE_LOS);
+            c->AddUnitState(UNIT_STAT_IGNORE_MOVE_LOS);
         }
-        ~NullCreatureAI();
+
+        ~NullCreatureAI()override;
 
         void MoveInLineOfSight(Unit *) override {}
         void AttackStart(Unit *) override {}

@@ -25,18 +25,17 @@
 #include "Common.h"
 #include "ObjectGuid.h"
 #include "Creature.h"
-#include "Unit.h"
 
 enum PetType
 {
-    SUMMON_PET              = 0,
-    HUNTER_PET              = 1,
-    GUARDIAN_PET            = 2,
-    MINI_PET                = 3,
-    MAX_PET_TYPE            = 4
+    SUMMON_PET = 0,
+    HUNTER_PET = 1,
+    GUARDIAN_PET = 2,
+    MINI_PET = 3,
+    MAX_PET_TYPE = 4
 };
 
-#define MAX_PET_STABLES         2
+#define MAX_PET_STABLES 2
 
 // stored in character_pet.slot
 enum PetSaveMode
@@ -146,7 +145,7 @@ class Pet : public Creature
 {
     public:
         explicit Pet(PetType type = MAX_PET_TYPE);
-        virtual ~Pet();
+        ~Pet() override;
 
         void AddToWorld() override;
         void RemoveFromWorld() override;

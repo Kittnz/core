@@ -35,18 +35,18 @@
 
 enum
 {
-    QUEST_SEA_LION_HORDE        = 30,
-    QUEST_SEA_LION_ALLY         = 272,
-    TAXI_PATH_ID_ALLY           = 315,
-    TAXI_PATH_ID_HORDE          = 316
+    QUEST_SEA_LION_HORDE = 30,
+    QUEST_SEA_LION_ALLY = 272,
+    TAXI_PATH_ID_ALLY = 315,
+    TAXI_PATH_ID_HORDE = 316
 };
 
-#define GOSSIP_ITEM_THUNDER     "I'd like to fly to Thunder Bluff."
-#define GOSSIP_ITEM_AQ_END      "Do you know where I can find Half Pendant of Aquatic Endurance?"
+#define GOSSIP_ITEM_THUNDER "I'd like to fly to Thunder Bluff."
+#define GOSSIP_ITEM_AQ_END "Do you know where I can find Half Pendant of Aquatic Endurance?"
 
 bool GossipHello_npc_bunthen_plainswind(Player* pPlayer, Creature* pCreature)
 {
-    if (pPlayer->getClass() != CLASS_DRUID)
+    if (pPlayer->GetClass() != CLASS_DRUID)
         pPlayer->SEND_GOSSIP_MENU(4916, pCreature->GetGUID());
     else if (pPlayer->GetTeam() != HORDE)
     {
@@ -55,7 +55,7 @@ bool GossipHello_npc_bunthen_plainswind(Player* pPlayer, Creature* pCreature)
 
         pPlayer->SEND_GOSSIP_MENU(4917, pCreature->GetGUID());
     }
-    else if (pPlayer->getClass() == CLASS_DRUID && pPlayer->GetTeam() == HORDE)
+    else if (pPlayer->GetClass() == CLASS_DRUID && pPlayer->GetTeam() == HORDE)
     {
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_THUNDER, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
@@ -74,7 +74,7 @@ bool GossipSelect_npc_bunthen_plainswind(Player* pPlayer, Creature* pCreature, u
         case GOSSIP_ACTION_INFO_DEF + 1:
             pPlayer->CLOSE_GOSSIP_MENU();
 
-            if (pPlayer->getClass() == CLASS_DRUID && pPlayer->GetTeam() == HORDE)
+            if (pPlayer->GetClass() == CLASS_DRUID && pPlayer->GetTeam() == HORDE)
                 pPlayer->ActivateTaxiPathTo(TAXI_PATH_ID_HORDE, 0, true);
 
             break;
@@ -147,7 +147,7 @@ bool GossipSelect_npc_great_bear_spirit(Player* pPlayer, Creature* pCreature, ui
 
 bool GossipHello_npc_silva_filnaveth(Player* pPlayer, Creature* pCreature)
 {
-    if (pPlayer->getClass() != CLASS_DRUID)
+    if (pPlayer->GetClass() != CLASS_DRUID)
         pPlayer->SEND_GOSSIP_MENU(4913, pCreature->GetGUID());
     else if (pPlayer->GetTeam() != ALLIANCE)
     {
@@ -156,7 +156,7 @@ bool GossipHello_npc_silva_filnaveth(Player* pPlayer, Creature* pCreature)
 
         pPlayer->SEND_GOSSIP_MENU(4915, pCreature->GetGUID());
     }
-    else if (pPlayer->getClass() == CLASS_DRUID && pPlayer->GetTeam() == ALLIANCE)
+    else if (pPlayer->GetClass() == CLASS_DRUID && pPlayer->GetTeam() == ALLIANCE)
     {
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_RUTHERAN, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
@@ -175,7 +175,7 @@ bool GossipSelect_npc_silva_filnaveth(Player* pPlayer, Creature* pCreature, uint
         case GOSSIP_ACTION_INFO_DEF + 1:
             pPlayer->CLOSE_GOSSIP_MENU();
 
-            if (pPlayer->getClass() == CLASS_DRUID && pPlayer->GetTeam() == ALLIANCE)
+            if (pPlayer->GetClass() == CLASS_DRUID && pPlayer->GetTeam() == ALLIANCE)
                 pPlayer->ActivateTaxiPathTo(TAXI_PATH_ID_ALLY, 0, true);
 
             break;
@@ -374,7 +374,7 @@ struct npc_keeper_remulosAI : public npc_escortAI
 
     bool m_bIsFirstWave;
 
-    void Reset()
+    void Reset() override
     {
         if (!HasEscortState(STATE_ESCORT_ESCORTING))
         {
@@ -413,7 +413,7 @@ struct npc_keeper_remulosAI : public npc_escortAI
     }
 
     // Remulos follows player
-    void EnterEvadeMode()
+    void EnterEvadeMode() override
     {
         npc_escortAI::EnterEvadeMode();
         if (HasEscortState(STATE_ESCORT_ESCORTING) && !m_bIsFirstWave)
@@ -426,7 +426,7 @@ struct npc_keeper_remulosAI : public npc_escortAI
         }
     }
 
-    void JustSummoned(Creature* pSummoned)
+    void JustSummoned(Creature* pSummoned) override
     {
         switch (pSummoned->GetEntry())
         {
@@ -457,7 +457,7 @@ struct npc_keeper_remulosAI : public npc_escortAI
         }
     }
 
-    void SummonedMovementInform(Creature* pSummoned, uint32 uiType, uint32 uiPointId)
+    void SummonedMovementInform(Creature* pSummoned, uint32 uiType, uint32 uiPointId) override
     {
         if (m_idQuestActive == QUEST_NIGHTMARE_MANIFESTS)
         {
@@ -481,7 +481,7 @@ struct npc_keeper_remulosAI : public npc_escortAI
         }
     }
 
-    void JustDied(Unit* pKiller)
+    void JustDied(Unit* pKiller) override
     {
         if (m_idQuestActive == QUEST_NIGHTMARE_MANIFESTS)
         {
@@ -500,7 +500,7 @@ struct npc_keeper_remulosAI : public npc_escortAI
 
             summonedGUIDs.clear();
 
-            me->setFaction(996); // restore default faction
+            me->SetFactionTemplateId(996); // restore default faction
             m_idQuestActive = 0;
         }
         if (m_idQuestActive == QUEST_WAKING_LEGENDS)
@@ -512,7 +512,7 @@ struct npc_keeper_remulosAI : public npc_escortAI
         }
     }
 
-    void WaypointReached(uint32 uiPointId)
+    void WaypointReached(uint32 uiPointId) override
     {
         if (m_idQuestActive == QUEST_NIGHTMARE_MANIFESTS)
         {
@@ -525,7 +525,7 @@ struct npc_keeper_remulosAI : public npc_escortAI
                     m_creature->SetWalk(true);
                     break;
                 case 1:
-                    m_creature->setFaction(1254); //Alita stop Remulos from healing shades.
+                    m_creature->SetFactionTemplateId(1254); //Alita stop Remulos from healing shades.
                     //1254 is a cenarian circle faction(609), belonging to group 1, has group 8 as ennemies, and is friendly with other cenarian circle guys
                     DoScriptText(SAY_REMULOS_INTRO_2, m_creature);
                     break;
@@ -616,12 +616,12 @@ struct npc_keeper_remulosAI : public npc_escortAI
                 manifest->ForcedDespawn();
 
         summonedGUIDs.clear();
-        me->setFaction(996); // restore default faction
+        me->SetFactionTemplateId(996); // restore default faction
 
         m_uiOutroTimer = 3000;
     }
 
-    void UpdateEscortAI(const uint32 uiDiff)
+    void UpdateEscortAI(const uint32 uiDiff) override
     {
         if (m_idQuestActive == QUEST_NIGHTMARE_MANIFESTS)
         {
@@ -760,7 +760,7 @@ struct npc_keeper_remulosAI : public npc_escortAI
             }
 
             // Combat spells
-            if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+            if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
                 return;
 
             if (m_uiHealTimer < uiDiff)
@@ -801,7 +801,7 @@ struct npc_keeper_remulosAI : public npc_escortAI
     }
 
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         npc_escortAI::UpdateAI(uiDiff);
 
@@ -1197,7 +1197,7 @@ struct boss_eranikusAI : public ScriptedAI
     ObjectGuid m_uiTyrandeGUID;
     std::list<uint64> m_lPriestessList;
 
-    void Reset()
+    void Reset() override
     {
         m_uiAcidBreathTimer = 10000;
         m_uiNoxiousBreathTimer = 3000;
@@ -1215,7 +1215,7 @@ struct boss_eranikusAI : public ScriptedAI
         SetCombatMovement(false);
     }
 
-    void EnterEvadeMode()
+    void EnterEvadeMode() override
     {
         if (m_creature->GetHealthPercent() < 20.0f)
         {
@@ -1241,7 +1241,7 @@ struct boss_eranikusAI : public ScriptedAI
 
             // redeem eranikus
             m_uiEventTimer = 5000;
-            m_creature->setFaction(FACTION_FRIENDLY);
+            m_creature->SetFactionTemplateId(FACTION_FRIENDLY);
             m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_PACIFIED);
         }
         else
@@ -1256,7 +1256,7 @@ struct boss_eranikusAI : public ScriptedAI
         }
     }
 
-    void KilledUnit(Unit* pVictim)
+    void KilledUnit(Unit* pVictim) override
     {
         if (pVictim->GetTypeId() != TYPEID_PLAYER)
             return;
@@ -1274,7 +1274,7 @@ struct boss_eranikusAI : public ScriptedAI
         }
     }
 
-    void JustSummoned(Creature* pSummoned)
+    void JustSummoned(Creature* pSummoned) override
     {
         switch (pSummoned->GetEntry())
         {
@@ -1289,7 +1289,7 @@ struct boss_eranikusAI : public ScriptedAI
                 m_creature->GetRandomPoint(aTyrandeLocations[1].m_fX, aTyrandeLocations[1].m_fY, aTyrandeLocations[1].m_fZ, 10.0f, fX, fY, fZ);
                 //pSummoned->GetMotionMaster()->MovePoint(POINT_ID_TYRANDE_HEAL, fX, fY, fZ);
                 pSummoned->GetMotionMaster()->MovePoint(1, fX, fY, fZ, MOVE_PATHFINDING | MOVE_RUN_MODE);
-                pSummoned->setFaction(495);//Alita : works out ^^'. 495 is an escort faction
+                pSummoned->SetFactionTemplateId(495);//Alita : works out ^^'. 495 is an escort faction
                 break;
         }
     }
@@ -1305,7 +1305,7 @@ struct boss_eranikusAI : public ScriptedAI
         }
     }
 
-    void SummonedMovementInform(Creature* pSummoned, uint32 uiType, uint32 uiPointId)
+    void SummonedMovementInform(Creature* pSummoned, uint32 uiType, uint32 uiPointId) override
     {
         if (uiType != POINT_MOTION_TYPE)
             return;
@@ -1360,7 +1360,7 @@ struct boss_eranikusAI : public ScriptedAI
         }
     }
 
-    void MovementInform(uint32 uiType, uint32 uiPointId)
+    void MovementInform(uint32 uiType, uint32 uiPointId) override
     {
         if (uiType != POINT_MOTION_TYPE || uiPointId != POINT_ID_ERANIKUS_REDEEMED)
             return;
@@ -1369,7 +1369,7 @@ struct boss_eranikusAI : public ScriptedAI
         m_uiEventTimer = 11000;
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (m_uiEventTimer)
         {
@@ -1440,19 +1440,19 @@ struct boss_eranikusAI : public ScriptedAI
         }
 
         // Return since we have no target
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
         //Alita : make sure he prefers targets he can hit. TO REMOVE WHEN AGGRO MECANICS WILL DO THE JOB.
-        Unit* pTarget = m_creature->getVictim();
+        Unit* pTarget = m_creature->GetVictim();
 
         if (!m_creature->IsWithinMeleeRange(pTarget))
         {
-            ThreatList const& tList = m_creature->getThreatManager().getThreatList();
+            ThreatList const& tList = m_creature->GetThreatManager().getThreatList();
             for (ThreatList::const_iterator itr = tList.begin(); itr != tList.end(); ++itr)
             {
                 if (Unit* pAttacker = m_creature->GetMap()->GetUnit((*itr)->getUnitGuid()))
                     if (m_creature->IsWithinMeleeRange(pAttacker))
-                        m_creature->getThreatManager().modifyThreatPercent(pAttacker, 5);
+                        m_creature->GetThreatManager().modifyThreatPercent(pAttacker, 5);
             }
         }
         // Move Tyrande after she is summoned

@@ -24,7 +24,6 @@
 #include "ObjectMgr.h"
 #include "SpellMgr.h"
 #include "Player.h"
-#include "Unit.h"
 #include "Spell.h"
 #include "SpellAuras.h"
 #include "Totem.h"
@@ -236,7 +235,7 @@ inline bool SpellCanTrigger(const SpellEntry* spellProto, const SpellEntry* proc
     return (procSpell && procSpell->SpellFamilyName == spellProto->SpellFamilyName && procSpell->SpellFamilyFlags & spellProto->EffectItemType[eff_idx]);
 }
 
-bool Unit::IsTriggeredAtSpellProcEvent(Unit *pVictim, SpellAuraHolder* holder, SpellEntry const* procSpell, uint32 procFlag, uint32 procExtra, WeaponAttackType attType, bool isVictim, SpellProcEventEntry const*& spellProcEvent)
+bool Unit::IsTriggeredAtSpellProcEvent(Unit *pVictim, SpellAuraHolder* holder, SpellEntry const* procSpell, uint32 procFlag, uint32 procExtra, WeaponAttackType attType, bool isVictim, SpellProcEventEntry const*& spellProcEvent) const
 {
     SpellEntry const* spellProto = holder->GetSpellProto();
     /*
@@ -687,7 +686,7 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, Aura
             // Magic Absorption
             if (dummySpell->SpellIconID == 459)             // only this spell have SpellIconID == 459 and dummy aura
             {
-                if (getPowerType() != POWER_MANA)
+                if (GetPowerType() != POWER_MANA)
                     return SPELL_AURA_PROC_FAILED;
 
                 // mana reward
@@ -844,7 +843,7 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, Aura
                 // Vampiric Embrace
                 case 15286:
                 {
-                    if (!pVictim || !pVictim->isAlive())
+                    if (!pVictim || !pVictim->IsAlive())
                         return SPELL_AURA_PROC_FAILED;
 
                     // pVictim is caster of aura
@@ -1016,7 +1015,7 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, Aura
                         return SPELL_AURA_PROC_FAILED;
 
                     // Set class defined buff
-                    switch (pVictim->getClass())
+                    switch (pVictim->GetClass())
                     {
                         case CLASS_PALADIN:
                         case CLASS_PRIEST:
@@ -1054,7 +1053,7 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, Aura
                         return SPELL_AURA_PROC_FAILED;
 
                     // Set class defined buff
-                    switch (pVictim->getClass())
+                    switch (pVictim->GetClass())
                     {
                         case CLASS_PALADIN:
                         case CLASS_PRIEST:
@@ -1105,7 +1104,7 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, Aura
     }
 
     // default case
-    if (!target || target != this && !target->isAlive())
+    if (!target || (target != this && !target->IsAlive()))
         return SPELL_AURA_PROC_FAILED;
 
     if (cooldown && HasSpellCooldown(triggered_spell_id))
@@ -1126,7 +1125,7 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, Aura
     return SPELL_AURA_PROC_OK;
 }
 
-SpellAuraProcResult Unit::HandleProcTriggerSpellAuraProc(Unit *pVictim, uint32 damage, Aura* triggeredByAura, SpellEntry const *procSpell, uint32 procFlags, uint32 procEx, uint32 cooldown)
+SpellAuraProcResult Unit::HandleProcTriggerSpellAuraProc(Unit* pVictim, uint32 damage, Aura* triggeredByAura, SpellEntry const *procSpell, uint32 procFlags, uint32 procEx, uint32 cooldown)
 {
     // Get triggered aura spell info
     SpellEntry const* auraSpellInfo = triggeredByAura->GetSpellProto();
@@ -1168,9 +1167,9 @@ SpellAuraProcResult Unit::HandleProcTriggerSpellAuraProc(Unit *pVictim, uint32 d
                 case 27522:                                 // Mana Drain Trigger
                 {
                     // On successful melee or ranged attack gain $29471s1 mana and if possible drain $27526s1 mana from the target.
-                    if (isAlive())
+                    if (IsAlive())
                         CastSpell(this, 29471, true, castItem, triggeredByAura);
-                    if (pVictim && pVictim->isAlive())
+                    if (pVictim && pVictim->IsAlive())
                         CastSpell(pVictim, 27526, true, castItem, triggeredByAura);
                     return SPELL_AURA_PROC_OK;
                 }
@@ -1213,7 +1212,7 @@ SpellAuraProcResult Unit::HandleProcTriggerSpellAuraProc(Unit *pVictim, uint32 d
             // Pyroclasm
             if (auraSpellInfo->SpellIconID == 1137)
             {
-                if (!pVictim || !pVictim->isAlive() || pVictim == this || procSpell == nullptr)
+                if (!pVictim || !pVictim->IsAlive() || pVictim == this || procSpell == nullptr)
                     return SPELL_AURA_PROC_FAILED;
                 // Calculate spell tick count for spells
                 uint32 tick = 1; // Default tick = 1
@@ -1371,20 +1370,21 @@ SpellAuraProcResult Unit::HandleProcTriggerSpellAuraProc(Unit *pVictim, uint32 d
                 if (!procSpell)
                     return SPELL_AURA_PROC_FAILED;
 
+                Player* pPlayer = ToPlayer();
+                if (!pPlayer)
+                    return SPELL_AURA_PROC_FAILED;
+
                 // procspell is triggered spell but we need mana cost of original casted spell
+                // The casted spell is in a variable: Player::m_castingSpell. Otherwise we can not find the spell that caused the proc.
 
-                //[Nostalrius] : Stocke autremenent
-                //Le sort caste est dans une varible : Unit::m_castingSpell. Sinon, impossible de trouver le sort qui a provoque le proc
-
-                SpellEntry const *originalSpell = sSpellMgr.GetSpellEntry(m_castingSpell);
-                //SpellEntry const *originalSpell = sSpellMgr.GetSpellEntry(originalSpellId);
+                SpellEntry const *originalSpell = sSpellMgr.GetSpellEntry(pPlayer->m_castingSpell);
                 if (!originalSpell)
                 {
-                    sLog.outError("Unit::HandleProcTriggerSpell: Spell %u unknown but selected as original in Illu", m_castingSpell);
+                    sLog.outError("Unit::HandleProcTriggerSpell: Spell %u unknown but selected as original in Illu", pPlayer->m_castingSpell);
                     return SPELL_AURA_PROC_FAILED;
                 }
                 // Histoire de pas reproc une autre fois ... :S
-                m_castingSpell = 0;
+                pPlayer->m_castingSpell = 0;
                 basepoints[0] = originalSpell->manaCost;
                 trigger_spell_id = 20272;
                 target = this;
@@ -1477,7 +1477,7 @@ SpellAuraProcResult Unit::HandleProcTriggerSpellAuraProc(Unit *pVictim, uint32 d
         // Combo points add triggers (need add combopoint only for main target, and after possible combopoints reset)
         case 15250: // Rogue Setup
         {
-            if (!pVictim || pVictim != getVictim())  // applied only for main target
+            if (!pVictim || pVictim != GetVictim())  // applied only for main target
                 return SPELL_AURA_PROC_FAILED;
             break;                                   // continue normal case
         }
@@ -1503,7 +1503,7 @@ SpellAuraProcResult Unit::HandleProcTriggerSpellAuraProc(Unit *pVictim, uint32 d
         target = !(procFlags & PROC_FLAG_SUCCESSFUL_POSITIVE_SPELL) && Spells::IsPositiveSpell(trigger_spell_id) ? this : pVictim;
 
     // default case
-    if (!target || target != this && !target->isAlive())
+    if (!target || (target != this && !target->IsAlive()))
         return SPELL_AURA_PROC_FAILED;
 
     if (basepoints[EFFECT_INDEX_0] || basepoints[EFFECT_INDEX_1] || basepoints[EFFECT_INDEX_2])
@@ -1542,7 +1542,7 @@ SpellAuraProcResult Unit::HandleOverrideClassScriptAuraProc(Unit *pVictim, uint3
 {
     int32 scriptId = triggeredByAura->GetModifier()->m_miscvalue;
 
-    if (!pVictim || !pVictim->isAlive())
+    if (!pVictim || !pVictim->IsAlive())
         return SPELL_AURA_PROC_FAILED;
 
     Item* castItem = triggeredByAura->GetCastItemGuid() && GetTypeId() == TYPEID_PLAYER
@@ -1601,7 +1601,7 @@ SpellAuraProcResult Unit::HandleOverrideClassScriptAuraProc(Unit *pVictim, uint3
         {
             if (procSpell->IsFitToFamily<SPELLFAMILY_DRUID, CF_DRUID_REJUVENATION>())
             {
-                switch (pVictim->getPowerType())
+                switch (pVictim->GetPowerType())
                 {
                 case POWER_MANA:
                     triggered_spell_id = 28722;
@@ -1689,13 +1689,13 @@ SpellAuraProcResult Unit::HandleAddTargetTriggerAuraProc(Unit *pVictim, uint32 /
     {
         switch (aurEntry->Id)
         {
-            // Frappes implacables
-            case 14179: // Rang 1 : 4%
+            // Relentless Strikes
+            case 14179: // Rank 1 : 4%
             {
-                if (GetTypeId() == TYPEID_PLAYER)
+                if (Player* pPlayer = ToPlayer())
                 {
-                    chance = 20.0f * m_castingSpell;
-                    m_castingSpell = 0;
+                    chance = 20.0f * pPlayer->m_castingSpell;
+                    pPlayer->m_castingSpell = 0;
                 }
                 break;
             }
