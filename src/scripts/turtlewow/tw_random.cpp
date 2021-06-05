@@ -2113,6 +2113,8 @@ bool GOHello_go_epl_flying_machine(Player* pPlayer, GameObject* pGo)
     return true;
 }
 
+#define SPELL_SLOW_FALL 130
+
 bool GOSelect_go_epl_flying_machine(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 action)
 {
     if (action == GOSSIP_ACTION_INFO_DEF + 1)
@@ -2123,9 +2125,9 @@ bool GOSelect_go_epl_flying_machine(Player* pPlayer, GameObject* pGo, uint32 sen
             {
                 pPlayer->ModifyMoney(-5000);
                 pPlayer->SetDisplayId(8011);
-                pPlayer->TeleportTo(0, -9046.90000F, 343.2570F, 190.055800F, 2.967656F);
+                pPlayer->TeleportTo(0, -9046.90f, 343.26f, 160.00f, 2.97f);
                 pPlayer->m_Events.AddEvent(new DemorphAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(15000));
-                pPlayer->CastSpell(pPlayer, 130, true);
+                pPlayer->CastSpell(pPlayer, SPELL_SLOW_FALL, true);
             }
             else
                 ChatHandler(pPlayer).PSendSysMessage("You don't have enough money!");
@@ -2136,23 +2138,24 @@ bool GOSelect_go_epl_flying_machine(Player* pPlayer, GameObject* pGo, uint32 sen
             {
                 pPlayer->ModifyMoney(-5000);
                 pPlayer->SetDisplayId(8011);
-                pPlayer->TeleportTo(1, 1271.40000F, -4271.9370F, 118.055800F, 2.367656F);
+                pPlayer->TeleportTo(1, 1271.40f, -4271.94f, 80.00f, 2.37f);
                 pPlayer->m_Events.AddEvent(new DemorphAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(15000));
-                pPlayer->CastSpell(pPlayer, 130, true);
+                pPlayer->CastSpell(pPlayer, SPELL_SLOW_FALL, true);
             }
             else
                 ChatHandler(pPlayer).PSendSysMessage("You don't have enough money!");
         }
     }
+    
     if (action == GOSSIP_ACTION_INFO_DEF + 2)
     {
         if (pPlayer->GetMoney() >= 5000)
         {
             pPlayer->ModifyMoney(-5000);
             pPlayer->SetDisplayId(8011);
-            pPlayer->TeleportTo(0, 1645.700000F, -3044.899700F, 190.055800F, 2.967656F);
+            pPlayer->TeleportTo(0, 1645.70f, -3044.90f, 160.00, 2.07f);
             pPlayer->m_Events.AddEvent(new DemorphAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(15000));
-            pPlayer->CastSpell(pPlayer, 130, true);
+            pPlayer->CastSpell(pPlayer, SPELL_SLOW_FALL, true);
         }
         else
             ChatHandler(pPlayer).PSendSysMessage("You don't have enough money!");
@@ -3552,7 +3555,6 @@ bool QuestRewarded_npc_mysterious_stranger(Player* pPlayer, Creature* pQuestGive
     return false;
 }
 
-#define SPELL_SLOW_FALL 130
 #define OK_TEXT 70003
 #define NOT_GUILD_TEXT 70004
 #define ON_CAST_TEXT 70005
