@@ -481,22 +481,21 @@ bool GOHello_go_flying_machine(Player* pPlayer, GameObject* pGo)
 
 bool GOSelect_go_flying_machine(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 action)
 {
-    if (action == GOSSIP_ACTION_INFO_DEF + 1)
-    {
+	if (action == GOSSIP_ACTION_INFO_DEF + 1)
+	{
 		uint32 cost = pPlayer->getLevel() * 100;
 
 		if (pPlayer->GetMoney() >= cost)
 		{
 			pPlayer->ModifyMoney(-cost);
 			pPlayer->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, 18510);
-			pPlayer->TeleportTo(1, -6103.890000F, -3872.739700F, 125.055800F, 3.567656F);
+			pPlayer->TeleportTo(1, -6103.89f, -3872.74f, 25.00f, 3.57f);
 			pPlayer->CastSpell(pPlayer, 130, true);
 		}
 		else
-		{
 			pPlayer->GetSession()->SendNotification("Not enough money. This flight will cost %u silver.", pPlayer->getLevel());
-		}
     }
+
     return true;
 }
 
