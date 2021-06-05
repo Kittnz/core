@@ -6,30 +6,30 @@ EndScriptData */
 #include "scriptPCH.h"
 #include "temple_of_ahnqiraj.h"
 
-#define SAY_AGGRO_1                 -1531000
-#define SAY_AGGRO_2                 -1531001
-#define SAY_AGGRO_3                 -1531002
-#define SAY_SLAY_1                  -1531003
-#define SAY_SLAY_2                  -1531004
-#define SAY_SLAY_3                  -1531005
-#define SAY_SPLIT                   -1531006
-#define SAY_DEATH                   -1531007
+#define SAY_AGGRO_1 -1531000
+#define SAY_AGGRO_2 -1531001
+#define SAY_AGGRO_3 -1531002
+#define SAY_SLAY_1 -1531003
+#define SAY_SLAY_2 -1531004
+#define SAY_SLAY_3 -1531005
+#define SAY_SPLIT -1531006
+#define SAY_DEATH -1531007
 
-#define SPELL_ARCANE_EXPLOSION      26192
-#define SPELL_EARTH_SHOCK           26194
+#define SPELL_ARCANE_EXPLOSION 26192
+#define SPELL_EARTH_SHOCK 26194
 
-#define SPELL_TRUE_FULFILLMENT      785
-#define FULFILLMENT_RANGE           90.0f
-#define SPELL_TF_HASTE              2313
-#define SPELL_TF_MOD_HEAL           26525
-#define SPELL_TF_IMMUNITY           26526
-#define SPELL_TF_CANCEL             26589
+#define SPELL_TRUE_FULFILLMENT 785
+#define FULFILLMENT_RANGE 90.0f
+#define SPELL_TF_HASTE 2313
+#define SPELL_TF_MOD_HEAL 26525
+#define SPELL_TF_IMMUNITY 26526
+#define SPELL_TF_CANCEL 26589
 
-#define SPELL_BLINK_0               4801
-#define SPELL_BLINK_1               8195
-#define SPELL_BLINK_2               20449
+#define SPELL_BLINK_0 4801
+#define SPELL_BLINK_1 8195
+#define SPELL_BLINK_2 20449
 
-#define SPELL_SUMMON_IMAGES         747
+#define SPELL_SUMMON_IMAGES 747
 
 /**
 * Source videos for Skeram behaviour:
@@ -81,7 +81,7 @@ struct boss_skeramAI : public ScriptedAI
 
     bool IsImage;
 
-    void Reset()
+    void Reset() override
     {
         ArcaneExplosion_Timer = urand(6000, 12000);
         EarthShock_Timer = 2000;
@@ -101,7 +101,7 @@ struct boss_skeramAI : public ScriptedAI
         // an mmap system that let them add invisible ramps for creatures). However, we can
         // obtain partial paths next to it. Normally, these are ignored, but we can set a
         // flag to allow them. They may put us out of LoS so allow autos through them too.
-        m_creature->addUnitState(UNIT_STAT_ALLOW_INCOMPLETE_PATH | UNIT_STAT_ALLOW_LOS_ATTACK);
+        m_creature->AddUnitState(UNIT_STAT_ALLOW_INCOMPLETE_PATH | UNIT_STAT_ALLOW_LOS_ATTACK);
         m_creature->SetMeleeZReach(74.0f);
     }
 
@@ -119,7 +119,7 @@ struct boss_skeramAI : public ScriptedAI
     void MoveInLineOfSight(Unit* pWho) override
     {
         if (pWho->GetTypeId() == TYPEID_PLAYER
-            && !m_creature->isInCombat()
+            && !m_creature->IsInCombat()
             && m_creature->IsWithinDistInMap(pWho, 28.0f, true)
             && !pWho->HasAuraType(SPELL_AURA_FEIGN_DEATH)
             && !pWho->HasAuraType(SPELL_AURA_MOD_UNATTACKABLE))
@@ -129,7 +129,7 @@ struct boss_skeramAI : public ScriptedAI
         ScriptedAI::MoveInLineOfSight(pWho);
     }
 
-    void KilledUnit(Unit* victim)
+    void KilledUnit(Unit* victim) override
     {
         switch (urand(0,8))
         {
@@ -139,7 +139,7 @@ struct boss_skeramAI : public ScriptedAI
         }
     }
 
-    void JustDied(Unit* Killer)
+    void JustDied(Unit* Killer) override
     {
         if (IsImage)
         {
@@ -158,7 +158,7 @@ struct boss_skeramAI : public ScriptedAI
             m_pInstance->SetData(TYPE_SKERAM, DONE);
     }
 
-    void Aggro(Unit *who)
+    void Aggro(Unit *who) override
     {
         if (IsImage)
             return;
@@ -180,7 +180,7 @@ struct boss_skeramAI : public ScriptedAI
         m_maxMeleeAllowed = m_pInstance->GetMap()->GetPlayersCountExceptGMs() > 30 ? 4 : 3;
     }
 
-    void JustReachedHome()
+    void JustReachedHome() override
     {
         CancelFulfillment();
 
@@ -191,14 +191,14 @@ struct boss_skeramAI : public ScriptedAI
             m_pInstance->SetData(TYPE_SKERAM, FAIL);
     }
 
-    void UpdateAI(const uint32 diff)
+    void UpdateAI(const uint32 diff) override
     {
         // Despawn Images instantly if the True Prophet died
         if (IsImage && m_pInstance && m_pInstance->GetData(TYPE_SKERAM) == DONE)
             m_creature->DoKillUnit();
 
         //Return since we have no target
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         if (ArcaneExplosion_Timer < diff)
@@ -209,7 +209,7 @@ struct boss_skeramAI : public ScriptedAI
 
             if (players.size() > m_maxMeleeAllowed)
             {
-                if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_ARCANE_EXPLOSION) == CAST_OK)
+                if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_ARCANE_EXPLOSION) == CAST_OK)
                     ArcaneExplosion_Timer = urand(8000, 18000);
             }
             // Recheck in 1 second
@@ -220,14 +220,14 @@ struct boss_skeramAI : public ScriptedAI
             ArcaneExplosion_Timer -= diff;
 
         // If we are within range, melee the target
-        if (m_creature->IsWithinMeleeRange(m_creature->getVictim()))
+        if (m_creature->IsWithinMeleeRange(m_creature->GetVictim()))
             DoMeleeAttackIfReady();
         else
         // Target not in melee range. Spam Earthshock
         {
             if (EarthShock_Timer < diff)
             {
-                if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_EARTH_SHOCK) == CAST_OK)
+                if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_EARTH_SHOCK) == CAST_OK)
                     EarthShock_Timer = urand(1000, 2000);
             }
             else
@@ -279,7 +279,7 @@ struct boss_skeramAI : public ScriptedAI
         }
     }
 
-    void JustSummoned(Creature* skeramImage)
+    void JustSummoned(Creature* skeramImage) override
     {
         if (m_creature->GetEntry() != skeramImage->GetEntry())
             return;

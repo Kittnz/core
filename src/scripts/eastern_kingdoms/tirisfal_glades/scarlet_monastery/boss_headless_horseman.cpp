@@ -25,21 +25,21 @@ EndScriptData */
 
 enum
 {
-    SAY_ENTRANCE           = -1189022,
-    SAY_REJOINED           = -1189023,
-    SAY_BODY_DEFEAT        = -1189024,
-    SAY_LOST_HEAD          = -1189025,
-    SAY_CONFLAGRATION      = -1189026,
+    SAY_ENTRANCE = -1189022,
+    SAY_REJOINED = -1189023,
+    SAY_BODY_DEFEAT = -1189024,
+    SAY_LOST_HEAD = -1189025,
+    SAY_CONFLAGRATION = -1189026,
     SAY_SPROUTING_PUMPKINS = -1189027,
-    SAY_SLAY               = -1189028,
-    SAY_DEATH              = -1189029,
+    SAY_SLAY = -1189028,
+    SAY_DEATH = -1189029,
 
-    EMOTE_LAUGH            = -1189030,
+    EMOTE_LAUGH = -1189030,
 
-    SAY_PLAYER1            = -1189031,
-    SAY_PLAYER2            = -1189032,
-    SAY_PLAYER3            = -1189033,
-    SAY_PLAYER4            = -1189034
+    SAY_PLAYER1 = -1189031,
+    SAY_PLAYER2 = -1189032,
+    SAY_PLAYER3 = -1189033,
+    SAY_PLAYER4 = -1189034
 };
 
 struct boss_headless_horsemanAI : public ScriptedAI
@@ -49,28 +49,28 @@ struct boss_headless_horsemanAI : public ScriptedAI
         Reset();
     }
 
-    void Reset()
+    void Reset() override
     {
     }
 
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* pWho) override
     {
         m_creature->SetInCombatWithZone();
     }
 
-    void KilledUnit(Unit* pVictim)
+    void KilledUnit(Unit* pVictim) override
     {
         DoScriptText(SAY_SLAY, m_creature);
     }
 
-    void JustDied(Unit* pKiller)
+    void JustDied(Unit* pKiller) override
     {
         DoScriptText(SAY_DEATH, m_creature);
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         DoMeleeAttackIfReady();

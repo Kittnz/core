@@ -82,29 +82,25 @@ void ObjectGridRespawnMover::Visit(CreatureMapType &m)
 class ObjectWorldLoader
 {
 public:
-    explicit ObjectWorldLoader(ObjectGridLoader& gloader)
-        : i_cell(gloader.i_cell), i_grid(gloader.i_grid), i_map(gloader.i_map), i_corpses(0)
-    {}
-
+    explicit ObjectWorldLoader(ObjectGridLoader& gloader) : i_cell(gloader.i_cell), i_map(gloader.i_map), i_corpses(0) {}
     void Visit(CorpseMapType &m);
-
     template<class T> void Visit(GridRefManager<T>&) { }
 
 private:
     Cell i_cell;
-    NGridType &i_grid;
     Map* i_map;
+
 public:
     uint32 i_corpses;
 };
 
 template<class T>
-void addUnitState(T* /*obj*/, CellPair const& /*cell_pair*/)
+void AddUnitState(T* /*obj*/, CellPair const& /*cell_pair*/)
 {
 }
 
 template<>
-void addUnitState(Creature *obj, CellPair const& cell_pair)
+void AddUnitState(Creature *obj, CellPair const& cell_pair)
 {
     Cell cell(cell_pair);
 
@@ -159,7 +155,7 @@ void LoadHelper(CellGuidSet const& guid_set, CellPair &cell, GridRefManager<T> &
 
         grid.AddGridObject(obj);
 
-        addUnitState(obj, cell);
+        AddUnitState(obj, cell);
         obj->SetMap(map);
         obj->AddToWorld();
         if (obj->isActiveObject() && !map->IsUnloading())
@@ -192,7 +188,7 @@ void LoadHelper(CellCorpseSet const& cell_corpses, CellPair &cell, CorpseMapType
 
         grid.AddWorldObject(obj);
 
-        addUnitState(obj, cell);
+        AddUnitState(obj, cell);
         obj->SetMap(map);
         obj->AddToWorld();
         if (obj->isActiveObject() && !map->IsUnloading())

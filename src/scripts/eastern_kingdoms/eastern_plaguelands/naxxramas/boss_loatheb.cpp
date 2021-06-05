@@ -92,7 +92,7 @@ struct mob_rottingMaggotAI : public ScriptedAI
             return;
 
         if (pWho->GetTypeId() == TYPEID_PLAYER
-            && !m_creature->isInCombat()
+            && !m_creature->IsInCombat()
             && m_creature->IsWithinDistInMap(pWho, 1.5f) // Custom, tiny aggro radius
             && m_creature->IsWithinLOSInMap(pWho)
             && !pWho->HasAuraType(SPELL_AURA_FEIGN_DEATH)
@@ -100,7 +100,7 @@ struct mob_rottingMaggotAI : public ScriptedAI
         {
             m_creature->SetNoCallAssistance(true);
 
-            if (!m_creature->getVictim())
+            if (!m_creature->GetVictim())
                 AttackStart(pWho);
             else if (m_creature->GetMap()->IsDungeon())
             {
@@ -116,9 +116,9 @@ struct mob_rottingMaggotAI : public ScriptedAI
         m_creature->GetPosition(aggroPossition);
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
         if (isDiseased)
         {
@@ -154,7 +154,7 @@ struct mob_eyeStalkAI : public ScriptedAI
 
     void Reset() override
     {
-        m_creature->addUnitState(UNIT_STAT_ROOT);
+        m_creature->AddUnitState(UNIT_STAT_ROOT);
         m_creature->StopMoving();
         m_creature->SetRooted(true);
         m_creature->SetNoCallAssistance(true);
@@ -169,7 +169,7 @@ struct mob_eyeStalkAI : public ScriptedAI
             return;
 
         if (pWho->GetTypeId() == TYPEID_PLAYER
-            && !m_creature->isInCombat()
+            && !m_creature->IsInCombat()
             && m_creature->IsWithinDistInMap(pWho, 19.0f)
             && m_creature->IsWithinLOSInMap(pWho)
             && !pWho->HasAuraType(SPELL_AURA_FEIGN_DEATH)
@@ -177,7 +177,7 @@ struct mob_eyeStalkAI : public ScriptedAI
         {
             m_creature->SetNoCallAssistance(true);
 
-            if (!m_creature->getVictim())
+            if (!m_creature->GetVictim())
                 AttackStart(pWho);
             else if (m_creature->GetMap()->IsDungeon())
             {
@@ -187,7 +187,7 @@ struct mob_eyeStalkAI : public ScriptedAI
         }
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         m_creature->SetNoCallAssistance(true);
         timeSinceSpawn += std::min(uiDiff, std::numeric_limits<uint32>::max() - timeSinceSpawn);
@@ -202,13 +202,13 @@ struct mob_eyeStalkAI : public ScriptedAI
             return;
         }
 
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         if (!m_creature->IsNonMeleeSpellCasted())
         {
-            if (m_creature->GetDistance(m_creature->getVictim()) < 35.0f)
-                DoCastSpellIfCan(m_creature->getVictim(), SPELL_MIND_FLAY);
+            if (m_creature->GetDistance(m_creature->GetVictim()) < 35.0f)
+                DoCastSpellIfCan(m_creature->GetVictim(), SPELL_MIND_FLAY);
             else
                 DoStopAttack();
         }
@@ -252,13 +252,13 @@ struct boss_loathebAI : public ScriptedAI
     std::vector<uint8> availableEyeLocs;
     EyeStalkInfo eyeStalks[MAX_STALKS_UP];
 
-    void Reset()
+    void Reset() override
     {
         events.Reset();
         numDooms = 0;
     }
 
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* pWho) override
     {
         numDooms = 0;
         events.ScheduleEvent(EVENT_SUMMON_SPORE,    Seconds(13));
@@ -270,13 +270,13 @@ struct boss_loathebAI : public ScriptedAI
             m_pInstance->SetData(TYPE_LOATHEB, IN_PROGRESS);
     }
 
-    void JustDied(Unit* pKiller)
+    void JustDied(Unit* pKiller) override
     {
         if (m_pInstance)
             m_pInstance->SetData(TYPE_LOATHEB, DONE);
     }
 
-    void JustReachedHome()
+    void JustReachedHome() override
     {
         if (m_pInstance)
             m_pInstance->SetData(TYPE_LOATHEB, FAIL);
@@ -382,7 +382,7 @@ struct boss_loathebAI : public ScriptedAI
         }
     }
 
-    virtual void SummonedCreatureJustDied(Creature* pCreature)
+    void SummonedCreatureJustDied(Creature* pCreature) override
     {
         if (pCreature->GetEntry() == NPC_EyeStalk)
         {
@@ -407,12 +407,11 @@ struct boss_loathebAI : public ScriptedAI
         }
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
-
         WhackAStalk(uiDiff);
 
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
         
         if (!m_pInstance->HandleEvadeOutOfHome(m_creature))

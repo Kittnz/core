@@ -20,7 +20,6 @@
  */
 
 #include "ThreatManager.h"
-#include "Unit.h"
 #include "Creature.h"
 #include "CreatureAI.h"
 #include "Map.h"
@@ -77,14 +76,14 @@ HostileReference::HostileReference(Unit* pUnit, ThreatManager *pThreatManager, f
 // Tell our refTo (target) object that we have a link
 void HostileReference::targetObjectBuildLink()
 {
-    getTarget()->addHatedBy(this);
+    getTarget()->AddHatedBy(this);
 }
 
 //============================================================
 // Tell our refTo (taget) object, that the link is cut
 void HostileReference::targetObjectDestroyLink()
 {
-    getTarget()->removeHatedBy(this);
+    getTarget()->RemoveHatedBy(this);
 }
 
 //============================================================
@@ -122,7 +121,7 @@ void HostileReference::addThreat(float pMod)
     if (isValid() && pMod >= 0)
     {
         Unit* victim_owner = getTarget()->GetOwner();
-        if (victim_owner && victim_owner->isAlive())
+        if (victim_owner && victim_owner->IsAlive())
             getSource()->addThreat(victim_owner, 0.0f);     // create a threat to the owner of a pet, if the pet attacks
     }
 }
@@ -296,7 +295,7 @@ HostileReference* ThreatContainer::selectNextVictim(Creature* pAttacker, Hostile
     HostileReference* currentRef = nullptr;
     bool found = false;
     bool allowLowPriorityTargets = false;
-    bool attackerImmobilized = pAttacker->hasUnitState(UNIT_STAT_CAN_NOT_MOVE);
+    bool attackerImmobilized = pAttacker->HasUnitState(UNIT_STAT_CAN_NOT_MOVE);
 
     for (int attempt = 0; attempt < 2 && !found; ++attempt)
     {
@@ -312,7 +311,7 @@ HostileReference* ThreatContainer::selectNextVictim(Creature* pAttacker, Hostile
 
             bool outOfThreatArea = pAttacker->IsOutOfThreatArea(target);
             bool validAttackTarget = pAttacker->IsValidAttackTarget(target);
-            bool targetableForAttack = target->isTargetableForAttack();
+            bool targetableForAttack = target->IsTargetableForAttack();
 
             if (outOfThreatArea)
                 return nullptr;
@@ -348,7 +347,7 @@ HostileReference* ThreatContainer::selectNextVictim(Creature* pAttacker, Hostile
                     break;
                 }
 
-                if (currentRef->getThreat() > 1.3f * pCurrentVictim->getThreat() || currentRef->getThreat() > 1.1f * pCurrentVictim->getThreat() && pAttacker->CanReachWithMeleeAutoAttack(target))
+                if ((currentRef->getThreat() > 1.3f * pCurrentVictim->getThreat()) || (currentRef->getThreat() > 1.1f * pCurrentVictim->getThreat() && pAttacker->CanReachWithMeleeAutoAttack(target)))
                 {
                     //implement 110% threat rule for targets in melee range
                     found = true;                           //and 130% rule for targets in ranged distances
@@ -406,7 +405,7 @@ void ThreatManager::addThreat(Unit* pVictim, float pThreat, bool crit, SpellScho
         return;
 
     // not to dead and not for dead
-    if (!pVictim->isAlive() || !getOwner()->isAlive())
+    if (!pVictim->IsAlive() || !getOwner()->IsAlive())
         return;
 
     MANGOS_ASSERT(getOwner()->GetTypeId() == TYPEID_UNIT);
@@ -414,7 +413,7 @@ void ThreatManager::addThreat(Unit* pVictim, float pThreat, bool crit, SpellScho
     // don't add assist threat to targets under hard CC
     // check for fear, blind, freezing trap, reckless charge, banish, etc.
     if (isAssistThreat)
-        if (getOwner()->hasUnitState(UNIT_STAT_CONFUSED | UNIT_STAT_FLEEING | UNIT_STAT_ISOLATED) || (getOwner()->hasUnitState(UNIT_STAT_STUNNED) && getOwner()->HasBreakableByDamageAuraType(SPELL_AURA_MOD_STUN, 0)))
+        if (getOwner()->HasUnitState(UNIT_STAT_CONFUSED | UNIT_STAT_FLEEING | UNIT_STAT_ISOLATED) || (getOwner()->HasUnitState(UNIT_STAT_STUNNED) && getOwner()->HasBreakableByDamageAuraType(SPELL_AURA_MOD_STUN, 0)))
             pThreat = 0.0f;
 
     float threat = ThreatCalcHelper::CalcThreat(pVictim, iOwner, pThreat, crit, schoolMask, pThreatSpell);
@@ -424,16 +423,16 @@ void ThreatManager::addThreat(Unit* pVictim, float pThreat, bool crit, SpellScho
 void ThreatManager::UnitDetailedThreatSituation(Creature* creature, Player* requester, int limit, bool tankMode)
 {
 
-	if (!creature || !creature->isInCombat() || !creature->IsElite() || !creature->isAlive() || !creature->CanHaveThreatList())
+	if (!creature || !creature->IsInCombat() || !creature->IsElite() || !creature->IsAlive() || !creature->CanHaveThreatList())
         return;
 
-    if (!requester || !requester->isAlive() || requester->GetTypeId() != TYPEID_PLAYER || !requester->GetGroup())
+    if (!requester || !requester->IsAlive() || requester->GetTypeId() != TYPEID_PLAYER || !requester->GetGroup())
         return;
 
-    if (!creature->getThreatManager().getHostileTarget() || creature->getThreatManager().isThreatListEmpty())
+    if (!creature->GetThreatManager().getHostileTarget() || creature->GetThreatManager().isThreatListEmpty())
         return;
 
-	std::string tankName           = creature->getThreatManager().getHostileTarget()->GetName();
+	std::string tankName           = creature->GetThreatManager().getHostileTarget()->GetName();
 	std::string creatureName       = creature->GetName();
 	std::string threatSeparator    = ":";
 	std::string rowSeparator       = ";";
@@ -453,9 +452,9 @@ void ThreatManager::UnitDetailedThreatSituation(Creature* creature, Player* requ
 	float threatPct = 0;
 	
 
-	ThreatList const& threatList = creature->getThreatManager().getThreatList();
+	ThreatList const& threatList = creature->GetThreatManager().getThreatList();
 
-	tankThreat = (int)round(creature->getThreatManager().getThreat(creature->getThreatManager().getHostileTarget()));
+	tankThreat = (int)round(creature->GetThreatManager().getThreat(creature->GetThreatManager().getHostileTarget()));
 
 	if (tankThreat <= 0)
 		return;
@@ -524,14 +523,14 @@ void ThreatManager::UnitDetailedThreatSituation(Creature* creature, Player* requ
 				if (creatureIndex > 4)
 					break;
 
-				if (!(*iter)->CanHaveThreatList() || !(*iter)->IsElite() || !(*iter)->isInCombat())
+				if (!(*iter)->CanHaveThreatList() || !(*iter)->IsElite() || !(*iter)->IsInCombat())
 					continue;
-				if (!(*iter)->getThreatManager().getHostileTarget() || (*iter)->getThreatManager().isThreatListEmpty())
+				if (!(*iter)->GetThreatManager().getHostileTarget() || (*iter)->GetThreatManager().isThreatListEmpty())
 					continue;
-				if ((*iter)->getThreatManager().getHostileTarget()->GetName() != requester->GetName())
+				if ((*iter)->GetThreatManager().getHostileTarget()->GetName() != requester->GetName())
 					continue;
 
-				ThreatList const& hThreatList = (*iter)->getThreatManager().getThreatList();
+				ThreatList const& hThreatList = (*iter)->GetThreatManager().getThreatList();
 
 				if (hThreatList.size() < 2)
 					continue;
@@ -595,7 +594,7 @@ void ThreatManager::UnitDetailedThreatSituation(Creature* creature, Player* requ
 
 void ThreatManager::addThreatDirectly(Unit* pVictim, float threat)
 {
-    if (!pVictim || pVictim == getOwner() || !pVictim->isAlive() || !pVictim->IsInMap(getOwner()))
+    if (!pVictim || pVictim == getOwner() || !pVictim->IsAlive() || !pVictim->IsInMap(getOwner()))
         return;
 
     HostileReference* ref = iThreatContainer.addThreat(pVictim, threat);

@@ -35,7 +35,7 @@ EndContentData */
 
 bool GossipHello_npc_lorax(Player* pPlayer, Creature* pCreature)
 {
-    if (pCreature->isQuestGiver())
+    if (pCreature->IsQuestGiver())
         pPlayer->PrepareQuestMenu(pCreature->GetGUID());
 
     if (pPlayer->GetQuestStatus(5126) == QUEST_STATUS_INCOMPLETE)
@@ -84,10 +84,10 @@ bool GossipSelect_npc_lorax(Player* pPlayer, Creature* pCreature, uint32 uiSende
 
 bool GossipHello_npc_rivern_frostwind(Player* pPlayer, Creature* pCreature)
 {
-    if (pCreature->isQuestGiver())
+    if (pCreature->IsQuestGiver())
         pPlayer->PrepareQuestMenu(pCreature->GetGUID());
 
-    if (pCreature->isVendor() && pPlayer->GetReputationRank(589) >= REP_FRIENDLY)
+    if (pCreature->IsVendor() && pPlayer->GetReputationRank(589) >= REP_FRIENDLY)
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, GOSSIP_TEXT_BROWSE_GOODS, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_TRADE);
 
     pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
@@ -109,7 +109,7 @@ bool GossipSelect_npc_rivern_frostwind(Player* pPlayer, Creature* pCreature, uin
 
 bool GossipHello_npc_witch_doctor_mauari(Player* pPlayer, Creature* pCreature)
 {
-    if (pCreature->isQuestGiver())
+    if (pCreature->IsQuestGiver())
         pPlayer->PrepareQuestMenu(pCreature->GetGUID());
 
     if (pPlayer->GetQuestRewardStatus(975))
@@ -179,7 +179,7 @@ struct npc_artoriusAI : public ScriptedAI
     uint32 m_uiDemonic_Frenzy_Timer;
     uint32 m_uiDespawn_Timer;
 
-    void Reset() 
+    void Reset() override
     {
         switch (m_creature->GetEntry())
         {
@@ -232,9 +232,9 @@ struct npc_artoriusAI : public ScriptedAI
     }
 
     /** Artorius the Doombringer */
-    void Aggro(Unit* pWho) 
+    void Aggro(Unit* pWho)  override
     {
-        if (pWho->getClass() == CLASS_HUNTER && (m_hunterGuid.IsEmpty() || m_hunterGuid == pWho->GetObjectGuid())/*&& pWho->GetQuestStatus(QUEST_STAVE_OF_THE_ANCIENTS) == QUEST_STATUS_INCOMPLETE*/)
+        if (pWho->GetClass() == CLASS_HUNTER && (m_hunterGuid.IsEmpty() || m_hunterGuid == pWho->GetObjectGuid())/*&& pWho->GetQuestStatus(QUEST_STAVE_OF_THE_ANCIENTS) == QUEST_STATUS_INCOMPLETE*/)
         {
             m_hunterGuid = pWho->GetObjectGuid();
         }
@@ -242,7 +242,7 @@ struct npc_artoriusAI : public ScriptedAI
             DemonDespawn();
     }    
     
-    void JustDied(Unit* /*pKiller*/)
+    void JustDied(Unit* /*pKiller*/) override
     {
         m_creature->SetHomePosition(7909.71f, -4598.67f, 710.008f, 0.606013f);
 
@@ -268,13 +268,13 @@ struct npc_artoriusAI : public ScriptedAI
             Creature* pCleaner = m_creature->SummonCreature(NPC_THE_CLEANER, m_creature->GetPositionX(), m_creature->GetPositionY(), m_creature->GetPositionZ(), m_creature->GetAngle(m_creature), TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 20*MINUTE*IN_MILLISECONDS);
             if (pCleaner)
             {
-                ThreatList const& tList = m_creature->getThreatManager().getThreatList();
+                ThreatList const& tList = m_creature->GetThreatManager().getThreatList();
                 
                 for (ThreatList::const_iterator itr = tList.begin();itr != tList.end(); ++itr)
                 {
                     if (Unit* pUnit = m_creature->GetMap()->GetUnit((*itr)->getUnitGuid()))
                     {
-                        if (pUnit->isAlive())
+                        if (pUnit->IsAlive())
                         {
                             pCleaner->SetInCombatWith(pUnit);
                             pCleaner->AddThreat(pUnit);
@@ -297,7 +297,7 @@ struct npc_artoriusAI : public ScriptedAI
         }
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         /** Artorius the Amiable */
         if (m_bTransform)
@@ -327,17 +327,17 @@ struct npc_artoriusAI : public ScriptedAI
         {
             if (m_uiDespawn_Timer <= uiDiff)
             {
-                if (m_creature->isAlive() && !m_creature->isInCombat())
+                if (m_creature->IsAlive() && !m_creature->IsInCombat())
                     DemonDespawn(false);
             }
             else
                 m_uiDespawn_Timer -= uiDiff;
         }
     
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
-        if (m_creature->getThreatManager().getThreatList().size() > 1 /*|| pHunter->isDead()*/)
+        if (m_creature->GetThreatManager().getThreatList().size() > 1 /*|| pHunter->isDead()*/)
             DemonDespawn();
 
         if (m_uiDemonic_Frenzy_Timer < uiDiff)
@@ -353,8 +353,8 @@ struct npc_artoriusAI : public ScriptedAI
             m_uiDemonic_Doom_Timer = 7500;
             // only attempt to cast this once every 7.5 seconds to give the hunter some leeway
             // LOWER max range for lag...
-            if (m_creature->IsWithinDistInMap(m_creature->getVictim(), 25))
-                DoCastSpellIfCan(m_creature->getVictim(), SPELL_DEMONIC_DOOM);
+            if (m_creature->IsWithinDistInMap(m_creature->GetVictim(), 25))
+                DoCastSpellIfCan(m_creature->GetVictim(), SPELL_DEMONIC_DOOM);
         }
         else
             m_uiDemonic_Doom_Timer -= uiDiff;
@@ -366,7 +366,7 @@ struct npc_artoriusAI : public ScriptedAI
 bool GossipHello_npc_artorius(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->GetQuestStatus(QUEST_STAVE_OF_THE_ANCIENTS) == QUEST_STATUS_INCOMPLETE ||
-        (pPlayer->getLevel() >= 60 && pPlayer->getClass() == CLASS_HUNTER && pPlayer->HasItemCount(51636, 1)))
+        (pPlayer->GetLevel() >= 60 && pPlayer->GetClass() == CLASS_HUNTER && pPlayer->HasItemCount(51636, 1)))
         pPlayer->ADD_GOSSIP_ITEM(0, GOSSIP_ITEM , GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF);
     
     pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetObjectGuid());
@@ -484,7 +484,7 @@ struct npc_ranshallaAI : public npc_escortAI
             SetEscortPaused(1); //STATE_ESCORT_PAUSED
             pGo->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_INTERACT_COND);
 
-            //if(DoCastSpellIfCan(m_creature, 18955)) //Ranshalla's Torch Trap: 18955  DoCastSpellIfCan(Unit*, uint32, uint32, ObjectGuid) //incant sort DoCastSpellIfCan(m_creature->getVictim(), TRAIT_FOUDRE
+            //if(DoCastSpellIfCan(m_creature, 18955)) //Ranshalla's Torch Trap: 18955  DoCastSpellIfCan(Unit*, uint32, uint32, ObjectGuid) //incant sort DoCastSpellIfCan(m_creature->GetVictim(), TRAIT_FOUDRE
             //{
             //    SetEscortPaused(0);
             //}
@@ -572,15 +572,10 @@ struct npc_ranshallaAI : public npc_escortAI
         }
     }
 
-    void SummonedMovementInform(Creature* pSummoned, uint32 uiType, uint32 uiPointId)
+    void SummonedMovementInform(Creature* pSummoned, uint32 uiType, uint32 uiPointId) override
     {
         if (!(uiType != POINT_MOTION_TYPE || pSummoned->GetEntry() != 12116))
         {
-
-            int id = 1;
-            int maxid = 3;
-            //m_creature->MonsterSay("Dans SummonedMovementInform");//test
-
             if (pretressesRepartent == 1)
             {
                 if (uiPointId > 0 && uiPointId < 4)
@@ -604,7 +599,7 @@ struct npc_ranshallaAI : public npc_escortAI
         }
     }
 
-    void WaypointReached(uint32 i)
+    void WaypointReached(uint32 i) override
     {
         //altar = 49182;
         /*
@@ -620,7 +615,7 @@ struct npc_ranshallaAI : public npc_escortAI
         switch (i)
         {
             case 0:
-                m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+                m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
                 if (pretressesRepartent != 0 ||  wpInvoqueAtteint != 0 || guidPriestess1 != 0 || guidPriestess2 != 0 ||  guidMoonkin != 0 ||  guidVoice != 0 || pretressesInvoque != 0)
                     m_creature->MonsterSay("WTF values have not been reset properly !");
                 DoScriptText(RANSHALLA_BEGIN, m_creature, pPlayer);
@@ -687,7 +682,7 @@ struct npc_ranshallaAI : public npc_escortAI
     }
 
 // pretresses sont pop pile 2MIN
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (HasEscortState(STATE_ESCORT_ESCORTING))
         {
@@ -795,15 +790,14 @@ struct npc_ranshallaAI : public npc_escortAI
         npc_escortAI::UpdateAI(uiDiff);
     }
 
-    void Reset()
+    void Reset() override
     {
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
         m_creature->SetStandState(UNIT_STAND_STATE_STAND);
         if (!HasEscortState(STATE_ESCORT_ESCORTING))
         {
             wpInvoqueAtteint = 0;
             pretressesInvoque = 0;
-            //m_creature->setFaction(FACTION_ESCORT_A_NEUTRAL_PASSIVE);
             guidPriestess1 = 0;
             guidPriestess2 = 0;
             guidMoonkin = 0;
@@ -879,7 +873,7 @@ bool GOHello_go_altar_of_elune(Player* pPlayer, GameObject* pGo)
 
 enum
 {
-    SPELL_UNSUMMON_YETI         = 17163
+    SPELL_UNSUMMON_YETI = 17163
 };
 
 struct npc_umi_yetiAI : public ScriptedAI
@@ -897,7 +891,7 @@ struct npc_umi_yetiAI : public ScriptedAI
     {
     }
 
-    void SpellHit(Unit* pCaster, const SpellEntry* pSpell)
+    void SpellHit(Unit* pCaster, const SpellEntry* pSpell) override
     {
         if (pSpell->Id == SPELL_UNSUMMON_YETI)
         {

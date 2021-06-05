@@ -26,25 +26,25 @@ EndScriptData */
 
 enum
 {
-    EMOTE_TARGET                =   -1509002,
+    EMOTE_TARGET = -1509002,
 
-    SPELL_CREEPING_PLAGUE       =   20512,
-    SPELL_DISMEMBER             =   96,
-    SPELL_GAIN_SPEED            =   1834,
-    SPELL_FULL_SPEED            =   1557,
-    SPELL_THORNS                =   25640,
-    SPELL_BURU_TRANSFORM        =   24721,
-    SPELL_CREATURE_SPECIAL      =   7155,
-    SPELL_BURU_EGG_TRIGGER      =   26646,
-    SPELL_SUMMON_HATCHLING      =   1881,
-    SPELL_EXPLODE               =   19593,
+    SPELL_CREEPING_PLAGUE = 20512,
+    SPELL_DISMEMBER = 96,
+    SPELL_GAIN_SPEED = 1834,
+    SPELL_FULL_SPEED = 1557,
+    SPELL_THORNS = 25640,
+    SPELL_BURU_TRANSFORM = 24721,
+    SPELL_CREATURE_SPECIAL = 7155,
+    SPELL_BURU_EGG_TRIGGER = 26646,
+    SPELL_SUMMON_HATCHLING = 1881,
+    SPELL_EXPLODE = 19593,
 
-    NPC_BURU_EGG                =   15514,
-    NPC_BURU_EGG_TRIGGER        =   15964,
-    NPC_HIVEZARA_HATCHLING      =   15521,
+    NPC_BURU_EGG = 15514,
+    NPC_BURU_EGG_TRIGGER = 15964,
+    NPC_HIVEZARA_HATCHLING = 15521,
 
-    MODEL_BURU_NORMAL           =   15654,
-    MODEL_INVISIBLE             =   11686
+    MODEL_BURU_NORMAL = 15654,
+    MODEL_INVISIBLE = 11686
 };
 
 const float THREAT_LOCK = FLT_MAX;
@@ -82,7 +82,7 @@ struct boss_buruAI : public ScriptedAI
 
     uint64 m_eggsGUID[6];
 
-    void Reset()
+    void Reset() override
     {
         m_creature->SetDisplayId(MODEL_BURU_NORMAL);
         m_creature->RemoveAllAuras();
@@ -113,7 +113,7 @@ struct boss_buruAI : public ScriptedAI
             m_pInstance->SetData(TYPE_BURU, NOT_STARTED);
     }
 
-    void Aggro(Unit *pWho)
+    void Aggro(Unit *pWho) override
     {
         m_creature->SetInCombatWithZone();
         DoCast(m_creature, SPELL_THORNS);
@@ -124,7 +124,7 @@ struct boss_buruAI : public ScriptedAI
             m_pInstance->SetData(TYPE_BURU, IN_PROGRESS);
     }
 
-    void JustDied(Unit* pKiller)
+    void JustDied(Unit* pKiller) override
     {
         // Remove Creeping Plague on boss death
         Map::PlayerList const &playerList = m_creature->GetMap()->GetPlayers();
@@ -156,20 +156,20 @@ struct boss_buruAI : public ScriptedAI
 
     void EnableMovement()
     {
-        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
         SetCombatMovement(true);
-        m_creature->clearUnitState(UNIT_STAT_ROOT);
+        m_creature->ClearUnitState(UNIT_STAT_ROOT);
         m_creature->SetRooted(false);
     }
 
     void DisableMovement()
     {
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
         SetCombatMovement(false);
         m_creature->RemoveAllAttackers();
         m_creature->AttackStop();
         m_creature->StopMoving();
-        m_creature->addUnitState(UNIT_STAT_ROOT);
+        m_creature->AddUnitState(UNIT_STAT_ROOT);
         m_creature->SetRooted(true);
     }
 
@@ -180,11 +180,11 @@ struct boss_buruAI : public ScriptedAI
         // Reset aggro
         if (resetAggro)
         {
-            m_creature->getThreatManager().modifyThreatPercent(m_creature->getVictim(), -100);
+            m_creature->GetThreatManager().modifyThreatPercent(m_creature->GetVictim(), -100);
             m_creature->DeleteThreatList();
         }
         // Add a really high threat to lock boss to target
-        m_creature->getThreatManager().addThreat(pWho, THREAT_LOCK);
+        m_creature->GetThreatManager().addThreat(pWho, THREAT_LOCK);
         m_bAwaitingNewTarget = false;
     }
 
@@ -196,7 +196,7 @@ struct boss_buruAI : public ScriptedAI
         m_creature->CastSpell(m_creature, SPELL_BURU_TRANSFORM, false);
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         Creature* egg;
         for (int i = 0; i < 6 && !m_bIsPhaseTwo; i++)
@@ -207,7 +207,7 @@ struct boss_buruAI : public ScriptedAI
                 if (Creature* egg = m_creature->SummonCreature(NPC_BURU_EGG, Eggs[i].x, Eggs[i].y, Eggs[i].z, 0))
                     m_eggsGUID[i] = egg->GetGUID();
             }
-            else if (!egg->isAlive())
+            else if (!egg->IsAlive())
             {
                 if (m_uiRespawnEgg_Timer[i] < uiDiff)
                 {
@@ -236,14 +236,14 @@ struct boss_buruAI : public ScriptedAI
                 m_creature->RemoveAurasDueToSpell(SPELL_FULL_SPEED);
                 m_creature->SetSpeedRate(MOVE_RUN, 1.0f);
 
-                if (m_creature->getVictim())
-                    m_creature->SetFacingToObject(m_creature->getVictim());
+                if (m_creature->GetVictim())
+                    m_creature->SetFacingToObject(m_creature->GetVictim());
 
                 // Kill remaining eggs
                 for (unsigned long guid : m_eggsGUID)
                 {
                     Creature* egg = m_pInstance->GetCreature(guid);
-                    if (egg != nullptr && egg->isAlive())
+                    if (egg != nullptr && egg->IsAlive())
                     {
                         egg->DoKillUnit(egg);
                         egg->AddObjectToRemoveList();
@@ -274,7 +274,7 @@ struct boss_buruAI : public ScriptedAI
             }
         }
 
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         // Check if boss should enrage or not.
@@ -292,7 +292,7 @@ struct boss_buruAI : public ScriptedAI
                 // Dismember - A stacking bleed effect that does 1248 damage every 2 second. Buru will use this if he catches up to whoever he is targeting.
                 if (m_uiDismember_Timer < uiDiff)
                 {
-                    if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_DISMEMBER) == CAST_OK)
+                    if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_DISMEMBER) == CAST_OK)
                         m_uiDismember_Timer = 6000;
                 }
                 else
@@ -335,24 +335,24 @@ struct mob_buru_eggAI : public ScriptedAI
 
     ScriptedInstance* m_pInstance;
 
-    void Reset()
+    void Reset() override
     {
         // Prevent eggs from rotating around
         SetCombatMovement(false);
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
     }
 
-    void DamageTaken(Unit* pDoneBy, uint32 &uiDamage)
+    void DamageTaken(Unit* pDoneBy, uint32 &uiDamage) override
     {
         // Aggro Buru on egg attack
         if (Creature* pBuru = m_pInstance->GetCreature(m_pInstance->GetData64(DATA_BURU)))
         {
-            if (!pBuru->isInCombat())
+            if (!pBuru->IsInCombat())
                 pBuru->SetInCombatWithZone();
         }
     }
 
-    void JustSummoned(Creature* pCreature)
+    void JustSummoned(Creature* pCreature) 
     {
         if (pCreature->GetEntry() == NPC_BURU_EGG_TRIGGER)
         {
@@ -360,7 +360,7 @@ struct mob_buru_eggAI : public ScriptedAI
         }
     }
 
-    void JustDied(Unit* pKiller)
+    void JustDied(Unit* pKiller) override
     {
         if (!m_pInstance)
             return;
@@ -379,7 +379,7 @@ struct mob_buru_eggAI : public ScriptedAI
         {
             float distance = m_creature->GetDistance2d(pBuru);
             float damageFactor = 1.0f - (distance / 25.0f);
-            if (pBuru->isAlive() && distance < 5.0f && pBuru->GetHealthPercent() >= 20)
+            if (pBuru->IsAlive() && distance < 5.0f && pBuru->GetHealthPercent() >= 20)
             {
                 pBuru->SetHealthPercent(pBuru->GetHealthPercent() - 10 * damageFactor);
                 static_cast<boss_buruAI*>(pBuru->AI())->OnEggExploded();
@@ -387,7 +387,7 @@ struct mob_buru_eggAI : public ScriptedAI
         }
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         return;
     }

@@ -23,9 +23,7 @@
 #include "Log.h"
 #include "CreatureAI.h"
 
-TemporarySummon::TemporarySummon(ObjectGuid summoner) :
-    Creature(CREATURE_SUBTYPE_TEMPORARY_SUMMON), m_type(TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN), m_timer(0), m_lifetime(0), m_summoner(summoner),
-    m_forceTargetUpdateTimer(1000), m_unSummonInformed(false)
+TemporarySummon::TemporarySummon(ObjectGuid summoner) : Creature(CREATURE_SUBTYPE_TEMPORARY_SUMMON), m_type(TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN), m_timer(0), m_lifetime(0), m_summoner(summoner), m_unSummonInformed(false)
 {
 }
 
@@ -34,7 +32,9 @@ void TemporarySummon::Update(uint32 update_diff,  uint32 diff)
     switch (m_type)
     {
         case TEMPSUMMON_MANUAL_DESPAWN:
+        {
             break;
+        }
         case TEMPSUMMON_TIMED_DESPAWN:
         {
             if (m_timer <= update_diff)
@@ -48,7 +48,7 @@ void TemporarySummon::Update(uint32 update_diff,  uint32 diff)
         }
         case TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT:
         {
-            if (!isInCombat())
+            if (!IsInCombat())
             {
                 if (m_timer <= update_diff)
                 {
@@ -75,12 +75,13 @@ void TemporarySummon::Update(uint32 update_diff,  uint32 diff)
 
                 m_timer -= update_diff;
             }
+
             break;
         }
         case TEMPSUMMON_CORPSE_DESPAWN:
         {
             // if m_deathState is DEAD, CORPSE was skipped
-            if (isDead())
+            if (IsDead())
             {
                 UnSummon();
                 return;
@@ -95,18 +96,19 @@ void TemporarySummon::Update(uint32 update_diff,  uint32 diff)
                 UnSummon();
                 return;
             }
+
             break;
         }
         case TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN:
         {
             // if m_deathState is DEAD, CORPSE was skipped
-            if (isDead())
+            if (IsDead())
             {
                 UnSummon();
                 return;
             }
 
-            if (!isInCombat())
+            if (!IsInCombat())
             {
                 if (m_timer <= update_diff)
                 {
@@ -118,6 +120,7 @@ void TemporarySummon::Update(uint32 update_diff,  uint32 diff)
             }
             else if (m_timer != m_lifetime)
                 m_timer = m_lifetime;
+
             break;
         }
         case TEMPSUMMON_TIMED_OR_DEAD_DESPAWN:
@@ -129,7 +132,7 @@ void TemporarySummon::Update(uint32 update_diff,  uint32 diff)
                 return;
             }
 
-            if (!isInCombat() && isAlive())
+            if (!IsInCombat() && IsAlive())
             {
                 if (m_timer <= update_diff)
                 {
@@ -141,18 +144,20 @@ void TemporarySummon::Update(uint32 update_diff,  uint32 diff)
             }
             else if (m_timer != m_lifetime)
                 m_timer = m_lifetime;
+
             break;
         }
         case TEMPSUMMON_TIMED_COMBAT_OR_CORPSE_DESPAWN:
         {
-            if (isDead())
+            if (IsDead())
             {
                 UnSummon();
                 return;
             }
+
             if (m_timer <= update_diff)
             {
-                if (!isInCombat())
+                if (!IsInCombat())
                 {
                     UnSummon();
                     return;
@@ -162,6 +167,7 @@ void TemporarySummon::Update(uint32 update_diff,  uint32 diff)
             }
             else
                 m_timer -= update_diff;
+
             break;
         }
         case TEMPSUMMON_TIMED_COMBAT_OR_DEAD_DESPAWN:
@@ -173,7 +179,7 @@ void TemporarySummon::Update(uint32 update_diff,  uint32 diff)
             }
 
             // Reset timer when the mob dies
-            if (!isAlive() && !m_justDied)
+            if (!IsAlive() && !m_justDied)
             {
                 m_justDied = true;
                 m_timer = m_lifetime;
@@ -182,7 +188,7 @@ void TemporarySummon::Update(uint32 update_diff,  uint32 diff)
             if (m_timer <= update_diff)
             {
                 // Prevent despawn while the mob is still in combat
-                if (!isInCombat())
+                if (!IsInCombat())
                 {
                     UnSummon();
                     return;
@@ -192,27 +198,17 @@ void TemporarySummon::Update(uint32 update_diff,  uint32 diff)
             }
             else
                 m_timer -= update_diff;
+
             break;
         }
         default:
+        {
             UnSummon();
             sLog.outError("Temporary summoned creature (entry: %u) have unknown type %u of ", GetEntry(), m_type);
             break;
+        }
     }
 
-    /* Potential hack to force updates at target index if it is not networked normally
-    if (isAlive() && isInCombat() && m_forceTargetUpdateTimer)
-    {
-        if (m_forceTargetUpdateTimer <= diff)
-        {
-            m_forceTargetUpdateTimer = 0;
-            // 64bit value, so it fills two indexes in the 32bit value mapping
-            ForceValuesUpdateAtIndex(UNIT_FIELD_TARGET);
-            ForceValuesUpdateAtIndex(UNIT_FIELD_TARGET+1)
-        }
-        else
-            m_forceTargetUpdateTimer -= diff;
-    }*/
     Creature::Update(update_diff, diff);
 }
 
@@ -249,6 +245,7 @@ void TemporarySummon::InformSummonerOfDespawn()
         return;
 
     m_unSummonInformed = true;
+
     if (WorldObject* pSummoner = GetMap()->GetWorldObject(GetSummonerGuid()))
     {
         pSummoner->DecrementSummonCounter();
@@ -275,14 +272,7 @@ TemporarySummon::~TemporarySummon()
         sLog.outError("TemporarySummon %s deleted before being unsummed - summoner will retain incorrect count", GetGuidStr().c_str());
 }
 
-void TemporarySummon::SaveToDB()
-{
-}
+void TemporarySummon::SaveToDB() { }
 
 TemporarySummonWaypoint::TemporarySummonWaypoint(ObjectGuid summoner, uint32 waypoint_id, int32 path_id, uint32 pathOrigin) :
-    TemporarySummon(summoner),
-    m_waypoint_id(waypoint_id),
-    m_path_id(path_id),
-    m_pathOrigin(pathOrigin)
-{
-}
+    TemporarySummon(summoner), m_waypoint_id(waypoint_id), m_path_id(path_id), m_pathOrigin(pathOrigin) { }

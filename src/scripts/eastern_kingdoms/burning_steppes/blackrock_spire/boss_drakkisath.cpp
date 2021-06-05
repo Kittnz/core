@@ -25,13 +25,12 @@ EndScriptData */
 
 enum
 {
-//    SPELL_FIRENOVA       = 23462,
-    SPELL_FLAMESTRIKE    = 16419, // Ustaag : en remplacement de SPELL_FIRENOVA
-    SPELL_CLEAVE         = 15284, // Ustaag : ancien cleave 20691
+    SPELL_FLAMESTRIKE = 16419,
+    SPELL_CLEAVE = 15284,
     SPELL_CONFLIGURATION = 16805,
-    SPELL_THUNDERCLAP    = 15548,                            //Not sure if right ID. 23931 would be a harder possibility.
-    SPELL_RAGE           = 16789, // Ustaag : ajout
-    SPELL_PIERCEARMOR   = 12097
+    SPELL_THUNDERCLAP = 15548,
+    SPELL_RAGE = 16789,
+    SPELL_PIERCEARMOR = 12097
 };
 
 struct boss_drakkisathAI : public ScriptedAI
@@ -48,26 +47,26 @@ struct boss_drakkisathAI : public ScriptedAI
     uint32 m_uiRageTimer;
     uint32 m_uiPierceArmorTimer;
 
-    void Reset()
+    void Reset() override
     {
-        m_uiFlameStrikeTimer    = 16000;
-        m_uiCleaveTimer         = 12000;
+        m_uiFlameStrikeTimer = 16000;
+        m_uiCleaveTimer = 12000;
         m_uiConfligurationTimer = 8000;
-        m_uiThunderclapTimer    = 1000;
-        m_uiRageTimer           = 1000;
-        m_uiPierceArmorTimer    = 5000;
+        m_uiThunderclapTimer = 1000;
+        m_uiRageTimer = 1000;
+        m_uiPierceArmorTimer = 5000;
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         // Return since we have no target
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         // FlameStrike
         if (m_uiFlameStrikeTimer < uiDiff)
         {
-            if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_FLAMESTRIKE) == CAST_OK)
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_FLAMESTRIKE) == CAST_OK)
                 m_uiFlameStrikeTimer = urand(13000, 14000);
         }
         else
@@ -76,7 +75,7 @@ struct boss_drakkisathAI : public ScriptedAI
         // Cleave
         if (m_uiCleaveTimer < uiDiff)
         {
-            if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_CLEAVE) == CAST_OK)
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_CLEAVE) == CAST_OK)
                 m_uiCleaveTimer = urand(8000, 10000);
         }
         else
@@ -85,7 +84,7 @@ struct boss_drakkisathAI : public ScriptedAI
         // Confliguration
         if (m_uiConfligurationTimer < uiDiff)
         {
-            if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_CONFLIGURATION, 0, m_creature->getVictim()->GetGUID()) == CAST_OK)
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_CONFLIGURATION, 0, m_creature->GetVictim()->GetGUID()) == CAST_OK)
                 m_uiConfligurationTimer = 18000;
         }
         else
@@ -94,7 +93,7 @@ struct boss_drakkisathAI : public ScriptedAI
         // Thunderclap
         if (m_uiThunderclapTimer < uiDiff)
         {
-            if ((m_creature->getVictim())->GetDistance(m_creature) < 10.0f)
+            if ((m_creature->GetVictim())->GetDistance(m_creature) < 10.0f)
             {
                 if (DoCastSpellIfCan(m_creature, SPELL_THUNDERCLAP) == CAST_OK)
                     m_uiThunderclapTimer = 20000;
@@ -114,7 +113,7 @@ struct boss_drakkisathAI : public ScriptedAI
 
         if (m_uiPierceArmorTimer < uiDiff)
         {
-            if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_PIERCEARMOR) == CAST_OK)
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_PIERCEARMOR) == CAST_OK)
                 m_uiPierceArmorTimer = 40000;
         }
         else

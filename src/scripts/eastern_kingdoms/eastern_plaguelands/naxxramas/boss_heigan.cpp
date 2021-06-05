@@ -81,15 +81,7 @@ enum Phases
     PHASE_DANCE
 };
 
-
-static const uint32 firstEruptionDBGUID = 533048;
 static const uint8 numSections = 4;
-static const uint8 numEruptions[numSections] = { // count of sequential GO DBGUIDs in the respective section of the room
-    15,
-    25,
-    23,
-    13
-};
 
 // in tunnel
 static constexpr float safespotFissures[3][3] = 
@@ -130,7 +122,7 @@ struct boss_heiganAI : public ScriptedAI
     uint32 killCooldown;
     std::vector<ObjectGuid> portedPlayersThisPhase;
 
-    void Reset()
+    void Reset() override
     {
         portedPlayersThisPhase.clear();
         
@@ -139,7 +131,7 @@ struct boss_heiganAI : public ScriptedAI
         currentPhase = PHASE_FIGHT;
     }
 
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* pWho) override
     {
         m_creature->SetInCombatWithZone();
         
@@ -167,11 +159,11 @@ struct boss_heiganAI : public ScriptedAI
         {
             if (pWho->GetPositionX() > 2825.0f)
                 return;
-            if (m_creature->CanInitiateAttack() && pWho->isTargetableForAttack() && m_creature->IsHostileTo(pWho))
+            if (m_creature->CanInitiateAttack() && pWho->IsTargetableForAttack() && m_creature->IsHostileTo(pWho))
             {
-                if (pWho->isInAccessablePlaceFor(m_creature) && m_creature->IsWithinLOSInMap(pWho))
+                if (pWho->IsInAccessablePlaceFor(m_creature) && m_creature->IsWithinLOSInMap(pWho))
                 {
-                    if (!m_creature->getVictim())
+                    if (!m_creature->GetVictim())
                         AttackStart(pWho);
                     else if (m_creature->GetMap()->IsDungeon())
                     {
@@ -191,13 +183,13 @@ struct boss_heiganAI : public ScriptedAI
             ScriptedAI::AttackStart(pWho);
     }
 
-    void KilledUnit(Unit* pVictim)
+    void KilledUnit(Unit* pVictim) override
     {
         if(!killCooldown)
             DoScriptText(SAY_SLAY, m_creature);
     }
 
-    void JustDied(Unit* pKiller)
+    void JustDied(Unit* pKiller) override
     {
         DoScriptText(SAY_DEATH, m_creature);
 
@@ -209,14 +201,13 @@ struct boss_heiganAI : public ScriptedAI
 
     }
 
-    void JustReachedHome()
+    void JustReachedHome() override
     {
         if (m_pInstance)
         {
             m_pInstance->SetData(TYPE_HEIGAN, FAIL);
             m_pInstance->UpdateAutomaticBossEntranceDoor(GO_PLAG_HEIG_ENTRY_DOOR, FAIL);
         }
-        
     }
 
     void SendEruptCustomLocation(float x, float y, float z)
@@ -342,15 +333,15 @@ struct boss_heiganAI : public ScriptedAI
         eruptionPhase = 0;
 
 
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
-        m_creature->GetMotionMaster()->MoveChase(m_creature->getVictim());
+        m_creature->GetMotionMaster()->MoveChase(m_creature->GetVictim());
 
     }
 
     void EventPortPlayer()
     {
-        const ThreatList& tl = m_creature->getThreatManager().getThreatList();
+        const ThreatList& tl = m_creature->GetThreatManager().getThreatList();
         std::vector<Unit*> candidates;
         auto it = tl.begin();
         ++it; // skip the tank
@@ -359,7 +350,7 @@ struct boss_heiganAI : public ScriptedAI
             if (Unit* pUnit = m_creature->GetMap()->GetUnit((*it)->getUnitGuid()))
             {
                 // Candidates are only alive players who have not yet been ported during this phase rotation
-                if (pUnit->IsPlayer() && pUnit->isAlive()
+                if (pUnit->IsPlayer() && pUnit->IsAlive()
                     && std::find(portedPlayersThisPhase.begin(), portedPlayersThisPhase.end(), pUnit->GetObjectGuid()) == portedPlayersThisPhase.end())
                 {
                     candidates.push_back(pUnit);
@@ -399,13 +390,13 @@ struct boss_heiganAI : public ScriptedAI
     {
         // Looking for anyone with a manabar, currently excluded pets and totems
         // within 25yd range (radius of SPELL_MANABURN). If there is one we cast SPELL_MANABURN
-        const auto& tl = m_creature->getThreatManager().getThreatList();
+        const auto& tl = m_creature->GetThreatManager().getThreatList();
         bool found_mana_in_range = false;
         for (auto it = tl.begin(); it != tl.end(); ++it)
         {
             if (Unit* pTarget = m_creature->GetMap()->GetUnit((*it)->getUnitGuid()))
             {
-                if (pTarget->getPowerType() == POWER_MANA && pTarget->GetTypeId() == TYPEID_PLAYER && pTarget->isAlive())
+                if (pTarget->GetPowerType() == POWER_MANA && pTarget->GetTypeId() == TYPEID_PLAYER && pTarget->IsAlive())
                 {
                     if (m_creature->GetDistance3dToCenter((*it)->getTarget()) < 28.0f)
                     {
@@ -422,19 +413,19 @@ struct boss_heiganAI : public ScriptedAI
             m_events.Repeat(Seconds(1));
     }
    
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         // This will avoid him running off the platform during dance phase.
         if (currentPhase == PHASE_FIGHT)
         {
-            if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+            if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
                 return;
             if (!m_pInstance->HandleEvadeOutOfHome(m_creature))
                 return;
         }
         else {
             // If wipe, we force the dance phase to end so above code runs and he evades.
-            if (m_creature->getThreatManager().isThreatListEmpty())
+            if (m_creature->GetThreatManager().isThreatListEmpty())
                 EventDanceEnd();
         }
         
@@ -491,13 +482,13 @@ struct mob_plague_cloudAI : public ScriptedAI
     }
     void Reset() override
     {
-        m_creature->addUnitState(UNIT_STAT_ROOT);
+        m_creature->AddUnitState(UNIT_STAT_ROOT);
         m_creature->StopMoving();
         m_creature->SetRooted(true);
     }
 
-    void AttackStart(Unit*) { }
-    void MoveInLineOfSight(Unit*) { }
+    void AttackStart(Unit*) override { }
+    void MoveInLineOfSight(Unit*) override { }
 
     void UpdateAI(const uint32) override { }
 };

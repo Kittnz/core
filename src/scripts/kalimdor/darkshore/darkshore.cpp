@@ -36,28 +36,28 @@ EndContentData */
 
 enum
 {
-    SAY_KER_START               = -1000434,
+    SAY_KER_START = -1000434,
 
-    EMOTE_KER_SLEEP_1           = -1000435,
-    EMOTE_KER_SLEEP_2           = -1000436,
-    EMOTE_KER_SLEEP_3           = -1000437,
+    EMOTE_KER_SLEEP_1 = -1000435,
+    EMOTE_KER_SLEEP_2 = -1000436,
+    EMOTE_KER_SLEEP_3 = -1000437,
 
-    SAY_KER_SLEEP_1             = -1000438,
-    SAY_KER_SLEEP_2             = -1000439,
-    SAY_KER_SLEEP_3             = -1000440,
-    SAY_KER_SLEEP_4             = -1000441,
+    SAY_KER_SLEEP_1 = -1000438,
+    SAY_KER_SLEEP_2 = -1000439,
+    SAY_KER_SLEEP_3 = -1000440,
+    SAY_KER_SLEEP_4 = -1000441,
 
-    EMOTE_KER_AWAKEN            = -1000445,
+    EMOTE_KER_AWAKEN = -1000445,
 
-    SAY_KER_ALERT_1             = -1000442,
-    SAY_KER_ALERT_2             = -1000443,
+    SAY_KER_ALERT_1 = -1000442,
+    SAY_KER_ALERT_2 = -1000443,
 
-    SAY_KER_END                 = -1000444,
+    SAY_KER_END = -1000444,
 
-    SPELL_SLEEP_VISUAL          = 25148,
-    SPELL_AWAKEN                = 17536,
-    QUEST_SLEEPER_AWAKENED      = 5321,
-    NPC_LILADRIS                = 11219                     //attackers entries unknown
+    SPELL_SLEEP_VISUAL = 25148,
+    SPELL_AWAKEN = 17536,
+    QUEST_SLEEPER_AWAKENED = 5321,
+    NPC_LILADRIS = 11219 // Attackers entries unknown
 };
 
 //TODO: make concept similar as "ringo" -escort. Find a way to run the scripted attacks, _if_ player are choosing road.
@@ -77,7 +77,7 @@ struct npc_kerlonianAI : public FollowerAI
 
     void JustRespawned() override
     {
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
         FollowerAI::JustRespawned();
     }
 
@@ -85,7 +85,7 @@ struct npc_kerlonianAI : public FollowerAI
     {
         FollowerAI::MoveInLineOfSight(pWho);
 
-        if (!m_creature->getVictim() && !HasFollowState(STATE_FOLLOW_COMPLETE) && pWho->GetEntry() == NPC_LILADRIS)
+        if (!m_creature->GetVictim() && !HasFollowState(STATE_FOLLOW_COMPLETE) && pWho->GetEntry() == NPC_LILADRIS)
         {
             if (m_creature->IsWithinDistInMap(pWho, INTERACTION_DISTANCE * 5))
             {
@@ -157,7 +157,7 @@ struct npc_kerlonianAI : public FollowerAI
 
     void UpdateFollowerAI(const uint32 uiDiff) override
     {
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
         {
             if (!HasFollowState(STATE_FOLLOW_INPROGRESS))
                 return;
@@ -192,7 +192,7 @@ bool QuestAccept_npc_kerlonian(Player* pPlayer, Creature* pCreature, const Quest
         if (npc_kerlonianAI* pKerlonianAI = dynamic_cast<npc_kerlonianAI*>(pCreature->AI()))
         {
             pCreature->SetStandState(UNIT_STAND_STATE_STAND);
-            pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+            pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
             DoScriptText(SAY_KER_START, pCreature, pPlayer);
             pKerlonianAI->StartFollow(pPlayer, FACTION_ESCORT_N_FRIEND_PASSIVE, pQuest);
         }
@@ -236,7 +236,7 @@ struct npc_prospector_remtravelAI : public npc_escortAI
 
     void JustRespawned() override
     {
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
         npc_escortAI::JustRespawned();
     }
 
@@ -324,13 +324,13 @@ bool QuestAccept_npc_prospector_remtravel(Player* pPlayer, Creature* pCreature, 
 {
     if (pQuest->GetQuestId() == QUEST_ABSENT_MINDED_PT2)
     {
-        pCreature->setFaction(FACTION_ESCORT_A_NEUTRAL_PASSIVE);
+        pCreature->SetFactionTemplateId(FACTION_ESCORT_A_NEUTRAL_PASSIVE);
 
         if (npc_prospector_remtravelAI* pEscortAI = dynamic_cast<npc_prospector_remtravelAI*>(pCreature->AI()))
         {
             DoScriptText(SAY_REM_START, pCreature, pPlayer);
             pCreature->HandleEmoteCommand(EMOTE_ONESHOT_QUESTION);
-            pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+            pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
             pEscortAI->Start(false, pPlayer->GetGUID(), pQuest, true);
         }
     }
@@ -366,7 +366,7 @@ struct npc_threshwackonatorAI : public FollowerAI
     {
         FollowerAI::MoveInLineOfSight(pWho);
 
-        if (!m_creature->getVictim() && !HasFollowState(STATE_FOLLOW_COMPLETE) && pWho->GetEntry() == NPC_GELKAK)
+        if (!m_creature->GetVictim() && !HasFollowState(STATE_FOLLOW_COMPLETE) && pWho->GetEntry() == NPC_GELKAK)
         {
             if (m_creature->IsWithinDistInMap(pWho, 10.0f))
             {
@@ -378,7 +378,7 @@ struct npc_threshwackonatorAI : public FollowerAI
 
     void DoAtEnd()
     {
-        m_creature->setFaction(FACTION_HOSTILE);
+        m_creature->SetFactionTemplateId(FACTION_HOSTILE);
 
         if (Player* pHolder = GetLeaderForFollower())
             m_creature->AI()->AttackStart(pHolder);
@@ -442,7 +442,7 @@ struct npc_theryluneAI : public npc_escortAI
 
     void JustRespawned() override
     {
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
         npc_escortAI::JustRespawned();
     }
 
@@ -477,7 +477,7 @@ bool QuestAccept_npc_therylune(Player* pPlayer, Creature* pCreature, const Quest
             pEscortAI->Start(false, pPlayer->GetGUID(), pQuest);
             DoScriptText(SAY_THERYLUNE_START, pCreature, pPlayer);
             pCreature->SetFactionTemporary(79, TEMPFACTION_RESTORE_RESPAWN);
-            pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+            pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
         }
     }
 
@@ -582,7 +582,7 @@ struct npc_volcorAI : public npc_escortAI
 
     void JustRespawned() override
     {
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
         m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER | UNIT_NPC_FLAG_GOSSIP);
         m_creature->SetHomePosition(m_creature->GetPositionX(), m_creature->GetPositionY(), m_creature->GetPositionZ(), 0.0f);
 
@@ -645,7 +645,7 @@ struct npc_volcorAI : public npc_escortAI
             ForceDialogueStep = 0;
             ForceDialogueTimer = 0;
             Start(false, pPlayer->GetGUID(), pQuest);
-            m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+            m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
         }
     }
 
@@ -840,12 +840,12 @@ struct npc_rabid_thistle_bearAI : public FollowerAI
                 Captured_Timer -= SignedDiff;
         }
 
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         if (Rage_Timer < SignedDiff)
         {
-            if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_RAGE) == CAST_OK)
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_RAGE) == CAST_OK)
                 Rage_Timer = 60000;
         }
         else
@@ -917,7 +917,7 @@ struct npc_tharnariun_treetenderAI : public ScriptedAI
     Player* pPlaguedLandsPlayer = nullptr;
     Creature* pPlaguedLandsBear = nullptr;
 
-    void Reset()
+    void Reset() override
     {
         m_bPlaguedLandsEvent = false;
         PlaguedLandsCount = 0;
@@ -933,7 +933,7 @@ struct npc_tharnariun_treetenderAI : public ScriptedAI
         m_uiPlaguedLandsTimer = 1100;
     }
 
-    void UpdateAI(const uint32 diff)
+    void UpdateAI(const uint32 diff) override
     {
         if (m_bPlaguedLandsEvent)
         { 
@@ -991,7 +991,7 @@ struct npc_tharnariun_treetenderAI : public ScriptedAI
         }
 
         //Return since we have no target
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         DoMeleeAttackIfReady();
@@ -1199,14 +1199,14 @@ struct npc_sentinel_aynashaAI : public Scripted_NoMovementAI
             }
         }
 
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         if (WaveNB < 4)
         {
             if (m_uiSpell_AynashasBowTimer < uiDiff)
             {
-                if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_AYNASHAS_BOW) == CAST_OK)
+                if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_AYNASHAS_BOW) == CAST_OK)
                     m_uiSpell_AynashasBowTimer = 2000;
             }
             else
@@ -1313,7 +1313,7 @@ struct npc_murkdeepAI : public ScriptedAI
         npc_murkdeepAI::Reset();
 
         m_creature->SetVisibility(VISIBILITY_OFF);
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
     }
 
     ObjectGuid m_playerGuid;
@@ -1375,7 +1375,7 @@ struct npc_murkdeepAI : public ScriptedAI
         if (!bonfire)
             return nullptr;
 
-        if (player->IsInRange(bonfire, 0.0f, 50.0f) && player->isAlive())
+        if (player->IsInRange(bonfire, 0.0f, 50.0f) && player->IsAlive())
             return player;
 
         return nullptr;
@@ -1419,10 +1419,10 @@ struct npc_murkdeepAI : public ScriptedAI
 
         if (m_uiSunderArmorTimer < uiDiff)
         {
-            SpellAuraHolder* holder = m_creature->getVictim()->GetSpellAuraHolder(SPELL_SUNDER_ARMOR);
+            SpellAuraHolder* holder = m_creature->GetVictim()->GetSpellAuraHolder(SPELL_SUNDER_ARMOR);
             if (!holder || holder->GetStackAmount() < 5)
             {
-                if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_SUNDER_ARMOR) == CAST_OK)
+                if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_SUNDER_ARMOR) == CAST_OK)
                     m_uiSunderArmorTimer = urand(5000, 9000);
             }
             else
@@ -1433,7 +1433,7 @@ struct npc_murkdeepAI : public ScriptedAI
 
         if (m_uiNetTimer < uiDiff)
         {
-            if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_NET) == CAST_OK)
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_NET) == CAST_OK)
                 m_uiNetTimer = urand(9000, 15000);
         }
         else
@@ -1444,7 +1444,7 @@ struct npc_murkdeepAI : public ScriptedAI
 
     void UpdateAI(const uint32 uiDiff) override
     {
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
         {
             if (!m_uiEventPhase && m_bEventState && m_creature->GetVisibility() == VISIBILITY_OFF)
             {
@@ -1477,7 +1477,7 @@ struct npc_murkdeepAI : public ScriptedAI
                     case 3:
                         DoSummon();
                         m_creature->SetVisibility(VISIBILITY_ON);
-                        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+                        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
 
                         Player* player = GetPlayer();
                         if (player)
@@ -1513,13 +1513,13 @@ bool at_murloc_camp(Player* pPlayer, AreaTriggerEntry const *pAt)
 {
     if (pAt->id == AREATRIGGER_MURKDEEP)
     {
-        if (pPlayer->IsGameMaster() || pPlayer->isDead())
+        if (pPlayer->IsGameMaster() || pPlayer->IsDead())
             return false;
 
         if (pPlayer && pPlayer->GetQuestStatus(QUEST_WANTED_MURKDEEP) == QUEST_STATUS_INCOMPLETE)
         {
             Creature *pCreature = GetClosestCreatureWithEntry(pPlayer, NPC_MURKDEEP, DEFAULT_VISIBILITY_DISTANCE);
-            if (pCreature && pCreature->isAlive())
+            if (pCreature && pCreature->IsAlive())
                 return false;
 
             pCreature = pPlayer->SummonCreature(NPC_MURKDEEP, 

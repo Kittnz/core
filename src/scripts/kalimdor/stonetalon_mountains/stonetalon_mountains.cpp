@@ -52,14 +52,14 @@ struct npc_piznikAI : public ScriptedAI
 
     void JustRespawned() override
     {
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
         ScriptedAI::JustRespawned();
     }
 
     void JustSummoned(Creature* pSummoned) override
     {
         pSummoned->GetMotionMaster()->MovePoint(2, 959.93f, -261.39f, -5.75f,MOVE_PATHFINDING);
-        pSummoned->SetHomePosition(959.931335f, -261.39f, -5.74659f,  5.32f);
+        pSummoned->SetHomePosition(959.931335f, -261.39f, -5.74659f, 5.32f);
     }
 
     void JustDied(Unit* /*pKiller*/) override
@@ -79,7 +79,7 @@ struct npc_piznikAI : public ScriptedAI
         EventTimer = 0;
         pGuid = plr->GetObjectGuid();
         m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PVP);
-        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
         m_creature->SetFactionTemporary(FACTION_ESCORT_N_FRIEND_ACTIVE, TEMPFACTION_RESTORE_RESPAWN);
     }
     void AttackStart(Unit* pWho) override
@@ -91,7 +91,7 @@ struct npc_piznikAI : public ScriptedAI
     }
     void UpdateAI(const uint32 uiDiff) override
     {
-        if (m_creature->SelectHostileTarget() || m_creature->getVictim())
+        if (m_creature->SelectHostileTarget() || m_creature->GetVictim())
                 DoMeleeAttackIfReady();
         else if(InEvent)
         {

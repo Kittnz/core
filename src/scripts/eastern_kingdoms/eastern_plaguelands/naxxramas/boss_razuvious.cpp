@@ -82,7 +82,7 @@ struct mob_deathknightUnderstudyAI : public ScriptedAI
 
     uint32 attackTimer;
     bool runAttack;
-    void Reset()
+    void Reset() override
     {
         m_creature->HandleEmote(EMOTE_STATE_READY1H);
         attackTimer = urand(5000, 10000);
@@ -108,7 +108,7 @@ struct mob_deathknightUnderstudyAI : public ScriptedAI
                 attackTimer -= diff;
         }
 
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         DoMeleeAttackIfReady();
@@ -131,7 +131,7 @@ struct boss_razuviousAI : public ScriptedAI
     EventMap rpEvents;
     ObjectGuid rpBuddy;
     
-    void Reset()
+    void Reset() override
     {
         events.Reset();
     }
@@ -142,13 +142,13 @@ struct boss_razuviousAI : public ScriptedAI
             return;
 
         if (pWho->GetTypeId() == TYPEID_PLAYER
-            && !m_creature->isInCombat()
+            && !m_creature->IsInCombat()
             && m_creature->IsWithinDistInMap(pWho, 33.0f)
             && m_creature->IsWithinLOSInMap(pWho)
             && !pWho->HasAuraType(SPELL_AURA_FEIGN_DEATH)
             && !pWho->HasAuraType(SPELL_AURA_MOD_UNATTACKABLE))
         {
-            if (!m_creature->getVictim())
+            if (!m_creature->GetVictim())
                 AttackStart(pWho);
             else if (m_creature->GetMap()->IsDungeon())
             {
@@ -196,14 +196,14 @@ struct boss_razuviousAI : public ScriptedAI
         RespawnAdds();
     }
 
-    void KilledUnit(Unit* Victim)
+    void KilledUnit(Unit* Victim) override
     {
         if (urand(0, 3))
             return;
         DoScriptText(urand(SAY_SLAY1, SAY_SLAY2), m_creature);
     }
 
-    void JustDied(Unit* pKiller)
+    void JustDied(Unit* pKiller) override
     {
         DoScriptText(SAY_DEATH, m_creature);
         DoCastSpellIfCan(m_creature, SPELL_HOPELESS, CF_TRIGGERED);
@@ -211,7 +211,7 @@ struct boss_razuviousAI : public ScriptedAI
             m_pInstance->SetData(TYPE_RAZUVIOUS, DONE);
     }
 
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* pWho) override
     {
 
         DoScriptText(urand(SAY_AGGRO1, SAY_AGGRO3), m_creature);
@@ -308,12 +308,12 @@ struct boss_razuviousAI : public ScriptedAI
         }
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
-        if (!m_creature->isInCombat())
+        if (!m_creature->IsInCombat())
             UpdateRP(uiDiff);
 
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
         
         if (!m_pInstance->HandleEvadeOutOfHome(m_creature))
@@ -325,11 +325,11 @@ struct boss_razuviousAI : public ScriptedAI
             switch (eventId)
             {
             case EVENT_UNBALANCING_STRIKE:
-                DoCastSpellIfCan(m_creature->getVictim(), SPELL_UNBALANCING_STRIKE);
+                DoCastSpellIfCan(m_creature->GetVictim(), SPELL_UNBALANCING_STRIKE);
                 events.Repeat(Seconds(30));
                 break;
             case EVENT_DISRUPTING_SHOUT:
-                DoCastSpellIfCan(m_creature->getVictim(), SPELL_DISRUPTING_SHOUT);
+                DoCastSpellIfCan(m_creature->GetVictim(), SPELL_DISRUPTING_SHOUT);
                 DoScriptText(EMOTE_SHOUT, m_creature);
                 events.Repeat(Seconds(25));
                 break;

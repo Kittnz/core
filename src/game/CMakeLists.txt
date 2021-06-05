@@ -251,14 +251,11 @@ set (game_SRCS
     AI/ScriptedEscortAI.h
     AI/ScriptedFollowerAI.h
     AI/ScriptedGameObject.h
-    AI/ScriptedGossip.h
     AI/ScriptedInstance.h
     AI/ScriptedPetAI.h
     AI/TotemAI.h
     Anticheat/Anticheat.h
     AuctionHouse/AuctionHouseMgr.h
-    AutoTesting/AutoTestingMgr.h
-    AutoTesting/Tests/TestPCH.h
     Battlegrounds/BattleGround.h
     Battlegrounds/BattleGroundAB.h
     Battlegrounds/BattleGroundAV.h
@@ -349,6 +346,7 @@ set (game_SRCS
     Objects/TemporarySummon.h
     Objects/Totem.h
     Objects/Unit.h
+	Objects/UnitDefines.h
     Objects/UpdateData.h
     Objects/UpdateFields.h
     Objects/UpdateMask.h
@@ -365,6 +363,7 @@ set (game_SRCS
     Spells/SpellAuraDefines.h
     Spells/SpellAuras.h
     Spells/SpellClassMask.h
+	Spells/SpellDefines.h
     Spells/SpellEntry.h
     Spells/SpellMgr.h
     Spells/SpellModMgr.h
@@ -431,10 +430,8 @@ include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}/AI
   ${CMAKE_CURRENT_SOURCE_DIR}/Anticheat
   ${CMAKE_CURRENT_SOURCE_DIR}/AuctionHouse
-  ${CMAKE_CURRENT_SOURCE_DIR}/AutoTesting
   ${CMAKE_CURRENT_SOURCE_DIR}/Battlegrounds
   ${CMAKE_CURRENT_SOURCE_DIR}/Chat
-  ${CMAKE_CURRENT_SOURCE_DIR}/CinematicStuff
   ${CMAKE_CURRENT_SOURCE_DIR}/Commands
   ${CMAKE_CURRENT_SOURCE_DIR}/Database
   ${CMAKE_CURRENT_SOURCE_DIR}/Group

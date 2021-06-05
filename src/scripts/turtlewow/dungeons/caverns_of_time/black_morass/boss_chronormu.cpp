@@ -1,6 +1,7 @@
 #include "scriptPCH.h"
 
-enum {
+enum
+{
     EMOTE_FRENZY = -1000001,
 
     SPELL_CLEAVE = 15284,
@@ -25,7 +26,7 @@ struct boss_chronormuAI : public ScriptedAI
     uint32 TimeStop_Timer;
     uint32 Frenzy_Timer;
 
-    void Reset()
+    void Reset() override
     {
         Cleave_Timer = 5000;
         SandBreath_Timer = 30000;
@@ -34,23 +35,24 @@ struct boss_chronormuAI : public ScriptedAI
         m_creature->SetActiveObjectState(true);
     }
 
-    void Aggro(Unit *who)
+    void Aggro(Unit *who) override
     {
 
     }
 
-    void KilledUnit(Unit* victim)
+    void KilledUnit(Unit* victim) override
     {
 
     }
 
-    void JustDied(Unit* /*pKiller*/)
+    void JustDied(Unit* /*pKiller*/) override
     {
         m_creature->SetRespawnTime(604800000);
     }
 
-    void EnterEvadeMode() {
-        if (m_creature->getFaction() != 35)
+    void EnterEvadeMode() override
+    {
+        if (m_creature->GetFactionTemplateId() != 35)
         {
             m_creature->SetObjectScale(0.75);
             m_creature->AddAura(SPELL_PARTICLES_GREEN);
@@ -59,10 +61,10 @@ struct boss_chronormuAI : public ScriptedAI
         }
     }
 
-    void UpdateAI(const uint32 diff)
+    void UpdateAI(const uint32 diff) override
     {
-        //Return since we have no target
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        // Return since we have no target
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         if (m_creature->HasAura(SPELL_SLEEP_VISUAL))
@@ -71,28 +73,28 @@ struct boss_chronormuAI : public ScriptedAI
             m_creature->SetStandState(UNIT_STAND_STATE_STAND);
         }
 
-        //Cleave
+        // Cleave
         if (Cleave_Timer < diff)
         {
-            DoCast(m_creature->getVictim(), SPELL_CLEAVE);
+            DoCast(m_creature->GetVictim(), SPELL_CLEAVE);
             Cleave_Timer = irand(6000, 8000);
         }
         else
             Cleave_Timer -= diff;
 
-        //Sand Breath
+        // Sand Breath
         if (SandBreath_Timer < diff)
         {
-            DoCast(m_creature->getVictim(), SPELL_SAND_BREATH);
+            DoCast(m_creature->GetVictim(), SPELL_SAND_BREATH);
             SandBreath_Timer = 30000;
         }
         else
             SandBreath_Timer -= diff;
 
-        //Time Stop
+        // Time Stop
         if (TimeStop_Timer < diff)
         {
-            DoCast(m_creature->getVictim(), SPELL_TIME_LAPSE);
+            DoCast(m_creature->GetVictim(), SPELL_TIME_LAPSE);
             DoPlaySoundToSet(m_creature, SOUND_CTHUNE_WOUND);
             TimeStop_Timer = 40000;
         }

@@ -29,14 +29,14 @@ EndScriptData */
 
 enum
 {
-    EMOTE_GENERIC_FRENZY_KILL   = -1000001,
-    EMOTE_GENERIC_BERSERK       = -1000004,
+    EMOTE_GENERIC_FRENZY_KILL = -1000001,
+    EMOTE_GENERIC_BERSERK = -1000004,
 
-    SPELL_ACIDSPIT              = 26050,
-    SPELL_FRENZY                = 26051,
-    SPELL_NOXIOUSPOISON         = 26053,
-    SPELL_BERSERK               = 26068,
-    SPELL_WYVERNSTING           = 26180
+    SPELL_ACIDSPIT = 26050,
+    SPELL_FRENZY = 26051,
+    SPELL_NOXIOUSPOISON = 26053,
+    SPELL_BERSERK = 26068,
+    SPELL_WYVERNSTING = 26180
 };
 
 struct boss_huhuranAI : public ScriptedAI
@@ -59,7 +59,7 @@ struct boss_huhuranAI : public ScriptedAI
     void MoveInLineOfSight(Unit* pWho) override
     {
         if (pWho->GetTypeId() == TYPEID_PLAYER
-            && !m_creature->isInCombat()
+            && !m_creature->IsInCombat()
             && m_creature->IsWithinDistInMap(pWho, 80.0f)
             && !pWho->HasAuraType(SPELL_AURA_FEIGN_DEATH)
             && !pWho->HasAuraType(SPELL_AURA_MOD_UNATTACKABLE))
@@ -87,20 +87,20 @@ struct boss_huhuranAI : public ScriptedAI
             m_pInstance->SetData(TYPE_HUHURAN, DONE);
     }
 
-    void Reset()
+    void Reset() override
     {
-        m_uiFrenzyTimer        = urand(10000, 20000);
-        m_uiWyvernTimer        = urand(18000, 28000);
-        m_uiSpitTimer          = 8000;
+        m_uiFrenzyTimer = urand(10000, 20000);
+        m_uiWyvernTimer = urand(18000, 28000);
+        m_uiSpitTimer = 8000;
         m_uiNoxiousPoisonTimer = urand(10000, 20000);
 
-        m_bBerserk             = false;
+        m_bBerserk = false;
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         //Return since we have no target
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         //m_uiFrenzyTimer
@@ -128,7 +128,7 @@ struct boss_huhuranAI : public ScriptedAI
         //Spit Timer
         if (m_uiSpitTimer < uiDiff)
         {
-            if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_ACIDSPIT) == CAST_OK)
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_ACIDSPIT) == CAST_OK)
                 m_uiSpitTimer = urand(5000, 10000);
         }
         else

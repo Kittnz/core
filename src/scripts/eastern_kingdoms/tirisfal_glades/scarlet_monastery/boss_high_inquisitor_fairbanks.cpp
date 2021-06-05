@@ -25,12 +25,12 @@ EndScriptData */
 
 enum
 {
-    SPELL_CURSEOFBLOOD              = 8282,
-    SPELL_DISPELMAGIC               = 15090,
-    SPELL_FEAR                      = 12096,
-    SPELL_HEAL                      = 12039,
-    SPELL_POWERWORDSHIELD           = 11647,
-    SPELL_SLEEP                     = 8399
+    SPELL_CURSEOFBLOOD = 8282,
+    SPELL_DISPELMAGIC = 15090,
+    SPELL_FEAR = 12096,
+    SPELL_HEAL = 12039,
+    SPELL_POWERWORDSHIELD = 11647,
+    SPELL_SLEEP = 8399
 };
 
 struct boss_high_inquisitor_fairbanksAI : public ScriptedAI
@@ -49,7 +49,7 @@ struct boss_high_inquisitor_fairbanksAI : public ScriptedAI
     bool PowerWordShield;
     bool bAshbringer;
 
-    void Reset()
+    void Reset() override
     {
         CurseOfBlood_Timer = 10000;
         DispelMagic_Timer = 30000;
@@ -73,9 +73,9 @@ struct boss_high_inquisitor_fairbanksAI : public ScriptedAI
         }
     }
 
-    void UpdateAI(const uint32 diff)
+    void UpdateAI(const uint32 diff) override
     {
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         //If we are <25% hp cast Heal
@@ -126,7 +126,7 @@ struct boss_high_inquisitor_fairbanksAI : public ScriptedAI
         //CurseOfBlood_Timer
         if (CurseOfBlood_Timer < diff)
         {
-            DoCastSpellIfCan(m_creature->getVictim(), SPELL_CURSEOFBLOOD);
+            DoCastSpellIfCan(m_creature->GetVictim(), SPELL_CURSEOFBLOOD);
             CurseOfBlood_Timer = 25000;
         }
         else CurseOfBlood_Timer -= diff;

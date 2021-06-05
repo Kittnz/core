@@ -85,7 +85,7 @@ bool ExecuteSpellEventData(SpellEventDataMap& eventData, SpellEventHolder& event
                 break;
 
             case TargetSpell::Victim:
-                target = me->getVictim();
+                target = me->GetVictim();
                 break;
 
             default:
@@ -96,9 +96,11 @@ bool ExecuteSpellEventData(SpellEventDataMap& eventData, SpellEventHolder& event
             {
                 me->CastSpell(target, spellId, false);
             }
+
             return true;
         }
     }
+
     return false;
 }
 
@@ -133,7 +135,7 @@ struct boss_black_brideAI : public ScriptedAI
     {
         m_events.Update(diff);
         
-        if (!me->SelectHostileTarget() || !me->getVictim())
+        if (!me->SelectHostileTarget() || !me->GetVictim())
             return;
 
         while (uint32 eventId = m_events.ExecuteEvent())
@@ -143,7 +145,7 @@ struct boss_black_brideAI : public ScriptedAI
                 case EVENT_SPELL_DEMORALIZING_SHOUT:
                 {
                     me->MonsterYell("Infidels!");
-                    DoCast(me->getVictim(), SPELL_DEMORALIZING_SHOUT);
+                    DoCast(me->GetVictim(), SPELL_DEMORALIZING_SHOUT);
                     m_events.Repeat(Seconds(140), Seconds(160));
                 }break;
 
@@ -155,7 +157,7 @@ struct boss_black_brideAI : public ScriptedAI
                         me->MonsterSay("I would\'ve done anything for your love.");
                     else if (m_weilCount == 3)
                         me->MonsterSay("I still feel the cold steel of your dagger in my back.");
-                    DoCast(me->getVictim(), SPELL_WEIL_OF_THE_BANSHEE);
+                    DoCast(me->GetVictim(), SPELL_WEIL_OF_THE_BANSHEE);
                 }break;
 
                 case EVENT_SPELL_LICH_SLAP:
@@ -166,7 +168,7 @@ struct boss_black_brideAI : public ScriptedAI
                         me->MonsterYell("Your touch defiles me, I am only his!");
                     else if (m_lichSlapCount == 3)
                         me->MonsterYell("I have to see him again!");
-                    DoCast(me->getVictim(), SPELL_LICH_SLAP);
+                    DoCast(me->GetVictim(), SPELL_LICH_SLAP);
                 }break;
             }
         }
@@ -280,7 +282,7 @@ struct boss_volkan_cruelbladeAI : public ScriptedAI
     {
         m_events.Update(diff);
 
-        if (!me->SelectHostileTarget() || !me->getVictim())
+        if (!me->SelectHostileTarget() || !me->GetVictim())
             return;
 
         while (uint32 eventId = m_events.ExecuteEvent())
@@ -290,7 +292,7 @@ struct boss_volkan_cruelbladeAI : public ScriptedAI
             case EVENT_SPELL_BLINK:
             {
                 me->MonsterYell("Behind you!");
-                DoCast(me->getVictim(), SPELL_BLINK);
+                DoCast(me->GetVictim(), SPELL_BLINK);
                 DoResetThreat();
                 m_events.Repeat(Seconds(70), Seconds(90));
             }break;
@@ -298,7 +300,7 @@ struct boss_volkan_cruelbladeAI : public ScriptedAI
 
             case EVENT_SPELL_THUNDERCLAP:
             {
-                DoCast(me->getVictim(), SPELL_THUNDERCLAP);
+                DoCast(me->GetVictim(), SPELL_THUNDERCLAP);
                 m_events.Repeat(Seconds(110), Seconds(130));
             }break;
 

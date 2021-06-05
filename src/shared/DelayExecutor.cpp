@@ -27,8 +27,7 @@ DelayExecutor* DelayExecutor::instance()
     return ACE_Singleton<DelayExecutor, ACE_Thread_Mutex>::instance();
 }
 
-DelayExecutor::DelayExecutor()
-    : activated_(false), pre_svc_hook_(0), post_svc_hook_(0)
+DelayExecutor::DelayExecutor() : pre_svc_hook_(0), post_svc_hook_(0), activated_(false)
 {
 }
 

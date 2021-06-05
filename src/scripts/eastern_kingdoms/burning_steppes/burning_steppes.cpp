@@ -38,13 +38,13 @@ struct npc_ragged_johnAI : public ScriptedAI
         Reset();
     }
 
-    void Reset() {}
+    void Reset() override {}
 
-    void MoveInLineOfSight(Unit *who)
+    void MoveInLineOfSight(Unit *who) override
     {
         if (who->HasAura(16468, EFFECT_INDEX_0))
         {
-            if (who->GetTypeId() == TYPEID_PLAYER && m_creature->IsWithinDistInMap(who, 15) && who->isInAccessablePlaceFor(m_creature))
+            if (who->GetTypeId() == TYPEID_PLAYER && m_creature->IsWithinDistInMap(who, 15) && who->IsInAccessablePlaceFor(m_creature))
             {
                 DoCastSpellIfCan(who, 16472);
                 ((Player*)who)->AreaExploredOrEventHappens(4866);
@@ -62,7 +62,7 @@ CreatureAI* GetAI_npc_ragged_john(Creature* pCreature)
 
 bool GossipHello_npc_ragged_john(Player* pPlayer, Creature* pCreature)
 {
-    if (pCreature->isQuestGiver())
+    if (pCreature->IsQuestGiver())
         pPlayer->PrepareQuestMenu(pCreature->GetGUID());
 
     if (pPlayer->GetQuestStatus(4224) == QUEST_STATUS_INCOMPLETE)
@@ -467,7 +467,7 @@ struct npc_grark_lorkrubAI : public npc_escortAI/*, private DialogueHelper*/
                 m_uiSomethingWentWrongTimer -=  uiDiff;
         }
 
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         DoMeleeAttackIfReady();
@@ -556,7 +556,7 @@ struct npc_klinfranAI : public ScriptedAI
     uint32 m_uiDemonic_Frenzy_Timer;
     uint32 m_uiDespawn_Timer;
 
-    void Reset() 
+    void Reset() override
     {
         switch (m_creature->GetEntry())
         {
@@ -608,9 +608,9 @@ struct npc_klinfranAI : public ScriptedAI
     }
 
     /** Klinfran the Crazed */
-    void Aggro(Unit* pWho) 
+    void Aggro(Unit* pWho) override
     {
-        if (pWho->getClass() == CLASS_HUNTER && (m_hunterGuid.IsEmpty() || m_hunterGuid == pWho->GetObjectGuid())/*&& pWho->GetQuestStatus(QUEST_STAVE_OF_THE_ANCIENTS) == QUEST_STATUS_INCOMPLETE*/)
+        if (pWho->GetClass() == CLASS_HUNTER && (m_hunterGuid.IsEmpty() || m_hunterGuid == pWho->GetObjectGuid())/*&& pWho->GetQuestStatus(QUEST_STAVE_OF_THE_ANCIENTS) == QUEST_STATUS_INCOMPLETE*/)
         {
             m_hunterGuid = pWho->GetObjectGuid();
         }
@@ -618,7 +618,7 @@ struct npc_klinfranAI : public ScriptedAI
             DemonDespawn();
     }
 
-    void JustDied(Unit* /*pKiller*/)
+    void JustDied(Unit* /*pKiller*/) override
     {
         m_creature->SetHomePosition(-8318.19f, -993.662f, 176.956f, 5.65024f);
 
@@ -644,13 +644,13 @@ struct npc_klinfranAI : public ScriptedAI
             Creature* pCleaner = m_creature->SummonCreature(NPC_THE_CLEANER, m_creature->GetPositionX(), m_creature->GetPositionY(), m_creature->GetPositionZ(), m_creature->GetAngle(m_creature), TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 20*MINUTE*IN_MILLISECONDS);
             if (pCleaner)
             {
-                ThreatList const& tList = m_creature->getThreatManager().getThreatList();
+                ThreatList const& tList = m_creature->GetThreatManager().getThreatList();
                 
                 for (ThreatList::const_iterator itr = tList.begin();itr != tList.end(); ++itr)
                 {
                     if (Unit* pUnit = m_creature->GetMap()->GetUnit((*itr)->getUnitGuid()))
                     {
-                        if (pUnit->isAlive())
+                        if (pUnit->IsAlive())
                         {
                             pCleaner->SetInCombatWith(pUnit);
                             pCleaner->AddThreat(pUnit);
@@ -673,7 +673,7 @@ struct npc_klinfranAI : public ScriptedAI
         }
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         /** Franklin the Friendly */
         if (m_bTransform)
@@ -703,17 +703,17 @@ struct npc_klinfranAI : public ScriptedAI
         {
             if (m_uiDespawn_Timer <= uiDiff)
             {
-                if (m_creature->isAlive() && !m_creature->isInCombat())
+                if (m_creature->IsAlive() && !m_creature->IsInCombat())
                     DemonDespawn(false);
             }
             else
                 m_uiDespawn_Timer -= uiDiff;
         }
             
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
-        if (m_creature->getThreatManager().getThreatList().size() > 1 /*|| pHunter->isDead()*/)
+        if (m_creature->GetThreatManager().getThreatList().size() > 1 /*|| pHunter->isDead()*/)
             DemonDespawn();
 
         if (m_uiDemonic_Frenzy_Timer < uiDiff)
@@ -734,7 +734,7 @@ struct npc_klinfranAI : public ScriptedAI
 bool GossipHello_npc_klinfran(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->GetQuestStatus(QUEST_STAVE_OF_THE_ANCIENTS) == QUEST_STATUS_INCOMPLETE ||
-        (pPlayer->getLevel() >= 60 && pPlayer->getClass() == CLASS_HUNTER && pPlayer->HasItemCount(51636, 1)))
+        (pPlayer->GetLevel() >= 60 && pPlayer->GetClass() == CLASS_HUNTER && pPlayer->HasItemCount(51636, 1)))
         pPlayer->ADD_GOSSIP_ITEM(0, GOSSIP_ITEM , GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF);
     
     pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetObjectGuid());

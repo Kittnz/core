@@ -49,10 +49,10 @@ bool QuestRewarded_go_helcular_s_grave(Player* pPlayer, GameObject* pGo, Quest c
 
 enum
 {
-    NPC_CAPTURED_FARMER     = 2284,
+    NPC_CAPTURED_FARMER = 2284,
 
-    GO_TAINTED_KEG          = 1729,
-    GO_TAINTED_KEG_SMOKE    = 1730
+    GO_TAINTED_KEG = 1729,
+    GO_TAINTED_KEG_SMOKE = 1730
 };
 struct go_dusty_rugAI: public GameObjectAI
 {
@@ -65,7 +65,7 @@ struct go_dusty_rugAI: public GameObjectAI
     GuidList Farmers;
     uint8 step;//0 = usual, nothing giong on // 1+ event going on
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (step)
         {
@@ -82,7 +82,7 @@ struct go_dusty_rugAI: public GameObjectAI
                             me->GetCreatureListWithEntryInGrid(lCrea, NPC_CAPTURED_FARMER, 30.0f);
                             for (std::list<Creature*>::iterator it = lCrea.begin(); it != lCrea.end(); ++it)
                             {
-                                if ((*it)->isAlive())
+                                if ((*it)->IsAlive())
                                 {
                                     Farmers.push_back((*it)->GetGUID());
                                     pKeg->GetContactPoint((*it), fX, fY, fZ, CONTACT_DISTANCE);

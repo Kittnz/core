@@ -14,14 +14,14 @@
 
 // Spells:
 
-#define SALT_FLATS_RACE_SLOW      6601
-#define SALT_FLATS_RACE_NORMAL    6602  // Decreases run speed, value -16%
-#define SALT_FLATS_RACE_SPEED     6600  // Increases run speed, value +14%
-#define DAMAGE_CAR                7084
-#define I_CANT_DRIVE_55           31565 // What the actual fuck...
-#define EXPLOSIVE_SHEEP_PASSIVE   4051
-#define EXPLOSIVE_SHEEP           4050
-#define SPELL_BOMB				  5134
+#define SALT_FLATS_RACE_SLOW 6601
+#define SALT_FLATS_RACE_NORMAL 6602  // Decreases run speed, value -16%
+#define SALT_FLATS_RACE_SPEED 6600  // Increases run speed, value +14%
+#define DAMAGE_CAR 7084
+#define I_CANT_DRIVE_55 31565 // What the actual fuck...
+#define EXPLOSIVE_SHEEP_PASSIVE 4051
+#define EXPLOSIVE_SHEEP 4050
+#define SPELL_BOMB 5134
 
 #define RACE_AGAINST_TIME_QUESTID 50316
 
@@ -32,18 +32,23 @@ bool GossipHello_npc_daisy(Player* p_Player, Creature* p_Creature)
 {
     if (p_Player->GetQuestRewardStatus(GOBLIN_TEST_QUEST))
         if (p_Player->GetQuestStatus(GOBLIN_REAL_QUEST) == QUEST_STATUS_INCOMPLETE)
-        p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I'll join Goblin's Team.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        	p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I'll join Goblin's Team.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+
     if (p_Player->GetQuestRewardStatus(GNOME_TEST_QUEST))
         if (p_Player->GetQuestStatus(GNOME_REAL_QUEST) == QUEST_STATUS_INCOMPLETE)
-        p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I'll join Gnome's Team.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        	p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I'll join Gnome's Team.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+
     if ((p_Player->GetQuestRewardStatus(GOBLIN_TEST_QUEST)) || (p_Player->GetQuestRewardStatus(GNOME_TEST_QUEST)))
         p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I want to leave from race queue.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
 
     if (p_Player->GetQuestRewardStatus(GOBLIN_TEST_QUEST))
         p_Player->PrepareQuestMenu(p_Creature->GetGUID());
+
     if (p_Player->GetQuestRewardStatus(GNOME_TEST_QUEST))
         p_Player->PrepareQuestMenu(p_Creature->GetGUID());
-    p_Player->SEND_GOSSIP_MENU(90250, p_Creature->GetGUID());    
+
+    p_Player->SEND_GOSSIP_MENU(90250, p_Creature->GetGUID());  
+  
     return true;
 }
 
@@ -110,13 +115,16 @@ bool GossipSelect_npc_daisy(Player* p_Player, Creature* p_Creature, uint32 /*uiS
 bool GossipHello_npc_dolores(Player* p_Player, Creature* p_Creature)
 {
     if (p_Player->GetQuestStatus(GOBLIN_TEST_QUEST) == QUEST_STATUS_INCOMPLETE)
-    if (!p_Player->GetQuestRewardStatus(GOBLIN_TEST_QUEST))
-        p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I want to test drive the Goblin team's racecar.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    	if (!p_Player->GetQuestRewardStatus(GOBLIN_TEST_QUEST))
+        	p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I want to test drive the Goblin team's racecar.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+
     if (p_Player->GetQuestStatus(GNOME_TEST_QUEST) == QUEST_STATUS_INCOMPLETE)
-    if (!p_Player->GetQuestRewardStatus(GNOME_TEST_QUEST))
-        p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I want to test drive the Gnomish team's racecar.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+    	if (!p_Player->GetQuestRewardStatus(GNOME_TEST_QUEST))
+        	p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I want to test drive the Gnomish team's racecar.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+
     p_Player->SEND_GOSSIP_MENU(90251, p_Creature->GetGUID());
-    return true;
+    
+	return true;
 }
 
 bool GossipSelect_npc_dolores(Player* p_Player, Creature* p_Creature, uint32 /*uiSender*/, uint32 uiAction)
@@ -136,6 +144,7 @@ bool GossipSelect_npc_dolores(Player* p_Player, Creature* p_Creature, uint32 /*u
             p_Creature->MonsterSay("You can't drive the car without keys! Speak to Jizzle Grikbot, silly.");
         }  
     }
+
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
     {
         if (p_Player->GetQuestStatus(GNOME_TEST_QUEST) == QUEST_STATUS_INCOMPLETE)
@@ -178,11 +187,11 @@ struct npc_dolores_say : public ScriptedAI
 
 	static const uint32 SpeechCooldown = 5 * IN_MILLISECONDS; // 5 sec
 
-	virtual void Reset() override
+	void Reset() override
     {
     }
 
-	virtual void UpdateAI(uint32 const uiDiff) override
+	void UpdateAI(uint32 const uiDiff) override
 	{
 		std::lock_guard<std::mutex> guard(InteractionsGuard);
 		for (auto iter = Interactions.begin(); iter != Interactions.end();)
@@ -196,25 +205,33 @@ struct npc_dolores_say : public ScriptedAI
 					bool bShouldSkip = false;
 					switch (InteractionData.step)
 					{
-					case PlayerInteraction::Step::One:
-						me->MonsterWhisper("While you race, try and pick up those crystals on the road. They will direct you to victory!", player);
-						InteractionData.step = PlayerInteraction::Step::Two;
-						InteractionData.backTimer = SpeechCooldown;
-						break;
-					case PlayerInteraction::Step::Two:
-						me->MonsterWhisper("I've seen some sheeps on the road, they are so cute and harmless, please don't hit them.", player);
-						InteractionData.step = PlayerInteraction::Step::Three;
-						InteractionData.backTimer = SpeechCooldown;
-						break;
-					case PlayerInteraction::Step::Three:
-						me->MonsterWhisper("Of course you'll have your chances to win since there are boots… no, boosters on the track!", player);
-						iter = Interactions.erase(iter);
-						bShouldSkip = true;
-						break;
-					default:
-						iter = Interactions.erase(iter);
-						bShouldSkip = true;
-						break;
+						case PlayerInteraction::Step::One:
+						{
+							me->MonsterWhisper("While you race, try and pick up those crystals on the road. They will direct you to victory!", player);
+							InteractionData.step = PlayerInteraction::Step::Two;
+							InteractionData.backTimer = SpeechCooldown;
+							break;
+						}
+						case PlayerInteraction::Step::Two:
+						{
+							me->MonsterWhisper("I've seen some sheeps on the road, they are so cute and harmless, please don't hit them.", player);
+							InteractionData.step = PlayerInteraction::Step::Three;
+							InteractionData.backTimer = SpeechCooldown;
+							break;
+						}
+						case PlayerInteraction::Step::Three:
+						{
+							me->MonsterWhisper("Of course you'll have your chances to win since there are boots… no, boosters on the track!", player);
+							iter = Interactions.erase(iter);
+							bShouldSkip = true;
+							break;
+						}
+						default:
+						{
+							iter = Interactions.erase(iter);
+							bShouldSkip = true;
+							break;
+						}
 					}
 
 					if (bShouldSkip)
@@ -239,7 +256,7 @@ struct npc_dolores_say : public ScriptedAI
 
 	// not sure about time when this function called.
 	// can be a time when AI was updating
-	virtual void InformGuid(const ObjectGuid guid, uint32) override
+	void InformGuid(const ObjectGuid guid, uint32) override
 	{
 		std::lock_guard<std::mutex> guard(InteractionsGuard);
 		if (Interactions.find(guid) == Interactions.end())
@@ -280,14 +297,14 @@ struct go_speed_up : public GameObjectAI
 			else
 			{
 				iter = racers.erase(iter);
-
 				continue;
 			}
+
 			iter++;
 		}
     }
 
-	virtual void InformGuid(ObjectGuid guid) override
+	void InformGuid(ObjectGuid guid) override
 	{
 		racers.insert(guid);
 	}
@@ -298,22 +315,19 @@ struct go_speed_up : public GameObjectAI
 
 struct npc_race_sheep : public ScriptedAI 
 {
-	npc_race_sheep(Creature* InCreature)
-		: ScriptedAI(InCreature)
-	{}
+	npc_race_sheep(Creature* InCreature) : ScriptedAI(InCreature) {}
 
 	std::set<ObjectGuid> racers;
 	uint32 checkTimer = 0;
 
 	static const uint32 CheckForRacersInterval = 10;
 
-
-	virtual void Reset() override
+	void Reset() override
 	{
 		checkTimer = CheckForRacersInterval;
 	}
 
-	virtual void MoveInLineOfSight(Unit* unit) override
+	void MoveInLineOfSight(Unit* unit) override
 	{
 		ScriptedAI::MoveInLineOfSight(unit);
 
@@ -332,7 +346,7 @@ struct npc_race_sheep : public ScriptedAI
 	}
 
 
-	virtual void UpdateAI(const uint32 deltaTime) override
+	void UpdateAI(const uint32 deltaTime) override
 	{
 		ScriptedAI::UpdateAI(deltaTime);
 
@@ -373,8 +387,10 @@ struct npc_race_sheep : public ScriptedAI
 					iter = racers.erase(iter);
 					continue;
 				}
+
 				iter++;
 			}
+
 			checkTimer = CheckForRacersInterval;
 		}
 		else
@@ -387,8 +403,7 @@ struct npc_race_sheep : public ScriptedAI
 
 struct npc_car_controller : public ScriptedAI
 {
-	npc_car_controller(Creature* InCreature)
-		: ScriptedAI(InCreature)
+	npc_car_controller(Creature* InCreature) : ScriptedAI(InCreature)
 	{
 		Reset();
 	}
@@ -418,14 +433,13 @@ struct npc_car_controller : public ScriptedAI
 		}
 	}
 
-
-	virtual void Reset() override
+	void Reset() override
 	{
 		BackTimer = TickInterval;
 	}
 
 
-	virtual void InformGuid(const ObjectGuid playerGuid, uint32 = 0) override
+	void InformGuid(const ObjectGuid playerGuid, uint32 = 0) override
 	{
 		targetGuid = playerGuid;
 	}
@@ -435,11 +449,9 @@ struct npc_car_controller : public ScriptedAI
 
 struct npc_race_car : public ScriptedAI 
 {
-	npc_race_car(Creature* InCreature)
-		: ScriptedAI(InCreature)
-	{}
+	npc_race_car(Creature* InCreature) : ScriptedAI(InCreature) {}
 
-	virtual void UpdateAI(const uint32 delta) override
+	void UpdateAI(const uint32 delta) override
 	{
 		if (Unit* pawn = me->GetMap()->GetUnit(PlayerControllerGuid))
 		{
@@ -454,23 +466,21 @@ struct npc_race_car : public ScriptedAI
 		}
 	}
 
-
-	virtual void Reset() override
+	void Reset() override
 	{
 	}
 
 	ObjectGuid PlayerControllerGuid;
 
-	virtual void InformGuid(const ObjectGuid guid, uint32 = 0) override
+	void InformGuid(const ObjectGuid guid, uint32 = 0) override
 	{
 		PlayerControllerGuid = guid;
 	}
-
 };
 
 bool GOHello_go_flying_machine(Player* pPlayer, GameObject* pGo)
 {
-	uint32 cost = pPlayer->getLevel();
+	uint32 cost = pPlayer->GetLevel();
 
 	if (pPlayer->GetQuestRewardStatus(50315))
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TAXI, "Buy a flight to the Shimmering Flats in Thousand Needles to visit the Mirage Raceway.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
@@ -481,10 +491,11 @@ bool GOHello_go_flying_machine(Player* pPlayer, GameObject* pGo)
 
 bool GOSelect_go_flying_machine(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 action)
 {
-	if (action == GOSSIP_ACTION_INFO_DEF + 1)
-	{
-		uint32 cost = pPlayer->getLevel() * 100;
 
+    if (action == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+
+		uint32 cost = pPlayer->GetLevel() * 100;
 		if (pPlayer->GetMoney() >= cost)
 		{
 			pPlayer->ModifyMoney(-cost);
@@ -493,8 +504,7 @@ bool GOSelect_go_flying_machine(Player* pPlayer, GameObject* pGo, uint32 sender,
 			pPlayer->CastSpell(pPlayer, 130, true);
 		}
 		else
-			pPlayer->GetSession()->SendNotification("Not enough money. This flight will cost %u silver.", pPlayer->getLevel());
-    }
+			pPlayer->GetSession()->SendNotification("Not enough money. This flight will cost %u silver.", pPlayer->GetLevel());
 
     return true;
 }
@@ -506,7 +516,7 @@ struct npc_landing_siteAI : public ScriptedAI
         Reset();
     }
 
-    void Reset()
+    void Reset() override
     {
     }
 
@@ -514,7 +524,8 @@ struct npc_landing_siteAI : public ScriptedAI
     {
         if (pWho && pWho->IsPlayer()) 
         {
-            if (Player* player = pWho->ToPlayer()) 
+            if (Player* player = pWho->ToPlayer())
+			{
                 if (m_creature->IsWithinDistInMap(pWho, 200.0F) && pWho->GetMountID() == 18510 && !pWho->HasAura(130))
                 {
                     player->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, 0);
@@ -522,6 +533,7 @@ struct npc_landing_siteAI : public ScriptedAI
                     me->MonsterWhisper("Ya go ahead and talk to Jizzle Grikbot or Gregor Fizzwuzz ta git ya on track in all manner of meanings.", pWho);
                     me->HandleEmoteCommand(EMOTE_ONESHOT_SALUTE);
                 }
+			}
         }
     }
 };

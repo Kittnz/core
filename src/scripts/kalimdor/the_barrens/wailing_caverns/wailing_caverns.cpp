@@ -36,40 +36,40 @@ EndContentData */
 
 enum
 {
-    SPELL_MARK              = 5232,
-    SPELL_SLEEP             = 1090,
-    SPELL_POTION            = 8141,
-    SPELL_CLEANSING         = 6270,
-    SPELL_AWAKENING         = 6271,
-    SPELL_SHAPESHIFT        = 8153,
+    SPELL_MARK = 5232,
+    SPELL_SLEEP = 1090,
+    SPELL_POTION = 8141,
+    SPELL_CLEANSING = 6270,
+    SPELL_AWAKENING = 6271,
+    SPELL_SHAPESHIFT = 8153,
 
-    SAY_CAST_MARK           = -1614998,
-    SAY_1ST_WP              = -1614997,
-    SAY_AFTER_1ST_TRASH     = -1614996,
-    SAY_BEFORE_CIRCLE       = -1614995,
-    SAY_AFTER_CIRCLE        = -1614994,
-    SAY_BEFORE_CHAMBER      = -1614993,
-    SAY_BEFORE_RITUAL       = -1614992,
-    EMOTE_DISCIPLE_1        = -1614991,
-    EMOTE_NARALEX_1         = -1614990,
-    SAY_ATTACKED            = -1614989,
-    EMOTE_NARALEX_2         = -1614987,
-    SAY_BEFORE_MUTANUS      = -1614986,
-    SAY_NARALEX_AWAKEN      = -1614985,
-    SAY_DISCIPLE_FINAL      = -1614984,
-    SAY_NARALEX_FINAL1      = -1614983,
-    SAY_NARALEX_FINAL2      = -1614982,
+    SAY_CAST_MARK = -1614998,
+    SAY_1ST_WP = -1614997,
+    SAY_AFTER_1ST_TRASH = -1614996,
+    SAY_BEFORE_CIRCLE = -1614995,
+    SAY_AFTER_CIRCLE = -1614994,
+    SAY_BEFORE_CHAMBER = -1614993,
+    SAY_BEFORE_RITUAL = -1614992,
+    EMOTE_DISCIPLE_1 = -1614991,
+    EMOTE_NARALEX_1 = -1614990,
+    SAY_ATTACKED = -1614989,
+    EMOTE_NARALEX_2 = -1614987,
+    SAY_BEFORE_MUTANUS = -1614986,
+    SAY_NARALEX_AWAKEN = -1614985,
+    SAY_DISCIPLE_FINAL = -1614984,
+    SAY_NARALEX_FINAL1 = -1614983,
+    SAY_NARALEX_FINAL2 = -1614982,
 
-    MOB_DEVIATE_RAPTOR      = 3636,
-    MOB_DEVIATE_VIPER       = 5755,
-    MOB_DEVIATE_MOCCASIN    = 5762,
+    MOB_DEVIATE_RAPTOR = 3636,
+    MOB_DEVIATE_VIPER = 5755,
+    MOB_DEVIATE_MOCCASIN = 5762,
     MOB_NIGHTMARE_ECTOPLASM = 5763,
-    MOB_MUTANUS_DEVOURER    = 3654,
+    MOB_MUTANUS_DEVOURER = 3654,
 
-    POINT_LAST_POINT    = 0xFFFFFF
+    POINT_LAST_POINT = 0xFFFFFF
 };
 
-#define GOSSIP_ITEM_BEGIN   "Let the event begin!"
+#define GOSSIP_ITEM_BEGIN "Let the event begin!"
 
 float Position [10][3] =
 {
@@ -108,7 +108,7 @@ struct npc_disciple_of_naralexAI : public npc_escortAI
     bool Yelled;
     bool isAggro;
 
-    void Reset()
+    void Reset() override
     {
         Event_Timer = 0;
         Sleep_Timer = 5000;
@@ -122,7 +122,7 @@ struct npc_disciple_of_naralexAI : public npc_escortAI
         isAggro = false;
     }
 
-    void EnterEvadeMode()
+    void EnterEvadeMode() override
     {
         m_creature->DeleteThreatList();
         m_creature->CombatStop(true);
@@ -137,7 +137,7 @@ struct npc_disciple_of_naralexAI : public npc_escortAI
         SetEscortPaused(false);
     }
 
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* pWho) override
     {
         isAggro = true;
         if (OnCastWaypoint() || OnFightWaypoint())
@@ -273,7 +273,7 @@ struct npc_disciple_of_naralexAI : public npc_escortAI
         while (it != vSummoned.end())
         {
             if (Creature* pSummon = m_pInstance->GetCreature(*it))
-                if (pSummon->isAlive())
+                if (pSummon->IsAlive())
                     pSummon->ForcedDespawn();
             it = vSummoned.erase(it);
         }
@@ -326,7 +326,7 @@ struct npc_disciple_of_naralexAI : public npc_escortAI
         }
     }
 
-    void UpdateEscortAI(const uint32 diff)
+    void UpdateEscortAI(const uint32 diff) override
     {
         if (!m_pInstance)
             return;
@@ -339,7 +339,7 @@ struct npc_disciple_of_naralexAI : public npc_escortAI
         {
             if (Creature* pSummon = m_pInstance->GetCreature(it))
             {
-                if (!pSummon->getVictim() && m_creature->isAlive())
+                if (!pSummon->GetVictim() && m_creature->IsAlive())
                 {
                     //the summon has reached the disciple, attack him
                     if (pSummon->GetDistance2d(m_creature) < ATTACK_DISTANCE)
@@ -370,7 +370,7 @@ struct npc_disciple_of_naralexAI : public npc_escortAI
                         {
                             for (Map::PlayerList::const_iterator i = PlayerList.begin(); i != PlayerList.end(); ++i)
                             {
-                                if (i->getSource()->isAlive() && (i->getSource()->GetDistance(m_creature) < 30))
+                                if (i->getSource()->IsAlive() && (i->getSource()->GetDistance(m_creature) < 30))
                                     m_creature->CastSpell(i->getSource(), SPELL_MARK, false);
                             }
                         }
@@ -416,7 +416,7 @@ struct npc_disciple_of_naralexAI : public npc_escortAI
                             break;
                         case 1:
                             m_creature->CastSpell(m_creature, SPELL_CLEANSING, false);
-                            m_creature->addUnitState(UNIT_STAT_ROOT);
+                            m_creature->AddUnitState(UNIT_STAT_ROOT);
                             Subevent_Phase = 2;
                             Event_Timer = 15000;
                             break;
@@ -429,7 +429,7 @@ struct npc_disciple_of_naralexAI : public npc_escortAI
                         case 3:
                             if (!m_creature->GetCurrentSpell(CURRENT_GENERIC_SPELL))
                             {
-                                m_creature->clearUnitState(UNIT_STAT_ROOT);
+                                m_creature->ClearUnitState(UNIT_STAT_ROOT);
                                 Subevent_Phase = 4;
                             }
                             Event_Timer = 1000;
@@ -437,7 +437,7 @@ struct npc_disciple_of_naralexAI : public npc_escortAI
                         case 4:
                         {
                             Player* eventStarter = m_creature->GetMap()->GetPlayer(m_playerGuid);
-                            if (!m_creature->isInCombat() && eventStarter && !eventStarter->isInCombat())
+                            if (!m_creature->IsInCombat() && eventStarter && !eventStarter->IsInCombat())
                             {
                                 DoScriptText(SAY_AFTER_CIRCLE, m_creature);
                                 m_creature->HandleEmoteCommand(EMOTE_ONESHOT_TALK);
@@ -522,8 +522,8 @@ struct npc_disciple_of_naralexAI : public npc_escortAI
                             else Event_Timer = 2000;
                             break;
                         case 8:
-                            if (m_creature->isAlive() &&
-                                !m_creature->getVictim())
+                            if (m_creature->IsAlive() &&
+                                !m_creature->GetVictim())
                             {
                                 m_creature->DeleteThreatList();
                                 m_creature->CombatStop(true);
@@ -576,7 +576,7 @@ struct npc_disciple_of_naralexAI : public npc_escortAI
         if (OnCastWaypoint())
             return;
 
-        if (m_creature->SelectHostileTarget() && m_creature->getVictim())
+        if (m_creature->SelectHostileTarget() && m_creature->GetVictim())
         {
             if (Sleep_Timer < diff)
             {
@@ -597,7 +597,7 @@ bool GossipHello_npc_disciple_of_naralex(Player* pPlayer, Creature* pCreature)
 
     pCreature->CastSpell(pPlayer, SPELL_MARK, false);
 
-    if (pCreature->isQuestGiver())
+    if (pCreature->IsQuestGiver())
         pPlayer->PrepareQuestMenu(pCreature->GetGUID());
     if (m_pInstance && m_pInstance->GetData(TYPE_DISCIPLE) == SPECIAL)
     {
@@ -623,7 +623,7 @@ bool GossipSelect_npc_disciple_of_naralex(Player* pPlayer, Creature* pCreature, 
         {
             pEscortAI->Start(false, 0); // We don't want the out of range check.
             pEscortAI->m_playerGuid = pPlayer->GetObjectGuid();
-            pCreature->setFaction(FACTION_ESCORT_N_NEUTRAL_ACTIVE);
+            pCreature->SetFactionTemplateId(FACTION_ESCORT_N_NEUTRAL_ACTIVE);
         }
 
         pPlayer->CLOSE_GOSSIP_MENU();
@@ -655,14 +655,14 @@ struct EvolvingEctoplasmAI : public ScriptedAI
     uint32 m_uiImmuneTimer;
     bool   isImmune;
 
-    void Reset()
+    void Reset() override
     {
         m_creature->RemoveAllAuras();
         m_uiImmuneTimer = 0;
         isImmune = false;
     }
 
-    void SpellHit(Unit* pCaster, const SpellEntry* pSpell)
+    void SpellHit(Unit* pCaster, const SpellEntry* pSpell) override
     {
         if (!isImmune)
         {
@@ -697,7 +697,7 @@ struct EvolvingEctoplasmAI : public ScriptedAI
         }
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (m_uiImmuneTimer < uiDiff)
         {
@@ -711,7 +711,7 @@ struct EvolvingEctoplasmAI : public ScriptedAI
         else
             m_uiImmuneTimer -= uiDiff;
 
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         DoMeleeAttackIfReady();

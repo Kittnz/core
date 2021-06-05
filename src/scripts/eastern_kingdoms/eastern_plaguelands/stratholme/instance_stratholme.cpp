@@ -111,7 +111,7 @@ struct instance_stratholme : public ScriptedInstance
     uint32 m_uiYsidaReward_Timer;
     uint32 m_uiPostboxesUsed;
 
-    void Initialize()
+    void Initialize() override
     {
         memset(&m_auiEncounter, 0, sizeof(m_auiEncounter));
 
@@ -166,7 +166,7 @@ struct instance_stratholme : public ScriptedInstance
         m_uiPostboxesUsed = 0;
     }
 
-    bool IsEncounterInProgress() const
+    bool IsEncounterInProgress() const override
     {
         for (uint8 i = 0; i < STRAT_MAX_ENCOUNTER; i++)
             if (m_auiEncounter[i] == IN_PROGRESS)
@@ -182,7 +182,7 @@ struct instance_stratholme : public ScriptedInstance
         {
             if (Creature* pCristal = instance->GetCreature(*i))
             {
-                if (!pCristal->isAlive())
+                if (!pCristal->IsAlive())
                     --uiCount;
             }
             else
@@ -218,7 +218,7 @@ struct instance_stratholme : public ScriptedInstance
         }
     }
 
-    void OnCreatureCreate(Creature* pCreature)
+    void OnCreatureCreate(Creature* pCreature) override
     {
         switch (pCreature->GetEntry())
         {
@@ -262,7 +262,7 @@ struct instance_stratholme : public ScriptedInstance
         npc_placeEcarlateGUID.insert(pCreature->GetGUID());
     }
 
-    void OnGameObjectCreate(GameObject* pGo)
+    void OnGameObjectCreate(GameObject* pGo) override
     {
         switch (pGo->GetEntry())
         {
@@ -330,7 +330,7 @@ struct instance_stratholme : public ScriptedInstance
         }
     }
 
-    void OnCreatureDeath(Creature *who)
+    void OnCreatureDeath(Creature *who) override
     {
         switch (who->GetEntry())
         {
@@ -345,7 +345,7 @@ struct instance_stratholme : public ScriptedInstance
         }
     }
 
-    uint32 GetData(uint32 uiType)
+    uint32 GetData(uint32 uiType) override
     {
         switch (uiType)
         {
@@ -359,7 +359,7 @@ struct instance_stratholme : public ScriptedInstance
         return 0;
     }
 
-    uint64 GetData64(uint32 uiData)
+    uint64 GetData64(uint32 uiData) override
     {
         switch (uiData)
         {
@@ -377,7 +377,7 @@ struct instance_stratholme : public ScriptedInstance
         return 0;
     }
 
-    void SetData64(uint32 uiType, uint64 uiData)
+    void SetData64(uint32 uiType, uint64 uiData) override
     {
         switch (uiType)
         {
@@ -386,7 +386,7 @@ struct instance_stratholme : public ScriptedInstance
                 break;
         }
     }
-    void SetData(uint32 uiType, uint32 uiData)
+    void SetData(uint32 uiType, uint32 uiData) override
     {
         switch (uiType)
         {
@@ -473,7 +473,7 @@ struct instance_stratholme : public ScriptedInstance
                     {
                         if (Creature* pAbom = instance->GetCreature(*i))
                         {
-                            if (!pAbom->isAlive())
+                            if (!pAbom->IsAlive())
                                 --uiCount;
                         }
                     }
@@ -642,12 +642,12 @@ struct instance_stratholme : public ScriptedInstance
 
     /** Load / save system */
     std::string strInstData;
-    const char* Save()
+    const char* Save() override
     {
         return strInstData.c_str();
     }
 
-    void Load(const char* chrIn)
+    void Load(const char* chrIn) override
     {
         if (!chrIn)
             return;
@@ -665,14 +665,10 @@ struct instance_stratholme : public ScriptedInstance
 
     bool JoueurDansPiegeRat1()
     {
-        float x1 = 3907.45f;
-        float y1 = -3550.41f;
         float x2 = 3909.34f;
         float y2 = -3540.14f;
         float x3 = 3930.1f;
         float y3 = -3554.4f;
-        float x4 = 3931.9f;
-        float y4 = -3544.6f;
 
         Map::PlayerList const &listeJoueur = instance->GetPlayers();
         for (Map::PlayerList::const_iterator itr = listeJoueur.begin(); itr != listeJoueur.end(); ++itr)
@@ -686,7 +682,7 @@ struct instance_stratholme : public ScriptedInstance
              |->x    /------------/
                     ^x1             ^x3
             */
-            if (itr->getSource()->isAlive() && !itr->getSource()->IsGameMaster() && itr->getSource()->IsGMVisible())
+            if (itr->getSource()->IsAlive() && !itr->getSource()->IsGameMaster() && itr->getSource()->IsGMVisible())
             {
                 //hauteur corect ?
                 if (itr->getSource()->GetPositionZ() < 135 && itr->getSource()->GetPositionZ() > 130)
@@ -708,7 +704,7 @@ struct instance_stratholme : public ScriptedInstance
         Map::PlayerList const &listeJoueur = instance->GetPlayers();
         for (Map::PlayerList::const_iterator itr = listeJoueur.begin(); itr != listeJoueur.end(); ++itr)
         {
-            if (itr->getSource()->isAlive() && !itr->getSource()->IsGameMaster() && itr->getSource()->IsGMVisible() &&
+            if (itr->getSource()->IsAlive() && !itr->getSource()->IsGameMaster() && itr->getSource()->IsGMVisible() &&
                     itr->getSource()->GetPositionX() < 3621.32 && itr->getSource()->GetPositionX() > 3603.18 &&
                     itr->getSource()->GetPositionY() < -3335 && itr->getSource()->GetPositionY() > -3340.46 &&
                     itr->getSource()->GetPositionZ() < 130 && itr->getSource()->GetPositionZ() > 123)
@@ -728,19 +724,16 @@ struct instance_stratholme : public ScriptedInstance
 
             if (Creature* pAbom = instance->GetCreature(*Iter))
             {
-                if (pAbom->isAlive() && !pAbom->isInCombat())
-                {
+                if (pAbom->IsAlive() && !pAbom->IsInCombat())
                     pAbom->GetMotionMaster()->MovePoint(0, 4037.194f, -3473.741943f, 121.738808f);
-                    //pAbom->GetMotionMaster()->MovePoint(1, 4038.45288f, -3487.635498f, 121.742157f);
-                    //pAbom->SetHomePosition(4036.40527f, -3470.181152f, 121.749062f, 4.7418f);
-                }
+
                 m_uiSlaugtherAboMob_Timer = (pAbom->GetEntry() == NPC_ABOM_BILE) ? 45000 : urand(35000, 40000);
                 slaugtherAboGUID.remove(*Iter);
             }
         }
     }
 
-    void Update(uint32 uiDiff)
+    void Update(uint32 uiDiff) override
     {
         if (m_uiBaronRun_Timer)
         {

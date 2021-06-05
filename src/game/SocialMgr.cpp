@@ -195,8 +195,8 @@ void SocialMgr::GetFriendInfo(MasterPlayer* player, uint32 friend_lowguid, Frien
         if (player->IsDND())
             friendInfo.Status = FRIEND_STATUS_DND;
         friendInfo.Area = player->GetZoneId();
-        friendInfo.Level = player->getLevel();
-        friendInfo.Class = player->getClass();
+        friendInfo.Level = player->GetLevel();
+        friendInfo.Class = player->GetClass();
         return;
     }
 
@@ -209,22 +209,23 @@ void SocialMgr::GetFriendInfo(MasterPlayer* player, uint32 friend_lowguid, Frien
 
     PlayerSocialMap::const_iterator itr = player->GetSocial()->m_playerSocialMap.find(friend_lowguid);
     if (itr != player->GetSocial()->m_playerSocialMap.end())
-
+    {
         // PLAYER see his team only and PLAYER can't see MODERATOR, GAME MASTER, ADMINISTRATOR characters
         // MODERATOR, GAME MASTER, ADMINISTRATOR can see all
-        if (pFriend && pFriend->GetName() &&
-                (security > SEC_PLAYER ||
-                 ((pFriend->GetTeam() == team || allowTwoSideWhoList) && (pFriend->GetSession()->GetSecurity() <= gmLevelInWhoList))) &&
-                pFriend->IsVisibleGloballyFor(player))
+        if (pFriend && pFriend->GetName() && (security > SEC_PLAYER ||
+            ((pFriend->GetTeam() == team || allowTwoSideWhoList) && (pFriend->GetSession()->GetSecurity() <= gmLevelInWhoList))) && pFriend->IsVisibleGloballyFor(player))
         {
             friendInfo.Status = FRIEND_STATUS_ONLINE;
+
             if (pFriend->IsAFK())
                 friendInfo.Status = FRIEND_STATUS_AFK;
+
             if (pFriend->IsDND())
                 friendInfo.Status = FRIEND_STATUS_DND;
+
             friendInfo.Area = pFriend->GetZoneId();
-            friendInfo.Level = pFriend->getLevel();
-            friendInfo.Class = pFriend->getClass();
+            friendInfo.Level = pFriend->GetLevel();
+            friendInfo.Class = pFriend->GetClass();
         }
         else
         {
@@ -233,6 +234,7 @@ void SocialMgr::GetFriendInfo(MasterPlayer* player, uint32 friend_lowguid, Frien
             friendInfo.Level = 0;
             friendInfo.Class = 0;
         }
+    }
 }
 
 void SocialMgr::MakeFriendStatusPacket(FriendsResult result, uint32 guid, WorldPacket *data)

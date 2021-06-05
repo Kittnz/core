@@ -237,7 +237,7 @@ bool inline ConditionEntry::Evaluate(WorldObject const* target, Map const* map, 
         case CONDITION_RACE_CLASS:
         {
             Player const* pPlayer = target->ToPlayer();
-            return (!m_value1 || (pPlayer->getRaceMask() & m_value1)) && (!m_value2 || (pPlayer->getClassMask() & m_value2));
+            return (!m_value1 || (pPlayer->GetRaceMask() & m_value1)) && (!m_value2 || (pPlayer->GetClassMask() & m_value2));
         }
         case CONDITION_LEVEL:
         {
@@ -245,11 +245,11 @@ bool inline ConditionEntry::Evaluate(WorldObject const* target, Map const* map, 
             switch (m_value2)
             {
                 case 0:
-                    return pTarget->getLevel() == m_value1;
+                    return pTarget->GetLevel() == m_value1;
                 case 1:
-                    return pTarget->getLevel() >= m_value1;
+                    return pTarget->GetLevel() >= m_value1;
                 case 2:
-                    return pTarget->getLevel() <= m_value1;
+                    return pTarget->GetLevel() <= m_value1;
             }
             return false;
         }
@@ -319,11 +319,11 @@ bool inline ConditionEntry::Evaluate(WorldObject const* target, Map const* map, 
             Player const* pTarget = ToPlayer(target);
 
             if (m_value1 & CF_ESCORT_SOURCE_DEAD)
-                if (!pSource || pSource->isDead())
+                if (!pSource || pSource->IsDead())
                     return true;
 
             if (m_value1 & CF_ESCORT_TARGET_DEAD)
-                if (!pTarget || pTarget->isDead() || !pTarget->IsInWorld())
+                if (!pTarget || pTarget->IsDead() || !pTarget->IsInWorld())
                     return true;
 
             if (m_value2)
@@ -338,7 +338,7 @@ bool inline ConditionEntry::Evaluate(WorldObject const* target, Map const* map, 
         }
         case CONDITION_GENDER:
         {
-            return target->getGender() == m_value1;
+            return target->GetGender() == m_value1;
         }
         case CONDITION_SKILL_BELOW:
         {
@@ -484,7 +484,7 @@ bool inline ConditionEntry::Evaluate(WorldObject const* target, Map const* map, 
         }
         case CONDITION_IS_IN_COMBAT:
         {
-            return target->ToUnit()->isInCombat();
+            return target->ToUnit()->IsInCombat();
         }
         case CONDITION_IS_HOSTILE_TO:
         {
@@ -496,7 +496,7 @@ bool inline ConditionEntry::Evaluate(WorldObject const* target, Map const* map, 
         }
         case CONDITION_IS_ALIVE:
         {
-            return target->ToUnit()->isAlive();
+            return target->ToUnit()->IsAlive();
         }
         case CONDITION_MAP_EVENT_TARGETS:
         {

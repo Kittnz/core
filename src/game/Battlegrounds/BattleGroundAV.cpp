@@ -496,11 +496,11 @@ void BattleGroundAV::UpgradeArmor(Object* questGiver, Player *player)
 
 void BattleGroundAV::HandleQuestComplete(Unit* questGiver, uint32 questid, Player *player)
 {
-    char sMessageRemaining[200]        = "";
-    uint32 faction_spell = 0;
+    char sMessageRemaining[200] = "";
 
     if (GetStatus() != STATUS_IN_PROGRESS)
         return;
+
     BattleGroundAVTeamIndex teamIdx = GetAVTeamIndexByTeamId(player->GetTeam());
     ASSERT(teamIdx < BG_TEAMS_COUNT);
 

@@ -28,7 +28,6 @@
 #include "DBCEnums.h"
 #include "ObjectGuid.h"
 #include "LootMgr.h"
-#include "Unit.h"
 #include "Player.h"
 
 #ifdef USE_STANDARD_MALLOC
@@ -771,7 +770,7 @@ namespace MaNGOS
             for(PlayerMapType::iterator itr=m.begin(); itr != m.end(); ++itr)
             {
                 Player * pPlayer = itr->getSource();
-                if( !pPlayer->isAlive() || pPlayer->IsTaxiFlying())
+                if( !pPlayer->IsAlive() || pPlayer->IsTaxiFlying())
                     continue;
 
                 if( i_originalCaster->IsFriendlyTo(pPlayer) )
@@ -791,11 +790,11 @@ class SpellEvent : public BasicEvent
 {
     public:
         SpellEvent(Spell* spell);
-        virtual ~SpellEvent();
+        ~SpellEvent() override;
 
-        virtual bool Execute(uint64 e_time, uint32 p_time);
-        virtual void Abort(uint64 e_time);
-        virtual bool IsDeletable() const;
+        bool Execute(uint64 e_time, uint32 p_time) override;
+        void Abort(uint64 e_time) override;
+        bool IsDeletable() const override;
         Spell* GetSpell() { return m_Spell; }
     protected:
         Spell* m_Spell;
@@ -805,10 +804,10 @@ class ChannelResetEvent : public BasicEvent
 {
     public:
         ChannelResetEvent(Unit* _caster) : caster(_caster) {}
-        virtual ~ChannelResetEvent() {}
+        ~ChannelResetEvent() override {}
 
-        virtual bool Execute(uint64 e_time, uint32 p_time);
-        virtual void Abort(uint64 e_time);
+        bool Execute(uint64 e_time, uint32 p_time) override;
+        void Abort(uint64 e_time) override;
     protected:
         Unit* caster;
 };

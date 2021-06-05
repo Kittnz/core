@@ -37,15 +37,15 @@ static eConfigFloatValues const qualityToRate[MAX_ITEM_QUALITY] =
     CONFIG_FLOAT_RATE_DROP_ITEM_ARTIFACT,                                // ITEM_QUALITY_ARTIFACT
 };
 
-LootStore LootTemplates_Creature("creature_loot_template",     "creature entry",                 true);
-LootStore LootTemplates_Disenchant("disenchant_loot_template",   "item disenchant id",             true);
-LootStore LootTemplates_Fishing("fishing_loot_template",      "area id",                        true);
-LootStore LootTemplates_Gameobject("gameobject_loot_template",   "gameobject lootid",              true);
-LootStore LootTemplates_Item("item_loot_template",         "item entry with ITEM_FLAG_LOOTABLE", true);
-LootStore LootTemplates_Mail("mail_loot_template",         "mail template id",               false);
-LootStore LootTemplates_Pickpocketing("pickpocketing_loot_template", "creature pickpocket lootid",     true);
-LootStore LootTemplates_Reference("reference_loot_template",    "reference id",                   false);
-LootStore LootTemplates_Skinning("skinning_loot_template",     "creature skinning id",           true);
+LootStore LootTemplates_Creature("creature_loot_template", "creature entry", true);
+LootStore LootTemplates_Disenchant("disenchant_loot_template", "item disenchant id", true);
+LootStore LootTemplates_Fishing("fishing_loot_template", "area id", true);
+LootStore LootTemplates_Gameobject("gameobject_loot_template", "gameobject lootid", true);
+LootStore LootTemplates_Item("item_loot_template", "item entry with ITEM_FLAG_LOOTABLE", true);
+LootStore LootTemplates_Mail("mail_loot_template", "mail template id", false);
+LootStore LootTemplates_Pickpocketing("pickpocketing_loot_template", "creature pickpocket lootid", true);
+LootStore LootTemplates_Reference("reference_loot_template", "reference id", false);
+LootStore LootTemplates_Skinning("skinning_loot_template", "creature skinning id", true);
 
 class LootTemplate::LootGroup                               // A set of loot definitions for items (refs are not allowed)
 {
@@ -480,7 +480,7 @@ bool Loot::FillLoot(uint32 loot_id, LootStore const& store, Player* loot_owner, 
         return false;
     }
 
-    _personal = true;
+    m_personal = true;
     items.reserve(MAX_NR_LOOT_ITEMS);
     m_questItems.reserve(MAX_NR_QUEST_ITEMS);
 
@@ -491,20 +491,29 @@ bool Loot::FillLoot(uint32 loot_id, LootStore const& store, Player* loot_owner, 
     if (!personal && group)
     {
         roundRobinPlayer = loot_owner->GetGUID();
-        _personal        = false;
+        m_personal = false;
         for (GroupReference *itr = group->GetFirstMember(); itr != nullptr; itr = itr->next())
+        {
             if (Player* pl = itr->getSource())
             {
                 if (!looted || (pl->IsInWorld() && pl->IsAtGroupRewardDistance(looted)))
                 {
-                    _allowedLooters.push_back(pl->GetObjectGuid());
+                    m_allowedLooters.push_back(pl->GetObjectGuid());
                     FillNotNormalLootFor(pl);
                 }
             }
+        }
+
         for (uint8 i = 0; i < items.size(); ++i)
+        {
             if (ItemPrototype const* proto = sObjectMgr.GetItemPrototype(items[i].itemid))
+            {
                 if (proto->Quality < uint32(group->GetLootThreshold()))
+                {
                     items[i].is_underthreshold = true;
+                }
+            }
+        }
     }
     // ... for personal loot
     else
@@ -515,19 +524,24 @@ bool Loot::FillLoot(uint32 loot_id, LootStore const& store, Player* loot_owner, 
 
 bool Loot::IsAllowedLooter(ObjectGuid guid, bool doPersonalCheck) const
 {
-    if (doPersonalCheck && _personal)
+    if (doPersonalCheck && m_personal)
         return true;
 
-    for (std::vector<ObjectGuid>::const_iterator it = _allowedLooters.begin(); it != _allowedLooters.end(); ++it)
+    for (std::vector<ObjectGuid>::const_iterator it = m_allowedLooters.begin(); it != m_allowedLooters.end(); ++it)
+    {
         if ((*it) == guid)
+        {
             return true;
+        }
+    }
+
     return false;
 }
 
 void Loot::FillNotNormalLootFor(Player* pl)
 {
     if (pl->IsInWorld())
-        _allowedLooters.push_back(pl->GetObjectGuid());
+        m_allowedLooters.push_back(pl->GetObjectGuid());
     
     uint32 plguid = pl->GetGUIDLow();
 
@@ -560,6 +574,7 @@ QuestItemList* Loot::FillFFALoot(Player* player)
             ++unlootedCount;
         }
     }
+
     if (ql->empty())
     {
         delete ql;
@@ -598,6 +613,7 @@ QuestItemList* Loot::FillQuestLoot(Player* player)
                 break;
         }
     }
+
     if (ql->empty())
     {
         delete ql;
@@ -628,6 +644,7 @@ QuestItemList* Loot::FillNonQuestNonFFAConditionalLoot(Player* player)
             }
         }
     }
+
     if (ql->empty())
     {
         delete ql;

@@ -34,7 +34,7 @@ EndContentData */
 
 enum
 {
-    QUEST_SHATTERED_SALUTE  = 2460
+    QUEST_SHATTERED_SALUTE = 2460
 };
 
 struct npc_shenthulAI : public ScriptedAI
@@ -50,7 +50,7 @@ struct npc_shenthulAI : public ScriptedAI
     uint32 Reset_Timer;
     uint64 playerGUID;
 
-    void Reset()
+    void Reset() override
     {
         CanTalk = false;
         CanEmote = false;
@@ -59,7 +59,7 @@ struct npc_shenthulAI : public ScriptedAI
         playerGUID = 0;
     }
 
-    void ReceiveEmote(Player* pPlayer, uint32 emote)
+    void ReceiveEmote(Player* pPlayer, uint32 emote) override
     {
         if (emote == TEXTEMOTE_SALUTE && pPlayer->GetQuestStatus(QUEST_SHATTERED_SALUTE) == QUEST_STATUS_INCOMPLETE)
         {
@@ -71,7 +71,7 @@ struct npc_shenthulAI : public ScriptedAI
         }
     }
 
-    void UpdateAI(const uint32 diff)
+    void UpdateAI(const uint32 diff) override
     {
         if (CanEmote)
         {
@@ -98,7 +98,7 @@ struct npc_shenthulAI : public ScriptedAI
             else Salute_Timer -= diff;
         }
 
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         DoMeleeAttackIfReady();
@@ -269,7 +269,7 @@ struct npc_overlord_runthakAI : public ScriptedAI
             else m_uiDialogueTimer -= uiDiff;
         } 
 
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         DoMeleeAttackIfReady();
@@ -498,49 +498,49 @@ struct npc_overlord_saurfangAI : public ScriptedAI
                 m_uiDialogueTimer -= diff;
         }
 
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
-        if (m_creature->getVictim()->GetHealth() <= m_creature->getVictim()->GetMaxHealth() * 0.2f && m_uiExecute_Timer < diff)
+        if (m_creature->GetVictim()->GetHealth() <= m_creature->GetVictim()->GetMaxHealth() * 0.2f && m_uiExecute_Timer < diff)
         {
-            DoCastSpellIfCan(m_creature->getVictim(), SPELL_SF_EXECUTE);
+            DoCastSpellIfCan(m_creature->GetVictim(), SPELL_SF_EXECUTE);
             m_uiExecute_Timer = 2000;
         }
         else m_uiExecute_Timer -= diff;
 
         if (m_uiMortalStrike_Timer < diff)
         {
-            DoCastSpellIfCan(m_creature->getVictim(), SPELL_SF_MORTALSTRIKE);
+            DoCastSpellIfCan(m_creature->GetVictim(), SPELL_SF_MORTALSTRIKE);
             m_uiMortalStrike_Timer = 13000;
         }
         else m_uiMortalStrike_Timer -= diff;
 
         /*        if (m_uiCleave_Timer < diff)
                 {
-                    DoCastSpellIfCan(m_creature->getVictim(), SPELL_SF_CLEAVE);
+                    DoCastSpellIfCan(m_creature->GetVictim(), SPELL_SF_CLEAVE);
                     m_uiCleave_Timer = 7000;
                 }
                 else m_uiCleave_Timer -= diff;
         */
-        if (m_uiCharge_Timer < diff && m_creature->GetDistance(m_creature->getVictim()->GetPositionX(),
-                m_creature->getVictim()->GetPositionY(),
-                m_creature->getVictim()->GetPositionZ()) >= 8.0f)
+        if (m_uiCharge_Timer < diff && m_creature->GetDistance(m_creature->GetVictim()->GetPositionX(),
+                m_creature->GetVictim()->GetPositionY(),
+                m_creature->GetVictim()->GetPositionZ()) >= 8.0f)
         {
-            DoCastSpellIfCan(m_creature->getVictim(), SPELL_SF_CHARGE);
+            DoCastSpellIfCan(m_creature->GetVictim(), SPELL_SF_CHARGE);
             m_uiCharge_Timer = 9000;
         }
         else m_uiCharge_Timer -= diff;
         /*
                 if (m_uiThunderClap_Timer < diff)
                 {
-                    DoCastSpellIfCan(m_creature->getVictim(), SPELL_SF_THUNDERCLAP);
+                    DoCastSpellIfCan(m_creature->GetVictim(), SPELL_SF_THUNDERCLAP);
                     m_uiThunderClap_Timer = 9000;
                 }
                 else m_uiThunderClap_Timer -= diff;
         */
         if (m_uiSaurfangRage_Timer < diff)
         {
-            DoCastSpellIfCan(m_creature->getVictim(), SPELL_SF_SAURFANGRAGE) ;
+            DoCastSpellIfCan(m_creature->GetVictim(), SPELL_SF_SAURFANGRAGE) ;
             m_uiSaurfangRage_Timer = 8000;
         }
         else m_uiSaurfangRage_Timer -= diff;
@@ -607,7 +607,7 @@ bool GossipSelect_npc_overlord_saurfang(Player* pPlayer, Creature* pCreature, ui
 
 bool GossipHello_npc_eitrigg(Player* pPlayer, Creature* pCreature)
 {
-    if (pCreature->isQuestGiver())
+    if (pCreature->IsQuestGiver())
         pPlayer->PrepareQuestMenu(pCreature->GetGUID());
 
     if (pPlayer->GetQuestStatus(4941) == QUEST_STATUS_INCOMPLETE)

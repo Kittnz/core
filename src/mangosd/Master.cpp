@@ -302,7 +302,7 @@ int Master::Run()
         b[3].Event.KeyEvent.wVirtualScanCode = 0x1c;
         b[3].Event.KeyEvent.wRepeatCount = 1;
         DWORD numb;
-        BOOL ret = WriteConsoleInput(hStdIn, b, 4, &numb);
+        WriteConsoleInput(hStdIn, b, 4, &numb);
 
         cliThread->wait();
 
@@ -442,8 +442,10 @@ void Master::_OnSignal(int s)
     switch (s)
     {
         case SIGINT:
+        {
             World::StopNow(RESTART_EXIT_CODE);
             break;
+        }
         case SIGTERM:
         #ifdef _WIN32
         case SIGBREAK:
@@ -451,9 +453,11 @@ void Master::_OnSignal(int s)
             World::StopNow(SHUTDOWN_EXIT_CODE);
             break;
         case SIGSEGV:
+        {
             signal(SIGSEGV, 0);
             if (!m_handleSigvSignals)
                 return;
+
             m_handleSigvSignals = false; // Desarm anticrash
             sWorld.SetAnticrashRearmTimer(sWorld.getConfig(CONFIG_UINT32_ANTICRASH_REARM_TIMER));
             uint32 anticrashOptions = sWorld.getConfig(CONFIG_UINT32_ANTICRASH_OPTIONS);
@@ -461,24 +465,30 @@ void Master::_OnSignal(int s)
             sLog.outInfo("Received SIGSEGV");
             ACE_Stack_Trace st;
             sLog.outInfo("%s", st.c_str());
+
             if (anticrashOptions & ANTICRASH_GENERATE_COREDUMP)
                 createdump();
+
             if (anticrashOptions & ANTICRASH_OPTION_ANNOUNCE_PLAYERS)
             {
                 if (anticrashOptions & ANTICRASH_OPTION_SAVEALL)
                     sWorld.SendWorldText(LANG_SYSTEMMESSAGE, "Server has crashed. Now saving online players ...");
                 else
                     sWorld.SendWorldText(LANG_SYSTEMMESSAGE, "Crash server occurred :(");
+    
                 ACE_Based::Thread::Sleep(500);
             }
+
             if (anticrashOptions & ANTICRASH_OPTION_SAVEALL)
             {
                 CharacterDatabase.ThreadStart();
                 sObjectAccessor.SaveAllPlayers();
                 ACE_Based::Thread::Sleep(25000); // Wait enough time to execute the SQL queries.
             }
-            *((int*)nullptr) = 42; // Crash for real now.
+
+            *((volatile int*)nullptr) = 42; // Crash for real now.
             return;
+        }
     }
 
     signal(s, _OnSignal);

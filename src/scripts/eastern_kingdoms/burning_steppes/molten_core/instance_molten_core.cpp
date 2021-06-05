@@ -204,7 +204,7 @@ struct instance_molten_core : ScriptedInstance
 
     void OnCreatureEnterCombat(Creature* pCreature) override
     {
-        Unit* victim = pCreature->getVictim();
+        Unit* victim = pCreature->GetVictim();
         if (!victim)
             return;
         std::list<Creature*> DomoListe;
@@ -213,6 +213,7 @@ struct instance_molten_core : ScriptedInstance
             case NPC_DOMO:
             case NPC_FLAMEWAKER_HEALER:
             case NPC_FLAMEWAKER_ELITE:
+            {
                 GetCreatureListWithEntryInGrid(DomoListe, pCreature, NPC_FLAMEWAKER_HEALER, 150.0f);
                 GetCreatureListWithEntryInGrid(DomoListe, pCreature, NPC_FLAMEWAKER_ELITE, 150.0f);
                 GetCreatureListWithEntryInGrid(DomoListe, pCreature, NPC_DOMO, 150.0f);
@@ -220,11 +221,13 @@ struct instance_molten_core : ScriptedInstance
                 {
                     for (std::list<Creature*>::iterator itr = DomoListe.begin(); itr != DomoListe.end(); ++itr)
                     {
-                        if ((*itr)->isAlive() && !(*itr)->isInCombat())
+                        if ((*itr)->IsAlive() && !(*itr)->IsInCombat())
                             (*itr)->SetInCombatWith(victim);
                     }
                 }
+
                 break;
+            }
         }
     }
 
@@ -456,7 +459,6 @@ struct instance_molten_core : ScriptedInstance
                 if (GOUseGuidList[i])
                 {
                     GameObject* Rune = instance->GetGameObject(GOUseGuidList[i]);
-                    bool End = true;
                     switch (Rune->GetEntry())
                     {
                         case 176951:                                    //Sulfuron
@@ -545,18 +547,6 @@ struct instance_molten_core : ScriptedInstance
 
         for (int i = 0; i < INSTANCE_MC_MAX_ENCOUNTER; i++)
             SetData(i, m_auiEncounter[i]);
-
-        uint64 GuidRunes[7] =
-        {
-            m_uiRuneKoroGUID,
-            m_uiRuneZethGUID,
-            m_uiRuneMazjGUID,
-            m_uiRuneTheriGUID,
-            m_uiRuneBlazGUID,
-            m_uiRuneKressGUID,
-            m_uiRuneMohnGUID
-        };
-
 
         for (int i = 0; i < 7; i++)
             SetData((TypeRuneActive0 + 16), RuneActive[i]);

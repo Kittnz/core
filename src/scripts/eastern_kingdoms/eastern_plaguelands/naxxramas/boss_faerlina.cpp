@@ -95,7 +95,7 @@ struct boss_faerlinaAI : public ScriptedAI
     ObjectGuid followers[2] = { 0,0 };
     ObjectGuid worshippers[4] = { 0,0,0,0 };
 
-    void Reset()
+    void Reset() override
     {
         m_uiPoisonBoltVolleyTimer   = INITIAL_POISONBOLT_VOLLEY_CD;
         m_uiRainOfFireTimer         = RAINOFFIRE_INITIAL_CD;
@@ -194,7 +194,7 @@ struct boss_faerlinaAI : public ScriptedAI
         CheckRespawnAdds();
     }
 
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* pWho) override
     {
         DoScriptText(SAY_PULL, m_creature);
 
@@ -212,10 +212,10 @@ struct boss_faerlinaAI : public ScriptedAI
         }
     }
 
-    void MoveInLineOfSight(Unit* pWho)
+    void MoveInLineOfSight(Unit* pWho) override
     {
         if (pWho->GetTypeId() == TYPEID_PLAYER
-            && !m_creature->isInCombat()
+            && !m_creature->IsInCombat()
             && m_creature->IsWithinDistInMap(pWho, 30.0f)
             && !pWho->HasAuraType(SPELL_AURA_FEIGN_DEATH)
             && !pWho->HasAuraType(SPELL_AURA_MOD_UNATTACKABLE))
@@ -225,7 +225,7 @@ struct boss_faerlinaAI : public ScriptedAI
         ScriptedAI::MoveInLineOfSight(pWho);
     }
 
-    void KilledUnit(Unit* pVictim)
+    void KilledUnit(Unit* pVictim) override
     {
         if (pVictim->GetTypeId() != TYPEID_PLAYER)
             return;
@@ -233,7 +233,7 @@ struct boss_faerlinaAI : public ScriptedAI
         DoScriptText(urand(0, 1) ? SAY_SLAY1 : SAY_SLAY2, m_creature);
     }
 
-    void JustDied(Unit* pKiller)
+    void JustDied(Unit* pKiller) override
     {
         DoScriptText(SAY_DEATH, m_creature);
 
@@ -241,9 +241,9 @@ struct boss_faerlinaAI : public ScriptedAI
             m_pInstance->SetData(TYPE_FAERLINA, DONE);
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
         
         if (!m_pInstance->HandleEvadeOutOfHome(m_creature))
@@ -266,7 +266,7 @@ struct boss_faerlinaAI : public ScriptedAI
             }
             else 
             {
-                if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_POSIONBOLT_VOLLEY) == CanCastResult::CAST_OK)
+                if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_POSIONBOLT_VOLLEY) == CanCastResult::CAST_OK)
                 {
                     m_uiPoisonBoltVolleyTimer = POSIONBOLT_VOLLEY_CD();
                 }
@@ -326,7 +326,7 @@ struct mob_faerlina_rp : public ScriptedAI
         Reset();
     }
 
-    void Reset()
+    void Reset() override
     {
         events.Reset();
         events.ScheduleEvent(EVENT_KNEEL, Seconds(urand(5, 10)));
@@ -350,7 +350,7 @@ struct mob_faerlina_rp : public ScriptedAI
                 Reset();
                 break;
             }
-            if ((*creatures.begin())->isInCombat())
+            if ((*creatures.begin())->IsInCombat())
             {
                 Reset();
                 break;
@@ -358,7 +358,7 @@ struct mob_faerlina_rp : public ScriptedAI
 
             for (auto it = creatures.begin(); it != creatures.end();)
             {
-                if ((*it)->isDead())
+                if ((*it)->IsDead())
                     it = creatures.erase(it);
                 else
                     ++it;

@@ -24,8 +24,8 @@ EndScriptData */
 #include "scriptPCH.h"
 #include "zulgurub.h"
 
-#define SPELL_AVARTAR                24646                  //The Enrage Spell
-#define SPELL_GROUNDTREMOR            6524
+#define SPELL_AVARTAR 24646                  //The Enrage Spell
+#define SPELL_GROUNDTREMOR 6524
 
 struct boss_grilekAI : public ScriptedAI
 {
@@ -37,16 +37,16 @@ struct boss_grilekAI : public ScriptedAI
     uint32 Avartar_Timer;
     uint32 GroundTremor_Timer;
 
-    void Reset()
+    void Reset() override
     {
         Avartar_Timer = urand(15000, 25000);
         GroundTremor_Timer = urand(8000, 16000);
     }
 
-    void UpdateAI(const uint32 diff)
+    void UpdateAI(const uint32 diff) override
     {
         //Return since we have no target
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         //Avartar_Timer
@@ -58,8 +58,8 @@ struct boss_grilekAI : public ScriptedAI
 
             target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 1);
 
-            if (m_creature->getThreatManager().getThreat(m_creature->getVictim()))
-                m_creature->getThreatManager().modifyThreatPercent(m_creature->getVictim(), -50);
+            if (m_creature->GetThreatManager().getThreat(m_creature->GetVictim()))
+                m_creature->GetThreatManager().modifyThreatPercent(m_creature->GetVictim(), -50);
             if (target)
                 AttackStart(target);
 
@@ -70,7 +70,7 @@ struct boss_grilekAI : public ScriptedAI
         //GroundTremor_Timer
         if (GroundTremor_Timer < diff)
         {
-            DoCastSpellIfCan(m_creature->getVictim(), SPELL_GROUNDTREMOR);
+            DoCastSpellIfCan(m_creature->GetVictim(), SPELL_GROUNDTREMOR);
             GroundTremor_Timer = urand(12000, 16000);
         }
         else GroundTremor_Timer -= diff;

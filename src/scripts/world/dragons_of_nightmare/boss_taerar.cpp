@@ -7,22 +7,22 @@
 
 enum
 {
-    SAY_TAERAR_AGGRO                = -1000399,
-    SAY_SUMMON_SHADE                = -1000400,
+    SAY_TAERAR_AGGRO = -1000399,
+    SAY_SUMMON_SHADE = -1000400,
 
-    SPELL_ARCANE_BLAST              = 24857,
-    SPELL_BELLOWING_ROAR            = 22686,
+    SPELL_ARCANE_BLAST = 24857,
+    SPELL_BELLOWING_ROAR = 22686,
 
-    SPELL_SHADE_OF_TAERAR_LEFT      = 24841,
-    SPELL_SHADE_OF_TAERAR_RIGHT     = 24842,
-    SPELL_SHADE_OF_TAERAR_FRONT     = 24843,
-    SPELL_SELF_STUN                 = 24883,
+    SPELL_SHADE_OF_TAERAR_LEFT = 24841,
+    SPELL_SHADE_OF_TAERAR_RIGHT = 24842,
+    SPELL_SHADE_OF_TAERAR_FRONT = 24843,
+    SPELL_SELF_STUN = 24883,
 
     // Shade of Taerar spells
-    SPELL_ACID_BREATH               = 24839,
-    SPELL_POISON_CLOUD              = 24840,
+    SPELL_ACID_BREATH = 24839,
+    SPELL_POISON_CLOUD = 24840,
 
-    NPC_SHADE_OF_TAERAR             = 15302
+    NPC_SHADE_OF_TAERAR = 15302
 };
 
 /*
@@ -38,11 +38,11 @@ void boss_taerarAI::Reset()
 {
     boss_dragon_of_nightmareAI::Reset();
 
-    m_uiArcaneBlastTimer       = urand(11000, 13000);
-    m_uiBellowingRoarTimer     = urand(27000, 30000);
-    m_uiShadesTimeoutTimer     = 0;
+    m_uiArcaneBlastTimer = urand(11000, 13000);
+    m_uiBellowingRoarTimer = urand(27000, 30000);
+    m_uiShadesTimeoutTimer = 0;
 
-    m_uiShadesDead             = 0;
+    m_uiShadesDead = 0;
 }
 
 void boss_taerarAI::Aggro(Unit* pWho)
@@ -158,7 +158,7 @@ void npc_shade_of_taerarAI::UpdatePetAI(const uint32 uiDiff)
 {
     if (m_uiAcidBreathTimer <= uiDiff)
     {
-        if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_ACID_BREATH) == CAST_OK)
+        if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_ACID_BREATH) == CAST_OK)
             m_uiAcidBreathTimer = urand(10000, 15000);
     }
     else

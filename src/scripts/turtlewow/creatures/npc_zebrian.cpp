@@ -12,7 +12,6 @@ struct zebrian_the_madAI : public ScriptedAI
         // unused
     }
 
-
     void Aggro(Unit *who)
     {
         m_creature->MonsterYell("Don't touch my Zebra! I won it to a drunken goblin!");
@@ -40,9 +39,12 @@ struct zebrian_the_madAI : public ScriptedAI
 
     void MoveInLineOfSight(Unit* pWho) override
     {
-        if (pWho && pWho->IsPlayer()) {
-            if (Player* player = pWho->ToPlayer()) {
-                if (!player->HasItemCount(18662) && !player->HasAura(8067)) { // Heavy Leather Ball and Party Fever
+        if (pWho && pWho->IsPlayer())
+        {
+            if (Player* player = pWho->ToPlayer())
+            {
+                if (!player->HasItemCount(18662) && !player->HasAura(8067)) // Heavy Leather Ball and Party Fever
+                {
                     player->AddAura(8067);
                     m_creature->CastSpell(player, 23135, true);
                     m_creature->HandleEmoteCommand(EMOTE_ONESHOT_LAUGH);
@@ -55,7 +57,7 @@ struct zebrian_the_madAI : public ScriptedAI
     void UpdateAI(const uint32 diff)
     {
         //Return since we have no target
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         DoMeleeAttackIfReady();

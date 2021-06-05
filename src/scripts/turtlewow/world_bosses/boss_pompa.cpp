@@ -13,19 +13,19 @@ enum
     // ------
 
     // Causes an explosion of divine light, inflicting (7.1% of Spell power) Holy damage
-    SPELL_HOLY_NOVA             = 23858,
+    SPELL_HOLY_NOVA = 23858,
 
     // Cleave - Attacks a number of melee range players around him with a cleaving strike that deals 1000-2000 damage to each. Since a 'blind spot' has not been found, Cleave might be capped to a certain number of players affected.
-    SPELL_CLEAVE                = 16044,
+    SPELL_CLEAVE = 16044,
 
     // Thunderclap - A point blank area of effect spell, hardly dealing any damage, but slowing movement speed. Some have reported 200 damage, some say it doesn't deal damage at all. Doesn't seem to affect attacking speed either.
-    SPELL_THUNDERCLAP           = 8078,
+    SPELL_THUNDERCLAP = 8078,
 
     // Holy Smite - Holy smite he may cast only on the player with aggro.
-    SPELL_HOLY_SMITE            = 20696,
+    SPELL_HOLY_SMITE = 20696,
 
     // Capture Soul - When a player, pet or totem gets killed, Avatar of Pompa casts this spell to instantly regenerate 70,000 health.
-    SPELL_CAPTURESOUL           = 21054
+    SPELL_CAPTURESOUL = 21054
 };
 
 struct boss_avatar_of_pompaAI : public ScriptedAI
@@ -42,7 +42,7 @@ struct boss_avatar_of_pompaAI : public ScriptedAI
     uint32 HolySmite_Timer;
     bool first_aggro;
 
-    void Reset()
+    void Reset() override
     {
         first_aggro = true;
         HolyNova_Timer = urand(8000, 12000);
@@ -51,12 +51,13 @@ struct boss_avatar_of_pompaAI : public ScriptedAI
         HolySmite_Timer = 10000;
     }
 
-    void Aggro(Unit *who)
+    void Aggro(Unit *who) override
     {
         if (first_aggro)
         {
             first_aggro = false;
         }
+
         m_creature->PMonsterYell("Who dares challenge the powerful Pompa!?");
     }
 
@@ -64,7 +65,7 @@ struct boss_avatar_of_pompaAI : public ScriptedAI
         Should only be triggered on enemy above lvl 50.
         (To prevent exploit by summoning low lvl player and make them die via the shadow bolt volley to heal Kazzak).
      */
-    void KilledUnit(Unit* victim)
+    void KilledUnit(Unit* victim) override
     {
         Player* affectedPlayer;
         Creature* creature;
@@ -79,7 +80,7 @@ struct boss_avatar_of_pompaAI : public ScriptedAI
                 if (!affectedPlayer)
                     return;
 
-                if (affectedPlayer->getLevel() < 50)
+                if (affectedPlayer->GetLevel() < 50)
                     return;
 
                 // Don't heal if player doesn't have at least 10 items
@@ -108,7 +109,7 @@ struct boss_avatar_of_pompaAI : public ScriptedAI
                         return;
 
                 /** Prevent Avatar of Pompa to use his healing spell if the pet got a level lower than 50 */
-                if (creature->getLevel() < 50)
+                if (creature->GetLevel() < 50)
                     return;
 
                 break;
@@ -122,7 +123,7 @@ struct boss_avatar_of_pompaAI : public ScriptedAI
         m_creature->PMonsterYell("Behold the power of Pompa!");
     }
 
-    void JustDied(Unit* /*pKiller*/)
+    void JustDied(Unit* /*pKiller*/) override
     {
         uint32 m_respawn_delay_Timer = urand(3, 6)*DAY + urand(0, 24*HOUR);
 
@@ -130,20 +131,20 @@ struct boss_avatar_of_pompaAI : public ScriptedAI
         if (m_creature->GetSpawnFlags() & SPAWN_FLAG_DYNAMIC_RESPAWN_TIME &&
             sWorld.GetActiveSessionCount() > BLIZZLIKE_REALM_POPULATION)
 
-            m_respawn_delay_Timer *= float(BLIZZLIKE_REALM_POPULATION) / float(sWorld.GetActiveSessionCount());
+        m_respawn_delay_Timer *= float(BLIZZLIKE_REALM_POPULATION) / float(sWorld.GetActiveSessionCount());
 
         m_creature->SetRespawnDelay(m_respawn_delay_Timer);
         m_creature->SetRespawnTime(m_respawn_delay_Timer);
         m_creature->SaveRespawnTime();
     }
 
-    void UpdateAI(const uint32 diff)
+    void UpdateAI(const uint32 diff) override
     {
-        //Return since we have no target
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        // Return since we have no target
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
-        //HolyNova_Timer
+        // HolyNova_Timer
         if (HolyNova_Timer < diff)
         {
             DoCast(m_creature, SPELL_HOLY_NOVA);
@@ -152,28 +153,28 @@ struct boss_avatar_of_pompaAI : public ScriptedAI
         else
             HolyNova_Timer -= diff;
 
-        //Cleave_Timer
+        // Cleave_Timer
         if (Cleave_Timer < diff)
         {
-            if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_CLEAVE) == CAST_OK)
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_CLEAVE) == CAST_OK)
                 Cleave_Timer = urand(6000, 12000);
         }
         else
             Cleave_Timer -= diff;
 
-        //ThunderClap_Timer
+        // ThunderClap_Timer
         if (ThunderClap_Timer < diff)
         {
-            if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_THUNDERCLAP) == CAST_OK)
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_THUNDERCLAP) == CAST_OK)
                 ThunderClap_Timer = urand(7500, 12000);
         }
         else
             ThunderClap_Timer -= diff;
 
-        //HolySmite_Timer
+        // HolySmite_Timer
         if (HolySmite_Timer < diff)
         {
-            if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_HOLY_SMITE) == CAST_OK)
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_HOLY_SMITE) == CAST_OK)
                 HolySmite_Timer = urand(9000, 12000);
         }
         else

@@ -7,21 +7,21 @@
 
 enum
 {
-    RFK_MAX_ENCOUNTER     = 1,
+    RFK_MAX_ENCOUNTER = 1,
 
-    TYPE_AGATHELOS    = 1,
+    TYPE_AGATHELOS = 1,
 
     GO_AGATHELOS_WARD = 21099,
 
-    NPC_WARD_KEEPER   = 4625,
-    NPC_AGATHELOS     = 4422
+    NPC_WARD_KEEPER = 4625,
+    NPC_AGATHELOS = 4422
 };
 
 class instance_razorfen_kraul : public ScriptedInstance
 {
     public:
         instance_razorfen_kraul(Map* pMap);
-        ~instance_razorfen_kraul() {}
+        ~instance_razorfen_kraul() override {}
 
         void Initialize() override;
 

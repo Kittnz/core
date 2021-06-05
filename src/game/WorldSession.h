@@ -231,9 +231,9 @@ class MapSessionFilter : public PacketFilter
             m_processLogout = false;
             m_processType = PACKET_PROCESS_MAP;
         }
-        ~MapSessionFilter() {}
+        ~MapSessionFilter() override {}
 
-        virtual bool Process(WorldPacket * packet);
+        bool Process(WorldPacket * packet) override;
 };
 
 //class used to filer only thread-unsafe packets from queue
@@ -246,7 +246,7 @@ class WorldSessionFilter : public PacketFilter
             m_processLogout = true;
             m_processType = PACKET_PROCESS_WORLD;
         }
-        ~WorldSessionFilter() {}
+        ~WorldSessionFilter() override {}
 };
 
 typedef std::map<uint8, std::string> ClientIdentifiersMap;

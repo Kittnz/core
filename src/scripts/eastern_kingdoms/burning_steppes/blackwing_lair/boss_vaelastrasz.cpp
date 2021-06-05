@@ -131,17 +131,17 @@ struct boss_vaelAI : public ScriptedAI
     ObjectGuid m_playerGuid;
     ObjectGuid m_nefariusGuid;
 
-    void Reset()
+    void Reset() override
     {
-        m_uiSpeechTimer                  = 0;
-        m_uiSpeechNum                    = 0;
-        m_uiCleaveTimer                  = 6000;
-        m_uiFlameBreathTimer             = 8000;
+        m_uiSpeechTimer = 0;
+        m_uiSpeechNum = 0;
+        m_uiCleaveTimer = 6000;
+        m_uiFlameBreathTimer = 8000;
         m_uiBurningAdrenalineCasterTimer = 15000;
-        m_uiBurningAdrenalineTankTimer   = 45000;
-        m_uiFireNovaTimer                = 4000;
-        m_uiTailSweepTimer               = 8000;
-        m_uiSelectableTimer              = 0;
+        m_uiBurningAdrenalineTankTimer = 45000;
+        m_uiFireNovaTimer = 4000;
+        m_uiTailSweepTimer = 8000;
+        m_uiSelectableTimer = 0;
         m_uiIntroTimer = 0;
         m_uiIntroPhase = 0;
         m_bHasYelled = false;
@@ -178,10 +178,9 @@ struct boss_vaelAI : public ScriptedAI
         // If Nefarius's Corruption has not been accepted by this point, fail Scepter Run
         if (m_pInstance->GetData(TYPE_SCEPTER_RUN) == NOT_STARTED)
             m_pInstance->SetData(TYPE_SCEPTER_RUN, FAIL);
-
     }
 
-    void KilledUnit(Unit* pVictim)
+    void KilledUnit(Unit* pVictim) override
     {
         if (!pVictim || pVictim->GetTypeId() != TYPEID_PLAYER)
             return;
@@ -192,7 +191,7 @@ struct boss_vaelAI : public ScriptedAI
         DoScriptText(SAY_KILLTARGET, m_creature, pVictim);
     }
 
-    void Aggro(Unit* /*pWho*/)
+    void Aggro(Unit* /*pWho*/) override
     {
         if (!m_bCastedEssenceOfTheRed)
         {
@@ -209,24 +208,24 @@ struct boss_vaelAI : public ScriptedAI
         }
     }
 
-    void JustDied(Unit* /*pKiller*/)
+    void JustDied(Unit* /*pKiller*/) override
     {
         m_creature->SetRespawnDelay(604800); // 7 j. 604800
         if (m_pInstance)
             m_pInstance->SetData(TYPE_VAELASTRASZ, DONE);
     }
 
-    void JustReachedHome()
+    void JustReachedHome() override
     {
         if (m_pInstance)
             m_pInstance->SetData(TYPE_VAELASTRASZ, FAIL);
-        m_creature->setFaction(FACTION_MONSTER);
+        m_creature->SetFactionTemplateId(FACTION_MONSTER);
         m_creature->SetStandState(UNIT_STAND_STATE_STAND);
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
         m_creature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER | UNIT_NPC_FLAG_GOSSIP);
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (!m_pInstance)
             return;
@@ -280,21 +279,21 @@ struct boss_vaelAI : public ScriptedAI
                 m_uiIntroTimer -= uiDiff;
         }
 
-        if (!m_creature->isInCombat() && !m_bFlagSet)
+        if (!m_creature->IsInCombat() && !m_bFlagSet)
         {
             if (m_uiInitTimer < uiDiff)
             {
                 if (m_pInstance->GetData(TYPE_VAEL_EVENT) != DONE)
                 {
-                    m_creature->setFaction(FACTION_FRIENDLY);
+                    m_creature->SetFactionTemplateId(FACTION_FRIENDLY);
                     m_creature->SetStandState(UNIT_STAND_STATE_DEAD);
                 }
                 else
                 {
-                    m_creature->setFaction(FACTION_MONSTER);
+                    m_creature->SetFactionTemplateId(FACTION_MONSTER);
                     m_creature->SetStandState(UNIT_STAND_STATE_STAND);
                 }
-                m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+                m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
                 m_creature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER | UNIT_NPC_FLAG_GOSSIP);
                 m_bFlagSet = true;
             }
@@ -335,7 +334,7 @@ struct boss_vaelAI : public ScriptedAI
                         ++m_uiSpeechNum;
                         break;
                     case 2:
-                        m_creature->setFaction(FACTION_MONSTER);
+                        m_creature->SetFactionTemplateId(FACTION_MONSTER);
                         if (m_playerGuid)
                         {
                             if (Player* pPlayer = m_creature->GetMap()->GetPlayer(m_playerGuid))
@@ -354,7 +353,7 @@ struct boss_vaelAI : public ScriptedAI
         }
 
         // Return since we have no target
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         // Burning Adrenaline Caster Timer
@@ -362,11 +361,11 @@ struct boss_vaelAI : public ScriptedAI
         if (m_uiBurningAdrenalineCasterTimer < uiDiff)
         {
             std::vector<ObjectGuid> vPossibleVictim;
-            ThreatList const& tList = m_creature->getThreatManager().getThreatList();
+            ThreatList const& tList = m_creature->GetThreatManager().getThreatList();
             for (ThreatList::const_iterator itr = tList.begin(); itr != tList.end(); ++itr)
             {
                 Player* pPlayer = m_creature->GetMap()->GetPlayer((*itr)->getUnitGuid());
-                if (pPlayer && pPlayer->isAlive() && pPlayer->getPowerType() == POWER_MANA && !pPlayer->HasAura(SPELL_BURNING_ADRENALINE, EFFECT_INDEX_0))
+                if (pPlayer && pPlayer->IsAlive() && pPlayer->GetPowerType() == POWER_MANA && !pPlayer->HasAura(SPELL_BURNING_ADRENALINE, EFFECT_INDEX_0))
                     vPossibleVictim.push_back(pPlayer->GetObjectGuid());
             }
             if (!vPossibleVictim.empty())
@@ -384,9 +383,9 @@ struct boss_vaelAI : public ScriptedAI
         {
             // have the victim cast the spell on himself otherwise the third effect aura will be applied
             // to Vael instead of the player
-            if (m_creature->getVictim() && !m_creature->getVictim()->HasAura(SPELL_BURNING_ADRENALINE) && m_creature->getVictim()->isAlive())
+            if (m_creature->GetVictim() && !m_creature->GetVictim()->HasAura(SPELL_BURNING_ADRENALINE) && m_creature->GetVictim()->IsAlive())
             {
-                m_creature->getVictim()->CastSpell(m_creature->getVictim(), SPELL_BURNING_ADRENALINE, true);
+                m_creature->GetVictim()->CastSpell(m_creature->GetVictim(), SPELL_BURNING_ADRENALINE, true);
                 m_uiBurningAdrenalineTankTimer = 45000;
             }
         }
@@ -403,7 +402,7 @@ struct boss_vaelAI : public ScriptedAI
         // Cleave Timer
         if (m_uiCleaveTimer < uiDiff)
         {
-            if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_CLEAVE) == CAST_OK)
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_CLEAVE) == CAST_OK)
                 m_uiCleaveTimer = urand(5000, 10000);
         }
         else
@@ -412,7 +411,7 @@ struct boss_vaelAI : public ScriptedAI
         // Flame Breath Timer
         if (m_uiFlameBreathTimer < uiDiff)
         {
-            if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_FLAME_BREATH) == CAST_OK)
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_FLAME_BREATH) == CAST_OK)
                 m_uiFlameBreathTimer = urand(5000, 10000);
         }
         else
@@ -468,7 +467,7 @@ bool GossipHello_boss_vael(Player* pPlayer, Creature* pCreature)
     if (m_pInstance->GetData(TYPE_RAZORGORE) != DONE && !pPlayer->IsGameMaster())
         return false;
 
-    if (pCreature->isQuestGiver())
+    if (pCreature->IsQuestGiver())
         if (m_pInstance->GetData(TYPE_SCEPTER_RUN) == NOT_STARTED)
             pPlayer->PrepareQuestMenu(pCreature->GetObjectGuid());
 
@@ -543,23 +542,23 @@ struct npc_death_talon_CaptainAI : public ScriptedAI
     uint32 m_uiCommandingShoutTimer;
     uint32 m_uiCleaveTimer;
 
-    void Reset()
+    void Reset() override
     {
-        m_uiMarkDetonationTimer     = 10000;
-        m_uiMarkFlamesTimer         = 6000;
-        m_uiCommandingShoutTimer    = urand(12000, 25000);
-        m_uiCleaveTimer             = urand(4000, 8000);
+        m_uiMarkDetonationTimer = 10000;
+        m_uiMarkFlamesTimer = 6000;
+        m_uiCommandingShoutTimer = urand(12000, 25000);
+        m_uiCleaveTimer = urand(4000, 8000);
         DoCastSpellIfCan(m_creature, SPELL_AURA_FLAMES, CF_AURA_NOT_PRESENT);
         SetAuraFlames(false);
     }
 
-    void MoveInLineOfSight(Unit *pWho)
+    void MoveInLineOfSight(Unit *pWho) override
     {
-        if (!pWho || m_creature->getVictim())
+        if (!pWho || m_creature->GetVictim())
             return;
 
         if (pWho->GetTypeId() == TYPEID_PLAYER
-            && !m_creature->isInCombat()
+            && !m_creature->IsInCombat()
             && m_creature->IsWithinDistInMap(pWho, 29.0f)
             && m_creature->IsWithinLOSInMap(pWho)
             && !pWho->HasAuraType(SPELL_AURA_FEIGN_DEATH)
@@ -569,7 +568,7 @@ struct npc_death_talon_CaptainAI : public ScriptedAI
         }
     }
 
-    void Aggro(Unit* /*pWho*/)
+    void Aggro(Unit* /*pWho*/) override
     {
         if (!m_creature->HasAura(SPELL_AURA_FLAMES))
             m_creature->AddAura(SPELL_AURA_FLAMES, ADD_AURA_PERMANENT);
@@ -577,7 +576,7 @@ struct npc_death_talon_CaptainAI : public ScriptedAI
         DoCastSpellIfCan(m_creature, SPELL_COMMANDING_SHOUT, CF_TRIGGERED);
     }
 
-    void JustDied(Unit* /*pKiller*/)
+    void JustDied(Unit* /*pKiller*/) override
     {
         SetAuraFlames(false);
     }
@@ -591,10 +590,10 @@ struct npc_death_talon_CaptainAI : public ScriptedAI
 
         for (std::list<Creature *>::iterator itr = lCreature.begin(); itr != lCreature.end(); ++itr)
         {
-            if (!(*itr)->isAlive())
+            if (!(*itr)->IsAlive())
                 continue;
 
-            if (on && m_creature->isAlive())
+            if (on && m_creature->IsAlive())
             {
                 if (m_creature->IsWithinDistInMap((*itr), 15.0f))
                 {
@@ -609,16 +608,16 @@ struct npc_death_talon_CaptainAI : public ScriptedAI
         }
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         SetAuraFlames(true);
 
         if (m_uiCleaveTimer < uiDiff)
         {
-            if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_CLEAVE2) == CAST_OK)
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_CLEAVE2) == CAST_OK)
                 m_uiCleaveTimer = urand(4000, 8000);
         }
         else
@@ -647,7 +646,7 @@ struct npc_death_talon_CaptainAI : public ScriptedAI
         {
             if (Unit* pUnit = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
             {
-                if (pUnit->isAlive())
+                if (pUnit->IsAlive())
                 {
                     pUnit->CastSpell(pUnit, SPELL_MARK_DETONATION, true);
                     m_uiMarkDetonationTimer = 20000;
@@ -689,16 +688,16 @@ struct npc_death_talon_SeetherAI : public ScriptedAI
     uint32 m_uiFrenzyTimer;
     bool m_bEngaged;
 
-    void Reset()
+    void Reset() override
     {
         m_uiFlameBuffetTimer = urand(5000, 10000);
-        m_uiFrenzyTimer     = 15000;
-        m_bEngaged          = false;
+        m_uiFrenzyTimer = 15000;
+        m_bEngaged = false;
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         if (m_uiFrenzyTimer < uiDiff)
@@ -713,14 +712,14 @@ struct npc_death_talon_SeetherAI : public ScriptedAI
 
         if (!m_bEngaged)
         {
-            if (m_creature->IsWithinMeleeRange(m_creature->getVictim()))
+            if (m_creature->IsWithinMeleeRange(m_creature->GetVictim()))
                 m_bEngaged = true;
         }
         else
         {
             if (m_uiFlameBuffetTimer < uiDiff)
             {
-                if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_FLAME_BUFFET) == CAST_OK)
+                if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_FLAME_BUFFET) == CAST_OK)
                     m_uiFlameBuffetTimer = urand(8000, 12000);
             }
             else m_uiFlameBuffetTimer -= uiDiff;

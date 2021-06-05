@@ -15,59 +15,59 @@
 enum
 {
 // Phase 1 : Invocateurs
-    PHASE_INVOC_SUMMONERS      = 1,
-    SUMMONER_COUNT             = 10,
+    PHASE_INVOC_SUMMONERS = 1,
+    SUMMONER_COUNT = 10,
     // Timer
-    DELAY_INVOC_SUMMONERS      = 10 * 1000,
-    DELAY_INVOC_PORTAL         = 45 * 1000,
+    DELAY_INVOC_SUMMONERS = 10 * 1000,
+    DELAY_INVOC_PORTAL = 45 * 1000,
     // NPC
-    NPC_SUMMONER_ENTRY         = 11582,
+    NPC_SUMMONER_ENTRY = 11582,
     // Gobj
-    GOBJ_PORTAL_ENTRY          = 181810, // Portail
-    GOBJ_PORTAL_2_ENTRY        = 149018, // Fumee sur le portail
+    GOBJ_PORTAL_ENTRY = 181810, // Portail
+    GOBJ_PORTAL_2_ENTRY = 149018, // Fumee sur le portail
     // Spells
-    SPELL_INSTANT_DEATH        = 5,
+    SPELL_INSTANT_DEATH = 5,
     SPELL_INVOCATION_ON_MASTER = 19984, // Sort avec un beau visuel de canalisation
-    SPELL_INVOCATION_MASTER    = 21157,
-    SPELL_ECLAIR_PORTAL        = 19984, // Eclair qui tombe du ciel
-    SPELL_SUMMONER_AURA_1      = 28330,
-    SPELL_SUMMONER_AURA_2      = 31951,
+    SPELL_INVOCATION_MASTER = 21157,
+    SPELL_ECLAIR_PORTAL = 19984, // Eclair qui tombe du ciel
+    SPELL_SUMMONER_AURA_1 = 28330,
+    SPELL_SUMMONER_AURA_2 = 31951,
 
 
 // Phase 2 : vagues de mobs
-    PHASE_WAVES                = 2,
+    PHASE_WAVES = 2,
     // Spells
-    SPELL_AURA_RED             = 31951,//28330,
-    SPELL_AURA_BLUE            = 31954,
-    MOBS_PER_WAVE              = 1,
+    SPELL_AURA_RED = 31951,//28330,
+    SPELL_AURA_BLUE = 31954,
+    MOBS_PER_WAVE = 1,
 
 // Phase 3
-    PHASE_FINAL_FIGHT          = 3,
-    NPC_BOSS_ADD1_COUNT        = 10,
-    NPC_BOSS_ADD2_COUNT        = 10,
-    MASTER_ADD1_COUNT          = 5,
-    MASTER_ADD2_COUNT          = 2,
+    PHASE_FINAL_FIGHT = 3,
+    NPC_BOSS_ADD1_COUNT = 10,
+    NPC_BOSS_ADD2_COUNT = 10,
+    MASTER_ADD1_COUNT = 5,
+    MASTER_ADD2_COUNT = 2,
     // NPC
-    NPC_BOSS_CAPITAL           = 12480,
-    NPC_BOSS_CAPITAL_ADD1      = 1976, // Patrouilleur de SW
-    NPC_BOSS_CAPITAL_ADD2      = 68, // Guet de SW
+    NPC_BOSS_CAPITAL = 12480,
+    NPC_BOSS_CAPITAL_ADD1 = 1976, // Patrouilleur de SW
+    NPC_BOSS_CAPITAL_ADD2 = 68, // Guet de SW
 
-    NPC_MASTER_ADD1            = 5624, // Abomination de UC
-    NPC_MASTER_ADD2            = 16428,
+    NPC_MASTER_ADD1 = 5624, // Abomination de UC
+    NPC_MASTER_ADD2 = 16428,
 };
 
 // Textes
 // Phase 1
-#define SAY_PORTAL_FINISHED_1            "Le portail est en place."
-#define SAY_PORTAL_FINISHED_2            "Travail termine, Maitre."
-#define SAY_PORTAL_FINISHED_3            "Nous pouvons commencer."
-#define SAY_PORTAL_FINISHED_MASTER_SAY   "Tres bien."
-#define SAY_PORTAL_FINISHED_MASTER_YELL  "Cette ville n'existera bientot plus !"
+#define SAY_PORTAL_FINISHED_1 "Le portail est en place."
+#define SAY_PORTAL_FINISHED_2 "Travail termine, Maitre."
+#define SAY_PORTAL_FINISHED_3 "Nous pouvons commencer."
+#define SAY_PORTAL_FINISHED_MASTER_SAY "Tres bien."
+#define SAY_PORTAL_FINISHED_MASTER_YELL "Cette ville n'existera bientot plus !"
 // Phase 2
-#define SAY_WAVE_MOB_AT_NEW_WAVE         "Les renforts arrivents !"
+#define SAY_WAVE_MOB_AT_NEW_WAVE "Les renforts arrivents !"
 
 // 1 jour : utilise si le script plante, pour se mettre "en pause"
-#define CD_INFINY                        60*60*24*1000
+#define CD_INFINY 60*60*24*1000
 
 class CreatureWaveEntry
 {
@@ -89,13 +89,13 @@ void SetAttackable(Unit* pCreature, bool Attackable)
     {
         pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
         pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-        pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+        pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
     }
     else
     {
         pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
         pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-        pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+        pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
     }
 }
 
@@ -149,7 +149,7 @@ struct npc_attack_masterAI : public ScriptedAI
 
     // Fonctions generiques
 #if 1
-    void Reset()
+    void Reset() override
     {
     }
     void SetAttackableInList(MobsGUIDList mobsList, bool bAttackable)
@@ -230,7 +230,7 @@ struct npc_attack_masterAI : public ScriptedAI
         {
             if (Unit* invoc = Unit::GetUnit(*ME, *itr))
             {
-                if (invoc->isAlive())
+                if (invoc->IsAlive())
                 {
                     ++num;
                     SetAttackable(invoc, false);
@@ -339,7 +339,7 @@ struct npc_attack_masterAI : public ScriptedAI
             {
                 if (Unit* waveMob = Unit::GetUnit(*ME, *it))
                 {
-                    if (waveMob->isAlive())
+                    if (waveMob->IsAlive())
                     {
                         if (!waveMob->HasAura(SPELL_AURA_RED))
                         {
@@ -525,7 +525,7 @@ struct npc_attack_masterAI : public ScriptedAI
         }
     }
 #endif
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (uiCD < uiDiff)
         {
@@ -624,7 +624,7 @@ struct npc_event_wave_mobAI : public ScriptedAI
     std::vector<uint32> m_lSpells;
     std::vector<uint32> m_lGobj;
 
-    void Reset()
+    void Reset() override
     {
         uiCD        = urand(5, 10) * 1000;
     }
@@ -651,7 +651,7 @@ struct npc_event_wave_mobAI : public ScriptedAI
     void DoCastRandomSpell()
     {
         uint32 randEntry = m_lSpells[ urand(0, m_lSpells.size() - 1) ];
-        ME->CastSpell(ME->getVictim(), randEntry, false);
+        ME->CastSpell(ME->GetVictim(), randEntry, false);
     }
     void DoSpawnRandomGobj()
     {
@@ -733,9 +733,9 @@ struct npc_event_wave_mobAI : public ScriptedAI
         for (std::list<Unit*>::iterator iter = targets.begin(); iter != targets.end(); ++iter)
         {
             uint32 currVictimQuality = 0;
-            if ((*iter)->getFaction() == ME->getFaction())
+            if ((*iter)->GetFactionTemplateId() == ME->GetFactionTemplateId())
                 continue;
-            if (!(*iter)->isAlive())
+            if (!(*iter)->IsAlive())
                 continue;
             uint32 entry = (*iter)->GetEntry();
             if (entry == NPC_BOSS_CAPITAL_ADD1 || entry == NPC_BOSS_CAPITAL_ADD2
@@ -753,8 +753,8 @@ struct npc_event_wave_mobAI : public ScriptedAI
             if ((*iter)->GetDistance2d(ME) <= nearest->GetDistance2d(ME))
                 currVictimQuality += 0x2;
             // Autre priorite : le niveau
-            if ((*iter)->getLevel() > 50)
-                currVictimQuality += ((*iter)->getLevel() - 50);
+            if ((*iter)->GetLevel() > 50)
+                currVictimQuality += ((*iter)->GetLevel() - 50);
             if (currVictimQuality > quality)
             {
                 quality = currVictimQuality;
@@ -766,9 +766,9 @@ struct npc_event_wave_mobAI : public ScriptedAI
             return nullptr;
         return nearest;
     }
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
-        if (ME->IsStopped() && !ME->getVictim())
+        if (ME->IsStopped() && !ME->GetVictim())
         {
             if (Unit* newTarget = GetRandomNearUnitToAttack())
                 AttackStart(newTarget);
@@ -788,7 +788,7 @@ struct npc_event_wave_mobAI : public ScriptedAI
 
         DoMeleeAttackIfReady();
     }
-    void JustDied(Unit* killer)
+    void JustDied(Unit* killer) override
     {
         if (bIsBad)
             DoSpawnDestruction();
@@ -848,7 +848,7 @@ struct npc_guard_masterAI : public ScriptedAI
     uint64 uiTarget;
     // Fonctions generiques
 #if 1
-    void Reset()
+    void Reset() override
     {
         uiTarget = 0;
     }
@@ -860,7 +860,7 @@ struct npc_guard_masterAI : public ScriptedAI
     {
         ME->MonsterYell(what, 0, 0);
     }
-    void MoveInLineOfSight(Unit* pWho)
+    void MoveInLineOfSight(Unit* pWho) override
     {
         if (!uiTarget && pWho->GetTypeId() != TYPEID_PLAYER)
             DoAllAttack(pWho);
@@ -964,7 +964,7 @@ struct npc_guard_masterAI : public ScriptedAI
         {
             if (Unit* crea = Unit::GetUnit(*ME, *itr))
             {
-                if (crea->isAlive())
+                if (crea->IsAlive())
                     ((Creature*)crea)->AI()->AttackStart(crea);
             }
         }
@@ -975,7 +975,7 @@ struct npc_guard_masterAI : public ScriptedAI
         {
             if (Unit* crea = Unit::GetUnit(*ME, *itr))
             {
-                if (crea->isAlive())
+                if (crea->IsAlive())
                     ((Creature*)crea)->MonsterSay(what, 0, 0);
             }
         }
@@ -995,7 +995,7 @@ struct npc_guard_masterAI : public ScriptedAI
         }
     }
 #endif
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (uiCD < uiDiff)
         {
@@ -1031,6 +1031,7 @@ CreatureAI* GetAI_npc_guard_master(Creature* pCreature)
 {
     return new npc_guard_masterAI(pCreature);
 }
+
 void AddSC_event_attack_city()
 {
     Script* pNewScript;

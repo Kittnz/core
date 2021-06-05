@@ -528,7 +528,7 @@ void WorldSession::HandleSellItemOpcode(WorldPacket & recv_data)
     }
 
     // remove fake death
-    if (GetPlayer()->hasUnitState(UNIT_STAT_DIED))
+    if (GetPlayer()->HasUnitState(UNIT_STAT_DIED))
         GetPlayer()->RemoveSpellsCausingAura(SPELL_AURA_FEIGN_DEATH);
 
     Item *pItem = _player->GetItemByGuid(itemGuid);
@@ -661,7 +661,7 @@ void WorldSession::HandleBuybackItem(WorldPacket & recv_data)
     }
 
     // remove fake death
-    if (GetPlayer()->hasUnitState(UNIT_STAT_DIED))
+    if (GetPlayer()->HasUnitState(UNIT_STAT_DIED))
         GetPlayer()->RemoveSpellsCausingAura(SPELL_AURA_FEIGN_DEATH);
 
     Item *pItem = _player->GetItemFromBuyBackSlot(slot);
@@ -746,7 +746,7 @@ void WorldSession::HandleListInventoryOpcode(WorldPacket & recv_data)
 
     recv_data >> guid;
 
-    if (!GetPlayer()->isAlive())
+    if (!GetPlayer()->IsAlive())
         return;
 
     DEBUG_LOG("WORLD: Recvd CMSG_LIST_INVENTORY");
@@ -768,7 +768,7 @@ void WorldSession::SendListInventory(ObjectGuid vendorguid, uint8 menu_type)
     }
 
     // remove fake death
-    if (GetPlayer()->hasUnitState(UNIT_STAT_DIED))
+    if (GetPlayer()->HasUnitState(UNIT_STAT_DIED))
         GetPlayer()->RemoveSpellsCausingAura(SPELL_AURA_FEIGN_DEATH);
 
     // Stop the npc if moving
@@ -812,11 +812,11 @@ void WorldSession::SendListInventory(ObjectGuid vendorguid, uint8 menu_type)
                 if (!_player->IsGameMaster())
                 {
                     // class wrong item skip only for bindable case
-                    if ((pProto->AllowableClass & _player->getClassMask()) == 0 && pProto->Bonding == BIND_WHEN_PICKED_UP)
+                    if ((pProto->AllowableClass & _player->GetClassMask()) == 0 && pProto->Bonding == BIND_WHEN_PICKED_UP)
                         continue;
 
                     // race wrong item skip always
-                    if ((pProto->AllowableRace & _player->getRaceMask()) == 0)
+                    if ((pProto->AllowableRace & _player->GetRaceMask()) == 0)
                         continue;
 
                     // when no faction required but rank > 0 will be used faction id from the vendor faction template to compare the rank
@@ -874,7 +874,7 @@ void WorldSession::HandleAutoStoreBagItemOpcode(WorldPacket & recv_data)
     }
 
     // cheating: check if source bag / item or destination bag is in bank and player can't use bank
-    if (_player->IsBankPos(srcbag, srcslot) || dstbag >= BANK_SLOT_BAG_START && dstbag < BANK_SLOT_BAG_END)
+    if (_player->IsBankPos(srcbag, srcslot) || (dstbag >= BANK_SLOT_BAG_START && dstbag < BANK_SLOT_BAG_END))
     {
         if (!CanUseBank())
             return;
@@ -1066,7 +1066,7 @@ void WorldSession::HandleAutoStoreBankItemOpcode(WorldPacket& recvPacket)
 
 void WorldSession::HandleSetAmmoOpcode(WorldPacket & recv_data)
 {
-    if (!GetPlayer()->isAlive())
+    if (!GetPlayer()->IsAlive())
     {
         GetPlayer()->SendEquipError(EQUIP_ERR_YOU_ARE_DEAD, nullptr, nullptr);
         return;

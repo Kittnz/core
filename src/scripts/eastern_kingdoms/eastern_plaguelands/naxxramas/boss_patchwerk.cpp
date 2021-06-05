@@ -73,7 +73,7 @@ struct boss_patchwerkAI : public ScriptedAI
     bool m_bBerserk;
     ObjectGuid previousTarget;
 
-    void Reset()
+    void Reset() override
     {
         m_events.Reset();
         m_bEnraged = false;
@@ -81,7 +81,7 @@ struct boss_patchwerkAI : public ScriptedAI
         previousTarget = 0;
     }
 
-    void KilledUnit(Unit* pVictim)
+    void KilledUnit(Unit* pVictim) override
     {
         if (urand(0, 4))
             return;
@@ -89,7 +89,7 @@ struct boss_patchwerkAI : public ScriptedAI
         DoScriptText(SAY_SLAY, m_creature);
     }
 
-    void JustDied(Unit* pKiller)
+    void JustDied(Unit* pKiller) override
     {
         DoScriptText(SAY_DEATH, m_creature);
 
@@ -103,7 +103,7 @@ struct boss_patchwerkAI : public ScriptedAI
             m_pInstance->SetData(TYPE_PATCHWERK, FAIL);
     }
 
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* pWho) override
     {
         DoScriptText(urand(0, 1) ? SAY_AGGRO1 : SAY_AGGRO2, m_creature);
 
@@ -122,7 +122,7 @@ struct boss_patchwerkAI : public ScriptedAI
         
         // todo: can it hit anything other than players?
 
-        Unit* mainTank = m_creature->getVictim();
+        Unit* mainTank = m_creature->GetVictim();
         
         // Shouldnt really be possible, but hey, weirder things have happened
         if (!mainTank)
@@ -136,7 +136,7 @@ struct boss_patchwerkAI : public ScriptedAI
 
         std::list<Unit*> lExtraThreatTargets;
 
-        ThreatList const& tList = m_creature->getThreatManager().getThreatList();
+        ThreatList const& tList = m_creature->GetThreatManager().getThreatList();
         for (const auto iter : tList)
         {
             // Only top 4 players on threat in melee range are targeted.
@@ -186,27 +186,27 @@ struct boss_patchwerkAI : public ScriptedAI
 
 		if (DoCastSpellIfCan(pTarget, SPELL_HATEFULSTRIKE, CF_TRIGGERED) == CAST_OK)
 			for (auto &soakerOrMT : lExtraThreatTargets)
-				m_creature->getThreatManager().addThreatDirectly(soakerOrMT, 500);
+				m_creature->GetThreatManager().addThreatDirectly(soakerOrMT, 500);
     }
 
     bool CustomGetTarget()
     {
-        if (!m_creature->isAlive())
+        if (!m_creature->IsAlive())
             return false;
 
         // No taunt aura or taunt aura caster is dead, standard target selection
         Unit* target = nullptr;
-        if (!m_creature->getThreatManager().isThreatListEmpty())
-            target = m_creature->getThreatManager().getHostileTarget();
+        if (!m_creature->GetThreatManager().isThreatListEmpty())
+            target = m_creature->GetThreatManager().getHostileTarget();
 
         if (target)
         {
             // Nostalrius : Correction bug sheep/fear
-            if (!m_creature->hasUnitState(UNIT_STAT_STUNNED | UNIT_STAT_PENDING_STUNNED | UNIT_STAT_DIED | UNIT_STAT_CONFUSED | UNIT_STAT_FLEEING)
+            if (!m_creature->HasUnitState(UNIT_STAT_STUNNED | UNIT_STAT_PENDING_STUNNED | UNIT_STAT_DIED | UNIT_STAT_CONFUSED | UNIT_STAT_FLEEING)
                 && (!m_creature->HasAuraType(SPELL_AURA_MOD_FEAR) || m_creature->HasAuraType(SPELL_AURA_PREVENTS_FLEEING)) && !m_creature->HasAuraType(SPELL_AURA_MOD_CONFUSE))
             {
                 
-                if (!m_creature->isAttackReady(BASE_ATTACK) && m_creature->IsWithinMeleeRange(target)) // He does not have offhand attack
+                if (!m_creature->IsAttackReady(BASE_ATTACK) && m_creature->IsWithinMeleeRange(target)) // He does not have offhand attack
                     return true;
 
                 if (target->GetObjectGuid() != previousTarget)
@@ -223,7 +223,7 @@ struct boss_patchwerkAI : public ScriptedAI
         }
 
         // No target but something prevent go to evade mode // Nostalrius - fix evade quand CM.
-        if (!m_creature->isInCombat() || m_creature->HasAuraType(SPELL_AURA_MOD_TAUNT) || m_creature->GetCharmerGuid())
+        if (!m_creature->IsInCombat() || m_creature->HasAuraType(SPELL_AURA_MOD_TAUNT) || m_creature->GetCharmerGuid())
             return false;
 
         // Last case when creature don't must go to evade mode:
@@ -232,9 +232,9 @@ struct boss_patchwerkAI : public ScriptedAI
         // Note: creature not have targeted movement generator but have attacker in this case
         if (m_creature->GetMotionMaster()->GetCurrentMovementGeneratorType() != CHASE_MOTION_TYPE)
         {
-            for (std::set<Unit*>::const_iterator itr = m_creature->getAttackers().begin(); itr != m_creature->getAttackers().end(); ++itr)
+            for (std::set<Unit*>::const_iterator itr = m_creature->GetAttackers().begin(); itr != m_creature->GetAttackers().end(); ++itr)
             {
-                if ((*itr)->IsInMap(m_creature) && (*itr)->isTargetableForAttack())
+                if ((*itr)->IsInMap(m_creature) && (*itr)->IsTargetableForAttack())
                     return false;
             }
         }
@@ -244,9 +244,9 @@ struct boss_patchwerkAI : public ScriptedAI
         return false;
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
-        if (!CustomGetTarget() || !m_creature->getVictim())
+        if (!CustomGetTarget() || !m_creature->GetVictim())
             return;
 
         // Soft Enrage at 5%
@@ -284,7 +284,7 @@ struct boss_patchwerkAI : public ScriptedAI
                 }
                 case EVENT_SLIMEBOLT:
                 {
-                    if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_SLIMEBOLT) == CAST_OK)
+                    if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_SLIMEBOLT) == CAST_OK)
                         m_events.Repeat(SLIMEBOLT_REPEAT_CD);
                     else
                         m_events.Repeat(100);

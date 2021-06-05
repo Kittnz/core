@@ -24,8 +24,8 @@ EndScriptData */
 #include "scriptPCH.h"
 #include "scholomance.h"
 
-#define SPELL_IMMOLATE             20294                    // Old ID  was 15570
-#define SPELL_VEILOFSHADOW         17820
+#define SPELL_IMMOLATE 20294                    // Old ID  was 15570
+#define SPELL_VEILOFSHADOW 17820
 
 struct boss_lordalexeibarovAI : public ScriptedAI
 {
@@ -37,7 +37,7 @@ struct boss_lordalexeibarovAI : public ScriptedAI
     uint32 Immolate_Timer;
     uint32 VeilofShadow_Timer;
 
-    void Reset()
+    void Reset() override
     {
         Immolate_Timer = 7000;
         VeilofShadow_Timer = 15000;
@@ -45,15 +45,15 @@ struct boss_lordalexeibarovAI : public ScriptedAI
         m_creature->LoadCreatureAddon(true);
     }
 
-    void JustDied(Unit *killer)
+    void JustDied(Unit *killer) override
     {
         if (ScriptedInstance* pInstance = (ScriptedInstance*)m_creature->GetInstanceData())
             pInstance->SetData(TYPE_ALEXEIBAROV, DONE);
     }
 
-    void UpdateAI(const uint32 diff)
+    void UpdateAI(const uint32 diff) override
     {
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         //Immolate_Timer
@@ -70,7 +70,7 @@ struct boss_lordalexeibarovAI : public ScriptedAI
         //VeilofShadow_Timer
         if (VeilofShadow_Timer < diff)
         {
-            DoCastSpellIfCan(m_creature->getVictim(), SPELL_VEILOFSHADOW);
+            DoCastSpellIfCan(m_creature->GetVictim(), SPELL_VEILOFSHADOW);
             VeilofShadow_Timer = 20000;
         }
         else VeilofShadow_Timer -= diff;

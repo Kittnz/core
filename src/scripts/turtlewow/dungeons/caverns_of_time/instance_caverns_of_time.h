@@ -3,7 +3,7 @@
 
 enum
 {
-    INSTANCE_BM_MAX_ENCOUNTER           = 3,
+    INSTANCE_BM_MAX_ENCOUNTER = 3,
 
     TYPE_GERASTRASZ = 4,
     TYPE_CHRONORMU = 5

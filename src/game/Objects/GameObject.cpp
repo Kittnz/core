@@ -50,8 +50,8 @@
 
 GameObject::GameObject() : WorldObject(),
     loot(this),
-    m_goInfo(nullptr),
-    m_visible(true)
+    m_visible(true),
+    m_goInfo(nullptr)
 {
     m_objectType |= TYPEMASK_GAMEOBJECT;
     m_objectTypeId = TYPEID_GAMEOBJECT;
@@ -241,8 +241,8 @@ public:
         }
 
         bool _isTotem = u->GetTypeId() == TYPEID_UNIT && ((Creature*)u)->IsTotem();
-        if (u->isAlive() && i_trap->IsWithinDistInMap(u, _isTotem ? i_range / 3.0f : i_range) && i_trapOwner->IsValidAttackTarget(u) &&
-            (u->isInCombat() || i_trapOwner->IsHostileTo(u)))
+        if (u->IsAlive() && i_trap->IsWithinDistInMap(u, _isTotem ? i_range / 3.0f : i_range) && i_trapOwner->IsValidAttackTarget(u) &&
+            (u->IsInCombat() || i_trapOwner->IsHostileTo(u)))
         {
             i_range = i_trap->GetDistance(u);
             return true;
@@ -288,7 +288,7 @@ void GameObject::Update(uint32 update_diff, uint32 /*p_time*/)
                     // Arming Time for GAMEOBJECT_TYPE_TRAP (6)
                     /* Ivina < Nostalrius > : toujours appliquer le startDelay. Retirer le delai de la DB si jamais un piege n'en a pas. */
                     // Unit* owner = GetOwner();
-                    // if (owner && ((Player*)owner)->isInCombat())
+                    // if (owner && ((Player*)owner)->IsInCombat())
                     if (GetGOInfo()->trap.startDelay)
                         m_cooldownTime = time(nullptr) + GetGOInfo()->trap.startDelay;
                     m_lootState = GO_READY;
@@ -577,7 +577,7 @@ void GameObject::Update(uint32 update_diff, uint32 /*p_time*/)
                 {
                     // In Instances GO_FLAG_LOCKED or GO_FLAG_NO_INTERACT are not changed
                     uint32 currentLockOrInteractFlags = GetUInt32Value(GAMEOBJECT_FLAGS) & (GO_FLAG_LOCKED | GO_FLAG_NO_INTERACT);
-                    SetUInt32Value(GAMEOBJECT_FLAGS, GetGOInfo()->flags & ~(GO_FLAG_LOCKED | GO_FLAG_NO_INTERACT) | currentLockOrInteractFlags);
+                    SetUInt32Value(GAMEOBJECT_FLAGS, (GetGOInfo()->flags & ~(GO_FLAG_LOCKED | GO_FLAG_NO_INTERACT)) | currentLockOrInteractFlags);
                 }
                 else
                     SetUInt32Value(GAMEOBJECT_FLAGS, GetGOInfo()->flags);
@@ -1027,7 +1027,7 @@ void GameObject::SetVisible(bool b)
     UpdateObjectVisibility();
 }
 
-bool GameObject::isVisibleForInState(WorldObject const* pDetector, WorldObject const* viewPoint, bool inVisibleList) const
+bool GameObject::IsVisibleForInState(WorldObject const* pDetector, WorldObject const* viewPoint, bool inVisibleList) const
 {
     // Not in world
     if (!IsInWorld() || !pDetector->IsInWorld())
@@ -2139,7 +2139,7 @@ bool GameObject::IsUseRequirementMet() const
         {
             case GameObjectUseRequirement::GOBJ_REQUIRE_DEAD_CREATURE:
                 if (Creature* crea = GetMap()->GetCreature(req->guid))
-                    if (crea->isAlive())
+                    if (crea->IsAlive())
                         return false;
                 break;
             case GameObjectUseRequirement::GOBJ_REQUIRE_ACTIVE_OBJECT:
@@ -2379,7 +2379,7 @@ void GameObject::Despawn()
         AddObjectToRemoveList();
 }
 
-uint32 GameObject::getLevel() const
+uint32 GameObject::GetLevel() const
 {
     uint32 level = 0;
 

@@ -21,7 +21,6 @@
 #include "Database/DatabaseEnv.h"
 #include "Policies/SingletonImp.h"
 #include "Player.h"
-#include "SpellEntry.h"
 
 INSTANTIATE_SINGLETON_1(AuraRemovalManager);
 

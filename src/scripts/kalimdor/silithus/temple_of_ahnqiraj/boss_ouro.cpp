@@ -30,40 +30,31 @@ EndScriptData */
 enum
 {
     // ground spells
-    SPELL_SWEEP                = 26103,
-    SPELL_SANDBLAST            = 26102,
-    SPELL_BOULDER              = 26616,
-    SPELL_BERSERK              = 26615,
+    SPELL_SWEEP = 26103,
+    SPELL_SANDBLAST = 26102,
+    SPELL_BOULDER = 26616,
+    SPELL_BERSERK = 26615,
 
     // emerge spells
-    SPELL_BIRTH                = 26262,                        // The Birth Animation
-    SPELL_GROUND_RUPTURE       = 26100,                        // spell not confirmed
-    SPELL_SUMMON_BASE          = 26133,                        // summons gameobject 180795
-    SPELL_DESPAWN_BASE         = 26594,
+    SPELL_BIRTH = 26262, // The Birth Animation
+    SPELL_GROUND_RUPTURE = 26100, // spell not confirmed
+    SPELL_SUMMON_BASE = 26133, // summons gameobject 180795
+    SPELL_DESPAWN_BASE = 26594,
 
     // submerge spells
-    SPELL_SUBMERGE_VISUAL      = 26063,
-    SPELL_SUMMON_OURO_MOUNDS   = 26058,                     // summons 5 dirt mounds
-    SPELL_SUMMON_TRIGGER       = 26284,
-
-    // SPELL_SUMMON_OURO_TRIGG = 26642,
-    SPELL_SUMMON_OURO          = 26061,                     // used by the script to summon the boss directly
-    //SPELL_QUAKE              = 26093,
+    SPELL_SUBMERGE_VISUAL = 26063,
+    SPELL_SUMMON_OURO_MOUNDS = 26058, // summons 5 dirt mounds
+    SPELL_SUMMON_TRIGGER = 26284,
+    SPELL_SUMMON_OURO = 26061, // used by the script to summon the boss directly
 
     // other spells - not used
-    SPELL_SUMMON_SCARABS       = 26060,                     // triggered after 30 secs - cast by the Dirt Mounds
-    SPELL_DIRTMOUND_PASSIVE    = 26092,                     // casts 26093 every 1 sec
-    // SPELL_SET_OURO_HEALTH   = 26075,                     // removed from DBC
-    // SPELL_SAVE_OURO_HEALTH  = 26076,                     // removed from DBC
-    // SPELL_TELEPORT_TRIGGER  = 26285,                     // removed from DBC
-    // SPELL_SUBMERGE_TRIGGER  = 26104,                     // removed from DBC
-    SPELL_SUMMON_OURO_MOUND    = 26617,
-    // SPELL_SCARABS_PERIODIC  = 26619,                     // cast by the Dirt Mounds in order to spawn the scarabs - removed from DBC
+    SPELL_SUMMON_SCARABS = 26060, // triggered after 30 secs - cast by the Dirt Mounds
+    SPELL_DIRTMOUND_PASSIVE = 26092, // casts 26093 every 1 sec
+    SPELL_SUMMON_OURO_MOUND = 26617,
 
     // summoned npcs
-    // NPC_OURO_SCARAB         = 15718,                  // summoned by Dirt Mounds
-    NPC_OURO_TRIGGER           = 15717,
-    NPC_DIRT_MOUND             = 15712,
+    NPC_OURO_TRIGGER = 15717,
+    NPC_DIRT_MOUND = 15712,
 };
 
 /*
@@ -75,11 +66,11 @@ enum
  */
 const uint32_t SANDBLAST_TIMER_INITIAL_MIN = 30000;
 const uint32_t SANDBLAST_TIMER_INITIAL_MAX = 45000;
-const uint32_t SANDBLAST_TIMER_MIN         = 12000;
-const uint32_t SANDBLAST_TIMER_MAX         = 17000;
-const uint32_t SUBMERGE_TIMER              = 90000;
-const uint32_t SUBMERGE_ANIMATION_INVIS    = 2000;
-const uint32_t SWEEP_TIMER                 = 15000;
+const uint32_t SANDBLAST_TIMER_MIN = 12000;
+const uint32_t SANDBLAST_TIMER_MAX = 17000;
+const uint32_t SUBMERGE_TIMER = 90000;
+const uint32_t SUBMERGE_ANIMATION_INVIS = 2000;
+const uint32_t SWEEP_TIMER = 15000;
 
 struct boss_ouroAI : public Scripted_NoMovementAI
 {
@@ -107,7 +98,7 @@ struct boss_ouroAI : public Scripted_NoMovementAI
 
     WorldLocation m_StartingLoc;
 
-    void Reset()
+    void Reset() override
     {
         m_uiSweepTimer        = urand(30000, 40000);
         m_uiSandBlastTimer    = urand(SANDBLAST_TIMER_INITIAL_MIN, SANDBLAST_TIMER_INITIAL_MAX);
@@ -128,7 +119,7 @@ struct boss_ouroAI : public Scripted_NoMovementAI
         m_ouroTriggerGuid.Clear();
     }
 
-    void Aggro(Unit* /*pWho*/)
+    void Aggro(Unit* /*pWho*/) override
     {
         if (m_pInstance)
             m_pInstance->SetData(TYPE_OURO, IN_PROGRESS);
@@ -146,7 +137,7 @@ struct boss_ouroAI : public Scripted_NoMovementAI
             (*itr)->ForcedDespawn();
     }
 
-    void JustReachedHome()
+    void JustReachedHome() override
     {
         if (m_pInstance)
             m_pInstance->SetData(TYPE_OURO, FAIL);
@@ -158,7 +149,7 @@ struct boss_ouroAI : public Scripted_NoMovementAI
         m_creature->ForcedDespawn(2000);
     }
 
-    void JustDied(Unit* /*pKiller*/)
+    void JustDied(Unit* /*pKiller*/) override
     {
         if (m_pInstance)
             m_pInstance->SetData(TYPE_OURO, DONE);
@@ -166,7 +157,7 @@ struct boss_ouroAI : public Scripted_NoMovementAI
         m_creature->CastSpell(m_creature, SPELL_DESPAWN_BASE, true);
     }
 
-    void JustSummoned(Creature* pSummoned)
+    void JustSummoned(Creature* pSummoned) override
     {
         switch (pSummoned->GetEntry())
         {
@@ -182,8 +173,8 @@ struct boss_ouroAI : public Scripted_NoMovementAI
     {
         if (pSpell->Id == SPELL_SANDBLAST && pTarget)
         {
-            if (m_creature->getThreatManager().getThreat(pTarget))
-                m_creature->getThreatManager().modifyThreatPercent(pTarget, -100);
+            if (m_creature->GetThreatManager().getThreat(pTarget))
+                m_creature->GetThreatManager().modifyThreatPercent(pTarget, -100);
         }
     }
 
@@ -222,20 +213,20 @@ struct boss_ouroAI : public Scripted_NoMovementAI
 
     void SetNewTarget(Unit &pNewTarget)
     {
-        const uint32 uiMaxThreat = m_creature->getThreatManager().getThreat(m_creature->getVictim());
+        const uint32 uiMaxThreat = m_creature->GetThreatManager().getThreat(m_creature->GetVictim());
 
         // erase current target's threat as soon as we switch the target now
-        m_creature->getThreatManager().modifyThreatPercent(m_creature->getVictim(), -100);
+        m_creature->GetThreatManager().modifyThreatPercent(m_creature->GetVictim(), -100);
 
         // give the new target aggro
-        m_creature->getThreatManager().addThreat(&pNewTarget, uiMaxThreat);
+        m_creature->GetThreatManager().addThreat(&pNewTarget, uiMaxThreat);
     }
 
 
     bool CheckForMelee()
     {
         // at first we check for the current player-type target
-        Unit* pMainTarget = m_creature->getVictim();
+        Unit* pMainTarget = m_creature->GetVictim();
         if (pMainTarget->GetTypeId() == TYPEID_PLAYER && !pMainTarget->ToPlayer()->IsGameMaster() &&
             m_creature->IsWithinMeleeRange(pMainTarget) && m_creature->IsWithinLOSInMap(pMainTarget))
         {
@@ -269,10 +260,10 @@ struct boss_ouroAI : public Scripted_NoMovementAI
         return false;
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         // Return since we have no pTarget
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         if (!m_bSubmerged)
@@ -299,7 +290,7 @@ struct boss_ouroAI : public Scripted_NoMovementAI
             // Sand Blast
             if (m_uiSandBlastTimer < uiDiff)
             {
-                auto target = m_creature->getThreatManager().getHostileTarget();
+                auto target = m_creature->GetThreatManager().getHostileTarget();
 
                 if (target && DoCastSpellIfCan(target, SPELL_SANDBLAST) == CAST_OK)
                 {
@@ -348,7 +339,7 @@ struct boss_ouroAI : public Scripted_NoMovementAI
             }
 
             // If we are within range melee the target
-            if (m_creature->CanReachWithMeleeAutoAttack(m_creature->getVictim()))
+            if (m_creature->CanReachWithMeleeAutoAttack(m_creature->GetVictim()))
             {
                 DoMeleeAttackIfReady();
             }
@@ -391,7 +382,7 @@ struct boss_ouroAI : public Scripted_NoMovementAI
                     m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
 
                     std::list<Unit*> lGroundRuptureTargets;
-                    ThreatList const& lThreat = m_creature->getThreatManager().getThreatList();
+                    ThreatList const& lThreat = m_creature->GetThreatManager().getThreatList();
                     for (ThreatList::const_iterator i = lThreat.begin(); i != lThreat.end(); ++i)
                     {
                         Unit* pUnit = m_creature->GetMap()->GetUnit((*i)->getUnitGuid());
@@ -449,7 +440,7 @@ struct npc_ouro_spawnerAI : public Scripted_NoMovementAI
 
     bool m_bHasSummoned;
 
-    void Reset()
+    void Reset() override
     {
         m_bHasSummoned = false;
 
@@ -462,7 +453,7 @@ struct npc_ouro_spawnerAI : public Scripted_NoMovementAI
         if (!m_bHasSummoned
             && !((Player*) pWho)->IsGameMaster()
             && pWho->GetTypeId() == TYPEID_PLAYER
-            && !m_creature->isInCombat()
+            && !m_creature->IsInCombat()
             && m_creature->IsWithinDistInMap(pWho, 25.0f)
             && !pWho->HasAuraType(SPELL_AURA_FEIGN_DEATH)
             && !pWho->HasAuraType(SPELL_AURA_MOD_UNATTACKABLE))
@@ -476,7 +467,7 @@ struct npc_ouro_spawnerAI : public Scripted_NoMovementAI
         ScriptedAI::MoveInLineOfSight(pWho);
     }
 
-    void JustSummoned(Creature* pSummoned)
+    void JustSummoned(Creature* pSummoned) override
     {
         // Despawn when Ouro is spawned
         if (pSummoned->GetEntry() == NPC_OURO)
@@ -487,7 +478,7 @@ struct npc_ouro_spawnerAI : public Scripted_NoMovementAI
         }
     }
 
-    void UpdateAI(const uint32 /*uiDiff*/) { }
+    void UpdateAI(const uint32 /*uiDiff*/) override { }
 };
 
 CreatureAI* GetAI_npc_ouro_spawner(Creature* pCreature)
@@ -510,7 +501,7 @@ struct npc_dirt_moundAI : public ScriptedAI
         ScriptedAI::JustRespawned();
     }
 
-    void Reset()
+    void Reset() override
     {
         m_uiDespawnTimer = 30000;
 	    m_TargetGUID.Clear();
@@ -519,7 +510,7 @@ struct npc_dirt_moundAI : public ScriptedAI
         DoCastSpellIfCan(m_creature, SPELL_DIRTMOUND_PASSIVE);
     }
 
-    void MoveInLineOfSight(Unit *who)
+    void MoveInLineOfSight(Unit *who) override
     {
         if (!m_TargetGUID && who->GetTypeId() == TYPEID_PLAYER)
         {
@@ -527,10 +518,10 @@ struct npc_dirt_moundAI : public ScriptedAI
 	    }
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         Unit *pTarget = m_creature->GetMap()->GetUnit(m_CurrentTargetGUID);
-        const bool bForceChangeTarget = !pTarget || pTarget->isDead()
+        const bool bForceChangeTarget = !pTarget || pTarget->IsDead()
             || pTarget->IsImmuneToDamage(SPELL_SCHOOL_MASK_NATURE);
 
         if (bForceChangeTarget || m_uiChangeTargetTimer < uiDiff)
@@ -575,22 +566,22 @@ struct npc_ouro_scarabAI : public ScriptedAI
 
     uint32 m_uiDespawnTimer;
 
-    void Reset()
+    void Reset() override
     {
         m_uiDespawnTimer = 45000;
     }
 
-    void MoveInLineOfSight(Unit *who)
+    void MoveInLineOfSight(Unit *who) override
     {
-        if (who->GetTypeId() == TYPEID_PLAYER && !m_creature->getVictim() && !urand(0, 5))
+        if (who->GetTypeId() == TYPEID_PLAYER && !m_creature->GetVictim() && !urand(0, 5))
 	    {
             AttackStart(who);
 	    }
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
-        if (m_creature->getVictim())
+        if (m_creature->GetVictim())
             DoMeleeAttackIfReady();
 
         if (m_uiDespawnTimer < uiDiff)
@@ -611,7 +602,7 @@ struct go_sandworm_baseAI: public GameObjectAI
 
     bool m_bActive;
 
-    bool OnUse(Unit* pUser)
+    bool OnUse(Unit* pUser) override
     {
         WorldLocation loc;
         pUser->GetObjectScale();

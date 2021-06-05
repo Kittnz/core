@@ -36,18 +36,18 @@ EndContentData */
 
 enum
 {
-    SAY_LAKO_START              = -1000365,
-    SAY_LAKO_LOOK_OUT           = -1000366,
-    SAY_LAKO_HERE_COME          = -1000367,
-    SAY_LAKO_MORE               = -1000368,
-    SAY_LAKO_END                = -1000369,
+    SAY_LAKO_START = -1000365,
+    SAY_LAKO_LOOK_OUT = -1000366,
+    SAY_LAKO_HERE_COME = -1000367,
+    SAY_LAKO_MORE = -1000368,
+    SAY_LAKO_END = -1000369,
 
-    QUEST_FREE_AT_LAST          = 4904,
-    NPC_GRIM_BANDIT             = 10758,
+    QUEST_FREE_AT_LAST = 4904,
+    NPC_GRIM_BANDIT = 10758,
 
-    ID_AMBUSH_1                 = 0,
-    ID_AMBUSH_2                 = 2,
-    ID_AMBUSH_3                 = 4
+    ID_AMBUSH_1 = 0,
+    ID_AMBUSH_2 = 2,
+    ID_AMBUSH_3 = 4
 };
 
 float m_afBanditLoc[6][6] =
@@ -67,9 +67,9 @@ struct npc_lakota_windsongAI : public npc_escortAI
         Reset();
     }
 
-    void Reset() { }
+    void Reset() override { }
 
-    void WaypointReached(uint32 uiPointId)
+    void WaypointReached(uint32 uiPointId) override
     {
         switch (uiPointId)
         {
@@ -94,7 +94,7 @@ struct npc_lakota_windsongAI : public npc_escortAI
 
     void JustRespawned() override
     {
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
         npc_escortAI::JustRespawned();
     }
 
@@ -117,9 +117,9 @@ bool QuestAccept_npc_lakota_windsong(Player* pPlayer, Creature* pCreature, const
     if (pQuest->GetQuestId() == QUEST_FREE_AT_LAST)
     {
         DoScriptText(SAY_LAKO_START, pCreature, pPlayer);
-        pCreature->setFaction(FACTION_ESCORT_H_NEUTRAL_ACTIVE);
+        pCreature->SetFactionTemplateId(FACTION_ESCORT_H_NEUTRAL_ACTIVE);
 
-        pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+        pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
 
         if (npc_lakota_windsongAI* pEscortAI = dynamic_cast<npc_lakota_windsongAI*>(pCreature->AI()))
             pEscortAI->Start(false, pPlayer->GetGUID(), pQuest);
@@ -155,9 +155,9 @@ struct npc_paoka_swiftmountainAI : public npc_escortAI
         Reset();
     }
 
-    void Reset() { }
+    void Reset() override { }
 
-    void WaypointReached(uint32 uiPointId)
+    void WaypointReached(uint32 uiPointId) override
     {
         switch (uiPointId)
         {
@@ -177,7 +177,7 @@ struct npc_paoka_swiftmountainAI : public npc_escortAI
 
     void JustRespawned() override
     {
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
         npc_escortAI::JustRespawned();
     }
 
@@ -200,9 +200,9 @@ bool QuestAccept_npc_paoka_swiftmountain(Player* pPlayer, Creature* pCreature, c
     if (pQuest->GetQuestId() == QUEST_HOMEWARD)
     {
         DoScriptText(SAY_START, pCreature, pPlayer);
-        pCreature->setFaction(FACTION_ESCORT_H_NEUTRAL_ACTIVE);
+        pCreature->SetFactionTemplateId(FACTION_ESCORT_H_NEUTRAL_ACTIVE);
 
-        pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+        pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
 
         if (npc_paoka_swiftmountainAI* pEscortAI = dynamic_cast<npc_paoka_swiftmountainAI*>(pCreature->AI()))
             pEscortAI->Start(false, pPlayer->GetGUID(), pQuest);
@@ -216,10 +216,10 @@ bool QuestAccept_npc_paoka_swiftmountain(Player* pPlayer, Creature* pCreature, c
 
 enum
 {
-    FACTION_FRIENDLY        = 35,
-    QUEST_SCOOP             = 1950,
-    SPELL_PLUCKY_HUMAN      = 9192,
-    SPELL_PLUCKY_CHICKEN    = 9220
+    FACTION_FRIENDLY = 35,
+    QUEST_SCOOP = 1950,
+    SPELL_PLUCKY_HUMAN = 9192,
+    SPELL_PLUCKY_CHICKEN = 9220
 };
 
 #define GOSSIP_ITEM_QUEST   "Please tell me the Phrase.."
@@ -228,19 +228,19 @@ struct npc_plucky_johnsonAI : public ScriptedAI
 {
     npc_plucky_johnsonAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
-        m_uiNormFaction = pCreature->getFaction();
+        m_uiNormFaction = pCreature->GetFactionTemplateId();
         Reset();
     }
 
     uint32 m_uiNormFaction;
     uint32 m_uiResetTimer;
 
-    void Reset()
+    void Reset() override
     {
         m_uiResetTimer = 120000;
 
-        if (m_creature->getFaction() != m_uiNormFaction)
-            m_creature->setFaction(m_uiNormFaction);
+        if (m_creature->GetFactionTemplateId() != m_uiNormFaction)
+            m_creature->SetFactionTemplateId(m_uiNormFaction);
 
         if (m_creature->HasFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP))
             m_creature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
@@ -248,13 +248,13 @@ struct npc_plucky_johnsonAI : public ScriptedAI
         m_creature->CastSpell(m_creature, SPELL_PLUCKY_CHICKEN, false);
     }
 
-    void ReceiveEmote(Player* pPlayer, uint32 uiTextEmote)
+    void ReceiveEmote(Player* pPlayer, uint32 uiTextEmote) override
     {
         if (pPlayer->GetQuestStatus(QUEST_SCOOP) == QUEST_STATUS_INCOMPLETE)
         {
             if (uiTextEmote == TEXTEMOTE_BECKON)
             {
-                m_creature->setFaction(FACTION_FRIENDLY);
+                m_creature->SetFactionTemplateId(FACTION_FRIENDLY);
                 m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
                 m_creature->CastSpell(m_creature, SPELL_PLUCKY_HUMAN, false);
             }
@@ -266,7 +266,7 @@ struct npc_plucky_johnsonAI : public ScriptedAI
                 return;
             else
             {
-                m_creature->setFaction(FACTION_FRIENDLY);
+                m_creature->SetFactionTemplateId(FACTION_FRIENDLY);
                 m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
                 m_creature->CastSpell(m_creature, SPELL_PLUCKY_HUMAN, false);
                 m_creature->HandleEmoteCommand(EMOTE_ONESHOT_WAVE);
@@ -274,13 +274,13 @@ struct npc_plucky_johnsonAI : public ScriptedAI
         }
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (m_creature->HasFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP))
         {
             if (m_uiResetTimer < uiDiff)
             {
-                if (!m_creature->getVictim())
+                if (!m_creature->GetVictim())
                     EnterEvadeMode();
                 else
                     m_creature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
@@ -291,7 +291,7 @@ struct npc_plucky_johnsonAI : public ScriptedAI
                 m_uiResetTimer -= uiDiff;
         }
 
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         DoMeleeAttackIfReady();
@@ -384,7 +384,7 @@ struct npc_grenka_bloodscreechAI : ScriptedAI
 {
     explicit npc_grenka_bloodscreechAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_PACIFIED | UNIT_FLAG_IMMUNE_TO_NPC);
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_PACIFIED | UNIT_FLAG_PASSIVE);
         m_creature->SetVisibility(VISIBILITY_OFF);
 
         m_uiWave = 0;
@@ -415,7 +415,7 @@ struct npc_grenka_bloodscreechAI : ScriptedAI
     {
         if (auto pPlayer = m_creature->GetMap()->GetPlayer(m_PlayerGuid))
         {
-            if (pPlayer->isAlive())
+            if (pPlayer->IsAlive())
                 pSummoned->AI()->AttackStart(pPlayer);
         }
     }
@@ -445,11 +445,11 @@ struct npc_grenka_bloodscreechAI : ScriptedAI
             case 2:
                 {
                     DoSummon(3);
-                    m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_PACIFIED | UNIT_FLAG_IMMUNE_TO_NPC);
+                    m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_PACIFIED | UNIT_FLAG_PASSIVE);
                     m_creature->SetVisibility(VISIBILITY_ON);
                     if (auto pPlayer = m_creature->GetMap()->GetPlayer(m_PlayerGuid))
                     {
-                        if (pPlayer->isAlive())
+                        if (pPlayer->IsAlive())
                             m_creature->AI()->AttackStart(pPlayer);
                     }
                     ++m_uiWave;

@@ -665,7 +665,7 @@ inline void Map::UpdateActiveCellsCallback(uint32 diff, uint32 now, uint32 threa
 class MapAsynchCellsWorker : public ACE_Based::Runnable
 {
 public:
-    MapAsynchCellsWorker(int i, int nthreads, uint32 _diff, uint32 _now, uint32 _step, Map* m) : threadIdx(i), nThreads(nthreads), now(_now), diff(_diff), map(m), step(_step)
+    MapAsynchCellsWorker(int i, int nthreads, uint32 _diff, uint32 _now, uint32 _step, Map* m) : threadIdx(i), nThreads(nthreads), diff(_diff), now(_now), step(_step), map(m)
     {
     }
 
@@ -839,7 +839,7 @@ void Map::UpdatePlayers()
         Player* plr = m_mapRefIter->getSource();
         if (!plr || !plr->IsInWorld())
             continue;
-        if (!updateInactivePlayers && (!plr->isInCombat() && !plr->GetSession()->HasRecentPacket(PACKET_PROCESS_SPELLS) && !plr->HasScheduledEvent()))
+        if (!updateInactivePlayers && (!plr->IsInCombat() && !plr->GetSession()->HasRecentPacket(PACKET_PROCESS_SPELLS) && !plr->HasScheduledEvent()))
         {
             plr->AddSkippedUpdateTime(diff);
             continue;
@@ -868,7 +868,6 @@ void Map::DoUpdate(uint32 maxDiff)
 void Map::Update(uint32 t_diff)
 {
     uint32 updateMapTime = WorldTimer::getMSTime();
-    uint32 timeDiff = 0;
     _dynamicTree.update(t_diff);
 
     ProcessSessionPackets(PACKET_PROCESS_DB_QUERY); // TODO: Move somewhere else ?
@@ -1994,7 +1993,7 @@ bool DungeonMap::CanEnter(Player *player)
     //   graveyard rushing in instances.
     Group *pGroup = player->GetGroup();
     if (IsRaid() && GetInstanceData() && GetInstanceData()->IsEncounterInProgress() && 
-        pGroup && pGroup->InCombatToInstance(GetInstanceId()) && player->isAlive() && !player->IsGameMaster())
+        pGroup && pGroup->InCombatToInstance(GetInstanceId()) && player->IsAlive() && !player->IsGameMaster())
     {
         player->SendTransferAborted(TRANSFER_ABORT_ZONE_IN_COMBAT);
         return false;
@@ -2782,7 +2781,7 @@ WorldObject* Map::GetWorldObjectOrPlayer(ObjectGuid guid)
 class ObjectUpdatePacketBuilder : public ACE_Based::Runnable
 {
 public:
-    ObjectUpdatePacketBuilder(std::set<Object*>::iterator& a, std::set<Object*>::iterator& b, uint32 now) : begin(a), end(b), beginTime(now), current(a)
+    ObjectUpdatePacketBuilder(std::set<Object*>::iterator& a, std::set<Object*>::iterator& b, uint32 now) : begin(a), current(a), end(b), beginTime(now)
     {
     }
 
@@ -2848,7 +2847,6 @@ void Map::SendObjectUpdates()
         threads = objectsCount;
 
     uint32 step = objectsCount / threads;
-    uint32 i = 0;
     ACE_Based::Thread** updaters = threads > 1 ? new ACE_Based::Thread*[threads - 1] : nullptr;
     ObjectUpdatePacketBuilder** objUpdaters = new ObjectUpdatePacketBuilder*[threads];
     std::set<Object*>::iterator itBegin = i_objectsToClientUpdate.begin();
@@ -2906,7 +2904,7 @@ void Map::SendObjectUpdates()
 class VisibilityUpdater : public ACE_Based::Runnable
 {
 public:
-    VisibilityUpdater(std::set<Unit*>::iterator& a, std::set<Unit*>::iterator& b, uint32 now) : begin(a), end(b), beginTime(now), current(a)
+    VisibilityUpdater(std::set<Unit*>::iterator& a, std::set<Unit*>::iterator& b, uint32 now) : begin(a), current(a), end(b), beginTime(now)
     {
     }
 
@@ -2959,7 +2957,6 @@ void Map::UpdateVisibilityForRelocations()
         threads = objectsCount;
 
     uint32 step = objectsCount / threads;
-    uint32 i = 0;
     ACE_Based::Thread** updaters = threads > 1 ? new ACE_Based::Thread*[threads - 1] : nullptr;
     VisibilityUpdater** visUpdaters = new VisibilityUpdater*[threads];
     std::set<Unit*>::iterator itBegin = i_unitsRelocated.begin();

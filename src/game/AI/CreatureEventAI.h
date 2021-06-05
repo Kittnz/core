@@ -23,17 +23,16 @@
 #define MANGOS_CREATURE_EAI_H
 
 #include "Common.h"
-#include "Creature.h"
 #include "CreatureAI.h"
-#include "Unit.h"
-#include "ScriptMgr.h"
 
+class Unit;
+class Creature;
 class Player;
 class WorldObject;
 
-#define EVENT_UPDATE_TIME               500
-#define MAX_ACTIONS                     3
-#define MAX_PHASE                       32
+#define EVENT_UPDATE_TIME 500
+#define MAX_ACTIONS 3
+#define MAX_PHASE 32
 
 enum EventAI_Type
 {

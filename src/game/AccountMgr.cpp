@@ -323,10 +323,9 @@ void AccountMgr::LoadIPBanList(bool silent)
     }
 
     _ipBanned.clear();
-    Field *fields = nullptr;
     do
     {
-        Field *fields = banresult->Fetch();
+        Field* fields = banresult->Fetch();
         uint32 unbandate = fields[1].GetUInt32();
         uint32 bandate = fields[2].GetUInt32();
         if (unbandate == bandate)
@@ -346,10 +345,9 @@ void AccountMgr::LoadAccountBanList(bool silent)
     }
 
     _accountBanned.clear();
-    Field *fields = nullptr;
     do
     {
-        Field *fields = banresult->Fetch();
+        Field* fields = banresult->Fetch();
         uint32 unbandate = fields[1].GetUInt32();
         uint32 bandate = fields[2].GetUInt32();
         if (unbandate == bandate)

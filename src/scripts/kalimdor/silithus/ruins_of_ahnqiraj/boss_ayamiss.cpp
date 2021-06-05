@@ -26,20 +26,20 @@ EndScriptData */
 
 enum
 {
-    SPELL_STINGERSPRAY          =  25749,
-    SPELL_POISONSTINGER         =  25748,                          //only used in phase1
-    SPELL_PARALYZE              =  25725,
-    SPELL_TRASH                 =  3391,
-    SPELL_FRENZY                =  8269,
-    SPELL_LASH                  =  25852,
+    SPELL_STINGERSPRAY = 25749,
+    SPELL_POISONSTINGER = 25748, // only used in phase1
+    SPELL_PARALYZE = 25725,
+    SPELL_TRASH = 3391,
+    SPELL_FRENZY = 8269,
+    SPELL_LASH = 25852,
 
-    EMOTE_FRENZY                =  -1000002,
+    EMOTE_FRENZY = -1000002,
 
-    SPELL_FEED                  =  25721,
+    SPELL_FEED = 25721,
 
-    NPC_HIVEZARA_LARVA          =  15555,
-    NPC_HIVEZARA_HORNET         =  15934,
-    NPC_HIVEZARA_SWARMER        =  15546
+    NPC_HIVEZARA_LARVA = 15555,
+    NPC_HIVEZARA_HORNET = 15934,
+    NPC_HIVEZARA_SWARMER = 15546
 };
 
 struct MoveLocations
@@ -95,7 +95,7 @@ struct boss_ayamissAI : public ScriptedAI
     ObjectGuid m_uiSacrificeGuid;
     float m_fSacrificeAggro;
 
-    void Reset()
+    void Reset() override
     {
         m_uiStingerSpray_Timer = 10000;
         m_uiPoisonStinger_Timer = 5000;
@@ -126,13 +126,13 @@ struct boss_ayamissAI : public ScriptedAI
         GetCreatureListWithEntryInGrid(GardiensListe, m_creature, NPC_HIVEZARA_HORNET, 300.0f);
         for (std::list<Creature*>::iterator itr = GardiensListe.begin(); itr != GardiensListe.end(); ++itr)
         {
-            if ((*itr)->isAlive())
+            if ((*itr)->IsAlive())
                 (*itr)->AddObjectToRemoveList();
         }
         GetCreatureListWithEntryInGrid(GardiensListe, m_creature, NPC_HIVEZARA_SWARMER, 300.0f);
         for (std::list<Creature*>::iterator itr = GardiensListe.begin(); itr != GardiensListe.end(); ++itr)
         {
-            if ((*itr)->isAlive())
+            if ((*itr)->IsAlive())
                 (*itr)->AddObjectToRemoveList();
         }
 
@@ -140,19 +140,19 @@ struct boss_ayamissAI : public ScriptedAI
             m_pInstance->SetData(TYPE_AYAMISS, NOT_STARTED);
     }
 
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* pWho) override
     {
         if (m_pInstance)
             m_pInstance->SetData(TYPE_AYAMISS, IN_PROGRESS);
     }
 
-    void JustDied(Unit* pKiller)
+    void JustDied(Unit* pKiller) override
     {
         if (m_pInstance)
             m_pInstance->SetData(TYPE_AYAMISS, DONE);
     }
 
-    void SpellHitTarget(Unit* pCaster, const SpellEntry* pSpell)
+    void SpellHitTarget(Unit* pCaster, const SpellEntry* pSpell) override
     {
         if (pSpell->Id == SPELL_PARALYZE)
         {
@@ -160,13 +160,13 @@ struct boss_ayamissAI : public ScriptedAI
                 return;
 
             m_uiSacrificeGuid = pCaster->GetObjectGuid();
-            m_fSacrificeAggro = m_creature->getThreatManager().getThreat(pCaster);
-            m_creature->getThreatManager().modifyThreatPercent(pCaster, -100);
+            m_fSacrificeAggro = m_creature->GetThreatManager().getThreat(pCaster);
+            m_creature->GetThreatManager().modifyThreatPercent(pCaster, -100);
             m_bPhaseTwoBeforeTeleport = m_bIsInPhaseTwo;
         }
     }
 
-    void JustSummoned(Creature* pSummoned)
+    void JustSummoned(Creature* pSummoned) override
     {
         pSummoned->SetInCombatWithZone();
     }
@@ -174,7 +174,7 @@ struct boss_ayamissAI : public ScriptedAI
     void MoveInLineOfSight(Unit* pWho) override
     {
         if (pWho->GetTypeId() == TYPEID_PLAYER
-            && !m_creature->isInCombat()
+            && !m_creature->IsInCombat()
             && m_creature->IsWithinDistInMap(pWho, 40.0f)
             && !pWho->HasAuraType(SPELL_AURA_FEIGN_DEATH)
             && !pWho->HasAuraType(SPELL_AURA_MOD_UNATTACKABLE))
@@ -185,9 +185,9 @@ struct boss_ayamissAI : public ScriptedAI
         ScriptedAI::MoveInLineOfSight(pWho);
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         if (!m_bRelocated && m_uiRelocate_Timer < uiDiff && !m_bIsInPhaseTwo)
@@ -209,18 +209,18 @@ struct boss_ayamissAI : public ScriptedAI
         if (m_creature->GetHealthPercent() <= 70 && !m_bIsInPhaseTwo)
         {
             SetCombatMovement(true);
-            m_creature->GetMotionMaster()->MoveChase(m_creature->getVictim());
-            m_creature->AttackerStateUpdate(m_creature->getVictim(), BASE_ATTACK, true);
-            m_creature->addUnitState(UNIT_STAT_IGNORE_PATHFINDING); //pathfinding desactivation
+            m_creature->GetMotionMaster()->MoveChase(m_creature->GetVictim());
+            m_creature->AttackerStateUpdate(m_creature->GetVictim(), BASE_ATTACK, true);
+            m_creature->AddUnitState(UNIT_STAT_IGNORE_PATHFINDING); //pathfinding desactivation
             m_bIsInPhaseTwo = true;
 
             /** Aggro list reset */
-            ThreatList const& tList = m_creature->getThreatManager().getThreatList();
+            ThreatList const& tList = m_creature->GetThreatManager().getThreatList();
             for (ThreatList::const_iterator i = tList.begin(); i != tList.end(); ++i)
             {
                 Unit* pUnit = m_creature->GetMap()->GetUnit((*i)->getUnitGuid());
                 if (pUnit && (pUnit->GetTypeId() == TYPEID_PLAYER))
-                    m_creature->getThreatManager().modifyThreatPercent(pUnit, -100);
+                    m_creature->GetThreatManager().modifyThreatPercent(pUnit, -100);
             }
         }
 
@@ -248,7 +248,7 @@ struct boss_ayamissAI : public ScriptedAI
             std::list<Creature*> SwarmerList;
             GetCreatureListWithEntryInGrid(SwarmerList, m_creature, NPC_HIVEZARA_SWARMER, 300.0f);
             for (std::list<Creature*>::iterator itr = SwarmerList.begin(); itr != SwarmerList.end(); ++itr)
-                (*itr)->addUnitState(UNIT_STAT_IGNORE_PATHFINDING);
+                (*itr)->AddUnitState(UNIT_STAT_IGNORE_PATHFINDING);
 
             m_uiSummonSwarmer_Timer = 60000;
         }
@@ -281,8 +281,8 @@ struct boss_ayamissAI : public ScriptedAI
         {
             if (!m_bPhaseTwoBeforeTeleport)
                 if (Player* player = m_creature->GetMap()->GetPlayer(m_uiSacrificeGuid))
-                    if (player->isAlive())
-                        m_creature->getThreatManager().addThreatDirectly(player, m_fSacrificeAggro);
+                    if (player->IsAlive())
+                        m_creature->GetThreatManager().addThreatDirectly(player, m_fSacrificeAggro);
             m_uiSacrificeGuid.Clear();
             m_fSacrificeAggro = 0;
         }
@@ -294,7 +294,7 @@ struct boss_ayamissAI : public ScriptedAI
         {
             if (m_uiPoisonStinger_Timer < uiDiff)
             {
-                if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_POISONSTINGER) == CAST_OK)
+                if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_POISONSTINGER) == CAST_OK)
                     m_uiPoisonStinger_Timer = urand(2000, 3000);
             }
             else
@@ -302,7 +302,7 @@ struct boss_ayamissAI : public ScriptedAI
 
             if (m_uiStingerSpray_Timer < uiDiff)
             {
-                if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_STINGERSPRAY) == CAST_OK)
+                if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_STINGERSPRAY) == CAST_OK)
                     m_uiStingerSpray_Timer = urand(15000, 20000);
             }
             else
@@ -313,7 +313,7 @@ struct boss_ayamissAI : public ScriptedAI
         {
             if (m_uiStingerSpray_Timer < uiDiff)
             {
-                if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_STINGERSPRAY) == CAST_OK)
+                if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_STINGERSPRAY) == CAST_OK)
                     m_uiStingerSpray_Timer = urand(6000, 12000);
             }
             else
@@ -321,7 +321,7 @@ struct boss_ayamissAI : public ScriptedAI
 
             if (m_uiLash_Timer < uiDiff)
             {
-                if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_LASH) == CAST_OK)
+                if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_LASH) == CAST_OK)
                     m_uiLash_Timer = urand(8000, 15000);
             }
             else
@@ -329,7 +329,7 @@ struct boss_ayamissAI : public ScriptedAI
 
             if (m_uiTrash_Timer < uiDiff)
             {
-                if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_TRASH) == CAST_OK)
+                if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_TRASH) == CAST_OK)
                     m_uiTrash_Timer = urand(5000, 7000);
             }
             else
@@ -351,7 +351,7 @@ struct mob_zara_larvaAI : public ScriptedAI
     uint8 m_waypoint;
     Unit * m_victim;
 
-    void Reset()
+    void Reset() override
     {
         m_victim = nullptr;
         m_waypoint = 0;
@@ -359,7 +359,7 @@ struct mob_zara_larvaAI : public ScriptedAI
         SetCombatMovement(false);
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (Active > uiDiff)
         {
@@ -402,7 +402,7 @@ struct mob_zara_larvaAI : public ScriptedAI
                 ++m_waypoint;
                 m_victim = i->getSource();
                 m_creature->AI()->AttackStart(m_victim);
-                m_creature->getThreatManager().addThreat(m_victim, 5000000000);
+                m_creature->GetThreatManager().addThreat(m_victim, 5000000000);
             }
             else if (m_victim)
             {

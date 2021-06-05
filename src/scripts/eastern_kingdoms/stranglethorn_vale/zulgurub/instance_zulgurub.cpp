@@ -50,7 +50,7 @@ void instance_zulgurub::UpdateHakkarPowerStacks()
 {
     if (Creature* pHakkar = instance->GetCreature(m_uiHakkarGUID))
     {
-        if (pHakkar->isAlive())
+        if (pHakkar->IsAlive())
         {
             uint32 neededStacks = 0;
             for (uint8 i = 0; i < 5; ++i)
@@ -176,11 +176,11 @@ void instance_zulgurub::SetData(uint32 uiType, uint32 uiData)
             if (uiData == IN_PROGRESS)
             {
                 Creature *Marli = instance->GetCreature(m_uiMarliGUID);
-                Unit* pVictim = Marli->getVictim();
+                Unit* pVictim = Marli->GetVictim();
                 for (std::list<uint64>::const_iterator itr = m_lMarliTrashGUIDList.begin(); itr != m_lMarliTrashGUIDList.end(); itr++)
                 {
                     if (Creature* MarliTrash = instance->GetCreature(*itr))
-                        if (MarliTrash->isAlive() && !MarliTrash->isInCombat())
+                        if (MarliTrash->IsAlive() && !MarliTrash->IsInCombat())
                             if (MarliTrash->GetMapId() == 309 && MarliTrash->GetZoneId() == 1977 && MarliTrash->GetAreaId() == 3379)
                                 MarliTrash->AI()->AttackStart(pVictim);
                 }
@@ -367,13 +367,13 @@ void instance_zulgurub::SpawnRandomBoss()
 Unit* instance_zulgurub::Thekal_GetUnitThatCanRez()
 {
     if (Unit *pLorKhan = instance->GetUnit(GetData64(DATA_LORKHAN)))
-        if (pLorKhan->isAlive())
+        if (pLorKhan->IsAlive())
             return pLorKhan;
     if (Unit *pZath = instance->GetUnit(GetData64(DATA_ZATH)))
-        if (pZath->isAlive())
+        if (pZath->IsAlive())
             return pZath;
     if (Unit *pThekal = instance->GetUnit(GetData64(DATA_THEKAL)))
-        if (pThekal->isAlive())
+        if (pThekal->IsAlive())
             return pThekal;
     return nullptr;
 }
@@ -393,7 +393,7 @@ struct npc_brazierAI: public ScriptedAI
     uint32 Timer;
     uint32 Var;
 
-    void Reset()
+    void Reset() override
     {
         Timer = 0;
         Var = 0;
@@ -420,7 +420,7 @@ struct npc_brazierAI: public ScriptedAI
         }
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (Var > 24)
             m_creature->ForcedDespawn();

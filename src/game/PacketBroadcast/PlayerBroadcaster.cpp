@@ -6,8 +6,8 @@
 uint32 PlayerBroadcaster::num_bcaster_created = 0;
 uint32 PlayerBroadcaster::num_bcaster_deleted = 0;
 
-PlayerBroadcaster::PlayerBroadcaster(WorldSocket* w_socket, const ObjectGuid& self, std::size_t max_queue)
-    : m_socket(w_socket), m_self(self), MAX_QUEUE_SIZE(max_queue), instanceId(0), lastUpdatePackets(0)
+PlayerBroadcaster::PlayerBroadcaster(WorldSocket* w_socket, const ObjectGuid& self, std::size_t max_queue) :
+    MAX_QUEUE_SIZE(max_queue), m_socket(w_socket), m_self(self), instanceId(0), lastUpdatePackets(0)
 {
     if (m_socket)
         m_socket->AddReference();
@@ -20,8 +20,10 @@ void PlayerBroadcaster::ChangeSocket(WorldSocket* new_socket)
 {
     if (m_socket)
         m_socket->RemoveReference();
+
     if (new_socket)
         new_socket->AddReference();
+
     m_socket = new_socket;
 }
 
@@ -104,8 +106,8 @@ void PlayerBroadcaster::QueuePacket(WorldPacket packet, bool self, ObjectGuid ex
             return;
         }
     }
-    m_queue.emplace_back(std::move(data));
 
+    m_queue.emplace_back(std::move(data));
     guard.unlock();
 }
 
@@ -121,6 +123,7 @@ void PlayerBroadcaster::FreeAtLogout()
         m_socket->RemoveReference();
         m_socket = nullptr;
     }
+
     std::unique_lock<std::mutex> q_g(m_queue_lock), v_g(m_listeners_lock);
     m_queue.clear();
     m_listeners.clear();
@@ -130,5 +133,6 @@ PlayerBroadcaster::~PlayerBroadcaster()
 {
     if (m_socket)
         m_socket->RemoveReference();
+
     ++num_bcaster_deleted;
 }

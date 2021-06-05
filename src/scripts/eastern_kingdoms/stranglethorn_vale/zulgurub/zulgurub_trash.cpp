@@ -4,9 +4,9 @@
 
 enum
 {
-    SPELL_THROW              =   16075,
-    SPELL_AXE_FLURRY         =   24018,
-    SPELL_FRENZY             =    8269,
+    SPELL_THROW = 16075,
+    SPELL_AXE_FLURRY = 24018,
+    SPELL_FRENZY = 8269,
 };
 
 struct GurubashiAxeThrowerAI : public ScriptedAI
@@ -23,28 +23,28 @@ struct GurubashiAxeThrowerAI : public ScriptedAI
     uint32 m_uiAxeFlurry_Timer;
     bool   m_bEnrage;
 
-    void Reset()
+    void Reset() override
     {
-        m_uiAxeFlurry_Timer   = 10000;
-        m_uiThrow_Timer       = 5000;
-        m_bEnrage             = false;
+        m_uiAxeFlurry_Timer = 10000;
+        m_uiThrow_Timer = 5000;
+        m_bEnrage = false;
     }
 
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* pWho) override
     {
         m_creature->SetInCombatWithZone();
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         if (m_uiAxeFlurry_Timer < uiDiff)
         {
             if (!m_creature->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISARMED))
             {
-                if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_AXE_FLURRY) == CAST_OK)
+                if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_AXE_FLURRY) == CAST_OK)
                     m_uiAxeFlurry_Timer = urand(14000, 19000);
             }
         }
@@ -53,7 +53,7 @@ struct GurubashiAxeThrowerAI : public ScriptedAI
 
         if (m_uiThrow_Timer < uiDiff)
         {
-            if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_THROW) == CAST_OK)
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_THROW) == CAST_OK)
                 m_uiThrow_Timer = urand(4000, 7000);
         }
         else
@@ -97,7 +97,7 @@ struct GurubashiBerserkerAI : public ScriptedAI
     uint32 m_uiFear_Timer;
     bool   m_bEnrage;
 
-    void Reset()
+    void Reset() override
     {
         m_uiKnockBack_Timer   = 10000;
         m_uiThunderClap_Timer = 5000;
@@ -105,19 +105,19 @@ struct GurubashiBerserkerAI : public ScriptedAI
         m_bEnrage             = false;
     }
 
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* pWho) override
     {
         m_creature->SetInCombatWithZone();
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         if (m_uiKnockBack_Timer < uiDiff)
         {
-            if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_KNOCKBACK) == CAST_OK)
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_KNOCKBACK) == CAST_OK)
             {
                 DoResetThreat();
                 m_uiKnockBack_Timer = 10000;
@@ -128,7 +128,7 @@ struct GurubashiBerserkerAI : public ScriptedAI
 
         if (m_uiThunderClap_Timer < uiDiff)
         {
-            if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_THUNDERCLAP) == CAST_OK)
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_THUNDERCLAP) == CAST_OK)
                 m_uiThunderClap_Timer = urand(14000, 16000);
         }
         else
@@ -136,7 +136,7 @@ struct GurubashiBerserkerAI : public ScriptedAI
 
         if (m_uiFear_Timer < uiDiff)
         {
-            if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_FEAR) == CAST_OK)
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_FEAR) == CAST_OK)
             {
                 m_uiFear_Timer = urand(25000, 30000);
                 DoResetThreat();
@@ -164,12 +164,12 @@ CreatureAI* GetAI_GurubashiBerserker(Creature* pCreature)
 // npc_hakkari_doctor (11831)
 /*
 5 Techniques
-- Maléfice http://www.wowhead.com/spell=24053
-- Libération des crapauds http://www.wowhead.com/spell=24058
+- Malï¿½fice http://www.wowhead.com/spell=24053
+- Libï¿½ration des crapauds http://www.wowhead.com/spell=24058
 - Horion de l'ombre http://www.wowhead.com/spell=17289
-- Rapetisser http://www.wowhead.com/spell=24054 Sort lancé mais pas d'effet de réduction de taille
+- Rapetisser http://www.wowhead.com/spell=24054 Sort lancï¿½ mais pas d'effet de rï¿½duction de taille
 
-Particularité :
+Particularitï¿½ :
 Quand le sorcier-docteur meurt, un Esprit Vaudou (http://www.wowhead.com/npc=15009) apparait.
 Il se dirige lentement vers une cible prise au hasard puis explose (explosion spirituelle http://www.wowhead.com/spell=24050) s'il touche la cible ; il disparait ensuite.
 S'il ne touche personne, l'esprit vaudou disparait au bout de quelques secondes.
@@ -189,7 +189,7 @@ struct npc_hakkari_doctor : public ScriptedAI
     uint32 m_uiCrapaudsLiberationTimer;
     uint32 m_uiOrionOmbreTimer;
 
-    void Reset()
+    void Reset() override
     {
         m_uiMaleficeTimer = 5000;
         m_uiCrapaudsTimer = 15000;
@@ -197,9 +197,9 @@ struct npc_hakkari_doctor : public ScriptedAI
         m_uiOrionOmbreTimer = 4000;
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         if (m_uiMaleficeTimer < uiDiff)
@@ -251,7 +251,7 @@ struct npc_hakkari_doctor : public ScriptedAI
         DoMeleeAttackIfReady();
     }
 
-    void JustDied(Unit* pKiller)
+    void JustDied(Unit* pKiller) override
     {
         m_creature->SummonCreatureAndAttack(15009, pKiller);
     }
@@ -272,13 +272,13 @@ struct npc_esprit_vaudou : public ScriptedAI
         Reset();
     }
 
-    void Reset()
+    void Reset() override
     {
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
-        if (Unit* pVictim = m_creature->getVictim())
+        if (Unit* pVictim = m_creature->GetVictim())
         {
             if (pVictim->GetDistance(m_creature) < 5.0f)
             {
@@ -306,15 +306,15 @@ struct npc_fils_hakkar : public ScriptedAI
     uint32 m_uiKnockDownTimer;
     uint32 m_uiTrashTimer;
 
-    void Reset()
+    void Reset() override
     {
         m_uiKnockDownTimer = 10000;
         m_uiTrashTimer = 5000;
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         if (m_uiTrashTimer < uiDiff)
@@ -327,7 +327,7 @@ struct npc_fils_hakkar : public ScriptedAI
 
         if (m_uiKnockDownTimer < uiDiff)
         {
-            m_creature->CastSpell(m_creature->getVictim(), 16790, true);
+            m_creature->CastSpell(m_creature->GetVictim(), 16790, true);
             m_uiKnockDownTimer = urand(5000, 10000);
         }
         else
@@ -336,7 +336,7 @@ struct npc_fils_hakkar : public ScriptedAI
         DoMeleeAttackIfReady();
     }
 
-    void JustDied(Unit* pKiller)
+    void JustDied(Unit* pKiller) override
     {
         m_creature->CastSpell(m_creature, 24320, true);//24840
     }
@@ -354,20 +354,20 @@ struct go_pile_dechetsAI: public GameObjectAI
     bool Actif;
     GameObject * const m_pGo;
 
-    bool OnUse(Unit* pUser)
+    bool OnUse(Unit* pUser) override
     {
         if (pUser->IsWithinDistInMap(m_pGo, 5.0f) && !Actif && (urand(0, 2)))
         {
             if (Creature* Guru = pUser->SummonCreature(15047, pUser->GetPositionX(), pUser->GetPositionY(), pUser->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 20000))
             {
-                Guru->addUnitState(UNIT_STAT_ROOT);
+                Guru->AddUnitState(UNIT_STAT_ROOT);
 
                 Map::PlayerList const& players = Guru->GetMap()->GetPlayers();
                 bool OtherPlayerFound = false;
                 for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
                 {
                     Player* pPlayer = itr->getSource();
-                    if (pPlayer && pPlayer->isAlive() && pUser->IsWithinDistInMap(pPlayer, 60.0f) && pUser->IsWithinLOSInMap(pPlayer) &&
+                    if (pPlayer && pPlayer->IsAlive() && pUser->IsWithinDistInMap(pPlayer, 60.0f) && pUser->IsWithinLOSInMap(pPlayer) &&
                             pPlayer != pUser->ToPlayer() && !pPlayer->IsGameMaster())
                     {
                         Guru->AddThreat(pPlayer);
@@ -396,38 +396,38 @@ struct go_pile_dechetsAI: public GameObjectAI
                     GetCreatureListWithEntryInGrid(MobList, Guru, 11361, 45.0f);          // Tigre Zulien
                     GetCreatureListWithEntryInGrid(MobList, Guru, 11831, 45.0f);          // Sorcier Docteur
                     GetCreatureListWithEntryInGrid(MobList, Guru, 11350, 45.0f);          // Lanceur de Haches
-                    GetCreatureListWithEntryInGrid(MobList, Guru, 11830, 45.0f);          // Prêtre
+                    GetCreatureListWithEntryInGrid(MobList, Guru, 11830, 45.0f);          // Prï¿½tre
                     GetCreatureListWithEntryInGrid(MobList, Guru, 11368, 45.0f);          // Chauve Souris Sanguinaire
-                    GetCreatureListWithEntryInGrid(MobList, Guru, 11365, 45.0f);          // Panthère
+                    GetCreatureListWithEntryInGrid(MobList, Guru, 11365, 45.0f);          // Panthï¿½re
                     GetCreatureListWithEntryInGrid(MobList, Guru, 11353, 45.0f);          // Buveur de sang
                     GetCreatureListWithEntryInGrid(MobList, Guru, 11356, 45.0f);          // Champion Guru
                     GetCreatureListWithEntryInGrid(MobList, Guru, 14821, 45.0f);          // Raptor razza
                     GetCreatureListWithEntryInGrid(MobList, Guru, 14532, 45.0f);          // Fils du venin
                     GetCreatureListWithEntryInGrid(MobList, Guru, 11370, 45.0f);          // Sombre veuve
                     GetCreatureListWithEntryInGrid(MobList, Guru, 11360, 45.0f);          // Jeune Zulien
-                    GetCreatureListWithEntryInGrid(MobList, Guru, 14825, 45.0f);          // Maitresse dessechée
+                    GetCreatureListWithEntryInGrid(MobList, Guru, 14825, 45.0f);          // Maitresse dessechï¿½e
                     GetCreatureListWithEntryInGrid(MobList, Guru, 14882, 45.0f);          // Maitresse Atalai
-                    GetCreatureListWithEntryInGrid(MobList, Guru, 14826, 45.0f);          // Troll sacrifié
-                    GetCreatureListWithEntryInGrid(MobList, Guru, 11351, 45.0f);          // Chasseur tête
+                    GetCreatureListWithEntryInGrid(MobList, Guru, 14826, 45.0f);          // Troll sacrifiï¿½
+                    GetCreatureListWithEntryInGrid(MobList, Guru, 11351, 45.0f);          // Chasseur tï¿½te
 
                     for (std::list<Creature*>::iterator itr = MobList.begin(); itr != MobList.end(); ++itr)
                     {
-                        if (pUser->IsWithinLOSInMap(*itr) && pUser->IsWithinDistInMap((*itr), 45.0f) && (*itr)->isAlive())
+                        if (pUser->IsWithinLOSInMap(*itr) && pUser->IsWithinDistInMap((*itr), 45.0f) && (*itr)->IsAlive())
                         {
                             if (Player* pPlay = pUser->ToPlayer())
                             {
                                 if (pPlay->GetTeam() == HORDE)
-                                    Guru->setFaction(1);    // Human
+                                    Guru->SetFactionTemplateId(1);    // Human
                                 else if (pPlay->GetTeam() == ALLIANCE)
-                                    Guru->setFaction(2);    // Orc
+                                    Guru->SetFactionTemplateId(2);    // Orc
 
                                 Guru->AddThreat(*itr);
                                 Guru->SetInCombatWith(*itr);
                                 Guru->CastSpell(pUser, 24178, true);
-                                Guru->addUnitState(UNIT_STAT_ROOT);
+                                Guru->AddUnitState(UNIT_STAT_ROOT);
                                 Guru->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                                 Guru->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-                                Guru->setFaction(14); // Troll Bloodscalp
+                                Guru->SetFactionTemplateId(14); // Troll Bloodscalp
                                 break;
                             }
                         }

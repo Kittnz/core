@@ -12,7 +12,6 @@ struct drogonAI : public ScriptedAI
         // unused
     }
 
-
     void Aggro(Unit *who)
     {
         Creature* daenerys = GetClosestCreatureWithEntry(m_creature, 50071, 150);
@@ -24,8 +23,9 @@ struct drogonAI : public ScriptedAI
         m_creature->InterruptNonMeleeSpells(false);
         DoCast(m_creature, 29388); // Breath of Fire
 
-        for (auto &player : players) {
-            if (player && player->isAlive())
+        for (auto &player : players)
+        {
+            if (player && player->IsAlive())
                 m_creature->DealDamage(player, player->GetHealth() * 2, nullptr, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, nullptr, false);
         }
     }
@@ -53,7 +53,7 @@ struct drogonAI : public ScriptedAI
     void UpdateAI(const uint32 diff)
     {
         //Return since we have no target
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         if (m_creature->GetHealthPercent() < 100.0f)

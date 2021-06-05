@@ -26,21 +26,21 @@ EndScriptData */
 
 enum
 {
-    SAY_AGGRO                           = -1090024,
-    SAY_PHASE                           = -1090025,
-    SAY_BOMB                            = -1090026,
-    SAY_SLAY                            = -1090027,
+    SAY_AGGRO = -1090024,
+    SAY_PHASE = -1090025,
+    SAY_BOMB = -1090026,
+    SAY_SLAY = -1090027,
 
-    SPELL_ACTIVATE_BOMB_A               = 11511,            // Target Dest = -530.754 670.571 -313.784
-    SPELL_ACTIVATE_BOMB_B               = 11795,            // Target Dest = -530.754 670.571 -313.784
-    SPELL_KNOCK_AWAY                    = 10101,
-    SPELL_KNOCK_AWAY_AOE                = 11130,
-    SPELL_WALKING_BOMB_EFFECT           = 11504,
+    SPELL_ACTIVATE_BOMB_A = 11511,            // Target Dest = -530.754 670.571 -313.784
+    SPELL_ACTIVATE_BOMB_B = 11795,            // Target Dest = -530.754 670.571 -313.784
+    SPELL_KNOCK_AWAY = 10101,
+    SPELL_KNOCK_AWAY_AOE = 11130,
+    SPELL_WALKING_BOMB_EFFECT = 11504,
 
-    NPC_WALKING_BOMB                    = 7915,
+    NPC_WALKING_BOMB = 7915,
 };
 
-static const float fBombSpawnZ  = -316.2625f;
+static const float fBombSpawnZ = -316.2625f;
 
 struct boss_thermapluggAI : public ScriptedAI
 {
@@ -62,7 +62,7 @@ struct boss_thermapluggAI : public ScriptedAI
     std::list<uint64> m_lSummonedBombGUIDs;
     std::list<uint64> m_lLandedBombGUIDs;
 
-    void Reset()
+    void Reset() override
     {
         m_uiKnockAwayTimer = urand(17000, 20000);
         m_uiActivateBombTimer = urand(10000, 15000);
@@ -73,12 +73,12 @@ struct boss_thermapluggAI : public ScriptedAI
         m_lLandedBombGUIDs.clear();
     }
 
-    void KilledUnit(Unit* pVictim)
+    void KilledUnit(Unit* pVictim) override
     {
         DoScriptText(SAY_SLAY, m_creature);
     }
 
-    void JustDied(Unit* pKiller)
+    void JustDied(Unit* pKiller) override
     {
         if (m_pInstance)
             m_pInstance->SetData(TYPE_THERMAPLUGG, DONE);
@@ -86,7 +86,7 @@ struct boss_thermapluggAI : public ScriptedAI
         m_lSummonedBombGUIDs.clear();
     }
 
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* pWho) override
     {
         DoScriptText(SAY_AGGRO, m_creature);
 
@@ -101,7 +101,7 @@ struct boss_thermapluggAI : public ScriptedAI
         m_afSpawnPos[2] = m_creature->GetPositionZ();
     }
 
-    void JustReachedHome()
+    void JustReachedHome() override
     {
         if (m_pInstance)
             m_pInstance->SetData(TYPE_THERMAPLUGG, FAIL);
@@ -115,7 +115,7 @@ struct boss_thermapluggAI : public ScriptedAI
         m_lSummonedBombGUIDs.clear();
     }
 
-    void JustSummoned(Creature* pSummoned)
+    void JustSummoned(Creature* pSummoned) override
     {
         if (pSummoned->GetEntry() == NPC_WALKING_BOMB)
         {
@@ -130,20 +130,20 @@ struct boss_thermapluggAI : public ScriptedAI
         }
     }
 
-    void SummonedMovementInform(Creature* pSummoned, uint32 uiMotionType, uint32 uiPointId)
+    void SummonedMovementInform(Creature* pSummoned, uint32 uiMotionType, uint32 uiPointId) override
     {
         if (pSummoned->GetEntry() == NPC_WALKING_BOMB && uiMotionType == POINT_MOTION_TYPE && uiPointId == 1)
             m_lLandedBombGUIDs.push_back(pSummoned->GetGUID());
     }
 
-    void SummonedCreatureDespawn(Creature* pSummoned)
+    void SummonedCreatureDespawn(Creature* pSummoned) override
     {
         m_lSummonedBombGUIDs.remove(pSummoned->GetGUID());
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         // Movement of Summoned mobs
@@ -172,7 +172,7 @@ struct boss_thermapluggAI : public ScriptedAI
             }
             else
             {
-                if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_KNOCK_AWAY) == CAST_OK)
+                if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_KNOCK_AWAY) == CAST_OK)
                     m_uiKnockAwayTimer = urand(17000, 20000);
             }
         }

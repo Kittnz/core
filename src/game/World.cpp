@@ -64,7 +64,6 @@
 #include "CharacterDatabaseCleaner.h"
 #include "LFGMgr.h"
 #include "AutoBroadCastMgr.h"
-#include "AutoTesting/AutoTestingMgr.h"
 #include "Transports/TransportMgr.h"
 #include "PlayerBotMgr.h"
 #include "ZoneScriptMgr.h"
@@ -88,17 +87,17 @@ uint8 World::m_ExitCode = SHUTDOWN_EXIT_CODE;
 volatile uint32 World::m_worldLoopCounter = 0;
 
 float World::m_MaxVisibleDistanceOnContinents = DEFAULT_VISIBILITY_DISTANCE;
-float World::m_MaxVisibleDistanceInInstances  = DEFAULT_VISIBILITY_INSTANCE;
-float World::m_MaxVisibleDistanceInBG         = DEFAULT_VISIBILITY_BG;
+float World::m_MaxVisibleDistanceInInstances = DEFAULT_VISIBILITY_INSTANCE;
+float World::m_MaxVisibleDistanceInBG = DEFAULT_VISIBILITY_BG;
 
-float World::m_MaxVisibleDistanceInFlight     = DEFAULT_VISIBILITY_DISTANCE;
-float World::m_VisibleUnitGreyDistance        = 0;
-float World::m_VisibleObjectGreyDistance      = 0;
+float World::m_MaxVisibleDistanceInFlight = DEFAULT_VISIBILITY_DISTANCE;
+float World::m_VisibleUnitGreyDistance = 0;
+float World::m_VisibleObjectGreyDistance = 0;
 
-float  World::m_relocation_lower_limit_sq     = 10.f * 10.f;
-uint32 World::m_relocation_ai_notify_delay    = 1000u;
+float  World::m_relocation_lower_limit_sq = 10.f * 10.f;
+uint32 World::m_relocation_ai_notify_delay = 1000u;
 
-uint32 World::m_creatureSummonCountLimit      = DEFAULT_CREATURE_SUMMON_LIMIT;
+uint32 World::m_creatureSummonCountLimit = DEFAULT_CREATURE_SUMMON_LIMIT;
 
 void LoadGameObjectModelList();
 
@@ -2090,12 +2089,8 @@ void World::BanAccount(uint32 accountId, uint32 duration, std::string reason, st
 class BanQueryHolder : public SqlQueryHolder
 {
 public:
-    BanQueryHolder(BanMode mode, std::string banTarget, uint32 duration, std::string reason, uint32 realmId, std::string author,
-        uint32 authorAccountId)
-        : m_mode(mode), m_banTarget(banTarget), m_duration(duration), m_reason(reason), m_realmId(realmId), m_author(author),
-          m_accountId(authorAccountId)
-    {
-    }
+    BanQueryHolder(BanMode mode, std::string banTarget, uint32 duration, std::string reason, uint32 realmId, std::string author, uint32 authorAccountId) :
+        m_mode(mode), m_duration(duration), m_reason(reason), m_realmId(realmId), m_author(author), m_banTarget(banTarget), m_accountId(authorAccountId) { }
 
     BanMode GetBanMode() const { return m_mode; }
     uint32 GetDuration() const { return m_duration; }

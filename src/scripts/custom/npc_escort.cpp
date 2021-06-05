@@ -2,7 +2,7 @@
 
 enum
 {
-    POINT_LAST_POINT    = 0xFFFFFF
+    POINT_LAST_POINT = 0xFFFFFF
 };
 
 struct npc_escort_genericAI : public npc_escortAI
@@ -15,10 +15,9 @@ struct npc_escort_genericAI : public npc_escortAI
             sLog.outError("npc_escort : La creature %u n'a pas de donnees dans la table `script_escort_data` ! Le PNJ sera inactif.");
     }
 
-    // ATTENTION : Peut etre nullptr
     CreatureEscortData const* m_pEscortData;
 
-    void Reset()
+    void Reset() override
     {
         if (Player* pPlayer = GetPlayerForEscort())
         {
@@ -37,9 +36,8 @@ struct npc_escort_genericAI : public npc_escortAI
         }
     }
 
-    void EnterEvadeMode()
+    void EnterEvadeMode() override
     {
-        //m_creature->RemoveAllAuras();
         m_creature->DeleteThreatList();
         m_creature->CombatStop(true);
         m_creature->SetLootRecipient(nullptr);
@@ -64,7 +62,7 @@ struct npc_escort_genericAI : public npc_escortAI
         Reset();
     }
 
-    void WaypointReached(uint32 uiPointId)
+    void WaypointReached(uint32 uiPointId) override
     {
         if (!m_pEscortData)
             return;
@@ -76,7 +74,8 @@ struct npc_escort_genericAI : public npc_escortAI
                 pPlayer->GroupEventHappens(m_pEscortData->uiQuestEntry, m_creature);
         }
     }
-    void JustDied(Unit* pKiller)
+
+    void JustDied(Unit* pKiller) override
     {
         if (!m_pEscortData)
             return;
@@ -87,7 +86,8 @@ struct npc_escort_genericAI : public npc_escortAI
                 pPlayer->FailQuest(m_pEscortData->uiQuestEntry);
         }
     }
-    void JustStartedEscort()
+
+    void JustStartedEscort() override
     {
         if (!m_pEscortData)
             return;
@@ -95,9 +95,9 @@ struct npc_escort_genericAI : public npc_escortAI
         m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
         m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PLAYER);
         m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PVP);
-
-        m_creature->setFaction(m_pEscortData->uiEscortFaction);
+        m_creature->SetFactionTemplateId(m_pEscortData->uiEscortFaction);
     }
+
     void OnQuestAccept(Player* pPlayer, const Quest* pQuest)
     {
         if (!m_pEscortData)
@@ -110,17 +110,18 @@ struct npc_escort_genericAI : public npc_escortAI
         }
     }
 
-    void UpdateEscortAI(const uint32 uiDiff)
+    void UpdateEscortAI(const uint32 uiDiff) override
     {
         if (!m_pEscortData)
             return;
 
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
         {
             if (HasEscortState(STATE_ESCORT_PAUSED))
                 SetEscortPaused(false);
             return;
         }
+
         if (!HasEscortState(STATE_ESCORT_PAUSED))
             SetEscortPaused(true);
 
@@ -142,7 +143,6 @@ bool QuestAccept_npc_escort_genericAI(Player* pPlayer, Creature* pCreature, cons
         pEscortAI->OnQuestAccept(pPlayer, pQuest);
     return true;
 }
-
 
 void AddSC_npc_escort()
 {

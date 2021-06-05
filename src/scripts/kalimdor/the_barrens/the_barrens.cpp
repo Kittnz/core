@@ -38,7 +38,7 @@ EndContentData */
 
 enum
 {
-    QUEST_LOST_IN_BATTLE    = 4921
+    QUEST_LOST_IN_BATTLE = 4921
 };
 
 bool GossipHello_npc_beaten_corpse(Player* pPlayer, Creature* pCreature)
@@ -119,12 +119,12 @@ struct npc_pollyAI : public ScriptedAI
 
     bool b_text;
 
-    void Reset()
+    void Reset() override
     {
         b_text = false;
     }
 
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* pWho) override
     {
         if (b_text == false)
         {
@@ -170,15 +170,15 @@ struct npc_giltharesAI : public npc_escortAI
         Reset();
     }
 
-    void Reset() { }
+    void Reset() override { }
 
     void JustRespawned() override
     {
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
         npc_escortAI::JustRespawned();
     }
 
-    void WaypointReached(uint32 uiPointId)
+    void WaypointReached(uint32 uiPointId) override
     {
         Player* pPlayer = GetPlayerForEscort();
 
@@ -209,7 +209,7 @@ struct npc_giltharesAI : public npc_escortAI
         }
     }
 
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* pWho) override
     {
         //not always use
         if (urand(0, 3))
@@ -247,8 +247,8 @@ bool QuestAccept_npc_gilthares(Player* pPlayer, Creature* pCreature, const Quest
 {
     if (pQuest->GetQuestId() == QUEST_FREE_FROM_HOLD)
     {
-        pCreature->setFaction(FACTION_ESCORT_H_NEUTRAL_ACTIVE);
-        pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+        pCreature->SetFactionTemplateId(FACTION_ESCORT_H_NEUTRAL_ACTIVE);
+        pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
         pCreature->SetStandState(UNIT_STAND_STATE_STAND);
 
         DoScriptText(SAY_GIL_START, pCreature, pPlayer);
@@ -265,16 +265,16 @@ bool QuestAccept_npc_gilthares(Player* pPlayer, Creature* pCreature, const Quest
 
 enum
 {
-    FACTION_FRIENDLY_F  = 35,
-    SPELL_FLARE         = 10113,
-    SPELL_FOLLY         = 10137,
+    FACTION_FRIENDLY_F = 35,
+    SPELL_FLARE = 10113,
+    SPELL_FOLLY = 10137,
 };
 
 struct npc_taskmaster_fizzuleAI : public ScriptedAI
 {
     npc_taskmaster_fizzuleAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
-        factionNorm = pCreature->getFaction();
+        factionNorm = pCreature->GetFactionTemplateId();
         Reset();
     }
 
@@ -283,12 +283,12 @@ struct npc_taskmaster_fizzuleAI : public ScriptedAI
     uint32 Reset_Timer;
     uint8 FlareCount;
 
-    void Reset()
+    void Reset() override
     {
         IsFriend = false;
         Reset_Timer = 120000;
         FlareCount = 0;
-        m_creature->setFaction(factionNorm);
+        m_creature->SetFactionTemplateId(factionNorm);
     }
 
     void DoFriend()
@@ -300,11 +300,11 @@ struct npc_taskmaster_fizzuleAI : public ScriptedAI
         m_creature->StopMoving();
         m_creature->GetMotionMaster()->MoveIdle();
 
-        m_creature->setFaction(FACTION_FRIENDLY_F);
+        m_creature->SetFactionTemplateId(FACTION_FRIENDLY_F);
         m_creature->HandleEmoteCommand(EMOTE_ONESHOT_SALUTE);
     }
 
-    void SpellHit(Unit *caster, const SpellEntry *spell)
+    void SpellHit(Unit *caster, const SpellEntry *spell) override
     {
         if (spell->Id == SPELL_FLARE || spell->Id == SPELL_FOLLY)
         {
@@ -315,7 +315,7 @@ struct npc_taskmaster_fizzuleAI : public ScriptedAI
         }
     }
 
-    void UpdateAI(const uint32 diff)
+    void UpdateAI(const uint32 diff) override
     {
         if (IsFriend)
         {
@@ -324,19 +324,19 @@ struct npc_taskmaster_fizzuleAI : public ScriptedAI
             else Reset_Timer -= diff;
         }
 
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         DoMeleeAttackIfReady();
     }
 
-    void ReceiveEmote(Player* pPlayer, uint32 emote)
+    void ReceiveEmote(Player* pPlayer, uint32 emote) override
     {
         if (emote == TEXTEMOTE_SALUTE)
         {
             if (FlareCount >= 2)
             {
-                if (m_creature->getFaction() == FACTION_FRIENDLY_F)
+                if (m_creature->GetFactionTemplateId() == FACTION_FRIENDLY_F)
                     return;
 
                 DoFriend();
@@ -401,7 +401,7 @@ struct npc_twiggy_flatheadAI : public ScriptedAI
     uint64 BigWillGUID;
     uint64 AffrayChallenger[6];
 
-    void Reset()
+    void Reset() override
     {
         EventInProgress = false;
 
@@ -443,7 +443,7 @@ struct npc_twiggy_flatheadAI : public ScriptedAI
                 continue;
             }
 
-            pCreature->setFaction(FACTION_FRIENDLY);
+            pCreature->SetFactionTemplateId(FACTION_FRIENDLY);
             pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
             pCreature->HandleEmoteCommand(EMOTE_ONESHOT_ROAR);
             AffrayChallenger[i] = pCreature->GetGUID();
@@ -455,10 +455,10 @@ struct npc_twiggy_flatheadAI : public ScriptedAI
         pUnit->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
         pUnit->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
         pUnit->HandleEmoteCommand(EMOTE_ONESHOT_ROAR);
-        pUnit->setFaction(FACTION_MONSTER);
+        pUnit->SetFactionTemplateId(FACTION_MONSTER);
     }
 
-    void UpdateAI(const uint32 diff)
+    void UpdateAI(const uint32 diff) override
     {
         if (!EventInProgress)
             return;
@@ -470,7 +470,7 @@ struct npc_twiggy_flatheadAI : public ScriptedAI
                 for (uint8 i = 0; i < 6; ++i)
                 {
                     Creature *challenger = m_creature->GetMap()->GetCreature(AffrayChallenger[i]);
-                    if (challenger && !challenger->isAlive() && challenger->isDead())
+                    if (challenger && !challenger->IsAlive() && challenger->IsDead())
                     {
                         DoScriptText(SAY_TWIGGY_DOWN, m_creature);
                         challenger->RemoveCorpse();
@@ -486,7 +486,7 @@ struct npc_twiggy_flatheadAI : public ScriptedAI
         {
             Player* pPlayer = m_creature->GetMap()->GetPlayer(PlayerGUID);
 
-            if (!pPlayer || pPlayer->isDead())
+            if (!pPlayer || pPlayer->IsDead())
                 Reset();
 
             switch (Step)
@@ -511,7 +511,7 @@ struct npc_twiggy_flatheadAI : public ScriptedAI
                     if (Unit *temp = m_creature->SummonCreature(NPC_BIG_WILL, -1713.79f, -4342.09f, 6.05f, 6.15f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 300000))
                     {
                         BigWillGUID = temp->GetGUID();
-                        temp->setFaction(FACTION_FRIENDLY);
+                        temp->SetFactionTemplateId(FACTION_FRIENDLY);
                         temp->GetMotionMaster()->MovePoint(0, -1682.31f, -4329.68f, 2.78f);
                     }
                     Event_Timer = 15000;
@@ -520,7 +520,7 @@ struct npc_twiggy_flatheadAI : public ScriptedAI
                 case 3:
                     if (Unit *will = m_creature->GetMap()->GetUnit(BigWillGUID))
                     {
-                        will->setFaction(FACTION_CREATURE);
+                        will->SetFactionTemplateId(FACTION_CREATURE);
                         DoScriptText(SAY_BIG_WILL_READY, will, pPlayer);
                     }
                     Event_Timer = 5000;
@@ -528,7 +528,7 @@ struct npc_twiggy_flatheadAI : public ScriptedAI
                     break;
                 case 4:
                     Unit *will = m_creature->GetMap()->GetUnit(BigWillGUID);
-                    if (will && will->isDead())
+                    if (will && will->IsDead())
                     {
                         DoScriptText(SAY_TWIGGY_OVER, m_creature);
                         Reset();
@@ -578,7 +578,7 @@ CreatureAI* GetAI_npc_twiggy_flathead(Creature* pCreature)
 
 bool AreaTrigger_at_twiggy_flathead(Player* pPlayer, const AreaTriggerEntry* pAt)
 {
-    if (!pPlayer->isDead() && pPlayer->GetQuestStatus(QUEST_AFFRAY) == QUEST_STATUS_INCOMPLETE)
+    if (!pPlayer->IsDead() && pPlayer->GetQuestStatus(QUEST_AFFRAY) == QUEST_STATUS_INCOMPLETE)
     {
         Creature* pCreature = GetClosestCreatureWithEntry(pPlayer, NPC_TWIGGY, 30.0f);
 
@@ -599,19 +599,19 @@ bool AreaTrigger_at_twiggy_flathead(Player* pPlayer, const AreaTriggerEntry* pAt
 
 enum
 {
-    SAY_START           = -1000298,
-    SAY_STARTUP1        = -1000299,
-    SAY_STARTUP2        = -1000300,
-    SAY_MERCENARY       = -1000301,
-    SAY_PROGRESS_1      = -1000302,
-    SAY_PROGRESS_2      = -1000303,
-    SAY_PROGRESS_3      = -1000304,
-    SAY_END             = -1000305,
+    SAY_START = -1000298,
+    SAY_STARTUP1 = -1000299,
+    SAY_STARTUP2 = -1000300,
+    SAY_MERCENARY = -1000301,
+    SAY_PROGRESS_1 = -1000302,
+    SAY_PROGRESS_2 = -1000303,
+    SAY_PROGRESS_3 = -1000304,
+    SAY_END = -1000305,
 
-    QUEST_ESCAPE        = 863,
-    FACTION_RATCHET     = 637,
-    NPC_PILOT_WIZZ      = 3451,
-    NPC_MERCENARY       = 3282
+    QUEST_ESCAPE = 863,
+    FACTION_RATCHET = 637,
+    NPC_PILOT_WIZZ = 3451,
+    NPC_MERCENARY = 3282
 };
 
 struct npc_wizzlecranks_shredderAI : public npc_escortAI
@@ -628,11 +628,11 @@ struct npc_wizzlecranks_shredderAI : public npc_escortAI
     uint32 m_uiPostEventTimer;
     uint32 m_uiPostEventCount;
 
-    void Reset()
+    void Reset() override
     {
         if (!HasEscortState(STATE_ESCORT_ESCORTING))
         {
-            if (m_creature->getStandState() == UNIT_STAND_STATE_DEAD)
+            if (m_creature->GetStandState() == UNIT_STAND_STATE_DEAD)
                 m_creature->SetStandState(UNIT_STAND_STATE_STAND);
 
             m_bIsPostEvent = false;
@@ -641,7 +641,7 @@ struct npc_wizzlecranks_shredderAI : public npc_escortAI
         }
     }
 
-    void WaypointReached(uint32 uiPointId)
+    void WaypointReached(uint32 uiPointId) override
     {
         switch (uiPointId)
         {
@@ -665,7 +665,7 @@ struct npc_wizzlecranks_shredderAI : public npc_escortAI
         }
     }
 
-    void WaypointStart(uint32 uiPointId)
+    void WaypointStart(uint32 uiPointId) override
     {
         switch (uiPointId)
         {
@@ -681,7 +681,7 @@ struct npc_wizzlecranks_shredderAI : public npc_escortAI
         }
     }
 
-    void JustSummoned(Creature* pSummoned)
+    void JustSummoned(Creature* pSummoned) override
     {
         if (pSummoned->GetEntry() == NPC_PILOT_WIZZ)
             m_creature->SetStandState(UNIT_STAND_STATE_DEAD);
@@ -690,9 +690,9 @@ struct npc_wizzlecranks_shredderAI : public npc_escortAI
             pSummoned->AI()->AttackStart(m_creature);
     }
 
-    void UpdateEscortAI(const uint32 uiDiff)
+    void UpdateEscortAI(const uint32 uiDiff) override
     {
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
         {
             if (m_bIsPostEvent)
             {
@@ -736,7 +736,7 @@ bool QuestAccept_npc_wizzlecranks_shredder(Player* pPlayer, Creature* pCreature,
     if (pQuest->GetQuestId() == QUEST_ESCAPE)
     {
         DoScriptText(SAY_START, pCreature);
-        pCreature->setFaction(FACTION_RATCHET);
+        pCreature->SetFactionTemplateId(FACTION_RATCHET);
 
         if (npc_wizzlecranks_shredderAI* pEscortAI = dynamic_cast<npc_wizzlecranks_shredderAI*>(pCreature->AI()))
             pEscortAI->Start(true, pPlayer->GetGUID(), pQuest);
@@ -822,7 +822,7 @@ struct npc_regthar_deathgateAI : public ScriptedAI
 
         ResetVars();
     }
-    void Reset()
+    void Reset() override
     {
 
     }
@@ -964,7 +964,7 @@ struct npc_regthar_deathgateAI : public ScriptedAI
 
         ResetVars();
     }
-    void SummonedCreatureJustDied(Creature* pSummoned)
+    void SummonedCreatureJustDied(Creature* pSummoned) override
     {
         if (!pSummoned)
             return;
@@ -982,7 +982,6 @@ struct npc_regthar_deathgateAI : public ScriptedAI
                     break;
                 }
             }
-
 
             if (deadKolkarCount == 10)
             {
@@ -1054,7 +1053,7 @@ struct npc_regthar_deathgateAI : public ScriptedAI
             }
         }
     }
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (eventPhase > 0)
         {
@@ -1084,7 +1083,7 @@ struct npc_regthar_deathgateAI : public ScriptedAI
             else
                 phaseTimer -= uiDiff;
         }
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         DoMeleeAttackIfReady();
@@ -1160,7 +1159,7 @@ struct npc_kolkar_invaderAI : public ScriptedAI
     {
         Reset();
     }
-    void Reset()
+    void Reset() override
     {
         // torchTimer=30000;
         chargeTimer = 0;
@@ -1171,16 +1170,16 @@ struct npc_kolkar_invaderAI : public ScriptedAI
     uint32 chargeTimer;
     uint32 strikeTimer;
     uint32 tetanosTimer;
-    void MovementInform(uint32 movementType, uint32 moveId)
+    void MovementInform(uint32 movementType, uint32 moveId) override
     {
         if (movementType != POINT_MOTION_TYPE || moveId != 2)
             return;
         //m_creature->CastSpell( m_creature->GetPositionX() + 10*cos( m_creature->GetOrientation()),  m_creature->GetPositionY() + 10*sin( m_creature->GetOrientation()),  m_creature->GetPositionZ(), SPELL_TORCH, false);
     }
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
 
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
         {
             // if (torchTimer < uiDiff)
             // {
@@ -1197,9 +1196,9 @@ struct npc_kolkar_invaderAI : public ScriptedAI
 
         if (chargeTimer < uiDiff)
         {
-            if (m_creature->GetDistance(m_creature->getVictim()) > 12)
+            if (m_creature->GetDistance(m_creature->GetVictim()) > 12)
             {
-                if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_CHARGE, false) == CAST_OK)
+                if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_CHARGE, false) == CAST_OK)
                 {
                     chargeTimer = 15000;
                     DoScriptText(EMOTE_CHARGE, m_creature);
@@ -1210,14 +1209,14 @@ struct npc_kolkar_invaderAI : public ScriptedAI
             chargeTimer -= uiDiff;
         if (strikeTimer < uiDiff)
         {
-            if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_STRIKE, false) == CAST_OK)
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_STRIKE, false) == CAST_OK)
                 strikeTimer = urand(4000, 9000);
         }
         else
             strikeTimer -= uiDiff;
         if (tetanosTimer < uiDiff)
         {
-            if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_TETANOS, false) == CAST_OK)
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_TETANOS, false) == CAST_OK)
                 tetanosTimer = 30000;
         }
         else
@@ -1236,25 +1235,25 @@ struct npc_axe_throwerAI : public ScriptedAI
     {
         Reset();
     }
-    void Reset()
+    void Reset() override
     {
         throwTimer = 0;
     }
-    void Aggro(Unit *who)
+    void Aggro(Unit *who) override
     {
         if (urand(0, 1))
             DoScriptText(urand(0, 1) ? SAY_HORDE : SAY_FOES, m_creature);
     }
     uint32 throwTimer;
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
 
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         if (throwTimer < uiDiff)
         {
-            if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_AXE_THROW, false) == CAST_OK)
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_AXE_THROW, false) == CAST_OK)
                 throwTimer = 1000;
         }
         else
@@ -1273,25 +1272,25 @@ struct npc_warlord_kromzarAI : public ScriptedAI
     {
         Reset();
     }
-    void Reset()
+    void Reset() override
     {
         strikeTimer = urand(4000, 7000);
     }
     uint32 strikeTimer;
 
-    void JustDied(Unit* pKiller)
+    void JustDied(Unit* pKiller) override
     {
         m_creature->CastSpell(m_creature, 13965, true); //SPELL_BANNER
     }
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
 
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         if (strikeTimer < uiDiff)
         {
-            if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_STRIKE, false) == CAST_OK)
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_STRIKE, false) == CAST_OK)
                 strikeTimer = urand(5000, 8000);
         }
         else
@@ -1331,12 +1330,12 @@ struct npc_razormane_stalkerAI : public ScriptedAI
     void UpdateAI(const uint32 diff) override
     {
 
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         if (SinisterStrike_Timer < diff)
         {
-            DoCastSpellIfCan(m_creature->getVictim(), SPELL_SINISTERSTRIKE);
+            DoCastSpellIfCan(m_creature->GetVictim(), SPELL_SINISTERSTRIKE);
             SinisterStrike_Counter += 1;
             if (SinisterStrike_Counter == 1) SinisterStrike_Timer = 15000;
             else if (SinisterStrike_Counter == 2) SinisterStrike_Timer = 12000;
@@ -1457,7 +1456,7 @@ struct npc_sarilus_foulborneAI : ScriptedAI
 
     void UpdateAI(uint32 const uiDiff) override
     {
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         if (m_uiElementalsTimer < uiDiff)
@@ -1470,7 +1469,7 @@ struct npc_sarilus_foulborneAI : ScriptedAI
 
         if (m_uiFrostboltTimer < uiDiff)
         {
-            if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_FROSTBOLT) == CAST_OK)
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_FROSTBOLT) == CAST_OK)
                 m_uiFrostboltTimer = urand(3500, 4500);
         }
         else

@@ -77,7 +77,7 @@ struct boss_mr_smiteAI : public ScriptedAI
 
     void AttackedBy(Unit* pAttacker) override
     {
-        if (m_creature->getVictim())
+        if (m_creature->GetVictim())
             return;
 
         if (m_uiPhase > PHASE_3)
@@ -114,7 +114,7 @@ struct boss_mr_smiteAI : public ScriptedAI
         {
             if (uiMotionType == POINT_MOTION_TYPE)
             {
-                if (Unit* target = m_creature->getVictim())
+                if (Unit* target = m_creature->GetVictim())
                     m_creature->GetMotionMaster()->MoveChase(target);
             }
             return;
@@ -187,7 +187,7 @@ struct boss_mr_smiteAI : public ScriptedAI
 
     void PhaseEquipEnd()
     {
-        // We don't have getVictim, so select from threat list
+        // We don't have GetVictim, so select from threat list
         Unit* pVictim = m_creature->SelectAttackingTarget(ATTACKING_TARGET_TOPAGGRO, 0);
 
         if (!pVictim)
@@ -206,7 +206,7 @@ struct boss_mr_smiteAI : public ScriptedAI
 
     void UpdateAI(const uint32 uiDiff) override
     {
-        Unit * target = m_creature->getVictim();
+        Unit * target = m_creature->GetVictim();
         if (!m_creature->SelectHostileTarget() || !target)
         {
             if (m_uiEquipTimer)
@@ -249,7 +249,7 @@ struct boss_mr_smiteAI : public ScriptedAI
                         m_uiPhase = PHASE_EQUIP_START;
                         m_uiEquipTimer = 2500;
 
-                        // will clear getVictim (m_attacking)
+                        // will clear GetVictim (m_attacking)
                         m_creature->GetMotionMaster()->Clear();
                         equiping = true;
                         m_creature->AttackStop(true);
@@ -263,7 +263,7 @@ struct boss_mr_smiteAI : public ScriptedAI
             {
                 if (m_uiThrashTimer < uiDiff)//instead of the aura, because the aura procs too much
                 {
-                    if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_THRASH) == CAST_OK)
+                    if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_THRASH) == CAST_OK)
                         m_uiThrashTimer = urand(1500, 4000);
                 }
                 else
@@ -277,7 +277,7 @@ struct boss_mr_smiteAI : public ScriptedAI
                         m_uiPhase = PHASE_EQUIP_START;
                         m_uiEquipTimer = 2500;
 
-                        // will clear getVictim (m_attacking)
+                        // will clear GetVictim (m_attacking)
                         m_creature->GetMotionMaster()->Clear();
                         equiping = true;
                         m_creature->AttackStop(true);
@@ -291,7 +291,7 @@ struct boss_mr_smiteAI : public ScriptedAI
             {
                 if (m_uiSlamTimer < uiDiff)
                 {
-                    if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_SMITE_SLAM) == CAST_OK)
+                    if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_SMITE_SLAM) == CAST_OK)
                         m_uiSlamTimer = 11000;
                 }
                 else

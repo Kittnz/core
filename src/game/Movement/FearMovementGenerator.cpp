@@ -19,7 +19,7 @@ void FearMovementGenerator<T>::_setTargetLocation(T &owner)
         return;
 
     // Ignore in case other no reaction state
-    if (owner.hasUnitState((UNIT_STAT_CAN_NOT_REACT | UNIT_STAT_CAN_NOT_MOVE | UNIT_STAT_STUNNED | UNIT_STAT_PENDING_STUNNED) & ~UNIT_STAT_FLEEING))
+    if (owner.HasUnitState((UNIT_STAT_CAN_NOT_REACT | UNIT_STAT_CAN_NOT_MOVE | UNIT_STAT_STUNNED | UNIT_STAT_PENDING_STUNNED) & ~UNIT_STAT_FLEEING))
         return;
 
     if (owner.IsRooted())
@@ -29,7 +29,7 @@ void FearMovementGenerator<T>::_setTargetLocation(T &owner)
     if (!_getPoint(owner, x, y, z))
         return;
 
-    owner.addUnitState(UNIT_STAT_FLEEING_MOVE);
+    owner.AddUnitState(UNIT_STAT_FLEEING_MOVE);
 
     PathFinder path(&owner);
     path.SetTransport(owner.GetTransport());
@@ -112,7 +112,7 @@ bool FearMovementGenerator<T>::_getPoint(T &owner, float &x, float &y, float &z)
 template<class T>
 void FearMovementGenerator<T>::Initialize(T &owner)
 {
-    owner.addUnitState(UNIT_STAT_FLEEING | UNIT_STAT_FLEEING_MOVE);
+    owner.AddUnitState(UNIT_STAT_FLEEING | UNIT_STAT_FLEEING_MOVE);
     owner.StopMoving();
     owner.UpdateControl();
 
@@ -128,7 +128,7 @@ void FearMovementGenerator<T>::Initialize(T &owner)
 template<>
 void FearMovementGenerator<Player>::Finalize(Player &owner)
 {
-    owner.clearUnitState(UNIT_STAT_FLEEING | UNIT_STAT_FLEEING_MOVE);
+    owner.ClearUnitState(UNIT_STAT_FLEEING | UNIT_STAT_FLEEING_MOVE);
     owner.StopMoving();
     owner.UpdateControl();
 }
@@ -136,8 +136,8 @@ void FearMovementGenerator<Player>::Finalize(Player &owner)
 template<>
 void FearMovementGenerator<Creature>::Finalize(Creature &owner)
 {
-    owner.SetWalk(!owner.hasUnitState(UNIT_STAT_RUNNING), false);
-    owner.clearUnitState(UNIT_STAT_FLEEING | UNIT_STAT_FLEEING_MOVE);
+    owner.SetWalk(!owner.HasUnitState(UNIT_STAT_RUNNING), false);
+    owner.ClearUnitState(UNIT_STAT_FLEEING | UNIT_STAT_FLEEING_MOVE);
     owner.UpdateControl();
 }
 
@@ -145,7 +145,7 @@ template<class T>
 void FearMovementGenerator<T>::Interrupt(T &owner)
 {
     // flee state still applied while movegen disabled
-    owner.clearUnitState(UNIT_STAT_FLEEING_MOVE);
+    owner.ClearUnitState(UNIT_STAT_FLEEING_MOVE);
 }
 
 template<class T>
@@ -157,12 +157,12 @@ void FearMovementGenerator<T>::Reset(T &owner)
 template<class T>
 bool FearMovementGenerator<T>::Update(T &owner, const uint32 & time_diff)
 {
-    if (!&owner || !owner.isAlive())
+    if (!&owner || !owner.IsAlive())
         return false;
 
-    if (owner.hasUnitState((UNIT_STAT_CAN_NOT_REACT | UNIT_STAT_CAN_NOT_MOVE | UNIT_STAT_STUNNED | UNIT_STAT_PENDING_STUNNED) & ~UNIT_STAT_FLEEING))
+    if (owner.HasUnitState((UNIT_STAT_CAN_NOT_REACT | UNIT_STAT_CAN_NOT_MOVE | UNIT_STAT_STUNNED | UNIT_STAT_PENDING_STUNNED) & ~UNIT_STAT_FLEEING))
     {
-        owner.clearUnitState(UNIT_STAT_FLEEING_MOVE);
+        owner.ClearUnitState(UNIT_STAT_FLEEING_MOVE);
         return true;
     }
 
@@ -210,12 +210,12 @@ void TimedFearMovementGenerator::Initialize(Unit& owner)
 
 void TimedFearMovementGenerator::Finalize(Unit &owner)
 {
-    owner.clearUnitState(UNIT_STAT_FLEEING | UNIT_STAT_FLEEING_MOVE);
+    owner.ClearUnitState(UNIT_STAT_FLEEING | UNIT_STAT_FLEEING_MOVE);
     owner.UpdateControl();
 
-    if (Unit* victim = owner.getVictim())
+    if (Unit* victim = owner.GetVictim())
     {
-        if (owner.isAlive())
+        if (owner.IsAlive())
         {
             owner.AttackStop(true);
             ((Creature*)&owner)->AI()->AttackStart(victim);
@@ -230,12 +230,12 @@ TimedFearMovementGenerator::TimedFearMovementGenerator(ObjectGuid fright, uint32
 
 bool TimedFearMovementGenerator::Update(Unit & owner, const uint32 & time_diff)
 {
-    if (!owner.isAlive())
+    if (!owner.IsAlive())
         return false;
 
-    if (owner.hasUnitState((UNIT_STAT_CAN_NOT_REACT | UNIT_STAT_CAN_NOT_MOVE | UNIT_STAT_STUNNED | UNIT_STAT_PENDING_STUNNED) & ~UNIT_STAT_FLEEING))
+    if (owner.HasUnitState((UNIT_STAT_CAN_NOT_REACT | UNIT_STAT_CAN_NOT_MOVE | UNIT_STAT_STUNNED | UNIT_STAT_PENDING_STUNNED) & ~UNIT_STAT_FLEEING))
     {
-        owner.clearUnitState(UNIT_STAT_FLEEING_MOVE);
+        owner.ClearUnitState(UNIT_STAT_FLEEING_MOVE);
         return true;
     }
     

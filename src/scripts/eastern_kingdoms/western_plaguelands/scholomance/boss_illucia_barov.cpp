@@ -24,10 +24,10 @@ EndScriptData */
 #include "scriptPCH.h"
 #include "scholomance.h"
 
-#define SPELL_CURSEOFAGONY      18671
-#define SPELL_SHADOWSHOCK       20603
-#define SPELL_SILENCE           15487
-#define SPELL_FEAR              6215
+#define SPELL_CURSEOFAGONY 18671
+#define SPELL_SHADOWSHOCK 20603
+#define SPELL_SILENCE 15487
+#define SPELL_FEAR 6215
 
 struct boss_illuciabarovAI : public ScriptedAI
 {
@@ -41,7 +41,7 @@ struct boss_illuciabarovAI : public ScriptedAI
     uint32 Silence_Timer;
     uint32 Fear_Timer;
 
-    void Reset()
+    void Reset() override
     {
         CurseOfAgony_Timer = 18000;
         ShadowShock_Timer = 9000;
@@ -49,21 +49,21 @@ struct boss_illuciabarovAI : public ScriptedAI
         Fear_Timer = 30000;
     }
 
-    void JustDied(Unit *killer)
+    void JustDied(Unit *killer) override
     {
         if (ScriptedInstance* pInstance = (ScriptedInstance*)m_creature->GetInstanceData())
             pInstance->SetData(TYPE_ILLUCIABAROV, DONE);
     }
 
-    void UpdateAI(const uint32 diff)
+    void UpdateAI(const uint32 diff) override
     {
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         //CurseOfAgony_Timer
         if (CurseOfAgony_Timer < diff)
         {
-            DoCastSpellIfCan(m_creature->getVictim(), SPELL_CURSEOFAGONY);
+            DoCastSpellIfCan(m_creature->GetVictim(), SPELL_CURSEOFAGONY);
             CurseOfAgony_Timer = 30000;
         }
         else CurseOfAgony_Timer -= diff;
@@ -82,7 +82,7 @@ struct boss_illuciabarovAI : public ScriptedAI
         //Silence_Timer
         if (Silence_Timer < diff)
         {
-            DoCastSpellIfCan(m_creature->getVictim(), SPELL_SILENCE);
+            DoCastSpellIfCan(m_creature->GetVictim(), SPELL_SILENCE);
             Silence_Timer = 14000;
         }
         else Silence_Timer -= diff;
@@ -90,7 +90,7 @@ struct boss_illuciabarovAI : public ScriptedAI
         //Fear_Timer
         if (Fear_Timer < diff)
         {
-            DoCastSpellIfCan(m_creature->getVictim(), SPELL_FEAR);
+            DoCastSpellIfCan(m_creature->GetVictim(), SPELL_FEAR);
             Fear_Timer = 30000;
         }
         else Fear_Timer -= diff;

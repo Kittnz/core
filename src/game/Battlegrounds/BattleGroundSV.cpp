@@ -59,7 +59,7 @@ void BattleGroundSV::StartingEventOpenDoors()
         {
             plr->SetHealth(plr->GetMaxHealth());
 
-            if (plr->getPowerType() == POWER_MANA)
+            if (plr->GetPowerType() == POWER_MANA)
                 plr->SetPower(POWER_MANA, plr->GetMaxPower(POWER_MANA));
         }
     }

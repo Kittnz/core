@@ -106,12 +106,12 @@ struct mob_viscidus_globAI : public ScriptedAI
     { }
 
     // dummy methods
-    void Reset() { }
-    void AttackStart(Unit* /*pWho*/) { }
-    void MoveInLineOfSight(Unit* /*pWho*/) { }
+    void Reset() override { }
+    void AttackStart(Unit* /*pWho*/) override { }
+    void MoveInLineOfSight(Unit* /*pWho*/) override { }
 
     // Implements acceleration on timer, prevents combat.
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (m_uiGlobStartAccelerationTimer <= uiDiff)
         {
@@ -148,18 +148,18 @@ struct mob_viscidus_triggerAI : public ScriptedAI
     { }
 
     // dummy methods
-    void Reset() { }
-    void AttackStart(Unit* /*pWho*/) { }
-    void MoveInLineOfSight(Unit* /*pWho*/) { }
+    void Reset() override { }
+    void AttackStart(Unit* /*pWho*/) override { }
+    void MoveInLineOfSight(Unit* /*pWho*/) override { }
     // Implements toxin cloud on timer, prevents combat.
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (m_uiToxinDelayTimer <= uiDiff)
         {
             if (!m_spellCasted)
             {
                 // set faction and flags before toxin cloud, so it won't damage a boss.
-                m_creature->setFaction(14); // 14 is a hostile faction
+                m_creature->SetFactionTemplateId(14); // 14 is a hostile faction
                 m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_ATTACKABLE_1);
 
                 m_spellCasted = true;
@@ -213,18 +213,18 @@ struct boss_viscidusAI : public ScriptedAI
         Reset();
     }
 
-    void Reset()
+    void Reset() override
     {
         m_uiGrowTimer = 0;
-        m_uiPhase                 = PHASE_NORMAL;
-        m_uiPhaseTimer            = 0;
+        m_uiPhase = PHASE_NORMAL;
+        m_uiPhaseTimer = 0;
 
-        m_uiRestoreTargetTimer    = 0;
+        m_uiRestoreTargetTimer = 0;
 
-        m_uiHitCount              = 0;
-        m_uiExplodeDelayTimer     = 0;
-        m_uiToxinTimer            = urand(30000, 40000);
-        m_uiPoisonShockTimer      = urand(7000, 12000);
+        m_uiHitCount = 0;
+        m_uiExplodeDelayTimer = 0;
+        m_uiToxinTimer = urand(30000, 40000);
+        m_uiPoisonShockTimer = urand(7000, 12000);
         m_uiPoisonBoltVolleyTimer = urand(10000, 15000);
         m_uiGrowCount = 0;
         m_creature->SetObjectScale(m_initialScale);
@@ -239,7 +239,7 @@ struct boss_viscidusAI : public ScriptedAI
     void MoveInLineOfSight(Unit* pWho) override
     {
         if (pWho->GetTypeId() == TYPEID_PLAYER
-            && !m_creature->isInCombat()
+            && !m_creature->IsInCombat()
             && m_creature->IsWithinDistInMap(pWho, 95.0f, true)
             && m_creature->IsWithinLOSInMap(pWho)
             && !pWho->HasAuraType(SPELL_AURA_FEIGN_DEATH)
@@ -251,13 +251,13 @@ struct boss_viscidusAI : public ScriptedAI
         ScriptedAI::MoveInLineOfSight(pWho);
     }
 
-    void Aggro(Unit* /*pWho*/)
+    void Aggro(Unit* /*pWho*/) override
     {
         if (m_pInstance)
             m_pInstance->SetData(TYPE_VISCIDUS, IN_PROGRESS);
     }
 
-    void JustReachedHome()
+    void JustReachedHome() override
     {
         if (m_pInstance)
             m_pInstance->SetData(TYPE_VISCIDUS, FAIL);
@@ -265,13 +265,13 @@ struct boss_viscidusAI : public ScriptedAI
         DoCastSpellIfCan(m_creature, SPELL_DESPAWN_GLOBS, CF_TRIGGERED);
     }
 
-    void JustDied(Unit* /*pKiller*/)
+    void JustDied(Unit* /*pKiller*/) override
     {
         if (m_pInstance)
             m_pInstance->SetData(TYPE_VISCIDUS, DONE);
     }
 
-    void DamageTaken(Unit* pDealer, uint32 &damage)
+    void DamageTaken(Unit* pDealer, uint32 &damage) override
     {
         if (pDealer->IsCreature() && ((Creature*)pDealer)->GetEntry() == NPC_VISCIDUS)
             return;
@@ -284,7 +284,7 @@ struct boss_viscidusAI : public ScriptedAI
             m_creature->SetHealthPercent(1.0f);
     }
 
-    void JustSummoned(Creature* pSummoned)
+    void JustSummoned(Creature* pSummoned) override
     {
         if (pSummoned->GetEntry() == NPC_GLOB_OF_VISCIDUS)
         {
@@ -307,7 +307,7 @@ struct boss_viscidusAI : public ScriptedAI
 
         DoResetThreat();
         m_creature->SetVisibility(VISIBILITY_ON);
-        m_creature->clearUnitState(UNIT_STAT_DIED);
+        m_creature->ClearUnitState(UNIT_STAT_DIED);
         m_creature->RemoveFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_DEAD);
         m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
         m_uiPhase = PHASE_NORMAL;
@@ -316,7 +316,7 @@ struct boss_viscidusAI : public ScriptedAI
         SetCombatMovement(true);
     }
 
-    void SummonedCreatureJustDied(Creature* pSummoned)
+    void SummonedCreatureJustDied(Creature* pSummoned) override
     {
         if (pSummoned->GetEntry() == NPC_GLOB_OF_VISCIDUS)
         {
@@ -344,7 +344,7 @@ struct boss_viscidusAI : public ScriptedAI
         }
     }
 
-    void SummonedMovementInform(Creature* pSummoned, uint32 uiType, uint32 uiPointId)
+    void SummonedMovementInform(Creature* pSummoned, uint32 uiType, uint32 uiPointId) override
     {
         if (pSummoned->GetEntry() != NPC_GLOB_OF_VISCIDUS || uiType != POINT_MOTION_TYPE)
             return;
@@ -363,7 +363,7 @@ struct boss_viscidusAI : public ScriptedAI
         }
     }
 
-    void SpellHit(Unit* pCaster, const SpellEntry* pSpell)
+    void SpellHit(Unit* pCaster, const SpellEntry* pSpell) override
     {
         if (pSpell->Id == SPELL_VISCIDUS_EXPLODE && m_uiPhase != PHASE_EXPLODED)
         {
@@ -468,9 +468,9 @@ struct boss_viscidusAI : public ScriptedAI
         }
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         HackyScaleUpdate();
@@ -511,7 +511,7 @@ struct boss_viscidusAI : public ScriptedAI
         {
             if (m_uiRestoreTargetTimer <= uiDiff)
             {
-                if (Unit* pTarget = m_creature->getVictim())
+                if (Unit* pTarget = m_creature->GetVictim())
                 {
                     m_creature->SetInFront(pTarget);
                     m_creature->SetTargetGuid(pTarget->GetObjectGuid());

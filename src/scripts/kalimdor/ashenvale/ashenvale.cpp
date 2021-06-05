@@ -36,50 +36,50 @@ EndContentData */
 
 enum
 {
-    SAY_MUG_START1          = -1000501,
-    SAY_MUG_START2          = -1000502,
-    SAY_MUG_BRAZIER         = -1000503,
-    SAY_MUG_BRAZIER_WAIT    = -1000504,
-    SAY_MUG_ON_GUARD        = -1000505,
-    SAY_MUG_REST            = -1000506,
-    SAY_MUG_DONE            = -1000507,
-    SAY_MUG_GRATITUDE       = -1000508,
-    SAY_MUG_PATROL          = -1000509,
-    SAY_MUG_RETURN          = -1000510,
+    SAY_MUG_START1 = -1000501,
+    SAY_MUG_START2 = -1000502,
+    SAY_MUG_BRAZIER = -1000503,
+    SAY_MUG_BRAZIER_WAIT = -1000504,
+    SAY_MUG_ON_GUARD = -1000505,
+    SAY_MUG_REST = -1000506,
+    SAY_MUG_DONE = -1000507,
+    SAY_MUG_GRATITUDE = -1000508,
+    SAY_MUG_PATROL = -1000509,
+    SAY_MUG_RETURN = -1000510,
 
-    SAY_MUG_Q_COMPETENCE    = -1780221,
-    SAY_MUG_IMPATIENT       = -1780222,
+    SAY_MUG_Q_COMPETENCE = -1780221,
+    SAY_MUG_IMPATIENT = -1780222,
 
-    QUEST_VORSHA            = 6641,
+    QUEST_VORSHA = 6641,
 
-    GO_NAGA_BRAZIER         = 178247,
-    GO_BRAZIER_GUID         = 47873,
+    GO_NAGA_BRAZIER = 178247,
+    GO_BRAZIER_GUID = 47873,
 
-    NPC_MUGLASH             = 12717,
+    NPC_MUGLASH = 12717,
 
-    NPC_WRATH_RIDER         = 3713,
-    NPC_WRATH_SORCERESS     = 3717,
-    NPC_WRATH_RAZORTAIL     = 3712,
+    NPC_WRATH_RIDER = 3713,
+    NPC_WRATH_SORCERESS = 3717,
+    NPC_WRATH_RAZORTAIL = 3712,
 
-    NPC_WRATH_PRIESTESS     = 3944,
-    NPC_WRATH_MYRMIDON      = 3711,
-    NPC_WRATH_SEAWITCH      = 3715,
+    NPC_WRATH_PRIESTESS = 3944,
+    NPC_WRATH_MYRMIDON = 3711,
+    NPC_WRATH_SEAWITCH = 3715,
 
-    NPC_VORSHA              = 12940
+    NPC_VORSHA = 12940
 };
 
 static float m_afFirstNagaCoord[3][3] =
 {
-    {3603.504150f, 1122.631104f, 1.635f},                   // rider
-    {3589.293945f, 1148.664063f, 5.565f},                   // sorceress
-    {3609.925537f, 1168.759521f, -1.168f}                   // razortail
+    {3603.504150f, 1122.631104f, 1.635f}, // rider
+    {3589.293945f, 1148.664063f, 5.565f}, // sorceress
+    {3609.925537f, 1168.759521f, -1.168f} // razortail
 };
 
 static float m_afSecondNagaCoord[3][3] =
 {
-    {3609.925537f, 1168.759521f, -1.168f},                  // witch
-    {3645.652100f, 1139.425415f, 1.322f},                   // priest
-    {3583.602051f, 1128.405762f, 2.347f}                    // myrmidon
+    {3609.925537f, 1168.759521f, -1.168f}, // witch
+    {3645.652100f, 1139.425415f, 1.322f}, // priest
+    {3583.602051f, 1128.405762f, 2.347f} // myrmidon
 };
 
 static float m_fVorshaCoord[] = {3633.056885f, 1172.924072f, -5.388f};
@@ -101,7 +101,7 @@ struct npc_muglashAI : public npc_escortAI
     uint32 m_uiEventTimer;
     uint32 impatienceTimer;
 
-    void Reset()
+    void Reset() override
     {
         m_uiEventTimer = 10000;
         impatienceTimer = 30000;
@@ -114,7 +114,7 @@ struct npc_muglashAI : public npc_escortAI
         }
     }
 
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* pWho) override
     {
         if (HasEscortState(STATE_ESCORT_PAUSED))
         {
@@ -125,7 +125,7 @@ struct npc_muglashAI : public npc_escortAI
         }
     }
 
-    void WaypointReached(uint32 uiPointId)
+    void WaypointReached(uint32 uiPointId) override
     {
         switch (uiPointId)
         {
@@ -187,14 +187,14 @@ struct npc_muglashAI : public npc_escortAI
         }
     }
 
-    void JustSummoned(Creature* pSummoned)
+    void JustSummoned(Creature* pSummoned) override
     {
         pSummoned->AI()->AttackStart(m_creature);
     }
 
-    void UpdateEscortAI(const uint32 uiDiff)
+    void UpdateEscortAI(const uint32 uiDiff) override
     {
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
         {
             if (HasEscortState(STATE_ESCORT_PAUSED))
             {
@@ -268,7 +268,7 @@ bool QuestAccept_npc_muglash(Player* pPlayer, Creature* pCreature, const Quest* 
         if (npc_muglashAI* pEscortAI = dynamic_cast<npc_muglashAI*>(pCreature->AI()))
         {
             DoScriptText(SAY_MUG_START1, pCreature);
-            pCreature->setFaction(FACTION_ESCORT_H_PASSIVE);
+            pCreature->SetFactionTemplateId(FACTION_ESCORT_H_PASSIVE);
 
             pEscortAI->Start(false, pPlayer->GetGUID(), pQuest);
         }
@@ -328,12 +328,12 @@ struct npc_ruul_snowhoofAI : public npc_escortAI
         Reset();
     }
 
-    void Reset()
+    void Reset() override
     {
         m_creature->AddAura(BEAR_AURA);
     }
 
-    void WaypointReached(uint32 uiPointId)
+    void WaypointReached(uint32 uiPointId) override
     {
         //m_creature->MonsterYell("DEBUG : WayPoint reached", 0); //The hell, still skipping waypoints 13/02/2015
         //sLog.outString("DEBUG : Ruul : WayPoint n° %u", uiPointId);
@@ -358,7 +358,7 @@ struct npc_ruul_snowhoofAI : public npc_escortAI
         }
     }
 
-    void JustSummoned(Creature* summoned)
+    void JustSummoned(Creature* summoned) override
     {
         summoned->AI()->AttackStart(m_creature);
     }
@@ -368,7 +368,7 @@ bool QuestAccept_npc_ruul_snowhoof(Player* pPlayer, Creature* pCreature, const Q
 {
     if (pQuest->GetQuestId() == QUEST_FREEDOM_TO_RUUL)
     {
-        pCreature->setFaction(FACTION_ESCORTEE);
+        pCreature->SetFactionTemplateId(FACTION_ESCORTEE);
         pCreature->SetStandState(UNIT_STAND_STATE_STAND);
 
         if (npc_ruul_snowhoofAI* pEscortAI = dynamic_cast<npc_ruul_snowhoofAI*>(pCreature->AI()))
@@ -415,12 +415,12 @@ struct npc_torekAI : public npc_escortAI
     uint32 m_uiRend_Timer;
     uint32 m_uiThunderclap_Timer;
 
-    void Reset()
+    void Reset() override
     {
         m_uiRend_Timer = 5000;
         m_uiThunderclap_Timer = 8000;
     }
-    void JustDied(Unit* pKiller)
+    void JustDied(Unit* pKiller) override
     {
         std::list<Creature*> lCrea;
         m_creature->GetCreatureListWithEntryInGrid(lCrea, NPC_SPLINTERTREE_RAIDER, 40.0f);
@@ -428,7 +428,7 @@ struct npc_torekAI : public npc_escortAI
             (*it)->DisappearAndDie();
         npc_escortAI::JustDied(pKiller);
     }
-    void WaypointReached(uint32 uiPointId)
+    void WaypointReached(uint32 uiPointId) override
     {
         Player* pPlayer = GetPlayerForEscort();
 
@@ -465,19 +465,19 @@ struct npc_torekAI : public npc_escortAI
         }
     }
 
-    void JustSummoned(Creature* pSummoned)
+    void JustSummoned(Creature* pSummoned) override
     {
         pSummoned->AI()->AttackStart(m_creature);
     }
 
-    void UpdateEscortAI(const uint32 uiDiff)
+    void UpdateEscortAI(const uint32 uiDiff) override
     {
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         if (m_uiRend_Timer < uiDiff)
         {
-            DoCastSpellIfCan(m_creature->getVictim(), SPELL_REND);
+            DoCastSpellIfCan(m_creature->GetVictim(), SPELL_REND);
             m_uiRend_Timer = 20000;
         }
         else
@@ -571,7 +571,7 @@ struct npc_feero_ironhandAI : public npc_escortAI
     uint8 m_uiCreaturesCount;
     bool m_bIsAttacked;
 
-    void Reset()
+    void Reset() override
     {
         if (!HasEscortState(STATE_ESCORT_ESCORTING))
         {
@@ -582,11 +582,11 @@ struct npc_feero_ironhandAI : public npc_escortAI
 
     void JustRespawned() override
     {
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
         npc_escortAI::JustRespawned();
     }
 
-    void WaypointReached(uint32 uiPointId)
+    void WaypointReached(uint32 uiPointId) override
     {
         switch (uiPointId)
         {
@@ -617,7 +617,7 @@ struct npc_feero_ironhandAI : public npc_escortAI
         }
     }
 
-    void AttackedBy(Unit* pWho)
+    void AttackedBy(Unit* pWho) override
     {
         // Yell only at the first attack
         if (!m_bIsAttacked)
@@ -639,7 +639,7 @@ struct npc_feero_ironhandAI : public npc_escortAI
         m_creature->SummonCreature(uiEntry, fX, fY, fZ, 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 20000);
     }
 
-    void SummonedCreatureJustDied(Creature* pSummoned)
+    void SummonedCreatureJustDied(Creature* pSummoned) override
     {
         --m_uiCreaturesCount;
 
@@ -662,7 +662,7 @@ struct npc_feero_ironhandAI : public npc_escortAI
         }
     }
 
-    void JustSummoned(Creature* pSummoned)
+    void JustSummoned(Creature* pSummoned) override
     {
         if (pSummoned->GetEntry() == NPC_FORSAKEN_SCOUT)
         {
@@ -689,8 +689,8 @@ bool QuestAccept_npc_feero_ironhand(Player* pPlayer, Creature* pCreature, const 
     if (pQuest->GetQuestId() == QUEST_SUPPLIES_TO_AUBERDINE)
     {
         DoScriptText(SAY_QUEST_START, pCreature, pPlayer);
-        pCreature->setFaction(FACTION_ESCORT_A_NEUTRAL_PASSIVE);
-        pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+        pCreature->SetFactionTemplateId(FACTION_ESCORT_A_NEUTRAL_PASSIVE);
+        pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
         if (npc_feero_ironhandAI* pEscortAI = dynamic_cast<npc_feero_ironhandAI*>(pCreature->AI()))
             pEscortAI->Start(true, pPlayer->GetGUID(), pQuest);
     }
@@ -727,6 +727,7 @@ struct go_foulweald_totem_moundAI: public GameObjectAI
     {
         reset();
     }
+
     void reset()
     {
         eventPhase = 0;
@@ -790,7 +791,7 @@ struct go_foulweald_totem_moundAI: public GameObjectAI
         }
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (eventPhase == 0 || eventPhase > 4)
             return;
@@ -839,14 +840,14 @@ struct npc_enraged_foulwealdAI : public ScriptedAI
     {
         Reset();
     }
-    void Reset()
+    void Reset() override
     {
         m_creature->AddAura(SPELL_CORRUPTED_STRENGTH);
         timer = 0;
     }
     uint32 timer;
     uint64 guidMound;
-    void JustDied(Unit* pKiller)
+    void JustDied(Unit* pKiller) override
     {
         if (GameObject* gobj = m_creature->GetMap()->GetGameObject(guidMound))
         {
@@ -855,13 +856,13 @@ struct npc_enraged_foulwealdAI : public ScriptedAI
         }
     }
 
-    void MovementInform(uint32 uiType, uint32 uiPointId)
+    void MovementInform(uint32 uiType, uint32 uiPointId) override
     {
         if (uiType != POINT_MOTION_TYPE || uiPointId != 2)
             return;
         HitBanner();
     }
-    void AttackStart(Unit * unit)
+    void AttackStart(Unit * unit) override
     {
         if (m_creature->GetCurrentSpell(CURRENT_CHANNELED_SPELL))
             return;
@@ -880,13 +881,13 @@ struct npc_enraged_foulwealdAI : public ScriptedAI
         }
         return false;
     }
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (m_creature->GetCurrentSpell(CURRENT_CHANNELED_SPELL))
             return;
 
 
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
         {
             if (timer < uiDiff)
             {
@@ -907,7 +908,7 @@ struct npc_enraged_foulwealdAI : public ScriptedAI
         }
         DoMeleeAttackIfReady();
     }
-    void SpellHit(Unit* pCaster, const SpellEntry* pSpell)
+    void SpellHit(Unit* pCaster, const SpellEntry* pSpell) override
     {
         if (pSpell->Id == SPELL_DESTROY_KARANG_S_BANNER_2)
         {

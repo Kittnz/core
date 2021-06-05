@@ -119,7 +119,7 @@ struct boss_gythAI : public ScriptedAI
 
     uint32 checkEveryoneDeadTimer;
 
-    void Reset()
+    void Reset() override
     {
         uiDragonsTimer = 3000;
         uiOrcTimer = WAVE_TIMER;
@@ -213,13 +213,13 @@ struct boss_gythAI : public ScriptedAI
         for (const auto &i : PlList) {
             if (Player* pPlayer = i.getSource())
             {
-                if (!pPlayer->isInCombat())
+                if (!pPlayer->IsInCombat())
                     continue;
 
-                if (pPlayer->isAlive())
+                if (pPlayer->IsAlive())
                 {
                     pPlayer->CombatStop();
-                    pPlayer->getHostileRefManager().deleteReferences();
+                    pPlayer->GetHostileRefManager().deleteReferences();
                     m_creature->UpdateCombatWithZoneState(false);
                 }
             }
@@ -238,17 +238,17 @@ struct boss_gythAI : public ScriptedAI
         for (const auto &i : PlList) {
             if (Player* pPlayer = i.getSource())
             {
-                if (!pPlayer->isAlive())
+                if (!pPlayer->IsAlive())
                     deadNumber++;
 
-                if (!pPlayer->isInCombat())
+                if (!pPlayer->IsInCombat())
                     noCombatNumber++;
             }
         }
         return deadNumber == PlList.getSize() || (noCombatNumber == PlList.getSize() && waveRemainingCount > 0);
     }
 
-    void SummonedCreatureJustDied(Creature* summ)
+    void SummonedCreatureJustDied(Creature* summ) override
     {
         // Ne doit pas etre negatif
         if (waveRemainingCount > 0)
@@ -282,7 +282,7 @@ struct boss_gythAI : public ScriptedAI
             NefarianYell(5824);
             rend = nullptr;
 
-            if (m_creature && m_creature->isAlive())
+            if (m_creature && m_creature->IsAlive())
                 m_creature->DealDamage(m_creature, m_creature->GetHealth(), nullptr, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, nullptr, false);
 
             if (Unit* nefarian = Unit::GetUnit(*m_creature, nefarianGUID))
@@ -314,7 +314,7 @@ struct boss_gythAI : public ScriptedAI
     }
 
     // NOSTALRIUS END
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* pWho) override
     {
         if (m_pInstance)
         {
@@ -322,14 +322,14 @@ struct boss_gythAI : public ScriptedAI
             m_uiCombatDoorGUID = m_pInstance->GetData64(GO_GYTH_COMBAT_DOOR);
 
             rend = m_creature->SummonCreature(NPC_REND_BLACKHAND, 150.378f, -443.601f, 121.975, 1.606, TEMPSUMMON_DEAD_DESPAWN, 900000);
-            rend->addUnitState(UNIT_STAT_ROOT);
+            rend->AddUnitState(UNIT_STAT_ROOT);
             rend->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-            rend->setFaction(35);
+            rend->SetFactionTemplateId(35);
             rend->SetVisibility(VISIBILITY_ON);
             rend->SetDisplayId(sGameEventMgr.IsActiveEvent(2) ? MODEL_ID_REND_CHRISTMAS : MODEL_ID_REND); // Check if its Christmas too
         }
     }
-    void AttackStart(Unit *target)
+    void AttackStart(Unit *target) override
     {
         m_RendEventStarted = true;
         // $target commence a nous attaquer.
@@ -353,7 +353,7 @@ struct boss_gythAI : public ScriptedAI
         }
     }
 
-    void JustDied(Unit* pKiller)
+    void JustDied(Unit* pKiller) override
     {
 #ifdef DEBUG_ON
         sLog.outString("Boss GYTH JustDied");
@@ -364,7 +364,7 @@ struct boss_gythAI : public ScriptedAI
 
     }
 
-    void EnterEvadeMode()
+    void EnterEvadeMode() override
     {
 #ifdef DEBUG_ON
         sLog.outString("Boss GYTH EnterEvadeMode");
@@ -372,14 +372,14 @@ struct boss_gythAI : public ScriptedAI
         if (m_pInstance)
             m_pInstance->SetData(TYPE_GYTH, FAIL);
 
-        if (m_creature->isAlive())
+        if (m_creature->IsAlive())
         {
             m_creature->SetDeathState(JUST_DIED);
             m_creature->Respawn();
         }
         Reset();
     }
-    void JustReachedHome()
+    void JustReachedHome() override
     {
 #ifdef DEBUG_ON
         sLog.outString("Boss GYTH JustReachedHome");
@@ -387,7 +387,7 @@ struct boss_gythAI : public ScriptedAI
         if (m_pInstance)
             m_pInstance->SetData(TYPE_GYTH, FAIL);
 
-        if (m_creature->isAlive())
+        if (m_creature->IsAlive())
         {
             m_creature->SetDeathState(JUST_DIED);
             m_creature->Respawn();
@@ -408,9 +408,9 @@ struct boss_gythAI : public ScriptedAI
         ++waveRemainingCount;
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
-        if (!m_creature->isAlive())
+        if (!m_creature->IsAlive())
             return;
 
         if (!m_bInitialized)
@@ -439,7 +439,7 @@ struct boss_gythAI : public ScriptedAI
         if (!m_bRootSelf)
         {
             //DoCastSpellIfCan(m_creature, SPELL_ROOT_SELF);
-            m_creature->addUnitState(UNIT_STAT_ROOT);
+            m_creature->AddUnitState(UNIT_STAT_ROOT);
             m_bRootSelf = true;
         }
 
@@ -456,10 +456,10 @@ struct boss_gythAI : public ScriptedAI
                 //m_creature->GetMotionMaster()->Initialize();
 
                 m_creature->SetDisplayId(MODEL_ID_GYTH_MOUNTED);
-                m_creature->setFaction(14);
+                m_creature->SetFactionTemplateId(14);
                 m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                 //m_creature->RemoveAurasDueToSpell(SPELL_ROOT_SELF);
-                m_creature->clearUnitState(UNIT_STAT_ROOT);
+                m_creature->ClearUnitState(UNIT_STAT_ROOT);
 
                 // Start attack random player in map
                 m_creature->UpdateCombatWithZoneState(true);
@@ -586,16 +586,16 @@ struct boss_gythAI : public ScriptedAI
                 m_creature->SetDisplayId(MODEL_ID_GYTH);
                 if (rend) {
                     CreatureCreatePos pos((rend->GetMap()), m_creature->GetPositionX(), m_creature->GetPositionY(),
-                            m_creature->getVictim() ? m_creature->getVictim()->GetPositionZ() : m_creature->GetPositionZ(), 0);
+                            m_creature->GetVictim() ? m_creature->GetVictim()->GetPositionZ() : m_creature->GetPositionZ(), 0);
                     rend->SetSummonPoint(pos);
                     rend->GetMap()->CreatureRelocation(rend, m_creature->GetPositionX(), m_creature->GetPositionY(),
-                            m_creature->getVictim() ? m_creature->getVictim()->GetPositionZ() : m_creature->GetPositionZ(), 0);
+                            m_creature->GetVictim() ? m_creature->GetVictim()->GetPositionZ() : m_creature->GetPositionZ(), 0);
                     rend->UpdateCombatWithZoneState(true);
                     rend->SetInCombatWithZone();
-                    rend->setFaction(73);
+                    rend->SetFactionTemplateId(73);
                     rend->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                     rend->SetVisibility(VISIBILITY_ON);
-                    rend->clearUnitState(UNIT_STAT_ROOT);
+                    rend->ClearUnitState(UNIT_STAT_ROOT);
                 }
                 m_bSummonedRend = true;
             }
@@ -604,7 +604,7 @@ struct boss_gythAI : public ScriptedAI
         }                                                   // end if Aggro
 
         // Reset - if there are no target for attack
-        if (m_bAggro && (!m_creature->SelectHostileTarget() || !m_creature->getVictim()))
+        if (m_bAggro && (!m_creature->SelectHostileTarget() || !m_creature->GetVictim()))
             return;
     }
 };

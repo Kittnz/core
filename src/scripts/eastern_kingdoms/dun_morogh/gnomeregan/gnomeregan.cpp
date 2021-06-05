@@ -34,48 +34,46 @@ EndContentData */
 
 enum
 {
-    SAY_START                   = -1090000,
-    SAY_INTRO_1                 = -1090001,
-    SAY_INTRO_2                 = -1090002,
-    SAY_INTRO_3                 = -1090003,
-    SAY_INTRO_4                 = -1090004,
-    SAY_LOOK_1                  = -1090005,
-    SAY_HEAR_1                  = -1090006,
-    SAY_AGGRO_1                 = -1090007,
-    SAY_CHARGE_1                = -1090008,
-    SAY_CHARGE_2                = -1090009,
-    SAY_BLOW_1_10               = -1090010,
-    SAY_BLOW_1_5                = -1090011,
-    SAY_BLOW_1                  = -1090012,
-    SAY_FINISH_1                = -1090013,
-    SAY_LOOK_2                  = -1090014,
-    SAY_HEAR_2                  = -1090015,
-    SAY_CHARGE_3                = -1090016,
-    SAY_CHARGE_4                = -1090017,
-    SAY_BLOW_2_10               = -1090018,
-    SAY_BLOW_2_5                = -1090019,
-    SAY_BLOW_SOON               = -1090020,
-    SAY_BLOW_2                  = -1090021,
-    SAY_FINISH_2                = -1090022,
+    SAY_START = -1090000,
+    SAY_INTRO_1 = -1090001,
+    SAY_INTRO_2 = -1090002,
+    SAY_INTRO_3 = -1090003,
+    SAY_INTRO_4 = -1090004,
+    SAY_LOOK_1 = -1090005,
+    SAY_HEAR_1 = -1090006,
+    SAY_AGGRO_1 = -1090007,
+    SAY_CHARGE_1 = -1090008,
+    SAY_CHARGE_2 = -1090009,
+    SAY_BLOW_1_10 = -1090010,
+    SAY_BLOW_1_5 = -1090011,
+    SAY_BLOW_1 = -1090012,
+    SAY_FINISH_1 = -1090013,
+    SAY_LOOK_2 = -1090014,
+    SAY_HEAR_2 = -1090015,
+    SAY_CHARGE_3 = -1090016,
+    SAY_CHARGE_4 = -1090017,
+    SAY_BLOW_2_10 = -1090018,
+    SAY_BLOW_2_5 = -1090019,
+    SAY_BLOW_SOON = -1090020,
+    SAY_BLOW_2 = -1090021,
+    SAY_FINISH_2 = -1090022,
 
-    SAY_AGGRO_2                 = -1090028,
+    SAY_AGGRO_2 = -1090028,
 
-    SAY_GRUBBIS_SPAWN           = -1090023,
+    SAY_GRUBBIS_SPAWN = -1090023,
 
-    GOSSIP_ITEM_START           = 4084,
+    GOSSIP_ITEM_START = 4084,
 
-    SPELL_EXPLOSION_NORTH       = 12159,
-    SPELL_EXPLOSION_SOUTH       = 12158,
-    SPELL_FIREWORKS_RED         = 11542,
+    SPELL_EXPLOSION_NORTH = 12159,
+    SPELL_EXPLOSION_SOUTH = 12158,
+    SPELL_FIREWORKS_RED = 11542,
 
-    //GO_EXPLOSIVE_CHARGE         = 144065, //A USE
+    MAX_SUMMON_POSITIONS = 33,
 
-    MAX_SUMMON_POSITIONS        = 33,
-
-    NPC_GRUBBIS                 = 7361,
-    NPC_CHOMPER                 = 6215,
-    NPC_CAVERNDEEP_BURROWER     = 6206,
-    NPC_CAVERNDEEP_AMBUSHER     = 6207
+    NPC_GRUBBIS = 7361,
+    NPC_CHOMPER = 6215,
+    NPC_CAVERNDEEP_BURROWER = 6206,
+    NPC_CAVERNDEEP_AMBUSHER = 6207
 };
 
 struct sSummonInformation
@@ -348,7 +346,7 @@ struct npc_blastmaster_emi_shortfuseAI : public npc_escortAI
     void UpdateEscortAI(uint32 const uiDiff) override
     {
         // the phases are handled OOC (keeps them in sync with the waypoints)
-        if (m_uiPhaseTimer && !m_creature->getVictim())
+        if (m_uiPhaseTimer && !m_creature->GetVictim())
         {
             if (m_uiPhaseTimer <= uiDiff)
             {
@@ -594,7 +592,7 @@ struct npc_blastmaster_emi_shortfuseAI : public npc_escortAI
                 m_uiPhaseTimer -= uiDiff;
         }
 
-        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         DoMeleeAttackIfReady();
@@ -680,11 +678,11 @@ struct npc_kernobeeAI : public FollowerAI
 
     void JustRespawned() override
     {
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
         FollowerAI::JustRespawned();
     }
 
-    void UpdateFollowerAI(const uint32 uiDiff)
+    void UpdateFollowerAI(const uint32 uiDiff) override
     {
         FollowerAI::UpdateFollowerAI(uiDiff);               // Do combat handling
         if (nextStep == 5) //HasFollowState(STATE_FOLLOW_COMPLETE)
@@ -719,7 +717,7 @@ struct npc_kernobeeAI : public FollowerAI
                 m_nextStepTimer -= uiDiff;
         }
 
-        if (m_creature->isInCombat() || !HasFollowState(STATE_FOLLOW_INPROGRESS) || HasFollowState(STATE_FOLLOW_COMPLETE))
+        if (m_creature->IsInCombat() || !HasFollowState(STATE_FOLLOW_INPROGRESS) || HasFollowState(STATE_FOLLOW_COMPLETE))
             return;
 
         if (nextStep == 1) /*HasFollowState(STATE_FOLLOW_PAUSED)*/
@@ -826,7 +824,7 @@ struct npc_kernobeeAI : public FollowerAI
         }
     }
 
-    void JustDied(Unit* pKiller)
+    void JustDied(Unit* pKiller) override
     {
         FollowerAI::JustDied(pKiller);
         QuestReset();
@@ -845,7 +843,7 @@ struct npc_kernobeeAI : public FollowerAI
     {
         DoScriptText(SAY_KERNOBEE_START, m_creature);
         m_creature->SetStandState(UNIT_STAND_STATE_STAND);
-        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
         StartFollow(pPlayer, 0/*FACTION_ESCORT_N_FRIEND_PASSIVE*/, pQuest);
         if (bombGuid = ((instance_gnomeregan*)m_creature->GetInstanceData())->GetData64(NPC_ALARM_A_BOMB_2600))
         {

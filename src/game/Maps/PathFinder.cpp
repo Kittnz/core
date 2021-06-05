@@ -33,9 +33,9 @@
 
 ////////////////// PathInfo //////////////////
 PathInfo::PathInfo(const Unit* owner) :
-    m_polyLength(0), m_type(PATHFIND_BLANK),
-    m_useStraightPath(false), m_forceDestination(false), m_pointPathLimit(MAX_POINT_PATH_LENGTH),
-    m_sourceUnit(owner), m_navMesh(nullptr), m_navMeshQuery(nullptr), m_transport(nullptr), m_targetAllowedFlags(0)
+    m_polyLength(0), m_type(PATHFIND_BLANK), m_useStraightPath(false), m_forceDestination(false),
+    m_pointPathLimit(MAX_POINT_PATH_LENGTH), m_transport(nullptr), m_sourceUnit(owner),
+    m_navMesh(nullptr), m_navMeshQuery(nullptr), m_targetAllowedFlags(0)
 {
     //DEBUG_FILTER_LOG(LOG_FILTER_PATHFINDING, "++ PathFinder::PathInfo for %u \n", m_sourceUnit->GetGUIDLow());
     createFilter();
@@ -87,7 +87,7 @@ bool PathInfo::calculate(float destX, float destY, float destZ, bool forceDest, 
 
     // make sure navMesh works - we can run on map w/o mmap
     // check if the start and end point have a .mmtile loaded (can we pass via not loaded tile on the way?)
-    if (!m_navMesh || !m_navMeshQuery || m_sourceUnit->hasUnitState(UNIT_STAT_IGNORE_PATHFINDING) ||
+    if (!m_navMesh || !m_navMeshQuery || m_sourceUnit->HasUnitState(UNIT_STAT_IGNORE_PATHFINDING) ||
             !HaveTiles(start) || !HaveTiles(dest))
     {
         BuildShortcut();
@@ -122,7 +122,6 @@ dtPolyRef PathInfo::FindWalkPoly(dtNavMeshQuery const* query, float const* point
 
     // WARNING : Nav mesh coords are Y, Z, X (and not X, Y, Z)
     float extents[3] = {5.0f, zSearchDist, 5.0f};
-    int polyCount = 0;
     dtPolyRef polyRef;
 
     // Default recastnavigation method
@@ -348,11 +347,6 @@ void PathInfo::BuildPolyPath(const Vector3 &startPos, const Vector3 &endPos)
         // free and invalidate old path data
         clear();
 
-        unsigned int const threadId = (uintptr_t) ACE_Based::Thread::currentId();
-
-        //if (threadId != m_navMeshQuery->m_owningThread)
-            //sLog.outError("CRASH: We are using a dtNavMeshQuery from thread %u which belongs to thread %u!", threadId, m_navMeshQuery->m_owningThread);
-
         dtStatus dtResult = m_navMeshQuery->findPath(
                                 startPoly,          // start polygon
                                 endPoly,            // end polygon
@@ -482,7 +476,6 @@ void PathInfo::BuildUnderwaterPath()
     // set start and a default next position
     m_pathPoints[0] = getStartPosition();
     m_pathPoints[1] = getActualEndPosition();
-    float ground = 0.0f;
     GridMapLiquidData liquidData;
     uint32 liquidStatus = m_sourceUnit->GetTerrain()->getLiquidStatus(getActualEndPosition().x, getActualEndPosition().y, getActualEndPosition().z, MAP_ALL_LIQUIDS, &liquidData);
     // No water here ...

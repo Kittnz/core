@@ -34,9 +34,9 @@
 #include "Anticheat.h"
 
 // Charters ID in item_template
-#define GUILD_CHARTER               5863
-#define GUILD_CHARTER_COST          1000                    // 10 S
-#define CHARTER_DISPLAY_ID          16161
+#define GUILD_CHARTER 5863
+#define GUILD_CHARTER_COST 1000 // 10 S
+#define CHARTER_DISPLAY_ID 16161
 
 void WorldSession::HandlePetitionBuyOpcode(WorldPacket & recv_data)
 {
@@ -76,11 +76,11 @@ void WorldSession::HandlePetitionBuyOpcode(WorldPacket & recv_data)
         return;
     }
 
-    if (!pCreature->isTabardDesigner())
+    if (!pCreature->IsTabardDesigner())
         return;
 
     // remove fake death
-    if (GetPlayer()->hasUnitState(UNIT_STAT_DIED))
+    if (GetPlayer()->HasUnitState(UNIT_STAT_DIED))
         GetPlayer()->RemoveSpellsCausingAura(SPELL_AURA_FEIGN_DEATH);
 
     // if tabard designer, then trying to buy a guild charter.
@@ -177,9 +177,7 @@ void WorldSession::HandlePetitionShowSignOpcode(WorldPacket & recv_data)
 
     if (!petition)
     {
-        sLog.outError("[PetitionHandler] No petition exists for petition ID %u, yet charter exists with guid %u for owner %s",
-            petitionguid, itemguid.GetCounter(), _player->GetGuidStr().c_str());
-
+        sLog.outError("[PetitionHandler] No petition exists for petition ID %u, yet charter exists with guid %u for owner %s", petitionguid, itemguid.GetCounter(), _player->GetGuidStr().c_str());
         return;
     }
 
@@ -212,8 +210,6 @@ void WorldSession::HandlePetitionQueryOpcode(WorldPacket & recv_data)
     Petition* petition = sGuildMgr.GetPetitionById(petitionguid);
     if (!petition)
         return;
-
-    uint8 signs = petition->GetSignatureCount();
 
     WorldPacket data(SMSG_PETITION_QUERY_RESPONSE, (4 + 8 + petition->GetName().size() + 1 + 2 + 4 * 11));
     data << uint32(petitionguid);                           // petition guid
@@ -514,11 +510,6 @@ void WorldSession::HandleTurnInPetitionOpcode(WorldPacket & recv_data)
         return;
     }
 
-    // OK!
-
-    // signs
-    uint8 signs = petition->GetSignatureCount();
-
     Guild* guild = new Guild;
     if (!guild->Create(petition, _player))
     {
@@ -565,7 +556,7 @@ void WorldSession::SendPetitionShowList(ObjectGuid& guid)
     }
 
     // remove fake death
-    if (GetPlayer()->hasUnitState(UNIT_STAT_DIED))
+    if (GetPlayer()->HasUnitState(UNIT_STAT_DIED))
         GetPlayer()->RemoveSpellsCausingAura(SPELL_AURA_FEIGN_DEATH);
 
     uint8 count = 1;
