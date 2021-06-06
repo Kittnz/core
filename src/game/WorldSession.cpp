@@ -560,7 +560,7 @@ void WorldSession::LogoutPlayer(bool Save)
             {
                 AreaTriggerTeleport const* at = sObjectMgr.GetGoBackTrigger(map->GetId());
                 if (at)
-                    removedFromMap = _player->TeleportTo(at->target_mapId, at->target_X, at->target_Y, at->target_Z, _player->GetOrientation());
+                    removedFromMap = _player->TeleportTo(at->destination);
                 else
                     removedFromMap = _player->TeleportToHomebind();
 

@@ -120,12 +120,14 @@ struct mob_rottingMaggotAI : public ScriptedAI
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
+
         if (isDiseased)
         {
             if (!m_creature->HasAura(SPELL_RETCHING_PLAGUE))
                 m_creature->CastSpell(m_creature, SPELL_RETCHING_PLAGUE, true);
         }
-        if (m_creature->GetDistance(aggroPossition.coord_x, aggroPossition.coord_y, aggroPossition.coord_z) > 40.0f)
+
+        if (m_creature->GetDistance(aggroPossition) > 40.0f)
         {
             EnterEvadeMode();
         }
