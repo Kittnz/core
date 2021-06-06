@@ -3108,8 +3108,7 @@ ReputationRank WorldObject::GetReactionTo(WorldObject const* target) const
         return REP_FRIENDLY;
 
     // always friendly to charmer or owner
-    if (IsUnit() && target->IsUnit() && 
-        ToUnit()->GetCharmerOrOwnerOrSelf() == target->ToUnit()->GetCharmerOrOwnerOrSelf())
+    if (IsUnit() && target->IsUnit() && ToUnit()->GetCharmerOrOwnerOrSelf() == target->ToUnit()->GetCharmerOrOwnerOrSelf())
         return REP_FRIENDLY;
 
     Player const* selfPlayerOwner = GetAffectingPlayer();
@@ -3120,6 +3119,7 @@ ReputationRank WorldObject::GetReactionTo(WorldObject const* target) const
     {
         if (selfPlayerOwner->IsGameMaster())
             return REP_NEUTRAL;
+
         if (FactionTemplateEntry const* targetFactionTemplateEntry = target->getFactionTemplateEntry())
             if (ReputationRank const* repRank = selfPlayerOwner->GetReputationMgr().GetForcedRankIfAny(targetFactionTemplateEntry))
                 return *repRank;
@@ -3128,6 +3128,7 @@ ReputationRank WorldObject::GetReactionTo(WorldObject const* target) const
     {
         if (targetPlayerOwner->IsGameMaster())
             return REP_NEUTRAL;
+
         if (FactionTemplateEntry const* selfFactionTemplateEntry = getFactionTemplateEntry())
             if (ReputationRank const* repRank = targetPlayerOwner->GetReputationMgr().GetForcedRankIfAny(selfFactionTemplateEntry))
                 return *repRank;
@@ -3150,45 +3151,37 @@ ReputationRank WorldObject::GetReactionTo(WorldObject const* target) const
 
                 // same group - checks dependant only on our faction - skip FFA_PVP for example
                 if (selfPlayerOwner->IsInRaidWith(targetPlayerOwner))
-                    return REP_FRIENDLY; // return true to allow config option AllowTwoSide.Interaction.Group to work
-                                         // however client seems to allow mixed group parties, because in 13850 client it works like:
-                                         // return GetFactionReactionTo(getFactionTemplateEntry(), target);
+                    return REP_FRIENDLY;
 
-                                         // Sanctuary
                 if (selfPlayerOwner->HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_SANCTUARY) && targetPlayerOwner->HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_SANCTUARY))
                     return REP_FRIENDLY;
 
-                // Nostalrius: Hackfix because UNIT_BYTE2_FLAG_FFA_PVP is not implemented yet.
+                // Hackfix because UNIT_BYTE2_FLAG_FFA_PVP is not implemented yet.
                 if (selfPlayerOwner->IsFFAPvP() && targetPlayerOwner->IsFFAPvP())
                     return REP_HOSTILE;
             }
-
-            // check FFA_PVP - not implemented that way on MaNGOS :/
-            /*
-            if (GetByteValue(UNIT_FIELD_BYTES_2, 1) & UNIT_BYTE2_FLAG_FFA_PVP
-            && target->GetByteValue(UNIT_FIELD_BYTES_2, 1) & UNIT_BYTE2_FLAG_FFA_PVP)
-            return REP_HOSTILE;
-            */
         }
+
         if (selfPlayerOwner)
         {
             if (FactionTemplateEntry const* targetFactionTemplateEntry = target->getFactionTemplateEntry())
             {
                 if (ReputationRank const* repRank = selfPlayerOwner->GetReputationMgr().GetForcedRankIfAny(targetFactionTemplateEntry))
                     return *repRank;
+
                 if (FactionEntry const* targetFactionEntry = sObjectMgr.GetFactionEntry(targetFactionTemplateEntry->faction))
                 {
                     if (targetFactionEntry->CanHaveReputation())
                     {
                         // check contested flags
-                        if (targetFactionTemplateEntry->factionFlags & FACTION_TEMPLATE_FLAG_CONTESTED_GUARD
-                            && selfPlayerOwner->HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_CONTESTED_PVP))
+                        if (targetFactionTemplateEntry->factionFlags & FACTION_TEMPLATE_FLAG_CONTESTED_GUARD && selfPlayerOwner->HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_CONTESTED_PVP))
                             return REP_HOSTILE;
 
                         // if faction has reputation, hostile state depends only from AtWar state
                         if (FactionState const* factionState = selfPlayerOwner->GetReputationMgr().GetState(targetFactionEntry))
                             if (factionState->Flags & FACTION_FLAG_AT_WAR)
                                 return REP_HOSTILE;
+
                         return REP_FRIENDLY;
                     }
                 }
