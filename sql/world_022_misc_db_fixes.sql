@@ -89,3 +89,5 @@ UPDATE `broadcast_text` SET `EmoteId0` = 2 WHERE `ID` IN (8265);
 UPDATE `broadcast_text` SET `Type` = 1 WHERE `ID` IN (11030, 11293, 11294, 11295, 11297, 11299, 11304, 11305, 11306, 11309, 11310, 11311, 11314, 11315, 11316, 11320);
 UPDATE `broadcast_text` SET `Type` = 2 WHERE `ID` IN (11313, 11160, 3012);
 UPDATE `broadcast_text` SET `Type` = 3 WHERE `ID` IN (11277);
+
+INSERT INTO `spell_mod` (`Id`, `AttributesEx2`, `Comment`) VALUES (26275, 4, 'PX-238 Winter Wondervolt TRAP - Ignore LOS');
