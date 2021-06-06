@@ -45,20 +45,6 @@
 #define MANGOS_PATH_MAX PATH_MAX                            // ace/os_include/os_limits.h -> ace/Basic_Types.h
 
 #if PLATFORM == PLATFORM_WINDOWS
-#  define MANGOS_EXPORT __declspec(dllexport)
-#  define MANGOS_IMPORT __cdecl
-#else //PLATFORM != PLATFORM_WINDOWS
-#  define MANGOS_EXPORT export
-#  if defined(__APPLE_CC__) && defined(BIG_ENDIAN)
-#    define MANGOS_IMPORT __attribute__ ((longcall))
-#  elif defined(__x86_64__)
-#    define MANGOS_IMPORT
-#  else
-#    define MANGOS_IMPORT __attribute__ ((cdecl))
-#  endif //__APPLE_CC__ && BIG_ENDIAN
-#endif //PLATFORM
-
-#if PLATFORM == PLATFORM_WINDOWS
 #  ifndef DECLSPEC_NORETURN
 #    define DECLSPEC_NORETURN __declspec(noreturn)
 #  endif //DECLSPEC_NORETURN
@@ -83,7 +69,7 @@ typedef ACE_UINT32 uint32;
 typedef ACE_UINT16 uint16;
 typedef ACE_UINT8 uint8;
 
-#if COMPILER != COMPILER_MICROSOFT
+#ifndef _WIN32
 typedef uint16      WORD;
 typedef uint32      DWORD;
 #endif //COMPILER

@@ -3,17 +3,13 @@
 #include <array>
 
 // Quests:
-
 #define GOBLIN_TEST_QUEST 50310
 #define GNOME_TEST_QUEST 50312
-
 #define GOBLIN_REAL_QUEST 50311
 #define GNOME_REAL_QUEST 50313
-
-#define ALREADY_REGISTERED_TXTID 50212
+#define RACE_AGAINST_TIME_QUESTID 50316
 
 // Spells:
-
 #define SALT_FLATS_RACE_SLOW 6601
 #define SALT_FLATS_RACE_NORMAL 6602  // Decreases run speed, value -16%
 #define SALT_FLATS_RACE_SPEED 6600  // Increases run speed, value +14%
@@ -23,7 +19,8 @@
 #define EXPLOSIVE_SHEEP 4050
 #define SPELL_BOMB 5134
 
-#define RACE_AGAINST_TIME_QUESTID 50316
+// Misc:
+#define ALREADY_REGISTERED_TXTID 50212
 
 constexpr float SheepAcceptanceRadius = 4.4f;
 constexpr float SheepAcceptanceRadiusSqr = SheepAcceptanceRadius * SheepAcceptanceRadius;
@@ -88,7 +85,6 @@ bool GossipSelect_npc_daisy(Player* p_Player, Creature* p_Creature, uint32 /*uiS
 				p_Creature->MonsterWhisper("You are already registered to participate on Mirage Race.", p_Player);
 			}
 		}
-
     }
 
 	if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
@@ -264,7 +260,6 @@ struct npc_dolores_say : public ScriptedAI
 			Interactions.emplace(std::make_pair(guid, PlayerInteraction{ PlayerInteraction::Step::One, 10 }));
 		}
 	}
-
 };
 
 // Ignore this for while:
@@ -308,7 +303,6 @@ struct go_speed_up : public GameObjectAI
 	{
 		racers.insert(guid);
 	}
-
 };
 
 #define INVISIBLE_TRIGGER_ID 14495
@@ -398,7 +392,6 @@ struct npc_race_sheep : public ScriptedAI
 			checkTimer -= deltaTime;
 		}
 	}
-
 };
 
 struct npc_car_controller : public ScriptedAI
@@ -491,10 +484,8 @@ bool GOHello_go_flying_machine(Player* pPlayer, GameObject* pGo)
 
 bool GOSelect_go_flying_machine(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 action)
 {
-
     if (action == GOSSIP_ACTION_INFO_DEF + 1)
     {
-
 		uint32 cost = pPlayer->GetLevel() * 100;
 		if (pPlayer->GetMoney() >= cost)
 		{
@@ -505,6 +496,7 @@ bool GOSelect_go_flying_machine(Player* pPlayer, GameObject* pGo, uint32 sender,
 		}
 		else
 			pPlayer->GetSession()->SendNotification("Not enough money. This flight will cost %u silver.", pPlayer->GetLevel());
+	}
 
     return true;
 }
