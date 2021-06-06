@@ -10925,18 +10925,6 @@ bool ChatHandler::HandleFlyCommand(char* args)
         target->UpdateSpeed(MOVE_RUN, false, 1.0F);
         target->UpdateSpeed(MOVE_WALK, false, 1.0F);
         target->DeMorph();
-
-        target->m_movementInfo.UpdateTime(WorldTimer::getMSTime());
-        WorldPacket hover(SMSG_MOVE_SET_HOVER, 31);
-        hover << target->GetPackGUID();
-        hover << target->m_movementInfo;
-        target->SendMovementMessageToSet(std::move(hover), true);
-
-        target->m_movementInfo.UpdateTime(WorldTimer::getMSTime());
-        WorldPacket stop_swim(MSG_MOVE_STOP_SWIM, 31);
-        stop_swim << target->GetPackGUID();
-        stop_swim << target->m_movementInfo;
-        target->SendMovementMessageToSet(std::move(stop_swim), true);
     }
     return true;
 }

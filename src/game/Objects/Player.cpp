@@ -22113,7 +22113,6 @@ void Player::SetFlying(bool flying)
         m_isFlying = false;
         m_movementInfo.RemoveMovementFlag(MOVEFLAG_LEVITATING);
         SendHeartBeat(true);
-        SetHover(false);
     }
 }
 
