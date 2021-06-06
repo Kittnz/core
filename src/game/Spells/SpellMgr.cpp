@@ -3376,7 +3376,7 @@ void SpellMgr::LoadSpells()
         {
             fields = result->Fetch();
             uint32 spellId = fields[0].GetUInt32();
-            if (spellId > maxEntry)
+            if ((spellId > maxEntry) || (!mSpellEntryMap[spellId]))
                 continue;
 
             mSpellEntryMap[spellId]->SpellName[1] = fields[1].GetCppString();
