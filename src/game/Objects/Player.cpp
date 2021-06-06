@@ -5058,10 +5058,15 @@ void Player::RepopAtGraveyard()
     else
         ClosestGrave = sObjectMgr.GetClosestGraveYard(GetPositionX(), GetPositionY(), GetPositionZ(), GetMapId(), GetTeam());
 
+    if (ClosestGrave)
+        if (float facing = sObjectMgr.GetWorldSafeLocFacing(ClosestGrave->ID))
+            orientation = facing;
+
     if (IsAlive())
     {
         if (ClosestGrave)
-            TeleportTo(ClosestGrave->map_id, ClosestGrave->x, ClosestGrave->y, ClosestGrave->z, GetOrientation(), 0, std::move(recover));
+            TeleportTo(ClosestGrave->map_id, ClosestGrave->x, ClosestGrave->y, ClosestGrave->z, orientation, 0, std::move(recover));
+
         return;
     }
 
@@ -5156,7 +5161,7 @@ void Player::RepopAtGraveyard()
             ResurrectPlayer(1.0f);
         }
 
-        TeleportTo(ClosestGrave->map_id, ClosestGrave->x, ClosestGrave->y, ClosestGrave->z, GetOrientation(), 0, std::move(recover));
+        TeleportTo(ClosestGrave->map_id, ClosestGrave->x, ClosestGrave->y, ClosestGrave->z, orientation, 0, std::move(recover));
     }
 
     // Fix invisible spirit healer if you die close to graveyard.
@@ -18415,7 +18420,7 @@ void Player::SetBattleGroundEntryPoint(Player* leader /*= nullptr*/, bool queued
         {
             if (const WorldSafeLocsEntry* entry = sObjectMgr.GetClosestGraveYard(leader->GetPositionX(), leader->GetPositionY(), leader->GetPositionZ(), leader->GetMapId(), leader->GetTeam()))
             {
-                m_bgData.joinPos = WorldLocation(entry->map_id, entry->x, entry->y, entry->z, 0.0f);
+                m_bgData.joinPos = WorldLocation(entry->map_id, entry->x, entry->y, entry->z, sObjectMgr.GetWorldSafeLocFacing(entry->ID));
                 m_bgData.m_needSave = true;
                 return;
             }
