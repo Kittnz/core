@@ -24,7 +24,7 @@
 #include "Opcodes.h"
 #include "Log.h"
 #include "Policies/SingletonImp.h"
-#include "zlib.h"
+#include "..\zlib\zlib.h"
 
 INSTANTIATE_SINGLETON_1(AddonHandler);
 
