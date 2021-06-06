@@ -139,7 +139,13 @@ bool inline ConditionEntry::Evaluate(WorldObject const* target, Map const* map, 
     {
         case CONDITION_NOT:
         {
-            // Checked on load
+            // Third and fourth condition are optional
+            if (m_value3 && sConditionStorage.LookupEntry<ConditionEntry>(m_value3)->Meets(target, map, source, conditionSourceType))
+                return true;
+
+            if (m_value4 && sConditionStorage.LookupEntry<ConditionEntry>(m_value4)->Meets(target, map, source, conditionSourceType))
+                return true;
+
             return !sConditionStorage.LookupEntry<ConditionEntry>(m_value1)->Meets(target, map, source, conditionSourceType);
         }
         case CONDITION_OR:
@@ -158,6 +164,7 @@ bool inline ConditionEntry::Evaluate(WorldObject const* target, Map const* map, 
             bool extraConditionsSatisfied = true;
             if (m_value3)
                 extraConditionsSatisfied = extraConditionsSatisfied && sConditionStorage.LookupEntry<ConditionEntry>(m_value3)->Meets(target, map, source, conditionSourceType);
+
             if (m_value4)
                 extraConditionsSatisfied = extraConditionsSatisfied && sConditionStorage.LookupEntry<ConditionEntry>(m_value4)->Meets(target, map, source, conditionSourceType);
 
