@@ -522,6 +522,7 @@ class Creature : public Unit
         // Fonctions utilisees par les links, et appelle CreatureAI.
         void OnEnterCombat(Unit *pAttacker, bool notInCombat = false) override;
         void OnLeaveCombat() override;
+        void RemoveAurasAtReset();
         // En cas de modification "manuelle" des stats.
         void ResetStats();
 
