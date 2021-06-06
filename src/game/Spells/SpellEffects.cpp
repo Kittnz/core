@@ -4942,9 +4942,9 @@ void Spell::EffectScriptEffect(SpellEffectIndex eff_idx)
                     uint32 spells[4] = {26272, 26157, 26273, 26274};
 
                     // check presence
-                    for (int j = 0; j < 4; ++j)
-                        if (unitTarget->HasAura(spells[j], EFFECT_INDEX_0))
-                            return;
+                    for (uint32 spell : spells)
+                        if (unitTarget->HasAura(spell))
+                            unitTarget->RemoveAurasDueToSpellByCancel(spell);
 
                     unitTarget->CastSpell(unitTarget, spells[urand(0, 3)], true);
                     return;
