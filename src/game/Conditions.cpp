@@ -653,7 +653,7 @@ bool ConditionEntry::CheckParamRequirements(WorldObject const* target, Map const
             if (source && source->IsGameObject() && target && target->IsGameObject())
                 return true;
             return false;
-        case CONDITION_REQ_BOTH_UNITS:
+        case CONDITION_REQ_BOTH_WORLDOBJECTS:
             if (source && source->IsUnit() && target && target->IsUnit())
                 return true;
             return false;
@@ -1181,10 +1181,15 @@ bool ConditionEntry::IsValid()
             }
             break;
         }
+        case CONDITION_HAS_FLAG:
+        {
+            // Fix field id for older client builds.
+            m_value1 = GetIndexOfUpdateFieldForCurrentBuild(m_value1);
+            break;
+        }
         case CONDITION_NONE:
         case CONDITION_INSTANCE_SCRIPT:
         case CONDITION_ACTIVE_HOLIDAY:
-        case CONDITION_HAS_FLAG:
         case CONDITION_INSTANCE_DATA:
         case CONDITION_MAP_EVENT_DATA:
         case CONDITION_MAP_EVENT_ACTIVE:
