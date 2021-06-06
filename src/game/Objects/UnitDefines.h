@@ -21,12 +21,12 @@
 
 enum UnitMoveType
 {
-    MOVE_WALK           = 0,
-    MOVE_RUN            = 1,
-    MOVE_RUN_BACK       = 2,
-    MOVE_SWIM           = 3,
-    MOVE_SWIM_BACK      = 4,
-    MOVE_TURN_RATE      = 5,
+    MOVE_WALK = 0,
+    MOVE_RUN = 1,
+    MOVE_RUN_BACK = 2,
+    MOVE_SWIM = 3,
+    MOVE_SWIM_BACK = 4,
+    MOVE_TURN_RATE = 5,
 };
 
 #define MAX_MOVE_TYPE 6
@@ -55,6 +55,12 @@ enum MovementChangeType
     KNOCK_BACK
 };
 
+// Delay time next attack to prevent client attack animation problems
+#define ATTACK_DISPLAY_DELAY 200
+
+// For this time difference is computed regen value
+#define REGEN_TIME_FULL 2000
+
 #define BASE_MELEERANGE_OFFSET 1.33f
 #define BASE_MINDAMAGE 1.0f
 #define BASE_MAXDAMAGE 2.0f
@@ -63,18 +69,18 @@ enum MovementChangeType
 // byte value (UNIT_FIELD_BYTES_1,0)
 enum UnitStandStateType
 {
-    UNIT_STAND_STATE_STAND             = 0,
-    UNIT_STAND_STATE_SIT               = 1,
-    UNIT_STAND_STATE_SIT_CHAIR         = 2,
-    UNIT_STAND_STATE_SLEEP             = 3,
-    UNIT_STAND_STATE_SIT_LOW_CHAIR     = 4,
-    UNIT_STAND_STATE_SIT_MEDIUM_CHAIR  = 5,
-    UNIT_STAND_STATE_SIT_HIGH_CHAIR    = 6,
-    UNIT_STAND_STATE_DEAD              = 7,
-    UNIT_STAND_STATE_KNEEL             = 8
+    UNIT_STAND_STATE_STAND = 0,
+    UNIT_STAND_STATE_SIT = 1,
+    UNIT_STAND_STATE_SIT_CHAIR = 2,
+    UNIT_STAND_STATE_SLEEP = 3,
+    UNIT_STAND_STATE_SIT_LOW_CHAIR = 4,
+    UNIT_STAND_STATE_SIT_MEDIUM_CHAIR = 5,
+    UNIT_STAND_STATE_SIT_HIGH_CHAIR = 6,
+    UNIT_STAND_STATE_DEAD = 7,
+    UNIT_STAND_STATE_KNEEL = 8
 };
 
-#define MAX_UNIT_STAND_STATE             9
+#define MAX_UNIT_STAND_STATE 9
 
 /* byte flag value not exist in 1.12, moved/merged in (UNIT_FIELD_BYTES_1,3), in post-1.x it's in (UNIT_FIELD_BYTES_1,2)
 enum UnitStandFlags
@@ -84,94 +90,81 @@ enum UnitStandFlags
 enum UnitBytes1_Flags
 {
     UNIT_BYTE1_FLAG_ALWAYS_STAND = 0x01, // Ajoute a la mort. Non affichage du nom des vivants.
-    UNIT_BYTE1_FLAGS_CREEP       = 0x02,
-    UNIT_BYTE1_FLAG_UNTRACKABLE  = 0x04,
-    UNIT_BYTE1_FLAG_ALL          = 0xFF
+    UNIT_BYTE1_FLAGS_CREEP = 0x02,
+    UNIT_BYTE1_FLAG_UNTRACKABLE = 0x04,
+    UNIT_BYTE1_FLAG_ALL = 0xFF
 };
 
 // byte value (UNIT_FIELD_BYTES_2,0)
 enum SheathState
 {
-    SHEATH_STATE_UNARMED  = 0,                              // non prepared weapon
-    SHEATH_STATE_MELEE    = 1,                              // prepared melee weapon
-    SHEATH_STATE_RANGED   = 2                               // prepared ranged weapon
+    SHEATH_STATE_UNARMED = 0, // non prepared weapon
+    SHEATH_STATE_MELEE = 1, // prepared melee weapon
+    SHEATH_STATE_RANGED = 2 // prepared ranged weapon
 };
 
-#define MAX_SHEATH_STATE    3
+#define MAX_SHEATH_STATE 3
 
 // byte flags value (UNIT_FIELD_BYTES_2,1)
 enum UnitBytes2_Flags
 {
-    UNIT_BYTE2_FLAG_PVP         = 0x01,
-    UNIT_BYTE2_FLAG_UNK1        = 0x02,
-    UNIT_BYTE2_FLAG_FFA_PVP     = 0x04,
-    UNIT_BYTE2_FLAG_UNK3        = 0x08,                     // FLAG_SANCTUARY on 3.3.5
-    UNIT_BYTE2_FLAG_AURAS       = 0x10,                     // show possitive auras as positive, and allow its dispel
-    UNIT_BYTE2_FLAG_UNK5        = 0x20,
-    UNIT_BYTE2_FLAG_UNK6        = 0x40,
-    UNIT_BYTE2_FLAG_UNK7        = 0x80
+    UNIT_BYTE2_FLAG_PVP = 0x01,
+    UNIT_BYTE2_FLAG_UNK1 = 0x02,
+    UNIT_BYTE2_FLAG_FFA_PVP = 0x04,
+    UNIT_BYTE2_FLAG_UNK3 = 0x08, // FLAG_SANCTUARY on 3.3.5
+    UNIT_BYTE2_FLAG_AURAS = 0x10, // show possitive auras as positive, and allow its dispel
+    UNIT_BYTE2_FLAG_UNK5 = 0x20,
+    UNIT_BYTE2_FLAG_UNK6 = 0x40,
+    UNIT_BYTE2_FLAG_UNK7 = 0x80
 };
 
-#define CREATURE_MAX_SPELLS     4
+#define CREATURE_MAX_SPELLS 4
 
 enum Swing
 {
-    NOSWING                    = 0,
-    SINGLEHANDEDSWING          = 1,
-    TWOHANDEDSWING             = 2
+    NOSWING = 0,
+    SINGLEHANDEDSWING = 1,
+    TWOHANDEDSWING = 2
 };
 
 enum VictimState
 {
-    VICTIMSTATE_UNAFFECTED     = 0,                         // seen in relation with HITINFO_MISS
-    VICTIMSTATE_NORMAL         = 1,
-    VICTIMSTATE_DODGE          = 2,
-    VICTIMSTATE_PARRY          = 3,
-    VICTIMSTATE_INTERRUPT      = 4,
-    VICTIMSTATE_BLOCKS         = 5,
-    VICTIMSTATE_EVADES         = 6,
-    VICTIMSTATE_IS_IMMUNE      = 7,
-    VICTIMSTATE_DEFLECTS       = 8
+    VICTIMSTATE_UNAFFECTED = 0, // seen in relation with HITINFO_MISS
+    VICTIMSTATE_NORMAL = 1,
+    VICTIMSTATE_DODGE = 2,
+    VICTIMSTATE_PARRY = 3,
+    VICTIMSTATE_INTERRUPT = 4,
+    VICTIMSTATE_BLOCKS = 5,
+    VICTIMSTATE_EVADES = 6,
+    VICTIMSTATE_IS_IMMUNE = 7,
+    VICTIMSTATE_DEFLECTS = 8
 };
 
 enum HitInfo
 {
-    HITINFO_NORMALSWING         = 0x00000000,
-    HITINFO_UNK0                = 0x00000001,               // req correct packet structure
-    HITINFO_NORMALSWING2        = 0x00000002,
-    HITINFO_LEFTSWING           = 0x00000004,
-    HITINFO_UNK3                = 0x00000008,
-    HITINFO_MISS                = 0x00000010,
-    HITINFO_ABSORB              = 0x00000020,               // plays absorb sound
-    HITINFO_RESIST              = 0x00000040,               // resisted atleast some damage
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_9_4
-    HITINFO_CRITICALHIT         = 0x00000080,
-#else
-    HITINFO_CRITICALHIT         = 0x00000008,
-#endif
-    HITINFO_UNK8                = 0x00000100,               // wotlk?
-    HITINFO_UNK9                = 0x00002000,               // wotlk?
-    HITINFO_GLANCING            = 0x00004000,
-    HITINFO_CRUSHING            = 0x00008000,
-    HITINFO_NOACTION            = 0x00010000,
-    HITINFO_SWINGNOHITSOUND     = 0x00080000
+    HITINFO_NORMALSWING = 0x00000000,
+    HITINFO_UNK0 = 0x00000001, // req correct packet structure
+    HITINFO_NORMALSWING2 = 0x00000002,
+    HITINFO_LEFTSWING = 0x00000004,
+    HITINFO_UNK3 = 0x00000008,
+    HITINFO_MISS = 0x00000010,
+    HITINFO_ABSORB = 0x00000020, // plays absorb sound
+    HITINFO_RESIST = 0x00000040, // resisted atleast some damage
+    HITINFO_CRITICALHIT = 0x00000080,
+    HITINFO_UNK8 = 0x00000100, // wotlk?
+    HITINFO_UNK9 = 0x00002000, // wotlk?
+    HITINFO_GLANCING = 0x00004000,
+    HITINFO_CRUSHING = 0x00008000,
+    HITINFO_NOACTION = 0x00010000,
+    HITINFO_SWINGNOHITSOUND = 0x00080000
 };
 
 //i would like to remove this: (it is defined in item.h
 enum InventorySlot
 {
-    NULL_BAG                   = 0,
-    NULL_SLOT                  = 255
+    NULL_BAG = 0,
+    NULL_SLOT = 255
 };
-
-
-struct SpellImmune
-{
-    uint32 type;
-    uint32 spellId;
-};
-
-typedef std::list<SpellImmune> SpellImmuneList;
 
 enum UnitModifierType
 {
