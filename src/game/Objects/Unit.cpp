@@ -5491,10 +5491,13 @@ float Unit::GetPPMProcChance(uint32 WeaponSpeed, float PPM) const
     return WeaponSpeed * PPM / 600.0f;                      // result is chance in percents (probability = Speed_in_sec * (PPM / 60))
 }
 
-void Unit::Mount(uint32 mount, uint32 spellId)
+UnitMountResult Unit::Mount(uint32 mount, uint32 spellId)
 {
-    if (!mount)
-        return;
+    if (!mount || !sCreatureDisplayInfoStore.LookupEntry(mount))
+    {
+        sLog.outError("Attempt by %s to mount invalid display id %u.", this->GetName(), mount);
+        return MOUNTRESULT_NOTMOUNTABLE;
+    }
 
     if (IsPlayer() && HasAura(29519))
     {
@@ -5518,22 +5521,17 @@ void Unit::Mount(uint32 mount, uint32 spellId)
     }     
 
     SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, mount);
-
-    // Turtle WoW, flying mounts
-    // if (!isTaxi && mount == ???)
-    // SetFlying(true);
+    return MOUNTRESULT_OK;
 }
 
-void Unit::Unmount(bool from_aura)
+UnitDismountResult Unit::Unmount(bool from_aura)
 {
+    if (!IsMounted())
+        return DISMOUNTRESULT_NOTMOUNTED;
+
     RemoveAurasWithInterruptFlags(AURA_INTERRUPT_FLAG_NOT_MOUNTED);
-
-    // uint32 modelId = GetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID);
-
     SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, 0);
-
-    // if (modelId == ???)
-    // SetFlying(false);
+    return DISMOUNTRESULT_OK;
 }
 
 bool Unit::IsInDisallowedMountForm()

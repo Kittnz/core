@@ -17973,19 +17973,19 @@ void Player::ContinueTaxiFlight()
     GetSession()->SendDoFlight(mountDisplayId, path, startNode);
 }
 
-void Player::Mount(uint32 mount, uint32 spellId)
+UnitMountResult Player::Mount(uint32 mount, uint32 spellId)
 {
     if (!mount)
     {
         RemoveSpellsCausingAura(SPELL_AURA_MOUNTED);
         SendMountResult(MOUNTRESULT_NOTMOUNTABLE);
-        return;
+        return MOUNTRESULT_NOTMOUNTABLE;
     }
 
     if (IsMounted())
     {
         SendMountResult(MOUNTRESULT_ALREADYMOUNTED);
-        return;
+        return MOUNTRESULT_ALREADYMOUNTED;
     }
 
 	// Turtle specific - allow gnome and goblin display ID to mount on
@@ -17995,7 +17995,7 @@ void Player::Mount(uint32 mount, uint32 spellId)
 		{
 			RemoveSpellsCausingAura(SPELL_AURA_MOUNTED);
 			SendMountResult(MOUNTRESULT_SHAPESHIFTED);
-			return;
+			return MOUNTRESULT_SHAPESHIFTED;
 		}
 	}
 
@@ -18003,7 +18003,7 @@ void Player::Mount(uint32 mount, uint32 spellId)
     {
         RemoveSpellsCausingAura(SPELL_AURA_MOUNTED);
         SendMountResult(MOUNTRESULT_LOOTING);
-        return;
+        return MOUNTRESULT_LOOTING;
     }
 
     Unit::Mount(mount, spellId);
@@ -18035,17 +18035,20 @@ void Player::Mount(uint32 mount, uint32 spellId)
     https://us.forums.blizzard.com/en/wow/t/reckoning-is-broken-after-yesterdays-patch/386476/123
     */
     ResetExtraAttacks();
+
     SendMountResult(MOUNTRESULT_OK);
+
+    return MOUNTRESULT_OK;
 }
 
-void Player::Unmount(bool from_aura)
+UnitDismountResult Player::Unmount(bool from_aura)
 {
     if (!IsMounted())
     {
         if (!from_aura)
             SendDismountResult(DISMOUNTRESULT_NOTMOUNTED);
 
-        return;
+        return DISMOUNTRESULT_NOTMOUNTED;
     }
 
     Unit::Unmount(from_aura);
@@ -18059,16 +18062,18 @@ void Player::Unmount(bool from_aura)
         ResummonPetTemporaryUnSummonedIfAny();
 
     SendDismountResult(DISMOUNTRESULT_OK);
+
+    return DISMOUNTRESULT_OK;
 }
 
-void Player::SendMountResult(PlayerMountResult result) const
+void Player::SendMountResult(UnitMountResult result) const
 {
     WorldPacket data(SMSG_MOUNTRESULT, 4);
     data << uint32(result);
     GetSession()->SendPacket(&data);
 }
 
-void Player::SendDismountResult(PlayerDismountResult result) const
+void Player::SendDismountResult(UnitDismountResult result) const
 {
     WorldPacket data(SMSG_DISMOUNTRESULT, 4);
     data << uint32(result);
