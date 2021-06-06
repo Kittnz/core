@@ -34,21 +34,21 @@ EndContentData */
 # npc_muglash
 ####*/
 
-enum
+enum MuglashData
 {
-    SAY_MUG_START1 = -1000501,
-    SAY_MUG_START2 = -1000502,
-    SAY_MUG_BRAZIER = -1000503,
-    SAY_MUG_BRAZIER_WAIT = -1000504,
-    SAY_MUG_ON_GUARD = -1000505,
-    SAY_MUG_REST = -1000506,
-    SAY_MUG_DONE = -1000507,
-    SAY_MUG_GRATITUDE = -1000508,
-    SAY_MUG_PATROL = -1000509,
-    SAY_MUG_RETURN = -1000510,
+    SAY_MUG_START1 = 8566,
+    SAY_MUG_START2 = 8555,
+    SAY_MUG_BRAZIER = 8556,
+    SAY_MUG_BRAZIER_WAIT = 8410,
+    SAY_MUG_ON_GUARD = 8412,
+    SAY_MUG_REST = 8413,
+    SAY_MUG_DONE = 8569,
+    SAY_MUG_GRATITUDE = 8558,
+    SAY_MUG_PATROL = 8564,
+    SAY_MUG_RETURN = 8565,
 
-    SAY_MUG_Q_COMPETENCE = -1780221,
-    SAY_MUG_IMPATIENT = -1780222,
+    SAY_MUG_Q_COMPETENCE = -1780221, // bct need
+    SAY_MUG_IMPATIENT = -1780222, // bct need
 
     QUEST_VORSHA = 6641,
 
@@ -56,15 +56,12 @@ enum
     GO_BRAZIER_GUID = 47873,
 
     NPC_MUGLASH = 12717,
-
     NPC_WRATH_RIDER = 3713,
     NPC_WRATH_SORCERESS = 3717,
     NPC_WRATH_RAZORTAIL = 3712,
-
     NPC_WRATH_PRIESTESS = 3944,
     NPC_WRATH_MYRMIDON = 3711,
     NPC_WRATH_SEAWITCH = 3715,
-
     NPC_VORSHA = 12940
 };
 
@@ -125,6 +122,12 @@ struct npc_muglashAI : public npc_escortAI
         }
     }
 
+    void JustRespawned() override
+    {
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
+        npc_escortAI::JustRespawned();
+    }
+
     void WaypointReached(uint32 uiPointId) override
     {
         switch (uiPointId)
@@ -146,10 +149,11 @@ struct npc_muglashAI : public npc_escortAI
                 }
                 break;
             case 25:
-                DoScriptText(SAY_MUG_GRATITUDE, m_creature);
-
                 if (Player* pPlayer = GetPlayerForEscort())
+                {
+                    DoScriptText(SAY_MUG_GRATITUDE, m_creature, pPlayer);
                     pPlayer->GroupEventHappens(QUEST_VORSHA, m_creature);
+                }
                 break;
             case 26:
                 DoScriptText(SAY_MUG_PATROL, m_creature);
@@ -165,25 +169,37 @@ struct npc_muglashAI : public npc_escortAI
         switch (m_uiWaveId)
         {
             case 1:
+            {
                 m_creature->SummonCreature(NPC_WRATH_RIDER,     m_afFirstNagaCoord[0][0], m_afFirstNagaCoord[0][1], m_afFirstNagaCoord[0][2], 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 60000);
                 m_creature->SummonCreature(NPC_WRATH_SORCERESS, m_afFirstNagaCoord[1][0], m_afFirstNagaCoord[1][1], m_afFirstNagaCoord[1][2], 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 60000);
                 m_creature->SummonCreature(NPC_WRATH_RAZORTAIL, m_afFirstNagaCoord[2][0], m_afFirstNagaCoord[2][1], m_afFirstNagaCoord[2][2], 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 60000);
                 break;
+            }
             case 2:
+            {
                 m_creature->SummonCreature(NPC_WRATH_PRIESTESS, m_afSecondNagaCoord[0][0], m_afSecondNagaCoord[0][1], m_afSecondNagaCoord[0][2], 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 60000);
                 m_creature->SummonCreature(NPC_WRATH_MYRMIDON,  m_afSecondNagaCoord[1][0], m_afSecondNagaCoord[1][1], m_afSecondNagaCoord[1][2], 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 60000);
                 m_creature->SummonCreature(NPC_WRATH_SEAWITCH,  m_afSecondNagaCoord[2][0], m_afSecondNagaCoord[2][1], m_afSecondNagaCoord[2][2], 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 60000);
                 break;
+            }
             case 3:
+            {
                 m_creature->SummonCreature(NPC_VORSHA, m_fVorshaCoord[0], m_fVorshaCoord[1], m_fVorshaCoord[2], 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 60000);
                 break;
+            }
             case 4:
-                DoScriptText(SAY_MUG_DONE, m_creature);
+            {
+                if (Player* pPlayer = GetPlayerForEscort())
+                    DoScriptText(SAY_MUG_DONE, m_creature, pPlayer);
+
                 m_creature->HandleEmote(EMOTE_ONESHOT_CHEER);
                 break;
+            }
             case 5:
+            {
                 SetEscortPaused(false);
                 break;
+            }
         }
     }
 
@@ -279,7 +295,6 @@ bool QuestAccept_npc_muglash(Player* pPlayer, Creature* pCreature, const Quest* 
             go_naga_brazier->ResetDoorOrButton();
             go_naga_brazier->SetGoState(GO_STATE_READY);
         }
-
     }
 
     return true;
@@ -296,7 +311,7 @@ bool GOHello_go_naga_brazier(Player* pPlayer, GameObject* pGo)
     {
         if (npc_muglashAI* pEscortAI = dynamic_cast<npc_muglashAI*>(pCreature->AI()))
         {
-            DoScriptText(SAY_MUG_BRAZIER_WAIT, pCreature);
+            DoScriptText(SAY_MUG_BRAZIER_WAIT, pCreature, pPlayer);
 
             pEscortAI->m_bIsBrazierExtinguished = true;
             return false;
@@ -310,15 +325,14 @@ bool GOHello_go_naga_brazier(Player* pPlayer, GameObject* pGo)
 # npc_ruul_snowhoof
 ####*/
 
-enum
+enum RuulSnowhoofData
 {
-    QUEST_FREEDOM_TO_RUUL   = 6482,
-    NPC_T_URSA              = 3921,
-    NPC_T_TOTEMIC           = 3922,
-    NPC_T_PATHFINDER        = 3926,
-    SAY_RUUL_END            = -1780189,
-    BEAR_AURA               = 20514,
-    FACTION_ESCORTEE        = 33,
+    QUEST_FREEDOM_TO_RUUL = 6482,
+    NPC_T_URSA = 3921,
+    NPC_T_TOTEMIC = 3922,
+    NPC_T_PATHFINDER = 3926,
+    SAY_RUUL_END = 8265,
+    BEAR_AURA = 20514
 };
 
 struct npc_ruul_snowhoofAI : public npc_escortAI
@@ -335,26 +349,30 @@ struct npc_ruul_snowhoofAI : public npc_escortAI
 
     void WaypointReached(uint32 uiPointId) override
     {
-        //m_creature->MonsterYell("DEBUG : WayPoint reached", 0); //The hell, still skipping waypoints 13/02/2015
-        //sLog.outString("DEBUG : Ruul : WayPoint n° %u", uiPointId);
         switch (uiPointId)
         {
             case 13:
+            {
                 m_creature->SummonCreature(NPC_T_TOTEMIC, 3449.218018f, -587.825073f, 174.978867f, 4.714445f, TEMPSUMMON_DEAD_DESPAWN, 60000);
                 m_creature->SummonCreature(NPC_T_URSA, 3446.384521f, -587.830872f, 175.186279f, 4.714445f, TEMPSUMMON_DEAD_DESPAWN, 60000);
                 m_creature->SummonCreature(NPC_T_PATHFINDER, 3444.218994f, -587.835327f, 175.380600f, 4.714445f, TEMPSUMMON_DEAD_DESPAWN, 60000);
                 break;
+            }
             case 19:
+            {
                 m_creature->SummonCreature(NPC_T_TOTEMIC, 3508.344482f, -492.024261f, 186.929031f, 4.145029f, TEMPSUMMON_DEAD_DESPAWN, 60000);
                 m_creature->SummonCreature(NPC_T_URSA, 3506.265625f, -490.531006f, 186.740128f, 4.239277f, TEMPSUMMON_DEAD_DESPAWN, 60000);
                 m_creature->SummonCreature(NPC_T_PATHFINDER, 3503.682373f, -489.393799f, 186.629684f, 4.349232f, TEMPSUMMON_DEAD_DESPAWN, 60000);
                 break;
+            }
             case 25:
+            {
                 m_creature->RemoveAurasDueToSpell(BEAR_AURA);
                 DoScriptText(SAY_RUUL_END, m_creature);
                 if (Player* pPlayer = GetPlayerForEscort())
                     pPlayer->GroupEventHappens(QUEST_FREEDOM_TO_RUUL, m_creature);
                 break;
+            }
         }
     }
 
@@ -368,12 +386,13 @@ bool QuestAccept_npc_ruul_snowhoof(Player* pPlayer, Creature* pCreature, const Q
 {
     if (pQuest->GetQuestId() == QUEST_FREEDOM_TO_RUUL)
     {
-        pCreature->SetFactionTemplateId(FACTION_ESCORTEE);
+        pCreature->SetFactionTemplateId(106);//supposed to be able to get killed by alliance players.
         pCreature->SetStandState(UNIT_STAND_STATE_STAND);
 
         if (npc_ruul_snowhoofAI* pEscortAI = dynamic_cast<npc_ruul_snowhoofAI*>(pCreature->AI()))
             pEscortAI->Start(false, pPlayer->GetGUID(), pQuest);
     }
+
     return true;
 }
 
@@ -386,23 +405,23 @@ CreatureAI* GetAI_npc_ruul_snowhoofAI(Creature* pCreature)
 # npc_torek
 ####*/
 
-enum
+enum TorekData
 {
-    SAY_READY                   = -1000106,
-    SAY_MOVE                    = -1000107,
-    SAY_PREPARE                 = -1000108,
-    SAY_WIN                     = -1000109,
-    SAY_END                     = -1000110,
+    SAY_READY = 8284,
+    SAY_MOVE = 8278,
+    SAY_PREPARE = 8282,
+    SAY_WIN = 8280,
+    SAY_END = 8281,
 
-    SPELL_REND                  = 11977,
-    SPELL_THUNDERCLAP           = 8078,
+    SPELL_REND = 11977,
+    SPELL_THUNDERCLAP = 8078,
 
-    QUEST_TOREK_ASSULT          = 6544,
+    QUEST_TOREK_ASSULT = 6544,
 
-    NPC_SPLINTERTREE_RAIDER     = 12859,
-    NPC_DURIEL                  = 12860,
-    NPC_SILVERWING_SENTINEL     = 12896,
-    NPC_SILVERWING_WARRIOR      = 12897
+    NPC_SPLINTERTREE_RAIDER = 12859,
+    NPC_DURIEL = 12860,
+    NPC_SILVERWING_SENTINEL = 12896,
+    NPC_SILVERWING_WARRIOR = 12897
 };
 
 struct npc_torekAI : public npc_escortAI
@@ -420,14 +439,19 @@ struct npc_torekAI : public npc_escortAI
         m_uiRend_Timer = 5000;
         m_uiThunderclap_Timer = 8000;
     }
+
     void JustDied(Unit* pKiller) override
     {
         std::list<Creature*> lCrea;
+
         m_creature->GetCreatureListWithEntryInGrid(lCrea, NPC_SPLINTERTREE_RAIDER, 40.0f);
+
         for (std::list<Creature*>::iterator it = lCrea.begin(); it != lCrea.end(); ++it)
             (*it)->DisappearAndDie();
+
         npc_escortAI::JustDied(pKiller);
     }
+
     void WaypointReached(uint32 uiPointId) override
     {
         Player* pPlayer = GetPlayerForEscort();
@@ -518,27 +542,26 @@ CreatureAI* GetAI_npc_torek(Creature* pCreature)
  # npc_feero_ironhand
  ####*/
 
-enum
+enum FeeroIronhandData
 {
-    SAY_QUEST_START = -1000817,
-    SAY_FIRST_AMBUSH_START = -1000818,
-    SAY_FIRST_AMBUSH_END = -1000819,
-    SAY_SECOND_AMBUSH_START = -1000820,
-    SAY_SCOUT_SECOND_AMBUSH = -1000821,
-    SAY_SECOND_AMBUSH_END = -1000822,
-    SAY_FINAL_AMBUSH_START = -1000823,
-    SAY_BALIZAR_FINAL_AMBUSH = -1000824,
-    SAY_FINAL_AMBUSH_ATTACK = -1000825,
-    SAY_QUEST_END = -1000826,
+    SAY_QUEST_START = 1292,
+    SAY_FIRST_AMBUSH_START = 1372,
+    SAY_FIRST_AMBUSH_END = 1294,
+    SAY_SECOND_AMBUSH_START = 1373,
+    SAY_SCOUT_SECOND_AMBUSH = 1309,
+    SAY_SECOND_AMBUSH_END = 1310,
+    SAY_FINAL_AMBUSH_START = 1374,
+    SAY_BALIZAR_FINAL_AMBUSH = 1313,
+    SAY_FINAL_AMBUSH_ATTACK = 1499,
+    SAY_QUEST_END = 1315,
 
     QUEST_SUPPLIES_TO_AUBERDINE = 976,
 
     NPC_DARK_STRAND_ASSASSIN = 3879,
     NPC_FORSAKEN_SCOUT = 3893,
-
     NPC_ALIGAR_THE_TORMENTOR = 3898,
     NPC_BALIZAR_THE_UMBRAGE = 3899,
-    NPC_CAEDAKAR_THE_VICIOUS = 3900,
+    NPC_CAEDAKAR_THE_VICIOUS = 3900
 };
 
 /*
@@ -550,7 +573,7 @@ enum
 static const float aSummonPositions[2][2] =
 {
     {30.0f, 1.25f},
-    {15.0f, 0.95f}//30.0f is in the tree and gets stuck with fathfinding
+    {15.0f, 0.95f} //30.0f is in the tree and gets stuck with fathfinding
 };
 
 // Hardcoded positions for the last 3 mobs
@@ -580,40 +603,42 @@ struct npc_feero_ironhandAI : public npc_escortAI
         }
     }
 
-    void JustRespawned() override
-    {
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
-        npc_escortAI::JustRespawned();
-    }
-
     void WaypointReached(uint32 uiPointId) override
     {
         switch (uiPointId)
         {
             case 14:
+            {
                 // Prepare the first ambush
                 DoScriptText(SAY_FIRST_AMBUSH_START, m_creature);
                 for (uint8 i = 0; i < 4; ++i)
                     DoSpawnMob(NPC_DARK_STRAND_ASSASSIN, aSummonPositions[0][0], aSummonPositions[0][1] - M_PI_F / 4 * i);
                 break;
+            }
             case 20:
+            {
                 // Prepare the second ambush
                 DoScriptText(SAY_SECOND_AMBUSH_START, m_creature);
                 for (uint8 i = 0; i < 3; ++i)
                     DoSpawnMob(NPC_FORSAKEN_SCOUT, aSummonPositions[1][0], aSummonPositions[1][1] - M_PI_F / 3 * i);
                 break;
+            }
             case 29:
+            {
                 // Final ambush
                 DoScriptText(SAY_FINAL_AMBUSH_START, m_creature);
                 m_creature->SummonCreature(NPC_BALIZAR_THE_UMBRAGE, aEliteSummonPositions[0][0], aEliteSummonPositions[0][1], aEliteSummonPositions[0][2], aEliteSummonPositions[0][3], TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 20000);
                 m_creature->SummonCreature(NPC_ALIGAR_THE_TORMENTOR, aEliteSummonPositions[1][0], aEliteSummonPositions[1][1], aEliteSummonPositions[1][2], aEliteSummonPositions[1][3], TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 20000);
                 m_creature->SummonCreature(NPC_CAEDAKAR_THE_VICIOUS, aEliteSummonPositions[2][0], aEliteSummonPositions[2][1], aEliteSummonPositions[2][2], aEliteSummonPositions[2][3], TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 20000);
                 break;
+            }
             case 30:
+            {
                 // Complete the quest
                 if (Player* pPlayer = GetPlayerForEscort())
                     pPlayer->GroupEventHappens(QUEST_SUPPLIES_TO_AUBERDINE, m_creature);
                 break;
+            }
         }
     }
 
@@ -674,6 +699,7 @@ struct npc_feero_ironhandAI : public npc_escortAI
             DoScriptText(SAY_BALIZAR_FINAL_AMBUSH, pSummoned);
 
         ++m_uiCreaturesCount;
+
         if (Player* pPlayer = GetPlayerForEscort())
             pSummoned->AI()->AttackStart(pPlayer);
     }
@@ -690,27 +716,33 @@ bool QuestAccept_npc_feero_ironhand(Player* pPlayer, Creature* pCreature, const 
     {
         DoScriptText(SAY_QUEST_START, pCreature, pPlayer);
         pCreature->SetFactionTemplateId(FACTION_ESCORT_A_NEUTRAL_PASSIVE);
+
         pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
+
         if (npc_feero_ironhandAI* pEscortAI = dynamic_cast<npc_feero_ironhandAI*>(pCreature->AI()))
             pEscortAI->Start(true, pPlayer->GetGUID(), pQuest);
     }
 
     return true;
 }
-//Alita King Of The Foulweed
-enum
-{
-    NPC_ENRAGED_FOULWEALD               = 12921,
-    NPC_CHIEF_MURGUT                    = 12918,
-    GO_KARANG_S_BANNER                  = 178205,
-    GO_KARANG_LIGHT                     = 178207,
-    GO_MOUND                            = 300131,
-    SPELL_CORRUPTED_STRENGTH            = 6821,
-    SPELL_DESTROY_KARANG_S_BANNER_1     = 20786,
-    SPELL_DESTROY_KARANG_S_BANNER_2     = 20783,
 
-    SAY_ATTACK_BANNER                   = -1780210
+//Alita King Of The Foulweed
+enum FoulwealdTotemMoundData
+{
+    NPC_ENRAGED_FOULWEALD = 12921,
+    NPC_CHIEF_MURGUT = 12918,
+
+    GO_KARANG_S_BANNER = 178205,
+    GO_KARANG_LIGHT = 178207,
+    GO_MOUND = 300131,
+
+    SPELL_CORRUPTED_STRENGTH = 6821,
+    SPELL_DESTROY_KARANG_S_BANNER_1 = 20786,
+    SPELL_DESTROY_KARANG_S_BANNER_2 = 20783,
+
+    SAY_ATTACK_BANNER = 8398
 };
+
 static float foulwealdSpawnCoords[4][3] =
 {
     {2237.48f, -1524.45f, 89.7827f},
@@ -742,6 +774,7 @@ struct go_foulweald_totem_moundAI: public GameObjectAI
     {
         if (eventPhase != 0)
             return false;
+
         eventPhase = 1;
         Creature* foulweald = nullptr;
         for (int i = 0; i < 2; i++)
@@ -756,20 +789,26 @@ struct go_foulweald_totem_moundAI: public GameObjectAI
                 foulweald->SetRespawnDelay(425000);
                 DefineFoulwealdMound(foulweald, me->GetGUID());
             }
+
             foulweald = nullptr;
         }
+
         return true;
     }
+
     void EventEnded()
     {
         if (GameObject* pGo = me->FindNearestGameObject(GO_KARANG_S_BANNER, 10))
             pGo->AddObjectToRemoveList();
+
         reset();
     }
+
     void EnragedFoulwealdJustDied(uint64 creatureGUID)
     {
         if (eventPhase != 1)
             return;
+
         Creature* foulweald;
         int pos = 0;
         for (int i = 0; i < 2; i++)
@@ -802,9 +841,12 @@ struct go_foulweald_totem_moundAI: public GameObjectAI
             switch (eventPhase)
             {
                 case 2:
+                {
                     phaseTimer = 10000;
                     break;
+                }
                 case 3:
+                {
                     if (Creature* murgut = me->SummonCreature(NPC_CHIEF_MURGUT, foulwealdSpawnCoords[3][0], foulwealdSpawnCoords[3][1], foulwealdSpawnCoords[3][2], 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 120000))
                     {
                         float x, y, z;
@@ -818,17 +860,22 @@ struct go_foulweald_totem_moundAI: public GameObjectAI
                             me->SummonGameObject(178207, x, y, z, 0, 0, 0, 0, 0, 120);
                         }
                     }
+
                     phaseTimer = 120000;
                     break;
+                }
                 case 4:
+                {
                     EventEnded();
                     break;
+                }
             }
         }
         else
             phaseTimer -= uiDiff;
     }
 };
+
 GameObjectAI* GetAIgo_foulweald_totem_mound(GameObject *pGo)
 {
     return new go_foulweald_totem_moundAI(pGo);
@@ -840,13 +887,16 @@ struct npc_enraged_foulwealdAI : public ScriptedAI
     {
         Reset();
     }
+
     void Reset() override
     {
         m_creature->AddAura(SPELL_CORRUPTED_STRENGTH);
         timer = 0;
     }
+
     uint32 timer;
     uint64 guidMound;
+
     void JustDied(Unit* pKiller) override
     {
         if (GameObject* gobj = m_creature->GetMap()->GetGameObject(guidMound))
@@ -860,14 +910,18 @@ struct npc_enraged_foulwealdAI : public ScriptedAI
     {
         if (uiType != POINT_MOTION_TYPE || uiPointId != 2)
             return;
+
         HitBanner();
     }
+
     void AttackStart(Unit * unit) override
     {
         if (m_creature->GetCurrentSpell(CURRENT_CHANNELED_SPELL))
             return;
+
         ScriptedAI::AttackStart(unit);
     }
+
     bool HitBanner()
     {
         if (GameObject* pGo = m_creature->FindNearestGameObject(GO_KARANG_S_BANNER, CONTACT_DISTANCE + 1))
@@ -879,13 +933,14 @@ struct npc_enraged_foulwealdAI : public ScriptedAI
             timer = 10000;
             return true;
         }
+
         return false;
     }
+
     void UpdateAI(const uint32 uiDiff) override
     {
         if (m_creature->GetCurrentSpell(CURRENT_CHANNELED_SPELL))
             return;
-
 
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
         {
@@ -904,10 +959,13 @@ struct npc_enraged_foulwealdAI : public ScriptedAI
             }
             else
                 timer -= uiDiff;
+
             return;
         }
+
         DoMeleeAttackIfReady();
     }
+
     void SpellHit(Unit* pCaster, const SpellEntry* pSpell) override
     {
         if (pSpell->Id == SPELL_DESTROY_KARANG_S_BANNER_2)
@@ -919,6 +977,7 @@ struct npc_enraged_foulwealdAI : public ScriptedAI
             }
         }
     }
+
     void SetMoundGuid(uint64 moundGuid)
     {
         guidMound = moundGuid;
@@ -929,6 +988,7 @@ CreatureAI* GetAI_npc_enraged_foulweald(Creature* pCreature)
 {
     return new npc_enraged_foulwealdAI(pCreature);
 }
+
 bool ProcessEventId_event_king_of_the_foulweald(uint32 eventId, Object* source, Object* target, bool isStart)
 {
     if (!target || !source)
@@ -936,7 +996,7 @@ bool ProcessEventId_event_king_of_the_foulweald(uint32 eventId, Object* source, 
 
     if (go_foulweald_totem_moundAI* pMoundAI = dynamic_cast<go_foulweald_totem_moundAI*>(((GameObject*) target)->AI()))
         pMoundAI->EventStart(source->GetGUID());
-    return true;//return the result of EventStart or true? true because otherwise it'll get the event in the DB.
+    return true; // return the result of EventStart or true? true because otherwise it'll get the event in the DB.
 }
 
 void DefineFoulwealdMound(Creature * crea, uint64 gobjGUID)
@@ -944,6 +1004,7 @@ void DefineFoulwealdMound(Creature * crea, uint64 gobjGUID)
     if (npc_enraged_foulwealdAI* foulwealdAI = dynamic_cast<npc_enraged_foulwealdAI*>(crea->AI()))
         foulwealdAI->SetMoundGuid(gobjGUID);
 }
+
 void AddSC_ashenvale()
 {
     Script *newscript;
