@@ -1,4 +1,4 @@
-- Move localized faction texts to separate table.
+-- Move localized faction texts to separate table.
 CREATE TABLE IF NOT EXISTS `locales_faction` (
   `entry` int(10) unsigned NOT NULL,
   `name_loc1` varchar(256) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',

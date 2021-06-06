@@ -418,10 +418,14 @@ UPDATE `quest_template` SET `entry`=5238 WHERE `entry`=52370;
 UPDATE `creature_questrelation` SET `quest`=5238 WHERE `quest`=52370;
 UPDATE `creature_involvedrelation` SET `quest`=5238 WHERE `quest`=52370;
 -- Mantles of the Dawn (Ally)
+DELETE FROM `creature_questrelation` WHERE `quest` = 5507;
 INSERT INTO `creature_questrelation` (`id`, `quest`, `patch_min`, `patch_max`) VALUES (10857, 5507, 0, 10);
+DELETE FROM `creature_involvedrelation` WHERE `quest` = 5507;
 INSERT INTO `creature_involvedrelation` (`id`, `quest`, `patch_min`, `patch_max`) VALUES (10857, 5507, 0, 10);
 -- Mantles of the Dawn (Neutral)
+DELETE FROM `creature_questrelation` WHERE `id` = 11536;
 INSERT INTO `creature_questrelation` (`id`, `quest`, `patch_min`, `patch_max`) VALUES (11536, 5513, 0, 10);
+DELETE FROM `creature_involvedrelation` WHERE `id` = 11536;
 INSERT INTO `creature_involvedrelation` (`id`, `quest`, `patch_min`, `patch_max`) VALUES (11536, 5513, 0, 10);
 -- Mantles of the Dawn (Horde)
 DELETE FROM `creature_questrelation` WHERE `quest`=5504 && `id`!=10856;
@@ -3715,6 +3719,7 @@ UPDATE `quest_template` SET `ReqItemCount4`=0 WHERE `entry`=6133;
 
 -- Areatriggers
 DELETE FROM `scripted_areatrigger` WHERE `entry`=822;
+DELETE FROM `areatrigger_involvedrelation` WHERE `quest`=2240;
 INSERT INTO `areatrigger_involvedrelation` VALUES (822, 2240);
 DELETE FROM `areatrigger_involvedrelation` WHERE `quest`=287;
 INSERT INTO `areatrigger_involvedrelation` VALUES (97, 287);
@@ -3725,11 +3730,17 @@ INSERT INTO `areatrigger_involvedrelation` VALUES (1387, 3505);
 DELETE FROM `areatrigger_involvedrelation` WHERE `quest`=6025;
 INSERT INTO `areatrigger_involvedrelation` VALUES (3366, 6025);
 UPDATE `quest_template` SET `SpecialFlags`=`SpecialFlags`|2 WHERE `entry` IN (437, 1658, 6185, 9263, 9264, 9265);
+DELETE FROM `areatrigger_involvedrelation` WHERE `quest`=437;
 INSERT INTO `areatrigger_involvedrelation` VALUES (173, 437);
+DELETE FROM `areatrigger_involvedrelation` WHERE `quest`=1658;
 INSERT INTO `areatrigger_involvedrelation` VALUES (3991, 1658);
+DELETE FROM `areatrigger_involvedrelation` WHERE `quest`=6185;
 INSERT INTO `areatrigger_involvedrelation` VALUES (2726, 6185);
+DELETE FROM `areatrigger_involvedrelation` WHERE `quest`=9263;
 INSERT INTO `areatrigger_involvedrelation` VALUES (4101, 9263);
+DELETE FROM `areatrigger_involvedrelation` WHERE `quest`=9264;
 INSERT INTO `areatrigger_involvedrelation` VALUES (4103, 9264);
+DELETE FROM `areatrigger_involvedrelation` WHERE `quest`=9265;
 INSERT INTO `areatrigger_involvedrelation` VALUES (4100, 9265);
 
 ALTER TABLE `quest_template`

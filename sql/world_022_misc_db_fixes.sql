@@ -1,6 +1,8 @@
 -- Remove custom Un'Goro eggs trigger and use proper areatriggers.
 DELETE FROM `creature` WHERE `id`=20005;
 DELETE FROM `creature_template` WHERE `entry`=20005;
+DELETE FROM `scripted_areatrigger` WHERE `entry` IN
+(1726, 1727, 1728, 1729, 1730, 1731, 1732, 1733, 1734, 1735, 1736, 1737, 1738, 1739, 1740, 1766);
 INSERT INTO `scripted_areatrigger` (`entry`, `script_name`) VALUES 
 (1726, 'at_scent_larkorwi'),
 (1727, 'at_scent_larkorwi'),
@@ -30,7 +32,7 @@ DELETE FROM `creature_ai_events` WHERE `creature_id` IN (155520, 155530);
 DELETE FROM `creature_ai_scripts` WHERE `id` iN (15552001, 15553001);
 
 -- Move Doctor Weavil's addon data to spawn instead of template.
-INSERT INTO `creature_addon` (`guid`, `patch`, `mount`, `bytes1`, `b2_0_sheath`, `b2_1_flags`, `emote`, `moveflags`, `auras`) VALUES (18614, 7, 0, 3, 1, 16, 0, 0, '');
+REPLACE `creature_addon` (`guid`, `patch`, `mount`, `bytes1`, `b2_0_sheath`, `b2_1_flags`, `emote`, `moveflags`, `auras`) VALUES (18614, 7, 0, 3, 1, 16, 0, 0, '');
 DELETE FROM `creature_template_addon` WHERE `entry`=15552;
 
 -- Remove custom spells used to start event script.
