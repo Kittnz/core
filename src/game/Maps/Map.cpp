@@ -1999,15 +1999,6 @@ bool DungeonMap::CanEnter(Player *player)
         return false;
     }
 
-    if (GetId() == 509 || GetId() == 531)
-    {
-        if (sGameEventMgr.IsActiveEvent(EVENT_AQ_GATE))
-        {
-            player->SendTransferAborted(TRANSFER_ABORT_SILENTLY);
-            return false;
-        }
-    }
-
     return Map::CanEnter(player);
 }
 

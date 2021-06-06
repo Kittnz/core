@@ -385,12 +385,6 @@ PvP.AccurateEquipRequirements = 1
 PvP.AccuratePurchaseRequirements = 1
 
 #
-#    PvP.AccurateZoneRequirements
-#        Whether to enforce Blizzlike PVP rank requirements to zone into the Champion and Legends halls.
-
-PvP.AccurateZoneRequirements = 1
-
-#
 #    PvP.AccurateTimeline
 #        Whether to enforce accurate PVP timelines. eg. the honour system was not implemented before patch 1.4.
 #        If set, players will be unable to gain rank until the appropriate patch.
