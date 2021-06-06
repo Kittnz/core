@@ -6114,16 +6114,10 @@ void ObjectMgr::LoadWorldSafeLocsFacing()
     uint32 count = 0;
     std::unique_ptr<QueryResult> result(WorldDatabase.Query("SELECT `id`, `orientation` FROM `world_safe_locs_facing`"));
     if (!result)
-    {
-        BarGoLink bar(1);
-        bar.step();
         return;
-    }
 
-    BarGoLink bar(result->GetRowCount());
     do
     {
-        bar.step();
         Field *fields = result->Fetch();
 
         uint32 safeLocId = fields[0].GetUInt32();

@@ -5058,6 +5058,8 @@ void Player::RepopAtGraveyard()
     else
         ClosestGrave = sObjectMgr.GetClosestGraveYard(GetPositionX(), GetPositionY(), GetPositionZ(), GetMapId(), GetTeam());
 
+    float orientation = GetOrientation();
+
     if (ClosestGrave)
         if (float facing = sObjectMgr.GetWorldSafeLocFacing(ClosestGrave->ID))
             orientation = facing;
