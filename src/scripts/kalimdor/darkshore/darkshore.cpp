@@ -34,30 +34,27 @@ EndContentData */
 # npc_kerlonian
 ####*/
 
-enum
+enum KerlonianData
 {
-    SAY_KER_START = -1000434,
-
-    EMOTE_KER_SLEEP_1 = -1000435,
-    EMOTE_KER_SLEEP_2 = -1000436,
-    EMOTE_KER_SLEEP_3 = -1000437,
-
-    SAY_KER_SLEEP_1 = -1000438,
-    SAY_KER_SLEEP_2 = -1000439,
-    SAY_KER_SLEEP_3 = -1000440,
-    SAY_KER_SLEEP_4 = -1000441,
-
-    EMOTE_KER_AWAKEN = -1000445,
-
-    SAY_KER_ALERT_1 = -1000442,
-    SAY_KER_ALERT_2 = -1000443,
-
-    SAY_KER_END = -1000444,
+    SAY_KER_START     = 6540,
+    EMOTE_KER_SLEEP_1 = 6811,
+    EMOTE_KER_SLEEP_2 = 6542,
+    EMOTE_KER_SLEEP_3 = 6541,
+    SAY_KER_SLEEP_1   = 6813,
+    SAY_KER_SLEEP_2   = 6543,
+    SAY_KER_SLEEP_3   = 6544,
+    SAY_KER_SLEEP_4   = 6545,
+    EMOTE_KER_AWAKEN  = 6612,
+    SAY_KER_ALERT_1   = 6867,
+    SAY_KER_ALERT_2   = 6868,
+    SAY_KER_END       = 6643,
 
     SPELL_SLEEP_VISUAL = 25148,
-    SPELL_AWAKEN = 17536,
+    SPELL_AWAKEN       = 17536,
+
     QUEST_SLEEPER_AWAKENED = 5321,
-    NPC_LILADRIS = 11219 // Attackers entries unknown
+
+    NPC_LILADRIS = 11219 // attackers entries unknown
 };
 
 //TODO: make concept similar as "ringo" -escort. Find a way to run the scripted attacks, _if_ player are choosing road.
@@ -205,26 +202,27 @@ bool QuestAccept_npc_kerlonian(Player* pPlayer, Creature* pCreature, const Quest
 # npc_prospector_remtravel
 ####*/
 
-enum
+enum ProspectorRemtravelData
 {
-    SAY_REM_START               = -1000327,
-    SAY_REM_AGGRO               = -1000339,
-    SAY_REM_RAMP1_1             = -1000328,
-    SAY_REM_RAMP1_2             = -1000329,
-    SAY_REM_BOOK                = -1000330,
-    SAY_REM_TENT1_1             = -1000331,
-    SAY_REM_TENT1_2             = -1000332,
-    SAY_REM_MOSS                = -1000333,
-    EMOTE_REM_MOSS              = -1000334,
-    SAY_REM_MOSS_PROGRESS       = -1000335,
-    SAY_REM_PROGRESS            = -1000336,
-    SAY_REM_REMEMBER            = -1000337,
-    EMOTE_REM_END               = -1000338,
+    SAY_REM_START         = 925,
+    SAY_REM_AGGRO         = 941,
+    SAY_REM_RAMP1_1       = 926,
+    SAY_REM_RAMP1_2       = 927,
+    SAY_REM_BOOK          = 928,
+    SAY_REM_TENT1_1       = 929,
+    SAY_REM_TENT1_2       = 930,
+    SAY_REM_MOSS          = 931,
+    EMOTE_REM_MOSS        = 932,
+    SAY_REM_MOSS_PROGRESS = 933,
+    SAY_REM_PROGRESS      = 935,
+    SAY_REM_REMEMBER      = 936,
+    EMOTE_REM_END         = 937,
 
-    QUEST_ABSENT_MINDED_PT2     = 731,
-    NPC_GRAVEL_SCOUT            = 2158,
-    NPC_GRAVEL_BONE             = 2159,
-    NPC_GRAVEL_GEO              = 2160
+    QUEST_ABSENT_MINDED_PT2 = 731,
+
+    NPC_GRAVEL_SCOUT = 2158,
+    NPC_GRAVEL_BONE  = 2159,
+    NPC_GRAVEL_GEO   = 2160
 };
 
 struct npc_prospector_remtravelAI : public npc_escortAI
@@ -342,16 +340,16 @@ bool QuestAccept_npc_prospector_remtravel(Player* pPlayer, Creature* pCreature, 
 # npc_threshwackonator
 ####*/
 
-enum
+enum ThreshwackonatorData
 {
-    EMOTE_START             = -1000325,
-    SAY_AT_CLOSE            = -1000326,
-    QUEST_GYROMAST_REV      = 2078,
-    NPC_GELKAK              = 6667,
-    FACTION_HOSTILE         = 14
+    EMOTE_START        = 3012,
+    SAY_AT_CLOSE       = 2704,
+    QUEST_GYROMAST_REV = 2078,
+    NPC_GELKAK         = 6667,
+    FACTION_HOSTILE    = 14
 };
 
-#define GOSSIP_ITEM_INSERT_KEY  "[PH] Insert key"
+#define GOSSIP_ITEM_INSERT_KEY "[PH] Insert key"
 
 struct npc_threshwackonatorAI : public FollowerAI
 {
@@ -421,14 +419,14 @@ bool GossipSelect_npc_threshwackonator(Player* pPlayer, Creature* pCreature, uin
 # npc_therylune
 ####*/
 
-enum
+enum TheryluneData
 {
-    SAY_THERYLUNE_START              = -1000905,
-    SAY_THERYLUNE_FINISH             = -1000906,
+    SAY_THERYLUNE_START  = 1189,
+    SAY_THERYLUNE_FINISH = 1188,
 
-    NPC_THERYSIL                     = 3585,
+    NPC_THERYSIL = 3585,
 
-    QUEST_ID_THERYLUNE_ESCAPE        = 945,
+    QUEST_ID_THERYLUNE_ESCAPE = 945
 };
 
 struct npc_theryluneAI : public npc_escortAI
@@ -487,30 +485,29 @@ bool QuestAccept_npc_therylune(Player* pPlayer, Creature* pCreature, const Quest
 # npc_volcor
 ######*/
 
-enum
+enum VolcorData
 {
-    SAY_START                       = -1000789,
-    SAY_END                         = -1000790,
-    SAY_FIRST_AMBUSH                = -1000791,
-    SAY_AGGRO_1                     = -1000792,
-    SAY_AGGRO_2                     = -1000793,
-    SAY_AGGRO_3                     = -1000794,
-    SAY_END_2                       = -1000795,
-    SAY_END_3                       = -1000796,
+    SAY_START        = 1237,
+    SAY_END          = 1243,
+    SAY_FIRST_AMBUSH = 1250,
+    SAY_AGGRO_1      = 1251,
+    SAY_AGGRO_2      = 1252,
+    SAY_AGGRO_3      = 1253,
+    SAY_END_2        = 1241,
+    SAY_END_3        = 1244,
+    SAY_ESCAPE       = 1236,
 
-    SAY_ESCAPE                      = -1780209,
+    NPC_BLACKWOOD_SHAMAN = 2171,
+    NPC_BLACKWOOD_URSA   = 2170,
+    NPC_GRIMCLAW         = 3695,
 
-    NPC_BLACKWOOD_SHAMAN            = 2171,
-    NPC_BLACKWOOD_URSA              = 2170,
-    NPC_GRIMCLAW                    = 3695,
+    SPELL_MOONSTALKER_FORM = 10849,
 
-    SPELL_MOONSTALKER_FORM          = 10849,
+    WAYPOINT_ID_QUEST_STEALTH = 16,
+    FACTION_FRIENDLY = 35,
 
-    WAYPOINT_ID_QUEST_STEALTH       = 16,
-    FACTION_FRIENDLY                = 35,
-
-    QUEST_ESCAPE_THROUGH_FORCE      = 994,
-    QUEST_ESCAPE_THROUGH_STEALTH    = 995,
+    QUEST_ESCAPE_THROUGH_FORCE   = 994,
+    QUEST_ESCAPE_THROUGH_STEALTH = 995
 };
 
 struct SummonLocation
@@ -806,11 +803,11 @@ bool QuestAccept_npc_volcor(Player* pPlayer, Creature* pCreature, const Quest* p
 # npc_captured_rabid_thistle_bear
 ####*/
 
-enum
+enum RabidThistleBearData
 {
-    SPELL_TRAPPED_BEAR              = 9439,
+    SPELL_RAGE         = 3150,
+    SPELL_TRAPPED_BEAR = 9439,
     NPC_CAPTURED_RABID_THISTLE_BEAR = 11836,
-    SPELL_RAGE                      = 3150
 };
 
 struct npc_rabid_thistle_bearAI : public FollowerAI
@@ -897,11 +894,11 @@ bool EffectDummyCreature_npc_rabid_thistle_bear(WorldObject* pCaster, uint32 uiS
 # npc_tharnariun_treetender
 ####*/
 
-enum
+enum TharnariunTreetenderData
 {
-    SAY_THARNARIUN_CLEANSED = -1780226,
-    QUEST_PLAGUED_LANDS = 2118,
-    SPELL_THARNARIUN_HEAL = 9457
+    SAY_THARNARIUN_CLEANSED = 5937,
+    QUEST_PLAGUED_LANDS     = 2118,
+    SPELL_THARNARIUN_HEAL   = 9457
 };
 
 struct npc_tharnariun_treetenderAI : public ScriptedAI
@@ -1023,7 +1020,7 @@ bool QuestComplete_npc_tharnariun_treetender(Player* pPlayer, Creature* pQuestGi
 # npc_terenthis
 ####*/
 
-enum
+enum TerenthisData
 {
     NPC_SENTINEL_SELARIN     = 3694,
     QUEST_HOW_BIG_A_THREAT_2 = 985
@@ -1064,18 +1061,18 @@ bool QuestComplete_npc_terenthis(Player* pPlayer, Creature* pQuestGiver, Quest c
 # npc_sentinel_aynasha
 ####*/
 
-enum
+enum SentinelAynashaData
 {
-    SAY_AYNASHA_START           = -1780184,
-    SAY_AYNASHA_ARROWS          = -1780185,
-    SAY_AYNASHA_END1            = -1780186,
-    SAY_AYNASHA_END2            = -1780187,
-    SAY_AYNASHA_END3            = -1780188,
+    SAY_AYNASHA_START  = 7200,
+    SAY_AYNASHA_ARROWS = 7199,
+    SAY_AYNASHA_END1   = 7201,
+    SAY_AYNASHA_END2   = 7202,
+    SAY_AYNASHA_END3   = 7328,
 
-    SPELL_AYNASHAS_BOW          = 19767,
-    QUEST_ONE_SHOT_ONE_KILL     = 5713,
-    NPC_BLACKWOOD_TRACKER       = 11713,
-    NPC_MAROSH_THE_DEVIOUS      = 11714
+    SPELL_AYNASHAS_BOW      = 19767,
+    QUEST_ONE_SHOT_ONE_KILL = 5713,
+    NPC_BLACKWOOD_TRACKER   = 11713,
+    NPC_MAROSH_THE_DEVIOUS  = 11714
 };
 
 
@@ -1282,7 +1279,7 @@ bool QuestAcceptGO_beached_sea(Player* player, GameObject* pGo, const Quest* pQu
  #npc_murkdeep
  ###*/
 
-enum
+enum MurkdeepData
 {
     NPC_MURLOC_COATRUNNER   = 2202,
     NPC_MURLOC_WARRIOR      = 2205,
@@ -1385,31 +1382,31 @@ struct npc_murkdeepAI : public ScriptedAI
     {
         switch (m_uiEventPhase)
         {
-        case 1:
-            for (uint8 i = 0; i < 3; ++i)
-                m_creature->SummonCreature(NPC_MURLOC_COATRUNNER,
-                    m_fSummonPoints[i][0],
-                    m_fSummonPoints[i][1],
-                    m_fSummonPoints[i][2],
+            case 1:
+                for (uint8 i = 0; i < 3; ++i)
+                    m_creature->SummonCreature(NPC_MURLOC_COATRUNNER,
+                        m_fSummonPoints[i][0],
+                        m_fSummonPoints[i][1],
+                        m_fSummonPoints[i][2],
+                        m_creature->GetOrientation(),
+                        TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 10 * MINUTE*IN_MILLISECONDS);
+                break;
+            case 2:
+                for (uint8 i = 0; i < 2; ++i)
+                    m_creature->SummonCreature(NPC_MURLOC_WARRIOR,
+                        m_fSummonPoints[i][0], m_fSummonPoints[i][1],
+                        m_fSummonPoints[i][2],
+                        m_creature->GetOrientation(),
+                        TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 10 * MINUTE*IN_MILLISECONDS);
+                break;
+            case 3:
+                m_creature->SummonCreature(NPC_MURLOC_HUNTER,
+                    m_fSummonPoints[1][0],
+                    m_fSummonPoints[1][1],
+                    m_fSummonPoints[1][2],
                     m_creature->GetOrientation(),
                     TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 10 * MINUTE*IN_MILLISECONDS);
-            break;
-        case 2:
-            for (uint8 i = 0; i < 2; ++i)
-                m_creature->SummonCreature(NPC_MURLOC_WARRIOR,
-                    m_fSummonPoints[i][0], m_fSummonPoints[i][1],
-                    m_fSummonPoints[i][2],
-                    m_creature->GetOrientation(),
-                    TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 10 * MINUTE*IN_MILLISECONDS);
-            break;
-        case 3:
-            m_creature->SummonCreature(NPC_MURLOC_HUNTER,
-                m_fSummonPoints[1][0],
-                m_fSummonPoints[1][1],
-                m_fSummonPoints[1][2],
-                m_creature->GetOrientation(),
-                TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 10 * MINUTE*IN_MILLISECONDS);
-            break;
+                break;
         }
     }
 

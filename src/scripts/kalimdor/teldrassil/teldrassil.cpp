@@ -31,10 +31,10 @@ EndContentData */
 # npc_mist
 ####*/
 
-enum
+enum MistData
 {
-    SAY_AT_HOME = -1000323,
-    EMOTE_AT_HOME = -1000324,
+    SAY_AT_HOME = 1330,
+    EMOTE_AT_HOME = 1340,
     QUEST_MIST = 938,
     NPC_ARYNIA = 3519,
     FACTION_DARNASSUS = 79
@@ -82,15 +82,6 @@ struct npc_mistAI : public FollowerAI
         //The follow is over (and for later development, run off to the woods before really end)
         SetFollowComplete();
     }
-
-    //call not needed here, no known abilities
-    /*void UpdateFollowerAI(const uint32 uiDiff)
-    {
-        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
-            return;
-
-        DoMeleeAttackIfReady();
-    }*/
 };
 
 CreatureAI* GetAI_npc_mist(Creature* pCreature)
@@ -105,9 +96,7 @@ struct npc_sethirAI : public ScriptedAI
         Reset();
     }
 
-    void Reset() override
-    {
-    }
+    void Reset() override { }
 
     void Aggro(Unit* pUnit) override
     {
@@ -129,12 +118,10 @@ struct npc_sethirAI : public ScriptedAI
     }
 };
 
-
 CreatureAI* GetAI_npc_sethir(Creature* pCreature)
 {
     return new npc_sethirAI(pCreature);
 }
-
 
 bool QuestAccept_npc_mist(Player* pPlayer, Creature* pCreature, const Quest* pQuest)
 {
@@ -143,7 +130,6 @@ bool QuestAccept_npc_mist(Player* pPlayer, Creature* pCreature, const Quest* pQu
         if (npc_mistAI* pMistAI = dynamic_cast<npc_mistAI*>(pCreature->AI()))
         {
             pCreature->SetFactionTemporary(FACTION_DARNASSUS, TEMPFACTION_RESTORE_RESPAWN);
-            pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
             pMistAI->StartFollow(pPlayer, FACTION_DARNASSUS, pQuest);
         } 
     }
@@ -151,14 +137,13 @@ bool QuestAccept_npc_mist(Player* pPlayer, Creature* pCreature, const Quest* pQu
     return true;
 }
 
-
-enum eSpells
+enum FandralStaghelmData
 {
-    SPELL_WRATH         = 20698,
-    SPELL_AE_ROOT       = 20699,
-    SPELL_REJUVENATION  = 20701,
-    SPELL_SUMM_TREANT   = 20702,
-    SPELL_HURRICANE     = 27530,
+    SPELL_WRATH = 20698,
+    SPELL_AE_ROOT = 20699,
+    SPELL_REJUVENATION = 20701,
+    SPELL_SUMM_TREANT = 20702,
+    SPELL_HURRICANE = 27530
 };
 
 struct boss_fandral_staghelmAI : public ScriptedAI
@@ -239,19 +224,23 @@ CreatureAI* GetAI_boss_fandral_staghelm(Creature* pCreature)
 {
     return new boss_fandral_staghelmAI(pCreature);
 }
+
 //Alita
-enum
+enum TreshalaFallowbrookData
 {
-    QUEST_MORTALITY_WANES =  1142
+    QUEST_MORTALITY_WANES = 1142
 };
+
 bool QuestComplete_npc_treshala_fallowbrook(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
 {
     if (!pQuestGiver)
-            return false;
+        return false;
+
     if (pQuest->GetQuestId() == QUEST_MORTALITY_WANES)
     {
         pQuestGiver->HandleEmoteCommand(EMOTE_ONESHOT_CRY);
     }
+
     return false;//return false meaning let DB take over (probably)(nothing in db anyway)
 }
 
