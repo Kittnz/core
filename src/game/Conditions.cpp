@@ -653,7 +653,7 @@ bool ConditionEntry::CheckParamRequirements(WorldObject const* target, Map const
             if (source && source->IsGameObject() && target && target->IsGameObject())
                 return true;
             return false;
-        case CONDITION_REQ_BOTH_WORLDOBJECTS:
+        case CONDITION_REQ_BOTH_UNITS:
             if (source && source->IsUnit() && target && target->IsUnit())
                 return true;
             return false;
