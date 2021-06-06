@@ -1283,6 +1283,7 @@ void World::SetInitialWorldSettings()
     sObjectMgr.LoadSkillLineAbility();
     sObjectMgr.LoadMailTemplate();
     sObjectMgr.LoadPetSpellData();
+    sObjectMgr.LoadWorldSafeLocsFacing();
 
     ///- Load the DBC files
     LoadDBCStores(m_dataPath);
