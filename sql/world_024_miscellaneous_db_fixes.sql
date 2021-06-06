@@ -1,0 +1,1 @@
+update broadcast_text set maletext = 'Hop right in for a first class seating to the Shimmering Flats! A premier traveling experience for a low affordable cost. Best prices anywhere!' where id=90253;
