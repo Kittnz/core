@@ -208,6 +208,7 @@ enum KeeperRemulosData
     SPELL_ERANIKUS_REDEEMED      = 25846, // transform Eranikus
   //SPELL_MOONGLADE_TRANQUILITY  = unk,   // spell which acts as a spotlight over Eranikus after he is redeemed
     SPELL_THROW_NIGHTMARE_OBJECT = 25004,
+    SPELL_MASS_HEALING           = 25839, // by Tyrande
 
     NPC_ERANIKUS_TYRANT     = 15491,
     NPC_NIGHTMARE_PHANTASM  = 15629, // shadows summoned during the event - should cast 17228 and 21307
@@ -215,6 +216,7 @@ enum KeeperRemulosData
     NPC_TYRANDE_WHISPERWIND = 15633, // appears with the priestess during the event to help the players - should cast healing spells
     NPC_ELUNE_PRIESTESS     = 15634,
     NPC_MALFURION           = 15362,
+    NPC_NIGHTHAVEN_DEFENDER = 15495,
 
     QUEST_NIGHTMARE_MANIFESTS = 8736,
     QUEST_WAKING_LEGENDS      = 8447,
@@ -423,29 +425,35 @@ struct npc_keeper_remulosAI : public npc_escortAI
         switch (pSummoned->GetEntry())
         {
             case NPC_ERANIKUS_TYRANT:
+            {
                 m_uiEranikusGUID = pSummoned->GetObjectGuid();
                 // Make Eranikus unattackable first
-                //pSummoned->SetByteValue(UNIT_FIELD_BYTES_1, 3, UNIT_BYTE1_FLAG_ALWAYS_STAND /*| UNIT_BYTE1_FLAG_UNK_2*/);
                 pSummoned->AddAura(17131); // hover
                 pSummoned->SetFly(true);
                 pSummoned->MonsterMove(aEranikusLocations[0].m_fX, aEranikusLocations[0].m_fY, aEranikusLocations[0].m_fZ);
                 pSummoned->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
                 pSummoned->SetRespawnDelay(DAY);
                 break;
+            }
             case NPC_NIGHTMARE_PHANTASM:
+            {
                 pSummoned->AI()->AttackStart(m_creature);
                 pSummoned->SetRespawnDelay(DAY);
                 summonedGUIDs.push_back(pSummoned->GetGUID());
                 break;
+            }
             case NPC_NIGHTHAVEN_DEFENDER:
+            {
                 summonedGUIDs.push_back(pSummoned->GetGUID());
                 break;
+            }
             case NPC_MALFURION:
+            {
                 m_uiMalfurionGUID = pSummoned->GetObjectGuid();
                 pSummoned->AddAura(10665);
                 pSummoned->AddAura(24999);
                 break;
-
+            }
         }
     }
 
