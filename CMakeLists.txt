@@ -217,17 +217,6 @@ if(UNIX)
   find_package(ZLIB REQUIRED)
 endif()
 
-# Add uninstall script and target
-#configure_file(
-#  "${CMAKE_CURRENT_SOURCE_DIR}/cmake/cmake_uninstall.cmake.in"
-#  "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
-#  IMMEDIATE @ONLY
-#)
-
-#add_custom_target(uninstall
-#  "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
-#)
-
 # Find core revision
 if(NOT GIT_EXECUTABLE)
   set(rev_date "1970-01-01 00:00:00 +0000")
@@ -398,15 +387,15 @@ set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 if(WIN32)
   install(
     FILES
-      ${CMAKE_SOURCE_DIR}/dep/lib/${DEP_ARCH}_release/libeay32.dll
-      ${CMAKE_SOURCE_DIR}/dep/lib/${DEP_ARCH}_release/libmySQL.dll
+      ${CMAKE_SOURCE_DIR}/dep/windows/lib/${DEP_ARCH}_release/libeay32.dll
+      ${CMAKE_SOURCE_DIR}/dep/windows/lib/${DEP_ARCH}_release/libmySQL.dll
     DESTINATION ${LIBS_DIR}
     CONFIGURATIONS Release
   )
   install(
     FILES
-      ${CMAKE_SOURCE_DIR}/dep/lib/${DEP_ARCH}_debug/libeay32.dll
-      ${CMAKE_SOURCE_DIR}/dep/lib/${DEP_ARCH}_debug/libmySQL.dll
+      ${CMAKE_SOURCE_DIR}/dep/windows/lib/${DEP_ARCH}_debug/libeay32.dll
+      ${CMAKE_SOURCE_DIR}/dep/windows/lib/${DEP_ARCH}_debug/libmySQL.dll
     DESTINATION ${LIBS_DIR}
     CONFIGURATIONS Debug
   )
@@ -414,13 +403,13 @@ if(WIN32)
     # Copy dll's Windows needs
     install(
       FILES
-        ${CMAKE_SOURCE_DIR}/dep/lib/win32_release/dbghelp.dll
+        ${CMAKE_SOURCE_DIR}/dep/windows/lib/win32_release/dbghelp.dll
       DESTINATION ${LIBS_DIR}
       CONFIGURATIONS Release
     )
     install(
       FILES
-        ${CMAKE_SOURCE_DIR}/dep/lib/win32_debug/dbghelp.dll
+        ${CMAKE_SOURCE_DIR}/dep/windows/lib/win32_debug/dbghelp.dll
       DESTINATION ${LIBS_DIR}
       CONFIGURATIONS Debug
     )
