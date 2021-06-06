@@ -37,7 +37,6 @@
 #include "LootMgr.h"
 #include "Chat.h"
 #include "ScriptMgr.h"
-#include "..\zlib\zlib.h"
 #include "ObjectAccessor.h"
 #include "Object.h"
 #include "BattleGround.h"
@@ -50,6 +49,12 @@
 #include "MasterPlayer.h"
 #include "GossipDef.h"
 #include "GameEventMgr.h"
+
+#ifdef WIN32
+#include "..\zlib\zlib.h"
+#else
+#include "zlib.h"
+#endif
 
 void WorldSession::HandleRepopRequestOpcode(WorldPacket & /*recv_data*/)
 {

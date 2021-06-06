@@ -27,7 +27,12 @@
 #include "Opcodes.h"
 #include "World.h"
 #include "ObjectGuid.h"
+
+#ifdef WIN32
 #include "..\zlib\zlib.h"
+#else
+#include "zlib.h"
+#endif
 
 #define MAX_UNCOMPRESSED_PACKET_SIZE 0x8000 // 32ko
 
