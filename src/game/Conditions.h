@@ -29,13 +29,13 @@ enum ConditionType
     CONDITION_NOT                   = -3,                   // Returns the opposite of the provided condition. This condition is deprecated. Use the reverse result flag.
     // Requirement: None
     // Value1: condition_id
-    CONDITION_OR                    = -2,                   // Returns true if at least one of the provided conditions is true.
+    CONDITION_OR                    = -2,                   // cond-id-1 cond-id-2 cond-id-3 cond-id-4 returns true if at least one of the conditions is satisfied
     // Requirement: None
     // Value1: condition_id
     // Value2: condition_id
     // Value3: condition_id (optional)
     // Value4: condition_id (optional)
-    CONDITION_AND                   = -1,                   // Returns true only if all the provided conditions are true.
+    CONDITION_AND                   = -1,                   // cond-id-1 cond-id-2 cond-id-3 cond-id-4 returns true only if all conditions are satisfied
     // Requirement: None
     // Value1: condition_id
     // Value2: condition_id
