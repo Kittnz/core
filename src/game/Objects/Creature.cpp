@@ -1524,9 +1524,9 @@ void Creature::SelectLevel(const CreatureInfo *cinfo, float percentHealth, float
     SetModifierValue(UNIT_MOD_ATTACK_POWER, BASE_VALUE, cinfo->attack_power * damagemod);
 }
 
-float Creature::_GetHealthMod(int32 Rank)
+float Creature::_GetHealthMod(int32 rank)
 {
-    switch (Rank)                                           // define rates for each elite rank
+    switch (rank)                                           // define rates for each elite rank
     {
         case CREATURE_ELITE_NORMAL:
             return sWorld.getConfig(CONFIG_FLOAT_RATE_CREATURE_NORMAL_HP);
@@ -1543,9 +1543,9 @@ float Creature::_GetHealthMod(int32 Rank)
     }
 }
 
-float Creature::_GetDamageMod(int32 Rank)
+float Creature::_GetDamageMod(int32 rank)
 {
-    switch (Rank)                                           // define rates for each elite rank
+    switch (rank)                                           // define rates for each elite rank
     {
         case CREATURE_ELITE_NORMAL:
             return sWorld.getConfig(CONFIG_FLOAT_RATE_CREATURE_NORMAL_DAMAGE);
@@ -1562,9 +1562,9 @@ float Creature::_GetDamageMod(int32 Rank)
     }
 }
 
-float Creature::GetSpellDamageMod(int32 Rank)
+float Creature::_GetSpellDamageMod(int32 rank)
 {
-    switch (Rank)                                           // define rates for each elite rank
+    switch (rank)                                           // define rates for each elite rank
     {
         case CREATURE_ELITE_NORMAL:
             return sWorld.getConfig(CONFIG_FLOAT_RATE_CREATURE_NORMAL_SPELLDAMAGE);
