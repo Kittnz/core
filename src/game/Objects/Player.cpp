@@ -22105,7 +22105,6 @@ void Player::SetFlying(bool flying)
         m_isFlying = true;
         m_movementInfo.AddMovementFlag(MOVEFLAG_SWIMMING);
         m_movementInfo.AddMovementFlag(MOVEFLAG_LEVITATING);
-        m_movementInfo.AddMovementFlag(MOVEFLAG_HOVER);
         SendHeartBeat(true);
     }
     else 
