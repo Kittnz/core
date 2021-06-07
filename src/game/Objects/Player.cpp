@@ -22926,6 +22926,8 @@ bool Player::ActivateTalentSpec(int primaryOrSecondary)
 	// short stun
 	AddAura(27880);
 
+	SaveToDB();
+
 	return true;
 }
 
