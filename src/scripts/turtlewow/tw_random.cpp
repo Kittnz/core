@@ -25,6 +25,24 @@ private:
     uint64 player_guid;
 };
 
+class DismountAfterTime : public BasicEvent
+{
+public:
+    explicit DismountAfterTime(uint64 player_guid) : BasicEvent(), player_guid(player_guid) {}
+
+    bool Execute(uint64 e_time, uint32 p_time) override
+    {
+        Player* player = ObjectAccessor::FindPlayer(player_guid);
+        if (player)
+            player->Unmount(false);
+
+        return false;
+    }
+
+private:
+    uint64 player_guid;
+};
+
 bool ItemUseSpell_character_rename(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
     if (!pPlayer) return false;
@@ -2107,72 +2125,112 @@ bool GOSelect_go_bounty(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 
     return true;
 }
 
-bool GOHello_go_epl_flying_machine(Player* pPlayer, GameObject* pGo)
+bool GOHello_go_airplane(Player* pPlayer, GameObject* pGo)
 {
-    if (pPlayer->GetLevel() >= 25)
+    switch (pGo->GetEntry())
     {
-        if (pPlayer->GetZoneId() == 139 || pPlayer->GetZoneId() == 1377)
+    case 1000295: // Argent Vanguard's Flying Machine
+        if (pPlayer->GetLevel() >= 25)
         {
-            if (pPlayer->GetTeam() == ALLIANCE)
-                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TAXI, "Set a course back to the Stormwind City.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            if (pPlayer->GetZoneId() == 139)
+            {
+                if (pPlayer->GetTeam() == ALLIANCE)
+                    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TAXI, "Set a course back to the Stormwind City.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+                else
+                    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TAXI, "Set a course back to the Orgrimmar.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            }
             else
-                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TAXI, "Set a course back to the Orgrimmar.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TAXI, "Up to the Plaguelands!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
         }
-        else
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TAXI, "Up to the Plaguelands!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
-    }
-    pPlayer->SEND_GOSSIP_MENU(90342, pGo->GetGUID());
-    return true;
+        pPlayer->SEND_GOSSIP_MENU(90342, pGo->GetGUID());
+        return true;
+    case 1000050: // Mirage Raceway's Outstanding Flying Machine BNX-92
+        if (pPlayer->GetQuestRewardStatus(50315))
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TAXI, "Buy a flight to the Shimmering Flats in Thousand Needles to visit the Mirage Raceway.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->SEND_GOSSIP_MENU(90254, pGo->GetGUID());
+        return true;
+    }    
+    return false;
 }
 
-#define SPELL_SLOW_FALL 130
-
-bool GOSelect_go_epl_flying_machine(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 action)
+bool GOSelect_go_airplane(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 action)
 {
-    if (action == GOSSIP_ACTION_INFO_DEF + 1)
+    uint32 mapid = 0;
+    float x, y, z, o = 0.0F;
+
+    switch (pGo->GetEntry())
     {
-        if (pPlayer->GetTeam() == ALLIANCE)
+    case 1000295: // Argent Vanguard's Flying Machine
+        if (action == GOSSIP_ACTION_INFO_DEF + 1)
         {
             if (pPlayer->GetMoney() >= 5000)
             {
-                pPlayer->ModifyMoney(-5000);
-                pPlayer->SetDisplayId(8011);
-                pPlayer->TeleportTo(0, -9046.90f, 343.26f, 160.00f, 2.97f);
-                pPlayer->m_Events.AddEvent(new DemorphAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(15000));
-                pPlayer->CastSpell(pPlayer, SPELL_SLOW_FALL, true);
+                switch (pPlayer->GetTeam())
+                {
+                case ALLIANCE:
+                    mapid = 0;
+                    x = -9046.90F;
+                    y = 343.26F;
+                    z = 160.00F;
+                    o = 2.97F;
+                    break;
+                case HORDE:
+                    mapid = 1;
+                    x = 1271.40F;
+                    y = -4271.94F;
+                    z = 80.00F;
+                    o = 2.37F;
+                    break;
+                }
             }
             else
-                ChatHandler(pPlayer).PSendSysMessage("You don't have enough money!");
+            {
+                pPlayer->GetSession()->SendNotification("You don't have enough money!");
+                pPlayer->CLOSE_GOSSIP_MENU();
+                return false;
+            }
         }
-        else
+        if (action == GOSSIP_ACTION_INFO_DEF + 2)
         {
             if (pPlayer->GetMoney() >= 5000)
             {
-                pPlayer->ModifyMoney(-5000);
-                pPlayer->SetDisplayId(8011);
-                pPlayer->TeleportTo(1, 1271.40f, -4271.94f, 80.00f, 2.37f);
-                pPlayer->m_Events.AddEvent(new DemorphAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(15000));
-                pPlayer->CastSpell(pPlayer, SPELL_SLOW_FALL, true);
+                mapid = 0;
+                x = 1645.70F;
+                y = -3044.90F;
+                z = 160.00F;
+                o = 2.07F;
             }
             else
-                ChatHandler(pPlayer).PSendSysMessage("You don't have enough money!");
+            {
+                pPlayer->GetSession()->SendNotification("You don't have enough money!");
+                pPlayer->CLOSE_GOSSIP_MENU();
+                return false;
+            }
         }
-    }
-    
-    if (action == GOSSIP_ACTION_INFO_DEF + 2)
-    {
-        if (pPlayer->GetMoney() >= 5000)
+        pPlayer->ModifyMoney(-5000);
+        pPlayer->CastSpell(pPlayer, 130, true); // Snow Fall
+        pPlayer->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, 18510);
+        pPlayer->m_Events.AddEvent(new DismountAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(5 * IN_MILLISECONDS));
+        pPlayer->TeleportTo(mapid, x, y, z, o);
+        return true;
+    case 1000050: // Mirage Raceway's Outstanding Flying Machine BNX-92
+        uint32 cost = pPlayer->GetLevel() * 100;
+        if (pPlayer->GetMoney() >= cost)
         {
-            pPlayer->ModifyMoney(-5000);
-            pPlayer->SetDisplayId(8011);
-            pPlayer->TeleportTo(0, 1645.70f, -3044.90f, 160.00, 2.07f);
-            pPlayer->m_Events.AddEvent(new DemorphAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(15000));
-            pPlayer->CastSpell(pPlayer, SPELL_SLOW_FALL, true);
+            pPlayer->ModifyMoney(-cost);
+            pPlayer->CastSpell(pPlayer, 130, true);
+            pPlayer->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, 18510);
+            pPlayer->m_Events.AddEvent(new DismountAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(10 * IN_MILLISECONDS));
+            pPlayer->TeleportTo(1, -6103.89f, -3872.74f, 55.00f, 3.57f);
+            return true;
         }
         else
-            ChatHandler(pPlayer).PSendSysMessage("You don't have enough money!");
-    }
-    return true;
+        {
+            pPlayer->GetSession()->SendNotification("Not enough money. This flight will cost %u silver.", pPlayer->GetLevel());
+            return false;
+        }
+    } 
+    return false;
 }
 
 bool GOHello_go_stormwind_fountain(Player* pPlayer, GameObject* pGo)
@@ -3591,10 +3649,9 @@ bool GossipSelect_DinkaDinker(Player* player, Creature* creature, uint32 sender,
     if (action == GOSSIP_ACTION_INFO_DEF + 1)
     {
         creature->CastSpell(player, SPELL_VISUAL, true);
-        player->AddAura(SPELL_SLOW_FALL);
+        player->AddAura(130); // Slow Fall
         creature->MonsterSay(ON_CAST_TEXT);
     }
-
     player->CLOSE_GOSSIP_MENU();
     return true;
 }
@@ -5786,9 +5843,9 @@ void AddSC_tw_random()
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "go_epl_flying_machine";
-    newscript->pGOHello = &GOHello_go_epl_flying_machine;
-    newscript->pGOGossipSelect = &GOSelect_go_epl_flying_machine;
+    newscript->Name = "go_airplane";
+    newscript->pGOHello = &GOHello_go_airplane;
+    newscript->pGOGossipSelect = &GOSelect_go_airplane;
     newscript->RegisterSelf();
 
     newscript = new Script;
