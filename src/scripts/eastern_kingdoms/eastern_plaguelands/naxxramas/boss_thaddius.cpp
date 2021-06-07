@@ -138,7 +138,7 @@ static constexpr uint32 ENRAGE_TIMER = 1000 * 60 * 5;   // 5 min enrage once p2 
 static const uint32 PolarityShiftTimer(bool initial = false) { return initial ? 1000 * 10 : 1000 * 30; }
 
 // Chain lightning timer. Timer from classic naxx sniffs
-static constexpr uint32 ChainLightningTimer() { return urand(5000, 10000); }
+static const uint32 ChainLightningTimer() { return urand(5000, 10000); }
 
 
 static constexpr float addPositions[2][4] =
