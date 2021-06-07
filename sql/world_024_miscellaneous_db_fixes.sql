@@ -10,3 +10,7 @@ update item_template set description = 'A veteran of some of the toughest battle
 -- The Lobotomizer is not supposed to drop from Lord Valthalak.
 
 delete from creature_loot_template where entry = 16042 and item = 19324;
+
+-- Update airplanes scripts:
+
+update gameobject_template set script_name = 'go_airplane' where script_name like '%flying%';

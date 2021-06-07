@@ -471,36 +471,6 @@ struct npc_race_car : public ScriptedAI
 	}
 };
 
-bool GOHello_go_flying_machine(Player* pPlayer, GameObject* pGo)
-{
-	uint32 cost = pPlayer->GetLevel();
-
-	if (pPlayer->GetQuestRewardStatus(50315))
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TAXI, "Buy a flight to the Shimmering Flats in Thousand Needles to visit the Mirage Raceway.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-
-    pPlayer->SEND_GOSSIP_MENU(90254, pGo->GetGUID());
-    return true;
-}
-
-bool GOSelect_go_flying_machine(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 action)
-{
-    if (action == GOSSIP_ACTION_INFO_DEF + 1)
-    {
-		uint32 cost = pPlayer->GetLevel() * 100;
-		if (pPlayer->GetMoney() >= cost)
-		{
-			pPlayer->ModifyMoney(-cost);
-			pPlayer->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, 18510);
-			pPlayer->TeleportTo(1, -6103.89f, -3872.74f, 25.00f, 3.57f);
-			pPlayer->CastSpell(pPlayer, 130, true);
-		}
-		else
-			pPlayer->GetSession()->SendNotification("Not enough money. This flight will cost %u silver.", pPlayer->GetLevel());
-	}
-
-    return true;
-}
-
 struct npc_landing_siteAI : public ScriptedAI
 {
     npc_landing_siteAI(Creature *c) : ScriptedAI(c)
@@ -520,7 +490,6 @@ struct npc_landing_siteAI : public ScriptedAI
 			{
                 if (m_creature->IsWithinDistInMap(pWho, 200.0F) && pWho->GetMountID() == 18510 && !pWho->HasAura(130))
                 {
-                    player->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, 0);
                     me->MonsterSay("Ugh, another one… Welcome to tha Mirage Raceway, $N!", 0U, pWho);
                     me->MonsterWhisper("Ya go ahead and talk to Jizzle Grikbot or Gregor Fizzwuzz ta git ya on track in all manner of meanings.", pWho);
                     me->HandleEmoteCommand(EMOTE_ONESHOT_SALUTE);
@@ -628,10 +597,4 @@ void AddSC_mirage_raceway()
 	newscript->Name = "npc_car_controller";
 	newscript->GetAI = &GetAI_npc_car_controller;
 	newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "go_flying_machine";
-    newscript->pGOHello = &GOHello_go_flying_machine;
-    newscript->pGOGossipSelect = &GOSelect_go_flying_machine;
-    newscript->RegisterSelf();
 }
