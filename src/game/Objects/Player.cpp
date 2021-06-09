@@ -21783,10 +21783,6 @@ bool Player::InGurubashiArena(bool checkOutsideArea) const
     return GetAreaId() == 2177 /* Gurubashi Arena Battle Ring*/ || (checkOutsideArea && GetAreaId() == 1741 /* Gurubashi Arena*/);
 }
 
-bool Player::IsDiplomat() const {
-    return HasItemCount(50012, 1, false);
-}
-
 bool Player::RemoveItemCurrency(uint32 itemId, uint32 count)
 {
     uint32 LastCount = count;

@@ -1891,7 +1891,7 @@ class Player final: public Unit
         void SetTransport(Transport* t) override;
         void DismountCheck();
 
-        bool IsDiplomat() const;
+        bool IsDiplomat() const { return HasItemCount(50012, 1, false); }
 
         // knockback/jumping states
         bool IsLaunched() const { return launched; }
