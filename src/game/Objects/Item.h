@@ -349,6 +349,7 @@ class Item : public Object
 
         bool HasQuest(uint32 quest_id) const override { return GetProto()->StartQuest == quest_id; }
         bool HasInvolvedQuest(uint32 /*quest_id*/) const override { return false; }
+        bool IsPotion() const { return GetProto()->IsPotion(); }
         bool IsConjuredConsumable() const { return GetProto()->IsConjuredConsumable(); }
 
         void AddToClientUpdateList() override;
