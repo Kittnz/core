@@ -544,7 +544,8 @@ class Creature : public Unit
         void SaveHomePosition() { SetHomePosition(GetPositionX(), GetPositionY(), GetPositionZ(), GetOrientation()); }
         void SetHomePosition(float x, float y, float z, float o);
         void GetHomePosition(float &x, float &y, float &z, float &o, float* dist = nullptr);
-        float GetHomePositionO() const { return m_HomeOrientation; }
+        Position const& GetHomePosition() { return m_homePosition; }
+        float GetHomePositionO() const { return m_homePosition.o; }
         void ResetHomePosition();
 
         CreatureSubtype GetSubtype() const { return m_subtype; }
@@ -991,10 +992,7 @@ class Creature : public Unit
         float m_combatStartY;
         float m_combatStartZ;
 
-        float m_HomeX;
-        float m_HomeY;
-        float m_HomeZ;
-        float m_HomeOrientation;
+        Position m_homePosition;
 
         ReactStates m_reactState;
 

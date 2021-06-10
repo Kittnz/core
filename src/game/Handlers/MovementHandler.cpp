@@ -1002,7 +1002,7 @@ void WorldSession::HandleMoverRelocation(Unit* pMover, MovementInfo& movementInf
                 pPlayerMover->GetTransport()->CalculatePassengerPosition(movementInfo.pos.x, movementInfo.pos.y, movementInfo.pos.z, &movementInfo.pos.o);
                 if (loadPetOnTransport)
                 {
-                    loadPetOnTransport->NearTeleportTo(movementInfo.pos.x, movementInfo.pos.y, movementInfo.pos.z, movementInfo.pos.o);
+                    loadPetOnTransport->NearTeleportTo(movementInfo.pos);
                     pPlayerMover->GetTransport()->AddPassenger(loadPetOnTransport);
                 }
             }
@@ -1017,7 +1017,7 @@ void WorldSession::HandleMoverRelocation(Unit* pMover, MovementInfo& movementInf
                 if (pet->GetTransport())
                 {
                     pet->GetTransport()->RemovePassenger(pet);
-                    pet->NearTeleportTo(movementInfo.pos.x, movementInfo.pos.y, movementInfo.pos.z, movementInfo.pos.o);
+                    pet->NearTeleportTo(movementInfo.pos);
                 }
             }
         }
@@ -1053,7 +1053,7 @@ void WorldSession::HandleMoverRelocation(Unit* pMover, MovementInfo& movementInf
                     sLog.outInfo("[UNDERMAP] %s [GUID %u]. MapId:%u %f %f %f", pPlayerMover->GetName(), pPlayerMover->GetGUIDLow(), pPlayerMover->GetMapId(), pPlayerMover->GetPositionX(), pPlayerMover->GetPositionY(), pPlayerMover->GetPositionZ());
         }
         else if (pPlayerMover->CanFreeMove())
-            pPlayerMover->SaveNoUndermapPosition(movementInfo.GetPos()->x, movementInfo.GetPos()->y, movementInfo.GetPos()->z + 3.0f);
+            pPlayerMover->SaveNoUndermapPosition(movementInfo.GetPos()->x, movementInfo.GetPos()->y, movementInfo.GetPos()->z + 3.0f, movementInfo.GetPos()->o);
         // Antiundermap2: Teleport to graveyard
         if (movementInfo.GetPos()->z < -500.0f)
         {

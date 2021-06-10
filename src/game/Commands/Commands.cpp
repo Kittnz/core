@@ -2453,12 +2453,12 @@ bool ChatHandler::HandleTeleAddCommand(char* args)
     }
 
     GameTele tele;
-    tele.position_x  = player->GetPositionX();
-    tele.position_y  = player->GetPositionY();
-    tele.position_z  = player->GetPositionZ();
-    tele.orientation = player->GetOrientation();
-    tele.mapId       = player->GetMapId();
-    tele.name        = name;
+    tele.x = player->GetPositionX();
+    tele.y = player->GetPositionY();
+    tele.z = player->GetPositionZ();
+    tele.o = player->GetOrientation();
+    tele.mapId = player->GetMapId();
+    tele.name = name;
 
     if (sObjectMgr.AddGameTele(tele))
         SendSysMessage(LANG_COMMAND_TP_ADDED);
@@ -5613,7 +5613,7 @@ bool ChatHandler::HandleTeleCommand(char* args)
         return false;
     }
 
-    return HandleGoHelper(pPlayer, tele->mapId, tele->position_x, tele->position_y, &tele->position_z, &tele->orientation);
+    return HandleGoHelper(pPlayer, tele->mapId, tele->x, tele->y, &tele->z, &tele->o);
 }
 
 //Enable\Disable accept whispers (for GM)
@@ -5723,7 +5723,7 @@ bool ChatHandler::HandleTeleNameCommand(char* args)
         if (needReportToTarget(target))
             ChatHandler(target).PSendSysMessage(LANG_TELEPORTED_TO_BY, GetNameLink().c_str());
 
-        return HandleGoHelper(target, tele->mapId, tele->position_x, tele->position_y, &tele->position_z, &tele->orientation);
+        return HandleGoHelper(target, tele->mapId, tele->x, tele->y, &tele->z, &tele->o);
     }
     else
     {
@@ -5734,8 +5734,7 @@ bool ChatHandler::HandleTeleNameCommand(char* args)
         std::string nameLink = playerLink(target_name);
 
         PSendSysMessage(LANG_TELEPORTING_TO, nameLink.c_str(), GetMangosString(LANG_OFFLINE), tele->name.c_str());
-        Player::SavePositionInDB(target_guid, tele->mapId, tele->position_x, tele->position_y, tele->position_z, tele->orientation,
-            sTerrainMgr.GetZoneId(tele->mapId, tele->position_x, tele->position_y, tele->position_z));
+        Player::SavePositionInDB(target_guid, tele->mapId, tele->x, tele->y, tele->z, tele->o, sTerrainMgr.GetZoneId(tele->mapId, tele->x, tele->y, tele->z));
     }
 
     return true;
@@ -5811,7 +5810,7 @@ bool ChatHandler::HandleTeleGroupCommand(char* args)
         else
             pl->SaveRecallPosition();
 
-        pl->TeleportTo(tele->mapId, tele->position_x, tele->position_y, tele->position_z, tele->orientation);
+        pl->TeleportTo(*tele);
     }
 
     return true;

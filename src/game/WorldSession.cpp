@@ -830,11 +830,9 @@ void WorldSession::ExecuteOpcode(OpcodeHandler const& opHandle, WorldPacket* pac
     if (_player)
         _player->SetCanDelayTeleport(true);
 
-
     //sLog.outString("[%s] Recvd packet : %u/0x%x (%s)", GetUsername().c_str(), packet->GetOpcode(), packet->GetOpcode(), LookupOpcodeName(packet->GetOpcode()));
     if (Player* player = GetPlayer())
         DEBUG_UNIT(player, DEBUG_PACKETS_RECV, "[%s] Recvd packet : %u/0x%x (%s)", player->GetName(), packet->GetOpcode(), packet->GetOpcode(), LookupOpcodeName(packet->GetOpcode()));
-
 
     (this->*opHandle.handler)(*packet);
 
@@ -846,8 +844,9 @@ void WorldSession::ExecuteOpcode(OpcodeHandler const& opHandle, WorldPacket* pac
         //we should execute delayed teleports only for alive(!) players
         //because we don't want player's ghost teleported from graveyard
         if (_player->IsHasDelayedTeleport())
-            _player->TeleportTo(_player->m_teleport_dest, _player->m_teleport_options, _player->m_teleportRecoverDelayed, _player->m_teleportFinishedDelayed);
+             _player->TeleportTo(_player->m_teleport_dest, _player->m_teleport_options);
     }
+
     if (packet->rpos() < packet->wpos() && sLog.HasLogLevelOrHigher(LOG_LVL_DEBUG))
         LogUnprocessedTail(packet);
 }

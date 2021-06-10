@@ -1442,8 +1442,6 @@ class Unit : public WorldObject
         template <class T>
         void NearTeleportTo(T const& pos, uint32 teleportOptions = TELE_TO_NOT_LEAVE_TRANSPORT | TELE_TO_NOT_LEAVE_COMBAT | TELE_TO_NOT_UNSUMMON_PET) { NearTeleportTo(pos.x, pos.y, pos.z, pos.o, teleportOptions); }
         void NearTeleportTo(float x, float y, float z, float orientation, uint32 teleportOptions = TELE_TO_NOT_LEAVE_TRANSPORT | TELE_TO_NOT_LEAVE_COMBAT | TELE_TO_NOT_UNSUMMON_PET);
-        template <class T>
-        void NearLandTo(T const& pos) { NearLandTo(pos.x, pos.y, pos.z, pos.o); }
         void NearLandTo(float x, float y, float z, float orientation);
         template <class T>
         void TeleportPositionRelocation(T const& pos) { TeleportPositionRelocation(pos.x, pos.y, pos.z, pos.o); }
