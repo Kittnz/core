@@ -101,7 +101,7 @@ void WaypointManager::Load()
                 continue;
             }
 
-            if (cData->movementType != WAYPOINT_MOTION_TYPE)
+            if (cData->movement_type != WAYPOINT_MOTION_TYPE)
                 creatureNoMoveType.insert(id);
 
             WaypointPath &path  = m_pathMap[id];
