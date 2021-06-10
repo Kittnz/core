@@ -664,15 +664,15 @@ void AuctionHouseObject::Update()
 
 void AuctionHouseObject::BuildListBidderItems(WorldPacket& data, Player* player, uint32 listfrom, uint32& count, uint32& totalcount)
 {
-    for (AuctionEntryMap::const_iterator itr = AuctionsMap.begin(); itr != AuctionsMap.end(); ++itr)
+    for (const auto& itr : AuctionsMap)
     {
-        AuctionEntry *Aentry = itr->second;
-        if (Aentry && Aentry->bidder == player->GetGUIDLow())
+        AuctionEntry* auctionEntry = itr.second;
+        if (auctionEntry && auctionEntry->bidder == player->GetGUIDLow())
         {
             ++totalcount;
 
             if (count < 50 && totalcount > listfrom)
-                if (itr->second->BuildAuctionInfo(data))
+                if (itr.second->BuildAuctionInfo(data))
                     ++count;
         }
     }
@@ -683,12 +683,12 @@ void AuctionHouseObject::BuildListOwnerItems(WorldPacket& data, Player* player, 
     auto bounds = AccountAuctionMap.equal_range(player->GetSession()->GetAccountId());
     for (auto itr = bounds.first; itr != bounds.second; ++itr)
     {
-        AuctionEntry *Aentry = itr->second;
-        if (Aentry && Aentry->owner == player->GetGUIDLow())
+        AuctionEntry* auctionEntry = itr->second;
+        if (auctionEntry && auctionEntry->owner == player->GetGUIDLow())
         {
             ++totalcount;
             if (count < 50 && totalcount > listfrom)
-                if (Aentry->BuildAuctionInfo(data))
+                if (auctionEntry->BuildAuctionInfo(data))
                     ++count;
         }
     }
@@ -727,10 +727,10 @@ void AuctionHouseObject::BuildListAuctionItems(WorldPacket& data, Player* player
     std::string name;
     name.reserve(140);
 
-    for (auto itr = OrderedAuctionMap.cbegin(); itr != OrderedAuctionMap.cend(); ++itr)
+    for (const auto& itr : OrderedAuctionMap)
     {
-        AuctionEntry *Aentry = itr->second;
-        Item *item = sAuctionMgr.GetAItem(Aentry->itemGuidLow);
+        AuctionEntry* auctionEntry = itr.second;
+        Item *item = sAuctionMgr.GetAItem(auctionEntry->itemGuidLow);
         if (!item)
             continue;
 
@@ -762,7 +762,7 @@ void AuctionHouseObject::BuildListAuctionItems(WorldPacket& data, Player* player
                         continue;
 
             // IP locked auction
-            if (!Aentry->IsAvailableFor(player))
+            if (!auctionEntry->IsAvailableFor(player))
                 continue;
 
             if (!query.wsearchedname.empty())
@@ -785,7 +785,7 @@ void AuctionHouseObject::BuildListAuctionItems(WorldPacket& data, Player* player
             if (count < 50 && totalcount >= query.listfrom)
             {
                 ++count;
-                Aentry->BuildAuctionInfo(data);
+                auctionEntry->BuildAuctionInfo(data);
             }
         }
 

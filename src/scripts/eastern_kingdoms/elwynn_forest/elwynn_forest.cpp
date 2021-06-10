@@ -111,11 +111,10 @@ struct go_marshal_haggards_chestAI: public GameObjectAI
                 timer -= uiDiff;
         }
     }
+
     bool CheckCanStartEvent()
     {
-        if (!state && !me->GetMap()->GetCreature(guid_spirit))
-            return true;
-        return false;
+        return !state && !me->GetMap()->GetCreature(guid_spirit);
     }
 
     void SetInUse(Creature* spirit)

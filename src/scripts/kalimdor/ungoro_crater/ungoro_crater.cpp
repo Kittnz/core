@@ -666,9 +666,9 @@ struct npc_simone_seductressAI : public ScriptedAI
             {
                 ThreatList const& SimonetList = m_creature->GetThreatManager().getThreatList();
                 
-                for (ThreatList::const_iterator itr = SimonetList.begin();itr != SimonetList.end(); ++itr)
+                for (const auto itr : SimonetList)
                 {
-                    if (Unit* pUnit = m_creature->GetMap()->GetUnit((*itr)->getUnitGuid()))
+                    if (Unit* pUnit = m_creature->GetMap()->GetUnit(itr->getUnitGuid()))
                     {
                         if (pUnit->IsAlive())
                         {
@@ -683,9 +683,9 @@ struct npc_simone_seductressAI : public ScriptedAI
                 {
                     ThreatList const& PrecioustList = pPrecious->GetThreatManager().getThreatList();
                 
-                    for (ThreatList::const_iterator itr = PrecioustList.begin();itr != PrecioustList.end(); ++itr)
+                    for (const auto itr : PrecioustList)
                     {
-                        if (Unit* pUnit = m_creature->GetMap()->GetUnit((*itr)->getUnitGuid()))
+                        if (Unit* pUnit = m_creature->GetMap()->GetUnit(itr->getUnitGuid()))
                         {
                             if (pUnit->IsAlive())
                             {

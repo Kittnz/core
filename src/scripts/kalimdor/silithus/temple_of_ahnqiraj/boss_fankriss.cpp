@@ -315,9 +315,9 @@ struct boss_fankrissAI : public ScriptedAI
     {
         if (pSummoned->GetEntry() == NPC_VEKNISS_HATCHLING)
         {
-            for (auto it = hatchlingVec.begin(); it != hatchlingVec.end(); it++)
+            for (auto& it : hatchlingVec)
             {
-                it->hatchlings.remove(pSummoned->GetObjectGuid());
+                it.hatchlings.remove(pSummoned->GetObjectGuid());
             }
             --aliveHatchlings;
         }
@@ -430,9 +430,9 @@ struct boss_fankrissAI : public ScriptedAI
     {
         if (!m_creature->IsInCombat()) {
             Map::PlayerList const &PlayerList = m_creature->GetMap()->GetPlayers();
-            for (Map::PlayerList::const_iterator itr = PlayerList.begin(); itr != PlayerList.end(); ++itr)
+            for (const auto& itr : PlayerList)
             {
-                Player* pPlayer = itr->getSource();
+                Player* pPlayer = itr.getSource();
                 if (pPlayer && pPlayer->IsAlive() && !pPlayer->IsGameMaster())
                 {
                     // cheap way of quickly disgarding the check most of the time. No point 

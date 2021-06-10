@@ -287,10 +287,10 @@ struct boss_rajaxxAI : public ScriptedAI
         std::list<Creature*> helpers;
         GetCreatureListWithEntryInGrid(helpers, m_creature, { 15473, 15478, 15471, 987001 }, 400.0f);
         
-        if (!helpers.size())
+        if (helpers.empty())
             return;
         int alive = 0;
-        for (auto it : helpers)
+        for (const auto it : helpers)
             if (it->IsAlive()) ++alive;
 
         if (Player* pLootRecepient = m_creature->GetLootRecipient()) {
@@ -400,10 +400,7 @@ struct boss_rajaxxAQWarAI : public boss_rajaxxAI
         DoScriptText(SAY_AQ_WAR_START, m_creature);
     }
 
-    void UpdateAI(const uint32 uiDiff) override
-    {
-        return;
-    }
+    void UpdateAI(uint32 const /*uiDiff*/) override {}
 
     bool FillLoot(Loot* loot, Player* looter) const override
     {

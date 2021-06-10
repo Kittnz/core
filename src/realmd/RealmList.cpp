@@ -31,14 +31,13 @@
 #include "Database/DatabaseEnv.h"
 #include "Config/Config.h"
 
-INSTANTIATE_SINGLETON_1( RealmList );
-
-extern DatabaseType LoginDatabase;
+INSTANTIATE_SINGLETON_1(RealmList);
 
 // list sorted from high to low build and first build used as low bound for accepted by default range (any > it will accepted by realmd at least)
-static RealmBuildInfo ExpectedRealmdClientBuilds[] = {
+static RealmBuildInfo ExpectedRealmdClientBuilds[] =
+{
 	{6010,  1, 15, 1, ' ', {{}}, {{}}},
-    {0,     0, 0, 0,  ' ', {{}}, {{}}}                                   // terminator
+    {0,     0, 0, 0,  ' ', {{}}, {{}}} // terminator
 };
 
 RealmBuildInfo const* FindBuildInfo(uint16 _build)

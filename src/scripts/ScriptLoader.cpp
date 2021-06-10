@@ -299,7 +299,6 @@ void AddScripts()
     AddSC_go_scripts();
 
     // Event
-    //AddSC_event_attack_city();
     AddSC_elemental_invasions();
 
     // HT

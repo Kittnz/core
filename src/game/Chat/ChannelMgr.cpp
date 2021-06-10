@@ -35,6 +35,7 @@ ChannelMgr* channelMgr(Team team)
 
     if (team == ALLIANCE)
         return &MaNGOS::Singleton<AllianceChannelMgr>::Instance();
+
     if (team == HORDE)
         return &MaNGOS::Singleton<HordeChannelMgr>::Instance();
 
@@ -43,8 +44,8 @@ ChannelMgr* channelMgr(Team team)
 
 ChannelMgr::~ChannelMgr()
 {
-    for (ChannelMap::iterator itr = channels.begin(); itr != channels.end(); ++itr)
-        delete itr->second;
+    for (const auto& channel : channels)
+        delete channel.second;
 
     channels.clear();
 }
@@ -121,8 +122,8 @@ void ChannelMgr::CreateDefaultChannels()
     GetJoinChannel("ChatSpam")->SetSecurityLevel(SEC_GAMEMASTER);
     GetJoinChannel("LowLevelBots")->SetSecurityLevel(SEC_GAMEMASTER);
 
-    for (ChannelMap::iterator it = channels.begin(); it != channels.end(); ++it)
-        it->second->SetAnnounce(false);
+    for (const auto& channel : channels)
+        channel.second->SetAnnounce(false);
 }
 
 void ChannelMgr::AnnounceBothFactionsChannel(std::string channelName, ObjectGuid playerGuid, const char* message)
