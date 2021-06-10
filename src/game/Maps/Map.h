@@ -681,7 +681,7 @@ class Map : public GridRefManager<NGridType>, public MaNGOS::ObjectLevelLockable
         void SendInitTransports(Player * player);
         void SendRemoveTransports(Player * player);
 
-        bool CreatureCellRelocation(Creature *creature, Cell new_cell);
+        bool CreatureCellRelocation(Creature* creature, Cell const& new_cell);
 
         bool loaded(const GridPair &) const;
         void EnsureGridCreated(const GridPair &);

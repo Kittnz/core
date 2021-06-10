@@ -2062,7 +2062,7 @@ void World::KickAllLess(AccountTypes sec)
                 session->KickPlayer();
 }
 
-void World::BanAccount(uint32 accountId, uint32 duration, std::string reason, std::string author)
+void World::BanAccount(uint32 accountId, uint32 duration, std::string reason, std::string const& author)
 {
     LoginDatabase.escape_string(reason);
     std::string safe_author = author;

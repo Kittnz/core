@@ -38,21 +38,21 @@
 
 INSTANTIATE_SINGLETON_1(MassMailMgr);
 
-void MassMailMgr::AddMassMailTask(MailDraft* mailProto, MailSender sender, uint32 raceMask)
+void MassMailMgr::AddMassMailTask(MailDraft* mailProto, MailSender const& sender, uint32 raceMask)
 {
     if (RACEMASK_ALL_PLAYABLE & ~raceMask)                  // have races not included in mask
     {
         std::ostringstream ss;
-        ss << "SELECT guid FROM characters WHERE (1 << (race - 1)) & " << raceMask << " AND deleteDate IS NULL";
+        ss << "SELECT `guid` FROM `characters` WHERE (1 << (`race` - 1)) & " << raceMask << " AND `deleteDate` IS NULL";
         AddMassMailTask(mailProto, sender, ss.str().c_str());
     }
     else
-        AddMassMailTask(mailProto, sender, "SELECT guid FROM characters WHERE deleteDate IS NULL");
+        AddMassMailTask(mailProto, sender, "SELECT `guid` FROM `characters` WHERE `deleteDate` IS NULL");
 }
 
 struct MassMailerQueryHandler
 {
-    void HandleQueryCallback(QueryResult * result, MailDraft* mailProto, MailSender sender)
+    void HandleQueryCallback(QueryResult* result, MailDraft* mailProto, MailSender sender)
     {
         if (!result)
             return;
@@ -61,7 +61,7 @@ struct MassMailerQueryHandler
 
         do
         {
-            Field *fields = result->Fetch();
+            Field* fields = result->Fetch();
             recievers.insert(fields[0].GetUInt32());
 
         }
@@ -70,7 +70,7 @@ struct MassMailerQueryHandler
     }
 } massMailerQueryHandler;
 
-void MassMailMgr::AddMassMailTask(MailDraft* mailProto, MailSender sender, char const* query)
+void MassMailMgr::AddMassMailTask(MailDraft* mailProto, MailSender const& sender, char const* query)
 {
     CharacterDatabase.AsyncPQuery(&massMailerQueryHandler, &MassMailerQueryHandler::HandleQueryCallback, mailProto, sender, query);
 }
@@ -92,7 +92,7 @@ void MassMailMgr::Update(bool sendall /*= false*/)
             task.m_receivers.erase(task.m_receivers.begin());
 
             ObjectGuid receiver_guid = ObjectGuid(HIGHGUID_PLAYER, receiver_lowguid);
-            Player *receiver = sObjectMgr.GetPlayer(receiver_guid);
+            Player* receiver = sObjectMgr.GetPlayer(receiver_guid);
 
             // last case. can be just send
             if (task.m_receivers.empty())
@@ -135,6 +135,5 @@ void MassMailMgr::GetStatistic(uint32& tasks, uint32& mails, uint32& needTime) c
     // 50 msecs is tick length
     needTime = 50 * mailsCount / sWorld.getConfig(CONFIG_UINT32_MASS_MAILER_SEND_PER_TICK) / IN_MILLISECONDS;
 }
-
 
 /*! @} */

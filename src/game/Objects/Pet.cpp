@@ -2202,6 +2202,7 @@ void Pet::ToggleAutocast(uint32 spellid, bool apply)
         return;
 
     PetSpellMap::iterator itr = m_petSpells.find(spellid);
+    PetSpell& petSpell = itr->second;
 
     uint32 i;
 
@@ -2214,11 +2215,11 @@ void Pet::ToggleAutocast(uint32 spellid, bool apply)
         {
             m_autospells.push_back(spellid);
 
-            if (itr->second.active != ACT_ENABLED)
+            if (petSpell.active != ACT_ENABLED)
             {
-                itr->second.active = ACT_ENABLED;
-                if (itr->second.state != PETSPELL_NEW)
-                    itr->second.state = PETSPELL_CHANGED;
+                petSpell.active = ACT_ENABLED;
+                if (petSpell.state != PETSPELL_NEW)
+                    petSpell.state = PETSPELL_CHANGED;
             }
         }
     }
@@ -2231,11 +2232,11 @@ void Pet::ToggleAutocast(uint32 spellid, bool apply)
         if (i < m_autospells.size())
         {
             m_autospells.erase(itr2);
-            if (itr->second.active != ACT_DISABLED)
+            if (petSpell.active != ACT_DISABLED)
             {
-                itr->second.active = ACT_DISABLED;
-                if (itr->second.state != PETSPELL_NEW)
-                    itr->second.state = PETSPELL_CHANGED;
+                petSpell.active = ACT_DISABLED;
+                if (petSpell.state != PETSPELL_NEW)
+                    petSpell.state = PETSPELL_CHANGED;
             }
         }
     }
