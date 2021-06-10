@@ -6,6 +6,10 @@ update item_template set bonding = 6 where entry in (51889, 51894);
 
 update item_template set quality = 2 where entry = 83005 or entry = 83006;
 
+-- Fix Ghoulslayer Shotgun:
+
+update item_template set range_mod = 100 where entry = 51780;
+
 -- Some new Kazgrim's items (TODO: FIX STATS)
 
 replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values 
