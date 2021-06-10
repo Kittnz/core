@@ -2217,9 +2217,9 @@ void Aura::HandleAuraMounted(bool apply, bool Real)
         }
 
         uint32 display_id = Creature::ChooseDisplayId(cInfo);
-        CreatureModelInfo const *minfo = sObjectMgr.GetCreatureModelRandomGender(display_id);
+        CreatureDisplayInfoAddon const* minfo = sObjectMgr.GetCreatureDisplayInfoRandomGender(display_id);
         if (minfo)
-            display_id = minfo->modelid;
+            display_id = minfo->display_id;
 
         target->Mount(display_id, GetId());
     }
@@ -2261,8 +2261,8 @@ void Aura::HandleWaterBreathing(bool /*apply*/, bool /*Real*/)
         ((Player*)GetTarget())->UpdateMirrorTimers();
 }
 
-std::pair<unsigned int, float> getShapeshiftModelInfo(ShapeshiftForm form, Unit *target){
-    unsigned int modelid = 0;
+std::pair<unsigned int, float> GetShapeshiftDisplayInfo(ShapeshiftForm form, Unit* target){
+    unsigned int display_id = 0;
     float mod = 1;
     switch (form)
     {
@@ -2272,22 +2272,22 @@ std::pair<unsigned int, float> getShapeshiftModelInfo(ShapeshiftForm form, Unit 
         {
             if (target->ToPlayer()->HasItemCount(51057, 1))
                 // Glyph of the Frostsaber, Turtle WoW:
-                modelid = (Player::TeamForRace(target->GetRace()) == ALLIANCE) ? 11444 : 10054;
+                display_id = (Player::TeamForRace(target->GetRace()) == ALLIANCE) ? 11444 : 10054;
             else    
                 // Blizzlike cat models:
-                modelid = (Player::TeamForRace(target->GetRace()) == ALLIANCE) ? 892 : 8571;  
+                display_id = (Player::TeamForRace(target->GetRace()) == ALLIANCE) ? 892 : 8571;  
         }
         else
-            modelid = 892;
+            display_id = 892;
         mod = 0.80f;
         break;
     case FORM_TRAVEL:
-        modelid = (target->IsPlayer() && target->ToPlayer()->HasItemCount(51056, 1)) ? 1991 : 632;
+        display_id = (target->IsPlayer() && target->ToPlayer()->HasItemCount(51056, 1)) ? 1991 : 632;
         mod = 0.80f;
         break;
     case FORM_AQUA:
         // Glyph of the Orca
-        modelid = (target->IsPlayer() && target->ToPlayer()->HasItemCount(51830, 1)) ? 4591 : 2428;
+        display_id = (target->IsPlayer() && target->ToPlayer()->HasItemCount(51830, 1)) ? 4591 : 2428;
         mod = 0.80f;
         break;
     case FORM_BEAR:
@@ -2296,48 +2296,48 @@ std::pair<unsigned int, float> getShapeshiftModelInfo(ShapeshiftForm form, Unit 
         {
             if (target->ToPlayer()->HasItemCount(51266, 1))
                 // Glyph of the Icebear, Turtle WoW:
-                modelid = 8837;
+                display_id = 8837;
             else
                 // Blizzlike bear models:
-                modelid = (Player::TeamForRace(target->GetRace()) == ALLIANCE) ? 2281 : 2289;
+                display_id = (Player::TeamForRace(target->GetRace()) == ALLIANCE) ? 2281 : 2289;
         }
         else
-            modelid = 2281;
+            display_id = 2281;
         break;
     case FORM_GHOUL:
         if (Player::TeamForRace(target->GetRace()) == ALLIANCE)
-            modelid = 10045;
+            display_id = 10045;
         break;
     case FORM_CREATUREBEAR:
-        modelid = 902;
+        display_id = 902;
         break;
     case FORM_GHOSTWOLF:
         // Glyph of the Spectral Wolf
-        modelid = (target->IsPlayer() && target->ToPlayer()->HasItemCount(51831, 1)) ? 3123 : 4613;
+        display_id = (target->IsPlayer() && target->ToPlayer()->HasItemCount(51831, 1)) ? 3123 : 4613;
         mod = 0.80f;
         break;
     case FORM_MOONKIN:
         if (target->IsPlayer())
         {
-            modelid = (Player::TeamForRace(target->GetRace()) == ALLIANCE) ? 15374 : 15375;
+            display_id = (Player::TeamForRace(target->GetRace()) == ALLIANCE) ? 15374 : 15375;
 
             // Glyph of the Frostkin
             if (target->ToPlayer()->HasItemCount(51431, 1))
-                modelid = 12237;
+                display_id = 12237;
 
             // Glyph of Stars
             if (target->ToPlayer()->HasItemCount(51432, 1))
-                modelid = target->ToPlayer()->GetNativeDisplayId();
+                display_id = target->ToPlayer()->GetNativeDisplayId();
 
         }
         else
-            modelid = 15374;
+            display_id = 15374;
         break;
     case FORM_TREE:
-        modelid = 864;
+        display_id = 864;
         break;
     case FORM_SPIRITOFREDEMPTION:
-        modelid = 16031;
+        display_id = 16031;
         break;
     /*case FORM_BATTLESTANCE:
     case FORM_BERSERKERSTANCE:
@@ -2348,7 +2348,7 @@ std::pair<unsigned int, float> getShapeshiftModelInfo(ShapeshiftForm form, Unit 
     default:
         break;
     }
-    return {modelid,mod};
+    return {display_id,mod};
 }
 
 void Aura::HandleAuraModShapeshift(bool apply, bool Real)
@@ -2398,14 +2398,14 @@ void Aura::HandleAuraModShapeshift(bool apply, bool Real)
             break;
     }
 
-    std::pair<unsigned int, float> info = getShapeshiftModelInfo(form, target);
-    unsigned int modelid = info.first;
-    if (modelid > 0 && !target->GetTransForm())
+    std::pair<uint32, float> info = GetShapeshiftDisplayInfo(form, target);
+    uint32 display_id = info.first;
+    if (display_id > 0 && !target->GetTransForm())
     {
         if (apply)
         {
             target->SetTransformScale(info.second);
-            target->SetDisplayId(modelid);
+            target->SetDisplayId(display_id);
         }
         else
         {
@@ -2574,7 +2574,7 @@ void Aura::HandleAuraTransform(bool apply, bool Real)
     if (apply)
     {
         float mod_x = 1;
-        uint32 model_id = 0;
+        uint32 display_id = 0;
 
         // Discombobulate removes mount auras.
         if (GetId() == 4060 && Real)
@@ -2590,13 +2590,13 @@ void Aura::HandleAuraTransform(bool apply, bool Real)
                 switch (rand)
                 {
                     case 0:
-                        model_id = 1060;
+                        display_id = 1060;
                         break;
                     case 1:
-                        model_id = 4473;
+                        display_id = 4473;
                         break;
                     case 2:
-                        model_id = 7898;
+                        display_id = 7898;
                         break;
                 }
             }
@@ -2606,61 +2606,61 @@ void Aura::HandleAuraTransform(bool apply, bool Real)
                 {
                     case 16739:                                 // Orb of Deception
                     {
-                        uint8 gender = sObjectMgr.GetCreatureModelInfo(target->GetDisplayId())->gender;
+                        uint8 gender = sObjectMgr.GetCreatureDisplayInfoAddon(target->GetDisplayId())->gender;
                         switch (target->GetRace())
                         {
                         case RACE_TROLL:
-                            model_id = gender == GENDER_MALE ?
+                            display_id = gender == GENDER_MALE ?
                                         10135 :
                                         10134 ;
                             break;
                         case RACE_TAUREN:
-                            model_id = gender == GENDER_MALE ?
+                            display_id = gender == GENDER_MALE ?
                                         10136 :
                                         10147 ;
                             break;
                         case RACE_HUMAN:
-                            model_id = gender == GENDER_MALE ?
+                            display_id = gender == GENDER_MALE ?
                                         10137 :
                                         10138 ;
                             break;
                         case RACE_ORC:
-                            model_id = gender == GENDER_MALE ?
+                            display_id = gender == GENDER_MALE ?
                                         10139 :
                                         10140 ;
                             break;
                         case RACE_DWARF:
-                            model_id = gender == GENDER_MALE ?
+                            display_id = gender == GENDER_MALE ?
                                         10141 :
                                         10142 ;
                             break;
                         case RACE_NIGHTELF:
-                            model_id = gender == GENDER_MALE ?
+                            display_id = gender == GENDER_MALE ?
                                         10143 :
                                         10144 ;
                             break;
                         case RACE_UNDEAD:
-                            model_id = gender == GENDER_MALE ?
+                            display_id = gender == GENDER_MALE ?
                                         10146 :
                                         10145 ;
                             break;
                         case RACE_GNOME:
                             if (gender == GENDER_MALE)
                             {
-                                model_id = 10148;
+                                display_id = 10148;
                                 mod_x = DEFAULT_TAUREN_MALE_SCALE;
                             }
                             else
                             {
-                                model_id = 10149;
+                                display_id = 10149;
                                 mod_x = DEFAULT_TAUREN_FEMALE_SCALE;
                             }
                             break;
                         case RACE_HIGH_ELF:
-                            model_id = gender == GENDER_MALE ? 7242 : 18552;
+                            display_id = gender == GENDER_MALE ? 7242 : 18552;
                             break;
                         case RACE_GOBLIN:
-                            model_id = gender == GENDER_MALE ? 18226 : 18225;
+                            display_id = gender == GENDER_MALE ? 18226 : 18225;
                             break;
                         default:
                             break;
@@ -2668,7 +2668,7 @@ void Aura::HandleAuraTransform(bool apply, bool Real)
                         break;
                     }
                     default:
-                        sLog.outError("Aura::HandleAuraTransform, spell %u does not have creature entry defined, need custom defined model.", GetId());
+                        sLog.outError("Aura::HandleAuraTransform, spell %u does not have creature entry defined, need custom defined display id.", GetId());
                         break;
                 }
             }
@@ -2677,11 +2677,11 @@ void Aura::HandleAuraTransform(bool apply, bool Real)
                 CreatureInfo const * ci = ObjectMgr::GetCreatureTemplate(m_modifier.m_miscvalue);
                 if (!ci)
                 {
-                    model_id = 16358;                           // pig pink ^_^
-                    sLog.outError("Auras: unknown creature id = %d (only need its modelid) Form Spell Aura Transform in Spell ID = %d", m_modifier.m_miscvalue, GetId());
+                    display_id = 16358;                           // pig pink ^_^
+                    sLog.outError("Auras: unknown creature id = %d (only need its display_id) Form Spell Aura Transform in Spell ID = %d", m_modifier.m_miscvalue, GetId());
                 }
                 else
-                    model_id = Creature::ChooseDisplayId(ci);   // Will use the default model here
+                    display_id = Creature::ChooseDisplayId(ci);   // Will use the default model here
 
                 // creature case, need to update equipment
                 if (ci && target->GetTypeId() == TYPEID_UNIT)
@@ -2692,9 +2692,9 @@ void Aura::HandleAuraTransform(bool apply, bool Real)
                     
             }
 
-            if (model_id)
+            if (display_id)
             {
-                target->SetDisplayId(model_id);
+                target->SetDisplayId(display_id);
                 target->SetTransformScale(mod_x);
             }
             target->SetTransForm(GetId());
@@ -2733,7 +2733,7 @@ void Aura::HandleAuraTransform(bool apply, bool Real)
             }
             else //reapply shapeshifting, there should be only one.
             {
-                std::pair<unsigned int, float> info = getShapeshiftModelInfo(target->GetShapeshiftForm(), target);
+                std::pair<unsigned int, float> info = GetShapeshiftDisplayInfo(target->GetShapeshiftForm(), target);
                 if (info.first)
                 {
                     target->SetDisplayId(info.first);
