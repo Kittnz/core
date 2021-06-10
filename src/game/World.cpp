@@ -1350,7 +1350,7 @@ void World::SetInitialWorldSettings()
 
     sObjectMgr.LoadItemTexts();
 
-    sObjectMgr.LoadCreatureModelInfo();
+    sObjectMgr.LoadCreatureDisplayInfoAddon();
 
     sObjectMgr.LoadEquipmentTemplates();
 

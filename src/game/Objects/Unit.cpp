@@ -8636,9 +8636,9 @@ bool Unit::IsAttackReady(WeaponAttackType type) const
     return m_attackTimer[type] == 0;
 }
 
-void Unit::SetDisplayId(uint32 modelId)
+void Unit::SetDisplayId(uint32 displayId)
 {
-    SetUInt32Value(UNIT_FIELD_DISPLAYID, modelId);
+    SetUInt32Value(UNIT_FIELD_DISPLAYID, displayId);
 
     UpdateModelData();
 
@@ -8652,8 +8652,8 @@ void Unit::SetDisplayId(uint32 modelId)
 void Unit::UpdateModelData()
 {
     CreatureDisplayInfoEntry const* displayEntry = sCreatureDisplayInfoStore.LookupEntry(GetDisplayId());
-    CreatureModelInfo const* modelInfo = sObjectMgr.GetCreatureModelInfo(GetDisplayId());
-    if (modelInfo && displayEntry && modelInfo->bounding_radius && modelInfo->combat_reach && displayEntry->scale)
+    CreatureDisplayInfoAddon const* displayAddon = sObjectMgr.GetCreatureDisplayInfoAddon(GetDisplayId());
+    if (displayAddon && displayEntry && displayAddon->bounding_radius && displayEntry->scale)
     {
         // Tauren and gnome players have scale != 1.0
         float nativeScale = displayEntry->scale;
@@ -8675,8 +8675,8 @@ void Unit::UpdateModelData()
         }
 
         // we expect values in database to be relative to scale = 1.0
-        SetFloatValue(UNIT_FIELD_BOUNDINGRADIUS, (GetObjectScale() / nativeScale) * modelInfo->bounding_radius);
-        SetFloatValue(UNIT_FIELD_COMBATREACH, (GetObjectScale() / nativeScale) * modelInfo->combat_reach);
+        SetFloatValue(UNIT_FIELD_BOUNDINGRADIUS, (GetObjectScale() / nativeScale) * displayAddon->bounding_radius);
+        SetFloatValue(UNIT_FIELD_COMBATREACH, (GetObjectScale() / nativeScale) * displayAddon->combat_reach);
 
         if (CreatureModelDataEntry const* modelData = sCreatureModelDataStore.LookupEntry(displayEntry->ModelId))
         {

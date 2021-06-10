@@ -30,19 +30,6 @@ EndContentData */
 
 #include "scriptPCH.h"
 
-bool QuestAccept_npc_morokk(Player* pPlayer, Creature* pCreature, const Quest* pQuest)
-{
-    if (pQuest->GetQuestId() == QUEST_CHALLENGE_MOROKK)
-    {
-        if (npc_morokkAI* pEscortAI = dynamic_cast<npc_morokkAI*>(pCreature->AI()))
-            pEscortAI->Start(true, pPlayer->GetGUID(), pQuest);
-
-        return true;
-    }
-
-    return false;
-}
-
 /*######
 ## npc_private_hendel
 ######*/

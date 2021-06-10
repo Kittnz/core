@@ -1364,7 +1364,7 @@ bool SpellMgr::IsSkillBonusSpell(uint32 spellId) const
 SpellEntry const* SpellMgr::SelectAuraRankForLevel(SpellEntry const* spellInfo, uint32 level) const
 {
     // fast case
-    if (level + 10 >= nextSpellInfo->spellLevel)
+    if (level + 10 >= spellInfo->spellLevel)
         return spellInfo;
 
     // ignore selection for passive spells
@@ -1394,7 +1394,7 @@ SpellEntry const* SpellMgr::SelectAuraRankForLevel(SpellEntry const* spellInfo, 
             break;
 
         // if found appropriate level
-        if (level + 10 >= spellInfo->spellLevel)
+        if (level + 10 >= nextSpellInfo->spellLevel)
             return nextSpellInfo;
 
         // one rank less then

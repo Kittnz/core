@@ -565,9 +565,9 @@ class Unit : public WorldObject
         Aura* GetDummyAura(uint32 spell_id) const;
         bool IsInDisallowedMountForm();
         uint32 GetDisplayId() const { return GetUInt32Value(UNIT_FIELD_DISPLAYID); }
-        void SetDisplayId(uint32 modelId);
+        void SetDisplayId(uint32 displayId);
         uint32 GetNativeDisplayId() const { return GetUInt32Value(UNIT_FIELD_NATIVEDISPLAYID); }
-        void SetNativeDisplayId(uint32 modelId) { SetUInt32Value(UNIT_FIELD_NATIVEDISPLAYID, modelId); }
+        void SetNativeDisplayId(uint32 displayId) { SetUInt32Value(UNIT_FIELD_NATIVEDISPLAYID, displayId); }
         void SetTransForm(uint32 spellid) { m_transform = spellid; }
         uint32 GetTransForm() const { return m_transform; }
         void SetTransformScale(float scale);

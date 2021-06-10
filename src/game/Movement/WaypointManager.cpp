@@ -248,46 +248,7 @@ void WaypointManager::Load()
 
                 WorldDatabase.PExecute("UPDATE `creature_movement_template` SET `position_x` = '%f', `position_y` = '%f' WHERE `entry` = %u AND `point` = %u", node.x, node.y, entry, point);
             }
-
-            WaypointBehavior be;
-            be.model1           = fields[16].GetUInt32();
-            be.model2           = fields[17].GetUInt32();
-            be.emote            = fields[13].GetUInt32();
-            be.spell            = fields[14].GetUInt32();
-
-            for (int i = 0; i < MAX_WAYPOINT_TEXT; ++i)
-            {
-                be.textid[i]    = fields[8 + i].GetUInt32();
-
-                if (be.textid[i] < 0)
-                {
-                    sLog.outErrorDb("Broadcast text %u used in table `creature_movement_template` does not exist.", be.textid[i]);
-                    continue;
-                }
-            }
-
-            if (be.spell && ! sSpellMgr.GetSpellEntry(be.spell))
-            {
-                sLog.outErrorDb("Table creature_movement_template references unknown spellid %u. Skipping id %u with point %u.", be.spell, entry, point);
-                be.spell = 0;
-            }
-
-            if (be.emote)
-            {
-                if (!sEmotesStore.LookupEntry(be.emote))
-                    sLog.outErrorDb("Waypoint template path %u (point %u) are using emote %u, but emote does not exist.", entry, point, be.emote);
-            }
-
-            // save memory by not storing empty behaviors
-            if (!be.isEmpty())
-            {
-                node.behavior   = new WaypointBehavior(be);
-                ++total_behaviors;
-            }
-            else
-                node.behavior   = nullptr;
-        }
-        while (result->NextRow());
+        } while (result->NextRow());
 
         delete result;
     }
