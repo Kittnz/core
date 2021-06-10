@@ -819,8 +819,7 @@ void WorldSession::HandleAreaTriggerOpcode(WorldPacket & recv_data)
         if (!bg)
             return;
 
-        if ((pPlayer->GetLevel() < bg->GetMinLevel() || pPlayer->GetLevel() > bg->GetMaxLevel()) ||
-            (pPlayer->GetTeam() == pBgEntrance->team))
+        if ((pPlayer->GetLevel() < bg->GetMinLevel() || pPlayer->GetLevel() > bg->GetMaxLevel()) || (pPlayer->GetTeam() != pBgEntrance->team))
         {
             SendAreaTriggerMessage("You must be in the %s and at least %u%s level to enter.", pPlayer->GetTeam() == ALLIANCE ? "Alliance" : "Horde", bg->GetMinLevel(), bg->GetMinLevel() % 2 ? "st" : "th");
             return;

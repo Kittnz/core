@@ -2538,6 +2538,18 @@ bool Player::CanInteractWithQuestGiver(Object* questGiver) const
     return false;
 }
 
+Creature* Player::FindNearestInteractableNpcWithFlag(uint32 npcFlags) const
+{
+    Creature* pCreature = nullptr;
+
+    MaNGOS::NearestInteractableNpcWithFlag u_check(this, npcFlags);
+    MaNGOS::CreatureLastSearcher<MaNGOS::NearestInteractableNpcWithFlag> searcher(pCreature, u_check);
+
+    Cell::VisitGridObjects(this, searcher, INTERACTION_DISTANCE);
+
+    return pCreature;
+}
+
 Creature* Player::GetNPCIfCanInteractWith(ObjectGuid guid, uint32 npcflagmask) const
 {
     // some basic checks
@@ -2550,7 +2562,7 @@ Creature* Player::GetNPCIfCanInteractWith(ObjectGuid guid, uint32 npcflagmask) c
     return CanInteractWithNPC(pCreature, npcflagmask) ? pCreature : nullptr;
 }
 
-bool Player::CanInteractWithNPC(Creature* pCreature, uint32 npcflagmask) const
+bool Player::CanInteractWithNPC(Creature const* pCreature, uint32 npcflagmask) const
 {
     if (!pCreature)
         return false;
@@ -2618,7 +2630,7 @@ GameObject* Player::GetGameObjectIfCanInteractWith(ObjectGuid guid, uint32 gameo
     return CanInteractWithGameObject(pGo, gameobject_type) ? pGo : nullptr;
 }
 
-bool Player::CanInteractWithGameObject(GameObject* pGo, uint32 gameobject_type) const
+bool Player::CanInteractWithGameObject(GameObject const* pGo, uint32 gameobject_type) const
 {
     if (!pGo)
         return false;
