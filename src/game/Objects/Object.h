@@ -100,30 +100,6 @@ struct FactionTemplateEntry;
 
 typedef std::unordered_map<Player*, UpdateData> UpdateDataMapType;
 
-struct Position
-{
-    Position() = default;
-    Position(float position_x, float position_y, float position_z, float orientation) : x(position_x), y(position_y), z(position_z), o(orientation) {}
-    float x = 0.0f;
-    float y = 0.0f;
-    float z = 0.0f;
-    float o = 0.0f;
-};
-
-struct WorldLocation
-{
-    uint32 mapId = 0;
-    float x = 0.0f;
-    float y = 0.0f;
-    float z = 0.0f;
-    float o = 0.0f;
-    explicit WorldLocation(uint32 _mapid = 0, float _x = 0, float _y = 0, float _z = 0, float _o = 0)
-        : mapId(_mapid), x(_x), y(_y), z(_z), o(_o) {}
-    WorldLocation(WorldLocation const &loc)
-        : mapId(loc.mapId), x(loc.x), y(loc.y), z(loc.z), o(loc.o) {}
-};
-
-
 //use this class to measure time between world update ticks
 //essential for units updating their spells after cells become active
 class WorldUpdateCounter
@@ -809,15 +785,19 @@ class WorldObject : public Object
         float GetDistance(WorldObject const* obj) const;
         float GetDistance(float x, float y, float z) const;
         float GetDistance(WorldLocation const& position) const { return GetDistance(position.x, position.y, position.z); }
+        float GetDistance(Position const& position) const { return GetDistance(position.x, position.y, position.z); }
         float GetDistance2d(WorldObject const* obj) const;
         float GetDistance2d(float x, float y) const;
         float GetDistance2d(WorldLocation const& position) const { return GetDistance2d(position.x, position.y); }
+        float GetDistance2d(Position const& position) const { return GetDistance2d(position.x, position.y); }
         float GetDistanceZ(WorldObject const* obj) const;
         float GetDistanceSqr(float x, float y, float z) const;
         bool IsInMap(WorldObject const* obj) const;
-        bool IsWithinDist3d(WorldLocation const& position, float dist2compare) const { return IsWithinDist3d(position.x, position.y, position.z, dist2compare); }
+        template <class T>
+        bool IsWithinDist3d(T const& position, float dist2compare) const { return IsWithinDist3d(position.x, position.y, position.z, dist2compare); }
         bool IsWithinDist3d(float x, float y, float z, float dist2compare) const;
-        bool IsWithinDist2d(WorldLocation const& position, float dist2compare) const { return IsWithinDist2d(position.x, position.y, dist2compare); }
+        template <class T >
+        bool IsWithinDist2d(T const& position, float dist2compare) const { return IsWithinDist2d(position.x, position.y, dist2compare); }
         bool IsWithinDist2d(float x, float y, float dist2compare) const;
         bool _IsWithinDist(WorldObject const* obj, float dist2compare, bool is3D) const;
 

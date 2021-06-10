@@ -142,9 +142,7 @@ struct boss_jeklikAI : public ScriptedAI
     {
         ScriptedAI::EnterEvadeMode();
         m_creature->Respawn();
-        float x, y, z, o;
-        m_creature->GetHomePosition(x, y, z, o);
-        m_creature->NearTeleportTo(x, y, z, o);
+        m_creature->NearTeleportTo(m_creature->GetHomePosition());
     }
 
     void UpdateAI(const uint32 lastDiff) override
