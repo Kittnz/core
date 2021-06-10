@@ -230,14 +230,7 @@ typedef std::multimap<uint32,SpellTargetEntry> SpellScriptTarget;
 typedef std::pair<SpellScriptTarget::const_iterator,SpellScriptTarget::const_iterator> SpellScriptTargetBounds;
 
 // coordinates for spells (accessed using SpellMgr functions)
-struct SpellTargetPosition
-{
-    uint32 target_mapId;
-    float  target_X;
-    float  target_Y;
-    float  target_Z;
-    float  target_Orientation;
-};
+typedef WorldLocation SpellTargetPosition;
 
 typedef std::unordered_map<uint32, SpellTargetPosition> SpellTargetPositionMap;
 
@@ -457,9 +450,9 @@ class SpellMgr
 
             SpellGroupStackRule rule = SPELL_GROUP_STACK_RULE_DEFAULT;
 
-            for (std::set<SpellGroup>::iterator itr = groups.begin() ; itr!= groups.end() ; ++itr)
+            for (const auto itr : groups)
             {
-                SpellGroupStackMap::const_iterator found = mSpellGroupStack.find(*itr);
+                SpellGroupStackMap::const_iterator found = mSpellGroupStack.find(itr);
                 if (found != mSpellGroupStack.end())
                 {
                     rule = found->second;
@@ -482,15 +475,13 @@ class SpellMgr
         bool IsMorePowerfullSpell(uint32 powerfullSpell, uint32 otherSpell, SpellGroup group) const
         {
             // The most powerfull spell appears after less powerfull spells in the list.
-            for (SpellGroupSpellMap::const_iterator itr = mSpellGroupSpell.begin(); itr != mSpellGroupSpell.end(); ++itr)
+            for (const auto& itr : mSpellGroupSpell)
             {
-                if (itr->first != group)
+                if (itr.first != group)
                     continue;
-
-                if (itr->second == powerfullSpell)
+                if (itr.second == powerfullSpell)
                     return false;
-
-                if (itr->second == otherSpell)
+                if (itr.second == otherSpell)
                     return true;
             }
 

@@ -407,14 +407,15 @@ ChatCommand * ChatHandler::getCommandTable()
 
     static ChatCommand serverCommandTable[] =
     {
-        { "corpses",        SEC_ADMINISTRATOR,     true,  &ChatHandler::HandleServerCorpsesCommand,       "", nullptr },
-        { "exit",           SEC_CONSOLE,        true,  &ChatHandler::HandleServerExitCommand,          "", nullptr },
-        { "idlerestart",    SEC_ADMINISTRATOR,  true, nullptr,                                         "", serverIdleRestartCommandTable },
-        { "idleshutdown",   SEC_ADMINISTRATOR,  true, nullptr,                                         "", serverIdleShutdownCommandTable },
-        { "info",           SEC_PLAYER,         true,  &ChatHandler::HandleServerInfoCommand,          "", nullptr },
-        { "restart",        SEC_ADMINISTRATOR,  true, nullptr,                                         "", serverRestartCommandTable },
-        { "shutdown",       SEC_ADMINISTRATOR,  true, nullptr,                                         "", serverShutdownCommandTable },
-        { nullptr,          0,                  false, nullptr,                                        "", nullptr }
+        { "corpses",        SEC_ADMINISTRATOR,  true,  &ChatHandler::HandleServerCorpsesCommand,     "", nullptr },
+        { "exit",           SEC_CONSOLE,        true,  &ChatHandler::HandleServerExitCommand,        "", nullptr },
+        { "idlerestart",    SEC_ADMINISTRATOR,  true,  nullptr,                                      "", serverIdleRestartCommandTable },
+        { "idleshutdown",   SEC_ADMINISTRATOR,  true,  nullptr,                                      "", serverIdleShutdownCommandTable },
+        { "info",           SEC_PLAYER,         true,  &ChatHandler::HandleServerInfoCommand,        "", nullptr },
+        { "resetallraid",   SEC_ADMINISTRATOR,  true,  &ChatHandler::HandleServerResetAllRaidCommand, "", nullptr },
+        { "restart",        SEC_ADMINISTRATOR,  true,  nullptr,                                       "", serverRestartCommandTable },
+        { "shutdown",       SEC_ADMINISTRATOR,  true,  nullptr,                                       "", serverShutdownCommandTable },
+        { nullptr,          0,                  false, nullptr,                                       "", nullptr }
     };
 
     static ChatCommand teleCommandTable[] =
@@ -828,10 +829,12 @@ void ChatHandler::FillFullCommandsName(ChatCommand* table, std::string prefix)
     for (uint32 i = 0; table[i].Name != nullptr; ++i)
     {
         std::string newPrefix = prefix;
-        if (newPrefix != "")
+        if (!newPrefix.empty())
             newPrefix += " ";
+
         newPrefix += table[i].Name;
         table[i].FullName = newPrefix;
+
         if (table[i].ChildCommands)
             FillFullCommandsName(table[i].ChildCommands, newPrefix);
 
@@ -927,7 +930,7 @@ ChatCommand const* ChatHandler::FindCommand(char const* text)
  */
 ChatCommandSearchResult ChatHandler::FindCommand(ChatCommand* table, char const* &text, ChatCommand*& command, ChatCommand** parentCommand /*= nullptr*/, std::string* cmdNamePtr /*= nullptr*/, bool allAvailable /*= false*/, bool exactlyName /*= false*/)
 {
-    std::string cmd = "";
+    std::string cmd;
 
     // skip whitespaces
     while (*text != ' ' && *text != '\0')
@@ -1581,9 +1584,8 @@ bool ChatHandler::isValidChatMessage(const char* message)
                             return false;
 
                         const ItemRandomPropertiesEntry* iProp = nullptr;
-                        for (auto iter = properties.begin(); iter != properties.end(); ++iter)
+                        for (const auto prop : properties)
                         {
-                            auto prop = *iter;
                             iProp = nullptr;
 
                             if (!hasRandomProperty)
@@ -2205,8 +2207,7 @@ char* ChatHandler::ExtractLinkArg(char** args, char const* const* linkTypes /*= 
     {
         // :something...|h[name]|h|r
 
-        if (*tail == ':')
-            ++tail;
+        ++tail;
 
         // something|h[name]|h|r or something:something2...|h[name]|h|r
 
@@ -2653,9 +2654,9 @@ bool ChatHandler::ExtractLocationFromLink(char** text, uint32& mapid, float& x, 
             if (!tele)
                 return false;
             mapid = tele->mapId;
-            x = tele->position_x;
-            y = tele->position_y;
-            z = tele->position_z;
+            x = tele->x;
+            y = tele->y;
+            z = tele->z;
             return true;
         }
         case LOCATION_LINK_TAXINODE:
@@ -2841,7 +2842,7 @@ std::string ChatHandler::ExtractPlayerNameFromLink(char** text)
  */
 bool ChatHandler::ExtractPlayerTarget(char** args, Player** player /*= nullptr*/, ObjectGuid* player_guid /*= nullptr*/, std::string* player_name /*= nullptr*/, bool use_extended_response)
 {
-    std::string name = "";
+    std::string name;
     if (*args && **args)
     {
         name = ExtractPlayerNameFromLink(args);
@@ -3148,7 +3149,7 @@ void ChatHandler::ShowNpcOrGoSpawnInformation(uint32 guid)
 template <typename T>
 std::string ChatHandler::PrepareStringNpcOrGoSpawnInformation(uint32 guid)
 {
-    std::string str = "";
+    std::string str;
     if (uint16 pool_id = sPoolMgr.IsPartOfAPool<T>(guid))
     {
         uint16 top_pool_id = sPoolMgr.IsPartOfTopPool<T>(guid);

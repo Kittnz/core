@@ -241,7 +241,7 @@ void LoadDBCStores(std::string const& dataPath)
         if (!spellInfo || !(spellInfo->Attributes & SPELL_ATTR_PASSIVE))
             continue;
 
-        for (unsigned int i = 1; i < sCreatureFamilyStore.GetNumRows(); ++i)
+        for (uint32 i = 1; i < sCreatureFamilyStore.GetNumRows(); ++i)
         {
             CreatureFamilyEntry const* cFamily = sCreatureFamilyStore.LookupEntry(i);
             if (!cFamily)
@@ -266,10 +266,12 @@ void LoadDBCStores(std::string const& dataPath)
 	LoadDBC(availableDbcLocales, bad_dbc_files, sTalentStore, dbcPath, "Talent.dbc");
 
     // create talent spells set
-    for (unsigned int i = 0; i < sTalentStore.GetNumRows(); ++i)
+    for (uint32 i = 0; i < sTalentStore.GetNumRows(); ++i)
     {
         TalentEntry const *talentInfo = sTalentStore.LookupEntry(i);
-        if (!talentInfo) continue;
+        if (!talentInfo)
+            continue;
+
         for (int j = 0; j < 5; j++)
             if (talentInfo->RankID[j])
                 sTalentSpellPosMap[talentInfo->RankID[j]] = TalentSpellPos(i, j);
@@ -326,9 +328,9 @@ void LoadDBCStores(std::string const& dataPath)
 
             // add total amount bits for first rank starting from talent tab first talent rank pos.
             uint32 pos = 0;
-            for (TalentBitSize::iterator itr = sTalentBitSize.begin(); itr != sTalentBitSize.end(); ++itr)
+            for (const auto& itr : sTalentBitSize)
             {
-                uint32 talentId = itr->first & 0xFFFF;
+                uint32 talentId = itr.first & 0xFFFF;
                 TalentEntry const *talentInfo = sTalentStore.LookupEntry(talentId);
                 if (!talentInfo)
                     continue;
@@ -337,7 +339,7 @@ void LoadDBCStores(std::string const& dataPath)
                     continue;
 
                 sTalentPosInInspect[talentId] = pos;
-                pos += itr->second;
+                pos += itr.second;
             }
         }
     }
@@ -389,10 +391,10 @@ void LoadDBCStores(std::string const& dataPath)
             if (src_i != sTaxiPathSetBySource.end() && !src_i->second.empty())
             {
                 bool ok = false;
-                for (TaxiPathSetForSource::const_iterator dest_i = src_i->second.begin(); dest_i != src_i->second.end(); ++dest_i)
+                for (const auto& dest_i : src_i->second)
                 {
                     // not spell path
-                    if (spellPaths.find(dest_i->second.ID) == spellPaths.end())
+                    if (spellPaths.find(dest_i.second.ID) == spellPaths.end())
                     {
                         ok = true;
                         break;
@@ -435,8 +437,8 @@ void LoadDBCStores(std::string const& dataPath)
     else if (!bad_dbc_files.empty())
     {
         std::string str;
-        for (std::list<std::string>::iterator i = bad_dbc_files.begin(); i != bad_dbc_files.end(); ++i)
-            str += *i + "\n";
+        for (const auto& bad_dbc_file : bad_dbc_files)
+            str += bad_dbc_file + "\n";
 
         sLog.outError("\nSome required *.dbc files (%u from %d) not found or not compatible:\n%s", (uint32)bad_dbc_files.size(), DBCFilesCount, str.c_str());
         Log::WaitBeforeContinueIfNeed();
@@ -506,12 +508,12 @@ ChatChannelsEntry const* GetChannelEntryFor(std::string const& name)
         if (ch)
         {
             // need to remove %s from entryName if it exists before we match
-            for (int loc = 0; loc < MAX_DBC_LOCALE; ++loc)
+            for (const auto loc : ch->pattern)
             {
-                std::string entryName(ch->pattern[loc]);
+                std::string entryName(loc);
                 std::size_t removeString = entryName.find("%s");
                 // Not loaded locale
-                if (!entryName.size())
+                if (entryName.empty())
                     continue;
 
                 if (removeString != std::string::npos)
@@ -524,27 +526,7 @@ ChatChannelsEntry const* GetChannelEntryFor(std::string const& name)
     }
     return nullptr;
 }
-/*[-ZERO]
-bool IsTotemCategoryCompatiableWith(uint32 itemTotemCategoryId, uint32 requiredTotemCategoryId)
-{
-    if(requiredTotemCategoryId==0)
-        return true;
-    if(itemTotemCategoryId==0)
-        return false;
 
-    TotemCategoryEntry const* itemEntry = sTotemCategoryStore.LookupEntry(itemTotemCategoryId);
-    if(!itemEntry)
-        return false;
-    TotemCategoryEntry const* reqEntry = sTotemCategoryStore.LookupEntry(requiredTotemCategoryId);
-    if(!reqEntry)
-        return false;
-
-    if(itemEntry->categoryType!=reqEntry->categoryType)
-        return false;
-
-    return (itemEntry->categoryMask & reqEntry->categoryMask)==reqEntry->categoryMask;
-}
-*/
 bool Zone2MapCoordinates(float& x, float& y, uint32 zone)
 {
     WorldMapAreaEntry const* maEntry = sWorldMapAreaStore.LookupEntry(zone);

@@ -552,9 +552,9 @@ enum RestType
 
 enum DuelCompleteType
 {
-    DUEL_INTERUPTED = 0,
-    DUEL_WON        = 1,
-    DUEL_FLED       = 2
+    DUEL_INTERRUPTED = 0,
+    DUEL_WON = 1,
+    DUEL_FLED = 2
 };
 
 /// Type of environmental damages
@@ -1038,7 +1038,7 @@ class Player final: public Unit
         void AutoUnequipWeaponsIfNeed();
         void AutoUnequipOffhandIfNeed();
         void AutoUnequipItemFromSlot(uint32 slot);
-        bool StoreNewItemInBestSlots(uint32 item_id, uint32 item_count);
+        bool StoreNewItemInBestSlots(uint32 item_id, uint32 item_count, uint32 enchantId = 0);
         Item* StoreNewItemInInventorySlot(uint32 itemEntry, uint32 amount);
         void AutoStoreLoot(Loot& loot, bool broadcast = false, uint8 bag = NULL_BAG, uint8 slot = NULL_SLOT);
         void SetAmmo(uint32 item);
@@ -1753,9 +1753,10 @@ class Player final: public Unit
         */
         bool SwitchInstance(uint32 newInstanceId);
         bool TeleportTo(uint32 mapid, float x, float y, float z, float orientation, uint32 options = 0, std::function<void()> recover = std::function<void()>(), std::function<void()> OnTeleportFinished = std::function<void()>());
-        bool TeleportTo(WorldLocation const &loc, uint32 options = 0, std::function<void()> recover = std::function<void()>(), std::function<void()> OnTeleportFinished = std::function<void()>())
+        template <class T>
+        bool TeleportTo(T const& loc, uint32 options = 0, std::function<void()> recover = std::function<void()>())
         {
-            return TeleportTo(loc.mapId, loc.x, loc.y, loc.z, loc.o, options, recover, OnTeleportFinished);
+            return TeleportTo(loc.mapId, loc.x, loc.y, loc.z, loc.o, options, recover);
         }
 
         // _NOT_ thread-safe. Must be executed by the map manager after map updates, since we
@@ -1851,30 +1852,29 @@ class Player final: public Unit
         void SetFly(bool enable) override;
 
         // Anti undermap
-        void SaveNoUndermapPosition(float x, float y, float z)
+        void SaveNoUndermapPosition(float x, float y, float z, float o)
         {
-            _lastSafeX = x;
-            _lastSafeY = y;
-            _lastSafeZ = z;
-            _undermapPosValid = true;
+            m_lastSafePosition.x = x;
+            m_lastSafePosition.y = y;
+            m_lastSafePosition.z = z + 2.0f;
+            m_lastSafePosition.o = 0;
+            m_undermapPosValid = true;
         }
         bool UndermapRecall()
         {
-            if (!_undermapPosValid || IsBeingTeleported())
+            if (!m_undermapPosValid || IsBeingTeleported())
                 return false;
-            if (GetDistance2d(_lastSafeX, _lastSafeY) > 100.0f)
+            if (GetDistance2d(m_lastSafePosition) > 100.0f)
             {
-                _undermapPosValid = false;
+                m_undermapPosValid = false;
                 return false;
             }
-            NearTeleportTo(_lastSafeX, _lastSafeY, _lastSafeZ + 2.0f, GetOrientation(), TELE_TO_NOT_LEAVE_COMBAT | TELE_TO_NOT_UNSUMMON_PET);
-            _undermapPosValid = false;
+            NearTeleportTo(m_lastSafePosition, TELE_TO_NOT_LEAVE_COMBAT | TELE_TO_NOT_UNSUMMON_PET);
+            m_undermapPosValid = false;
             return true;
         }
-        float _lastSafeX;
-        float _lastSafeY;
-        float _lastSafeZ;
-        bool  _undermapPosValid;
+        Position m_lastSafePosition;
+        bool  m_undermapPosValid;
 
         uint32 GetHomeBindMap() const { return m_homebindMapId; }
         uint16 GetHomeBindAreaId() const { return m_homebindAreaId; }
@@ -1891,7 +1891,7 @@ class Player final: public Unit
         void SetTransport(Transport* t) override;
         void DismountCheck();
 
-        bool IsDiplomat() const;
+        bool IsDiplomat() const { return HasItemCount(50012, 1, false); }
 
         // knockback/jumping states
         bool IsLaunched() const { return launched; }
@@ -1940,6 +1940,14 @@ class Player final: public Unit
         RestType rest_type;
         void UpdateInnerTime(time_t time) { time_inn_enter = time; }
     public:
+        /**
+        * \brief: compute rest bonus
+        * \param: time_t timePassed > time from last check
+        * \param: bool offline      > is the player was offline?
+        * \param: bool inRestPlace  > if it was offline, is the player was in city/tavern/inn?
+        * \returns: float
+        **/
+        float ComputeRest(time_t timePassed, bool offline = false, bool inRestPlace = false);
         float GetRestBonus() const { return m_rest_bonus; }
         void SetRestBonus(float rest_bonus_new);
         RestType GetRestType() const { return rest_type; }
@@ -2324,17 +2332,19 @@ class Player final: public Unit
 
         bool InBattleGroundQueue() const
         {
-            for (int i=0; i < PLAYER_MAX_BATTLEGROUND_QUEUES; ++i)
-                if (m_bgBattleGroundQueueID[i].bgQueueTypeId != BATTLEGROUND_QUEUE_NONE)
+            for (const auto& i : m_bgBattleGroundQueueID)
+                if (i.bgQueueTypeId != BATTLEGROUND_QUEUE_NONE)
                     return true;
+
             return false;
         }
 
         BattleGroundQueueTypeId GetQueuedBattleground() const
         {
-            for (int i = 0; i < PLAYER_MAX_BATTLEGROUND_QUEUES; ++i)
-                if (m_bgBattleGroundQueueID[i].bgQueueTypeId != BATTLEGROUND_QUEUE_NONE)
-                    return m_bgBattleGroundQueueID[i].bgQueueTypeId;
+            for (const auto& i : m_bgBattleGroundQueueID)
+                if (i.bgQueueTypeId != BATTLEGROUND_QUEUE_NONE)
+                    return i.bgQueueTypeId;
+
             return BATTLEGROUND_QUEUE_NONE;
         }
 
@@ -2348,9 +2358,9 @@ class Player final: public Unit
         }
         bool IsInvitedForBattleGroundQueueType(BattleGroundQueueTypeId bgQueueTypeId) const
         {
-            for (int i=0; i < PLAYER_MAX_BATTLEGROUND_QUEUES; ++i)
-                if (m_bgBattleGroundQueueID[i].bgQueueTypeId == bgQueueTypeId)
-                    return m_bgBattleGroundQueueID[i].invitedToInstance != 0;
+            for (const auto& i : m_bgBattleGroundQueueID)
+                if (i.bgQueueTypeId == bgQueueTypeId)
+                    return i.invitedToInstance != 0;
             return false;
         }
         bool InBattleGroundQueueForBattleGroundQueueType(BattleGroundQueueTypeId bgQueueTypeId) const
@@ -2380,26 +2390,26 @@ class Player final: public Unit
         bool HasFreeBattleGroundQueueId() const;
         void RemoveBattleGroundQueueId(BattleGroundQueueTypeId val)
         {
-            for (int i=0; i < PLAYER_MAX_BATTLEGROUND_QUEUES; ++i)
+            for (auto& i : m_bgBattleGroundQueueID)
             {
-                if (m_bgBattleGroundQueueID[i].bgQueueTypeId == val)
+                if (i.bgQueueTypeId == val)
                 {
-                    m_bgBattleGroundQueueID[i].bgQueueTypeId = BATTLEGROUND_QUEUE_NONE;
-                    m_bgBattleGroundQueueID[i].invitedToInstance = 0;
+                    i.bgQueueTypeId = BATTLEGROUND_QUEUE_NONE;
+                    i.invitedToInstance = 0;
                     return;
                 }
             }
         }
         void SetInviteForBattleGroundQueueType(BattleGroundQueueTypeId bgQueueTypeId, uint32 instanceId)
         {
-            for (int i=0; i < PLAYER_MAX_BATTLEGROUND_QUEUES; ++i)
-                if (m_bgBattleGroundQueueID[i].bgQueueTypeId == bgQueueTypeId)
-                    m_bgBattleGroundQueueID[i].invitedToInstance = instanceId;
+            for (auto& i : m_bgBattleGroundQueueID)
+                if (i.bgQueueTypeId == bgQueueTypeId)
+                    i.invitedToInstance = instanceId;
         }
         bool IsInvitedForBattleGroundInstance(uint32 instanceId) const
         {
-            for (int i=0; i < PLAYER_MAX_BATTLEGROUND_QUEUES; ++i)
-                if (m_bgBattleGroundQueueID[i].invitedToInstance == instanceId)
+            for (const auto& i : m_bgBattleGroundQueueID)
+                if (i.invitedToInstance == instanceId)
                     return true;
             return false;
         }
@@ -2579,10 +2589,8 @@ template <class T> T Player::ApplySpellMod(uint32 spellId, SpellModOp op, T &bas
     if (!spellInfo) return 0;
     int32 totalpct = 0;
     int32 totalflat = 0;
-    for (SpellModList::iterator itr = m_spellMods[op].begin(); itr != m_spellMods[op].end(); ++itr)
+    for (const auto mod : m_spellMods[op])
     {
-        SpellModifier* mod = *itr;
-
         if (!IsAffectedBySpellmod(spellInfo,mod,spell))
             continue;
 

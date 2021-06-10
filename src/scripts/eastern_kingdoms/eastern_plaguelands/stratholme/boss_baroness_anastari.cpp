@@ -182,9 +182,9 @@ struct boss_baroness_anastariAI : public ScriptedAI
                             PlayerAggro[i] = 0;
                         }
                         ThreatList const& tList = m_creature->GetThreatManager().getThreatList();
-                        for (ThreatList::const_iterator i = tList.begin(); i != tList.end(); ++i)
+                        for (const auto i : tList)
                         {
-                            Unit* pUnit = m_creature->GetMap()->GetUnit((*i)->getUnitGuid());
+                            Unit* pUnit = m_creature->GetMap()->GetUnit(i->getUnitGuid());
                             if (pUnit && pUnit->IsPlayer())
                             {
                                 for (int i = 0; i < 5; i++)
@@ -198,7 +198,7 @@ struct boss_baroness_anastariAI : public ScriptedAI
                             }
                         }
 
-                        if (Position_memorized == false)
+                        if (!Position_memorized)
                         {
                             /** Memorize old position of the Banshee */
                             old_Position.x = m_creature->GetPositionX();
@@ -211,7 +211,7 @@ struct boss_baroness_anastariAI : public ScriptedAI
                             Position_memorized =  true;
                         }
 
-                        m_creature->NearTeleportTo(target->GetPositionX(), target->GetPositionY(), target->GetPositionZ(), 0.0f);
+                        m_creature->NearTeleportTo(target->GetPosition());
                         if (DoCastSpellIfCan(target, SPELL_POSSESS) == CAST_OK)
                         {
                             m_creature->ApplySpellImmune(0, IMMUNITY_DAMAGE, SPELL_SCHOOL_MASK_ALL, true);

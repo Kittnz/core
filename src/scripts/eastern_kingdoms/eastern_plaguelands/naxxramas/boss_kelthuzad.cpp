@@ -361,10 +361,7 @@ struct boss_kelthuzadAI : public ScriptedAI
         EvadeAllGuardians();
     }
 
-    void MoveInLineOfSight(Unit* pWho) override
-    {
-        return;
-    }
+    void MoveInLineOfSight(Unit* /*pWho*/) override {}
 
     void AttackStart(Unit* who) override
     {
@@ -395,9 +392,9 @@ struct boss_kelthuzadAI : public ScriptedAI
 
     void EvadeAllGuardians()
     {
-        for (auto it = guardians.begin(); it != guardians.end(); it++)
+        for (const auto& guardian : guardians)
         {
-            if (Creature* pCreature = m_pInstance->GetCreature(it->first))
+            if (Creature* pCreature = m_pInstance->GetCreature(guardian.first))
             {
                 pCreature->AI()->EnterEvadeMode();
             }
@@ -406,9 +403,9 @@ struct boss_kelthuzadAI : public ScriptedAI
 
     void DespawnAllIntroCreatures()
     {
-        for (auto it = p1_adds.begin(); it != p1_adds.end(); it++)
+        for (const auto& guid : p1_adds)
         {
-            if (Creature* pSoldier = m_pInstance->instance->GetCreature(*it))
+            if (Creature* pSoldier = m_pInstance->instance->GetCreature(guid))
                 ((TemporarySummon*)pSoldier)->UnSummon();
         }
         p1_adds.clear();
@@ -437,14 +434,14 @@ struct boss_kelthuzadAI : public ScriptedAI
         events.ScheduleEvent(EVENT_SKELETON, Seconds(20));
         //events.ScheduleEvent(EVENT_SOUL_WEAVER, Seconds(35));
         //events.ScheduleEvent(EVENT_ABOMINATION, Seconds(43));
-        for (uint32 i = 0; i < NUM_UNDEAD_SPAWNS; i++)
-            events.ScheduleEvent(EVENT_ABOMINATION, abominationSpawnMs[i]);
-        for (uint32 i = 0; i < NUM_UNDEAD_SPAWNS; i++)
-            events.ScheduleEvent(EVENT_SOUL_WEAVER, soulweaverSpawnMs[i]);
+        for (uint32 i : abominationSpawnMs)
+            events.ScheduleEvent(EVENT_ABOMINATION, i);
+        for (uint32 i : soulweaverSpawnMs)
+            events.ScheduleEvent(EVENT_SOUL_WEAVER, i);
 
         m_pInstance->DoUseDoorOrButton(pullPortalGuid);
 
-        for (int i = 0; i < NUM_ALCOVES; i++)
+        for (const auto& alcove : alcoves)
         {
             for (int j = 0; j < 10; j++)
             {
@@ -452,8 +449,8 @@ struct boss_kelthuzadAI : public ScriptedAI
                 double relDistance = rand_norm() + rand_norm();
                 if (relDistance > 1)
                     relDistance = 1 - relDistance;
-                const float x = alcoves[i][0];
-                const float y = alcoves[i][1];
+                float const x = alcove[0];
+                float const y = alcove[1];
                 const float radius = 14.0f;
                 float thisX = x + std::sin(angle)*relDistance*radius;
                 float thisY = y + std::cos(angle)*relDistance*radius;
@@ -466,9 +463,9 @@ struct boss_kelthuzadAI : public ScriptedAI
                 }
             }
         }
-        for (int i = 0; i < NUM_ABOM; i++)
+        for (const auto& position : abomPos)
         {
-            if (Creature* pCreature = m_creature->SummonCreature(NPC_UNSTOPPABLE_ABOM, abomPos[i][0], abomPos[i][1], alcoveZ, frand(0, M_PI_F * 2),
+            if (Creature* pCreature = m_creature->SummonCreature(NPC_UNSTOPPABLE_ABOM, position[0], position[1], alcoveZ, frand(0, M_PI_F * 2),
                 TEMPSUMMON_MANUAL_DESPAWN))
             {
                 p1_adds.push_back(pCreature->GetObjectGuid());
@@ -476,9 +473,9 @@ struct boss_kelthuzadAI : public ScriptedAI
             }
 
         }
-        for (int i = 0; i < NUM_SOULWEAVER; i++)
+        for (const auto& position : soulweaverPos)
         {
-            if (Creature* pCreature = m_creature->SummonCreature(NPC_SOUL_WEAVER, soulweaverPos[i][0], soulweaverPos[i][1], alcoveZ, frand(0, M_PI_F * 2),
+            if (Creature* pCreature = m_creature->SummonCreature(NPC_SOUL_WEAVER, position[0], position[1], alcoveZ, frand(0, M_PI_F * 2),
                 TEMPSUMMON_MANUAL_DESPAWN))
             {
                 p1_adds.push_back(pCreature->GetObjectGuid());

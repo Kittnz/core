@@ -138,16 +138,13 @@ struct mob_anubisath_guardianAI : public ScriptedAI
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
-        if (m_uiExplode_Timer < uiDiff && m_bIsExploding == true)
+        if (m_uiExplode_Timer < uiDiff && m_bIsExploding)
         {
             if (DoCastSpellIfCan(m_creature, SPELL_EXPLODE) == CAST_OK)
                 m_uiExplode_Timer = 15000;
         }
         else
             m_uiExplode_Timer -= uiDiff;
-
-
-
 
         if (m_uiSpell1_Timer < uiDiff)
         {
@@ -531,7 +528,7 @@ struct SilicateFeederAI : public ScriptedAI
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
-        if (m_bIsAttacked == false)
+        if (!m_bIsAttacked)
         {
             m_creature->SetFactionTemplateId(14);
             m_creature->SetInCombatWithZone();
@@ -705,7 +702,7 @@ struct HiveZaraStingerAI : public ScriptedAI
         else
         {
             m_uiCharge_Timer -= uiDiff;
-            if (m_bChargeCasted == true)
+            if (m_bChargeCasted)
             {
                 m_uiChargeCasted_Timer -= uiDiff;
                 if (m_uiChargeCasted_Timer < uiDiff)

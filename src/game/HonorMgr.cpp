@@ -528,10 +528,8 @@ HonorScores HonorMaintenancer::GenerateScores(HonorStandingList& standingList)
     }
 
     // get the WS scores at the top of each break point
-    for (uint8 group = 0; group < 14; group++)
-    //   sc.BRK[group] = floor((sc.BRK[group] * standingList.size()) + 0.5f);
-    // Turtle WoW Custom: Fake PvP player pool
-        sc.BRK[group] = floor((sc.BRK[group] * (standingList.size() > FAKE_PVP_POOL ? standingList.size() : FAKE_PVP_POOL)) + 0.5f);
+    for (float & group : sc.BRK)
+        group = floor((group * (standingList.size() > FAKE_PVP_POOL ? standingList.size() : FAKE_PVP_POOL)) + 0.5f); // Turtle WoW Custom: Fake PvP player pool
     // initialize RP array
     // set the low point
     sc.FY[0] = 0;
@@ -542,7 +540,7 @@ HonorScores HonorMaintenancer::GenerateScores(HonorStandingList& standingList)
         sc.FY[i] = (i - 1) * 1000;
 
     // and finally
-    sc.FY[14] = 13000;   // ... gets 13000 RP
+    sc.FY[14] = 13000; // ... gets 13000 RP
 
     // the X values for each breakpoint are found from the CP scores
     // of the players around that point in the WS schcores
@@ -824,11 +822,11 @@ bool HonorMgr::Add(float cp, uint8 type, Unit* source)
     float honor = (type == DISHONORABLE) ? -cp : cp;
 
     // get IP if source is player
-    std::string ip = "";
+    std::string ip;
     if (Player* victim = source->ToPlayer())
         ip = victim->GetSession()->GetRemoteAddress();
 
-    bool plr = source->GetTypeId() == TYPEID_PLAYER ? true : false;
+    bool plr = source->GetTypeId() == TYPEID_PLAYER;
 
     if (m_owner->GetMap()->IsBattleGround())
         sLog.outHonor("[BATTLEGROUND]: Player %s (account: %u) got %f honor for type %u, source %s %s (IP: %s)",

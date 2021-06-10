@@ -52,11 +52,11 @@ class Item;
 
 struct GameTele
 {
-    float  position_x;
-    float  position_y;
-    float  position_z;
-    float  orientation;
-    uint32 mapId;
+    float  x = 0.0f;
+    float  y = 0.0f;
+    float  z = 0.0f;
+    float  o = 0.0f;
+    uint32 mapId = 0;
     std::string name;
     std::wstring wnameLow;
 };
@@ -293,7 +293,7 @@ typedef std::pair<QuestRelationsMap::const_iterator, QuestRelationsMap::const_it
 
 struct PetLevelInfo
 {
-    PetLevelInfo() : health(0), mana(0), armor(0) { for(int i=0; i < MAX_STATS; ++i ) stats[i] = 0; }
+    PetLevelInfo() : health(0), mana(0), armor(0) { for (uint16 & stat : stats) stat = 0; }
 
     uint16 stats[MAX_STATS];
     uint16 health;
@@ -984,8 +984,8 @@ class ObjectMgr
         template<typename Worker>
         void DoCreatureData(Worker& worker) const
         {
-            for (auto itr = m_CreatureDataMap.begin(); itr != m_CreatureDataMap.end(); ++itr)
-                if (worker(*itr))
+            for (const auto& itr : m_CreatureDataMap)
+                if (worker(itr))
                     break;
         }
 
@@ -1096,8 +1096,8 @@ class ObjectMgr
         template<typename Worker>
         void DoGOData(Worker& worker) const
         {
-            for (GameObjectDataMap::const_iterator itr = m_GameObjectDataMap.begin(); itr != m_GameObjectDataMap.end(); ++itr)
-                if (worker(*itr))                           // arg = GameObjectDataPair
+            for (const auto& itr : m_GameObjectDataMap)
+                if (worker(itr)) // arg = GameObjectDataPair
                     break;
         }
 

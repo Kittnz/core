@@ -156,9 +156,9 @@ struct boss_four_horsemen_shared : public ScriptedAI
 
         // Large aggro radius
         Map::PlayerList const &PlayerList = m_creature->GetMap()->GetPlayers();
-        for (Map::PlayerList::const_iterator itr = PlayerList.begin(); itr != PlayerList.end(); ++itr)
+        for (const auto& itr : PlayerList)
         {
-            Player* pPlayer = itr->getSource();
+            Player* pPlayer = itr.getSource();
             
             if (m_creature->GetDistance3dToCenter(pPlayer) > 74.0f)
                 continue;
@@ -354,9 +354,9 @@ struct boss_four_horsemen_shared : public ScriptedAI
                 m_uiMarkTimer = 12000;
                 //todo: this behavior should get some more confirmation
                 ThreatList const& tList = m_creature->GetThreatManager().getThreatList();
-                for (ThreatList::const_iterator itr = tList.begin();itr != tList.end(); ++itr)
+                for (const auto itr : tList)
                 {
-                    Unit* pUnit = m_creature->GetMap()->GetUnit( (*itr)->getUnitGuid());
+                    Unit* pUnit = m_creature->GetMap()->GetUnit( itr->getUnitGuid());
 
                     if (pUnit && m_creature->GetThreatManager().getThreat(pUnit))
                         m_creature->GetThreatManager().modifyThreatPercent(pUnit, -50);

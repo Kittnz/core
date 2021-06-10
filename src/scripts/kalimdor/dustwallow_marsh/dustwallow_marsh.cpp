@@ -17,124 +17,18 @@
 /* ScriptData
 SDName: Dustwallow_Marsh
 SD%Complete: 95
-SDComment: Quest support: 558, 1173, 1324. Vendor Nat Pagle
+SDComment: Quest support: 558, 1324. Vendor Nat Pagle
 SDCategory: Dustwallow Marsh
 EndScriptData */
 
 /* ContentData
 npc_lady_jaina_proudmoore
-npc_morokk
 npc_private_hendel
 npc_cassa_crimsonwing
 npc_balon_jacken
 EndContentData */
 
 #include "scriptPCH.h"
-
-/*######
-## npc_morokk
-######*/
-
-enum
-{
-    SAY_MOR_CHALLENGE = -1000499,
-    SAY_MOR_SCARED = -1000500,
-
-    QUEST_CHALLENGE_MOROKK = 1173,
-
-    FACTION_MOR_HOSTILE = 168,
-    FACTION_MOR_RUNNING = 35
-};
-
-struct npc_morokkAI : public npc_escortAI
-{
-    npc_morokkAI(Creature* pCreature) : npc_escortAI(pCreature)
-    {
-        m_bIsSuccess = false;
-        Reset();
-    }
-
-    bool m_bIsSuccess;
-
-    void Reset() override {}
-
-    void WaypointReached(uint32 uiPointId) override
-    {
-        switch (uiPointId)
-        {
-            case 0:
-                SetEscortPaused(true);
-                break;
-            case 1:
-                if (m_bIsSuccess)
-                    DoScriptText(SAY_MOR_SCARED, m_creature);
-                else
-                {
-                    m_creature->SetDeathState(JUST_DIED);
-                    m_creature->Respawn();
-                }
-                break;
-        }
-    }
-
-    void AttackedBy(Unit* pAttacker) override
-    {
-        if (m_creature->GetVictim())
-            return;
-
-        if (m_creature->IsFriendlyTo(pAttacker))
-            return;
-
-        AttackStart(pAttacker);
-    }
-
-    void DamageTaken(Unit* pDoneBy, uint32 &uiDamage) override
-    {
-        if (HasEscortState(STATE_ESCORT_ESCORTING))
-        {
-            if (m_creature->GetHealthPercent() < 30.0f)
-            {
-                if (Player* pPlayer = GetPlayerForEscort())
-                    pPlayer->GroupEventHappens(QUEST_CHALLENGE_MOROKK, m_creature);
-
-                m_creature->SetFactionTemplateId(FACTION_MOR_RUNNING);
-
-                m_bIsSuccess = true;
-                EnterEvadeMode();
-
-                uiDamage = 0;
-            }
-        }
-    }
-
-    void UpdateEscortAI(const uint32 uiDiff) override
-    {
-        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
-        {
-            if (HasEscortState(STATE_ESCORT_PAUSED))
-            {
-                if (Player* pPlayer = GetPlayerForEscort())
-                {
-                    m_bIsSuccess = false;
-                    DoScriptText(SAY_MOR_CHALLENGE, m_creature, pPlayer);
-                    m_creature->SetFactionTemplateId(FACTION_MOR_HOSTILE);
-                    AttackStart(pPlayer);
-                }
-
-                SetEscortPaused(false);
-            }
-
-            return;
-        }
-
-        DoMeleeAttackIfReady();
-    }
-};
-
-CreatureAI* GetAI_npc_morokk(Creature* pCreature)
-{
-    return new npc_morokkAI(pCreature);
-}
 
 bool QuestAccept_npc_morokk(Player* pPlayer, Creature* pCreature, const Quest* pQuest)
 {
@@ -263,8 +157,8 @@ struct npc_private_hendelAI : public ScriptedAI
     npc_private_hendelAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
         // zero init required to prevent crash
-        for (ptrdiff_t i = 0; i < 2; ++i)
-            m_guards[i] = nullptr;
+        for (auto& guard : m_guards)
+            guard = nullptr;
         for (ptrdiff_t i = 0; i < 3; ++i)
         {
             m_allies[i] = nullptr;
@@ -297,11 +191,11 @@ struct npc_private_hendelAI : public ScriptedAI
         // reset private hendel's faction
         m_creature->SetFactionTemplateId(FACTION_THERAMORE); // theramore faction
         // reset his guards faction
-        for (ptrdiff_t i = 0; i < 2; ++i)
+        for (const auto& guard : m_guards)
         {
-            if (m_guards[i] && m_guards[i]->IsAlive())
+            if (guard && guard->IsAlive())
             {
-                m_guards[i]->SetFactionTemplateId(FACTION_THERAMORE); // theramore faction
+                guard->SetFactionTemplateId(FACTION_THERAMORE); // theramore faction
             }
         }
         // reset phase flags
@@ -395,9 +289,8 @@ struct npc_private_hendelAI : public ScriptedAI
 
             // check if there one of the guards is available
             bool first = true;
-            for (ptrdiff_t guardIndex = 0; guardIndex < 2; ++guardIndex)
+            for (const auto guard : m_guards)
             {
-                Creature* guard = m_guards[guardIndex];
                 // if guard is valid
                 if (guard && guard->IsAlive())
                 {
@@ -442,13 +335,13 @@ struct npc_private_hendelAI : public ScriptedAI
             }
 
             // remove guards
-            for (ptrdiff_t i = 0; i < 2; ++i)
+            for (auto& guard : m_guards)
             {
                 // if guard is valid
-                if (m_guards[i])
+                if (guard)
                 {
-                    static_cast<TemporarySummon*>(m_guards[i])->UnSummon();
-                    m_guards[i] = nullptr;
+                    static_cast<TemporarySummon*>(guard)->UnSummon();
+                    guard = nullptr;
                 }
             }
 
@@ -533,8 +426,8 @@ struct npc_private_hendelAI : public ScriptedAI
             if (m_nextPhaseDelayTimer < uiDiff)
             {
                 // make allies face private hendel
-                for (ptrdiff_t i = 0; i < 3; ++i)
-                    m_allies[i]->SetFacingToObject(m_creature);
+                for (const auto& ally : m_allies)
+                    ally->SetFacingToObject(m_creature);
 
                 // Tervosh is index 0
                 Creature* tervosh = m_allies[0];
@@ -560,13 +453,13 @@ struct npc_private_hendelAI : public ScriptedAI
                 case 0: // remove guards, say0
                 {
                     // remove guards
-                    for (ptrdiff_t i = 0; i < 2; ++i)
+                    for (auto& guard : m_guards)
                     {
                         // if guard is valid
-                        if (m_guards[i])
+                        if (guard)
                         {
-                            static_cast<TemporarySummon*>(m_guards[i])->UnSummon();
-                            m_guards[i] = nullptr;
+                            static_cast<TemporarySummon*>(guard)->UnSummon();
+                            guard = nullptr;
                         }
                     }
 
@@ -662,25 +555,25 @@ struct npc_private_hendelAI : public ScriptedAI
                 case 3: // Final, despawn
                 {
                     // remove allies
-                    for (ptrdiff_t i = 0; i < 3; ++i)
+                    for (auto& ally : m_allies)
                     {
                         // if ally is valid
-                        if (m_allies[i])
+                        if (ally)
                         {
-                            static_cast<TemporarySummon*>(m_allies[i])->UnSummon();
-                            m_allies[i] = nullptr;
+                            static_cast<TemporarySummon*>(ally)->UnSummon();
+                            ally = nullptr;
                         }
                     }
 
                     // restore original allies in Theramore
-                    for (ptrdiff_t i = 0; i < 3; ++i)
+                    for (const auto& i : m_alliesOriginal)
                     {
-                        if (m_alliesOriginal[i])
+                        if (i)
                         {
                             // Make them temporary invisible
-                            m_alliesOriginal[i]->SetVisibility(VISIBILITY_ON);
+                            i->SetVisibility(VISIBILITY_ON);
                             // teleport effect
-                            m_alliesOriginal[i]->CastSpell(m_alliesOriginal[i], TELEPORT_VISUAL, false);
+                            i->CastSpell(i, TELEPORT_VISUAL, false);
                         }
                     }
 
@@ -710,16 +603,16 @@ struct npc_private_hendelAI : public ScriptedAI
     void SummonedCreatureDespawn(Creature* creature) override 
     {
         // No dangling pointers
-        for (ptrdiff_t i = 0; i < 3; ++i)
+        for (auto& ally : m_allies)
         {
-            if (m_allies[i] == creature)
-                m_allies[i] = 0;
+            if (ally == creature)
+                ally = 0;
         }
 
-        for (ptrdiff_t i = 0; i < 2; ++i)
+        for (auto& guard : m_guards)
         {
-            if (m_guards[i] == creature)
-                m_guards[i] = 0;
+            if (guard == creature)
+                guard = 0;
         }
     }
 };
@@ -746,9 +639,8 @@ bool QuestAccept_npc_private_hendel(Player* pPlayer, Creature* pCreature, const 
                                                    // switch quest event phase to FIGHT
             privateHendelAI->m_mdQuestPhase = MDQP_FIGHT;
             // set his guards faction to hostile
-            for (ptrdiff_t i = 0; i < 2; ++i)
+            for (const auto guard : privateHendelAI->m_guards)
             {
-                Creature* guard = privateHendelAI->m_guards[i];
                 // if guard is valid
                 if (guard)
                 {
@@ -820,7 +712,7 @@ struct npc_archmage_tervoshAI : public ScriptedAI
     // used on area-trigger: if a new player arrives, reset event duration.
     void resetDespawnDelay() { m_despawnDelayTimer = TERVOSH_SPAWN_DURATION; }
     // returns the current phase in the event
-    const uint32 getCurrentPhase() const { return m_eventPhase; }
+    uint32 getCurrentPhase() const { return m_eventPhase; }
 
     void Reset() override
     {
@@ -1397,9 +1289,9 @@ struct npc_tabethaAI : ScriptedAI
 
         if (manaSurges.empty()) return;
 
-        for (auto itr = manaSurges.begin(); itr != manaSurges.end(); ++itr)
-            if ((*itr)->IsAlive())
-                (*itr)->ForcedDespawn();
+        for (const auto& manaSurge : manaSurges)
+            if (manaSurge->IsAlive())
+                manaSurge->ForcedDespawn();
     }
 
     void UpdateAI(const uint32 uiDiff) override
@@ -1704,12 +1596,6 @@ CreatureAI* GetAI_npc_balos_jacken(Creature *_Creature)
 void AddSC_dustwallow_marsh()
 {
     Script *newscript;
-
-    newscript = new Script;
-    newscript->Name = "npc_morokk";
-    newscript->GetAI = &GetAI_npc_morokk;
-    newscript->pQuestAcceptNPC = &QuestAccept_npc_morokk;
-    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_private_hendel";

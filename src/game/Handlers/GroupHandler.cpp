@@ -539,7 +539,7 @@ void WorldSession::HandleGroupChangeSubGroupOpcode(WorldPacket & recv_data)
         group->ChangeMembersGroup(player, groupNr);
     else
     {
-        if (ObjectGuid guid = sObjectMgr.GetPlayerGuidByName(name.c_str()))
+        if (ObjectGuid guid = sObjectMgr.GetPlayerGuidByName(name))
             group->ChangeMembersGroup(guid, groupNr);
     }
 }
@@ -571,9 +571,10 @@ void WorldSession::HandleGroupSwapSubGroupOpcode(WorldPacket & recv_data)
     {
         group->SwapMembersGroup(player, swapPlayer);
     }
-    else {
-        ObjectGuid swapGuid = sObjectMgr.GetPlayerGuidByName(name.c_str());
-        ObjectGuid swapWithGuid = sObjectMgr.GetPlayerGuidByName(nameSwapWith.c_str());
+    else
+    {
+        ObjectGuid swapGuid = sObjectMgr.GetPlayerGuidByName(name);
+        ObjectGuid swapWithGuid = sObjectMgr.GetPlayerGuidByName(nameSwapWith);
 
         if (!swapGuid || !swapWithGuid)
             return;
@@ -599,7 +600,7 @@ void WorldSession::HandleGroupAssistantLeaderOpcode(WorldPacket & recv_data)
     /********************/
 
     // everything is fine, do it
-    group->SetAssistant(guid, (flag == 0 ? false : true));
+    group->SetAssistant(guid, (flag != 0));
 }
 
 void WorldSession::HandleRaidReadyCheckOpcode(WorldPacket & recv_data)

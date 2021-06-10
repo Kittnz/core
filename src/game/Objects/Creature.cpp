@@ -99,9 +99,10 @@ size_t VendorItemData::FindItemSlot(uint32 item_id) const
 
 VendorItem const* VendorItemData::FindItem(uint32 item_id) const
 {
-    for (VendorItemList::const_iterator i = m_items.begin(); i != m_items.end(); ++i)
-        if ((*i)->item == item_id)
-            return *i;
+    for (const auto item : m_items)
+        if (item->item == item_id)
+            return item;
+
     return nullptr;
 }
 
@@ -129,8 +130,8 @@ AssistDelayEvent::AssistDelayEvent(ObjectGuid victim, Unit& owner, std::list<Cre
 {
     // Pushing guids because in delay can happen some creature gets despawned => invalid pointer
     m_assistantGuids.reserve(assistants.size());
-    for (std::list<Creature*>::const_iterator itr = assistants.begin(); itr != assistants.end(); ++itr)
-        m_assistantGuids.push_back((*itr)->GetObjectGuid());
+    for (const auto assistant : assistants)
+        m_assistantGuids.push_back(assistant->GetObjectGuid());
 }
 
 bool ForcedDespawnDelayEvent::Execute(uint64 /*e_time*/, uint32 /*p_time*/)
@@ -179,8 +180,7 @@ Creature::Creature(CreatureSubtype subtype) :
     m_AlreadySearchedAssistance(false),
     m_bRegenHealth(true), m_bRegenMana(true), m_AI_locked(false), m_isDeadByDefault(false), m_temporaryFactionFlags(TEMPFACTION_NONE),
     m_meleeDamageSchoolMask(SPELL_SCHOOL_MASK_NORMAL), m_originalEntry(0), _creatureGroup(nullptr),
-    m_combatStartX(0.0f), m_combatStartY(0.0f), m_combatStartZ(0.0f),
-    m_HomeX(0.0f), m_HomeY(0.0f), m_HomeZ(0.0f), m_HomeOrientation(0.0f), m_reactState(REACT_PASSIVE),
+    m_combatStartX(0.0f), m_combatStartY(0.0f), m_combatStartZ(0.0f), m_reactState(REACT_PASSIVE),
     _lastDamageTakenForEvade(0), _playerDamageTaken(0), _nonPlayerDamageTaken(0), m_creatureInfo(nullptr),
     m_AI_InitializeOnRespawn(false), m_detectionDistance(20.0f), m_callForHelpDist(5.0f), m_leashDistance(0.0f), m_combatWithZoneState(false), m_startwaypoint(0), m_mountId(0),
     _isEscortable(false), m_reputationId(-1), m_castingTargetGuid(0)
@@ -188,8 +188,8 @@ Creature::Creature(CreatureSubtype subtype) :
     m_regenTimer = 200;
     m_valuesCount = UNIT_END;
 
-    for (int i = 0; i < CREATURE_MAX_SPELLS; ++i)
-        m_spells[i] = 0;
+    for (uint32 & spell : m_spells)
+        spell = 0;
 }
 
 Creature::~Creature()
@@ -1588,10 +1588,7 @@ bool Creature::CreateFromProto(uint32 guidlow, CreatureInfo const* cinfo, Team t
 
     Object::_Create(guidlow, firstCreatureId, cinfo->GetHighGuid());
 
-    if (!UpdateEntry(cinfo->entry, team, data, eventData, false))
-        return false;
-
-    return true;
+    return UpdateEntry(cinfo->entry, team, data, eventData, false);
 }
 
 bool Creature::LoadFromDB(uint32 guidlow, Map *map)
@@ -1815,9 +1812,9 @@ float Creature::GetAttackDistance(Unit const* pl) const
     // detect range auras
     // SPELL_AURA_MOD_DETECT_RANGE: Par exemple [2908 - Apaiser les animaux]. Affecte uniquement si niveau < 70 par exemple (rang 3).
     AuraList const& nModDetectRange = GetAurasByType(SPELL_AURA_MOD_DETECT_RANGE);
-    for (AuraList::const_iterator i = nModDetectRange.begin(); i != nModDetectRange.end(); ++i)
-        if ((*i)->GetSpellProto()->MaxTargetLevel >= GetLevel())
-            finalDistance += (*i)->GetModifier()->m_amount;
+    for (const auto i : nModDetectRange)
+        if (i->GetSpellProto()->MaxTargetLevel >= GetLevel())
+            finalDistance += i->GetModifier()->m_amount;
 
     // detected range auras
     finalDistance += pl->GetTotalAuraModifier(SPELL_AURA_MOD_DETECTED_RANGE);
@@ -2483,9 +2480,9 @@ void Creature::SetInCombatWithZone(bool initialPulse)
     if (!m_combatWithZoneState)
         UpdateCombatWithZoneState(true);
 
-    for (Map::PlayerList::const_iterator i = PlList.begin(); i != PlList.end(); ++i)
+    for (const auto& i : PlList)
     {
-        if (Player* pPlayer = i->getSource())
+        if (Player* pPlayer = i.getSource())
         {
             if (pPlayer->IsGameMaster())
                 continue;
@@ -2579,7 +2576,7 @@ Unit* Creature::SelectAttackingTarget(AttackingTarget target, uint32 position, S
     ThreatList::const_iterator itr = threatlist.begin();
     ThreatList::const_reverse_iterator ritr = threatlist.rbegin();
 
-    if (position >= threatlist.size() || !threatlist.size())
+    if (position >= threatlist.size() || threatlist.empty())
         return nullptr;
 
     switch (target)
@@ -2702,13 +2699,13 @@ time_t Creature::GetRespawnTimeEx() const
 void Creature::GetRespawnCoord(float &x, float &y, float &z, float* ori, float* dist) const
 {
     // Nostalrius : pouvoir changer point de spawn d'un mob -> Creature::SetHomePosition
-    if (m_HomeX > 0.1f || m_HomeX < -0.1f)
+    if (m_homePosition.x > 0.1f || m_homePosition.y < -0.1f)
     {
-        x = m_HomeX;
-        y = m_HomeY;
-        z = m_HomeZ;
+        x = m_homePosition.x;
+        y = m_homePosition.y;
+        z = m_homePosition.z;
         if (ori)
-            *ori = m_HomeOrientation;
+            *ori = m_homePosition.o;
         if (dist)
             *dist = GetRespawnRadius();
     }
@@ -2965,12 +2962,12 @@ void Creature::DisappearAndDie()
 
 void Creature::GetHomePosition(float &x, float &y, float &z, float &o, float* dist)
 {
-    if (m_HomeX != 0.0f)
+    if (m_homePosition.x != 0.0f)
     {
-        x = m_HomeX;
-        y = m_HomeY;
-        z = m_HomeZ;
-        o = m_HomeOrientation;
+        x = m_homePosition.x;
+        y = m_homePosition.y;
+        z = m_homePosition.z;
+        o = m_homePosition.o;
         if (dist)
             (*dist) = GetRespawnRadius();
         return;
@@ -2979,10 +2976,10 @@ void Creature::GetHomePosition(float &x, float &y, float &z, float &o, float* di
 }
 void Creature::SetHomePosition(float x, float y, float z, float o)
 {
-    m_HomeX = x;
-    m_HomeY = y;
-    m_HomeZ = z;
-    m_HomeOrientation = o;
+    m_homePosition.x = x;
+    m_homePosition.y = y;
+    m_homePosition.z = z;
+    m_homePosition.o = o;
 }
 
 void Creature::ResetHomePosition()
@@ -2990,7 +2987,7 @@ void Creature::ResetHomePosition()
     if (CreatureData const *data = sObjectMgr.GetCreatureData(GetGUIDLow()))
         SetHomePosition(data->posX, data->posY, data->posZ, data->orientation);
     else if (IsTemporarySummon())
-        GetSummonPoint(m_HomeX, m_HomeY, m_HomeZ, m_HomeOrientation);
+        GetSummonPoint(m_homePosition.x, m_homePosition.y, m_homePosition.z, m_homePosition.o);
 }
 
 void Creature::RemoveAurasAtReset()
@@ -3089,9 +3086,9 @@ Unit* Creature::GetNearestVictimInRange(float min, float max, bool includeCreatu
     Unit* pUnit = nullptr;
 
     ThreatList const& tList = GetThreatManager().getThreatList();
-    for (ThreatList::const_iterator i = tList.begin(); i != tList.end(); ++i)
+    for (const auto i : tList)
     {
-        Unit* pTarget = GetMap()->GetUnit((*i)->getUnitGuid());
+        Unit* pTarget = GetMap()->GetUnit(i->getUnitGuid());
         if (!pTarget || (!pTarget->IsPlayer() && !includeCreatures))
             continue;
 
@@ -3114,9 +3111,9 @@ Unit* Creature::GetFarthestVictimInRange(float min, float max, bool includeCreat
     Unit* pUnit = nullptr;
 
     ThreatList const& tList = GetThreatManager().getThreatList();
-    for (ThreatList::const_iterator i = tList.begin(); i != tList.end(); ++i)
+    for (const auto i : tList)
     {
-        Unit* pTarget = GetMap()->GetUnit((*i)->getUnitGuid());
+        Unit* pTarget = GetMap()->GetUnit(i->getUnitGuid());
         if (!pTarget || (!pTarget->IsPlayer() && !includeCreatures))
             continue;
 
@@ -3136,9 +3133,9 @@ Unit* Creature::GetVictimInRange(float min, float max, bool includeCreatures)
         return nullptr;
 
     ThreatList const& tList = GetThreatManager().getThreatList();
-    for (ThreatList::const_iterator i = tList.begin(); i != tList.end(); ++i)
+    for (const auto i : tList)
     {
-        Unit* pTarget = GetMap()->GetUnit((*i)->getUnitGuid());
+        Unit* pTarget = GetMap()->GetUnit(i->getUnitGuid());
 
         if (pTarget && IsInRange(pTarget, min, max))
         {
@@ -3156,9 +3153,9 @@ Unit* Creature::GetHostileCasterInRange(float min, float max)
         return nullptr;
 
     ThreatList const& tList = GetThreatManager().getThreatList();
-    for (ThreatList::const_iterator i = tList.begin(); i != tList.end(); ++i)
+    for (const auto i : tList)
     {
-        Unit* pTarget = GetMap()->GetUnit((*i)->getUnitGuid());
+        Unit* pTarget = GetMap()->GetUnit(i->getUnitGuid());
 
         if (pTarget && pTarget->IsCaster() && IsInRange(pTarget, min, max))
             return pTarget;
@@ -3172,9 +3169,9 @@ Unit* Creature::GetHostileCaster()
         return nullptr;
 
     ThreatList const& tList = GetThreatManager().getThreatList();
-    for (ThreatList::const_iterator i = tList.begin(); i != tList.end(); ++i)
+    for (const auto i : tList)
     {
-        Unit* pTarget = GetMap()->GetUnit((*i)->getUnitGuid());
+        Unit* pTarget = GetMap()->GetUnit(i->getUnitGuid());
 
         if (pTarget && pTarget->IsCaster())
             return pTarget;
@@ -3188,9 +3185,9 @@ void Creature::ProcessThreatList(ThreatListProcesser* f)
         return;
 
     ThreatList const& tList = GetThreatManager().getThreatList();
-    for (ThreatList::const_iterator i = tList.begin(); i != tList.end(); ++i)
+    for (const auto i : tList)
     {
-        Unit* target = GetMap()->GetUnit((*i)->getUnitGuid());
+        Unit* target = GetMap()->GetUnit(i->getUnitGuid());
 
         if (target)
             if (f->Process(target))
@@ -3231,9 +3228,9 @@ bool Creature::CastSpellOnHostileCasterInRange(uint32 spellId, float min, float 
 void Creature::AddThreatsOf(Creature const* pOther)
 {
     ThreatList const& tList = pOther->GetThreatManager().getThreatList();
-    for (ThreatList::const_iterator i = tList.begin(); i != tList.end(); ++i)
+    for (const auto i : tList)
     {
-        Unit* pTarget = GetMap()->GetUnit((*i)->getUnitGuid());
+        Unit* pTarget = GetMap()->GetUnit(i->getUnitGuid());
 
         if (pTarget && pTarget->IsAlive() && !IsFriendlyTo(pTarget))
         {
@@ -3468,12 +3465,10 @@ bool Creature::canCreatureAttack(Unit const *pVictim, bool force) const
         if (!pVictim->IsWithinDist(unit, dist))
             return false;
     }
-    else if (!pVictim->IsWithinDist3d(m_HomeX, m_HomeY, m_HomeZ, dist))
+    else if (!pVictim->IsWithinDist3d(m_homePosition, dist))
         return false;
 
-    if (!pVictim->IsInAccessablePlaceFor(this))
-        return false;
-    return true;
+    return pVictim->IsInAccessablePlaceFor(this);
 }
 
 time_t Creature::GetCombatTime() const
@@ -3675,10 +3670,7 @@ void Creature::LeaveCreatureGroup()
 bool Creature::HasWeapon() const
 {
     uint8 itemClass = GetByteValue(UNIT_VIRTUAL_ITEM_INFO + (0 * 2) + 0, VIRTUAL_ITEM_INFO_0_OFFSET_CLASS);
-    if (itemClass == ITEM_CLASS_WEAPON)
-        return true;
-
-    return false;
+    return itemClass == ITEM_CLASS_WEAPON;
 }
 
 void Creature::DespawnOrUnsummon(uint32 msTimeToDespawn /*= 0*/)

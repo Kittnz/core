@@ -371,8 +371,9 @@ struct VendorItemData
 
     void Clear()
     {
-        for (VendorItemList::const_iterator itr = m_items.begin(); itr != m_items.end(); ++itr)
-            delete *itr;
+        for (const auto& item : m_items)
+            delete item;
+
         m_items.clear();
     }
 };
@@ -543,7 +544,8 @@ class Creature : public Unit
         void SaveHomePosition() { SetHomePosition(GetPositionX(), GetPositionY(), GetPositionZ(), GetOrientation()); }
         void SetHomePosition(float x, float y, float z, float o);
         void GetHomePosition(float &x, float &y, float &z, float &o, float* dist = nullptr);
-        float GetHomePositionO() const { return m_HomeOrientation; }
+        Position const& GetHomePosition() { return m_homePosition; }
+        float GetHomePositionO() const { return m_homePosition.o; }
         void ResetHomePosition();
 
         CreatureSubtype GetSubtype() const { return m_subtype; }
@@ -990,10 +992,7 @@ class Creature : public Unit
         float m_combatStartY;
         float m_combatStartZ;
 
-        float m_HomeX;
-        float m_HomeY;
-        float m_HomeZ;
-        float m_HomeOrientation;
+        Position m_homePosition;
 
         ReactStates m_reactState;
 

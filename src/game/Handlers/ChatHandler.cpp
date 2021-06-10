@@ -68,10 +68,7 @@ bool WorldSession::ProcessChatMessageAfterSecurityCheck(std::string& msg, uint32
 
     ChatHandler handler(this);
 
-    if (handler.ParseCommands(msg.c_str()))
-        return false;
-
-    return true;
+    return !handler.ParseCommands(msg.c_str());
 }
 
 bool WorldSession::IsLanguageAllowedForChatType(uint32 lang, uint32 msgType)
@@ -855,7 +852,7 @@ void WorldSession::HandleChatIgnoredOpcode(WorldPacket& recv_data)
     player->GetSession()->SendPacket(&data);
 }
 
-void WorldSession::SendPlayerNotFoundNotice(std::string name)
+void WorldSession::SendPlayerNotFoundNotice(std::string const& name)
 {
     WorldPacket data(SMSG_CHAT_PLAYER_NOT_FOUND, name.size() + 1);
     data << name;

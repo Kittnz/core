@@ -399,10 +399,10 @@ struct npc_keeper_remulosAI : public npc_escortAI
 
             m_uiMalfurionGUID.Clear();
 
-            for (int j = 0; j < 5; j++)
-                m_uiTabMovementsTimer[j] = 0;
-            for (int k = 0; k < 10; k++)
-                m_uiTabDialogsTimer[k] = 0;
+            for (uint32 & j : m_uiTabMovementsTimer)
+                j = 0;
+            for (uint32 & k : m_uiTabDialogsTimer)
+                k = 0;
         }
     }
 
@@ -638,16 +638,7 @@ struct npc_keeper_remulosAI : public npc_escortAI
                         case 1:
                             // Despawn Remulos after the outro is finished - he will respawn automatically at his home position after a few min
                             DoScriptText(SAY_REMULOS_OUTRO_2, m_creature);
-                            //m_creature->ForcedDespawn(3000);
-                            // Alita : piqué ce morceau de code à ScriptedFollowerAI.h, car NON il ne se replaçait pas forcément correctement (p-etre lié à mon code dans evade mode)
-                            //Ustaag <Nostalrius> : vilain fix des mobs qui voulaient pas respawn à leur point de spawn
-                            float x = 0.0f;
-                            float y = 0.0f;
-                            float z = 0.0f;
-                            float o = 0.0f;
-                            m_creature->GetHomePosition(x, y, z, o);
-                            //m_creature->DealDamage(m_creature, m_creature->GetMaxHealth(),nullptr, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, nullptr, false);
-                            m_creature->NearTeleportTo(x, y, z, o);
+                            m_creature->NearTeleportTo(m_creature->GetHomePosition());
                             m_creature->ForcedDespawn();
                             m_uiOutroTimer = 0;
                             break;
@@ -1090,12 +1081,7 @@ struct npc_keeper_remulosAI : public npc_escortAI
                     {
                         if (m_uiQuestComplete <= uiDiff)
                         {
-                            float x = 0.0f;
-                            float y = 0.0f;
-                            float z = 0.0f;
-                            float o = 0.0f;
-                            m_creature->GetHomePosition(x, y, z, o);
-                            m_creature->NearTeleportTo(x, y, z, o);
+                            m_creature->NearTeleportTo(m_creature->GetHomePosition());
                             if (pPlayer->GetQuestStatus(QUEST_WAKING_LEGENDS) == QUEST_STATUS_INCOMPLETE)
                                 pPlayer->GroupEventHappens(QUEST_WAKING_LEGENDS, m_creature);
                             m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
@@ -1448,9 +1434,9 @@ struct boss_eranikusAI : public ScriptedAI
         if (!m_creature->IsWithinMeleeRange(pTarget))
         {
             ThreatList const& tList = m_creature->GetThreatManager().getThreatList();
-            for (ThreatList::const_iterator itr = tList.begin(); itr != tList.end(); ++itr)
+            for (const auto itr : tList)
             {
-                if (Unit* pAttacker = m_creature->GetMap()->GetUnit((*itr)->getUnitGuid()))
+                if (Unit* pAttacker = m_creature->GetMap()->GetUnit(itr->getUnitGuid()))
                     if (m_creature->IsWithinMeleeRange(pAttacker))
                         m_creature->GetThreatManager().modifyThreatPercent(pAttacker, 5);
             }

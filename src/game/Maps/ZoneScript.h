@@ -212,19 +212,19 @@ class ZoneScript
         // setup stuff
         virtual bool SetupZoneScript() {return true;}
 
-        virtual void OnGameObjectCreate(GameObject *) {}
-        virtual void OnGameObjectRemove(GameObject *) {}
-        virtual void OnCreatureRemove(Creature *) {}
-        virtual void OnPlayerDeath(Player *) {}
-        virtual void OnObjectCreate(GameObject *) {}
-        virtual void OnCreatureCreate(Creature * /*creature*/)      {}
-        virtual void OnCreatureEnterCombat(Creature * /*creature*/) {}
-        virtual void OnCreatureEvade(Creature * /*creature*/)       {}
-        virtual void OnCreatureRespawn(Creature * /*crea*/)         {}
-        virtual void OnCreatureDeath(Creature * /*creature*/)       {}
+        virtual void OnGameObjectCreate(GameObject*) {}
+        virtual void OnGameObjectRemove(GameObject*) {}
+        virtual void OnCreatureRemove(Creature*) {}
+        virtual void OnPlayerDeath(Player*) {}
+        virtual void OnObjectCreate(GameObject*) {}
+        virtual void OnCreatureCreate(Creature* /*creature*/)      {}
+        virtual void OnCreatureEnterCombat(Creature* /*creature*/) {}
+        virtual void OnCreatureEvade(Creature* /*creature*/)       {}
+        virtual void OnCreatureRespawn(Creature* /*crea*/)         {}
+        virtual void OnCreatureDeath(Creature* /*creature*/)       {}
         virtual void OnCreatureSpellHit(Unit* /*caster*/,Creature* /*receiver*/, const SpellEntry*)    {}
-        virtual void OnPlayerEnter(Player *);
-        virtual void OnPlayerLeave(Player * plr, bool bJustDestroy = false);
+        virtual void OnPlayerEnter(Player*);
+        virtual void OnPlayerLeave(Player* plr, bool bJustDestroy = false);
         
         // send world state update to all players present
         void SendUpdateWorldState(uint32 field, uint32 value);
