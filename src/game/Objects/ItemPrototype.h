@@ -183,10 +183,14 @@ enum ItemSubclassContainer
     ITEM_SUBCLASS_CONTAINER = 0,
     ITEM_SUBCLASS_SOUL_CONTAINER = 1,
     ITEM_SUBCLASS_HERB_CONTAINER = 2,
-    ITEM_SUBCLASS_ENCHANTING_CONTAINER = 3
+    ITEM_SUBCLASS_ENCHANTING_CONTAINER = 3,
+    ITEM_SUBCLASS_ENGINEERING_CONTAINER = 4,
+    ITEM_SUBCLASS_GEM_CONTAINER = 5,
+    ITEM_SUBCLASS_MINING_CONTAINER = 6,
+    ITEM_SUBCLASS_LEATHERWORKING_CONTAINER = 7
 };
 
-#define MAX_ITEM_SUBCLASS_CONTAINER 4
+#define MAX_ITEM_SUBCLASS_CONTAINER 8
 
 enum ItemSubclassWeapon
 {
@@ -256,17 +260,25 @@ enum ItemSubclassTradeGoods
     ITEM_SUBCLASS_TRADE_GOODS = 0,
     ITEM_SUBCLASS_PARTS = 1,
     ITEM_SUBCLASS_EXPLOSIVES = 2,
-    ITEM_SUBCLASS_DEVICES = 3
+    ITEM_SUBCLASS_DEVICES = 3,
+    ITEM_SUBCLASS_CLOTH = 5,
+    ITEM_SUBCLASS_LEATHER = 6,
+    ITEM_SUBCLASS_METAL_STONE = 7,
+    ITEM_SUBCLASS_MEAT = 8,
+    ITEM_SUBCLASS_HERB = 9,
+    ITEM_SUBCLASS_ELEMENTAL = 10,
+    ITEM_SUBCLASS_TRADE_GOODS_OTHER = 11,
+    ITEM_SUBCLASS_ENCHANTING = 12
 };
 
-#define MAX_ITEM_SUBCLASS_TRADE_GOODS 4
+#define MAX_ITEM_SUBCLASS_TRADE_GOODS 14
 
 enum ItemSubclassGeneric
 {
-    ITEM_SUBCLASS_GENERIC                       = 0
+    ITEM_SUBCLASS_GENERIC = 0
 };
 
-#define MAX_ITEM_SUBCLASS_GENERIC                 1
+#define MAX_ITEM_SUBCLASS_GENERIC 1
 
 enum ItemSubclassRecipe
 {
@@ -504,10 +516,14 @@ struct ItemPrototype
 
     uint32 GetMaxStackSize() const { return Stackable; }
 
+    bool IsPotion() const { return Class==ITEM_CLASS_CONSUMABLE && SubClass==ITEM_SUBCLASS_POTION; }
     bool IsConjuredConsumable() const { return Class == ITEM_CLASS_CONSUMABLE && (Flags & ITEM_FLAG_CONJURED); }
     bool IsWeapon() const { return Class == ITEM_CLASS_WEAPON; }
     bool IsRangedWeapon() const { return IsWeapon() && (InventoryType == INVTYPE_RANGED || InventoryType == INVTYPE_THROWN || InventoryType == INVTYPE_RANGEDRIGHT); }
     bool HasSignature() const { return GetMaxStackSize() == 1 && Class != ITEM_CLASS_CONSUMABLE && Class != ITEM_CLASS_QUEST && (Flags & ITEM_FLAG_NO_CREATOR) == 0 && ItemId != 6948; /*Hearthstone*/ }
+
+    uint32 GetProficiencySkill() const;
+    uint32 GetProficiencySpell() const;
 };
 
 // GCC have alternative #pragma pack() syntax and old gcc version not support pack(pop), also any gcc version not support it at some platform

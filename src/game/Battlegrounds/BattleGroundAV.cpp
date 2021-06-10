@@ -43,14 +43,14 @@ BattleGroundAV::~BattleGroundAV()
 {
 }
 
-void BattleGroundAV::HandleKillPlayer(Player *player, Player *killer)
+void BattleGroundAV::HandleKillPlayer(Player* pVictim, Player* pKiller)
 {
     if (GetStatus() != STATUS_IN_PROGRESS)
         return;
 
-    BattleGround::HandleKillPlayer(player, killer);
-    if (!player->HasAura(27827)) // Esprit de redemption
-        UpdateScore(GetTeamIndexByTeamId(player->GetTeam()), -1);
+    BattleGround::HandleKillPlayer(pVictim, pKiller);
+    if (!pVictim->HasAura(27827)) // Esprit de redemption
+        UpdateScore(GetTeamIndexByTeamId(pVictim->GetTeam()), -1);
 }
 
 /*********/
@@ -1648,8 +1648,8 @@ SendQuestCompleteEvent -> Affiche au joueur que une quête est validée.
 void BattleGroundAV::CompleteQuestForAll(uint32 questId)
 {
     Map::PlayerList const &PlayerList = GetBgMap()->GetPlayers();
-    for (Map::PlayerList::const_iterator it = PlayerList.begin(); it != PlayerList.end(); ++it)
-        if (Player* player = it->getSource())
+    for (const auto& it : PlayerList)
+        if (Player* player = it.getSource())
             if (player->GetQuestStatus(questId) == QUEST_STATUS_INCOMPLETE)
                 player->FullQuestComplete(questId);
 }

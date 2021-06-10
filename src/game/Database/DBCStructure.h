@@ -317,34 +317,38 @@ struct FactionTemplateEntry
     {
         if(entry.faction)
         {
-            for(int i = 0; i < 4; ++i)
-                if (enemyFaction[i]  == entry.faction)
+            for (uint32 i : enemyFaction)
+                if (i  == entry.faction)
                     return false;
-            for(int i = 0; i < 4; ++i)
-                if (friendFaction[i] == entry.faction)
+
+            for (uint32 i : friendFaction)
+                if (i == entry.faction)
                     return true;
         }
         return (friendlyMask & entry.ourMask) || (ourMask & entry.friendlyMask);
     }
+
     bool IsHostileTo(FactionTemplateEntry const& entry) const
     {
-        if(entry.faction)
+        if (entry.faction)
         {
-            for(int i = 0; i < 4; ++i)
-                if (enemyFaction[i]  == entry.faction)
+            for (uint32 i : enemyFaction)
+                if (i  == entry.faction)
                     return true;
-            for(int i = 0; i < 4; ++i)
-                if (friendFaction[i] == entry.faction)
+            for (uint32 i : friendFaction)
+                if (i == entry.faction)
                     return false;
         }
+
         return (hostileMask & entry.ourMask) != 0;
     }
     bool IsHostileToPlayers() const { return (hostileMask & FACTION_MASK_PLAYER) !=0; }
     bool IsNeutralToAll() const
     {
-        for(int i = 0; i < 4; ++i)
-            if (enemyFaction[i] != 0)
+        for(uint32 i : enemyFaction)
+            if (i != 0)
                 return false;
+
         return hostileMask == 0 && friendlyMask == 0;
     }
     bool IsContestedGuardFaction() const { return (factionFlags & FACTION_TEMPLATE_FLAG_CONTESTED_GUARD)!=0; }

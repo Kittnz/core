@@ -80,11 +80,11 @@ bool Map::ScriptCommand_Emote(const ScriptInfo& script, WorldObject* source, Wor
     // find the emote
     std::vector<uint32> emotes;
     emotes.push_back(script.emote.emoteId);
-    for (int i = 0; i < MAX_EMOTE_ID; ++i)
+    for (uint32 emoteId : script.emote.randomEmotes)
     {
-        if (!script.emote.randomEmotes[i])
+        if (!emoteId)
             continue;
-        emotes.push_back(uint32(script.emote.randomEmotes[i]));
+        emotes.push_back(uint32(emoteId));
     }
 
     pSource->HandleEmote(emotes[urand(0, emotes.size() - 1)]);
@@ -241,7 +241,7 @@ bool Map::ScriptCommand_TeleportTo(const ScriptInfo& script, WorldObject* source
     if (pSource->GetTypeId() == TYPEID_PLAYER)
         (static_cast<Player*>(pSource))->TeleportTo(script.teleportTo.mapId, script.x, script.y, script.z, script.o, script.teleportTo.teleportOptions);
     else
-        pSource->NearTeleportTo(script.x, script.y, script.z, script.o, script.teleportTo.teleportOptions);
+        pSource->NearTeleportTo(script, script.teleportTo.teleportOptions);
 
     return false;
 }
@@ -837,13 +837,13 @@ bool Map::ScriptCommand_Morph(const ScriptInfo& script, WorldObject* source, Wor
 }
 
 // SCRIPT_COMMAND_MOUNT_TO_ENTRY_OR_MODEL (24)
-bool Map::ScriptCommand_Mount(const ScriptInfo& script, WorldObject* source, WorldObject* target)
+bool Map::ScriptCommand_Mount(ScriptInfo const& script, WorldObject* source, WorldObject* target)
 {
-    Creature* pSource;
+    Unit* pSource = ToUnit(source);
 
-    if (!((pSource = ToCreature(source)) || (pSource = ToCreature(target))))
+    if (!pSource)
     {
-        sLog.outError("SCRIPT_COMMAND_MOUNT_TO_ENTRY_OR_MODEL (script id %u) call for a nullptr or non-creature source and target (TypeIdSource: %u)(TypeIdTarget: %u), skipping.", script.id, source ? source->GetTypeId() : 0, target ? target->GetTypeId() : 0);
+        sLog.outError("SCRIPT_COMMAND_MOUNT_TO_ENTRY_OR_MODEL (script id %u) call for a nullptr or non-unit source and target (TypeIdSource: %u)(TypeIdTarget: %u), skipping.", script.id, source ? source->GetTypeId() : 0, target ? target->GetTypeId() : 0);
         return ShouldAbortScript(script);
     }
 
@@ -862,7 +862,15 @@ bool Map::ScriptCommand_Mount(const ScriptInfo& script, WorldObject* source, Wor
     }
 
     if (script.mount.permanent)
-        pSource->SetDefaultMount(displayId);
+    {
+        Creature* pCreature = ToCreature(source);
+        if (!pCreature)
+        {
+            sLog.outError("SCRIPT_COMMAND_MOUNT_TO_ENTRY_OR_MODEL (script id %u) call for a nullptr or non-creature source and target (TypeIdSource: %u)(TypeIdTarget: %u), skipping.", script.id, source ? source->GetTypeId() : 0, target ? target->GetTypeId() : 0);
+            return ShouldAbortScript(script);
+        }
+        pCreature->SetDefaultMount(displayId);
+    }
 
     return false;
 }
@@ -960,8 +968,8 @@ bool Map::ScriptCommand_ModifyThreat(const ScriptInfo& script, WorldObject* sour
     if (script.modThreat.target == SO_MODIFYTHREAT_ALL_ATTACKERS)
     {
         ThreatList const& threatList = pSource->GetThreatManager().getThreatList();
-        for (ThreatList::const_iterator i = threatList.begin(); i != threatList.end(); ++i)
-            if (Unit* Temp = pSource->GetMap()->GetUnit((*i)->getUnitGuid()))
+        for (const auto i : threatList)
+            if (Unit* Temp = pSource->GetMap()->GetUnit(i->getUnitGuid()))
                 pSource->GetThreatManager().modifyThreatPercent(Temp, script.x);
     }
     else
@@ -1898,7 +1906,7 @@ bool Map::ScriptCommand_StartScriptForAll(const ScriptInfo& script, WorldObject*
 
     Cell::VisitAllObjects(source, searcher, script.startScriptForAll.searchRadius);
 
-    for (auto pWorldObject : targets)
+    for (const auto pWorldObject : targets)
     {
         if (!pWorldObject)
             continue;

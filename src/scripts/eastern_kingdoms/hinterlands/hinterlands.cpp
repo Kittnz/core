@@ -265,9 +265,7 @@ struct go_lards_picnic_basketAI: public GameObjectAI
     }
     bool CheckCanStartEvent()
     {
-        if (!state)
-            return true;
-        return false;
+        return !state;
     }
 
     void SetInUse()

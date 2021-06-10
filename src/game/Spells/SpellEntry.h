@@ -538,9 +538,9 @@ public:
         uint32 mask = 0;
         if (Mechanic)
             mask |= 1 << (Mechanic - 1);
-        for (int i=0; i< MAX_EFFECT_INDEX; ++i)
-            if (EffectMechanic[i])
-                mask |= 1 << (EffectMechanic[i]-1);
+            for (uint32 i : EffectMechanic)
+                if (i)
+                    mask |= 1 << (i-1);
         return mask;
     }
 
@@ -551,8 +551,8 @@ public:
     bool HasAttribute(SpellAttributesEx4 attribute) const { return AttributesEx4 & attribute; }
     inline bool HasEffect(SpellEffects effect) const
     {
-        for (int i = 0; i < MAX_EFFECT_INDEX; ++i)
-            if (SpellEffects(Effect[i]) == effect)
+        for (uint32 i : Effect)
+            if (SpellEffects(i) == effect)
                 return true;
             
         return false;
@@ -613,8 +613,8 @@ public:
 
     inline bool HasAura(AuraType aura) const
     {
-        for (int i = 0; i < MAX_EFFECT_INDEX; ++i)
-            if (AuraType(EffectApplyAuraName[i]) == aura)
+        for (uint32 i : EffectApplyAuraName)
+            if (AuraType(i) == aura)
                 return true;
         
         return false;
@@ -680,8 +680,20 @@ public:
         return Internal & SPELL_INTERNAL_POSITIVE;
     }
 
-        bool IsPositiveSpell(WorldObject* caster, Unit* victim) const;
-        bool IsPositiveEffect(SpellEffectIndex effIndex, WorldObject* caster = nullptr, Unit* victim = nullptr) const;
+    bool IsPositiveSpell(WorldObject const* caster, WorldObject const* victim) const;
+    bool IsPositiveEffect(SpellEffectIndex effIndex, WorldObject const* caster = nullptr, WorldObject const* victim = nullptr) const;
+
+    // this is propably the correct check for most positivity / negativity decisions
+    inline bool IsPositiveEffectMask(uint8 effectMask, WorldObject const* caster = nullptr, WorldObject const* target = nullptr) const
+    {
+        // spells with at least one negative effect are considered negative
+        // some self-applied spells have negative effects but in self casting case negative check ignored.
+        for (int i = 0; i < MAX_EFFECT_INDEX; ++i)
+            if (Effect[i] && (effectMask & (1 << i)) && !IsPositiveEffect(SpellEffectIndex(i), caster, target))
+                return false;
+
+        return true;
+    }
 
     inline bool IsHealSpell() const
     {
@@ -728,12 +740,7 @@ public:
         return Internal & SPELL_INTERNAL_REFLECTABLE;
     }
 
-    inline bool IsReflectableSpell(WorldObject* caster, Unit* victim) const
-    {
-        return DmgClass == SPELL_DAMAGE_CLASS_MAGIC && !HasAttribute(SPELL_ATTR_IS_ABILITY)
-            && !HasAttribute(SPELL_ATTR_EX_CANT_BE_REFLECTED) && !HasAttribute(SPELL_ATTR_UNAFFECTED_BY_INVULNERABILITY)
-            && !HasAttribute(SPELL_ATTR_PASSIVE) && !IsPositiveSpell(caster, victim);
-    }
+    bool IsReflectableSpell(WorldObject const* caster, WorldObject const* victim) const;
 
     inline bool IsAutoRepeatRangedSpell() const
     {
@@ -767,9 +774,9 @@ public:
 
     inline bool HasAuraWithSpellTriggerEffect() const
     {
-        for (int32 i = 0; i < MAX_EFFECT_INDEX; ++i)
+        for (uint32 i : EffectApplyAuraName)
         {
-            switch (EffectApplyAuraName[i])
+            switch (i)
             {
                 case SPELL_AURA_PROC_TRIGGER_SPELL:
                     return true;

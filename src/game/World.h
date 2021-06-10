@@ -534,6 +534,7 @@ enum eConfigBoolValues
     CONFIG_BOOL_TRANSMOG_ENABLED,
     CONFIG_BOOL_STATIC_OBJECT_LOS,
     CONFIG_BOOL_BOUNTY,
+	CONFIG_BOOL_DUAL_SPEC,
     CONFIG_BOOL_OPENHOUSE,
     CONFIG_BOOL_AC_MOVEMENT_ENABLED,
     CONFIG_BOOL_AC_MOVEMENT_PLAYERS_ONLY,
@@ -840,7 +841,7 @@ class World
 
         void KickAll();
         void KickAllLess(AccountTypes sec);
-        void BanAccount(uint32 accountId, uint32 duration, std::string reason, std::string author);
+        void BanAccount(uint32 accountId, uint32 duration, std::string reason, std::string const& author);
         BanReturn BanAccount(BanMode mode, std::string nameOrIP, uint32 duration_secs, std::string reason, std::string author);
         bool RemoveBanAccount(BanMode mode, std::string const& source, std::string const& message, std::string nameOrIP);
 

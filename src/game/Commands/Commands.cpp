@@ -529,8 +529,8 @@ bool ChatHandler::HandleAddItemCommand(char* args)
 
     // remove binding (let GM give it to another player later)
     if (pl == plTarget)
-        for (ItemPosCountVec::const_iterator itr = dest.begin(); itr != dest.end(); ++itr)
-            if (Item* item1 = pl->GetItemByPos(itr->pos))
+        for (const auto& itr : dest)
+            if (Item* item1 = pl->GetItemByPos(itr.pos))
                 item1->SetBinding(false);
 
     if (count > 0 && item)
@@ -1234,9 +1234,9 @@ bool ChatHandler::HandleLookupQuestCommand(char* args)
     uint32 counter = 0 ;
 
     ObjectMgr::QuestMap const& qTemplates = sObjectMgr.GetQuestTemplates();
-    for (ObjectMgr::QuestMap::const_iterator iter = qTemplates.begin(); iter != qTemplates.end(); ++iter)
+    for (const auto& itr : qTemplates)
     {
-        const auto& qinfo = iter->second;
+        const auto& qinfo = itr.second;
 
         int loc_idx = GetSessionDbLocaleIndex();
         if (loc_idx >= 0)
@@ -1765,8 +1765,9 @@ bool ChatHandler::HandleDamageCommand(char* args)
         return false;
 
     Unit* target = GetSelectedUnit();
+    Player* player = m_session->GetPlayer();
 
-    if (!target || !m_session->GetPlayer()->GetSelectionGuid())
+    if (!target || !player->GetSelectionGuid())
     {
         SendSysMessage(LANG_SELECT_CHAR_OR_CREATURE);
         SetSentErrorMessage(true);
@@ -1788,9 +1789,11 @@ bool ChatHandler::HandleDamageCommand(char* args)
     // flat melee damage without resistence/etc reduction
     if (!*args)
     {
-        m_session->GetPlayer()->DealDamage(target, damage, nullptr, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, nullptr, false);
-        if (target != m_session->GetPlayer())
-            m_session->GetPlayer()->SendAttackStateUpdate(HITINFO_NORMALSWING2, target, 1, SPELL_SCHOOL_MASK_NORMAL, damage, 0, 0, VICTIMSTATE_NORMAL, 0);
+        player->DealDamage(target, damage, nullptr, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, nullptr, false);
+
+        if (target != player)
+            player->SendAttackStateUpdate(HITINFO_NORMALSWING2, target, 1, SPELL_SCHOOL_MASK_NORMAL, damage, 0, 0, VICTIMSTATE_NORMAL, 0);
+
         return true;
     }
 
@@ -1804,7 +1807,7 @@ bool ChatHandler::HandleDamageCommand(char* args)
     SpellSchoolMask schoolmask = GetSchoolMask(school);
 
     if (schoolmask & SPELL_SCHOOL_MASK_NORMAL)
-        damage = m_session->GetPlayer()->CalcArmorReducedDamage(target, damage);
+        damage = player->CalcArmorReducedDamage(target, damage);
 
     // melee damage by specific school
     if (!*args)
@@ -1812,7 +1815,7 @@ bool ChatHandler::HandleDamageCommand(char* args)
         uint32 absorb = 0;
         int32 resist = 0;
 
-        target->CalculateDamageAbsorbAndResist(m_session->GetPlayer(), schoolmask, SPELL_DIRECT_DAMAGE, damage, &absorb, &resist, nullptr);
+        target->CalculateDamageAbsorbAndResist(player, schoolmask, SPELL_DIRECT_DAMAGE, damage, &absorb, &resist, nullptr);
 
         const uint32 bonus = (resist < 0 ? uint32(std::abs(resist)) : 0);
         damage += bonus;
@@ -1823,9 +1826,9 @@ bool ChatHandler::HandleDamageCommand(char* args)
 
         damage -= malus;
 
-        m_session->GetPlayer()->DealDamageMods(target, damage, &absorb);
-        m_session->GetPlayer()->DealDamage(target, damage, nullptr, DIRECT_DAMAGE, schoolmask, nullptr, false);
-        m_session->GetPlayer()->SendAttackStateUpdate(HITINFO_NORMALSWING2, target, 1, schoolmask, damage, absorb, resist, VICTIMSTATE_NORMAL, 0);
+        player->DealDamageMods(target, damage, &absorb);
+        player->DealDamage(target, damage, nullptr, DIRECT_DAMAGE, schoolmask, nullptr, false);
+        player->SendAttackStateUpdate(HITINFO_NORMALSWING2, target, 1, schoolmask, damage, absorb, resist, VICTIMSTATE_NORMAL, 0);
         return true;
     }
 
@@ -1836,7 +1839,7 @@ bool ChatHandler::HandleDamageCommand(char* args)
     if (!spellid || !sSpellMgr.GetSpellEntry(spellid))
         return false;
 
-    m_session->GetPlayer()->SpellNonMeleeDamageLog(target, spellid, damage);
+    player->SpellNonMeleeDamageLog(target, spellid, damage);
     return true;
 }
 
@@ -2453,12 +2456,12 @@ bool ChatHandler::HandleTeleAddCommand(char* args)
     }
 
     GameTele tele;
-    tele.position_x  = player->GetPositionX();
-    tele.position_y  = player->GetPositionY();
-    tele.position_z  = player->GetPositionZ();
-    tele.orientation = player->GetOrientation();
-    tele.mapId       = player->GetMapId();
-    tele.name        = name;
+    tele.x = player->GetPositionX();
+    tele.y = player->GetPositionY();
+    tele.z = player->GetPositionZ();
+    tele.o = player->GetOrientation();
+    tele.mapId = player->GetMapId();
+    tele.name = name;
 
     if (sObjectMgr.AddGameTele(tele))
         SendSysMessage(LANG_COMMAND_TP_ADDED);
@@ -2666,9 +2669,16 @@ bool ChatHandler::HandleResetAllCommand(char* args)
 
     CharacterDatabase.PExecute("UPDATE characters SET at_login = at_login | '%u' WHERE (at_login & '%u') = '0'", atLogin, atLogin);
     HashMapHolder<Player>::MapType const& plist = sObjectAccessor.GetPlayers();
-    for (HashMapHolder<Player>::MapType::const_iterator itr = plist.begin(); itr != plist.end(); ++itr)
-        itr->second->SetAtLoginFlag(atLogin);
+    for (const auto& itr : plist)
+        itr.second->SetAtLoginFlag(atLogin);
 
+    return true;
+}
+
+bool ChatHandler::HandleServerResetAllRaidCommand(char* /*args*/)
+{
+    SendSysMessage("Global raid instances reset, all players in raid instances will be teleported to homebind!");
+    sMapPersistentStateMgr.GetScheduler().ResetAllRaid();
     return true;
 }
 
@@ -3019,14 +3029,16 @@ bool ChatHandler::HandleBanAllIPCommand(char* args)
         SetSentErrorMessage(true);
         return false;
     }
+
     std::set<uint32> accountsToBan;
     std::map<uint32, std::string> accountsIdToName;
     std::stringstream allAccounts;
     do
     {
         Field* fields = result->Fetch();
-        if (allAccounts.str() != "")
+        if (!allAccounts.str().empty())
             allAccounts << ",";
+
         allAccounts << fields[0].GetUInt32();
         accountsToBan.insert(fields[0].GetUInt32());
         accountsIdToName[fields[0].GetUInt32()] = fields[1].GetCppString();
@@ -3044,14 +3056,16 @@ bool ChatHandler::HandleBanAllIPCommand(char* args)
     }
 
     uint32 bannedCount = 0;
-    for (std::set<uint32>::const_iterator it = accountsToBan.begin(); it != accountsToBan.end(); ++it)
+    for (const auto it : accountsToBan)
     {
-        if (sAccountMgr.IsAccountBanned(*it))
+        if (sAccountMgr.IsAccountBanned(it))
             continue;
-        sWorld.BanAccount(BAN_ACCOUNT, accountsIdToName[*it], 0, reason, m_session ? m_session->GetPlayerName() : "");
-        PSendSysMessage("Account '%s' permanently banned.", accountsIdToName[*it].c_str(), reason);
+
+        sWorld.BanAccount(BAN_ACCOUNT, accountsIdToName[it], 0, reason, m_session ? m_session->GetPlayerName() : "");
+        PSendSysMessage("Account '%s' permanently banned.", accountsIdToName[it].c_str(), reason);
         ++bannedCount;
     }
+
     PSendSysMessage("%u accounts banned for %s (%u on this IP)", bannedCount, reason, accountsIdToName.size());
     return true;
 }
@@ -3776,23 +3790,23 @@ bool ChatHandler::HandleInstanceListBindsCommand(char* /*args*/)
     uint32 counter = 0;
 
     Player::BoundInstancesMap &binds = player->GetBoundInstances();
-    for (Player::BoundInstancesMap::const_iterator itr = binds.begin(); itr != binds.end(); ++itr)
+    for (const auto& bind : binds)
     {
-        DungeonPersistentState *state = itr->second.state;
-        std::string timeleft = "";
-        if (!itr->second.perm)
+        DungeonPersistentState* state = bind.second.state;
+        std::string timeleft;
+        if (!bind.second.perm)
             timeleft = secsToTimeString(state->GetResetTime() - time(nullptr), true);
         else
-            timeleft = secsToTimeString(sMapPersistentStateMgr.GetScheduler().GetResetTimeFor(itr->first) - time(nullptr));
+            timeleft = secsToTimeString(sMapPersistentStateMgr.GetScheduler().GetResetTimeFor(bind.first) - time(nullptr));
 
-        if (const MapEntry* entry = sMapStorage.LookupEntry<MapEntry>(itr->first))
+        if (MapEntry const* entry = sMapStorage.LookupEntry<MapEntry>(bind.first))
         {
             PSendSysMessage("map: %d (%s) inst: %d perm: %s canReset: %s TTR: %s",
-                            itr->first, entry->name, state->GetInstanceId(), itr->second.perm ? "yes" : "no",
+                            bind.first, entry->name, state->GetInstanceId(), bind.second.perm ? "yes" : "no",
                             state->CanReset() ? "yes" : "no", timeleft.c_str());
         }
         else
-            PSendSysMessage("bound for a nonexistent map %u", itr->first);
+            PSendSysMessage("bound for a nonexistent map %u", bind.first);
         counter++;
     }
 
@@ -3802,26 +3816,27 @@ bool ChatHandler::HandleInstanceListBindsCommand(char* /*args*/)
     if (Group *group = player->GetGroup())
     {
         Group::BoundInstancesMap &binds = group->GetBoundInstances();
-        for (Group::BoundInstancesMap::const_iterator itr = binds.begin(); itr != binds.end(); ++itr)
+        for (const auto& bind : binds)
         {
-            DungeonPersistentState *state = itr->second.state;
-            std::string timeleft = "";
-            if (!itr->second.perm)
+            DungeonPersistentState* state = bind.second.state;
+            std::string timeleft;
+            if (!bind.second.perm)
                 timeleft = secsToTimeString(state->GetResetTime() - time(nullptr), true);
             else
-                timeleft = secsToTimeString(sMapPersistentStateMgr.GetScheduler().GetResetTimeFor(itr->first) - time(nullptr));
+                timeleft = secsToTimeString(sMapPersistentStateMgr.GetScheduler().GetResetTimeFor(bind.first) - time(nullptr));
 
-            if (const MapEntry* entry = sMapStorage.LookupEntry<MapEntry>(itr->first))
+            if (MapEntry const* entry = sMapStorage.LookupEntry<MapEntry>(bind.first))
             {
                 PSendSysMessage("map: %d (%s) inst: %d perm: %s canReset: %s TTR: %s",
-                                itr->first, entry->name, state->GetInstanceId(), itr->second.perm ? "yes" : "no",
+                                bind.first, entry->name, state->GetInstanceId(), bind.second.perm ? "yes" : "no",
                                 state->CanReset() ? "yes" : "no", timeleft.c_str());
             }
             else
-                PSendSysMessage("bound for a nonexistent map %u", itr->first);
+                PSendSysMessage("bound for a nonexistent map %u", bind.first);
             counter++;
         }
     }
+
     PSendSysMessage("group binds: %d", counter);
 
     return true;
@@ -4026,9 +4041,9 @@ bool ChatHandler::HandleSendItemsHelper(MailDraft& draft, char* args)
     // fill mail
     draft.SetSubjectAndBody(msgSubject, msgText);
 
-    for (ItemPairs::const_iterator itr = items.begin(); itr != items.end(); ++itr)
+    for (const auto& itr : items)
     {
-        if (Item* item = Item::CreateItem(itr->first, itr->second, m_session ? m_session->GetPlayer() : 0))
+        if (Item* item = Item::CreateItem(itr.first, itr.second, m_session ? m_session->GetPlayer() : 0))
         {
             item->SaveToDB();                               // save for prevent lost at next mail load, if send fail then item will deleted
             draft.AddItem(item);
@@ -4128,8 +4143,10 @@ bool ChatHandler::HandleSendMessageCommand(char* args)
     if (!*args)
         return false;
 
+    WorldSession* rPlayerSession = rPlayer->GetSession();
+
     ///- Check that he is not logging out.
-    if (rPlayer->GetSession()->isLogingOut())
+    if (rPlayerSession->isLogingOut())
     {
         SendSysMessage(LANG_PLAYER_NOT_FOUND);
         SetSentErrorMessage(true);
@@ -4138,8 +4155,8 @@ bool ChatHandler::HandleSendMessageCommand(char* args)
 
     ///- Send the message
     //Use SendAreaTriggerMessage for fastest delivery.
-    rPlayer->GetSession()->SendAreaTriggerMessage("%s", args);
-    rPlayer->GetSession()->SendAreaTriggerMessage("|cffff0000[Message from administrator]:|r");
+    rPlayerSession->SendAreaTriggerMessage("%s", args);
+    rPlayerSession->SendAreaTriggerMessage("|cffff0000[Message from administrator]:|r");
 
     //Confirmation message
     std::string nameLink = GetNameLink(rPlayer);
@@ -5608,7 +5625,7 @@ bool ChatHandler::HandleTeleCommand(char* args)
         return false;
     }
 
-    return HandleGoHelper(pPlayer, tele->mapId, tele->position_x, tele->position_y, &tele->position_z, &tele->orientation);
+    return HandleGoHelper(pPlayer, tele->mapId, tele->x, tele->y, &tele->z, &tele->o);
 }
 
 //Enable\Disable accept whispers (for GM)
@@ -5707,7 +5724,7 @@ bool ChatHandler::HandleTeleNameCommand(char* args)
 
         std::string chrNameLink = playerLink(target_name);
 
-        if (target->IsBeingTeleported() == true)
+        if (target->IsBeingTeleported())
         {
             PSendSysMessage(LANG_IS_TELEPORTED, chrNameLink.c_str());
             SetSentErrorMessage(true);
@@ -5718,7 +5735,7 @@ bool ChatHandler::HandleTeleNameCommand(char* args)
         if (needReportToTarget(target))
             ChatHandler(target).PSendSysMessage(LANG_TELEPORTED_TO_BY, GetNameLink().c_str());
 
-        return HandleGoHelper(target, tele->mapId, tele->position_x, tele->position_y, &tele->position_z, &tele->orientation);
+        return HandleGoHelper(target, tele->mapId, tele->x, tele->y, &tele->z, &tele->o);
     }
     else
     {
@@ -5729,8 +5746,7 @@ bool ChatHandler::HandleTeleNameCommand(char* args)
         std::string nameLink = playerLink(target_name);
 
         PSendSysMessage(LANG_TELEPORTING_TO, nameLink.c_str(), GetMangosString(LANG_OFFLINE), tele->name.c_str());
-        Player::SavePositionInDB(target_guid, tele->mapId, tele->position_x, tele->position_y, tele->position_z, tele->orientation,
-            sTerrainMgr.GetZoneId(tele->mapId, tele->position_x, tele->position_y, tele->position_z));
+        Player::SavePositionInDB(target_guid, tele->mapId, tele->x, tele->y, tele->z, tele->o, sTerrainMgr.GetZoneId(tele->mapId, tele->x, tele->y, tele->z));
     }
 
     return true;
@@ -5806,7 +5822,7 @@ bool ChatHandler::HandleTeleGroupCommand(char* args)
         else
             pl->SaveRecallPosition();
 
-        pl->TeleportTo(tele->mapId, tele->position_x, tele->position_y, tele->position_z, tele->orientation);
+        pl->TeleportTo(*tele);
     }
 
     return true;
@@ -5862,7 +5878,7 @@ bool ChatHandler::HandleGroupgoCommand(char* args)
 
         std::string plNameLink = GetNameLink(pl);
 
-        if (pl->IsBeingTeleported() == true)
+        if (pl->IsBeingTeleported())
         {
             PSendSysMessage(LANG_IS_TELEPORTED, plNameLink.c_str());
             SetSentErrorMessage(true);
@@ -6620,15 +6636,15 @@ bool ChatHandler::HandleGameObjectTargetCommand(char* args)
         eventFilter << " AND (event IS nullptr ";
         bool initString = true;
 
-        for (GameEventMgr::ActiveEvents::const_iterator itr = activeEventsList.begin(); itr != activeEventsList.end(); ++itr)
+        for (const auto itr : activeEventsList)
         {
             if (initString)
             {
-                eventFilter << "OR event IN (" << *itr;
+                eventFilter  <<  "OR event IN (" << itr;
                 initString = false;
             }
             else
-                eventFilter << "," << *itr;
+                eventFilter << "," << itr;
         }
 
         if (!initString)
@@ -7349,13 +7365,13 @@ bool ChatHandler::HandleModifyRepCommand(char* args)
 
     if (factionEntry->reputationListID < 0)
     {
-        PSendSysMessage(LANG_COMMAND_FACTION_NOREP_ERROR, factionEntry->name[GetSessionDbcLocale()], factionId);
+        PSendSysMessage(LANG_COMMAND_FACTION_NOREP_ERROR, factionEntry->name[GetSessionDbcLocale()].c_str(), factionId);
         SetSentErrorMessage(true);
         return false;
     }
 
     target->GetReputationMgr().SetReputation(factionEntry, amount);
-    PSendSysMessage(LANG_COMMAND_MODIFY_REP, factionEntry->name[GetSessionDbcLocale()], factionId,
+    PSendSysMessage(LANG_COMMAND_MODIFY_REP, factionEntry->name[GetSessionDbcLocale()].c_str(), factionId,
         GetNameLink(target).c_str(), target->GetReputationMgr().GetReputation(factionEntry));
     return true;
 }
@@ -8147,7 +8163,7 @@ bool ChatHandler::HandlePInfoCommand(char* args)
 /// Helper function
 inline Creature* Helper_CreateWaypointFor(Creature* wpOwner, WaypointPathOrigin wpOrigin, int32 pathId, uint32 wpId, WaypointNode const* wpNode, CreatureInfo const* waypointInfo)
 {
-    TemporarySummonWaypoint* wpCreature = new TemporarySummonWaypoint(wpOwner->GetObjectGuid(), wpId, pathId, (uint32)wpOrigin);
+    TemporarySummonWaypoint* wpCreature = new TemporarySummonWaypoint(wpOwner->GetObjectGuid(), wpId+1, pathId, (uint32)wpOrigin);
 
     CreatureCreatePos pos(wpOwner->GetMap(), wpNode->x, wpNode->y, wpNode->z, wpNode->orientation != 100.0f ? wpNode->orientation : 0.0f);
 
@@ -8172,12 +8188,12 @@ inline void UnsummonVisualWaypoints(Player const* player, ObjectGuid ownerGuid)
     MaNGOS::CreatureListSearcher<MaNGOS::AllCreaturesOfEntryInRange> searcher(waypoints, checkerForWaypoint);
     Cell::VisitGridObjects(player, searcher, SIZE_OF_GRIDS);
 
-    for (std::list<Creature*>::iterator itr = waypoints.begin(); itr != waypoints.end(); ++itr)
+    for (const auto& waypoint : waypoints)
     {
-        if ((*itr)->GetSubtype() != CREATURE_SUBTYPE_TEMPORARY_SUMMON)
+        if (waypoint->GetSubtype() != CREATURE_SUBTYPE_TEMPORARY_SUMMON)
             continue;
 
-        TemporarySummonWaypoint* wpTarget = dynamic_cast<TemporarySummonWaypoint*>(*itr);
+        TemporarySummonWaypoint* wpTarget = dynamic_cast<TemporarySummonWaypoint*>(waypoint);
         if (!wpTarget)
             continue;
 
@@ -8330,9 +8346,9 @@ bool ChatHandler::HandleWpAddCommand(char* args)
     // Unsummon old visuals, summon new ones
     UnsummonVisualWaypoints(m_session->GetPlayer(), wpOwner->GetObjectGuid());
     WaypointPath const* wpPath = sWaypointMgr.GetPathFromOrigin(wpOwner->GetEntry(), wpOwner->GetGUIDLow(), wpPathId, wpDestination);
-    for (WaypointPath::const_iterator itr = wpPath->begin(); itr != wpPath->end(); ++itr)
+    for (const auto& itr : *wpPath)
     {
-        if (!Helper_CreateWaypointFor(wpOwner, wpDestination, wpPathId, itr->first, &itr->second, waypointInfo))
+        if (!Helper_CreateWaypointFor(wpOwner, wpDestination, wpPathId, itr.first, &itr.second, waypointInfo))
         {
             PSendSysMessage(LANG_WAYPOINT_VP_NOTCREATED, VISUAL_WAYPOINT);
             SetSentErrorMessage(true);
@@ -8446,7 +8462,7 @@ bool ChatHandler::HandleWpModifyCommand(char* args)
             SetSentErrorMessage(true);
             return false;
         }
-        wpId = wpTarget->GetWaypointId();
+        wpId = wpTarget->GetWaypointId()-1;
 
         wpPathId = wpTarget->GetPathId();
         wpSource = (WaypointPathOrigin)wpTarget->GetPathOrigin();
@@ -8767,9 +8783,9 @@ bool ChatHandler::HandleWpShowCommand(char* args)
     {
         UnsummonVisualWaypoints(m_session->GetPlayer(), wpOwner->GetObjectGuid());
 
-        for (WaypointPath::const_iterator pItr = wpPath->begin(); pItr != wpPath->end(); ++pItr)
+        for (const auto& itr : *wpPath)
         {
-            if (!Helper_CreateWaypointFor(wpOwner, wpOrigin, wpPathId, pItr->first, &(pItr->second), waypointInfo))
+            if (!Helper_CreateWaypointFor(wpOwner, wpOrigin, wpPathId, itr.first, &(itr.second), waypointInfo))
             {
                 printf("error %s wpPathId %i", wpOwner->GetName(), wpPathId);
                 PSendSysMessage(LANG_WAYPOINT_VP_NOTCREATED, VISUAL_WAYPOINT);
@@ -9765,9 +9781,7 @@ bool ChatHandler::HandleGameObjectTempAddCommand(char* args)
     float rot2 = sin(ang / 2);
     float rot3 = cos(ang / 2);
 
-    if (!chr->SummonGameObject(id, x, y, z, ang, 0, 0, rot2, rot3, spawntm))
-        return false;
-    return true;
+    return chr->SummonGameObject(id, x, y, z, ang, 0, 0, rot2, rot3, spawntm) != nullptr;
 }
 
 bool ChatHandler::HandleUpdateWorldStateCommand(char* args)
@@ -10243,16 +10257,16 @@ bool ChatHandler::HandleBGStatusCommand(char* args)
             uiAllianceCount = 0;
             uiHordeCount = 0;
             BattleGroundPlayerMap const& pPlayers = it->second->GetPlayers();
-            std::string playerName = "";
+            std::string playerName;
 
-            for (BattleGroundPlayerMap::const_iterator itr = pPlayers.begin(); itr != pPlayers.end(); ++itr)
+            for (const auto& itr : pPlayers)
             {
-                if (itr->second.PlayerTeam == HORDE)
+                if (itr.second.PlayerTeam == HORDE)
                     uiHordeCount++;
                 else
                     uiAllianceCount++;
-                if (playerName == "")
-                    if (sObjectMgr.GetPlayerNameByGUID(itr->first, playerName))
+                if (playerName.empty())
+                    if (sObjectMgr.GetPlayerNameByGUID(itr.first, playerName))
                         playerName = playerLink(playerName);
             }
 
@@ -10302,9 +10316,9 @@ bool ChatHandler::HandleBGStatusCommand(char* args)
         BattleGroundQueueTypeId bgQueueTypeId = BattleGroundMgr::BGQueueTypeId(BattleGroundTypeId(bgTypeId));
         // Doit etre une référence (&), sinon crash par la suite ...
         BattleGroundQueue& queue = sBattleGroundMgr.m_BattleGroundQueues[bgQueueTypeId];
-        for (BattleGroundQueue::QueuedPlayersMap::const_iterator it = queue.m_QueuedPlayers.begin(); it != queue.m_QueuedPlayers.end(); ++it)
+        for (const auto& itr : queue.m_QueuedPlayers)
         {
-            if (it->second.GroupInfo->GroupTeam == HORDE)
+            if (itr.second.GroupInfo->GroupTeam == HORDE)
                 uiHordeCount++;
             else
                 uiAllianceCount++;
@@ -10562,22 +10576,26 @@ bool ChatHandler::HandleListAddonsCommand(char* args)
 
     std::set<std::string> const& addons = player->GetSession()->GetAddons();
     PSendSysMessage("%u addons on target.", addons.size());
-    for (std::set<std::string>::const_iterator it = addons.begin(); it != addons.end(); ++it)
-        PSendSysMessage(">> %s", it->c_str());
+    for (const auto& addon : addons)
+        PSendSysMessage(">> %s", addon.c_str());
+
     return true;
 }
 
 bool ChatHandler::HandleClientInfosCommand(char* args)
 {
     Player* player = nullptr;
+
     if (!ExtractPlayerTarget(&args, &player) && m_session)
         player = m_session->GetPlayer();
+
     if (!player)
         return false;
 
     PSendSysMessage("Account %s has %u client identifiers.", player->GetSession()->GetUsername().c_str(), player->GetSession()->GetClientIdentifiers().size());
-    for (ClientIdentifiersMap::const_iterator it = player->GetSession()->GetClientIdentifiers().begin(); it != player->GetSession()->GetClientIdentifiers().end(); ++it)
-        PSendSysMessage("%u: %s", it->first, it->second.c_str());
+    for (const auto& it : player->GetSession()->GetClientIdentifiers())
+        PSendSysMessage("%u: %s", it.first, it.second.c_str());
+
     player->GetSession()->ComputeClientHash();
     PSendSysMessage("Hash is %s", playerLink(player->GetSession()->GetClientHash()).c_str());
     return true;
@@ -10589,18 +10607,18 @@ bool ChatHandler::HandleClientSearchCommand(char* args)
     std::string searchedHash = args;
     uint32 i = 0;
     World::SessionMap const& sessMap = sWorld.GetAllSessions();
-    for (World::SessionMap::const_iterator itr = sessMap.begin(); itr != sessMap.end(); ++itr)
+    for (const auto& itr : sessMap)
     {
-        if (!itr->second)
+        if (!itr.second)
             continue;
 
-        std::string currentHash = itr->second->GetClientHash();
+        std::string currentHash = itr.second->GetClientHash();
         if (currentHash.find(searchedHash) != std::string::npos)
         {
             PSendSysMessage("%s on account %s, %s",
-                playerLink(itr->second->GetPlayerName()).c_str(),
-                playerLink(itr->second->GetUsername()).c_str(),
-                playerLink(itr->second->GetRemoteAddress()).c_str());
+                playerLink(itr.second->GetPlayerName()).c_str(),
+                playerLink(itr.second->GetUsername()).c_str(),
+                playerLink(itr.second->GetRemoteAddress()).c_str());
             ++i;
         }
     }
@@ -10699,15 +10717,19 @@ bool ChatHandler::HandlePetListCommand(char* args)
         SetSentErrorMessage(true);
         return false;
     }
+
     CharPetMap const& petsMap = sCharacterDatabaseCache.GetCharPetsMap();
     CharPetMap::const_iterator charPets = petsMap.find(playerGuid.GetCounter());
     uint32 count = 0;
     if (charPets != petsMap.end())
-        for (CharPetVector::const_iterator it = charPets->second.begin(); it != charPets->second.end(); ++it)
+    {
+        for (const auto it : charPets->second)
         {
-            PSendSysMessage("#%u: \"%s\" (%s)", (*it)->id, (*it)->name.c_str(), (*it)->slot == PET_SAVE_AS_CURRENT ? "Current pet" : "In stable");
+            PSendSysMessage("#%u: \"%s\" (%s)", it->id, it->name.c_str(), it->slot == PET_SAVE_AS_CURRENT ? "Current pet" : "In stable");
             ++count;
         }
+    }
+
     PSendSysMessage("Found %u pets for character %s (#%u).", count, charName.c_str(), playerGuid.GetCounter());
     return true;
 }
@@ -10809,9 +10831,9 @@ bool ChatHandler::HandleInstancePerfInfosCommand(char* args)
         return false;
     map->PrintInfos(*this);
     uint32 playersInClient = 0, gobjsInClient = 0, unitsInClient = 0, corpsesInClient = 0;
-    for (ObjectGuidSet::const_iterator it = player->m_visibleGUIDs.begin(); it != player->m_visibleGUIDs.end(); ++it)
+    for (const auto& itr : player->m_visibleGUIDs)
     {
-        switch (it->GetHigh())
+        switch (itr.GetHigh())
         {
         case HIGHGUID_PLAYER: ++playersInClient; break;
         case HIGHGUID_GAMEOBJECT: ++gobjsInClient; break;

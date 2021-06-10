@@ -304,9 +304,6 @@ class Item : public Object
         bool IsInBag() const { return m_container != nullptr; }
         bool IsEquipped() const;
 
-        uint32 GetSkill();
-        uint32 GetSpell();
-
         // RandomPropertyId (signed but stored as unsigned)
         int32 GetItemRandomPropertyId() const { return GetInt32Value(ITEM_FIELD_RANDOM_PROPERTIES_ID); }
         uint32 GetItemSuffixFactor() const { return GetUInt32Value(ITEM_FIELD_PROPERTY_SEED); }
@@ -349,6 +346,7 @@ class Item : public Object
 
         bool HasQuest(uint32 quest_id) const override { return GetProto()->StartQuest == quest_id; }
         bool HasInvolvedQuest(uint32 /*quest_id*/) const override { return false; }
+        bool IsPotion() const { return GetProto()->IsPotion(); }
         bool IsConjuredConsumable() const { return GetProto()->IsConjuredConsumable(); }
 
         void AddToClientUpdateList() override;

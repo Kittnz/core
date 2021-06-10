@@ -41,7 +41,6 @@ set (SCRIPTS_SRCS
     custom/boss_arena_hardog.cpp
     custom/custom.cpp
     custom/custom_creatures.cpp
-    custom/event_attack_city.cpp
     custom/npc_escort.cpp
     custom/zero_creatures.cpp
     custom/npc_j_eevee.cpp

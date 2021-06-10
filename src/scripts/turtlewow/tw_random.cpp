@@ -2210,7 +2210,7 @@ bool GOSelect_go_airplane(Player* pPlayer, GameObject* pGo, uint32 sender, uint3
         pPlayer->ModifyMoney(-5000);
         pPlayer->CastSpell(pPlayer, 130, true); // Snow Fall
         pPlayer->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, 18510);
-        pPlayer->m_Events.AddEvent(new DismountAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(5 * IN_MILLISECONDS));
+        pPlayer->m_Events.AddEvent(new DismountAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(15 * IN_MILLISECONDS));
         pPlayer->TeleportTo(mapid, x, y, z, o);
         return true;
     case 1000050: // Mirage Raceway's Outstanding Flying Machine BNX-92
@@ -2220,7 +2220,7 @@ bool GOSelect_go_airplane(Player* pPlayer, GameObject* pGo, uint32 sender, uint3
             pPlayer->ModifyMoney(-cost);
             pPlayer->CastSpell(pPlayer, 130, true);
             pPlayer->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, 18510);
-            pPlayer->m_Events.AddEvent(new DismountAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(10 * IN_MILLISECONDS));
+            pPlayer->m_Events.AddEvent(new DismountAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(18 * IN_MILLISECONDS));
             pPlayer->TeleportTo(1, -6103.89f, -3872.74f, 55.00f, 3.57f);
             return true;
         }
@@ -2256,22 +2256,23 @@ bool GOHello_go_brainwashing_device(Player* pPlayer, GameObject* pGo)
 
 		pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, "Reset my talents.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
-		// primary
-		if (pPlayer->HasSavedTalentSpec(1))
-		{
-			activateText = "Activate Primary Specialization (" + pPlayer->SpecTalentPoints(1) + ")";
-			pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_1, activateText.c_str(), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
-		}
-		pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, "Save Primary Specialization.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+		if (sWorld.getConfig(CONFIG_BOOL_DUAL_SPEC)) {
+			// primary
+			if (pPlayer->HasSavedTalentSpec(1))
+			{
+				activateText = "Activate Primary Specialization (" + pPlayer->SpecTalentPoints(1) + ")";
+				pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_1, activateText.c_str(), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+			}
+			pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, "Save Primary Specialization.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
 
-		// secondary
-		if (pPlayer->HasSavedTalentSpec(2))
-		{
-			activateText = "Activate Secondary Specialization (" + pPlayer->SpecTalentPoints(2) + ")";
-			pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_1, activateText.c_str(), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
+			// secondary
+			if (pPlayer->HasSavedTalentSpec(2))
+			{
+				activateText = "Activate Secondary Specialization (" + pPlayer->SpecTalentPoints(2) + ")";
+				pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_1, activateText.c_str(), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
+			}
+			pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, "Save Secondary Specialization.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
 		}
-		pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, "Save Secondary Specialization.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
-
 	}
     pPlayer->SEND_GOSSIP_MENU(90350, pGo->GetGUID());
     return true;

@@ -61,20 +61,20 @@ void SpellMgr::LoadSpellTargetPositions()
 
         SpellTargetPosition st;
 
-        st.target_mapId       = fields[1].GetUInt32();
-        st.target_X           = fields[2].GetFloat();
-        st.target_Y           = fields[3].GetFloat();
-        st.target_Z           = fields[4].GetFloat();
-        st.target_Orientation = fields[5].GetFloat();
+        st.mapId       = fields[1].GetUInt32();
+        st.x           = fields[2].GetFloat();
+        st.y           = fields[3].GetFloat();
+        st.z           = fields[4].GetFloat();
+        st.o           = fields[5].GetFloat();
 
-        MapEntry const* mapEntry = sMapStorage.LookupEntry<MapEntry>(st.target_mapId);
+        MapEntry const* mapEntry = sMapStorage.LookupEntry<MapEntry>(st.mapId);
         if (!mapEntry)
         {
-            sLog.outErrorDb("Spell (ID:%u) target map (ID: %u) does not exist in `Map.dbc`.", Spell_ID, st.target_mapId);
+            sLog.outErrorDb("Spell (ID:%u) target map (ID: %u) does not exist in `Map.dbc`.", Spell_ID, st.mapId);
             continue;
         }
 
-        if (st.target_X == 0 && st.target_Y == 0 && st.target_Z == 0)
+        if (st.x == 0 && st.y == 0 && st.z == 0)
         {
             sLog.outErrorDb("Spell (ID:%u) target coordinates not provided.", Spell_ID);
             continue;
@@ -261,10 +261,10 @@ struct DoSpellProcEvent
         if (!spe.schoolMask && !spe.procFlags &&
                 !spe.procEx && !spe.ppmRate && !spe.customChance && !spe.cooldown)
         {
-            bool empty = !spe.spellFamilyName ? true : false;
-            for (int32 i = 0; i < MAX_EFFECT_INDEX; ++i)
+            bool empty = spe.spellFamilyName == 0;
+            for (uint64 i : spe.spellFamilyMask)
             {
-                if (spe.spellFamilyMask[i])
+                if (i)
                 {
                     empty = false;
                     break;
@@ -638,14 +638,14 @@ void SpellMgr::LoadSpellGroups()
         }
     }
 
-    for (std::set<uint32>::iterator groupItr = groups.begin(); groupItr != groups.end(); ++groupItr)
+    for (const auto group : groups)
     {
         std::set<uint32> spells;
-        GetSetOfSpellsInSpellGroup(SpellGroup(*groupItr), spells);
+        GetSetOfSpellsInSpellGroup(SpellGroup(group), spells);
 
-        for (std::set<uint32>::iterator spellItr = spells.begin(); spellItr != spells.end(); ++spellItr)
+        for (const auto spell : spells)
         {
-            mSpellSpellGroup.insert(SpellSpellGroupMap::value_type(*spellItr, SpellGroup(*groupItr)));
+            mSpellSpellGroup.insert(SpellSpellGroupMap::value_type(spell, SpellGroup(group)));
         }
     }
 }
@@ -690,38 +690,38 @@ bool SpellMgr::ListMorePowerfullSpells(uint32 spellId, std::list<uint32>& list) 
     std::vector<uint32> spellGroupIds;
     std::vector<uint32>::iterator spellGroupIdsIt;
     // first = groupid, second = spellId
-    for (SpellGroupSpellMap::const_iterator itr = mSpellGroupSpell.begin(); itr != mSpellGroupSpell.end(); ++itr)
+    for (const auto& itr : mSpellGroupSpell)
     {
-        if (itr->second == spellId)
+        if (itr.second == spellId)
         {
             // Un sort peut etre dans plusieurs groupes. On s'interesse au groupe 'SPELL_GROUP_STACK_RULE_POWERFULL_CHAIN'
-            SpellGroupStackMap::const_iterator found = mSpellGroupStack.find(itr->first);
+            SpellGroupStackMap::const_iterator found = mSpellGroupStack.find(itr.first);
             // Ce groupe n'a pas de regle ... Pas d'entree dans 'spell_group_stack_rule' ?
             if (found == mSpellGroupStack.end())
                 continue;
             SpellGroupStackRule stackRule = found->second;
             if (stackRule == SPELL_GROUP_STACK_RULE_POWERFULL_CHAIN)
             {
-                spellGroupIds.push_back(itr->first);
+                spellGroupIds.push_back(itr.first);
             }
         }
     }
-    if (spellGroupIds.size() == 0)
+    if (spellGroupIds.empty())
         return false;
     for (spellGroupIdsIt = spellGroupIds.begin(); spellGroupIdsIt != spellGroupIds.end(); ++spellGroupIdsIt)
     {
         bool spellPassed = false;
-        for (SpellGroupSpellMap::const_iterator itr = mSpellGroupSpell.begin(); itr != mSpellGroupSpell.end(); ++itr)
+        for (const auto& itr : mSpellGroupSpell)
         {
-            if (itr->first != *(spellGroupIdsIt))
+            if (itr.first != *(spellGroupIdsIt))
                 continue;
             if (!spellPassed)
             {
-                if (itr->second == spellId)
+                if (itr.second == spellId)
                     spellPassed = true;
                 continue;
             }
-            list.push_back(itr->second);
+            list.push_back(itr.second);
         }
         MANGOS_ASSERT(spellPassed == true);
     }
@@ -733,33 +733,33 @@ bool SpellMgr::ListLessPowerfullSpells(uint32 spellId, std::list<uint32>& list) 
     std::vector<uint32> spellGroupIds;
     std::vector<uint32>::iterator spellGroupIdsIt;
     // first = groupid, second = spellId
-    for (SpellGroupSpellMap::const_iterator itr = mSpellGroupSpell.begin(); itr != mSpellGroupSpell.end(); ++itr)
+    for (const auto& itr : mSpellGroupSpell)
     {
-        if (itr->second == spellId)
+        if (itr.second == spellId)
         {
             // Un sort peut etre dans plusieurs groupes. On s'interesse au groupe 'SPELL_GROUP_STACK_RULE_POWERFULL_CHAIN'
-            SpellGroupStackMap::const_iterator found = mSpellGroupStack.find(itr->first);
+            SpellGroupStackMap::const_iterator found = mSpellGroupStack.find(itr.first);
             // Ce groupe n'a pas de regle ... Pas d'entree dans 'spell_group_stack_rule' ?
             if (found == mSpellGroupStack.end())
                 continue;
             SpellGroupStackRule stackRule = found->second;
             if (stackRule == SPELL_GROUP_STACK_RULE_POWERFULL_CHAIN)
             {
-                spellGroupIds.push_back(itr->first);
+                spellGroupIds.push_back(itr.first);
             }
         }
     }
-    if (spellGroupIds.size() == 0)
+    if (spellGroupIds.empty())
         return false;
     for (spellGroupIdsIt = spellGroupIds.begin(); spellGroupIdsIt != spellGroupIds.end(); ++spellGroupIdsIt)
     {
-        for (SpellGroupSpellMap::const_iterator itr = mSpellGroupSpell.begin(); itr != mSpellGroupSpell.end(); ++itr)
+        for (const auto& itr : mSpellGroupSpell)
         {
-            if (itr->first != *(spellGroupIdsIt))
+            if (itr.first != *(spellGroupIdsIt))
                 continue;
-            if (itr->second == spellId)
+            if (itr.second == spellId)
                 break;
-            list.push_back(itr->second);
+            list.push_back(itr.second);
         }
     }
     return !list.empty();
@@ -1364,7 +1364,7 @@ bool SpellMgr::IsSkillBonusSpell(uint32 spellId) const
 SpellEntry const* SpellMgr::SelectAuraRankForLevel(SpellEntry const* spellInfo, uint32 level) const
 {
     // fast case
-    if (level + 10 >= spellInfo->spellLevel)
+    if (level + 10 >= nextSpellInfo->spellLevel)
         return spellInfo;
 
     // ignore selection for passive spells
@@ -1477,7 +1477,7 @@ void SpellMgr::LoadSpellChains()
     mSpellChainsNext.clear();                               // need for reload case
 
     // load known data for talents
-    for (unsigned int i = 0; i < sTalentStore.GetNumRows(); ++i)
+    for (uint32 i = 0; i < sTalentStore.GetNumRows(); ++i)
     {
         TalentEntry const *talentInfo = sTalentStore.LookupEntry(i);
         if (!talentInfo)
@@ -1513,9 +1513,9 @@ void SpellMgr::LoadSpellChains()
     {
         // we can calculate ranks only after full data generation
         AbilitySpellPrevMap prevRanks;
-        for (SkillLineAbilityMap::const_iterator ab_itr = mSkillLineAbilityMapBySpellId.begin(); ab_itr != mSkillLineAbilityMapBySpellId.end(); ++ab_itr)
+        for (const auto& ab_itr : mSkillLineAbilityMapBySpellId)
         {
-            uint32 spell_id = ab_itr->first;
+            uint32 spell_id = ab_itr.first;
 
             // some forward spells not exist and can be ignored (some outdated data)
             SpellEntry const* spell_entry = sSpellMgr.GetSpellEntry(spell_id);
@@ -1523,7 +1523,7 @@ void SpellMgr::LoadSpellChains()
                 continue;
 
             // ignore spell without forwards (non ranked or missing info in skill abilities)
-            uint32 forward_id = ab_itr->second->forward_spellid;
+            uint32 forward_id = ab_itr.second->forward_spellid;
 
             // by some strange reason < 3.x clients not have forward spell for 2366
             if (spell_id == 2366)                           // Herb Gathering, Apprentice
@@ -1727,58 +1727,58 @@ void SpellMgr::LoadSpellChains()
     } while (result->NextRow());
 
     // additional integrity checks
-    for (SpellChainMap::const_iterator i = mSpellChains.begin(); i != mSpellChains.end(); ++i)
+    for (const auto& itr : mSpellChains)
     {
-        if (i->second.prev)
+        if (itr.second.prev)
         {
-            SpellChainMap::const_iterator i_prev = mSpellChains.find(i->second.prev);
+            SpellChainMap::const_iterator i_prev = mSpellChains.find(itr.second.prev);
             if (i_prev == mSpellChains.end())
             {
                 sLog.outErrorDb("Spell %u (prev: %u, first: %u, rank: %d, req: %u) listed in `spell_chain` has not found previous rank spell in table.",
-                                i->first, i->second.prev, i->second.first, i->second.rank, i->second.req);
+                                itr.first, itr.second.prev, itr.second.first, itr.second.rank, itr.second.req);
             }
-            else if (i_prev->second.first != i->second.first)
+            else if (i_prev->second.first != itr.second.first)
             {
                 sLog.outErrorDb("Spell %u (prev: %u, first: %u, rank: %d, req: %u) listed in `spell_chain` has different first spell in chain compared to previous rank spell (prev: %u, first: %u, rank: %d, req: %u).",
-                                i->first, i->second.prev, i->second.first, i->second.rank, i->second.req,
+                                itr.first, itr.second.prev, itr.second.first, itr.second.rank, itr.second.req,
                                 i_prev->second.prev, i_prev->second.first, i_prev->second.rank, i_prev->second.req);
             }
-            else if (i_prev->second.rank + 1 != i->second.rank)
+            else if (i_prev->second.rank + 1 != itr.second.rank)
             {
                 sLog.outErrorDb("Spell %u (prev: %u, first: %u, rank: %d, req: %u) listed in `spell_chain` has different rank compared to previous rank spell (prev: %u, first: %u, rank: %d, req: %u).",
-                                i->first, i->second.prev, i->second.first, i->second.rank, i->second.req,
+                                itr.first, itr.second.prev, itr.second.first, itr.second.rank, itr.second.req,
                                 i_prev->second.prev, i_prev->second.first, i_prev->second.rank, i_prev->second.req);
             }
         }
 
-        if (i->second.req)
+        if (itr.second.req)
         {
-            SpellChainMap::const_iterator i_req = mSpellChains.find(i->second.req);
+            SpellChainMap::const_iterator i_req = mSpellChains.find(itr.second.req);
             if (i_req == mSpellChains.end())
             {
                 sLog.outErrorDb("Spell %u (prev: %u, first: %u, rank: %d, req: %u) listed in `spell_chain` has not found required rank spell in table.",
-                                i->first, i->second.prev, i->second.first, i->second.rank, i->second.req);
+                                itr.first, itr.second.prev, itr.second.first, itr.second.rank, itr.second.req);
             }
-            else if (i_req->second.first == i->second.first)
+            else if (i_req->second.first == itr.second.first)
             {
                 sLog.outErrorDb("Spell %u (prev: %u, first: %u, rank: %d, req: %u) listed in `spell_chain` has required rank spell from same spell chain (prev: %u, first: %u, rank: %d, req: %u).",
-                                i->first, i->second.prev, i->second.first, i->second.rank, i->second.req,
+                                itr.first, itr.second.prev, itr.second.first, itr.second.rank, itr.second.req,
                                 i_req->second.prev, i_req->second.first, i_req->second.rank, i_req->second.req);
             }
             else if (i_req->second.req)
             {
                 sLog.outErrorDb("Spell %u (prev: %u, first: %u, rank: %d, req: %u) listed in `spell_chain` has required rank spell with required spell (prev: %u, first: %u, rank: %d, req: %u).",
-                                i->first, i->second.prev, i->second.first, i->second.rank, i->second.req,
+                                itr.first, itr.second.prev, itr.second.first, itr.second.rank, itr.second.req,
                                 i_req->second.prev, i_req->second.first, i_req->second.rank, i_req->second.req);
             }
         }
     }
 
     // fill next rank cache
-    for (SpellChainMap::const_iterator i = mSpellChains.begin(); i != mSpellChains.end(); ++i)
+    for (const auto& itr : mSpellChains)
     {
-        uint32 spell_id = i->first;
-        SpellChainNode const& node = i->second;
+        uint32 spell_id = itr.first;
+        SpellChainNode const& node = itr.second;
 
         if (node.prev)
             mSpellChainsNext.insert(SpellChainMapNext::value_type(node.prev, spell_id));
@@ -1788,16 +1788,16 @@ void SpellMgr::LoadSpellChains()
     }
 
     // check single rank redundant cases (single rank talents not added by default so this can be only custom cases)
-    for (SpellChainMap::const_iterator i = mSpellChains.begin(); i != mSpellChains.end(); ++i)
+    for (const auto& itr : mSpellChains)
     {
         // skip non-first ranks, and spells with additional reqs
-        if (i->second.rank > 1 || i->second.req)
+        if (itr.second.rank > 1 || itr.second.req)
             continue;
 
-        if (mSpellChainsNext.find(i->first) == mSpellChainsNext.end())
+        if (mSpellChainsNext.find(itr.first) == mSpellChainsNext.end())
         {
             sLog.outErrorDb("Spell %u (prev: %u, first: %u, rank: %d, req: %u) listed in `spell_chain` has single rank data, so redundant.",
-                            i->first, i->second.prev, i->second.first, i->second.rank, i->second.req);
+                            itr.first, itr.second.prev, itr.second.first, itr.second.rank, itr.second.req);
         }
     }
 }
@@ -2027,8 +2027,9 @@ void SpellMgr::LoadSpellScriptTarget()
                     spellProto->EffectImplicitTargetB[i] == TARGET_AREAEFFECT_INSTANT ||
                     spellProto->EffectImplicitTargetA[i] == TARGET_AREAEFFECT_CUSTOM ||
                     spellProto->EffectImplicitTargetB[i] == TARGET_AREAEFFECT_CUSTOM ||
-                    spellProto->EffectImplicitTargetA[i] == TARGET_AREAEFFECT_GO_AROUND_DEST ||
-                    spellProto->EffectImplicitTargetB[i] == TARGET_AREAEFFECT_GO_AROUND_DEST)
+                    spellProto->EffectImplicitTargetB[i] == TARGET_AREAEFFECT_GO_AROUND_DEST ||
+                    spellProto->EffectImplicitTargetA[i] == TARGET_NARROW_FRONTAL_CONE ||
+                    spellProto->EffectImplicitTargetB[i] == TARGET_NARROW_FRONTAL_CONE)
             {
                 targetfound = true;
                 break;
@@ -2201,16 +2202,16 @@ bool SpellMgr::IsSpellValid(SpellEntry const* spellInfo, Player* pl, bool msg)
 
     if (need_check_reagents)
     {
-        for (int j = 0; j < MAX_SPELL_REAGENTS; ++j)
+        for (int j : spellInfo->Reagent)
         {
-            if (spellInfo->Reagent[j] > 0 && !ObjectMgr::GetItemPrototype(spellInfo->Reagent[j]))
+            if (j > 0 && !ObjectMgr::GetItemPrototype(j))
             {
                 if (msg)
                 {
                     if (pl)
-                        ChatHandler(pl).PSendSysMessage("Craft spell %u requires reagent item (Entry: %u) but item does not exist in item_template.", spellInfo->Id, spellInfo->Reagent[j]);
+                        ChatHandler(pl).PSendSysMessage("Craft spell %u requires reagent item (Entry: %u) but item does not exist in item_template.", spellInfo->Id, j);
                     else
-                        sLog.outErrorDb("Craft spell %u requires reagent item (Entry: %u) but item does not exist in item_template.", spellInfo->Id, spellInfo->Reagent[j]);
+                        sLog.outErrorDb("Craft spell %u requires reagent item (Entry: %u) but item does not exist in item_template.", spellInfo->Id, j);
                 }
                 return false;
             }
@@ -2968,9 +2969,9 @@ namespace SpellInternal
 {
     bool IsSpellAppliesAura(SpellEntry const *spellInfo)
     {
-        for (int i = 0; i < MAX_EFFECT_INDEX; ++i)
+        for (uint32 i : spellInfo->Effect)
         {
-            if (IsEffectAppliesAura(spellInfo->Effect[i]) && spellInfo->EffectApplyAuraName[i])
+            if (SpellEffects(i) == SPELL_EFFECT_APPLY_AURA || SpellEffects(i) == SPELL_EFFECT_APPLY_AREA_AURA_PARTY)
                 return true;
         }
         return false;
@@ -3070,9 +3071,9 @@ namespace SpellInternal
 
     bool IsDirectDamageSpell(SpellEntry const* spellInfo)
     {
-        for (int i = 0; i < MAX_EFFECT_INDEX; ++i)
+        for (uint32 i : spellInfo->Effect)
         {
-            switch (spellInfo->Effect[i])
+            switch (i)
             {
                 case SPELL_EFFECT_INSTAKILL:
                 case SPELL_EFFECT_SCHOOL_DAMAGE:
@@ -3121,9 +3122,10 @@ namespace SpellInternal
 
     bool HasAreaAuraEffect(SpellEntry const *spellInfo)
     {
-        for (int32 i = 0; i < MAX_EFFECT_INDEX; ++i)
-            if (IsAreaAuraEffect(spellInfo->Effect[i]))
+        for (uint32 i : spellInfo->Effect)
+            if (IsAreaAuraEffect(i))
                 return true;
+
         return false;
     }
 

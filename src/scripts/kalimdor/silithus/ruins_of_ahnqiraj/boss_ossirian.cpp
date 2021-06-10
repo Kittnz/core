@@ -140,9 +140,9 @@ struct boss_ossirianAI : public ScriptedAI
 
     void SpellHit(Unit* pUnit, const SpellEntry* pSpell) override
     {
-        for (int i = 0; i < SpellWeakness.size(); ++i)
+        for (uint32 i : SpellWeakness)
         {
-            if (pSpell->Id == SpellWeakness[i])
+            if (pSpell->Id == i)
             {
                 m_uiStrengthOfOssirian_Timer = 45000;
 
@@ -176,12 +176,12 @@ struct boss_ossirianAI : public ScriptedAI
         DoScriptText(SAY_AGGRO, m_creature);
         m_creature->SetInCombatWithZone();
         DoCast(m_creature, SPELL_STRENGTH_OF_OSSIRIAN);
-        for (uint8 i = 0; i < TornadoSpawn.size(); ++i)
+        for (const auto& i : TornadoSpawn)
         {
             Creature *pCreature = m_creature->SummonCreature(NPC_TORNADO,
-                                  TornadoSpawn[i].x,
-                                  TornadoSpawn[i].y,
-                                  TornadoSpawn[i].z,
+                                  i.x,
+                                  i.y,
+                                  i.z,
                                   0,
                                   TEMPSUMMON_MANUAL_DESPAWN,
                                   0);
