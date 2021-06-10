@@ -832,50 +832,75 @@ bool Player::Create(uint32 guidlow, std::string const& name, uint8 race, uint8 c
     return true;
 }
 
-bool Player::StoreNewItemInBestSlots(uint32 titem_id, uint32 titem_amount)
+bool Player::StoreNewItemInBestSlots(uint32 itemId, uint32 amount, uint32 enchantId)
 {
-    DEBUG_LOG("STORAGE: Creating initial item, itemId = %u, count = %u", titem_id, titem_amount);
+    DEBUG_LOG("STORAGE: Creating initial item, itemId = %u, count = %u", itemId, amount);
 
     // attempt equip by one
-    while (titem_amount > 0)
+    while (amount > 0)
     {
         uint16 eDest;
-        uint8 msg = CanEquipNewItem(NULL_SLOT, eDest, titem_id, false);
+        uint8 msg = CanEquipNewItem(NULL_SLOT, eDest, itemId, false);
         if (msg != EQUIP_ERR_OK)
             break;
 
-        if (Item* pItem = EquipNewItem(eDest, titem_id, true))
+        if (Item* pItem = EquipNewItem(eDest, itemId, true))
         {
-            if (uint32 randomPropertyId = Item::GenerateItemRandomPropertyId(titem_id))
+            bool needReApplyItemMods = false;
+            if (enchantId)
+            {
+                pItem->ClearEnchantment(PERM_ENCHANTMENT_SLOT);
+                pItem->SetEnchantment(PERM_ENCHANTMENT_SLOT, enchantId, 0, 0);
+                needReApplyItemMods = true;
+            }
+            if (uint32 randomPropertyId = Item::GenerateItemRandomPropertyId(itemId))
+            {
                 pItem->SetItemRandomProperties(randomPropertyId);
+                needReApplyItemMods = true;
+            }
+            // Since the item is enchanted after it is equipped, item mods need to be re-applied.
+            if (needReApplyItemMods)
+            {
+                uint8 slot = eDest & 255;
+                _ApplyItemMods(pItem, slot, false);
+                _ApplyItemMods(pItem, slot, true);
+            }
 
             AutoUnequipOffhandIfNeed();
 
-            if ((titem_amount > 1) && (titem_amount <= pItem->GetProto()->GetMaxStackSize()))
+            if ((amount > 1) && (amount <= pItem->GetProto()->GetMaxStackSize()))
             {
-                pItem->SetCount(titem_amount);
-                titem_amount = 0;
+                pItem->SetCount(amount);
+                amount = 0;
                 break;
             }
         }
-        --titem_amount;
+        
+        --amount;
     }
 
-    if (titem_amount == 0)
+    if (amount == 0)
         return true;                                        // equipped
 
     // attempt store
     ItemPosCountVec sDest;
     // store in main bag to simplify second pass (special bags can be not equipped yet at this moment)
-    uint8 msg = CanStoreNewItem(INVENTORY_SLOT_BAG_0, NULL_SLOT, sDest, titem_id, titem_amount);
+    uint8 msg = CanStoreNewItem(INVENTORY_SLOT_BAG_0, NULL_SLOT, sDest, itemId, amount);
     if (msg == EQUIP_ERR_OK)
     {
-        StoreNewItem(sDest, titem_id, true, Item::GenerateItemRandomPropertyId(titem_id));
+        if (Item* pItem = StoreNewItem(sDest, itemId, true, Item::GenerateItemRandomPropertyId(itemId)))
+        {
+            if (enchantId)
+            {
+                pItem->ClearEnchantment(PERM_ENCHANTMENT_SLOT);
+                pItem->SetEnchantment(PERM_ENCHANTMENT_SLOT, enchantId, 0, 0);
+            }
+        }
         return true;                                        // stored
     }
 
     // item can't be added
-    sLog.outError("STORAGE: Can't equip or store initial item %u for race %u class %u , error msg = %u", titem_id, GetRace(), GetClass(), msg);
+    sLog.outError("STORAGE: Can't equip or store initial item %u for race %u class %u , error msg = %u", itemId, GetRace(), GetClass(), msg);
     return false;
 }
 
@@ -5627,7 +5652,7 @@ void Player::UpdateWeaponSkill(WeaponAttackType attType)
             if (!tmpitem)
                 UpdateSkill(SKILL_UNARMED, weapon_skill_gain);
             else if (tmpitem->GetProto()->SubClass != ITEM_SUBCLASS_WEAPON_FISHING_POLE)
-                UpdateSkill(tmpitem->GetSkill(), weapon_skill_gain);
+                UpdateSkill(tmpitem->GetProto()->GetProficiencySkill(), weapon_skill_gain);
             break;
         }
         case OFF_ATTACK:
@@ -5635,7 +5660,7 @@ void Player::UpdateWeaponSkill(WeaponAttackType attType)
         {
             Item *tmpitem = GetWeaponForAttack(attType, true, true);
             if (tmpitem)
-                UpdateSkill(tmpitem->GetSkill(), weapon_skill_gain);
+                UpdateSkill(tmpitem->GetProto()->GetProficiencySkill(), weapon_skill_gain);
             break;
         }
     }
@@ -10223,11 +10248,12 @@ InventoryResult Player::CanUseItem(Item *pItem, bool not_loading) const
             if (msg != EQUIP_ERR_OK)
                 return msg;
 
-            if (uint32 skill = pItem->GetSkill())
+            if (uint32 skill = pProto->GetProficiencySkill())
             {
                 // Fist weapons use unarmed skill calculations, but we must query fist weapon skill presence to use this item
                 if (pProto->SubClass == ITEM_SUBCLASS_WEAPON_FIST)
                     skill = SKILL_FIST_WEAPONS;
+
                 if (!GetSkillValue(skill))
                     return EQUIP_ERR_NO_REQUIRED_PROFICIENCY;
             }
@@ -10238,6 +10264,7 @@ InventoryResult Player::CanUseItem(Item *pItem, bool not_loading) const
             return EQUIP_ERR_OK;
         }
     }
+
     return EQUIP_ERR_ITEM_NOT_FOUND;
 }
 
@@ -19747,7 +19774,7 @@ uint32 Player::GetBaseWeaponSkillValue(WeaponAttackType attType) const
         return 0;
 
     // weapon skill or (unarmed for base attack)
-    uint32  skill = item ? item->GetSkill() : uint32(SKILL_UNARMED);
+    uint32  skill = item ? item->GetProto()->GetProficiencySkill() : uint32(SKILL_UNARMED);
     return GetSkillValuePure(skill);
 }
 
