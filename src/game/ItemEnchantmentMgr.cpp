@@ -54,20 +54,20 @@ void LoadRandomEnchantmentsTable()
     EnchantmentStore::const_iterator tab;
     uint32 entry, ench;
 
-    QueryResult *result = WorldDatabase.PQuery("SELECT entry, ench, chance FROM item_enchantment_template WHERE ((%u >= patch_min) && (%u <= patch_max))", sWorld.GetWowPatch(), sWorld.GetWowPatch());
+    QueryResult* result = WorldDatabase.PQuery("SELECT entry, ench, chance FROM item_enchantment_template WHERE ((%u >= patch_min) && (%u <= patch_max))", sWorld.GetWowPatch(), sWorld.GetWowPatch());
 
     if (result)
     {
         do
         {
-            Field *fields = result->Fetch();
+            Field* fields = result->Fetch();
 
             entry = fields[0].GetUInt32();
             ench = fields[1].GetUInt32();
             float chance = fields[2].GetFloat();
 
             if (chance > 0.000001f && chance <= 100.0f)
-                RandomItemEnch[entry].emplace_back(EnchStoreItem(ench, chance));
+                RandomItemEnch[entry].push_back(EnchStoreItem(ench, chance));
         }
         while (result->NextRow());
 
@@ -90,7 +90,8 @@ uint32 GetItemEnchantMod(uint32 entry)
     double dRoll = rand_chance();
     float fCount = 0;
 
-    for (const auto& ench_iter : tab->second)
+    EnchStoreList const& enchantList = tab->second;
+    for (const auto& ench_iter : enchantList)
     {
         fCount += ench_iter.chance;
 
@@ -101,7 +102,7 @@ uint32 GetItemEnchantMod(uint32 entry)
     dRoll = (irand(0, (int)floor(fCount * 100) + 1)) / 100.0f;
     fCount = 0;
 
-    for (const auto& ench_iter : tab->second)
+    for (const auto& ench_iter : enchantList)
     {
         fCount += ench_iter.chance;
 
