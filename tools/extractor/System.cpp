@@ -103,7 +103,7 @@ const char* CONF_mpq_list[] =
     "patch.MPQ",
     "patch-2.MPQ",
     "patch-T.MPQ",
-    "patch-Z.MPQ"
+    "patch-U.MPQ"
 };
 
 void CreateDir(const std::string& Path)
