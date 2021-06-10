@@ -2256,22 +2256,23 @@ bool GOHello_go_brainwashing_device(Player* pPlayer, GameObject* pGo)
 
 		pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, "Reset my talents.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
-		// primary
-		if (pPlayer->HasSavedTalentSpec(1))
-		{
-			activateText = "Activate Primary Specialization (" + pPlayer->SpecTalentPoints(1) + ")";
-			pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_1, activateText.c_str(), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
-		}
-		pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, "Save Primary Specialization.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+		if (sWorld.getConfig(CONFIG_BOOL_DUAL_SPEC)) {
+			// primary
+			if (pPlayer->HasSavedTalentSpec(1))
+			{
+				activateText = "Activate Primary Specialization (" + pPlayer->SpecTalentPoints(1) + ")";
+				pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_1, activateText.c_str(), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+			}
+			pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, "Save Primary Specialization.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
 
-		// secondary
-		if (pPlayer->HasSavedTalentSpec(2))
-		{
-			activateText = "Activate Secondary Specialization (" + pPlayer->SpecTalentPoints(2) + ")";
-			pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_1, activateText.c_str(), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
+			// secondary
+			if (pPlayer->HasSavedTalentSpec(2))
+			{
+				activateText = "Activate Secondary Specialization (" + pPlayer->SpecTalentPoints(2) + ")";
+				pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_1, activateText.c_str(), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
+			}
+			pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, "Save Secondary Specialization.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
 		}
-		pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, "Save Secondary Specialization.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
-
 	}
     pPlayer->SEND_GOSSIP_MENU(90350, pGo->GetGUID());
     return true;
