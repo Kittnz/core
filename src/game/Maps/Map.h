@@ -190,6 +190,12 @@ typedef ACE_Thread_Mutex MapMutexType; // Use ACE_Null_Mutex to disable locks
 // Instance IDs reserved for internal use (instanced continent parts, ...)
 #define RESERVED_INSTANCES_LAST 100
 
+enum TeleportLocation
+{
+    TELEPORT_LOCATION_HOMEBIND = 0,
+    TELEPORT_LOCATION_BG_ENTRY_POINT = 1
+};
+
 typedef bool(Map::*ScriptCommandFunction) (const ScriptInfo& script, WorldObject* source, WorldObject* target);
 
 // Additional target part of a ScriptedEvent. 
@@ -640,7 +646,6 @@ class Map : public GridRefManager<NGridType>, public MaNGOS::ObjectLevelLockable
         void SetUpdateDiffMod(int32 d) { m_updateDiffMod = d; }
         uint32 GetUpdateDiffMod() const { return m_updateDiffMod; }
         void BindToInstanceOrRaid(Player* player, time_t objectResetTime, bool permBindToRaid);
-        void TeleportAllPlayersToHomeBind();
 
         // WeatherSystem
         WeatherSystem* GetWeatherSystem() const { return m_weatherSystem; }
@@ -656,6 +661,9 @@ class Map : public GridRefManager<NGridType>, public MaNGOS::ObjectLevelLockable
 
         // Get Holder for Creature Linking
         CreatureLinkingHolder* GetCreatureLinkingHolder() { return &m_creatureLinkingHolder; }
+
+        // Teleport all players in that map to choosed location
+        void TeleportAllPlayersTo(TeleportLocation loc);
 
         void AddCorpseToRemove(Corpse* corpse, ObjectGuid looter_guid);
         GameObject* SummonGameObject(uint32 entry, float x, float y, float z, float ang, float rotation0, float rotation1, float rotation2, float rotation3, uint32 respawnTime, uint32 worldMask);

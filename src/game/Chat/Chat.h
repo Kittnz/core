@@ -389,6 +389,7 @@ class ChatHandler
         bool HandleServerIdleRestartCommand(char* args);
         bool HandleServerIdleShutDownCommand(char* args);
         bool HandleServerInfoCommand(char* args);
+        bool HandleServerResetAllRaidCommand(char* args);
         bool HandleServerRestartCommand(char* args);
         bool HandleServerShutDownCommand(char* args);
         bool HandleServerShutDownCancelCommand(char* args);
