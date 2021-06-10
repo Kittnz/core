@@ -2210,7 +2210,7 @@ bool GOSelect_go_airplane(Player* pPlayer, GameObject* pGo, uint32 sender, uint3
         pPlayer->ModifyMoney(-5000);
         pPlayer->CastSpell(pPlayer, 130, true); // Snow Fall
         pPlayer->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, 18510);
-        pPlayer->m_Events.AddEvent(new DismountAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(10 * IN_MILLISECONDS));
+        pPlayer->m_Events.AddEvent(new DismountAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(15 * IN_MILLISECONDS));
         pPlayer->TeleportTo(mapid, x, y, z, o);
         return true;
     case 1000050: // Mirage Raceway's Outstanding Flying Machine BNX-92
@@ -2220,7 +2220,7 @@ bool GOSelect_go_airplane(Player* pPlayer, GameObject* pGo, uint32 sender, uint3
             pPlayer->ModifyMoney(-cost);
             pPlayer->CastSpell(pPlayer, 130, true);
             pPlayer->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, 18510);
-            pPlayer->m_Events.AddEvent(new DismountAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(15 * IN_MILLISECONDS));
+            pPlayer->m_Events.AddEvent(new DismountAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(18 * IN_MILLISECONDS));
             pPlayer->TeleportTo(1, -6103.89f, -3872.74f, 55.00f, 3.57f);
             return true;
         }
