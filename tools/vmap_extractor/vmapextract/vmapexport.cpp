@@ -361,7 +361,7 @@ bool fillArchiveNameVector(std::vector<std::string>& pArchiveNames)
 
     sprintf(path, "%sPatch-T.mpq", input_path);
     pArchiveNames.push_back(path);
-    sprintf(path, "%sPatch-Z.mpq", input_path);
+    sprintf(path, "%sPatch-U.mpq", input_path);
     pArchiveNames.push_back(path);
 
     return true;
