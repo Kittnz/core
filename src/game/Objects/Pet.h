@@ -128,15 +128,17 @@ typedef std::unordered_map<uint32, PetSpell> PetSpellMap;
 typedef std::map<uint32,uint32> TeachSpellMap;
 typedef std::vector<uint32> AutoSpellList;
 
-#define HAPPINESS_LEVEL_SIZE        333000
+#define HAPPINESS_LEVEL_SIZE 333000
 
 extern const uint32 LevelUpLoyalty[6];
 extern const uint32 LevelStartLoyalty[6];
 
-#define ACTIVE_SPELLS_MAX           4
+#define ACTIVE_SPELLS_MAX 4
 
-#define PET_FOLLOW_DIST  1.0f
+#define PET_FOLLOW_DIST 2.0f
 #define PET_FOLLOW_ANGLE (M_PI_F/2.0f)
+#define MINI_PET_FOLLOW_ANGLE (M_PI_F)
+#define MINI_PET_SUMMON_ANGLE (M_PI_F/4.0f)
 
 class Player;
 struct CharacterPetCache;
