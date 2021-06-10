@@ -247,7 +247,6 @@ void instance_blackrock_spire::OnCreatureCreate(Creature* pCreature)
         case NPC_THE_BEAST:
             m_uiBeastGUID = pCreature->GetGUID();
             break;
-
         case NPC_BLACKHAND_SUMMONER:
         case NPC_BLACKHAND_VETERAN:
             m_lRoomEventMobGUIDList.push_back(pCreature->GetGUID());
@@ -258,24 +257,25 @@ void instance_blackrock_spire::OnCreatureCreate(Creature* pCreature)
         case NPC_SOLAKAR_TRIGGER:
             m_uiSolakarTriggerGUID = pCreature->GetGUID();
             break;
-        case NPC_ROOKERY_HATCHER:
-            pCreature->SetInCombatWithZone();
-            break;
-
         case NPC_FIREBRAND_GRUNT:
+        {
             // 14.26% chance to spawn Bannok Grimaxe instead of one of his 3 placeholders
             switch (pCreature->GetGUIDLow())
             {
                 case 44020:
                 case 43764:
                 case 44327:
+                {
                     if (!m_bBannokSpawned && urand(0,99) < 5)
                     {
                         pCreature->UpdateEntry(NPC_BANNOK_GRIMAXE);
                         m_bBannokSpawned = true;
                     }
+                }
             }
+
             break;
+        }
     }
 }
 
@@ -703,6 +703,15 @@ struct npc_rookery_hatcherAI : public ScriptedAI
         else
             m_pInstance->SetData(TYPE_SOLAKAR, FAIL);
         m_creature->ForcedDespawn();
+    }
+
+    void MoveInLineOfSight(Unit* pWho) override
+    {
+        // Do not aggro players in the Hall of Binding.
+        if (pWho->GetPositionX() > 110.0f)
+            return;
+
+        ScriptedAI::MoveInLineOfSight(pWho);
     }
 
     void HatchRookeryEgg()
