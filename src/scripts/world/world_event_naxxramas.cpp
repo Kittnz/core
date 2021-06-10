@@ -272,7 +272,7 @@ struct npc_necrotic_shard : public ScriptedAI
             {
                 add->SetCorpseDelay(120);  // 2 min for corpse to despawn
                 add->SetRespawnDelay(30); // 30 sec to respawn after despawn(?)
-                add->SetRespawnRadius(20.0f);
+                add->SetWanderDistance(20.0f);
                 _adds.insert(add->GetObjectGuid());
             }
         }

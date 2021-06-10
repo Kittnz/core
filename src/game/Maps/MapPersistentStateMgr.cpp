@@ -150,7 +150,7 @@ void MapPersistentState::ClearRespawnTimes()
 
 void MapPersistentState::AddCreatureToGrid(uint32 guid, CreatureData const* data)
 {
-    CellPair cell_pair = MaNGOS::ComputeCellPair(data->posX, data->posY);
+    CellPair cell_pair = MaNGOS::ComputeCellPair(data->position.x, data->position.y);
     uint32 cell_id = (cell_pair.y_coord * TOTAL_NUMBER_OF_CELLS_PER_MAP) + cell_pair.x_coord;
 
     m_gridObjectGuids[cell_id].creatures.insert(guid);
@@ -158,7 +158,7 @@ void MapPersistentState::AddCreatureToGrid(uint32 guid, CreatureData const* data
 
 void MapPersistentState::RemoveCreatureFromGrid(uint32 guid, CreatureData const* data)
 {
-    CellPair cell_pair = MaNGOS::ComputeCellPair(data->posX, data->posY);
+    CellPair cell_pair = MaNGOS::ComputeCellPair(data->position.x, data->position.y);
     uint32 cell_id = (cell_pair.y_coord * TOTAL_NUMBER_OF_CELLS_PER_MAP) + cell_pair.x_coord;
 
     m_gridObjectGuids[cell_id].creatures.erase(guid);
@@ -166,7 +166,7 @@ void MapPersistentState::RemoveCreatureFromGrid(uint32 guid, CreatureData const*
 
 void MapPersistentState::AddGameobjectToGrid(uint32 guid, GameObjectData const* data)
 {
-    CellPair cell_pair = MaNGOS::ComputeCellPair(data->posX, data->posY);
+    CellPair cell_pair = MaNGOS::ComputeCellPair(data->position.x, data->position.y);
     uint32 cell_id = (cell_pair.y_coord * TOTAL_NUMBER_OF_CELLS_PER_MAP) + cell_pair.x_coord;
 
     m_gridObjectGuids[cell_id].gameobjects.insert(guid);
@@ -174,7 +174,7 @@ void MapPersistentState::AddGameobjectToGrid(uint32 guid, GameObjectData const* 
 
 void MapPersistentState::RemoveGameobjectFromGrid(uint32 guid, GameObjectData const* data)
 {
-    CellPair cell_pair = MaNGOS::ComputeCellPair(data->posX, data->posY);
+    CellPair cell_pair = MaNGOS::ComputeCellPair(data->position.x, data->position.y);
     uint32 cell_id = (cell_pair.y_coord * TOTAL_NUMBER_OF_CELLS_PER_MAP) + cell_pair.x_coord;
 
     m_gridObjectGuids[cell_id].gameobjects.erase(guid);
@@ -1034,7 +1034,7 @@ void MapPersistentStateManager::LoadCreatureRespawnTimes()
         if (!data)
             continue;
 
-        if (mapId != data->mapid)
+        if (mapId != data->position.mapId)
             continue;
 
         MapEntry const* mapEntry = sMapStorage.LookupEntry<MapEntry>(mapId);
@@ -1098,7 +1098,7 @@ void MapPersistentStateManager::LoadGameobjectRespawnTimes()
         if (!data)
             continue;
 
-        if (mapId != data->mapid)
+        if (mapId != data->position.mapId)
             continue;
 
         MapEntry const* mapEntry = sMapStorage.LookupEntry<MapEntry>(mapId);

@@ -289,7 +289,7 @@ void PoolGroup<Creature>::Despawn1Object(MapPersistentState& mapState, uint32 gu
 {
     if (CreatureData const* data = sObjectMgr.GetCreatureData(guid))
     {
-        if (mapState.GetMapId() != data->mapid)
+        if (mapState.GetMapId() != data->position.mapId)
             return;
 
         mapState.RemoveCreatureFromGrid(guid, data);
@@ -306,7 +306,7 @@ void PoolGroup<GameObject>::Despawn1Object(MapPersistentState& mapState, uint32 
 {
     if (GameObjectData const* data = sObjectMgr.GetGOData(guid))
     {
-        if (mapState.GetMapId() != data->mapid)
+        if (mapState.GetMapId() != data->position.mapId)
             return;
 
         mapState.RemoveGameobjectFromGrid(guid, data);
@@ -455,7 +455,7 @@ void PoolGroup<Creature>::Spawn1Object(MapPersistentState& mapState, PoolObject*
 {
     if (CreatureData const* data = sObjectMgr.GetCreatureData(obj->guid))
     {
-        if (mapState.GetMapId() != data->mapid)
+        if (mapState.GetMapId() != data->position.mapId)
             return;
 
         mapState.AddCreatureToGrid(obj->guid, data);
@@ -463,7 +463,7 @@ void PoolGroup<Creature>::Spawn1Object(MapPersistentState& mapState, PoolObject*
         Map* dataMap = mapState.GetMap();
 
         // We use spawn coords to spawn
-        if (dataMap && dataMap->IsLoaded(data->posX, data->posY))
+        if (dataMap && dataMap->IsLoaded(data->position.x, data->position.y))
         {
             Creature* pCreature = new Creature;
             //DEBUG_LOG("Spawning creature %u",obj->guid);
@@ -496,7 +496,7 @@ void PoolGroup<GameObject>::Spawn1Object(MapPersistentState& mapState, PoolObjec
 {
     if (GameObjectData const* data = sObjectMgr.GetGOData(obj->guid))
     {
-        if (mapState.GetMapId() != data->mapid)
+        if (mapState.GetMapId() != data->position.mapId)
             return;
 
         mapState.AddGameobjectToGrid(obj->guid, data);
@@ -504,7 +504,7 @@ void PoolGroup<GameObject>::Spawn1Object(MapPersistentState& mapState, PoolObjec
         Map* dataMap = mapState.GetMap();
 
         // We use spawn coords to spawn
-        if (dataMap && dataMap->IsLoaded(data->posX, data->posY))
+        if (dataMap && dataMap->IsLoaded(data->position.x, data->position.y))
         {
             GameObject* pGameobject = new GameObject;
             //DEBUG_LOG("Spawning gameobject %u", obj->guid);
@@ -554,7 +554,7 @@ void PoolGroup<Creature>::ReSpawn1Object(MapPersistentState& mapState, PoolObjec
 {
     if (CreatureData const* data = sObjectMgr.GetCreatureData(obj->guid))
     {
-        if (mapState.GetMapId() != data->mapid)
+        if (mapState.GetMapId() != data->position.mapId)
             return;
 
         if (Map* dataMap = mapState.GetMap())
@@ -569,7 +569,7 @@ void PoolGroup<GameObject>::ReSpawn1Object(MapPersistentState& mapState, PoolObj
 {
     if (GameObjectData const* data = sObjectMgr.GetGOData(obj->guid))
     {
-        if (mapState.GetMapId() != data->mapid)
+        if (mapState.GetMapId() != data->position.mapId)
             return;
 
         if (Map* dataMap = mapState.GetMap())
@@ -747,7 +747,7 @@ void PoolManager::LoadFromDB()
             }
             if (!CheckPoolAndChance(table, pool_id, chance))
                 continue;
-            if (!mapChecker.CheckAndRemember(data->mapid, pool_id, table, "creature guid"))
+            if (!mapChecker.CheckAndRemember(data->position.mapId, pool_id, table, "creature guid"))
                 continue;
 
             PoolTemplateData *pPoolTemplate = &mPoolTemplate[pool_id];
@@ -818,7 +818,7 @@ void PoolManager::LoadFromDB()
             }
             if (!CheckPoolAndChance(table, pool_id, chance))
                 continue;
-            if (!mapChecker.CheckAndRemember(data->mapid, pool_id, table, "gameobject guid"))
+            if (!mapChecker.CheckAndRemember(data->position.mapId, pool_id, table, "gameobject guid"))
                 continue;
 
             PoolTemplateData *pPoolTemplate = &mPoolTemplate[pool_id];
