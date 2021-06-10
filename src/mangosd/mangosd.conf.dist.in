@@ -2257,11 +2257,11 @@ Visibility.GroupMode = 0
 
 #
 #    Visibility.Distance
-#        Visibility distance for different ingame object in different maps. (Max 333)
+#        Visibility distance for different ingame object in different maps. (Max 533)
 
 Visibility.Distance.Continents = 250
 Visibility.Distance.Instances = 250
-Visibility.Distance.BG = 250
+Visibility.Distance.BG = 533
 
 #
 #    Visibility.Distance.Continents.Min
@@ -2299,6 +2299,12 @@ Visibility.RelocationLowerLimit = 10
 #        Delay time between creature AI reactions on nearby movements.
 
 Visibility.AIRelocationNotifyDelay = 1000
+
+#    Visibility.ForceActiveObjects
+#        Force any creatures or gameobjects with increased visibility set in template to be active objects.
+#        The modifier will not work for creatures that don't have the active flag set in spawn table otherwise.
+
+Visibility.ForceActiveObjects = 1
 
 #
 #    Rate
