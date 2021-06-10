@@ -427,13 +427,6 @@ void npc_escortAI::MovementInform(uint32 uiMoveType, uint32 uiPointId)
     }
 }
 
-/*void npc_escortAI::AddWaypoint(uint32 id, float x, float y, float z, uint32 WaitTimeMs)
-{
-    Escort_Waypoint t(id, x, y, z, WaitTimeMs);
-
-    WaypointList.push_back(t);
-}*/
-
 void npc_escortAI::FillPointMovementListForCreature()
 {
     auto const & pPointsEntries = sScriptMgr.GetPointMoveList(m_creature->GetEntry());
@@ -441,9 +434,9 @@ void npc_escortAI::FillPointMovementListForCreature()
     if (pPointsEntries.empty())
         return;
 
-    for (auto itr = pPointsEntries.begin(); itr != pPointsEntries.end(); ++itr)
+    for (const auto& itr : pPointsEntries)
     {
-        Escort_Waypoint pPoint(itr->uiPointId, itr->fX, itr->fY, itr->fZ, itr->uiWaitTime);
+        Escort_Waypoint pPoint(itr.uiPointId, itr.fX, itr.fY, itr.fZ, itr.uiWaitTime);
         WaypointList.push_back(pPoint);
     }
 }

@@ -131,10 +131,7 @@ bool ModelInstance::isUnderModel(const G3D::Vector3& p, float* outDist, float* i
     Vector3 pModel = iInvRot * (p - iPos) * iInvScale;
     up = iInvRot * up * iInvScale;
 
-    if (iModel->IsUnderObject(pModel, up, flags & MOD_M2, outDist, inDist))
-        return true;
-
-    return false;
+    return iModel->IsUnderObject(pModel, up, flags & MOD_M2, outDist, inDist);
 }
 
 bool ModelInstance::GetLocationInfo(const G3D::Vector3& p, LocationInfo& info) const

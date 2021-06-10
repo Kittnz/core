@@ -34,11 +34,9 @@
 #include "MasterPlayer.h"
 #include "Anticheat.h"
 
-extern DatabaseType LoginDatabase;
-
 INSTANTIATE_SINGLETON_1(AccountMgr);
 
-AccountMgr::AccountMgr() : _banlistUpdateTimer(0)
+AccountMgr::AccountMgr() : m_banlistUpdateTimer(0)
 {}
 
 AccountMgr::~AccountMgr()
@@ -136,7 +134,7 @@ AccountOpResult AccountMgr::ChangeUsername(uint32 accid, std::string new_uname, 
 
 AccountOpResult AccountMgr::ChangePassword(uint32 accid, std::string new_passwd, std::string username)
 {
-    if (username == "")
+    if (username.empty())
     {
         if (!GetName(accid, username))
             return AOR_NAME_NOT_EXIST;
@@ -173,7 +171,7 @@ uint32 AccountMgr::GetId(std::string username)
 
 void AccountMgr::Load()
 {
-    _accountSecurity.clear();
+    m_accountSecurity.clear();
 
     std::unique_ptr<QueryResult> result(LoginDatabase.PQuery("SELECT `id`, `gmlevel` FROM `account_access` WHERE (`RealmID` = '%u' OR `RealmID`='-1')", realmID));
 
@@ -194,10 +192,9 @@ void AccountMgr::Load()
             break;
         case SEC_GAMEMASTER:
         case SEC_ADMINISTRATOR:
-            // Peut etre deja dans la liste ? On prend le plus haut gmlevel.
-            if (_accountSecurity.find(accountId) == _accountSecurity.end() ||
-                _accountSecurity[accountId] < secu)
-                _accountSecurity[accountId] = secu;
+            if (m_accountSecurity.find(accountId) == m_accountSecurity.end() ||
+                m_accountSecurity[accountId] < secu)
+                m_accountSecurity[accountId] = secu;
             break;
         }
     } while (result->NextRow());
@@ -208,15 +205,15 @@ void AccountMgr::Load()
 
 AccountTypes AccountMgr::GetSecurity(uint32 acc_id)
 {
-    std::map<uint32, AccountTypes>::const_iterator it = _accountSecurity.find(acc_id);
-    if (it == _accountSecurity.end())
+    std::map<uint32, AccountTypes>::const_iterator it = m_accountSecurity.find(acc_id);
+    if (it == m_accountSecurity.end())
         return SEC_PLAYER;
     return it->second;
 }
 
 void AccountMgr::SetSecurity(uint32 accId, AccountTypes sec, std::string name)
 {
-    _accountSecurity[accId] = sec;
+    m_accountSecurity[accId] = sec;
     LoginDatabase.PExecute("DELETE FROM account_access WHERE RealmID=%u AND id=%u", realmID, accId);
     LoginDatabase.PExecute("INSERT INTO account_access VALUES (%u, %u, %u, '%s')", accId, sec, realmID, name);
 }
@@ -252,7 +249,7 @@ uint32 AccountMgr::GetCharactersCount(uint32 acc_id)
 
 bool AccountMgr::CheckPassword(uint32 accid, std::string passwd, std::string username)
 {
-    if (username == "")
+    if (username.empty())
     {
         if (!GetName(accid, username))
             return false;
@@ -303,14 +300,13 @@ std::string AccountMgr::CalculateShaPassHash(std::string& name, std::string& pas
 
 void AccountMgr::Update(uint32 diff)
 {
-    if (_banlistUpdateTimer < diff)
+    if (m_banlistUpdateTimer < diff)
     {
-        _banlistUpdateTimer = sWorld.getConfig(CONFIG_UINT32_BANLIST_RELOAD_TIMER) * 1000;
+        m_banlistUpdateTimer = sWorld.getConfig(CONFIG_UINT32_BANLIST_RELOAD_TIMER) * 1000;
         LoadIPBanList(true);
-        //LoadAccountBanList(true);
     }
     else
-        _banlistUpdateTimer -= diff;
+        m_banlistUpdateTimer -= diff;
 }
 
 void AccountMgr::LoadIPBanList(bool silent)
@@ -322,7 +318,7 @@ void AccountMgr::LoadIPBanList(bool silent)
         return;
     }
 
-    _ipBanned.clear();
+    m_ipBanned.clear();
     do
     {
         Field* fields = banresult->Fetch();
@@ -330,7 +326,8 @@ void AccountMgr::LoadIPBanList(bool silent)
         uint32 bandate = fields[2].GetUInt32();
         if (unbandate == bandate)
             unbandate = 0xFFFFFFFF;
-        _ipBanned[fields[0].GetString()] = unbandate;
+
+        m_ipBanned[fields[0].GetString()] = unbandate;
     } while (banresult->NextRow());
 
 }
@@ -344,7 +341,7 @@ void AccountMgr::LoadAccountBanList(bool silent)
         return;
     }
 
-    _accountBanned.clear();
+    m_accountBanned.clear();
     do
     {
         Field* fields = banresult->Fetch();
@@ -352,76 +349,82 @@ void AccountMgr::LoadAccountBanList(bool silent)
         uint32 bandate = fields[2].GetUInt32();
         if (unbandate == bandate)
             unbandate = 0xFFFFFFFF;
-        _accountBanned[fields[0].GetUInt32()] = unbandate;
+        m_accountBanned[fields[0].GetUInt32()] = unbandate;
     } while (banresult->NextRow());
 
 }
 
 bool AccountMgr::IsIPBanned(std::string const& ip) const
 {
-    std::map<std::string, uint32>::const_iterator it = _ipBanned.find(ip);
-    if (it == _ipBanned.end() || it->second < time(nullptr))
-        return false;
-    return true;
+    std::map<std::string, uint32>::const_iterator it = m_ipBanned.find(ip);
+    return !(it == m_ipBanned.end() || it->second < time(nullptr));
 }
 
 bool AccountMgr::IsAccountBanned(uint32 acc) const
 {
-    std::map<uint32, uint32>::const_iterator it = _accountBanned.find(acc);
-    if (it == _accountBanned.end() || it->second < time(nullptr))
-        return false;
-    return true;
+    std::map<uint32, uint32>::const_iterator it = m_accountBanned.find(acc);
+    return !(it == m_accountBanned.end() || it->second < time(nullptr));
 }
 
 bool AccountMgr::CheckInstanceCount(uint32 accountId, uint32 instanceId, uint32 maxCount)
 {
-    AccountInstanceEnterTimesMap::iterator it = _instanceEnterTimes.find(accountId);
-    if (it == _instanceEnterTimes.end())
+    AccountInstanceEnterTimesMap::iterator it = m_instanceEnterTimes.find(accountId);
+    if (it == m_instanceEnterTimes.end())
         return true;
+
     InstanceEnterTimesMap& enterTimes = it->second;
     InstanceEnterTimesMap::iterator it2 = enterTimes.find(instanceId);
+
     if (it2 != enterTimes.end())
         return true;
+
     if (enterTimes.size() < maxCount)
         return true;
+
     time_t now = time(nullptr);
+
     for (it2 = enterTimes.begin(); it2 != enterTimes.end(); ++it2)
+    {
         if (it2->second + 3600 < now)
         {
             enterTimes.erase(it2);
             return true;
         }
+    }
+
     return false;
 }
 
 void AccountMgr::AddInstanceEnterTime(uint32 accountId, uint32 instanceId, time_t enterTime)
 {
-    AccountInstanceEnterTimesMap::iterator it = _instanceEnterTimes.find(accountId);
-    if (it == _instanceEnterTimes.end())
+    AccountInstanceEnterTimesMap::iterator it = m_instanceEnterTimes.find(accountId);
+    if (it == m_instanceEnterTimes.end())
     {
         InstanceEnterTimesMap resetTimes;
         resetTimes[instanceId] = enterTime;
-        _instanceEnterTimes[accountId] = resetTimes;
+        m_instanceEnterTimes[accountId] = resetTimes;
         return;
     }
+
     it->second[instanceId] = enterTime;
 }
 
 // Anticheat
 void AccountPersistentData::WhisperedBy(MasterPlayer* whisperer)
 {
-    WhispersMap::iterator it = _whisperTargets.find(whisperer->GetGUIDLow());
-    if (it != _whisperTargets.end())
+    WhispersMap::iterator it = m_whisperTargets.find(whisperer->GetGUIDLow());
+    if (it != m_whisperTargets.end())
         it->second.score = 0;
 }
 
 uint32 AccountPersistentData::CountWhispersTo(MasterPlayer* from, MasterPlayer* player)
 {
     sAccountMgr.GetAccountPersistentData(player->GetSession()->GetAccountId()).WhisperedBy(from);
-    WhisperData& data = _whisperTargets[player->GetGUIDLow()];
+    WhisperData& data = m_whisperTargets[player->GetGUIDLow()];
     ++data.whispers_count;
     if (data.whispers_count == 1)
         data.score = GetWhisperScore(from, player);
+
     return data.whispers_count-1;
 }
 
@@ -446,20 +449,21 @@ uint32 AccountPersistentData::GetWhisperScore(MasterPlayer* from, MasterPlayer* 
 
 void AccountPersistentData::JustMailed(uint32 toAccount)
 {
-    _mailsSent[toAccount] = time(nullptr);
+    m_mailsSent[toAccount] = time(nullptr);
 }
 
 bool AccountPersistentData::CanMail(uint32 targetAccount)
 {
     // Already sent a mail to this guy => OK
-    if (_mailsSent.find(targetAccount) != _mailsSent.end())
+    if (m_mailsSent.find(targetAccount) != m_mailsSent.end())
         return true;
 
     uint32 totalScore = 0;
     time_t lastNonExpired = time(nullptr) - sWorld.getConfig(CONFIG_UINT32_MAILSPAM_EXPIRE_SECS);
-    for (auto it = _mailsSent.begin(); it != _mailsSent.end(); ++it)
-        if (it->second >= lastNonExpired)
+    for (const auto& it : m_mailsSent)
+        if (it.second >= lastNonExpired)
             totalScore++;
+
     uint32 allowedScore = sWorld.getConfig(CONFIG_UINT32_MAILSPAM_MAX_MAILS);
     return totalScore < allowedScore;
 }

@@ -74,11 +74,11 @@ enum
     MAX_WEB_WRAP_POSITIONS  = 3,
 };
 
-static const float WebWrapCooldown(bool initial = false)            { return initial ? 20000 : 40000; }
-static const float SummonSpiderlingsCooldown(bool initial = false)  { return initial ? 30000 : 40000; }
-static const float WebSprayCooldown(bool initial = false)           { return 40000; }
-static const float PoisonShockCooldown(bool initial = false)        { return urand(6000,20000); }
-static const float NecroticPoisonCooldown(bool initial = false)     { return urand(10000, 25000); }
+static float WebWrapCooldown(bool initial = false) { return initial ? 20000 : 40000; }
+static float SummonSpiderlingsCooldown(bool initial = false) { return initial ? 30000 : 40000; }
+static float WebSprayCooldown(bool initial = false) { return initial ? 40000 : 40000; }
+static float PoisonShockCooldown(bool initial = false) { return urand(9000,11000); }
+static float NecroticPoisonCooldown(bool initial = false) { return initial ? 15000 : urand(5000, 10000); } 
 
 
 struct mob_webwrapAI : public ScriptedAI
@@ -106,11 +106,10 @@ struct mob_webwrapAI : public ScriptedAI
             sLog.outError("mob_webwrapAI::SetVictim called for non-player");
             return;
         }
+
         pVictim->AddAura(SPELL_SUMMON_WEB_WRAP);
         m_victimGuid = pVictim->GetObjectGuid();
-        m_creature->GetMotionMaster()->MovePoint(0, pVictim->GetPositionX(), pVictim->GetPositionY(), pVictim->GetPositionZ(),
-            MOVE_FLY_MODE | MOVE_CYCLIC, 0.0f, 0);
-        return;
+        m_creature->GetMotionMaster()->MovePoint(0, pVictim->GetPositionX(), pVictim->GetPositionY(), pVictim->GetPositionZ(), MOVE_FLY_MODE | MOVE_CYCLIC, 0.0f, 0);
     }
 
     void JustDied(Unit* /*pKiller*/) override
@@ -263,14 +262,14 @@ struct boss_maexxnaAI : public ScriptedAI
         }
         
 
-        if (!candidates.size())
+        if (candidates.empty())
             return false;
 
         std::shuffle(wepWrapLoc.begin(), wepWrapLoc.end(), m_random);
 
         for (int i = 0; i < 3; i++)
         {
-            if (!candidates.size())
+            if (candidates.empty())
                 break;
             auto candIt = candidates.begin();
 

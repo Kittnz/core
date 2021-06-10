@@ -984,7 +984,7 @@ float PathInfo::Length() const
     return length;
 }
 
-bool PathInfo::inRangeYZX(const float* v1, const float* v2, float r, float h) const
+bool PathInfo::inRangeYZX(const float* v1, const float* v2, float r, float h)
 {
     const float dx = v2[0] - v1[0];
     const float dy = v2[1] - v1[1]; // elevation
@@ -992,13 +992,13 @@ bool PathInfo::inRangeYZX(const float* v1, const float* v2, float r, float h) co
     return (dx * dx + dz * dz) < r * r && fabsf(dy) < h;
 }
 
-bool PathInfo::inRange(const Vector3 &p1, const Vector3 &p2, float r, float h) const
+bool PathInfo::inRange(const Vector3 &p1, const Vector3 &p2, float r, float h)
 {
     Vector3 d = p1 - p2;
     return (d.x * d.x + d.y * d.y) < r * r && fabsf(d.z) < h;
 }
 
-float PathInfo::dist3DSqr(const Vector3 &p1, const Vector3 &p2) const
+float PathInfo::dist3DSqr(const Vector3 &p1, const Vector3 &p2)
 {
     return (p1 - p2).squaredLength();
 }
