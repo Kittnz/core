@@ -1158,6 +1158,7 @@ void World::LoadConfigSettings(bool reload)
     setConfig(CONFIG_BOOL_BOUNTY, "PvPBountyBoards", false);
     setConfig(CONFIG_BOOL_OPENHOUSE, "OpenHouse", false);
     setConfig(CONFIG_BOOL_STATIC_OBJECT_LOS, "StaticObjectLOS", true);
+    setConfig(CONFIG_BOOL_DUAL_SPEC, "DualSpec", false);
 }
 
 class CharactersDatabaseWorkerThread : public ACE_Based::Runnable
