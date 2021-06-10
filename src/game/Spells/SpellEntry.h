@@ -680,7 +680,7 @@ public:
         return Internal & SPELL_INTERNAL_POSITIVE;
     }
 
-    bool IsPositiveSpell(WorldObject* caster, Unit* victim) const;
+    bool IsPositiveSpell(WorldObject const* caster, WorldObject const* victim) const;
     bool IsPositiveEffect(SpellEffectIndex effIndex, WorldObject const* caster = nullptr, WorldObject const* victim = nullptr) const;
 
     // this is propably the correct check for most positivity / negativity decisions
