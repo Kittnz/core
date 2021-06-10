@@ -4136,7 +4136,7 @@ ObjectGuid Unit::EffectSummonPet(uint32 spellId, uint32 petEntry, uint32 petLeve
         return ObjectGuid();
     }
 
-    CreatureCreatePos pos(this, GetOrientation(), PET_FOLLOW_DIST, PET_FOLLOW_ANGLE);
+    CreatureCreatePos pos(this, GetOrientation(), PET_FOLLOW_DIST, MINI_PET_SUMMON_ANGLE);
 
     Map *map = GetMap();
     uint32 pet_number = sObjectMgr.GeneratePetNumber();
