@@ -9436,7 +9436,7 @@ void Unit::InterruptAttacksOnMe(float dist, bool guard_check)
         dist = GetMap()->GetVisibilityDistance();
 
     // Must use modifier, otherwise long range auto attacks will not toggle
-    dist += GetVisibilityModifier();
+    dist = std::max(dist, GetVisibilityModifier());
 
     std::list<Unit*> targets;
     MaNGOS::AnyUnfriendlyUnitInObjectRangeCheck u_check(this, this, dist);
@@ -9460,7 +9460,7 @@ void Unit::CombatStopInRange(float dist)
         dist = GetMap()->GetVisibilityDistance();
 
     // must check with modifier, otherwise we could combat bug
-    dist += GetVisibilityModifier();
+    dist = std::max(dist, GetVisibilityModifier());
 
     std::list<Unit*> targets;
     MaNGOS::AnyUnfriendlyUnitInObjectRangeCheck u_check(this, this, dist);
