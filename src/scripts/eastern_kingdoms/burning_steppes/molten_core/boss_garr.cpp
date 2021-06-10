@@ -45,8 +45,9 @@ struct boss_garrAI : ScriptedAI
 
     void Reset() override
     {
-        m_uiAntiMagicPulseTimer = 25000;                       //These times are probably wrong
-        m_uiMagmaShacklesTimer  = 15000;
+        m_uiAntiMagicPulseTimer = 15000;
+        m_uiMagmaShacklesTimer  = 10000;
+
         m_uiExplodeTimer        = 360000; // 6 Minutes
 
         if (m_pInstance && m_creature->IsAlive())
@@ -131,7 +132,7 @@ struct boss_garrAI : ScriptedAI
         if (m_uiAntiMagicPulseTimer < diff)
         {
             if (DoCastSpellIfCan(m_creature, SPELL_ANTIMAGICPULSE) == CAST_OK)
-                m_uiAntiMagicPulseTimer = urand(10000, 15000);
+                m_uiAntiMagicPulseTimer = 20000;
         }
         else
             m_uiAntiMagicPulseTimer -= diff;
@@ -139,7 +140,7 @@ struct boss_garrAI : ScriptedAI
         if (m_uiMagmaShacklesTimer < diff)
         {
             if (DoCastSpellIfCan(m_creature, SPELL_MAGMASHACKLES) == CAST_OK)
-                m_uiMagmaShacklesTimer = urand(8000, 12000);
+                m_uiMagmaShacklesTimer = 15000;
         }
         else
             m_uiMagmaShacklesTimer -= diff;
