@@ -1594,14 +1594,13 @@ void World::SetInitialWorldSettings()
 
     sAnticheatMgr->LoadAnticheatData();
 
-	sAutoBroadCastMgr.load();
+	sAutoBroadCastMgr.Load();
 
 	sObjectMgr.LoadPlayerPhaseFromDb();
 
 	sCharacterDatabaseCache.LoadAll();
 
-	sPlayerBotMgr.load();
-
+	sPlayerBotMgr.Load();
 	
 	sObjectMgr.LoadFactionChangeReputations();
 	sObjectMgr.LoadFactionChangeSpells();
@@ -1822,9 +1821,9 @@ void World::Update(uint32 diff)
         m_MaintenanceTimeChecker -= diff;
 
     //Update PlayerBotMgr
-    sPlayerBotMgr.update(diff);
+    sPlayerBotMgr.Update(diff);
     // Update AutoBroadcast
-    sAutoBroadCastMgr.update(diff);
+    sAutoBroadCastMgr.Update(diff);
     // Update liste des ban si besoin
     sAccountMgr.Update(diff);
 

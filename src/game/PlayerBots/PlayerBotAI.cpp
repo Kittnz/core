@@ -121,21 +121,7 @@ void MageOrgrimmarAttackerAI::UpdateAI(const uint32 diff)
     /// DEATH
     if (!me->IsAlive())
     {
-        sPlayerBotMgr.deleteBot(me->GetGUIDLow());
-        /*
-        if (me->GetDeathState() < CORPSE)
-            return;
-        if (me->GetDeathState() == CORPSE && me->GetDeathTimer() && me->GetDeathTimer() < (6 * MINUTE * IN_MILLISECONDS - 30000))
-        {
-            me->SetHealth(1);
-            me->RepopAtGraveyard();
-        }
-        else if (me->GetDeathState() == CORPSE && !me->GetDeathTimer())
-        {
-            me->ResurrectPlayer(0.5f);
-            me->SpawnCorpseBones();
-        }
-        */
+        sPlayerBotMgr.DeleteBot(me->GetGUIDLow());
         return;
     }
     /// COMBAT AI

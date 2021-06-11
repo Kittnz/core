@@ -81,7 +81,7 @@ uint8 const ConditionTargetsInternal[] =
                 CONDITION_REQ_TARGET_PLAYER,      //  29
                 CONDITION_REQ_TARGET_PLAYER,      //  30
                 CONDITION_REQ_SOURCE_WORLDOBJECT, //  31
-                CONDITION_REQ_SOURCE_CREATURE,    //  32
+                CONDITION_REQ_SOURCE_UNIT,        //  32
                 CONDITION_REQ_MAP_OR_WORLDOBJECT, //  33
                 CONDITION_REQ_MAP_OR_WORLDOBJECT, //  34
                 CONDITION_REQ_MAP_OR_WORLDOBJECT, //  35
@@ -526,7 +526,7 @@ bool inline ConditionEntry::Evaluate(WorldObject const* target, Map const* map, 
         }
         case CONDITION_CANT_PATH_TO_VICTIM:
         {
-            return source->ToCreature()->CantPathToVictim();
+            return source->ToUnit()->CantPathToVictim();
         }
         case CONDITION_IS_PLAYER:
         {
