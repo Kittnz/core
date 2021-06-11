@@ -6111,7 +6111,7 @@ if (m_caster->IsPlayer() && !(m_spellInfo->Attributes & SPELL_ATTR_PASSIVE)
                     if (m_caster->ToPlayer()->IsInCombat() || m_caster->ToPlayer()->IsBeingTeleported() ||
                        (m_caster->ToPlayer()->GetDeathState() == CORPSE) || m_caster->ToPlayer()->IsMoving())
                     {
-                        m_caster->ToPlayer()->GetSession()->SendNotification("Can't build yet.");
+                        m_caster->ToPlayer()->GetSession()->SendNotification("Can't build right now.");
                         return SPELL_FAILED_DONT_REPORT;
                     }
                     GameObject* ZoneCheck = m_caster->FindNearestGameObject(1000373, 25.0F); // Gardening zone (farm) trigger
@@ -6124,6 +6124,21 @@ if (m_caster->IsPlayer() && !(m_spellInfo->Attributes & SPELL_ATTR_PASSIVE)
                     if (OtherPlanter)
                     {
                         m_caster->ToPlayer()->GetSession()->SendNotification("Can't place planters too close to each other.");
+                        return SPELL_FAILED_DONT_REPORT;
+                    }
+                }
+                else if (m_spellInfo->Id == 46012) // Portable Wormhole Generator
+                {
+                    if (m_caster->ToPlayer()->IsInCombat() || m_caster->ToPlayer()->IsBeingTeleported() ||
+                       (m_caster->ToPlayer()->GetDeathState() == CORPSE) || m_caster->ToPlayer()->IsMoving())
+                    {
+                        m_caster->ToPlayer()->GetSession()->SendNotification("Cannot use it right now.");
+                        return SPELL_FAILED_DONT_REPORT;
+                    }
+                    uint32 cost = m_caster->ToPlayer()->GetLevel() * 100;
+                    if (m_caster->ToPlayer()->GetMoney() < cost)
+                    {
+                        m_caster->ToPlayer()->GetSession()->SendNotification("Device crackles and whirring. Aperture on it's husk is well fitting %u silver coins.", m_caster->ToPlayer()->GetLevel());
                         return SPELL_FAILED_DONT_REPORT;
                     }
                 }
