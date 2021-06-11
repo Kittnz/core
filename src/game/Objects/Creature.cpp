@@ -2502,8 +2502,15 @@ void Creature::SetInCombatWithZone(bool initialPulse)
 
             if (pPlayer->IsAlive() && !IsFriendlyTo(pPlayer))
             {
-                pPlayer->SetInCombatWith(this);
-                AddThreat(pPlayer);
+                if (IsInCombat())
+                {
+                    pPlayer->SetInCombatWith(this);
+                    AddThreat(pPlayer);
+                }
+                else if (AI())
+                {
+                    AI()->AttackStart(pPlayer);
+                }
             }
         }
     }
