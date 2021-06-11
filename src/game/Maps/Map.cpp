@@ -2449,6 +2449,27 @@ bool Map::FindScriptFinalTargets(WorldObject*& source, WorldObject*& target, con
                 }
                 break;
             }
+            case TARGET_T_RANDOM_CREATURE_WITH_ENTRY:
+            {
+                WorldObject* pSearcher;
+
+                if (!((pSearcher = source) || (pSearcher = original_source)))
+                {
+                    sLog.outError("FindScriptTargets: Attempt to search for random creature in script with id %u but source is a nullptr object.", script.id);
+                    return false;
+                }
+
+                Creature* pCreatureBuddy = pSearcher->FindRandomCreature(script.target_param1, script.target_param2, true, pSearcher->ToCreature());
+
+                if (pCreatureBuddy)
+                    target = pCreatureBuddy;
+                else
+                {
+                    sLog.outError("FindScriptTargets: Failed to find buddy for script with id %u (target_param1: %u), (target_param2: %u), (target_type: %u).", script.id, script.target_param1, script.target_param2, script.target_type);
+                    return false;
+                }
+                break;
+            }
             case TARGET_T_CREATURE_WITH_GUID:
             {
                 const CreatureData* pCreatureData = sObjectMgr.GetCreatureData(script.target_param1);

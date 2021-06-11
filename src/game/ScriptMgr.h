@@ -1117,7 +1117,7 @@ enum ScriptTarget
     TARGET_T_OWNER                          = 7,            //The owner of the source.
     
 
-    TARGET_T_CREATURE_WITH_ENTRY            = 8,            //Searches for nearby creature with the given entry.
+    TARGET_T_CREATURE_WITH_ENTRY            = 8,            //Searches for closest creature with the given entry.
                                                             //Param1 = creature_entry
                                                             //Param2 = search_radius
 
@@ -1127,7 +1127,7 @@ enum ScriptTarget
     TARGET_T_CREATURE_FROM_INSTANCE_DATA    = 10,           //Find creature by guid stored in instance data.
                                                             //Param1 = instance_data_field
 
-    TARGET_T_GAMEOBJECT_WITH_ENTRY          = 11,           //Searches for nearby gameobject with the given entry.
+    TARGET_T_GAMEOBJECT_WITH_ENTRY          = 11,           //Searches for closest gameobject with the given entry.
                                                             //Param1 = gameobject_entry
                                                             //Param2 = search_radius
 
@@ -1167,7 +1167,9 @@ enum ScriptTarget
                                                             //Param1 = search-radius
     TARGET_T_NEAREST_FRIENDLY_PLAYER        = 25,           //Nearest friendly player within range.
                                                             //Param1 = search-radius
-
+    TARGET_T_RANDOM_CREATURE_WITH_ENTRY     = 26,           //Searches for random nearby creature with the given entry. Not Self.
+                                                            //Param1 = creature_entry
+                                                            //Param2 = search_radius
     TARGET_T_END
 };
 

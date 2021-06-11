@@ -270,6 +270,7 @@ set (SCRIPTS_SRCS
     world/boss_lord_kazzak.cpp
     world/elemental_invasions.cpp
     world/event_scourge_invasion.cpp
+    world/fireworks_show.cpp
     world/npcs_special.cpp
     world/spell_scripts.cpp
     world/totems.cpp

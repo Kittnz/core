@@ -522,8 +522,6 @@ bool OutdoorPvP::HandleAreaTrigger(Player * /*plr*/, uint32 /*trigger*/)
     return false;
 }
 
-#endif
-
 ZoneScript::ZoneScript() : m_pMap(nullptr)
 {
 }
@@ -541,11 +539,13 @@ void ZoneScript::OnPlayerEnter(Player* plr)
     m_players[plr->GetTeamId()].insert(plr);
 }
 
-void ZoneScript::OnPlayerLeave(Player* plr)
+void ZoneScript::OnPlayerLeave(Player * plr, bool bJustDestroy)
 {
     // remove the world state information from the player (we can't keep everyone up to date, so leave out those who are not in the concerning zones)
-    if (!plr->GetSession()->PlayerLogout())
-        SendRemoveWorldStates(plr);
+    if (!bJustDestroy)
+        if (!plr->GetSession()->PlayerLogout())
+            SendRemoveWorldStates(plr);
+
     m_players[plr->GetTeamId()].erase(plr);
     DEBUG_LOG("Player %s left a ZoneScript zone", plr->GetName());
 }

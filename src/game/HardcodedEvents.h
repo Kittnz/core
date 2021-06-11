@@ -175,14 +175,18 @@ private:
 enum
 {
     EVENT_FIREWORKS         = 6,
-    EVENT_LUNAR_FIREWORKS   = 76,
+    EVENT_NEW_YEAR          = 34,
+    EVENT_LUNAR_NEW_YEAR    = 38,
+    EVENT_TOASTING_GOBLETS  = 39,
+    EVENT_JULY_4TH          = 41,
+    EVENT_SEPTEMBER_30TH    = 42,
 
-    FIREWORKS_DURATION      = 5
+    FIREWORKS_DURATION      = 10
 };
 
-struct LunarFestivalFirework : WorldEvent
+struct FireworksShow : WorldEvent
 {
-    LunarFestivalFirework() : WorldEvent(EVENT_FIREWORKS) {}
+    FireworksShow() : WorldEvent(EVENT_FIREWORKS) {}
 
     void Update() override;
     void Enable() override;
@@ -192,10 +196,17 @@ private:
     bool IsHourBeginning(uint8 minutes = FIREWORKS_DURATION) const;
 };
 
+struct ToastingGoblets : WorldEvent
+{
+    ToastingGoblets() : WorldEvent(EVENT_TOASTING_GOBLETS) {}
 
+    void Update() override;
+    void Enable() override;
+    void Disable() override;
 
-
-
+private:
+    bool ShouldEnable() const;
+};
 
 struct ScourgeInvasionEvent : WorldEvent
 {
