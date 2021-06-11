@@ -6135,10 +6135,9 @@ if (m_caster->IsPlayer() && !(m_spellInfo->Attributes & SPELL_ATTR_PASSIVE)
                         m_caster->ToPlayer()->GetSession()->SendNotification("Cannot use it right now.");
                         return SPELL_FAILED_DONT_REPORT;
                     }
-                    uint32 cost = m_caster->ToPlayer()->GetLevel() * 100;
-                    if (m_caster->ToPlayer()->GetMoney() < cost)
+                    if (m_caster->ToPlayer()->GetMoney() < 500)
                     {
-                        m_caster->ToPlayer()->GetSession()->SendNotification("Device crackles and whirring. Aperture on it's husk is well fitting %u silver coins.", m_caster->ToPlayer()->GetLevel());
+                        m_caster->ToPlayer()->GetSession()->SendNotification("Not enough money. The device crackles and whirls.", m_caster->ToPlayer()->GetLevel());
                         return SPELL_FAILED_DONT_REPORT;
                     }
                 }

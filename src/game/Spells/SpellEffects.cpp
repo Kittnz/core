@@ -1776,7 +1776,6 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                 {
                     if (m_caster && m_caster->IsPlayer())
                     {
-                        uint32 cost = m_caster->ToPlayer()->GetLevel() * 100;
                         float dis{ 2.0F };
                         float x, y, z;
                         m_caster->GetSafePosition(x, y, z);
@@ -1784,7 +1783,7 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                         y += dis * sin(m_caster->GetOrientation());
                         m_caster->PMonsterEmote("%s just opened a wormhole.", nullptr, false, m_caster->ToPlayer()->GetName());
                         m_caster->SummonGameObject(1000081, x, y, z + 0.5F, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 8, true);
-                        m_caster->ToPlayer()->ModifyMoney(-cost);
+                        m_caster->ToPlayer()->ModifyMoney(-500);
                     }
                     return;
                 }
