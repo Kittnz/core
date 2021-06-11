@@ -126,7 +126,7 @@ struct GameObjectInfo
             uint32 spellId;                                 //3
             uint32 charges;                                 //4 need respawn (if > 0)
             uint32 cooldown;                                //5 time in secs
-            uint32 autoCloseTime;                           //6
+            int32  autoCloseTime;                           //6
             uint32 startDelay;                              //7
             uint32 serverOnly;                              //8
             uint32 stealthed;                               //9
@@ -164,12 +164,12 @@ struct GameObjectInfo
         struct
         {
             uint32 lockId;                                  //0 -> Lock.dbc
-            uint32 questId;                                 //1
+            int32  questId;                                 //1
             uint32 eventId;                                 //2
             uint32 autoCloseTime;                           //3
             uint32 customAnim;                              //4
             uint32 consumable;                              //5
-            uint32 cooldown;                                //6
+            int32  cooldown;                                //6
             uint32 pageId;                                  //7
             uint32 language;                                //8
             uint32 pageMaterial;                            //9
@@ -768,6 +768,12 @@ class GameObject : public WorldObject
         void UpdateModel();                                 // updates model in case displayId were changed
         GameObjectModel* m_model;
         void UpdateModelPosition();
+
+        float GetStationaryX() const { if (GetGOInfo()->type != GAMEOBJECT_TYPE_MO_TRANSPORT) return m_stationaryPosition.x; return 0.f; }
+        float GetStationaryY() const { if (GetGOInfo()->type != GAMEOBJECT_TYPE_MO_TRANSPORT) return m_stationaryPosition.y; return 0.f; }
+        float GetStationaryZ() const { if (GetGOInfo()->type != GAMEOBJECT_TYPE_MO_TRANSPORT) return m_stationaryPosition.z; return 0.f; }
+        float GetStationaryO() const { if (GetGOInfo()->type != GAMEOBJECT_TYPE_MO_TRANSPORT) return m_stationaryPosition.o; return GetOrientation(); }
+
         GameObjectData const * GetGOData() const;
 
         // Transports system
@@ -808,6 +814,8 @@ class GameObject : public WorldObject
 
         uint64 m_rotation;
         GameObjectInfo const* m_goInfo;
+
+        Position m_stationaryPosition;
 
         GameObjectAI *i_AI;
 

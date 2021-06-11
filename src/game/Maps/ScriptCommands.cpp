@@ -329,10 +329,7 @@ bool Map::ScriptCommand_RespawnGameObject(const ScriptInfo& script, WorldObject*
 
     int32 time_to_despawn = script.respawnGo.despawnDelay < 5 ? 5 : script.respawnGo.despawnDelay;
 
-    if (pGo->GetGoType() == GAMEOBJECT_TYPE_FISHINGNODE ||
-        pGo->GetGoType() == GAMEOBJECT_TYPE_DOOR ||
-        pGo->GetGoType() == GAMEOBJECT_TYPE_BUTTON ||
-        pGo->GetGoType() == GAMEOBJECT_TYPE_TRAP)
+    if (pGo->GetGoType() == GAMEOBJECT_TYPE_FISHINGNODE || pGo->GetGoType() == GAMEOBJECT_TYPE_DOOR)
     {
         sLog.outError("SCRIPT_COMMAND_RESPAWN_GAMEOBJECT (script id %u) can not be used with gameobject of type %u (guid: %u).", script.id, uint32(pGo->GetGoType()), script.respawnGo.goGuid);
         return ShouldAbortScript(script);
@@ -350,7 +347,7 @@ bool Map::ScriptCommand_RespawnGameObject(const ScriptInfo& script, WorldObject*
 }
 
 // SCRIPT_COMMAND_TEMP_SUMMON_CREATURE (10)
-bool Map::ScriptCommand_SummonCreature(const ScriptInfo& script, WorldObject* source, WorldObject* target)
+bool Map::ScriptCommand_SummonCreature(ScriptInfo const& script, WorldObject* source, WorldObject* target)
 {
     if (!script.summonCreature.creatureEntry)
     {
@@ -2206,5 +2203,63 @@ bool Map::ScriptCommand_SetGoState(const ScriptInfo& script, WorldObject* source
     }
 
     pGo->SetGoState(GOState(script.setGoState.state));
+    return false;
+}
+
+// SCRIPT_COMMAND_DESPAWN_GAMEOBJECT (81)
+bool Map::ScriptCommand_DespawnGameObject(ScriptInfo const& script, WorldObject* source, WorldObject* target)
+{
+    GameObject* pGo = nullptr;
+    uint32 guidlow = script.despawnGo.goGuid;
+
+    if (guidlow)
+    {
+        GameObjectData const* goData = sObjectMgr.GetGOData(guidlow);
+        if (!goData)
+            return ShouldAbortScript(script); // checked at load
+
+        pGo = GetGameObject(ObjectGuid(HIGHGUID_GAMEOBJECT, goData->id, guidlow));
+    }
+    else if (target && target->GetTypeId() == TYPEID_GAMEOBJECT)
+        pGo = static_cast<GameObject*>(target);
+    else if (source && source->GetTypeId() == TYPEID_GAMEOBJECT)
+        pGo = static_cast<GameObject*>(source);
+
+    if (!pGo)
+    {
+        sLog.outError("SCRIPT_COMMAND_DESPAWN_GAMEOBJECT (script id %u) failed for gameobject(guid: %u).", script.id, guidlow);
+        return ShouldAbortScript(script);
+    }
+
+    if (!pGo->isSpawned())
+        return ShouldAbortScript(script);          // gameobject already despawned
+
+    pGo->SetLootState(GO_JUST_DEACTIVATED);
+    if (script.despawnGo.respawnDelay)
+        pGo->SetRespawnDelay(script.despawnGo.respawnDelay);        // respawn object in ? seconds
+
+    return false;
+}
+
+// SCRIPT_COMMAND_LOAD_GAMEOBJECT (82)
+bool Map::ScriptCommand_LoadGameObject(ScriptInfo const& script, WorldObject* source, WorldObject* target)
+{
+    GameObjectData const* pGameObjectData = sObjectMgr.GetGOData(script.loadGo.goGuid);
+
+    if (GetId() != pGameObjectData->position.mapId)
+    {
+        sLog.outError("SCRIPT_COMMAND_LOAD_GAMEOBJECT (script id %u) tried to spawn guid %u on wrong map %u.", script.id, script.loadGo.goGuid, GetId());
+        return ShouldAbortScript(script);
+    }
+
+    if (GetGameObject(ObjectGuid(HIGHGUID_GAMEOBJECT, pGameObjectData->id, script.loadGo.goGuid)))
+        return ShouldAbortScript(script); // already spawned
+
+    GameObject* pGameobject = new GameObject;
+    if (!pGameobject->LoadFromDB(script.loadGo.goGuid, this))
+        delete pGameobject;
+    else
+        Add(pGameobject);
+
     return false;
 }

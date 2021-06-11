@@ -77,6 +77,7 @@
 #include <string.h>
 #include <typeinfo>
 #include <regex>
+#include <ctime>
 
 bool ChatHandler::HandleReloadMangosStringCommand(char* /*args*/)
 {
@@ -6841,12 +6842,14 @@ bool ChatHandler::HandleGameObjectInfoCommand(char* args)
         pGameObject->GetDisplayId(),
         pGameObject->GetGoState(),
         pGameObject->getLootState());
-    SendSysMessage(pGameObject->isSpawned() ? "Object is spawned." : "Not spawned.");
 
-    GameObjectAI* gAI = pGameObject->AI();
-    if (gAI != nullptr)
+    if (pGameObject->isSpawned())
+        SendSysMessage("Object is spawned.");
+    else
     {
-        PSendSysMessage("AI class: %s. Debug info: %s", typeid(gAI).name(), gAI->GetDebugInfo());
+        time_t respawnTime = pGameObject->GetRespawnTime();
+        std::tm* pTime = std::localtime(&respawnTime);
+        PSendSysMessage("Not spawned. Respawns in %u seconds (%u:%u:%u).", pGameObject->GetRespawnDelay(), pTime->tm_hour, pTime->tm_min, pTime->tm_sec);
     }
 
     return true;
