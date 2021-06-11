@@ -737,16 +737,19 @@ UPDATE `creature_template` SET `ranged_attack_time`=2000 WHERE `entry`=4391;
 -- Wrong gossip.
 UPDATE `creature_template` SET `gossip_menu_id`=6944, `npc_flags`=`npc_flags`|1 WHERE `entry`=4317;
 UPDATE `creature_template` SET `gossip_menu_id`=1421 WHERE `entry`=7773;
+
+DELETE FROM `gossip_menu` WHERE `entry` IN (1421, 5481, 6526, 6562);
 INSERT INTO `gossip_menu` VALUES (1421, 2053, 0);
 UPDATE `creature_template` SET `gossip_menu_id`=6944, `npc_flags`=`npc_flags`|1 WHERE `entry`=8020;
 UPDATE `creature_template` SET `gossip_menu_id`=5481 WHERE `entry`=10182;
 INSERT INTO `gossip_menu` VALUES (5481, 6533, 0);
 UPDATE `creature_template` SET `gossip_menu_id`=6526 WHERE `entry`=15175;
 INSERT INTO `gossip_menu` VALUES (6526, 7728, 0);
-INSERT INTO `gossip_menu_option` (`menu_id`, `id`, `option_icon`, `option_text`, `OptionBroadcastTextID`, `option_id`, `npc_option_npcflag`, `action_menu_id`, `action_poi_id`, `box_coded`, `box_money`, `box_text`, `BoxBroadcastTextID`) VALUES (6526, 0, 1, 'Let me browse your goods.', 8097, 3, 4, 0, 0, 0, 0, '', 0);
 UPDATE `creature_template` SET `gossip_menu_id`=6562 WHERE `entry`=15178;
 INSERT INTO `gossip_menu` VALUES (6562, 7778, 0);
-INSERT INTO `gossip_menu_option` (`menu_id`, `id`, `option_icon`, `option_text`, `OptionBroadcastTextID`, `option_id`, `npc_option_npcflag`, `action_menu_id`, `action_poi_id`, `box_coded`, `box_money`, `box_text`, `BoxBroadcastTextID`) VALUES (6562, 0, 2, 'I need a ride.', 3409, 4, 8, 0, 0, 0, 0, '', 0);
+
+-- INSERT INTO `gossip_menu_option` (`menu_id`, `id`, `option_icon`, `option_text`, `OptionBroadcastTextID`, `option_id`, `npc_option_npcflag`, `action_menu_id`, `action_poi_id`, `box_coded`, `box_money`, `box_text`, `BoxBroadcastTextID`) VALUES (6526, 0, 1, 'Let me browse your goods.', 8097, 3, 4, 0, 0, 0, 0, '', 0);
+-- INSERT INTO `gossip_menu_option` (`menu_id`, `id`, `option_icon`, `option_text`, `OptionBroadcastTextID`, `option_id`, `npc_option_npcflag`, `action_menu_id`, `action_poi_id`, `box_coded`, `box_money`, `box_text`, `BoxBroadcastTextID`) VALUES (6562, 0, 2, 'I need a ride.', 3409, 4, 8, 0, 0, 0, 0, '', 0);
 
 -- Wrong health or mana.
 UPDATE `creature_template` SET `health_min`=2059, `health_max`=2059 WHERE `entry`=4883 && `patch`=0;
@@ -774,6 +777,7 @@ UPDATE `creature_template` SET `mana_min`=0, `mana_max`=0 WHERE `entry`=12056 &&
 -- Stats for Misha.
 UPDATE `creature_template` SET `dmg_min`=755, `dmg_max`=1002, `armor`=3677, `health_min`=161850, `health_max`=161850 WHERE `entry`=10204;
 
+DELETE FROM `creature_questrelation` WHERE `id` IN (4595, 3041);
 insert into `creature_questrelation` (`id`, `quest`, `patch_min`, `patch_max`) values('4595','1823','0','10');
 insert into `creature_questrelation` (`id`, `quest`, `patch_min`, `patch_max`) values('3041','1823','0','10');
 
