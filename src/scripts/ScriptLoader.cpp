@@ -16,9 +16,9 @@ void AddSC_bg_alterac();
 void AddSC_zero_scripts();
 void AddSC_ubrs_trash();
 void AddSC_go_scripts();
+void AddSC_event_fireworks();
 
 // Event
-//void AddSC_event_attack_city();
 void AddSC_elemental_invasions();
 
 // HT
@@ -297,6 +297,7 @@ void AddScripts()
     AddSC_zero_scripts();
     AddSC_ubrs_trash();
     AddSC_go_scripts();
+    AddSC_event_fireworks();
 
     // Event
     AddSC_elemental_invasions();
