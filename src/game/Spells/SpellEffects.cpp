@@ -1751,6 +1751,27 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                     }
                     return;
                 }
+                case 46013: // Simple Wooden Planter
+                {
+                    if (m_caster && m_caster->IsPlayer())
+                    {
+                        float dis{ 2.0F };
+                        float x, y, z;
+                        m_caster->GetSafePosition(x, y, z);
+                        x += dis * cos(m_caster->GetOrientation());
+                        y += dis * sin(m_caster->GetOrientation());
+
+                        float  p_r, o_r;
+                        p_r = m_caster->GetOrientation();
+                        o_r = remainderf(p_r + M_PI, M_PI * 2.0f);
+                        float rot2 = sin(o_r / 2);
+                        float rot3 = cos(o_r / 2);
+
+                        m_caster->SummonGameObject(1000334, x, y, z - 0.1F, o_r, 0.0f, 0.0f, rot2, rot3, 60 * MINUTE * IN_MILLISECONDS, true);
+                        m_caster->SummonGameObject(1000335, x, y, z + 0.1F, o_r + 1.6F, 0.0f, 0.0f, 0.0f, 0.0f, 60 * MINUTE * IN_MILLISECONDS, true);
+                    }
+                    return;
+                }
             }
             // All IconID Check in there
             switch (m_spellInfo->SpellIconID)

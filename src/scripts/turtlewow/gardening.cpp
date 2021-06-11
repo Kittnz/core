@@ -59,50 +59,6 @@ enum GardenObjects
     DUST_CLOUD = 1000365
 };
 
-bool ItemUseSpell_item_wooden_planter(Player* pPlayer, Item* pItem, const SpellCastTargets&)
-{
-    GameObject* ZoneCheck = pPlayer->FindNearestGameObject(GARDEN_ZONE_CHECK, 25.0F);
-
-    if (!ZoneCheck)
-    {
-        pPlayer->AddItem(PLANTER_ITEM_ENTRY); 
-        pPlayer->GetSession()->SendNotification(pPlayer->GetTeam() == ALLIANCE ? "Requires Elwynn Gardens." : "Requires Mulgore Fields.");
-        return false;
-    }
-
-    GameObject* OtherPlanter = pPlayer->FindNearestGameObject(WOODEN_PLANTER, 3.0F);
-
-    if (OtherPlanter)
-    {
-        pPlayer->AddItem(PLANTER_ITEM_ENTRY);
-        pPlayer->GetSession()->SendNotification("Can't place Planters too close to each other!");
-        return false;
-    }
-
-    if (pPlayer->IsInCombat() || pPlayer->IsBeingTeleported() || (pPlayer->GetDeathState() == CORPSE) || pPlayer->IsMoving())
-    {
-        pPlayer->AddItem(PLANTER_ITEM_ENTRY);
-        pPlayer->GetSession()->SendNotification("Leave battle or stop moving!");
-        return false;
-    }   
-
-    float dis{ 2.0F };
-    float x, y, z;
-    pPlayer->GetSafePosition(x, y, z);
-    x += dis * cos(pPlayer->GetOrientation());
-    y += dis * sin(pPlayer->GetOrientation());
-
-    float  p_r, o_r;
-    p_r = pPlayer->GetOrientation();
-    o_r = remainderf(p_r + M_PI, M_PI * 2.0f);
-    float rot2 = sin(o_r / 2);
-    float rot3 = cos(o_r / 2);
-
-    pPlayer->SummonGameObject(WOODEN_PLANTER, x, y, z - 0.1F, o_r, 0.0f, 0.0f, rot2, rot3, LIFESPAN_PLANTER, true);
-    pPlayer->SummonGameObject(PLANTER_EARTH, x, y, z + 0.1F, o_r + 1.6F, 0.0f, 0.0f, 0.0f, 0.0f, LIFESPAN_PLANTER, true);
-    return true;
-}
-
 bool GOHello_go_simple_wooden_planter(Player* pPlayer, GameObject* pGo)
 {
     if (pPlayer->HasItemCount(PUMPKIN_SEEDS, 1)) 
@@ -376,10 +332,5 @@ void AddSC_gardening()
     newscript->Name = "go_simple_wooden_planter";
     newscript->pGOHello = &GOHello_go_simple_wooden_planter;
     newscript->pGOGossipSelect = &GOSelect_go_simple_wooden_planter;
-    newscript->RegisterSelf();
-	
-	newscript = new Script;
-    newscript->Name = "item_wooden_planter";
-    newscript->pItemUseSpell = &ItemUseSpell_item_wooden_planter;
     newscript->RegisterSelf();
 }

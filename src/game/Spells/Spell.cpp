@@ -6106,6 +6106,27 @@ if (m_caster->IsPlayer() && !(m_spellInfo->Attributes & SPELL_ATTR_PASSIVE)
                         return SPELL_FAILED_DONT_REPORT;
                     }
                 }
+                else if (m_spellInfo->Id == 46013) // Simple Wooden Planter
+                {
+                    if (m_caster->ToPlayer()->IsInCombat() || m_caster->ToPlayer()->IsBeingTeleported() ||
+                       (m_caster->ToPlayer()->GetDeathState() == CORPSE) || m_caster->ToPlayer()->IsMoving())
+                    {
+                        m_caster->ToPlayer()->GetSession()->SendNotification("Can't build yet.");
+                        return SPELL_FAILED_DONT_REPORT;
+                    }
+                    GameObject* ZoneCheck = m_caster->FindNearestGameObject(1000373, 25.0F); // Gardening zone (farm) trigger
+                    if (!ZoneCheck)
+                    {
+                        m_caster->ToPlayer()->GetSession()->SendNotification("Requires a garden or a farm.");
+                        return SPELL_FAILED_DONT_REPORT;
+                    }
+                    GameObject* OtherPlanter = m_caster->FindNearestGameObject(1000334, 3.0F); 
+                    if (OtherPlanter)
+                    {
+                        m_caster->ToPlayer()->GetSession()->SendNotification("Can't place planters too close to each other.");
+                        return SPELL_FAILED_DONT_REPORT;
+                    }
+                }
                 break;
             }
             case SPELL_EFFECT_SCHOOL_DAMAGE:
