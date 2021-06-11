@@ -3004,9 +3004,10 @@ void Spell::SetTargetMap(SpellEffectIndex effIndex, uint32 targetMode, UnitList&
                 m_targets.setDestination(x, y, z);
             }                
 
-            if (m_casterUnit)
+            if (m_casterUnit && targetUnitMap.empty())
                 targetUnitMap.push_back(m_casterUnit);
-
+            else if (m_casterGo)
+                AddGOTarget(m_casterGo, effIndex);
             break;
         }
         case TARGET_LOCATION_CASTER_DEST:

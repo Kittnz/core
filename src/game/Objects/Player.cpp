@@ -68,6 +68,7 @@
 #include "WaypointMovementGenerator.h"
 #include "GMTicketMgr.h"
 #include "MasterPlayer.h"
+#include "MovementPacketSender.h"
 #include "turtlewow/transmog/transmog.h"
 
 /* Nostalrius */
@@ -2042,13 +2043,10 @@ bool Player::TeleportTo(uint32 mapid, float x, float y, float z, float orientati
         if (!GetSession()->PlayerLogout())
         {
             const auto wps = [this](){
-                WorldPacket data;
-                BuildTeleportAckMsg(data,
-                                    m_teleport_dest.x,
-                                    m_teleport_dest.y,
-                                    m_teleport_dest.z,
-                                    m_teleport_dest.o);
-                SendMovementMessageToSet(std::move(data), true);
+                MovementPacketSender::SendTeleportToController(this, m_teleport_dest.x, 
+                                                                     m_teleport_dest.y, 
+                                                                     m_teleport_dest.z, 
+                                                                     m_teleport_dest.o);
             };
             if (recover)
                 m_teleportRecover = recover;
@@ -20712,17 +20710,6 @@ void Player::SendSpellRemoved(uint32 spell_id) const
     WorldPacket data(SMSG_REMOVED_SPELL, 4);
     data << uint16(spell_id);
     GetSession()->SendPacket(&data);
-}
-
-void Player::BuildTeleportAckMsg(WorldPacket& data, float x, float y, float z, float ang) const
-{
-    MovementInfo mi = m_movementInfo;
-    mi.UpdateTime(WorldTimer::getMSTime());
-    mi.ChangePosition(x, y, z, ang);
-    data.Initialize(MSG_MOVE_TELEPORT_ACK, 41);
-    data << GetPackGUID();
-    data << uint32(0);                                      // this value increments every time
-    data << mi;
 }
 
 bool Player::HasMovementFlag(MovementFlags f) const

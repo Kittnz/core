@@ -6335,7 +6335,7 @@ void Unit::CheckPendingMovementChanges()
         }
 
         // Not resendable change.
-        if (oldestChangeToAck.movementChangeType == INVALID || oldestChangeToAck.movementChangeType == KNOCK_BACK)
+        if (oldestChangeToAck.movementChangeType == INVALID || oldestChangeToAck.movementChangeType == TELEPORT || oldestChangeToAck.movementChangeType == KNOCK_BACK)
         {
             pController->GetCheatData()->OnFailedToAckChange();
             PopPendingMovementChange();
@@ -6489,6 +6489,25 @@ bool Unit::FindPendingMovementRootChange(uint32 movementCounter, bool applyRecei
 #endif
 
         if (pendingChange->movementCounter != movementCounter || pendingChange->apply != applyReceived || pendingChange->movementChangeType != ROOT)
+            continue;
+
+        m_pendingMovementChanges.erase(pendingChange);
+        return true;
+    }
+
+    return false;
+}
+
+bool Unit::FindPendingMovementTeleportChange(uint32 movementCounter)
+{
+    for (auto pendingChange = m_pendingMovementChanges.begin(); pendingChange != m_pendingMovementChanges.end(); pendingChange++)
+    {
+
+#if SUPPORTED_CLIENT_BUILD <= CLIENT_BUILD_1_9_4
+        movementCounter = pendingChange->movementCounter;
+#endif
+
+        if (pendingChange->movementCounter != movementCounter || pendingChange->movementChangeType != TELEPORT)
             continue;
 
         m_pendingMovementChanges.erase(pendingChange);
