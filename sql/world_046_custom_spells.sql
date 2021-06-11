@@ -23,3 +23,14 @@ update item_template set spellid_1 = 46012 where entry = 51310;
 update item_template set description = 'Technologically advanced energy-matter scrambler.' where entry = 51310;
 update item_template set script_name = '' where entry = 51310;
 
+-- Goblin Brainwashing Device:
+
+replace into spell_mod (id, castingtimeindex) values (46002, 6); 
+update item_template set spellid_1 = 46002 where entry = 51715;
+update item_template set script_name = '' where entry = 51715;
+
+-- Fixes for spells missing movement interruption flag:
+
+replace into spell_mod (id, interruptflags) values (46013, 7);
+replace into spell_mod (id, interruptflags) values (46012, 7);
+replace into spell_mod (id, interruptflags) values (46002, 7);
