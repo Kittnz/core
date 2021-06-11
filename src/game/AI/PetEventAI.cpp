@@ -142,7 +142,7 @@ bool PetEventAI::FindTargetForAttack()
         }
     }
 
-    Unit* pOwner = m_creature->GetCharmerOrOwner();
+    Unit const* pOwner = m_creature->GetCharmerOrOwner();
 
     if (!pOwner)
         return false;
@@ -175,14 +175,13 @@ bool PetEventAI::FindTargetForAttack()
 
 void PetEventAI::UpdateAI(const uint32 uiDiff)
 {
-    bool bHasVictim = m_creature->GetVictim();
-
-    //Must return if creature isn't alive. Normally select hostile target and get victim prevent this
+    // Must return if creature isn't alive. Normally select hostile target and get victim prevent this
     if (!m_creature->IsAlive())
         return;
 
-    Unit* pOwner = m_creature->GetCharmerOrOwner();
-    bool hasAliveOwner = pOwner && pOwner->IsAlive() && m_creature->GetCharmInfo();
+    Unit const* pOwner = m_creature->GetCharmerOrOwner();
+    bool const hasAliveOwner = pOwner && pOwner->IsAlive() && m_creature->GetCharmInfo();
+    bool bHasVictim = m_creature->GetVictim();
 
     if (!bHasVictim && (m_creature->IsInCombat() || (hasAliveOwner && pOwner->IsInCombat())))
     {
