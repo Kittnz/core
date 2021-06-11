@@ -233,36 +233,11 @@ OutdoorPvP::OutdoorPvP() : ZoneScript(), m_objective_changed(false), m_TypeId(0)
 {
 }
 
-ZoneScript::ZoneScript() : m_pMap(nullptr)
-{
-}
-
 OutdoorPvP::~OutdoorPvP()
 {
     // `Map`s should already be unloaded at this point
     for (const auto& itr : m_capturePoints)
         delete itr.second;
-}
-
-ZoneScript::~ZoneScript()
-{
-}
-
-void ZoneScript::OnPlayerEnter(Player * plr)
-{
-    m_players[plr->GetTeamId()].insert(plr);
-}
-
-void ZoneScript::OnPlayerLeave(Player * plr, bool bJustDestroy)
-{
-    // remove the world state information from the player (we can't keep everyone up to date, so leave out those who are not in the concerning zones)
-	if (!bJustDestroy)
-	{
-		if (!plr->GetSession()->PlayerLogout())
-			SendRemoveWorldStates(plr);
-	}
-    m_players[plr->GetTeamId()].erase(plr);
-    DEBUG_LOG("Player %s left a ZoneScript zone", plr->GetName());
 }
 
 void OutdoorPvP::OnPlayerLeave(Player* plr, bool bJustDestroy)
@@ -277,9 +252,6 @@ void OutdoorPvP::OnPlayerLeave(Player* plr, bool bJustDestroy)
 void OutdoorPvP::OnPlayerEnter(Player* pPlayer)
 {
     ZoneScript::OnPlayerEnter(pPlayer);
-}
-void ZoneScript::Update(uint32 diff)
-{
 }
 
 void OutdoorPvP::Update(uint32 diff)
@@ -409,13 +381,6 @@ bool OPvPCapturePoint::Update(uint32 diff)
     }
 
     return false;
-}
-
-void ZoneScript::SendUpdateWorldState(uint32 field, uint32 value)
-{
-    for (const auto& playerPerTeam : m_players)
-        for (PlayerSet::iterator itr = playerPerTeam.begin(); itr != playerPerTeam.end(); ++itr)
-            (*itr)->SendUpdateWorldState(field, value);
 }
 
 void OPvPCapturePoint::SendUpdateWorldState(uint32 field, uint32 value)
@@ -555,6 +520,41 @@ int32 OPvPCapturePoint::HandleOpenGo(Player * /*plr*/, uint64 guid)
 bool OutdoorPvP::HandleAreaTrigger(Player * /*plr*/, uint32 /*trigger*/)
 {
     return false;
+}
+
+#endif
+
+ZoneScript::ZoneScript() : m_pMap(nullptr)
+{
+}
+
+ZoneScript::~ZoneScript()
+{
+}
+
+void ZoneScript::Update(uint32 diff)
+{
+}
+
+void ZoneScript::OnPlayerEnter(Player* plr)
+{
+    m_players[plr->GetTeamId()].insert(plr);
+}
+
+void ZoneScript::OnPlayerLeave(Player* plr)
+{
+    // remove the world state information from the player (we can't keep everyone up to date, so leave out those who are not in the concerning zones)
+    if (!plr->GetSession()->PlayerLogout())
+        SendRemoveWorldStates(plr);
+    m_players[plr->GetTeamId()].erase(plr);
+    DEBUG_LOG("Player %s left a ZoneScript zone", plr->GetName());
+}
+
+void ZoneScript::SendUpdateWorldState(uint32 field, uint32 value)
+{
+    for (const auto& playerPerTeam : m_players)
+        for (PlayerSet::iterator itr = playerPerTeam.begin(); itr != playerPerTeam.end(); ++itr)
+            (*itr)->SendUpdateWorldState(field, value);
 }
 
 void ZoneScript::BroadcastPacket(WorldPacket &data) const
