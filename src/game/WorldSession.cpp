@@ -272,7 +272,6 @@ bool WorldSession::Update(PacketFilter& updater)
         if (_clientHashComputeStep == HASH_COMPUTED && GetPlayer())
         {
             _clientHashComputeStep = HASH_NOTIFIED;
-            sAnticheatLib->OnClientHashComputed(this);
         }
         ///- Cleanup socket pointer if need
         if (m_Socket && m_Socket->IsClosed())
@@ -297,7 +296,6 @@ bool WorldSession::Update(PacketFilter& updater)
     }
     else // Async map based update
     {
-        sAnticheatLib->MapAccountUpdate(this);
         if (GetMasterPlayer() && GetPlayer())
         {
             GetMasterPlayer()->LoadPlayer(GetPlayer());
@@ -853,7 +851,7 @@ void WorldSession::ExecuteOpcode(OpcodeHandler const& opHandle, WorldPacket* pac
 
 void WorldSession::InitWarden(BigNumber* k)
 {
-    m_warden = sAnticheatLib->CreateWardenFor(this, k);
+    m_warden = sAnticheatMgr->CreateWardenFor(this, k);
 }
 
 void WorldSession::InitCheatData(Player* pPlayer)
@@ -861,12 +859,12 @@ void WorldSession::InitCheatData(Player* pPlayer)
     if (m_cheatData)
         m_cheatData->InitNewPlayer(pPlayer);
     else
-        m_cheatData = sAnticheatLib->CreateAnticheatFor(pPlayer);
+        m_cheatData = sAnticheatMgr->CreateAnticheatFor(pPlayer);
 }
 
-MovementAnticheatInterface* WorldSession::GetCheatData()
+MovementAnticheat* WorldSession::GetCheatData()
 {
-    return m_cheatData ? m_cheatData : (m_cheatData = sAnticheatLib->CreateAnticheatFor(GetPlayer()));
+    return m_cheatData ? m_cheatData : (m_cheatData = sAnticheatMgr->CreateAnticheatFor(GetPlayer()));
 }
 
 void WorldSession::ProcessAnticheatAction(const char* detector, const char* reason, uint32 cheatAction, uint32 banSeconds)

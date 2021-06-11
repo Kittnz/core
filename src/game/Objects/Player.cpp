@@ -1437,7 +1437,7 @@ void Player::Update(uint32 update_diff, uint32 p_time)
         }
 
         float x, y, z, o;
-        if (IsInWorld() && sWorld.getConfig(CONFIG_BOOL_ENABLE_MOVEMENT_INTERP) && movespline->Finalized() && !GetCheatData()->InterpolateMovement(m_movementInfo, WorldTimer::getMSTime() - m_movementInfo.time, x, y, z, o))
+        if (IsInWorld() && sWorld.getConfig(CONFIG_BOOL_ENABLE_MOVEMENT_INTERP) && movespline->Finalized() && !GetCheatData()->ExtrapolateMovement(m_movementInfo, WorldTimer::getMSTime() - m_movementInfo.time, x, y, z, o))
         {
             GetMap()->DoPlayerGridRelocation(this, x, y, z, o);
             m_position.x = x;
@@ -3121,11 +3121,13 @@ void Player::GiveLevel(uint32 level)
     // set current level health and mana/energy to maximum after applying all mods.
     if (IsAlive())
         SetHealth(GetMaxHealth());
+
     SetPower(POWER_MANA, GetMaxPower(POWER_MANA));
     SetPower(POWER_ENERGY, GetMaxPower(POWER_ENERGY));
 
     if (GetPower(POWER_RAGE) > GetMaxPower(POWER_RAGE))
         SetPower(POWER_RAGE, GetMaxPower(POWER_RAGE));
+
     SetPower(POWER_FOCUS, 0);
     SetPower(POWER_HAPPINESS, 0);
 
@@ -3135,7 +3137,6 @@ void Player::GiveLevel(uint32 level)
 
     if (m_session->ShouldBeBanned(GetLevel()))
         sWorld.BanAccount(BAN_ACCOUNT, m_session->GetUsername(), 0, m_session->GetScheduleBanReason(), "");
-    sAnticheatLib->OnPlayerLevelUp(this);
 }
 
 void Player::UpdateFreeTalentPoints(bool resetIfNeed)
