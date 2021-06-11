@@ -40,6 +40,7 @@ enum
     SAY_AME_AGGRO2 = -1000450,
     SAY_AME_AGGRO3 = -1000451,
 
+    FACTION_ESCORTEE = 113,
     QUEST_CHASING_AME = 4245
 };
 
@@ -109,12 +110,7 @@ bool QuestAccept_npc_ame01(Player* pPlayer, Creature* pCreature, const Quest* pQ
         if (npc_ame01AI* pAmeAI = dynamic_cast<npc_ame01AI*>(pCreature->AI()))
         {
             pCreature->SetStandState(UNIT_STAND_STATE_STAND);
-
-            if (pPlayer->GetTeam() == ALLIANCE)
-                pCreature->SetFactionTemplateId(FACTION_ESCORT_A_PASSIVE);
-            else if (pPlayer->GetTeam() == HORDE)
-                pCreature->SetFactionTemplateId(FACTION_ESCORT_H_PASSIVE);
-            pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
+            pCreature->SetFactionTemporary(FACTION_ESCORTEE, TEMPFACTION_RESTORE_RESPAWN);
             pAmeAI->Start(false, pPlayer->GetGUID(), pQuest);
         }
     }
@@ -359,7 +355,7 @@ bool QuestAccept_npc_ringo(Player* pPlayer, Creature* pCreature, const Quest* pQ
         {
             pCreature->SetStandState(UNIT_STAND_STATE_STAND);
             pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
-            pRingoAI->StartFollow(pPlayer, FACTION_ESCORT_N_FRIEND_PASSIVE, pQuest);
+            pRingoAI->StartFollow(pPlayer, FACTION_ESCORTEE, pQuest);
         }
     }
 
