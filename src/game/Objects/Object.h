@@ -598,7 +598,7 @@ class Object
         uint16 m_objectType;
 
         uint8 m_objectTypeId;
-        uint8 m_updateFlag;
+        uint8 m_updateFlag = 0;
 
         union
         {
@@ -965,6 +965,7 @@ class WorldObject : public Object
         Player* FindNearestPlayer(float range) const;
         void GetGameObjectListWithEntryInGrid(std::list<GameObject*>& lList, uint32 uiEntry, float fMaxSearchRange) const;
         void GetCreatureListWithEntryInGrid(std::list<Creature*>& lList, uint32 uiEntry, float fMaxSearchRange) const;
+        void GetAlivePlayerListInRange(WorldObject const* pSource, std::list<Player*>& lList, float fMaxSearchRange) const;
 
         bool isActiveObject() const { return m_isActiveObject || m_viewPoint.hasViewers(); }
         void SetActiveObjectState(bool on);
@@ -1013,10 +1014,12 @@ virtual uint32 GetLevel() const = 0;
         virtual Player* GetAffectingPlayer() const { return nullptr; }
         Unit* SelectMagnetTarget(Unit *victim, Spell* spell = nullptr, SpellEffectIndex eff = EFFECT_INDEX_0);
 
-        SpellCastResult CastSpell(Unit* Victim, uint32 spellId, bool triggered, Item *castItem = nullptr, Aura* triggeredByAura = nullptr, ObjectGuid originalCaster = ObjectGuid(), SpellEntry const* triggeredBy = nullptr, SpellEntry const* triggeredByParent = nullptr);
-        SpellCastResult CastSpell(Unit* Victim, SpellEntry const *spellInfo, bool triggered, Item *castItem = nullptr, Aura* triggeredByAura = nullptr, ObjectGuid originalCaster = ObjectGuid(), SpellEntry const* triggeredBy = nullptr, SpellEntry const* triggeredByParent = nullptr);
-        void CastCustomSpell(Unit* Victim, uint32 spellId, int32 const* bp0, int32 const* bp1, int32 const* bp2, bool triggered, Item *castItem = nullptr, Aura* triggeredByAura = nullptr, ObjectGuid originalCaster = ObjectGuid(), SpellEntry const* triggeredBy = nullptr);
-        void CastCustomSpell(Unit* Victim, SpellEntry const *spellInfo, int32 const* bp0, int32 const* bp1, int32 const* bp2, bool triggered, Item *castItem = nullptr, Aura* triggeredByAura = nullptr, ObjectGuid originalCaster = ObjectGuid(), SpellEntry const* triggeredBy = nullptr);
+        SpellCastResult CastSpell(Unit* pTarget, uint32 spellId, bool triggered, Item* castItem = nullptr, Aura* triggeredByAura = nullptr, ObjectGuid originalCaster = ObjectGuid(), SpellEntry const* triggeredBy = nullptr, SpellEntry const* triggeredByParent = nullptr);
+        SpellCastResult CastSpell(Unit* pTarget, SpellEntry const* spellInfo, bool triggered, Item* castItem = nullptr, Aura* triggeredByAura = nullptr, ObjectGuid originalCaster = ObjectGuid(), SpellEntry const* triggeredBy = nullptr, SpellEntry const* triggeredByParent = nullptr);
+        SpellCastResult CastSpell(GameObject* pTarget, uint32 spellId, bool triggered, Item* castItem = nullptr, Aura* triggeredByAura = nullptr, ObjectGuid originalCaster = ObjectGuid(), SpellEntry const* triggeredBy = nullptr, SpellEntry const* triggeredByParent = nullptr);
+        SpellCastResult CastSpell(GameObject* pTarget, SpellEntry const* spellInfo, bool triggered, Item* castItem = nullptr, Aura* triggeredByAura = nullptr, ObjectGuid originalCaster = ObjectGuid(), SpellEntry const* triggeredBy = nullptr, SpellEntry const* triggeredByParent = nullptr);
+        void CastCustomSpell(Unit* pTarget, uint32 spellId, int32 const* bp0, int32 const* bp1, int32 const* bp2, bool triggered, Item* castItem = nullptr, Aura* triggeredByAura = nullptr, ObjectGuid originalCaster = ObjectGuid(), SpellEntry const* triggeredBy = nullptr);
+        void CastCustomSpell(Unit* pTarget, SpellEntry const* spellInfo, int32 const* bp0, int32 const* bp1, int32 const* bp2, bool triggered, Item* castItem = nullptr, Aura* triggeredByAura = nullptr, ObjectGuid originalCaster = ObjectGuid(), SpellEntry const* triggeredBy = nullptr);
         SpellCastResult CastSpell(float x, float y, float z, uint32 spellId, bool triggered, Item *castItem = nullptr, Aura* triggeredByAura = nullptr, ObjectGuid originalCaster = ObjectGuid(), SpellEntry const* triggeredBy = nullptr);
         SpellCastResult CastSpell(float x, float y, float z, SpellEntry const *spellInfo, bool triggered, Item *castItem = nullptr, Aura* triggeredByAura = nullptr, ObjectGuid originalCaster = ObjectGuid(), SpellEntry const* triggeredBy = nullptr);
 

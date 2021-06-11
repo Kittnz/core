@@ -852,6 +852,7 @@ class Unit : public WorldObject
         bool IsInRoots() const { return HasAuraType(SPELL_AURA_MOD_ROOT); }
         bool IsPolymorphed() const;
         bool IsImmuneToSchoolMask(uint32 schoolMask) const;
+        bool IsImmuneToMechanic(Mechanics mechanic) const;
         bool IsFrozen() const { return HasAuraState(AURA_STATE_FROZEN); }
 
         bool HasBreakableByDamageCrowdControlAura(Unit* excludeCasterChannel = nullptr) const;
@@ -1172,6 +1173,7 @@ class Unit : public WorldObject
         HostileRefManager const& GetHostileRefManager() const { return m_HostileRefManager; }
 
         // Script Helpers
+        uint8 GetEnemyCountInRadiusAround(Unit* pTarget, float radius) const;
         Unit* SelectNearestTarget(float dist) const;
         Unit* SelectRandomUnfriendlyTarget(Unit* except = nullptr, float radius = ATTACK_DISTANCE, bool inFront = false, bool isValidAttackTarget = false) const;
         Unit* SelectRandomFriendlyTarget(Unit* except = nullptr, float radius = ATTACK_DISTANCE, bool inCombat = false) const;
@@ -1436,6 +1438,7 @@ class Unit : public WorldObject
         void SetFacingTo(float ori);
         void SetFacingToObject(WorldObject* pObject);
         bool IsBehindTarget(Unit const* pTarget, bool strict = true) const;
+        bool CantPathToVictim() const;
         
         MotionMaster* GetMotionMaster() { return &i_motionMaster; }
         MotionMaster const* GetMotionMaster() const { return &i_motionMaster; }

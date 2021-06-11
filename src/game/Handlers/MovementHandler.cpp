@@ -226,10 +226,10 @@ void WorldSession::HandleMoveTeleportAckOpcode(WorldPacket& recvData)
 
     ObjectGuid guid;
     recvData >> guid;
-
     uint32 counter = 0;
+    recvData >> counter;
     uint32 time = 0;
-    recvData >> counter >> time;
+    recvData >> time;
     DEBUG_LOG("Guid: %s", guid.GetString().c_str());
     DEBUG_LOG("Counter %u, time %u", counter, time / IN_MILLISECONDS);
 
