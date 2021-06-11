@@ -10,7 +10,7 @@ update item_template set quality = 2 where entry = 83005 or entry = 83006;
 
 update item_template set range_mod = 100 where entry = 51780;
 
--- Some new Kazgrim's items (TODO: FIX STATS)
+-- Some new Kazgrim's items:
 
 replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values 
 (11496, 70050, 6, 5, 1, 1), -- Immol’thar
@@ -44,3 +44,14 @@ replace into `item_template` values
 (70062, 0, 4, 4, 'Gauntlets of Force', '', 50134, 3, 0, 0, 83241, 18033, 10, -1, -1, 63, 55, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 5, 12, 0, 11, 0, 17, 0, 17, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 483, 0, 0, 0, 0, 15, 5, 4720, 1, 0, 0, -1, 0, -1, 0, 1, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 55, 0, 0, 0, 0, 65, 0, 0, 0, 0, 1, NULL),
 (70063, 0, 4, 4, 'Girdle of Hope', '', 50133, 3, 0, 0, 85671, 14586, 6, -1, -1, 63, 57, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 24, 0, 11, 0, 17, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 416, 0, 0, 0, 0, 10, 5, 12981, 1, 0, 0, -1, 0, -1, 0, 1, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 55, 0, 0, 0, 0, 65, 0, 0, 0, 0, 1, NULL),
 (70064, 0, 4, 4, 'Epaulets of Courage', '', 50157, 3, 0, 0, 91323, 29712, 3, -1, -1, 63, 60, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 4, 18, 6, 9, 0, 7, 0, 19, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 610, 0, 0, 0, 0, 5, 15, 0, 1, 0, 0, -1, 0, -1, 0, 1, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 100, 0, 0, 0, 0, 65, 0, 0, 0, 0, 1, NULL);
+
+update item_template set stat_value1 = 0 where stat_value1 > 0 and stat_type1 = 0;
+update item_template set stat_value2 = 0 where stat_value2 > 0 and stat_type2 = 0;
+update item_template set stat_value3 = 0 where stat_value3 > 0 and stat_type3 = 0;
+update item_template set stat_value4 = 0 where stat_value4 > 0 and stat_type4 = 0;
+update item_template set stat_value5 = 0 where stat_value5 > 0 and stat_type5 = 0;
+update item_template set stat_value6 = 0 where stat_value6 > 0 and stat_type6 = 0;
+update item_template set stat_value7 = 0 where stat_value7 > 0 and stat_type7 = 0;
+update item_template set stat_value8 = 0 where stat_value8 > 0 and stat_type8 = 0;
+update item_template set stat_value9 = 0 where stat_value9 > 0 and stat_type9 = 0;
+update item_template set stat_value10 = 0 where stat_value10 > 0 and stat_type10 = 0;
