@@ -322,6 +322,8 @@ void WorldSession::HandleCastSpellOpcode(WorldPacket& recvPacket)
 
     recvPacket >> targets.ReadForCaster(_player);
 
+    SpellEntry const* originalSpellInfo = spellInfo;
+
     // auto-selection buff level base at target level (in spellInfo)
     if (Unit* target = targets.getUnitTarget())
     {
@@ -363,7 +365,11 @@ void WorldSession::HandleCastSpellOpcode(WorldPacket& recvPacket)
     if (spellInfo->SpellFamilyName == SPELLFAMILY_ROGUE)
         _player->m_castingSpell = _player->GetComboPoints();
 
-    Spell *spell = new Spell(_player, spellInfo, false, ObjectGuid(), nullptr, targets.getUnitTarget());
+    Spell* spell = new Spell(_player, spellInfo, false, ObjectGuid(), nullptr, targets.getUnitTarget());
+
+    // Spell has been down-ranked, remember what client wanted to cast.
+    if (spellInfo != originalSpellInfo)
+        spell->m_originalSpellInfo = originalSpellInfo;
 
     // Nostalrius : Ivina
     spell->SetClientStarted(true);
