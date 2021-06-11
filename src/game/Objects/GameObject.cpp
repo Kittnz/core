@@ -1858,35 +1858,16 @@ void GameObject::Use(Unit* user)
 
             if (player->CanUseBattleGroundObject())
             {
-                // in battleground check
-                BattleGround *bg = player->GetBattleGround();
-                if (!bg)
-                    return;
-                // BG flag dropped
-                // WS:
-                // 179785 - Silverwing Flag
-                // 179786 - Warsong Flag
                 GameObjectInfo const* info = GetGOInfo();
-                if (info)
+                if (info && info->flagdrop.eventID)
                 {
-                    switch (info->id)
-                    {
-                        case 179785:                        // Silverwing Flag
-                            // check if it's correct bg
-                            if (bg->GetTypeID() == BATTLEGROUND_WS)
-                                bg->EventPlayerClickedOnFlag(player, this);
-                            break;
-                        case 179786:                        // Warsong Flag
-                            if (bg->GetTypeID() == BATTLEGROUND_WS)
-                                bg->EventPlayerClickedOnFlag(player, this);
-                            break;
-                    }
+                    DEBUG_FILTER_LOG(LOG_FILTER_AI_AND_MOVEGENSS, "FlagDrop ScriptStart id %u for GO entry %u (GUID %u).", info->flagdrop.eventID, GetEntry(), GetGUIDLow());
+
+                    if (!sScriptMgr.OnProcessEvent(info->flagdrop.eventID, player, this, true))
+                        GetMap()->ScriptsStart(sEventScripts, info->flagdrop.eventID, player, this);
                 }
-                player->RemoveSpellsCausingAura(SPELL_AURA_MOD_STEALTH);
-                player->RemoveSpellsCausingAura(SPELL_AURA_MOD_INVISIBILITY);
-                //this cause to call return, all flags must be deleted here!!
-                spellId = 0;
-                Delete();
+
+                spellId = info->flagdrop.pickupSpell;
             }
             break;
         }
