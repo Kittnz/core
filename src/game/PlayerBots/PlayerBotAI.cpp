@@ -90,6 +90,7 @@ bool PlayerBotAI::SpawnNewPlayer(WorldSession* sess, uint8 class_, uint32 race_,
     newChar->Relocate(x, y, z, o);
     sObjectMgr.InsertPlayerInCache(newChar);
     newChar->SetMap(map);
+    newChar->SaveRecallPosition();
     newChar->CreatePacketBroadcaster();
     MasterPlayer* mPlayer = new MasterPlayer(sess);
     mPlayer->LoadPlayer(newChar);
@@ -103,6 +104,8 @@ bool PlayerBotAI::SpawnNewPlayer(WorldSession* sess, uint8 class_, uint32 race_,
     sess->SetPlayer(newChar);
     sess->SetMasterPlayer(mPlayer);
     sObjectAccessor.AddObject(newChar);
+    newChar->SetCanModifyStats(true);
+    newChar->UpdateAllStats();
     return true;
 }
 bool MageOrgrimmarAttackerAI::OnSessionLoaded(PlayerBotEntry* entry, WorldSession* sess)
