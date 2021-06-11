@@ -1614,15 +1614,9 @@ Anticheat.NumDesyncs.Penalty = 7
 
 #
 #    Anticheat.SpeedHack.Enable
-#        Check for players moving too fast.
+#        Check for players moving too fast using extrapolation.
 
 Anticheat.SpeedHack.Enable = 1
-
-#
-#    Anticheat.SpeedHack.UseInterpolation
-#        Use movement interpolation when doing speed checks.
-
-Anticheat.SpeedHack.UseInterpolation = 1
 
 #
 #    Anticheat.OverpspeedDistance.Enable
@@ -1641,24 +1635,6 @@ Anticheat.OverpspeedDistance.Threshold = 30
 #        Action to take upon failing this check.
 
 Anticheat.OverpspeedDistance.Penalty = 7
-
-#
-#    Anticheat.OverspeedZ.Enable
-#        Check for players moving up or down too fast.
-
-Anticheat.OverspeedZ.Enable = 1
-
-#
-#    Anticheat.OverspeedZ.Threshold
-#        Detections needed to trigger a penalty.
-
-Anticheat.OverspeedZ.Threshold = 3
-
-#
-#    Anticheat.OverspeedZ.Penalty
-#        Action to take upon failing this check.
-
-Anticheat.OverspeedZ.Penalty = 7
 
 #
 #    Anticheat.OverspeedJump.Enable

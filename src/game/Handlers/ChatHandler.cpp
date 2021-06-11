@@ -274,7 +274,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
     /** Enable various spam chat detections */
     if (lang != LANG_ADDON)
     {
-        if (AntispamInterface *a = sAnticheatLib->GetAntispam())
+        if (AntispamInterface *a = sAnticheatMgr->GetAntispam())
             if (a->isMuted(GetAccountId(), true, type))
                 return;
     }
@@ -380,7 +380,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                         if (sWorld.getConfig(CONFIG_BOOL_STRICT_LATIN_IN_GENERAL_CHANNELS))
                         {
                             // remove color, punct, ctrl, space
-                            if (AntispamInterface *a = sAnticheatLib->GetAntispam())
+                            if (AntispamInterface *a = sAnticheatMgr->GetAntispam())
                             {
                                 std::string normMsg = a->normalizeMessage(msg, 0x1D);
                                 std::wstring w_normMsg;
@@ -408,7 +408,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                     SetLastPubChanMsgTime(time(nullptr));
 
                     if (lang != LANG_ADDON && chn->HasFlag(Channel::ChannelFlags::CHANNEL_FLAG_GENERAL))
-                        if (AntispamInterface *a = sAnticheatLib->GetAntispam())
+                        if (AntispamInterface *a = sAnticheatMgr->GetAntispam())
                             a->addMessage(msg, type, GetPlayerPointer(), nullptr);
                 }
             }
@@ -437,7 +437,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
             if (lang != LANG_ADDON)
             {
                 sWorld.LogChat(this, "Say", msg);
-                if (AntispamInterface *a = sAnticheatLib->GetAntispam())
+                if (AntispamInterface *a = sAnticheatMgr->GetAntispam())
                     a->addMessage(msg, type, GetPlayerPointer(), nullptr);
             }
 
@@ -458,7 +458,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
             if (lang != LANG_ADDON)
             {
                 sWorld.LogChat(this, "Emote", msg);
-                if (AntispamInterface *a = sAnticheatLib->GetAntispam())
+                if (AntispamInterface *a = sAnticheatMgr->GetAntispam())
                     a->addMessage(msg, type, GetPlayerPointer(), nullptr);
             }
 
@@ -480,7 +480,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
             if (lang != LANG_ADDON)
             {
                 sWorld.LogChat(this, "Yell", msg);
-                if (AntispamInterface *a = sAnticheatLib->GetAntispam())
+                if (AntispamInterface *a = sAnticheatMgr->GetAntispam())
                     a->addMessage(msg, type, GetPlayerPointer(), nullptr);
             }
         }
@@ -545,7 +545,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                 {
                     sWorld.LogChat(this, "Whisp", msg, PlayerPointer(new PlayerWrapper<MasterPlayer>(player)));
                     if (!allowIgnoreAntispam)
-                        if (AntispamInterface *a = sAnticheatLib->GetAntispam())
+                        if (AntispamInterface *a = sAnticheatMgr->GetAntispam())
                             a->addMessage(msg, type, GetPlayerPointer(), PlayerPointer(new PlayerWrapper<MasterPlayer>(player)));
                 }
             }

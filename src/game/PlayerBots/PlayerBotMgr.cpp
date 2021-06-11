@@ -321,12 +321,12 @@ bool PlayerBotMgr::addBot(uint32 playerGUID, bool chatBot)
     e->state = PB_STATE_LOADING;
     WorldSession *session = new WorldSession(accountId, nullptr, sAccountMgr.GetSecurity(accountId), 0, LOCALE_enUS, "<BOT>");
     session->SetBot(e);
-    // "It's not because you are a bot that you are allowed cheat!"
-    sAnticheatLib->SessionAdded(session);
     sWorld.AddSession(session);
     m_stats.loadingCount++;
+
     if (chatBot)
         AddTempBot(accountId, 20000);
+
     return true;
 }
 
