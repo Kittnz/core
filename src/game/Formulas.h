@@ -89,15 +89,17 @@ namespace MaNGOS
                     return (ZD + victim_level - pl_level) / float(ZD);
                 }
             }
+
             return 0;
         }
+
         inline uint32 BaseGain(uint32 pl_level, uint32 mob_level)
         {
             const uint32 nBaseExp = 45;
             return (pl_level * 5 + nBaseExp) * BaseGainLevelFactor(pl_level, mob_level);
         }
 
-        inline uint32 Gain(Unit* pUnit, Creature* pCreature)
+        inline uint32 Gain(Player* pPlayer, Creature* pCreature)
         {
             if (pCreature->GetUInt32Value(UNIT_CREATED_BY_SPELL) &&
                ((pCreature->GetCreatureInfo()->type == CREATURE_TYPE_CRITTER) ||
@@ -112,7 +114,7 @@ namespace MaNGOS
             if (pCreature->HasUnitState(UNIT_STAT_NO_KILL_REWARD))
                 return 0;
 
-            float xp_gain = BaseGain(pUnit->GetLevel(), pCreature->GetLevel());
+            float xp_gain = BaseGain(pPlayer->GetLevel(), pCreature->GetLevel());
             if (!xp_gain)
                 return 0;
 
@@ -132,13 +134,11 @@ namespace MaNGOS
             xp_gain *= pCreature->GetCreatureInfo()->xp_multiplier;
             xp_gain *= pCreature->GetXPModifierDueToDamageOrigin();
 
-            Player* pPlayer = pUnit->GetCharmerOrOwnerPlayerOrPlayerItself();
-            float personalRate = pPlayer ? pPlayer->GetPersonalXpRate() : -1.0f;
+            if (pPlayer->isTurtle())
+			    xp_gain *= 0.5f;
 
-            if (personalRate >= 0.0f)
-                xp_gain *= personalRate;
-            else
-                xp_gain *= sWorld.getConfig(CONFIG_FLOAT_RATE_XP_KILL);
+            if (pPlayer->isCheater())
+                xp_gain *= 5.0f;
 
             return std::nearbyint(xp_gain);
         }

@@ -19721,7 +19721,7 @@ void Player::RewardSinglePlayerAtKill(Unit* pVictim)
 
         if (Pet* pet = GetPet())
         {
-            uint32 XP = PvP ? 0 : MaNGOS::XP::Gain(pet, static_cast<Creature*>(pVictim));
+            uint32 XP = PvP ? 0 : MaNGOS::XP::PetGain(pet, static_cast<Creature*>(pVictim));
             pet->GivePetXP(XP);
         }
 

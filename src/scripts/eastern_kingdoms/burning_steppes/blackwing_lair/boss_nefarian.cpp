@@ -479,7 +479,7 @@ CreatureAI* GetAI_boss_nefarian(Creature* pCreature)
 
 enum
 {
-    SPELL_ROOT_SELF     = 23973,
+    SPELL_ROOT_SELF = 17507,
 };
 
 struct npc_corrupted_totemAI : ScriptedAI
