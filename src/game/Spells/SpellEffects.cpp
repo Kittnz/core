@@ -1480,7 +1480,7 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                 {
                     if (unitTarget && unitTarget->GetTypeId() == TYPEID_PLAYER)
                         // Naxxramas Entry Flag Effect DND
-                        m_caster->CastSpell(unitTarget, 29294, true);
+                        m_caster->CastSpell(unitTarget, 29296, true);
 
                     return;
                 }
