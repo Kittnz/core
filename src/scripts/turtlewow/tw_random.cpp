@@ -708,23 +708,6 @@ bool ItemUseSpell_item_holy_wings(Player* pPlayer, Item* pItem, const SpellCastT
     return false;
 }
 
-bool ItemUseSpell_item_brainwashing_device(Player* pPlayer, Item* pItem, const SpellCastTargets&)
-{
-    if (pPlayer->IsInCombat() || pPlayer->IsBeingTeleported() || (pPlayer->GetDeathState() == CORPSE) || pPlayer->IsMoving())
-        ChatHandler(pPlayer).PSendSysMessage("Warning! Failsafe system shutting device down!");
-    else
-    {
-        float dis{ 2.0F };
-        float x, y, z;
-        pPlayer->GetSafePosition(x, y, z);
-        x += dis * cos(pPlayer->GetOrientation());
-        y += dis * sin(pPlayer->GetOrientation());
-        pPlayer->SummonGameObject(1000333, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 120, true);
-        return true;
-    }
-    return false;
-}
-
 enum PlayerMounting
 {
     STAG_MOUNT_DISPLAY = 17158,
@@ -5927,11 +5910,6 @@ void AddSC_tw_random()
     newscript = new Script;
     newscript->Name = "item_saddle";
     newscript->pItemUseSpell = &ItemUseSpell_item_saddle;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "item_brainwashing_device";
-    newscript->pItemUseSpell = &ItemUseSpell_item_brainwashing_device;
     newscript->RegisterSelf();
 
     newscript = new Script;

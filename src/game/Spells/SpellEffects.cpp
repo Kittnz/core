@@ -1787,6 +1787,19 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                     }
                     return;
                 }
+                case 46002: // Goblin Brainwashing Device
+                {
+                    if (m_caster && m_caster->IsPlayer())
+                    {
+                        float dis{ 2.0F };
+                        float x, y, z;
+                        m_caster->GetSafePosition(x, y, z);
+                        x += dis * cos(m_caster->GetOrientation());
+                        y += dis * sin(m_caster->GetOrientation());
+                        m_caster->SummonGameObject(1000333, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 120, true);
+                    }
+                    return;
+                }
             }
             // All IconID Check in there
             switch (m_spellInfo->SpellIconID)
