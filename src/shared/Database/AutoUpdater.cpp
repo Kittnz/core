@@ -11,7 +11,11 @@
 #include <iterator>
 #include <istream>
 
+#if PLATFORM == PLATFORM_WINDOWS
 using namespace std::filesystem;
+#elif PLATFORM == PLATFORM_UNIX
+using namespace std::experimental::filesystem
+#endif
 
 namespace DBUpdater
 {

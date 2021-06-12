@@ -1,5 +1,10 @@
 #pragma once
+#if PLATFORM == PLATFORM_WINDOWS
 #include <filesystem>
+#elif PLATFORM == PLATFORM_UNIX
+#include <experimental/filesystem>
+#endif
+
 #include <vector>
 #include <optional>
 #include <unordered_map>
