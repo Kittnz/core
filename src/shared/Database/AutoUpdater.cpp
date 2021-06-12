@@ -14,7 +14,7 @@
 #if PLATFORM == PLATFORM_WINDOWS
 using namespace std::filesystem;
 #elif PLATFORM == PLATFORM_UNIX
-using namespace std::experimental::filesystem
+using namespace std::experimental::filesystem;
 #endif
 
 namespace DBUpdater
@@ -100,7 +100,7 @@ namespace DBUpdater
         return dbMigrations;
     }
 
-    void AutoUpdater::ProcessTargetUpdates(const std::filesystem::directory_entry& targetPath, DatabaseType* targetDatabase) const
+    void AutoUpdater::ProcessTargetUpdates(const fs::directory_entry& targetPath, DatabaseType* targetDatabase) const
     {
         auto fileMigrations = LoadFileMigrations(targetPath);
         auto dbMigrations = LoadDatabaseMigrations(targetDatabase);
