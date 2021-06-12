@@ -715,17 +715,18 @@ bool GOHello_go_corrupted_crystal(Player* pPlayer, GameObject* pGO)
 
         return false;
     }
-        if (go_corrupted_crystal* gobAI = dynamic_cast<go_corrupted_crystal*>(pGO->AI()))
-        {
-            if (gobAI->CheckCanStartEvent())
-            {
-                gobAI->SetInUse();
-                gobAI->PassPlayer(pPlayer);
 
-                pPlayer->SummonCreature(NPC_KHEYNA, 658.04, -4105.24, 99.43, 0, TEMPSUMMON_DEAD_DESPAWN);
-            }
+    if (go_corrupted_crystal* gobAI = dynamic_cast<go_corrupted_crystal*>(pGO->AI()))
+    {
+        if (gobAI->CheckCanStartEvent())
+        {
+            gobAI->SetInUse();
+            gobAI->PassPlayer(pPlayer);
+
+            pPlayer->SummonCreature(NPC_KHEYNA, 658.04, -4105.24, 99.43, 0, TEMPSUMMON_DEAD_DESPAWN);
         }
-        return false;
+    }
+    return false;
 }
 
 
