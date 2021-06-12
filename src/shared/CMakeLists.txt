@@ -41,6 +41,7 @@ set (shared_SRCS
     Auth/Sha1.h
     Config/Config.h
     Config/ConfigEnv.h
+    Database/AutoUpdater.hpp
     Database/Database.h
     Database/DatabaseEnv.h
     Database/DatabaseImpl.h
@@ -74,6 +75,7 @@ set (shared_SRCS
     Auth/HMACSHA1.cpp
     Auth/Sha1.cpp
     Config/Config.cpp
+    Database/AutoUpdater.cpp
     Database/Database.cpp
     Database/DatabaseMysql.cpp
     Database/DatabasePostgre.cpp

@@ -157,6 +157,11 @@ QueryNamedResult* PostgreSQLConnection::QueryNamed(const char *sql)
     return new QueryNamedResult(queryResult,names);
 }
 
+bool PostgreSQLConnection::ExecuteMultiline(const char* sql)
+{
+    return false; //not supported for now.
+}
+
 bool PostgreSQLConnection::Execute(const char *sql)
 {
     if (!mPGconn)

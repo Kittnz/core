@@ -395,7 +395,7 @@ QueryNamedResult* Database::PQueryNamed(const char *format,...)
     return QueryNamed(szQuery);
 }
 
-bool Database::Execute(const char *sql)
+bool Database::Execute(const char *sql, bool multiline)
 {
     if (!m_pAsyncConn)
         return false;
@@ -404,7 +404,7 @@ bool Database::Execute(const char *sql)
     if(pTrans)
     {
         //add SQL request to trans queue
-        pTrans->DelayExecute(new SqlPlainRequest(sql));
+        pTrans->DelayExecute(multiline ? static_cast<SqlOperation*>(new SqlMultilineRequest(sql)) : new SqlPlainRequest(sql));
     }
     else
     {
@@ -413,7 +413,7 @@ bool Database::Execute(const char *sql)
             return DirectExecute(sql);
 
         // Simple sql statement
-        AddToDelayQueue(new SqlPlainRequest(sql));
+        AddToDelayQueue(multiline ? static_cast<SqlOperation*>(new SqlMultilineRequest(sql)) : new SqlPlainRequest(sql));
     }
 
     return true;

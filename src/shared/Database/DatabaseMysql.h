@@ -71,6 +71,7 @@ private:
     MYSQL_RES *m_pResultMetadata;
 };
 
+
 class MySQLConnection : public SqlConnection
 {
     public:
@@ -84,6 +85,7 @@ class MySQLConnection : public SqlConnection
         QueryResult* Query(const char *sql) override;
         QueryNamedResult* QueryNamed(const char *sql) override;
         bool Execute(const char *sql) override;
+        bool ExecuteMultiline(const char* sql) override;
 
         unsigned long escape_string(char *to, const char *from, unsigned long length) override;
 

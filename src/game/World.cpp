@@ -79,6 +79,7 @@
 #include "GuardMgr.h"
 #include "DailyQuestHandler.h"
 #include "GuidObjectScaling.h"
+#include "Database/AutoUpdater.hpp"
 
 #include <chrono>
 
@@ -1212,6 +1213,8 @@ char const* World::GetPatchName() const
 /// Initialize the World
 void World::SetInitialWorldSettings()
 {
+    using namespace DBUpdater;
+
     ///- Initialize the random number generator
     srand((unsigned int)time(nullptr));
 
@@ -1240,6 +1243,8 @@ void World::SetInitialWorldSettings()
         Log::WaitBeforeContinueIfNeed();
         exit(1);                                            // Error message displayed in function already
     }
+
+    sAutoUpdater->ProcessUpdates();
 
     ///- Loading shop tables
     sObjectMgr.LoadShop();

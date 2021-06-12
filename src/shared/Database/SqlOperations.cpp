@@ -36,6 +36,12 @@ bool SqlPlainRequest::Execute(SqlConnection *conn)
     return conn->Execute(m_sql);
 }
 
+bool SqlMultilineRequest::Execute(SqlConnection* conn)
+{
+    LOCK_DB_CONN(conn);
+    return conn->ExecuteMultiline(m_sql.c_str());
+}
+
 SqlTransaction::~SqlTransaction()
 {
     while(!m_queue.empty())
