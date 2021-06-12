@@ -1,8 +1,10 @@
 #pragma once
 #if PLATFORM == PLATFORM_WINDOWS
 #include <filesystem>
+namespace fs = std::filesystem;
 #elif PLATFORM == PLATFORM_UNIX
 #include <experimental/filesystem>
+namespace fs = std::experimental::filesystem;
 #endif
 
 #include <vector>
@@ -49,7 +51,7 @@ namespace DBUpdater
 
         bool ExecuteUpdate(const FileMigration& fileData, DatabaseType* targetDatabase) const;
 
-        void ProcessTargetUpdates(const std::filesystem::directory_entry& targetPath, DatabaseType* targetDatabase) const;
+        void ProcessTargetUpdates(const fs::directory_entry& targetPath, DatabaseType* targetDatabase) const;
 
         std::unordered_map<std::string, FileMigration> LoadFileMigrations(const std::filesystem::directory_entry& targetPath) const;
         std::unordered_map<std::string, Migration> LoadDatabaseMigrations(DatabaseType* targetDatabase) const;
