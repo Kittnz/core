@@ -96,8 +96,14 @@ bool MySQLConnection::OpenConnection(bool reconnect)
         mysql_options(mysqlInit, MYSQL_OPT_PROTOCOL, (char const*)&opt);
     }
 
+    unsigned long flags = CLIENT_MULTI_STATEMENTS;
+
+    //multiple execs for auto updater.
+    //We might have to add multiple result set support later on for this.
+
+
     mMysql = mysql_real_connect(mysqlInit, m_host.c_str(), m_user.c_str(),
-        m_password.c_str(), m_database.c_str(), m_port, nullptr, 0);
+        m_password.c_str(), m_database.c_str(), m_port, nullptr, flags);
 
     if (mMysql)
     {
@@ -271,6 +277,44 @@ QueryNamedResult* MySQLConnection::QueryNamed(const char *sql)
 
     queryResult->NextRow();
     return new QueryNamedResult(queryResult,names);
+}
+
+bool MySQLConnection::ExecuteMultiline(const char* sql)
+{
+    if (!mMysql)
+        return false;
+
+    uint32 _s = WorldTimer::getMSTime();
+
+    if (mysql_query(mMysql, sql))
+    {
+        uint32 lErrno = mysql_errno(mMysql);
+
+        sLog.outErrorDb("SQL: %s", sql);
+        sLog.outErrorDb("[%u] %s", lErrno, mysql_error(mMysql));
+
+        if (HandleMySQLError(lErrno)) // If error is handled, just try again
+            return Execute(sql);
+        return false;
+    }
+    else
+    {
+        DEBUG_FILTER_LOG(LOG_FILTER_SQL_TEXT, "[%u ms] SQL: %s", WorldTimer::getMSTimeDiff(_s, WorldTimer::getMSTime()), sql);
+    }
+
+    int status = 0;
+
+    //we have to drain the results from multiline queries otherwise the server will not be able to keep up.
+    do {
+        MYSQL_RES* result = mysql_store_result(mMysql);
+        if (result)
+            mysql_free_result(result);
+
+        if ((status = mysql_next_result(mMysql)) > 0)
+            return false;
+    } while (status == 0);
+
+    return true;
 }
 
 bool MySQLConnection::Execute(const char* sql)

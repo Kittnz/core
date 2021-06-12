@@ -46,8 +46,10 @@ class PostgreSQLConnection : public SqlConnection
         bool OpenConnection(bool reconnect);
 
         QueryResult* Query(const char *sql);
+
         QueryNamedResult* QueryNamed(const char *sql);
         bool Execute(const char *sql);
+        bool ExecuteMultiline(const char* sql);
 
         unsigned long escape_string(char *to, const char *from, unsigned long length);
 

@@ -62,6 +62,16 @@ class SqlPlainRequest : public SqlOperation
         bool Execute(SqlConnection *conn);
 };
 
+class SqlMultilineRequest : public SqlOperation
+{
+private:
+    std::string m_sql;
+public:
+    SqlMultilineRequest(const char* sql) : m_sql(sql) {}
+
+    bool Execute(SqlConnection* conn);
+};
+
 class SqlTransaction : public SqlOperation
 {
     private:

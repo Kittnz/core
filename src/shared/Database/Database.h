@@ -58,6 +58,7 @@ class SqlConnection
 
         //public methods for making requests
         virtual bool Execute(const char *sql) = 0;
+        virtual bool ExecuteMultiline(const char* sql) = 0;
 
         //escape string generation
         virtual unsigned long escape_string(char *to, const char *from, unsigned long length) { strncpy(to,from,length); return length; }
@@ -217,7 +218,7 @@ class Database
         template<typename ParamType1>
             bool DelayQueryHolderUnsafe(void (*method)(QueryResult*, SqlQueryHolder*, ParamType1), SqlQueryHolder *holder, ParamType1 param1);
 
-        bool Execute(const char *sql);
+        bool Execute(const char *sql, bool multiline = false);
         bool PExecute(const char *format,...) ATTR_PRINTF(2,3);
 
         // Writes SQL commands to a LOG file (see mangosd.conf "LogSQL")
