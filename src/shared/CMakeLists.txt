@@ -170,7 +170,7 @@ add_library(shared STATIC
 
 if(UNIX)
   find_package(Threads)
-  target_link_libraries(shared ${ACE_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+  target_link_libraries(shared ${ACE_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT} stdc++fs)
 endif(UNIX)
 
 if(MINGW)
