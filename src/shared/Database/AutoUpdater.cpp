@@ -118,8 +118,8 @@ namespace DBUpdater
                 continue;
             }
 
-
             updates.push_back(std::move(fileMigrationPair.second));
+            dbMigrations.erase(hash);
         }
 
         for (const auto& dbMigration : dbMigrations)
