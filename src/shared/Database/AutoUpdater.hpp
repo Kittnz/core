@@ -1,11 +1,6 @@
 #pragma once
-#if PLATFORM == PLATFORM_WINDOWS
 #include <filesystem>
 namespace fs = std::filesystem;
-#elif PLATFORM == PLATFORM_UNIX
-#include <experimental/filesystem>
-namespace fs = std::experimental::filesystem;
-#endif
 
 #include <vector>
 #include <optional>
