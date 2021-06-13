@@ -148,19 +148,17 @@ void WorldSession::HandleSendMail(WorldPacket& recv_data)
 
     recv_data >> req->body;
 
-    recv_data >> unk1;                                      // stationery?
-    recv_data >> unk2;                                      // 0x00000000
+    recv_data >> unk1; // stationery?
+    recv_data >> unk2; // 0x00000000
 
     recv_data >> req->itemGuid;
 
-    recv_data >> req->money >> req->COD;                    // money and cod
+    recv_data >> req->money >> req->COD; // money and cod
 
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_9_4
     uint64 unk3;
     uint8 unk4;
-    recv_data >> unk3;                                      // const 0
-    recv_data >> unk4;                                      // const 0
-#endif
+    recv_data >> unk3; // const 0
+    recv_data >> unk4; // const 0
 
     // packet read complete, now do check
     if (req->subject.size() > 64)
