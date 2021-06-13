@@ -170,7 +170,15 @@ add_library(shared STATIC
 
 if(UNIX)
   find_package(Threads)
-  target_link_libraries(shared ${ACE_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT} stdc++fs)
+  if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 8)
+      message(FATAL_ERROR "Core requires GCC of 8 or higher.")
+    elseif (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 10)
+      target_link_libraries(shared stdc++fs)
+    endif()
+  endif()
+
+  target_link_libraries(shared ${ACE_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT} )
 endif(UNIX)
 
 if(MINGW)
