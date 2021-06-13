@@ -15543,61 +15543,58 @@ void Player::LoadCorpse()
     }
 }
 
-void Player::_LoadInventory(QueryResult *result, uint32 timediff, bool &has_epic_mount)
+bool Player::_LoadInventory(QueryResult* result, uint32 timediff, bool& hasEpicMount)
 {
-    //               0                1      2         3        4      5             6                 7           8     9    10    11   12    13              14
-    //SELECT creatorGuid, giftCreatorGuid, count, duration, charges, flags, enchantments, randomPropertyId, durability, text, bag, slot, item, itemEntry, generated_loot
-    std::unordered_map<uint32, Bag*> bagMap;                          // fast guid lookup for bags
-    //NOTE: the "order by `bag`" is important because it makes sure
-    //the bagMap is filled before items in the bags are loaded
-    //NOTE2: the "order by `slot`" is needed because mainhand weapons are (wrongly?)
-    //expected to be equipped before offhand items (TODO: fixme)
-
-    std::set<uint32> itemGuids;
-    uint32 zone = GetZoneId();
+    //        0             1                  2      3         4        5      6             7                   8           9     10   11    12         13              14
+    // SELECT creator_guid, gift_creator_guid, count, duration, charges, flags, enchantments, random_property_id, durability, text, bag, slot, item_guid, item_id, generated_loot
 
     if (result)
     {
+        std::unordered_map<uint32, Bag*> bagMap; // Fast guid lookup for bags
+        // NOTE: The "order by `bag`" is important because it makes sure the bagMap is filled before items in the bags are loaded
+        // NOTE2: The "order by `slot`" is needed because mainhand weapons are (wrongly?) expected to be equipped before offhand items (TODO: fixme)
+
+        std::set<uint32> itemGuids;
+        uint32 zone = GetZoneId();
         std::list<Item*> problematicItems;
 
-        // prevent items from being added to the queue when stored
+        // Prevent items from being added to the queue when stored
         m_itemUpdateQueueBlocked = true;
         do
         {
-            Field *fields = result->Fetch();
-            uint32 bag_guid     = fields[10].GetUInt32();
-            uint8  slot         = fields[11].GetUInt8();
+            Field* fields = result->Fetch();
+            uint32 bag_guid = fields[10].GetUInt32();
+            uint8  slot = fields[11].GetUInt8();
             uint32 item_lowguid = fields[12].GetUInt32();
-            uint32 item_id      = fields[13].GetUInt32();
+            uint32 item_id = fields[13].GetUInt32();
 
-            ItemPrototype const * proto = ObjectMgr::GetItemPrototype(item_id);
+            ItemPrototype const* proto = ObjectMgr::GetItemPrototype(item_id);
 
             if (!proto)
             {
-                CharacterDatabase.PExecute("DELETE FROM character_inventory WHERE item = '%u'", item_lowguid);
-                CharacterDatabase.PExecute("DELETE FROM item_instance WHERE guid = '%u'", item_lowguid);
-                CharacterDatabase.PExecute("INSERT INTO character_deleted_items (player_guid, item_entry, stack_count) VALUES ('%u', '%u', '%u')", GetGUIDLow(), item_id, fields[2].GetUInt32());
+                CharacterDatabase.PExecute("DELETE FROM `character_inventory` WHERE `item_guid` = '%u'", item_lowguid);
+                CharacterDatabase.PExecute("DELETE FROM `item_instance` WHERE `guid` = '%u'", item_lowguid);
+                CharacterDatabase.PExecute("INSERT INTO `character_deleted_items` (`player_guid`, `item_id`, `stack_count`) VALUES ('%u', '%u', '%u')", GetGUIDLow(), item_id, fields[2].GetUInt32());
                 sLog.outError("Player::_LoadInventory: Player %s has an unknown item (id: #%u) in inventory, deleted.", GetName(), item_id);
                 continue;
             }
 
             // Needed for riding skill replacement in patch 1.12.
             if ((proto->RequiredSkill == SKILL_RIDING) && (proto->RequiredSkillRank == 150))
-                has_epic_mount = true;
+                hasEpicMount = true;
 
-            // Duplicate check. Player listed item in AH and then immediately relogged, before the item
-            // was deleted from the inventory in the DB
-            if (Item *item = sAuctionMgr.GetAItem(item_lowguid))
+            // Duplicate check. Player listed item in AH and then immediately relogged, before the item was deleted from the inventory in the DB
+            if (Item* item = sAuctionMgr.GetAItem(item_lowguid))
             {
                 std::stringstream oss;
                 oss << "Duplicate item (via AH) " << item_id << " GUID:" << item_lowguid << ", count: " << item->GetCount() << ", bag: " << bag_guid << ", slot: " << uint32(slot);
-                CharacterDatabase.PExecute("DELETE FROM character_inventory WHERE item = '%u'", item_lowguid);
+                CharacterDatabase.PExecute("DELETE FROM `character_inventory` WHERE `item_guid` = '%u'", item_lowguid);
                 GetSession()->ProcessAnticheatAction("PassiveAnticheat", oss.str().c_str(), CHEAT_ACTION_LOG | CHEAT_ACTION_REPORT_GMS);
                 DETAIL_LOG(oss.str().c_str());
                 continue;
             }
 
-            Item *item = NewItemOrBag(proto);
+            Item* item = NewItemOrBag(proto);
 
             /*
              * LoadFromDB is called from multiple places but with a different set of fields - this is workaround
@@ -15608,13 +15605,13 @@ void Player::_LoadInventory(QueryResult *result, uint32 timediff, bool &has_epic
             if (!item->LoadFromDB(item_lowguid, GetObjectGuid(), fields, item_id))
             {
                 sLog.outError("Player::_LoadInventory: Player %s has broken item (id: #%u) in inventory, deleted.", GetName(), item_id);
-                CharacterDatabase.PExecute("DELETE FROM character_inventory WHERE item = '%u'", item_lowguid);
+                CharacterDatabase.PExecute("DELETE FROM `character_inventory` WHERE `item_guid` = '%u'", item_lowguid);
                 item->FSetState(ITEM_REMOVED);
-                item->SaveToDB();                           // it also deletes item object !
+                item->SaveToDB(); // It also deletes item object!
                 continue;
             }
 
-            // Duplic guid check
+            // Duplicate guid check
             if (itemGuids.find(item_lowguid) != itemGuids.end())
             {
                 std::stringstream oss;
@@ -15624,27 +15621,27 @@ void Player::_LoadInventory(QueryResult *result, uint32 timediff, bool &has_epic
 
             itemGuids.insert(item_lowguid);
 
-            // not allow have in alive state item limited to another map/zone
+            // Not allow have in alive state item limited to another map/zone
             if (IsAlive() && item->IsLimitedToAnotherMapOrZone(GetMapId(), zone))
             {
-                CharacterDatabase.PExecute("DELETE FROM character_inventory WHERE item = '%u'", item_lowguid);
+                CharacterDatabase.PExecute("DELETE FROM `character_inventory` WHERE `item_guid` = '%u'", item_lowguid);
                 item->FSetState(ITEM_REMOVED);
-                item->SaveToDB();                           // it also deletes item object !
+                item->SaveToDB(); // It also deletes item object!
                 continue;
             }
 
             // "Conjured items disappear if you are logged out for more than 15 minutes"
             if (timediff > 15 * MINUTE && (item->GetProto()->Flags & ITEM_FLAG_CONJURED))
             {
-                CharacterDatabase.PExecute("DELETE FROM character_inventory WHERE item = '%u'", item_lowguid);
+                CharacterDatabase.PExecute("DELETE FROM `character_inventory` WHERE `item_guid` = '%u'", item_lowguid);
                 item->FSetState(ITEM_REMOVED);
-                item->SaveToDB();                           // it also deletes item object !
+                item->SaveToDB(); // It also deletes item object!
                 continue;
             }
 
             bool success = true;
 
-            // the item/bag is not in a bag
+            // The item/bag is not in a bag
             if (!bag_guid)
             {
                 item->SetContainer(nullptr);
@@ -15654,7 +15651,9 @@ void Player::_LoadInventory(QueryResult *result, uint32 timediff, bool &has_epic
                 {
                     ItemPosCountVec dest;
                     if (CanStoreItem(INVENTORY_SLOT_BAG_0, slot, dest, item, false) == EQUIP_ERR_OK)
+                    {
                         item = StoreItem(dest, item, true);
+                    }
                     else
                     {
                         GetSession()->ProcessAnticheatAction("PassiveAnticheat", "Item Load failed: cannot store", CHEAT_ACTION_LOG | CHEAT_ACTION_REPORT_GMS);
@@ -15665,7 +15664,9 @@ void Player::_LoadInventory(QueryResult *result, uint32 timediff, bool &has_epic
                 {
                     uint16 dest;
                     if (CanEquipItem(slot, dest, item, false, false) == EQUIP_ERR_OK)
+                    {
                         QuickEquipItem(dest, item);
+                    }
                     else
                     {
                         GetSession()->ProcessAnticheatAction("PassiveAnticheat", "Item Load failed: cannot QuickEquip", CHEAT_ACTION_LOG | CHEAT_ACTION_REPORT_GMS);
@@ -15676,7 +15677,9 @@ void Player::_LoadInventory(QueryResult *result, uint32 timediff, bool &has_epic
                 {
                     ItemPosCountVec dest;
                     if (CanBankItem(INVENTORY_SLOT_BAG_0, slot, dest, item, false, false) == EQUIP_ERR_OK)
+                    {
                         item = BankItem(dest, item, true);
+                    }
                     else
                     {
                         GetSession()->ProcessAnticheatAction("PassiveAnticheat", "Item Load failed: cannot Bank", CHEAT_ACTION_LOG | CHEAT_ACTION_REPORT_GMS);
@@ -15686,16 +15689,16 @@ void Player::_LoadInventory(QueryResult *result, uint32 timediff, bool &has_epic
 
                 if (success)
                 {
-                    // store bags that may contain items in them
+                    // Store bags that may contain items in them
                     if (item->IsBag() && IsBagPos(item->GetPos()))
                         bagMap[item_lowguid] = (Bag*)item;
                 }
             }
-            // the item/bag in a bag
+            // The item/bag in a bag
             else
             {
                 item->SetSlot(NULL_SLOT);
-                // the item is in a bag, find the bag
+                // The item is in a bag, find the bag
                 std::unordered_map<uint32, Bag*>::const_iterator itr = bagMap.find(bag_guid);
                 if (itr != bagMap.end() && slot < itr->second->GetBagSize())
                 {
@@ -15715,21 +15718,18 @@ void Player::_LoadInventory(QueryResult *result, uint32 timediff, bool &has_epic
                 }
             }
 
-            // item's state may have changed after stored
+            // Item's state may have changed after stored
             if (success)
             {
                 item->SetState(ITEM_UNCHANGED, this);
 
-                // restore container unchanged state also
+                // Restore container unchanged state also
                 if (item->GetContainer())
                     item->GetContainer()->SetState(ITEM_UNCHANGED, this);
             }
             else
             {
-                // Un probleme avec la maniere
-                // dont le PNJ de Bienvenue ajoute le stuff ...
-                //sLog.outError("Player::_LoadInventory: Player %s has item (GUID: %u Entry: %u) can't be loaded to inventory (Bag GUID: %u Slot: %u) by some reason, will send by mail.", GetName(),item_lowguid, item_id, bag_guid, slot);
-                CharacterDatabase.PExecute("DELETE FROM character_inventory WHERE item = '%u'", item_lowguid);
+                CharacterDatabase.PExecute("DELETE FROM `character_inventory` WHERE `item_guid` = '%u'", item_lowguid);
                 problematicItems.push_back(item);
                 std::stringstream oss;
                 oss << "Broken item " << item->GetEntry() << " GUID:" << item->GetGUIDLow() << " count:" << item->GetCount() << " bag:" << bag_guid << " slot:" << uint32(slot);
@@ -15739,12 +15739,12 @@ void Player::_LoadInventory(QueryResult *result, uint32 timediff, bool &has_epic
         while (result->NextRow());
         m_itemUpdateQueueBlocked = false;
 
-        // send by mail problematic items
+        // Send by mail problematic items
         while (!problematicItems.empty())
         {
             std::string subject = GetSession()->GetMangosString(LANG_NOT_EQUIPPED_ITEM);
 
-            // fill mail
+            // Fill mail
             MailDraft draft(subject);
 
             for (int i = 0; !problematicItems.empty() && i < MAX_MAIL_ITEMS; ++i)
@@ -15757,10 +15757,12 @@ void Player::_LoadInventory(QueryResult *result, uint32 timediff, bool &has_epic
 
             draft.SendMailTo(this, MailSender(this, MAIL_STATIONERY_GM), MAIL_CHECK_MASK_COPIED);
         }
-    }
 
-    //if(IsAlive())
-    _ApplyAllItemMods();
+        _ApplyAllItemMods();
+        return true;
+    }
+    
+    return false;
 }
 
 void Player::_LoadItemLoot(QueryResult *result)
