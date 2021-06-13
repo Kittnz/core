@@ -1,3 +1,4 @@
+#if PLATFORM == PLATFORM_WINDOWS
 #include "AutoUpdater.hpp"
 #include "DatabaseEnv.h"
 #include "Config/Config.h"
@@ -200,3 +201,5 @@ namespace DBUpdater
 
     }
 }
+
+#endif
