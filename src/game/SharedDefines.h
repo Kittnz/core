@@ -1716,11 +1716,7 @@ enum MailResponseResult
     MAIL_ERR_NOT_YOUR_TEAM             = 5,
     MAIL_ERR_INTERNAL_ERROR            = 6,
     MAIL_ERR_DISABLED_FOR_TRIAL_ACC    = 14,
-    MAIL_ERR_RECIPIENT_CAP_REACHED     = 15,
-    MAIL_ERR_CANT_SEND_WRAPPED_COD     = 16,
-    MAIL_ERR_MAIL_AND_CHAT_SUSPENDED   = 17,
-    MAIL_ERR_TOO_MANY_ATTACHMENTS      = 18,
-    MAIL_ERR_MAIL_ATTACHMENT_INVALID   = 19,
+    MAIL_ERR_RECIPIENT_CAP_REACHED     = 15
 };
 
 // reasons for why pet tame may fail

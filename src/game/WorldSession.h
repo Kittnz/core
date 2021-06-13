@@ -355,6 +355,8 @@ class WorldSession
         bool CheckBanker(ObjectGuid guid);
         void SendShowBank(ObjectGuid guid);
         bool CheckMailBox(ObjectGuid guid);
+        void SendMailResult(uint32 mailId, MailResponseType mailAction, MailResponseResult mailError, uint32 equipError = 0, uint32 item_guid = 0, uint32 item_count = 0);
+        void SendNewMail();
         void SendTabardVendorActivate(ObjectGuid guid);
         void SendSpiritResurrect();
         void SendBindPoint(Creature* npc);
