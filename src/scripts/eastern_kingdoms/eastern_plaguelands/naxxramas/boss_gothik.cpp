@@ -180,57 +180,58 @@ struct boss_gothikAI : public ScriptedAI
         if (!m_creature->IsInCombat() && !m_creature->IsDead())
             return;
 
-        if (Creature *pCreature = m_creature->SummonCreature(entry, x, y, z, o, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 420000))
-        {
-            pCreature->SetCorpseDelay(10);
-            if (gatesOpened)
-            {
-                pCreature->SetInCombatWithZone();
-                return;
-            }
+		if (Creature *pCreature = m_creature->SummonCreature(entry, x, y, z, o, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 420000))
+		{
+			pCreature->SetCorpseDelay(10);
+			if (gatesOpened)
+			{
+				pCreature->SetInCombatWithZone();
+				return;
+			}
 
-            MapRefManager const&  lPlayers = m_pInstance->GetMap()->GetPlayers();
-            for (auto& playerRef : lPlayers)
-            {
-                Player* p = playerRef.getSource();
-                {
-                    bool isRightSide = m_pInstance->IsInRightSideGothArea(p);
-                    switch (entry)
-                    {
-                        case NPC_UNREL_RIDER:
-                        case NPC_UNREL_DEATH_KNIGHT:
-                        case NPC_UNREL_TRAINEE:
-                        {
-                            if (isRightSide)
-                            {
-                                pCreature->SetInCombatWith(p);
-                                pCreature->AddThreat(p, 100);
-                            
+			MapRefManager const&  lPlayers = m_pInstance->GetMap()->GetPlayers();
+			for (auto& playerRef : lPlayers)
+			{
+				Player* p = playerRef.getSource();
+				{
+					bool isRightSide = m_pInstance->IsInRightSideGothArea(p);
+					switch (entry)
+					{
+					case NPC_UNREL_RIDER:
+					case NPC_UNREL_DEATH_KNIGHT:
+					case NPC_UNREL_TRAINEE:
+					{
+						if (isRightSide)
+						{
+							pCreature->SetInCombatWith(p);
+							pCreature->AddThreat(p, 100);
 
-                            break;
-                        }
-                        case NPC_SPECT_DEATH_KNIGTH:
-                        case NPC_SPECT_HORSE:
-                        case NPC_SPECT_RIDER:
-                        case NPC_SPECT_TRAINEE:
-                        {
-                            if (!isRightSide)
-                            {
-                                pCreature->SetInCombatWith(p);
-                                pCreature->AddThreat(p, 100);
-                            }
 
-                            break;
-                        }
-                    }
-                }
-            }
+							break;
+						}
+					case NPC_SPECT_DEATH_KNIGTH:
+					case NPC_SPECT_HORSE:
+					case NPC_SPECT_RIDER:
+					case NPC_SPECT_TRAINEE:
+					{
+						if (!isRightSide)
+						{
+							pCreature->SetInCombatWith(p);
+							pCreature->AddThreat(p, 100);
+						}
 
-            if (Unit* pTar = pCreature->SelectAttackingTarget(ATTACKING_TARGET_NEAREST, 0))
-            {
-                pCreature->AI()->AttackStart(pTar);
-            }
-        }
+						break;
+					}
+					}
+					}
+				}
+
+				if (Unit* pTar = pCreature->SelectAttackingTarget(ATTACKING_TARGET_NEAREST, 0))
+				{
+					pCreature->AI()->AttackStart(pTar);
+				}
+			}
+		}
     }
 
     void SummonAdds(bool bRightSide, uint32 uiSummonEntry)
@@ -619,7 +620,7 @@ bool EffectDummyCreature_spell_anchor(WorldObject* /*pCaster*/, uint32 uiSpellId
     if (uiEffIndex != EFFECT_INDEX_0 || pCreatureTarget->GetEntry() != NPC_SUB_BOSS_TRIGGER)
         return true;
 
-    instance_naxxramas* pInstance = static_cast<instance_naxxramas*>(pCreature->GetInstanceData());
+    instance_naxxramas* pInstance = static_cast<instance_naxxramas*>(pCreatureTarget->GetInstanceData());
 
     if (!pInstance)
         return true;
