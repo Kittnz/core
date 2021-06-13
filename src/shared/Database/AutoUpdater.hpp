@@ -1,6 +1,8 @@
 #pragma once
+#if PLATFORM == PLATFORM_WINDOWS
 #include <filesystem>
 namespace fs = std::filesystem;
+
 
 #include <vector>
 #include <optional>
@@ -59,3 +61,5 @@ namespace DBUpdater
 }
 
 #define sAutoUpdater AutoUpdater::Instance()
+
+#endif
