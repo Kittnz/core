@@ -892,7 +892,7 @@ struct boss_thaddiusAI : public ScriptedAI
                     }
                     else
                     {
-                        m_events.Repeat(100)
+                        m_events.Repeat(100);
                     }
                     break;
                 }
