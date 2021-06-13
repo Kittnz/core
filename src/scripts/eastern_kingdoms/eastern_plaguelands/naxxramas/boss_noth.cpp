@@ -32,11 +32,11 @@
 // we have to use the spells which summon a single creature.
 enum eSpell
 {
-    SPELL_TP_CENTER           = 29231,
-    SPELL_TP_BALC             = 29216,
-    SPELL_CRIPPLE             = 29212, // used on players where noth blinked FROM 
+    SPELL_TP_CENTER = 29231,
+    SPELL_TP_BALC = 29216,
+    SPELL_CRIPPLE = 29212, // used on players where noth blinked FROM 
     SPELL_CURSE_PLAGUEBRINGER = 29213,
-    SPELL_IMMUNE_ALL          = 29230, // used on TP to balc
+    SPELL_IMMUNE_ALL = 29230, // used on TP to balc
 
     SPELL_BLINK_1 = 29208,
     SPELL_BLINK_2 = 29209,
@@ -90,28 +90,22 @@ static const uint8 g3_start = 8, g3_size = 2;
 
 enum eScriptText
 {
-    SAY_AGGRO1                          = -1533075,
-    SAY_AGGRO2                          = -1533076,
-    SAY_AGGRO3                          = -1533077,
-    SAY_SUMMON                          = -1533078,
+    SAY_AGGRO1 = -1533075,
+    SAY_AGGRO2 = -1533076,
+    SAY_AGGRO3 = -1533077,
+    SAY_SUMMON = -1533078,
 
-    SAY_SLAY1                           = -1533079,
-    SAY_SLAY2                           = -1533080,
-    SAY_DEATH                           = -1533081,
-
-    // Emotes probably only wotlk
-    //EMOTE_WARRIOR                       = -1533130,
-    //EMOTE_SKELETON                      = -1533131,
-    //EMOTE_TELEPORT                      = -1533132,
-    //EMOTE_TELEPORT_RETURN               = -1533133,
+    SAY_SLAY1 = -1533079,
+    SAY_SLAY2 = -1533080,
+    SAY_DEATH = -1533081,
 };
 
 enum eNPCs
 {
-    NPC_PLAGUED_GUARDIAN  = 16981,
+    NPC_PLAGUED_GUARDIAN = 16981,
     NPC_PLAGUED_CONSTRUCT = 16982, // unknown if this was ever used
-    NPC_PLAGUED_CHAMPION  = 16983,
-    NPC_PLAGUED_WARRIOR   = 16984,
+    NPC_PLAGUED_CHAMPION = 16983,
+    NPC_PLAGUED_WARRIOR = 16984,
 };
 
 enum eEvents
@@ -127,9 +121,9 @@ enum eEvents
 
 struct boss_nothAI : public ScriptedAI
 {
-    boss_nothAI(Creature* pCreature) : ScriptedAI(pCreature)
+    explicit boss_nothAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
-        m_pInstance = (instance_naxxramas*)pCreature->GetInstanceData();
+        m_pInstance = static_cast<instance_naxxramas*>(pCreature->GetInstanceData());
         Reset();
     }
 
@@ -163,10 +157,10 @@ struct boss_nothAI : public ScriptedAI
     {
         m_creature->SetInCombatWithZone();
 
-        m_events.ScheduleEvent(EVENT_CURSE,    Seconds(urand(8,12)));
-        m_events.ScheduleEvent(EVENT_BLINK,    Seconds(urand(30,40)));
+        m_events.ScheduleEvent(EVENT_CURSE, Seconds(urand(8,12)));
+        m_events.ScheduleEvent(EVENT_BLINK, Seconds(urand(30,40)));
         m_events.ScheduleEvent(EVENT_WARRIORS, Seconds(10));
-        m_events.ScheduleEvent(EVENT_TP_BALC,  Seconds(90));
+        m_events.ScheduleEvent(EVENT_TP_BALC, Seconds(90));
 
         DoScriptText(urand(SAY_AGGRO1, SAY_AGGRO3), m_creature);
 
@@ -196,6 +190,7 @@ struct boss_nothAI : public ScriptedAI
         DoCastSpellIfCan(m_creature, auiSpellBlink[urand(0, 3)], CF_TRIGGERED|CF_FORCE_CAST);
         m_events.Repeat(Seconds(urand(30, 40)));
         DoResetThreat();
+
         if (Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
             AttackStart(target);
     }
@@ -210,7 +205,8 @@ struct boss_nothAI : public ScriptedAI
             m_events.Repeat(Seconds(urand(50,60))); //It's somewhere around 50seconds+
 
         }
-        else {
+        else
+        {
             m_events.Repeat(100);
         }
     }
@@ -256,6 +252,7 @@ struct boss_nothAI : public ScriptedAI
             m_events.Repeat(100); // try again
             return;
         }
+
         m_events.Reset();
         m_events.ScheduleEvent(EVENT_RMV_INVULN, Seconds(2));
     }
@@ -264,18 +261,17 @@ struct boss_nothAI : public ScriptedAI
     {
         // We need to spawn 4 champions. We have 10 different possible locations,
         // and the adds need to be somewhat evenly spread out, yet somewhat randomized.
-
-        std::vector<uint32> champs(ChampionSpells, ChampionSpells + sizeof(ChampionSpells)/sizeof(uint32));
+        std::vector<uint32> champs(ChampionSpells, ChampionSpells + sizeof(ChampionSpells) / sizeof(uint32));
         
         // First selecting one random champ from each of the 3 main groups
-        uint32 champ1 = champs[urand(g1_start, g1_start+g1_size-1)];
-        uint32 champ2 = champs[urand(g2_start, g2_start+g2_size-1)];
-        uint32 champ3 = champs[urand(g3_start, g3_start+g3_size-1)];
+        uint32 champ1 = champs[urand(g1_start, g1_start + g1_size - 1)];
+        uint32 champ2 = champs[urand(g2_start, g2_start + g2_size - 1)];
+        uint32 champ3 = champs[urand(g3_start, g3_start + g3_size - 1)];
         
         // Moving the selected champions to the end of the vector
-        std::remove(champs.begin(), champs.end(), champ1);
-        std::remove(champs.begin(), champs.end(), champ2);
-        std::remove(champs.begin(), champs.end(), champ3);
+        auto nend = std::remove(champs.begin(), champs.end(), champ1);
+        nend = std::remove(champs.begin(), nend, champ2);
+        nend = std::remove(champs.begin(), nend, champ3);
 
         // Summoning the selected 3 guardians
         DoCastSpellIfCan(m_creature, champ1, CF_TRIGGERED);
@@ -283,14 +279,14 @@ struct boss_nothAI : public ScriptedAI
         DoCastSpellIfCan(m_creature, champ3, CF_TRIGGERED);
         
         // Choosing the final champion at random between the remaining 7 locations
-        uint32 champ4 = champs[urand(0, 6)];
+        uint32 champ4 = champs[urand(0, std::distance(champs.begin(), nend))];
         DoCastSpellIfCan(m_creature, champ4, CF_TRIGGERED);
     }
 
     void Summon2Guardians()
     {
         // Choose one of two locations south-west, and either the north-east or north-west location
-        DoCastSpellIfCan(m_creature, urand(0, 1) ? SPELL_SUM_GUARD_SW1 : SPELL_SUM_GUARD_SW1, CF_TRIGGERED);
+        DoCastSpellIfCan(m_creature, urand(0, 1) ? SPELL_SUM_GUARD_SW1 : SPELL_SUM_GUARD_SW2, CF_TRIGGERED);
         DoCastSpellIfCan(m_creature, urand(0, 1) ? SPELL_SUM_GUARD_NE : SPELL_SUM_GUARD_NW, CF_TRIGGERED);
     }
 
@@ -326,8 +322,8 @@ struct boss_nothAI : public ScriptedAI
         isOnBalc = false;
 
         m_events.Reset();
-        m_events.ScheduleEvent(EVENT_BLINK,    Seconds(urand(2, 10)));
-        m_events.ScheduleEvent(EVENT_CURSE,    Seconds(urand(2, 10)));
+        m_events.ScheduleEvent(EVENT_BLINK, Seconds(urand(2, 10)));
+        m_events.ScheduleEvent(EVENT_CURSE, Seconds(urand(2, 10)));
         m_events.ScheduleEvent(EVENT_WARRIORS, Seconds(urand(2,10)));
         m_creature->RemoveAurasDueToSpell(SPELL_IMMUNE_ALL);
 
@@ -386,17 +382,20 @@ struct boss_nothAI : public ScriptedAI
         if (!isOnBalc)
             ScriptedAI::AttackStart(pWho);
     }
+
     void DamageTaken(Unit* /*pDoneBy*/, uint32& uiDamage) override 
     {
         if (isOnBalc && uiDamage > 0)
             uiDamage = 0;
     }
+
     void UpdateAI(const uint32 uiDiff) override
     {
         if (!isOnBalc)
         {
             if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
                 return;
+
             if (!m_pInstance->HandleEvadeOutOfHome(m_creature))
                 return;
         }
@@ -441,6 +440,7 @@ struct boss_nothAI : public ScriptedAI
                 break;
             }
         }
+
         if (!isOnBalc)
             DoMeleeAttackIfReady();
     }
