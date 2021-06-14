@@ -14,6 +14,7 @@ INSERT INTO `quest_start_scripts` (`id`, `delay`, `command`, `datalong`, `datalo
 INSERT INTO `quest_start_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (4961, 0, 4, 147, 3, 2, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Cleansing of the Orb of Orahil: Tabetha - Remove Quest Giver Flag');
 
 -- Waypoints for Tabetha when quest Cleansing of the Orb of Orahil is started.
+delete from creature_movement_special where id = 4961;
 INSERT INTO `creature_movement_special` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES 
 (4961, 1, -4035.85, -3384.24, 38.9959, 100, 0, 0, 0),
 (4961, 2, -4037.6, -3381.32, 37.9133, 100, 0, 0, 0),
@@ -38,5 +39,6 @@ INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `
 INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (496111, 0, 20, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Cleansing of the Orb of Orahil: Tabetha - Move Idle');
 
 -- Missing weapon used by Demon of the Orb.
+delete from creature_equip_template where entry = 6549;
 INSERT INTO `creature_equip_template` (`entry`, `equipentry1`, `equipentry2`, `equipentry3`) VALUES (6549, 5747, 0, 0);
 UPDATE `creature_template` SET `equipment_id`=6549 WHERE `entry`=6549;

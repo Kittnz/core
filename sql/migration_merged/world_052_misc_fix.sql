@@ -3,7 +3,7 @@
 UPDATE `gameobject_template` SET `faction`=35 WHERE `entry` IN (180087, 180088, 180089, 180090, 180091);
 
 -- Add missing target for Test Ribbon Pole Channel.
-INSERT INTO `spell_script_target` (`entry`, `type`, `targetEntry`) VALUES (29705, 1, 17066);
+replace into `spell_script_target` (`entry`, `type`, `targetEntry`) VALUES (29705, 1, 17066);
 
 -- Add missing aura and fix movement of Corrupt Water Spirit.
 UPDATE `creature` SET `wander_distance`=3, `movement_type`=1 WHERE `id`=5897;
