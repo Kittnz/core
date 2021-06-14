@@ -309,11 +309,11 @@ bool GossipSelect_npc_overlord_runthak(Player* pPlayer, Creature* pCreature, uin
 
 		if (pPlayer->HasItemCount(ITEM_HEAD_ONY_HORDE, 1))
 		{
-
-			if (npc_overlord_runthakAI* pMattingly = dynamic_cast<npc_overlord_runthakAI*>(pCreature->AI()))
-				pMattingly->StartRallyEvent(pPlayer->GetObjectGuid());
-
-			pPlayer->RemoveItemCurrency(ITEM_HEAD_ONY_HORDE, 1);
+			if (npc_overlord_runthakAI* pRunthak = dynamic_cast<npc_overlord_runthakAI*>(pCreature->AI()))
+            {
+                pRunthak->StartRallyEvent(pPlayer->GetObjectGuid());
+                pPlayer->DestroyItemCount(ITEM_HEAD_ONY_HORDE, 1, true);
+            }
 		}
 		else
 		{
@@ -583,11 +583,11 @@ bool GossipSelect_npc_overlord_saurfang(Player* pPlayer, Creature* pCreature, ui
 
 		if (pPlayer->HasItemCount(ITEM_HEAD_NEF_HORDE, 1))
 		{
-
-			if (npc_overlord_saurfangAI* pMattingly = dynamic_cast<npc_overlord_saurfangAI*>(pCreature->AI()))
-				pMattingly->StartRallyEvent(pPlayer->GetObjectGuid());
-
-			pPlayer->RemoveItemCurrency(ITEM_HEAD_NEF_HORDE, 1);
+            if (npc_overlord_saurfangAI* pSaurfang = dynamic_cast<npc_overlord_saurfangAI*>(pCreature->AI()))
+            {
+                pSaurfang->StartRallyEvent(pPlayer->GetObjectGuid());
+                pPlayer->DestroyItemCount(ITEM_HEAD_NEF_HORDE, 1, true);
+            }
 		}
 		else
 		{
