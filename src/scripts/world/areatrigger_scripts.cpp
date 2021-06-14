@@ -41,17 +41,18 @@ uint32 TriggerOrphanSpell[6][3] =
     {3552, 14305, 1687}    // Spooky Lighthouse
 };
 
-bool AreaTrigger_at_childrens_week_spot(Player* pPlayer, AreaTriggerEntry const* pAt)
+bool AreaTrigger_at_childrens_week_spot(Player* pPlayer, const AreaTriggerEntry* pAt)
 {
-    for (const auto& i : TriggerOrphanSpell)
+    for (uint8 i = 0; i < 6; ++i)
     {
-        if (pAt->id == i[0] &&
-                pPlayer->GetMiniPet() && pPlayer->GetMiniPet()->GetEntry() == i[1])
+        if (pAt->id == TriggerOrphanSpell[i][0] &&
+            pPlayer->GetMiniPet() && pPlayer->GetMiniPet()->GetEntry() == TriggerOrphanSpell[i][1])
         {
-            pPlayer->AreaExploredOrEventHappens(i[2]);
+            pPlayer->AreaExploredOrEventHappens(TriggerOrphanSpell[i][2]);
             return true;
         }
     }
+    return false;
 }
 
 /*######
