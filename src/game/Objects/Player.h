@@ -1304,7 +1304,7 @@ class Player final: public Unit
         bool SaveAura(SpellAuraHolder* holder, AuraSaveStruct& saveStruct);
         void _LoadAuras(QueryResult* result, uint32 timediff);
         void _LoadBoundInstances(QueryResult* result);
-        bool _LoadInventory(QueryResult* result, uint32 timediff, bool& hasEpicMount);
+        void _LoadInventory(QueryResult* result, uint32 timediff, bool& has_epic_mount);
         void _LoadItemLoot(QueryResult* result);
         void _LoadQuestStatus(QueryResult* result);
         void _LoadGroup(QueryResult* result);
