@@ -1375,11 +1375,11 @@ bool GossipSelect_npc_major_mattingly(Player* pPlayer, Creature* pCreature, uint
 
         if (pPlayer->HasItemCount(ITEM_HEAD_ONY_ALLIANCE, 1))
         {
-
-			if (npc_major_mattinglyAI* pMattingly = dynamic_cast<npc_major_mattinglyAI*>(pCreature->AI()))
-				pMattingly->StartRallyEvent(pPlayer->GetObjectGuid());
-
-			pPlayer->RemoveItemCurrency(ITEM_HEAD_ONY_ALLIANCE, 1);
+            if (npc_major_mattinglyAI* pMattingly = dynamic_cast<npc_major_mattinglyAI*>(pCreature->AI()))
+            {
+                pMattingly->StartRallyEvent(pPlayer->GetObjectGuid());
+                pPlayer->DestroyItemCount(ITEM_HEAD_ONY_ALLIANCE, 1, true);
+            }
         }
         else
         {
@@ -1523,11 +1523,11 @@ bool GossipSelect_npc_field_marshal_afrasiabi(Player* pPlayer, Creature* pCreatu
 
 		if (pPlayer->HasItemCount(ITEM_HEAD_NEF_ALLIANCE, 1))
 		{
-
-			if (npc_field_marshal_afrasiabiAI* pAfrasiabi = dynamic_cast<npc_field_marshal_afrasiabiAI*>(pCreature->AI()))
-				pAfrasiabi->StartRallyEvent(pPlayer->GetObjectGuid());
-
-			pPlayer->RemoveItemCurrency(ITEM_HEAD_NEF_ALLIANCE, 1);
+            if (npc_field_marshal_afrasiabiAI* pAfrasiabi = dynamic_cast<npc_field_marshal_afrasiabiAI*>(pCreature->AI()))
+            {
+                pAfrasiabi->StartRallyEvent(pPlayer->GetObjectGuid());
+                pPlayer->DestroyItemCount(ITEM_HEAD_NEF_ALLIANCE, 1, true);
+            }
 		}
 		else
 		{
