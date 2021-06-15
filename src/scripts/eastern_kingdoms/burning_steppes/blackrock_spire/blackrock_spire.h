@@ -57,7 +57,7 @@ enum
     GO_FATHER_FLAME             = 175245,
 
     // Pour Event Porte de UBRS
-    GO_DOOR_URBS                = 170556,
+    GO_DOOR_URBS                = 164725,
     GO_BRAZIER01                = 175528,
     GO_BRAZIER02                = 175529,
     GO_BRAZIER03                = 175530,
