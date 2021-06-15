@@ -1104,17 +1104,52 @@ struct npc_piege_grille1AI : public ScriptedAI
         Reset();
     }
 
+    uint32 m_uiRatsDeadCheckTimer;
+    uint32 RatsId;
+    bool RatsSpawned;
+
     void Reset() override
     {
+        m_uiRatsDeadCheckTimer = 2000;
+        RatsSpawned = false;
+        RatsId = 0;
+    }
+
+    void UpdateAI(const uint32 diff) override
+    {
+        if (RatsSpawned && RatsId > 0)
+        {
+            if (m_uiRatsDeadCheckTimer < diff)
+            {
+
+                m_uiRatsDeadCheckTimer = 2000;
+
+                std::list<Creature*> rats;
+                GetCreatureListWithEntryInGrid(rats, m_creature, RatsId, 10.0f);
+
+                for (const auto& rat : rats)
+                    if (rat->IsAlive())
+                        return;
+
+                if (GameObject* pGrille = m_creature->FindNearestGameObject(175355, 20.0f)) // GO_PORT_PIEGE_RAT1 baron
+                    pGrille->ResetDoorOrButton();
+                if (GameObject* pGrille = m_creature->FindNearestGameObject(175354, 20.0f)) // GO_PORT_PIEGE_RAT2 baron
+                    pGrille->ResetDoorOrButton();
+
+                m_creature->ForcedDespawn();
+
+            }
+            else m_uiRatsDeadCheckTimer -= diff;
+        }
     }
 
     void MoveInLineOfSight(Unit* who) override
     {
-        if (who->GetTypeId() == TYPEID_PLAYER && m_creature->IsWithinDistInMap(who, 4.0f))
+        if (!RatsSpawned && who->GetTypeId() == TYPEID_PLAYER && m_creature->IsWithinDistInMap(who, 4.0f))
         {
-            if (GameObject* pGrille = m_creature->FindNearestGameObject(175355, 20.0f)) // GO_PORT_PIEGE_RAT1 c�t� baron
+            if (GameObject* pGrille = m_creature->FindNearestGameObject(175355, 20.0f)) // GO_PORT_PIEGE_RAT1 baron
                 pGrille->UseDoorOrButton();
-            if (GameObject* pGrille = m_creature->FindNearestGameObject(175354, 20.0f)) // GO_PORT_PIEGE_RAT2 c�t� baron
+            if (GameObject* pGrille = m_creature->FindNearestGameObject(175354, 20.0f)) // GO_PORT_PIEGE_RAT2 baron
                 pGrille->UseDoorOrButton();
 
             uint32 maxplagued = urand(8, 10);
@@ -1123,6 +1158,7 @@ struct npc_piege_grille1AI : public ScriptedAI
             {
                 case 0: // Plagued Rat
                 {
+                    RatsId = 10441;
                     for (uint8 i = 0; i < maxplagued; ++i)
                         m_creature->SummonCreature(10441, m_creature->GetPositionX() - 3.0f + float(urand(0, 6)),
                                                    m_creature->GetPositionY() - 3.0f + float(urand(0, 6)), m_creature->GetPositionZ() + 0.7f, 1, TEMPSUMMON_DEAD_DESPAWN, HOUR * IN_MILLISECONDS);
@@ -1130,6 +1166,7 @@ struct npc_piege_grille1AI : public ScriptedAI
                 }
                 case 1: // Plagued Insect
                 {
+                    RatsId = 10461;
                     for (uint8 i = 0; i < maxplagued; ++i)
                         m_creature->SummonCreature(10461, m_creature->GetPositionX() - 3.0f + float(urand(0, 6)),
                                                    m_creature->GetPositionY() - 3.0f + float(urand(0, 6)), m_creature->GetPositionZ() + 0.7f, 1, TEMPSUMMON_DEAD_DESPAWN, HOUR * IN_MILLISECONDS);
@@ -1137,6 +1174,7 @@ struct npc_piege_grille1AI : public ScriptedAI
                 }
                 case 2: // Plagued Maggot
                 {
+                    RatsId = 10536;
                     for (uint8 i = 0; i < maxplagued; ++i)
                         m_creature->SummonCreature(10536, m_creature->GetPositionX() - 3.0f + float(urand(0, 6)),
                                                    m_creature->GetPositionY() - 3.0f + float(urand(0, 6)), m_creature->GetPositionZ() + 0.7f, 1, TEMPSUMMON_DEAD_DESPAWN, HOUR * IN_MILLISECONDS);
@@ -1144,7 +1182,10 @@ struct npc_piege_grille1AI : public ScriptedAI
                 }
             }
 
-            m_creature->ForcedDespawn();
+            RatsSpawned = true;
+
+            //despawn creature only after all rats are dead and we open the gates
+            //m_creature->ForcedDespawn();
         }
     }
 };
@@ -1161,17 +1202,52 @@ struct npc_piege_grille2AI : public ScriptedAI
         Reset();
     }
 
+    uint32 m_uiRatsDeadCheckTimer;
+    uint32 RatsId;
+    bool RatsSpawned;
+
     void Reset() override
     {
+        m_uiRatsDeadCheckTimer = 2000;
+        RatsSpawned = false;
+        RatsId = 0;
+    }
+
+    void UpdateAI(const uint32 diff) override
+    {
+        if (RatsSpawned && RatsId > 0)
+        {
+            if (m_uiRatsDeadCheckTimer < diff)
+            {
+                
+                m_uiRatsDeadCheckTimer = 2000;
+
+                std::list<Creature*> rats;
+                GetCreatureListWithEntryInGrid(rats, m_creature, RatsId, 10.0f);
+
+                for (const auto& rat : rats)
+                    if (rat->IsAlive())
+                        return;
+
+                if (GameObject* pGrille = m_creature->FindNearestGameObject(175351, 20.0f)) // GO_PORT_PIEGE_RAT3 carlate
+                    pGrille->ResetDoorOrButton();
+                if (GameObject* pGrille = m_creature->FindNearestGameObject(175350, 20.0f)) // GO_PORT_PIEGE_RAT4 carlate
+                    pGrille->ResetDoorOrButton();
+
+                m_creature->ForcedDespawn();
+
+            }
+            else m_uiRatsDeadCheckTimer -= diff;
+        }
     }
 
     void MoveInLineOfSight(Unit* who) override
     {
-        if (who->GetTypeId() == TYPEID_PLAYER && m_creature->IsWithinDistInMap(who, 3.0f))
+        if (!RatsSpawned && who->GetTypeId() == TYPEID_PLAYER && m_creature->IsWithinDistInMap(who, 3.0f))
         {
-            if (GameObject* pGrille = m_creature->FindNearestGameObject(175351, 20.0f)) // GO_PORT_PIEGE_RAT3 c�t� �carlate
+            if (GameObject* pGrille = m_creature->FindNearestGameObject(175351, 20.0f)) // GO_PORT_PIEGE_RAT3 carlate
                 pGrille->UseDoorOrButton();
-            if (GameObject* pGrille = m_creature->FindNearestGameObject(175350, 20.0f)) // GO_PORT_PIEGE_RAT4 c�t� �carlate
+            if (GameObject* pGrille = m_creature->FindNearestGameObject(175350, 20.0f)) // GO_PORT_PIEGE_RAT4 carlate
                 pGrille->UseDoorOrButton();
 
             uint32 maxplagued = urand(8, 10);
@@ -1180,6 +1256,7 @@ struct npc_piege_grille2AI : public ScriptedAI
             {
                 case 0: // Plagued Rat
                 {
+                    RatsId = 10441;
                     for (uint8 i = 0; i < maxplagued; ++i)
                         m_creature->SummonCreature(10441, m_creature->GetPositionX() - 3.0f + float(urand(0, 6)),
                                                    m_creature->GetPositionY() - 3.0f + float(urand(0, 6)), m_creature->GetPositionZ() + 0.7f, 1, TEMPSUMMON_DEAD_DESPAWN, HOUR * IN_MILLISECONDS);
@@ -1187,6 +1264,7 @@ struct npc_piege_grille2AI : public ScriptedAI
                 }
                 case 1: // Plagued Insect
                 {
+                    RatsId = 10461;
                     for (uint8 i = 0; i < maxplagued; ++i)
                         m_creature->SummonCreature(10461, m_creature->GetPositionX() - 3.0f + float(urand(0, 6)),
                                                    m_creature->GetPositionY() - 3.0f + float(urand(0, 6)), m_creature->GetPositionZ() + 0.7f, 1, TEMPSUMMON_DEAD_DESPAWN, HOUR * IN_MILLISECONDS);
@@ -1194,6 +1272,7 @@ struct npc_piege_grille2AI : public ScriptedAI
                 }
                 case 2: // Plagued Maggot
                 {
+                    RatsId = 10536;
                     for (uint8 i = 0; i < maxplagued; ++i)
                         m_creature->SummonCreature(10536, m_creature->GetPositionX() - 3.0f + float(urand(0, 6)),
                                                    m_creature->GetPositionY() - 3.0f + float(urand(0, 6)), m_creature->GetPositionZ() + 0.7f, 1, TEMPSUMMON_DEAD_DESPAWN, HOUR * IN_MILLISECONDS);
@@ -1201,7 +1280,10 @@ struct npc_piege_grille2AI : public ScriptedAI
                 }
             }
 
-            m_creature->ForcedDespawn();
+            RatsSpawned = true;
+
+            //despawn creature only after all rats are dead and we open the gates
+            //m_creature->ForcedDespawn();
         }
     }
 };
