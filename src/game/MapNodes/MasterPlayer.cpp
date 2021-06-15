@@ -108,8 +108,11 @@ void MasterPlayer::SaveMails()
             stmt.addUInt32(m->messageID);
             stmt.Execute();
 
+            sLog.out(LOG_MAIL_AH, "SaveMails Now UPDATING state CHANGED mail for mail Id %u, player %s, expire_time %l64u", m->messageID, name.c_str(), m->expire_time);
+
             if (!m->removedItems.empty())
             {
+                sLog.out(LOG_MAIL_AH, "SaveMails Now REMOVING items for mail Id %u, player %s, item guid %u", m->messageID, name.c_str(), m->removedItems[0]);
                 stmt = CharacterDatabase.CreateStatement(deleteMailItems, "DELETE FROM mail_items WHERE item_guid = ?");
 
                 for (const auto removedItem : m->removedItems)
@@ -121,6 +124,10 @@ void MasterPlayer::SaveMails()
         }
         else if (m->state == MAIL_STATE_DELETED)
         {
+
+            sLog.out(LOG_MAIL_AH, "SaveMails Now DELETING state DELETED mail for mail Id %u, player %s, item entry %u", m->messageID, name.c_str(), m->HasItems() ? 
+            m->items[0].item_template : 0);
+
             if (m->HasItems())
             {
                 SqlStatement stmt = CharacterDatabase.CreateStatement(deleteItem, "DELETE FROM item_instance WHERE guid = ?");

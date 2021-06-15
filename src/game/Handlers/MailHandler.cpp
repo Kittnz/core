@@ -517,6 +517,7 @@ void WorldSession::HandleMailMarkAsRead(WorldPacket& recv_data)
         if ((m->expire_time - time_now) > (3 * DAY))
             m->expire_time = time_now + (3 * DAY);
     }
+    sLog.out(LOG_MAIL_AH, "HandleMailMarkAsRead for player %s.", pl->name.c_str());
 }
 
 /**
@@ -550,6 +551,7 @@ void WorldSession::HandleMailDelete(WorldPacket& recv_data)
             return;
         }
 
+        sLog.out(LOG_MAIL_AH, "HandleMailDelete for %s mail Id %u", pl->GetName(), mailId);
         m->state = MAIL_STATE_DELETED;
     }
     SendMailResult(mailId, MAIL_DELETED, MAIL_OK);
@@ -578,10 +580,13 @@ void WorldSession::HandleMailReturnToSender(WorldPacket& recv_data)
     Mail *m = pl->GetMail(mailId);
     if (!m || m->state == MAIL_STATE_DELETED || m->deliver_time > time(nullptr))
     {
+        sLog.out(LOG_MAIL_AH, "HandleMailReturnToSender MAIL STATE DELETED for mail %u player %s.", mailId, pl->name.c_str());
         SendMailResult(mailId, MAIL_RETURNED_TO_SENDER, MAIL_ERR_INTERNAL_ERROR);
         return;
     }
 
+
+    sLog.out(LOG_MAIL_AH, "HandleMailReturnToSender will now destroy mail %u for player %s.", mailId, pl->name.c_str());
     //we can return mail now
     //so firstly delete the old one
     CharacterDatabase.BeginTransaction(pl->GetGUIDLow());
@@ -737,6 +742,8 @@ void WorldSession::HandleMailTakeItem(WorldPacket& recv_data)
         it->SetState(ITEM_UNCHANGED);                       // need to set this state, otherwise item cannot be removed later, if necessary
         loadedPlayer->MoveItemToInventory(dest, it, true);
 
+        sLog.out(LOG_MAIL_AH, "HandleMailTakeItem player %s took item entry %u.", loadedPlayer->GetShortDescription().c_str(), it->GetEntry());
+
         CharacterDatabase.BeginTransaction(loadedPlayer->GetGUIDLow());
         loadedPlayer->SaveInventoryAndGoldToDB();
         pl->SaveMails();
@@ -816,8 +823,11 @@ void WorldSession::HandleGetMailList(WorldPacket& recv_data)
             break;
 
         // skip deleted or not delivered (deliver delay not expired) mails
-        if ((*itr)->state == MAIL_STATE_DELETED || cur_time < (*itr)->deliver_time || cur_time > (*itr)->expire_time)
+        if ((*itr)->state == MAIL_STATE_DELETED || cur_time < (*itr)->deliver_time || cur_time >(*itr)->expire_time)
+        {
+            sLog.out(LOG_MAIL_AH, "HandleGetMailList skipping mail %u for player %s.", (*itr)->messageID,  pl->name.c_str());
             continue;
+        }
 
         /*[-ZERO] TODO recheck this
         size_t next_mail_size = 4+1+8+((*itr)->subject.size()+1)+4*7+1+item_count*(1+4+4+6*3*4+4+4+1+4+4+4);

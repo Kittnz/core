@@ -175,6 +175,7 @@ void AuctionHouseMgr::SendAuctionWonMail(AuctionEntry *auction)
 
         // set owner to bidder (to prevent delete item with sender char deleting)
         // owner in `data` will set at mail receive and item extracting
+        CharacterDatabase.BeginTransaction();
         CharacterDatabase.PExecute("UPDATE item_instance SET owner_guid = '%u' WHERE guid='%u'", auction->bidder, pItem->GetGUIDLow());
         CharacterDatabase.CommitTransaction();
 
@@ -182,6 +183,8 @@ void AuctionHouseMgr::SendAuctionWonMail(AuctionEntry *auction)
             bidder->GetSession()->SendAuctionBidderNotification(auction, true);
         else
             RemoveAItem(pItem->GetGUIDLow());               // we have to remove the item, before we delete it !!
+
+        sLog.out(LOG_MAIL_AH, "SendAuctionWonMail for auc Id %u, Sending to player bidder %s acc id %u.", auction->Id, bidder ? bidder->GetShortDescription().c_str() : "", bidder_accId);
 
         // will delete item or place to receiver mail list
         MailDraft(msgAuctionWonSubject.str(), msgAuctionWonBody.str())
@@ -231,6 +234,8 @@ void AuctionHouseMgr::SendAuctionSuccessfulMail(AuctionEntry * auction)
             owner->GetSession()->SendAuctionOwnerNotification(auction, true);
         }
 
+        sLog.out(LOG_MAIL_AH, "SendAuctionSuccessfulMail for auc Id %u, Sending to player %s acc id %u.", auction->Id, owner ? owner->GetShortDescription().c_str() : "", owner_accId);
+
         MailDraft(msgAuctionSuccessfulSubject.str(), auctionSuccessfulBody.str())
         .SetMoney(profit)
         .SendMailTo(MailReceiver(owner, owner_guid), auction, MAIL_CHECK_MASK_COPIED);
@@ -265,6 +270,8 @@ void AuctionHouseMgr::SendAuctionExpiredMail(AuctionEntry * auction)
             owner->GetSession()->SendAuctionOwnerNotification(auction, false);
         else
             RemoveAItem(pItem->GetGUIDLow());               // we have to remove the item, before we delete it !!
+
+        sLog.out(LOG_MAIL_AH, "SendAuctionExpiredMail for auc Id %u, item Id %u. Sending to player %s.", auction->Id, pItem->GetEntry(), owner ? owner->GetShortDescription().c_str() : "");
 
         // will delete item or place to receiver mail list
         MailDraft(subject.str())

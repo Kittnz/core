@@ -462,10 +462,16 @@ bool Database::DirectPExecute(const char * format,...)
 bool Database::BeginTransaction(uint32 serialId)
 {
     if (!m_pAsyncConn)
+    {
+        sLog.outError("Cant begin transaction.");
         return false;
+    }
     //ASSERT(!m_TransStorage->get());
     if (m_TransStorage->get())
+    {
+        sLog.outError("Cant begin transaction.");
         return false;
+    }
 
     //initiate transaction on current thread
     m_TransStorage->init(serialId);
@@ -488,12 +494,18 @@ uint32 Database::GetTransactionSerialId()
 bool Database::CommitTransaction()
 {
     if (!m_pAsyncConn)
+    {
+        sLog.outError("Cant commit transaction.");
         return false;
+    }
 
     //check if we have pending transaction
     //ASSERT(m_TransStorage->get());
     if (!m_TransStorage->get())
+    {
+        sLog.outError("Cant commit transaction.");
         return false;
+    }
 
     //if async execution is not available
     if(!m_bAllowAsyncTransactions)
