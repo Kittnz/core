@@ -108,11 +108,15 @@ void MasterPlayer::SaveMails()
             stmt.addUInt32(m->messageID);
             stmt.Execute();
 
-            sLog.out(LOG_MAIL_AH, "SaveMails Now UPDATING state CHANGED mail for mail Id %u, player %s, expire_time %I64u", m->messageID, name.c_str(), (uint64)m->expire_time);
+            sLog.out(LOG_MAIL_AH, "SaveMails Now UPDATING state CHANGED mail for mail Id %u, player %s", m->messageID, name.c_str());
 
             if (!m->removedItems.empty())
             {
-                sLog.out(LOG_MAIL_AH, "SaveMails Now REMOVING items for mail Id %u, player %s, item guid %u", m->messageID, name.c_str(), *m->removedItems.begin());
+                uint32 itemGuid = 0;
+                if (m->removedItems.begin() != m->removedItems.end())
+                    itemGuid = *m->removedItems.begin();
+
+                sLog.out(LOG_MAIL_AH, "SaveMails Now REMOVING items for mail Id %u, player %s, item guid %u", m->messageID, name.c_str(), itemGuid);
                 stmt = CharacterDatabase.CreateStatement(deleteMailItems, "DELETE FROM mail_items WHERE item_guid = ?");
 
                 for (const auto removedItem : m->removedItems)
@@ -125,10 +129,15 @@ void MasterPlayer::SaveMails()
         else if (m->state == MAIL_STATE_DELETED)
         {
 
-            sLog.out(LOG_MAIL_AH, "SaveMails Now DELETING state DELETED mail for mail Id %u, player %s, item entry %u", m->messageID, name.c_str(), m->HasItems() ? 
-            m->items.begin()->item_template : 0);
+            uint32 itemEntry = 0;
+            if (m->has_items && m->items.begin() != m->items.end())
+            {
+                auto item = *m->items.begin();
+                itemEntry = item.item_template;
+            }
+            sLog.out(LOG_MAIL_AH, "SaveMails Now DELETING state DELETED mail for mail Id %u, player %s, item entry %u", m->messageID, name.c_str(), itemEntry);
 
-            if (m->HasItems())
+            if (m->HasItems()) 
             {
                 SqlStatement stmt = CharacterDatabase.CreateStatement(deleteItem, "DELETE FROM item_instance WHERE guid = ?");
                 for (const auto& item : m->items)
