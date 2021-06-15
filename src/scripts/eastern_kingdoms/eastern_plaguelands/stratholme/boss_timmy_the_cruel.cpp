@@ -95,6 +95,7 @@ struct npc_crimson_guardsmanAI : public ScriptedAI
         m_uiDisarmTimer = 6000;
         m_uiShieldBashTimer = 4000;
         m_uiShieldChargeTimer = 1000;
+        m_bIsTimmySpawner = false;
     }
 
     void JustDied(Unit* pKiller) override
