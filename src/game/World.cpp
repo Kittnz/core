@@ -1213,7 +1213,7 @@ char const* World::GetPatchName() const
 /// Initialize the World
 void World::SetInitialWorldSettings()
 {
-    // using namespace DBUpdater;
+    using namespace DBUpdater;
 
     ///- Initialize the random number generator
     srand((unsigned int)time(nullptr));
