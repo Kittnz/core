@@ -520,13 +520,8 @@ void GameObject::Update(uint32 update_diff, uint32 /*p_time*/)
         {
             switch (GetGoType())
             {
-                case GAMEOBJECT_TYPE_DOOR: // Ustaag <Nostalrius>
-                {
-                    if ((m_cooldownTime < time(nullptr)) && (GetGOInfo()->GetAutoCloseTime() != 0))
-                        ResetDoorOrButton();
-                    break;
-                }
-                case GAMEOBJECT_TYPE_BUTTON:
+            case GAMEOBJECT_TYPE_DOOR:
+            case GAMEOBJECT_TYPE_BUTTON:
                 {
                     if ((m_cooldownTime < time(nullptr)) && (GetGOInfo()->GetAutoCloseTime() != 0))  // Ustaag <Nostalrius>
                         //if (m_respawnDelayTime && (m_cooldownTime < time(nullptr)))
@@ -534,13 +529,8 @@ void GameObject::Update(uint32 update_diff, uint32 /*p_time*/)
                     break;
                 }
                 case GAMEOBJECT_TYPE_GOOBER:
-                    if (m_cooldownTime < time(nullptr))
-                    {
-                        RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_IN_USE);
-
-                        SetLootState(GO_JUST_DEACTIVATED);
-                        m_cooldownTime = 0;
-                    }
+                    if (GetGOInfo()->GetAutoCloseTime() && (m_cooldownTime < time(nullptr)))
+                        ResetDoorOrButton();
                     break;
                 default:
                     break;
