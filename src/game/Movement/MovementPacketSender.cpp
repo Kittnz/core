@@ -154,8 +154,15 @@ void MovementPacketSender::SendTeleportToController(Unit* unit, float x, float y
     mi.ChangePosition(x, y, z, ang);
 
     WorldPacket data(MSG_MOVE_TELEPORT_ACK, 41);
+#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
     data << unit->GetPackGUID();
+#else
+    data << unit->GetGUID();
+#endif
+#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_9_4
     data << mCounter;                                      // this value increments every time
+#endif
+    data << mi;
 
     mover->GetSession()->SendPacket(&data);
 }
@@ -170,7 +177,11 @@ void MovementPacketSender::SendTeleportToObservers(Unit* unit)
     }
 
     WorldPacket data(MSG_MOVE_TELEPORT, 64);
+#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
     data << unit->GetPackGUID();
+#else
+    data << unit->GetGUID();
+#endif
     data << unit->m_movementInfo;
     unit->SendMovementMessageToSet(std::move(data), true, mover);
 }
