@@ -2227,7 +2227,7 @@ void GameEventMgr::LoadHardcodedEvents(HardcodedEventList& eventList)
 	auto scourge_invasion = new ScourgeInvasionEvent();
 	auto war_effort = new WarEffortEvent();
 	auto miracleRaceEvent = new MiracleRaceEvent();
-	eventList = { invasion, leprithus, moonbrook, nightmare, darkmoon, fireworks, goblets, scourge_invasion, war_effort };
+	eventList = { invasion, leprithus, moonbrook, nightmare, darkmoon, fireworks, goblets, scourge_invasion, war_effort, miracleRaceEvent };
 }
 
 void MiracleRaceQueueSystem::QueuePlayer(Player* player, MiracleRaceSide bySide)
