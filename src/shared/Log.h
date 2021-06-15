@@ -104,6 +104,7 @@ enum LogFile
     LOG_CHAT_SPAM,
     LOG_EXPLOITS,
     LOG_HARDCORE_MODE,
+    LOG_MAIL_AH,
     LOG_MAX_FILES
 };
 

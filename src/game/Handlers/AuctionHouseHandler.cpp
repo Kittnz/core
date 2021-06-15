@@ -101,6 +101,7 @@ void WorldSession::SendAuctionCommandResult(AuctionEntry *auc, AuctionAction Act
             break;
     }
 
+    sLog.out(LOG_MAIL_AH, "SendAuctionCommandResult for auc Id %u, value %u, player %s(%u).", auc ? auc->Id : 0, ErrorCode,  GetPlayer() ? GetPlayer()->GetName() : "", GetPlayer() ? GetPlayer()->GetGUIDLow() : 0);
     SendPacket(&data);
 }
 
@@ -122,6 +123,7 @@ void WorldSession::SendAuctionBidderNotification(AuctionEntry* auction, bool won
 
     data << uint32(randomId);                               // random property (value > 0) or suffix (value < 0)
 
+    sLog.out(LOG_MAIL_AH, "SendAuctionBidderNotification for auc Id %u, player %s(%u).", auction->Id, GetPlayer() ? GetPlayer()->GetName() : "", GetPlayer() ? GetPlayer()->GetGUIDLow() : 0);
     SendPacket(&data);
 }
 
@@ -143,6 +145,9 @@ void WorldSession::SendAuctionOwnerNotification(AuctionEntry* auction, bool sold
 
     Item *item = sAuctionMgr.GetAItem(auction->itemGuidLow);
     uint32 randomId = item ? item->GetItemRandomPropertyId() : 0;
+
+    sLog.out(LOG_MAIL_AH, "SendAuctionOwnerNotification for auc Id %u, player %s, bidder %u.", auction->Id, GetPlayer() ? GetPlayer()->GetShortDescription().c_str() : "",
+        guid.GetCounter());
 
     data << uint32(randomId);                               // random property (value > 0) or suffix (value < 0)
     SendPacket(&data);
@@ -513,6 +518,7 @@ void WorldSession::HandleAuctionPlaceBid(WorldPacket & recv_data)
         // after this update we should save player's money ...
         CharacterDatabase.PExecute("UPDATE auction SET buyguid = '%u', lastbid = '%u' WHERE id = '%u'", auction->bidder, auction->bid, auction->Id);
 
+        sLog.out(LOG_MAIL_AH, "HandleAuctionPlaceBid for auc Id %u, player %s bid lower than buyout.", auction->Id, GetPlayer() ? GetPlayer()->GetShortDescription().c_str() : "");
         SendAuctionCommandResult(auction, AUCTION_BID_PLACED, AUCTION_OK);
     }
     else                                                    // buyout
@@ -528,6 +534,8 @@ void WorldSession::HandleAuctionPlaceBid(WorldPacket & recv_data)
 
         auction->bidder = pl->GetGUIDLow();
         auction->bid = auction->buyout;
+
+        sLog.out(LOG_MAIL_AH, "HandleAuctionPlaceBid for auc Id %u item Id %u, bought out by %s.", auction->Id, auction->itemTemplate, GetPlayer() ? GetPlayer()->GetShortDescription().c_str() : "");
 
         sAuctionMgr.SendAuctionSuccessfulMail(auction);
         sAuctionMgr.SendAuctionWonMail(auction);
