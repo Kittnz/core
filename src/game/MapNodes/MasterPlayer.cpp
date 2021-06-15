@@ -108,7 +108,7 @@ void MasterPlayer::SaveMails()
             stmt.addUInt32(m->messageID);
             stmt.Execute();
 
-            sLog.out(LOG_MAIL_AH, "SaveMails Now UPDATING state CHANGED mail for mail Id %u, player %s, expire_time %l64u", m->messageID, name.c_str(), (uint64)m->expire_time);
+            sLog.out(LOG_MAIL_AH, "SaveMails Now UPDATING state CHANGED mail for mail Id %u, player %s, expire_time %I64u", m->messageID, name.c_str(), (uint64)m->expire_time);
 
             if (!m->removedItems.empty())
             {
