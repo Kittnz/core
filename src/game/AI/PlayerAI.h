@@ -60,7 +60,7 @@ class PlayerControlledAI: public PlayerAI
     public:
         explicit PlayerControlledAI(Player* pPlayer, Unit* caster = nullptr);
 
-        ~PlayerControlledAI() override;
+        virtual ~PlayerControlledAI();
 
         // Called at World update tick
         void UpdateAI(const uint32 /*diff*/) override;

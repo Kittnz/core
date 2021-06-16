@@ -35,7 +35,7 @@ class Totem : public Creature
 {
     public:
         explicit Totem();
-        ~Totem() override{};
+        virtual ~Totem(){};
         bool Create(uint32 guidlow, CreatureCreatePos& cPos, CreatureInfo const* cinfo, Unit* owner);
         void Update(uint32 update_diff, uint32 time) override;
         void Summon(Unit* owner);

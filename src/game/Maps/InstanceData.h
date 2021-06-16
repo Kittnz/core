@@ -38,7 +38,7 @@ class InstanceData : public ZoneScript
     public:
 
         explicit InstanceData(Map *map) : instance(map) { SetMap(map); }
-        ~InstanceData() override {}
+        virtual ~InstanceData() {}
 
         Map *instance;
 

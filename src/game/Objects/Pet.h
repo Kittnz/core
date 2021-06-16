@@ -147,7 +147,7 @@ class Pet : public Creature
 {
     public:
         explicit Pet(PetType type = MAX_PET_TYPE);
-        ~Pet() override;
+        virtual ~Pet();
 
         void AddToWorld() override;
         void RemoveFromWorld() override;

@@ -720,7 +720,7 @@ class WorldObject : public Object
                 WorldObject * const m_obj;
         };
 
-        ~WorldObject ( ) override {}
+        virtual ~WorldObject () {}
 
         virtual void Update(uint32 /*update_diff*/, uint32 /*time_diff*/);
 
