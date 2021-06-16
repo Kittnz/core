@@ -185,3 +185,8 @@ update creature_template set faction = 35 where entry = 81025;
 update creature_template set faction = 35 where entry = 81024;
 update creature_template set faction = 35 where entry = 81023;
 update creature_template set faction = 35 where entry = 81022;
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/52
+
+update quest_template set requiredraces = 32 where entry = 748;
+
