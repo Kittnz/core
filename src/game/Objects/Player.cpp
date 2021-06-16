@@ -22462,7 +22462,7 @@ bool Player::SetupHardcoreMode()
         TradeCancel(true);
 
     // Delete mails TO and FROM
-    QueryResult* resultMail = CharacterDatabase.PQuery("SELECT id FROM mail WHERE receiver='%u' OR sender='%u'", GetGUIDLow());
+    QueryResult* resultMail = CharacterDatabase.PQuery("SELECT id FROM mail WHERE receiver='%u' OR sender='%u'", GetGUIDLow(), GetGUIDLow());
     if (resultMail)
     {
         do

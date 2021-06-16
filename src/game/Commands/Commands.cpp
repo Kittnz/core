@@ -6634,7 +6634,7 @@ bool ChatHandler::HandleGameObjectTargetCommand(char* args)
     else
     {
         std::ostringstream eventFilter;
-        eventFilter << " AND (event IS nullptr ";
+        eventFilter << " AND (event IS NULL ";
         bool initString = true;
 
         for (const auto itr : activeEventsList)
