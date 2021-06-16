@@ -26,3 +26,10 @@ update item_template set stat_value10 = 0 where stat_value10 < 0 and stat_type10
 
 replace into creature_questrelation (id, quest) values (11536, 9226);
 replace into creature_involvedrelation (id, quest) values (11536, 9226);
+
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/35
+-- Some non-combat pets do not move after summoning them.
+
+update creature_template set type = 12 where entry = 50611;
+update creature_template set type = 12 where entry = 14421;
