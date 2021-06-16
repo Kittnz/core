@@ -372,7 +372,7 @@ class Unit : public WorldObject
         typedef std::set<uint32> ComboPointHolderSet;
         typedef std::map<SpellEntry const*, ObjectGuid> SingleCastSpellTargetMap;
 
-        ~Unit ( ) override;
+        virtual ~Unit ();
 
         void AddToWorld() override;
         void RemoveFromWorld() override;

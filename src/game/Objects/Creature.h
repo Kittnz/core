@@ -510,7 +510,7 @@ class Creature : public Unit
     public:
 
         explicit Creature(CreatureSubtype subtype = CREATURE_SUBTYPE_GENERIC);
-        ~Creature() override;
+        virtual ~Creature();
 
         void AddToWorld() override;
         void RemoveFromWorld() override;

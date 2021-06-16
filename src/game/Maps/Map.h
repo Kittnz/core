@@ -332,7 +332,7 @@ class Map : public GridRefManager<NGridType>, public MaNGOS::ObjectLevelLockable
         Map(uint32 id, time_t, uint32 InstanceId);
 
     public:
-        ~Map() override;
+        virtual ~Map();
         void PrintInfos(ChatHandler& handler);
         void SpawnActiveObjects();
         // currently unused for normal maps

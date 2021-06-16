@@ -791,7 +791,7 @@ class SpellEvent : public BasicEvent
 {
     public:
         SpellEvent(Spell* spell);
-        ~SpellEvent() override;
+        virtual ~SpellEvent();
 
         bool Execute(uint64 e_time, uint32 p_time) override;
         void Abort(uint64 e_time) override;
@@ -805,7 +805,7 @@ class ChannelResetEvent : public BasicEvent
 {
     public:
         ChannelResetEvent(Unit* _caster) : caster(_caster) {}
-        ~ChannelResetEvent() override {}
+        virtual ~ChannelResetEvent() {}
 
         bool Execute(uint64 e_time, uint32 p_time) override;
         void Abort(uint64 e_time) override;
