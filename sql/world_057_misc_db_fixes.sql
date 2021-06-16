@@ -168,3 +168,8 @@ replace into npc_trainer values (81050, 20940, 1800, 0, 0, 50, 0, 5875);
 replace into npc_trainer values (81050, 20941, 2500, 0, 0, 60, 0, 5875);
 replace into npc_trainer values (81050, 20942, 1200, 0, 0, 42, 0, 5875);
 replace into npc_trainer values (81050, 20943, 2100, 0, 0, 54, 0, 5875);
+
+-- Quest: Attack on Camp Narache is not enable to all horde races
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/33
+
+update quest_template set requiredraces = 434 where entry = 781;
