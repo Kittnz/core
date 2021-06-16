@@ -33,3 +33,8 @@ replace into creature_involvedrelation (id, quest) values (11536, 9226);
 
 update creature_template set type = 12 where entry = 50611;
 update creature_template set type = 12 where entry = 14421;
+
+-- Bug: Tonal Stone: Kamio 
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/17
+
+update item_template set spellid_1 = 46035 where entry = 70043;
