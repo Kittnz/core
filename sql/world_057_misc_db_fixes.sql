@@ -20,3 +20,9 @@ update item_template set stat_value7 = 0 where stat_value7 < 0 and stat_type7 = 
 update item_template set stat_value8 = 0 where stat_value8 < 0 and stat_type8 = 0;
 update item_template set stat_value9 = 0 where stat_value9 < 0 and stat_type9 = 0;
 update item_template set stat_value10 = 0 where stat_value10 < 0 and stat_type10 = 0;
+
+
+-- Superior Armaments of Battle - Revered Amongst the Dawn, missing start / end NPC.
+
+replace into creature_questrelation (id, quest) values (11536, 9226);
+replace into creature_involvedrelation (id, quest) values (11536, 9226);
