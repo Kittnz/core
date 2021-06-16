@@ -15251,9 +15251,6 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
     //bIsMortal = GetItemCount(80188, true) > 0;
     m_hardcoreStatus = fields[61].GetUInt8();
 
-    // For lazy me
-    bIsCheater = GetItemCount(81130, true) > 0;
-
     // Titles
 
     if (GetGUIDLow() == 1 || GetGUIDLow() == 11549) // Torta, Pompa

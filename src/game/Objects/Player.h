@@ -2069,7 +2069,6 @@ class Player final: public Unit
         void ResetSkippedUpdateTime() { m_skippedUpdateTime = 0; }
 
         bool isTurtle() const { return bIsTurtle; };
-        bool isCheater() const { return bIsCheater; };
         void EnableTurtleMode() { bIsTurtle = true; };
 
         void SetHardcoreStatus(uint8 status) { m_hardcoreStatus = status; };
@@ -2106,7 +2105,6 @@ class Player final: public Unit
 
         // Turtle WoW custom feature: turtle mode (0.5x rates for Creature.Kill)
         bool bIsTurtle = false;
-        bool bIsCheater = false;
 
         uint8 m_hardcoreStatus;
         uint32 m_hardcoreKickTimer;

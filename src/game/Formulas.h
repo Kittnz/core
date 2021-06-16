@@ -137,10 +137,6 @@ namespace MaNGOS
             if (pPlayer->isTurtle())
 			    xp_gain *= 0.5f;
 
-            if (pPlayer->isCheater())
-                xp_gain *= 5.0f;
-
-
             xp_gain *= sWorld.getConfig(CONFIG_FLOAT_RATE_XP_KILL);
 
             return std::nearbyint(xp_gain);
