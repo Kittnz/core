@@ -7,3 +7,16 @@ delete from custom_pet_entry_relation where item_entry = 51221;
 -- Delete GM Glyph
 
 delete from item_template where entry = 81130;
+
+-- Fix broken stats on Kazgrim's items.
+
+update item_template set stat_value1 = 0 where stat_value1 < 0 and stat_type1 = 0;
+update item_template set stat_value2 = 0 where stat_value2 < 0 and stat_type2 = 0;
+update item_template set stat_value3 = 0 where stat_value3 < 0 and stat_type3 = 0;
+update item_template set stat_value4 = 0 where stat_value4 < 0 and stat_type4 = 0;
+update item_template set stat_value5 = 0 where stat_value5 < 0 and stat_type5 = 0;
+update item_template set stat_value6 = 0 where stat_value6 < 0 and stat_type6 = 0;
+update item_template set stat_value7 = 0 where stat_value7 < 0 and stat_type7 = 0;
+update item_template set stat_value8 = 0 where stat_value8 < 0 and stat_type8 = 0;
+update item_template set stat_value9 = 0 where stat_value9 < 0 and stat_type9 = 0;
+update item_template set stat_value10 = 0 where stat_value10 < 0 and stat_type10 = 0;
