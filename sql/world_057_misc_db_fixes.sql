@@ -31,8 +31,8 @@ replace into creature_involvedrelation (id, quest) values (11536, 9226);
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/35
 -- Some non-combat pets do not move after summoning them.
 
-update creature_template set type = 3 where entry = 50611;
-update creature_template set type = 3 where entry = 14421;
+update creature_template set type = 10 where entry = 50611;
+update creature_template set type = 10 where entry = 14421;
 
 -- Bug: Tonal Stone: Kamio 
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/17
