@@ -190,3 +190,15 @@ update creature_template set faction = 35 where entry = 81022;
 
 update quest_template set requiredraces = 32 where entry = 748;
 
+-- Taming the Beast questline done twice 
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/40
+
+update quest_template set requiredraces = 256 where entry = 80330;
+update quest_template set requiredraces = 256 where entry = 80331;
+update quest_template set requiredraces = 256 where entry = 80332;
+update quest_template set requiredraces = 256 where entry = 80333;
+update quest_template set requiredraces = 256 where entry = 80334;
+
+update quest_template set requiredraces = 512 where entry = 80366;
+
+
