@@ -173,3 +173,15 @@ replace into npc_trainer values (81050, 20943, 2100, 0, 0, 54, 0, 5875);
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/33
 
 update quest_template set requiredraces = 434 where entry = 781;
+
+-- oblin Mount vendor and Rats Guildbase npcs hostile to Horde players
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/55
+
+update creature_template set faction = 35 where entry = 80137;
+update creature_template set faction = 35 where entry = 81028;
+update creature_template set faction = 35 where entry = 81027;
+update creature_template set faction = 35 where entry = 81026;
+update creature_template set faction = 35 where entry = 81025;
+update creature_template set faction = 35 where entry = 81024;
+update creature_template set faction = 35 where entry = 81023;
+update creature_template set faction = 35 where entry = 81022;
