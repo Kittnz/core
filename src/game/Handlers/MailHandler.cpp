@@ -281,7 +281,7 @@ void WorldSession::HandleSendMail(WorldPacket& recv_data)
 
         req->rcTeam = sObjectMgr.GetPlayerTeamByGUID(req->receiver);
         // Unsafe query: can modify items, accesses online players ...
-        CharacterDatabase.AsyncPQueryUnsafe(req, &WorldSession::AsyncMailSendRequest::Callback, "SELECT COUNT(*) FROM `mail` WHERE `receiver` = '%u'", req->receiver.GetCounter());
+        CharacterDatabase.AsyncPQueryUnsafe(req, &WorldSession::AsyncMailSendRequest::Callback, "SELECT COUNT(*) FROM `mail` WHERE `receiver` = '%u' AND isDeleted = 0", req->receiver.GetCounter());
     }
 }
 
@@ -517,7 +517,7 @@ void WorldSession::HandleMailMarkAsRead(WorldPacket& recv_data)
         if ((m->expire_time - time_now) > (3 * DAY))
             m->expire_time = time_now + (3 * DAY);
     }
-    sLog.out(LOG_MAIL_AH, "HandleMailMarkAsRead for player %s.", pl->name.c_str());
+    sLog.out(LOG_MAIL_AH, "HandleMailMarkAsRead for player %s mailId %u.", pl->name.c_str(), mailId);
 }
 
 /**
@@ -590,7 +590,7 @@ void WorldSession::HandleMailReturnToSender(WorldPacket& recv_data)
     //we can return mail now
     //so firstly delete the old one
     CharacterDatabase.BeginTransaction(pl->GetGUIDLow());
-    CharacterDatabase.PExecute("DELETE FROM `mail` WHERE `id` = '%u'", mailId);
+    CharacterDatabase.PExecute("UPDATE `mail` SET `isDeleted` = 1 WHERE `id` = '%u'", mailId);
     // needed?
     CharacterDatabase.PExecute("DELETE FROM `mail_items` WHERE `mail_id` = '%u'", mailId);
     CharacterDatabase.CommitTransaction();

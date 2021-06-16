@@ -93,8 +93,8 @@ void PInfoHandler::HandleDataAfterPlayerLookup(PInfoData *data)
 {
     SqlQueryHolder* charHolder = new SqlQueryHolder;
     charHolder->SetSize(2);
-    charHolder->SetPQuery(PINFO_QUERY_GOLD_SENT, "SELECT SUM(money) FROM mail WHERE sender = %u", data->target_guid.GetCounter());
-    charHolder->SetPQuery(PINFO_QUERY_GOLD_RECEIVED, "SELECT SUM(money) FROM mail WHERE receiver = %u", data->target_guid.GetCounter());
+    charHolder->SetPQuery(PINFO_QUERY_GOLD_SENT, "SELECT SUM(money) FROM mail WHERE sender = %u AND isDeleted = 0", data->target_guid.GetCounter());
+    charHolder->SetPQuery(PINFO_QUERY_GOLD_RECEIVED, "SELECT SUM(money) FROM mail WHERE receiver = %u AND isDeleted = 0", data->target_guid.GetCounter());
 
     CharacterDatabase.DelayQueryHolder(&PInfoHandler::HandleDelayedMoneyQuery, charHolder, data);
 }

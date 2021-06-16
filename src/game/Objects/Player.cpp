@@ -22459,7 +22459,7 @@ bool Player::SetupHardcoreMode()
         TradeCancel(true);
 
     // Delete mails TO and FROM
-    QueryResult* resultMail = CharacterDatabase.PQuery("SELECT id FROM mail WHERE receiver='%u' OR sender='%u'", GetGUIDLow(), GetGUIDLow());
+    QueryResult* resultMail = CharacterDatabase.PQuery("SELECT id FROM mail WHERE isDeleted = 0 AND (receiver='%u' OR sender='%u')", GetGUIDLow(), GetGUIDLow());
     if (resultMail)
     {
         do
@@ -22467,7 +22467,7 @@ bool Player::SetupHardcoreMode()
             Field* fields = resultMail->Fetch();
 
             uint32 mail_id = fields[0].GetUInt32();
-            CharacterDatabase.PExecute("DELETE FROM mail WHERE id = '%u'", mail_id);
+            CharacterDatabase.PExecute("UPDATE mail SET isDeleted = 1 WHERE id = '%u'", mail_id);
             CharacterDatabase.PExecute("DELETE FROM mail_items WHERE mail_id = '%u'", mail_id);
             if (MasterPlayer* pl = GetSession()->GetMasterPlayer())
                 pl->RemoveMail(mail_id);

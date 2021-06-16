@@ -150,7 +150,7 @@ void MasterPlayer::SaveMails()
                 stmt.PExecute(m->itemTextId);
             }
 
-            SqlStatement stmt = CharacterDatabase.CreateStatement(deleteMain, "DELETE FROM mail WHERE id = ?");
+            SqlStatement stmt = CharacterDatabase.CreateStatement(deleteMain, "UPDATE mail SET isDeleted = 1 WHERE id = ?");
             stmt.PExecute(m->messageID);
 
             stmt = CharacterDatabase.CreateStatement(deleteItems, "DELETE FROM mail_items WHERE mail_id = ?");

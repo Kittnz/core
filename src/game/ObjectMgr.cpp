@@ -5499,7 +5499,8 @@ public:
                 if (itemTextId)
                     CharacterDatabase.PExecute("DELETE FROM `item_text` WHERE `id` = '%u'", itemTextId);
 
-                CharacterDatabase.PExecute("DELETE FROM `mail` WHERE `id` = '%u'", messageID);
+                CharacterDatabase.PExecute("UPDATE `mail` SET `isDeleted` = 1 WHERE `id` = '%u'", messageID);
+                sLog.out(LOG_MAIL_AH, "About to DELETE mail id %u with receiver LowGUID %u and item GUID %u", messageID, receiverGuid.GetCounter(),item_guid);
             }
             else                // Return to sender
             {
@@ -5583,7 +5584,8 @@ public:
 
             // deletemail = true;
             // delmails << m->messageID << ", ";
-            CharacterDatabase.PExecute("DELETE FROM `mail` WHERE `id` = '%u'", m->messageID);
+            sLog.out(LOG_MAIL_AH, "About to DELETE mail id %u with receiver LowGUID %u and sender LowGUID %u", m->messageID, m->receiverGuid.GetCounter(), m->sender);
+            CharacterDatabase.PExecute("UPDATE `mail` SET `isDeleted` = 1 WHERE `id` = '%u'", m->messageID);
             delete m;
             
         }
@@ -5601,12 +5603,12 @@ void ObjectMgr::ReturnOrDeleteOldMails(bool serverUp)
     DEBUG_LOG("Returning mails current time: hour: %d, minute: %d, second: %d ", localtime(&basetime)->tm_hour, localtime(&basetime)->tm_min, localtime(&basetime)->tm_sec);
     //delete all old mails without item and without body immediately, if starting server
     if (!serverUp)
-        CharacterDatabase.PExecute("DELETE FROM `mail` WHERE `expire_time` < '" UI64FMTD "' AND `has_items` = '0' AND `itemTextId` = 0", (uint64)basetime);
+        CharacterDatabase.PExecute("UPDATE `mail` SET `isDeleted` = 1 WHERE `expire_time` < '" UI64FMTD "' AND `has_items` = '0' AND `itemTextId` = 0", (uint64)basetime);
     OldMailsReturner* cb = new OldMailsReturner();
     cb->serverUp = serverUp;
     cb->basetime = basetime;
     uint32 limit = serverUp ? 5 : 1000;
-    CharacterDatabase.AsyncPQueryUnsafe(cb, &OldMailsReturner::Callback, "SELECT `id`, `messageType`, `sender`, `receiver`, `itemTextId`, `has_items`, `expire_time`, `cod`, `checked`, `mailTemplateId` FROM `mail` WHERE `expire_time` < '" UI64FMTD "' ORDER BY `expire_time` LIMIT %u,%u", (uint64)basetime, m_OldMailCounter, limit);
+    CharacterDatabase.AsyncPQueryUnsafe(cb, &OldMailsReturner::Callback, "SELECT `id`, `messageType`, `sender`, `receiver`, `itemTextId`, `has_items`, `expire_time`, `cod`, `checked`, `mailTemplateId` FROM `mail` WHERE `expire_time` < '" UI64FMTD "' AND isDeleted = 0 ORDER BY `expire_time` LIMIT %u,%u", (uint64)basetime, m_OldMailCounter, limit);
 }
 
 void ObjectMgr::LoadAreaTriggers()
