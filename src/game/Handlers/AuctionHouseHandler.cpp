@@ -71,7 +71,7 @@ void WorldSession::SendAuctionHello(Unit* unit)
 
     WorldPacket data(MSG_AUCTION_HELLO, 12);
     data << unit->GetObjectGuid();
-    data << uint32(ahEntry->houseId);
+    data << uint32(ahEntry->houseId); 
     SendPacket(&data);
 }
 
@@ -425,14 +425,23 @@ void WorldSession::HandleAuctionPlaceBid(WorldPacket & recv_data)
     recv_data >> auctionId >> price;
 
     if (!sWorld.getConfig(CONFIG_BOOL_GM_ALLOW_TRADES) && GetSecurity() > SEC_PLAYER)
+    {
+        sLog.outInfo("HandleAuctionPlaceBid - Failed security check [Player %s, auctionId %u, auctioneer %u, price %u]", GetPlayer()->GetName(), auctionId, auctioneerGuid, price);
         return;
+    }
 
     if (!auctionId || !price)
+    {
+        sLog.outInfo("HandleAuctionPlaceBid - !auctionId || !price [Player %s, auctionId %u, auctioneer %u, price %u]", GetPlayer()->GetName(), auctionId, auctioneerGuid, price);
         return;                                             // check for cheaters
+    }
 
     AuctionHouseEntry const* auctionHouseEntry = GetCheckedAuctionHouseForAuctioneer(auctioneerGuid);
     if (!auctionHouseEntry)
+    {
+        sLog.outInfo("HandleAuctionPlaceBid - auctionHouseEntry missing WTF! [Player %s, auctionId %u, auctioneer %u, price %u]", GetPlayer()->GetName(), auctionId, auctioneerGuid, price);
         return;
+    }
 
     // always return pointer
     AuctionHouseObject* auctionHouse = sAuctionMgr.GetAuctionsMap(auctionHouseEntry);
@@ -446,6 +455,7 @@ void WorldSession::HandleAuctionPlaceBid(WorldPacket & recv_data)
 
     if (!auction)
     {
+        sLog.outInfo("HandleAuctionPlaceBid - auction is missing [Player %s, auctionId %u, auctioneer %u, price %u]", GetPlayer()->GetName(), auctionId, auctioneerGuid, price);
         // item not found; auction may have expired, or been bought out
         SendAuctionCommandResult(nullptr, AUCTION_BID_PLACED, AUCTION_ERR_ITEM_NOT_FOUND);
 
@@ -455,6 +465,7 @@ void WorldSession::HandleAuctionPlaceBid(WorldPacket & recv_data)
     if (auction->owner == pl->GetGUIDLow())
     {
         // you cannot bid your own auction:
+		sLog.outInfo("HandleAuctionPlaceBid - owner is incorrect [Player %s, auctionId %u, auctioneer %u, price %u]", GetPlayer()->GetName(), auctionId, auctioneerGuid, price);
         SendAuctionCommandResult(nullptr, AUCTION_BID_PLACED, AUCTION_ERR_BID_OWN);
         return;
     }
@@ -466,6 +477,7 @@ void WorldSession::HandleAuctionPlaceBid(WorldPacket & recv_data)
     if (!auction_owner && sObjectMgr.GetPlayerAccountIdByGUID(ownerGuid) == pl->GetSession()->GetAccountId())
     {
         // you cannot bid your another character auction:
+		sLog.outInfo("HandleAuctionPlaceBid - owner is incorrect[2] [Player %s, auctionId %u, auctioneer %u, price %u]", GetPlayer()->GetName(), auctionId, auctioneerGuid, price);
         SendAuctionCommandResult(nullptr, AUCTION_BID_PLACED, AUCTION_ERR_BID_OWN);
         return;
     }
@@ -478,6 +490,8 @@ void WorldSession::HandleAuctionPlaceBid(WorldPacket & recv_data)
     if (price <= auction->bid)
     {
         // client test but possible in result lags
+		sLog.outInfo("HandleAuctionPlaceBid - CHEATING [Player %s, auctionId %u, auctioneer %u, price %u]", GetPlayer()->GetName(), auctionId, auctioneerGuid, price);
+
         SendAuctionCommandResult(auction, AUCTION_BID_PLACED, AUCTION_ERR_HIGHER_BID);
         return;
     }
@@ -487,6 +501,8 @@ void WorldSession::HandleAuctionPlaceBid(WorldPacket & recv_data)
             price < auction->bid + auction->GetAuctionOutBid())
     {
         // client test but possible in result lags
+		sLog.outInfo("HandleAuctionPlaceBid - bid is too low [Player %s, auctionId %u, auctioneer %u, price %u]", GetPlayer()->GetName(), auctionId, auctioneerGuid, price);
+
         SendAuctionCommandResult(auction, AUCTION_BID_PLACED, AUCTION_ERR_BID_INCREMENT);
         return;
     }
@@ -495,6 +511,7 @@ void WorldSession::HandleAuctionPlaceBid(WorldPacket & recv_data)
     {
         // you don't have enough money!, client tests!
         // SendAuctionCommandResult(auction->auctionId, AUCTION_ERR_INVENTORY, EQUIP_ERR_NOT_ENOUGH_MONEY);
+		sLog.outInfo("HandleAuctionPlaceBid - Player don't have enough money [Player %s, auctionId %u, auctioneer %u, price %u]", GetPlayer()->GetName(), auctionId, auctioneerGuid, price);
         return;
     }
 
