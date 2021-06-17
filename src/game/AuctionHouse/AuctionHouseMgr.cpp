@@ -115,7 +115,10 @@ void AuctionHouseMgr::SendAuctionWonMail(AuctionEntry *auction)
 {
     Item *pItem = GetAItem(auction->itemGuidLow);
     if (!pItem)
+    {
+        sLog.outError("AuctionHouseMgr::SendAuctionWonMail: FAILED to get an item from auctionEntryId: %u", auction->itemGuidLow);
         return;
+    }
 
     ObjectGuid bidder_guid = ObjectGuid(HIGHGUID_PLAYER, auction->bidder);
     Player *bidder = sObjectMgr.GetPlayer(bidder_guid);
@@ -239,6 +242,10 @@ void AuctionHouseMgr::SendAuctionSuccessfulMail(AuctionEntry * auction)
         MailDraft(msgAuctionSuccessfulSubject.str(), auctionSuccessfulBody.str())
         .SetMoney(profit)
         .SendMailTo(MailReceiver(owner, owner_guid), auction, MAIL_CHECK_MASK_COPIED);
+    }
+    else
+    {
+        //sLog.outInfo("FAIL to send a successful mail")
     }
 }
 

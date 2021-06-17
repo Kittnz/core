@@ -105,7 +105,6 @@ MailReceiver::MailReceiver(Player* receiver) : m_receiver(receiver), m_receiver_
  */
 MailReceiver::MailReceiver(Player* receiver, ObjectGuid receiver_guid) : m_receiver(receiver), m_receiver_guid(receiver_guid)
 {
-    MANGOS_ASSERT(!receiver || receiver->GetObjectGuid() == receiver_guid);
 }
 
 /**

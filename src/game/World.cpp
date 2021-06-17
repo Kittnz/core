@@ -1244,9 +1244,9 @@ void World::SetInitialWorldSettings()
         exit(1);                                            // Error message displayed in function already
     }
 
-#if PLATFORM == PLATFORM_WINDOWS
-    sAutoUpdater->ProcessUpdates();
-#endif
+//#if PLATFORM == PLATFORM_WINDOWS
+//    sAutoUpdater->ProcessUpdates();
+//#endif
 
     ///- Loading shop tables
     sObjectMgr.LoadShop();
