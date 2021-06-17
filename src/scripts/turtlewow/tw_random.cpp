@@ -733,56 +733,6 @@ private:
     uint64 passenger_guid;
 };
 
-bool ItemUseSpell_item_saddle(Player* pPlayer, Item* pItem, const SpellCastTargets&)
-{
-    if (pPlayer->IsInCombat() || pPlayer->IsBeingTeleported() || (pPlayer->GetDeathState() == CORPSE) || pPlayer->IsMoving())
-    {        
-        pPlayer->GetSession()->SendNotification("You can't use this yet.");
-        return false;
-    }
-
-    Player* target = pPlayer->GetSelectedPlayer();
-
-    if (!pPlayer->GetTerrain()->IsOutdoors(pPlayer->GetPositionX(), pPlayer->GetPositionY(), pPlayer->GetPositionZ()) && pPlayer->GetInstanceId())
-    {
-        pPlayer->GetSession()->SendNotification("You can't use it here.");
-        return false;
-    }
-
-    if (!target || target == pPlayer)
-    {
-        pPlayer->GetSession()->SendNotification("You need a passenger.");
-        return false;
-    }
-
-    if (!target->IsInPartyWith(pPlayer))
-    {
-        pPlayer->GetSession()->SendNotification("Your paseenger must be in party!");
-        return false;
-    }
-
-    if (pPlayer->GetDisplayId() != STAG_MOUNT_DISPLAY)
-    {
-        pPlayer->GetSession()->SendNotification("Saddle be used only in a Stag Form.");
-        return false;
-    }
-
-    target->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, STAG_MOUNT_DISPLAY);
-    target->UpdateSpeed(MOVE_RUN, false, 4.0F);
-    target->SetTaxiPassengerStatus(true);
-
-    pPlayer->AddAura(SPELL_TAXI_INVISIBILITY, ADD_AURA_PERMANENT);
-    pPlayer->CastSpell(target, SPELL_CHARM, true);
-    pPlayer->SetObjectScale(0.01F);
-    pPlayer->SetTaxiDriverStatus(true);
-
-
-    pPlayer->m_Events.AddEvent(new StopUber(pPlayer->GetGUID(), target->GetGUID()), pPlayer->m_Events.CalculateTime(10 * MINUTE * IN_MILLISECONDS));
-    pPlayer->GetSession()->SendNotification("You have 10 minute.");
-
-    return true;
-}
-
 bool GossipHello_npc_barber(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->HasItemCount(50600, 1) || pPlayer->GetRace() == RACE_GOBLIN)
@@ -5905,11 +5855,6 @@ void AddSC_tw_random()
     newscript = new Script;
     newscript->Name = "shop_racechange";
     newscript->pItemUseSpell = &ItemUseSpell_shop_racechange;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "item_saddle";
-    newscript->pItemUseSpell = &ItemUseSpell_item_saddle;
     newscript->RegisterSelf();
 
     newscript = new Script;
