@@ -255,15 +255,9 @@ void MailDraft::SendReturnToSender(uint32 sender_acc, ObjectGuid sender_guid, Ob
         return;
     }
 
-    // prepare mail and send in other case
-    bool needItemDelay = false;
-
     if (!m_items.empty())
     {
-        // if item send to character at another account, then apply item delivery delay
-        needItemDelay = sender_acc != rc_account;
-
-        // set owner to new receiver (to prevent delete item with sender char deleting)
+        // Set owner to new receiver (to prevent delete item with sender char deleting)
         CharacterDatabase.BeginTransaction();
         for (const auto& itr : m_items)
         {
@@ -276,8 +270,7 @@ void MailDraft::SendReturnToSender(uint32 sender_acc, ObjectGuid sender_guid, Ob
         CharacterDatabase.CommitTransaction();
     }
 
-    // If theres is an item, there is a one hour delivery delay.
-    uint32 deliver_delay = needItemDelay ? sWorld.getConfig(CONFIG_UINT32_MAIL_DELIVERY_DELAY) : 0;
+    // WowWiki: "Return mail arrives immediately."
 
     // will delete item or place to receiver mail list
     SendMailTo(MailReceiver(receiver, receiver_guid), MailSender(MAIL_NORMAL, sender_guid.GetCounter()), MAIL_CHECK_MASK_RETURNED, deliver_delay);
@@ -329,14 +322,14 @@ void MailDraft::SendMailTo(MailReceiver const& receiver, MailSender const& sende
 
     CharacterDatabase.BeginTransaction();
     CharacterDatabase.escape_string(safe_subject);
-    CharacterDatabase.PExecute("INSERT INTO mail (id,messageType,stationery,mailTemplateId,sender,receiver,subject,itemTextId,has_items,expire_time,deliver_time,money,cod,checked) "
+    CharacterDatabase.PExecute("INSERT INTO mail (`id`, `messageType`, `stationery`, `mailTemplateId`, `sender`, `receiver`, `subject`, `itemTextId`, `has_items`, `expire_time`, `deliver_time`, `money`, `cod`, `checked`) "
                                "VALUES ('%u', '%u', '%u', '%u', '%u', '%u', '%s', '%u', '%u', '" UI64FMTD "','" UI64FMTD "', '%u', '%u', '%u')",
                                mailId, sender.GetMailMessageType(), sender.GetStationery(), GetMailTemplateId(), sender.GetSenderId(), receiver.GetPlayerGuid().GetCounter(), safe_subject.c_str(), GetBodyId(), (has_items ? 1 : 0), (uint64)expire_time, (uint64)deliver_time, m_money, m_COD, checked);
 
     for (const auto& itr : m_items)
     {
         Item* item = itr.second;
-        CharacterDatabase.PExecute("INSERT INTO mail_items (mail_id,item_guid,item_template,receiver) VALUES ('%u', '%u', '%u','%u')",
+        CharacterDatabase.PExecute("INSERT INTO mail_items (`mail_id`, `item_guid`, `item_template`, `receiver`) VALUES ('%u', '%u', '%u','%u')",
                                    mailId, item->GetGUIDLow(), item->GetEntry(), receiver.GetPlayerGuid().GetCounter());
     }
 
