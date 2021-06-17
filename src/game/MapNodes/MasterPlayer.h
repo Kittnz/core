@@ -72,7 +72,7 @@ public:
     Mail* GetMail(uint32 id);
     void MarkMailsUpdated() { m_mailsUpdated = true; }
     bool HasUnreadMail() const { return unReadMails > 0; }
-    void DecreaseUnreadMailsCount() { unReadMails = unReadMails ? unReadMails-1 : 0; }
+    void DecreaseUnreadMailsCount() { unReadMails = (unReadMails ? unReadMails-1 : 0); }
 
     PlayerMails::iterator GetMailBegin() { return m_mail.begin();}
     PlayerMails::iterator GetMailEnd() { return m_mail.end();}
