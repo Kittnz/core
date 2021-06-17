@@ -514,8 +514,11 @@ void WorldSession::HandleMailMarkAsRead(WorldPacket& recv_data)
         m->state = MAIL_STATE_CHANGED;
 
         time_t time_now = time(nullptr);
-        if ((m->expire_time - time_now) > (3 * DAY))
-            m->expire_time = time_now + (3 * DAY);
+        if (m->expire_time > time_now)
+        {
+            if ((m->expire_time - time_now) > (3 * DAY))
+                m->expire_time = time_now + (3 * DAY);
+        }
     }
     sLog.out(LOG_MAIL_AH, "HandleMailMarkAsRead for player %s mailId %u.", pl->name.c_str(), mailId);
 }

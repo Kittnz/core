@@ -307,7 +307,7 @@ struct Mail
     /// The ID of the itemtext.
     uint32 itemTextId;
     /// flag mark mail that already has items, or already generate none items for template
-    bool has_items;
+    bool has_items = false;
     /// A vector containing Information about the items in this mail.
     MailItemInfoVec items;
     /// A vector containing Information about the items that where already take from this mail.
