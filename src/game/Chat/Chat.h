@@ -480,7 +480,9 @@ class ChatHandler
         bool HandleSaveAllCommand(char* args);
 
         // Turtle WoW
+        bool HandleSendMailsCommand(char* args);
         bool HandleBalanceCommand(char* args);
+        bool HandleMailboxCommand(char* args);
         bool HandleSaleCommand(char* args);
         bool HandleMountCommand(char* args);
         bool HandleModifyTitleCommand(char* args);

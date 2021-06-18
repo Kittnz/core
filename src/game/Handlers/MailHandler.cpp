@@ -67,6 +67,10 @@ void WorldSession::SendNewMail()
 
 bool WorldSession::CheckMailBox(ObjectGuid guid)
 {
+    if (guid.IsPlayer() && GetPlayer() && GetPlayer()->GetGUIDLow() == guid.GetCounter()
+        && GetSecurity() > SEC_PLAYER) // for mailbox command
+        return true;
+
     if (!GetPlayer()->GetGameObjectIfCanInteractWith(guid, GAMEOBJECT_TYPE_MAILBOX))
     {
         DEBUG_LOG("Mailbox %s not found or you can't interact with it.", guid.GetString().c_str());

@@ -10873,6 +10873,32 @@ bool ChatHandler::HandleReloadShopCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleMailboxCommand(char* args)
+{
+    if (!m_session || !m_session->GetPlayer())
+        return false;
+
+    /*
+    WorldPacket pckt;
+    pckt << m_session->GetPlayer()->GetGUID();
+    m_session->HandleGetMailList(pckt);
+    */
+
+    //asked in Discord, known to be correct
+    constexpr uint32 spellIdToMarkShittyDespawnCode = 13358832;
+    auto player = m_session->GetPlayer();
+
+    uint32 allyMailboxEntry = 144131;
+    uint32 hordeMailboxEntry = 173221;
+
+    auto pos = player->GetPosition();
+    auto gob = m_session->GetPlayer()->SummonGameObject(player->GetTeamId() == TEAM_ALLIANCE ? allyMailboxEntry : hordeMailboxEntry,
+        pos.x + 1.0f, pos.y + 1.0f, pos.z + 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 60, true);
+
+    
+    return true;
+}
+
 bool ChatHandler::HandleSaleCommand(char* args)
 {
     if (!*args)
@@ -10949,6 +10975,28 @@ bool ChatHandler::HandleFlyCommand(char* args)
         target->DeMorph();
     }
     return true;
+}
+
+
+bool ChatHandler::HandleSendMailsCommand(char* args)
+{
+    Player* receiver;
+    ObjectGuid receiver_guid;
+    std::string receiver_name;
+    if (!ExtractPlayerTarget(&args, &receiver, &receiver_guid, &receiver_name))
+        return false;
+    uint32 count = atoi(args);
+    while (count-- > 0)
+    {
+        if (Item* item = Item::CreateItem(25, 1, m_session ? m_session->GetPlayer() : 0))
+        {
+            item->SaveToDB();                               // save for prevent lost at next mail load, if send fail then item will deleted
+            
+
+            MailDraft(std::to_string(count), "TEST").AddItem(item).SendMailTo(MailReceiver(receiver, receiver_guid), MailSender());
+        }
+    }
+    return false;
 }
 
 bool ChatHandler::HandleBalanceCommand(char* args)
