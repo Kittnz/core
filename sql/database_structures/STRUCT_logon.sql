@@ -1,9 +1,3 @@
--- --------------------------------------------------------
--- Host:                         127.0.0.1
--- Server Version:               10.1.26-MariaDB-0+deb9u1 - Debian 9.1
--- Server Betriebssystem:        debian-linux-gnu
--- HeidiSQL Version:             9.5.0.5196
--- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET NAMES utf8 */;
@@ -11,7 +5,6 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Exportiere Struktur von Tabelle tw_logon.account
 CREATE TABLE IF NOT EXISTS `account` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Identifier',
   `username` varchar(32) NOT NULL,
@@ -53,8 +46,6 @@ CREATE TABLE IF NOT EXISTS `account` (
   KEY `idx_gmlevel` (`gmlevel`)
 ) ENGINE=InnoDB AUTO_INCREMENT=18726 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Account System';
 
--- Daten Export vom Benutzer nicht ausgewählt
--- Exportiere Struktur von Tabelle tw_logon.account_access
 CREATE TABLE IF NOT EXISTS `account_access` (
   `id` int(11) unsigned NOT NULL,
   `gmlevel` tinyint(3) unsigned NOT NULL,
@@ -62,24 +53,6 @@ CREATE TABLE IF NOT EXISTS `account_access` (
   PRIMARY KEY (`id`,`RealmID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
--- Daten Export vom Benutzer nicht ausgewählt
--- Exportiere Struktur von Funktion tw_logon.account_balance_update
--- ONLY NEEDED FOR A LIFE REALM!
--- DELIMITER //
--- CREATE DEFINER=`xxx`@`%` FUNCTION `account_balance_update`(`AccountID` int,`Price` int) RETURNS int(11)
--- BEGIN
-    -- SELECT `coins` INTO @CoinCount FROM `shop_coins` WHERE `id`= AccountID FOR UPDATE;
-    -- IF @CoinCount >= Price THEN
-        -- UPDATE `shop_coins` SET `coins` = `coins` - Price WHERE `id` = AccountID;
-        -- RETURN 1;
-    -- ELSE
-        -- RETURN 0;
-    -- END IF;
-    -- RETURN 0;
--- END//
--- DELIMITER ;
-
--- Exportiere Struktur von Tabelle tw_logon.account_banned
 CREATE TABLE IF NOT EXISTS `account_banned` (
   `banid` bigint(20) NOT NULL AUTO_INCREMENT,
   `id` bigint(20) NOT NULL DEFAULT '0' COMMENT 'Account id',
@@ -94,8 +67,6 @@ CREATE TABLE IF NOT EXISTS `account_banned` (
   UNIQUE KEY `banid` (`banid`)
 ) ENGINE=MyISAM AUTO_INCREMENT=105 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Ban List';
 
--- Daten Export vom Benutzer nicht ausgewählt
--- Exportiere Struktur von Tabelle tw_logon.account_mailstatus
 CREATE TABLE IF NOT EXISTS `account_mailstatus` (
   `message_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `account_id` int(11) unsigned NOT NULL DEFAULT '0',
@@ -105,8 +76,6 @@ CREATE TABLE IF NOT EXISTS `account_mailstatus` (
   PRIMARY KEY (`message_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=92120 DEFAULT CHARSET=utf8mb4;
 
--- Daten Export vom Benutzer nicht ausgewählt
--- Exportiere Struktur von Tabelle tw_logon.account_mailstatus_archive
 CREATE TABLE IF NOT EXISTS `account_mailstatus_archive` (
   `message_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `account_id` int(11) unsigned NOT NULL DEFAULT '0',
@@ -116,49 +85,29 @@ CREATE TABLE IF NOT EXISTS `account_mailstatus_archive` (
   PRIMARY KEY (`message_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=76921 DEFAULT CHARSET=utf8mb4;
 
--- Daten Export vom Benutzer nicht ausgewählt
--- Exportiere Struktur von Tabelle tw_logon.antispam_blacklist
 CREATE TABLE IF NOT EXISTS `antispam_blacklist` (
   `string` varchar(64) NOT NULL,
   PRIMARY KEY (`string`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
--- Daten Export vom Benutzer nicht ausgewählt
--- Exportiere Struktur von Tabelle tw_logon.antispam_client
 CREATE TABLE IF NOT EXISTS `antispam_client` (
   `Regex` varchar(255) NOT NULL,
   `Note` varchar(64) DEFAULT NULL,
   PRIMARY KEY (`Regex`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Daten Export vom Benutzer nicht ausgewählt
--- Exportiere Struktur von Tabelle tw_logon.antispam_replacement
 CREATE TABLE IF NOT EXISTS `antispam_replacement` (
   `from` varchar(32) NOT NULL DEFAULT '',
   `to` varchar(32) NOT NULL DEFAULT '',
   PRIMARY KEY (`from`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
--- Daten Export vom Benutzer nicht ausgewählt
--- Exportiere Struktur von Tabelle tw_logon.antispam_unicode_replacement
 CREATE TABLE IF NOT EXISTS `antispam_unicode_replacement` (
   `from` mediumint(5) unsigned NOT NULL DEFAULT '0',
   `to` mediumint(5) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`from`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
--- Daten Export vom Benutzer nicht ausgewählt
--- Exportiere Struktur von Ereignis tw_logon.DetectUpdate
--- DELIMITER //
--- CREATE DEFINER=`root`@`localhost` EVENT `DetectUpdate` ON SCHEDULE EVERY 1 MINUTE STARTS '2017-01-01 00:00:00' ON COMPLETION PRESERVE ENABLE DO BEGIN
-        -- SELECT @time:= UNIX_TIMESTAMP();
-        -- UPDATE `antispam_detected` SET `unmuteTime` = 0 WHERE @time > `unmuteTime`;
-	    -- UPDATE `antispam_detected` SET `detectScore` = `detectScore` - 1 WHERE (@time - `detectTime`) > 7200;
-	    -- DELETE FROM `antispam_detected` WHERE `detectScore` <= 0 and (@time - `detectTime`) > 7200;
-	-- END//
--- DELIMITER ;
-
--- Exportiere Struktur von Tabelle tw_logon.geoip
 CREATE TABLE IF NOT EXISTS `geoip` (
   `network_start_integer` int(11) DEFAULT NULL,
   `network_last_integer` int(11) DEFAULT NULL,
@@ -175,8 +124,6 @@ CREATE TABLE IF NOT EXISTS `geoip` (
   KEY `ip_end` (`network_last_integer`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Daten Export vom Benutzer nicht ausgewählt
--- Exportiere Struktur von Tabelle tw_logon.ip_banned
 CREATE TABLE IF NOT EXISTS `ip_banned` (
   `ip` varchar(32) NOT NULL DEFAULT '0.0.0.0',
   `bandate` int(11) NOT NULL,
@@ -186,15 +133,6 @@ CREATE TABLE IF NOT EXISTS `ip_banned` (
   PRIMARY KEY (`ip`,`bandate`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Banned IPs';
 
--- Daten Export vom Benutzer nicht ausgewählt
--- Exportiere Struktur von Tabelle tw_logon.migrations
-CREATE TABLE IF NOT EXISTS `migrations` (
-  `id` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- Daten Export vom Benutzer nicht ausgewählt
--- Exportiere Struktur von Tabelle tw_logon.realmcharacters
 CREATE TABLE IF NOT EXISTS `realmcharacters` (
   `realmid` int(11) unsigned NOT NULL DEFAULT '0',
   `acctid` bigint(20) unsigned NOT NULL,
@@ -203,8 +141,6 @@ CREATE TABLE IF NOT EXISTS `realmcharacters` (
   KEY `acctid` (`acctid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Realm Character Tracker';
 
--- Daten Export vom Benutzer nicht ausgewählt
--- Exportiere Struktur von Tabelle tw_logon.realmlist
 CREATE TABLE IF NOT EXISTS `realmlist` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(32) NOT NULL DEFAULT '',
@@ -220,16 +156,12 @@ CREATE TABLE IF NOT EXISTS `realmlist` (
   UNIQUE KEY `idx_name` (`name`)
 ) ENGINE=MyISAM AUTO_INCREMENT=56 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Realm System';
 
--- Daten Export vom Benutzer nicht ausgewählt
--- Exportiere Struktur von Tabelle tw_logon.shop_coins
 CREATE TABLE IF NOT EXISTS `shop_coins` (
   `id` int(10) unsigned NOT NULL,
   `coins` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Daten Export vom Benutzer nicht ausgewählt
--- Exportiere Struktur von Tabelle tw_logon.shop_diff
 CREATE TABLE IF NOT EXISTS `shop_diff` (
   `guid` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `accountid` int(11) unsigned NOT NULL DEFAULT '0',
@@ -240,8 +172,6 @@ CREATE TABLE IF NOT EXISTS `shop_diff` (
   PRIMARY KEY (`guid`)
 ) ENGINE=MyISAM AUTO_INCREMENT=94537 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Daten Export vom Benutzer nicht ausgewählt
--- Exportiere Struktur von Tabelle tw_logon.statistics_online
 CREATE TABLE IF NOT EXISTS `statistics_online` (
   `guid` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `online` int(8) unsigned DEFAULT '0',
@@ -253,8 +183,6 @@ CREATE TABLE IF NOT EXISTS `statistics_online` (
   PRIMARY KEY (`guid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=83946 DEFAULT CHARSET=utf8mb4;
 
--- Daten Export vom Benutzer nicht ausgewählt
--- Exportiere Struktur von Tabelle tw_logon.system_fingerprint_usage
 CREATE TABLE IF NOT EXISTS `system_fingerprint_usage` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `fingerprint` int(10) unsigned NOT NULL,
@@ -273,8 +201,6 @@ CREATE TABLE IF NOT EXISTS `system_fingerprint_usage` (
   KEY `ip` (`ip`)
 ) ENGINE=InnoDB AUTO_INCREMENT=122487 DEFAULT CHARSET=utf8;
 
--- Daten Export vom Benutzer nicht ausgewählt
--- Exportiere Struktur von Tabelle tw_logon.uptime
 CREATE TABLE IF NOT EXISTS `uptime` (
   `realmid` int(11) unsigned NOT NULL,
   `starttime` bigint(20) unsigned NOT NULL DEFAULT '0',
