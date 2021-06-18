@@ -1,4 +1,4 @@
-#if PLATFORM == PLATFORM_WINDOWS
+#ifdef _MSC_VER
 #include "AutoUpdater.hpp"
 #include "DatabaseEnv.h"
 #include "Config/Config.h"
@@ -135,7 +135,12 @@ namespace DBUpdater
             });
 
         for (const auto& update : updates)
-            ExecuteUpdate(update, targetDatabase);
+        {
+            if (!ExecuteUpdate(update, targetDatabase))
+            {
+                sLog.outError("[DB Auto-Updater] Migration %s with hash %s failed to apply.", update.Name.c_str(), update.Hash.c_str());
+           }
+        }
     }
 
     bool AutoUpdater::ExecuteUpdate(const FileMigration& migration, DatabaseType* targetDatabase) const
@@ -181,19 +186,22 @@ namespace DBUpdater
 
     void AutoUpdater::ProcessUpdates()
     {
-        if (!sConfig.GetBoolDefault("Database.AutoUpdate.Enabled", false))
+        if (!sConfig.GetBoolDefault("Database.AutoUpdate.Enabled", true))
         {
             sLog.outInfo("[DB Auto-Updater] Disabled.");
             return;
         }
 
         auto pathString = sConfig.GetStringDefault("Database.AutoUpdate.Path", "");
+        auto authUpdateFolder = sConfig.GetStringDefault("Database.AutoUpdate.AuthUpdateName", "Logon");
+        auto charUpdateFolder = sConfig.GetStringDefault("Database.AutoUpdate.CharUpdateName", "Char");
+        auto worldUpdateFolder = sConfig.GetStringDefault("Database.AutoUpdate.WorldUpdateName", "World");
         path folderPath{ pathString };
 
 
-        directory_entry logonUpdatePath{ folderPath / "Logon" };
-        directory_entry charUpdatePath{ folderPath / "Char" };
-        directory_entry worldUpdatePath{ folderPath / "World" };
+        directory_entry logonUpdatePath{ folderPath / authUpdateFolder };
+        directory_entry charUpdatePath{ folderPath / charUpdateFolder };
+        directory_entry worldUpdatePath{ folderPath / worldUpdateFolder };
 
         ProcessTargetUpdates(logonUpdatePath, &LoginDatabase);
         ProcessTargetUpdates(charUpdatePath, &CharacterDatabase);
@@ -201,5 +209,4 @@ namespace DBUpdater
 
     }
 }
-
 #endif
