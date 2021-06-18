@@ -1169,7 +1169,7 @@ public:
         CharacterDatabase.ThreadStart();
         while (!sWorld.IsStopped())
         {
-            ACE_Based::Thread::Sleep(1000);
+            ACE_Based::Thread::Sleep(300000); // 5 minutes
             if (CharacterDatabase.HasAsyncQuery())
                 continue;
             Player::DeleteOldCharacters();
