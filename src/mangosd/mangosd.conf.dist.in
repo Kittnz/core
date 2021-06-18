@@ -5,187 +5,139 @@
 [MangosdConf]
 ConfVersion=2010100901
 
-#    RealmID
-#        RealmID must match the realmlist inside the realmd database.
+#    RealmID. RealmID must match the realmlist inside the realmd database.
 
 RealmID = 1
 
-#
-#    DataDir
-#        Data directory setting.
+#    DataDir. Data directory setting.
 
 DataDir = "../data"
 
-#
-#    LogsDir
-#        Logs directory setting.
-#        Important: Logs dir must exists, or all logs need to be disabled
+#    LogsDir. Logs directory setting. Important: Logs dir must exists, or all logs need to be disabled
 
 LogsDir = "../logs"
 
-#
-#	HonorDir
-#        Folder to store HCR files. These are logs of weekly honor calculation.
+#	HonorDir. Folder to store HCR files. These are logs of weekly honor calculation.
 
 HonorDir = "../honor"
 
-#
-#	HardcoreModeLogFile
-#        HardcoreModeLogFile name.
+#	HardcoreModeLogFile. HardcoreModeLogFile name.
 
 HardcoreModeLogFile = "hardcore.log"
 
-#
-#    Database.Info
-#        Database connection settings for the world server.
+#    Database.Info. Database connection settings for the world server.
 
 LoginDatabase.Info = ""
 WorldDatabase.Info = ""
 CharacterDatabase.Info = ""
 
+# DB Auto-updater
+
+Database.AutoUpdate.Enabled = 1
+Database.AutoUpdate.Path = "../../sql/database_updates/"
+Database.AutoUpdate.AuthUpdateName = "logon"
+Database.AutoUpdate.CharUpdateName = "chars"
+Database.AutoUpdate.WorldUpdateName = "world"
+
 #
-#	Database.Connections
-#		 Amount of connections to database which will be used for SELECT queries. Maximum 16 connections per database.
+#	Database.Connections. Amount of connections to database which will be used for SELECT queries. Maximum 16 connections per database.
 
 LoginDatabase.Connections = 4
 WorldDatabase.Connections = 1
 CharacterDatabase.Connections = 6
 
 #
-#   Database.WorkerThreads
-#        Amount of async threads (with dedicated connection) which will be used for async SELECT, executes, and transactions.
+#   Database.WorkerThreads. Amount of async threads (with dedicated connection) which will be used for async SELECT, executes, and transactions.
 
 LoginDatabase.WorkerThreads = 2
 WorldDatabase.WorkerThreads = 1
 CharacterDatabase.WorkerThreads = 4
 
-#
-#    MaxPingTime
-#        Settings for maximum database-ping interval.
+
+#    MaxPingTime. Settings for maximum database-ping interval.
 
 MaxPingTime = 30
 
-#
-#    WorldServerPort
-#        Port on which the server will listen.
+#    WorldServerPort. Port on which the server will listen.
 
 WorldServerPort = 8090
 
-#
-#    BindIP
-#        This option is useful for running multiple worldd/realmd instances on different IP addresses using default ports.
+#    BindIP. This option is useful for running multiple worldd/realmd instances on different IP addresses using default ports.
 
 BindIP = "51.89.212.98"
 
-#
-#    UseProcessors
-#        Used processors mask for multi-processors system. (Used only at Windows)
+#    UseProcessors. Used processors mask for multi-processors system. (Used only at Windows)
 
 UseProcessors = 0
 
-#
-#    ProcessPriority
-#        Process priority setting. (Used only at Windows)
+#    ProcessPriority. Process priority setting. (Used only at Windows)
 
 ProcessPriority = 1
 
-#
-#    Compression
-#        Compression level for update packages sent to client. (1-9)
+#    Compression. Compression level for update packages sent to client. (1-9)
 
 Compression = 1
 
-#
-#    PlayerLimit
-#        Initial realm capacity. (Excluding Mods, GMs and Admins)
+#    PlayerLimit. Initial realm capacity. (Excluding Mods, GMs and Admins)
 
 PlayerLimit = 0
 
-#
-#    PlayerHardLimit
-#        Maximum number of players in the world, after increasing PlayerLimit with LoginPerTick.
+#    PlayerHardLimit. Maximum number of players in the world, after increasing PlayerLimit with LoginPerTick.
 
 PlayerHardLimit = 4000
 
-#
-#    LoginQueue.GracePeriodSecs
-#        How many seconds after last logout can we login and skip the queue.
+#    LoginQueue.GracePeriodSecs. How many seconds after last logout can we login and skip the queue.
 
 LoginQueue.GracePeriodSecs = 300
 
-#
-#    LoginPerTick
-#        Maximum number of players allowed to login from the queue during a world update tick. (~ Every 100 ms)
+#    LoginPerTick. Maximum number of players allowed to login from the queue during a world update tick. (~ Every 100 ms)
 
 LoginPerTick = 8
 
-#
-#    CharacterScreenMaxIdleTime
-#        Number of seconds to allow for players to remain on the character screen before disconnecting.
+#    CharacterScreenMaxIdleTime. Number of seconds to allow for players to remain on the character screen before disconnecting.
 
 CharacterScreenMaxIdleTime = 900
 
-#
-#    SaveRespawnTimeImmediately
-#        Save respawn time for creatures at death and for gameobjects at use.
+#    SaveRespawnTimeImmediately. Save respawn time for creatures at death and for gameobjects at use.
 
 SaveRespawnTimeImmediately = 1
 
-#
-#    MaxOverspeedPings
-#        Maximum overspeed ping count before player kick.
+#    MaxOverspeedPings. Maximum overspeed ping count before player kick.
 
 MaxOverspeedPings = 15
 
-#
-#    GridUnload
-#        Unload grids. (If you have lot memory you can disable it to speed up player move to new grids second time)
+#    GridUnload. Unload grids. (If you have lot memory you can disable it to speed up player move to new grids second time)
 
 GridUnload = 0
 
-#
-#    CleanupTerrain
-#        Enable / Disable CleanupTerrain.
+#    CleanupTerrain. Enable / Disable CleanupTerrain.
 
 CleanupTerrain = 1
 
-#
-#    GridCleanUpDelay
-#        Grid clean up delay.
+#    GridCleanUpDelay. Grid clean up delay.
 
 GridCleanUpDelay = 300000
 
-#
-#    MapUpdateInterval
-#        Map update interval.
+#    MapUpdateInterval. Map update interval.
 
 MapUpdateInterval = 50
 
-#
-#    ChangeWeatherInterval
-#        Weather update interval.
+#    ChangeWeatherInterval. Weather update interval.
 
 ChangeWeatherInterval = 1200000
 
-#
-#    PlayerSave.Interval
-#        Player save interval.
+#    PlayerSave.Interval. Player save interval.
 
 PlayerSave.Interval = 60000
 
-#
-#    PlayerSave.Stats.MinLevel
-#        Minimum level for saving character stats for external usage in database.
+#    PlayerSave.Stats.MinLevel. Minimum level for saving character stats for external usage in database.
 
 PlayerSave.Stats.MinLevel = 0
 
-#
-#    PlayerSave.Stats.SaveOnlyOnLogout
-#        Enable/Disable saving of character stats only on logout.
+#    PlayerSave.Stats.SaveOnlyOnLogout. Enable/Disable saving of character stats only on logout.
 
 PlayerSave.Stats.SaveOnlyOnLogout = 1
 
-#
 #    Terrain.Preload.Continents
 #    Terrain.Preload.Instances
 #        Enable/Disable to load all terrain data on server startup.
@@ -194,46 +146,32 @@ PlayerSave.Stats.SaveOnlyOnLogout = 1
 Terrain.Preload.Continents = 1
 Terrain.Preload.Instances  = 1
 
-#
-#    vmap.enableLOS
-#    vmap.enableHeight
-#        Enable/Disable VMaps support for line of sight and height calculation.
+#    vmap.enableLOS | vmap.enableHeight. Enable/Disable VMaps support for line of sight and height calculation.
 
 vmap.enableLOS = 1
 vmap.enableHeight = 1
 
-#
-#    vmap.ignoreSpellIds
-#        These spells are ignored for LoS calculation. (List of ids with delimiter ',')
+#    vmap.ignoreSpellIds. These spells are ignored for LoS calculation. (List of ids with delimiter ',')
 
 vmap.ignoreSpellIds = "7720"
 
-#
-#    vmap.enableIndoorCheck
-#        Enable / Disable VMap based indoor check to remove outdoor-only auras.
+#    vmap.enableIndoorCheck. Enable / Disable VMap based indoor check to remove outdoor-only auras.
 
 vmap.enableIndoorCheck = 1
 vmap.petLOS = 1
 
-#
-#    mmap.enabled
-#        Enable / Disable pathfinding using mmaps.
+#    mmap.enabled. Enable / Disable pathfinding using mmaps.
 
 mmap.enabled = 1
 
-#
-#    Collision.Models.Unload
-#        Free model when no one uses it anymore.
+#    Collision.Models.Unload. Free model when no one uses it anymore.
 
 Collision.Models.Unload = 1
 
-#
-#    DetectPosCollision
-#        Check final move position, summon position, etc. For visible collision with other objects or walls.
+#    DetectPosCollision. Check final move position, summon position, etc. For visible collision with other objects or walls.
 
 DetectPosCollision = 1
 
-#
 #    TargetPosRecalculateRange
 #        Max distance from movement target point (+moving unit size) and targeted object (+size)
 #        after that new target movement point calculated. Max: melee attack range (5), min: contact range (0.5)
@@ -241,39 +179,30 @@ DetectPosCollision = 1
 
 TargetPosRecalculateRange = 1.5
 
-#
-#    UpdateUptimeInterval
-#        Update realm uptime period for save data in 'uptime' table. (Must be > 0)
+#    UpdateUptimeInterval. Update realm uptime period for save data in 'uptime' table. (Must be > 0)
 
 UpdateUptimeInterval = 10
 
-#
 #    MaxCoreStuckTime
 #        Periodically check if the process got freezed, if this is the case force crash after the specified amount of seconds.
 #        Must be > 0. Recommended > 10 secs if you use this.
 
 MaxCoreStuckTime = 0
 
-#
-#    BanListReloadTimer
-#        Time between 'ip_banned' / 'account_banned' reload. Useful in multi realm cases.
+#    BanListReloadTimer. Time between 'ip_banned' / 'account_banned' reload. Useful in multi realm cases.
 
 BanListReloadTimer = 5
 
-#
 #    AddonChannel
 #        Enable / Disable the use of the addon channel through the server.
 #        (Some client side addons can stop work correctly with disabled addon channel)
 
 AddonChannel = 1
 
-#
-#    CleanCharacterDB
-#        Perform character db cleanups on start up
+#    CleanCharacterDB. Perform character db cleanups on start up
 
 CleanCharacterDB = 1
 
-#
 #    Continents & MapUpdate
 
 Continents.Instanciate = 0
@@ -285,65 +214,46 @@ MapUpdate.ReduceVisDist.Tick = 190
 MapUpdate.IncreaseVisDist.Tick = 130
 MapUpdate.MinVisibilityDistance = 55
 
-#
 #    MapUpdate.Empty.UpdateTime
 #        Maps with no player for more than $UpdateTime (Milliseconds) will no longer be updated.
 
 MapUpdate.Empty.UpdateTime = 60000
 
-#
-#    MapUpdate.Instanced.UpdateThreads
-#        Per-map threading.
+#    MapUpdate.Instanced.UpdateThreads. Per-map threading.
 
 MapUpdate.Instanced.UpdateThreads = 4
 
-#
-#    MapUpdate.ObjectsUpdate.MaxThreads
-#    MapUpdate.ObjectsUpdate.Timeout
-#    MapUpdate.VisibilityUpdate.MaxThreads
-#    MapUpdate.VisibilityUpdate.Timeout
-#        Per-map subthreads. (Not for instanced maps)
+#    Per-map subthreads. (Not for instanced maps)
 
 MapUpdate.ObjectsUpdate.MaxThreads = 2
 MapUpdate.ObjectsUpdate.Timeout = 80
 MapUpdate.VisibilityUpdate.MaxThreads = 1
 MapUpdate.VisibilityUpdate.Timeout = 100
 
-#
-#    MapUpdate.UpdatePacketsDiff
-#    MapUpdate.UpdatePlayersDiff
-#    MapUpdate.UpdateCellsDiff
-#        Hardcode multithreading options.
+#   Hardcode multithreading options.
 
 MapUpdate.UpdatePacketsDiff = 40
 MapUpdate.UpdatePlayersDiff = 30
 MapUpdate.UpdateCellsDiff = 40
 
-#
-#    MapUpdate.Continents.MTCells.Threads
-#        Number of different cells to update at the sametime.
+#   MapUpdate.Continents.MTCells.Threads. Number of different cells to update at the sametime.
 
 MapUpdate.Continents.MTCells.Threads = 1
 
-#    MapUpdate.Continents.MTCells.SafeDistance
+#    MapUpdate.Continents.MTCells.SafeDistance.
 #        2 cells wont be updated at the same time if they are at an inferior distance from each other. (Thread race issues)
 
 MapUpdate.Continents.MTCells.SafeDistance = 600
 
-#    Continents.MotionUpdate.Threads
-#        Parallelized execution of cells from same map.
+#    Continents.MotionUpdate.Threads. Parallelized execution of cells from same map.
 
 Continents.MotionUpdate.Threads = 1
 
-#
-#    AsyncTasks.Threads
-#    AsyncQueriesTickTimeout
-#        Number of threads for async tasks. (/who, list AH items ...)
+#    AsyncTasks.Threads | AsyncQueriesTickTimeout. Number of threads for async tasks. (/who, list AH items ...)
 
 AsyncTasks.Threads = 2
 AsyncQueriesTickTimeout = 15000
 
-#
 #    Movement.RelocationVmapsCheckDelay
 #    Movement.MaxPointsPerPacket
 #        Delayed repositionning checks. (Mounts inside / swimming ...)
@@ -352,77 +262,57 @@ Movement.RelocationVmapsCheckDelay = 200
 Movement.MaxPointsPerPacket = 80
 
 # Movement interpolation system - not stable now
+
 Movement.Interpolation = 0
 
-#
-#    Anticrash.Options
-#        Flag values: 1 Announce, 2 Save all, 4 Crash instances, 8 Crash continents, Coredump 16.
+#    Anticrash.Options. Flag values: 1 Announce, 2 Save all, 4 Crash instances, 8 Crash continents, Coredump 16.
 
 Anticrash.Options = 24
 
-#
-#    Anticrash.Rearm.Timer
-#        Timer between 2 crashes to be protected by anticrash.
+#    Anticrash.Rearm.Timer. Timer between 2 crashes to be protected by anticrash.
 
 Anticrash.Rearm.Timer = 60000
 
-#
-#    WowPatch
-#        The current patch the server targets for quest, NPC, dungeon and raid availability.
+#    WowPatch. The current patch the server targets for quest, NPC, dungeon and raid availability.
 
 WowPatch = 10
 
-#
-#    PvP.AccurateEquipRequirements
-#        Whether to enforce Blizzlike PVP rank requirements to equip PVP gear before patch 1.6.
+#    PvP.AccurateEquipRequirements. Whether to enforce Blizzlike PVP rank requirements to equip PVP gear before patch 1.6.
 
 PvP.AccurateEquipRequirements = 1
 
-#
-#    PvP.AccuratePurchaseRequirements
-#        Whether to enforce Blizzlike PVP rank requirements to purchase PVP gear (i.e. lifetime or current rank).
+#    PvP.AccuratePurchaseRequirements. Whether to enforce Blizzlike PVP rank requirements to purchase PVP gear (i.e. lifetime or current rank).
 
 PvP.AccuratePurchaseRequirements = 1
 
-#
 #    PvP.AccurateTimeline
 #        Whether to enforce accurate PVP timelines. eg. the honour system was not implemented before patch 1.4.
 #        If set, players will be unable to gain rank until the appropriate patch.
 
 PvP.AccurateTimeline = 1
 
-#
-#    PvP.AccurateRewards
-#        Whether to alter PVP reputation and honorable kill rewards based on patch (changed several times).
+#    PvP.AccurateRewards. Whether to alter PVP reputation and honorable kill rewards based on patch (changed several times).
 
 PvP.AccurateRewards = 1
 
-#
-#    PvP.DishonorableKills
-#        Whether to give dishonorable kills to players who kill civilians.
+#    PvP.DishonorableKills. Whether to give dishonorable kills to players who kill civilians.
 
 PvP.DishonorableKills = 1
 
-#
-#    Progression.AccuratePetStatistics
-#        Whether to allow Blizzlike pet statistic (damage, speed, resists) progression.
+#    Progression.AccuratePetStatistics. Whether to allow Blizzlike pet statistic (damage, speed, resists) progression.
 
 Progression.RestoreDeletedItems = 1
 
-#
-#    Progression.AccurateLFGAvailability
-#        If set, disables the LFG system pre-1.3
+#    Progression.AccurateLFGAvailability. If set, disables the LFG system pre-1.3
 
 Progression.AccuratePetStatistics = 1
 
-#
 #    Progression.AccuratePVEEvents
-#        Whether to apply progressional changes in PVE events (NOT boss scripts). These are events which
-#        affect quests and other scripted scenes.
+#        Whether to apply progressional changes in PVE events (NOT boss scripts). 
+#        These are events which affect quests and other scripted scenes.
 
 Progression.AccurateLFGAvailability = 1
 
-#
 #    Progression.AccurateSpellEffects
 #        Whether to accurately portray changes in spell effects (eg. Deviate Fish). NOT applicable to effects
 #        which change their functionality (eg. spell changed) or values between patches. Only affects
@@ -430,97 +320,71 @@ Progression.AccurateLFGAvailability = 1
 
 Progression.AccuratePVEEvents = 1
 
-#
 #    Progression.RestoreDeletedItems
 #        Whether to automatically restore items which were previously deleted because no item template with
 #        this entry existed on that content patch. Players will receive the item in the mail once it has been added to the game.
 
 Progression.AccurateSpellEffects = 1
 
-#
 #    Progression.NoRespecPriceDecay
 #        If set, the talent respec cost will not decay until patch 1.11 when the monthly reduction was added.
 
 Progression.NoRespecPriceDecay = 1
 
-#
 #    Progression.NoQuestXpToGold
 #        If set, quest xp gained at max level will not be converted to gold until patch 1.10 when the feature was added.
 
 Progression.NoQuestXpToGold = 1
 
-#
 #    Progression.UnlinkedAuctionHouses
 #        If set, every auction house is separate until patch 1.9. Does not apply to goblin auction houses.
 
 Progression.UnlinkedAuctionHouses = 1
 
-#
 #    DebuffLimit
 #        How many debuffs can be present on a target simultaneously
 
 DebuffLimit = 0
 
-#
 #    LogSQL
 #        Enable logging of GM commands. (All SQL code will be written to a log file)
 #        If a new day starts (00:00:00), a new file is created, the old file will not be deleted.
 
 LogSQL = 1
 
-#
-#    PidFile
-#        World daemon PID file.
+#    PidFile. World daemon PID file.
 
 PidFile = "twlive.pid"
 
-#
-#    LogLevel
-#        Server console level of logging
-#        0 = Minimum; 1 = Basic&Error; 2 = Detail; 3 = Full/Debug
+#    LogLevel. Server console level of logging. 0 = Minimum; 1 = Basic&Error; 2 = Detail; 3 = Full/Debug
 
 LogLevel = 1
 
-#
-#    LogTime
-#        Include time in server console output.
+#    LogTime. Include time in server console output.
 
 LogTime = 0
 
-#
-#    LogFile
-#        Logfile name.
+#    LogFile. Logfile name.
 
 LogFile = "server.log"
 
-#
-#    LogTimestamp
-#        Logfile with timestamp of server start in name.
+#    LogTimestamp. Logfile with timestamp of server start in name.
 
 LogTimestamp = 1
 
-#
-#    LogFileLevel
-#        Server file level of logging.
-#        0 = Minimum; 1 = Error; 2 = Detail; 3 = Full/Debug
+#    LogFileLevel. Server file level of logging. 0 = Minimum; 1 = Error; 2 = Detail; 3 = Full/Debug
 
 LogFileLevel = 1
 
-#
-#    HonorLogFile
-#        HonorLogFile name.
+#    HonorLogFile. HonorLogFile name.
 
 HonorLogFile = "honor.log"
 
-#
-#    HonorLogTimestamp
-#        HonorLogTimestamp with timestamp of server start in name.
+#    HonorLogTimestamp. HonorLogTimestamp with timestamp of server start in name.
 
 HonorLogTimestamp = 0
 
-#
-#    LogFilter
-#        Log filters.
+#    LogFilter. Log filtes.
 
 LogFilter_TransportMoves = 1
 LogFilter_CreatureMoves = 1
@@ -538,66 +402,46 @@ LogFilter_SpellCast = 0
 LogFilter_Pathfinding = 0
 LogFilter_Weather = 0
 
-#    AnticheatLogFile
-#        Log file for anticheat check results.
+#    AnticheatLogFile. Log file for anticheat check results.
 
 AnticheatLogFile = "anticheat.log"
 
-#
-#    AnticheatLogTimestamp
-#        Logfile with timestamp of server start in name.
+#    AnticheatLogTimestamp. Logfile with timestamp of server start in name.
 
 AnticheatLogTimestamp = 0
 
-#
-#    WardenLogFile
-#        Log file for warden check results.
+#    WardenLogFile. Log file for warden check results.
 
 WardenLogFile = "warden.log"
 
-#
-#    WardenLogTimestamp
-#        Logfile with timestamp of server start in name.
+#    WardenLogTimestamp. Logfile with timestamp of server start in name.
 
 WardenLogTimestamp = 0
 
-#
-#    WorldLogFile
-#        Packet logging file for the worldserver.
+#    WorldLogFile. Packet logging file for the worldserver.
 
 WorldLogFile = ""
 
-#
-#    WorldLogTimestamp
-#        Logfile with timestamp of server start in name.
+#    WorldLogTimestamp. Logfile with timestamp of server start in name.
 
 WorldLogTimestamp = 0
 
-#
-#    DBErrorLogFile
-#        Log file of DB errors detected at server run.
+#    DBErrorLogFile. Log file of DB errors detected at server run.
 
 DBErrorLogFile = "errors.log"
 
-#
-#    DBErrorFixFile
-#        Log file of SQL requests to apply to fix detected database errors.
+#    DBErrorFixFile. Log file of SQL requests to apply to fix detected database errors.
 
 DBErrorFixFile = ""
 
-#
-#    CharLogFile
-#        Character operations logfile name.
+#    CharLogFile. Character operations logfile name.
 
 CharLogFile = "char.log"
 
-#
-#    CharLogTimestamp
-#        Log file with timestamp of server start in name.
+#    CharLogTimestamp. Log file with timestamp of server start in name.
 
 CharLogTimestamp = 0
 
-#
 #    CharLogDump
 #        Write character dump before deleting in Char.log.
 #        For restoration, cut character data from log starting from
@@ -605,15 +449,11 @@ CharLogTimestamp = 0
 
 CharLogDump = 0
 
-#
-#    ChatLogEnable
-#        Enable or disable logging of player chat.
+#    ChatLogEnable. Enable or disable logging of player chat.
 
 ChatLogEnable = 1
 
-#
-#    ChatLogFile
-#        Log file for player chat.
+#    ChatLogFile. Log file for player chat.
 
 ChatLogFile = "chat.log"
 
