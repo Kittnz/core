@@ -1213,8 +1213,6 @@ char const* World::GetPatchName() const
 /// Initialize the World
 void World::SetInitialWorldSettings()
 {
-    // using namespace DBUpdater;
-
     ///- Initialize the random number generator
     srand((unsigned int)time(nullptr));
 
@@ -1244,9 +1242,10 @@ void World::SetInitialWorldSettings()
         exit(1);                                            // Error message displayed in function already
     }
 
-//#if PLATFORM == PLATFORM_WINDOWS
-//    sAutoUpdater->ProcessUpdates();
-//#endif
+#ifdef  _MSC_VER
+    using namespace DBUpdater;
+    sAutoUpdater->ProcessUpdates();
+#endif
 
     ///- Loading shop tables
     sObjectMgr.LoadShop();
