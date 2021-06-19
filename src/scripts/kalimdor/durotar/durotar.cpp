@@ -195,6 +195,230 @@ CreatureAI* GetAI_LazyPeon(Creature* pCreature)
 }
 
 
+struct npc_den_commanderAI : ScriptedAI
+{
+    explicit npc_den_commanderAI(Creature* pCreature) : ScriptedAI(pCreature)
+    {
+        npc_den_commanderAI::Reset();
+
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+    }
+
+    uint32 m_uiTick;
+    uint32 m_uiDialogueTimer;
+
+    uint32 m_uiTick2;
+    uint32 m_uiDialogueTimer2;
+
+    void Reset() override
+    {
+        m_uiTick = 0;
+        m_uiDialogueTimer = 1000;
+
+        m_uiTick2 = 0;
+        m_uiDialogueTimer2 = 1000;
+    }
+
+
+    void UpdateAI(const uint32 uiDiff)
+    {
+        if (m_uiDialogueTimer <= uiDiff && m_creature->GetEntry() == 160102)
+        {
+            switch (m_uiTick)
+            {
+            case 0:
+            {
+                m_creature->MonsterMoveWithSpeed(-580.90f, -4305.14f, 38.91f, 0, 2, MOVE_WALK);
+
+                if (m_creature->GetPositionX() == -580.90f)
+                {
+                    m_creature->PMonsterSay("Brace for the attack! Watch your enemies movement!");
+                    m_uiDialogueTimer = 10000;
+                    m_uiTick++;
+                }
+
+                break;
+            }
+            case 1:
+            {
+                m_creature->MonsterMoveWithSpeed(-576.38f, -4297.83f, 39.17f, 0, 2, MOVE_WALK);
+
+                if (m_creature->GetPositionX() == -576.38f)
+                {
+                    m_creature->PMonsterSay("My den mother hits harder than that!");
+                    m_uiDialogueTimer = 10000;
+                    m_uiTick++;
+                }
+                break;
+            }
+            case 2:
+            {
+                m_creature->MonsterMoveWithSpeed(-571.19f, -4288.76f, 39.18f, 0, 2, MOVE_WALK);
+
+                if (m_creature->GetPositionX() == -571.19f)
+                {
+                    m_creature->SetOrientation(5.59f);
+                    m_creature->PMonsterSay("Harder! The Alliance won't be so forgiving!");
+                    m_uiDialogueTimer = 10000;
+                    m_uiTick = 0;
+                }
+                break;
+            }
+            }
+        }
+        else
+            m_uiDialogueTimer -= uiDiff;
+
+        if (m_uiDialogueTimer2 <= uiDiff)
+        {
+            if (m_creature->GetEntry() == 160105) // archer commander
+            {
+                switch (m_uiTick2)
+                {
+                case 0:
+                {
+                    m_creature->PMonsterSay("Lok-Narash! Arms steady! Fire!");
+                    uint32 rand = urand(5000, 15000);
+                    m_uiDialogueTimer2 = rand;
+                    m_uiTick2++;
+                }
+
+                case 1:
+                {
+                    m_creature->PMonsterSay("The Night Elves are quick. Fire ahead of their movements!");
+                    uint32 rand = urand(25000, 60000);
+                    m_uiDialogueTimer2 = rand;
+                    m_uiTick2 = 0;
+                }
+
+                }
+            }
+        }
+        else
+            m_uiDialogueTimer2 -= uiDiff;
+    }
+};
+
+CreatureAI* GetAI_npc_den_commander(Creature* pCreature)
+{
+    return new npc_den_commanderAI(pCreature);
+}
+
+struct npc_den_recruitAI : ScriptedAI
+{
+    explicit npc_den_recruitAI(Creature* pCreature) : ScriptedAI(pCreature)
+    {
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+        m_creature->SetRooted(true);
+
+    }
+
+    uint32 m_uiTick = 0;
+    uint32 m_uiDialogueTimer = 1000;
+
+    uint32 m_uiTick2 = 0;
+    uint32 m_uiDialogueTimer2 = 1000;
+
+    void Reset()
+    {
+        m_uiTick = 0;
+        m_uiDialogueTimer = 1000;
+
+        m_uiTick2 = 0;
+        m_uiDialogueTimer2 = 1000;
+    }
+
+    void UpdateAI(const uint32 uiDiff)
+    {
+        if (m_uiDialogueTimer <= uiDiff)
+        {
+            switch (m_uiTick)
+            {
+            case 0: // setup targets
+            {
+                switch (m_creature->GetEntry())
+                {
+                case 160100: // grunt
+                {
+                    if (Creature* combatTarget = m_creature->FindNearestCreature(160101, 3, true))
+                    {
+                        m_creature->AddThreat(combatTarget, 5000);
+                        m_creature->AI()->AttackStart(combatTarget);
+                    }
+                }
+                case 160101: // grunt
+                {
+                    if (Creature* combatTarget = m_creature->FindNearestCreature(160100, 3, true))
+                    {
+                        m_creature->AddThreat(combatTarget, 5000);
+                        m_creature->AI()->AttackStart(combatTarget);
+                    }
+                }
+                }
+                m_uiTick++;
+                m_uiDialogueTimer = 1000;
+            }
+            case 1:
+            {
+                uint32 randChance = urand(1, 100);
+
+                if (randChance > 49)
+                {
+                    uint32 randEmote = urand(1, 3);
+
+                    switch (randEmote)
+                    {
+                    case 1:
+                        m_creature->HandleEmote(18); // cry
+                        break;
+                    case 2:
+                        m_creature->HandleEmote(15); // roar
+                        break;
+                    case 3:
+                        m_creature->HandleEmote(11); // laugh
+                        break;
+                    }
+                }
+
+                if (m_creature->GetHealthPercent() <= 20.0f)
+                    m_creature->SetFullHealth();
+
+                uint32 rand = urand(10000, 30000);
+                m_uiDialogueTimer = rand;
+                break;
+            }
+            }
+        }
+        else
+            m_uiDialogueTimer -= uiDiff;
+
+        m_creature->AI()->DoMeleeAttackIfReady();
+
+        if (m_uiDialogueTimer2 <= uiDiff)
+        {
+            if (m_creature->GetEntry() == 160103)
+            {
+                if (Creature* combatTarget2 = m_creature->FindNearestCreature(160104, 20, true))
+                {
+                    m_creature->AddThreat(combatTarget2, 5000);
+                    m_creature->CastSpell(combatTarget2, 2480, false);
+                }
+
+                uint32 rand = urand(1000, 5000);
+                m_uiDialogueTimer2 = rand;
+            }
+        }
+        else
+            m_uiDialogueTimer2 -= uiDiff;
+    }
+
+};
+
+CreatureAI* GetAI_npc_den_recruitAI(Creature* pCreature)
+{
+    return new npc_den_recruitAI(pCreature);
+}
+
 void AddSC_durotar()
 {
     Script *newscript;
@@ -204,5 +428,15 @@ void AddSC_durotar()
     newscript->pEffectDummyCreature = &peon_wake_up;
     newscript->GetAI = &GetAI_LazyPeon;
 
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_den_commander";
+    newscript->GetAI = &GetAI_npc_den_commander;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_den_recruit";
+    newscript->GetAI = &GetAI_npc_den_recruitAI;
     newscript->RegisterSelf();
 }
