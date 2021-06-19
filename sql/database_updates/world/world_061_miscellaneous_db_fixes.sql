@@ -38,6 +38,6 @@ replace into creature (id, id2, id3, id4, map, display_id, equipment_id, positio
 
 -- Gnome Enlargement Balm
 
-replace into item_template values (81278, 0, 0, 0, 'Gnome Enlargement Balm', 'When time when you feel like becoming a bigger person! Might cause unpredictable effects on other races.', 21794, 1, 0, 1, 1500, 250, 0, -1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 56042, 0, -1, 0, 560000, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 'item_gnome_enlargement');
+replace into item_template values (81278, 0, 0, 0, 'Gnome Enlargement Balm', 'For the times when you feel like becoming a bigger person! Causes unpredictable effects on other races.', 21794, 1, 0, 1, 1500, 250, 0, -1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 56042, 0, -1, 0, 560000, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 'item_gnome_enlargement');
 
 replace into npc_vendor (entry, item) values (81063, 81278);
