@@ -19238,7 +19238,7 @@ BattleGroundBracketId Player::GetBattleGroundBracketIdFromLevel(BattleGroundType
 		
 		// shift bracketId, since the first bracket for 1 lvl characters only
 		bracket_id++;
-		if (bracket_id > MAX_BATTLEGROUND_BRACKETS)
+		if (bracket_id >= MAX_BATTLEGROUND_BRACKETS)
 		{
 			return BG_BRACKET_ID_LAST;
 		}
