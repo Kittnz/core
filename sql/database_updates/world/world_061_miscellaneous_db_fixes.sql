@@ -15,7 +15,7 @@ replace into gameobject_template values
 (1772013, 0, 5, 24881, 'Xerron\'s Voodoo Doll', 0, 0, 0.7, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
 (1772014, 0, 5, 24157, 'Plushy Momo', 0, 0, 0.3, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
 (1772015, 0, 5, 24025, 'Laughadin: What if we had a taunt?', 0, 0, 0.9, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
-(1772016, 0, 5, 30712, 'Damage Dealing for Dummies', 0, 0, 0.9, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+(1772016, 0, 5, 30712, 'Kilan: Damage Dealing for Dummies', 0, 0, 0.9, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
 
 delete from gameobject where id in (2003540, 1772010, 1772011, 1772012, 1772013, 1772014, 1772015);
 
@@ -36,4 +36,8 @@ delete from creature where id = 81063;
 
 replace into creature (id, id2, id3, id4, map, display_id, equipment_id, position_x, position_y, position_z, orientation, spawntimesecsmin, spawntimesecsmax, wander_distance, health_percent, mana_percent, movement_type, spawn_flags, visibility_mod, patch_min, patch_max) values (81063, 0, 0, 0, 0, 0, 0, -8786.18, 587.474, 97.8564, 2.17356, 25, 25, 0, 100, 100, 0, 0, 0, 0, 10);
 
+-- Gnome Enlargement Balm
 
+replace into item_template values (81278, 0, 0, 0, 'Gnome Enlargement Balm', 'When time when you feel like becoming a bigger person! Might cause unpredictable effects on other races.', 21794, 1, 0, 1, 1500, 250, 0, -1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 56042, 0, -1, 0, 560000, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 'item_gnome_enlargement');
+
+replace into npc_vendor (entry, item) values (81063, 81278);
