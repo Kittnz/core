@@ -6811,6 +6811,55 @@ bool ChatHandler::HandleGameObjectTurnCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleGameObjectScaleCommand(char* args)
+{
+    // number or [name] Shift-click form |color|Hgameobject:go_id|h[name]|h|r
+    uint32 lowguid;
+    if (!ExtractUint32KeyFromLink(&args, "Hgameobject", lowguid))
+        return false;
+
+    if (!lowguid)
+        return false;
+
+    GameObject* obj = nullptr;
+
+    // by DB guid
+    if (GameObjectData const* go_data = sObjectMgr.GetGOData(lowguid))
+        obj = GetGameObjectWithGuid(lowguid, go_data->id);
+
+    if (!obj)
+    {
+        PSendSysMessage(LANG_COMMAND_OBJNOTFOUND, lowguid);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    float scale;
+    if (!ExtractOptFloat(&args, scale, 1.0f))
+        return false;
+
+    if (scale < 0.1f || scale >= 50.1f)
+    {
+        ChatHandler(m_session->GetPlayer()).PSendSysMessage("Scale must be between 0.1 and 50.");
+        return false;
+    }
+
+    Map* map = obj->GetMap();
+    map->Remove(obj, false);
+
+    obj->SetObjectScale(scale);
+    obj->UpdateRotationFields();
+
+    map->Add(obj);
+
+    obj->SaveToDB();
+    obj->Refresh();
+
+    ChatHandler(m_session->GetPlayer()).PSendSysMessage("%u, Entry %u %s -  scaled to %f", obj->GetGUIDLow(), obj->GetGUIDLow(), obj->GetGOInfo()->name, scale);
+
+    return true;
+}
+
 bool ChatHandler::HandleGameObjectInfoCommand(char* args)
 {
     // number or [name] Shift-click form |color|Hgameobject:go_id|h[name]|h|r
