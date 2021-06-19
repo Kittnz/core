@@ -5374,9 +5374,35 @@ bool QuestRewarded_npc_norvok(Player* pPlayer, Creature* pQuestGiver, Quest cons
     return false;
 }
 
+bool ItemUseSpell_item_gnome_enlargement(Player* pPlayer, Item* pItem, const SpellCastTargets&) 
+{
+    if (pPlayer->GetRace() == RACE_GNOME)
+    {
+        if (pPlayer->GetObjectScale() == 1.6F)
+        {
+            pPlayer->GetSession()->SendNotification("You can't grow more!");
+            return false;
+        }
+        pPlayer->SetObjectScale(1.6F);
+        return true;
+    }
+    else
+    {
+        pPlayer->GetSession()->SendNotification("GREAT NEWS!!! YOU ARE JELLY NOW!");
+        pPlayer->SetObjectScale(0.6F);
+        pPlayer->SetDisplayId(12349);
+        return true;
+    }
+}
+
 void AddSC_tw_random()
 {
     Script *newscript;
+
+    newscript = new Script;
+    newscript->Name = "item_gnome_enlargement";
+    newscript->pItemUseSpell = &ItemUseSpell_item_gnome_enlargement;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_norvok";
