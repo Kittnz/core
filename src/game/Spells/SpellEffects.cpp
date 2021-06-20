@@ -1800,6 +1800,19 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                     }
                     return;
                 }
+                case 46010: // Teleport to Guild House
+                {
+                    if (m_caster && m_caster->IsPlayer())
+                    {
+                        switch (m_caster->ToPlayer()->GetGuildId())
+                        {                        
+                        case 189: m_caster->ToPlayer()->TeleportTo(1, 7301.3F, -1523.8F, 179.8F, 1.4F);    break; // Rush'n Attack                     
+                        case 172: m_caster->ToPlayer()->TeleportTo(1, -3134.49F, 2415.03F, 253.12F, 5.5F); break; // Traveler
+                        default: break;
+                        }
+                    }
+                    return;
+                }
             }
             // All IconID Check in there
             switch (m_spellInfo->SpellIconID)

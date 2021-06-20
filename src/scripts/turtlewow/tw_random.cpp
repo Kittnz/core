@@ -435,27 +435,6 @@ bool ItemUseSpell_bg_tabard(Player* pPlayer, Item* pItem, const SpellCastTargets
     return false;
 }
 
-bool ItemUseSpell_guild_tabard(Player* pPlayer, Item* pItem, const SpellCastTargets&)
-{
-    if (pPlayer->IsInCombat() || pPlayer->InBattleGround() || pPlayer->IsBeingTeleported() || (pPlayer->GetDeathState() == CORPSE))
-    {
-        pPlayer->GetSession()->SendNotification("Can't use right now.");
-        return false;
-    }
-    switch (pPlayer->GetGuildId())
-    {
-    case 189: // Rush'n Attack (need Guild ID)
-        pPlayer->TeleportTo(1, 7301.3F, -1523.8F, 179.8F, 1.4F);
-        break;
-    case 172: // Traveler
-        pPlayer->TeleportTo(1, -3134.49F, 2415.03F, 253.12F, 5.5F);
-        break;
-    default: 
-        break;
-    }
-    return true;
-}
-
 bool ItemUseSpell_item_radio(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
     if (!pPlayer) return false;
@@ -5941,11 +5920,6 @@ void AddSC_tw_random()
     newscript = new Script;
     newscript->Name = "item_bg_tabard";
     newscript->pItemUseSpell = &ItemUseSpell_bg_tabard;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "item_guild_tabard";
-    newscript->pItemUseSpell = &ItemUseSpell_guild_tabard;
     newscript->RegisterSelf();
 
     newscript = new Script;
