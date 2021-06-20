@@ -26,25 +26,21 @@ EndScriptData */
 
 enum
 {
-    SAY_AGGRO                   = -1469007,
-    SAY_XHEALTH                 = -1469008,             // at 5% hp
-    SAY_SHADOWFLAME             = -1469009,
-    EMOTE_GENERIC_SHADOW_FLAME  = -1469033,
-    SAY_RAISE_SKELETONS         = -1469010,
-    SAY_SLAY                    = -1469011,
-    SAY_DEATH                   = -1469012,
-    EMOTE_ROAR                  = -1249005,
+    SAY_AGGRO                   = 9973,
+    SAY_SHADOWFLAME             = 9974,
+    SAY_RAISE_SKELETONS         = 9883,
+    SAY_SLAY                    = 9972,
+    SAY_DEATH                   = 9971,
 
-    SAY_MAGE                    = -1469013,
-    SAY_WARRIOR                 = -1469014,
-    SAY_DRUID                   = -1469015,
-    SAY_PRIEST                  = -1469016,
-    SAY_PALADIN                 = -1469017,
-    SAY_SHAMAN                  = -1469018,
-    SAY_WARLOCK                 = -1469019,
-    SAY_HUNTER                  = -1469020,
-    SAY_ROGUE                   = -1469021,
-    //SAY_DEATH_KNIGHT            = -1469031,             // spell unk for the moment
+    SAY_MAGE                    = 9850,
+    SAY_WARRIOR                 = 9855,
+    SAY_DRUID                   = 9851,
+    SAY_PRIEST                  = 9848,
+    SAY_PALADIN                 = 9853,
+    SAY_SHAMAN                  = 9854,
+    SAY_WARLOCK                 = 9852,
+    SAY_HUNTER                  = 9849,
+    SAY_ROGUE                   = 9856,
 
     SPELL_SHADOWFLAME_INITIAL   = 22992,                // old spell id 22972 -> wrong
     SPELL_SHADOWFLAME           = 22539,
@@ -69,6 +65,7 @@ enum
     SPELL_POLYMORPH             = 23603,
 
     NPC_BONE_CONSTRUCT          = 14605,
+    ITEM_FIELD_REPAIR_BOT_75B   = 50041
 };
 
 struct ClassCallInfo
@@ -96,7 +93,6 @@ struct boss_nefarianAI : ScriptedAI
     uint32 m_uiTailLashTimer;
     uint32 m_uiClassCallTimer;
     bool m_bPhase3;
-    bool m_bHasEndYell;
     uint8 m_uiTransitionStage;
     uint32 m_uiTransitionTimer;
     bool m_bTransitionDone;
@@ -115,7 +111,6 @@ struct boss_nefarianAI : ScriptedAI
         m_uiTailLashTimer       = 10000;
         m_uiClassCallTimer      = urand(25000, 35000);                            // 25-35 seconds
         m_bPhase3               = false;
-        m_bHasEndYell           = false;
         m_bTransitionDone       = false;
         m_bWarriorStance        = false;
         m_uiTransitionStage     = 0;
@@ -187,20 +182,6 @@ struct boss_nefarianAI : ScriptedAI
         }
     }
 
-    /*
-    void SpellHitTarget(Unit* pTarget, const SpellEntry* pSpell)
-    {
-        if (!pTarget)
-            return;
-
-        if (pSpell->Id == SPELL_BELLOWING_ROAR)
-            if (SpellAuraHolder* holder = pTarget->GetSpellAuraHolder(SPELL_BELLOWING_ROAR))
-                holder->SetTargetSecondaryThreatFocus(true);
-    }
-    */
-
-    #define FIELD_REPAIR_BOT_75B 50041
-
     bool HandleClassCall(uint8 ClassCalled)
     {
         if (!ClassCalled)
@@ -220,7 +201,7 @@ struct boss_nefarianAI : ScriptedAI
             if (pPlayer && pPlayer->IsAlive())
             {
                 // Remove Field Repair Bot 75B if summoned
-                if (pPlayer->GetMiniPet() && pPlayer->GetMiniPet()->GetEntry() == FIELD_REPAIR_BOT_75B)
+                if (pPlayer->GetMiniPet() && pPlayer->GetMiniPet()->GetEntry() == ITEM_FIELD_REPAIR_BOT_75B)
                     pPlayer->RemoveMiniPet();
 
                 if (pPlayer->GetClass() == ClassCalled)
@@ -287,7 +268,7 @@ struct boss_nefarianAI : ScriptedAI
         return bClassFound;
     }
 
-    void UpdateAI(const uint32 uiDiff) override
+    void UpdateAI(uint32 const uiDiff) override
     {
         if (m_uiTransitionTimer && !m_bTransitionDone)
         {
@@ -305,7 +286,6 @@ struct boss_nefarianAI : ScriptedAI
                         DoScriptText(SAY_AGGRO, m_creature);
 
                         m_creature->GetMotionMaster()->MovePoint(1, -7449.145f, -1320.647f, 476.795f);
-                        //m_creature->MonsterMove(-7449.145f, -1320.647f, 476.795f);
                         m_creature->MonsterMoveWithSpeed(-7449.145f, -1320.647f, 476.795f, -10.0f, 17, uint32(MOVE_FORCE_DESTINATION));
                         m_uiTransitionTimer = 0;
                         break;
@@ -320,8 +300,6 @@ struct boss_nefarianAI : ScriptedAI
                         m_creature->RemoveAurasDueToSpell(17131);
                         if (Unit* pTarget = m_creature->GetVictim())
                         {
-                            //m_creature->AI()->AttackStart(pTarget);
-                            //m_creature->GetMotionMaster()->Clear(false);
                             m_creature->GetMotionMaster()->MoveChase(pTarget);
                             SetCombatMovement(true);
                         }
@@ -341,10 +319,7 @@ struct boss_nefarianAI : ScriptedAI
         if (m_uiShadowFlameTimer < uiDiff)
         {
             if (DoCastSpellIfCan(m_creature, SPELL_SHADOWFLAME) == CAST_OK)
-            {
-                DoScriptText(EMOTE_GENERIC_SHADOW_FLAME, m_creature);
                 m_uiShadowFlameTimer = urand(18000, 25000);
-            }
         }
         else
             m_uiShadowFlameTimer -= uiDiff;
@@ -353,10 +328,7 @@ struct boss_nefarianAI : ScriptedAI
         if (m_uiBellowingRoarTimer < uiDiff)
         {
             if (DoCastSpellIfCan(m_creature, SPELL_BELLOWING_ROAR) == CAST_OK)
-            {
-                DoScriptText(EMOTE_ROAR, m_creature);
                 m_uiBellowingRoarTimer = urand(25000, 30000);
-            }
         }
         else
             m_uiBellowingRoarTimer -= uiDiff;
@@ -453,16 +425,9 @@ struct boss_nefarianAI : ScriptedAI
         // Phase3 begins when we are below X health
         if (!m_bPhase3 && m_creature->GetHealthPercent() < 20.0f)
         {
-            m_bPhase3 = true;
             DoScriptText(SAY_RAISE_SKELETONS, m_creature);
             m_creature->CastSpell(m_creature, SPELL_RAISE_DRAKONID, true);
-        }
-
-        // 5% hp yell
-        if (!m_bHasEndYell && m_creature->GetHealthPercent() < 5.0f)
-        {
-            m_bHasEndYell = true;
-            DoScriptText(SAY_XHEALTH, m_creature);
+            m_bPhase3 = true;
         }
 
         if (DoMeleeAttackIfReady())
@@ -598,7 +563,7 @@ struct npc_corrupted_totemAI : ScriptedAI
         }
     }
 
-    void UpdateAI(const uint32 uiDiff) override
+    void UpdateAI(uint32 const uiDiff) override
     {
         if (!m_creature->HasAura(SPELL_ROOT_SELF))
             m_creature->AddAura(SPELL_ROOT_SELF);
