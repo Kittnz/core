@@ -3148,18 +3148,23 @@ private:
     uint64 player_guid;
 };
 
-bool GossipHello_npc_riding_gryphon(Player* p_Player, Creature* p_Creature)
+bool GossipHello_npc_flying_mount(Player* pPlayer, Creature* pCreature)
 {
-    if (p_Player->GetQuestRewardStatus(60070))
+    switch (pCreature->GetEntry())
     {
-        p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Feed the gryphon and see what will happen.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    case 51562: // Goldshire Gryphon
+        if (pPlayer->GetQuestRewardStatus(60070))
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Feed the gryphon and see what will happen.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        break;
+    case 51685: // Darkshore Wyvern
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Take me out of here.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2); break;
     }
-    p_Player->PrepareQuestMenu(p_Creature->GetGUID());
-    p_Player->SEND_GOSSIP_MENU(90366, p_Creature->GetGUID());
+    pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+    pPlayer->SEND_GOSSIP_MENU(90366, pCreature->GetGUID());
     return true;
 }
 
-bool GossipSelect_npc_riding_gryphon(Player* p_Player, Creature* p_Creature, uint32 /*uiSender*/, uint32 uiAction)
+bool GossipSelect_npc_flying_mount(Player* p_Player, Creature* p_Creature, uint32 /*uiSender*/, uint32 uiAction)
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
@@ -3170,69 +3175,22 @@ bool GossipSelect_npc_riding_gryphon(Player* p_Player, Creature* p_Creature, uin
             p_Player->m_Events.AddEvent(new StopFlyingAfterTime(p_Player->GetGUID()), p_Player->m_Events.CalculateTime(30 * IN_MILLISECONDS));
             p_Player->SetFlying(true);
             p_Player->RemoveItemCurrency(422, 1);
+            p_Player->UpdateSpeed(MOVE_SWIM, true, 6.0F);
         }
         else
             p_Player->PMonsterEmote("Gryphon clearly looks hungry and frustrated. Perhaps a handful of famous Dwarven Mild could do some good?", nullptr, false);
     }
-    p_Player->CLOSE_GOSSIP_MENU();
-    return true;
-}
-
-// too lazy
-
-bool GossipHello_npc_riding_gryphon_back(Player* p_Player, Creature* p_Creature)
-{
-    if (p_Player->GetQuestRewardStatus(60070))
-    {
-        p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Take me back!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-    }
-    p_Player->PrepareQuestMenu(p_Creature->GetGUID());
-    p_Player->SEND_GOSSIP_MENU(90366, p_Creature->GetGUID());
-    return true;
-}
-
-bool GossipSelect_npc_riding_gryphon_back(Player* p_Player, Creature* p_Creature, uint32 /*uiSender*/, uint32 uiAction)
-{
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
-    {
-        if (p_Player->HasItemCount(422, 1))
-        {
-            p_Player->GetSession()->SendNotification("You have 10 seconds to get back to Northshire Valley!");
-            p_Player->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, 6852);
-            p_Player->m_Events.AddEvent(new StopFlyingAfterTime(p_Player->GetGUID()), p_Player->m_Events.CalculateTime(10000));
-            p_Player->SetFlying(true);
-            p_Player->UpdateSpeed(MOVE_SWIM, true, 4.0F);
-            p_Player->RemoveItemCurrency(422, 1);
-        }
-        else
-            p_Player->PMonsterEmote("Gryphon clearly looks hungry and frustrated. Perhaps a handful of famous Dwarven Mild could do some good?", nullptr, false);
-    }
-    p_Player->CLOSE_GOSSIP_MENU();
-    return true;
-}
-
-bool GossipHello_npc_riding_wyvern(Player* p_Player, Creature* p_Creature)
-{
-    p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Take me out of here.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-    p_Player->PrepareQuestMenu(p_Creature->GetGUID());
-    p_Player->SEND_GOSSIP_MENU(1, p_Creature->GetGUID());
-    return true;
-}
-
-bool GossipSelect_npc_riding_wyvern(Player* p_Player, Creature* p_Creature, uint32 /*uiSender*/, uint32 uiAction)
-{
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
     {
         p_Player->GetSession()->SendNotification("Your flight will last 45 seconds.");
         p_Player->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, 295);
         p_Player->m_Events.AddEvent(new StopFlyingAfterTime(p_Player->GetGUID()), p_Player->m_Events.CalculateTime(45000));
         p_Player->SetFlying(true);
-        p_Player->UpdateSpeed(MOVE_SWIM, true, 4.0F);
+        p_Player->UpdateSpeed(MOVE_SWIM, true, 6.0F);
     }
     p_Player->CLOSE_GOSSIP_MENU();
     return true;
 }
-
 #define KODO_CALFLING 51599
 
 enum palkeoteEvents
@@ -5379,6 +5337,12 @@ void AddSC_tw_random()
     Script *newscript;
 
     newscript = new Script;
+    newscript->Name = "npc_flying_mount";
+    newscript->pGossipHello = &GossipHello_npc_flying_mount;
+    newscript->pGossipSelect = &GossipSelect_npc_flying_mount;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
     newscript->Name = "item_gnome_enlargement";
     newscript->pItemUseSpell = &ItemUseSpell_item_gnome_enlargement;
     newscript->RegisterSelf();
@@ -5574,24 +5538,6 @@ void AddSC_tw_random()
     newscript = new Script;
     newscript->Name = "palkeote";
     newscript->GetAI = &GetAI_palkeote;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "npc_riding_wyvern";
-    newscript->pGossipHello = &GossipHello_npc_riding_wyvern;
-    newscript->pGossipSelect = &GossipSelect_npc_riding_wyvern;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "npc_riding_gryphon_back";
-    newscript->pGossipHello = &GossipHello_npc_riding_gryphon_back;
-    newscript->pGossipSelect = &GossipSelect_npc_riding_gryphon_back;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "npc_riding_gryphon";
-    newscript->pGossipHello = &GossipHello_npc_riding_gryphon;
-    newscript->pGossipSelect = &GossipSelect_npc_riding_gryphon;
     newscript->RegisterSelf();
 
     newscript = new Script;
