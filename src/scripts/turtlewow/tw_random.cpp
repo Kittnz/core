@@ -5332,9 +5332,28 @@ bool ItemUseSpell_item_gnome_enlargement(Player* pPlayer, Item* pItem, const Spe
     }
 }
 
+bool GOHello_go_shagu_shisha(Player* pPlayer, GameObject* pGo)
+{
+    if (pPlayer->GetQuestStatus(40003) == QUEST_STATUS_INCOMPLETE) // Puffing Peace
+    {
+        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60301))
+        {
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+            pPlayer->CastSpell(pPlayer, 26389, false);
+            return true;
+        }
+    }
+    return false;
+}
+
 void AddSC_tw_random()
 {
     Script *newscript;
+
+    newscript = new Script;
+    newscript->Name = "go_shagu_shisha";
+    newscript->pGOHello = &GOHello_go_shagu_shisha;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_flying_mount";
