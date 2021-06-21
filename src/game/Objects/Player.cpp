@@ -3080,8 +3080,13 @@ void Player::GiveLevel(uint32 level)
     if (level >= 2)
         RemoveQuest(80388);
 
-    if (level == 5)
-        MailRidingTurtleGift();
+    // Learn Speedy Mount spell if player doesnt have it at lvl 5
+    if (level == 5 && !HasSpell(30174))
+    {        
+        ChatHandler(this).PSendSysMessage("|cff00FF00We sincerely hope you enjoy your stay on Turtle WoW! We have the best community out there and are very happy to have you join us.");
+        ChatHandler(this).PSendSysMessage("|cff00FF00Please accept this adorable Riding Turtle as your companion during this long and difficult journey! Safe travels!");
+        LearnSpell(30174, false);
+    }
 
     if (level == 10 && sWorld.getConfig(CONFIG_BOOL_OPENHOUSE))
         MailOpenHouseGift();
