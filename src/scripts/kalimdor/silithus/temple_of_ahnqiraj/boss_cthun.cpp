@@ -1296,6 +1296,7 @@ struct cthunAI : public ScriptedAI
             if (m_pInstance) {
                 m_pInstance->SetData(TYPE_CTHUN, IN_PROGRESS);
             }
+            ScriptedAI::AttackStart(who);
         }
         else {
             ScriptedAI::AttackStart(who);
