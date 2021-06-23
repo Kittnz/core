@@ -1286,6 +1286,7 @@ struct cthunAI : public ScriptedAI
             }
             eye_of_cthunAI* eyeAI = (eye_of_cthunAI*)pEye->AI();
             eyeAI->Pull(who);
+            ScriptedAI::AttackStart(who);
 #ifdef USE_POSTFIX_PRENERF_PULL_LOGIC
             m_creature->SetInCombatWith(who);
             pEye->SetInCombatWith(who);
@@ -1296,7 +1297,6 @@ struct cthunAI : public ScriptedAI
             if (m_pInstance) {
                 m_pInstance->SetData(TYPE_CTHUN, IN_PROGRESS);
             }
-            ScriptedAI::AttackStart(who);
         }
         else {
             ScriptedAI::AttackStart(who);
