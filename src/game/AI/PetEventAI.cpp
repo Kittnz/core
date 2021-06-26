@@ -183,7 +183,7 @@ void PetEventAI::UpdateAI(const uint32 uiDiff)
     bool const hasAliveOwner = pOwner && pOwner->IsAlive() && m_creature->GetCharmInfo();
     bool bHasVictim = m_creature->GetVictim();
 
-    if (!bHasVictim && (m_creature->IsInCombat() || (hasAliveOwner && pOwner->IsInCombat())))
+    if ((m_creature->IsInCombat() || (hasAliveOwner && pOwner->IsInCombat())))
     {
         if (FindTargetForAttack())
             bHasVictim = m_creature->GetVictim();
