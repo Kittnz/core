@@ -1,133 +1,106 @@
-/* Copyright (C) 2006 - 2011 ScriptDev2 <http://www.scriptdev2.com/>
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- */
-
-/* ScriptData
-SDName: Boss_Nefarian
-SD%Complete: 80
-SDComment: Some issues with class calls effecting more than one class
-SDCategory: Blackwing Lair
-EndScriptData */
-
 #include "scriptPCH.h"
 #include "blackwing_lair.h"
 
-enum
-{
-    SAY_AGGRO                   = 9973,
-    SAY_SHADOWFLAME             = 9974,
-    SAY_RAISE_SKELETONS         = 9883,
-    SAY_SLAY                    = 9972,
-    SAY_DEATH                   = 9971,
-
-    SAY_MAGE                    = 9850,
-    SAY_WARRIOR                 = 9855,
-    SAY_DRUID                   = 9851,
-    SAY_PRIEST                  = 9848,
-    SAY_PALADIN                 = 9853,
-    SAY_SHAMAN                  = 9854,
-    SAY_WARLOCK                 = 9852,
-    SAY_HUNTER                  = 9849,
-    SAY_ROGUE                   = 9856,
-
-    SPELL_SHADOWFLAME_INITIAL   = 22992,                // old spell id 22972 -> wrong
-    SPELL_SHADOWFLAME           = 22539,
-    SPELL_BELLOWING_ROAR        = 22686,
-    SPELL_VEIL_OF_SHADOW        = 22687,                // old spell id 7068 -> wrong
-    SPELL_CLEAVE                = 20691,
-    SPELL_TAIL_LASH             = 23364,
-    SPELL_BONE_CONTRUST         = 23363,
-    SPELL_RAISE_DRAKONID        = 23362,
-
-    SPELL_MAGE                  = 23410,                // wild magic
-    SPELL_WARRIOR               = 23397,                // beserk
-    SPELL_DRUID                 = 23398,                // cat form
-    SPELL_PRIEST                = 23401,                // corrupted healing
-    SPELL_PALADIN               = 23418,                // syphon blessing
-    SPELL_SHAMAN                = 23425,                // totems
-    SPELL_CORRUPTED_TOTEM       = 23424,
-    SPELL_WARLOCK               = 23427,                // infernals    -> should trigger 23426
-    SPELL_HUNTER                = 23436,                // bow broke
-    SPELL_ROGUE                 = 23414,                // Paralise
-
-    SPELL_POLYMORPH             = 23603,
-
-    NPC_BONE_CONSTRUCT          = 14605,
-    ITEM_FIELD_REPAIR_BOT_75B   = 50041
-};
-
 struct ClassCallInfo
 {
-    ClassCallInfo(uint8 uiClass, int32 uiYell) : m_uiClass(uiClass), m_uiYell(uiYell) {}
+    ClassCallInfo(uint8 ui_Class, int32 ui_Yell) : m_uiClass(ui_Class), m_uiYell(ui_Yell) {}
+
     uint8 m_uiClass;
     int32 m_uiYell;
 };
 
+static constexpr uint32 NPC_BONE_CONSTRUCT = 14605;
+static constexpr uint32 SPELL_WINDFURY_TOTEM_PASSIVE = 10612;
+static constexpr uint32 SPELL_WINDFURY_TOTEM = 10610;
+
 struct boss_nefarianAI : ScriptedAI
 {
-    explicit boss_nefarianAI(Creature* pCreature) : ScriptedAI(pCreature)
+    explicit boss_nefarianAI(Creature* p_Creature) : ScriptedAI(p_Creature)
     {
-        m_pInstance = static_cast<ScriptedInstance*>(pCreature->GetInstanceData());
-
+        p_Instance = static_cast<ScriptedInstance*>(p_Creature->GetInstanceData());
         boss_nefarianAI::Reset();
     }
 
-    ScriptedInstance* m_pInstance;
+    static constexpr uint32 SAY_AGGRO = 9973;
+    static constexpr uint32 SAY_SHADOWFLAME = 9974;
+    static constexpr uint32 SAY_RAISE_SKELETONS = 9883;
+    static constexpr uint32 SAY_SLAY = 9972;
+    static constexpr uint32 SAY_DEATH = 9971;
+    static constexpr uint32 SAY_MAGE = 9850;
+    static constexpr uint32 SAY_WARRIOR = 9855;
+    static constexpr uint32 SAY_DRUID = 9851;
+    static constexpr uint32 SAY_PRIEST = 9848;
+    static constexpr uint32 SAY_PALADIN = 9853;
+    static constexpr uint32 SAY_SHAMAN = 9854;
+    static constexpr uint32 SAY_WARLOCK = 9852;
+    static constexpr uint32 SAY_HUNTER = 9849;
+    static constexpr uint32 SAY_ROGUE = 9856;
 
-    uint32 m_uiShadowFlameTimer;
-    uint32 m_uiBellowingRoarTimer;
-    uint32 m_uiVeilOfShadowTimer;
-    uint32 m_uiCleaveTimer;
-    uint32 m_uiTailLashTimer;
-    uint32 m_uiClassCallTimer;
-    bool m_bPhase3;
-    uint8 m_uiTransitionStage;
-    uint32 m_uiTransitionTimer;
-    bool m_bTransitionDone;
-    bool m_bWarriorStance;
+    static constexpr uint32 SPELL_SHADOWFLAME_INITIAL = 22992;
+    static constexpr uint32 SPELL_SHADOWFLAME = 22539;
+    static constexpr uint32 SPELL_BELLOWING_ROAR = 22686;
+    static constexpr uint32 SPELL_VEIL_OF_SHADOW = 22687;
+    static constexpr uint32 SPELL_CLEAVE = 20691;
+    static constexpr uint32 SPELL_TAIL_LASH = 23364;
+    static constexpr uint32 SPELL_MAGE = 23410;
+    static constexpr uint32 SPELL_WARRIOR = 23397;
+    static constexpr uint32 SPELL_DRUID = 23398;
+    static constexpr uint32 SPELL_PRIEST = 23401;
+    static constexpr uint32 SPELL_PALADIN = 23418;
+    static constexpr uint32 SPELL_SHAMAN = 23425;
+    static constexpr uint32 SPELL_WARLOCK = 23427;
+    static constexpr uint32 SPELL_HUNTER = 23436;
+    static constexpr uint32 SPELL_ROGUE = 23414;
+    static constexpr uint32 SPELL_POLYMORPH = 23603;
+    static constexpr uint32 SPELL_HOVER = 17131;
 
-    std::vector<ClassCallInfo> m_vPossibleCalls;
+    static constexpr uint32 NPC_CORRUPTED_INFERNAL = 14668;
+    static constexpr uint32 ITEM_FIELD_REPAIR_BOT_75B = 50041;
+
+    uint32 ui_ShadowFlameTimer;
+    uint32 ui_BellowingRoarTimer;
+    uint32 ui_VeilOfShadowTimer;
+    uint32 ui_CleaveTimer;
+    uint32 ui_TailLashTimer;
+    uint32 ui_ClassCallTimer;
+    uint32 ui_TransitionTimer;
+    uint32 ui_MageTriggerTimer;
+    uint8 ui_TransitionStage;
+    bool b_Phase3;
+    bool b_TransitionDone;
+    bool b_WarriorStance;
+
+    std::vector<ClassCallInfo> v_PossibleCalls;
     std::list<ObjectGuid> MagePlayerGUID;
-    uint32 m_uiMageTriggerTimer;
+
+    ScriptedInstance* p_Instance;
 
     void Reset() override
     {
-        m_uiShadowFlameTimer    = urand(18000, 25000);
-        m_uiBellowingRoarTimer  = urand(25000, 30000);
-        m_uiVeilOfShadowTimer   = 15000;
-        m_uiCleaveTimer         = urand(7000, 10000);
-        m_uiTailLashTimer       = 10000;
-        m_uiClassCallTimer      = urand(25000, 35000);                            // 25-35 seconds
-        m_bPhase3               = false;
-        m_bTransitionDone       = false;
-        m_bWarriorStance        = false;
-        m_uiTransitionStage     = 0;
-        m_uiTransitionTimer     = 100;
-        m_uiMageTriggerTimer    = 0;
+        ui_ShadowFlameTimer = urand(18000, 25000);
+        ui_BellowingRoarTimer = urand(25000, 30000);
+        ui_VeilOfShadowTimer = 15000;
+        ui_CleaveTimer = urand(7000, 10000);
+        ui_TailLashTimer = 10000;
+        ui_ClassCallTimer = urand(25000, 35000);
+        ui_TransitionTimer = 100;
+        ui_MageTriggerTimer = 0;
+        ui_TransitionStage = 0;
+        b_Phase3 = false;
+        b_TransitionDone = false;
+        b_WarriorStance = false;
 
         MagePlayerGUID.clear();
-        m_vPossibleCalls.clear();
-        m_vPossibleCalls.push_back(ClassCallInfo(CLASS_WARRIOR, SAY_WARRIOR));
-        m_vPossibleCalls.push_back(ClassCallInfo(CLASS_PALADIN, SAY_PALADIN));
-        m_vPossibleCalls.push_back(ClassCallInfo(CLASS_HUNTER, SAY_HUNTER));
-        m_vPossibleCalls.push_back(ClassCallInfo(CLASS_ROGUE, SAY_ROGUE));
-        m_vPossibleCalls.push_back(ClassCallInfo(CLASS_PRIEST, SAY_PRIEST));
-        m_vPossibleCalls.push_back(ClassCallInfo(CLASS_SHAMAN, SAY_SHAMAN));
-        m_vPossibleCalls.push_back(ClassCallInfo(CLASS_MAGE, SAY_MAGE));
-        m_vPossibleCalls.push_back(ClassCallInfo(CLASS_WARLOCK, SAY_WARLOCK));
-        m_vPossibleCalls.push_back(ClassCallInfo(CLASS_DRUID, SAY_DRUID));
+        v_PossibleCalls.clear();
+        v_PossibleCalls.push_back(ClassCallInfo(CLASS_WARRIOR, SAY_WARRIOR));
+        v_PossibleCalls.push_back(ClassCallInfo(CLASS_PALADIN, SAY_PALADIN));
+        v_PossibleCalls.push_back(ClassCallInfo(CLASS_HUNTER, SAY_HUNTER));
+        v_PossibleCalls.push_back(ClassCallInfo(CLASS_ROGUE, SAY_ROGUE));
+        v_PossibleCalls.push_back(ClassCallInfo(CLASS_PRIEST, SAY_PRIEST));
+        v_PossibleCalls.push_back(ClassCallInfo(CLASS_SHAMAN, SAY_SHAMAN));
+        v_PossibleCalls.push_back(ClassCallInfo(CLASS_MAGE, SAY_MAGE));
+        v_PossibleCalls.push_back(ClassCallInfo(CLASS_WARLOCK, SAY_WARLOCK));
+        v_PossibleCalls.push_back(ClassCallInfo(CLASS_DRUID, SAY_DRUID));
     }
 
     void KilledUnit(Unit* pVictim) override
@@ -142,329 +115,360 @@ struct boss_nefarianAI : ScriptedAI
     {
         DoScriptText(SAY_DEATH, m_creature);
 
-        if (m_pInstance)
-            m_pInstance->SetData(TYPE_NEFARIAN, DONE);
+        if (p_Instance)
+            p_Instance->SetData(TYPE_NEFARIAN, DONE);
     }
 
     void EnterEvadeMode() override
     {
-        if (m_pInstance)
+        if (p_Instance)
         {
-            m_pInstance->SetData(TYPE_NEFARIAN, FAIL);
-            if (Creature* pNefarius = m_creature->GetMap()->GetCreature(m_pInstance->GetData64(DATA_NEFARIUS_GUID)))
-                pNefarius->AI()->EnterEvadeMode();
+            p_Instance->SetData(TYPE_NEFARIAN, FAIL);
+
+            if (Creature* p_Nefarius = m_creature->GetMap()->GetCreature(p_Instance->GetData64(DATA_NEFARIUS_GUID)))
+                p_Nefarius->AI()->EnterEvadeMode();
         }
+
         m_creature->DeleteLater();
     }
 
-    void JustSummoned(Creature* pSummoned) override
+    void JustSummoned(Creature* p_Summoned) override
     {
-        pSummoned->SetInCombatWithZone();
+        p_Summoned->SetInCombatWithZone();
     }
 
-    void MovementInform(uint32 uiType, uint32 uiPointId) override
+    void MovementInform(uint32 ui_Type, uint32 ui_PointId) override
     {
-        if (uiType != POINT_MOTION_TYPE)
+        if (ui_Type != POINT_MOTION_TYPE)
             return;
 
-        switch (uiPointId)
+        if (ui_PointId == 1)
         {
-            case 1:
-                m_creature->GetMotionMaster()->MovePoint(2, -7495.964f, -1252.402f, 476.795f, MOVE_FORCE_DESTINATION, 17.0f);
-                m_uiTransitionTimer = 0;
-                break;
-            case 2:
-                m_creature->GetMotionMaster()->MoveIdle();
-                m_uiTransitionTimer = 100;
-                break;
-            default:
-                break;
+            m_creature->GetMotionMaster()->MovePoint(2, -7495.964f, -1252.402f, 476.795f, MOVE_FORCE_DESTINATION, 17.0f);
+            ui_TransitionTimer = 0;
+        }
+        else if (ui_PointId == 2)
+        {
+            m_creature->GetMotionMaster()->MoveIdle();
+            ui_TransitionTimer = 100;
         }
     }
 
-    bool HandleClassCall(uint8 ClassCalled)
+    bool HandleClassCall(uint8 ui_ClassCalled)
     {
-        if (!ClassCalled)
+        if (!ui_ClassCalled)
             return false;
 
         Map::PlayerList const& players = m_creature->GetMap()->GetPlayers();
         if (players.isEmpty())
             return false;
 
-        bool bClassFound = false;
-        // Clear mage GUIDs or we'll be adding the same players again for subsequent
-        // mage class calls, resulting in far more polymorphs than intended
-        MagePlayerGUID.clear();
+        bool b_ClassFound = false;
+        MagePlayerGUID.clear(); // Clear mage GUIDs or we'll be adding the same players again for subsequent mage class calls, resulting in far more polymorphs than intended
         for (const auto& itr : players)
         {
-            Player* pPlayer = itr.getSource();
-            if (pPlayer && pPlayer->IsAlive())
+            Player* p_Player = itr.getSource();
+            if (p_Player && p_Player->IsAlive())
             {
                 // Remove Field Repair Bot 75B if summoned
-                if (pPlayer->GetMiniPet() && pPlayer->GetMiniPet()->GetEntry() == ITEM_FIELD_REPAIR_BOT_75B)
-                    pPlayer->RemoveMiniPet();
+                if (p_Player->GetMiniPet() && p_Player->GetMiniPet()->GetEntry() == ITEM_FIELD_REPAIR_BOT_75B)
+                    p_Player->RemoveMiniPet();
 
-                if (pPlayer->GetClass() == ClassCalled)
+                if (p_Player->GetClass() == ui_ClassCalled)
                 {
-                    bClassFound = true;
-                    switch (ClassCalled)
+                    b_ClassFound = true;
+                    switch (ui_ClassCalled)
                     {
-                    case CLASS_WARRIOR:
-                        pPlayer->AddAura(SPELL_WARRIOR); //OK
-                        break;
-                    case CLASS_PALADIN:
-                        pPlayer->CastSpell(pPlayer, SPELL_PALADIN, true); // OK
-                        break;
-                    case CLASS_HUNTER:
-                        pPlayer->CastSpell(pPlayer, SPELL_HUNTER, true); // OK
-                        break;
-                    case CLASS_ROGUE:
-                    {
-                        WorldLocation loc;
-                        double dang = frand(0, M_PI_F * 2);
-                        double dsin = sin(dang);
-                        double dcos = cos(dang);
-                        m_creature->GetPosition(loc);
-                        loc.x += 5.0f * dcos;
-                        loc.y += 5.0f * dsin;
-                        loc.z += 0.5f;
-                        loc.o = dang - M_PI_F;
-                        pPlayer->TeleportTo(loc);
-                        pPlayer->AddAura(SPELL_ROGUE); // OK
-                        break;
-                    }
-                    case CLASS_PRIEST:
-                        pPlayer->AddAura(SPELL_PRIEST); // OK
-                        break;
-                    case CLASS_SHAMAN:
-                        pPlayer->AddAura(SPELL_SHAMAN); // OK
-                        break;
-                    case CLASS_MAGE:
-                        pPlayer->AddAura(SPELL_MAGE); // OK
-                        MagePlayerGUID.push_back(pPlayer->GetObjectGuid());
-                        break;
-                    case CLASS_WARLOCK:
-                        pPlayer->CastSpell(pPlayer, SPELL_WARLOCK, true); // OK
-                        m_creature->SummonCreature(14668,
-                            pPlayer->GetPositionX(),
-                            pPlayer->GetPositionY(),
-                            pPlayer->GetPositionZ(),
-                            pPlayer->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 10000);
-                        m_creature->SummonCreature(14668,
-                            pPlayer->GetPositionX(),
-                            pPlayer->GetPositionY(),
-                            pPlayer->GetPositionZ(),
-                            pPlayer->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 10000);
-                        break;
-                    case CLASS_DRUID:
-                        pPlayer->AddAura(SPELL_DRUID); // OK
-                        break;
+                        case CLASS_WARRIOR:
+                        {
+                            p_Player->AddAura(SPELL_WARRIOR);
+                            break;
+                        }
+                        case CLASS_PALADIN:
+                        {
+                            p_Player->CastSpell(p_Player, SPELL_PALADIN, true);
+                            break;
+                        }
+                        case CLASS_HUNTER:
+                        {
+                            p_Player->CastSpell(p_Player, SPELL_HUNTER, true);
+                            break;
+                        }
+                        case CLASS_ROGUE:
+                        {
+                            WorldLocation loc;
+                            double d_ang = frand(0, M_PI_F * 2);
+                            double d_sin = sin(d_ang);
+                            double d_cos = cos(d_ang);
+                            m_creature->GetPosition(loc);
+                            loc.x += 5.0f * d_cos;
+                            loc.y += 5.0f * d_sin;
+                            loc.z += 0.5f;
+                            loc.o = d_ang - M_PI_F;
+                            p_Player->TeleportTo(loc);
+                            p_Player->AddAura(SPELL_ROGUE);
+                            break;
+                        }
+                        case CLASS_PRIEST:
+                        {
+                            p_Player->AddAura(SPELL_PRIEST);
+                            break;
+                        }
+                        case CLASS_SHAMAN:
+                        {
+                            p_Player->AddAura(SPELL_SHAMAN);
+                            break;
+                        }
+                        case CLASS_MAGE:
+                        {
+                            p_Player->AddAura(SPELL_MAGE);
+                            MagePlayerGUID.push_back(p_Player->GetObjectGuid());
+                            break;
+                        }
+                        case CLASS_WARLOCK:
+                        {
+                            p_Player->CastSpell(p_Player, SPELL_WARLOCK, true);
+                            m_creature->SummonCreature(NPC_CORRUPTED_INFERNAL, p_Player->GetPositionX(), p_Player->GetPositionY(), p_Player->GetPositionZ(), p_Player->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 10000);
+                            m_creature->SummonCreature(NPC_CORRUPTED_INFERNAL, p_Player->GetPositionX(), p_Player->GetPositionY(), p_Player->GetPositionZ(), p_Player->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 10000);
+                            break;
+                        }
+                        case CLASS_DRUID:
+                        {
+                            p_Player->AddAura(SPELL_DRUID);
+                            break;
+                        }
                     }
                 }
             }
         }
-        m_bWarriorStance = bClassFound && ClassCalled == CLASS_WARRIOR;
 
-        return bClassFound;
+        b_WarriorStance = b_ClassFound && ui_ClassCalled == CLASS_WARRIOR;
+
+        return b_ClassFound;
     }
 
-    void UpdateAI(uint32 const uiDiff) override
+    void UpdateAI(uint32 const ui_Diff) override
     {
-        if (m_uiTransitionTimer && !m_bTransitionDone)
+        if (ui_TransitionTimer && !b_TransitionDone)
         {
-            if (m_uiTransitionTimer <= uiDiff)
+            if (ui_TransitionTimer <= ui_Diff)
             {
-                switch (m_uiTransitionStage)
+                switch (ui_TransitionStage)
                 {
                     case 0:
+                    {
                         SetCombatMovement(false);
                         m_creature->SetInCombatWithZone();
                         m_creature->SetFly(true);
-
-                        m_creature->CastSpell(m_creature, SPELL_SHADOWFLAME_INITIAL, true); // Test speed 17 / fire damage on the initial ??? Oo
-
+                        m_creature->CastSpell(m_creature, SPELL_SHADOWFLAME_INITIAL, true);
                         DoScriptText(SAY_AGGRO, m_creature);
-
                         m_creature->GetMotionMaster()->MovePoint(1, -7449.145f, -1320.647f, 476.795f);
                         m_creature->MonsterMoveWithSpeed(-7449.145f, -1320.647f, 476.795f, -10.0f, 17, uint32(MOVE_FORCE_DESTINATION));
-                        m_uiTransitionTimer = 0;
+                        ui_TransitionTimer = 0;
                         break;
+                    }
                     case 1:
+                    {
                         m_creature->SetFly(false);
                         DoScriptText(SAY_SHADOWFLAME, m_creature);
                         m_creature->HandleEmote(EMOTE_ONESHOT_LAND);
-                        m_uiTransitionTimer = 1000;
+                        ui_TransitionTimer = 1000;
                         break;
+                    }
                     case 2:
+                    {
                         m_creature->SetWalk(true);
-                        m_creature->RemoveAurasDueToSpell(17131);
-                        if (Unit* pTarget = m_creature->GetVictim())
+                        m_creature->RemoveAurasDueToSpell(SPELL_HOVER);
+                        if (Unit* p_Target = m_creature->GetVictim())
                         {
-                            m_creature->GetMotionMaster()->MoveChase(pTarget);
+                            m_creature->GetMotionMaster()->MoveChase(p_Target);
                             SetCombatMovement(true);
                         }
-                        m_bTransitionDone = true;
+
+                        b_TransitionDone = true;
                         break;
+                    }
                 }
-                ++m_uiTransitionStage;
+
+                ++ui_TransitionStage;
             }
             else
-                m_uiTransitionTimer -= uiDiff;
+                ui_TransitionTimer -= ui_Diff;
         }
 
-        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim() || !m_bTransitionDone)
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim() || !b_TransitionDone)
             return;
 
         // ShadowFlame_Timer
-        if (m_uiShadowFlameTimer < uiDiff)
+        if (ui_ShadowFlameTimer < ui_Diff)
         {
             if (DoCastSpellIfCan(m_creature, SPELL_SHADOWFLAME) == CAST_OK)
-                m_uiShadowFlameTimer = urand(18000, 25000);
+                ui_ShadowFlameTimer = urand(18000, 25000);
         }
         else
-            m_uiShadowFlameTimer -= uiDiff;
+            ui_ShadowFlameTimer -= ui_Diff;
 
         // BellowingRoar_Timer
-        if (m_uiBellowingRoarTimer < uiDiff)
+        if (ui_BellowingRoarTimer < ui_Diff)
         {
             if (DoCastSpellIfCan(m_creature, SPELL_BELLOWING_ROAR) == CAST_OK)
-                m_uiBellowingRoarTimer = urand(25000, 30000);
+                ui_BellowingRoarTimer = urand(25000, 30000);
         }
         else
-            m_uiBellowingRoarTimer -= uiDiff;
+            ui_BellowingRoarTimer -= ui_Diff;
 
         // VeilOfShadow_Timer
-        if (m_uiVeilOfShadowTimer < uiDiff)
+        if (ui_VeilOfShadowTimer < ui_Diff)
         {
             if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_VEIL_OF_SHADOW) == CAST_OK)
-                m_uiVeilOfShadowTimer = urand(10000, 15000);
+                ui_VeilOfShadowTimer = urand(10000, 15000);
         }
         else
-            m_uiVeilOfShadowTimer -= uiDiff;
+            ui_VeilOfShadowTimer -= ui_Diff;
 
         // Cleave_Timer
-        if (m_uiCleaveTimer < uiDiff)
+        if (ui_CleaveTimer < ui_Diff)
         {
             if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_CLEAVE) == CAST_OK)
-                m_uiCleaveTimer = urand(7000, 10000);
+                ui_CleaveTimer = urand(7000, 10000);
         }
         else
-            m_uiCleaveTimer -= uiDiff;
+            ui_CleaveTimer -= ui_Diff;
 
         // TailLash_Timerm_uiWindfuryTimer
-        if (m_uiTailLashTimer < uiDiff)
+        if (ui_TailLashTimer < ui_Diff)
         {
             if (DoCastSpellIfCan(m_creature, SPELL_TAIL_LASH) == CAST_OK)
-                m_uiTailLashTimer = urand(4000, 8000);
+                ui_TailLashTimer = urand(4000, 8000);
         }
         else
-            m_uiTailLashTimer -= uiDiff;
+            ui_TailLashTimer -= ui_Diff;
 
         // ClassCall_Timer
-        if (m_uiClassCallTimer < uiDiff)
+        if (ui_ClassCallTimer < ui_Diff)
         {
-            //Cast a random class call
-            //On official it is based on what classes are currently on the hostil list
-            //but we can't do that yet so just randomly call one
-            // We do it now
-            if (!m_vPossibleCalls.empty())
+            // Cast a random class call
+            // It is based on what classes are currently on the hostil list but we can't do that yet so just randomly call one
+            if (!v_PossibleCalls.empty())
             {
-                uint8 uiRandClass = urand(0, m_vPossibleCalls.size() - 1);
-                if (HandleClassCall(m_vPossibleCalls[uiRandClass].m_uiClass))
+                uint8 ui_RandClass = urand(0, v_PossibleCalls.size() - 1);
+                if (HandleClassCall(v_PossibleCalls[ui_RandClass].m_uiClass))
                 {
-                    DoScriptText(m_vPossibleCalls[uiRandClass].m_uiYell, m_creature);
-                    m_uiClassCallTimer = urand(25000, 35000);
+                    DoScriptText(v_PossibleCalls[ui_RandClass].m_uiYell, m_creature);
+                    ui_ClassCallTimer = urand(25000, 35000);
                 }
                 else
-                    m_vPossibleCalls.erase(m_vPossibleCalls.begin() + uiRandClass);
+                    v_PossibleCalls.erase(v_PossibleCalls.begin() + ui_RandClass);
             }
         }
         else
-            m_uiClassCallTimer -= uiDiff;
+            ui_ClassCallTimer -= ui_Diff;
 
         if (!MagePlayerGUID.empty())
         {
-            if (m_uiMageTriggerTimer < uiDiff)
+            if (ui_MageTriggerTimer < ui_Diff)
             {
                 for (const auto& guid : MagePlayerGUID)
                 {
-                    if (Player* pMage = m_creature->GetMap()->GetPlayer(guid))
+                    if (Player* p_Mage = m_creature->GetMap()->GetPlayer(guid))
                     {
-                        if (pMage->HasAura(SPELL_MAGE))
+                        if (p_Mage->HasAura(SPELL_MAGE))
                         {
-                            std::vector<ObjectGuid> m_vPossibleVictim;
-                            ThreatList const& tList = m_creature->GetThreatManager().getThreatList();
-                            for (const auto itr2 : tList)
+                            std::vector<ObjectGuid> v_PossibleVictim;
+                            ThreatList const& threatList = m_creature->GetThreatManager().getThreatList();
+                            for (const auto itr2 : threatList)
                             {
-                                Unit* pUnit = m_creature->GetMap()->GetUnit(itr2->getUnitGuid());
-                                if (pUnit && pUnit->IsCreature() && pUnit->ToCreature()->IsTotem())
-                                    pUnit = nullptr;
-                                if (pUnit && pUnit->GetDistance(pMage) < 60.0f && !pUnit->HasAura(SPELL_POLYMORPH))
-                                    m_vPossibleVictim.push_back(pUnit->GetObjectGuid());
+                                Unit* p_Unit = m_creature->GetMap()->GetUnit(itr2->getUnitGuid());
+
+                                if (p_Unit && p_Unit->IsCreature() && p_Unit->ToCreature()->IsTotem())
+                                    p_Unit = nullptr;
+
+                                if (p_Unit && p_Unit->GetDistance(p_Mage) < 60.0f && !p_Unit->HasAura(SPELL_POLYMORPH))
+                                    v_PossibleVictim.push_back(p_Unit->GetObjectGuid());
                             }
 
-                            if (m_vPossibleVictim.empty())
+                            if (v_PossibleVictim.empty())
                                 continue;
 
-                            if (Unit *pTarget = m_creature->GetMap()->GetUnit(m_vPossibleVictim[urand(0, m_vPossibleVictim.size() - 1)]))
+                            if (Unit *p_Target = m_creature->GetMap()->GetUnit(v_PossibleVictim[urand(0, v_PossibleVictim.size() - 1)]))
                             {
-                                pMage->InterruptNonMeleeSpells(false);
-                                pMage->CastSpell(pTarget, SPELL_POLYMORPH, false); //cast polymorph
-                                if (pTarget != pMage)
-                                    pTarget->CastSpell(pTarget, SPELL_POLYMORPH, true); //cast polymorph
+                                p_Mage->InterruptNonMeleeSpells(false);
+                                p_Mage->CastSpell(p_Target, SPELL_POLYMORPH, false);
+
+                                if (p_Target != p_Mage)
+                                    p_Target->CastSpell(p_Target, SPELL_POLYMORPH, true);
                             }
                         }
                     }
                 }
-                m_uiMageTriggerTimer = 5000;
+
+                ui_MageTriggerTimer = 5000;
             }
             else
-                m_uiMageTriggerTimer -= uiDiff;
+                ui_MageTriggerTimer -= ui_Diff;
         }
 
         // Phase3 begins when we are below X health
-        if (!m_bPhase3 && m_creature->GetHealthPercent() < 20.0f)
+        if (!b_Phase3 && m_creature->GetHealthPercent() < 20.0f)
         {
+            b_Phase3 = true;
+
             DoScriptText(SAY_RAISE_SKELETONS, m_creature);
-            m_creature->CastSpell(m_creature, SPELL_RAISE_DRAKONID, true);
-            m_bPhase3 = true;
+
+            std::list<GameObject*> l_GObject;
+            static constexpr uint32 GO_DRAKINOID_BONES = 179804;
+            GetGameObjectListWithEntryInGrid(l_GObject, m_creature, GO_DRAKINOID_BONES, 200.0f);
+
+            for (const auto& itr : l_GObject)
+            {
+                m_creature->SummonCreature(NPC_BONE_CONSTRUCT, itr->GetPositionX(), itr->GetPositionY(), itr->GetPositionZ(), itr->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 10000);
+                itr->DeleteLater();
+            }
         }
 
         if (DoMeleeAttackIfReady())
-            if (m_creature->HasAura(10612) && !m_creature->HasAura(10610))
+        {
+            if (m_creature->HasAura(SPELL_WINDFURY_TOTEM_PASSIVE) && !m_creature->HasAura(SPELL_WINDFURY_TOTEM))
+            {
                 if (!urand(0, 4))
-                    m_creature->CastSpell(m_creature, 10610, true);
+                    m_creature->CastSpell(m_creature, SPELL_WINDFURY_TOTEM, true);
+            }
+        }
     }
 };
 
-CreatureAI* GetAI_boss_nefarian(Creature* pCreature)
+CreatureAI* GetAI_boss_nefarian(Creature* p_Creature)
 {
-    return new boss_nefarianAI(pCreature);
+    return new boss_nefarianAI(p_Creature);
 }
-
-enum
-{
-    SPELL_ROOT_SELF = 17507,
-};
 
 struct npc_corrupted_totemAI : ScriptedAI
 {
-    explicit npc_corrupted_totemAI(Creature* pCreature) : ScriptedAI(pCreature)
+    explicit npc_corrupted_totemAI(Creature* p_Creature) : ScriptedAI(p_Creature)
     {
-        m_uiCreatureEntry = pCreature->GetEntry();
+        ui_CreatureEntry = p_Creature->GetEntry();
 
-        uint32 HP = urand(200, 2000);
-        pCreature->SetMaxHealth(HP);
-        pCreature->SetHealth(HP);
+        uint32 ui_HP = urand(200, 2000);
+        p_Creature->SetMaxHealth(ui_HP);
+        p_Creature->SetHealth(ui_HP);
 
-        m_bAuraAdded = false;
+        b_AuraAdded = false;
 
         npc_corrupted_totemAI::Reset();
     }
 
-    uint32 m_uiCreatureEntry;
-    uint32 m_uiCheckTimer;
-    bool m_bAuraAdded;
+    static constexpr uint32 SPELL_ROOT_SELF = 17507;
+    static constexpr uint32 SPELL_AVOIDANCE = 23198;
+    static constexpr uint32 SPELL_STONESKIN = 10405;
+    static constexpr uint32 SPELL_HEALING_STREAM = 10461;
+
+    static constexpr uint32 NPC_CORRUPTED_STONESKIN_TOTEM_VI = 14663;
+    static constexpr uint32 NPC_CORRUPTED_HEALING_STREAM_TOTEM_V = 14664;
+    static constexpr uint32 NPC_CORRUPTED_WINDFURY_TOTEM_III = 14666;
+
+    uint32 ui_CreatureEntry;
+    uint32 ui_CheckTimer;
+    bool b_AuraAdded;
 
     void Reset() override
     {
@@ -473,8 +477,8 @@ struct npc_corrupted_totemAI : ScriptedAI
         if (!m_creature->HasAura(SPELL_ROOT_SELF))
             m_creature->AddAura(SPELL_ROOT_SELF);
 
-        m_creature->AddAura(23198, ADD_AURA_PERMANENT); // Avoidance: not affected by AoE
-        m_uiCheckTimer = 1000;
+        m_creature->AddAura(SPELL_AVOIDANCE, ADD_AURA_PERMANENT);
+        ui_CheckTimer = 1000;
     }
 
     void Aggro(Unit* /*pWho*/) override
@@ -484,86 +488,93 @@ struct npc_corrupted_totemAI : ScriptedAI
 
     void JustDied(Unit* /*pKiller*/) override
     {
-        switch (m_uiCreatureEntry)
+        switch (ui_CreatureEntry)
         {
-            case 14663:
-                SetAura(false, 10405);
-                break;    // Corrupted Stoneskin Totem VI
-            case 14664:
-                SetAura(false, 10461);
-                break;    // Corrupted Healing Stream Totem V
-            case 14666:
-                SetAura(false, 10612);
-                break;    // Corrupted Windfury Totem III
-            default:
-                break;
-        }
-    }
-
-    void SetAura(bool on, uint32 uiSpellId) const
-    {
-        int damage = 0;
-        switch (uiSpellId)
-        {
-            case 10405:
-                damage = -310;
-                break;     // Stoneskin : base -31
-            case 10461:
-                damage = 14000;
-                break;     // Healing Stream : base 14
-            default:
-                damage = 0;
-                break;
-        }
-
-        std::vector<uint32> mobsEntries;
-        std::vector<uint32>::iterator entriesIt;
-        mobsEntries.push_back(11583); // Nefarian
-        mobsEntries.push_back(14605); // Bone Construct
-        mobsEntries.push_back(14263); // NPC_BRONZE_DRAKANOID
-        mobsEntries.push_back(14261); // NPC_BLUE_DRAKANOID
-        mobsEntries.push_back(14264); // NPC_RED_DRAKANOID
-        mobsEntries.push_back(14262); // NPC_GREEN_DRAKANOID
-        mobsEntries.push_back(14265); // NPC_BLACK_DRAKANOID
-        mobsEntries.push_back(14302); // NPC_CHROMATIC_DRAKANOID
-
-        for (entriesIt = mobsEntries.begin(); entriesIt != mobsEntries.end(); ++entriesIt)
-        {
-            std::list<Creature*> tmpMobsList;
-            GetCreatureListWithEntryInGrid(tmpMobsList, m_creature, *entriesIt, 55.0f);
-            while (!tmpMobsList.empty())
+            case NPC_CORRUPTED_STONESKIN_TOTEM_VI:
             {
-                Creature* curr = tmpMobsList.front();
-                tmpMobsList.pop_front();
-
-                if (!curr->IsAlive())
-                    continue;
-
-                if (on && m_creature->IsAlive())
-                {
-                    if (m_creature->IsWithinDistInMap(curr, 40.0f))
-                    {
-                        if (!curr->HasAura(uiSpellId))
-                        {
-                            if (damage)
-                                curr->CastCustomSpell(curr, uiSpellId, &damage, nullptr, nullptr, true);
-                            else
-                                curr->AddAura(uiSpellId);
-                        }
-                    }
-                    else
-                    {
-                        if (curr->HasAura(uiSpellId))
-                            curr->RemoveAurasDueToSpell(uiSpellId);
-                    }
-                }
-                else
-                    curr->RemoveAurasDueToSpell(uiSpellId);
+                SetAura(false, SPELL_STONESKIN);
+                break;
+            }
+            case NPC_CORRUPTED_HEALING_STREAM_TOTEM_V:
+            {
+                SetAura(false, SPELL_HEALING_STREAM);
+                break;
+            }
+            case NPC_CORRUPTED_WINDFURY_TOTEM_III:
+            {
+                SetAura(false, SPELL_WINDFURY_TOTEM_PASSIVE);
+                break;
             }
         }
     }
 
-    void UpdateAI(uint32 const uiDiff) override
+    void SetAura(bool b_on, uint32 ui_SpellId) const
+    {
+        static constexpr uint32 NPC_NEFARIAN = 11583;
+        static constexpr uint32 NPC_BRONZE_DRAKONID = 14263;
+        static constexpr uint32 NPC_BLUE_DRAKONID = 14261;
+        static constexpr uint32 NPC_RED_DRAKONID = 14264;
+        static constexpr uint32 NPC_GREEN_DRAKONID = 14262;
+        static constexpr uint32 NPC_BLACK_DRAKONID = 14265;
+        static constexpr uint32 NPC_CHROMATIC_DRAKANOID = 14302;
+
+        std::vector<uint32> vui_MobEntries;
+        std::vector<uint32>::iterator vui_EntriesIt;
+
+        vui_MobEntries.push_back(NPC_NEFARIAN);
+        vui_MobEntries.push_back(NPC_BONE_CONSTRUCT);
+        vui_MobEntries.push_back(NPC_BRONZE_DRAKONID);
+        vui_MobEntries.push_back(NPC_BLUE_DRAKONID);
+        vui_MobEntries.push_back(NPC_RED_DRAKONID);
+        vui_MobEntries.push_back(NPC_GREEN_DRAKONID);
+        vui_MobEntries.push_back(NPC_BLACK_DRAKONID);
+        vui_MobEntries.push_back(NPC_CHROMATIC_DRAKANOID);
+
+        for (vui_EntriesIt = vui_MobEntries.begin(); vui_EntriesIt != vui_MobEntries.end(); ++vui_EntriesIt)
+        {
+            std::list<Creature*> l_tmpMobsList;
+            GetCreatureListWithEntryInGrid(l_tmpMobsList, m_creature, *vui_EntriesIt, 55.0f);
+            while (!l_tmpMobsList.empty())
+            {
+                Creature* p_CurrentCreature = l_tmpMobsList.front();
+                l_tmpMobsList.pop_front();
+
+                if (!p_CurrentCreature->IsAlive())
+                    continue;
+
+                if (b_on && m_creature->IsAlive())
+                {
+                    if (m_creature->IsWithinDistInMap(p_CurrentCreature, 40.0f))
+                    {
+                        if (!p_CurrentCreature->HasAura(ui_SpellId))
+                        {
+                            int i_damage = 0;
+
+                            if (ui_SpellId == SPELL_STONESKIN)
+                                i_damage = -310;
+
+                            if (ui_SpellId == SPELL_HEALING_STREAM)
+                                i_damage = 14000;
+
+                            if (i_damage)
+                                p_CurrentCreature->CastCustomSpell(p_CurrentCreature, ui_SpellId, &i_damage, nullptr, nullptr, true);
+                            else
+                                p_CurrentCreature->AddAura(ui_SpellId);
+                        }
+                    }
+                    else
+                    {
+                        if (p_CurrentCreature->HasAura(ui_SpellId))
+                            p_CurrentCreature->RemoveAurasDueToSpell(ui_SpellId);
+                    }
+                }
+                else
+                    p_CurrentCreature->RemoveAurasDueToSpell(ui_SpellId);
+            }
+        }
+    }
+
+    void UpdateAI(uint32 const ui_Diff) override
     {
         if (!m_creature->HasAura(SPELL_ROOT_SELF))
             m_creature->AddAura(SPELL_ROOT_SELF);
@@ -571,57 +582,73 @@ struct npc_corrupted_totemAI : ScriptedAI
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
-        uint32 addAuraEntry = 0;
-        switch (m_uiCreatureEntry)
+        static constexpr uint32 SPELL_FIRE_NOVA = 11311;
+        static constexpr uint32 NPC_CORRUPTED_FIRE_NOVA_TOTEM_V = 14662;
+        static constexpr uint32 NPC_CORRUPTED_STONESKIN_TOTEM_VI = 14663;
+        static constexpr uint32 NPC_CORRUPTED_HEALING_STREAM_TOTEM_V = 14664;
+        static constexpr uint32 NPC_CORRUPTED_WINDFURY_TOTEM_III = 14666;
+
+        uint32 ui_addAuraEntry = 0;
+        switch (ui_CreatureEntry)
         {
-            case 14662:         // Corrupted Fire Nova Totem V
-                if (!m_bAuraAdded)
+            case NPC_CORRUPTED_FIRE_NOVA_TOTEM_V:
+            {
+                if (!b_AuraAdded)
                 {
-                    m_creature->AddAura(11311);  // Fire Nova
-                    m_bAuraAdded = true;
+                    m_creature->AddAura(SPELL_FIRE_NOVA);
+                    b_AuraAdded = true;
                     m_creature->DeleteLater();
                     return;
                 }
+
                 break;
-            case 14663:         // Corrupted Stoneskin Totem VI
-                addAuraEntry = 10405;    // Stoneskin -30 dmg really ???
+            }
+            case NPC_CORRUPTED_STONESKIN_TOTEM_VI:
+            {
+                ui_addAuraEntry = SPELL_STONESKIN;
                 break;
-            case 14664:         // Corrupted Healing Stream Totem V
-                addAuraEntry = 10461;    // Healing Stream +14 hp really ???
+            }
+            case NPC_CORRUPTED_HEALING_STREAM_TOTEM_V:
+            {
+                ui_addAuraEntry = SPELL_HEALING_STREAM;
                 break;
-            case 14666:         // Corrupted Windfury Totem III
-                addAuraEntry = 10612;    // Windfury Totem Passive
+            }
+            case NPC_CORRUPTED_WINDFURY_TOTEM_III:
+            {
+                ui_addAuraEntry = SPELL_WINDFURY_TOTEM_PASSIVE;
                 break;
+            }
         }
-        if (!addAuraEntry)
+
+        if (!ui_addAuraEntry)
             return;
 
-        if (m_uiCheckTimer < uiDiff)
+        if (ui_CheckTimer < ui_Diff)
         {
-            m_uiCheckTimer = 1000; // Add immune to AoE + fear
-            SetAura(true, addAuraEntry);    // Stoneskin -30 dmg really ???
+            ui_CheckTimer = 1000; // Add immune to AoE + fear
+            SetAura(true, ui_addAuraEntry);
         }
         else
-            m_uiCheckTimer -= uiDiff;
+            ui_CheckTimer -= ui_Diff;
     }
 };
 
-CreatureAI* GetAI_npc_corrupted_totem(Creature* pCreature)
+CreatureAI* GetAI_npc_corrupted_totem(Creature* p_Creature)
 {
-    return new npc_corrupted_totemAI(pCreature);
+    return new npc_corrupted_totemAI(p_Creature);
 }
 
 void AddSC_boss_nefarian()
 {
-    Script* pNewScript;
+    Script* p_NewScript;
 
-    pNewScript = new Script;
-    pNewScript->Name = "boss_nefarian";
-    pNewScript->GetAI = &GetAI_boss_nefarian;
-    pNewScript->RegisterSelf();
+    p_NewScript = new Script;
+    p_NewScript->Name = "boss_nefarian";
+    p_NewScript->GetAI = &GetAI_boss_nefarian;
+    p_NewScript->RegisterSelf();
 
-    pNewScript = new Script;
-    pNewScript->Name = "npc_corrupted_totem";
-    pNewScript->GetAI = &GetAI_npc_corrupted_totem;
-    pNewScript->RegisterSelf();
+    p_NewScript = new Script;
+    p_NewScript->Name = "npc_corrupted_totem";
+    p_NewScript->GetAI = &GetAI_npc_corrupted_totem;
+    p_NewScript->RegisterSelf();
 }
