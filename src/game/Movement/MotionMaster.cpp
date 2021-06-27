@@ -623,7 +623,7 @@ void MotionMaster::PropagateSpeedChange()
 {
     Impl::container_type::iterator it = Impl::c.begin();
     for (; it != end(); ++it)
-        (*it)->unitSpeedChanged();
+        (*it)->UnitSpeedChanged();
 }
 
 bool MotionMaster::SetNextWaypoint(uint32 pointId)

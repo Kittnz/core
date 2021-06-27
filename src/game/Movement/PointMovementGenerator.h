@@ -55,7 +55,7 @@ class PointMovementGenerator
 };
 
 template<class T>
-class MANGOS_DLL_SPEC DistancingMovementGenerator
+class DistancingMovementGenerator
 : public PointMovementGenerator<T>
 {
     public:
