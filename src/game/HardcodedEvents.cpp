@@ -12,6 +12,7 @@
 #include "GridSearchers.h"
 #include <chrono>
 #include <random>
+#include <limits>
 
 /*
  * Elemental Invasion
@@ -261,8 +262,8 @@ void DragonsOfNightmare::Update()
     {
         // Event is active, dragons exist in the world
         uint32 alive = 0;
-        // Update respawn time to 9999999999 if the dragon is dead, get current alive count
-        GetAliveCountAndUpdateRespawnTime(dragonGUIDs, alive, 9999999999);
+        // Update respawn time to max time value if the dragon is dead, get current alive count
+        GetAliveCountAndUpdateRespawnTime(dragonGUIDs, alive, std::numeric_limits<time_t>::max());
 
         // If any dragons are still alive, do not pass go. We'll update once they are all dead
         if (alive)
