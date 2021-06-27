@@ -5,21 +5,21 @@ enum
 {
     GO_SERVICE_ENTRANCE         = 175368,
     GO_GAUNTLET_GATE1           = 175357,
-    GO_ZIGGURAT1                = 175380,                   //baroness
-    GO_ZIGGURAT2                = 175379,                   //nerub'enkan
-    GO_ZIGGURAT3                = 175381,                   //maleki
-    GO_ZIGGURAT4                = 175405,                   //rammstein
-    GO_ZIGGURAT5                = 175796,                   //baron
-    GO_PORT_GAUNTLET            = 175374,                   //port from gauntlet to slaugther
-    GO_PORT_SLAUGTHER           = 175373,                   //port at slaugther
-    GO_PORT_ELDERS              = 175377,                   //port at elders square
-    GO_PORT_PIEGE_RAT1          = 175355,
-    GO_PORT_PIEGE_RAT2          = 175354,
-    GO_PORT_PIEGE_RAT3          = 175351,
-    GO_PORT_PIEGE_RAT4          = 175350,
-    GO_CAGE_YSIDA               = 181071,        // en 2 patie, la base est : 181072
+    GO_ZIGGURAT1                = 175380,                   // baroness
+    GO_ZIGGURAT2                = 175379,                   // nerub'enkan
+    GO_ZIGGURAT3                = 175381,                   // maleki
+    GO_ZIGGURAT4                = 175405,                   // rammstein
+    GO_ZIGGURAT5                = 175796,                   // baron
+    GO_PORT_GAUNTLET            = 175374,                   // port from gauntlet to slaugther
+    GO_PORT_SLAUGTHER           = 175373,                   // port at slaugther
+    GO_PORT_ELDERS              = 175377,                   // port at elders square
+    GO_PORT_TRAP_GATE_1         = 175351,                   // Portcullis used in the gate traps (rats trap)
+    GO_PORT_TRAP_GATE_2         = 175350,                   // Scarlet side
+    GO_PORT_TRAP_GATE_3         = 175355,                   // Undead side
+    GO_PORT_TRAP_GATE_4         = 175354,
+    GO_CAGE_YSIDA               = 181071,                   // in 2 parts, the base is: 181072
 
-    NPC_CRYSTAL                 = 10415,                    //three ziggurat crystals
+    NPC_CRYSTAL                 = 10415,                    // three ziggurat crystals
     NPC_BARON                   = 10440,
     NPC_YSIDA_TRIGGER           = 16100,
     NPC_TIMMY                   = 10808,
@@ -33,9 +33,9 @@ enum
     NPC_ABOM_VENOM              = 10417,
     NPC_BLACK_GUARD             = 10394,
     NPC_YSIDA                   = 16031,
-    NPC_RAT                     = 10441,
-    NPC_ASTICOT                 = 10536,
-    NPC_INSECTE                 = 10461,
+    NPC_PLAGUED_RAT             = 10441,
+    NPC_PLAGUED_INSECT          = 10461,
+    NPC_PLAGUED_MAGGOT          = 10536,
 
     QUEST_AURIUSRECKONING       = 5125,
     QUEST_THEMEDALLIONOFFAITH   = 5122,
@@ -55,6 +55,17 @@ enum
     SPELL_YSIDA_FREED           = 27773
 };
 
+static Position const aGateTrap[] =                    // Positions of the two Gate Traps
+{
+    {3612.29f, -3335.39f, 124.077f, 3.14159f},              // Scarlet side
+    {3919.88f, -3547.34f, 134.269f, 2.94961f}               // Undead side
+};
+
+static uint32 const aPlaguedCritters[] =
+{
+    NPC_PLAGUED_RAT, NPC_PLAGUED_MAGGOT, NPC_PLAGUED_INSECT
+};
+
 struct instance_stratholme : public ScriptedInstance
 {
     instance_stratholme(Map* pMap) : ScriptedInstance(pMap)
@@ -63,18 +74,14 @@ struct instance_stratholme : public ScriptedInstance
     };
 
     uint32 m_auiEncounter[STRAT_MAX_ENCOUNTER];
+
+    uint32 m_uiGateTrapTimers[2][3];
     bool IsSilverHandDead[5];
 
     uint8 m_phaseBaron;
     uint32 m_uiBaronRun_Timer;
     uint32 m_uiSlaugtherSquare_Timer;
     uint32 m_uiSlaugtherAboMob_Timer;
-
-    uint32 m_piegeRat1_Timer;
-    uint32 m_piegeRat2_Timer;
-
-    uint8 m_etatPiege1;
-    uint8 m_etatPiege2;
 
     uint64 m_uiServiceEntranceGUID;
     uint64 m_uiGauntletGate1GUID;
@@ -87,11 +94,7 @@ struct instance_stratholme : public ScriptedInstance
     uint64 m_uiPortSlaugtherGUID;
     uint64 m_uiPortElderGUID;
     uint64 m_cageYsidaGUID;
-
-    uint64 m_piegeRatPorte1;
-    uint64 m_piegeRatPorte2;
-    uint64 m_piegeRatPorte3;
-    uint64 m_piegeRatPorte4;
+    uint64 m_ratTrapGateGUID[4];
 
     uint64 m_uiBaronGUID;
     uint64 m_uiTimmyGUID;
@@ -114,6 +117,11 @@ struct instance_stratholme : public ScriptedInstance
     void Initialize() override
     {
         memset(&m_auiEncounter, 0, sizeof(m_auiEncounter));
+        memset(&m_ratTrapGateGUID, 0, sizeof(m_ratTrapGateGUID));
+
+        for (auto& trapTimer : m_uiGateTrapTimers)
+            for (uint8 j = 0; j < 3; ++j)
+                trapTimer[j] = 0;
 
         for (bool & i : IsSilverHandDead)
             i = false;
@@ -122,12 +130,6 @@ struct instance_stratholme : public ScriptedInstance
         m_uiBaronRun_Timer = 0;
         m_uiSlaugtherSquare_Timer = 0;
         m_uiSlaugtherAboMob_Timer = 0;
-
-        m_piegeRat1_Timer = 0;
-        m_piegeRat2_Timer = 0;
-
-        m_etatPiege1 = 0;
-        m_etatPiege2 = 0;
 
         m_uiServiceEntranceGUID = 0;
         m_uiGauntletGate1GUID = 0;
@@ -140,11 +142,6 @@ struct instance_stratholme : public ScriptedInstance
         m_uiPortSlaugtherGUID = 0;
         m_uiPortElderGUID = 0;
         m_cageYsidaGUID = 0;
-
-        m_piegeRatPorte1 = 0;
-        m_piegeRatPorte2 = 0;
-        m_piegeRatPorte3 = 0;
-        m_piegeRatPorte4 = 0;
 
         m_uiBaronGUID = 0;
         m_uiYsidaTriggerGUID = 0;
@@ -171,7 +168,6 @@ struct instance_stratholme : public ScriptedInstance
         for (uint32 i : m_auiEncounter)
             if (i == IN_PROGRESS)
                 return true;
-
         return false;
     }
 
@@ -313,17 +309,17 @@ struct instance_stratholme : public ScriptedInstance
             case GO_PORT_ELDERS:
                 m_uiPortElderGUID = pGo->GetGUID();
                 break;
-            case GO_PORT_PIEGE_RAT1:
-                m_piegeRatPorte1 = pGo->GetGUID();
+            case GO_PORT_TRAP_GATE_1:
+                m_ratTrapGateGUID[0] = pGo->GetGUID();
                 break;
-            case GO_PORT_PIEGE_RAT2:
-                m_piegeRatPorte2 = pGo->GetGUID();
+            case GO_PORT_TRAP_GATE_2:
+                m_ratTrapGateGUID[1] = pGo->GetGUID();
                 break;
-            case GO_PORT_PIEGE_RAT3:
-                m_piegeRatPorte3 = pGo->GetGUID();
+            case GO_PORT_TRAP_GATE_3:
+                m_ratTrapGateGUID[2] = pGo->GetGUID();
                 break;
-            case GO_PORT_PIEGE_RAT4:
-                m_piegeRatPorte4 = pGo->GetGUID();
+            case GO_PORT_TRAP_GATE_4:
+                m_ratTrapGateGUID[3] = pGo->GetGUID();
                 break;
             case GO_CAGE_YSIDA:
                 m_cageYsidaGUID = pGo->GetGUID();
@@ -643,12 +639,12 @@ struct instance_stratholme : public ScriptedInstance
 
     /** Load / save system */
     std::string strInstData;
-    const char* Save() override
+    char const* Save() override
     {
         return strInstData.c_str();
     }
 
-    void Load(const char* chrIn) override
+    void Load(char const* chrIn) override
     {
         if (!chrIn)
             return;
@@ -666,10 +662,14 @@ struct instance_stratholme : public ScriptedInstance
 
     bool JoueurDansPiegeRat1()
     {
+        //float x1 = 3907.45f;
+        //float y1 = -3550.41f;
         float x2 = 3909.34f;
         float y2 = -3540.14f;
         float x3 = 3930.1f;
         float y3 = -3554.4f;
+        //float x4 = 3931.9f;
+        //float y4 = -3544.6f;
 
         Map::PlayerList const &listeJoueur = instance->GetPlayers();
         for (const auto& itr : listeJoueur)
@@ -726,8 +726,11 @@ struct instance_stratholme : public ScriptedInstance
             if (Creature* pAbom = instance->GetCreature(*Iter))
             {
                 if (pAbom->IsAlive() && !pAbom->IsInCombat())
+                {
                     pAbom->GetMotionMaster()->MovePoint(0, 4037.194f, -3473.741943f, 121.738808f);
-
+                    //pAbom->GetMotionMaster()->MovePoint(1, 4038.45288f, -3487.635498f, 121.742157f);
+                    //pAbom->SetHomePosition(4036.40527f, -3470.181152f, 121.749062f, 4.7418f);
+                }
                 m_uiSlaugtherAboMob_Timer = (pAbom->GetEntry() == NPC_ABOM_BILE) ? 45000 : urand(35000, 40000);
                 slaugtherAboGUID.remove(*Iter);
             }
@@ -736,6 +739,61 @@ struct instance_stratholme : public ScriptedInstance
 
     void Update(uint32 uiDiff) override
     {
+        // Loop over the two Gate traps, each one has up to three timers (trap reset, gate opening delay, critters spawning delay)
+        for (uint8 i = 0; i < 2; i++)
+        {
+            // Check that the trap is not on cooldown, if so check if player/pet is in range
+            if (m_uiGateTrapTimers[i][0])
+            {
+                m_uiGateTrapTimers[i][0] -= uiDiff;
+                if (m_uiGateTrapTimers[i][0] <= uiDiff)
+                {
+                    DEBUG_LOG("SD2: Instance Stratholme - Rat Trap reseted %u.", i);
+                    m_uiGateTrapTimers[i][0] = 0;
+                }
+            }
+            else
+            {
+                Map::PlayerList const& players = instance->GetPlayers();
+                for (const auto& player : players)
+                {
+                    if (Player* pPlayer = player.getSource())
+                    {
+                        if (!pPlayer->IsGameMaster() && pPlayer->IsWithinDist2d(aGateTrap[i].x, aGateTrap[i].y, 5.5f))
+                            DoGateTrap(i);
+
+                        Pet* pet = pPlayer->GetPet();
+                        if (!pPlayer->IsGameMaster() && pet && pet->IsWithinDist2d(aGateTrap[i].x, aGateTrap[i].y, 5.5f))
+                            DoGateTrap(i);
+                    }
+                }
+            }
+            // Timer to reopen the gates
+            if (m_uiGateTrapTimers[i][1])
+            {
+                if (m_uiGateTrapTimers[i][1] <= uiDiff)
+                {
+                    DoUseDoorOrButton(m_ratTrapGateGUID[2 * i]);
+                    DoUseDoorOrButton(m_ratTrapGateGUID[2 * i + 1]);
+                    m_uiGateTrapTimers[i][1] = 0;
+                }
+                else
+                    m_uiGateTrapTimers[i][1] -= uiDiff;
+            }
+            // Delay timer to spawn the plagued critters once the gate are closing
+            if (m_uiGateTrapTimers[i][2])
+            {
+                if (m_uiGateTrapTimers[i][2] <= uiDiff)
+                {
+                    if (Player* pPlayer = GetPlayerInMap())
+                        DoSpawnPlaguedCritters(i, pPlayer);
+                    m_uiGateTrapTimers[i][2] = 0;
+                }
+                else
+                    m_uiGateTrapTimers[i][2] -= uiDiff;
+            }
+        }
+
         if (m_uiBaronRun_Timer)
         {
             if (m_uiBaronRun_Timer <= 45*MINUTE*IN_MILLISECONDS && m_phaseBaron == 0)
@@ -904,6 +962,38 @@ struct instance_stratholme : public ScriptedInstance
             sLog.outDebug("Instance Stratholme: Ramstein spawned.");
         }
     }
+    void DoGateTrap(uint8 uiGate)
+    {
+        // Check if timer was not already set by another player/pet a few milliseconds before
+        if (m_uiGateTrapTimers[uiGate][0])
+            return;
+
+        DEBUG_LOG("SD2: Instance Stratholme - Rat Trap activated %i.", uiGate);
+        // close the gates
+        DoUseDoorOrButton(m_ratTrapGateGUID[2 * uiGate]);
+        DoUseDoorOrButton(m_ratTrapGateGUID[2 * uiGate + 1]);
+
+        // set timer to reset the trap
+        m_uiGateTrapTimers[uiGate][0] = 30 * MINUTE * IN_MILLISECONDS;
+        // set timer to reopen gates
+        m_uiGateTrapTimers[uiGate][1] = 20 * IN_MILLISECONDS;
+        // set timer to spawn the plagued critters
+        m_uiGateTrapTimers[uiGate][2] = 2 * IN_MILLISECONDS;
+    }
+
+    void DoSpawnPlaguedCritters(uint8 uiGate, Player* pPlayer)
+    {
+        if (!pPlayer)
+            return;
+
+        uint32 uiEntry = aPlaguedCritters[urand(0, 2)];
+        for (uint8 i = 0; i < 30; ++i)
+        {
+            float fX, fY, fZ;
+            pPlayer->GetRandomPoint(aGateTrap[uiGate].x, aGateTrap[uiGate].y, aGateTrap[uiGate].z, 8.0f, fX, fY, fZ);
+            pPlayer->SummonCreature(uiEntry, fX, fY, fZ, 0, TEMPSUMMON_DEAD_DESPAWN, 0);
+        }
+    }
 };
 
 InstanceData* GetInstanceData_instance_stratholme(Map* pMap)
@@ -913,7 +1003,7 @@ InstanceData* GetInstanceData_instance_stratholme(Map* pMap)
 
 void AddSC_instance_stratholme()
 {
-    Script *newscript;
+    Script* newscript;
     newscript = new Script;
     newscript->Name = "instance_stratholme";
     newscript->GetInstanceData = &GetInstanceData_instance_stratholme;

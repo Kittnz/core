@@ -162,7 +162,7 @@ struct mob_restless_soulAI : public ScriptedAI
         Tagged = false;
     }
 
-    void SpellHit(Unit *caster, const SpellEntry *spell) override
+    void SpellHit(Unit *caster, SpellEntry const* spell) override
     {
         if (caster->GetTypeId() == TYPEID_PLAYER)
         {
@@ -187,7 +187,7 @@ struct mob_restless_soulAI : public ScriptedAI
             m_creature->SummonCreature(ENTRY_FREED, 0.0f, 0.0f, 0.0f, 0.0f, TEMPSUMMON_TIMED_DESPAWN, 300000);
     }
 
-    void UpdateAI(const uint32 diff) override
+    void UpdateAI(uint32 const diff) override
     {
         if (Tagged)
         {
@@ -237,7 +237,7 @@ struct mobs_spectral_ghostly_citizenAI : public ScriptedAI
         Tagged = false;
     }
 
-    void SpellHit(Unit *caster, const SpellEntry *spell) override
+    void SpellHit(Unit *caster, SpellEntry const* spell) override
     {
         if (!Tagged && spell->Id == SPELL_EGAN_BLASTER)
             Tagged = true;
@@ -260,7 +260,7 @@ struct mobs_spectral_ghostly_citizenAI : public ScriptedAI
         }
     }
 
-    void UpdateAI(const uint32 diff) override
+    void UpdateAI(uint32 const diff) override
     {
         if (Tagged)
         {
@@ -352,7 +352,7 @@ struct mobs_cristal_zugguratAI : public ScriptedAI
         }
     }
 
-    void UpdateAI(const uint32 diff) override
+    void UpdateAI(uint32 const diff) override
     {
         if (!m_creature->IsAlive() || !m_pInstance)
             return;
@@ -464,7 +464,7 @@ struct AI_mobs_rat_pestifere : public ScriptedAI
         m_mvt_id++;
     }
 
-    void UpdateAI(const uint32 diff) override
+    void UpdateAI(uint32 const diff) override
     {
         if (m_mvt_timer < diff && m_idRat > 0)
         {
@@ -694,6 +694,11 @@ struct npc_auriusAI : public ScriptedAI
             m_creature->SetStandState(UNIT_STAND_STATE_DEAD);
             m_creature->AddUnitState(UNIT_STAT_DIED);
             m_creature->CombatStop();
+            //m_creature->RemoveAllAuras();
+            //m_creature->DeleteThreatList();
+            //m_creature->LoadCreatureAddon();
+            //m_creature->GetMotionMaster()->MovementExpired();
+            //m_creature->GetMotionMaster()->MoveIdle();
             m_creature->RemoveAurasWithInterruptFlags(AURA_INTERRUPT_FLAG_IMMUNE_OR_LOST_SELECTION);
             m_creature->InterruptNonMeleeSpells(true);
             m_creature->GetHostileRefManager().deleteReferences();
@@ -722,7 +727,7 @@ struct npc_auriusAI : public ScriptedAI
         }
     }
 
-    void UpdateAI(const uint32 diff) override
+    void UpdateAI(uint32 const diff) override
     {
         switch (ui_entry)
         {
@@ -855,7 +860,7 @@ struct npc_couloir_trigger1AI : public ScriptedAI
             pSummoned->SetInCombatWithZone();
     }
 
-    void UpdateAI(const uint32 uiDiff) override
+    void UpdateAI(uint32 const uiDiff) override
     {
         if (ScourgeStarted)
         {
@@ -1001,7 +1006,7 @@ struct npc_Scourge_TriggerAI : public ScriptedAI
         pSummoned->SetInCombatWithZone();
     }
 
-    void UpdateAI(const uint32 uiDiff) override
+    void UpdateAI(uint32 const uiDiff) override
     {
         if (ScourgeStarted)
         {
@@ -1093,210 +1098,9 @@ GameObjectAI* GetAIgo_supply_crate(GameObject *pGo)
     return new go_supply_crateAI(pGo);
 }
 
-/*######
-## PIEGES GRILLES
-######*/
-
-struct npc_piege_grille1AI : public ScriptedAI
-{
-    npc_piege_grille1AI(Creature* pCreature) : ScriptedAI(pCreature)
-    {
-        Reset();
-    }
-
-    uint32 m_uiRatsDeadCheckTimer;
-    uint32 RatsId;
-    bool RatsSpawned;
-
-    void Reset() override
-    {
-        m_uiRatsDeadCheckTimer = 2000;
-        RatsSpawned = false;
-        RatsId = 0;
-    }
-
-    void UpdateAI(const uint32 diff) override
-    {
-        if (RatsSpawned && RatsId > 0)
-        {
-            if (m_uiRatsDeadCheckTimer < diff)
-            {
-
-                m_uiRatsDeadCheckTimer = 2000;
-
-                std::list<Creature*> rats;
-                GetCreatureListWithEntryInGrid(rats, m_creature, RatsId, 10.0f);
-
-                for (const auto& rat : rats)
-                    if (rat->IsAlive())
-                        return;
-
-                if (GameObject* pGrille = m_creature->FindNearestGameObject(175355, 20.0f)) // GO_PORT_PIEGE_RAT1 baron
-                    pGrille->ResetDoorOrButton();
-                if (GameObject* pGrille = m_creature->FindNearestGameObject(175354, 20.0f)) // GO_PORT_PIEGE_RAT2 baron
-                    pGrille->ResetDoorOrButton();
-
-                m_creature->ForcedDespawn();
-
-            }
-            else m_uiRatsDeadCheckTimer -= diff;
-        }
-    }
-
-    void MoveInLineOfSight(Unit* who) override
-    {
-        if (!RatsSpawned && who->GetTypeId() == TYPEID_PLAYER && m_creature->IsWithinDistInMap(who, 4.0f))
-        {
-            if (GameObject* pGrille = m_creature->FindNearestGameObject(175355, 20.0f)) // GO_PORT_PIEGE_RAT1 baron
-                pGrille->UseDoorOrButton();
-            if (GameObject* pGrille = m_creature->FindNearestGameObject(175354, 20.0f)) // GO_PORT_PIEGE_RAT2 baron
-                pGrille->UseDoorOrButton();
-
-            uint32 maxplagued = urand(8, 10);
-
-            switch (urand(0, 2))
-            {
-                case 0: // Plagued Rat
-                {
-                    RatsId = 10441;
-                    for (uint8 i = 0; i < maxplagued; ++i)
-                        m_creature->SummonCreature(10441, m_creature->GetPositionX() - 3.0f + float(urand(0, 6)),
-                                                   m_creature->GetPositionY() - 3.0f + float(urand(0, 6)), m_creature->GetPositionZ() + 0.7f, 1, TEMPSUMMON_DEAD_DESPAWN, HOUR * IN_MILLISECONDS);
-                    break;
-                }
-                case 1: // Plagued Insect
-                {
-                    RatsId = 10461;
-                    for (uint8 i = 0; i < maxplagued; ++i)
-                        m_creature->SummonCreature(10461, m_creature->GetPositionX() - 3.0f + float(urand(0, 6)),
-                                                   m_creature->GetPositionY() - 3.0f + float(urand(0, 6)), m_creature->GetPositionZ() + 0.7f, 1, TEMPSUMMON_DEAD_DESPAWN, HOUR * IN_MILLISECONDS);
-                    break;
-                }
-                case 2: // Plagued Maggot
-                {
-                    RatsId = 10536;
-                    for (uint8 i = 0; i < maxplagued; ++i)
-                        m_creature->SummonCreature(10536, m_creature->GetPositionX() - 3.0f + float(urand(0, 6)),
-                                                   m_creature->GetPositionY() - 3.0f + float(urand(0, 6)), m_creature->GetPositionZ() + 0.7f, 1, TEMPSUMMON_DEAD_DESPAWN, HOUR * IN_MILLISECONDS);
-                    break;
-                }
-            }
-
-            RatsSpawned = true;
-
-            //despawn creature only after all rats are dead and we open the gates
-            //m_creature->ForcedDespawn();
-        }
-    }
-};
-
-CreatureAI* GetAI_npc_piege_grille1(Creature* pCreature)
-{
-    return new npc_piege_grille1AI(pCreature);
-}
-
-struct npc_piege_grille2AI : public ScriptedAI
-{
-    npc_piege_grille2AI(Creature* pCreature) : ScriptedAI(pCreature)
-    {
-        Reset();
-    }
-
-    uint32 m_uiRatsDeadCheckTimer;
-    uint32 RatsId;
-    bool RatsSpawned;
-
-    void Reset() override
-    {
-        m_uiRatsDeadCheckTimer = 2000;
-        RatsSpawned = false;
-        RatsId = 0;
-    }
-
-    void UpdateAI(const uint32 diff) override
-    {
-        if (RatsSpawned && RatsId > 0)
-        {
-            if (m_uiRatsDeadCheckTimer < diff)
-            {
-                
-                m_uiRatsDeadCheckTimer = 2000;
-
-                std::list<Creature*> rats;
-                GetCreatureListWithEntryInGrid(rats, m_creature, RatsId, 10.0f);
-
-                for (const auto& rat : rats)
-                    if (rat->IsAlive())
-                        return;
-
-                if (GameObject* pGrille = m_creature->FindNearestGameObject(175351, 20.0f)) // GO_PORT_PIEGE_RAT3 carlate
-                    pGrille->ResetDoorOrButton();
-                if (GameObject* pGrille = m_creature->FindNearestGameObject(175350, 20.0f)) // GO_PORT_PIEGE_RAT4 carlate
-                    pGrille->ResetDoorOrButton();
-
-                m_creature->ForcedDespawn();
-
-            }
-            else m_uiRatsDeadCheckTimer -= diff;
-        }
-    }
-
-    void MoveInLineOfSight(Unit* who) override
-    {
-        if (!RatsSpawned && who->GetTypeId() == TYPEID_PLAYER && m_creature->IsWithinDistInMap(who, 3.0f))
-        {
-            if (GameObject* pGrille = m_creature->FindNearestGameObject(175351, 20.0f)) // GO_PORT_PIEGE_RAT3 carlate
-                pGrille->UseDoorOrButton();
-            if (GameObject* pGrille = m_creature->FindNearestGameObject(175350, 20.0f)) // GO_PORT_PIEGE_RAT4 carlate
-                pGrille->UseDoorOrButton();
-
-            uint32 maxplagued = urand(8, 10);
-
-            switch (urand(0, 2))
-            {
-                case 0: // Plagued Rat
-                {
-                    RatsId = 10441;
-                    for (uint8 i = 0; i < maxplagued; ++i)
-                        m_creature->SummonCreature(10441, m_creature->GetPositionX() - 3.0f + float(urand(0, 6)),
-                                                   m_creature->GetPositionY() - 3.0f + float(urand(0, 6)), m_creature->GetPositionZ() + 0.7f, 1, TEMPSUMMON_DEAD_DESPAWN, HOUR * IN_MILLISECONDS);
-                    break;
-                }
-                case 1: // Plagued Insect
-                {
-                    RatsId = 10461;
-                    for (uint8 i = 0; i < maxplagued; ++i)
-                        m_creature->SummonCreature(10461, m_creature->GetPositionX() - 3.0f + float(urand(0, 6)),
-                                                   m_creature->GetPositionY() - 3.0f + float(urand(0, 6)), m_creature->GetPositionZ() + 0.7f, 1, TEMPSUMMON_DEAD_DESPAWN, HOUR * IN_MILLISECONDS);
-                    break;
-                }
-                case 2: // Plagued Maggot
-                {
-                    RatsId = 10536;
-                    for (uint8 i = 0; i < maxplagued; ++i)
-                        m_creature->SummonCreature(10536, m_creature->GetPositionX() - 3.0f + float(urand(0, 6)),
-                                                   m_creature->GetPositionY() - 3.0f + float(urand(0, 6)), m_creature->GetPositionZ() + 0.7f, 1, TEMPSUMMON_DEAD_DESPAWN, HOUR * IN_MILLISECONDS);
-                    break;
-                }
-            }
-
-            RatsSpawned = true;
-
-            //despawn creature only after all rats are dead and we open the gates
-            //m_creature->ForcedDespawn();
-        }
-    }
-};
-
-CreatureAI* GetAI_npc_piege_grille2(Creature* pCreature)
-{
-    return new npc_piege_grille2AI(pCreature);
-}
-
-
 void AddSC_stratholme()
 {
-    Script *newscript;
+    Script* newscript;
 
     newscript = new Script;
     newscript->Name = "go_gauntlet_gate";
@@ -1362,16 +1166,6 @@ void AddSC_stratholme()
     newscript = new Script;
     newscript->Name = "go_supply_crate";
     newscript->GOGetAI = &GetAIgo_supply_crate;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "npc_piege_grille1";
-    newscript->GetAI = &GetAI_npc_piege_grille1;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "npc_piege_grille2";
-    newscript->GetAI = &GetAI_npc_piege_grille2;
     newscript->RegisterSelf();
 
     newscript = new Script;
