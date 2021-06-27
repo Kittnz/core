@@ -5612,7 +5612,7 @@ bool Unit::IsInDisallowedMountForm()
     ChrRacesEntry const* race = sChrRacesStore.LookupEntry(displayExtra->Race);
 
     if (model && !(model->flags & 0x80))
-        if (race && !(race->Flags & 0x4))
+        if (race && !race->HasFlag(CHRRACES_FLAGS_CAN_MOUNT))
             return true;
 
     return false;
@@ -7348,6 +7348,8 @@ uint32 Unit::GetCreatureType() const
         SpellShapeshiftFormEntry const* ssEntry = sSpellShapeshiftFormStore.LookupEntry(GetShapeshiftForm());
         if (ssEntry && ssEntry->creatureType > 0)
             return ssEntry->creatureType;
+        else if (ChrRacesEntry const* raceEntry = sChrRacesStore.LookupEntry(GetRace()))
+            return raceEntry->creatureType;
         else
             return CREATURE_TYPE_HUMANOID;
     }
