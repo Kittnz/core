@@ -651,7 +651,7 @@ void Creature::Update(uint32 update_diff, uint32 diff)
 
                 CreatureInfo const *cinfo = GetCreatureInfo();
 
-                SelectLevel(cinfo);
+                SelectLevel(cinfo, dbSpawnData ? dbSpawnData->health_percent : 100.0f, dbSpawnData ? dbSpawnData->mana_percent : 100.0f);
                 SetUInt32Value(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_NONE);
                 if (IsDeadByDefault())
                 {
@@ -1898,7 +1898,9 @@ void Creature::SetDeathState(DeathState s)
 
         CreatureInfo const *cinfo = GetCreatureInfo();
 
-        SetHealth(GetMaxHealth());
+        if (!GetHealth())
+            SetHealth(GetMaxHealth());
+
         SetLootRecipient(nullptr);
 
         if (GetTemporaryFactionFlags() & TEMPFACTION_RESTORE_RESPAWN)
