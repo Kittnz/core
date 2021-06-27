@@ -810,3 +810,8 @@ UPDATE `creature_template` SET `dmg_min`=355, `dmg_max`=480, `fire_res`=171, `na
 
 -- Update Zealot Lor'Khan and Zealot Zath respawn time to match Thekal.
 UPDATE `creature` SET `spawntimesecsmin`=259200, `spawntimesecsmax`=259200 WHERE `id` IN (11347, 11348);
+
+
+-- Remove custom stratholme rat trap triggers.
+DELETE FROM `creature` WHERE `id` IN (160012, 160013);
+DELETE FROM `creature_template` WHERE `entry` IN (160012, 160013);
