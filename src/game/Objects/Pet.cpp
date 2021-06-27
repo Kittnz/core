@@ -1266,11 +1266,9 @@ bool Pet::CreateBaseAtCreature(Creature* creature)
     }
 
     CreatureCreatePos pos(creature, creature->GetOrientation());
-
     uint32 guid = creature->GetMap()->GenerateLocalLowGuid(HIGHGUID_PET);
-
-    BASIC_LOG("Create pet");
     uint32 pet_number = sObjectMgr.GeneratePetNumber();
+
     if (!Create(guid, pos, creature->GetCreatureInfo(), pet_number))
         return false;
 
@@ -1286,6 +1284,7 @@ bool Pet::CreateBaseAtCreature(Creature* creature)
         setPetType(MINI_PET);
         return true;
     }
+
     SetDisplayId(creature->GetDisplayId());
     SetNativeDisplayId(creature->GetNativeDisplayId());
     SetMaxPower(POWER_HAPPINESS, GetCreatePowers(POWER_HAPPINESS));
