@@ -453,3 +453,358 @@ UPDATE `creature_display_info_addon` SET `combat_reach`=0 WHERE `display_id`=110
 UPDATE `creature_display_info_addon` SET `combat_reach`=2 WHERE `display_id`=15191;
 UPDATE `creature_display_info_addon` SET `combat_reach`=10.5 WHERE `display_id`=15295;
 
+-- Onyxia
+UPDATE `creature_template` SET `dmg_min`=1648, `dmg_max`=2184, `armor`=4691 WHERE `entry`=10184;
+-- Lucifron
+UPDATE `creature_template` SET `dmg_min`=1636, `dmg_max`=2165, `armor`=3795 WHERE `entry`=12118;
+-- Magmadar
+UPDATE `creature_template` SET `dmg_min`=1867, `dmg_max`=2475, `armor`=4691 WHERE `entry`=11982;
+-- Gehennas
+UPDATE `creature_template` SET `dmg_min`=1636, `dmg_max`=2165, `armor`=3795 WHERE `entry`=12259;
+-- Garr
+UPDATE `creature_template` SET `dmg_min`=1977, `dmg_max`=2621, `armor`=4691 WHERE `entry`=12057;
+-- Shazzrah
+UPDATE `creature_template` SET `dmg_min`=1636, `dmg_max`=2165, `armor`=3795 WHERE `entry`=12264;
+-- Baron Geddon
+UPDATE `creature_template` SET `dmg_min`=1538, `dmg_max`=2039, `armor`=4691 WHERE `entry`=12056;
+-- Golemagg the Incinerator
+UPDATE `creature_template` SET `dmg_min`=2197, `dmg_max`=2912, `armor`=4691 WHERE `entry`=11988;
+-- Sulfuron Harbinger
+UPDATE `creature_template` SET `dmg_min`=1757, `dmg_max`=2330, `armor`=5840 WHERE `entry`=12098;
+-- Majordomo Executus
+UPDATE `creature_template` SET `dmg_min`=1538, `dmg_max`=2039, `armor`=4691 WHERE `entry`=12018;
+-- Ragnaros
+UPDATE `creature_template` SET `dmg_min`=1999, `dmg_max`=2650, `armor`=4691 WHERE `entry`=11502;
+
+-- Correct faction for BWL creatures.
+UPDATE `creature_template` SET `faction`=62 WHERE `entry`=11981;
+UPDATE `creature_template` SET `faction`=62 WHERE `entry`=11983;
+UPDATE `creature_template` SET `faction`=1114 WHERE `entry`=12435;
+UPDATE `creature_template` SET `faction`=103 WHERE `entry`=12461;
+UPDATE `creature_template` SET `faction`=7 WHERE `entry`=13976;
+UPDATE `creature_template` SET `faction`=62 WHERE `entry`=14020;
+UPDATE `creature_template` SET `faction`=35 WHERE `entry`=14449;
+UPDATE `creature_template` SET `faction`=35 WHERE `entry`=14459;
+UPDATE `creature_template` SET `faction`=62 WHERE `entry`=14601;
+
+-- Correct levels for BWL creatures.
+UPDATE `creature_template` SET `level_min`=62, `level_max`=62 WHERE `entry`=12557;
+UPDATE `creature_template` SET `level_min`=60, `level_max`=60 WHERE `entry`=12999;
+UPDATE `creature_template` SET `level_min`=40, `level_max`=40 WHERE `entry`=13976;
+
+-- Correct health for BWL creatures.
+UPDATE `creature_template` SET `health_min`=64750, `health_max`=64750, `mana_min`=25680, `mana_max`=25680 WHERE `entry`=12557;
+UPDATE `creature_template` SET `health_min`=4120, `health_max`=4120 WHERE `entry`=12999;
+UPDATE `creature_template` SET `health_min`=7620, `health_max`=7620 WHERE `entry`=13976;
+
+-- Correct melee attack speed for BWL creatures.
+UPDATE `creature_template` SET `base_attack_time`=2000 WHERE `entry`=8279;
+UPDATE `creature_template` SET `base_attack_time`=2000 WHERE `entry`=11981;
+UPDATE `creature_template` SET `base_attack_time`=2000 WHERE `entry`=11983;
+UPDATE `creature_template` SET `base_attack_time`=2000 WHERE `entry`=12017;
+UPDATE `creature_template` SET `base_attack_time`=2000 WHERE `entry`=12435;
+UPDATE `creature_template` SET `base_attack_time`=2000 WHERE `entry`=12457;
+UPDATE `creature_template` SET `base_attack_time`=2000 WHERE `entry`=12458;
+UPDATE `creature_template` SET `base_attack_time`=2000 WHERE `entry`=12459;
+UPDATE `creature_template` SET `base_attack_time`=2000 WHERE `entry`=12460;
+UPDATE `creature_template` SET `base_attack_time`=2000 WHERE `entry`=12461;
+UPDATE `creature_template` SET `base_attack_time`=2000 WHERE `entry`=12463;
+UPDATE `creature_template` SET `base_attack_time`=2000 WHERE `entry`=12464;
+UPDATE `creature_template` SET `base_attack_time`=2000 WHERE `entry`=12465;
+UPDATE `creature_template` SET `base_attack_time`=2400 WHERE `entry`=12467;
+UPDATE `creature_template` SET `base_attack_time`=2000 WHERE `entry`=12468;
+UPDATE `creature_template` SET `base_attack_time`=2000 WHERE `entry`=12557;
+UPDATE `creature_template` SET `base_attack_time`=2000 WHERE `entry`=13976;
+UPDATE `creature_template` SET `base_attack_time`=2000 WHERE `entry`=13996;
+UPDATE `creature_template` SET `base_attack_time`=2000 WHERE `entry`=14020;
+UPDATE `creature_template` SET `base_attack_time`=2000 WHERE `entry`=14022;
+UPDATE `creature_template` SET `base_attack_time`=2000 WHERE `entry`=14023;
+UPDATE `creature_template` SET `base_attack_time`=2000 WHERE `entry`=14024;
+UPDATE `creature_template` SET `base_attack_time`=2000 WHERE `entry`=14025;
+UPDATE `creature_template` SET `base_attack_time`=2000 WHERE `entry`=14377;
+UPDATE `creature_template` SET `base_attack_time`=2000 WHERE `entry`=14401;
+UPDATE `creature_template` SET `base_attack_time`=2000 WHERE `entry`=14456;
+UPDATE `creature_template` SET `base_attack_time`=2000 WHERE `entry`=14601;
+
+-- Correct ranged attack speed for BWL creatures.
+UPDATE `creature_template` SET `ranged_attack_time`=2000 WHERE `entry`=8279;
+UPDATE `creature_template` SET `ranged_attack_time`=2000 WHERE `entry`=11981;
+UPDATE `creature_template` SET `ranged_attack_time`=2000 WHERE `entry`=11983;
+UPDATE `creature_template` SET `ranged_attack_time`=2000 WHERE `entry`=12017;
+UPDATE `creature_template` SET `ranged_attack_time`=2000 WHERE `entry`=12435;
+UPDATE `creature_template` SET `ranged_attack_time`=2000 WHERE `entry`=12457;
+UPDATE `creature_template` SET `ranged_attack_time`=2000 WHERE `entry`=12458;
+UPDATE `creature_template` SET `ranged_attack_time`=2000 WHERE `entry`=12459;
+UPDATE `creature_template` SET `ranged_attack_time`=2000 WHERE `entry`=12460;
+UPDATE `creature_template` SET `ranged_attack_time`=2000 WHERE `entry`=12461;
+UPDATE `creature_template` SET `ranged_attack_time`=2000 WHERE `entry`=12463;
+UPDATE `creature_template` SET `ranged_attack_time`=2000 WHERE `entry`=12464;
+UPDATE `creature_template` SET `ranged_attack_time`=2000 WHERE `entry`=12465;
+UPDATE `creature_template` SET `ranged_attack_time`=2000 WHERE `entry`=12467;
+UPDATE `creature_template` SET `ranged_attack_time`=2000 WHERE `entry`=12468;
+UPDATE `creature_template` SET `ranged_attack_time`=2000 WHERE `entry`=12557;
+UPDATE `creature_template` SET `ranged_attack_time`=2000 WHERE `entry`=12999;
+UPDATE `creature_template` SET `ranged_attack_time`=2000 WHERE `entry`=13020;
+UPDATE `creature_template` SET `ranged_attack_time`=2000 WHERE `entry`=13976;
+UPDATE `creature_template` SET `ranged_attack_time`=2000 WHERE `entry`=13996;
+UPDATE `creature_template` SET `ranged_attack_time`=2000 WHERE `entry`=14020;
+UPDATE `creature_template` SET `ranged_attack_time`=2000 WHERE `entry`=14022;
+UPDATE `creature_template` SET `ranged_attack_time`=2000 WHERE `entry`=14023;
+UPDATE `creature_template` SET `ranged_attack_time`=2000 WHERE `entry`=14024;
+UPDATE `creature_template` SET `ranged_attack_time`=2000 WHERE `entry`=14025;
+UPDATE `creature_template` SET `ranged_attack_time`=2000 WHERE `entry`=14401;
+UPDATE `creature_template` SET `ranged_attack_time`=2000 WHERE `entry`=14449;
+UPDATE `creature_template` SET `ranged_attack_time`=2000 WHERE `entry`=14456;
+UPDATE `creature_template` SET `ranged_attack_time`=2000 WHERE `entry`=14459;
+UPDATE `creature_template` SET `ranged_attack_time`=2000 WHERE `entry`=14601;
+
+-- Correct walk speed for BWL creatures.
+UPDATE `creature_template` SET `speed_walk`=2 WHERE `entry`=11981;
+UPDATE `creature_template` SET `speed_walk`=1 WHERE `entry`=12017;
+UPDATE `creature_template` SET `speed_walk`=0.888888 WHERE `entry`=12435;
+UPDATE `creature_template` SET `speed_walk`=1 WHERE `entry`=12458;
+UPDATE `creature_template` SET `speed_walk`=0.888888 WHERE `entry`=12463;
+UPDATE `creature_template` SET `speed_walk`=0.888888 WHERE `entry`=12464;
+UPDATE `creature_template` SET `speed_walk`=0.888888 WHERE `entry`=12465;
+UPDATE `creature_template` SET `speed_walk`=0.888888 WHERE `entry`=12468;
+UPDATE `creature_template` SET `speed_walk`=1 WHERE `entry`=13020;
+UPDATE `creature_template` SET `speed_walk`=1 WHERE `entry`=13976;
+UPDATE `creature_template` SET `speed_walk`=1.11111 WHERE `entry`=14022;
+UPDATE `creature_template` SET `speed_walk`=1.11111 WHERE `entry`=14023;
+UPDATE `creature_template` SET `speed_walk`=1.11111 WHERE `entry`=14024;
+UPDATE `creature_template` SET `speed_walk`=1.11111 WHERE `entry`=14025;
+
+-- Correct run speed for BWL creatures.
+UPDATE `creature_template` SET `speed_run`=2.14286 WHERE `entry`=11981;
+UPDATE `creature_template` SET `speed_run`=2.14286 WHERE `entry`=11983;
+UPDATE `creature_template` SET `speed_run`=1.42857 WHERE `entry`=12435;
+UPDATE `creature_template` SET `speed_run`=1.71429 WHERE `entry`=12460;
+UPDATE `creature_template` SET `speed_run`=1.71429 WHERE `entry`=13020;
+UPDATE `creature_template` SET `speed_run`=2.14286 WHERE `entry`=14020;
+UPDATE `creature_template` SET `speed_run`=2.14286 WHERE `entry`=14601;
+
+-- Razorgore the Untamed
+UPDATE `creature_template` SET `dmg_min`=2416, `dmg_max`=3203, `armor`=4691 WHERE `entry`=12435;
+UPDATE `creature_template` SET `health_min`=449685, `health_max`=449685, `mana_min`=0, `mana_max`=0 WHERE `entry`=12435;
+-- Vaelastrasz the Corrupt
+UPDATE `creature_template` SET `dmg_min`=3844, `dmg_max`=5096, `armor`=4691 WHERE `entry`=13020;
+UPDATE `creature_template` SET `health_min`=3331000, `health_max`=3331000, `mana_min`=0, `mana_max`=0 WHERE `entry`=13020;
+-- Broodlord Lashlayer
+UPDATE `creature_template` SET `dmg_min`=2746, `dmg_max`=3640, `armor`=4691 WHERE `entry`=12017;
+UPDATE `creature_template` SET `mana_min`=0, `mana_max`=0 WHERE `entry`=12017;
+-- Firemaw
+UPDATE `creature_template` SET `dmg_min`=2746, `dmg_max`=3640, `armor`=4691 WHERE `entry`=11983;
+UPDATE `creature_template` SET `health_min`=999300, `health_max`=999300, `mana_min`=0, `mana_max`=0 WHERE `entry`=11983;
+-- Ebonroc
+UPDATE `creature_template` SET `dmg_min`=2746, `dmg_max`=3640, `armor`=4691 WHERE `entry`=14601;
+UPDATE `creature_template` SET `health_min`=999300, `health_max`=999300 WHERE `entry`=14601;
+-- Flamegor
+UPDATE `creature_template` SET `dmg_min`=2746, `dmg_max`=3640, `armor`=4691 WHERE `entry`=11981;
+UPDATE `creature_template` SET `health_min`=999300, `health_max`=999300, `mana_min`=0, `mana_max`=0 WHERE `entry`=11981;
+-- Chromaggus
+UPDATE `creature_template` SET `dmg_min`=3295, `dmg_max`=4368, `armor`=4691 WHERE `entry`=14020;
+UPDATE `creature_template` SET `health_min`=1832050, `health_max`=1832050 WHERE `entry`=14020;
+-- Nefarian
+UPDATE `creature_template` SET `dmg_min`=3844, `dmg_max`=5096, `armor`=4691 WHERE `entry`=11583;
+UPDATE `creature_template` SET `health_min`=2165150, `health_max`=2165150, `mana_min`=0, `mana_max`=0 WHERE `entry`=11583;
+
+-- Correct bounding radius for BWL creatures.
+UPDATE `creature_display_info_addon` SET `bounding_radius`=0.278 WHERE `display_id`=694;
+UPDATE `creature_display_info_addon` SET `bounding_radius`=0.7 WHERE `display_id`=4449;
+UPDATE `creature_display_info_addon` SET `bounding_radius`=0.214 WHERE `display_id`=7923;
+UPDATE `creature_display_info_addon` SET `bounding_radius`=0.278 WHERE `display_id`=9994;
+UPDATE `creature_display_info_addon` SET `bounding_radius`=0.4836 WHERE `display_id`=11967;
+UPDATE `creature_display_info_addon` SET `bounding_radius`=0.4836 WHERE `display_id`=11969;
+UPDATE `creature_display_info_addon` SET `bounding_radius`=0.2832 WHERE `display_id`=12021;
+UPDATE `creature_display_info_addon` SET `bounding_radius`=0.2832 WHERE `display_id`=12022;
+UPDATE `creature_display_info_addon` SET `bounding_radius`=0.4464 WHERE `display_id`=12024;
+UPDATE `creature_display_info_addon` SET `bounding_radius`=0.4464 WHERE `display_id`=12025;
+UPDATE `creature_display_info_addon` SET `bounding_radius`=2.625 WHERE `display_id`=12892;
+UPDATE `creature_display_info_addon` SET `bounding_radius`=3.44225 WHERE `display_id`=12893;
+UPDATE `creature_display_info_addon` SET `bounding_radius`=0.459 WHERE `display_id`=13991;
+UPDATE `creature_display_info_addon` SET `bounding_radius`=1.5 WHERE `display_id`=13992;
+UPDATE `creature_display_info_addon` SET `bounding_radius`=0.4464 WHERE `display_id`=14292;
+UPDATE `creature_display_info_addon` SET `bounding_radius`=0.4464 WHERE `display_id`=14293;
+UPDATE `creature_display_info_addon` SET `bounding_radius`=0.2832 WHERE `display_id`=14294;
+UPDATE `creature_display_info_addon` SET `bounding_radius`=0.2832 WHERE `display_id`=14295;
+UPDATE `creature_display_info_addon` SET `bounding_radius`=0.4836 WHERE `display_id`=14296;
+UPDATE `creature_display_info_addon` SET `bounding_radius`=0.3068 WHERE `display_id`=14300;
+UPDATE `creature_display_info_addon` SET `bounding_radius`=0.3068 WHERE `display_id`=14301;
+UPDATE `creature_display_info_addon` SET `bounding_radius`=0.459 WHERE `display_id`=14302;
+UPDATE `creature_display_info_addon` SET `bounding_radius`=0.459 WHERE `display_id`=14303;
+UPDATE `creature_display_info_addon` SET `bounding_radius`=0.459 WHERE `display_id`=14304;
+UPDATE `creature_display_info_addon` SET `bounding_radius`=1.5 WHERE `display_id`=14308;
+UPDATE `creature_display_info_addon` SET `bounding_radius`=1.05 WHERE `display_id`=14367;
+UPDATE `creature_display_info_addon` SET `bounding_radius`=0.5202 WHERE `display_id`=14498;
+UPDATE `creature_display_info_addon` SET `bounding_radius`=0.875 WHERE `display_id`=14544;
+UPDATE `creature_display_info_addon` SET `bounding_radius`=0.278 WHERE `display_id`=14720;
+
+-- Correct combat reach for BWL creatures.
+UPDATE `creature_display_info_addon` SET `combat_reach`=1.25 WHERE `display_id`=694;
+UPDATE `creature_display_info_addon` SET `combat_reach`=1.05 WHERE `display_id`=4449;
+UPDATE `creature_display_info_addon` SET `combat_reach`=1.5 WHERE `display_id`=7923;
+UPDATE `creature_display_info_addon` SET `combat_reach`=1.25 WHERE `display_id`=9994;
+UPDATE `creature_display_info_addon` SET `combat_reach`=1.95 WHERE `display_id`=11967;
+UPDATE `creature_display_info_addon` SET `combat_reach`=1.95 WHERE `display_id`=11969;
+UPDATE `creature_display_info_addon` SET `combat_reach`=1.8 WHERE `display_id`=12021;
+UPDATE `creature_display_info_addon` SET `combat_reach`=1.8 WHERE `display_id`=12022;
+UPDATE `creature_display_info_addon` SET `combat_reach`=1.8 WHERE `display_id`=12024;
+UPDATE `creature_display_info_addon` SET `combat_reach`=1.8 WHERE `display_id`=12025;
+UPDATE `creature_display_info_addon` SET `combat_reach`=2.625 WHERE `display_id`=12892;
+UPDATE `creature_display_info_addon` SET `combat_reach`=2.625 WHERE `display_id`=12893;
+UPDATE `creature_display_info_addon` SET `combat_reach`=2.25 WHERE `display_id`=13991;
+UPDATE `creature_display_info_addon` SET `combat_reach`=15 WHERE `display_id`=13992;
+UPDATE `creature_display_info_addon` SET `combat_reach`=1.8 WHERE `display_id`=14292;
+UPDATE `creature_display_info_addon` SET `combat_reach`=1.8 WHERE `display_id`=14293;
+UPDATE `creature_display_info_addon` SET `combat_reach`=1.8 WHERE `display_id`=14294;
+UPDATE `creature_display_info_addon` SET `combat_reach`=1.8 WHERE `display_id`=14295;
+UPDATE `creature_display_info_addon` SET `combat_reach`=1.95 WHERE `display_id`=14296;
+UPDATE `creature_display_info_addon` SET `combat_reach`=1.95 WHERE `display_id`=14300;
+UPDATE `creature_display_info_addon` SET `combat_reach`=1.95 WHERE `display_id`=14301;
+UPDATE `creature_display_info_addon` SET `combat_reach`=2.25 WHERE `display_id`=14302;
+UPDATE `creature_display_info_addon` SET `combat_reach`=2.25 WHERE `display_id`=14303;
+UPDATE `creature_display_info_addon` SET `combat_reach`=2.25 WHERE `display_id`=14304;
+UPDATE `creature_display_info_addon` SET `combat_reach`=5 WHERE `display_id`=14308;
+UPDATE `creature_display_info_addon` SET `combat_reach`=12 WHERE `display_id`=14367;
+UPDATE `creature_display_info_addon` SET `combat_reach`=2.55 WHERE `display_id`=14498;
+UPDATE `creature_display_info_addon` SET `combat_reach`=2.625 WHERE `display_id`=14544;
+UPDATE `creature_display_info_addon` SET `combat_reach`=1.25 WHERE `display_id`=14720;
+
+-- Correct stats for non-boss ZG creatures.
+
+-- 'Saltscale Warrior'
+UPDATE `creature_template` SET `armor`=1480 WHERE `entry`=871;
+-- 'Saltscale Forager'
+UPDATE `creature_template` SET `armor`=1480 WHERE `entry`=877;
+-- 'Saltscale Hunter'
+UPDATE `creature_template` SET `armor`=1480 WHERE `entry`=879;
+-- 'Hakkari Shadowcaster'
+UPDATE `creature_template` SET `dmg_min`=788, `dmg_max`=1043 WHERE `entry`=11338;
+-- 'Hakkari Shadow Hunter'
+UPDATE `creature_template` SET `dmg_min`=591, `dmg_max`=782 WHERE `entry`=11339;
+-- 'Hakkari Blood Priest'
+UPDATE `creature_template` SET `dmg_min`=591, `dmg_max`=782 WHERE `entry`=11340;
+-- 'Gurubashi Axe Thrower'
+UPDATE `creature_template` SET `dmg_min`=416, `dmg_max`=552 WHERE `entry`=11350;
+-- 'Gurubashi Headhunter'
+UPDATE `creature_template` SET `dmg_min`=520, `dmg_max`=689 WHERE `entry`=11351;
+-- 'Gurubashi Berserker'
+UPDATE `creature_template` SET `dmg_min`=1510, `dmg_max`=2004 WHERE `entry`=11352;
+-- 'Gurubashi Blood Drinker'
+UPDATE `creature_template` SET `dmg_min`=935, `dmg_max`=1241 WHERE `entry`=11353;
+-- 'Gurubashi Champion'
+UPDATE `creature_template` SET `dmg_min`=741, `dmg_max`=982 WHERE `entry`=11356;
+-- 'Soulflayer'
+UPDATE `creature_template` SET `dmg_min`=1270, `dmg_max`=1684 WHERE `entry`=11359;
+-- 'Bloodseeker Bat'
+UPDATE `creature_template` SET `level_min`=60, `dmg_min`=130, `dmg_max`=172, `health_min`=5341 WHERE `entry`=11368;
+-- 'Razzashi Serpent'
+UPDATE `creature_template` SET `dmg_min`=416, `dmg_max`=551 WHERE `entry`=11371;
+-- 'Razzashi Adder'
+UPDATE `creature_template` SET `dmg_min`=436, `dmg_max`=579 WHERE `entry`=11372;
+-- 'Hooktooth Frenzy'
+UPDATE `creature_template` SET `dmg_min`=249, `dmg_max`=331 WHERE `entry`=11374;
+-- 'Bloodscalp Speaker'
+UPDATE `creature_template` SET `dmg_min`=529, `dmg_max`=702 WHERE `entry`=11389 && `patch`=9;
+-- 'Skullsplitter Speaker'
+UPDATE `creature_template` SET `dmg_min`=529, `dmg_max`=702 WHERE `entry`=11390 && `patch`=9;
+-- 'Hakkari Priest'
+UPDATE `creature_template` SET `dmg_min`=484, `dmg_max`=641 WHERE `entry`=11830 && `patch`=5;
+-- 'Hakkari Witch Doctor'
+UPDATE `creature_template` SET `level_min`=60, `dmg_min`=581, `dmg_max`=769, `health_min`=24420, `mana_min`=12170 WHERE `entry`=11831;
+-- 'Gurubashi Bat Rider'
+UPDATE `creature_template` SET `dmg_min`=1058, `dmg_max`=1403 WHERE `entry`=14750;
+-- 'Razzashi Raptor'
+UPDATE `creature_template` SET `dmg_min`=831, `dmg_max`=1103 WHERE `entry`=14821;
+-- 'Zulian Crocolisk'
+UPDATE `creature_template` SET `dmg_min`=416, `dmg_max`=552 WHERE `entry`=15043;
+
+-- Correct stats for non-boss BWL creatures.
+
+-- Faulty War Golem
+UPDATE `creature_template` SET `dmg_min`=77, `dmg_max`=102 WHERE `entry`=8279;
+-- Blackwing Spellbinder
+UPDATE `creature_template` SET `dmg_min`=1506, `dmg_max`=1996 WHERE `entry`=12457;
+-- Blackwing Taskmaster
+UPDATE `creature_template` SET `dmg_min`=1506, `dmg_max`=1996 WHERE `entry`=12458;
+-- Blackwing Warlock
+UPDATE `creature_template` SET `dmg_min`=1478, `dmg_max`=1956 WHERE `entry`=12459;
+-- Death Talon Wyrmguard
+UPDATE `creature_template` SET `dmg_min`=2746, `dmg_max`=3640 WHERE `entry`=12460;
+-- Death Talon Overseer
+UPDATE `creature_template` SET `dmg_min`=2374, `dmg_max`=3149 WHERE `entry`=12461;
+-- Death Talon Flamescale
+UPDATE `creature_template` SET `dmg_min`=1942, `dmg_max`=2576 WHERE `entry`=12463;
+-- Death Talon Seether
+UPDATE `creature_template` SET `dmg_min`=2158, `dmg_max`=2862 WHERE `entry`=12464;
+-- Death Talon Wyrmkin
+UPDATE `creature_template` SET `dmg_min`=1774, `dmg_max`=2347 WHERE `entry`=12465;
+-- Death Talon Captain
+UPDATE `creature_template` SET `dmg_min`=3107, `dmg_max`=4122 WHERE `entry`=12467;
+-- Death Talon Hatcher
+UPDATE `creature_template` SET `dmg_min`=1971, `dmg_max`=2607 WHERE `entry`=12468;
+-- Grethok the Controller
+UPDATE `creature_template` SET `dmg_min`=1807, `dmg_max`=2395, `health_min`=64750, `health_max`=64750, `mana_min`=25680, `mana_max`=25680 WHERE `entry`=12557;
+-- Blackwing Technician
+UPDATE `creature_template` SET `dmg_min`=520, `dmg_max`=689 WHERE `entry`=13996;
+-- Corrupted Red Whelp
+UPDATE `creature_template` SET `dmg_min`=312, `dmg_max`=414 WHERE `entry`=14022;
+-- Corrupted Green Whelp
+UPDATE `creature_template` SET `dmg_min`=312, `dmg_max`=414 WHERE `entry`=14023;
+-- Corrupted Blue Whelp
+UPDATE `creature_template` SET `dmg_min`=312, `dmg_max`=414 WHERE `entry`=14024;
+-- Corrupted Bronze Whelp
+UPDATE `creature_template` SET `dmg_min`=312, `dmg_max`=414 WHERE `entry`=14025;
+-- Master Elemental Shaper Krixix
+UPDATE `creature_template` SET `dmg_min`=311, `dmg_max`=413 WHERE `entry`=14401;
+-- Blackwing Guardsman
+UPDATE `creature_template` SET `dmg_min`=1481, `dmg_max`=1964 WHERE `entry`=14456;
+
+-- Correct stats for non-boss MC creatures.
+
+-- Molten Giant
+UPDATE `creature_template` SET `dmg_min`=1618, `dmg_max`=2147, `fire_res`=93 WHERE `entry`=11658;
+-- Molten Destroyer
+UPDATE `creature_template` SET `dmg_min`=1757, `dmg_max`=2330, `fire_res`=93 WHERE `entry`=11659;
+-- Flamewaker
+UPDATE `creature_template` SET `dmg_min`=1305, `dmg_max`=1729, `fire_res`=93 WHERE `entry`=11661;
+-- Flamewaker Priest
+UPDATE `creature_template` SET `dmg_min`=1023, `dmg_max`=1352, `fire_res`=93 WHERE `entry`=11662;
+-- Flamewaker Healer
+UPDATE `creature_template` SET `dmg_min`=1161, `dmg_max`=1538, `armor`=3075, `fire_res`=15 WHERE `entry`=11663;
+-- Flamewaker Elite
+UPDATE `creature_template` SET `dmg_min`=1687, `dmg_max`=2235, `armor`=4421, `fire_res`=93, `nature_res`=-93, `frost_res`=-93, `shadow_res`=-93, `arcane_res`=-93 WHERE `entry`=11664;
+-- Lava Annihilator
+UPDATE `creature_template` SET `dmg_min`=1524, `dmg_max`=2061, `armor`=4391, `fire_res`=93, `nature_res`=93 WHERE `entry`=11665;
+-- Firewalker
+UPDATE `creature_template` SET `dmg_min`=1058, `dmg_max`=1431, `armor`=4391, `fire_res`=15 WHERE `entry`=11666;
+-- Flameguard
+UPDATE `creature_template` SET `dmg_min`=1058, `dmg_max`=1431, `armor`=4391, `fire_res`=15 WHERE `entry`=11667;
+-- Firelord
+UPDATE `creature_template` SET `dmg_min`=952, `dmg_max`=1288, `armor`=4391, `fire_res`=15 WHERE `entry`=11668;
+-- Flame Imp
+UPDATE `creature_template` SET `dmg_min`=317, `dmg_max`=429, `fire_res`=186 WHERE `entry`=11669;
+-- Core Hound
+UPDATE `creature_template` SET `dmg_min`=1058, `dmg_max`=1403, `fire_res`=93 WHERE `entry`=11671;
+-- Core Rager
+UPDATE `creature_template` SET `dmg_min`=1510, `dmg_max`=2004, `fire_res`=95 WHERE `entry`=11672;
+-- Ancient Core Hound
+UPDATE `creature_template` SET `dmg_min`=1726, `dmg_max`=2290, `fire_res`=93 WHERE `entry`=11673;
+-- Lava Elemental
+UPDATE `creature_template` SET `dmg_min`=1587, `dmg_max`=2147, `armor`=4391, `fire_res`=95, `nature_res`=95 WHERE `entry`=12076;
+-- Firesworn
+UPDATE `creature_template` SET `dmg_min`=1455, `dmg_max`=1930, `fire_res`=95, `nature_res`=95 WHERE `entry`=12099;
+-- Lava Reaver
+UPDATE `creature_template` SET `dmg_min`=1381, `dmg_max`=1864, `armor`=4691, `fire_res`=95, `nature_res`=95 WHERE `entry`=12100;
+-- Lava Surger
+UPDATE `creature_template` SET `dmg_min`=1376, `dmg_max`=1861, `armor`=4391, `fire_res`=93, `nature_res`=93 WHERE `entry`=12101;
+-- Flamewaker Protector
+UPDATE `creature_template` SET `dmg_min`=1305, `dmg_max`=1729 WHERE `entry`=12119;
+
+-- Correct stats for non-boss Ony creatures.
+
+-- Onyxian Warder
+UPDATE `creature_template` SET `dmg_min`=1039, `dmg_max`=1456, `fire_res`=250, `nature_res`=0 WHERE `entry`=12129;
+-- Onyxian Whelp
+UPDATE `creature_template` SET `dmg_min`=355, `dmg_max`=480, `fire_res`=171, `nature_res`=0 WHERE `entry`=11262;
+
