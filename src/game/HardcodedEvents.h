@@ -3,7 +3,6 @@
 
 #include "GameEventMgr.h"
 #include "ObjectMgr.h"
-#include "PlayerBotAI.h"
 #include <queue>
 
 /*

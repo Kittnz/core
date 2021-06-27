@@ -1,11 +1,5 @@
-/*
- *
- */
-
 #include "HardcodedEvents.h"
-#include "PlayerBotMgr.h"
 #include "World.h"
-#include "PlayerBotAI.h"
 #include "MapManager.h"
 #include "world/world_event_naxxramas.h"
 #include "world/world_event_wareffort.h"
@@ -2211,10 +2205,6 @@ void RacePlayer::IncrementCheckpoint(Player* pl)
 		LeaveRaceMode();
 	}
 }
-
-/*
-*
-*/
 
 void GameEventMgr::LoadHardcodedEvents(HardcodedEventList& eventList)
 {
