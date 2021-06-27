@@ -34,7 +34,7 @@ class FleeingMovementGenerator : public MovementGeneratorMedium< T, FleeingMovem
         void Reset(T &);
         bool Update(T &, const uint32 &);
 
-        void unitSpeedChanged() override { _forceUpdate = true; }
+        void UnitSpeedChanged() override { _forceUpdate = true; }
         MovementGeneratorType GetMovementGeneratorType() const override { return FLEEING_MOTION_TYPE; }
 
     protected:
