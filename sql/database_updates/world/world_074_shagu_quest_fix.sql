@@ -1,2 +1,1 @@
-delete from gameobject_template where entry = 2010701;
-replace into gameobject_template (entry, type, displayid, size, name, flags, script_name) values (2010700, 2, 24710, 1, 'Shagu\'s Shisha', 32, 'go_shagu_shisha');
+update gameobject_template set type = 2 where entry = 2010700;
