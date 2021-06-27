@@ -808,3 +808,5 @@ UPDATE `creature_template` SET `dmg_min`=1039, `dmg_max`=1456, `fire_res`=250, `
 -- Onyxian Whelp
 UPDATE `creature_template` SET `dmg_min`=355, `dmg_max`=480, `fire_res`=171, `nature_res`=0 WHERE `entry`=11262;
 
+-- Update Zealot Lor'Khan and Zealot Zath respawn time to match Thekal.
+UPDATE `creature` SET `spawntimesecsmin`=259200, `spawntimesecsmax`=259200 WHERE `id` IN (11347, 11348);
