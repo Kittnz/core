@@ -95,6 +95,15 @@ struct mob_deathknightUnderstudyAI : public ScriptedAI
         m_creature->CallForHelp(30.0f);
     }
 
+    void CastMindExhaustionAndResetThreat()
+    {
+        m_creature->CastSpell(m_creature, 29051, true);
+
+        // Reset understudy threat
+        // https://github.com/slowtorta/turtlewow-bug-tracker/issues/105
+        DoResetThreat();
+    }
+
     void UpdateAI(const uint32 diff) override
     {
         if (runAttack)
@@ -125,7 +134,7 @@ struct boss_razuviousAI : public ScriptedAI
     }
 
     instance_naxxramas* m_pInstance;
-    std::vector<ObjectGuid> summonedAdds;
+    std::vector<std::pair<ObjectGuid, bool>> summonedAdds;
     EventMap events;
 
     EventMap rpEvents;
@@ -164,16 +173,16 @@ struct boss_razuviousAI : public ScriptedAI
             return;
 
         // start by despawning any adds that may still be around
-        for (auto it = summonedAdds.begin(); it != summonedAdds.end();)
+        for (const auto& add : summonedAdds)
         {
-            if (Creature* cg = m_pInstance->GetCreature((*it)))
+            if (Creature* cg = m_pInstance->GetCreature(add.first))
             {
                 if (TemporarySummon* tmpSumm = static_cast<TemporarySummon*>(cg)) {
                     tmpSumm->UnSummon();
                 }
             }
-            it = summonedAdds.erase(it);
         }
+        summonedAdds.clear();
 
         // respawn all 4 adds
         for (int i = 0; i < 4; i++)
@@ -183,7 +192,7 @@ struct boss_razuviousAI : public ScriptedAI
             {
                 if (i == 1)
                     rpBuddy = pAdd->GetObjectGuid();
-                summonedAdds.push_back(pAdd->GetObjectGuid());
+                summonedAdds.push_back(std::make_pair(pAdd->GetObjectGuid(), false /*was mind controllerd*/));
             }
         }
     }
@@ -339,6 +348,25 @@ struct boss_razuviousAI : public ScriptedAI
                 break;
             }
         }
+
+        // Check if add was mind controlled 
+        // to cast mind exhaustion and reset threat when mind control ends
+        for (auto& add : summonedAdds)
+            if (Creature* dk = m_pInstance->GetCreature(add.first))
+            {
+                if (!dk->IsAlive())
+                    continue;
+
+                if (dk->IsCharmed())
+                    add.second = true; // was mind controlled
+                else
+                    if (add.second)
+                    {
+                        if (mob_deathknightUnderstudyAI* dkAI = dynamic_cast<mob_deathknightUnderstudyAI*>(dk->AI()))
+                            dkAI->CastMindExhaustionAndResetThreat();
+                        add.second = false;
+                    }
+            }
 
         DoMeleeAttackIfReady();
     }
