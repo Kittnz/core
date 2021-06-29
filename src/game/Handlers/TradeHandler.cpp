@@ -277,6 +277,12 @@ void WorldSession::HandleAcceptTradeOpcode(WorldPacket& recvPacket)
     // set before checks to properly undo at problems (it already set in to client)
     my_trade->SetAccepted(true);
 
+    if (_player->GetDistance3dToCenter(trader) > TRADE_DISTANCE)
+    {
+        SendTradeStatus(TRADE_STATUS_TARGET_TO_FAR);
+        return;
+    }
+
     // not accept case incorrect money amount
     if (my_trade->GetMoney() > _player->GetMoney())
     {
@@ -624,7 +630,7 @@ void WorldSession::HandleInitiateTradeOpcode(WorldPacket& recvPacket)
         return;
     }
 
-    if (!pOther->IsWithinDistInMap(_player, 10.0f, false))
+    if (_player->GetDistance3dToCenter(pOther) > TRADE_DISTANCE)
     {
         SendTradeStatus(TRADE_STATUS_TARGET_TO_FAR);
         return;

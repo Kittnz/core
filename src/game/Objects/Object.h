@@ -40,18 +40,21 @@
 #define CONTACT_DISTANCE 0.5f
 #define INTERACTION_DISTANCE 5.0f
 #define ATTACK_DISTANCE 5.0f
-#define MAX_VISIBILITY_DISTANCE     SIZE_OF_GRIDS      // max distance for visible object show, used to be 333 yards
-#define DEFAULT_VISIBILITY_DISTANCE 100.0f             // default visible distance on continents, used to be 90 yards
-#define DEFAULT_VISIBILITY_INSTANCE 170.0f             // default visible distance in instances, used to be 120 yards
-#define DEFAULT_VISIBILITY_BG       533.0f             // default visible distance in BG, used to be 180 yards
-#define DEFAULT_VISIBILITY_MODIFIER 0.0f               // default visibility modifier on some units that should be seen beyond normal visibility distances
-#define DEFAULT_CREATURE_SUMMON_LIMIT  100             // default maximum number of creatures an object can have summoned at once
+#define INSPECT_DISTANCE 10.0f
+#define TRADE_DISTANCE 11.11f
 
-#define VISIBILITY_DISTANCE_GIGANTIC    400.0f
-#define VISIBILITY_DISTANCE_LARGE       200.0f
-#define VISIBILITY_DISTANCE_NORMAL      100.0f
-#define VISIBILITY_DISTANCE_SMALL       50.0f
-#define VISIBILITY_DISTANCE_TINY        25.0f
+#define MAX_VISIBILITY_DISTANCE SIZE_OF_GRIDS // max distance for visible object show, used to be 333 yards
+#define DEFAULT_VISIBILITY_DISTANCE 100.0f // default visible distance on continents, used to be 90 yards
+#define DEFAULT_VISIBILITY_INSTANCE 170.0f // default visible distance in instances, used to be 120 yards
+#define DEFAULT_VISIBILITY_BG 533.0f // default visible distance in BG, used to be 180 yards
+#define DEFAULT_VISIBILITY_MODIFIER 0.0f // default visibility modifier on some units that should be seen beyond normal visibility distances
+#define DEFAULT_CREATURE_SUMMON_LIMIT 100 // default maximum number of creatures an object can have summoned at once
+
+#define VISIBILITY_DISTANCE_GIGANTIC 400.0f
+#define VISIBILITY_DISTANCE_LARGE 200.0f
+#define VISIBILITY_DISTANCE_NORMAL 100.0f
+#define VISIBILITY_DISTANCE_SMALL 50.0f
+#define VISIBILITY_DISTANCE_TINY 25.0f
 
 #define DEFAULT_WORLD_OBJECT_SIZE 0.388999998569489f // currently used (correctly?) for any non Unit world objects. This is actually the bounding_radius, like player/creature from creature_model_data
 #define DEFAULT_OBJECT_SCALE 1.0f // player/item scale as default, npc/go from database, pets from dbc
