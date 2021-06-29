@@ -651,7 +651,7 @@ void Creature::Update(uint32 update_diff, uint32 diff)
 
                 CreatureInfo const *cinfo = GetCreatureInfo();
 
-                SelectLevel(cinfo);
+                SelectLevel(cinfo, dbSpawnData ? dbSpawnData->health_percent : 100.0f, dbSpawnData ? dbSpawnData->mana_percent : 100.0f);
                 SetUInt32Value(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_NONE);
                 if (IsDeadByDefault())
                 {
@@ -1898,7 +1898,9 @@ void Creature::SetDeathState(DeathState s)
 
         CreatureInfo const *cinfo = GetCreatureInfo();
 
-        SetHealth(GetMaxHealth());
+        if (!GetHealth())
+            SetHealth(GetMaxHealth());
+
         SetLootRecipient(nullptr);
 
         if (GetTemporaryFactionFlags() & TEMPFACTION_RESTORE_RESPAWN)
@@ -3021,7 +3023,7 @@ void Creature::RemoveAurasAtReset()
 
     for (SpellAuraHolderMap::iterator iter = m_spellAuraHolders.begin(); iter != m_spellAuraHolders.end();)
     {
-        if (!(iter->second->GetCasterGuid().IsPlayer() && !iter->second->IsPermanent() && iter->second->IsPositive()))
+        if (!(iter->second->GetCasterGuid().IsPlayer() && !iter->second->IsPermanent() && iter->second->IsPositive()) && iter->second->GetSpellProto()->IsAuraRemovedOnEvade())
         {
             RemoveSpellAuraHolder(iter->second, AURA_REMOVE_BY_DEFAULT);
             iter = m_spellAuraHolders.begin();
@@ -3392,7 +3394,7 @@ SpellCastResult Creature::TryToCast(Unit* pTarget, const SpellEntry* pSpellInfo,
                 return SPELL_FAILED_UNKNOWN;
 
             // No point in casting if target is immune.
-            if (pTarget->IsImmuneToDamage(pSpellInfo->GetSpellSchoolMask(), pSpellInfo))
+            if (!pSpellInfo->IsPositiveSpell() && pTarget->IsImmuneToDamage(pSpellInfo->GetSpellSchoolMask(), pSpellInfo))
                 return SPELL_FAILED_IMMUNE;
         }
 

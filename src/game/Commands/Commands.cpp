@@ -3843,14 +3843,55 @@ bool ChatHandler::HandleInstanceListBindsCommand(char* /*args*/)
     return true;
 }
 
+void ChatHandler::HandleInstanceUnbindHelper(Player* player, bool got_map, uint32 mapid)
+{
+    if (!player || !player->IsInWorld())
+        return;
+
+    uint32 counter = 0;
+
+    Player::BoundInstancesMap &binds = player->GetBoundInstances();
+    for (Player::BoundInstancesMap::iterator itr = binds.begin(); itr != binds.end();)
+    {
+        if (got_map && mapid != itr->first)
+        {
+            ++itr;
+            continue;
+        }
+
+        if (itr->first != player->GetMapId())
+        {
+            DungeonPersistentState *save = itr->second.state;
+            std::string timeleft = secsToTimeString(save->GetResetTime() - time(nullptr), true);
+
+            if (MapEntry const* entry = sMapStorage.LookupEntry<MapEntry>(itr->first))
+            {
+                ChatHandler(player).PSendSysMessage("unbinding map: %d (%s) inst: %d perm: %s canReset: %s TTR: %s",
+                    itr->first, entry->name, save->GetInstanceId(), itr->second.perm ? "yes" : "no",
+                    save->CanReset() ? "yes" : "no", timeleft.c_str());
+            }
+            else
+                ChatHandler(player).PSendSysMessage("bound for a nonexistent map %u", itr->first);
+
+            player->UnbindInstance(itr);
+            counter++;
+        }
+        else
+            ++itr;
+    }
+
+    ChatHandler(player).PSendSysMessage("instances unbound: %d", counter);
+}
+
 bool ChatHandler::HandleInstanceUnbindCommand(char* args)
 {
     if (!*args)
         return false;
 
     Player* player = GetSelectedPlayer();
+    if (!player || GetAccessLevel() < SEC_ADMINISTRATOR)
+        player = m_session->GetPlayer();
 
-    uint32 counter = 0;
     uint32 mapid = 0;
     bool got_map = false;
 
@@ -3863,35 +3904,55 @@ bool ChatHandler::HandleInstanceUnbindCommand(char* args)
         mapid = atoi(args);
     }
 
-    Player::BoundInstancesMap &binds = player->GetBoundInstances();
-    for (Player::BoundInstancesMap::iterator itr = binds.begin(); itr != binds.end();)
+    HandleInstanceUnbindHelper(player, got_map, mapid);
+
+    return true;
+}
+
+bool ChatHandler::HandleInstanceGroupUnbindCommand(char* args)
+{
+    if (!*args)
+        return false;
+
+    Player* player = player = GetSelectedPlayer();
+    if (!player || player->InBattleGround())
+        return false;
+
+    uint32 mapid = 0;
+    bool got_map = false;
+
+    if (strncmp(args, "all", strlen(args)) != 0)
     {
-        if (got_map && mapid != itr->first)
-        {
-            ++itr;
-            continue;
-        }
-        if (itr->first != player->GetMapId())
-        {
-            DungeonPersistentState *save = itr->second.state;
-            std::string timeleft = secsToTimeString(save->GetResetTime() - time(nullptr), true);
+        if (!isNumeric(args[0]))
+            return false;
 
-            if (const MapEntry* entry = sMapStorage.LookupEntry<MapEntry>(itr->first))
-            {
-                PSendSysMessage("unbinding map: %d (%s) inst: %d perm: %s canReset: %s TTR: %s",
-                                itr->first, entry->name, save->GetInstanceId(), itr->second.perm ? "yes" : "no",
-                                save->CanReset() ? "yes" : "no", timeleft.c_str());
-            }
-            else
-                PSendSysMessage("bound for a nonexistent map %u", itr->first);
-            player->UnbindInstance(itr);
-            counter++;
-        }
-        else
-            ++itr;
+        got_map = true;
+        mapid = atoi(args);
     }
-    PSendSysMessage("instances unbound: %d", counter);
 
+    Group* pGroup = player->GetGroup();
+    if (!pGroup)
+    {
+        std::string nameLink = GetNameLink(player);
+        PSendSysMessage(LANG_NOT_IN_GROUP, nameLink.c_str());
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    for (GroupReference* itr = pGroup->GetFirstMember(); itr != nullptr; itr = itr->next())
+    {
+        if (Player* pMember = itr->getSource())
+        {
+            if (!pMember->IsInWorld())
+                continue;
+
+            HandleInstanceUnbindHelper(pMember, got_map, mapid);
+        }
+    }
+
+    pGroup->Disband();
+
+    SendSysMessage("Group unbound. Disbanding.");
     return true;
 }
 
@@ -4532,7 +4593,7 @@ bool ChatHandler::HandleUnstuckCommand(char* /*args*/)
     }
     else
     {
-        pPlayer->AddAura(15007); // Add Resurrection Sickness
+        pPlayer->AddAura(SPELL_ID_PASSIVE_RESURRECTION_SICKNESS); // Add Resurrection Sickness
         pPlayer->AddSpellCooldown(20939, 0, time(nullptr) + 3600000); // Trigger 1 Hour Cooldown
         // Get nearest graveyard.
         WorldSafeLocsEntry const* ClosestGrave = sObjectMgr.GetClosestGraveYard(pPlayer->GetPositionX(), pPlayer->GetPositionY(), pPlayer->GetPositionZ(), pPlayer->GetMapId(), pPlayer->GetTeam());

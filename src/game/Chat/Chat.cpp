@@ -224,6 +224,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "continents",     SEC_ADMINISTRATOR,    true,  &ChatHandler::HandleInstanceContinentsCommand,  "", nullptr },
         { "listbinds",      SEC_ADMINISTRATOR,     false, &ChatHandler::HandleInstanceListBindsCommand,   "", nullptr },
         { "unbind",         SEC_ADMINISTRATOR,     false, &ChatHandler::HandleInstanceUnbindCommand,      "", nullptr },
+        { "groupunbind",    SEC_ADMINISTRATOR, false, &ChatHandler::HandleInstanceGroupUnbindCommand, "", nullptr },
         { "stats",          SEC_ADMINISTRATOR,    true,  &ChatHandler::HandleInstanceStatsCommand,       "", nullptr },
         { "perfinfos",      SEC_ADMINISTRATOR,    false, &ChatHandler::HandleInstancePerfInfosCommand,   "", nullptr },
         { nullptr,          0,                  false, nullptr,                                        "", nullptr }
@@ -413,7 +414,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "idlerestart",    SEC_ADMINISTRATOR,  true,  nullptr,                                      "", serverIdleRestartCommandTable },
         { "idleshutdown",   SEC_ADMINISTRATOR,  true,  nullptr,                                      "", serverIdleShutdownCommandTable },
         { "info",           SEC_PLAYER,         true,  &ChatHandler::HandleServerInfoCommand,        "", nullptr },
-        { "resetallraid",   SEC_ADMINISTRATOR,  true,  &ChatHandler::HandleServerResetAllRaidCommand, "", nullptr },
+        { "resetallraids",  SEC_ADMINISTRATOR,  true,  &ChatHandler::HandleServerResetAllRaidCommand, "", nullptr },
         { "restart",        SEC_ADMINISTRATOR,  true,  nullptr,                                       "", serverRestartCommandTable },
         { "shutdown",       SEC_ADMINISTRATOR,  true,  nullptr,                                       "", serverShutdownCommandTable },
         { nullptr,          0,                  false, nullptr,                                       "", nullptr }

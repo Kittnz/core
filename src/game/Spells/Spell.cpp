@@ -6074,14 +6074,15 @@ if (m_caster->IsPlayer() && !(m_spellInfo->Attributes & SPELL_ATTR_PASSIVE)
         {
             case SPELL_EFFECT_DUMMY:
             {
-                if (m_spellInfo->SpellIconID == 156)   // Holy Shock
+                if (m_spellInfo->SpellIconID == 156) // Holy Shock
                 {
                     // spell different for friends and enemies
                     // hart version required facing
-                    if (m_targets.getUnitTarget() && !m_caster->IsFriendlyTo(m_targets.getUnitTarget()) && !m_caster->HasInArc(M_PI_F, m_targets.getUnitTarget()))
+                    if (m_targets.getUnitTarget() && !m_caster->IsFriendlyTo(m_targets.getUnitTarget()) &&
+                       (m_caster->GetDistance2dToCenter(m_targets.getUnitTarget()) > NO_FACING_CHECKS_DISTANCE) && !m_caster->HasInArc(M_PI_F, m_targets.getUnitTarget()))
                         return SPELL_FAILED_UNIT_NOT_INFRONT;
                 }
-                else if (m_spellInfo->Id == 13278)      // Gnomish Death Ray
+                else if (m_spellInfo->Id == 13278) // Gnomish Death Ray
                 {
                     if (!m_targets.getUnitTarget() || m_caster->IsFriendlyTo(m_targets.getUnitTarget()))
                         return SPELL_FAILED_BAD_TARGETS;
@@ -7230,7 +7231,7 @@ SpellCastResult Spell::CheckRange(bool strict)
                     return SPELL_CAST_OK;
 
                 // Requires target forward for these spells
-                if (!m_caster->HasInArc(M_PI_F, target))
+                if ((m_caster->GetDistance2dToCenter(target) > NO_FACING_CHECKS_DISTANCE) && !m_caster->HasInArc(M_PI_F, target))
                     return SPELL_FAILED_UNIT_NOT_INFRONT;
 
                 float range_mod = 1.0f;
@@ -7281,10 +7282,12 @@ SpellCastResult Spell::CheckRange(bool strict)
 
         if (dist > max_range)
             return SPELL_FAILED_OUT_OF_RANGE;
+
         if (min_range && dist < min_range)
             return SPELL_FAILED_TOO_CLOSE;
-        if (m_caster->IsPlayer() &&
-                (m_spellInfo->Custom & SPELL_CUSTOM_FACE_TARGET) && !m_caster->HasInArc(M_PI_F, target))
+
+        if (m_caster->IsPlayer() && (m_spellInfo->Custom & SPELL_CUSTOM_FACE_TARGET) &&
+           (m_caster->GetDistance2dToCenter(target) > NO_FACING_CHECKS_DISTANCE) && !m_caster->HasInArc(M_PI_F, target))
             return SPELL_FAILED_UNIT_NOT_INFRONT;
     }
 
