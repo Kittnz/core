@@ -474,7 +474,7 @@ bool ItemUseSpell_item_illusion(Player* pPlayer, Item* pItem, const SpellCastTar
     {
     case 51246: displayid = 15458; break; // Sarah Sadwhistle 
     case 51247: displayid = 10008; break; // Chromie
-    case 51055: displayid = 9591;  break; // Tree Form
+    case 51055: displayid = 18356;  break; // Tree Form
     case 51065: displayid = 4629;  break; // Shadow
     case 51253: displayid = 6746;  break; // Furbolg
     case 51209: displayid = 2176;  break; // Rat
