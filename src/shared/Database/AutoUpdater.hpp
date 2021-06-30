@@ -1,4 +1,3 @@
-#ifdef _MSC_VER
 #pragma once
 #include <filesystem>
 namespace fs = std::filesystem;
@@ -61,4 +60,3 @@ namespace DBUpdater
 }
 
 #define sAutoUpdater AutoUpdater::Instance()
-#endif
