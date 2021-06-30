@@ -1,4 +1,3 @@
-#ifdef _MSC_VER
 #include "AutoUpdater.hpp"
 #include "DatabaseEnv.h"
 #include "Config/Config.h"
@@ -209,4 +208,3 @@ namespace DBUpdater
 
     }
 }
-#endif

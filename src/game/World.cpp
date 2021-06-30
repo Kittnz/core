@@ -1242,10 +1242,10 @@ void World::SetInitialWorldSettings()
         exit(1);                                            // Error message displayed in function already
     }
 
-#ifdef  _MSC_VER
+
     using namespace DBUpdater;
     sAutoUpdater->ProcessUpdates();
-#endif
+
 
     ///- Loading shop tables
     sObjectMgr.LoadShop();
