@@ -160,17 +160,20 @@ namespace DBUpdater
 
     bool AutoUpdater::CalculateFileHash(const std::string& fileName, std::string& hexResult, std::optional<std::reference_wrapper<std::vector<uint8>>> fileData) const
     {
-        std::basic_ifstream<uint8, std::char_traits<uint8>> fileStream{ fileName, std::ios::binary };
+        std::basic_ifstream<char, std::char_traits<char>> fileStream{ fileName, std::ios::binary };
 
         //char_traits isn't specialized for uint8_t for some reason so get_faucet std::locale won't work if we don't imbue first.
-        fileStream.imbue(std::locale{ fileStream.getloc(), new std::codecvt<uint8, char, std::mbstate_t> });
+       // fileStream.imbue(std::locale{ fileStream.getloc(), new std::codecvt<uint8, char, std::mbstate_t> });
+
         if (!fileStream)
         {
             sLog.outError("[DB Auto-Updater] Can\'t open migration file %s.", fileName.c_str());
             return false;
         }
         
-        std::vector<uint8> binData{ std::istreambuf_iterator<uint8>(fileStream), std::istreambuf_iterator<uint8>() };
+        std::vector<char> binCharData{ std::istreambuf_iterator<char>(fileStream), std::istreambuf_iterator<char>() };
+        std::vector<uint8> binData{ binCharData.begin(), binCharData.end() };
+
         Sha1Hash hash;
         hash.Initialize();
         if (binData.size() > 0)
