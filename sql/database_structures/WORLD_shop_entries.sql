@@ -1,4 +1,4 @@
-replace into broadcast_text (id, maletext) values
+replace into broadcast_text (entry, male_text) values
 ('90000', 'Welcome to our shop! We offer exotic garments, large bags, mysterious engineering devices and much more to improve your experience on our server.');
 
 drop table if exists shop_categories;
