@@ -28,21 +28,22 @@ update item_template set spellid_1 = 18074 where entry = 70062;
 -- Reputation Plate Belt: 14 Strength => 11 Strength, 10 Agility => 8 Agility, 13 Stamina => 16 Stamina, 380 Armor => 400 Armor
 -- Reputation Plate Gloves: 15 Strength => 12 Strength, 10 Agility => 8 Agility, 10 Stamina => 15 Stamina
 
-update item_template set stat_value2 = 16, spellid_1 = 9140 where entry = 80619;
-update item_template set stat_value2 = 16, spellid_1 = 9140 where entry = 80519;
-update item_template set stat_value1 = 14, stat_value2 = 16, spellid_1 = 9138, armor = 145 where entry = 80618;
-update item_template set stat_value1 = 14, stat_value2 = 16, spellid_1 = 9138, armor = 145 where entry = 80518;
-update item_template set stat_value1 = 15, stat_value2 = 22, spellid_1 = 9331, armor = 189 where entry = 80621;
-update item_template set stat_value1 = 15, stat_value2 = 22, spellid_1 = 9331, armor = 189 where entry = 80521;
-update item_template set stat_value1 = 20, stat_value2 = 15 where entry = 80617;
-update item_template set stat_value1 = 20, stat_value2 = 15 where entry = 80517;
-update item_template set stat_value2 = 18, spellid_1 = 9331 where entry = 80620;
-update item_template set stat_value2 = 18, spellid_1 = 9331 where entry = 80520;
-update item_template set stat_value1 = 15, stat_value2 = 10, stat_value3 = 18, armor = 489 where entry = 80608;
-update item_template set stat_value1 = 15, stat_value2 = 10, stat_value3 = 18, armor = 489 where entry = 80508;
-update item_template set stat_value1 = 11, stat_value2 = 8, stat_value3 = 16, armor = 400 where entry = 80609;
-update item_template set stat_value1 = 11, stat_value2 = 8, stat_value3 = 16, armor = 400 where entry = 80509;
-update item_template set stat_value1 = 12, stat_value2 = 8, stat_value3 = 15 where entry = 80610;
-update item_template set stat_value1 = 12, stat_value2 = 8, stat_value3 = 15 where entry = 80510;
+-- update item_template set stat_value2 = 16, spellid_1 = 9140 where entry = 80619;
+-- update item_template set stat_value2 = 16, spellid_1 = 9140 where entry = 80519;
+-- update item_template set stat_value1 = 14, stat_value2 = 16, spellid_1 = 9138, armor = 145 where entry = 80618;
+-- update item_template set stat_value1 = 14, stat_value2 = 16, spellid_1 = 9138, armor = 145 where entry = 80518;
+-- update item_template set stat_value1 = 15, stat_value2 = 22, spellid_1 = 9331, armor = 189 where entry = 80621;
+-- update item_template set stat_value1 = 15, stat_value2 = 22, spellid_1 = 9331, armor = 189 where entry = 80521;
+-- update item_template set stat_value1 = 20, stat_value2 = 15 where entry = 80617;
+-- update item_template set stat_value1 = 20, stat_value2 = 15 where entry = 80517;
+-- update item_template set stat_value2 = 18, spellid_1 = 9331 where entry = 80620;
+-- update item_template set stat_value2 = 18, spellid_1 = 9331 where entry = 80520;
+-- update item_template set stat_value1 = 15, stat_value2 = 10, stat_value3 = 18, armor = 489 where entry = 80608;
+-- update item_template set stat_value1 = 15, stat_value2 = 10, stat_value3 = 18, armor = 489 where entry = 80508;
+-- update item_template set stat_value1 = 11, stat_value2 = 8, stat_value3 = 16, armor = 400 where entry = 80609;
+-- update item_template set stat_value1 = 11, stat_value2 = 8, stat_value3 = 16, armor = 400 where entry = 80509;
+-- update item_template set stat_value1 = 12, stat_value2 = 8, stat_value3 = 15 where entry = 80610;
+-- update item_template set stat_value1 = 12, stat_value2 = 8, stat_value3 = 15 where entry = 80510;
+
 -- Scale up Lake Toad.
 update creature_template set scale = 3 where entry = 80965;
