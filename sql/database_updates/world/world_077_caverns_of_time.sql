@@ -87,3 +87,10 @@ replace into npc_vendor values
 (65013, 3857, 0, 0, 0, 0),
 (65013, 5956, 0, 0, 0, 0),
 (65013, 18567, 0, 0, 0, 0);
+
+-- Misc. environmental updates:
+delete from gameobject where guid = 4001269;
+delete from gameobject where guid = 4001268;
+delete from gameobject where guid = 3999109;
+delete from gameobject where guid = 3999112;
+delete from gameobject where guid = 3999113;
