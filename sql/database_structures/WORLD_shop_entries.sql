@@ -26,7 +26,7 @@ replace into shop_categories values
 (5,  'Gameplay: Glyphs'),
 (6,  'Riding Mounts: Birds'),
 (7,  'Riding Mounts: Sabers'),
-(8,  'Riding Mounts: Horses'),
+(8,  'Riding Mounts: Horses & Rams'),
 (9,  'Riding Mounts: Kodo & Wolves'),
 (10, 'Riding Mounts: Raptors & Bears'),
 (11, 'Riding Mounts: Miscellaneous'),
