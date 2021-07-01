@@ -22950,7 +22950,7 @@ bool Player::SaveTalentSpec(int primaryOrSecondary)
 bool Player::ActivateTalentSpec(int primaryOrSecondary)
 {
 
-	ResetTalents(true);
+	ResetTalents(false);
 
 	QueryResult *talents = CharacterDatabase.PQuery("SELECT spell "
 		"FROM character_spell_dual_spec WHERE guid = '%u' and spec = '%i'", GetGUIDLow(), primaryOrSecondary);
