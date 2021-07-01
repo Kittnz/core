@@ -1,0 +1,2 @@
+-- Shadowhorn Stag should be blue quality:
+update item_template set quality = 3, description = 'A powerful, beautiful being.', required_level = 0, required_skill = 0, required_skill_rank = 0 where entry = 50406;
