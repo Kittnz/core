@@ -10,6 +10,7 @@
 #include <memory>
 #include <iterator>
 #include <istream>
+#include <locale>
 
 using namespace std::filesystem;
 
@@ -160,6 +161,9 @@ namespace DBUpdater
     bool AutoUpdater::CalculateFileHash(const std::string& fileName, std::string& hexResult, std::optional<std::reference_wrapper<std::vector<uint8>>> fileData) const
     {
         std::basic_ifstream<uint8, std::char_traits<uint8>> fileStream{ fileName, std::ios::binary };
+
+        //char_traits isn't specialized for uint8_t for some reason so get_faucet std::locale won't work if we don't imbue first.
+        fileStream.imbue(std::locale{ fileStream.getloc(), new std::codecvt<uint8, char, std::mbstate_t> });
         if (!fileStream)
         {
             sLog.outError("[DB Auto-Updater] Can\'t open migration file %s.", fileName.c_str());
