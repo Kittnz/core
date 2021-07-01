@@ -1467,7 +1467,7 @@ bool ItemUseSpell_item_mage_refreshment_table(Player* pPlayer, Item* pItem, cons
 
 bool ItemUseSpell_item_warlock_soulwell_ritual(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
-	
+
 	SpellCastResult castResult = SPELL_CAST_OK;
 
 	if (pPlayer->IsMoving() || pPlayer->IsBeingTeleported())
@@ -2155,8 +2155,6 @@ bool GOSelect_go_brainwashing_device(Player* pPlayer, GameObject* pGo, uint32 se
     {
         pPlayer->ResetTalents();
         pPlayer->AddAura(27880);
-        pGo->Despawn();
-        pGo->UpdateObjectVisibility();
     }
 	else if (action == GOSSIP_ACTION_INFO_DEF + 2)
 		pPlayer->ActivateTalentSpec(1);
@@ -5330,6 +5328,61 @@ bool ItemUseSpell_item_gnome_enlargement(Player* pPlayer, Item* pItem, const Spe
         pPlayer->SetDisplayId(12349);
         return true;
     }
+
+}
+bool ItemUseSpell_item_item_thunder_ale_drink(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+{
+    // NOT USED YET
+    return false;
+    //SetDrunkValue(drunk);
+    //if (value >= 23000)
+        //return DRUNKEN_SMASHED;
+    //if (value >= 12800)
+        //return DRUNKEN_DRUNK;
+    //if (value & 0xFFFE)
+        //return DRUNKEN_TIPSY;
+    //return DRUNKEN_SOBER;
+
+    pPlayer->SetDrunkValue(10000);
+
+    DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer]() {
+        player->AddAura(17743);
+        player->SetDrunkValue(23000);
+    });
+
+    DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [player = pPlayer]() { 
+        player->TeleportTo(0, -1852.873535f, -4091.622314f, 9.815960f, 4.762068f);
+    });
+
+    DoAfterTime(pPlayer, 10 * IN_MILLISECONDS, [player = pPlayer]() {
+        player->RemoveAurasDueToSpell(17743);
+        player->CastSpell(player, 12533, true);
+        player->SetDrunkValue(10000);
+
+        std::list<Creature *> sleeper;
+        player->GetCreatureListWithEntryInGrid(sleeper, 12998, 10.0f);
+
+        for (const auto& bedDude : sleeper)
+        {
+            bedDude->SetStandState(UNIT_STAND_STATE_SIT);
+            bedDude->PMonsterSay("Hey you, you're finally awake. You just tried the thunder ale reserve right? Blacked out and ended up here same as us and that dwarf over there. We're all brothers and sisters with brews now.");
+        }
+
+    });
+
+    DoAfterTime(pPlayer, 20 * IN_MILLISECONDS, [player = pPlayer]() {
+
+        player->SetDrunkValue(256);
+
+        std::list<Creature *> sleeper;
+        player->GetCreatureListWithEntryInGrid(sleeper, 12998, 15.0f);
+
+        for (const auto& bedDude : sleeper)
+            bedDude->SetStandState(UNIT_STAND_STATE_SLEEP);
+
+    });
+
+    return true;
 }
 
 bool GOHello_go_shagu_shisha(Player* pPlayer, GameObject* pGo)
@@ -5936,4 +5989,11 @@ void AddSC_tw_random()
 	newscript->Name = "item_warlock_soulwell_ritual";
 	newscript->pItemUseSpell = &ItemUseSpell_item_warlock_soulwell_ritual;
 	newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "item_thunder_ale_drink";
+    newscript->pItemUseSpell = &ItemUseSpell_item_item_thunder_ale_drink;
+    newscript->RegisterSelf();
+
+    
 }
