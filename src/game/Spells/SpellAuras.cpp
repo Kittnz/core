@@ -2282,7 +2282,11 @@ std::pair<unsigned int, float> GetShapeshiftDisplayInfo(ShapeshiftForm form, Uni
         mod = 0.80f;
         break;
     case FORM_TRAVEL:
-        display_id = (target->IsPlayer() && target->ToPlayer()->HasItemCount(51056, 1)) ? 1991 : 632;
+        // Glyph of the Stag, Alliance glyph makes you a black Stag and the Horde one a brown Stag.
+        if (target->ToPlayer()->HasItemCount(51056, 1))       
+            display_id = (Player::TeamForRace(target->GetRace()) == ALLIANCE) ? 1992 : 2161;
+        else 
+            display_id = 632;
         mod = 0.80f;
         break;
     case FORM_AQUA:
