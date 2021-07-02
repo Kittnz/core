@@ -23,6 +23,7 @@ update creature_template set name = 'Dronormu', subname = 'Keepers of Time Quart
 -- Set correct faction and other mics. stuff:
 update creature_template set faction = 910 where entry between 65000 and 65015;
 update creature_template set scale = 0.4 where entry = 65004;
+update creature_template set script_name = 'npc_custodian_of_time', npc_flags = 1 where entry in (65000, 65015);
 
 -- General Goods 
 replace into npc_vendor values 

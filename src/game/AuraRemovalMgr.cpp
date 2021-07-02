@@ -31,7 +31,7 @@ void AuraRemovalManager::LoadFromDB()
     QueryResult* result = WorldDatabase.Query("SELECT map_id, spell_id, enabled, flags, comment FROM instance_buff_removal");
     if (!result)
     {
-        sLog.outString(">> Table instance_buff_removal is empty.");
+        return;
     }
     else
     {

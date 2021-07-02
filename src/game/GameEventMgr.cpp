@@ -167,9 +167,7 @@ void GameEventMgr::LoadFromDB()
     {
         QueryResult *result = WorldDatabase.Query("SELECT MAX(entry) FROM game_event");
         if (!result)
-        {
-            sLog.outString(">> Table game_event is empty.");
-            
+        {           
             return;
         }
 
