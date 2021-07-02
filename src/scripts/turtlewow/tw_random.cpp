@@ -5429,9 +5429,69 @@ bool GossipSelect_npc_custodian_of_time(Player* pPlayer, Creature* pCreature, ui
     return true;
 }
 
+bool QuestRewarded_npc_malanys_cloudpiercer(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver)
+        return false;
+
+    if (!pPlayer)
+        return false;
+
+    if (pQuest->GetQuestId() == 40010) // Antler’s Guidance
+    {
+        pQuestGiver->SetDisplayId(12034); // Nigth Elf
+        pQuestGiver->CastSpell(pQuestGiver, 21178, false);
+        return true;
+    }
+
+    if (pQuest->GetQuestId() == 40012) // The White Stag and the Moon (A)
+    {
+        pQuestGiver->SetDisplayId(1991); // Deer(A)
+        pQuestGiver->MonsterSayToPlayer("May Elune bless you with a firm step, $N!", pPlayer);
+        return true;
+    }
+
+    return false;
+}
+
+bool QuestRewarded_npc_ilyara_skyvault(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver)
+        return false;
+
+    if (!pPlayer)
+        return false;
+
+    if (pQuest->GetQuestId() == 40011) // Antler’s Guidance
+    {
+        pQuestGiver->SetDisplayId(2121); // Tauren
+        pQuestGiver->HandleEmote(EMOTE_ONESHOT_WAVE);
+        return true;
+    }
+
+    if (pQuest->GetQuestId() == 40013) // The White Stag and the Moon (H)
+    {
+        pQuestGiver->SetDisplayId(2161); // Deer(H)
+        pQuestGiver->MonsterSayToPlayer("Let the Earth Mother be your foothold, $N!", pPlayer);
+        return true;
+    }
+
+    return false;
+}
+
 void AddSC_tw_random()
 {
     Script *newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_ilyara_skyvault";
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_ilyara_skyvault;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_malanys_cloudpiercer";
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_malanys_cloudpiercer;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_custodian_of_time";
