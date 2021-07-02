@@ -5399,9 +5399,45 @@ bool GOHello_go_shagu_shisha(Player* pPlayer, GameObject* pGo)
     return false;
 }
 
+bool GossipHello_npc_custodian_of_time(Player* pPlayer, Creature* pCreature)
+{
+    switch (pCreature->GetEntry())
+    {
+    case 65000: pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I wish to enter Caverns of Time.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1); break;
+    case 65015: pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I am leaving.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2); break;
+    }
+    
+    pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+    pPlayer->SEND_GOSSIP_MENU(90371, pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_custodian_of_time(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pCreature->MonsterSayToPlayer("I would wish you luck, if such a thing existed.");
+        pPlayer->TeleportTo(1, -8170.67F, -4758.11F, 33.33F, 4.8F);
+    }
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
+    {
+        pCreature->MonsterSayToPlayer("Farewell.");
+        pPlayer->TeleportTo(1, -8174.74F, -4734.51F, 33.25F, 1.8F);
+    }
+
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
 void AddSC_tw_random()
 {
     Script *newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_custodian_of_time";
+    newscript->pGossipHello = &GossipHello_npc_custodian_of_time;
+    newscript->pGossipSelect = &GossipSelect_npc_custodian_of_time;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "go_shagu_shisha";
