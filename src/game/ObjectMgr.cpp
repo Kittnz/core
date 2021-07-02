@@ -5226,8 +5226,6 @@ void ObjectMgr::LoadPetCreateSpells()
 void ObjectMgr::LoadPetSpellData()
 {
     sCreatureSpellDataStorage.LoadProgressive(SUPPORTED_CLIENT_BUILD, "build");
-    sLog.outString(">> Loaded %u pet spell lists", sCreatureSpellDataStorage.GetRecordCount());
-    sLog.outString();
 }
 
 void ObjectMgr::LoadItemTexts()
@@ -9692,8 +9690,6 @@ void ObjectMgr::GeneratePetNumberRange(uint32& first, uint32& last)
 void ObjectMgr::LoadMailTemplate()
 {
     sMailTemplateStorage.Load();
-    sLog.outString(">> Loaded %u mail text templates", sMailTemplateStorage.GetRecordCount());
-    sLog.outString();
 }
 
 char const* ObjectMgr::GetMailTextTemplate(uint32 id, LocaleConstant locale_idx)
