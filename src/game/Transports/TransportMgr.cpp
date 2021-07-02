@@ -409,8 +409,6 @@ void TransportMgr::SpawnContinentTransports()
         while (result->NextRow());
         delete result;
     }
-
-    sLog.outString(">> Spawned %u continent transports in %u ms", count, WorldTimer::getMSTimeDiffToNow(oldMSTime));
 }
 
 void TransportMgr::CreateInstanceTransports(Map* map)

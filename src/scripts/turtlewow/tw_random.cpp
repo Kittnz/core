@@ -3173,7 +3173,7 @@ bool GossipSelect_npc_flying_mount(Player* p_Player, Creature* p_Creature, uint3
             p_Player->m_Events.AddEvent(new StopFlyingAfterTime(p_Player->GetGUID()), p_Player->m_Events.CalculateTime(30 * IN_MILLISECONDS));
             p_Player->SetFlying(true);
             p_Player->RemoveItemCurrency(422, 1);
-            p_Player->UpdateSpeed(MOVE_SWIM, true, 6.0F);
+            p_Player->UpdateSpeed(MOVE_SWIM, false, 6.0F);
         }
         else
             p_Player->PMonsterEmote("Gryphon clearly looks hungry and frustrated. Perhaps a handful of famous Dwarven Mild could do some good?", nullptr, false);
@@ -3184,7 +3184,7 @@ bool GossipSelect_npc_flying_mount(Player* p_Player, Creature* p_Creature, uint3
         p_Player->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, 295);
         p_Player->m_Events.AddEvent(new StopFlyingAfterTime(p_Player->GetGUID()), p_Player->m_Events.CalculateTime(45000));
         p_Player->SetFlying(true);
-        p_Player->UpdateSpeed(MOVE_SWIM, true, 6.0F);
+        p_Player->UpdateSpeed(MOVE_SWIM, false, 6.0F);
     }
     p_Player->CLOSE_GOSSIP_MENU();
     return true;
