@@ -152,6 +152,73 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '8', '1', '0', '0', '50', '0', '0', '0', '0', '49', '0', '0', '0',
  '0', '1', NULL);
+ -- Stray Armament
+replace into item_template values
+ ('61006', '0', '4', '3', 'Gauntlets of Temporal Guidance', '', '16731', '3', '0', '1', '80652', '20163', '10', '-1', '-1', '65',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '18', '7', '11',
+ '5', '7', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '238', '0', '0', '0',
+ '0', '0', '0', '15464', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '5', '1', '0', '0', '40', '0', '0', '0', '0', '49', '0', '0', '0',
+ '0', '1', NULL);
+-- Greater Armaments of the Scale
+replace into item_template values
+ ('61006', '0', '2', '7', 'Blade of Infinite Truths', 'Forged from glass smelted from the very sands of time that flow in the Caverns of Time.', '33145', '4', '65536', '1', '339456', '84864', '21', '-1', '-1', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '1', '1', '0', '5', '6', '7', '6',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1900', '0',
+ '0', '50', '108', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '23727', '1', '0', '0', '-1', '0', '-1', '24595', '1', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '1', '3', '0', '0', '105', '0', '0', '0', '0', '65', '0', '0', '0',
+ '0', '1', NULL);
+ replace into item_template values
+ ('61007', '0', '4', '4', 'Temporal Bronze Boots', '', '10167', '4', '65536', '1', '105944', '26486', '8', '-1', '-1', '65',
+ '0', '0', '0', '0', '0', '0', '0', '0', '1', '1', '0', '4', '5', '3', '3',
+ '7', '24', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '507', '0', '0', '0',
+ '0', '0', '0', '13675', '1', '0', '0', '-1', '0', '-1', '22912', '1', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '6', '1', '0', '0', '100', '0', '0', '0', '0', '65', '0', '0', '0',
+ '0', '1', NULL);
+replace into item_template values
+ ('61009', '0', '4', '6', 'Time-Shifting Wheel', '', '28407', '4', '65536', '1', '55596', '13899', '14', '-1', '-1', '65',
+ '0', '0', '0', '0', '0', '0', '0', '0', '1', '1', '0', '5', '10', '7', '10',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '44', '2468', '0', '0', '0',
+ '0', '0', '0', '9317', '1', '0', '0', '-1', '0', '-1', '21625', '1', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '2', '4', '0', '0', '120', '0', '0', '0', '0', '65', '0', '0', '0',
+ '0', '1', NULL);
+ replace into item_template values
+ ('61010', '0', '4', '1', 'Wing of the Time-Lord', '', '33730', '4', '65536', '1', '99156', '24789', '16', '-1', '-1', '65',
+ '0', '0', '0', '0', '0', '0', '0', '0', '1', '1', '0', '7', '13', '3', '12',
+ '7', '14', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '50', '0', '0', '0',
+ '0', '0', '0', '21347', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '1', '1', '0', '0', '0', '0', '0', '0', '0', '65', '0', '0', '0',
+ '0', '1', NULL);
+ replace into item_template values
+ ('61011', '0', '2', '3', 'Time-Lost Boomcannon', 'H.W is etched on the hilt.', '29163', '4', '0', '1', '265828', '66457', '26', '-1', '-1', '65',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '8', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3200', '100',
+ '3', '97', '139', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '15464', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '1', '0', '0', '0', '90', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+ replace into item_template values
+ ('61012', '0', '4', '0', 'Shard of Eternity', '', '40150', '4', '0', '1', '48616', '12154', '2', '-1', '-1', '65',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '14', '6', '-20',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '12854', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '4', '1', '0', '0', '0', '0', '0', '0', '0', '65', '0', '0', '0',
+ '0', '1', NULL);
+ 
+replace into `item_template` values (51043, 0, 1, 0, 'Void-Linked Satchel', 'The means how this bag holds so many things is better left unspoken.', 34796, 3, 0, 1, 160000, 40000, 18, -1, -1, 62, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
  
 -- Sands of Time — Time-Worn Rune
 
@@ -160,17 +227,25 @@ replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minleve
 replace into creature_questrelation (id, quest) values (80943, 80600);
 replace into creature_involvedrelation (id, quest) values (80943, 80600);
 
--- Sands of Time: Armaments of the Scale
+-- Sands of Time: Timewarden's Armaments
 
-replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewmoneymaxlevel, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4, rewchoiceitemid5, rewchoiceitemcount5, rewchoiceitemid6, rewchoiceitemcount6) values (0,80601,2300,60,58,0,0,'Sands of Time: Armaments of the Scale','Greetings mortal!\n\nYou might have acquired some Corrupted Sand from one of the Infinite Dragonflight, which they\'ve been using to try and compromise the flow of the timelines, or residual amounts that can be found creatures that have been affected by their magic.\n\nI\'ve been assigned to reward those that bring adequate amounts of Corrupted Sand for purification and being returned to safe hands.\n\nIn exchange for 500 Corrupted Sand, I can reward you with one of our timeless armaments, imbued with the very magic that shaped these caverns.','Bring 500 Corrupted Sand to Dronormu in the Caverns of Time.','These sands cannot fall to the wrong hands.','Very well. May it serve you well.',50203,500,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,910,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,61006,1,61001,1,61002,1,61003,1, 61004, 1, 61005, 1);
+replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewmoneymaxlevel, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4, rewchoiceitemid5, rewchoiceitemcount5, rewchoiceitemid6, rewchoiceitemcount6) values (0,80601,2300,60,58,0,0,'Sands of Time: Timewarden\'s Armaments','Greetings mortal!\n\nYou might have acquired some Corrupted Sand from one of the Infinite Dragonflight, which they\'ve been using to try and compromise the flow of the timelines, or residual amounts that can be found creatures that have been affected by their magic.\n\nI\'ve been assigned to reward those that bring adequate amounts of Corrupted Sand for purification and being returned to safe hands.\n\nIn exchange for 500 Corrupted Sand, I can reward you with one of our timeless armaments, imbued with the very magic that shaped these caverns.','Bring 500 Corrupted Sand to Dronormu in the Caverns of Time.','These sands cannot fall to the wrong hands.','Very well. May it serve you well.',50203,500,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,910,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,61006,1,61001,1,61002,1,61003,1, 61004, 1, 61005, 1);
 
 replace into creature_questrelation (id, quest) values (80943, 80601);
 replace into creature_involvedrelation (id, quest) values (80943, 80601);
 
--- Sands of Time: Epic Armaments of the Scale
+-- Sands of Time: Epic Timewarden's Armaments
 
-replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewmoneymaxlevel, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4, rewchoiceitemid5, rewchoiceitemcount5, rewchoiceitemid6, rewchoiceitemcount6) values (0,80602,2300,60,58,0,0,'Sands of Time: Epic Armaments of the Scale','Greetings mortal!\n\nYou might have acquired some Corrupted Sand from one of the Infinite Dragonflight, which they\'ve been using to try and compromise the flow of the timelines, or residual amounts that can be found creatures that have been affected by their magic.\n\nI\'ve been assigned to reward those that bring adequate amounts of Corrupted Sand for purification and being returned to safe hands.\n\nIn exchange for 1500 Corrupted Sand, I can reward you with one of our highly revered armaments, imbued with the most powerful magic our timeweavers could muster.','Bring 1500 Corrupted Sand to Dronormu in the Caverns of Time.','These sands cannot fall to the wrong hands.','Very well. May it serve you well.',50203,1500,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,910,500,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,61007,1,61008,1,61009,1,61010,1,61011,1,61012,1);
+replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewmoneymaxlevel, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4, rewchoiceitemid5, rewchoiceitemcount5, rewchoiceitemid6, rewchoiceitemcount6) values (0,80602,2300,60,58,0,0,'Sands of Time: Epic Timewarden\'s Armaments','Greetings mortal!\n\nYou might have acquired some Corrupted Sand from one of the Infinite Dragonflight, which they\'ve been using to try and compromise the flow of the timelines, or residual amounts that can be found creatures that have been affected by their magic.\n\nI\'ve been assigned to reward those that bring adequate amounts of Corrupted Sand for purification and being returned to safe hands.\n\nIn exchange for 1500 Corrupted Sand, I can reward you with one of our highly revered armaments, imbued with the most powerful magic our timeweavers could muster.','Bring 1500 Corrupted Sand to Dronormu in the Caverns of Time.','These sands cannot fall to the wrong hands.','Very well. May it serve you well.',50203,1500,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,910,500,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,61007,1,61008,1,61009,1,61010,1,61011,1,61012,1);
 
 replace into creature_questrelation (id, quest) values (80943, 80602);
 replace into creature_involvedrelation (id, quest) values (80943, 80602);
+
+-- Sands of Time: Void-Linked Satchel
+
+replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewmoneymaxlevel, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (0,80603,2300,60,58,0,0,'Sands of Time: Void-Linked Satchel','Greetings mortal!\n\nYou might have acquired some Corrupted Sand from one of the Infinite Dragonflight, which they\'ve been using to try and compromise the flow of the timelines, or residual amounts that can be found creatures that have been affected by their magic.\n\nI\'ve been assigned to reward those that bring adequate amounts of Corrupted Sand for purification and being returned to safe hands.\n\nIn exchange for 200 Corrupted Sand, I can reward you with a special bag that\'s been imbued with magic that breaks the nominal limits, allowing it to carry more items than any mortal container could hold.','Bring 1500 Corrupted Sand to Dronormu in the Caverns of Time.','These sands cannot fall to the wrong hands.','Very well. May it serve you well.',50203,2000,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,910,600,0,0,0,0,0,0,0,0,0,51043,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+replace into creature_questrelation (id, quest) values (80943, 80603);
+replace into creature_involvedrelation (id, quest) values (80943, 80603);
+
 
