@@ -251,4 +251,6 @@ replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minleve
 replace into creature_questrelation (id, quest) values (80943, 80603);
 replace into creature_involvedrelation (id, quest) values (80943, 80603);
 
+-- CoT Meeting Stone
 
+replace into gameobject_template values (1772020, 0, 23, 5498, 'Meeting Stone', 35, 0, 1, 58, 60, 1941, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
