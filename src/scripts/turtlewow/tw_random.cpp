@@ -3169,7 +3169,7 @@ bool GossipSelect_npc_flying_mount(Player* p_Player, Creature* p_Creature, uint3
         if (p_Player->HasItemCount(422, 1))
         {
             p_Player->GetSession()->SendNotification("You will be dismounted in 30 seconds.");
-            p_Player->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, 6852);
+            p_Player->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, 18274);
             p_Player->m_Events.AddEvent(new StopFlyingAfterTime(p_Player->GetGUID()), p_Player->m_Events.CalculateTime(30 * IN_MILLISECONDS));
             p_Player->SetFlying(true);
             p_Player->RemoveItemCurrency(422, 1);

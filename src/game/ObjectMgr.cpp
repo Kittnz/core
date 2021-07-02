@@ -9481,7 +9481,6 @@ void ObjectMgr::RestoreDeletedItems()
 
     if (!result)
     {
-        sLog.outString(">> Restored 0 prevously deleted items.");
         return;
     }
 
