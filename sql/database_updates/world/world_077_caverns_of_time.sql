@@ -15,10 +15,8 @@ replace into creature_template values
 (65012, 0, 95, 0, 0, 0, 'Taradormi', 'Keepers of Time', 0, 57, 57, 3758, 3758, 0, 0, 3334, 80, 6, 1, 1.14286, 0, 20, 5, 0, 0, 1, 102, 131, 0, 258, 1, 1500, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 72.2304, 99.3168, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 524298, ''),
 (65013, 0, 242, 0, 0, 0, 'Rimus', 'Blacksmithing Supplies', 6085, 47, 47, 1990, 1990, 0, 0, 3600, 1494, 16391, 1, 1.14286, 0, 20, 5, 0, 0, 1, 72, 93, 0, 204, 1, 2000, 2000, 1, 36864, 0, 0, 0, 0, 0, 0, 61.776, 84.942, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 14737, 0, 0, 0, 0, 524298, ''),
 (65014, 0, 4605, 0, 0, 0, 'Aunassi', 'Time-Lost Baubles', 0, 57, 57, 3758, 3758, 0, 0, 3334, 80, 6, 1, 1.14286, 0, 20, 5, 0, 0, 1, 102, 131, 0, 258, 1, 1500, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 72.2304, 99.3168, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 524298, ''),
-(65015, 0, 15569, 0, 0, 0, 'Mazornos', 'Custodian of Time', 0, 63, 63, 4496, 4496, 0, 0, 4641, 35, 6, 1, 1.14286, 1.15, 20, 5, 0, 0, 1, 178, 229, 0, 290, 1, 2000, 2000, 1, 33536, 0, 0, 0, 0, 0, 0, 220.81, 105.197, 100, 2, 0, 0, 0, 0, 0, 15, 15, 15, 15, 15, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 10667, 0, 0, 0, 0, 2, '');
-
--- Update quartermaster:
-update creature_template set name = 'Dronormu', subname = 'Keepers of Time Quartermaster' where entry = 80943;
+(65015, 0, 15569, 0, 0, 0, 'Mazornos', 'Custodian of Time', 0, 63, 63, 4496, 4496, 0, 0, 4641, 35, 6, 1, 1.14286, 1.15, 20, 5, 0, 0, 1, 178, 229, 0, 290, 1, 2000, 2000, 1, 33536, 0, 0, 0, 0, 0, 0, 220.81, 105.197, 100, 2, 0, 0, 0, 0, 0, 15, 15, 15, 15, 15, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 10667, 0, 0, 0, 0, 2, ''),
+(80943, 0, 18120, 0, 0, 0, 'Dronormu', 'Quartermaster', 0, 57, 57, 3758, 3758, 0, 0, 3334, 80, 6, 1, 1.14286, 0, 20, 5, 0, 0, 1, 102, 131, 0, 258, 1, 1500, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 72.2304, 99.3168, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 524298, '');
 
 -- Set correct faction and other mics. stuff:
 update creature_template set faction = 910 where entry between 65000 and 65015;
@@ -154,3 +152,10 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '8', '1', '0', '0', '50', '0', '0', '0', '0', '49', '0', '0', '0',
  '0', '1', NULL);
+ 
+-- Sands of Time — Time-Worn Rune
+
+replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewmoneymaxlevel, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (0,80600,2300,60,58,0,1,' Sands of Time: Time-Worn Rune','Greetings mortal, You might have acquired some Corrupted Sand from one of the Infinite Dragonflight, which they\'ve been using to try and compromise the flow of the timelines, or residual amounts that can be found creatures that have been affected by their magic.\n\nI\'ve been assigned to reward those that bring adequate amounts of Corrupted Sand for purification and being returned to safe hands.\n\nIn exchange for 100 Corrupted Sand, I can reward you with a Time-Lost Rune, which can teleport you back to the Caverns of Time when used, beware though.\n\nThey can only be used five times, after which they lose their power.','Bring 100 Corrupted Sand to Dronormu in the Caverns of Time.','These sands cannot fall to the wrong hands.','Very well. May it serve you well.',50203,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,910,50,0,0,0,0,0,0,0,0,0,61000,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+replace into creature_questrelation (id, quest) values (80943, 80600);
+replace into creature_involvedrelation (id, quest) values (80943, 80600);
