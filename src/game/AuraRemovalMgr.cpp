@@ -27,8 +27,6 @@ INSTANTIATE_SINGLETON_1(AuraRemovalManager);
 void AuraRemovalManager::LoadFromDB()
 {
     m_data.clear();
-
-    sLog.outString("> Loading table `instance_buff_removal`");
     uint32 count = 0;
     QueryResult* result = WorldDatabase.Query("SELECT map_id, spell_id, enabled, flags, comment FROM instance_buff_removal");
     if (!result)

@@ -47,3 +47,7 @@ update item_template set spellid_1 = 18074 where entry = 70062;
 
 -- Scale up Lake Toad.
 update creature_template set scale = 3 where entry = 80965;
+
+-- Change flying mounts models to have a saddle:
+
+update creature_template set display_id1 = 18274 where entry = 51562;
