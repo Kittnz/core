@@ -308,6 +308,10 @@ class ChatHandler
         bool HandleInstanceContinentsCommand(char* args);
         bool HandleInstancePerfInfosCommand(char* args);
 
+        bool HandleListAurasCommand(char* args);
+        bool HandleListCreatureCommand(char* args);
+        bool HandleListObjectCommand(char* args);
+
         bool HandleLearnCommand(char* args);
         bool HandleLearnAllMySpellsCommand(char* args);
 

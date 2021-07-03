@@ -237,6 +237,14 @@ ChatCommand * ChatHandler::getCommandTable()
 		{ nullptr,          0,                  false, nullptr,                                        "", nullptr }
     };
 
+    static ChatCommand listCommandTable[] =
+    {
+        { "auras",          SEC_GAMEMASTER,  false, &ChatHandler::HandleListAurasCommand,           "", nullptr },
+        { "creature",       SEC_GAMEMASTER,  true,  &ChatHandler::HandleListCreatureCommand,        "", nullptr },
+        { "object",         SEC_GAMEMASTER,  true,  &ChatHandler::HandleListObjectCommand,          "", nullptr },
+        { nullptr,       0,                  false, nullptr,                                           "", nullptr }
+    };
+
 
     // TODO: Add console output support to async player lookups
     static ChatCommand lookupPlayerCommandTable[] =
@@ -514,6 +522,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "guild",          SEC_GAMEMASTER,     true, nullptr,                                         "", guildCommandTable    },
         { "instance",       SEC_ADMINISTRATOR,      true, nullptr,                                         "", instanceCommandTable },
         { "learn",          SEC_GAMEMASTER,      false, nullptr,                                        "", learnCommandTable    },
+        { "list",           SEC_ADMINISTRATOR,  true, nullptr,                                           "", listCommandTable     },
         { "lookup",         SEC_GAMEMASTER,      true, nullptr,                                         "", lookupCommandTable   },
         { "modify",         SEC_GAMEMASTER,      false, nullptr,                                        "", modifyCommandTable   },
         { "npc",            SEC_GAMEMASTER,      false, nullptr,                                        "", npcCommandTable      },
