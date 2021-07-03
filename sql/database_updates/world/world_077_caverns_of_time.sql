@@ -223,6 +223,27 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '4', '1', '0', '0', '0', '0', '0', '0', '0', '65', '0', '0', '0',
  '0', '1', NULL);
  
+  -- Stray Armament
+replace into item_template values
+ ('61013', '0', '4', '3', 'Gauntlets of Temporal Guidance', '', '16731', '3', '0', '1', '80652', '20163', '10', '-1', '-1', '65',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '18', '7', '11',
+ '5', '7', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '238', '0', '0', '0',
+ '0', '0', '0', '15464', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '5', '1', '0', '0', '40', '0', '0', '0', '0', '49', '0', '0', '0',
+ '0', '1', NULL);
+ -- Remodeled Item
+replace into item_template values
+ ('61001', '0', '2', '15', 'Claw of the Infinite', '', '25612', '3', '0', '1', '243932', '60983', '13', '-1', '-1', '65',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '11', '7', '5',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '2200', '0',
+ '0', '63', '125', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '7573', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '1', '3', '0', '0', '90', '0', '0', '0', '0', '49', '0', '0', '0',
+ '0', '1', NULL);
+ 
 replace into `item_template` values (51043, 0, 1, 0, 'Void-Linked Satchel', 'The means how this bag holds so many things is better left unspoken.', 34796, 3, 0, 1, 160000, 40000, 18, -1, -1, 62, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
  
 -- Sands of Time — Time-Worn Rune
@@ -271,3 +292,17 @@ REPLACE INTO `creature_template` VALUES (65103, 0, 18043, 0, 0, 0, 'Infinite Whe
 REPLACE INTO `creature_equip_template` VALUES (82000, 0, 2014, 0, 0);
 REPLACE INTO `creature_equip_template` VALUES (82001, 0, 14541, 0, 0);
 REPLACE INTO `creature_equip_template` VALUES (82002, 0, 0, 15979, 0);
+
+-- Drag's quest fixes:
+
+update quest_template set RewChoiceItemId6 = 61013, RewChoiceItemCount6 = 1 where entry = 80601;
+update quest_template set RewChoiceItemId1 = 61006, RewChoiceItemCount1 = 1 where entry = 80602;
+update quest_template set RewChoiceItemId2 = 61007, RewChoiceItemCount2 = 1 where entry = 80602;
+update quest_template set RewChoiceItemId3 = 61008, RewChoiceItemCount3 = 1 where entry = 80602;
+update quest_template set RewChoiceItemId4 = 61009, RewChoiceItemCount4 = 1 where entry = 80602;
+update quest_template set RewChoiceItemId5 = 61010, RewChoiceItemCount5 = 1 where entry = 80602;
+update quest_template set RewChoiceItemId6 = 61012, RewChoiceItemCount6 = 1 where entry = 80602;
+update item_template set display_id = 27405 where entry = 61007;
+update item_template set stat_type2 = 4 where entry = 61010;
+update item_template set name = "Blade of Infinite Mysteries" where entry = 61006;
+
