@@ -24,6 +24,8 @@ replace into creature_template values
 update creature_template set faction = 910 where entry between 65000 and 65017;
 update creature_template set scale = 0.4 where entry = 65004;
 update creature_template set script_name = 'npc_custodian_of_time', npc_flags = 1 where entry in (65000, 65015);
+update creature_template set name = 'Bronze Drake' where entry = 50113;
+update creature_template set name = 'Bronze Drake' where entry = 80156;
 
 -- General Goods 
 replace into npc_vendor values 
@@ -245,6 +247,20 @@ replace into item_template values
  '0', '1', NULL);
  
 replace into `item_template` values (51043, 0, 1, 0, 'Void-Linked Satchel', 'The means how this bag holds so many things is better left unspoken.', 34796, 3, 0, 1, 160000, 40000, 18, -1, -1, 62, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+
+-- Change to Corrupted Sand to make it stack up to 1000 instead of 250
+update item_template set stackable = 1000 where entry = 50203;
+
+-- Rebalanced Pompa's Caverns of Time Items for Item Level 65 for Possible Future Use:
+
+update item_template set stat_value1 = 8, stat_value2 = 8, spellid_1 = 9317, item_level = 65 where entry = 50416;
+update item_template set spellid_1 = 9141, item_level = 65 where entry = 50427;
+update item_template set armor = 380, item_level = 65 where entry = 50428;
+update item_template set spellid_1 = 15806, spellid_2 = 7597, spellid_3 = 15464, spelltrigger_3 = 1, stat_value1 = 0, stat_value2 = 0, item_level = 65 where entry = 50429;
+update item_template set spellid_1 = 9345, spellid_2 = 0, stat_value1 = 10, item_level = 65 where entry = 50430;
+update item_template set spellid_1 = 9407, spellid_2 = 21619, stat_value2 = 8, item_level = 65 where entry = 50431;
+update item_template set spellid_2 = 9138, stat_value1 = 13, stat_value2 = 4, item_level = 65 where entry = 50432;
+
  
 -- Sands of Time — Time-Worn Rune
 
@@ -305,4 +321,5 @@ update quest_template set RewChoiceItemId6 = 61012, RewChoiceItemCount6 = 1 wher
 update item_template set display_id = 27405 where entry = 61007;
 update item_template set stat_type2 = 4 where entry = 61010;
 update item_template set name = "Blade of Infinite Mysteries" where entry = 61006;
+
 
