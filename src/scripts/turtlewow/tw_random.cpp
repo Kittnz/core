@@ -3158,6 +3158,8 @@ bool GossipHello_npc_flying_mount(Player* pPlayer, Creature* pCreature)
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Take me out of here.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2); break;
     case 51686: // Feralas Gryphon
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Take me out of here.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3); break;
+    case 65018: // Alormion (Bronze Drake)
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Please guide me through Caverns of Time.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4); break;
     }
     pPlayer->PrepareQuestMenu(pCreature->GetGUID());
     pPlayer->SEND_GOSSIP_MENU(90366, pCreature->GetGUID());
@@ -3180,10 +3182,15 @@ bool GossipSelect_npc_flying_mount(Player* p_Player, Creature* p_Creature, uint3
         else
             p_Player->PMonsterEmote("Gryphon clearly looks hungry and frustrated. Perhaps a handful of famous Dwarven Mild could do some good?", nullptr, false);
     }
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2 || uiAction == GOSSIP_ACTION_INFO_DEF + 3) // Wyvern and Gryphon
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2 || uiAction == GOSSIP_ACTION_INFO_DEF + 3 || uiAction == GOSSIP_ACTION_INFO_DEF + 4)
     {
         p_Player->GetSession()->SendNotification("Your flight will last 45 seconds.");
-        p_Player->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, uiAction == GOSSIP_ACTION_INFO_DEF + 2 ? 295 : 18274);
+        switch (uiAction)
+        {
+        case GOSSIP_ACTION_INFO_DEF + 2: p_Player->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, 295);   break; // Gryphon
+        case GOSSIP_ACTION_INFO_DEF + 3: p_Player->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, 18274); break; // Wywern
+        case GOSSIP_ACTION_INFO_DEF + 4: p_Player->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, 18279); break; // Bronze Drake
+        }
         p_Player->m_Events.AddEvent(new StopFlyingAfterTime(p_Player->GetGUID()), p_Player->m_Events.CalculateTime(45000));
         p_Player->SetFlying(true);
         p_Player->UpdateSpeed(MOVE_SWIM, false, 6.0F);
