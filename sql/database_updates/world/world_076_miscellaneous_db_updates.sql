@@ -51,3 +51,7 @@ update creature_template set scale = 3 where entry = 80965;
 -- Change flying mounts models to have a saddle:
 
 update creature_template set display_id1 = 18274 where entry = 51562;
+
+-- Yet another riding gryphon
+
+replace into `creature_template` values (51686, 0, 18274, 0, 0, 0, 'Beaky', NULL, 0, 29, 29, 1528, 1528, 1126, 1126, 0, 35, 1, 1.07, 1.14286, 0, 20, 5, 0, 0, 1, 9, 10, 0, 120, 1, 1720, 1892, 1, 0, 0, 0, 0, 0, 0, 0, 43.8944, 60.3548, 100, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 17, 86, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 2, 'npc_flying_mount');
