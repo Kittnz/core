@@ -1804,13 +1804,14 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                     {
                         switch (m_caster->ToPlayer()->GetGuildId())
                         {                        
-                        case 189: m_caster->ToPlayer()->TeleportTo(1, 7301.3F, -1523.8F, 179.8F, 1.4F);    break;  // Rush'n Attack                     
-                        case 172: m_caster->ToPlayer()->TeleportTo(1, -3134.49F, 2415.03F, 253.12F, 5.5F); break;  // Traveler
-                        case 105: m_caster->ToPlayer()->TeleportTo(0, 1574.24F, -2975.24F, 86.85F, 4.8F); break;   // Argent Vanguard
+                        case 189: m_caster->ToPlayer()->TeleportTo(1, 7301.3F, -1523.8F, 179.8F, 1.4F);     break; // Rush'n Attack                     
+                        case 172: m_caster->ToPlayer()->TeleportTo(1, -3134.49F, 2415.03F, 253.12F, 5.5F);  break; // Traveler
+                        case 105: m_caster->ToPlayer()->TeleportTo(0, 1574.24F, -2975.24F, 86.85F, 4.8F);   break; // Argent Vanguard
                         case 212: m_caster->ToPlayer()->TeleportTo(1, -5546.96F, -4071.97F, -58.50F, 3.2F); break; // Rats
-                    //  case 3:   m_caster->ToPlayer()->TeleportTo(0, -1853.48F, -4091.64F, 9.81F, 4.7F); break;   // Thunder Ale Brewing Co
-                        case 168: m_caster->ToPlayer()->TeleportTo(1, 3879.91F, -5396.72F, 142.89F, 0.3F); break;  // Macrochelys
-                        case 226: m_caster->ToPlayer()->TeleportTo(1, 1017.24F, -2225.02F, 93.09F, 5.15F); break;  // Warsong Outriders
+                    //  case 3:   m_caster->ToPlayer()->TeleportTo(0, -1853.48F, -4091.64F, 9.81F, 4.7F);   break; // Thunder Ale Brewing Co
+                        case 168: m_caster->ToPlayer()->TeleportTo(1, 3879.91F, -5396.72F, 142.89F, 0.3F);  break; // Macrochelys
+                        case 226: m_caster->ToPlayer()->TeleportTo(1, 1017.24F, -2225.02F, 93.09F, 5.15F);  break; // Warsong Outriders
+                        case 254: m_caster->ToPlayer()->TeleportTo(1, 7.71F, -3619.13F, 27.22F, 2.5F);      break; // Southfury Trading Co
                         default: break;
                         }
                     }
