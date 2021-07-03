@@ -283,18 +283,18 @@ void Spell::EffectInstaKill(SpellEffectIndex /*eff_idx*/)
         uint32 spellID;
         switch (entry)
         {
-            case   416:
+            case 416: // Imp
                 spellID = 18789;
-                break;               //imp
-            case   417:
+                break;
+            case 417: // Fellhunter
                 spellID = 18792;
-                break;               //fellhunter
-            case  1860:
+                break;
+            case 1860: // Void
                 spellID = 18790;
-                break;               //void
-            case  1863:
+                break;
+            case 1863: // Succubus
                 spellID = 18791;
-                break;               //succubus
+                break;
             default:
                 sLog.outError("EffectInstaKill: Unhandled creature entry (%u) case.", entry);
                 return;
@@ -303,15 +303,15 @@ void Spell::EffectInstaKill(SpellEffectIndex /*eff_idx*/)
         m_casterUnit->CastSpell(m_casterUnit, spellID, true);
     }
 
-    if (m_caster == unitTarget)                             // prevent interrupt message
+    if (m_caster == unitTarget) // Prevent interrupt message
         finish();
 
     WorldPacket data(SMSG_SPELLINSTAKILLLOG, (8 + 4));
-    data << unitTarget->GetObjectGuid();                    // Victim GUID
+    data << unitTarget->GetObjectGuid(); // Victim GUID
     data << uint32(m_spellInfo->Id);
     m_caster->SendMessageToSet(&data, true);
 
-    m_caster->DealDamage(unitTarget, unitTarget->GetHealth(), nullptr, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, nullptr, false);
+    m_caster->DealDamage(unitTarget, unitTarget->GetMaxHealth(), nullptr, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, nullptr, false);
 }
 
 void Spell::EffectEnvironmentalDMG(SpellEffectIndex eff_idx)
@@ -1162,16 +1162,6 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                             if (tempDamage < 100)
                                 tempDamage = 100;
                         }
-                        /* NOT WORKING */
-                        /*
-                        else
-                        {
-                            // Buru itself
-                            if (unitTarget->GetEntry() == 15370 && unitTarget->GetHealthPercent() >= 20.0f)
-                                tempDamage = unitTarget->GetMaxHealth() * 0.15;
-                            else
-                                return;
-                        }*/
 
                         m_originalCaster->DealDamage(unitTarget, tempDamage, nullptr, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, nullptr, false);
                     }
@@ -1458,13 +1448,13 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                 case 26074:                                 // Holiday Cheer
                     // implemented at client side
                     return;
-                case 26399:                                 // Despawn Tentacles (C'thun)
+                case 26399: // Despawn Tentacles (C'thun)
                 {
                     if (!m_caster)
                         return;
 
                     if (unitTarget)
-                        m_caster->DealDamage(unitTarget, unitTarget->GetHealth(), nullptr, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NONE, nullptr, false);
+                        m_caster->DealDamage(unitTarget, unitTarget->GetMaxHealth(), nullptr, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NONE, nullptr, false);
 
                     return;
                 }
