@@ -777,12 +777,6 @@ void WorldSession::HandleAreaTriggerOpcode(WorldPacket & recv_data)
         return;
     }
 
-    if (pPlayer->IsCharmed())
-    {
-        DEBUG_LOG("Player '%s' (GUID: %u) is charmed, ignore Area Trigger ID: %u", pPlayer->GetName(), pPlayer->GetGUIDLow(), triggerId);
-        return;
-    }
-
     AreaTriggerEntry const* pTrigger = sObjectMgr.GetAreaTrigger(triggerId);
     if (!pTrigger)
     {
