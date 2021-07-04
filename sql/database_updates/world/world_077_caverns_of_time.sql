@@ -324,4 +324,22 @@ update item_template set display_id = 27405 where entry = 61007;
 update item_template set stat_type2 = 4 where entry = 61010;
 update item_template set name = "Blade of Infinite Mysteries" where entry = 61006;
 
+-- Dungeon Stuff
+
+-- Creature Templates
+REPLACE INTO `creature_template` VALUES (65100, 0, 18041, 0, 0, 0, 'Infinite Dragonspawn', '', 0, 62, 62, 8536, 9267, 0, 0, 5553, 40, 0, 1, 1.14286, 1, 20, 5, 0, 1, 1, 552, 679, 0, 290, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 220.81, 105.197, 100, 2, 0, 0, 0, 0, 0, 25, 25, 25, 25, 25, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 1, 82000, 0, 0, 0, 0, 0, 'infinite_dragonspawn');
+REPLACE INTO `creature_template` VALUES (65101, 0, 18040, 0, 0, 0, 'Infinite Riftguard', '', 0, 62, 62, 8523, 9243, 0, 0, 5819, 40, 0, 1, 1.14286, 1, 20, 5, 0, 1, 1, 613, 728, 0, 290, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 220.81, 105.197, 100, 2, 0, 0, 0, 0, 0, 25, 25, 25, 25, 25, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 1, 82001, 0, 0, 0, 0, 256, 'infinite_riftguard');
+REPLACE INTO `creature_template` VALUES (65102, 0, 18042, 0, 0, 0, 'Infinite Riftweaver', '', 0, 62, 62, 8276, 8874, 0, 0, 4566, 40, 0, 1, 1.14286, 1, 20, 5, 0, 1, 1, 626, 736, 0, 290, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 220.81, 105.197, 100, 2, 0, 0, 0, 0, 0, 25, 25, 25, 25, 25, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 1, 82001, 0, 0, 0, 0, 0, 'infinite_riftweaver');
+REPLACE INTO `creature_template` VALUES (65103, 0, 18043, 0, 0, 0, 'Infinite Whelp', '', 0, 62, 62, 3578, 3656, 1500, 1500, 3734, 40, 0, 1, 1.14286, 1, 20, 5, 0, 1, 1, 434, 492, 0, 290, 1, 2000, 2000, 8, 0, 0, 0, 0, 0, 0, 0, 220.81, 105.197, 100, 2, 0, 0, 0, 0, 0, 25, 25, 25, 25, 25, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 1, 0, 0, 0, 7232, 0, 0, 'infinite_whelp');
+REPLACE INTO `creature_template` VALUES (65104, 0, 18042, 0, 0, 0, 'Infinite Timeripper', '', 0, 62, 62, 8276, 8874, 0, 0, 4566, 40, 0, 1, 1.14286, 1, 20, 5, 0, 1, 1, 626, 736, 0, 290, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 220.81, 105.197, 100, 2, 0, 0, 0, 0, 0, 25, 25, 25, 25, 25, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 1, 82002, 0, 0, 0, 0, 0, 'infinite_timeripper');
+REPLACE INTO `creature_template` VALUES (65105, 0, 18040, 0, 0, 0, 'Infinite Rift-Lord', '', 0, 62, 62, 24564, 24564, 0, 0, 6204, 40, 0, 1, 1.14286, 1, 20, 5, 0, 1, 1, 856, 932, 0, 290, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 220.81, 105.197, 100, 2, 0, 0, 0, 0, 0, 25, 25, 25, 25, 25, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 1, 82003, 0, 0, 0, 0, 0, 'infinite_riftlord');
+REPLACE INTO `creature_template` VALUES (65106, 0, 18044, 0, 0, 0, 'Infinite Timereaver', '', 0, 62, 62, 24564, 24564, 0, 0, 6204, 40, 0, 1, 1.14286, 1, 20, 5, 0, 1, 1, 856, 932, 0, 290, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 220.81, 105.197, 100, 2, 0, 0, 0, 0, 0, 25, 25, 25, 25, 25, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 1, 82003, 0, 0, 0, 0, 0, '');
+
+
+-- Equipment Templates
+REPLACE INTO `creature_equip_template` VALUES (82000, 0, 2014, 0, 0);
+REPLACE INTO `creature_equip_template` VALUES (82001, 0, 14541, 0, 0);
+REPLACE INTO `creature_equip_template` VALUES (82002, 0, 23124, 0, 0);
+REPLACE INTO `creature_equip_template` VALUES (82003, 0, 13017, 0, 0);
+
 
