@@ -224,16 +224,21 @@ struct infinite_dragonspawnAI : public ScriptedAI
     }
     void EnterCombat(Unit*) override
     {
-        uint32 rand = urand(1, 2);
+        uint32 randChance = urand(1, 50);
 
-        switch (rand)
+        if (randChance > 50)
         {
-        case 1:
-            m_creature->PMonsterSay("Our numbers are endless!");
-            break;
-        case 2:
-            m_creature->PMonsterSay("Our mission cannot be compromised!");
-            break;
+            uint32 rand = urand(1, 2);
+
+            switch (rand)
+            {
+            case 1:
+                m_creature->PMonsterSay("Our numbers are endless!");
+                break;
+            case 2:
+                m_creature->PMonsterSay("Our mission cannot be compromised!");
+                break;
+            }
         }
     }
 
@@ -276,16 +281,22 @@ struct infinite_riftguardAI : public ScriptedAI
 
     void EnterCombat(Unit*) override
     {
-        uint32 rand = urand(1, 2);
+        uint32 randChance = urand(1, 50);
 
-        switch (rand)
+        if (randChance > 50)
         {
-        case 1:
-            m_creature->PMonsterSay("The sands flow in our favor, we cannot be stopped!");
-            break;
-        case 2:
-            m_creature->PMonsterSay("Our mission cannot be compromised! Stop them!");
-            break;
+
+            uint32 rand = urand(1, 2);
+
+            switch (rand)
+            {
+            case 1:
+                m_creature->PMonsterSay("The sands flow in our favor, we cannot be stopped!");
+                break;
+            case 2:
+                m_creature->PMonsterSay("Our mission cannot be compromised! Stop them!");
+                break;
+            }
         }
     }
 
@@ -337,7 +348,7 @@ struct infinite_riftguardAI : public ScriptedAI
 
     void JustDied(Unit*) override
     {
-        m_creature->PMonsterYell("You're only delaying the inevitable ... ");
+        m_creature->PMonsterYell("You're only delaying the inevitable... ");
     }
 };
 
@@ -408,22 +419,28 @@ struct infinite_riftweaverAI : public ScriptedAI
 
     void EnterCombat(Unit*) override
     {
-        uint32 rand = urand(1, 2);
+        uint32 randChance = urand(1, 50);
 
-        switch (rand)
+        if (randChance > 50)
         {
-        case 1:
-            m_creature->PMonsterSay("Our rifts must be preserved!");
-            break;
-        case 2:
-            m_creature->PMonsterSay("Our time has come!");
-            break;
+
+            uint32 rand = urand(1, 2);
+
+            switch (rand)
+            {
+            case 1:
+                m_creature->PMonsterSay("Our rifts must be preserved!");
+                break;
+            case 2:
+                m_creature->PMonsterSay("Our time has come!");
+                break;
+            }
         }
     }
 
     void JustDied(Unit*) override
     {
-        m_creature->PMonsterYell("You've merely removed a grain from the hourglass ... ");
+        m_creature->PMonsterYell("You've merely removed a grain from the hourglass... ");
     }
 };
 
@@ -582,6 +599,9 @@ struct infinite_riftlordAI : public ScriptedAI
         if (!m_creature->HasAura(AURA_SHADOWGUARD))
             m_creature->AddAura(AURA_SHADOWGUARD);
 
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
+            return;
+
         if (m_whirlwindTimer <= uiDiff)
         {
             if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_WHIRLWIND) == CAST_OK)
@@ -600,7 +620,7 @@ struct infinite_riftlordAI : public ScriptedAI
                 m_demoShoutTimer = 16500;
             }
             else
-                m_demoShoutTimer = 16500; // if failed try again
+                m_demoShoutTimer = 1000; // if failed try again
         }
         else
             m_demoShoutTimer -= uiDiff;
@@ -610,7 +630,7 @@ struct infinite_riftlordAI : public ScriptedAI
             if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_THUNDERCLAP) == CAST_OK)
                 m_thunderTimer = 15000;
             else
-                m_thunderTimer = 15000; // if failed try again
+                m_thunderTimer = 1000; // if failed try again
         }
         else
             m_thunderTimer -= uiDiff;
@@ -620,13 +640,17 @@ struct infinite_riftlordAI : public ScriptedAI
 
     void EnterCombat(Unit*) override
     {
+        uint32 randChance = urand(1, 50);
+
+        if (randChance > 50)
             m_creature->PMonsterSay("The sands of time shall be scattered to the winds!");
+
             DoCastSpellIfCan(m_creature, SPELL_DEMO_SHOUT);
     }
 
     void JustDied(Unit*) override
     {
-        m_creature->PMonsterSay("Impossible ... ");
+        m_creature->PMonsterSay("Impossible... ");
     }
 };
 
