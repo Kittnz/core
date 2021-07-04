@@ -18,16 +18,30 @@ replace into creature_template values
 (65015, 0, 15569, 0, 0, 0, 'Mazornos', 'Custodian of Time', 0, 63, 63, 4496, 4496, 0, 0, 4641, 35, 6, 1, 1.14286, 1.15, 20, 5, 0, 0, 1, 178, 229, 0, 290, 1, 2000, 2000, 1, 33536, 0, 0, 0, 0, 0, 0, 220.81, 105.197, 100, 2, 0, 0, 0, 0, 0, 15, 15, 15, 15, 15, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 10667, 0, 0, 0, 0, 2, ''),
 (80943, 0, 18120, 0, 0, 0, 'Dronormu', 'Quartermaster', 0, 57, 57, 3758, 3758, 0, 0, 3334, 80, 6, 1, 1.14286, 0, 20, 5, 0, 0, 1, 102, 131, 0, 258, 1, 1500, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 72.2304, 99.3168, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 524298, ''),
 (65016, 0, 18123, 0, 0, 0, 'Bronze Time Weaver', 'Keeprs of Time', 0, 62, 62, 6496, 9496, 2568, 2568, 4391, 35, 3, 1, 1.14286, 0, 20, 5, 0, 1, 1, 559, 720, 0, 284, 1, 2000, 2000, 2, 33536, 0, 0, 0, 0, 0, 0, 203.77, 289.86, 100, 2, 0, 0, 0, 0, 0, 10, 10, 10, 10, 10, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 10929, 0, 0, 0, 0, 2, ''),
-(65017, 0, 6370, 0, 0, 0, 'Bronze Guardian', 'Keeprs of Time', 0, 65, 65, 33496, 45496, 2568, 2568, 4391, 35, 3, 1, 1.14286, 0, 20, 5, 0, 1, 1, 559, 720, 0, 284, 1, 2000, 2000, 2, 33536, 0, 0, 0, 0, 0, 0, 203.77, 289.86, 100, 2, 0, 0, 0, 0, 0, 10, 10, 10, 10, 10, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 10929, 0, 0, 0, 0, 2, ''),
+(65017, 0, 6370, 0, 0, 0, 'Bronze Guardian', 'Keepers of Time', 0, 50, 52, 6645, 7113, 0, 0, 3052, 103, 0, 1, 2.85714, 0, 20, 5, 0, 1, 1, 276, 356, 0, 230, 1, 2000, 2000, 1, 33555264, 0, 0, 0, 0, 0, 0, 56.1, 77.1375, 100, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 806, 1058, '', 1, 5, 0, 0, 3, 0, 0, 0, 0, 0, 2, ''),
 (65018, 0, 18279, 0, 0, 0, 'Alormion', 'Keepers of Time', 0, 63, 63, 4496, 4496, 0, 0, 4641, 35, 6, 1, 1.14286, 1.15, 20, 5, 0, 0, 1, 178, 229, 0, 290, 1, 2000, 2000, 1, 33536, 0, 0, 0, 0, 0, 0, 220.81, 105.197, 100, 2, 0, 0, 0, 0, 0, 15, 15, 15, 15, 15, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 10667, 0, 0, 0, 0, 2, 'npc_flying_mount');
 
 -- Set correct faction and other mics. stuff:
-update creature_template set faction = 910 where entry between 65000 and 65018;
+update creature_template set faction = 776 where entry between 65000 and 65018;
+update creature_template set faction = 776 where entry = 80943;
 update creature_template set npc_flags = 1 where entry = 65018;
-update creature_template set scale = 0.4 where entry = 65004;
 update creature_template set script_name = 'npc_custodian_of_time', npc_flags = 1 where entry in (65000, 65015);
 update creature_template set name = 'Bronze Drake' where entry = 50113;
 update creature_template set name = 'Bronze Drake' where entry = 80156;
+update creature_template set movement_type = 2 where entry = 65017;
+update creature_template set movement_type = 2 where entry = 65001;
+update creature set movement_type = 2 where id = 65001;
+update creature_template set scale = 2.1 where entry = 15192;
+update creature_template set scale = 2.2 where entry = 65001;
+update creature_template set scale = 1.1 where entry = 65004;
+
+update creature_template set scale = 2 where entry = 65017;
+update creature_template set speed_walk = 2.5 where entry = 65001;
+update creature_template set scale = 1.3 where entry in (65006, 65007, 65008, 65009, 65010, 65011);
+update creature_template set scale = 1.2, level_min = 62, level_max = 62, health_min = 9712, health_max = 9712, armor = 5235 where entry = 50111;
+
+-- Set hovering for Bronze Drake:
+replace into creature_template_addon values (65017, 0, 0, 0, 1, 16, 0, 0, '');
 
 -- General Goods 
 replace into npc_vendor values 
@@ -296,7 +310,6 @@ replace into creature_involvedrelation (id, quest) values (80943, 80603);
 
 replace into gameobject_template values (1772020, 0, 23, 5491, 'Meeting Stone', 35, 0, 1, 58, 60, 1941, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
 
-
 -- Dungeon Stuff
 
 -- Creature Templates
@@ -312,7 +325,6 @@ REPLACE INTO `creature_equip_template` VALUES (82001, 0, 14541, 0, 0);
 REPLACE INTO `creature_equip_template` VALUES (82002, 0, 0, 15979, 0);
 
 -- Drag's quest fixes:
-
 update quest_template set RewChoiceItemId6 = 61013, RewChoiceItemCount6 = 1 where entry = 80601;
 update quest_template set RewChoiceItemId1 = 61006, RewChoiceItemCount1 = 1 where entry = 80602;
 update quest_template set RewChoiceItemId2 = 61007, RewChoiceItemCount2 = 1 where entry = 80602;
@@ -323,6 +335,11 @@ update quest_template set RewChoiceItemId6 = 61012, RewChoiceItemCount6 = 1 wher
 update item_template set display_id = 27405 where entry = 61007;
 update item_template set stat_type2 = 4 where entry = 61010;
 update item_template set name = "Blade of Infinite Mysteries" where entry = 61006;
+update quest_template set RewChoiceItemId6 = 61001, RewChoiceItemCount6 = 1 where entry = 80601;
+update quest_template set RewChoiceItemId1 = 61002, RewChoiceItemCount1 = 1 where entry = 80601;
+update quest_template set RewChoiceItemId2 = 61003, RewChoiceItemCount2 = 1 where entry = 80601;
+update quest_template set RewChoiceItemId3 = 61004, RewChoiceItemCount3 = 1 where entry = 80601;
+update quest_template set RewChoiceItemId4 = 61005, RewChoiceItemCount4 = 1 where entry = 80601;
 
 -- Dungeon Stuff
 
@@ -335,11 +352,13 @@ REPLACE INTO `creature_template` VALUES (65104, 0, 18042, 0, 0, 0, 'Infinite Tim
 REPLACE INTO `creature_template` VALUES (65105, 0, 18040, 0, 0, 0, 'Infinite Rift-Lord', '', 0, 62, 62, 24564, 24564, 0, 0, 6204, 40, 0, 1, 1.14286, 1, 20, 5, 0, 1, 1, 856, 932, 0, 290, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 220.81, 105.197, 100, 2, 0, 0, 0, 0, 0, 25, 25, 25, 25, 25, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 1, 82003, 0, 0, 0, 0, 0, 'infinite_riftlord');
 REPLACE INTO `creature_template` VALUES (65106, 0, 18044, 0, 0, 0, 'Infinite Timereaver', '', 0, 62, 62, 24564, 24564, 0, 0, 6204, 40, 0, 1, 1.14286, 1, 20, 5, 0, 1, 1, 856, 932, 0, 290, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 220.81, 105.197, 100, 2, 0, 0, 0, 0, 0, 25, 25, 25, 25, 25, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 1, 82003, 0, 0, 0, 0, 0, '');
 
+-- Drag's fixes for mob sizes:
+update creature_template set scale = 1.5 where entry = 65100;
+update creature_template set scale = 1.8 where entry = 65101;
+update creature_template set scale = 1.3 where entry = 65103;
 
 -- Equipment Templates
 REPLACE INTO `creature_equip_template` VALUES (82000, 0, 2014, 0, 0);
 REPLACE INTO `creature_equip_template` VALUES (82001, 0, 14541, 0, 0);
 REPLACE INTO `creature_equip_template` VALUES (82002, 0, 23124, 0, 0);
 REPLACE INTO `creature_equip_template` VALUES (82003, 0, 13017, 0, 0);
-
-
