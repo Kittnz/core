@@ -90,7 +90,7 @@ namespace DBUpdater
                 auto fields = tableResult->Fetch();
                 auto hash = fields[1].GetCppString();
 
-                dbMigrations.insert({ hash, Migration{ fields[0].GetCppString(), hash } });
+                dbMigrations.insert({ hash, Migration{ hash, fields[0].GetCppString() } });
             } while (tableResult->NextRow());
         }
 
