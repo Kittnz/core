@@ -3956,10 +3956,6 @@ void Aura::HandleAuraModIncreaseMountedSpeed(bool /*apply*/, bool Real)
                 case 21324:
                     m_modifier.m_amount = 100;
                     break;
-                // Bronze Drake
-                case 51252:
-                    m_modifier.m_amount = 120;
-                    break;
                 default:
                     uint32 skillValue = player->GetSkillValue(762);
 
