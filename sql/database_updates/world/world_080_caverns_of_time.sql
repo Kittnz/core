@@ -1,7 +1,10 @@
 -- Misc. DB fixes:
 
 update creature_template set scale = 2.5, level_min = 63, level_max = 63 where entry = 65105;
+update creature_template set level_min = 63, level_max = 63 where entry = 50113;
+update creature_template set health_min = 15663, health_max = 19463 where entry = 65001;
 update creature_template set display_id1 = 18544 where entry = 65004; 
+update creature_template set npc_flags = 2 where entry = 80943; 
 
 update quest_template set RewChoiceItemId1 = 61001, RewChoiceItemCount1 = 1 where entry = 80601;
 update quest_template set RewChoiceItemId2 = 61002, RewChoiceItemCount2 = 1 where entry = 80601;
@@ -17,12 +20,14 @@ update quest_template set RewChoiceItemId4 = 61011, RewChoiceItemCount4 = 1 wher
 update quest_template set RewChoiceItemId5 = 61009, RewChoiceItemCount5 = 1 where entry = 80602;
 update quest_template set RewChoiceItemId6 = 61010, RewChoiceItemCount6 = 1 where entry = 80602;
 
-update item_template set sell_price = 13750000, buy_price = 55000000 where entry = 51252;
+update item_template set sell_price = 0, buy_price = 55000000 where entry = 51252;
 
 -- Quests:
 
 replace into creature_template values 
 (65019, 0, 10008, 0, 0, 0, 'Chromie', 'Keepers of Time', 2911, 63, 63, 4496, 4496, 0, 0, 4641, 35, 6, 1, 1.14286, 1.15, 20, 5, 0, 0, 1, 178, 229, 0, 290, 1, 2000, 2000, 1, 33536, 0, 0, 0, 0, 0, 0, 220.81, 105.197, 100, 2, 0, 0, 0, 0, 0, 15, 15, 15, 15, 15, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 10667, 0, 0, 0, 0, 2, '');
+
+update creature_template set npc_flags = 2 where entry = 65019; 
 
 replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewmoneymaxlevel, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (0,80604,2300,60,60,0,0,'A Journey Into The Caverns','Our enemy is no longer in this time, but I have reason to believe they are in the past. I will tell you more but not here, you never know who might be listening.\n\nTravel to the Caverns of Time in Tanaris.\n\nI have given you authorization to enter since you are involved in this matter.\n\nOnce you arrive talk to me again.','Travel to the Caverns of Time and speak to Chromie.','There you are... Try not to step into the time streams, and whatever you do never try to enter the hourglass.','Do not mind the weirdness here too much, it\'s all timey wimey.\n\nYou\'ll get used to it... Maybe. Anyway. Thank you for coming and welcome to the Caverns of Time!\n\nThis is where the Bronze Dragonflight lives, and it is also where the time ways to different periods in history are.\n\nThe corridors that you can see here are ever changing and shifting.\n\nFrom one moment to the next a corridor before you can be replaced with another.\n\nAlas you can never truly experience the timeways with your limited perception of time.\n\nBut I digress, we have a job to do!',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,100,0,910,25,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
 
@@ -36,6 +41,11 @@ replace into creature_involvedrelation (id, quest) values (65004, 65004);
 
 replace into item_template values (51044, 0, 12, 0, 'Antnormi\'s Head', '', 31434, 1, 0, 1, 0, 0, 0, -1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 4, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, null);
 update item_template set flags = 2048 where entry = 51044;
+
+update quest_template set title = 'Time-Worn Rune' where entry = 80600;
+update quest_template set title = 'Timewarden\'s Armaments' where entry = 80601;
+update quest_template set title = 'Epic Timewarden\'s Armaments' where entry = 80602;
+update quest_template set title = 'Void-Linked Satchel' where entry = 80603;
 
 -- Spawns:
 
@@ -175,4 +185,26 @@ REPLACE INTO `creature` (`id`, `map`, `position_x`, `position_y`, `position_z`, 
 REPLACE INTO `creature` (`id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `health_percent`, `patch_max`) VALUES (65106, 269, -1435.07, 6997.6, -14.3512, 4.08954, 25, 25, 100, 10);
 REPLACE INTO `creature` (`id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `health_percent`, `patch_max`) VALUES (80943, 1, -8527.94, -4601.97, -211.901, 5.2182, 25, 25, 100, 10);
 
+replace into item_template values
+ ('61012', '0', '4', '0', 'Shard of Eternity', '', '40150', '4', '0', '1', '48616', '12154', '2', '-1', '-1', '65',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '8', '4', '8',
+ '5', '8', '7', '8', '6', '8', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '30', '0', '0', '0',
+ '0', '0', '0', '25109', '1', '0', '0', '-1', '0', '-1', '7679', '1', '0', '0', '-1', '0', '-1', '13383', '1',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '4', '1', '0', '0', '0', '0', '0', '0', '0', '65', '0', '0', '0',
+ '0', '1', NULL);
 
+update item_template set stat_value1 = 5 where entry = 61011;
+update item_template set spellid_2 = 9346 where entry = 61006;
+update item_template set spellid_1 = 9408 where entry = 61009;
+update item_template set stat_value1 = 8, stat_value2 = 9, stat_value3 = 23, spellid_1 = 13674, spellid_2 = 23731 where entry = 61007;
+
+-- Tabard Vendor:
+
+update item_template set quality = 2, description = 'Unto you is charged the great task of keeping the purity of time. Know that there is only one true timeline, though there are those who would have it otherwise.',  sell_price = 0, buy_price = 150000 where entry = 80300;
+
+-- General Goods 
+replace into npc_vendor values 
+-- Taradormi
+(65012, 80300, 0, 0, 0, 0);
