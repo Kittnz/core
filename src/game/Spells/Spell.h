@@ -407,6 +407,8 @@ class Spell
         //void HandleAddAura(Unit* Target);
 
         SpellEntry const* m_spellInfo;
+        bool m_isCustomSpell = false;
+
         SpellEntry const* m_originalSpellInfo = nullptr; // For auto down-ranking aura case, we send this in cast result packet
         SpellEntry const* m_triggeredBySpellInfo;
         SpellEntry const* m_triggeredByParentSpellInfo; // Spell that triggered the spell that triggered this
@@ -414,6 +416,8 @@ class Spell
         Item* m_CastItem = nullptr;
         SpellCastTargets m_targets;
 
+        bool IsCustomSpell() const { return m_isCustomSpell; }
+        void MarkCustom() { m_isCustomSpell = true; }
         int32 GetCastTime() const { return m_casttime; }
         uint32 GetCastedTime() { return m_timer; }
         bool IsAutoRepeat() const { return m_autoRepeat; }

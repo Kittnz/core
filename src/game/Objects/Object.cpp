@@ -5216,6 +5216,23 @@ void WorldObject::CastCustomSpell(Unit* pTarget, SpellEntry const *spellInfo, in
     spell->prepare(std::move(targets), triggeredByAura);
 }
 
+void WorldObject::CastCustomSpell(Unit* target, SpellEntry const* customInfo, bool triggered)
+{
+    Spell* spell;
+
+    if (Unit* pUnit = ToUnit())
+        spell = new Spell(pUnit, customInfo, triggered);
+    else if (GameObject* pGameObject = ToGameObject())
+        spell = new Spell(pGameObject, customInfo, triggered);
+    else
+        return;
+
+    SpellCastTargets targets;
+    targets.setUnitTarget(target);
+    spell->MarkCustom();
+    spell->prepare(std::move(targets));
+}
+
 // used for scripting
 SpellCastResult WorldObject::CastSpell(float x, float y, float z, uint32 spellId, bool triggered, Item *castItem, Aura* triggeredByAura, ObjectGuid originalCaster, SpellEntry const* triggeredBy)
 {

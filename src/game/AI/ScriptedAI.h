@@ -68,6 +68,9 @@ struct ScriptedAI : CreatureAI
     // Called when hit by a spell
     void SpellHit(Unit*, const SpellEntry*) override {}
 
+    // Called when spell hits creature's target
+    void SpellHitTarget(Unit*, const SpellEntry*) override {}
+
     // Called when creature is spawned or respawned (for reseting variables)
     void JustRespawned() override;
 
@@ -153,6 +156,8 @@ struct ScriptedAI : CreatureAI
 
     private:
         uint32 m_uiEvadeCheckCooldown;
+
+
 
         bool m_bEvadeOutOfHomeArea;
         uint32 m_uiHomeArea;

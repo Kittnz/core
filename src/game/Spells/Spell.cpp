@@ -268,7 +268,7 @@ Spell::Spell(Unit* caster, SpellEntry const *info, bool triggered, ObjectGuid or
     m_spellInfo(info), m_triggeredBySpellInfo(triggeredBy), m_triggeredByParentSpellInfo(triggeredByParent), m_caster(caster), m_casterUnit(caster), m_IsTriggeredSpell(triggered)
 {
     MANGOS_ASSERT(caster != nullptr && info != nullptr);
-    MANGOS_ASSERT(info == sSpellMgr.GetSpellEntry(info->Id) && "`info` must be pointer to a sSpellMgr element");
+    //MANGOS_ASSERT(info == sSpellMgr.GetSpellEntry(info->Id) && "`info` must be pointer to a sSpellMgr element");
 
     // Get data for type of attack
     m_attackType = m_spellInfo->GetWeaponAttackType();
@@ -307,7 +307,7 @@ Spell::Spell(GameObject* caster, SpellEntry const *info, bool triggered, ObjectG
     m_spellInfo(info), m_triggeredBySpellInfo(triggeredBy), m_triggeredByParentSpellInfo(triggeredByParent), m_caster(caster), m_casterGo(caster), m_IsTriggeredSpell(triggered)
 {
     MANGOS_ASSERT(caster != nullptr && info != nullptr);
-    MANGOS_ASSERT(info == sSpellMgr.GetSpellEntry(info->Id) && "`info` must be pointer to a sSpellMgr element");
+   // MANGOS_ASSERT(info == sSpellMgr.GetSpellEntry(info->Id) && "`info` must be pointer to a sSpellMgr element");
 
     // Get data for type of attack
     m_attackType = m_spellInfo->GetWeaponAttackType();
@@ -8756,7 +8756,11 @@ void Spell::RemoveStealthAuras()
 void Spell::Delete() const
 {
     if (IsDeletable())
+    {
+        if (IsCustomSpell())
+            delete m_spellInfo;
         delete this;
+    }
     else
         sLog.outInfo("[CRASH] Deleting in-use spell. SpellID=%u", m_spellInfo->Id);
 }
