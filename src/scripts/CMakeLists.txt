@@ -4,6 +4,7 @@ set(LIBRARY_NAME scripts)
 set (SCRIPTS_SRCS 
     ScriptLoader.h
     custom/custom.h
+    custom/CustomSpellTestBoss.cpp
     custom/npc_j_eevee.h
     turtlewow/transmog/transmog.h
     eastern_kingdoms/burning_steppes/blackrock_depths/blackrock_depths.h

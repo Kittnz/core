@@ -280,6 +280,7 @@ void AddSC_mirage_raceway();
 void AddSC_gardening();
 void AddSC_boss_dark_reaver();
 void AddSC_boss_ostarius();
+void AddSC_CUSTOM_SPELL();
 
 void AddScripts()
 {
@@ -559,4 +560,5 @@ void AddScripts()
     AddSC_gardening();
     AddSC_boss_dark_reaver();
     AddSC_boss_ostarius();
+    AddSC_CUSTOM_SPELL();
 }
