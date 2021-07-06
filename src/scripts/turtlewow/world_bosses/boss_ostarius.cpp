@@ -85,6 +85,14 @@ Player* GetRandomNearbyEnemyPlayer(Unit* self, float dist, uint8 attempt = 0)
     return random->ToPlayer();
 }
 
+SpellEntry* MakeCustomSpellEntry(uint32 spellId)
+{
+    auto entry = sSpellMgr.GetSpellEntry(spellId);
+    if (entry)
+        return new SpellEntry(*entry);
+    return nullptr;
+}
+
 struct boss_ostariusAI : public ScriptedAI
 {
     boss_ostariusAI(Creature *c) : ScriptedAI(c)
@@ -105,6 +113,7 @@ struct boss_ostariusAI : public ScriptedAI
     uint32 SetFlags_Timer;
     uint32 SonicBurst_Timer;
     uint32 ChainLightning_Timer;
+    time_t aggroTime;
 
     void SetDefaults()
     {
@@ -114,6 +123,7 @@ struct boss_ostariusAI : public ScriptedAI
 
         PhaseState = 0;
         CurrentPhase = 0;
+        aggroTime = time(nullptr);
 
         LastHealthPercentage = 100;
 
@@ -170,6 +180,7 @@ struct boss_ostariusAI : public ScriptedAI
     void Aggro(Unit *who) override
     {
         m_creature->MonsterYell(urand(0, 1) ? AGGRO_TEXT_1 : AGGRO_TEXT_2);
+        aggroTime = time(nullptr);
 
         m_events.ScheduleEvent(EVENT_PHASE_1_DELAY, Seconds(3));
     }
@@ -323,9 +334,14 @@ struct boss_ostariusAI : public ScriptedAI
         // Stomp and Earthquake every 10% HP loss.
         if (LastHealthPercentage - me->GetHealthPercent() >= 10)
         {
+            auto secondsDiff = time(nullptr) - aggroTime;
             if (DoCastSpellIfCan(me->GetVictim(), SPELL_STOMP) == CAST_OK)
             {
-                DoCast(me, SPELL_EARTHQUAKE, true);
+                float multiplier = 1 + (secondsDiff / 200.f);
+                auto entry = MakeCustomSpellEntry(SPELL_EARTHQUAKE); 
+                entry->EffectBasePoints[EFFECT_0] *= multiplier;
+                me->CastCustomSpell(me, entry, true);
+                //DoCast(me, SPELL_EARTHQUAKE, true);
                 LastHealthPercentage = me->GetHealthPercent();
             }
         }
@@ -351,7 +367,15 @@ struct boss_ostariusAI : public ScriptedAI
                     if (target->GetDistance2d(me) < 15.0f)
                         continue;
 
-                    DoCast(target, SPELL_CHAIN_LIGHTNING, true);
+                    uint32 addedValue = 0;
+
+                    if (target->GetPowerType() == POWER_MANA)
+                        addedValue = (target->GetMaxPower(POWER_MANA) - target->GetPower(POWER_MANA)) / 4;
+
+                    auto entry = MakeCustomSpellEntry(SPELL_CHAIN_LIGHTNING);
+                    entry->EffectBasePoints[EFFECT_0] += addedValue;
+                    me->CastCustomSpell(target, entry, true);
+                    //DoCast(target, SPELL_CHAIN_LIGHTNING, true);
 
                     break;
                 }
@@ -442,6 +466,8 @@ struct mob_uldum_sentryAI : public ScriptedAI
     }
 
     uint32 AoE_Timer;
+    uint32 lastSpell;
+    float currentMultiplier;
 
     void SetDefaults()
     {
@@ -454,6 +480,8 @@ struct mob_uldum_sentryAI : public ScriptedAI
         me->AddAura(SPELL_ROOT_FOREVER); // core support for NPC rooting broken?
         DoCast(me, SPELL_TELEPORT_VISUAL);
 
+        lastSpell = 0;
+        currentMultiplier = 1.0f;
         AoE_Timer = urand(0, 8000);
     }
 
@@ -477,8 +505,21 @@ struct mob_uldum_sentryAI : public ScriptedAI
             if (!randomTarget)
                 return;
 
-            if (DoCastSpellIfCan(randomTarget, urand(0, 1) ? SPELL_BLIZZARD : SPELL_RAIN_OF_FIRE) == CAST_OK)
-                AoE_Timer = urand(15500, 25000);
+           // if (DoCastSpellIfCan(randomTarget, urand(0, 1) ? SPELL_BLIZZARD : SPELL_RAIN_OF_FIRE) == CAST_OK)
+
+            uint32 spellId = urand(0, 1) ? SPELL_BLIZZARD : SPELL_RAIN_OF_FIRE;
+
+            if (spellId == lastSpell)
+                currentMultiplier += 1.0f;
+            else
+                currentMultiplier = 1.f;
+
+            auto entry = MakeCustomSpellEntry(spellId);
+            entry->EffectBasePoints[EFFECT_0] *= currentMultiplier;
+            me->CastCustomSpell(randomTarget, entry);
+
+            lastSpell = spellId;
+            AoE_Timer = urand(15500, 25000);
         }
         else
             AoE_Timer -= diff;
