@@ -5748,7 +5748,7 @@ if (m_caster->IsPlayer() && !(m_spellInfo->Attributes & SPELL_ATTR_PASSIVE)
                 return SPELL_FAILED_TARGET_AURASTATE;
 
         // Must be behind the target.
-        if (m_spellInfo->IsFromBehindOnlySpell() && m_casterUnit && !m_casterUnit->IsBehindTarget(target, strict))
+        if (m_spellInfo->IsFromBehindOnlySpell() && m_casterUnit && target->HasInArc(M_PI_F, m_caster))
         {
             SendInterrupted(2);
             return SPELL_FAILED_NOT_BEHIND;
