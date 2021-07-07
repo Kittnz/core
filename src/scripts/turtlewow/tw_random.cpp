@@ -5498,7 +5498,7 @@ bool GOHello_go_uldum_pedestal(Player* pPlayer, GameObject* pGo)
     }
 
     if ((pPlayer->GetQuestStatus(50228) == QUEST_STATUS_INCOMPLETE || pPlayer->GetQuestStatus(50229) == QUEST_STATUS_INCOMPLETE) && pPlayer->HasItemCount(6064, 1, false))
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_SENDER_INFO, "Place Platinum Discs on the pedestal.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 7);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_SENDER_INFO, "Place Platinum Discs on the pedestal.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
     pPlayer->SEND_GOSSIP_MENU(pGo->GetDefaultGossipMenuId(), pGo->GetGUID());
     return true;
