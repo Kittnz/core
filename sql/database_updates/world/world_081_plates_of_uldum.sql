@@ -23,4 +23,4 @@ replace into creature_involvedrelation (id, quest) values (3978, 50229);
 update quest_template set type = 61 where entry = 50229;
 update quest_template set objectivetext2 = 'Place disks on a Pedestal of Uldum' where entry = 50229;
 
-update gameobject_template set script_name = 'go_uldum_pedestal' where entry = 142343;
+REPLACE INTO `gameobject_template` VALUES (3000512, 0, 1, 1627, 'Pedestal of Uldum (Ostarius Test)', 0, 0, 0.8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_uldum_pedestal');
