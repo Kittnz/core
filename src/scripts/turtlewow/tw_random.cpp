@@ -5488,9 +5488,47 @@ bool QuestRewarded_npc_ilyara_skyvault(Player* pPlayer, Creature* pQuestGiver, Q
     return false;
 }
 
+
+bool GOHello_go_uldum_pedestal(Player* pPlayer, GameObject* pGo)
+{
+    if (pGo->GetGoType() == GAMEOBJECT_TYPE_QUESTGIVER)
+    {
+        pPlayer->PrepareQuestMenu(pGo->GetGUID());
+        pPlayer->SendPreparedQuest(pGo->GetGUID());
+    }
+
+    if ((pPlayer->GetQuestStatus(50228) == QUEST_STATUS_INCOMPLETE || pPlayer->GetQuestStatus(50229) == QUEST_STATUS_INCOMPLETE) && pPlayer->HasItemCount(6064, 1, false))
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_SENDER_INFO, "Place Platinum Discs on the pedestal.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 7);
+
+    pPlayer->SEND_GOSSIP_MENU(pGo->GetDefaultGossipMenuId(), pGo->GetGUID());
+    return true;
+}
+
+bool GOSelect_go_uldum_pedestal(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 action)
+{
+    if (action == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        if (sGameEventMgr.IsActiveEvent(162) || (!sGameEventMgr.IsEnabled(162)))
+            return false;
+        else
+        {
+            sGameEventMgr.StartEvent(162, true);
+            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(50663))
+                pPlayer->KilledMonster(cInfo, ObjectGuid());
+        }
+    }
+    return true;
+}
+
 void AddSC_tw_random()
 {
     Script *newscript;
+
+    newscript = new Script;
+    newscript->Name = "go_uldum_pedestal";
+    newscript->pGOHello = &GOHello_go_uldum_pedestal;
+    newscript->pGOGossipSelect = &GOSelect_go_uldum_pedestal;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_ilyara_skyvault";

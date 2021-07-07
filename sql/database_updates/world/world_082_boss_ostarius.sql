@@ -6,21 +6,21 @@ replace INTO `creature_template` (`entry`, `patch`, `display_id1`, `display_id2`
 UPDATE `creature_template` SET `dmg_min`='1120', `dmg_max`='1650' WHERE (`entry`='80938') AND (`patch`='0');
 
 -- Boss spawn
-INSERT INTO `creature` (`guid`, `id`, `map`, `display_id`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `wander_distance`, `health_percent`, `mana_percent`, `Movement_Type`, `spawn_Flags`, `visibility_mod`, `patch_min`, `patch_max`) VALUES (2561465, 80935, 1, 0, 0, -9649.77, -2787.49, 8.71916, 0.184924, 25, 25, 0, 100, 100, 0, 0, 0, 0, 10);
+replace INTO `creature` (`guid`, `id`, `map`, `display_id`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `wander_distance`, `health_percent`, `mana_percent`, `Movement_Type`, `spawn_Flags`, `visibility_mod`, `patch_min`, `patch_max`) VALUES (2561465, 80935, 1, 0, 0, -9649.77, -2787.49, 8.71916, 0.184924, 25, 25, 0, 100, 100, 0, 0, 0, 0, 10);
 
 -- Game event
-INSERT INTO `game_event` (`entry`, `start_time`, `end_time`, `occurence`, `length`, `holiday`, `description`, `hardcoded`, `disabled`, `patch_min`, `patch_max`) VALUES (162, '2021-01-01 18:00:00', '2030-12-31 12:00:00', 1, 9999999999, 0, 'Uldum Boss', 1, 0, 0, 10);
+replace INTO `game_event` (`entry`, `start_time`, `end_time`, `occurence`, `length`, `holiday`, `description`, `hardcoded`, `disabled`, `patch_min`, `patch_max`) VALUES (162, '2021-01-01 18:00:00', '2030-12-31 12:00:00', 1, 9999999999, 0, 'Uldum Boss', 1, 0, 0, 10);
 
 -- Game event creatures/objects
-INSERT INTO `game_event_creature` (`guid`, `event`) VALUES (2561465, 162);
-INSERT INTO `game_event_creature` (`guid`, `event`) VALUES (23119, -162);
-INSERT INTO `game_event_creature` (`guid`, `event`) VALUES (23120, -162);
-INSERT INTO `game_event_creature` (`guid`, `event`) VALUES (23121, -162);
-INSERT INTO `game_event_creature` (`guid`, `event`) VALUES (23122, -162);
-INSERT INTO `game_event_creature` (`guid`, `event`) VALUES (23123, -162);
-INSERT INTO `game_event_creature` (`guid`, `event`) VALUES (23124, -162);
+replace INTO `game_event_creature` (`guid`, `event`) VALUES (2561465, 162);
+replace  INTO `game_event_creature` (`guid`, `event`) VALUES (23119, -162);
+replace  INTO `game_event_creature` (`guid`, `event`) VALUES (23120, -162);
+replace  INTO `game_event_creature` (`guid`, `event`) VALUES (23121, -162);
+replace INTO `game_event_creature` (`guid`, `event`) VALUES (23122, -162);
+replace INTO `game_event_creature` (`guid`, `event`) VALUES (23123, -162);
+replace  INTO `game_event_creature` (`guid`, `event`) VALUES (23124, -162);
 
-INSERT INTO `game_event_gameobject` (`guid`, `event`) VALUES (4007563, -162);
+replace INTO `game_event_gameobject` (`guid`, `event`) VALUES (4007563, -162);
 
 -- Encounter objects
-INSERT INTO `gameobject_template` (`entry`, `patch`, `type`, `displayId`, `name`, `faction`, `flags`, `size`, `data0`, `data1`, `data2`, `data3`, `data4`, `data5`, `data6`, `data7`, `data8`, `data9`, `data10`, `data11`, `data12`, `data13`, `data14`, `data15`, `data16`, `data17`, `data18`, `data19`, `data20`, `data21`, `data22`, `data23`, `mingold`, `maxgold`, `script_name`) VALUES (3000270, 0, 1, 1327, 'Defense Portal', 35, 0, 3, 0, 93, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_uldum_portal');
+replace INTO `gameobject_template` (`entry`, `patch`, `type`, `displayId`, `name`, `faction`, `flags`, `size`, `data0`, `data1`, `data2`, `data3`, `data4`, `data5`, `data6`, `data7`, `data8`, `data9`, `data10`, `data11`, `data12`, `data13`, `data14`, `data15`, `data16`, `data17`, `data18`, `data19`, `data20`, `data21`, `data22`, `data23`, `mingold`, `maxgold`, `script_name`) VALUES (3000270, 0, 1, 1327, 'Defense Portal', 35, 0, 3, 0, 93, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_uldum_portal');
