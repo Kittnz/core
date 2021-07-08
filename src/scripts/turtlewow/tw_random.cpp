@@ -3153,17 +3153,23 @@ bool GossipHello_npc_flying_mount(Player* pPlayer, Creature* pCreature)
     case 51562: // Goldshire Gryphon
         if (pPlayer->GetQuestRewardStatus(60070))
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Feed the gryphon and see what will happen.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-        break;
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+        pPlayer->SEND_GOSSIP_MENU(90366, pCreature->GetGUID());
+        return true;
     case 51685: // Darkshore Wyvern
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Take me out of here.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2); break;
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Take me out of here.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2); 
+        pPlayer->SEND_GOSSIP_MENU(1, pCreature->GetGUID());
+        return true;
     case 51686: // Feralas Gryphon
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Take me out of here.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3); break;
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Take me out of here.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3); 
+        pPlayer->SEND_GOSSIP_MENU(90366, pCreature->GetGUID());
+        return true;
     case 65018: // Alormion (Bronze Drake)
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Please guide me through Caverns of Time.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4); break;
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Please guide me through Caverns of Time.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4); 
+        pPlayer->SEND_GOSSIP_MENU(51674, pCreature->GetGUID());
+        return true;
     }
-    pPlayer->PrepareQuestMenu(pCreature->GetGUID());
-    pPlayer->SEND_GOSSIP_MENU(90366, pCreature->GetGUID());
-    return true;
+    return false;
 }
 
 bool GossipSelect_npc_flying_mount(Player* p_Player, Creature* p_Creature, uint32 /*uiSender*/, uint32 uiAction)
@@ -5417,7 +5423,7 @@ bool GossipHello_npc_custodian_of_time(Player* pPlayer, Creature* pCreature)
     }
     
     pPlayer->PrepareQuestMenu(pCreature->GetGUID());
-    pPlayer->SEND_GOSSIP_MENU(90371, pCreature->GetGUID());
+    pPlayer->SEND_GOSSIP_MENU(51673, pCreature->GetGUID());
     return true;
 }
 
