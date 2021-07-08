@@ -345,26 +345,24 @@ void WorldSession::HandleMovementOpcodes(WorldPacket & recvData)
         pPlayerMover->UpdateFallInformationIfNeed(movementInfo, opcode);
     }
 
-    // Turtle WoW, jump while flying
-    /*
+    // Turtle WoW: Prevent falling, using space
     Player* exceptPlayer = _player;
 
     if (_player->IsFlying() && !movementInfo.HasMovementFlag(MOVEFLAG_SWIMMING))
     {
         movementInfo.AddMovementFlag(MOVEFLAG_SWIMMING);
-        plMover->m_movementInfo.AddMovementFlag(MOVEFLAG_SWIMMING);
-        plMover->ClearUnitState(UNIT_STAT_MOVING);
+        pMover->m_movementInfo.AddMovementFlag(MOVEFLAG_SWIMMING);
+        pMover->ClearUnitState(UNIT_STAT_MOVING);
         movementInfo.RemoveMovementFlag(MOVEFLAG_MASK_MOVING);
-        plMover->RemoveUnitMovementFlag(MOVEFLAG_MASK_MOVING);
+        pMover->RemoveUnitMovementFlag(MOVEFLAG_MASK_MOVING);
         exceptPlayer = nullptr;
-    }*/
+    }
 
     WorldPacket data(opcode, recvData.size());
-
     data << _clientMoverGuid.WriteAsPacked();
     movementInfo.Write(data);
 
-    pMover->SendMovementMessageToSet(std::move(data), true, _player);
+    pMover->SendMovementMessageToSet(std::move(data), true, exceptPlayer);
 }
 
 /*
