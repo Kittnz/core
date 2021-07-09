@@ -164,7 +164,7 @@ enum
 {
     //Spell entries for all COT NPCs
     SPELL_CLEAVE = 19642,
-    SPELL_REND = 18106,
+    SPELL_REND = 16509,
     SPELL_ECHOING_ROAR = 10967,
     SPELL_RUSHING_CHARGE = 22911,
     SPELL_PUMMEL = 19639,
