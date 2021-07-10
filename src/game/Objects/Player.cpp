@@ -21509,21 +21509,18 @@ void Player::RewardHonor(Unit* uVictim, uint32 groupSize)
         if (cVictim->IsRacialLeader())
         {
             m_honorMgr.Add(488.0, HONORABLE, cVictim);
-            //honor_points = MaNGOS::XP::xp_in_group_rate(groupsize, false) * 15000.0f / groupsize;
-            //kill_type = HONORABLE;
             return;
         }
     }
-    // for PvP see ::HonorRewardInPvP
 }
 
 void Player::RewardHonorOnDeath()
 {
-    // Honor System was added in 1.4.
-    if (sWorld.GetWowPatch() < WOW_PATCH_104 && sWorld.getConfig(CONFIG_BOOL_ACCURATE_PVP_TIMELINE))
+    // Hackfix: Don't grant honor in raid-dungeons, to fix massive honor gain on xfaction raids player deaths
+    if (GetMap() && GetMap()->IsRaid())
         return;
 
-    if (GetAura(2479, EFFECT_INDEX_0))             // Honorless Target
+    if (GetAura(2479, EFFECT_INDEX_0)) // Honorless Target
         return;
 
     // Turtle WoW Custom
@@ -21604,6 +21601,7 @@ void Player::RewardHonorOnDeath()
             {
                 rewPoints *= 0.25F;
             }
+
             rewItr.first->GetHonorMgr().Add(rewPoints, HONORABLE, this);
         }
     }
