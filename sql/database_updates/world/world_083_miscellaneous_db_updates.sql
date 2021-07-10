@@ -24,4 +24,6 @@ update creature_template set faction = 21 where entry = 604;
 update creature_template set scale = 1.25  where entry = 11180;
 update creature_template set scale = 1.25  where entry = 2806;
 
-replace into creature_template_addon (entry, auras) values (3946, 9617); 
+replace into creature_template_addon (entry, auras) values (3946, 9617);
+
+update item_template set bonding = 1 where entry = 50203; 
