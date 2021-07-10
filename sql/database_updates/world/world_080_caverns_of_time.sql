@@ -1,4 +1,4 @@
--- Misc. DB fixes:
+-- Misc. DB fixes: 
 
 update creature_template set scale = 2.5, level_min = 63, level_max = 63 where entry = 65105;
 update creature_template set level_min = 63, level_max = 63 where entry = 50113;
