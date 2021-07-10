@@ -2131,7 +2131,7 @@ bool GOHello_go_brainwashing_device(Player* pPlayer, GameObject* pGo)
 			// primary
 			if (pPlayer->HasSavedTalentSpec(1))
 			{
-				activateText = "Activate Primary Specialization (" + pPlayer->SpecTalentPoints(1) + ")";
+				activateText = "Activate Primary Specialization " + pPlayer->SpecTalentPoints(1);
 				pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_1, activateText.c_str(), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
 			}
 			pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, "Save Primary Specialization.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
@@ -2139,7 +2139,7 @@ bool GOHello_go_brainwashing_device(Player* pPlayer, GameObject* pGo)
 			// secondary
 			if (pPlayer->HasSavedTalentSpec(2))
 			{
-				activateText = "Activate Secondary Specialization (" + pPlayer->SpecTalentPoints(2) + ")";
+				activateText = "Activate Secondary Specialization " + pPlayer->SpecTalentPoints(2);
 				pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_1, activateText.c_str(), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
 			}
 			pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, "Save Secondary Specialization.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
@@ -2153,8 +2153,8 @@ bool GOSelect_go_brainwashing_device(Player* pPlayer, GameObject* pGo, uint32 se
 {
     if (action == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        pPlayer->ResetTalents();
-        pPlayer->AddAura(27880);
+        if (pPlayer->ResetTalents())
+            pPlayer->AddAura(27880);
     }
 	else if (action == GOSSIP_ACTION_INFO_DEF + 2)
 		pPlayer->ActivateTalentSpec(1);

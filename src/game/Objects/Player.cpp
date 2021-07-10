@@ -22851,6 +22851,10 @@ bool Player::HasSavedTalentSpec(int primaryOrSecondary)
 std::string Player::SpecTalentPoints(int primaryOrSecondary)
 {
 
+    // mage trees are messed up, disable for them untill i find a fix
+    if (GetClass() == CLASS_MAGE)
+        return "";
+
 	QueryResult *savedTalents = CharacterDatabase.PQuery("SELECT spell FROM character_spell_dual_spec "
 		" WHERE guid = '%u' and spec = '%i'", GetGUIDLow(), primaryOrSecondary);
 
@@ -22876,8 +22880,8 @@ std::string Player::SpecTalentPoints(int primaryOrSecondary)
 				continue;
 
 			for (int j = 0; j < MAX_TALENT_RANK; ++j)
-				if (talentInfo->RankID[j] && talentInfo->RankID[j] == savedTalentID)
-					treeTalents[talentTabInfo->tabpage] += j + 1;
+               if (talentInfo->RankID[j] && talentInfo->RankID[j] == savedTalentID)
+                   treeTalents[talentTabInfo->tabpage] += j + 1;
 		}
 
 	} while (savedTalents->NextRow());
@@ -22885,7 +22889,7 @@ std::string Player::SpecTalentPoints(int primaryOrSecondary)
 
 	delete savedTalents;
 
-	return std::to_string(treeTalents[0]) + "/" + std::to_string(treeTalents[1]) + "/" + std::to_string(treeTalents[2]);
+	return "(" + std::to_string(treeTalents[0]) + "/" + std::to_string(treeTalents[1]) + "/" + std::to_string(treeTalents[2]) + ")";
 }
 
 // saves primary or secondary spec
@@ -22899,7 +22903,9 @@ bool Player::SaveTalentSpec(int primaryOrSecondary)
 	}
 
 	// make sure dual spec table is empty for spec=primaryOrSecondary to avoid duplicates
-	CharacterDatabase.PExecute("DELETE FROM character_spell_dual_spec WHERE guid = %u and spec = %i", GetGUIDLow(), primaryOrSecondary);
+	CharacterDatabase.DirectPExecute("DELETE FROM character_spell_dual_spec WHERE guid = '%u' and spec = '%i'", GetGUIDLow(), primaryOrSecondary);
+
+    CharacterDatabase.BeginTransaction();
 
 	for (unsigned int i = 0; i < sTalentStore.GetNumRows(); ++i)
 	{
@@ -22920,19 +22926,11 @@ bool Player::SaveTalentSpec(int primaryOrSecondary)
 			SpellEntry const* pInfos = sSpellMgr.GetSpellEntry(talentInfo->RankID[j]);
 
 			if (talentInfo->RankID[j] && HasSpell(talentInfo->RankID[j]))
-			{
-				static SqlStatementID saveTalents;
-
-				SqlStatement stmt = CharacterDatabase.CreateStatement(saveTalents, "INSERT INTO character_spell_dual_spec (guid, spell, spec) "
-					"VALUES (?, ?, ?)");
-
-				stmt.addUInt32(GetGUIDLow());
-				stmt.addUInt32(talentInfo->RankID[j]);
-				stmt.addUInt8(primaryOrSecondary);
-				stmt.Execute();
-			}
+                CharacterDatabase.PExecute("INSERT INTO character_spell_dual_spec (guid, spell, spec) VALUES ('%u', '%u', '%i')", GetGUIDLow(), talentInfo->RankID[j], primaryOrSecondary);
 		}
 	}
+
+    CharacterDatabase.CommitTransaction();
 
 	if (primaryOrSecondary == 1)
 		ChatHandler(this).PSendSysMessage("Primary Specialization Saved.");
@@ -22948,7 +22946,8 @@ bool Player::SaveTalentSpec(int primaryOrSecondary)
 bool Player::ActivateTalentSpec(int primaryOrSecondary)
 {
 
-	ResetTalents(false);
+    if (!ResetTalents(false)) // money check
+        return false;
 
 	QueryResult *talents = CharacterDatabase.PQuery("SELECT spell "
 		"FROM character_spell_dual_spec WHERE guid = '%u' and spec = '%i'", GetGUIDLow(), primaryOrSecondary);
