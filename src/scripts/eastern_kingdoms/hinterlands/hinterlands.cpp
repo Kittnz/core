@@ -29,9 +29,9 @@ EndContentData */
 #include "scriptPCH.h"
 
 template <typename Functor>
-void DoAfterTime(Player* player, uint32 p_time, Functor&& function)
+void DoAfterTime(Creature* creature, uint32 p_time, Functor&& function)
 {
-    player->m_Events.AddEvent(new LambdaBasicEvent<Functor>(std::move(function)), player->m_Events.CalculateTime(p_time));
+    creature->m_Events.AddEvent(new LambdaBasicEvent<Functor>(std::move(function)), creature->m_Events.CalculateTime(p_time));
 }
 
 /*######
@@ -325,6 +325,9 @@ enum
 
     SPELL_TELEPORT = 26638,
     SPELL_BRONZE_AFFLICTION = 23170,
+    SPELL_WHELP_TRANSFORM = 8357,
+    SPELL_FROSTBOLT = 21369,
+    SPELL_ARCANE_MISSILES = 15254,
 
     GOB_CHROMIE_PORTAL = 81048,
     GOB_DRAGON_PORTAL = 91001,
@@ -351,6 +354,7 @@ struct go_corrupted_crystal : public GameObjectAI
 
     bool doOnce = true;
     bool endPortal = false;
+    bool positionOnce = false;
 
     void UpdateAI(const uint32 uiDiff)
     {
@@ -367,7 +371,7 @@ struct go_corrupted_crystal : public GameObjectAI
 
                     if (kheyna->GetPositionX() == 669.26f)
                         m_uiTick++;
-                    m_uiDialogueTimer = 1000;
+                    //m_uiDialogueTimer = 250;
                 }
                 else Reset();
                 break;
@@ -523,22 +527,39 @@ struct go_corrupted_crystal : public GameObjectAI
                     {
                         antnormi->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PLAYER);
                         antnormi->SetRooted(false);
+
                         kheyna->AddThreat(antnormi, 900);
                         kheyna->MonsterSay(SAY_KHEYNA_4); // I'll help you! Let's KILL!
                         kheyna->SetFactionTemplateId(11);
-                        kheyna->MonsterMove(690.41f, -4087.98f, 100.71f);
-                        kheyna->Attack(antnormi, true);
+                        kheyna->MonsterMove(681.44f, -4093.86f, 100.71f);
+                        kheyna->CastSpell(kheyna, SPELL_WHELP_TRANSFORM, false);
+
+                        if (Creature* chromie = antnormi->FindNearestCreature(NPC_CHROMIE, 100, true))
+                            chromie->PMonsterSay("What? You're a dragon too?! The same as her?!");
+
                         antnormi->AddAura(SPELL_BRONZE_AFFLICTION);
                     }
 
                     m_uiTick++;
-                    m_uiDialogueTimer = 5000;
+                    m_uiDialogueTimer = 1000;
                 }
                 else Reset();
                 break;
             case 12:
                 if (Creature* antnormi = me->FindNearestCreature(NPC_ANTNORMI, 1000, true))
                 {
+                    if (!positionOnce)
+                    {
+                        positionOnce = true;
+
+                        if (Creature* kheyna = me->FindNearestCreature(NPC_KHEYNA, 100, true))
+                        {
+                            kheyna->PMonsterSay("Focus on Antnormi! I'll tell you everything I know once we've killed her!");
+                            kheyna->Attack(antnormi, false);
+                            kheyna->SetSpeedRate(MOVE_RUN, 0.0);
+                            kheyna->SetSpeedRate(MOVE_WALK, 0.0);
+                        }
+                    }
                     if (antnormi->GetHealthPercent() <= 90.0f && !endPortal)
                         endPortal = true;
 
@@ -547,7 +568,7 @@ struct go_corrupted_crystal : public GameObjectAI
                         if (doOnce)
                         {
                             antnormi->MonsterYell(YELL_ANTNORMI); // Enough of this! I have no time for insects like you. The master's plan is almost complete and my diversion was a success!
-
+                            
                             if (antnormi->HasAura(SPELL_BRONZE_AFFLICTION))
                                 antnormi->RemoveAurasDueToSpell(SPELL_BRONZE_AFFLICTION);
 
@@ -560,6 +581,8 @@ struct go_corrupted_crystal : public GameObjectAI
 
                         if (Creature* kheyna = me->FindNearestCreature(NPC_KHEYNA, 1000, true))
                         {
+                            kheyna->SetSpeedRate(MOVE_RUN, 1.14f);
+                            kheyna->SetSpeedRate(MOVE_WALK, 1.0f);
                             kheyna->MonsterMoveWithSpeed(690.09f, -4086.31f, 100.71f, 0, 1, MOVE_WALK_MODE);
 
                             if (Creature* chromie = me->FindNearestCreature(NPC_CHROMIE, 1000, true))
@@ -590,6 +613,12 @@ struct go_corrupted_crystal : public GameObjectAI
                     {
                         chromie->SetFacingToObject(kheyna);
                         kheyna->SetFacingToObject(chromie);
+
+                        if (kheyna->HasAura(SPELL_WHELP_TRANSFORM))
+                            kheyna->RemoveAurasDueToSpell(SPELL_WHELP_TRANSFORM);
+
+                        kheyna->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISABLE_MOVE);
+
                         chromie->MonsterSay(SAY_CHROMIE_4); // We have much to talk about Kheyna. Adventurer, return to Andorhal and speak to me.
                         chromie->SummonCreature(GOB_CHROMIE_PORTAL, 673.74f, -4090.49, 100.71, 0, TEMPSUMMON_TIMED_DESPAWN, 60000);
                         kheyna->MonsterMove(chromie->GetPositionX() + 1, chromie->GetPositionY() + 1, chromie->GetPositionZ());
