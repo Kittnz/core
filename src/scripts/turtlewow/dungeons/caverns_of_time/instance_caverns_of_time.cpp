@@ -177,8 +177,9 @@ enum
     SPELL_WHIRLWIND = 24236,
     SPELL_DEMO_SHOUT = 19778,
     SPELL_THUNDERCLAP = 8732,
-    
+
     AURA_SHADOWGUARD = 19312,
+    AURA_SHADOWFORM = 15473
 
 };
 
@@ -319,7 +320,7 @@ struct infinite_riftguardAI : public ScriptedAI
                 if (DoCastSpellIfCan(chargeTarget, SPELL_RUSHING_CHARGE) == CAST_OK)
                     m_creature->PMonsterSay("Your pathetic magic means nothing!");
 
-                    m_checkForCasterTimer = 15000;
+                m_checkForCasterTimer = 15000;
             }
         }
         else
@@ -329,7 +330,7 @@ struct infinite_riftguardAI : public ScriptedAI
         if (!doOnce) // one time cast at 5s into fight
         {
             DoAfterTime(m_creature, 5 * IN_MILLISECONDS, [m_creature = m_creature, this]() {
-            DoCastSpellIfCan(m_creature, SPELL_ECHOING_ROAR);});
+                DoCastSpellIfCan(m_creature, SPELL_ECHOING_ROAR); });
             doOnce = true;
         }
 
@@ -444,7 +445,7 @@ struct infinite_riftweaverAI : public ScriptedAI
     }
 };
 
-
+// Whelp 
 struct infinite_whelpAI : public ScriptedAI
 {
     infinite_whelpAI(Creature* c) : ScriptedAI(c)
@@ -513,7 +514,7 @@ struct infinite_whelpAI : public ScriptedAI
 };
 
 
-
+// Time-Ripper
 struct infinite_timeripperAI : public ScriptedAI
 {
     infinite_timeripperAI(Creature* c) : ScriptedAI(c)
@@ -575,6 +576,7 @@ struct infinite_timeripperAI : public ScriptedAI
     }
 };
 
+// Riftlord
 
 struct infinite_riftlordAI : public ScriptedAI
 {
@@ -605,7 +607,7 @@ struct infinite_riftlordAI : public ScriptedAI
         if (m_whirlwindTimer <= uiDiff)
         {
             if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_WHIRLWIND) == CAST_OK)
-             m_whirlwindTimer = 6000;
+                m_whirlwindTimer = 6000;
             else
                 m_whirlwindTimer = 1000; // if failed try again
         }
@@ -645,12 +647,230 @@ struct infinite_riftlordAI : public ScriptedAI
         if (randChance > 50)
             m_creature->PMonsterSay("The sands of time shall be scattered to the winds!");
 
-            DoCastSpellIfCan(m_creature, SPELL_DEMO_SHOUT);
+        DoCastSpellIfCan(m_creature, SPELL_DEMO_SHOUT);
     }
 
     void JustDied(Unit*) override
     {
         m_creature->PMonsterSay("Impossible... ");
+    }
+};
+
+// Aqir-Adds
+struct aqir_addAI : public ScriptedAI
+{
+    aqir_addAI(Creature* c) : ScriptedAI(c)
+    {
+        Reset();
+    }
+
+    enum NPCentries
+    {
+        NPC_CLERIC = 65107,
+        NPC_WARRIOR = 65108,
+        NPC_DRONE = 65109
+    };
+
+    enum Spells
+    {
+        SPELL_MIND_BLAST = 26048,
+        SPELL_MIND_FLAY = 22919,
+        SPELL_SHADOW_STRIKE = 22574,
+        SPELL_PIERCING_SHADOW = 16429,
+        SPELL_POISON_BOLT_VOLLEY = 24099,
+        SPELL_PLAGUE_CLOUD = 23861
+    };
+
+    uint32 mindBlastTimer;
+    uint32 mindFlayTimer;
+    uint32 shadowStrikeTimer;
+    uint32 piercingShadowTimer;
+    uint32 poisonVolleyTimer;
+    uint32 plagueCloudtimer;
+
+
+    void Reset() override
+    {
+        mindBlastTimer = 1000;
+        mindFlayTimer = 15000;
+        shadowStrikeTimer = 1000;
+        piercingShadowTimer = 5000;
+        poisonVolleyTimer = 5000;
+        plagueCloudtimer = 2000;
+    }
+
+    void UpdateAI(const uint32 uiDiff) override
+    {
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
+            return;
+
+        switch (m_creature->GetEntry())
+        {
+        case NPC_CLERIC:
+        {
+            if (!m_creature->HasAura(AURA_SHADOWGUARD))
+                m_creature->AddAura(AURA_SHADOWGUARD);
+
+            if (mindBlastTimer <= uiDiff)
+            {
+                m_creature->CastStop();
+
+                if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_MIND_BLAST) == CAST_OK)
+                    mindBlastTimer = 10000;
+                else
+                    mindBlastTimer = 1000; // try again
+            }
+            else
+                mindBlastTimer -= uiDiff;
+                
+            if (mindFlayTimer <= uiDiff)
+            {
+                if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_MIND_FLAY) == CAST_OK)
+                    mindFlayTimer = 11000;
+                else
+                    mindFlayTimer = 1000; // try again
+
+            }
+            else
+                mindFlayTimer -= uiDiff;
+            break;
+        }
+        case NPC_WARRIOR:
+        {
+            if (shadowStrikeTimer <= uiDiff)
+            {
+                if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_SHADOW_STRIKE) == CAST_OK)
+                    shadowStrikeTimer = 10000;
+            }
+            else
+                shadowStrikeTimer -= uiDiff;
+
+            if (piercingShadowTimer <= uiDiff)
+            {
+                for (int i = 0; i < 5; i++)
+                {
+                    if (DoCastSpellIfCan(m_creature->SelectRandomUnfriendlyTarget(), SPELL_PIERCING_SHADOW) == CAST_OK);
+                }
+                piercingShadowTimer = 15000;
+            }
+            else
+                piercingShadowTimer -= uiDiff;
+
+            break;
+        }
+        case NPC_DRONE:
+        {
+            m_creature->SetRooted(true);
+
+            if (poisonVolleyTimer <= uiDiff)
+            {
+                if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_POISON_BOLT_VOLLEY) == CAST_OK)
+                    poisonVolleyTimer = 12000;
+            }
+            else
+                poisonVolleyTimer -= uiDiff;
+
+            if (plagueCloudtimer <= uiDiff)
+            {
+                DoCastSpellIfCan(m_creature->SelectRandomUnfriendlyTarget(), SPELL_POISON_BOLT_VOLLEY);
+
+                plagueCloudtimer = 20000;
+            }
+            else
+                plagueCloudtimer -= uiDiff;
+            break;
+        }
+        }
+
+        DoMeleeAttackIfReady();
+    }
+};
+
+
+// Aqir-Adds
+struct swamp_npcs_cotAI : public ScriptedAI
+{
+    swamp_npcs_cotAI(Creature* c) : ScriptedAI(c)
+    {
+        Reset();
+    }
+
+    uint32 poisonTimer;
+    uint32 woundTimer;
+    uint32 paralyzeTimer;
+
+    enum NPCentries
+    {
+        NPC_PYTHON = 65110,
+        NPC_CROC = 65111,
+        NPC_TARANTULA = 65112
+    };
+
+    enum Spells
+    {
+        SPELL_POISON = 24097,
+        SPELL_WOUND = 16549,
+        SPELL_PARALYZING_POISON = 3609
+    };
+
+    void Reset() override
+    {
+        poisonTimer = 21000;
+        woundTimer = 10000;
+        paralyzeTimer = 35000;
+    }
+
+    void UpdateAI(const uint32 uiDiff) override
+    {
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
+            return;
+
+        switch (m_creature->GetEntry())
+        {
+        case NPC_PYTHON:
+        {
+            if (poisonTimer <= uiDiff)
+            {
+                if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_POISON) == CAST_OK)
+                    poisonTimer = 21000;
+            }
+            else poisonTimer -= uiDiff;
+
+            break;
+        }
+        case NPC_CROC:
+        {
+            if (woundTimer <= uiDiff)
+            {
+                if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_WOUND) == CAST_OK)
+                    woundTimer = 10000;
+            }
+            else woundTimer -= uiDiff;
+            break;
+        }
+        case NPC_TARANTULA:
+        {
+            bool doOnce = false;
+
+            if (!doOnce)
+            {
+                if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_PARALYZING_POISON) == CAST_OK)
+                    paralyzeTimer = 35000;
+                doOnce = true;
+            }
+
+            if (paralyzeTimer <= uiDiff)
+            {
+                if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_PARALYZING_POISON) == CAST_OK)
+                    paralyzeTimer = 35000;
+            }
+            else paralyzeTimer -= uiDiff;
+            break;
+        }
+
+        }
+
+        DoMeleeAttackIfReady();
     }
 };
 
@@ -687,6 +907,16 @@ CreatureAI* GetAI_infinite_timeripper(Creature* _Creature)
 CreatureAI* GetAI_infinite_riftlord(Creature* _Creature)
 {
     return new infinite_riftlordAI(_Creature);
+}
+
+CreatureAI* GetAI_aqir_add(Creature* _Creature)
+{
+    return new aqir_addAI(_Creature);
+}
+
+CreatureAI* GetAI_swamp_npcs_cot(Creature* _Creature)
+{
+    return new swamp_npcs_cotAI(_Creature);
 }
 
 void AddSC_instance_caverns_of_time()
@@ -730,5 +960,15 @@ void AddSC_instance_caverns_of_time()
     newscript = new Script;
     newscript->Name = "infinite_riftlord";
     newscript->GetAI = &GetAI_infinite_riftlord;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "aqir_add";
+    newscript->GetAI = &GetAI_aqir_add;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "swamp_npcs_cot";
+    newscript->GetAI = &GetAI_swamp_npcs_cot;
     newscript->RegisterSelf();
 }
