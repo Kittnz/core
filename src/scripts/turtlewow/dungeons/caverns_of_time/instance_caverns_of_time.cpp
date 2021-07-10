@@ -531,6 +531,9 @@ struct infinite_timeripperAI : public ScriptedAI
 
     void UpdateAI(const uint32 uiDiff) override
     {
+        if (!m_creature->HasAura(AURA_SHADOWGUARD))
+            m_creature->AddAura(AURA_SHADOWGUARD);
+
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
@@ -598,8 +601,6 @@ struct infinite_riftlordAI : public ScriptedAI
 
     void UpdateAI(const uint32 uiDiff) override
     {
-        if (!m_creature->HasAura(AURA_SHADOWGUARD))
-            m_creature->AddAura(AURA_SHADOWGUARD);
 
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
@@ -674,7 +675,7 @@ struct aqir_addAI : public ScriptedAI
     enum Spells
     {
         SPELL_MIND_BLAST = 26048,
-        SPELL_MIND_FLAY = 22919,
+        SPELL_HEAL = 11642,
         SPELL_SHADOW_STRIKE = 22574,
         SPELL_PIERCING_SHADOW = 16429,
         SPELL_POISON_BOLT_VOLLEY = 24099,
@@ -682,7 +683,7 @@ struct aqir_addAI : public ScriptedAI
     };
 
     uint32 mindBlastTimer;
-    uint32 mindFlayTimer;
+    uint32 healTimer;
     uint32 shadowStrikeTimer;
     uint32 piercingShadowTimer;
     uint32 poisonVolleyTimer;
@@ -692,7 +693,7 @@ struct aqir_addAI : public ScriptedAI
     void Reset() override
     {
         mindBlastTimer = 1000;
-        mindFlayTimer = 15000;
+        healTimer = 15000;
         shadowStrikeTimer = 1000;
         piercingShadowTimer = 5000;
         poisonVolleyTimer = 5000;
@@ -708,31 +709,31 @@ struct aqir_addAI : public ScriptedAI
         {
         case NPC_CLERIC:
         {
-            if (!m_creature->HasAura(AURA_SHADOWGUARD))
-                m_creature->AddAura(AURA_SHADOWGUARD);
+            if (!m_creature->HasAura(AURA_SHADOWFORM))
+                m_creature->AddAura(AURA_SHADOWFORM);
 
             if (mindBlastTimer <= uiDiff)
             {
                 m_creature->CastStop();
 
                 if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_MIND_BLAST) == CAST_OK)
-                    mindBlastTimer = 10000;
+                    mindBlastTimer = 8000;
                 else
                     mindBlastTimer = 1000; // try again
             }
             else
                 mindBlastTimer -= uiDiff;
                 
-            if (mindFlayTimer <= uiDiff)
+            if (healTimer <= uiDiff)
             {
-                if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_MIND_FLAY) == CAST_OK)
-                    mindFlayTimer = 11000;
+                if (DoCastSpellIfCan(m_creature->SelectRandomFriendlyTarget(nullptr, 15.0f), SPELL_HEAL) == CAST_OK)
+                    healTimer = 15000;
                 else
-                    mindFlayTimer = 1000; // try again
+                    healTimer = 1000; // try again
 
             }
             else
-                mindFlayTimer -= uiDiff;
+                healTimer -= uiDiff;
             break;
         }
         case NPC_WARRIOR:
@@ -756,6 +757,8 @@ struct aqir_addAI : public ScriptedAI
             else
                 piercingShadowTimer -= uiDiff;
 
+            DoMeleeAttackIfReady();
+
             break;
         }
         case NPC_DRONE:
@@ -772,7 +775,8 @@ struct aqir_addAI : public ScriptedAI
 
             if (plagueCloudtimer <= uiDiff)
             {
-                DoCastSpellIfCan(m_creature->SelectRandomUnfriendlyTarget(), SPELL_POISON_BOLT_VOLLEY);
+                if (Creature* cloudTarget = m_creature->SummonCreature(65120, m_creature->GetVictim()->GetPositionX(), m_creature->GetVictim()->GetPositionY(), m_creature->GetVictim()->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 5000))
+                cloudTarget->CastSpell(cloudTarget, SPELL_PLAGUE_CLOUD, false);
 
                 plagueCloudtimer = 20000;
             }
@@ -782,12 +786,11 @@ struct aqir_addAI : public ScriptedAI
         }
         }
 
-        DoMeleeAttackIfReady();
     }
 };
 
 
-// Aqir-Adds
+// swamp creatures
 struct swamp_npcs_cotAI : public ScriptedAI
 {
     swamp_npcs_cotAI(Creature* c) : ScriptedAI(c)
