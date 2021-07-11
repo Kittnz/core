@@ -1335,8 +1335,6 @@ void World::SetInitialWorldSettings()
 
     sSpellMgr.LoadSpellProcEvents();
 
-    sSpellMgr.LoadSpellBonuses();
-
     sSpellMgr.LoadSpellProcItemEnchant();                   // must be after LoadSpellChains
 
     sSpellMgr.LoadSpellThreats();
