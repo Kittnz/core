@@ -69,6 +69,7 @@
 #include "World.h"
 #include "WorldPacket.h"
 #include "WorldSession.h"
+#include "GuidObjectScaling.h"
 #include "revision.h"
 #include <cctype>
 #include <fstream>
@@ -7104,6 +7105,7 @@ bool ChatHandler::HandleGameObjectScaleCommand(char* args)
     map->Remove(obj, false);
 
     obj->SetObjectScale(scale);
+    sGuidObjectScaling->AddOrEdit(obj->GetGUID(), scale);
     obj->UpdateRotationFields();
 
     map->Add(obj);
