@@ -609,7 +609,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "pet",            SEC_GAMEMASTER,     true, nullptr,                                         "", petCommandTable},
         { "gold",           SEC_GAMEMASTER,    true, nullptr,                                         "", goldCommandTable },
             // Turtle WoW
-        { "balance",        SEC_ADMINISTRATOR,    true,  &ChatHandler::HandleBalanceCommand,             "", nullptr },
+        { "balance",        SEC_GAMEMASTER,    true,  &ChatHandler::HandleBalanceCommand,             "", nullptr },
        // {"sendmails", SEC_ADMINISTRATOR, true, &ChatHandler::HandleSendMailsCommand, "", nullptr},
         { "mailbox",         SEC_GAMEMASTER,     false,  &ChatHandler::HandleMailboxCommand,           "", nullptr },
         { "sale",           SEC_ADMINISTRATOR,    true,  &ChatHandler::HandleSaleCommand,                "", nullptr },
