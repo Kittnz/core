@@ -220,14 +220,6 @@ void GuildMgr::LoadPetitions()
     }
 }
 
-void GuildMgr::SaveGuildBankInventories()
-{
-	for (const auto& guildPair : m_GuildMap)
-	{
-		guildPair.second->SaveGuildBank();
-	}
-}
-
 Petition::~Petition()
 {
     for (const auto& itr : m_signatures)

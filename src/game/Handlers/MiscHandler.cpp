@@ -481,10 +481,6 @@ void WorldSession::HandleSetSelectionOpcode(WorldPacket & recv_data)
 
     _player->SetSelectionGuid(guid);
 
-	if (!_player->m_bankStash.empty())
-	{
-		_player->RestoreBankFromStash();
-	}
     // update reputation list if need
     Unit* unit = ObjectAccessor::GetUnit(*_player, guid);   // can select group members at diff maps
 
