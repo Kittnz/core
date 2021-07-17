@@ -77,3 +77,5 @@ replace into npc_vendor values
 (80008, 4400, 0, 0, 0, 0),
 (80008, 1645, 0, 0, 0, 0),
 (80008, 8950, 0, 0, 0, 0);
+
+update quest_template set objectives = 'Collect 20 Winterspring Tea Leaves.' where entry = 80369;
