@@ -48,3 +48,16 @@ replace into creature_involvedrelation (id, quest) values (11536, 9226);
 
 replace into creature_template (entry, name, display_id1) values (80007, 'Quest 80395 Custom Trigger 1', 328);
 UPDATE `quest_template` SET `ReqCreatureOrGOId1`='80007' WHERE entry=80395;
+
+delete from item_template where entry = 50617;
+delete from item_template where entry = 16104;
+delete from item_template where entry = 21195;
+delete from item_template where entry = 21193;
+delete from item_template where entry = 21194
+
+update quest_template set rewxp = 1000 where entry = 70054;
+update quest_template set rewxp = 2000 where entry = 70055;
+update quest_template set rewxp = 2000 where entry = 70056;
+update quest_template set rewxp = 2000 where entry = 70057;
+update quest_template set rewxp = 2500 where entry = 70058;
+
