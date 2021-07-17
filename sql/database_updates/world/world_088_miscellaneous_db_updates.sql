@@ -61,3 +61,19 @@ update quest_template set rewxp = 2000 where entry = 70056;
 update quest_template set rewxp = 2000 where entry = 70057;
 update quest_template set rewxp = 2500 where entry = 70058;
 
+REPLACE INTO `creature_template` VALUES (80008, 0, 1541, 0, 0, 0, 'Aubrey Merton', 'Blue Anchor Exports Trader', 0, 57, 57, 3758, 3758, 0, 0, 3334, 776, 6, 1, 1.14286, 0, 20, 5, 0, 0, 1, 102, 131, 0, 258, 1, 1500, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 72.2304, 99.3168, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 524298, '');
+
+update creature_template set faction = 31 where entry = 80008;
+
+replace into npc_vendor values 
+(80008, 18256, 0, 0, 0, 0),
+(80008, 8925, 0, 0, 0, 0),
+(80008, 692, 0, 0, 0, 0),
+(80008, 6530, 0, 0, 0, 0),
+(80008, 3466, 0, 0, 0, 0),
+(80008, 4470, 0, 0, 0, 0),
+(80008, 11284, 0, 0, 0, 0),
+(80008, 4364, 0, 0, 0, 0),
+(80008, 4400, 0, 0, 0, 0),
+(80008, 1645, 0, 0, 0, 0),
+(80008, 8950, 0, 0, 0, 0);
