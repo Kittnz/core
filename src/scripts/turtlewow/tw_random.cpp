@@ -5276,7 +5276,7 @@ bool GOHello_go_kheyna_wormhole(Player* pPlayer, GameObject* pGo)
     else
     {
         if (pPlayer->GetQuestStatus(80395) == QUEST_STATUS_INCOMPLETE)
-            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80938))
+            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80007))
                 pPlayer->KilledMonster(cInfo, ObjectGuid());
 
         if (pPlayer->FindNearestCreature(81041, 15.0F))
