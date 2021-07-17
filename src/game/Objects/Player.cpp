@@ -12527,14 +12527,6 @@ void Player::OnGossipSelect(WorldObject* pSource, uint32 gossipListId)
             PrepareGossipMenu(pSource);
             SendPreparedGossip(pSource);
             break;
-		case GOSSIP_OPTION_GUILD_BANKER:
-			// prepare guild bank for player
-			if (TryOpenGuildBank())
-			{
-				// show new bank
-				GetSession()->SendShowBank(guid);
-			}
-			break;
         case GOSSIP_OPTION_BATTLEFIELD:
         {
             BattleGroundTypeId bgTypeId = sBattleGroundMgr.GetBattleMasterBG(pSource->GetEntry());
@@ -22175,118 +22167,6 @@ void Player::SetFlying(bool flying)
         m_movementInfo.RemoveMovementFlag(MOVEFLAG_LEVITATING);
         SendHeartBeat(true);
     }
-}
-
-bool Player::TryOpenGuildBank()
-{
-	uint32 GuildId = GetGuildId();
-
-	if (GuildId == 0) return false;
-
-	if (Guild* guild = sGuildMgr.GetGuildById(GetGuildId()))
-	{
-		if (guild->IsGuildBankUsingNow())
-		{
-			return false;
-		}
-
-		Item** pInventory = guild->GetInventory();
-
-		// stash all our bank, and replace it to guild bank
-		//slot >= BANK_SLOT_ITEM_START && slot < BANK_SLOT_ITEM_END
-		//INVENTORY_SLOT_BAG_0
-		for (uint8 i = BANK_SLOT_ITEM_START; i < BANK_SLOT_ITEM_END; i++)
-		{
-			if (Item* BankItem = GetItemByPos(INVENTORY_SLOT_BAG_0, i))
-			{
-				RemoveItem(INVENTORY_SLOT_BAG_0, i, true);
-				BankItem->FSetState(ITEM_STASHED);
-				m_bankStash.emplace_back(StashedItem{ BankItem, i, INVENTORY_SLOT_BAG_0 });
-			}
-		}
-
-		for (uint8 i = BANK_SLOT_ITEM_START; i < BANK_SLOT_ITEM_END; i++)
-		{
-			if (Item* BankItem = pInventory[i])
-			{
-				m_items[i] = BankItem;
-				SetGuidValue(PLAYER_FIELD_INV_SLOT_HEAD + (i * 2), BankItem->GetObjectGuid());
-				BankItem->SetGuidValue(ITEM_FIELD_CONTAINED, GetObjectGuid());
-				BankItem->SetGuidValue(ITEM_FIELD_OWNER, GetObjectGuid());
-				BankItem->SetSlot(i);
-				BankItem->SetContainer(nullptr);
-
-				if (IsInWorld())
-				{
-					BankItem->AddToWorld();
-					BankItem->SendCreateUpdateToPlayer(this);
-				}
-
-				BankItem->SetState(ITEM_CHANGED, this);
-
-				pInventory[i] = nullptr;
-			}
-		}
-
-		guild->SetGuildBankUser(this);
-
-		return true;
-	}
-
-	return false;
-}
-
-void Player::RestoreBankFromStash()
-{
-	uint32 GuildId = GetGuildId();
-
-	if (GuildId == 0) return;
-
-	if (Guild* guild = sGuildMgr.GetGuildById(GetGuildId()))
-	{
-		if (!guild->IsGuildBankUser(this))
-		{
-			sLog.outError("Player \"%s\" GUID: %llu tried to restore bank items, but he doesn't own guild inventory", 
-				GetName(), GetObjectGuid().GetRawValue());
-			return;
-		}
-
-		Item** pInventory = guild->GetInventory();
-
-		for (uint8 i = BANK_SLOT_ITEM_START; i < BANK_SLOT_ITEM_END; i++)
-		{
-			if (Item* BankItem = GetItemByPos(INVENTORY_SLOT_BAG_0, i))
-			{
-				RemoveItem(INVENTORY_SLOT_BAG_0, i, true);
-
-				BankItem->FSetState(ITEM_STASHED);
-				pInventory[i] = BankItem;
-			}
-		}
-
-		for (StashedItem& Item : m_bankStash)
-		{
-			m_items[Item.slot] = Item.item;
-			SetGuidValue(PLAYER_FIELD_INV_SLOT_HEAD + (Item.slot * 2), Item.item->GetObjectGuid());
-			Item.item->SetGuidValue(ITEM_FIELD_CONTAINED, GetObjectGuid());
-			Item.item->SetGuidValue(ITEM_FIELD_OWNER, GetObjectGuid());
-			Item.item->SetSlot(Item.slot);
-			Item.item->SetContainer(nullptr);
-
-			if (IsInWorld())
-			{
-				Item.item->AddToWorld();
-				Item.item->SendCreateUpdateToPlayer(this);
-			}
-
-			Item.item->SetState(ITEM_CHANGED, this);
-		}
-
-		m_bankStash.clear();
-		guild->SetGuildBankUser(nullptr);
-	}
-
-	PlayerTalkClass->CloseGossip();
 }
 
 void Player::CancelTaxiRide(Player* passenger)

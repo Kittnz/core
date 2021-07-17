@@ -923,11 +923,6 @@ class Player final: public Unit
         /*********************************************************/
         /***                    STORAGE SYSTEM                 ***/
         /*********************************************************/
-
-		// Turtle specific
-		// need to be public, in order to force close guild bank
-		void RestoreBankFromStash();
-
     private:
         ObjectGuid m_lootGuid;
         Item* m_items[PLAYER_SLOTS_COUNT];
@@ -941,17 +936,6 @@ class Player final: public Unit
         TradeData* m_trade;
         uint32 m_WeaponProficiency;
         uint32 m_ArmorProficiency;
-
-		struct StashedItem
-		{
-			Item* item;
-			uint8 slot;
-			uint8 bag;
-		};
-		std::vector< StashedItem> m_bankStash;
-
-		// Turtle specific: 
-		bool TryOpenGuildBank();
 
         // internal common parts for CanStore/StoreItem functions
         InventoryResult _CanStoreItem_InSpecificSlot(uint8 bag, uint8 slot, ItemPosCountVec& dest, ItemPrototype const* pProto, uint32& count, bool swap, Item* pSrcItem) const;
