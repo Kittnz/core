@@ -27,8 +27,8 @@
 
 class Petition;
 
-#define GUILD_RANKS_MIN_COUNT   5
-#define GUILD_RANKS_MAX_COUNT   10
+#define GUILD_RANKS_MIN_COUNT 5
+#define GUILD_RANKS_MAX_COUNT 10
 
 enum
 {
@@ -101,7 +101,7 @@ enum CommandErrors
     ERR_GUILD_NAME_INVALID = 0x06,
     ERR_GUILD_NAME_EXISTS_S = 0x07,
     ERR_GUILD_LEADER_LEAVE = 0x08, // for Typecommand 0x03
-    ERR_GUILD_PERMISSIONS = 0x08, // for another Typecommand
+    ERR_GUILD_PERMISSIONS = 0x08,  // for another Typecommand
     ERR_GUILD_PLAYER_NOT_IN_GUILD = 0x09,
     ERR_GUILD_PLAYER_NOT_IN_GUILD_S = 0x0A,
     ERR_GUILD_PLAYER_NOT_FOUND_S = 0x0B,
@@ -112,7 +112,7 @@ enum CommandErrors
     ERR_GUILD_RANKS_LOCKED = 0x11,
     ERR_GUILD_RANK_IN_USE = 0x12,
     ERR_GUILD_IGNORING_YOU_S = 0x13,
-    ERR_GUILD_UNK20 = 0x14  // for Typecommand 0x05 only
+    ERR_GUILD_UNK20 = 0x14 // for Typecommand 0x05 only
 };
 
 enum GuildEvents
@@ -127,10 +127,10 @@ enum GuildEvents
     GE_LEADER_CHANGED = 0x07,
     GE_DISBANDED = 0x08,
     GE_TABARDCHANGE = 0x09,
-    GE_UNK1 = 0x0A,                 // string, string EVENT_GUILD_ROSTER_UPDATE tab content change?
-    GE_UNK2 = 0x0B,                 // EVENT_GUILD_ROSTER_UPDATE
-    GE_SIGNED_ON = 0x0C,                 // ERR_FRIEND_ONLINE_SS
-    GE_SIGNED_OFF = 0x0D,                 // ERR_FRIEND_OFFLINE_S
+    GE_UNK1 = 0x0A,       // string, string EVENT_GUILD_ROSTER_UPDATE tab content change?
+    GE_UNK2 = 0x0B,       // EVENT_GUILD_ROSTER_UPDATE
+    GE_SIGNED_ON = 0x0C,  // ERR_FRIEND_ONLINE_SS
+    GE_SIGNED_OFF = 0x0D, // ERR_FRIEND_OFFLINE_S
 };
 
 enum PetitionSigns
@@ -165,11 +165,11 @@ enum GuildEmblem
 
 struct GuildEventLogEntry
 {
-    uint8  EventType;
-    uint32 PlayerGuid1;
-    uint32 PlayerGuid2;
-    uint8  NewRank;
-    uint64 TimeStamp;
+    uint8 eventType = 0;
+    uint32 playerGuid1 = 0;
+    uint32 playerGuid2 = 0;
+    uint8 newRank = 0;
+    uint64 timestamp = 0;
 };
 
 struct MemberSlot
@@ -251,8 +251,6 @@ public:
     bool CheckGuildStructure();
     bool LoadRanksFromDB(QueryResult* guildRanksResult);
     bool LoadMembersFromDB(QueryResult* guildMembersResult);
-    void LoadGuildBankFromDB();
-    void SaveGuildBank();
 
     void BroadcastToGuild(WorldSession* session, std::string const& msg, uint32 language = LANG_UNIVERSAL);
     void BroadcastToOfficers(WorldSession* session, std::string const& msg, uint32 language = LANG_UNIVERSAL);
@@ -265,7 +263,7 @@ public:
         BroadcastEvent(event, ObjectGuid(), str1, str2, str3);
     }
 
-    template<class Do>
+    template <class Do>
     void BroadcastWorker(Do& _do, Player* except = nullptr)
     {
         for (MemberList::iterator itr = members.begin(); itr != members.end(); ++itr)
@@ -308,23 +306,13 @@ public:
         return nullptr;
     }
 
-    void Roster(WorldSession* session = nullptr);          // nullptr = broadcast
+    void Roster(WorldSession* session = nullptr); // nullptr = broadcast
     void Query(WorldSession* session);
 
     // Guild EventLog
     void LoadGuildEventLogFromDB();
     void DisplayGuildEventLog(WorldSession* session);
-    void LogGuildEvent(uint8 EventType, ObjectGuid playerGuid1, ObjectGuid playerGuid2 = ObjectGuid(), uint8 newRank = 0);
-
-    Item** GetInventory()
-    {
-        return &m_guildInventory[0];
-    }
-
-    void SetGuildBankUser(Player* pPlayer);
-
-    bool IsGuildBankUser(Player* pPlayer) const;
-    bool IsGuildBankUsingNow() const;
+    void LogGuildEvent(uint8 eventType, ObjectGuid playerGuid1, ObjectGuid playerGuid2 = ObjectGuid(), uint8 newRank = 0);
 
 protected:
     void AddRank(std::string const& name, uint32 rights);
@@ -343,7 +331,7 @@ protected:
     int32 m_BorderStyle;
     int32 m_BorderColor;
     int32 m_BackgroundColor;
-    uint32 m_accountsNumber;                            // 0 used as marker for need lazy calculation at request
+    uint32 m_accountsNumber; // 0 used as marker for need lazy calculation at request
 
     RankList m_Ranks;
 
@@ -355,14 +343,7 @@ protected:
 
     uint32 m_GuildEventLogNextGuid;
 
-    // Giperion Turtle: Guild inventory
-    Item* m_guildInventory[255];
-
-    // player guid that currently using guild bank
-    ObjectGuid m_guildInventoryUsedBy;
-
 private:
-    void UpdateAccountsNumber() { m_accountsNumber = 0; }// mark for lazy calculation at request in GetAccountsNumber
+    void UpdateAccountsNumber() { m_accountsNumber = 0; } // mark for lazy calculation at request in GetAccountsNumber
 };
-
 #endif
