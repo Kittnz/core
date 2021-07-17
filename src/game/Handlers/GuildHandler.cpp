@@ -72,7 +72,7 @@ void WorldSession::HandleGuildInviteOpcode(WorldPacket& recvPacket)
     DEBUG_LOG("WORLD: Received CMSG_GUILD_INVITE");
 
     std::string Invitedname, plname;
-    Player * player = nullptr;
+    Player* player = nullptr;
 
     recvPacket >> Invitedname;
 
@@ -202,7 +202,7 @@ void WorldSession::HandleGuildRemoveOpcode(WorldPacket& recvPacket)
 void WorldSession::HandleGuildAcceptOpcode(WorldPacket& /*recvPacket*/)
 {
     Guild *guild;
-    Player *player = GetPlayer();
+    Player* player = GetPlayer();
 
     DEBUG_LOG("WORLD: Received CMSG_GUILD_ACCEPT");
 
@@ -442,7 +442,7 @@ void WorldSession::HandleGuildLeaderOpcode(WorldPacket& recvPacket)
     std::string name;
     recvPacket >> name;
 
-    Player *oldLeader = GetPlayer();
+    Player* oldLeader = GetPlayer();
 
     if (!normalizePlayerName(name))
         return;
@@ -722,12 +722,12 @@ void WorldSession::HandleSaveGuildEmblemOpcode(WorldPacket& recvPacket)
     DEBUG_LOG("WORLD: Received MSG_SAVE_GUILD_EMBLEM");
 
     ObjectGuid vendorGuid;
-    uint32 EmblemStyle, EmblemColor, BorderStyle, BorderColor, BackgroundColor;
+    int32 emblemStyle, emblemColor, borderStyle, borderColor, backgroundColor;
 
     recvPacket >> vendorGuid;
-    recvPacket >> EmblemStyle >> EmblemColor >> BorderStyle >> BorderColor >> BackgroundColor;
+    recvPacket >> emblemStyle >> emblemColor >> borderStyle >> borderColor >> backgroundColor;
 
-    Creature *pCreature = GetPlayer()->GetNPCIfCanInteractWith(vendorGuid, UNIT_NPC_FLAG_TABARDDESIGNER);
+    Creature* pCreature = GetPlayer()->GetNPCIfCanInteractWith(vendorGuid, UNIT_NPC_FLAG_TABARDDESIGNER);
     if (!pCreature)
     {
         //[-ZERO] fails silently, not "That's not an emblem vendor!"
@@ -763,7 +763,7 @@ void WorldSession::HandleSaveGuildEmblemOpcode(WorldPacket& recvPacket)
     }
 
     GetPlayer()->ModifyMoney(-10 * GOLD);
-    guild->SetEmblem(EmblemStyle, EmblemColor, BorderStyle, BorderColor, BackgroundColor);
+    guild->SetEmblem(emblemStyle, emblemColor, borderStyle, borderColor, backgroundColor);
 
     //"Guild Emblem saved."
     SendSaveGuildEmblem(ERR_GUILDEMBLEM_SUCCESS);
