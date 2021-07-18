@@ -5519,9 +5519,160 @@ bool GOSelect_go_uldum_pedestal(Player* pPlayer, GameObject* pGo, uint32 sender,
     return true;
 }
 
+// Scarlet Monastery raid attunement quest scripts:
+
+bool GossipHello_npc_young_and_foolish(Player* pPlayer, Creature* pCreature)
+{
+    if (pPlayer->GetQuestStatus(80702) == QUEST_STATUS_INCOMPLETE)
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Anything strange happened recently?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+
+    if (pCreature->IsVendor())
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ACTION_TRADE, "Buy somethin', will ya?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_young_and_foolish(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        switch (pCreature->GetEntry())
+        {
+        case 341: // Foreman Oslow
+            pCreature->HandleEmote(EMOTE_ONESHOT_POINT);
+            pCreature->MonsterSayToPlayer("Yes, a caravan with men and women in red passed through here. Many of our young and foolish followed them.", pPlayer);
+            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(50665))
+                pPlayer->KilledMonster(cInfo, ObjectGuid());
+            break;
+        case 956: // Dorin Songblade
+            pCreature->MonsterSayToPlayer("Aye, young boys and girls left with the Scarlets, can ya blame them? Look at this place.", pPlayer);
+            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(50666))
+                pPlayer->KilledMonster(cInfo, ObjectGuid());
+            break;
+        case 344: // Magistrate Solomon
+            pCreature->MonsterSayToPlayer("It\'s regrettable, our children left with the foolish zealots of the Crusade in the middle of the night! Please, don\'t harm them, send them home.", pPlayer);
+            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(50667))
+                pPlayer->KilledMonster(cInfo, ObjectGuid());
+            break;
+        }
+    }
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
+        pPlayer->SEND_VENDORLIST(pCreature->GetGUID());
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
+bool GossipHello_search_for_clues(Player* pPlayer, Creature* pCreature)
+{
+    if (pPlayer->GetQuestStatus(80703) == QUEST_STATUS_INCOMPLETE && pPlayer->GetQuestStatusData(80703)->m_creatureOrGOcount[0] == 0)
+    {
+        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(50668))
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+    }
+    pPlayer->SEND_GOSSIP_MENU(51680, pCreature->GetGUID());
+    return true;
+}
+
+bool GOHello_search_for_clues(Player* pPlayer, GameObject* pGo)
+{
+    if (pGo->GetEntry() == 1000167 && pPlayer->GetQuestStatus(80703) == QUEST_STATUS_INCOMPLETE && pPlayer->GetQuestStatusData(80703)->m_creatureOrGOcount[0] == 1)
+    {
+        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(50668))
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+        pPlayer->SEND_GOSSIP_MENU(51681, pGo->GetGUID());
+        return true;
+    }
+    if (pGo->GetEntry() == 1000168)
+    {
+        if (pPlayer->GetQuestStatus(80703) == QUEST_STATUS_INCOMPLETE && pPlayer->GetQuestStatusData(80703)->m_creatureOrGOcount[0] >= 2)
+        {
+            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(50668))
+                pPlayer->KilledMonster(cInfo, ObjectGuid());
+            if (!pPlayer->HasItemCount(53002, 1, 1))
+                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "Take Scarlet Recruit\'s Insignia Ring.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            pPlayer->SEND_GOSSIP_MENU(51682, pGo->GetGUID());
+            return true;
+        }
+        return false;
+    }
+}
+
+bool GOSelect_search_for_clues(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 action)
+{
+    if (action == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        if (pPlayer->AddItem(53002))
+        {
+            pPlayer->CLOSE_GOSSIP_MENU();
+            return true;
+        }
+    }
+    return false;
+}
+
+bool GossipHello_npc_kixxle(Player* pPlayer, Creature* pCreature)
+{
+    if (pPlayer->GetQuestStatus(80702) == QUEST_STATUS_INCOMPLETE)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Were you the one to sell an oil canister to humans dressed in red?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    }
+    if (pCreature->IsVendor())
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ACTION_TRADE, "I want to browse your goods.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 10);
+
+    pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_kixxle(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pPlayer->MonsterSayToPlayer("Yea boss, I sure did. I\'m a merchant, you know, if I gots it, I sells it.", pPlayer);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Where did they go?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+    }
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
+    {
+        pPlayer->MonsterSayToPlayer("They went North I guess, following in the footsteps of that dwarven caravan. One of them said they\'d wait by the bridge for an ambush or something, didn\'t look like the sharpest tool in the shed, you get me?", pPlayer);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Why didn\'t you stop them?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+    }
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
+    {
+        pCreature->HandleEmote(EMOTE_ONESHOT_NO);
+        pPlayer->MonsterSayToPlayer("You\'re joking, right, bub? There were like at least five of them and I gots no weapon!", pPlayer);
+        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(50669))
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+    }
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 10)
+        pPlayer->SEND_VENDORLIST(pCreature->GetGUID());
+    return true;
+}
+
 void AddSC_tw_random()
 {
-    Script *newscript;
+    Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_kixxle";
+    newscript->pGossipHello = &GossipHello_npc_kixxle;
+    newscript->pGossipSelect = &GossipSelect_npc_kixxle;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "search_for_clues";
+    newscript->pGossipHello = &GossipHello_search_for_clues;
+    newscript->pGOHello = &GOHello_search_for_clues;
+    newscript->pGOGossipSelect = &GOSelect_search_for_clues;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_young_and_foolish";
+    newscript->pGossipHello = &GossipHello_npc_young_and_foolish;
+    newscript->pGossipSelect = &GossipSelect_npc_young_and_foolish;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "go_uldum_pedestal";
