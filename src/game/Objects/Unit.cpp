@@ -3238,7 +3238,7 @@ bool Unit::AddSpellAuraHolder(SpellAuraHolder *holder)
     if (holder->IsAffectedByDebuffLimit())
     {
         uint32 negativeAuras = GetNegativeAurasCount();
-        if (negativeAuras > 24)
+        if (negativeAuras > sWorld.getConfig(CONFIG_UINT32_DEBUFF_LIMIT))
         {
             // We may have removed the aura we just applied ...
             if (RemoveAuraDueToDebuffLimit(holder))
