@@ -5524,7 +5524,7 @@ bool GOSelect_go_uldum_pedestal(Player* pPlayer, GameObject* pGo, uint32 sender,
 bool GossipHello_npc_young_and_foolish(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->GetQuestStatus(80702) == QUEST_STATUS_INCOMPLETE)
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Anything strange happened recently?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Anything strange happen recently?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
     if (pCreature->IsVendor())
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ACTION_TRADE, "Buy somethin', will ya?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
@@ -5544,17 +5544,17 @@ bool GossipSelect_npc_young_and_foolish(Player* pPlayer, Creature* pCreature, ui
         {
         case 341: // Foreman Oslow
             pCreature->HandleEmote(EMOTE_ONESHOT_POINT);
-            pCreature->MonsterSayToPlayer("Yes, a caravan with men and women in red passed through here. Many of our young and foolish followed them.", pPlayer);
+            pCreature->MonsterSayToPlayer("Yes. A caravan with men and women dressed in scarlet passed through here. Many of our young ones followed them.", pPlayer);
             if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(50665))
                 pPlayer->KilledMonster(cInfo, ObjectGuid());
             break;
         case 956: // Dorin Songblade
-            pCreature->MonsterSayToPlayer("Aye, young boys and girls left with the Scarlets, can ya blame them? Look at this place.", pPlayer);
+            pCreature->MonsterSayToPlayer("Aye, our young ones left with them. Can you blame them? Look at this place.", pPlayer);
             if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(50666))
                 pPlayer->KilledMonster(cInfo, ObjectGuid());
             break;
         case 344: // Magistrate Solomon
-            pCreature->MonsterSayToPlayer("It\'s regrettable, our children left with the foolish zealots of the Crusade in the middle of the night! Please, don\'t harm them, send them home.", pPlayer);
+            pCreature->MonsterSayToPlayer("It\'s regrettable that our children left with those foolish zealots of the crusade in the middle of the night! Please, don\'t harm them. Send them back home to us.", pPlayer);
             if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(50667))
                 pPlayer->KilledMonster(cInfo, ObjectGuid());
             break;
@@ -5616,9 +5616,9 @@ bool GOSelect_search_for_clues(Player* pPlayer, GameObject* pGo, uint32 sender, 
 
 bool GossipHello_npc_kixxle(Player* pPlayer, Creature* pCreature)
 {
-    if (pPlayer->GetQuestStatus(80702) == QUEST_STATUS_INCOMPLETE)
+    if (pPlayer->GetQuestStatus(80703) == QUEST_STATUS_INCOMPLETE && pPlayer->GetQuestStatusData(80703)->m_creatureOrGOcount[1] == 0)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Were you the one to sell an oil canister to humans dressed in red?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Were you the one to sell an oil canister to to a group of men dressed in scarlet?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     }
     if (pCreature->IsVendor())
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ACTION_TRADE, "I want to browse your goods.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 10);
@@ -5631,20 +5631,23 @@ bool GossipSelect_npc_kixxle(Player* pPlayer, Creature* pCreature, uint32 /*uiSe
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        pPlayer->MonsterSayToPlayer("Yea boss, I sure did. I\'m a merchant, you know, if I gots it, I sells it.", pPlayer);
+        pCreature->MonsterSayToPlayer("Yea boss, I sure did. I\'m a merchant, you know. If I got it, I sell it.", pPlayer);
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Where did they go?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
     }
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
     {
-        pPlayer->MonsterSayToPlayer("They went North I guess, following in the footsteps of that dwarven caravan. One of them said they\'d wait by the bridge for an ambush or something, didn\'t look like the sharpest tool in the shed, you get me?", pPlayer);
+        pCreature->MonsterSayToPlayer("They went North I guess, following in the footsteps of that dwarven caravan. One of them said they\'d wait by the bridge for an ambush or something. He didn\'t look like the sharpest tool in the shed, you get me?", pPlayer);
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Why didn\'t you stop them?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+        pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
     }
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
     {
         pCreature->HandleEmote(EMOTE_ONESHOT_NO);
-        pPlayer->MonsterSayToPlayer("You\'re joking, right, bub? There were like at least five of them and I gots no weapon!", pPlayer);
+        pCreature->MonsterSayToPlayer("You\'re joking, right, bub? There were like at least five of them!", pPlayer);
         if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(50669))
             pPlayer->KilledMonster(cInfo, ObjectGuid());
+        pPlayer->CLOSE_GOSSIP_MENU();
     }
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 10)
         pPlayer->SEND_VENDORLIST(pCreature->GetGUID());
