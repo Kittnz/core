@@ -53,7 +53,7 @@ delete from item_template where entry = 50617;
 delete from item_template where entry = 16104;
 delete from item_template where entry = 21195;
 delete from item_template where entry = 21193;
-delete from item_template where entry = 21194
+delete from item_template where entry = 21194;
 
 update quest_template set rewxp = 1000 where entry = 70054;
 update quest_template set rewxp = 2000 where entry = 70055;
