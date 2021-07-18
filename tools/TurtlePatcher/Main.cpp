@@ -53,6 +53,10 @@
 // Original fov value
 #define OFFSET_ORIGINAL_FOV_VALUE 0x004089B4
 
+// Target frame debuff limit value
+#define OFFSET_DEBUFF_LIMIT_VALUE_1 0x0011997B
+#define OFFSET_DEBUFF_LIMIT_VALUE_2 0x00119BC1
+
 const unsigned char LoadDLLShellcode[] =
 {
 	0x68, 0x60, 0xFF, 0x7F, 0x00,		// push 0x007FFF60 (offset to string "DiscordOverlay.dll")
@@ -156,6 +160,14 @@ void PatchUIUnlock(FILE* hWoW)
 	char SixPatch[] = { 0x66, 0x66, 0xF6, 0x3F };
 	fseek(hWoW, OFFSET_ORIGINAL_FOV_VALUE, SEEK_SET);
 	fwrite(SixPatch, sizeof(SixPatch), 1, hWoW);
+
+	char SeventhPatch[] = { 0x38 };
+	fseek(hWoW, OFFSET_DEBUFF_LIMIT_VALUE_1, SEEK_SET);
+	fwrite(SeventhPatch, sizeof(SeventhPatch), 1, hWoW);
+
+	char EightPatch[] = { 0x38 };
+	fseek(hWoW, OFFSET_DEBUFF_LIMIT_VALUE_2, SEEK_SET);
+	fwrite(EightPatch, sizeof(EightPatch), 1, hWoW);
 }
 
 constexpr int max_path = 260;
