@@ -56,8 +56,6 @@
 // Target frame debuff limit value
 #define OFFSET_DEBUFF_LIMIT_VALUE_1 0x0011997B
 #define OFFSET_DEBUFF_LIMIT_VALUE_2 0x00119BC1
-#define OFFSET_DEBUFF_LIMIT_VALUE_3 0x00119A3F
-#define OFFSET_DEBUFF_LIMIT_VALUE_4 0x001199E4
 
 const unsigned char LoadDLLShellcode[] =
 {
@@ -170,14 +168,6 @@ void PatchUIUnlock(FILE* hWoW)
 	char EightPatch[] = { 0x38 };
 	fseek(hWoW, OFFSET_DEBUFF_LIMIT_VALUE_2, SEEK_SET);
 	fwrite(EightPatch, sizeof(EightPatch), 1, hWoW);
-
-	char NinthPatch[] = { 0x84 };
-	fseek(hWoW, OFFSET_DEBUFF_LIMIT_VALUE_3, SEEK_SET);
-	fwrite(NinthPatch, sizeof(NinthPatch), 1, hWoW);
-
-	char TenPatch[] = { 0x84 };
-	fseek(hWoW, OFFSET_DEBUFF_LIMIT_VALUE_4, SEEK_SET);
-	fwrite(TenPatch, sizeof(TenPatch), 1, hWoW);
 }
 
 constexpr int max_path = 260;
