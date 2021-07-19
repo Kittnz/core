@@ -679,10 +679,12 @@ struct aqir_addAI : public ScriptedAI
         SPELL_SHADOW_STRIKE = 22574,
         SPELL_PIERCING_SHADOW = 16429,
         SPELL_POISON_BOLT_VOLLEY = 24099,
-        SPELL_PLAGUE_CLOUD = 23861
+        SPELL_PLAGUE_CLOUD = 23861,
+        SPELL_SHIELD = 10901
     };
 
     uint32 mindBlastTimer;
+    uint32 shieldTimer;
     uint32 healTimer;
     uint32 shadowStrikeTimer;
     uint32 piercingShadowTimer;
@@ -693,6 +695,7 @@ struct aqir_addAI : public ScriptedAI
     void Reset() override
     {
         mindBlastTimer = 1000;
+        shieldTimer = 1000;
         healTimer = 15000;
         shadowStrikeTimer = 1000;
         piercingShadowTimer = 5000;
@@ -714,8 +717,6 @@ struct aqir_addAI : public ScriptedAI
 
             if (mindBlastTimer <= uiDiff)
             {
-                m_creature->CastStop();
-
                 if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_MIND_BLAST) == CAST_OK)
                     mindBlastTimer = 8000;
                 else
@@ -726,14 +727,32 @@ struct aqir_addAI : public ScriptedAI
 
             if (healTimer <= uiDiff)
             {
-                if (DoCastSpellIfCan(m_creature->SelectRandomFriendlyTarget(nullptr, 15.0f), SPELL_HEAL) == CAST_OK)
-                    healTimer = 15000;
+                Unit* friendlyTarget = m_creature->SelectRandomFriendlyTarget(nullptr, 15.0f);
+
+                if (friendlyTarget->GetHealthPercent() <= 75.0f)
+                {
+                    if (DoCastSpellIfCan(friendlyTarget, SPELL_HEAL) == CAST_OK)
+                        healTimer = 15000;
+                    else
+                        healTimer = 1000; // try again
+                }
                 else
                     healTimer = 1000; // try again
-
             }
             else
                 healTimer -= uiDiff;
+
+            if (shieldTimer <= uiDiff)
+            {
+                Unit* shieldTarget = m_creature->FindLowestHpFriendlyUnit(15.0f);
+
+                if (DoCastSpellIfCan(shieldTarget, SPELL_SHIELD) == CAST_OK)
+                    shieldTimer = 7500;
+                else
+                    shieldTimer = 1000; // try again
+            }
+            else
+                shieldTimer -= uiDiff;
             break;
         }
         case NPC_WARRIOR:
@@ -763,8 +782,6 @@ struct aqir_addAI : public ScriptedAI
         }
         case NPC_DRONE:
         {
-            m_creature->SetRooted(true);
-
             if (poisonVolleyTimer <= uiDiff)
             {
                 if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_POISON_BOLT_VOLLEY) == CAST_OK)
@@ -778,11 +795,13 @@ struct aqir_addAI : public ScriptedAI
                 if (Creature* cloudTarget = m_creature->SummonCreature(65120, m_creature->GetVictim()->GetPositionX(), m_creature->GetVictim()->GetPositionY(), m_creature->GetVictim()->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 5000))
                     cloudTarget->CastSpell(cloudTarget, SPELL_PLAGUE_CLOUD, false);
 
-                plagueCloudtimer = 20000;
+                plagueCloudtimer = 10000;
             }
             else
                 plagueCloudtimer -= uiDiff;
             break;
+
+            DoMeleeAttackIfReady();
         }
         }
 
@@ -884,11 +903,11 @@ struct chronar_boss_cotAI : public ScriptedAI
         Reset();
     }
 
-    uint32 shoutTimer = 5000;
-    uint32 mortalStriketimer = 18000;
-    uint32 sweepingSlamTimer = 25000;
-    uint32 healthPhase = 0;
-    bool enrageActive = false;
+    uint32 shoutTimer;
+    uint32 mortalStriketimer;
+    uint32 sweepingSlamTimer;
+    uint32 healthPhase;
+    bool enrageActive;
 
     enum Spells
     {
@@ -944,25 +963,27 @@ struct chronar_boss_cotAI : public ScriptedAI
             {
                 DoCastSpellIfCan(m_creature->GetVictim(), SPELL_REFLECTION);
                 healthPhase++;
+                m_creature->PMonsterYell("Your magic turns against you!");
+                break;
             }
-            break;
         case 1:
             if (m_creature->GetHealthPercent() <= 50.0)
             {
                 DoCastSpellIfCan(m_creature->GetVictim(), SPELL_REFLECTION);
                 healthPhase++;
+                m_creature->PMonsterYell("Your magic turns against you!");
+                break;
             }
-            break;
         case 2:
             if (m_creature->GetHealthPercent() <= 25.0)
             {
                 DoCastSpellIfCan(m_creature->GetVictim(), SPELL_REFLECTION);
                 healthPhase++;
+                m_creature->PMonsterYell("Your magic turns against you!");
+                break;
             }
-            break;
-
-            m_creature->PMonsterYell("Your magic turns against you!");
         }
+
 
         if (!enrageActive && m_creature->GetHealthPercent() <= 35.0f) // enrage
         {
@@ -993,17 +1014,15 @@ struct harbinger_boss_cotAI : public ScriptedAI
         Reset();
     }
 
-    uint32 veilTimer = 5000;
-    uint32 instanityTimer = 15000;
-    bool addsSpawned = false;
-    bool burstDone = false;
-    float oldHP = 100.0f;
-
-    Unit* mainTarget;
+    uint32 veilTimer;
+    uint32 instanityTimer;
+    bool addsSpawned;
+    bool burstDone;
+    float oldHP;
 
     enum AddEntries
     {
-        NPC_LARVAE = 17173
+        NPC_LARVAE = 65115
     };
 
     enum Spells
@@ -1028,8 +1047,6 @@ struct harbinger_boss_cotAI : public ScriptedAI
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
-
-        mainTarget = m_creature->GetVictim();
 
         if (veilTimer <= uiDiff)
         {
@@ -1059,12 +1076,11 @@ struct harbinger_boss_cotAI : public ScriptedAI
 
             for (int i = 0; i < 5; i++)
             {
-                Creature* larvae = m_creature->SummonCreature(NPC_LARVAE, mainTarget->GetPositionX() + frand(-8.0f, 8.0f), mainTarget->GetPositionY() + frand(-8.0f, 8.0f), mainTarget->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT);
-
-                larvae->AddThreat(mainTarget, 100.0f);
+                if (Creature* larvae = m_creature->SummonCreature(NPC_LARVAE, m_creature->GetVictim()->GetPositionX() + frand(-8.0f, 8.0f), m_creature->GetVictim()->GetPositionY() + frand(-8.0f, 8.0f), m_creature->GetVictim()->GetPositionZ(), 0, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN))
+                    larvae->AddThreat(m_creature->GetVictim(), 100.0f);
             }
 
-            m_creature->MonsterWhisper("Come, servants of rot. Consume!", mainTarget, true);
+            m_creature->MonsterWhisper("Come, servants of rot. Consume!", m_creature->GetVictim(), true);
 
         }
 
@@ -1076,7 +1092,7 @@ struct harbinger_boss_cotAI : public ScriptedAI
             DoCastSpellIfCan(m_creature->GetVictim(), SPELL_SHADOW_BURST);
 
             m_creature->PMonsterYell("Ak'agthshi ma uhnish, ak'uq shg'cul vwahuhn! H'iwn iggksh Phquathi gag OOU KAAXTH SHUUL!");
-            m_creature->MonsterWhisper("Our numbers are endless, our power beyond reckoning! All who oppose the Destroyer will DIE A THOUSAND DEATHS!", mainTarget, true);
+            m_creature->MonsterWhisper("Our numbers are endless, our power beyond reckoning! All who oppose the Destroyer will DIE A THOUSAND DEATHS!", m_creature->GetVictim(), true);
         }
         DoMeleeAttackIfReady();
     }
@@ -1106,7 +1122,7 @@ struct larvae_cotAI : public ScriptedAI
 
     enum Spells
     {
-        SPELL_DRAIN_LIFE = 17238
+        SPELL_DRAIN_LIFE = 17173
     };
 
     void Reset() override
@@ -1121,6 +1137,356 @@ struct larvae_cotAI : public ScriptedAI
 
         DoCastSpellIfCan(m_creature->GetVictim(), SPELL_DRAIN_LIFE);
     }
+
+    void OnCombatStop() override
+    {
+        m_creature->DespawnOrUnsummon();
+    }
+};
+
+struct epochronos_boss_cotAI : public ScriptedAI
+{
+    epochronos_boss_cotAI(Creature* c) : ScriptedAI(c)
+    {
+        Reset();
+    }
+
+    uint32 sandBreathTimer;
+    uint32 swoopTimer;
+    uint32 arcaneBlastTimer;
+    bool shadeSummoned = false;
+    enum Spells
+    {
+        SPELL_SAND_BREATH = 20717,
+        SPELL_SWOOP = 23919, 
+        SPELL_ARCANE_BLAST = 24857,
+        SPELL_BANISH = 18647
+    };
+
+    enum NPCEntries
+    {
+        NPC_LICH_KING = 65117,
+        NPC_KAELTHAS = 65118,
+        NPC_VASHJ = 65119
+    };
+
+    void Reset() override
+    {
+        sandBreathTimer = 3000;
+        swoopTimer = 12000;
+        arcaneBlastTimer = 10000;
+        shadeSummoned = false;
+    }
+
+    void UpdateAI(const uint32 uiDiff) override
+    {
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
+            return;
+
+        if (sandBreathTimer <= uiDiff)
+        {
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_SAND_BREATH) == CAST_OK)
+                sandBreathTimer = 15000;
+        }
+        else sandBreathTimer -= uiDiff;
+
+        if (swoopTimer <= uiDiff)
+        {
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_SWOOP) == CAST_OK)
+                swoopTimer = 12000;
+        }
+        else swoopTimer -= uiDiff;
+
+        if (arcaneBlastTimer <= uiDiff)
+        {
+            Unit* currentTarget = m_creature->SelectRandomUnfriendlyTarget(nullptr, 50.0f);
+
+            if (currentTarget == m_creature->GetVictim())
+                return;
+
+            if (DoCastSpellIfCan(currentTarget, SPELL_ARCANE_BLAST) == CAST_OK)
+                arcaneBlastTimer = 10000;
+        }
+        else arcaneBlastTimer -= uiDiff;
+
+
+        if (!shadeSummoned && m_creature->GetHealthPercent() <= 50.0f)
+        {
+            m_creature->PMonsterYell("Face the consequences of your actions!");
+            m_creature->AddAura(SPELL_BANISH);
+
+            shadeSummoned = true;
+
+            int random = irand(1, 3);
+            uint32 summonEntry = 0;
+
+            switch (random)
+            {
+            case 1:
+                summonEntry = NPC_LICH_KING;
+                break;
+            case 2:
+                summonEntry = NPC_KAELTHAS;
+                break;
+            case 3:
+                summonEntry = NPC_VASHJ;
+                break;
+            }
+
+            if (summonEntry > 0)
+            m_creature->SummonCreature(summonEntry, m_creature->GetPositionX(), m_creature->GetPositionY(), m_creature->GetPositionZ(), 0, TEMPSUMMON_MANUAL_DESPAWN);
+
+        }
+        if (m_creature->GetHealthPercent() <= 25.0f)
+        {
+            m_creature->ApplyCastTimePercentMod(25.0f, true);
+            m_creature->PMonsterYell("Time for a change of pace!");
+        }
+
+        DoMeleeAttackIfReady();
+    }
+
+
+    void EnterCombat(Unit*) override
+    {
+        m_creature->PMonsterYell("Time moves in our favor, your intrusion means nothing!");
+    }
+
+    void JustDied(Unit*) override
+    {
+        m_creature->PMonsterYell("We are infinite...");
+    }
+
+};
+
+struct shade_cotAI : public ScriptedAI
+{
+    shade_cotAI(Creature* c) : ScriptedAI(c)
+    {
+        Reset();
+    }
+
+    uint32 screamTimer;
+    uint32 deathCoilTimer;
+    uint32 deathnDecayTimer;
+    uint32 plagueTimer;
+    uint32 coneOfFireTimer;
+    uint32 amplifyFireTimer;
+    uint32 pyroTimer;
+    uint32 chainLightningTimer;
+    uint32 lightningCloudTimer;
+    uint32 lightningBolttimer;
+
+    int plagueCount = 0;
+
+    enum Spells
+    {
+        SPELL_SCREAMS = 7074,
+        SPELL_DEATHCOIL = 28412,
+        SPELL_DEATHNDECAY = 11433,
+        SPELL_CONE_OF_FIRE = 19630,
+        SPELL_AMPLIFY_FLAMES = 9482,
+        SPELL_PYROBLAST = 20228,
+        SPELL_CHAIN_LIGHTNING =  23106,
+        SPELL_LIGHTNING_BOLT = 15234, 
+        SPELL_LIGHTNING_CLOUD = 26550,
+        SPELL_PLAGUE = 19280,
+
+        AURA_LIGHTNING_SHIELD = 20545,
+    };
+
+    enum NPCEntries
+    {
+        NPC_LICH_KING = 65117,
+        NPC_KAELTHAS = 65118,
+        NPC_VASHJ = 65119
+    };
+
+    void Reset() override
+    {
+        screamTimer = 13000;
+        deathCoilTimer = 5000;
+        deathnDecayTimer = 8000;
+        plagueTimer = 15000;
+        coneOfFireTimer = 8000;
+        amplifyFireTimer = 500;
+        pyroTimer = 10000;
+        chainLightningTimer = 8000;
+        lightningCloudTimer = 18000;
+        lightningBolttimer = 1000;
+        plagueCount = 0;
+    }
+
+    void UpdateAI(const uint32 uiDiff) override
+    {
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
+            return;
+
+        if (screamTimer <= uiDiff)
+        {
+            Player* player = m_creature->FindNearestHostilePlayer(50.0f);
+
+            if (player)
+            {
+                Group* group = player->GetGroup();
+
+                if (group)
+                {
+                    for (GroupReference* itr = group->GetFirstMember(); itr != nullptr; itr = itr->next())
+                    {
+                        Player* playerGroup = itr->getSource();
+                        if (!playerGroup)
+                            continue;
+
+                        playerGroup->AddAura(SPELL_SCREAMS);
+                    }
+                }
+            }
+            screamTimer = 13000;
+        }
+        else screamTimer = 1000;
+
+            switch (m_creature->GetEntry())
+            {
+
+            case NPC_LICH_KING:
+            {
+                if (plagueTimer <= uiDiff)
+                {
+                    Player* player = m_creature->FindNearestHostilePlayer(10);
+
+                    if (player)
+                    {
+                        Group* group = player->GetGroup();
+
+                        if (group)
+                        {
+                            for (GroupReference* itr = group->GetFirstMember(); itr != nullptr; itr = itr->next())
+                            {
+                                Player* playerGroup = itr->getSource();
+                                if (!playerGroup)
+                                    continue;
+
+                                if (plagueCount >= 2)
+                                    break;
+
+                                if (!playerGroup->HasAura(SPELL_PLAGUE))
+                                {
+                                    playerGroup->AddAura(SPELL_PLAGUE);
+                                    plagueCount++;
+                                }
+                            }
+                            plagueCount = 0;
+                        }
+                    }
+                    plagueTimer = 15000;
+                }
+                else plagueTimer -= uiDiff;
+
+                if (deathnDecayTimer <= uiDiff)
+                {
+                    if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_DEATHNDECAY) == CAST_OK)
+                        deathnDecayTimer = 25000;
+                }
+                else deathnDecayTimer -= uiDiff;
+
+                if (deathCoilTimer <= uiDiff)
+                {
+                    if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_DEATHCOIL) == CAST_OK)
+                        deathCoilTimer = 10000;
+                }
+                else deathCoilTimer -= uiDiff;
+
+                DoMeleeAttackIfReady();
+
+            }
+            break;
+            case NPC_KAELTHAS:
+            {
+                if (coneOfFireTimer <= uiDiff)
+                {
+                    if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_CONE_OF_FIRE) == CAST_OK)
+                        coneOfFireTimer = 8000;
+                }
+                else coneOfFireTimer -= uiDiff;
+
+                if (amplifyFireTimer <= uiDiff)
+                {
+                    if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_AMPLIFY_FLAMES) == CAST_OK)
+                    {
+                        amplifyFireTimer = 30000;
+
+                        Player* player = m_creature->FindNearestHostilePlayer(10);
+
+                        if (player)
+                        {
+                            Group* group = player->GetGroup();
+
+                            if (group)
+                            {
+                                for (GroupReference* itr = group->GetFirstMember(); itr != nullptr; itr = itr->next())
+                                {
+                                    Player* playerGroup = itr->getSource();
+                                    if (!playerGroup)
+                                        continue;
+
+                                    playerGroup->AddAura(SPELL_AMPLIFY_FLAMES);
+                                }
+                            }
+                        }
+                    }
+                }
+                else amplifyFireTimer -= uiDiff;
+
+                if (pyroTimer <= uiDiff)
+                {
+                    if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_PYROBLAST) == CAST_OK)
+                        pyroTimer = 10000;
+                }
+                else pyroTimer -= uiDiff;
+
+                DoMeleeAttackIfReady();
+            }
+
+            break;
+            case NPC_VASHJ:
+            {
+                if (!m_creature->HasAura(AURA_LIGHTNING_SHIELD))
+                    m_creature->AddAura(AURA_LIGHTNING_SHIELD);
+
+                if (chainLightningTimer <= uiDiff)
+                {
+                    if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_CHAIN_LIGHTNING) == CAST_OK)
+                        chainLightningTimer = 8000;
+                }
+                else chainLightningTimer -= uiDiff;
+
+                if (lightningCloudTimer <= uiDiff)
+                {
+                    if (DoCastSpellIfCan(m_creature->SelectRandomUnfriendlyTarget(), SPELL_LIGHTNING_CLOUD) == CAST_OK)
+                        lightningCloudTimer = 18000;
+                }
+                else lightningCloudTimer -= uiDiff;
+
+                if (lightningBolttimer <= uiDiff)
+                {
+                    if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_LIGHTNING_BOLT) == CAST_OK)
+                        lightningBolttimer = 1000;
+                }
+                else lightningBolttimer -= uiDiff;
+
+            }
+            break;
+            }
+
+    }
+
+    void OnCombatStop() override 
+    {
+        m_creature->DespawnOrUnsummon();
+    }
+
+
 };
 
 CreatureAI* GetAI_infinite_dragonspawn(Creature* _Creature)
@@ -1181,6 +1547,16 @@ CreatureAI* GetAI_larvae_cot(Creature* _Creature)
 CreatureAI* GetAI_harbinger_boss_cot(Creature* _Creature)
 {
     return new harbinger_boss_cotAI(_Creature);
+}
+
+CreatureAI* GetAIepochronos_boss_cot(Creature* _Creature)
+{
+    return new epochronos_boss_cotAI(_Creature);
+}
+
+CreatureAI* GetAI_shade_cot(Creature* _Creature)
+{
+    return new shade_cotAI(_Creature);
 }
 
 void AddSC_instance_caverns_of_time()
@@ -1247,7 +1623,17 @@ void AddSC_instance_caverns_of_time()
     newscript->RegisterSelf();
 
     newscript = new Script;
+    newscript->Name = "epochronos_boss_cot";
+    newscript->GetAI = &GetAIepochronos_boss_cot;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
     newscript->Name = "larvae_cot";
     newscript->GetAI = &GetAI_larvae_cot;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "shade_cot";
+    newscript->GetAI = &GetAI_shade_cot;
     newscript->RegisterSelf();
 }
