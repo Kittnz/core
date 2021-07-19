@@ -5616,7 +5616,7 @@ bool GOSelect_search_for_clues(Player* pPlayer, GameObject* pGo, uint32 sender, 
 
 bool GossipHello_npc_kixxle(Player* pPlayer, Creature* pCreature)
 {
-    if (pPlayer->GetQuestStatus(80703) == QUEST_STATUS_INCOMPLETE && pPlayer->GetQuestStatusData(80703)->m_creatureOrGOcount[1] == 0)
+    if (pPlayer->GetQuestStatus(80703) == QUEST_STATUS_INCOMPLETE && pPlayer->GetQuestStatusData(80703)->m_creatureOrGOcount[1] == 0 && pPlayer->GetQuestStatusData(80703)->m_creatureOrGOcount[0] == 3)
     {
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Were you the one to sell an oil canister to to a group of men dressed in scarlet?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     }
@@ -5654,9 +5654,172 @@ bool GossipSelect_npc_kixxle(Player* pPlayer, Creature* pCreature, uint32 /*uiSe
     return true;
 }
 
+struct npc_vladeus_springriverAI : public ScriptedAI
+{
+    npc_vladeus_springriverAI(Creature* c) : ScriptedAI(c) { Reset(); }
+
+    void Reset()
+    {
+        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+        m_creature->SetFactionTemplateId(m_creature->GetCreatureInfo()->faction);
+    }
+    void UpdateAI(const uint32 diff)
+    {
+        if (m_creature->GetHealthPercent() < 10)
+        {
+            m_creature->CombatStop(true);
+            m_creature->ClearInCombat();
+            m_creature->SetFactionTemplateId(35);
+        }
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim()) return;
+        DoMeleeAttackIfReady();
+    }
+    void EnterCombat()
+    {
+        m_creature->MonsterSay("For the Scarlet Crusade!");
+    }
+    void OnCombatStop()
+    {
+        m_creature->MonsterSay("Stop, I give up! Spare me, I will submit to imprisonment.");
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+
+        ThreatList const& tList = m_creature->GetThreatManager().getThreatList();
+        for (ThreatList::const_iterator i = tList.begin(); i != tList.end(); ++i)
+        {
+            Unit* pUnit = m_creature->GetMap()->GetUnit((*i)->getUnitGuid());
+            if (pUnit && (pUnit->GetTypeId() == TYPEID_PLAYER))
+            {
+                if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(50670))
+                    pUnit->ToPlayer()->KilledMonster(cInfo, ObjectGuid());
+            }
+        }
+    }
+    void JustRespawned() { Reset(); }
+};
+
+CreatureAI* GetAI_npc_vladeus_springriver(Creature* _Creature) { return new npc_vladeus_springriverAI(_Creature); }
+
+bool GossipHello_npc_vladeus_springriver(Player* pPlayer, Creature* pCreature)
+{
+    if (pPlayer->GetQuestStatus(80703) == QUEST_STATUS_INCOMPLETE && pPlayer->GetQuestStatusData(80703)->m_creatureOrGOcount[2] == 1)
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I\'m taking you to the local law enforcement.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+
+    pPlayer->SEND_GOSSIP_MENU(51683, pCreature->GetGUID());
+    return true;
+}
+
+static std::vector<ObjectGuid> followed_units;
+
+bool GossipSelect_npc_vladeus_springriver(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pCreature->MonsterSay("I understand.");
+        pCreature->GetMotionMaster()->MoveFollow(pPlayer, PET_FOLLOW_DIST, PET_FOLLOW_ANGLE);
+        followed_units.push_back(pPlayer->GetObjectGuid());
+    }
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
+bool GossipHello_npc_captain_stoutfist(Player* pPlayer, Creature* pCreature)
+{
+    if (pPlayer->GetQuestStatus(80703) == QUEST_STATUS_INCOMPLETE && (std::find(followed_units.begin(), followed_units.end(), pPlayer->GetObjectGuid()) != followed_units.end()))
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "This guy here is the only survivor of those who attacked the caravan that was ment to reach Aerie Peak, he yielded and I have spared his life.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_captain_stoutfist(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(50671))
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+
+        pCreature->MonsterSay("Great find. My boys and I will put him up in chains. Go get yourself an ale while we handle this.");
+
+        auto itr = std::find(followed_units.begin(), followed_units.end(), pPlayer->GetObjectGuid());
+        if (itr != followed_units.end())
+            followed_units.erase(itr);
+    }
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
+struct go_scarlet_attack_trigger : public GameObjectAI
+{
+    explicit go_scarlet_attack_trigger(GameObject* pGo) : GameObjectAI(pGo) { m_uiUpdateTimer = 10000; }
+
+    uint32 m_uiUpdateTimer;
+
+    void UpdateAI(uint32 const uiDiff) override
+    {     
+        if (m_uiUpdateTimer < uiDiff)
+        {
+            std::list<Player*> players;
+            MaNGOS::AnyPlayerInObjectRangeCheck check(me, 10.0f, true, false);
+            MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
+            Cell::VisitWorldObjects(me, searcher, 10.0f);
+            // Temp. solution for quick testing.
+            for (Player* pPlayer : players)
+            {
+                if (pPlayer->GetQuestStatus(80703) == QUEST_STATUS_INCOMPLETE && 
+                    pPlayer->GetQuestStatusData(80703)->m_creatureOrGOcount[1] == 1 && 
+                    pPlayer->GetQuestStatusData(80703)->m_creatureOrGOcount[2] == 0)
+                {
+                    DoAfterTime(pPlayer, 2 * IN_MILLISECONDS, [player = pPlayer]() {
+                        Map* map = sMapMgr.FindMap(0);
+                        player->SummonCreature(50673, -2458.82F, -2494.24F, 78.5F, 4.0F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 5 * IN_MILLISECONDS);
+                        player->SummonCreature(50673, -2458.19F, -2512.90F, 78.5F, 1.9F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 5 * IN_MILLISECONDS);
+                        });
+                    DoAfterTime(pPlayer, 20 * IN_MILLISECONDS, [player = pPlayer]() {
+                        Map* map = sMapMgr.FindMap(0);
+                        player->SummonCreature(50673, -2458.82F, -2494.24F, 78.5F, 4.0F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 5 * IN_MILLISECONDS);
+                        player->SummonCreature(50673, -2458.19F, -2512.90F, 78.5F, 1.9F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 5 * IN_MILLISECONDS);
+                        });
+                    DoAfterTime(pPlayer, 40 * IN_MILLISECONDS, [player = pPlayer]() {
+                        Map* map = sMapMgr.FindMap(0);
+                        player->SummonCreature(50673, -2458.82F, -2494.24F, 78.5F, 4.0F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 5 * IN_MILLISECONDS);
+                        Creature* vladeus_spawned = player->FindNearestCreature(50674, 30.0F);
+                        if (!vladeus_spawned)
+                            player->SummonCreature(50674, -2458.19F, -2512.90F, 78.5F, 1.9F, TEMPSUMMON_TIMED_DESPAWN, 60 * MINUTE * IN_MILLISECONDS);                    
+                         });
+                }
+            }
+            m_uiUpdateTimer = 10000;
+        }
+        else m_uiUpdateTimer -= uiDiff;
+    }
+}; 
+
+GameObjectAI* GetAI_go_scarlet_attack_trigger(GameObject* gameobject) { return new go_scarlet_attack_trigger(gameobject); } 
+
 void AddSC_tw_random()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "go_scarlet_attack_trigger";
+    newscript->GOGetAI = &GetAI_go_scarlet_attack_trigger;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_captain_stoutfist";
+    newscript->pGossipHello = &GossipHello_npc_captain_stoutfist;
+    newscript->pGossipSelect = &GossipSelect_npc_captain_stoutfist;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_vladeus_springriver";
+    newscript->pGossipHello = &GossipHello_npc_vladeus_springriver;
+    newscript->pGossipSelect = &GossipSelect_npc_vladeus_springriver;
+    newscript->GetAI = &GetAI_npc_vladeus_springriver;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_kixxle";
