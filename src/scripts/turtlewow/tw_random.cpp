@@ -5765,30 +5765,36 @@ struct go_scarlet_attack_trigger : public GameObjectAI
             MaNGOS::AnyPlayerInObjectRangeCheck check(me, 10.0f, true, false);
             MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
             Cell::VisitWorldObjects(me, searcher, 10.0f);
-            // Temp. solution for quick testing.
             for (Player* pPlayer : players)
             {
                 if (pPlayer->GetQuestStatus(80703) == QUEST_STATUS_INCOMPLETE && 
                     pPlayer->GetQuestStatusData(80703)->m_creatureOrGOcount[1] == 1 && 
                     pPlayer->GetQuestStatusData(80703)->m_creatureOrGOcount[2] == 0)
                 {
-                    DoAfterTime(pPlayer, 2 * IN_MILLISECONDS, [player = pPlayer]() {
-                        Map* map = sMapMgr.FindMap(0);
-                        player->SummonCreature(50673, -2458.82F, -2494.24F, 78.5F, 4.0F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 5 * IN_MILLISECONDS);
-                        player->SummonCreature(50673, -2458.19F, -2512.90F, 78.5F, 1.9F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 5 * IN_MILLISECONDS);
-                        });
-                    DoAfterTime(pPlayer, 20 * IN_MILLISECONDS, [player = pPlayer]() {
-                        Map* map = sMapMgr.FindMap(0);
-                        player->SummonCreature(50673, -2458.82F, -2494.24F, 78.5F, 4.0F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 5 * IN_MILLISECONDS);
-                        player->SummonCreature(50673, -2458.19F, -2512.90F, 78.5F, 1.9F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 5 * IN_MILLISECONDS);
-                        });
-                    DoAfterTime(pPlayer, 40 * IN_MILLISECONDS, [player = pPlayer]() {
-                        Map* map = sMapMgr.FindMap(0);
-                        player->SummonCreature(50673, -2458.82F, -2494.24F, 78.5F, 4.0F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 5 * IN_MILLISECONDS);
-                        Creature* vladeus_spawned = player->FindNearestCreature(50674, 30.0F);
-                        if (!vladeus_spawned)
-                            player->SummonCreature(50674, -2458.19F, -2512.90F, 78.5F, 1.9F, TEMPSUMMON_TIMED_DESPAWN, 60 * MINUTE * IN_MILLISECONDS);                    
-                         });
+                    GameObject* event_running = pPlayer->FindNearestGameObject(1000170, 30.0F);
+                    if (!event_running)
+                    {
+                        pPlayer->SummonGameObject(1000170, pPlayer->GetPositionX(), pPlayer->GetPositionY(), pPlayer->GetPositionZ(), 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 180, true);
+
+                        DoAfterTime(pPlayer, 2 * IN_MILLISECONDS, [player = pPlayer]() {
+                            Map* map = sMapMgr.FindMap(0);
+                            player->SummonCreature(50673, -2458.82F, -2494.24F, 78.5F, 4.0F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 5 * IN_MILLISECONDS);
+                            player->SummonCreature(50673, -2458.19F, -2512.90F, 78.5F, 1.9F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 5 * IN_MILLISECONDS);
+                            });
+                        DoAfterTime(pPlayer, 20 * IN_MILLISECONDS, [player = pPlayer]() {
+                            Map* map = sMapMgr.FindMap(0);
+                            player->SummonCreature(50673, -2458.82F, -2494.24F, 78.5F, 4.0F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 5 * IN_MILLISECONDS);
+                            player->SummonCreature(50673, -2458.19F, -2512.90F, 78.5F, 1.9F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 5 * IN_MILLISECONDS);
+                            });
+                        DoAfterTime(pPlayer, 40 * IN_MILLISECONDS, [player = pPlayer]() {
+                            Map* map = sMapMgr.FindMap(0);
+                            player->SummonCreature(50673, -2458.82F, -2494.24F, 78.5F, 4.0F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 5 * IN_MILLISECONDS);
+                            Creature* vladeus_spawned = player->FindNearestCreature(50674, 30.0F);
+                            if (!vladeus_spawned)
+                                player->SummonCreature(50674, -2458.19F, -2512.90F, 78.5F, 1.9F, TEMPSUMMON_TIMED_DESPAWN, 60 * MINUTE * IN_MILLISECONDS);
+                            });
+                    }
+                    else return;                    
                 }
             }
             m_uiUpdateTimer = 10000;
