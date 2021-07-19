@@ -28,3 +28,25 @@ REPLACE INTO `creature_template` VALUES (65100, 0, 18041, 0, 0, 0, 'Infinite Dra
 REPLACE INTO `creature_template` VALUES (65115, 0, 10046, 0, 0, 0, 'Aqir Larva', '', 0, 62, 62, 2278, 2458, 10000, 10000, 2734, 40, 0, 0, 0, 0.5, 20, 5, 0, 2, 1, 234, 292, 5, 290, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 220.81, 105.197, 100, 2, 0, 0, 0, 0, 0, 25, 25, 25, 25, 25, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 1, 0, 0, 0, 0, 0, 0, 'larvae_cot');
 REPLACE INTO `creature_template` VALUES (65114, 0, 18238, 0, 0, 0, 'Harbinger Aph\'ygth', '', 0, 63, 63, 55987, 55987, 50000, 50000, 6688, 40, 0, 1, 1.14286, 1.5, 20, 5, 0, 3, 1, 584, 672, 5, 290, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 220.81, 105.197, 100, 2, 0, 0, 0, 0, 0, 25, 25, 25, 25, 25, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 1, 0, 0, 0, 0, 0, 0, 'harbinger_boss_cot');
 REPLACE INTO `creature_template` VALUES (65113, 0, 18116, 0, 0, 0, 'Chronar', '', 0, 63, 63, 52864, 52864, 0, 0, 6573, 40, 0, 1, 1.14286, 2, 20, 5, 0, 3, 1, 1135, 1489, 0, 290, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 220.81, 105.197, 100, 2, 0, 0, 0, 0, 0, 25, 25, 25, 25, 25, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 1, 0, 0, 0, 0, 0, 0, 'chronar_boss_cot');
+
+-- Equip template
+REPLACE INTO `creature_equip_template` VALUES (82007, 0, 5201, 0, 0);
+
+
+-- NPC Updates
+UPDATE `creature_template` SET `scale` = 2.5 WHERE `entry` = 65105; -- Infinite Time-Lord
+UPDATE `creature_template` SET `scale` = 2.7 WHERE `entry` = 65113; -- Chronar
+UPDATE `creature_template` SET `scale` = 1.2 WHERE `entry` = 65108; -- Aqir Warrior
+
+-- HP Updates 7/18/2021
+UPDATE `creature_template` SET `equipment_id` = 82006 WHERE `entry` = 65113;
+UPDATE `creature_template` SET `health_min` = 16524, `health_max` = 16524 WHERE `entry` = 65100;
+UPDATE `creature_template` SET `health_min` = 17104, `health_max` = 17104 WHERE `entry` = 65101;
+UPDATE `creature_template` SET `health_min` = 16832, `health_max` = 16832 WHERE `entry` = 65102;
+UPDATE `creature_template` SET `health_min` = 28256, `health_max` = 28256 WHERE `entry` = 65105;
+UPDATE `creature_template` SET `health_min` = 5683, `health_max` = 5683 WHERE `entry` = 65103;
+UPDATE `creature_template` SET `health_min` = 17452, `health_max` = 17452 WHERE `entry` = 65108;
+UPDATE `creature_template` SET `health_min` = 16960, `health_max` = 16960 WHERE `entry` = 65109;
+UPDATE `creature_template` SET `health_min` = 16850, `health_max` = 16850 WHERE `entry` = 65107;
+UPDATE `creature_template` SET `health_min` = 14893, `health_max` = 14893 WHERE `entry` = 50111;
+UPDATE `creature_template` SET `equipment_id` = 82007 WHERE `entry` = 65118;
