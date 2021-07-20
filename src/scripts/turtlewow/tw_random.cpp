@@ -5347,17 +5347,6 @@ bool ItemUseSpell_item_gnome_enlargement(Player* pPlayer, Item* pItem, const Spe
 }
 bool ItemUseSpell_item_item_thunder_ale_drink(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
-    // NOT USED YET
-    return false;
-    //SetDrunkValue(drunk);
-    //if (value >= 23000)
-        //return DRUNKEN_SMASHED;
-    //if (value >= 12800)
-        //return DRUNKEN_DRUNK;
-    //if (value & 0xFFFE)
-        //return DRUNKEN_TIPSY;
-    //return DRUNKEN_SOBER;
-
     pPlayer->SetDrunkValue(10000);
 
     DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer]() {
