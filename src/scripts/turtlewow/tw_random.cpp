@@ -3132,7 +3132,7 @@ public:
             player->Unmount();
 
             player->SetFlying(false);
-            player->UpdateSpeed(MOVE_SWIM, true, 1.0F);
+            player->UpdateSpeed(MOVE_SWIM, false, 1.0F);
 
             player->m_movementInfo.UpdateTime(WorldTimer::getMSTime());
             WorldPacket stop_swim(MSG_MOVE_STOP_SWIM, 31);
