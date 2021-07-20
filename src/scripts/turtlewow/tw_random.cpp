@@ -5741,8 +5741,12 @@ bool GossipSelect_npc_captain_stoutfist(Player* pPlayer, Creature* pCreature, ui
         if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(50671))
             pPlayer->KilledMonster(cInfo, ObjectGuid());
 
-        pCreature->MonsterSay("Great find. My boys and I will put him up in chains. Go get yourself an ale while we handle this.");
-
+        pCreature->MonsterSay("Great find. My boys and I will put him up in chains. Go get yourself an ale while we handle this.");        
+        if (Creature* prisoner = pPlayer->FindNearestCreature(50674, 30.0F))
+        {
+            prisoner->GetMotionMaster()->Clear();
+            prisoner->ForcedDespawn();
+        }
         auto itr = std::find(followed_units.begin(), followed_units.end(), pPlayer->GetObjectGuid());
         if (itr != followed_units.end())
             followed_units.erase(itr);
