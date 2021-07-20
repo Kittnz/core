@@ -5813,13 +5813,21 @@ GameObjectAI* GetAI_go_scarlet_attack_trigger(GameObject* gameobject) { return n
 bool GossipHello_npc_vladeus_interrogation(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->GetQuestStatus(80705) == QUEST_STATUS_INCOMPLETE && pPlayer->GetQuestStatusData(80705)->m_creatureOrGOcount[0] == 0)
+    {
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Vladeus Springriver, from Lakeshire, is it?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-    pPlayer->SEND_GOSSIP_MENU(51684, pCreature->GetGUID());
+        pPlayer->SEND_GOSSIP_MENU(51684, pCreature->GetGUID());
+    }
+    if (pPlayer->GetQuestStatus(80706) == QUEST_STATUS_INCOMPLETE && pPlayer->GetQuestStatusData(80706)->m_creatureOrGOcount[0] == 0)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "You smash your right fist into his sides.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 7);
+        pPlayer->SEND_GOSSIP_MENU(51685, pCreature->GetGUID());
+    }
     return true;
 }
 
 bool GossipSelect_npc_vladeus_interrogation(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
 {
+    // The Means of Persuading:
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
         pCreature->MonsterTextEmote("Vladeus remains silent while slightly nodding his head, the nod is followed by a cough. You assume his throat was parched after being in chains for so long.");
@@ -5856,6 +5864,58 @@ bool GossipSelect_npc_vladeus_interrogation(Player* pPlayer, Creature* pCreature
         pCreature->HandleEmote(EMOTE_ONESHOT_CRY);
         pCreature->MonsterSayToPlayer("Yes, that's the one! Please I don't know anything else, I wish to return home.", pPlayer);
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Abbendis?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 6);
+        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(50675))
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+        pPlayer->CLOSE_GOSSIP_MENU();
+    }
+    // Seeking Justice or Vengeance:
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 7)
+    {
+        pCreature->MonsterSayToPlayer("Ugh, bastard! What was that for?", pPlayer);
+        pCreature->MonsterTextEmote("Vladeus grits his teeth.");
+        pCreature->HandleEmote(EMOTE_ONESHOT_CRY);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Silence mongrel, you will start talking before I do more than that.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 8);
+        pPlayer->SEND_GOSSIP_MENU(51685, pCreature->GetGUID());
+    }
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 8)
+    {
+        pCreature->MonsterSayToPlayer("I won't te... tell you anything!", pPlayer);
+        pCreature->MonsterTextEmote("Vladeus short speech is followed by a cough. You assume he must be thirsty after being chained for so long.");
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Last time I visited the Monastery I remember your people using this tool.\n\n<You grab a hot poker and place it one Vladeus' neck.>\n\nNow talk!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 9);
+        pPlayer->SEND_GOSSIP_MENU(51685, pCreature->GetGUID());
+    }
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 9)
+    {
+        pCreature->MonsterSayToPlayer("I will say nothing to the one that murdered my companions!", pPlayer);
+        pCreature->HandleEmote(EMOTE_ONESHOT_CRY);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Your COMPANIONS murdered innocents.\n\n<You reach for the prongs.>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 10);
+        pPlayer->SEND_GOSSIP_MENU(51685, pCreature->GetGUID());
+    }
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 10)
+    {
+        pCreature->MonsterSayToPlayer("Stop! Please stop, I will talk. I didn't want it to end up this way, I swear! The Red Hooded man said if we don't comply he'd kill my family, please, you have to understand!", pPlayer);
+        pCreature->HandleEmote(EMOTE_ONESHOT_BEG);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "He's not the one holding your life in his hands at this very moment.\n\n<You push the prongs close to his face.>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 11);
+        pPlayer->SEND_GOSSIP_MENU(51685, pCreature->GetGUID());
+    }
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 11)
+    {
+        pCreature->MonsterSayToPlayer("He... he said we were going to be taken to a hidden place to train. They were lacking numbers an- and since two of their leaders were dead they weren't doing very well. He also mentioned a name, Aventis or Adentis?", pPlayer);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Abbendis?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 12);
+        pPlayer->SEND_GOSSIP_MENU(51685, pCreature->GetGUID());
+    }
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 12)
+    {
+        pCreature->MonsterSayToPlayer("Yes, please, please. I don't know anything else.", pPlayer);
+        pCreature->MonsterTextEmote("Vladeus is utterly terrified.");
+        pCreature->HandleEmote(EMOTE_ONESHOT_CRY);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Kick him in his knee.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 13);
+        pPlayer->SEND_GOSSIP_MENU(51685, pCreature->GetGUID());
+    }
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 13)
+    {
+        pCreature->MonsterTextEmote("Vladeus squeals in pain, so harshly it'd be heard outside.");
+        pCreature->HandleEmote(EMOTE_ONESHOT_CRY);
         if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(50675))
             pPlayer->KilledMonster(cInfo, ObjectGuid());
         pPlayer->CLOSE_GOSSIP_MENU();

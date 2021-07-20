@@ -100,7 +100,7 @@ replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minleve
 
 update quest_template set reqcreatureorgoid1 = 50675, reqcreatureorgocount1 = 1, objectivetext1 = 'Obtain information from Vladeus' where entry = 80705;
 
-replace into creature_template (entry, name, display_id1) values (50675, 'Quest 80705 Custom Trigger 3', 328);
+replace into creature_template (entry, name, display_id1) values (50675, 'Quest 80705 & 80706 Custom Trigger 3', 328);
 
 replace into gameobject_questrelation (id, quest) values (1000172, 80705);
 replace into gameobject_involvedrelation (id, quest) values (1000171, 80705);
@@ -110,3 +110,16 @@ replace into gameobject_template values (1000172, 0, 2, 29546, 'Prison Guards\'s
 replace into broadcast_text (entry, male_text) values (51684, 'What are they going to do to me? I am sorry for all I have done, I really am.\n\nI regret all of it, and given the chance I will surely make amends.'); 
 replace into npc_text (id, broadcasttextid0) values (51684, 51684);
 
+replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewmoneymaxlevel, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (80704,80706,150,60,60,0,0,'Seeking Justice or Vengeance?','You\'ve met many foes on your several adventures through Azeroth, for the first time something in you clicked.\n\nHow many more scum do you have to beat, maim and kill so that this twisted world gets its damnable peace?\n\nThe Scarlet Crusade has been a personal thorn in your sides as well, maybe it\'s time to deliver some sort of justice or is it vengeance?\n\nWith a table full of tools that will aid you to obtain what you need, you are ready to embrace your demons.','Find out everything by any means necessary.','The report seems incomplete, other than some basic information of the prisoner there\'s really nothing useful there.','Reaching for the quill and ink, you note the information you extracted from Vladeus thus finalizing the report.',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+update quest_template set reqcreatureorgoid1 = 50675, reqcreatureorgocount1 = 1, objectivetext1 = 'Obtain information from Vladeus' where entry = 80706;
+
+update quest_template set exclusivegroup = 80705 where entry in (80705, 80706);
+
+replace into broadcast_text (entry, male_text) values (51685, 'Please, don\'t kill me, please!\n\nI don\'t know anything else, please! I just want to go home.'); 
+replace into npc_text (id, broadcasttextid0) values (51685, 51685);
+
+replace into gameobject_template values (1000173, 0, 2, 24410, 'Iron Maiden', 0, 4, 1, 0, 3672, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+replace into gameobject_questrelation (id, quest) values (1000173, 80706);
+replace into gameobject_involvedrelation (id, quest) values (1000171, 80706);
