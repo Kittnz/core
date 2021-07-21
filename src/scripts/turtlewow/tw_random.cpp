@@ -5599,6 +5599,7 @@ bool GOHello_search_for_clues(Player* pPlayer, GameObject* pGo)
         }
         return false;
     }
+    return true;
 }
 
 bool GOSelect_search_for_clues(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 action)
