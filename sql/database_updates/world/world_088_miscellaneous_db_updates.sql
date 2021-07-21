@@ -85,3 +85,18 @@ update item_template set name = 'Flintlocke\'s Hand Cannon', description = 'Also
 -- CoT mobs faction update:
 
 update creature_template set faction = 35 where entry between 65000 and 65019;
+
+-- Misc. DB updates:
+
+update item_template set required_reputation_faction = 910, required_reputation_rank = 7,  buy_price = 150000, sell_price = 5500 where entry = 50070;
+
+update gameobject_template set displayid = 7726 where entry = 1000001;
+update gameobject_template set displayid = 7730 where entry = 1000236;
+
+REPLACE INTO `item_template` VALUES (70016, 0, 15, 2, 'Infinite Whelpling', 'You better believe he knows what time it is.', 31434, 1, 0, 1, 10000, 2500, 0, -1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 28505, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+
+update item_template set bonding = 1 where entry = 70016;
+
+REPLACE INTO `creature_template` VALUES (51658, 0, 18043, 0, 0, 0, 'Infinite Whelpling', NULL, 0, 1, 1, 64, 64, 53, 53, 20, 35, 0, 1.11111, 1.14286, 0, 20, 5, 0, 0, 1, 10, 11, 0, 44, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 1.76, 2.42, 100, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 2, '');
+
+replace into custom_pet_entry_relation values (70016, 51658);

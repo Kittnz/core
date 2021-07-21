@@ -396,7 +396,7 @@ struct boss_lady_blaumeuxAI : public boss_four_horsemen_shared
         boss_four_horsemen_shared::Aggro(who);
         DoScriptText(SAY_BLAU_AGGRO, m_creature);
 
-        m_events.ScheduleEvent(EVENT_BOSS_ABILITY, Seconds(12));
+        m_events.ScheduleEvent(EVENT_BOSS_ABILITY, Seconds(15));
     }
 
     void KilledUnit(Unit* Victim) override
@@ -604,7 +604,7 @@ struct boss_thane_korthazzAI : public boss_four_horsemen_shared
         m_events.ScheduleEvent(EVENT_AGGRO_TEXT, Seconds(4)); 
         
         // unknown if it should be this long for initial cast. Might be right to get in possition
-        m_events.ScheduleEvent(EVENT_BOSS_ABILITY, Seconds(30));
+        m_events.ScheduleEvent(EVENT_BOSS_ABILITY, Seconds(20));
     }
 
     void KilledUnit(Unit* Victim) override
@@ -702,7 +702,7 @@ struct boss_sir_zeliekAI : public boss_four_horsemen_shared
             return;
         boss_four_horsemen_shared::Aggro(who);
         m_events.ScheduleEvent(EVENT_AGGRO_TEXT, Seconds(2));
-        m_events.ScheduleEvent(EVENT_BOSS_ABILITY, Seconds(12));
+        m_events.ScheduleEvent(EVENT_BOSS_ABILITY, Seconds(20));
     }
 
     void KilledUnit(Unit* Victim) override
