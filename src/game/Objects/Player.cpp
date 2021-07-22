@@ -22029,8 +22029,6 @@ bool Player::IsIgnoringTitles() { return m_isIgnoringTitles; }
 
 void Player::SetIgnoringTitles(bool shouldIgnore) { m_isIgnoringTitles = shouldIgnore; }
 
-bool Player::IsScarletCrusade() { return HasItemWithIdEquipped(50440); }
-
 void Player::SendRaidWarning(const std::string& text)
 {
 	SendRaidWarning(text.c_str());
