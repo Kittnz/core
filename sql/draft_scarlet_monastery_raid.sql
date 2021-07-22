@@ -179,3 +179,65 @@ replace into creature_involvedrelation (id, quest) values (50677, 80711);
 update item_template set quality = 0, name = 'Cracked Scarlet Crusade Insignia', display_id = 31604, description = '' where entry = 50440;
 
 replace into item_template values (53005, 0, 13, 0, 'Scarlet Crusade Insignia', 'This insignia marks the bearer as a fully fledged member of the Scarlet Crusade.', 31604, 1, 0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, null);
+
+delete from gameobject where id = 2002768 and position_x = -2902.66;
+delete from gameobject where id = 1000033 and position_x = -2897.14;
+delete from gameobject where id = 1000027 and position_x = -2899.86;
+delete from gameobject where id = 1000268 and position_x = -2908.6;
+delete from gameobject where id = 2000203 and position_x = -2908.01; 
+delete from gameobject where id = 2000203 and position_x = -2904.13; 
+delete from gameobject where id = 2004285 and position_x = -2905.2; 
+delete from gameobject where id = 2004286 and position_x = -2904.97; 
+delete from gameobject where id = 2004334 and position_x = -2899.36;
+delete from gameobject where id = 1000167 and position_x = -2906.81; 
+delete from gameobject where id = 987658 and position_x = -2899.26; 
+delete from gameobject where id = 1000168 and position_x = -2900.01; 
+delete from gameobject where id = 1000169 and position_x = -2469.41;
+delete from gameobject where id = 2002889 and position_x = -3733.73; 
+delete from gameobject where id = 2002725 and position_x = -3731.5; 
+delete from gameobject where id = 1000171 and position_x = -3733.25;
+delete from gameobject where id = 180340 and position_x = -3733.78; 
+delete from gameobject where id = 2003458 and position_x = -3734.17; 
+delete from gameobject where id = 2003455 and position_x = -3734.35; 
+delete from gameobject where id = 1000172 and position_x = -3733.67;
+delete from gameobject where id = 1000173 and position_x = -3738.02; 
+delete from gameobject where id = 2003532 and position_x = -3741.25;
+delete from gameobject where id = 2003533 and position_x = -3732.29;
+delete from gameobject where id = 2003533 and position_x = -3744.24; 
+delete from gameobject where id = 2003533 and position_x = -3742.68;
+
+replace into gameobject (id, map, position_x, position_y, position_z, orientation) values 
+(2002768, 0, -2902.66, -2506.66, 33.4268, 2.41543),
+(1000033, 0, -2897.14, -2512.39, 33.6725, 1.80282),
+(1000027, 0, -2899.86, -2509.91, 33.4855, 6.2576),
+(1000268, 0, -2908.6, -2510.47, 33.3968, 5.67248),
+(2000203, 0, -2908.01, -2512.73, 33.6244, 3.48908),
+(2000203, 0, -2904.13, -2515.66, 34.4606, 5.16355),
+(2004285, 0, -2905.2, -2514.93, 34.2398, 4.77085),
+(2004286, 0, -2904.97, -2518.21, 34.5729, 3.04768),
+(2004334, 0, -2899.36, -2512.44, 34.5082, 0.148844),
+(1000167, 0, -2906.81, -2517.01, 34.2675, 0.0742337),
+(987658, 0, -2899.26, -2521.77, 34.8312, 2.88203),
+(1000168, 0, -2900.01, -2522.38, 34.8497, 5.26179),
+(1000169, 0, -2469.41, -2503.07, 78.5076, 6.24461),
+(2002889, 0, -3733.73, -804.611, 4.32537, 4.25542),
+(2002725, 0, -3731.5, -805.688, 4.32533, 4.25087),
+(1000171, 0, -3733.25, -804.919, 5.29236, 2.65409),
+(180340, 0, -3733.78, -803.752, 5.29256, 3.62584),
+(2003458, 0, -3734.17, -804.495, 5.29256, 4.01841),
+(2003455, 0, -3734.35, -805.351, 5.29256, 5.87745),
+(1000172, 0, -3733.67, -805.785, 5.29234, 5.8429),
+(1000173, 0, -3738.02, -808.251, 4.32543, 1.136),
+(2003532, 0, -3741.25, -805.79, 4.3256, 1.0793),
+(2003533, 0, -3732.29, -809.552, 4.32527, 2.60297),
+(2003533, 0, -3744.24, -798.279, 4.32505, 2.61082),
+(2003533, 0, -3742.68, -795.629, 4.32505, 2.61082);
+
+delete from creature where id in (50672, 50676, 50677);
+
+replace into creature (id, map, position_x, position_y, position_z, orientation, spawntimesecsmin, spawntimesecsmax) values 
+(50672, 0, -2909.08, -2505.64, 33.0063, 3.23075, 25, 25),
+(50672, 0, -2894.67, -2520.58, 34.3141, 5.58017, 25, 25),
+(50676, 0, -3736.28, -809.162, 4.32525, 1.10049, 25, 25),
+(50677, 0, 1682.32, -5333.22, 74.2273, 1.24345, 25, 25);
+
