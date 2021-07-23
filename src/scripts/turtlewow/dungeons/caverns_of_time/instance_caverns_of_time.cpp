@@ -1076,10 +1076,14 @@ struct harbinger_boss_cotAI : public ScriptedAI
 
             for (int i = 0; i < 5; i++)
             {
-                if (Creature* larvae = m_creature->SummonCreature(NPC_LARVAE, m_creature->GetVictim()->GetPositionX() + frand(-8.0f, 8.0f), m_creature->GetVictim()->GetPositionY() + frand(-8.0f, 8.0f), m_creature->GetVictim()->GetPositionZ(), 0, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN))
+                if (Creature* larvae = m_creature->SummonCreature(NPC_LARVAE, m_creature->GetVictim()->GetPositionX() + frand(-8.0f, 8.0f), m_creature->GetVictim()->GetPositionY() + frand(-8.0f, 8.0f), m_creature->GetVictim()->GetPositionZ(), 0, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 1000))
+                {
+                    larvae->AI()->AttackStart(m_creature->GetVictim());
                     larvae->AddThreat(m_creature->GetVictim(), 100.0f);
+                }
             }
 
+            m_creature->PMonsterYell("W'oq uhn'agth ez qam Sk'arr!");
             m_creature->MonsterWhisper("Come, servants of rot. Consume!", m_creature->GetVictim(), true);
 
         }
@@ -1140,7 +1144,7 @@ struct larvae_cotAI : public ScriptedAI
 
     void OnCombatStop() override
     {
-        m_creature->DespawnOrUnsummon();
+        //m_creature->DespawnOrUnsummon(); // handled in Epochronos script when summoned
     }
 };
 
