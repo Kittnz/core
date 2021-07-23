@@ -5913,9 +5913,37 @@ bool GossipSelect_npc_vladeus_interrogation(Player* pPlayer, Creature* pCreature
     return true;
 }
 
+bool QuestRewarded_npc_brother_crowley(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || ! pPlayer) return false;
+
+    if (pQuest->GetQuestId() == 80708) // Scarlet Aid
+    {
+        DoAfterTime(pPlayer, 2 * IN_MILLISECONDS, [player = pPlayer, crowley = pQuestGiver]() {
+            Map* map = sMapMgr.FindMap(0);
+            crowley->MonsterSayToPlayer("Brigitte Abbendis is the daughter of the former High General Abbendis and utterly hates the undead, which is not a surprise when it comes to the Scarlet Crusade, I know.", player);});
+        DoAfterTime(pPlayer, 10 * IN_MILLISECONDS, [player = pPlayer, crowley = pQuestGiver]() {
+            Map* map = sMapMgr.FindMap(0);
+            crowley->MonsterSayToPlayer("The issue is she’d go to any length and I mean any to achieve this purpose, given what you told me and the fate of the other leaders she probably broke and went insane by now.", player); });
+        DoAfterTime(pPlayer, 18 * IN_MILLISECONDS, [player = pPlayer, crowley = pQuestGiver]() {
+            Map* map = sMapMgr.FindMap(0);
+            crowley->MonsterSayToPlayer("Last I heard she was in Tyr’s Hand, but if there’s a secret training place or whatever that prisoner called it the only one to know about it would be her, an information passed down from the Ashbringer to her father and from her father to her.", player); });
+        DoAfterTime(pPlayer, 28 * IN_MILLISECONDS, [player = pPlayer, crowley = pQuestGiver]() {
+            Map* map = sMapMgr.FindMap(0);
+            crowley->MonsterSayToPlayer("I am telling you, the Scarlet Crusade is indeed broken and we have seen better days but Abbendis will not stop at anything to take on the undead, be they Scourge or not.", player);
+            crowley->HandleEmote(EMOTE_ONESHOT_QUESTION); });
+    }
+    return false;
+}
+
 void AddSC_tw_random()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_brother_crowley";
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_brother_crowley;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_vladeus_interrogation";

@@ -90,7 +90,7 @@ replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minleve
 replace into creature_questrelation (id, quest) values (2104, 80704);
 replace into gameobject_involvedrelation (id, quest) values (1000171, 80704);
 
-replace into gameobject_template values (1000171, 0, 2, 25894, 'Incompleted Interrogation Report', 0, 4, 1, 0, 3672, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+replace into gameobject_template values (1000171, 0, 2, 24337, 'Incompleted Interrogation Report', 0, 4, 1, 0, 3672, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
 
 replace into creature_template values (50676, 0, 2565, 0, 0, 0, 'Vladeus Springriver', NULL, 0, 60, 60, 2607, 2658, 2289, 2369, 2810, 89, 0, 1, 0.857143, 0, 20, 5, 0, 0, 1, 154, 184, 0, 268, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 70.4704, 96.8968, 100, 7, 0, 12352, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 123520, 0, 59, 296, 'EventAI', 0, 3, 0, 0, 3, 12352, 0, 0, 0, 0, 0, 'npc_vladeus_interrogation');
 
@@ -128,3 +128,116 @@ replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minleve
 
 replace into gameobject_questrelation (id, quest) values (1000171, 80707);
 replace into creature_involvedrelation (id, quest) values (2104, 80707);
+
+replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewmoneymaxlevel, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (80707,80708,1519,60,60,0,0,'Scarlet Aid','My boys made preparation for the prisoner to reach Stormwind, his fate will be decided there since he’s part of their jurisdiction.\n\nYou were of great help and I am sure you want to poke around this thing even further, I might have a lead for you, not sure how much it will help though.\n\nUnder the Cathedral District’s Chapel there’s a priest in red robes, the intel I got from Shaw’s men says that his name is Brother Crowley and was sent by the Scarlet Crusade inside the city as an ambassador of sorts.\n\nHis mission was to recruit the willing to fight in the name of the Light or whatever stupid lie these Scarlets are telling to themselves.\n\nIn any case, Crowley hasn’t been that active, we are not sure if he’s the one to recruit these blokes but it’s worth a try.','Travel to the Cathedral’s District of Stormwind and speak with Brother Crowley.','How can I assist?','Bold accusation, $r, I almost feel offended.\n\nI fear it was not me, things would’ve been simpler. I assume you got a name from your prisoner, tell me what happened.',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+replace into creature_questrelation (id, quest) values (2104, 80708);
+replace into creature_involvedrelation (id, quest) values (12336, 80708);
+
+update creature_template set script_name = 'npc_brother_crowley' where entry = 12336;
+
+replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewmoneymaxlevel, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (80708,80709,139,60,60,0,0,'Donning the Red Flag','Abbendis must be stopped and you will be one of the thorns in her side and how better should you do it if not from the inside?\n\nWhile I hold no skill in the arts of the Arcane, a dear friend of mine who just like me will love to see her fall has provided me in the past with a few scrolls that could change one’s appearance.\n\nI am more than happy to offer you one if you were to tell nobody of it, let’s just say the scrolls were for something more meaningful, yet desperate times call for desperate measures.\n\nOnly use this when close to Tyr’s Hand, claim to be one of the disciples of the caravan you destroyed and claim your team was slain by the ogres of Arathi.','Travel to Tyr’s Hand and report to Mavel Brightwood.','Speak quickly or move along.','We’ve been expecting at least a handful of new recruits, not just one.\n\nExplain yourself immediately.',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+replace into creature_questrelation (id, quest) values (12336, 80709);
+replace into creature_involvedrelation (id, quest) values (50677, 80709);
+
+update quest_template set srcitemid = 53003, srcitemcount = 1 where entry = 80709;
+
+replace into creature_template values (50677, 0, 10518, 0, 0, 0, 'Mavel Brightwood', NULL, 0, 60, 60, 5291, 7291, 3738, 4738, 2832, 67, 0, 1.1, 1.14286, 0, 20, 5, 0, 2, 1, 395, 510, 0, 268, 1, 1158, 2000, 2, 32832, 0, 0, 0, 0, 0, 0, 61.152, 84.084, 100, 7, 0, 10828, 10828, 0, 0, 0, 0, 0, 0, 0, 9128, 13730, 17143, 0, 108280, 0, 2035, 2141, 'EventAI', 0, 3, 0, 0, 3, 10828, 0, 0, 0, 0, 0, '');
+
+update creature_template set npc_flags = 3, equipment_id = 9452 where entry = 50677;
+
+replace into item_template values (53003, 0, 12, 0, 'Illusion: Scarlet Crusade', '', 634, 1, 0, 1, 0, 0, 0, -1, -1, 45, 60, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 19690, 0, 3, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+
+replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewmoneymaxlevel, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (80709,80710,139,60,60,0,0,'It’s All in Their Brains','Ready for your first assignment?\n\nYour armor looks shabby and your blade dull but if you’re not able to pull up your own weight you’re not worth the trouble of the Light.\n\nTravel the Plaguelands, slay any undead in your path and bring me their brains. Their brains are essential for something the High General has planned, simply do your job and ask no questions.\n\nGo you fool, the Light waits for nobody, go on and claim your glorious purpose.','Hunt undead all over the Plaguelands and gather their brains.','Don’t worry yourself with details, do as you were told.','Perfect condition, if anything this rotten could be called something other than disgusting.\n\nBlasted Scourge, I hope the High General is right.\n\nNow onto your next task, recruit.',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+update quest_template set reqitemid1 = 53004, reqitemcount1 = 30 where entry = 80710;
+
+replace into creature_questrelation (id, quest) values (50677, 80710);
+replace into creature_involvedrelation (id, quest) values (50677, 80710);
+
+replace into item_template values (53004, 0, 12, 0, 'Undead\'s Rotten Brain', '', 10923, 1, 0, 1, 0, 0, 0, -1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 4, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref) values
+(8530, 53004, -90, 6, 1),
+(8532, 53004, -80, 6, 1),
+(8544, 53004, -90, 6, 1),
+(8531, 53004, -80, 6, 1),
+(10946, 53004, -90, 6, 1),
+(16380, 53004, -80, 6, 1),
+(16141, 53004, -90, 6, 1);
+
+replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewmoneymaxlevel, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (80710,80711,139,60,60,0,0,'Supplies We Need','Your next errand is to simply collect a few things here and there, nothing special.\n\nYou will find these while fighting Elementals and plants in some of the actual dangerous zones of the world, but I am more than sure you will succeed if you truly are chosen by the Light.\n\nBring me Savage Fronds and Core of the Elements, fifty of each, it will be a great help in what we wish to achieve.\n\nWhen and if you return you will officially be a member and I will give you a map as to where to find the entrance for the secret training spot.\n\nMay the Light bless your poor soul. If you return we will embrace you as a sibling, if you do not we will not mourn for you even for a second.','Travel the world and bring back the supplies you were asked to.','It’s a simple task, kill and collect, what more do you want?','Welcome back, brother and may the Light bless us both in the days to come.\n\nHere’s your insignia and here’s the map for the entrance, the High General will be very pleased to have you.\n\nFor the Scarlet Crusade, for the Light and for Lordaeron!',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+update quest_template set reqitemid1 = 22529, reqitemcount1 = 50 where entry = 80711;
+update quest_template set reqitemid2 = 22527, reqitemcount2 = 50 where entry = 80711;
+update quest_template set rewitemid1 = 53005, rewitemcount1 = 1 where entry = 80711;
+
+replace into creature_questrelation (id, quest) values (50677, 80711);
+replace into creature_involvedrelation (id, quest) values (50677, 80711);
+
+update item_template set quality = 0, name = 'Cracked Scarlet Crusade Insignia', display_id = 31604, description = '' where entry = 50440;
+
+replace into item_template values (53005, 0, 13, 0, 'Scarlet Crusade Insignia', 'This insignia marks the bearer as a fully fledged member of the Scarlet Crusade.', 31604, 1, 0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, null);
+
+delete from gameobject where id = 2002768 and position_x = -2902.66;
+delete from gameobject where id = 1000033 and position_x = -2897.14;
+delete from gameobject where id = 1000027 and position_x = -2899.86;
+delete from gameobject where id = 1000268 and position_x = -2908.6;
+delete from gameobject where id = 2000203 and position_x = -2908.01; 
+delete from gameobject where id = 2000203 and position_x = -2904.13; 
+delete from gameobject where id = 2004285 and position_x = -2905.2; 
+delete from gameobject where id = 2004286 and position_x = -2904.97; 
+delete from gameobject where id = 2004334 and position_x = -2899.36;
+delete from gameobject where id = 1000167 and position_x = -2906.81; 
+delete from gameobject where id = 987658 and position_x = -2899.26; 
+delete from gameobject where id = 1000168 and position_x = -2900.01; 
+delete from gameobject where id = 1000169 and position_x = -2469.41;
+delete from gameobject where id = 2002889 and position_x = -3733.73; 
+delete from gameobject where id = 2002725 and position_x = -3731.5; 
+delete from gameobject where id = 1000171 and position_x = -3733.25;
+delete from gameobject where id = 180340 and position_x = -3733.78; 
+delete from gameobject where id = 2003458 and position_x = -3734.17; 
+delete from gameobject where id = 2003455 and position_x = -3734.35; 
+delete from gameobject where id = 1000172 and position_x = -3733.67;
+delete from gameobject where id = 1000173 and position_x = -3738.02; 
+delete from gameobject where id = 2003532 and position_x = -3741.25;
+delete from gameobject where id = 2003533 and position_x = -3732.29;
+delete from gameobject where id = 2003533 and position_x = -3744.24; 
+delete from gameobject where id = 2003533 and position_x = -3742.68;
+
+replace into gameobject (id, map, position_x, position_y, position_z, orientation) values 
+(2002768, 0, -2902.66, -2506.66, 33.4268, 2.41543),
+(1000033, 0, -2897.14, -2512.39, 33.6725, 1.80282),
+(1000027, 0, -2899.86, -2509.91, 33.4855, 6.2576),
+(1000268, 0, -2908.6, -2510.47, 33.3968, 5.67248),
+(2000203, 0, -2908.01, -2512.73, 33.6244, 3.48908),
+(2000203, 0, -2904.13, -2515.66, 34.4606, 5.16355),
+(2004285, 0, -2905.2, -2514.93, 34.2398, 4.77085),
+(2004286, 0, -2904.97, -2518.21, 34.5729, 3.04768),
+(2004334, 0, -2899.36, -2512.44, 34.5082, 0.148844),
+(1000167, 0, -2906.81, -2517.01, 34.2675, 0.0742337),
+(987658, 0, -2899.26, -2521.77, 34.8312, 2.88203),
+(1000168, 0, -2900.01, -2522.38, 34.8497, 5.26179),
+(1000169, 0, -2469.41, -2503.07, 78.5076, 6.24461),
+(2002889, 0, -3733.73, -804.611, 4.32537, 4.25542),
+(2002725, 0, -3731.5, -805.688, 4.32533, 4.25087),
+(1000171, 0, -3733.25, -804.919, 5.29236, 2.65409),
+(180340, 0, -3733.78, -803.752, 5.29256, 3.62584),
+(2003458, 0, -3734.17, -804.495, 5.29256, 4.01841),
+(2003455, 0, -3734.35, -805.351, 5.29256, 5.87745),
+(1000172, 0, -3733.67, -805.785, 5.29234, 5.8429),
+(1000173, 0, -3738.02, -808.251, 4.32543, 1.136),
+(2003532, 0, -3741.25, -805.79, 4.3256, 1.0793),
+(2003533, 0, -3732.29, -809.552, 4.32527, 2.60297),
+(2003533, 0, -3744.24, -798.279, 4.32505, 2.61082),
+(2003533, 0, -3742.68, -795.629, 4.32505, 2.61082);
+
+delete from creature where id in (50672, 50676, 50677);
+
+replace into creature (id, map, position_x, position_y, position_z, orientation, spawntimesecsmin, spawntimesecsmax) values 
+(50672, 0, -2909.08, -2505.64, 33.0063, 3.23075, 25, 25),
+(50672, 0, -2894.67, -2520.58, 34.3141, 5.58017, 25, 25),
+(50676, 0, -3736.28, -809.162, 4.32525, 1.10049, 25, 25),
+(50677, 0, 1682.32, -5333.22, 74.2273, 1.24345, 25, 25);
+
