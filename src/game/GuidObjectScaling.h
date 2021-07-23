@@ -42,14 +42,14 @@ public:
     void AddOrEdit(uint64 fullGuid, float scale)
     {
         m_guidScales[fullGuid] = scale;
-        WorldDatabase.PExecute("REPLACE INTO `object_scaling` (`fullGuid`, `scale`) VALUES (%ull, %f)", fullGuid, scale);
+        WorldDatabase.PExecute("REPLACE INTO `object_scaling` (`fullGuid`, `scale`) VALUES (%llu, %f)", fullGuid, scale);
     }
 
     void Remove(uint64 fullGuid)
     {
         auto ret = m_guidScales.erase(fullGuid);
         if (ret > 0)
-            WorldDatabase.PExecute("DELETE FROM `object_scaling` WHERE `fullGuid` = %ull", fullGuid);
+            WorldDatabase.PExecute("DELETE FROM `object_scaling` WHERE `fullGuid` = %llu", fullGuid);
     }
 
 
