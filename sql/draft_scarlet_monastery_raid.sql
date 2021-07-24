@@ -22,14 +22,14 @@ replace into creature_template (entry, name, display_id1) values (50665, 'Quest 
 replace into creature_template (entry, name, display_id1) values (50666, 'Quest 80702 Custom Trigger 2', 328);
 replace into creature_template (entry, name, display_id1) values (50667, 'Quest 80702 Custom Trigger 3', 328);
 
-replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewmoneymaxlevel, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (80701,80702,69,60,60,0,0,'Young and Foolish','My agents have reported that a Scarlet caravan has started moving through various towns.\n\nFrom what we know they have already gone to Lakeshire, Darkshire, Menethil and Southshore.\n\nMy only assumption is that whoever took over the Crusade after the events that transpired the Scarlet Monastery, Hearthglen and Stratholme has realised they\'ve been running short on men.\n\nI want you to go and speak to the people of Lakeshire. The locals should have at least seen something.','Interrogate the people of Lakeshire and find out the truth.','How is your task going?','So we were right, this would\'ve been valuable information if we didn\'t already receive another report.\n\nSorry about that, $N. I will be needing your help once more.',0,0,0,0,0,0,0,0,50665,1,50666,1,50667,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewmoneymaxlevel, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (80701,80702,69,60,60,0,0,'Young and Foolish','My agents have reported that a Scarlet caravan has started moving through various towns.\n\nFrom what we know they have already gone to Lakeshire, Darkshire, Menethil and Southshore.\n\nMy only assumption is that whoever took over the Crusade after the events that transpired the Scarlet Monastery, Hearthglen and Stratholme has realised they\'ve been running short on men.\n\nI want you to go and speak to the people of Lakeshire. The locals should have at least seen something.','Interrogate the people of Lakeshire and find out the truth. Report back to Mathias Shaw.','How is your task going?','So we were right, this would\'ve been valuable information if we didn\'t already receive another report.\n\nSorry about that, $N. I will be needing your help once more.',0,0,0,0,0,0,0,0,50665,1,50666,1,50667,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
 
 replace into creature_questrelation (id, quest) values (332, 80702);
 replace into creature_involvedrelation (id, quest) values (332, 80702);
 
-update quest_template set objectivetext1 = 'Interrogate citizen of Lakeshire' where entry = 80702;
-update quest_template set objectivetext2 = 'Interrogate citizen of Lakeshire' where entry = 80702;
-update quest_template set objectivetext3 = 'Interrogate citizen of Lakeshire' where entry = 80702;
+update quest_template set objectivetext1 = 'Speak to Foreman Oslow' where entry = 80702;
+update quest_template set objectivetext2 = 'Speak to Dorin Songblade' where entry = 80702;
+update quest_template set objectivetext3 = 'Speak to Magistrate Solomon' where entry = 80702;
 
 update creature_template set script_name = 'npc_young_and_foolish' where entry in (341, 956, 344);
 update creature_template set npc_flags = 16389 where entry = 956;
@@ -51,7 +51,7 @@ replace into creature_template (entry, name, display_id1) values (50671, 'Quest 
 
 replace into creature_template values (50672, 0, 1598, 1608, 0, 0, 'Dwarf Mountaineer', NULL, 0, 30, 30, 1910, 1910, 0, 0, 1200, 57, 0, 1.08, 1.14286, 0, 20, 5, 0, 0, 1, 42, 53, 0, 122, 1, 1710, 1881, 1, 0, 0, 0, 0, 0, 0, 0, 42.1344, 57.9348, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 130760, 0, 0, 0, 'GuardAI', 0, 3, 0, 0, 3, 13076, 0, 0, 0, 0, 525312, 'search_for_clues');
 
-replace into broadcast_text (entry, male_text) values (51680, 'It appears that this dwarf wasn’t only killed but also mutilated, his jaw was missing.'); 
+replace into broadcast_text (entry, male_text) values (51680, 'It appears that this dwarf wasn’t only killed but also mutilated, the jaw was missing.'); 
 replace into npc_text (id, broadcasttextid0) values (51680, 51680);
 
 update creature_template set dynamic_flags = 36, npc_flags = 1 where entry = 50672;
@@ -180,31 +180,33 @@ update item_template set quality = 0, name = 'Cracked Scarlet Crusade Insignia',
 
 replace into item_template values (53005, 0, 13, 0, 'Scarlet Crusade Insignia', 'This insignia marks the bearer as a fully fledged member of the Scarlet Crusade.', 31604, 1, 0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, null);
 
-delete from gameobject where id = 2002768 and position_x = -2902.66;
-delete from gameobject where id = 1000033 and position_x = -2897.14;
-delete from gameobject where id = 1000027 and position_x = -2899.86;
-delete from gameobject where id = 1000268 and position_x = -2908.6;
-delete from gameobject where id = 2000203 and position_x = -2908.01; 
-delete from gameobject where id = 2000203 and position_x = -2904.13; 
-delete from gameobject where id = 2004285 and position_x = -2905.2; 
-delete from gameobject where id = 2004286 and position_x = -2904.97; 
-delete from gameobject where id = 2004334 and position_x = -2899.36;
-delete from gameobject where id = 1000167 and position_x = -2906.81; 
-delete from gameobject where id = 987658 and position_x = -2899.26; 
-delete from gameobject where id = 1000168 and position_x = -2900.01; 
-delete from gameobject where id = 1000169 and position_x = -2469.41;
-delete from gameobject where id = 2002889 and position_x = -3733.73; 
-delete from gameobject where id = 2002725 and position_x = -3731.5; 
-delete from gameobject where id = 1000171 and position_x = -3733.25;
-delete from gameobject where id = 180340 and position_x = -3733.78; 
-delete from gameobject where id = 2003458 and position_x = -3734.17; 
-delete from gameobject where id = 2003455 and position_x = -3734.35; 
-delete from gameobject where id = 1000172 and position_x = -3733.67;
-delete from gameobject where id = 1000173 and position_x = -3738.02; 
-delete from gameobject where id = 2003532 and position_x = -3741.25;
-delete from gameobject where id = 2003533 and position_x = -3732.29;
-delete from gameobject where id = 2003533 and position_x = -3744.24; 
-delete from gameobject where id = 2003533 and position_x = -3742.68;
+update item_template set max_count = 1, quality = 3, bag_family = 9, flags = 64, item_level = 60, sheath = 0 where entry = 53005;
+
+delete from gameobject where id = 2002768 and position_x between -2902.7 and -2902.5;
+delete from gameobject where id = 1000033 and position_x between -2897.2 and -2897.0;
+delete from gameobject where id = 1000027 and position_x between -2899.9 and -2899.7;
+delete from gameobject where id = 1000268 and position_x between -2908.7 and -2908.5;
+delete from gameobject where id = 2000203 and position_x between -2908.2 and -2908.0;
+delete from gameobject where id = 2000203 and position_x between -2904.2 and -2904.0;
+delete from gameobject where id = 2004285 and position_x between -2905.3 and -2905.1;
+delete from gameobject where id = 2004286 and position_x between -2905.0 and -2904.9;
+delete from gameobject where id = 2004334 and position_x between -2899.4 and -2899.2;
+delete from gameobject where id = 1000167 and position_x between -2906.9 and -2906.7;
+delete from gameobject where id = 987658 and position_x between -2899.3 and -2899.1;
+delete from gameobject where id = 1000168 and position_x between -2900.1 and -2900.0;
+delete from gameobject where id = 1000169 and position_x between -2469.5 and -2469.3;
+delete from gameobject where id = 2002889 and position_x between -3733.8 and -3733.6;
+delete from gameobject where id = 2002725 and position_x between -3731.6 and -3731.4;
+delete from gameobject where id = 1000171 and position_x between -3733.3 and -3733.1;
+delete from gameobject where id = 180340 and position_x between -3733.8 and -3733.6;
+delete from gameobject where id = 2003458 and position_x between -3734.2 and -3734.0;
+delete from gameobject where id = 2003455 and position_x between -3734.4 and -3734.2;
+delete from gameobject where id = 1000172 and position_x between -3733.7 and -3733.5;
+delete from gameobject where id = 1000173 and position_x between -3738.1 and -3738.0;
+delete from gameobject where id = 2003532 and position_x between -3741.3 and -3741.1;
+delete from gameobject where id = 2003533 and position_x between -3732.3 and -3732.1;
+delete from gameobject where id = 2003533 and position_x between -3744.3 and -3744.1;
+delete from gameobject where id = 2003533 and position_x between -3742.7 and -3742.5;
 
 replace into gameobject (id, map, position_x, position_y, position_z, orientation) values 
 (2002768, 0, -2902.66, -2506.66, 33.4268, 2.41543),
