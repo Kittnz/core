@@ -1247,7 +1247,7 @@ struct epochronos_boss_cotAI : public ScriptedAI
             }
 
             if (summonEntry > 0)
-            m_creature->SummonCreature(summonEntry, m_creature->GetPositionX(), m_creature->GetPositionY(), m_creature->GetPositionZ(), 0, TEMPSUMMON_MANUAL_DESPAWN);
+            m_creature->SummonCreature(summonEntry, m_creature->GetPositionX(), m_creature->GetPositionY(), m_creature->GetPositionZ(), 0, TEMPSUMMON_CORPSE_DESPAWN);
 
         }
         if (!enrageActive && m_creature->GetHealthPercent() <= 25.0f)
@@ -1492,14 +1492,172 @@ struct shade_cotAI : public ScriptedAI
             }
             break;
             }
-
     }
 
     void OnCombatStop() override 
     {
         m_creature->DespawnOrUnsummon();
     }
+};
 
+
+struct chromie_boss_cotAI : public ScriptedAI
+{
+    chromie_boss_cotAI(Creature* c) : ScriptedAI(c)
+    {
+        Reset();
+    }
+
+    enum Spells
+    {
+        SPELL_MANA_BURN = 26046,
+        SPELL_FEAR = 26580,
+        SPELL_FUMBLE = 593
+    };
+
+    enum CreatureEntries
+    {
+        NPC_TIME_RIFT = 81051,
+        NPC_RIFT_GUARD = 65101
+    };
+
+    uint32 manaBurnTimer = 20000;
+    uint32 fearTimer = 12000;
+    uint32 fumbleTimer = 12000;
+    uint32 phase = 1;
+
+
+    void Reset() override
+    {
+        manaBurnTimer = 20000;
+        fearTimer = 12000;
+        fumbleTimer = 12000;
+        phase = 1;
+    }
+
+    void UpdateAI(const uint32 uiDiff) override
+    {
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
+            return;
+
+        if (manaBurnTimer <= uiDiff)
+        {
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_MANA_BURN) == CAST_OK)
+            {
+                manaBurnTimer = 20000;
+                m_creature->PMonsterYell("Your will, your power, it’ll be all reduced down to a husk!");
+            }
+        }
+        else manaBurnTimer -= uiDiff;
+
+        if (fearTimer <= uiDiff)
+        {
+            if (DoCastSpellIfCan(m_creature->SelectRandomUnfriendlyTarget(), SPELL_FEAR) == CAST_OK)
+                fearTimer = 12000;
+        }
+        else fearTimer -= uiDiff;
+
+        if (fumbleTimer <= uiDiff)
+        {
+            Unit* target = m_creature->SelectRandomUnfriendlyTarget(nullptr, 10.0f);
+            target->AddAura(SPELL_FUMBLE);
+                fumbleTimer = 12000;
+        }
+        else fumbleTimer -= uiDiff;
+
+
+        if (phase == 1 && m_creature->GetHealthPercent() <= 80.0f)
+        {
+            phase++;
+
+            Creature* portal = m_creature->SummonCreature(NPC_TIME_RIFT, m_creature->GetPositionX() + 5, m_creature->GetPositionY() + 5, m_creature->GetPositionZ(), 0);
+
+            m_creature->SummonCreature(NPC_RIFT_GUARD, portal->GetPositionX(), portal->GetPositionY(), portal->GetPositionZ(), 0, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 100);
+
+            m_creature->PMonsterYell("We are Infinite! Our numbers are countless!");
+        }
+
+        if (phase == 2 && m_creature->GetHealthPercent() <= 40.0f)
+        {
+            phase++;
+
+            Creature* portal = m_creature->SummonCreature(NPC_TIME_RIFT, m_creature->GetPositionX() + 5, m_creature->GetPositionY() + 5, m_creature->GetPositionZ(), 0);
+
+            m_creature->SummonCreature(NPC_RIFT_GUARD, portal->GetPositionX(), portal->GetPositionY(), portal->GetPositionZ(), 0, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 100);
+
+            m_creature->PMonsterYell("We are Infinite! Our numbers are countless!");
+        }
+
+        DoMeleeAttackIfReady();
+    }
+
+    void EnterCombat(Unit*) override
+    {
+        m_creature->PMonsterYell("Well well, surprised are we? I am the superior Chromie! It's a shame you came this far just to die.");
+    }
+
+    void JustDied(Unit*) override
+    {
+        m_creature->PMonsterYell("But I... we cannot fail! We are so close!");
+    }
+
+};
+
+struct chromie_portal_cotAI : public ScriptedAI
+{
+    chromie_portal_cotAI(Creature* c) : ScriptedAI(c)
+    {
+        Reset();
+    }
+
+    uint32 spawnTimer;
+    bool beginSpawning;
+    bool doOnce;
+
+    enum CreatureEntries
+    {
+        NPC_WHELP = 65103,
+        NPC_RIFT_GUARD = 65101
+    };
+
+
+    void Reset() override
+    {
+        spawnTimer = 2000;
+        beginSpawning = false;
+        doOnce = false;
+    }
+
+    void UpdateAI(const uint32 uiDiff) override
+    {
+        if (!doOnce)
+        {
+            m_creature->PMonsterSay("The time rift will stabilise in 20 seconds!");
+
+            DoAfterTime(m_creature, 10 * IN_MILLISECONDS, [m_creature = m_creature, this]() {
+                m_creature->PMonsterSay("The time rift will stabilise in 10 seconds!"); });
+
+            DoAfterTime(m_creature, 20 * IN_MILLISECONDS, [m_creature = m_creature, this]() {
+                m_creature->PMonsterSay("The time rift is stable!");
+                beginSpawning = true;
+                });
+
+            doOnce = true;
+        }
+
+        if (beginSpawning)
+        {
+            if (spawnTimer <= uiDiff && m_creature->FindNearestCreature(NPC_RIFT_GUARD, 50.0f, true))
+            {
+                m_creature->SummonCreature(NPC_WHELP, m_creature->GetPositionX(), m_creature->GetPositionY(), m_creature->GetPositionZ(), 0, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 100);
+                spawnTimer = 8000;
+            }
+            else spawnTimer -= uiDiff;
+        }
+
+        if (!m_creature->FindNearestCreature(NPC_RIFT_GUARD, 50.0f, true))
+            m_creature->DespawnOrUnsummon();
+    }
 
 };
 
@@ -1571,6 +1729,16 @@ CreatureAI* GetAIepochronos_boss_cot(Creature* _Creature)
 CreatureAI* GetAI_shade_cot(Creature* _Creature)
 {
     return new shade_cotAI(_Creature);
+}
+
+CreatureAI* GetAI_chromie_boss_cot(Creature* _Creature)
+{
+    return new chromie_boss_cotAI(_Creature);
+}
+
+CreatureAI* GetAI_chromie_portal_cot(Creature* _Creature)
+{
+    return new chromie_portal_cotAI(_Creature);
 }
 
 void AddSC_instance_caverns_of_time()
@@ -1649,5 +1817,15 @@ void AddSC_instance_caverns_of_time()
     newscript = new Script;
     newscript->Name = "shade_cot";
     newscript->GetAI = &GetAI_shade_cot;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "chromie_boss_cot";
+    newscript->GetAI = &GetAI_chromie_boss_cot;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "chromie_portal_cot";
+    newscript->GetAI = &GetAI_chromie_portal_cot;
     newscript->RegisterSelf();
 }
