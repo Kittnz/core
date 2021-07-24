@@ -1124,9 +1124,13 @@ struct larvae_cotAI : public ScriptedAI
         Reset();
     }
 
-    enum Spells
+    bool doOnce = false;
+
+    enum
     {
-        SPELL_DRAIN_LIFE = 17173
+        SPELL_DRAIN_LIFE = 17173,
+
+        NPC_HARBINGER = 65114
     };
 
     void Reset() override
@@ -1138,6 +1142,9 @@ struct larvae_cotAI : public ScriptedAI
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
+
+        if (Creature* harbinger = m_creature->FindNearestCreature(NPC_HARBINGER, 100.0f, true))
+            m_creature->AddThreat(harbinger->GetVictim(), 100.0f);
 
         DoCastSpellIfCan(m_creature->GetVictim(), SPELL_DRAIN_LIFE);
     }
@@ -1159,6 +1166,7 @@ struct epochronos_boss_cotAI : public ScriptedAI
     uint32 swoopTimer;
     uint32 arcaneBlastTimer;
     bool shadeSummoned = false;
+    bool enrageActive = false;
     enum Spells
     {
         SPELL_SAND_BREATH = 20717,
@@ -1167,7 +1175,7 @@ struct epochronos_boss_cotAI : public ScriptedAI
         SPELL_BANISH = 18647
     };
 
-    enum NPCEntries
+    enum ShadeEntries
     {
         NPC_LICH_KING = 65117,
         NPC_KAELTHAS = 65118,
@@ -1180,6 +1188,7 @@ struct epochronos_boss_cotAI : public ScriptedAI
         swoopTimer = 12000;
         arcaneBlastTimer = 10000;
         shadeSummoned = false;
+        enrageActive = false;
     }
 
     void UpdateAI(const uint32 uiDiff) override
@@ -1241,8 +1250,9 @@ struct epochronos_boss_cotAI : public ScriptedAI
             m_creature->SummonCreature(summonEntry, m_creature->GetPositionX(), m_creature->GetPositionY(), m_creature->GetPositionZ(), 0, TEMPSUMMON_MANUAL_DESPAWN);
 
         }
-        if (m_creature->GetHealthPercent() <= 25.0f)
+        if (!enrageActive && m_creature->GetHealthPercent() <= 25.0f)
         {
+            enrageActive = true;
             m_creature->ApplyCastTimePercentMod(25.0f, true);
             m_creature->PMonsterYell("Time for a change of pace!");
         }
