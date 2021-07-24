@@ -5704,8 +5704,10 @@ bool GossipSelect_npc_vladeus_springriver(Player* pPlayer, Creature* pCreature, 
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
+        pPlayer->CombatStop();
         pCreature->MonsterSay("I understand.");
         pCreature->GetMotionMaster()->MoveFollow(pPlayer, PET_FOLLOW_DIST, PET_FOLLOW_ANGLE);
+        pCreature->UpdateSpeed(MOVE_RUN, false, pCreature->GetSpeedRate(MOVE_RUN) * 1.5);
         followed_units.push_back(pPlayer->GetObjectGuid());
     }
     pPlayer->CLOSE_GOSSIP_MENU();
@@ -5747,7 +5749,7 @@ bool GossipSelect_npc_captain_stoutfist(Player* pPlayer, Creature* pCreature, ui
 
 struct go_scarlet_attack_trigger : public GameObjectAI
 {
-    explicit go_scarlet_attack_trigger(GameObject* pGo) : GameObjectAI(pGo) { m_uiUpdateTimer = 10000; }
+    explicit go_scarlet_attack_trigger(GameObject* pGo) : GameObjectAI(pGo) { m_uiUpdateTimer = 1000; }
 
     uint32 m_uiUpdateTimer;
 
@@ -5791,7 +5793,7 @@ struct go_scarlet_attack_trigger : public GameObjectAI
                     else return;                    
                 }
             }
-            m_uiUpdateTimer = 10000;
+            m_uiUpdateTimer = 1000;
         }
         else m_uiUpdateTimer -= uiDiff;
     }
@@ -5845,7 +5847,7 @@ bool GossipSelect_npc_vladeus_interrogation(Player* pPlayer, Creature* pCreature
     }
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 5)
     {
-        pCreature->MonsterSayToPlayer("I didn't see his face clearly, he was wearing a red hood and was simply laughing every few minutes. Looking back at it was the stupidest choice I have ever made. As to why they recruited us, I am not really sure. He said we would be taken to a hidden place of the Crusade to be trained, he was complaining that their number was low and since the death of two of their leaders they became broken. I think he mentioned a name, Aventis or Adentis?", pPlayer);
+        pCreature->MonsterSayToPlayer("I didn't see his face clearly, he was wearing a red hood and was simply laughing every few minutes. Looking back, it was the stupidest choice I have ever made. As to why they recruited us, I am not really sure. He said we would be taken to a hidden place of the Crusade to be trained, he was complaining that their number was low and since the death of two of their leaders they became broken. I think he mentioned a name, Aventis or Adentis?", pPlayer);
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Abbendis?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 6);
         pPlayer->SEND_GOSSIP_MENU(51684, pCreature->GetGUID());
     }
