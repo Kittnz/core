@@ -1,4 +1,4 @@
-update `quest_template` set `ReqItemCount1` = 20, `RewItemCount1` = 4 where `entry` = 80369;
+update quest_template set ReqItemCount1 = 20, RewItemCount1 = 4 where entry = 80369;
 
 -- Wing of the Time-Lord Fix and Nerf
 
@@ -15,7 +15,7 @@ replace into item_template values
 update item_template set max_count = 1 where entry = 51043;
 update quest_template set reqitemcount1 = 2500, objectives = 'Bring 2500 Corrupted Sand to Dronormu in the Caverns of Time.', details = 'Greetings mortal!\n\nYou might have acquired some Corrupted Sand from one of the Infinite Dragonflight, which they\'ve been using to try and compromise the flow of the timelines, or residual amounts that can be found creatures that have been affected by their magic.\n\nI\'ve been assigned to reward those that bring adequate amounts of Corrupted Sand for purification and being returned to safe hands.\n\nIn exchange for 2500 Corrupted Sand, I can reward you with a special bag that\'s been imbued with magic that breaks the nominal limits, allowing it to carry more items than any mortal container could hold.' where entry = 80603;
 
-UPDATE `quest_template` SET `Details`='Greetings, $R. Since you\'re here this means you’ve come to help so listen up. We have a situation here... You might be aware that our building use arcane magic to operate.\n\nWhile our central crystal is the main power source, we use smaller crystals to effectively channel the arcane energy from the nexus to the outlying ley points of the structure.\n\nThe downside is that these crystals break down overtime, if we had found this outpost a decade later the entire Academy could have collapsed.\n\nFortunately, our predecessors built this site on a location with arcane crystal deposits. While the automated constructs have long since stopped working or malfunctioned, the mine remains full of intact crystals.\n\nI need you to head down there and bring me some crystals. Eight should do for now.\n\nAre you still here? Get moving.' WHERE entry = 80252;
+UPDATE quest_template SET Details='Greetings, $R. Since you\'re here this means you’ve come to help so listen up. We have a situation here... You might be aware that our building use arcane magic to operate.\n\nWhile our central crystal is the main power source, we use smaller crystals to effectively channel the arcane energy from the nexus to the outlying ley points of the structure.\n\nThe downside is that these crystals break down overtime, if we had found this outpost a decade later the entire Academy could have collapsed.\n\nFortunately, our predecessors built this site on a location with arcane crystal deposits. While the automated constructs have long since stopped working or malfunctioned, the mine remains full of intact crystals.\n\nI need you to head down there and bring me some crystals. Eight should do for now.\n\nAre you still here? Get moving.' WHERE entry = 80252;
 
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/64
 
@@ -47,7 +47,7 @@ replace into creature_questrelation (id, quest) values (11536, 9226);
 replace into creature_involvedrelation (id, quest) values (11536, 9226);
 
 replace into creature_template (entry, name, display_id1) values (80007, 'Quest 80395 Custom Trigger 1', 328);
-UPDATE `quest_template` SET `ReqCreatureOrGOId1`='80007' WHERE entry=80395;
+UPDATE quest_template SET ReqCreatureOrGOId1='80007' WHERE entry=80395;
 
 delete from item_template where entry = 50617;
 delete from item_template where entry = 16104;
@@ -61,7 +61,7 @@ update quest_template set rewxp = 2000 where entry = 70056;
 update quest_template set rewxp = 2000 where entry = 70057;
 update quest_template set rewxp = 2500 where entry = 70058;
 
-REPLACE INTO `creature_template` VALUES (80008, 0, 1541, 0, 0, 0, 'Aubrey Merton', 'Blue Anchor Exports Trader', 0, 57, 57, 3758, 3758, 0, 0, 3334, 776, 6, 1, 1.14286, 0, 20, 5, 0, 0, 1, 102, 131, 0, 258, 1, 1500, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 72.2304, 99.3168, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 524298, '');
+REPLACE INTO creature_template VALUES (80008, 0, 1541, 0, 0, 0, 'Aubrey Merton', 'Blue Anchor Exports Trader', 0, 57, 57, 3758, 3758, 0, 0, 3334, 776, 6, 1, 1.14286, 0, 20, 5, 0, 0, 1, 102, 131, 0, 258, 1, 1500, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 72.2304, 99.3168, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 524298, '');
 
 update creature_template set faction = 35 where entry = 80008;
 
@@ -93,11 +93,11 @@ update item_template set required_reputation_faction = 910, required_reputation_
 update gameobject_template set displayid = 7726 where entry = 1000001;
 update gameobject_template set displayid = 7730 where entry = 1000236;
 
-REPLACE INTO `item_template` VALUES (70016, 0, 15, 2, 'Infinite Whelpling', 'You better believe he knows what time it is.', 31434, 1, 0, 1, 10000, 2500, 0, -1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 28505, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+REPLACE INTO item_template VALUES (70016, 0, 15, 2, 'Infinite Whelpling', 'You better believe he knows what time it is.', 31434, 1, 0, 1, 10000, 2500, 0, -1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 28505, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
 
 update item_template set bonding = 1 where entry = 70016;
 
-REPLACE INTO `creature_template` VALUES (51658, 0, 18043, 0, 0, 0, 'Infinite Whelpling', NULL, 0, 1, 1, 64, 64, 53, 53, 20, 35, 0, 1.11111, 1.14286, 0, 20, 5, 0, 0, 1, 10, 11, 0, 44, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 1.76, 2.42, 100, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 2, '');
+REPLACE INTO creature_template VALUES (51658, 0, 18043, 0, 0, 0, 'Infinite Whelpling', NULL, 0, 1, 1, 64, 64, 53, 53, 20, 35, 0, 1.11111, 1.14286, 0, 20, 5, 0, 0, 1, 10, 11, 0, 44, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 1.76, 2.42, 100, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 2, '');
 
 replace into custom_pet_entry_relation values (70016, 51658);
 
@@ -105,3 +105,7 @@ update creature_template set script_name = 'epochronos_boss_cot' where entry = 6
 
 update item_template set max_count = 1 where entry = 80114;
 UPDATE creature_loot_template SET ChanceOrQuestChance = 60 WHERE item = 80114;
+
+REPLACE INTO gameobject_template (entry, patch, type, displayId, name, faction, flags, size, data0, data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12, data13, data14, data15, data16, data17, data18, data19, data20, data21, data22, data23, mingold, maxgold, script_name) VALUES (1000245, 0, 9, 214, 'High General Abbendis', 0, 0, 1.5, 1000245, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+replace into page_text (entry, text) values (1000245, 'The Crusades Wall against the Scourge. Paladin of the Scarlet Crusade, Knight of the Silver Hand, Served with honor in the wars against our enemies.\n\nThere has never been a man more fearless or tenacious in his duties, your virtue is something that all of the crusade look up to in inspiration, and your judgement will never be forgotten.\n\nYou were the fist of our kin, and the wall that kept evil at bay.\n\nMay the light guide you to your new beginning with the same fury you once held in life.');
