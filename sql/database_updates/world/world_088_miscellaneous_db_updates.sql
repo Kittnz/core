@@ -102,3 +102,6 @@ REPLACE INTO `creature_template` VALUES (51658, 0, 18043, 0, 0, 0, 'Infinite Whe
 replace into custom_pet_entry_relation values (70016, 51658);
 
 update creature_template set script_name = 'epochronos_boss_cot' where entry = 65116;
+
+update item_template set max_count = 1 where entry = 80114;
+UPDATE creature_loot_template SET ChanceOrQuestChance = 60 WHERE item = 80114;
