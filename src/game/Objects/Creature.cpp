@@ -2545,10 +2545,10 @@ bool Creature::MeetsSelectAttackingRequirement(Unit* pTarget, SpellEntry const* 
     if (selectFlags & SELECT_FLAG_POWER_ENERGY && pTarget->GetPowerType() != POWER_ENERGY)
         return false;
 
-    if (selectFlags & SELECT_FLAG_IN_MELEE_RANGE && !IsWithinMeleeRange(pTarget))
+    if (selectFlags & SELECT_FLAG_IN_MELEE_RANGE && !CanReachWithMeleeAutoAttack(pTarget))
         return false;
 
-    if (selectFlags & SELECT_FLAG_NOT_IN_MELEE_RANGE && IsWithinMeleeRange(pTarget))
+    if (selectFlags & SELECT_FLAG_NOT_IN_MELEE_RANGE && CanReachWithMeleeAutoAttack(pTarget))
         return false;
 
     if (selectFlags & SELECT_FLAG_IN_LOS && !IsWithinLOSInMap(pTarget))
@@ -2572,7 +2572,7 @@ bool Creature::MeetsSelectAttackingRequirement(Unit* pTarget, SpellEntry const* 
             case SPELL_RANGE_IDX_ANYWHERE:
                 return true;
             case SPELL_RANGE_IDX_COMBAT:
-                return IsWithinMeleeRange(pTarget);
+                return CanReachWithMeleeAutoAttack(pTarget);
         }
 
         SpellRangeEntry const* srange = sSpellRangeStore.LookupEntry(pSpellInfo->rangeIndex);

@@ -206,7 +206,7 @@ struct boss_patchwerkAI : public ScriptedAI
                 && (!m_creature->HasAuraType(SPELL_AURA_MOD_FEAR) || m_creature->HasAuraType(SPELL_AURA_PREVENTS_FLEEING)) && !m_creature->HasAuraType(SPELL_AURA_MOD_CONFUSE))
             {
                 
-                if (!m_creature->IsAttackReady(BASE_ATTACK) && m_creature->IsWithinMeleeRange(target)) // He does not have offhand attack
+                if (!m_creature->IsAttackReady(BASE_ATTACK) && m_creature->CanReachWithMeleeAutoAttack(target)) // He does not have offhand attack
                     return true;
 
                 if (target->GetObjectGuid() != previousTarget)

@@ -208,7 +208,7 @@ struct infinite_dragonspawnAI : public ScriptedAI
 
         if (currentTarget)
         {
-            if (m_Timer <= uiDiff && m_creature->IsWithinMeleeRange(currentTarget))
+            if (m_Timer <= uiDiff && m_creature->CanReachWithMeleeAutoAttack(currentTarget))
             {
                 if (!currentTarget->HasAura(SPELL_REND))
                     m_creature->CastSpell(currentTarget, SPELL_REND, false);
@@ -1545,7 +1545,7 @@ struct chromie_boss_cotAI : public ScriptedAI
             if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_MANA_BURN) == CAST_OK)
             {
                 manaBurnTimer = 20000;
-                m_creature->PMonsterYell("Your will, your power, it’ll be all reduced down to a husk!");
+                m_creature->PMonsterYell("Your will, your power, itï¿½ll be all reduced down to a husk!");
             }
         }
         else manaBurnTimer -= uiDiff;
