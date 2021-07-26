@@ -563,7 +563,7 @@ struct boss_ragnarosAI : ScriptedAI
         // at first we check for the current player-type target
         Unit* pMainTarget = m_creature->GetVictim();
         if (pMainTarget && pMainTarget->GetTypeId() == TYPEID_PLAYER && !pMainTarget->ToPlayer()->IsGameMaster() && 
-            m_creature->IsWithinMeleeRange(pMainTarget) && m_creature->IsWithinLOSInMap(pMainTarget))
+            m_creature->CanReachWithMeleeAutoAttack(pMainTarget) && m_creature->IsWithinLOSInMap(pMainTarget))
         {
             m_bInMelee = true;
 

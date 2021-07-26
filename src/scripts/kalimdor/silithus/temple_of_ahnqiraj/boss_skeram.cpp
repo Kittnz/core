@@ -220,7 +220,7 @@ struct boss_skeramAI : public ScriptedAI
             ArcaneExplosion_Timer -= diff;
 
         // If we are within range, melee the target
-        if (m_creature->IsWithinMeleeRange(m_creature->GetVictim()))
+        if (m_creature->CanReachWithMeleeAutoAttack(m_creature->GetVictim()))
             DoMeleeAttackIfReady();
         else
         // Target not in melee range. Spam Earthshock
