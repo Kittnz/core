@@ -141,7 +141,7 @@ void MageOrgrimmarAttackerAI::UpdateAI(const uint32 diff)
     // Stop chase if has mana
     if (me->GetMotionMaster()->GetCurrentMovementGeneratorType() == CHASE_MOTION_TYPE)
         me->GetMotionMaster()->MovementExpired();
-    bool nearTarget = target && target->IsWithinMeleeRange(me);
+    bool nearTarget = target && target->CanReachWithMeleeAutoAttack(me);
     if (!me->HasSpellCooldown(SPELL_FROST_NOVA) && me->GetPower(POWER_MANA) > 50)
         if (nearTarget)
             me->CastSpell(me, SPELL_FROST_NOVA, false);
