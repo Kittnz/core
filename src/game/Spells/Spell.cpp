@@ -930,9 +930,10 @@ void Spell::AddUnitTarget(Unit* pTarget, SpellEffectIndex effIndex)
     if (m_spellInfo->speed > 0.0f && affectiveObject && pTarget != affectiveObject)
     {
         // calculate spell incoming interval
-        float dist = affectiveObject->GetDistance3dToCenter(pTarget);
+        float dist = affectiveObject->GetDistance(pVictim->GetPositionX(), pVictim->GetPositionY(), pVictim->GetPositionZ());
         if (dist < 5.0f)
             dist = 5.0f;
+
         targetInfo.timeDelay = (uint64) floor(dist / m_spellInfo->speed * 1000.0f);
 
         // Calculate minimum incoming time
@@ -942,7 +943,7 @@ void Spell::AddUnitTarget(Unit* pTarget, SpellEffectIndex effIndex)
     else if (m_delayed)
         m_delayMoment = targetInfo.timeDelay = sWorld.getConfig(CONFIG_UINT32_SPELLS_CCDELAY);
     else
-        targetInfo.timeDelay = uint64(0);
+        targetInfo.timeDelay = UI64LIT(0);
 
     // If target reflect spell back to caster
     if (targetInfo.missCondition == SPELL_MISS_REFLECT)
@@ -1027,17 +1028,19 @@ void Spell::AddGOTarget(GameObject* pTarget, SpellEffectIndex effIndex)
     if (m_spellInfo->speed > 0.0f && affectiveObject && pTarget != affectiveObject)
     {
         // calculate spell incoming interval
-        float dist = affectiveObject->GetDistance3dToCenter(pTarget);
+        float dist = affectiveObject->GetDistance(pVictim->GetPositionX(), pVictim->GetPositionY(), pVictim->GetPositionZ());
         if (dist < 5.0f)
             dist = 5.0f;
+
         targetInfo.timeDelay = (uint64) floor(dist / m_spellInfo->speed * 1000.0f);
+
         if (m_delayMoment == 0 || m_delayMoment > targetInfo.timeDelay)
             m_delayMoment = targetInfo.timeDelay;
     }
     else if (m_delayed)
         m_delayMoment = targetInfo.timeDelay = sWorld.getConfig(CONFIG_UINT32_SPELLS_CCDELAY);
     else
-        targetInfo.timeDelay = uint64(0);
+        targetInfo.timeDelay = UI64LIT(0);
 
     // Add target to list
     m_UniqueGOTargetInfo.push_back(targetInfo);
