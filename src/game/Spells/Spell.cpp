@@ -930,7 +930,7 @@ void Spell::AddUnitTarget(Unit* pTarget, SpellEffectIndex effIndex)
     if (m_spellInfo->speed > 0.0f && affectiveObject && pTarget != affectiveObject)
     {
         // calculate spell incoming interval
-        float dist = affectiveObject->GetDistance(pVictim->GetPositionX(), pVictim->GetPositionY(), pVictim->GetPositionZ());
+        float dist = affectiveObject->GetDistance(pTarget->GetPositionX(), pTarget->GetPositionY(), pTarget->GetPositionZ());
         if (dist < 5.0f)
             dist = 5.0f;
 
@@ -1028,7 +1028,7 @@ void Spell::AddGOTarget(GameObject* pTarget, SpellEffectIndex effIndex)
     if (m_spellInfo->speed > 0.0f && affectiveObject && pTarget != affectiveObject)
     {
         // calculate spell incoming interval
-        float dist = affectiveObject->GetDistance(pVictim->GetPositionX(), pVictim->GetPositionY(), pVictim->GetPositionZ());
+        float dist = affectiveObject->GetDistance(pTarget->GetPositionX(), pTarget->GetPositionY(), pTarget->GetPositionZ());
         if (dist < 5.0f)
             dist = 5.0f;
 
