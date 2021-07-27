@@ -266,3 +266,28 @@ update quest_template set objectivetext2 = 'Speak to High Executor Hadrec' where
 update quest_template set objectivetext3 = 'Speak to High Executor Darthalia' where entry = 80721;
 
 update creature_template set script_name = 'npc_questions_and_answers', npc_flags = 3 where entry in (2215, 1515, 1952);
+
+replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewmoneymaxlevel, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (80721,80722,1497,60,60,0,0,'To Catch a Rat...','The only real way to find out more is to set a trap for the Scarlet mongrels. I have tasked a Deathguard to help you with this, obviously he has no idea he will simply be a means to an end and act as bait.\n\nIf you have a guilty conscience, turn around now and never speak of this again, I will find someone else to employ.\n\nYet if you find it in yourself to realise that sacrifices must be met sometimes I will tell you where he is.\n\nFind Maverick, he will be in the Graveyard close to the Monastery, use him to bait them and gather as much intel as you can.','Fin Deathguard Maverick and set a trap for the Scarlet Crusade.','Quickly now.','He really is just unconscious, how strange.\n\nI will have my men take him back to the Apothecary and collect a few samples that will aid us in our mission.',53010,1,0,0,0,0,0,0,50668,1,50669,1,50670,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+replace into creature_questrelation (id, quest) values (2425, 80722);
+replace into creature_involvedrelation (id, quest) values (2425, 80722);
+
+update quest_template set objectivetext1 = 'Speak to Deathguard Maverick' where entry = 80722;
+update quest_template set objectivetext2 = 'Defeat Scarlets' where entry = 80722;
+update quest_template set objectivetext3 = 'Take Maverick to Varimathras' where entry = 80722;
+
+replace into creature_template (entry, name, display_id1) values (50668, 'Quest 80703 & 80722 Custom Trigger 1', 328);
+replace into creature_template (entry, name, display_id1) values (50669, 'Quest 80703 & 80722 Custom Trigger 2', 328);
+replace into creature_template (entry, name, display_id1) values (50670, 'Quest 80703 & 80722 Custom Trigger 3', 328);
+
+replace into creature_template values (51567, 0, 2852, 0, 0, 0, 'Deathguard Maverick', NULL, 0, 30, 30, 1910, 1910, 0, 0, 1200, 57, 0, 1.08, 1.14286, 0, 20, 5, 0, 0, 1, 42, 53, 0, 122, 1, 1710, 1881, 1, 0, 0, 0, 0, 0, 0, 0, 42.1344, 57.9348, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 130760, 0, 0, 0, 'GuardAI', 0, 3, 0, 0, 3, 13076, 0, 0, 0, 0, 525312, 'npc_maverick');
+
+replace into broadcast_text (entry, male_text) values (51690, 'Are you the one Lord Varimathras spoke about, for the important mission?'); 
+replace into npc_text (id, broadcasttextid0) values (51690, 51690);
+
+replace into broadcast_text (entry, male_text) values (51691, 'Maverick seems to be in a deep slumber nothing would be able to wake him up.'); 
+replace into npc_text (id, broadcasttextid0) values (51691, 51691);
+
+replace into item_template values (53010, 0, 12, 0, 'Vial of Mysterious Concoction', '', 33451, 1, 0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 4, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+
+update creature_template set npc_flags = 1, faction = 68 where entry = 51567;
