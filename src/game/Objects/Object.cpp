@@ -4602,10 +4602,14 @@ int32 WorldObject::SpellBonusWithCoeffs(SpellEntry const* spellProto, SpellEffec
         if (spellProto->Id == 15851)
             bUsePenalty = false;
 
-        if (bUsePenalty)
-            total += int32(benefit * coeff * LvlPenalty);
-        else
-            total += int32(benefit * coeff);
+        // dont use penalty anymore, since its baked in coeff in the database from update
+        // https://github.com/slowtorta/turtle-wow/commit/1497fffc8dcba1c9bb61d20e9953dcf1962b70a8
+
+        //if (bUsePenalty)
+        //    total += int32(benefit * coeff * LvlPenalty);
+        //else
+        
+        total += int32(benefit * coeff);
 
     }
 
