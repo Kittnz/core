@@ -5971,9 +5971,49 @@ bool QuestRewarded_npc_brother_crowley(Player* pPlayer, Creature* pQuestGiver, Q
     return false;
 }
 
+bool GossipHello_npc_maverick(Player* pPlayer, Creature* pCreature)
+{
+    if (pPlayer->GetQuestStatus(80722) == QUEST_STATUS_INCOMPLETE && pPlayer->GetQuestStatusData(80722)->m_creatureOrGOcount[0] == 0)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Are you ready, Maverick?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    }
+
+    pPlayer->SEND_GOSSIP_MENU(51690, pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_maverick(Player* pPlayer, Creature* maverick, uint32 /*uiSender*/, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        maverick->MonsterSayToPlayer("Let's bring demise upon these foolish zealots!", pPlayer);
+        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(50668))
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+
+        maverick->SetWalk(true);
+        maverick->GetMotionMaster()->MovePoint(0, 0, 0, 0 + 1.0F);
+
+        DoAfterTime(pPlayer, 10 * IN_MILLISECONDS, [player = pPlayer, summoner = maverick]() {
+            Map* map = sMapMgr.FindMap(0);
+            summoner->MonsterSayToPlayer("A trap! It's a trap!", player);
+            summoner->SummonCreature(50673, -2458.82F, -2494.24F, 78.5F, 4.0F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 5 * IN_MILLISECONDS);
+            });
+
+    }
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
+
 void AddSC_tw_random()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_maverick";
+    newscript->pGossipHello = &GossipHello_npc_maverick;
+    newscript->pGossipSelect = &GossipSelect_npc_maverick;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_brother_crowley";
