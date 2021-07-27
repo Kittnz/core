@@ -5991,14 +5991,26 @@ bool GossipSelect_npc_maverick(Player* pPlayer, Creature* maverick, uint32 /*uiS
             pPlayer->KilledMonster(cInfo, ObjectGuid());
 
         maverick->SetWalk(true);
-        maverick->GetMotionMaster()->MovePoint(0, 0, 0, 0 + 1.0F);
+        maverick->GetMotionMaster()->MovePoint(0, 2545.8F, -651.11F, 78.8F);
 
-        DoAfterTime(pPlayer, 10 * IN_MILLISECONDS, [player = pPlayer, summoner = maverick]() {
+        DoAfterTime(pPlayer, 40 * IN_MILLISECONDS, [player = pPlayer, summoner = maverick]() {
             Map* map = sMapMgr.FindMap(0);
-            summoner->MonsterSayToPlayer("A trap! It's a trap!", player);
-            summoner->SummonCreature(50673, -2458.82F, -2494.24F, 78.5F, 4.0F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 5 * IN_MILLISECONDS);
+            summoner->MonsterSayToPlayer("A trap! It's a trap!", player); 
+            summoner->SummonCreature(50680, 2536.97F, -659.34F, 77.17F, 6.18F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 60 * IN_MILLISECONDS);
+            summoner->SummonGameObject(2005013, 2545.8F, -651.11F, 78.8F, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 100, true);
             });
-
+        DoAfterTime(pPlayer, 60 * IN_MILLISECONDS, [player = pPlayer, summoner = maverick]() {
+            Map* map = sMapMgr.FindMap(0);
+            summoner->MonsterSayToPlayer("More coming, help me!", player);
+            summoner->SummonCreature(50681, 2536.97F, -659.34F, 77.17F, 6.18F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 60 * IN_MILLISECONDS);
+            });
+        DoAfterTime(pPlayer, 90 * IN_MILLISECONDS, [player = pPlayer, summoner = maverick]() {
+            Map* map = sMapMgr.FindMap(0);
+            summoner->MonsterSayToPlayer("I feel... weird.", player);
+            summoner->HandleEmote(EMOTE_STATE_SLEEP);
+            summoner->SetStandState(UNIT_STAND_STATE_SLEEP);
+            summoner->SummonCreature(50682, 2552.90F, -651.53F, 80.10F, 3.11F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 120 * IN_MILLISECONDS);
+            });
     }
     pPlayer->CLOSE_GOSSIP_MENU();
     return true;
