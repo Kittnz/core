@@ -5510,10 +5510,27 @@ bool GOSelect_go_uldum_pedestal(Player* pPlayer, GameObject* pGo, uint32 sender,
 
 // Scarlet Monastery raid attunement quest scripts:
 
-bool GossipHello_npc_young_and_foolish(Player* pPlayer, Creature* pCreature)
+bool GossipHello_npc_questions_and_answers(Player* pPlayer, Creature* pCreature)
 {
-    if (pPlayer->GetQuestStatus(80702) == QUEST_STATUS_INCOMPLETE)
+    if (pPlayer->GetQuestStatus(80702) == QUEST_STATUS_INCOMPLETE) // Young and Foolish
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Anything strange happen recently?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+
+    if (pPlayer->GetQuestStatus(80721) == QUEST_STATUS_INCOMPLETE) // Grim News
+        switch (pCreature->GetEntry())
+        {
+        case 1515: 
+            if (pPlayer->GetQuestStatusData(80721)->m_creatureOrGOcount[0] == 0)
+                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "You're missing a few guards.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1); 
+            break;
+        case 1952: 
+            if (pPlayer->GetQuestStatusData(80721)->m_creatureOrGOcount[1] == 0)
+                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Rumors say you've lost a couple of men, is that true?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1); 
+            break;
+        case 2215:
+            if (pPlayer->GetQuestStatusData(80721)->m_creatureOrGOcount[2] == 0)
+                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Two other encampments have lost a few of their guards, did this also happen here?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            break;
+        }
 
     if (pCreature->IsVendor())
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ACTION_TRADE, "Buy somethin', will ya?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
@@ -5525,7 +5542,7 @@ bool GossipHello_npc_young_and_foolish(Player* pPlayer, Creature* pCreature)
     return true;
 }
 
-bool GossipSelect_npc_young_and_foolish(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
+bool GossipSelect_npc_questions_and_answers(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
@@ -5544,6 +5561,22 @@ bool GossipSelect_npc_young_and_foolish(Player* pPlayer, Creature* pCreature, ui
             break;
         case 344: // Magistrate Solomon
             pCreature->MonsterSayToPlayer("It\'s regrettable that our children left with those foolish zealots of the crusade in the middle of the night! Please, don\'t harm them. Send them back home to us.", pPlayer);
+            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(50667))
+                pPlayer->KilledMonster(cInfo, ObjectGuid());
+            break;
+        case 1515: // Executor Zygand
+            pCreature->MonsterSayToPlayer("I don't know how you obtained that information but yes, some Scarlet Remnants attacked one of my Deathguard patrols, some never made it back and the others are in a deep sleep. Before falling into this weird slumber one of the guards said they were heading for the Monastery.", pPlayer);
+            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(50665))
+                pPlayer->KilledMonster(cInfo, ObjectGuid());
+            break;
+        case 1952: // High Executor Hadrec
+            pCreature->MonsterSayToPlayer("A small force of the Scarlet Crusade has reached far enough into the forest to attack one of the patrols, we found only one lying about who had this strange ichor drooling out of his mouth. One of the other Deathguards touched it and soon fell into a deep slumber, one whose relative may be Death itself.", pPlayer);
+            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(50666))
+                pPlayer->KilledMonster(cInfo, ObjectGuid());
+            break;
+        case 2215: // High Executor Darthalia
+            pCreature->HandleEmote(EMOTE_ONESHOT_POINT);
+            pCreature->MonsterSayToPlayer("Right on point, yes, our short numbers grew even shorter, we found no trail of their corpses yet we have found their weapons covered in mud yet no blood. It seems they didn't put up a fight.", pPlayer);
             if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(50667))
                 pPlayer->KilledMonster(cInfo, ObjectGuid());
             break;
@@ -5985,9 +6018,9 @@ void AddSC_tw_random()
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "npc_young_and_foolish";
-    newscript->pGossipHello = &GossipHello_npc_young_and_foolish;
-    newscript->pGossipSelect = &GossipSelect_npc_young_and_foolish;
+    newscript->Name = "npc_questions_and_answers";
+    newscript->pGossipHello = &GossipHello_npc_questions_and_answers;
+    newscript->pGossipSelect = &GossipSelect_npc_questions_and_answers;
     newscript->RegisterSelf();
 
     newscript = new Script;
