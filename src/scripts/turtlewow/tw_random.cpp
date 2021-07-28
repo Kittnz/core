@@ -5977,7 +5977,12 @@ bool GossipHello_npc_maverick(Player* pPlayer, Creature* pCreature)
     {
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Are you ready, Maverick?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     }
-
+    if (pPlayer->GetQuestStatus(80722) == QUEST_STATUS_INCOMPLETE && pPlayer->GetQuestStatusData(80722)->m_itemcount[0] == 1)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Drag Maverick's body to Varimathras.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->SEND_GOSSIP_MENU(51691, pCreature->GetGUID());
+        return true;
+    }
     pPlayer->SEND_GOSSIP_MENU(51690, pCreature->GetGUID());
     return true;
 }
@@ -5992,34 +5997,124 @@ bool GossipSelect_npc_maverick(Player* pPlayer, Creature* maverick, uint32 /*uiS
 
         maverick->SetWalk(true);
         maverick->GetMotionMaster()->MovePoint(0, 2545.8F, -651.11F, 78.8F);
+        maverick->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_PASSIVE);
 
         DoAfterTime(pPlayer, 40 * IN_MILLISECONDS, [player = pPlayer, summoner = maverick]() {
             Map* map = sMapMgr.FindMap(0);
-            summoner->MonsterSayToPlayer("A trap! It's a trap!", player); 
-            summoner->SummonCreature(50680, 2536.97F, -659.34F, 77.17F, 6.18F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 60 * IN_MILLISECONDS);
-            summoner->SummonGameObject(2005013, 2545.8F, -651.11F, 78.8F, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 100, true);
+            summoner->SummonCreature(50680, 2552.95F, -650.62F, 80.09F, 3.20F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 60 * IN_MILLISECONDS);
+            summoner->SummonGameObject(2005011, 2545.8F, -651.11F, 78.8F, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 100, true);
             });
-        DoAfterTime(pPlayer, 60 * IN_MILLISECONDS, [player = pPlayer, summoner = maverick]() {
+        DoAfterTime(pPlayer, 41 * IN_MILLISECONDS, [player = pPlayer, summoner = maverick]() {
             Map* map = sMapMgr.FindMap(0);
-            summoner->MonsterSayToPlayer("More coming, help me!", player);
-            summoner->SummonCreature(50681, 2536.97F, -659.34F, 77.17F, 6.18F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 60 * IN_MILLISECONDS);
+            summoner->MonsterSayToPlayer("A trap! It's a trap!", player);
+            summoner->SummonCreature(50680, 2544.84F, -658.78F, 79.53F, 1.5F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 60 * IN_MILLISECONDS);
             });
-        DoAfterTime(pPlayer, 90 * IN_MILLISECONDS, [player = pPlayer, summoner = maverick]() {
+        DoAfterTime(pPlayer, 44 * IN_MILLISECONDS, [player = pPlayer, summoner = maverick]() {
             Map* map = sMapMgr.FindMap(0);
             summoner->MonsterSayToPlayer("I feel... weird.", player);
+            summoner->CastSpell(summoner, 25148, true);
             summoner->HandleEmote(EMOTE_STATE_SLEEP);
             summoner->SetStandState(UNIT_STAND_STATE_SLEEP);
-            summoner->SummonCreature(50682, 2552.90F, -651.53F, 80.10F, 3.11F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 120 * IN_MILLISECONDS);
+            summoner->SummonCreature(50682, 2558.14F, -663.63F, 88.68F, 2.19F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 120 * IN_MILLISECONDS);
+            summoner->SummonGameObject(1000248, 2552.95F, -650.62F, 80.09F, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 200, true);
             });
+        DoAfterTime(pPlayer, 53 * IN_MILLISECONDS, [player = pPlayer, summoner = maverick]() {
+            Map* map = sMapMgr.FindMap(0);
+            summoner->SummonCreature(50681, 2544.84F, -658.78F, 79.53F, 1.5F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 60 * IN_MILLISECONDS);
+            });
+        DoAfterTime(pPlayer, 54 * IN_MILLISECONDS, [player = pPlayer, summoner = maverick]() {
+            Map* map = sMapMgr.FindMap(0);
+            summoner->SummonCreature(50681, 2546.42F, -643.44F, 80.20F, 4.6F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 60 * IN_MILLISECONDS);
+            summoner->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+            summoner->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+            });
+    }
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
+    {
+        maverick->SetStandState(UNIT_STAND_STATE_STAND);
+        pPlayer->CombatStop();
+        maverick->MonsterTextEmote("Maverick seems to be in a deep slumber nothing would be able to wake him up.");
+        maverick->GetMotionMaster()->MoveFollow(pPlayer, PET_FOLLOW_DIST, PET_FOLLOW_ANGLE);
+        maverick->UpdateSpeed(MOVE_RUN, false, maverick->GetSpeedRate(MOVE_RUN) * 1.5);
+        followed_units.push_back(pPlayer->GetObjectGuid());
     }
     pPlayer->CLOSE_GOSSIP_MENU();
     return true;
 }
 
+struct npc_scarlet_magicianAI : public ScriptedAI
+{
+    npc_scarlet_magicianAI(Creature* c) : ScriptedAI(c) { Reset(); }
+
+    void Reset(){}
+
+    void UpdateAI(const uint32 diff)
+    {
+        if (!m_creature->IsInCombat())
+        {
+            if (m_creature->GetEntry() == 50680)
+                m_creature->CastSpell((Unit*)nullptr, 23017, true);
+            else           
+                m_creature->CastSpell((Unit*)nullptr, 13540, true);
+        }
+        DoMeleeAttackIfReady();
+    }
+    void EnterCombat()
+    {
+        m_creature->MonsterSay("For the Scarlet Crusade!");
+    }
+    void JustRespawned(){}
+};
+
+CreatureAI* GetAI_npc_scarlet_magician(Creature* _Creature) { return new npc_scarlet_magicianAI(_Creature); }
+
+bool GossipHello_npc_varimathras(Player* pPlayer, Creature* pCreature)
+{
+    if (pPlayer->GetQuestStatus(80722) == QUEST_STATUS_INCOMPLETE && (std::find(followed_units.begin(), followed_units.end(), pPlayer->GetObjectGuid()) != followed_units.end()))
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I completed my task, dreadlord.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_varimathras(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(50670))
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+
+        pCreature->MonsterSay("He really is just unconscious, how strange...");
+        if (Creature* prisoner = pPlayer->FindNearestCreature(51691, 30.0F))
+        {
+            prisoner->GetMotionMaster()->Clear();
+            prisoner->ForcedDespawn();
+        }
+        auto itr = std::find(followed_units.begin(), followed_units.end(), pPlayer->GetObjectGuid());
+        if (itr != followed_units.end())
+            followed_units.erase(itr);
+    }
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
 
 void AddSC_tw_random()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_varimathras";
+    newscript->pGossipHello = &GossipHello_npc_varimathras;
+    newscript->pGossipSelect = &GossipSelect_npc_varimathras;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_scarlet_magician";
+    newscript->GetAI = &GetAI_npc_scarlet_magician;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_maverick";
