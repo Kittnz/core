@@ -19,5 +19,8 @@ REPLACE INTO `creature_equip_template` VALUES (82010, 0, 19166, 0, 0);
 
 
 -- UPDATE
-UPDATE `creature_template` SET `equipment_id` = 82009 WHERE `entry` = 65118;
-UPDATE `creature_template` SET `equipment_id` = 82010 WHERE `entry` = 65121;
+UPDATE `creature_template` SET `equipment_id` = 82009 WHERE `entry` = 65118; -- kael'thas
+UPDATE `creature_template` SET `equipment_id` = 82010 WHERE `entry` = 65121; -- chromie
+UPDATE `creature_template` SET `rank` = 3 WHERE `entry` = 65121; -- chromie 
+UPDATE `creature_template` SET `script_name` = 'shade_cot' WHERE `entry` IN (65119, 65118, 65117);  -- shades to make sure they have scripts
+UPDATE `creature_template` SET mana_min = 50000, mana_max = 50000 WHERE `entry` IN (65119, 65118, 65117); -- shades add mana
