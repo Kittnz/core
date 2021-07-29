@@ -1076,7 +1076,7 @@ struct harbinger_boss_cotAI : public ScriptedAI
 
             for (int i = 0; i < 5; i++)
             {
-                if (Creature* larvae = m_creature->SummonCreature(NPC_LARVAE, m_creature->GetVictim()->GetPositionX() + frand(-8.0f, 8.0f), m_creature->GetVictim()->GetPositionY() + frand(-8.0f, 8.0f), m_creature->GetVictim()->GetPositionZ(), 0, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 1000))
+                if (Creature* larvae = m_creature->SummonCreature(NPC_LARVAE, m_creature->GetVictim()->GetPositionX() + frand(-8.0f, 8.0f), m_creature->GetVictim()->GetPositionY() + frand(-8.0f, 8.0f), m_creature->GetMap()->GetHeight(m_creature->GetPositionX(), m_creature->GetPositionY(), m_creature->GetPositionZ()), 0, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 1000))
                 {
                     larvae->AI()->AttackStart(m_creature->GetVictim());
                     larvae->AddThreat(m_creature->GetVictim(), 100.0f);
@@ -1110,8 +1110,11 @@ struct harbinger_boss_cotAI : public ScriptedAI
 
     void JustDied(Unit*) override
     {
-        m_creature->PMonsterSay("Hul bala miz rilakich...");
-        m_creature->MonsterWhisper("How is this possible...", m_creature->GetVictim(), true);
+            m_creature->PMonsterSay("Hul bala miz rilakich...");
+
+            Player* player = m_creature->FindNearestPlayer(100);
+
+            m_creature->MonsterWhisper("How is this possible...", player, true);
     }
 };
 
@@ -1124,17 +1127,20 @@ struct larvae_cotAI : public ScriptedAI
         Reset();
     }
 
-    bool doOnce = false;
+    bool doOnce;
+    uint32 spellTimer;
 
     enum
     {
-        SPELL_DRAIN_LIFE = 17173,
+        SPELL_DRAIN_LIFE = 26693,
 
         NPC_HARBINGER = 65114
     };
 
     void Reset() override
     {
+        doOnce = false;
+        spellTimer = 5000;
 
     }
 
@@ -1146,7 +1152,14 @@ struct larvae_cotAI : public ScriptedAI
         if (Creature* harbinger = m_creature->FindNearestCreature(NPC_HARBINGER, 100.0f, true))
             m_creature->AddThreat(harbinger->GetVictim(), 100.0f);
 
-        DoCastSpellIfCan(m_creature->GetVictim(), SPELL_DRAIN_LIFE);
+        if (spellTimer <= uiDiff)
+        {
+            DoCastSpellIfCan(m_creature->GetVictim(), SPELL_DRAIN_LIFE);
+
+            spellTimer = urand(5000, 7000);
+        }
+        else spellTimer -= uiDiff;
+        
     }
 
     void OnCombatStop() override
@@ -1167,6 +1180,8 @@ struct epochronos_boss_cotAI : public ScriptedAI
     uint32 arcaneBlastTimer;
     bool shadeSummoned = false;
     bool enrageActive = false;
+    uint32 summonEntry;
+
     enum Spells
     {
         SPELL_SAND_BREATH = 20717,
@@ -1189,6 +1204,7 @@ struct epochronos_boss_cotAI : public ScriptedAI
         arcaneBlastTimer = 10000;
         shadeSummoned = false;
         enrageActive = false;
+        summonEntry = 0;
     }
 
     void UpdateAI(const uint32 uiDiff) override
@@ -1231,7 +1247,6 @@ struct epochronos_boss_cotAI : public ScriptedAI
             shadeSummoned = true;
 
             int random = irand(1, 3);
-            uint32 summonEntry = 0;
 
             switch (random)
             {
@@ -1247,9 +1262,16 @@ struct epochronos_boss_cotAI : public ScriptedAI
             }
 
             if (summonEntry > 0)
-            m_creature->SummonCreature(summonEntry, m_creature->GetPositionX(), m_creature->GetPositionY(), m_creature->GetPositionZ(), 0, TEMPSUMMON_CORPSE_DESPAWN);
+            Creature* summon = m_creature->SummonCreature(summonEntry, m_creature->GetPositionX(), m_creature->GetPositionY(), m_creature->GetPositionZ(), 0, TEMPSUMMON_TIMED_COMBAT_OR_CORPSE_DESPAWN, 1000);
 
         }
+
+        if (m_creature->FindNearestCreature(summonEntry, 100, true))
+        {
+            if (!m_creature->HasAura(SPELL_BANISH))
+                m_creature->AddAura(SPELL_BANISH);
+        }
+
         if (!enrageActive && m_creature->GetHealthPercent() <= 25.0f)
         {
             enrageActive = true;
@@ -1291,7 +1313,7 @@ struct shade_cotAI : public ScriptedAI
     uint32 lightningCloudTimer;
     uint32 lightningBolttimer;
 
-    int plagueCount = 0;
+    int plagueCount;
 
     enum Spells
     {
@@ -1494,10 +1516,10 @@ struct shade_cotAI : public ScriptedAI
             }
     }
 
-    void OnCombatStop() override 
-    {
-        m_creature->DespawnOrUnsummon();
-    }
+    //void OnCombatStop() override 
+    //{
+    //    m_creature->ForcedDespawn();
+    //}
 };
 
 
@@ -1521,16 +1543,16 @@ struct chromie_boss_cotAI : public ScriptedAI
         NPC_RIFT_GUARD = 65101
     };
 
-    uint32 manaBurnTimer = 20000;
-    uint32 fearTimer = 12000;
-    uint32 fumbleTimer = 12000;
-    uint32 phase = 1;
+    uint32 manaBurnTimer;
+    uint32 fearTimer;
+    uint32 fumbleTimer;
+    uint32 phase;
 
 
     void Reset() override
     {
-        manaBurnTimer = 20000;
-        fearTimer = 12000;
+        manaBurnTimer = 18000;
+        fearTimer = 10000;
         fumbleTimer = 12000;
         phase = 1;
     }
@@ -1553,15 +1575,21 @@ struct chromie_boss_cotAI : public ScriptedAI
         if (fearTimer <= uiDiff)
         {
             if (DoCastSpellIfCan(m_creature->SelectRandomUnfriendlyTarget(), SPELL_FEAR) == CAST_OK)
-                fearTimer = 12000;
+                fearTimer = 10000;
         }
         else fearTimer -= uiDiff;
 
         if (fumbleTimer <= uiDiff)
         {
             Unit* target = m_creature->SelectRandomUnfriendlyTarget(nullptr, 10.0f);
-            target->AddAura(SPELL_FUMBLE);
+
+            if (target->IsPlayer())
+            {
+                target->AddAura(SPELL_FUMBLE);
                 fumbleTimer = 12000;
+            }
+            else // retry if its not a player
+                fumbleTimer = 250;
         }
         else fumbleTimer -= uiDiff;
 
@@ -1571,18 +1599,26 @@ struct chromie_boss_cotAI : public ScriptedAI
             phase++;
 
             Creature* portal = m_creature->SummonCreature(NPC_TIME_RIFT, m_creature->GetPositionX() + 5, m_creature->GetPositionY() + 5, m_creature->GetPositionZ(), 0);
-
             m_creature->SummonCreature(NPC_RIFT_GUARD, portal->GetPositionX(), portal->GetPositionY(), portal->GetPositionZ(), 0, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 100);
 
             m_creature->PMonsterYell("We are Infinite! Our numbers are countless!");
         }
 
-        if (phase == 2 && m_creature->GetHealthPercent() <= 40.0f)
+        if (phase == 2 && m_creature->GetHealthPercent() <= 50.0f)
         {
             phase++;
 
             Creature* portal = m_creature->SummonCreature(NPC_TIME_RIFT, m_creature->GetPositionX() + 5, m_creature->GetPositionY() + 5, m_creature->GetPositionZ(), 0);
+            m_creature->SummonCreature(NPC_RIFT_GUARD, portal->GetPositionX(), portal->GetPositionY(), portal->GetPositionZ(), 0, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 100);
 
+            m_creature->PMonsterYell("We are Infinite! Our numbers are countless!");
+        }
+
+        if (phase == 3 && m_creature->GetHealthPercent() <= 20.0f)
+        {
+            phase++;
+
+            Creature* portal = m_creature->SummonCreature(NPC_TIME_RIFT, m_creature->GetPositionX() + 5, m_creature->GetPositionY() + 5, m_creature->GetPositionZ(), 0);
             m_creature->SummonCreature(NPC_RIFT_GUARD, portal->GetPositionX(), portal->GetPositionY(), portal->GetPositionZ(), 0, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 100);
 
             m_creature->PMonsterYell("We are Infinite! Our numbers are countless!");
@@ -1599,6 +1635,11 @@ struct chromie_boss_cotAI : public ScriptedAI
     void JustDied(Unit*) override
     {
         m_creature->PMonsterYell("But I... we cannot fail! We are so close!");
+    }
+
+    void OnCombatStop() override 
+    {
+
     }
 
 };
@@ -1828,4 +1869,10 @@ void AddSC_instance_caverns_of_time()
     newscript->Name = "chromie_portal_cot";
     newscript->GetAI = &GetAI_chromie_portal_cot;
     newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "rotmaw_cot";
+    newscript->GetAI = &GetAI_chromie_portal_cot;
+    newscript->RegisterSelf();
+
 }
