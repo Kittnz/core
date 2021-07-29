@@ -1285,7 +1285,7 @@ struct epochronos_boss_cotAI : public ScriptedAI
 
     void EnterCombat(Unit*) override
     {
-        m_creature->PMonsterYell("Time moves in our favor, your intrusion means nothing!");
+        m_creature->PMonsterYell("Time moves in our favor, your intrusion ends here!");
     }
 
     void JustDied(Unit*) override
@@ -1534,7 +1534,7 @@ struct chromie_boss_cotAI : public ScriptedAI
     {
         SPELL_MANA_BURN = 26046,
         SPELL_FEAR = 26580,
-        SPELL_FUMBLE = 593
+        SPELL_FUMBLE = 5917
     };
 
     enum CreatureEntries
@@ -1567,7 +1567,7 @@ struct chromie_boss_cotAI : public ScriptedAI
             if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_MANA_BURN) == CAST_OK)
             {
                 manaBurnTimer = 20000;
-                m_creature->PMonsterYell("Your will, your power, it�ll be all reduced down to a husk!");
+                m_creature->PMonsterYell("Your will, your power, it'll be all reduced down to a husk!");
             }
         }
         else manaBurnTimer -= uiDiff;
