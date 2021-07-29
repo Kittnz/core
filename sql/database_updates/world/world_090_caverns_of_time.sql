@@ -24,3 +24,5 @@ UPDATE `creature_template` SET `equipment_id` = 82010 WHERE `entry` = 65121; -- 
 UPDATE `creature_template` SET `rank` = 3 WHERE `entry` = 65121; -- chromie 
 UPDATE `creature_template` SET `script_name` = 'shade_cot' WHERE `entry` IN (65119, 65118, 65117);  -- shades to make sure they have scripts
 UPDATE `creature_template` SET mana_min = 50000, mana_max = 50000 WHERE `entry` IN (65119, 65118, 65117); -- shades add mana
+UPDATE `creature` SET spawntimesecsmin = 7200, spawntimesecsmax = 7200 WHERE `id` IN (65110, 65111, 65112); -- 2 hrs
+UPDATE `creature` SET spawntimesecsmin = 14400, spawntimesecsmax = 14400 WHERE `id` BETWEEN 65100 AND 65109; -- 4 hrs
