@@ -6071,7 +6071,7 @@ CreatureAI* GetAI_npc_scarlet_magician(Creature* _Creature) { return new npc_sca
 bool GossipHello_npc_varimathras(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->GetQuestStatus(80722) == QUEST_STATUS_INCOMPLETE && (std::find(followed_units.begin(), followed_units.end(), pPlayer->GetObjectGuid()) != followed_units.end()))
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I completed my task, dreadlord.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Here is your lab rat.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
     if (pCreature->IsQuestGiver())
         pPlayer->PrepareQuestMenu(pCreature->GetGUID());
