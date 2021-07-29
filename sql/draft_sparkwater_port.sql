@@ -49,7 +49,7 @@ replace into creature_template values
 
 
 -- TODO:  Sparkwater Reserve
-update creature_template set faction = 1001 where entry between 91200 and 91215;
+update creature_template set faction = 1001 where entry between 91200 and 91236;
 update creature_template set equipment_id = 3454 where entry in (91230, 91231);
 update creature_template set equipment_id = 3368 where entry = 91227;
 update creature_template set equipment_id = 3368 where entry = 91234;
