@@ -1702,6 +1702,88 @@ struct chromie_portal_cotAI : public ScriptedAI
 
 };
 
+
+struct rotmaw_cotAI : public ScriptedAI
+{
+    rotmaw_cotAI(Creature* c) : ScriptedAI(c)
+    {
+        Reset();
+    }
+
+    uint32 consumeTimer;
+    uint32 mortalWoundTimer;
+    uint32 sunderArmorTimer;
+    bool isConsuming;
+
+    void Reset() override
+    {
+        consumeTimer = 25000;
+        mortalWoundTimer = 14000;
+        sunderArmorTimer = 5000;
+        isConsuming = false;
+    }
+
+    enum SpellEntries
+    {
+        SPELL_CONSUME = 25371,
+        SPELL_MORTAL_WOUND = 28467,
+        SPELL_SUNDER = 25051,
+        SPELL_KNOCKBACK = 10689
+    };
+
+    void UpdateAI(const uint32 uiDiff) override
+    {
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
+            return;
+
+        if (consumeTimer <= uiDiff)
+        {
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_CONSUME) == CAST_OK)
+            {
+                isConsuming = true;
+                m_creature->UpdateSpeed(MOVE_WALK, true, 0.0f);
+
+                Unit* target = m_creature->GetVictim();
+                target->TeleportPositionRelocation(m_creature->GetPosition());
+                
+                float originalscale = target->GetNativeScale();
+                target->SetTransformScale(0.00001f);
+                target->GetThreatManager().modifyThreatPercent(target, -100);
+
+                Player* player = target->GetCharmerOrOwnerPlayerOrPlayerItself();
+                player->GetSession()->SendNotification("You are being consumed!");
+
+                DoAfterTime(m_creature, 15.5 * IN_MILLISECONDS, [m_creature = m_creature, player = player, originalscale = originalscale, this]() {
+                    DoCastSpellIfCan(player, SPELL_KNOCKBACK); 
+                    player->SetTransformScale(originalscale);
+                    isConsuming = false;
+                    m_creature->UpdateSpeed(MOVE_WALK, true, 1.0f);
+                    });
+
+                m_creature->PMonsterEmote("|cffff8040Rotmaw is consuming %s and cannot move!|r", nullptr, true, target->GetName());
+            }
+                consumeTimer = 25000;
+        }
+        else consumeTimer -= uiDiff;
+
+        if (mortalWoundTimer <= uiDiff)
+        {
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_MORTAL_WOUND) == CAST_OK)
+                mortalWoundTimer = 14000;
+        }
+        else mortalWoundTimer -= uiDiff;
+
+        if (sunderArmorTimer <= uiDiff)
+        {
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_SUNDER) == CAST_OK)
+                sunderArmorTimer = 18000;
+        }
+        else sunderArmorTimer -= uiDiff;
+
+        DoMeleeAttackIfReady();
+    }
+};
+
 CreatureAI* GetAI_infinite_dragonspawn(Creature* _Creature)
 {
     return new infinite_dragonspawnAI(_Creature);
@@ -1780,6 +1862,11 @@ CreatureAI* GetAI_chromie_boss_cot(Creature* _Creature)
 CreatureAI* GetAI_chromie_portal_cot(Creature* _Creature)
 {
     return new chromie_portal_cotAI(_Creature);
+}
+
+CreatureAI* GetAI_rotmaw_cot(Creature* _Creature)
+{
+    return new rotmaw_cotAI(_Creature);
 }
 
 void AddSC_instance_caverns_of_time()
@@ -1872,7 +1959,7 @@ void AddSC_instance_caverns_of_time()
 
     newscript = new Script;
     newscript->Name = "rotmaw_cot";
-    newscript->GetAI = &GetAI_chromie_portal_cot;
+    newscript->GetAI = &GetAI_rotmaw_cot;
     newscript->RegisterSelf();
 
 }

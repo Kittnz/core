@@ -26,3 +26,9 @@ UPDATE `creature_template` SET `script_name` = 'shade_cot' WHERE `entry` IN (651
 UPDATE `creature_template` SET mana_min = 50000, mana_max = 50000 WHERE `entry` IN (65119, 65118, 65117); -- shades add mana
 UPDATE `creature` SET spawntimesecsmin = 7200, spawntimesecsmax = 7200 WHERE `id` IN (65110, 65111, 65112); -- 2 hrs
 UPDATE `creature` SET spawntimesecsmin = 14400, spawntimesecsmax = 14400 WHERE `id` BETWEEN 65100 AND 65109; -- 4 hrs
+UPDATE `creature` SET movement_type = 1 WHERE `id` IN (65110, 65111, 65112);
+UPDATE `creature_template` SET movement_type = 1 WHERE `entry` IN (65110, 65111, 65112);
+
+-- Rotmaw
+
+REPLACE INTO `creature_template` VALUES (65122, 0, 2996, 0, 0, 0, 'Rotmaw', '', 0, 61, 61, 54951, 54951, 0, 0, 6273, 40, 0, 1, 1.14286, 1.5, 20, 5, 0, 0, 1, 1189, 1539, 0, 290, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 220.81, 105.197, 100, 1, 0, 0, 0, 0, 0, 25, 25, 25, 25, 25, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 1, 0, 0, 0, 0, 0, 0, 'rotmaw_cot');
