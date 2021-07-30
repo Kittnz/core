@@ -739,75 +739,108 @@ void Guild::Disband()
 
 void Guild::Roster(WorldSession* session /*= nullptr*/)
 {
-    // we can only guess size
-    WorldPacket data(SMSG_GUILD_ROSTER, (4 + MOTD.length() + 1 + GINFO.length() + 1 + 4 + m_Ranks.size() * 4 + members.size() * 50));
-    int32 spaceLeft = GUILD_ROSTER_MAX_LENGTH;
-
-    size_t count_pos = data.wpos();
-    data << uint32(0); // members count placeholder
-    spaceLeft -= sizeof(uint32);
-    data << MOTD;
-    spaceLeft -= MOTD.length() + 1;
-    data << GINFO;
-    spaceLeft -= GINFO.length() + 1;
-
-    data << uint32(m_Ranks.size());
-    spaceLeft -= sizeof(uint32);
-    for (const auto& itr : m_Ranks)
-        data << uint32(itr.Rights);
-    spaceLeft -= m_Ranks.size() * sizeof(uint32);
-
-    uint32 count = 0;
-    for (const auto& itr : members)
+    struct TempMemberInfo
     {
-        int32 spaceNeeded =
-            sizeof(ObjectGuid) +          // player guid
-            sizeof(uint8) +               // online indicator
-            itr.second.Name.length() +    // name
-            1 +                           // null byte for name
-            sizeof(uint32) +              // rank id
-            sizeof(uint8) +               // level
-            sizeof(uint8) +               // class
-            sizeof(uint32) +              // zone id
-            sizeof(float) +               // last online time
-            itr.second.Pnote.length() +   // player note
-            1 +                           // null byte for player note
-            itr.second.OFFnote.length() + // officer note
-            1;                            // null byte for officer note
+        ObjectGuid Guid;
+        Player* Member = nullptr;
+        MemberSlot* Slot = nullptr;
+    };
 
-        spaceLeft -= spaceNeeded;
-        if (spaceLeft < 0)
-            break;
+    size_t onlineMembers = 0;
+    size_t offlineMembers = 0;
+    std::vector<TempMemberInfo> memberCache;
+    memberCache.reserve(members.size());
 
-        count++;
+    for (auto itr = members.begin(); itr != members.end(); ++itr)
+    {
+        TempMemberInfo info;
+        info.Guid = ObjectGuid(HIGHGUID_PLAYER, itr->first);
+        info.Member = ObjectAccessor::FindPlayer(ObjectGuid(HIGHGUID_PLAYER, itr->first));
+        info.Slot = &itr->second;
 
-        if (Player* pl = ObjectAccessor::FindPlayer(ObjectGuid(HIGHGUID_PLAYER, itr.first)))
+        if (info.Member)
+            ++onlineMembers;
+        else
+            ++offlineMembers;
+
+        memberCache.emplace_back(info);
+    }
+
+    size_t count = onlineMembers + offlineMembers;
+
+    count = std::min(count, size_t(GUILD_MAX_MEMBERS));
+    onlineMembers = std::min(onlineMembers, size_t(GUILD_MAX_MEMBERS));
+    offlineMembers = std::min(offlineMembers, size_t(GUILD_MAX_MEMBERS) - onlineMembers);
+
+    bool const sendNotes = count < GUILD_MAX_MEMBERS_WITH_NOTE;
+
+    auto writeMemberData = [sendNotes](WorldPacket& data, TempMemberInfo const& member) -> void
+    {
+        data << member.Guid;
+        data << uint8(member.Member != nullptr);
+        if (member.Member)
         {
-            data << pl->GetObjectGuid();
-            data << uint8(1);
-            data << itr.second.Name;
-            data << uint32(itr.second.RankId);
-            data << uint8(pl->GetLevel());
-            data << uint8(pl->GetClass());
-            data << uint32(pl->GetCachedZoneId());
-            data << itr.second.Pnote;
-            data << ((session && HasRankRight(session->GetPlayer()->GetRank(), GR_RIGHT_VIEWOFFNOTE)) ? itr.second.OFFnote : "");
+            data << member.Member->GetName();
+            data << uint32(member.Slot->RankId);
+            data << uint8(member.Member->GetLevel());
+            data << uint8(member.Member->GetLevel());
+            data << uint32(member.Member->GetCachedZoneId());
         }
         else
         {
-            data << ObjectGuid(HIGHGUID_PLAYER, itr.first);
-            data << uint8(0);
-            data << itr.second.Name;
-            data << uint32(itr.second.RankId);
-            data << uint8(itr.second.Level);
-            data << uint8(itr.second.Class);
-            data << uint32(itr.second.ZoneId);
-            data << float(float(time(nullptr) - itr.second.LogoutTime) / DAY);
-            data << itr.second.Pnote;
-            data << ((session && HasRankRight(session->GetPlayer()->GetRank(), GR_RIGHT_VIEWOFFNOTE)) ? itr.second.OFFnote : "");
+            data << member.Slot->Name;
+            data << uint32(member.Slot->RankId);
+            data << uint8(member.Slot->Level);
+            data << uint8(member.Slot->Class);
+            data << uint32(member.Slot->ZoneId);
+            data << float(float(time(nullptr) - member.Slot->LogoutTime) / DAY);
+        }
+
+        if (sendNotes)
+        {
+            data << member.Slot->Pnote;
+            data << member.Slot->OFFnote;
+        }
+        else
+            data << uint8(0) << uint8(0);
+    };
+
+    // We can only guess size
+    WorldPacket data(SMSG_GUILD_ROSTER, (4 + MOTD.length() + 1 + GINFO.length() + 1 + 4 + m_Ranks.size() * 4 + count * GUILD_MEMBER_BLOCK_SIZE_WITHOUT_NOTE));
+    data << uint32(count);
+    data << MOTD;
+    data << GINFO;
+    data << uint32(m_Ranks.size());
+
+    for (RankList::const_iterator ritr = m_Ranks.begin(); ritr != m_Ranks.end(); ++ritr)
+        data << uint32(ritr->Rights);
+
+    if (onlineMembers > 0)
+    {
+        for (TempMemberInfo const& member : memberCache)
+        {
+            if (!member.Member)
+                continue;
+
+            writeMemberData(data, member);
+            if (--onlineMembers == 0)
+                break;
         }
     }
-    data.put<uint32>(count_pos, count);
+
+    if (offlineMembers > 0)
+    {
+        for (TempMemberInfo const& member : memberCache)
+        {
+            if (member.Member)
+                continue;
+
+            writeMemberData(data, member);
+
+            if (--offlineMembers == 0)
+                break;
+        }
+    }
 
     if (session)
         session->SendPacket(&data);
