@@ -8399,6 +8399,10 @@ bool ChatHandler::HandleKickPlayerCommand(char* args)
     if (HasLowerSecurity(target))
         return false;
 
+    // [Hardcore] Prevent death caused by getting disconnected while in-fight
+    if (target->IsInCombat() && target->isHardcore())
+        return false;
+
     // send before target pointer invalidate
     PSendSysMessage(LANG_COMMAND_KICKMESSAGE, GetNameLink(target).c_str());
     // First kick: close socket but keep player online
@@ -8406,6 +8410,7 @@ bool ChatHandler::HandleKickPlayerCommand(char* args)
         target->GetSession()->KickPlayer();
     else
         target->GetSession()->KickDisconnectedFromWorld();
+
     return true;
 }
 
