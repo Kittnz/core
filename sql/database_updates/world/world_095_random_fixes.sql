@@ -1,0 +1,1 @@
+update quest_template set requiredraces = 434 where entry = 70052;
