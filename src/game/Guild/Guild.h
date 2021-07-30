@@ -24,6 +24,7 @@
 
 #include "Common.h"
 #include "ObjectAccessor.h"
+#include "ObjectMgr.h"
 
 class Petition;
 
@@ -35,7 +36,12 @@ enum
     GUILD_NOTE_MAX_LENGTH = 31,
     GUILD_INFO_MAX_LENGTH = 500,
     GUILD_MOTD_MAX_LENGTH = 128,
-    GUILD_ROSTER_MAX_LENGTH = 0x8000, // max packet size accepted by client
+    GUILD_MEMBER_BLOCK_SIZE = (8 + 1 + (1 + MAX_INTERNAL_PLAYER_NAME) + 4 + 1 + 1 + 4 + (1 + GUILD_NOTE_MAX_LENGTH) + (1 + GUILD_NOTE_MAX_LENGTH)),
+    GUILD_MEMBER_BLOCK_SIZE_WITHOUT_NOTE = (8 + 1 + (1 + MAX_INTERNAL_PLAYER_NAME) + 4 + 1 + 1 + 4 + (1 + 0) + (1 + 0)),
+    // 0x8000 is client max accepted packet size.
+    // Set a limit so that SMSG_GUILD_ROSTER size is never over this size.
+    GUILD_MAX_MEMBERS_WITH_NOTE = (0x8000 - 10 - GUILD_RANKS_MAX_COUNT - GUILD_INFO_MAX_LENGTH - GUILD_MOTD_MAX_LENGTH) / GUILD_MEMBER_BLOCK_SIZE,
+    GUILD_MAX_MEMBERS = (0x8000 - 10 - GUILD_RANKS_MAX_COUNT - GUILD_INFO_MAX_LENGTH - GUILD_MOTD_MAX_LENGTH) / GUILD_MEMBER_BLOCK_SIZE_WITHOUT_NOTE,
 };
 
 enum GuildDefaultRanks
