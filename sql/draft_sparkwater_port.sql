@@ -263,3 +263,14 @@ replace into creature_loot_template (entry, item, chanceorquestchance, groupid, 
 replace into gameobject_template values (1000250, 0, 3, 2891, 'Razlik\'s Tools', 0, 4, 0.7, 43, 1000250, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
 replace into gameobject_loot_template (entry, item, chanceorquestchance, groupid, mincountorref) values (1000250, 81291, -100, 1, 1);
 
+-- Quests:
+
+replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewmoneymaxlevel, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (0,55000,14,9,7,0,0,'Razlik\'s Tools','Hey! You, yeah you!\n\nI got a problem that I need fixin\' and I\'ll tell ya, it\'s not sittin\' around waitin\' to work again I\'ll tell yeah that.\n\nWe\'re livin\' paradise right now, but, you know how goblins work, eventually we\'ll be back on that oil platform, one way or another.\n\nThing is, I got a set of tools up there, from way back in the Venture Co. days, I\'m used to em see, and the last thing I want is some sea sucker knockin\' em off into the water to be lost forever.\n\nGo up there, find my tools, and get a few silver, whaddya say kid?','Find Razlik\'s lost tools on the Oil Platform east of the Port.','You got em yet? Or you just waitin\' around?','About time, I was gettin\' scared, thought I might\'a lost them!\n\nThey are a bit more dirty then I remember though, for muckin\' up my tools yer gonna get a silver less, no hard feelings!',81291,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,150,400,1001,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+update quest_template set rewxp = 400 where entry = 55000;
+
+replace into creature_questrelation (id, quest) values (91208, 55000);
+replace into creature_involvedrelation (id, quest) values (91208, 55000);
+
+
+
