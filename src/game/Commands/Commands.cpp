@@ -1895,6 +1895,13 @@ bool ChatHandler::HandleDieCommand(char* /*args*/)
             return false;
     }
 
+    if (target->ToPlayer() && target->ToPlayer()->isHardcore())
+    {
+        SendSysMessage("Cannot kill a Hardcore Character.");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
     if (target->IsAlive())
     {
         if (sWorld.getConfig(CONFIG_BOOL_DIE_COMMAND_CREDIT))
@@ -1927,6 +1934,13 @@ bool ChatHandler::HandleFearCommand(char* /*args*/)
     SpellEntry const *spellInfo = sSpellMgr.GetSpellEntry(fearID);
     if (!spellInfo)
         return false;
+
+    if (target->ToPlayer() && target->ToPlayer()->isHardcore())
+    {
+        SendSysMessage("Cannot fear a Hardcore Character.");
+        SetSentErrorMessage(true);
+        return false;
+    }
 
     if (!spellInfo->IsSpellAppliesAura((1 << EFFECT_INDEX_0) | (1 << EFFECT_INDEX_1) | (1 << EFFECT_INDEX_2)) && !spellInfo->HasEffect(SPELL_EFFECT_PERSISTENT_AREA_AURA))
     {
@@ -1982,6 +1996,13 @@ bool ChatHandler::HandleDamageCommand(char* args)
         return true;
 
     uint32 damage = uint32(damage_int);
+
+    if (target->ToPlayer() && target->ToPlayer()->isHardcore())
+    {
+        SendSysMessage("Cannot damage a Hardcore Character.");
+        SetSentErrorMessage(true);
+        return false;
+    }
 
     // flat melee damage without resistence/etc reduction
     if (!*args)
@@ -8400,8 +8421,12 @@ bool ChatHandler::HandleKickPlayerCommand(char* args)
         return false;
 
     // [Hardcore] Prevent death caused by getting disconnected while in-fight
-    if (target->IsInCombat() && target->isHardcore())
+    if (target->isHardcore())
+    {
+        SendSysMessage("Cannot kick a Hardcore Character.");
+        SetSentErrorMessage(true);
         return false;
+    }
 
     // send before target pointer invalidate
     PSendSysMessage(LANG_COMMAND_KICKMESSAGE, GetNameLink(target).c_str());
