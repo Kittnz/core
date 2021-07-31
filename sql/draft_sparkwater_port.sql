@@ -91,6 +91,7 @@ update creature_template set npc_flags = 16388 where entry = 91220; -- Vendor + 
 update creature_template set npc_flags = 16388 where entry = 91221; -- Vendor + gossip
 update creature_template set npc_flags = 16388 where entry = 91232; -- Vendor + gossip
 update creature_template set npc_flags = 16388 where entry = 91227; -- Vendor + gossip
+update creature_template set npc_flags = 7 where entry = 91227; -- Vendor + gossip
 
 replace into creature_template_addon (entry, patch, mount, bytes1, b2_0_sheath, b2_1_flags, emote, moveflags, auras) values (91200, 0, 0, 0, 0, 0, 69, 0, null);
 replace into creature_template_addon (entry, patch, mount, bytes1, b2_0_sheath, b2_1_flags, emote, moveflags, auras) values (91209, 0, 0, 1, 0, 0, 0, 0, null);
@@ -297,4 +298,11 @@ replace into creature_involvedrelation (id, quest) values (91214, 55003);
 replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref) values
 (3131, 81292, -100, 6, 1), -- Lightning Hide
 (3130, 81292, -100, 6, 1); -- Thunder Lizard
+
+replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewmoneymaxlevel, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (0,55004,14,7,5,0,0,'Adding a Little Sting','Hail, it is in times of peace that the body is set to engage within past-times of enjoyment, one such enjoyment for these goblins is that of eating, and eat do they ever, $r.\n\nAs much as they eat I am still competing with the others around me, and I\'m hoping to set myself apart .\n\nI have been wanting to experiment with new recipes from around the Barrens, and while I may never get tired of roasted boar meat there is more I can do to make my food even more alluring.\n\nAll around Sparkwater Port there are Scorpids and Boars, gather Chunks of Boar Meat and Scorpid Stingers from around the area, I will reward you for the effort.','Collect 5 Chunk of Boar Meat and 5 Scorpid Stinger.','Have you gathered everything I need yet?','<Hargosh takes his time preparing the food, and begins to cook with an utmost determination, the aroma and smell starts as something horrific, but begins to turn pleasant as the fire cooks, soon enough, the orc takes a bite from his creation .>\n\nMmn... Yes... Hah! This will do just the trick, the kick is strong in this, just like an orcish axe! You\'ve done me a service, here.',5466,5,769,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,175,0,1001,150,76,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+update quest_template set rewxp = 375 where entry = 55004;
+
+replace into creature_questrelation (id, quest) values (91227, 55004);
+replace into creature_involvedrelation (id, quest) values (91227, 55004);
 
