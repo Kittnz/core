@@ -77,3 +77,12 @@ update gameobject_template set displaid = 338 where entry = 12666;
 
 delete from creature_loot_template where item = 9471;
 replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (7796, 9471, -100, 6, 1, 1);
+
+REPLACE INTO `skinning_loot_template` VALUES (4400, 4234, 43.2093, 1, 1, 1, 0, 0, 10);
+REPLACE INTO `skinning_loot_template` VALUES (4400, 4235, 3.1439, 1, 1, 1, 0, 0, 10);
+REPLACE INTO `skinning_loot_template` VALUES (4400, 4304, 40.000, 1, 1, 1, 0, 0, 10);
+REPLACE INTO `skinning_loot_template` VALUES (4400, 8169, 4.2254, 1, 1, 1, 0, 0, 10);
+REPLACE INTO `skinning_loot_template` VALUES (4400, 8167, 9.4215, 1, 1, 1, 0, 0, 10);
+
+UPDATE `creature_template` SET `skinning_loot_id`='4400' WHERE `entry`=4400;
+
