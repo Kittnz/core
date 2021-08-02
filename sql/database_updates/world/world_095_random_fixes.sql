@@ -65,5 +65,9 @@ UPDATE `quest_template` SET `RewXP`=660, `RewMoneyMaxLevel`=3900 WHERE `entry`=7
 update quest_template set prevquestid = 7807  where entry = 7808;
 update quest_template set prevquestid = 7808  where entry = 7809;
 
-
 update creature set spawntimesecsmin = 300, spawntimesecsmax = 300 where id = 3821;
+
+replace into  npc_trainer  values (4160, 3178, 50, 171, 175, 25, 0, 5875);
+replace into  npc_trainer  values (4611, 3178, 50, 171, 175, 25, 0, 5875);
+replace into  npc_trainer  values (7948, 3178, 50, 171, 175, 25, 0, 5875);
+replace into  npc_trainer  values (1386, 3178, 50, 171, 175, 25, 0, 5875);
