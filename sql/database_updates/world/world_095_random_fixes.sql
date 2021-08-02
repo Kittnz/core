@@ -103,3 +103,12 @@ update gameobject set position_x = -9965.76, position_y = -3692.54, position_z =
 update gameobject set spawntimesecsmin = 7200, spawntimesecsmax = 7200 where id = 153451;
 update item_template set flags = 2048 where entry in (80863, 80864);
 
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`, `patch_min`, `patch_max`) VALUES (9568, 12219, 7.5, 0, 1, 1, 0, 0, 10);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`, `patch_min`, `patch_max`) VALUES (9568, 12337, 30, 0, 1, 1, 0, 0, 10);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`, `patch_min`, `patch_max`) VALUES (9568, 12780, 100, 0, 1, 1, 3, 0, 10);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`, `patch_min`, `patch_max`) VALUES (9568, 13143, 2, 0, 1, 1, 0, 0, 10);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`, `patch_min`, `patch_max`) VALUES (9568, 16786, -80, 0, 2, 2, 0, 0, 10);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`, `patch_min`, `patch_max`) VALUES (9568, 22528, 8, 0, 2, 4, 0, 9, 10);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`, `patch_min`, `patch_max`) VALUES (9568, 30254, 100, 0, -30254, 1, 0, 0, 10);
+REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`, `patch_min`, `patch_max`) VALUES (9568, 80760, 35, 6, 1, 1, 0, 0, 10);
+
