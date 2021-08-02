@@ -86,4 +86,12 @@ REPLACE INTO `skinning_loot_template` VALUES (4400, 8167, 9.4215, 1, 1, 1, 0, 0,
 
 UPDATE `creature_template` SET `skinning_loot_id`='4400' WHERE `entry`=4400;
 
-update item_loot_template set chanceorquestchance = 0, groupid = 1 where entry = 9541;;
+update item_loot_template set chanceorquestchance = 0, groupid = 1 where entry = 9541;
+
+update quest_template set objectives = 'For the belt plans, I\'ll be needin\' 20 thorium bars.' where entry = 7653;
+update quest_template set objectives = 'For the boot plans, I\'ll be needin\' 40 thorium bars. Yep, 40. Are you gonna cry? Would you like a hanky?' where entry = 7654;
+update quest_template set objectives = 'For the bracer plans, I\'ll be needin\' 20 thorium bars.' where entry = 7655;
+update quest_template set objectives = 'For the chest piece plans, I\'ll be needin\' 60 thorium bars.\n\nOh boy, there you go again. Are you gonna be runnin\' to yer blue Gods, askin\' why they have forsaken you?!?\n\nToughen up, Nancy! Nobody ever said life\'s fair.' where entry = 7656;
+update quest_template set objectives = 'Just hand over 50 thorium bars and the helm plans are yers.' where entry = 7657;
+update quest_template set objectives = 'Just hand over 60 thorium bars and the leg plans are yers.\n\nI know, I\'m driving you into bankruptcy! I\'ve heard it all before so you can save your sob story, weakling.' where entry = 7658;
+update quest_template set objectives = 'For the shoulder plans, I\'ll be needin\' 20 thorium bars.' where entry = 7659;
