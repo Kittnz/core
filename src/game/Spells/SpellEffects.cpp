@@ -3700,25 +3700,25 @@ void Spell::EffectSummonWild(SpellEffectIndex eff_idx)
                     switch (urand(0, 7))
                     {
                         case 1:
-                            EranikusText = -1001013;
+                            EranikusText = 4444;
                             break;
                         case 2:
-                            EranikusText = -1001014;
+                            EranikusText = 4445;
                             break;
                         case 3:
-                            EranikusText = -1001015;
+                            EranikusText = 4446;
                             break;
                         case 4:
-                            EranikusText = -1001016;
+                            EranikusText = 4447;
                             break;
                         case 5:
-                            EranikusText = -1001017;
+                            EranikusText = 4448;
                             break;
                         case 6:
-                            EranikusText = -1001018;
+                            EranikusText = 4449;
                             break;
                         case 7:
-                            EranikusText = -1001019;
+                            EranikusText = 4450;
                             break;
                     }
 
