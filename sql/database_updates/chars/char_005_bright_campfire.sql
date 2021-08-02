@@ -1,0 +1,1 @@
+delete from character_spell where spell = 25085;
