@@ -95,3 +95,7 @@ update quest_template set objectives = 'For the chest piece plans, I\'ll be need
 update quest_template set objectives = 'Just hand over 50 thorium bars and the helm plans are yers.' where entry = 7657;
 update quest_template set objectives = 'Just hand over 60 thorium bars and the leg plans are yers.\n\nI know, I\'m driving you into bankruptcy! I\'ve heard it all before so you can save your sob story, weakling.' where entry = 7658;
 update quest_template set objectives = 'For the shoulder plans, I\'ll be needin\' 20 thorium bars.' where entry = 7659;
+
+update gameobject set position_x = -5135.0, position_y = -3402.10, position_z = 302.07, orientation = 3.77 where guid = 4007543;
+update gameobject set position_x = -10198.44, position_y = 1256.97, position_z = 36.85, orientation = 5.54 where guid = 4007544;
+update gameobject set position_x = -9965.76, position_y = -3692.54, position_z = 21.7, orientation =3.58 where guid = 30992;
