@@ -73,7 +73,7 @@ replace into  npc_trainer  values (7948, 3178, 50, 171, 175, 25, 0, 5875);
 replace into  npc_trainer  values (1386, 3178, 50, 171, 175, 25, 0, 5875);
 
 UPDATE gameobject SET id = 12666 WHERE guid = 48530;
-update gameobject_template set displaid = 338 where entry = 12666;
+update gameobject_template set displayid = 338 where entry = 12666;
 
 delete from creature_loot_template where item = 9471;
 replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (7796, 9471, -100, 6, 1, 1);
@@ -86,3 +86,4 @@ REPLACE INTO `skinning_loot_template` VALUES (4400, 8167, 9.4215, 1, 1, 1, 0, 0,
 
 UPDATE `creature_template` SET `skinning_loot_id`='4400' WHERE `entry`=4400;
 
+update item_loot_template set chanceorquestchance = 0, groupid = 1 where entry = 9541;;
