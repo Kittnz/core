@@ -22384,7 +22384,7 @@ bool Player::SetupHardcoreMode()
     {
         if (Item* pItem = GetItemByPos(INVENTORY_SLOT_BAG_0, i))
         {
-            if (pItem->GetEntry() == 6948)
+            if (pItem->GetEntry() == 6948)  // Hearthstone
                 continue;
 
             DestroyItem(INVENTORY_SLOT_BAG_0, i, true);
@@ -22398,7 +22398,12 @@ bool Player::SetupHardcoreMode()
             for (uint32 j = 0; j < pBag->GetBagSize(); ++j)
             {
                 if (Item* pItem = pBag->GetItemByPos(j))
+                {
+                    if (pItem->GetEntry() == 2516 || pItem->GetEntry() == 2512)  // Light Shot & Rough Arrow
+                        continue;
+
                     DestroyItem(i, j, true);
+                }
             }
         }
     }
@@ -22406,7 +22411,13 @@ bool Player::SetupHardcoreMode()
     for (int i = INVENTORY_SLOT_BAG_START; i < INVENTORY_SLOT_BAG_END; ++i)
     {
         if (Bag* pBag = (Bag*)GetItemByPos(INVENTORY_SLOT_BAG_0, i))
-            DestroyItem(INVENTORY_SLOT_BAG_0, i, true);
+        {
+            if (pBag->GetEntry() == 2102 || pBag->GetEntry() == 2101)  //  Small Ammo Pouch & Light Quiver
+                continue;
+
+                DestroyItem(INVENTORY_SLOT_BAG_0, i, true);
+        }
+
     }
     // destroy items from bank
     for (int i = BANK_SLOT_ITEM_START; i < BANK_SLOT_ITEM_END; ++i)
