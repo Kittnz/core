@@ -61,3 +61,9 @@ UPDATE `quest_template` SET `NextQuestInChain`=7792 WHERE `NextQuestInChain`=779
 UPDATE `quest_template` SET `ExclusiveGroup`=-7792 WHERE `ExclusiveGroup`=-7797;
 UPDATE `quest_template` SET `entry`=7792 WHERE `entry`=7797;
 UPDATE `quest_template` SET `RewXP`=660, `RewMoneyMaxLevel`=3900 WHERE `entry`=7792 && `patch`=7;
+
+update quest_template set prevquestid = 7807  where entry = 7808;
+update quest_template set prevquestid = 7808  where entry = 7809;
+
+
+update creature set spawntimesecsmin = 300, spawntimesecsmax = 300 where id = 3821;
