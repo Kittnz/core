@@ -71,3 +71,6 @@ replace into  npc_trainer  values (4160, 3178, 50, 171, 175, 25, 0, 5875);
 replace into  npc_trainer  values (4611, 3178, 50, 171, 175, 25, 0, 5875);
 replace into  npc_trainer  values (7948, 3178, 50, 171, 175, 25, 0, 5875);
 replace into  npc_trainer  values (1386, 3178, 50, 171, 175, 25, 0, 5875);
+
+UPDATE gameobject SET id = 12666 WHERE guid = 48530;
+update gameobject_template set displaid = 338 where entry = 12666;
