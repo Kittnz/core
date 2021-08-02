@@ -4845,7 +4845,14 @@ bool ChatHandler::HandleServerInfoCommand(char* /*args*/)
 bool ChatHandler::HandleDismountCommand(char* /*args*/)
 {
     Player* pPlayer = m_session->GetPlayer();
-    //If player is not mounted, so go out :)
+
+    if (pPlayer->GetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID) == 2490 || pPlayer->GetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID) == 10318) // Mirage Raceway cars
+    {
+        pPlayer->GetSession()->SendNotification("You can't dismount while racing!");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
     if (!pPlayer->IsMounted())
     {
         SendSysMessage(LANG_CHAR_NON_MOUNTED);
