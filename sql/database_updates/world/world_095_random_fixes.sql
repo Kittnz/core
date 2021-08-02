@@ -19,3 +19,45 @@ update quest_template set questlevel = 8, minlevel = 5 where entry = 811;
 update quest_template set questlevel = 10, minlevel = 5 where entry = 820;
 
 update item_template set display_id = 7987 where entry = 20373;
+
+
+-- fix donation quests used by bubulo acerbus
+UPDATE `quest_template` SET `PrevQuestId` = 0, `NextQuestId` = 7811, `ExclusiveGroup` = -7807 WHERE `entry` IN (7807, 7808, 7809) AND `patch` = 7;
+UPDATE `quest_template` SET `PrevQuestId` = 0 WHERE `entry` = 7811;
+
+-- fix donation quests used by clavicus knavingham 
+UPDATE `quest_template` SET `PrevQuestId` = 0, `NextQuestId` = 7795, `ExclusiveGroup` = -7791 WHERE `entry` IN (7791, 7793, 7794) AND `patch` = 7;
+UPDATE `quest_template` SET `PrevQuestId` = 0 WHERE `entry` = 7795;
+
+-- fix donation quests used by raedon duskstriker
+UPDATE `quest_template` SET `PrevQuestId` = 0, `NextQuestId` = 7800, `ExclusiveGroup` = -7797 WHERE `entry` IN (7797, 7798, 7799) AND `patch` = 7;
+UPDATE `quest_template` SET `PrevQuestId` = 0 WHERE `entry` = 7800;
+
+-- fix donation quests used by rashona straglash
+UPDATE `quest_template` SET `PrevQuestId` = 0, `NextQuestId` = 7824, `ExclusiveGroup` = -7826 WHERE `entry` IN (7826, 7827, 7831) AND `patch` = 7;
+UPDATE `quest_template` SET `PrevQuestId` = 0, `NextQuestId` = 7832 WHERE `entry` = 7824;
+UPDATE `quest_template` SET `PrevQuestId` = 7824 WHERE `entry` = 7832;
+
+-- fix donation quests used by vehena
+UPDATE `quest_template` SET `PrevQuestId` = 0, `NextQuestId` = 7836, `ExclusiveGroup` = -7833 WHERE `entry` IN (7833, 7834, 7835) AND `patch` = 7;
+UPDATE `quest_template` SET `PrevQuestId` = 0, `NextQuestId` = 7837 WHERE `entry` = 7836;
+UPDATE `quest_template` SET `PrevQuestId` = 7836 WHERE `entry` = 7837;
+
+-- fix donation quests used by rumstag proudstrider
+UPDATE `quest_template` SET `PrevQuestId` = 0, `NextQuestId` = 7823, `ExclusiveGroup` = -7820 WHERE `entry` IN (7820, 7821, 7822) AND `patch` = 7;
+UPDATE `quest_template` SET `PrevQuestId` = 0 WHERE `entry` = 7823;
+
+-- fix donation quests used by ralston farnsley
+UPDATE `quest_template` SET `PrevQuestId` = 0, `NextQuestId` = 7818, `ExclusiveGroup` = -7813 WHERE `entry` IN (7813, 7814, 7817) AND `patch` = 7;
+UPDATE `quest_template` SET `PrevQuestId` = 0 WHERE `entry` = 7818;
+
+
+-- Fix wrong quest id for A Donation of Wool.
+UPDATE `creature_questrelation` SET `quest`=7792 WHERE `quest`=7797;
+UPDATE `creature_involvedrelation` SET `quest`=7792 WHERE `quest`=7797;
+UPDATE `quest_template` SET `PrevQuestId`=7792 WHERE `PrevQuestId`=7797;
+UPDATE `quest_template` SET `NextQuestId`=7792 WHERE `NextQuestId`=7797;
+UPDATE `quest_template` SET `NextQuestInChain`=7792 WHERE `NextQuestInChain`=7797;
+UPDATE `quest_template` SET `ExclusiveGroup`=-7792 WHERE `ExclusiveGroup`=-7797;
+UPDATE `quest_template` SET `entry`=7792 WHERE `entry`=7797;
+UPDATE `quest_template` SET `RewXP`=660, `RewMoneyMaxLevel`=3900 WHERE `entry`=7792 && `patch`=7;
