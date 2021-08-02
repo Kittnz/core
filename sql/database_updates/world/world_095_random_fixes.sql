@@ -101,4 +101,5 @@ update gameobject set position_x = -10198.44, position_y = 1256.97, position_z =
 update gameobject set position_x = -9965.76, position_y = -3692.54, position_z = 21.7, orientation =3.58 where guid = 30992;
 
 update gameobject set spawntimesecsmin = 7200, spawntimesecsmax = 7200 where id = 153451;
+update item_template set flags = 2048 where entry in (80863, 80864);
 
