@@ -13,7 +13,7 @@ update item_template set max_count = 1 where entry = 70035;
 replace into npc_vendor values (50053, 80653, 0, 0, 0, 0);
 
 delete from creature_loot_template where item = 51868;
-replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref) values (524, 51868, -100, 6, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (524, 51868, -100, 6, 1, 1);
 
 update quest_template set questlevel = 8, minlevel = 5 where entry = 811;
 update quest_template set questlevel = 10, minlevel = 5 where entry = 820;
@@ -74,3 +74,6 @@ replace into  npc_trainer  values (1386, 3178, 50, 171, 175, 25, 0, 5875);
 
 UPDATE gameobject SET id = 12666 WHERE guid = 48530;
 update gameobject_template set displaid = 338 where entry = 12666;
+
+delete from creature_loot_template where item = 9471;
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (7796, 9471, -100, 6, 1, 1);
