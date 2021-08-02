@@ -284,7 +284,7 @@ struct go_speed_up : public GameObjectAI
 				if (distSqr < SheepAcceptanceRadiusSqr)
 				{
 					// our client
-					player->CastSpell(player, 454, true);
+					player->CastSpell(player, 9175, true);
 					me->Despawn();
 					me->Delete();
 				}

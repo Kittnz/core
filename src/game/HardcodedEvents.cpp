@@ -1797,7 +1797,6 @@ void RaceSubEvent::Update(uint32 deltaTime)
 
 			AnnounceToRacers("GO! GO! GO!");
 
-			// Spawn the shit
 			if (theMap != nullptr)
 			{
 				//	creatures
@@ -2090,8 +2089,8 @@ void RacePlayer::GoRaceMode()
 			checkPointEffect->SetExclusiveVisibleFor(pl);
 			pl->AddExclusiveVisibleObject(checkpointEffectGuid);
 			pl->UpdateVisibilityOf(pl, checkPointEffect);
-			pl->SetSpeedRatePersistance(MOVE_RUN, 3.0f);
-			pl->UpdateSpeed(MOVE_RUN, true, 3.0f);
+			pl->SetSpeedRatePersistance(MOVE_RUN, 4.0f);
+			pl->UpdateSpeed(MOVE_RUN, false, 4.0f);
 
 			// Set ability bar
 
@@ -2117,10 +2116,10 @@ void RacePlayer::LeaveRaceMode()
 			pl->Unmount();
 			pl->RemoveExclusiveVisibleObject(checkpointEffectGuid);
 			pl->SetSpeedRatePersistance(MOVE_RUN, 1.0f);
-			pl->UpdateSpeed(MOVE_RUN, true, 1.0f);
+			pl->UpdateSpeed(MOVE_RUN, false, 1.0f);
 			pl->SetCharm(nullptr);
 			pl->RemovePetActionBar();
-			pl->CastSpell(pl, 1604, true); // Dazed spell
+		//	pl->CastSpell(pl, 1604, true); // Dazed spell
 		}
 
 		if (GameObject* checkpointEffect = map->GetGameObject(checkpointEffectGuid))
@@ -2273,9 +2272,7 @@ void MiracleRaceQueueSystem::Update(uint32 deltaTime)
 
 		iter++;
 	}
-
 }
-
 
 size_t MiracleRaceQueueSystem::GetInviteCount() const
 {
