@@ -112,3 +112,5 @@ REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`, `patch_min`, `patch_max`) VALUES (9568, 30254, 100, 0, -30254, 1, 0, 0, 10);
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`, `patch_min`, `patch_max`) VALUES (9568, 80760, 35, 6, 1, 1, 0, 0, 10);
 
+delete from creature_loot_template where item = 5388;
+update quest_template set srcitemid = 5388, srcitemcount = 1 where entry = 1046;
