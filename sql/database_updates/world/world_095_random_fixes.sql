@@ -17,3 +17,5 @@ replace into creature_loot_template (entry, item, chanceorquestchance, groupid, 
 
 update quest_template set questlevel = 8, minlevel = 5 where entry = 811;
 update quest_template set questlevel = 10, minlevel = 5 where entry = 820;
+
+update item_template set display_id = 7987 where entry = 20373;
