@@ -588,6 +588,10 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '4', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
+ 
+  replace into item_template values 
+(81322, 0, 12, 0, 'Sack of Coins', '', 1183, 1, 0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 4, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, null);
+
 
 update item_template set stackable = 5 where entry = 81293;
 replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref) values (3130, 81292, -20, 6, 1);
@@ -675,4 +679,11 @@ replace into creature_loot_template (entry, item, chanceorquestchance, groupid, 
 
 replace into creature_questrelation (id, quest) values (91254, 55010);
 replace into creature_involvedrelation (id, quest) values (91254, 55010);
+
+update creature_template set npc_flags = 3, display_id1 = 7164 where entry = 80121; -- Nert (Horde)
+
+replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (0,55011,14,13,10,0,0,'Employing the Cabal','Not good pal, not good at all! And here I thought we’d be safe and sound under the Horde’s banner.\n\nThere’s rumors coming from the Undermine that Razdunk found out our location and might come knocking out our doors! Times are desperate enough for me to seek him...\n\nThere’s a crazy old goblin hiding somewhere in the Barrens, knowing him and his folk they definitely have a barrier over the blasted thing or I don’t know whatever mages do to protect a place they own.\n\nThere’s a slim chance you might find him in the north, when you follow the road to Ashenvale.\n\nGive him this piece of paper and this sack of coins, I hate having to pay someone before they do something for me but this is a special case! I really hope you can find him, we definitely could use his help.','Find Grimm Onearm in the Barrens.','Hey, hey, move along bub, nothing to see here!','Toss me in a dirty sack and cover me in oil, and here I thought everyone forgot about ol’ Grimm, Blastentom is running with the Horde now huh?',81322,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,81322,1,0,750,1001,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+replace into creature_questrelation (id, quest) values (80121, 55011);
+replace into creature_involvedrelation (id, quest) values (91275, 55011);
 
