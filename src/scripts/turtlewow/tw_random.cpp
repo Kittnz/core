@@ -6100,9 +6100,138 @@ bool GossipSelect_npc_varimathras(Player* pPlayer, Creature* pCreature, uint32 u
     return true;
 }
 
+bool GOHello_go_gunthers_favor(Player* pPlayer, GameObject* pGo)
+{
+    if (pPlayer->GetQuestStatus(80725) == QUEST_STATUS_INCOMPLETE && pPlayer->HasItemCount(53011, 1, false))
+    {
+        pGo->UseDoorOrButton();
+        pPlayer->HandleEmote(EMOTE_ONESHOT_KNEEL);
+
+        if (GameObjectAI* gAI = pGo->AI())
+        {
+            gAI->SetData(1, 1);
+        }
+
+        pGo->SummonCreature(50683, pGo->GetPositionX(), pGo->GetPositionY(), pGo->GetPositionZ(), pGo->GetOrientation(), 
+                            TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 60 * IN_MILLISECONDS);
+    }
+    return true;
+}
+
+struct go_gunthers_favor : public GameObjectAI
+{
+    explicit go_gunthers_favor(GameObject* pGo) : GameObjectAI(pGo) {}
+
+    uint32 BackTimer = 0;
+
+    virtual void UpdateAI(uint32 const uiDiff) override
+    {
+        if (BackTimer != 0)
+        {
+            if (BackTimer < uiDiff)
+            {
+                BackTimer = 0;
+                me->ResetDoorOrButton();
+            }
+            else
+            {
+                BackTimer -= uiDiff;
+                if (BackTimer == 0)
+                {
+                    me->ResetDoorOrButton();
+                }
+            }
+        }
+    }
+    virtual void SetData(uint32 id, uint32 value) override
+    {
+        if (id == 1)
+            BackTimer = 60 * IN_MILLISECONDS;
+        GameObjectAI::SetData(id, value);
+    }
+};
+
+GameObjectAI* GetAI_go_gunthers_favor(GameObject* Obj) { return new go_gunthers_favor(Obj); }
+
+struct npc_alphus_wordwillAI : public ScriptedAI
+{
+    npc_alphus_wordwillAI(Creature* c) : ScriptedAI(c) { Reset(); }
+
+    bool speech_1 = false;
+    bool speech_2 = false;
+    bool speech_3 = false;
+    bool speech_4 = false;
+
+    void Reset() {}
+
+    void Aggro(Unit* pWho) override
+    {
+        m_creature->MonsterSay("I sensed magic! What are you doing here?");
+    }
+
+    void UpdateAI(const uint32 diff)
+    {
+        std::list<Player*> players;
+        GetPlayersWithinRange(players, 20);
+
+        if (m_creature->GetHealthPercent() < 80 && m_creature->GetHealthPercent() > 70)
+        {
+            if (!speech_1)
+            {
+                speech_1 = true;
+                m_creature->MonsterSay("Is this all you can muster?");
+            }
+        }
+        if (m_creature->GetHealthPercent() < 60 && m_creature->GetHealthPercent() > 50)
+        {
+            if (!speech_2)
+            {
+                speech_2 = true;
+                m_creature->MonsterSay("Young folk these days are disappointing.");
+            }
+        }
+        if (m_creature->GetHealthPercent() < 30 && m_creature->GetHealthPercent() > 20)
+        {
+            if (!speech_3)
+            {
+                speech_3 = true;
+                m_creature->MonsterSay("Hardly a challenge!");
+            }
+        }
+        if (m_creature->GetHealthPercent() < 10)
+        {
+            if (!speech_4)
+            {
+                speech_4 = true;
+                m_creature->MonsterSay("Hmph, I will admit you have some skills, I will let you flee this day!");
+            }
+            m_creature->CombatStop(true);
+            m_creature->ClearInCombat();
+            m_creature->SetFactionTemplateId(35);
+            m_creature->CastSpell((Unit*)nullptr, 11426, true);
+            m_creature->SummonGameObject(1000177, m_creature->GetPositionX() + 1.0F, m_creature->GetPositionY() + 1.0F, m_creature->GetPositionZ(), 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 150, true);
+        }
+        DoMeleeAttackIfReady();
+    }
+    void EnterCombat() {}
+    void JustRespawned() {}
+};
+
+CreatureAI* GetAI_npc_alphus_wordwill(Creature* _Creature) { return new npc_alphus_wordwillAI(_Creature); }
+
 void AddSC_tw_random()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_alphus_wordwill";
+    newscript->GetAI = &GetAI_npc_alphus_wordwill;
+    newscript->RegisterSelf();
+
+    newscript->Name = "go_gunthers_favor";
+    newscript->pGOHello = &GOHello_go_gunthers_favor;
+    newscript->GOGetAI = &GetAI_go_gunthers_favor;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_varimathras";
