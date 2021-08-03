@@ -467,6 +467,19 @@ struct go_corrupted_crystal : public GameObjectAI
 
                     drakonidOneptr->MonsterMove(700.94f, -4091.69f, 100.71f);
                     drakonidTwoptr->MonsterMove(700.94f, -4091.69f, 100.71f);
+
+                    drakonidOneptr->SetFactionTemplateId(11);
+                    drakonidTwoptr->SetFactionTemplateId(11);
+
+                    drakonidOneptr->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PLAYER);
+                    drakonidTwoptr->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PLAYER);
+
+                    if (Creature* antnormi = me->FindNearestCreature(NPC_ANTNORMI, 1000, true))
+                    {
+                        drakonidOneptr->GetThreatManager().addThreat(antnormi, 100);
+                        drakonidTwoptr->GetThreatManager().addThreat(antnormi, 100);
+                    }
+
                     m_uiDialogueTimer = 1000;
                     m_uiTick++;
                     break;
@@ -510,10 +523,12 @@ struct go_corrupted_crystal : public GameObjectAI
                 if (Creature* chromie = me->FindNearestCreature(NPC_CHROMIE, 100, true))
                 {
                     if (Creature* antnormi = me->FindNearestCreature(NPC_ANTNORMI, 1000, true))
-                        chromie->AddThreat(antnormi, 1000);
-
+                    {
+                        chromie->AddThreat(antnormi, 100);
+                    }
                     chromie->MonsterSay(SAY_CHROMIE_3); // Adventurer, I'll weaken it, but you must finish her.
                     chromie->SetFactionTemplateId(11);
+                    chromie->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PLAYER);
                     chromie->MonsterMove(691.41f, -4086.98f, 100.71f);
                     m_uiDialogueTimer = 5000;
                     m_uiTick++;
@@ -528,9 +543,10 @@ struct go_corrupted_crystal : public GameObjectAI
                         antnormi->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PLAYER);
                         antnormi->SetRooted(false);
 
-                        kheyna->AddThreat(antnormi, 900);
+                        kheyna->AddThreat(antnormi, 50);
                         kheyna->MonsterSay(SAY_KHEYNA_4); // I'll help you! Let's KILL!
                         kheyna->SetFactionTemplateId(11);
+                        kheyna->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PLAYER);
                         kheyna->MonsterMove(681.44f, -4093.86f, 100.71f);
                         kheyna->CastSpell(kheyna, SPELL_WHELP_TRANSFORM, false);
 
@@ -583,12 +599,13 @@ struct go_corrupted_crystal : public GameObjectAI
                         {
                             kheyna->SetSpeedRate(MOVE_RUN, 1.14f);
                             kheyna->SetSpeedRate(MOVE_WALK, 1.0f);
+                            kheyna->RestoreFaction();
                             kheyna->MonsterMoveWithSpeed(690.09f, -4086.31f, 100.71f, 0, 1, MOVE_WALK_MODE);
 
                             if (Creature* chromie = me->FindNearestCreature(NPC_CHROMIE, 1000, true))
                             {
                                 chromie->MonsterMoveWithSpeed(690.40f, -4087.36f, 100.71f, 0, 1, MOVE_WALK_MODE);
-
+                                chromie->RestoreFaction();
                                 if (antnormiPortalptr->FindNearestCreature(antnormi->GetEntry(), 5, true))
                                 {
                                     antnormi->ForcedDespawn();
