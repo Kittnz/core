@@ -1895,6 +1895,13 @@ bool ChatHandler::HandleDieCommand(char* /*args*/)
             return false;
     }
 
+    if (target->ToPlayer() && target->ToPlayer()->isHardcore())
+    {
+        SendSysMessage("Cannot kill a Hardcore Character.");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
     if (target->IsAlive())
     {
         if (sWorld.getConfig(CONFIG_BOOL_DIE_COMMAND_CREDIT))
@@ -1927,6 +1934,13 @@ bool ChatHandler::HandleFearCommand(char* /*args*/)
     SpellEntry const *spellInfo = sSpellMgr.GetSpellEntry(fearID);
     if (!spellInfo)
         return false;
+
+    if (target->ToPlayer() && target->ToPlayer()->isHardcore())
+    {
+        SendSysMessage("Cannot fear a Hardcore Character.");
+        SetSentErrorMessage(true);
+        return false;
+    }
 
     if (!spellInfo->IsSpellAppliesAura((1 << EFFECT_INDEX_0) | (1 << EFFECT_INDEX_1) | (1 << EFFECT_INDEX_2)) && !spellInfo->HasEffect(SPELL_EFFECT_PERSISTENT_AREA_AURA))
     {
@@ -1982,6 +1996,13 @@ bool ChatHandler::HandleDamageCommand(char* args)
         return true;
 
     uint32 damage = uint32(damage_int);
+
+    if (target->ToPlayer() && target->ToPlayer()->isHardcore())
+    {
+        SendSysMessage("Cannot damage a Hardcore Character.");
+        SetSentErrorMessage(true);
+        return false;
+    }
 
     // flat melee damage without resistence/etc reduction
     if (!*args)
@@ -4824,7 +4845,14 @@ bool ChatHandler::HandleServerInfoCommand(char* /*args*/)
 bool ChatHandler::HandleDismountCommand(char* /*args*/)
 {
     Player* pPlayer = m_session->GetPlayer();
-    //If player is not mounted, so go out :)
+
+    if (pPlayer->GetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID) == 2490 || pPlayer->GetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID) == 10318) // Mirage Raceway cars
+    {
+        pPlayer->GetSession()->SendNotification("You can't dismount while racing!");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
     if (!pPlayer->IsMounted())
     {
         SendSysMessage(LANG_CHAR_NON_MOUNTED);
@@ -8399,6 +8427,14 @@ bool ChatHandler::HandleKickPlayerCommand(char* args)
     if (HasLowerSecurity(target))
         return false;
 
+    // [Hardcore] Prevent death caused by getting disconnected while in-fight
+    if (target->isHardcore())
+    {
+        SendSysMessage("Cannot kick a Hardcore Character.");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
     // send before target pointer invalidate
     PSendSysMessage(LANG_COMMAND_KICKMESSAGE, GetNameLink(target).c_str());
     // First kick: close socket but keep player online
@@ -8406,6 +8442,7 @@ bool ChatHandler::HandleKickPlayerCommand(char* args)
         target->GetSession()->KickPlayer();
     else
         target->GetSession()->KickDisconnectedFromWorld();
+
     return true;
 }
 

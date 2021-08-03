@@ -1440,7 +1440,9 @@ void Creature::SaveToDB(uint32 mapid)
     data.wander_distance = GetDefaultMovementType() == IDLE_MOTION_TYPE ? 0 : m_wanderDistance;;
     data.movement_type = !m_wanderDistance && GetDefaultMovementType() == RANDOM_MOTION_TYPE
                         ? IDLE_MOTION_TYPE : GetDefaultMovementType();
-    data.spawn_flags = m_isActiveObject ? SPAWN_FLAG_ACTIVE : 0;
+    if (m_isActiveObject)
+        data.spawn_flags |= SPAWN_FLAG_ACTIVE;
+ //   data.spawn_flags = m_isActiveObject ? SPAWN_FLAG_ACTIVE : 0;
 
     float const wander_distance = GetDefaultMovementType() == RANDOM_MOTION_TYPE ? m_wanderDistance : 0.0f;
 
@@ -1469,7 +1471,7 @@ void Creature::SaveToDB(uint32 mapid)
        << data.health_percent << ","                       // health_percent
        << data.mana_percent << ","                         // mana_percent
        << GetDefaultMovementType() << ","                  // default movement generator type
-       << m_isActiveObject << ","
+       << data.spawn_flags << ","
        << m_visibilityModifier << ","
        << "0,"                                             // patch_min
        << "10)";                                           // patch_max

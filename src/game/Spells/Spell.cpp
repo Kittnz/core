@@ -6156,7 +6156,7 @@ if (m_caster->IsPlayer() && !(m_spellInfo->Attributes & SPELL_ATTR_PASSIVE)
                         return SPELL_FAILED_DONT_REPORT;
                     }
                 }
-                else if (m_spellInfo->Id == 46058) // Traveler's Day
+                else if (m_spellInfo->Id == 46058) // Traveler's Tent
                 {
                     if (m_casterUnit->IsInWater() || !m_casterUnit->GetTerrain()->IsOutdoors(m_caster->GetPositionX(), m_caster->GetPositionY(), m_caster->GetPositionZ()) || 
                         m_caster->GetZoneId() == 1519 || m_caster->GetZoneId() == 1637 || m_caster->GetZoneId() == 1497 || m_caster->GetZoneId() == 1537 ||
@@ -6290,6 +6290,15 @@ if (m_caster->IsPlayer() && !(m_spellInfo->Attributes & SPELL_ATTR_PASSIVE)
             }
             case SPELL_EFFECT_LEARN_SPELL:
             {
+                if (m_spellInfo->Id == 12775)
+                {
+                    // Schematic: Goblin Radio
+                    if (m_caster->IsPlayer())
+                        if (Unit* target = m_targets.getUnitTarget())
+                            if (target != m_caster)
+                                return SPELL_FAILED_BAD_TARGETS;
+                }
+
                 if (m_spellInfo->EffectImplicitTargetA[i] != TARGET_UNIT_CASTER_PET)
                     break;
 
@@ -6311,6 +6320,7 @@ if (m_caster->IsPlayer() && !(m_spellInfo->Attributes & SPELL_ATTR_PASSIVE)
 
                 if (!pet->HasTPForSpell(learn_spellproto->Id))
                     return SPELL_FAILED_TRAINING_POINTS;
+
 
                 break;
             }

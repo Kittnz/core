@@ -231,72 +231,61 @@ CreatureAI* GetAI_npc_rinji(Creature* pCreature)
     return new npc_rinjiAI(pCreature);
 }
 
-/*######
-## go_lards_picnic_basket
-######*/
+// Lard Lost His Lunch:
 
-enum
+bool GOHello_go_lards_picnic_basket(Player* pPlayer, GameObject* pGo)
 {
-    NPC_KIDNAPPEUR_VILEBRANCH     = 14748,
-};
-struct go_lards_picnic_basketAI: public GameObjectAI
-{
-    go_lards_picnic_basketAI(GameObject* pGo) : GameObjectAI(pGo)
+    if (pPlayer->GetQuestStatus(7840) == QUEST_STATUS_INCOMPLETE)
     {
-        timer = 0;
-        state = 0;
-    }
-    uint32 timer;
-    bool state;//0 = usual, can launch. //1 = in use, cannot launch
+        pGo->UseDoorOrButton();
+        pPlayer->HandleEmote(EMOTE_ONESHOT_KNEEL);
 
-    void UpdateAI(const uint32 uiDiff) override
-    {
-        if (state)
+        if (GameObjectAI* gAI = pGo->AI())
         {
-            if (timer < uiDiff)
+            gAI->SetData(1, 1);
+        }
+
+        pGo->SummonCreature(14748, 408.75F, -4823.33F, 10.92F, 4.70F, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 15 * IN_MILLISECONDS);
+        pGo->SummonCreature(14748, 409.01F, -4830.60F, 10.58F, 1.55F, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 15 * IN_MILLISECONDS);
+        pGo->SummonCreature(14748, 413.80F, -4826.17F, 11.111F, 3.3F, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 15 * IN_MILLISECONDS);
+    }
+    return true;
+}
+
+struct go_lards_picnic_basket : public GameObjectAI
+{
+    explicit go_lards_picnic_basket(GameObject* pGo) : GameObjectAI(pGo) {}
+
+    uint32 BackTimer = 0;
+
+    virtual void UpdateAI(uint32 const uiDiff) override
+    {
+        if (BackTimer != 0)
+        {
+            if (BackTimer < uiDiff)
             {
-                state = 0;
-                me->SetGoState(GO_STATE_READY);
-                me->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_IN_USE);
+                BackTimer = 0;
+                me->ResetDoorOrButton();
             }
             else
-                timer -= uiDiff;
-        }
-    }
-    bool CheckCanStartEvent()
-    {
-        return !state;
-    }
-
-    void SetInUse()
-    {
-        me->SetGoState(GO_STATE_ACTIVE);
-        me->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_IN_USE);
-        state = 1;
-        timer = 300000;
-    }
-};
-GameObjectAI* GetAIgo_lards_picnic_basket(GameObject *pGo)
-{
-    return new go_lards_picnic_basketAI(pGo);
-}
-bool GOHello_go_lards_picnic_basket(Player* pPlayer, GameObject* pGO)
-{
-    if (pGO->GetGoType() == GAMEOBJECT_TYPE_GOOBER)
-    {
-        if (go_lards_picnic_basketAI* pMarkAI = dynamic_cast<go_lards_picnic_basketAI*>(pGO->AI()))
-        {
-            if (pMarkAI->CheckCanStartEvent())
             {
-                pMarkAI->SetInUse();
-                for (int i = 0; i < 3; ++i)
-                    pPlayer->SummonCreature(NPC_KIDNAPPEUR_VILEBRANCH, pPlayer->GetPositionX(), pPlayer->GetPositionY(), pPlayer->GetPositionZ(), 0, TEMPSUMMON_CORPSE_TIMED_DESPAWN);
+                BackTimer -= uiDiff;
+                if (BackTimer == 0)
+                {
+                    me->ResetDoorOrButton();
+                }
             }
         }
     }
-    return false;
-}
+    virtual void SetData(uint32 id, uint32 value) override
+    {
+        if (id == 1)
+            BackTimer = 60 * IN_MILLISECONDS;
+        GameObjectAI::SetData(id, value);
+    }
+};
 
+GameObjectAI* GetAI_go_lards_picnic_basket(GameObject* Obj){ return new go_lards_picnic_basket(Obj); }
 
 /*######
 ## go_corrupted_crystal
@@ -775,7 +764,6 @@ bool GOHello_go_corrupted_crystal(Player* pPlayer, GameObject* pGO)
     return false;
 }
 
-
 void AddSC_hinterlands()
 {
     Script* newscript;
@@ -786,10 +774,9 @@ void AddSC_hinterlands()
     newscript->pQuestAcceptNPC = &QuestAccept_npc_rinji;
     newscript->RegisterSelf();
 
-    newscript = new Script;
     newscript->Name = "go_lards_picnic_basket";
-    newscript->GOGetAI = &GetAIgo_lards_picnic_basket;
     newscript->pGOHello = &GOHello_go_lards_picnic_basket;
+    newscript->GOGetAI = &GetAI_go_lards_picnic_basket;
     newscript->RegisterSelf();
 
     newscript = new Script;
