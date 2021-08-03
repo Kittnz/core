@@ -177,7 +177,14 @@ struct boss_gluthAI : public ScriptedAI
                     // All the decimate logic is handled in SpellHit, so we dont put any players on
                     // 5% HP until we know the boss has received his stun etc
                     if (DoCastSpellIfCan(m_creature, SPELL_DECIMATE) == CAST_OK)
+                    {
+                        // stop summoning zombies for 15s
+                        // https://github.com/slowtorta/turtlewow-bug-tracker/issues/207                    {
+                        m_events.CancelEvent(EVENT_SUMMON);
+                        m_events.ScheduleEvent(EVENT_SUMMON, 15000);
+
                         m_events.Repeat(DECIMATE_CD);
+                    }
                     else
                         m_events.Repeat(100);
 
