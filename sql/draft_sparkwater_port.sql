@@ -578,6 +578,16 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '1', '0', '0', '0', '65', '0', '0', '0', '0', '44', '0', '0', '0',
  '0', '1', NULL);
+ 
+ replace into item_template values
+ ('81321', '0', '4', '0', 'Frix\'s Necklace', 'Has bad-luck written all over it.', '18172', '2', '0', '1', '21000', '5622', '2', '-1', '-1', '49',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '12', '6', '6',
+ '5', '-5', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '4', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
 
 update item_template set stackable = 5 where entry = 81293;
 replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref) values (3130, 81292, -20, 6, 1);
@@ -654,3 +664,9 @@ replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minleve
 
 replace into creature_questrelation (id, quest) values (91255, 55009);
 replace into creature_involvedrelation (id, quest) values (91254, 55009);
+
+replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (55009,55010,16,47,45,0,0,'Grabbing the Gear','...Gah! We can\'t waste our time cursing the dumb lout... we have to get this fixed before the big ups in Sparkwater find out what I\'ve gone and done putting the important equipment in his hands.\n\nI\'m willing to bet the Survey Equipment is still around where he died, the Satyrs probably pried it from his hands and are still trying to figure out what the complex goblin machinery is, and I doubt they ever will.\n\nGo back there and dispatch them until you find my Goblin Surveying Gear!d report your findings to Gazztoggle Krewpipe!','Head to the Haldarr Encampment and Slay Satyrs until you find Goblin Surveying Gear.','Have you found the Surveying Gear yet?','Did you find it? Oh...\n\nDamn I was getting ready to pack it up and start heading into exile, you really saved my hide here kid, and -big- time, here I had this from Frix before he headed out, was a necklace he wore, aparently the metal messed with the survey gear, its probably coated in bad luck, last thing I want is to keep it.',81312,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4250,1001,250,0,0,0,0,0,0,0,0,0,81321,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+replace into creature_questrelation (id, quest) values (91254, 55010);
+replace into creature_involvedrelation (id, quest) values (91254, 55010);
+
