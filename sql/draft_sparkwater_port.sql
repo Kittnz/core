@@ -82,13 +82,17 @@ replace into creature_template values
 (91274, 0, 8477, 0, 0, 0, 'Big Fraggle', 'The Mining Boss', 0, 8, 12, 268, 668, 0, 0, 1427, 1682, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 51, 66, 0, 140, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 52.272, 71.874, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 10, ''),
 (91275, 0, 7181, 0, 0, 0, 'Grimm Onearm', '', 0, 8, 12, 268, 668, 0, 0, 1427, 1682, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 51, 66, 0, 140, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 52.272, 71.874, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 10, ''),
 (91276, 0, 7188, 0, 0, 0, 'Mememgem', '', 0, 8, 12, 268, 668, 0, 0, 1427, 1682, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 51, 66, 0, 140, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 52.272, 71.874, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 10, ''),
+(91277, 0, 3748, 0, 0, 0, 'Miner Glaktor', '', 0, 8, 12, 268, 668, 0, 0, 1427, 1682, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 51, 66, 0, 140, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 52.272, 71.874, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 10, ''),
+(91278, 0, 7058, 0, 0, 0, 'Jock Tossbucket ', 'Banker', 0, 45, 45, 5544, 5544, 0, 0, 2725, 69, 256, 1, 1.14286, 0, 20, 5, 0, 0, 1, 72, 93, 0, 204, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 61.776, 84.942, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 3496, 0, 0, 0, 0, 10, ''),
+(91279, 0, 7125, 0, 0, 0, 'Woodworker Shlax', '', 0, 8, 12, 268, 668, 0, 0, 1427, 1682, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 51, 66, 0, 140, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 52.272, 71.874, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 10, ''),
+
 
 
 update creature_template set faction = 1682 where entry between 91200 and 91290; -- Durotar Labor Union
-update creature_template set faction = 125 where entry in (91203, 91204, 91206, 91207, 91227, 91244, 91245, 91246, 91251); -- Orgrimmar
+update creature_template set faction = 125 where entry in (91203, 91204, 91206, 91207, 91227, 91244, 91245, 91246, 91251, 91277); -- Orgrimmar
 
 -- Gossip + Quest
-update creature_template set npc_flags = 3 where entry in (91266, 91267, 91274);
+update creature_template set npc_flags = 3 where entry in (91266, 91267, 91274, 91251, 91277);
 -- Quest
 update creature_template set npc_flags = 2 where entry in (91268, 91269, 91275, 91276); 
 -- Gossip + Quest + Vendor
@@ -98,10 +102,10 @@ update creature_template set npc_flags = 2 where entry in (91268, 91269, 91275, 
 -- Vendor + Quest + Trainer
 -- update creature_template set npc_flags = 23 where entry = 91206; 
 -- Gossip + Vendor
- update creature_template set npc_flags = 7 where entry im (91220); 
+ update creature_template set npc_flags = 7 where entry in (91220); 
 
-update creature_template set equipment_id = 1094 where entry in (91269, 91270, 91271, 91272, 91273); -- Minig Pick
-update creature_template set equipment_id = 921 where entry in (91264, 91265, 91266); -- Lumberjack Axe
+update creature_template set equipment_id = 1094 where entry in (91269, 91270, 91271, 91272, 91273, 91277); -- Minig Pick
+update creature_template set equipment_id = 921 where entry in (91264, 91265, 91266, 91279); -- Lumberjack Axe
 update creature_template set equipment_id = 1097 where entry in (91257, 91258, 91260, 91261, 91262, 91263); -- Wrench
 
 update creature_template set dynamic_flags = 36, npc_flags = 1 where entry = 91255; 
@@ -212,7 +216,21 @@ replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id,
 set @gossip_menu_id = 60024; set @magic_number = 91274; 
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Always more work to be done and its up to me to make sure it gets done! We got shipments due and people to get all this stone and ore too!\n\nWithout me around, half of what you see here wouldn\'t even exist! Hey, you lookin\' for a job?'); replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
+set @gossip_menu_id = 60025; set @magic_number = 91251; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); replace into broadcast_text (entry, Male_Text) values (@magic_number, 'We shall see soon if these Goblin\'s can embody their station as honorable members of the Horde...'); replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 60026; set @magic_number = 91216; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Wuzgut make sure no one steal lumber, you buy?'); replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 60027; set @magic_number = 91255; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); replace into broadcast_text (entry, Male_Text) values (@magic_number, 'The goblin\'s body is covered in various cuts, scrapes bruises and puncture wounds.'); replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 60028; set @magic_number = 91277; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Can\'t believe they hired me to just swing a pick axe! Easy work!'); replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
 -- Vendors
+delete from npc_vendor where entry = 91248;
+delete from npc_vendor where entry = 91238;
 replace into npc_vendor values (91207, 2488, 0, 0, 0, 0);
 replace into npc_vendor values (91207, 2489, 0, 0, 0, 0);
 replace into npc_vendor values (91207, 2490, 0, 0, 0, 0);
@@ -255,6 +273,7 @@ replace into npc_vendor (entry, item) values (91205, 2773);
 replace into npc_vendor (entry, item) values (91205, 81278);
 replace into npc_vendor (entry, item) values (91216, 4470);
 replace into npc_vendor (entry, item) values (91221, 81296);
+replace into npc_vendor (entry, item) values (91221, 80167);
 replace into npc_vendor (entry, item) values (91220, 80167);
 replace into npc_vendor values (91227, 117, 0, 0, 0, 0);
 replace into npc_vendor values (91227, 2287, 0, 0, 0, 0);
@@ -267,16 +286,10 @@ replace into npc_vendor values (91232, 955, 1, 7200, 0, 0);
 replace into npc_vendor values (91232, 3013, 1, 7200, 0, 0);
 replace into npc_vendor values (91232, 1181, 1, 7200, 0, 0);
 replace into npc_vendor values (91232, 954, 1, 7200, 0, 0);
-replace into npc_vendor values (91238, 159, 0, 0, 0, 0);
 replace into npc_vendor values (91238, 787, 0, 0, 0, 0);
-replace into npc_vendor values (91238, 1179, 0, 0, 0, 0);
-replace into npc_vendor values (91238, 1205, 0, 0, 0, 0);
-replace into npc_vendor values (91238, 1645, 0, 0, 0, 0);
-replace into npc_vendor values (91238, 1708, 0, 0, 0, 0);
 replace into npc_vendor values (91238, 4592, 0, 0, 0, 0);
 replace into npc_vendor values (91238, 4593, 0, 0, 0, 0);
 replace into npc_vendor values (91238, 4594, 0, 0, 0, 0);
-replace into npc_vendor values (91238, 8766, 0, 0, 0, 0);
 replace into npc_vendor values (91238, 8957, 0, 0, 0, 0);
 replace into npc_vendor values (91238, 21552, 0, 0, 0, 0);
 replace into npc_vendor values (91246, 2506, 0, 0, 0, 0);
@@ -308,7 +321,6 @@ REPLACE INTO npc_vendor VALUES (91248, 2512, 0, 0, 0, 0);
 REPLACE INTO npc_vendor VALUES (91248, 2516, 0, 0, 0, 0);
 REPLACE INTO npc_vendor VALUES (91248, 2947, 0, 0, 0, 0);
 REPLACE INTO npc_vendor VALUES (91248, 3111, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (91248, 4470, 0, 0, 0, 0);
 REPLACE INTO npc_vendor VALUES (91248, 4471, 0, 0, 0, 0);
 REPLACE INTO npc_vendor VALUES (91248, 4496, 0, 0, 0, 0);
 REPLACE INTO npc_vendor VALUES (91248, 4498, 0, 0, 0, 0);
@@ -468,7 +480,7 @@ replace into item_template values
  '0', '1', NULL);
  
  replace into item_template values
- ('81307', '0', '2', '14', 'Cursed Tome', 'A dusty book, scrawled in a cryptic language. You can feel your mind pulse the longer you gaze.', '12743', '2', '0', '1', '0', '0', '22', '-1', '-1', '0',
+ ('81307', '0', '2', '14', 'Cursed Tome', 'A dusty book, scrawled in a cryptic language. You can feel your mind pulse the longer you gaze.', '23171', '2', '0', '1', '0', '0', '22', '-1', '-1', '0',
  '21', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '-10', '6', '-10',
  '7', '-10', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
