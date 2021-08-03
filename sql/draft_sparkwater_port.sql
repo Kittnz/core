@@ -84,9 +84,7 @@ replace into creature_template values
 (91276, 0, 7188, 0, 0, 0, 'Mememgem', '', 0, 8, 12, 268, 668, 0, 0, 1427, 1682, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 51, 66, 0, 140, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 52.272, 71.874, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 10, ''),
 (91277, 0, 3748, 0, 0, 0, 'Miner Glaktor', '', 0, 8, 12, 268, 668, 0, 0, 1427, 1682, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 51, 66, 0, 140, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 52.272, 71.874, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 10, ''),
 (91278, 0, 7058, 0, 0, 0, 'Jock Tossbucket ', 'Banker', 0, 45, 45, 5544, 5544, 0, 0, 2725, 69, 256, 1, 1.14286, 0, 20, 5, 0, 0, 1, 72, 93, 0, 204, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 61.776, 84.942, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 3496, 0, 0, 0, 0, 10, ''),
-(91279, 0, 7125, 0, 0, 0, 'Woodworker Shlax', '', 0, 8, 12, 268, 668, 0, 0, 1427, 1682, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 51, 66, 0, 140, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 52.272, 71.874, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 10, ''),
-
-
+(91279, 0, 7125, 0, 0, 0, 'Woodworker Shlax', '', 0, 8, 12, 268, 668, 0, 0, 1427, 1682, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 51, 66, 0, 140, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 52.272, 71.874, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 10, '');
 
 update creature_template set faction = 1682 where entry between 91200 and 91290; -- Durotar Labor Union
 update creature_template set faction = 125 where entry in (91203, 91204, 91206, 91207, 91227, 91244, 91245, 91246, 91251, 91277); -- Orgrimmar
@@ -94,7 +92,7 @@ update creature_template set faction = 125 where entry in (91203, 91204, 91206, 
 -- Gossip + Quest
 update creature_template set npc_flags = 3 where entry in (91266, 91267, 91274, 91251, 91277);
 -- Quest
-update creature_template set npc_flags = 2 where entry in (91268, 91269, 91275, 91276); 
+update creature_template set npc_flags = 2 where entry in (91268, 91269, 91275, 91276, 91234); 
 -- Gossip + Quest + Vendor
 -- update creature_template set npc_flags = 16389 where entry = 91201;
 -- Gossip + Quest + Trainer
@@ -554,6 +552,29 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '2', '1', '0', '0', '0', '0', '0', '0', '0', '23', '0', '0', '0',
  '0', '1', NULL);
+ 
+ replace into item_template values 
+(81318, 0, 12, 0, 'Megaflux Capacitor', '', 23475, 1, 0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 4, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, null);
+
+replace into item_template values
+ ('81319', '0', '4', '6', 'Razorblade Buckler', '', '20985', '3', '0', '1', '25328', '6332', '14', '-1', '-1', '36',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '2', '7', '6',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '17', '776', '0', '0', '0',
+ '0', '0', '0', '20887', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '2', '4', '0', '0', '100', '0', '0', '0', '0', '44', '0', '0', '0',
+ '0', '1', NULL);
+ 
+ replace into item_template values
+ ('81320', '0', '2', '19', 'Crackling Zapper', 'For really big bugs.', '13084', '3', '0', '1', '26952', '6738', '15', '-1', '-1', '36',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1700', '100',
+ '0', '42', '74', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '1', '0', '0', '0', '65', '0', '0', '0', '0', '44', '0', '0', '0',
+ '0', '1', NULL);
 
 update item_template set stackable = 5 where entry = 81293;
 replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref) values (3130, 81292, -20, 6, 1);
@@ -609,4 +630,14 @@ replace into creature_loot_template (entry, item, chanceorquestchance, groupid, 
 
 replace into creature_questrelation (id, quest) values (91200, 55005);
 replace into creature_involvedrelation (id, quest) values (91200, 55005);
+
+replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (55003,55006,721,34,29,0,0,'Backup Capacitor','That was almost a disaster, we ran out of oil and almost used all of the power from the thunder lizard scales. What do you mean just work without power?\n\nPal, most things here don\'t have a failsafe when the tap runs dry, some things don\'t even have an off button!\n\nThis town is a ticking timebomb, it\'ll blow up sky high if the oil platform is destroyed or overrun again, and I plan to have a backup plan.\n\nYou see, I\'ve heard some whispers that the gnomes invented some sort of capacitor that can power entire rigs for hours without end in an emergency, though I also heard Gnomeregan blew up and got radiated, and the capacitor went missing after that, that explains why nobody got their grubby hands on it yet.\n\nVenture there and see if you have any luck finding it, maybe bring your friends too, who knows what lurks down there.','Bring the Megaflux Capacitor to Technician Grimzlow.','Time is ticking, and there\'s no telling when disaster might strike.','Some green gnome was using it to power a giant robot? What a waste!\n\n<Grimzlow takes the capacitor and inserts it to the machine behind him.>\n\nThere, this should work good enough, if it doesn\'t explode that is. Thanks for the hussle by the way, feel free take one of these prototypes as reward, and don\'t stick your fingers into any turning pieces if you want to keep them.',81318,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2700,1001,250,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,81319,1,81320,1,0,0,0,0);
+
+update quest_template set type = 81 where entry = 55006;
+update item_template set flags = 2048 where entry = 81318;
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref) values (7800, 81318, -100, 6, 1);
+
+replace into creature_questrelation (id, quest) values (91234, 55006);
+replace into creature_involvedrelation (id, quest) values (91234, 55006);
+
 
