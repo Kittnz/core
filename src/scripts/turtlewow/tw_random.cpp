@@ -380,7 +380,6 @@ bool ItemUseSpell_item_survival_outline(Player* pPlayer, Item* pItem, const Spel
     {
     case 50234: pPlayer->LearnSpell(46058, false); break; // Outline: Traveler's Tent 
     case 50235: pPlayer->LearnSpell(46060, false); break; // Outline: Fishing Boat
-    case 50254: pPlayer->LearnSpell(25085, false); break; // Outline: Bright Campfire
     }
     return true;
 }

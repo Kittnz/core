@@ -1293,3 +1293,19 @@ INSERT INTO `gameobject` (`guid`, `id`, `position_x`, `position_y`, `position_z`
   (1270261, 181391, -4042.64, -1480.76, 167.715, 3.3053, 0.996652, -0.0817644, 120, 120, 100, 1, 0, 10),
   (1270276, 181391, -4625.68, -853.212, 641.908, 4.90004, 0.63775, -0.770244, 120, 120, 100, 1, 0, 10);
 
+-- Fixes
+
+update creature_template set display_id1=4857 where entry=52086;
+update creature_template set scale=0.5 where entry=52088;  -- guessing on the size
+delete from creature where guid=2562680;
+
+-- Small issues, todo:
+-- Entry 52065 Guid 1260139			Has no mount - should be Mount ID 2410 in template_addon table (can copy entry 466, guid 79677)
+-- Entry 52031 Guid 1260091			[HAS PATH] Default state should be standing (he is supposed to sit on the log, but then stand by the keg)
+-- Entry 52084 Guid 1260158			Should be in lying down state
+
+-- Global issues
+-- Entry 180515 Guid 1270223			Ultra Cannon does not work  (seems none of them on Turtle do)
+-- Creatures are not wandering			this is due to vmaps/mmaps
+-- Unable to test flightpaths			this is due to server DBCs  (Tamamo should have but I can upload them here too)
+

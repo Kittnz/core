@@ -148,6 +148,7 @@ struct boss_vectusAI : public ScriptedAI
                     m_creature->MonsterYell(VECTUS_SPEECH_GAMBIT_EVENT_START, 0, 0);
                     m_creature->SetFactionTemplateId(FACTION_MONSTER);
                     m_creature->SetReactState(REACT_AGGRESSIVE);
+                    m_creature->SetMaxHealth(888);
                     m_creature->AIM_Initialize();
 
                     eventGambitDone = true;
