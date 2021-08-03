@@ -67,12 +67,14 @@ struct boss_gluthAI : public ScriptedAI
         m_pInstance = static_cast<instance_naxxramas*>(pCreature->GetInstanceData());
         Reset();
         five_percent = uint32(m_creature->GetMaxHealth() * 0.05f);
+        decimate_hit = false;
     }
 
     instance_naxxramas* m_pInstance;
     EventMap m_events;
 
     uint32 five_percent;
+    bool decimate_hit;
     
     void Reset() override
     {
@@ -182,6 +184,7 @@ struct boss_gluthAI : public ScriptedAI
                         // https://github.com/slowtorta/turtlewow-bug-tracker/issues/207                    {
                         m_events.CancelEvent(EVENT_SUMMON);
                         m_events.ScheduleEvent(EVENT_SUMMON, 15000);
+                        decimate_hit = true;
 
                         m_events.Repeat(DECIMATE_CD);
                     }
@@ -284,6 +287,25 @@ struct boss_gluthAI : public ScriptedAI
 
     void SummonAdd()
     {
+        // spawn 3 adds after 15s after decimate
+        if (decimate_hit) 
+        {
+            decimate_hit = false;
+            for (int i = 0; i <= 2; i++) {
+                float x = aZombieSummonLoc[i][0] + frand(-7.0f, 7.0f);
+                float y = aZombieSummonLoc[i][1] + frand(-7.0f, 7.0f);
+                float z = aZombieSummonLoc[i][2];
+
+                if (Creature* pZombie = m_creature->SummonCreature(NPC_ZOMBIE_CHOW, x, y, z, 0.0f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 300000))
+                {
+                    pZombie->SetInCombatWithZone();
+                    if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
+                        pZombie->AI()->AttackStart(pTarget);
+                }
+            }
+            return;
+        }
+
         int idx = urand(0, 2);
         float x = aZombieSummonLoc[idx][0] + frand(-7.0f, 7.0f);
         float y = aZombieSummonLoc[idx][1] + frand(-7.0f, 7.0f);
