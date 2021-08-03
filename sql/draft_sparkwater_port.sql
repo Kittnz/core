@@ -92,7 +92,7 @@ update creature_template set faction = 125 where entry in (91203, 91204, 91206, 
 -- Gossip + Quest
 update creature_template set npc_flags = 3 where entry in (91266, 91267, 91274, 91251, 91277);
 -- Quest
-update creature_template set npc_flags = 2 where entry in (91268, 91269, 91275, 91276, 91234); 
+update creature_template set npc_flags = 2 where entry in (91268, 91269, 91275, 91276, 91234, 91254); 
 -- Gossip + Quest + Vendor
 -- update creature_template set npc_flags = 16389 where entry = 91201;
 -- Gossip + Quest + Trainer
@@ -533,6 +533,9 @@ replace into item_template values
 (81314, 0, 12, 0, 'Skystormer Antler', '', 1416, 1, 0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 4, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, null),
 (81315, 0, 12, 0, 'Prototype Shredder X0-1 Schematic', '', 15274, 1, 0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 4, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, null);
 
+update item_template set stackable = 8 where entry = 81313;
+update item_template set stackable = 3 where entry = 81314;
+
 replace into item_template values
  ('81316', '0', '2', '1', 'Foe Chopper', '', '19252', '2', '0', '1', '10824', '2706', '17', '-1', '-1', '23',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '3', '7', '6',
@@ -640,4 +643,8 @@ replace into creature_loot_template (entry, item, chanceorquestchance, groupid, 
 replace into creature_questrelation (id, quest) values (91234, 55006);
 replace into creature_involvedrelation (id, quest) values (91234, 55006);
 
+replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (0,55007,14,47,45,0,0,'Searching For New Methods','The Technicians of Sparkwater are always looking for more methods to optimize and make use of energy sources across Azeroth, we have quite a few people out on the field doing just that!\n\nI got a guy that\'s located in Azshara that I\'d like you to check on, he last was located within Valormok.\n\nJust make sure he\'s doing what I paid him to do, last thing I goblin likes is wasted gold and wasted potential!','Find Gazztoggle Krewpipe in the camp of Valormok Azshara.','Have you found him yet?','Look at all this barren nothingness in Azshara!/v/vWhat do you mean theres stuff all around us? I meant as in nobody is doing any work here, all this wasted potential, such a shame that I\'m here doing this then setting up factories all over, heh.',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,750,1001,200,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+replace into creature_questrelation (id, quest) values (91234, 55007);
+replace into creature_involvedrelation (id, quest) values (91254, 55007);
 
