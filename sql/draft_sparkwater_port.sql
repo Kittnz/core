@@ -276,6 +276,16 @@ replace into npc_vendor (entry, item) values (91216, 4470);
 replace into npc_vendor (entry, item) values (91221, 81296);
 replace into npc_vendor (entry, item) values (91221, 80167);
 replace into npc_vendor (entry, item) values (91220, 80167);
+
+replace into npc_vendor (entry, item) values (91220, 81297);
+replace into npc_vendor (entry, item) values (91220, 81298);
+replace into npc_vendor (entry, item) values (91220, 81299);
+replace into npc_vendor (entry, item) values (91220, 81300);
+replace into npc_vendor (entry, item) values (91220, 81301);
+replace into npc_vendor (entry, item) values (91220, 81302);
+replace into npc_vendor (entry, item) values (91220, 81303);
+replace into npc_vendor (entry, item) values (91220, 81304);
+
 replace into npc_vendor values (91227, 117, 0, 0, 0, 0);
 replace into npc_vendor values (91227, 2287, 0, 0, 0, 0);
 replace into npc_vendor values (91227, 3770, 0, 0, 0, 0);
@@ -329,20 +339,14 @@ REPLACE INTO npc_vendor VALUES (91248, 5042, 0, 0, 0, 0);
 REPLACE INTO npc_vendor VALUES (91248, 6183, 0, 0, 0, 0);
 -- Sparkwater rares:
 delete from npc_vendor where entry = 91256;
-REPLACE INTO npc_vendor VALUES (91256, 81305, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (91256, 81309, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (91256, 81308, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (91256, 81307, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (91256, 81297, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (91256, 81298, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (91256, 81299, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (91256, 81300, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (91256, 81301, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (91256, 81302, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (91256, 81303, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (91256, 81304, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (91256, 81310, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (91256, 81311, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (91256, 81305, 1, 3600, 0, 0);
+REPLACE INTO npc_vendor VALUES (91256, 81306, 1, 3600, 0, 0);
+REPLACE INTO npc_vendor VALUES (91256, 81307, 1, 3600, 0, 0);
+REPLACE INTO npc_vendor VALUES (91256, 81308, 1, 3600, 0, 0);
+REPLACE INTO npc_vendor VALUES (91256, 81309, 1, 3600, 0, 0);
+REPLACE INTO npc_vendor VALUES (91256, 81310, 1, 3600, 0, 0);
+REPLACE INTO npc_vendor VALUES (91256, 81311, 1, 3600, 0, 0);
+REPLACE INTO npc_vendor VALUES (91256, 81333, 1, 604800, 0, 0);
 
 -- New quest's related items:
 replace into item_template values 
@@ -600,7 +604,7 @@ replace into item_template values (81322, 0, 12, 0, 'Sack of Coins', '', 1183, 1
 
 replace into item_template values (81323, 0, 12, 0, 'Intense Ethereal Essence', '', 20794, 1, 0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 4, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, null);
 
-replace into item_template values (81324, 0, 12, 0, 'Eldarath Ley-Shard', '', 2516, 1, 0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 4, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, null);
+replace into item_template values (81324, 0, 12, 0, 'Eldarath Ley-Shard', '', 36540, 1, 0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 4, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, null);
 
 replace into item_template values
  ('81325', '0', '2', '0', 'Skystormer Axe', '', '5640', '2', '0', '1', '125020', '31255', '21', '-1', '-1', '53',
@@ -612,9 +616,9 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '1', '3', '0', '0', '75', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
-replace into item_template values (81326, 0, 12, 0, 'Gazztoggle\'s Report', '', 1301, 1, 0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 4, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, null);
+replace into item_template values (81326, 0, 12, 0, 'Gazztoggle\'s Report', '', 3020, 1, 0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 4, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, null);
 
-replace into item_template values (81327, 0, 12, 0, 'Staff of Azsalus', '', 32909, 1, 0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 4, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, null);
+replace into item_template values (81327, 0, 12, 0, 'Staff of Azsalus', '', 1092, 1, 0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 4, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, null);
 
 replace into item_template values
  ('81328', '0', '4', '1', 'Energyseekers Cover', '', '34715', '3', '0', '1', '45175', '11294', '1', '-1', '-1', '55',
@@ -650,6 +654,15 @@ replace into item_template values (81331, 0, 12, 0, 'Rugnar\'s Letter', '', 3022
 
 replace into item_template values (81332, 0, 12, 0, 'Zuul\'s Note', '', 13497, 1, 0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 4, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, null);
 
+replace into item_template values
+ ('81333', '0', '4', '0', 'Goblin Essence of Knivery', 'Pure essence of the true features of a goblin condensed down', '35842', '4', '0', '1', '5000000', '10000', '12', '-1', '-1', '0',
+ '55', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '5', '6', '-24',
+ '0', '-24', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '24', '0', '0', '0',
+ '0', '0', '24', '13669', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
 
 update item_template set stackable = 5 where entry = 81293;
 update item_template set stackable = 5 where entry = 81324;
@@ -664,7 +677,7 @@ replace into creature_loot_template (entry, item, chanceorquestchance, groupid, 
 replace into gameobject_template values (1000250, 0, 3, 2891, 'Razlik\'s Tools', 0, 4, 0.7, 43, 1000250, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
 replace into gameobject_loot_template (entry, item, chanceorquestchance, groupid, mincountorref) values (1000250, 81291, -100, 1, 1);
 
-replace into gameobject_template values (1000251, 0, 3, 2592, 'Eldarath Ley-Shard', 0, 4, 0.7, 43, 1000251, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+replace into gameobject_template values (1000251, 0, 3, 2971, 'Eldarath Ley-Shard', 0, 4, 0.5, 43, 1000251, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
 replace into gameobject_loot_template (entry, item, chanceorquestchance, groupid, mincountorref) values (1000251, 81324, -100, 1, 1);
 
 -- Quests:
@@ -708,7 +721,7 @@ update quest_template set rewxp = 375 where entry = 55004;
 replace into creature_questrelation (id, quest) values (91227, 55004);
 replace into creature_involvedrelation (id, quest) values (91227, 55004);
 
-replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (0,55005,1581,18,16,0,0,'Prototype Thievery','Sneed and I used to be close friends and colleagues back in Kezan, he was a great assistant. But it seems he wasn\'t satisfied with the silver I paid him, and he snatched MY prototype shredder schematic and ran off one night!\n\nNow that we\'re finally settling up here I had time to call in a few favors on where he ended up, he apparently got contracted by some "Edwin" guy and that\'s where the trail ran cold.\n\nTime is money, and his time ran out, find him and get back my plans, make him pay for doublecrossing me.','Bring the Prototype Shredder X0-1 Schematic to Wrix Ozzlenut.','Any luck finding him?','Nice job, he actually built the shredder you say?\n\nGuess he was always smarter than he looked, I almost gave up on you and was about to put up a bounty, you can have the bounty reward instead.',81315,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1350,1001,250,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,81316,1,81316,1,0,0,0,0);
+replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (0,55005,1581,18,16,0,0,'Prototype Thievery','Sneed and I used to be close friends and colleagues back in Kezan, he was a great assistant. But it seems he wasn\'t satisfied with the silver I paid him, and he snatched MY prototype shredder schematic and ran off one night!\n\nNow that we\'re finally settling up here I had time to call in a few favors on where he ended up, he apparently got contracted by some "Edwin" guy and that\'s where the trail ran cold.\n\nTime is money, and his time ran out, find him and get back my plans, make him pay for doublecrossing me.','Bring the Prototype Shredder X0-1 Schematic to Wrix Ozzlenut.','Any luck finding him?','Nice job, he actually built the shredder you say?\n\nGuess he was always smarter than he looked, I almost gave up on you and was about to put up a bounty, you can have the bounty reward instead.',81315,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1350,1001,250,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,81316,1,81317,1,0,0,0,0);
 
 update quest_template set type = 81 where entry = 55005;
 replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref) values (639, 81315, -100, 6, 1);
