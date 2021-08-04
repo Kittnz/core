@@ -15279,6 +15279,9 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
     if (HasItemCount(19019, 1, 0)) // Stormwielder
         SetByteValue(PLAYER_BYTES_3, 2, 48);
 
+    if (HasItemCount(22630, 1, 0) || HasItemCount(22632, 1, 0) || HasItemCount(22631, 1, 0) || HasItemCount(22589, 1, 0)) // Guardian of Tirisfal
+        SetByteValue(PLAYER_BYTES_3, 2, 50);
+
     if (isImmortal()) // Immortal (temp. check)
         SetByteValue(PLAYER_BYTES_3, 2, 52);
 
