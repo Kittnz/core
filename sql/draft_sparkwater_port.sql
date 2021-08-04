@@ -612,7 +612,7 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '1', '3', '0', '0', '75', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
  
-replace into item_template values (81326, 0, 12, 0, 'Eldarath Ley-Shard', '', 2516, 1, 0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 4, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, null);
+replace into item_template values (81326, 0, 12, 0, 'Gazztoggle\'s Report', '', 1301, 1, 0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 4, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, null);
 
 
 update item_template set stackable = 5 where entry = 81293;
@@ -745,4 +745,10 @@ replace into creature_questrelation (id, quest) values (91254, 55015);
 replace into creature_involvedrelation (id, quest) values (91254, 55015);
 
 update quest_template set exclusivegroup = 55014, nextquestid = 55016 where entry in (55014, 55015);
+
+replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (55016,55017,16,48,46,0,0,'Report to Sparkwater!','Ahh... It feels good finally having something to report, no doubt Grimzlow is pretty angry given how long it took me to get back to him!\n\nThe big ups in Sparkwater are going to need a report, run it up to them while I continue my work here!\n\nYou\'re going to buy me some time to keep my work up, and keep getting paid!\n\nMaybe I\'ll even get a new assistant that isn\'t as bad as Frix, bless his soul.','Take Gazztoggle\'s Report to Grimzlow.','He\'s in Sparkwater!','Oh, didn\'t I send you to Azshara?\n\nDon\'t tell me you\'ve been in the tavern this entire time!\n\nThis is from Gazztoggle, I figured he had run with Sparkwater\'s money, I was getting ready to call up my people to go and give him a -real- visit.\n\nHe seems to have found some promising results at least.',81326,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,81326,1,100,1250,1001,200,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+replace into creature_questrelation (id, quest) values (91254, 55017);
+replace into creature_involvedrelation (id, quest) values (91234, 55017);
+
 
