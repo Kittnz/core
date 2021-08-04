@@ -92,7 +92,7 @@ update creature_template set faction = 125 where entry in (91203, 91204, 91206, 
 -- Gossip + Quest
 update creature_template set npc_flags = 3 where entry in (91266, 91267, 91274, 91251, 91277);
 -- Quest
-update creature_template set npc_flags = 2 where entry in (91268, 91269, 91275, 91276, 91234, 91254); 
+update creature_template set npc_flags = 2 where entry in (91268, 91269, 91275, 91276, 91234, 91254, 91203); 
 -- Gossip + Quest + Vendor
 -- update creature_template set npc_flags = 16389 where entry = 91201;
 -- Gossip + Quest + Trainer
@@ -645,6 +645,9 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '1', '1', '0', '0', '40', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
+ 
+replace into item_template values (81331, 0, 12, 0, 'Rugnar\'s Letter', '', 3022, 1, 0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 4, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, null);
+
 
 update item_template set stackable = 5 where entry = 81293;
 update item_template set stackable = 5 where entry = 81324;
@@ -784,7 +787,15 @@ replace into creature_involvedrelation (id, quest) values (91234, 55017);
 
 replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (55017,55018,16,54,46,0,0,'The Big Energy Project','I have one final project that I am calling The Big Energy Project, it has to do with the gathering of Blue Dragonflight that have cropped up a while ago around the Lake Mennar to the south east.\n\nIts not often that dragon\'s get involved with much, but from what I\'ve learned, these blue dragons love their magic!\n\nIf I can get my hand on some dragonkin\'s staff, just think of the possibilities!\n\nThe orc\'s in valormok have been talking a little about their presence and a new Lieutenant posted there, its a good thing my long ears were able to hear the little details!\m\mGo find this Lieutenant, and take his staff, he has to have one! Now, gather up a group of friends, or fellow adventurer\'s, this is gonna be a big operation, not just something you can do alone.','Take Gazztoggle\'s Report to Grimzlow.','What? We\'re on the brink of greatness here, you gotta get that staff.','Wait... You actually pulled it off?\n\nI can\'t believe you managed to interfere with the Dragonkin in such a way! Haha!\n\nWith this staff I could power Sparkwater for weeks, maybe even set up my own shop here...\n\nOh, take this!',81327,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1000,7250,1001,450,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,81328,1,81329,1,81330,1,0,0);
 
+update quest_template set type = 1 where entry = 55018;
+
 replace into creature_questrelation (id, quest) values (91254, 55018);
 replace into creature_involvedrelation (id, quest) values (91234, 55018);
+
+replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (0,55019,14,39,35,0,0,'Missing Blood','My brother has recently been dispatched out to the far reaches of our strength and posted within the encampment of Stonard.\n\nIt\'s not me to question the Warchief\'s desires but I still do worry for his safety out there even if he is strong and good of health.\n\n t has been months since we have last seen one another with all of the deployments, from one to the next, and now the Swamp of Sorrows of all places?\n\nThe only thing that has me at peace is that he had been promoted to a position of some power within the garrison there.\n\nIt\'s good knowing that maybe he is not on the very frontlines and is instead commanding his men.\n\nIt\'s an odd thing to watch a younger brother become more important then you but, well, duty calls and we must all do our part.\n\n If you could please find Zuul within Stonard in the Swamp of Sorrows and deliver him this letter it would be an ease off my mind.','Deliver Rugnar\'s Letter to Zuul in Stonard. ','The Swamp of Sorrow\'s is across Azeroth.','You\'re looking for Zuul? Well that would be me, what\'s this?',81331,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,81331,81331,50,720,76,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,81328,1,81329,1,81330,1,0,0);
+
+replace into creature_questrelation (id, quest) values (91203, 55019);
+replace into creature_involvedrelation (id, quest) values (5546, 55019);
+
 
 
