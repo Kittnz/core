@@ -6228,6 +6228,7 @@ void AddSC_tw_random()
     newscript->GetAI = &GetAI_npc_alphus_wordwill;
     newscript->RegisterSelf();
 
+    newscript = new Script;
     newscript->Name = "go_gunthers_favor";
     newscript->pGOHello = &GOHello_go_gunthers_favor;
     newscript->GOGetAI = &GetAI_go_gunthers_favor;
