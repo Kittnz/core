@@ -328,7 +328,7 @@ replace into item_template values (53012, 0, 12, 0, 'Gunther\'s Locket', '', 345
 
 REPLACE INTO `gameobject_template` VALUES (1000176, 0, 2, 49, 'Dirt Mound', 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_gunthers_favor');
 
-REPLACE INTO `creature_template` VALUES (50683, 0, 1600, 0, 0, 0, 'Archmage Alphus Wordwill', NULL, 0, 60, 60, 6883, 6883, 5751, 5751, 3252, 73, 2, 1.1, 1.14286, 0, 20, 5, 0, 0, 1, 164, 212, 0, 272, 1, 2000, 2000, 8, 512, 0, 0, 0, 0, 0, 0, 74.448, 102.366, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10149, 10179, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 2, 'npc_alphus_wordwill');
+REPLACE INTO `creature_template` VALUES (50683, 0, 2708, 0, 0, 0, 'Archmage Alphus Wordwill', NULL, 0, 60, 60, 6883, 6883, 5751, 5751, 3252, 73, 2, 1.1, 1.14286, 0, 20, 5, 0, 0, 1, 164, 212, 0, 272, 1, 2000, 2000, 8, 512, 0, 0, 0, 0, 0, 0, 74.448, 102.366, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10149, 10179, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 2, 'npc_alphus_wordwill');
 
 update creature_template set equipment_id = 5498 where entry = 50683;
 
@@ -365,4 +365,9 @@ replace into creature_involvedrelation (id, quest) values (50677, 80729);
 replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref) values (9447, 53014, -30, 6, 1);
 replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref) values (9452, 53014, -30, 6, 1);
 replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref) values (9449, 53014, -30, 6, 1);
+
+update quest_template set exclusivegroup = 80709, nextquestid = 80710 where entry in (80709, 80729);
+
+update quest_template set nextquestinchain = 80710 where entry = 80729;
+update quest_template set nextquestinchain = 80710 where entry = 80709;
 
