@@ -614,6 +614,37 @@ replace into item_template values
  
 replace into item_template values (81326, 0, 12, 0, 'Gazztoggle\'s Report', '', 1301, 1, 0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 4, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, null);
 
+replace into item_template values (81327, 0, 12, 0, 'Staff of Azsalus', '', 32909, 1, 0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 4, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, null);
+
+replace into item_template values
+ ('81328', '0', '4', '1', 'Energyseekers Cover', '', '34715', '3', '0', '1', '45175', '11294', '1', '-1', '-1', '55',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '19', '6', '11',
+ '3', '5', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '62', '0', '0', '0',
+ '0', '0', '0', '9395', '1', '0', '0', '-1', '0', '-1', '21619', '1', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '1', '0', '0', '50', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+ 
+ replace into item_template values
+ ('81329', '0', '4', '4', 'Spark-Charged Cuirass', '', '27932', '3', '0', '1', '67288', '16822', '5', '-1', '-1', '55',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '30', '7', '8',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '542', '0', '0', '0',
+ '0', '0', '0', '9140', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '0', '1', '0', '0', '135', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+ 
+ replace into item_template values
+ ('81330', '0', '4', '3', 'Quick-Surge Gloves', '', '27041', '3', '0', '1', '51332', '12833', '10', '-1', '-1', '55',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '14', '7', '6',
+ '5', '4', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '206', '0', '0', '0',
+ '0', '0', '0', '9331', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '1', '1', '0', '0', '40', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
 
 update item_template set stackable = 5 where entry = 81293;
 update item_template set stackable = 5 where entry = 81324;
@@ -750,5 +781,10 @@ replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minleve
 
 replace into creature_questrelation (id, quest) values (91254, 55017);
 replace into creature_involvedrelation (id, quest) values (91234, 55017);
+
+replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (55017,55018,16,54,46,0,0,'The Big Energy Project','I have one final project that I am calling The Big Energy Project, it has to do with the gathering of Blue Dragonflight that have cropped up a while ago around the Lake Mennar to the south east.\n\nIts not often that dragon\'s get involved with much, but from what I\'ve learned, these blue dragons love their magic!\n\nIf I can get my hand on some dragonkin\'s staff, just think of the possibilities!\n\nThe orc\'s in valormok have been talking a little about their presence and a new Lieutenant posted there, its a good thing my long ears were able to hear the little details!\m\mGo find this Lieutenant, and take his staff, he has to have one! Now, gather up a group of friends, or fellow adventurer\'s, this is gonna be a big operation, not just something you can do alone.','Take Gazztoggle\'s Report to Grimzlow.','What? We\'re on the brink of greatness here, you gotta get that staff.','Wait... You actually pulled it off?\n\nI can\'t believe you managed to interfere with the Dragonkin in such a way! Haha!\n\nWith this staff I could power Sparkwater for weeks, maybe even set up my own shop here...\n\nOh, take this!',81327,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1000,7250,1001,450,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,81328,1,81329,1,81330,1,0,0);
+
+replace into creature_questrelation (id, quest) values (91254, 55018);
+replace into creature_involvedrelation (id, quest) values (91234, 55018);
 
 
