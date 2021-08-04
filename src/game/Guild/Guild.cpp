@@ -783,7 +783,7 @@ void Guild::Roster(WorldSession *session /*= nullptr*/)
             data << member.Member->GetName();
             data << uint32(member.Slot->RankId);
             data << uint8(member.Member->GetLevel());
-            data << uint8(member.Member->GetLevel());
+            data << uint8(member.Member->GetClass());
             data << uint32(member.Member->GetCachedZoneId());
         }
         else
