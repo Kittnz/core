@@ -33,8 +33,9 @@
 #include "Language.h"
 #include "World.h"
 #include "Anticheat.h"
+#include "Item.h"
 
-//// MemberSlot ////////////////////////////////////////////
+ //// MemberSlot ////////////////////////////////////////////
 void MemberSlot::SetMemberStats(Player* player)
 {
     Name = player->GetName();
@@ -95,6 +96,7 @@ Guild::Guild() : m_Name(), MOTD(), GINFO()
     m_CreatedDay = 0;
 
     m_GuildEventLogNextGuid = 0;
+    memset(&m_guildInventory[0], 0, sizeof(Item*) * 255);
 }
 
 Guild::~Guild()
@@ -228,7 +230,8 @@ GuildAddStatus Guild::AddMember(ObjectGuid plGuid, uint32 plRank)
         newmember.ZoneId = data->uiZoneId;
         newmember.accountId = data->uiAccount;
 
-        if (newmember.Level < 1 || newmember.Level > PLAYER_STRONG_MAX_LEVEL || !((1 << (newmember.Class - 1)) & CLASSMASK_ALL_PLAYABLE))
+        if (newmember.Level < 1 || newmember.Level > PLAYER_STRONG_MAX_LEVEL ||
+            !((1 << (newmember.Class - 1)) & CLASSMASK_ALL_PLAYABLE))
         {
             sLog.outError("%s has a broken data in field `characters` table, cannot add him to guild.", plGuid.GetString().c_str());
             return GuildAddStatus::PLAYER_DATA_ERROR;
@@ -247,7 +250,8 @@ GuildAddStatus Guild::AddMember(ObjectGuid plGuid, uint32 plRank)
     CharacterDatabase.escape_string(dbPnote);
     CharacterDatabase.escape_string(dbOFFnote);
 
-    CharacterDatabase.PExecute("INSERT INTO `guild_member` (`guildid`, `guid`, `rank`, `pnote`, `offnote`) VALUES ('%u', '%u', '%u','%s','%s')", m_Id, lowguid, newmember.RankId, dbPnote.c_str(), dbOFFnote.c_str());
+    CharacterDatabase.PExecute("INSERT INTO `guild_member` (`guildid`, `guid`, `rank`, `pnote`, `offnote`) VALUES ('%u', '%u', '%u','%s','%s')",
+        m_Id, lowguid, newmember.RankId, dbPnote.c_str(), dbOFFnote.c_str());
 
     // If player not in game data in data field will be loaded from guild tables, no need to update it!!
     if (pl)
@@ -301,7 +305,7 @@ bool Guild::LoadGuildFromDB(QueryResult* guildDataResult)
 
     if (time > 0)
     {
-        tm local = *(localtime(&time)); // dereference and assign
+        tm local = *(localtime(&time));               // dereference and assign
         m_CreatedDay = local.tm_mday;
         m_CreatedMonth = local.tm_mon + 1;
         m_CreatedYear = local.tm_year + 1900;
@@ -383,8 +387,7 @@ bool Guild::LoadRanksFromDB(QueryResult* guildRanksResult)
             rankRights |= GR_RIGHT_ALL;
 
         AddRank(rankName, rankRights);
-    }
-    while (guildRanksResult->NextRow());
+    } while (guildRanksResult->NextRow());
 
     if (m_Ranks.size() < GUILD_RANKS_MIN_COUNT)             // if too few ranks, renew them
     {
@@ -406,7 +409,6 @@ bool Guild::LoadRanksFromDB(QueryResult* guildRanksResult)
             CharacterDatabase.escape_string(name);
             CharacterDatabase.PExecute("INSERT INTO `guild_rank` (`guildid`, `rid`, `rname`, `rights`) VALUES ('%u', '%u', '%s', '%u')", m_Id, uint32(i), name.c_str(), rights);
         }
-
         CharacterDatabase.CommitTransaction();
     }
 
@@ -479,8 +481,7 @@ bool Guild::LoadMembersFromDB(QueryResult* guildMembersResult)
         members[lowguid] = newmember;
         sGuildMgr.GuildMemberAdded(GetId(), lowguid);
 
-    }
-    while (guildMembersResult->NextRow());
+    } while (guildMembersResult->NextRow());
 
     if (members.empty())
         return false;
@@ -488,6 +489,102 @@ bool Guild::LoadMembersFromDB(QueryResult* guildMembersResult)
     UpdateAccountsNumber();
 
     return true;
+}
+
+void Guild::LoadGuildBankFromDB()
+{
+    QueryResult* result = CharacterDatabase.PQuery("SELECT * FROM "
+        "(SELECT creatorGuid, giftCreatorGuid, count, duration, charges, flags, enchantments, randomPropertyId, durability, text, bag, slot, item, itemEntry, generated_loot "
+        "FROM guild_bank "
+        "JOIN item_instance "
+        "ON guild_bank.item = item_instance.guid "
+        "WHERE guild_bank.guid = '%u') as t ORDER BY bag, slot", GetId());
+
+    if (result == nullptr)
+    {
+        return;
+    }
+
+    do
+    {
+        Field* fields = result->Fetch();
+        uint8 slot = fields[11].GetUInt8();
+        uint32 item = fields[12].GetUInt32();
+        uint32 item_template = fields[13].GetUInt32();
+
+        ItemPrototype const* proto = ObjectMgr::GetItemPrototype(item_template);
+        if (proto == nullptr)
+        {
+            CharacterDatabase.PExecute("DELETE FROM guild_bank WHERE item = '%u'", item);
+            sLog.outError("Guild::LoadGuildBankFromDB: Guild %s has an unknown item (id: #%u) in inventory, deleted.", GetName(), item_template);
+            continue;
+        }
+
+        Item* itemInstance = NewItemOrBag(proto);
+
+        const uint32 GuildIdsStart = 0xEFFFFFFF;
+
+        ObjectGuid FakeGuildId(HIGHGUID_PLAYER, GuildIdsStart + GetId());
+        if (!itemInstance->LoadFromDB(item, FakeGuildId, fields, item_template))
+        {
+            sLog.outError("Guild::LoadGuildBankFromDB: Guild %s has broken item (id: #%u) in inventory, deleted.", GetName(), item_template);
+            CharacterDatabase.PExecute("DELETE FROM guild_bank WHERE item = '%u'", item);
+            itemInstance->FSetState(ITEM_REMOVED);
+            itemInstance->SaveToDB();                           // it also deletes item object !
+            continue;
+        }
+
+        itemInstance->SetContainer(nullptr);
+        itemInstance->SetSlot(slot);
+
+        m_guildInventory[slot] = itemInstance;
+    } while (result->NextRow());
+
+    delete result;
+}
+
+void Guild::SaveGuildBank()
+{
+    // check if GB is opened. If so - refuse to save
+    if (IsGuildBankUsingNow())
+    {
+        // force close
+        if (Player* guildUser = sObjectMgr.GetPlayer(m_guildInventoryUsedBy))
+        {
+            guildUser->RestoreBankFromStash();
+        }
+        else
+        {
+            sLog.outError("CRITICAL ERROR: Can't restore guild inventory (ID: '%u'), because system can't find player with ID '%llu'", GetId(), m_guildInventoryUsedBy.GetRawValue());
+        }
+    }
+
+    // check again
+    if (IsGuildBankUsingNow())
+    {
+        sLog.outError("Can't drop guild bank user even after request. Save request for guild '%u' will be ignored", GetId());
+        return;
+    }
+
+    if (CharacterDatabase.BeginTransaction(m_Id))
+    {
+        for (int32 i = 0; i < 255; i++)
+        {
+            if (Item* GuildItem = m_guildInventory[i])
+            {
+                CharacterDatabase.PExecute("INSERT INTO guild_bank VALUES ('%u', '0', %hu, %llu, %u)", GetId(), i, GuildItem->GetObjectGuid().GetRawValue(), GuildItem->GetEntry());
+            }
+        }
+
+        if (!CharacterDatabase.CommitTransaction())
+        {
+            sLog.outError("Can't save guild inventory for guild '%u'", GetId());
+        }
+    }
+    else
+    {
+        sLog.outError("Can't begin save transaction for guild bank inventory. Guild Id '%u'", GetId());
+    }
 }
 
 void Guild::SetLeader(ObjectGuid guid)
@@ -778,7 +875,6 @@ void Guild::Roster(WorldSession* session /*= nullptr*/)
         spaceLeft -= spaceNeeded;
         if (spaceLeft < 0)
             break;
-
         count++;
 
         if (Player* pl = ObjectAccessor::FindPlayer(ObjectGuid(HIGHGUID_PLAYER, itr.first)))
@@ -902,11 +998,11 @@ void Guild::LoadGuildEventLogFromDB()
         }
         // Fill entry
         GuildEventLogEntry NewEvent;
-        NewEvent.eventType = fields[1].GetUInt8();
-        NewEvent.playerGuid1 = fields[2].GetUInt32();
-        NewEvent.playerGuid2 = fields[3].GetUInt32();
-        NewEvent.newRank = fields[4].GetUInt8();
-        NewEvent.timestamp = fields[5].GetUInt64();
+        NewEvent.EventType = fields[1].GetUInt8();
+        NewEvent.PlayerGuid1 = fields[2].GetUInt32();
+        NewEvent.PlayerGuid2 = fields[3].GetUInt32();
+        NewEvent.NewRank = fields[4].GetUInt8();
+        NewEvent.TimeStamp = fields[5].GetUInt64();
 
         // There can be a problem if more events have same TimeStamp the ORDER can be broken when fields[0].GetUInt32() == configCount, but
         // events with same timestamp can appear when there is lag, and we naively suppose that mangos isn't laggy
@@ -915,32 +1011,53 @@ void Guild::LoadGuildEventLogFromDB()
         // Add entry to list
         m_GuildEventLog.push_front(NewEvent);
 
-    }
-    while (result->NextRow());
+    } while (result->NextRow());
     delete result;
 }
 
 // Add entry to guild eventlog
-void Guild::LogGuildEvent(uint8 eventType, ObjectGuid playerGuid1, ObjectGuid playerGuid2, uint8 newRank)
+void Guild::LogGuildEvent(uint8 EventType, ObjectGuid playerGuid1, ObjectGuid playerGuid2, uint8 newRank)
 {
-    GuildEventLogEntry newEvent;
+    GuildEventLogEntry NewEvent;
     // Create event
-    newEvent.eventType = eventType;
-    newEvent.playerGuid1 = playerGuid1.GetCounter();
-    newEvent.playerGuid2 = playerGuid2.GetCounter();
-    newEvent.newRank = newRank;
-    newEvent.timestamp = time(nullptr);
+    NewEvent.EventType = EventType;
+    NewEvent.PlayerGuid1 = playerGuid1.GetCounter();
+    NewEvent.PlayerGuid2 = playerGuid2.GetCounter();
+    NewEvent.NewRank = newRank;
+    NewEvent.TimeStamp = uint32(time(nullptr));
     // Count new LogGuid
     m_GuildEventLogNextGuid = (m_GuildEventLogNextGuid + 1) % sWorld.getConfig(CONFIG_UINT32_GUILD_EVENT_LOG_COUNT);
     // Check max records limit
     if (m_GuildEventLog.size() >= GUILD_EVENTLOG_MAX_RECORDS)
         m_GuildEventLog.pop_front();
     // Add event to list
-    m_GuildEventLog.push_back(newEvent);
+    m_GuildEventLog.push_back(NewEvent);
     // Save event to DB
     CharacterDatabase.PExecute("DELETE FROM `guild_eventlog` WHERE `guildid`='%u' AND `LogGuid`='%u'", m_Id, m_GuildEventLogNextGuid);
     CharacterDatabase.PExecute("INSERT INTO `guild_eventlog` (`guildid`, `LogGuid`, `EventType`, `PlayerGuid1`, `PlayerGuid2`, `NewRank`, `TimeStamp`) VALUES ('%u','%u','%u','%u','%u','%u','" UI64FMTD "')",
-                               m_Id, m_GuildEventLogNextGuid, uint32(newEvent.eventType), newEvent.playerGuid1, newEvent.playerGuid2, uint32(newEvent.newRank), newEvent.timestamp);
+        m_Id, m_GuildEventLogNextGuid, uint32(NewEvent.EventType), NewEvent.PlayerGuid1, NewEvent.PlayerGuid2, uint32(NewEvent.NewRank), NewEvent.TimeStamp);
+}
+
+void Guild::SetGuildBankUser(Player* pPlayer)
+{
+    if (pPlayer != nullptr)
+    {
+        m_guildInventoryUsedBy = pPlayer->GetObjectGuid();
+    }
+    else
+    {
+        m_guildInventoryUsedBy = ObjectGuid();
+    }
+}
+
+bool Guild::IsGuildBankUser(Player* pPlayer) const
+{
+    return pPlayer->GetObjectGuid() == m_guildInventoryUsedBy;
+}
+
+bool Guild::IsGuildBankUsingNow() const
+{
+    return !m_guildInventoryUsedBy.IsEmpty();
 }
 
 void Guild::BroadcastEvent(GuildEvents event, ObjectGuid guid, char const* str1 /*=nullptr*/, char const* str2 /*=nullptr*/, char const* str3 /*=nullptr*/)
