@@ -96,7 +96,6 @@ Guild::Guild() : m_Name(), MOTD(), GINFO()
     m_CreatedDay = 0;
 
     m_GuildEventLogNextGuid = 0;
-	memset(&m_guildInventory[0], 0, sizeof(Item*) * 255);
 }
 
 Guild::~Guild()
@@ -489,102 +488,6 @@ bool Guild::LoadMembersFromDB(QueryResult *guildMembersResult)
     UpdateAccountsNumber();
 
     return true;
-}
-
-void Guild::LoadGuildBankFromDB()
-{
-	QueryResult* result = CharacterDatabase.PQuery("SELECT * FROM "
-		"(SELECT creatorGuid, giftCreatorGuid, count, duration, charges, flags, enchantments, randomPropertyId, durability, text, bag, slot, item, itemEntry, generated_loot "
-		"FROM guild_bank "
-		"JOIN item_instance "
-		"ON guild_bank.item = item_instance.guid "
-		"WHERE guild_bank.guid = '%u') as t ORDER BY bag, slot", GetId());
-
-	if (result == nullptr)
-	{
-		return;
-	}
-
-	do
-	{
-		Field *fields = result->Fetch();
-		uint8 slot = fields[11].GetUInt8();
-		uint32 item = fields[12].GetUInt32();
-		uint32 item_template = fields[13].GetUInt32();
-
-		ItemPrototype const * proto = ObjectMgr::GetItemPrototype(item_template);
-		if (proto == nullptr)
-		{
-			CharacterDatabase.PExecute("DELETE FROM guild_bank WHERE item = '%u'", item);
-			sLog.outError("Guild::LoadGuildBankFromDB: Guild %s has an unknown item (id: #%u) in inventory, deleted.", GetName(), item_template);
-			continue;
-		}
-
-		Item* itemInstance = NewItemOrBag(proto);
-
-		const uint32 GuildIdsStart = 0xEFFFFFFF;
-
-		ObjectGuid FakeGuildId(HIGHGUID_PLAYER, GuildIdsStart + GetId());
-		if (!itemInstance->LoadFromDB(item, FakeGuildId, fields, item_template))
-		{
-			sLog.outError("Guild::LoadGuildBankFromDB: Guild %s has broken item (id: #%u) in inventory, deleted.", GetName(), item_template);
-			CharacterDatabase.PExecute("DELETE FROM guild_bank WHERE item = '%u'", item);
-			itemInstance->FSetState(ITEM_REMOVED);
-			itemInstance->SaveToDB();                           // it also deletes item object !
-			continue;
-		}
-
-		itemInstance->SetContainer(nullptr);
-		itemInstance->SetSlot(slot);
-
-		m_guildInventory[slot] = itemInstance;
-	} while (result->NextRow());
-
-	delete result;
-}
-
-void Guild::SaveGuildBank()
-{
-	// check if GB is opened. If so - refuse to save
-	if (IsGuildBankUsingNow())
-	{
-		// force close
-		if (Player* guildUser = sObjectMgr.GetPlayer(m_guildInventoryUsedBy))
-		{
-			guildUser->RestoreBankFromStash();
-		}
-		else
-		{
-			sLog.outError("CRITICAL ERROR: Can't restore guild inventory (ID: '%u'), because system can't find player with ID '%llu'", GetId(), m_guildInventoryUsedBy.GetRawValue());
-		}
-	}
-
-	// check again
-	if (IsGuildBankUsingNow())
-	{
-		sLog.outError("Can't drop guild bank user even after request. Save request for guild '%u' will be ignored", GetId());
-		return;
-	}
-
-	if (CharacterDatabase.BeginTransaction(m_Id))
-	{
-		for (int32 i = 0; i < 255; i++)
-		{
-			if (Item* GuildItem = m_guildInventory[i])
-			{
-				CharacterDatabase.PExecute("INSERT INTO guild_bank VALUES ('%u', '0', %hu, %llu, %u)", GetId(), i, GuildItem->GetObjectGuid().GetRawValue(), GuildItem->GetEntry());
-			}
-		}
-
-		if (!CharacterDatabase.CommitTransaction())
-		{
-			sLog.outError("Can't save guild inventory for guild '%u'", GetId());
-		}
-	}
-	else
-	{
-		sLog.outError("Can't begin save transaction for guild bank inventory. Guild Id '%u'", GetId());
-	}
 }
 
 void Guild::SetLeader(ObjectGuid guid)
@@ -1068,28 +971,6 @@ void Guild::LogGuildEvent(uint8 EventType, ObjectGuid playerGuid1, ObjectGuid pl
                                m_Id, m_GuildEventLogNextGuid, uint32(NewEvent.EventType), NewEvent.PlayerGuid1, NewEvent.PlayerGuid2, uint32(NewEvent.NewRank), NewEvent.TimeStamp);
 }
 
-
-void Guild::SetGuildBankUser(Player* pPlayer)
-{
-	if (pPlayer != nullptr)
-	{
-		m_guildInventoryUsedBy = pPlayer->GetObjectGuid();
-	}
-	else
-	{
-		m_guildInventoryUsedBy = ObjectGuid();
-	}
-}
-
-bool Guild::IsGuildBankUser(Player* pPlayer) const
-{
-	return pPlayer->GetObjectGuid() == m_guildInventoryUsedBy;
-}
-
-bool Guild::IsGuildBankUsingNow() const
-{
-	return !m_guildInventoryUsedBy.IsEmpty();
-}
 
 void Guild::BroadcastEvent(GuildEvents event, ObjectGuid guid, char const* str1 /*=nullptr*/, char const* str2 /*=nullptr*/, char const* str3 /*=nullptr*/)
 {

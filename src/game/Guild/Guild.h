@@ -260,8 +260,6 @@ class Guild
         bool CheckGuildStructure();
         bool LoadRanksFromDB(QueryResult *guildRanksResult);
         bool LoadMembersFromDB(QueryResult *guildMembersResult);
-		void LoadGuildBankFromDB();
-		void SaveGuildBank();
 
         void BroadcastToGuild(WorldSession *session, std::string const& msg, uint32 language = LANG_UNIVERSAL);
         void BroadcastToOfficers(WorldSession *session, std::string const& msg, uint32 language = LANG_UNIVERSAL);
@@ -325,15 +323,6 @@ class Guild
         void   DisplayGuildEventLog(WorldSession *session);
         void   LogGuildEvent(uint8 EventType, ObjectGuid playerGuid1, ObjectGuid playerGuid2 = ObjectGuid(), uint8 newRank = 0);
 
-		Item** GetInventory()
-		{
-			return &m_guildInventory[0];
-		}
-
-		void SetGuildBankUser(Player* pPlayer);
-
-		bool IsGuildBankUser(Player* pPlayer) const;
-		bool IsGuildBankUsingNow() const;
 
     protected:
         void AddRank(std::string const& name,uint32 rights);
@@ -364,11 +353,6 @@ class Guild
 
         uint32 m_GuildEventLogNextGuid;
 
-		// Giperion Turtle: Guild inventory
-		Item* m_guildInventory[255];
-
-		// player guid that currently using guild bank
-		ObjectGuid m_guildInventoryUsedBy;
 
     private:
         void UpdateAccountsNumber() { m_accountsNumber = 0;}// mark for lazy calculation at request in GetAccountsNumber

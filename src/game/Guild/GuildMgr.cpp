@@ -139,8 +139,6 @@ void GuildMgr::LoadGuilds()
         }
         newGuild->LoadGuildEventLogFromDB();
 
-		// Guild bank is optional
-		newGuild->LoadGuildBankFromDB();
         AddGuild(newGuild);
     }
     while (result->NextRow());
