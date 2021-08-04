@@ -600,14 +600,23 @@ replace into item_template values (81322, 0, 12, 0, 'Sack of Coins', '', 1183, 1
 
 replace into item_template values (81323, 0, 12, 0, 'Intense Ethereal Essence', '', 20794, 1, 0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 4, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, null);
 
+replace into item_template values (81324, 0, 12, 0, 'Eldarath Ley-Shard', '', 2516, 1, 0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 4, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, null);
+
 
 update item_template set stackable = 5 where entry = 81293;
+update item_template set stackable = 5 where entry = 81324;
+update item_template set stackable = 8 where entry = 81323;
+
 replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref) values (3130, 81292, -20, 6, 1);
 replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref) values (3131, 81292, -20, 6, 1);
 replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref) values (6116, 81323, -50, 6, 1);
 replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref) values (6117, 81323, -50, 6, 1);
+
 replace into gameobject_template values (1000250, 0, 3, 2891, 'Razlik\'s Tools', 0, 4, 0.7, 43, 1000250, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
 replace into gameobject_loot_template (entry, item, chanceorquestchance, groupid, mincountorref) values (1000250, 81291, -100, 1, 1);
+
+replace into gameobject_template values (1000251, 0, 3, 2592, 'Eldarath Ley-Shard', 0, 4, 0.7, 43, 1000251, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+replace into gameobject_loot_template (entry, item, chanceorquestchance, groupid, mincountorref) values (1000251, 81324, -100, 1, 1);
 
 -- Quests:
 
@@ -711,4 +720,10 @@ replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minleve
 
 replace into creature_questrelation (id, quest) values (91254, 55014);
 replace into creature_involvedrelation (id, quest) values (91254, 55014);
+
+replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (55010,55015,16,49,45,0,0,'The Eldarath Project','There\'s always new projects popping up, and subsequently turning up worthless!\n\nIt seems this region is cursed, or I am anyway with my horrid luck.\n\nFrix is haunting me from the grave, but still, there are a few projects that we had I\'d like to close up to rule them out.\n\nTo the east lays the ancient Highborne city of Eldarath, now, you won\'t find any friendly elves, instead twisted versions of them...\n\nOr so the rumors go. Naga occupy almost the entirety of the ruins, it\'s mostly why me and Frix never bothered with pushing this project forward.\n\nNow with you around though, we can finally test it out! Go to the Ruins of Eldarath to the east, it is partially sunken into the land, just look for an excess of ruins and you\'ll find it.\n\nOnce there look for small shards of energy known as Eldarath Ley-shards, they used to be energy that kept magic flowing through their city.\n\nLet\'s hope we can harnass it!','Venture to the Ruins of Eldarath and find 5 Eldarath Ley-Shards.','What, are the naga being too much trouble?','Glad you came back in one piece, now, did you get those shards?!\n\n<The goblin greedily takes the ley-shards and begins to tinker with them, it is not long before the unstable shards crackle, and fizzle, beginning to to turn to dust.>\n\nDamned! These crystals are worthless, junk even, too unstable and not even in the good way...\n\nI\'m really going to have to use my noggin here.',81324,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,500,3850,1001,250,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+replace into creature_questrelation (id, quest) values (91254, 55015);
+replace into creature_involvedrelation (id, quest) values (91254, 55015);
+
 
