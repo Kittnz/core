@@ -1409,6 +1409,7 @@ struct shade_cotAI : public ScriptedAI
     uint32 chainLightningTimer;
     uint32 lightningCloudTimer;
     uint32 lightningBolttimer;
+    uint32 darkStrikeTimer;
 
     int plagueCount;
 
@@ -1424,6 +1425,7 @@ struct shade_cotAI : public ScriptedAI
         SPELL_LIGHTNING_BOLT = 15234,
         SPELL_LIGHTNING_CLOUD = 26550,
         SPELL_PLAGUE = 19280,
+        SPELL_DARKSTRIKE = 19777,
 
         AURA_LIGHTNING_SHIELD = 20545,
     };
@@ -1440,6 +1442,7 @@ struct shade_cotAI : public ScriptedAI
         screamTimer = 13000;
         deathCoilTimer = 5000;
         deathnDecayTimer = 8000;
+        darkStrikeTimer = 6000;
         plagueTimer = 15000;
         coneOfFireTimer = 8000;
         amplifyFireTimer = 500;
@@ -1484,7 +1487,6 @@ struct shade_cotAI : public ScriptedAI
             {
                 if (Player* player = m_creature->FindNearestHostilePlayer(10))
                 {
-
                     if (Group* group = player->GetGroup())
                     {
                         for (GroupReference* itr = group->GetFirstMember(); itr != nullptr; itr = itr->next())
@@ -1498,8 +1500,8 @@ struct shade_cotAI : public ScriptedAI
 
                             if (!playerGroup->HasAura(SPELL_PLAGUE))
                             {
-                                playerGroup->AddAura(SPELL_PLAGUE);
-                                plagueCount++;
+                                 if (DoCastSpellIfCan(playerGroup, SPELL_PLAGUE) == CAST_OK)
+                                    plagueCount++;
                             }
                         }
                         plagueCount = 0;
@@ -1522,6 +1524,13 @@ struct shade_cotAI : public ScriptedAI
                     deathCoilTimer = 10000;
             }
             else deathCoilTimer -= uiDiff;
+
+            if (darkStrikeTimer <= uiDiff)
+            {
+                if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_DARKSTRIKE) == CAST_OK)
+                    darkStrikeTimer = 6000;
+            }
+            else darkStrikeTimer -= uiDiff;
 
             DoMeleeAttackIfReady();
 
@@ -1804,7 +1813,7 @@ struct rotmaw_cotAI : public ScriptedAI
     uint32 consumeTimer;
     uint32 mortalWoundTimer;
     uint32 sunderArmorTimer;
-    uint32 darkStrikeTimer;
+    uint32 rotTimer;
     uint32 tailSwipeTimer;
     bool isConsuming;
 
@@ -1813,7 +1822,7 @@ struct rotmaw_cotAI : public ScriptedAI
         consumeTimer = 10000;
         mortalWoundTimer = 14000;
         sunderArmorTimer = 5000;
-        darkStrikeTimer = 1000;
+        rotTimer = 1000;
         tailSwipeTimer = 5000;
         isConsuming = false;
     }
@@ -1824,7 +1833,7 @@ struct rotmaw_cotAI : public ScriptedAI
         SPELL_MORTAL_WOUND = 28467,
         SPELL_SUNDER = 25051,
         SPELL_KNOCKBACK = 10689,
-        SPELL_DARK_STRIKE = 19777,
+        SPELL_ROT = 7102,
         SPELL_TAIL_SWEEP = 15847
     };
 
@@ -1852,13 +1861,13 @@ struct rotmaw_cotAI : public ScriptedAI
         }
         else tailSwipeTimer -= uiDiff;
 
-        if (darkStrikeTimer <= uiDiff)
+        if (rotTimer <= uiDiff)
         {
-            if (!m_creature->GetVictim()->HasAura(SPELL_DARK_STRIKE))
-                if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_DARK_STRIKE) == CAST_OK)
-                    darkStrikeTimer = 15000;
+            if (!m_creature->GetVictim()->HasAura(SPELL_ROT))
+                if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_ROT) == CAST_OK)
+                    rotTimer = 15000;
         }
-        else darkStrikeTimer -= uiDiff;
+        else rotTimer -= uiDiff;
 
         if (consumeTimer <= uiDiff)
         {
