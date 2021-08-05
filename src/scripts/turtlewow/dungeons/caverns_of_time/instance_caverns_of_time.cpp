@@ -631,8 +631,11 @@ struct infinite_timeripperAI : public ScriptedAI
                 }
                 case 2:
                 {
-                    Creature* portal = m_creature->FindNearestCreature(NPC_TIME_RIFT, 50, true);
-                    portal->PMonsterEmote("Something big is coming!", nullptr, true);
+                    if (Creature* portal = m_creature->FindNearestCreature(NPC_TIME_RIFT, 100, true))
+                    {
+                        Player* player = m_creature->FindNearestPlayer(50);
+                        portal->PMonsterEmote("Something big is coming!", player, true);
+                    }
                     phasetimer = 2000;
                     phase++;
                     break;
