@@ -6,6 +6,19 @@ void DoAfterTime(Creature* creature, uint32 p_time, Functor&& function)
     creature->m_Events.AddEvent(new LambdaBasicEvent<Functor>(std::move(function)), creature->m_Events.CalculateTime(p_time));
 }
 
+struct SpawnLocation
+{
+    float m_fX, m_fY, m_fZ;
+};
+
+
+static const SpawnLocation rotMawSpawns[4] =
+{
+    {-2083.904053f, 6853.967773f, 24.009354f },
+    {-2116.244629f, 7346.801270f, 24.093992f },
+    {-1669.338501f, 7410.056152f, 24.888636f },
+    {-1649.062500f, 6863.167969f, 22.198698f }
+};
 
 struct instance_caverns_of_time : public ScriptedInstance
 {
@@ -34,6 +47,8 @@ struct instance_caverns_of_time : public ScriptedInstance
     {
         if (!pPlayer)
             return;
+
+
     }
 
     void OnPlayerLeave(Player* pPlayer, bool bJustDestroy) override
@@ -349,7 +364,7 @@ struct infinite_riftweaverAI : public ScriptedAI
         {
             DoAfterTime(m_creature, 10 * IN_MILLISECONDS, [m_creature = m_creature, this]() {
                 if (Unit* target = m_creature->GetVictimInRange(0, 10))
-                DoCastSpellIfCan(target, SPELL_DARKEN_VISION); });
+                    DoCastSpellIfCan(target, SPELL_DARKEN_VISION); });
 
             doOnce = true;
         }
@@ -373,7 +388,7 @@ struct infinite_riftweaverAI : public ScriptedAI
         if (m_darkenVisionTimer <= uiDiff)
         {
             if (Unit* target = m_creature->GetVictimInRange(0, 10))
-            DoCastSpellIfCan(target, SPELL_DARKEN_VISION);
+                DoCastSpellIfCan(target, SPELL_DARKEN_VISION);
 
             m_darkenVisionTimer = 24000;
         }
@@ -1195,7 +1210,7 @@ struct harbinger_boss_cotAI : public ScriptedAI
         m_creature->PMonsterSay("Hul bala miz rilakich...");
 
         if (Player* player = m_creature->FindNearestPlayer(100))
-           m_creature->MonsterWhisper("How is this possible...", player, true);
+            m_creature->MonsterWhisper("How is this possible...", player, true);
     }
 };
 
@@ -1442,8 +1457,8 @@ struct shade_cotAI : public ScriptedAI
 
         if (screamTimer <= uiDiff)
         {
-           if ( Player* player = m_creature->FindNearestHostilePlayer(50.0f))
-           {
+            if (Player* player = m_creature->FindNearestHostilePlayer(50.0f))
+            {
                 if (Group* group = player->GetGroup())
                 {
                     for (GroupReference* itr = group->GetFirstMember(); itr != nullptr; itr = itr->next())
@@ -1469,7 +1484,7 @@ struct shade_cotAI : public ScriptedAI
             {
                 if (Player* player = m_creature->FindNearestHostilePlayer(10))
                 {
-                   
+
                     if (Group* group = player->GetGroup())
                     {
                         for (GroupReference* itr = group->GetFirstMember(); itr != nullptr; itr = itr->next())
@@ -1529,7 +1544,7 @@ struct shade_cotAI : public ScriptedAI
 
                     if (Player* player = m_creature->FindNearestHostilePlayer(10))
                     {
-                       
+
                         if (Group* group = player->GetGroup())
                         {
                             for (GroupReference* itr = group->GetFirstMember(); itr != nullptr; itr = itr->next())
@@ -1612,7 +1627,8 @@ struct chromie_boss_cotAI : public ScriptedAI
     enum CreatureEntries
     {
         NPC_TIME_RIFT = 81051,
-        NPC_RIFT_GUARD = 65101
+        NPC_RIFT_GUARD = 65101,
+        NPC_ROTMAW = 65122
     };
 
     uint32 manaBurnTimer;
@@ -1707,13 +1723,16 @@ struct chromie_boss_cotAI : public ScriptedAI
     void JustDied(Unit*) override
     {
         m_creature->PMonsterYell("But I... we cannot fail! We are so close!");
+
+
+        uint32 spawnChance = urand(1, 100); // spawn rotmaw or not
+
+        if (spawnChance <= 35)
+        {
+            int randomSpawnLocation = irand(0, 3);
+            m_creature->SummonCreature(NPC_ROTMAW, rotMawSpawns[randomSpawnLocation].m_fX, rotMawSpawns[randomSpawnLocation].m_fY, rotMawSpawns[randomSpawnLocation].m_fZ, 0, TEMPSUMMON_DEAD_DESPAWN);
+        }
     }
-
-    void OnCombatStop() override
-    {
-
-    }
-
 };
 
 struct chromie_portal_cotAI : public ScriptedAI
@@ -1822,8 +1841,8 @@ struct rotmaw_cotAI : public ScriptedAI
             {
                 Unit* hostileTarget = m_creature->GetMap()->GetUnit(attacker->getUnitGuid());
 
-                if (hostileTarget && hostileTarget->IsBehindTarget(m_creature, false))
-                    if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_TAIL_SWEEP) == CAST_OK)
+                //if (hostileTarget && hostileTarget->IsBehindTarget(m_creature, false))
+                    if (DoCastSpellIfCan(m_creature, SPELL_TAIL_SWEEP) == CAST_OK)
                     {
                         tailSwipeTimer = 5000;
                         break;
