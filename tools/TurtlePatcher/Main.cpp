@@ -53,6 +53,12 @@
 // Original fov value
 #define OFFSET_ORIGINAL_FOV_VALUE 0x004089B4
 
+// Hackfix Blizzard's hackfix for Dwarf Mages
+#define OFFSET_DWARF_MAGE_VALUE_1 0x000706E5
+#define OFFSET_DWARF_MAGE_VALUE_2 0x000706EB
+#define OFFSET_DWARF_MAGE_VALUE_3 0x0007075D
+#define OFFSET_DWARF_MAGE_VALUE_4 0x00070763
+
 const unsigned char LoadDLLShellcode[] =
 {
 	0x68, 0x60, 0xFF, 0x7F, 0x00,		// push 0x007FFF60 (offset to string "DiscordOverlay.dll")
@@ -156,6 +162,21 @@ void PatchUIUnlock(FILE* hWoW)
 	char SixPatch[] = { 0x66, 0x66, 0xF6, 0x3F };
 	fseek(hWoW, OFFSET_ORIGINAL_FOV_VALUE, SEEK_SET);
 	fwrite(SixPatch, sizeof(SixPatch), 1, hWoW);
+
+	// Hackfix Blizzard's hackfix for Dwarf Mages
+
+	char SevenPatch[] = { 0xFE };
+	fseek(hWoW, OFFSET_DWARF_MAGE_VALUE_1, SEEK_SET);
+	fwrite(SevenPatch, sizeof(SevenPatch), 1, hWoW);
+
+	fseek(hWoW, OFFSET_DWARF_MAGE_VALUE_2, SEEK_SET);
+	fwrite(SevenPatch, sizeof(SevenPatch), 1, hWoW);
+
+	fseek(hWoW, OFFSET_DWARF_MAGE_VALUE_3, SEEK_SET);
+	fwrite(SevenPatch, sizeof(SevenPatch), 1, hWoW);
+
+	fseek(hWoW, OFFSET_DWARF_MAGE_VALUE_4, SEEK_SET);
+	fwrite(SevenPatch, sizeof(SevenPatch), 1, hWoW);
 }
 
 constexpr int max_path = 260;
