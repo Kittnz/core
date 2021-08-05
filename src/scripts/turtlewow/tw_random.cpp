@@ -5974,15 +5974,14 @@ bool QuestRewarded_npc_brother_crowley(Player* pPlayer, Creature* pQuestGiver, Q
 bool GossipHello_npc_maverick(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->GetQuestStatus(80722) == QUEST_STATUS_INCOMPLETE && pPlayer->GetQuestStatusData(80722)->m_creatureOrGOcount[0] == 0)
-    {
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Are you ready, Maverick?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-    }
     if (pPlayer->GetQuestStatus(80722) == QUEST_STATUS_INCOMPLETE && pPlayer->GetQuestStatusData(80722)->m_itemcount[0] == 1)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Drag Maverick's body to Varimathras.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Inspect Maverick's condition.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
         pPlayer->SEND_GOSSIP_MENU(51691, pCreature->GetGUID());
         return true;
     }
+
     pPlayer->SEND_GOSSIP_MENU(51690, pCreature->GetGUID());
     return true;
 }
@@ -6031,12 +6030,12 @@ bool GossipSelect_npc_maverick(Player* pPlayer, Creature* maverick, uint32 /*uiS
     }
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
     {
-        maverick->SetStandState(UNIT_STAND_STATE_STAND);
-        pPlayer->CombatStop();
-        maverick->MonsterTextEmote("Maverick seems to be in a deep slumber nothing would be able to wake him up.");
-        maverick->GetMotionMaster()->MoveFollow(pPlayer, PET_FOLLOW_DIST, PET_FOLLOW_ANGLE);
-        maverick->UpdateSpeed(MOVE_RUN, false, maverick->GetSpeedRate(MOVE_RUN) * 1.5);
-        followed_units.push_back(pPlayer->GetObjectGuid());
+        Creature* varimathras = pPlayer->SummonCreature(2425, 2552.95F, -650.62F, 80.09F, 3.20F, TEMPSUMMON_TIMED_DESPAWN, 180 * IN_MILLISECONDS);
+
+        varimathras->MonsterSayToPlayer("He really is just unconscious, how strange...", pPlayer);
+
+        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(50670))
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
     }
     pPlayer->CLOSE_GOSSIP_MENU();
     return true;
@@ -6067,39 +6066,6 @@ struct npc_scarlet_magicianAI : public ScriptedAI
 };
 
 CreatureAI* GetAI_npc_scarlet_magician(Creature* _Creature) { return new npc_scarlet_magicianAI(_Creature); }
-
-bool GossipHello_npc_varimathras(Player* pPlayer, Creature* pCreature)
-{
-    if (pPlayer->GetQuestStatus(80722) == QUEST_STATUS_INCOMPLETE && (std::find(followed_units.begin(), followed_units.end(), pPlayer->GetObjectGuid()) != followed_units.end()))
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Here is your lab rat.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-
-    if (pCreature->IsQuestGiver())
-        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
-
-    pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
-    return true;
-}
-
-bool GossipSelect_npc_varimathras(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
-{
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
-    {
-        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(50670))
-            pPlayer->KilledMonster(cInfo, ObjectGuid());
-
-        pCreature->MonsterSay("He really is just unconscious, how strange...");
-        if (Creature* prisoner = pPlayer->FindNearestCreature(51691, 30.0F))
-        {
-            prisoner->GetMotionMaster()->Clear();
-            prisoner->ForcedDespawn();
-        }
-        auto itr = std::find(followed_units.begin(), followed_units.end(), pPlayer->GetObjectGuid());
-        if (itr != followed_units.end())
-            followed_units.erase(itr);
-    }
-    pPlayer->CLOSE_GOSSIP_MENU();
-    return true;
-}
 
 bool GOHello_go_gunthers_favor(Player* pPlayer, GameObject* pGo)
 {
@@ -6233,12 +6199,6 @@ void AddSC_tw_random()
     newscript->Name = "go_gunthers_favor";
     newscript->pGOHello = &GOHello_go_gunthers_favor;
     newscript->GOGetAI = &GetAI_go_gunthers_favor;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "npc_varimathras";
-    newscript->pGossipHello = &GossipHello_npc_varimathras;
-    newscript->pGossipSelect = &GossipSelect_npc_varimathras;
     newscript->RegisterSelf();
 
     newscript = new Script;
