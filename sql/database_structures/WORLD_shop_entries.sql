@@ -86,7 +86,6 @@ replace into shop_items values
 (82, 5, 50008, 'General: Glyph of Twinking', 0),
 (83, 5, 50521, 'General: Glyph of Exhaustion', 0),
 (84, 5, 51055, 'Druid: Glyph of the Tree', 100),
-(85, 5, 51056, 'Druid: Glyph of the Stag', 100),
 (86, 5, 51057, 'Druid: Glyph of the Frostsaber', 100),
 (87, 5, 51266, 'Druid: Glyph of the Ice Bear', 100),
 (88, 5, 51431, 'Druid: Glyph of the Frostkin', 100),
