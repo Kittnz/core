@@ -5590,7 +5590,7 @@ bool GossipSelect_npc_questions_and_answers(Player* pPlayer, Creature* pCreature
 
 bool GossipHello_search_for_clues(Player* pPlayer, Creature* pCreature)
 {
-    if (pPlayer->GetQuestStatus(80703) == QUEST_STATUS_INCOMPLETE && pPlayer->GetQuestStatusData(80703)->m_creatureOrGOcount[0] == 0)
+    if (pPlayer->GetQuestStatus(80730) == QUEST_STATUS_INCOMPLETE && pPlayer->GetQuestStatusData(80730)->m_creatureOrGOcount[0] == 0)
     {
         if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(50668))
             pPlayer->KilledMonster(cInfo, ObjectGuid());
@@ -5601,7 +5601,7 @@ bool GossipHello_search_for_clues(Player* pPlayer, Creature* pCreature)
 
 bool GOHello_search_for_clues(Player* pPlayer, GameObject* pGo)
 {
-    if (pGo->GetEntry() == 1000167 && pPlayer->GetQuestStatus(80703) == QUEST_STATUS_INCOMPLETE && pPlayer->GetQuestStatusData(80703)->m_creatureOrGOcount[0] == 1)
+    if (pGo->GetEntry() == 1000167 && pPlayer->GetQuestStatus(80730) == QUEST_STATUS_INCOMPLETE && pPlayer->GetQuestStatusData(80730)->m_creatureOrGOcount[0] == 1)
     {
         if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(50668))
             pPlayer->KilledMonster(cInfo, ObjectGuid());
@@ -5610,7 +5610,7 @@ bool GOHello_search_for_clues(Player* pPlayer, GameObject* pGo)
     }
     if (pGo->GetEntry() == 1000168)
     {
-        if (pPlayer->GetQuestStatus(80703) == QUEST_STATUS_INCOMPLETE && pPlayer->GetQuestStatusData(80703)->m_creatureOrGOcount[0] >= 2)
+        if (pPlayer->GetQuestStatus(80730) == QUEST_STATUS_INCOMPLETE && pPlayer->GetQuestStatusData(80730)->m_creatureOrGOcount[0] >= 2)
         {
             if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(50668))
                 pPlayer->KilledMonster(cInfo, ObjectGuid());
@@ -5639,12 +5639,15 @@ bool GOSelect_search_for_clues(Player* pPlayer, GameObject* pGo, uint32 sender, 
 
 bool GossipHello_npc_kixxle(Player* pPlayer, Creature* pCreature)
 {
-    if (pPlayer->GetQuestStatus(80703) == QUEST_STATUS_INCOMPLETE && pPlayer->GetQuestStatusData(80703)->m_creatureOrGOcount[1] == 0 && pPlayer->GetQuestStatusData(80703)->m_creatureOrGOcount[0] == 3)
+    if (pPlayer->GetQuestStatus(80730) == QUEST_STATUS_INCOMPLETE && pPlayer->GetQuestStatusData(80730)->m_creatureOrGOcount[1] == 0 && pPlayer->GetQuestStatusData(80730)->m_creatureOrGOcount[0] == 3)
     {
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Were you the one to sell an oil canister to to a group of men dressed in scarlet?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     }
     if (pCreature->IsVendor())
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ACTION_TRADE, "I want to browse your goods.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 10);
+
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
 
     pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
     return true;
@@ -5724,7 +5727,7 @@ CreatureAI* GetAI_npc_vladeus_springriver(Creature* _Creature) { return new npc_
 
 bool GossipHello_npc_vladeus_springriver(Player* pPlayer, Creature* pCreature)
 {
-    if (pPlayer->GetQuestStatus(80703) == QUEST_STATUS_INCOMPLETE && pPlayer->GetQuestStatusData(80703)->m_creatureOrGOcount[2] == 1)
+    if (pPlayer->GetQuestStatus(80703) == QUEST_STATUS_INCOMPLETE && pPlayer->GetQuestStatusData(80703)->m_creatureOrGOcount[0] == 1)
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I\'m taking you to the local law enforcement.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
     pPlayer->SEND_GOSSIP_MENU(51683, pCreature->GetGUID());
@@ -5797,8 +5800,8 @@ struct go_scarlet_attack_trigger : public GameObjectAI
             for (Player* pPlayer : players)
             {
                 if (pPlayer->GetQuestStatus(80703) == QUEST_STATUS_INCOMPLETE && 
-                    pPlayer->GetQuestStatusData(80703)->m_creatureOrGOcount[1] == 1 && 
-                    pPlayer->GetQuestStatusData(80703)->m_creatureOrGOcount[2] == 0)
+                    pPlayer->GetQuestStatusData(80703)->m_creatureOrGOcount[0] == 0 || 
+                    pPlayer->GetQuestStatusData(80703)->m_creatureOrGOcount[1] == 0)
                 {
                     GameObject* event_running = pPlayer->FindNearestGameObject(1000170, 30.0F);
                     if (!event_running)
