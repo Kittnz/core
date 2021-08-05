@@ -3,6 +3,41 @@
 
 -- Sally Whitemane is dead. Confused, scattered and some even in panic, Scarlet Fanatics were laying low. Many died in attempts to continue their struggles but without a strong command leading their effort failed. However, week by week, Scarlets had reinstated their structure, and scouting groups that were mercilessly murdering every non-human being started to succeed in their crazy mission. Looks like the new leader of the Scarlet Crusade has ambitions protruding further than just instinct of other races in Azeroth: multiple human settlements had been reporting of strangers appearing in their towns speaking to the young and trying to spread their influence over their minds. 
 
+-- Teleport
+DELETE FROM `game_tele` WHERE `id` = 500;
+INSERT INTO `game_tele` (`id`, `position_x`, `position_y`, `position_z`, `orientation`, `map`, `name`) VALUES
+(500, 81.1913, -0.849708, 18.6773, 6.27162, 44, 'ForbiddenMonastery');
+
+-- Dungeon is a 10 man raid with 7 day reset timer
+DELETE FROM `map_template` WHERE `entry` = 44;
+INSERT INTO `map_template` (`entry`, `patch`, `parent`, `map_type`, `linked_zone`, `player_limit`, `reset_delay`, `ghost_entrance_map`, `ghost_entrance_x`, `ghost_entrance_y`, `map_name`, `script_name`) VALUES
+(44, 0, 0, 2, 0, 10, 7, -1, 0, 0, 'Forbidden Monastery', 'instance_forbidden_monastery');
+
+-- Doors
+DELETE FROM `gameobject_template` WHERE `entry` BETWEEN 5000000 AND 5000004;
+INSERT INTO `gameobject_template` (`entry`, `patch`, `type`, `displayId`, `name`, `faction`, `flags`, `size`, `data0`, `data1`, `data2`, `data3`, `data4`, `data5`, `data6`, `data7`, `data8`, `data9`, `data10`, `data11`, `data12`, `data13`, `data14`, `data15`, `data16`, `data17`, `data18`, `data19`, `data20`, `data21`, `data22`, `data23`, `mingold`, `maxgold`, `script_name`) VALUES
+(5000000, 0, 0, 6385, 'ForbiddenMonastery_Green_Instance_Whirl', 0, 52, 0.6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(5000001, 0, 0, 3751, 'ForbiddenMonastery_Entry_Grid_Door', 0, 52, 1.29, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(5000002, 0, 0, 444, 'ForbiddenMonastery_Vendor_Door', 0, 52, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(5000003, 0, 0, 444, 'ForbiddenMonastery_Boss2_Door', 0, 52, 1.2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(5000004, 0, 0, 6385, 'ForbiddenMonastery_Right_Wing_Door', 0, 52, 1.1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+DELETE FROM `gameobject` WHERE `guid` BETWEEN 5000000 AND 5000012;
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`, `spawn_flags`, `visibility_mod`, `patch_min`, `patch_max`) VALUES
+(5000000, 5000000, 44, 70.75, -0.725565, 21, 6.25026, 0, 0, 0.0164639, -0.999864, 0, 0, 100, 1, 0, 533.333, 0, 10), -- Instance Whirl
+(5000001, 5000001, 44, 72.8568, -0.839216, 18.6773, 3.14298, 0, 0, 1, -0.000692173, 0, 0, 100, 1, 0, 533.333, 0, 10), -- Perma Locked Instance Gate
+(5000002, 5000002, 44, 68.7409, -12.7199, 18.6773, 0.00833514, 0, 0, 0.00416756, 0.999991, 0, 0, 100, 1, 0, 533.333, 0, 10), -- Left Vendor Door
+(5000003, 5000002, 44, 68.7249, 11.0146, 18.6773, 6.27494, 0, 0, 0.00412454, 0.999991, 0, 0, 100, 1, 0, 533.333, 0, 10), -- Right Vendor Door
+(5000004, 5000002, 44, 141.352, -12.7469, 18.6773, 3.11881, 0, 0, 0.999935, 0.0113925, 0, 0, 100, 1, 0, 533.333, 0, 10), -- First Room Right Perma Locked Door
+(5000005, 5000002, 44, 143.98, -12.8275, 18.6774, 0.0176611, 0, 0, 0.00883043, 0.999961, 0, 0, 100, 1, 0, 533.333, 0, 10), -- First Room Right Perma Locked Door
+(5000006, 5000002, 44, 140.889, 11.0119, 18.6773, 6.28056, 0, 0, 0.00131241, -0.999999, 0, 0, 100, 1, 0, 533.333, 0, 10), -- First Room Boss Door
+(5000007, 5000003, 44, 244.069, -99.993, 18.6773, 0.00169, 0, 0, 0.00544775, -0.999985, 0, 0, 100, 0, 0, 533.333, 0, 10), -- Second Boss Bottom Door
+(5000008, 5000002, 44, 286.786, -100.016, 31.4936, 3.20612, 0, 0, 0.00281054, 0.999996, 0, 0, 100, 1, 0, 533.333, 0, 10), -- Second Boss Top Door
+(5000009, 104600, 44, 374.393, -120.773, 32.4956, 1.59063, 0, 0, 0.706667, 0.707546, 0, 0, 100, 1, 1, 533.333, 0, 10), -- Last Boss Chamber Door
+(5000010, 180497, 44, 374.397, -18.1461, 34.4945, 4.72046, 0, 0, 0.704249, -0.709953, 0, 0, 100, 0, 1, 533.333, 0, 10), -- Last Boss Room Door
+(5000011, 5000004, 44, 308.668, -53.3655, 35.6911, 3.19283, 0, 0, 0.0116924, -0.999932, 0, 0, 100, 1, 1, 533.333, 0, 10), -- Right Wing Door
+(5000012, 5000003, 44, 221.343, 25.8922, 31.493, 3.13509, 0, 0, 0.999995, 0.00325365, 0, 0, 100, 0, 1, 533.333, 0, 10); -- Third Boss Door
+
 -- Alliance attunement.
 
 replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewmoneymaxlevel, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (0,80700,1519,60,58,0,0,'A Particular Letter','I\'ve been looking for you all around the city! Although I am more of an announcer than a mailman I was instructed to give this letter to you by well… I am not sure who he was.\n\nThe figure\'s face was covered and his voice didn\'t seem familiar at all. He said you will understand when you read it.\n\nI am not one to pry, $N, but be more careful, I wouldn\'t let the guards know I associate myself with those kinds of people.','Accept suspicious letter to ease Goddman\'s mind.','Just take it off my hands before the guards think we\'re doing something shady.','Here\'s the letter, I hope I won\'t have to do this again.',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,53000,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
