@@ -523,10 +523,37 @@ struct infinite_timeripperAI : public ScriptedAI
     }
 
     uint32 m_manaBurnTimer;
+    uint32 phasetimer;
+    std::list <Creature*> dragonSpawns;
+    int phase;
+    ObjectGuid dragonSpawn1;
+    ObjectGuid dragonSpawn2;
+    bool doOnce;
+    bool startSummonEvent;
+
+    enum CreatureEntries
+    {
+        NPC_TIME_RIFT = 81267,
+        NPC_DRAGONSPAWN = 65123,
+        NPC_HARBINGER = 65114
+    };
+
+    void DespawnGuid(ObjectGuid& g)
+    {
+        if (Creature* c = me->GetMap()->GetCreature(g))
+            c->ForcedDespawn();
+        g.Clear();
+    }
 
     void Reset() override
     {
         m_manaBurnTimer = 3000;
+        phasetimer = 1000;
+        startSummonEvent = false;
+        phase = 1;
+        doOnce = false;
+        DespawnGuid(dragonSpawn1);
+        DespawnGuid(dragonSpawn2);
     }
 
     void UpdateAI(const uint32 uiDiff) override
@@ -534,13 +561,117 @@ struct infinite_timeripperAI : public ScriptedAI
         if (!m_creature->HasAura(AURA_SHADOWGUARD))
             m_creature->AddAura(AURA_SHADOWGUARD);
 
-        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
-            return;
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
 
-        if (!m_creature->HasAura(AURA_SHADOWGUARD))
-            m_creature->AddAura(AURA_SHADOWGUARD);
+        if (!doOnce)
+        {
+            if (Creature* spawn1 = m_creature->SummonCreature(NPC_DRAGONSPAWN, -1412.98f, 6914.89f, -138.01f, 0.41f, TEMPSUMMON_MANUAL_DESPAWN))
+            {
+                dragonSpawns.push_back(spawn1);
+                dragonSpawn1 = spawn1->GetGUIDLow();
+                spawn1->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
+            }
+            if (Creature* spawn2 = m_creature->SummonCreature(NPC_DRAGONSPAWN, -1401.54f, 6905.29f, -138.01f, 0.46f, TEMPSUMMON_MANUAL_DESPAWN))
+            {
+                dragonSpawns.push_back(spawn2);
+                dragonSpawn2 = spawn2->GetGUIDLow();
+                spawn2->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
+            }
+            doOnce = true;
+        }
 
-        DoMeleeAttackIfReady();
+        if (Player* player = m_creature->FindNearestHostilePlayer(25.0f))
+        {
+            if (!startSummonEvent)
+            {
+                Group* group = player->GetGroup();
+
+                if (group)
+                {
+                    for (GroupReference* itr = group->GetFirstMember(); itr != nullptr; itr = itr->next())
+                    {
+                        Player* playerGroup = itr->getSource();
+                        if (!playerGroup)
+                            continue;
+
+                        playerGroup->AddAura(SPELL_TIME_LAPSE);
+                    }
+                }
+                else
+                {
+                    player->AddAura(SPELL_TIME_LAPSE);
+                }
+                m_creature->PMonsterYell("It seems the Bronze Dragonflight sent their pawns to fix what they could not, you’ve come far to stop us, but your advance stops here!");
+
+                startSummonEvent = true;
+            }
+        }
+
+        if (startSummonEvent)
+        {
+            if (phasetimer <= uiDiff)
+            {
+
+                switch (phase)
+                {
+                case 1:
+                {
+                    if (Creature* portal = m_creature->SummonCreature(NPC_TIME_RIFT, -1424.58f, 6895.75f, -131.0f, 0, TEMPSUMMON_TIMED_DESPAWN, 10000))
+                    {
+                        portal->PMonsterEmote("The Infinite Timeripper opens a rift in time!", nullptr, true);
+
+                        DoAfterTime(m_creature, 9 * IN_MILLISECONDS, [m_creature = m_creature, portal = portal]() {
+                            portal->SummonCreature(NPC_HARBINGER, portal->GetPositionX(), portal->GetPositionY(), -138.0146f, 0, TEMPSUMMON_DEAD_DESPAWN);
+                            });
+                    }
+
+                    phasetimer = 2000;
+                    phase++;
+                    break;
+                }
+                case 2:
+                {
+                    Creature* portal = m_creature->FindNearestCreature(NPC_TIME_RIFT, 50, true);
+                    portal->PMonsterEmote("Something big is coming!", nullptr, true);
+                    phasetimer = 2000;
+                    phase++;
+                    break;
+                }
+                case 3:
+                {
+                    m_creature->PMonsterSay("Your time has come, what we have summoned is but a hollow reflection of what we have seen in the future. Savor these moments, mortals. They will be your last. Retreat!");
+                    phase++;
+                    phasetimer = 4000;
+                    break;
+                }
+                case 4:
+                {
+                    m_creature->MonsterMove(-1441.65f, 6936.788f, -136.89f);
+                    m_creature->ForcedDespawn(4000);
+                     
+                    if (dragonSpawns.size() > 0)
+                    {
+                        for (auto const& i : dragonSpawns)
+                        {
+                            i->MonsterMove(-1441.65f, 6936.788f, -136.89f);
+                            i->ForcedDespawn(4000);
+                        }
+                    }
+
+                    // GIP PLZ!
+                    //if (Creature* dragonSpawnOne = m_creature->GetInstanceData()->GetCreature(dragonSpawn1))
+                    //    dragonSpawnOne->MonsterMove(-1441.65f, 6936.788f, -136.89f);
+                    //if (Creature* dragonSpawnTwo = m_creature->GetInstanceData()->GetCreature(dragonSpawn2))
+                    //    dragonSpawnTwo->MonsterMove(-1441.65f, 6936.788f, -136.89f);
+
+
+                        phase++;
+                }
+                }
+            }
+            else
+                phasetimer -= uiDiff;
+        }
     }
 
     void EnterCombat(Unit*) override
@@ -562,20 +693,13 @@ struct infinite_timeripperAI : public ScriptedAI
                     playerGroup->AddAura(SPELL_TIME_LAPSE);
                 }
             }
+            else
+            {
+                player->AddAura(SPELL_TIME_LAPSE);
+            }
+
+            m_creature->PMonsterYell("It seems the Bronze Dragonflight sent their pawns to fix what they could not, you’ve come far to stop us, but your advance stops here!");
         }
-
-
-        // Run away to boss here. Add later.
-
-        m_creature->PMonsterYell("It seems the Bronze Dragonflight sent their pawns to fix what they could not, you've come far to stop us, but your advance stops here!");
-        m_creature->PMonsterEmote("Infinite Timeripper opens a rift in time!");
-
-        DoAfterTime(m_creature, 5 * IN_MILLISECONDS, [m_creature = m_creature, this]() {
-            m_creature->PMonsterYell("Your time has come, what we have summoned is but a hollow reflection of what we have seen in the future. Savor these moments, mortals. They will be your last. Retreat!");
-            });
-
-        // Harbinger and Aqir emerge from portal.
-
     }
 };
 
