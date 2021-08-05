@@ -5975,7 +5975,7 @@ bool GossipHello_npc_maverick(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->GetQuestStatus(80722) == QUEST_STATUS_INCOMPLETE && pPlayer->GetQuestStatusData(80722)->m_creatureOrGOcount[0] == 0)
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Are you ready, Maverick?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-    if (pPlayer->GetQuestStatus(80722) == QUEST_STATUS_INCOMPLETE && pPlayer->GetQuestStatusData(80722)->m_itemcount[0] == 1)
+    if (pPlayer->GetQuestStatus(80722) == QUEST_STATUS_INCOMPLETE && pPlayer->GetQuestStatusData(80722)->m_creatureOrGOcount[1] == 2)
     {
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Inspect Maverick's condition.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
         pPlayer->SEND_GOSSIP_MENU(51691, pCreature->GetGUID());
@@ -6015,7 +6015,6 @@ bool GossipSelect_npc_maverick(Player* pPlayer, Creature* maverick, uint32 /*uiS
             summoner->HandleEmote(EMOTE_STATE_SLEEP);
             summoner->SetStandState(UNIT_STAND_STATE_SLEEP);
             summoner->SummonCreature(50682, 2558.14F, -663.63F, 88.68F, 2.19F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 120 * IN_MILLISECONDS);
-            summoner->SummonGameObject(1000248, 2552.95F, -650.62F, 80.09F, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 200, true);
             });
         DoAfterTime(pPlayer, 53 * IN_MILLISECONDS, [player = pPlayer, summoner = maverick]() {
             Map* map = sMapMgr.FindMap(0);
@@ -6030,12 +6029,23 @@ bool GossipSelect_npc_maverick(Player* pPlayer, Creature* maverick, uint32 /*uiS
     }
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
     {
-        Creature* varimathras = pPlayer->SummonCreature(2425, 2552.95F, -650.62F, 80.09F, 3.20F, TEMPSUMMON_TIMED_DESPAWN, 180 * IN_MILLISECONDS);
+        Creature* varimathras_spawned = pPlayer->FindNearestCreature(2425, 30.0F);
 
-        varimathras->MonsterSayToPlayer("He really is just unconscious, how strange...", pPlayer);
+        if (!varimathras_spawned)
+        {
+            Creature* varimathras = pPlayer->SummonCreature(2425, 2552.95F, -650.62F, 80.09F, 3.20F, TEMPSUMMON_TIMED_DESPAWN, 180 * IN_MILLISECONDS);
+            varimathras->MonsterSayToPlayer("He really is just unconscious, how strange...", pPlayer);
+        }
 
-        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(50670))
-            pPlayer->KilledMonster(cInfo, ObjectGuid());
+        if (pPlayer->GetQuestStatusData(80722)->m_itemcount[0] == 0)
+        {
+            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(50670))
+            {
+                pPlayer->HandleEmote(EMOTE_ONESHOT_KNEEL);
+                pPlayer->KilledMonster(cInfo, ObjectGuid());
+                pPlayer->AddItem(53010, 1);
+            }
+        }
     }
     pPlayer->CLOSE_GOSSIP_MENU();
     return true;
