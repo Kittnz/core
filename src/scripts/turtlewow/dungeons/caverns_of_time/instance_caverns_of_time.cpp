@@ -33,46 +33,13 @@ struct instance_caverns_of_time : public ScriptedInstance
     void OnPlayerEnter(Player* pPlayer) override
     {
         if (!pPlayer)
-            return;
-
-        uint32 displayId;
-        bool isMale = pPlayer->GetGender() == GENDER_MALE;
-        switch (pPlayer->GetClass())
-        {
-        case CLASS_WARRIOR:
-            displayId = isMale ? 4446 : 3591;
-            break;
-        case CLASS_MAGE:
-        case CLASS_PRIEST:
-            displayId = isMale ? 3348 : 3347;
-            break;
-        case CLASS_WARLOCK:
-            displayId = isMale ? 4461 : 4462;
-            break;
-        case CLASS_PALADIN:
-            displayId = isMale ? 3372 : 3289;
-            break;
-        case CLASS_DRUID:
-        case CLASS_ROGUE:
-            displayId = isMale ? 4276 : 4419;
-            break;
-        case CLASS_SHAMAN:
-        case CLASS_HUNTER:
-            displayId = isMale ? 4125 : 4393;
-            break;
-        default:
-            displayId = isMale ? 1541 : 4888;
-        }
-
-        pPlayer->SetDisplayId(displayId);
+            return; 
     }
 
     void OnPlayerLeave(Player* pPlayer, bool bJustDestroy) override
     {
         if (!pPlayer)
             return;
-
-        pPlayer->DeMorph();
     }
 
     //void SetData(uint32 uiType, uint32 uiData)
