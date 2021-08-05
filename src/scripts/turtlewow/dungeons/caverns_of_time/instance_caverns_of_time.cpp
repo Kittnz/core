@@ -1500,7 +1500,7 @@ struct shade_cotAI : public ScriptedAI
 
                             if (!playerGroup->HasAura(SPELL_PLAGUE))
                             {
-                                 if (DoCastSpellIfCan(playerGroup, SPELL_PLAGUE) == CAST_OK)
+                                if (DoCastSpellIfCan(playerGroup, SPELL_PLAGUE) == CAST_OK)
                                     plagueCount++;
                             }
                         }
@@ -1851,11 +1851,11 @@ struct rotmaw_cotAI : public ScriptedAI
                 Unit* hostileTarget = m_creature->GetMap()->GetUnit(attacker->getUnitGuid());
 
                 //if (hostileTarget && hostileTarget->IsBehindTarget(m_creature, false))
-                    if (DoCastSpellIfCan(m_creature, SPELL_TAIL_SWEEP) == CAST_OK)
-                    {
-                        tailSwipeTimer = 5000;
-                        break;
-                    }
+                if (DoCastSpellIfCan(m_creature, SPELL_TAIL_SWEEP) == CAST_OK)
+                {
+                    tailSwipeTimer = 5000;
+                    break;
+                }
             }
 
         }
@@ -1918,6 +1918,135 @@ struct rotmaw_cotAI : public ScriptedAI
         else sunderArmorTimer -= uiDiff;
 
         DoMeleeAttackIfReady();
+    }
+};
+
+
+
+struct mossheart_cotAI : public ScriptedAI
+{
+    mossheart_cotAI(Creature* c) : ScriptedAI(c)
+    {
+        Reset();
+    }
+
+    bool engaged;
+    uint32 rejuvTimer;
+    uint32 tangleTimer;
+    uint32 mossTimer;
+    int phase;
+    void Reset() override
+    {
+        engaged = false;
+        rejuvTimer = 500; // initial quick cast
+        tangleTimer = 25000;
+        phase = 0;
+        mossTimer = 18000;
+    }
+
+    enum SpellEntries
+    {
+        AURA_THORNS = 8148,
+        SPELL_REJUV = 20664,
+        SPELL_DREDGE_SICKNESS = 14535,
+        SPELL_TANGLE_ROOTS = 20699,
+        SPELL_MOSS_FEET = 6870,
+        SPELL_MOSS_HANDS = 6866
+    };
+
+    void UpdateAI(const uint32 uiDiff) override
+    {
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
+            return;
+
+        if (engaged && !m_creature->HasAura(AURA_THORNS))
+            m_creature->AddAura(AURA_THORNS);
+
+
+        if (m_creature->GetHealthPercent() <= 75.0f)
+        {
+            if (rejuvTimer <= uiDiff)
+            {
+                if (DoCastSpellIfCan(m_creature, SPELL_REJUV) == CAST_OK)
+                    rejuvTimer = 20000;
+            }
+            else rejuvTimer -= uiDiff;
+        }
+
+        if (phase == 0 && m_creature->GetHealthPercent() <= 50.0f)
+            ApplyDredge();
+
+        if (phase == 1 && m_creature->GetHealthPercent() <= 25.0f)
+            ApplyDredge();
+
+        if (tangleTimer <= uiDiff)
+        {
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_TANGLE_ROOTS) == CAST_OK)
+            {
+                tangleTimer = 25000;
+                m_creature->PMonsterYell("The very earth rises in defiance...");
+            }
+        }
+        else tangleTimer -= uiDiff;
+
+        if (mossTimer <= uiDiff)
+        {
+            if (m_creature->GetVictim()->HasAura(SPELL_MOSS_HANDS))
+            {
+                if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_MOSS_FEET) == CAST_OK)
+                    mossTimer = 18000;
+                m_creature->PMonsterEmote("|cffff8040Mossheart covers %s with moss!|r", nullptr, true, m_creature->GetVictim()->GetName());
+            }
+            else
+            {
+                if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_MOSS_HANDS) == CAST_OK)
+                    mossTimer = 18000;
+                m_creature->PMonsterEmote("|cffff8040Mossheart covers %s with moss!|r", nullptr, true, m_creature->GetVictim()->GetName());
+            }
+        }
+        else mossTimer -= uiDiff;
+
+
+
+        DoMeleeAttackIfReady();
+    }
+
+
+    void ApplyDredge()
+    {
+        if (Player* player = m_creature->FindNearestHostilePlayer(10))
+        {
+            if (Group* group = player->GetGroup())
+            {
+                for (GroupReference* itr = group->GetFirstMember(); itr != nullptr; itr = itr->next())
+                {
+                    Player* playerGroup = itr->getSource();
+                    if (!playerGroup || playerGroup->HasAura(SPELL_DREDGE_SICKNESS))
+                        continue;
+
+                    playerGroup->AddAura(SPELL_DREDGE_SICKNESS);
+
+                }
+                phase++;
+            }
+        }
+    }
+
+    void EnterCombat(Unit*) override
+    {
+        engaged = true;
+
+        m_creature->PMonsterYell("Who dares defile the sanctity of the morass...");
+    }
+
+    void KilledUnit(Unit*) override
+    {
+        m_creature->PMonsterSay("You belong to the bog now...");
+    }
+
+    void JustDied(Unit*) override
+    {
+        m_creature->PMonsterSay("I failed...");
     }
 };
 
@@ -2004,6 +2133,11 @@ CreatureAI* GetAI_chromie_portal_cot(Creature* _Creature)
 CreatureAI* GetAI_rotmaw_cot(Creature* _Creature)
 {
     return new rotmaw_cotAI(_Creature);
+}
+
+CreatureAI* GetAI_mossheart_cot(Creature* _Creature)
+{
+    return new mossheart_cotAI(_Creature);
 }
 
 void AddSC_instance_caverns_of_time()
@@ -2097,6 +2231,11 @@ void AddSC_instance_caverns_of_time()
     newscript = new Script;
     newscript->Name = "rotmaw_cot";
     newscript->GetAI = &GetAI_rotmaw_cot;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "mossheart_cot";
+    newscript->GetAI = &GetAI_mossheart_cot;
     newscript->RegisterSelf();
 
 }
