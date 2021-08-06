@@ -2005,9 +2005,6 @@ struct mossheart_cotAI : public ScriptedAI
             }
         }
         else mossTimer -= uiDiff;
-
-
-
         DoMeleeAttackIfReady();
     }
 
@@ -2047,6 +2044,119 @@ struct mossheart_cotAI : public ScriptedAI
     void JustDied(Unit*) override
     {
         m_creature->PMonsterSay("I failed...");
+    }
+};
+
+
+struct antnormi_cotAI : public ScriptedAI
+{
+    antnormi_cotAI(Creature* c) : ScriptedAI(c)
+    {
+        Reset();
+    }
+
+    uint32 thrashTimer;
+    uint32 coweringRoarTimer;
+    uint32 shadowShockTimer;
+    uint32 enrageTimer;
+    bool enraged;
+
+
+    enum Spells
+    {
+        SPELL_THRASH = 21919,
+        SPELL_COWERING_ROAR = 16096,
+        SPELL_SHADOW_SHOCK = 17234,
+        SPELL_ENRAGE = 28131
+    };
+
+
+    void Reset() override
+    {
+        thrashTimer = 12000;
+        coweringRoarTimer = 20000;
+        shadowShockTimer = 15000;
+        enrageTimer = 300000;
+        enraged = false;
+    }
+
+    void UpdateAI(const uint32 uiDiff) override
+    {
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
+            return;
+
+        if (thrashTimer <= uiDiff)
+        {
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_THRASH) == CAST_OK)
+                thrashTimer = 12000;
+        }
+        else thrashTimer -= uiDiff;
+
+        if (coweringRoarTimer <= uiDiff)
+        {
+            m_creature->PMonsterEmote("|cffff8040Antnormi is preparing for a bellowing roar!|r", nullptr, true);
+            coweringRoarTimer = 25000;
+
+            DoAfterTime(m_creature, 5 * IN_MILLISECONDS, [m_creature = m_creature, this]() {
+                DoCastSpellIfCan(m_creature->GetVictim(), SPELL_COWERING_ROAR);
+                });
+        }
+        else coweringRoarTimer -= uiDiff;
+
+        if (shadowShockTimer <= uiDiff)
+        {
+            std::list<Unit*> targets;
+
+            for (int i = 0; i < 2; i++)
+            {
+                Unit* selectedTarget = m_creature->SelectRandomUnfriendlyTarget();
+
+                auto itr = std::find(targets.begin(), targets.end(), selectedTarget);
+                if (itr != targets.end())
+                {
+                    selectedTarget = m_creature->SelectRandomUnfriendlyTarget();
+                    i--;
+                    continue;
+                }
+                else
+                    targets.push_back(selectedTarget);
+
+                if (DoCastSpellIfCan(selectedTarget, SPELL_SHADOW_SHOCK) == !CAST_OK)
+                    DoAfterTime(m_creature, 1.25 * IN_MILLISECONDS, [m_creature = m_creature, selectedTarget = selectedTarget, this]() {
+                    DoCastSpellIfCan(selectedTarget, SPELL_SHADOW_SHOCK);
+                        });
+            }         
+                shadowShockTimer = 10000;
+                targets.clear();
+        }
+        else shadowShockTimer -= uiDiff;
+
+        if (!enraged && enrageTimer <= uiDiff)
+        {
+            DoCastSpellIfCan(m_creature->GetVictim(), SPELL_ENRAGE);
+            enraged = true;
+            m_creature->PMonsterYell("We have come too far to be stopped, this ends now!");
+        }
+        else enrageTimer -= uiDiff;
+
+        if (!enraged && m_creature->GetHealthPercent() <= 20.0f)
+        {
+            enraged = true;
+            DoCastSpellIfCan(m_creature, SPELL_ENRAGE);
+            m_creature->PMonsterYell("We have come too far to be stopped, this ends now!");
+        }
+
+        DoMeleeAttackIfReady();
+    }
+
+    void JustDied(Unit*) override
+    {
+        m_creature->PMonsterSay("My death changes nothing, YOU HEAR ME? NOTHING!");
+    }
+
+    void EnterCombat(Unit*) override
+    {
+        m_creature->PMonsterYell("You again?! So the others have failed to stop the lapdogs of the Bronze, pathetic. Time to take the matter to my own hands.");
     }
 };
 
@@ -2140,6 +2250,11 @@ CreatureAI* GetAI_mossheart_cot(Creature* _Creature)
     return new mossheart_cotAI(_Creature);
 }
 
+CreatureAI* GetAI_antnormi_cot(Creature* _Creature)
+{
+    return new antnormi_cotAI(_Creature);
+}
+
 void AddSC_instance_caverns_of_time()
 {
     Script* newscript;
@@ -2226,6 +2341,11 @@ void AddSC_instance_caverns_of_time()
     newscript = new Script;
     newscript->Name = "chromie_portal_cot";
     newscript->GetAI = &GetAI_chromie_portal_cot;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "antnormi_cot";
+    newscript->GetAI = &GetAI_antnormi_cot;
     newscript->RegisterSelf();
 
     newscript = new Script;
