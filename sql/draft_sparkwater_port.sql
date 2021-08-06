@@ -97,7 +97,7 @@ replace into creature_template values
 -- Gossip + Quest
 update creature_template set npc_flags = 3 where entry in (91266, 91267, 91274, 91251, 91277, 91280, 91281, 91285, 91286, 91289, 91287, 91288, 91290);
 -- Quest
-update creature_template set npc_flags = 2 where entry in (91268, 91269, 91275, 91276, 91234, 91254, 91203, 91282, 5546); 
+update creature_template set npc_flags = 2 where entry in (91268, 91269, 91275, 91276, 91234, 91254, 91203, 91282, 5546, 91259); 
 -- Gossip + Quest + Vendor
 update creature_template set npc_flags = 16391 where entry  = 91292;
 
@@ -596,3 +596,9 @@ replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minleve
 
 replace into creature_questrelation (id, quest) values (91282, 55025);
 replace into creature_involvedrelation (id, quest) values (91282, 55025);
+
+replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (0,55026,14,36,30,0,0,'It All Comes Sinking Down','Hey watch it pal! You\'re looking at the Captain of the Brightwater, one of the finest, and most powerful vessels ever to sail the sea\'s, at the least, by the Horde\'s standard!\n\nAhh... She was a beauty, all before those damn Bloodsail Buccaneers gave us a volley on the starboard side and sank us, it wasn\'t even fair really, a two on one engagement.\n\nMy crew is still stuck out in Booty Bay hiding and I\'m not sure exactly where they\'re at.\n\nI have a favor I can call in from an old pal Revilgaz who is the baron there, tell him I sent you, and locate my crew.','Travel to the port of Booty Bay and speak with Baron Revilgaz.','Is there something that I can help you with?','Yes? Oh.... -He- sent you?\n\nFool was oh so eager to offer his assistance to the Horde for coin he underestimated the pirates in the area, and got himself sank.\n\nNow he wants to call in a favor from an age past, hah. Let\'s get this over with.',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,375,1001,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+replace into creature_questrelation (id, quest) values (91259, 55026);
+replace into creature_involvedrelation (id, quest) values (2496, 55026);
+
