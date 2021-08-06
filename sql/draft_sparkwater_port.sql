@@ -1,4 +1,44 @@
 replace into creature_template values 
+(91200, 0, 7179, 0, 0, 0, 'Wrix Ozzlenut', 'Shredder Mechanic', 60004, 36, 36, 1468, 1468, 0, 0, 1427, 1682, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 51, 66, 0, 140, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 52.272, 71.874, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 10, ''),
+(91201, 0, 7164, 0, 0, 0, 'Grazzle Steamscrew', 'Woodcutting Foreman', 60003, 5, 5, 319, 319, 0, 0, 852, 1682, 16389, 1, 1.14286, 0, 20, 5, 0, 0, 1, 24, 31, 0, 90, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 31.856, 43.802, 100, 7, 4096, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 2, ''),
+(91202, 0, 15765, 0, 0, 0, 'Tammix Razzfire', 'Apprentice Alchemist', 60001, 23, 23, 617, 617, 0, 0, 957, 1682, 19, 1, 1.14286, 0, 20, 5, 0, 0, 1, 28, 37, 0, 100, 1, 2000, 2000, 1, 4608, 0, 0, 2, 0, 0, 0, 36.0272, 49.5374, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 11046, 0, 0, 0, 0, 524298, ''),
+(91203, 0, 3877, 0, 0, 0, 'Rugnar', '', 9162, 35, 35, 1342, 1342, 0, 0, 1373, 125, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 51, 65, 0, 138, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 51.128, 70.301, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 3342, 0, 0, 0, 0, 524298, ''),
+(91204, 6, 1379, 0, 0, 0, 'Karnag the Drunk', 'Drunkard', 60002, 35, 35, 5568, 5568, 0, 0, 3327, 125, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 51, 75, 0, 258, 1, 2000, 2000, 1, 514, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 15724, 0, 0, 0, 0, 2, ''),
+(91205, 0, 7131, 0, 0, 0, 'Zeet Waxwrench', 'Antique Goods', 60000, 25, 25, 712, 712, 0, 0, 1009, 1682, 16389, 1, 1.14286, 0, 20, 5, 0, 0, 1, 31, 40, 0, 106, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 38.72, 53.24, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 10, ''),
+(91206, 0, 7074, 0, 0, 0, 'Fisherman Shix', 'Fishing Trainer', 9158, 35, 35, 1342, 1342, 0, 0, 1373, 125, 23, 1, 1.14286, 0, 20, 5, 0, 0, 1, 51, 65, 0, 138, 1, 2000, 2000, 1, 4608, 0, 0, 2, 0, 0, 0, 51.128, 70.301, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 3332, 0, 0, 0, 0, 524298, ''),
+(91207, 0, 10004, 0, 0, 0, 'Maleka', 'Weapon and Armor Vendor', 9191, 30, 30, 1002, 1002, 0, 0, 1200, 125, 16388, 1, 1.14286, 0, 20, 5, 0, 0, 1, 49, 68, 0, 122, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 45.144, 62.073, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 3409, 0, 0, 0, 0, 524298, ''),
+(91208, 0, 7166, 0, 0, 0, 'Oilworker Razlik', '', 0, 5, 5, 319, 319, 0, 0, 852, 1682, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 24, 31, 0, 90, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 31.856, 43.802, 100, 7, 4096, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 2, ''),
+(91209, 0, 7130, 0, 0, 0, 'Bazz Eagerblast', '', 0, 5, 5, 319, 319, 0, 0, 852, 1682, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 24, 31, 0, 90, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 31.856, 43.802, 100, 7, 4096, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 2, ''),
+(91210, 0, 13050, 0, 0, 0, 'Meek Fusemix', '', 0, 5, 5, 219, 319, 0, 0, 852, 1682, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 24, 31, 0, 90, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 31.856, 43.802, 100, 7, 4096, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 2, ''),
+(91211, 0, 15300, 0, 0, 0, 'Sazzy Gearlight', '', 0, 5, 5, 219, 319, 0, 0, 852, 1682, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 24, 31, 0, 90, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 31.856, 43.802, 100, 7, 4096, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 2, ''),
+(91212, 0, 10742, 0, 0, 0, 'Rixxle Copperdrive', '', 0, 5, 5, 219, 319, 0, 0, 852, 1682, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 24, 31, 0, 90, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 31.856, 43.802, 100, 7, 4096, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 2, ''),
+(91213, 0, 16023, 0, 0, 0, 'Oil Manager Tizzleflux', '', 0, 5, 5, 219, 319, 0, 0, 852, 1682, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 24, 31, 0, 90, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 31.856, 43.802, 100, 7, 4096, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 2, ''),
+(91214, 0, 7168, 0, 0, 0, 'Technician Spuzzle', '', 0, 5, 5, 119, 319, 0, 0, 852, 1682, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 24, 31, 0, 90, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 31.856, 43.802, 100, 7, 4096, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 2, ''),
+(91215, 0, 7179, 0, 0, 0, 'Nazzle Moreflak', 'Engineering Supplies', 0, 36, 36, 1468, 1468, 0, 0, 1427, 1682, 16388, 1, 1.14286, 0, 20, 5, 0, 0, 1, 51, 66, 0, 140, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 52.272, 71.874, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 10, ''),
+(91216, 0, 18057, 0, 0, 0, 'Wuzgut', 'Lumber Distributor', 60026, 12, 12, 1468, 1468, 0, 0, 1427, 1682, 16388, 1, 1.14286, 0, 20, 5, 0, 0, 1, 51, 66, 0, 140, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 52.272, 71.874, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 10, ''),
+(91217, 0, 7200, 0, 0, 0, 'Lumberworker Pluckwrench', 'Lumber Worker', 0, 16, 16, 1468, 1468, 0, 0, 1427, 1682, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 51, 66, 0, 140, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 52.272, 71.874, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 10, ''),
+(91218, 0, 7198, 0, 0, 0, 'Lumberworker Kazz', 'Lumber Worker', 0, 12, 12, 1468, 1468, 0, 0, 1427, 1682, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 51, 66, 0, 140, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 52.272, 71.874, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 10, ''),
+(91219, 0, 7338, 0, 0, 0, 'Lumberworker Ruzbolt', 'Lumber Worker', 0, 12, 14, 468, 568, 0, 0, 1427, 1682, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 51, 66, 0, 140, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 52.272, 71.874, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 10, ''),
+(91220, 0, 7188, 0, 0, 0, 'Lozzle', 'Refreshments Extraordinaire!', 60007, 12, 14, 468, 568, 0, 0, 1427, 1682, 7, 1, 1.14286, 0, 20, 5, 0, 0, 1, 51, 66, 0, 140, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 52.272, 71.874, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 10, ''),
+(91221, 0, 7157, 0, 0, 0, 'Faz', 'Moonshiner', 60009, 10, 12, 468, 568, 0, 0, 1427, 1682, 16388, 1, 1.14286, 0, 20, 5, 0, 0, 1, 51, 66, 0, 140, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 52.272, 71.874, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 10, ''),
+(91222, 0, 7237, 0, 0, 0, 'Oilworker Gullydagger', '', 0, 16, 16, 1468, 1468, 0, 0, 1427, 1682, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 51, 66, 0, 140, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 52.272, 71.874, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 10, ''),
+(91223, 0, 7227, 0, 0, 0, 'Oilworker Brassrust', '', 0, 12, 12, 1468, 1468, 0, 0, 1427, 1682, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 51, 66, 0, 140, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 52.272, 71.874, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 10, ''),
+(91224, 0, 7197, 0, 0, 0, 'Craneoperator Bizzrocket', '', 0, 12, 14, 468, 568, 0, 0, 1427, 1682, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 51, 66, 0, 140, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 52.272, 71.874, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 4429, 0, 0, 0, 0, 10, ''),
+(91225, 0, 7197, 0, 0, 0, 'Chief Shang', 'Chief Architect of Sparkwater', 60008, 16, 18, 468, 568, 0, 0, 1427, 1682, 1, 1, 1.14286, 0, 20, 5, 0, 0, 1, 51, 66, 0, 140, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 52.272, 71.874, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 10, ''),
+(91226, 0, 15549, 0, 0, 0, 'Varna Wireburn', '', 0, 16, 18, 468, 568, 0, 0, 1427, 1682, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 51, 66, 0, 140, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 52.272, 71.874, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 10, ''),
+(91227, 0, 1390, 0, 0, 0, 'Hargosh', 'Backalley Butcher', 60010, 13, 14, 468, 568, 0, 0, 1427, 125, 7, 1, 1.14286, 0, 20, 5, 0, 0, 1, 51, 66, 0, 140, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 52.272, 71.874, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 3368, 0, 0, 0, 0, 10, ''),
+(91228, 0, 9553, 0, 0, 0, 'Haylee Bucketblast', '', 0, 13, 14, 468, 568, 0, 0, 1427, 1682, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 51, 66, 0, 140, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 52.272, 71.874, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 10, ''),
+(91229, 0, 7202, 0, 0, 0, 'Dockworker Shazklench', '', 60011, 13, 14, 468, 568, 0, 0, 1427, 1682, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 51, 66, 0, 140, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 52.272, 71.874, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 4429, 0, 0, 0, 0, 10, ''),
+(91230, 0, 7112, 0, 0, 0, 'Cannoneer Gaxbruise', '', 60012, 13, 14, 468, 568, 0, 0, 1427, 1682, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 51, 66, 0, 140, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 52.272, 71.874, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 3454, 0, 0, 0, 0, 10, ''),
+(91231, 0, 7192, 0, 0, 0, 'Cannoneer Dazzcrank', '', 60013, 13, 14, 468, 568, 0, 0, 1427, 1682, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 51, 66, 0, 140, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 52.272, 71.874, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 3454, 0, 0, 0, 0, 10, ''),
+(91232, 0, 7340, 0, 0, 0, 'Krez the Wise', 'Scroll and Book Vendor', 60014, 13, 14, 468, 568, 0, 0, 1427, 1682, 16388, 1, 1.14286, 0, 20, 5, 0, 0, 1, 51, 66, 0, 140, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 52.272, 71.874, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 10, ''),
+(91233, 0, 7110, 0, 0, 0, 'Technician Haztick', '', 0, 13, 14, 468, 568, 0, 0, 1427, 1682, 4, 1, 1.14286, 0, 20, 5, 0, 0, 1, 51, 66, 0, 140, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 52.272, 71.874, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 3368, 0, 0, 0, 0, 10, ''),
+(91234, 0, 7109, 0, 0, 0, 'Technician Grimzlow', 'Head Technician of Sparkwater', 0, 13, 14, 468, 568, 0, 0, 1427, 1682, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 51, 66, 0, 140, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 52.272, 71.874, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 3368, 0, 0, 0, 0, 10, ''),
+(91235, 0, 7192, 0, 0, 0, 'Technician Balwaz', '', 0, 13, 14, 468, 568, 0, 0, 1427, 1682, 4, 1, 1.14286, 0, 20, 5, 0, 0, 1, 51, 66, 0, 140, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 52.272, 71.874, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 10, ''),
+(91236, 8, 10747, 11375, 7102, 0, 'Sparkwater Bruiser', '', 0, 55, 55, 7842, 7842, 0, 0, 20, 1682, 0, 1, 1.42857, 0, 20, 5, 0, 0, 1, 154, 222, 0, 248, 1, 2000, 2000, 1, 36864, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 35021, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 16096, 0, 0, 0, 0, 524288, ''),
+(91237, 0, 15201, 0, 0, 0, 'Tradesman Laz', '', 0, 52, 52, 2468, 2568, 0, 0, 1427, 1682, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 51, 66, 0, 140, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 52.272, 71.874, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 10, ''),
+(91238, 0, 15765, 0, 0, 0, 'Lena Zapscrew', 'Innkeeper', 60015, 16, 16, 398, 698, 0, 0, 2753, 1682, 135, 1, 1.14286, 0, 20, 5, 0, 0, 1, 74, 96, 0, 208, 1, 1000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 62.744, 86.273, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 10, ''),
+(91239, 0, 7197, 0, 0, 0, 'Hangman Glix', 'Port Executioner', 60016, 7, 8, 468, 568, 0, 0, 1427, 1682, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 51, 66, 0, 140, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 52.272, 71.874, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 10, ''),
 (91240, 0, 18057, 0, 0, 0, 'Thorg the Big', 'Bouncer', 60017, 10, 12, 1468, 1568, 0, 0, 1427, 1682, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 51, 66, 0, 140, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 52.272, 71.874, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 10, ''),
 (91241, 0, 4083, 0, 0, 0, 'Tikku', '', 0, 10, 12, 468, 568, 0, 0, 1427, 1682, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 51, 66, 0, 140, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 52.272, 71.874, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 10, ''),
 (91242, 0, 7179, 0, 0, 0, 'Wazzrocket', '', 0, 10, 12, 368, 568, 0, 0, 1427, 1682, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 51, 66, 0, 140, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 52.272, 71.874, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 10, ''),
@@ -26,7 +66,7 @@ replace into creature_template values
 (91264, 0, 7157, 0, 0, 0, 'Woodworker Grack', '', 0, 5, 10, 168, 668, 0, 0, 1427, 1682, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 51, 66, 0, 140, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 52.272, 71.874, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 921, 0, 0, 0, 0, 10, ''),
 (91265, 0, 7180, 0, 0, 0, 'Woodworker Rustlug', '', 0, 5, 10, 168, 668, 0, 0, 1427, 1682, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 51, 66, 0, 140, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 52.272, 71.874, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 921, 0, 0, 0, 0, 10, ''),
 (91266, 0, 13349, 0, 0, 0, 'Nazgro Wacktoggle', 'Woodcutting Foreman', 60022, 10, 13, 368, 668, 0, 0, 1427, 1682, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 51, 66, 0, 140, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 52.272, 71.874, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 921, 0, 0, 0, 0, 10, ''),
-(91267, 0, 7171, 0, 0, 0, 'Shredder Operator Boltratchet', 'Woodcutting Foreman', 60023, 11, 12, 268, 668, 0, 0, 1427, 1682, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 51, 66, 0, 140, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 52.272, 71.874, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 10, ''),
+(91267, 0, 7171, 0, 0, 0, 'Shredder Operator Boltratchet', '', 60023, 11, 12, 268, 668, 0, 0, 1427, 1682, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 51, 66, 0, 140, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 52.272, 71.874, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 10, ''),
 (91268, 0, 7230, 0, 0, 0, 'Technician Fraxdust', '', 0, 5, 12, 268, 668, 0, 0, 1427, 1682, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 51, 66, 0, 140, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 52.272, 71.874, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 10, ''),
 (91269, 0, 7171, 0, 0, 0, 'Miner Gralwax', '', 0, 5, 12, 268, 668, 0, 0, 1427, 1682, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 51, 66, 0, 140, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 52.272, 71.874, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 1094, 0, 0, 0, 0, 10, ''),
 (91270, 0, 7202, 0, 0, 0, 'Miner Kazzlebucket', '', 0, 5, 12, 268, 668, 0, 0, 1427, 1682, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 51, 66, 0, 140, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 52.272, 71.874, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 1094, 0, 0, 0, 0, 10, ''),
@@ -42,21 +82,24 @@ replace into creature_template values
 (91280, 0, 7053, 0, 0, 0, 'Brizclang Spuckettool', 'Brightwater Crew', 60029, 10, 14, 468, 568, 0, 0, 1427, 1682, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 51, 66, 0, 140, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 52.272, 71.874, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 3454, 0, 0, 0, 0, 10, ''),
 (91281, 0, 15300, 0, 0, 0, 'Spanessa Fogwater', 'Brightwater Crew', 60030, 10, 14, 468, 568, 0, 0, 1427, 1682, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 51, 66, 0, 140, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 52.272, 71.874, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 3454, 0, 0, 0, 0, 10, ''),
 (91282, 0, 7106, 0, 0, 0, 'Shalgrig Pipeshack', 'Brightwater Crew', 0, 10, 14, 468, 568, 0, 0, 1427, 1682, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 51, 66, 0, 140, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 52.272, 71.874, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 3454, 0, 0, 0, 0, 10, ''),
-(91283, 0, 6761, 0, 0, 0, 'Lieutenant Azsalus', NULL, 0, 54, 54, 5847, 6030, 5340, 5461, 1742, 1682, 0, 0.888888, 1.14286, 1.3, 20, 5, 0, 1, 1, 460, 593, 0, 262, 1, 2000, 2000, 8, 64, 0, 0, 0, 0, 0, 0, 65.7432, 90.3969, 100, 2, 0, 7437, 0, 7437, 0, 0, 0, 85, 0, 170, 15784, 15043, 0, 0, 0, 0, 357, 472, '', 1, 1, 0, 0, 3, 7437, 0, 0, 0, 0, 0, 'generic_spell_ai'),
-(91284, 0, 864, 0, 0, 0, 'Captain Salt Tooth', 'Bloodsail Captain', 0, 45, 45, 2859, 2917, 0, 0, 2846, 119, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 61, 78, 0, 204, 1, 2000, 2000, 1, 32768, 0, 0, 0, 0, 0, 0, 62.8672, 86.4424, 100, 7, 0, 1565, 1565, 0, 0, 0, 0, 0, 0, 0, 0, 12540, 744, 0, 15650, 0, 83, 114, 'EventAI', 0, 3, 0, 0, 3, 1565, 0, 0, 0, 0, 0, '');
+(91283, 0, 6761, 0, 0, 0, 'Lieutenant Azsalus', NULL, 0, 54, 54, 5847, 6030, 5340, 5461, 1742, 60, 0, 0.888888, 1.14286, 1.3, 20, 5, 0, 1, 1, 460, 593, 0, 262, 1, 2000, 2000, 8, 64, 0, 0, 0, 0, 0, 0, 65.7432, 90.3969, 100, 2, 0, 7437, 0, 7437, 0, 0, 0, 85, 0, 170, 15784, 15043, 0, 0, 0, 0, 357, 472, '', 1, 1, 0, 0, 3, 12557, 0, 0, 0, 0, 0, 'generic_spell_ai'),
+(91284, 0, 864, 0, 0, 0, 'Captain Salt Tooth', 'Bloodsail Captain', 0, 45, 45, 2859, 2917, 0, 0, 2846, 1682, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 61, 78, 0, 204, 1, 2000, 2000, 1, 32768, 0, 0, 0, 0, 0, 0, 62.8672, 86.4424, 100, 7, 0, 1565, 1565, 0, 0, 0, 0, 0, 0, 0, 0, 12540, 744, 0, 15650, 0, 83, 114, 'EventAI', 0, 3, 0, 0, 3, 1565, 0, 0, 0, 0, 0, ''),
+(91285, 6, 6821, 0, 0, 0, 'Grol the Exile', '', 60031, 25, 25, 2000, 3000, 0, 0, 7, 31, 3, 1.2, 1.14286, 1, 20, 5, 0, 0, 1, 2, 2, 0, 44, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524288, ''),
+(91286, 0, 1303, 0, 0, 0, 'Shredder Operator Kixol', '', 60032, 10, 12, 268, 668, 0, 0, 1427, 1682, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 51, 66, 0, 140, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 52.272, 71.874, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 10, ''),
+(91287, 0, 11070, 0, 0, 0, 'Daela Evermoon', NULL, 60033, 25, 29, 1718, 1718, 2117, 2117, 2654, 69, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 2, 4096, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 4204, 0, 0, 0, 0, 524298, ''),
+(91288, 0, 2253, 0, 0, 0, 'Ardaen Evermoon', NULL, 9494, 25, 29, 1718, 1718, 2117, 2117, 2654, 69, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 2, 4096, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 15184, 0, 0, 0, 0, 524298, ''),
+(91289, 1, 14328, 0, 0, 0, 'Lord Rog', '', 60034, 42, 44, 1981, 2138, 0, 0, 4436, 31, 3, 1.2, 1.14286, 0, 20, 5, 0, 0, 1, 66, 90, 0, 194, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 59.0304, 81.1668, 100, 4, 0, 2736, 0, 0, 0, 0, 15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 3, 0, 0, 3, 0, 0, 0, 646016863, 0, 0, ''),
+(91290, 0, 14773, 0, 0, 0, 'Chief Yin\'do', 'Wildtusk Chieftain', 60035, 55, 55, 4667, 4667, 0, 0, 4292, 31, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 240, 260, 0, 122, 1, 2000, 2000, 1, 4096, 0, 0, 0, 0, 0, 0, 39.5824, 54.4258, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 3297, 0, 0, 0, 0, 524288, ''),
+(91291, 0, 3197, 0, 0, 0, 'Sagepaw', '', 0, 23, 24, 1189, 1282, 2714, 2886, 519, 65, 0, 0.95, 1.14286, 1.2, 20, 5, 0, 1, 1, 101, 130, 0, 100, 1, 1466, 2000, 8, 32768, 0, 0, 0, 0, 0, 0, 29.6792, 40.8089, 100, 7, 0, 436, 436, 0, 0, 0, 0, 0, 0, 0, 8994, 13787, 9613, 11639, 4360, 0, 102, 139, 'EventAI', 0, 3, 0, 0, 3, 436, 0, 0, 0, 0, 0, ''),
+(91292, 0, 7340, 0, 0, 0, 'Tarlo Farcrack', '', 60036, 20, 25, 800, 900, 0, 0, 20, 1682, 16391, 1, 1.14286, 0, 20, 5, 0, 0, 1, 15, 19, 0, 70, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 23.0384, 31.6778, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 3164, 0, 0, 0, 0, 524298, ''),
+(91293, 0, 3585, 0, 0, 0, 'Archivist Landas', NULL, 0, 30, 30, 1382, 1518, 2362, 2457, 703, 1682, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 32, 42, 0, 132, 1, 2000, 2000, 8, 32768, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 7, 0, 2272, 2272, 0, 0, 0, 0, 50, 0, 0, 3652, 20819, 15044, 0, 22720, 0, 44, 62, 'EventAI', 1, 3, 0, 0, 3, 2272, 0, 0, 0, 0, 0, '');
 
-update creature_template set faction = 1682 where entry between 91200 and 91290; -- Durotar Labor Union
-update creature_template set faction = 125 where entry in (91203, 91204, 91206, 91207, 91227, 91244, 91245, 91246, 91251, 91277); -- Orgrimmar
-update creature_template set faction = 87 where entry = 1565; update creature_template set faction = 60 where entry = 91283; 
 -- Gossip + Quest
-update creature_template set npc_flags = 3 where entry in (91266, 91267, 91274, 91251, 91277, 91280, 91281 );
+update creature_template set npc_flags = 3 where entry in (91266, 91267, 91274, 91251, 91277, 91280, 91281, 91285, 91286, 91289, 91287, 91288, 91290);
 -- Quest
 update creature_template set npc_flags = 2 where entry in (91268, 91269, 91275, 91276, 91234, 91254, 91203, 91282, 5546); 
-
-update creature_template set equipment_id = 1094 where entry in (91269, 91270, 91271, 91272, 91273, 91277); -- Minig Pick
-update creature_template set equipment_id = 921 where entry in (91264, 91265, 91266, 91279); -- Lumberjack Axe
-update creature_template set equipment_id = 1097 where entry in (91257, 91258, 91260, 91261, 91262, 91263); -- Wrench
-update creature_template set equipment_id = 12557 where entry = 91283;
+-- Gossip + Quest + Vendor
+update creature_template set npc_flags = 16391 where entry  = 91292;
 
 replace into creature_template_addon values 
 (91200, 0, 0, 0, 0, 0, 69, 0, NULL),
@@ -72,26 +115,6 @@ replace into creature_template_addon values
 (91271, 0, 0, 0, 0, 0, 233, 0, NULL),
 (91277, 0, 0, 0, 0, 0, 233, 0, NULL),
 (91279, 0, 0, 0, 0, 0, 233, 0, NULL);
-
-replace into npc_trainer values 
-(91202, 2275, 10, 0, 0, 5, 0, 5875),
-(91202, 2339, 100, 171, 25, 0, 0, 5875),
-(91202, 2340, 135, 171, 40, 0, 0, 5875),
-(91202, 2341, 250, 171, 55, 0, 0, 5875),
-(91202, 3179, 450, 171, 90, 0, 0, 5875),
-(91202, 3181, 1350, 171, 120, 0, 0, 5875),
-(91202, 3184, 50, 171, 15, 0, 0, 5875),
-(91202, 3185, 1350, 171, 125, 0, 0, 5875),
-(91202, 3186, 1800, 171, 130, 0, 0, 5875),
-(91202, 3458, 3600, 171, 110, 0, 0, 5875),
-(91202, 7180, 405, 171, 90, 0, 0, 5875),
-(91202, 7838, 225, 171, 80, 0, 0, 5875),
-(91202, 7839, 900, 171, 130, 0, 0, 5875),
-(91202, 7842, 900, 171, 100, 0, 0, 5875),
-(91202, 7846, 2700, 171, 140, 0, 0, 5875),
-(91202, 11536, 225, 171, 50, 0, 0, 5875),
-(91206, 7733, 100, 0, 0, 5, 0, 5875),
-(91206, 7734, 500, 356, 50, 0, 0, 5875);
 
 set @gossip_menu_id = 60000; set @magic_number = 91205; 
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); replace into broadcast_text (entry, Male_Text) values (@magic_number, 'If you\'re lookin\' for odds and ends from across the south sea\'s then you\'re in luck!\n\nThere\'s no other place you can get this stuff then right here at Zeet\'s!\n\nOh, and NO REFUNDS!'); replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
@@ -179,6 +202,44 @@ replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id,
 
 set @gossip_menu_id = 60030; set @magic_number = 91281; 
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Waiting for the Captain to send word back, he\'s taking his time.'); replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 60031; set @magic_number = 91285; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Darkness lurks, keep your mind safe.'); replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 60032; set @magic_number = 91286; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Boltratchet looks like he\'s having a bad time, not me though, hah!'); replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 60033; set @magic_number = 91287; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Welcome, please make yourself at home.'); replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 60034; set @magic_number = 91289; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); replace into broadcast_text (entry, Male_Text) values (@magic_number, 'The balance of power between the elemental forces keeps shifting.\n\nThere is a disturbance within the realm of earth, I know not where the cracks originate, or how they have begun but I sense a growing disconnect with each passing minute.'); replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 60035; set @magic_number = 91290; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Ma people have remained hidden within these heights for a long time, it is only now that we have been exiled from our homeland and beaten back to the shadows.\n\nThe supplies of my tribe has dwindled greatly, but I will offer you what little I can mon, is there anything that the Wildtusk can do for you?\n\nOr, is there anything you can do for us?'); replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 60036; set @magic_number = 91292; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); replace into broadcast_text (entry, Male_Text) values (@magic_number, 'You heard news from Sparkwater Port?'); replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+replace into npc_trainer values 
+(91202, 2275, 10, 0, 0, 5, 0, 5875),
+(91202, 2339, 100, 171, 25, 0, 0, 5875),
+(91202, 2340, 135, 171, 40, 0, 0, 5875),
+(91202, 2341, 250, 171, 55, 0, 0, 5875),
+(91202, 3179, 450, 171, 90, 0, 0, 5875),
+(91202, 3181, 1350, 171, 120, 0, 0, 5875),
+(91202, 3184, 50, 171, 15, 0, 0, 5875),
+(91202, 3185, 1350, 171, 125, 0, 0, 5875),
+(91202, 3186, 1800, 171, 130, 0, 0, 5875),
+(91202, 3458, 3600, 171, 110, 0, 0, 5875),
+(91202, 7180, 405, 171, 90, 0, 0, 5875),
+(91202, 7838, 225, 171, 80, 0, 0, 5875),
+(91202, 7839, 900, 171, 130, 0, 0, 5875),
+(91202, 7842, 900, 171, 100, 0, 0, 5875),
+(91202, 7846, 2700, 171, 140, 0, 0, 5875),
+(91202, 11536, 225, 171, 50, 0, 0, 5875),
+(91206, 7733, 100, 0, 0, 5, 0, 5875),
+(91206, 7734, 500, 356, 50, 0, 0, 5875);
 
 replace into npc_vendor values 
 (91201, 4470, 0, 0, 0, 0),
@@ -343,14 +404,20 @@ replace into item_template values
 (81331, 0, 12, 0, 'Rugnar\'s Letter', '', 3022, 1, 0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 4, 80305, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL),
 (81332, 0, 12, 0, 'Zuul\'s Note', '', 13497, 1, 0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 4, 80308, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL),
 (81333, 0, 4, 0, 'Goblin Essence of Knivery', 'Pure essence of the true features of a goblin condensed down', 35842, 4, 0, 1, 5000000, 10000, 12, -1, -1, 0, 55, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 5, 6, -24, 0, -24, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 24, 0, 0, 0, 0, 0, 24, 13669, 1, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL),
-(81334, 0, 12, 0, 'Salt Tooth\'s Head', 'There doesn\'t seem to be a \'salty\' tooth.', 3633, 1, 0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 4, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+(81334, 0, 12, 0, 'Salt Tooth\'s Head', 'There doesn\'t seem to be a \'salty\' tooth.', 3633, 1, 0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 4, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL),
+(81335, 0, 12, 0, 'Mosshide Gnoll Armband', '', 10301, 1, 0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 4, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL),
+(81336, 0, 12, 0, 'Tarlo\'s Crate ', 'It has a note attached to the top.', 11448, 1, 0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 4, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL),
+(81337, 0, 12, 0, 'Rock Elemental Mastery: Compendium III', 'A large, and overly thick book about Rock Elementals.', 6645, 1, 0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 4, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL),
+(81338, 0, 12, 0, 'Water-Weaving and Command', 'This large book seems incredibly aged.', 23175, 1, 0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 4, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
 
 update item_template set flags = 2048 where entry in (81334);
+update item_template set stackable = 10 where entry = 81335;
 
 update item_template set page_text = 80300 where entry = 81326; 
 update item_template set page_text = 80305 where entry = 81331;
 update item_template set page_text = 80308 where entry = 81332;
 update item_template set page_text = 80310 where entry = 81300;
+update item_template set page_text = 80311 where entry = 81336;
 
 replace into `page_text` values 
 (80300, 'This is Gazztoggle\'s Report from Azshara!\n\nI have suffered many set backs in my work, my assistant Frix that I was assigned has blundered almost every task I have given him, and almost lost the Surveying Gear we were given.\n\nFrix died to the local Satyrs and the Surveying Gear was recovered from their hands, I will need a new assistant as soon as possible, and one that\'s worth my time!', 80301),
@@ -359,7 +426,8 @@ replace into `page_text` values
 (80305, 'Greetings brother,\n\nI hope this letter finds you well, I am doing good in my work with the goblins of Sparkwater, I know you said my ventures were foolish but the money is great!', 80306),
 (80306, 'The weather of Durotar is as hot as ever and the sun beats with great strength.\n\nI am happy to hear of your success\', and wish you good fortunes.\n\nI hope to hear from you soon, let us keep in contact.\n\nRugnar.', 0),
 (80308, 'Rugnar, your words were nice to read within the overgrowth of weeds that is the Swamp of Sorrows.\n\nI have been given leave and should be departing to Orgrimmar soon, it\'s been too long since we have last seen one another, and I am looking forward to it greatly, and have many things to tell you.\n\nYour Brother Zuul', 0),
-(80310, 'In prophecy the gods will abandon the unfaithful and break apart those that do not listen.\n\nThe world will change and the spirits shall become corrupted, and break within.\n\nThe rock shall wither, the wind shall fade, and the water shall parch, heed the warnings of the end for it is the elements themselves that need our aid.', 0);
+(80310, 'In prophecy the gods will abandon the unfaithful and break apart those that do not listen.\n\nThe world will change and the spirits shall become corrupted, and break within.\n\nThe rock shall wither, the wind shall fade, and the water shall parch, heed the warnings of the end for it is the elements themselves that need our aid.', 0),
+(80311, 'Hey boss, sorry for the late delivery, it won\'t be late again, can promise you that! I enclosed an extra bit of money for how long it took.\n\nTARLO. ', 0);
 
 replace into creature_loot_template values 
 (639, 81315, -100, 6, 1, 1, 0, 0, 10),
@@ -372,12 +440,16 @@ replace into creature_loot_template values
 (6378, 81314, -50, 6, 1, 1, 0, 0, 10),
 (91284, 81334, -100, 6, 1, 1, 0, 0, 10);
 
-replace into gameobject_template values (1000250, 0, 3, 2891, 'Razlik\'s Tools', 0, 4, 0.7, 43, 1000250, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
-replace into gameobject_template values (1000251, 0, 3, 2971, 'Eldarath Ley-Shard', 0, 4, 0.5, 43, 1000251, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+replace into gameobject_template values
+(1000250, 0, 3, 2891, 'Razlik\'s Tools', 0, 4, 0.7, 43, 1000250, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(1000251, 0, 3, 2971, 'Eldarath Ley-Shard', 0, 4, 0.5, 43, 1000251, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(1000500, 0, 2, 49, 'Pile of Glinting Muck', 0, 4, 1, 0, 3672, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(1000501, 0, 3, 107, 'Water-Weaving and Command', 0, 4, 0.5, 43, 1000501, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
 
 replace into gameobject_loot_template values 
 (1000250, 81291, -100, 1, 1, 1, 0, 0, 10),
-(1000251, 81324, -100, 1, 1, 1, 0, 0, 10);
+(1000251, 81324, -100, 1, 1, 1, 0, 0, 10),
+(1000501, 81338, -100, 1, 1, 1, 0, 0, 10);
 
 replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewmoneymaxlevel, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (0,55000,14,9,7,0,0,'Razlik\'s Tools','Hey! You, yeah you!\n\nI got a problem that I need fixing and I\'ll tell ya, it\'s not sitting around waiting to work again that\'s for sure!\n\nWe\'re living paradise right now, but, you know how goblins work, eventually we\'ll be back on that oil platform, one way or another.\n\nThing is, I got a set of tools up there, from way back in the Venture Co. days, I\'m used to em see, and the last thing I want is some sea sucker knocking em off into the water to be lost forever.\n\nGo up there, find my tools, and get a few silver, whaddya say kid?','Find Razlik\'s lost tools on the Oil Platform east of the Port.','You got em yet? Or you just waitin\' around?','About time, I was gettin\' scared, thought I might\'a lost them!\n\nThey are a bit more dirty then I remember though, for muckin\' up my tools yer gonna get a silver less, no hard feelings!',81291,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,150,0,1001,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
 
