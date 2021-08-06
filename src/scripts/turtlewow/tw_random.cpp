@@ -6199,9 +6199,43 @@ struct npc_alphus_wordwillAI : public ScriptedAI
 
 CreatureAI* GetAI_npc_alphus_wordwill(Creature* _Creature) { return new npc_alphus_wordwillAI(_Creature); }
 
+
+
+bool GossipHello_npc_bloodsail_traitor(Player* pPlayer, Creature* pCreature)
+{
+    if (pPlayer->GetQuestStatus(55030) == QUEST_STATUS_INCOMPLETE && pPlayer->GetQuestStatusData(80730)->m_creatureOrGOcount[1] == 0)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Revilgaz sent me to look for information about the group hunting the Brightwater crew.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    }
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_bloodsail_traitor(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+        pCreature->MonsterSayToPlayer("Oh, he did , did he? Well, I might know a thing or two about that, the only crew that would be wanting the head of those goblins would be Captain Salt Tooth, he\'s got a camp to the north near the arena, and that\'s all I know, I swear!", pPlayer);
+        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(91294))
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+        pPlayer->CLOSE_GOSSIP_MENU();
+    }
+    return true;
+}
+
 void AddSC_tw_random()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_bloodsail_traitor";
+    newscript->pGossipHello = &GossipHello_npc_bloodsail_traitor;
+    newscript->pGossipSelect = &GossipSelect_npc_bloodsail_traitor;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_alphus_wordwill";
