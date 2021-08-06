@@ -6203,7 +6203,7 @@ CreatureAI* GetAI_npc_alphus_wordwill(Creature* _Creature) { return new npc_alph
 
 bool GossipHello_npc_bloodsail_traitor(Player* pPlayer, Creature* pCreature)
 {
-    if (pPlayer->GetQuestStatus(55030) == QUEST_STATUS_INCOMPLETE && pPlayer->GetQuestStatusData(80730)->m_creatureOrGOcount[1] == 0)
+    if (pPlayer->GetQuestStatus(55030) == QUEST_STATUS_INCOMPLETE && pPlayer->GetQuestStatusData(55030)->m_creatureOrGOcount[0] == 0)
     {
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Revilgaz sent me to look for information about the group hunting the Brightwater crew.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     }
