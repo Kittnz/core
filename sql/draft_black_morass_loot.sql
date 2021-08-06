@@ -600,5 +600,36 @@
  replace into creature_loot_template values (65124, 50203, 100, 9, 20, 25, 0, 0, 0);
  replace into creature_loot_template values (65125, 50203, 100, 9, 10, 15, 0, 0, 0);
 
+ -- Antnormi Loottable 1
+ replace into creature_loot_template values (65125, 61040, 12.375, 1, 1, 1, 0, 0, 0);
+ replace into creature_loot_template values (65125, 61027, 12.375, 1, 1, 1, 0, 0, 0);
+ replace into creature_loot_template values (65125, 61031, 12.375, 1, 1, 1, 0, 0, 0);
+ replace into creature_loot_template values (65125, 61037, 12.375, 1, 1, 1, 0, 0, 0);
+ replace into creature_loot_template values (65125, 61046, 12.375, 1, 1, 1, 0, 0, 0);
+ replace into creature_loot_template values (65125, 50429, 12.375, 1, 1, 1, 0, 0, 0);
+ replace into creature_loot_template values (65125, 61053, 12.375, 1, 1, 1, 0, 0, 0);
+ replace into creature_loot_template values (65125, 50427, 12.375, 1, 1, 1, 0, 0, 0);
+ replace into creature_loot_template values (65125, 61014, 1, 1, 1, 1, 0, 0, 0);
+ -- Antnormi Loottable 2
+ replace into creature_loot_template values (65125, 61040, 12.375, 2, 1, 1, 0, 0, 0);
+ replace into creature_loot_template values (65125, 61027, 12.375, 2, 1, 1, 0, 0, 0);
+ replace into creature_loot_template values (65125, 61031, 12.375, 2, 1, 1, 0, 0, 0);
+ replace into creature_loot_template values (65125, 61037, 12.375, 2, 1, 1, 0, 0, 0);
+ replace into creature_loot_template values (65125, 61046, 12.375, 2, 1, 1, 0, 0, 0);
+ replace into creature_loot_template values (65125, 50429, 12.375, 2, 1, 1, 0, 0, 0);
+ replace into creature_loot_template values (65125, 61053, 12.375, 2, 1, 1, 0, 0, 0);
+ replace into creature_loot_template values (65125, 50427, 12.375, 2, 1, 1, 0, 0, 0);
+ replace into creature_loot_template values (65125, 61014, 1, 2, 1, 1, 0, 0, 0);
+-- Antnormi Infinite Whelp Loottable
+ replace into creature_loot_template values (65125, 70016, 0.5, 3, 1, 1, 0, 0, 0);
  
+ -- Mossheart Loottable
+ replace into creature_loot_template values (65124, 61051, 16.5, 1, 1, 1, 0, 0, 0);
+ replace into creature_loot_template values (65124, 61050, 16.5, 1, 1, 1, 0, 0, 0);
+ replace into creature_loot_template values (65124, 61059, 16.5, 1, 1, 1, 0, 0, 0);
+ replace into creature_loot_template values (65124, 61060, 16.5, 1, 1, 1, 0, 0, 0);
+ replace into creature_loot_template values (65124, 61061, 16.5, 1, 1, 1, 0, 0, 0);
+ replace into creature_loot_template values (65124, 61062, 16.5, 1, 1, 1, 0, 0, 0);
+
+
  

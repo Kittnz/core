@@ -83,10 +83,10 @@ replace into creature_template values
 (91281, 0, 15300, 0, 0, 0, 'Spanessa Fogwater', 'Brightwater Crew', 60030, 10, 14, 468, 568, 0, 0, 1427, 1682, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 51, 66, 0, 140, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 52.272, 71.874, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 3454, 0, 0, 0, 0, 10, ''),
 (91282, 0, 7106, 0, 0, 0, 'Shalgrig Pipeshack', 'Brightwater Crew', 0, 10, 14, 468, 568, 0, 0, 1427, 1682, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 51, 66, 0, 140, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 52.272, 71.874, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 3454, 0, 0, 0, 0, 10, ''),
 (91283, 0, 6761, 0, 0, 0, 'Lieutenant Azsalus', NULL, 0, 54, 54, 5847, 6030, 5340, 5461, 1742, 60, 0, 0.888888, 1.14286, 1.3, 20, 5, 0, 1, 1, 460, 593, 0, 262, 1, 2000, 2000, 8, 64, 0, 0, 0, 0, 0, 0, 65.7432, 90.3969, 100, 2, 0, 7437, 0, 7437, 0, 0, 0, 85, 0, 170, 15784, 15043, 0, 0, 0, 0, 357, 472, '', 1, 1, 0, 0, 3, 12557, 0, 0, 0, 0, 0, 'generic_spell_ai'),
-(91284, 0, 864, 0, 0, 0, 'Captain Salt Tooth', 'Bloodsail Captain', 0, 45, 45, 2859, 2917, 0, 0, 2846, 1682, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 61, 78, 0, 204, 1, 2000, 2000, 1, 32768, 0, 0, 0, 0, 0, 0, 62.8672, 86.4424, 100, 7, 0, 1565, 1565, 0, 0, 0, 0, 0, 0, 0, 0, 12540, 744, 0, 15650, 0, 83, 114, 'EventAI', 0, 3, 0, 0, 3, 1565, 0, 0, 0, 0, 0, ''),
+(91284, 0, 4501, 0, 0, 0, 'Captain Salt Tooth', 'Bloodsail Captain', 0, 45, 45, 2859, 2917, 0, 0, 2846, 1682, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 61, 78, 0, 204, 1, 2000, 2000, 1, 32768, 0, 0, 0, 0, 0, 0, 62.8672, 86.4424, 100, 7, 0, 1565, 1565, 0, 0, 0, 0, 0, 0, 0, 0, 12540, 744, 0, 15650, 0, 83, 114, 'EventAI', 0, 3, 0, 0, 3, 1565, 0, 0, 0, 0, 0, ''),
 (91285, 6, 6821, 0, 0, 0, 'Grol the Exile', '', 60031, 25, 25, 2000, 3000, 0, 0, 7, 31, 3, 1.2, 1.14286, 1, 20, 5, 0, 0, 1, 2, 2, 0, 44, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524288, ''),
 (91286, 0, 1303, 0, 0, 0, 'Shredder Operator Kixol', '', 60032, 10, 12, 268, 668, 0, 0, 1427, 1682, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 51, 66, 0, 140, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 52.272, 71.874, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 10, ''),
-(91287, 0, 11070, 0, 0, 0, 'Daela Evermoon', NULL, 60033, 25, 29, 1718, 1718, 2117, 2117, 2654, 69, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 2, 4096, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 4204, 0, 0, 0, 0, 524298, ''),
+(91287, 0, 10878, 0, 0, 0, 'Daela Evermoon', NULL, 60033, 25, 29, 1718, 1718, 2117, 2117, 2654, 69, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 2, 4096, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 4204, 0, 0, 0, 0, 524298, ''),
 (91288, 0, 2253, 0, 0, 0, 'Ardaen Evermoon', NULL, 9494, 25, 29, 1718, 1718, 2117, 2117, 2654, 69, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 2, 4096, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 15184, 0, 0, 0, 0, 524298, ''),
 (91289, 1, 14328, 0, 0, 0, 'Lord Rog', '', 60034, 42, 44, 1981, 2138, 0, 0, 4436, 31, 3, 1.2, 1.14286, 0, 20, 5, 0, 0, 1, 66, 90, 0, 194, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 59.0304, 81.1668, 100, 4, 0, 2736, 0, 0, 0, 0, 15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 3, 0, 0, 3, 0, 0, 0, 646016863, 0, 0, ''),
 (91290, 0, 14773, 0, 0, 0, 'Chief Yin\'do', 'Wildtusk Chieftain', 60035, 55, 55, 4667, 4667, 0, 0, 4292, 31, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 240, 260, 0, 122, 1, 2000, 2000, 1, 4096, 0, 0, 0, 0, 0, 0, 39.5824, 54.4258, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 3297, 0, 0, 0, 0, 524288, ''),
@@ -101,6 +101,10 @@ update creature_template set npc_flags = 3 where entry in (91266, 91267, 91274, 
 update creature_template set npc_flags = 2 where entry in (91268, 91269, 91275, 91276, 91234, 91254, 91203, 91282, 5546, 91259); 
 -- Gossip + Quest + Vendor
 update creature_template set npc_flags = 16391 where entry  = 91292;
+
+update creature_template set loot_id = 91284 where entry = 91284;
+update creature_template set loot_id = 91283 where entry = 91283;
+update creature_template set equipment_id = 0 where entry = 91288;
 
 replace into creature_template_addon values 
 (91200, 0, 0, 0, 0, 0, 69, 0, NULL),
@@ -244,14 +248,14 @@ replace into npc_trainer values
 
 replace into npc_vendor values 
 (91201, 4470, 0, 0, 0, 0),
-(91205, 81297, 1, 0, 0, 0),
-(91205, 81298, 1, 0, 0, 0),
-(91205, 81299, 1, 0, 0, 0),
-(91205, 81300, 1, 0, 0, 0),
-(91205, 81301, 1, 0, 0, 0),
-(91205, 81302, 1, 0, 0, 0),
-(91205, 81303, 1, 0, 0, 0),
-(91205, 81304, 1, 0, 0, 0),
+(91205, 81297, 0, 0, 0, 0),
+(91205, 81298, 0, 0, 0, 0),
+(91205, 81299, 0, 0, 0, 0),
+(91205, 81300, 0, 0, 0, 0),
+(91205, 81301, 0, 0, 0, 0),
+(91205, 81302, 0, 0, 0, 0),
+(91205, 81303, 0, 0, 0, 0),
+(91205, 81304, 0, 0, 0, 0),
 (91207, 2129, 0, 0, 0, 0),
 (91207, 2379, 0, 0, 0, 0),
 (91207, 2380, 0, 0, 0, 0),
@@ -352,14 +356,14 @@ replace into npc_vendor values
 (91248, 4498, 0, 0, 0, 0),
 (91248, 5042, 0, 0, 0, 0),
 (91248, 6183, 0, 0, 0, 0),
-(91256, 81305, 1, 0, 0, 0),
-(91256, 81306, 1, 0, 0, 0),
-(91256, 81307, 1, 0, 0, 0),
-(91256, 81308, 1, 0, 0, 0),
-(91256, 81309, 1, 0, 0, 0),
-(91256, 81310, 1, 0, 0, 0),
-(91256, 81311, 1, 0, 0, 0),
-(91256, 81333, 1, 0, 0, 0);
+(91256, 81305, 0, 0, 0, 0),
+(91256, 81306, 0, 0, 0, 0),
+(91256, 81307, 0, 0, 0, 0),
+(91256, 81308, 0, 0, 0, 0),
+(91256, 81309, 0, 0, 0, 0),
+(91256, 81310, 0, 0, 0, 0),
+(91256, 81311, 0, 0, 0, 0),
+(91256, 81333, 0, 0, 0, 0);
 
 replace into item_template values 
 (81291, 0, 12, 0, 'Razlik\'s Tools', 'Small, crude, and smeared with oil, most definitely of goblin make.', 2053, 1, 0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 4, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL),
@@ -449,6 +453,7 @@ replace into creature_loot_template values
 (6116, 81323, -50, 6, 1, 1, 0, 0, 10),
 (6117, 81323, -50, 6, 1, 1, 0, 0, 10),
 (6378, 81314, -50, 6, 1, 1, 0, 0, 10),
+(91283, 81327, -100, 6, 1, 1, 0, 0, 10),
 (91284, 81334, -100, 6, 1, 1, 0, 0, 10);
 
 replace into gameobject_template values
@@ -603,7 +608,7 @@ replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minleve
 replace into creature_questrelation (id, quest) values (5546, 55023);
 replace into creature_involvedrelation (id, quest) values (91203, 55023);
 
-replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (0,55025,35,35,30,0,0,'Dry Hiding','I\'m losing my mind down here, we\'ve been told to stay a bit under the radar for the while after the old Brightwater took a few cannonballs to the side.\n\nBeen forced to stay in refuge for a few days now and I\'m going loopy! Aaah, if only there was a way to get some booze... Wait a second, you can get booze.\n\n Since we can\'t, make a trip up to The Salty Sailor and get my the following... Ahem...\n\n5 Jug of Bourbon\n3 Flagon of Mead\n10 Flask of Port\n...and 10 Cherry Grog!','Collect 5 Jug of Bourbon, 3 Flag of Mead, 10 Flask of Port, and 10 Cherry Grog for Shalgrig Pipeshack and the other Brightwater Crew.','Get the booze yet? We\'re dying down here!','Ahh! It\'s been a dang while since I\'ve been able to drink! You\'ve surely saved us.',2595,5,2594,3,2593,10,4600,10,0,0,0,0,0,0,0,0,0,0,1000,1250,1001,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (0,55025,35,35,30,0,0,'Dry Hiding','I\'m losing my mind down here, we\'ve been told to stay a bit under the radar for the while after the old Brightwater took a few cannonballs to the side.\n\nBeen forced to stay in refuge for a few days now and I\'m going loopy! Aaah, if only there was a way to get some booze... Wait a second, you can get booze.\n\nSince we can\'t, make a trip up to The Salty Sailor and get me the following... Ahem...\n\n5 Jug of Bourbon\n3 Flagon of Mead\n10 Flask of Port\n...and 10 Cherry Grog!','Collect 5 Jug of Bourbon, 3 Flag of Mead, 10 Flask of Port, and 10 Cherry Grog for Shalgrig Pipeshack and the other Brightwater Crew.','Get the booze yet? We\'re dying down here!','Ahh! It\'s been a dang while since I\'ve been able to drink! You\'ve surely saved us.',2595,5,2594,3,2593,10,4600,10,0,0,0,0,0,0,0,0,0,0,1000,1250,1001,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
 
 replace into creature_questrelation (id, quest) values (91282, 55025);
 replace into creature_involvedrelation (id, quest) values (91282, 55025);
