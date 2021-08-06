@@ -120,6 +120,9 @@ replace into npc_vendor (entry, item) values (81021, 23713);
 replace into npc_vendor (entry, item) values (81021, 19055);
 replace into npc_vendor (entry, item) values (81021, 50013);
 replace into npc_vendor (entry, item) values (81021, 50019);
+
+replace into gameobject_template values (1772030, 0, 9, 218, 'Grim Batol Memorial', 0, 0, 1.5, 1000246, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+replace into page_text values (1772030, 'Grim Batol Memorial\n\n\n\n A shrine dedicated to those that fought, and gave their lives in the defence of innocents against our greatest of challenges. May this shrine forever honor those that died within our once great halls in defiance against our invaders.\n\nYou shall never be forgotten.', 0);
 replace into npc_vendor (entry, item) values (81021, 50083);
 replace into npc_vendor (entry, item) values (81021, 50084);
 replace into npc_vendor (entry, item) values (81021, 22781);
