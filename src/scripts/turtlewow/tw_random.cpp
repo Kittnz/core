@@ -6227,9 +6227,57 @@ bool GossipSelect_npc_bloodsail_traitor(Player* pPlayer, Creature* pCreature, ui
     return true;
 }
 
+
+bool QuestAccept_npc_shalgrig(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver)
+        return false;
+
+    if (!pPlayer)
+        return false;
+
+    if (pQuest->GetQuestId() == 55032) // Return to Port!
+    {
+        Creature* spanessa = pPlayer->FindNearestCreature(91281, 30.0F);
+        Creature* brizclang = pPlayer->FindNearestCreature(91280, 30.0F);
+
+        if (spanessa && brizclang)
+        {
+            DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = spanessa]() {
+                Map* map = sMapMgr.FindMap(0);
+                npc->HandleEmote(EMOTE_ONESHOT_TALK);
+                npc->MonsterSayToPlayer("Finally, I can sleep in a real bed!", player);
+                });
+            DoAfterTime(pPlayer, 3 * IN_MILLISECONDS, [player = pPlayer, npc = brizclang]() {
+                Map* map = sMapMgr.FindMap(0);
+                npc->HandleEmote(EMOTE_ONESHOT_CHEER);
+                npc->MonsterSayToPlayer("Well, maybe we can get back to sailing soon, after a nice break! Thanks!", player);
+                });
+            DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+                Map* map = sMapMgr.FindMap(0);
+                npc->HandleEmote(EMOTE_ONESHOT_WAVE);
+                npc->MonsterSayToPlayer("Goodluck out there, and may you have the sailors luck!", player);
+                });
+            return true;
+        }
+        else
+        {
+            pQuestGiver->HandleEmote(EMOTE_ONESHOT_WAVE);
+            pQuestGiver->MonsterSayToPlayer("Goodluck out there, and may you have the sailors luck!", pPlayer);
+            return true;
+        }
+    }
+    return false;
+}
+
 void AddSC_tw_random()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_shalgrig";
+    newscript->pQuestAcceptNPC = &QuestAccept_npc_shalgrig;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_bloodsail_traitor";
