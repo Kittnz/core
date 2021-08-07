@@ -475,7 +475,8 @@ replace into creature_loot_template values
 (6117, 81323, -50, 6, 1, 1, 0, 0, 10),
 (6378, 81314, -50, 6, 1, 1, 0, 0, 10),
 (91283, 81327, -100, 6, 1, 1, 0, 0, 10),
-(91284, 81334, -100, 6, 1, 1, 0, 0, 10);
+(91284, 81334, -100, 6, 1, 1, 0, 0, 10),
+(2319, 81337, -8, 6, 1, 1, 0, 0, 10);
 
 replace into gameobject_template values
 (1000250, 0, 3, 2891, 'Razlik\'s Tools', 0, 4, 0.7, 43, 1000250, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
@@ -713,3 +714,8 @@ replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minleve
 
 replace into creature_questrelation (id, quest) values (91292, 55038);
 replace into creature_involvedrelation (id, quest) values (91237, 55038);
+
+replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (0,55039,279,35,25,0,0,'Seeking Lost Answers','The Kingdom of Alterac fell to ruin after their betrayal of the Alliance, I find it fitting that a nation of traitors soon after became a roving band of brigands, pilferers and cutthroats.\n\nThose who lay ruin to the lands and take which is not truly theirs in the first place.\n\nThe Syndicate have stolen from Dalaran a tome of great importance that the Kirin Tor requires back, it is the third chapter of the rock elemental compendiums.\n\nThere are many building projects being done in and around Dalaran that such a book is needed to keep our control over the Elementals around us.\n\nSyndicate Wizards have taken the book to the small town of Strahnbrad in the Alterac Mountains.\n\nTake back that which was taken from us, and dispense justice to the uncivil curs.','Retrieve the Rock Elemental Mastery : Compendium III from Syndicate Wizards in Strahnbrad.','The tome is of great importance, do act quickly master $r .','Dalaran thanks you greatly for your efforts, it is the effort of adventurer\'s like you that not all seems lost in this new world.',81337,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,200,2675,61,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+replace into creature_questrelation (id, quest) values (2543, 55039);
+replace into creature_involvedrelation (id, quest) values (2543, 55039);
