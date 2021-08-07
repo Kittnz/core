@@ -282,6 +282,12 @@ void AddSC_boss_dark_reaver();
 void AddSC_boss_ostarius();
 void AddSC_CUSTOM_SPELL();
 
+void AddSC_boss_abbendis();
+void AddSC_boss_ardaeus();
+void AddSC_boss_daelus();
+void AddSC_boss_mariella();
+void AddSC_instance_scarlet_citadel();
+
 void AddScripts()
 {
     //Nostalrius
@@ -561,4 +567,10 @@ void AddScripts()
     AddSC_boss_dark_reaver();
     AddSC_boss_ostarius();
     AddSC_CUSTOM_SPELL();
+
+    AddSC_boss_abbendis();
+    AddSC_boss_ardaeus();
+    AddSC_boss_daelus();
+    AddSC_boss_mariella();
+    AddSC_instance_scarlet_citadel();
 }

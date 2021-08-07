@@ -308,6 +308,12 @@ set (SCRIPTS_SRCS
     turtlewow/dungeons/caverns_of_time/black_morass/boss_chromie.cpp
     turtlewow/dungeons/caverns_of_time/black_morass/boss_chronormu.cpp
 
+    turtlewow/dungeons/scarlet_citadel/boss_abbendis.cpp
+    turtlewow/dungeons/scarlet_citadel/boss_ardaeus.cpp
+    turtlewow/dungeons/scarlet_citadel/boss_daelus.cpp
+    turtlewow/dungeons/scarlet_citadel/boss_mariella.cpp
+    turtlewow/dungeons/scarlet_citadel/instance_scarlet_citadel.cpp
+
     turtlewow/mirage_raceway.cpp
     turtlewow/transmog/transmog.cpp
     turtlewow/gardening.cpp
