@@ -435,6 +435,16 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '0', '0', '0', '0', '0', '0', '2', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
+ 
+replace into item_template values
+ ('81341', '0', '4', '3', 'Gowlfang\'s Vest', '', '26949', '2', '0', '1', '10424', '2606', '5', '-1', '-1', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '7', '3', '4',
+ '6', '2', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '201', '0', '0', '5',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '1', '1', '0', '0', '100', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
 
 update item_template set flags = 2048 where entry in (81334);
 update item_template set stackable = 10 where entry = 81335;
@@ -676,8 +686,14 @@ replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minleve
 replace into creature_questrelation (id, quest) values (91243, 55033);
 replace into creature_involvedrelation (id, quest) values (91243, 55033);
 
-replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (0,55034,14,24,16,0,0,'Kill-Kill Mosshides!','Friends betray Gowlfang because bad-bad leader says too, Mosshide no longer friend of Gowlfang, and Gowlfang kill-kill betrayers!\n\nGo to Mosshide Fen, in wetlands yes yes, make sure they suffer, kill them good-good, hah!\n\nBring me armbands to prove-prove you did good work and did what Gowlfang ask-ask yes yes!','Slay Mosshide Gnolls and retrieve 10 Mosshide Gnollbands for Gowlfang.','You get-get armbands yet? Why waste Gowlfang time?','Now Mosshide know who real leader is, perhaps one day they listen-listen!',0,0,0,0,0,0,0,0,91291,1,0,0,0,0,0,0,0,0,50,1200,0,0,0,0,0,0,0,0,0,0,0,1211,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (0,55034,14,24,16,0,0,'Kill-Kill Mosshides!','Friends betray Gowlfang because bad-bad leader says too, Mosshide no longer friend of Gowlfang, and Gowlfang kill-kill betrayers!\n\nGo to Mosshide Fen, in wetlands yes yes, make sure they suffer, kill them good-good, hah!\n\nBring me armbands to prove-prove you did good work and did what Gowlfang ask-ask yes yes!','Slay Mosshide Gnolls and retrieve 10 Mosshide Gnollbands for Gowlfang.','You get-get armbands yet? Why waste Gowlfang time?','Now Mosshide know who real leader is, perhaps one day they listen-listen!',0,0,0,0,0,0,0,0,91291,1,0,0,0,0,0,0,0,0,50,1200,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
 
 replace into creature_questrelation (id, quest) values (91243, 55034);
 replace into creature_involvedrelation (id, quest) values (91243, 55034);
 
+replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (55034,55035,14,24,16,0,0,'Hidden-Hidden Reward','You did Gowlfang good-good, no other gnoll ever do for me like that before! I give you gift show that Mosshide good gnoll, strong gnolls!\n\nI bury-bury chest in hollowed out tree at bottom of dam, should be still there unless someone steal, you find, treasure for you, Gowlfang no need what inside, all for you.','Find the Hidden Mosshide Chest and claim its reward.','Within the hollowed out tree you see a small pile of muck that is oddly formed.','Now Mosshide know who real leader is, perhaps one day they listen-listen!',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,10000,1750,0,0,0,0,0,0,0,0,0,0,0,81341,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+update quest_template set questflags = 512 where entry = 55035;
+
+replace into creature_questrelation (id, quest) values (91243, 55035);
+replace into gameobject_involvedrelation (id, quest) values (1000500, 55035);
