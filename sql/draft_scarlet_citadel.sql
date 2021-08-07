@@ -14,29 +14,48 @@ INSERT INTO `map_template` (`entry`, `patch`, `parent`, `map_type`, `linked_zone
 (44, 0, 0, 2, 0, 10, 7, -1, 0, 0, 'Scarlet Citadel', 'instance_scarlet_citadel');
 
 -- Doors
-DELETE FROM `gameobject_template` WHERE `entry` BETWEEN 5000000 AND 5000004;
+DELETE FROM `gameobject_template` WHERE `entry` BETWEEN 5000000 AND 5000010;
 INSERT INTO `gameobject_template` (`entry`, `patch`, `type`, `displayId`, `name`, `faction`, `flags`, `size`, `data0`, `data1`, `data2`, `data3`, `data4`, `data5`, `data6`, `data7`, `data8`, `data9`, `data10`, `data11`, `data12`, `data13`, `data14`, `data15`, `data16`, `data17`, `data18`, `data19`, `data20`, `data21`, `data22`, `data23`, `mingold`, `maxgold`, `script_name`) VALUES
-(5000000, 0, 0, 6385, 'ScarletCitadel_Green_Instance_Whirl', 0, 52, 0.6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
-(5000001, 0, 0, 3751, 'ScarletCitadel_Entry_Grid_Door', 0, 52, 1.29, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
-(5000002, 0, 0, 444, 'ScarletCitadel_Vendor_Door', 0, 52, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
-(5000003, 0, 0, 444, 'ScarletCitadel_Boss2_Door', 0, 52, 1.2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
-(5000004, 0, 0, 6385, 'ScarletCitadel_Right_Wing_Door', 0, 52, 1.1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+(5000000, 0, 0, 6385, 'SC_INSTANCE_WHIRL', 0, 52, 0.6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(5000001, 0, 0, 6385, 'SC_RIGHT_WING_DOOR', 0, 52, 1.1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(5000002, 0, 0, 6385, 'SC_ABBENDIS_DOOR', 0, 52, 1.1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(5000003, 0, 0, 3751, 'SC_ENTER_DOOR_LOCKED', 0, 52, 1.29, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(5000004, 0, 0, 444, 'SC_VENDOR_DOOR_LEFT', 0, 52, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(5000005, 0, 0, 444, 'SC_VENDOR_DOOR_RIGHT', 0, 52, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(5000006, 0, 0, 444, 'SC_DAELUS_DOOR', 0, 52, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(5000007, 0, 0, 444, 'SC_DAELUS_DOOR_LOCKED', 0, 52, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(5000008, 0, 0, 444, 'SC_ARDAEUS_DOOR_ENTER', 0, 52, 1.2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(5000009, 0, 0, 444, 'SC_ARDAEUS_DOOR_EXIT', 0, 52, 1.2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(5000010, 0, 0, 444, 'SC_MARIELLA_DOOR', 0, 52, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
 
 DELETE FROM `gameobject` WHERE `guid` BETWEEN 5000000 AND 5000012;
 INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`, `spawn_flags`, `visibility_mod`, `patch_min`, `patch_max`) VALUES
-(5000000, 5000000, 44, 70.75, -0.725565, 21, 6.25026, 0, 0, 0.0164639, -0.999864, 0, 0, 100, 1, 0, 533.333, 0, 10), -- Instance Whirl
-(5000001, 5000001, 44, 72.8568, -0.839216, 18.6773, 3.14298, 0, 0, 1, -0.000692173, 0, 0, 100, 1, 0, 533.333, 0, 10), -- Perma Locked Instance Gate
-(5000002, 5000002, 44, 68.7409, -12.7199, 18.6773, 0.00833514, 0, 0, 0.00416756, 0.999991, 0, 0, 100, 1, 0, 533.333, 0, 10), -- Left Vendor Door
-(5000003, 5000002, 44, 68.7249, 11.0146, 18.6773, 6.27494, 0, 0, 0.00412454, 0.999991, 0, 0, 100, 1, 0, 533.333, 0, 10), -- Right Vendor Door
-(5000004, 5000002, 44, 141.352, -12.7469, 18.6773, 3.11881, 0, 0, 0.999935, 0.0113925, 0, 0, 100, 1, 0, 533.333, 0, 10), -- First Room Right Perma Locked Door
-(5000005, 5000002, 44, 143.98, -12.8275, 18.6774, 0.0176611, 0, 0, 0.00883043, 0.999961, 0, 0, 100, 1, 0, 533.333, 0, 10), -- First Room Right Perma Locked Door
-(5000006, 5000002, 44, 140.889, 11.0119, 18.6773, 6.28056, 0, 0, 0.00131241, -0.999999, 0, 0, 100, 1, 0, 533.333, 0, 10), -- First Room Boss Door
-(5000007, 5000003, 44, 244.069, -99.993, 18.6773, 0.00169, 0, 0, 0.00544775, -0.999985, 0, 0, 100, 0, 0, 533.333, 0, 10), -- Second Boss Bottom Door
-(5000008, 5000002, 44, 286.786, -100.016, 31.4936, 3.20612, 0, 0, 0.00281054, 0.999996, 0, 0, 100, 1, 0, 533.333, 0, 10), -- Second Boss Top Door
-(5000009, 104600, 44, 374.393, -120.773, 32.4956, 1.59063, 0, 0, 0.706667, 0.707546, 0, 0, 100, 1, 1, 533.333, 0, 10), -- Last Boss Chamber Door
-(5000010, 180497, 44, 374.397, -18.1461, 34.4945, 4.72046, 0, 0, 0.704249, -0.709953, 0, 0, 100, 0, 1, 533.333, 0, 10), -- Last Boss Room Door
-(5000011, 5000004, 44, 308.668, -53.3655, 35.6911, 3.19283, 0, 0, 0.0116924, -0.999932, 0, 0, 100, 1, 1, 533.333, 0, 10), -- Right Wing Door
-(5000012, 5000003, 44, 221.343, 25.8922, 31.493, 3.13509, 0, 0, 0.999995, 0.00325365, 0, 0, 100, 0, 1, 533.333, 0, 10); -- Third Boss Door
+(5000000, 5000000, 44, 70.75, -0.725565, 21, 6.25026, 0, 0, 0.0164639, -0.999864, 300, 300, 100, 1, 1, 0, 0, 10), -- Instance Locked Whirl
+(5000001, 5000003, 44, 72.8568, -0.839216, 18.6773, 3.14298, 0, 0, 1, -0.000692173, 300, 300, 100, 1, 1, 0, 0, 10), -- Instance Locked Door
+(5000002, 5000004, 44, 68.7409, -12.7199, 18.6773, 0.00833514, 0, 0, 0.00416756, 0.999991, 300, 300, 100, 1, 1, 0, 0, 10), -- Left Vendor Door
+(5000003, 5000005, 44, 68.7249, 11.0146, 18.6773, 6.27494, 0, 0, 0.00412454, 0.999991, 300, 300, 100, 1, 1, 0, 0, 10), -- Right Vendor Door
+(5000004, 5000007, 44, 141.352, -12.7469, 18.6773, 3.11881, 0, 0, 0.999935, 0.0113925, 300, 300, 100, 1, 1, 0, 0, 10), -- Boss Daelus' Locked Door
+(5000005, 5000007, 44, 143.98, -12.8275, 18.6774, 0.0176611, 0, 0, 0.00883043, 0.999961, 300, 300, 100, 1, 1, 0, 0, 10), -- Boss Daelus' Locked Door
+(5000006, 5000006, 44, 140.889, 11.0119, 18.6773, 6.28056, 0, 0, 0.00131241, -0.999999, 300, 300, 100, 1, 1, 0, 0, 10), -- Boss Daelus' Door
+(5000007, 5000008, 44, 244.069, -99.993, 18.6773, 0.00169, 0, 0, 0.00544775, -0.999985, 300, 300, 100, 0, 1, 0, 0, 10), -- Boss Ardaeus' Enter Door
+(5000008, 5000009, 44, 286.786, -100.016, 31.4936, 3.20612, 0, 0, 0.00281054, 0.999996, 300, 300, 100, 1, 1, 0, 0, 10), -- Boss Ardaeus' Exit Door
+(5000009, 104600, 44, 374.393, -120.773, 32.4956, 1.59063, 0, 0, 0.706667, 0.707546, 300, 300, 100, 1, 1, 0, 0, 10), -- Boss Abbendis' Locked Door
+(5000010, 5000002, 44, 374.397, -18.1461, 34.4945, 4.72046, 0, 0, 0.704249, -0.709953, 300, 300, 100, 0, 1, 0, 0, 10), -- Boss Abbendis' Door
+(5000011, 5000001, 44, 308.668, -53.3655, 35.6911, 3.19283, 0, 0, 0.0116924, -0.999932, 300, 300, 100, 1, 1, 0, 0, 10), -- Right Wing Door
+(5000012, 5000010, 44, 221.343, 25.8922, 31.493, 3.13509, 0, 0, 0.999995, 0.00325365, 300, 300, 100, 0, 1, 0, 0, 10); -- Boss Mariella's Door
+
+-- NPCs
+DELETE FROM `creature_template` WHERE `entry` BETWEEN 2000000 AND 2000002;
+INSERT INTO `creature_template` (`entry`, `patch`, `display_id1`, `display_id2`, `display_id3`, `display_id4`, `name`, `subname`, `gossip_menu_id`, `level_min`, `level_max`, `health_min`, `health_max`, `mana_min`, `mana_max`, `armor`, `faction`, `npc_flags`, `speed_walk`, `speed_run`, `scale`, `detection_range`, `call_for_help_range`, `leash_range`, `rank`, `xp_multiplier`, `dmg_min`, `dmg_max`, `dmg_school`, `attack_power`, `dmg_multiplier`, `base_attack_time`, `ranged_attack_time`, `unit_class`, `unit_flags`, `dynamic_flags`, `beast_family`, `trainer_type`, `trainer_spell`, `trainer_class`, `trainer_race`, `ranged_dmg_min`, `ranged_dmg_max`, `ranged_attack_power`, `type`, `type_flags`, `loot_id`, `pickpocket_loot_id`, `skinning_loot_id`, `holy_res`, `fire_res`, `nature_res`, `frost_res`, `shadow_res`, `arcane_res`, `spell_id1`, `spell_id2`, `spell_id3`, `spell_id4`, `spell_list_id`, `pet_spell_list_id`, `gold_min`, `gold_max`, `ai_name`, `movement_type`, `inhabit_type`, `civilian`, `racial_leader`, `regeneration`, `equipment_id`, `trainer_id`, `vendor_id`, `mechanic_immune_mask`, `school_immune_mask`, `flags_extra`, `script_name`) VALUES
+(2000000, 0, 10529, 0, 0, 0, 'High Monk Daelus', 'Scarlet Citadel', 0, 63, 63, 700000, 700000, 5000000, 5000000, 4500, 67, 1, 1.5, 1.5, 1, 20, 5, 0, 3, 1, 5000, 7000, 0, 100, 1, 1000, 3700, 0, 0, 0, 0, 0, 0, 0, 0, 220, 320, 100, 7, 72, 0, 0, 0, 250, 15, 15, 15, 15, 15, 0, 0, 0, 0, 0, 0, 320113, 391250, '', 0, 3, 0, 0, 3, 0, 0, 0, 3167436667, 0, 2130689, 'boss_daelus'),
+(2000001, 0, 10529, 0, 0, 0, 'Grand Magi Ardaeus', 'Scarlet Citadel', 0, 63, 63, 500000, 500000, 5000000, 5000000, 6000, 67, 1, 1.5, 1.5, 1, 20, 5, 0, 3, 1, 5000, 7000, 0, 100, 1, 1000, 3700, 0, 0, 0, 0, 0, 0, 0, 0, 220, 320, 100, 7, 72, 0, 0, 0, 15, 15, 15, 15, 15, 15, 0, 0, 0, 0, 0, 0, 320113, 391250, '', 0, 3, 0, 0, 3, 0, 0, 0, 3167436667, 0, 2130689, 'boss_ardaeus'),
+(2000002, 0, 10529, 0, 0, 0, 'Master Inquisitor Mariella', 'Scarlet Citadel', 0, 63, 63, 500000, 500000, 5000000, 5000000, 4500, 67, 1, 1.5, 1.5, 1, 20, 5, 0, 3, 1, 5000, 7000, 0, 100, 1, 1000, 3700, 0, 0, 0, 0, 0, 0, 0, 0, 220, 320, 100, 7, 72, 0, 0, 0, 250, 15, 15, 15, 250, 15, 0, 0, 0, 0, 0, 0, 320113, 391250, '', 0, 3, 0, 0, 3, 0, 0, 0, 3167436667, 0, 2130689, 'boss_mariella');
+
+DELETE FROM `creature` WHERE `id` BETWEEN 2000000 AND 2000002;
+INSERT INTO `creature` (`guid`, `id`, `id2`, `id3`, `id4`, `map`, `display_id`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `wander_distance`, `health_percent`, `mana_percent`, `movement_type`, `spawn_flags`, `visibility_mod`, `patch_min`, `patch_max`) VALUES
+(2562029, 2000000, 0, 0, 0, 44, 0, 0, 104.894, -0.835886, 18.6774, 6.27162, 604800, 604800, 0, 100, 100, 2, 0, 0, 0, 10),
+(2562030, 2000001, 0, 0, 0, 44, 0, 0, 269.607, -100.035, 18.6794, 3.16849, 604800, 604800, 0, 100, 100, 2, 0, 0, 0, 10),
+(2562031, 2000002, 0, 0, 0, 44, 0, 0, 196.597, 25.8633, 30.8391, 6.2708, 604800, 604800, 0, 100, 100, 2, 0, 0, 0, 10);
 
 -- Alliance attunement.
 
