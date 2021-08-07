@@ -6227,7 +6227,6 @@ bool GossipSelect_npc_bloodsail_traitor(Player* pPlayer, Creature* pCreature, ui
     return true;
 }
 
-
 bool QuestAccept_npc_shalgrig(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
 {
     if (!pQuestGiver)
@@ -6270,9 +6269,34 @@ bool QuestAccept_npc_shalgrig(Player* pPlayer, Creature* pQuestGiver, Quest cons
     return false;
 }
 
+
+bool QuestRewarded_npc_ansirem(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver)
+        return false;
+
+    if (!pPlayer)
+        return false;
+
+    if (pQuest->GetQuestId() == 55040) // Returning Property
+    {
+        pQuestGiver->HandleEmote(EMOTE_ONESHOT_BOW);
+        pQuestGiver->SummonGameObject(2005011, pPlayer->GetPositionX(), pPlayer->GetPositionY(), pPlayer->GetPositionZ(), pPlayer->GetOrientation(), 0.0f, 0.0f, 0.0f, 0.0f, 5, true);
+        pQuestGiver->CastSpell(pPlayer, 10157, false);
+        pQuestGiver->MonsterSayToPlayer("Travel safely, friend!", pPlayer);
+        return true;
+    }
+    return true;
+}
+
 void AddSC_tw_random()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_ansirem";
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_ansirem;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_shalgrig";
