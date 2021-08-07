@@ -426,6 +426,16 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '1', '3', '0', '0', '75', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
 
+replace into item_template values
+ ('81340', '0', '15', '0', 'Greenpaw Medallion', 'A symbol of better days', '32282', '0', '0', '1', '400', '100', '0', '-1', '-1', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '2', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+
 update item_template set flags = 2048 where entry in (81334);
 update item_template set stackable = 10 where entry = 81335;
 
@@ -655,4 +665,10 @@ update creature_template set script_name = 'npc_shalgrig' where entry = 91282;
 
 replace into creature_questrelation (id, quest) values (91282, 55032);
 replace into creature_involvedrelation (id, quest) values (91259, 55032);
+
+replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (0,55032,331,24,16,0,0,'Reduced to Madness','My people have been reduced to madness, insanity and a bloodlust for riddled fever dreams of nothingness.\n\nIt is like a shadow clouds their minds, and blocks all clarity from being perceived.\n\nDo you know the pain of not knowing those you once knew? To look upon the face of a friend and recognize nothing from them but utter savagery as if they were speaking a foreign language?\n\nMy kin are lost, and it hurts me greatly to admit that I no longer have a home within these forests. Something must be done to stop the madness, and to end it all.\n\nTravel to the Greenpaw Village just south of here, and rid my once home of the Foulweald Shaman\'s that lurk there, they are nothing of what they once were, and perpetuate the horrors.','Travel to Greenpaw village and slay 8 Foulweald Shaman.','If nothing is done my friends and kin will slay the innocent senselessly, it must be done...','It pains my soul to imagine it has come to this, it feels as if there is no light left within this once beautiful forest, I thank you for easing the troubled minds, maybe they can find clarity in the after life. Take this, I will need it no longer.',0,0,0,0,0,0,0,0,3748,8,0,0,0,0,0,0,0,0,0,2175,0,0,0,0,0,0,0,0,0,0,0,81340,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+replace into creature_questrelation (id, quest) values (91285, 55032);
+replace into creature_involvedrelation (id, quest) values (91285, 55032);
+
 
