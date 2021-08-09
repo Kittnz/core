@@ -163,3 +163,12 @@ UPDATE item_template SET description = 'This disguise will work until logout.' W
 REPLACE INTO item_template VALUES (53008, 0, 12, 0, 'Illusion: Two-headed Ogre', 'This disguise will work until logout.', 36521, 1, 0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1300, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 31726, 0, 0, 0, 10, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 'item_illusion');
 
 update creature_template set display_id1 = 11669 where entry in (50110, 50111);
+
+REPLACE INTO creature_template VALUES (50760, 0, 3121, 0, 0, 0, 'Tansy Sparkpen', 'Gadgetzan Times Reporter', 0, 30, 30, 1605, 1605, 0, 0, 1200, 35, 2, 1.08, 1.14286, 0, 20, 5, 0, 0, 1, 42, 53, 0, 122, 1, 1000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 45.144, 62.073, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 10, '');
+replace into broadcast_text (entry, Male_Text) values ('90260', 'Latest news from the best race event ever! Come and get your own magazine!');
+replace into npc_text (id, BroadcastTextID0) values ('90260', '90260');
+REPLACE INTO creature_ai_scripts VALUES (50760, 500, 0, 1, 0, 0, 0, 0, 0, 0, 0, 90260, 0, 0, 0, 0, 0, 0, 0, 0, 'Tansy, speaking.');
+REPLACE INTO `creature_ai_events` VALUES (50760, 50760, 0, 1, 0, 100, 1, 0, 0, 700000, 800000, 50760, 0, 0, 'Tansy, speaking.');
+replace into creature_questrelation (id, quest) values (50760, 50315);
+replace into creature_involvedrelation (id, quest) values (50760, 50315);
+update creature set id = 50760 where guid = 2555592;
