@@ -555,7 +555,7 @@ struct infinite_timeripperAI : public ScriptedAI
             doOnce = true;
         }
 
-        if (Player* player = m_creature->FindNearestHostilePlayer(25.0f))
+        if (Player* player = m_creature->FindNearestHostilePlayer(30.0f))
         {
             if (!startSummonEvent)
             {
@@ -574,7 +574,7 @@ struct infinite_timeripperAI : public ScriptedAI
                 {
                     player->AddAura(SPELL_TIME_LAPSE);
                 }
-                m_creature->PMonsterYell("It seems the Bronze Dragonflight sent their pawns to fix what they could not, you’ve come far to stop us, but your advance stops here!");
+                m_creature->PMonsterYell("It seems the Bronze Dragonflight sent their pawns to fix what they could not, You’ve come far to stop us, but your advance stops here!");
 
                 startSummonEvent = true;
             }
@@ -615,7 +615,7 @@ struct infinite_timeripperAI : public ScriptedAI
                 }
                 case 3:
                 {
-                    m_creature->PMonsterSay("Your time has come, what we have summoned is but a hollow reflection of what we have seen in the future. Savor these moments, mortals. They will be your last. Retreat!");
+                    m_creature->PMonsterYell("Your time has come, what we have summoned is but a hollow reflection of what we have seen in the future. Savor these moments, mortals. They will be your last. Retreat!");
                     phase++;
                     phasetimer = 4000;
                     break;
@@ -630,7 +630,7 @@ struct infinite_timeripperAI : public ScriptedAI
                         for (auto const& i : dragonSpawns)
                         {
                             i->MonsterMove(-1441.65f, 6936.788f, -136.89f);
-                            i->ForcedDespawn(4000);
+                            i->DespawnOrUnsummon(4000);
                         }
                     }
 
@@ -2105,29 +2105,9 @@ struct antnormi_cotAI : public ScriptedAI
 
         if (shadowShockTimer <= uiDiff)
         {
-            std::list<Unit*> targets;
-
-            for (int i = 0; i < 2; i++)
-            {
-                Unit* selectedTarget = m_creature->SelectRandomUnfriendlyTarget();
-
-                auto itr = std::find(targets.begin(), targets.end(), selectedTarget);
-                if (itr != targets.end())
-                {
-                    selectedTarget = m_creature->SelectRandomUnfriendlyTarget();
-                    i--;
-                    continue;
-                }
-                else
-                    targets.push_back(selectedTarget);
-
-                if (DoCastSpellIfCan(selectedTarget, SPELL_SHADOW_SHOCK) == !CAST_OK)
-                    DoAfterTime(m_creature, 1.25 * IN_MILLISECONDS, [m_creature = m_creature, selectedTarget = selectedTarget, this]() {
-                    DoCastSpellIfCan(selectedTarget, SPELL_SHADOW_SHOCK);
-                        });
-            }         
+            if (DoCastSpellIfCan(m_creature->GetHostileCasterInRange(0, 30), SPELL_SHADOW_SHOCK) == CAST_OK)
                 shadowShockTimer = 10000;
-                targets.clear();
+
         }
         else shadowShockTimer -= uiDiff;
 
