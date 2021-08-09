@@ -1637,7 +1637,8 @@ struct chromie_boss_cotAI : public ScriptedAI
     {
         NPC_TIME_RIFT = 81051,
         NPC_RIFT_GUARD = 65101,
-        NPC_ROTMAW = 65122
+        NPC_ROTMAW = 65122,
+        NPC_MOSSHEART = 65124
     };
 
     uint32 manaBurnTimer;
@@ -1734,13 +1735,15 @@ struct chromie_boss_cotAI : public ScriptedAI
         m_creature->PMonsterYell("But I... we cannot fail! We are so close!");
 
 
-        uint32 spawnChance = urand(1, 100); // spawn rotmaw or not
 
-        if (spawnChance <= 35)
-        {
-            int randomSpawnLocation = irand(0, 3);
-            m_creature->SummonCreature(NPC_ROTMAW, rotMawSpawns[randomSpawnLocation].m_fX, rotMawSpawns[randomSpawnLocation].m_fY, rotMawSpawns[randomSpawnLocation].m_fZ, 0, TEMPSUMMON_DEAD_DESPAWN);
-        }
+        // Deprecated and put into DB
+        //uint32 spawnChance = urand(1, 100); // spawn rotmaw or mossheart or not
+
+        //if (spawnChance <= 35)
+        //{
+        //    int randomSpawnLocation = irand(0, 3);
+        //    m_creature->SummonCreature(NPC_ROTMAW, rotMawSpawns[randomSpawnLocation].m_fX, rotMawSpawns[randomSpawnLocation].m_fY, rotMawSpawns[randomSpawnLocation].m_fZ, 0, TEMPSUMMON_DEAD_DESPAWN);
+        //}
     }
 };
 
@@ -1951,17 +1954,20 @@ struct mossheart_cotAI : public ScriptedAI
         SPELL_DREDGE_SICKNESS = 14535,
         SPELL_TANGLE_ROOTS = 20699,
         SPELL_MOSS_FEET = 6870,
-        SPELL_MOSS_HANDS = 6866
+        SPELL_MOSS_HANDS = 6866,
+        SPELL_STEALTH = 1787
     };
 
     void UpdateAI(const uint32 uiDiff) override
     {
+        if (!m_creature->IsInCombat() && !m_creature->HasAura(SPELL_STEALTH))
+            DoCastSpellIfCan(m_creature, SPELL_STEALTH);
+        
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         if (engaged && !m_creature->HasAura(AURA_THORNS))
             m_creature->AddAura(AURA_THORNS);
-
 
         if (m_creature->GetHealthPercent() <= 75.0f)
         {
