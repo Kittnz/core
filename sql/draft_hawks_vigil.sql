@@ -2,46 +2,52 @@
 -- ##  Total Creatures: 119  ##
 -- ##  Total Creature Spawns: 243  (mostly critters)  ##
 -- ##  Total Creature Paths: 56  (558 waypoints)  ##
+-- ##  Total Gossip Texts: 106  ##
+-- ##  Total Vendor Items: 13  ##
 -- ##  Total GameObjects: 295  ##
 -- ##  Total Flight Paths: 4 + (17 transitions)  ##
 
 -- ##  UNINSTALL  ## --
--- delete from creature_movement_scripts where id between 14000000 and 14000008;
--- delete from creature_movement where id between 1260000 and 1260244;
--- delete from creature where guid between 1260000 and 1260244;
--- delete from creature_template where entry between 52000 and 52128;
--- delete from gameobject where guid between 1270000 and 1270303;
--- delete from area_template where entry between 4018 and 4020;
--- delete from taxi_nodes where id between 175 and 176;
--- delete from taxi_path_transitions where in_path between 90 and 95 or out_path between 90 and 95;
+delete from gossip_menu where text_id between 52000 and 52128;
+delete from npc_text where id between 52000 and 52128;
+delete from broadcast_text where entry between 52000 and 52128;
+delete from npc_vendor where entry between 52000 and 52128;
+delete from creature_movement_scripts where id between 14000000 and 14000008;
+delete from creature_movement where id between 1260000 and 1260244;
+delete from creature where guid between 1260000 and 1260244;
+delete from creature_template where entry between 52000 and 52128;
+delete from gameobject where guid between 1270000 and 1270303;
+delete from area_template where entry between 4018 and 4020;
+delete from taxi_nodes where id between 175 and 176;
+delete from taxi_path_transitions where in_path between 90 and 95 or out_path between 90 and 95;
 
 -- ##  INSTALL  ## --
-INSERT INTO `area_template` VALUES (4018, 0, 11, 1077, 64, 25, 'Hawk\'s Vigil', 0, 0);
-INSERT INTO `area_template` VALUES (4019, 0, 11, 1078, 64, 25, 'Dun Agrath', 0, 0);
-INSERT INTO `area_template` VALUES (4020, 0, 1, 1079, 64, 7, 'Ironforge Airfields', 0, 0);
+replace into `area_template` VALUES (4018, 0, 11, 1077, 64, 25, 'Hawk\'s Vigil', 0, 0);
+replace into `area_template` VALUES (4019, 0, 11, 1078, 64, 25, 'Dun Agrath', 0, 0);
+replace into `area_template` VALUES (4020, 0, 1, 1079, 64, 7, 'Ironforge Airfields', 0, 0);
 
-INSERT INTO `taxi_nodes` VALUES (175, 4222, 0, -3951.5, -1331.74, 148.73, 'Dun Agrath, Wetlands', 0, 541);
-INSERT INTO `taxi_nodes` VALUES (176, 4222, 0, -4492.72, -1581.01, 509.01, 'Ironforge Airfields, Dun Morogh', 0, 541);
+replace into `taxi_nodes` VALUES (175, 4222, 0, -3951.5, -1331.74, 148.73, 'Dun Agrath, Wetlands', 0, 541);
+replace into `taxi_nodes` VALUES (176, 4222, 0, -4492.72, -1581.01, 509.01, 'Ironforge Airfields, Dun Morogh', 0, 541);
 
-INSERT INTO `taxi_path_transitions` VALUES (13, 95, 46, 15, 'Stormwind, Elwynn -> Ironforge, Dun Morogh -> Ironforge Airfields, Dun Morogh', 5302);
-INSERT INTO `taxi_path_transitions` VALUES (15, 95, 18, 19, 'Thelsamar, Loch Modan -> Ironforge, Dun Morogh -> Ironforge Airfields, Dun Morogh', 5302);
-INSERT INTO `taxi_path_transitions` VALUES (18, 93, 30, 4, 'Ironforge, Dun Morogh -> Menethil Harbor, Wetlands -> Dun Agrath, Wetlands', 5302);
-INSERT INTO `taxi_path_transitions` VALUES (90, 94, 5, 1, 'Dun Agrath, Wetlands -> Ironforge Airfields, Dun Morogh -> Ironforge, Dun Morogh', 5302);
-INSERT INTO `taxi_path_transitions` VALUES (91, 92, 6, 1, 'Ironforge Airfields, Dun Morogh -> Dun Agrath, Wetlands -> Menethil Harbor, Wetlands', 5302);
-INSERT INTO `taxi_path_transitions` VALUES (92, 271, 1, 4, 'Dun Agrath, Wetlands -> Menethil Harbor, Wetlands -> Southshore, Hillsbrad', 5302);
-INSERT INTO `taxi_path_transitions` VALUES (92, 269, 1, 6, 'Dun Agrath, Wetlands -> Menethil Harbor, Wetlands -> Refuge Point, Arathi', 5302);
-INSERT INTO `taxi_path_transitions` VALUES (92, 266, 1, 6, 'Dun Agrath, Wetlands -> Menethil Harbor, Wetlands -> Thelsamar, Loch Modan', 5302);
-INSERT INTO `taxi_path_transitions` VALUES (93, 90, 3, 2, 'Menethil Harbor, Wetlands -> Dun Agrath, Wetlands -> Ironforge Airfields, Dun Morogh', 5302);
-INSERT INTO `taxi_path_transitions` VALUES (94, 404, 11, 9, 'Ironforge Airfields, Dun Morogh -> Ironforge, Dun Morogh -> Thorium Point, Searing Gorge', 5302);
-INSERT INTO `taxi_path_transitions` VALUES (94, 12, 11, 17, 'Ironforge Airfields, Dun Morogh -> Ironforge, Dun Morogh -> Stormwind, Elwynn', 5302);
-INSERT INTO `taxi_path_transitions` VALUES (94, 16, 7, 18, 'Ironforge Airfields, Dun Morogh -> Ironforge, Dun Morogh -> Thelsamar, Loch Modan', 5302);
-INSERT INTO `taxi_path_transitions` VALUES (95, 91, 26, 1, 'Ironforge, Dun Morogh -> Ironforge Airfields, Dun Morogh -> Dun Agrath, Wetlands', 5302);
-INSERT INTO `taxi_path_transitions` VALUES (265, 93, 25, 3, 'Thelsamar, Loch Modan -> Menethil Harbor, Wetlands -> Dun Agrath, Wetlands', 5302);
-INSERT INTO `taxi_path_transitions` VALUES (270, 93, 18, 1, 'Refuge Pointe, Arathi -> Menethil Harbor, Wetlands -> Dun Agrath, Wetlands', 5302);
-INSERT INTO `taxi_path_transitions` VALUES (272, 93, 11, 1, 'Southshore, Hillsbrad -> Menethil Harbor, Wetlands -> Dun Agrath, Wetlands', 5302);
-INSERT INTO `taxi_path_transitions` VALUES (402, 95, 13, 14, 'Thorium Point, Searing Gorge -> Ironforge, Dun Morogh -> Ironforge Airfields, Dun Morogh', 5302);
+replace into `taxi_path_transitions` VALUES (13, 95, 46, 15, 'Stormwind, Elwynn -> Ironforge, Dun Morogh -> Ironforge Airfields, Dun Morogh', 5302);
+replace into `taxi_path_transitions` VALUES (15, 95, 18, 19, 'Thelsamar, Loch Modan -> Ironforge, Dun Morogh -> Ironforge Airfields, Dun Morogh', 5302);
+replace into `taxi_path_transitions` VALUES (18, 93, 30, 4, 'Ironforge, Dun Morogh -> Menethil Harbor, Wetlands -> Dun Agrath, Wetlands', 5302);
+replace into `taxi_path_transitions` VALUES (90, 94, 5, 1, 'Dun Agrath, Wetlands -> Ironforge Airfields, Dun Morogh -> Ironforge, Dun Morogh', 5302);
+replace into `taxi_path_transitions` VALUES (91, 92, 6, 1, 'Ironforge Airfields, Dun Morogh -> Dun Agrath, Wetlands -> Menethil Harbor, Wetlands', 5302);
+replace into `taxi_path_transitions` VALUES (92, 271, 1, 4, 'Dun Agrath, Wetlands -> Menethil Harbor, Wetlands -> Southshore, Hillsbrad', 5302);
+replace into `taxi_path_transitions` VALUES (92, 269, 1, 6, 'Dun Agrath, Wetlands -> Menethil Harbor, Wetlands -> Refuge Point, Arathi', 5302);
+replace into `taxi_path_transitions` VALUES (92, 266, 1, 6, 'Dun Agrath, Wetlands -> Menethil Harbor, Wetlands -> Thelsamar, Loch Modan', 5302);
+replace into `taxi_path_transitions` VALUES (93, 90, 3, 2, 'Menethil Harbor, Wetlands -> Dun Agrath, Wetlands -> Ironforge Airfields, Dun Morogh', 5302);
+replace into `taxi_path_transitions` VALUES (94, 404, 11, 9, 'Ironforge Airfields, Dun Morogh -> Ironforge, Dun Morogh -> Thorium Point, Searing Gorge', 5302);
+replace into `taxi_path_transitions` VALUES (94, 12, 11, 17, 'Ironforge Airfields, Dun Morogh -> Ironforge, Dun Morogh -> Stormwind, Elwynn', 5302);
+replace into `taxi_path_transitions` VALUES (94, 16, 7, 18, 'Ironforge Airfields, Dun Morogh -> Ironforge, Dun Morogh -> Thelsamar, Loch Modan', 5302);
+replace into `taxi_path_transitions` VALUES (95, 91, 26, 1, 'Ironforge, Dun Morogh -> Ironforge Airfields, Dun Morogh -> Dun Agrath, Wetlands', 5302);
+replace into `taxi_path_transitions` VALUES (265, 93, 25, 3, 'Thelsamar, Loch Modan -> Menethil Harbor, Wetlands -> Dun Agrath, Wetlands', 5302);
+replace into `taxi_path_transitions` VALUES (270, 93, 18, 1, 'Refuge Pointe, Arathi -> Menethil Harbor, Wetlands -> Dun Agrath, Wetlands', 5302);
+replace into `taxi_path_transitions` VALUES (272, 93, 11, 1, 'Southshore, Hillsbrad -> Menethil Harbor, Wetlands -> Dun Agrath, Wetlands', 5302);
+replace into `taxi_path_transitions` VALUES (402, 95, 13, 14, 'Thorium Point, Searing Gorge -> Ironforge, Dun Morogh -> Ironforge Airfields, Dun Morogh', 5302);
 
-INSERT INTO `creature_template` (`entry`, `display_id1`, `display_id2`, `display_id3`, `display_id4`, `name`, `subname`, `gossip_menu_id`, `level_min`, `level_max`, `health_min`, `health_max`, `armor`, `faction`, `npc_flags`, `speed_walk`, `speed_run`, `detection_range`, `rank`, `dmg_min`, `dmg_max`, `attack_power`, `base_attack_time`, `ranged_attack_time`, `unit_class`, `unit_flags`, `ranged_dmg_min`, `ranged_dmg_max`, `ranged_attack_power`, `type`, `movement_type`, `inhabit_type`, `civilian`, `equipment_id`, `mechanic_immune_mask`, `flags_extra`) VALUES 
+replace into `creature_template` (`entry`, `display_id1`, `display_id2`, `display_id3`, `display_id4`, `name`, `subname`, `gossip_menu_id`, `level_min`, `level_max`, `health_min`, `health_max`, `armor`, `faction`, `npc_flags`, `speed_walk`, `speed_run`, `detection_range`, `rank`, `dmg_min`, `dmg_max`, `attack_power`, `base_attack_time`, `ranged_attack_time`, `unit_class`, `unit_flags`, `ranged_dmg_min`, `ranged_dmg_max`, `ranged_attack_power`, `type`, `movement_type`, `inhabit_type`, `civilian`, `equipment_id`, `mechanic_immune_mask`, `flags_extra`) VALUES 
   (52000, 15718, 0, 0, 0, 'Howland Hooch', '', 0, 20, 38, 1002, 1002, 1009, 35, 1, 1, 1.14286, 16, 0, 42, 53, 122, 1000, 2000, 1, 4608, 45.144, 62.073, 100, 7, 0, 3, 1, 0, 0, 524298),
   (52001, 10625, 0, 0, 0, 'Terry Robins', '', 0, 20, 38, 1002, 1002, 1009, 35, 1, 1, 1.14286, 16, 0, 42, 53, 122, 1000, 2000, 1, 4608, 45.144, 62.073, 100, 7, 0, 3, 1, 5112, 0, 524298),
   (52002, 11351, 0, 0, 0, 'Warren Reed', '', 0, 20, 38, 1002, 1002, 1009, 35, 1, 1, 1.14286, 16, 0, 42, 53, 122, 1000, 2000, 1, 4608, 45.144, 62.073, 100, 7, 0, 3, 1, 14381, 0, 524298),
@@ -71,10 +77,10 @@ INSERT INTO `creature_template` (`entry`, `display_id1`, `display_id2`, `display
   (52026, 3323, 0, 0, 0, 'Griselda', '', 0, 20, 38, 1002, 1002, 1009, 35, 1, 1, 1.14286, 16, 0, 42, 53, 122, 1000, 2000, 1, 4608, 45.144, 62.073, 100, 7, 0, 3, 1, 15512, 0, 524298),
   (52027, 3268, 0, 0, 0, 'Amelia Hawkes', '', 0, 20, 38, 1002, 1002, 1009, 35, 1, 1, 1.14286, 16, 0, 42, 53, 122, 1000, 2000, 1, 4608, 45.144, 62.073, 100, 7, 0, 3, 1, 151, 0, 524298),
   (52028, 1756, 0, 0, 0, 'Sturgis Skinner', '', 0, 20, 38, 1002, 1002, 1009, 35, 1, 1, 1.14286, 16, 0, 42, 53, 122, 1000, 2000, 1, 4608, 45.144, 62.073, 100, 7, 0, 3, 1, 12657, 0, 524298),
-  (52029, 3377, 0, 0, 0, 'Galadriel', '', 0, 20, 38, 1002, 1002, 1009, 35, 1, 1, 1.14286, 16, 0, 42, 53, 122, 1000, 2000, 1, 4608, 45.144, 62.073, 100, 7, 0, 3, 1, 2664, 0, 524298),
+  (52029, 3377, 0, 0, 0, 'Chef Galadriel', '', 0, 20, 38, 1002, 1002, 1009, 35, 1, 1, 1.14286, 16, 0, 42, 53, 122, 1000, 2000, 1, 4608, 45.144, 62.073, 100, 7, 0, 3, 1, 2664, 0, 524298),
   (52030, 3326, 0, 0, 0, 'Jaime Sparrow', '', 0, 20, 38, 1002, 1002, 1009, 35, 1, 1, 1.14286, 16, 0, 42, 53, 122, 1000, 2000, 1, 4608, 45.144, 62.073, 100, 7, 0, 3, 1, 14849, 0, 524298),
   (52031, 5012, 0, 0, 0, 'Brandon Fletchley', '', 0, 20, 38, 1002, 1002, 1009, 35, 1, 1, 1.14286, 16, 0, 42, 53, 122, 1000, 2000, 1, 4608, 45.144, 62.073, 100, 7, 0, 3, 1, 12738, 0, 524298),
-  (52032, 3484, 0, 0, 0, 'Edgard Hawthorne', '', 0, 20, 38, 1002, 1002, 1009, 35, 1, 1, 1.14286, 16, 0, 42, 53, 122, 1000, 2000, 1, 4608, 45.144, 62.073, 100, 7, 0, 3, 1, 6090, 0, 524298),
+  (52032, 3484, 0, 0, 0, 'Edgard Hawthorne', 'Bartender', 0, 20, 38, 1002, 1002, 1009, 35, 5, 1, 1.14286, 16, 0, 42, 53, 122, 1000, 2000, 1, 4608, 45.144, 62.073, 100, 7, 0, 3, 1, 6090, 0, 524298),
   (52033, 3466, 0, 0, 0, 'Penelope Krum', '', 0, 20, 38, 1002, 1002, 1009, 35, 1, 1, 1.14286, 16, 0, 42, 53, 122, 1000, 2000, 1, 4608, 45.144, 62.073, 100, 7, 0, 3, 1, 16090, 0, 524298),
   (52034, 1517, 0, 0, 0, 'Parvati Robins', '', 0, 20, 38, 1002, 1002, 1009, 35, 1, 1, 1.14286, 16, 0, 42, 53, 122, 1000, 2000, 1, 4608, 45.144, 62.073, 100, 7, 0, 3, 1, 15508, 0, 524298),
   (52035, 3486, 0, 0, 0, 'Dori Smith', '', 0, 20, 38, 1002, 1002, 1009, 35, 1, 1, 1.14286, 16, 0, 42, 53, 122, 1000, 2000, 1, 4608, 45.144, 62.073, 100, 7, 0, 3, 1, 465, 0, 524298),
@@ -85,7 +91,7 @@ INSERT INTO `creature_template` (`entry`, `display_id1`, `display_id2`, `display
   (52040, 8632, 0, 0, 0, 'Romilda', '', 0, 20, 38, 1002, 1002, 1009, 35, 1, 1, 1.14286, 16, 0, 42, 53, 122, 1000, 2000, 1, 4608, 45.144, 62.073, 100, 7, 0, 3, 1, 0, 0, 524298),
   (52041, 7330, 0, 0, 0, 'Angelina Hackett', '', 0, 20, 38, 1002, 1002, 1009, 35, 1, 1, 1.14286, 16, 0, 42, 53, 122, 1000, 2000, 1, 4608, 45.144, 62.073, 100, 7, 0, 3, 1, 340, 0, 524298),
   (52042, 11746, 0, 0, 0, 'Rita Marsh', '', 0, 20, 38, 1002, 1002, 1009, 35, 1, 1, 1.14286, 16, 0, 42, 53, 122, 1000, 2000, 1, 4608, 45.144, 62.073, 100, 7, 0, 3, 1, 11106, 0, 524298),
-  (52043, 11747, 0, 0, 0, 'Katie Marsh', '', 0, 20, 38, 1002, 1002, 1009, 35, 1, 1, 1.14286, 16, 0, 42, 53, 122, 1000, 2000, 1, 4608, 45.144, 62.073, 100, 7, 0, 3, 1, 15354, 0, 524298),
+  (52043, 11747, 0, 0, 0, 'Katie Marsh', '', 0, 20, 38, 1002, 1002, 1009, 35, 5, 1, 1.14286, 16, 0, 42, 53, 122, 1000, 2000, 1, 4608, 45.144, 62.073, 100, 7, 0, 3, 1, 15354, 0, 524298),
   (52044, 11744, 0, 0, 0, 'Nori Dolohov', '', 0, 20, 38, 1002, 1002, 1009, 35, 1, 1, 1.14286, 16, 0, 42, 53, 122, 1000, 2000, 1, 4608, 45.144, 62.073, 100, 7, 0, 3, 1, 5483, 0, 524298),
   (52045, 11742, 0, 0, 0, 'Rose Dolohov', '', 0, 20, 38, 1002, 1002, 1009, 35, 1, 1, 1.14286, 16, 0, 42, 53, 122, 1000, 2000, 1, 4608, 45.144, 62.073, 100, 7, 0, 3, 1, 11106, 0, 524298),
   (52046, 3463, 0, 0, 0, 'Amycus Seaworth', '', 0, 20, 38, 1002, 1002, 1009, 35, 1, 1, 1.14286, 16, 0, 42, 53, 122, 1000, 2000, 1, 4608, 45.144, 62.073, 100, 7, 0, 3, 1, 11706, 0, 524298),
@@ -128,7 +134,7 @@ INSERT INTO `creature_template` (`entry`, `display_id1`, `display_id2`, `display
   (52083, 10184, 0, 0, 0, 'Garrick Marblebrew', '', 0, 20, 38, 1002, 1002, 1009, 35, 1, 1, 1.14286, 16, 0, 42, 53, 122, 1000, 2000, 1, 4608, 45.144, 62.073, 100, 7, 0, 3, 1, 12738, 0, 524298),
   (52084, 1848, 0, 0, 0, 'Sarug Coffeeblack', '', 0, 20, 38, 1002, 1002, 1009, 35, 1, 1, 1.14286, 16, 0, 42, 53, 122, 1000, 2000, 1, 4608, 45.144, 62.073, 100, 7, 0, 3, 1, 14634, 0, 524298),
   (52085, 9550, 0, 0, 0, 'Ernie Carrow', '', 0, 20, 38, 1002, 1002, 1009, 35, 1, 1, 1.14286, 16, 0, 42, 53, 122, 1000, 2000, 1, 4608, 45.144, 62.073, 100, 7, 0, 3, 1, 3540, 0, 524298),
-  (52086, 16412, 0, 0, 0, 'Mary Morris', '', 0, 20, 38, 1002, 1002, 1009, 35, 1, 1, 1.14286, 16, 0, 42, 53, 122, 1000, 2000, 1, 4608, 45.144, 62.073, 100, 7, 0, 3, 1, 5112, 0, 524298),
+  (52086, 4857, 0, 0, 0, 'Mary Morris', '', 0, 20, 38, 1002, 1002, 1009, 35, 1, 1, 1.14286, 16, 0, 42, 53, 122, 1000, 2000, 1, 4608, 45.144, 62.073, 100, 7, 0, 3, 1, 5112, 0, 524298),
   (52087, 15956, 0, 0, 0, 'Cadmus Shacklebolt', '', 0, 20, 38, 1002, 1002, 1009, 35, 1, 1, 1.14286, 16, 0, 42, 53, 122, 1000, 2000, 1, 4608, 45.144, 62.073, 100, 7, 0, 3, 1, 2104, 0, 524298),
   (52088, 5585, 5555, 5556, 5586, 'Kitty', NULL, 0, 1, 1, 1, 1, 20, 35, 0, 0.857143, 1, 16, 0, 2, 2, 44, 2000, 2000, 1, 0, 1.76, 2.42, 100, 8, 1, 1, 0, 0, 0, 2),
   (52090, 13850, 0, 0, 0, 'Gladdus Podmore', '', 0, 20, 38, 1002, 1002, 1009, 35, 1, 1, 1.14286, 16, 0, 42, 53, 122, 1000, 2000, 1, 4608, 45.144, 62.073, 100, 7, 0, 3, 1, 0, 0, 524298),
@@ -157,12 +163,29 @@ INSERT INTO `creature_template` (`entry`, `display_id1`, `display_id2`, `display
   (52117, 14754, 0, 0, 0, 'Elena Firebrew', '', 0, 20, 38, 1002, 1002, 1009, 35, 1, 1, 1.14286, 16, 0, 42, 53, 122, 1000, 2000, 1, 4608, 45.144, 62.073, 100, 7, 0, 3, 1, 0, 0, 524298),
   (52123, 221, 0, 0, 0, 'Sam', '', 0, 6, 12, 102, 102, 109, 35, 0, 1, 1.14286, 16, 0, 42, 53, 122, 1000, 2000, 1, 4608, 45.144, 62.073, 100, 7, 0, 3, 1, 0, 0, 524298),
   (52124, 338, 0, 0, 0, 'Jonas', '', 0, 6, 12, 102, 102, 109, 35, 0, 1, 1.14286, 16, 0, 42, 53, 122, 1000, 2000, 1, 4608, 45.144, 62.073, 100, 7, 0, 3, 1, 0, 0, 524298),
-  (52125, 257, 0, 0, 0, 'Jessica', '', 0, 6, 12, 102, 102, 109, 35, 0, 1, 1.14286, 16, 0, 42, 53, 122, 1000, 2000, 1, 4608, 45.144, 62.073, 100, 7, 0, 3, 1, 0, 0, 524298),
+  (52125, 257, 0, 0, 0, 'Jessica', '', 0, 6, 12, 102, 102, 109, 35, 1, 1, 1.14286, 16, 0, 42, 53, 122, 1000, 2000, 1, 4608, 45.144, 62.073, 100, 7, 0, 3, 1, 0, 0, 524298),
   (52126, 252, 0, 0, 0, 'Sophie', '', 0, 6, 12, 102, 102, 109, 35, 0, 1, 1.14286, 16, 0, 42, 53, 122, 1000, 2000, 1, 4608, 45.144, 62.073, 100, 7, 0, 3, 1, 0, 0, 524298),
   (52127, 344, 0, 0, 0, 'Canary', '', 0, 6, 12, 102, 102, 109, 35, 0, 1, 1.14286, 16, 0, 42, 53, 122, 1000, 2000, 1, 4608, 45.144, 62.073, 100, 7, 0, 3, 1, 0, 0, 524298),
   (52128, 3042, 0, 0, 0, 'Ormus Grindelbeard', '', 0, 20, 38, 1002, 1002, 1009, 35, 1, 1, 1.14286, 16, 0, 42, 53, 122, 1000, 2000, 1, 4608, 45.144, 62.073, 100, 7, 0, 3, 1, 15354, 0, 524298);
 
-INSERT INTO `creature` (`guid`, `id`, `position_x`, `position_y`, `position_z`, `orientation`, `wander_distance`, `movement_type`) VALUES 
+
+replace into `npc_vendor` (`entry`, `item`) VALUES
+(52032, 2593),	-- Bartender
+(52032, 2594),
+(52032, 2595),
+(52032, 2596),
+(52032, 2723),
+(52032, 4600),
+(52043, 8485),	-- Cat Vendor
+(52043, 8486),
+(52043, 8487),
+(52043, 8488),
+(52043, 8489),
+(52043, 8490),
+(52043, 8491);
+
+
+replace into `creature` (`guid`, `id`, `position_x`, `position_y`, `position_z`, `orientation`, `wander_distance`, `movement_type`) VALUES 
   (1260000, 620, -3876.07, -1897.37, 140.332, 1.33399, 5, 1),
   (1260001, 620, -3876.27, -1917.81, 141.176, 2.35343, 5, 1),
   (1260002, 620, -3867.41, -1908.94, 140.248, 6.06994, 5, 1),
@@ -354,7 +377,7 @@ INSERT INTO `creature` (`guid`, `id`, `position_x`, `position_y`, `position_z`, 
   (1260181, 52103, -4024.88, -1274.73, 146.534, 4.4127, 0, 0),
   (1260182, 52104, -4024.46, -1895.09, 147.488, 3.3312, 0, 0),
   (1260183, 52105, -4105.33, -1253.6, 148.958, 3.82955, 0, 0),
-  (1260184, 52106, -4027.05, -1498.72, 168.935, 6.04436, 0, 0),
+  (1260184, 52106, -4023.58, -1505.39, 168.688, 4.44810, 0, 0),
   (1260185, 52107, -4142.19, -1059, 167.926, 3.13918, 0, 0),
   (1260186, 52108, -3997.39, -1297.49, 146.861, 5.16473, 0, 0),
   (1260187, 52109, -4036.42, -1466.87, 169.863, 0.906679, 0, 0),
@@ -408,7 +431,7 @@ INSERT INTO `creature` (`guid`, `id`, `position_x`, `position_y`, `position_z`, 
   (1260244, 721, -3961.45, -1457.83, 178.494, 6.22949, 10, 1);
 
 
-INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `comments`) VALUES 
+replace into `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `comments`) VALUES 
   (14000000, 0, 28, 1, 0, 0, 0, 'General - Sit'),
   (14000001, 0, 28, 5, 0, 0, 0, 'General - Sit Chair'),
   (14000002, 6, 1, 92, 0, 0, 0, 'General - Bar Drinker'),
@@ -433,7 +456,7 @@ INSERT INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, `
   (14000008, 0, 1, 333, 0, 0, 0, 'General - Ready Attack');
 
 
-INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `script_id`) VALUES
+replace into `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `script_id`) VALUES
   (1260060, 1, -3868.66, -1859.62, 149.668, 3.25426, 20000, 0),
   (1260060, 2, -3868.45, -1865.22, 149.668, 3.25426, 120000, 0),
   (1260060, 3, -3862.32, -1864.87, 149.668, 5.90425, 0, 0),
@@ -993,10 +1016,133 @@ INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `pos
   (1260202, 41, -3874.14, -1471.79, 140.754, 1.59553, 0, 0),
   (1260202, 42, -3876.22, -1464.79, 141.536, 0.694286, 0, 0);
 
+-- Gossip Texts
 
-DELETE FROM `gameobject` WHERE guid=4009433;  -- This is a door blocking a dwarf house in Dun Agrath
+DROP PROCEDURE IF EXISTS AddGossip;
 
-INSERT INTO `gameobject` (`guid`, `id`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`, `patch_min`, `patch_max`) VALUES 
+DELIMITER //
+CREATE PROCEDURE AddGossip(IN gossipID MEDIUMINT(8), IN magicID MEDIUMINT(8), IN npcText LONGTEXT)
+BEGIN
+	replace into gossip_menu (entry, text_id, condition_id) VALUES (gossipID, magicID, '0');
+	replace into broadcast_text (entry, Male_Text) values (magicID, npcText);
+	replace into npc_text (ID, BroadcastTextID0) values (magicID, magicID);
+	update creature_template set gossip_menu_id = gossipID where entry = magicID;
+END //
+DELIMITER ;
+
+CALL AddGossip(52000, 52028, 'Ah, look at the time! I must return to my post... up over there.');
+CALL AddGossip(52001, 52087, 'Show strength to your enemy, and we will prevail!');
+CALL AddGossip(52002, 52071, 'Hook me up!');
+CALL AddGossip(52003, 52007, 'Remember when Danath gathered all the mercenaries of Stormwind together and we marched to fight at Nethergarde?');
+CALL AddGossip(52004, 52060, 'Now, let\'s see... If I am correct, then... Hmmm...');
+CALL AddGossip(52005, 52000, 'So many lost.  And so many more we must lose before this battle ends.');
+CALL AddGossip(52006, 52061, 'The Scourge will not prevail!');
+CALL AddGossip(52007, 52085, 'Dang! Fish aren\'t biting here either. I am gonna go back to my ol\' fishin\' hole!');
+CALL AddGossip(52008, 52101, 'I\'d talk to you if you smelled better. Cologne would be nice.');
+CALL AddGossip(52009, 52066, '(Sniff, sniff) You smell that? Don\'t you just LOVE the smell of grease?');
+CALL AddGossip(52010, 52017, 'What the...');
+CALL AddGossip(52011, 52056, 'Times like these get me all sentimental...');
+CALL AddGossip(52012, 52105, 'You are an inspiration to us all, sir.');
+CALL AddGossip(52013, 52021, 'Have you come to save this world? To cleanse it?');
+CALL AddGossip(52014, 52108, 'Unlike most ogres, I do know what an outhouse is for - giving you a swirlie.  Now beat it.');
+CALL AddGossip(52015, 52112, 'A pleasure, $n. What can I do for you?');
+CALL AddGossip(52016, 52097, 'What happened to our pigs?');
+CALL AddGossip(52017, 52083, 'I\'ll get the last laugh... they\'ll see! Oh, hi $c, I didn\'t see you there.');
+CALL AddGossip(52018, 52016, 'I can\'t help it, really. This is just such a beautiful place.');
+CALL AddGossip(52019, 52035, 'Try these fireworks launchers.  They\'re a blast!');
+CALL AddGossip(52020, 52001, 'I miss the dwarven ale we used to get at that inn in Lordaeron. Remember that fight we started there?');
+CALL AddGossip(52021, 52057, 'The longer you wait, the less future you have for me to foretell.');
+CALL AddGossip(52022, 52019, 'Let\'s see if the fish are biting.');
+CALL AddGossip(52023, 52005, 'I lived in Dire Maul for a little bit.  That was fun.  Really.');
+CALL AddGossip(52024, 52069, 'Stormy seas out there.  The sea spirits must be restless....hic!');
+CALL AddGossip(52025, 52074, 'Yeah, okay, boss. No problem.');
+CALL AddGossip(52026, 52086, 'Did you see?  That last firework almost caught that drawf\'s shirt on fire!  Hah!');
+CALL AddGossip(52027, 52068, 'Oh, I wandered off again.  I\'m sorry.');
+CALL AddGossip(52028, 52009, 'Too long have I sat idle, gripped in this haze... this malaise, lamenting what could have been... what should have been.');
+CALL AddGossip(52029, 52078, 'Start doing something before I replace that target dummy with you and begin a warm up session of my own!');
+CALL AddGossip(52030, 52082, 'Your mind is unfocused.  Are you hiding something from me?');
+CALL AddGossip(52031, 52037, 'Cherry pie is my favoritist food in all of Azeroth.');
+CALL AddGossip(52032, 52040, 'Oh, there you are!');
+CALL AddGossip(52033, 52079, 'Oh, what a beautiful flower over there...');
+CALL AddGossip(52034, 52042, 'These trees are quite glorious, aren\'t they? ');
+CALL AddGossip(52035, 52034, 'Hmmm, I wonder what\'s over this way?');
+CALL AddGossip(52036, 52015, 'Are we taking the scenic route?');
+CALL AddGossip(52037, 52059, 'This is quite an adventure!');
+CALL AddGossip(52038, 52055, 'Nana always said there was no greater thing in the whole world than a warm, toasty slice of fresh, homemeade cherry pie.');
+CALL AddGossip(52039, 52002, 'If you\'ll excuse me, I must take my leave. Good day, ladies.');
+CALL AddGossip(52040, 52080, 'I love pie.');
+CALL AddGossip(52041, 52102, 'You lost?');
+CALL AddGossip(52042, 52077, 'What do you want?');
+CALL AddGossip(52043, 52038, 'Very few seek me out... What may I do for you?');
+CALL AddGossip(52044, 52018, 'Eh?');
+CALL AddGossip(52045, 52011, 'Yes?');
+CALL AddGossip(52046, 52117, 'Yea?');
+CALL AddGossip(52047, 52073, 'Yes, $c?');
+CALL AddGossip(52048, 52116, 'Kiss me.');
+CALL AddGossip(52049, 52107, 'Uh oh...');
+CALL AddGossip(52050, 52031, 'I need to pee.');
+CALL AddGossip(52051, 52091, 'Please, go on.');
+CALL AddGossip(52052, 52106, 'Watch it, buddy!');
+CALL AddGossip(52053, 52084, 'Hiccup!');
+CALL AddGossip(52054, 52067, 'Hic! Hic!');
+CALL AddGossip(52055, 52090, 'Wha\'sh your name?');
+CALL AddGossip(52056, 52041, 'Wha\'sh that you shay?');
+CALL AddGossip(52057, 52003, 'Hic! Hic! I don\'t feel so good...');
+CALL AddGossip(52058, 52045, 'Did you hear what happened to poor Thavius\' wife?');
+CALL AddGossip(52059, 52010, 'Watch out for those taverns! You\'ll become a drunkard before you know it.');
+CALL AddGossip(52060, 52092, 'Hail traveler. If you want the latest news, head over to Vigil\'s Tavern. That\'s where most of us go to trade stories and gossip.');
+CALL AddGossip(52061, 52076, 'Good luck on your journey, kind stranger!');
+CALL AddGossip(52062, 52062, 'Please, don\'t speak to me again. I\'m inconsolable.');
+CALL AddGossip(52063, 52063, 'He was a man of guts and guile no doubt… Not a day goes by in which I don’t think of his valorous deeds.');
+CALL AddGossip(52064, 52053, 'Is there something I can help you with?');
+CALL AddGossip(52065, 52128, 'How are you doing?');
+CALL AddGossip(52066, 52047, 'Oh, I didn\'t see you there!');
+CALL AddGossip(52067, 52022, 'New here, aye? Stop by Magus Tirth, he\'s sure to have some magical wares.');
+CALL AddGossip(52068, 52020, 'Pleasure to meet you $n!');
+CALL AddGossip(52069, 52048, 'G\'day and welcome $n!');
+CALL AddGossip(52070, 52026, 'Greetings $n. Looking for a place to stay? Hawk\'s Vigil inn surely has a nice warm bed to sleep in.');
+CALL AddGossip(52071, 52052, 'Here to dance? Hopefully you\'ve got a partner?');
+CALL AddGossip(52072, 52072, 'Town hall?! More like sexy dance hall!');
+CALL AddGossip(52073, 52095, 'Gods, this is country. I have half a mind to leave them all behind and keep going. What do you say, just you and me on the Kingsroad, swords at our sides, couple of tavern wenches to warm our beds tonight?');
+CALL AddGossip(52074, 52075, 'Oh to be young again. For me there were wars to fight, women to marry... never had the chance to be young.');
+CALL AddGossip(52075, 52024, 'There\'s a war comin $n... I don\'t know when, I don\'t know who we\'ll be fighting... But it\'s comin.');
+CALL AddGossip(52076, 52104, 'Medicine, law, business, engineering, these are noble pursuits, and necessary to sustain life. But poetry, beauty, romance, love, these are what we stay alive for.');
+CALL AddGossip(52077, 52032, 'Welcome to Hawk\'s Vigil $n! Hope you enjoy your stay.');
+CALL AddGossip(52078, 52004, 'Some believe it is only great power that can hold evil in check, but that is not what I have found. It is the small everyday deeds of ordinary folk that keep the darkness at bay. Small acts of kindness and love.');
+CALL AddGossip(52079, 52125, 'Greta the tittle tattle prattled on about the little metal bottle.  She spat a bit of spittle on the moth that bit the cattle in a bitter battle.');
+CALL AddGossip(52080, 52049, 'The delicate illusions that get us through life can only stand so much strain.');
+CALL AddGossip(52081, 52023, 'You speak of courage? Courage is just fear that has said its prayers.');
+CALL AddGossip(52082, 52008, 'We generate fears while we sit. We overcome them by action. Fear is natures way of warning us to get busy.');
+CALL AddGossip(52083, 52100, 'Remember this laddie, pressure can either burst pipes or make diamonds.');
+CALL AddGossip(52084, 52115, 'I\'ll tell you a secret. Something they don\'t teach you in your temple. The Gods envy us. They envy us because we\'re mortal, because any moment might be our last. Everything is more beautiful because we\'re doomed. You will never be lovelier than you are now. We will never be here again.');
+CALL AddGossip(52085, 52096, 'A friend once told me something that gave me great comfort. He said \'Life is only worth a damn because it\'s short! It\'s designed to be consumed, used, spent, lived, felt. We\'re supposed to fill it with every mistake and miracle we can manage. And then we\'re supposed to let go.\'');
+CALL AddGossip(52086, 52046, 'If you want to build a ship, don\'t drum up the men to gather wood, divide the work and give orders. Instead, teach them to yearn for the vast and endless sea. ');
+CALL AddGossip(52087, 52111, '*Gwenna gives you a sly wink.*');
+CALL AddGossip(52088, 52054, 'What ails you, friend?');
+CALL AddGossip(52089, 52036, 'Please, make yourself at home $n.');
+CALL AddGossip(52090, 52006, 'Lovely day, isn’t it?');
+CALL AddGossip(52091, 52014, 'I, for one, am sick of all these wars... I believe when there\'s total enlightenment there will be peace, the world will be in bliss.');
+CALL AddGossip(52092, 52043, 'I hope you like cats!');
+CALL AddGossip(52093, 52044, 'They say an army travels on its stomach, and that\'s the truth.  For any offensive to succeed, your troops have to be well-fed and well supplied.');
+CALL AddGossip(52094, 52070, 'Oh aye! I’ll take an ale if you’re buyin! Hah! ...Hic!');
+CALL AddGossip(52095, 52029, 'I’ve got the finest salted meats around! Here have a taste!');
+CALL AddGossip(52096, 52030, 'It’s not much, but it’s honest work.');
+CALL AddGossip(52097, 52012, 'She’s mine pal!');
+CALL AddGossip(52098, 52050, 'Nothing like dancing the night away!');
+CALL AddGossip(52099, 52051, 'Let’s boogie!');
+CALL AddGossip(52100, 52081, 'Aye?');
+CALL AddGossip(52101, 52013, 'We can’t all be great dancers!');
+CALL AddGossip(52102, 52033, 'Spirits all around!');
+CALL AddGossip(52103, 52039, 'I must return to my studies. Something is strangely amiss in our land and I must learn its cause.');
+CALL AddGossip(52104, 52103, 'Do fish ever get thirsty?');
+CALL AddGossip(52105, 52114, 'Been a tough day? A nice ale should loosen those worries right up.');
+CALL AddGossip(52106, 52058, 'Hello there young $g man : lady;, care to dance?');
+CALL AddGossip(52107, 52027, 'Well hello. What might a $c be doing so far afield from his homeland?');
+
+DROP PROCEDURE IF EXISTS AddGossip;
+
+
+replace into `gameobject` (`guid`, `id`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`, `patch_min`, `patch_max`) VALUES 
   (1270000, 1685, -4155.76, -1131.05, 166.199, 2.43665, 0.938523, 0.345216, 900, 900, 100, 1, 0, 10),
   (1270001, 1744, -4154.74, -1128.25, 166.262, 0.932592, 0.951953, 0.306244, 120, 120, 100, 1, 5, 10),
   (1270089, 2413, -3860.41, -1859.55, 149.668, 0.0349278, 0.017463, 0.999848, 120, 120, 0, 0, 0, 10),
@@ -1294,18 +1440,11 @@ INSERT INTO `gameobject` (`guid`, `id`, `position_x`, `position_y`, `position_z`
   (1270276, 181391, -4625.68, -853.212, 641.908, 4.90004, 0.63775, -0.770244, 120, 120, 100, 1, 0, 10);
 
 -- Fixes
-
-update creature_template set display_id1=4857 where entry=52086;
-update creature_template set scale=0.5 where entry=52088;  -- guessing on the size
-delete from creature where guid=2562680;
-
--- Small issues, todo:
--- Entry 52065 Guid 1260139			Has no mount - should be Mount ID 2410 in template_addon table (can copy entry 466, guid 79677)
--- Entry 52031 Guid 1260091			[HAS PATH] Default state should be standing (he is supposed to sit on the log, but then stand by the keg)
--- Entry 52084 Guid 1260158			Should be in lying down state
-
--- Global issues
--- Entry 180515 Guid 1270223			Ultra Cannon does not work  (seems none of them on Turtle do)
--- Creatures are not wandering			this is due to vmaps/mmaps
--- Unable to test flightpaths			this is due to server DBCs  (Tamamo should have but I can upload them here too)
-
+delete from gameobject where guid=4009433;  -- this is a door blocking a dwarf house in Dun Agrath
+delete from gameobject where guid=4009435;  -- old tent in Dun Agrath, replaced
+delete from gameobject where guid=4009436;  -- old campfire in Dun Agrath, replaced
+delete from gameobject where guid=4010098;  -- random turd in Dun Agrath
+delete from creature where guid=2562680;  -- rat in the road
+update creature_template set scale=0.5 where entry=52088;  -- kitties too big
+replace into creature_addon values (1260158, 0, 0, 3, 0, 0, 0, 0, NULL); -- lay down
+replace into creature_addon values (1260139, 0, 0, 2410, 0, 0, 0, 0, NULL); -- lay down
