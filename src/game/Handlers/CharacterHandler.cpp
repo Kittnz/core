@@ -33,6 +33,7 @@
 #include "GuildMgr.h"
 #include "UpdateMask.h"
 #include "Auth/md5.h"
+#include "AccountMgr.h"
 #include "ObjectAccessor.h"
 #include "Group.h"
 #include "Database/DatabaseImpl.h"
@@ -617,13 +618,17 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
     pCurrChar->SendInitialPacketsBeforeAddToMap();
     GetMasterPlayer()->SendInitialActionButtons();
 
-    //Show cinematic at the first time that player login
-    if (!pCurrChar->GetCinematic())
+    // Show only player accounts cinematic at first log on
+    AccountMgr AccountMgr;
+    if (AccountMgr.IsPlayerAccount(GetSecurity()))
     {
-        pCurrChar->SetCinematic(1);
+        if (!pCurrChar->GetCinematic())
+        {
+            pCurrChar->SetCinematic(1);
 
-        if (ChrRacesEntry const* rEntry = sChrRacesStore.LookupEntry(pCurrChar->GetRace()))
-            pCurrChar->SendCinematicStart(rEntry->CinematicSequence);
+            if (ChrRacesEntry const* rEntry = sChrRacesStore.LookupEntry(pCurrChar->GetRace()))
+                pCurrChar->SendCinematicStart(rEntry->CinematicSequence);
+        }
     }
 
     if (!alreadyOnline && !pCurrChar->GetMap()->Add(pCurrChar))
