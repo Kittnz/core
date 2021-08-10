@@ -1,7 +1,11 @@
 #include "scriptPCH.h"
 #include "scarlet_citadel.h"
 
+#ifdef WIN32 
+#include <process.h>
+#else
 #include <unistd.h>
+#endif
 
 struct instance_scarlet_citadel : public ScriptedInstance
 {
