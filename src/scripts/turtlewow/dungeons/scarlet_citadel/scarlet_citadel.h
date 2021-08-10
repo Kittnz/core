@@ -41,8 +41,9 @@ enum
     DATA_ARDAEUS_GUID = 9,
     DATA_MARIELLA_GUID = 10,
     DATA_ABBENDIS_GUID = 11,
+    DATA_FIRST_AREARIGGER_GUID = 12,
 
-    MAX_DATA = 12
+    MAX_DATA = 13
 };
 
 #endif

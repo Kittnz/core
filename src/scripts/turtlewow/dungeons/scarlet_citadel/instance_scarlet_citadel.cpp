@@ -134,6 +134,11 @@ struct instance_scarlet_citadel : public ScriptedInstance
                 m_auiData[DATA_ABBENDIS_GUID] = p_Creature->GetObjectGuid();
                 break;
             }
+            case NPC_FIRST_WING_TRASH_TRIGGER:
+            {
+                m_auiData[DATA_FIRST_AREARIGGER_GUID] = p_Creature->GetObjectGuid();
+                break;
+            }
         }
     }
 
@@ -154,12 +159,6 @@ struct instance_scarlet_citadel : public ScriptedInstance
                 m_auiEncounter[TYPE_DAELUS] = ui_Data;
                 if (ui_Data == DONE)
                 {
-                    if (GameObject* p_Go = instance->GetGameObject(m_auiData[DATA_DOOR_VENDOR_LEFT]))
-                    {
-                        if (p_Go->GetGoState() != GO_STATE_ACTIVE)
-                            DoUseDoorOrButton(m_auiData[DATA_DOOR_VENDOR_LEFT]); // Open it
-                    }
-
                     if (GameObject* p_Go = instance->GetGameObject(m_auiData[DATA_DOOR_VENDOR_RIGHT]))
                     {
                         if (p_Go->GetGoState() != GO_STATE_ACTIVE)
@@ -198,6 +197,11 @@ struct instance_scarlet_citadel : public ScriptedInstance
                     {
                         if (p_Go->GetGoState() != GO_STATE_ACTIVE)
                             DoUseDoorOrButton(m_auiData[DATA_DOOR_ARDAEUS_ENTER]); // Open it
+                    }
+
+                    if (Creature *p_Creature = instance->GetCreature(m_auiData[DATA_FIRST_AREARIGGER_GUID]))
+                    {
+                        p_Creature->ForcedDespawn(); // Despawn first wing trash arearigger to prevent respawn of trash after killing 2nd boss
                     }
                 }
                 else if (ui_Data == FAIL)
@@ -263,6 +267,12 @@ struct instance_scarlet_citadel : public ScriptedInstance
                     {
                         if (p_Go->GetGoState() != GO_STATE_ACTIVE)
                             p_Go->DeleteLater(); // Remove it
+                    }
+
+                    if (GameObject* p_Go = instance->GetGameObject(m_auiData[DATA_DOOR_VENDOR_LEFT])) // Open second vendor door after killing last boss
+                    {
+                        if (p_Go->GetGoState() != GO_STATE_ACTIVE)
+                            DoUseDoorOrButton(m_auiData[DATA_DOOR_VENDOR_LEFT]); // Open it
                     }
                 }
                 else if (ui_Data == FAIL)
@@ -341,32 +351,50 @@ struct Location
 
 static const Location vf_SpawnPoint[] =
 {
-    { 151.764f, -56.7610f, 18.007f, 1.57898f }
+    { 151.75450f, -62.649109f, 18.007f, 1.59041f }
 };
 
 static const Location vf_LastWaypoint[] =
 {
-    { 153.686f, -18.3206f, 18.007f, 1.56408f },
-    { 148.870f, -18.3653f, 18.007f, 1.56408f },
-    { 151.397f, -18.3903f, 18.007f, 1.56408f },
-    { 155.877f, -18.4343f, 18.007f, 1.56408f },
-    { 146.708f, -18.4572f, 18.007f, 1.56408f },
-    { 155.489f, -36.2737f, 18.007f, 1.56408f },
-    { 154.648f, -27.2310f, 18.007f, 1.56408f },
-    { 151.687f, -27.2111f, 18.007f, 1.56408f },
-    { 148.733f, -27.2969f, 18.007f, 1.56408f },
-    { 154.648f, -27.2310f, 18.007f, 1.56408f },
-    { 151.687f, -27.2111f, 18.007f, 1.56408f },
-    { 148.733f, -27.2969f, 18.007f, 1.56408f },
-    { 153.173f, -36.1897f, 18.007f, 1.56408f },
-    { 150.240f, -36.1585f, 18.007f, 1.56408f },
-    { 147.945f, -36.1340f, 18.007f, 1.56408f },
-    { 155.489f, -36.2737f, 18.007f, 1.56408f },
-    { 153.965f, -44.8860f, 18.007f, 1.56408f },
-    { 149.106f, -44.8231f, 18.007f, 1.56408f },
-    { 151.731f, -44.7851f, 18.007f, 1.56408f },
-    { 146.929f, -44.8546f, 18.007f, 1.56408f },
-    { 156.001f, -44.9314f, 18.007f, 1.56408f }
+    { 148.78366f, -18.592115f, 18.007f, 1.59041f }, // 0
+    { 151.75268f, -18.500916f, 18.007f, 1.59041f }, // 1
+    { 154.81858f, -18.524998f, 18.007f, 1.59041f }, // 2
+    { 154.67590f, -21.368568f, 18.007f, 1.59041f }, // 3
+    { 151.72247f, -21.426525f, 18.007f, 1.59041f }, // 4
+    { 148.88095f, -21.477419f, 18.007f, 1.59041f }, // 5
+    { 148.83274f, -24.543039f, 18.007f, 1.59041f }, // 6
+    { 151.78595f, -24.474773f, 18.007f, 1.59041f }, // 7
+    { 154.73963f, -24.433607f, 18.007f, 1.59041f }, // 8
+    { 154.69479f, -27.267065f, 18.007f, 1.59041f }, // 9
+    { 151.73402f, -27.244328f, 18.007f, 1.59041f }, // 10
+    { 148.78012f, -27.267494f, 18.007f, 1.59041f }, // 11
+    { 148.85170f, -30.331608f, 18.007f, 1.59041f }, // 12
+    { 151.79849f, -30.296930f, 18.007f, 1.59041f }, // 13
+    { 154.75230f, -30.262171f, 18.007f, 1.59041f }, // 14
+    { 154.73669f, -33.214294f, 18.007f, 1.59041f }, // 15
+    { 151.79025f, -33.271278f, 18.007f, 1.59041f }, // 16
+    { 148.95544f, -33.304626f, 18.007f, 1.59041f }, // 17
+    { 148.87420f, -36.257507f, 18.007f, 1.59041f }, // 18
+    { 151.82739f, -36.187962f, 18.007f, 1.59041f }, // 19
+    { 154.66903f, -36.142517f, 18.007f, 1.59041f }, // 20
+    { 154.70416f, -39.089146f, 18.007f, 1.59041f }, // 21
+    { 151.85516f, -39.089092f, 18.007f, 1.59041f }, // 22
+    { 148.78916f, -39.089035f, 18.007f, 1.59041f }, // 23
+    { 148.80809f, -42.136555f, 18.007f, 1.59041f }, // 24
+    { 151.86688f, -42.100590f, 18.007f, 1.59041f }, // 25
+    { 154.82078f, -42.077461f, 18.007f, 1.59041f }, // 26
+    { 154.77267f, -45.024055f, 18.007f, 1.59041f }, // 27
+    { 151.72085f, -44.997993f, 18.007f, 1.59041f }, // 28
+    { 148.88606f, -44.964539f, 18.007f, 1.59041f }, // 29
+    { 148.89892f, -47.924526f, 18.007f, 1.59041f }, // 30
+    { 151.74072f, -47.891113f, 18.007f, 1.59041f }, // 31
+    { 154.70851f, -47.859352f, 18.007f, 1.59041f }, // 32
+    { 154.68435f, -50.925259f, 18.007f, 1.59041f }, // 33
+    { 151.73756f, -50.959892f, 18.007f, 1.59041f }, // 34
+    { 148.89576f, -50.993290f, 18.007f, 1.59041f }, // 35
+    { 148.76803f, -53.945572f, 18.007f, 1.59041f }, // 36
+    { 151.82702f, -53.945675f, 18.007f, 1.59041f }, // 37
+    { 154.78801f, -53.945774f, 18.007f, 1.59041f }  // 38
 };
 
 struct npc_areatriggerAI : public ScriptedAI
@@ -382,7 +410,7 @@ struct npc_areatriggerAI : public ScriptedAI
     bool b_IsTrashSpawned = false;
 
     uint16 ui_CheckPulse = 500;
-    uint8 ui_TrashMob = 21;
+    uint8 ui_TrashMob = 38 + 1;
     uint8 ui_ITR = 0;
 
     void Reset() override
@@ -395,7 +423,7 @@ struct npc_areatriggerAI : public ScriptedAI
     {
         b_IsTrashSpawned = true;
 
-        for ( ; ui_ITR < ui_TrashMob + 1 ; ++ui_ITR)
+        for ( ; ui_ITR < ui_TrashMob ; ui_ITR++)
             m_creature->SummonCreature(NPC_FIRST_WING_TRASH, vf_SpawnPoint[0].m_fX, vf_SpawnPoint[0].m_fY, vf_SpawnPoint[0].m_fZ, vf_SpawnPoint[0].m_fO, TEMPSUMMON_DEAD_DESPAWN, 30000);
     }
 
@@ -403,7 +431,7 @@ struct npc_areatriggerAI : public ScriptedAI
     {
         if (p_Summoned->GetEntry() == NPC_FIRST_WING_TRASH)
         {
-            p_Summoned->MonsterMoveWithSpeed(vf_LastWaypoint[ui_ITR].m_fX, vf_LastWaypoint[ui_ITR].m_fY, vf_LastWaypoint[ui_ITR].m_fZ, vf_LastWaypoint[ui_ITR].m_fO, 1, uint32(MOVE_PATHFINDING | MOVE_FORCE_DESTINATION));
+            p_Summoned->MonsterMoveWithSpeed(vf_LastWaypoint[ui_ITR].m_fX, vf_LastWaypoint[ui_ITR].m_fY, vf_LastWaypoint[ui_ITR].m_fZ, vf_LastWaypoint[ui_ITR].m_fO, 5, uint32(MOVE_PATHFINDING | MOVE_FORCE_DESTINATION));
         }
     }
 
@@ -414,7 +442,7 @@ struct npc_areatriggerAI : public ScriptedAI
             Map::PlayerList const &liste = m_creature->GetMap()->GetPlayers();
             for (const auto& i : liste)
             {
-                if (i.getSource()->IsInRange3d(146.187f, 10.9377f, 18.01f, 0.0f, 5.0f))
+                if (i.getSource()->IsInRange3d(151.724518f, 2.139748f, 18.007f, 0.0f, 7.0f))
                     SummonAdds();
             }
 
