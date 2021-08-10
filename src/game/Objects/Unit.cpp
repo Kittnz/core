@@ -2497,13 +2497,12 @@ float Unit::RollMagicResistanceMultiplierOutcomeAgainst(float resistanceChance, 
         {
             // NOSTALRIUS: Some DoTs follow normal resist rules. Need to find which ones, why and how.
             // We have a video proof for the following ones.
+        case 20564:     // Ragnaros' Elemental Fire, proof https://www.youtube.com/watch?v=zrzTPbbEPu4&t=138s 
         case 23461:     // Vaelastrasz's Flame Breath
         case 24818:     // Nightmare Dragon's Noxious Breath
         case 25812:     // Lord Kri's Toxic Volley
         case 28531:     // Sapphiron's Frost Aura
         case 28882:     // Mograine's Righteous Fire, proof https://vanilla.warcraftlogs.com/reports/c7qg8JKBCbYkxnPW#fight=40&type=damage-taken&source=36&ability=28882&target=82&targetbuffs=28882&pins=0%24Separate%24%23244F4B%24damage%241%240.0.0.Any%2416062.0.0.Boss%24true%2416373260.0.0.Warrior%24false%2428882
-        //case 20564:     // Ragnaros' Elemental Fire, proof https://www.youtube.com/watch?v=zrzTPbbEPu4&t=138s --doesnt work yet, wrong spell maybe
-        //case 20563:     // Ragnaros' Elemental Fire, proof https://www.youtube.com/watch?v=zrzTPbbEPu4&t=138s --doesnt work yet, wrong spell maybe
             break;
         default:
             resistanceChance *= 0.1f;
