@@ -96,15 +96,18 @@ replace into creature_template values
 (91294, 0, 328, 0, 0, 0, 'Quest 55030 Custom Objective Trigger', NULL, 0, 1, 1, 1382, 1518, 2362, 2457, 703, 1682, 0, 1, 1.14286, 0, 31, 5, 0, 0, 1, 32, 42, 0, 132, 1, 2000, 2000, 8, 32768, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 7, 0, 2272, 2272, 0, 0, 0, 0, 50, 0, 0, 3652, 20819, 15044, 0, 22720, 0, 44, 62, 'EventAI', 1, 3, 0, 0, 3, 2272, 0, 0, 0, 0, 0, ''),
 (91295, 0, 7407, 0, 0, 0, 'Ozwack Tigflint', 'Supply Officer', 0, 20, 25, 800, 900, 0, 0, 20, 1682, 16391, 1, 1.14286, 0, 20, 5, 0, 0, 1, 15, 19, 0, 70, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 23.0384, 31.6778, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 3164, 0, 0, 0, 0, 524298, '');
 
--- Gossip + Quest
-update creature_template set npc_flags = 3 where entry in (91266, 91267, 91274, 91251, 91277, 91280, 91281, 91285, 91286, 91289, 91287, 91288, 91290);
 -- Quest
 update creature_template set npc_flags = 2 where entry in (91268, 91269, 91275, 91276, 91234, 91254, 91203, 91282, 5546, 91259, 91295); 
+-- Gossip + Quest
+update creature_template set npc_flags = 3 where entry in (91266, 91267, 91274, 91251, 91277, 91280, 91281, 91285, 91286, 91289, 91287, 91288, 91290);
 -- Gossip + Vendor
 update creature_template set npc_flags = 5 where entry  = 91256;
+-- Gossip + Vendor + Quest
+update creature_template set npc_flags = 7 where entry  = 91232;
 
 update creature_template set loot_id = 91284 where entry = 91284;
 update creature_template set loot_id = 91283 where entry = 91283;
+update creature_template set loot_id = 91293 where entry = 91293;
 update creature_template set equipment_id = 0 where entry = 91288;
 update creature_template set faction = 61, rank = 0 where entry = 91291;
 
@@ -457,6 +460,10 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '7', '1', '0', '0', '45', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
 
+replace into item_template values 
+(81343, 0, 12, 0, 'Wisdom of the Sages', '', 1155, 1, 0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 4, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL),
+(81344, 0, 12, 0, 'Klix\'s Studded Ring ', '', 1155, 1, 0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 4, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+
 update item_template set flags = 2048 where entry in (81334);
 update item_template set stackable = 10 where entry = 81335;
 
@@ -494,6 +501,7 @@ replace into creature_loot_template values
 (1010, 81335, -50, 6, 1, 1, 0, 0, 10),
 (1009, 81335, -50, 6, 1, 1, 0, 0, 10),
 (1008, 81335, -50, 6, 1, 1, 0, 0, 10),
+(91293, 81343, -100, 1, 1, 1, 0, 0, 10),
 (1007, 81335, -50, 6, 1, 1, 0, 0, 10);
 
 replace into gameobject_template values
@@ -745,4 +753,9 @@ update quest_template set questflags = 512 where entry = 55040;
 
 replace into creature_questrelation (id, quest) values (2543, 55040);
 replace into creature_involvedrelation (id, quest) values (2543, 55040);
+
+replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (0,55041,14,30,20,0,0,'Wisdom of the Sages','You ever hear the saying \'knowledge is power\'? Well, a lot of my goblin kin have not, it is knowledge that I seek, and sell, to those who are interested in gaining some new skills.\n\nI\'ve been after this old book for quite a while now titled "Wisdom of the Sages", an archivist by the name of Landas is holding it.\n\nProblem is, this isn\'t just some guy with a book, he\'s one of them mages from Dalaran and getting my hands on it isn\'t gonna be easy.\n\nThey\'re pretty protective over their stuff, so that\'s where you come in.\n\nI got some info recently that he was in the heights overlooking the Hillsbrad Fields and the Internment camp fairly close to Dalaran, find him, and get me that book. ','Find the book "Wisdom of the Sages" and bring it to Krez the Wise.','Have you checked all of the heights? I got good sources saying he was there.','Hey, this seems to be it, the damage is certainly going to hurt the resell value when I\'m done reading it.',81343,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,100,2050,1001,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+replace into creature_questrelation (id, quest) values (91232, 55041);
+replace into creature_involvedrelation (id, quest) values (91232, 55041);
 
