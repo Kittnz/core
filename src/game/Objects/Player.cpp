@@ -15284,6 +15284,8 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
 
     // Titles
 
+    //SetByteValue(PLAYER_BYTES_3, 2, GetActiveTitle()); -- disabled until we push titles update
+
     if (GetGUIDLow() == 1 || GetGUIDLow() == 11549) // Torta, Pompa
         SetByteValue(PLAYER_BYTES_3, 2, 12); // Developer
 
@@ -22858,7 +22860,7 @@ bool Player::SaveTalentSpec(int primaryOrSecondary)
 bool Player::ActivateTalentSpec(int primaryOrSecondary)
 {
 
-    if (!ResetTalents(false)) // money check
+    if (!ResetTalents(GetQuestRewardStatus(70010))) // money check
         return false;
 
 	QueryResult *talents = CharacterDatabase.PQuery("SELECT spell "
