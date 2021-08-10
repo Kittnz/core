@@ -97,9 +97,8 @@ replace into creature_template values
 (91295, 0, 7407, 0, 0, 0, 'Ozwack Tigflint', 'Supply Officer', 0, 20, 25, 800, 900, 0, 0, 20, 1682, 16391, 1, 1.14286, 0, 20, 5, 0, 0, 1, 15, 19, 0, 70, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 23.0384, 31.6778, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 3164, 0, 0, 0, 0, 524298, ''),
 (91295, 0, 7229, 3929, 3931, 3933, 'Foreman Klix', 'Venture Co.', 0, 21, 22, 531, 573, 0, 0, 905, 47, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 33, 38, 0, 98, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 35.6224, 48.9808, 100, 7, 0, 91295, 3993, 0, 0, 0, 0, 0, 0, 0, 7979, 0, 0, 0, 39930, 0, 27, 40, 'EventAI', 1, 1, 0, 0, 3, 3993, 0, 0, 0, 0, 0, '');
 
-
 -- Quest
-update creature_template set npc_flags = 2 where entry in (91268, 91269, 91275, 91276, 91234, 91254, 91203, 91282, 5546, 91259, 91295, 91260); 
+update creature_template set npc_flags = 2 where entry in (91268, 91269, 91275, 91276, 91234, 91254, 91203, 91282, 5546, 91259, 91295, 91260, 91272); 
 -- Gossip + Quest
 update creature_template set npc_flags = 3 where entry in (91266, 91267, 91274, 91251, 91277, 91280, 91281, 91285, 91286, 91289, 91287, 91288, 91290);
 -- Gossip + Vendor
@@ -775,5 +774,10 @@ replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minleve
 
 replace into creature_questrelation (id, quest) values (91259, 55043);
 replace into creature_involvedrelation (id, quest) values (91259, 55043);
+
+replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (0,55044,14,10,6,0,0,'Missing Worker!','This mining operation is tough work, and we don\'t always get the toughest workers, you catch my drift?\n\nI got a worker named Axel who has been slacking on delivering his ore, that and he often dissapears during the day.\n\nI don\'t take lazy goons eating up my coin for doing nothing, so go and find him and get my copper I needed him to mine.','Find Miner Axel.','He\'s gotta be around here somewhere, keep looking!','Hey there, nice view huh?\n\nOh, the boss sent you?',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,95,1001,25,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+replace into creature_questrelation (id, quest) values (91274, 55044);
+replace into creature_involvedrelation (id, quest) values (91272, 55044);
 
 
