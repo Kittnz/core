@@ -6302,9 +6302,37 @@ bool QuestRewarded_npc_ansirem(Player* pPlayer, Creature* pQuestGiver, Quest con
     return true;
 }
 
+bool QuestRewarded_npc_pazzle_brightwrench(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver)
+        return false;
+
+    if (!pPlayer)
+        return false;
+
+    if (pQuest->GetQuestId() == 55043) // The Brightwater Logs
+    {
+        DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            npc->HandleEmote(EMOTE_ONESHOT_EAT_NOSHEATHE);
+            npc->MonsterSayToPlayer("Bottoms up!", player);
+            });
+        DoAfterTime(pPlayer, 3 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            npc->HandleEmote(EMOTE_ONESHOT_LAUGH);
+            npc->MonsterSayToPlayer("Ack- that hits the spot!", player);
+            });
+        return true;
+    }
+    return true;
+}
+
 void AddSC_tw_random()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_pazzle_brightwrench";
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_pazzle_brightwrench;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_ansirem";
