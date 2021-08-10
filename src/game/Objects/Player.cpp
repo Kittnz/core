@@ -812,7 +812,7 @@ bool Player::Create(uint32 guidlow, std::string const& name, uint8 race, uint8 c
         for (const auto& item_id_itr : info->item)
             StoreNewItemInBestSlots(item_id_itr.item_id, item_id_itr.item_amount);
     }
-    else if (GetSession()->GetSecurity() >= SEC_MODERATOR)
+    else if (GetSession()->GetSecurity() >= SEC_GAMEMASTER)
     {
         StoreNewItemInBestSlots(4500, 4);  // 4 x Traveler's Backpack
         StoreNewItemInBestSlots(12064, 1); // Gamemaster Hood
