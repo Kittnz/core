@@ -172,3 +172,70 @@ REPLACE INTO `creature_ai_events` VALUES (50760, 50760, 0, 1, 0, 100, 1, 0, 0, 7
 replace into creature_questrelation (id, quest) values (50760, 50315);
 replace into creature_involvedrelation (id, quest) values (50760, 50315);
 update creature set id = 50760 where guid = 2555592;
+
+update quest_template set entry = 80735 where entry = 100007;
+update quest_template set entry = 80736 where entry = 100008;
+update quest_template set entry = 80737 where entry = 100009;
+
+update creature_questrelation set quest = 80735 where id = 100007;
+update creature_questrelation set quest = 80736 where id = 100008;
+update creature_questrelation set quest = 80737 where id = 100009;
+
+replace into creature_loot_template values (11120, 81282, -100, 6, 1, 1, 0, 0, 10);
+
+update quest_template set prevquestid = 0, nextquestid = 7832, exclusivegroup = 0, nextquestinchain = 0 where entry = 7824; -- A Donation of Runecloth
+update quest_template set prevquestid = 7793, nextquestid = 7795, exclusivegroup = 0, nextquestinchain = 0 where entry = 7794; -- A Donation of Mageweave
+update quest_template set prevquestid = 0, nextquestid = 7793, exclusivegroup = 0, nextquestinchain = 0 where entry = 7791; -- A Donation of Wool
+update quest_template set prevquestid = 7791, nextquestid = 7794, exclusivegroup = 0, nextquestinchain = 0 where entry = 7793; -- A Donation of Silk
+update quest_template set prevquestid = 0, nextquestid = 7795, exclusivegroup = -7791, nextquestinchain = 0 where entry = 7793; -- A Donation of Silk
+update quest_template set prevquestid = 0, nextquestid = 7795, exclusivegroup = -7791, nextquestinchain = 0 where entry = 7794; -- A Donation of Mageweave
+update quest_template set prevquestid = 0, nextquestid = 7795, exclusivegroup = -7791, nextquestinchain = 0 where entry = 7791; -- A Donation of Wool
+update quest_template set prevquestid = 0, nextquestid = 7837, exclusivegroup = 0, nextquestinchain = 0 where entry = 7836; -- A Donation of Runecloth
+update quest_template set prevquestid = 0, nextquestid = 7825, exclusivegroup = 0, nextquestinchain = 0 where entry = 7823; -- A Donation of Runecloth
+update quest_template set prevquestid = 7792, nextquestid = 7799, exclusivegroup = 0, nextquestinchain = 0 where entry = 7798; -- A Donation of Silk
+update quest_template set prevquestid = 0, nextquestid = 7800, exclusivegroup = 0, nextquestinchain = 0 where entry = 7799; -- A Donation of Mageweave
+update quest_template set prevquestid = 0, nextquestid = 7798, exclusivegroup = 0, nextquestinchain = 0 where entry = 7792; -- A Donation of Wool
+update quest_template set prevquestid = 0, nextquestid = 7819, exclusivegroup = 0, nextquestinchain = 0 where entry = 7818; -- A Donation of Runecloth
+update quest_template set prevquestid = 0, nextquestid = 7800, exclusivegroup = -7792, nextquestinchain = 0 where entry = 7799; -- A Donation of Mageweave
+update quest_template set prevquestid = 0, nextquestid = 7800, exclusivegroup = -7792, nextquestinchain = 0 where entry = 7792; -- A Donation of Wool
+update quest_template set prevquestid = 0, nextquestid = 7800, exclusivegroup = -7792, nextquestinchain = 0 where entry = 7798; -- A Donation of Silk
+update quest_template set prevquestid = 0, nextquestid = 7812, exclusivegroup = 0, nextquestinchain = 0 where entry = 7811; -- A Donation of Runecloth
+update quest_template set prevquestid = 7808, nextquestid = 7805, exclusivegroup = 0, nextquestinchain = 0 where entry = 7804; -- A Donation of Mageweave
+update quest_template set prevquestid = 0, nextquestid = 7805, exclusivegroup = -7802, nextquestinchain = 0 where entry = 7804; -- A Donation of Mageweave
+update quest_template set prevquestid = 0, nextquestid = 7803, exclusivegroup = 0, nextquestinchain = 0 where entry = 7807; -- A Donation of Wool
+update quest_template set prevquestid = 7802, nextquestid = 7809, exclusivegroup = 0, nextquestinchain = 0 where entry = 7808; -- A Donation of Silk
+update quest_template set prevquestid = 0, nextquestid = 7806, exclusivegroup = 0, nextquestinchain = 0 where entry = 7805; -- A Donation of Runecloth
+update quest_template set prevquestid = 7803, nextquestid = 7811, exclusivegroup = 0, nextquestinchain = 0 where entry = 7809; -- A Donation of Mageweave
+update quest_template set prevquestid = 0, nextquestid = 7811, exclusivegroup = -7807, nextquestinchain = 0 where entry = 7807; -- A Donation of Wool
+update quest_template set prevquestid = 0, nextquestid = 7811, exclusivegroup = -7807, nextquestinchain = 0 where entry = 7808; -- A Donation of Silk
+update quest_template set prevquestid = 0, nextquestid = 7801, exclusivegroup = 0, nextquestinchain = 0 where entry = 7800; -- A Donation of Runecloth
+update quest_template set prevquestid = 0, nextquestid = 7811, exclusivegroup = -7807, nextquestinchain = 0 where entry = 7809; -- A Donation of Mageweave
+update quest_template set prevquestid = 0, nextquestid = 7796, exclusivegroup = 0, nextquestinchain = 0 where entry = 7795; -- A Donation of Runecloth
+update quest_template set prevquestid = 7814, nextquestid = 7818, exclusivegroup = 0, nextquestinchain = 0 where entry = 7817; -- A Donation of Mageweave
+update quest_template set prevquestid = 0, nextquestid = 7805, exclusivegroup = -7802, nextquestinchain = 0 where entry = 7802; -- A Donation of Wool
+update quest_template set prevquestid = 0, nextquestid = 7805, exclusivegroup = -7802, nextquestinchain = 0 where entry = 7803; -- A Donation of Silk
+update quest_template set prevquestid = 0, nextquestid = 7808, exclusivegroup = 0, nextquestinchain = 0 where entry = 7802; -- A Donation of Wool
+update quest_template set prevquestid = 7807, nextquestid = 7804, exclusivegroup = 0, nextquestinchain = 0 where entry = 7803; -- A Donation of Silk
+update quest_template set prevquestid = 0, nextquestid = 7814, exclusivegroup = 0, nextquestinchain = 0 where entry = 7813; -- A Donation of Wool
+update quest_template set prevquestid = 0, nextquestid = 7818, exclusivegroup = -7813, nextquestinchain = 0 where entry = 7813; -- A Donation of Wool
+update quest_template set prevquestid = 0, nextquestid = 7821, exclusivegroup = 0, nextquestinchain = 0 where entry = 7820; -- A Donation of Wool
+update quest_template set prevquestid = 0, nextquestid = 7823, exclusivegroup = -7820, nextquestinchain = 0 where entry = 7820; -- A Donation of Wool
+update quest_template set prevquestid = 0, nextquestid = 7827, exclusivegroup = 0, nextquestinchain = 0 where entry = 7826; -- A Donation of Wool
+update quest_template set prevquestid = 0, nextquestid = 7824, exclusivegroup = -7826, nextquestinchain = 0 where entry = 7826; -- A Donation of Wool
+update quest_template set prevquestid = 0, nextquestid = 7834, exclusivegroup = 0, nextquestinchain = 0 where entry = 7833; -- A Donation of Wool
+update quest_template set prevquestid = 0, nextquestid = 7836, exclusivegroup = -7833, nextquestinchain = 0 where entry = 7833; -- A Donation of Wool
+update quest_template set prevquestid = 7813, nextquestid = 7817, exclusivegroup = 0, nextquestinchain = 0 where entry = 7814; -- A Donation of Silk
+update quest_template set prevquestid = 0, nextquestid = 7818, exclusivegroup = -7813, nextquestinchain = 0 where entry = 7814; -- A Donation of Silk
+update quest_template set prevquestid = 7820, nextquestid = 7822,  exclusivegroup = 0, nextquestinchain = 0 where entry = 7821; -- A Donation of Silk
+update quest_template set prevquestid = 0, nextquestid = 7823, exclusivegroup = -7820, nextquestinchain = 0 where entry = 7821; -- A Donation of Silk
+update quest_template set prevquestid = 7826, nextquestid = 7831, exclusivegroup = 0, nextquestinchain = 0 where entry = 7827; -- A Donation of Silk
+update quest_template set prevquestid = 0, nextquestid = 7824, exclusivegroup = -7826, nextquestinchain = 0 where entry = 7827; -- A Donation of Silk
+update quest_template set prevquestid = 7833, nextquestid = 7835, exclusivegroup = 0, nextquestinchain = 0 where entry = 7834; -- A Donation of Silk
+update quest_template set prevquestid = 0, nextquestid = 7836, exclusivegroup = -7833, nextquestinchain = 0 where entry = 7834; -- A Donation of Silk
+update quest_template set prevquestid = 0, nextquestid = 7818, exclusivegroup = -7813, nextquestinchain = 0 where entry = 7817; -- A Donation of Mageweave
+update quest_template set prevquestid = 7821, nextquestid = 7823, exclusivegroup = 0, nextquestinchain = 0 where entry = 7822; -- A Donation of Mageweave
+update quest_template set prevquestid = 0, nextquestid = 7823, exclusivegroup = -7820, nextquestinchain = 0 where entry = 7822; -- A Donation of Mageweave
+update quest_template set prevquestid = 7827, nextquestid = 7836, exclusivegroup = 0, nextquestinchain = 0 where entry = 7831; -- A Donation of Mageweave
+update quest_template set prevquestid = 0, nextquestid = 7824, exclusivegroup = -7826, nextquestinchain = 0 where entry = 7831; -- A Donation of Mageweave
+update quest_template set prevquestid = 7834, nextquestid = 7824, exclusivegroup = 0, nextquestinchain = 0 where entry = 7835; -- A Donation of Mageweave
+update quest_template set prevquestid = 0, nextquestid = 7836, exclusivegroup = -7833, nextquestinchain = 0 where entry = 7835; -- A Donation of Mageweave
