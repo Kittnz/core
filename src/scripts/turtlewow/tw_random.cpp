@@ -2143,6 +2143,9 @@ bool GOHello_go_brainwashing_device(Player* pPlayer, GameObject* pGo)
 				pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_1, activateText.c_str(), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
 			}
 			pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, "Save Secondary Specialization.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
+
+            if (!pPlayer->GetQuestRewardStatus(70010))
+			    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, "Unlock Free Specialization Switch (500g).", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 6);
 		}
 	}
     pPlayer->SEND_GOSSIP_MENU(90350, pGo->GetGUID());
@@ -2164,6 +2167,16 @@ bool GOSelect_go_brainwashing_device(Player* pPlayer, GameObject* pGo, uint32 se
 		pPlayer->SaveTalentSpec(1);
 	else if (action == GOSSIP_ACTION_INFO_DEF + 5)
 		pPlayer->SaveTalentSpec(2);
+    else if (action == GOSSIP_ACTION_INFO_DEF + 6)
+    {
+        if (pPlayer->GetMoney() < 5000000)
+            pPlayer->SendBuyError(BUY_ERR_NOT_ENOUGHT_MONEY, 0, 0, 0);
+        else
+        {
+            pPlayer->ModifyMoney(-(int32)5000000);
+            CharacterDatabase.DirectPExecute("REPLACE INTO character_queststatus (guid,quest,status,rewarded) VALUES ('%u', 70010, 1, 1)", pPlayer->GetGUIDLow());
+        }
+    }
 
 	pPlayer->CLOSE_GOSSIP_MENU();
     return true;
