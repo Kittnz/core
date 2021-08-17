@@ -2,3 +2,5 @@ replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minleve
 
 replace into creature_questrelation (id, quest) values (3182, 55100);
 replace into creature_involvedrelation (id, quest) values (1076, 55100);
+
+update creature_template set npc_flags = 2 where entry in (3182); 
