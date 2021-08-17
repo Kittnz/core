@@ -48,7 +48,7 @@ replace into creature_template values
 (91246, 0, 3739, 0, 0, 0, 'Valkar', 'Fletcher', 0, 13, 13, 273, 273, 0, 0, 20, 125, 16388, 1, 1.14286, 0, 20, 5, 0, 0, 1, 13, 17, 0, 68, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 21.5072, 29.5724, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 3165, 0, 0, 0, 0, 524298, ''),
 (91247, 0, 15094, 0, 0, 0, 'Karey Gozzleratch', 'Tailoring Supplies', 9177, 8, 9, 100, 400, 0, 0, 1200, 1682, 6, 1, 1.14286, 0, 20, 5, 0, 0, 1, 42, 53, 0, 122, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 45.144, 62.073, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, ''),
 (91248, 0, 7340, 0, 0, 0, 'Wixx', 'General Goods', 0, 10, 10, 300, 300, 0, 0, 20, 1682, 6, 1, 1.14286, 0, 20, 5, 0, 0, 1, 15, 19, 0, 70, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 23.0384, 31.6778, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 3164, 0, 0, 0, 0, 524298, ''),
-(91249, 0, 7185, 0, 0, 0, 'Hizzle', 'Correction\'s Officer', 60019, 13, 14, 468, 568, 0, 0, 1427, 1682, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 51, 66, 0, 140, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 52.272, 71.874, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 10, ''),
+(91249, 0, 7185, 0, 0, 0, 'Hizzle', 'Correction\'s Officer', 60019, 13, 14, 468, 568, 0, 0, 1427, 1682, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 51, 66, 0, 140, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 52.272, 71.874, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 10, 'npc_hizzle'),
 (91250, 0, 7172, 0, 0, 0, 'Dockmaster Nixx Oldfuse', '', 0, 13, 14, 468, 568, 0, 0, 1427, 1682, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 51, 66, 0, 140, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 52.272, 71.874, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 10, ''),
 (91251, 0, 4547, 0, 0, 0, 'Grunt Karg', NULL, 60025, 20, 20, 484, 484, 0, 0, 852, 125, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 24, 31, 0, 90, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 31.856, 43.802, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 1, 0, 3, 5911, 0, 0, 0, 0, 524298, ''),
 (91252, 0, 7051, 0, 0, 0, 'Oilworker Skazjaw', '', 0, 13, 14, 468, 568, 0, 0, 1427, 1682, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 51, 66, 0, 140, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 52.272, 71.874, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 10, ''),
@@ -95,12 +95,14 @@ replace into creature_template values
 (91293, 0, 3585, 0, 0, 0, 'Archivist Landas', NULL, 0, 30, 30, 1382, 1518, 2362, 2457, 703, 1682, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 32, 42, 0, 132, 1, 2000, 2000, 8, 32768, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 7, 0, 2272, 2272, 0, 0, 0, 0, 50, 0, 0, 3652, 20819, 15044, 0, 22720, 0, 44, 62, 'EventAI', 1, 3, 0, 0, 3, 2272, 0, 0, 0, 0, 0, ''),
 (91294, 0, 328, 0, 0, 0, 'Quest 55030 Custom Objective Trigger', NULL, 0, 1, 1, 1382, 1518, 2362, 2457, 703, 1682, 0, 1, 1.14286, 0, 31, 5, 0, 0, 1, 32, 42, 0, 132, 1, 2000, 2000, 8, 32768, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 7, 0, 2272, 2272, 0, 0, 0, 0, 50, 0, 0, 3652, 20819, 15044, 0, 22720, 0, 44, 62, 'EventAI', 1, 3, 0, 0, 3, 2272, 0, 0, 0, 0, 0, ''),
 (91295, 0, 7407, 0, 0, 0, 'Ozwack Tigflint', 'Supply Officer', 0, 20, 25, 800, 900, 0, 0, 20, 1682, 16391, 1, 1.14286, 0, 20, 5, 0, 0, 1, 15, 19, 0, 70, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 23.0384, 31.6778, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 3164, 0, 0, 0, 0, 524298, ''),
-(91295, 0, 7229, 3929, 3931, 3933, 'Foreman Klix', 'Venture Co.', 0, 21, 22, 531, 573, 0, 0, 905, 47, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 33, 38, 0, 98, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 35.6224, 48.9808, 100, 7, 0, 91295, 3993, 0, 0, 0, 0, 0, 0, 0, 7979, 0, 0, 0, 39930, 0, 27, 40, 'EventAI', 1, 1, 0, 0, 3, 3993, 0, 0, 0, 0, 0, '');
+(91295, 0, 7229, 3929, 3931, 3933, 'Foreman Klix', 'Venture Co.', 0, 21, 22, 531, 573, 0, 0, 905, 47, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 33, 38, 0, 98, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 35.6224, 48.9808, 100, 7, 0, 91295, 3993, 0, 0, 0, 0, 0, 0, 0, 7979, 0, 0, 0, 39930, 0, 27, 40, 'EventAI', 1, 1, 0, 0, 3, 3993, 0, 0, 0, 0, 0, ''),
+(91296, 0, 328, 0, 0, 0, 'Quest 55048 Custom Objective Trigger', NULL, 0, 1, 1, 1382, 1518, 2362, 2457, 703, 1682, 0, 1, 1.14286, 0, 31, 5, 0, 0, 1, 32, 42, 0, 132, 1, 2000, 2000, 8, 32768, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 7, 0, 2272, 2272, 0, 0, 0, 0, 50, 0, 0, 3652, 20819, 15044, 0, 22720, 0, 44, 62, 'EventAI', 1, 3, 0, 0, 3, 2272, 0, 0, 0, 0, 0, ''),
+(91297, 0, 7166, 0, 0, 0, 'Baxxil', NULL, 0, 14, 15, 300, 328, 0, 0, 660, 47, 0, 1, 1.19048, 0, 20, 5, 0, 0, 1, 21, 27, 0, 74, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 21.2784, 29.2578, 100, 7, 0, 3284, 3284, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16, 26, '', 1, 1, 0, 0, 3, 3284, 0, 0, 0, 0, 0, 'npc_baxxil');
 
 -- Quest
 update creature_template set npc_flags = 2 where entry in (91268, 91269, 91275, 91276, 91234, 91254, 91203, 91282, 5546, 91259, 91295, 91260, 91272); 
 -- Gossip + Quest
-update creature_template set npc_flags = 3 where entry in (91266, 91267, 91274, 91251, 91277, 91280, 91281, 91285, 91286, 91289, 91287, 91288, 91290);
+update creature_template set npc_flags = 3 where entry in (91266, 91267, 91274, 91251, 91277, 91280, 91281, 91285, 91286, 91289, 91287, 91288, 91290, 91249, 91297);
 -- Gossip + Vendor
 update creature_template set npc_flags = 5 where entry  = 91256;
 -- Gossip + Vendor + Quest
@@ -232,6 +234,10 @@ replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id,
 
 set @gossip_menu_id = 60036; set @magic_number = 91292; 
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); replace into broadcast_text (entry, Male_Text) values (@magic_number, 'You heard news from Sparkwater Port?'); replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 60037; set @magic_number = 91297; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); replace into broadcast_text (entry, Male_Text) values (@magic_number, 'The winds at my back, I can do anything I want now!'); replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
 
 replace into npc_trainer values 
 (91202, 2275, 10, 0, 0, 5, 0, 5875),
@@ -519,7 +525,9 @@ replace into gameobject_template values
 (1000500, 0, 2, 49, 'Pile of Glinting Muck', 0, 4, 1, 0, 3672, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
 (1000501, 0, 3, 107, 'Water-Weaving and Command', 0, 4, 0.5, 43, 1000501, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
 (1000502, 0, 3, 10, 'Brightwater Lockbox', 0, 4, 0.7, 43, 1000502, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
-(1000503, 0, 3, 10, 'Sealed Trunk', 0, 4, 0.7, 43, 1000503, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+(1000503, 0, 3, 10, 'Sealed Trunk', 0, 4, 0.7, 43, 1000503, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(1000504, 0, 2, 2491, 'WANTED: Baxxil!', 80, 4, 1, 0, 3991, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
 
 replace into gameobject_loot_template values 
 (1000250, 81291, -100, 1, 1, 1, 0, 0, 10),
@@ -801,4 +809,12 @@ replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minleve
 
 replace into creature_questrelation (id, quest) values (91274, 55047);
 replace into creature_involvedrelation (id, quest) values (91274, 55047);
+
+replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (0,55048,14,14,8,0,0,'WANTED: Hole Escapee','To those reading this message, a local prisoner named Baxxil has recently escaped from the hole after something of a tunneling incident and escaped off the coast.\n\nHe has been reported and sighted at Far Watch Post to the west in The Barrens along the river of Durotar. Justice must be dealt out, bring this prisoner back alive, or make him dead and return to Hizzle!','Find Baxxil the prisoner at Farwatch Post in the Barrens.','What now?','You answered the board did you?\n\nDamn prisoner was abled to tunnel his way out of the last hole, we had to board it up after he got out into the ocean, good thing he\'s dealt with.',0,0,0,0,0,0,0,0,91296,1,0,0,0,0,0,0,0,0,0,895,1001,75,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+update quest_template set objectivetext1 = 'Find Baxxil, dead or alive' where entry = 55048;
+
+replace into gameobject_questrelation (id, quest) values (1000504, 55048);
+replace into creature_involvedrelation (id, quest) values (91249, 55048);
+
 
