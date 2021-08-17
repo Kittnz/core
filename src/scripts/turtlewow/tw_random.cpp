@@ -6325,9 +6325,114 @@ bool QuestRewarded_npc_pazzle_brightwrench(Player* pPlayer, Creature* pQuestGive
     return true;
 }
 
+struct npc_baxxilAI : public ScriptedAI
+{
+    npc_baxxilAI(Creature* c) : ScriptedAI(c) { Reset(); }
+
+    void Reset()
+    {
+        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+        m_creature->SetFactionTemplateId(m_creature->GetCreatureInfo()->faction);
+    }
+    void UpdateAI(const uint32 diff)
+    {
+        if (m_creature->GetHealthPercent() < 10)
+        {
+            m_creature->CombatStop(true);
+            m_creature->ClearInCombat();
+            m_creature->SetFactionTemplateId(35);
+        }
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim()) return;
+        DoMeleeAttackIfReady();
+    }
+    void EnterCombat()
+    {
+        m_creature->MonsterSay("You think I'm going to go back down there?! You're nuts!");
+    }
+    void OnCombatStop()
+    {
+        m_creature->MonsterSay("Fine, FINE! Take me back to the hole, just don't kill me!");
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+    }
+    void JustRespawned() { Reset(); }
+};
+
+CreatureAI* GetAI_npc_baxxil(Creature* _Creature) { return new npc_baxxilAI(_Creature); }
+
+bool GossipHello_npc_baxxil(Player* pPlayer, Creature* pCreature)
+{
+    if (pPlayer->GetQuestStatus(55048) == QUEST_STATUS_INCOMPLETE)
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "You're coming back to Sparkwater to serve your sentence.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+
+    pPlayer->SEND_GOSSIP_MENU(91297, pCreature->GetGUID());
+    return true;
+}
+
+static std::vector<ObjectGuid> baxxil_following;
+
+bool GossipSelect_npc_baxxil(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pPlayer->CombatStop();
+        pCreature->MonsterSay("Okay, okay! Just whatever you say boss!");
+        pCreature->GetMotionMaster()->MoveFollow(pPlayer, PET_FOLLOW_DIST, PET_FOLLOW_ANGLE);
+        pCreature->UpdateSpeed(MOVE_RUN, false, pCreature->GetSpeedRate(MOVE_RUN) * 1.5);
+        baxxil_following.push_back(pPlayer->GetObjectGuid());
+    }
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
+bool GossipHello_npc_hizzle(Player* pPlayer, Creature* pCreature)
+{
+    if (pPlayer->GetQuestStatus(55048) == QUEST_STATUS_INCOMPLETE && (std::find(baxxil_following.begin(), baxxil_following.end(), pPlayer->GetObjectGuid()) != baxxil_following.end()))
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Here you are Hizzle, I got your prisoner red handed.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_hizzle(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(91296))
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+
+        pCreature->MonsterSay("Good! All the damage he caused and now he's finally going to pay for it!");
+        if (Creature* prisoner = pPlayer->FindNearestCreature(91297, 30.0F))
+        {
+            prisoner->GetMotionMaster()->Clear();
+            prisoner->ForcedDespawn();
+        }
+        auto itr = std::find(baxxil_following.begin(), baxxil_following.end(), pPlayer->GetObjectGuid());
+        if (itr != baxxil_following.end())
+            baxxil_following.erase(itr);
+    }
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
 void AddSC_tw_random()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_hizzle";
+    newscript->pGossipHello = &GossipHello_npc_hizzle;
+    newscript->pGossipSelect = &GossipSelect_npc_hizzle;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_baxxil";
+    newscript->pGossipHello = &GossipHello_npc_baxxil;
+    newscript->pGossipSelect = &GossipSelect_npc_baxxil;
+    newscript->GetAI = &GetAI_npc_baxxil;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_pazzle_brightwrench";
