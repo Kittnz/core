@@ -98,10 +98,12 @@ replace into creature_template values
 (91295, 0, 7229, 3929, 3931, 3933, 'Foreman Klix', 'Venture Co.', 0, 21, 22, 531, 573, 0, 0, 905, 47, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 33, 38, 0, 98, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 35.6224, 48.9808, 100, 7, 0, 91295, 3993, 0, 0, 0, 0, 0, 0, 0, 7979, 0, 0, 0, 39930, 0, 27, 40, 'EventAI', 1, 1, 0, 0, 3, 3993, 0, 0, 0, 0, 0, ''),
 (91296, 0, 328, 0, 0, 0, 'Quest 55048 Custom Objective Trigger', NULL, 0, 1, 1, 1382, 1518, 2362, 2457, 703, 1682, 0, 1, 1.14286, 0, 31, 5, 0, 0, 1, 32, 42, 0, 132, 1, 2000, 2000, 8, 32768, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 7, 0, 2272, 2272, 0, 0, 0, 0, 50, 0, 0, 3652, 20819, 15044, 0, 22720, 0, 44, 62, 'EventAI', 1, 3, 0, 0, 3, 2272, 0, 0, 0, 0, 0, ''),
 (91297, 0, 7166, 0, 0, 0, 'Baxxil', NULL, 0, 14, 15, 300, 328, 0, 0, 660, 47, 0, 1, 1.19048, 0, 20, 5, 0, 0, 1, 21, 27, 0, 74, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 21.2784, 29.2578, 100, 7, 0, 3284, 3284, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16, 26, '', 1, 1, 0, 0, 3, 3284, 0, 0, 0, 0, 0, 'npc_baxxil'),
-(91298, 0, 7110, 0, 0, 0, 'Shazknock', NULL, 0, 18, 19, 417, 449, 0, 0, 800, 47, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 32, 37, 0, 76, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 28.6704, 39.4218, 100, 7, 0, 3989, 3989, 0, 0, 0, 0, 0, 0, 0, 10277, 0, 0, 0, 39890, 0, 22, 33, 'EventAI', 1, 1, 0, 0, 3, 3989, 0, 0, 0, 0, 0, '');
+(91298, 0, 7110, 0, 0, 0, 'Shazknock', NULL, 0, 18, 19, 417, 449, 0, 0, 800, 47, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 32, 37, 0, 76, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 28.6704, 39.4218, 100, 7, 0, 3989, 3989, 0, 0, 0, 0, 0, 0, 0, 10277, 0, 0, 0, 39890, 0, 22, 33, 'EventAI', 1, 1, 0, 0, 3, 3989, 0, 0, 0, 0, 0, ''),
+(91299, 2, 14589, 14616, 0, 0, 'Little Grizlik', NULL, 0, 1, 3, 42, 71, 0, 0, 20, 29, 0, 1, 1, 0, 20, 5, 0, 0, 1, 3, 5, 0, 48, 1, 2000, 2000, 1, 768, 0, 0, 0, 0, 0, 0, 5.2272, 7.1874, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 3, 0, 0, 3, 0, 0, 0, 0, 0, 2, ''),
+(91300, 0, 1141, 1418, 2176, 0, 'Squeaks', '', 0, 1, 1, 64, 64, 0, 0, 0, 35, 0, 1, 1.14286, 1, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, '');
 
 -- Quest
-update creature_template set npc_flags = 2 where entry in (91268, 91269, 91275, 91276, 91234, 91254, 91203, 91282, 5546, 91259, 91295, 91260, 91272); 
+update creature_template set npc_flags = 2 where entry in (91268, 91269, 91275, 91276, 91234, 91254, 91203, 91282, 5546, 91259, 91295, 91260, 91272, 91299); 
 -- Gossip + Quest
 update creature_template set npc_flags = 3 where entry in (91266, 91267, 91274, 91251, 91277, 91280, 91281, 91285, 91286, 91289, 91287, 91288, 91290, 91249, 91297);
 -- Gossip + Vendor
@@ -116,6 +118,7 @@ update creature_template set loot_id = 91295 where entry = 91295;
 update creature_template set equipment_id = 0 where entry = 91288;
 update creature_template set equipment_id = 5112 where entry = 91259;
 update creature_template set faction = 61, rank = 0 where entry = 91291;
+update creature_template set faction = 35 where entry = 91300;
 
 replace into creature_template_addon values 
 (91200, 0, 0, 0, 0, 0, 69, 0, NULL),
@@ -477,7 +480,11 @@ replace into item_template values
 (81344, 0, 12, 0, 'Klix\'s Studded Ring', '', 1006, 1, 0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 4, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL),
 (81345, 0, 12, 0, 'Brightwater Logbook', 'Dripping wet.', 918, 1, 0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 4, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL),
 (81346, 0, 12, 0, 'Agon Ore', '', 4690, 1, 0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 4, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL),
-(81347, 0, 12, 0, 'Fraggle\'s Lucky Boots', '', 825, 1, 0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 4, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+(81347, 0, 12, 0, 'Fraggle\'s Lucky Boots', '', 825, 1, 0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 4, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL),
+(81348, 0, 12, 0, 'Grizlik\'s Letter', '', 3022, 1, 0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 4, 80305, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL),
+(81349, 0, 15, 0, 'Squeak\'s Cage', 'Annoying and destructive, they can be coaxed with enough cheese to become a tolerable companion.',  22271, 1, 0, 1, 6000, 1500, 0, -1, -1, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 28505, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, null);
+
+replace into custom_pet_entry_relation values (81349, 91300); 
 
 update item_template set flags = 2048 where entry in (81334);
 update item_template set stackable = 10 where entry = 81335;
@@ -825,5 +832,11 @@ replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minleve
 replace into gameobject_questrelation (id, quest) values (1000504, 55049);
 replace into creature_involvedrelation (id, quest) values (91237, 55049);
 
+replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (0,55050,1638,5,8,0,0,'Grizlik\’s Wish','<Little Grizlik would press his knuckle on his chest.>\n\nLok’tar, $r! I’m Grizlik, son of the Horde and future warrior of Orgrimmar!\n\n<The child flexes his scrawny arms, he almost seems cute.>\n\nHey, don’t laugh at me, come on, I’ve got a long way to go but the matron says if I put my mind to it, I too will one have a big axe like the High Overlord, or who knows maybe shoot lightning like the Warchief!\n\n<Grizlik mimics a spell with his hands.>\n\nPew, pew!\n\nAnyway, you seem like a boring elder and don’t seem to want to play with me so I will instead ask you for a favour! Please take this to Torm Ragetotem in Thunder Bluff, when he was here last time he brought us toys and taught me how to use a wooden axe!\n\nTake Squeaks with you too, he wants to see Thunder Bluff, you can keep him, he’s the more adventuring type really. I’d be sad to keep him around forever if he wants to see the world! ','Take Grizzlik\'s letter to Torm Ragetotem in Thunder Bluff.','A letter, for me?','Ah, how unexpected, young Grizlek had sent me a drawing of us training together including a thank you message.\n\nHe aspires to be trained when he grows older, the future generations of the horde $N, that\'s why we are all here.',81348,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,81348,1,140,175,76,50,0,0,0,0,0,0,0,0,0,81349,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+update quest_template set questflags = 512 where entry = 55050;
+
+replace into creature_questrelation (id, quest) values (91299, 55050);
+replace into creature_involvedrelation (id, quest) values (3041, 55050);
 
 
