@@ -87,28 +87,14 @@ bool GossipSelect_npc_royal_historian_archesonus(Player* pPlayer, Creature* pCre
     return true;
 }
 
-
-/*######
-## npc_magni_bronzebeard
-######*/
-
-bool GossipHello_npc_magni_bronzebeard(Player* pPlayer, Creature* pCreature)
-{
-    if (pCreature->IsQuestGiver())
-        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
-    pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
-
-    return true;
-}
-
 /*######
 ## npc_tinker_mekkatorque
 ######*/
 
 bool GossipHello_npc_tinker_mekkatorque(Player* pPlayer, Creature* pCreature)
 {
-    if (pPlayer->GetQuestStatusData(80750)->m_itemcount[2] == 0) // Gnomeregan
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Mekkatorque , I bring word from the high elves about important matters.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    if (!pPlayer->HasItemCount(83019, 1, false)) // Gnomeregan
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Mekkatorque, I bring word from the high elves about important matters.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
     if (pCreature->IsQuestGiver())
         pPlayer->PrepareQuestMenu(pCreature->GetGUID());
@@ -121,6 +107,7 @@ bool GossipSelect_npc_tinker_mekkatorque(Player* pPlayer, Creature* pCreature, u
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
+        pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_PASSIVE);
         pCreature->MonsterSayToPlayer("As someone who has lost their home, I can deeply emphasise with the elves.", pPlayer);
         if (pPlayer->HasItemCount(83015, 1, false))
             pPlayer->RemoveItemCurrency(83015, 1);
@@ -129,6 +116,8 @@ bool GossipSelect_npc_tinker_mekkatorque(Player* pPlayer, Creature* pCreature, u
             c->MonsterSayToPlayer("You can count on the gnomes to support the high elven ascension into the Alliance!", player);
             c->HandleEmote(EMOTE_ONESHOT_YES);
             player->AddItem(83019, 1);
+            c->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+            c->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
             });
     }
     pPlayer->CLOSE_GOSSIP_MENU();
@@ -259,12 +248,11 @@ CreatureAI* GetAI_boss_magni_bronzebeard(Creature* pCreature)
     return new boss_magni_bronzebeardAI(pCreature);
 }
 
-
 bool GossipHello_boss_magni_bronzebeard(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->GetQuestStatus(80750) == QUEST_STATUS_INCOMPLETE && pPlayer->HasItemCount(83015, 1, false))
     {
-        if (pPlayer->GetQuestStatusData(80750)->m_itemcount[1] == 0) // Ironforge
+        if (!pPlayer->HasItemCount(83017, 1, false)) // Ironforge
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Mighty Magni, the high elves have sent me with this message.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     }
 
@@ -279,6 +267,7 @@ bool GossipSelect_boss_magni_bronzebeard(Player* pPlayer, Creature* pCreature, u
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
+        pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_PASSIVE);
         pCreature->MonsterSayToPlayer("The Senate will need to discuss this matter in detail.", pPlayer);
         if (pPlayer->HasItemCount(83015, 1, false))
             pPlayer->RemoveItemCurrency(83015, 1);
@@ -298,6 +287,8 @@ bool GossipSelect_boss_magni_bronzebeard(Player* pPlayer, Creature* pCreature, u
             c->MonsterSayToPlayer("We would be fools to reject them after they've lost their homeland. Please deliver this reply to Alah'thalas.", player);
             c->HandleEmote(EMOTE_ONESHOT_YES);
             player->AddItem(83017, 1);
+            c->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+            c->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
             });
     }
     pPlayer->CLOSE_GOSSIP_MENU();
