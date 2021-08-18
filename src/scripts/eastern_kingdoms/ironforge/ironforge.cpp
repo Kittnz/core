@@ -27,6 +27,12 @@ EndContentData */
 
 #include "scriptPCH.h"
 
+template <typename Functor>
+void DoAfterTime(Player* player, uint32 p_time, Functor&& function)
+{
+    player->m_Events.AddEvent(new LambdaBasicEvent<Functor>(std::move(function)), player->m_Events.CalculateTime(p_time));
+}
+
 /*######
 ## npc_royal_historian_archesonus
 ######*/
@@ -101,10 +107,31 @@ bool GossipHello_npc_magni_bronzebeard(Player* pPlayer, Creature* pCreature)
 
 bool GossipHello_npc_tinker_mekkatorque(Player* pPlayer, Creature* pCreature)
 {
+    if (pPlayer->GetQuestStatusData(80750)->m_itemcount[2] == 0) // Gnomeregan
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Mekkatorque , I bring word from the high elves about important matters.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+
     if (pCreature->IsQuestGiver())
         pPlayer->PrepareQuestMenu(pCreature->GetGUID());
     pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
 
+    return true;
+}
+
+bool GossipSelect_npc_tinker_mekkatorque(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pCreature->MonsterSayToPlayer("As someone who has lost their home, I can deeply emphasise with the elves.", pPlayer);
+        if (pPlayer->HasItemCount(83015, 1, false))
+            pPlayer->RemoveItemCurrency(83015, 1);
+        pCreature->HandleEmote(EMOTE_ONESHOT_TALK_NOSHEATHE);
+        DoAfterTime(pPlayer, 3 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
+            c->MonsterSayToPlayer("You can count on the gnomes to support the high elven ascension into the Alliance!", player);
+            c->HandleEmote(EMOTE_ONESHOT_YES);
+            player->AddItem(83019, 1);
+            });
+    }
+    pPlayer->CLOSE_GOSSIP_MENU();
     return true;
 }
 
@@ -232,6 +259,51 @@ CreatureAI* GetAI_boss_magni_bronzebeard(Creature* pCreature)
     return new boss_magni_bronzebeardAI(pCreature);
 }
 
+
+bool GossipHello_boss_magni_bronzebeard(Player* pPlayer, Creature* pCreature)
+{
+    if (pPlayer->GetQuestStatus(80750) == QUEST_STATUS_INCOMPLETE && pPlayer->HasItemCount(83015, 1, false))
+    {
+        if (pPlayer->GetQuestStatusData(80750)->m_itemcount[1] == 0) // Ironforge
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Mighty Magni, the high elves have sent me with this message.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    }
+
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_boss_magni_bronzebeard(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pCreature->MonsterSayToPlayer("The Senate will need to discuss this matter in detail.", pPlayer);
+        if (pPlayer->HasItemCount(83015, 1, false))
+            pPlayer->RemoveItemCurrency(83015, 1);
+        DoAfterTime(pPlayer, 3 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
+            c->MonsterSayToPlayer("However King Bronzebeard has been very supportive of the Quel'dorei ascension to the Alliance.", player);
+            c->HandleEmote(EMOTE_ONESHOT_TALK_NOSHEATHE);
+            });
+        DoAfterTime(pPlayer, 6 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
+            c->MonsterSayToPlayer("Especially after the refugees have done their best to help secure Loch Modan.", player);
+            c->HandleEmote(EMOTE_ONESHOT_TALK_NOSHEATHE);
+            });
+        DoAfterTime(pPlayer, 10 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
+            c->MonsterSayToPlayer("During the Second war, the majority of us dwarves were trapped in Ironforge until the Alliance liberated our lands, and the Quel'dorei were part of that very alliance.", player);
+            c->HandleEmote(EMOTE_ONESHOT_TALK_NOSHEATHE);
+            });
+        DoAfterTime(pPlayer, 15 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
+            c->MonsterSayToPlayer("We would be fools to reject them after they've lost their homeland. Please deliver this reply to Alah'thalas.", player);
+            c->HandleEmote(EMOTE_ONESHOT_YES);
+            player->AddItem(83017, 1);
+            });
+    }
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
 void AddSC_ironforge()
 {
     Script *newscript;
@@ -241,19 +313,17 @@ void AddSC_ironforge()
     newscript->pGossipHello =  &GossipHello_npc_royal_historian_archesonus;
     newscript->pGossipSelect = &GossipSelect_npc_royal_historian_archesonus;
     newscript->RegisterSelf();
-    /*
-    newscript = new Script;
-    newscript->Name = "npc_magni_bronzebeard";
-    newscript->pGossipHello   = &GossipHello_npc_magni_bronzebeard;
-    newscript->RegisterSelf();
-    */
+
     newscript = new Script;
     newscript->Name = "npc_tinker_mekkatorque";
-    newscript->pGossipHello   = &GossipHello_npc_tinker_mekkatorque;
+    newscript->pGossipHello  = &GossipHello_npc_tinker_mekkatorque;
+    newscript->pGossipSelect = &GossipSelect_npc_tinker_mekkatorque;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "boss_magni_bronzebeard";
+    newscript->pGossipHello = &GossipHello_boss_magni_bronzebeard;
+    newscript->pGossipSelect = &GossipSelect_boss_magni_bronzebeard;
     newscript->GetAI = &GetAI_boss_magni_bronzebeard;
     newscript->RegisterSelf();
 }
