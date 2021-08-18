@@ -22,6 +22,16 @@ replace into item_template values
 (81409, 0, 12, 0, 'Barthos\' Engineering Notes', '', 7629, 1, 0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 4, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL),
 (81410, 0, 12, 0, 'Barthos\' Engineering Supplies', 'There is a note written upon the crate.', 11449, 1, 0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 4, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
 
+replace into item_template values
+ ('81411', '0', '4', '6', 'Occelation Inhibited Disk', 'An engineering masterpiece - Barthos Thundercrack', '20985', '2', '0', '1', '18365', '4591', '14', '-1', '-1', '34',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '6', '3', '3',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '13', '635', '0', '0', '5',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '6', '4', '0', '0', '85', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+
 update item_template set stackable = 5 where entry in (81400, 81401);
 
 update creature_template set npc_flags = 3 where entry in (52015, 52095, 52068, 52080, 52030, 52069, 52066);
@@ -129,4 +139,13 @@ replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minleve
 replace into creature_questrelation (id, quest) values (52102, 55213);
 replace into creature_involvedrelation (id, quest) values (52066, 55213);
 
+replace into creature_template values (91301, 0, 328, 0, 0, 0, 'Quest 55211 Custom Objective Trigger', NULL, 0, 1, 1, 1382, 1518, 2362, 2457, 703, 1682, 0, 1, 1.14286, 0, 31, 5, 0, 0, 1, 32, 42, 0, 132, 1, 2000, 2000, 8, 32768, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 7, 0, 2272, 2272, 0, 0, 0, 0, 50, 0, 0, 3652, 20819, 15044, 0, 22720, 0, 44, 62, 'EventAI', 1, 3, 0, 0, 3, 2272, 0, 0, 0, 0, 0, '');
 
+replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (55210,55211,4018,24,20,0,0,'Occelation Inhibited Disk!','Now then, I\'ll get started on my next, greatest creation! It shouldn\'t take long, just stand back, and keep a good distance so you don''t get hurt!\n\nGood engineering does require a bit of danger, after all.','Wait for Barthos Thundercrack to create his great invention.','Text if incomplete','Here it is, my creation!\n\nAn engineering masterpiece.\n\nMay it serve you well out there, now, on to my own works!',0,0,0,0,0,0,0,0,91301,1,0,0,0,0,0,0,0,0,0,345,47,25,0,0,0,0,0,0,0,0,0,81411,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+update quest_template set objectivetext1 = 'Wait for Barthos Thundercrack to create his great invention' where entry = 55211;
+update quest_template set questflags = 512 where entry = 55211;
+update creature_template set script_name = 'npc_barthos' where entry = 52066;
+
+replace into creature_questrelation (id, quest) values (52066, 55211);
+replace into creature_involvedrelation (id, quest) values (52066, 55211);
