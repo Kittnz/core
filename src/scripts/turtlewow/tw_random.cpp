@@ -6424,21 +6424,22 @@ bool QuestAccept_npc_barthos(Player* pPlayer, Creature* pQuestGiver, Quest const
 
     if (pQuest->GetQuestId() == 55211) // Occelation Inhibited Disk!
     {
-        pQuestGiver->HandleEmote(EMOTE_STATE_WORK);
+        pQuestGiver->HandleEmote(69);
         pQuestGiver->MonsterSayToPlayer("First, we put this here, and then this... here...", pPlayer);
         pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_PASSIVE);
 
         DoAfterTime(pPlayer, 6 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-            npc->HandleEmote(EMOTE_ONESHOT_SPECIALATTACK1H);
             npc->MonsterSayToPlayer("Then all it takes is, Ah! Damn thing!", player);
             });
         DoAfterTime(pPlayer, 12 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-            npc->HandleEmote(EMOTE_ONESHOT_TALK);
             npc->MonsterSayToPlayer("There it is, I've done it, here you are, my work is complete!", player);
             npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
             npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
             if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(91301))
                 player->KilledMonster(cInfo, ObjectGuid());
+            });
+        DoAfterTime(pPlayer, 14 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            npc->HandleEmote(EMOTE_ONESHOT_NONE);
             });
     }
     return false;
