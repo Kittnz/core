@@ -6437,9 +6437,9 @@ bool QuestAccept_npc_barthos(Player* pPlayer, Creature* pQuestGiver, Quest const
             npc->MonsterSayToPlayer("There it is, I've done it, here you are, my work is complete!", player);
             npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
             npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(91301))
+                player->KilledMonster(cInfo, ObjectGuid());
             });
-        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(91301))
-            pPlayer->KilledMonster(cInfo, ObjectGuid());
     }
     return false;
 }
