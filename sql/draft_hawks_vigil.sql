@@ -1486,3 +1486,16 @@ delete from gameobject where guid=4010098;  -- random turd in Dun Agrath
 delete from creature where guid=2562680;  -- rat in the road
 update creature_template set scale=0.5 where entry=52088;  -- kitties too big
 
+INSERT INTO `npc_vendor` (`entry`, `item`) VALUES 
+(52118, 159),    -- Innkeeper Heidi, Hawk's Vigil
+(52118, 787),
+(52118, 1179),
+(52118, 1205),
+(52118, 1645),
+(52118, 1708),
+(52118, 4592),
+(52118, 4593),
+(52118, 4594),
+(52118, 8766),
+(52118, 8957),
+(52118, 21552);
