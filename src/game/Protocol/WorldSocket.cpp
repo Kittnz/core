@@ -33,6 +33,8 @@
 #include "Opcodes.h"
 #include "MangosSocketImpl.h"
 
+#include <memory>
+
 template class MangosSocket<WorldSession, WorldSocket, AuthCrypt>;
 
 int WorldSocket::ProcessIncoming(WorldPacket* new_pct)
@@ -40,7 +42,7 @@ int WorldSocket::ProcessIncoming(WorldPacket* new_pct)
     MANGOS_ASSERT(new_pct);
 
     // manage memory ;)
-    ACE_Auto_Ptr<WorldPacket> aptr(new_pct);
+    std::unique_ptr<WorldPacket> aptr(new_pct);
 
     const ACE_UINT16 opcode = new_pct->GetOpcode();
 
