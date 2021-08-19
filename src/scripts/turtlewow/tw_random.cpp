@@ -6447,18 +6447,35 @@ bool QuestAccept_npc_barthos(Player* pPlayer, Creature* pQuestGiver, Quest const
 
 bool GossipHello_npc_faction_leader(Player* pPlayer, Creature* pCreature)
 {
-    if (pPlayer->GetQuestStatus(80750) == QUEST_STATUS_INCOMPLETE && pPlayer->HasItemCount(83015, 1, false))
+    if (pPlayer->GetQuestStatus(80750) == QUEST_STATUS_INCOMPLETE || pPlayer->GetQuestStatus(80800) == QUEST_STATUS_INCOMPLETE)
     {
-        switch (pCreature->GetEntry())
+        if (pPlayer->HasItemCount(83015, 1, false))
         {
-        case 1748:
-            if (!pPlayer->HasItemCount(83016, 1, false)) // Stormwind
-                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Hail, Lord Bolvar. I am delivering an important missive on behalf of the high elves.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-            break;
-        case 7999:
-            if (!pPlayer->HasItemCount(83018, 1, false)) // Darnassus
-                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Tyrande, the high elves have sent me with a letter for your reading.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-            break;
+            switch (pCreature->GetEntry())
+            {
+            case 1748:
+                if (!pPlayer->HasItemCount(83016, 1, false)) // Stormwind
+                    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Hail, Lord Bolvar. I am delivering an important missive on behalf of the high elves.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+                break;
+            case 7999:
+                if (!pPlayer->HasItemCount(83018, 1, false)) // Darnassus
+                    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Tyrande, the high elves have sent me with a letter for your reading.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+                break;
+            }
+        }
+        if (pPlayer->HasItemCount(83020, 1, false))
+        {
+            switch (pCreature->GetEntry())
+            {
+            case 4949:
+                if (!pPlayer->HasItemCount(83021, 1, false)) // Orgrimmar
+                    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Thrall, the Revantusk Tribe have sent me with a letter for your reading.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+                break;
+            case 10540:
+                if (!pPlayer->HasItemCount(83023, 1, false)) // Darkspear Tribe
+                    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Vol'jin, the Revantusk Tribe have sent me with a letter for your reading.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+                break;
+            }
         }
     }
 
@@ -6521,6 +6538,44 @@ bool GossipSelect_npc_faction_leader(Player* pPlayer, Creature* pCreature, uint3
                 c->MonsterSayToPlayer("The answer of the Kaldorei stands firm. You may deliver this reply to your masters.", player);
                 c->HandleEmote(EMOTE_ONESHOT_NO);
                 player->AddItem(83018, 1);
+                c->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                c->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                });
+            break;
+        case 4949:
+            pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_PASSIVE);
+            pCreature->MonsterSayToPlayer("Ogrim told me stories about the Forest Trolls, how he trampled on Khaz Modan with them and brought fear to the Alliance.", pPlayer);
+            if (pPlayer->HasItemCount(83020, 1, false))
+                pPlayer->RemoveItemCurrency(83020, 1);
+            DoAfterTime(pPlayer, 6 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
+                c->MonsterSayToPlayer("I wasn’t always on the same page with the old orc but in truth from what I know these trolls will be an asset to the Horde and our redemption for the betrayal they faced at the borders of Quel’thalas.", player);
+                c->HandleEmote(EMOTE_ONESHOT_TALK);
+                });
+            DoAfterTime(pPlayer, 12 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
+                c->MonsterSayToPlayer("Take my respond to Amani’Alor and tell them they are welcomed in our ranks with Lok’tar Ogar.", player);
+                c->HandleEmote(EMOTE_ONESHOT_YES);
+                player->AddItem(83021, 1);
+                c->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                c->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                });
+            break;
+        case 10540:
+            pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_PASSIVE);
+            pCreature->MonsterSayToPlayer("Da trolls were at one time just one people, no matter da tribe they cared and respected each other.", pPlayer);
+            if (pPlayer->HasItemCount(83020, 1, false))
+                pPlayer->RemoveItemCurrency(83020, 1);
+            DoAfterTime(pPlayer, 3 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
+                c->MonsterSayToPlayer("We are not dat close anymore, not as we used to.", player);
+                c->HandleEmote(EMOTE_ONESHOT_TALK);
+                });
+            DoAfterTime(pPlayer, 6 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
+                c->MonsterSayToPlayer("Da Darkspear holds no remorse to old Zul’jin’s people. We welcome them as brothers in arms and wish they will find a home under our banner.", player);
+                c->HandleEmote(EMOTE_ONESHOT_TALK);
+                });
+            DoAfterTime(pPlayer, 10 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
+                c->MonsterSayToPlayer("May da Loa be with us in war and peace.", player);
+                c->HandleEmote(EMOTE_ONESHOT_YES);
+                player->AddItem(83023, 1);
                 c->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                 c->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
                 });

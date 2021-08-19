@@ -149,9 +149,55 @@ CreatureAI* GetAI_boss_sylvanas(Creature* pCreature)
     return new boss_sylvanasAI(pCreature);
 }
 
-/*######
-## AddSC
-######*/
+template <typename Functor>
+void DoAfterTime(Player* player, uint32 p_time, Functor&& function)
+{
+    player->m_Events.AddEvent(new LambdaBasicEvent<Functor>(std::move(function)), player->m_Events.CalculateTime(p_time));
+}
+
+bool GossipHello_npc_lady_sylvanas_windrunner(Player* pPlayer, Creature* pCreature)
+{
+    if (pPlayer->GetQuestStatus(80800) == QUEST_STATUS_INCOMPLETE && pPlayer->HasItemCount(83020, 1, false) && !pPlayer->HasItemCount(83024, 1, false))
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Lady Sylvanas, the Revantusk Tribe have sent me with this message.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_lady_sylvanas_windrunner(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_PASSIVE);
+        pCreature->MonsterSayToPlayer("What manner of buffoonery is this?", pPlayer);
+        if (pPlayer->HasItemCount(83020, 1, false))
+            pPlayer->RemoveItemCurrency(83020, 1);
+        DoAfterTime(pPlayer, 3 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
+            c->MonsterSayToPlayer("The Forest Trolls were my greatest enemy in life and although I’ve long left that life behind I am still bitter.", player);
+            c->HandleEmote(EMOTE_ONESHOT_TALK);
+            });
+        DoAfterTime(pPlayer, 7 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
+            c->MonsterSayToPlayer("You do not understand how brutish, savage and stupid these mongrels are.", player);
+            c->HandleEmote(EMOTE_ONESHOT_NO);
+            });
+        DoAfterTime(pPlayer, 11 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
+            c->MonsterSayToPlayer("I will not stand for this, no Forest Troll filth shall step in my home.", player);
+            c->HandleEmote(EMOTE_ONESHOT_NO);
+            });
+        DoAfterTime(pPlayer, 14 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
+            c->MonsterSayToPlayer("Now leave.", player);
+            c->HandleEmote(EMOTE_ONESHOT_TALK);
+            player->AddItem(83024, 1);
+            c->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+            c->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+            });
+    }
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
 
 void AddSC_undercity()
 {
@@ -159,6 +205,8 @@ void AddSC_undercity()
 
     newscript = new Script;
     newscript->Name = "npc_lady_sylvanas_windrunner";
+    newscript->pGossipHello = &GossipHello_npc_lady_sylvanas_windrunner;
+    newscript->pGossipSelect = &GossipSelect_npc_lady_sylvanas_windrunner;
     newscript->GetAI = &GetAI_boss_sylvanas;
     newscript->RegisterSelf();
 }
