@@ -6586,9 +6586,78 @@ bool GossipSelect_npc_faction_leader(Player* pPlayer, Creature* pCreature, uint3
     return true;
 }
 
+bool GossipHello_npc_zuljin(Player* pPlayer, Creature* pCreature)
+{
+    if (pPlayer->GetQuestStatus(80801) == QUEST_STATUS_INCOMPLETE)
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "What happened to you, Zul'jin?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    pPlayer->SEND_GOSSIP_MENU(80867, pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_zuljin(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_PASSIVE);
+        pCreature->MonsterSayToPlayer("After da combined forces of da Amani and da Horde failed da attack on de Elven Lands we didn’t back down and me people and I paid da price.", pPlayer);
+        DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
+            c->MonsterSayToPlayer("Dey cornered me close to dat lake and been captured by a bashful elf named Brightwing.", player);
+            c->HandleEmote(EMOTE_ONESHOT_TALK);
+            });
+        DoAfterTime(pPlayer, 10 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
+            c->MonsterSayToPlayer("Dey tormented me and even took me eye, dey wanted to take me back to dey settlement and probably end me life in front of every other elf to boost morality.", player);
+            c->HandleEmote(EMOTE_ONESHOT_NO);
+            });
+        DoAfterTime(pPlayer, 15 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
+            c->MonsterSayToPlayer("It was den that ol’ Zul’jin took a gamble with fate, with da help of me people who laid a small siege on da encampment I cut off me arm with a spear and ran into da forest.", player);
+            c->HandleEmote(EMOTE_ONESHOT_TALK);
+            });
+        DoAfterTime(pPlayer, 20 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
+            c->MonsterSayToPlayer("I healed and organised me army once again, not long before da Scourge claimed Silvermoon it was time to act, but even with the Loa’s blessings we couldn’t hold against the dead and failed.", player);
+            c->HandleEmote(EMOTE_ONESHOT_YES);
+            });
+        DoAfterTime(pPlayer, 25 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
+            c->MonsterSayToPlayer("Me lands lay in shambles, lost to da living dead and I will do anything to take our lands back, and no high elf or Scourge would stand against da powers of da Amani and da Horde.", player);
+            c->HandleEmote(EMOTE_ONESHOT_TALK);
+            });
+        DoAfterTime(pPlayer, 30 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
+            c->MonsterSayToPlayer("Dose were our lands, mon, troll lands, de Amani was there before anyone else and no Alliance, Scourge or Demons will stop us from getting it back.", player);
+            c->HandleEmote(EMOTE_ONESHOT_YES);
+            });
+        DoAfterTime(pPlayer, 35 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
+            c->MonsterSayToPlayer("Hear dis!", player);
+            c->HandleEmote(EMOTE_ONESHOT_EXCLAMATION);
+            });
+        DoAfterTime(pPlayer, 40 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
+            c->MonsterYell("WE ARE DE AMANI, WE FEAR NOBODY!");
+            c->HandleEmote(EMOTE_ONESHOT_BATTLEROAR);
+            });
+        DoAfterTime(pPlayer, 45 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
+            c->MonsterYell("WE WILL NEVER GIVE UP BECAUSE WE NEVER DIE!");
+            c->HandleEmote(EMOTE_ONESHOT_EXCLAMATION);
+            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(91320))
+                player->KilledMonster(cInfo, ObjectGuid());
+            c->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+            c->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+            }); 
+    }
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
 void AddSC_tw_random()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_zuljin";
+    newscript->pGossipHello = &GossipHello_npc_zuljin;
+    newscript->pGossipSelect = &GossipSelect_npc_zuljin;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_faction_leader";
