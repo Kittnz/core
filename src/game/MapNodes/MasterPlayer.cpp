@@ -258,9 +258,9 @@ void MasterPlayer::LoadMailedItems(QueryResult *result)
     do
     {
         Field *fields = result->Fetch();
-        uint32 mail_id       = fields[10].GetUInt32();
-        uint32 item_guid_low = fields[11].GetUInt32();
-        uint32 item_template = fields[12].GetUInt32();
+        uint32 mail_id       = fields[11].GetUInt32();
+        uint32 item_guid_low = fields[12].GetUInt32();
+        uint32 item_template = fields[13].GetUInt32();
 
         Mail* mail = GetMail(mail_id);
         if (!mail)

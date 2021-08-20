@@ -360,7 +360,7 @@ void AuctionHouseMgr::LoadAuctionHouses()
 void AuctionHouseMgr::LoadAuctionItems()
 {
     //               0                1      2         3        4      5             6                 7           8           9       10       11
-    QueryResult *result = CharacterDatabase.Query("SELECT creatorGuid, giftCreatorGuid, count, duration, charges, flags, enchantments, randomPropertyId, durability, text, itemguid, itemEntry FROM auction JOIN item_instance ON itemguid = guid");
+    QueryResult *result = CharacterDatabase.Query("SELECT creatorGuid, giftCreatorGuid, count, duration, charges, flags, enchantments, randomPropertyId, transmogrifyId, durability, text, itemguid, itemEntry FROM auction JOIN item_instance ON itemguid = guid");
 
     if (!result)
     {
@@ -371,8 +371,8 @@ void AuctionHouseMgr::LoadAuctionItems()
     do
     {
         fields = result->Fetch();
-        uint32 item_guid        = fields[10].GetUInt32();
-        uint32 item_template    = fields[11].GetUInt32();
+        uint32 item_guid        = fields[11].GetUInt32();
+        uint32 item_template    = fields[12].GetUInt32();
 
         ItemPrototype const *proto = ObjectMgr::GetItemPrototype(item_template);
 
