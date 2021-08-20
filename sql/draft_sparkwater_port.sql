@@ -105,7 +105,6 @@ replace into creature_template values
 (91303, 0, 5573, 0, 0, 0, 'The Scorpid King', NULL, 0, 54, 54, 3292, 3292, 0, 0, 3190, 855, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 92, 120, 0, 244, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 69.8544, 96.0498, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 2, ''),
 (91304, 0, 9996, 0, 0, 0, 'Taranaszz', 'The Dampener', 0, 56, 56, 23192, 23192, 0, 0, 4075, 14, 0, 1, 1.14286, 0, 20, 5, 0, 2, 1, 354, 456, 0, 258, 1, 1175, 1292, 1, 0, 0, 0, 0, 0, 0, 0, 59.9488, 82.4296, 100, 2, 0, 10196, 0, 10196, 0, 0, 228, 0, 0, 0, 9128, 13730, 11971, 0, 0, 0, 688, 903, '', 1, 1, 0, 0, 3, 10196, 0, 0, 0, 0, 0, 'generic_spell_ai');
 
-
 -- Quest
 update creature_template set npc_flags = 2 where entry in (91268, 91269, 91275, 91276, 91234, 91254, 91203, 91282, 5546, 91259, 91295, 91260, 91272, 91299); 
 -- Gossip + Quest
@@ -945,5 +944,6 @@ replace into item_template values
 
 delete from creature_questrelation where id = 91282 and quest = 55032;
 update creature_template set faction = 119 where entry = 91284;
+update creature_template set faction = 1914 where entry = 91293;
 delete from npc_vendor where entry = 91221 and item = 80167;
 
