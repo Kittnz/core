@@ -173,6 +173,9 @@ ObjectMgr::~ObjectMgr()
 
     for (auto& itr : m_playerCacheData)
         delete itr.second;
+
+    for (auto& itr : m_itemTransmogs)
+        delete itr.second;
 }
 
 void ObjectMgr::LoadAllIdentifiers()
@@ -3409,13 +3412,6 @@ void ObjectMgr::LoadItemPrototypes()
     }
 }
 
-void ObjectMgr::LoadTransmogTemplate()
-{
-    SQLItemLoader loader;
-    loader.Load(sTransmogEntryStorage);
-    
-}
-
 void ObjectMgr::LoadItemLocales()
 {
     m_ItemLocaleMap.clear();                                 // need for reload case
@@ -3647,8 +3643,8 @@ void ObjectMgr::LoadPetLevelInfo()
 
 ItemPrototype const* ObjectMgr::GetItemPrototype(uint32 id)
 {
-    const ItemPrototype* fakeProto = sTransmog.GetFakeItemProto(id);
-    return fakeProto ? fakeProto : sItemStorage.LookupEntry<ItemPrototype>(id);
+    const ItemPrototype* transmogrifyProto = sObjectMgr.GetItemTransmogrify(id);
+    return transmogrifyProto ? transmogrifyProto : sItemStorage.LookupEntry<ItemPrototype>(id);
 }
 
 PetLevelInfo const* ObjectMgr::GetPetLevelInfo(uint32 creature_id, uint32 level) const
@@ -9871,4 +9867,69 @@ uint32 ObjectMgr::GetCustomMountCreatureEntryFromItem(uint32 item_entry) {
     else {
         return 0;
     }
+}
+
+void ObjectMgr::LoadTransmogrifyItems()
+{
+    m_itemTransmogs.clear();
+
+    std::unique_ptr<QueryResult> result(WorldDatabase.Query("SELECT `ID`, `ItemID`, `DisplayID` FROM `item_transmogrify_template`"));
+
+    if (!result)
+        return;
+
+    do
+    {
+        Field* fields = result->Fetch();
+
+        uint32 ID = fields[0].GetUInt32();
+        uint32 ItemID = fields[1].GetUInt32();
+        uint32 DisplayID = fields[2].GetUInt32();
+
+        ItemPrototype* copy = new ItemPrototype;
+        ItemPrototype const* base = GetItemPrototype(ItemID);
+
+        if (!base)
+            continue;
+
+        *copy = *base;
+
+        copy->ItemId = ID;
+        copy->DisplayInfoID = DisplayID;
+        copy->SourceItemId = ItemID;
+
+        m_itemTransmogs[ID] = copy;
+    } while (result->NextRow());
+}
+
+bool ObjectMgr::CreateItemTransmogrification(uint32 sourceItemId, uint32 sourceDisplayId)
+{
+    // find max id
+    uint32 destId = 100000;
+    for (const auto& itr : m_itemTransmogs)
+    {
+        if (itr.first > destId)
+            destId = itr.first;
+    }
+
+    // use next
+    ++destId;
+
+    ItemPrototype* copy = new ItemPrototype;
+    ItemPrototype const* base = GetItemPrototype(sourceItemId);
+
+    if (!base)
+        return false;
+
+    *copy = *base;
+
+    copy->ItemId = destId;
+    copy->DisplayInfoID = sourceDisplayId;
+    copy->SourceItemId = sourceItemId;
+
+    m_itemTransmogs[destId] = copy;
+
+    sWorld.SendSingleItemAdd(destId);
+
+    return WorldDatabase.PExecuteLog("INSERT INTO `item_transmogrify_template` (`ID`, `ItemID`, `DisplayID`) VALUES ('%u','%u','%u')", destId, sourceItemId, sourceDisplayId);
 }

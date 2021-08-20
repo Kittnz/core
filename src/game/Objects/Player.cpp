@@ -10737,7 +10737,7 @@ void Player::SetVisibleItemSlot(uint8 slot, Item *pItem)
         SetGuidValue(PLAYER_VISIBLE_ITEM_1_CREATOR + (slot * MAX_VISIBLE_ITEM_OFFSET), pItem->GetGuidValue(ITEM_FIELD_CREATOR));
 
         int VisibleBase = PLAYER_VISIBLE_ITEM_1_0 + (slot * MAX_VISIBLE_ITEM_OFFSET);
-        SetUInt32Value(VisibleBase + 0, pItem->GetEntry());
+        SetUInt32Value(VisibleBase + 0, pItem->GetVisibleEntry());
 
         for (int i = 0; i < MAX_INSPECTED_ENCHANTMENT_SLOT; ++i)
             SetUInt32Value(VisibleBase + 1 + i, pItem->GetEnchantmentId(EnchantmentSlot(i)));
@@ -10745,9 +10745,6 @@ void Player::SetVisibleItemSlot(uint8 slot, Item *pItem)
         // Use SetInt16Value to prevent set high part to FFFF for negative value
         SetInt16Value(PLAYER_VISIBLE_ITEM_1_PROPERTIES + (slot * MAX_VISIBLE_ITEM_OFFSET), 0, pItem->GetItemRandomPropertyId());
         SetUInt32Value(PLAYER_VISIBLE_ITEM_1_PROPERTIES + 1 + (slot * MAX_VISIBLE_ITEM_OFFSET), pItem->GetItemSuffixFactor());
-
-        if (sWorld.getConfig(CONFIG_BOOL_TRANSMOG_ENABLED))
-            sTransmog.UpdateTransmogItem(this, pItem);
     }
     else
     {
@@ -15578,8 +15575,8 @@ void Player::LoadCorpse()
 
 void Player::_LoadInventory(QueryResult *result, uint32 timediff, bool &has_epic_mount)
 {
-    //               0                1      2         3        4      5             6                 7           8     9    10    11   12    13              14
-    //SELECT creatorGuid, giftCreatorGuid, count, duration, charges, flags, enchantments, randomPropertyId, durability, text, bag, slot, item, itemEntry, generated_loot
+    //               0                1      2         3        4      5             6               7           8             9       10    11   12    13      14         15
+    //SELECT creatorGuid, giftCreatorGuid, count, duration, charges, flags, enchantments, randomPropertyId, transmogifyId, durability, text, bag, slot, item, itemEntry, generated_loot
     std::unordered_map<uint32, Bag*> bagMap;                          // fast guid lookup for bags
     //NOTE: the "order by `bag`" is important because it makes sure
     //the bagMap is filled before items in the bags are loaded
@@ -15598,10 +15595,10 @@ void Player::_LoadInventory(QueryResult *result, uint32 timediff, bool &has_epic
         do
         {
             Field *fields = result->Fetch();
-            uint32 bag_guid     = fields[10].GetUInt32();
-            uint8  slot         = fields[11].GetUInt8();
-            uint32 item_lowguid = fields[12].GetUInt32();
-            uint32 item_id      = fields[13].GetUInt32();
+            uint32 bag_guid     = fields[11].GetUInt32();
+            uint8  slot         = fields[12].GetUInt8();
+            uint32 item_lowguid = fields[13].GetUInt32();
+            uint32 item_id      = fields[14].GetUInt32();
 
             ItemPrototype const * proto = ObjectMgr::GetItemPrototype(item_id);
 
@@ -15636,7 +15633,7 @@ void Player::_LoadInventory(QueryResult *result, uint32 timediff, bool &has_epic
              * LoadFromDB is called from multiple places but with a different set of fields - this is workaround
              * so I don't need to fix the mess of queries and probably break something until a later date
              */
-            item->SetGeneratedLoot(fields[14].GetBool());
+            item->SetGeneratedLoot(fields[15].GetBool());
 
             if (!item->LoadFromDB(item_lowguid, GetObjectGuid(), fields, item_id))
             {

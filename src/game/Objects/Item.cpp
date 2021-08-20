@@ -223,7 +223,7 @@ Item::Item() : loot(nullptr)
     m_objectTypeId = TYPEID_ITEM;
     m_updateFlag = UPDATEFLAG_ALL;
 
-    m_fakeEntry = 0;
+    transmogrifyId = 0;
     m_valuesCount = ITEM_END;
     m_slot = 0;
     uState = ITEM_NEW;
@@ -362,7 +362,7 @@ void Item::SaveToDB()
             }
 
             SqlStatement stmt = CharacterDatabase.CreateStatement(delInst, "DELETE FROM `item_instance` WHERE `guid` = ?");
-            sTransmog.DeleteTransmogItemFromDB(guid);
+            //sTransmog.DeleteTransmogItemFromDB(guid);
             stmt.PExecute(guid);
 
             if (HasFlag(ITEM_FIELD_FLAGS, ITEM_DYNFLAG_WRAPPED))
@@ -444,8 +444,8 @@ void Item::SaveToDB()
 
 bool Item::LoadFromDB(uint32 guidLow, ObjectGuid ownerGuid, Field* fields, uint32 entry)
 {
-    //                0                1      2         3        4      5             6                 7           8     9       10         11
-    // SELECT creatorGuid, giftCreatorGuid, count, duration, charges, flags, enchantments, randomPropertyId, durability, text, item_guid, itemEntry
+    //                0                1      2         3        4      5             6            7              8            9        10       11        12
+    // SELECT creatorGuid, giftCreatorGuid, count, duration, charges, flags, enchantments, randomPropertyId, appearanceId, durability, text, item_guid, itemEntry
     // create item before any checks for store correct guid
     // and allow use "FSetState(ITEM_REMOVED); SaveToDB();" for deleting item from DB
     Object::_Create(guidLow, 0, HIGHGUID_ITEM);
@@ -500,7 +500,9 @@ bool Item::LoadFromDB(uint32 guidLow, ObjectGuid ownerGuid, Field* fields, uint3
     _LoadIntoDataField(enchants, ITEM_FIELD_ENCHANTMENT, MAX_ENCHANTMENT_SLOT * MAX_ENCHANTMENT_OFFSET);
     SetInt32Value(ITEM_FIELD_RANDOM_PROPERTIES_ID, fields[7].GetInt16());
 
-    uint32 durability = fields[8].GetUInt16();
+    SetTransmogrification(fields[8].GetUInt32());
+
+    uint32 durability = fields[9].GetUInt16();
     SetUInt32Value(ITEM_FIELD_DURABILITY, durability);
     // update max durability (and durability) if need
     SetUInt32Value(ITEM_FIELD_MAXDURABILITY, proto->MaxDurability);
@@ -510,7 +512,7 @@ bool Item::LoadFromDB(uint32 guidLow, ObjectGuid ownerGuid, Field* fields, uint3
         need_save = true;
     }
 
-    SetUInt32Value(ITEM_FIELD_ITEM_TEXT_ID, fields[9].GetUInt32());
+    SetUInt32Value(ITEM_FIELD_ITEM_TEXT_ID, fields[10].GetUInt32());
 
     // set correct wrapped state
     if (HasFlag(ITEM_FIELD_FLAGS, ITEM_DYNFLAG_WRAPPED))
@@ -556,7 +558,7 @@ void Item::DeleteAllFromDB(uint32 guidLow)
         sGuildMgr.DeletePetition(petition);
 
     CharacterDatabase.PExecute("DELETE FROM `character_gifts` WHERE `item_guid` = '%u'", guidLow);
-    sTransmog.DeleteTransmogItemFromDB(guidLow);
+    //sTransmog.DeleteTransmogItemFromDB(guidLow);
 }
 
 void Item::LoadLootFromDB(Field* fields)
@@ -595,7 +597,7 @@ void Item::DeleteFromDB()
 
     SqlStatement stmt = CharacterDatabase.CreateStatement(delItem, "DELETE FROM `item_instance` WHERE `guid` = ?");
     stmt.PExecute(GetGUIDLow());
-    sTransmog.DeleteTransmogItemFromDB(GetGUIDLow());
+    //sTransmog.DeleteTransmogItemFromDB(GetGUIDLow());
 }
 
 void Item::DeleteFromInventoryDB()
@@ -604,7 +606,7 @@ void Item::DeleteFromInventoryDB()
 
     SqlStatement stmt = CharacterDatabase.CreateStatement(delInv, "DELETE FROM `character_inventory` WHERE `item` = ?");
     stmt.PExecute(GetGUIDLow());
-    sTransmog.DeleteTransmogItemFromDB(GetGUIDLow());
+    //sTransmog.DeleteTransmogItemFromDB(GetGUIDLow());
 }
 
 ItemPrototype const* Item::GetProto() const
@@ -760,7 +762,7 @@ void Item::SetState(ItemUpdateState state, Player* forplayer)
 {
     if (uState == ITEM_NEW && state == ITEM_REMOVED)
     {
-        sTransmog.DeleteTransmogItemFromDB(GetGUIDLow());
+        //sTransmog.DeleteTransmogItemFromDB(GetGUIDLow());
         // pretend the item never existed
         RemoveFromUpdateQueueOf(forplayer);
         delete this;

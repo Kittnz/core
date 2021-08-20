@@ -315,9 +315,9 @@ void WorldSession::HandleItemQuerySingleOpcode(WorldPacket & recv_data)
         {
             uint32 i_id = pProto->ItemId;
 
-            if (sWorld.getConfig(CONFIG_BOOL_TRANSMOG_ENABLED))
-                if (sTransmog.IsFakeItem(pProto->ItemId))
-                    i_id = sTransmog.GetRealItemEntry(pProto->ItemId);
+            //if (sWorld.getConfig(CONFIG_BOOL_TRANSMOG_ENABLED))
+                //if (sTransmog.IsFakeItem(pProto->ItemId))
+                    //i_id = sTransmog.GetRealItemEntry(pProto->ItemId);
 
             ItemLocale const* il = sObjectMgr.GetItemLocale(i_id);
             if (il)
