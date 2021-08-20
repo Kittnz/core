@@ -37,7 +37,6 @@ extern SQLStorage sConditionStorage;
 extern SQLStorage sAreaStorage;
 extern SQLStorage sMailTemplateStorage;
 extern SQLStorage sCreatureSpellDataStorage;
-extern SQLStorage sTransmogEntryStorage;
 
 extern SQLHashStorage sGOStorage;
 

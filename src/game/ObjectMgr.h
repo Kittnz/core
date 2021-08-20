@@ -486,10 +486,12 @@ struct FactionChangeMountData
     uint8 MountNum;
     uint32 ItemEntry;
 };
+
 typedef std::vector<FactionChangeMountData> FactionChangeMountsData;
 
-
 bool IsLanguageSkill(uint32 Skill);
+
+typedef std::unordered_map<uint32, ItemPrototype*> ItemTransmogrifyMap;
 
 enum PermVariables
 {
@@ -655,11 +657,6 @@ class ObjectMgr
         }
 
         static ItemPrototype const* GetItemPrototype(uint32 id);
-
-        static TransmogEntry const* GetTransmogEntry(uint32 displayid)
-        {
-            return sTransmogEntryStorage.LookupEntry<TransmogEntry>(displayid);
-        }
 
         PetLevelInfo const* GetPetLevelInfo(uint32 creature_id, uint32 level) const;
 
@@ -849,7 +846,6 @@ class ObjectMgr
         void LoadGameObjectLocales();
         void LoadGameobjects(bool reload = false);
         void LoadItemPrototypes();
-        void LoadTransmogTemplate();
         void FillObtainedItemsList(std::set<uint32>&);
         void CorrectItemEffects(uint32, _ItemSpell&);
         void CorrectItemDisplayIds(uint32, uint32&);
@@ -904,6 +900,8 @@ class ObjectMgr
         void LoadVendors() { LoadVendors("npc_vendor", false); }
         void LoadTrainerTemplates();
         void LoadTrainers() { LoadTrainers("npc_trainer", false); }
+
+        void LoadTransmogrifyItems();
 
         std::string GeneratePetName(uint32 entry);
         uint32 GetBaseXP(uint32 level) const;
@@ -1285,6 +1283,15 @@ class ObjectMgr
             return m_ExclusiveQuestGroups.equal_range(groupId);
         }
 
+        ItemPrototype const* ObjectMgr::GetItemTransmogrify(uint32 transmogrifyId) const
+        {
+            auto itr = m_itemTransmogs.find(transmogrifyId);
+            if (itr == m_itemTransmogs.end()) return nullptr;
+            return itr->second;
+        }
+        ItemTransmogrifyMap const& GetItemTransmogrifyMap() const { return m_itemTransmogs; }
+        bool CreateItemTransmogrification(uint32 sourceItemID, uint32 sourceDisplayID);
+
         // Deactivated Spells
         std::set<uint32>    m_DisabledSpells;
         void LoadSpellDisabledEntrys();
@@ -1519,6 +1526,7 @@ class ObjectMgr
         TaxiPathTransitionsMap  m_TaxiPathTransitions;
         TaxiNodesStore          m_TaxiNodes;
 
+        ItemTransmogrifyMap     m_itemTransmogs;
 
         int DBCLocaleIndex;
 

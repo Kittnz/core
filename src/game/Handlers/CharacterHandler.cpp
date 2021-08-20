@@ -541,6 +541,14 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
 
     ASSERT(pCurrChar->GetSession() == this);
     SetPlayer(pCurrChar);
+
+    std::vector<uint32> entries;
+    for (auto const& itemTransmog : sObjectMgr.GetItemTransmogrifyMap())
+        entries.push_back(itemTransmog.second->ItemId);
+
+    sWorld.SendMultipleItemsInvalidate(&entries, this);
+    sWorld.SendMultipleItemsAdd(&entries, this);
+
     if (pCurrMasterPlayer)
     {
         pCurrMasterPlayer->GetSession()->SetMasterPlayer(nullptr);
@@ -813,8 +821,8 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
         //for (int i = 0; i < MAX_MOVE_TYPE; ++i)
             //GetWarden()->SendSpeedChange(UnitMoveType(i), pCurrChar->GetSpeed(UnitMoveType(i)));
 
-    if (sWorld.getConfig(CONFIG_BOOL_TRANSMOG_ENABLED))
-        sTransmog.LoadTransmog(pCurrChar);
+    //if (sWorld.getConfig(CONFIG_BOOL_TRANSMOG_ENABLED))
+        //sTransmog.LoadTransmog(pCurrChar);
 
     ALL_SESSION_SCRIPTS(this, OnLogin(pCurrChar));
 }
@@ -977,5 +985,5 @@ void WorldSession::HandleChangePlayerNameOpcodeCallBack(QueryResult *result, uin
     session->SendPacket(&data);
 
     sObjectMgr.ChangePlayerNameInCache(guidLow, oldname, newname);
-    sWorld.InvalidatePlayerDataToAllClient(guid);
+    sWorld.InvalidatePlayerDataToAllClients(guid);
 }

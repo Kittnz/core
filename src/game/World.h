@@ -908,7 +908,11 @@ class World
         * FullName: World::InvalidatePlayerDataToAllClient
         * Access: public
         **/
-        void InvalidatePlayerDataToAllClient(ObjectGuid guid);
+        void InvalidatePlayerDataToAllClients(ObjectGuid guid);
+        void SendSingleItemInvalidate(uint32 entry, WorldSession* self = nullptr);
+        void SendMultipleItemsInvalidate(std::vector<uint32>* items, WorldSession* self = nullptr);
+        void SendSingleItemAdd(uint32 entry, WorldSession* self = nullptr);
+        void SendMultipleItemsAdd(std::vector<uint32>* items, WorldSession* self = nullptr);
 
         // Manually override timer update secs to force a faster update
         void SetWorldUpdateTimer(WorldTimers timer, uint32 current);

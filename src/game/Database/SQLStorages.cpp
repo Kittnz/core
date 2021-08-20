@@ -42,7 +42,6 @@ const char ConditionsDstFmt[] = "iiiiiii";
 const char AreaEntryfmt[] = "iiiiiisii";
 const char MailTemplatefmt[] = "issssssss";
 const char CreatureSpellDatafmt[] = "iiiii";
-const char TransmogEntrySrcFmt[] = "iis";
 
 SQLStorage sCreatureStorage(CreatureInfosrcfmt, CreatureInfodstfmt, "entry", "creature_template");
 SQLStorage sCreatureDataAddonStorage(CreatureDataAddonInfofmt, "guid", "creature_addon");
@@ -56,6 +55,5 @@ SQLStorage sConditionStorage(ConditionsSrcFmt, ConditionsDstFmt, "condition_entr
 SQLStorage sAreaStorage(AreaEntryfmt, "entry", "area_template");
 SQLStorage sMailTemplateStorage(MailTemplatefmt, "entry", "mail_text_template");
 SQLStorage sCreatureSpellDataStorage(CreatureSpellDatafmt, "entry", "pet_spell_data");
-SQLStorage sTransmogEntryStorage(TransmogEntrySrcFmt, "displayid", "transmog_template");
 
 SQLHashStorage sGOStorage(GameObjectInfosrcfmt, GameObjectInfodstfmt, "entry", "gameobject_template");

@@ -352,17 +352,25 @@ class Item : public Object
         void AddToClientUpdateList() override;
         void RemoveFromClientUpdateList() override;
         void BuildUpdateData(UpdateDataMapType& update_players) override;
+
+        uint32 GetVisibleEntry() const
+        {
+            if (uint32 appearanceItemId = GetTransmogrification())
+                return appearanceItemId;
+            return GetEntry();
+        }
+
         void SetGeneratedLoot(bool value) { generatedLoot = value; }
         bool HasGeneratedLootSecondary() {  return generatedLoot; } // todo, remove and add condition to HasGeneratedLoot
 
         bool IsCharter() const { return GetEntry() == 5863u; }
         static void GetLocalizedNameWithSuffix(std::string& name, const ItemPrototype* proto, const ItemRandomPropertiesEntry* randomProp, int dbLocale, LocaleConstant dbcLocale);
 
-        uint32 GetFakeEntry() { return m_fakeEntry; }
-        void SetFakeEntry(uint32 fakeEntry) { m_fakeEntry = fakeEntry; }
+        uint32 GetTransmogrification() const { return transmogrifyId; }
+        void SetTransmogrification(uint32 value) { transmogrifyId = value; }
 
     private:
-        uint32 m_fakeEntry;
+        uint32 transmogrifyId;
         bool generatedLoot;
         uint8 m_slot;
         Bag* m_container;

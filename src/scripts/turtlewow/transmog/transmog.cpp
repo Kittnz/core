@@ -5,7 +5,7 @@
 #include "GossipDef.h"
 #include <ctime>
 
-transmog sTransmog;
+/*transmog sTransmog;
 
 bool transmog::IsFakeItem(uint32 entry)
 {
@@ -342,7 +342,7 @@ void transmog::GetTransmogItems(Player* player, Creature* creature, uint32 Inven
 
         player->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, ("Reset: " + GetTransmogItemColor(itemToTransmog->GetProto()->Quality) +
             "" + sObjectMgr.GetItemLocaleName(itemToTransmog->GetEntry(), player->GetSession()->GetSessionDbLocaleIndex()) + "|r" /*\n" +
-            GetTransmogCostStr(player, tItem->GetProto()->BuyPrice)*/).c_str()
+            GetTransmogCostStr(player, tItem->GetProto()->BuyPrice)8/).c_str()
             , GOSSIP_SENDER_TRANSMOGRIFY, index + itemToTransmog->GetEntry());
     }
 
@@ -415,7 +415,7 @@ void transmog::UpdateTransmogItem(Player* player, Item* item)
     }
 }
 
-void transmog::LoadTransmog(Player* player, bool logout /*= false*/)
+void transmog::LoadTransmog(Player* player, bool logout /*= false8/)
 {
     QueryResult* result = CharacterDatabase.PQuery("SELECT itemguid, fakeentry, newentry FROM character_transmog WHERE ownerguid = %u", player->GetGUIDLow());
     if (result)
@@ -606,5 +606,5 @@ void AddSC_transmog()
     newscript->pGossipHello = &GossipHello_TransmogNPC;
     newscript->pGossipSelect = &GossipSelect_TransmogNPC;
     newscript->RegisterSelf();
-}
+}*/
 
