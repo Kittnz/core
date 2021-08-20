@@ -98,7 +98,7 @@ replace into creature_template values
 (91295, 0, 7229, 3929, 3931, 3933, 'Foreman Klix', 'Venture Co.', 0, 21, 22, 531, 573, 0, 0, 905, 47, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 33, 38, 0, 98, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 35.6224, 48.9808, 100, 7, 0, 91295, 3993, 0, 0, 0, 0, 0, 0, 0, 7979, 0, 0, 0, 39930, 0, 27, 40, 'EventAI', 1, 1, 0, 0, 3, 3993, 0, 0, 0, 0, 0, ''),
 (91296, 0, 328, 0, 0, 0, 'Quest 55048 Custom Objective Trigger', NULL, 0, 1, 1, 1382, 1518, 2362, 2457, 703, 1682, 0, 1, 1.14286, 0, 31, 5, 0, 0, 1, 32, 42, 0, 132, 1, 2000, 2000, 8, 32768, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 7, 0, 2272, 2272, 0, 0, 0, 0, 50, 0, 0, 3652, 20819, 15044, 0, 22720, 0, 44, 62, 'EventAI', 1, 3, 0, 0, 3, 2272, 0, 0, 0, 0, 0, ''),
 (91297, 0, 7166, 0, 0, 0, 'Baxxil', NULL, 0, 14, 15, 300, 328, 0, 0, 660, 47, 0, 1, 1.19048, 0, 20, 5, 0, 0, 1, 21, 27, 0, 74, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 21.2784, 29.2578, 100, 7, 0, 3284, 3284, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16, 26, '', 1, 1, 0, 0, 3, 3284, 0, 0, 0, 0, 0, 'npc_baxxil'),
-(91298, 0, 7110, 0, 0, 0, 'Shazknock', NULL, 0, 18, 19, 417, 449, 0, 0, 800, 47, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 32, 37, 0, 76, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 28.6704, 39.4218, 100, 7, 0, 3989, 3989, 0, 0, 0, 0, 0, 0, 0, 10277, 0, 0, 0, 39890, 0, 22, 33, 'EventAI', 1, 1, 0, 0, 3, 3989, 0, 0, 0, 0, 0, ''),
+(91298, 0, 7110, 0, 0, 0, 'Shazknock', NULL, 0, 18, 18, 417, 449, 0, 0, 800, 47, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 32, 37, 0, 76, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 28.6704, 39.4218, 100, 7, 0, 3989, 3989, 0, 0, 0, 0, 0, 0, 0, 10277, 0, 0, 0, 39890, 0, 22, 33, 'EventAI', 1, 1, 0, 0, 3, 3989, 0, 0, 0, 0, 0, ''),
 (91299, 2, 14589, 14616, 0, 0, 'Little Grizlik', NULL, 0, 1, 3, 42, 71, 0, 0, 20, 29, 0, 1, 1, 0, 20, 5, 0, 0, 1, 3, 5, 0, 48, 1, 2000, 2000, 1, 768, 0, 0, 0, 0, 0, 0, 5.2272, 7.1874, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 3, 0, 0, 3, 0, 0, 0, 0, 0, 2, ''),
 (91300, 0, 1141, 1418, 2176, 0, 'Squeaks', 'Grizlik\' Pet', 0, 1, 1, 64, 64, 0, 0, 0, 35, 0, 1, 1.14286, 1, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, '');
 -- 91301 reserved.
@@ -266,7 +266,7 @@ replace into npc_trainer values
 (91202, 11536, 225, 171, 50, 0, 0, 5875),
 (91206, 7733, 100, 0, 0, 5, 0, 5875),
 (91206, 7734, 500, 356, 50, 0, 0, 5875);
-
+delete from npc_vendor where entry = 91256;
 replace into npc_vendor values 
 (91201, 4470, 0, 0, 0, 0),
 (91205, 81297, 0, 0, 0, 0),
@@ -384,7 +384,14 @@ replace into npc_vendor values
 (91256, 81309, 0, 0, 0, 0),
 (91256, 81310, 0, 0, 0, 0),
 (91256, 81311, 0, 0, 0, 0),
-(91256, 81333, 0, 0, 0, 0);
+(91256, 2117, 0, 0, 0, 0),
+(91256, 81350, 0, 0, 0, 0),
+(91256, 81351, 0, 0, 0, 0),
+(91256, 81352, 0, 0, 0, 0),
+(91256, 81353, 0, 0, 0, 0),
+(91256, 81354, 0, 0, 0, 0),
+(91256, 81355, 0, 0, 0, 0),
+(91256, 81355, 0, 0, 0, 0);
 
 replace into item_template values 
 (81291, 0, 12, 0, 'Razlik\'s Tools', 'Small, crude, and smeared with oil, most definitely of goblin make.', 2053, 1, 0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 4, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL),
@@ -429,7 +436,6 @@ replace into item_template values
 (81330, 0, 4, 3, 'Quick-Surge Gloves', '', 27041, 3, 0, 1, 51332, 12833, 10, -1, -1, 55, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 3, 14, 7, 6, 5, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 206, 0, 0, 0, 0, 0, 0, 9331, 1, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 40, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL),
 (81331, 0, 12, 0, 'Rugnar\'s Letter', '', 3022, 1, 0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 4, 80305, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL),
 (81332, 0, 12, 0, 'Zuul\'s Note', '', 13497, 1, 0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 4, 80308, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL),
-(81333, 0, 4, 0, 'Goblin Essence of Knivery', 'Pure essence of the true features of a goblin condensed down', 35842, 4, 0, 1, 5000000, 10000, 12, -1, -1, 0, 55, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 5, 6, -24, 0, -24, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 24, 0, 0, 0, 0, 0, 24, 13669, 1, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL),
 (81334, 0, 12, 0, 'Salt Tooth\'s Head', 'There doesn\'t seem to be a \'salty\' tooth.', 1310, 1, 0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 4, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL),
 (81335, 0, 12, 0, 'Mosshide Gnoll Armband', '', 10301, 1, 0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 4, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL),
 (81336, 0, 12, 0, 'Tarlo\'s Crate ', 'It has a note attached to the top.', 11448, 1, 0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 4, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL),
@@ -485,6 +491,76 @@ replace into item_template values
 (81348, 0, 12, 0, 'Grizlik\'s Letter', '', 3022, 1, 0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 4, 80305, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL),
 (81349, 0, 15, 0, 'Squeak\'s Cage', 'Annoying and destructive, they can be coaxed with enough cheese to become a tolerable companion.',  22271, 1, 0, 1, 6000, 1500, 0, -1, -1, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 28505, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, null);
 
+replace into item_template values
+ ('81350', '0', '2', '15', 'The Longshank', 'Long enough for a good shank!', '4119', '2', '0', '1', '150000', '19201', '21', '-1', '-1', '47',
+ '41', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '6', '8', '3', '3',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1300', '0',
+ '0', '25', '48', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '30000', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '1', '3', '0', '0', '55', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+ 
+ replace into item_template values
+ ('81351', '0', '4', '2', 'Grips of the Scorpid King', 'The rumors of the Scorpid King are true to some.', '17185', '2', '0', '1', '250000', '24133', '10', '-1', '-1', '56',
+ '51', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '14', '6', '8',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '91', '0', '0', '0',
+ '0', '0', '0', '21952', '0', '0', '0', '120000', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '8', '1', '0', '0', '30', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+ 
+ replace into item_template values
+ ('81352', '0', '4', '1', 'Executioner\'s Cowl', 'The cover of death itself', '15298', '2', '0', '1', '180000', '7622', '1', '-1', '-1', '52',
+ '46', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '-5', '3', '-5',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '53', '0', '0', '0',
+ '0', '0', '0', '7597', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '1', '0', '0', '45', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+ 
+ replace into item_template values
+ ('81353', '0', '4', '1', 'Executioner\'s Cowl', 'The cover of death itself', '15298', '2', '0', '1', '180000', '7622', '1', '-1', '-1', '52',
+ '46', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '-5', '3', '-5',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '53', '0', '0', '0',
+ '0', '0', '0', '7597', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '1', '0', '0', '45', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+ 
+ replace into item_template values
+ ('81354', '0', '4', '1', 'Mantle of Arcane Art', 'They shimmer in arcane energy', '24966', '2', '0', '1', '65000', '8123', '3', '-1', '-1', '30',
+ '24', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '6', '7', '4',
+ '6', '2', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '32', '0', '0', '0',
+ '0', '0', '0', '9393', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '1', '0', '0', '45', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+ 
+ replace into item_template values
+ ('81355', '0', '4', '4', 'Fallen Crusader Legguards', 'Blessed by the light to vanquish undeath', '30857', '3', '0', '1', '1200000', '16422', '7', '-1', '-1', '58',
+ '53', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '17', '6', '9',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '463', '0', '0', '0',
+ '0', '15', '0', '4722', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '21513', '1',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '6', '1', '0', '0', '85', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+ 
+ replace into item_template values
+ ('81356', '0', '4', '1', 'Shackles of Arcana', 'They crackle in mana', '36435', '2', '0', '1', '150000', '2533', '9', '-1', '-1', '44',
+ '38', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '-5', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '23', '0', '0', '0',
+ '0', '0', '0', '17823', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '1', '1', '0', '0', '25', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+
 replace into custom_pet_entry_relation values (81349, 91300); 
 
 update item_template set flags = 2048 where entry in (81334);
@@ -537,7 +613,7 @@ replace into gameobject_template values
 (1000501, 0, 3, 107, 'Water-Weaving and Command', 0, 4, 0.5, 43, 1000501, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
 (1000502, 0, 3, 10, 'Brightwater Lockbox', 0, 4, 0.7, 43, 1000502, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
 (1000503, 0, 3, 10, 'Sealed Trunk', 0, 4, 0.7, 43, 1000503, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
-(1000504, 0, 2, 2491, 'WANTED!', 80, 4, 1, 0, 3991, 1, 60038, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+(1000504, 0, 2, 2491, 'WANTED!', 2, 4, 1, 0, 3991, 1, 60038, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
 
 
 replace into gameobject_loot_template values 
@@ -688,7 +764,7 @@ replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minleve
 replace into creature_questrelation (id, quest) values (5546, 55023);
 replace into creature_involvedrelation (id, quest) values (91203, 55023);
 
-replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (0,55025,35,35,30,0,0,'Dry Hiding','I\'m losing my mind down here, we\'ve been told to stay a bit under the radar for the while after the old Brightwater took a few cannonballs to the side.\n\nBeen forced to stay in refuge for a few days now and I\'m going loopy! Aaah, if only there was a way to get some booze... Wait a second, you can get booze.\n\nSince we can\'t, make a trip up to The Salty Sailor and get me the following... Ahem...\n\n5 Jug of Bourbon\n3 Flagon of Mead\n10 Flask of Port\n...and 10 Cherry Grog!','Collect 5 Jug of Bourbon, 3 Flag of Mead, 10 Flask of Port, and 10 Cherry Grog for Shalgrig Pipeshack and the other Brightwater Crew.','Get the booze yet? We\'re dying down here!','Ahh! It\'s been a dang while since I\'ve been able to drink! You\'ve surely saved us.',2595,5,2594,3,2593,10,4600,10,0,0,0,0,0,0,0,0,0,0,1000,1250,1001,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (0,55025,35,35,30,0,0,'Dry Hiding','I\'m losing my mind down here, we\'ve been told to stay a bit under the radar for the while after the old Brightwater took a few cannonballs to the side.\n\nBeen forced to stay in refuge for a few days now and I\'m going loopy! Aaah, if only there was a way to get some booze... Wait a second, you can get booze.\n\nSince we can\'t, make a trip up to The Salty Sailor and get me the following... Ahem...\n\n5 Jug of Bourbon\n3 Flagon of Mead\n10 Flask of Port\n...and 10 Cherry Grog!','Collect 5 Jug of Bourbon, 3 Flag of Mead, 10 Flask of Port, and 10 Cherry Grog for Shalgrig Pipeshack and the other Brightwater Crew.','Get the booze yet? We\'re dying down here!','Ahh! It\'s been a dang while since I\'ve been able to drink! You\'ve surely saved us.',2595,5,2594,3,2593,10,4600,10,0,0,0,0,0,0,0,0,0,0,10000,1250,1001,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
 
 replace into creature_questrelation (id, quest) values (91282, 55025);
 replace into creature_involvedrelation (id, quest) values (91282, 55025);
@@ -840,4 +916,23 @@ update quest_template set questflags = 512 where entry = 55050;
 replace into creature_questrelation (id, quest) values (91299, 55050);
 replace into creature_involvedrelation (id, quest) values (3041, 55050);
 
+update item_template set item_level = 30, required_level = 30, buy_price = 125000, sell_price = 31250 where entry = 81311;
+update item_template set buy_price = 80000, sell_price = 19513 where entry = 81307;
+update item_template set buy_price = 250000, sell_price = 43894 where entry = 81309;
+update item_template set buy_price = 250000, sell_price = 43894 where entry = 81306;
+update item_template set buy_price = 350000, sell_price = 87500 where entry = 81305;
+update item_template set buy_price = 75000, sell_price = 18750 where entry = 81308;
+
+replace into item_template values
+ ('1217', '0', '4', '0', 'Goblin Essence of Knivery', 'Pure essence of the true features of a goblin condensed down', '35842', '4', '0', '1', '5000000', '10000', '12', '-1', '-1', '0',
+ '55', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '5', '6', '-24',
+ '0', '-24', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '24', '0', '0', '0',
+ '0', '0', '24', '13669', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+
+delete from creature_questrelation where id = 91282 and quest = 55032;
+update creature_template set faction = 119 where entry = 91284;
 
