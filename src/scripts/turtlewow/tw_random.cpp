@@ -6248,7 +6248,7 @@ bool QuestAccept_npc_shalgrig(Player* pPlayer, Creature* pQuestGiver, Quest cons
     if (!pPlayer)
         return false;
 
-    if (pQuest->GetQuestId() == 55032) // Return to Port!
+    if (pQuest->GetQuestId() == 55051) // Return to Port!
     {
         Creature* spanessa = pPlayer->FindNearestCreature(91281, 30.0F);
         Creature* brizclang = pPlayer->FindNearestCreature(91280, 30.0F);
