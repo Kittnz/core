@@ -1283,7 +1283,7 @@ class ObjectMgr
             return m_ExclusiveQuestGroups.equal_range(groupId);
         }
 
-        ItemPrototype const* ObjectMgr::GetItemTransmogrify(uint32 transmogrifyId) const
+        ItemPrototype const* GetItemTransmogrify(uint32 transmogrifyId) const
         {
             auto itr = m_itemTransmogs.find(transmogrifyId);
             if (itr == m_itemTransmogs.end()) return nullptr;

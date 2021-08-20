@@ -393,7 +393,7 @@ replace into npc_vendor values
 (91256, 81309, 0, 0, 0, 0),
 (91256, 81310, 0, 0, 0, 0),
 (91256, 81311, 0, 0, 0, 0),
-(91256, 2117, 0, 0, 0, 0),
+(91256, 81333, 0, 0, 0, 0),
 (91256, 81350, 0, 0, 0, 0),
 (91256, 81351, 0, 0, 0, 0),
 (91256, 81352, 0, 0, 0, 0),
@@ -932,14 +932,17 @@ update item_template set buy_price = 350000, sell_price = 87500 where entry = 81
 update item_template set buy_price = 75000, sell_price = 18750 where entry = 81308;
 
 replace into item_template values
- ('1217', '0', '4', '0', 'Goblin Essence of Knivery', 'Pure essence of the true features of a goblin condensed down', '35842', '4', '0', '1', '5000000', '10000', '12', '-1', '-1', '0',
- '55', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '5', '6', '-24',
- '0', '-24', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ ('81333', '0', '4', '0', 'Goblin Essence of Knivery', 'Pure essence of the true features of a goblin condensed down', '35842', '4', '0', '1', '5000000', '10000', '12', '-1', '-1', '0',
+ '55', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '24', '0', '0', '0',
  '0', '0', '24', '13669', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
+ 
+ update item_template set stat_type1 = 0, stat_value1 = 5 where entry = 81333;
+ update item_template set stat_type2 = 6, stat_value2 = -24 where entry = 81333;
 
 delete from creature_questrelation where id = 91282 and quest = 55032;
 update creature_template set faction = 119 where entry = 91284;
