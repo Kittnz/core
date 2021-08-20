@@ -542,12 +542,18 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
     ASSERT(pCurrChar->GetSession() == this);
     SetPlayer(pCurrChar);
 
-    std::vector<uint32> entries;
-    for (auto const& itemTransmog : sObjectMgr.GetItemTransmogrifyMap())
-        entries.push_back(itemTransmog.second->ItemId);
+    if (sWorld.getConfig(CONFIG_BOOL_TRANSMOG_ENABLED))
+    {
+        std::vector<uint32> entries;
+        for (auto const& itemTransmog : sObjectMgr.GetItemTransmogrifyMap())
+            entries.push_back(itemTransmog.second->ItemId);
 
-    sWorld.SendMultipleItemsInvalidate(&entries, this);
-    sWorld.SendMultipleItemsAdd(&entries, this);
+        if (!entries.empty())
+        {
+            sWorld.SendMultipleItemsInvalidate(&entries, this);
+            sWorld.SendMultipleItemsAdd(&entries, this);
+        }
+    }
 
     if (pCurrMasterPlayer)
     {

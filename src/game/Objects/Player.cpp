@@ -15576,7 +15576,7 @@ void Player::LoadCorpse()
 void Player::_LoadInventory(QueryResult *result, uint32 timediff, bool &has_epic_mount)
 {
     //               0                1      2         3        4      5             6               7           8             9       10    11   12    13      14         15
-    //SELECT creatorGuid, giftCreatorGuid, count, duration, charges, flags, enchantments, randomPropertyId, transmogifyId, durability, text, bag, slot, item, itemEntry, generated_loot
+    //SELECT creatorGuid, giftCreatorGuid, count, duration, charges, flags, enchantments, randomPropertyId, transmogrifyId, durability, text, bag, slot, item, itemEntry, generated_loot
     std::unordered_map<uint32, Bag*> bagMap;                          // fast guid lookup for bags
     //NOTE: the "order by `bag`" is important because it makes sure
     //the bagMap is filled before items in the bags are loaded
