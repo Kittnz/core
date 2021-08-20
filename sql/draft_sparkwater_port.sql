@@ -95,18 +95,21 @@ replace into creature_template values
 (91293, 0, 3585, 0, 0, 0, 'Archivist Landas', NULL, 0, 30, 30, 1382, 1518, 2362, 2457, 703, 1682, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 32, 42, 0, 132, 1, 2000, 2000, 8, 32768, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 7, 0, 2272, 2272, 0, 0, 0, 0, 50, 0, 0, 3652, 20819, 15044, 0, 22720, 0, 44, 62, 'EventAI', 1, 3, 0, 0, 3, 2272, 0, 0, 0, 0, 0, ''),
 (91294, 0, 328, 0, 0, 0, 'Quest 55030 Custom Objective Trigger', NULL, 0, 1, 1, 1382, 1518, 2362, 2457, 703, 1682, 0, 1, 1.14286, 0, 31, 5, 0, 0, 1, 32, 42, 0, 132, 1, 2000, 2000, 8, 32768, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 7, 0, 2272, 2272, 0, 0, 0, 0, 50, 0, 0, 3652, 20819, 15044, 0, 22720, 0, 44, 62, 'EventAI', 1, 3, 0, 0, 3, 2272, 0, 0, 0, 0, 0, ''),
 (91295, 0, 7407, 0, 0, 0, 'Ozwack Tigflint', 'Supply Officer', 0, 20, 25, 800, 900, 0, 0, 20, 1682, 16391, 1, 1.14286, 0, 20, 5, 0, 0, 1, 15, 19, 0, 70, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 23.0384, 31.6778, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 3164, 0, 0, 0, 0, 524298, ''),
-(91295, 0, 7229, 3929, 3931, 3933, 'Foreman Klix', 'Venture Co.', 0, 21, 22, 531, 573, 0, 0, 905, 47, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 33, 38, 0, 98, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 35.6224, 48.9808, 100, 7, 0, 91295, 3993, 0, 0, 0, 0, 0, 0, 0, 7979, 0, 0, 0, 39930, 0, 27, 40, 'EventAI', 1, 1, 0, 0, 3, 3993, 0, 0, 0, 0, 0, ''),
 (91296, 0, 328, 0, 0, 0, 'Quest 55048 Custom Objective Trigger', NULL, 0, 1, 1, 1382, 1518, 2362, 2457, 703, 1682, 0, 1, 1.14286, 0, 31, 5, 0, 0, 1, 32, 42, 0, 132, 1, 2000, 2000, 8, 32768, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 7, 0, 2272, 2272, 0, 0, 0, 0, 50, 0, 0, 3652, 20819, 15044, 0, 22720, 0, 44, 62, 'EventAI', 1, 3, 0, 0, 3, 2272, 0, 0, 0, 0, 0, ''),
 (91297, 0, 7166, 0, 0, 0, 'Baxxil', NULL, 0, 14, 15, 300, 328, 0, 0, 660, 47, 0, 1, 1.19048, 0, 20, 5, 0, 0, 1, 21, 27, 0, 74, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 21.2784, 29.2578, 100, 7, 0, 3284, 3284, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16, 26, '', 1, 1, 0, 0, 3, 3284, 0, 0, 0, 0, 0, 'npc_baxxil'),
 (91298, 0, 7110, 0, 0, 0, 'Shazknock', NULL, 0, 18, 18, 417, 449, 0, 0, 800, 47, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 32, 37, 0, 76, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 28.6704, 39.4218, 100, 7, 0, 3989, 3989, 0, 0, 0, 0, 0, 0, 0, 10277, 0, 0, 0, 39890, 0, 22, 33, 'EventAI', 1, 1, 0, 0, 3, 3989, 0, 0, 0, 0, 0, ''),
 (91299, 2, 14589, 14616, 0, 0, 'Little Grizlik', NULL, 0, 1, 3, 42, 71, 0, 0, 20, 29, 0, 1, 1, 0, 20, 5, 0, 0, 1, 3, 5, 0, 48, 1, 2000, 2000, 1, 768, 0, 0, 0, 0, 0, 0, 5.2272, 7.1874, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 3, 0, 0, 3, 0, 0, 0, 0, 0, 2, ''),
-(91300, 0, 1141, 1418, 2176, 0, 'Squeaks', 'Grizlik\' Pet', 0, 1, 1, 64, 64, 0, 0, 0, 35, 0, 1, 1.14286, 1, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, '');
+(91300, 0, 1141, 1418, 2176, 0, 'Squeaks', 'Grizlik\' Pet', 0, 1, 1, 64, 64, 0, 0, 0, 35, 0, 1, 1.14286, 1, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, ''),
 -- 91301 reserved.
+(91302, 0, 7229, 3929, 3931, 3933, 'Foreman Klix', 'Venture Co.', 0, 21, 22, 531, 573, 0, 0, 905, 47, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 33, 38, 0, 98, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 35.6224, 48.9808, 100, 7, 0, 91295, 3993, 0, 0, 0, 0, 0, 0, 0, 7979, 0, 0, 0, 39930, 0, 27, 40, 'EventAI', 1, 1, 0, 0, 3, 3993, 0, 0, 0, 0, 0, ''),
+(91303, 0, 5573, 0, 0, 0, 'The Scorpid King', NULL, 0, 54, 54, 3292, 3292, 0, 0, 3190, 855, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 92, 120, 0, 244, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 69.8544, 96.0498, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 2, ''),
+(91304, 0, 9996, 0, 0, 0, 'Taranaszz', 'The Dampener', 0, 56, 56, 23192, 23192, 0, 0, 4075, 14, 0, 1, 1.14286, 0, 20, 5, 0, 2, 1, 354, 456, 0, 258, 1, 1175, 1292, 1, 0, 0, 0, 0, 0, 0, 0, 59.9488, 82.4296, 100, 2, 0, 10196, 0, 10196, 0, 0, 228, 0, 0, 0, 9128, 13730, 11971, 0, 0, 0, 688, 903, '', 1, 1, 0, 0, 3, 10196, 0, 0, 0, 0, 0, 'generic_spell_ai');
+
 
 -- Quest
 update creature_template set npc_flags = 2 where entry in (91268, 91269, 91275, 91276, 91234, 91254, 91203, 91282, 5546, 91259, 91295, 91260, 91272, 91299); 
 -- Gossip + Quest
-update creature_template set npc_flags = 3 where entry in (91266, 91267, 91274, 91251, 91277, 91280, 91281, 91285, 91286, 91289, 91287, 91288, 91290, 91249, 91297);
+update creature_template set npc_flags = 3 where entry in (91266, 91267, 91274, 91251, 91277, 91280, 91281, 91285, 91286, 91289, 91287, 91288, 91290, 91249, 91259, 91297);
 -- Gossip + Vendor
 update creature_template set npc_flags = 5 where entry  = 91256;
 -- Gossip + Vendor + Quest
@@ -115,11 +118,13 @@ update creature_template set npc_flags = 7 where entry  = 91232;
 update creature_template set loot_id = 91284 where entry = 91284;
 update creature_template set loot_id = 91283 where entry = 91283;
 update creature_template set loot_id = 91293 where entry = 91293;
-update creature_template set loot_id = 91295 where entry = 91295;
+update creature_template set loot_id = 91302 where entry = 91302;
 update creature_template set equipment_id = 0 where entry = 91288;
 update creature_template set equipment_id = 5112 where entry = 91259;
 update creature_template set faction = 61, rank = 0 where entry = 91291;
 update creature_template set faction = 35 where entry = 91300;
+update creature_template set rank = 1 where entry = 91303;
+update creature_template set frost_res = 85, arcane_res = 100, shadow_res = 15, nature_res = 15, fire_res = 15, holy_res = 15 where entry = 91304;
 
 replace into creature_template_addon values 
 (91200, 0, 0, 0, 0, 0, 69, 0, NULL),
@@ -247,6 +252,12 @@ replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id,
 set @gossip_menu_id = 60038; set @magic_number = 91296; 
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); replace into broadcast_text (entry, Male_Text) values (@magic_number, 'A board with various postings for wanted individuals.'); replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
+set @gossip_menu_id = 60039; set @magic_number = 91259; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Do you know who you\'re talking to?'); replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 60040; set @magic_number = 91303; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Greetings, $r, the dunes have claimed many a strong adventurer. Walk softly and be careful of the path ahead.'); replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
 replace into npc_trainer values 
 (91202, 2275, 10, 0, 0, 5, 0, 5875),
 (91202, 2339, 100, 171, 25, 0, 0, 5875),
@@ -267,6 +278,7 @@ replace into npc_trainer values
 (91206, 7733, 100, 0, 0, 5, 0, 5875),
 (91206, 7734, 500, 356, 50, 0, 0, 5875);
 delete from npc_vendor where entry = 91256;
+delete from npc_vendor where entry = 91220;
 replace into npc_vendor values 
 (91201, 4470, 0, 0, 0, 0),
 (91205, 81297, 0, 0, 0, 0),
@@ -317,14 +329,9 @@ replace into npc_vendor values
 (91215, 10648, 0, 0, 0, 0),
 (91216, 4470, 0, 0, 0, 0),
 (91220, 80167, 0, 0, 0, 0),
-(91220, 81297, 0, 0, 0, 0),
-(91220, 81298, 0, 0, 0, 0),
-(91220, 81299, 0, 0, 0, 0),
-(91220, 81300, 0, 0, 0, 0),
-(91220, 81301, 0, 0, 0, 0),
-(91220, 81302, 0, 0, 0, 0),
-(91220, 81303, 0, 0, 0, 0),
-(91220, 81304, 0, 0, 0, 0),
+-- Lozzle
+(91220, 159, 0, 0, 0, 0),
+
 (91221, 81296, 0, 0, 0, 0),
 (91227, 117, 0, 0, 0, 0),
 (91227, 2287, 0, 0, 0, 0),
@@ -343,6 +350,9 @@ replace into npc_vendor values
 (91238, 4594, 0, 0, 0, 0),
 (91238, 8957, 0, 0, 0, 0),
 (91238, 21552, 0, 0, 0, 0),
+(91238, 2595, 0, 0, 0, 0),
+(91238, 2594, 0, 0, 0, 0),
+(91238, 19222, 0, 0, 0, 0),
 (91246, 2506, 0, 0, 0, 0),
 (91246, 2507, 0, 0, 0, 0),
 (91246, 2512, 0, 0, 0, 0),
@@ -603,7 +613,7 @@ replace into creature_loot_template values
 (91293, 81343, -100, 1, 1, 1, 0, 0, 10),
 (1007, 81335, -50, 6, 1, 1, 0, 0, 10),
 (2893, 81346, -10, 6, 1, 1, 0, 0, 10),
-(91295, 81344, -100, 6, 1, 1, 0, 0, 10),
+(91302, 81344, -100, 6, 1, 1, 0, 0, 10),
 (2894, 81346, -10, 6, 1, 1, 0, 0, 10);
 
 replace into gameobject_template values
@@ -935,4 +945,5 @@ replace into item_template values
 
 delete from creature_questrelation where id = 91282 and quest = 55032;
 update creature_template set faction = 119 where entry = 91284;
+delete from npc_vendor where entry = 91221 and item = 80167;
 
