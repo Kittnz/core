@@ -23,3 +23,4 @@ update item_template set display_id = 8593 where entry = 80631;
 -- Fix Tirisfal Farmhand respawn times.
 update creature set spawntimesecsmin = 300, spawntimesecsmax = 300 where id = 1935;
 update creature_template set faction = 1682 where entry in (70060, 80903);
+update item_template set display_id = 7601 where entry = 10648;
