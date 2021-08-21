@@ -101,14 +101,14 @@ replace into creature_template values
 (91299, 2, 14589, 14616, 0, 0, 'Little Grizlik', NULL, 0, 1, 3, 42, 71, 0, 0, 20, 29, 0, 1, 1, 0, 20, 5, 0, 0, 1, 3, 5, 0, 48, 1, 2000, 2000, 1, 768, 0, 0, 0, 0, 0, 0, 5.2272, 7.1874, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 3, 0, 0, 3, 0, 0, 0, 0, 0, 2, ''),
 (91300, 0, 1141, 1418, 2176, 0, 'Squeaks', 'Grizlik\' Pet', 0, 1, 1, 64, 64, 0, 0, 0, 35, 0, 1, 1.14286, 1, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, ''),
 -- 91301 reserved.
-(91302, 0, 7229, 3929, 3931, 3933, 'Foreman Klix', 'Venture Co.', 0, 21, 22, 531, 573, 0, 0, 905, 47, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 33, 38, 0, 98, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 35.6224, 48.9808, 100, 7, 0, 91295, 3993, 0, 0, 0, 0, 0, 0, 0, 7979, 0, 0, 0, 39930, 0, 27, 40, 'EventAI', 1, 1, 0, 0, 3, 3993, 0, 0, 0, 0, 0, ''),
+(91302, 0, 3945, 0, 0, 0, 'Foreman Klix', 'Venture Co.', 0, 21, 22, 531, 573, 0, 0, 905, 47, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 33, 38, 0, 98, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 35.6224, 48.9808, 100, 7, 0, 91295, 3993, 0, 0, 0, 0, 0, 0, 0, 7979, 0, 0, 0, 39930, 0, 27, 40, 'EventAI', 1, 1, 0, 0, 3, 3993, 0, 0, 0, 0, 0, ''),
 (91303, 0, 5573, 0, 0, 0, 'The Scorpid King', NULL, 0, 54, 54, 3292, 3292, 0, 0, 3190, 855, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 92, 120, 0, 244, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 69.8544, 96.0498, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 2, ''),
 (91304, 0, 9996, 0, 0, 0, 'Taranaszz', 'The Dampener', 0, 56, 56, 23192, 23192, 0, 0, 4075, 14, 0, 1, 1.14286, 0, 20, 5, 0, 2, 1, 354, 456, 0, 258, 1, 1175, 1292, 1, 0, 0, 0, 0, 0, 0, 0, 59.9488, 82.4296, 100, 2, 0, 10196, 0, 10196, 0, 0, 228, 0, 0, 0, 9128, 13730, 11971, 0, 0, 0, 688, 903, '', 1, 1, 0, 0, 3, 10196, 0, 0, 0, 0, 0, 'generic_spell_ai');
 
 -- Quest
 update creature_template set npc_flags = 2 where entry in (91268, 91269, 91275, 91276, 91234, 91254, 91203, 91282, 5546, 91259, 91295, 91260, 91272, 91299); 
 -- Gossip + Quest
-update creature_template set npc_flags = 3 where entry in (91266, 91267, 91274, 91251, 91277, 91280, 91281, 91285, 91286, 91289, 91287, 91288, 91290, 91249, 91259, 91297);
+update creature_template set npc_flags = 3 where entry in (91266, 91267, 91274, 91251, 91277, 91280, 91281, 91285, 91286, 91289, 91287, 91288, 91290, 91249, 91259, 91297, 91303);
 -- Gossip + Vendor
 update creature_template set npc_flags = 5 where entry  = 91256;
 -- Gossip + Vendor + Quest
@@ -122,7 +122,7 @@ update creature_template set equipment_id = 0 where entry = 91288;
 update creature_template set equipment_id = 5112 where entry = 91259;
 update creature_template set faction = 61, rank = 0 where entry = 91291;
 update creature_template set faction = 35 where entry = 91300;
-update creature_template set rank = 1 where entry = 91303;
+update creature_template set rank = 1, faction = 1315 where entry = 91303;
 update creature_template set frost_res = 85, arcane_res = 100, shadow_res = 15, nature_res = 15, fire_res = 15, holy_res = 15 where entry = 91304;
 
 replace into creature_template_addon values 
