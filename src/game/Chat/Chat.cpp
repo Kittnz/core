@@ -584,7 +584,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "deleteitem",     SEC_GAMEMASTER,     false, &ChatHandler::HandleDeleteItemCommand,          "", nullptr },
         { "additemset",     SEC_GAMEMASTER,     false, &ChatHandler::HandleAddItemSetCommand,          "", nullptr },
         { "bank",           SEC_GAMEMASTER, false, &ChatHandler::HandleBankCommand,                "", nullptr },
-        { "wchange",        SEC_ADMINISTRATOR,    false, &ChatHandler::HandleChangeWeatherCommand,       "", nullptr },
+        { "wchange",        SEC_GAMEMASTER,    false, &ChatHandler::HandleChangeWeatherCommand,       "", nullptr },
         { "ticket",         SEC_GAMEMASTER, true, nullptr,                                         "",ticketCommandTable },
         { "maxskill",       SEC_GAMEMASTER,     false, &ChatHandler::HandleMaxSkillCommand,            "", nullptr },
         { "setskill",       SEC_GAMEMASTER,     false, &ChatHandler::HandleSetSkillCommand,            "", nullptr },
