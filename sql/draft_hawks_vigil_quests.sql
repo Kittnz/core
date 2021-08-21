@@ -34,7 +34,7 @@ replace into item_template values
 
 update item_template set stackable = 5 where entry in (81400, 81401);
 
-update creature_template set npc_flags = 3 where entry in (52015, 52095, 52068, 52080, 52030, 52069, 52066, 52024, 52039);
+update creature_template set npc_flags = 3 where entry in (52015, 52095, 52068, 52080, 52030, 52069, 52066, 52024, 52039, 52021);
 update creature_template set npc_flags = 2 where entry in (1476);
 -- Gossip + Vendor + Quest
 update creature_template set npc_flags = 7 where entry  in (2682);
@@ -152,3 +152,9 @@ replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minleve
 
 replace into creature_questrelation (id, quest) values (52024, 55216);
 replace into creature_involvedrelation (id, quest) values (52039, 55216);
+
+replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (55215,55216,4018,24,18,0,0,'The Mystery Continues','My research is ever continuing, though the mystery still remains at foot, my friend and associate Poppy Zabini is also a mage within the region.\n\nHe too has been researching into this matter, though I do believe his time is much more occupied then mine.\n\nWould you please head to meet with him? He is currently located just a small walk north to the manor with the blue roof.','Speak with Poppy Zabini.','There is much knowledge to learn, is that why you have come to seek my presence?','Oh, Marge Blackwood sent you, the matter of the dark magic in Hawk\'s Vigil? I see.',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,275,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+replace into creature_questrelation (id, quest) values (52039, 55216);
+replace into creature_involvedrelation (id, quest) values (52021, 55216);
+
