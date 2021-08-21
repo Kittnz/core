@@ -34,7 +34,7 @@ replace into item_template values
 
 update item_template set stackable = 5 where entry in (81400, 81401);
 
-update creature_template set npc_flags = 3 where entry in (52015, 52095, 52068, 52080, 52030, 52069, 52066);
+update creature_template set npc_flags = 3 where entry in (52015, 52095, 52068, 52080, 52030, 52069, 52066, 52024, 52039);
 update creature_template set npc_flags = 2 where entry in (1476);
 -- Gossip + Vendor + Quest
 update creature_template set npc_flags = 7 where entry  in (2682);
@@ -147,3 +147,8 @@ update creature_template set script_name = 'npc_barthos' where entry = 52066;
 
 replace into creature_questrelation (id, quest) values (52066, 55211);
 replace into creature_involvedrelation (id, quest) values (52066, 55211);
+
+replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (0,55215,4018,24,18,0,0,'Uncovering Mystery','Upon first glance Hawk\'s Vigil may look as if it is the perfect haven to settle, the hills are lush, and the grass is a bright green.\n\nThough, do not let this visage fool you, there are foul deeds going on beneath our very eyes, a taint of magic that has been sensed by some of our most adept.\n\nWe have had murder within our Vigil, and still this growing darkness lingers. Marge Blackwood has taken it upon herself to study and look into these findings of a magical taint and I would like to get to the bottom of this.\n\nReport to her, and see if you can assist in getting to the bottom of this mystery.','Report to Marge Blackwood.','Is there something I can do for you?','I have spent quite some time researching into what is going on, something lingers within the air, as if the presence of forbidden magic is being introduced to Hawk\'s Vigil.',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,175,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+replace into creature_questrelation (id, quest) values (52024, 55216);
+replace into creature_involvedrelation (id, quest) values (52039, 55216);
