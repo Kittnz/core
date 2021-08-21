@@ -34,7 +34,7 @@ replace into item_template values
 
 update item_template set stackable = 5 where entry in (81400, 81401);
 
-update creature_template set npc_flags = 3 where entry in (52015, 52095, 52068, 52080, 52030, 52069, 52066, 52024, 52039, 52021);
+update creature_template set npc_flags = 3 where entry in (52015, 52095, 52068, 52080, 52030, 52069, 52066, 52024, 52039, 52021, 52006);
 update creature_template set npc_flags = 2 where entry in (1476);
 -- Gossip + Vendor + Quest
 update creature_template set npc_flags = 7 where entry  in (2682);
@@ -167,3 +167,8 @@ replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minleve
 
 replace into creature_questrelation (id, quest) values (52039, 55218);
 replace into creature_involvedrelation (id, quest) values (52024, 55218);
+
+replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (55218,55219,4018,24,18,0,0,'Overlapping Investigations','<Lord Commander Ryke finishes looking over his records>\n\nSo, it seems that we have had someone recently move into the town, though he hails from the city of Stormwind, Harlus Ashbuckle.\n\nIt would be out of my jurisdiction to press, being that this individual has... Complications.\n\nHe is currently being investigated by the SI:7, I only tell you this because of our investigation, but we have an operative in the town keeping tabs upon him.\n\nMeet up with him, he goes by the name of Robb Dursley, and see if you can get any information on this Harlus character.','Speak with the undercover operative Robb Dursley.','What would Lord Commander Ryke have to do with me?','Oh...\n\n<Robb Dursley\'s cheerful demeanor drops.>\n\nThat is why you\'ve come?\n\nWhat we are going to speak of must remain a secret, understood, $N?',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,500,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+replace into creature_questrelation (id, quest) values (52024, 55219);
+replace into creature_involvedrelation (id, quest) values (52006, 55219);
