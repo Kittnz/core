@@ -34,7 +34,8 @@ replace into item_template values
 
 replace into item_template values
 (81412, 0, 12, 0, 'Robb Dursley\'s Sealed Report', '', 924, 1, 0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 4, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL),
-(81413, 0, 12, 0, 'Martin Corinth\'s Information', 'Contains all manner of information.', 4753, 1, 0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 4, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+(81413, 0, 12, 0, 'Martin Corinth\'s Information', 'Contains all manner of information.', 4753, 1, 0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 4, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL),
+(81414, 0, 12, 0, 'Martin\'s Unsent Letter', 'Dirty, but still sealed.', 3029, 1, 0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 4, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
 
 update item_template set stackable = 5 where entry in (81400, 81401);
 
@@ -45,10 +46,12 @@ update creature_template set npc_flags = 7 where entry  in (2682);
 
 -- Entry between 1000510 AND 1000520
 replace into gameobject_template values
-(1000510, 0, 3, 10, 'Sealed Documents Crate', 0, 4, 0.7, 43, 1000510, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+(1000510, 0, 3, 10, 'Sealed Documents Crate', 0, 4, 0.7, 43, 1000510, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(1000511, 0, 3, 1, 'Crate of Discarded Goods,', 0, 4, 0.7, 43, 1000511, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
 
 replace into gameobject_loot_template values 
-(1000510, 81413, -100, 1, 1, 1, 0, 0, 10);
+(1000510, 81413, -100, 1, 1, 1, 0, 0, 10),
+(1000511, 81414, -100, 1, 1, 1, 0, 0, 10);
 
 replace into creature_loot_template values 
 (1032, 81400, -8, 6, 1, 1, 0, 0, 10),
@@ -61,13 +64,16 @@ update item_template set page_text = 80320 where entry = 81405;
 update item_template set page_text = 80322 where entry = 81406; 
 update item_template set page_text = 80324 where entry = 81409; 
 update item_template set page_text = 80326 where entry = 81410; 
+update item_template set page_text = 80327 where entry = 81414; 
 
 replace into `page_text` values 
 (80320, 'To Captain Snowbeard.\n\nThe supply lines between Ironforge and Menethil harbor are being strained every day. Caravans are being attacked by the Dragonmaw orcs, and even reaching you has become a dangerous difficulty.\n\nMore help is required, and needed in dealing with the Dragonmaw menace that threatens our lands. If you have any spare soldiers, now would be the time to lend them.\n\nCaptain Stoutfist.', 0),
 (80322, 'Captain Stoutfist, I am sorry to say that I cannot be of assistance. As much as the Dragonmaw is a threat to the both of us, I am severely undermanned in the mountains to be able to go on the offensive, and cannot afford to lend some of my mountaineers to your aid.\n\nI wish you the best in this matter, and I pray by Magni\'s beard that Ironforge brings aid to the both of us.\n\n Captain Snowbeard of the Ironforge Army', 0),
 (80324, 'Hey there, it\'s me, Barthos, from the PAGES! I need the following for two Tilting Oscillation Inhibitors:\n\n16x Iron Bar\n6x Strong Flux\n2x Bronze Whirring Gizmo\n2x Fused Wiring', 80325),
 (80325, 'This should be all that is needed!\n\nGood luck in your searching, and be quick. There is much to do!\n\nBarthos Thundercrack, Engineering Legend of Hawk\'s Vigil', 0),
-(80326, 'Barthos, if the senate finds out about all these supplies heading to Hawk\'s Vigil they are going to be furious. The expenses of the Airport are quite large after all! Be sure that the supplies I have sent you last as long as possible before asking for more.\n\nYour friend, Orion Coalborn', 0);
+(80326, 'Barthos, if the senate finds out about all these supplies heading to Hawk\'s Vigil they are going to be furious. The expenses of the Airport are quite large after all! Be sure that the supplies I have sent you last as long as possible before asking for more.\n\nYour friend, Orion Coalborn', 0),
+(80327, 'To Duke Ramon III\n\nThanks again for everything you\'ve done, I am keeping myself safe and a bit under the radar since I have left Stormwind.\n\nI know the SI:7 may keep tabs on me, but I am making sure to not make myself overly noticed and mostly keeping to my room.', 80328),
+(80328, 'Your support has been instrumental and has saved my life from that wretched stockade.\n\nMy uncle would have been proud to have called you a great friend, I hope to hear from you soon, I am unsure of when I will be leaving this place\n\nA friend, Martin Corinth', 0),
 
 replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (0,55100,11,27,20,0,0,'Join The League!','The Explorer\'s league is always looking for new members. Are you looking to see the world, and travel the seas of Azeroth in search of forgotten artifacts and buried treasures?!\n\nWell then, you should seek out my friend Merrin Rockweaver, one of the many excavators and explorers from the league uncovering old artifacts and bones!\n\nHead east from here and find Whelgar\'s Excavation site. It should be tucked against the southern mountains, so keep your eyes peeled explorer!','Report to Merrin Rockweaver to become a great explorer!','Yeah, can I help you? Things are a bit of a mess here.','Is Menethil Harbor still in the dark about what has happened here?\n\nI need proof to report to that fool Grovug stationed in the mountains. You\'ll help right?',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1400,375,47,50,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
 
@@ -198,5 +204,11 @@ replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minleve
 
 replace into creature_questrelation (id, quest) values (332, 55222);
 replace into creature_involvedrelation (id, quest) values (1464, 55222);
+
+replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (55222,55223,4018,24,18,0,0,'Uncovering Evidence','Yes, he stayed here for a few days infact, had a room the entire time!\n\nThe man was quite nice from what I recall, kept to his lonesome, drank a bit of ale, seemed a bit down though.\n\nHe did have a lot of mail back and forth that I delivered to him with his daily supper.\n\nIf you\'re looking for some of his personal affects then I can\'t be of that much help, I only recently cleared out what little he had.\n\nMan said he was taking a small trip and hasn\'t showed up in weeks, I figured he wasn\'t coming back, so I tossed his stuff out to the side of the Tavern.\n\nIf you\'re looking for something, check there, if it\'s not gone already.','Find Martin\'s belonging\'s and bring them to Mathias Shaw.','Have you got any news from Menethil?','Hmm, so, he did leave stuff within Menethil, it seems the man didn\'t cover all of his tracks, thankfully for us.',81414,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1000,72,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+replace into creature_questrelation (id, quest) values (1464, 55223);
+replace into creature_involvedrelation (id, quest) values (332, 55223);
+
 
 
