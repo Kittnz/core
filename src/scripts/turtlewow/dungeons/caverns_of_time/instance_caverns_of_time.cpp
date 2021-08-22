@@ -129,13 +129,16 @@ struct instance_caverns_of_time : public ScriptedInstance
         {
             doOnce = true;
 
-            bronzeDefender1->PMonsterYell("Squad! Move up and secure the landing!");
+            if (bronzeDefender1 && bronzeDefender2 && bronzeDefender3 && bronzeDefender4 && bronzeDefender5)
+            {
+                bronzeDefender1->PMonsterYell("Squad! Move up and secure the landing!");
 
-            bronzeDefender1->MonsterMove(-1822.03f, 6689.86f, -186.14f);
-            bronzeDefender2->MonsterMove(-1820.43f, 6692.90f, -186.81f);
-            bronzeDefender3->MonsterMove(-1817.59f, 6696.38f, -187.69f);
-            bronzeDefender4->MonsterMove(-1815.76f, 6701.76f, -187.63f);
-            bronzeDefender5->MonsterMove(-1810.97f, 6706.42f, -187.79f);
+                bronzeDefender1->MonsterMove(-1822.03f, 6689.86f, -186.14f);
+                bronzeDefender2->MonsterMove(-1820.43f, 6692.90f, -186.81f);
+                bronzeDefender3->MonsterMove(-1817.59f, 6696.38f, -187.69f);
+                bronzeDefender4->MonsterMove(-1815.76f, 6701.76f, -187.63f);
+                bronzeDefender5->MonsterMove(-1810.97f, 6706.42f, -187.79f);
+            }
         }
     }
 };
