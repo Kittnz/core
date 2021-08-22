@@ -11,6 +11,15 @@ struct SpawnLocation
     float m_fX, m_fY, m_fZ;
 };
 
+ObjectGuid spawn1guid;
+ObjectGuid spawn2guid;
+ObjectGuid spawn3guid;
+
+Creature* dragonSpawn1;
+Creature* dragonSpawn2;
+Creature* dragonSpawn3;
+
+int dragonGuidCount = 0;
 
 static const SpawnLocation rotMawSpawns[4] =
 {
@@ -27,8 +36,25 @@ struct instance_caverns_of_time : public ScriptedInstance
         Initialize();
     };
 
+    int deadDragonCount = 0;
+
+    Creature* bronzeDefender1;
+    Creature* bronzeDefender2;
+    Creature* bronzeDefender3;
+    Creature* bronzeDefender4;
+    Creature* bronzeDefender5;
+
+    std::list<Creature*> deadDragonsList;
+
+    bool doOnce = false;
+
     void Initialize() override
     {
+        bronzeDefender1 = instance->SummonCreature(50110, -1880.02, 6635.72, -155.02, 0);
+        bronzeDefender2 = instance->SummonCreature(50110, -1884.82, 6637.66, -155.80, 0);
+        bronzeDefender3 = instance->SummonCreature(50110, -1889.18, 6640.18, -156.75, 0);
+        bronzeDefender4 = instance->SummonCreature(50110, -1893.81, 6643.04, -156.24, 0);
+        bronzeDefender5 = instance->SummonCreature(50110, -1897.60, 6646.52, -155.83, 0);
     }
 
     void OnCreatureCreate(Creature* pCreature) override
@@ -47,8 +73,6 @@ struct instance_caverns_of_time : public ScriptedInstance
     {
         if (!pPlayer)
             return;
-
-
     }
 
     void OnPlayerLeave(Player* pPlayer, bool bJustDestroy) override
@@ -72,10 +96,48 @@ struct instance_caverns_of_time : public ScriptedInstance
 
     //}
 
-    //void Update(uint32 uiDiff)
-    //{
+    void Update(uint32 uiDiff)
+    {
+        if (deadDragonsList.size() < 3)
+        {
+            if (dragonSpawn1 && dragonSpawn2 && dragonSpawn3)
+            {
+                    if (!dragonSpawn1->IsAlive())
+                    {
+                        auto itr = std::find(deadDragonsList.begin(), deadDragonsList.end(), dragonSpawn1);
+                        if (itr == deadDragonsList.end())
+                            deadDragonsList.push_back(dragonSpawn1);
+                    }
 
-    //}
+                    if (!dragonSpawn2->IsAlive())
+                    {
+                        auto itr = std::find(deadDragonsList.begin(), deadDragonsList.end(), dragonSpawn2);
+                        if (itr == deadDragonsList.end())
+                            deadDragonsList.push_back(dragonSpawn2);
+                    }
+
+                    if (!dragonSpawn3->IsAlive())
+                    {
+                        auto itr = std::find(deadDragonsList.begin(), deadDragonsList.end(), dragonSpawn3);
+                        if (itr == deadDragonsList.end())
+                            deadDragonsList.push_back(dragonSpawn3);
+                    }
+            }
+   }
+
+        if (deadDragonsList.size() == 3 && !doOnce)
+        {
+            doOnce = true;
+
+            bronzeDefender1->PMonsterYell("Squad! Move up and secure the landing!");
+
+            bronzeDefender1->MonsterMove(-1822.03f, 6689.86f, -186.14f);
+            bronzeDefender2->MonsterMove(-1820.43f, 6692.90f, -186.81f);
+            bronzeDefender3->MonsterMove(-1817.59f, 6696.38f, -187.69f);
+            bronzeDefender4->MonsterMove(-1815.76f, 6701.76f, -187.63f);
+            bronzeDefender5->MonsterMove(-1810.97f, 6706.42f, -187.79f);
+        }
+    }
 };
 
 InstanceData* GetInstanceData_instance_caverns_of_time(Map* pMap)
@@ -2146,6 +2208,98 @@ struct antnormi_cotAI : public ScriptedAI
     }
 };
 
+
+struct injured_defender_cot : public ScriptedAI
+{
+    injured_defender_cot(Creature* c) : ScriptedAI(c)
+    {
+        Reset();
+    }
+
+    uint32 m_uiUpdateTimer;
+    int phase;
+
+
+    void Reset()
+    {
+        m_uiUpdateTimer = 1000;
+        phase = 0;
+
+        m_creature->SetHealthPercent(40.0f);
+    }
+
+
+    enum CreatureEntries
+    {
+        NPC_DEFENDER = 65001,
+        NPC_DRAGONSPAWN = 65100
+    };
+
+    void UpdateAI(uint32 const uiDiff) override
+    {
+        if (m_uiUpdateTimer < uiDiff && m_creature->GetMapId() == 269)
+        {
+            switch (phase)
+            {
+
+            case 0:
+            {
+                std::list<Player*> players;
+                MaNGOS::AnyPlayerInObjectRangeCheck check(m_creature, 20.0f, true, false);
+                MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
+
+                Cell::VisitWorldObjects(me, searcher, 20.0f);
+
+                if (players.size() != 0)
+                {
+                    phase++;
+                }
+                m_uiUpdateTimer = 2000;
+                break;
+            }
+            case 1:
+            {
+                    m_creature->PMonsterYell("They're everywhere! They're attacking the Caverns!");
+                    m_uiUpdateTimer = 3000;
+                    phase++;
+                    break;
+            }
+            case 2:
+            {
+                m_creature->MonsterMove(-1906.15f, 6617.59f, -154.88);
+                m_creature->PMonsterSay("Heroes! I must report whats happening! Keep them back!");
+                m_creature->DespawnOrUnsummon(5000);
+
+                dragonSpawn1 = m_creature->SummonCreature(NPC_DRAGONSPAWN, -1809.58f, 6708.89f, -187.67f, 0, TEMPSUMMON_DEAD_DESPAWN);
+                dragonSpawn2 = m_creature->SummonCreature(NPC_DRAGONSPAWN, -1808.60f, 6701.76f, -188.38f, 0, TEMPSUMMON_DEAD_DESPAWN);
+                dragonSpawn3 = m_creature->SummonCreature(NPC_DRAGONSPAWN, -1813.18f, 6692.31f, -188.27f, 0, TEMPSUMMON_DEAD_DESPAWN);
+
+                dragonGuidCount = 3;
+
+
+                if (dragonSpawn1 && dragonSpawn2 && dragonSpawn3)
+                {
+                    dragonSpawn1->MonsterMove(-1850.10f, 6701.65f, -182.06f);
+                    dragonSpawn2->MonsterMove(-1844.97f, 6697.32f, -182.67f);
+                    dragonSpawn3->MonsterMove(-1839.84f, 6693.14f, -182.99f);
+                }
+                m_uiUpdateTimer = 2000;
+                phase++;
+                break;
+            }
+
+            }
+
+            m_uiUpdateTimer = 1000;
+        }
+        else m_uiUpdateTimer -= uiDiff;
+
+        DoMeleeAttackIfReady();
+    }
+};
+
+
+
 CreatureAI* GetAI_infinite_dragonspawn(Creature* _Creature)
 {
     return new infinite_dragonspawnAI(_Creature);
@@ -2239,6 +2393,11 @@ CreatureAI* GetAI_mossheart_cot(Creature* _Creature)
 CreatureAI* GetAI_antnormi_cot(Creature* _Creature)
 {
     return new antnormi_cotAI(_Creature);
+}
+
+CreatureAI* GetAI_injured_defender_cot(Creature* _Creature)
+{
+    return new injured_defender_cot(_Creature);
 }
 
 void AddSC_instance_caverns_of_time()
@@ -2342,6 +2501,11 @@ void AddSC_instance_caverns_of_time()
     newscript = new Script;
     newscript->Name = "mossheart_cot";
     newscript->GetAI = &GetAI_mossheart_cot;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "injured_defender_cot";
+    newscript->GetAI = &GetAI_injured_defender_cot;
     newscript->RegisterSelf();
 
 }
