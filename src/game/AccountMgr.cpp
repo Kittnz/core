@@ -211,7 +211,7 @@ AccountTypes AccountMgr::GetSecurity(uint32 acc_id)
     return it->second;
 }
 
-void AccountMgr::SetSecurity(uint32 accId, AccountTypes sec, std::string name)
+void AccountMgr::SetSecurity(uint32 accId, AccountTypes sec)
 {
     m_accountSecurity[accId] = sec;
     LoginDatabase.PExecute("DELETE FROM account_access WHERE RealmID=%u AND id=%u", realmID, accId);

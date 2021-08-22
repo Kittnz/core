@@ -78,7 +78,7 @@ update creature_template set npc_flags = 7 where entry  in (2682);
 -- Entry between 1000510 AND 1000520
 replace into gameobject_template values
 (1000510, 0, 3, 10, 'Sealed Documents Crate', 0, 4, 0.7, 43, 1000510, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
-(1000511, 0, 3, 1, 'Crate of Discarded Goods,', 0, 4, 0.7, 43, 1000511, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(1000511, 0, 3, 1, 'Crate of Discarded Goods,', 0, 4, 0.7, 43, 1000511, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
 
 replace into gameobject_loot_template values 
 (1000510, 81413, -100, 1, 1, 1, 0, 0, 10),
