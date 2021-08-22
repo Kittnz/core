@@ -123,14 +123,6 @@ bool ChatHandler::HandleAccountSetGmLevelCommand(char* args)
     if (!ExtractInt32(&args, gm))
         return false;
 
-    char* comment = ExtractArg(&args);
-
-    if (!comment)
-        return false;
-
-    std::string name(comment);  
-    AccountMgr::normalizeString(name);
-
     if (gm < SEC_PLAYER || gm > SEC_ADMINISTRATOR)
     {
         SendSysMessage(LANG_BAD_VALUE);
@@ -143,7 +135,7 @@ bool ChatHandler::HandleAccountSetGmLevelCommand(char* args)
     if (HasLowerSecurityAccount(nullptr, targetAccountId, true))
         return false;
 
-    /// account can't set security to same or grater level, need more power GM or console
+    /// account can't set security to greater level, need more power GM or console
     AccountTypes plSecurity = GetAccessLevel();
     if (AccountTypes(gm) > plSecurity)
     {
@@ -159,7 +151,7 @@ bool ChatHandler::HandleAccountSetGmLevelCommand(char* args)
     }
 
     PSendSysMessage(LANG_YOU_CHANGE_SECURITY, targetAccountName.c_str(), gm);
-    sAccountMgr.SetSecurity(targetAccountId, AccountTypes(gm), name);
+    sAccountMgr.SetSecurity(targetAccountId, AccountTypes(gm));
 
     return true;
 }

@@ -945,8 +945,7 @@ update creature_template set faction = 1914 where entry = 91293;
 update creature_template set faction = 69 where entry = 91287;
 update creature_template set faction = 69 where entry = 91288;
 delete from npc_vendor where entry = 91221 and item = 80167;
-
-update item_template set where entry = 81307;
+update item_template set class = 4, subclass = 23 where entry = 81307;
 
 -- Razzle
 delete from npc_vendor where entry = 91256;
