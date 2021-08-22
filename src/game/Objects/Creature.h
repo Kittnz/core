@@ -163,6 +163,7 @@ struct CreatureInfo
     uint32  mechanic_immune_mask;
     uint32  school_immune_mask;
     uint32  flags_extra;
+    uint32  phase_quest_id;
     uint32  script_id;
 
     // helpers
@@ -977,6 +978,8 @@ class Creature : public Unit
 
         bool CanSummonGuards() { return GetCreatureInfo()->flags_extra & CREATURE_FLAG_EXTRA_SUMMON_GUARD; }
         uint32 GetOriginalEntry() const { return m_originalEntry; }
+
+        uint32 GetPhaseQuestId() const { return GetCreatureInfo()->phase_quest_id; }
 
     protected:
         bool MeetsSelectAttackingRequirement(Unit* pTarget, SpellEntry const* pSpellInfo, uint32 selectFlags) const;

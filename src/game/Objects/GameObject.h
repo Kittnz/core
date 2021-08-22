@@ -351,6 +351,7 @@ struct GameObjectInfo
 
     uint32 MinMoneyLoot;
     uint32 MaxMoneyLoot;
+    uint32 PhaseQuestId;
     uint32 ScriptId;
 
     // helpers
@@ -789,6 +790,8 @@ class GameObject : public WorldObject
         uint32 GetFactionTemplateId() const final { return GetGOInfo()->faction; }
         uint32 GetLevel() const final;
         bool IsValidAttackTarget(Unit const* target) const final;
+
+        uint32 GetPhaseQuestId() const { return GetGOInfo()->PhaseQuestId; }
 
     protected:
         bool        m_visible;

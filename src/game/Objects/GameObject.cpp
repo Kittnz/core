@@ -1049,6 +1049,13 @@ bool GameObject::IsVisibleForInState(WorldObject const* pDetector, WorldObject c
     if (IsTransport() && IsInMap(pDetector))
         return true;
 
+    // TODO: hack for phasing gameobjects for player's visibility by quest status
+    if (Player const* plDetector = pDetector->ToPlayer())
+    {
+        if (GetPhaseQuestId() && plDetector->GetQuestStatus(GetPhaseQuestId()) != QUEST_STATE_COMPLETE)
+            return false;
+    }
+
 	// Check for exclusive visibility settings
 	if (!ExclusiveVisibleGuid.IsEmpty())
 	{
