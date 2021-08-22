@@ -2248,10 +2248,10 @@ struct injured_defender_cot : public ScriptedAI
             case 0:
             {
                 std::list<Player*> players;
-                MaNGOS::AnyPlayerInObjectRangeCheck check(m_creature, 20.0f, true, false);
+                MaNGOS::AnyPlayerInObjectRangeCheck check(m_creature, 40.0f, true, false);
                 MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
 
-                Cell::VisitWorldObjects(me, searcher, 20.0f);
+                Cell::VisitWorldObjects(me, searcher, 40.0f);
 
                 if (players.size() != 0)
                 {
