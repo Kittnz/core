@@ -24,14 +24,14 @@
 #include "Database/SQLStorageImpl.h"
 #include "Database/DatabaseEnv.h"
 
-const char CreatureInfosrcfmt[] = "iiiiissiiiiiiiiiiffffffifffiifiiiiiiiiiiffiiiiiiiiiiiiiiiiiiiisiiiliiiiiiis";
-const char CreatureInfodstfmt[] = "iiiiissiiiiiiiiiiffffffifffiifiiiiiiiiiiffiiiiiiiiiiiiiiiiiiiisiiiliiiiiiii";
+const char CreatureInfosrcfmt[] = "iiiiissiiiiiiiiiiffffffifffiifiiiiiiiiiiffiiiiiiiiiiiiiiiiiiiisiiiliiiiiiiis";
+const char CreatureInfodstfmt[] = "iiiiissiiiiiiiiiiffffffifffiifiiiiiiiiiiffiiiiiiiiiiiiiiiiiiiisiiiliiiiiiiii";
 const char CreatureDataAddonInfofmt[] = "iiibbiis";
 const char CreatureModelfmt[] = "iffbi";
 const char CreatureInfoAddonInfofmt[] = "iiibbiis";
 const char EquipmentInfofmt[] = "iiii";
-const char GameObjectInfosrcfmt[] = "iiisiifiiiiiiiiiiiiiiiiiiiiiiiiiis";
-const char GameObjectInfodstfmt[] = "iiisiifiiiiiiiiiiiiiiiiiiiiiiiiiii";
+const char GameObjectInfosrcfmt[] = "iiisiifiiiiiiiiiiiiiiiiiiiiiiiiiiis";
+const char GameObjectInfodstfmt[] = "iiisiifiiiiiiiiiiiiiiiiiiiiiiiiiiii";
 const char ItemPrototypesrcfmt[] = "iiissiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiififfiffiffiffiffiiiiiiiiiiiifiiiiiifiiiiiifiiiiiifiiiiiifiiiiiiiiiiiiiiiiiiiiiiiis";
 const char ItemPrototypedstfmt[] = "iiissiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiififfiffiffiffiffiiiiiiiiiiiifiiiiiifiiiiiifiiiiiifiiiiiifiiiiiiiiiiiiiiiiiiiiiiiiixx";
 const char PageTextfmt[] = "isi";

@@ -2099,6 +2099,10 @@ bool Creature::IsVisibleInGridForPlayer(Player const* pl) const
     if (GetCreatureInfo()->flags_extra & CREATURE_FLAG_EXTRA_INVISIBLE)
         return false;
 
+    // TODO: hack for phasing creatures for player's visibility by quest status
+    if (GetPhaseQuestId() && pl->GetQuestStatus(GetPhaseQuestId()) != QUEST_STATE_COMPLETE)
+        return false;
+
     // Live player (or with not release body see live creatures or death creatures with corpse disappearing time > 0
     if (pl->IsAlive() || pl->GetDeathTimer() > 0)
         return (IsAlive() || m_corpseDecayTimer > 0 || (IsDeadByDefault() && m_deathState == CORPSE));
