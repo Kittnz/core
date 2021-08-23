@@ -1052,8 +1052,13 @@ bool GameObject::IsVisibleForInState(WorldObject const* pDetector, WorldObject c
     // TODO: hack for phasing gameobjects for player's visibility by quest status
     if (Player const* plDetector = pDetector->ToPlayer())
     {
-        if (GetPhaseQuestId() && plDetector->GetQuestStatus(GetPhaseQuestId()) != QUEST_STATE_COMPLETE)
-            return false;
+        uint32 phaseQuestId = GetPhaseQuestId();
+        if (phaseQuestId)
+        {
+            auto status = plDetector->GetQuestStatusData(phaseQuestId);
+            if (!status || !status->m_rewarded)
+                return false;
+        }
     }
 
 	// Check for exclusive visibility settings
