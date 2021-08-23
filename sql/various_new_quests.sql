@@ -84,3 +84,5 @@ replace into game_weather (zone, spring_rain_chance, spring_snow_chance, spring_
  replace into creature_loot_template values (65124, 61060, 16.5, 1, 1, 1, 0, 0, 0);
  replace into creature_loot_template values (65124, 61061, 16.5, 1, 1, 1, 0, 0, 0);
  replace into creature_loot_template values (65124, 61062, 16.5, 1, 1, 1, 0, 0, 0);
+ 
+ delete from item_template where entry between 83031 and 83035;
