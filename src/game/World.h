@@ -909,10 +909,22 @@ class World
         * Access: public
         **/
         void InvalidatePlayerDataToAllClients(ObjectGuid guid);
+
+        // Cache operations
         void SendSingleItemInvalidate(uint32 entry, WorldSession* self = nullptr);
         void SendMultipleItemsInvalidate(std::vector<uint32>* items, WorldSession* self = nullptr);
         void SendSingleItemAdd(uint32 entry, WorldSession* self = nullptr);
         void SendMultipleItemsAdd(std::vector<uint32>* items, WorldSession* self = nullptr);
+
+        void SendCreatureStatsInvalidate(uint32 entry, WorldSession* self = nullptr);
+        void SendGameObjectStatsInvalidate(uint32 entry, WorldSession* self = nullptr);
+        void SendGuildStatsInvalidate(uint32 guildId, WorldSession* self = nullptr);
+        void SendQuestStatsInvalidate(uint32 questId, WorldSession* self = nullptr);
+        void SendNpcTextInvalidate(uint32 textId, WorldSession* self = nullptr);
+        void SendPlayerNameInvalidate(ObjectGuid guid, WorldSession* self = nullptr);
+        void SendPetNameInvalidate(uint32 petNumber, WorldSession* self = nullptr);
+        void SendPageTextInvalidate(uint32 pageId, WorldSession* self = nullptr);
+        void SendPetitionInvalidate(uint32 petitionId, WorldSession* self = nullptr);
 
         // Manually override timer update secs to force a faster update
         void SetWorldUpdateTimer(WorldTimers timer, uint32 current);

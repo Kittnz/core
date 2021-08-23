@@ -2682,6 +2682,240 @@ void World::InvalidatePlayerDataToAllClients(ObjectGuid guid)
     SendGlobalMessage(&data);
 }
 
+void World::SendCreatureStatsInvalidate(uint32 entry, WorldSession* self)
+{
+    WorldPacket data(SMSG_CREATURE_QUERY_RESPONSE, 4);
+    data << uint32(entry | 0x80000000);
+
+    if (self)
+        self->SendPacket(&data);
+    else
+    {
+        SessionMap::const_iterator itr;
+        for (itr = m_sessions.begin(); itr != m_sessions.end(); ++itr)
+        {
+            if (itr->second)
+                itr->second->SendPacket(&data);
+        }
+    }
+}
+
+void World::SendGameObjectStatsInvalidate(uint32 entry, WorldSession* self)
+{
+    WorldPacket data(SMSG_GAMEOBJECT_QUERY_RESPONSE, 4);
+    data << uint32(entry | 0x80000000);
+
+    if (self)
+        self->SendPacket(&data);
+    else
+    {
+        SessionMap::const_iterator itr;
+        for (itr = m_sessions.begin(); itr != m_sessions.end(); ++itr)
+        {
+            if (itr->second)
+                itr->second->SendPacket(&data);
+        }
+    }
+}
+
+void World::SendGuildStatsInvalidate(uint32 guildId, WorldSession* self)
+{
+    WorldPacket data(SMSG_GUILD_QUERY_RESPONSE, 35);
+    data << uint32(guildId);
+    data << uint8(0);
+
+    for (size_t i = 0; i < GUILD_RANKS_MAX_COUNT; ++i)
+            data << uint8(0);
+
+    data << uint32(0);
+    data << uint32(0);
+    data << uint32(0);
+    data << uint32(0);
+    data << uint32(0);
+
+    if (self)
+        self->SendPacket(&data);
+    else
+    {
+        SessionMap::const_iterator itr;
+        for (itr = m_sessions.begin(); itr != m_sessions.end(); ++itr)
+        {
+            if (itr->second)
+                itr->second->SendPacket(&data);
+        }
+    }
+}
+
+void World::SendQuestStatsInvalidate(uint32 questId, WorldSession* self)
+{
+    WorldPacket data(SMSG_QUEST_QUERY_RESPONSE, 100);       // guess size
+
+    data << uint32(questId);                                // quest id
+    data << uint32(0);
+    data << uint32(0);
+    data << uint32(0);
+    data << uint32(0);
+    data << uint32(0);
+    data << uint32(0);
+    data << uint32(0);
+    data << uint32(0);
+    data << uint32(0);
+    data << uint32(0);
+    data << uint32(0);
+    data << uint32(0);
+    data << uint32(0);
+    data << uint32(0);
+
+    for (int i = 0; i < 4; ++i)
+        data << uint32(0) << uint32(0);
+
+    for (int i = 0; i < 6; ++i)
+        data << uint32(0) << uint32(0);
+
+    data << uint32(0);
+    data << float(0.0f);
+    data << float(0.0f);
+    data << uint32(0);
+
+    data << uint8(0);
+    data << uint8(0);
+    data << uint8(0);
+    data << uint8(0);
+
+    for (int i = 0; i < 4; ++i)
+        data << uint32(0) << uint32(0) << uint32(0) << uint32(0);
+
+    for (int i = 0; i < 4; ++i)
+        data << uint8(0);
+
+    if (self)
+        self->SendPacket(&data);
+    else
+    {
+        SessionMap::const_iterator itr;
+        for (itr = m_sessions.begin(); itr != m_sessions.end(); ++itr)
+        {
+            if (itr->second)
+                itr->second->SendPacket(&data);
+        }
+    }
+}
+
+void World::SendNpcTextInvalidate(uint32 textId, WorldSession* self)
+{
+    WorldPacket data(SMSG_NPC_TEXT_UPDATE, 4);
+    data << uint32(textId | 0x80000000);
+
+    if (self)
+        self->SendPacket(&data);
+    else
+    {
+        SessionMap::const_iterator itr;
+        for (itr = m_sessions.begin(); itr != m_sessions.end(); ++itr)
+        {
+            if (itr->second)
+                itr->second->SendPacket(&data);
+        }
+    }
+}
+
+void World::SendPlayerNameInvalidate(ObjectGuid guid, WorldSession* self)
+{
+    WorldPacket data(SMSG_NAME_QUERY_RESPONSE, 22);
+    data << guid;
+    data << uint8(0);
+    data << uint8(0);
+
+    data << uint32(0);
+    data << uint32(0);
+    data << uint32(0);
+
+    if (self)
+        self->SendPacket(&data);
+    else
+    {
+        SessionMap::const_iterator itr;
+        for (itr = m_sessions.begin(); itr != m_sessions.end(); ++itr)
+        {
+            if (itr->second)
+                itr->second->SendPacket(&data);
+        }
+    }
+}
+
+void World::SendPetNameInvalidate(uint32 petNumber, WorldSession* self)
+{
+    WorldPacket data(SMSG_PET_NAME_QUERY_RESPONSE, 9);
+    data << uint32(petNumber);
+    data << uint8(0);
+    data << uint32(0);
+
+    if (self)
+        self->SendPacket(&data);
+    else
+    {
+        SessionMap::const_iterator itr;
+        for (itr = m_sessions.begin(); itr != m_sessions.end(); ++itr)
+        {
+            if (itr->second)
+                itr->second->SendPacket(&data);
+        }
+    }
+}
+
+void World::SendPageTextInvalidate(uint32 pageId, WorldSession* self)
+{
+    WorldPacket data(SMSG_PAGE_TEXT_QUERY_RESPONSE, 9);
+    data << uint32(pageId | 0x80000000);
+
+    if (self)
+        self->SendPacket(&data);
+    else
+    {
+        SessionMap::const_iterator itr;
+        for (itr = m_sessions.begin(); itr != m_sessions.end(); ++itr)
+        {
+            if (itr->second)
+                itr->second->SendPacket(&data);
+        }
+    }
+}
+
+void World::SendPetitionInvalidate(uint32 petitionId, WorldSession* self)
+{
+    WorldPacket data(SMSG_PETITION_QUERY_RESPONSE, 64);
+    petitionId *= -1;
+    data << petitionId;                           // petition guid
+    data << uint64(0);
+    data << uint8(0);
+    data << uint8(0);
+    data << uint32(0);
+    data << uint32(0);
+    data << uint32(0);
+    data << uint32(0);
+    data << uint32(0);
+    data << uint32(0);
+    data << uint32(0);
+    data << uint32(0);
+    data << uint16(0);
+    data << uint32(0);
+    data << uint32(0);
+    data << uint32(0);
+    data << uint32(0);
+
+    if (self)
+        self->SendPacket(&data);
+    else
+    {
+        SessionMap::const_iterator itr;
+        for (itr = m_sessions.begin(); itr != m_sessions.end(); ++itr)
+        {
+            if (itr->second)
+                itr->second->SendPacket(&data);
+        }
+    }
+}
+
 void World::SendSingleItemInvalidate(uint32 entry, WorldSession* self)
 {
     WorldPacket data(SMSG_ITEM_QUERY_SINGLE_RESPONSE, 4);
