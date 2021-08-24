@@ -1,7 +1,7 @@
 -- Alliance
 
 delete from creature_template where entry = 80817;
-insert into creature_template values (80877, 0, 18235, 0, 0, 0, 'Ranger-General Vereesa Windrunner', 'Silvermoon Remnant', 0, 63, 63, 799500, 799500, 52400, 52400, 3402, 118, 3, 1, 1.14286, 0, 20, 5, 0, 3, 1, 1489, 1610, 0, 290, 1, 2000, 2000, 2, 36928, 0, 0, 0, 0, 0, 0, 220.81, 320.77, 100, 7, 12, 0, 0, 0, 0, 15, 15, 15, 15, 15, 0, 0, 0, 0, 0, 0, 1, 866, '', 0, 3, 0, 1, 3, 10181, 0, 0, 2764783451, 0, 2654216, '');
+replace into creature_template values (80877, 0, 18235, 0, 0, 0, 'Ranger-General Vereesa Windrunner', 'Silvermoon Remnant', 0, 63, 63, 799500, 799500, 52400, 52400, 3402, 118, 3, 1, 1.14286, 0, 20, 5, 0, 3, 1, 1489, 1610, 0, 290, 1, 2000, 2000, 2, 36928, 0, 0, 0, 0, 0, 0, 220.81, 320.77, 100, 7, 12, 0, 0, 0, 0, 15, 15, 15, 15, 15, 0, 0, 0, 0, 0, 0, 1, 866, '', 0, 3, 0, 1, 3, 10181, 0, 0, 2764783451, 0, 2654216, '');
 update creature_template set faction = 371 where entry = 80877;
 
 replace into item_template values
