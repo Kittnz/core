@@ -9929,7 +9929,7 @@ bool ObjectMgr::CreateItemTransmogrification(uint32 sourceItemId, uint32 sourceD
 
     m_itemTransmogs[destId] = copy;
 
-    sWorld.SendSingleItemAdd(destId);
+    sWorld.SendUpdateSingleItem(destId);
 
     return WorldDatabase.PExecuteLog("INSERT INTO `item_transmogrify_template` (`ID`, `ItemID`, `DisplayID`) VALUES ('%u','%u','%u')", destId, sourceItemId, sourceDisplayId);
 }

@@ -549,10 +549,7 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
             entries.push_back(itemTransmog.second->ItemId);
 
         if (!entries.empty())
-        {
-            sWorld.SendMultipleItemsInvalidate(&entries, this);
-            sWorld.SendMultipleItemsAdd(&entries, this);
-        }
+            sWorld.SendUpdateMultipleItems(&entries, this);
     }
 
     if (pCurrMasterPlayer)
