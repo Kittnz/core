@@ -6667,13 +6667,13 @@ bool GossipSelect_npc_harlus(Player* pPlayer, Creature* pCreature, uint32 uiSend
             c->MonsterSayToPlayer("Executed?! Do you know who it is you speak to?", player);
             c->HandleEmote(EMOTE_ONESHOT_LAUGH);
             });
-        DoAfterTime(pPlayer, 3 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
+        DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
             c->MonsterSayToPlayer("Do you know who it is you're threatening?!", player);
             c->HandleEmote(EMOTE_ONESHOT_NO);
             });
-        DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
+        DoAfterTime(pPlayer, 9 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
             c->MonsterSayToPlayer("I shall destroy you and all others who try to stop me!", player);
-            c->SetFactionTemporary(40, TEMPFACTION_RESTORE_COMBAT_STOP);
+            c->SetFactionTemporary(14, TEMPFACTION_RESTORE_COMBAT_STOP);
             c->HandleEmote(EMOTE_ONESHOT_ATTACK1H);
             });
     }
