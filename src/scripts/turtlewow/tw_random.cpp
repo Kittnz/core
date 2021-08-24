@@ -6649,9 +6649,48 @@ bool GossipSelect_npc_zuljin(Player* pPlayer, Creature* pCreature, uint32 uiSend
     return true;
 }
 
+bool GossipHello_npc_harlus(Player* pPlayer, Creature* pCreature)
+{
+    if (pPlayer->GetQuestStatus(55225) == QUEST_STATUS_INCOMPLETE) // The Hawk's Vigil
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Martin Corinth, you are to be executed for crimes against the Alliance.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+
+    pPlayer->SEND_GOSSIP_MENU(52119, pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_harlus(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+
+        DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
+            c->MonsterSayToPlayer("Executed?! Do you know who it is you speak to?", player);
+            c->HandleEmote(EMOTE_ONESHOT_LAUGH);
+            });
+        DoAfterTime(pPlayer, 3 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
+            c->MonsterSayToPlayer("Do you know who it is you're threatening?!", player);
+            c->HandleEmote(EMOTE_ONESHOT_NO);
+            });
+        DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
+            c->MonsterSayToPlayer("I shall destroy you and all others who try to stop me!", player);
+            c->SetFactionTemporary(40, TEMPFACTION_RESTORE_COMBAT_STOP);
+            c->HandleEmote(EMOTE_ONESHOT_ATTACK1H);
+            });
+    }
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
 void AddSC_tw_random()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_harlus";
+    newscript->pGossipHello = &GossipHello_npc_harlus;
+    newscript->pGossipSelect = &GossipSelect_npc_harlus;
+    newscript->GetAI = &GetAI_npc_harlus;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_zuljin";
