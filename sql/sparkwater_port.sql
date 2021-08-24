@@ -102,13 +102,13 @@ replace into creature_template values
 (91300, 0, 1141, 1418, 2176, 0, 'Squeaks', 'Grizlik\' Pet', 0, 1, 1, 64, 64, 0, 0, 0, 35, 0, 1, 1.14286, 1, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, ''),
 -- 91301 reserved.
 (91302, 0, 3945, 0, 0, 0, 'Foreman Klix', 'Venture Co.', 0, 21, 22, 531, 573, 0, 0, 905, 47, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 33, 38, 0, 98, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 35.6224, 48.9808, 100, 7, 0, 91295, 3993, 0, 0, 0, 0, 0, 0, 0, 7979, 0, 0, 0, 39930, 0, 27, 40, 'EventAI', 1, 1, 0, 0, 3, 3993, 0, 0, 0, 0, 0, ''),
-(91303, 0, 5573, 0, 0, 0, 'The Scorpid King', NULL, 0, 54, 54, 3292, 3292, 0, 0, 3190, 855, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 92, 120, 0, 244, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 69.8544, 96.0498, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 2, ''),
-(91304, 0, 9996, 0, 0, 0, 'Taranaszz', 'The Dampener', 0, 56, 56, 26455, 26455, 0, 0, 4075, 14, 0, 1, 1.14286, 0, 20, 5, 0, 2, 1, 354, 456, 0, 258, 1, 1175, 1292, 1, 0, 0, 0, 0, 0, 0, 0, 59.9488, 82.4296, 100, 2, 0, 10196, 0, 10196, 0, 0, 228, 0, 0, 0, 9128, 13730, 11971, 0, 0, 0, 688, 903, '', 1, 1, 0, 0, 3, 10196, 0, 0, 0, 0, 0, 'generic_spell_ai');
+(91303, 0, 5573, 0, 0, 0, 'The Scorpid King', NULL, 0, 54, 54, 3292, 3292, 0, 0, 3190, 855, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 92, 120, 0, 244, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 69.8544, 96.0498, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 2, '');
 
 -- Quest
 update creature_template set npc_flags = 2 where entry in (91268, 91269, 91275, 91276, 91234, 91254, 91203, 91282, 5546, 91259, 91295, 91260, 91272, 91299); 
 -- Gossip + Quest
 update creature_template set npc_flags = 3 where entry in (91266, 91267, 91274, 91251, 91277, 91280, 91281, 91285, 91286, 91289, 91287, 91288, 91290, 91249, 91259, 91297, 91303);
+update creature_template set npc_flags = 3 where entry in (91252, 91244, 91242, 91245);
 -- Gossip + Vendor
 update creature_template set npc_flags = 5 where entry  = 91256;
 -- Gossip + Vendor + Quest
@@ -256,6 +256,19 @@ replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id,
 
 set @gossip_menu_id = 60040; set @magic_number = 91303; 
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Greetings, $r, the dunes have claimed many a strong adventurer. Walk softly and be careful of the path ahead.'); replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 60041; set @magic_number = 91252; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); replace into broadcast_text (entry, Male_Text) values (@magic_number, 'It\'s good getting some time off from that Oil Platform!'); replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 60042 set @magic_number = 91244; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Nothing better then kicking back after a good fishing day.'); replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 60043; set @magic_number = 91242; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Are you here about my famous Wazzrocket?\n\nWhat do you mean you\'ve never heard of it?'); replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 60044; set @magic_number = 91245; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); replace into broadcast_text (entry, Male_Text) values (@magic_number, 'The Goblin\'s are an interesting folk, but could use more spiritualism.'); replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
 
 replace into npc_trainer values 
 (91202, 2275, 10, 0, 0, 5, 0, 5875),
@@ -562,6 +575,8 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
+
+-- 81360-81380 reserved.
 
 replace into custom_pet_entry_relation values (81349, 91300); 
 
