@@ -35,6 +35,7 @@
 #include "ObjectGuid.h"
 #include "MapNodes/AbstractPlayer.h"
 #include "WorldPacket.h"
+#include "Creature.h"
 
 #include <map>
 #include <set>
@@ -899,23 +900,12 @@ class World
         uint32 InsertLog(std::string const& message, AccountTypes sec);
         ArchivedLogMessage* GetLog(uint32 logId, AccountTypes my_sec);
 
-        /**
-        * \brief: force all client to request player data
-        * \param: ObjectGuid guid : guid of the specified player
-        * \returns: void
-        *
-        * Description: InvalidatePlayerDataToAllClient force all connected clients to clear specified player cache
-        * FullName: World::InvalidatePlayerDataToAllClient
-        * Access: public
-        **/
+        // Invalidate player name, player guild info/roster and refresh some UI elements
         void InvalidatePlayerDataToAllClients(ObjectGuid guid);
 
-        // Cache operations
+        // DBCache operations (Deny, Invalidate) - use for clear cache data only(!!!) at loading character before loading UI
         void SendSingleItemInvalidate(uint32 entry, WorldSession* self = nullptr);
         void SendMultipleItemsInvalidate(std::vector<uint32>* items, WorldSession* self = nullptr);
-        void SendSingleItemAdd(uint32 entry, WorldSession* self = nullptr);
-        void SendMultipleItemsAdd(std::vector<uint32>* items, WorldSession* self = nullptr);
-
         void SendCreatureStatsInvalidate(uint32 entry, WorldSession* self = nullptr);
         void SendGameObjectStatsInvalidate(uint32 entry, WorldSession* self = nullptr);
         void SendGuildStatsInvalidate(uint32 guildId, WorldSession* self = nullptr);
@@ -925,6 +915,11 @@ class World
         void SendPetNameInvalidate(uint32 petNumber, WorldSession* self = nullptr);
         void SendPageTextInvalidate(uint32 pageId, WorldSession* self = nullptr);
         void SendPetitionInvalidate(uint32 petitionId, WorldSession* self = nullptr);
+
+        // DBCache operations (Add, Update) - use for add/update cache data at runtime
+        void SendUpdateSingleItem(uint32 entry, WorldSession* self = nullptr);
+        void SendUpdateMultipleItems(std::vector<uint32>* items, WorldSession* self = nullptr);
+        void SendUpdateCreatureStats(const CreatureInfo& crInfo, WorldSession* self = nullptr);
 
         // Manually override timer update secs to force a faster update
         void SetWorldUpdateTimer(WorldTimers timer, uint32 current);

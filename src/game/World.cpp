@@ -2954,7 +2954,69 @@ void World::SendMultipleItemsInvalidate(std::vector<uint32>* items, WorldSession
     }
 }
 
-void World::SendSingleItemAdd(uint32 entry, WorldSession* self)
+void World::SendUpdateCreatureStats(const CreatureInfo& crInfo, WorldSession* self)
+{
+    WorldPacket data(SMSG_CREATURE_QUERY_RESPONSE, 100);
+    data << crInfo.entry;
+    size_t NamePos = data.wpos();
+    data << crInfo.name;
+    data << uint8(0) << uint8(0) << uint8(0);
+    size_t SubNamePos = data.wpos();
+    data << crInfo.subname;
+    data << crInfo.type_flags;
+    data << crInfo.type;
+    data << crInfo.beast_family;
+    data << crInfo.rank;
+    data << uint32(0);
+    data << crInfo.pet_spell_list_id;
+    data << crInfo.display_id;
+    data << crInfo.civilian;
+    data << crInfo.racial_leader;
+
+    if (self)
+    {
+        int loc_idx = self->GetSessionDbLocaleIndex();
+        if (loc_idx >= 0)
+        {
+            CreatureLocale const* cl = sObjectMgr.GetCreatureLocale(crInfo.entry);
+            if (cl)
+            {
+                if (cl->Name.size() > size_t(loc_idx) && !cl->Name[loc_idx].empty())
+                    data.put<std::string>(NamePos, cl->Name[loc_idx]);
+                if (cl->SubName.size() > size_t(loc_idx) && !cl->SubName[loc_idx].empty())
+                    data.put<std::string>(SubNamePos, cl->SubName[loc_idx]);
+            }
+        }
+
+        self->SendPacket(&data);
+    }
+    else
+    {
+        SessionMap::const_iterator itr;
+        for (itr = m_sessions.begin(); itr != m_sessions.end(); ++itr)
+        {
+            if (itr->second)
+            {
+                int loc_idx = itr->second->GetSessionDbLocaleIndex();
+                if (loc_idx >= 0)
+                {
+                    CreatureLocale const* cl = sObjectMgr.GetCreatureLocale(crInfo.entry);
+                    if (cl)
+                    {
+                        if (cl->Name.size() > size_t(loc_idx) && !cl->Name[loc_idx].empty())
+                            data.put<std::string>(NamePos, cl->Name[loc_idx]);
+                        if (cl->SubName.size() > size_t(loc_idx) && !cl->SubName[loc_idx].empty())
+                            data.put<std::string>(SubNamePos, cl->SubName[loc_idx]);
+                    }
+                }
+
+                itr->second->SendPacket(&data);
+            }
+        }
+    }
+}
+
+void World::SendUpdateSingleItem(uint32 entry, WorldSession* self)
 {
     // While only for transmogrification
     ItemPrototype const* pProto = ObjectMgr::GetItemPrototype(entry);
@@ -3120,7 +3182,7 @@ void World::SendSingleItemAdd(uint32 entry, WorldSession* self)
     }
 }
 
-void World::SendMultipleItemsAdd(std::vector<uint32>* items, WorldSession* self)
+void World::SendUpdateMultipleItems(std::vector<uint32>* items, WorldSession* self)
 {
     // While only for transmogrification
     WorldPacket data(SMSG_ITEM_QUERY_MULTIPLE_RESPONSE, 600*items->size());
