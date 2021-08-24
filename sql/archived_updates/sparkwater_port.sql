@@ -260,7 +260,7 @@ replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id,
 set @gossip_menu_id = 60041; set @magic_number = 91252; 
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); replace into broadcast_text (entry, Male_Text) values (@magic_number, 'It\'s good getting some time off from that Oil Platform!'); replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
-set @gossip_menu_id = 60042 set @magic_number = 91244; 
+set @gossip_menu_id = 60042; set @magic_number = 91244; 
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Nothing better then kicking back after a good fishing day.'); replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
 set @gossip_menu_id = 60043; set @magic_number = 91242; 

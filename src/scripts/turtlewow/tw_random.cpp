@@ -6689,7 +6689,6 @@ void AddSC_tw_random()
     newscript->Name = "npc_harlus";
     newscript->pGossipHello = &GossipHello_npc_harlus;
     newscript->pGossipSelect = &GossipSelect_npc_harlus;
-    newscript->GetAI = &GetAI_npc_harlus;
     newscript->RegisterSelf();
 
     newscript = new Script;
