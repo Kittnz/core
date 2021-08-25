@@ -146,10 +146,10 @@ update creature_template set equipment_id = 55000 where entry in (91410, 91409, 
 -- Remnants Knight change weapon to 1406:
 replace into creature_equip_template (entry, equipentry1) values ('55001', '1406');
 update creature_template set equipment_id = 55001 where entry = 91353;
-replace into creature_equip_template (entry, equipentry1) values ('55002', '1896',  15207, 0);
+replace into creature_equip_template (entry, equipentry1, equipentry2, equipentry3) values ('55002', '1896',  15207, 0);
 update creature_template set equipment_id = 55002 where entry = 91352;
 -- Remnants Knight, make mounted on horse:
 replace into creature_template_addon values (91353, 0, 18259, 0, 0, 0, 0, 0, NULL);
 -- Duchess Faliona add weapon 12252:
-replace into creature_equip_template (entry, equipentry1) values (55003, 12252, 0, 0);
+replace into creature_equip_template (entry, equipentry1, equipentry2, equipentry3) values (55003, 12252, 0, 0);
 update creature_template set equipment_id = 55003 where entry = 91711;
