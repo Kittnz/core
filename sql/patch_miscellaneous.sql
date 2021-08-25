@@ -103,6 +103,7 @@ replace into creature_template values
 update creature_template set npc_flags = 3 where entry between 91710 and 91730;
 update creature_template set scale = 1.2 where entry = 91716;
 update creature_template set faction = 76 where entry = 91719;
+update creature_template set faction = 189, unit_flags = 2 where entry = 91722;
 -- Magus Bromley
 update creature_template set faction = 76 where entry = 91350;
 set @gossip_menu_id = 60046; set @magic_number = 91710; 
@@ -117,20 +118,20 @@ replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id,
 set @gossip_menu_id = 60049; set @magic_number = 91724; 
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); replace into broadcast_text (entry, Male_Text) values (@magic_number, 'I am busy, what do you need?'); replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 -- Update Wildtusk Village NPCs:
-update creature_template set display_id1 = 536 where entry = 91412;
-update creature_template set display_id1 = 4085 where entry = 91414;
-update creature_template set display_id1 = 4359 where entry = 91413;
-update creature_template set display_id1 = 4074 where entry = 91415;
-update creature_template set display_id1 = 6839 where entry = 91400;
-update creature_template set display_id1 = 9768 where entry = 91411;
-update creature_template set display_id1 = 3608 where entry = 91410;
-update creature_template set display_id1 = 2735 where entry = 91409;
-update creature_template set display_id1 = 9261 where entry = 91408;
-update creature_template set display_id1 = 9336 where entry = 91407;
-update creature_template set display_id1 = 2734 where entry = 91406;
-update creature_template set display_id1 = 4534 where entry = 91405;
-update creature_template set display_id1 = 4321 where entry = 91404;
-update creature_template set display_id1 = 4239 where entry = 91401;
+update creature_template set display_id1 = 536, display_id2 = 0, display_id3 = 0, display_id4 = 0 where entry = 91412;
+update creature_template set display_id1 = 4085, display_id2 = 0, display_id3 = 0, display_id4 = 0 where entry = 91414;
+update creature_template set display_id1 = 4359, display_id2 = 0, display_id3 = 0, display_id4 = 0 where entry = 91413;
+update creature_template set display_id1 = 4074, display_id2 = 0, display_id3 = 0, display_id4 = 0 where entry = 91415;
+update creature_template set display_id1 = 6839, display_id2 = 0, display_id3 = 0, display_id4 = 0 where entry = 91400;
+update creature_template set display_id1 = 9768, display_id2 = 0, display_id3 = 0, display_id4 = 0 where entry = 91411;
+update creature_template set display_id1 = 3608, display_id2 = 0, display_id3 = 0, display_id4 = 0 where entry = 91410;
+update creature_template set display_id1 = 2735, display_id2 = 0, display_id3 = 0, display_id4 = 0 where entry = 91409;
+update creature_template set display_id1 = 9261, display_id2 = 0, display_id3 = 0, display_id4 = 0 where entry = 91408;
+update creature_template set display_id1 = 9336, display_id2 = 0, display_id3 = 0, display_id4 = 0 where entry = 91407;
+update creature_template set display_id1 = 2734, display_id2 = 0, display_id3 = 0, display_id4 = 0 where entry = 91406;
+update creature_template set display_id1 = 4534, display_id2 = 0, display_id3 = 0, display_id4 = 0 where entry = 91405;
+update creature_template set display_id1 = 4321, display_id2 = 0, display_id3 = 0, display_id4 = 0 where entry = 91404;
+update creature_template set display_id1 = 4239, display_id2 = 0, display_id3 = 0, display_id4 = 0 where entry = 91401;
 update creature_template set equipment_id = 0 where entry = 91401;
 update creature_template set equipment_id = 0 where entry = 91404;
 update creature_template set equipment_id = 0 where entry = 91405;
@@ -186,3 +187,15 @@ update gameobject set id = 1000249 where id = 1000251 and guid >= 4011324;
 delete from map_template where entry = 24;
 replace into map_template (entry, map_name) values ('27', 'sunnyglade valley');
 update game_tele set map = 27, name='sunnyglade' where id = 549;
+-- Remove weapon from Speaker Lazoko:
+update creature_template set equipment_id = 0 where entry = 91723;
+-- Remove the bows and arrows from Maleka's sell list:
+delete from npc_vendor where entry = 91207 and item = 2515;
+delete from npc_vendor where entry = 91207 and item = 2512;
+delete from npc_vendor where entry = 91207 and item = 5439;
+delete from npc_vendor where entry = 91207 and item = 2507;
+delete from npc_vendor where entry = 91207 and item = 2506;
+-- Barbershop Chair
+replace into gameobject_template values 
+(105180, 0, 7, 32822, 'Barbershop Chair', 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(105181, 0, 5, 7417, 'Moonwell (Phasing)', 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 332, '');
