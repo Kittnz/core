@@ -153,3 +153,13 @@ replace into creature_template_addon values (91353, 0, 18259, 0, 0, 0, 0, 0, NUL
 -- Duchess Faliona add weapon 12252:
 replace into creature_equip_template (entry, equipentry1, equipentry2, equipentry3) values (55003, 12252, 0, 0);
 update creature_template set equipment_id = 55003 where entry = 91711;
+-- Raceway changes:
+update broadcast_text set male_text = 'Talk to Gregor or Jizzle. Let them know you want to race!' WHERE entry = 90254;
+-- Remove Wormhole stuff:
+delete from creature_questrelation where id = 51574 and quest = 60104;
+delete from creature_questrelation where id = 51570 and quest = 60104;
+delete from creature_involvedrelation where id = 51572 and quest = 60104;
+delete from creature_involvedrelation where id = 51571 and quest = 60104;
+update quest_template set title = 'Into the Unknown [Deprecated]' where entry = 60104;
+update item_template set quality = 0, script_name = '' where entry = 51808;
+update item_template set quality = 0, name = 'Broken Portable Wormhole Generator' where entry = 51310;
