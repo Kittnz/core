@@ -182,3 +182,7 @@ replace into gameobject_template VALUES
 (1000251,0,5,95,'House Smoke',0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,''),
 (1000249, 0, 3, 2971, 'Eldarath Ley-Shard', 0, 4, 0.5, 43, 1000251, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
 update gameobject set id = 1000249 where id = 1000251 and guid >= 4011324;
+-- Sunnyglade Valley map:
+delete from map_template where entry = 24;
+replace into map_template (entry, map_name) values ('27', 'sunnyglade valley');
+update game_tele set map = 27, name='sunnyglade' where id = 549;
