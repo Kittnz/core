@@ -71,7 +71,7 @@ update creature_template set equipment_id = 0 where entry = 91234;
 update creature_template set equipment_id = 0 where entry = 91233;
 -- Shang and other weird creatures:
 replace into creature_template values 
-(9939, 0, 892, 0, 0, 0, 'Mr. Shang', 'GM Island Cat', 0, 1, 1, 64, 64, 0, 0, 20, 35, 0, 1, 1.42857, 1, 20, 5, 0, 0, 1, 10, 11, 0, 44, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 1.76, 2.42, 100, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 2, 0, 'npc_kitten'),
+(9939, 0, 9989, 0, 0, 0, 'Mr. Shang', 'GM Island Cat', 0, 1, 1, 64, 64, 0, 0, 20, 35, 0, 1, 1.42857, 1, 20, 5, 0, 0, 1, 10, 11, 0, 44, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 1.76, 2.42, 100, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 2, 0, 'npc_kitten'),
 (9940, 0, 18098, 0, 0, 0, 'The Peach King', '', 0, 20, 20, 1064, 1064, 0, 0, 0, 35, 0, 1, 1.14286, 0.5, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (9941, 0, 9583, 0, 0, 0, 'Dragunastrasz', NULL, 0, 23, 24, 617, 664, 0, 0, 976, 60, 0, 1.11111, 1.14286, 0, 20, 5, 0, 0, 1, 34, 43, 0, 104, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 36.96, 50.82, 100, 2, 0, 1042, 0, 1042, 0, 62, 0, 0, 0, 0, 3356, 0, 0, 0, 10420, 0, 31, 45, '', 1, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
 -- He's gonna sell peaches!
@@ -199,3 +199,8 @@ delete from npc_vendor where entry = 91207 and item = 2506;
 replace into gameobject_template values 
 (105180, 0, 7, 32822, 'Barbershop Chair', 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
 (105181, 0, 5, 7417, 'Moonwell (Phasing)', 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 332, '');
+-- Barber stuff:
+update creature_template set display_id1 = 15765, name = 'Theresa Fluxlight', faction = 1682 where entry = 50054; 
+update creature_template set faction = 1682 where entry = 81024; 
+update creature_template set faction = 1682 where entry = 80136; 
+update creature_template set faction = 1682 where entry = 80137; 
