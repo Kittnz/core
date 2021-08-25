@@ -99,11 +99,103 @@ replace into creature_template values
 (91722, 0, 2274, 0, 0, 0, 'Keeper Iselus', NULL, 0, 58, 58, 3875, 3875, 0, 0, 3408, 80, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 106, 136, 0, 262, 1, 2000, 2000, 1, 4096, 0, 0, 0, 0, 0, 0, 72.9872, 100.357, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 10300, 0, 0, 0, 0, 1048578, 0, ''),
 (91723, 0, 9715, 0, 0, 0, 'Speaker Lazoko', '', 0, 38, 38, 1059, 1059, 0, 0, 2311, 83, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 66, 85, 0, 182, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 59.7872, 82.2074, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 1, 0, 3, 5592, 0, 0, 0, 0, 524298, 0, 'npc_lazoko'),
 (91724, 0, 3882, 0, 0, 0, 'Ryan Oxcrest', '', 9546, 30, 30, 752, 752, 0, 0, 1890, 68, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 61, 78, 0, 156, 1, 2000, 2000, 1, 36864, 0, 0, 0, 0, 0, 0, 56.672, 77.924, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 10781, 0, 0, 0, 0, 524298, 0, '');
-
-update creature_template set npc_flags = 3 where entry between 91710 and 91730;
+update creature_template set npc_flags = 3 where entry between 91710 and 91724;
 update creature_template set scale = 1.2 where entry = 91716;
 update creature_template set faction = 76 where entry = 91719;
 update creature_template set faction = 189, unit_flags = 2 where entry = 91722;
+-- ...
+replace into creature_template values 
+(91725, 6, 2625, 0, 0, 0, 'Darren Mistwall', 'General Goods', 9260, 15, 15, 605, 605, 0, 0, 400, 68, 6, 1, 1.14286, 0, 20, 5, 0, 0, 1, 42, 53, 0, 122, 1, 2000, 2000, 1, 37376, 0, 0, 0, 0, 0, 0, 45.144, 62.073, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 4555, 0, 455502, 0, 0, 524298, 0, ''),
+(91726, 0, 10130, 0, 0, 0, 'Father Brightcopf', NULL, 9256, 32, 32, 1162, 1162, 0, 0, 1061, 118, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 44, 57, 0, 128, 1, 2000, 2000, 1, 37376, 0, 0, 0, 0, 0, 0, 47.5904, 65.4368, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 4486, 0, 0, 0, 0, 524298, 0, ''),
+(91727, 0, 5508, 0, 0, 0, 'Butcher Reeves', 'Meat Vendor', 9270, 30, 30, 1002, 1002, 0, 0, 1200, 68, 6, 1, 1.14286, 0, 20, 5, 0, 0, 1, 42, 53, 0, 122, 1, 2000, 2000, 1, 37376, 0, 0, 0, 0, 0, 0, 45.144, 62.073, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 4571, 0, 0, 0, 0, 524298, 0, ''),
+(91728, 0, 1599, 0, 0, 0, 'Marlow Neggle', 'Heavy Armor Merchant', 9444, 14, 14, 502, 502, 0, 0, 1200, 68, 16388, 1, 1.14286, 0, 20, 5, 0, 0, 1, 42, 53, 0, 122, 1, 2000, 2000, 1, 37376, 0, 0, 0, 0, 0, 0, 45.144, 62.073, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 5819, 0, 0, 0, 0, 524298, 0, ''),
+(91729, 0, 1604, 0, 0, 0, 'Harry Upperson', NULL, 0, 24, 24, 712, 712, 0, 0, 1026, 68, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 31, 40, 0, 106, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 38.72, 53.24, 100, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 8388624, 0, 524298, 0, ''),
+(91730, 0, 2855, 0, 0, 0, 'Deathguard Markus', NULL, 0, 55, 55, 4667, 4667, 0, 0, 4292, 71, 0, 1, 1.42857, 0, 20, 5, 0, 0, 1, 240, 260, 0, 248, 1, 2000, 2000, 1, 36864, 0, 0, 0, 0, 0, 0, 301.34, 422.17, 100, 7, 0, 1741, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 1, 714, '', 0, 3, 0, 0, 3, 1741, 0, 0, 0, 0, 524288, 0, ''),
+(91731, 0, 2857, 0, 0, 0, 'Deathguard Robert', NULL, 0, 55, 55, 4667, 4667, 0, 0, 4292, 71, 0, 1, 1.42857, 0, 20, 5, 0, 0, 1, 240, 260, 0, 248, 1, 2000, 2000, 1, 36864, 0, 0, 0, 0, 0, 0, 301.34, 422.17, 100, 7, 0, 1741, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 1, 714, '', 0, 3, 0, 0, 3, 1741, 0, 0, 0, 0, 524288, 0, ''),
+(91732, 0, 1666, 0, 0, 0, 'Deathguard Yannis', NULL, 0, 55, 55, 4667, 4667, 0, 0, 4292, 71, 0, 1, 1.42857, 0, 20, 5, 0, 0, 1, 240, 260, 0, 248, 1, 2000, 2000, 1, 36864, 0, 0, 0, 0, 0, 0, 301.34, 422.17, 100, 7, 0, 1741, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 1, 714, '', 0, 3, 0, 0, 3, 1741, 0, 0, 0, 0, 524288, 0, ''),
+(91733, 0, 2858, 0, 0, 0, 'Deathguard Lena', NULL, 0, 55, 55, 4667, 4667, 0, 0, 4292, 71, 0, 1, 1.42857, 0, 20, 5, 0, 0, 1, 240, 260, 0, 248, 1, 2000, 2000, 1, 36864, 0, 0, 0, 0, 0, 0, 301.34, 422.17, 100, 7, 0, 1741, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 1, 714, '', 0, 3, 0, 0, 3, 1741, 0, 0, 0, 0, 524288, 0, ''),
+(91734, 0, 1648, 0, 0, 0, 'Deathguard Jenkor', NULL, 0, 55, 55, 4667, 4667, 0, 0, 4292, 71, 0, 1, 1.42857, 0, 20, 5, 0, 0, 1, 240, 260, 0, 248, 1, 2000, 2000, 1, 36864, 0, 0, 0, 0, 0, 0, 301.34, 422.17, 100, 7, 0, 1741, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 1, 714, '', 0, 3, 0, 0, 3, 1741, 0, 0, 0, 0, 524288, 0, '');
+-- Misc.
+update creature_template set npc_flags = 3 where entry = 91726;
+update creature_template set npc_flags = 3 where entry = 91729;
+-- Armor
+replace into npc_vendor values (91728, 285, 0, 0, 0, 0);
+replace into npc_vendor values (91728, 286, 0, 0, 0, 0);
+replace into npc_vendor values (91728, 287, 0, 0, 0, 0);
+replace into npc_vendor values (91728, 718, 0, 0, 0, 0);
+replace into npc_vendor values (91728, 847, 0, 0, 0, 0);
+replace into npc_vendor values (91728, 848, 0, 0, 0, 0);
+replace into npc_vendor values (91728, 849, 0, 0, 0, 0);
+replace into npc_vendor values (91728, 850, 0, 0, 0, 0);
+replace into npc_vendor values (91728, 1845, 0, 0, 0, 0);
+replace into npc_vendor values (91728, 1846, 0, 0, 0, 0);
+replace into npc_vendor values (91728, 1852, 0, 0, 0, 0);
+replace into npc_vendor values (91728, 1853, 0, 0, 0, 0);
+replace into npc_vendor values (91728, 2148, 0, 0, 0, 0);
+replace into npc_vendor values (91728, 2149, 0, 0, 0, 0);
+replace into npc_vendor values (91728, 2150, 0, 0, 0, 0);
+replace into npc_vendor values (91728, 2151, 0, 0, 0, 0);
+replace into npc_vendor values (91728, 2152, 0, 0, 0, 0);
+replace into npc_vendor values (91728, 2153, 0, 0, 0, 0);
+replace into npc_vendor values (91728, 2392, 0, 0, 0, 0);
+replace into npc_vendor values (91728, 2393, 0, 0, 0, 0);
+replace into npc_vendor values (91728, 2394, 0, 0, 0, 0);
+replace into npc_vendor values (91728, 2395, 0, 0, 0, 0);
+replace into npc_vendor values (91728, 2396, 0, 0, 0, 0);
+replace into npc_vendor values (91728, 2397, 0, 0, 0, 0);
+replace into npc_vendor values (91728, 2417, 0, 0, 0, 0);
+replace into npc_vendor values (91728, 2418, 0, 0, 0, 0);
+replace into npc_vendor values (91728, 2419, 0, 0, 0, 0);
+replace into npc_vendor values (91728, 2420, 0, 0, 0, 0);
+replace into npc_vendor values (91728, 2421, 0, 0, 0, 0);
+replace into npc_vendor values (91728, 2422, 0, 0, 0, 0);
+replace into npc_vendor values (91728, 2423, 0, 0, 0, 0);
+replace into npc_vendor values (91728, 2424, 0, 0, 0, 0);
+replace into npc_vendor values (91728, 2425, 0, 0, 0, 0);
+replace into npc_vendor values (91728, 2426, 0, 0, 0, 0);
+replace into npc_vendor values (91728, 2427, 0, 0, 0, 0);
+replace into npc_vendor values (91728, 2428, 0, 0, 0, 0);
+replace into npc_vendor values (91728, 2446, 0, 0, 0, 0);
+replace into npc_vendor values (91728, 2448, 0, 0, 0, 0);
+replace into npc_vendor values (91728, 2451, 0, 0, 0, 0);
+replace into npc_vendor values (91728, 3891, 0, 0, 0, 0);
+replace into npc_vendor values (91728, 3894, 0, 0, 0, 0);
+replace into npc_vendor values (91728, 8088, 0, 0, 0, 0);
+replace into npc_vendor values (91728, 8089, 0, 0, 0, 0);
+replace into npc_vendor values (91728, 8090, 0, 0, 0, 0);
+replace into npc_vendor values (91728, 8091, 0, 0, 0, 0);
+replace into npc_vendor values (91728, 8092, 0, 0, 0, 0);
+replace into npc_vendor values (91728, 8093, 0, 0, 0, 0);
+replace into npc_vendor values (91728, 8094, 0, 0, 0, 0);
+replace into npc_vendor values (91728, 17189, 0, 0, 0, 0);
+replace into npc_vendor values (91728, 17190, 0, 0, 0, 0);
+replace into npc_vendor values (91728, 17192, 0, 0, 0, 0);
+-- Meat Vendor
+replace into npc_vendor values (91727, 117, 0, 0, 0, 0);
+replace into npc_vendor values (91727, 2287, 0, 0, 0, 0);
+replace into npc_vendor values (91727, 3770, 0, 0, 0, 0);
+replace into npc_vendor values (91727, 3771, 0, 0, 0, 0);
+replace into npc_vendor values (91727, 4599, 0, 0, 0, 0);
+replace into npc_vendor values (91727, 8952, 0, 0, 0, 0);
+-- General Goods
+replace into npc_vendor values (91725, 159, 0, 0, 0, 0);
+replace into npc_vendor values (91725, 1179, 0, 0, 0, 0);
+replace into npc_vendor values (91725, 1205, 0, 0, 0, 0);
+replace into npc_vendor values (91725, 2515, 0, 0, 0, 0);
+replace into npc_vendor values (91725, 2519, 0, 0, 0, 0);
+replace into npc_vendor values (91725, 2946, 0, 0, 0, 0);
+replace into npc_vendor values (91725, 3030, 0, 0, 0, 0);
+replace into npc_vendor values (91725, 3033, 0, 0, 0, 0);
+replace into npc_vendor values (91725, 3107, 0, 0, 0, 0);
+replace into npc_vendor values (91725, 3108, 0, 0, 0, 0);
+replace into npc_vendor values (91725, 3131, 0, 0, 0, 0);
+replace into npc_vendor values (91725, 3135, 0, 0, 0, 0);
+replace into npc_vendor values (91725, 3137, 0, 0, 0, 0);
+replace into npc_vendor values (91725, 4470, 0, 0, 0, 0);
+replace into npc_vendor values (91725, 4471, 0, 0, 0, 0);
+replace into npc_vendor values (91725, 4497, 0, 0, 0, 0);
+replace into npc_vendor values (91725, 4498, 0, 0, 0, 0);
+replace into npc_vendor values (91725, 6183, 0, 0, 0, 0);
 -- Magus Bromley
 update creature_template set faction = 76 where entry = 91350;
 set @gossip_menu_id = 60046; set @magic_number = 91710; 
@@ -117,6 +209,12 @@ replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id,
 -- Ryan Oxcrest
 set @gossip_menu_id = 60049; set @magic_number = 91724; 
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); replace into broadcast_text (entry, Male_Text) values (@magic_number, 'I am busy, what do you need?'); replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+-- Father Brightcopf
+set @gossip_menu_id = 60050; set @magic_number = 91726; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); replace into broadcast_text (entry, Male_Text) values (@magic_number, 'We must do our duty to restore these lands for the Forsaken.'); replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+-- Harry Upperson
+set @gossip_menu_id = 60051; set @magic_number = 91729; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); replace into broadcast_text (entry, Male_Text) values (@magic_number, 'There are many mysteries here, have you come in search of knowledge?'); replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 -- Update Wildtusk Village NPCs:
 update creature_template set display_id1 = 536, display_id2 = 0, display_id3 = 0, display_id4 = 0 where entry = 91412;
 update creature_template set display_id1 = 4085, display_id2 = 0, display_id3 = 0, display_id4 = 0 where entry = 91414;
