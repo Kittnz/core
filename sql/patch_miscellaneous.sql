@@ -177,3 +177,8 @@ update item_template set quality = 0, script_name = '' where entry = 51808;
 update item_template set quality = 0, name = 'Broken Portable Wormhole Generator' where entry = 51310;
 -- Fix Tomato:
 replace into npc_vendor values (80963, 40000, 0, 0, 0, 0);
+-- Fix House Smoke object:
+replace into gameobject_template VALUES 
+(1000251,0,5,95,'House Smoke',0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,''),
+(1000249, 0, 3, 2971, 'Eldarath Ley-Shard', 0, 4, 0.5, 43, 1000251, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+update gameobject set id = 1000249 where id = 1000251 and guid >= 4011324;
