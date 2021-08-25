@@ -95,7 +95,10 @@ replace into creature_template values
 (91718, 0, 1504, 0, 0, 0, 'Storn', '', 0, 19, 19, 686, 697, 0, 0, 765, 17, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 27, 34, 0, 84, 1, 2000, 2000, 1, 32768, 0, 0, 0, 0, 0, 0, 28.6704, 39.4218, 100, 7, 0, 122, 122, 0, 0, 0, 0, 0, 0, 0, 53, 0, 0, 0, 1220, 0, 21, 32, 'EventAI', 1, 3, 0, 0, 3, 122, 0, 0, 0, 0, 0, 0, ''),
 (91719, 0, 5076, 0, 0, 0, 'Magister Salorn', 'Kirin Tor', 0, 20, 20, 1299, 1392, 1225, 1275, 740, 128, 0, 0.94, 1.14286, 0, 20, 5, 0, 1, 1, 101, 130, 0, 94, 1, 2000, 2000, 2, 32768, 0, 0, 0, 0, 0, 0, 29.6792, 40.8089, 100, 7, 0, 4802, 4802, 0, 0, 0, 0, 0, 0, 0, 9672, 11642, 0, 0, 48020, 0, 95, 129, 'EventAI', 1, 3, 0, 0, 3, 4802, 0, 0, 0, 0, 0, 0, ''),
 (91720, 0, 4350, 0, 0, 0, 'Norga', NULL, 0, 41, 41, 1902, 1902, 0, 0, 2033, 104, 2, 1, 1.14286, 1.35, 20, 5, 0, 0, 1, 62, 80, 0, 162, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 57.728, 79.376, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, 0, ''),
-(91721, 0, 1472, 0, 0, 0, 'Duchess Faliona', '', 0, 19, 19, 1062, 1062, 2040, 2040, 20, 12, 3, 1.2, 1.14286, 0, 20, 5, 0, 1, 1, 79, 103, 0, 84, 1, 2000, 1650, 8, 32832, 0, 0, 0, 0, 0, 0, 25.08, 34.485, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 79, 108, '', 1, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+(91721, 0, 1472, 0, 0, 0, 'Duchess Faliona', '', 0, 19, 19, 1062, 1062, 2040, 2040, 20, 12, 3, 1.2, 1.14286, 0, 20, 5, 0, 1, 1, 79, 103, 0, 84, 1, 2000, 1650, 8, 32832, 0, 0, 0, 0, 0, 0, 25.08, 34.485, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 79, 108, '', 1, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(91722, 0, 2274, 0, 0, 0, 'Keeper Iselus', NULL, 0, 58, 58, 3875, 3875, 0, 0, 3408, 80, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 106, 136, 0, 262, 1, 2000, 2000, 1, 4096, 0, 0, 0, 0, 0, 0, 72.9872, 100.357, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 10300, 0, 0, 0, 0, 1048578, 0, ''),
+(91723, 0, 9715, 0, 0, 0, 'Speaker Lazoko', '', 0, 38, 38, 1059, 1059, 0, 0, 2311, 83, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 66, 85, 0, 182, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 59.7872, 82.2074, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 1, 0, 3, 5592, 0, 0, 0, 0, 524298, 0, 'npc_lazoko'),
+(91724, 0, 3882, 0, 0, 0, 'Ryan Oxcrest', '', 9546, 30, 30, 752, 752, 0, 0, 1890, 68, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 61, 78, 0, 156, 1, 2000, 2000, 1, 36864, 0, 0, 0, 0, 0, 0, 56.672, 77.924, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 10781, 0, 0, 0, 0, 524298, 0, '');
 
 update creature_template set npc_flags = 3 where entry between 91710 and 91730;
 update creature_template set scale = 1.2 where entry = 91716;
@@ -104,6 +107,15 @@ update creature_template set faction = 76 where entry = 91719;
 update creature_template set faction = 76 where entry = 91350;
 set @gossip_menu_id = 60046; set @magic_number = 91710; 
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); replace into broadcast_text (entry, Male_Text) values (@magic_number, 'I was once a great wizard, its good to leave it all behind me, and simply tend to apples.'); replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+-- Keeper Iselus
+set @gossip_menu_id = 60047; set @magic_number = 91722; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); replace into broadcast_text (entry, Male_Text) values (@magic_number, 'It is my charge to keep watch of this place.'); replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+-- Speaker Lazoko
+set @gossip_menu_id = 60048; set @magic_number = 91723; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); replace into broadcast_text (entry, Male_Text) values (@magic_number, 'The spirits be communicating with us, I must be listening!'); replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+-- Ryan Oxcrest
+set @gossip_menu_id = 60049; set @magic_number = 91724; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); replace into broadcast_text (entry, Male_Text) values (@magic_number, 'I am busy, what do you need?'); replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 -- Update Wildtusk Village NPCs:
 update creature_template set display_id1 = 536 where entry = 91412;
 update creature_template set display_id1 = 4085 where entry = 91414;
@@ -154,7 +166,7 @@ replace into creature_template_addon values (91353, 0, 18259, 0, 0, 0, 0, 0, NUL
 replace into creature_equip_template (entry, equipentry1, equipentry2, equipentry3) values (55003, 12252, 0, 0);
 update creature_template set equipment_id = 55003 where entry = 91711;
 -- Raceway changes:
-update broadcast_text set male_text = 'Talk to Gregor or Jizzle. Let them know you want to race!' WHERE entry = 90254;
+update broadcast_text set male_text = 'Your prize and rewards right in the middle of the Shimmering Flats in Thousand Needles! Talk to Gregor or Jizzle there to participate in the race!' WHERE entry = 90254;
 -- Remove Wormhole stuff:
 delete from creature_questrelation where id = 51574 and quest = 60104;
 delete from creature_questrelation where id = 51570 and quest = 60104;
@@ -163,3 +175,5 @@ delete from creature_involvedrelation where id = 51571 and quest = 60104;
 update quest_template set title = 'Into the Unknown [Deprecated]' where entry = 60104;
 update item_template set quality = 0, script_name = '' where entry = 51808;
 update item_template set quality = 0, name = 'Broken Portable Wormhole Generator' where entry = 51310;
+-- Fix Tomato:
+replace into npc_vendor values (80963, 40000, 0, 0, 0, 0);
