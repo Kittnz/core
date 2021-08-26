@@ -77,6 +77,12 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 replace into creature_questrelation (id, quest) values (3978, 40111);
 replace into creature_involvedrelation (id, quest) values (3978, 40111);
 
+delete from quest_template where entry = 40112;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (40111,40112,2,1638,60,58,0,0,'Disturbing Silence','While I\'m glad to see you return, I feel a disturbance in the air. The war party that I have to send to The Swamp of Sorrows has not returned, nor did they send any message. Logrash\'s warning still circles my mind.\n\n$n you have done so much already for us, but I would ask you to check on the war party. The location Logrash marked for us points us towards the southeastern part of the swamps along the mountains.\n\nMaybe this is just an old man worrying, but I cannot shake this feeling of unease.','Sage Truthseeker wants you to search for his missing War Party in the Eastern part of The Swamp of Sorrows.','It be you $n.','We were trying to negotiate with the Alliance when they attacked. The madman\'s fought with the power I have never seen.',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,660,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+replace into creature_questrelation (id, quest) values (3978, 40112);
+replace into creature_involvedrelation (id, quest) values (60410, 40112);
+
 delete from creature_template where entry = 60400;
 replace into creature_template (entry, display_id1, name, subname, level_min, level_max, health_min, health_max, armor, faction, npc_flags, speed_walk, speed_run, detection_range, call_for_help_range, xp_multiplier, dmg_min, dmg_max, attack_power, dmg_multiplier, base_attack_time, ranged_attack_time, unit_class, unit_flags, ranged_dmg_min, ranged_dmg_max, ranged_attack_power, type, loot_id, gold_min, gold_max, movement_type, inhabit_type, regeneration, flags_extra) values (60400,6435,'Vess','Black Rose',50,50,2768,2768,2999,120,2,1,1.14,20,5,1,85,109,226,1,2000,2000,1,512,67,92,100,7,0,0,0,0,3,3,10);
 
@@ -106,6 +112,9 @@ replace into creature_template (entry, display_id1, name, subname, level_min, le
 
 delete from creature_template where entry = 60409;
 replace into creature_template (entry, display_id1, name, level_min, level_max, health_min, health_max, armor, faction, npc_flags, speed_walk, speed_run, detection_range, call_for_help_range, xp_multiplier, dmg_min, dmg_max, attack_power, dmg_multiplier, base_attack_time, ranged_attack_time, unit_class, unit_flags, ranged_dmg_min, ranged_dmg_max, ranged_attack_power, type, loot_id, gold_min, gold_max, movement_type, inhabit_type, regeneration, flags_extra) values (60409,12334,'Naxiar',60,60,3997,4120,3640,16,0,1,1.14,20,5,1,104,130,272,1,2000,2000,1,0,72,99,100,7,60409,136,183,0,3,3,0);
+
+delete from creature_template where entry = 60410;
+replace into creature_template (entry, display_id1, name, subname, level_min, level_max, health_min, health_max, armor, faction, npc_flags, speed_walk, speed_run, detection_range, call_for_help_range, xp_multiplier, dmg_min, dmg_max, attack_power, dmg_multiplier, base_attack_time, ranged_attack_time, unit_class, unit_flags, ranged_dmg_min, ranged_dmg_max, ranged_attack_power, type, loot_id, gold_min, gold_max, movement_type, inhabit_type, regeneration, flags_extra) values (60410,4239,'Re\’than','Leader of War Party',55,55,2768,2768,2999,65,2,1,1.14,20,5,1,85,109,226,1,2000,2000,1,512,67,92,100,7,0,0,0,0,3,0,10);
 
 update creature_template set script_name = 'npc_high_explorer_magellas' where entry = 5387;
 
@@ -170,6 +179,9 @@ replace into creature (id, map, position_x, position_y, position_z, orientation,
 delete from creature where id = 60409;
 replace into creature (id, map, position_x, position_y, position_z, orientation, spawntimesecsmin, spawntimesecsmax, wander_distance, health_percent, movement_type, patch_max) values (60409,1,1793.752319,-2975.766113,114.890640,3.73,300,300,3,20,0,10);
 
+delete from creature where id = 60410;
+replace into creature (id, map, position_x, position_y, position_z, orientation, spawntimesecsmin, spawntimesecsmax, wander_distance, health_percent, movement_type, patch_max) values (60410,0,-10910.900391,-3875.795410,23.781332,0.45,300,300,3,1,0,10);
+
 delete from gameobject where id = 2010800;
 replace into gameobject (id, map, position_x, position_y, position_z, orientation) values (2010800, 1, -6167.819824, -1573.680054, -211, 5.31);
 
@@ -189,3 +201,18 @@ replace into creature_template_addon (entry, bytes1) values (60400, 6);
 replace into creature_template_addon (entry, bytes1) values (60403, 7);
 replace into creature_template_addon (entry, bytes1) values (60406, 1);
 replace into creature_template_addon (entry, bytes1) values (60407, 3);
+replace into creature_template_addon (entry, bytes1) values (60410, 7);
+
+
+
+
+
+
+
+
+
+
+sdelat' GO dla lutaniya 1 diska
+kinzhal na stol dlya vess
+sdelat' repliku dlya Bannora i Naxiara
+sdelat' script na poluchenie diskov pri vzyatii kvesta u Maggelasa
