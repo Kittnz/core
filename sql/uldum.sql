@@ -209,8 +209,11 @@ replace into creature_template_addon (entry, bytes1) values (60406, 1);
 replace into creature_template_addon (entry, bytes1) values (60407, 3);
 replace into creature_template_addon (entry, bytes1) values (60410, 7);
 
+delete from quest_template where entry = 40114;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (40113,40114,2,1638,60,58,0,0,'Uldum Awaits','The time has come, it is as the Earthmother told me. We have no idea what we might find in Uldum. And if there are dangerous factions that seek to enter as well. Then all the more reason for us to take extreme precautions.\n\nI urge you to avoid the mistake I have made with the war party. Before you go, find trustworthy allies who would accompany you to the gates. There is no telling what awaits you there. And I. I will be working on putting our friends to rest. It is the least I can do to atone for my mistake. Go now, and may the winds be ever at your back.','Head to the Valley of the Watcher in Tanaris and activate the Pedestal in front of the gate by using the Plates of Uldum.','<The pedestal appears dormant>.','<I should get ready. Once I activate the pedestal, who knows what awaits inside>.',60102,1,60103,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,660,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
 
-
+replace into creature_questrelation (id, quest) values (3978, 40114);
+replace into gameobject_involvedrelation (id, quest) values (142343, 40114);
 
 
 
