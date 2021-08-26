@@ -6701,9 +6701,31 @@ struct npc_lazokoAI : public ScriptedAI
 
 CreatureAI* GetAI_npc_lazoko(Creature* _Creature) { return new npc_lazokoAI(_Creature); }
 
+bool QuestRewarded_npc_ardaen_evermoon(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver)
+        return false;
+
+    if (!pPlayer)
+        return false;
+
+    if (pQuest->GetQuestId() == 40121) // Alpha Aggresion
+    {
+        pQuestGiver->MonsterSayToPlayer("May my family staff serve you well $N.", pPlayer);
+        return true;
+    }
+
+    return false;
+}
+
 void AddSC_tw_random()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_ardaen_evermoon";
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_ardaen_evermoon;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_lazoko";
