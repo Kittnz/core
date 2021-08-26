@@ -83,6 +83,12 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 replace into creature_questrelation (id, quest) values (3978, 40112);
 replace into creature_involvedrelation (id, quest) values (60410, 40112);
 
+delete from quest_template where entry = 40113;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (40112,40113,2,8,60,58,0,0,'Might of the Horde','Hahaha, this be not the death I thought I would end up with, but Bwonsamdi appears to have other plans for me.\n\n<Cough, cough>.\n\nI lived a life with no regrets <name>, until now. I ask this of you, friend. Go north of here after those bastards and show them that if it be the war they seek, then the Horde will stand against them.\n\nLok-Tar... Ogar.','Slay 4 Twilight Cultists, and retrieve the Second Plate of Uldum north of the "Temple of Old." Return to Sage Truthseeker with the second plate and news of his expedition.','You return, what did you find?','Dead? All of them? This... this is my fault for not listening to the warning of the spirits.\n\nThey will be remembered as the true warriors of the Horde. But what of the plates $n, tell me that the lives of our friends were not sacrificed for nothing.',60103,1,0,0,0,0,0,0,60404,1,60405,1,60406,1,60407,1,0,0,30000,6600,81,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+replace into creature_questrelation (id, quest) values (60410, 40113);
+replace into creature_involvedrelation (id, quest) values (3978, 40113);
+
 delete from creature_template where entry = 60400;
 replace into creature_template (entry, display_id1, name, subname, level_min, level_max, health_min, health_max, armor, faction, npc_flags, speed_walk, speed_run, detection_range, call_for_help_range, xp_multiplier, dmg_min, dmg_max, attack_power, dmg_multiplier, base_attack_time, ranged_attack_time, unit_class, unit_flags, ranged_dmg_min, ranged_dmg_max, ranged_attack_power, type, loot_id, gold_min, gold_max, movement_type, inhabit_type, regeneration, flags_extra) values (60400,6435,'Vess','Black Rose',50,50,2768,2768,2999,120,2,1,1.14,20,5,1,85,109,226,1,2000,2000,1,512,67,92,100,7,0,0,0,0,3,3,10);
 
@@ -202,6 +208,7 @@ replace into creature_template_addon (entry, bytes1) values (60403, 7);
 replace into creature_template_addon (entry, bytes1) values (60406, 1);
 replace into creature_template_addon (entry, bytes1) values (60407, 3);
 replace into creature_template_addon (entry, bytes1) values (60410, 7);
+
 
 
 
