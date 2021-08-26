@@ -43,7 +43,7 @@ update creature_template set display_id1 = 6778 where entry = 91293;
 -- Staff of Azure Domination
 update item_template set display_id = 61112 where entry = 81363;	
 -- Blackrock Clan Mantle
-update item_template set display_id = 61111 where entry = 81366;
+update item_template set display_id = 61111, duration = 0 where entry = 81366;
 -- Maleka
 update creature_template set display_id1 = 12392 where entry = 91207;
 -- Hangman Glix
@@ -90,8 +90,8 @@ replace into creature_template values
 (91713, 0, 1660, 0, 0, 0, 'Apothecary Volgrin', NULL, 0, 30, 30, 1002, 1002, 0, 0, 1200, 68, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 42, 53, 0, 122, 1, 2000, 2000, 1, 37376, 0, 0, 0, 0, 0, 0, 45.144, 62.073, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 4572, 0, 0, 0, 0, 524298, 0, ''),
 (91714, 0, 9252, 0, 0, 0, 'Foreman Bill', NULL, 0, 17, 17, 439, 495, 0, 0, 1114, 123, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 44, 55, 0, 116, 1, 2200, 2000, 1, 32768, 0, 0, 0, 0, 0, 0, 42.1344, 57.9348, 100, 7, 0, 2503, 2503, 0, 0, 0, 0, 0, 0, 0, 5115, 0, 0, 0, 25030, 0, 40, 57, 'EventAI', 0, 3, 0, 0, 3, 2503, 0, 0, 0, 0, 0, 0, ''),
 (91715, 0, 1098, 0, 0, 0, 'Pack Leader Sharn', NULL, 0, 18, 18, 956, 986, 0, 0, 748, 38, 0, 0.94, 1.14286, 0, 20, 5, 0, 0, 1, 27, 34, 0, 80, 1, 2000, 2000, 1, 0, 0, 1, 0, 0, 0, 0, 26.048, 35.816, 100, 1, 1, 1923, 0, 1923, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5947, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
-(91716, 0, 3199, 0, 0, 0, 'Chief Rnarl', NULL, 0, 20, 20, 793, 731, 0, 0, 871, 61, 0, 1.2, 1.14286, 0, 20, 5, 0, 0, 1, 31, 38, 0, 94, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 34.2672, 47.1174, 100, 7, 0, 1007, 1007, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 25, 38, 'EventAI', 1, 1, 0, 0, 3, 1007, 0, 0, 0, 0, 0, 0, ''),
-(91717, 0, 3197, 0, 0, 0, 'Belgar', NULL, 0, 18, 18, 640, 683, 655, 693, 870, 61, 0, 1.05, 1.14286, 0, 20, 5, 0, 0, 1, 34, 43, 0, 110, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 42.1344, 57.9348, 100, 7, 0, 1013, 0, 0, 0, 0, 0, 0, 0, 0, 11986, 11436, 9532, 0, 10130, 0, 34, 49, 'EventAI', 1, 1, 0, 0, 3, 1013, 0, 0, 0, 0, 0, 0, ''),
+(91716, 0, 609, 0, 0, 0, 'Chief Rnarl', NULL, 0, 20, 20, 793, 731, 0, 0, 871, 61, 0, 1.2, 1.14286, 0, 20, 5, 0, 0, 1, 31, 38, 0, 94, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 34.2672, 47.1174, 100, 7, 0, 1007, 1007, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 25, 38, 'EventAI', 1, 1, 0, 0, 3, 1007, 0, 0, 0, 0, 0, 0, ''),
+(91717, 0, 10789, 0, 0, 0, 'Belgar', NULL, 0, 18, 18, 640, 683, 655, 693, 870, 61, 0, 1.05, 1.14286, 0, 20, 5, 0, 0, 1, 34, 43, 0, 110, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 42.1344, 57.9348, 100, 7, 0, 1013, 0, 0, 0, 0, 0, 0, 0, 0, 11986, 11436, 9532, 0, 10130, 0, 34, 49, 'EventAI', 1, 1, 0, 0, 3, 1013, 0, 0, 0, 0, 0, 0, ''),
 (91718, 0, 1504, 0, 0, 0, 'Storn', '', 0, 19, 19, 686, 697, 0, 0, 765, 17, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 27, 34, 0, 84, 1, 2000, 2000, 1, 32768, 0, 0, 0, 0, 0, 0, 28.6704, 39.4218, 100, 7, 0, 122, 122, 0, 0, 0, 0, 0, 0, 0, 53, 0, 0, 0, 1220, 0, 21, 32, 'EventAI', 1, 3, 0, 0, 3, 122, 0, 0, 0, 0, 0, 0, ''),
 (91719, 0, 5076, 0, 0, 0, 'Magister Salorn', 'Kirin Tor', 0, 20, 20, 1299, 1392, 1225, 1275, 740, 128, 0, 0.94, 1.14286, 0, 20, 5, 0, 1, 1, 101, 130, 0, 94, 1, 2000, 2000, 2, 32768, 0, 0, 0, 0, 0, 0, 29.6792, 40.8089, 100, 7, 0, 4802, 4802, 0, 0, 0, 0, 0, 0, 0, 9672, 11642, 0, 0, 48020, 0, 95, 129, 'EventAI', 1, 3, 0, 0, 3, 4802, 0, 0, 0, 0, 0, 0, ''),
 (91720, 0, 4350, 0, 0, 0, 'Norga', NULL, 0, 41, 41, 1902, 1902, 0, 0, 2033, 104, 2, 1, 1.14286, 1.35, 20, 5, 0, 0, 1, 62, 80, 0, 162, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 57.728, 79.376, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, 0, ''),
@@ -100,7 +100,8 @@ replace into creature_template values
 (91723, 0, 9715, 0, 0, 0, 'Speaker Lazoko', '', 0, 38, 38, 1059, 1059, 0, 0, 2311, 83, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 66, 85, 0, 182, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 59.7872, 82.2074, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 1, 0, 3, 5592, 0, 0, 0, 0, 524298, 0, 'npc_lazoko'),
 (91724, 0, 3882, 0, 0, 0, 'Ryan Oxcrest', '', 9546, 30, 30, 752, 752, 0, 0, 1890, 68, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 61, 78, 0, 156, 1, 2000, 2000, 1, 36864, 0, 0, 0, 0, 0, 0, 56.672, 77.924, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 10781, 0, 0, 0, 0, 524298, 0, '');
 update creature_template set npc_flags = 3 where entry between 91710 and 91724;
-update creature_template set scale = 1.2 where entry = 91716;
+update creature_template set scale = 1.3 where entry = 91716;
+update creature_template set scale = 1.2 where entry = 91717;
 update creature_template set faction = 76 where entry = 91719;
 update creature_template set faction = 189, unit_flags = 2 where entry = 91722;
 -- ...
@@ -260,7 +261,7 @@ update creature_template set equipment_id = 55001 where entry = 91353;
 replace into creature_equip_template (entry, equipentry1, equipentry2, equipentry3) values ('55002', '1896',  15207, 0);
 update creature_template set equipment_id = 55002 where entry = 91352;
 -- Remnants Knight, make mounted on horse:
-replace into creature_template_addon values (91353, 0, 18259, 0, 0, 0, 0, 0, NULL);
+replace into creature_template_addon values (91353, 0, 2404, 0, 0, 0, 0, 0, NULL);
 -- Duchess Faliona add weapon 12252:
 replace into creature_equip_template (entry, equipentry1, equipentry2, equipentry3) values (55003, 12252, 0, 0);
 update creature_template set equipment_id = 55003 where entry = 91711;
@@ -302,3 +303,34 @@ update creature_template set display_id1 = 15765, name = 'Theresa Fluxlight', fa
 update creature_template set faction = 1682 where entry = 81024; 
 update creature_template set faction = 1682 where entry = 80136; 
 update creature_template set faction = 1682 where entry = 80137; 
+-- ...
+replace into creature_template values 
+(91735, 0, 714, 0, 0, 0, 'Pesterhide Forager', '', 0, 15, 16, 328, 356, 0, 0, 20, 19, 0, 1, 1.19048, 0, 20, 5, 0, 0, 1, 21, 27, 0, 76, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 27.2272, 37.4374, 100, 7, 0, 423, 423, 0, 0, 0, 0, 0, 50, 0, 0, 0, 0, 0, 0, 0, 17, 28, 'EventAI', 1, 1, 0, 0, 3, 423, 0, 0, 0, 0, 0, 0, '');
+replace into creature_equip_template (entry, equipentry1, equipentry2, equipentry3) values (55020, 2092, 0, 0);
+update creature_template set equipment_id = 55020 where entry = 91735;
+-- ...
+replace into creature_template values (91736, 0, 714, 0, 0, 0, 'Pesterhide Gnoll', '', 0, 16, 18, 386, 417, 0, 0, 777, 19, 0, 1.2, 1.14286, 0, 20, 5, 0, 0, 1, 44, 56, 0, 84, 1, 2700, 2000, 1, 524288, 0, 0, 0, 0, 0, 0, 28.6704, 39.4218, 100, 7, 0, 426, 426, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 20, 32, 'EventAI', 1, 1, 0, 0, 3, 426, 0, 0, 0, 0, 0, 0, '');
+replace into creature_equip_template (entry, equipentry1, equipentry2, equipentry3) values (55021, 1905, 0, 0);
+update creature_template set equipment_id = 55021 where entry = 91736;
+-- ...
+replace into creature_template values (91737, 0, 543, 0, 0, 0, 'Pesterhide Warrior', '', 0, 17, 19, 586, 617, 0, 0, 777, 19, 0, 1.2, 1.14286, 0, 20, 5, 0, 0, 1, 44, 56, 0, 84, 1, 2700, 2000, 1, 524288, 0, 0, 0, 0, 0, 0, 28.6704, 39.4218, 100, 7, 0, 426, 426, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 20, 32, 'EventAI', 1, 1, 0, 0, 3, 426, 0, 0, 0, 0, 0, 0, '');
+replace into creature_equip_template (entry, equipentry1, equipentry2, equipentry3) values (55022, 5289, 15145, 0);
+update creature_template set equipment_id = 55022 where entry = 91737;
+-- ...
+replace into creature_template values (91738, 0, 10789, 0, 0, 0, 'Pesterhide Mystic', '', 0, 16, 18, 354, 379, 1020, 1118, 432, 19, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 19, 25, 0, 88, 1, 2000, 2000, 8, 0, 0, 0, 0, 0, 0, 0, 28.6704, 39.4218, 100, 7, 0, 430, 430, 0, 0, 0, 0, 0, 0, 0, 20802, 547, 0, 0, 4300, 0, 21, 32, 'EventAI', 1, 1, 0, 0, 3, 430, 0, 0, 0, 0, 0, 0, '');
+replace into creature_equip_template (entry, equipentry1, equipentry2, equipentry3) values (55023, 35, 0, 0);
+update creature_template set equipment_id = 55023 where entry = 91738;
+-- ...
+replace into creature_equip_template (entry, equipentry1, equipentry2, equipentry3) values (55024, 15231, 2524, 0);
+update creature_template set equipment_id = 55024 where entry = 91716;
+-- ...
+replace into creature_equip_template (entry, equipentry1, equipentry2, equipentry3) values (55025, 1827, 0, 0);
+update creature_template set equipment_id = 55025 where entry = 91727;
+-- ...
+update item_template set disenchant_id = 47 where entry in (81328, 81329, 81330);
+-- ...
+replace into creature_template values(91739, 0, 729, 0, 0, 0, 'Tirisclaw Scavenger', NULL, 0, 13, 14, 719, 800, 0, 0, 642, 16, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 57, 73, 0, 70, 1, 1541, 1695, 1, 0, 0, 0, 0, 0, 0, 0, 18.984, 26.103, 100, 7, 0, 1892, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 50, 'EventAI', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+replace into creature_template values(91740, 0, 11180, 0, 0, 0, 'Tirisclaw Ravager', NULL, 0, 14, 15, 819, 900, 0, 0, 642, 16, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 57, 73, 0, 70, 1, 1541, 1695, 1, 0, 0, 0, 0, 0, 0, 0, 18.984, 26.103, 100, 7, 0, 1892, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 50, 'EventAI', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+replace into creature_template values(91741, 0, 11180, 0, 0, 0, 'Tirisclaw Shadowcaster', NULL, 0, 14, 14, 828, 903, 295, 326, 566, 16, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 61, 78, 0, 74, 1, 1500, 1500, 2, 0, 0, 0, 0, 0, 0, 0, 20.232, 27.819, 100, 7, 0, 1896, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 47, '', 1, 1, 0, 0, 3, 1896, 0, 0, 0, 0, 0, 0, '');
+replace into creature_equip_template (entry, equipentry1, equipentry2, equipentry3) values (55026, 80602, 0, 0);
+update creature_template set equipment_id = 55026 where entry = 91741;
