@@ -65,6 +65,12 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 replace into creature_questrelation (id, quest) values (60408, 40109);
 replace into creature_involvedrelation (id, quest) values (60408, 40109);
 
+delete from quest_template where entry = 40110;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (40109,40110,2,17,60,58,0,0,'Unseen Enemy','This totem will help me enter a deeper state of trance and allow me to commune with the spirits of old. With their help, we might be able to locate your missing plates.\n\n<Logrash begins his ritual, and his eyes turn pale>.\n\nBah, I forgot how taxing this ritual is. The plates you seek are immensely powerful $n, show this message to the Truthseeker he will understand where to send you next. But be warned, it appears that we are not the only ones looking for the plates. Someone or something dark is on the trail as well.','Logrash wants you to travel to Thunder Bluff and bring the Inscribed Boar Pelt to Sage Truth Seeker.','Any news $n?','The winds guided you back to me $n. I\'m glad to hear that my friend is still alive and well. A letter, you say? Show me.\n\n<The Sage reads the letter, and a grin shows up on his face>.\n\nAh, words of a long-lost friend bring warmth to my heart $c, but how did he manage to locate the exact location of the plates, and what is this talk about the danger ahead?',60105,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60105,1,15000,660,81,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+replace into creature_questrelation (id, quest) values (60408, 40110);
+replace into creature_involvedrelation (id, quest) values (3978, 40110);
+
 delete from creature_template where entry = 60400;
 replace into creature_template (entry, display_id1, name, subname, level_min, level_max, health_min, health_max, armor, faction, npc_flags, speed_walk, speed_run, detection_range, call_for_help_range, xp_multiplier, dmg_min, dmg_max, attack_power, dmg_multiplier, base_attack_time, ranged_attack_time, unit_class, unit_flags, ranged_dmg_min, ranged_dmg_max, ranged_attack_power, type, loot_id, gold_min, gold_max, movement_type, inhabit_type, regeneration, flags_extra) values (60400,6435,'Vess','Black Rose',50,50,2768,2768,2999,120,2,1,1.14,20,5,1,85,109,226,1,2000,2000,1,512,67,92,100,7,0,0,0,0,3,3,10);
 
@@ -114,6 +120,9 @@ replace into item_template (entry, display_id, name, class, quality, flags, buy_
 
 delete from item_template where entry = 60104;
 replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description) values (60104,50462,'Wolf Totem',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'Thou battered and scarred the totem still brims with energy');
+
+delete from item_template where entry = 60105;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description) values (60105,21470,'Inscribed Boar Pelt',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'A boar pelt with Logrash\'s message inscribed on it');
 
 delete from creature where id = 60400;
 replace into creature (id, map, position_x, position_y, position_z, orientation, spawntimesecsmin, spawntimesecsmax, wander_distance, health_percent, movement_type, patch_max) values (60400,0,-14448.299609,504.408997,21.677200,0.564129,300,300,3,100,0,10);
@@ -174,6 +183,11 @@ replace into creature_template_addon (entry, bytes1) values (60400, 6);
 replace into creature_template_addon (entry, bytes1) values (60403, 7);
 replace into creature_template_addon (entry, bytes1) values (60406, 1);
 replace into creature_template_addon (entry, bytes1) values (60407, 3);
+
+
+
+
+
 
 
 
