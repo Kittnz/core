@@ -71,6 +71,12 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 replace into creature_questrelation (id, quest) values (60408, 40110);
 replace into creature_involvedrelation (id, quest) values (3978, 40110);
 
+delete from quest_template where entry = 40111;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (40110,40111,2,1638,60,58,0,0,'In a Rush','The path ahead is clear now, friend. With both locations revealed, it is time to act. I will gather a war party of Horde\'s finest warriors to secure one of the plates at The Swamp of Sorrows while you make your way to the northern mountains of Un\'goro Crater and recover the other plate.\n\n<Sage rubs his chin>.\n\nBut the grave news Logrash spoke of still trouble my mind. Be careful, friend, and may the Earthmother watch over you.','Disable 6 Altar Guardians at Titans Ruined Altar in North Un\'goro Crater and bring the Plate of Uldum to Sage Truthseeker at Thunder Bluff.','Is there something you need?','Your back! And you have the plate with you as well. The Sun shines upon us today.',60102,1,0,0,0,0,0,0,60402,6,0,0,0,0,0,0,0,0,30000,6600,81,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+replace into creature_questrelation (id, quest) values (3978, 40111);
+replace into creature_involvedrelation (id, quest) values (3978, 40111);
+
 delete from creature_template where entry = 60400;
 replace into creature_template (entry, display_id1, name, subname, level_min, level_max, health_min, health_max, armor, faction, npc_flags, speed_walk, speed_run, detection_range, call_for_help_range, xp_multiplier, dmg_min, dmg_max, attack_power, dmg_multiplier, base_attack_time, ranged_attack_time, unit_class, unit_flags, ranged_dmg_min, ranged_dmg_max, ranged_attack_power, type, loot_id, gold_min, gold_max, movement_type, inhabit_type, regeneration, flags_extra) values (60400,6435,'Vess','Black Rose',50,50,2768,2768,2999,120,2,1,1.14,20,5,1,85,109,226,1,2000,2000,1,512,67,92,100,7,0,0,0,0,3,3,10);
 
@@ -183,16 +189,3 @@ replace into creature_template_addon (entry, bytes1) values (60400, 6);
 replace into creature_template_addon (entry, bytes1) values (60403, 7);
 replace into creature_template_addon (entry, bytes1) values (60406, 1);
 replace into creature_template_addon (entry, bytes1) values (60407, 3);
-
-
-
-
-
-
-
-
-
-sdelat' GO dla lutaniya 1 diska
-kinzhal na stol dlya vess
-sdelat' repliku dlya Bannora i Naxiara
-sdelat' script na poluchenie diskov pri vzyatii kvesta u Maggelasa
