@@ -1,7 +1,7 @@
 -- Grug'thok the Seer
 update creature_template set display_id1 = 11556, scale = 1.3 where entry = 91308;
 -- Mallon the Moontouched
-update creature_template set display_id1 = 12237 where entry = 91307;
+update creature_template set display_id1 = 12237, scale = 1.2 where entry = 91307;
 -- Xalvic Blackclaw
 update creature_template set display_id1 = 11335, scale = 0.9 where entry = 91306;
 -- Ghoststalker
@@ -84,7 +84,7 @@ replace into creature_template_addon values (9939, 0, 0, 1, 0, 0, 69, 0, NULL);
 update creature_template set faction = 83 where entry between 91400 and 91415;
 -- New NPCs:
 replace into creature_template values 
-(91710, 0, 3702, 0, 0, 0, 'Old Brumwell', '', 0, 40, 40, 1238, 1238, 3191, 3191, 1035, 76, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 61, 78, 0, 156, 1, 2000, 2000, 8, 0, 0, 0, 0, 0, 0, 0, 56.672, 77.924, 100, 7, 0, 2543, 0, 0, 0, 0, 0, 0, 0, 0, 143, 145, 0, 0, 25430, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 2543, 0, 0, 0, 0, 2, 0, ''),
+(91710, 0, 3702, 0, 0, 0, 'Old Farwell', '', 0, 40, 40, 1238, 1238, 3191, 3191, 1035, 76, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 61, 78, 0, 156, 1, 2000, 2000, 8, 0, 0, 0, 0, 0, 0, 0, 56.672, 77.924, 100, 7, 0, 2543, 0, 0, 0, 0, 0, 0, 0, 0, 143, 145, 0, 0, 25430, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 2543, 0, 0, 0, 0, 2, 0, ''),
 (91711, 0, 2668, 0, 0, 0, 'Duchess Grelda', NULL, 0, 25, 25, 712, 712, 0, 0, 1009, 68, 1, 1, 1.14286, 0, 20, 5, 0, 0, 1, 31, 40, 0, 106, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 38.72, 53.24, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 6566, 0, 0, 0, 0, 524298, 0, ''),
 (91712, 0, 2620, 0, 0, 0, 'Duke Nargelas', NULL, 0, 50, 50, 2768, 2768, 0, 0, 2999, 83, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 85, 109, 0, 226, 1, 2000, 2000, 1, 37376, 0, 0, 0, 0, 0, 0, 66.44, 91.355, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 5675, 0, 0, 0, 0, 524298, 0, ''),
 (91713, 0, 1660, 0, 0, 0, 'Apothecary Volgrin', NULL, 0, 30, 30, 1002, 1002, 0, 0, 1200, 68, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 42, 53, 0, 122, 1, 2000, 2000, 1, 37376, 0, 0, 0, 0, 0, 0, 45.144, 62.073, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 4572, 0, 0, 0, 0, 524298, 0, ''),
@@ -102,6 +102,7 @@ replace into creature_template values
 update creature_template set npc_flags = 3 where entry between 91710 and 91724;
 update creature_template set scale = 1.3 where entry = 91716;
 update creature_template set scale = 1.2 where entry = 91717;
+update creature_template set scale = 1 where entry = 91720;
 update creature_template set faction = 76 where entry = 91719;
 update creature_template set faction = 189, unit_flags = 2 where entry = 91722;
 -- ...
@@ -317,11 +318,11 @@ replace into creature_template values (91737, 0, 543, 0, 0, 0, 'Pesterhide Warri
 replace into creature_equip_template (entry, equipentry1, equipentry2, equipentry3) values (55022, 5289, 15145, 0);
 update creature_template set equipment_id = 55022 where entry = 91737;
 -- ...
-replace into creature_template values (91738, 0, 10789, 0, 0, 0, 'Pesterhide Mystic', '', 0, 16, 18, 354, 379, 1020, 1118, 432, 19, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 19, 25, 0, 88, 1, 2000, 2000, 8, 0, 0, 0, 0, 0, 0, 0, 28.6704, 39.4218, 100, 7, 0, 430, 430, 0, 0, 0, 0, 0, 0, 0, 20802, 547, 0, 0, 4300, 0, 21, 32, 'EventAI', 1, 1, 0, 0, 3, 430, 0, 0, 0, 0, 0, 0, '');
+replace into creature_template values (91738, 0, 3197, 0, 0, 0, 'Pesterhide Mystic', '', 0, 16, 18, 354, 379, 1020, 1118, 432, 19, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 19, 25, 0, 88, 1, 2000, 2000, 8, 0, 0, 0, 0, 0, 0, 0, 28.6704, 39.4218, 100, 7, 0, 430, 430, 0, 0, 0, 0, 0, 0, 0, 20802, 547, 0, 0, 4300, 0, 21, 32, 'EventAI', 1, 1, 0, 0, 3, 430, 0, 0, 0, 0, 0, 0, '');
 replace into creature_equip_template (entry, equipentry1, equipentry2, equipentry3) values (55023, 35, 0, 0);
 update creature_template set equipment_id = 55023 where entry = 91738;
 -- ...
-replace into creature_equip_template (entry, equipentry1, equipentry2, equipentry3) values (55024, 15231, 2524, 0);
+replace into creature_equip_template (entry, equipentry1, equipentry2, equipentry3) values (55024, 2524, 15543, 0);
 update creature_template set equipment_id = 55024 where entry = 91716;
 -- ...
 replace into creature_equip_template (entry, equipentry1, equipentry2, equipentry3) values (55025, 1827, 0, 0);
@@ -329,8 +330,91 @@ update creature_template set equipment_id = 55025 where entry = 91727;
 -- ...
 update item_template set disenchant_id = 47 where entry in (81328, 81329, 81330);
 -- ...
-replace into creature_template values(91739, 0, 729, 0, 0, 0, 'Tirisclaw Scavenger', NULL, 0, 13, 14, 719, 800, 0, 0, 642, 16, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 57, 73, 0, 70, 1, 1541, 1695, 1, 0, 0, 0, 0, 0, 0, 0, 18.984, 26.103, 100, 7, 0, 1892, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 50, 'EventAI', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
-replace into creature_template values(91740, 0, 11180, 0, 0, 0, 'Tirisclaw Ravager', NULL, 0, 14, 15, 819, 900, 0, 0, 642, 16, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 57, 73, 0, 70, 1, 1541, 1695, 1, 0, 0, 0, 0, 0, 0, 0, 18.984, 26.103, 100, 7, 0, 1892, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 50, 'EventAI', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
-replace into creature_template values(91741, 0, 11180, 0, 0, 0, 'Tirisclaw Shadowcaster', NULL, 0, 14, 14, 828, 903, 295, 326, 566, 16, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 61, 78, 0, 74, 1, 1500, 1500, 2, 0, 0, 0, 0, 0, 0, 0, 20.232, 27.819, 100, 7, 0, 1896, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 47, '', 1, 1, 0, 0, 3, 1896, 0, 0, 0, 0, 0, 0, '');
+replace into creature_template values (91739, 0, 729, 0, 0, 0, 'Tirisclaw Scavenger', NULL, 0, 14, 16, 719, 800, 0, 0, 642, 16, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 57, 73, 0, 70, 1, 1541, 1695, 1, 0, 0, 0, 0, 0, 0, 0, 18.984, 26.103, 100, 7, 0, 1892, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 50, 'EventAI', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+replace into creature_template values (91740, 0, 11180, 0, 0, 0, 'Tirisclaw Ravager', NULL, 0, 14, 15, 819, 900, 0, 0, 642, 16, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 57, 73, 0, 70, 1, 1541, 1695, 1, 0, 0, 0, 0, 0, 0, 0, 18.984, 26.103, 100, 7, 0, 1892, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 50, 'EventAI', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+replace into creature_template values (91741, 0, 11180, 0, 0, 0, 'Tirisclaw Shadowcaster', NULL, 0, 14, 14, 828, 903, 295, 326, 566, 16, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 61, 78, 0, 74, 1, 1500, 1500, 2, 0, 0, 0, 0, 0, 0, 0, 20.232, 27.819, 100, 7, 0, 1896, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 47, '', 1, 1, 0, 0, 3, 1896, 0, 0, 0, 0, 0, 0, '');
 replace into creature_equip_template (entry, equipentry1, equipentry2, equipentry3) values (55026, 80602, 0, 0);
 update creature_template set equipment_id = 55026 where entry = 91741;
+update creature_template set rank = 0 where entry = 91739;
+update creature_template set rank = 0 where entry = 91740;
+update creature_template set rank = 0 where entry = 91741;
+-- ...
+update gameobject_template set name = 'Gate' where name = 'Doodad_PortcullisActive05';
+update gameobject_template set name = 'Gate' where name = 'Doodad_PortcullisActive07';
+update gameobject_template set name = 'Gate' where name = 'Doodad_PortcullisActive02';
+update gameobject_template set name = 'Gate' where name = 'Doodad_PortcullisActive06';
+update gameobject_template set name = 'Gate' where name = 'Doodad_WroughtIronDoor01';
+update gameobject_template set name = 'Gate' where name = 'Doodad_WroughtIronDoor02';
+update gameobject_template set name = 'Gate' where name = 'Doodad_WroughtIronDoor03';
+update gameobject_template set name = 'Gate' where name = 'Doodad_WroughtIronDoor04';
+update gameobject_template set name = 'Gate' where name = 'Doodad_WroughtIronDoor05';
+update gameobject_template set name = 'Gate' where name = 'Doodad_WroughtIronDoor06';
+update gameobject_template set name = 'Gate' where name = 'Doodad_WroughtIronDoor07';
+update gameobject_template set name = 'Gate' where name = 'Doodad_WroughtIronDoor08';
+update gameobject_template set name = 'Gate' where name = 'Doodad_WroughtIronDoor09';
+update gameobject_template set name = 'Gate' where name like '%Doodad_opendoor%';
+-- ...
+set @gossip_menu_id = 60053; set @magic_number = 91288; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Welcome to our home, take shelter if you need.'); replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+-- ...
+replace into creature_template values 
+(91742, 0, 4005, 0, 0, 0, 'House Guard Dilgar', NULL, 9087, 40, 40, 1752, 1752, 0, 0, 1890, 68, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 61, 78, 0, 156, 1, 2000, 2000, 1, 36864, 0, 0, 0, 0, 0, 0, 56.672, 77.924, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 2308, 0, 0, 0, 0, 524290, 0, ''),
+(91743, 0, 3650, 0, 0, 0, 'Leyna Dayton', 'First Aid Trainer', 5856, 10, 10, 198, 198, 0, 0, 20, 68, 19, 1, 1.14286, 0, 20, 5, 0, 0, 1, 9, 13, 0, 62, 1, 2000, 2000, 1, 37376, 0, 0, 2, 0, 0, 0, 16.808, 23.111, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 5759, 0, 0, 0, 0, 524298, 0, ''),
+(91744, 0, 4594, 0, 0, 0, 'House Guard Melia', NULL, 9087, 40, 40, 1752, 1752, 0, 0, 1890, 68, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 61, 78, 0, 156, 1, 2000, 2000, 1, 36864, 0, 0, 0, 0, 0, 0, 56.672, 77.924, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 2308, 0, 0, 0, 0, 524290, 0, ''),
+(91745, 0, 1736, 0, 0, 0, 'Injured Guard Bill', NULL, 9476, 15, 15, 328, 328, 0, 0, 20, 68, 2, 1, 1.14286, 0, 20, 5, 0, 1, 1, 52, 68, 0, 74, 1, 2000, 2000, 1, 37376, 0, 0, 0, 0, 0, 0, 20.46, 28.1325, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 6522, 0, 0, 0, 0, 524298, 0, ''),
+(91746, 0, 1634, 0, 0, 0, 'Injured Guard Nela', NULL, 9476, 15, 15, 328, 328, 0, 0, 20, 68, 2, 1, 1.14286, 0, 20, 5, 0, 1, 1, 52, 68, 0, 74, 1, 2000, 2000, 1, 37376, 0, 0, 0, 0, 0, 0, 20.46, 28.1325, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 6522, 0, 0, 0, 0, 524298, 0, ''),
+(91747, 0, 3652, 0, 0, 0, 'Chef Borl', '', 9081, 8, 8, 200, 200, 0, 0, 20, 68, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 15, 19, 0, 70, 1, 1000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 23.0384, 31.6778, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 2050, 0, 0, 0, 0, 524298, 0, ''),
+(91748, 0, 3675, 0, 0, 0, 'Innkeeper Natt', 'Innkeeper', 1296, 25, 25, 1002, 1002, 0, 0, 1200, 68, 135, 1, 1.14286, 0, 20, 5, 0, 0, 1, 42, 53, 0, 122, 1, 2000, 2000, 1, 37376, 0, 0, 0, 0, 0, 0, 45.144, 62.073, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 5688, 0, 100, 0, 0, 524298, 0, '')б
+(91749, 0, 1580, 0, 0, 0, 'Bounty Hunter Knox', NULL, 0, 34, 34, 1279, 1279, 0, 0, 1340, 68, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 47, 61, 0, 134, 1, 1500, 2000, 1, 37376, 0, 0, 0, 0, 0, 0, 49.9664, 68.7038, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 2437, 0, 0, 0, 0, 524298, 0, '');
+
+
+
+
+replace into creature_template_addon (entry, bytes1) values (91745, 7);
+replace into creature_template_addon (entry, bytes1) values (91746, 7);
+-- ...
+replace into creature_equip_template (entry, equipentry1, equipentry2, equipentry3) values (55027, 3400, 15890, 0);
+update creature_template set equipment_id = 55027 where entry = 91742;
+-- ...
+update creature_template set npc_flags = 2 where entry = 91742;
+update creature_template set npc_flags = 2 where entry = 91744;
+update creature_template set npc_flags = 2 where entry = 91746;
+update creature_template set npc_flags = 2 where entry = 91747;
+update creature_template set npc_flags = 2 where entry = 91749;
+update creature_template set npc_flags = 2, regeneration = 0, flags_extra = 10 where entry = 91745;
+update creature_template set npc_flags = 2, regeneration = 0, flags_extra = 10 where entry = 91746;
+replace into creature_equip_template (entry, equipentry1, equipentry2, equipentry3) values (55028, 3400, 9790, 0);
+update creature_template set equipment_id = 55028 where entry = 91744;
+-- ...
+replace into creature_equip_template (entry, equipentry1, equipentry2, equipentry3) values (55029, 5197, 0, 0);
+update creature_template set equipment_id = 55029 where entry = 91747;
+-- ...
+set @gossip_menu_id = 60054; set @magic_number = 91742; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); replace into broadcast_text (entry, Male_Text) values (@magic_number, 'This is a dangerous place, it doesn\'t hurt to be prepared.'); replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+-- ...
+set @gossip_menu_id = 60055; set @magic_number = 91747; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Is there something you need cooked?'); replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+-- ...
+set @gossip_menu_id = 60056; set @magic_number = 91748; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Yes?'); replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+-- ...
+set @gossip_menu_id = 60057; set @magic_number = 91749; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Keep to your witts in this place.'); replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+-- ...
+replace into creature_equip_template (entry, equipentry1, equipentry2, equipentry3) values (55029, 7608, 0, 0);
+update creature_template set equipment_id = 55029 where entry = 91748;
+-- ...
+replace into creature_equip_template (entry, equipentry1, equipentry2, equipentry3) values (55030, 12248, 4947, 0);
+update creature_template set equipment_id = 55030 where entry = 91749;
+-- ...
+replace into creature_equip_template (entry, equipentry1, equipentry2, equipentry3) values (55031, 2524, 0, 0);
+update creature_template set equipment_id = 55031 where entry = 91308;
+-- ...
+replace into npc_trainer values (91743, 3279, 100, 0, 0, 0, 0, 5875);
+replace into npc_trainer values (91743, 3280, 500, 129, 50, 0, 0, 5875);
+replace into npc_trainer values (91743, 3281, 100, 129, 40, 0, 0, 5875);
+replace into npc_trainer values (91743, 3282, 250, 129, 80, 0, 0, 5875);
+replace into npc_trainer values (91743, 3283, 1000, 129, 115, 0, 0, 5875);
+replace into npc_trainer values (91743, 7930, 5000, 129, 150, 0, 0, 5875);
+replace into npc_trainer values (91743, 7936, 250, 129, 80, 0, 0, 5875);
+
