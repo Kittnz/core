@@ -32,6 +32,8 @@ replace into creature_template values
 (91781, 9, 11652, 0, 0, 0, 'Sanv K\'la', NULL, 7236, 43, 44, 2059, 2138, 0, 0, 2557, 35, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 68, 88, 0, 194, 1, 2000, 2000, 1, 32768, 0, 0, 0, 0, 0, 0, 201.913, 288.031, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 3, 0, 0, 3, 16399, 0, 0, 0, 0, 0, 0, ''),
 (91782, 9, 11652, 0, 0, 0, 'Akh Z\'ador', 'Riftseeker', 7236, 54, 54, 2059, 2138, 0, 0, 2557, 35, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 68, 88, 0, 194, 1, 2000, 2000, 1, 32768, 0, 0, 0, 0, 0, 0, 201.913, 288.031, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 3, 0, 0, 3, 16399, 0, 0, 0, 0, 0, 0, '');
 
+-- Ghostly aura:
+-- replace into creature_template_addon (entry, auras) values (3946, 9617);
 
 update creature_template set dynamic_flags = 36, npc_flags = 2 where entry = 91774;
 replace into creature_template_addon (entry, bytes1) values (91774, 7);
@@ -44,11 +46,13 @@ update creature_template set npc_flags = 3 where entry = 91769;
 update creature_template set npc_flags = 3 where entry = 91770;
 update creature_template set npc_flags = 3 where entry = 91771;
 update creature_template set npc_flags = 3 where entry = 91779;
+update creature_template set npc_flags = 3, scale = 1.6 where entry = 91777;
 update creature_template set npc_flags = 2 where entry = 91781;
 update creature_template set npc_flags = 2 where entry = 91782;
 update creature_template set npc_flags = 3, rank = 1 where entry = 91776;
-update creature_template set npc_flags = 3, rank = 1, scale = 1.2 where entry = 91776;
+update creature_template set npc_flags = 3, rank = 1, scale = 2 where entry = 91776;
 update creature_template set npc_flags = 5 where entry = 12957;
+update creature_template set npc_flags = 4 where entry = 91778;
 update creature_template set equipment_id = 0 where entry = 91769;
 update creature_template set faction = 875, npc_flags = 3 where entry = 91775;
 update creature_template set rank = 0 where entry = 91763;
@@ -119,12 +123,9 @@ set @equip_template = 55071; set @weapon_1 = 5746; set @weapon_2 = 0; set @creat
 replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
 update creature_template set equipment_id = @equip_template where entry = @creature;
 
-
 set @equip_template = 55072; set @weapon_1 = 8196; set @weapon_2 = 0; set @creature = 91779;
 replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
 update creature_template set equipment_id = @equip_template where entry = @creature;
-
-
 
 set @gossip_menu_id = 60060; set @magic_number = 91750; 
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
@@ -216,7 +217,7 @@ replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Cause no 
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
-set @gossip_menu_id = 60076; set @magic_number = 91778; 
+set @gossip_menu_id = 60076; set @magic_number = 91779; 
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
 replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Tread carefully interloper, the tide can pull you in.'); 
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
@@ -264,3 +265,43 @@ replace into npc_vendor values (91778, 4594, 0, 0, 0, 0);
 replace into npc_vendor values (91778, 8766, 0, 0, 0, 0);
 replace into npc_vendor values (91778, 8957, 0, 0, 0, 0);
 replace into npc_vendor values (91778, 21552, 0, 0, 0, 0);
+
+  replace into item_template values
+ ('36000', '0', '4', '0', 'Kazgrim Test Druid Chest 1', '', '61115', '0', '0', '1', '0', '0', '5', '-1', '-1', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+ 
+   replace into item_template values
+ ('36001', '0', '4', '0', 'Kazgrim Test Druid Chest 2', '', '61116', '0', '0', '1', '0', '0', '5', '-1', '-1', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+ 
+   replace into item_template values
+ ('36002', '0', '4', '0', 'Kazgrim Test Druid Chest 3', '', '61117', '0', '0', '1', '0', '0', '5', '-1', '-1', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+ 
+   replace into item_template values
+ ('36003', '0', '4', '0', 'Kazgrim Test Druid Chest 4', '', '61118', '0', '0', '1', '0', '0', '5', '-1', '-1', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
