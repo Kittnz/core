@@ -6722,21 +6722,37 @@ struct npc_bannorAI : public ScriptedAI
 {
     npc_bannorAI(Creature* c) : ScriptedAI(c) { Reset(); }
 
-    void Reset()
-    {
-    }
+    void Reset() {}
     void UpdateAI(const uint32 diff)
     {
         DoMeleeAttackIfReady();
     }
-    void EnterCombat()
+    void Aggro(Unit* who)
     {
-        m_creature->MonsterSay("FOR THE HORDE!");
+        m_creature->MonsterSay("Another fool walks into his death. Come then, let me show you what happens to those who oppose the Bloodsail!");
     }
     void JustRespawned() { Reset(); }
 };
 
 CreatureAI* GetAI_npc_bannor(Creature* _Creature) { return new npc_bannorAI(_Creature); }
+
+struct npc_naxiarAI : public ScriptedAI
+{
+    npc_naxiarAI(Creature* c) : ScriptedAI(c) { Reset(); }
+
+    void Reset() {}
+    void UpdateAI(const uint32 diff)
+    {
+        DoMeleeAttackIfReady();
+    }
+    void Aggro(Unit* who)
+    {
+        m_creature->MonsterSay("Don't you just love, when the experiment simply shows up on your doorstep?");
+    }
+    void JustRespawned() { Reset(); }
+};
+
+CreatureAI* GetAI_npc_naxiar(Creature* _Creature) { return new npc_naxiarAI(_Creature); }
 
 bool QuestAccept_npc_truthseeker_magellas(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
 {
@@ -6827,6 +6843,11 @@ void AddSC_tw_random()
     newscript = new Script;
     newscript->Name = "npc_truthseeker_magellas";
     newscript->pQuestAcceptNPC = &QuestAccept_npc_truthseeker_magellas;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_naxiar";
+    newscript->GetAI = &GetAI_npc_naxiar;
     newscript->RegisterSelf();
 
     newscript = new Script;
