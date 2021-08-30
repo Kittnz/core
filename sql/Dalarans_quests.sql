@@ -26,6 +26,12 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 replace into creature_questrelation (id, quest) values (91350, 40124);
 replace into creature_involvedrelation (id, quest) values (91350, 40124);
 
+delete from quest_template where entry = 40125;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (40124,40125,2,16,52,40,0,0,'Out of Options','It would appear I have run out of ideas in what may be causing this. I hate to admit intellectual defeat, but I must turn to another for an answer. Archmage Ansirem Runeweaver is well versed in more then I know, I need you to travel to him with a crate of the Ley-Shard\'s you gathered earlier.\n\nIf there is any clues, or magic that lingers upon them, perhaps he will have some answers for them, and know their origination to help me here in Azshara. Please, take these coins for the journey, Dalaran is but far away, and I will assist in what way I can.','Travel to Dalaran, and deliver the Crate of Ley-Shard\'s to Archmage Ansirem Runeweaver.','What brings you to Dalaran?','Magus Bromley sent you? Well, it is good to hear from him at the least, if he desires these shard\'s to be examined I will begin at once.',60114,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60114,1,10000,2150,61,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+replace into creature_questrelation (id, quest) values (91350,40125);
+replace into creature_involvedrelation (id, quest) values (2543,40125);
+
 delete from creature_template where entry = 60312;
 replace into creature_template (entry, name, display_id1) values (60312 , 'quest_40124_dummy_triger', 328);
 
@@ -35,6 +41,9 @@ replace into gameobject_template values
 
 delete from item_template where entry = 60113;
 replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, spellid_1, spelltrigger_1) values (60113,11161,'Bromley\'s Dispelling Scroll',0,1,1,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0,0);
+
+delete from item_template where entry = 60114;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description) values (60114,7913,'Crate of Ley-Shard\'s',12,1,1,1,-1,-1,1,1,-1,-1,-1,-1,4,'');
 
 delete from gameobject where id = 2010801;
 replace into gameobject (id, map, position_x, position_y, position_z, orientation) values (2010801, 1, 3471.790, -5168.149, 85.351, 4.68);
