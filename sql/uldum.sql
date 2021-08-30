@@ -158,6 +158,7 @@ replace into creature_template (entry, equipment_id, display_id1, name, level_mi
 delete from creature_template where entry = 60418;
 replace into creature_template (entry, equipment_id, display_id1, name, level_min, level_max, health_min, health_max, armor, faction, npc_flags, speed_walk, speed_run, detection_range, call_for_help_range, xp_multiplier, dmg_min, dmg_max, attack_power, dmg_multiplier, base_attack_time, ranged_attack_time, unit_class, unit_flags, ranged_dmg_min, ranged_dmg_max, ranged_attack_power, type, loot_id, gold_min, gold_max, movement_type, inhabit_type, regeneration, flags_extra) values (60418,68,3167,'Fallen Soldier',55,55,2768,2768,2999,0,2,1,1.14,20,5,1,85,109,226,1,2000,2000,1,512,67,92,100,7,0,0,0,0,3,0,10);
 
+delete from gameobject_template where entry = 2010800;
 replace into gameobject_template values
 (2010800, 0, 3, 27184, 'Pedestal', 0, 4, 1, 43, 2010800, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
 
