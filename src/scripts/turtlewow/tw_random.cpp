@@ -6718,9 +6718,99 @@ bool QuestRewarded_npc_ardaen_evermoon(Player* pPlayer, Creature* pQuestGiver, Q
     return false;
 }
 
+struct npc_bannorAI : public ScriptedAI
+{
+    npc_bannorAI(Creature* c) : ScriptedAI(c) { Reset(); }
+
+    void Reset()
+    {
+    }
+    void UpdateAI(const uint32 diff)
+    {
+        DoMeleeAttackIfReady();
+    }
+    void EnterCombat()
+    {
+        m_creature->MonsterSay("FOR THE HORDE!");
+    }
+    void JustRespawned() { Reset(); }
+};
+
+CreatureAI* GetAI_npc_bannor(Creature* _Creature) { return new npc_bannorAI(_Creature); }
+
+bool QuestAccept_npc_truthseeker_magellas(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver)
+        return false;
+
+    if (!pPlayer)
+        return false;
+
+    bool first_item_added = false;
+    bool second_item_added = false;
+
+    if (pQuest->GetQuestId() == 40106 || pQuest->GetQuestId() == 40114) //Gates of Uldum  //Uldum Awaits
+    {
+        if (pPlayer->AddItem(60102)) first_item_added = true;
+        if (pPlayer->AddItem(60103)) second_item_added = true;
+
+        if (!first_item_added || !second_item_added)
+        {
+            pPlayer->RemoveQuest(40106);
+            pPlayer->RemoveQuest(40114);
+            pPlayer->SetQuestStatus(40107, QUEST_STATUS_NONE);
+            pPlayer->SetQuestStatus(40115, QUEST_STATUS_NONE);
+            pPlayer->GetSession()->SendNotification("Your bags are full!");
+            return false;
+        }
+    }
+    return false;
+}
+
+bool QuestAcceptGO_pedestal_of_uldum(Player* player, GameObject* pGo, const Quest* pQuest)
+{
+    if (!player)
+        return false;
+
+    bool first_item_added = false;
+    bool second_item_added = false;
+
+    if (pQuest->GetQuestId() == 40107 || pQuest->GetQuestId() == 40115) //Gate Keeper  //Guardian of the Gate
+    {
+        if (player->AddItem(60102)) first_item_added = true;
+        if (player->AddItem(60103)) second_item_added = true;
+
+        if (!first_item_added || !second_item_added)
+        {
+            player->RemoveQuest(40107);
+            player->RemoveQuest(40115);
+            player->SetQuestStatus(40107, QUEST_STATUS_NONE);
+            player->SetQuestStatus(40115, QUEST_STATUS_NONE);
+            player->GetSession()->SendNotification("Your bags are full!");
+            return false;
+        }
+    }
+    return false;
+}
+
 void AddSC_tw_random()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "GO_pedestal_of_uldum";
+    newscript->pGOQuestAccept = &QuestAcceptGO_pedestal_of_uldum;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_truthseeker_magellas";
+    newscript->pQuestAcceptNPC = &QuestAccept_npc_truthseeker_magellas;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_bannor";
+    newscript->GetAI = &GetAI_npc_bannor;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_ardaen_evermoon";

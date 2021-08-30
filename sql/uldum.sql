@@ -105,7 +105,7 @@ delete from creature_template where entry = 60400;
 replace into creature_template (entry, display_id1, name, subname, level_min, level_max, health_min, health_max, armor, faction, npc_flags, speed_walk, speed_run, detection_range, call_for_help_range, xp_multiplier, dmg_min, dmg_max, attack_power, dmg_multiplier, base_attack_time, ranged_attack_time, unit_class, unit_flags, ranged_dmg_min, ranged_dmg_max, ranged_attack_power, type, loot_id, gold_min, gold_max, movement_type, inhabit_type, regeneration, flags_extra) values (60400,6435,'Vess','Black Rose',50,50,2768,2768,2999,120,2,1,1.14,20,5,1,85,109,226,1,2000,2000,1,512,67,92,100,7,0,0,0,0,3,3,10);
 
 delete from creature_template where entry = 60401;
-replace into creature_template (entry, equipment_id, display_id1, name, level_min, level_max, health_min, health_max, armor, faction, npc_flags, speed_walk, speed_run, detection_range, call_for_help_range, xp_multiplier, dmg_min, dmg_max, attack_power, dmg_multiplier, base_attack_time, ranged_attack_time, unit_class, unit_flags, ranged_dmg_min, ranged_dmg_max, ranged_attack_power, type, loot_id, gold_min, gold_max, movement_type, inhabit_type, regeneration, flags_extra) values (60401,11867,797,'Bannor',60,60,3997,4120,3640,16,0,1,1.14,20,5,1,104,130,272,1,2000,2000,1,0,72,99,100,7,60401,136,183,0,3,3,0);
+replace into creature_template (entry, equipment_id, display_id1, name, level_min, level_max, health_min, health_max, armor, faction, npc_flags, speed_walk, speed_run, detection_range, call_for_help_range, xp_multiplier, dmg_min, dmg_max, attack_power, dmg_multiplier, base_attack_time, ranged_attack_time, unit_class, unit_flags, ranged_dmg_min, ranged_dmg_max, ranged_attack_power, type, loot_id, gold_min, gold_max, movement_type, inhabit_type, regeneration, flags_extra, script_name) values (60401,11867,797,'Bannor',60,60,3997,4120,3640,16,0,1,1.14,20,5,1,104,130,272,1,2000,2000,1,0,72,99,100,7,60401,136,183,0,3,3,0,'npc_bannor');
 
 delete from creature_template where entry = 60402;
 replace into creature_template (entry, display_id1, name, level_min, level_max, health_min, health_max, armor, faction, npc_flags, speed_walk, speed_run, detection_range, call_for_help_range, xp_multiplier, dmg_min, dmg_max, attack_power, dmg_multiplier, base_attack_time, ranged_attack_time, unit_class, unit_flags, ranged_dmg_min, ranged_dmg_max, ranged_attack_power, type, loot_id, gold_min, gold_max, movement_type, inhabit_type, regeneration, flags_extra, phase_quest_id) values (60402,8395,'Stone Guardian',60,60,3997,4120,3640,16,0,1,1.14,20,5,1,104,130,272,1,2000,2000,1,0,72,99,100,7,6560,136,183,0,3,3,0,0);
@@ -158,28 +158,26 @@ replace into creature_template (entry, equipment_id, display_id1, name, level_mi
 delete from creature_template where entry = 60418;
 replace into creature_template (entry, equipment_id, display_id1, name, level_min, level_max, health_min, health_max, armor, faction, npc_flags, speed_walk, speed_run, detection_range, call_for_help_range, xp_multiplier, dmg_min, dmg_max, attack_power, dmg_multiplier, base_attack_time, ranged_attack_time, unit_class, unit_flags, ranged_dmg_min, ranged_dmg_max, ranged_attack_power, type, loot_id, gold_min, gold_max, movement_type, inhabit_type, regeneration, flags_extra) values (60418,68,3167,'Fallen Soldier',55,55,2768,2768,2999,0,2,1,1.14,20,5,1,85,109,226,1,2000,2000,1,512,67,92,100,7,0,0,0,0,3,0,10);
 
-update creature_template set script_name = 'npc_high_explorer_magellas' where entry = 5387;
-
-delete from gameobject_template where entry = 2010800;
-replace into gameobject_template (entry, type, displayid, size, name, flags, data0, data1, data3) values (2010800,3,27184,1,'Pedestal',4,43,2010800,1);
+replace into gameobject_template values
+(2010800, 0, 3, 27184, 'Pedestal', 0, 4, 1, 43, 2010800, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
 
 delete from item_template where entry = 60100;
 replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description) values (60100,609,'Family Locket',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'A necklace with an old family crest engraved on it');
 
 delete from item_template where entry = 60101;
-replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description) values (60101,811,'Sealed Scroll',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4, 'Tightly sealed information for the High Explorer.');
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description) values (60101,811,'Sealed Scroll',12,1,1,1,-1,-1,1,1,-1,-1,-1,-1,4, 'Tightly sealed information for the High Explorer.');
 
 delete from item_template where entry = 60102;
-replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description) values (60102,40146,'Plate of Uldum',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4, 'The plate radiates with power as you hold it');
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description) values (60102,40146,'Plate of Uldum',12,1,1,1,-1,-1,1,1,-1,-1,-1,-1,4, 'The plate radiates with power as you hold it');
 
 delete from item_template where entry = 60103;
-replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description) values (60103,16265,'Second Plate of Uldum',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4, 'The plate radiates with power as you hold it');
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description) values (60103,16265,'Second Plate of Uldum',12,1,1,1,-1,-1,1,1,-1,-1,-1,-1,4, 'The plate radiates with power as you hold it');
 
 delete from item_template where entry = 60104;
 replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description) values (60104,50462,'Wolf Totem',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'Thou battered and scarred the totem still brims with energy');
 
 delete from item_template where entry = 60105;
-replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description) values (60105,21470,'Inscribed Boar Pelt',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'A boar pelt with Logrash\'s message inscribed on it');
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description) values (60105,21470,'Inscribed Boar Pelt',12,1,1,1,-1,-1,1,1,-1,-1,-1,-1,4,'A boar pelt with Logrash\'s message inscribed on it');
 
 delete from creature where id = 60400;
 replace into creature (id, map, position_x, position_y, position_z, orientation, spawntimesecsmin, spawntimesecsmax, wander_distance, health_percent, movement_type, patch_max) values (60400,0,-14448.299609,504.408997,21.677200,0.564129,300,300,3,100,0,10);
@@ -255,7 +253,7 @@ delete from creature where id = 60418;
 replace into creature (id, map, position_x, position_y, position_z, orientation, spawntimesecsmin, spawntimesecsmax, wander_distance, health_percent, movement_type, patch_max) values (60418,0,-10908.191,-3878.867,23.3231,3.51,300,300,3,0,0,10);
 
 delete from gameobject where id = 2010800;
-replace into gameobject (id, map, position_x, position_y, position_z, orientation) values (2010800, 1, -6167.819824, -1573.680054, -211, 5.31);
+replace into gameobject (id, map, position_x, position_y, position_z, orientation, rotation0, rotation1, spawntimesecsmin, spawntimesecsmax, animprogress, state, spawn_flags, visibility_mod) values (2010800, 1, -6167.819824, -1573.680054, -211, 5.31,0,0,300,300,0,1,0,0);
 
 delete from gameobject where id = 29784 and position_x between 1215.256830 and 1215.256840;
 replace into gameobject (id, map, position_x, position_y, position_z, orientation) values (29784, 1, 1215.256836, -3334.443359, 91.675957, 0.00);
@@ -367,3 +365,6 @@ replace into creature_template_addon (entry, bytes1) values (60412,7);
 replace into creature_template_addon (entry, bytes1) values (60413,7);
 
 update creature_template set script_name = 'npc_ardaen_evermoon' where entry = 91288;
+update gameobject_template set script_name = 'GO_pedestal_of_uldum' where entry = 142343;
+update creature_template set script_name = 'npc_truthseeker_magellas' where entry = 5387;
+update creature_template set script_name = 'npc_truthseeker_magellas' where entry = 3978;
