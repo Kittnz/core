@@ -19,3 +19,22 @@ replace into creature_involvedrelation (id, quest) values (91350, 40123);
 
 delete from gameobject_loot_template where entry = 1000251;
 replace into gameobject_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values (1000251,81324,-100,1,1,0,10);
+
+delete from quest_template where entry = 40124;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4, objectivetext2) values (40123,40124,2,16,52,40,0,0,'Interfering Naga','Even the Ley-Shard\'s of the city of Eldarath have their energies compromised. This could be the work of the Naga that have encroached and invaded from the ocean depths. I would not put it past the beasts, as savage as they are, for attempting to claim dominion over the landscape.\n\nWe must look into this matter further before claiming we have gotten this solved. I have prepared a scroll of dispelling, use it upon the Spitelash Shrine in their clutches. If they are behind this dampening, this should solve the problem. While you\'re there, slay their sirens as well, they are the ones who wield a crude, and foul magic.','Slay 15 Spitelash Siren\'s and dispell the magic at the Spitelash Shrine.','Have the Naga been dealt with?','It has been done? You have dispelled the shrine? Let us see just how much of an effect this has had on our magics, let us hope this is done, once and for all.',0,0,0,0,0,0,0,0,6195,15,60312,1,0,0,0,0,60113,1,0,6000,61,200,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'Use Bromley\'s Dispelling Scroll near Spitelash Shrine');
+
+replace into creature_questrelation (id, quest) values (91350, 40124);
+replace into creature_involvedrelation (id, quest) values (91350, 40124);
+
+delete from creature_template where entry = 60312;
+replace into creature_template (entry, name, display_id1) values (60312 , 'quest_40124_dummy_triger', 328);
+
+delete from gameobject_template where entry = 2010801;
+replace into gameobject_template values
+(2010801, 0, 0, 26036, 'Spitelash Shrine', 0, 32, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+delete from item_template where entry = 60113;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, spellid_1, spelltrigger_1) values (60113,11161,'Bromley\'s Dispelling Scroll',0,1,1,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0,0);
+
+delete from gameobject where id = 2010801;
+replace into gameobject (id, map, position_x, position_y, position_z, orientation) values (2010801, 1, 3471.790, -5168.149, 85.351, 4.68);
