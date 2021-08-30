@@ -6793,9 +6793,31 @@ bool QuestAcceptGO_pedestal_of_uldum(Player* player, GameObject* pGo, const Ques
     return false;
 }
 
+bool QuestRewarded_npc_magus_bromley(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver)
+        return false;
+
+    if (!pPlayer)
+        return false;
+
+    if (pQuest->GetQuestId() == 40127) // The Dampening Must End
+    {
+        pQuestGiver->MonsterSayToPlayer("Thanks again $N, travel safely, you are a hero to the Kirin Tor.", pPlayer);
+        return true;
+    }
+
+    return false;
+}
+
 void AddSC_tw_random()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_magus_bromley";
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_magus_bromley;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "GO_pedestal_of_uldum";

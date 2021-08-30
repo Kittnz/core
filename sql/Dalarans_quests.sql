@@ -35,6 +35,12 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 replace into creature_questrelation (id, quest) values (2543,40126);
 replace into creature_involvedrelation (id, quest) values (91350,40126);
 
+delete from quest_template where entry = 40127;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, type, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4, objectivetext2) values (40126,40127,2,16,52,40,1,0,0,'The Dampening Must End','It seems as though there is only one thing left. I cannot believe the Blue Dragonflight would be responsible for such a thing, if their enemy is magic then that means their enemy is Dalaran. We cannot allow their plans to take fruition and must deal with them now and with due haste in our actions.\n\nJust south of here is Lake Mennar it is where the Blue Dragonflight has gathered, the cause of which was unknown until now. Head there, slay their Magelords, and kill the leader, Lieutenant Azsalus.\n\nI would advise, the Blue Dragonflight is not a foe to be under-estimated, find a band of mercenaries, or like minded heroes. You will need them to battle with the dragonkin, or to stand a chance.','Slay 3 Draconic Magelord\'s and Kill Lieutenant Azsalus.','Have you ended the dampening upon Azshara?','It is done? Truly?\n\nYou have my thanks hero, your name shall go down with glory in Dalaran, a defender of magic is truly one that stands for virtue, please, take one of these artifacts, it is the least I can offer. May it serve you well.',0,0,0,0,0,0,0,0,91283,1,6129,3,0,0,0,0,0,0,0,7150,61,500,0,0,0,0,0,0,10157,10157,0,0,0,0,0,0,0,0,0,60116,1,60117,1,60118,1,0,0,'');
+
+replace into creature_questrelation (id, quest) values (91350, 40127);
+replace into creature_involvedrelation (id, quest) values (91350, 40127);
+
 delete from creature_template where entry = 60312;
 replace into creature_template (entry, name, display_id1) values (60312 , 'quest_40124_dummy_triger', 328);
 
@@ -51,6 +57,39 @@ replace into item_template (entry, display_id, name, class, quality, flags, buy_
 delete from item_template where entry = 60115;
 replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, page_text, page_material) values (60115,3033,'Archmage Ansirem\'s Letter',12,1,1,1,-1,-1,1,1,-1,-1,-1,-1,4,50500,1);
 
+ delete from item_template where entry = 60116;
+ replace into item_template values
+ ('60116', '0', '4', '1', 'Dalaran Wizard\'s Hat', '', '26309', '3', '0', '1', '50984', '12746', '1', '-1', '-1', '57',
+ '', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '23', '6', '5',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '66', '0', '0', '0',
+ '0', '0', '5', '9345', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '1', '0', '0', '50', '0', '0', '0', '0', '47', '0', '0', '0',
+ '0', '1', NULL);
+ 
+ delete from item_template where entry = 60117;
+ replace into item_template values
+ ('60117', '0', '4', '4', 'Cuirass of the Kirin-Eye', '', '4085', '3', '0', '1', '71364', '17841', '5', '-1', '-1', '58',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '24', '7', '12',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '612', '0', '0', '0',
+ '0', '0', '5', '9140', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '6', '1', '0', '0', '135', '0', '0', '0', '0', '47', '0', '0', '0',
+ '0', '1', NULL);
+ 
+ delete from item_template where entry = 60118;
+ replace into item_template values
+ ('60118', '0', '4', '3', 'Kirin Tor Watch Grips', '', '30720', '3', '0', '1', '59948', '14987', '10', '-1', '-1', '57',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '11', '5', '10',
+ '7', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '204', '0', '0', '0',
+ '0', '0', '5', '20732', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '5', '1', '0', '0', '40', '0', '0', '0', '0', '47', '0', '0', '0',
+ '0', '1', NULL);
+
 delete from gameobject where id = 2010801;
 replace into gameobject (id, map, position_x, position_y, position_z, orientation) values (2010801, 1, 3471.790, -5168.149, 85.351, 4.68);
 
@@ -62,3 +101,5 @@ replace into page_text (entry, text, next_page) value (50500,'To Magus Bromley\n
 
 delete from page_text where entry = 50501;
 replace into page_text (entry, text, next_page) value (50501,'Whilst, I have given you good news, I must also deliver bad. The foreign magic is that of a Draconic nature, we have many examples and studies done, so I am completely certain. The only group operating in that region would be the Blue Dragonflight. The reason they would have to do so I cannot give you, but it is their magic lingering upon the Shard\'s. I wish you luck in resolving this, and advise you look for outside help, rather then tackling the Dragonflight on your own.\n\nA friend, Archmage Ansirem Runeweaver of Dalaran.',0);
+
+update creature_template set script_name = 'npc_magus_bromley' where entry = 91350;
