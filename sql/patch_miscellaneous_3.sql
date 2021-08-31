@@ -7,8 +7,12 @@ replace into creature_template values
 (91788, 0, 4000, 0, 0, 0, 'Witherbark Darkcaller', NULL, 0, 33, 35, 1047, 1382, 2253, 2362, 694, 654, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 38, 48, 0, 128, 1, 2000, 2000, 8, 32768, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 7, 0, 2553, 2553, 0, 0, 0, 0, 0, 0, 0, 20816, 688, 8176, 0, 25530, 0, 43, 61, 'EventAI', 1, 3, 0, 0, 3, 2553, 0, 0, 0, 0, 0, 0, ''),
 (91789, 0, 10452, 0, 0, 0, 'Warleader Kintoza', NULL, 0, 40, 40, 1909, 1909, 2566, 2566, 1750, 654, 0, 1, 1.14286, 0, 20, 5, 0, 4, 1, 150, 200, 0, 156, 1, 1325, 1457, 2, 0, 0, 0, 0, 0, 0, 0, 46.624, 64.108, 100, 7, 0, 2605, 0, 0, 0, 0, 40, 0, 0, 0, 0, 0, 0, 0, 26050, 0, 72, 362, '', 1, 3, 0, 0, 3, 2605, 0, 0, 0, 0, 0, 0, ''),
 (91790, 0, 10443, 0, 0, 0, 'Speaker Gan\'to', NULL, 0, 36, 36, 1359, 1459, 0, 0, 2397, 654, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 67, 82, 0, 182, 1, 2000, 2000, 1, 32768, 0, 0, 0, 0, 0, 0, 62.8672, 86.4424, 100, 7, 0, 2652, 2652, 0, 0, 0, 0, 0, 0, 0, 3235, 0, 0, 0, 0, 0, 76, 104, 'EventAI', 1, 3, 0, 0, 3, 2652, 0, 0, 0, 0, 0, 0, ''),
-(91791, 0, 11348, 0, 0, 0, 'Heketh', '', 0, 39, 39, 1804, 1977, 0, 0, 1537, 312, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 52, 65, 0, 152, 1, 2000, 2000, 1, 0, 0, 3, 0, 0, 0, 0, 51.6384, 71.0028, 100, 1, 1, 4379, 0, 0, 0, 0, 0, 0, 0, 0, 744, 745, 0, 0, 0, 0, 0, 0, 'EventAI', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+(91791, 0, 11348, 0, 0, 0, 'Heketh', '', 0, 39, 39, 1804, 1977, 0, 0, 1537, 312, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 52, 65, 0, 152, 1, 2000, 2000, 1, 0, 0, 3, 0, 0, 0, 0, 51.6384, 71.0028, 100, 1, 1, 4379, 0, 0, 0, 0, 0, 0, 0, 0, 744, 745, 0, 0, 0, 0, 0, 0, 'EventAI', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(91792, 0, 19033, 0, 0, 0, 'SHANGtest1', '', 0, 39, 39, 1804, 1977, 0, 0, 1537, 312, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 52, 65, 0, 152, 1, 2000, 2000, 1, 0, 0, 3, 0, 0, 0, 0, 51.6384, 71.0028, 100, 1, 1, 4379, 0, 0, 0, 0, 0, 0, 0, 0, 744, 745, 0, 0, 0, 0, 0, 0, 'EventAI', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(91793, 0, 19034, 0, 0, 0, 'SHANGtest2', '', 0, 39, 39, 1804, 1977, 0, 0, 1537, 312, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 52, 65, 0, 152, 1, 2000, 2000, 1, 0, 0, 3, 0, 0, 0, 0, 51.6384, 71.0028, 100, 1, 1, 4379, 0, 0, 0, 0, 0, 0, 0, 0, 744, 745, 0, 0, 0, 0, 0, 0, 'EventAI', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 
+replace into creature_display_info_addon values (19033, 5875, 2, 2, 0, 0);
+replace into creature_display_info_addon values (19034, 5875, 2, 2, 0, 0);
 update creature_template set health_min = 23155, health_max = 23155 where entry = 91304;
 update creature_template set faction = 15 where entry = 91774;
 update creature_template set faction = 118 where entry = 91712;
@@ -19,6 +23,13 @@ update creature_template set rank = 0 where entry = 91789;
 update creature_template set display_id1 = 2855 where entry = 91745;
 update creature_template set loot_id = 2649 where entry = 91789;
 update creature_template set scale = 1.5, faction = 22 where entry = 91791;
+update creature_template set rank = 0 where entry = 91745;
+update creature_template set rank = 0 where entry = 91746;
+update creature_template set name = 'Tarangos' where entry = 91304;
+update creature_template set subname = 'Harborage Supplies' where entry = 11874;
+update creature_template set faction = 189, unit_flags = 2  where entry = 91775;
+update creature_template set unit_flags = 536870912	  where entry = 91774;
+update creature_template set faction = 76 where entry = 91293;
 
 set @equip_template = 55075; set @weapon_1 = 8196; set @weapon_2 = 0; set @creature = 91782;
 replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
@@ -77,6 +88,12 @@ update creature_template set gossip_menu_id = @gossip_menu_id where entry = @mag
 set @gossip_menu_id = 60112; set @magic_number = 91400; 
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
 replace into broadcast_text (entry, Male_Text) values (@magic_number, 'I be the one who prepares the meat for the feasts, and da leather for war, what one you need?'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 60113; set @magic_number = 91780; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Skrak stares at you blankly.'); 
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
@@ -149,6 +166,44 @@ replace into npc_vendor values (91402, 17036, 0, 0, 0, 0);
 replace into npc_vendor values (91402, 17037, 0, 0, 0, 0);
 replace into npc_vendor values (91402, 17038, 0, 0, 0, 0);
 replace into npc_vendor values (91402, 21177, 0, 0, 0, 0);
+
+delete from npc_vendor where entry = 11874;
+
+replace into npc_vendor values (11874, 2320, 0, 0, 0, 0);
+replace into npc_vendor values (11874, 2321, 0, 0, 0, 0);
+replace into npc_vendor values (11874, 2324, 0, 0, 0, 0);
+replace into npc_vendor values (11874, 2325, 0, 0, 0, 0);
+replace into npc_vendor values (11874, 2604, 0, 0, 0, 0);
+replace into npc_vendor values (11874, 2678, 0, 0, 0, 0);
+replace into npc_vendor values (11874, 2692, 0, 0, 0, 0);
+replace into npc_vendor values (11874, 2880, 0, 0, 0, 0);
+replace into npc_vendor values (11874, 2901, 0, 0, 0, 0);
+replace into npc_vendor values (11874, 2928, 0, 0, 0, 0);
+replace into npc_vendor values (11874, 3371, 0, 0, 0, 0);
+replace into npc_vendor values (11874, 3372, 0, 0, 0, 0);
+replace into npc_vendor values (11874, 3466, 0, 0, 0, 0);
+replace into npc_vendor values (11874, 3713, 0, 0, 0, 0);
+replace into npc_vendor values (11874, 3777, 0, 0, 0, 0);
+replace into npc_vendor values (11874, 3857, 0, 0, 0, 0);
+replace into npc_vendor values (11874, 4289, 0, 0, 0, 0);
+replace into npc_vendor values (11874, 4291, 0, 0, 0, 0);
+replace into npc_vendor values (11874, 4340, 0, 0, 0, 0);
+replace into npc_vendor values (11874, 4341, 0, 0, 0, 0);
+replace into npc_vendor values (11874, 4342, 0, 0, 0, 0);
+replace into npc_vendor values (11874, 4399, 0, 0, 0, 0);
+replace into npc_vendor values (11874, 4400, 0, 0, 0, 0);
+replace into npc_vendor values (11874, 5956, 0, 0, 0, 0);
+replace into npc_vendor values (11874, 6183, 0, 0, 0, 0);
+replace into npc_vendor values (11874, 6217, 0, 0, 0, 0);
+replace into npc_vendor values (11874, 6256, 0, 0, 0, 0);
+replace into npc_vendor values (11874, 6529, 0, 0, 0, 0);
+replace into npc_vendor values (11874, 6530, 0, 0, 0, 0);
+replace into npc_vendor values (11874, 6532, 0, 0, 0, 0);
+replace into npc_vendor values (11874, 7005, 0, 0, 0, 0);
+replace into npc_vendor values (11874, 8343, 0, 0, 0, 0);
+replace into npc_vendor values (11874, 8925, 0, 0, 0, 0);
+replace into npc_vendor values (11874, 14341, 0, 0, 0, 0);
+replace into npc_vendor values (11874, 18256, 0, 0, 0, 0);
 
 replace into item_template values
  ('36004', '0', '4', '1', 'kazgrim test troll shoulder', '', '61110', '0', '0', '1', '0', '0', '3', '-1', '-1', '0',
@@ -277,3 +332,6 @@ replace into item_template values
  '-1', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
 
+delete from npc_trainer where entry = 91400 and spell = 10648;
+delete from creature_involvedrelation where quest = 1392;
+update item_template set start_quest = 0 where entry = 6196;
