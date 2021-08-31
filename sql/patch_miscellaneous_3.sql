@@ -9,7 +9,10 @@ replace into creature_template values
 (91790, 0, 10443, 0, 0, 0, 'Speaker Gan\'to', NULL, 0, 36, 36, 1359, 1459, 0, 0, 2397, 654, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 67, 82, 0, 182, 1, 2000, 2000, 1, 32768, 0, 0, 0, 0, 0, 0, 62.8672, 86.4424, 100, 7, 0, 2652, 2652, 0, 0, 0, 0, 0, 0, 0, 3235, 0, 0, 0, 0, 0, 76, 104, 'EventAI', 1, 3, 0, 0, 3, 2652, 0, 0, 0, 0, 0, 0, ''),
 (91791, 0, 11348, 0, 0, 0, 'Heketh', '', 0, 39, 39, 1804, 1977, 0, 0, 1537, 312, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 52, 65, 0, 152, 1, 2000, 2000, 1, 0, 0, 3, 0, 0, 0, 0, 51.6384, 71.0028, 100, 1, 1, 4379, 0, 0, 0, 0, 0, 0, 0, 0, 744, 745, 0, 0, 0, 0, 0, 0, 'EventAI', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (91792, 0, 19033, 0, 0, 0, 'SHANGtest1', '', 0, 39, 39, 1804, 1977, 0, 0, 1537, 312, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 52, 65, 0, 152, 1, 2000, 2000, 1, 0, 0, 3, 0, 0, 0, 0, 51.6384, 71.0028, 100, 1, 1, 4379, 0, 0, 0, 0, 0, 0, 0, 0, 744, 745, 0, 0, 0, 0, 0, 0, 'EventAI', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
-(91793, 0, 19034, 0, 0, 0, 'SHANGtest2', '', 0, 39, 39, 1804, 1977, 0, 0, 1537, 312, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 52, 65, 0, 152, 1, 2000, 2000, 1, 0, 0, 3, 0, 0, 0, 0, 51.6384, 71.0028, 100, 1, 1, 4379, 0, 0, 0, 0, 0, 0, 0, 0, 744, 745, 0, 0, 0, 0, 0, 0, 'EventAI', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+(91793, 0, 19034, 0, 0, 0, 'SHANGtest2', '', 0, 39, 39, 1804, 1977, 0, 0, 1537, 312, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 52, 65, 0, 152, 1, 2000, 2000, 1, 0, 0, 3, 0, 0, 0, 0, 51.6384, 71.0028, 100, 1, 1, 4379, 0, 0, 0, 0, 0, 0, 0, 0, 744, 745, 0, 0, 0, 0, 0, 0, 'EventAI', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(91794, 0, 4920, 0, 0, 0, 'Mmrmglul', NULL, 0, 55, 55, 2633, 2718, 2041, 2117, 2654, 18, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 106, 137, 0, 248, 1, 2000, 2000, 2, 32768, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 7, 0, 6351, 6351, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 63510, 0, 102, 139, 'EventAI', 1, 3, 0, 0, 3, 6351, 0, 0, 0, 0, 0, 0, ''),
+(91795, 0, 11651, 0, 0, 0, 'Tas Lanq', '', 0, 43, 43, 1981, 1981, 0, 0, 2246, 15, 0, 1.11111, 1.14286, 0, 20, 5, 0, 0, 1, 64, 79, 0, 172, 1, 2000, 2000, 1, 768, 0, 0, 0, 0, 0, 0, 58.7664, 80.8038, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 524290, 0, ''),
+(91796, 0, 11651, 0, 0, 0, 'Har Na\'lan', '', 0, 42, 42, 1781, 1881, 0, 0, 2246, 15, 0, 1.11111, 1.14286, 0, 20, 5, 0, 0, 1, 64, 79, 0, 172, 1, 2000, 2000, 1, 768, 0, 0, 0, 0, 0, 0, 58.7664, 80.8038, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 524290, 0, '');
 
 replace into creature_display_info_addon values (19033, 5875, 2, 2, 0, 0);
 replace into creature_display_info_addon values (19034, 5875, 2, 2, 0, 0);
@@ -30,6 +33,8 @@ update creature_template set subname = 'Harborage Supplies' where entry = 11874;
 update creature_template set faction = 189, unit_flags = 2  where entry = 91775;
 update creature_template set unit_flags = 536870912	  where entry = 91774;
 update creature_template set faction = 76 where entry = 91293;
+update creature_template set scale = 1, level_min = 45, level_max = 45 where entry = 91781;
+update creature_template set spell_list_id = 0 where entry = 91789;
 
 set @equip_template = 55075; set @weapon_1 = 8196; set @weapon_2 = 0; set @creature = 91782;
 replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
@@ -71,6 +76,18 @@ set @equip_template = 55084; set @weapon_1 = 19014; set @weapon_2 = 0; set @crea
 replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
 update creature_template set equipment_id = @equip_template where entry = @creature;
 
+set @equip_template = 55085; set @weapon_1 = 2092; set @weapon_2 = 0; set @creature = 91795;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 55086; set @weapon_1 = 0; set @weapon_2 = 12449; set @creature = 91796;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 55086; set @weapon_1 = 15444; set @weapon_2 = 0; set @creature = 91781;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
 -- ...
 
 set @gossip_menu_id = 60110; set @magic_number = 91783; 
@@ -94,6 +111,12 @@ update creature_template set gossip_menu_id = @gossip_menu_id where entry = @mag
 set @gossip_menu_id = 60113; set @magic_number = 91780; 
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
 replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Skrak stares at you blankly.'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 60114; set @magic_number = 91781; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Welcome to Harborage, outsider, my name is Sanv\'Kla, the leader of this place.\n\nI guide my people to a better fate away from the hellish landscape we once called home.\n\nPerhaps this is home now, and for the better.\n\nThe Draenei here are friendly and will treat you with respect.'); 
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
@@ -204,6 +227,10 @@ replace into npc_vendor values (11874, 8343, 0, 0, 0, 0);
 replace into npc_vendor values (11874, 8925, 0, 0, 0, 0);
 replace into npc_vendor values (11874, 14341, 0, 0, 0, 0);
 replace into npc_vendor values (11874, 18256, 0, 0, 0, 0);
+
+replace into npc_vendor values (11874, 36017, 1, 36000, 0, 0);
+replace into npc_vendor values (11874, 36018, 1, 36000, 0, 0);
+replace into npc_vendor values (11874, 36019, 1, 36000, 0, 0);
 
 replace into item_template values
  ('36004', '0', '4', '1', 'kazgrim test troll shoulder', '', '61110', '0', '0', '1', '0', '0', '3', '-1', '-1', '0',
@@ -330,6 +357,36 @@ replace into item_template values
  '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+ 
+ replace into item_template values
+ ('36017', '0', '4', '1', 'Outland Exile Hood', '', '15283', '2', '0', '1', '75000', '3894', '1', '-1', '-1', '44',
+ '37', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '10', '6', '5',
+ '7', '2', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '44', '0', '0', '0',
+ '0', '0', '0', '9397', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '1', '0', '0', '45', '0', '0', '0', '0', '26', '0', '0', '0',
+ '0', '1', NULL);
+ 
+ replace into item_template values
+ ('36018', '0', '4', '2', 'Draenic Wanderer Harness', '', '12370', '2', '0', '1', '75000', '7054', '5', '-1', '-1', '44',
+ '37', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '15', '6', '7',
+ '7', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '116', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '8', '1', '0', '0', '85', '0', '0', '0', '0', '26', '0', '0', '0',
+ '0', '1', NULL);
+ 
+ replace into item_template values
+ ('36019', '0', '2', '4', 'Harborage War-Mace', '', '19634', '2', '0', '1', '75000', '13854', '13', '-1', '-1', '45',
+ '37', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '5', '7', '3',
+ '6', '2', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '2300', '0',
+ '0', '51', '76', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '2', '1', '0', '0', '75', '0', '0', '0', '0', '26', '0', '0', '0',
  '0', '1', NULL);
 
 delete from npc_trainer where entry = 91400 and spell = 10648;
