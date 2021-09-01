@@ -142,3 +142,10 @@ replace into item_template values
 
 delete from creature_loot_template where entry = 2649 and item = 60123;
 replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values (2649,60123,-100,1,1,0,10);
+
+
+delete from quest_template where entry = 40023;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (0,40023,2,45,40,30,0,0,'Assisting Lord Rog','The Wildtusk have always held good relations with the elemental beings. It is up to us, the speakers to commune with the spirits and elements alike. Lord Rog be troubled by disturbances that go beyond Wildtusk Village\n\nWe not have the strength, or the means to help him, but perhaps you can mon? The elements do not reach out often so we cannot miss this opportunity. Speak with Lord Rog, and see if you can help in our stead.','Speak with Lord Rog.','Yes Mortal being?','You desire to aid the realm of rock? There is much to do, let us begin.',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,175,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+replace into creature_questrelation (id, quest) values (91411, 40023);
+replace into creature_involvedrelation (id, quest) values (91289, 40023);
