@@ -16,6 +16,10 @@ replace into creature_template values
 
 replace into creature_display_info_addon values (19033, 5875, 2, 2, 0, 0);
 replace into creature_display_info_addon values (19034, 5875, 2, 2, 0, 0);
+replace into creature_display_info_addon values (18576, 5875, 2, 2, 0, 0);
+replace into creature_display_info_addon values (18577, 5875, 2, 2, 0, 0);
+replace into creature_display_info_addon values (18578, 5875, 2, 2, 0, 0);
+replace into creature_display_info_addon values (18579, 5875, 2, 2, 0, 0);
 update creature_template set health_min = 23155, health_max = 23155 where entry = 91304;
 update creature_template set faction = 15 where entry = 91774;
 update creature_template set faction = 118 where entry = 91712;
@@ -33,7 +37,7 @@ update creature_template set subname = 'Harborage Supplies' where entry = 11874;
 update creature_template set faction = 189, unit_flags = 2  where entry = 91775;
 update creature_template set unit_flags = 536870912	  where entry = 91774;
 update creature_template set faction = 76 where entry = 91293;
-update creature_template set scale = 1, level_min = 45, level_max = 45 where entry = 91781;
+update creature_template set scale = 1, level_min = 45, level_max = 45, display_id1 = 18576 where entry = 91781;
 update creature_template set spell_list_id = 0 where entry = 91789;
 
 set @equip_template = 55075; set @weapon_1 = 8196; set @weapon_2 = 0; set @creature = 91782;
@@ -84,7 +88,7 @@ set @equip_template = 55086; set @weapon_1 = 0; set @weapon_2 = 12449; set @crea
 replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
 update creature_template set equipment_id = @equip_template where entry = @creature;
 
-set @equip_template = 55086; set @weapon_1 = 15444; set @weapon_2 = 0; set @creature = 91781;
+set @equip_template = 55087; set @weapon_1 = 15444; set @weapon_2 = 0; set @creature = 91781;
 replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
 update creature_template set equipment_id = @equip_template where entry = @creature;
 
