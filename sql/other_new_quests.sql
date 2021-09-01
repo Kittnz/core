@@ -88,3 +88,20 @@ replace into gameobject_template values
 
 delete from gameobject_loot_template where entry = 2010802;
 replace into gameobject_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values (2010802,60120,-100,1,1,0,10);
+
+
+delete from quest_template where entry = 40020;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (0,40020,2,45,36,25,0,0,'The Chief\'s Necklace','In the chaos of the battle for Zul Rasaz items were left behind that are important to many. When we were forced to retreat I left behind a valuable family necklace that means the world to me mon. It was handed down from my father and his own all the way to me, back to the Troll Wars long, long ago.\n\nI cannot stand by while my necklace lays in the Ruins of Zul\'Rasaz, you must get it for me. You can find the ruins of my old city by following a trail outside of the town to the north west. Once in Zul\'Rasaz, you can find my necklace in a hut at the top of the ruins there, in the heights near the Rasaz trails.','Find Yin\'dos necklace in the Ruins of Zul\'Rasaz.','Have you found my family heirloom?','I cannot believe you have got it mon! My ancestors would have been angered if I had lost it, you just saved me a lot of bad juju!',60121,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1950,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+replace into creature_questrelation (id, quest) values (91290, 40020);
+replace into creature_involvedrelation (id, quest) values (91290, 40020);
+
+delete from item_template where entry = 60121;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description) values (60121,9852,'The Chief\'s Necklace',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'');
+
+delete from gameobject_template where entry = 2010803;
+replace into gameobject_template values
+(2010803, 0, 3, 25452, 'Woven Basket', 0, 4, 1, 43, 2010803, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+delete from gameobject_loot_template where entry = 2010803;
+replace into gameobject_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values (2010803,60121,-100,1,1,0,10);
