@@ -101,6 +101,7 @@ replace into shop_items values
 (107, 6, 81120, 'Frayfeather Hippogryph', 500),
 (108, 6, 81121, 'Cenarion Hippogryph', 500),
 (109, 6, 81242, 'Viridian Hippogryph', 300),
+(110, 6, 80431, 'Swift Magic Rooster', 300),
 -- Riding Mounts: Sabers
 (121, 7, 12325, 'Spotted Leopard', 200), 
 (122, 7, 12326, 'Tawny Leopard', 200),

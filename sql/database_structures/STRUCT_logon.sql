@@ -1,11 +1,16 @@
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET NAMES utf8 */;
-/*!50503 SET NAMES utf8mb4 */;
+/*!40101 SET SQL_MODE=''*/;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
-CREATE TABLE IF NOT EXISTS `account` (
+/*Table structure for table `account` */
+
+DROP TABLE IF EXISTS `account`;
+
+CREATE TABLE `account` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Identifier',
   `username` varchar(32) NOT NULL,
   `sha_pass_hash` varchar(40) NOT NULL,
@@ -44,16 +49,24 @@ CREATE TABLE IF NOT EXISTS `account` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `idx_username` (`username`),
   KEY `idx_gmlevel` (`gmlevel`)
-) ENGINE=InnoDB AUTO_INCREMENT=18726 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Account System';
+) ENGINE=InnoDB AUTO_INCREMENT=18729 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Account System';
 
-CREATE TABLE IF NOT EXISTS `account_access` (
+/*Table structure for table `account_access` */
+
+DROP TABLE IF EXISTS `account_access`;
+
+CREATE TABLE `account_access` (
   `id` int(11) unsigned NOT NULL,
   `gmlevel` tinyint(3) unsigned NOT NULL,
   `RealmID` int(11) NOT NULL,
   PRIMARY KEY (`id`,`RealmID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
-CREATE TABLE IF NOT EXISTS `account_banned` (
+/*Table structure for table `account_banned` */
+
+DROP TABLE IF EXISTS `account_banned`;
+
+CREATE TABLE `account_banned` (
   `banid` bigint(20) NOT NULL AUTO_INCREMENT,
   `id` bigint(20) NOT NULL DEFAULT '0' COMMENT 'Account id',
   `bandate` bigint(40) NOT NULL DEFAULT '0',
@@ -67,48 +80,87 @@ CREATE TABLE IF NOT EXISTS `account_banned` (
   UNIQUE KEY `banid` (`banid`)
 ) ENGINE=MyISAM AUTO_INCREMENT=105 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Ban List';
 
-CREATE TABLE IF NOT EXISTS `account_mailstatus` (
+/*Table structure for table `account_mailstatus` */
+
+DROP TABLE IF EXISTS `account_mailstatus`;
+
+CREATE TABLE `account_mailstatus` (
   `message_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `account_id` int(11) unsigned NOT NULL DEFAULT '0',
   `email` text,
   `status` int(11) DEFAULT NULL,
   `letterid` int(11) DEFAULT NULL,
   PRIMARY KEY (`message_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=92120 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE IF NOT EXISTS `account_mailstatus_archive` (
+/*Table structure for table `account_mailstatus_archive` */
+
+DROP TABLE IF EXISTS `account_mailstatus_archive`;
+
+CREATE TABLE `account_mailstatus_archive` (
   `message_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `account_id` int(11) unsigned NOT NULL DEFAULT '0',
   `email` text,
   `status` int(11) DEFAULT NULL,
   `letterid` int(11) DEFAULT NULL,
   PRIMARY KEY (`message_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=76921 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE IF NOT EXISTS `antispam_blacklist` (
+/*Table structure for table `antispam_blacklist` */
+
+DROP TABLE IF EXISTS `antispam_blacklist`;
+
+CREATE TABLE `antispam_blacklist` (
   `string` varchar(64) NOT NULL,
   PRIMARY KEY (`string`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `antispam_client` (
+/*Table structure for table `antispam_client` */
+
+DROP TABLE IF EXISTS `antispam_client`;
+
+CREATE TABLE `antispam_client` (
   `Regex` varchar(255) NOT NULL,
   `Note` varchar(64) DEFAULT NULL,
   PRIMARY KEY (`Regex`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `antispam_replacement` (
+/*Table structure for table `antispam_replacement` */
+
+DROP TABLE IF EXISTS `antispam_replacement`;
+
+CREATE TABLE `antispam_replacement` (
   `from` varchar(32) NOT NULL DEFAULT '',
   `to` varchar(32) NOT NULL DEFAULT '',
   PRIMARY KEY (`from`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `antispam_unicode_replacement` (
+/*Table structure for table `antispam_unicode_replacement` */
+
+DROP TABLE IF EXISTS `antispam_unicode_replacement`;
+
+CREATE TABLE `antispam_unicode_replacement` (
   `from` mediumint(5) unsigned NOT NULL DEFAULT '0',
   `to` mediumint(5) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`from`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `geoip` (
+/*Table structure for table `config` */
+
+DROP TABLE IF EXISTS `config`;
+
+CREATE TABLE `config` (
+  `id` int(11) NOT NULL,
+  `value` varchar(45) DEFAULT NULL,
+  `comment` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*Table structure for table `geoip` */
+
+DROP TABLE IF EXISTS `geoip`;
+
+CREATE TABLE `geoip` (
   `network_start_integer` int(11) DEFAULT NULL,
   `network_last_integer` int(11) DEFAULT NULL,
   `geoname_id` text,
@@ -124,7 +176,11 @@ CREATE TABLE IF NOT EXISTS `geoip` (
   KEY `ip_end` (`network_last_integer`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `ip_banned` (
+/*Table structure for table `ip_banned` */
+
+DROP TABLE IF EXISTS `ip_banned`;
+
+CREATE TABLE `ip_banned` (
   `ip` varchar(32) NOT NULL DEFAULT '0.0.0.0',
   `bandate` int(11) NOT NULL,
   `unbandate` int(11) NOT NULL,
@@ -133,7 +189,23 @@ CREATE TABLE IF NOT EXISTS `ip_banned` (
   PRIMARY KEY (`ip`,`bandate`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Banned IPs';
 
-CREATE TABLE IF NOT EXISTS `realmcharacters` (
+/*Table structure for table `migrations` */
+
+DROP TABLE IF EXISTS `migrations`;
+
+CREATE TABLE `migrations` (
+  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `Name` varchar(255) NOT NULL DEFAULT '0',
+  `Hash` varchar(128) NOT NULL DEFAULT '0',
+  `AppliedAt` datetime NOT NULL,
+  PRIMARY KEY (`Id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*Table structure for table `realmcharacters` */
+
+DROP TABLE IF EXISTS `realmcharacters`;
+
+CREATE TABLE `realmcharacters` (
   `realmid` int(11) unsigned NOT NULL DEFAULT '0',
   `acctid` bigint(20) unsigned NOT NULL,
   `numchars` tinyint(3) unsigned NOT NULL DEFAULT '0',
@@ -141,7 +213,11 @@ CREATE TABLE IF NOT EXISTS `realmcharacters` (
   KEY `acctid` (`acctid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Realm Character Tracker';
 
-CREATE TABLE IF NOT EXISTS `realmlist` (
+/*Table structure for table `realmlist` */
+
+DROP TABLE IF EXISTS `realmlist`;
+
+CREATE TABLE `realmlist` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(32) NOT NULL DEFAULT '',
   `address` varchar(32) NOT NULL DEFAULT '127.0.0.1',
@@ -154,15 +230,23 @@ CREATE TABLE IF NOT EXISTS `realmlist` (
   `realmbuilds` varchar(64) NOT NULL DEFAULT '5875',
   PRIMARY KEY (`id`),
   UNIQUE KEY `idx_name` (`name`)
-) ENGINE=MyISAM AUTO_INCREMENT=56 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Realm System';
+) ENGINE=MyISAM AUTO_INCREMENT=57 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Realm System';
 
-CREATE TABLE IF NOT EXISTS `shop_coins` (
+/*Table structure for table `shop_coins` */
+
+DROP TABLE IF EXISTS `shop_coins`;
+
+CREATE TABLE `shop_coins` (
   `id` int(10) unsigned NOT NULL,
   `coins` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `shop_diff` (
+/*Table structure for table `shop_diff` */
+
+DROP TABLE IF EXISTS `shop_diff`;
+
+CREATE TABLE `shop_diff` (
   `guid` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `accountid` int(11) unsigned NOT NULL DEFAULT '0',
   `prev_bonus` int(11) NOT NULL,
@@ -172,7 +256,11 @@ CREATE TABLE IF NOT EXISTS `shop_diff` (
   PRIMARY KEY (`guid`)
 ) ENGINE=MyISAM AUTO_INCREMENT=94537 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-CREATE TABLE IF NOT EXISTS `statistics_online` (
+/*Table structure for table `statistics_online` */
+
+DROP TABLE IF EXISTS `statistics_online`;
+
+CREATE TABLE `statistics_online` (
   `guid` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `online` int(8) unsigned DEFAULT '0',
   `online_alli` int(8) DEFAULT '0',
@@ -181,9 +269,13 @@ CREATE TABLE IF NOT EXISTS `statistics_online` (
   `realm` tinyint(3) unsigned DEFAULT '0',
   `date` int(11) unsigned DEFAULT NULL,
   PRIMARY KEY (`guid`)
-) ENGINE=InnoDB AUTO_INCREMENT=83946 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE IF NOT EXISTS `system_fingerprint_usage` (
+/*Table structure for table `system_fingerprint_usage` */
+
+DROP TABLE IF EXISTS `system_fingerprint_usage`;
+
+CREATE TABLE `system_fingerprint_usage` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `fingerprint` int(10) unsigned NOT NULL,
   `account` int(10) unsigned NOT NULL,
@@ -199,9 +291,13 @@ CREATE TABLE IF NOT EXISTS `system_fingerprint_usage` (
   KEY `fingerprint` (`fingerprint`),
   KEY `account` (`account`),
   KEY `ip` (`ip`)
-) ENGINE=InnoDB AUTO_INCREMENT=122487 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `uptime` (
+/*Table structure for table `uptime` */
+
+DROP TABLE IF EXISTS `uptime`;
+
+CREATE TABLE `uptime` (
   `realmid` int(11) unsigned NOT NULL,
   `starttime` bigint(20) unsigned NOT NULL DEFAULT '0',
   `startstring` varchar(64) NOT NULL DEFAULT '',
@@ -212,15 +308,7 @@ CREATE TABLE IF NOT EXISTS `uptime` (
   PRIMARY KEY (`realmid`,`starttime`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Uptime system';
 
-CREATE TABLE IF NOT EXISTS `config` (
-  `id` INT NOT NULL,
-  `value` VARCHAR(45) NULL,
-  `comment` VARCHAR(255) NULL,
-  PRIMARY KEY (`id`));
-
-INSERT INTO `config` (`id`, `value`, `comment`) VALUES ('1', '2048', 'Patch download speed limit. Number of Kbytes per client');
-
-ALTER TABLE account_access
-  DROP COLUMN IF EXISTS name;
-ALTER TABLE account_access
-  ADD name VARCHAR(255);
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
