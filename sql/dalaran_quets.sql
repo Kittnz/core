@@ -46,7 +46,11 @@ replace into creature_template (entry, name, display_id1) values (60312 , 'quest
 
 delete from gameobject_template where entry = 2010801;
 replace into gameobject_template values
-(2010801, 0, 0, 26036, 'Spitelash Shrine', 0, 32, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+(2010801, 0, 0, 26036, 'Spitelash Shrine', 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+delete from gameobject_template where entry = 2010804;
+replace into gameobject_template values
+(2010804, 0, 5, 6397, 'Dispelling Scroll Explotion', 0, 0, 1.5, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
 
 delete from item_template where entry = 60113;
 replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, script_name, spellid_1, spelltrigger_1) values (60113,11161,'Bromley\'s Dispelling Scroll',0,1,1,1,-1,-1,1,1,-1,-1,-1,-1,4,'item_dispelling_scroll',18282,0);
