@@ -149,3 +149,16 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 
 replace into creature_questrelation (id, quest) values (91411, 40023);
 replace into creature_involvedrelation (id, quest) values (91289, 40023);
+
+
+delete from quest_template where entry = 40024;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (40023,40024,2,45,40,30,0,0,'Lord Rog\'s Exiles','My kind have become disconnected from the Elemental Plane here within the Arathi Highlands. Foreign disturbances and the death of our leaders has left us disillusioned and waining in our powers. I have no control over those I was charged any longer and I believe there is more at play here.\n\nTo the south west is the Circle of Inner Binding, it is where my followers are scattered. Go there, and take from them the Inner Binding Bracers they possess. They will not give them to you willingly, destroy them.','Gather 5 Inner Binding Bracers from Rock Elementals at the Circle of Inner Binding in Arathi Highlands.','Is it done Mortal? Have you gathered the bracers?','There is something foul here, a magic that is not native to my kind.',60125,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1950,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+replace into creature_questrelation (id, quest) values (91289, 40024);
+replace into creature_involvedrelation (id, quest) values (91289, 40024);
+
+delete from item_template where entry = 60125;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description) values (60125,4281,'Inner Binding Bracer',12,1,2048,1,-1,-1,1,5,-1,-1,-1,-1,4,'');
+
+delete from creature_loot_template where entry = 2592 and item = 60125;
+replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values (2592,60125,-40,1,1,0,10);
