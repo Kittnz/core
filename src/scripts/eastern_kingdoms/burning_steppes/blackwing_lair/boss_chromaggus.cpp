@@ -88,10 +88,11 @@ struct boss_chromaggusAI : public ScriptedAI
             if (idx2 >= (breaths % NUM_BREATHS))
                 ++idx2;
             m_uiBreathTwoSpell = aPossibleBreaths[idx2 % NUM_BREATHS];
+    
+            pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_PASSIVE);
+            m_bEngagedOnce = false;
+            Reset();
         }
-        pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_PASSIVE);
-        m_bEngagedOnce = false;
-        Reset();
     }
 
     ScriptedInstance* m_pInstance;
