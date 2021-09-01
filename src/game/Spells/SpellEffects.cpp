@@ -1780,9 +1780,13 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                 case 46200: // Teleport to Caverns of Time
                 {
                     if (m_caster && m_caster->IsPlayer())
-                    {
                         m_caster->ToPlayer()->TeleportTo(1, -8170.67F, -4758.11F, 33.33F, 4.8F);
-                    }
+                    return;
+                }
+                case 46028: // Teleport to GM Island
+                {
+                    if (m_caster && m_caster->IsPlayer())
+                        m_caster->ToPlayer()->TeleportTo(1, 16247.7F, 16305.58F, 20.89F, 3.47F);
                     return;
                 }
                 case 46002: // Goblin Brainwashing Device
