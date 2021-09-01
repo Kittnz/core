@@ -46,7 +46,7 @@ replace into creature_template (entry, name, display_id1) values (60312 , 'quest
 
 delete from gameobject_template where entry = 2010801;
 replace into gameobject_template values
-(2010801, 0, 0, 26036, 'Spitelash Shrine', 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+(2010801, 0, 0, 26036, 'Spitelash Shrine', 0, 0, 2.8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
 
 delete from gameobject_template where entry = 2010804;
 replace into gameobject_template values
