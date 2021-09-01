@@ -105,3 +105,16 @@ replace into gameobject_template values
 
 delete from gameobject_loot_template where entry = 2010803;
 replace into gameobject_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values (2010803,60121,-100,1,1,0,10);
+
+
+delete from quest_template where entry = 40021;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (0,40021,2,45,36,30,0,0,'The Speakers Betrayal','My people once held great power and lived in a city secluded within the mountains. A traitor, Speaker Gan\'to betrayed us, and told the location of our ancestral home to the Witherbark in order to gain favor. Innocents were slaughtered and I can still hear the cries of battle in the late hours of that horrific night. Words cannot express the hatred I be having for this troll I once called friend, for the blood shed he has brought.\n\nYou will kill him, and bring his head to me once you are done. You will find him in the Ruins of Zul\'Rasaz to the north west of here, take the trail once you leave town and you will find it... When you find Speaker Gan\'to, make he sure he suffers.','Bring the head of Speaker Gan\'to to Chief Yin\'do.','Has that traitor died, have you tortured his soul?','It is about time mon, he deserved a brutal death, and I hope you gave it to him.',60122,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2000,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+replace into creature_questrelation (id, quest) values (91290, 40021);
+replace into creature_involvedrelation (id, quest) values (91290, 40021);
+
+delete from item_template where entry = 60122;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description) values (60122,10546,'Head of Speaker Gan\'to',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'');
+
+delete from creature_loot_template where entry = 2652 and item = 60122;
+replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values (2652,60122,-100,1,1,0,10);
