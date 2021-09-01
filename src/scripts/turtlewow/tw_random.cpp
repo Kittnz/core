@@ -6823,12 +6823,52 @@ bool QuestRewarded_npc_magus_bromley(Player* pPlayer, Creature* pQuestGiver, Que
         return true;
     }
 
+    if (pQuest->GetQuestId() == 40124) //  Interfering Naga
+    {
+        pQuestGiver->MonsterSayToPlayer("Now, let us see if the dampening has been halted...", pPlayer);
+        pQuestGiver->CastSpell(pQuestGiver, 23017, false); // Arcane Channeling
+
+        DoAfterTime(pPlayer, 6 * IN_MILLISECONDS, [player = pPlayer, c = pQuestGiver]() {
+            c->MonsterSayToPlayer("It would appear our efforts have been meaningless... We must think of a new solution...", player);
+            c->HandleEmote(EMOTE_ONESHOT_NO);
+            c->CastSpell(c, 1449, false);
+            });
+
+        return true;
+    }
+
     return false;
+}
+
+bool ItemUseSpell_dispelling_scroll(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+{
+    if (!pPlayer) return false;
+
+    GameObject* spitelash_shrine = pPlayer->FindNearestGameObject(2010801, 10.0F); // Spitelash Shrine
+
+    if (!spitelash_shrine)
+    {
+        pPlayer->GetSession()->SendNotification("Requires Spitelash Shrine.");
+        return false;
+    }
+    
+    if (CreatureInfo const* dummy_bunny = ObjectMgr::GetCreatureTemplate(60312))
+        pPlayer->KilledMonster(dummy_bunny, ObjectGuid());
+
+    pPlayer->SummonGameObject(2010804, spitelash_shrine->GetPositionX(), spitelash_shrine->GetPositionY(), spitelash_shrine->GetPositionZ() + 0.0F, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 4, true);
+    pPlayer->RemoveItemCurrency(pItem->GetEntry(), 1);
+
+    return true;
 }
 
 void AddSC_tw_random()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "item_dispelling_scroll";
+    newscript->pItemUseSpell = &ItemUseSpell_dispelling_scroll;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_magus_bromley";
