@@ -6861,9 +6861,33 @@ bool ItemUseSpell_dispelling_scroll(Player* pPlayer, Item* pItem, const SpellCas
     return true;
 }
 
+bool QuestRewarded_npc_lord_rog(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    if (pQuest->GetQuestId() == 40024) // Lord Rog's Exiles
+    {
+        Creature* speaker_ganzih = pPlayer->FindNearestCreature(91411, 30.0F);
+        if (speaker_ganzih)
+        {
+            DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = speaker_ganzih]() {
+                npc->HandleEmote(EMOTE_ONESHOT_TALK);
+                npc->MonsterSayToPlayer("It would appear the bracers be having some sort of voodoo corruption tainting them, I can sense it from here.", player);
+                });
+            return true;
+        }
+    }
+    return false;
+}
+
 void AddSC_tw_random()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_lord_rog";
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_lord_rog;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "item_dispelling_scroll";
