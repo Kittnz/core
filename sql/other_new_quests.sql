@@ -118,3 +118,27 @@ replace into item_template (entry, display_id, name, class, quality, flags, buy_
 
 delete from creature_loot_template where entry = 2652 and item = 60122;
 replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values (2652,60122,-100,1,1,0,10);
+
+
+delete from quest_template where entry = 40022;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (40021,40022,2,45,40,30,0,0,'The Witherbark Warleader','If there is ever a chance for my people to return to Zul\'Rasaz, then the Warleader must be killed. The troll who lead the attack is Kintoza, a powerful Warleader who came from Shandra\'Alor. With his Warband he was able to kill many of my people and claim Zul\'Rasaz for himself.\n\nI want you to avenge the dead, and to scatter the Witherbark leadership. Bring me the head of Kin\'toza, it will be a symbol of hope for my people, and a chance to retake Zul\'Rasaz one day from those who stole it. You will find him at the ruins of my old city.','Bring the head of Warleader Kintoza to Chief Yin\'do.','Has the Warleader been slain?','You done it mon? His head will be a trophy of my people, for the one who slayed so many now nothing but a skull on my spear! You done well for us this day $N, you shall be remembered in the stories of my people.',60123,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2500,0,0,0,0,0,0,0,0,0,0,0,60124,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+replace into creature_questrelation (id, quest) values (91290, 40022);
+replace into creature_involvedrelation (id, quest) values (91290, 40022);
+
+delete from item_template where entry = 60123;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description) values (60123,2853,'Skull of Kintoza',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'');
+
+delete from item_template where entry = 60124;
+replace into item_template values
+ ('60124', '0', '2', '0', 'Axe of the Wildtusk', '', '30834', '2', '0', '1', '82044', '20511', '21', '-1', '-1', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '6', '4', '4',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '2200', '0',
+ '0', '49', '88', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '1', '3', '0', '0', '75', '0', '0', '0', '0', '26', '0', '0', '0',
+ '0', '1', '');
+
+delete from creature_loot_template where entry = 2649 and item = 60123;
+replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values (2649,60123,-100,1,1,0,10);
