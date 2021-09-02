@@ -60,4 +60,4 @@ REPLACE INTO `fishing_loot_template` VALUES (2037, 6718, 6.2031, 1, 1, 1, 0, 0, 
 REPLACE INTO `fishing_loot_template` VALUES (2037, 10457, 0, 1, 1, 1, 0, 0, 10);
 REPLACE INTO `fishing_loot_template` VALUES (2037, 20708, 1.4437, 1, 1, 1, 0, 0, 10);
 REPLACE INTO `fishing_loot_template` VALUES (2037, 20709, 0.5269, 1, 1, 3, 0, 0, 10);
-
+replace into `skill_fishing_base_level` (`entry`, `skill`) VALUES ('2040', '-20');
