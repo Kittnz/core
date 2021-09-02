@@ -359,7 +359,7 @@ void AuctionHouseMgr::LoadAuctionHouses()
 
 void AuctionHouseMgr::LoadAuctionItems()
 {
-    //               0                1      2         3        4      5             6                 7           8           9       10       11
+    //                                                       0                1           2       3         4       5         6               7                8             9        10     11        12
     QueryResult *result = CharacterDatabase.Query("SELECT creatorGuid, giftCreatorGuid, count, duration, charges, flags, enchantments, randomPropertyId, transmogrifyId, durability, text, itemguid, itemEntry FROM auction JOIN item_instance ON itemguid = guid");
 
     if (!result)
