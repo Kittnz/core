@@ -1766,14 +1766,22 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                 {
                     if (m_caster && m_caster->IsPlayer())
                     {
-                        float dis{ 2.0F };
-                        float x, y, z;
-                        m_caster->GetSafePosition(x, y, z);
-                        x += dis * cos(m_caster->GetOrientation());
-                        y += dis * sin(m_caster->GetOrientation());
-                        m_caster->PMonsterEmote("%s just opened a wormhole.", nullptr, false, m_caster->ToPlayer()->GetName());
-                        m_caster->SummonGameObject(1000081, x, y, z + 0.5F, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 8, true);
-                        m_caster->ToPlayer()->ModifyMoney(-500);
+                        if (sWorld.getConfig(CONFIG_BOOL_BETA))
+                        {
+                            m_caster->ToPlayer()->GetSession()->SendNotification("As you activate the wormhole generator, you are surprised to see no portal appear before you. Instead, it begins to make odd mechanical noises, and smoke emits from its engine. It would seem this device no longer works.");
+                            return;
+                        }
+                        else
+                        {
+                            float dis{ 2.0F };
+                            float x, y, z;
+                            m_caster->GetSafePosition(x, y, z);
+                            x += dis * cos(m_caster->GetOrientation());
+                            y += dis * sin(m_caster->GetOrientation());
+                            m_caster->PMonsterEmote("%s just opened a wormhole.", nullptr, false, m_caster->ToPlayer()->GetName());
+                            m_caster->SummonGameObject(1000081, x, y, z + 0.5F, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 8, true);
+                            m_caster->ToPlayer()->ModifyMoney(-500);
+                        }
                     }
                     return;
                 }
