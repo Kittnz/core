@@ -194,3 +194,20 @@ replace into item_template values
  '0', '1', '');
  
  update creature_template set script_name = 'npc_ganzih' where entry = 91411;
+
+
+delete from quest_template where entry = 40027;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (0,40027,2,8,39,30,0,0,'The Sanv Charm','The world we come from is a hellish place. One filled with danger, with demons and barren in all ways imaginable. Food was scarce, and water even scarcer. I led my people to the safety of this world through our magic by way of the Rift. In the ancient days my people created a charm that attuned them to the old world and held great magic. This allowed for Riftwalking, the ability to travel great distances.\n\nMuch of this skill is lost to us now, from stories told to me from the older generations it was much more powerful then the primitive means we currently use it.\n\nThe Sanv Charm, a powerful item was lost on one of my trips to the Misty Valley, I have been attempting to communicate with a Riftseeker who was apart of Harborage. As I was attempting communication in the valley Swampwalker\'s approached and attacked, I was unable to gather the Charm and left it in a small chest in fear for my life. Get it for me, it is of great importance.','Head to the Misty Valley and find the Sanv Charm.','The Charm must be recovered outsider, be quick.','The Sanv Charm means a lot to me outsider. The Sanv were once a large tribe in the Outland, sadly I am the only that remains. Let me begin prepare the communication with the lost one.',60127,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2250,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+replace into creature_questrelation (id, quest) values (91781, 40027);
+replace into creature_involvedrelation (id, quest) values (91781, 40027);
+
+delete from item_template where entry = 60127;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description) values (60127,36596,'Sanv Charm',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'Hums with energy');
+
+delete from gameobject_template where entry = 2010805;
+replace into gameobject_template values
+(2010805, 0, 3, 23430, 'Sunken Chest', 0, 4, 1, 43, 2010805, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+delete from gameobject_loot_template where entry = 2010805;
+replace into gameobject_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values (2010805,60127,-100,1,1,0,10);
