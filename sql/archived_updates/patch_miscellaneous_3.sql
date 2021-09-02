@@ -417,13 +417,13 @@ update item_template set start_quest = 0 where entry = 6196;
 update creature_template set skinning_loot_id = 0 where entry between 91304 and 91308;
 delete from creature_loot_template where entry between 91304 and 91308;
 
-update creature_template set loot_id = 30000 where entry = 91304;
+update creature_template set loot_id = 91304 where entry = 91304;
 
-replace into creature_loot_template values (30000, 81360, 0, 1, 1, 1, 0, 0, 0);
-replace into creature_loot_template values (30000, 81361, 0, 2, 1, 1, 0, 0, 0);
-replace into creature_loot_template values (30000, 81362, 0, 3, 1, 1, 0, 0, 0);
-replace into creature_loot_template values (30000, 81364, 0, 4, 1, 1, 0, 0, 0);
-replace into creature_loot_template values (30000, 81363, 0.5, 5, 1, 1, 0, 0, 0);
+replace into creature_loot_template values (91304, 81360, 0, 1, 1, 1, 0, 0, 0);
+replace into creature_loot_template values (91304, 81361, 0, 2, 1, 1, 0, 0, 0);
+replace into creature_loot_template values (91304, 81362, 0, 3, 1, 1, 0, 0, 0);
+replace into creature_loot_template values (91304, 81364, 0, 4, 1, 1, 0, 0, 0);
+replace into creature_loot_template values (91304, 81363, 0.5, 5, 1, 1, 0, 0, 0);
 replace into creature_loot_template values (91305, 81365, 0, 6, 1, 1, 0, 0, 0);
 replace into creature_loot_template values (91305, 81366, 0, 6, 1, 1, 0, 0, 0);
 replace into creature_loot_template values (91305, 81367, 0, 6, 1, 1, 0, 0, 0);
