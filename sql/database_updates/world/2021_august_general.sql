@@ -42,3 +42,5 @@ update creature_template set name = 'Fluppi' where entry = 60302;
 delete from item_template where entry in (80173, 80175, 80174);
 update item_template set buy_price = 100000, sell_price = 20000 where entry in (80462, 80461, 80460);
 update quest_template set requiredclasses = 0 where entry = 60133;
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/277
+update quest_template set rewrepfaction1 = 47, rewrepvalue1 = 150, rewrepfaction2 = 730 , rewrepvalue2 = 150 where entry = 7170;
