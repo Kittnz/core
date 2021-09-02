@@ -1939,6 +1939,7 @@ Transmog.ReqMoneyRate = 0
 StaticObjectLOS = 1
 PvPBounryBoards = 1
 OpenHouse = 0
+Beta = 1
 
 PlayerBot.Enable = 1
 PlayerBot.Debug = 0
