@@ -44,3 +44,20 @@ update item_template set buy_price = 100000, sell_price = 20000 where entry in (
 update quest_template set requiredclasses = 0 where entry = 60133;
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/277
 update quest_template set rewrepfaction1 = 47, rewrepvalue1 = 150, rewrepfaction2 = 730 , rewrepvalue2 = 150 where entry = 7170;
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/137
+REPLACE INTO `fishing_loot_template` VALUES (2037, 3820, 0.8371, 1, 1, 3, 0, 0, 10);
+REPLACE INTO `fishing_loot_template` VALUES (2037, 6289, 7.4902, 1, 1, 1, 0, 0, 10);
+REPLACE INTO `fishing_loot_template` VALUES (2037, 6291, 2.0018, 1, 1, 1, 0, 0, 10);
+REPLACE INTO `fishing_loot_template` VALUES (2037, 6303, 16.1003, 1, 1, 1, 0, 0, 10);
+REPLACE INTO `fishing_loot_template` VALUES (2037, 6307, 0.2603, 1, 1, 1, 0, 0, 10);
+REPLACE INTO `fishing_loot_template` VALUES (2037, 6308, 2.6969, 1, 1, 1, 0, 0, 10);
+REPLACE INTO `fishing_loot_template` VALUES (2037, 6351, 0.2367, 1, 1, 1, 0, 0, 10);
+REPLACE INTO `fishing_loot_template` VALUES (2037, 6353, 0.2167, 1, 1, 1, 0, 0, 10);
+REPLACE INTO `fishing_loot_template` VALUES (2037, 6358, 11.9547, 1, 1, 1, 0, 0, 10);
+REPLACE INTO `fishing_loot_template` VALUES (2037, 6361, 24.0128, 1, 1, 1, 0, 0, 10);
+REPLACE INTO `fishing_loot_template` VALUES (2037, 6717, -10, 0, 1, 1, 0, 0, 10);
+REPLACE INTO `fishing_loot_template` VALUES (2037, 6718, 6.2031, 1, 1, 1, 0, 0, 10);
+REPLACE INTO `fishing_loot_template` VALUES (2037, 10457, 0, 1, 1, 1, 0, 0, 10);
+REPLACE INTO `fishing_loot_template` VALUES (2037, 20708, 1.4437, 1, 1, 1, 0, 0, 10);
+REPLACE INTO `fishing_loot_template` VALUES (2037, 20709, 0.5269, 1, 1, 3, 0, 0, 10);
+
