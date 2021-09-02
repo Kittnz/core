@@ -37,3 +37,5 @@ update item_template set spellid_1 = 1852, spelltrigger_1 = 0 where entry = 2540
 update item_template set spellid_1 = 46028, spelltrigger_1 = 0 where entry = 2543;
 update item_template set spellid_1 = 9454, spelltrigger_1 = 0 where entry = 2541;
 update item_template set max_count = 1, quality = 1, armor = 0 where entry in (2540, 2543, 2541, 12064, 2586, 11508);
+-- ...
+update creature_template set name = 'Fluppi' where entry = 60302;

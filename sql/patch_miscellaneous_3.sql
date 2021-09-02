@@ -12,7 +12,16 @@ replace into creature_template values
 (91793, 0, 19034, 0, 0, 0, 'SHANGtest2', '', 0, 39, 39, 1804, 1977, 0, 0, 1537, 312, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 52, 65, 0, 152, 1, 2000, 2000, 1, 0, 0, 3, 0, 0, 0, 0, 51.6384, 71.0028, 100, 1, 1, 4379, 0, 0, 0, 0, 0, 0, 0, 0, 744, 745, 0, 0, 0, 0, 0, 0, 'EventAI', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (91794, 0, 4920, 0, 0, 0, 'Mmrmglul', NULL, 0, 55, 55, 2633, 2718, 2041, 2117, 2654, 18, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 106, 137, 0, 248, 1, 2000, 2000, 2, 32768, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 7, 0, 6351, 6351, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 63510, 0, 102, 139, 'EventAI', 1, 3, 0, 0, 3, 6351, 0, 0, 0, 0, 0, 0, ''),
 (91795, 0, 11651, 0, 0, 0, 'Tas Lanq', '', 0, 43, 43, 1981, 1981, 0, 0, 2246, 15, 0, 1.11111, 1.14286, 0, 20, 5, 0, 0, 1, 64, 79, 0, 172, 1, 2000, 2000, 1, 768, 0, 0, 0, 0, 0, 0, 58.7664, 80.8038, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 524290, 0, ''),
-(91796, 0, 11651, 0, 0, 0, 'Har Na\'lan', '', 0, 42, 42, 1781, 1881, 0, 0, 2246, 15, 0, 1.11111, 1.14286, 0, 20, 5, 0, 0, 1, 64, 79, 0, 172, 1, 2000, 2000, 1, 768, 0, 0, 0, 0, 0, 0, 58.7664, 80.8038, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 524290, 0, '');
+(91796, 0, 11651, 0, 0, 0, 'Har Na\'lan', '', 0, 42, 42, 1781, 1881, 0, 0, 2246, 15, 0, 1.11111, 1.14286, 0, 20, 5, 0, 0, 1, 64, 79, 0, 172, 1, 2000, 2000, 1, 768, 0, 0, 0, 0, 0, 0, 58.7664, 80.8038, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 524290, 0, ''),
+(91797, 0, 1060, 0, 0, 0, 'Buttercup', '', 0, 35, 35, 1342, 1342, 0, 0, 1357, 35, 2, 1.11, 1.14286, 1.8, 20, 5, 0, 0, 1, 51, 65, 0, 138, 1, 2000, 2000, 1, 768, 0, 0, 0, 0, 0, 0, 51.128, 70.301, 100, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 2, 0, ''),
+(91798, 0, 18145, 0, 0, 0, 'Bessy', '', 0, 35, 35, 1342, 1342, 0, 0, 1357, 35, 2, 1.11, 1.14286, 1.8, 20, 5, 0, 0, 1, 51, 65, 0, 138, 1, 2000, 2000, 1, 768, 0, 0, 0, 0, 0, 0, 51.128, 70.301, 100, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 2, 0, ''),
+(91799, 0, 18144, 0, 0, 0, 'Moo', 'The Cow King', 0, 63, 63, 408528, 408528, 128821, 128821, 5200, 7, 0, 1, 1.14286, 3.2, 20, 5, 0, 3, 1, 1920, 2456, 0, 364, 1, 2200, 2000, 8, 0, 0, 1, 0, 0, 0, 0, 400, 550, 100, 10, 4, 50112, 0, 0, 30, 0, 30, 100, 30, 30, 0, 0, 0, 0, 0, 0, 324687, 561234, '', 1, 3, 0, 0, 3, 0, 0, 0, 2798337883, 0, 0, 0, ''),
+(91800, 0, 856, 0, 0, 0, 'Sir Jessy', 'Honorary Cow', 0, 35, 35, 1342, 1342, 0, 0, 1357, 35, 2, 1.11, 1.14286, 1.8, 20, 5, 0, 0, 1, 51, 65, 0, 138, 1, 2000, 2000, 1, 768, 0, 0, 0, 0, 0, 0, 51.128, 70.301, 100, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 2, 0, ''),
+(91801, 0, 18144, 0, 0, 0, 'Butterscotch', '', 0, 35, 35, 1342, 1342, 0, 0, 1357, 35, 2, 1.11, 1.14286, 1.8, 20, 5, 0, 0, 1, 51, 65, 0, 138, 1, 2000, 2000, 1, 768, 0, 0, 0, 0, 0, 0, 51.128, 70.301, 100, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 2, 0, ''),
+(91802, 0, 1060, 0, 0, 0, 'Marcus', '', 0, 35, 35, 1342, 1342, 0, 0, 1357, 35, 2, 1.11, 1.14286, 1.8, 20, 5, 0, 0, 1, 51, 65, 0, 138, 1, 2000, 2000, 1, 768, 0, 0, 0, 0, 0, 0, 51.128, 70.301, 100, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 2, 0, ''),
+(91803, 0, 18145, 0, 0, 0, 'Domino', '', 0, 35, 35, 1342, 1342, 0, 0, 1357, 35, 2, 1.11, 1.14286, 1.8, 20, 5, 0, 0, 1, 51, 65, 0, 138, 1, 2000, 2000, 1, 768, 0, 0, 0, 0, 0, 0, 51.128, 70.301, 100, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 2, 0, ''),
+(91804, 0, 1060, 0, 0, 0, 'Brandy', '', 0, 35, 35, 1342, 1342, 0, 0, 1357, 35, 2, 1.11, 1.14286, 1.8, 20, 5, 0, 0, 1, 51, 65, 0, 138, 1, 2000, 2000, 1, 768, 0, 0, 0, 0, 0, 0, 51.128, 70.301, 100, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 2, 0, ''),
+(91805, 0, 1418, 0, 0, 0, 'Clewsee the Scourge', '', 0, 5, 5, 342, 342, 0, 0, 1357, 31, 2, 1.11, 1.14286, 1.8, 20, 5, 0, 0, 1, 51, 65, 0, 138, 1, 2000, 2000, 1, 768, 0, 0, 0, 0, 0, 0, 51.128, 70.301, 100, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 2, 0, '');
 
 replace into creature_display_info_addon values (19033, 5875, 2, 2, 0, 0);
 replace into creature_display_info_addon values (19034, 5875, 2, 2, 0, 0);
@@ -24,12 +33,16 @@ update creature_template set health_min = 23155, health_max = 23155 where entry 
 update creature_template set faction = 15 where entry = 91774;
 update creature_template set faction = 118 where entry = 91712;
 update creature_template set npc_flags = 3 where entry = 91412;
+update creature_template set npc_flags = 2 where entry = 91797;
+update creature_template set npc_flags = 3 where entry = 91798;
 update creature_template set npc_flags = 5 where entry = 91403;
+update creature_template set npc_flags = 4 where entry = 91804;
 update creature_template set npc_flags = 21, trainer_type = 2 where entry = 91400;
 update creature_template set rank = 0 where entry = 91789;
 update creature_template set display_id1 = 2855 where entry = 91745;
 update creature_template set loot_id = 2649 where entry = 91789;
 update creature_template set scale = 1.5, faction = 22 where entry = 91791;
+update creature_template set scale = 1.5 entry = 91805;
 update creature_template set rank = 0 where entry = 91745;
 update creature_template set rank = 0 where entry = 91746;
 update creature_template set name = 'Tarangos' where entry = 91304;
@@ -125,6 +138,8 @@ replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_numbe
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
 -- ...
+
+replace into npc_vendor values (91804, 1179, 0, 0, 0, 0);
 
 replace into npc_vendor values (91400, 117, 0, 0, 0, 0);
 replace into npc_vendor values (91400, 2287, 0, 0, 0, 0);
@@ -396,3 +411,36 @@ replace into item_template values
 delete from npc_trainer where entry = 91400 and spell = 10648;
 delete from creature_involvedrelation where quest = 1392;
 update item_template set start_quest = 0 where entry = 6196;
+
+-- Fix rares:
+
+update creature_template set skinning_loot_id = 0 where entry between 91304 and 91308;
+delete from creature_loot_template where entry between 91304 and 91308;
+
+update creature_template set loot_id = 30000 where entry = 91304;
+
+replace into creature_loot_template values (30000, 81360, 0, 1, 1, 1, 0, 0, 0);
+replace into creature_loot_template values (30000, 81361, 0, 2, 1, 1, 0, 0, 0);
+replace into creature_loot_template values (30000, 81362, 0, 3, 1, 1, 0, 0, 0);
+replace into creature_loot_template values (30000, 81364, 0, 4, 1, 1, 0, 0, 0);
+replace into creature_loot_template values (30000, 81363, 0.5, 5, 1, 1, 0, 0, 0);
+replace into creature_loot_template values (91305, 81365, 0, 6, 1, 1, 0, 0, 0);
+replace into creature_loot_template values (91305, 81366, 0, 6, 1, 1, 0, 0, 0);
+replace into creature_loot_template values (91305, 81367, 0, 6, 1, 1, 0, 0, 0);
+replace into creature_loot_template values (91305, 81368, 0, 6, 1, 1, 0, 0, 0);
+replace into creature_loot_template values (91305, 81369, 0.5, 1, 1, 1, 0, 0, 0);
+replace into creature_loot_template values (91306, 81370, 0, 6, 1, 1, 0, 0, 0);
+replace into creature_loot_template values (91306, 81371, 0, 6, 1, 1, 0, 0, 0);
+replace into creature_loot_template values (91306, 81372, 0, 6, 1, 1, 0, 0, 0);
+replace into creature_loot_template values (91306, 81373, 0, 6, 1, 1, 0, 0, 0);
+replace into creature_loot_template values (91306, 81374, 0.45, 1, 1, 1, 0, 0, 0);
+replace into creature_loot_template values (91307, 81375, 0, 6, 1, 1, 0, 0, 0);
+replace into creature_loot_template values (91307, 81376, 0, 6, 1, 1, 0, 0, 0);
+replace into creature_loot_template values (91307, 81377, 0, 6, 1, 1, 0, 0, 0);
+replace into creature_loot_template values (91307, 81378, 0, 6, 1, 1, 0, 0, 0);
+replace into creature_loot_template values (91307, 81379, 0.60, 1, 1, 1, 0, 0, 0);
+replace into creature_loot_template values (91308, 81380, 0, 6, 1, 1, 0, 0, 0);
+replace into creature_loot_template values (91308, 81381, 0, 6, 1, 1, 0, 0, 0);
+replace into creature_loot_template values (91308, 81382, 0, 6, 1, 1, 0, 0, 0);
+replace into creature_loot_template values (91308, 81383, 0, 6, 1, 1, 0, 0, 0);
+replace into creature_loot_template values (91308, 81383, 0.5, 1, 1, 1, 0, 0, 0);
