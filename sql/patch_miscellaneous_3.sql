@@ -42,7 +42,7 @@ update creature_template set rank = 0 where entry = 91789;
 update creature_template set display_id1 = 2855 where entry = 91745;
 update creature_template set loot_id = 2649 where entry = 91789;
 update creature_template set scale = 1.5, faction = 22 where entry = 91791;
-update creature_template set scale = 1.5 entry = 91805;
+update creature_template set scale = 1.5 where entry = 91805;
 update creature_template set rank = 0 where entry = 91745;
 update creature_template set rank = 0 where entry = 91746;
 update creature_template set name = 'Tarangos' where entry = 91304;
