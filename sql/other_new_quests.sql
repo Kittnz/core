@@ -174,10 +174,13 @@ replace into creature_involvedrelation (id, quest) values (91411, 40025);
 
 
 delete from quest_template where entry = 40026;
-replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (40025,40026,2,45,40,30,0,0,'Lord Rog\'s Favor','It is done, I have gotten all of the materials prepared and given them to Lord Rog, he shall begin the purifaction of his bracers, we have done well, let us wait until he is done.','Wait for Lord Rog to purify the bracers.','','You have done your duty well, you exemplify the values of my kind well. Without you I would be unable to continue my work. Take this signet as a symbol of gratitude mortal, may the blessings of the Elemental Plane help you in your future battles.',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,850,0,0,0,0,0,0,0,0,0,0,0,60126,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,objectivetext1) values (40025,40026,2,45,40,30,0,0,'Lord Rog\'s Favor','It is done, I have gotten all of the materials prepared and given them to Lord Rog, he shall begin the purifaction of his bracers, we have done well, let us wait until he is done.','Wait for Lord Rog to purify the bracers.','','You have done your duty well, you exemplify the values of my kind well. Without you I would be unable to continue my work. Take this signet as a symbol of gratitude mortal, may the blessings of the Elemental Plane help you in your future battles.',0,0,0,0,0,0,0,0,60313,1,0,0,0,0,0,0,0,0,0,850,0,0,0,0,0,0,0,0,0,0,0,60126,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'The purification ritual is completed');
 
 replace into creature_questrelation (id, quest) values (91411, 40026);
 replace into creature_involvedrelation (id, quest) values (91289, 40026);
+
+delete from creature_template where entry = 60313;
+replace into creature_template (entry, name, display_id1) values (60313 , 'quest_40026_dummy_triger', 328);
 
 delete from item_template where entry = 60126;
 replace into item_template values
@@ -189,3 +192,5 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '4', '1', '0', '0', '0', '0', '0', '0', '0', '27', '0', '0', '0',
  '0', '1', '');
+ 
+ update creature_template set script_name = 'npc_ganzih' where entry = 91411;

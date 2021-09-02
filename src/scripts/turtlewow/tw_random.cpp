@@ -6880,9 +6880,46 @@ bool QuestRewarded_npc_lord_rog(Player* pPlayer, Creature* pQuestGiver, Quest co
     return false;
 }
 
+bool QuestAccept_npc_ganzih(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    if (pQuest->GetQuestId() == 40026) // Lord Rog's Favor
+    {
+        Creature* lord_rog = pPlayer->FindNearestCreature(91289, 30.0F);
+
+        if (lord_rog)
+        {
+            lord_rog->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_PASSIVE);
+            lord_rog->CastSpell(pQuestGiver, 13236, false);
+
+            DoAfterTime(pPlayer, 10 * IN_MILLISECONDS, [player = pPlayer, npc = lord_rog]() {
+                npc->MonsterSayToPlayer("The curse upon the bracers has been lifted, the weak magic of mortals cannot compete with the Elemental Plane.", player);
+                });
+            DoAfterTime(pPlayer, 12 * IN_MILLISECONDS, [player = pPlayer, npc = lord_rog]() {
+                npc->CastSpell(npc, 5906, false);
+                });
+            DoAfterTime(pPlayer, 20 * IN_MILLISECONDS, [player = pPlayer, npc = lord_rog]() {
+                npc->MonsterSayToPlayer("I must thank you, your assistance has been insturmental.", player);
+
+                if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60313))
+                    player->KilledMonster(cInfo, ObjectGuid());
+
+                });
+            return true;
+        }
+    }
+    return false;
+}
+
 void AddSC_tw_random()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_ganzih";
+    newscript->pQuestAcceptNPC = &QuestAccept_npc_ganzih;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_lord_rog";
