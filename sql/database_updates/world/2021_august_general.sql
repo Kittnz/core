@@ -41,3 +41,4 @@ update item_template set max_count = 1, quality = 1, armor = 0 where entry in (2
 update creature_template set name = 'Fluppi' where entry = 60302;
 delete from item_template where entry in (80173, 80175, 80174);
 update item_template set buy_price = 100000, sell_price = 20000 where entry in (80462, 80461, 80460);
+update quest_template set requiredclasses = 0 where entry = 60133;
