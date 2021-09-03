@@ -61,3 +61,5 @@ REPLACE INTO `fishing_loot_template` VALUES (2037, 10457, 0, 1, 1, 1, 0, 0, 10);
 REPLACE INTO `fishing_loot_template` VALUES (2037, 20708, 1.4437, 1, 1, 1, 0, 0, 10);
 REPLACE INTO `fishing_loot_template` VALUES (2037, 20709, 0.5269, 1, 1, 3, 0, 0, 10);
 replace into `skill_fishing_base_level` (`entry`, `skill`) VALUES ('2040', '-20');
+-- ...
+UPDATE `quest_template` SET `OfferRewardText`='$N, pal, great to see ya, let’s have a quick chat.' WHERE `entry`='80115';
