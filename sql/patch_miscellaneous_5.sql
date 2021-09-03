@@ -1,5 +1,5 @@
-replace into map_template (entry, map_name) values ('800', 'Karazhan Crypts')
-replace into map_template (entry, map_name) values ('801', 'Secret Cow Level')
+replace into map_template (entry, map_name) values ('800', 'Karazhan Crypts');
+replace into map_template (entry, map_name) values ('801', 'Secret Cow Level');
 
 replace into creature_template values 
 (91809, 0, 4625, 0, 0, 0, 'Hazzuri Troll', NULL, 0, 47, 49, 2487, 2787, 0, 0, 2835, 28, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 120, 144, 0, 212, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 62.8672, 86.4424, 100, 7, 0, 7809, 0, 0, 0, 70, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 43, 213, 'EventAI', 0, 3, 0, 0, 3, 7809, 0, 0, 0, 0, 0, 0, ''),
