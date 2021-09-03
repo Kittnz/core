@@ -69,7 +69,7 @@
 #include "GMTicketMgr.h"
 #include "MasterPlayer.h"
 #include "MovementPacketSender.h"
-#include "turtlewow/transmog/transmog.h"
+#include "miscelanneous/transmog.h"
 
 /* Nostalrius */
 #include "Config/Config.h"
@@ -84,8 +84,8 @@
 #include "MovementBroadcaster.h"
 #include "PlayerBroadcaster.h"
 #include "GameEventMgr.h"
-#include "world/world_event_naxxramas.h"
-#include "world/world_event_wareffort.h"
+#include "events/event_naxxramas.h"
+#include "events/event_wareffort.h"
 
 #define ZONE_UPDATE_INTERVAL (1*IN_MILLISECONDS)
 

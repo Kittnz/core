@@ -51,7 +51,7 @@
 #include "InstanceData.h"
 #include "CharacterDatabaseCache.h"
 #include "HardcodedEvents.h"
-#include "turtlewow/transmog/transmog.h"
+#include "miscelanneous/transmog.h"
 
 #include <limits>
 

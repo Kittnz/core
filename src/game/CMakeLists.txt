@@ -407,7 +407,6 @@ if(SCRIPTS)
   )
 else()
   list(APPEND game_SRCS
-      ${CMAKE_SOURCE_DIR}/src/scripts/ScriptLoader_noscripts.cpp
       ${CMAKE_SOURCE_DIR}/src/scripts/ScriptLoader.h
   )
 endif()
@@ -460,7 +459,6 @@ include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}/Transports
   ${CMAKE_CURRENT_SOURCE_DIR}/vmap
   ${CMAKE_SOURCE_DIR}/src/scripts
-  ${CMAKE_SOURCE_DIR}/src/scripts/precompiled_headers
   ${CMAKE_SOURCE_DIR}/dep/include/g3dlite
   ${CMAKE_SOURCE_DIR}/dep/recastnavigation/Detour
   ${CMAKE_SOURCE_DIR}/dep/recastnavigation

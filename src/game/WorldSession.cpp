@@ -50,7 +50,7 @@
 #include "Channel.h"
 #include "AccountMgr.h"
 #include "MasterPlayer.h"
-#include "turtlewow/transmog/transmog.h"
+#include "miscelanneous/transmog.h"
 
 // select opcodes appropriate for processing in Map::Update context for current session state
 static bool MapSessionFilterHelper(WorldSession* session, OpcodeHandler const& opHandle)

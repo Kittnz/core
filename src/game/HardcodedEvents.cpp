@@ -1,8 +1,8 @@
 #include "HardcodedEvents.h"
 #include "World.h"
 #include "MapManager.h"
-#include "world/world_event_naxxramas.h"
-#include "world/world_event_wareffort.h"
+#include "events/event_naxxramas.h"
+#include "events/event_wareffort.h"
 #include "GridSearchers.h"
 #include <chrono>
 #include <random>
