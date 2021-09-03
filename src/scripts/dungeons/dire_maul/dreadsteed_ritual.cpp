@@ -4,7 +4,7 @@
 
 #include "scriptPCH.h"
 #include "dire_maul.h"
-#include "../../miscelanneous/npc_j_eevee.h"
+#include "../../events/event_dreadsteed.h"
 
 enum
 {

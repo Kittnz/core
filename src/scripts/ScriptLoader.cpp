@@ -6,14 +6,12 @@
 
 // AI system
 void AddSC_generic_spell_ai();
-void AddSC_npc_escort();
 
 //battlegrounds
 void AddSC_battleground();
 void AddSC_bg_alterac();
 
 //custom
-void AddSC_zero_scripts();
 void AddSC_ubrs_trash();
 void AddSC_go_scripts();
 void AddSC_event_fireworks();
@@ -39,7 +37,6 @@ void AddSC_npcs_special();
 void AddSC_Totems();
 void AddSC_world_event_naxxramas();
 void AddSC_event_scourge_invasion();
-void AddSC_spell_scripts();
 
 //eastern kingdoms
 void AddSC_instance_blackrock_spire();
@@ -258,12 +255,9 @@ void AddSC_ungoro_crater();
 void AddSC_winterspring();
 void AddSC_war_effort();
 
-void AddSC_npc_j_eevee();                            // J'Eevee, the Imp in a Jar
-
 // Turtle WoW
 void AddSC_shop();
 void AddSC_arena_tournament();
-void AddSC_battlemaster();
 void AddSC_boss_rares();
 void AddSC_boss_avatar_of_pompa();
 void AddSC_boss_turtlhu();
@@ -271,12 +265,10 @@ void AddSC_instance_stormwind_vaults();
 void AddSC_instance_karazhan_crypt();
 void AddSC_boss_xmas_wolf();
 void AddSC_boss_nerubian_overseer();
-void AddSC_drogon();
 void AddSC_boss_gerastrasz();
 void AddSC_boss_chromie();
 void AddSC_boss_chronormu();
 void AddSC_instance_caverns_of_time();
-void AddSC_zebrian_the_mad();
 void AddSC_tw_random();
 void AddSC_mirage_raceway();
 void AddSC_gardening();
@@ -294,14 +286,12 @@ void AddScripts()
 {
     //Nostalrius
     AddSC_generic_spell_ai();
-    AddSC_npc_escort();
 
     //battlegrounds
     AddSC_battleground();
     AddSC_bg_alterac();
 
     //custom
-    AddSC_zero_scripts();
     AddSC_ubrs_trash();
     AddSC_go_scripts();
     AddSC_event_fireworks();
@@ -324,10 +314,8 @@ void AddScripts()
     AddSC_dragons_of_nightmare();
     AddSC_boss_lord_kazzak();
     AddSC_npcs_special();
-    AddSC_Totems();
     AddSC_world_event_naxxramas();
     AddSC_event_scourge_invasion();
-    AddSC_spell_scripts();
 
     AddSC_war_effort();
 
@@ -545,13 +533,8 @@ void AddScripts()
     AddSC_ungoro_crater();
     AddSC_winterspring();
 
-    AddSC_npc_j_eevee();
-
-    // Turtle WoW
-
     AddSC_shop();
     AddSC_arena_tournament();
-    AddSC_battlemaster();
     AddSC_boss_rares();
     AddSC_boss_avatar_of_pompa();
     AddSC_boss_turtlhu();
@@ -559,12 +542,10 @@ void AddScripts()
     AddSC_instance_karazhan_crypt();
     AddSC_boss_xmas_wolf();
     AddSC_boss_nerubian_overseer();
-    AddSC_drogon();
     AddSC_boss_gerastrasz();
     AddSC_boss_chromie();
     AddSC_boss_chronormu();
     AddSC_instance_caverns_of_time();
-    AddSC_zebrian_the_mad();
     AddSC_tw_random();
     AddSC_mirage_raceway();
     AddSC_gardening();

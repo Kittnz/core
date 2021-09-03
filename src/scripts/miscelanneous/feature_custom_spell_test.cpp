@@ -1,5 +1,4 @@
 #include "scriptPCH.h"
-#include "custom.h"
 
 struct boss_custom_spell_test_AI : public ScriptedAI
 {

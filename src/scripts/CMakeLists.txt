@@ -220,7 +220,6 @@ dungeons/zulgurub/instance_zulgurub.cpp
 dungeons/zulgurub/zulgurub.h
 dungeons/zulgurub/zulgurub_trash.cpp
 
-events/bloody_coins.cpp
 events/boss_dark_reaver.cpp
 events/boss_emeriss.cpp
 events/boss_lethon.cpp
@@ -233,6 +232,7 @@ events/boss_snowball.cpp
 events/boss_taerar.cpp
 events/boss_turtlhu.cpp
 events/boss_ysondre.cpp
+events/event_bloody_coins.cpp
 events/event_dragons_of_nightmare.cpp
 events/event_dragons_of_nightmare.h
 events/event_elemental_invasions.cpp
@@ -243,27 +243,18 @@ events/event_naxxramas.h
 events/event_scourge_invasion.cpp
 events/event_wareffort.cpp
 events/event_wareffort.h
+events/event_dreadsteed.h
 
 miscelanneous/areatrigger_scripts.cpp
-miscelanneous/custom.cpp
-miscelanneous/custom.h
-miscelanneous/custom_creatures.cpp
-miscelanneous/CustomSpellTestBoss.cpp
-miscelanneous/gardening.cpp
-miscelanneous/go_scripts.cpp
-miscelanneous/npc_battlemaster.cpp
-miscelanneous/npc_drogon.cpp
-miscelanneous/npc_escort.cpp
-miscelanneous/npc_j_eevee.cpp
-miscelanneous/npc_j_eevee.h
-miscelanneous/npc_zebrian.cpp
-miscelanneous/npcs_special.cpp
-miscelanneous/shop.cpp
-miscelanneous/spell_scripts.cpp
-miscelanneous/totems.cpp
-miscelanneous/transmog.h
-miscelanneous/tw_random.cpp
-miscelanneous/zero_creatures.cpp
+miscelanneous/gameobject_scripts.cpp
+miscelanneous/feature_custom_spell_test.cpp
+miscelanneous/feature_gardening.cpp
+miscelanneous/feature_shop.cpp
+miscelanneous/feature_transmog.h
+miscelanneous/random_scripts_0.cpp
+miscelanneous/random_scripts_1.cpp
+miscelanneous/random_scripts_2.cpp
+miscelanneous/random_scripts_3.cpp
 
 world/alterac_mountains.cpp
 world/arathi_highlands.cpp
