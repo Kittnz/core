@@ -268,7 +268,7 @@ void AddSC_boss_rares();
 void AddSC_boss_avatar_of_pompa();
 void AddSC_boss_turtlhu();
 void AddSC_instance_stormwind_vaults();
-void AddSC_instance_karazhan_crypts();
+void AddSC_instance_karazhan_crypt();
 void AddSC_boss_xmas_wolf();
 void AddSC_boss_nerubian_overseer();
 void AddSC_drogon();
@@ -556,7 +556,7 @@ void AddScripts()
     AddSC_boss_avatar_of_pompa();
     AddSC_boss_turtlhu();
     AddSC_instance_stormwind_vaults();
-    AddSC_instance_karazhan_crypts();
+    AddSC_instance_karazhan_crypt();
     AddSC_boss_xmas_wolf();
     AddSC_boss_nerubian_overseer();
     AddSC_drogon();
