@@ -191,3 +191,20 @@ replace into item_template (entry, display_id, name, class, quality, flags, buy_
 
 delete from creature_loot_template where entry = 6351 and item = 60139;
 replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values (6351,60139,-100,1,1,0,10);
+
+
+delete from quest_template where entry = 40039;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (40038,40039,2,16,56,45,0,0,'The Rethress Tide Scepter','The Rethress Tide Scepter holds power for me within the great depths of the world and especially within Nazjatar. It is the birthright of the Rethress and gives us dominion over many others. I had suspected they would try to steal it when the Spitelash was formed in order to get this dominion.\n\nYou may wonder, why am I telling you this, it would never concern a land-creature like yourself. Well, I buried the Scepter in a secretive location so that they could never claim power legitimately. Now that the Rethress Sanctum is founded and we are not in immediate danger I would like it returned.\n\nThere is a place called the Tower of Eldara, held by some Highborne Keeper. It is located at the very far north eastern tip of the peninsula. To the west of it, along the coast is four rocks, buried around those rocks is the Rethress Tide Scepter. Get it, and bring it to me interloper, to help me reclaim my birthright.','Find the Buried Rethress Tide Scepter and bring it to Tide Mistress Rashal.','Has the Scepter been found? Can you follow instructions $r?','You have found it... Well done land-walker, there is still one final task I must ask of you, to ensure the Rethress survive.',60140,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6000,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+replace into creature_questrelation (id, quest) values (91776, 40039);
+replace into creature_involvedrelation (id, quest) values (91776, 40039);
+
+delete from item_template where entry = 60140;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description) values (60140,20384,'Rethress Tide Scepter',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'Covered in grime and mud');
+
+delete from gameobject_template where entry = 2010808;
+replace into gameobject_template values
+(2010808, 0, 3, 1767, 'Pile of Glinting Sand', 0, 4, 0.3, 43, 2010808, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+delete from gameobject_loot_template where entry = 2010808;
+replace into gameobject_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values (2010808,60140,-100,1,1,0,10);
