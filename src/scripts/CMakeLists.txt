@@ -244,6 +244,8 @@ events/event_scourge_invasion.cpp
 events/event_wareffort.cpp
 events/event_wareffort.h
 events/event_dreadsteed.h
+events/quest_stormwind_rendezvous.cpp
+events/quest_stormwind_rendezvous.h
 
 miscelanneous/areatrigger_scripts.cpp
 miscelanneous/gameobject_scripts.cpp
@@ -301,9 +303,7 @@ world/western_plaguelands.cpp
 world/westfall.cpp
 world/wetlands.cpp
 world/winterspring.cpp
-world/stormwind_city/quest_stormwind_rendezvous.cpp
-world/stormwind_city/quest_stormwind_rendezvous.h
-world/stormwind_city/stormwind_city.cpp
+world/stormwind_city.cpp
 )
 
 if(WIN32)
