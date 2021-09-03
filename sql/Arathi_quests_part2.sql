@@ -89,3 +89,30 @@ delete from creature_loot_template where entry = 1084 and item = 60133;
 replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values (1084,60133,-30,1,1,0,10);
 
 update creature_template set npc_flags = 6 where entry = 11874;
+
+delete from quest_template where entry = 40032;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (40027,40032,2,8,39,30,0,0,'Draenic Communication','Akh Z\'ador is a Riftseeker who led us to this world. He was one of the few of our kind that knew the magic of our ancient ancestors. He was skilled enough to bring our entire tribe here, and that of the Fallow Sanctuary with the help of the other lesser Riftseekers.\n\nA few weeks ago he attempted to return to the old world in search of more exiles to bring to Harborage. I suspect something went terribly wrong for I could not detect his presence upon our old world with the Sanv Charm. You see, the magic he is using is old, and somewhat unstable. We barely understand its usage, and only the bright minds like Akh Z\'ador can manipulate it enough to travel.\n\nI need you to gather materials in order to cast a spell to find his location and see perhaps where it is he has gone. Local materials should work just fine. Gather me 6 Tangled Essence from the Tangled Horrors to the east, and a Marsh-Murloc Eye from Murlocs at the coast.','Gather 6 Tangled Essence and a Marsh Murloc Eye for Sanv Kla.','We must attempt to find Akh Z\'ador, and quickly outsider.','We shall begin the communication at once, stand back outsider, our magic is unstable.',60134,6,60135,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2350,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+replace into creature_questrelation (id, quest) values (91781, 40032);
+replace into creature_involvedrelation (id, quest) values (91781, 40032);
+
+delete from item_template where entry = 60134;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description) values (60134,1405,'Tangled Essence',12,1,2048,1,-1,-1,1,6,-1,-1,-1,-1,4,'');
+
+delete from item_template where entry = 60135;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description) values (60135,7986,'Marsh Murloc Eye',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'');
+
+delete from creature_loot_template where entry = 766 and item = 60134;
+replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values (766,60134,-50,1,1,0,10);
+
+delete from creature_loot_template where entry = 750 and item = 60135;
+replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values (750,60135,-10,1,1,0,10);
+
+delete from creature_loot_template where entry = 752 and item = 60135;
+replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values (752,60135,-10,1,1,0,10);
+
+delete from creature_loot_template where entry = 751 and item = 60135;
+replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values (751,60135,-10,1,1,0,10);
+
+delete from creature_loot_template where entry = 747 and item = 60135;
+replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values (747,60135,-9,1,1,0,10);
