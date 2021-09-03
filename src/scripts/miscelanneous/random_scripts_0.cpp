@@ -2489,9 +2489,104 @@ CreatureAI* GetAI_npc_oozeling_jubjub(Creature* pCreature)
     return new npc_oozeling_jubjubAI(pCreature);
 }
 
+
+struct npc_training_dummyAI : ScriptedAI
+{
+    explicit npc_training_dummyAI(Creature* pCreature) : ScriptedAI(pCreature)
+    {
+        npc_training_dummyAI::Reset();
+    }
+
+    uint32 m_uiCombatTimer;
+    std::unordered_map<ObjectGuid, time_t> attackers;
+
+    void Reset() override
+    {
+        m_uiCombatTimer = 15000;
+        attackers.clear();
+    }
+
+    void AttackStart(Unit* /*pWho*/) override {}
+
+    void Aggro(Unit* pWho) override
+    {
+        SetCombatMovement(false);
+    }
+
+    void AddAttackerToList(Unit* pWho)
+    {
+        auto itr = attackers.find(pWho->GetObjectGuid());
+        if (itr != attackers.end())
+        {
+            itr->second = std::time(nullptr);
+        }
+        else
+        {
+            attackers.emplace(pWho->GetObjectGuid(), std::time(nullptr));
+        }
+    }
+
+    void DamageTaken(Unit* pWho, uint32& /*uiDamage*/) override
+    {
+        if (pWho)
+            AddAttackerToList(pWho);
+    }
+
+    void SpellHit(Unit* pWho, const SpellEntry* /*pSpell*/) override
+    {
+        if (pWho)
+            AddAttackerToList(pWho);
+    }
+
+    void UpdateAI(const uint32 diff) override
+    {
+        if (m_creature->IsInCombat())
+        {
+            if (m_uiCombatTimer <= diff)
+            {
+                for (auto itr = attackers.begin(); itr != attackers.end();)
+                {
+                    Unit* pAttacker = m_creature->GetMap()->GetUnit(itr->first);
+
+                    if (!pAttacker || !pAttacker->IsInWorld())
+                    {
+                        itr = attackers.erase(itr);
+                        continue;
+                    }
+                    if (itr->second + 10 < std::time(nullptr))
+                    {
+                        m_creature->_removeAttacker(pAttacker);
+                        m_creature->GetThreatManager().modifyThreatPercent(pAttacker, -101.0f);
+                        itr = attackers.erase(itr);
+                        continue;
+                    }
+                    ++itr;
+                }
+
+                if (m_creature->GetThreatManager().isThreatListEmpty())
+                    EnterEvadeMode();
+
+                m_uiCombatTimer = 15000;
+            }
+            else
+                m_uiCombatTimer -= diff;
+        }
+    }
+};
+
+CreatureAI* GetAI_npc_training_dummy(Creature* pCreature)
+{
+    return new npc_training_dummyAI(pCreature);
+}
+
 void AddSC_npcs_special()
 {
     Script *newscript;
+	
+	newscript = new Script;
+    newscript->Name = "custom_npc_training_dummy";
+    newscript->GetAI = &GetAI_npc_training_dummy;
+    newscript->RegisterSelf(false);
 
     newscript = new Script;
     newscript->Name = "npc_chicken_cluck";
