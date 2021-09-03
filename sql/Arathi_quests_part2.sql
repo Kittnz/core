@@ -39,3 +39,38 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 
 replace into creature_questrelation (id, quest) values (1776, 40029);
 replace into creature_involvedrelation (id, quest) values (1776, 40029);
+
+
+delete from quest_template where entry = 40030;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (40029,40030,2,8,36,30,0,0,'Noboru the Cudgel','There is one we fear, his name is Noboru the Cudgel, and he roams with a band of thugs who terrorize us at every opportunity. He is a skilled warrior from our old tribe on Outland, very few in the village can stand up to him and his goons both. Noboru has enacted great brutality on Harborage, and killed members of our tribe without any sign of remorse.\n\nNoboru must be stopped, you must kill him in order for the bloodshed to end. He wields a Cudgel, it is from this brutal weapon he has gained his nickname. Defeat him, bring us his weapon so that we may still survive on this foreign world.','Find and slay Noboru the Cudgel, and bring Noboru\'s Cudgel to Magtoor.','Has the feared one been defeated?','You have done it? You have truly defeated the terrible one? This is a joyous day for the Harborage. He was a direct threat to our survival, and we did not have the strength to face him.\n\nWe are fortunate you were able to help outsider! Please, as a symbol of our gratitude, take one of our artifacts from the old world. They serve no purpose to us anymore. We must look to the future and not remember the brutal past.',60130,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2475,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60131,1,60132,1,0,0,0,0);
+
+replace into creature_questrelation (id, quest) values (1776, 40030);
+replace into creature_involvedrelation (id, quest) values (1776, 40030);
+
+delete from item_template where entry = 60130;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description) values (60130,4896,'Noboru\'s Cudgel',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'');
+
+delete from item_template where entry = 60131;
+replace into item_template values
+ ('60131', '0', '4', '0', 'Scepter of Aka\'sha', 'The Scepter of a temple long forgotten', '27929', '2', '0', '1', '73240', '18310', '23', '-1', '-1', '45',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '10', '6', '5',
+ '7', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '4', '1', '0', '0', '0', '0', '0', '0', '0', '26', '0', '0', '0',
+ '0', '1', '0');
+ 
+delete from item_template where entry = 60132;
+replace into item_template values
+ ('60132', '0', '4', '0', 'Talisman of Kar\'noom', 'Ancient Talisman of a long gone sage', '35437', '2', '0', '1', '45816', '11454', '2', '-1', '-1', '42',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '8', '6', '8',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '4', '1', '0', '0', '0', '0', '0', '0', '0', '26', '0', '0', '0',
+ '0', '1', '0');
+
+delete from creature_loot_template where entry = 5477 and item = 60130;
+replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values (5477,60130,-100,1,1,0,10);
