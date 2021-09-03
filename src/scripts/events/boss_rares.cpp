@@ -4,7 +4,7 @@
 
 enum
 {
-    /* boss_taranaszz */
+    /* boss_tarangos */
     SPELL_ICE_BREATH = 16350,
     SPELL_REND       = 17153,
     /* boss_blademaster_kargron */
@@ -59,7 +59,7 @@ enum
 
 enum Events
 {
-    /* boss_taranaszz */
+    /* boss_tarangos */
     EVENT_ICE_BREATH,
     EVENT_REND,
     /* boss_blademaster_kargron */
@@ -104,9 +104,9 @@ enum Events
     EVENT_DEM_SHOUT,
 };
 
-struct boss_taranaszzAI : public ScriptedAI
+struct boss_tarangosAI : public ScriptedAI
 {
-    boss_taranaszzAI(Creature* pCreature) : ScriptedAI(pCreature)
+    boss_tarangosAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
         Reset();
     }
@@ -1064,9 +1064,9 @@ struct boss_explorer_ashbeardAI : public ScriptedAI
     }
 };
 
-CreatureAI* GetAI_boss_taranaszz(Creature* pCreature)
+CreatureAI* GetAI_boss_tarangos(Creature* pCreature)
 {
-    return new boss_taranaszzAI(pCreature);
+    return new boss_tarangosAI(pCreature);
 }
 
 CreatureAI* GetAI_boss_blademaster_kargron(Creature* pCreature)
@@ -1133,8 +1133,8 @@ void AddSC_boss_rares()
 {
     Script* newscript;
     newscript = new Script;
-    newscript->Name = "boss_taranaszz";
-    newscript->GetAI = &GetAI_boss_taranaszz;
+    newscript->Name = "boss_tarangos";
+    newscript->GetAI = &GetAI_boss_tarangos;
     newscript->RegisterSelf();
 
     newscript = new Script;
