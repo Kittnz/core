@@ -1,4 +1,3 @@
-replace into map_template (entry, map_name) values ('800', 'Karazhan Crypts');
 replace into map_template (entry, map_name) values ('801', 'Secret Cow Level');
 
 replace into creature_template values 

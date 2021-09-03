@@ -299,8 +299,10 @@ set (SCRIPTS_SRCS
     turtlewow/world_bosses/boss_nerubian_overseer.cpp
     turtlewow/world_bosses/boss_dark_reaver.cpp
     turtlewow/world_bosses/boss_ostarius.cpp
+    turtlewow/world_bosses/boss_rares.cpp
 
     turtlewow/dungeons/stormwind_vaults/instance_stormwind_vaults.cpp
+    turtlewow/dungeons/karazhan_crypts/instance_karazhan_crypts.cpp
 
     turtlewow/dungeons/caverns_of_time/black_morass/boss_gerastrasz.cpp
     turtlewow/dungeons/caverns_of_time/instance_caverns_of_time.cpp
