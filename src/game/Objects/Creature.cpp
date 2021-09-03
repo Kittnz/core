@@ -2544,6 +2544,9 @@ bool Creature::MeetsSelectAttackingRequirement(Unit* pTarget, SpellEntry const* 
     if (selectFlags & SELECT_FLAG_NO_TOTEM && pTarget->ToCreature() && pTarget->ToCreature()->IsTotem())
         return false;
 
+    if (selectFlags & SELECT_FLAG_NO_PET && pTarget->ToCreature() && pTarget->ToCreature()->IsPet())
+        return false;
+
     if (selectFlags & SELECT_FLAG_POWER_MANA && pTarget->GetPowerType() != POWER_MANA)
         return false;
 
