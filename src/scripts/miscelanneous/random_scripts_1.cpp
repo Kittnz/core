@@ -7006,7 +7006,7 @@ bool QuestRewarded_npc_magtoor(Player* pPlayer, Creature* pQuestGiver, Quest con
     return false;
 }
 
-void AddSC_tw_random()
+void AddSC_random_scripts_1()
 {
     Script* newscript;
 

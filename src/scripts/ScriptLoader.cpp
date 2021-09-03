@@ -33,8 +33,6 @@ void AddSC_npc_king_gordok();
 void AddSC_areatrigger_scripts();
 void AddSC_dragons_of_nightmare();
 void AddSC_boss_lord_kazzak();
-void AddSC_npcs_special();
-void AddSC_Totems();
 void AddSC_world_event_naxxramas();
 void AddSC_event_scourge_invasion();
 
@@ -269,12 +267,16 @@ void AddSC_boss_gerastrasz();
 void AddSC_boss_chromie();
 void AddSC_boss_chronormu();
 void AddSC_instance_caverns_of_time();
-void AddSC_tw_random();
 void AddSC_mirage_raceway();
 void AddSC_gardening();
 void AddSC_boss_dark_reaver();
 void AddSC_boss_ostarius();
 void AddSC_CUSTOM_SPELL();
+
+void AddSC_random_scripts_0();
+void AddSC_random_scripts_1();
+void AddSC_random_scripts_2();
+void AddSC_random_scripts_3();
 
 void AddSC_boss_abbendis();
 void AddSC_boss_ardaeus();
@@ -313,7 +315,6 @@ void AddScripts()
     AddSC_areatrigger_scripts();
     AddSC_dragons_of_nightmare();
     AddSC_boss_lord_kazzak();
-    AddSC_npcs_special();
     AddSC_world_event_naxxramas();
     AddSC_event_scourge_invasion();
 
@@ -546,12 +547,16 @@ void AddScripts()
     AddSC_boss_chromie();
     AddSC_boss_chronormu();
     AddSC_instance_caverns_of_time();
-    AddSC_tw_random();
     AddSC_mirage_raceway();
     AddSC_gardening();
     AddSC_boss_dark_reaver();
     AddSC_boss_ostarius();
     AddSC_CUSTOM_SPELL();
+
+    AddSC_random_scripts_0();
+    AddSC_random_scripts_1();
+    AddSC_random_scripts_2();
+    AddSC_random_scripts_3();
 
     AddSC_boss_abbendis();
     AddSC_boss_ardaeus();
