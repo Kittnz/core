@@ -3,7 +3,7 @@
 #define KARAZHAN_CRYPT_KEY 51356
 #define KARAZHAN_GATE_RESET 1
 
-bool GOHello_karazhan_crypts_gate(Player* pPlayer, GameObject* pGo)
+bool GOHello_karazhan_crypt_gate(Player* pPlayer, GameObject* pGo)
 {
     if (pPlayer->HasItemCount(KARAZHAN_CRYPT_KEY, 1))
     {
@@ -19,9 +19,9 @@ bool GOHello_karazhan_crypts_gate(Player* pPlayer, GameObject* pGo)
     return true;
 }
 
-struct karazhan_crypts_gate : public GameObjectAI
+struct karazhan_crypt_gate : public GameObjectAI
 {
-    explicit karazhan_crypts_gate(GameObject* pGo) : GameObjectAI(pGo) {}
+    explicit karazhan_crypt_gate(GameObject* pGo) : GameObjectAI(pGo) {}
     uint32 BackTimer = 0;
 
     virtual void UpdateAI(uint32 const uiDiff) override
@@ -52,11 +52,11 @@ struct karazhan_crypts_gate : public GameObjectAI
     }
 };
 
-GameObjectAI* GetAI_karazhan_crypts_gate(GameObject* Obj){ return new karazhan_crypts_gate(Obj); }
+GameObjectAI* GetAI_karazhan_crypt_gate(GameObject* Obj) { return new karazhan_crypt_gate(Obj); }
 
-struct karazhan_crypts_portal : public GameObjectAI
+struct karazhan_crypt_portal : public GameObjectAI
 {
-    explicit karazhan_crypts_portal(GameObject* pGo) : GameObjectAI(pGo)
+    explicit karazhan_crypt_portal(GameObject* pGo) : GameObjectAI(pGo)
     {
         m_uiUpdateTimer = 1000;
     }
@@ -74,8 +74,8 @@ struct karazhan_crypts_portal : public GameObjectAI
             Cell::VisitWorldObjects(me, searcher, 5.0f);
 
             for (Player* pPlayer : players)
-            {                
-                if (!pPlayer->IsAlive()) 
+            {
+                if (!pPlayer->IsAlive())
                 {
                     pPlayer->ResurrectPlayer(0.5f);
                     pPlayer->SpawnCorpseBones();
@@ -94,20 +94,20 @@ struct karazhan_crypts_portal : public GameObjectAI
     }
 };
 
-GameObjectAI* GetAI_karazhan_crypts_portal(GameObject* gameobject) { return new karazhan_crypts_portal(gameobject); }
+GameObjectAI* GetAI_karazhan_crypt_portal(GameObject* gameobject) { return new karazhan_crypt_portal(gameobject); }
 
-void AddSC_instance_karazhan_crypts()
+void AddSC_instance_karazhan_crypt()
 {
     Script* newscript;
 
     newscript = new Script;
-    newscript->Name = "karazhan_crypts_gate";
-    newscript->pGOHello = &GOHello_karazhan_crypts_gate;
-    newscript->GOGetAI = &GetAI_karazhan_crypts_gate;
+    newscript->Name = "karazhan_crypt_gate";
+    newscript->pGOHello = &GOHello_karazhan_crypt_gate;
+    newscript->GOGetAI = &GetAI_karazhan_crypt_gate;
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "karazhan_crypts_portal";
-    newscript->GOGetAI = &GetAI_karazhan_crypts_portal;
+    newscript->Name = "karazhan_crypt_portal";
+    newscript->GOGetAI = &GetAI_karazhan_crypt_portal;
     newscript->RegisterSelf();
 }
