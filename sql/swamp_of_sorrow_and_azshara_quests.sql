@@ -228,3 +228,10 @@ replace into gameobject_template values
 
 delete from gameobject_loot_template where entry = 2010808;
 replace into gameobject_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values (2010808,60140,-100,1,1,0,10);
+
+
+delete from quest_template where entry = 40040;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (0,40040,2,16,50,40,0,0,'The Flaxwhisker Front','Howdy! Welcome to Flaxwhisker post, I am Fendo in charge of all manner of things around here. I\'m suppose to direct any new arrivies in Flaxwhisker to the boss. That is to say, we haven\'t heard word from Gnomeregan in months, or recieved any new people! Still, good to have you around $r. You\'ll find Gigno Flaxwhisker inside, at the top floor.','Speak with Gigno Flaxwhisker.','Mmm, yes?','Oh, someone new? We haven\'t had anyone new around here in a long time, we haven\'t been told of someone new arriving... You want to help us out, you gotta prove to me you\'re the real deal buddy!',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,250,54,25,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+replace into creature_questrelation (id, quest) values (91770, 40040);
+replace into creature_involvedrelation (id, quest) values (91768, 40040);
