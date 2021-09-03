@@ -83,7 +83,7 @@ struct karazhan_crypt_portal : public GameObjectAI
                 if (me->GetEntry() == 181580) // Entrance
                     pPlayer->TeleportTo(800, -11085.0F, -1788.2F, 52.7F, 5.3F);
                 if (me->GetEntry() == 181581) // Exit
-                    pPlayer->TeleportTo(1, -11068.9F, -1828.6F, 60.26F, 3.1F);
+                    pPlayer->TeleportTo(0, -11068.9F, -1828.6F, 60.26F, 3.1F);
             }
             m_uiUpdateTimer = 1000;
         }
