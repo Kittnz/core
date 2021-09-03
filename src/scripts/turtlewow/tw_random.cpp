@@ -6965,9 +6965,55 @@ struct npc_stone_guardAI : public ScriptedAI
 
 CreatureAI* GetAI_npc_stone_guard(Creature* _Creature) { return new npc_stone_guardAI(_Creature); }
 
+bool QuestRewarded_npc_magtoor(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    if (pQuest->GetQuestId() == 40030) // Noboru the Cudgel
+    {
+        Creature* exile1 = pPlayer->FindNearestCreature(60421, 40.0F);
+        if (exile1)
+        {
+            DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = exile1]() {
+                npc->HandleEmote(EMOTE_ONESHOT_TALK);
+                npc->MonsterSayToPlayer("You have saved Harborage!", player);
+                });
+
+        Creature* exile2 = pPlayer->FindNearestCreature(60422, 40.0F);
+        if (exile2)
+            DoAfterTime(pPlayer, 3 * IN_MILLISECONDS, [player = pPlayer, npc = exile2]() {
+                npc->HandleEmote(EMOTE_ONESHOT_TALK);
+                npc->MonsterSayToPlayer("Noboru is dead? We thank you outsider!", player);
+                });
+
+        Creature* exile3 = pPlayer->FindNearestCreature(60423, 40.0F);
+        if (exile3)
+            DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [player = pPlayer, npc = exile3]() {
+                npc->HandleEmote(EMOTE_ONESHOT_TALK);
+                npc->MonsterSayToPlayer("We will fear no longer the menace Noboru.", player);
+                });
+
+        Creature* exile4 = pPlayer->FindNearestCreature(60424, 40.0F);
+        if (exile4)
+            DoAfterTime(pPlayer, 7 * IN_MILLISECONDS, [player = pPlayer, npc = exile4]() {
+                npc->HandleEmote(EMOTE_ONESHOT_TALK);
+                npc->MonsterSayToPlayer("Our journey here was not pointless after all, thank you.", player);
+                });
+            return true;
+        }
+    }
+
+    return false;
+}
+
 void AddSC_tw_random()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_magtoor";
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_magtoor;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_stone_guard";
