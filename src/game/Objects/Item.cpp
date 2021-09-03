@@ -26,7 +26,7 @@
 #include "Database/DatabaseEnv.h"
 #include "ItemEnchantmentMgr.h"
 #include "GuildMgr.h"
-#include "miscelanneous/transmog.h"
+#include "miscelanneous/feature_transmog.h"
 
 void AddItemsSetItem(Player* player, Item* item)
 {

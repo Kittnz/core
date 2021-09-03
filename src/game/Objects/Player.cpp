@@ -69,7 +69,7 @@
 #include "GMTicketMgr.h"
 #include "MasterPlayer.h"
 #include "MovementPacketSender.h"
-#include "miscelanneous/transmog.h"
+#include "miscelanneous/feature_transmog.h"
 
 /* Nostalrius */
 #include "Config/Config.h"

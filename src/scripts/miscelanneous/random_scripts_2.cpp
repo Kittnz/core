@@ -582,7 +582,6 @@ CreatureAI* GetAI_TotemGlebe(Creature* pCreature)
     return new TotemGlebeAI(pCreature);
 }
 
-
 enum
 {
     POINT_LAST_POINT = 0xFFFFFF

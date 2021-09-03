@@ -2579,7 +2579,7 @@ CreatureAI* GetAI_npc_training_dummy(Creature* pCreature)
     return new npc_training_dummyAI(pCreature);
 }
 
-void AddSC_npcs_special()
+void AddSC_random_scripts_0()
 {
     Script *newscript;
 	
