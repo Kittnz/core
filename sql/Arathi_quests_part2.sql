@@ -147,3 +147,27 @@ replace into gameobject_template values
 
 delete from gameobject_loot_template where entry = 2010807;
 replace into gameobject_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values (2010807,60136,-100,1,1,0,10);
+
+
+delete from quest_template where entry = 40036;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (40034,40036,2,16,54,45,0,0,'A Broken Oath','The Myrmidon\'s of Rethress swore a sacred oath upon the stones of the Temple Rethress beneath the deep waves. Their word was their bond, and they broke both the word of their sharp tongues and the oath they promised to keep. We were tasked with the protection of Tide Mistress Rashal, and to carry out her whims and deeds for the greater depths of all Naga.\n\nWhen the Spitelash was created, and the division began most all of the Myrmidon\'s changed sides. They betrayed those loyal to the Rethress on orders from Naszharr and slayed many of my most trusted brothers upon The Shattered Strand.\n\nI want them dead interloper, I want their corpses to be feasted on by the depths. From their bodies take their Myrmidon Signet\'s, a ring given to them upon swearing their oath.','Gather 20 Myrmidon Signets from Spitelash Myrmidon on the Shattered Strand.','Have you killed the oathbreakers $r?','The Spitelash Myrmidon are an abomination to the great depths, they deserved death for breaking our most sacred bonds... I am pleased.',60137,20,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5600,0,0,0,0,0,0,0,0,0,0,0,60138,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+replace into creature_questrelation (id, quest) values (91777, 40036);
+replace into creature_involvedrelation (id, quest) values (91777, 40036);
+
+delete from item_template where entry = 60137;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description) values (60137,35313,'Myrmidon Signet',12,1,2048,1,-1,-1,1,20,-1,-1,-1,-1,4,'');
+
+delete from item_template where entry = 60138;
+replace into item_template values
+ ('60138', '0', '2', '6', 'Rethress Myrmidon Triden', '', '8746', '2', '0', '1', '195107', '48761', '17', '-1', '-1', '57',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '5', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3200', '0',
+ '0', '121', '177', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '5', '0', '0', '15464', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '1', '2', '0', '0', '85', '0', '0', '0', '0', '30', '0', '0', '0',
+ '0', '1', '0');
+
+delete from creature_loot_template where entry = 7885 and item = 60137;
+replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values (7885,60137,-100,1,1,0,10);
