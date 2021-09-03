@@ -248,3 +248,16 @@ replace into item_template (entry, display_id, name, class, quality, flags, buy_
 
 delete from creature_loot_template where entry = 8763 and item = 60141;
 replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values (8763,60141,-30,1,1,0,10);
+
+
+delete from quest_template where entry = 40042;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (40041,40042,2,16,50,40,0,0,'Delivery for Bromley','A Dalaran wizard stopped by a few weeks ago believe it or not! I\'ve never met a wizard from Dalaran and his magic was impeccable, and I really mean it! He offered us some help with a few projects but asked for some supplies in return. I haven\'t had the means to get them to him yet, given all of the danger between me and the camp he is within up north of here.\n\nDo me a favor would you, run my delivery to Magus Bromley. You can find him to the northwest of Lake Mennar. He has a tent overlooking the Ruins of Eldarath just on the ridges there!','Deliver Gigno\'s Shipment to Magus Bromley in Azshara.','Hello there traveler, do you bring news from the outside world?','So Gigno finally delivered the shipment? Well I am pleased to recieve it at all, I hadn\'t expected it would arrive in some time with all of the... Trouble in the area.',60142,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60142,1,0,1000,54,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+replace into creature_questrelation (id, quest) values (91768, 40042);
+replace into creature_involvedrelation (id, quest) values (91350, 40042);
+
+delete from item_template where entry = 60142;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values (60142,7926,'Gigno\'s Shipment',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'Has a note attached to the top , readable pagetext:',50502);
+
+delete from page_text where entry = 50502;
+replace into page_text (entry, text, next_page) value (50502,'Hello there Bromley! I sent the bearer of this box with the supplies you needed! Sorry for taking so long, there is a lot of danger between you and us! Thanks again for the magical help you\'ve given us, you certainly advanced our projects!\n\nGigno Flaxwhisker of the Flaxwhisker Front.',0);
