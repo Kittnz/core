@@ -6,7 +6,7 @@
 #include <memory>
 
 // I need to check if creature is an image in order to avoid scaling it
-#include <kalimdor/silithus/temple_of_ahnqiraj/boss_skeram.cpp>
+#include "../scripts/dungeons/temple_of_ahnqiraj/boss_skeram.cpp"
 
 using namespace AutoScaling;
 
