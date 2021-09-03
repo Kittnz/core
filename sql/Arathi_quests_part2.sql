@@ -74,3 +74,18 @@ replace into item_template values
 
 delete from creature_loot_template where entry = 5477 and item = 60130;
 replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values (5477,60130,-100,1,1,0,10);
+
+
+delete from quest_template where entry = 40031;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (0,40031,2,8,35,30,0,0,'Leather, A Draenic Luxury','It is good to work with leather once again. On our old planet of Outland we had scarce access to the resource. It was considered a rarity, a luxury there with the lack of beasts and lack of water. Our planet was once as dense, and populated as this, until the demons came and the waters dried. It is like we live in a paradise on this world. I had my doubts with Sanv K\'la and his plan at first, but it seems as though this land is much more promising then I had originally imagined.\n\nI would ask of you outsider to gather me leather from the Young Sawtooth Crocolisks, it is hard, but still stretchable in its quality, and has made good use for our purposes. With the lost ones of Fallow Sanctuary lurking about, it has been more dangerous to get.','Gather 10 Sawtooth Leather for Masat T\'andr.','Have you procured the leather?','Oh, more leather to work with, my hands are eager to get started. I thank you outsider for  getting me this.',60133,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2350,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+replace into creature_questrelation (id, quest) values (11874, 40031);
+replace into creature_involvedrelation (id, quest) values (11874, 40031);
+
+delete from item_template where entry = 60133;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description) values (60133,4676,'Sawtooth Leather',12,1,2048,1,-1,-1,1,10,-1,-1,-1,-1,4,'');
+
+delete from creature_loot_template where entry = 1084 and item = 60133;
+replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values (1084,60133,-30,1,1,0,10);
+
+update creature_template set npc_flags = 6 where entry = 11874;
