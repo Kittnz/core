@@ -264,6 +264,7 @@ void AddSC_npc_j_eevee();                            // J'Eevee, the Imp in a Ja
 void AddSC_shop();
 void AddSC_arena_tournament();
 void AddSC_battlemaster();
+void AddSC_boss_rares();
 void AddSC_boss_avatar_of_pompa();
 void AddSC_boss_turtlhu();
 void AddSC_instance_stormwind_vaults();
@@ -550,6 +551,7 @@ void AddScripts()
     AddSC_shop();
     AddSC_arena_tournament();
     AddSC_battlemaster();
+    AddSC_boss_rares();
     AddSC_boss_avatar_of_pompa();
     AddSC_boss_turtlhu();
     AddSC_instance_stormwind_vaults();
