@@ -235,3 +235,16 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 
 replace into creature_questrelation (id, quest) values (91770, 40040);
 replace into creature_involvedrelation (id, quest) values (91768, 40040);
+
+
+delete from quest_template where entry = 40041;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (40040,40041,2,16,50,40,0,0,'Flaxwhisker Loyalty','If you\'re the real deal then you gotta do a real task, That makes sense yeah? I\'ve been dying to get my hands on a Mistwing Horn for some time! Those creatures are quite powerful and supercharged with all sorts of natural energy. I\'ve had my suspicions for some time now that a Mistwing Horn could be useful beyond its practical purposes and I\'d like to put it to the test.. That\'s where you come in.\n\nThe Mistwing can be found to the north west just beyond Lake Mennar. Keep careful though, there are all manner of big, and powerful things up there! Azshara sure is a dangerous place.','Obtain a Mistwing Horn for Gigno Flaxwhisker to prove your loyalties.','Have you gotten the Horn for me?','Wow you got it? I guess you are the real deal and you really do want to help us! I\'ll spread the word around that you\'re A-OKAY! Let us get some work done then!',60141,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5450,54,175,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+replace into creature_questrelation (id, quest) values (91768, 40041);
+replace into creature_involvedrelation (id, quest) values (91768, 40041);
+
+delete from item_template where entry = 60141;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description) values (60141,1416,'Mistwing Horn',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'');
+
+delete from creature_loot_template where entry = 8763 and item = 60141;
+replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values (8763,60141,-30,1,1,0,10);
