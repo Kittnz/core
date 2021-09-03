@@ -178,3 +178,16 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 
 replace into creature_questrelation (id, quest) values (91776, 40037);
 replace into creature_involvedrelation (id, quest) values (91776, 40037);
+
+
+delete from quest_template where entry = 40038;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (40037,40038,2,16,56,45,0,0,'Keeping Command','The leader of the Storm Bay is a murloc with a brain the size of a small oyster. Mmrmglul is his name, he should be punished, and brutally for rallying the Storm Bay Murlocs in an open revolt.\n\nYou\'ll find that slimy eel to the north, through the pathways and along the coastline on the Southridge Beach. Bring his head to me as a showing to the rest of his lackeys that Tide Mistress Rashal commands the Storm Bay Murlocs.','Slay Mmrmglul and bring his head to Tide Mistress Rashal.','Have you got his head interloper?','Even just crippling their numbers is enough to please me. My kind would never stand for such an abboration of the tides rules, and if I had the numbers I would be sure to make them suffer.',60139,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5700,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+replace into creature_questrelation (id, quest) values (91776, 40038);
+replace into creature_involvedrelation (id, quest) values (91776, 40038);
+
+delete from item_template where entry = 60139;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description) values (60139,9585,'Head of Mmrmglul',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'');
+
+delete from creature_loot_template where entry = 6351 and item = 60139;
+replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values (6351,60139,-100,1,1,0,10);
