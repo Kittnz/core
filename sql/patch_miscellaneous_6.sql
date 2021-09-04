@@ -7,7 +7,7 @@ replace into creature_template values
 (91904, 0, 18144, 0, 0, 0, 'Larry', '', 0, 35, 35, 1342, 1342, 0, 0, 1357, 35, 2, 1.11, 1.14286, 1.8, 20, 5, 0, 0, 1, 51, 65, 0, 138, 1, 2000, 2000, 1, 768, 0, 0, 0, 0, 0, 0, 51.128, 70.301, 100, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 2, 0, ''),
 (91905, 0, 12610, 0, 0, 0, 'Sailor Darkbay', 'Kul Tiras', 0, 45, 53, 1981, 4281, 0, 0, 2246, 15, 0, 1.11111, 1.14286, 0, 20, 5, 0, 0, 1, 300, 345, 0, 172, 1, 2000, 2000, 1, 768, 0, 0, 0, 0, 0, 0, 58.7664, 80.8038, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 524290, 0, '');
 
-update creature_template set npc_flags = 1, faction = 189, unit_flags = 2, equipment_id = 5838 where entry = 91799;
+update creature_template set npc_flags = 1, faction = 189, unit_flags = 2, scale = 2.5 where entry = 91799;
 update creature_template set display_id1 = 18149 where entry = 91800;
 update creature_template set display_id1 = 3264 where entry = 91886;
 update creature_template set rank = 1 where entry = 70891;
