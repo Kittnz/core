@@ -119,10 +119,10 @@ bool GossipSelect_the_cow_king(Player* pPlayer, Creature* pCreature, uint32 uiSe
 
 enum cow_king_spells
 {
-    SPELL_CLEAVE = 15284,
-    SPELL_MORTAL_STRIKE = 16856,
+    SPELL_FIREBALL = 20678,
+    SPELL_SHADOWBOLT_VOLLEY = 25586,
     SPELL_THUNDERCLAP = 23931,
-    SPELL_UPPERCUT = 22916,
+    SPELL_FROSTBOLT = 28479,
     SPELL_CHARGE = 22911,
     SPELL_WARSTOMP = 16727,
 };
@@ -154,7 +154,7 @@ public:
 
         if (m_uiCleaveTimer <= uiDiff)
         {
-            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_CLEAVE) == CAST_OK)
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_FIREBALL) == CAST_OK)
                 m_uiCleaveTimer = 10000;
         }
         else
@@ -162,7 +162,7 @@ public:
 
         if (m_uiMortalStrikeTimer <= uiDiff)
         {
-            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_MORTAL_STRIKE) == CAST_OK)
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_SHADOWBOLT_VOLLEY) == CAST_OK)
                 m_uiMortalStrikeTimer = 15000;
         }
         else
@@ -170,7 +170,7 @@ public:
 
         if (m_uiUppercutTimer <= uiDiff)
         {
-            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_UPPERCUT) == CAST_OK)
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_FROSTBOLT) == CAST_OK)
                 m_uiUppercutTimer = 20000;
         }
         else
