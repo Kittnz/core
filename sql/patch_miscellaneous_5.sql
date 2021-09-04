@@ -37,15 +37,66 @@ replace into creature_template values
 (91840, 0, 9134, 0, 0, 0, 'Deeptide Myrmidon', NULL, 0, 52, 53, 3179, 3379, 0, 0, 3026, 74, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 87, 107, 0, 230, 1, 2000, 2000, 1, 32768, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 6196, 6196, 0, 0, 0, 0, 0, 0, 0, 11976, 0, 0, 0, 0, 0, 105, 143, '', 1, 3, 0, 0, 3, 6196, 0, 0, 0, 0, 2097152, 0, ''),
 (91841, 0, 6750, 0, 0, 0, 'Deeptide Siren', NULL, 0, 50, 51, 2479, 2779, 0, 0, 3026, 74, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 87, 107, 0, 230, 1, 2000, 2000, 1, 32768, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 6196, 6196, 0, 0, 0, 0, 0, 0, 0, 11976, 0, 0, 0, 0, 0, 105, 143, '', 1, 3, 0, 0, 3, 6196, 0, 0, 0, 0, 2097152, 0, ''),
 (91842, 0, 9134, 0, 0, 0, 'Deeptide Tidehunter', NULL, 0, 49, 52, 2279, 2779, 0, 0, 3026, 74, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 87, 107, 0, 230, 1, 2000, 2000, 1, 32768, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 6196, 6196, 0, 0, 0, 0, 0, 0, 0, 11976, 0, 0, 0, 0, 0, 105, 143, '', 1, 3, 0, 0, 3, 6196, 0, 0, 0, 0, 2097152, 0, ''),
-(91843, 0, 9134, 0, 0, 0, 'Deeptide Serpent Guard', NULL, 0, 52, 54, 2479, 3579, 0, 0, 3026, 74, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 87, 107, 0, 230, 1, 2000, 2000, 1, 32768, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 6196, 6196, 0, 0, 0, 0, 0, 0, 0, 11976, 0, 0, 0, 0, 0, 105, 143, '', 1, 3, 0, 0, 3, 6196, 0, 0, 0, 0, 2097152, 0, '');
+(91843, 0, 9134, 0, 0, 0, 'Deeptide Serpent Guard', NULL, 0, 52, 54, 2479, 3579, 0, 0, 3026, 74, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 87, 107, 0, 230, 1, 2000, 2000, 1, 32768, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 6196, 6196, 0, 0, 0, 0, 0, 0, 0, 11976, 0, 0, 0, 0, 0, 105, 143, '', 1, 3, 0, 0, 3, 6196, 0, 0, 0, 0, 2097152, 0, ''),
+(91844, 0, 793, 0, 0, 0, 'Southsea Buccaneer', NULL, 0, 50, 51, 2979, 2979, 0, 0, 2389, 230, 0, 1.21, 1.14286, 0, 20, 5, 0, 0, 1, 128, 153, 0, 230, 1, 1500, 1650, 1, 0, 0, 0, 0, 0, 0, 0, 64.68, 88.935, 100, 7, 0, 8581, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 85810, 0, 46, 230, 'EventAI', 1, 3, 0, 0, 3, 8581, 0, 0, 0, 0, 64, 0, ''),
+(91845, 0, 6945, 0, 0, 0, 'Southsea Corsair', NULL, 0, 52, 53, 3179, 3279, 0, 0, 2389, 230, 0, 1.21, 1.14286, 0, 20, 5, 0, 0, 1, 148, 173, 0, 230, 1, 1500, 1650, 1, 0, 0, 0, 0, 0, 0, 0, 64.68, 88.935, 100, 7, 0, 8581, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 85810, 0, 46, 230, 'EventAI', 1, 3, 0, 0, 3, 8581, 0, 0, 0, 0, 64, 0, ''),
+(91846, 0, 797, 0, 0, 0, '\'Water Rat\' Jorgy', 'Southsea Freebooters', 0, 54, 54, 4179, 4279, 0, 0, 2389, 230, 0, 1.21, 1.14286, 0, 20, 5, 0, 0, 1, 148, 173, 0, 230, 1, 1500, 1650, 1, 0, 0, 0, 0, 0, 0, 0, 64.68, 88.935, 100, 7, 0, 8581, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 85810, 0, 46, 230, 'EventAI', 1, 3, 0, 0, 3, 8581, 0, 0, 0, 0, 64, 0, ''),
+(91847, 0, 2181, 0, 0, 0, 'Southsea Pillager', NULL, 0, 51, 52, 2384, 2466, 1864, 1923, 2500, 74, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 106, 137, 0, 234, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 7, 0, 6198, 6198, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 61980, 0, 91, 124, '', 0, 3, 0, 0, 3, 6198, 0, 0, 0, 0, 0, 0, ''),
+(91848, 0, 11545, 0, 0, 0, 'Gor\'dosh Ogre', NULL, 0, 48, 50, 3322, 3438, 0, 0, 2285, 45, 0, 1.6, 1.14286, 0, 20, 5, 0, 0, 1, 87, 107, 0, 230, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 67.32, 92.565, 100, 7, 0, 7033, 7033, 0, 0, 0, 0, 0, 0, 0, 13382, 0, 0, 0, 70330, 0, 114, 154, 'EventAI', 0, 3, 0, 0, 3, 7033, 0, 0, 0, 0, 0, 0, ''),
+(91849, 0, 10709, 0, 0, 0, 'Gor\'dosh Brute', NULL, 0, 50, 51, 2672, 2672, 0, 0, 2944, 45, 0, 1.6, 1.14286, 0, 20, 5, 0, 0, 1, 85, 104, 0, 220, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 62.8672, 86.4424, 100, 7, 0, 12046, 12046, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 120460, 0, 98, 133, 'EventAI', 0, 1, 0, 0, 3, 12046, 0, 0, 0, 0, 0, 0, ''),
+(91850, 0, 11545, 0, 0, 0, 'Gor\'dosh Butcher', NULL, 0, 48, 50, 2672, 2672, 0, 0, 2944, 45, 0, 1.6, 1.14286, 0, 20, 5, 0, 0, 1, 85, 104, 0, 220, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 62.8672, 86.4424, 100, 7, 0, 12046, 12046, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 120460, 0, 98, 133, 'EventAI', 0, 1, 0, 0, 3, 12046, 0, 0, 0, 0, 0, 0, ''),
+(91851, 0, 11545, 0, 0, 0, 'Gor\'dosh Shaman', NULL, 0, 50, 51, 2751, 2845, 1864, 1923, 1892, 45, 0, 1.6, 1.14286, 0, 20, 5, 0, 0, 1, 83, 103, 0, 234, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 7, 0, 7034, 7034, 0, 0, 0, 0, 0, 0, 78, 13381, 0, 20793, 0, 70340, 0, 100, 135, 'EventAI', 1, 3, 0, 0, 3, 7034, 0, 0, 0, 0, 0, 0, ''),
+(91852, 0, 12003, 0, 0, 0, 'Gor\'dosh Firethrower', '', 0, 50, 51, 2470, 2631, 5013, 5340, 5086, 45, 0, 1.6, 1.14286, 0, 20, 5, 0, 0, 1, 83, 104, 0, 258, 1, 2000, 2000, 8, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 7, 0, 7379, 7379, 0, 0, 0, 0, 0, 0, 0, 6742, 9532, 12550, 13729, 73790, 0, 116, 156, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(91853, 0, 11571, 0, 0, 0, 'Tyrant King Brog\'dosh', NULL, 0, 53, 53, 4633, 4633, 2041, 2041, 2610, 45, 0, 1.6, 1.14286, 0, 20, 5, 0, 0, 1, 88, 107, 0, 244, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 8977, 8977, 0, 0, 0, 0, 0, 0, 0, 6742, 13381, 0, 0, 89770, 0, 98, 133, 'EventAI', 0, 3, 0, 0, 3, 8977, 0, 0, 0, 0, 0, 0, ''),
+(91854, 9, 12003, 0, 0, 0, 'Seer Bol\'ukk', NULL, 0, 55, 55, 2614, 2699, 0, 0, 3299, 35, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 363, 447, 0, 254, 1, 2000, 2000, 1, 32768, 0, 0, 0, 0, 0, 0, 258.261, 366.585, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(91855, 9, 11545, 0, 0, 0, 'Ambassador Krok', NULL, 0, 52, 52, 2614, 2699, 0, 0, 3299, 45, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 363, 447, 0, 254, 1, 2000, 2000, 1, 32768, 0, 0, 0, 0, 0, 0, 258.261, 366.585, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(91856, 0, 11158, 0, 0, 0, 'Hazzuri Speaker', NULL, 0, 51, 51, 2016, 2085, 4393, 4506, 1532, 28, 0, 0.666668, 0.992063, 0, 20, 5, 0, 0, 1, 54, 57, 0, 230, 1, 2000, 2000, 8, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 6188, 6188, 0, 0, 0, 0, 0, 0, 0, 20295, 0, 0, 0, 61880, 0, 86, 118, 'EventAI', 0, 3, 0, 0, 3, 6188, 0, 0, 0, 0, 0, 0, ''),
+(91857, 0, 2597, 0, 0, 0, 'Wallowfin Devourer', NULL, 0, 50, 52, 2979, 3082, 0, 0, 2669, 18, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 106, 136, 0, 234, 1, 2000, 2000, 1, 32768, 0, 0, 0, 0, 0, 0, 70.4704, 96.8968, 100, 7, 0, 6371, 6371, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 63710, 0, 104, 141, 'EventAI', 1, 3, 0, 0, 3, 6371, 0, 0, 0, 0, 0, 0, ''),
+(91858, 0, 4920, 0, 0, 0, 'Wallowfin Devourer', NULL, 0, 47, 49, 2479, 2982, 0, 0, 2669, 18, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 106, 136, 0, 234, 1, 2000, 2000, 1, 32768, 0, 0, 0, 0, 0, 0, 70.4704, 96.8968, 100, 7, 0, 6371, 6371, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 63710, 0, 104, 141, 'EventAI', 1, 3, 0, 0, 3, 6371, 0, 0, 0, 0, 0, 0, ''),
+(91860, 0, 2597, 0, 0, 0, 'Wallowfin Tidecaller', NULL, 0, 48, 50, 2233, 2718, 2041, 2117, 2654, 18, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 106, 137, 0, 248, 1, 2000, 2000, 2, 32768, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 7, 0, 6351, 6351, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 63510, 0, 102, 139, 'EventAI', 1, 3, 0, 0, 3, 6351, 0, 0, 0, 0, 0, 0, ''),
+(91861, 0, 4920, 0, 0, 0, 'Wallowfin Shorerunner', NULL, 0, 49, 51, 3292, 3398, 0, 0, 4871, 16, 0, 1.1, 1.14286, 0, 20, 5, 0, 0, 1, 95, 118, 0, 248, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.4704, 96.8968, 100, 7, 0, 6137, 6137, 0, 0, 0, 0, 0, 0, 0, 13443, 0, 0, 0, 0, 0, 117, 158, 'EventAI', 1, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(91862, 6, 4920, 0, 0, 0, 'Wallowfin Netter', '', 0, 49, 50, 2963, 3110, 0, 0, 2725, 18, 0, 1.2, 1.14286, 0, 20, 5, 0, 0, 1, 85, 109, 0, 204, 1, 2000, 2000, 1, 32768, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 15692, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 15692, 0, 0, 0, 0, 0, 0, ''),
+(91863, 7, 506, 0, 0, 0, 'Wallowtalker', NULL, 0, 53, 53, 5151, 5490, 4765, 5013, 1630, 18, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 354, 456, 0, 248, 1, 2000, 2000, 8, 32832, 0, 0, 0, 0, 0, 0, 59.9488, 82.4296, 100, 7, 0, 9452, 9452, 0, 0, 0, 0, 0, 0, 0, 25055, 20989, 0, 0, 94521, 0, 1229, 1335, '', 1, 3, 0, 0, 3, 9452, 0, 0, 0, 0, 0, 0, ''),
+(91864, 0, 12193, 0, 0, 0, 'Deepwater Shark', NULL, 0, 55, 55, 10132, 10132, 0, 0, 3108, 16, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 316, 408, 0, 244, 1, 1208, 1329, 1, 32768, 0, 0, 0, 0, 0, 0, 57.4128, 78.9426, 100, 1, 0, 12125, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 133, 666, '', 0, 2, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(91865, 0, 2423, 0, 0, 0, 'Deepwater Hydra', '', 0, 53, 53, 4554, 4945, 0, 0, 2808, 16, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 243, 313, 0, 212, 1, 2000, 2000, 1, 32832, 0, 0, 0, 0, 0, 0, 50.796, 69.8445, 100, 10, 8, 12207, 0, 12207, 0, 0, 0, 0, 0, 0, 3417, 21790, 0, 0, 122070, 0, 0, 0, 'EventAI', 1, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
 
-update creature_template set loot_id = 0 where entry between 91809 and 91843;
+update creature_template set loot_id = 0 where entry between 91809 and 91870;
 update creature_template set scale = 0.8 where entry = 91825;
 update creature_template set scale = 1.5 where entry = 91826;
-update creature_template set scale = 1   where entry = 91827;
+update creature_template set scale = 1.0 where entry = 91827;
 update creature_template set scale = 1.3 where entry = 91828;
 update creature_template set scale = 1.2 where entry = 91829;
 update creature_template set scale = 1.5 where entry = 91830;
+update creature_template set scale = 1.5 where entry = 91848;
+update creature_template set scale = 1.7 where entry = 91849;
+update creature_template set scale = 1.6 where entry = 91850;
+update creature_template set scale = 1.6 where entry = 91851;
+update creature_template set scale = 1.6 where entry = 91852;
+update creature_template set scale = 2.0 where entry = 91853;
+update creature_template set scale = 1.5 where entry = 91854;
+update creature_template set speed_run = 1.8 where entry = 91861;
+update creature_template set rank = 0 where entry = 91864;
+update creature_template set rank = 0 where entry = 91865;
+
+set @equip_template = 55117; set @weapon_1 = 1824; set @weapon_2 = 0; set @creature = 91853;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 55116; set @weapon_1 = 12943; set @weapon_2 = 0; set @creature = 91852;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 55115; set @weapon_1 = 5306; set @weapon_2 = 0; set @creature = 91851;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 55114; set @weapon_1 = 2827; set @weapon_2 = 0; set @creature = 91850;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 55113; set @weapon_1 = 18481; set @weapon_2 = 0; set @creature = 91849;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+update creature_template set equipment_id = @equip_template where entry = @creature;
 
 set @equip_template = 55088; set @weapon_1 = 2092; set @weapon_2 = 0; set @creature = 91809;
 replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
@@ -124,6 +175,26 @@ replace into creature_equip_template values (@equip_template, 0, @weapon_1, @wea
 update creature_template set equipment_id = @equip_template where entry = @creature;
 
 set @equip_template = 55107; set @weapon_1 = 1493; set @weapon_2 = 2021; set @creature = 91843;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 55108; set @weapon_1 = 2092; set @weapon_2 = 1936; set @creature = 91844;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 55109; set @weapon_1 = 1493; set @weapon_2 = 0; set @creature = 91845;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 55110; set @weapon_1 = 4560; set @weapon_2 = 16788; set @creature = 91846;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 55111; set @weapon_1 = 1473; set @weapon_2 = 0; set @creature = 91847;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 55112; set @weapon_1 = 4971; set @weapon_2 = 0; set @creature = 91848;
 replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
 update creature_template set equipment_id = @equip_template where entry = @creature;
 
