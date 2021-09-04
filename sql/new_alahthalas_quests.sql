@@ -16,5 +16,6 @@ replace into item_template values (81358, 0, 12, 0, 'Ancient Thalassian Tablet',
 
 replace into gameobject_template values (181583, 0, 2, 25965, 'Ancient Thalassian Tablet', 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'runed_thalassian_tablet');
 
+update quest_template set type = 1 where entry = 80290;
 update creature_template set loot_id = 91808, script_name = 'highborne_wraith' where entry = 91808;
 replace into creature_loot_template values (91808, 81358, -100, 6, 1, 1, 0, 0, 10);
