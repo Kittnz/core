@@ -60,17 +60,18 @@ enum
 enum Events
 {
     /* boss_tarangos */
-    EVENT_ICE_BREATH,
+    EVENT_ICE_BREATH = 1,
     EVENT_REND,
     /* boss_blademaster_kargron */
     EVENT_THRASH,
     /* boss_xalvik_blackclaw */
     EVENT_CORRUPTION,
     EVENT_SHADOW_BOLT,
-    /* boss_xalvik_blackclaw */
+    /**/
     EVENT_MOONFIRE_AOE,
     EVENT_WRATH,
     EVENT_HEALING_TOUCH,
+    EVENT_TRANSFORM,
     /**/
     EVENT_LIGHTNING_BOLT,
     EVENT_LIGHTNING_SHIELD,
@@ -139,7 +140,7 @@ struct boss_tarangosAI : public ScriptedAI
                 case EVENT_ICE_BREATH:
                 {
                     if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_ICE_BREATH) == CAST_OK)
-                        m_events.Repeat(Seconds(45));
+                        m_events.Repeat(Seconds(60));
                     else
                         m_events.Repeat(100);
 
@@ -148,7 +149,7 @@ struct boss_tarangosAI : public ScriptedAI
                 case EVENT_REND:
                 {
                     if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_REND) == CAST_OK)
-                        m_events.Repeat(Seconds(60));
+                        m_events.Repeat(Seconds(45));
                     else
                         m_events.Repeat(100);
 
@@ -193,8 +194,8 @@ struct boss_blademaster_kargronAI : public ScriptedAI
         {
             if (m_creature->GetHealthPercent() < 20.0f)
             {
-                DoCastSpellIfCan(m_creature, SPELL_PARRY, CF_FORCE_CAST);
-                DoCastSpellIfCan(m_creature, SPELL_ENRAGE, CF_FORCE_CAST);
+                DoCastSpellIfCan(m_creature, SPELL_PARRY, CF_TRIGGERED | CF_FORCE_CAST);
+                DoCastSpellIfCan(m_creature, SPELL_ENRAGE, CF_TRIGGERED | CF_FORCE_CAST);
                 m_bEnraged = true;
             }
         }
@@ -228,13 +229,10 @@ struct boss_xalvic_blackclawAI : public ScriptedAI
     }
 
     EventMap m_events;
-    bool m_bCorrupt;
 
     void Reset() override
     {
         m_events.Reset();
-        m_creature->RemoveAurasDueToSpell(SPELL_CORRUPT_SOUL);
-        m_bCorrupt = false;
     }
 
     void Aggro(Unit* pWho) override
@@ -250,13 +248,11 @@ struct boss_xalvic_blackclawAI : public ScriptedAI
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
-        if (!m_bCorrupt)
+        if (m_creature->GetHealthPercent() < 15.0f)
         {
-            if (m_creature->GetHealthPercent() < 15.0f)
-            {
-                m_creature->AddAura(SPELL_CORRUPT_SOUL, ADD_AURA_PERMANENT);
-                m_bCorrupt = true;
-            }
+            if (Unit* victim = m_creature->GetVictim())
+                if (!victim->HasAura(SPELL_CORRUPT_SOUL))
+                    DoCastSpellIfCan(m_creature, SPELL_CORRUPT_SOUL, CF_TRIGGERED | CF_FORCE_CAST);
         }
 
         m_events.Update(uiDiff);
@@ -338,15 +334,15 @@ struct boss_mallon_the_moontouchedAI : public ScriptedAI
                 m_events.RescheduleEvent(EVENT_MOONFIRE_AOE, Seconds(15));
                 m_events.CancelEvent(EVENT_WRATH);
                 m_events.ScheduleEvent(EVENT_HEALING_TOUCH, Seconds(urand(30, 70)));
-                DoCast(m_creature, SPELL_TRANSFORM_VISUAL, true);
-                m_creature->SetDisplayId(15660);
+                DoCast(m_creature, SPELL_TRANSFORM_VISUAL);
+                m_events.ScheduleEvent(EVENT_TRANSFORM, 250);
             }
         }
         else
         {
             if (m_creature->GetHealthPercent() < 10.0f && !m_bRegrowth)
             {
-                DoCastSpellIfCan(m_creature, SPELL_REGROWTH, CF_FORCE_CAST);
+                DoCastSpellIfCan(m_creature, SPELL_REGROWTH, CF_TRIGGERED | CF_FORCE_CAST);
                 m_bRegrowth = true;
             }
         }
@@ -381,6 +377,11 @@ struct boss_mallon_the_moontouchedAI : public ScriptedAI
                     else
                         m_events.Repeat(100);
 
+                    break;
+                }
+                case EVENT_TRANSFORM:
+                {
+                    m_creature->SetDisplayId(15660);
                     break;
                 }
             }

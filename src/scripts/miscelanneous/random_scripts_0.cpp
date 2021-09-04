@@ -26,6 +26,7 @@ EndScriptData
 #include "../world/boss_omen.h"
 #include "CritterAI.h"
 #include <array>
+#include <ctime>
 
 /* ContentData
 npc_chicken_cluck       100%    support for quest 3861 (Cluck!)
