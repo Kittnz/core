@@ -19,3 +19,17 @@ replace into gameobject_template values (181583, 0, 2, 25965, 'Ancient Thalassia
 update quest_template set type = 1 where entry = 80290;
 update creature_template set loot_id = 91808, script_name = 'highborne_wraith' where entry = 91808;
 replace into creature_loot_template values (91808, 81358, -100, 6, 1, 1, 0, 0, 10);
+
+-- The Shadow Well
+
+replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (80290,80291,2040,30,26,0,0,'The Shadow Well','We need to head down and investigate this Shadow Well, my assistant Thalo tried and he has not returned.\n\nThe air is smelly and these black slimes are overflowing, they even seem resistant to my slime.\n\nDon\'t go alone.','Investigate the Shadow Well.','You\'ve returned? And you\'re not corrupted?','Thalo is dead, it is likely the skeleton is his... So it seems the slimes are emerging from the water of the well itself?\n\nThis is troubling as it means something deep beneath the Tirisfal Glades spawned those slimes and is responsible for the taint.\n\nGood job $N, good job...\n\nYou may go, inform the good Arcanist that I will return in due time, and that the hour of reckoning...for our enemies will come when I do.\n\nI aim to learn everything I can about these ruins.',0,0,0,0,0,0,0,0,70891,1,0,0,0,0,0,0,0,0,140,3575,629,250,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+replace into creature_questrelation (id, quest) values (91806, 80291);
+replace into creature_involvedrelation (id, quest) values (91806, 80291);
+
+update quest_template set objectivetext1 = 'Find out what happened at Shadow Well' where entry = 80291;
+
+replace into creature_template values (70891, 0, 360, 0, 0, 0, 'Black Blood of N\'zoth', '', 0, 30, 30, 1550, 1702, 0, 0, 1200, 21, 0, 0.777776, 1.14286, 0, 20, 5, 0, 0, 1, 42, 53, 0, 122, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 42.1344, 57.9348, 100, 6, 0, 1270, 1270, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 12700, 0, 43, 61, 'EventAI', 1, 1, 0, 0, 3, 0, 0, 0, 8388624, 0, 0, 0, '');
+
+update quest_template set type = 1 where entry = 80291;
+replace into gameobject_template values (181584, 0, 2, 25020, 'Thalo\'s Skeleton', 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'skeleton_thalo');
