@@ -41,8 +41,44 @@ private:
     uint64 player_guid;
 };
 
+bool GOHello_runed_thalassian_tablet(Player* pPlayer, GameObject* pGo)
+{
+    if (pPlayer->GetQuestStatus(80290) == QUEST_STATUS_INCOMPLETE) // The Lost Tablets
+    {        
+        if (Creature* highborne_wraith = pPlayer->FindNearestCreature(91808, 20.0F)) // Highborne Wraith
+            return false;
+        
+        pGo->SummonCreature(91808, pPlayer->GetPositionX() + 2.0F, pPlayer->GetPositionY() + 2.0F, pPlayer->GetPositionZ() + 1.0F, 0.0F, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 15 * IN_MILLISECONDS);
+            return true;
+    }
+    return false;
+}
+
+struct highborne_wraithAI : public ScriptedAI
+{
+    highborne_wraithAI(Creature* c) : ScriptedAI(c) { Reset(); }
+    void Reset() {}
+    void UpdateAI(const uint32 diff) {}
+    void JustRespawned() { Reset(); }
+    void Aggro(Unit* who)
+    {
+        m_creature->MonsterSay("Leave this place! Leave! It took us, it will take you!");
+    }
+};
+
+CreatureAI* GetAI_highborne_wraith(Creature* _Creature) { return new highborne_wraithAI(_Creature); }
 
 void AddSC_random_scripts_3()
 {
-    Script* newscript;    
+    Script* newscript;  
+
+    newscript = new Script;
+    newscript->Name = "highborne_wraith";
+    newscript->GetAI = &GetAI_highborne_wraith;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "runed_thalassian_tablet";
+    newscript->pGOHello = &GOHello_runed_thalassian_tablet;
+    newscript->RegisterSelf();
 }
