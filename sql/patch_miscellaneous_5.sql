@@ -65,7 +65,28 @@ replace into creature_template values
 (91868, 3, 4577, 0, 0, 0, 'Primalist Gojo', 'Voodoo Goods', 0, 51, 51, 3304, 3804, 3208, 3208, 3791, 1214, 2, 1, 4, 0, 20, 5, 0, 1, 1, 371, 437, 0, 272, 1, 2000, 2000, 2, 4096, 0, 0, 0, 0, 0, 0, 61.732, 84.8815, 100, 7, 0, 13236, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 886, '', 1, 3, 0, 0, 3, 13236, 0, 0, 1011483136, 0, 524288, 0, ''),
 (91869, 3, 4085, 0, 0, 0, 'Primalist Palaz', 'Hazzuri Primalists', 0, 51, 51, 3304, 3804, 3208, 3208, 3791, 1214, 2, 1, 4, 0, 20, 5, 0, 1, 1, 371, 437, 0, 272, 1, 2000, 2000, 2, 4096, 0, 0, 0, 0, 0, 0, 61.732, 84.8815, 100, 7, 0, 13236, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 886, '', 1, 3, 0, 0, 3, 13236, 0, 0, 1011483136, 0, 524288, 0, ''),
 (91870, 3, 4534, 0, 0, 0, 'Primalist Yango', 'Hazzuri Primalists', 0, 52, 52, 3304, 3804, 3208, 3208, 3791, 1214, 2, 1, 4, 0, 20, 5, 0, 1, 1, 371, 437, 0, 272, 1, 2000, 2000, 2, 4096, 0, 0, 0, 0, 0, 0, 61.732, 84.8815, 100, 7, 0, 13236, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 886, '', 1, 3, 0, 0, 3, 13236, 0, 0, 1011483136, 0, 524288, 0, ''),
-(91871, 3, 6839, 0, 0, 0, 'Head-Primalist Manaz\'ago', 'Hazzuri Primalists', 0, 54, 54, 8304, 8804, 3208, 3208, 3791, 1214, 2, 1, 4, 0, 20, 5, 0, 1, 1, 371, 437, 0, 272, 1, 2000, 2000, 2, 4096, 0, 0, 0, 0, 0, 0, 61.732, 84.8815, 100, 7, 0, 13236, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 886, '', 1, 3, 0, 0, 3, 13236, 0, 0, 1011483136, 0, 524288, 0, ''); 
+(91871, 3, 6839, 0, 0, 0, 'Head-Primalist Manaz\'ago', 'Hazzuri Primalists', 0, 54, 54, 8304, 8804, 3208, 3208, 3791, 1214, 2, 1, 4, 0, 20, 5, 0, 1, 1, 371, 437, 0, 272, 1, 2000, 2000, 2, 4096, 0, 0, 0, 0, 0, 0, 61.732, 84.8815, 100, 7, 0, 13236, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 886, '', 1, 3, 0, 0, 3, 13236, 0, 0, 1011483136, 0, 524288, 0, ''),
+-- Caelans Rest npcs for Lapidis
+(91872, 0, 3246, 0, 0, 0, '\'Slim\'', 'Kul Tiras', 0, 45, 53, 1981, 4281, 0, 0, 2246, 15, 0, 1.11111, 1.14286, 0, 20, 5, 0, 0, 1, 300, 345, 0, 172, 1, 2000, 2000, 1, 768, 0, 0, 0, 0, 0, 0, 58.7664, 80.8038, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 524290, 0, ''),
+(91873, 0, 3462, 0, 0, 0, 'Fellis Bander', 'Bartender', 0, 45, 53, 1981, 4281, 0, 0, 2246, 15, 0, 1.11111, 1.14286, 0, 20, 5, 0, 0, 1, 300, 345, 0, 172, 1, 2000, 2000, 1, 768, 0, 0, 0, 0, 0, 0, 58.7664, 80.8038, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 524290, 0, ''),
+(91891, 0, 3462, 0, 0, 0, 'Sailor Darkbay', 'Kul Tiras', 0, 45, 53, 1981, 4281, 0, 0, 2246, 15, 0, 1.11111, 1.14286, 0, 20, 5, 0, 0, 1, 300, 345, 0, 172, 1, 2000, 2000, 1, 768, 0, 0, 0, 0, 0, 0, 58.7664, 80.8038, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 524290, 0, ''),
+(91874, 0, 3599, 0, 0, 0, 'Kelgun Blackmug', 'Kul Tiras', 0, 45, 53, 1981, 4281, 0, 0, 2246, 15, 0, 1.11111, 1.14286, 0, 20, 5, 0, 0, 1, 300, 345, 0, 172, 1, 2000, 2000, 1, 768, 0, 0, 0, 0, 0, 0, 58.7664, 80.8038, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 524290, 0, ''),
+(91875, 0, 12610, 0, 0, 0, 'Duke Larker IV', 'Kul Tiras', 0, 45, 53, 1981, 4281, 0, 0, 2246, 15, 0, 1.11111, 1.14286, 0, 20, 5, 0, 0, 1, 300, 345, 0, 172, 1, 2000, 2000, 1, 768, 0, 0, 0, 0, 0, 0, 58.7664, 80.8038, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 524290, 0, ''),
+(91876, 0, 3273, 0, 0, 0, 'Foreman Nate Mud', 'Kul Tiras', 0, 45, 53, 1981, 4281, 0, 0, 2246, 15, 0, 1.11111, 1.14286, 0, 20, 5, 0, 0, 1, 300, 345, 0, 172, 1, 2000, 2000, 1, 768, 0, 0, 0, 0, 0, 0, 58.7664, 80.8038, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 524290, 0, ''),
+(91877, 0, 1239, 0, 0, 0, 'Lumberworker Oppol', 'Kul Tiras', 0, 45, 53, 1981, 4281, 0, 0, 2246, 15, 0, 1.11111, 1.14286, 0, 20, 5, 0, 0, 1, 300, 345, 0, 172, 1, 2000, 2000, 1, 768, 0, 0, 0, 0, 0, 0, 58.7664, 80.8038, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 524290, 0, ''),
+(91878, 0, 2046, 0, 0, 0, 'Lumberworker Baste', 'Kul Tiras', 0, 45, 53, 1981, 4281, 0, 0, 2246, 15, 0, 1.11111, 1.14286, 0, 20, 5, 0, 0, 1, 300, 345, 0, 172, 1, 2000, 2000, 1, 768, 0, 0, 0, 0, 0, 0, 58.7664, 80.8038, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 524290, 0, ''),
+(91879, 0, 5034, 0, 0, 0, 'Lumberworker Jacob', 'Kul Tiras', 0, 45, 53, 1981, 4281, 0, 0, 2246, 15, 0, 1.11111, 1.14286, 0, 20, 5, 0, 0, 1, 300, 345, 0, 172, 1, 2000, 2000, 1, 768, 0, 0, 0, 0, 0, 0, 58.7664, 80.8038, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 524290, 0, ''),
+(91880, 0, 1756, 0, 0, 0, 'Shipworker Calub', 'Kul Tiras', 0, 45, 53, 1981, 4281, 0, 0, 2246, 15, 0, 1.11111, 1.14286, 0, 20, 5, 0, 0, 1, 300, 345, 0, 172, 1, 2000, 2000, 1, 768, 0, 0, 0, 0, 0, 0, 58.7664, 80.8038, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 524290, 0, ''),
+(91881, 0, 3274, 0, 0, 0, 'Shipworker Donovan', 'Kul Tiras', 0, 45, 53, 1981, 4281, 0, 0, 2246, 15, 0, 1.11111, 1.14286, 0, 20, 5, 0, 0, 1, 300, 345, 0, 172, 1, 2000, 2000, 1, 768, 0, 0, 0, 0, 0, 0, 58.7664, 80.8038, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 524290, 0, ''),
+(91882, 0, 5032, 0, 0, 0, 'Dudley', 'Trade Supplies', 0, 45, 53, 1981, 4281, 0, 0, 2246, 15, 0, 1.11111, 1.14286, 0, 20, 5, 0, 0, 1, 300, 345, 0, 172, 1, 2000, 2000, 1, 768, 0, 0, 0, 0, 0, 0, 58.7664, 80.8038, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 524290, 0, ''),
+(91883, 0, 3462, 0, 0, 0, 'Arnold Boran', 'Kul Tiras', 0, 45, 53, 1981, 4281, 0, 0, 2246, 15, 0, 1.11111, 1.14286, 0, 20, 5, 0, 0, 1, 300, 345, 0, 172, 1, 2000, 2000, 1, 768, 0, 0, 0, 0, 0, 0, 58.7664, 80.8038, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 524290, 0, ''),
+(91884, 0, 3370, 0, 0, 0, 'Shipworker Larry', 'Kul Tiras', 0, 45, 53, 1981, 4281, 0, 0, 2246, 15, 0, 1.11111, 1.14286, 0, 20, 5, 0, 0, 1, 300, 345, 0, 172, 1, 2000, 2000, 1, 768, 0, 0, 0, 0, 0, 0, 58.7664, 80.8038, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 524290, 0, ''),
+(91885, 0, 3667, 0, 0, 0, 'Shipworker Gandrel', 'Kul Tiras', 0, 45, 53, 1981, 4281, 0, 0, 2246, 15, 0, 1.11111, 1.14286, 0, 20, 5, 0, 0, 1, 300, 345, 0, 172, 1, 2000, 2000, 1, 768, 0, 0, 0, 0, 0, 0, 58.7664, 80.8038, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 524290, 0, ''),
+(91886, 0, 2430, 0, 0, 0, 'Cannoneer Gary', 'Kul Tiras', 0, 45, 53, 1981, 4281, 0, 0, 2246, 15, 0, 1.11111, 1.14286, 0, 20, 5, 0, 0, 1, 300, 345, 0, 172, 1, 2000, 2000, 1, 768, 0, 0, 0, 0, 0, 0, 58.7664, 80.8038, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 524290, 0, ''),
+(91887, 0, 3362, 0, 0, 0, 'Cannoneer Breck', 'Kul Tiras', 0, 45, 53, 1981, 4281, 0, 0, 2246, 15, 0, 1.11111, 1.14286, 0, 20, 5, 0, 0, 1, 300, 345, 0, 172, 1, 2000, 2000, 1, 768, 0, 0, 0, 0, 0, 0, 58.7664, 80.8038, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 524290, 0, ''),
+(91888, 0, 3696, 0, 0, 0, 'Angela Goodwill', 'Barmaid', 0, 45, 53, 1981, 4281, 0, 0, 2246, 15, 0, 1.11111, 1.14286, 0, 20, 5, 0, 0, 1, 300, 345, 0, 172, 1, 2000, 2000, 1, 768, 0, 0, 0, 0, 0, 0, 58.7664, 80.8038, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 524290, 0, ''),
+(91889, 0, 4332, 0, 0, 0, 'Sean Pinerock', 'Blacksmith', 0, 45, 53, 1981, 4281, 0, 0, 2246, 15, 0, 1.11111, 1.14286, 0, 20, 5, 0, 0, 1, 300, 345, 0, 172, 1, 2000, 2000, 1, 768, 0, 0, 0, 0, 0, 0, 58.7664, 80.8038, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 524290, 0, ''),
+(91890, 0, 3287, 0, 0, 0, 'Eliza Caldwell', 'Blacksmith', 0, 45, 53, 1981, 4281, 0, 0, 2246, 15, 0, 1.11111, 1.14286, 0, 20, 5, 0, 0, 1, 300, 345, 0, 172, 1, 2000, 2000, 1, 768, 0, 0, 0, 0, 0, 0, 58.7664, 80.8038, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 524290, 0, '');
 
 update creature_template set loot_id = 0 where entry between 91809 and 91870;
 update creature_template set scale = 0.8 where entry = 91825;
@@ -89,7 +110,63 @@ update creature_template set rank = 0 where entry = 91865;
 update creature_template set faction = 35 where entry between 91865 and 91871;
 update creature_template set spell_list_id = 0, faction = 54, mana_min = 0, mana_max = 0 where entry = 91766;
 
+set @equip_template = 55128; set @weapon_1 = 19015; set @weapon_2 = 0; set @creature = 91879;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 55127; set @weapon_1 = 19015; set @weapon_2 = 0; set @creature = 91878;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 55126; set @weapon_1 = 19015; set @weapon_2 = 0; set @creature = 91877;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 55125; set @weapon_1 = 13165; set @weapon_2 = 10367; set @creature = 91875;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 55124; set @weapon_1 = 4560; set @weapon_2 = 15932; set @creature = 91891;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 55123; set @weapon_1 = 0; set @weapon_2 = 15932; set @creature = 91872;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
 set @equip_template = 55122; set @weapon_1 = 12322; set @weapon_2 = 0; set @creature = 91871;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 55129; set @weapon_1 = 1415; set @weapon_2 = 0; set @creature = 91880;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 55130; set @weapon_1 = 1415; set @weapon_2 = 0; set @creature = 91881;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 55131; set @weapon_1 = 1415; set @weapon_2 = 0; set @creature = 91884;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 55132; set @weapon_1 = 1415; set @weapon_2 = 0; set @creature = 91885;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 55133; set @weapon_1 = 6680; set @weapon_2 = 0; set @creature = 91883;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 55134; set @weapon_1 = 4560; set @weapon_2 = 2081; set @creature = 91886;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 55135; set @weapon_1 = 4560; set @weapon_2 = 2081; set @creature = 91887;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 55136; set @weapon_1 = 5956; set @weapon_2 = 0; set @creature = 91889;
 replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
 update creature_template set equipment_id = @equip_template where entry = @creature;
 
@@ -226,6 +303,10 @@ replace into creature_equip_template values (@equip_template, 0, @weapon_1, @wea
 update creature_template set equipment_id = @equip_template where entry = @creature;
 
 set @equip_template = 55112; set @weapon_1 = 4971; set @weapon_2 = 0; set @creature = 91848;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 55137; set @weapon_1 = 5746; set @weapon_2 = 0; set @creature = 91890;
 replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
 update creature_template set equipment_id = @equip_template where entry = @creature;
 
