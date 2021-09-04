@@ -297,3 +297,23 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 
 replace into creature_questrelation (id, quest) values (91768, 40045);
 replace into creature_involvedrelation (id, quest) values (91769, 40045);
+
+
+delete from quest_template where entry = 40046;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (40045,40046,2,16,50,40,0,0,'The Flight Logbook','Dinkle Togpipe, he was out at the landing pad far to the east on a small island.\n\nWe used that landing pad as a small refueling area and resting spot for pilots, we used to have them dispersed across the ocean near the very end of a Flight-Machine\'s fuel usage. It was possible in the past to get from Gnomeregan to Kalimdor with ease. But, I have a feeling that the landing pads are in a state of disrepair, we haven\'t heard much word in a long time from back home.\n\nIf you want the Flight Logbook, go and get it from Dinkle Togpipe stationed out there.','Travel to the Landing Pad in the east and obtain the Flight Logbook from Dinkle Togpipe, return the Flight Logbook to Gigno Flaxwhisker.','Have you gotten the Flight Logbook? It certainly took a while!','Dinkle? He\'s dead? Those blasted murlocs! I knew it would be trouble stationing him out there with only a rifle on that platform. Those higher ups at Gnomeregan said the lights should be enough to scare off the creatures, looks like they were wrong!',60145,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5650,54,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+replace into creature_questrelation (id, quest) values (91769, 40046);
+replace into creature_involvedrelation (id, quest) values (91768, 40046);
+
+delete from item_template where entry = 60145;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values (60145,1155,'Flight Logbook',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',50504);
+
+delete from gameobject_template where entry = 2010809;
+replace into gameobject_template values
+(2010809, 0, 3, 23430, 'Gnomish Trunk', 0, 4, 1, 43, 2010809, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+delete from gameobject_loot_template where entry = 2010809;
+replace into gameobject_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values (2010809,60145,-100,1,1,0,10);
+
+delete from page_text where entry = 50504;
+replace into page_text (entry, text, next_page) value (50504,'Recon over Azshara 22.03 04:22-05:55\n\nRecon over Winterspring 01.04 14:33-15:03\n\nRecon over Blue Dragons in Azshara 06.04 15:22-15:51\n\nRecon over Icepoint Rock north of Winterspring 07.04 05:22-09:31\n\nTransfering supplies to Icepoint Rock 09.04 05:31-10:50\n\n13.04 05:12-09:20 Established base at Icepoint Rock north of Winterspring\n\nRecon over Winterspring 18.04 20:03-22:14\n\nFlight to Icepoint Rock 03.05 06:04-',0);
