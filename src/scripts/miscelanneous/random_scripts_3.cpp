@@ -74,9 +74,36 @@ bool GOHello_skeleton_thalo(Player* pPlayer, GameObject* pGo)
 
 CreatureAI* GetAI_skeleton_thalo(Creature* _Creature) { return new highborne_wraithAI(_Creature); }
 
+bool GossipHello_analyzor_53(Player* pPlayer, Creature* pCreature)
+{
+    if (pPlayer->GetQuestStatus(40044) == QUEST_STATUS_INCOMPLETE) // The Analyzation Chip
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Attempt to pull out the Analyzation Chip.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_analyzor_53(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pCreature->MonsterSayToPlayer("Foreign interference detected! Dispatch threat!", pPlayer);
+        pCreature->SetFactionTemporary(14, TEMPFACTION_RESTORE_COMBAT_STOP);
+        pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+        pCreature->HandleEmote(EMOTE_ONESHOT_ATTACK1H);
+    }
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
 void AddSC_random_scripts_3()
 {
-    Script* newscript;  
+    Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "analyzor_53";
+    newscript->pGossipHello = &GossipHello_analyzor_53;
+    newscript->pGossipSelect = &GossipSelect_analyzor_53;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "skeleton_thalo";

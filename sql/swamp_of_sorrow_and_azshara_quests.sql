@@ -274,3 +274,19 @@ replace into item_template (entry, display_id, name, class, quality, flags, buy_
 
 delete from page_text where entry = 50503;
 replace into page_text (entry, text, next_page) value (50503,'To Gigno.\n\nThanks for the supplies, it is good to hear you and your gnomes are in good health and still advancing the great field of science. I have news of your robot that I helped craft. Whilst I was visiting the Naga of the Rethress Sanctum I noticed it upon the coast. They have seemed to leave it alone, being that the robot is malfunctioning and inactive. I hope this information is helpful to you, and I wish you continued luck\n\nMagus Bromley , Kirin Tor.',0);
+
+
+delete from quest_template where entry = 40044;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (40043,40044,2,16,50,40,0,0,'The Analyzation Chip','If the Analyzor 53G is still out there then this is great news! We spent so long on its Analyzation Chip that it would be almost impossible to recreate. We had the magic of Bromley the first time, and without it I could not replicate it entirely.\n\nThe Rethress Sanctum is located just east of here along the coast, it is inhabited by Naga who seem not the friendliest to us. I don\'t want to risk any of my crew in getting the Analyzation Chip! You will find it located just beneath the exhaust port of the inhibitor chamber on the main chassis at the back side, easy.','Retrieve the Analyzation Chip from Analyzor 53G near the Rethress Sanctum.','Have you got the Analyzation Chip, it must be recovered!','Analyzor 53G was destroyed?... I will miss him dearly, but we shall create a better one in the future, Analyzor 54G will rise from the ashes like- I was carried away. Thanks for getting the Analyzation Chip, you\'ve said months of work!',60144,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5650,54,200,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+replace into creature_questrelation (id, quest) values (91768, 40044);
+replace into creature_involvedrelation (id, quest) values (91768, 40044);
+
+delete from item_template where entry = 60144;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values (60144,9636,'Analyzation Chip',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+delete from creature_loot_template where entry = 91775 and item = 60144;
+replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values (91775,60144,-100,1,1,0,10);
+
+update creature_template set script_name = 'analyzor_53' where entry = 91775;
+update creature_template set loot_id = 91775 where entry = 91775;
