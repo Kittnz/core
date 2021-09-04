@@ -290,3 +290,10 @@ replace into creature_loot_template (entry, item, chanceorquestchance, mincounto
 
 update creature_template set script_name = 'analyzor_53' where entry = 91775;
 update creature_template set loot_id = 91775 where entry = 91775;
+
+
+delete from quest_template where entry = 40045;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (40044,40045,2,16,50,40,0,0,'Lorie\'s Logbook','Now that we have the Analyzation Chip, I can focus on other matters! I\'d like you to speak with Lorie Gearwatch, she has been in charge of flights from Flaxwhisker Front! Our main flying machine hasn\'t been seen in weeks and I want to know who took the blasted thing and hasn\'t returned!\n\nYou\'ll find her outside, she should have the Log Book, or at the least know where it is!','Speak with Lorie Gearwatch about the Flight Logbook.','Hello there, how can I help you $r?','The Flight Log Book? Oh... I\'ve been so distracted I haven\'t even thought about it for a while now! The last one that has it was Dinkle Togpipe...',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,450,54,25,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+replace into creature_questrelation (id, quest) values (91768, 40045);
+replace into creature_involvedrelation (id, quest) values (91769, 40045);
