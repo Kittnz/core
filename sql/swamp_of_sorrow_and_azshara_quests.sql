@@ -105,7 +105,7 @@ delete from item_template where entry = 60133;
 replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description) values (60133,4676,'Sawtooth Leather',12,1,2048,1,-1,-1,1,10,-1,-1,-1,-1,4,'');
 
 delete from creature_loot_template where entry = 1084 and item = 60133;
-replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values (1084,60133,-30,1,1,0,10);
+replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values (1084,60133,-10,1,1,0,10);
 
 update creature_template set npc_flags = 6 where entry = 11874;
 
