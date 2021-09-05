@@ -2385,10 +2385,6 @@ bool ChatHandler::HandleNpcAddWeaponCommand(char* args)
         return true;
     }
 
-    // prepare db query
-    static SqlStatementID updateEquip;
-    SqlStatement stmt = WorldDatabase.CreateStatement(updateEquip, "REPLACE INTO creature_equip_template (entry, patch, equipentry1, equipentry2, equipentry3) VALUES (?, ?, ?, ?, ?)");
-
     // server slot id, 0 - for clear
     uint32 uiSlotId = 0;
 
@@ -2397,7 +2393,6 @@ bool ChatHandler::HandleNpcAddWeaponCommand(char* args)
 
     if (!uiSlotId)
     {
-        stmt.PExecute(pCreature->GetEntry(), 0, 0, 0, 0);
         for (uint8 i = 0; i < MAX_VIRTUAL_ITEM_SLOT; ++i)
             pCreature->SetVirtualItem(VirtualItemSlot(i), 0);
         return true;
@@ -2416,32 +2411,13 @@ bool ChatHandler::HandleNpcAddWeaponCommand(char* args)
         return true;
     }
 
-    if (uiSlotId > MAX_VIRTUAL_ITEM_SLOT + 1)
-    {
-        PSendSysMessage(LANG_ITEM_SLOT_NOT_EXIST, uiSlotId);
-        return true;
-    }
-
     // convert to client slot id
     uint32 uiSlotId_C = uiSlotId - 1;
 
-    // get current equipment
-    EquipmentInfo const* einfo = sObjectMgr.GetEquipmentInfo(pCreature->GetEntry());
-
-    // save to db
-    if (einfo)
+    if (uiSlotId > MAX_VIRTUAL_ITEM_SLOT)
     {
-        const_cast<EquipmentInfo*>(einfo)->equipentry[uiSlotId_C] = pItemProto->DisplayInfoID;
-        stmt.PExecute(pCreature->GetEntry(), 0, einfo->equipentry[0], einfo->equipentry[1], einfo->equipentry[2]);
-    }
-    else
-    {
-        if (!uiSlotId_C)
-            stmt.PExecute(pCreature->GetEntry(), 0, pItemProto->DisplayInfoID, 0, 0);
-        else if (uiSlotId_C == 1)
-            stmt.PExecute(pCreature->GetEntry(), 0, 0, pItemProto->DisplayInfoID, 0);
-        else
-            stmt.PExecute(pCreature->GetEntry(), 0, 0, 0, pItemProto->DisplayInfoID);
+        PSendSysMessage(LANG_ITEM_SLOT_NOT_EXIST, uiSlotId_C);
+        return true;
     }
 
     pCreature->SetVirtualItem(VirtualItemSlot(uiSlotId_C), uiItemId);
