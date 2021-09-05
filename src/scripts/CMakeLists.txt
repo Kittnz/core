@@ -72,7 +72,7 @@ dungeons/gnomeregan/boss_thermaplugg.cpp
 dungeons/gnomeregan/gnomeregan.cpp
 dungeons/gnomeregan/gnomeregan.h
 dungeons/gnomeregan/instance_gnomeregan.cpp
-dungeons/karazhan_crypts/instance_karazhan_crypts.cpp
+dungeons/karazhan_crypt/instance_karazhan_crypt.cpp
 dungeons/maraudon/boss_celebras_the_cursed.cpp
 dungeons/maraudon/boss_landslide.cpp
 dungeons/maraudon/boss_noxxion.cpp

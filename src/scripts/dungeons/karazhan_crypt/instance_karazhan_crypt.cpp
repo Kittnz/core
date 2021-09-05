@@ -96,9 +96,111 @@ struct karazhan_crypt_portal : public GameObjectAI
 
 GameObjectAI* GetAI_karazhan_crypt_portal(GameObject* gameobject) { return new karazhan_crypt_portal(gameobject); }
 
+// Ravenous Strigoi
+
+enum boss_strigoi_spells
+{
+    SPELL_RAVAGE = 8391,
+    SPELL_BLOOD_LEECH = 24437,
+    SPELL_PUTRID_BITE = 30113,
+    SPELL_RAVENOUS_CLAW = 17470,
+    SPELL_CHARGE = 22911,
+    SPELL_PSYCHIC_SCREAM = 26042,
+};
+
+struct boss_strigoiAI : public ScriptedAI
+{
+public:
+    boss_strigoiAI(Creature* pCreature) : ScriptedAI(pCreature) { Reset(); }
+
+    void Reset() override
+    {
+        m_uiRavageTimer = 10000;
+        m_uiLeechTimer = 15000;
+        m_uiPutridBiteTimer = 5000;
+        m_uiChargeTimer = 20000;
+        m_uiScreamTimer = 0;
+    }
+
+    void SpellHitTarget(Unit* /*pTarget*/, const SpellEntry* pSpell) override
+    {
+        if (pSpell->Id == SPELL_CHARGE)
+            m_uiScreamTimer = 500;
+    }
+
+    void UpdateAI(const uint32 uiDiff) override
+    {
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
+            return;
+
+        if (m_uiRavageTimer <= uiDiff)
+        {
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_RAVAGE) == CAST_OK)
+                m_uiRavageTimer = 10000;
+        }
+        else
+            m_uiRavageTimer -= uiDiff;
+
+        if (m_uiLeechTimer <= uiDiff)
+        {
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_BLOOD_LEECH) == CAST_OK)
+                m_uiLeechTimer = 15000;
+        }
+        else
+            m_uiLeechTimer -= uiDiff;
+
+        if (m_uiPutridBiteTimer <= uiDiff)
+        {
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_PUTRID_BITE) == CAST_OK)
+                m_uiPutridBiteTimer = 20000;
+        }
+        else
+            m_uiPutridBiteTimer -= uiDiff;
+
+        if (m_uiChargeTimer <= uiDiff)
+        {
+            if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 1))
+            {
+                if (DoCastSpellIfCan(pTarget, SPELL_CHARGE) == CAST_OK)
+                    m_uiChargeTimer = urand(15000, 25000);
+            }
+        }
+        else
+            m_uiChargeTimer -= uiDiff;
+
+        if (m_uiScreamTimer)
+        {
+            if (m_uiScreamTimer <= uiDiff)
+            {
+                if (DoCastSpellIfCan(m_creature, SPELL_PSYCHIC_SCREAM) == CAST_OK)
+                    m_uiScreamTimer = 0;
+            }
+            else
+                m_uiScreamTimer -= uiDiff;
+        }
+
+        DoMeleeAttackIfReady();
+        EnterEvadeIfOutOfCombatArea(uiDiff);
+    }
+
+private:
+    uint32 m_uiRavageTimer;
+    uint32 m_uiLeechTimer;
+    uint32 m_uiPutridBiteTimer;
+    uint32 m_uiChargeTimer;
+    uint32 m_uiScreamTimer;
+};
+
+CreatureAI* GetAI_boss_strigoi(Creature* pCreature) { return new boss_strigoiAI(pCreature); }
+
 void AddSC_instance_karazhan_crypt()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "boss_strigoi";
+    newscript->GetAI = &GetAI_boss_strigoi;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "karazhan_crypt_gate";
