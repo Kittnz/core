@@ -5,10 +5,16 @@ replace into gameobject_template values
 (181581, 0, 5, 23442, 'Karazhan Crypt (Exit)', 0, 0, 1.6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'karazhan_crypt_portal'),
 (181582, 0, 5, 23443, 'Karazhan Crypt (Collision)', 0, 0, 1.6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
 
+update gameobject_template set type = 0, flags = 32, data0 = 0, name = 'Karazhan Crypt', script_name = 'karazhan_crypts_gate' where entry = 177203;
+
 replace into item_template values (51356, 0, 13, 0, 'Karazhan Crypt Key', 'Covered in rust.', 22071, 1, 64, 1, 0, 0, 0, -1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 1, NULL);
 
-replace into creature_template values (91910, 0, 18499, 0, 0, 0, 'Ravenous Strigoi', NULL, 0, 61, 61, 45180, 45180, 7458, 7458, 3316, 233, 0, 1, 1.19048, 0, 20, 5, 0, 1, 1, 759, 820, 0, 278, 1, 2000, 2000, 2, 64, 0, 0, 0, 0, 0, 0, 172.1, 240.07, 100, 6, 0, 11622, 0, 0, 0, 5, 5, 5, 5, 5, 10101, 16727, 18116, 0, 116220, 0, 1376, 1801, '', 1, 1, 0, 0, 3, 0, 0, 0, 617299931, 0, 2097152, 0, 'boss_strigoi');
-
-update gameobject_template set type = 0, flags = 32, data0 = 0, name = 'Karazhan Crypt', script_name = 'karazhan_crypts_gate' where entry = 177203;
 update item_template set bonding = 1 where entry = 51356;
-update creature_template set scale = 1.7 where entry = 91910;
+
+replace into creature_template values 
+(91910, 0, 18499, 0, 0, 0, 'Ravenous Strigoi', NULL, 0, 62, 62, 13180, 14180, 7458, 7458, 3316, 233, 0, 1, 1.19048, 0, 20, 5, 0, 1, 1, 759, 820, 0, 278, 1, 2000, 2000, 2, 64, 0, 0, 0, 0, 0, 0, 172.1, 240.07, 100, 6, 0, 11622, 0, 0, 0, 5, 5, 5, 5, 5, 10101, 16727, 18116, 0, 116220, 0, 1376, 1801, '', 1, 1, 0, 0, 3, 0, 0, 0, 617299931, 0, 2097152, 0, 'ravenous_strigoi'),
+(91911, 0, 146, 0, 0, 0, 'Forgotten Soul', NULL, 0, 62, 62, 12191, 14326, 16867, 17302, 4932, 233, 0, 1.11111, 1.14286, 0, 20, 5, 0, 1, 1, 559, 720, 0, 272, 1, 2000, 2000, 2, 64, 0, 0, 0, 0, 0, 0, 61.152, 84.084, 100, 6, 0, 10499, 0, 0, 0, 0, 0, 0, 0, 0, 17630, 17631, 0, 0, 104990, 0, 410, 540, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 8405008, 0, 0, 0, 'forgotten_soul');
+
+
+update creature_template set scale = 1.7, rank = 1, loot_id = 0 where entry = 91910;
+update creature_template set  scale = 1.4, dmg_school = 4, loot_id = 0 where entry = 91911;
