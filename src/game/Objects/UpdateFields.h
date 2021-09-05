@@ -92,15 +92,8 @@ enum EUnitFields
     UNIT_FIELD_LEVEL                           = 0x1C + OBJECT_END, // Size:1
     UNIT_FIELD_FACTIONTEMPLATE                 = 0x1D + OBJECT_END, // Size:1
     UNIT_FIELD_BYTES_0                         = 0x1E + OBJECT_END, // Size:1
-    UNIT_VIRTUAL_ITEM_SLOT_DISPLAY             = 0x1F + OBJECT_END, // Size:3
-    UNIT_VIRTUAL_ITEM_SLOT_DISPLAY_01          = 0x20 + OBJECT_END,
-    UNIT_VIRTUAL_ITEM_SLOT_DISPLAY_02          = 0x21 + OBJECT_END,
+    UNIT_VIRTUAL_ITEM_DISPLAY                  = 0x1F + OBJECT_END, // Size:3
     UNIT_VIRTUAL_ITEM_INFO                     = 0x22 + OBJECT_END, // Size:6
-    UNIT_VIRTUAL_ITEM_INFO_01                  = 0x23 + OBJECT_END,
-    UNIT_VIRTUAL_ITEM_INFO_02                  = 0x24 + OBJECT_END,
-    UNIT_VIRTUAL_ITEM_INFO_03                  = 0x25 + OBJECT_END,
-    UNIT_VIRTUAL_ITEM_INFO_04                  = 0x26 + OBJECT_END,
-    UNIT_VIRTUAL_ITEM_INFO_05                  = 0x27 + OBJECT_END,
     UNIT_FIELD_FLAGS                           = 0x28 + OBJECT_END, // Size:1
     UNIT_FIELD_AURA                            = 0x29 + OBJECT_END, // Size:48
     UNIT_FIELD_AURA_LAST                       = UNIT_FIELD_AURA + 47,

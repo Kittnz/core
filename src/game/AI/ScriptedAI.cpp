@@ -251,13 +251,13 @@ void ScriptedAI::SetEquipmentSlots(bool bLoadDefault, int32 uiMainHand, int32 ui
     }
 
     if (uiMainHand >= 0)
-        m_creature->SetUInt32Value(UNIT_VIRTUAL_ITEM_SLOT_DISPLAY + 0, uint32(uiMainHand));
+        m_creature->SetUInt32Value(UNIT_VIRTUAL_ITEM_DISPLAY + 0, uint32(uiMainHand));
 
     if (uiOffHand >= 0)
-        m_creature->SetUInt32Value(UNIT_VIRTUAL_ITEM_SLOT_DISPLAY + 1, uint32(uiOffHand));
+        m_creature->SetUInt32Value(UNIT_VIRTUAL_ITEM_DISPLAY + 1, uint32(uiOffHand));
 
     if (uiRanged >= 0)
-        m_creature->SetUInt32Value(UNIT_VIRTUAL_ITEM_SLOT_DISPLAY + 2, uint32(uiRanged));
+        m_creature->SetUInt32Value(UNIT_VIRTUAL_ITEM_DISPLAY + 2, uint32(uiRanged));
 }
 
 // Hacklike storage used for misc creatures that are expected to evade of outside of a certain area.

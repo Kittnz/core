@@ -316,7 +316,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "addloot",        SEC_GAMEMASTER,     false, &ChatHandler::HandleNpcAddLootCommand,    "", nullptr },
         { "addweapon",      SEC_GAMEMASTER,     false, &ChatHandler::HandleNpcAddWeaponCommand,        "", nullptr },
         { "aiinfo",         SEC_ADMINISTRATOR,      false, &ChatHandler::HandleNpcAIInfoCommand,           "", nullptr },
-        { "allowmove",      SEC_ADMINISTRATOR,     false, &ChatHandler::HandleNpcAllowMovementCommand,    "", nullptr },
+        { "wander",         SEC_ADMINISTRATOR,     false, &ChatHandler::HandleNpcSetWanderDistanceCommand,    "", nullptr },
         { "delete",         SEC_GAMEMASTER,     false, &ChatHandler::HandleNpcDeleteCommand,           "", nullptr },
         { "delitem",        SEC_GAMEMASTER,     false, &ChatHandler::HandleNpcDelVendorItemCommand,    "", nullptr },
         { "factionid",      SEC_GAMEMASTER,     false, &ChatHandler::HandleNpcFactionIdCommand,        "", nullptr },

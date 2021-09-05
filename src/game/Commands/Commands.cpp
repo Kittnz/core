@@ -2275,18 +2275,35 @@ bool ChatHandler::HandleNearGraveCommand(char* args)
 
 //-----------------------Npc Commands-----------------------
 
-bool ChatHandler::HandleNpcAllowMovementCommand(char* /*args*/)
+bool ChatHandler::HandleNpcSetWanderDistanceCommand(char* args)
 {
-    if (sWorld.getAllowMovement())
+    Creature* pCreature = GetSelectedCreature();
+
+    if (!pCreature)
     {
-        sWorld.SetAllowMovement(false);
-        SendSysMessage(LANG_CREATURE_MOVE_DISABLED);
+        SendSysMessage(LANG_SELECT_CREATURE);
+        return true;
     }
-    else
+
+    float dist = 0.0f;
+
+    if (!ExtractFloat(&args, dist))
+        return false;
+
+    MovementGeneratorType type = RANDOM_MOTION_TYPE;
+    if (dist == 0.0f)
+        type = IDLE_MOTION_TYPE;
+
+    pCreature->SetWanderDistance(dist);
+    pCreature->SetDefaultMovementType(type);
+    pCreature->GetMotionMaster()->Initialize();
+    if (pCreature->IsAlive())                         // Dead creature will reset movement generator at respawn
     {
-        sWorld.SetAllowMovement(true);
-        SendSysMessage(LANG_CREATURE_MOVE_ENABLED);
+        pCreature->SetDeathState(JUST_DIED);
+        pCreature->Respawn();
     }
+    pCreature->SaveToDB();
+
     return true;
 }
 
@@ -2368,14 +2385,27 @@ bool ChatHandler::HandleNpcAddWeaponCommand(char* args)
         return true;
     }
 
-    uint32 uiItemId = 0;
+    // prepare db query
+    static SqlStatementID updateEquip;
+    SqlStatement stmt = WorldDatabase.CreateStatement(updateEquip, "REPLACE INTO creature_equip_template (entry, patch, equipentry1, equipentry2, equipentry3) VALUES (?, ?, ?, ?, ?)");
 
-    if (!ExtractUInt32(&args, uiItemId))
-        return false;
-
+    // server slot id, 0 - for clear
     uint32 uiSlotId = 0;
 
     if (!ExtractUInt32(&args, uiSlotId))
+        return false;
+
+    if (!uiSlotId)
+    {
+        stmt.PExecute(pCreature->GetEntry(), 0, 0, 0, 0);
+        for (uint8 i = 0; i < MAX_VIRTUAL_ITEM_SLOT; ++i)
+            pCreature->SetVirtualItem(VirtualItemSlot(i), 0);
+        return true;
+    }
+
+    uint32 uiItemId = 0;
+
+    if (!ExtractUInt32(&args, uiItemId))
         return false;
     
     ItemPrototype const* pItemProto = ObjectMgr::GetItemPrototype(uiItemId);
@@ -2386,14 +2416,36 @@ bool ChatHandler::HandleNpcAddWeaponCommand(char* args)
         return true;
     }
 
-    if (uiSlotId > VIRTUAL_ITEM_SLOT_2)
+    if (uiSlotId > MAX_VIRTUAL_ITEM_SLOT + 1)
     {
         PSendSysMessage(LANG_ITEM_SLOT_NOT_EXIST, uiSlotId);
         return true;
     }
 
-    pCreature->SetVirtualItem(VirtualItemSlot(uiSlotId), uiItemId);
-    PSendSysMessage(LANG_ITEM_ADDED_TO_SLOT, uiItemId, pItemProto->Name1, uiSlotId);
+    // convert to client slot id
+    uint32 uiSlotId_C = uiSlotId - 1;
+
+    // get current equipment
+    EquipmentInfo const* einfo = sObjectMgr.GetEquipmentInfo(pCreature->GetEntry());
+
+    // save to db
+    if (einfo)
+    {
+        const_cast<EquipmentInfo*>(einfo)->equipentry[uiSlotId_C] = pItemProto->DisplayInfoID;
+        stmt.PExecute(pCreature->GetEntry(), 0, einfo->equipentry[0], einfo->equipentry[1], einfo->equipentry[2]);
+    }
+    else
+    {
+        if (!uiSlotId_C)
+            stmt.PExecute(pCreature->GetEntry(), 0, pItemProto->DisplayInfoID, 0, 0);
+        else if (uiSlotId_C == 1)
+            stmt.PExecute(pCreature->GetEntry(), 0, 0, pItemProto->DisplayInfoID, 0);
+        else
+            stmt.PExecute(pCreature->GetEntry(), 0, 0, 0, pItemProto->DisplayInfoID);
+    }
+
+    pCreature->SetVirtualItem(VirtualItemSlot(uiSlotId_C), uiItemId);
+    PSendSysMessage(LANG_ITEM_ADDED_TO_SLOT, uiItemId, pItemProto->Name1, uiSlotId_C);
 
     return true;
 }
