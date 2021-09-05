@@ -98,7 +98,7 @@ GameObjectAI* GetAI_karazhan_crypt_portal(GameObject* gameobject) { return new k
 
 // Ravenous Strigoi
 
-enum boss_strigoi_spells
+enum ravenous_strigoi_spells
 {
     SPELL_RAVAGE = 8391,
     SPELL_BLOOD_LEECH = 24437,
@@ -108,18 +108,18 @@ enum boss_strigoi_spells
     SPELL_PSYCHIC_SCREAM = 26042,
 };
 
-struct boss_strigoiAI : public ScriptedAI
+struct ravenous_strigoiAI : public ScriptedAI
 {
 public:
-    boss_strigoiAI(Creature* pCreature) : ScriptedAI(pCreature) { Reset(); }
+    ravenous_strigoiAI(Creature* pCreature) : ScriptedAI(pCreature) { Reset(); }
 
     void Reset() override
     {
-        m_uiRavageTimer = 10000;
-        m_uiLeechTimer = 15000;
+        m_uiRavageTimer = 5000;
+        m_uiLeechTimer = 6000;
         m_uiPutridBiteTimer = 5000;
-        m_uiChargeTimer = 20000;
-        m_uiScreamTimer = 0;
+        m_uiChargeTimer = 15000;
+        m_uiScreamTimer = 7000;
     }
 
     void SpellHitTarget(Unit* /*pTarget*/, const SpellEntry* pSpell) override
@@ -191,15 +191,103 @@ private:
     uint32 m_uiScreamTimer;
 };
 
-CreatureAI* GetAI_boss_strigoi(Creature* pCreature) { return new boss_strigoiAI(pCreature); }
+CreatureAI* GetAI_ravenous_strigoi(Creature* pCreature) { return new ravenous_strigoiAI(pCreature); }
+
+// Forgotten Soul
+
+enum forgotten_soul_spells
+{
+    SPELL_FROSTBOLT = 15530,
+    SPELL_FROST_BLAST = 19260,
+    SPELL_FROST_NOVA = 30094,
+    SPELL_FROST_BREATH = 21099
+};
+
+struct forgotten_soulAI : public ScriptedAI
+{
+public:
+    forgotten_soulAI(Creature* pCreature) : ScriptedAI(pCreature) { Reset(); }
+
+    void Reset() override
+    {
+        m_uiFrostBoltTimer = 5000;
+        m_uiFrostBlast = 15000;
+        m_uiFrostNovaTimer = 10000;
+        m_uiFrostBreathTimer = 6000;
+    }
+
+    void SpellHitTarget(Unit* /*pTarget*/, const SpellEntry* pSpell) override
+    {
+        if (pSpell->Id == SPELL_CHARGE)
+            m_uiFrostBreathTimer = 500;
+    }
+
+    void UpdateAI(const uint32 uiDiff) override
+    {
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
+            return;
+
+        if (m_uiFrostBoltTimer <= uiDiff)
+        {
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_FROSTBOLT) == CAST_OK)
+                m_uiFrostBoltTimer = 10000;
+        }
+        else
+            m_uiFrostBoltTimer -= uiDiff;
+
+        if (m_uiFrostBlast <= uiDiff)
+        {
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_FROST_NOVA) == CAST_OK)
+                m_uiFrostBlast = 15000;
+        }
+        else
+            m_uiFrostBlast -= uiDiff;
+
+        if (m_uiFrostNovaTimer <= uiDiff)
+        {
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_FROST_NOVA) == CAST_OK)
+                m_uiFrostNovaTimer = 20000;
+        }
+        else
+            m_uiFrostNovaTimer -= uiDiff;
+
+        if (m_uiFrostBreathTimer)
+        {
+            if (m_uiFrostBreathTimer <= uiDiff)
+            {
+                if (DoCastSpellIfCan(m_creature, SPELL_FROST_BREATH) == CAST_OK)
+                    m_uiFrostBreathTimer = 0;
+            }
+            else
+                m_uiFrostBreathTimer -= uiDiff;
+        }
+
+        DoMeleeAttackIfReady();
+        EnterEvadeIfOutOfCombatArea(uiDiff);
+    }
+
+private:
+    uint32 m_uiFrostBoltTimer;
+    uint32 m_uiFrostBlast;
+    uint32 m_uiFrostNovaTimer;
+    uint32 m_uiChargeTimer;
+    uint32 m_uiFrostBreathTimer;
+};
+
+CreatureAI* GetAI_forgotten_soul(Creature* pCreature) { return new forgotten_soulAI(pCreature); }
 
 void AddSC_instance_karazhan_crypt()
 {
     Script* newscript;
 
     newscript = new Script;
-    newscript->Name = "boss_strigoi";
-    newscript->GetAI = &GetAI_boss_strigoi;
+    newscript->Name = "forgotten_soul";
+    newscript->GetAI = &GetAI_forgotten_soul;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "ravenous_strigoi";
+    newscript->GetAI = &GetAI_ravenous_strigoi;
     newscript->RegisterSelf();
 
     newscript = new Script;
