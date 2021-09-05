@@ -2414,7 +2414,7 @@ bool ChatHandler::HandleNpcAddWeaponCommand(char* args)
     // convert to client slot id
     uint32 uiSlotId_C = uiSlotId - 1;
 
-    if (uiSlotId > MAX_VIRTUAL_ITEM_SLOT)
+    if (uiSlotId_C > MAX_VIRTUAL_ITEM_SLOT)
     {
         PSendSysMessage(LANG_ITEM_SLOT_NOT_EXIST, uiSlotId_C);
         return true;
