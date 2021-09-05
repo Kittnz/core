@@ -506,6 +506,8 @@ class ChatHandler
         bool HandleCopyCommand(char* args);
 
         bool HandleFastDebugCommand(char* args);
+        bool HandleDebugLootTableCommand(char* args);
+        bool HandleDebugItemEnchantCommand(int lootid, unsigned int simCount);
 
         Player*   GetSelectedPlayer();
         Creature* GetSelectedCreature();

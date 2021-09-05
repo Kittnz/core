@@ -4613,6 +4613,184 @@ bool ChatHandler::HandleFastDebugCommand(char* /*args*/)
     return true;
 }
 
+bool ChatHandler::HandleDebugLootTableCommand(char* args)
+{
+    std::stringstream in(args);
+    std::string tableName;
+    int32 lootid = 0;
+    int32 checkItem = 0;
+    uint32 simCount = 0;
+    in >> tableName >> lootid >> simCount >> checkItem;
+    simCount = simCount ? simCount : 10000;
+    SetSentErrorMessage(true);
+
+    LootStore const* store = nullptr;
+    if (tableName == "creature")
+        store = &LootTemplates_Creature;
+    else if (tableName == "reference")
+        store = &LootTemplates_Reference;
+    else if (tableName == "fishing")
+        store = &LootTemplates_Fishing;
+    else if (tableName == "gameobject")
+        store = &LootTemplates_Gameobject;
+    else if (tableName == "item")
+        store = &LootTemplates_Item;
+    else if (tableName == "mail")
+        store = &LootTemplates_Mail;
+    else if (tableName == "pickpocketing")
+        store = &LootTemplates_Pickpocketing;
+    else if (tableName == "skinning")
+        store = &LootTemplates_Skinning;
+    else if (tableName == "disenchant")
+        store = &LootTemplates_Disenchant;
+    else if (tableName == "enchant")
+        return HandleDebugItemEnchantCommand(lootid, simCount);
+    else
+    {
+        PSendSysMessage("Error: loot type \"%s\" unknown", tableName.c_str());
+        return false;
+    }
+
+    LootTemplate const* tab = store->GetLootFor(lootid);
+    if (!tab)
+    {
+        PSendSysMessage("Error: loot type \"%s\" has no lootid %u", tableName.c_str(), lootid);
+        return false;
+    }
+
+    Player* lootOwner = GetSelectedPlayer();
+
+    std::map<uint32, uint32> lootChances;
+    if (checkItem)
+        lootChances[checkItem] = 0;
+
+    uint32 const MAX_TIME = 30;
+    auto startTime = time(nullptr);
+
+    for (uint32 i = 0; i < simCount; ++i)
+    {
+        Loot l(nullptr);
+        if (lootOwner)
+            l.SetTeam(lootOwner->GetTeam());
+
+        tab->Process(l, *store, store->IsRatesAllowed());
+
+        for (const auto& item : l.items)
+            if (!lootOwner || !item.conditionId)
+                lootChances[item.itemid]++;
+
+        for (const auto& m_questItem : l.m_questItems)
+            lootChances[m_questItem.itemid]++;
+
+        if (lootOwner)
+        {
+            l.FillNotNormalLootFor(lootOwner);
+            QuestItemMap::const_iterator itemsList = l.m_playerFFAItems.find(lootOwner->GetGUIDLow());
+
+            if (itemsList != l.m_playerFFAItems.end())
+                for (const auto& it : *itemsList->second)
+                    lootChances[l.items[it.index].itemid]++;
+
+            itemsList = l.m_playerQuestItems.find(lootOwner->GetGUIDLow());
+            if (itemsList != l.m_playerQuestItems.end())
+                for (const auto& it : *itemsList->second)
+                    lootChances[l.m_questItems[it.index].itemid]++;
+
+            itemsList = l.m_playerNonQuestNonFFAConditionalItems.find(lootOwner->GetGUIDLow());
+            if (itemsList != l.m_playerNonQuestNonFFAConditionalItems.end())
+                for (const auto& it : *itemsList->second)
+                    lootChances[l.items[it.index].itemid]++;
+        }
+
+        if (i % 1000000 == 0) // check the time every million iterations
+        {
+            if (time(nullptr) - startTime > MAX_TIME)
+            {
+                PSendSysMessage("Error: Aborted loot simulation after %u runs for exceeding max allowed time of %us", i, MAX_TIME);
+                simCount = i;
+                break;
+            }
+        }
+    }
+
+    PSendSysMessage("%u items dropped after %u attempts for loot %s.%u", lootChances.size(), simCount, tableName.c_str(), lootid);
+    for (const auto& itr : lootChances)
+    {
+        if (itr.first == checkItem || !checkItem)
+        {
+            ItemPrototype const* proto = sItemStorage.LookupEntry<ItemPrototype >(itr.first);
+            if (!proto)
+                continue;
+
+            std::stringstream chance;
+            chance << 100 * itr.second / float(simCount);
+            chance << "%";
+
+            if (m_session)
+                PSendSysMessage(LANG_ITEM_LIST_CHAT, itr.first, itr.first, proto->Name1, chance.str().c_str());
+            else
+                PSendSysMessage(LANG_ITEM_LIST_CONSOLE, itr.first, proto->Name1, chance.str().c_str());
+        }
+    }
+
+    return true;
+}
+
+bool ChatHandler::HandleDebugItemEnchantCommand(int lootid, uint32 simCount)
+{
+    std::map<uint32, uint32> lootChances;
+    uint32 const MAX_TIME = 30;
+    auto startTime = time(nullptr);
+
+    ItemPrototype const* proto = sItemStorage.LookupEntry<ItemPrototype >(lootid);
+    if (!proto)
+    {
+        PSendSysMessage("Error: invalid item id %u", lootid);
+        return false;
+    }
+
+    if (!proto->RandomProperty)
+    {
+        PSendSysMessage("Error: item %u has no random enchantments", lootid);
+        return false;
+    }
+
+    for (uint32 i = 0; i < simCount; ++i)
+    {
+        uint32 enchant = GetItemEnchantMod(proto->RandomProperty);
+        lootChances[enchant]++;
+
+        if (i % 1000000 == 0) // check the time every million iterations
+        {
+            if (time(nullptr) - startTime > MAX_TIME)
+            {
+                PSendSysMessage("Error: Aborted loot simulation after %u runs for exceeding max allowed time of %us", i, MAX_TIME);
+                simCount = i;
+                break;
+            }
+        }
+    }
+
+    PSendSysMessage("%u items dropped after %u attempts for item %s.", lootChances.size(), simCount, proto->Name1);
+    for (const auto& itr : lootChances)
+    {
+        std::stringstream chance;
+        chance << 100 * itr.second / float(simCount);
+        chance << "%";
+
+        ItemRandomPropertiesEntry const* randomProp = sItemRandomPropertiesStore.LookupEntry(itr.first);
+        if (!randomProp)
+            continue;
+
+        if (m_session)
+            PSendSysMessage(LANG_ITEM_LIST_CHAT, itr.first, lootid, randomProp->internalName, chance.str().c_str());
+        else
+            PSendSysMessage(LANG_ITEM_LIST_CONSOLE, itr.first, randomProp->internalName, chance.str().c_str());
+    }
+
+    return true;
+}
+
 
 bool ChatHandler::HandleGMTicketListCommand(char* args)
 {
