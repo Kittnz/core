@@ -60,9 +60,12 @@ struct boss_renatakiAI : public ScriptedAI
         ThousandBlades_Timer = urand(4000, 8000);
 
         Invisible = false;
-        m_creature->SetUInt32Value(UNIT_VIRTUAL_ITEM_SLOT_DISPLAY, 31818);
-        m_creature->SetUInt32Value(UNIT_VIRTUAL_ITEM_INFO , 218171138);
-        m_creature->SetUInt32Value(UNIT_VIRTUAL_ITEM_INFO  + 1, 3);
+        m_creature->SetUInt32Value(UNIT_VIRTUAL_ITEM_DISPLAY, 31818);
+        m_creature->SetByteValue(UNIT_VIRTUAL_ITEM_INFO, VIRTUAL_ITEM_INFO_0_OFFSET_CLASS, ITEM_CLASS_WEAPON);
+        m_creature->SetByteValue(UNIT_VIRTUAL_ITEM_INFO, VIRTUAL_ITEM_INFO_0_OFFSET_SUBCLASS, ITEM_SUBCLASS_WEAPON_SWORD);
+        m_creature->SetByteValue(UNIT_VIRTUAL_ITEM_INFO, VIRTUAL_ITEM_INFO_0_OFFSET_MATERIAL, 1);
+        m_creature->SetByteValue(UNIT_VIRTUAL_ITEM_INFO, VIRTUAL_ITEM_INFO_0_OFFSET_INVENTORYTYPE, INVTYPE_WEAPON);
+        m_creature->SetUInt32Value(UNIT_VIRTUAL_ITEM_INFO + 1, 3);
     }
 
     void JustDied(Unit* pKiller) override
