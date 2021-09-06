@@ -52,3 +52,120 @@ replace into item_template values
 
 replace into creature_loot_template values (2442, 83100, 1, 6, 1, 1, 0, 0, 10);
 
+-- Item changes:
+
+-- Blacksmithing:
+
+-- Dawnbringer Shoulders: 10 Spirit -> 10 Intellect
+
+-- Heavy Timbermaw Belt: 9 Stamina -> 18 Stamina, 42 Attack Power -> %1 Dodge, + 60 Armor
+-- Heavy Timbermaw Boots: 23 Stamina -> 21 Stamina, 20 Attack Power -> %1 Dodge, + 60 Armor
+
+-- Heavy Obsidian Belt: 25 Strength -> 22 Stamina
+
+-- Wildthorn Mail: 5 Stamina -> 11 Stamina, 11 Spirit -> 5 Intellect
+
+-- Fiery Plate Gauntlets: 10 Fire Resistance -> 15 Fire Resistance, +10 Stamina
+
+-- Girdle of the Dawn: 9 Stamina -> 12 Stamina, 21 Strength -> 12 Strength, + 8 Intellect, + %1 Block Chance, + 12 Block Value
+-- Gloves of the Dawn: 10 Stamina -> 14 Stamina, 23 Strength -> 12 Strength, + 9 Intellect, + %1 Block Chance, + 14 Block Value
+
+-- Fiery Chain Girdle: 9 Intellect -> 9 Agility, 8 Spirit -> 8 Intellect
+-- Fiery Chain Shoulders: 14 Intellect -> 8 Intellect, +10 Agility
+
+-- Helm of the Great Chief: 12 Stamina -> 26 Stamina, 30 Spirit -> 12 Agility, + 70 Armor, + 6 Defense
+
+-- Blackfury: 105 - 158 Damage -> 155 - 238 Damage, 2.1 Attack Speed -> 3.3 Attack Speed
+
+-- Dark Iron Destroyer: 10 Strength -> 12 Strength, 6 Fire Resistance -> 8 Fire Resistance
+
+-- Enchanted Battlehammer: %1 Parry -> %1 Dodge, + 12 Stamina
+
+-- Corruption: New Proc: Corrupts the target, causing 90 damage over 3 sec. (3 PPM)
+
+-- Engineering:
+
+-- Dark Iron Rifle: 53 - 100 Damage -> 70 - 106 Damage, 2.7 Attack Speed -> 3.1 Attack Speed
+
+-- Flawless Arcanite Rifle: 65 - 122 Damage -> 68 - 126 Damage, 3.0 Attack Speed -> 3.1 Attack Speed
+
+-- Core Marksman Rifle: 64 - 120 Damage -> 88 - 146 Damage, 2.6 Attack Speed -> 3.2 Attack Speed
+-- Leatherworking:
+
+-- Blood Tiger Breastplate: 13 Spirit -> 16 Agility, 16 Intellect -> 13 Intellect
+-- Blood Tiger Shoulders: 10 Spirit -> 12 Agility, 12 Intellect -> 10 Intellect
+
+-- Feathered Breastplate: 10 Intellect -> 24 Intellect, 24 Spirit -> 10 Spirit
+
+-- Ironfeather Shoulders: 20 Intellect -> 18 Intellect, 8 Spirit -> 6 Spirit, + 10 Spellpower
+-- Ironfeather Breastplate: 12 Intellect -> 24 Intellect, 28 Spirit -> 12 Spirit, + 14 Spellpower
+-- New Ironfeather Armor (2) Set Bonus: %1 Spell Hit
+
+-- Green Dragonscale Leggings: New Effect: Allows 5% of your Mana regeneration to continue while casting.
+-- Green Dragonscale Gauntlets: New Effect: Allows 5% of your Mana regeneration to continue while casting.
+-- Green Dragonscale Breastplate: New Effect: Allows 5% of your Mana regeneration to continue while casting.
+
+-- Tailoring:
+
+-- Argent Boots: 21 Stamina -> 18 Stamina, 57 Armor -> 107 Armor, + 13 Spellpower
+-- Argent Shoulders: 23 Stamina -> 20 Stamina, 68 Armor -> 132 Armor, + 15 Spellpower
+
+-- Wisdom of the Timbermaw: 21 Intellect -> 17 Intellect, 4 MP5 -> 6 MP5
+-- Mantle of the Timbermaw: 21 Intellect -> 17 Intellect, 6 MP5 -> 8 MP5
+
+-- Mooncloth Boots: 11 Stamina -> 20 Healing Power
+-- Mooncloth Leggings: 12 Stamina -> 34 Healing Power
+-- Mooncloth Vest: 19 Spirit -> 8 MP5
+-- Mooncloth Robe: 25 Intellect -> 18 Intellect, 12 Stamina -> 47 Healing Power
+-- Mooncloth Shoulders: 7 Stamina -> 20 Healing Power
+-- Mooncloth Circlet: 13 Stamina -> 28 Healing Power 
+-- Mooncloth Gloves: 9 Stamina -> 20 Healing Power
+
+-- Belt of the Archmage: 10 Stamina -> 12 Spellpower
+-- Gloves of Spell Mastery: 8 Spirit -> 12 Spellpower, No longer class restricted.
+	
+update item_template set stat_type1 = 5 where entry = 12625;
+update item_template set stat_value1 = 18, spellid_1 = 13669, armor = 253 where entry = 19043;
+update item_template set stat_value1 = 21, spellid_1 = 13669, armor = 318 where entry = 19048;
+update item_template set stat_value1 = 22, stat_type1 = 7 where entry = 22197;
+update item_template set stat_value1 = 5, stat_type1 = 5, stat_value2 = 11 where entry = 12624;
+update item_template set fire_res = 15, stat_value1 = 10, stat_type1 = 7 where entry = 12631;
+update item_template set stat_value2 = 12, stat_value1 = 12, stat_type3 = 5, stat_value3 = 8, spellid_1 = 13674, spelltrigger_1 = 1, spellid_2 = 25036, spelltrigger_2 = 1 where entry = 19051;
+update item_template set stat_value2 = 14, stat_value1 = 12, stat_type3 = 5, stat_value3 = 9, spellid_1 = 13674, spelltrigger_1 = 1, spellid_2 = 23515, spelltrigger_2 = 1 where entry = 19051;
+update item_template set stat_type2 = 3, stat_type3 = 5 where entry = 16989;
+update item_template set stat_value1 = 10, stat_type3 = 3, stat_value3 = 10 where entry = 16988;
+update item_template set stat_value1 = 26, stat_type2 = 3, stat_value3 = 12, armor = 362, spellid_1 = 13384, spelltrigger_1 = 1 where entry = 12636;	
+update item_template set dmg_min1 = 155, dmg_max1 = 238, delay = 3300 where entry = 19167;
+update item_template set fire_res = 8, stat_value1 = 12 where entry = 17016;
+update item_template set spellid_1 = 13669, stat_value1 = 12, stat_type1 = 7 where entry = 12776;
+update item_template set spellid_1 = 18088, spelltrigger_1 = 2, spellppmRate_1 = 3 where entry = 12782;
+-- Engineering
+update item_template set dmg_min1 = 70, dmg_max1 = 106, delay = 3100 where entry = 16004;
+update item_template set dmg_min1 = 68, dmg_max1 = 126, delay = 3100 where entry = 16007;
+update item_template set dmg_min1 = 88, dmg_max1 = 146, delay = 3200 where entry = 18282;
+-- Leatherworking
+update item_template set stat_type4 = 3, stat_value4 = 16, stat_value3 = 13 where entry = 19688;
+update item_template set stat_type4 = 3, stat_value4 = 12, stat_value3 = 10 where entry = 19689;
+update item_template set stat_value1 = 10, stat_value2 = 24 where entry = 8349;
+update item_template set stat_value1 = 12, stat_value2 = 24, spellid_1 = 9343, spelltrigger_1 = 1 where entry = 15066;
+update item_template set stat_value1 = 18, stat_value2 = 6, spellid_1 = 9416, spelltrigger_1 = 1 where entry = 15067;
+update item_template set spellid_1 = 14521, spelltrigger_1 = 1 where entry = 15045;
+update item_template set spellid_1 = 14521, spelltrigger_1 = 1 where entry = 20296;
+update item_template set spellid_1 = 14521, spelltrigger_1 = 1 where entry = 15046;
+-- Tailoring
+update item_template set stat_value1 = 18, armor = 107, spellid_1 = 9342, spelltrigger_1 = 1 where entry = 19056;
+update item_template set stat_value1 = 20, armor = 132, spellid_1 = 9344, spelltrigger_1 = 1 where entry = 19059;
+update item_template set stat_value1 = 17, spellid_1 = 18378 where entry = 19050;
+update item_template set stat_value1 = 17, spellid_1 = 18379 where entry = 19047;
+update item_template set stat_value3 = 0, stat_type3 = 0, spellid_1 = 9407, spelltrigger_1 = 1 where entry = 15802;
+update item_template set stat_value3 = 0, stat_type3 = 0, spellid_1 = 9316, spelltrigger_1 = 1 where entry = 14140;
+update item_template set stat_value3 = 0, stat_type3 = 0, spellid_1 = 9407, spelltrigger_1 = 1 where entry = 18409;
+update item_template set stat_value3 = 0, stat_type3 = 0, spellid_1 = 18029, spelltrigger_1 = 1 where entry = 14137;
+update item_template set stat_value3 = 0, stat_type3 = 0, spellid_1 = 9407, spelltrigger_1 = 1 where entry = 18409;
+update item_template set stat_value3 = 0, stat_type3 = 0, spellid_1 = 9407, spelltrigger_1 = 1 where entry = 14139;
+update item_template set stat_value1 = 18, stat_value3 = 0, stat_type3 = 0, spellid_1 = 18034, spelltrigger_1 = 1 where entry = 18409;
+update item_template set stat_value2 = 0, stat_type2 = 0, spellid_1 = 18378, spelltrigger_1 = 1 where entry = 14138;
+update item_template set stat_value2 = 0, stat_type2 = 0, spellid_2 = 9417, spelltrigger_2 = 1 where entry = 18405;
+update item_template set stat_value2 = 0, stat_type2 = 0, spellid_2 = 9417, spelltrigger_2 = 1, allowable_class = -1 where entry = 14146;
+
+
