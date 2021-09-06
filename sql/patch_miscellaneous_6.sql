@@ -168,4 +168,9 @@ update item_template set stat_value2 = 0, stat_type2 = 0, spellid_1 = 18378, spe
 update item_template set stat_value2 = 0, stat_type2 = 0, spellid_2 = 9417, spelltrigger_2 = 1 where entry = 18405;
 update item_template set stat_value2 = 0, stat_type2 = 0, spellid_2 = 9417, spelltrigger_2 = 1, allowable_class = -1 where entry = 14146;
 
+-- ...
+
+replace into `creature_template` VALUES (80178, 0, 7164, 0, 0, 0, 'Grand Taskmaster Nert Blastentom', 'Leader of the Durotar Labor Union', 59011, 60, 60, 145319, 145319, 0, 0, 4852, 1682, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 890, 1031, 0, 90, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 31.856, 43.802, 100, 7, 4096, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 2, 0, '');
+
+update creature_template set rank = 1, racial_leader = 1 where entry = 80178;
 
