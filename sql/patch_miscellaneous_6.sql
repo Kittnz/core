@@ -6,7 +6,15 @@ replace into creature_template values
 (91903, 0, 18145, 0, 0, 0, 'Duke', '', 0, 35, 35, 1342, 1342, 0, 0, 1357, 35, 2, 1.11, 1.14286, 1.8, 20, 5, 0, 0, 1, 51, 65, 0, 138, 1, 2000, 2000, 1, 768, 0, 0, 0, 0, 0, 0, 51.128, 70.301, 100, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 2, 0, ''),
 (91904, 0, 18144, 0, 0, 0, 'Larry', '', 0, 35, 35, 1342, 1342, 0, 0, 1357, 35, 2, 1.11, 1.14286, 1.8, 20, 5, 0, 0, 1, 51, 65, 0, 138, 1, 2000, 2000, 1, 768, 0, 0, 0, 0, 0, 0, 51.128, 70.301, 100, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 2, 0, ''),
 (91905, 0, 12610, 0, 0, 0, 'Sailor Darkbay', 'Kul Tiras', 0, 45, 53, 1981, 4281, 0, 0, 2246, 15, 0, 1.11111, 1.14286, 0, 20, 5, 0, 0, 1, 300, 345, 0, 172, 1, 2000, 2000, 1, 768, 0, 0, 0, 0, 0, 0, 58.7664, 80.8038, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 524290, 0, ''),
-(91906, 0, 2423, 0, 0, 0, 'Deepwater Hydra', '', 0, 53, 53, 4554, 4945, 0, 0, 2808, 16, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 243, 313, 0, 212, 1, 2000, 2000, 1, 32832, 0, 0, 0, 0, 0, 0, 50.796, 69.8445, 100, 10, 8, 12207, 0, 12207, 0, 0, 0, 0, 0, 0, 3417, 21790, 0, 0, 122070, 0, 0, 0, 'EventAI', 1, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+(91906, 0, 2423, 0, 0, 0, 'Deepwater Hydra', '', 0, 53, 53, 4554, 4945, 0, 0, 2808, 16, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 243, 313, 0, 212, 1, 2000, 2000, 1, 32832, 0, 0, 0, 0, 0, 0, 50.796, 69.8445, 100, 10, 8, 12207, 0, 12207, 0, 0, 0, 0, 0, 0, 3417, 21790, 0, 0, 122070, 0, 0, 0, 'EventAI', 1, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(91950, 0, 1731, 0, 0, 0, 'Chef Jenkel', 'Cooking Trainer', 0, 35, 35, 1281, 2281, 0, 0, 1246, 15, 0, 1.11111, 1.14286, 0, 20, 5, 0, 0, 1, 300, 345, 0, 172, 1, 2000, 2000, 1, 768, 0, 0, 0, 0, 0, 0, 58.7664, 80.8038, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 524290, 0, ''),
+(91951, 0, 1516, 0, 0, 0, 'Cook Lopperson', 'Cooking Supplies', 0, 30, 30, 1981, 2281, 0, 0, 1246, 15, 0, 1.11111, 1.14286, 0, 20, 5, 0, 0, 1, 300, 345, 0, 172, 1, 2000, 2000, 1, 768, 0, 0, 0, 0, 0, 0, 58.7664, 80.8038, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 524290, 0, ''),
+(91952, 0, 4320, 0, 0, 0, 'Devon Harkwave', 'Kul Tiras', 0, 45, 45, 1981, 2281, 0, 0, 2246, 15, 0, 1.11111, 1.14286, 0, 20, 5, 0, 0, 1, 300, 345, 0, 172, 1, 2000, 2000, 1, 768, 0, 0, 0, 0, 0, 0, 58.7664, 80.8038, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 524290, 0, ''),
+(91953, 0, 1501, 0, 0, 0, 'Father Benofar', 'Kul Tiras', 0, 44, 44, 1281, 2281, 0, 0, 1646, 15, 0, 1.11111, 1.14286, 0, 20, 5, 0, 0, 1, 300, 345, 0, 172, 1, 2000, 2000, 1, 768, 0, 0, 0, 0, 0, 0, 58.7664, 80.8038, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 524290, 0, ''),
+(91954, 0, 3285, 0, 0, 0, 'Fisherman Delavey', 'Kul Tiras', 0, 43, 43, 1981, 2281, 0, 0, 2246, 15, 0, 1.11111, 1.14286, 0, 20, 5, 0, 0, 1, 300, 345, 0, 172, 1, 2000, 2000, 1, 4319, 0, 0, 0, 0, 0, 0, 58.7664, 80.8038, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 524290, 0, ''),
+(91955, 0, 4319, 0, 0, 0, 'Milroy Haveshine', 'Kul Tiras', 0, 50, 50, 1981, 2981, 0, 0, 2246, 15, 0, 1.11111, 1.14286, 0, 20, 5, 0, 0, 1, 300, 345, 0, 172, 1, 2000, 2000, 1, 4319, 0, 0, 0, 0, 0, 0, 58.7664, 80.8038, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 524290, 0, ''),
+(91956, 0, 2973, 0, 0, 0, 'Denia Hale', 'General Goods', 0, 47, 47, 1981, 2281, 0, 0, 2046, 15, 0, 1.11111, 1.14286, 0, 20, 5, 0, 0, 1, 300, 345, 0, 172, 1, 2000, 2000, 1, 768, 0, 0, 0, 0, 0, 0, 58.7664, 80.8038, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 524290, 0, ''),
+(91957, 0, 1490, 0, 0, 0, 'Sailor Kark', 'Kul Tiras', 0, 50, 50, 1981, 2981, 0, 0, 2246, 15, 0, 1.11111, 1.14286, 0, 20, 5, 0, 0, 1, 300, 345, 0, 172, 1, 2000, 2000, 1, 768, 0, 0, 0, 0, 0, 0, 58.7664, 80.8038, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 524290, 0, '');
 
 update creature_template set npc_flags = 1, faction = 189, unit_flags = 2, scale = 2.5 where entry = 91799;
 update creature_template set display_id1 = 18149 where entry = 91800;
@@ -23,6 +31,51 @@ update creature_template set name = 'Cannoneer Darlug' where entry = 91886;
 update creature_template set equipment_id = 0, level_min = 55, level_max = 55 where entry = 91891;
 update creature_template set equipment_id = 0 where entry = 91865;
 update creature_template set inhabit_type = 2 where entry = 91837;
+update creature_template set npc_flags = 4 where entry = 91956;
+update creature_template set npc_flags = 4 where entry = 91951;
+update creature_template set npc_flags = 1 where entry = 91953;
+update creature_template set npc_flags = 16, trainer_type = 2 where entry = 91950;
+
+REPLACE INTO `npc_vendor` VALUES (91956, 159, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91956, 1205, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91956, 1645, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91956, 1708, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91956, 2515, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91956, 2519, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91956, 3030, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91956, 3033, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91956, 3107, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91956, 3108, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91956, 3135, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91956, 3137, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91956, 4470, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91956, 4471, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91956, 4497, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91956, 4498, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91956, 6183, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91956, 11284, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91956, 11285, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91956, 15326, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91956, 15327, 0, 0, 0, 0);
+
+REPLACE INTO `npc_vendor` VALUES (91951, 159, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91951, 2678, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91951, 2692, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91951, 3713, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91951, 30817, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91951, 40000, 0, 0, 0, 0);
+
+REPLACE INTO `npc_trainer` VALUES (91950, 1290, 1, 0, 0, 0, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (91950, 2551, 100, 0, 0, 5, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (91950, 2559, 50, 185, 10, 0, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (91950, 2561, 100, 185, 50, 0, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (91950, 2562, 200, 185, 75, 0, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (91950, 2563, 150, 185, 80, 0, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (91950, 3412, 500, 185, 50, 10, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (91950, 6502, 100, 185, 50, 0, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (91950, 6503, 300, 185, 125, 0, 0, 5875);
+REPLACE INTO `npc_trainer` VALUES (91950, 21176, 4000, 185, 200, 0, 0, 5875);
+
 
 replace into creature_template_addon values 
 (91881, 0, 0, 0, 0, 0, 234, 0, NULL),
@@ -43,6 +96,20 @@ replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id,
 replace into broadcast_text (entry, Male_Text) values (@magic_number, 'What do you want in my realm, mortal?'); 
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 60119; set @magic_number = 91953; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Even in a desolate island such as this, we must keep our faith.'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 60120; set @magic_number = 91954; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'A wonderful day to fish, is it not?'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+
 
 replace into item_template values
  ('83100', '0', '15', '0', 'Mysterious Cow Scroll', 'It beckons you.', '11161', '1', '0', '1', '0', '0', '0', '-1', '-1', '0',
