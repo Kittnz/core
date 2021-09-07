@@ -114,7 +114,12 @@ enum crypt_spells
     SPELL_WAILING_DEAD = 7713,
     SPELL_BANSHEE_SHRIEK = 7713,
     SPELL_PIERCING_SHADOW = 16429,
-    SPELL_SHADOW_BARRIER = 17151
+    SPELL_SHADOW_BARRIER = 17151,
+    // Undead Frenzy
+    SPELL_DRAWNING_DEATH = 19319,
+    SPELL_FESTERING_BITES = 16460,
+    SPELL_SOUL_BITE = 11016,
+   
 };
 
 struct ravenous_strigoiAI : public ScriptedAI
@@ -360,9 +365,75 @@ private:
 
 CreatureAI* GetAI_forlorn_shrieker(Creature* pCreature) { return new forlorn_shriekerAI(pCreature); }
 
+struct undead_frenzyAI : public ScriptedAI
+{
+public:
+    undead_frenzyAI(Creature* pCreature) : ScriptedAI(pCreature) { Reset(); }
+
+    void Reset() override
+    {
+        m_uiFesteringBitesTimer = 6000;
+        m_uiDrawningDeathTimer = 5000;
+        m_uiSoulBiteTimer = 2000;
+    }
+
+    void SpellHitTarget(Unit* /*pTarget*/, const SpellEntry* pSpell) override
+    {
+        if (pSpell->Id == SPELL_PIERCING_SHADOW)
+            m_uiFesteringBitesTimer = 500;
+    }
+
+    void UpdateAI(const uint32 uiDiff) override
+    {
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
+            return;
+
+        if (m_uiFesteringBitesTimer <= uiDiff)
+        {
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_FESTERING_BITES) == CAST_OK)
+                m_uiFesteringBitesTimer = 10000;
+        }
+        else
+            m_uiFesteringBitesTimer -= uiDiff;
+
+        if (m_uiDrawningDeathTimer <= uiDiff)
+        {
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_DRAWNING_DEATH) == CAST_OK)
+                m_uiDrawningDeathTimer = 15000;
+        }
+        else
+            m_uiShadowBarrierTimer -= uiDiff;
+
+        if (m_uiSoulBiteTimer <= uiDiff)
+        {
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_SOUL_BITE) == CAST_OK)
+                m_uiSoulBiteTimer = 20000;
+        }
+        else
+            m_uiSoulBiteTimer -= uiDiff;
+
+
+        DoMeleeAttackIfReady();
+        EnterEvadeIfOutOfCombatArea(uiDiff);
+    }
+
+private:
+    uint32 m_uiFesteringBitesTimer;
+    uint32 m_uiShadowBarrierTimer;
+    uint32 m_uiDrawningDeathTimer;
+    uint32 m_uiSoulBiteTimer;
+};
+
+CreatureAI* GetAI_undead_frenzy(Creature* pCreature) { return new undead_frenzyAI(pCreature); }
+
 void AddSC_instance_karazhan_crypt()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "undead_frenzy";
+    newscript->GetAI = &GetAI_undead_frenzy;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "forlorn_shrieker";
