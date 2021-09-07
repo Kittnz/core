@@ -109,6 +109,7 @@ struct boss_four_horsemen_shared : public ScriptedAI
     instance_naxxramas* m_pInstance;
     bool m_bShieldWall1;
     bool m_bShieldWall2;
+    int32 m_bShieldWall1Cooldown;
     uint32 m_uiMarkTimer;
     const uint32 m_uiMarkId;
     const uint32 m_uiGhostId;
@@ -228,6 +229,7 @@ struct boss_four_horsemen_shared : public ScriptedAI
 
         m_bShieldWall1 = true;
         m_bShieldWall2 = true;
+        m_bShieldWall1Cooldown = 30 * IN_MILLISECONDS;
         m_uiMarkTimer = 20000;
         killSayCooldown = 0;
 
@@ -335,7 +337,15 @@ struct boss_four_horsemen_shared : public ScriptedAI
         m_events.Update(uiDiff);
         killSayCooldown -= std::min(killSayCooldown, uiDiff);
 
+        if (!m_bShieldWall1 && m_bShieldWall1Cooldown >= 0)
+            m_bShieldWall1Cooldown -= uiDiff;
+
         // Shield Wall - All 4 horsemen will shield wall at 50% hp and 20% hp for 20 seconds
+
+        // TW Change - https://www.youtube.com/watch?v=DiwyLkjp8eM&t=98s&ab_channel=speedfox
+        // Don't cast 20% shieldwall if 50% shieldwall is still on cooldown (30s cd)
+        //  and dont cast it ever again if the 20% chance is missed
+        // Only affects strategies when you nuke one horsemen
         if (m_bShieldWall1 && m_creature->GetHealthPercent() < 50.0f)
         {
             if ((DoCastSpellIfCan(m_creature, SPELL_SHIELDWALL)) == CAST_OK)
@@ -343,8 +353,14 @@ struct boss_four_horsemen_shared : public ScriptedAI
         }
         else if (m_bShieldWall2 && m_creature->GetHealthPercent() < 20.0f)
         {
-            if ((DoCastSpellIfCan(m_creature, SPELL_SHIELDWALL)) == CAST_OK)
+            if (CanCastSpell(m_creature, sSpellMgr.GetSpellEntry(SPELL_SHIELDWALL), false) == CAST_OK)
+            {
+                if (m_bShieldWall1Cooldown <= 0)
+                    DoCastSpellIfCan(m_creature, SPELL_SHIELDWALL);
+                else
+                    sLog.outInfo("tried to cast wall but its on cooldown");
                 m_bShieldWall2 = false;
+            }   
         }
 
         if (m_uiMarkTimer < uiDiff)
