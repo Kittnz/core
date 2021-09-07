@@ -96,16 +96,25 @@ struct karazhan_crypt_portal : public GameObjectAI
 
 GameObjectAI* GetAI_karazhan_crypt_portal(GameObject* gameobject) { return new karazhan_crypt_portal(gameobject); }
 
-// Ravenous Strigoi
-
-enum ravenous_strigoi_spells
+enum crypt_spells
 {
+    // Ravenous Strigoi
     SPELL_RAVAGE = 8391,
     SPELL_BLOOD_LEECH = 24437,
     SPELL_PUTRID_BITE = 30113,
     SPELL_RAVENOUS_CLAW = 17470,
     SPELL_CHARGE = 22911,
     SPELL_PSYCHIC_SCREAM = 26042,
+    // Forgotten Soul
+    SPELL_FROSTBOLT = 15530,
+    SPELL_FROST_BLAST = 19260,
+    SPELL_FROST_NOVA = 30094,
+    SPELL_FROST_BREATH = 21099,
+    // Forlorn Shrieker
+    SPELL_WAILING_DEAD = 7713,
+    SPELL_BANSHEE_SHRIEK = 7713,
+    SPELL_PIERCING_SHADOW = 16429,
+    SPELL_SHADOW_BARRIER = 17151
 };
 
 struct ravenous_strigoiAI : public ScriptedAI
@@ -193,16 +202,6 @@ private:
 
 CreatureAI* GetAI_ravenous_strigoi(Creature* pCreature) { return new ravenous_strigoiAI(pCreature); }
 
-// Forgotten Soul
-
-enum forgotten_soul_spells
-{
-    SPELL_FROSTBOLT = 15530,
-    SPELL_FROST_BLAST = 19260,
-    SPELL_FROST_NOVA = 30094,
-    SPELL_FROST_BREATH = 21099
-};
-
 struct forgotten_soulAI : public ScriptedAI
 {
 public:
@@ -276,9 +275,99 @@ private:
 
 CreatureAI* GetAI_forgotten_soul(Creature* pCreature) { return new forgotten_soulAI(pCreature); }
 
+struct forlorn_shriekerAI : public ScriptedAI
+{
+public:
+    forlorn_shriekerAI(Creature* pCreature) : ScriptedAI(pCreature) { Reset(); }
+
+    void Reset() override
+    {
+        m_uiWailingDeadTimer = 10000;
+        m_uiShadowBarrierTimer = 6000;
+        m_uiBansheeShriekTimer = 7000;
+        m_uiPiercingShadowTimer = 5000;
+        m_uiScreamTimer = 7000;
+    }
+
+    void SpellHitTarget(Unit* /*pTarget*/, const SpellEntry* pSpell) override
+    {
+        if (pSpell->Id == SPELL_PIERCING_SHADOW)
+            m_uiScreamTimer = 500;
+    }
+
+    void UpdateAI(const uint32 uiDiff) override
+    {
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
+            return;
+
+        if (m_uiWailingDeadTimer <= uiDiff)
+        {
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_WAILING_DEAD) == CAST_OK)
+                m_uiWailingDeadTimer = 10000;
+        }
+        else
+            m_uiWailingDeadTimer -= uiDiff;
+
+        if (m_uiShadowBarrierTimer <= uiDiff)
+        {
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_SHADOW_BARRIER) == CAST_OK)
+                m_uiShadowBarrierTimer = 15000;
+        }
+        else
+            m_uiShadowBarrierTimer -= uiDiff;
+
+        if (m_uiBansheeShriekTimer <= uiDiff)
+        {
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_BANSHEE_SHRIEK) == CAST_OK)
+                m_uiBansheeShriekTimer = 20000;
+        }
+        else
+            m_uiBansheeShriekTimer -= uiDiff;
+
+        if (m_uiPiercingShadowTimer <= uiDiff)
+        {
+            if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 1))
+            {
+                if (DoCastSpellIfCan(pTarget, SPELL_PIERCING_SHADOW) == CAST_OK)
+                    m_uiPiercingShadowTimer = urand(15000, 25000);
+            }
+        }
+        else
+            m_uiPiercingShadowTimer -= uiDiff;
+
+        if (m_uiScreamTimer)
+        {
+            if (m_uiScreamTimer <= uiDiff)
+            {
+                if (DoCastSpellIfCan(m_creature, SPELL_PSYCHIC_SCREAM) == CAST_OK)
+                    m_uiScreamTimer = 0;
+            }
+            else
+                m_uiScreamTimer -= uiDiff;
+        }
+
+        DoMeleeAttackIfReady();
+        EnterEvadeIfOutOfCombatArea(uiDiff);
+    }
+
+private:
+    uint32 m_uiWailingDeadTimer;
+    uint32 m_uiShadowBarrierTimer;
+    uint32 m_uiBansheeShriekTimer;
+    uint32 m_uiPiercingShadowTimer;
+    uint32 m_uiScreamTimer;
+};
+
+CreatureAI* GetAI_forlorn_shrieker(Creature* pCreature) { return new forlorn_shriekerAI(pCreature); }
+
 void AddSC_instance_karazhan_crypt()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "forlorn_shrieker";
+    newscript->GetAI = &GetAI_forlorn_shrieker;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "forgotten_soul";

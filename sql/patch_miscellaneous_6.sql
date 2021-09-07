@@ -28,7 +28,11 @@ replace into creature_template_addon values
 (91881, 0, 0, 0, 0, 0, 234, 0, NULL),
 (91885, 0, 0, 0, 0, 0, 234, 0, NULL),
 (91880, 0, 0, 0, 0, 0, 234, 0, NULL),
-(91884, 0, 0, 0, 0, 0, 234, 0, NULL);
+(91884, 0, 0, 0, 0, 0, 234, 0, NULL),
+
+(91877, 0, 0, 0, 0, 0, 234, 0, NULL),
+(91878, 0, 0, 0, 0, 0, 234, 0, NULL),
+(91879, 0, 0, 0, 0, 0, 234, 0, NULL);
 
 set @equip_template = 55140; set @weapon_1 = 14879; set @weapon_2 = 0; set @creature = 91305;
 replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
