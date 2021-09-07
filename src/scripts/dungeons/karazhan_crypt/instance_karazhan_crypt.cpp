@@ -119,7 +119,10 @@ enum crypt_spells
     SPELL_DRAWNING_DEATH = 19319,
     SPELL_FESTERING_BITES = 16460,
     SPELL_SOUL_BITE = 11016,
-   
+    // Cursed Blades
+    SPELL_BLADE_FURRY = 13877,
+    SPELL_DOUBLE_ATTACK = 18941,
+    SPELL_INFECTED_WOUND = 29306   
 };
 
 struct ravenous_strigoiAI : public ScriptedAI
@@ -267,7 +270,6 @@ public:
         }
 
         DoMeleeAttackIfReady();
-        EnterEvadeIfOutOfCombatArea(uiDiff);
     }
 
 private:
@@ -352,7 +354,6 @@ public:
         }
 
         DoMeleeAttackIfReady();
-        EnterEvadeIfOutOfCombatArea(uiDiff);
     }
 
 private:
@@ -414,7 +415,6 @@ public:
 
 
         DoMeleeAttackIfReady();
-        EnterEvadeIfOutOfCombatArea(uiDiff);
     }
 
 private:
@@ -426,9 +426,66 @@ private:
 
 CreatureAI* GetAI_undead_frenzy(Creature* pCreature) { return new undead_frenzyAI(pCreature); }
 
+struct cursed_bladesAI : public ScriptedAI
+{
+public:
+    cursed_bladesAI(Creature* pCreature) : ScriptedAI(pCreature) { Reset(); }
+
+    void Reset() override
+    {
+        m_uiBladeFurryTimer = 10000;
+        m_uiInfectedWoundTimer = 8000;
+        m_uiDoubleAttackTimer = 5000;
+    }
+    void UpdateAI(const uint32 uiDiff) override
+    {
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
+            return;
+
+            if (m_uiBladeFurryTimer <= uiDiff)
+            {
+                if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_BLADE_FURRY) == CAST_OK)
+                    m_uiBladeFurryTimer = 10000;
+            }
+            else
+                m_uiBladeFurryTimer -= uiDiff;
+
+        if (m_uiInfectedWoundTimer <= uiDiff)
+        {
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_INFECTED_WOUND) == CAST_OK)
+                m_uiInfectedWoundTimer = 8000;
+        }
+        else
+            m_uiInfectedWoundTimer -= uiDiff;
+
+        if (m_uiDoubleAttackTimer <= uiDiff)
+        {
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_DOUBLE_ATTACK) == CAST_OK)
+                m_uiDoubleAttackTimer = 5000;
+        }
+        else
+            m_uiDoubleAttackTimer -= uiDiff;
+
+
+        DoMeleeAttackIfReady();
+    }
+
+private:
+    uint32 m_uiBladeFurryTimer;
+    uint32 m_uiInfectedWoundTimer;
+    uint32 m_uiDoubleAttackTimer;
+};
+
+CreatureAI* GetAI_cursed_blades(Creature* pCreature) { return new cursed_bladesAI(pCreature); }
+
 void AddSC_instance_karazhan_crypt()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "cursed_blades";
+    newscript->GetAI = &GetAI_cursed_blades;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "undead_frenzy";
