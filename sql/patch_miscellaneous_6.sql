@@ -14,7 +14,18 @@ replace into creature_template values
 (91954, 0, 3285, 0, 0, 0, 'Fisherman Delavey', 'Kul Tiras', 0, 43, 43, 1981, 2281, 0, 0, 2246, 15, 0, 1.11111, 1.14286, 0, 20, 5, 0, 0, 1, 300, 345, 0, 172, 1, 2000, 2000, 1, 4319, 0, 0, 0, 0, 0, 0, 58.7664, 80.8038, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 524290, 0, ''),
 (91955, 0, 4319, 0, 0, 0, 'Milroy Haveshine', 'Kul Tiras', 0, 50, 50, 1981, 2981, 0, 0, 2246, 15, 0, 1.11111, 1.14286, 0, 20, 5, 0, 0, 1, 300, 345, 0, 172, 1, 2000, 2000, 1, 4319, 0, 0, 0, 0, 0, 0, 58.7664, 80.8038, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 524290, 0, ''),
 (91956, 0, 2973, 0, 0, 0, 'Denia Hale', 'General Goods', 0, 47, 47, 1981, 2281, 0, 0, 2046, 15, 0, 1.11111, 1.14286, 0, 20, 5, 0, 0, 1, 300, 345, 0, 172, 1, 2000, 2000, 1, 768, 0, 0, 0, 0, 0, 0, 58.7664, 80.8038, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 524290, 0, ''),
-(91957, 0, 1490, 0, 0, 0, 'Sailor Kark', 'Kul Tiras', 0, 50, 50, 1981, 2981, 0, 0, 2246, 15, 0, 1.11111, 1.14286, 0, 20, 5, 0, 0, 1, 300, 345, 0, 172, 1, 2000, 2000, 1, 768, 0, 0, 0, 0, 0, 0, 58.7664, 80.8038, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 524290, 0, '');
+(91957, 0, 1490, 0, 0, 0, 'Sailor Kark', 'Kul Tiras', 0, 50, 50, 1981, 2981, 0, 0, 2246, 15, 0, 1.11111, 1.14286, 0, 20, 5, 0, 0, 1, 300, 345, 0, 172, 1, 2000, 2000, 1, 768, 0, 0, 0, 0, 0, 0, 58.7664, 80.8038, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 524290, 0, ''),
+(91958, 0, 1929, 0, 0, 0, 'Salty\' O\'Keef', 'Traitor', 0, 50, 50, 2981, 2981, 0, 0, 2246, 230, 0, 1.11111, 1.14286, 0, 20, 5, 0, 0, 1, 300, 345, 0, 172, 1, 2000, 2000, 1, 768, 0, 0, 0, 0, 0, 0, 58.7664, 80.8038, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 524290, 0, ''),
+(91959, 0, 4478, 0, 0, 0, 'Sailor \'Deepmug\'', 'Rum Vendor', 0, 48, 48, 2181, 2981, 0, 0, 2246, 15, 0, 1.11111, 1.14286, 0, 20, 5, 0, 0, 1, 300, 345, 0, 172, 1, 2000, 2000, 1, 768, 0, 0, 0, 0, 0, 0, 58.7664, 80.8038, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 524290, 0, ''),
+(91960, 0, 2347, 0, 0, 0, 'Junglepaw Panther', NULL, 0, 48, 50, 2568, 2768, 0, 0, 2101, 16, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 60, 74, 0, 226, 1, 2000, 2000, 1, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 1, 1, 2522, 0, 2522, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5833, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 'generic_spell_ai'),
+(91961, 0, 2347, 0, 0, 0, 'Junglepaw Shadow Panther', NULL, 0, 51, 53, 2868, 3168, 0, 0, 2101, 16, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 160, 174, 0, 226, 1, 2000, 2000, 1, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 1, 1, 2522, 0, 2522, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5833, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 'generic_spell_ai'),
+(91962, 0, 1039, 0, 0, 0, 'Saltsnap Crocolisk', '', 0, 49, 51, 2817, 3117, 0, 0, 2101, 16, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 260, 374, 0, 204, 1, 2000, 2000, 1, 32768, 0, 6, 0, 0, 0, 0, 60.016, 82.522, 100, 1, 1, 4841, 0, 4841, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5858, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(91963, 0, 8802, 0, 0, 0, 'Deepstone Basilisk', '', 0, 51, 53, 3217, 3417, 0, 0, 3101, 16, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 360, 474, 0, 204, 1, 2000, 2000, 1, 32768, 0, 6, 0, 0, 0, 0, 60.016, 82.522, 100, 1, 1, 4841, 0, 4841, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5858, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(91964, 0, 2174, 0, 0, 0, 'Saltjaw Basilisk', '', 0, 49, 51, 3017, 3217, 0, 0, 2101, 16, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 260, 374, 0, 204, 1, 2000, 2000, 1, 32768, 0, 6, 0, 0, 0, 0, 60.016, 82.522, 100, 1, 1, 4841, 0, 4841, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5858, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(91965, 0, 2024, 0, 0, 0, 'Lurking Jungle Creeper', NULL, 0, 54, 54, 2550, 2633, 1982, 2041, 2588, 16, 0, 0.666668, 1.14286, 0, 20, 5, 0, 0, 1, 112, 139, 0, 244, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 70.4704, 96.8968, 100, 4, 0, 6519, 0, 0, 0, -51, 51, 0, 0, 0, 12747, 11640, 0, 0, 65190, 0, 99, 135, 'EventAI', 1, 3, 0, 0, 3, 0, 0, 0, 16384, 0, 0, 0, ''),
+(91966, 0, 10991, 0, 0, 0, 'Venomous Jungle Serpent', NULL, 0, 51, 53, 916, 981, 0, 0, 3163, 90, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 27, 34, 0, 238, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 3, 0, 9776, 0, 0, 0, 0, 0, 0, 0, 0, 16866, 0, 0, 0, 97760, 0, 74, 102, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(91967, 0, 5561, 0, 0, 0, 'Enraged Water Elemental', NULL, 0, 53, 54, 3292, 3292, 0, 0, 3216, 16, 0, 1.55556, 1.14286, 0, 20, 5, 0, 0, 1, 88, 106, 4, 244, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 67.2672, 92.4924, 100, 4, 0, 0, 0, 0, 0, 54, 54, 0, 54, 54, 0, 0, 0, 0, 0, 0, 51, 257, '', 0, 3, 0, 0, 3, 0, 0, 0, 16384, 16, 32, 0, ''),
+(91968, 0, 9418, 0, 0, 0, 'Lykourgos the Reaver', NULL, 0, 53, 53, 3182, 3388, 0, 0, 3151, 16, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 77, 96, 0, 238, 1, 1700, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.4704, 96.8968, 100, 7, 0, 6005, 6005, 0, 0, 0, 0, 0, 104, 0, 3417, 8646, 11976, 0, 60050, 0, 111, 150, 'EventAI', 1, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
 
 update creature_template set npc_flags = 1, faction = 189, unit_flags = 2, scale = 2.5 where entry = 91799;
 update creature_template set display_id1 = 18149 where entry = 91800;
@@ -22,6 +33,9 @@ update creature_template set display_id1 = 3264 where entry = 91886;
 update creature_template set display_id1 = 3264 where entry = 91773;
 update creature_template set rank = 1 where entry = 70891;
 update creature_template set scale = 1.2 where entry = 91797;
+update creature_template set scale = 1.2 where entry = 91761;
+update creature_template set scale = 0.9 where entry = 91762;
+update creature_template set scale = 0.8 where entry = 91764;
 update creature_template set scale = 1.3 where entry = 91798;
 update creature_template set scale = 1.4 where entry = 91831;
 update quest_template set suggestedplayers = 3 where entry = 80291;
@@ -32,9 +46,12 @@ update creature_template set equipment_id = 0, level_min = 55, level_max = 55 wh
 update creature_template set equipment_id = 0 where entry = 91865;
 update creature_template set inhabit_type = 2 where entry = 91837;
 update creature_template set npc_flags = 4 where entry = 91956;
+update creature_template set npc_flags = 4 where entry = 91959;
 update creature_template set npc_flags = 4 where entry = 91951;
 update creature_template set npc_flags = 1 where entry = 91953;
 update creature_template set npc_flags = 16, trainer_type = 2 where entry = 91950;
+
+REPLACE INTO `npc_vendor` VALUES (91959, 9260, 0, 0, 0, 0);
 
 REPLACE INTO `npc_vendor` VALUES (91956, 159, 0, 0, 0, 0);
 REPLACE INTO `npc_vendor` VALUES (91956, 1205, 0, 0, 0, 0);
@@ -88,6 +105,14 @@ replace into creature_template_addon values
 (91879, 0, 0, 0, 0, 0, 234, 0, NULL);
 
 set @equip_template = 55140; set @weapon_1 = 14879; set @weapon_2 = 0; set @creature = 91305;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 55141; set @weapon_1 = 4560; set @weapon_2 = 0; set @creature = 91958;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 55142; set @weapon_1 = 15972; set @weapon_2 = 0; set @creature = 91959;
 replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
 update creature_template set equipment_id = @equip_template where entry = @creature;
 
@@ -194,7 +219,8 @@ replace into creature_loot_template values (2442, 83100, 1, 6, 1, 1, 0, 0, 10);
 
 -- Belt of the Archmage: 10 Stamina -> 12 Spellpower
 -- Gloves of Spell Mastery: 8 Spirit -> 12 Spellpower, No longer class restricted.
-	
+
+-- Blacksmithing
 update item_template set stat_type1 = 5 where entry = 12625;
 update item_template set stat_value1 = 18, spellid_1 = 13669, armor = 253 where entry = 19043;
 update item_template set stat_value1 = 21, spellid_1 = 13669, armor = 318 where entry = 19048;
@@ -202,14 +228,15 @@ update item_template set stat_value1 = 22, stat_type1 = 7 where entry = 22197;
 update item_template set stat_value1 = 5, stat_type1 = 5, stat_value2 = 11 where entry = 12624;
 update item_template set fire_res = 15, stat_value1 = 10, stat_type1 = 7 where entry = 12631;
 update item_template set stat_value2 = 12, stat_value1 = 12, stat_type3 = 5, stat_value3 = 8, spellid_1 = 13674, spelltrigger_1 = 1, spellid_2 = 25036, spelltrigger_2 = 1 where entry = 19051;
-update item_template set stat_value2 = 14, stat_value1 = 12, stat_type3 = 5, stat_value3 = 9, spellid_1 = 13674, spelltrigger_1 = 1, spellid_2 = 23515, spelltrigger_2 = 1 where entry = 19051;
+update item_template set stat_value2 = 14, stat_value1 = 12, stat_type3 = 5, stat_value3 = 9, spellid_1 = 13674, spelltrigger_1 = 1, spellid_2 = 23515, spelltrigger_2 = 1 where entry = 19057;
 update item_template set stat_type2 = 3, stat_type3 = 5 where entry = 16989;
 update item_template set stat_value1 = 10, stat_type3 = 3, stat_value3 = 10 where entry = 16988;
-update item_template set stat_value1 = 26, stat_type2 = 3, stat_value3 = 12, armor = 362, spellid_1 = 13384, spelltrigger_1 = 1 where entry = 12636;	
+update item_template set stat_value1 = 26, stat_type2 = 3, stat_value3 = 12, stat_type3 = 3, armor = 362, spellid_1 = 13384, spelltrigger_1 = 1 where entry = 12636;	
 update item_template set dmg_min1 = 155, dmg_max1 = 238, delay = 3300 where entry = 19167;
 update item_template set fire_res = 8, stat_value1 = 12 where entry = 17016;
 update item_template set spellid_1 = 13669, stat_value1 = 12, stat_type1 = 7 where entry = 12776;
 update item_template set spellid_1 = 18088, spelltrigger_1 = 2, spellppmRate_1 = 3 where entry = 12782;
+update item_template set dmg_min1 = 151, dmg_max1 = 227, delay = 3500, spellppmRate_1 = 1.2 where entry = 12790;
 -- Engineering
 update item_template set dmg_min1 = 70, dmg_max1 = 106, delay = 3100 where entry = 16004;
 update item_template set dmg_min1 = 68, dmg_max1 = 126, delay = 3100 where entry = 16007;
@@ -232,9 +259,8 @@ update item_template set stat_value3 = 0, stat_type3 = 0, spellid_1 = 9407, spel
 update item_template set stat_value3 = 0, stat_type3 = 0, spellid_1 = 9316, spelltrigger_1 = 1 where entry = 14140;
 update item_template set stat_value3 = 0, stat_type3 = 0, spellid_1 = 9407, spelltrigger_1 = 1 where entry = 18409;
 update item_template set stat_value3 = 0, stat_type3 = 0, spellid_1 = 18029, spelltrigger_1 = 1 where entry = 14137;
-update item_template set stat_value3 = 0, stat_type3 = 0, spellid_1 = 9407, spelltrigger_1 = 1 where entry = 18409;
 update item_template set stat_value3 = 0, stat_type3 = 0, spellid_1 = 9407, spelltrigger_1 = 1 where entry = 14139;
-update item_template set stat_value1 = 18, stat_value3 = 0, stat_type3 = 0, spellid_1 = 18034, spelltrigger_1 = 1 where entry = 18409;
+update item_template set stat_value1 = 18, stat_value3 = 0, stat_type3 = 0, spellid_1 = 18034, spelltrigger_1 = 1 where entry = 18486;
 update item_template set stat_value2 = 0, stat_type2 = 0, spellid_1 = 18378, spelltrigger_1 = 1 where entry = 14138;
 update item_template set stat_value2 = 0, stat_type2 = 0, spellid_2 = 9417, spelltrigger_2 = 1 where entry = 18405;
 update item_template set stat_value2 = 0, stat_type2 = 0, spellid_2 = 9417, spelltrigger_2 = 1, allowable_class = -1 where entry = 14146;
