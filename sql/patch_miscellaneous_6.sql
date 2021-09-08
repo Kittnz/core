@@ -25,8 +25,82 @@ replace into creature_template values
 (91965, 0, 2024, 0, 0, 0, 'Lurking Jungle Creeper', NULL, 0, 54, 54, 2550, 2633, 1982, 2041, 2588, 16, 0, 0.666668, 1.14286, 0, 20, 5, 0, 0, 1, 112, 139, 0, 244, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 70.4704, 96.8968, 100, 4, 0, 6519, 0, 0, 0, -51, 51, 0, 0, 0, 12747, 11640, 0, 0, 65190, 0, 99, 135, 'EventAI', 1, 3, 0, 0, 3, 0, 0, 0, 16384, 0, 0, 0, ''),
 (91966, 0, 10991, 0, 0, 0, 'Venomous Jungle Serpent', NULL, 0, 51, 53, 916, 981, 0, 0, 3163, 90, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 27, 34, 0, 238, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 3, 0, 9776, 0, 0, 0, 0, 0, 0, 0, 0, 16866, 0, 0, 0, 97760, 0, 74, 102, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (91967, 0, 5561, 0, 0, 0, 'Enraged Water Elemental', NULL, 0, 53, 54, 3292, 3292, 0, 0, 3216, 16, 0, 1.55556, 1.14286, 0, 20, 5, 0, 0, 1, 88, 106, 4, 244, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 67.2672, 92.4924, 100, 4, 0, 0, 0, 0, 0, 54, 54, 0, 54, 54, 0, 0, 0, 0, 0, 0, 51, 257, '', 0, 3, 0, 0, 3, 0, 0, 0, 16384, 16, 32, 0, ''),
-(91968, 0, 9418, 0, 0, 0, 'Lykourgos the Reaver', NULL, 0, 53, 53, 3182, 3388, 0, 0, 3151, 16, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 77, 96, 0, 238, 1, 1700, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.4704, 96.8968, 100, 7, 0, 6005, 6005, 0, 0, 0, 0, 0, 104, 0, 3417, 8646, 11976, 0, 60050, 0, 111, 150, 'EventAI', 1, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+(91968, 0, 9418, 0, 0, 0, 'Lykourgos the Reaver', NULL, 0, 53, 53, 3182, 3388, 0, 0, 3151, 16, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 77, 96, 0, 238, 1, 1700, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.4704, 96.8968, 100, 7, 0, 6005, 6005, 0, 0, 0, 0, 0, 104, 0, 3417, 8646, 11976, 0, 60050, 0, 111, 150, 'EventAI', 1, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(91969, 0, 2632, 0, 0, 0, 'Miner Gill', NULL, 0, 15, 15, 328, 328, 0, 0, 20, 68, 2, 1, 1.14286, 0, 20, 5, 0, 1, 1, 52, 68, 0, 74, 1, 2000, 2000, 1, 37376, 0, 0, 0, 0, 0, 0, 20.46, 28.1325, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 6522, 0, 0, 0, 0, 524298, 0, ''),
+(91970, 0, 4010, 0, 0, 0, 'Miner Miya', NULL, 0, 17, 17, 428, 428, 0, 0, 20, 68, 2, 1, 1.14286, 0, 20, 5, 0, 1, 1, 82, 128, 0, 74, 1, 2000, 2000, 1, 37376, 0, 0, 0, 0, 0, 0, 20.46, 28.1325, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 6522, 0, 0, 0, 0, 524298, 0, ''),
+(91971, 0, 2617, 0, 0, 0, 'Miner Nerik', NULL, 0, 16, 16, 388, 388, 0, 0, 20, 68, 2, 1, 1.14286, 0, 20, 5, 0, 1, 1, 52, 68, 0, 74, 1, 2000, 2000, 1, 37376, 0, 0, 0, 0, 0, 0, 20.46, 28.1325, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 6522, 0, 0, 0, 0, 524298, 0, ''),
+(91972, 0, 2662, 0, 0, 0, 'Barmaid Dela', '', 0, 25, 25, 902, 902, 0, 0, 1200, 68, 6, 1, 1.14286, 0, 20, 5, 0, 0, 1, 42, 53, 0, 122, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 45.144, 62.073, 100, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 1, 0, 0, 3, 4610, 0, 0, 8388624, 0, 524298, 0, ''),
+(91973, 0, 4045, 0, 0, 0, 'Grock', NULL, 0, 45, 45, 2217, 2217, 0, 0, 2725, 29, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 72, 93, 0, 204, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 61.776, 84.942, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 7790, 0, 0, 0, 0, 524298, 0, ''),
+(91974, 0, 4885, 0, 0, 0, 'Captain Silas', 'The Army of Lordaeron', 0, 20, 20, 1547, 1652, 0, 0, 817, 17, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 79, 103, 0, 90, 1, 2000, 2000, 1, 64, 0, 0, 0, 0, 0, 0, 25.08, 34.485, 100, 7, 0, 636, 636, 0, 0, 10, 10, 10, 10, 10, 0, 0, 0, 0, 0, 0, 89, 121, 'EventAI', 1, 3, 0, 0, 3, 636, 0, 0, 0, 0, 0, 0, ''),
+(91975, 0, 6608, 6609, 0, 0, 'Remnants Priest', 'The Army of Lordaeron', 0, 16, 17, 700, 749, 511, 552, 1004, 23, 0, 1.2, 1.14286, 1.15, 20, 5, 0, 1, 1, 46, 89, 0, 122, 1, 2000, 1540, 2, 32832, 0, 0, 0, 0, 0, 0, 38.192, 52.514, 100, 7, 0, 6392, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 191, 254, 'EventAI', 1, 3, 0, 0, 3, 6392, 0, 0, 0, 0, 0, 0, ''),
+(91976, 0, 3373, 0, 0, 0, 'Barkeep Clemens', 'The Army of Lordaeron', 0, 15, 15, 602, 602, 0, 0, 1200, 68, 6, 1, 1.14286, 0, 20, 5, 0, 0, 1, 42, 53, 0, 122, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 45.144, 62.073, 100, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 1, 0, 0, 3, 4610, 0, 0, 8388624, 0, 524298, 0, ''),
+(91977, 0, 3434, 0, 0, 0, 'Olfan Goldenbrow', 'The Army of Lordaeron', 0, 15, 15, 602, 602, 0, 0, 1200, 68, 6, 1, 1.14286, 0, 20, 5, 0, 0, 1, 42, 53, 0, 122, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 45.144, 62.073, 100, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 1, 0, 0, 3, 4610, 0, 0, 8388624, 0, 524298, 0, ''),
+(91978, 0, 3613, 0, 0, 0, 'Cort Barton', 'The Army of Lordaeron', 0, 14, 14, 502, 502, 0, 0, 1200, 68, 6, 1, 1.14286, 0, 20, 5, 0, 0, 1, 42, 53, 0, 122, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 45.144, 62.073, 100, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 1, 0, 0, 3, 4610, 0, 0, 8388624, 0, 524298, 0, ''),
+(91979, 0, 3613, 0, 0, 0, 'Brayton Garthside', 'The Army of Lordaeron', 0, 14, 14, 502, 502, 0, 0, 1200, 68, 6, 1, 1.14286, 0, 20, 5, 0, 0, 1, 42, 53, 0, 122, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 45.144, 62.073, 100, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 1, 0, 0, 3, 4610, 0, 0, 8388624, 0, 524298, 0, ''),
+(91980, 0, 11036, 0, 0, 0, 'Remnants Farmer', 'The Army of Lordaeron', 0, 13, 15, 402, 552, 0, 0, 1200, 68, 6, 1, 1.14286, 0, 20, 5, 0, 0, 1, 52, 83, 0, 122, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 45.144, 62.073, 100, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 1, 0, 0, 3, 4610, 0, 0, 8388624, 0, 524298, 0, ''),
+(91981, 0, 2372, 0, 0, 0, 'Remnants Militia', 'The Army of Lordaeron', 0, 14, 16, 502, 602, 0, 0, 1200, 68, 6, 1, 1.14286, 0, 20, 5, 0, 0, 1, 62, 73, 0, 122, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 45.144, 62.073, 100, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 1, 0, 0, 3, 4610, 0, 0, 8388624, 0, 524298, 0, ''),
+(91982, 0, 8545, 0, 0, 0, 'Argon Halmantle', 'Leather Armor Merchant', 0, 25, 25, 1002, 1002, 0, 0, 1200, 68, 16388, 1, 1.14286, 0, 20, 5, 0, 0, 1, 42, 53, 0, 122, 1, 2000, 2000, 1, 37376, 0, 0, 0, 0, 0, 0, 45.144, 62.073, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 5820, 0, 0, 0, 0, 524298, 0, ''),
+(91983, 0, 10619, 0, 0, 0, 'Randal Portman', 'Leatherworking Supplies', 0, 18, 18, 898, 898, 0, 0, 4500, 29, 6, 1, 1.14286, 0, 20, 5, 0, 0, 1, 36, 75, 0, 248, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 12943, 0, 0, 0, 0, 2, 0, '');
 
+
+
+set @equip_template = 55143; set @weapon_1 = 2901; set @weapon_2 = 0; set @creature = 91969;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 55144; set @weapon_1 = 2901; set @weapon_2 = 0; set @creature = 91970;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 55145; set @weapon_1 = 2901; set @weapon_2 = 0; set @creature = 91971;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 55146; set @weapon_1 = 3362; set @weapon_2 = 0; set @creature = 91972;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 55147; set @weapon_1 = 12249; set @weapon_2 = 0; set @creature = 91973;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 55148; set @weapon_1 = 3196; set @weapon_2 = 0; set @creature = 91974;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 55149; set @weapon_1 = 14845; set @weapon_2 = 0; set @creature = 91975;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 55150; set @weapon_1 = 0; set @weapon_2 = 7608; set @creature = 91976;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 55151; set @weapon_1 = 5956; set @weapon_2 = 0; set @creature = 91977;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 55152; set @weapon_1 = 1415; set @weapon_2 = 0; set @creature = 91978;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 55153; set @weapon_1 = 1415; set @weapon_2 = 0; set @creature = 91979;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 55154; set @weapon_1 = 1485; set @weapon_2 = 0; set @creature = 91980;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 55155; set @weapon_1 = 7329; set @weapon_2 = 17482; set @creature = 91981;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 55156; set @weapon_1 = 2092; set @weapon_2 = 17482; set @creature = 91983;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+update creature_template set faction = 88 where subname = 'The Army of Lordaeron';
 update creature_template set npc_flags = 1, faction = 189, unit_flags = 2, scale = 2.5 where entry = 91799;
 update creature_template set display_id1 = 18149 where entry = 91800;
 update creature_template set display_id1 = 3264 where entry = 91886;
@@ -48,10 +122,89 @@ update creature_template set inhabit_type = 2 where entry = 91837;
 update creature_template set npc_flags = 4 where entry = 91956;
 update creature_template set npc_flags = 4 where entry = 91959;
 update creature_template set npc_flags = 4 where entry = 91951;
+update creature_template set npc_flags = 4 where entry = 91972;
+update creature_template set npc_flags = 4 where entry = 91982;
 update creature_template set npc_flags = 1 where entry = 91953;
+update creature_template set npc_flags = 2 where entry = 91969;
+update creature_template set npc_flags = 2 where entry = 91970;
+update creature_template set npc_flags = 2 where entry = 91976;
+update creature_template set npc_flags = 2 where entry = 91971;
 update creature_template set npc_flags = 16, trainer_type = 2 where entry = 91950;
 
+REPLACE INTO `npc_vendor` VALUES (91983, 2320, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91983, 2321, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91983, 2325, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91983, 2604, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91983, 2605, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91983, 4289, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91983, 4291, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91983, 4340, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91983, 4341, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91983, 4342, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91983, 6260, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91983, 6261, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91983, 7005, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91983, 8343, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91983, 10290, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91983, 14341, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91983, 15725, 1, 7200, 3, 0);
+REPLACE INTO `npc_vendor` VALUES (91983, 15741, 1, 7200, 3, 0);
+
+REPLACE INTO `npc_vendor` VALUES (91982, 236, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91982, 237, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91982, 238, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91982, 239, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91982, 796, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91982, 797, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91982, 798, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91982, 799, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91982, 843, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91982, 844, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91982, 845, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91982, 846, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91982, 1839, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91982, 1840, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91982, 1843, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91982, 1844, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91982, 1849, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91982, 1850, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91982, 2141, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91982, 2142, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91982, 2143, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91982, 2144, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91982, 2145, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91982, 2146, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91982, 2463, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91982, 2464, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91982, 2465, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91982, 2467, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91982, 2468, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91982, 2469, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91982, 2470, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91982, 2471, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91982, 2472, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91982, 2473, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91982, 2474, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91982, 2475, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91982, 3890, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91982, 3893, 0, 0, 0, 0);
+
+
 REPLACE INTO `npc_vendor` VALUES (91959, 9260, 0, 0, 0, 0);
+
+REPLACE INTO `npc_vendor` VALUES (91972, 159, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91972, 1179, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91972, 1205, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91972, 1645, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91972, 1708, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91972, 2593, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91972, 2594, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91972, 2595, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91972, 2596, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91972, 2686, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91972, 2723, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` VALUES (91972, 8766, 0, 0, 0, 0);
+
 
 REPLACE INTO `npc_vendor` VALUES (91956, 159, 0, 0, 0, 0);
 REPLACE INTO `npc_vendor` VALUES (91956, 1205, 0, 0, 0, 0);
