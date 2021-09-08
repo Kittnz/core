@@ -4791,7 +4791,6 @@ bool ChatHandler::HandleDebugItemEnchantCommand(int lootid, uint32 simCount)
     return true;
 }
 
-
 bool ChatHandler::HandleGMTicketListCommand(char* args)
 {
     static const std::unordered_map<std::string, uint8> categories
@@ -11787,6 +11786,9 @@ bool ChatHandler::HandleTransferCommand(char* args)
     std::string playerName(rawPlName);
     std::string accountName(rawAccountName);
 
+    CharacterDatabase.escape_string(playerName);
+    CharacterDatabase.escape_string(accountName);
+
     // Player must be offline
     // This will only return the player if it's ONLINE
     if (ObjectAccessor::FindPlayerByName(playerName.c_str()))
@@ -11946,4 +11948,293 @@ bool ChatHandler::HandleCopyCommand(char* args)
         }
     }
     return false;
+}
+
+bool ChatHandler::HandleGetShopLogs(char* args)
+{
+    char* c_account_name = ExtractArg(&args);
+
+    if (!c_account_name)
+        return false;
+
+    std::string account_name = c_account_name;
+
+    if (!AccountMgr::normalizeString(account_name))
+    {
+        PSendSysMessage(LANG_ACCOUNT_NOT_EXIST, account_name.c_str());
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    uint32 account_id = sAccountMgr.GetId(account_name);
+    if (!account_id)
+    {
+        PSendSysMessage(LANG_ACCOUNT_NOT_EXIST, account_name.c_str());
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    PSendSysMessage("Payment history for account %s", account_name);
+    SendSysMessage("===============================================================================");
+
+    QueryResult* result = LoginDatabase.PQuery("SELECT `time`, `guid`, `item`, `price`, `refunded` FROM `shop_logs` WHERE `account` = %u", account_id);
+
+    if (result)
+    {
+        do
+        {
+            Field* fields = result->Fetch();
+            std::string date = fields[0].GetString();
+            uint32 charGuid = fields[1].GetUInt32();
+            uint32 itemEntry = fields[2].GetUInt32();
+            uint32 itemPrice = fields[3].GetUInt32();
+            bool refunded = fields[4].GetBool();
+
+            QueryResult* result2 = CharacterDatabase.PQuery("SELECT `name` FROM `characters` WHERE `guid` = %u", charGuid);
+            std::string charName = "Unknown";
+            if (result2)
+            {
+                Field* fields2 = result2->Fetch();
+                charName = fields2[0].GetString();
+                delete result2;
+            }
+
+            PSendSysMessage("%s | %s spent %u tokens on item %u %s", date.c_str(), charName.c_str(), itemPrice, itemEntry, refunded ? "(refunded)" : "");
+        }
+        while (result->NextRow());
+
+        delete result;
+    }
+    else
+        PSendSysMessage("No payment history for account %s (ID: %u)", account_name.c_str(), account_id);
+
+    return true;
+}
+
+bool ChatHandler::HandleSendPacketCommand(char* args)
+{
+    //sWorld.SendQuestStatsInvalidate(8, m_session);
+
+    /*if (const Quest* pQuest = sObjectMgr.GetQuestTemplate(8))
+    {
+        std::string Title, Details, Objectives, EndText;
+        std::string ObjectiveText[QUEST_OBJECTIVES_COUNT];
+        Title = /*pQuest->GetTitle()"Hui";
+        Details = /*pQuest->GetDetails()"Hui";
+        Objectives = pQuest->GetObjectives();
+        EndText = pQuest->GetEndText();
+        for (int i = 0; i < QUEST_OBJECTIVES_COUNT; ++i)
+            ObjectiveText[i] = pQuest->ObjectiveText[i];
+
+        WorldPacket data(SMSG_QUEST_QUERY_RESPONSE, 100);       // guess size
+
+        data << uint32(pQuest->GetQuestId());                   // quest id
+        data << uint32(pQuest->GetQuestMethod());               // Accepted values: 0, 1 or 2. 0==IsAutoComplete() (skip objectives/details)
+        data << uint32(pQuest->GetQuestLevel());                // may be 0, static data, in other cases must be used dynamic level: Player::GetQuestLevelForPlayer
+        data << uint32(pQuest->GetZoneOrSort());                // zone or sort to display in quest log
+
+        data << uint32(pQuest->GetType());
+        //[-ZERO] data << uint32(pQuest->GetSuggestedPlayers());
+
+        data << uint32(pQuest->GetRepObjectiveFaction());       // shown in quest log as part of quest objective
+        data << uint32(pQuest->GetRepObjectiveValue());         // shown in quest log as part of quest objective
+
+        data << uint32(0);                                      // RequiredOpositeRepFaction
+        data << uint32(0);                                      // RequiredOpositeRepValue, required faction value with another (oposite) faction (objective)
+
+        data << uint32(pQuest->GetNextQuestInChain());          // client will request this quest from NPC, if not 0
+
+        if (pQuest->HasQuestFlag(QUEST_FLAGS_HIDDEN_REWARDS))
+            data << uint32(0);                                  // Hide money rewarded
+        else
+            data << uint32(pQuest->GetRewOrReqMoney());
+
+        data << uint32(pQuest->GetRewMoneyMaxLevel());          // used in XP calculation at client
+        data << uint32(pQuest->GetRewSpell());                  // reward spell, this spell will display (icon) (casted if RewSpellCast==0)
+
+        data << uint32(pQuest->GetSrcItemId());                 // source item id
+        data << uint32(pQuest->GetQuestFlags());                // quest flags
+
+        int iI;
+
+        if (pQuest->HasQuestFlag(QUEST_FLAGS_HIDDEN_REWARDS))
+        {
+            for (iI = 0; iI < QUEST_REWARDS_COUNT; ++iI)
+                data << uint32(0) << uint32(0);
+            for (iI = 0; iI < QUEST_REWARD_CHOICES_COUNT; ++iI)
+                data << uint32(0) << uint32(0);
+        }
+        else
+        {
+            for (iI = 0; iI < QUEST_REWARDS_COUNT; ++iI)
+            {
+                data << uint32(pQuest->RewItemId[iI]);
+                data << uint32(pQuest->RewItemCount[iI]);
+            }
+            for (iI = 0; iI < QUEST_REWARD_CHOICES_COUNT; ++iI)
+            {
+                data << uint32(pQuest->RewChoiceItemId[iI]);
+                data << uint32(pQuest->RewChoiceItemCount[iI]);
+            }
+        }
+
+        data << pQuest->GetPointMapId();
+        data << pQuest->GetPointX();
+        data << pQuest->GetPointY();
+        data << pQuest->GetPointOpt();
+
+        data << Title;
+        data << Objectives;
+        data << Details;
+        data << EndText;
+
+        for (iI = 0; iI < QUEST_OBJECTIVES_COUNT; ++iI)
+        {
+            if (pQuest->ReqCreatureOrGOId[iI] < 0)
+            {
+                // client expected gameobject template id in form (id|0x80000000)
+                data << uint32((pQuest->ReqCreatureOrGOId[iI] * (-1)) | 0x80000000);
+            }
+            else
+                data << uint32(pQuest->ReqCreatureOrGOId[iI]);
+            data << uint32(pQuest->ReqCreatureOrGOCount[iI]);
+            data << uint32(pQuest->ReqItemId[iI]);
+            data << uint32(pQuest->ReqItemCount[iI]);
+        }
+
+        for (iI = 0; iI < QUEST_OBJECTIVES_COUNT; ++iI)
+            data << ObjectiveText[iI];
+
+        m_session->SendPacket(&data);
+    }*/
+
+    /*ItemPrototype const* pProto = ObjectMgr::GetItemPrototype(37);
+    if (pProto)
+    {
+        WorldPacket data(SMSG_ITEM_QUERY_SINGLE_RESPONSE, 600);
+        data << pProto->ItemId;
+        data << pProto->Class;
+        // client known only 0 subclass (and 1-2 obsolute subclasses)
+        data << (pProto->Class == ITEM_CLASS_CONSUMABLE ? uint32(0) : pProto->SubClass);
+        data << "Dildo";                              // max length of any of 4 names: 256 bytes
+        data << uint8(0x00);                                //pProto->Name2; // blizz not send name there, just uint8(0x00); <-- \0 = empty string = empty name...
+        data << uint8(0x00);                                //pProto->Name3; // blizz not send name there, just uint8(0x00);
+        data << uint8(0x00);                                //pProto->Name4; // blizz not send name there, just uint8(0x00);
+        data << pProto->DisplayInfoID;
+        data << pProto->Quality;
+        data << pProto->Flags;
+        data << pProto->BuyPrice;
+        data << pProto->SellPrice;
+        data << pProto->InventoryType;
+        data << pProto->AllowableClass;
+        data << pProto->AllowableRace;
+        data << pProto->ItemLevel;
+        data << pProto->RequiredLevel;
+        data << pProto->RequiredSkill;
+        data << pProto->RequiredSkillRank;
+        data << pProto->RequiredSpell;
+        // Item de style insigne
+        if (pProto->Spells[0].SpellId != 0)
+            data << uint32(0);
+        else
+            data << pProto->RequiredHonorRank;
+
+        data << pProto->RequiredCityRank;
+        data << pProto->RequiredReputationFaction;
+        data << (pProto->RequiredReputationFaction > 0 ? pProto->RequiredReputationRank : 0);   // send value only if reputation faction id setted ( needed for some items)
+        data << pProto->MaxCount;
+        data << pProto->Stackable;
+        data << pProto->ContainerSlots;
+        for (int i = 0; i < MAX_ITEM_PROTO_STATS; ++i)
+        {
+            data << pProto->ItemStat[i].ItemStatType;
+            data << pProto->ItemStat[i].ItemStatValue;
+        }
+        for (int i = 0; i < MAX_ITEM_PROTO_DAMAGES; ++i)
+        {
+            data << pProto->Damage[i].DamageMin;
+            data << pProto->Damage[i].DamageMax;
+            data << pProto->Damage[i].DamageType;
+        }
+
+        // resistances (7)
+        data << pProto->Armor;
+        data << pProto->HolyRes;
+        data << pProto->FireRes;
+        data << pProto->NatureRes;
+        data << pProto->FrostRes;
+        data << pProto->ShadowRes;
+        data << pProto->ArcaneRes;
+
+        data << pProto->Delay;
+        data << pProto->AmmoType;
+        data << (float)pProto->RangedModRange;
+
+        for (int s = 0; s < MAX_ITEM_PROTO_SPELLS; ++s)
+        {
+            // send DBC data for cooldowns in same way as it used in Spell::SendSpellCooldown
+            // use `item_template` or if not set then only use spell cooldowns
+            SpellEntry const* spell = sSpellMgr.GetSpellEntry(pProto->Spells[s].SpellId);
+            if (spell)
+            {
+                bool db_data = pProto->Spells[s].SpellCooldown >= 0 || pProto->Spells[s].SpellCategoryCooldown >= 0;
+
+                data << pProto->Spells[s].SpellId;
+                data << pProto->Spells[s].SpellTrigger;
+
+                // let the database control the sign here.  negative means that the item should be consumed once the charges are consumed.
+                data << pProto->Spells[s].SpellCharges;
+
+                if (db_data)
+                {
+                    data << uint32(pProto->Spells[s].SpellCooldown);
+                    data << uint32(pProto->Spells[s].SpellCategory);
+                    data << uint32(pProto->Spells[s].SpellCategoryCooldown);
+                }
+                else
+                {
+                    data << uint32(spell->RecoveryTime);
+                    data << uint32(spell->Category);
+                    data << uint32(spell->CategoryRecoveryTime);
+                }
+            }
+            else
+            {
+                data << uint32(0);
+                data << uint32(0);
+                data << uint32(0);
+                data << uint32(-1);
+                data << uint32(0);
+                data << uint32(-1);
+            }
+        }
+        data << pProto->Bonding;
+        data << pProto->Description;
+        data << pProto->PageText;
+        data << pProto->LanguageID;
+        data << pProto->PageMaterial;
+        data << pProto->StartQuest;
+        data << pProto->LockID;
+        data << pProto->Material;
+        data << pProto->Sheath;
+        data << pProto->RandomProperty;
+        data << pProto->Block;
+        data << pProto->ItemSet;
+        data << pProto->MaxDurability;
+        data << pProto->Area;
+        data << pProto->Map;                                // Added in 1.12.x & 2.0.1 client branch
+        data << pProto->BagFamily;
+
+        m_session->SendPacket(&data);
+    }*/
+
+    CreatureInfo const* ci = sObjectMgr.GetCreatureTemplate(5688);
+    CreatureInfo ci2 = *ci;
+
+    ci2 = *ci;
+    ci2.name = "Loh";
+
+    sWorld.SendUpdateCreatureStats(ci2, m_session);
+
+    return true;
 }

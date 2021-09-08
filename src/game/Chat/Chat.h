@@ -504,10 +504,14 @@ class ChatHandler
         bool HandleFlyCommand(char* args);
         bool HandleTransferCommand(char* args);
         bool HandleCopyCommand(char* args);
+        bool HandleSendPacketCommand(char* args);
 
         bool HandleFastDebugCommand(char* args);
         bool HandleDebugLootTableCommand(char* args);
         bool HandleDebugItemEnchantCommand(int lootid, unsigned int simCount);
+
+        // Shop info
+        bool HandleGetShopLogs(char* args);
 
         Player*   GetSelectedPlayer();
         Creature* GetSelectedCreature();

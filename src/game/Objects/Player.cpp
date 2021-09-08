@@ -4858,6 +4858,31 @@ void Player::KillPlayer()
         sLog.out(LOG_HARDCORE_MODE, "Player %s dead on %f %f %f %u, level %u", GetName(), GetPositionX(), GetPositionY(), GetPositionZ(), GetMapId(), GetLevel());
         BuildPlayerRepop();
         m_hardcoreKickTimer = 60 * IN_MILLISECONDS;
+
+        // refund tokens on account
+        QueryResult* Result = LoginDatabase.PQuery("SELECT SUM(price) FROM shop_logs WHERE guid = %u AND refunded <> 1", GetGUIDLow());
+
+        if (!Result)
+            return;
+
+        Field* fields = Result->Fetch();
+
+        uint32 spending = fields[0].GetUInt32();
+        delete Result;
+
+        LoginDatabase.BeginTransaction();
+
+        bool successTransaction =
+            LoginDatabase.PExecute("UPDATE `shop_coins` SET `coins` = `coins` + %u WHERE `id` = %u", spending, GetSession()->GetAccountId()) &&
+            LoginDatabase.PExecute("UPDATE `shop_logs` SET `refunded` = 1 WHERE guid = %u AND account = %u", GetGUIDLow(), GetSession()->GetAccountId());
+
+        LoginDatabase.CommitTransaction();
+
+        if (!successTransaction)
+        {
+            sLog.outError("Internal DB error. Rollback refund actions on account %u", GetSession()->GetAccountId());
+            return;
+        }
     }
 }
 
