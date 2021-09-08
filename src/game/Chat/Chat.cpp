@@ -509,6 +509,12 @@ ChatCommand * ChatHandler::getCommandTable()
         { nullptr,             0,                     false, nullptr,                                        "", nullptr }
     };
 
+    static ChatCommand shopCommandTable[] =
+    {
+        { "log",               SEC_GAMEMASTER,        false, &ChatHandler::HandleGetShopLogs,               "", nullptr },
+        { nullptr,             0,                     false, nullptr,                                        "", nullptr }
+    };
+
     static ChatCommand commandTable[] =
     {
         { "account",        SEC_PLAYER,         true, nullptr,                                         "", accountCommandTable  },
@@ -620,9 +626,11 @@ ChatCommand * ChatHandler::getCommandTable()
         { "transfer",       SEC_GAMEMASTER,     false, &ChatHandler::HandleTransferCommand,                 "", nullptr },
         { "bgtest",         SEC_ADMINISTRATOR,  false, &ChatHandler::HandleBgTestCommand,                 "", nullptr },
         { "cinematic",      SEC_ADMINISTRATOR,  false, &ChatHandler::HandleTurtleCinematic,                 "", nullptr },
-        { "dbghard",        SEC_ADMINISTRATOR,     false,  &ChatHandler::HandleFastDebugCommand,                  "", nullptr },
-        { "debugloot",      SEC_ADMINISTRATOR, true, &ChatHandler::HandleDebugLootTableCommand, "", nullptr },
-        { "copy",           SEC_PLAYER,     false,  &ChatHandler::HandleCopyCommand,                  "", nullptr },
+        { "dbghard",        SEC_ADMINISTRATOR,  false,  &ChatHandler::HandleFastDebugCommand,                  "", nullptr },
+        { "debugloot",      SEC_ADMINISTRATOR,  true,   &ChatHandler::HandleDebugLootTableCommand, "", nullptr },
+        { "copy",           SEC_PLAYER,         false,  &ChatHandler::HandleCopyCommand,                  "", nullptr },
+        { "sendpacket",     SEC_ADMINISTRATOR,  false,  &ChatHandler::HandleSendPacketCommand,                  "", nullptr },
+        { "shop",           SEC_GAMEMASTER,     true,  nullptr,                                         "", shopCommandTable },
         { nullptr,          0,                  false, nullptr,                                        "", nullptr }
     };
 

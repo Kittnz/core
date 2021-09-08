@@ -42,9 +42,7 @@ bool GossipHello_npc_shop(Player* pPlayer, Creature* pCreature)
         std::string formattedMessage = strstream.str();
 
         if (coins_amount != nullptr)
-        {
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, formattedMessage.c_str(), GOSSIP_SENDER_MAIN, ACTION_CATEGORY_START);
-        }
 
         delete coins_result;
     }
@@ -130,46 +128,65 @@ bool GossipSelect_npc_shop(Player* pPlayer, Creature* pCreature, uint32 uiSender
                 break;
             }
 
-            QueryResult* Result = LoginDatabase.PQuery("select account_balance_update(%d,%d)", pPlayer->GetSession()->GetAccountId(), shopentry->Price);
+            QueryResult* Result = LoginDatabase.PQuery("SELECT `coins` FROM `shop_coins` WHERE `id` = %u", pPlayer->GetSession()->GetAccountId());
 
             if (!Result)
             {
-                sLog.outError("DB function 'account_balance_update' is missing.");
+                sLog.outError("Possible DB error. Can't get info about turtle token balance on account %u", pPlayer->GetSession()->GetAccountId());
                 return true;
             }
 
             Field* fields = Result->Fetch();
 
-            int32 bSuccess = fields[0].GetInt32();
+            uint32 coins = fields[0].GetUInt32();
             delete Result;
 
-            if (bSuccess == 1)
+            if (coins > 0)
             {
-                // Going hardcore is possible only for characters below level 10.
-                if (pPlayer->GetLevel() > 1 && shopentry->Item == 50010)
+                int32 newBalance = coins - shopentry->Price;
+
+                if (newBalance >= 0)
                 {
-                    pCreature->MonsterSay("Too late, my friend! You must have done this at level 1.", 0U, pPlayer);
-                    break;
+                    LoginDatabase.BeginTransaction();
+
+                    bool successTransaction =
+                        LoginDatabase.PExecute("UPDATE `shop_coins` SET `coins` = %i WHERE `id` = %u", newBalance, pPlayer->GetSession()->GetAccountId()) &&
+                        LoginDatabase.PExecute("INSERT INTO `shop_logs` VALUES (NOW(), %u, %u, %u, %u, 0)", pPlayer->GetGUIDLow(), pPlayer->GetSession()->GetAccountId(), shopentry->Item, shopentry->Price);
+
+                    LoginDatabase.CommitTransaction();
+
+                    if (!successTransaction)
+                    {
+                        sLog.outError("Internal DB error. Can't proceed payment on account %u", pPlayer->GetSession()->GetAccountId());
+                        return true;
+                    }
+
+                    // Going hardcore is possible only for characters below level 10.
+                    if (pPlayer->GetLevel() > 1 && shopentry->Item == 50010)
+                    {
+                        pCreature->MonsterSay("Too late, my friend! You must have done this at level 1.", 0U, pPlayer);
+                        break;
+                    }
+
+                    Item* item = pPlayer->StoreNewItem(dest, shopentry->Item, true, Item::GenerateItemRandomPropertyId(shopentry->Item));
+                    pPlayer->SendNewItem(item, count, false, true);
+
+                    if (shopentry->Item == 50010)
+                        pPlayer->EnableTurtleMode();
+
+                    uint8 index = 1;
+
+                    for (auto& itr : sObjectMgr.GetShopCategoriesList())
+                    {
+                        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, itr.second.Name.c_str(), GOSSIP_SENDER_MAIN, ACTION_CATEGORY_START + index);
+                        ++index;
+                    }
                 }
-
-                Item* item = pPlayer->StoreNewItem(dest, shopentry->Item, true, Item::GenerateItemRandomPropertyId(shopentry->Item));
-                pPlayer->SendNewItem(item, count, false, true);
-
-                if (shopentry->Item == 50010)
-                {
-                    pPlayer->EnableTurtleMode();
-                }
-
-                uint8 index = 1;
-
-                for (auto &itr : sObjectMgr.GetShopCategoriesList())
-                {
-                    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, itr.second.Name.c_str(), GOSSIP_SENDER_MAIN, ACTION_CATEGORY_START + index);
-                    ++index;
-                }
+                else
+                    pCreature->MonsterWhisper("You don't have enough tokens to buy this! You can buy tokens via PayPal: info.turtlewow@gmail.com. Please include your account name. 1 euro gives you 10 tokens.", pPlayer);
             }
             else
-                pCreature->MonsterWhisper("You don't have enough tokens! You can buy them via PayPal: info.turtlewow@gmail.com. Please include your account name. 1 euro gives you 10 tokens.", pPlayer);
+                pCreature->MonsterWhisper("You have 0 tokens and can't shop. You can buy tokens via PayPal: info.turtlewow@gmail.com. Please include your account name. 1 euro gives you 10 tokens.", pPlayer);
         }
         break;
     }
