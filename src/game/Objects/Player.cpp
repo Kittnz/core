@@ -4849,14 +4849,15 @@ void Player::KillPlayer()
     {
         SetHardcoreStatus(HARDCORE_MODE_STATUS_DEAD);
         if (GetLevel() >= 10)
-        {
             sWorld.SendWorldText(50300, GetName(), GetLevel());
-        }
         PlayDirectMusic(1171, this);
         GetSession()->SendNotification("YOU HAVE DIED.\nYou will be disconnected in 60 seconds.");
         ChatHandler(this).PSendSysMessage("YOU HAVE DIED.\nYou will be disconnected in 60 seconds.");
+
         sLog.out(LOG_HARDCORE_MODE, "Player %s dead on %f %f %f %u, level %u", GetName(), GetPositionX(), GetPositionY(), GetPositionZ(), GetMapId(), GetLevel());
+
         BuildPlayerRepop();
+
         m_hardcoreKickTimer = 60 * IN_MILLISECONDS;
 
         // refund tokens on account
@@ -4879,15 +4880,9 @@ void Player::KillPlayer()
         LoginDatabase.CommitTransaction();
 
         if (successTransaction)
-        {
             ChatHandler(this).PSendSysMessage("%u tokens have been refunded to your account.", spending);
-        }
-
-        if (!successTransaction)
-        {
-            sLog.outError("Internal DB error. Rollback refund actions on account %u", GetSession()->GetAccountId());
-            return;
-        }
+        else
+            sLog.outErrorDb("Internal DB error. Rollback refund actions on account %u", GetSession()->GetAccountId());
     }
 }
 
