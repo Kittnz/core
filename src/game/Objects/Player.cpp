@@ -3105,13 +3105,12 @@ void Player::GiveLevel(uint32 level)
         }
     }
 
-    // Quick-fix for Slow and Steady Quest.
+    // Quick-fix Turtle Mode & HArdcore Mode quets.
     if (level >= 2)
+    {
         RemoveQuest(60118);
-
-    // Hardcore quest.
-    if (level >= 2)
         RemoveQuest(80388);
+    }
 
     // Learn Speedy Mount spell if player doesnt have it at lvl 5
     if (level == 5 && !HasSpell(30174))
@@ -15299,20 +15298,40 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
     if (sWorld.GetWowPatch() >= WOW_PATCH_112)
         UpdateOldRidingSkillToNew(has_epic_mount);
 
-    // Turtle WoW custom feature : hardcore mode(0.5x rates for Creature.Kill)
+    // Turtle Mode
+
     bIsTurtle = GetItemCount(50010, true) > 0;
+
+    if (bIsTurtle)
+    {
+        if (!HasSpell(50000))
+            LearnSpell(50000, false, false);
+    }
+    else
+    {
+        if (HasSpell(50000))
+            RemoveSpell(50000, false, false);
+    }    
+
+    // Exhaustion Mode
+
+    if (GetItemCount(50521, true) > 0)
+    {
+        if (!HasSpell(50004))
+            LearnSpell(50004, false, false);
+    }
+    else
+    {
+        if (HasSpell(50004))
+            RemoveSpell(50004, false, false);
+    }
+
     //bIsMortal = GetItemCount(80188, true) > 0;
     m_hardcoreStatus = fields[61].GetUInt8();
 
     // Titles
 
     //SetByteValue(PLAYER_BYTES_3, 2, GetActiveTitle()); -- disabled until we push titles update
-
-    if (GetGUIDLow() == 1 || GetGUIDLow() == 11549) // Torta, Pompa
-        SetByteValue(PLAYER_BYTES_3, 2, 12); // Developer
-
-    if (GetGUIDLow() == 121365) // Gheor
-        SetByteValue(PLAYER_BYTES_3, 2, 14); // Turtle God
 
     if (HasItemCount(21176, 1, 0)) // Scarab Lord
         SetByteValue(PLAYER_BYTES_3, 2, 15);

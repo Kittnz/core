@@ -296,6 +296,8 @@ replace into broadcast_text (entry, Male_Text) values (@magic_number, 'A wonderf
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
+-- 60121-60126 reserved.
+
 
 
 replace into item_template values

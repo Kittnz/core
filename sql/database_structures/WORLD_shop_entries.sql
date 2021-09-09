@@ -82,9 +82,6 @@ replace into shop_items values
 (67, 4, 50007, 'Summon: Bank (Mule)', 200),
 (68, 4, 51421, 'Summon: Bank (Kodo)', 200),
 -- Gameplay: Glyphs
-(81, 5, 50010, 'General: Glyph of the Turtle', 0),
-(82, 5, 50008, 'General: Glyph of Twinking', 0),
-(83, 5, 50521, 'General: Glyph of Exhaustion', 0),
 (84, 5, 51055, 'Druid: Glyph of the Tree', 100),
 (86, 5, 51057, 'Druid: Glyph of the Frostsaber', 100),
 (87, 5, 51266, 'Druid: Glyph of the Ice Bear', 100),
