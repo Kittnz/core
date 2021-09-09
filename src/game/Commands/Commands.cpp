@@ -11975,7 +11975,6 @@ bool ChatHandler::HandleGetShopLogs(char* args)
     }
 
     PSendSysMessage("Payment history for account %s", account_name);
-    SendSysMessage("===============================================================================");
 
     QueryResult* result = LoginDatabase.PQuery("SELECT `time`, `guid`, `item`, `price`, `refunded` FROM `shop_logs` WHERE `account` = %u", account_id);
 
