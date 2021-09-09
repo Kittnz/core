@@ -7006,9 +7006,30 @@ bool QuestRewarded_npc_magtoor(Player* pPlayer, Creature* pQuestGiver, Quest con
     return false;
 }
 
+bool QuestRewarded_glyph_master(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer)
+        return false;
+
+    if (pQuest->GetQuestId() == 60118) // Glyph of The Turtle
+    {
+        pQuestGiver->HandleEmote(EMOTE_ONESHOT_CHEER);
+        pQuestGiver->MonsterSayToPlayer("Stay safe on your journey, friend.", pPlayer);
+        pPlayer->EnableTurtleMode();
+        pPlayer->LearnSpell(50000, false, false);
+        return true;
+    }
+    return false;
+}
+
 void AddSC_random_scripts_1()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "glyph_master";
+    newscript->pQuestRewardedNPC = &QuestRewarded_glyph_master;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_magtoor";
