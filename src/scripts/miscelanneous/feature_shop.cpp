@@ -132,7 +132,7 @@ bool GossipSelect_npc_shop(Player* pPlayer, Creature* pCreature, uint32 uiSender
 
             if (!Result)
             {
-                sLog.outError("Possible DB error. Can't get info about turtle token balance on account %u", pPlayer->GetSession()->GetAccountId());
+                sLog.outErrorDb("Possible DB error. Can't get info about turtle token balance on account %u", pPlayer->GetSession()->GetAccountId());
                 return true;
             }
 
@@ -157,7 +157,7 @@ bool GossipSelect_npc_shop(Player* pPlayer, Creature* pCreature, uint32 uiSender
 
                     if (!successTransaction)
                     {
-                        sLog.outError("Internal DB error. Can't proceed payment on account %u", pPlayer->GetSession()->GetAccountId());
+                        sLog.outErrorDb("Internal DB error. Can't proceed payment on account %u", pPlayer->GetSession()->GetAccountId());
                         return true;
                     }
 
