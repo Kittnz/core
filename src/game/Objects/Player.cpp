@@ -4878,6 +4878,11 @@ void Player::KillPlayer()
 
         LoginDatabase.CommitTransaction();
 
+        if (successTransaction)
+        {
+            ChatHandler(this).PSendSysMessage("%u tokens have been refunded to your account.", spending);
+        }
+
         if (!successTransaction)
         {
             sLog.outError("Internal DB error. Rollback refund actions on account %u", GetSession()->GetAccountId());
