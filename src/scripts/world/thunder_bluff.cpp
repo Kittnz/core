@@ -135,7 +135,7 @@ bool GossipHello_npc_cairne_bloodhoof(Player* pPlayer, Creature* pCreature)
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I know this is rather silly but a young ward who is a bit shy would like your hoofprint.", GOSSIP_SENDER_MAIN, GOSSIP_SENDER_INFO);
     
     if (pPlayer->GetQuestStatus(80800) == QUEST_STATUS_INCOMPLETE && pPlayer->HasItemCount(83020, 1, false) && !pPlayer->HasItemCount(83022, 1, false))
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Cairne, the Revantusk Tribe have sent me with this message.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Cairne, the Revantusk Tribe have sent me with this message.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
 
     if (pCreature->IsQuestGiver())
         pPlayer->PrepareQuestMenu(pCreature->GetGUID());
@@ -160,7 +160,7 @@ bool GossipSelect_npc_cairne_bloodhoof(Player* pPlayer, Creature* pCreature, uin
         return true;
     }
 
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 4)
     {
         pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_PASSIVE);
         pCreature->MonsterSayToPlayer("The Revantusk Trolls are allies I never imagined we would have after hearing the history they and the Old Horde had.", pPlayer);

@@ -46,10 +46,10 @@ replace into npc_vendor values
 (51545, 50008, 0, 0, 0, 0),
 (51545, 50012, 0, 0, 0, 0);
 
-update item_template set quality = 1, buy_price = 1, sell_price = 0 where entry = 50521;
-update item_template set quality = 1, buy_price = 1, sell_price = 0 where entry = 50008;
-update item_template set quality = 1, buy_price = 1, sell_price = 0 where entry = 50010;
-update item_template set quality = 1, buy_price = 1, sell_price = 0 where entry = 50012;
+update item_template set quality = 1, buy_price = 5, sell_price = 0 where entry = 50521;
+update item_template set quality = 1, buy_price = 5, sell_price = 0 where entry = 50008;
+update item_template set quality = 1, buy_price = 5, sell_price = 0 where entry = 50010;
+update item_template set quality = 1, buy_price = 5, sell_price = 0 where entry = 50012;
 
 -- Glyph of the Turtle
 
