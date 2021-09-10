@@ -12,3 +12,5 @@ set @equip_template = 55158; set @weapon_1 = 2092; set @weapon_2 = 0; set @creat
 replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
 update creature_template set equipment_id = @equip_template where entry = @creature;
 
+update creature_template set name = 'Wallowfin Murloc' where entry = 91857;
+

@@ -2,6 +2,8 @@
 update creature_loot_template set patch_max = 10 where patch_max = 0;
 -- Remove Turtlhu
 delete from creature where id = 50056;
+-- Fix Gnome Hunter's quest:
+update quest_template set requiredraces = 64 where entry = 80339;
 -- Fix Hedwig:
 replace into creature_template values (50663, 0, 12237, 0, 0, 0, 'Hedwig', '', 0, 1, 1, 64, 64, 0, 0, 0, 35, 0, 1, 1.14286, 0.3, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 'npc_scripted_companion');
 -- Glyph Masters
@@ -11,15 +13,19 @@ replace into creature_template values
 (51542, 0, 3473, 0, 0, 0, 'Scribe Skardrer', 'Glyph Master', 0, 5, 5, 102, 102, 0, 0, 20, 12, 4, 1, 1.14286, 0, 20, 5, 0, 0, 1, 6, 8, 0, 52, 1, 1500, 2000, 1, 4864, 0, 0, 0, 0, 0, 0, 8.624, 11.858, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 152, 0, 0, 0, 0, 524298, 0, 'glyph_master'),
 (51543, 0, 6030, 0, 0, 0, 'Scribe Torgan', 'Glyph Master', 0, 5, 5, 102, 102, 0, 0, 20, 12, 4, 1, 1.14286, 0, 20, 5, 0, 0, 1, 6, 8, 0, 52, 1, 1500, 2000, 1, 4864, 0, 0, 0, 0, 0, 0, 8.624, 11.858, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 152, 0, 0, 0, 0, 524298, 0, 'glyph_master'),
 (51544, 0, 6065, 0, 0, 0, 'Scribe Sigfrid', 'Glyph Master', 0, 5, 5, 102, 102, 0, 0, 20, 12, 4, 1, 1.14286, 0, 20, 5, 0, 0, 1, 6, 8, 0, 52, 1, 1500, 2000, 1, 4864, 0, 0, 0, 0, 0, 0, 8.624, 11.858, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 152, 0, 0, 0, 0, 524298, 0, 'glyph_master'),
-(51545, 0, 5778, 0, 0, 0, 'Scribe Nahele', 'Glyph Master', 0, 5, 5, 102, 102, 0, 0, 20, 12, 4, 1, 1.14286, 0, 20, 5, 0, 0, 1, 6, 8, 0, 52, 1, 1500, 2000, 1, 4864, 0, 0, 0, 0, 0, 0, 8.624, 11.858, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 152, 0, 0, 0, 0, 524298, 0, 'glyph_master');
+(51545, 0, 5778, 0, 0, 0, 'Scribe Nahele', 'Glyph Master', 0, 5, 5, 102, 102, 0, 0, 20, 12, 4, 1, 1.14286, 0, 20, 5, 0, 0, 1, 6, 8, 0, 52, 1, 1500, 2000, 1, 4864, 0, 0, 0, 0, 0, 0, 8.624, 11.858, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 152, 0, 0, 0, 0, 524298, 0, 'glyph_master'),
+(51546, 0, 16037, 0, 0, 0, 'Scribe Nahele', 'Glyph Master', 0, 5, 5, 102, 102, 0, 0, 20, 12, 4, 1, 1.14286, 0, 20, 5, 0, 0, 1, 6, 8, 0, 52, 1, 1500, 2000, 1, 4864, 0, 0, 0, 0, 0, 0, 8.624, 11.858, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 152, 0, 0, 0, 0, 524298, 0, 'glyph_master'),
+(51547, 0, 7095, 0, 0, 0, 'Scribe Jazdis', 'Glyph Master', 0, 5, 5, 102, 102, 0, 0, 20, 12, 4, 1, 1.14286, 0, 20, 5, 0, 0, 1, 6, 8, 0, 52, 1, 1500, 2000, 1, 4864, 0, 0, 0, 0, 0, 0, 8.624, 11.858, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 152, 0, 0, 0, 0, 524298, 0, 'glyph_master');
 
-update creature_template set npc_flags = 7, equipment_id = 0 where entry in (51540, 51541, 51542, 51543, 51544, 51545);
+update creature_template set npc_flags = 7, equipment_id = 0 where entry in (51540, 51541, 51542, 51543, 51544, 51545, 51546, 51547);
 
 update creature_template set faction = 80 where entry = 51541;
 update creature_template set faction = 55 where entry = 51542;
 update creature_template set faction = 29 where entry = 51543;
 update creature_template set faction = 118 where entry = 51544;
 update creature_template set faction = 104 where entry = 51545;
+update creature_template set faction = 371 where entry = 51546;
+update creature_template set faction = 35 where entry = 51547;
 
 replace into npc_vendor values 
 (51540, 50521, 0, 0, 0, 0),
@@ -44,7 +50,15 @@ replace into npc_vendor values
 
 (51545, 50521, 0, 0, 0, 0),
 (51545, 50008, 0, 0, 0, 0),
-(51545, 50012, 0, 0, 0, 0);
+(51545, 50012, 0, 0, 0, 0),
+
+(51546, 50521, 0, 0, 0, 0),
+(51546, 50008, 0, 0, 0, 0),
+(51546, 50012, 0, 0, 0, 0),
+
+(51547, 50521, 0, 0, 0, 0),
+(51547, 50008, 0, 0, 0, 0),
+(51547, 50012, 0, 0, 0, 0);
 
 update item_template set quality = 1, buy_price = 5, sell_price = 0 where entry = 50521;
 update item_template set quality = 1, buy_price = 5, sell_price = 0 where entry = 50008;
@@ -72,6 +86,12 @@ replace into creature_involvedrelation (id, quest) values (51544, 60118);
 
 replace into creature_questrelation (id, quest) values (51545, 60118);
 replace into creature_involvedrelation (id, quest) values (51545, 60118);
+
+replace into creature_questrelation (id, quest) values (51546, 60118);
+replace into creature_involvedrelation (id, quest) values (51546, 60118);
+
+replace into creature_questrelation (id, quest) values (51547, 60118);
+replace into creature_involvedrelation (id, quest) values (51547, 60118);
 
 set @gossip_menu_id = 60121; set @magic_number = 51540; 
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
@@ -108,4 +128,17 @@ replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id,
 replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Greetings. I sell glyphs to those who could use them, what are you looking for?'); 
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 60127; set @magic_number = 51546; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Greetings. I sell glyphs to those who could use them, what are you looking for?'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 60128; set @magic_number = 51547; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Greetings. I sell glyphs to those who could use them, what are you looking for?'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
 
