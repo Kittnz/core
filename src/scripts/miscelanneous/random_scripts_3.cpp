@@ -240,7 +240,6 @@ bool GossipSelect_npc_vereesa_windrunner(Player* pPlayer, Creature* pCreature, u
             npc->MonsterSayToPlayer("How broken they are, how much they suffer and struggle. I couldn't idle in Dalaran anymore, I reached out to the surviving Elven lodges and acquired the support from several Elven citizen and magi of Dalaran. I searched the Dalarani records and found records pertaining to this ancient outpost.\t", player);
             });
 
-
         if (pPlayer->GetRace() == RACE_HIGH_ELF)
         {
         DoAfterTime(pPlayer, 11 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
@@ -278,9 +277,96 @@ bool GossipSelect_npc_vereesa_windrunner(Player* pPlayer, Creature* pCreature, u
     return true;
 }
 
+bool GossipHello_npc_felstone(Player* pPlayer, Creature* pCreature)
+{
+    if (pPlayer->GetQuestStatus(40050) == QUEST_STATUS_INCOMPLETE)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Inspect Felstone", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    }
+    pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_felstone(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+            npc->SummonCreature(60426, 3549.72F, -1560.13F, 169.80F, 3.85F, TEMPSUMMON_TIMED_DESPAWN, 5 * MINUTE * IN_MILLISECONDS);
+            npc->SummonCreature(60427, 3558.34F, -1567.86F, 172.00F, 3.37F, TEMPSUMMON_TIMED_DESPAWN, 5 * MINUTE * IN_MILLISECONDS);
+            });
+
+        DoAfterTime(pPlayer, 41 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+            npc->SummonCreature(60426, 3558.34F, -1567.86F, 172.00F, 3.37F, TEMPSUMMON_TIMED_DESPAWN, 5 * MINUTE * IN_MILLISECONDS);
+            npc->SummonCreature(60427, 3549.72F, -1560.13F, 169.80F, 3.85F, TEMPSUMMON_TIMED_DESPAWN, 5 * MINUTE * IN_MILLISECONDS);
+            });
+
+        DoAfterTime(pPlayer, 81 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+            npc->SummonCreature(60425, 3553.80F, -1561.09F, 170.19F, 4.09F, TEMPSUMMON_TIMED_DESPAWN, 5 * MINUTE * IN_MILLISECONDS);
+            if (Creature* dralox_felstar = player->FindNearestCreature(60425, 30.0F))
+                dralox_felstar->MonsterSayToPlayer("Get away from that Felstone! It is crucial to my plans!", player);
+            });
+    }
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
+struct npc_dralox_felstarAI : public ScriptedAI
+{
+    npc_dralox_felstarAI(Creature* c) : ScriptedAI(c) { Reset(); }
+
+    void Reset() { }
+    void UpdateAI(const uint32 diff)
+    {
+        GameObject* event_running = m_creature->FindNearestGameObject(1000170, 30.0F);
+        if (m_creature->GetHealthPercent() > 70 && m_creature->GetHealthPercent() < 75)
+        {
+            if (!event_running)
+            {
+                m_creature->SummonGameObject(1000170, m_creature->GetPositionX(), m_creature->GetPositionY(), m_creature->GetPositionZ(), 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 180, true);
+                Creature* mob_one = m_creature->SummonCreature(60429, 3515.17F, -1600.66F, 169.37F, 2.76F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 150 * IN_MILLISECONDS);
+                Creature* mob_two = m_creature->SummonCreature(60429, 3533.07F, -1603.13F, 172.10F, 1.40F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 150 * IN_MILLISECONDS);
+                Creature* mob_three = m_creature->SummonCreature(60429, 3526.66F, -1601.96F, 170.83F, 1.73F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 150 * IN_MILLISECONDS);
+
+                mob_one->MonsterSay("You do not stand alone friend! Let's take this creature down!");
+            }
+        }
+    }
+    void JustDied(Unit*) override
+    {
+        m_creature->MonsterSay("NO! Thousands of years of planning!");
+        Creature* mob_one = m_creature->FindNearestCreature(60429, 20.0F);
+        Creature* mob_two = m_creature->FindNearestCreature(60429, 20.0F);
+        Creature* mob_three = m_creature->FindNearestCreature(60429, 20.0F);
+
+        if (mob_one && mob_two && mob_three)
+        {
+            mob_one->MonsterSay("We will warn the Sentinels about the Felstone, go now!");
+            mob_one->ForcedDespawn();
+            mob_two->ForcedDespawn();
+            mob_three->ForcedDespawn();
+        }
+    }
+    void EnterCombat() {}
+    void JustRespawned() { Reset(); }
+};
+
+CreatureAI* GetAI_npc_dralox_felstar(Creature* _Creature) { return new npc_dralox_felstarAI(_Creature); }
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_dralox_felstar";
+    newscript->GetAI = &GetAI_npc_dralox_felstar;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_felstone";
+    newscript->pGossipHello = &GossipHello_npc_felstone;
+    newscript->pGossipSelect = &GossipSelect_npc_felstone;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_vereesa_windrunner";
