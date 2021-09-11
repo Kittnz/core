@@ -26,3 +26,14 @@ replace into gameobject_involvedrelation (id, quest) values (2010811, 40052);
 delete from gameobject_template where entry = 2010811;
 replace into gameobject_template values
 (2010811, 0, 2, 49, 'Mysterious Muddy Pile', 0, 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+
+delete from quest_template where entry = 40053;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40052,40053,2,876,60,5,0,0,'Cow Scroll III','The Second Clue is yours, but the next will be much more dangerous. Keep your wits about you, and be safe. One that I called friend died a long time ago, and was buried in a large graveyard, bigger then most. Find this grave, and you will find your clue.','Find the Third Clue.','','<Upon searching within the Mysterious Grave, you find yet another Clue>.',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,500,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into gameobject_questrelation (id, quest) values (2010811, 40053);
+replace into gameobject_involvedrelation (id, quest) values (2010812, 40053);
+
+delete from gameobject_template where entry = 2010812;
+replace into gameobject_template values
+(2010812, 0, 2, 23124, 'Mysterious Grave', 0, 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
