@@ -137,7 +137,9 @@ struct tomb_bat_event_trigger : public GameObjectAI
                     pPlayer->PlayDirectMusic(1171);
 
                     DoAfterTime(pPlayer, 10 * IN_MILLISECONDS, [player = pPlayer]() {
-                        player->SummonCreature(91922, -11063.4F, -1795.69F, 56.65F, 3.1F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 150 * IN_MILLISECONDS);
+                        Creature* bat = player->FindNearestCreature(91922, 20.0F);
+                        if (!bat)
+                            player->SummonCreature(91922, -11063.4F, -1795.69F, 56.65F, 3.1F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 150 * IN_MILLISECONDS);
                         });
                 }
                 m_uiUpdateTimer = 2500;

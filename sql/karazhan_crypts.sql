@@ -25,10 +25,16 @@ replace into creature_template values
 (91919, 0, 17144, 0, 0, 0, 'Commander Andreon', NULL, 0, 62, 62, 49432, 49711, 0, 0, 4091, 14, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 588, 669, 0, 284, 1, 1133, 1246, 1, 0, 0, 0, 0, 0, 0, 0, 62.7984, 86.3478, 100, 6, 0, 11121, 0, 0, 0, 5, 5, 5, 5, 5, 0, 5884, 0, 0, 111210, 0, 187, 935, '', 0, 1, 0, 0, 3, 11121, 0, 0, 16384, 0, 0, 0, ''),
 (91920, 2, 12074, 0, 0, 0, 'Bonespike Construct', NULL, 0, 62, 62, 42850, 42850, 10272, 10272, 3831, 14, 0, 1, 1.14286, 2, 20, 5, 0, 1, 1, 643, 768, 0, 284, 1, 1150, 1265, 2, 0, 0, 0, 0, 0, 0, 0, 61.732, 84.8815, 100, 6, 0, 14516, 0, 0, 0, 10, 10, 10, 10, 10, 0, 0, 0, 0, 145160, 0, 168, 838, 'EventAI', 1, 3, 0, 0, 3, 14516, 0, 0, 0, 0, 0, 0, ''),
 (91921, 0, 10033, 0, 0, 0, 'Tomb Bat', NULL, 0, 60, 60, 700, 1275, 0, 0, 2435, 14, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 97, 123, 0, 262, 1, 2000, 2000, 1, 0, 0, 24, 0, 0, 0, 0, 71.9664, 98.9538, 100, 1, 1, 8602, 0, 8602, 0, 0, 0, 0, 0, 0, 8281, 0, 0, 0, 86020, 5789, 0, 0, '', 1, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 'tomb_bat'),
-(91922, 5, 10033, 0, 0, 0, 'Crypt Fearfeaster', NULL, 0, 60, 60, 10341, 10341, 3245, 4567, 3791, 28, 0, 2, 2.14286, 1, 20, 5, 0, 0, 1, 130, 172, 0, 272, 1, 1000, 2000, 1, 0, 0, 24, 0, 0, 0, 0, 69.696, 95.832, 100, 1, 9, 11368, 0, 11368, 0, 15, 15, 15, 15, 15, 24023, 0, 0, 0, 0, 0, 0, 0, '', 1, 5, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 'generic_spell_ai');
+(91922, 5, 10033, 0, 0, 0, 'Crypt Fearfeaster', NULL, 0, 60, 60, 10341, 10341, 3245, 4567, 3791, 28, 0, 2, 2.14286, 1, 20, 5, 0, 0, 1, 130, 172, 0, 272, 1, 1000, 2000, 1, 0, 0, 24, 0, 0, 0, 0, 69.696, 95.832, 100, 1, 9, 11368, 0, 11368, 0, 15, 15, 15, 15, 15, 24023, 0, 0, 0, 0, 0, 0, 0, '', 1, 5, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 'generic_spell_ai'),
+(91923, 0, 4870, 0, 0, 0, 'Unseen Stalker', NULL, 0, 60, 61, 12765, 13765, 0, 0, 3514, 14, 0, 1.26, 1.14286, 0, 20, 5, 0, 0, 0.5, 492, 575, 0, 272, 1, 1410, 1551, 2, 0, 0, 0, 0, 0, 0, 0, 71.9664, 98.9538, 100, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 63, 316, 'EventAI', 1, 3, 0, 0, 3, 0, 0, 0, 8413718, 0, 0, 0, '');
+
 
 update creature_template set spell_id1 = 13704, type = 6 where entry = 91922;
 update creature_template set dynamic_flags = 36, unit_flags = 33554432, loot_id = 0, skinning_loot_id = 0, type = 6 where entry = 91921;
+update creature_template set dmg_school = 5 where entry = 91923;
+update creature_template set rank = 1 where entry = 91922;
+update creature_template set equipment_id = 0 where entry = 91920;
+
 replace into creature_template_addon (entry, bytes1) values (91921, 7);
 replace into creature_template_addon (entry, auras) values (91922, 22650);
 
@@ -96,6 +102,105 @@ set @delayinitialmin_4 = 3;
 set @delayinitialmax_4 = 4; 
 set @delayrepeatmin_4 = 5; 
 set @delayrepeatmax_4 = 6;
+
+set @spellid_5 = 0; 
+set @probability_5 = 0; 
+set @casttarget_5 = 0; 
+set @castflags_5 = 0;
+set @delayinitialmin_5 = 0; 
+set @delayinitialmax_5 = 0; 
+set @delayrepeatmin_5 = 0; 
+set @delayrepeatmax_5 = 0;
+
+set @spellid_6 = 0; 
+set @probability_6 = 0; 
+set @casttarget_6 = 0; 
+set @castflags_6 = 0;
+set @delayinitialmin_6 = 0; 
+set @delayinitialmax_6 = 0; 
+set @delayrepeatmin_6 = 0; 
+set @delayrepeatmax_6 = 0;
+
+set @spellid_7 = 0; 
+set @probability_7 = 0; 
+set @casttarget_7 = 0; 
+set @castflags_7 = 0;
+set @delayinitialmin_7 = 0; 
+set @delayinitialmax_7 = 0; 
+set @delayrepeatmin_7 = 0; 
+set @delayrepeatmax_7 = 0;
+
+set @spellid_8 = 0; 
+set @probability_8 = 0; 
+set @casttarget_8 = 0; 
+set @castflags_8 = 0;
+set @delayinitialmin_8 = 0; 
+set @delayinitialmax_8 = 0; 
+set @delayrepeatmin_8 = 0; 
+set @delayrepeatmax_8 = 0;
+
+-- Do not touch this part:
+update creature_template set spell_list_id = @spell_list_id, ai_name = '', script_name = '', spell_id1 = 0, spell_id2 = 0, spell_id3 = 0 
+where entry = @creature_entry;
+replace into creature_spells (entry, name, 
+spellid_1, probability_1, casttarget_1, castflags_1, delayinitialmin_1, delayinitialmax_1, delayrepeatmin_1, delayrepeatmax_1, 
+spellid_2, probability_2, casttarget_2, castflags_2, delayinitialmin_2, delayinitialmax_2, delayrepeatmin_2, delayrepeatmax_2, 
+spellid_3, probability_3, casttarget_3, castflags_3, delayinitialmin_3, delayinitialmax_3, delayrepeatmin_3, delayrepeatmax_3, 
+spellid_4, probability_4, casttarget_4, castflags_4, delayinitialmin_4, delayinitialmax_4, delayrepeatmin_4, delayrepeatmax_4, 
+spellid_5, probability_5, casttarget_5, castflags_5, delayinitialmin_5, delayinitialmax_5, delayrepeatmin_5, delayrepeatmax_5, 
+spellid_6, probability_6, casttarget_6, castflags_6, delayinitialmin_6, delayinitialmax_6, delayrepeatmin_6, delayrepeatmax_6, 
+spellid_7, probability_7, casttarget_7, castflags_7, delayinitialmin_7, delayinitialmax_7, delayrepeatmin_7, delayrepeatmax_7, 
+spellid_8, probability_8, casttarget_8, castflags_8, delayinitialmin_8, delayinitialmax_8, delayrepeatmin_8, delayrepeatmax_8) 
+values (@spell_list_id, @description,
+@spellid_1, @probability_1, @casttarget_1, @castflags_1, @delayinitialmin_1, @delayinitialmax_1, @delayrepeatmin_1, @delayrepeatmax_1,
+@spellid_2, @probability_2, @casttarget_2, @castflags_2, @delayinitialmin_2, @delayinitialmax_2, @delayrepeatmin_2, @delayrepeatmax_2,
+@spellid_3, @probability_3, @casttarget_3, @castflags_3, @delayinitialmin_3, @delayinitialmax_3, @delayrepeatmin_3, @delayrepeatmax_3,
+@spellid_4, @probability_4, @casttarget_4, @castflags_4, @delayinitialmin_4, @delayinitialmax_4, @delayrepeatmin_4, @delayrepeatmax_4,
+@spellid_5, @probability_5, @casttarget_5, @castflags_5, @delayinitialmin_5, @delayinitialmax_5, @delayrepeatmin_5, @delayrepeatmax_5,
+@spellid_6, @probability_6, @casttarget_6, @castflags_6, @delayinitialmin_6, @delayinitialmax_6, @delayrepeatmin_6, @delayrepeatmax_6,
+@spellid_7, @probability_7, @casttarget_7, @castflags_7, @delayinitialmin_7, @delayinitialmax_7, @delayrepeatmin_7, @delayrepeatmax_7,
+@spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
+
+-- Unseen Stalker
+set @creature_entry = 91923;
+set @description = 'Karazhan Crypt: Unseen Stalker';
+set @spell_list_id = 201001;
+
+set @spellid_1 = 17151; 
+set @probability_1 = 100; 
+set @casttarget_1 = 0; 
+set @castflags_1 = 4;
+set @delayinitialmin_1 = 2; 
+set @delayinitialmax_1 = 4; 
+set @delayrepeatmin_1 = 20; 
+set @delayrepeatmax_1 = 25;
+
+set @spellid_2 = 22687; -- Veil of Shadow
+set @probability_2 = 100; 
+set @casttarget_2 = 1; 
+set @castflags_2 = 4;
+set @delayinitialmin_2 = 1; 
+set @delayinitialmax_2 = 3; 
+set @delayrepeatmin_2 = 20; 
+set @delayrepeatmax_2 = 25;
+
+set @spellid_3 = 28447; 
+set @probability_3 = 100; 
+set @casttarget_3 = 0; 
+set @castflags_3 = 4;
+set @delayinitialmin_3 = 10; 
+set @delayinitialmax_3 = 13; 
+set @delayrepeatmin_3 = 15; 
+set @delayrepeatmax_3 = 16;
+
+set @spellid_4 = 0; 
+set @probability_4 = 0; 
+set @casttarget_4 = 0; 
+set @castflags_4 = 0;
+set @delayinitialmin_4 = 0; 
+set @delayinitialmax_4 = 0; 
+set @delayrepeatmin_4 = 0; 
+set @delayrepeatmax_4 = 0;
 
 set @spellid_5 = 0; 
 set @probability_5 = 0; 
