@@ -39,11 +39,13 @@ struct boss_mothersmolderwebAI : public ScriptedAI
 
     uint32 m_uiCrystalizeTimer;
     uint32 m_uiMothersMilkTimer;
+    bool m_bPulledByPet;
 
     void Reset() override
     {
         m_uiCrystalizeTimer  = 20000;
         m_uiMothersMilkTimer = 10000;
+        m_bPulledByPet = false;
     }
 
     void DamageTaken(Unit* pDoneBy, uint32 &uiDamage) override
@@ -57,6 +59,12 @@ struct boss_mothersmolderwebAI : public ScriptedAI
         // Return since we have no target
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
+
+        if (m_bPulledByPet || ((m_creature->GetPositionZ < -20.0f) || (m_creature->GetPositionZ > 30.0f)))
+        {
+            EnterEvadeMode();
+            return;
+        }
 
         // Crystalize
         if (m_uiCrystalizeTimer < uiDiff)

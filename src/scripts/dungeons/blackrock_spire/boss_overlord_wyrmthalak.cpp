@@ -32,7 +32,6 @@ enum
 
     NPC_SPIRESTONE_WARLORD = 9216,
     NPC_SMOLDERTHORN_BERSERKER = 9268
-
 };
 
 const float afLocations[2][4] =
@@ -54,7 +53,6 @@ struct boss_overlordwyrmthalakAI : public ScriptedAI
     uint32 m_uiKnockawayTimer;
     bool m_bSummoned;
     bool m_bPulledByPet;
-    uint32 m_uiLeashCheckTimer;
 
     void Reset() override
     {
@@ -64,8 +62,6 @@ struct boss_overlordwyrmthalakAI : public ScriptedAI
         m_uiKnockawayTimer = 12000;
         m_bSummoned = false;
         m_bPulledByPet = false;
-
-        m_uiLeashCheckTimer = 5000;
     }
 
     void JustSummoned(Creature* pSummoned) override
@@ -82,7 +78,6 @@ struct boss_overlordwyrmthalakAI : public ScriptedAI
 
     void EnterCombat(Unit* pUnit) override
     {
-        // Prevent exploit where pet can run through the wall and pull the boss.
         if (Unit* pOwner = pUnit->GetOwner())
             if (!pOwner->IsWithinLOSInMap(m_creature))
                 m_bPulledByPet = true;
@@ -90,25 +85,17 @@ struct boss_overlordwyrmthalakAI : public ScriptedAI
         ScriptedAI::EnterCombat(pUnit);
     }
 
-    void LeashIfOutOfCombatArea(uint32 uiDiff)
-    {
-        if (m_uiLeashCheckTimer < uiDiff)
-            m_uiLeashCheckTimer = 3500;
-        else
-        {
-            m_uiLeashCheckTimer -= uiDiff;
-            return;
-        }
-
-        if (m_bPulledByPet || (m_creature->GetPositionZ() > 100.0f))
-            EnterEvadeMode();
-    } 
-
     void UpdateAI(const uint32 uiDiff) override
     {
         // Return since we have no target
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
+
+        if (m_bPulledByPet || ((m_creature->GetPositionZ < 72.0f) || (m_creature->GetPositionZ > 100.0f)))
+        {
+            EnterEvadeMode();
+            return;
+        }
 
         // Prevent players from pulling Wyrmthalak into UBRS
         LeashIfOutOfCombatArea(uiDiff);
