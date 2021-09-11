@@ -15,3 +15,14 @@ replace into item_template (entry, display_id, name, class, quality, flags, buy_
 delete from gameobject_template where entry = 2010810;
 replace into gameobject_template values
 (2010810, 0, 2, 24202, 'Mysterious Trunk', 0, 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+
+delete from quest_template where entry = 40052;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40051,40052,2,876,60,5,0,0,'Cow Scroll II','You have found the First Clue, there is a future yet for you little moo. The second clue will be found far to the west, in a mine named after the humans most valuable currency.','Find the Second Clue.','','<Upon searching within the Muddy Pile, you find yet another Clue>.',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,500,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into gameobject_questrelation (id, quest) values (2010810, 40052);
+replace into gameobject_involvedrelation (id, quest) values (2010811, 40052);
+
+delete from gameobject_template where entry = 2010811;
+replace into gameobject_template values
+(2010811, 0, 2, 49, 'Mysterious Muddy Pile', 0, 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
