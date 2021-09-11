@@ -1,4 +1,4 @@
-replace into map_template (entry, map_name) values ('800', 'Karazhan Crypt');
+replace into map_template values (800, 0, 0, 1, 800, 5, 0, -1, 0, 0, 'Karazhan Crypt', '');
 
 replace into gameobject_template values 
 (181580, 0, 5, 23442, 'Karazhan Crypt (Entrance)', 0, 0, 1.6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'karazhan_crypt_portal'),
@@ -24,10 +24,13 @@ replace into creature_template values
 (91918, 0, 11649, 0, 0, 0, 'Ghost or Abomination', NULL, 0, 62, 62, 46620, 46620, 12840, 12840, 4091, 21, 0, 1, 1.14286, 0, 1, 5, 0, 1, 1, 605, 783, 0, 284, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 203.77, 289.86, 100, 6, 0, 10440, 0, 0, 0, 5, 5, 5, 5, 5, 0, 0, 0, 0, 0, 0, 2057, 2692, 'EventAI', 1, 3, 0, 0, 3, 10440, 0, 0, 1053507419, 0, 2097152, 0, ''),
 (91919, 0, 17144, 0, 0, 0, 'Commander Andreon', NULL, 0, 62, 62, 49432, 49711, 0, 0, 4091, 14, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 588, 669, 0, 284, 1, 1133, 1246, 1, 0, 0, 0, 0, 0, 0, 0, 62.7984, 86.3478, 100, 6, 0, 11121, 0, 0, 0, 5, 5, 5, 5, 5, 0, 5884, 0, 0, 111210, 0, 187, 935, '', 0, 1, 0, 0, 3, 11121, 0, 0, 16384, 0, 0, 0, ''),
 (91920, 2, 12074, 0, 0, 0, 'Bone Abomination', NULL, 0, 62, 62, 42850, 42850, 10272, 10272, 4391, 14, 0, 1, 1.14286, 2, 20, 5, 0, 1, 1, 571, 737, 0, 284, 1, 1150, 1265, 2, 0, 0, 0, 0, 0, 0, 0, 61.732, 84.8815, 100, 6, 0, 14516, 0, 0, 0, 10, 10, 10, 10, 10, 0, 0, 0, 0, 145160, 0, 168, 838, 'EventAI', 1, 3, 0, 0, 3, 14516, 0, 0, 0, 0, 0, 0, ''),
-(91921, 0, 10033, 0, 0, 0, 'Tomb Bat', NULL, 0, 60, 60, 900, 1275, 0, 0, 2435, 14, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 97, 123, 0, 262, 1, 2000, 2000, 1, 0, 0, 24, 0, 0, 0, 0, 71.9664, 98.9538, 100, 1, 1, 8602, 0, 8602, 0, 0, 0, 0, 0, 0, 8281, 0, 0, 0, 86020, 5789, 0, 0, '', 1, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 'tomb_bat');
+(91921, 0, 10033, 0, 0, 0, 'Tomb Bat', NULL, 0, 60, 60, 700, 1275, 0, 0, 2435, 14, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 97, 123, 0, 262, 1, 2000, 2000, 1, 0, 0, 24, 0, 0, 0, 0, 71.9664, 98.9538, 100, 1, 1, 8602, 0, 8602, 0, 0, 0, 0, 0, 0, 8281, 0, 0, 0, 86020, 5789, 0, 0, '', 1, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 'tomb_bat'),
+(91922, 5, 10033, 0, 0, 0, 'Crypt Fearfeaster', NULL, 0, 60, 60, 10341, 10341, 3245, 4567, 3791, 28, 0, 2, 2.14286, 1, 20, 5, 0, 0, 1, 130, 172, 0, 272, 1, 1000, 2000, 1, 0, 0, 24, 0, 0, 0, 0, 69.696, 95.832, 100, 1, 9, 11368, 0, 11368, 0, 15, 15, 15, 15, 15, 24023, 0, 0, 0, 0, 0, 0, 0, '', 1, 5, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 'generic_spell_ai');
 
-update creature_template set dynamic_flags = 36, unit_flags = 33554432, loot_id = 0, skinning_loot_id = 0 where entry = 91921;
+update creature_template set spell_id1 = 13704, type = 6 where entry = 91922;
+update creature_template set dynamic_flags = 36, unit_flags = 33554432, loot_id = 0, skinning_loot_id = 0, type = 6 where entry = 91921;
 replace into creature_template_addon (entry, bytes1) values (91921, 7);
+replace into creature_template_addon (entry, auras) values (91922, 22650);
 
 update creature_template set spell_id1 = 24318, spell_id2 = 8391, spell_id3 = 30113, spell_id4 = 17470 where entry = 91910; -- Ravenous Strigoi
 update creature_template set spell_id1 = 15530, spell_id2 = 30094, spell_id3 = 19260, spell_id4 = 21099 where entry = 91911; -- Forgotten Soul

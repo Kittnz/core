@@ -1,5 +1,11 @@
 #include "scriptPCH.h"
 
+template <typename Functor>
+void DoAfterTime(Player* player, uint32 p_time, Functor&& function)
+{
+    player->m_Events.AddEvent(new LambdaBasicEvent<Functor>(std::move(function)), player->m_Events.CalculateTime(p_time));
+}
+
 #define KARAZHAN_CRYPT_KEY 51356
 #define KARAZHAN_GATE_RESET 1
 
@@ -75,15 +81,18 @@ struct karazhan_crypt_portal : public GameObjectAI
 
             for (Player* pPlayer : players)
             {
-                if (!pPlayer->IsAlive())
+                if (!pPlayer->IsInCombat())
                 {
-                    pPlayer->ResurrectPlayer(0.5f);
-                    pPlayer->SpawnCorpseBones();
+                    if (!pPlayer->IsAlive())
+                    {
+                        pPlayer->ResurrectPlayer(0.5f);
+                        pPlayer->SpawnCorpseBones();
+                    }
+                    if (me->GetEntry() == 181580) // Entrance
+                        pPlayer->TeleportTo(800, -11068.1F, -1806.4F, 52.74F, 1.5F);
+                    if (me->GetEntry() == 181581) // Exit
+                        pPlayer->TeleportTo(0, -11068.9F, -1828.6F, 60.26F, 3.1F);
                 }
-                if (me->GetEntry() == 181580) // Entrance
-                    pPlayer->TeleportTo(800, -11068.1F, -1806.4F, 52.74F, 1.5F);
-                if (me->GetEntry() == 181581) // Exit
-                    pPlayer->TeleportTo(0, -11068.9F, -1828.6F, 60.26F, 3.1F);
             }
             m_uiUpdateTimer = 1000;
         }
@@ -126,6 +135,10 @@ struct tomb_bat_event_trigger : public GameObjectAI
                 {
                     me->SummonGameObject(177301, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1800, true); // 30 minutes
                     pPlayer->PlayDirectMusic(1171);
+
+                    DoAfterTime(pPlayer, 15 * IN_MILLISECONDS, [player = pPlayer]() {
+                        player->SummonCreature(91922, -11063.4F, -1795.69F, 56.65F, 3.1F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 150 * IN_MILLISECONDS);
+                        });
                 }
                 m_uiUpdateTimer = 2500;
             }
