@@ -97,9 +97,6 @@ struct boss_overlordwyrmthalakAI : public ScriptedAI
             return;
         }
 
-        // Prevent players from pulling Wyrmthalak into UBRS
-        LeashIfOutOfCombatArea(uiDiff);
-
         // BlastWave
         if (m_uiBlastWaveTimer < uiDiff)
         {
