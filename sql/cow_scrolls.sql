@@ -69,3 +69,5 @@ replace into creature_involvedrelation (id, quest) values (91798, 40056);
 
 delete from item_template where entry = 60150;
 replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, start_quest) values (60150,1301,'Scroll of Cow Portal',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+update creature_template set script_name = 'npc_bessy' where entry = 91798;

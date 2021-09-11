@@ -353,9 +353,41 @@ struct npc_dralox_felstarAI : public ScriptedAI
 
 CreatureAI* GetAI_npc_dralox_felstar(Creature* _Creature) { return new npc_dralox_felstarAI(_Creature); }
 
+bool GossipHello_npc_bessy(Player* pPlayer, Creature* pCreature)
+{
+    if (pPlayer->GetQuestRewardStatus(40056))
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Teleport me to the Cow Level", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    }
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_bessy(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        static const WorldLocation m_CowLevel(801, 16809.69F, 16794.09F, 65.36f, 3.70F);
+        pPlayer->TeleportTo(m_CowLevel);
+    }
+
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_bessy";
+    newscript->pGossipHello = &GossipHello_npc_bessy;
+    newscript->pGossipSelect = &GossipSelect_npc_bessy;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_dralox_felstar";
