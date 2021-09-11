@@ -11,7 +11,7 @@ replace into gameobject_involvedrelation (id, quest) values (2010810, 40051);
 
 delete from item_template where entry = 60149;
 delete from item_template where entry = 83100;
-replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, start_quest, description, max_count) values (60149,83100,'Mysterious Cow Scroll',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',40051, 'It beckons you.', 1);
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, start_quest, max_count) values (60149,83100,'Mysterious Cow Scroll',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'It beckons you.',40051, 1);
 
 replace into creature_loot_template values (2442, 60149, 1, 6, 1, 1, 0, 0, 10);
 
