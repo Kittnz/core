@@ -81,7 +81,7 @@ struct karazhan_crypt_portal : public GameObjectAI
                     pPlayer->SpawnCorpseBones();
                 }
                 if (me->GetEntry() == 181580) // Entrance
-                    pPlayer->TeleportTo(800, -11085.0F, -1788.2F, 52.7F, 5.3F);
+                    pPlayer->TeleportTo(800, -11068.1F, -1806.4F, 52.74F, 1.5F);
                 if (me->GetEntry() == 181581) // Exit
                     pPlayer->TeleportTo(0, -11068.9F, -1828.6F, 60.26F, 3.1F);
             }
