@@ -96,9 +96,96 @@ struct karazhan_crypt_portal : public GameObjectAI
 
 GameObjectAI* GetAI_karazhan_crypt_portal(GameObject* gameobject) { return new karazhan_crypt_portal(gameobject); }
 
+
+struct tomb_bat_event_trigger : public GameObjectAI
+{
+    explicit tomb_bat_event_trigger(GameObject* pGo) : GameObjectAI(pGo)
+    {
+        m_uiJustUsedTimer = 1;
+        m_uiUpdateTimer = 1000;
+    }
+
+    uint32 m_uiJustUsedTimer;
+    uint32 m_uiUpdateTimer;
+
+    void UpdateAI(uint32 const uiDiff) override
+    {
+        if (m_uiUpdateTimer < uiDiff)
+        {
+            GameObject* bat_event_activated = me->FindNearestGameObject(177301, 10.0f);
+
+            if (!bat_event_activated)
+            {
+                std::list<Player*> players;
+                MaNGOS::AnyPlayerInObjectRangeCheck check(me, 20.0f);
+                MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
+
+                Cell::VisitWorldObjects(me, searcher, 20.0f);
+
+                for (Player* pPlayer : players)
+                {
+                    me->SummonGameObject(177301, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1800, true); // 30 minutes
+                    pPlayer->PlayDirectMusic(1171);
+                }
+                m_uiUpdateTimer = 2500;
+            }
+        }
+        else
+            m_uiUpdateTimer -= uiDiff;
+    }
+};
+
+GameObjectAI* GetAI_tomb_bat_event_trigger(GameObject* gameobject) { return new tomb_bat_event_trigger(gameobject); }
+
+struct tomb_batAI : public ScriptedAI
+{
+    tomb_batAI(Creature* c) : ScriptedAI(c) { Reset(); }
+
+    void Reset() 
+    {
+        m_creature->SetFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_DEAD | UNIT_DYNFLAG_TAPPED);
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+        m_creature->SetStandState(UNIT_STAND_STATE_DEAD);
+    }
+    void UpdateAI(const uint32 diff)
+    {
+        GameObject* bat_event_activated = me->FindNearestGameObject(177301, 30.0f);
+
+        if (bat_event_activated)
+        {
+            m_creature->RemoveFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_DEAD | UNIT_DYNFLAG_TAPPED);
+            m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+            m_creature->SetStandState(UNIT_STAND_STATE_STAND);
+
+            if (!m_creature->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE))
+            {
+                if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim()) return;
+                DoMeleeAttackIfReady();
+            }
+        }
+    }
+    void JustDied(Unit*) override 
+    {
+        m_creature->SetRespawnTime(1800); // 30 minutes
+    }
+    void JustRespawned() { Reset(); }
+};
+
+CreatureAI* GetAI_tomb_bat(Creature* _Creature) { return new tomb_batAI(_Creature); }
+
 void AddSC_instance_karazhan_crypt()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "tomb_bat";
+    newscript->GetAI = &GetAI_tomb_bat;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "tomb_bat_event_trigger";
+    newscript->GOGetAI = &GetAI_tomb_bat_event_trigger;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "karazhan_crypt_gate";
