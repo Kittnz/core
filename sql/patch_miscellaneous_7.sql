@@ -14,3 +14,6 @@ update creature_template set equipment_id = @equip_template where entry = @creat
 
 update creature_template set name = 'Wallowfin Murloc' where entry = 91857;
 
+delete from page_text where entry = 50504;
+replace into page_text (entry, text, next_page) value (50504,'Recon over Azshara 22.03 04:22-05:55\n\nRecon over Winterspring 01.04 14:33-15:03\n\nRecon over Blue Dragons in Azshara 06.04 15:22-15:51\n\nRecon over Icepoint Rock north of Winterspring 07.04 05:22-09:31',3456); 
+replace into page_text (entry, text, next_page) value (3456,'Transfering supplies to Icepoint Rock 09.04 05:31-10:50\n\n13.04 05:12-09:20 Established base at Icepoint Rock north of Winterspring\n\nRecon over Winterspring 18.04 20:03-22:14\n\nFlight to Icepoint Rock 03.05 06:04-',0); 
