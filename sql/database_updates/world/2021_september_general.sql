@@ -141,4 +141,9 @@ replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Greetings
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
+-- Turtlhu memo:
+
+REPLACE INTO `creature_template` VALUES (50060, 0, 16361, 0, 0, 0, 'Turtlhu', NULL, 0, 60, 60, 2217, 2217, 0, 0, 4059, 35, 2, 1, 1.14286, 3, 20, 5, 0, 0, 1, 72, 93, 0, 204, 1, 2000, 2000, 1, 32768, 0, 0, 0, 0, 0, 0, 61.776, 84.942, 100, 1, 0, 0, 0, 100004, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+
 
