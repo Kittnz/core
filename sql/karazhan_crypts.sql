@@ -29,7 +29,6 @@ replace into creature_template values
 (91923, 0, 4870, 0, 0, 0, 'Unseen Stalker', NULL, 0, 60, 61, 12765, 13765, 0, 0, 3514, 14, 0, 1.26, 1.14286, 0, 20, 5, 0, 0, 0.5, 492, 575, 0, 272, 1, 1410, 1551, 2, 0, 0, 0, 0, 0, 0, 0, 71.9664, 98.9538, 100, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 63, 316, 'EventAI', 1, 3, 0, 0, 3, 0, 0, 0, 8413718, 0, 0, 0, ''),
 (91924, 0, 11400, 9789, 9784, 0, 'Skeletal Remains', NULL, 0, 60, 61, 9710, 9754, 2369, 2486, 3152, 233, 0, 0.888888, 1.14286, 0, 20, 5, 0, 0, 1, 465, 798, 0, 278, 1, 2400, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 72.688, 99.946, 100, 6, 0, 11598, 0, 0, 0, 0, 0, 0, 0, 0, 13496, 0, 0, 0, 0, 0, 65, 326, 'EventAI', 1, 1, 0, 0, 3, 0, 0, 0, 8405008, 0, 0, 0, '');
 
-
 update creature_template set spell_id1 = 13704, type = 6 where entry = 91922;
 update creature_template set dynamic_flags = 36, unit_flags = 33554432, loot_id = 0, skinning_loot_id = 0, type = 6 where entry = 91921;
 update creature_template set dmg_school = 5 where entry = 91923;
@@ -203,6 +202,105 @@ set @delayinitialmin_4 = 0;
 set @delayinitialmax_4 = 0; 
 set @delayrepeatmin_4 = 0; 
 set @delayrepeatmax_4 = 0;
+
+set @spellid_5 = 0; 
+set @probability_5 = 0; 
+set @casttarget_5 = 0; 
+set @castflags_5 = 0;
+set @delayinitialmin_5 = 0; 
+set @delayinitialmax_5 = 0; 
+set @delayrepeatmin_5 = 0; 
+set @delayrepeatmax_5 = 0;
+
+set @spellid_6 = 0; 
+set @probability_6 = 0; 
+set @casttarget_6 = 0; 
+set @castflags_6 = 0;
+set @delayinitialmin_6 = 0; 
+set @delayinitialmax_6 = 0; 
+set @delayrepeatmin_6 = 0; 
+set @delayrepeatmax_6 = 0;
+
+set @spellid_7 = 0; 
+set @probability_7 = 0; 
+set @casttarget_7 = 0; 
+set @castflags_7 = 0;
+set @delayinitialmin_7 = 0; 
+set @delayinitialmax_7 = 0; 
+set @delayrepeatmin_7 = 0; 
+set @delayrepeatmax_7 = 0;
+
+set @spellid_8 = 0; 
+set @probability_8 = 0; 
+set @casttarget_8 = 0; 
+set @castflags_8 = 0;
+set @delayinitialmin_8 = 0; 
+set @delayinitialmax_8 = 0; 
+set @delayrepeatmin_8 = 0; 
+set @delayrepeatmax_8 = 0;
+
+-- Do not touch this part:
+update creature_template set spell_list_id = @spell_list_id, ai_name = '', script_name = '', spell_id1 = 0, spell_id2 = 0, spell_id3 = 0 
+where entry = @creature_entry;
+replace into creature_spells (entry, name, 
+spellid_1, probability_1, casttarget_1, castflags_1, delayinitialmin_1, delayinitialmax_1, delayrepeatmin_1, delayrepeatmax_1, 
+spellid_2, probability_2, casttarget_2, castflags_2, delayinitialmin_2, delayinitialmax_2, delayrepeatmin_2, delayrepeatmax_2, 
+spellid_3, probability_3, casttarget_3, castflags_3, delayinitialmin_3, delayinitialmax_3, delayrepeatmin_3, delayrepeatmax_3, 
+spellid_4, probability_4, casttarget_4, castflags_4, delayinitialmin_4, delayinitialmax_4, delayrepeatmin_4, delayrepeatmax_4, 
+spellid_5, probability_5, casttarget_5, castflags_5, delayinitialmin_5, delayinitialmax_5, delayrepeatmin_5, delayrepeatmax_5, 
+spellid_6, probability_6, casttarget_6, castflags_6, delayinitialmin_6, delayinitialmax_6, delayrepeatmin_6, delayrepeatmax_6, 
+spellid_7, probability_7, casttarget_7, castflags_7, delayinitialmin_7, delayinitialmax_7, delayrepeatmin_7, delayrepeatmax_7, 
+spellid_8, probability_8, casttarget_8, castflags_8, delayinitialmin_8, delayinitialmax_8, delayrepeatmin_8, delayrepeatmax_8) 
+values (@spell_list_id, @description,
+@spellid_1, @probability_1, @casttarget_1, @castflags_1, @delayinitialmin_1, @delayinitialmax_1, @delayrepeatmin_1, @delayrepeatmax_1,
+@spellid_2, @probability_2, @casttarget_2, @castflags_2, @delayinitialmin_2, @delayinitialmax_2, @delayrepeatmin_2, @delayrepeatmax_2,
+@spellid_3, @probability_3, @casttarget_3, @castflags_3, @delayinitialmin_3, @delayinitialmax_3, @delayrepeatmin_3, @delayrepeatmax_3,
+@spellid_4, @probability_4, @casttarget_4, @castflags_4, @delayinitialmin_4, @delayinitialmax_4, @delayrepeatmin_4, @delayrepeatmax_4,
+@spellid_5, @probability_5, @casttarget_5, @castflags_5, @delayinitialmin_5, @delayinitialmax_5, @delayrepeatmin_5, @delayrepeatmax_5,
+@spellid_6, @probability_6, @casttarget_6, @castflags_6, @delayinitialmin_6, @delayinitialmax_6, @delayrepeatmin_6, @delayrepeatmax_6,
+@spellid_7, @probability_7, @casttarget_7, @castflags_7, @delayinitialmin_7, @delayinitialmax_7, @delayrepeatmin_7, @delayrepeatmax_7,
+@spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
+
+-- Archlich Enkhraz
+set @creature_entry = 91916;
+set @description = 'Karazhan Crypt: Archlich Enkhraz';
+set @spell_list_id = 201002;
+
+set @spellid_1 = 17715; -- Consuming Shadows 
+set @probability_1 = 100; 
+set @casttarget_1 = 0; 
+set @castflags_1 = 4;
+set @delayinitialmin_1 = 40; 
+set @delayinitialmax_1 = 50; 
+set @delayrepeatmin_1 = 30; 
+set @delayrepeatmax_1 = 35;
+
+set @spellid_2 = 18099; -- Chill Nova
+set @probability_2 = 100; 
+set @casttarget_2 = 1; 
+set @castflags_2 = 4;
+set @delayinitialmin_2 = 6; 
+set @delayinitialmax_2 = 9; 
+set @delayrepeatmin_2 = 10; 
+set @delayrepeatmax_2 = 15;
+
+set @spellid_3 = 12096; -- Fear
+set @probability_3 = 100; 
+set @casttarget_3 = 1; 
+set @castflags_3 = 4;
+set @delayinitialmin_3 = 12; 
+set @delayinitialmax_3 = 17; 
+set @delayrepeatmin_3 = 15; 
+set @delayrepeatmax_3 = 16;
+
+set @spellid_4 = 18763; -- Freeze
+set @probability_4 = 100; 
+set @casttarget_4 = 1; 
+set @castflags_4 = 4;
+set @delayinitialmin_4 = 4; 
+set @delayinitialmax_4 = 9; 
+set @delayrepeatmin_4 = 8; 
+set @delayrepeatmax_4 = 14;
 
 set @spellid_5 = 0; 
 set @probability_5 = 0; 
