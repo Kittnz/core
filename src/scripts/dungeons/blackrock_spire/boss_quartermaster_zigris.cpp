@@ -40,11 +40,13 @@ struct boss_quatermasterzigrisAI : public ScriptedAI
 
     uint32 m_uiShootTimer;
     uint32 m_uiStunBombTimer;
+    bool m_bPulledByPet;
 
     void Reset() override
     {
         m_uiShootTimer = 1000;
         m_uiStunBombTimer = 16000;
+        m_bPulledByPet = false;
     }
 
     void UpdateAI(const uint32 uiDiff) override
@@ -52,6 +54,12 @@ struct boss_quatermasterzigrisAI : public ScriptedAI
         // Return since we have no target
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
+
+        if (m_bPulledByPet || (m_creature->GetPositionZ < 50.0f)/* || (m_creature->GetPositionZ > 100.0f)*/) // Anti-Exploit: His position is approx at 87.0f be default, make a large leeway
+        {
+            EnterEvadeMode();
+            return;
+        }
 
         // Shoot
         if (m_uiShootTimer < uiDiff)

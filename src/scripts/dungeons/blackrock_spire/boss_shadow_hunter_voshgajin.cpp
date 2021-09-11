@@ -40,12 +40,14 @@ struct boss_shadowvoshAI : public ScriptedAI
     uint32 m_uiCurseOfBloodTimer;
     uint32 m_uiHexTimer;
     uint32 m_uiCleaveTimer;
+    bool m_bPulledByPet;
 
     void Reset() override
     {
         m_uiCurseOfBloodTimer = 2000;
         m_uiHexTimer = 8000;
         m_uiCleaveTimer = 14000;
+        m_bPulledByPet = false;
     }
 
     void UpdateAI(const uint32 uiDiff) override
@@ -53,6 +55,12 @@ struct boss_shadowvoshAI : public ScriptedAI
         // Return since we have no target
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
+
+        if (m_bPulledByPet || (m_creature->GetPositionZ < 0.0f) || (m_creature->GetPositionZ > 30.0f))
+        {
+            EnterEvadeMode();
+            return;
+        }
 
         // Curse Of Blood
         if (m_uiCurseOfBloodTimer < uiDiff)

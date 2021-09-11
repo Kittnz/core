@@ -47,6 +47,7 @@ struct boss_highlordomokkAI : public ScriptedAI
     uint32 m_uiSunderArmorTimer;
     uint32 m_uiKnockAwayTimer;
     uint32 m_uiSlowTimer;
+    bool m_bPulledByPet;
 
     void Reset() override
     {
@@ -56,6 +57,7 @@ struct boss_highlordomokkAI : public ScriptedAI
         m_uiSunderArmorTimer = 2000;
         m_uiKnockAwayTimer   = 18000;
         m_uiSlowTimer        = 24000;
+        m_bPulledByPet       = false;
     }
 
     void UpdateAI(const uint32 uiDiff) override
@@ -63,6 +65,12 @@ struct boss_highlordomokkAI : public ScriptedAI
         //Return since we have no target
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
+
+        if (m_bPulledByPet || ((m_creature->GetPositionZ < 25.0f) || (m_creature->GetPositionZ > 50.0f)))
+        {
+            EnterEvadeMode();
+            return;
+        }
 
         // WarStomp
         if (m_uiWarStompTimer < uiDiff)

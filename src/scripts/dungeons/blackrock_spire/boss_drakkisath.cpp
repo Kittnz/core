@@ -46,6 +46,7 @@ struct boss_drakkisathAI : public ScriptedAI
     uint32 m_uiThunderclapTimer;
     uint32 m_uiRageTimer;
     uint32 m_uiPierceArmorTimer;
+    bool m_bPulledByPet;
 
     void Reset() override
     {
@@ -55,6 +56,14 @@ struct boss_drakkisathAI : public ScriptedAI
         m_uiThunderclapTimer = 1000;
         m_uiRageTimer = 1000;
         m_uiPierceArmorTimer = 5000;
+        m_bPulledByPet = false;
+    }
+
+    void EnterCombat(Unit* pUnit) override
+    {
+        if (Unit* pOwner = pUnit->GetOwner())
+            if (!pOwner->IsWithinLOSInMap(m_creature))
+                m_bPulledByPet = true;
     }
 
     void UpdateAI(const uint32 uiDiff) override
@@ -62,6 +71,12 @@ struct boss_drakkisathAI : public ScriptedAI
         // Return since we have no target
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
+
+        if (m_bPulledByPet || (m_creature->GetPositionZ < 105.0f))
+        {
+            EnterEvadeMode();
+            return;
+        }
 
         // FlameStrike
         if (m_uiFlameStrikeTimer < uiDiff)
@@ -126,7 +141,6 @@ struct boss_drakkisathAI : public ScriptedAI
 CreatureAI* GetAI_boss_drakkisath(Creature* pCreature)
 {
     return new boss_drakkisathAI(pCreature);
-}
 
 void AddSC_boss_drakkisath()
 {

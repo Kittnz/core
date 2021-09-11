@@ -46,6 +46,7 @@ struct boss_thebeastAI : public ScriptedAI
     uint32 m_uiBeserkerChargeTimer;
     uint32 m_uiFireballTimer;
     uint32 m_uiFireBlastTimer;
+    bool m_bPulledByPet;
 
     void Reset() override
     {
@@ -54,6 +55,7 @@ struct boss_thebeastAI : public ScriptedAI
         m_uiBeserkerChargeTimer = 0;
         m_uiFireballTimer = 10000;
         m_uiFireBlastTimer = urand(8000, 11000);
+        m_bPulledByPet = false;
     }
 
     void SpellHit(Unit* pCaster, const SpellEntry* pSpell) override
@@ -66,9 +68,16 @@ struct boss_thebeastAI : public ScriptedAI
     {
         if (!m_creature->HasAura(AURA_IMMOLATE))
             m_creature->CastSpell(m_creature, AURA_IMMOLATE, true);
+
         // Return since we have no target
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
+
+        if (m_bPulledByPet || (m_creature->GetPositionZ < 75.0f) || (m_creature->GetPositionZ > 125.0f))
+        {
+            EnterEvadeMode();
+            return;
+        }
 
         // Flamebreak
         if (m_uiFlamebreakTimer < uiDiff)
