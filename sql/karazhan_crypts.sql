@@ -23,7 +23,7 @@ replace into creature_template values
 (91917, 6, 15509, 0, 0, 0, 'Corpsemuncher', '', 0, 62, 62, 44320, 44320, 0, 0, 3469, 310, 0, 1, 2.28571, 0, 20, 5, 0, 2, 1, 544, 579, 0, 278, 2, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 9, 0, 15290, 0, 15290, 0, 5, 5, 5, 5, 5, 0, 0, 0, 0, 152900, 0, 599, 4836, '', 1, 1, 0, 0, 3, 0, 0, 0, 646938591, 0, 0, 0, ''),
 (91918, 0, 11649, 0, 0, 0, 'Ghost or Abomination', NULL, 0, 62, 62, 46620, 46620, 12840, 12840, 4091, 21, 0, 1, 1.14286, 0, 1, 5, 0, 1, 1, 605, 783, 0, 284, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 203.77, 289.86, 100, 6, 0, 10440, 0, 0, 0, 5, 5, 5, 5, 5, 0, 0, 0, 0, 0, 0, 2057, 2692, 'EventAI', 1, 3, 0, 0, 3, 10440, 0, 0, 1053507419, 0, 2097152, 0, ''),
 (91919, 0, 17144, 0, 0, 0, 'Commander Andreon', NULL, 0, 62, 62, 49432, 49711, 0, 0, 4091, 14, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 588, 669, 0, 284, 1, 1133, 1246, 1, 0, 0, 0, 0, 0, 0, 0, 62.7984, 86.3478, 100, 6, 0, 11121, 0, 0, 0, 5, 5, 5, 5, 5, 0, 5884, 0, 0, 111210, 0, 187, 935, '', 0, 1, 0, 0, 3, 11121, 0, 0, 16384, 0, 0, 0, ''),
-(91920, 2, 12074, 0, 0, 0, 'Bone Abomination', NULL, 0, 62, 62, 42850, 42850, 10272, 10272, 4391, 14, 0, 1, 1.14286, 2, 20, 5, 0, 1, 1, 571, 737, 0, 284, 1, 1150, 1265, 2, 0, 0, 0, 0, 0, 0, 0, 61.732, 84.8815, 100, 6, 0, 14516, 0, 0, 0, 10, 10, 10, 10, 10, 0, 0, 0, 0, 145160, 0, 168, 838, 'EventAI', 1, 3, 0, 0, 3, 14516, 0, 0, 0, 0, 0, 0, ''),
+(91920, 2, 12074, 0, 0, 0, 'Bonespike Construct', NULL, 0, 62, 62, 42850, 42850, 10272, 10272, 3831, 14, 0, 1, 1.14286, 2, 20, 5, 0, 1, 1, 643, 768, 0, 284, 1, 1150, 1265, 2, 0, 0, 0, 0, 0, 0, 0, 61.732, 84.8815, 100, 6, 0, 14516, 0, 0, 0, 10, 10, 10, 10, 10, 0, 0, 0, 0, 145160, 0, 168, 838, 'EventAI', 1, 3, 0, 0, 3, 14516, 0, 0, 0, 0, 0, 0, ''),
 (91921, 0, 10033, 0, 0, 0, 'Tomb Bat', NULL, 0, 60, 60, 700, 1275, 0, 0, 2435, 14, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 97, 123, 0, 262, 1, 2000, 2000, 1, 0, 0, 24, 0, 0, 0, 0, 71.9664, 98.9538, 100, 1, 1, 8602, 0, 8602, 0, 0, 0, 0, 0, 0, 8281, 0, 0, 0, 86020, 5789, 0, 0, '', 1, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 'tomb_bat'),
 (91922, 5, 10033, 0, 0, 0, 'Crypt Fearfeaster', NULL, 0, 60, 60, 10341, 10341, 3245, 4567, 3791, 28, 0, 2, 2.14286, 1, 20, 5, 0, 0, 1, 130, 172, 0, 272, 1, 1000, 2000, 1, 0, 0, 24, 0, 0, 0, 0, 69.696, 95.832, 100, 1, 9, 11368, 0, 11368, 0, 15, 15, 15, 15, 15, 24023, 0, 0, 0, 0, 0, 0, 0, '', 1, 5, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 'generic_spell_ai');
 
@@ -46,4 +46,112 @@ update creature_template set equipment_id = @equip_template where entry = @creat
 set @equip_template = 55140; set @weapon_1 = 7118; set @weapon_2 = 7118; set @creature = 91915;
 replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
 update creature_template set equipment_id = @equip_template where entry = @creature;
+
+-- CF_INTERRUPT_PREVIOUS     = 0x01 | Interrupt any spell casting
+-- CF_TRIGGERED              = 0x02 | Triggered (this makes spell cost zero mana and have no cast time)
+-- CF_FORCE_CAST             = 0x04 | Forces cast even if creature is out of mana or out of range
+-- CF_MAIN_RANGED_SPELL      = 0x08 | To be used by ranged mobs only. Creature will not chase target until cast fails.
+-- CF_TARGET_UNREACHABLE     = 0x10 | Will only use the ability if creature cannot currently get to target
+-- CF_AURA_NOT_PRESENT       = 0x20 | Only casts the spell if the target does not have an aura from the spell
+-- CF_ONLY_IN_MELEE          = 0x40 | Only casts if the creature is in melee range of the target
+-- CF_NOT_IN_MELEE           = 0x80 | Only casts if the creature is not in melee range of the target
+
+-- Bonespike Construct
+set @creature_entry = 91920;
+set @description = 'Karazhan Crypt: Bonespike Construct';
+set @spell_list_id = 201000;
+
+set @spellid_1 = 16169; -- Arcing Smash
+set @probability_1 = 100; 
+set @casttarget_1 = 1; 
+set @castflags_1 = 4;
+set @delayinitialmin_1 = 1; 
+set @delayinitialmax_1 = 3; 
+set @delayrepeatmin_1 = 10; 
+set @delayrepeatmax_1 = 12;
+
+set @spellid_2 = 12787; -- Trash
+set @probability_2 = 100; 
+set @casttarget_2 = 1; 
+set @castflags_2 = 4;
+set @delayinitialmin_2 = 1; 
+set @delayinitialmax_2 = 3; 
+set @delayrepeatmin_2 = 8; 
+set @delayrepeatmax_2 = 11;
+
+set @spellid_3 = 22644; -- Blood Leech
+set @probability_3 = 100; 
+set @casttarget_3 = 1; 
+set @castflags_3 = 4;
+set @delayinitialmin_3 = 5; 
+set @delayinitialmax_3 = 8; 
+set @delayrepeatmin_3 = 20; 
+set @delayrepeatmax_3 = 25;
+
+set @spellid_4 = 15284; -- Cleave
+set @probability_4 = 100; 
+set @casttarget_4 = 1; 
+set @castflags_4 = 4;
+set @delayinitialmin_4 = 3; 
+set @delayinitialmax_4 = 4; 
+set @delayrepeatmin_4 = 5; 
+set @delayrepeatmax_4 = 6;
+
+set @spellid_5 = 0; 
+set @probability_5 = 0; 
+set @casttarget_5 = 0; 
+set @castflags_5 = 0;
+set @delayinitialmin_5 = 0; 
+set @delayinitialmax_5 = 0; 
+set @delayrepeatmin_5 = 0; 
+set @delayrepeatmax_5 = 0;
+
+set @spellid_6 = 0; 
+set @probability_6 = 0; 
+set @casttarget_6 = 0; 
+set @castflags_6 = 0;
+set @delayinitialmin_6 = 0; 
+set @delayinitialmax_6 = 0; 
+set @delayrepeatmin_6 = 0; 
+set @delayrepeatmax_6 = 0;
+
+set @spellid_7 = 0; 
+set @probability_7 = 0; 
+set @casttarget_7 = 0; 
+set @castflags_7 = 0;
+set @delayinitialmin_7 = 0; 
+set @delayinitialmax_7 = 0; 
+set @delayrepeatmin_7 = 0; 
+set @delayrepeatmax_7 = 0;
+
+set @spellid_8 = 0; 
+set @probability_8 = 0; 
+set @casttarget_8 = 0; 
+set @castflags_8 = 0;
+set @delayinitialmin_8 = 0; 
+set @delayinitialmax_8 = 0; 
+set @delayrepeatmin_8 = 0; 
+set @delayrepeatmax_8 = 0;
+
+-- Do not touch this part:
+update creature_template set spell_list_id = @spell_list_id, ai_name = '', script_name = '', spell_id1 = 0, spell_id2 = 0, spell_id3 = 0 
+where entry = @creature_entry;
+replace into creature_spells (entry, name, 
+spellid_1, probability_1, casttarget_1, castflags_1, delayinitialmin_1, delayinitialmax_1, delayrepeatmin_1, delayrepeatmax_1, 
+spellid_2, probability_2, casttarget_2, castflags_2, delayinitialmin_2, delayinitialmax_2, delayrepeatmin_2, delayrepeatmax_2, 
+spellid_3, probability_3, casttarget_3, castflags_3, delayinitialmin_3, delayinitialmax_3, delayrepeatmin_3, delayrepeatmax_3, 
+spellid_4, probability_4, casttarget_4, castflags_4, delayinitialmin_4, delayinitialmax_4, delayrepeatmin_4, delayrepeatmax_4, 
+spellid_5, probability_5, casttarget_5, castflags_5, delayinitialmin_5, delayinitialmax_5, delayrepeatmin_5, delayrepeatmax_5, 
+spellid_6, probability_6, casttarget_6, castflags_6, delayinitialmin_6, delayinitialmax_6, delayrepeatmin_6, delayrepeatmax_6, 
+spellid_7, probability_7, casttarget_7, castflags_7, delayinitialmin_7, delayinitialmax_7, delayrepeatmin_7, delayrepeatmax_7, 
+spellid_8, probability_8, casttarget_8, castflags_8, delayinitialmin_8, delayinitialmax_8, delayrepeatmin_8, delayrepeatmax_8) 
+values (@spell_list_id, @description,
+@spellid_1, @probability_1, @casttarget_1, @castflags_1, @delayinitialmin_1, @delayinitialmax_1, @delayrepeatmin_1, @delayrepeatmax_1,
+@spellid_2, @probability_2, @casttarget_2, @castflags_2, @delayinitialmin_2, @delayinitialmax_2, @delayrepeatmin_2, @delayrepeatmax_2,
+@spellid_3, @probability_3, @casttarget_3, @castflags_3, @delayinitialmin_3, @delayinitialmax_3, @delayrepeatmin_3, @delayrepeatmax_3,
+@spellid_4, @probability_4, @casttarget_4, @castflags_4, @delayinitialmin_4, @delayinitialmax_4, @delayrepeatmin_4, @delayrepeatmax_4,
+@spellid_5, @probability_5, @casttarget_5, @castflags_5, @delayinitialmin_5, @delayinitialmax_5, @delayrepeatmin_5, @delayrepeatmax_5,
+@spellid_6, @probability_6, @casttarget_6, @castflags_6, @delayinitialmin_6, @delayinitialmax_6, @delayrepeatmin_6, @delayrepeatmax_6,
+@spellid_7, @probability_7, @casttarget_7, @castflags_7, @delayinitialmin_7, @delayinitialmax_7, @delayrepeatmin_7, @delayrepeatmax_7,
+@spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
 
