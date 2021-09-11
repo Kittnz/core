@@ -37,3 +37,14 @@ replace into gameobject_involvedrelation (id, quest) values (2010812, 40053);
 delete from gameobject_template where entry = 2010812;
 replace into gameobject_template values
 (2010812, 0, 2, 23124, 'Mysterious Grave', 0, 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+
+delete from quest_template where entry = 40054;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40053,40054,2,876,60,5,0,0,'Cow Scroll IV','With the Third Clue you get close little one, there is still searching to do, and this will be harder for you. The next clue is in a land the trolls call home and fight with one another. Where the animals lurk in the deep woods. You will find this clue there, by water.','Find the Fourth Clue.','','<Upon searching within the Mysterious Sunken Chest, you find yet another Clue>.',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,500,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into gameobject_questrelation (id, quest) values (2010812, 40054);
+replace into gameobject_involvedrelation (id, quest) values (2010813, 40054);
+
+delete from gameobject_template where entry = 2010813;
+replace into gameobject_template values
+(2010813, 0, 2, 22656, 'Mysterious Sunken Chest', 0, 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
