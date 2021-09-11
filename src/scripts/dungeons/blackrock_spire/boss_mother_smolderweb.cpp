@@ -60,7 +60,7 @@ struct boss_mothersmolderwebAI : public ScriptedAI
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
-        if (m_bPulledByPet || ((m_creature->GetPositionZ < -20.0f) || (m_creature->GetPositionZ > 30.0f)))
+        if (m_bPulledByPet || ((m_creature->GetPositionZ() < -20.0f) || (m_creature->GetPositionZ() > 30.0f)))
         {
             EnterEvadeMode();
             return;

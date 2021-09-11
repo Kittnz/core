@@ -55,7 +55,7 @@ struct boss_quatermasterzigrisAI : public ScriptedAI
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
-        if (m_bPulledByPet || (m_creature->GetPositionZ < 50.0f)/* || (m_creature->GetPositionZ > 100.0f)*/) // Anti-Exploit: His position is approx at 87.0f be default, make a large leeway
+        if (m_bPulledByPet || (m_creature->GetPositionZ() < 50.0f)/* || (m_creature->GetPositionZ > 100.0f)*/) // Anti-Exploit: His position is approx at 87.0f be default, make a large leeway
         {
             EnterEvadeMode();
             return;

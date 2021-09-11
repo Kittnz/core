@@ -72,7 +72,7 @@ struct boss_drakkisathAI : public ScriptedAI
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
-        if (m_bPulledByPet || (m_creature->GetPositionZ < 105.0f))
+        if (m_bPulledByPet || (m_creature->GetPositionZ() < 105.0f))
         {
             EnterEvadeMode();
             return;
@@ -141,6 +141,7 @@ struct boss_drakkisathAI : public ScriptedAI
 CreatureAI* GetAI_boss_drakkisath(Creature* pCreature)
 {
     return new boss_drakkisathAI(pCreature);
+}
 
 void AddSC_boss_drakkisath()
 {
