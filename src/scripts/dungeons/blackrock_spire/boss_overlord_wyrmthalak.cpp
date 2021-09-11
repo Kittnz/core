@@ -91,7 +91,7 @@ struct boss_overlordwyrmthalakAI : public ScriptedAI
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
-        if (m_bPulledByPet || ((m_creature->GetPositionZ < 72.0f) || (m_creature->GetPositionZ > 100.0f)))
+        if (m_bPulledByPet || ((m_creature->GetPositionZ() < 72.0f) || (m_creature->GetPositionZ() > 100.0f)))
         {
             EnterEvadeMode();
             return;

@@ -73,7 +73,7 @@ struct boss_thebeastAI : public ScriptedAI
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
-        if (m_bPulledByPet || (m_creature->GetPositionZ < 75.0f) || (m_creature->GetPositionZ > 125.0f))
+        if (m_bPulledByPet || (m_creature->GetPositionZ() < 75.0f) || (m_creature->GetPositionZ() > 125.0f))
         {
             EnterEvadeMode();
             return;

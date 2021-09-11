@@ -66,7 +66,7 @@ struct boss_highlordomokkAI : public ScriptedAI
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
-        if (m_bPulledByPet || ((m_creature->GetPositionZ < 25.0f) || (m_creature->GetPositionZ > 50.0f)))
+        if (m_bPulledByPet || ((m_creature->GetPositionZ() < 25.0f) || (m_creature->GetPositionZ() > 50.0f)))
         {
             EnterEvadeMode();
             return;
