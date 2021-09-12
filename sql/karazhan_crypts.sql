@@ -4,9 +4,18 @@ replace into gameobject_template values
 (181580, 0, 5, 23442, 'Karazhan Crypt (Entrance)', 0, 0, 1.6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'karazhan_crypt_portal'),
 (181581, 0, 5, 23442, 'Karazhan Crypt (Exit)', 0, 0, 1.6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'karazhan_crypt_portal'),
 (181582, 0, 5, 23443, 'Karazhan Crypt (Collision)', 0, 0, 1.6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
-(177203, 0, 0, 411, 'Karazhan Crypt', 0, 32, 2.45983, 0, 0, 196608, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'karazhan_crypts_gate'),
+(177203, 0, 0, 411, 'Karazhan Crypt', 0, 32, 2.45983, 0, 0, 196608, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'karazhan_crypt_gate'),
 (177300, 0, 5, 381, 'Karazan Crypt: Tomb Bats Waiting', 0, 0, 0.01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'tomb_bat_event_trigger'),
-(177301, 0, 5, 381, 'Karazan Crypt: Tomb Bats Active', 0, 0, 0.01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+(177301, 0, 5, 381, 'Karazan Crypt: Tomb Bats Active', 0, 0, 0.01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(177303, 1, 0, 5693, 'Alarus Vortex Doodad', 0, 4, 0.4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(177304, 0, 5, 381, 'Karazan Crypt: Alarus (Spawned)', 0, 0, 0.01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(177302, 0, 0, 25891, 'Necrotic Rune', 0, 32, 0.4, 0, 0, 196608, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'necrotic_rune'),
+(177305, 0, 0, 25891, 'Necrotic Rune', 0, 32, 0.4, 0, 0, 196608, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'necrotic_rune'),
+(177306, 0, 0, 25891, 'Necrotic Rune', 0, 32, 0.4, 0, 0, 196608, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'necrotic_rune'),
+(177307, 0, 0, 25891, 'Necrotic Rune', 0, 32, 0.4, 0, 0, 196608, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'necrotic_rune'),
+(177308, 0, 0, 25891, 'Necrotic Rune', 0, 32, 0.4, 0, 0, 196608, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'necrotic_rune'),
+(177309, 0, 0, 25891, 'Necrotic Rune', 0, 32, 0.4, 0, 0, 196608, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'necrotic_rune');
+
 
 replace into item_template values 
 (51356, 0, 13, 0, 'Karazhan Crypt Key', 'Covered in rust.', 22071, 1, 64, 1, 0, 0, 0, -1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 1, null);
@@ -31,7 +40,7 @@ replace into creature_template values
 (91925, 0, 18117, 0, 0, 0, 'Risen Crypt Guard', NULL, 0, 60, 61, 11710, 11754, 2369, 2486, 3152, 233, 0, 0.888888, 1.14286, 0, 20, 5, 0, 1, 1, 465, 798, 0, 278, 1, 2400, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 72.688, 99.946, 100, 6, 0, 11598, 0, 0, 0, 0, 0, 0, 0, 0, 13496, 0, 0, 0, 0, 0, 65, 326, 'EventAI', 1, 1, 0, 0, 3, 55142, 0, 0, 8405008, 0, 0, 0, ''),
 (91926, 0, 18114, 0, 0, 0, 'Rotten Zombie', NULL, 0, 59, 60, 14805, 15260, 0, 0, 3791, 21, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 528, 681, 0, 272, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 59.9488, 82.4296, 100, 6, 0, 10416, 10416, 0, 0, 0, 0, 0, 0, 0, 0, 16866, 0, 0, 104160, 0, 735, 964, 'EventAI', 1, 1, 0, 0, 3, 0, 0, 0, 8388624, 0, 0, 0, ''),
 (91927, 0, 18628, 0, 0, 0, 'Midnight', 'Enkhraz\'s Favorite Cat', 0, 5, 5, 25, 25, 0, 0, 20, 31, 0, 1, 1.14286, 1.5, 20, 5, 0, 0, 0, 2370, 2440, 0, 52, 1, 1150, 1265, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 2, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
-(91928, 8, 18135, 0, 0, 0, 'Alarus', 'Crypt Watcher', 0, 60, 60, 44884, 44884, 50434, 503434, 3791, 14, 0, 1.15, 1.14286, 1.5, 20, 5, 0, 1, 1, 335, 484, 0, 272, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 17145, 16102, 15063, 15043, 161200, 0, 0, 0, '', 0, 1, 0, 0, 3, 0, 0, 0, 8388624, 0, 0, 0, ''),
+(91928, 8, 18135, 0, 0, 0, 'Alarus', 'Crypt Watcher', 0, 60, 60, 44884, 44884, 50434, 503434, 3791, 14, 0, 1.15, 1.14286, 1.5, 20, 5, 0, 1, 1, 335, 484, 0, 272, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 17145, 16102, 15063, 15043, 161200, 0, 0, 0, '', 0, 1, 0, 0, 3, 0, 0, 0, 8388624, 0, 0, 0, 'alarus_crypt_watcher'),
 (91929, 0, 18247, 0, 0, 0, 'Hivaxxis', NULL, 0, 62, 62, 38613, 39156, 0, 0, 3791, 233, 0, 1, 1.14286, 1.6, 20, 5, 0, 1, 1, 528, 681, 0, 272, 1, 2000, 2000, 1, 64, 0, 0, 0, 0, 0, 0, 59.9488, 82.4296, 100, 6, 0, 11551, 0, 0, 0, 0, 0, 0, 0, 0, 16469, 3583, 0, 0, 115510, 0, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 8388624, 0, 0, 0, ''),
 (91930, 0, 18245, 18246, 18248, 0, 'Tomb Creeper', NULL, 0, 60, 60, 5613, 5156, 0, 0, 3791, 233, 0, 1, 1.14286, 1, 20, 5, 0, 1, 1, 528, 681, 0, 272, 1, 2000, 2000, 1, 64, 0, 0, 0, 0, 0, 0, 59.9488, 82.4296, 100, 6, 0, 11551, 0, 0, 0, 0, 0, 0, 0, 0, 16469, 3583, 0, 0, 115510, 0, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 8388624, 0, 0, 0, '');
 
@@ -39,13 +48,14 @@ replace into creature_display_info_addon (display_id) values (18628);
 replace into creature_display_info_addon (display_id) values (18135);
 replace into creature_display_info_addon (display_id) values (18498);
 
+update creature_template set unit_flags = 33554432+512 where entry = 91928;
+
 update creature_template set scale = 2 where entry = 91925;
 update creature_template set scale = 2 where entry = 91928;
 update creature_template set scale = 1.5 where entry = 91926;
 update creature_template set rank = 1, level_min = 61, level_max = 61 where entry between 91910 and 91930;
 update creature_template set detection_range = 30 where entry = 91922;
 
-update creature set spawntimesecsmin = 10800, spawntimesecsmax = 10800 where id between 91910 and 91930;
 
 update creature_template set rank = 3, level_min = 62, level_max = 62 where entry = 91929;
 update creature_template set rank = 3, level_min = 62, level_max = 62 where entry = 91928;
@@ -53,10 +63,14 @@ update creature_template set rank = 3, level_min = 62, level_max = 62 where entr
 update creature_template set rank = 3, level_min = 62, level_max = 62 where entry = 91916;
 update creature_template set rank = 3, level_min = 62, level_max = 62 where entry = 91920;
 
+
+update creature set spawntimesecsmin = 10800, spawntimesecsmax = 10800 where id between 91910 and 91930;
+
 replace into creature_template_addon (entry, bytes1) values (91921, 7);
 replace into creature_template_addon (entry, auras) values (91922, 22650);
 replace into creature_template_addon (entry, auras) values (91923, 20580);
 replace into creature_template_addon (entry, auras) values (91923, 1787);
+replace into creature_template_addon (entry, auras) values (91928, 16380);
 replace into creature_template_addon (entry, bytes1, emote) VALUES (91927, 1, 69);
 
 update creature_template set spell_id1 = 24318, spell_id2 = 8391, spell_id3 = 30113, spell_id4 = 17470 where entry = 91910; -- Ravenous Strigoi
@@ -82,7 +96,11 @@ set @equip_template = 55142; set @weapon_1 = 18520; set @weapon_2 = 51796; set @
 replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
 update creature_template set equipment_id = @equip_template where entry = @creature;
 
--- CF_INTERRUPT_PREVIOUS     = 0x01 | Interrupt any spell casting
+set @equip_template = 55143; set @weapon_1 = 13622; set @weapon_2 = 0; set @creature = 91928;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+-- CF_INTERRUPT_PREVIOUS     = 0x01 | Interrupt any spell casting 
 -- CF_TRIGGERED              = 0x02 | Triggered (this makes spell cost zero mana and have no cast time)
 -- CF_FORCE_CAST             = 0x04 | Forces cast even if creature is out of mana or out of range
 -- CF_MAIN_RANGED_SPELL      = 0x08 | To be used by ranged mobs only. Creature will not chase target until cast fails.
