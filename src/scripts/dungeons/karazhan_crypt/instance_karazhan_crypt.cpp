@@ -190,8 +190,16 @@ CreatureAI* GetAI_tomb_bat(Creature* _Creature) { return new tomb_batAI(_Creatur
 
 bool GOHello_necrotic_rune(Player* pPlayer, GameObject* pGo)
 {
-    pGo->UseDoorOrButton(10800);
-    pPlayer->HandleEmote(EMOTE_ONESHOT_KNEEL);
+    if (!pPlayer->IsInCombat())
+    {
+        pGo->UseDoorOrButton(10800);
+        pPlayer->HandleEmote(EMOTE_ONESHOT_KNEEL);
+    }
+    else
+    {
+        pPlayer->GetSession()->SendNotification("You are in combat.");
+        return false;
+    }
     return true;
 }
 
