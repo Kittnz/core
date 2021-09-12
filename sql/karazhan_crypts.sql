@@ -35,8 +35,17 @@ replace into creature_template values
 (91929, 0, 18247, 0, 0, 0, 'Hivaxxis', NULL, 0, 62, 62, 38613, 39156, 0, 0, 3791, 233, 0, 1, 1.14286, 1.6, 20, 5, 0, 1, 1, 528, 681, 0, 272, 1, 2000, 2000, 1, 64, 0, 0, 0, 0, 0, 0, 59.9488, 82.4296, 100, 6, 0, 11551, 0, 0, 0, 0, 0, 0, 0, 0, 16469, 3583, 0, 0, 115510, 0, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 8388624, 0, 0, 0, ''),
 (91930, 0, 18245, 18246, 18248, 0, 'Tomb Creeper', NULL, 0, 60, 60, 5613, 5156, 0, 0, 3791, 233, 0, 1, 1.14286, 1, 20, 5, 0, 1, 1, 528, 681, 0, 272, 1, 2000, 2000, 1, 64, 0, 0, 0, 0, 0, 0, 59.9488, 82.4296, 100, 6, 0, 11551, 0, 0, 0, 0, 0, 0, 0, 0, 16469, 3583, 0, 0, 115510, 0, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 8388624, 0, 0, 0, '');
 
+replace into creature_display_info_addon (display_id) values (18628);
+replace into creature_display_info_addon (display_id) values (18135);
+replace into creature_display_info_addon (display_id) values (18498);
+
+update creature_template set scale = 2 where entry = 91925;
+update creature_template set scale = 2 where entry = 91928;
+update creature_template set scale = 1.5 where entry = 91926;
+
 replace into creature_template_addon (entry, bytes1) values (91921, 7);
 replace into creature_template_addon (entry, auras) values (91922, 22650);
+replace into creature_template_addon (entry, bytes1, emote) VALUES (91927, 1, 69);
 
 update creature_template set spell_id1 = 24318, spell_id2 = 8391, spell_id3 = 30113, spell_id4 = 17470 where entry = 91910; -- Ravenous Strigoi
 update creature_template set spell_id1 = 15530, spell_id2 = 30094, spell_id3 = 19260, spell_id4 = 21099 where entry = 91911; -- Forgotten Soul
