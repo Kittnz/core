@@ -190,80 +190,53 @@ CreatureAI* GetAI_tomb_bat(Creature* _Creature) { return new tomb_batAI(_Creatur
 
 bool GOHello_necrotic_rune(Player* pPlayer, GameObject* pGo)
 {
-    pGo->UseDoorOrButton();
-    pGo->Despawn();
-    pGo->SetRespawnTime(10800);
+    pGo->UseDoorOrButton(10800);
     pPlayer->HandleEmote(EMOTE_ONESHOT_KNEEL);
     return true;
 }
 
-struct alarus_crypt_watcherAI : public ScriptedAI
+struct trigger_summon_alarusAI : public ScriptedAI
 {
-    alarus_crypt_watcherAI(Creature* c) : ScriptedAI(c) { Reset(); }
+    trigger_summon_alarusAI(Creature* c) : ScriptedAI(c) { Reset(); }
 
-    void Reset()
-    {
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_PASSIVE);
-    }
+    void Reset() {}
     void UpdateAI(const uint32 diff)
     {
-        GameObject* necrotic_rune_1 = me->FindNearestGameObject(177302, 300.0f);
-        GameObject* necrotic_rune_2 = me->FindNearestGameObject(177305, 300.0f);
-        GameObject* necrotic_rune_3 = me->FindNearestGameObject(177306, 300.0f);
-        GameObject* necrotic_rune_4 = me->FindNearestGameObject(177307, 300.0f);
-        GameObject* necrotic_rune_5 = me->FindNearestGameObject(177308, 300.0f);
-        GameObject* necrotic_rune_6 = me->FindNearestGameObject(177309, 300.0f);
+        Creature* alarus_spawned = me->FindNearestCreature(91928, 10.0f);
 
-        GameObject* alarus_spawned = me->FindNearestGameObject(177304, 20.0f);
-
-        if (necrotic_rune_1 &&
-            necrotic_rune_2 &&
-            necrotic_rune_3 &&
-            necrotic_rune_4 &&
-            necrotic_rune_5 &&
-            necrotic_rune_6 && !alarus_spawned)
+        if (!alarus_spawned)
         {
-            if (necrotic_rune_1->GetGoState() == GO_STATE_ACTIVE &&
-                necrotic_rune_2->GetGoState() == GO_STATE_ACTIVE &&
-                necrotic_rune_3->GetGoState() == GO_STATE_ACTIVE &&
-                necrotic_rune_4->GetGoState() == GO_STATE_ACTIVE &&
-                necrotic_rune_5->GetGoState() == GO_STATE_ACTIVE &&
-                necrotic_rune_6->GetGoState() == GO_STATE_ACTIVE)
+            GameObject* necrotic_rune_1 = me->FindNearestGameObject(177302, 300.0f);
+            GameObject* necrotic_rune_2 = me->FindNearestGameObject(177305, 300.0f);
+            GameObject* necrotic_rune_3 = me->FindNearestGameObject(177306, 300.0f);
+            GameObject* necrotic_rune_4 = me->FindNearestGameObject(177307, 300.0f);
+            GameObject* necrotic_rune_5 = me->FindNearestGameObject(177308, 300.0f);
+            GameObject* necrotic_rune_6 = me->FindNearestGameObject(177309, 300.0f);
+
+            if ((necrotic_rune_1 && necrotic_rune_2 && necrotic_rune_3 && necrotic_rune_4 && necrotic_rune_5 && necrotic_rune_6) &&                
+                (necrotic_rune_1->GetGoState() == GO_STATE_ACTIVE) && 
+                (necrotic_rune_2->GetGoState() == GO_STATE_ACTIVE) && 
+                (necrotic_rune_3->GetGoState() == GO_STATE_ACTIVE) && 
+                (necrotic_rune_4->GetGoState() == GO_STATE_ACTIVE) && 
+                (necrotic_rune_5->GetGoState() == GO_STATE_ACTIVE) && 
+                (necrotic_rune_6->GetGoState() == GO_STATE_ACTIVE))
             {
-                m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-                m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
-
-                me->SummonGameObject(177303, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ() - 30.0F, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1800, true); // 30 minutes
-                me->SummonGameObject(177304, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1800, true); // 30 minutes
-
-                m_creature->MonsterYell("It seems words alone aren't enough to deter you. Find me, and meet your untimely end!");
-                m_creature->RemoveAurasDueToSpell(16380); // Remove Invisibility
-
-                if (!m_creature->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE))
-                {
-                    if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim()) return;
-                    DoMeleeAttackIfReady();
-                }
+                me->SummonCreature(91928, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 10800 * IN_MILLISECONDS);
             }
-
         }
-    }
-    void JustDied(Unit*) override
-    {
-        m_creature->SetRespawnTime(10800); // 3 hours
     }
     void JustRespawned() { Reset(); }
 };
 
-CreatureAI* GetAI_alarus_crypt_watcher(Creature* _Creature) { return new alarus_crypt_watcherAI(_Creature); }
+CreatureAI* GetAI_trigger_summon_alarus(Creature* _Creature) { return new trigger_summon_alarusAI(_Creature); }
 
 void AddSC_instance_karazhan_crypt()
 {
     Script* newscript;
 
     newscript = new Script;
-    newscript->Name = "alarus_crypt_watcher";
-    newscript->GetAI = &GetAI_alarus_crypt_watcher;
+    newscript->Name = "trigger_summon_alarus";
+    newscript->GetAI = &GetAI_trigger_summon_alarus;
     newscript->RegisterSelf();
 
     newscript = new Script;

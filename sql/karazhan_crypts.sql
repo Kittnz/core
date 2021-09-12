@@ -16,7 +16,6 @@ replace into gameobject_template values
 (177308, 0, 0, 25891, 'Necrotic Rune', 0, 32, 0.4, 0, 0, 196608, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'necrotic_rune'),
 (177309, 0, 0, 25891, 'Necrotic Rune', 0, 32, 0.4, 0, 0, 196608, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'necrotic_rune');
 
-
 replace into item_template values 
 (51356, 0, 13, 0, 'Karazhan Crypt Key', 'Covered in rust.', 22071, 1, 64, 1, 0, 0, 0, -1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 1, null);
 
@@ -42,13 +41,12 @@ replace into creature_template values
 (91927, 0, 18628, 0, 0, 0, 'Midnight', 'Enkhraz\'s Favorite Cat', 0, 5, 5, 25, 25, 0, 0, 20, 31, 0, 1, 1.14286, 1.5, 20, 5, 0, 0, 0, 2370, 2440, 0, 52, 1, 1150, 1265, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 2, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (91928, 8, 18135, 0, 0, 0, 'Alarus', 'Crypt Watcher', 0, 60, 60, 44884, 44884, 50434, 503434, 3791, 14, 0, 1.15, 1.14286, 1.5, 20, 5, 0, 1, 1, 335, 484, 0, 272, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 17145, 16102, 15063, 15043, 161200, 0, 0, 0, '', 0, 1, 0, 0, 3, 0, 0, 0, 8388624, 0, 0, 0, 'alarus_crypt_watcher'),
 (91929, 0, 18247, 0, 0, 0, 'Hivaxxis', NULL, 0, 62, 62, 38613, 39156, 0, 0, 3791, 233, 0, 1, 1.14286, 1.6, 20, 5, 0, 1, 1, 528, 681, 0, 272, 1, 2000, 2000, 1, 64, 0, 0, 0, 0, 0, 0, 59.9488, 82.4296, 100, 6, 0, 11551, 0, 0, 0, 0, 0, 0, 0, 0, 16469, 3583, 0, 0, 115510, 0, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 8388624, 0, 0, 0, ''),
-(91930, 0, 18245, 18246, 18248, 0, 'Tomb Creeper', NULL, 0, 60, 60, 5613, 5156, 0, 0, 3791, 233, 0, 1, 1.14286, 1, 20, 5, 0, 1, 1, 528, 681, 0, 272, 1, 2000, 2000, 1, 64, 0, 0, 0, 0, 0, 0, 59.9488, 82.4296, 100, 6, 0, 11551, 0, 0, 0, 0, 0, 0, 0, 0, 16469, 3583, 0, 0, 115510, 0, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 8388624, 0, 0, 0, '');
+(91930, 0, 18245, 18246, 18248, 0, 'Tomb Creeper', NULL, 0, 60, 60, 5613, 5156, 0, 0, 3791, 233, 0, 1, 1.14286, 1, 20, 5, 0, 1, 1, 528, 681, 0, 272, 1, 2000, 2000, 1, 64, 0, 0, 0, 0, 0, 0, 59.9488, 82.4296, 100, 6, 0, 11551, 0, 0, 0, 0, 0, 0, 0, 0, 16469, 3583, 0, 0, 115510, 0, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 8388624, 0, 0, 0, ''),
+(91931, 0, 10045, 0, 0, 0, 'Trigger (Summon Alarus)', '', 0, 63, 63, 9999, 9999, 0, 0, 1866, 35, 0, 0.91, 1.14286, 0, 20, 5, 0, 3, 0, 7, 7, 0, 290, 1, 2000, 2200, 1, 4096, 0, 8, 0, 0, 0, 0, 1.76, 2.42, 100, 8, 5242886, 0, 0, 0, 0, 15, 15, 15, 15, 15, 0, 0, 0, 0, 0, 0, 0, 0, 'NullAI', 0, 1, 0, 0, 3, 0, 0, 0, 2147483648, 0, 32898, 0, 'trigger_summon_alarus');
 
 replace into creature_display_info_addon (display_id) values (18628);
 replace into creature_display_info_addon (display_id) values (18135);
 replace into creature_display_info_addon (display_id) values (18498);
-
-update creature_template set unit_flags = 33554432+512 where entry = 91928;
 
 update creature_template set scale = 2 where entry = 91925;
 update creature_template set scale = 2 where entry = 91928;
@@ -70,8 +68,9 @@ replace into creature_template_addon (entry, bytes1) values (91921, 7);
 replace into creature_template_addon (entry, auras) values (91922, 22650);
 replace into creature_template_addon (entry, auras) values (91923, 20580);
 replace into creature_template_addon (entry, auras) values (91923, 1787);
-replace into creature_template_addon (entry, auras) values (91928, 16380);
 replace into creature_template_addon (entry, bytes1, emote) VALUES (91927, 1, 69);
+delete from creature_template_addon where entry = 91928;
+
 
 update creature_template set spell_id1 = 24318, spell_id2 = 8391, spell_id3 = 30113, spell_id4 = 17470 where entry = 91910; -- Ravenous Strigoi
 update creature_template set spell_id1 = 15530, spell_id2 = 30094, spell_id3 = 19260, spell_id4 = 21099 where entry = 91911; -- Forgotten Soul
