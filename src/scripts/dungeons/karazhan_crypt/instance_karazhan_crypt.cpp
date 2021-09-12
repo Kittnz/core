@@ -202,7 +202,7 @@ struct trigger_summon_alarusAI : public ScriptedAI
     void Reset() {}
     void UpdateAI(const uint32 diff)
     {
-        Creature* alarus_spawned = me->FindNearestCreature(91928, 10.0f);
+        GameObject* alarus_spawned = me->FindNearestGameObject(177304, 20.0f);
 
         if (!alarus_spawned)
         {
@@ -221,7 +221,11 @@ struct trigger_summon_alarusAI : public ScriptedAI
                 (necrotic_rune_5->GetGoState() == GO_STATE_ACTIVE) && 
                 (necrotic_rune_6->GetGoState() == GO_STATE_ACTIVE))
             {
-                me->SummonCreature(91928, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 10800 * IN_MILLISECONDS);
+                Creature* alarus = me->SummonCreature(91928, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 10800 * IN_MILLISECONDS);
+                me->SummonGameObject(177304, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1800, true); 
+
+                if (alarus)
+                    alarus->MonsterYell("It seems words alone aren't enough to deter you. Find me, and meet your untimely end!");
             }
         }
     }
@@ -230,9 +234,39 @@ struct trigger_summon_alarusAI : public ScriptedAI
 
 CreatureAI* GetAI_trigger_summon_alarus(Creature* _Creature) { return new trigger_summon_alarusAI(_Creature); }
 
+struct alarus_crypt_watcherAI : public ScriptedAI
+{
+    alarus_crypt_watcherAI(Creature* c) : ScriptedAI(c) { Reset(); }
+
+    void Reset() 
+    {
+
+    }
+    void UpdateAI(const uint32 diff)
+    {
+        
+    }
+    void JustDied(Unit*) override 
+    {
+        m_creature->MonsterSay("Another... corpse... to the pile.");
+    }
+
+    void JustRespawned() 
+    {
+        Reset(); 
+    }
+};
+
+CreatureAI* GetAI_alarus_crypt_watcher(Creature* _Creature) { return new alarus_crypt_watcherAI(_Creature); }
+
 void AddSC_instance_karazhan_crypt()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "alarus_crypt_watcher";
+    newscript->GetAI = &GetAI_alarus_crypt_watcher;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "trigger_summon_alarus";
