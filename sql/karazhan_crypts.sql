@@ -31,7 +31,7 @@ replace into creature_template values
 (91925, 0, 18117, 0, 0, 0, 'Risen Crypt Guard', NULL, 0, 60, 61, 11710, 11754, 2369, 2486, 3152, 233, 0, 0.888888, 1.14286, 0, 20, 5, 0, 1, 1, 465, 798, 0, 278, 1, 2400, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 72.688, 99.946, 100, 6, 0, 11598, 0, 0, 0, 0, 0, 0, 0, 0, 13496, 0, 0, 0, 0, 0, 65, 326, 'EventAI', 1, 1, 0, 0, 3, 55142, 0, 0, 8405008, 0, 0, 0, ''),
 (91926, 0, 18114, 0, 0, 0, 'Rotten Zombie', NULL, 0, 59, 60, 14805, 15260, 0, 0, 3791, 21, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 528, 681, 0, 272, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 59.9488, 82.4296, 100, 6, 0, 10416, 10416, 0, 0, 0, 0, 0, 0, 0, 0, 16866, 0, 0, 104160, 0, 735, 964, 'EventAI', 1, 1, 0, 0, 3, 0, 0, 0, 8388624, 0, 0, 0, ''),
 (91927, 0, 18628, 0, 0, 0, 'Midnight', 'Enkhraz\'s Favorite Cat', 0, 5, 5, 25, 25, 0, 0, 20, 31, 0, 1, 1.14286, 1.5, 20, 5, 0, 0, 0, 2370, 2440, 0, 52, 1, 1150, 1265, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 2, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
-(91928, 8, 18135, 0, 0, 0, 'Alarus', 'Crypt Watcher', 0, 60, 60, 44884, 44884, 2434, 3434, 3791, 14, 0, 1.15, 1.14286, 1.5, 20, 5, 0, 1, 1, 335, 484, 0, 272, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 17145, 16102, 15063, 15043, 161200, 0, 0, 0, '', 0, 1, 0, 0, 3, 0, 0, 0, 8388624, 0, 0, 0, ''),
+(91928, 8, 18135, 0, 0, 0, 'Alarus', 'Crypt Watcher', 0, 60, 60, 44884, 44884, 50434, 503434, 3791, 14, 0, 1.15, 1.14286, 1.5, 20, 5, 0, 1, 1, 335, 484, 0, 272, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 17145, 16102, 15063, 15043, 161200, 0, 0, 0, '', 0, 1, 0, 0, 3, 0, 0, 0, 8388624, 0, 0, 0, ''),
 (91929, 0, 18247, 0, 0, 0, 'Hivaxxis', NULL, 0, 62, 62, 38613, 39156, 0, 0, 3791, 233, 0, 1, 1.14286, 1.6, 20, 5, 0, 1, 1, 528, 681, 0, 272, 1, 2000, 2000, 1, 64, 0, 0, 0, 0, 0, 0, 59.9488, 82.4296, 100, 6, 0, 11551, 0, 0, 0, 0, 0, 0, 0, 0, 16469, 3583, 0, 0, 115510, 0, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 8388624, 0, 0, 0, ''),
 (91930, 0, 18245, 18246, 18248, 0, 'Tomb Creeper', NULL, 0, 60, 60, 5613, 5156, 0, 0, 3791, 233, 0, 1, 1.14286, 1, 20, 5, 0, 1, 1, 528, 681, 0, 272, 1, 2000, 2000, 1, 64, 0, 0, 0, 0, 0, 0, 59.9488, 82.4296, 100, 6, 0, 11551, 0, 0, 0, 0, 0, 0, 0, 0, 16469, 3583, 0, 0, 115510, 0, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 8388624, 0, 0, 0, '');
 
@@ -42,9 +42,21 @@ replace into creature_display_info_addon (display_id) values (18498);
 update creature_template set scale = 2 where entry = 91925;
 update creature_template set scale = 2 where entry = 91928;
 update creature_template set scale = 1.5 where entry = 91926;
+update creature_template set rank = 1, level_min = 61, level_max = 61 where entry between 91910 and 91930;
+update creature_template set detection_range = 30 where entry = 91922;
+
+update creature set spawntimesecsmin = 10800, spawntimesecsmax = 10800 where id between 91910 and 91930;
+
+update creature_template set rank = 3, level_min = 62, level_max = 62 where entry = 91929;
+update creature_template set rank = 3, level_min = 62, level_max = 62 where entry = 91928;
+update creature_template set rank = 3, level_min = 62, level_max = 62 where entry = 91917;
+update creature_template set rank = 3, level_min = 62, level_max = 62 where entry = 91916;
+update creature_template set rank = 3, level_min = 62, level_max = 62 where entry = 91920;
 
 replace into creature_template_addon (entry, bytes1) values (91921, 7);
 replace into creature_template_addon (entry, auras) values (91922, 22650);
+replace into creature_template_addon (entry, auras) values (91923, 20580);
+replace into creature_template_addon (entry, auras) values (91923, 1787);
 replace into creature_template_addon (entry, bytes1, emote) VALUES (91927, 1, 69);
 
 update creature_template set spell_id1 = 24318, spell_id2 = 8391, spell_id3 = 30113, spell_id4 = 17470 where entry = 91910; -- Ravenous Strigoi

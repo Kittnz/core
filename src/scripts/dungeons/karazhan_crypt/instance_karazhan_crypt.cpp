@@ -136,7 +136,7 @@ struct tomb_bat_event_trigger : public GameObjectAI
                     me->SummonGameObject(177301, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1800, true); // 30 minutes
                     pPlayer->PlayDirectMusic(1171);
 
-                    DoAfterTime(pPlayer, 10 * IN_MILLISECONDS, [player = pPlayer]() {
+                    DoAfterTime(pPlayer, 7 * IN_MILLISECONDS, [player = pPlayer]() {
                         Creature* bat = player->FindNearestCreature(91922, 20.0F);
                         if (!bat)
                             player->SummonCreature(91922, -11063.4F, -1795.69F, 56.65F, 3.1F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 150 * IN_MILLISECONDS);
