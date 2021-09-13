@@ -13,7 +13,7 @@ bool GOHello_karazhan_crypt_gate(Player* pPlayer, GameObject* pGo)
 {
     if (pPlayer->HasItemCount(KARAZHAN_CRYPT_KEY, 1))
     {
-        pGo->UseDoorOrButton();
+        pGo->UseDoorOrButton(10);
         pPlayer->HandleEmote(EMOTE_ONESHOT_KNEEL);
 
         if (GameObjectAI* gAI = pGo->AI())
@@ -264,6 +264,11 @@ struct alarus_crypt_watcherAI : public ScriptedAI
     }
     void JustDied(Unit*) override 
     {
+        GameObject* doors = m_creature->FindNearestGameObject(2006634, 100.0f);
+
+        if (doors)
+            doors->UseDoorOrButton(10800);
+
         m_creature->MonsterSay("Another... corpse... to the pile.");
     }
 
@@ -357,9 +362,49 @@ struct skeletal_remainsAI : public ScriptedAI
 
 CreatureAI* GetAI_skeletal_remains(Creature* _Creature) { return new skeletal_remainsAI(_Creature); }
 
+
+struct bonespike_constructAI : public ScriptedAI
+{
+    bonespike_constructAI(Creature* c) : ScriptedAI(c) { Reset(); }
+
+    void Reset()
+    {
+
+    }
+    void UpdateAI(const uint32 diff)
+    {
+
+    }
+    void JustDied(Unit*) override
+    {
+        GameObject* doors = m_creature->FindNearestGameObject(177312, 300.0f);
+
+        if (doors)
+            doors->UseDoorOrButton(10800);
+    }
+
+    void KilledUnit(Unit*) override
+    {
+
+
+    }
+
+    void JustRespawned()
+    {
+        Reset();
+    }
+};
+
+CreatureAI* GetAI_bonespike_construct(Creature* _Creature) { return new bonespike_constructAI(_Creature); }
+
 void AddSC_instance_karazhan_crypt()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "bonespike_construct";
+    newscript->GetAI = &GetAI_bonespike_construct;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "skeletal_remains";
