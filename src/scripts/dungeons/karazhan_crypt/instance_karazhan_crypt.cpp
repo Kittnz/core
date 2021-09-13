@@ -193,6 +193,15 @@ bool GOHello_necrotic_rune(Player* pPlayer, GameObject* pGo)
     {
         pGo->UseDoorOrButton(10800);
         pPlayer->HandleEmote(EMOTE_ONESHOT_KNEEL);
+
+        Creature* alarus_trigger = pGo->FindNearestCreature(91931, 300.0F);
+
+        switch (pGo->GetEntry())
+        {
+        case 177302: alarus_trigger->MonsterYell("Those urns hold the remains of heroes of many good deeds, much better than you adventurer types will ever be."); break;
+        case 177306: alarus_trigger->MonsterYell("Does my words fall on deaf ears? Or are you just doing this out of spite?"); break;
+        case 177308: alarus_trigger->MonsterYell("Is this why you've came here, to defile sacred graves in search of precious baubles?"); break;
+        }
     }
     else
     {
@@ -256,6 +265,11 @@ struct alarus_crypt_watcherAI : public ScriptedAI
     void JustDied(Unit*) override 
     {
         m_creature->MonsterSay("Another... corpse... to the pile.");
+    }
+
+    void KilledUnit(Unit*) override 
+    {
+        m_creature->MonsterSay("Another corpse to the pile!");
     }
 
     void JustRespawned() 
