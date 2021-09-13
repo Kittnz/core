@@ -21,7 +21,7 @@ replace into gameobject_template values
 
 (177312, 0, 0, 3771, 'Tomb of the Unrepetant', 0, 16, 0.78587, 0, 0, 196608, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
 
-update gameobject_template set data2 = 10800 where entry in (177246, 177245, 177312);
+update gameobject_template set data2 = 10800 where entry in (177246, 177245);
 update gameobject set id = 177312 where guid = 4013011;
 
 replace into item_template values 
