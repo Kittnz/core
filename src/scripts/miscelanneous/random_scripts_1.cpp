@@ -6479,6 +6479,21 @@ bool GossipHello_npc_faction_leader(Player* pPlayer, Creature* pCreature)
         }
     }
 
+    if (pPlayer->HasItemCount(60154, 1, false))
+    {
+        if (pCreature->GetEntry() == 7999) // Darnassus
+        {
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Present the Sealed Writ.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        }
+    }
+    if (pPlayer->HasItemCount(60155, 1, false))
+    {
+        if (pCreature->GetEntry() == 1748) // Stormwind
+        {
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Present the Darnassian Endorsement.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        }
+    }
+
     if (pCreature->IsQuestGiver())
         pPlayer->PrepareQuestMenu(pCreature->GetGUID());
 
@@ -6490,97 +6505,190 @@ bool GossipSelect_npc_faction_leader(Player* pPlayer, Creature* pCreature, uint3
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        switch (pCreature->GetEntry())
+        if (pPlayer->GetQuestStatus(80750) == QUEST_STATUS_INCOMPLETE || pPlayer->GetQuestStatus(80800) == QUEST_STATUS_INCOMPLETE)
         {
-        case 1748:
-            pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_PASSIVE);
-            pCreature->MonsterSayToPlayer("So the Quel'dorei wish to formally join the Alliance?", pPlayer);
-            if (pPlayer->HasItemCount(83015, 1, false)) 
-                pPlayer->RemoveItemCurrency(83015, 1);
-            DoAfterTime(pPlayer, 3 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
-                c->MonsterSayToPlayer("I have no objections. During the Second war the high elves were instrumental in beating back the Orcish Horde.", player);
-                c->HandleEmote(EMOTE_ONESHOT_TALK);
-                });
-            DoAfterTime(pPlayer, 6 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
-                c->MonsterSayToPlayer("Also the refugees have done a lot for the Alliance, it would be remiss of me to reject their aid.", player);
-                c->HandleEmote(EMOTE_ONESHOT_TALK);
-                });
-            DoAfterTime(pPlayer, 10 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
-                c->MonsterSayToPlayer("After all, Lady Prestor has lobbied hard for military aid being sent abroad to help them.", player);
-                c->HandleEmote(EMOTE_ONESHOT_TALK);
-                });
-            DoAfterTime(pPlayer, 15 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
-                c->MonsterSayToPlayer("Please take my reply to Alah'thalas.", player);
-                c->HandleEmote(EMOTE_ONESHOT_YES);
-                player->AddItem(83016, 1);
-                c->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-                c->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-                });
-            break;
-        case 7999:
-            pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_PASSIVE);
-            pCreature->MonsterSayToPlayer("Ten thousand years ago, the Highborne first summoned the Legion to this world.", pPlayer);
-            if (pPlayer->HasItemCount(83015, 1, false))
-                pPlayer->RemoveItemCurrency(83015, 1);
-            DoAfterTime(pPlayer, 3 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
-                c->MonsterSayToPlayer("Some defected long after their atrocities, we took pity and welcome them in our fold, only for them to betray us and unleashing a magical storm on Ashenvale itself.", player);
-                c->HandleEmote(EMOTE_ONESHOT_TALK);
-                });
-            DoAfterTime(pPlayer, 6 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
-                c->MonsterSayToPlayer("Then they spread their blatant use of magic to the humans, and were responsible for attracting the attention of the Legion once more. ", player);
-                c->HandleEmote(EMOTE_ONESHOT_TALK);
-                });
-            DoAfterTime(pPlayer, 10 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
-                c->MonsterSayToPlayer("We night elves firmly reject the Quel'dorei from the Alliance. Their actions would only doom us once more.", player);
-                c->HandleEmote(EMOTE_ONESHOT_TALK);
-                });
-            DoAfterTime(pPlayer, 15 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
-                c->MonsterSayToPlayer("The answer of the Kaldorei stands firm. You may deliver this reply to your masters.", player);
-                c->HandleEmote(EMOTE_ONESHOT_NO);
-                player->AddItem(83018, 1);
-                c->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-                c->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-                });
-            break;
-        case 4949:
-            pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_PASSIVE);
-            pCreature->MonsterSayToPlayer("Ogrim told me stories about the Forest Trolls, how he trampled on Khaz Modan with them and brought fear to the Alliance.", pPlayer);
-            if (pPlayer->HasItemCount(83020, 1, false))
-                pPlayer->RemoveItemCurrency(83020, 1);
-            DoAfterTime(pPlayer, 6 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
-                c->MonsterSayToPlayer("I wasn’t always on the same page with the old orc but in truth from what I know these trolls will be an asset to the Horde and our redemption for the betrayal they faced at the borders of Quel’thalas.", player);
-                c->HandleEmote(EMOTE_ONESHOT_TALK);
-                });
-            DoAfterTime(pPlayer, 12 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
-                c->MonsterSayToPlayer("Take my respond to Amani’Alor and tell them they are welcomed in our ranks with Lok’tar Ogar.", player);
-                c->HandleEmote(EMOTE_ONESHOT_YES);
-                player->AddItem(83021, 1);
-                c->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-                c->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-                });
-            break;
-        case 10540:
-            pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_PASSIVE);
-            pCreature->MonsterSayToPlayer("Da trolls were at one time just one people, no matter da tribe they cared and respected each other.", pPlayer);
-            if (pPlayer->HasItemCount(83020, 1, false))
-                pPlayer->RemoveItemCurrency(83020, 1);
-            DoAfterTime(pPlayer, 3 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
-                c->MonsterSayToPlayer("We are not dat close anymore, not as we used to.", player);
-                c->HandleEmote(EMOTE_ONESHOT_TALK);
-                });
-            DoAfterTime(pPlayer, 6 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
-                c->MonsterSayToPlayer("Da Darkspear holds no remorse to old Zul’jin’s people. We welcome them as brothers in arms and wish they will find a home under our banner.", player);
-                c->HandleEmote(EMOTE_ONESHOT_TALK);
-                });
-            DoAfterTime(pPlayer, 10 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
-                c->MonsterSayToPlayer("May da Loa be with us in war and peace.", player);
-                c->HandleEmote(EMOTE_ONESHOT_YES);
-                player->AddItem(83023, 1);
-                c->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-                c->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-                });
-            break;
+            switch (pCreature->GetEntry())
+            {
+            case 1748:
+                pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_PASSIVE);
+                pCreature->MonsterSayToPlayer("So the Quel'dorei wish to formally join the Alliance?", pPlayer);
+                if (pPlayer->HasItemCount(83015, 1, false))
+                    pPlayer->RemoveItemCurrency(83015, 1);
+                DoAfterTime(pPlayer, 3 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
+                    c->MonsterSayToPlayer("I have no objections. During the Second war the high elves were instrumental in beating back the Orcish Horde.", player);
+                    c->HandleEmote(EMOTE_ONESHOT_TALK);
+                    });
+                DoAfterTime(pPlayer, 6 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
+                    c->MonsterSayToPlayer("Also the refugees have done a lot for the Alliance, it would be remiss of me to reject their aid.", player);
+                    c->HandleEmote(EMOTE_ONESHOT_TALK);
+                    });
+                DoAfterTime(pPlayer, 10 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
+                    c->MonsterSayToPlayer("After all, Lady Prestor has lobbied hard for military aid being sent abroad to help them.", player);
+                    c->HandleEmote(EMOTE_ONESHOT_TALK);
+                    });
+                DoAfterTime(pPlayer, 15 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
+                    c->MonsterSayToPlayer("Please take my reply to Alah'thalas.", player);
+                    c->HandleEmote(EMOTE_ONESHOT_YES);
+                    player->AddItem(83016, 1);
+                    c->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                    c->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                    });
+                break;
+            case 7999:
+                pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_PASSIVE);
+                pCreature->MonsterSayToPlayer("Ten thousand years ago, the Highborne first summoned the Legion to this world.", pPlayer);
+                if (pPlayer->HasItemCount(83015, 1, false))
+                    pPlayer->RemoveItemCurrency(83015, 1);
+                DoAfterTime(pPlayer, 3 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
+                    c->MonsterSayToPlayer("Some defected long after their atrocities, we took pity and welcome them in our fold, only for them to betray us and unleashing a magical storm on Ashenvale itself.", player);
+                    c->HandleEmote(EMOTE_ONESHOT_TALK);
+                    });
+                DoAfterTime(pPlayer, 6 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
+                    c->MonsterSayToPlayer("Then they spread their blatant use of magic to the humans, and were responsible for attracting the attention of the Legion once more. ", player);
+                    c->HandleEmote(EMOTE_ONESHOT_TALK);
+                    });
+                DoAfterTime(pPlayer, 10 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
+                    c->MonsterSayToPlayer("We night elves firmly reject the Quel'dorei from the Alliance. Their actions would only doom us once more.", player);
+                    c->HandleEmote(EMOTE_ONESHOT_TALK);
+                    });
+                DoAfterTime(pPlayer, 15 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
+                    c->MonsterSayToPlayer("The answer of the Kaldorei stands firm. You may deliver this reply to your masters.", player);
+                    c->HandleEmote(EMOTE_ONESHOT_NO);
+                    player->AddItem(83018, 1);
+                    c->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                    c->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                    });
+                break;
+            case 4949:
+                pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_PASSIVE);
+                pCreature->MonsterSayToPlayer("Ogrim told me stories about the Forest Trolls, how he trampled on Khaz Modan with them and brought fear to the Alliance.", pPlayer);
+                if (pPlayer->HasItemCount(83020, 1, false))
+                    pPlayer->RemoveItemCurrency(83020, 1);
+                DoAfterTime(pPlayer, 6 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
+                    c->MonsterSayToPlayer("I wasn’t always on the same page with the old orc but in truth from what I know these trolls will be an asset to the Horde and our redemption for the betrayal they faced at the borders of Quel’thalas.", player);
+                    c->HandleEmote(EMOTE_ONESHOT_TALK);
+                    });
+                DoAfterTime(pPlayer, 12 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
+                    c->MonsterSayToPlayer("Take my respond to Amani’Alor and tell them they are welcomed in our ranks with Lok’tar Ogar.", player);
+                    c->HandleEmote(EMOTE_ONESHOT_YES);
+                    player->AddItem(83021, 1);
+                    c->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                    c->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                    });
+                break;
+            case 10540:
+                pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_PASSIVE);
+                pCreature->MonsterSayToPlayer("Da trolls were at one time just one people, no matter da tribe they cared and respected each other.", pPlayer);
+                if (pPlayer->HasItemCount(83020, 1, false))
+                    pPlayer->RemoveItemCurrency(83020, 1);
+                DoAfterTime(pPlayer, 3 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
+                    c->MonsterSayToPlayer("We are not dat close anymore, not as we used to.", player);
+                    c->HandleEmote(EMOTE_ONESHOT_TALK);
+                    });
+                DoAfterTime(pPlayer, 6 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
+                    c->MonsterSayToPlayer("Da Darkspear holds no remorse to old Zul’jin’s people. We welcome them as brothers in arms and wish they will find a home under our banner.", player);
+                    c->HandleEmote(EMOTE_ONESHOT_TALK);
+                    });
+                DoAfterTime(pPlayer, 10 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
+                    c->MonsterSayToPlayer("May da Loa be with us in war and peace.", player);
+                    c->HandleEmote(EMOTE_ONESHOT_YES);
+                    player->AddItem(83023, 1);
+                    c->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                    c->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                    });
+                break;
+            }
         }
+
+        if (pPlayer->GetQuestStatus(40058) == QUEST_STATUS_INCOMPLETE)
+        {
+            switch (pCreature->GetEntry())
+            {
+            case 7999: // Darnassus
+                pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_PASSIVE);
+
+                if (pPlayer->HasItemCount(60154, 1, false))
+                    pPlayer->RemoveItemCurrency(60154, 1);
+                DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
+                    c->MonsterSayToPlayer("Can this be? The elusive Felstar is finally no more? I am impressed, but if you think that changes my opinion of the Quel'dorei you are sorely mistaken.", player);
+                    c->HandleEmote(EMOTE_ONESHOT_TALK);
+                    });
+                DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
+                    c->MonsterSayToPlayer("They continue to wield the dangerous Arcane, and they have much to answer for. However, they have risked their life for my people, and have defeated an enemy that has sought the destruction of our home.", player);
+                    c->HandleEmote(EMOTE_ONESHOT_TALK);
+                    });
+                DoAfterTime(pPlayer, 9 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
+                    c->MonsterSayToPlayer("Their ancestors once lived among us until their wanton betrayal and exile. This will not change, their people remain barred from settling around Mount Hyjal.", player);
+                    c->HandleEmote(EMOTE_ONESHOT_TALK);
+                    });
+                DoAfterTime(pPlayer, 13 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
+                    c->MonsterSayToPlayer("But it would be remiss of me to not show any gratitude. I hereby withdraw my opposition to the ascension into the Alliance. If the only leaders can keep them on a leash, I will desist.", player);
+                    c->HandleEmote(EMOTE_ONESHOT_TALK);
+                    });
+                DoAfterTime(pPlayer, 17 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
+                    c->MonsterSayToPlayer("Please take this Endorsement to Bolvar Fordragon in Stormwind. I am sure the news of this will spread quickly.", player);
+                    c->HandleEmote(EMOTE_ONESHOT_TALK);
+                    player->AddItem(60155, 1);
+                    if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60315))
+                        player->KilledMonster(cInfo, ObjectGuid());
+                    c->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                    c->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                    });
+                break;
+
+            case 1748: // Stormwind
+                pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_PASSIVE);
+                if (pPlayer->HasItemCount(60155, 1, false))
+                    pPlayer->RemoveItemCurrency(60155, 1);
+                DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+                    npc->MonsterSayToPlayer("Then there is consent. With the Darnassian Endorsement, the Alliance has agreed for the Quel'dorei of Alah'thalas to formally join the Alliance.", player);
+                    npc->HandleEmote(EMOTE_ONESHOT_TALK);
+                    });
+                DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+                    npc->SummonCreature(80877, -8442.24F, 334.17F, 122.57F, 5.35F, TEMPSUMMON_TIMED_DESPAWN, 32 * IN_MILLISECONDS);
+                    });
+                DoAfterTime(pPlayer, 8 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+                    if (Creature* anduin = player->FindNearestCreature(1747, 30.0F))
+                    {
+                        anduin->MonsterSayToPlayer("Vereesa Windrunner, do your pledge your people to join us? My father was always proud of how the Alliance looks out for each other. Every race will do their outmost to help one another, that is the essence of the Alliance.", player);
+                        anduin->HandleEmote(EMOTE_ONESHOT_TALK);
+                    }
+                    });
+                DoAfterTime(pPlayer, 14 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+                    if (Creature* vereesa = player->FindNearestCreature(80877, 30.0F))
+                    {
+                        vereesa->MonsterSayToPlayer("I understand. My people joined the Alliance before to repay a debt, and then for justice. We never fully committed to the ideals of the Alliance, we were too arrogant.", player);
+                        vereesa->HandleEmote(EMOTE_ONESHOT_TALK);
+                    }
+                    });
+                DoAfterTime(pPlayer, 20 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+                    if (Creature* vereesa = player->FindNearestCreature(80877, 30.0F))
+                    {
+                        vereesa->MonsterSayToPlayer("However, those Quel'dorei are no more, that Quel'thalas is no more. Our arrogance and isolation became our undoing. I will not repeat that mistake. Our people have survived thanks to the Alliance and to those who have aided us. Of course we will commit to the Alliance and all it's races, even the Kaldorei.", player);
+                        vereesa->HandleEmote(EMOTE_ONESHOT_TALK);
+                    }
+                    });
+                DoAfterTime(pPlayer, 26 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+                    npc->MonsterSayToPlayer("Well spoken. Then let it be known, that the Quel'dorei of Alah'thalas are hereby fully fledged members of the Grand Alliance!", player);
+                    npc->HandleEmote(EMOTE_ONESHOT_APPLAUD);
+                    });
+                DoAfterTime(pPlayer, 31 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+                    if (Creature* vereesa = player->FindNearestCreature(80877, 30.0F))
+                    {
+                        vereesa->MonsterSayToPlayer("I am honored, and on behalf of my people I thank you all. I must return to Alah'thalas.", player);
+                        vereesa->HandleEmote(EMOTE_ONESHOT_BOW);
+                    }
+                    });
+                DoAfterTime(pPlayer, 37 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
+                    if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60316))
+                        player->KilledMonster(cInfo, ObjectGuid());
+                    c->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                    c->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                    });
+                break;
+            }
+        }
+
     }
     pPlayer->CLOSE_GOSSIP_MENU();
     return true;
