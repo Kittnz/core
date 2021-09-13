@@ -105,7 +105,6 @@ struct karazhan_crypt_portal : public GameObjectAI
 
 GameObjectAI* GetAI_karazhan_crypt_portal(GameObject* gameobject) { return new karazhan_crypt_portal(gameobject); }
 
-
 struct tomb_bat_event_trigger : public GameObjectAI
 {
     explicit tomb_bat_event_trigger(GameObject* pGo) : GameObjectAI(pGo)
@@ -267,9 +266,96 @@ struct alarus_crypt_watcherAI : public ScriptedAI
 
 CreatureAI* GetAI_alarus_crypt_watcher(Creature* _Creature) { return new alarus_crypt_watcherAI(_Creature); }
 
+struct skeletal_remains_trigger : public GameObjectAI
+{
+    explicit skeletal_remains_trigger(GameObject* pGo) : GameObjectAI(pGo)
+    {
+        m_uiJustUsedTimer = 1;
+        m_uiUpdateTimer = 1000;
+    }
+
+    uint32 m_uiJustUsedTimer;
+    uint32 m_uiUpdateTimer;
+
+    void UpdateAI(uint32 const uiDiff) override
+    {
+        if (m_uiUpdateTimer < uiDiff)
+        {
+            GameObject* remains_activated = me->FindNearestGameObject(177311, 10.0f);
+
+            if (!remains_activated)
+            {
+                std::list<Player*> players;
+                MaNGOS::AnyPlayerInObjectRangeCheck check(me, 15.0f);
+                MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
+
+                Cell::VisitWorldObjects(me, searcher, 15.0f);
+
+                for (Player* pPlayer : players)
+                {
+                    me->SummonGameObject(177311, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1800, true); // 30 minutes
+                    pPlayer->PlayDirectMusic(335);
+
+                }
+                m_uiUpdateTimer = 2500;
+            }
+        }
+        else
+            m_uiUpdateTimer -= uiDiff;
+    }
+};
+
+GameObjectAI* GetAI_skeletal_remains_trigger(GameObject* gameobject) { return new skeletal_remains_trigger(gameobject); }
+
+struct skeletal_remainsAI : public ScriptedAI
+{
+    skeletal_remainsAI(Creature* c) : ScriptedAI(c) { Reset(); }
+
+    void Reset()
+    {
+        m_creature->SetFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_DEAD | UNIT_DYNFLAG_TAPPED);
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+        m_creature->SetStandState(UNIT_STAND_STATE_DEAD);
+    }
+    void UpdateAI(const uint32 diff)
+    {
+        GameObject* remains_activated = me->FindNearestGameObject(177311, 30.0f);
+
+        if (remains_activated)
+        {
+            m_creature->RemoveFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_DEAD | UNIT_DYNFLAG_TAPPED);
+            m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+            m_creature->SetStandState(UNIT_STAND_STATE_STAND);
+
+            if (!m_creature->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE))
+            {
+                if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim()) return;
+                DoMeleeAttackIfReady();
+            }
+        }
+    }
+    void JustDied(Unit*) override
+    {
+        m_creature->SetRespawnTime(1800); // 30 minutes
+    }
+    void JustRespawned() { Reset(); }
+};
+
+CreatureAI* GetAI_skeletal_remains(Creature* _Creature) { return new skeletal_remainsAI(_Creature); }
+
 void AddSC_instance_karazhan_crypt()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "skeletal_remains";
+    newscript->GetAI = &GetAI_skeletal_remains;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "skeletal_remains_trigger";
+    newscript->GOGetAI = &GetAI_skeletal_remains_trigger;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "alarus_crypt_watcher";
