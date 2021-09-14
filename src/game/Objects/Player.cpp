@@ -445,7 +445,7 @@ UpdateMask Player::updateVisualBits;
 Player::Player(WorldSession *session) : Unit(),
     m_mover(this), m_camera(this), m_reputationMgr(this),
     m_currentTicketCounter(0), m_castingSpell(0),
-    m_honorMgr(this), m_bNextRelocationsIgnored(0), m_standStateTimer(0), m_newStandState(MAX_UNIT_STAND_STATE), m_foodEmoteTimer(0)
+    m_honorMgr(this), m_bNextRelocationsIgnored(0), m_standStateTimer(0), m_newStandState(MAX_UNIT_STAND_STATE), m_foodEmoteTimer(0), _collectionMgr(new CollectionMgr(this))
 {
     m_objectType |= TYPEMASK_PLAYER;
     m_objectTypeId = TYPEID_PLAYER;
@@ -647,6 +647,8 @@ Player::~Player()
     RemoveAI();
     CleanupsBeforeDelete();
 
+    delete _collectionMgr; _collectionMgr = nullptr;
+
     // Note: buy back item already deleted from DB when player was saved
     for (const auto& item : m_items)
         delete item;
@@ -792,6 +794,7 @@ bool Player::Create(uint32 guidlow, std::string const& name, uint8 race, uint8 c
     InitTalentForLevel();
     InitPrimaryProfessions(); // to max set before any spell added
     m_reputationMgr.LoadFromDB(nullptr);
+    _collectionMgr->LoadFromDB(nullptr);
 
     // apply original stats mods before spell loading or item equipment that call before equip _RemoveStatsMods()
     UpdateMaxHealth();                                      // Update max Health (for add bonus from stamina)
@@ -10552,9 +10555,9 @@ Item* Player::_StoreItem(uint16 pos, Item *pItem, uint32 count, bool clone, bool
 
 		// Turtle specific - set binding for all items with BIND_ACCOUNT
 		if (proto->Bonding == BIND_ACCOUNT)
-		{
 			pItem->ApplyModFlag(ITEM_FIELD_FLAGS, ITEM_DYNFLAG_BOA, true);
-		}
+
+        //AddTransmog(proto->ItemId);
 
         if (bag == INVENTORY_SLOT_BAG_0)
         {
@@ -15139,6 +15142,8 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
     // must be before inventory (some items required reputation check)
     m_reputationMgr.LoadFromDB(holder->GetResult(PLAYER_LOGIN_QUERY_LOADREPUTATION));
 
+    _collectionMgr->LoadFromDB(holder->GetResult(PLAYER_LOGIN_QUERY_LOADTRANSMOGS));
+
     bool has_epic_mount = false; // Needed for riding skill replacement in patch 1.12.
     _LoadInventory(holder->GetResult(PLAYER_LOGIN_QUERY_LOADINVENTORY), time_diff, has_epic_mount);
     _LoadItemLoot(holder->GetResult(PLAYER_LOGIN_QUERY_LOADITEMLOOT));
@@ -16530,6 +16535,7 @@ void Player::SaveToDB(bool online, bool force)
     _SaveSkills();
     m_reputationMgr.SaveToDB();
     m_honorMgr.Save();
+    _collectionMgr->SaveToDB();
 
     // Systeme de phasing
     sObjectMgr.SetPlayerWorldMask(GetGUIDLow(), GetWorldMask());
@@ -22945,5 +22951,14 @@ bool Player::ActivateTalentSpec(int primaryOrSecondary)
 	SaveToDB();
 
 	return true;
+}
+
+void Player::AddTransmog(uint32 itemId)
+{
+    if (_collectionMgr)
+    {
+        if (_collectionMgr->CanAddTransmog(itemId))
+            _collectionMgr->AddTransmog(itemId);
+    }
 }
 
