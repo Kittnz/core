@@ -42,6 +42,7 @@
 #include "SharedDefines.h"
 #include "SpellMgr.h"
 #include "HonorMgr.h"
+#include "CollectionMgr.h"
 
 #include <string>
 #include <vector>
@@ -588,6 +589,7 @@ enum PlayerLoginQueryIndex
     PLAYER_LOGIN_QUERY_LOADQUESTSTATUS,
     PLAYER_LOGIN_QUERY_LOADHONORCP,
     PLAYER_LOGIN_QUERY_LOADREPUTATION,
+    PLAYER_LOGIN_QUERY_LOADTRANSMOGS,
     PLAYER_LOGIN_QUERY_LOADINVENTORY,
     PLAYER_LOGIN_QUERY_LOADITEMLOOT,
     PLAYER_LOGIN_QUERY_LOADACTIONS,
@@ -2559,6 +2561,13 @@ class Player final: public Unit
 			bool ActivateTalentSpec(int primaryOrSecondary);
 			bool SaveTalentSpec(int primaryOrSecondary);
 		// Xerron Dual Spec End
+
+        // Tanatos Transmog
+        public:
+            void AddTransmog(uint32 itemId);
+        private:
+            CollectionMgr* _collectionMgr;
+        // Tanatos Transmog End
 
 };
 
