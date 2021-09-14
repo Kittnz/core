@@ -21,6 +21,7 @@ set (game_SRCS
     AutoBroadCastMgr.cpp
     Camera.cpp
     Conditions.cpp
+    CollectionMgr.cpp
     CreatureGroups.cpp
     DailyQuestHandler.cpp
     GameEventMgr.cpp
@@ -203,6 +204,7 @@ set (game_SRCS
     AuraRemovalMgr.h
     AutoBroadCastMgr.h
     Camera.h
+    CollectionMgr.h
     Conditions.h
     CreatureGroups.h
     Formulas.h
