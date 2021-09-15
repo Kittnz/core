@@ -75,3 +75,24 @@ replace into item_template values
  '0', '0', '1800000', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '4', '1', '0', '0', '0', '0', '0', '0', '0', '29', '0', '0', '0',
  '0', '1', NULL);
+
+--An Azure Scale for Gnomeregan!--
+delete from quest_template where entry = 40062;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4, type) values (40041,40062,2,16,55,40,0,0,'An Azure Scale for Gnomeregan!','When we were first sent here we were tasked to obtain an Azure Scale from the Blue Dragonflight, sadly, we have not had the means to do so! We\'ve been to busy with other projects, and well, didn\'t want to stir the hive. Especially since we don\'t have any actual military capabilities.\n\nNow with you around though, there is a possibility! To the north west is Lake Mennar, the Dragonflight has gathered around there for. Something. Get me an Azure Scale from the Blue Dragonflight, and make sure to bring buddies, I\'d hate to have you die on my account!','Gather an Azure Scale for Blimo Gadgetspring.','So, have you tackled the Dragonflight yet?','Dragon\'s sure can be imposing, I under-... Wait, you actually got it? Wow, that\'s incredible! I\'m shocked you managed to do this, thanks again, we\'ve been needing this since we first came here.',60158,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,25000,6500,54,250,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1);
+
+replace into creature_questrelation (id, quest) values (12957, 40062);
+replace into creature_involvedrelation (id, quest) values (12957, 40062);
+
+delete from item_template where entry = 60158;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values (60158,22641,'Azure Scale',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+delete from creature_loot_template where entry = 6130 and item = 60158;
+replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values (6130,60158,-8,1,1,0,10);
+
+delete from creature_loot_template where entry = 6131 and item = 60158;
+replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values (6131,60158,-10,1,1,0,10);
+
+delete from creature_loot_template where entry = 6129 and item = 60158;
+replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values (6129,60158,-14,1,1,0,10);
+
+update creature_template set npc_flags = 7 where entry = 12957;
