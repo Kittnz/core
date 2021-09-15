@@ -378,10 +378,152 @@ bool GossipSelect_npc_bessy(Player* pPlayer, Creature* pCreature, uint32 /*uiSen
     return true;
 }
 
+bool GossipHello_npc_vestia_moonspear(Player* pPlayer, Creature* pCreature)
+{
+    if (pPlayer->GetQuestStatus(40060) == QUEST_STATUS_INCOMPLETE && pPlayer->HasItemCount(60156, 1, false))
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Ashylah Starcaller has sent me with this missive.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->SEND_GOSSIP_MENU(61001, pCreature->GetGUID());
+    }
+    return true;
+}
+
+bool GossipSelect_npc_vestia_moonspear(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+        pCreature->MonsterSay("What you ask is quite difficult. But there may be away. As you may know by now, the waters of a Moonwell is sacred to us. It contains the pure power of our Goddess Elune, but also a small fragment of water from the original Well of Eternity. Obviously losing a Well like this or having it corrupted would be a great sacrilege to us.Unfortunately, this has happened.A Twin set of moonwell exist outside Eldra'thalas. You may know it better as Dire Maul. The larger well remain sanctified, while the smaller well has been defiledand corrupted by the Ogres. They have defecatedand urinated in the sacred waters.");
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "That's terrible! What can I do to help?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->SEND_GOSSIP_MENU(7878, pCreature->GetGUID());
+    }
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
+    {
+        pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+        pCreature->MonsterSay("If you help me cleanse the Moonwell and bring retribution to the Ogres, then we may take some of the water. I will present your case to the High Priestess herself. Under the supervision of the Sisterhoodand the Sentinels, I do not see why we could not try to guide some of the Quel'dorei back in the warm embrace of the goddess. Even if they choose to reject the Goddess, proximity to the water should eventually help them wean off from their ailment. It may take thousands of years however. Remember that the Quel'dorei lived with us for over two thousand years, and that was not enough for them to cease their use of magic. However, the modern Quel'dorei are a different people from our wayward kin. Either way, that is my offer.");
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I see, It appears that I have no choice. I will help.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+        pPlayer->SEND_GOSSIP_MENU(7878, pCreature->GetGUID());
+    }
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
+    {
+        pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+        pCreature->MonsterSay("Splendid! Then meet me by the Well and be prepared, this will not be an easy task. Should you fail and we have to retreat, I will be ready to attempt this once more. I will place a bowl of sacred water by the well, when you are there I will arrive. The cleansing will draw the attention of the brutes, so do not hesitate to fight! If they injure me, the cleansing will also fail, keep me safe!May Elune guide us.");
+        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60317))
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+        pPlayer->RemoveItemCurrency(60156, 1);
+        pPlayer->CLOSE_GOSSIP_MENU();
+    }
+    return true;
+}
+
+bool GOHello_go_sacred_water(Player* pPlayer, GameObject* pGo)
+{
+    if (pGo->GetEntry() == 2010815)
+    {
+        if (pPlayer->GetQuestStatus(40060) == QUEST_STATUS_INCOMPLETE)
+        {
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Use Bowl of Sacred Water.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            pPlayer->SEND_GOSSIP_MENU(100304, pGo->GetGUID());
+        }
+    }
+    return true;
+}
+
+bool GOSelect_go_sacred_water(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 action)
+{
+    if (action == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        if (pGo->GetEntry() == 2010815)
+        {
+            DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, gob = pGo]() {
+                gob->SummonCreature(7878, -4496.34F, 1281.63F, 127.91F, 4.25F, TEMPSUMMON_TIMED_DESPAWN, 180 * IN_MILLISECONDS);
+                gob->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_NO_INTERACT);
+                });
+            DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [player = pPlayer, gob = pGo]() {
+                if (Creature* vestia = player->FindNearestCreature(7878, 30.0F))
+                {
+                    vestia->SetWalk(true);
+                    vestia->GetMotionMaster()->MovePoint(0, -4505.66F, 1265.37F, 127.57F);
+                    vestia->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                }
+                });
+            DoAfterTime(pPlayer, 13 * IN_MILLISECONDS, [player = pPlayer, gob = pGo]() {
+                if (Creature* vestia = player->FindNearestCreature(7878, 30.0F))
+                {
+                    vestia->CastSpell(vestia, 23017, false); // Arcane Channeling
+                    vestia->MonsterSayToPlayer("This is it, keep me safe!", player);
+                }
+                });
+            DoAfterTime(pPlayer, 15 * IN_MILLISECONDS, [player = pPlayer, gob = pGo]() {
+                gob->SummonCreature(60430, -4496.34F, 1281.63F, 127.91F, 4.25F, TEMPSUMMON_TIMED_DESPAWN, 5 * MINUTE * IN_MILLISECONDS);
+                });
+            DoAfterTime(pPlayer, 30 * IN_MILLISECONDS, [player = pPlayer, gob = pGo]() {
+                gob->SummonCreature(60430, -4496.34F, 1281.63F, 127.91F, 4.25F, TEMPSUMMON_TIMED_DESPAWN, 5 * MINUTE * IN_MILLISECONDS);
+                });
+            DoAfterTime(pPlayer, 31 * IN_MILLISECONDS, [player = pPlayer, gob = pGo]() {
+                if (Creature* vestia = player->FindNearestCreature(7878, 30.0F))
+                {
+                    vestia->CastSpell(vestia, 23017, false); // Arcane Channeling
+                    vestia->MonsterSayToPlayer("Mother moon, I call upon you to restore this sacred water, our negligence caused this defilement to happen and we humbly beg your giveness.", player);
+                }
+                });
+            DoAfterTime(pPlayer, 45 * IN_MILLISECONDS, [player = pPlayer, gob = pGo]() {
+                gob->SummonCreature(60430, -4496.34F, 1281.63F, 127.91F, 4.25F, TEMPSUMMON_TIMED_DESPAWN, 5 * MINUTE * IN_MILLISECONDS);
+                });
+            DoAfterTime(pPlayer, 46 * IN_MILLISECONDS, [player = pPlayer, gob = pGo]() {
+                if (Creature* vestia = player->FindNearestCreature(7878, 30.0F))
+                {
+                    vestia->CastSpell(vestia, 23017, false); // Arcane Channeling
+                    vestia->MonsterSayToPlayer("Bless us with the light of the moon and restore these waters to their former glory so that your love can be shared even to our wayward kin!", player);
+                }
+                });
+            DoAfterTime(pPlayer, 60 * IN_MILLISECONDS, [player = pPlayer, gob = pGo]() {
+                gob->SummonCreature(60431, -4496.34F, 1281.63F, 127.91F, 4.25F, TEMPSUMMON_TIMED_DESPAWN, 5 * MINUTE * IN_MILLISECONDS);
+                if (Creature* tuwhak = player->FindNearestCreature(60431, 30.0F))
+                {
+                    tuwhak->MonsterYell("Tu'whak smack tiny people! Leave Tu'whak toilet alone!");
+                }
+                });
+            DoAfterTime(pPlayer, 100 * IN_MILLISECONDS, [player = pPlayer, gob = pGo]() {
+                if (Creature* vestia = player->FindNearestCreature(7878, 30.0F))
+                {
+                    vestia->CastSpell(vestia, 1449, false);
+                }
+                });
+            DoAfterTime(pPlayer, 103 * IN_MILLISECONDS, [player = pPlayer, gob = pGo]() {
+                if (Creature* vestia = player->FindNearestCreature(7878, 30.0F))
+                {
+                    vestia->HandleEmote(EMOTE_ONESHOT_KNEEL);
+                    vestia->MonsterSayToPlayer("It is done. Please travel to Darnassus and speak to the High Priestess. I have something I must finish here, then I will catch up to you.", player);
+                    vestia->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                    if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60318))
+                        player->KilledMonster(cInfo, ObjectGuid());
+                }
+                });
+            DoAfterTime(pPlayer, 180 * IN_MILLISECONDS, [player = pPlayer, gob = pGo]() {
+                gob->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_NO_INTERACT);
+                });
+        }
+    }
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return false;
+}
 
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "go_sacred_water";
+    newscript->pGOHello = &GOHello_go_sacred_water;
+    newscript->pGOGossipSelect = &GOSelect_go_sacred_water;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_vestia_moonspear";
+    newscript->pGossipHello = &GossipHello_npc_vestia_moonspear;
+    newscript->pGossipSelect = &GossipSelect_npc_vestia_moonspear;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_bessy";
