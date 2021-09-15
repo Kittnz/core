@@ -24,6 +24,12 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 replace into creature_questrelation (id, quest) values (91768, 40057);
 replace into creature_involvedrelation (id, quest) values (91768, 40057);
 
+delete from creature_template where entry = 60433;
+REPLACE INTO `creature_template` VALUES (60433, 0, 11265, 0, 0, 0, 'Laszan', NULL, 0, 53, 53, 3188, 3188, 0, 0, 3190, 74, 0, 1.1, 1.14286, 2.3, 20, 5, 0, 0, 1, 93, 115, 0, 244, 1, 2000, 2000, 1, 32768, 0, 0, 0, 0, 0, 0, 69.696, 95.832, 100, 7, 0, 60433, 7885, 0, 0, 0, 0, 0, 0, 0, 11564, 0, 0, 0, 0, 0, 116, 157, '', 0, 3, 0, 0, 3, 4948, 0, 0, 0, 0, 0, 0, '');
+
+delete from creature_loot_template where entry = 60433 and item = 60151;
+replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values (60433,60151,-100,1,1,0,10);
+
 delete from item_template where entry = 60151;
 replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values (60151,7841,'Tinkerspark Transponder',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
 
