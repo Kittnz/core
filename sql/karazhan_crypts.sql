@@ -85,6 +85,12 @@ update creature_template set spell_id1 = 7713, spell_id2 = 16838, spell_id3 = 16
 update creature_template set spell_id1 = 16555, spell_id2 = 12097, spell_id3 = 16460, spell_id4 = 0 where entry = 91914; -- Undead Frenzy
 update creature_template set spell_id1 = 13877, spell_id2 = 18941, spell_id3 = 29306, spell_id4 = 0 where entry = 91915; -- Cursed Blades
 
+update creature_template set faction = 14, loot_id = 10394, gold_min = 377, gold_max = 920 where entry between 91910 and 91930;
+
+update creature_template set loot_id = 0 where entry = 91927;
+update creature_template set loot_id = 0 where entry = 91921;
+update creature_template set loot_id = 0 where entry = 91922;
+
 set @equip_template = 55139; set @weapon_1 = 7717; set @weapon_2 = 0; set @creature = 91912;
 replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
 update creature_template set equipment_id = @equip_template where entry = @creature;
