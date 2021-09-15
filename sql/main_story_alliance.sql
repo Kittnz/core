@@ -82,6 +82,7 @@ replace into creature (id, map, position_x, position_y, position_z, orientation,
 delete from quest_template where entry = 40058;
 replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1,objectivetext2) values (40050,40058,2,2040,30,25,0,0,'Thalassian Ascension','Dra\'lox Felstar has long caused pain and suffering to our people. Your actions may be able to sway the High Priestess. Please take this writ to the Temple of the Moon and present it to the High Priestess. I cannot let you take the horns to such a sacred place.','Present the Sealed Writ to Tyrande Whispermind and the Darnassian Endorsement to Bolvar Fordragon and then return to Vereesa Windrunner.','What news do you bring?','Then it is done. Our people are part of the Alliance once more. We are no longer mere refugees living off scrap but equals. We still have a long journey ahead of us, but the first step has been done. I will call upon again once the time is right. May the sun guide you.',0,0,0,0,0,0,0,0,60315,1,60316,1,0,0,0,0,60154,1,10000,1228,269,250,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,269,9000,'Deliver the Sealed Writ','Deliver the Darnassian Endorsement');
 
+
 replace into creature_questrelation (id, quest) values (80242, 40058);
 replace into creature_involvedrelation (id, quest) values (80877, 40058);
 
@@ -104,3 +105,41 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 
 replace into creature_questrelation (id, quest) values (80877, 40059);
 replace into creature_involvedrelation (id, quest) values (80242, 40059);
+
+--A quest for the Moonwell--
+delete from quest_template where entry = 40060;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1,objectivetext2) values (40059,40060,2,357,50,45,0,0,'A quest for the Moonwell','A Moonwell is something we sentinels protect with everything we have. I symphatize with the Quel\'dorei\'s plight, but I would never betray my people and turn over the sacred waters to the Quel\'dorei.\n\nPerhaps there is another way, if they have no intention of using the water, then perhaps should you prove your worth to the Priesthood they would be willing to educate the Quel\'dorei on the goddess and erect a small well within Alah\'thalas. A well was erected in Stormwind after all, so it is not unfeasible.\n\nTravel to the Feathermoon Stronghold in Feralas and speak to Vestia Moonspear, she may be the only priestess sympatetic to your cause. Give this Missive to her and pay attention to what she has to say!','Travel to Feralas and deliver the Missive to Vestia Moonspear. Help Vestia cleanse the Moonwell outside Dire Maul.','It is you again $r. What brings you here?','It is taking all my wisdom and patience to not remove you for even suggesting that we hand over some of our sacred waters to the children of the Highborne! I hope you come bringing more than words.',0,0,0,0,0,0,0,0,60317,1,60318,1,0,0,0,0,60156,1,4281,578,269,250,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,269,21000,'Deliver the Missive to Vestia Moonspear','Help Vestia cleanse the Moonwell outside Dire Maul');
+
+
+replace into creature_questrelation (id, quest) values (80242, 40060);
+replace into creature_involvedrelation (id, quest) values (7999, 40060);
+
+delete from creature_template where entry = 60317;
+replace into creature_template (entry, name, display_id1) values (60317, 'quest_40060_dummy_triger', 328);
+
+delete from creature_template where entry = 60318;
+replace into creature_template (entry, name, display_id1) values (60318, 'quest_40060_dummy_triger', 328);
+
+update creature_template set script_name = 'npc_vestia_moonspear' where entry = 7878;
+update creature_template set npc_flags = 3 where entry = 7878;
+
+delete from gameobject_template where entry = 2010815;
+replace into gameobject_template (entry, type, displayid, size, name, flags, script_name) values (2010815, 2, 6913, 0.2, 'Bowl of Sacred Water', 32, 'go_sacred_water');
+
+delete from creature_template where entry = 60430;
+REPLACE INTO `creature_template` VALUES (60430, 0, 11533, 0, 0, 0, 'Furious Ogre', NULL, 0, 48, 48, 1800, 1800, 0, 0, 2780, 45, 0, 1.6, 1.14286, 0, 20, 5, 0, 0, 1, 78, 96, 0, 208, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 5238, 5238, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 52380, 0, 86, 118, '', 1, 3, 0, 0, 3, 5238, 0, 0, 0, 0, 0, 0, '');
+
+delete from creature_template where entry = 60431;
+REPLACE INTO `creature_template` VALUES (60431, 0, 11561, 0, 0, 0, 'Tu\'whak', NULL, 0, 50, 50, 2800, 2800, 0, 0, 2835, 45, 0, 1.6, 1.14286, 0, 20, 5, 0, 0, 1, 79, 99, 0, 212, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 62.8672, 86.4424, 100, 7, 0, 5241, 5241, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 52410, 0, 89, 121, '', 1, 3, 0, 0, 3, 5241, 0, 0, 0, 0, 0, 0, '');
+
+delete from item_template where entry = 60156;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values (60156,3022,'Missive to Vestia Moonspear',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+set @gossip_menu_id = 61001; set @magic_number = 7878; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Greetings to you traveler.'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+delete from creature where guid = 51009;
+delete from creature where guid = 51077;
