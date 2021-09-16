@@ -168,4 +168,5 @@ delete from item_template where entry = 81167;
 
 -- Deleted to prevent abuse by sending a link to playesr ^
 
-update item_template set name = 'Over-Engineered Rifle' where entry = 51794;
+update item_template set name = 'Otherwordly Rifle', description = '' where entry = 51794;
+update item_template set name = 'Otherwordly Blade' where name = 'Void-Linked Blade';
