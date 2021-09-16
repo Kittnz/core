@@ -22,11 +22,11 @@
 #include "Common.h"
 #include "SharedDefines.h"
 #include "Platform/Define.h"
-#include "Policies/Singleton.h"
 
 typedef std::vector<uint32> TransmogContainer;
 
 class Player;
+class QueryResult;
 
 class CollectionMgr
 {
