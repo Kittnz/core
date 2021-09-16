@@ -30,6 +30,7 @@
 #include "MassMailMgr.h"
 #include "SpellMgr.h"
 #include "Policies/SingletonImp.h"
+#include "Player.h"
 
 CollectionMgr::CollectionMgr(Player* owner) : _owner(owner)
 {
