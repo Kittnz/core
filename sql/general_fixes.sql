@@ -1,3 +1,15 @@
+update creature_template set display_id1 = 18647 where entry = 49002;
+update creature_template set display_id1 = 18668 where entry = 91781;
+update creature_template set display_id1 = 18669 where entry = 91768;
+update creature_template set display_id1 = 18670 where entry = 91237;
+update creature_template set display_id1 = 18648 where entry = 49009;
+
+replace into creature_display_info_addon (display_id) values (18647);
+replace into creature_display_info_addon (display_id) values (18668);
+replace into creature_display_info_addon (display_id) values (18669);
+replace into creature_display_info_addon (display_id) values (18670);
+replace into creature_display_info_addon (display_id) values (18648);
+
 replace into item_template values
  ('83060', '0', '2', '5', 'Carved Ragetotem', 'The fury of the tauren people.', '61042', '3', '0', '1', '324363', '64531', '17', '-1', '-1', '62',
  '59', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '10', '3', '10',
