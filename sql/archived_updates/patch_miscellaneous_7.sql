@@ -21,23 +21,23 @@ replace into page_text (entry, text, next_page) value (3456,'Transfering supplie
 -- Duchess Grelda (91711)
 -- Greetings Line: Go on, I'm listening.
 -- Aggro Line: Sadly, you came all this way only to die.
---------------------------------------------------------
+-- ------------------------------------------------------
 -- Duke Nargelas (91712)
 -- Greetings Line: This better not be a waste of time.
 -- Aggro Line: Get your filthy hands off of me!
---------------------------------------------------------
+-- ------------------------------------------------------
 -- Apothecary Volgrin (91713)
 -- Greetings Line: Are you here to assist me $c?
---------------------------------------------------------
+-- ------------------------------------------------------
 -- Norga (91720)
 -- Greetings Line: What can Norga do for you $r?
---------------------------------------------------------
+-- ------------------------------------------------------
 -- Bounty Hunter Knox (91749)
 -- Greetings Line: Make it quick $c, I'm rather busy.
---------------------------------------------------------
+-- ------------------------------------------------------
 -- Gorck (91973)
 -- Greetings Line: Strenght and Honor $r, what do you need?
---------------------------------------------------------
+-- ------------------------------------------------------
 -- Apothecary Villa (91750)
 -- Greetings Line: Have you come to serve the Dark Lady?
 
