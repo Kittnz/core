@@ -3213,7 +3213,7 @@ bool GossipSelect_npc_flying_mount(Player* p_Player, Creature* p_Creature, uint3
             p_Player->UpdateSpeed(MOVE_SWIM, false, 6.0F);
         }
         else
-            p_Player->PMonsterEmote("Gryphon clearly looks hungry and frustrated. Perhaps a handful of famous Dwarven Mild could do some good?", nullptr, false);
+            p_Player->PMonsterEmote("The gryphon recognizes you and doesn't seem to be satisfied. Perhaps a handful of famous Dwarven Mild could do some good?", nullptr, false);
     }
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 2 || uiAction == GOSSIP_ACTION_INFO_DEF + 3 || uiAction == GOSSIP_ACTION_INFO_DEF + 4)
     {

@@ -147,3 +147,25 @@ REPLACE INTO `creature_template` VALUES (50060, 0, 16361, 0, 0, 0, 'Turtlhu', NU
 UPDATE `item_template` SET `stat_type2`='0', `stat_value2`='0' WHERE (`entry`='12636') AND (`patch`='0');
 
 update item_template set bonding = 1 where entry in (80699, 50000, 50611);
+
+-- Grammar fixes:
+
+REPLACE INTO `quest_template` VALUES (60145, 0, 2, 9, 1, 60, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 15, 0, 0, 0, 0, 0, 0, 'Down in the Ridge', 'Kill Snufflesnout, then report back to Marshal McBride in Northshire Abbey.', 'We also got reports of a kobold much larger than the others, hiding deep in the Echo Ridge. Even its mere existence poses a threat to the abbey.\n\nGo down into the Echo Ridge and kill it. You will be justly rewarded.', 'Even though your journey has just began, you\'re already accomplishing great things. Choose one, you\'ve earned it.', 'I assume you killed the beast?', '', '', '', '', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 51600, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 51875, 51876, 51877, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 72, 0, 0, 0, 0, 100, 0, 0, 0, 0, 333, 0, 200, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+
+REPLACE INTO `quest_template` VALUES (60070, 0, 2, 1519, 6, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Matter of Trust', 'Trust is something you can\'t buy, $R.\n\nHere\'s the deal, lad. You earn the trust of this gryphon over here and you\'ll get your ride to the camp. Fail and he\'ll have you as his breakfast.\n\nHah! Of course I\'m pulling your leg here, lad. This winged beast won\'t even nudge unless it trust you completely.\n\nHow, you ask? Food, of course. And a toy. Go figure.', 'Bring 10 Chunks of Boar Meat, 3 Dwarven Mild Cheese and 1 Chew Toy to Kelton\'s Riding Gryphon in the Goldshire.', 'The gryphon looks excited sniffing air about you sensing treats and almost chirping with joy at the sight of his Chew Toy you are holding. His pupils expand immensily. He looks happy!', 'The gryphon recognizes you and doesn\'t seem to be satisfied with all his cawing and disturbed jabbering.\n\nHe clearly looks hungry and frustrated. Perhaps a handful of famous Dwarven Mild could do some good?', '', '', '', '', '', 769, 422, 51751, 0, 5, 3, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 750, 0, 450, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+
+update broadcast_text set male_text = 'The gryphon looks at you with a curious gaze, clearly not ready for any flight. Perhaps feeding him a Chunk of Boar Meat is a good idea, since there are some leftovers around.\n\nMost likely that stray chew toy is something this gryphon is attached to and will trust you if he gets one?' where entry = 90366;
+
+update item_template set name = 'Threshadon Trophy' where entry = 70034;
+
+REPLACE INTO `quest_template` VALUES (60041, 0, 2, 12, 6, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -60040, 0, 0, 0, 0, 0, 0, 'The Pumpkin Thieves', 'This is outrageous! The nerve! First, they only sneak around and startle your herds. Then they sneak into your barn. And what\'s next?! Rob our houses? Kill us all in out sleep?! What do you think the guards do with this situation, hm? NOTHING!\n\nThese gnolls are getting bolder with each week and we need our fields protected! Guards are of no help here, unfortunately for us, but I see you have some of that bristling force in your sights. Perhaps you\'ll be able to help me and in the end help yourself too!\n\nLast I\'ve seen these mongrels fly away toward Goldshire. Doubt guards will be of any help on this matter. Perhaps someone at the Eastvale Logging Camp could help with our trouble… Ask folks at the camp!\n\nI tell you, these gnolls have stolen my pumpkins! Of course, they have no idea how to cook besides crudely charring anything with camp fire from time to time.\n\nThey have no idea what you could make out of our sweet pumpkins! Barbarians!', 'Bring back 15 Elwynn Pumpkins to Gramma Stonefield.', 'By the Light!\n\nMy dear child, you have no idea what you have truly done for us all here on our farm!\n\nSaving is the least I\'d say. You have my deepest gratitude and respect, $N!', 'Oh, tell me you have managed to find my harvest!\n\nAt least 15 of my sweet pumpkins?', '', 'Speak to Terry Palin', NULL, '', '', 51325, 0, 0, 0, 15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 51299, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 51330, 51332, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 833, 0, 500, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 2, 0, 0, 2, 4, 0, 0, 0, 0);
+
+delete from npc_vendor where item = 80099;
+delete from npc_vendor where item = 81167;
+
+delete from item_template where entry = 80099;
+delete from item_template where entry = 81167;
+
+-- Deleted to prevent abuse by sending a link to playesr ^
+
+update item_template set name = 'Over-Engineered Rifle' where entry = 51794;
