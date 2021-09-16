@@ -310,6 +310,8 @@ bool ItemUseSpell_skin_changer(Player* pPlayer, Item* pItem, const SpellCastTarg
             case 50105: if (!male) bytes = 10; break; // Human: Scarlet Inquisitor
             case 50106:            bytes = 11; break; // Human: Scholomance Student
             case 81210:            bytes = 12; break; // Human: Death Knight
+            case 83091: if (male) bytes = static_cast<uint8>(irand(13, 15)); else bytes = 13; break;  // Human: Necrotic Corruption
+            case 83090: if (male) bytes = 16; else bytes = static_cast<uint8>(irand(12, 14)); break;  // Human: Wizardly Attire
             }
             break;
         case RACE_DWARF:
@@ -359,6 +361,12 @@ bool ItemUseSpell_skin_changer(Player* pPlayer, Item* pItem, const SpellCastTarg
             switch (item_entry)
             {
             case 81228: if (male) bytes = 19; break; // Tauren: Spirit Walker
+            }
+            break;
+        case RACE_NIGHTELF:
+            switch (item_entry)
+            {
+            case 83092: if (male) bytes = static_cast<uint8>(irand(13, 15)); else bytes = static_cast<uint8>(irand(9, 10)); break; // Night Elf: Cenraion Cirle
             }
             break;
     }

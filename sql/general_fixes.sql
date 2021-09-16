@@ -260,3 +260,5 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
+ 
+ update item_template set spellid_1 = 12244, script_name = 'item_skin_change', buy_price = 95000, sell_price = 23750 where entry in (83090, 83091, 83092);
