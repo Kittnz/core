@@ -26,6 +26,8 @@
 
 typedef std::vector<uint32> TransmogContainer;
 
+class Player;
+
 class CollectionMgr
 {
     public:
