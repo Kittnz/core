@@ -10,6 +10,8 @@ replace into creature_display_info_addon (display_id) values (18669);
 replace into creature_display_info_addon (display_id) values (18670);
 replace into creature_display_info_addon (display_id) values (18648);
 
+update item_template set name = 'Rethress Myrmidon Trident' where entry = 60138;
+
 replace into item_template values
  ('83060', '0', '2', '5', 'Carved Ragetotem', 'The fury of the tauren people.', '61042', '3', '0', '1', '324363', '64531', '17', '-1', '-1', '62',
  '59', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '10', '3', '10',

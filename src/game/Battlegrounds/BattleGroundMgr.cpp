@@ -485,7 +485,7 @@ void BattleGroundQueue::FillPlayersToBG(BattleGround* bg, BattleGroundBracketId 
     int8 bg_differential = 0; // default differential between Horde & Alliance
 
     if (bg->GetTypeID() == BATTLEGROUND_AV)
-        bg_differential = 3;    // custom differential between Horde & Alliance for Alterac Valley
+        bg_differential = 0;    // custom differential between Horde & Alliance for Alterac Valley
 
 
     //iterator for iterating through bg queue
