@@ -468,6 +468,12 @@ bool ItemUseSpell_item_illusion(Player* pPlayer, Item* pItem, const SpellCastTar
 {
     if (!pPlayer) return false;
 
+    if (pPlayer->InBattleGround())
+    {
+        pPlayer->GetSession()->SendNotification("Can't use this item on the battleground.", pPlayer->GetLevel());
+        return false;
+    }
+
     if (pPlayer->GetNativeDisplayId() != pPlayer->GetDisplayId()) 
     {
         pPlayer->DeMorph();
