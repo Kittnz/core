@@ -148,3 +148,20 @@ replace into gameobject_template values
 
 delete from gameobject_loot_template where entry = 2010816;
 replace into gameobject_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values (2010816,60160,-100,1,1,0,10);
+
+-- The Turbo-Charged Wobblefree Fizz-disk --
+delete from quest_template where entry = 40065;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4, type) values (40041,40065,2,16,54,40,0,0,'The Turbo-Charged Wobblefree Fizz-disk','Now that Gigno has vouched for you I\'d like to get some real work done around here! The Turbo-Charged Wobblefree Fizz-disk is an invention I made, and did a lot of work for reading magic and ley-levels within Azshara. We had a good thing going, for a while, until all of the naga and the murlocs showed up months ago!\n\nWe were driven from our site, and I had to abandon the Fizz-disk or I would have certainly lost my life prying it free. I want you to go and get it back for me, so that I can continue my work and not have to start over, this was something I was cooking up in Gnomeregan, and a lot of my plans are still back there.\n\nTo the east is where the Rethress Naga have taken sanctuary, if you head north of the Sanctum,there is a canyon that is somewhat maze-like. Within that Canyon is where the cave is located, and in that cave, a control panel. Search the inside of the control panel for the Turbo-Charged Wobblefree Fizz-disk.','Retrieve the Turbo-Charged Wobblefree Fizz-disk for Fendo Wobblefizz at Flaxwhisker Front.','Have you found our old work site, have you reclaimed the Turbo-Charged Wobblefree Fizz-disk?!','Wonderous! Oh by my name you\'ve done a great job in getting this back. I was getting myself mentally prepared for having to work for another few months to get this thing back.\n\nOh... My, it seems to have taken some damage...',60162,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5500,54,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+replace into creature_questrelation (id, quest) values (91770, 40065);
+replace into creature_involvedrelation (id, quest) values (91770, 40065);
+
+delete from item_template where entry = 60162;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values (60162,1221,'Turbo-Charged Wobblefree Fizz-disk',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'Turbo Charged, and Wobble Free',0);
+
+delete from gameobject_template where entry = 2010817;
+replace into gameobject_template values
+(2010817, 0, 3, 23886, 'Site Control Panel', 0, 4, 1, 43, 2010817, 0, 32, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+delete from gameobject_loot_template where entry = 2010817;
+replace into gameobject_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values (2010817,60162,-100,1,1,0,10);
