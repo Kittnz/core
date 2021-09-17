@@ -189,3 +189,37 @@ replace into gameobject_template values
 
 delete from gameobject_loot_template where entry = 2010818;
 replace into gameobject_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values (2010818,60163,-100,1,1,0,10);
+
+-- Wobblefree Fizz-gear --
+delete from quest_template where entry = 40068;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4, type, objectivetext1) values (40067,40068,2,16,54,40,0,0,'Wobblefree Fizz-gear','Now that I have everything required, I\'m going to get to work! I will utilize the Turbo-Charged Wobblefree Fizz-disk and incorporate it into a few items. This will take a little bit, so don\'t be too hasty, when I\'m done you can choose which one you would like most!','Wait for Fendo to finish his work.','Hmm, yes?','There, done! I appreciate all that you\'ve done, honestly, you\ve been a huge help to me around here. Without the Turbo-charged Wobblefree Fizz-disk I would be back in the stone ages! Here, pick which one you like more, for all the troubles.',0,0,0,0,0,0,0,0,60319,1,0,0,0,0,0,0,0,0,0,1000,54,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60164,1,60165,1,0,0,0,0,0,'Fendo has finished his work');
+
+replace into creature_questrelation (id, quest) values (91770, 40068);
+replace into creature_involvedrelation (id, quest) values (91770, 40068);
+
+delete from creature_template where entry = 60319;
+replace into creature_template (entry, name, display_id1) values (60319, 'quest_40067_dummy_triger', 328);
+
+delete from item_template where entry = 60164;
+replace into item_template values
+ ('60164', '0', '4', '0', 'Turbo-Charged Fizz-Ring', '', '9837', '2', '0', '1', '80448', '20112', '11', '-1', '-1', '59',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '8', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '9396', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '4', '1', '0', '0', '0', '0', '0', '0', '0', '29', '0', '0', '0',
+ '0', '1', NULL);
+
+delete from item_template where entry = 60165;
+replace into item_template values
+ ('60165', '0', '2', '3', 'Wobblefree Fizz-rifle', '', '8257', '2', '0', '1', '122680', '30670', '26', '-1', '-1', '60',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '5', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '2600', '0',
+ '0', '61', '87', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '1', '1', '0', '0', '65', '0', '0', '0', '0', '29', '0', '0', '0',
+ '0', '1', NULL);
+ 
+update creature_template set script_name = 'npc_wendo_wobblefizz' where entry = 91770;
