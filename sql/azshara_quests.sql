@@ -172,3 +172,20 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 
 replace into creature_questrelation (id, quest) values (91770, 40066);
 replace into creature_involvedrelation (id, quest) values (91770, 40066);
+
+-- Fendo\'s Spanner --
+delete from quest_template where entry = 40067;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4, type) values (40066,40067,2,16,54,40,0,0,'Fendo\'s Spanner','Thanks for getting it all, now I can get to work... Where is my...\n\n<Fendo begins to look around>.\n\nHuh, I don\'t have my spanner on me, can you look inside? If anything it should be on the second floor, in my toolbox, once I have it, I\'ll get started.','Find Fendo Wobblefizz\'s Spanner.','Any luck? I\'m still looking around, but I can\'t find it.','That\'s it! I knew it would be on the second floor, now lets get started!',60163,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,400,54,25,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+replace into creature_questrelation (id, quest) values (91770, 40067);
+replace into creature_involvedrelation (id, quest) values (91770, 40067);
+
+delete from item_template where entry = 60163;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values (60163,7494,'Fendo\'s Spanner',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+delete from gameobject_template where entry = 2010818;
+replace into gameobject_template values
+(2010818, 0, 3, 23790, 'Fendo\'s Toolbox', 0, 4, 1, 43, 2010818, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+delete from gameobject_loot_template where entry = 2010818;
+replace into gameobject_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values (2010818,60163,-100,1,1,0,10);
