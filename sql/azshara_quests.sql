@@ -120,3 +120,31 @@ delete from creature_loot_template where entry = 6371 and item = 60159;
 replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values (6371,60159,-18,1,1,0,10);
 
 update creature_template set npc_flags = 7 where entry = 8678;
+
+-- The Gyronautical Compass --
+delete from quest_template where entry = 40064;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4, type) values (40063,40064,2,16,53,40,0,0,'The Gyronautical Compass','A few days back this human ship was passing through, it didn\'t seem like anything weird, aside from a boat being all the way out here. That was until fire started upon the deck, and all manner of chaos seemed to erupt. The ship was attacked by naga and murloc both!\n\nIt was dragged down, and the crew seemed to escape somewhere along the coast to the east of here. I\'d imagine the boat is still resting somewhere along the bottom of the sea, and I want you to go through the wreckage! If the crew knew any gnomes, or used any gnomish tools, then there is a very high chance that they had a Gyronautical Compass!\n\nI feel bad for the dead - surely, but it would help us quite a bit if we had such a device! Search the ship and its wreckage, it sank to the south east.','Search the wreckage for a Gyronautical Compass.','Have you found the boat?','Splendid! So there really was one, this is going to help a bunch around here, thanks again for everything you\ve done. As a thanks, take this, we can do without it.',60160,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6000,54,200,0,0,0,0,0,0,0,0,0,60161,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+replace into creature_questrelation (id, quest) values (8678, 40064);
+replace into creature_involvedrelation (id, quest) values (8678, 40064);
+
+delete from item_template where entry = 60160;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values (60160,1270,'Gyronautical Compass',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'Looks very complicated',0);
+
+delete from item_template where entry = 60161;
+replace into item_template values
+ ('60161', '0', '4', '1', 'Flaxwhisker Sash', '', '27614', '2', '0', '1', '33664', '8416', '6', '-1', '-1', '59',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '20', '6', '6',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '43', '0', '0', '0',
+ '0', '0', '0', '21592', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '1', '0', '0', '25', '0', '0', '0', '0', '29', '0', '0', '0',
+ '0', '1', NULL);
+
+delete from gameobject_template where entry = 2010816;
+replace into gameobject_template values
+(2010816, 0, 3, 23434, 'Sunken Locker', 0, 4, 1, 43, 2010816, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+delete from gameobject_loot_template where entry = 2010816;
+replace into gameobject_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values (2010816,60160,-100,1,1,0,10);
