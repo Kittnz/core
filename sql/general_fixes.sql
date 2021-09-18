@@ -12,28 +12,29 @@ replace into creature_template values
 (92008, 7, 18661, 0, 0, 0, 'Stablemaster Yannis', 'Kul Tiras', 0, 35, 35, 1052, 1052, 0, 0, 8401, 994, 84, 1, 1.14286, 0, 20, 5, 0, 0, 1, 227, 290, 0, 272, 1, 2000, 2000, 1, 32768, 0, 0, 0, 0, 0, 0, 83.6, 107.3, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 2, 0, ''),
 (92009, 0, 18657, 0, 0, 0, 'Sailor Patterson', 'Kul Tiras', 0, 52, 52, 2179, 2979, 5013, 5013, 1506, 84, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 8, 4096, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 11616, 0, 0, 0, 0, 524290, 0, ''),
 (92010, 0, 18655, 0, 0, 0, 'Sailor Larson', 'Kul Tiras', 0, 52, 52, 2179, 2979, 5013, 5013, 1506, 84, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 8, 4096, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 11616, 0, 0, 0, 0, 524290, 0, ''),
-(92011, 0, 18659, 0, 0, 0, 'Valdarion Smite', 'Boxing Champion', 3821, 50, 50, 4379, 4979, 0, 0, 1506, 84, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 8, 4096, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 11616, 0, 0, 0, 0, 524290, 0, ''),
+(92011, 0, 18659, 0, 0, 0, 'Valdarion Smite', 'Boxing Champion', 3821, 50, 50, 4379, 4979, 0, 0, 1506, 84, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 8, 4096, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 11616, 0, 0, 0, 0, 524290, 0, '');
 
 -- NPCS FOR SORROWGUARD
-
+replace into creature_template values
 (92012, 0, 18662, 0, 0, 0, 'Watch Sergeant Arthur', 'Sorrowguard', 0, 52, 52, 3092, 3292, 0, 0, 3190, 123, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 92, 120, 0, 244, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 69.8544, 96.0498, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, 0, ''),
 (92013, 0, 18663, 0, 0, 0, 'Watchman Banal', 'Sorrowguard', 0, 52, 52, 3092, 3292, 0, 0, 3190, 123, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 92, 120, 0, 244, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 69.8544, 96.0498, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, 0, ''),
 (92014, 0, 18664, 0, 0, 0, 'Watchman Damion', 'Sorrowguard', 0, 50, 50, 3092, 3292, 0, 0, 3190, 123, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 92, 120, 0, 244, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 69.8544, 96.0498, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, 0, ''),
 (92015, 0, 18665, 0, 0, 0, 'Watchman Hanson', 'Sorrowguard', 0, 50, 50, 3092, 3292, 0, 0, 3190, 123, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 92, 120, 0, 244, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 69.8544, 96.0498, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, 0, ''),
 (92016, 0, 18667, 0, 0, 0, 'Watchman Tyrial', 'Sorrowguard', 0, 50, 50, 3092, 3292, 0, 0, 3190, 123, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 92, 120, 0, 244, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 69.8544, 96.0498, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, 0, ''),
 (92017, 1, 18666, 0, 0, 0, 'Watch Paladin Janathos', 'Sorrowguard', 0, 60, 60, 39072, 39072, 2434, 2434, 3791, 12, 3, 1, 1.14286, 0, 20, 5, 0, 1, 1, 528, 681, 0, 272, 1, 2000, 2000, 2, 4096, 0, 0, 0, 0, 0, 0, 62.016, 85.272, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524290, 0, ''),
-(92018, 0, 10625, 0, 0, 0, 'Sir Areyntall', '', 0, 30, 30, 1468, 1468, 0, 0, 1427, 12, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 51, 66, 0, 140, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 52.272, 71.874, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 1, 0, 3, 2711, 0, 0, 0, 0, 524298, 0, '');
+(92018, 0, 10625, 0, 0, 0, 'Sir Areyntall', '', 0, 30, 30, 1468, 1468, 0, 0, 1427, 12, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 51, 66, 0, 140, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 52.272, 71.874, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 1, 0, 3, 2711, 0, 0, 0, 0, 524298, 0, ''),
 (92019, 0, 3448, 0, 0, 0, 'Janet Hollowworth', 'Blacksmith', 0, 40, 40, 2672, 2672, 0, 0, 2916, 123, 16390, 1, 1.14286, 0, 20, 5, 0, 0, 1, 81, 105, 0, 220, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 65.5424, 90.1208, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, 0, ''),
-(92020, 0, 1511, 0, 0, 0, 'Howard Gray', 'Trade Supplies', 0, 35, 35, 1052, 1252, 0, 0, 1890, 12, 6, 1, 1.14286, 0, 20, 5, 0, 0, 1, 61, 78, 0, 156, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 56.672, 77.924, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 2381, 0, 0, 0, 0, 524298, 0, '');
-(92021, 0, 1492, 0, 0, 0, 'Lucas', 'Cobbler', 0, 40, 40 1536, 1536, 0, 0, 1340, 12, 6, 1, 1.14286, 0, 20, 5, 0, 0, 1, 55, 70, 0, 144, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 53.3984, 73.4228, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 1, 0, 3, 2816, 0, 0, 0, 0, 524298, 0, ''),
 (92022, 0, 8186, 0, 0, 0, '\'Sly\' Fredwall', 'Mushroom Seller', 0, 25, 25, 712, 712, 0, 0, 1009, 12, 4, 1, 1.14286, 0, 20, 5, 0, 0, 1, 31, 40, 0, 106, 1, 1000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 38.72, 53.24, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, 0, ''),
+(92020, 0, 1511, 0, 0, 0, 'Howard Gray', 'Trade Supplies', 0, 35, 35, 1052, 1252, 0, 0, 1890, 12, 6, 1, 1.14286, 0, 20, 5, 0, 0, 1, 61, 78, 0, 156, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 56.672, 77.924, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 2381, 0, 0, 0, 0, 524298, 0, ''),
+(92021, 0, 1492, 0, 0, 0, 'Lucas', 'Cobbler', 0, 40, 40, 1536, 1536, 0, 0, 1340, 12, 6, 1, 1.14286, 0, 20, 5, 0, 0, 1, 55, 70, 0, 144, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 53.3984, 73.4228, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 1, 0, 3, 2816, 0, 0, 0, 0, 524298, 0, ''),
 (92023, 0, 1748, 0, 0, 0, 'Quartermaster Davin', 'Sorrowguard', 0, 40, 40, 3092, 3292, 0, 0, 3190, 123, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 92, 120, 0, 244, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 69.8544, 96.0498, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, 0, ''),
-
+(92024, 0, 18690, 0, 0, 0, 'Dag\'grak Bloodfist', NULL, 0, 58, 58, 21592, 21592, 0, 0, 3327, 29, 2, 1.1, 0.9, 0, 20, 5, 0, 1, 1, 328, 421, 0, 254, 1, 1200, 2000, 1, 32832, 0, 0, 0, 0, 0, 0, 58.08, 79.86, 100, 7, 0, 9520, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1027, 1346, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 1048578, 0, '');
 
 update creature_template set faction = 12 where entry between 92012 and 92023;
 update creature_template set npc_flags = 7 where entry = 92022;
 update creature_template set npc_flags = 5 where entry = 92021;
 update creature_template set npc_flags = 3 where entry = 92012;
+update creature_template set npc_flags = 3 where entry = 92024;
 update creature_template set npc_flags = 3 where entry = 92013;
 update creature_template set npc_flags = 3 where entry = 92014;
 update creature_template set npc_flags = 3 where entry = 92015;
@@ -68,6 +69,13 @@ replace into creature_display_info_addon (display_id) values (18664);
 replace into creature_display_info_addon (display_id) values (18665);
 replace into creature_display_info_addon (display_id) values (18667);
 replace into creature_display_info_addon (display_id) values (18666);
+replace into creature_display_info_addon (display_id) values (18690);
+
+set @gossip_menu_id = 60175; set @magic_number = 92024; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'I have fought in many wars, and have slain many foes. All the way from Draenor, to this outpost here, and I will lead it with great honor.\n\nI am entrusted by the greatest minds in Orgrimmar to lead the Horde\'s efforts, and I shall...n\nHave you come to lend a hand, to make a name for yourself?'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
 set @gossip_menu_id = 60174; set @magic_number = 92022; 
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
@@ -153,6 +161,9 @@ replace into broadcast_text (entry, Male_Text) values (@magic_number, 'The Hydro
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
+set @equip_template = 55173; set @weapon_1 = 15862; set @weapon_2 = 2488; set @creature = 92024;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+update creature_template set equipment_id = @equip_template where entry = @creature;
 
 set @equip_template = 55173; set @weapon_1 = 1938; set @weapon_2 = 12743; set @creature = 92023;
 replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
