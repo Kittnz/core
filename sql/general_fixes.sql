@@ -1,3 +1,116 @@
+-- Caelan's Rest NPCS
+
+replace into creture_template 
+(92000, 0, 18660, 0, 0, 0, 'Hydromancer Vanessa', 'Kul Tiras', 3821, 55, 55, 2379, 2979, 5013, 5013, 1506, 84, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 8, 4096, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 11616, 0, 0, 0, 0, 524290, 0, ''),
+(92001, 0,  18654, 0, 0, 0, 'Hydromancer Flakereef', 'Kul Tiras', 3821, 56, 56, 2479, 2979, 5013, 5013, 1506, 84, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 8, 4096, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 11616, 0, 0, 0, 0, 524290, 0, ''),
+(92002, 0,  18649, 0, 0, 0, 'Colonel Hardinus', 'Kul Tiras', 3821, 58, 58, 8479, 8479, 15013, 15013, 1506, 84, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 8, 4096, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 11616, 0, 0, 0, 0, 524290, 0, ''),
+(92003, 0,  18651, 0, 0, 0, 'Deckmaster Breachcrest', 'Kul Tiras', 3821, 57, 57, 2479, 2979, 5013, 5013, 1506, 84, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 8, 4096, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 11616, 0, 0, 0, 0, 524290, 0, ''),
+(92004, 0, 18652, 0, 0, 0, 'Marine Clifftower', 'Kul Tiras', 0, 55, 55, 2479, 2979, 5013, 5013, 1506, 84, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 8, 4096, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 11616, 0, 0, 0, 0, 524290, 0, ''),
+(92005, 0, 18650, 0, 0, 0, 'Marine Blackwell', 'Kul Tiras', 0, 55, 55, 2479, 2979, 5013, 5013, 1506, 84, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 8, 4096, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 11616, 0, 0, 0, 0, 524290, 0, ''),
+(92006, 0, 18653, 0, 0, 0, 'Marine Dagby', 'Kul Tiras', 0, 55, 55, 2479, 2979, 5013, 5013, 1506, 84, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 8, 4096, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 11616, 0, 0, 0, 0, 524290, 0, ''),
+
+(92007, 0, 18656, 0, 0, 0, 'Marine Logan', 'Kul Tiras', 0, 55, 55, 2479, 2979, 5013, 5013, 1506, 84, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 8, 4096, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 11616, 0, 0, 0, 0, 524290, 0, ''),
+(92008, 7, 18661, 0, 0, 0, 'Stablemaster Yannis', 'Kul Tiras', 0, 35, 35, 1052, 1052, 0, 0, 8401, 994, 84, 1, 1.14286, 0, 20, 5, 0, 0, 1, 227, 290, 0, 272, 1, 2000, 2000, 1, 32768, 0, 0, 0, 0, 0, 0, 83.6, 107.3, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 2, 0, ''),
+(92009, 0, 18657, 0, 0, 0, 'Sailor Patterson', 'Kul Tiras', 0, 52, 52, 2179, 2979, 5013, 5013, 1506, 84, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 8, 4096, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 11616, 0, 0, 0, 0, 524290, 0, ''),
+(92010, 0, 18655, 0, 0, 0, 'Sailor Larson', 'Kul Tiras', 0, 52, 52, 2179, 2979, 5013, 5013, 1506, 84, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 8, 4096, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 11616, 0, 0, 0, 0, 524290, 0, ''),
+(92011, 0, 18659, 0, 0, 0, 'Valdarion Smite', 'Boxing Champion', 3821, 50, 50, 4379, 4979, 0, 0, 1506, 84, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 8, 4096, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 11616, 0, 0, 0, 0, 524290, 0, '');
+ 
+update creature_template set npc_flags = 2 where entry = 92004;
+update creature_template set npc_flags = 3 where entry = 92003;
+update creature_template set npc_flags = 3, rank = 1 where entry = 92002;
+update creature_template set npc_flags = 3 where entry = 92011;
+update creature_template set npc_flags = 3 where entry = 92000;
+update creature_template set npc_flags = 3 where entry = 92001;
+update creature_template set npc_flags = 3 where entry = 92009;
+replace into creature_display_info_addon (display_id) values (18660);
+replace into creature_display_info_addon (display_id) values (18654);
+replace into creature_display_info_addon (display_id) values (18649);
+replace into creature_display_info_addon (display_id) values (18651);
+replace into creature_display_info_addon (display_id) values (18652);
+replace into creature_display_info_addon (display_id) values (18650);
+replace into creature_display_info_addon (display_id) values (18653);
+replace into creature_display_info_addon (display_id) values (18653);
+replace into creature_display_info_addon (display_id) values (18656);
+replace into creature_display_info_addon (display_id) values (18661);
+replace into creature_display_info_addon (display_id) values (18657);
+replace into creature_display_info_addon (display_id) values (18655);
+replace into creature_display_info_addon (display_id) values (18659);
+
+set @gossip_menu_id = 60165 set @magic_number = 92011; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'You know who you\'re speaking to? I am -the- Valdarion Smite, yeah, that\'s the one.\n\nI am a world reknowned boxer, the champion of Kul Tiras infact! I haven\'t been back home in about four years now, but I held the title when I was there!\n\nSuch a shame to be drafted like this huh, especially a shame to be stuck here....\n\nOh well, the lads and lasses are good enough to me, especially with my fame back home.'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 60164 set @magic_number = 92009; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'What are you looking at?'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 60163 set @magic_number = 92003; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'I am the Deckmaster of the Waterbreaker, you be standing on her!\n\nWatch your footing when you\'re around on my deck, understood?'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 60162 set @magic_number = 92002; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'It is a surprise to see a new face around here. We were shipwrecked quite a while ago, and have made an alright living here.\n\nThis is Caelan\'s Rest, named after the Admiral who led the fleet, he died when we were attacked, if you\'re here to help, we certainly need it.'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 60161 set @magic_number = 92001; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'In order to have a powerful fleet, one must master the waves. It is what we Hydromancer\'s do, both in guiding the fleet, and controlling the flowing waters of the ocean to be either favorable... Or in the cases of our foes, not favorable.'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 60160 set @magic_number = 92000; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'The Hydromancer\'s of Kul Tiras are world reknowned, we keep our magic a secret for that very reason.'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @equip_template = 55165; set @weapon_1 = 12329; set @weapon_2 = 0; set @creature = 92008;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 55164; set @weapon_1 = 4560; set @weapon_2 = 3816; set @creature = 92007;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 55163; set @weapon_1 = 4560; set @weapon_2 = 3816; set @creature = 92006;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 55162; set @weapon_1 = 4560; set @weapon_2 = 3816; set @creature = 92005;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 55161; set @weapon_1 = 4560; set @weapon_2 = 3816; set @creature = 92004;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 55160; set @weapon_1 = 1296; set @weapon_2 = 15633; set @creature = 92003;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+
+-- // -- 
+-- // -- 
+-- // -- 
+-- // -- 
+-- // -- 
+-- // -- 
+-- // -- 
+-- // -- 
+-- // -- 
+-- // -- 
+-- // -- 
+-- // -- 
+-- // -- 
+
 update creature_template set display_id1 = 18647 where entry = 49002;
 update creature_template set display_id1 = 18668 where entry = 91781;
 update creature_template set display_id1 = 18669 where entry = 91768;
