@@ -179,7 +179,7 @@ void ReputationMgr::SendInitialReputations()
     }
 
     // fill in absent fields
-    for (; a != 64; a++)
+    for (; a != 69; a++)
     {
         data << uint8(0x00);
         data << uint32(0x00000000);
