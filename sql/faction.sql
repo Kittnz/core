@@ -1,4 +1,4 @@
-replace into  `faction` VALUES 
+INSERT INTO `faction` VALUES 
 (1, 5875, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'PLAYER, Human', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''),
 (2, 5875, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'PLAYER, Orc', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''),
 (3, 5875, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'PLAYER, Dwarf', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''),
@@ -60,7 +60,7 @@ replace into  `faction` VALUES
 (63, 5875, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Darkhowl', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''),
 (64, 5875, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Grell', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''),
 (65, 5875, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Furbolg', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''),
-(66, 5875, 68, 434, 589, 0, 0, 0, 0, 0, 0, 3500, -42000, 0, 0, 0, 0, 0, 0, 0, 'Horde Civilians', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''),
+(66, 5875, 67, 434, 589, 0, 0, 0, 0, 0, 0, 3500, -42000, 0, 0, 0, 0, 0, 0, 0, 'Horde Civilians', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''),
 (67, 5875, 12, 434, 589, 0, 0, 0, 0, 0, 0, 3500, -42000, 0, 0, 17, 2, 0, 0, 0, 'Horde', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''),
 (68, 5875, 17, 418, 589, 16, 0, 0, 0, 0, 0, 500, -42000, 4000, 0, 17, 2, 17, 0, 67, 'Undercity', '', '', '', '', '', '', '', 'Led by Sylvanas Windrunner, the Forsaken have joined a tenuous alliance with the Horde and established this capital in the vast depths under the Ruins of Lordaeron.', '', '', '', '', '', '', ''),
 (69, 5875, 21, 581, 434, 8, 512, 0, 0, 0, 0, 3100, -42000, 4000, 500, 17, 2, 17, 0, 469, 'Darnassus', '', '', '', '', '', '', '', 'The Alliance capital is populated by Night Elves and is located in the island of Teldrassil.  Ruled by the Priestess of the Moon, Tyrande Whisperwind.', '', '', '', '', '', '', ''),
@@ -197,4 +197,5 @@ replace into  `faction` VALUES
 (1002, 5875, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Fel Elves', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''),
 (1003, 5875, 63, 1023, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 'Forest Nymphs', '', '', '', '', '', '', '', 'The Nymphs are an off-shoot of the Dryads that inhabit Mount Hyjal, after the fall of Archimonde they have been vehemently protecting the World Tree from the Heredine Demons.', '', '', '', '', '', '', ''),
 (1004, 5875, 65, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Brotherhood of the Horse', '', '', '', '', '', '', '', 'The Gallant Knights of Azeroth ride into battle upon their armored steeds to prevent the invasion of their homeland.', '', '', '', '', '', '', ''),
-(1005, 5875, 66, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Sythegore Arm', '', '', '', '', '', '', '', 'Elite raiders of the Blackrock Clan, now unleashed upon Elwynn Forest to see it burn.', '', '', '', '', '', '', '');
+(1005, 5875, 66, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Sythegore Arm', '', '', '', '', '', '', '', 'Elite raiders of the Blackrock Clan, now unleashed upon Elwynn Forest to see it burn.', '', '', '', '', '', '', ''),
+(1006, 5875, 64, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Keepers of Outerend', '', '', '', '', '', '', '', 'These stalwart servants have kept the relic Outerend save for a dozen millenia. With the coming dark, they now seek to guide mortals to fight for Azeroth.', '', '', '', '', '', '', '');
