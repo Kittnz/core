@@ -12,7 +12,8 @@ replace into creature_template values
 (92008, 7, 18661, 0, 0, 0, 'Stablemaster Yannis', 'Kul Tiras', 0, 35, 35, 1052, 1052, 0, 0, 8401, 994, 84, 1, 1.14286, 0, 20, 5, 0, 0, 1, 227, 290, 0, 272, 1, 2000, 2000, 1, 32768, 0, 0, 0, 0, 0, 0, 83.6, 107.3, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 2, 0, ''),
 (92009, 0, 18657, 0, 0, 0, 'Sailor Patterson', 'Kul Tiras', 0, 52, 52, 2179, 2979, 5013, 5013, 1506, 84, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 8, 4096, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 11616, 0, 0, 0, 0, 524290, 0, ''),
 (92010, 0, 18655, 0, 0, 0, 'Sailor Larson', 'Kul Tiras', 0, 52, 52, 2179, 2979, 5013, 5013, 1506, 84, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 8, 4096, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 11616, 0, 0, 0, 0, 524290, 0, ''),
-(92011, 0, 18659, 0, 0, 0, 'Valdarion Smite', 'Boxing Champion', 3821, 50, 50, 4379, 4979, 0, 0, 1506, 84, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 8, 4096, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 11616, 0, 0, 0, 0, 524290, 0, '');
+(92011, 0, 18659, 0, 0, 0, 'Valdarion Smite', 'Boxing Champion', 3821, 50, 50, 4379, 4979, 0, 0, 1506, 84, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 8, 4096, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 11616, 0, 0, 0, 0, 524290, 0, ''),
+(92025, 0, 18658, 0, 0, 0, 'Sailor Percy', 'Kul Tiras', 0, 50, 50, 2179, 2979, 5013, 5013, 1506, 84, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 8, 4096, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 11616, 0, 0, 0, 0, 524290, 0, '');
 
 -- NPCS FOR SORROWGUARD
 replace into creature_template values
@@ -40,6 +41,7 @@ update creature_template set npc_flags = 3 where entry = 92014;
 update creature_template set npc_flags = 3 where entry = 92015;
 update creature_template set npc_flags = 3 where entry = 92016;
 update creature_template set npc_flags = 3 where entry = 92017;
+update creature_template set npc_flags = 3 where entry = 92025;
 update creature_template set npc_flags = 2 where entry = 92018;
 
 update creature_template set npc_flags = 2 where entry = 92023;
@@ -70,10 +72,17 @@ replace into creature_display_info_addon (display_id) values (18665);
 replace into creature_display_info_addon (display_id) values (18667);
 replace into creature_display_info_addon (display_id) values (18666);
 replace into creature_display_info_addon (display_id) values (18690);
+replace into creature_display_info_addon (display_id) values (18658);
 
 update creature_template set mana_min = 9000, mana_max = 9000 where entry = 49009;
 update creature_template set mana_min = 20000, mana_max = 20000 where entry = 49008;
 update creature_template set type = 7 where entry = 91823;
+
+set @gossip_menu_id = 60177; set @magic_number = 92025; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Oh to be in Boralus again, I can\'t wait to head home once the ship is all repaired, I\'m going to go to every pub, every day for atleast a year.'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
 set @gossip_menu_id = 60175; set @magic_number = 92024; 
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
@@ -165,7 +174,24 @@ replace into broadcast_text (entry, Male_Text) values (@magic_number, 'The Hydro
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
-set @equip_template = 55173; set @weapon_1 = 15862; set @weapon_2 = 2488; set @creature = 92024;
+
+set @equip_template = 55175; set @weapon_1 = 2819; set @weapon_2 = 2716; set @creature = 92025;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 55177; set @weapon_1 = 4560; set @weapon_2 = 0; set @creature = 92010;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 55176; set @weapon_1 = 11588; set @weapon_2 = 0; set @creature = 92001;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 55175; set @weapon_1 = 11588; set @weapon_2 = 0; set @creature = 92000;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 55174; set @weapon_1 = 15862; set @weapon_2 = 2488; set @creature = 92024;
 replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
 update creature_template set equipment_id = @equip_template where entry = @creature;
 
@@ -181,7 +207,7 @@ set @equip_template = 55172; set @weapon_1 = 5956; set @weapon_2 = 0; set @creat
 replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
 update creature_template set equipment_id = @equip_template where entry = @creature;
 
-set @equip_template = 55171; set @weapon_1 = 9651; set @weapon_2 = 20833; set @creature = 92017;
+set @equip_template = 55171; set @weapon_1 = 9651; set @weapon_2 = 10367; set @creature = 92017;
 replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
 update creature_template set equipment_id = @equip_template where entry = @creature;
 
@@ -571,3 +597,11 @@ REPLACE INTO `item_template` VALUES (83094, 0, 2, 3, 'Monster - Rifle2H, Mechagn
 REPLACE INTO `item_template` VALUES (83095, 3, 12, 0, 'Mechanical Head', '', 66119, 1, 0, 1, 0, 0, 0, 2047, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
 
 update item_template set quality = 2 where entry = 83095;
+
+-- ...
+update creature_template set equipment_id = 0 where entry = 92002;
+update creature_template set equipment_id = 0 where entry = 92009;
+update creature_template set equipment_id = 0 where entry = 92011;
+update creature_template set equipment_id = 0 where entry = 92018;
+update creature_template set equipment_id = 0 where entry = 92021;
+-- ...
