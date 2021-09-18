@@ -4588,6 +4588,12 @@ uint32 handleRecords(Player* pPlayer, uint32 amount, int result)
 
 bool GossipHello_npc_agne_gambler(Player* pPlayer, Creature* pCreature)
 {
+    if (pPlayer->HasItemCount(50745, 1, false))
+    {
+        pPlayer->GetSession()->SendNotification("You cannot gamble anymore.");
+        return false;
+    }
+
     pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, OPT1, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, OPT2, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
     pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, OPT3, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
