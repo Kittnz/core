@@ -605,3 +605,10 @@ update creature_template set equipment_id = 0 where entry = 92011;
 update creature_template set equipment_id = 0 where entry = 92018;
 update creature_template set equipment_id = 0 where entry = 92021;
 -- ...
+
+REPLACE INTO `gameobject_template` VALUES (106650, 0, 5, 33050, 'UL_Garbage_Bits3.mdx', 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+REPLACE INTO `gameobject_template` VALUES (106651, 0, 5, 33051, 'UL_Garbage_Bits5.mdx', 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+REPLACE INTO `gameobject_template` VALUES (106652, 0, 3, 33051, 'Mechanical Head [PH]', 0, 4, 1, 43, 2237, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+
