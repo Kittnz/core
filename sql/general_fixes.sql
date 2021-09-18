@@ -71,6 +71,10 @@ replace into creature_display_info_addon (display_id) values (18667);
 replace into creature_display_info_addon (display_id) values (18666);
 replace into creature_display_info_addon (display_id) values (18690);
 
+update creature_template set mana_min = 9000, mana_max = 9000 where entry = 49009;
+update creature_template set mana_min = 20000, mana_max = 20000 where entry = 49008;
+update creature_template set type = 7 where entry = 91823;
+
 set @gossip_menu_id = 60175; set @magic_number = 92024; 
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
 replace into broadcast_text (entry, Male_Text) values (@magic_number, 'I have fought in many wars, and have slain many foes. All the way from Draenor, to this outpost here, and I will lead it with great honor.\n\nI am entrusted by the greatest minds in Orgrimmar to lead the Horde\'s efforts, and I shall...n\nHave you come to lend a hand, to make a name for yourself?'); 
@@ -560,3 +564,10 @@ replace into item_template values
  '0', '1', NULL);
  
  update item_template set spellid_1 = 12244, script_name = 'item_skin_change', buy_price = 95000, sell_price = 23750 where entry in (83090, 83091, 83092);
+ 
+ 
+REPLACE INTO `item_template` VALUES (83093, 8, 2, 10, 'Monster - Staff2H, Outerend', '', 66120, 3, 0, 1, 343264, 68652, 17, -1, -1, 63, 58, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2100, 0, 0, 90, 136, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14055, 1, 0, 0, -1, 0, -1, 18384, 1, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 2, 2, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 4, 1, NULL);
+REPLACE INTO `item_template` VALUES (83094, 0, 2, 3, 'Monster - Rifle2H, Mechagnome', '', 66121, 1, 0, 1, 203, 40, 26, -1, -1, 7, 2, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2600, 100, 3, 4, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL),
+REPLACE INTO `item_template` VALUES (83095, 3, 12, 0, 'Mechanical Head', '', 66119, 1, 0, 1, 0, 0, 0, 2047, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+
+update item_template set quality = 2 where entry = 83095;
