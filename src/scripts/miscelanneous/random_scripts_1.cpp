@@ -2189,6 +2189,7 @@ bool GOSelect_go_brainwashing_device(Player* pPlayer, GameObject* pGo, uint32 se
         {
             pPlayer->ModifyMoney(-(int32)5000000);
             CharacterDatabase.DirectPExecute("REPLACE INTO character_queststatus (guid,quest,status,rewarded) VALUES ('%u', 70010, 1, 1)", pPlayer->GetGUIDLow());
+            ChatHandler(pPlayer).SendSysMessage("Please logout and login again!");
         }
     }
 
