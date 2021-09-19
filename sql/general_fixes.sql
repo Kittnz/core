@@ -175,7 +175,7 @@ replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_numbe
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
 
-set @equip_template = 55175; set @weapon_1 = 2819; set @weapon_2 = 2716; set @creature = 92025;
+set @equip_template = 55178; set @weapon_1 = 2819; set @weapon_2 = 2716; set @creature = 92025;
 replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
 update creature_template set equipment_id = @equip_template where entry = @creature;
 
