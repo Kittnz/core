@@ -12010,6 +12010,131 @@ bool ChatHandler::HandleGetShopLogs(char* args)
     return true;
 }
 
+bool ChatHandler::HandleCreaturePathSetup(char* /*args*/)
+{
+    Creature* target = GetSelectedCreature();
+
+    if (!target)
+    {
+        SendSysMessage("No creature selected.");
+        return false;
+    }
+
+    uint32 guid = target->GetDBTableGUIDLow();
+
+    if (!guid)
+    {
+        SendSysMessage("No static DB data for this creature.");
+        return false;
+    }
+
+    if (!target->IsStopped())
+        target->StopMoving(true);
+
+    target->GetMotionMaster()->Clear(false, true);
+    sWaypointMgr.DeletePath(target->GetGUIDLow());
+    
+    uint32 pointId = 0;
+    if (!sWaypointMgr.AddNode(0, target->GetGUIDLow(), pointId, PATH_FROM_GUID, target->GetHomePosition().x, target->GetHomePosition().y, target->GetHomePosition().z))
+    {
+        SendSysMessage("Internal error at create path. Contact with admin.");
+        return false;
+    }
+
+    PSendSysMessage("%s%s%u%s%u%s|r", "|cff00ff00", "PathID: |r|cff00ffff", target->GetGUIDLow(), "|r|cff00ff00: Waypoint |r|cff00ffff", pointId, "|r|cff00ff00 created. ");
+    return true;
+}
+
+bool ChatHandler::HandleCreaturePathAddPoint(char* /*args*/)
+{
+    Creature* target = GetSelectedCreature();
+
+    if (!target)
+    {
+        SendSysMessage("No creature selected.");
+        return false;
+    }
+
+    uint32 guid = target->GetDBTableGUIDLow();
+
+    if (!guid)
+    {
+        SendSysMessage("No static DB data for this creature.");
+        return false;
+    }
+
+    uint32 pointId = 0;
+    QueryResult* result = WorldDatabase.PQuery("SELECT MAX(point) FROM creature_movement WHERE id = %u", guid);
+
+    if (result)
+    {
+        Field* fields = result->Fetch();
+        pointId = fields[0].GetUInt32();
+        delete result;
+
+        if (!sWaypointMgr.AddNode(0, target->GetGUIDLow(), pointId, PATH_FROM_GUID, target->GetHomePosition().x, target->GetHomePosition().y, target->GetHomePosition().z))
+        {
+            SendSysMessage("Internal error at add waypoint. Please use .path setup for clear waypoints and setup again");
+            return false;
+        }
+
+        PSendSysMessage("%s%s%u%s%u%s|r", "|cff00ff00", "PathID: |r|cff00ffff", target->GetGUIDLow(), "|r|cff00ff00: Waypoint |r|cff00ffff", pointId+1, "|r|cff00ff00 added. ");
+    }
+    else
+    {
+        SendSysMessage("No start waypoint data for this creature.");
+        return false;
+    }
+
+    return true;
+}
+
+bool ChatHandler::HandleCreaturePathLaunch(char* /*args*/)
+{
+    Creature* target = GetSelectedCreature();
+
+    if (!target)
+    {
+        SendSysMessage("No creature selected.");
+        return false;
+    }
+
+    uint32 guid = target->GetDBTableGUIDLow();
+
+    if (!guid)
+    {
+        SendSysMessage("No static DB data for this creature.");
+        return false;
+    }
+
+    if (!target->IsStopped())
+    {
+        SendSysMessage("Can't launch waypoint path for this creature. Please use setup.");
+        return false;
+    }
+
+    QueryResult* result = WorldDatabase.PQuery("SELECT MAX(point) FROM creature_movement WHERE id = %u", guid);
+
+    if (!result)
+    {
+        SendSysMessage("No start waypoint data for this creature.");
+        return false;
+    }
+
+    delete result;
+
+    target->SetDefaultMovementType(WAYPOINT_MOTION_TYPE);
+    target->GetMotionMaster()->Initialize();
+    if (target->IsAlive())                         // Dead creature will reset movement generator at respawn
+    {
+        target->SetDeathState(JUST_DIED);
+        target->Respawn();
+    }
+    target->SaveToDB();
+    target->MonsterSay("Path loaded.", 0);
+    return true;
+}
+
 bool ChatHandler::HandleSendPacketCommand(char* args)
 {
     //sWorld.SendQuestStatsInvalidate(8, m_session);

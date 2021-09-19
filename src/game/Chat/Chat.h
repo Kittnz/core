@@ -513,6 +513,11 @@ class ChatHandler
         // Shop info
         bool HandleGetShopLogs(char* args);
 
+        // Temp simple waypoints
+        bool HandleCreaturePathSetup(char* );
+        bool HandleCreaturePathAddPoint(char*);
+        bool HandleCreaturePathLaunch(char*);
+
         Player*   GetSelectedPlayer();
         Creature* GetSelectedCreature();
         Unit*     GetSelectedUnit();
