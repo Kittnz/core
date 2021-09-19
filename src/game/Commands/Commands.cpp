@@ -12028,10 +12028,14 @@ bool ChatHandler::HandleCreaturePathSetup(char* /*args*/)
         return false;
     }
 
-    if (!target->IsStopped())
-        target->StopMoving(true);
-
-    target->GetMotionMaster()->Clear(false, true);
+    target->SetDefaultMovementType(IDLE_MOTION_TYPE);
+    if (target->IsAlive())                         // Dead creature will reset movement generator at respawn
+    {
+        target->SetDeathState(JUST_DIED);
+        target->Respawn();
+    }
+    target->SaveToDB();
+    target->GetMotionMaster()->Initialize();
     sWaypointMgr.DeletePath(target->GetGUIDLow());
     
     uint32 pointId = 0;
@@ -12064,28 +12068,13 @@ bool ChatHandler::HandleCreaturePathAddPoint(char* /*args*/)
     }
 
     uint32 pointId = 0;
-    QueryResult* result = WorldDatabase.PQuery("SELECT MAX(point) FROM creature_movement WHERE id = %u", guid);
-
-    if (result)
+    if (!sWaypointMgr.AddNode(0, target->GetGUIDLow(), pointId, PATH_FROM_GUID, m_session->GetPlayer()->GetPositionX(), m_session->GetPlayer()->GetPositionY(), m_session->GetPlayer()->GetPositionZ()))
     {
-        Field* fields = result->Fetch();
-        pointId = fields[0].GetUInt32();
-        delete result;
-
-        if (!sWaypointMgr.AddNode(0, target->GetGUIDLow(), pointId, PATH_FROM_GUID, target->GetHomePosition().x, target->GetHomePosition().y, target->GetHomePosition().z))
-        {
-            SendSysMessage("Internal error at add waypoint. Please use .path setup for clear waypoints and setup again");
-            return false;
-        }
-
-        PSendSysMessage("%s%s%u%s%u%s|r", "|cff00ff00", "PathID: |r|cff00ffff", target->GetGUIDLow(), "|r|cff00ff00: Waypoint |r|cff00ffff", pointId+1, "|r|cff00ff00 added. ");
-    }
-    else
-    {
-        SendSysMessage("No start waypoint data for this creature.");
+        SendSysMessage("Internal error at add waypoint. Please use .path setup for clear waypoints and setup again");
         return false;
     }
 
+    PSendSysMessage("%s%s%u%s%u%s|r", "|cff00ff00", "PathID: |r|cff00ffff", target->GetGUIDLow(), "|r|cff00ff00: Waypoint |r|cff00ffff", pointId, "|r|cff00ff00 added. ");
     return true;
 }
 
@@ -12124,13 +12113,8 @@ bool ChatHandler::HandleCreaturePathLaunch(char* /*args*/)
     delete result;
 
     target->SetDefaultMovementType(WAYPOINT_MOTION_TYPE);
-    target->GetMotionMaster()->Initialize();
-    if (target->IsAlive())                         // Dead creature will reset movement generator at respawn
-    {
-        target->SetDeathState(JUST_DIED);
-        target->Respawn();
-    }
     target->SaveToDB();
+    target->GetMotionMaster()->Initialize();
     target->MonsterSay("Path loaded.", 0);
     return true;
 }
