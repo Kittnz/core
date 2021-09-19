@@ -515,6 +515,14 @@ ChatCommand * ChatHandler::getCommandTable()
         { nullptr,             0,                     false, nullptr,                                        "", nullptr }
     };
 
+    static ChatCommand pathCommandTable[] =
+    {
+        { "setup",             SEC_GAMEMASTER,        false, &ChatHandler::HandleCreaturePathSetup,         "", nullptr },
+        { "add",               SEC_GAMEMASTER,        false, &ChatHandler::HandleCreaturePathAddPoint,      "", nullptr },
+        { "start",             SEC_GAMEMASTER,        false, &ChatHandler::HandleCreaturePathLaunch,        "", nullptr },
+        { nullptr,             0,                     false, nullptr,                                       "", nullptr }
+    };
+
     static ChatCommand commandTable[] =
     {
         { "account",        SEC_PLAYER,         true, nullptr,                                         "", accountCommandTable  },
@@ -631,6 +639,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "copy",           SEC_PLAYER,         false,  &ChatHandler::HandleCopyCommand,                  "", nullptr },
         { "sendpacket",     SEC_ADMINISTRATOR,  false,  &ChatHandler::HandleSendPacketCommand,                  "", nullptr },
         { "shop",           SEC_GAMEMASTER,     true,  nullptr,                                         "", shopCommandTable },
+        { "path",           SEC_GAMEMASTER,     true,  nullptr,                                         "", pathCommandTable },
         { nullptr,          0,                  false, nullptr,                                        "", nullptr }
     };
 
