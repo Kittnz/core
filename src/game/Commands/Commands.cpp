@@ -5419,7 +5419,7 @@ bool ChatHandler::HandleGPSCommand(char* args)
 }
 
 //Summon Player
-bool ChatHandler::HandleNamegoCommand(char* args)
+bool ChatHandler::HandleSummonCommand(char* args)
 {
     Player* pTarget;
     ObjectGuid target_guid;
