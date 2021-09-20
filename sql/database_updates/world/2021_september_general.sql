@@ -179,3 +179,7 @@ REPLACE INTO `npc_text` (`ID`, `BroadcastTextID0`, `Probability0`) VALUES ('3163
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/297
 
 update item_template set max_durability = 100 where entry = 80612;
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/306
+
+update gameobject_loot_template set chanceorquestchance = 64 where item = 2798;
