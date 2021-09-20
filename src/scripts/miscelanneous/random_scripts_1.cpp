@@ -2511,7 +2511,7 @@ struct soulwell_portal_clicks : public GameObjectAI
                     float z = me->GetPositionZ();
 
                     // purple rune on the ground
-                    if (purple_rune_big = me->SummonGameObject(2005014, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0, true))
+                    if (purple_rune_big = me->SummonGameObject(2005014, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 5, true))
                         rune_summoned = true;
 
                     me->SetVisible(false);
