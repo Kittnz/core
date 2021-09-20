@@ -170,3 +170,8 @@ delete from item_template where entry = 81167;
 
 update item_template set name = 'Otherwordly Rifle', description = '' where entry = 51794;
 update item_template set name = 'Otherwordly Blade' where name = 'Void-Linked Blade';
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/296
+
+REPLACE INTO `gossip_menu` (`entry`, `text_id`) VALUES ('543', '3163');
+REPLACE INTO `npc_text` (`ID`, `BroadcastTextID0`, `Probability0`) VALUES ('3163', '3163', '100');
