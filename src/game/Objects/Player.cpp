@@ -6590,8 +6590,8 @@ int32 Player::CalculateReputationGain(ReputationSource source, int32 rep, int32 
             break;
         case REPUTATION_SOURCE_QUEST:
             rate = sWorld.getConfig(CONFIG_FLOAT_RATE_REPUTATION_LOWLEVEL_QUEST);
-            if (GetLevel() >= creatureOrQuestLevel + 5)
-                diffLvl = GetLevel() - creatureOrQuestLevel - 5;
+            if (GetLevel() >= creatureOrQuestLevel + 25)  // Turtle WoW Custom, default is 5 levels of difference.
+                diffLvl = GetLevel() - creatureOrQuestLevel - 25;
             else
                 diffLvl = 0;
             break;
