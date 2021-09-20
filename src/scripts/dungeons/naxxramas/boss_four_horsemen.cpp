@@ -386,6 +386,12 @@ struct boss_four_horsemen_shared : public ScriptedAI
 
 struct boss_lady_blaumeuxAI : public boss_four_horsemen_shared
 {
+    int32 changeTargetTimer;
+    Unit* pTank;
+    Creature* fakeVZ;
+    int32 pVZTimer;
+    Position VZPosition;
+
     boss_lady_blaumeuxAI(Creature* pCreature)
         : boss_four_horsemen_shared(pCreature, SPELL_MARK_OF_BLAUMEUX, SPELL_SPIRIT_OF_BLAUMEUX)
     {
@@ -402,6 +408,10 @@ struct boss_lady_blaumeuxAI : public boss_four_horsemen_shared
                 m_uiMarkTimer = static_cast<boss_lady_blaumeuxAI*>(pC->AI())->m_uiMarkTimer;
             }
         }
+        changeTargetTimer = 2000;
+        pVZTimer = 1000;
+        pTank = nullptr;
+        fakeVZ = nullptr;
     }
 
     void Aggro(Unit *who) override
@@ -461,17 +471,40 @@ struct boss_lady_blaumeuxAI : public boss_four_horsemen_shared
             case EVENT_BOSS_ABILITY:
                 if (m_bIsSpirit)
                     break;
+
+                pTank = m_creature->GetVictim();
+
                 if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0, SPELL_VOIDZONE, SELECT_FLAG_IN_LOS | SELECT_FLAG_PLAYER))
                 {
+
+                    // fake npc = 15904
+                    // reak npc = 16697
+
+                    // voidzone should have a 1-2s grace period before starting to do the 1s interval shadow damage
+                    // thats why we spawn a fake void zone that spawns the real void zone after 1s
+                    // https://www.youtube.com/watch?v=UjIniZEPtAI&t=430s
+
+
+                    // Boss changes his visual target to whoever is targeted for the void zone
+                    // so boss mods can warn the person targeted
+                    // On classic addons can get boss' spell target even if the boss does not target the player
+                    m_creature->SetTargetGuid(pTarget->GetObjectGuid());
+                    changeTargetTimer = 500;
+
                     float height = m_pInstance->GetMap()->GetHeight(pTarget->GetPositionX(), pTarget->GetPositionY(), pTarget->GetPositionZ(), true, 5.0f) + 0.2f;
                     if (height < 241.35f)
                         height = 241.35f;
-                    if (Creature* pVZ = m_creature->SummonCreature(16697, pTarget->GetPositionX(), pTarget->GetPositionY(), height, 0, TEMPSUMMON_TIMED_DESPAWN, 90000))
+                    if (fakeVZ = m_creature->SummonCreature(15904, pTarget->GetPositionX(), pTarget->GetPositionY(), height, 0, TEMPSUMMON_TIMED_DESPAWN, 2000))
                     {
-                        pVZ->SetWanderDistance(0.1f);
-                        pVZ->SetSpeedRate(UnitMoveType::MOVE_RUN, 0.1f);
-                        pVZ->SetSpeedRate(UnitMoveType::MOVE_WALK, 0.1f);
-                        pVZ->GetMotionMaster()->MoveRandom();
+                        VZPosition.x = pTarget->GetPositionX();
+                        VZPosition.y = pTarget->GetPositionY();
+                        VZPosition.z = height;
+                        pVZTimer = 1000;
+
+                        fakeVZ->SetWanderDistance(0.1f);
+                        fakeVZ->SetSpeedRate(UnitMoveType::MOVE_RUN, 0.1f);
+                        fakeVZ->SetSpeedRate(UnitMoveType::MOVE_WALK, 0.1f);
+                        fakeVZ->GetMotionMaster()->MoveRandom();
 
                         DoScriptText(SAY_BLAU_SPECIAL, m_creature);
                         m_events.Repeat(Seconds(12));
@@ -483,6 +516,33 @@ struct boss_lady_blaumeuxAI : public boss_four_horsemen_shared
             }
         }
 
+        if (fakeVZ != nullptr)
+        {
+            if (pVZTimer <= 0) 
+            {
+                if (Creature* realVZ = m_creature->SummonCreature(16697, VZPosition.x, VZPosition.y, VZPosition.z, 0, TEMPSUMMON_TIMED_DESPAWN, 90000))
+                {
+                    realVZ->SetWanderDistance(0.1f);
+                    realVZ->SetSpeedRate(UnitMoveType::MOVE_RUN, 0.1f);
+                    realVZ->SetSpeedRate(UnitMoveType::MOVE_WALK, 0.1f);
+                    realVZ->GetMotionMaster()->MoveRandom();
+
+                    fakeVZ = nullptr;
+                }
+            }
+            else 
+                pVZTimer -= uiDiff;
+        }
+
+        if (changeTargetTimer <= 0) {
+            m_creature->SetTargetGuid(pTank->GetObjectGuid());
+            pTank = nullptr;
+            changeTargetTimer = 500;
+        }
+
+        if (pTank != nullptr)
+            changeTargetTimer -= uiDiff;
+        
         DoMeleeAttackIfReady();
     }
 };
