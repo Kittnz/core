@@ -1,4 +1,4 @@
-replace into map_template values (800, 0, 0, 1, 800, 5, 0, -1, 0, 0, 'Karazhan Crypt', '');
+replace into map_template values (800, 0, 0, 1, 800, 5, 0, -1, 0, 0, 'Karazhan Crypt', 'instance_karazhan_crypt');
 
 replace into gameobject_template values 
 (181580, 0, 5, 23442, 'Karazhan Crypt (Entrance)', 0, 0, 1.6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'karazhan_crypt_portal'),
@@ -90,6 +90,7 @@ update creature_template set faction = 14, loot_id = 10394, gold_min = 377, gold
 update creature_template set loot_id = 0 where entry = 91927;
 update creature_template set loot_id = 0 where entry = 91921;
 update creature_template set loot_id = 0 where entry = 91922;
+update creature_template set gold_min = 0, gold_max = 0 where entry = 91921;
 
 set @equip_template = 55139; set @weapon_1 = 7717; set @weapon_2 = 0; set @creature = 91912;
 replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
@@ -198,7 +199,7 @@ set @delayrepeatmin_8 = 0;
 set @delayrepeatmax_8 = 0;
 
 -- Do not touch this part:
-update creature_template set spell_list_id = @spell_list_id, ai_name = '', script_name = '', spell_id1 = 0, spell_id2 = 0, spell_id3 = 0 
+update creature_template set spell_list_id = @spell_list_id, ai_name = '', script_name = 'bonespike_construct', spell_id1 = 0, spell_id2 = 0, spell_id3 = 0 
 where entry = @creature_entry;
 replace into creature_spells (entry, name, 
 spellid_1, probability_1, casttarget_1, castflags_1, delayinitialmin_1, delayinitialmax_1, delayrepeatmin_1, delayrepeatmax_1, 
@@ -516,7 +517,7 @@ values (@spell_list_id, @description,
 @spellid_7, @probability_7, @casttarget_7, @castflags_7, @delayinitialmin_7, @delayinitialmax_7, @delayrepeatmin_7, @delayrepeatmax_7,
 @spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
 
--- Hivaxxis
+-- Alarus
 set @creature_entry = 91928;
 set @description = 'Karazhan Crypt: Alarus';
 set @spell_list_id = 201054;
@@ -545,8 +546,8 @@ set @casttarget_3 = 1;
 set @castflags_3 = 12;
 set @delayinitialmin_3 = 1; 
 set @delayinitialmax_3 = 1; 
-set @delayrepeatmin_3 = 4; 
-set @delayrepeatmax_3 = 4;
+set @delayrepeatmin_3 = 3.5; 
+set @delayrepeatmax_3 = 3.5;
 
 set @spellid_4 = 0;
 set @probability_4 = 0; 
@@ -733,7 +734,7 @@ set @probability_2 = 100;
 set @casttarget_2 = 2; 
 set @castflags_2 = 4;
 set @delayinitialmin_2 = 12; 
-set @delayinitialmax_2 = 12 
+set @delayinitialmax_2 = 12;
 set @delayrepeatmin_2 = 18; 
 set @delayrepeatmax_2 = 20;
 
@@ -911,3 +912,4 @@ values (@spell_list_id, @description,
 @spellid_6, @probability_6, @casttarget_6, @castflags_6, @delayinitialmin_6, @delayinitialmax_6, @delayrepeatmin_6, @delayrepeatmax_6,
 @spellid_7, @probability_7, @casttarget_7, @castflags_7, @delayinitialmin_7, @delayinitialmax_7, @delayrepeatmin_7, @delayrepeatmax_7,
 @spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
+

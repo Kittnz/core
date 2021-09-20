@@ -6,6 +6,60 @@ void DoAfterTime(Player* player, uint32 p_time, Functor&& function)
     player->m_Events.AddEvent(new LambdaBasicEvent<Functor>(std::move(function)), player->m_Events.CalculateTime(p_time));
 }
 
+struct instance_karazhan_crypt : public ScriptedInstance
+{
+    explicit instance_karazhan_crypt(Map* p_Map) : ScriptedInstance(p_Map)
+    {
+        Initialize();
+    };
+
+    uint64 hivaxxis_door_guid;
+    uint64 alarus_door_guid;
+
+    void Initialize() override   
+    {
+        hivaxxis_door_guid = 0;
+        alarus_door_guid = 0;
+    }
+
+    void OnObjectCreate(GameObject* pGo) override
+    {
+        if (pGo->GetEntry() == 177312) hivaxxis_door_guid = pGo->GetGUID();
+        if (pGo->GetEntry() == 2006634) alarus_door_guid = pGo->GetGUID();
+    }
+
+    void OnCreatureDeath(Creature* boss) override
+    {
+        switch (boss->GetEntry()) // Bonespike Construst
+        {
+        case 91920:
+        {
+            GameObject* hivaxxis_door = instance->GetGameObject(hivaxxis_door_guid);
+            if (hivaxxis_door && hivaxxis_door->GetGoState() !=  GO_STATE_ACTIVE)
+            {
+                hivaxxis_door->UseDoorOrButton(10800);
+                boss->MonsterTextEmote("A loud creaking echoes across the crypt...");
+                boss->PlayDirectMusic(6762);
+            }
+            break;
+        }
+        case 91928:
+        {
+            GameObject* alarus_door = instance->GetGameObject(alarus_door_guid);
+            if (alarus_door && alarus_door->GetGoState() != GO_STATE_ACTIVE)
+            {
+                alarus_door->UseDoorOrButton(10800);
+                boss->MonsterSay("Another... corpse... to the pile.");
+                boss->PlayDirectMusic(6762);
+            }
+            break;
+        }
+        }
+    }
+};
+
+InstanceData* GetInstanceData_instance_karazhan_crypt(Map* p_Map) { return new instance_karazhan_crypt(p_Map); }
+
 #define KARAZHAN_CRYPT_KEY 51356
 #define KARAZHAN_GATE_RESET 1
 
@@ -250,41 +304,6 @@ struct trigger_summon_alarusAI : public ScriptedAI
 
 CreatureAI* GetAI_trigger_summon_alarus(Creature* _Creature) { return new trigger_summon_alarusAI(_Creature); }
 
-struct alarus_crypt_watcherAI : public ScriptedAI
-{
-    alarus_crypt_watcherAI(Creature* c) : ScriptedAI(c) { Reset(); }
-
-    void Reset() 
-    {
-
-    }
-    void UpdateAI(const uint32 diff)
-    {
-        
-    }
-    void JustDied(Unit*) override 
-    {
-        GameObject* doors = m_creature->FindNearestGameObject(2006634, 100.0f);
-
-        if (doors)
-            doors->UseDoorOrButton(10800);
-
-        m_creature->MonsterSay("Another... corpse... to the pile.");
-    }
-
-    void KilledUnit(Unit*) override 
-    {
-        m_creature->MonsterSay("Another corpse to the pile!");
-    }
-
-    void JustRespawned() 
-    {
-        Reset(); 
-    }
-};
-
-CreatureAI* GetAI_alarus_crypt_watcher(Creature* _Creature) { return new alarus_crypt_watcherAI(_Creature); }
-
 struct skeletal_remains_trigger : public GameObjectAI
 {
     explicit skeletal_remains_trigger(GameObject* pGo) : GameObjectAI(pGo)
@@ -362,48 +381,28 @@ struct skeletal_remainsAI : public ScriptedAI
 
 CreatureAI* GetAI_skeletal_remains(Creature* _Creature) { return new skeletal_remainsAI(_Creature); }
 
-
-struct bonespike_constructAI : public ScriptedAI
+struct paupers_walk_door : public GameObjectAI
 {
-    bonespike_constructAI(Creature* c) : ScriptedAI(c) { Reset(); }
+    explicit paupers_walk_door(GameObject* pGo) : GameObjectAI(pGo) {}
 
-    void Reset()
+    virtual void UpdateAI(uint32 const uiDiff) override
     {
+        Creature* alarus = me->FindNearestCreature(91928, 100.0f);
 
-    }
-    void UpdateAI(const uint32 diff)
-    {
-
-    }
-    void JustDied(Unit*) override
-    {
-        GameObject* doors = m_creature->FindNearestGameObject(177312, 300.0f);
-
-        if (doors)
-            doors->UseDoorOrButton(10800);
-    }
-
-    void KilledUnit(Unit*) override
-    {
-
-
-    }
-
-    void JustRespawned()
-    {
-        Reset();
+        if (alarus && !alarus->IsAlive())
+            me->UseDoorOrButton(10800);
     }
 };
 
-CreatureAI* GetAI_bonespike_construct(Creature* _Creature) { return new bonespike_constructAI(_Creature); }
+GameObjectAI* GetAI_paupers_walk_door(GameObject* Obj) { return new paupers_walk_door(Obj); }
 
 void AddSC_instance_karazhan_crypt()
 {
     Script* newscript;
 
     newscript = new Script;
-    newscript->Name = "bonespike_construct";
-    newscript->GetAI = &GetAI_bonespike_construct;
+    newscript->Name = "instance_karazhan_crypt";
+    newscript->GetInstanceData = &GetInstanceData_instance_karazhan_crypt;
     newscript->RegisterSelf();
 
     newscript = new Script;
@@ -414,11 +413,6 @@ void AddSC_instance_karazhan_crypt()
     newscript = new Script;
     newscript->Name = "skeletal_remains_trigger";
     newscript->GOGetAI = &GetAI_skeletal_remains_trigger;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "alarus_crypt_watcher";
-    newscript->GetAI = &GetAI_alarus_crypt_watcher;
     newscript->RegisterSelf();
 
     newscript = new Script;
