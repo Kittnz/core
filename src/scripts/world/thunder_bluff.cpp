@@ -132,10 +132,10 @@ CreatureAI* GetAI_boss_cairne_bloodhoof(Creature* pCreature)
 bool GossipHello_npc_cairne_bloodhoof(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->GetQuestStatus(925) == QUEST_STATUS_INCOMPLETE)
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I know this is rather silly but a young ward who is a bit shy would like your hoofprint.", GOSSIP_SENDER_MAIN, GOSSIP_SENDER_INFO);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I know this is rather silly but a young ward who is a bit shy would like your hoofprint.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     
     if (pPlayer->GetQuestStatus(80800) == QUEST_STATUS_INCOMPLETE && pPlayer->HasItemCount(83020, 1, false) && !pPlayer->HasItemCount(83022, 1, false))
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Cairne, the Revantusk Tribe have sent me with this message.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Cairne, the Revantusk Tribe have sent me with this message.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
 
     if (pCreature->IsQuestGiver())
         pPlayer->PrepareQuestMenu(pCreature->GetGUID());
@@ -155,12 +155,12 @@ bool GossipSelect_npc_cairne_bloodhoof(Player* pPlayer, Creature* pCreature, uin
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        pPlayer->CastSpell(pPlayer, 23123, false);
+        pPlayer->CastSpell(pPlayer, 23123, true);
         pPlayer->SEND_GOSSIP_MENU(7014, pCreature->GetGUID());
         return true;
     }
 
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 4)
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
     {
         pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_PASSIVE);
         pCreature->MonsterSayToPlayer("The Revantusk Trolls are allies I never imagined we would have after hearing the history they and the Old Horde had.", pPlayer);
