@@ -22484,7 +22484,7 @@ bool Player::SetupHardcoreMode()
     {
         if (Bag* pBag = (Bag*)GetItemByPos(INVENTORY_SLOT_BAG_0, i))
         {
-            if (pBag->GetEntry() == 2102 || pBag->GetEntry() == 2101)  //  Small Ammo Pouch & Light Quiver
+            if (pBag->GetEntry() == 2102 || pBag->GetEntry() == 2101 || pBag->GetEntry() == 5439)  //  Small Ammo Pouch & Light Quiver & Small Quiver
                 continue;
 
                 DestroyItem(INVENTORY_SLOT_BAG_0, i, true);
