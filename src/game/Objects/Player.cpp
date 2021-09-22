@@ -794,7 +794,7 @@ bool Player::Create(uint32 guidlow, std::string const& name, uint8 race, uint8 c
     InitTalentForLevel();
     InitPrimaryProfessions(); // to max set before any spell added
     m_reputationMgr.LoadFromDB(nullptr);
-    _collectionMgr->LoadFromDB(nullptr);
+    // _collectionMgr->LoadFromDB(nullptr);
 
     // apply original stats mods before spell loading or item equipment that call before equip _RemoveStatsMods()
     UpdateMaxHealth();                                      // Update max Health (for add bonus from stamina)
@@ -15142,7 +15142,7 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
     // must be before inventory (some items required reputation check)
     m_reputationMgr.LoadFromDB(holder->GetResult(PLAYER_LOGIN_QUERY_LOADREPUTATION));
 
-    _collectionMgr->LoadFromDB(holder->GetResult(PLAYER_LOGIN_QUERY_LOADTRANSMOGS));
+    //_collectionMgr->LoadFromDB(holder->GetResult(PLAYER_LOGIN_QUERY_LOADTRANSMOGS));
 
     bool has_epic_mount = false; // Needed for riding skill replacement in patch 1.12.
     _LoadInventory(holder->GetResult(PLAYER_LOGIN_QUERY_LOADINVENTORY), time_diff, has_epic_mount);
@@ -16535,7 +16535,7 @@ void Player::SaveToDB(bool online, bool force)
     _SaveSkills();
     m_reputationMgr.SaveToDB();
     m_honorMgr.Save();
-    _collectionMgr->SaveToDB();
+    // _collectionMgr->SaveToDB();
 
     // Systeme de phasing
     sObjectMgr.SetPlayerWorldMask(GetGUIDLow(), GetWorldMask());
