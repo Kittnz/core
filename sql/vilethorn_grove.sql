@@ -26,6 +26,10 @@ delete from creature_template where entry between 92100 and 92200;
 -- Blacktalon Corruptor, display ID 2017, scale 1.4, level 34-35 elite, casts 11659, has 1500 mana , demon, faction 90
 -- Twisted Ancient, display ID 6351, scale 1, level 35 elite , elemental,  faction 16
 
+-- Warden Liferoot , display ID 4408, level 35 elite, miniboss ((Give 2x normal level 35 elite hp)), has 2000 mana , casts 8905 , weapon 15444 , humanoid , faction 16 , MUST BE CHANNELING A NATURE SPELL
+
+-- Warden Treeshade , display ID 4485, level 35 elite, miniboss ((Give 2x normal level 35 elite hp)), has 2000 mana , casts 8905 , weapon 15444 , humanoid , faction 16 , MUST BE CHANNELING A NATURE SPELL 
+
 replace into creature_template values
 
 (92100, 0, 6821, 0, 0, 0, 'Groveweald Warrior', NULL, 0, 30, 31, 2865, 3018, 0, 0, 1661, 152, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 193, 249, 0, 126, 1, 2000, 2000, 1, 64, 0, 0, 0, 0, 0, 0, 44.84, 61.655, 100, 7, 0, 4623, 4623, 0, 0, 0, 0, 0, 0, 0, 7164, 8258, 15572, 0, 0, 0, 180, 240, 'EventAI', 0, 1, 0, 0, 3, 4623, 0, 0, 0, 0, 0, 0, ''),
@@ -42,8 +46,22 @@ replace into creature_template values
 (92111, 0, 2010, 0, 0, 0, 'Fenektis the Deceiver', NULL, 0, 40, 40, 18572, 18572, 5000, 5000, 1964, 90, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 193, 249, 0, 156, 1, 1341, 1475, 1, 0, 0, 0, 0, 0, 0, 0, 47.2, 64.9, 100, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 71, 354, '', 0, 1, 0, 0, 3, 6549, 0, 0, 0, 0, 0, 0, ''),
 (92112, 0, 10905, 0, 0, 0, 'Raging Infernal', NULL, 0, 33, 34, 1468, 1536, 0, 0, 2593, 90, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 67, 84, 0, 144, 1, 2200, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 52.272, 71.874, 100, 3, 0, 4676, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 46760, 0, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 0, 4, 0, 0, ''),
 (92113, 0, 6809, 0, 0, 0, 'Grove Sprite Corruptor', NULL, 0, 32, 32, 5106, 5162, 2000, 2000, 1252, 90, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 145, 156, 0, 128, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 3, 0, 4672, 4672, 0, 0, 0, 0, 0, 0, 0, 8599, 0, 0, 0, 0, 0, 49, 69, 'EventAI', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
-(92114, 0, 1267, 0, 0, 0, 'Wandering Faerie Dragon', '', 0, 33, 33, 5037, 5075, 2680, 2763, 777, 50, 0, 1.11111, 1.14286, 0, 20, 5, 0, 0, 1, 42, 53, 0, 140, 1, 2000, 2000, 8, 0, 0, 0, 0, 0, 0, 0, 52.272, 71.874, 100, 2, 0, 741, 0, 741, 0, 0, 80, 0, 107, 0, 20821, 12098, 0, 0, 7410, 0, 50, 70, '', 1, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
-
+(92114, 0, 1267, 0, 0, 0, 'Wandering Faerie Dragon', '', 0, 33, 33, 5037, 5075, 2680, 2763, 777, 50, 0, 1.11111, 1.14286, 0, 20, 5, 0, 0, 1, 42, 53, 0, 140, 1, 2000, 2000, 8, 0, 0, 0, 0, 0, 0, 0, 52.272, 71.874, 100, 2, 0, 741, 0, 741, 0, 0, 80, 0, 107, 0, 20821, 12098, 0, 0, 7410, 0, 50, 70, '', 1, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(92115, 0, 820, 0, 0, 0, 'Enraged Sharpclaw', '', 0, 33, 33, 2176, 2241, 0, 0, 562, 44, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 42, 53, 0, 122, 1, 2000, 2000, 1, 0, 0, 4, 0, 0, 0, 0, 40.8672, 56.1924, 100, 1, 1, 3811, 0, 3811, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+(92116, 0, 9011, 0, 0, 0, 'Glade Creeper', NULL, 0, 32, 32, 2865, 2865, 0, 0, 1200, 91, 0, 1.55556, 1.14286, 0, 20, 5, 0, 1, 1, 129, 166, 0, 122, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 35.1008, 48.2636, 100, 4, 0, 4499, 0, 0, 0, 0, 15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 0, 0, 0, 16384, 0, 0, 0, ''),
+(92117, 0, 2451, 0, 0, 0, 'Deranged Ancient', NULL, 0, 34, 34, 4002, 4002, 350, 350, 1061, 91, 0, 1, 1.14286, 0, 20, 5, 0, 4, 1, 240, 281, 0, 122, 1, 1400, 1540, 1, 0, 0, 0, 0, 0, 0, 0, 38.192, 52.514, 100, 4, 0, 4030, 0, 0, 0, 240, 240, 240, 300, 240, 6909, 0, 0, 0, 0, 0, 43, 61, 'EventAI', 1, 3, 0, 0, 3, 0, 0, 0, 16384, 0, 0, 0, ''),
+(92118, 0, 14594, 0, 0, 0, 'Disturbed Spirit', '', 0, 33, 33, 3018, 3330, 800, 800, 1234, 21, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 293, 349, 0, 132, 1, 2000, 2000, 1, 64, 0, 0, 0, 0, 0, 0, 44.84, 61.655, 100, 6, 0, 6426, 6426, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 64260, 0, 198, 264, '', 1, 1, 0, 0, 3, 0, 0, 0, 8388624, 0, 0, 0, ''),
+(92119, 0, 10700, 0, 0, 0, 'Wallowing Spirit', '', 0, 35, 35, 3918, 4530, 1000, 1000, 1234, 21, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 293, 349, 0, 132, 1, 2000, 2000, 1, 64, 0, 0, 0, 0, 0, 0, 44.84, 61.655, 100, 6, 0, 6426, 6426, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 64260, 0, 198, 264, '', 1, 1, 0, 0, 3, 0, 0, 0, 8388624, 0, 0, 0, ''),
+(92120, 0, 7970, 0, 0, 0, 'Roaming Felguard', NULL, 0, 35, 36, 3572, 5572, 6888, 8999, 1964, 90, 0, 1, 1.14286, 2, 20, 5, 0, 1, 1, 199, 256, 0, 156, 1, 2000, 2000, 1, 64, 0, 0, 0, 0, 0, 0, 45.7392, 62.8914, 100, 3, 0, 5760, 5760, 0, 0, 0, 0, 0, 0, 160, 0, 0, 0, 0, 0, 0, 261, 345, 'EventAI', 1, 1, 0, 0, 3, 5760, 0, 0, 0, 0, 0, 0, ''),
+(92121, 0, 1913, 0, 0, 0, 'Mana Hunter', NULL, 0, 34, 36, 3572, 3572, 5888, 6000, 1964, 90, 0, 1, 1.14286, 2, 20, 5, 0, 1, 1, 199, 256, 0, 156, 1, 2000, 2000, 1, 64, 0, 0, 0, 0, 0, 0, 45.7392, 62.8914, 100, 3, 0, 5760, 5760, 0, 0, 0, 0, 0, 0, 160, 0, 0, 0, 0, 0, 0, 261, 345, 'EventAI', 1, 1, 0, 0, 3, 5760, 0, 0, 0, 0, 0, 0, ''),
+(92122, 0, 2834, 0, 0, 0, 'Wicked Manipulator', NULL, 0, 33, 34, 2572, 5172, 5888, 6000, 1964, 90, 0, 1, 1.14286, 2, 20, 5, 0, 1, 1, 199, 256, 0, 156, 1, 2000, 2000, 1, 64, 0, 0, 0, 0, 0, 0, 45.7392, 62.8914, 100, 3, 0, 5760, 5760, 0, 0, 0, 0, 0, 0, 160, 0, 0, 0, 0, 0, 0, 261, 345, 'EventAI', 1, 1, 0, 0, 3, 5760, 0, 0, 0, 0, 0, 0, ''),
+(92123, 0, 2017, 0, 0, 0, 'Blacktalon Trickster', NULL, 0, 33, 35, 3572, 4172, 5888, 6000, 1964, 90, 0, 1, 1.14286, 2, 20, 5, 0, 1, 1, 199, 256, 0, 156, 1, 2000, 2000, 1, 64, 0, 0, 0, 0, 0, 0, 45.7392, 62.8914, 100, 3, 0, 5760, 5760, 0, 0, 0, 0, 0, 0, 160, 0, 0, 0, 0, 0, 0, 261, 345, 'EventAI', 1, 1, 0, 0, 3, 5760, 0, 0, 0, 0, 0, 0, ''),
+(92124, 0, 11334, 0, 0, 0, 'Blacktalon Felsworn', NULL, 0, 33, 36, 3572, 4172, 5888, 6000, 1964, 90, 0, 1, 1.14286, 2, 20, 5, 0, 1, 1, 199, 256, 0, 156, 1, 2000, 2000, 1, 64, 0, 0, 0, 0, 0, 0, 45.7392, 62.8914, 100, 3, 0, 5760, 5760, 0, 0, 0, 0, 0, 0, 160, 0, 0, 0, 0, 0, 0, 261, 345, 'EventAI', 1, 1, 0, 0, 3, 5760, 0, 0, 0, 0, 0, 0, ''),
+(92125, 0, 11334, 0, 0, 0, 'Blacktalon Flamecaller', NULL, 0, 35, 35, 3572, 4172, 5888, 6000, 1964, 90, 0, 1, 1.14286, 2, 20, 5, 0, 1, 1, 199, 256, 0, 156, 1, 2000, 2000, 1, 64, 0, 0, 0, 0, 0, 0, 45.7392, 62.8914, 100, 3, 0, 5760, 5760, 0, 0, 0, 0, 0, 0, 160, 0, 0, 0, 0, 0, 0, 261, 345, 'EventAI', 1, 1, 0, 0, 3, 5760, 0, 0, 0, 0, 0, 0, ''),
+(92126, 0, 2017, 0, 0, 0, 'Blacktalon Corruptor', NULL, 0, 35, 35, 3572, 4172, 5888, 6000, 1964, 90, 0, 1, 1.14286, 2, 20, 5, 0, 1, 1, 199, 256, 0, 156, 1, 2000, 2000, 1, 64, 0, 0, 0, 0, 0, 0, 45.7392, 62.8914, 100, 3, 0, 5760, 5760, 0, 0, 0, 0, 0, 0, 160, 0, 0, 0, 0, 0, 0, 261, 345, 'EventAI', 1, 1, 0, 0, 3, 5760, 0, 0, 0, 0, 0, 0, ''),
+(92127, 0, 6351, 0, 0, 0, 'Twisted Ancient', NULL, 0, 35, 35, 3002, 3602, 350, 350, 1061, 91, 0, 1, 1.14286, 0, 20, 5, 0, 4, 1, 240, 281, 0, 122, 1, 1400, 1540, 1, 0, 0, 0, 0, 0, 0, 0, 38.192, 52.514, 100, 4, 0, 4030, 0, 0, 0, 240, 240, 240, 300, 240, 6909, 0, 0, 0, 0, 0, 43, 61, 'EventAI', 1, 3, 0, 0, 3, 0, 0, 0, 16384, 0, 0, 0, ''),
+(92128, 0, 4408, 0, 0, 0, 'Warden Liferoot', NULL, 0, 35, 35, 8220, 8263, 1963, 2007, 1121, 28, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 45, 55, 0, 134, 1, 2000, 2000, 2, 32768, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 7, 0, 697, 697, 0, 0, 0, 0, 0, 0, 0, 8599, 11969, 8788, 0, 6970, 0, 51, 71, 'EventAI', 1, 3, 0, 0, 3, 697, 0, 0, 0, 0, 0, 0, ''),
+(92129, 0, 4485, 0, 0, 0, 'Warden Treeshade', NULL, 0, 35, 35 8220, 8263, 1963, 2007, 1121, 28, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 45, 55, 0, 134, 1, 2000, 2000, 2, 32768, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 7, 0, 697, 697, 0, 0, 0, 0, 0, 0, 0, 8599, 11969, 8788, 0, 6970, 0, 51, 71, 'EventAI', 1, 3, 0, 0, 3, 697, 0, 0, 0, 0, 0, 0, '');
 
 update creature_template set faction = 82, loot_id = 0 where entry between 92100 and 92150;
 
@@ -62,6 +80,19 @@ update creature_template set scale = 1.5, faction = 90 where entry = 92111;
 update creature_template set scale = 1.5, faction = 90, dmg_school = 2 where entry = 92112;
 update creature_template set scale = 1, faction = 90, dmg_school = 5 where entry = 92113;
 update creature_template set scale = 1, rank = 1 where entry = 92114;
+update creature_template set scale = 1.2, rank = 1, faction = 44 where entry = 92115;
+update creature_template set scale = 1.2, rank = 1, faction = 16 where entry = 92116;
+update creature_template set scale = 1, rank = 1, faction = 16 where entry = 92117;
+update creature_template set scale = 1.1, rank = 1, faction = 16 where entry = 92118;
+update creature_template set scale = 1.2, rank = 1, faction = 16 where entry = 92119;
+update creature_template set scale = 1.3, rank = 1, faction = 90 where entry = 92120;
+update creature_template set scale = 1.0, rank = 1, faction = 90 where entry = 92121;
+update creature_template set scale = 1.0, rank = 1, faction = 90 where entry = 92122;
+update creature_template set scale = 1.3, rank = 1, faction = 90 where entry = 92123;
+update creature_template set scale = 1.3, rank = 1, faction = 90 where entry = 92124;
+update creature_template set scale = 1.4, rank = 1, faction = 90 where entry = 92125;
+update creature_template set scale = 1.4, rank = 1, faction = 90 where entry = 92126;
+update creature_template set scale = 1.0, rank = 1, faction = 96 where entry = 92127;
 
 -- High Priestess A'lathea, ghost visual: 
 replace into creature_template_addon values (92108, 0, 0, 0, 0, 0, 0, 0, 9617);
@@ -103,5 +134,9 @@ replace into creature_equip_template values (@equip_template, 0, @weapon_1, @wea
 update creature_template set equipment_id = @equip_template where entry = @creature;
 
 set @equip_template = 56010; set @weapon_1 = 9372; set @weapon_2 = 0; set @creature = 92110;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 56011; set @weapon_1 = 15213; set @weapon_2 = 0; set @creature = 92120;
 replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
 update creature_template set equipment_id = @equip_template where entry = @creature;
