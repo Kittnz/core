@@ -633,6 +633,7 @@ Player::Player(WorldSession *session) : Unit(),
     m_hardcoreStatus = HARDCORE_MODE_STATUS_NONE;
     m_hardcoreKickTimer = 0;
     m_hardcoreInvGuildTimer = 0;
+    m_hardcoreSaveItemsTimer = 0;
 
     m_totalDeathCount = 0;
     m_worldBuffCheckTimer = 0;
@@ -1515,6 +1516,17 @@ void Player::Update(uint32 update_diff, uint32 p_time)
             }
             else
                 m_hardcoreInvGuildTimer -= update_diff;
+        }
+
+        if (m_hardcoreStatus == HARDCORE_MODE_STATUS_ALIVE && m_hardcoreSaveItemsTimer)
+        {
+            if (update_diff >= m_hardcoreSaveItemsTimer)
+            {
+                m_hardcoreSaveItemsTimer = 0;
+                _SaveInventory();
+            }
+            else
+                m_hardcoreSaveItemsTimer -= update_diff;
         }
     }
 }
@@ -22471,8 +22483,12 @@ bool Player::SetupHardcoreMode()
             {
                 if (Item* pItem = pBag->GetItemByPos(j))
                 {
-                    if (pItem->GetEntry() == 2516 || pItem->GetEntry() == 2512)  // Light Shot & Rough Arrow
-                        continue;
+                    // skip arrows/bullets ONLY for quivers
+                    if (pBag->IsQuiver())
+                    {
+                        if (pItem->isProjectile())  // Arrows and Bullets
+                            continue;
+                    }
 
                     DestroyItem(i, j, true);
                 }
@@ -22484,10 +22500,10 @@ bool Player::SetupHardcoreMode()
     {
         if (Bag* pBag = (Bag*)GetItemByPos(INVENTORY_SLOT_BAG_0, i))
         {
-            if (pBag->GetEntry() == 2102 || pBag->GetEntry() == 2101 || pBag->GetEntry() == 5439)  //  Small Ammo Pouch & Light Quiver & Small Quiver
+            if (pBag->IsQuiver())
                 continue;
-
-                DestroyItem(INVENTORY_SLOT_BAG_0, i, true);
+            
+            DestroyItem(INVENTORY_SLOT_BAG_0, i, true);
         }
 
     }
@@ -22519,7 +22535,8 @@ bool Player::SetupHardcoreMode()
     for (int i = BUYBACK_SLOT_START; i < BUYBACK_SLOT_END; ++i)
         RemoveItemFromBuyBackSlot(i, true);
 
-    _SaveInventory();
+    if (!m_hardcoreSaveItemsTimer)
+        m_hardcoreSaveItemsTimer = 1 * IN_MILLISECONDS;
 
     return true;
 }

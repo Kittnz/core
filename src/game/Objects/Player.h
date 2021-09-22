@@ -2094,6 +2094,7 @@ class Player final: public Unit
         uint8 m_hardcoreStatus;
         uint32 m_hardcoreKickTimer;
         uint32 m_hardcoreInvGuildTimer;
+        uint32 m_hardcoreSaveItemsTimer;
 
         // For druids carrying players in a stag form
         bool bIsTaxiPassenger = false;

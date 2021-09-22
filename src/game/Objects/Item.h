@@ -268,6 +268,7 @@ class Item : public Object
         static void DeleteAllFromDB(uint32 guidLow);
 
         bool isWeapon() const{ return GetProto()->Class == ITEM_CLASS_WEAPON; }
+        bool isProjectile() const { return GetProto()->Class == ITEM_CLASS_PROJECTILE; }
         bool isOneHandedWeapon() const 
         {
             return (isWeapon() &&
@@ -280,6 +281,7 @@ class Item : public Object
         }
 
         bool IsBag() const { return GetProto()->InventoryType == INVTYPE_BAG; }
+        bool IsQuiver() const { return GetProto()->InventoryType == INVTYPE_BAG && GetProto()->Class == ITEM_CLASS_QUIVER; }
         bool IsBroken() const { return GetUInt32Value(ITEM_FIELD_MAXDURABILITY) > 0 && GetUInt32Value(ITEM_FIELD_DURABILITY) == 0; }
         bool CanBeTraded() const;
         void SetInTrade(bool b = true) { mb_in_trade = b; }
