@@ -8292,6 +8292,26 @@ bool ChatHandler::HandleNpcMoveCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleNpcSpeedCommand(char* args)
+{
+    if (!*args)
+        return false;
+
+    float mod = (uint32)atof(args);
+    Creature* pCreature = GetSelectedCreature();
+
+    if (!pCreature)
+    {
+        SendSysMessage(LANG_SELECT_CREATURE);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    pCreature->UpdateSpeed(MOVE_WALK, false, mod);
+    WorldDatabase.PExecuteLog("UPDATE creature_template SET speed_walk = %f WHERE entry = %u", mod, pCreature->GetEntry());
+    return true;
+}
+
 //set faction of creature
 bool ChatHandler::HandleNpcFactionIdCommand(char* args)
 {

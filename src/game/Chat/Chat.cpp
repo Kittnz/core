@@ -326,6 +326,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "playemote",      SEC_GAMEMASTER, false, &ChatHandler::HandleNpcPlayEmoteCommand,        "", nullptr },
         { "spawntime",      SEC_GAMEMASTER,     false, &ChatHandler::HandleNpcSpawnTimeCommand,        "", nullptr },
         { "say",            SEC_GAMEMASTER, false, &ChatHandler::HandleNpcSayCommand,              "", nullptr },
+        { "speed",          SEC_GAMEMASTER, false, &ChatHandler::HandleNpcSpeedCommand,              "", nullptr },
         { "textemote",      SEC_GAMEMASTER, false, &ChatHandler::HandleNpcTextEmoteCommand,        "", nullptr },
         { "yell",           SEC_GAMEMASTER, false, &ChatHandler::HandleNpcYellCommand,             "", nullptr },
         { "setdeathstate",  SEC_GAMEMASTER,     false, &ChatHandler::HandleNpcSetDeathStateCommand,    "", nullptr },
