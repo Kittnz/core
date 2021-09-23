@@ -279,6 +279,33 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                 return;
     }
 
+    // Minimap Battleground Queue System
+    if (lang == LANG_ADDON && type == CHAT_MSG_GUILD && !msg.empty())
+    {
+        if (strstr(msg.c_str(), "TW_BGQueue")) // prefix
+        {
+            if (_player->IsInCombat() || _player->InBattleGround() || _player->IsBeingTeleported() || _player->GetDeathState() == CORPSE)
+            {
+                ChatHandler(_player).PSendSysMessage("You are not meeting the conditions to queue for BGs!");
+                return;
+            }
+            if (strstr(msg.c_str(), "Warsong") || strstr(msg.c_str(), "Arathi") || strstr(msg.c_str(), "Alterac"))
+            {
+                _player->SetBattleGroundEntryPoint();
+
+                if (strstr(msg.c_str(), "Warsong"))
+                    _player->GetSession()->SendBattlegGroundList(_player->GetObjectGuid(), BATTLEGROUND_WS);
+                if (strstr(msg.c_str(), "Arathi"))
+                    _player->GetSession()->SendBattlegGroundList(_player->GetObjectGuid(), BATTLEGROUND_AB);
+                if (strstr(msg.c_str(), "Alterac"))
+                    _player->GetSession()->SendBattlegGroundList(_player->GetObjectGuid(), BATTLEGROUND_AV);
+
+                _player->SetBGQueueAllowed(true);
+            }
+            return;
+        }
+    }
+
     // Title System Comms
     if (lang == LANG_ADDON && type == CHAT_MSG_GUILD && !msg.empty())
     {
