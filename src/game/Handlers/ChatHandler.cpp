@@ -398,6 +398,171 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 
 	}
 
+    // Transmog System Comms
+    if (lang == LANG_ADDON && type == CHAT_MSG_GUILD && !msg.empty())
+    {
+        if (strstr(msg.c_str(), "TW_XMOG")) // prefix
+        {
+            // syntax: GetAvailableTransmogsItemLinks:SLOT (eg: INVTYPE_HEAD)
+            if (strstr(msg.c_str(), "DoTransmog:"))
+            {
+                std::string delimiter = ":";
+                std::string command = msg.substr(0, msg.find(delimiter));
+
+                msg = msg.substr(command.length() + 1, msg.length());
+                std::string slot = msg.substr(0, msg.find(delimiter));
+
+                msg = msg.substr(slot.length() + 1, msg.length());
+                std::string newModelID = msg.substr(0, msg.find(delimiter));
+
+                std::string aText;
+
+                aText = "TW_XMOG TransmogResult:" + slot + ":ok";
+                WorldPacket data;
+                ChatHandler::BuildChatPacket(data, CHAT_MSG_GUILD,
+                    aText.c_str(), Language(LANG_ADDON), _player->GetChatTag(),
+                    _player->GetObjectGuid(), _player->GetName());
+
+                _player->GetSession()->SendPacket(&data);
+                return;
+            }
+            if (strstr(msg.c_str(), "ResetTransmog:"))
+            {
+                std::string delimiter = ":";
+                std::string command = msg.substr(0, msg.find(delimiter));
+
+                msg = msg.substr(command.length() + 1, msg.length());
+                std::string slot = msg.substr(0, msg.find(delimiter));
+
+                std::string aText;
+
+                aText = "TW_XMOG ResetResult:" + slot + ":ok";
+                WorldPacket data;
+                ChatHandler::BuildChatPacket(data, CHAT_MSG_GUILD,
+                    aText.c_str(), Language(LANG_ADDON), _player->GetChatTag(),
+                    _player->GetObjectGuid(), _player->GetName());
+
+                _player->GetSession()->SendPacket(&data);
+                return;
+            }
+            // syntax: GetAvailableTransmogsItemLinks:SLOT (eg: INVTYPE_HEAD)
+            if (strstr(msg.c_str(), "GetAvailableTransmogsItemIDs:"))
+            {
+                std::string slotString = std::regex_replace(msg.c_str(), std::regex("[^0-9]*([0-9]+).*"), std::string("$1"));
+
+                if (slotString.empty() || slotString.length() > 2)
+                    return;
+
+                std::string delimiter = ":";
+                std::string command = msg.substr(0, msg.find(delimiter));
+
+                msg = msg.substr(command.length() + 1, msg.length());
+                std::string slot = msg.substr(0, msg.find(delimiter));
+
+                msg = msg.substr(slot.length() + 1, msg.length());
+                std::string t1 = msg.substr(0, msg.find(delimiter));
+
+                msg = msg.substr(t1.length() + 1, msg.length());
+                std::string t2 = msg.substr(0, msg.find(delimiter));
+
+                std::string aText;
+
+                aText = "TW_XMOG AvailableTransmogs:" + slotString + ":";
+                if (slotString == "1")
+                    aText += "21329:81262:51769:16474:19372:21999:16866:23019:16955:16854:12640:22428:70057:12633:61003:20286:20246";
+
+                if (slotString == "3")
+                    aText += "20637:21330:20184:19394:22419:16476:20058:22940:16953:16856";
+
+                if (slotString == "16") //cloak
+                    aText += "21583:19857:19436:19398:3475:22960";
+
+                if (slotString == "5") //chest
+                    aText += "21389:21814:16966:51771:23000:21652:70055";
+
+                if (slotString == "9") //bracer
+                    aText += "16959:21457:16861";
+
+                if (slotString == "10") //hand
+                    aText += "16471:20264:22090";
+
+                if (slotString == "6") //belt
+                    aText += "16952:16858:23219";
+
+                if (slotString == "7") //pants
+                    aText += "19855:21390:22417";
+
+                if (slotString == "8") //boot
+                    aText += "20049:16409:22270";
+
+                if (slotString == "21") //mh
+                    aText += "869:21650:22736";
+
+                if (slotString == "22") //oh - sshields
+                    aText += "19862:21269:23075";
+
+                if (slotString == "15") //ranged - bow
+                    aText += "2825:18713";
+
+                //INVTYPE_2HWEAPON;
+                WorldPacket data;
+                ChatHandler::BuildChatPacket(data, CHAT_MSG_GUILD,
+                    aText.c_str(), Language(LANG_ADDON), _player->GetChatTag(),
+                    _player->GetObjectGuid(), _player->GetName());
+
+                _player->GetSession()->SendPacket(&data);
+
+                sLog.outInfo("send %s ", aText.c_str());
+
+                return;
+            }
+            // syntax: GetAvailableTransmogsItemLinks:SLOT (eg: INVTYPE_HEAD)
+            if (strstr(msg.c_str(), "GetTransmogStatus"))
+            {
+                std::string aText;
+
+                aText = "TW_XMOG TransmogStatus:";
+
+                aText += "1:21329,";
+                aText += "3:20637,";
+                aText += "16:21583,";
+                aText += "5:21389,";
+                aText += "9:16959,";
+                aText += "10:16471,";
+                aText += "6:16952,";
+                aText += "7:19855,";
+                aText += "8:20049,";
+                aText += "21:869,";
+                aText += "22:19862,";
+                aText += "15:2825";
+
+                aText += "1:0,";
+                aText += "3:0,";
+                aText += "16:0,";
+                aText += "5:0,";
+                aText += "9:0,";
+                aText += "10:0,";
+                aText += "6:0,";
+                aText += "7:0,";
+                aText += "8:0,";
+                aText += "21:0,";
+                aText += "22:0,";
+                aText += "15:0";
+
+                WorldPacket data;
+                ChatHandler::BuildChatPacket(data, CHAT_MSG_GUILD,
+                    aText.c_str(), Language(LANG_ADDON), _player->GetChatTag(),
+                    _player->GetObjectGuid(), _player->GetName());
+
+                _player->GetSession()->SendPacket(&data);
+
+                sLog.outInfo("send %s ", aText.c_str());
+                return;
+            }
+            return;
+        }
+    }
+
     // Message handling
     switch (type)
     {
