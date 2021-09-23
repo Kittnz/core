@@ -3108,7 +3108,8 @@ void Player::GiveLevel(uint32 level)
         if (level == 60)
         {
             SetHardcoreStatus(HARDCORE_MODE_STATUS_IMMORTAL);
-            SetByteValue(PLAYER_BYTES_3, 2, 52);
+            AwardTitle(TITLE_IMMORTAL);
+            ChangeTitle(TITLE_IMMORTAL);
             uint32 itemEntry = 80189;
             std::string subject = "Lockbox of the Immortal Soul";
             std::string message = "Greetings, hero! Like you I undertook the same journey you have. I weathered the greatest dangers and foes without ever losing consciousness or falling to the brink of death.\n\nNow I stand immortal, just as you do. I have reached the peak of my power!\n\nTo celebrate your ascension in the ranks of immortality, I have attached a tabard that only we can wear.\n\n Wear it with pride and continue to avoid death! If you continue on this path, we shall meet one day.";
@@ -10674,6 +10675,18 @@ Item* Player::EquipItem(uint16 pos, Item *pItem, bool update)
 
     Item *pItem2 = GetItemByPos(bag, slot);
 
+    // Transmog - disabled for now
+    // - learn item when equipping it
+    // - send it to player
+    /*ItemPrototype const *itemProto = pItem->GetProto();
+    WorldPacket data;
+    std::string aText;
+    aText = "TW_XMOG NewTransmog:" + std::to_string(itemProto->ItemId);
+    ChatHandler::BuildChatPacket(data, CHAT_MSG_GUILD,
+        aText.c_str(), Language(LANG_ADDON), GetChatTag(),
+        GetObjectGuid(), GetName());
+    GetSession()->SendPacket(&data);*/
+
     if (!pItem2)
     {
         VisualizeItem(slot, pItem);
@@ -10747,6 +10760,11 @@ Item* Player::EquipItem(uint16 pos, Item *pItem, bool update)
 
         return pItem2;
     }
+
+    // Hand of Rag
+    // not a quest, so award on equip
+    if (pItem->GetEntry() == 17182)
+        AwardTitle(TITLE_SULFURON_CHAMPION); //Sulfuron Champion
 
     return pItem;
 }
@@ -13520,6 +13538,16 @@ void Player::RewardQuest(Quest const *pQuest, uint32 reward, WorldObject* questE
                 if (!HasAura(itr->second->spellId, EFFECT_INDEX_0))
                     CastSpell(this, itr->second->spellId, true);
     }
+
+    // Titles players get when they complete quests
+
+    // Thunderfury Quest
+    if (quest_id == 7787) // Rise, Thunderfury!
+        AwardTitle(TITLE_STORMWIELDER);   // Stormwielder
+
+    // Atiesh Quests
+    if (quest_id == 9270 /*Mage*/ || quest_id == 9269 /*Druid*/ || quest_id == 9271 /*Warlock*/ || quest_id == 9257 /*Priest*/)
+        AwardTitle(TITLE_GUARDIAN_OF_TIRISFAL); // Guardian of Tirisfal
 }
 
 void Player::FailQuest(uint32 questId)
@@ -15348,23 +15376,47 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
 
     // Titles
 
-    //SetByteValue(PLAYER_BYTES_3, 2, GetActiveTitle()); -- disabled until we push titles update
+    // Load all titles from theh db
+    m_playerTitles.clear();
+    QueryResult *titlesQuery = CharacterDatabase.PQuery("SELECT title, active "
+        "FROM character_titles "
+        "WHERE guid = '%u'", GetGUIDLow());
 
-    if (HasItemCount(21176, 1, 0)) // Scarab Lord
-        SetByteValue(PLAYER_BYTES_3, 2, 15);
+    if (titlesQuery && titlesQuery->GetRowCount() > 0)
+        do
+        {
+            Field *fields = titlesQuery->Fetch();
+            uint8 titleID = fields[0].GetUInt8();
+            uint8 active = fields[1].GetUInt8();
 
-    if (HasItemCount(17182, 1, 0)) // Sulfuron Champion
-        SetByteValue(PLAYER_BYTES_3, 2, 49);
+            m_playerTitles[titleID] = active;
 
-    if (HasItemCount(19019, 1, 0)) // Stormwielder
-        SetByteValue(PLAYER_BYTES_3, 2, 48);
+        } while (titlesQuery->NextRow());
 
-    if (HasItemCount(22630, 1, 0) || HasItemCount(22632, 1, 0) || HasItemCount(22631, 1, 0) || HasItemCount(22589, 1, 0)) // Guardian of Tirisfal
-        SetByteValue(PLAYER_BYTES_3, 2, 50);
+    SetByteValue(PLAYER_BYTES_3, 2, GetActiveTitle()); // set active title on logon
+
+    if (GetGUIDLow() == 1 || GetGUIDLow() == 11549) // Torta, Pompa
+        AwardTitle(TITLE_DEVELOPER); // Developer
+
+    if (GetGUIDLow() == 121365) // Gheor
+        AwardTitle(TITLE_TURTLE_GOD); // Turtle God
+
+    if (HasItemCount(21176, 1, 1)) // Scarab Lord
+        AwardTitle(TITLE_SCARAB_LORD);
 
     if (isImmortal()) // Immortal (temp. check)
-        SetByteValue(PLAYER_BYTES_3, 2, 52);
+        AwardTitle(TITLE_IMMORTAL);
 
+    // Award titles for current important items
+    if (HasItemCount(17182, 1, 1))
+        AwardTitle(TITLE_SULFURON_CHAMPION); //Sulfuron Champion
+        
+    if (HasItemCount(19019, 1, 1))
+        AwardTitle(TITLE_STORMWIELDER); // Stormwielder
+        
+    if (HasItemCount(22589, 1, 1) || HasItemCount(22630, 1, 1) || HasItemCount(22631, 1, 1) || HasItemCount(22632, 1, 1))
+        AwardTitle(TITLE_GUARDIAN_OF_TIRISFAL); // Guardian of Tirisfal
+    
     return true;
 }
 
@@ -22979,3 +23031,84 @@ void Player::AddTransmog(uint32 itemId)
     }
 }
 
+bool Player::HasTitle(uint8 title)
+{
+    return m_playerTitles.count(title) > 0 || title == 0;
+}
+
+void Player::AwardTitle(int8 title)
+{
+
+    if (!HasTitle(title))
+    {
+        CharacterDatabase.DirectPExecute("INSERT INTO character_titles (guid, title) VALUES ('%u', '%i')", GetGUIDLow(), title);
+
+        std::string newTiteText = "TWT_TITLES newTitle:" + std::to_string(title);
+        WorldPacket data;
+        ChatHandler::BuildChatPacket(data, CHAT_MSG_GUILD,
+            newTiteText.c_str(), Language(LANG_ADDON), GetChatTag(),
+            GetObjectGuid(), GetName());
+
+        m_playerTitles[title] = 0;
+
+        GetSession()->SendPacket(&data);
+
+        // check if this is the only title the player has, enable it if so
+        if (m_playerTitles.size() == 1)
+            ChangeTitle(title);
+
+        SendEarnedTitles();
+    }
+}
+
+uint8 Player::GetActiveTitle()
+{
+    for (std::map<uint8, uint8>::iterator itr = m_playerTitles.begin(); itr != m_playerTitles.end(); itr++)
+        if (itr->second == 1)
+            return itr->first;
+    return 0;
+}
+
+void Player::SendEarnedTitles()
+{
+
+    std::string titlesText = "TWT_TITLES TW_AVAILABLE_TITLES:0:";
+
+    if (GetByteValue(PLAYER_BYTES_3, 2) == 0)
+        titlesText += "1;"; // "None" title, but active
+    else
+        titlesText += "0;"; // "None" title
+
+    if (m_playerTitles.size() > 0)
+        for (std::map<uint8, uint8>::iterator itr = m_playerTitles.begin(); itr != m_playerTitles.end(); itr++)
+            titlesText += std::to_string(itr->first) + ":" + std::to_string(itr->second) + ";";
+
+    titlesText.pop_back(); // remove last ;
+
+    WorldPacket data;
+    ChatHandler::BuildChatPacket(data, CHAT_MSG_GUILD,
+        titlesText.c_str(), Language(LANG_ADDON), GetChatTag(),
+        GetObjectGuid(), GetName());
+
+    GetSession()->SendPacket(&data);
+}
+
+void Player::ChangeTitle(uint8 title)
+{
+    if (!HasTitle(title))
+        ChatHandler(this).PSendSysMessage("You have not earned that title.");
+    else {
+        SetByteValue(PLAYER_BYTES_3, 2, title);
+
+        for (std::map<uint8, uint8>::iterator itr = m_playerTitles.begin(); itr != m_playerTitles.end(); itr++)
+            if (itr->first == title)
+                itr->second = 1;
+            else
+                itr->second = 0;
+
+        CharacterDatabase.DirectPExecute("UPDATE character_titles SET active = 0 WHERE guid = '%u'", GetGUIDLow());
+        CharacterDatabase.DirectPExecute("UPDATE character_titles SET active = 1 WHERE guid = '%u' and title = '%i'", GetGUIDLow(), title);
+    }
+
+    SendEarnedTitles();
+}

@@ -279,6 +279,41 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                 return;
     }
 
+    // Title System Comms
+    if (lang == LANG_ADDON && type == CHAT_MSG_GUILD && !msg.empty())
+    {
+        if (strstr(msg.c_str(), "TW_TITLES")) // prefix
+        {
+            // syntax: ChangeTitle:#
+            if (strstr(msg.c_str(), "ChangeTitle:"))
+            {
+                std::string titleIDstring = std::regex_replace(msg.c_str(), std::regex("[^0-9]*([0-9]+).*"), std::string("$1"));
+                int titleID = 0;
+
+                if (titleIDstring.empty() || titleIDstring.length() > 3)
+                    return;
+
+                try
+                {
+                    titleID = std::stoi(titleIDstring);
+                }
+                catch (...)
+                {
+                    return;
+                }
+
+                _player->ChangeTitle(titleID);
+                return;
+            }
+
+            // syntax: ChangeTitle:#
+            if (strstr(msg.c_str(), "Titles:List"))
+            {
+                _player->SendEarnedTitles();
+                return;
+            }
+        }
+    }
 
 	// TWT Threat: Guid and UnitDetailedThreatSituation Request
 	if (lang == LANG_ADDON && (type == CHAT_MSG_PARTY || type == CHAT_MSG_RAID) && !msg.empty())

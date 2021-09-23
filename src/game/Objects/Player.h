@@ -631,6 +631,77 @@ enum HardcoreStatus : uint8
     HARDCORE_MODE_STATUS_DEAD     = 3,
 };
 
+enum PlayerTitles : uint8
+{
+    TITLE_PROTECTOR_OF_STORMWIND = 1,
+    TITLE_OVERLORD_OF_ORGRIMMAR = 2,
+    TITLE_THANE_OF_IRONFORGE = 3,
+    TITLE_HIGH_SENTINEL_OF_DARNASSUS = 4,
+    TITLE_DEATHLORD_OF_THE_UNDERCITY = 5,
+    TITLE_CHIEFTAN_OF_THUNDERBLUFF = 6,
+    TITLE_VOODOO_BOSS_OF_SENJIN = 7,
+    TITLE_AVENGER_OF_GNOMEREGAN = 8,
+    TITLE_BRUISER_OF_MUDSPROCKET = 9,
+    TITLE_AVENGER_OF_QUELTHALAS = 10,
+    TITLE_WARCHIEF = 11,
+    TITLE_DEVELOPER = 12,
+    TITLE_WORLD_BOSS = 13,
+    TITLE_TURTLE_GOD = 14,
+    TITLE_SCARAB_LORD = 15,
+    TITLE_CONQUEROR_OF_NAXXRAMAS = 16,
+    TITLE_EXPEDITION_LEADER = 17,
+    TITLE_FOOTMAN = 18,
+    TITLE_GRUNT = 19,
+    TITLE_DEATHGUARD = 20,
+    TITLE_HEADHUNTER = 21,
+    TITLE_PRIESTESS_OF_THE_MOON = 22,
+    TITLE_DRUID_OF_THE_WILD = 23,
+    TITLE_DRUID_OF_THE_CLAW = 24,
+    TITLE_DRUID_OF_THE_TALON = 25,
+    TITLE_MOUNTAINEER = 26,
+    TITLE_MEKGINEER = 27,
+    TITLE_BRUISER = 28,
+    TITLE_MERCHANT = 29,
+    TITLE_TRADER = 30,
+    TITLE_SUNBRINGER = 31,
+    TITLE_CLERIC = 32,
+    TITLE_PEASANT = 33,
+    TITLE_PEON = 34,
+    TITLE_MAGUS = 35,
+    TITLE_BISHOP = 36,
+    TITLE_SPIRITWALKER = 37,
+    TITLE_CHILD_OF_CHENARIUS = 38,
+    TITLE_WATCHER = 39,
+    TITLE_BLOOD_MAGE = 40,
+    TITLE_FARSTRIDER = 41,
+    TITLE_GIPERIONS_MINION = 42,
+    TITLE_TAMAMOS_MINION = 43,
+    TITLE_TORTAS_MINION = 44,
+    TITLE_DRAGUNOVIS_MINION = 45,
+    TITLE_KITSUNE = 46,
+    TITLE_BLOOD_RING_CHAMPION = 47,
+    TITLE_STORMWIELDER = 48,
+    TITLE_SULFURON_CHAMPION = 49,
+    TITLE_GUARDIAN_OF_TIRISFAL = 50,
+    TITLE_STARKILLER = 51,
+    TITLE_IMMORTAL = 52,
+    TITLE_ADMIRAL = 53,
+    TITLE_MAYOR = 54,
+    TITLE_CAPTAIN = 55,
+    TITLE_SAILOR = 56,
+    TITLE_QUEEN = 57,
+    TITLE_KING = 58,
+    TITLE_LORD = 59,
+    TITLE_LADY = 60,
+    TITLE_DOCTOR = 61,
+    TITLE_MEDIC = 62,
+    TITLE_LOREKEEPER = 63,
+    TITLE_FOX = 64,
+    TITLE_TURTLE = 65,
+    TITLE_ANIME_LOVER = 66,
+    TITLE_PENUS = 67,
+};
+
 // Player summoning auto-decline time (in secs)
 #define MAX_PLAYER_SUMMON_DELAY                   (2*MINUTE)
 #define MAX_MONEY_AMOUNT                       (0x7FFFFFFF-1)
@@ -2532,43 +2603,53 @@ class Player final: public Unit
         /*********************************************************/
         /***                       OTHER                       ***/
         /*********************************************************/
-		protected:
+	protected:
 
-		// Giperion TURTLE SPECIFIC Begin
-		public:
-			//Giperion Elysium: Send message to upper place of player screen, even if he not in raid. Useful for scripts/events
-			void SendRaidWarning(uint32 textId);
-			void SendRaidWarning(const std::string& text);
-			void SendRaidWarning(const char* text);
+	    // Giperion TURTLE SPECIFIC Begin
+	public:
+		//Giperion Elysium: Send message to upper place of player screen, even if he not in raid. Useful for scripts/events
+		void SendRaidWarning(uint32 textId);
+		void SendRaidWarning(const std::string& text);
+		void SendRaidWarning(const char* text);
 
-			bool IsObjectIsExclusiveVisible(ObjectGuid guid);
-			void AddExclusiveVisibleObject(ObjectGuid guid);
-			void RemoveExclusiveVisibleObject(ObjectGuid guid);
-			std::list<ObjectGuid> m_exclusiveVisibleObjects;
+		bool IsObjectIsExclusiveVisible(ObjectGuid guid);
+		void AddExclusiveVisibleObject(ObjectGuid guid);
+		void RemoveExclusiveVisibleObject(ObjectGuid guid);
+		std::list<ObjectGuid> m_exclusiveVisibleObjects;
 
 		// Giperion TURTLE SPECIFIC End
 
 		// Xerron Suspend World Buffs Start
-		public:
-			bool SuspendWorldBuffs();
-			bool RestoreSuspendedWorldBuffs();
-			void RemoveWorldBuffsIfAlreadySuspended();
+	public:
+		bool SuspendWorldBuffs();
+		bool RestoreSuspendedWorldBuffs();
+		void RemoveWorldBuffsIfAlreadySuspended();
 		// Xerron Suspend World Buffs End
 
 		// Xerron Dual Spec
-		public:
-			bool HasSavedTalentSpec(int primaryOrSecondary);
-			std::string SpecTalentPoints(int primaryOrSecondary);
-			bool ActivateTalentSpec(int primaryOrSecondary);
-			bool SaveTalentSpec(int primaryOrSecondary);
+	public:
+		bool HasSavedTalentSpec(int primaryOrSecondary);
+		std::string SpecTalentPoints(int primaryOrSecondary);
+		bool ActivateTalentSpec(int primaryOrSecondary);
+		bool SaveTalentSpec(int primaryOrSecondary);
 		// Xerron Dual Spec End
 
         // Tanatos Transmog
-        public:
-            void AddTransmog(uint32 itemId);
-        private:
-            CollectionMgr* _collectionMgr;
+    public:
+        void AddTransmog(uint32 itemId);
+    private:
+        CollectionMgr* _collectionMgr;
         // Tanatos Transmog End
+
+        // Titles System
+    public:
+        std::map<uint8, uint8> m_playerTitles;
+        bool HasTitle(uint8 title);
+        void AwardTitle(int8 title);
+        uint8 GetActiveTitle();
+        void SendEarnedTitles();
+        void ChangeTitle(uint8 title);
+        // Titles System End
 
 };
 
