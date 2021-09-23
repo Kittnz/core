@@ -23055,7 +23055,10 @@ void Player::AwardTitle(int8 title)
 
         // check if this is the only title the player has, enable it if so
         if (m_playerTitles.size() == 1)
+        {
             ChangeTitle(title);
+            return;
+        }
 
         SendEarnedTitles();
     }
