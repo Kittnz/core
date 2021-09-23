@@ -63,7 +63,7 @@ replace into creature_template values
 (92128, 0, 4408, 0, 0, 0, 'Warden Liferoot', NULL, 0, 35, 35, 8220, 8263, 1963, 2007, 1121, 28, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 245, 255, 0, 134, 1, 2000, 2000, 2, 32768, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 7, 0, 697, 697, 0, 0, 0, 0, 0, 0, 0, 8599, 11969, 8788, 0, 6970, 0, 51, 71, 'EventAI', 1, 3, 0, 0, 3, 697, 0, 0, 0, 0, 0, 0, ''),
 (92129, 0, 4485, 0, 0, 0, 'Warden Treeshade', NULL, 0, 35, 35, 8220, 8263, 1963, 2007, 1121, 28, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 245, 255, 0, 134, 1, 2000, 2000, 2, 32768, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 7, 0, 697, 697, 0, 0, 0, 0, 0, 0, 0, 8599, 11969, 8788, 0, 6970, 0, 51, 71, 'EventAI', 1, 3, 0, 0, 3, 697, 0, 0, 0, 0, 0, 0, '');
 
-update creature_template set faction = 82, loot_id = 0 where entry between 92100 and 92150;
+update creature_template set faction = 82, loot_id = 0 where entry between 92100 and 92129;
 
 update creature_template set scale = 0.9 where entry = 92100;
 update creature_template set scale = 0.8, rank = 1 where entry = 92101;
