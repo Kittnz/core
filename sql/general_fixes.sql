@@ -12,8 +12,8 @@ set @equip_template = 56020; set @weapon_1 = 15269; set @weapon_2 = 0; set @crea
 replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
 update creature_template set equipment_id = @equip_template where entry = @creature;
 
-update creature_template set diplay_id1 = 2437 where entry = 91961;
-update creature_template set diplay_id1 = 2437 where entry = 91960;
+update creature_template set display_id1 = 2437 where entry = 91961;
+update creature_template set display_id1 = 2437 where entry = 91960;
 
 replace into creature_template values 
 (92130, 0, 6825, 0, 0, 0, 'Speaker Gnarr', '', 0, 32, 32, 1221, 1221, 2000, 2000, 1200, 11, 2, 1, 1.14286, 0, 20, 5, 0, 0, 1, 46, 58, 0, 132, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 48.7872, 67.0824, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 1, 0, 3, 1070, 0, 0, 0, 0, 524298, 0, ''),
