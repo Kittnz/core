@@ -141,7 +141,7 @@ bool Group::Create(ObjectGuid guid, const char * name)
 
         // store group in database
         CharacterDatabase.BeginTransaction();
-        CharacterDatabase.PExecute("DELETE FROM groups WHERE groupId ='%u'", m_Id);
+        CharacterDatabase.PExecute("DELETE FROM `groups` WHERE groupId ='%u'", m_Id);
         CharacterDatabase.PExecute("DELETE FROM group_member WHERE groupId ='%u'", m_Id);
 
         CharacterDatabase.PExecute("INSERT INTO groups(groupId,leaderGuid,mainTank,mainAssistant,lootMethod,looterGuid,lootThreshold,icon1,icon2,icon3,icon4,icon5,icon6,icon7,icon8,isRaid) "
@@ -169,7 +169,7 @@ bool Group::Create(ObjectGuid guid, const char * name)
 bool Group::LoadGroupFromDB(Field* fields)
 {
     //                                          0         1              2           3           4              5      6      7      8      9      10     11     12     13      14          15
-    // result = CharacterDatabase.Query("SELECT mainTank, mainAssistant, lootMethod, looterGuid, lootThreshold, icon1, icon2, icon3, icon4, icon5, icon6, icon7, icon8, isRaid, leaderGuid, groupId FROM groups");
+    // result = CharacterDatabase.Query("SELECT mainTank, mainAssistant, lootMethod, looterGuid, lootThreshold, icon1, icon2, icon3, icon4, icon5, icon6, icon7, icon8, isRaid, leaderGuid, groupId FROM `groups`");
 
     m_Id = fields[15].GetUInt32();
     m_leaderGuid = ObjectGuid(HIGHGUID_PLAYER, fields[14].GetUInt32());
@@ -524,7 +524,7 @@ void Group::Disband(bool hideDestroy)
     if (!isBGGroup())
     {
         CharacterDatabase.BeginTransaction();
-        CharacterDatabase.PExecute("DELETE FROM groups WHERE groupId='%u'", m_Id);
+        CharacterDatabase.PExecute("DELETE FROM `groups` WHERE groupId='%u'", m_Id);
         CharacterDatabase.PExecute("DELETE FROM group_member WHERE groupId='%u'", m_Id);
         CharacterDatabase.CommitTransaction();
         ResetInstances(INSTANCE_RESET_GROUP_DISBAND, nullptr);
@@ -1558,7 +1558,7 @@ void Group::_setLeader(ObjectGuid guid)
         Player::ConvertInstancesToGroup(player, this, slot->guid);
 
         // update the group leader
-        CharacterDatabase.PExecute("UPDATE groups SET leaderGuid='%u' WHERE groupId='%u'", slot_lowguid, m_Id);
+        CharacterDatabase.PExecute("UPDATE `groups` SET leaderGuid='%u' WHERE groupId='%u'", slot_lowguid, m_Id);
         CharacterDatabase.CommitTransaction();
     }
 

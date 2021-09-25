@@ -180,7 +180,7 @@ void WorldSession::HandleGMSurveySubmitOpcode(WorldPacket& recvData)
             continue;
 
         static SqlStatementID insSubSurvey;
-        SqlStatement stmt = CharacterDatabase.CreateStatement(insSubSurvey, "INSERT INTO gm_subsurveys (surveyId, subsurveyId, rank, comment) VALUES (?, ?, ?, ?)");
+        SqlStatement stmt = CharacterDatabase.CreateStatement(insSubSurvey, "INSERT INTO gm_subsurveys (surveyId, subsurveyId, `rank`, comment) VALUES (?, ?, ?, ?)");
         stmt.addUInt32(nextSurveyID);
         stmt.addUInt32(subSurveyId);
         stmt.addUInt32(rank);
