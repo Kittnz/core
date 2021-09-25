@@ -16386,7 +16386,7 @@ bool Player::_LoadHomeBind(QueryResult *result)
 
 void Player::_LoadGuild(QueryResult* result)
 {
-    //"SELECT guildid,rank FROM guild_member WHERE guid = '%u'",pCurrChar->GetGUIDLow());
+    //"SELECT guildid,`rank` FROM guild_member WHERE guid = '%u'",pCurrChar->GetGUIDLow());
 
     if (result)
     {
