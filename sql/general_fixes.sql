@@ -141,3 +141,58 @@ update creature_template set equipment_id = @equip_template where entry = @creat
 set @equip_template = 56033; set @weapon_1 = 1389; set @weapon_2 = 0; set @creature = 92145;
 replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
 update creature_template set equipment_id = @equip_template where entry = @creature;
+
+-- Razarri Priest , display ID 9911, level 51-52, humanoid , weapon 15863, has 2300 mana, casts 15207 faction 28
+-- Razzari Worshipper , display ID 5370, level 49-50, humanoid , weapon 1 12991, faction 28
+-- Razzari Tribesman , display ID 4079, level 49-50, humanoid, weapon 1 1415, faction 28
+-- Razzari Warrior , display ID 12829, level 52-53, humanoid, weapon 1 7945, weapon 2 15604, faction 28
+-- Razzari Guardian , display ID 14832, level 54, humanoid, NO WEAPON, faction 28
+-- Razzari Scout , display ID 11468, level 47-48, humanoid , weapon 1 15396, faction 28
+-- Razzari Mystic , display ID 4076, level 48-49, humanoid , weapon 1 15397, has 1000 mana, casts 10466 faction 28
+-- Speaker Ujuwa <Razzari Speaker> , display ID 12306, level 53, humanoid, weapon 1 80767, faction 28
+-- Chief Imaz'ul <Razzari Chieftain>, display ID  4239  , level 53, humanoid, weapon 2501, faction 28
+-- Seer Jang'zo <Razzari Seer> , display ID 4078 , level 53, humanoid, weapon 1 13339, has 3500 mana, casts 10413 , faction 28
+
+replace into creature_template values
+(92148, 0, 9911, 0, 0, 0, 'Razarri Priest', NULL, 0, 51, 52, 2751, 2845, 2000, 2000, 1892, 28, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 83, 103, 0, 234, 1, 2000, 2000, 8, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 7, 0, 14748, 0, 0, 0, 0, 0, 0, 0, 0, 15207, 0, 0, 0, 0, 0, 100, 135, 'EventAI', 1, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(92149, 0, 5370, 0, 0, 0, 'Razzari Worshipper', NULL, 0, 49, 50, 2672, 2768, 0, 0, 2972, 28, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 85, 105, 0, 226, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 14748, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 96, 130, 'EventAI', 1, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(92150, 0, 4079, 0, 0, 0, 'Razzari Tribesman', NULL, 0, 49, 50, 2672, 2768, 0, 0, 2972, 28, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 85, 105, 0, 226, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 14748, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 96, 130, 'EventAI', 1, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(92151, 0, 12829, 0, 0, 0, 'Razzari Warrior', NULL, 0, 52, 53, 3082, 3188, 0, 0, 3163, 28, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 99, 122, 0, 238, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 7, 0, 14748, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 107, 145, 'EventAI', 1, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(92152, 0, 14832, 0, 0, 0, 'Razzari Guardian', NULL, 0, 54, 54, 3082, 3292, 0, 0, 3162, 28, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 158, 188, 0, 244, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 7, 0, 14748, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 61, 305, 'EventAI', 1, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(92153, 0, 11468, 0, 0, 0, 'Razzari Scout', NULL, 0, 47, 48, 2487, 2577, 0, 0, 2862, 28, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 81, 101, 0, 216, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 14748, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 94, 128, 'EventAI', 1, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(92154, 0, 4076, 0, 0, 0, 'Razzari Mystic', NULL, 0, 48, 49, 2062, 2137, 1000, 1000, 2367, 28, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 81, 105, 0, 220, 1, 2000, 2000, 8, 0, 0, 0, 0, 0, 0, 0, 62.8672, 86.4424, 100, 7, 0, 14748, 0, 0, 0, 0, 0, 0, 0, 0, 10466, 0, 0, 0, 0, 0, 85, 115, 'EventAI', 1, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(92155, 0, 12306, 0, 0, 0, 'Speaker Ujuwa', 'Razzari Speaker', 0, 53, 53, 2550, 2550, 0, 0, 3202, 28, 0, 1.1, 1.14286, 0, 20, 5, 0, 0, 1, 85, 104, 0, 238, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.4704, 96.8968, 100, 7, 0, 14748, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 97, 132, 'EventAI', 1, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(92156, 0, 4239, 0, 0, 0, 'Chief Imaz\'ul', 'Razzari Chieftain', 0, 53, 53, 2550, 2550, 0, 0, 3202, 28, 0, 1.1, 1.14286, 0, 20, 5, 0, 0, 1, 85, 104, 0, 238, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.4704, 96.8968, 100, 7, 0, 14748, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 97, 132, 'EventAI', 1, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(92157, 0, 4078, 0, 0, 0, 'Seer Jang\'zo', 'Razzari Seer', 0, 53, 53, 2550, 2550, 3500, 3500, 3202, 28, 0, 1.1, 1.14286, 0, 20, 5, 0, 0, 1, 85, 104, 0, 238, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.4704, 96.8968, 100, 7, 0, 14748, 0, 0, 0, 0, 0, 0, 0, 0, 10413, 0, 0, 0, 0, 0, 97, 132, 'EventAI', 1, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+set @equip_template = 56034; set @weapon_1 = 15863; set @weapon_2 = 0; set @creature = 92148;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 56035; set @weapon_1 = 12991; set @weapon_2 = 0; set @creature = 92149;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 56036; set @weapon_1 = 1415; set @weapon_2 = 0; set @creature = 92150;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 56037; set @weapon_1 = 7945; set @weapon_2 = 15604; set @creature = 92151;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 56038; set @weapon_1 = 15396; set @weapon_2 = 0; set @creature = 92153;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 56039; set @weapon_1 = 15397; set @weapon_2 = 0; set @creature = 92154;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 56040; set @weapon_1 = 80767; set @weapon_2 = 0; set @creature = 92155;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 56041; set @weapon_1 = 2501; set @weapon_2 = 0; set @creature = 92156;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+update creature_template set equipment_id = @equip_template where entry = @creature;
