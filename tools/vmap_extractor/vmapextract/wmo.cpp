@@ -195,7 +195,7 @@ bool WMORoot::open()
         {
         }
         */
-        f.seek((int)nextpos);
+        f.seekU(nextpos);
     }
     f.close();
     return true;

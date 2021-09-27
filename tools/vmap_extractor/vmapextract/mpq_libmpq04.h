@@ -91,6 +91,7 @@ class MPQFile
         char* getPointer() { return buffer + pointer; }
         bool isEof() { return eof; }
         void seek(int offset);
+        void seekU(uint32 offset);
         void seekRelative(int offset);
         void close();
 };

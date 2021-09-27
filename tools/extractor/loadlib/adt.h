@@ -21,6 +21,8 @@
 
 #include "loadlib.h"
 
+#include <limits>
+
 #define TILESIZE (533.33333f)
 #define CHUNKSIZE ((TILESIZE) / 16.0f)
 #define UNITSIZE (CHUNKSIZE / 8.0f)
@@ -143,7 +145,7 @@ class adt_MCNK
         }
         adt_MCLQ* getMCLQ()
         {
-            if (offsMCLQ)
+            if (offsMCLQ < std::numeric_limits<uint32>::max() - 1)
                 return (adt_MCLQ*)((uint8*)this + offsMCLQ);
             return 0;
         }

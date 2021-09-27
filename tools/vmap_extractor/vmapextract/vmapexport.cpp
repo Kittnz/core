@@ -363,6 +363,8 @@ bool fillArchiveNameVector(std::vector<std::string>& pArchiveNames)
     pArchiveNames.push_back(path);
     sprintf(path, "%sPatch-U.mpq", input_path);
     pArchiveNames.push_back(path);
+    sprintf(path, "%sPatch-V.mpq", input_path);
+    pArchiveNames.push_back(path);
 
     return true;
 }
@@ -432,6 +434,7 @@ bool processArgv(int argc, char** argv)
 
 int main(int argc, char** argv)
 {
+    std::cin.get();
     bool success = true;
 
     // Use command line arguments, when some

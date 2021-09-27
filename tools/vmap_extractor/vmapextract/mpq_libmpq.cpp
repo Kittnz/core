@@ -119,6 +119,12 @@ void MPQFile::seek(int offset)
     eof = (pointer >= size);
 }
 
+void MPQFile::seekU(uint32 offset) // too big WMOs have high size will cause underflow.
+{
+    pointer = offset;
+    eof = (pointer >= size);
+}
+
 void MPQFile::seekRelative(int offset)
 {
     pointer += offset;

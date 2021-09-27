@@ -35,7 +35,6 @@
 #include "ObjectGuid.h"
 #include "MapNodes/AbstractPlayer.h"
 #include "WorldPacket.h"
-#include "Creature.h"
 
 #include <map>
 #include <set>
@@ -51,6 +50,7 @@ class SqlResultQueue;
 class QueryResult;
 class World;
 class MovementBroadcaster;
+class CreatureInfo;
 
 // ServerMessages.dbc
 enum ServerMessageType
