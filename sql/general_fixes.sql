@@ -213,21 +213,73 @@ replace into creature_template values
 (92163, 0, 4872, 0, 0, 0, 'Letashaz', '', 0, 55, 55, 18298, 18298, 0, 0, 3271, 74, 0, 1, 1.14286, 2, 20, 5, 0, 1, 1, 335, 432, 0, 248, 1, 1191, 1310, 1, 0, 0, 0, 0, 0, 0, 0, 58.688, 80.696, 100, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 28969, 0, 0, 0, 0, 0, 143, 713, 'EventAI', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
 
 set @equip_template = 56042; set @weapon_1 = 2224; set @weapon_2 = 0; set @creature = 92158;
-replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0);
 update creature_template set equipment_id = @equip_template where entry = @creature;
 
 set @equip_template = 56043; set @weapon_1 = 1161; set @weapon_2 = 0; set @creature = 92159;
-replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0);
 update creature_template set equipment_id = @equip_template where entry = @creature;
 
 set @equip_template = 56044; set @weapon_1 = 35; set @weapon_2 = 0; set @creature = 92160;
-replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0);
 update creature_template set equipment_id = @equip_template where entry = @creature;
 
 set @equip_template = 56045; set @weapon_1 = 11042; set @weapon_2 = 0; set @creature = 92161;
-replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0);
 update creature_template set equipment_id = @equip_template where entry = @creature;
 
 set @equip_template = 56046; set @weapon_1 = 36; set @weapon_2 = 0; set @creature = 92162;
-replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0);
 update creature_template set equipment_id = @equip_template where entry = @creature;
+
+-- Letashaz
+set @creature_entry = 92163;
+set @description = 'Deeptide: Letashaz';
+set @spell_list_id = 201100;
+
+set @spellid_1 = 28969;
+set @probability_1 = 100; 
+set @casttarget_1 = 1; 
+set @castflags_1 = 4;
+set @delayinitialmin_1 = 1; 
+set @delayinitialmax_1 = 3; 
+set @delayrepeatmin_1 = 29; 
+set @delayrepeatmax_1 = 31;
+
+-- Do not touch this part:
+update creature_template set spell_list_id = @spell_list_id, ai_name = '', script_name = '', spell_id1 = 0, spell_id2 = 0, spell_id3 = 0 
+where entry = @creature_entry;
+replace into creature_spells (entry, name, 
+spellid_1, probability_1, casttarget_1, castflags_1, delayinitialmin_1, delayinitialmax_1, delayrepeatmin_1, delayrepeatmax_1) 
+values (@spell_list_id, @description,
+@spellid_1, @probability_1, @casttarget_1, @castflags_1, @delayinitialmin_1, @delayinitialmax_1, @delayrepeatmin_1, @delayrepeatmax_1);
+
+-- Drowned Soul, display ID 146 , level 51-52, undead, has 2000 mana,  casts 10181, faction 19
+-- Forgotten Crew, display ID 10381, level 51-52, undead, weapon 2092, faction 19, MUST BE GHOST
+-- Forgotten Swordsman, display ID 10379, level 52-53, undead , weapon 4560, faction 19, MUST BE GHOST
+-- Captain Faelon, display ID 10375, level 54, undead , weapon 15211, has 2000 mana , casts 10150 , faction 19, MUST BE GHOST
+
+replace into creature_template values
+(92164, 0, 146, 0, 0, 0, 'Drowned Soul', NULL, 0, 51, 52, 2384, 2466, 2000, 2000, 2500, 19, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 81, 101, 0, 234, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10181, 0, 0, 0, 0, 0, 93, 127, 'EventAI', 1, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(92165, 0, 10381, 0, 0, 0, 'Forgotten Crew', NULL, 0, 51, 52, 2384, 2466, 0, 0, 2500, 19, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 81, 101, 0, 234, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 93, 127, 'EventAI', 1, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(92166, 0, 10379, 0, 0, 0, 'Forgotten Swordsman', NULL, 0, 52, 53, 2466, 2550, 0, 0, 2500, 19, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 81, 101, 0, 234, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 93, 127, 'EventAI', 1, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(92167, 0, 10375, 0, 0, 0, 'Captain Faelon', NULL, 0, 54, 54, 3292, 3292, 2000, 2000, 3216, 19, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 95, 116, 0, 244, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 70.4704, 96.8968, 100, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10150, 0, 0, 0, 0, 0, 113, 153, 'EventAI', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+set @equip_template = 56047; set @weapon_1 = 2092; set @weapon_2 = 0; set @creature = 92165;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 56048; set @weapon_1 = 4560; set @weapon_2 = 0; set @creature = 92166;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 56049; set @weapon_1 = 15211; set @weapon_2 = 0; set @creature = 92167;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+-- Forgotten Crew, ghost visual: 
+replace into creature_template_addon values (92165, 0, 0, 0, 0, 0, 0, 0, 9617);
+-- Forgotten Swordsman, ghost visual: 
+replace into creature_template_addon values (92166, 0, 0, 0, 0, 0, 0, 0, 9617);
+-- Captain Faelon, ghost visual: 
+replace into creature_template_addon values (92167, 0, 0, 0, 0, 0, 0, 0, 9617);
