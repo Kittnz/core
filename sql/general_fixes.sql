@@ -158,7 +158,7 @@ replace into creature_template values
 (92149, 0, 5370, 0, 0, 0, 'Razzari Worshipper', NULL, 0, 49, 50, 2672, 2768, 0, 0, 2972, 28, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 85, 105, 0, 226, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 14748, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 96, 130, 'EventAI', 1, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (92150, 0, 4079, 0, 0, 0, 'Razzari Tribesman', NULL, 0, 49, 50, 2672, 2768, 0, 0, 2972, 28, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 85, 105, 0, 226, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 14748, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 96, 130, 'EventAI', 1, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (92151, 0, 12829, 0, 0, 0, 'Razzari Warrior', NULL, 0, 52, 53, 3082, 3188, 0, 0, 3163, 28, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 99, 122, 0, 238, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 7, 0, 14748, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 107, 145, 'EventAI', 1, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
-(92152, 0, 14832, 0, 0, 0, 'Razzari Guardian', NULL, 0, 54, 54, 3082, 3292, 0, 0, 3162, 28, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 158, 188, 0, 244, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 7, 0, 14748, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 61, 305, 'EventAI', 1, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(92152, 0, 14832, 0, 0, 0, 'Razzari Guardian', NULL, 0, 54, 54, 3082, 3292, 0, 0, 3162, 28, 0, 1, 1.14286, 1,5, 20, 5, 0, 0, 1, 158, 188, 0, 244, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 7, 0, 14748, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 61, 305, 'EventAI', 1, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (92153, 0, 11468, 0, 0, 0, 'Razzari Scout', NULL, 0, 47, 48, 2487, 2577, 0, 0, 2862, 28, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 81, 101, 0, 216, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 14748, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 94, 128, 'EventAI', 1, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (92154, 0, 4076, 0, 0, 0, 'Razzari Mystic', NULL, 0, 48, 49, 2062, 2137, 1000, 1000, 2367, 28, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 81, 105, 0, 220, 1, 2000, 2000, 8, 0, 0, 0, 0, 0, 0, 0, 62.8672, 86.4424, 100, 7, 0, 14748, 0, 0, 0, 0, 0, 0, 0, 0, 10466, 0, 0, 0, 0, 0, 85, 115, 'EventAI', 1, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (92155, 0, 12306, 0, 0, 0, 'Speaker Ujuwa', 'Razzari Speaker', 0, 53, 53, 2550, 2550, 0, 0, 3202, 28, 0, 1.1, 1.14286, 0, 20, 5, 0, 0, 1, 85, 104, 0, 238, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.4704, 96.8968, 100, 7, 0, 14748, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 97, 132, 'EventAI', 1, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
@@ -194,5 +194,40 @@ replace into creature_equip_template values (@equip_template, 0, @weapon_1, @wea
 update creature_template set equipment_id = @equip_template where entry = @creature;
 
 set @equip_template = 56041; set @weapon_1 = 2501; set @weapon_2 = 0; set @creature = 92156;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+-- Deeptide Shorerunner , display ID 11293 , scale 1.1, level 48-49, humanoid, weapon 2224 , faction 74
+-- Deeptide Murloc , display ID 11293 , scale 1.5, level 49-51, humanoid, weapon 1161 , faction 74
+-- Deeptide Mystic, display ID 5025 , scale 1.4, level 50-51, humanoid, weapon 35 , has 2000 mana, casts 10467, faction 74
+-- Tidelord Hakash, display ID 6747 , scale 2, level 54, humanoid, weapon 11042 faction 74
+-- Princess Shasza , display ID 11261 , scale 1.5, level 54, humanoid, weapon 36 , has 3000 mana, casts 10605 , faction 74
+-- Letashaz , display ID 4872, scale 2, level 55 elite, beast (hydra), casts 28969 every 30 seconds, hits hard, has a lot of HP, is a boss, faction 74
+
+replace into creature_template values
+(92158, 0, 11293, 0, 0, 0, 'Deeptide Shorerunner', NULL, 0, 48, 49, 2062, 2137, 1695, 0, 0, 74, 0, 1.1, 1.14286, 1.1, 20, 5, 0, 0, 1, 116, 140, 0, 220, 1, 1530, 1683, 1, 0, 0, 0, 0, 0, 0, 0, 62.8672, 86.4424, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 41, 207, 'EventAI', 1, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(92159, 0, 11293, 0, 0, 0, 'Deeptide Murloc', NULL, 0, 49, 51, 2137, 2215, 1750, 0, 0, 74, 0, 1.1, 1.14286, 1.5, 20, 5, 0, 0, 1, 79, 98, 0, 220, 1, 1530, 1683, 1, 0, 0, 0, 0, 0, 0, 0, 64.6272, 88.8624, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 85, 116, 'EventAI', 1, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(92160, 0, 5025, 0, 0, 0, 'Deeptide Mystic', NULL, 0, 50, 51, 2016, 2085, 4393, 2000, 2000, 74, 0, 1.1, 1.14286, 1.4, 20, 5, 0, 0, 1, 54, 57, 0, 230, 1, 2000, 2000, 8, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10467, 0, 0, 0, 0, 0, 86, 118, 'EventAI', 1, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(92161, 0, 6747, 0, 0, 0, 'Tidelord Hakash', NULL, 0, 55, 55, 3398, 3398, 0, 0, 3271, 74, 0, 1, 1.14286, 2, 20, 5, 0, 0, 1, 95, 117, 0, 248, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 116, 156, 'EventAI', 1, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(92162, 0, 11261, 0, 0, 0, 'Princess Shasza', NULL, 0, 54, 54, 2633, 2633, 3000, 3000, 2654, 74, 0, 1.1, 1.14286, 1.5, 20, 5, 0, 0, 1, 89, 110, 0, 248, 1, 2000, 2000, 8, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10605, 0, 0, 0, 0, 0, 100, 136, 'EventAI', 1, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(92163, 0, 4872, 0, 0, 0, 'Letashaz', '', 0, 55, 55, 18298, 18298, 0, 0, 3271, 74, 0, 1, 1.14286, 2, 20, 5, 0, 1, 1, 335, 432, 0, 248, 1, 1191, 1310, 1, 0, 0, 0, 0, 0, 0, 0, 58.688, 80.696, 100, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 28969, 0, 0, 0, 0, 0, 143, 713, 'EventAI', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+set @equip_template = 56042; set @weapon_1 = 2224; set @weapon_2 = 0; set @creature = 92158;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 56043; set @weapon_1 = 1161; set @weapon_2 = 0; set @creature = 92159;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 56044; set @weapon_1 = 35; set @weapon_2 = 0; set @creature = 92160;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 56045; set @weapon_1 = 11042; set @weapon_2 = 0; set @creature = 92161;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 56046; set @weapon_1 = 36; set @weapon_2 = 0; set @creature = 92162;
 replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
 update creature_template set equipment_id = @equip_template where entry = @creature;
