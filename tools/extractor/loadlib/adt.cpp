@@ -125,8 +125,8 @@ bool adt_MCVT::prepareLoadedData()
 
 bool adt_MCLQ::prepareLoadedData()
 {
-    if (!strncmp(fcc_txt, "MCLQ", 4))
-        return false;
+  //  if (!strncmp(fcc_txt, "MCLQ", 4))
+ //       return false;
 
     return true;
 }

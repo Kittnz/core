@@ -51,8 +51,9 @@ bool FileLoader::prepareLoadedData()
     version = (file_MVER*) data;
     if (!strncmp(version->fcc_txt, "MVER", 4))
         return false;
-    if (version->ver != FILE_FORMAT_VERSION)
-        return false;
+  //  if (version->ver != FILE_FORMAT_VERSION) F
+  //      return false; O
+  // X
     return true;
 }
 

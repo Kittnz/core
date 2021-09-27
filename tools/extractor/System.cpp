@@ -103,7 +103,8 @@ const char* CONF_mpq_list[] =
     "patch.MPQ",
     "patch-2.MPQ",
     "patch-T.MPQ",
-    "patch-U.MPQ"
+    "patch-U.MPQ",
+    "patch-V.MPQ"
 };
 
 void CreateDir(const std::string& Path)
@@ -600,7 +601,8 @@ bool ConvertADT(char* filename, char* filename2, int cell_y, int cell_x)
     }
 
     // Get liquid map for grid (in WOTLK used MH2O chunk)
-    adt_MH2O* h2o = adt.a_grid->getMH2O();
+    // edited noggit corrupts mh2o data and wasnt used in vanilla anyway.
+    /*adt_MH2O* h2o = adt.a_grid->getMH2O();
     if (h2o)
     {
         for (int i = 0; i < ADT_CELLS_PER_GRID; i++)
@@ -667,7 +669,7 @@ bool ConvertADT(char* filename, char* filename2, int cell_y, int cell_x)
                 }
             }
         }
-    }
+    }*/
     //============================================
     // Pack liquid data
     //============================================
@@ -951,6 +953,7 @@ inline void CloseMPQFiles()
 
 int main(int argc, char* arg[])
 {
+    std::cin.get();
     printf("Map & DBC Extractor\n");
     printf("===================\n\n");
 
