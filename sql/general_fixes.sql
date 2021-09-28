@@ -283,3 +283,109 @@ replace into creature_template_addon values (92165, 0, 0, 0, 0, 0, 0, 0, 9617);
 replace into creature_template_addon values (92166, 0, 0, 0, 0, 0, 0, 0, 9617);
 -- Captain Faelon, ghost visual: 
 replace into creature_template_addon values (92167, 0, 0, 0, 0, 0, 0, 0, 9617);
+
+-- Achaikos <Kalkor Point> , display ID 9433, level 55, humanoid, weapon 6094, greeting text: "Welcome to Kalkor Point, I assume you have many questions about why there are Centaur here in Giljim.\n\nA long time ago, practically six years now, we set sail from Kalimdor and joined up with the Southsea Pirates. We were hired as mercenaries, and fighters, but our leader betrayed us, and kept the gold for himself.\n\nHe has gained the name of \'Reaver\' for his brutality and his lack of care or compassion for his fellow brothers in arms. The name Kalkor Point comes from the name of our Mercenary Band, and we wear it like an award.\n\nOne day we hope to return home to our kin, but that day still seems far off." , neutral faction to both ally/horde
+-- Kryillos <General Supplies> , display ID 4583, level 50, humanoid, weapon 1938, sells GENERAL SUPPLIES , , neutral faction to both ally/horde
+-- Isidora <Enchanting Supplies> , display ID 9429, level 53, humanoid , weapon 15274, sells ENCHANTING SUPPLIES , neutral faction to both ally/horde
+-- Eudokia <Kalkor Point , display ID 9429, level 54, humanoid, weapon 15444 , greeting text : "It takes a brave heart to continue on after tragedy, and keep a good face to the world." , neutral faction to both ally/horde
+-- Karpos <Blacksmith> , display ID 4583, level 50, humanoid , weapon 5956, SELLS BLACKSMITHING SUPPLIES AND REPAIRS , neutral faction to both ally/horde
+-- Tarokar <Kalkor Point> , display ID 9432, level 53, humanoid , weapon 15811, greeting text: "Cause no trouble here, I do not want to have to fight you." , neutral faction to both ally/horde
+-- Phokas <Kalkor Point> , display ID 9432, level 53, humanoid , weapon 15811, greeting text: "Lykourgos will pay for what he has done." , neutral faction to both ally/horde
+
+replace into creature_template values
+(92168, 0, 9433, 0, 0, 0, 'Achaikos', 'Kalkor Point', 0, 55, 55, 3398, 3398, 0, 0, 4500, 31, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(92169, 0, 4583, 0, 0, 0, 'Kryillos', 'General Supplies', 0, 50, 50, 2879, 2879, 0, 0, 4000, 31, 6, 1, 1.14286, 0, 20, 5, 0, 0, 1, 90, 110, 0, 226, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(92170, 0, 9429, 0, 0, 0, 'Isidora', 'Enchanting Supplies', 0, 53, 53, 2550, 2550, 0, 0, 4000, 31, 6, 1, 1.14286, 0, 20, 5, 0, 0, 1, 81, 101, 0, 234, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(92171, 0, 9429, 0, 0, 0, 'Eudokia', 'Kalkor Point', 0, 54, 54, 3292, 3292, 0, 0, 3216, 31, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 95, 116, 0, 244, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.4704, 96.8968, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(92172, 0, 4583, 0, 0, 0, 'Karpos', 'Blacksmith', 0, 50, 50, 2879, 2879, 0, 0, 4000, 31, 16390, 1, 1.14286, 0, 20, 5, 0, 0, 1, 90, 110, 0, 226, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(92173, 0, 9432, 0, 0, 0, 'Tarokar', 'Kalkor Point', 0, 53, 53, 2550, 2550, 0, 0, 4000, 31, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 81, 101, 0, 234, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(92174, 0, 9432, 0, 0, 0, 'Tarokar', 'Kalkor Point', 0, 53, 53, 2550, 2550, 0, 0, 4000, 31, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 81, 101, 0, 234, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+set @equip_template = 56050; set @weapon_1 = 6094; set @weapon_2 = 0; set @creature = 92168;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 56051; set @weapon_1 = 1938; set @weapon_2 = 0; set @creature = 92169;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 56052; set @weapon_1 = 15274; set @weapon_2 = 0; set @creature = 92170;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 56053; set @weapon_1 = 15444; set @weapon_2 = 0; set @creature = 92171;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 56054; set @weapon_1 = 5956; set @weapon_2 = 0; set @creature = 92172;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 56055; set @weapon_1 = 15811; set @weapon_2 = 0; set @creature = 92173;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 56056; set @weapon_1 = 15811; set @weapon_2 = 0; set @creature = 92174;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @gossip_menu_id = 60183; set @magic_number = 92168; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Welcome to Kalkor Point, I assume you have many questions about why there are Centaur here in Giljim.\n\nA long time ago, practically six years now, we set sail from Kalimdor and joined up with the Southsea Pirates. We were hired as mercenaries, and fighters, but our leader betrayed us, and kept the gold for himself.\n\nHe has gained the name of \'Reaver\' for his brutality and his lack of care or compassion for his fellow brothers in arms. The name Kalkor Point comes from the name of our Mercenary Band, and we wear it like an award.\n\nOne day we hope to return home to our kin, but that day still seems far off.'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 60184; set @magic_number = 92171; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'It takes a brave heart to continue on after tragedy, and keep a good face to the world.'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 60185; set @magic_number = 92173; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Cause no trouble here, I do not want to have to fight you.'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 60186; set @magic_number = 92174; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Lykourgos will pay for what he has done.'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+replace into npc_vendor values
+-- Kryillos <General Supplies>
+(92169, 159, 0, 0, 0, 0),
+(92169, 1179, 0, 0, 0, 0),
+(92169, 2512, 0, 0, 0, 0),
+(92169, 2515, 0, 0, 0, 0),
+(92169, 2516, 0, 0, 0, 0),
+(92169, 2519, 0, 0, 0, 0),
+(92169, 4470, 0, 0, 0, 0),
+(92169, 4471, 0, 0, 0, 0),
+(92169, 4496, 0, 0, 0, 0),
+(92169, 4498, 0, 0, 0, 0),
+(92169, 5042, 0, 0, 0, 0),
+(92169, 2947, 0, 0, 0, 0),
+(92169, 3111, 0, 0, 0, 0),
+(92169, 2946, 0, 0, 0, 0),
+(92169, 3107, 0, 0, 0, 0),
+(92169, 3135, 0, 0, 0, 0),
+(92169, 3131, 0, 0, 0, 0),
+(92169, 6183, 0, 0, 0, 0),
+(92169, 2101, 0, 0, 0, 0),
+-- Isidora <Enchanting Supplies>
+(92170, 4470, 0, 0, 0, 0),
+(92170, 6217, 0, 0, 0, 0),
+(92170, 11291, 0, 0, 0, 0),
+(92170, 20752, 0, 0, 0, 0),
+(92170, 20753, 0, 0, 0, 0),
+(92170, 20758, 0, 0, 0, 0),
+(92170, 22307, 0, 0, 0, 0),
+-- Karpos <Blacksmith>
+(92172, 2880, 0, 0, 0, 0),
+(92172, 2901, 0, 0, 0, 0),
+(92172, 3466, 0, 0, 0, 0),
+(92172, 3857, 0, 0, 0, 0),
+(92172, 5956, 0, 0, 0, 0),
+(92172, 18567, 0, 0, 0, 0);
