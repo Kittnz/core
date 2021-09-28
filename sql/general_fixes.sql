@@ -389,3 +389,6 @@ replace into npc_vendor values
 (92172, 3857, 0, 0, 0, 0),
 (92172, 5956, 0, 0, 0, 0),
 (92172, 18567, 0, 0, 0, 0);
+
+update creature_template set subname = 'The Bootlegger' where entry = 92137;
+update creature_template set scale = 1.3 where entry = 92142;
