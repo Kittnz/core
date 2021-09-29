@@ -23022,6 +23022,34 @@ bool Player::ActivateTalentSpec(int primaryOrSecondary)
 	return true;
 }
 
+bool Player::ApplyTransmogrifications(uint8 slot, uint32 itemID)
+{
+    if (slot > EQUIPMENT_SLOT_END)
+        return false;
+
+    if (!_collectionMgr->HasTransmog(itemID))
+        return false;
+
+    Item* destItem = GetItemByPos(INVENTORY_SLOT_BAG_0, slot);
+
+    if (!destItem || !destItem->GetProto())
+        return false;
+
+    // transmog rules check HERE
+
+    // create item replica
+    uint32 newItemId = sObjectMgr.CreateItemTransmogrification(itemID, 0);
+
+    if (!newItemId)
+        return false;
+
+    destItem->SetTransmogrification(newItemId);
+    SetVisibleItemSlot(slot, destItem);
+
+    destItem->SetState(ITEM_CHANGED, this);
+    return true;
+}
+
 void Player::AddTransmog(uint32 itemId)
 {
     if (_collectionMgr)
@@ -23029,6 +23057,31 @@ void Player::AddTransmog(uint32 itemId)
         if (_collectionMgr->CanAddTransmog(itemId))
             _collectionMgr->AddTransmog(itemId);
     }
+}
+
+std::string Player::GetAvailableTransmogs(uint8 slot)
+{
+    if (_collectionMgr)
+        return _collectionMgr->GetAvailableTransmogs(slot);
+
+    return {};
+}
+
+std::string Player::GetTransmogStatus()
+{
+    std::string status;
+    for (auto slot = 0; slot < EQUIPMENT_SLOT_END; ++slot)
+    {
+        if (Item* pItem = GetItemByPos(INVENTORY_SLOT_BAG_0, slot))
+        {
+            if (ItemPrototype const* tmogProto = ObjectMgr::GetItemPrototype(pItem->GetTransmogrification()))
+                status += std::to_string(slot) + ":" + std::to_string(tmogProto->SourceItemId);
+            else
+                status += std::to_string(slot) + ":0";
+        }
+    }
+
+    return status;
 }
 
 bool Player::HasTitle(uint8 title)

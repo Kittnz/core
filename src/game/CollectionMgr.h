@@ -42,6 +42,7 @@ class CollectionMgr
         TransmogContainer& GetTransmogs() { return _transmogs; }
         void AddTransmog(uint32 itemId);
         bool CanAddTransmog(uint32 ItemId);
+        std::string GetAvailableTransmogs(uint8 slot);
     private:
         Player* _owner;
         TransmogContainer _transmogs{};
