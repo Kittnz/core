@@ -511,7 +511,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
             {
                 std::string aText;
 
-                aText = "TW_XMOG TransmogStatus:";
+                aText = "TW_XMOG TransmogStatus";
 
                 aText += _player->GetTransmogStatus();
 
