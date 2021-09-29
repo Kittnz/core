@@ -2637,6 +2637,9 @@ class Player final: public Unit
         // Tanatos Transmog
     public:
         void AddTransmog(uint32 itemId);
+        bool ApplyTransmogrifications(uint8 slot, uint32 itemID);
+        std::string GetAvailableTransmogs(uint8 slot);
+        std::string GetTransmogStatus();
     private:
         CollectionMgr* _collectionMgr;
         // Tanatos Transmog End

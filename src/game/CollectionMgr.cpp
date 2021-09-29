@@ -73,3 +73,20 @@ bool CollectionMgr::CanAddTransmog(uint32 itemId)
 
     // TODO
 }
+
+// helper for client interface
+std::string CollectionMgr::GetAvailableTransmogs(uint8 slot)
+{
+    std::string tmogs;
+    for (auto& item : _transmogs)
+    {
+        if (ItemPrototype const* proto = ObjectMgr::GetItemPrototype(item))
+            if (proto->InventoryType == slot)
+                tmogs += std::to_string(proto->ItemId) + ":";
+    }
+
+    if (!tmogs.empty())
+        tmogs.pop_back();
+
+    return tmogs;
+}
