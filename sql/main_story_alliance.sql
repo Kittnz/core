@@ -249,3 +249,20 @@ replace into broadcast_text (entry, Male_Text) values (@magic_number, 'The Kaldo
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
+-- A people restored --
+delete from quest_template where entry = 40070;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1,objectivetext2) values (40069,40070,2,2040,60,60,0,0,'A Thalassian Threat','Hello, a new development has revealed itself. We\'ve received word from the Quel\'lithien lodge that the Scourge is on the move, and we\'ve received reports of demons converging in Quel\'thalas. Suffice to say, if the Scourge or someone else is summoning demons, that is something we cannot abide by. I am travelling to Stormwind to meet with the Alliance leaders, please join me there. Speak to Ambassador Caledra Dawnbreeze in a side chamber within the Stormwind Keep.','Speak to Caledra Dawnbreeze in the Stormwind Keep and attend the Summit.','It was difficult but we did it.','Now that we have the support, it is time to move as soon as possible. The Kaldorei vanguard cannot hold long, they will be under siege the moment they are located.',0,0,0,0,0,0,0,0,60322,1,0,0,0,0,0,0,0,0,4281,2578,269,500,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,269,42000,'','');
+
+replace into creature_questrelation (id, quest) values (80877, 40070);
+replace into creature_involvedrelation (id, quest) values (80877, 40070);
+
+delete from creature_template where entry = 60322;
+replace into creature_template (entry, name, display_id1) values (60322, 'quest_40070_dummy_triger', 328);
+
+update creature_template set npc_flags = 3 where entry = 1752;
+
+set @gossip_menu_id = 61103; set @magic_number = 60313; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Hello again friend, I have heard of all the good you\'ve done for our cause. I take it you\'re here as Lady Windrunner\'s emissary for the summit?'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
