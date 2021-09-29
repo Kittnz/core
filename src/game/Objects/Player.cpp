@@ -23075,9 +23075,9 @@ std::string Player::GetTransmogStatus()
         if (Item* pItem = GetItemByPos(INVENTORY_SLOT_BAG_0, slot))
         {
             if (ItemPrototype const* tmogProto = ObjectMgr::GetItemPrototype(pItem->GetTransmogrification()))
-                status += std::to_string(slot) + ":" + std::to_string(tmogProto->SourceItemId);
+                status += ":" + std::to_string(slot) + ":" + std::to_string(tmogProto->SourceItemId);
             else
-                status += std::to_string(slot) + ":0";
+                status += ":" + std::to_string(slot) + ":0";
         }
     }
 
