@@ -1291,7 +1291,7 @@ class ObjectMgr
         }
         ItemTransmogrifyTemplateMap const& GetItemTransmogrifyTemplateMap() const { return m_itemTransmogs; }
         uint32 CreateItemTransmogrifyTemplate(uint32 sourceItemID, uint32 sourceDisplayID);
-        uint32 GetItemTransmogrifyTemplateId(uint32 sourceItemId, uint32 sourceDisplayId);
+        void DeleteItemTransmogrifyTemplate(uint32 transmogrifyId);
 
         // Deactivated Spells
         std::set<uint32>    m_DisabledSpells;
