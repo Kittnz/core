@@ -3643,7 +3643,7 @@ void ObjectMgr::LoadPetLevelInfo()
 
 ItemPrototype const* ObjectMgr::GetItemPrototype(uint32 id)
 {
-    const ItemPrototype* transmogrifyProto = sObjectMgr.GetItemTransmogrify(id);
+    const ItemPrototype* transmogrifyProto = sObjectMgr.GetItemTransmogrifyTemplate(id);
     return transmogrifyProto ? transmogrifyProto : sItemStorage.LookupEntry<ItemPrototype>(id);
 }
 
@@ -9869,7 +9869,7 @@ uint32 ObjectMgr::GetCustomMountCreatureEntryFromItem(uint32 item_entry) {
     }
 }
 
-void ObjectMgr::LoadTransmogrifyItems()
+void ObjectMgr::LoadItemTransmogrifyTemplates()
 {
     m_itemTransmogs.clear();
 
@@ -9902,8 +9902,15 @@ void ObjectMgr::LoadTransmogrifyItems()
     } while (result->NextRow());
 }
 
-bool ObjectMgr::CreateItemTransmogrification(uint32 sourceItemId, uint32 sourceDisplayId)
+uint32 ObjectMgr::CreateItemTransmogrifyTemplate(uint32 sourceItemId, uint32 sourceDisplayId)
 {
+    // don't create template duplicates
+    if (uint32 ttId = GetItemTransmogrifyTemplateId(sourceItemId, sourceDisplayId))
+    {
+        sWorld.SendUpdateSingleItem(ttId);
+        return ttId;
+    }
+
     // find max id
     uint32 destId = 100000;
     for (const auto& itr : m_itemTransmogs)
@@ -9930,6 +9937,17 @@ bool ObjectMgr::CreateItemTransmogrification(uint32 sourceItemId, uint32 sourceD
     m_itemTransmogs[destId] = copy;
 
     sWorld.SendUpdateSingleItem(destId);
+    WorldDatabase.PExecuteLog("INSERT INTO `item_transmogrify_template` (`ID`, `ItemID`, `DisplayID`) VALUES ('%u','%u','%u')", destId, sourceItemId, sourceDisplayId);
 
-    return WorldDatabase.PExecuteLog("INSERT INTO `item_transmogrify_template` (`ID`, `ItemID`, `DisplayID`) VALUES ('%u','%u','%u')", destId, sourceItemId, sourceDisplayId);
+    return destId;
+}
+
+uint32 ObjectMgr::GetItemTransmogrifyTemplateId(uint32 sourceItemId, uint32 sourceDisplayId)
+{
+    for (const auto& itr : m_itemTransmogs)
+        if (ItemPrototype const* proto = itr.second)
+            if (proto->SourceItemId == sourceItemId && proto->DisplayInfoID == sourceDisplayId)
+                return proto->ItemId;
+
+    return 0;
 }

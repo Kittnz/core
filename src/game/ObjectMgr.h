@@ -491,7 +491,7 @@ typedef std::vector<FactionChangeMountData> FactionChangeMountsData;
 
 bool IsLanguageSkill(uint32 Skill);
 
-typedef std::unordered_map<uint32, ItemPrototype*> ItemTransmogrifyMap;
+typedef std::unordered_map<uint32, ItemPrototype*> ItemTransmogrifyTemplateMap;
 
 enum PermVariables
 {
@@ -901,7 +901,7 @@ class ObjectMgr
         void LoadTrainerTemplates();
         void LoadTrainers() { LoadTrainers("npc_trainer", false); }
 
-        void LoadTransmogrifyItems();
+        void LoadItemTransmogrifyTemplates();
 
         std::string GeneratePetName(uint32 entry);
         uint32 GetBaseXP(uint32 level) const;
@@ -1283,14 +1283,15 @@ class ObjectMgr
             return m_ExclusiveQuestGroups.equal_range(groupId);
         }
 
-        ItemPrototype const* GetItemTransmogrify(uint32 transmogrifyId) const
+        ItemPrototype const* GetItemTransmogrifyTemplate(uint32 transmogrifyId) const
         {
             auto itr = m_itemTransmogs.find(transmogrifyId);
             if (itr == m_itemTransmogs.end()) return nullptr;
             return itr->second;
         }
-        ItemTransmogrifyMap const& GetItemTransmogrifyMap() const { return m_itemTransmogs; }
-        bool CreateItemTransmogrification(uint32 sourceItemID, uint32 sourceDisplayID);
+        ItemTransmogrifyTemplateMap const& GetItemTransmogrifyTemplateMap() const { return m_itemTransmogs; }
+        uint32 CreateItemTransmogrifyTemplate(uint32 sourceItemID, uint32 sourceDisplayID);
+        uint32 GetItemTransmogrifyTemplateId(uint32 sourceItemId, uint32 sourceDisplayId);
 
         // Deactivated Spells
         std::set<uint32>    m_DisabledSpells;
@@ -1526,7 +1527,7 @@ class ObjectMgr
         TaxiPathTransitionsMap  m_TaxiPathTransitions;
         TaxiNodesStore          m_TaxiNodes;
 
-        ItemTransmogrifyMap     m_itemTransmogs;
+        ItemTransmogrifyTemplateMap     m_itemTransmogs;
 
         int DBCLocaleIndex;
 

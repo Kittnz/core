@@ -546,7 +546,7 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
     if (sWorld.getConfig(CONFIG_BOOL_TRANSMOG_ENABLED))
     {
         std::vector<uint32> entries;
-        for (auto const& itemTransmog : sObjectMgr.GetItemTransmogrifyMap())
+        for (auto const& itemTransmog : sObjectMgr.GetItemTransmogrifyTemplateMap())
             entries.push_back(itemTransmog.second->ItemId);
 
         if (!entries.empty())

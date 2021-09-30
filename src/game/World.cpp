@@ -1616,7 +1616,7 @@ void World::SetInitialWorldSettings()
     sObjectMgr.LoadCinematicsWaypoints();
 
     if (sWorld.getConfig(CONFIG_BOOL_TRANSMOG_ENABLED))
-        sObjectMgr.LoadTransmogrifyItems();
+        sObjectMgr.LoadItemTransmogrifyTemplates();
 
     sSpellMgr.LoadSpellGroups();
 
