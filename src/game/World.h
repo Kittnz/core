@@ -50,7 +50,7 @@ class SqlResultQueue;
 class QueryResult;
 class World;
 class MovementBroadcaster;
-class CreatureInfo;
+struct CreatureInfo;
 
 // ServerMessages.dbc
 enum ServerMessageType
@@ -900,7 +900,7 @@ class World
 
         // DBCache operations (Deny, Invalidate) - use for clear cache data only(!!!) at loading character before loading UI
         void SendSingleItemInvalidate(uint32 entry, WorldSession* self = nullptr);
-        void SendMultipleItemsInvalidate(std::vector<uint32>* items, WorldSession* self = nullptr);
+        void SendMultipleItemsInvalidate(const std::vector<uint32>& items, WorldSession* self = nullptr);
         void SendCreatureStatsInvalidate(uint32 entry, WorldSession* self = nullptr);
         void SendGameObjectStatsInvalidate(uint32 entry, WorldSession* self = nullptr);
         void SendGuildStatsInvalidate(uint32 guildId, WorldSession* self = nullptr);
@@ -913,7 +913,7 @@ class World
 
         // DBCache operations (Add, Update) - use for add/update cache data at runtime
         void SendUpdateSingleItem(uint32 entry, WorldSession* self = nullptr);
-        void SendUpdateMultipleItems(std::vector<uint32>* items, WorldSession* self = nullptr);
+        void SendUpdateMultipleItems(const std::vector<uint32>& items, WorldSession* self = nullptr);
         void SendUpdateCreatureStats(const CreatureInfo& crInfo, WorldSession* self = nullptr);
 
         // Manually override timer update secs to force a faster update

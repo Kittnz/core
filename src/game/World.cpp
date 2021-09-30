@@ -2934,11 +2934,11 @@ void World::SendSingleItemInvalidate(uint32 entry, WorldSession* self)
     }
 }
 
-void World::SendMultipleItemsInvalidate(std::vector<uint32>* items, WorldSession* self)
+void World::SendMultipleItemsInvalidate(const std::vector<uint32>& items, WorldSession* self)
 {
-    WorldPacket data(SMSG_ITEM_QUERY_MULTIPLE_RESPONSE, 1 + 4 * items->size());
-    data << uint8(items->size());
-    for (const auto& entry : *items)
+    WorldPacket data(SMSG_ITEM_QUERY_MULTIPLE_RESPONSE, 1 + 4 * items.size());
+    data << uint8(items.size());
+    for (const auto& entry : items)
         data << uint32(entry | 0x80000000);
 
     if (self)
@@ -3182,12 +3182,12 @@ void World::SendUpdateSingleItem(uint32 entry, WorldSession* self)
     }
 }
 
-void World::SendUpdateMultipleItems(std::vector<uint32>* items, WorldSession* self)
+void World::SendUpdateMultipleItems(const std::vector<uint32>& items, WorldSession* self)
 {
     // While only for transmogrification
-    WorldPacket data(SMSG_ITEM_QUERY_MULTIPLE_RESPONSE, 600*items->size());
-    data << uint8(items->size());
-    for (const auto& entry : *items)
+    WorldPacket data(SMSG_ITEM_QUERY_MULTIPLE_RESPONSE, 600*items.size());
+    data << uint8(items.size());
+    for (const auto& entry : items)
     {
         if (ItemPrototype const* pProto = ObjectMgr::GetItemPrototype(entry))
         {
