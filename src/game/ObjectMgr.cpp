@@ -9904,13 +9904,6 @@ void ObjectMgr::LoadItemTransmogrifyTemplates()
 
 uint32 ObjectMgr::CreateItemTransmogrifyTemplate(uint32 sourceItemId, uint32 sourceDisplayId)
 {
-    // don't create template duplicates
-    if (uint32 ttId = GetItemTransmogrifyTemplateId(sourceItemId, sourceDisplayId))
-    {
-        sWorld.SendUpdateSingleItem(ttId);
-        return ttId;
-    }
-
     // find max id
     uint32 destId = 100000;
     for (const auto& itr : m_itemTransmogs)
@@ -9942,12 +9935,9 @@ uint32 ObjectMgr::CreateItemTransmogrifyTemplate(uint32 sourceItemId, uint32 sou
     return destId;
 }
 
-uint32 ObjectMgr::GetItemTransmogrifyTemplateId(uint32 sourceItemId, uint32 sourceDisplayId)
+void ObjectMgr::DeleteItemTransmogrifyTemplate(uint32 transmogrifyId)
 {
-    for (const auto& itr : m_itemTransmogs)
-        if (ItemPrototype const* proto = itr.second)
-            if (proto->SourceItemId == sourceItemId && proto->DisplayInfoID == sourceDisplayId)
-                return proto->ItemId;
-
-    return 0;
+    m_itemTransmogs.erase(transmogrifyId);
+    sWorld.SendSingleItemInvalidate(transmogrifyId);
+    WorldDatabase.PExecuteLog("DELETE FROM `item_transmogrify_template` WHERE `ID`=%u", transmogrifyId);
 }

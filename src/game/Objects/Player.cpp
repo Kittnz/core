@@ -23024,30 +23024,39 @@ bool Player::ActivateTalentSpec(int primaryOrSecondary)
 
 bool Player::ApplyTransmogrifications(uint8 slot, uint32 itemID)
 {
-    if (slot > EQUIPMENT_SLOT_END)
-        return false;
-
-    if (!_collectionMgr->HasTransmog(itemID))
-        return false;
-
-    ItemPrototype const* srcItemProto = sObjectMgr.GetItemPrototype(itemID);
-
-    if (!srcItemProto)
-        return false;
-
     Item* destItem = GetItemByPos(INVENTORY_SLOT_BAG_0, slot);
 
     if (!destItem || !destItem->GetProto())
         return false;
 
-    // transmog rules check HERE
+    uint32 newItemId = 0;
 
-    // create or get item replica
-    uint32 newItemId = sObjectMgr.CreateItemTransmogrifyTemplate(destItem->GetProto()->ItemId, srcItemProto->DisplayInfoID);
+    if (itemID)
+    {
+        if (slot > EQUIPMENT_SLOT_END)
+            return false;
+
+        if (!_collectionMgr->HasTransmog(itemID))
+            return false;
+
+        ItemPrototype const* srcItemProto = sObjectMgr.GetItemPrototype(itemID);
+
+        if (!srcItemProto)
+            return false;
+
+        // transmog rules check HERE
+
+        // create or get item replica
+        newItemId = sObjectMgr.CreateItemTransmogrifyTemplate(destItem->GetProto()->ItemId, srcItemProto->DisplayInfoID);
+    }
+    else
+    {
+        sObjectMgr.DeleteItemTransmogrifyTemplate(destItem->GetTransmogrification());
+    }
 
     destItem->SetTransmogrification(newItemId);
+    // update on client
     SetVisibleItemSlot(slot, destItem);
-
     destItem->SetState(ITEM_CHANGED, this);
     return true;
 }
