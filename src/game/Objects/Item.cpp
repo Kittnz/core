@@ -356,6 +356,9 @@ void Item::SaveToDB()
             static SqlStatementID delGifts ;
             static SqlStatementID delLoot ;
 
+            if (GetTransmogrification())
+                sObjectMgr.DeleteItemTransmogrifyTemplate(GetTransmogrification());
+
             if (uint32 item_text_id = GetUInt32Value(ITEM_FIELD_ITEM_TEXT_ID))
             {
                 SqlStatement stmt = CharacterDatabase.CreateStatement(delItemText, "DELETE FROM `item_text` WHERE `id` = ?");
