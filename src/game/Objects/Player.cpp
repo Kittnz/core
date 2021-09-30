@@ -23030,6 +23030,11 @@ bool Player::ApplyTransmogrifications(uint8 slot, uint32 itemID)
     if (!_collectionMgr->HasTransmog(itemID))
         return false;
 
+    ItemPrototype const* srcItemProto = sObjectMgr.GetItemPrototype(itemID);
+
+    if (!srcItemProto)
+        return false;
+
     Item* destItem = GetItemByPos(INVENTORY_SLOT_BAG_0, slot);
 
     if (!destItem || !destItem->GetProto())
@@ -23037,11 +23042,8 @@ bool Player::ApplyTransmogrifications(uint8 slot, uint32 itemID)
 
     // transmog rules check HERE
 
-    // create item replica
-    uint32 newItemId = sObjectMgr.CreateItemTransmogrification(itemID, 0);
-
-    if (!newItemId)
-        return false;
+    // create or get item replica
+    uint32 newItemId = sObjectMgr.CreateItemTransmogrifyTemplate(destItem->GetProto()->ItemId, srcItemProto->DisplayInfoID);
 
     destItem->SetTransmogrification(newItemId);
     SetVisibleItemSlot(slot, destItem);
