@@ -40,4 +40,4 @@ set @creature_loot_id = 92127; update creature_template set loot_id = @creature_
 set @creature_loot_id = 92128; update creature_template set loot_id = @creature_loot_id where entry = @creature_loot_id;
 set @creature_loot_id = 92129; update creature_template set loot_id = @creature_loot_id where entry = @creature_loot_id;
 
-update creature set spawntimesecsmin = 36000 spawntimesecsmax = 36000 where entry between 92100 and 92129;
+update creature set spawntimesecsmin = 36000 spawntimesecsmax = 36000 where id between 92100 and 92129;
