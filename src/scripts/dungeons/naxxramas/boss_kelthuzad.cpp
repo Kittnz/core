@@ -75,8 +75,11 @@ enum AddSpells
     SPELL_DARK_BLAST_AUR  = 28458,
     SPELL_DARK_BLAST_TRIG = 28457,
 
-    // Abominationvirtual
-    SPELL_MORTAL_WOUND = 28467,
+    // Abomination
+    // SPELL_MORTAL_WOUND = 28467, // does 6k damage on plate due to abom damage being really high
+    // deals 55 damage (+-25) on all classic videos
+    // https://youtu.be/pV-56SakQnA?t=302
+    SPELL_MORTAL_WOUND = 25646,
 };
 
 enum Events
@@ -350,6 +353,16 @@ struct boss_kelthuzadAI : public ScriptedAI
             DoScriptText(urand(0, 1) ? SAY_SLAY1 : SAY_SLAY2, m_creature);
             killSayTimer = 5000;
         }
+
+        // Add a stack of blood tap to guardians whenever a player dies.
+        // current blood tap does 200% weapon damage, resulting in damage from 2500 and up
+        // on classic the tap does minimal damage
+        // https://vanilla.warcraftlogs.com/reports/cJ8XpmBW4MzxK6Aj#fight=52&type=damage&hostility=1&target=208.2&view=events
+        // replacing cast spell with add aura, so they still get the 15% increase in damage and size
+        std::list<Creature*> guardians;
+        GetCreatureListWithEntryInGrid(guardians, m_creature, NPC_GUARDIAN, 130.0f);
+        for (Creature* pC : guardians)
+            pC->AddAura(SPELL_BLOOD_TAP);
     }
 
     void JustDied(Unit* pKiller) override
@@ -617,8 +630,12 @@ struct boss_kelthuzadAI : public ScriptedAI
         DoScriptText(urand(0, 1) ? SAY_CHAIN1 : SAY_CHAIN2, m_creature);
         // Wowwiki the useless has this on 60sec cd,
         // but sampling a random vanilla video, the shortest cd was 60sec, with one as high as 142sec.
-        // Setting this to 60-75 as a slight buff
-        events.Repeat(Seconds(urand(60, 75)));
+
+        //1608240612219	1608240612.2190	Thu Dec 17 23:30:12 UTC 2020	Kel'Thuzad	Chains of Kel'Thuzad 0
+        //1608240687469	1608240687.4690	Thu Dec 17 23:31:27 UTC 2020	Kel'Thuzad	Chains of Kel'Thuzad 75
+        //1608240766469	1608240766.4690	Thu Dec 17 23:32:46 UTC 2020	Kel'Thuzad	Chains of Kel'Thuzad 79
+
+        events.Repeat(Seconds(urand(60, 90)));
     }
     void UpdateP2P3(uint32 diff)
     {
@@ -681,7 +698,18 @@ struct boss_kelthuzadAI : public ScriptedAI
                 }
                 if (DoCastSpellIfCan(m_creature, SPELL_FROST_BOLT_NOVA) == CAST_OK)
                 {
-                    events.Repeat(Seconds(urand(15, 17)));
+
+                    /*1608240584328    1608240584.3280    Thu Dec 17 23:29 : 44 UTC 2020    Kel'Thuzad    Frostbolt 0
+                    1608240615875    1608240615.8750    Thu Dec 17 23 : 30 : 16 UTC 2020    Kel'Thuzad    Frostbolt 32
+                    1608240631641    1608240631.6410    Thu Dec 17 23 : 30 : 32 UTC 2020    Kel'Thuzad    Frostbolt 16
+                    1608240647406    1608240647.4060    Thu Dec 17 23 : 30 : 47 UTC 2020    Kel'Thuzad    Frostbolt 15
+                    1608240663203    1608240663.2030    Thu Dec 17 23 : 31 : 03 UTC 2020    Kel'Thuzad    Frostbolt 16
+                    1608240679000    1608240679.0000    Thu Dec 17 23 : 31 : 19 UTC 2020    Kel'Thuzad    Frostbolt 16
+                    1608240694781    1608240694.7810    Thu Dec 17 23 : 31 : 35 UTC 2020    Kel'Thuzad    Frostbolt 16
+                    1608240742172    1608240742.1720    Thu Dec 17 23 : 32 : 22 UTC 2020    Kel'Thuzad    Frostbolt 47
+                    1608240757985    1608240757.9850    Thu Dec 17 23 : 32 : 38 UTC 2020    Kel'Thuzad    Frostbolt 16*/
+
+                    events.Repeat(Seconds(urand(15, 45))); // from naxx sniffs
                     timeSinceLastAEFrostBolt = 0;
                 }
                 else
@@ -724,7 +752,35 @@ struct boss_kelthuzadAI : public ScriptedAI
             }
             case EVENT_FROSTBOLT:
             {
-                events.Repeat(Seconds(urand(5, 7))); // todo: this is guesswork
+                // from naxx sniff
+                /*1608240561281	1608240561.2810	Thu Dec 17 23:29 : 21 UTC 2020	Kel'Thuzad	Frostbolt 0 
+                1608240572219	1608240572.2190	Thu Dec 17 23 : 29 : 32 UTC 2020	Kel'Thuzad	Frostbolt 11
+                1608240587985	1608240587.9850	Thu Dec 17 23 : 29 : 48 UTC 2020	Kel'Thuzad	Frostbolt 16
+                1608240602531	1608240602.5310	Thu Dec 17 23 : 30 : 03 UTC 2020	Kel'Thuzad	Frostbolt 15
+                1608240612235	1608240612.2350	Thu Dec 17 23 : 30 : 12 UTC 2020	Kel'Thuzad	Frostbolt 9
+                1608240621906	1608240621.9060	Thu Dec 17 23 : 30 : 22 UTC 2020	Kel'Thuzad	Frostbolt 10
+                1608240630406	1608240630.4060	Thu Dec 17 23 : 30 : 30 UTC 2020	Kel'Thuzad	Frostbolt 8
+                1608240636500	1608240636.5000	Thu Dec 17 23 : 30 : 37 UTC 2020	Kel'Thuzad	Frostbolt 7
+                1608240643781	1608240643.7810	Thu Dec 17 23 : 30 : 44 UTC 2020	Kel'Thuzad	Frostbolt 7
+                1608240653485	1608240653.4850	Thu Dec 17 23 : 30 : 53 UTC 2020	Kel'Thuzad	Frostbolt 9
+                1608240660781	1608240660.7810	Thu Dec 17 23 : 31 : 01 UTC 2020	Kel'Thuzad	Frostbolt 8
+                1608240670500	1608240670.5000	Thu Dec 17 23 : 31 : 11 UTC 2020	Kel'Thuzad	Frostbolt 10
+                1608240677750	1608240677.7500	Thu Dec 17 23 : 31 : 18 UTC 2020	Kel'Thuzad	Frostbolt 7
+                1608240685047	1608240685.0470	Thu Dec 17 23 : 31 : 25 UTC 2020	Kel'Thuzad	Frostbolt 7
+                1608240691125	1608240691.1250	Thu Dec 17 23 : 31 : 31 UTC 2020	Kel'Thuzad	Frostbolt 6
+                1608240710578	1608240710.5780	Thu Dec 17 23 : 31 : 51 UTC 2020	Kel'Thuzad	Frostbolt 20
+                1608240722688	1608240722.6880	Thu Dec 17 23 : 32 : 03 UTC 2020	Kel'Thuzad	Frostbolt 12
+                1608240732438	1608240732.4380	Thu Dec 17 23 : 32 : 12 UTC 2020	Kel'Thuzad	Frostbolt 9
+                1608240739735	1608240739.7350	Thu Dec 17 23 : 32 : 20 UTC 2020	Kel'Thuzad	Frostbolt 8
+                1608240760422	1608240760.4220	Thu Dec 17 23 : 32 : 40 UTC 2020	Kel'Thuzad	Frostbolt 10
+                1608240766485	1608240766.4850	Thu Dec 17 23 : 32 : 46 UTC 2020	Kel'Thuzad	Frostbolt 6
+                1608240773766	1608240773.7660	Thu Dec 17 23 : 32 : 54 UTC 2020	Kel'Thuzad	Frostbolt 8
+                1608240781031	1608240781.0310	Thu Dec 17 23 : 33 : 01 UTC 2020	Kel'Thuzad	Frostbolt 7
+                1608240790750	1608240790.7500	Thu Dec 17 23 : 33 : 11 UTC 2020	Kel'Thuzad	Frostbolt 10
+                1608240811391	1608240811.3910	Thu Dec 17 23 : 33 : 31 UTC 2020	Kel'Thuzad	Frostbolt 20
+                1608240818672	1608240818.6720	Thu Dec 17 23 : 33 : 39 UTC 2020	Kel'Thuzad	Frostbolt 8*/
+
+                events.Repeat(Seconds(urand(5, 20))); 
                 DoCastSpellIfCan(m_creature->GetVictim(), SPELL_FROST_BOLT);
                 break;
             }
@@ -744,7 +800,23 @@ struct boss_kelthuzadAI : public ScriptedAI
                 {
                     if (DoCastSpellIfCan(pUnit, SPELL_SHADOW_FISSURE) == CAST_OK)
                     {
-                        events.Repeat(Seconds(urand(10, 20)));
+                        // from naxx sniffs
+                        /*1608240563735    1608240563.7350    Thu Dec 17 23:29 : 24 UTC 2020    Kel'Thuzad    Shadow Fissure 0
+                        1608240575844    1608240575.8440    Thu Dec 17 23 : 29 : 36 UTC 2020    Kel'Thuzad    Shadow Fissure 12
+                        1608240598891    1608240598.8910    Thu Dec 17 23 : 29 : 59 UTC 2020    Kel'Thuzad    Shadow Fissure 25
+                        1608240625563    1608240625.5630    Thu Dec 17 23 : 30 : 26 UTC 2020    Kel'Thuzad    Shadow Fissure 27
+                        1608240657141    1608240657.1410    Thu Dec 17 23 : 30 : 57 UTC 2020    Kel'Thuzad    Shadow Fissure 31
+                        1608240672906    1608240672.9060    Thu Dec 17 23 : 31 : 13 UTC 2020    Kel'Thuzad    Shadow Fissure 16
+                        1608240706938    1608240706.9380    Thu Dec 17 23 : 31 : 47 UTC 2020    Kel'Thuzad    Shadow Fissure 34
+                        1608240717860    1608240717.8600    Thu Dec 17 23 : 31 : 58 UTC 2020    Kel'Thuzad    Shadow Fissure 11
+                        1608240730000    1608240730.0000    Thu Dec 17 23 : 32 : 10 UTC 2020    Kel'Thuzad    Shadow Fissure 12
+                        1608240750688    1608240750.6880    Thu Dec 17 23 : 32 : 31 UTC 2020    Kel'Thuzad    Shadow Fissure 21
+                        1608240774985    1608240774.9850    Thu Dec 17 23 : 32 : 55 UTC 2020    Kel'Thuzad    Shadow Fissure 34
+                        1608240788344    1608240788.3440    Thu Dec 17 23 : 33 : 08 UTC 2020    Kel'Thuzad    Shadow Fissure 13
+                        1608240802891    1608240802.8910    Thu Dec 17 23:33 : 23 UTC 2020    Kel'Thuzad    Shadow Fissure 15
+                        1608240815031    1608240815.0310    Thu Dec 17 23 : 33 : 35 UTC 2020    Kel'Thuzad    Shadow Fissure 12*/
+
+                        events.Repeat(Seconds(urand(10, 30)));
                         timeSinceLastShadowFissure = 0;
                     }
                     else
@@ -761,7 +833,20 @@ struct boss_kelthuzadAI : public ScriptedAI
                     events.Repeat(Seconds(2));
                     break;
                 }
-                events.Repeat(Seconds(urand(20,25)));
+
+                // from naxx sniffs
+                /*1608240580703    1608240580.7030    Thu Dec 17 23:29 : 41 UTC 2020    Kel'Thuzad    Detonate Mana 0
+                1608240603735    1608240603.7350    Thu Dec 17 23 : 30 : 04 UTC 2020    Kel'Thuzad    Detonate Mana 25
+                1608240634047    1608240634.0470    Thu Dec 17 23 : 30 : 34 UTC 2020    Kel'Thuzad    Detonate Mana 30
+                1608240655922    1608240655.9220    Thu Dec 17 23 : 30 : 56 UTC 2020    Kel'Thuzad    Detonate Mana 22
+                1608240676547    1608240676.5470    Thu Dec 17 23 : 31 : 17 UTC 2020    Kel'Thuzad    Detonate Mana 21
+                1608240697188    1608240697.1880    Thu Dec 17 23 : 31 : 37 UTC 2020    Kel'Thuzad    Detonate Mana 20
+                1608240725125    1608240725.1250    Thu Dec 17 23 : 32 : 05 UTC 2020    Kel'Thuzad    Detonate Mana 28
+                1608240754344    1608240754.3440    Thu Dec 17 23 : 32 : 34 UTC 2020    Kel'Thuzad    Detonate Mana 29
+                1608240774985    1608240774.9850    Thu Dec 17 23 : 32 : 55 UTC 2020    Kel'Thuzad    Detonate Mana 21
+                1608240806531    1608240806.5310    Thu Dec 17 23 : 33 : 27 UTC 2020    Kel'Thuzad    Detonate Mana 32*/
+
+                events.Repeat(Seconds(urand(20,30)));
                 if(Unit* pUnit = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0, SPELL_MANA_DETONATION, SELECT_FLAG_POWER_MANA|SELECT_FLAG_PLAYER))
                 {
                     if (DoCastSpellIfCan(pUnit, SPELL_MANA_DETONATION) == CAST_OK)
@@ -923,9 +1008,7 @@ struct mob_guardian_icecrownAI : public ScriptedAI
     uint32 bloodTapTimer;
     void Reset() override
     {
-        // Not sure if this was 18 or 15sec cd in vanilla, was 15 in wotlk. But making it 15 as we already
-        // overpower last phase anyway
-        bloodTapTimer = 15000;
+        bloodTapTimer = 18000; // from classic logs
     }
     void JustReachedHome() override
     {
@@ -979,6 +1062,20 @@ struct mob_guardian_icecrownAI : public ScriptedAI
         }
     }
 
+    void KilledUnit(Unit* pVictim) override
+    {
+        // Add a stack of blood tap to guardians whenever a player dies.
+        // current blood tap does 200% weapon damage, resulting in damage from 2500 and up
+        // on classic the tap does minimal damage
+        // https://vanilla.warcraftlogs.com/reports/cJ8XpmBW4MzxK6Aj#fight=52&type=damage&hostility=1&target=208.2&view=events
+        // replacing cast spell with add aura, so they still get the 15% increase in damage and size
+        std::list<Creature*> guardians;
+        GetCreatureListWithEntryInGrid(guardians, m_creature, NPC_GUARDIAN, 130.0f);
+        for (Creature* pC : guardians)
+            pC->AddAura(SPELL_BLOOD_TAP);
+
+    }
+
     void UpdateAI(const uint32 diff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
@@ -986,8 +1083,13 @@ struct mob_guardian_icecrownAI : public ScriptedAI
 
         if (bloodTapTimer < diff)
         {
-            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_BLOOD_TAP) == CAST_OK)
-                bloodTapTimer = 15000;
+            // current blood tap does 200% weapon damage, resulting in damage from 2500 and up
+            // on classic the tap does minimal damage
+            // https://vanilla.warcraftlogs.com/reports/cJ8XpmBW4MzxK6Aj#fight=52&type=damage&hostility=1&target=208.2&view=events
+            // replacing cast spell with add aura, so they still get the 15% increase in damage and size
+            m_creature->AddAura(SPELL_BLOOD_TAP);
+            //if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_BLOOD_TAP) == CAST_OK)
+            bloodTapTimer = 18000;
         }
         else bloodTapTimer -= diff;
 
