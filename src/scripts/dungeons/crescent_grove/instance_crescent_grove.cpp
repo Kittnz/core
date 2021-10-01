@@ -47,8 +47,8 @@ struct crescent_grove_portal : public GameObjectAI
                     }
                     if (me->GetEntry() == 112911) // Entrance
                         pPlayer->TeleportTo(802, 579.13F, 90.70F, 276.11F, 3.4F);
-                    if (me->GetEntry() == 112912) // Exit
-                        pPlayer->TeleportTo(0, -11068.9F, -1828.6F, 60.26F, 3.1F);
+                    if (me->GetEntry() == 112912) // Exit  
+                        pPlayer->TeleportTo(1, 1722.0F, -1272.6F, 163.26F, 5.8F);
                 }
             }
             m_uiUpdateTimer = 1000;
