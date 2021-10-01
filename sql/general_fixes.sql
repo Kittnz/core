@@ -8,3 +8,34 @@ replace into gameobject_template values
 (112912, 0, 5, 23442, 'Crescent Grove (Exit)', 0, 0, 1.6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'crescent_grove_portal'),
 (112913, 0, 5, 23443, 'Crescent Grove (Collision)', 0, 0, 1.6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
 replace into map_template values (802, 0, 0, 1, 802, 5, 0, -1, 0, 0, 'Crescent Grove', 'instance_crescent_grove');
+
+set @creature_loot_id = 92100; update creature_template set loot_id = @creature_loot_id where entry = @creature_loot_id;
+set @creature_loot_id = 92101; update creature_template set loot_id = @creature_loot_id where entry = @creature_loot_id;
+set @creature_loot_id = 92102; update creature_template set loot_id = @creature_loot_id where entry = @creature_loot_id;
+set @creature_loot_id = 92103; update creature_template set loot_id = @creature_loot_id where entry = @creature_loot_id;
+set @creature_loot_id = 92104; update creature_template set loot_id = @creature_loot_id where entry = @creature_loot_id;
+set @creature_loot_id = 92105; update creature_template set loot_id = @creature_loot_id where entry = @creature_loot_id;
+set @creature_loot_id = 92106; update creature_template set loot_id = @creature_loot_id where entry = @creature_loot_id;
+set @creature_loot_id = 92107; update creature_template set loot_id = @creature_loot_id where entry = @creature_loot_id;
+set @creature_loot_id = 92108; update creature_template set loot_id = @creature_loot_id where entry = @creature_loot_id;
+set @creature_loot_id = 92109; update creature_template set loot_id = @creature_loot_id where entry = @creature_loot_id;
+set @creature_loot_id = 92110; update creature_template set loot_id = @creature_loot_id where entry = @creature_loot_id;
+set @creature_loot_id = 92111; update creature_template set loot_id = @creature_loot_id where entry = @creature_loot_id;
+set @creature_loot_id = 92112; update creature_template set loot_id = @creature_loot_id where entry = @creature_loot_id;
+set @creature_loot_id = 92113; update creature_template set loot_id = @creature_loot_id where entry = @creature_loot_id;
+set @creature_loot_id = 92114; update creature_template set loot_id = @creature_loot_id where entry = @creature_loot_id;
+set @creature_loot_id = 92115; update creature_template set loot_id = @creature_loot_id where entry = @creature_loot_id;
+set @creature_loot_id = 92116; update creature_template set loot_id = @creature_loot_id where entry = @creature_loot_id;
+set @creature_loot_id = 92117; update creature_template set loot_id = @creature_loot_id where entry = @creature_loot_id;
+set @creature_loot_id = 92118; update creature_template set loot_id = @creature_loot_id where entry = @creature_loot_id;
+set @creature_loot_id = 92119; update creature_template set loot_id = @creature_loot_id where entry = @creature_loot_id;
+set @creature_loot_id = 92120; update creature_template set loot_id = @creature_loot_id where entry = @creature_loot_id;
+set @creature_loot_id = 92121; update creature_template set loot_id = @creature_loot_id where entry = @creature_loot_id;
+set @creature_loot_id = 92122; update creature_template set loot_id = @creature_loot_id where entry = @creature_loot_id;
+set @creature_loot_id = 92123; update creature_template set loot_id = @creature_loot_id where entry = @creature_loot_id;
+set @creature_loot_id = 92124; update creature_template set loot_id = @creature_loot_id where entry = @creature_loot_id;
+set @creature_loot_id = 92125; update creature_template set loot_id = @creature_loot_id where entry = @creature_loot_id;
+set @creature_loot_id = 92126; update creature_template set loot_id = @creature_loot_id where entry = @creature_loot_id;
+set @creature_loot_id = 92127; update creature_template set loot_id = @creature_loot_id where entry = @creature_loot_id;
+set @creature_loot_id = 92128; update creature_template set loot_id = @creature_loot_id where entry = @creature_loot_id;
+
