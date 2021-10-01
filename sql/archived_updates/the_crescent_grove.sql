@@ -77,7 +77,7 @@ update creature_template set scale = 1.7 where entry = 92108;
 update creature_template set scale = 1.7 where entry = 92109;
 update creature_template set scale = 2, faction = 90 where entry = 92110;
 update creature_template set scale = 1.5, faction = 90 where entry = 92111;
-update creature_template set scale = 1.5, faction = 90, dmg_school = 2 where entry = 92112;
+update creature_template set scale = 1.5, faction = 90, dmg_school = 2, rank = 1 where entry = 92112;
 update creature_template set scale = 1, faction = 90, dmg_school = 5 where entry = 92113;
 update creature_template set scale = 1, rank = 1 where entry = 92114;
 update creature_template set scale = 1.2, rank = 1, faction = 44 where entry = 92115;
