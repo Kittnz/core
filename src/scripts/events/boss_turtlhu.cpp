@@ -16,9 +16,9 @@ enum
     SPELL_DRAIN_LIFE = 29155
 };
 
-struct boss_turtlhuAI : public ScriptedAI
+struct boss_concaviusAI : public ScriptedAI
 {
-    boss_turtlhuAI(Creature *c) : ScriptedAI(c)
+    boss_concaviusAI(Creature* c) : ScriptedAI(c)
     {
         Reset();
     }
@@ -52,7 +52,7 @@ struct boss_turtlhuAI : public ScriptedAI
         in_shadow_form = false;
     }
 
-    void Aggro(Unit *who) override
+    void Aggro(Unit* who) override
     {
         m_creature->PMonsterYell("NO! LET ME STEAL MORE TREASURES! WE NEED THEM!");
     }
@@ -75,30 +75,30 @@ struct boss_turtlhuAI : public ScriptedAI
 
         switch (victim->GetTypeId())
         {
-            case TYPEID_PLAYER:
-            {
-                affectedPlayer = victim->GetAffectingPlayer();
-                if (!affectedPlayer)
-                    return;
-
-                if (affectedPlayer->GetLevel() < 50)
-                    return;
-
-                break;
-            }
-            case TYPEID_UNIT:
-            {
-                creature = victim->ToCreature();
-                if (!creature->IsPet() && !creature->IsTotem())
-                    return;
-
-                if (creature->GetLevel() < 50)
-                    return;
-
-                break;
-            }
-            default:
+        case TYPEID_PLAYER:
+        {
+            affectedPlayer = victim->GetAffectingPlayer();
+            if (!affectedPlayer)
                 return;
+
+            if (affectedPlayer->GetLevel() < 50)
+                return;
+
+            break;
+        }
+        case TYPEID_UNIT:
+        {
+            creature = victim->ToCreature();
+            if (!creature->IsPet() && !creature->IsTotem())
+                return;
+
+            if (creature->GetLevel() < 50)
+                return;
+
+            break;
+        }
+        default:
+            return;
         }
 
         m_creature->PMonsterYell("Do you understand it now? You can't do anything.");
@@ -116,7 +116,7 @@ struct boss_turtlhuAI : public ScriptedAI
         if (m_creature->GetSpawnFlags() & SPAWN_FLAG_DYNAMIC_RESPAWN_TIME &&
             sWorld.GetActiveSessionCount() > BLIZZLIKE_REALM_POPULATION)
 
-        m_respawn_delay_Timer *= float(BLIZZLIKE_REALM_POPULATION) / float(sWorld.GetActiveSessionCount());
+            m_respawn_delay_Timer *= float(BLIZZLIKE_REALM_POPULATION) / float(sWorld.GetActiveSessionCount());
 
         m_creature->SetRespawnDelay(m_respawn_delay_Timer);
         m_creature->SetRespawnTime(m_respawn_delay_Timer);
@@ -241,7 +241,7 @@ struct boss_turtlhuAI : public ScriptedAI
             m_creature->InterruptNonMeleeSpells(false);
             DoCast(m_creature, SPELL_TWIN_TELEPORT_VISUAL);
 
-            for (auto &player : players)
+            for (auto& player : players)
             {
                 if (player && player->IsAlive() && player != m_creature->GetVictim())
                     m_creature->CastSpell(player, 21150, true);
@@ -276,16 +276,16 @@ struct boss_turtlhuAI : public ScriptedAI
 
 };
 
-CreatureAI* GetAI_boss_turtlhu(Creature *_Creature)
+CreatureAI* GetAI_boss_concavius(Creature* _Creature)
 {
-    return new boss_turtlhuAI(_Creature);
+    return new boss_concaviusAI(_Creature);
 }
 
 void AddSC_boss_turtlhu()
 {
-    Script *newscript;
+    Script* newscript;
     newscript = new Script;
-    newscript->Name = "boss_turtlhu";
-    newscript->GetAI = &GetAI_boss_turtlhu;
+    newscript->Name = "boss_concavius";
+    newscript->GetAI = &GetAI_boss_concavius;
     newscript->RegisterSelf();
 }
