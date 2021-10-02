@@ -270,6 +270,7 @@ class ChatHandler
         bool HandleGameObjectAddCommand(char* args);
         bool HandleGameObjectDeleteCommand(char* args);
         bool HandleGameObjectMoveCommand(char* args);
+        bool HandleGameObjectRotateCommand(char* args);
         bool HandleGameObjectNearCommand(char* args);
         bool HandleGameObjectTargetCommand(char* args);
         bool HandleGameObjectTurnCommand(char* args);
