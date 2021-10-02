@@ -376,5 +376,22 @@ replace into npc_vendor values
 -- Ruins Creeper , display ID 631, scale 1.5, level 50-52, 25 nature resistance, faction 16
 
 replace into creature_template values
-(92202, 0, 2024, 0, 0, 0, 'Tanglemoss', '', 0, 53, 53, 7359, 7359, 0, 0, 3163, 16, 0, 1, 1.14286, 2.2, 20, 5, 0, 1, 1, 344, 444, 0, 238, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 59.3256, 81.5727, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 147, 737, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(92204, 0, 2024, 0, 0, 0, 'Tanglemoss', '', 0, 53, 53, 7359, 7359, 0, 0, 3163, 16, 0, 1, 1.14286, 2.2, 20, 5, 0, 1, 1, 344, 444, 0, 238, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 59.3256, 81.5727, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 147, 737, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (92203, 0, 631, 0, 0, 0, 'Ruins Creeper', '', 0, 50, 52, 6750, 7115, 0, 0, 3174, 16, 0, 1, 1.14286, 1.5, 20, 5, 0, 1, 1, 375, 462, 0, 234, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 59.3256, 81.5727, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 394, 519, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+-- gilijim and lapidis Npcs seem to have 25 second respawn timer, should be corrected to minimum 5 minutes
+-- murlocs sometimes have mana, sometimes don't
+-- speaker ujuwa has no model
+-- razzari guardians should be elite or atleast stronger than other mobs
+-- colonel hardinus has nelf voice, both colonel and sailor larson and has a weird reputation called alliance civilans that the alliance can go "on war" on
+-- npcs outside on kalkor point are missing their intended functions (stable master, vendor etc)
+-- bengal tigers should be level 49-51
+-- bengal alphas should be level 52-53
+-- bengal matriarchs should be level 53-54 
+-- Isidora of Kalkor Point should sell Formula: Wizard Oil with only one stock and refreshed every 2.5 hours.
+
+update creature set spawntimesecsmin = 300, spawntimesecsmax = 600 where id > 40000 and spawntimesecsmin = 25 and map = 1;
+update creature set spawntimesecsmin = 300, spawntimesecsmax = 600 where id > 40000 and spawntimesecsmin = 25 and map = 0;
+update creature_template set unit_flags = 0, faction = 12 where entry = 92002;
+update creature_template set unit_flags = 0, faction = 12 where entry = 92010;
+update creature_template set faction = 12 where subname like '%Kul Tiras%';
