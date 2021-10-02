@@ -52,7 +52,7 @@ enum
 class instance_zulgurub : public ScriptedInstance
 {
     public:
-        instance_zulgurub(Map* pMap) : ScriptedInstance(pMap), m_randomBossSpawned(false) {Initialize();};
+        explicit instance_zulgurub(Map* pMap) : ScriptedInstance(pMap), m_randomBossSpawned(false) {Initialize();};
 
         void Initialize() override;
         void Create() override;
