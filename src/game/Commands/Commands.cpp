@@ -7465,6 +7465,61 @@ bool ChatHandler::HandleGameObjectMoveCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleGameObjectRotateCommand(char* args)
+{
+    uint32 lowguid;
+
+    if (!ExtractUint32KeyFromLink(&args, "Hgameobject", lowguid))
+        return false;
+
+    if (!lowguid)
+        return false;
+
+    GameObject* obj = nullptr;
+
+    if (GameObjectData const* go_data = sObjectMgr.GetGOData(lowguid))
+        obj = GetGameObjectWithGuid(lowguid, go_data->id);
+
+    if (!obj || !args)
+    {
+        PSendSysMessage(LANG_COMMAND_OBJNOTFOUND, lowguid);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    float o;
+
+    if (!ExtractFloat(&args, o))
+        return false;
+
+    if (o <= -10.0F || o >= 10.0F)
+    {
+        SendSysMessage("Can't be higher than 10 or lower than -10.");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    if (!MapManager::IsValidMapCoord(obj->GetMapId(), obj->GetPositionX(), obj->GetPositionY(), obj->GetPositionZ()))
+    {
+        PSendSysMessage(LANG_INVALID_TARGET_COORD, obj->GetPositionX(), obj->GetPositionY(), obj->GetMapId());
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    Map* map = obj->GetMap();
+    map->Remove(obj, false);
+
+    obj->Relocate(obj->GetPositionX(), obj->GetPositionY(), obj->GetPositionZ(), o);
+    obj->SetFloatValue(GAMEOBJECT_FACING, o);
+    obj->UpdateRotationFields(0.0F, 0.0F);
+    map->Add(obj);
+    obj->SaveToDB();
+    obj->Refresh();
+
+    PSendSysMessage(LANG_COMMAND_MOVEOBJMESSAGE, obj->GetGUIDLow(), obj->GetGOInfo()->name, obj->GetGUIDLow());
+    return true;
+}
+
 //spawn go
 bool ChatHandler::HandleGameObjectAddCommand(char* args)
 {

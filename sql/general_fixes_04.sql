@@ -2116,3 +2116,14 @@ update creature_template set level_min = 18, level_max = 20 where entry = 91975;
 -- update creature_template set dmg_min = dmg_min + 20, dmg_max = dmg_max + 30  where entry = 91352;
 -- update creature_template set dmg_min = dmg_min + 20, dmg_max = dmg_max + 30  where entry = 91353;
 -- update creature_template set dmg_min = dmg_min + 20, dmg_max = dmg_max + 30  where entry = 91975;
+
+update creature_template set equipment_id = 0 where entry = 92025;
+
+-- jungleback stomper should be beast (Gorilla) and have thunderstonp rank 3 when tamed
+-- junglepaw shadow panther should be beast (Cat) and have cower rank 5 and prowl rank 3 when tamed
+-- junglepaw panther should be beast (Cat) and have cower 5 when tamed
+-- saltsnap crocolisk should be beast (Crocolisk) and have bite rank 7 when tamed
+-- strand crawler should be beast (Crab) and have claw rank 7 when tamed
+-- bengal tiger, bengal alpha and bengal matriarch should be beast (Cat) and have claw rank 7 when tamed
+-- venomous jungle serpents should be beast (Wind Serpent) and have lightning breath rank 5 when tamed 
+

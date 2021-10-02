@@ -186,10 +186,10 @@ bool GameObject::Create(uint32 guidlow, uint32 name_id, Map *map, float x, float
     SetFloatValue(GAMEOBJECT_POS_Z, z);
     SetFloatValue(GAMEOBJECT_FACING, ang);
 
-    SetFloatValue(GAMEOBJECT_ROTATION + 0, rotation0);
-    SetFloatValue(GAMEOBJECT_ROTATION + 1, rotation1);
+    SetFloatValue(GAMEOBJECT_ROTATION + 0, 0.0F);
+    SetFloatValue(GAMEOBJECT_ROTATION + 1, 0.0F);
 
-    UpdateRotationFields(rotation2, rotation3);             // GAMEOBJECT_FACING, GAMEOBJECT_ROTATION+2/3
+    UpdateRotationFields(0, 0.0F);             
 
     SetUInt32Value(GAMEOBJECT_FACTION, goinfo->faction);
     SetUInt32Value(GAMEOBJECT_FLAGS, goinfo->flags);
