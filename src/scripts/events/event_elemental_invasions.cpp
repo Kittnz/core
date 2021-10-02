@@ -60,7 +60,7 @@ public:
     {
         float x, y, z;
         me->GetPosition(x, y, z);
-        auto invader = me->SummonCreature(InvasionData[m_uiEventIndex].invader, x, y, z, 0, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, HOUR * IN_MILLISECONDS);
+        auto invader = me->SummonCreature(InvasionData[m_uiEventIndex].invader, x, y, z, 0, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 2 * HOUR * IN_MILLISECONDS);
 
         if (!invader) return false;
 
@@ -74,6 +74,7 @@ public:
         invader->SetHomePosition(x, y, z, frand(0, 2 * M_PI_F));
         invader->SetWanderDistance(30.f);
         invader->SetDefaultMovementType(RANDOM_MOTION_TYPE);
+        invader->SetCorpseDelay(5 * MINUTE);
 
         if (!invader->IsInCombat())
         {
