@@ -12,6 +12,12 @@ struct instance_crescent_grove : public ScriptedInstance
     {
         Initialize();
     };
+
+    void OnCreatureEnterCombat(Creature* pCreature) override
+    {
+        if (pCreature->IsAlive() && !pCreature->IsInCombat())
+            pCreature->SetInCombatWithZone();
+    }
 };
 
 InstanceData* GetInstanceData_instance_crescent_grove(Map* p_Map) { return new instance_crescent_grove(p_Map); }
