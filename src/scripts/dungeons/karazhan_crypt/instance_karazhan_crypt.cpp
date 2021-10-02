@@ -28,6 +28,12 @@ struct instance_karazhan_crypt : public ScriptedInstance
         if (pGo->GetEntry() == 2006634) alarus_door_guid = pGo->GetGUID();
     }
 
+    void OnCreatureEnterCombat(Creature* pCreature) override
+    {
+        if (pCreature->IsAlive() && !pCreature->IsInCombat())
+            pCreature->SetInCombatWithZone();
+    }
+
     void OnCreatureDeath(Creature* boss) override
     {
         switch (boss->GetEntry()) // Bonespike Construst
