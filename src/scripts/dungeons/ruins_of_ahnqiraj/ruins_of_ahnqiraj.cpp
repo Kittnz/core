@@ -52,7 +52,7 @@ enum
 
 struct mob_anubisath_guardianAI : public ScriptedAI
 {
-    mob_anubisath_guardianAI(Creature* pCreature) : ScriptedAI(pCreature)
+    explicit mob_anubisath_guardianAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
         Reset();
     }
@@ -94,8 +94,8 @@ struct mob_anubisath_guardianAI : public ScriptedAI
 
     void JustDied(Unit* pKiller) override
     {
-        if (GameObject *pObsidian = m_creature->SummonGameObject(OBJ_SMALL_OBSIDIAN_CHUNK, m_creature->GetPositionX(), m_creature->GetPositionY(), m_creature->GetPositionZ(), 0, 0, 0, 0, 0, -1, false))
-            pObsidian->SetRespawnTime(345600);
+        m_creature->SummonGameObject(OBJ_SMALL_OBSIDIAN_CHUNK, m_creature->GetPositionX(), m_creature->GetPositionY(), m_creature->GetPositionZ(), 0, 0, 0, 0, 0, -1, false);
+        m_creature->ForcedDespawn(8000); // 8 Seconds until despawn
     }
 
     void Aggro(Unit* pWho) override
@@ -148,12 +148,11 @@ struct mob_anubisath_guardianAI : public ScriptedAI
 
         if (m_uiSpell1_Timer < uiDiff)
         {
-            /** Spell1 shall be cast on random target */
+            // Spell1 shall be cast on random target
             if (Unit* pUnit = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
             {
                 // Create visual animation of the spell
                 m_creature->SendSpellGo(m_creature, m_uiSpell1);
-
 
                 if (DoCastSpellIfCan(pUnit, m_uiSpell1) == CAST_OK)
                     m_uiSpell1_Timer = 15000;
@@ -184,6 +183,7 @@ struct mob_anubisath_guardianAI : public ScriptedAI
                 // Create visual animation of the teleportation spell
                 m_creature->SendSpellGo(m_creature, 25681);
             }
+
             m_uiSummon_Timer = 15000;
         }
         else
@@ -195,7 +195,7 @@ struct mob_anubisath_guardianAI : public ScriptedAI
 
 struct OssirianTornadoAI : public ScriptedAI
 {
-    OssirianTornadoAI(Creature* pCreature) : ScriptedAI(pCreature)
+    explicit OssirianTornadoAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
         SetCombatMovement(false);
         m_creature->CastSpell(m_creature, 25160, false);
@@ -240,7 +240,7 @@ enum
 
 struct mob_flesh_hunterAI : public ScriptedAI
 {
-    mob_flesh_hunterAI(Creature* pCreature) : ScriptedAI(pCreature)
+    explicit mob_flesh_hunterAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
         Reset();
     }
@@ -385,7 +385,7 @@ enum
 
 struct ObsidianDestroyerAI : public ScriptedAI
 {
-    ObsidianDestroyerAI(Creature* pCreature) : ScriptedAI(pCreature)
+    explicit ObsidianDestroyerAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
         Reset();
     }
@@ -447,7 +447,7 @@ enum
 /******************/
 struct HiveZaraSoldierAI : public ScriptedAI
 {
-    HiveZaraSoldierAI(Creature* pCreature) : ScriptedAI(pCreature)
+    explicit HiveZaraSoldierAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
         Reset();
     }
@@ -507,7 +507,7 @@ struct SilicateFeederAI : public ScriptedAI
 
     bool m_bIsAttacked = false;
 
-    SilicateFeederAI(Creature* pCreature) : ScriptedAI(pCreature)
+    explicit SilicateFeederAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
         Reset();
     }
@@ -547,7 +547,7 @@ enum
 /******************/
 struct QirajiSwarmguardAI : public ScriptedAI
 {
-    QirajiSwarmguardAI(Creature* pCreature) : ScriptedAI(pCreature)
+    explicit QirajiSwarmguardAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
         Reset();
     }
@@ -595,7 +595,7 @@ enum
 /******************/
 struct QirajiGladiatorAI : public ScriptedAI
 {
-    QirajiGladiatorAI(Creature* pCreature) : ScriptedAI(pCreature)
+    explicit QirajiGladiatorAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
         m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
         Reset();
@@ -667,7 +667,7 @@ enum
 
 struct HiveZaraStingerAI : public ScriptedAI
 {
-    HiveZaraStingerAI(Creature* pCreature) : ScriptedAI(pCreature)
+    explicit HiveZaraStingerAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
         Reset();
     }
@@ -729,7 +729,7 @@ enum
 
 struct TuubidAI : public ScriptedAI
 {
-    TuubidAI(Creature* pCreature) : ScriptedAI(pCreature)
+    explicit TuubidAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
         Reset();
     }
@@ -809,7 +809,7 @@ enum
 
 struct QirajiWarriorAI : public ScriptedAI
 {
-    QirajiWarriorAI(Creature* pCreature) : ScriptedAI(pCreature)
+    explicit QirajiWarriorAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
         Reset();
     }
@@ -919,7 +919,7 @@ enum
 
 struct SwarmguardNeedlerAI : public ScriptedAI
 {
-    SwarmguardNeedlerAI(Creature* pCreature) : ScriptedAI(pCreature)
+    explicit SwarmguardNeedlerAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
         Reset();
     }
