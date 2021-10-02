@@ -47,8 +47,6 @@ enum
     MODEL_INVISIBLE = 11686
 };
 
-const float THREAT_LOCK = FLT_MAX;
-
 static SpawnLocations Eggs[] =
 {
     { -9312.73f, 1281.51f, -63.56f },
@@ -61,9 +59,9 @@ static SpawnLocations Eggs[] =
 
 struct boss_buruAI : public ScriptedAI
 {
-    boss_buruAI(Creature* pCreature) : ScriptedAI(pCreature)
+    explicit boss_buruAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
-        m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
+        m_pInstance = static_cast<ScriptedInstance*>(pCreature->GetInstanceData());
         Reset();
     }
 
@@ -173,7 +171,7 @@ struct boss_buruAI : public ScriptedAI
         m_creature->SetRooted(true);
     }
 
-    void LockTarget(Unit *pWho, bool resetAggro=true)
+    void LockTarget(Unit *pWho, bool resetAggro = true)
     {
         DoScriptText(EMOTE_TARGET, m_creature, pWho, -1, 300.0);
 
@@ -184,7 +182,7 @@ struct boss_buruAI : public ScriptedAI
             m_creature->DeleteThreatList();
         }
         // Add a really high threat to lock boss to target
-        m_creature->GetThreatManager().addThreat(pWho, THREAT_LOCK);
+        m_creature->GetThreatManager().addThreat(pWho, 1000000.0f);
         m_bAwaitingNewTarget = false;
     }
 
@@ -327,9 +325,9 @@ struct boss_buruAI : public ScriptedAI
 
 struct mob_buru_eggAI : public ScriptedAI
 {
-    mob_buru_eggAI(Creature* pCreature) : ScriptedAI(pCreature)
+    explicit mob_buru_eggAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
-        m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
+        m_pInstance = static_cast<ScriptedInstance*>(pCreature->GetInstanceData());
         Reset();
     }
 

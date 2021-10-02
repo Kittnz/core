@@ -122,7 +122,7 @@ const std::array<SpawnLocations, 11> CrystalSpawn =
 struct instance_ruins_of_ahnqiraj : public ScriptedInstance
 {
 public:
-    instance_ruins_of_ahnqiraj(Map* pMap);
+    explicit instance_ruins_of_ahnqiraj(Map* pMap);
     void Initialize() override;
 
     void SetData(uint32 uiType, uint32 uiData) override;
