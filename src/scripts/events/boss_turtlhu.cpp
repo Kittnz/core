@@ -54,8 +54,7 @@ struct boss_concaviusAI : public ScriptedAI
 
     void Aggro(Unit* who) override
     {
-        // "Gul'kafh an'shel." = "Gaze into the void."
-        m_creature->PMonsterYell("Gul'kafh an'shel.");
+        m_creature->PMonsterYell("Let the void claim you...");
     }
 
     void Reset() override
@@ -65,8 +64,7 @@ struct boss_concaviusAI : public ScriptedAI
 
     void JustRespawned() override
     {
-        // "Vwyq agth sshoq'meg N'Zoth vra zz shfk qwor ga'halahs agthu." = "Once more shall the twisted flesh-banners of N'Zoth chitter and howl above the fly-blown corpse of this world."
-        m_creature->PMonsterYell("Vwyq agth sshoq'meg N'Zoth vra zz shfk qwor ga'halahs agthu!");
+        m_creature->PMonsterYell("Make your peace mortals, void approaches!");
         SetDefaults();
     }
 
@@ -102,17 +100,14 @@ struct boss_concaviusAI : public ScriptedAI
         default:
             return;
         }
-        // "Sk'shuul agth vorzz N'Zoth naggwa'fssh." = "Your deaths shall sing of N'Zoth's unending glory."
-        m_creature->PMonsterYell("Sk'shuul agth vorzz N'Zoth naggwa'fssh!");
+        m_creature->PMonsterYell("Your struggle is futile.");
         DoCastSpellIfCan(m_creature, SPELL_SHADOWVOLLEY);
     }
 
     void JustDied(Unit* /*pKiller*/) override
     {
-        m_creature->SetObjectScale(0.35f);
-        
-        // "Iilth vwah, uhn'agth fhssh za." = "Where one falls, many shall take its place."
-        m_creature->PMonsterSay("Iilth vwah, uhn'agth fhssh za...");
+        m_creature->SetObjectScale(0.35f);        
+        m_creature->PMonsterSay("Void... awaits.");
 
         uint32 m_respawn_delay_Timer = urand(3, 5) * DAY;
 
@@ -136,10 +131,7 @@ struct boss_concaviusAI : public ScriptedAI
         // Adopting shadowform
         if (m_creature->GetHealthPercent() <= 30 && !in_shadow_form)
         {
-            // "Sk'shgn eqnizz hoq." = "Your fear drives me."
-            // "Sk'magg yawifk hoq." = "Your suffering strengthens me."
-            // "Sk'uuyat guulphg hoq." = "Your agony sustains me."
-            m_creature->PMonsterYell("Sk'shgn eqnizz hoq! Sk'magg yawifk hoq! Sk'uuyat guulphg hoq.");
+            m_creature->PMonsterYell("Bask in the power of the infinite void!");
             m_creature->InterruptNonMeleeSpells(false);
             DoCast(m_creature, SPELL_SHADOWFORM);
             DoCast(m_creature, SPELL_PERIODIC_SHADOW_STORM);
@@ -254,15 +246,13 @@ struct boss_concaviusAI : public ScriptedAI
                     m_creature->CastSpell(player, 21150, true);
             }
 
-            // "Uovssh thyzz... qwaz..." = "To have waited so long... for this..."
-            m_creature->PMonsterYell("Uovssh thyzz... qwaz...");
+            m_creature->PMonsterYell("Embrace the void!");
             mana_burn_warning_said = true;
         }
 
         if (ManaBurn_Timer < diff)
         {
-            // "Sk'yahf agth huqth N'Zoth qornaus." = "Your souls shall sate N'Zoth's endless hunger."
-            m_creature->PMonsterYell("Sk'yahf agth huqth N'Zoth qornaus.");
+            m_creature->PMonsterYell("Perish.");
             m_creature->InterruptNonMeleeSpells(false);
             DoCast(m_creature, SPELL_MANA_BURN);
             ManaBurn_Timer = 30000;
@@ -290,9 +280,39 @@ CreatureAI* GetAI_boss_concavius(Creature* _Creature)
     return new boss_concaviusAI(_Creature);
 }
 
+
+struct concavius_summonerAI : public ScriptedAI
+{
+    concavius_summonerAI(Creature* c) : ScriptedAI(c) { Reset(); }
+
+    void Reset() {}
+
+    void UpdateAI(const uint32 diff)
+    {
+        if (!m_creature->IsInCombat())
+        {
+            m_creature->CastSpell((Unit*)nullptr, 21157, true);
+        }
+        DoMeleeAttackIfReady();
+    }
+    void EnterCombat()
+    {
+        if (m_creature->GetEntry() == 92212)
+            m_creature->MonsterSay("Too late, miserable mongrels! The Master has sent one of his best soldiers to aid us! Your end is now!");
+    }
+    void JustRespawned() {}
+};
+
+CreatureAI* GetAI_concavius_summoner(Creature* _Creature) { return new concavius_summonerAI(_Creature); }
+
 void AddSC_boss_turtlhu()
 {
     Script* newscript;
+    newscript = new Script;
+    newscript->Name = "concavius_summoner";
+    newscript->GetAI = &GetAI_concavius_summoner;
+    newscript->RegisterSelf();
+
     newscript = new Script;
     newscript->Name = "boss_concavius";
     newscript->GetAI = &GetAI_boss_concavius;
