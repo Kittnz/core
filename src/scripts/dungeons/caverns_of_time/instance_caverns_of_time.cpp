@@ -102,28 +102,28 @@ struct instance_caverns_of_time : public ScriptedInstance
         {
             if (dragonSpawn1 && dragonSpawn2 && dragonSpawn3)
             {
-                    if (!dragonSpawn1->IsAlive())
-                    {
-                        auto itr = std::find(deadDragonsList.begin(), deadDragonsList.end(), dragonSpawn1);
-                        if (itr == deadDragonsList.end())
-                            deadDragonsList.push_back(dragonSpawn1);
-                    }
+                if (!dragonSpawn1->IsAlive())
+                {
+                    auto itr = std::find(deadDragonsList.begin(), deadDragonsList.end(), dragonSpawn1);
+                    if (itr == deadDragonsList.end())
+                        deadDragonsList.push_back(dragonSpawn1);
+                }
 
-                    if (!dragonSpawn2->IsAlive())
-                    {
-                        auto itr = std::find(deadDragonsList.begin(), deadDragonsList.end(), dragonSpawn2);
-                        if (itr == deadDragonsList.end())
-                            deadDragonsList.push_back(dragonSpawn2);
-                    }
+                if (!dragonSpawn2->IsAlive())
+                {
+                    auto itr = std::find(deadDragonsList.begin(), deadDragonsList.end(), dragonSpawn2);
+                    if (itr == deadDragonsList.end())
+                        deadDragonsList.push_back(dragonSpawn2);
+                }
 
-                    if (!dragonSpawn3->IsAlive())
-                    {
-                        auto itr = std::find(deadDragonsList.begin(), deadDragonsList.end(), dragonSpawn3);
-                        if (itr == deadDragonsList.end())
-                            deadDragonsList.push_back(dragonSpawn3);
-                    }
+                if (!dragonSpawn3->IsAlive())
+                {
+                    auto itr = std::find(deadDragonsList.begin(), deadDragonsList.end(), dragonSpawn3);
+                    if (itr == deadDragonsList.end())
+                        deadDragonsList.push_back(dragonSpawn3);
+                }
             }
-   }
+        }
 
         if (deadDragonsList.size() == 3 && !doOnce)
         {
@@ -290,7 +290,7 @@ struct infinite_dragonspawnAI : public ScriptedAI
 
     void JustDied(Unit*) override
     {
-        m_creature->PMonsterYell("You're too late... We are...Infinite!");
+        m_creature->PMonsterYell("You're too late, we are infinite...");
     }
 };
 
@@ -498,10 +498,12 @@ struct infinite_whelpAI : public ScriptedAI
     }
 
     uint32 m_manaBurnTimer;
+    uint8 stage;
 
     void Reset() override
     {
         m_manaBurnTimer = 3000;
+        stage = 0;
         m_creature->SetPowerPercent(POWER_MANA, 1); // start with 1% mana
     }
 
@@ -510,8 +512,9 @@ struct infinite_whelpAI : public ScriptedAI
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
-        if (m_creature->GetPowerPercent(POWER_MANA) == 75)
+        if (m_creature->GetPowerPercent(POWER_MANA) >= 75 && stage == 0)
         {
+            stage = 1;
             m_creature->MonsterTextEmote("begins vibrating with the energy it's absorbed!");
         }
 
@@ -521,6 +524,7 @@ struct infinite_whelpAI : public ScriptedAI
 
             DoAfterTime(m_creature, 1 * IN_MILLISECONDS, [m_creature = m_creature, this]() {
                 m_creature->SetPowerPercent(POWER_MANA, 0);
+                stage = 0;
                 });
         }
 
@@ -541,6 +545,11 @@ struct infinite_whelpAI : public ScriptedAI
                         if (playerGroup->FindNearestCreature(m_creature->GetEntry(), 50, true) && playerGroup->GetPowerPercent(POWER_MANA) >= 1)
                             playerGroup->ModifyPower(POWER_MANA, (playerGroup->GetMaxPower(POWER_MANA) / 10) * -1);
                     }
+                }
+
+                else
+                {
+                    player->ModifyPower(POWER_MANA, (player->GetMaxPower(POWER_MANA) / 10) * -1);
                 }
             }
 
@@ -698,13 +707,6 @@ struct infinite_timeripperAI : public ScriptedAI
                             i->DespawnOrUnsummon(4000);
                         }
                     }
-
-                    // GIP PLZ!
-                    //if (Creature* dragonSpawnOne = m_creature->GetInstanceData()->GetCreature(dragonSpawn1))
-                    //    dragonSpawnOne->MonsterMove(-1441.65f, 6936.788f, -136.89f);
-                    //if (Creature* dragonSpawnTwo = m_creature->GetInstanceData()->GetCreature(dragonSpawn2))
-                    //    dragonSpawnTwo->MonsterMove(-1441.65f, 6936.788f, -136.89f);
-
 
                     phase++;
                 }
@@ -898,7 +900,10 @@ struct aqir_addAI : public ScriptedAI
                         healTimer = 1000; // try again
                 }
                 else
-                    healTimer = 1000; // try again
+                {
+                    healTimer = 5000; // try again
+                    mindBlastTimer = 2000;
+                }
             }
             else
                 healTimer -= uiDiff;
@@ -1321,6 +1326,7 @@ struct larvae_cotAI : public ScriptedAI
         }
         else spellTimer -= uiDiff;
 
+        DoMeleeAttackIfReady();
     }
 
     void OnCombatStop() override
@@ -1715,7 +1721,7 @@ struct chromie_boss_cotAI : public ScriptedAI
     void Reset() override
     {
         manaBurnTimer = 18000;
-        fearTimer = 10000;
+        fearTimer = 45000;
         fumbleTimer = 12000;
         phase = 1;
     }
@@ -1738,7 +1744,7 @@ struct chromie_boss_cotAI : public ScriptedAI
         if (fearTimer <= uiDiff)
         {
             if (DoCastSpellIfCan(m_creature->SelectRandomUnfriendlyTarget(), SPELL_FEAR) == CAST_OK)
-                fearTimer = 10000;
+                fearTimer = 45000;
         }
         else fearTimer -= uiDiff;
 
@@ -2027,7 +2033,7 @@ struct mossheart_cotAI : public ScriptedAI
     {
         if (!m_creature->IsInCombat() && !m_creature->HasAura(SPELL_STEALTH))
             DoCastSpellIfCan(m_creature, SPELL_STEALTH);
-        
+
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
@@ -2262,10 +2268,10 @@ struct injured_defender_cot : public ScriptedAI
             }
             case 1:
             {
-                    m_creature->PMonsterYell("They're everywhere! They're attacking the Caverns!");
-                    m_uiUpdateTimer = 3000;
-                    phase++;
-                    break;
+                m_creature->PMonsterYell("They're everywhere! They're attacking the Caverns!");
+                m_uiUpdateTimer = 3000;
+                phase++;
+                break;
             }
             case 2:
             {
