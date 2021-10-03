@@ -215,7 +215,7 @@ void AccountMgr::SetSecurity(uint32 accId, AccountTypes sec)
 {
     m_accountSecurity[accId] = sec;
     LoginDatabase.PExecute("DELETE FROM account_access WHERE RealmID=%u AND id=%u", realmID, accId);
-    LoginDatabase.PExecute("INSERT INTO account_access VALUES (%u, %u, %u, '%s')", accId, sec, realmID);
+    LoginDatabase.PExecute("INSERT INTO account_access VALUES (%u, %u, %u)", accId, sec, realmID);
 }
 
 bool AccountMgr::GetName(uint32 acc_id, std::string &name)
