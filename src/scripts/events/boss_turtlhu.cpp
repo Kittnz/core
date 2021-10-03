@@ -54,7 +54,8 @@ struct boss_concaviusAI : public ScriptedAI
 
     void Aggro(Unit* who) override
     {
-        m_creature->PMonsterYell("NO! LET ME STEAL MORE TREASURES! WE NEED THEM!");
+        // "Gul'kafh an'shel." = "Gaze into the void."
+        m_creature->PMonsterYell("Gul'kafh an'shel.");
     }
 
     void Reset() override
@@ -64,7 +65,8 @@ struct boss_concaviusAI : public ScriptedAI
 
     void JustRespawned() override
     {
-        m_creature->PMonsterYell("Finally! I'm here! The wait is over.");
+        // "Vwyq agth sshoq'meg N'Zoth vra zz shfk qwor ga'halahs agthu." = "Once more shall the twisted flesh-banners of N'Zoth chitter and howl above the fly-blown corpse of this world."
+        m_creature->PMonsterYell("Vwyq agth sshoq'meg N'Zoth vra zz shfk qwor ga'halahs agthu!");
         SetDefaults();
     }
 
@@ -100,15 +102,17 @@ struct boss_concaviusAI : public ScriptedAI
         default:
             return;
         }
-
-        m_creature->PMonsterYell("Do you understand it now? You can't do anything.");
+        // "Sk'shuul agth vorzz N'Zoth naggwa'fssh." = "Your deaths shall sing of N'Zoth's unending glory."
+        m_creature->PMonsterYell("Sk'shuul agth vorzz N'Zoth naggwa'fssh!");
         DoCastSpellIfCan(m_creature, SPELL_SHADOWVOLLEY);
     }
 
     void JustDied(Unit* /*pKiller*/) override
     {
         m_creature->SetObjectScale(0.35f);
-        m_creature->PMonsterSay("I... feel... weak... Thanks for freeing my soul, strangers.");
+        
+        // "Iilth vwah, uhn'agth fhssh za." = "Where one falls, many shall take its place."
+        m_creature->PMonsterSay("Iilth vwah, uhn'agth fhssh za...");
 
         uint32 m_respawn_delay_Timer = urand(3, 5) * DAY;
 
@@ -132,7 +136,10 @@ struct boss_concaviusAI : public ScriptedAI
         // Adopting shadowform
         if (m_creature->GetHealthPercent() <= 30 && !in_shadow_form)
         {
-            m_creature->PMonsterYell("The shadows! I'll let them consume me to erase you!");
+            // "Sk'shgn eqnizz hoq." = "Your fear drives me."
+            // "Sk'magg yawifk hoq." = "Your suffering strengthens me."
+            // "Sk'uuyat guulphg hoq." = "Your agony sustains me."
+            m_creature->PMonsterYell("Sk'shgn eqnizz hoq! Sk'magg yawifk hoq! Sk'uuyat guulphg hoq.");
             m_creature->InterruptNonMeleeSpells(false);
             DoCast(m_creature, SPELL_SHADOWFORM);
             DoCast(m_creature, SPELL_PERIODIC_SHADOW_STORM);
@@ -247,13 +254,15 @@ struct boss_concaviusAI : public ScriptedAI
                     m_creature->CastSpell(player, 21150, true);
             }
 
-            m_creature->PMonsterYell("Soon... You will run! Cowards!");
+            // "Uovssh thyzz... qwaz..." = "To have waited so long... for this..."
+            m_creature->PMonsterYell("Uovssh thyzz... qwaz...");
             mana_burn_warning_said = true;
         }
 
         if (ManaBurn_Timer < diff)
         {
-            m_creature->PMonsterYell("BURN! ALL OF YOUR ENERGY, BURN!");
+            // "Sk'yahf agth huqth N'Zoth qornaus." = "Your souls shall sate N'Zoth's endless hunger."
+            m_creature->PMonsterYell("Sk'yahf agth huqth N'Zoth qornaus.");
             m_creature->InterruptNonMeleeSpells(false);
             DoCast(m_creature, SPELL_MANA_BURN);
             ManaBurn_Timer = 30000;
