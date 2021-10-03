@@ -32,10 +32,10 @@ CharacterDatabase.Info = "127.0.0.1;3306;mangos;mangos;tw_chars"
 # DB Auto-updater
 
 Database.AutoUpdate.Enabled = 1
-Database.AutoUpdate.Path = "../../sql/database_updates/"
-Database.AutoUpdate.AuthUpdateName = "logon"
-Database.AutoUpdate.CharUpdateName = "chars"
-Database.AutoUpdate.WorldUpdateName = "world"
+Database.AutoUpdate.Path = "../../sql/"
+Database.AutoUpdate.AuthUpdateName = "UNUSED"
+Database.AutoUpdate.CharUpdateName = "UNUSED"
+Database.AutoUpdate.WorldUpdateName = "database_updates"
 
 # Database.Connections. Amount of connections to database which will be used for SELECT queries. Maximum 16 connections per database.
 
