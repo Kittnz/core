@@ -97,3 +97,7 @@ replace into item_loot_template (entry, item, ChanceOrQuestChance, groupid, minc
 (83236, 13468, 8, 3, 1, 3);
 
 UPDATE item_template SET spelltrigger_1 = 2 WHERE entry = 83062 AND patch = 0;
+
+update item_template set name = 'Otherwordly Rifle', description = '' where entry = 51794;
+update item_template set name = 'Otherwordly Robe', description = 'This robe is emblazoned with runes you\'ve never seen before. The way it is woven seems as if it were from another world.' where entry = 51792;
+update item_template set name = 'Otherwordly Blade' where name = 'Void-Linked Blade';
