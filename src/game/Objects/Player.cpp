@@ -23103,6 +23103,21 @@ bool Player::HasTitle(uint8 title)
 void Player::AwardTitle(int8 title)
 {
 
+    // remomve title if its a negative value - for gms from .title # command
+    if (title < 0)
+    {
+        title *= -1;
+
+        if (HasTitle(title)) {
+
+            m_playerTitles.erase(title);
+            CharacterDatabase.DirectPExecute("DELETE FROM character_titles WHERE guid = '%u' and title = '%i'", GetGUIDLow(), title);
+            ChangeTitle(0);
+            return;
+        }
+        return;
+    }
+
     if (!HasTitle(title))
     {
         CharacterDatabase.DirectPExecute("INSERT INTO character_titles (guid, title) VALUES ('%u', '%i')", GetGUIDLow(), title);
