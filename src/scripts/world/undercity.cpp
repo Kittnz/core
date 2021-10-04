@@ -171,12 +171,12 @@ bool GossipSelect_npc_lady_sylvanas_windrunner(Player* pPlayer, Creature* pCreat
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_PASSIVE);
+        pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_NPC);
         pCreature->MonsterSayToPlayer("What manner of buffoonery is this?", pPlayer);
         if (pPlayer->HasItemCount(83020, 1, false))
             pPlayer->RemoveItemCurrency(83020, 1);
         DoAfterTime(pPlayer, 3 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
-            c->MonsterSayToPlayer("The Forest Trolls were my greatest enemy in life and although I’ve long left that life behind I am still bitter.", player);
+            c->MonsterSayToPlayer("The Forest Trolls were my greatest enemy in life and although Iï¿½ve long left that life behind I am still bitter.", player);
             c->HandleEmote(EMOTE_ONESHOT_TALK);
             });
         DoAfterTime(pPlayer, 7 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {

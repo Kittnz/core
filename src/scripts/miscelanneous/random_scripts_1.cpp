@@ -3259,7 +3259,7 @@ struct palkeoteAI : public ScriptedAI
     void Reset()
     {
         m_events.Reset();
-        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_PASSIVE);
+        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_NPC);
         m_creature->SetFactionTemplateId(m_creature->GetCreatureInfo()->faction);
         calfActive = false;
     }
@@ -3287,7 +3287,7 @@ struct palkeoteAI : public ScriptedAI
             m_creature->CombatStop(true);
             m_creature->ClearInCombat();
             m_creature->SetFactionTemplateId(35);
-            m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_PASSIVE);
+            m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_NPC);
 
 
             ThreatList const& tList = m_creature->GetThreatManager().getThreatList();
@@ -5815,7 +5815,7 @@ bool QuestRewarded_npc_malanys_cloudpiercer(Player* pPlayer, Creature* pQuestGiv
     if (!pPlayer)
         return false;
 
-    if (pQuest->GetQuestId() == 40010) // Antler’s Guidance
+    if (pQuest->GetQuestId() == 40010) // Antlerï¿½s Guidance
     {
         pQuestGiver->SetDisplayId(12034); // Nigth Elf
         pQuestGiver->CastSpell(pQuestGiver, 21178, false);
@@ -5840,7 +5840,7 @@ bool QuestRewarded_npc_ilyara_skyvault(Player* pPlayer, Creature* pQuestGiver, Q
     if (!pPlayer)
         return false;
 
-    if (pQuest->GetQuestId() == 40011) // Antler’s Guidance
+    if (pQuest->GetQuestId() == 40011) // Antlerï¿½s Guidance
     {
         pQuestGiver->SetDisplayId(2121); // Tauren
         pQuestGiver->HandleEmote(EMOTE_ONESHOT_WAVE);
@@ -6336,10 +6336,10 @@ bool QuestRewarded_npc_brother_crowley(Player* pPlayer, Creature* pQuestGiver, Q
             crowley->MonsterSayToPlayer("Brigitte Abbendis is the daughter of the former High General Abbendis and utterly hates the undead, which is not a surprise when it comes to the Scarlet Crusade, I know.", player);});
         DoAfterTime(pPlayer, 10 * IN_MILLISECONDS, [player = pPlayer, crowley = pQuestGiver]() {
             Map* map = sMapMgr.FindMap(0);
-            crowley->MonsterSayToPlayer("The issue is she’d go to any length and I mean any to achieve this purpose, given what you told me and the fate of the other leaders she probably broke and went insane by now.", player); });
+            crowley->MonsterSayToPlayer("The issue is sheï¿½d go to any length and I mean any to achieve this purpose, given what you told me and the fate of the other leaders she probably broke and went insane by now.", player); });
         DoAfterTime(pPlayer, 18 * IN_MILLISECONDS, [player = pPlayer, crowley = pQuestGiver]() {
             Map* map = sMapMgr.FindMap(0);
-            crowley->MonsterSayToPlayer("Last I heard she was in Tyr’s Hand, but if there’s a secret training place or whatever that prisoner called it the only one to know about it would be her, an information passed down from the Ashbringer to her father and from her father to her.", player); });
+            crowley->MonsterSayToPlayer("Last I heard she was in Tyrï¿½s Hand, but if thereï¿½s a secret training place or whatever that prisoner called it the only one to know about it would be her, an information passed down from the Ashbringer to her father and from her father to her.", player); });
         DoAfterTime(pPlayer, 28 * IN_MILLISECONDS, [player = pPlayer, crowley = pQuestGiver]() {
             Map* map = sMapMgr.FindMap(0);
             crowley->MonsterSayToPlayer("I am telling you, the Scarlet Crusade is indeed broken and we have seen better days but Abbendis will not stop at anything to take on the undead, be they Scourge or not.", player);
@@ -6373,7 +6373,7 @@ bool GossipSelect_npc_maverick(Player* pPlayer, Creature* maverick, uint32 /*uiS
 
         maverick->SetWalk(true);
         maverick->GetMotionMaster()->MovePoint(0, 2545.8F, -651.11F, 78.8F);
-        maverick->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_PASSIVE);
+        maverick->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_NPC);
 
         DoAfterTime(pPlayer, 40 * IN_MILLISECONDS, [player = pPlayer, summoner = maverick]() {
             Map* map = sMapMgr.FindMap(0);
@@ -6787,7 +6787,7 @@ bool QuestAccept_npc_barthos(Player* pPlayer, Creature* pQuestGiver, Quest const
     {
         pQuestGiver->HandleEmote(69);
         pQuestGiver->MonsterSayToPlayer("First, we put this here, and then this... here...", pPlayer);
-        pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_PASSIVE);
+        pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_NPC);
 
         DoAfterTime(pPlayer, 6 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
             npc->MonsterSayToPlayer("Then all it takes is, Ah! Damn thing!", player);
@@ -6858,7 +6858,7 @@ bool GossipSelect_npc_faction_leader(Player* pPlayer, Creature* pCreature, uint3
         switch (pCreature->GetEntry())
         {
         case 1748:
-            pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_PASSIVE);
+            pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_NPC);
             pCreature->MonsterSayToPlayer("So the Quel'dorei wish to formally join the Alliance?", pPlayer);
             if (pPlayer->HasItemCount(83015, 1, false))
                 pPlayer->RemoveItemCurrency(83015, 1);
@@ -6883,7 +6883,7 @@ bool GossipSelect_npc_faction_leader(Player* pPlayer, Creature* pCreature, uint3
                 });
             break;
         case 7999:
-            pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_PASSIVE);
+            pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_NPC);
             pCreature->MonsterSayToPlayer("Ten thousand years ago, the Highborne first summoned the Legion to this world.", pPlayer);
             if (pPlayer->HasItemCount(83015, 1, false))
                 pPlayer->RemoveItemCurrency(83015, 1);
@@ -6908,16 +6908,16 @@ bool GossipSelect_npc_faction_leader(Player* pPlayer, Creature* pCreature, uint3
                 });
             break;
         case 4949:
-            pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_PASSIVE);
+            pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_NPC);
             pCreature->MonsterSayToPlayer("Ogrim told me stories about the Forest Trolls, how he trampled on Khaz Modan with them and brought fear to the Alliance.", pPlayer);
             if (pPlayer->HasItemCount(83020, 1, false))
                 pPlayer->RemoveItemCurrency(83020, 1);
             DoAfterTime(pPlayer, 6 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
-                c->MonsterSayToPlayer("I wasn’t always on the same page with the old orc but in truth from what I know these trolls will be an asset to the Horde and our redemption for the betrayal they faced at the borders of Quel’thalas.", player);
+                c->MonsterSayToPlayer("I wasnï¿½t always on the same page with the old orc but in truth from what I know these trolls will be an asset to the Horde and our redemption for the betrayal they faced at the borders of Quelï¿½thalas.", player);
                 c->HandleEmote(EMOTE_ONESHOT_TALK);
                 });
             DoAfterTime(pPlayer, 12 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
-                c->MonsterSayToPlayer("Take my respond to Amani’Alor and tell them they are welcomed in our ranks with Lok’tar Ogar.", player);
+                c->MonsterSayToPlayer("Take my respond to Amaniï¿½Alor and tell them they are welcomed in our ranks with Lokï¿½tar Ogar.", player);
                 c->HandleEmote(EMOTE_ONESHOT_YES);
                 player->AddItem(83021, 1);
                 c->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
@@ -6925,7 +6925,7 @@ bool GossipSelect_npc_faction_leader(Player* pPlayer, Creature* pCreature, uint3
                 });
             break;
         case 10540:
-            pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_PASSIVE);
+            pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_NPC);
             pCreature->MonsterSayToPlayer("Da trolls were at one time just one people, no matter da tribe they cared and respected each other.", pPlayer);
             if (pPlayer->HasItemCount(83020, 1, false))
                 pPlayer->RemoveItemCurrency(83020, 1);
@@ -6934,7 +6934,7 @@ bool GossipSelect_npc_faction_leader(Player* pPlayer, Creature* pCreature, uint3
                 c->HandleEmote(EMOTE_ONESHOT_TALK);
                 });
             DoAfterTime(pPlayer, 6 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
-                c->MonsterSayToPlayer("Da Darkspear holds no remorse to old Zul’jin’s people. We welcome them as brothers in arms and wish they will find a home under our banner.", player);
+                c->MonsterSayToPlayer("Da Darkspear holds no remorse to old Zulï¿½jinï¿½s people. We welcome them as brothers in arms and wish they will find a home under our banner.", player);
                 c->HandleEmote(EMOTE_ONESHOT_TALK);
                 });
             DoAfterTime(pPlayer, 10 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
@@ -6953,7 +6953,7 @@ bool GossipSelect_npc_faction_leader(Player* pPlayer, Creature* pCreature, uint3
         switch (pCreature->GetEntry())
         {
         case 7999: // Darnassus
-            pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_PASSIVE);
+            pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_NPC);
 
             if (pPlayer->HasItemCount(60154, 1, false))
                 pPlayer->RemoveItemCurrency(60154, 1);
@@ -6985,7 +6985,7 @@ bool GossipSelect_npc_faction_leader(Player* pPlayer, Creature* pCreature, uint3
             break;
 
         case 1748: // Stormwind
-            pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_PASSIVE);
+            pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_NPC);
             if (pPlayer->HasItemCount(60155, 1, false))
                 pPlayer->RemoveItemCurrency(60155, 1);
             DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
@@ -7057,8 +7057,8 @@ bool GossipSelect_npc_zuljin(Player* pPlayer, Creature* pCreature, uint32 uiSend
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_PASSIVE);
-        pCreature->MonsterSayToPlayer("After da combined forces of da Amani and da Horde failed da attack on de Elven Lands we didn’t back down and me people and I paid da price.", pPlayer);
+        pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_NPC);
+        pCreature->MonsterSayToPlayer("After da combined forces of da Amani and da Horde failed da attack on de Elven Lands we didnï¿½t back down and me people and I paid da price.", pPlayer);
         DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
             c->MonsterSayToPlayer("Dey cornered me close to dat lake and been captured by a bashful elf named Brightwing.", player);
             c->HandleEmote(EMOTE_ONESHOT_TALK);
@@ -7068,11 +7068,11 @@ bool GossipSelect_npc_zuljin(Player* pPlayer, Creature* pCreature, uint32 uiSend
             c->HandleEmote(EMOTE_ONESHOT_NO);
             });
         DoAfterTime(pPlayer, 15 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
-            c->MonsterSayToPlayer("It was den that ol’ Zul’jin took a gamble with fate, with da help of me people who laid a small siege on da encampment I cut off me arm with a spear and ran into da forest.", player);
+            c->MonsterSayToPlayer("It was den that olï¿½ Zulï¿½jin took a gamble with fate, with da help of me people who laid a small siege on da encampment I cut off me arm with a spear and ran into da forest.", player);
             c->HandleEmote(EMOTE_ONESHOT_TALK);
             });
         DoAfterTime(pPlayer, 20 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
-            c->MonsterSayToPlayer("I healed and organised me army once again, not long before da Scourge claimed Silvermoon it was time to act, but even with the Loa’s blessings we couldn’t hold against the dead and failed.", player);
+            c->MonsterSayToPlayer("I healed and organised me army once again, not long before da Scourge claimed Silvermoon it was time to act, but even with the Loaï¿½s blessings we couldnï¿½t hold against the dead and failed.", player);
             c->HandleEmote(EMOTE_ONESHOT_YES);
             });
         DoAfterTime(pPlayer, 25 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
@@ -7345,7 +7345,7 @@ bool QuestAccept_npc_ganzih(Player* pPlayer, Creature* pQuestGiver, Quest const*
 
         if (lord_rog)
         {
-            lord_rog->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_PASSIVE);
+            lord_rog->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_NPC);
             lord_rog->CastSpell(pQuestGiver, 13236, false);
 
             DoAfterTime(pPlayer, 10 * IN_MILLISECONDS, [player = pPlayer, npc = lord_rog]() {

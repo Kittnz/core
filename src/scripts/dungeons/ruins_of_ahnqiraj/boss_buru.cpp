@@ -154,7 +154,7 @@ struct boss_buruAI : public ScriptedAI
 
     void EnableMovement()
     {
-        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
+        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
         SetCombatMovement(true);
         m_creature->ClearUnitState(UNIT_STAT_ROOT);
         m_creature->SetRooted(false);
@@ -162,7 +162,7 @@ struct boss_buruAI : public ScriptedAI
 
     void DisableMovement()
     {
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
         SetCombatMovement(false);
         m_creature->RemoveAllAttackers();
         m_creature->AttackStop();
@@ -337,7 +337,7 @@ struct mob_buru_eggAI : public ScriptedAI
     {
         // Prevent eggs from rotating around
         SetCombatMovement(false);
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
     }
 
     void DamageTaken(Unit* pDoneBy, uint32 &uiDamage) override

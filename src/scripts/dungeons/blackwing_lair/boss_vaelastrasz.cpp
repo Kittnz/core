@@ -221,7 +221,7 @@ struct boss_vaelAI : public ScriptedAI
             m_pInstance->SetData(TYPE_VAELASTRASZ, FAIL);
         m_creature->SetFactionTemplateId(FACTION_MONSTER);
         m_creature->SetStandState(UNIT_STAND_STATE_STAND);
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
         m_creature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER | UNIT_NPC_FLAG_GOSSIP);
     }
 
@@ -293,7 +293,7 @@ struct boss_vaelAI : public ScriptedAI
                     m_creature->SetFactionTemplateId(FACTION_MONSTER);
                     m_creature->SetStandState(UNIT_STAND_STATE_STAND);
                 }
-                m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
+                m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
                 m_creature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER | UNIT_NPC_FLAG_GOSSIP);
                 m_bFlagSet = true;
             }
