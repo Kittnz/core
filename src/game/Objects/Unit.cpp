@@ -5809,6 +5809,9 @@ bool Unit::IsTargetableForAttack(bool inverseAlive /*=false*/, bool isAttackerPl
     if (isAttackerPlayer && HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PLAYER))
         return false;
 
+    if (!isAttackerPlayer && HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC))
+        return false;
+
     // Players or their pets can attack feigned players
     if (!isAttackerPlayer && HasUnitState(UNIT_STAT_DIED))
         return false;
@@ -9745,6 +9748,9 @@ bool Unit::IsAttackableByAOE(bool requireDeadTarget, bool isCasterPlayer) const
         return false;
 
     if (isCasterPlayer && HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PLAYER))
+        return false;
+
+    if (!isCasterPlayer && HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC))
         return false;
 
     if (Player const* pPlayer = ToPlayer())

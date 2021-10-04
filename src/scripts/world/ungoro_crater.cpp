@@ -55,7 +55,7 @@ struct npc_ame01AI : public npc_escortAI
 
     void JustRespawned() override
     {
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
         npc_escortAI::JustRespawned();
     }
 
@@ -178,7 +178,7 @@ struct npc_ringoAI : public FollowerAI
 
     void JustRespawned() override
     {
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
         FollowerAI::JustRespawned();
     }
 
@@ -354,7 +354,7 @@ bool QuestAccept_npc_ringo(Player* pPlayer, Creature* pCreature, const Quest* pQ
         if (npc_ringoAI* pRingoAI = dynamic_cast<npc_ringoAI*>(pCreature->AI()))
         {
             pCreature->SetStandState(UNIT_STAND_STATE_STAND);
-            pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
+            pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
             pRingoAI->StartFollow(pPlayer, FACTION_ESCORTEE, pQuest);
         }
     }

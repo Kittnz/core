@@ -52,7 +52,7 @@ struct npc_piznikAI : public ScriptedAI
 
     void JustRespawned() override
     {
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
         ScriptedAI::JustRespawned();
     }
 
@@ -79,7 +79,7 @@ struct npc_piznikAI : public ScriptedAI
         EventTimer = 0;
         pGuid = plr->GetObjectGuid();
         m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PVP);
-        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
+        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
         m_creature->SetFactionTemporary(FACTION_ESCORT_N_FRIEND_ACTIVE, TEMPFACTION_RESTORE_RESPAWN);
     }
     void AttackStart(Unit* pWho) override

@@ -95,7 +95,7 @@ struct npc_lakota_windsongAI : public npc_escortAI
 
     void JustRespawned() override
     {
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
         npc_escortAI::JustRespawned();
     }
 
@@ -120,7 +120,7 @@ bool QuestAccept_npc_lakota_windsong(Player* pPlayer, Creature* pCreature, const
         DoScriptText(SAY_LAKO_START, pCreature, pPlayer);
         pCreature->SetFactionTemporary(FACTION_ESCORTEE, TEMPFACTION_RESTORE_RESPAWN);
 
-        pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
+        pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
 
         if (npc_lakota_windsongAI* pEscortAI = dynamic_cast<npc_lakota_windsongAI*>(pCreature->AI()))
             pEscortAI->Start(false, pPlayer->GetGUID(), pQuest);
@@ -179,7 +179,7 @@ struct npc_paoka_swiftmountainAI : public npc_escortAI
 
     void JustRespawned() override
     {
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
         npc_escortAI::JustRespawned();
     }
 
@@ -204,7 +204,7 @@ bool QuestAccept_npc_paoka_swiftmountain(Player* pPlayer, Creature* pCreature, c
         DoScriptText(SAY_START, pCreature, pPlayer);
         pCreature->SetFactionTemplateId(FACTION_ESCORT_H_NEUTRAL_ACTIVE);
 
-        pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
+        pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
 
         if (npc_paoka_swiftmountainAI* pEscortAI = dynamic_cast<npc_paoka_swiftmountainAI*>(pCreature->AI()))
             pEscortAI->Start(false, pPlayer->GetGUID(), pQuest);
@@ -386,7 +386,7 @@ struct npc_grenka_bloodscreechAI : ScriptedAI
 {
     explicit npc_grenka_bloodscreechAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_PACIFIED | UNIT_FLAG_PASSIVE);
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_PACIFIED | UNIT_FLAG_IMMUNE_TO_NPC);
         m_creature->SetVisibility(VISIBILITY_OFF);
 
         m_uiWave = 0;
@@ -447,7 +447,7 @@ struct npc_grenka_bloodscreechAI : ScriptedAI
             case 2:
                 {
                     DoSummon(3);
-                    m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_PACIFIED | UNIT_FLAG_PASSIVE);
+                    m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_PACIFIED | UNIT_FLAG_IMMUNE_TO_NPC);
                     m_creature->SetVisibility(VISIBILITY_ON);
                     if (auto pPlayer = m_creature->GetMap()->GetPlayer(m_PlayerGuid))
                     {

@@ -357,7 +357,7 @@ struct npc_kineloryAI : public npc_escortAI
 
     void JustRespawned() override
     {
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
         npc_escortAI::JustRespawned();
     }
 
@@ -444,7 +444,7 @@ bool QuestAccept_npc_kinelory(Player* pPlayer, Creature* pCreature, const Quest*
         if (npc_kineloryAI* pKineloryAI = dynamic_cast<npc_kineloryAI*>(pCreature->AI()))
         {
             DoScriptText(SAY_START, pCreature);
-            pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
+            pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
             pKineloryAI->Start(false, pPlayer->GetGUID(), pQuest);
         }
     }
