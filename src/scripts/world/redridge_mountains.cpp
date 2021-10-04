@@ -32,6 +32,9 @@ npc_corporal_keeshan */
 
 enum
 {
+    FACTION_ESCORTEE        = 10, // only during escort
+    FACTION_STORMWIND       = 12, // default ooc faction
+
     QUEST_MISSING_IN_ACTION = 219,
 
     SPELL_MOCKING_BLOW      = 21008,
@@ -128,6 +131,7 @@ bool QuestAccept_npc_corporal_keeshan(Player* pPlayer, Creature* pCreature, cons
         if (auto pEscortAI = dynamic_cast<npc_corporal_keeshan_escortAI*>(pCreature->AI()))
         {
             DoScriptText(SAY_CORPORAL_KEESHAN_1, pCreature);
+            pCreature->SetFactionTemporary(FACTION_ESCORTEE, TEMPFACTION_RESTORE_RESPAWN);
             pEscortAI->Start(false, pPlayer->GetGUID(), pQuest);
         }
     }
