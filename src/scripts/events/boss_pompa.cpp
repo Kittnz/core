@@ -32,7 +32,6 @@ struct boss_avatar_of_pompaAI : public ScriptedAI
 {
     boss_avatar_of_pompaAI(Creature *c) : ScriptedAI(c)
     {
-        c->SetLootAndXPModDist(150.0f);
         Reset();
     }
 
