@@ -1717,80 +1717,6 @@ GameObjectAI* GetAI_go_campfire_rested(GameObject* gameobject)
     return new go_campfire_rested(gameobject);
 }
 
-struct go_cot_enter_trigger : public GameObjectAI
-{
-    explicit go_cot_enter_trigger(GameObject* pGo) : GameObjectAI(pGo)
-    {
-        m_uiUpdateTimer = 1000;
-    }
-
-    uint32 m_uiUpdateTimer;
-
-    void UpdateAI(uint32 const uiDiff) override
-    {
-        if (m_uiUpdateTimer < uiDiff)
-        {
-            std::list<Player*> players;
-            MaNGOS::AnyPlayerInObjectRangeCheck check(me, 8.0f, true, false);
-            MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
-
-            Cell::VisitWorldObjects(me, searcher, 8.0f);
-
-            for (Player* pPlayer : players)
-            {
-                if (!pPlayer->IsAlive()) {
-                    pPlayer->ResurrectPlayer(0.5f);
-                    pPlayer->SpawnCorpseBones();
-                }
-                pPlayer->TeleportTo(269, -2002.51f, 6575.36f, -154.93f, 5.76f);
-            }
-            m_uiUpdateTimer = 1000;
-        }
-        else
-        {
-            m_uiUpdateTimer -= uiDiff;
-        }
-    }
-};
-
-GameObjectAI* GetAI_go_cot_enter_trigger(GameObject* gameobject)
-{
-    return new go_cot_enter_trigger(gameobject);
-}
-
-struct go_cot_exit_trigger : public GameObjectAI
-{
-    explicit go_cot_exit_trigger(GameObject* pGo) : GameObjectAI(pGo)
-    {
-        m_uiUpdateTimer = 1000;
-    }
-
-    uint32 m_uiUpdateTimer;
-
-    void UpdateAI(uint32 const uiDiff) override
-    {
-        if (m_uiUpdateTimer < uiDiff)
-        {
-            std::list<Player*> players;
-            MaNGOS::AnyPlayerInObjectRangeCheck check(me, 8.0f, true, false);
-            MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
-
-            Cell::VisitWorldObjects(me, searcher, 8.0f);
-
-            for (Player* pPlayer : players)
-            {
-                //pPlayer->TeleportTo(1, -8349.90f, -4060.05f, -208.06f, 3.48f);
-                pPlayer->TeleportTo(1, -8756.86f, -4191.39f, -209.49f, 5.57f);
-            }
-            m_uiUpdateTimer = 1000;
-        }
-        else
-        {
-            m_uiUpdateTimer -= uiDiff;
-        }
-    }
-};
-
 bool GOHello_go_radio(Player* pPlayer, GameObject* pGo)
 {
     switch (pGo->GetEntry())
@@ -1883,11 +1809,6 @@ bool GOSelect_go_radio(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 a
     pPlayer->PlayDirectMusic(sound);
     pPlayer->CLOSE_GOSSIP_MENU();
     return true;
-}
-
-GameObjectAI* GetAI_go_cot_exit_trigger(GameObject* gameobject)
-{
-    return new go_cot_exit_trigger(gameobject);
 }
 
 bool GOHello_go_portal_to_stormwind(Player* pPlayer, GameObject* pGo)
@@ -2195,52 +2116,6 @@ bool GOSelect_go_brainwashing_device(Player* pPlayer, GameObject* pGo, uint32 se
 
 	pPlayer->CLOSE_GOSSIP_MENU();
     return true;
-}
-
-struct stormwind_vault_portal : public GameObjectAI
-{
-    explicit stormwind_vault_portal(GameObject* pGo) : GameObjectAI(pGo)
-    {
-        m_uiUpdateTimer = 1000;
-    }
-
-    uint32 m_uiUpdateTimer;
-
-    void UpdateAI(uint32 const uiDiff) override
-    {
-        if (m_uiUpdateTimer < uiDiff)
-        {
-            std::list<Player*> players;
-            MaNGOS::AnyPlayerInObjectRangeCheck check(me, 1.0f, true, false);
-            MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
-
-            Cell::VisitWorldObjects(me, searcher, 1.0f);
-
-            for (Player* pPlayer : players)
-            {
-                pPlayer->GetSession()->SendNotification("This dungeon is currently not available.");
-                //if (!pPlayer->IsAlive()) 
-                //{
-                //    pPlayer->ResurrectPlayer(0.5f);
-                //    pPlayer->SpawnCorpseBones();
-                //}
-                //if (me->GetEntry() == 3000281)
-                //    pPlayer->TeleportTo(0, -8677.60F, 637.04F, 96.90F, 5.3F);
-                //else
-                //    pPlayer->TeleportTo(35, -1.15F, 44.4F, -25.58F, 1.6F);
-            }
-            m_uiUpdateTimer = 1000;
-        }
-        else
-        {
-            m_uiUpdateTimer -= uiDiff;
-        }
-    }
-};
-
-GameObjectAI* GetAI_stormwind_vault_portal(GameObject* gameobject)
-{
-    return new stormwind_vault_portal(gameobject);
 }
 
 // Refreshment Portal GO
@@ -8035,11 +7910,6 @@ void AddSC_random_scripts_1()
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "stormwind_vault_portal";
-    newscript->GOGetAI = &GetAI_stormwind_vault_portal;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
     newscript->Name = "go_campfire_rested";
     newscript->GOGetAI = &GetAI_go_campfire_rested;
     newscript->RegisterSelf();
@@ -8079,16 +7949,6 @@ void AddSC_random_scripts_1()
     newscript = new Script;
     newscript->Name = "go_custom_rested";
     newscript->GOGetAI = &GetAI_go_custom_rested;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "go_cot_enter_trigger";
-    newscript->GOGetAI = &GetAI_go_cot_enter_trigger;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "go_cot_exit_trigger";
-    newscript->GOGetAI = &GetAI_go_cot_exit_trigger;
     newscript->RegisterSelf();
 
     newscript = new Script;

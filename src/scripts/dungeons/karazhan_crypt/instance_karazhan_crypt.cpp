@@ -120,51 +120,6 @@ struct karazhan_crypt_gate : public GameObjectAI
 
 GameObjectAI* GetAI_karazhan_crypt_gate(GameObject* Obj) { return new karazhan_crypt_gate(Obj); }
 
-struct karazhan_crypt_portal : public GameObjectAI
-{
-    explicit karazhan_crypt_portal(GameObject* pGo) : GameObjectAI(pGo)
-    {
-        m_uiUpdateTimer = 1000;
-    }
-
-    uint32 m_uiUpdateTimer;
-
-    void UpdateAI(uint32 const uiDiff) override
-    {
-        if (m_uiUpdateTimer < uiDiff)
-        {
-            std::list<Player*> players;
-            MaNGOS::AnyPlayerInObjectRangeCheck check(me, 1.0f, true, false);
-            MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
-
-            Cell::VisitWorldObjects(me, searcher, 1.0f);
-
-            for (Player* pPlayer : players)
-            {
-                if (!pPlayer->IsInCombat())
-                {
-                    if (!pPlayer->IsAlive())
-                    {
-                        pPlayer->ResurrectPlayer(0.5f);
-                        pPlayer->SpawnCorpseBones();
-                    }
-                    if (me->GetEntry() == 181580) // Entrance
-                        pPlayer->TeleportTo(800, -11068.1F, -1806.4F, 52.74F, 1.5F);
-                    if (me->GetEntry() == 181581) // Exit
-                        pPlayer->TeleportTo(0, -11068.9F, -1828.6F, 60.26F, 3.1F);
-                }
-            }
-            m_uiUpdateTimer = 1000;
-        }
-        else
-        {
-            m_uiUpdateTimer -= uiDiff;
-        }
-    }
-};
-
-GameObjectAI* GetAI_karazhan_crypt_portal(GameObject* gameobject) { return new karazhan_crypt_portal(gameobject); }
-
 struct tomb_bat_event_trigger : public GameObjectAI
 {
     explicit tomb_bat_event_trigger(GameObject* pGo) : GameObjectAI(pGo)
@@ -445,10 +400,5 @@ void AddSC_instance_karazhan_crypt()
     newscript->Name = "karazhan_crypt_gate";
     newscript->pGOHello = &GOHello_karazhan_crypt_gate;
     newscript->GOGetAI = &GetAI_karazhan_crypt_gate;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "karazhan_crypt_portal";
-    newscript->GOGetAI = &GetAI_karazhan_crypt_portal;
     newscript->RegisterSelf();
 }
