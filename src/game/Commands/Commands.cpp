@@ -11836,13 +11836,16 @@ bool ChatHandler::HandleModifyTitleCommand(char* args)
     // For gnomes, Avenger of Gnomeregan
     // For trolls, Voodoo Boss of Sen'jin
 
-    uint32 city_rank = (uint32)atoi(args);
-    Unit* target = GetSelectedUnit();
+    int32 titleId = (int32)atoi(args);
+    Player* target = GetSelectedPlayer();
 
     if (!target)
-        target = m_session->GetPlayer();
+    {
+        PSendSysMessage("You must select a player.");
+        return false;
+    }
 
-    target->SetByteValue(PLAYER_BYTES_3, 2, city_rank);
+    target->ToPlayer()->AwardTitle(titleId);
     return true;
 }
 
