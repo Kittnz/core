@@ -134,7 +134,7 @@ void WorldSession::HandleUseItemOpcode(WorldPacket& recvPacket)
     {
         itemCastCheckResult = SPELL_FAILED_BAD_TARGETS;
     }
-    else if (pUser->IsInDisallowedItemUseForm())
+    else if (pUser->IsShapeShifted())
     {
         if (!(bagIndex == INVENTORY_SLOT_BAG_0 && slot < EQUIPMENT_SLOT_END))
         {
@@ -168,12 +168,6 @@ void WorldSession::HandleUseItemOpcode(WorldPacket& recvPacket)
     if (!sScriptMgr.OnItemUse(pUser, pItem, targets))
         pUser->CastItemUseSpell(pItem, targets);
 }
-
-#define OPEN_CHEST 11437
-#define OPEN_SAFE 11535
-#define OPEN_CAGE 11792
-#define OPEN_BOOTY_CHEST 5107
-#define OPEN_STRONGBOX 8517
 
 void WorldSession::HandleOpenItemOpcode(WorldPacket& recvPacket)
 {
