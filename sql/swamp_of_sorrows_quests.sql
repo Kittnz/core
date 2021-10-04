@@ -81,3 +81,20 @@ replace into item_template (entry, display_id, name, class, quality, flags, buy_
 
 delete from creature_loot_template where entry = 767 and item = 60170;
 replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values (767,60170,-14,1,1,0,10);
+
+-- Sorrowmoss Mushrooms! --
+delete from quest_template where entry = 40077;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40077,2,8,37,30,0,0,'Sorrowmoss Mushrooms!','Howdy partner! Don\'t see many new faces around here, especially in this old beaten up castle! Surely you\'ve heard the rumors, of brave defenders holding off the orcs for days on end before being destroyed! What a tale, I could also tell you stories about the mushrooms in Swamp of Sorrows, especially Sorrowmoss Mushrooms!\n\nSorrowmoss Mushrooms only grow within this region, and have a certain... Taste to them, once you figure out how to cook it properly, because if you don\'t, well its deadly! Let\'s just say, I have a few friends from back in my old home town that would love to try some, and you\'ll be a pal and help me get them, right?\n\nAll I need is 10, that should do just nicely partner!','Collect 10 Sorrowmoss Mushrooms for \'Sly\' Duncan','Any luck? The swamp is a dangerous place, so be careful!','Huuha! you did it partner, now I can finally make some coin and sell off some of these, here, don\'t say I didn\'t cut you in on the profits!',60171,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1000,2750,72,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (92022, 40077);
+replace into creature_involvedrelation (id, quest) values (92022, 40077);
+
+delete from item_template where entry = 60171;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values (60171,19488,'Sorrowmoss Mushroom',12,1,2048,1,-1,-1,1,10,-1,-1,-1,-1,4,'',0);
+
+delete from gameobject_template where entry = 2010820;
+replace into gameobject_template values
+(2010820, 0, 3, 26317, 'Sorrowmoss Mushroom', 0, 4, 1, 43, 2010820, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+delete from gameobject_loot_template where entry = 2010820;
+replace into gameobject_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values (2010820,60171,-100,1,1,0,10);
