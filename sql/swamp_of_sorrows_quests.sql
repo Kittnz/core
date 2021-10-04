@@ -70,3 +70,14 @@ replace into item_template values
  '0', '1', NULL);
  
 -- Food Improvision --
+delete from quest_template where entry = 40076;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40076,2,8,38,30,0,0,'Food Improvision','I manage the supplies here in Sorrowguard and let me tell you we are getting close to rationing. Our supplies are well kept and managed, and I make sure that we have a lock on most things, but the one thing we are coming short on is food. If you can help me improvise for the next coming while, it would certainly mean a lot.\n\nThe Jaguars in the area are probably the closest thing to an actual decent meal. Collect 5 Heavy Jaguar Flanks for me, they should do me well enough in keeping everyone well fed.','Collect 5 Heavy Jaguar Flanks from Swamp Jaguar in Swamp of Sorrows for Quartermaster Davin.','Have you had any luck?','Well, these are quite heavy pieces of meat and will last me a while if I ration everything out, thanks again, you\'ve kept us fed.',60170,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2650,72,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (92023, 40076);
+replace into creature_involvedrelation (id, quest) values (92023, 40076);
+ 
+delete from item_template where entry = 60170;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values (60170,25466,'Heavy Jaguar Flank',12,1,2048,1,-1,-1,1,5,-1,-1,-1,-1,4,'',0);
+
+delete from creature_loot_template where entry = 767 and item = 60170;
+replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values (767,60170,-14,1,1,0,10);
