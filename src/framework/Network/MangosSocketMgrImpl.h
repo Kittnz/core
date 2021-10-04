@@ -276,10 +276,9 @@ void MangosSocketMgr<SocketType>::StopNetwork()
             m_NetThreads[i].Stop();
     }
 
-    // Avoid hanging on shutdown on unix systems
-#ifdef _WIN32
+//#ifdef _WIN32
     Wait();
-#endif
+//#endif
 }
 
 template <typename SocketType>

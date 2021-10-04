@@ -241,6 +241,7 @@ int Master::Run()
     ///- Stop freeze protection before shutdown tasks
     if (freeze_thread)
     {
+        sLog.outString("Stopping anti freeze thread...");
         freeze_thread->destroy();
         delete freeze_thread;
     }
@@ -250,20 +251,24 @@ int Master::Run()
 
     // when the main thread closes the singletons get unloaded
     // since worldrunnable uses them, it will crash if unloaded after master
+    sLog.outString("Waiting for world thread to finish...");
     world_thread.wait();
 
     ///- Clean account database before leaving
+    sLog.outString("Cleaning character database...");
     clearOnlineAccounts();
 
     // send all still queued mass mails (before DB connections shutdown)
+    sLog.outString("Sending queued mail...");
     sMassMailMgr.Update(true);
 
     ///- Wait for DB delay threads to end
+    sLog.outString("Closing database connections...");
     CharacterDatabase.StopServer();
     WorldDatabase.StopServer();
     LoginDatabase.StopServer();
 
-    sLog.outString( "Halting process..." );
+    sLog.outString("Halting process...");
 
     if (cliThread)
     {
