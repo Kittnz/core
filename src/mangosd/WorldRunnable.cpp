@@ -96,15 +96,18 @@ void WorldRunnable::run()
             prevSleepTime = 0;
     }
 
+    sLog.outString("Shutting down world...");
     sWorld.Shutdown();
 
     // unload battleground templates before different singletons destroyed
     sBattleGroundMgr.DeleteAllBattleGrounds();
 
+    sLog.outString("Stopping network threads...");
     sWorldSocketMgr->StopNetwork();
 
-    sMapMgr.UnloadAll();                                    // unload all grids (including locked in memory)
+    sLog.outString("Unloading all maps...");
+    sMapMgr.UnloadAll(); // unload all grids (including locked in memory)
 
     ///- End the database thread
-    WorldDatabase.ThreadEnd();                              // free mySQL thread resources
+    WorldDatabase.ThreadEnd(); // free mySQL thread resources
 }
