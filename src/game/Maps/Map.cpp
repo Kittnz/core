@@ -375,7 +375,9 @@ bool Map::Add(Player *player)
         player->m_visibleGUIDs.clear();
     NGridType* grid = getNGrid(cell.GridX(), cell.GridY());
     player->GetViewPoint().Event_AddedToWorld(&(*grid)(cell.CellX(), cell.CellY()));
+    player->SetIsNewObject(true);
     UpdateObjectVisibility(player, cell, p);
+    player->SetIsNewObject(false);
 
     if (i_data)
         i_data->OnPlayerEnter(player);
