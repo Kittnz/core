@@ -279,6 +279,8 @@ void AddSC_random_scripts_1();
 void AddSC_random_scripts_2();
 void AddSC_random_scripts_3();
 
+void AddSC_custom_teleports();
+
 void AddSC_boss_abbendis();
 void AddSC_boss_ardaeus();
 void AddSC_boss_daelus();
@@ -559,6 +561,8 @@ void AddScripts()
     AddSC_random_scripts_1();
     AddSC_random_scripts_2();
     AddSC_random_scripts_3();
+
+    AddSC_custom_teleports();
 
     AddSC_boss_abbendis();
     AddSC_boss_ardaeus();

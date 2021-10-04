@@ -258,6 +258,7 @@ miscelanneous/random_scripts_0.cpp
 miscelanneous/random_scripts_1.cpp
 miscelanneous/random_scripts_2.cpp
 miscelanneous/random_scripts_3.cpp
+miscelanneous/custom_teleports.cpp
 
 world/alterac_mountains.cpp
 world/arathi_highlands.cpp

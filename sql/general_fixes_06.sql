@@ -17,3 +17,26 @@ replace into item_template values
 (83263, 0, 4, 4, 'Steel Plate Armor', '', 27932, 2, 0, 1, 37664, 9416, 5, -1, -1, 52, 45, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 7, 15, 4, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 512, 0, 0, 0, 0, 0, 0, 13384, 1, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 2, 0, 0, 0, 0, 0, 6, 1, 0, 0, 115, 0, 0, 0, 0, 27, 0, 0, 0, 0, 1, NULL),
 (83264, 0, 4, 4, 'Steel Plate Pauldrons', '', 27940, 2, 0, 1, 29380, 7345, 3, -1, -1, 52, 45, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 7, 14, 4, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 372, 0, 0, 0, 0, 0, 0, 13669, 1, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 6, 1, 0, 0, 70, 0, 0, 0, 0, 27, 0, 0, 0, 0, 1, NULL),
 (83265, 0, 4, 4, 'Steel Plate Helm', '', 32900, 3, 0, 1, 36524, 9131, 1, -1, -1, 53, 45, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 7, 17, 4, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 426, 0, 0, 0, 0, 0, 0, 13665, 1, 0, 0, -1, 0, -1, 13383, 1, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 2, 0, 0, 0, 0, 0, 6, 1, 0, 0, 80, 0, 0, 0, 0, 45, 0, 0, 0, 0, 1, NULL);
+
+update gameobject_template set entry = 112915 where entry = 1000025;
+update gameobject_template set entry = 112916 where entry = 1000026;
+update gameobject set id = 112915 where id = 1000025;
+update gameobject set id = 112916 where id = 1000026;
+update gameobject_template set entry = 112917, name = 'Stormwind Vault (Entrance)' where entry = 3000226;
+update gameobject_template set entry = 112918 where entry = 3000281;
+update gameobject set id = 112917 where id = 3000226;
+update gameobject set id = 112918 where id = 3000281;
+
+replace into gameobject_template values 
+(112915, 0, 5, 23442, 'Black Morass (Entrance)', 0, 0, 1.6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(112916, 0, 5, 23442, 'Black Morass (Exit)', 0, 0, 1.6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+update gameobject_template set script_name = 'custom_dungeon_portal' where entry = 181580;
+update gameobject_template set script_name = 'custom_dungeon_portal' where entry = 181581;
+update gameobject_template set script_name = 'custom_dungeon_portal' where entry = 112911;
+update gameobject_template set script_name = 'custom_dungeon_portal' where entry = 112912;
+update gameobject_template set script_name = 'custom_dungeon_portal' where entry = 112915;
+update gameobject_template set script_name = 'custom_dungeon_portal' where entry = 112916;
+update gameobject_template set script_name = 'custom_dungeon_portal' where entry = 112917;
+update gameobject_template set script_name = 'custom_dungeon_portal' where entry = 112918;
+
