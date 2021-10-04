@@ -5520,6 +5520,17 @@ UnitDismountResult Unit::Unmount(bool from_aura)
     return DISMOUNTRESULT_OK;
 }
 
+bool Unit::IsShapeShifted() const
+{
+    // Mirroring clientside gameplay logic
+    if (ShapeshiftForm form = GetShapeshiftForm())
+    {
+        if (SpellShapeshiftFormEntry const* ssEntry = sSpellShapeshiftFormStore.LookupEntry(form))
+            return !(ssEntry->flags1 & SHAPESHIFT_FORM_FLAG_ALLOW_ACTIVITY);
+    }
+    return false;
+}
+
 bool Unit::IsInDisallowedMountForm()
 {
     // Turtle WoW custom, some morphs should be allowed to use mounts
