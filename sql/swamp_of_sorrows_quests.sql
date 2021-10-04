@@ -47,3 +47,25 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 
 replace into creature_questrelation (id, quest) values (92019, 40074);
 replace into creature_involvedrelation (id, quest) values (3136, 40074);
+
+-- Swords to Sorrowguard --
+delete from quest_template where entry = 40075;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40074,40075,2,8,37,30,0,0,'Swords to Sorrowguard','It has been so long since I last heard from Sorrowguard, I honestly had assumed the orcs had taken or destroyed the keep. That or something equally as bad, I am not a downer, just a realist in a way, its a dangerous place that swamp!\n\nStill, I held onto the swords, just incase something as bad happened here, its better to have them, then have some coin I figure. Take them to Janet, she should be relieved I didn\'t happen to sell them off.','Take the Delivery of Swords to Janet Hollowworth in Sorrowguard Keep.','You return, good news I hope?','Thank the heavens, I have been worried about this order since the trouble with shipping weeks ago. At the least we have a stock of swords available should anything bad happen, and it has freed up my Iron for other things.\n\nHere, take one, as a way for me to pay you for the services.',60168,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60168,1,0,1850,72,100,0,0,0,0,0,0,0,0,0,60169,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (3136, 40075);
+replace into creature_involvedrelation (id, quest) values (92019, 40075);
+
+delete from item_template where entry = 60168;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values (60168,7914,'Delivery of Swords',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+delete from item_template where entry = 60169;
+replace into item_template values
+ ('60169', '0', '2', '7', 'Sorrowguard Shortsword', '', '28567', '2', '0', '1', '57064', '14266', '21', '-1', '-1', '43',
+ '36', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '6', '5', '4', '4',
+ '7', '2', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '2400', '0',
+ '0', '45', '78', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '1', '3', '0', '0', '75', '0', '0', '0', '0', '26', '0', '0', '0',
+ '0', '1', NULL);
+
