@@ -115,15 +115,18 @@ struct boss_huhuranAI : public ScriptedAI
         else
             m_uiFrenzyTimer -= uiDiff;
 
-        // Wyvern Timer
-        if (m_uiWyvernTimer < uiDiff && !m_bBerserk)
+        // No longer cast wyvern string during enrage
+        if (!m_bBerserk)
         {
-            if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
-                if (DoCastSpellIfCan(pTarget, SPELL_WYVERNSTING) == CAST_OK)
+            // Wyvern Timer
+            if (m_uiWyvernTimer < uiDiff)
+            {
+                if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_WYVERNSTING) == CAST_OK)
                     m_uiWyvernTimer = urand(15000, 32000);
+            }
+            else
+                m_uiWyvernTimer -= uiDiff;
         }
-        else
-            m_uiWyvernTimer -= uiDiff;
 
         //Spit Timer
         if (m_uiSpitTimer < uiDiff)
