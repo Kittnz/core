@@ -134,7 +134,7 @@ void WorldSession::HandleUseItemOpcode(WorldPacket& recvPacket)
     {
         itemCastCheckResult = SPELL_FAILED_BAD_TARGETS;
     }
-    else if (pUser->IsInDisallowedMountForm())
+    else if (pUser->IsInDisallowedItemUseForm())
     {
         if (!(bagIndex == INVENTORY_SLOT_BAG_0 && slot < EQUIPMENT_SLOT_END))
         {
