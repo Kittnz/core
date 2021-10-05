@@ -37,8 +37,6 @@ struct boss_concaviusAI : public ScriptedAI
 
     void SetDefaults()
     {
-        m_creature->SetObjectScale(4.2f);
-
         VoidBolt_Timer = 12000;
         ManaBurn_Timer = 30000;
         ShadowBolt_Timer = urand(4000, 6000);
@@ -105,8 +103,7 @@ struct boss_concaviusAI : public ScriptedAI
     }
 
     void JustDied(Unit* /*pKiller*/) override
-    {
-        m_creature->SetObjectScale(0.35f);        
+    {   
         m_creature->PMonsterSay("Void... awaits.");
 
         uint32 m_respawn_delay_Timer = urand(3, 5) * DAY;
