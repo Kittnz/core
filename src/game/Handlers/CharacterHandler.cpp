@@ -779,6 +779,12 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
         pCurrChar->LearnSpell(30174, false);
     }
 
+    if (sWorld.getConfig(CONFIG_BOOL_ANNIVERSARY))
+    {
+        if (pCurrChar->GetLevel() > 5 && !pCurrChar->HasItemCount(83272) && !pCurrChar->HasItemCount(83270))
+            pCurrChar->AddItem(83270, 1);
+    }
+
     if (pCurrChar->IsCityProtector())
         pCurrChar->MailCityProtectorScroll();
 
