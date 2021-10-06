@@ -262,3 +262,41 @@ replace into npc_vendor values
 (92217, 2509, 0, 0, 0, 0),
 (92217, 2516, 0, 0, 0, 0),
 (92217, 5441, 0, 0, 0, 0);
+
+-- Lazsan
+update creature_template set health_min = 18234 where entry = 60433;
+update creature_template set health_max = 18234 where entry = 60433;
+update creature_template set armor = 4000 where entry = 60433;
+update creature_template set dmg_min = 344 where entry = 60433;
+update creature_template set dmg_max = 444 where entry = 60433;
+update creature_template set base_attack_time = 1300 where entry = 60433;
+
+-- Hal'dah Plainsguard <Kodo Hide Leatherworker> , display ID 12673, level 25, no weapons, faction 104, greeting line : "I have been working with Kodo Hide for many years, and am certainly the most experienced with it. Are you looking to increase your knowledge, and skills with Leatherworking friend?", SELLS RECIPES FOR KODO HIDE ARMOR FOR LEATHERWORKERS
+-- First Mate Sidney "One ear" Velvet, display ID 1403, level 53, weapon 15396, faction 230
+
+-- Kalanar Brightshine, display ID 5078, level 30, no weapon, faction 80, greeting line : "I was expelled from my home, the Furbolg have grown out of control."
+
+replace into creature_template values
+(92221, 0, 12673, 0, 0, 0, 'Hal\'dah Plainsguard', 'Kodo Hide Leatherworker', 0, 25, 25, 712, 712, 0, 0, 1026, 104, 7, 1, 1.14286, 0, 20, 5, 0, 0, 1, 37, 46, 0, 100, 1, 2000, 2000, 1, 4096, 0, 0, 0, 0, 0, 0, 35.6224, 48.9808, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 1, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(92222, 0, 1403, 0, 0, 0, 'First Mate Sidney "One ear" Velvet', '', 0, 53, 53, 2900, 2900, 0, 0, 2700, 230, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 342, 416, 0, 234, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 244.174, 340.4, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(92223, 0, 5078, 0, 0, 0, 'Kalanar Brightshine', '', 0, 30, 30, 1002, 1002, 0, 0, 1200, 80, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 42, 53, 0, 122, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 45.144, 62.073, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+set @equip_template = 56077; set @weapon_1 = 15396; set @weapon_2 = 0; set @creature = 92222;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @gossip_menu_id = 60211; set @magic_number = 92221; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'I have been working with Kodo Hide for many years, and am certainly the most experienced with it. Are you looking to increase your knowledge, and skills with Leatherworking friend?'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 60212; set @magic_number = 92223; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'I was expelled from my home, the Furbolg have grown out of control.'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+replace into npc_vendor values
+-- Hal'dah Plainsguard <Kodo Hide Leatherworker>
+(92221, 5083, 0, 0, 0, 0);
