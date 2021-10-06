@@ -143,7 +143,7 @@ replace into item_template values
 update creature_template set rank = 0, health_min = 3000, health_max = 3500, armor = 1980 where entry = 92203;
 update creature_template set equipment_id = 0 where entry = 91959;
 
-set @gossip_menu_id = 65536; set @magic_number = 92010; 
+set @gossip_menu_id = 30; set @magic_number = 92010; 
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
 replace into broadcast_text (entry, Male_Text) values (@magic_number, 'The Marines usually get all the credit, but we do all of the hard work.'); 
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
@@ -302,6 +302,6 @@ replace into npc_vendor values
 (92221, 5083, 0, 0, 0, 0);
 
 update creature_template set faction = 82, rank = 1, health_min = 4500, health_max = 5500, dmg_min = 140, dmg_max = 160, armor = 1000 where entry = 92131;
-update creature_template set unit_flags = 0, rank = 1, , health_min = 4500, health_max = 5500, , dmg_min = 140, dmg_max = 160, armor = 1000 where entry = 92130;
-update creature_template set rank = 0, health_min = 1201, health_max = 1209, , dmg_min = 85, dmg_max = 99, armor = 800 where entry = 92113;
-update creature_template set rank = 1, health_min = 3601, health_max = 4009, , dmg_min = 125, dmg_max = 199, armor = 980 where entry = 92112;
+update creature_template set unit_flags = 0, rank = 1, health_min = 4500, health_max = 5500, dmg_min = 140, dmg_max = 160, armor = 1000 where entry = 92130;
+update creature_template set rank = 0, health_min = 1201, health_max = 1209, dmg_min = 85, dmg_max = 99, armor = 800 where entry = 92113;
+update creature_template set rank = 1, health_min = 3601, health_max = 4009, dmg_min = 125, dmg_max = 199, armor = 980 where entry = 92112;
