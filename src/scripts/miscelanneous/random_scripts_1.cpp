@@ -6681,32 +6681,171 @@ bool QuestAccept_npc_barthos(Player* pPlayer, Creature* pQuestGiver, Quest const
     return false;
 }
 
+
+bool QuestAccept_npc_faction_leader(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver)
+        return false;
+
+    if (!pPlayer)
+        return false;
+
+    if (pQuest->GetQuestId() == 40069) //A people restored
+    {
+        pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+
+        DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            npc->SummonCreature(7878, 9680.20F, 2525.99F, 1360.00F, 3.23F, TEMPSUMMON_TIMED_DESPAWN, 87 * IN_MILLISECONDS);
+            });
+        DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            if (Creature* vestia = player->FindNearestCreature(7878, 30.0F))
+            {
+                vestia->SetWalk(true);
+                vestia->GetMotionMaster()->MovePoint(0, 9669.10F, 2524.87F, 1360.00F);
+                vestia->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+            }
+            });
+
+        DoAfterTime(pPlayer, 11 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            npc->SummonGameObject(2010819, 9666.39F, 2524.73F, 1360.00F, 3.12F, 0.0F, 0.0F, 0.0F, 0.0F, 77, true);
+            });
+
+        DoAfterTime(pPlayer, 13 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            if (Creature* vestia = player->FindNearestCreature(7878, 30.0F))
+            {
+                vestia->HandleEmote(EMOTE_STATE_KNEEL);
+                vestia->MonsterSay("High Priestess, I come before you presenting this container of Moonwell water. $n acting on the behalf of Alah'thalas has helped in the restoration of a Sacred Moonwell while bringing the perpretators to justice.");
+            }
+            });
+        DoAfterTime(pPlayer, 17 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            if (Creature* vestia = player->FindNearestCreature(7878, 30.0F))
+            {
+                vestia->MonsterSay("I have heard their case, they wish to slowly wean off their addiction to magic, while also embracing the warmth of the Goddess. Is it not our duty to guide them back into the fold?");
+            }
+            });
+        DoAfterTime(pPlayer, 21 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            npc->HandleEmote(EMOTE_ONESHOT_TALK);
+            npc->MonsterSay("Do you think me a fool Priestess? They aided you for their own gain. Do you truly believe the sincerity of the children of the Highborne?");
+            });
+        DoAfterTime(pPlayer, 25 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            npc->HandleEmote(EMOTE_ONESHOT_TALK);
+            npc->MonsterSay("They cannot be trusted. Even if we were to give them a Moonwell, what then? They'd pervert it and use it for profane magics. It is their nature.");
+            });
+        DoAfterTime(pPlayer, 28 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            if (Creature* vestia = player->FindNearestCreature(7878, 30.0F))
+            {
+                vestia->HandleEmote(EMOTE_ONESHOT_NO);
+            }
+            });
+        DoAfterTime(pPlayer, 30 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            npc->SummonCreature(80877, 9670.91F, 2518.45F, 1360.00F, 2.54F, TEMPSUMMON_TIMED_DESPAWN, 58 * IN_MILLISECONDS);
+            });
+        DoAfterTime(pPlayer, 30 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            if (Creature* vereesa = player->FindNearestCreature(80877, 30.0F))
+            {
+                vereesa->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+            }
+            });
+        DoAfterTime(pPlayer, 34 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            if (Creature* vereesa = player->FindNearestCreature(80877, 30.0F))
+            {
+                vereesa->HandleEmote(EMOTE_ONESHOT_TALK);
+                vereesa->MonsterSay("High Priestess Tyrande Whisperwind I have come to speak to you personally. I cannot rely on someone else to represent me, not this time. My ancestors have committed while acts and I do not deny this.");
+            }
+            });
+        DoAfterTime(pPlayer, 37 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            if (Creature* vereesa = player->FindNearestCreature(80877, 30.0F))
+            {
+                vereesa->HandleEmote(EMOTE_ONESHOT_TALK);
+                vereesa->MonsterSay("They conspired to summon the Legion to this world, and the few who changed their ways fell prey to their addiction to magic and caused untold damage to Ashenvale.");
+            }
+            });
+        DoAfterTime(pPlayer, 40 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            if (Creature* vereesa = player->FindNearestCreature(80877, 30.0F))
+            {
+                vereesa->HandleEmote(EMOTE_ONESHOT_TALK);
+                vereesa->MonsterSay("However, we are not our ancestors. And I wish to avoid the mistakes of the past. I do not want a moonwell we can use for magic, I want one that we can use to end our dependence upon magic overtime.");
+            }
+            });
+        DoAfterTime(pPlayer, 43 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            npc->HandleEmote(EMOTE_ONESHOT_ROAR);
+            npc->MonsterYell("Silence!");
+            });
+        DoAfterTime(pPlayer, 48 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            npc->HandleEmote(EMOTE_ONESHOT_TALK);
+            npc->MonsterSay("You dare try to claim the blessing of the goddess for such selfish means?! She is not a tool for you to wean off your vile addiction.");
+            });
+        DoAfterTime(pPlayer, 53 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            if (Creature* vereesa = player->FindNearestCreature(80877, 30.0F))
+            {
+                vereesa->HandleEmote(EMOTE_ONESHOT_NO);
+                vereesa->MonsterSay("I never claimed that. We know little of the Goddess but we wish to learn from her. She is kind and merciful from what I've heard. We do not want you to gift us a Moonwell, we want you to administer one and guide us.");
+            }
+            });
+        DoAfterTime(pPlayer, 58 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            if (Creature* vestia = player->FindNearestCreature(7878, 30.0F))
+            {
+                vestia->HandleEmote(EMOTE_ONESHOT_TALK);
+                vestia->MonsterSay("I believe in her sincerity, and with the Sentinels and a Priestess of the Moon guarding the water, no upstart mage would be able to commit any crime. Please think of this High Priestess, they are not the Highborne.");
+            }
+            });
+        DoAfterTime(pPlayer, 65 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            npc->HandleEmote(EMOTE_ONESHOT_TALK);
+            npc->MonsterSay("Vereesa Windrunner, your ancestors have as you claim caused much damage, but your agent here and your people have assisted mine. You have even restored the sacred fount of our Goddess. If you would have us guide you to prevent the mistakes of the past then so be it.");
+            });
+        DoAfterTime(pPlayer, 68 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            npc->HandleEmote(EMOTE_ONESHOT_TALK);
+            npc->MonsterSay("I will allow a miniature Moonwell to be established in Alah'thalas under heavy guard. Your people will have the option to attend sermons on Elune. Should they convert, I hope there will be no problem.");
+            });
+        DoAfterTime(pPlayer, 72 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            if (Creature* vereesa = player->FindNearestCreature(80877, 30.0F))
+            {
+                vereesa->HandleEmote(EMOTE_ONESHOT_NO);
+                vereesa->MonsterSay("None High Priestess, I shall attend the sermons myself and learn of your goddess too. If my people wish to follow the goddess Elune then they are welcome to do so.");
+            }
+            });
+        DoAfterTime(pPlayer, 75 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            npc->HandleEmote(EMOTE_ONESHOT_YES);
+            npc->MonsterSay("Very well, then return home. I will make the necessary arrangements.");
+            npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+            });
+        DoAfterTime(pPlayer, 80 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            if (Creature* vereesa = player->FindNearestCreature(80877, 30.0F))
+            {
+                vereesa->HandleEmote(EMOTE_ONESHOT_TALK);
+                vereesa->MonsterSayToPlayer("Come find me in Alah'thalas $n, I'll see you there in the Citadel.", player);
+            }
+            });
+        DoAfterTime(pPlayer, 85 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            if (Creature* vestia = player->FindNearestCreature(7878, 30.0F))
+            {
+                vestia->HandleEmote(EMOTE_ONESHOT_BOW);
+                if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60320))
+                    player->KilledMonster(cInfo, ObjectGuid());
+            }
+            });
+    }
+    return false;
+}
+
 bool GossipHello_npc_faction_leader(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->GetQuestStatus(80750) == QUEST_STATUS_INCOMPLETE || pPlayer->GetQuestStatus(80800) == QUEST_STATUS_INCOMPLETE || pPlayer->GetQuestStatus(40058) == QUEST_STATUS_INCOMPLETE)
     {
-
             switch (pCreature->GetEntry())
             {
             case 1748: // Stormwind
-                if (!pPlayer->HasItemCount(83016, 1, false))
+                if (pPlayer->HasItemCount(83015, 1, false) && !pPlayer->HasItemCount(83016, 1, false))
                     pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Hail, Lord Bolvar. I am delivering an important missive on behalf of the high elves.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-                break;
                 if (pPlayer->HasItemCount(60155, 1, false))
                     pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Present the Darnassian Endorsement.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
                 break;
             case 7999: // Darnassus
-                if (!pPlayer->HasItemCount(83018, 1, false))
+                if (pPlayer->HasItemCount(83015, 1, false) && !pPlayer->HasItemCount(83018, 1, false))
                     pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Tyrande, the high elves have sent me with a letter for your reading.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-                break;
                 if (pPlayer->HasItemCount(60154, 1, false))
                     pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Present the Sealed Writ.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
                 break;
-            }
-
-
-            switch (pCreature->GetEntry())
-            {
             case 4949: // Orgrimmar
                 if (!pPlayer->HasItemCount(83021, 1, false))
                     pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Thrall, the Revantusk Tribe have sent me with a letter for your reading.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
@@ -6716,18 +6855,19 @@ bool GossipHello_npc_faction_leader(Player* pPlayer, Creature* pCreature)
                     pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Vol'jin, the Revantusk Tribe have sent me with a letter for your reading.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
                 break;
             }
-
     }
 
     if (pCreature->IsQuestGiver())
         pPlayer->PrepareQuestMenu(pCreature->GetGUID());
 
-    pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
+    pPlayer->SEND_GOSSIP_MENU(4654, pCreature->GetGUID());
     return true;
 }
 
 bool GossipSelect_npc_faction_leader(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
 {
+
+
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
         switch (pCreature->GetEntry())
@@ -7442,6 +7582,7 @@ void AddSC_random_scripts_1()
     newscript->Name = "npc_faction_leader";
     newscript->pGossipHello = &GossipHello_npc_faction_leader;
     newscript->pGossipSelect = &GossipSelect_npc_faction_leader;
+    newscript->pQuestAcceptNPC = &QuestAccept_npc_faction_leader;
     newscript->RegisterSelf();
 
     newscript = new Script;
