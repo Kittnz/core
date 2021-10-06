@@ -300,3 +300,8 @@ update creature_template set gossip_menu_id = @gossip_menu_id where entry = @mag
 replace into npc_vendor values
 -- Hal'dah Plainsguard <Kodo Hide Leatherworker>
 (92221, 5083, 0, 0, 0, 0);
+
+update creature_template set faction = 82, rank = 1, health_min = 4500, health_max = 5500, dmg_min = 140, dmg_max = 160, armor = 1000 where entry = 92131;
+update creature_template set unit_flags = 0, rank = 1, , health_min = 4500, health_max = 5500, , dmg_min = 140, dmg_max = 160, armor = 1000 where entry = 92130;
+update creature_template set rank = 0, health_min = 1201, health_max = 1209, , dmg_min = 85, dmg_max = 99, armor = 800 where entry = 92113;
+update creature_template set rank = 1, health_min = 3601, health_max = 4009, , dmg_min = 125, dmg_max = 199, armor = 980 where entry = 92112;
