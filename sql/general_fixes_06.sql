@@ -182,3 +182,83 @@ replace into npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_i
 replace into npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (91882, 6217, 0, 0, 0, 0);
 replace into npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (91882, 6530, 0, 0, 0, 0);
 replace into npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (91882, 6532, 0, 0, 0, 0);
+
+-- Twilight Darkblade <Twilight's Hammer> , display id 11811, level 58-59 elite weapon 1 10823, weapon 2 10823, faction 16 
+-- Twilight Shadowmancer <Twilight's Hammer>, display ID 15407, level 58-59, elite, weapon 1 20718, has 3000 mana, casts 11661, faction 16
+-- Twilight Overseer <Twilight's Hammer>, 11824, level 58-59, elite, weapon 1 14533, has 4000 mana, casts immolate, faction 16
+
+replace into creature_template values
+(92214, 0, 11811, 0, 0, 0, 'Twilight Darkblade', 'Twilight\'s Hammer', 0, 58, 59, 6891, 7107, 0, 0, 2810, 16, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 354, 456, 0, 268, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 59.9488, 82.4296, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 402, 529, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(92215, 0, 15407, 0, 0, 0, 'Twilight Shadowmancer', 'Twilight\'s Hammer', 0, 58, 59, 6891, 7107, 3000, 3000, 2810, 16, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 354, 456, 0, 268, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 59.9488, 82.4296, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11661, 0, 0, 0, 0, 0, 402, 529, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(92216, 0, 11824, 0, 0, 0, 'Twilight Overseer', 'Twilight\'s Hammer', 0, 58, 59, 6891, 7107, 4000, 4000, 2810, 16, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 354, 456, 0, 268, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 59.9488, 82.4296, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11668, 0, 0, 0, 0, 0, 402, 529, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+set @equip_template = 56071; set @weapon_1 = 10823; set @weapon_2 = 10823; set @creature = 92214;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 56072; set @weapon_1 = 20718; set @weapon_2 = 0; set @creature = 92215;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 56073; set @weapon_1 = 14533; set @weapon_2 = 0; set @creature = 92216;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+-- Ticas Quirkfuzz <Gun Merchant>, display ID 12669 , level 52 , weapon1 3079, faction 64, greeting text: "Looking for some self defense? Out here in Azshara, diplomacy and good gnomish gestures don't usually mean safety!"
+-- Fixie Steamspark <Flaxwhisker Front>, display ID 7093, level 54, weapon1 4994, faction 64 , greeting text: "So much work to be done around here, so many projects being worked on at once! It almost makes a gnomes head spin."
+-- Genzil Spannerlight <Flaxwhisker Front> , display ID 2180, level 55 , weapon 12751, faction 64, greeting text : "We're making such splendid, fabulous advances in the fields of engineering and science both. We're tinkering with magic and technology fused together and are having great success!"
+-- Hasey Wobblefuse <Flaxwhisker Front>, display ID 10569 , level 56, no weapon, faction 64, greeting line: "Innovation is the only way forward, it takes thinking outside the box to get there sometimes."
+
+replace into creature_template values
+(92217, 0, 12669, 0, 0, 0, 'Ticas Quirkfuzz', 'Gun Merchant', 0, 52, 52, 2900, 2900, 0, 0, 2669, 64, 7, 1, 1.14286, 0, 20, 5, 0, 0, 1, 342, 416, 0, 234, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 244.174, 340.4, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(92218, 0, 7093, 0, 0, 0, 'Fixie Steamspark', 'Flaxwhisker Front', 0, 54, 54, 3000, 3000, 0, 0, 3190, 64, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 92, 120, 0, 244, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 69.8544, 96.0498, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(92219, 0, 2180, 0, 0, 0, 'Genzil Spannerlight', 'Flaxwhisker Front', 0, 55, 55, 3100, 3100, 0, 0, 2972, 64, 3, 1, 1.42857, 0, 20, 5, 0, 0, 1, 125, 149, 0, 226, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(92220, 0, 10569, 0, 0, 0, 'Hasey Wobblefuse', 'Flaxwhisker Front', 0, 56, 56, 3150, 3150, 0, 0, 2972, 64, 3, 1, 1.42857, 0, 20, 5, 0, 0, 1, 125, 149, 0, 226, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+set @equip_template = 56074; set @weapon_1 = 3079; set @weapon_2 = 0; set @creature = 92217;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 56075; set @weapon_1 = 4994; set @weapon_2 = 0; set @creature = 92218;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 56076; set @weapon_1 = 12751; set @weapon_2 = 0; set @creature = 92219;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @gossip_menu_id = 60207; set @magic_number = 92217; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Looking for some self defense? Out here in Azshara, diplomacy and good gnomish gestures don\'t usually mean safety!'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 60208; set @magic_number = 92218; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'So much work to be done around here, so many projects being worked on at once! It almost makes a gnomes head spin.'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 60209; set @magic_number = 92219; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'We\'re making such splendid, fabulous advances in the fields of engineering and science both. We\'re tinkering with magic and technology fused together and are having great success!'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 60210; set @magic_number = 92220; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Innovation is the only way forward, it takes thinking outside the box to get there sometimes.'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+replace into npc_vendor values
+-- Ticas Quirkfuzz <Gun Merchant>
+(92217, 11284, 0, 0, 0, 0),
+(92217, 3033, 0, 0, 0, 0),
+(92217, 3024, 0, 0, 0, 0),
+(92217, 3023, 0, 0, 0, 0),
+(92217, 2519, 0, 0, 0, 0),
+(92217, 2511, 0, 0, 0, 0),
+(92217, 2509, 0, 0, 0, 0),
+(92217, 2516, 0, 0, 0, 0),
+(92217, 5441, 0, 0, 0, 0);
