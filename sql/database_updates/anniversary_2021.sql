@@ -28,4 +28,6 @@ replace into item_loot_template (entry, item, chanceorquestchance, groupid, minc
 (83270, 83272, 100, 4, 1, 1, 0, 0, 10),
 (83270, 83272, 100, 4, 1, 1, 0, 0, 10);
 
-
+update item_template set max_count = 1 where entry = 83270;
+update item_template set max_count = 1 where entry = 83271;
+update item_template set max_count = 1 where entry = 83272;
