@@ -122,6 +122,8 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 replace into creature_questrelation (id, quest) values (91285, 40089);
 replace into creature_involvedrelation (id, quest) values (91285, 40089);
 
+update quest_template set type = 81 where entry = 40089;
+
 delete from item_template where entry = 60176;
 replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values (60176,32282,'Groveweald Badges',12,1,2048,1,-1,-1,1,8,-1,-1,-1,-1,4,'',0);
 
@@ -142,3 +144,35 @@ replace into creature_loot_template (entry, item, chanceorquestchance, mincounto
 (92107,60176,-100,1,1,0,10),
 (92105,60176,-100,1,1,0,10),
 (92106,60176,-100,1,1,0,10);
+
+-- The Unwise Elders --
+delete from quest_template where entry = 40090;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40090,2,8,34,26,0,0,'The Unwise Elders','The Elders of the Foulweald were smart enough to leave once things had taken for the worse. They helped lead the fleeing tribes of Furbolg into the Crescent Grove to the south. It is there that they themselves slipped into madness, and further drove the tribes under their watchful gaze into a deep craze. They not only are seen as spiritual leaders, but as the word of truth and a guide for the Furbolg there.\n\nTheir delusions, and their madness, have only spurred the Groveweald to become an ever greater threat to those around them, and have lead to even more misery to nature in Ashenvale. If the Groveweald are to stopped, the Elders must cease their whisperings into the Grovetenders ears. I doubt he will let you stop them, and he will also need to be destroyed. Bring me the paw of Elder \'One Eye\' and Elder Blackmaw, as proof of their demise, you shall be rewarded for ending this cycle of destruction.','I have been tasked by Grol to bring Paw of Elder \'One Eye\' and Paw of Elder Blackmaw.','Have you gotten Paw of Elder \'One Eye\'? and Paw of Elder Blackmaw.','So... It is done then.',60177,1,60178,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5000,2750,0,0,0,0,0,0,0,0,0,0,0,60179,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (91285, 40090);
+replace into creature_involvedrelation (id, quest) values (91285, 40090);
+
+update quest_template set type = 81 where entry = 40090;
+
+delete from item_template where entry = 60177;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values (60177,1496,'Paw of Elder \'One Eye\'',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+delete from item_template where entry = 60178;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values (60178,940,'Paw of Elder Blackmaw',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+delete from item_template where entry = 60179;
+replace into item_template values
+ ('60179', '0', '4', '0', 'Grol\'s Band', '', '9833', '3', '0', '1', '17224', '4306', '11', '-1', '-1', '36',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '6', '7', '7', '5',
+ '3', '2', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '4', '1', '0', '0', '0', '0', '0', '0', '0', '43', '0', '0', '0',
+ '0', '1', NULL);
+
+delete from creature_loot_template where entry = 92105 and item = 60177;
+delete from creature_loot_template where entry = 92106 and item = 60178;
+replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values
+(92105,60177,-100,1,1,0,10),
+(92106,60178,-100,1,1,0,10);
