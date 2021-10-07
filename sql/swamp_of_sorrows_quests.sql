@@ -284,3 +284,20 @@ replace into creature_loot_template (entry, item, chanceorquestchance, mincounto
 (91846,60186,-100,1,1,0,10);
 
 update creature_template set loot_id = 91846 where entry = 91846;
+
+-- Tales of the Past --
+delete from quest_template where entry = 40095;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40095,2,8,38,30,0,0,'Tales of the Past','Sorrowguard Keep once held the Orcish Horde at bay for two weeks, day after day orcs attacked these walls and were repelled by brave defenders of the Kingdom of Azeroth. They battled from one end of the swamp, all the way back to these very walls.\n\nMy mentor, was one such hero who took the call and met the horde within these lands. As much of a hero he was , he gave his life so others had the chance to survive. When I was being trained her carried a tome of great holy power from the Abbey of Northshire.\n\nI still believe the tome to be present here in the swamp, though in what condition, or where, I cannot be certain. I do know it lies west of stonard, that should certainly narrow down the area if you wish to search in the name of the light.','Find the Forgotten Tome within the Swamp of Sorrows.','I take it you have had no luck?','This... This is it, you found it. I must say, looking at this again, after all these years is quite something.',60188,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2950,72,250,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (92017, 40095);
+replace into creature_involvedrelation (id, quest) values (92017, 40095);
+
+delete from item_template where entry = 60188;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values (60188,1317,'Forgotten Tome',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'Covered in overgrowth, and muck, it is aged, but the book seems intact.',0);
+
+delete from gameobject_template where entry = 2010823;
+replace into gameobject_template values
+(2010823, 0, 3, 25781, 'Kul Tiran Trunk', 0, 4, 1, 43, 2010823, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+delete from gameobject_loot_template where entry = 2010823;
+replace into gameobject_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values (2010823,60188,-100,1,1,0,10);
