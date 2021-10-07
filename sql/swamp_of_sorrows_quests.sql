@@ -114,3 +114,31 @@ replace into creature_questrelation (id, quest) values (92012, 40079);
 replace into creature_involvedrelation (id, quest) values (92012, 40079);
 
 update quest_template set type = 41 where entry = 40079;
+
+-- The Rampant Groveweald --
+delete from quest_template where entry = 40089;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40089,2,8,33,26,0,0,'The Rampant Groveweald','The Foulweald have long since lost their mind, set into a state of delusion and ferocity. When the tribe originally had begun to lose itself, many had set out toward the Crescent Grove to the south in hopes to escape this madness. I placed my hopes in my people but still they were lost to insanity.\n\nThe Furbolg who traveled to Crescent Grove may have sought refuge, and a new place to call home, but they did not escape that which sent the Foulweald into madness. They too have become aggresive, irrational, and uncaring for the world around them. Many of those I called friends, those I called family, went to the Groveweald, and they are nothing how I remember them.\n\nThe Groveweald must be stopped, gather what mercenaries, or fellow adventurers you can, and brave to the Crescent Grove, slay them there, and gather from them their Groveweald Badges as proof of the deed. It must be done for the good of the forest, and for the good of my people.','I have been tasked by Grol to bring 8 Groveweald Badges.','It pains me to ask, but have you gotten the badges?','So... It is done then, I hope in peace they may finally be let free from their delusions.',60176,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2750,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (91285, 40089);
+replace into creature_involvedrelation (id, quest) values (91285, 40089);
+
+delete from item_template where entry = 60176;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values (60176,32282,'Groveweald Badges',12,1,2048,1,-1,-1,1,8,-1,-1,-1,-1,4,'',0);
+
+delete from creature_loot_template where entry = 92100 and item = 60176;
+delete from creature_loot_template where entry = 92101 and item = 60176;
+delete from creature_loot_template where entry = 92102 and item = 60176;
+delete from creature_loot_template where entry = 92103 and item = 60176;
+delete from creature_loot_template where entry = 92104 and item = 60176;
+delete from creature_loot_template where entry = 92107 and item = 60176;
+delete from creature_loot_template where entry = 92105 and item = 60176;
+delete from creature_loot_template where entry = 92106 and item = 60176;
+replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values 
+(92100,60176,-40,1,1,0,10),
+(92101,60176,-45,1,1,0,10),
+(92102,60176,-55,1,1,0,10),
+(92103,60176,-55,1,1,0,10),
+(92104,60176,-65,1,1,0,10),
+(92107,60176,-100,1,1,0,10),
+(92105,60176,-100,1,1,0,10),
+(92106,60176,-100,1,1,0,10);
