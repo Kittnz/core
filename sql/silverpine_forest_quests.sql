@@ -44,3 +44,18 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 
 replace into creature_questrelation (id, quest) values (91713, 40084);
 replace into creature_involvedrelation (id, quest) values (91711, 40084);
+
+-- Into The Uplands --
+delete from quest_template where entry = 40085;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40084,40085,2,130,16,15,0,0,'Into The Uplands','You certainly know how to impress a lady. With those pests gone, we can focus on the more pressing matters. I need you to bring supplies and this letter to my husband, Nargelas, at Glenshire. He is currently leading a campaign to reclaim the Tirisfal Uplands to its rightful ruler and the Forsaken, of course.','Find Duke Nargelas at Glenshire and deliver supplies and the letter to him.','What\'s this, a letter for me?','So you single-handedly reclaimed both the tower and the mine? While I believe Grelda, you can imagine that your situation raises quite a number of questions.',60173,1,60174,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,290,68,50,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (91711, 40085);
+replace into creature_involvedrelation (id, quest) values (91712, 40085);
+
+delete from item_template where entry = 60173;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values (60173,60860,'Forsaken Supplies',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'A heavy box of supplies from Undercity',0);
+
+delete from item_template where entry = 60174;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values (60174,5567,'Grelda\'s Letter',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'A sealed letter addressed to Nargelas',0);
+
+update creature_template set script_name = 'npc_grelda' where entry = 91711;

@@ -550,10 +550,41 @@ bool QuestAccept_npc_wendo_wobblefizz(Player* pPlayer, Creature* pQuestGiver, Qu
     return false;
 }
 
+bool QuestAccept_npc_grelda(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver)
+        return false;
+
+    if (!pPlayer)
+        return false;
+
+    bool first_item_added = false;
+    bool second_item_added = false;
+
+    if (pQuest->GetQuestId() == 40085) //Into The Uplands
+    {
+        if (pPlayer->AddItem(60173)) first_item_added = true;
+        if (pPlayer->AddItem(60174)) second_item_added = true;
+
+        if (!first_item_added || !second_item_added)
+        {
+            pPlayer->RemoveQuest(40085);
+            pPlayer->SetQuestStatus(40085, QUEST_STATUS_NONE);
+            pPlayer->GetSession()->SendNotification("Your bags are full!");
+            return false;
+        }
+    }
+    return false;
+}
 
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_grelda";
+    newscript->pQuestAcceptNPC = &QuestAccept_npc_grelda;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_wendo_wobblefizz";
