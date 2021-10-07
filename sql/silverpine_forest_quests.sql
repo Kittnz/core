@@ -73,3 +73,16 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 
 replace into creature_questrelation (id, quest) values (91712, 40087);
 replace into creature_involvedrelation (id, quest) values (91712, 40087);
+
+-- Cutting Them Off --
+delete from quest_template where entry = 40088;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40087,40088,2,85,17,15,0,0,'Cutting Them Off','While you were gone, I sent a few of our scouts to investigate supply lines for the Humans main base. It appears that most of their supplies come from the eastern road. This indicates that they are most likely getting their food from the Garrick Stead.\n\nI need you to go there and kill their Farmers and those guarding them. Also, we found out that the man in charge of supplies is called Bill. While killing his man will suffice, I want Bill\'s head so that I can send a message to my dear sister in law.','I have been tasked by Duke to kill 10 Remnants Farmers, 6 Remnants Militia and bring Head of the Foreman Bill.','Back already?','Yeees... a fine trophy. With their supplies cut off, It is just a matter of time before they start to panic.',60175,1,0,0,0,0,0,0,91980,10,91981,7,0,0,0,0,0,0,1200,1500,68,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (91712, 40088);
+replace into creature_involvedrelation (id, quest) values (91712, 40088);
+
+delete from item_template where entry = 60175;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values (60175,2945,'Foreman Bill\'s Head',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'A severed human head',0);
+
+delete from creature_loot_template where entry = 2503 and item = 60175;
+replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values (2503,60175,-100,1,1,0,10);
