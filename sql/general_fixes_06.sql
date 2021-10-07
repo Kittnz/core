@@ -305,3 +305,8 @@ update creature_template set faction = 82, rank = 1, health_min = 4500, health_m
 update creature_template set unit_flags = 0, rank = 1, health_min = 4500, health_max = 5500, dmg_min = 140, dmg_max = 160, armor = 1000 where entry = 92130;
 update creature_template set rank = 0, health_min = 1201, health_max = 1209, dmg_min = 85, dmg_max = 99, armor = 800 where entry = 92113;
 update creature_template set rank = 1, health_min = 3601, health_max = 4009, dmg_min = 125, dmg_max = 199, armor = 980 where entry = 92112;
+
+update item_template set max_count = 1, stackable = 1 where entry = 61051;
+update creature_template set faction = 210 where subname = 'The Army of Lordaeron';
+update creature_template set health_min = 13242, health_max = 13242 where entry = 92110;
+update creature_template set npc_flags = 16391 where entry = 92217;
