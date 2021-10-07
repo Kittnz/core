@@ -310,3 +310,42 @@ update item_template set max_count = 1, stackable = 1 where entry = 61051;
 update creature_template set faction = 210 where subname = 'The Army of Lordaeron';
 update creature_template set health_min = 13242, health_max = 13242 where entry = 92110;
 update creature_template set npc_flags = 16391 where entry = 92217;
+
+-- keeper ranathos, add spell flag to allow entangling roots between wrath casts
+-- increase a'lathea starfire damage (again)
+-- blacktalon corruptor fireballs itself
+
+update creature_template set dmg_min = 180, dmg_max = 200 where entry = 92115;
+update creature_template set dmg_min = 180, dmg_max = 200 where entry = 92114;
+update creature_template set faction = 82 where entry = 92127;
+update creature_template set dmg_min = 220, dmg_max = 240 where entry = 92118;
+update creature_template set dmg_min = 270, dmg_max = 290 where entry = 92119;
+
+update item_template set stat_value1 = 8 where entry = 83223;
+update item_template set stat_value1 = 3 where entry = 83225;
+
+set @gossip_menu_id = 60073; set @magic_number = 91775; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'The Analyzor 53G seems to be malfunctioning.'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 53110; set @magic_number = 92005; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'This island is dangerous, keep yourself to Caelan\'s Rest if you\'re not experienced in the wilderness.\n\nAll sorts of evil lurks outside our borders and tests us for weakness.'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 53111; set @magic_number = 92007; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'The Sailors are overly arrogant and can be a rowdy bunch.\n\nThey may be good on a ship, but left alone on Caelan\'s Rest, they are as much of a nuisance as the wildlife.'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 53112; set @magic_number = 92006; 
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Careful beyond these stakes, walk with your head on a swivel.\n\nYou may end up dead if you are caught off guard.'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+update creature_template set rank = 1, health_min = 6000, health_max = 8000, dmg_min = 180, dmg_max = 220 where entry = 91968;
