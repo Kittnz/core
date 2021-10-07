@@ -184,6 +184,8 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 replace into creature_questrelation (id, quest) values (4218, 40091);
 replace into creature_involvedrelation (id, quest) values (4218, 40091);
 
+update quest_template set type = 81 where entry = 40091;
+
 delete from item_template where entry = 60180;
 delete from item_template where entry = 60181;
 delete from item_template where entry = 60182;
@@ -221,3 +223,20 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '8', '1', '0', '0', '60', '0', '0', '0', '0', '43', '0', '0', '0',
  '0', '1', NULL);
+ 
+-- Lost and Stranded --
+delete from quest_template where entry = 40092;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40092,2,409,51,40,0,0,'Lost and Stranded','The Tidemaster was sent off course after a scrap with some pirates, the next thing I knew pure chaos erupted as sailors were tossed into the ocean and ripped across jagged rocks! Murlocs attacked and the night erupted into screams and battle. I ran and found shelter upon this small island all the while my crewmates suffered a fate more horrible then you could imagine!\n\nI\'ve been trapped here ever since, the murlocs have been attempting to fight me, but they haven\'t had luck yet and mostly stick to their shore. On the last attack they ended up stealing a crate which had many of my belongings, but most importantly my compass. If I am ever to get back to Kul Tiras, it will be needed once I am prepared to go ashore. You should find their small camp down the hill on this island, among their hovels find my compass, and while you\'re there, kill some, in revenge for the Tidemaster!','Slay 6 Wallowfin Murlocs and find Wally Burnside\'s Compass on Crown Island.','They are a dreadful race of creature, murlocs, are they not?','This means a lot to me, when I get back home I will send a postcard and some coin for what you\'ve done, wish me luck for when I set off!',60184,1,0,0,0,0,0,0,91857,6,0,0,0,0,0,0,0,0,0,4450,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (90987, 40092);
+replace into creature_involvedrelation (id, quest) values (90987, 40092);
+
+delete from item_template where entry = 60184;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values (60184,1270,'Rusted Compass',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+delete from gameobject_template where entry = 2010821;
+replace into gameobject_template values
+(2010821, 0, 3, 24106, 'Cracked Crate', 0, 4, 1, 43, 2010821, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+delete from gameobject_loot_template where entry = 2010821;
+replace into gameobject_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values (2010821,60184,-100,1,1,0,10);
