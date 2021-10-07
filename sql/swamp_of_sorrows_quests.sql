@@ -240,3 +240,20 @@ replace into gameobject_template values
 
 delete from gameobject_loot_template where entry = 2010821;
 replace into gameobject_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values (2010821,60184,-100,1,1,0,10);
+
+-- The Tidemaster --
+delete from quest_template where entry = 40093;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40093,2,409,51,40,0,0,'The Tidemaster','Our sister ship, the Tidemaster was wrecked off the coast and suffered horrible casualties after grounding into Shank\'s Reef. The ship was ripped apart and the crew were attacked, none survived to tell tale. The ship was a wonderful one, and sits as a disfigured wreck within the Reef as if to disgrace Boralus.\n\nThere is nothing that can be done with the husk of the Tidemaster or its perished crew but we still need to recover the logbook. I do not have the crew to risk, especially with the murlocs, and rather hostile fish that tread the waters there. You will be the one to venture inside the wreckage, and take the logbook from its chest. The information there cannot fall into the hands of our enemies, or pirates.\n\nYou shall find what you\'re looking for to the north west along the coast.','Venture within the ship Tidemaster in Shank\'s Reef and recover the Tidemaster\'s Logbook for Deckmaster Breachcrest in Caelan\'s Rest.','Have you had any luck in finding the logs?','You have done well in your task, if the blackblood had found this, or pirates of the southsea, they would have been able to raid innocent merchantmen with leisure.',60185,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2500,4450,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (90987, 40093);
+replace into creature_involvedrelation (id, quest) values (90987, 40093);
+
+delete from item_template where entry = 60185;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values (60185,3426,'Tidemaster Logbook',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+delete from gameobject_template where entry = 2010822;
+replace into gameobject_template values
+(2010822, 0, 3, 23430, 'Kul Tiran Trunk', 0, 4, 1, 43, 2010822, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+delete from gameobject_loot_template where entry = 2010822;
+replace into gameobject_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values (2010822,60185,-100,1,1,0,10);
