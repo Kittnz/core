@@ -112,3 +112,5 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 
 replace into creature_questrelation (id, quest) values (92012, 40079);
 replace into creature_involvedrelation (id, quest) values (92012, 40079);
+
+update quest_template set type = 41 where entry = 40079;

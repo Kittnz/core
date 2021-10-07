@@ -1826,6 +1826,7 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                         case 254: m_caster->ToPlayer()->TeleportTo(1, 7.71F, -3619.13F, 27.22F, 2.5F);      break; // Southfury Trading Co
                         case 49:  m_caster->ToPlayer()->TeleportTo(0, 2743.08F, -1032.77F, 112.89F, 5.32F); break; // The Scarlet Crusade
                         case 294: m_caster->ToPlayer()->TeleportTo(0, -10709.6F, 310.9F, 40.14F, 0.01F);    break; // The Dark Guard
+                        case 176: m_caster->ToPlayer()->TeleportTo(1, -10707.2F, 2483.1F, 7.9F, 3.4F);      break; // Philanthropy
                         default: break;
                         }
                     }
