@@ -176,3 +176,48 @@ delete from creature_loot_template where entry = 92106 and item = 60178;
 replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values
 (92105,60177,-100,1,1,0,10),
 (92106,60178,-100,1,1,0,10);
+
+-- The Crescent Grove --
+delete from quest_template where entry = 40091;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40091,2,5077,37,28,0,0,'The Crescent Grove','The Crescent Grove was once a retreat for druids of our kind for many long years. As of recently something evil has lurked there. Keeper Ranathos was tasked with holding back the taint that plagued the area, but we have not been getting word from him as of late. His last message back was, also quite erratic, and unlike who Ranathos was. We druids had our suspicions of something much darker taking root within the Crescent Grove.\n\nRecently we have gotten a report from one of our druids of the place being corrupted, and warped. Arch Druid Staghelm has asked the Druids to assist with establishing control in Crescent Grove once again, but we are unable too as of current, perhaps you can assist.\n\nYou will find the entrance to the grove in the south of Ashenvale, at the waterfall to the Mystral Lake, the caves entrance lies above, venture forth, and destroy what evil lurks in that place. Make sure to bring assistance, there will be many hardships found inside.','Destroy the source of corruption inside Crescent Grove.','Have you ventured into the grove?','Arch Druid Staghelm will be overjoyed to hear such news! Please, on behalf of the Cenarion Circle, take one of these items.',0,0,0,0,0,0,0,0,92110,1,0,0,0,0,0,0,0,0,5000,3450,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60180,1,60181,1,60182,1,60183,1,0,0,'');
+
+replace into creature_questrelation (id, quest) values (4218, 40091);
+replace into creature_involvedrelation (id, quest) values (4218, 40091);
+
+delete from item_template where entry = 60180;
+delete from item_template where entry = 60181;
+delete from item_template where entry = 60182;
+delete from item_template where entry = 60183;
+replace into item_template values
+ ('60180', '0', '4', '3', 'Chain of Denatharion', '', '30866', '3', '0', '1', '28416', '7104', '5', '-1', '-1', '40',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '16', '4', '10',
+ '6', '4', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '254', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '5', '1', '0', '0', '120', '0', '0', '0', '0', '43', '0', '0', '0',
+ '0', '1', NULL),
+ ('60181', '0', '4', '0', 'Cloak of Denatharion', '', '23029', '3', '0', '1', '14580', '3945', '16', '-1', '-1', '40',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '7', '6', '4',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '29', '0', '0', '0',
+ '0', '0', '0', '7678', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '1', '0', '0', '0', '0', '0', '0', '0', '43', '0', '0', '0',
+ '0', '1', NULL),
+ ('60182', '0', '4', '1', 'Epaulets of Denatharion', '', '17192', '3', '0', '1', '16424', '4106', '3', '-1', '-1', '40',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '15', '7', '4',
+ '6', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '44', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '1', '0', '0', '50', '0', '0', '0', '0', '43', '0', '0', '0',
+ '0', '1', NULL),
+ ('60183', '0', '4', '2', 'Mask of Denatharion', '', '26305', '3', '0', '1', '20164', '5041', '1', '-1', '-1', '40',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '12', '3', '8',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '100', '0', '0', '0',
+ '0', '0', '0', '9140', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '8', '1', '0', '0', '60', '0', '0', '0', '0', '43', '0', '0', '0',
+ '0', '1', NULL);
