@@ -349,3 +349,8 @@ replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_numbe
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
 update creature_template set rank = 1, health_min = 6000, health_max = 8000, dmg_min = 180, dmg_max = 220 where entry = 91968;
+
+-- Gusbowl , display id 1600, level 35, faction 68
+
+replace into creature_template values
+(92224, 0, 1600, 0, 0, 0, 'Gusbowl', '', 0, 35, 35, 1342, 1342, 0, 0, 1373, 68, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 51, 65, 0, 138, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 51.128, 70.301, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
