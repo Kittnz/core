@@ -230,6 +230,7 @@ class BattleGroundMgr
         }
 
         void CreateInitialBattleGrounds();
+        void ReloadBGPlayerCounts();
         void DeleteAllBattleGrounds();
 
         void SendToBattleGround(Player *pl, uint32 InstanceID, BattleGroundTypeId bgTypeId);
