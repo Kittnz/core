@@ -301,3 +301,16 @@ replace into gameobject_template values
 
 delete from gameobject_loot_template where entry = 2010823;
 replace into gameobject_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values (2010823,60188,-100,1,1,0,10);
+
+-- some fixes.
+update creature_questrelation set id = 92003 where quest = 40093;
+update creature_involvedrelation set id = 92003 where quest = 40093;
+update quest_template set objectives = 'Bring the paws of Elder \'One Eye\' and Elder Blackmaw from within the Crescent Grove to Grol the Exile.' where entry = 40090;
+update quest_template set zoneorsort = 5077 where entry = 40090;
+update quest_template set objectives = 'Venture into the Crescent Grove, and collect 8 Groveweald Badges from Furbolg inside for Grol the Exile.' where entry = 40089;
+update quest_template set zoneorsort = 5077 where entry = 40089;
+update quest_template set requestitemstext = 'Have they been silenced? Has the whisperings of the Elders ceased?' where entry = 40090;
+update item_template set name = 'Groveweald Badge' where entry = 60176;
+update creature_loot_template set chanceorquestchance = -50 where entry = 92100;
+update creature_loot_template set chanceorquestchance = -50 where entry = 92101;
+update quest_template set offerrewardtext = 'It is a relief to know that the delusions these once wise elders spread has been halted. I hope they will find a better place in the afterlife.' where entry = 40090;
