@@ -181,6 +181,7 @@ bool GossipSelect_npc_cairne_bloodhoof(Player* pPlayer, Creature* pCreature, uin
         pPlayer->CLOSE_GOSSIP_MENU();
         return true;
     }
+    return true;
 }
 
 #define PLAINSRUNNING_QUEST 3581

@@ -493,6 +493,7 @@ class ChatHandler
         bool HandleBalanceCommand(char* args);
         bool HandleMailboxCommand(char* args);
         bool HandleSaleCommand(char* args);
+        bool HandleReloadBgAmounts(char* args);
         bool HandleMountCommand(char* args);
         bool HandleModifyTitleCommand(char* args);
         bool HandleModifyXpCommand(char* args);
@@ -507,6 +508,8 @@ class ChatHandler
         bool HandleTransferCommand(char* args);
         bool HandleCopyCommand(char* args);
         bool HandleSendPacketCommand(char* args);
+        bool HandleQueueWsgCommand(char* args);
+        bool HandleQueueAvCommand(char* args);
 
         bool HandleFastDebugCommand(char* args);
         bool HandleDebugLootTableCommand(char* args);

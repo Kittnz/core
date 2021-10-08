@@ -1270,6 +1270,35 @@ uint32 BattleGroundMgr::CreateBattleGround(BattleGroundTypeId bgTypeId, uint32 M
     return bgTypeId;
 }
 
+void BattleGroundMgr::ReloadBGPlayerCounts()
+{
+    std::unique_ptr<QueryResult> res{ WorldDatabase.Query("SELECT `id`, `min_players_per_team`, `max_players_per_team` FROM `battleground_template`") };
+
+    if (!res)
+        return;
+
+    std::unordered_map<uint32, std::pair<uint32, uint32>> newPlayerCounts;
+
+
+    do {
+        auto fields = res->Fetch();
+        newPlayerCounts[fields[0].GetUInt32()] = std::make_pair(fields[1].GetUInt32(), fields[2].GetUInt32());
+        
+    } while (res->NextRow());
+
+    for (auto& bgSet : m_BattleGrounds)
+    {
+        for (auto& bg : bgSet)
+        {
+            if (newPlayerCounts.find(bg.second->GetTypeID()) == newPlayerCounts.end())
+                continue;
+
+            bg.second->SetMinPlayersPerTeam(newPlayerCounts[bg.second->GetTypeID()].first);
+            bg.second->SetMaxPlayersPerTeam(newPlayerCounts[bg.second->GetTypeID()].second);
+        }
+    }
+}
+
 void BattleGroundMgr::CreateInitialBattleGrounds()
 {
     //                                                                0     1                       2                       3            4            5                     6                      7                  8                   9                          10

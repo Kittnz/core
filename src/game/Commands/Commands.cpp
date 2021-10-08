@@ -11907,6 +11907,44 @@ bool ChatHandler::HandleTransferCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleQueueWsgCommand(char* args)
+{
+    auto player = GetSession()->GetPlayer();
+    if (!player || !player->IsInWorld())
+        return false;
+
+    WorldPacket pckt{ CMSG_BATTLEMASTER_JOIN };
+    pckt << uint64(1337); // player->GetObjectGuid();
+    pckt << 489; // map id.
+    pckt << 0; // instance id, 0 always.
+    pckt << uint8(0); // join as group, 0 = false.
+    GetSession()->HandleBattlemasterJoinOpcode(pckt);
+    return true;
+}
+
+bool ChatHandler::HandleQueueAvCommand(char* args)
+{
+    auto player = GetSession()->GetPlayer();
+    if (!player || !player->IsInWorld())
+        return false;
+
+
+    WorldPacket pckt{ CMSG_BATTLEMASTER_JOIN };
+    pckt << uint64(1337); // player->GetObjectGuid();
+    pckt << 30; // map id.
+    pckt << 0; // instance id, 0 always.
+    pckt << uint8(0); // join as group, 0 = false.
+    GetSession()->HandleBattlemasterJoinOpcode(pckt);
+    return true;
+}
+
+bool ChatHandler::HandleReloadBgAmounts(char* args)
+{
+    sBattleGroundMgr.ReloadBGPlayerCounts();
+    SendSysMessage("Player counts reloaded.");
+    return true;
+}
+
 bool ChatHandler::HandleMountCommand(char* /*args*/)
 {
     Player* player = m_session->GetPlayer();

@@ -99,6 +99,7 @@ void WorldSession::HandleBattlemasterJoinOpcode(WorldPacket & recv_data)
     uint32 mapId;
     uint8 joinAsGroup;
     bool queuedAtBGPortal = false;
+    bool queuedviaCommand = false;
     bool isPremade = false;
     Group * grp;
 
@@ -109,6 +110,9 @@ void WorldSession::HandleBattlemasterJoinOpcode(WorldPacket & recv_data)
 
     if (guid == GetPlayer()->GetObjectGuid())
         queuedAtBGPortal = true;
+
+    if (guid.GetRawValue() == 1337) // temp command
+        queuedviaCommand = true;
 
     BattleGroundTypeId bgTypeId = GetBattleGroundTypeIdByMapId(mapId);
 
@@ -124,21 +128,24 @@ void WorldSession::HandleBattlemasterJoinOpcode(WorldPacket & recv_data)
         return;
     }
 
-    if (queuedAtBGPortal)
+    if (!queuedviaCommand)
     {
-        auto const& bgQueuePos = _player->GetBattleGroundEntryPoint();
-        if (_player->GetMapId() != bgQueuePos.mapId || !_player->IsWithinDist3d(bgQueuePos, 50.0f))
+        if (queuedAtBGPortal)
         {
-            ProcessAnticheatAction("PassiveAnticheat", "Attempt to queue for BG through out of range portal", CHEAT_ACTION_LOG | CHEAT_ACTION_REPORT_GMS);
-            return;
+            auto const& bgQueuePos = _player->GetBattleGroundEntryPoint();
+            if (_player->GetMapId() != bgQueuePos.mapId || !_player->IsWithinDist3d(bgQueuePos, 50.0f))
+            {
+                ProcessAnticheatAction("PassiveAnticheat", "Attempt to queue for BG through out of range portal", CHEAT_ACTION_LOG | CHEAT_ACTION_REPORT_GMS);
+                return;
+            }
         }
-    }
-    else
-    {
-        if (!_player->GetNPCIfCanInteractWith(guid, UNIT_NPC_FLAG_BATTLEMASTER) && !_player->IsAllowedToQueueBGDueToTabard())
+        else
         {
-            ProcessAnticheatAction("PassiveAnticheat", "Attempt to queue for BG through invalid creature", CHEAT_ACTION_LOG | CHEAT_ACTION_REPORT_GMS);
-            return;
+            if (!_player->GetNPCIfCanInteractWith(guid, UNIT_NPC_FLAG_BATTLEMASTER) && !_player->IsAllowedToQueueBGDueToTabard())
+            {
+                ProcessAnticheatAction("PassiveAnticheat", "Attempt to queue for BG through invalid creature", CHEAT_ACTION_LOG | CHEAT_ACTION_REPORT_GMS);
+                return;
+            }
         }
     }
 
