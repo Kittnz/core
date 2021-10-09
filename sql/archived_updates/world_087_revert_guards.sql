@@ -1,3 +1,0 @@
-update creature_template set level_min = 55, level_max = 55, health_min = 4667, health_max = 4667, armor = 4292, dmg_min = 240, dmg_max = 260, rank = 0 where entry in (1423, 1642, 853, 727, 3571, 12160, 5952, 3297, 5953, 68, 1976, 3296, 5624, 3084, 4262, 5595);
-update creature_template set level_min = 55, level_max = 55, health_min = 4667, health_max = 4667, armor = 4292, dmg_min = 240, dmg_max = 260, rank = 0 where entry in (select entry from creature_template where name like 'Brave %');
-update creature_template set level_min = 55, level_max = 55, health_min = 4667, health_max = 4667, armor = 4292, dmg_min = 240, dmg_max = 260, rank = 0 where entry in (select entry from creature_template where name like 'Deathguard %');

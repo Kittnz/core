@@ -1,1 +1,0 @@
-update gameobject_template set type = 2 where entry = 2010700;
