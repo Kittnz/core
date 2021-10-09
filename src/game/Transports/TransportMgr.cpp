@@ -327,6 +327,12 @@ void TransportMgr::GeneratePath(GameObjectInfo const* goInfo, TransportTemplate*
     // Feathermoon 303 & Teldrassil 293 ferries
     if (pathId == 303 || pathId == 293)
         keyFrames[12].Update = true;
+    // hack for custom boats:
+    if ((pathId == 1500))
+    {
+        keyFrames[6].InitialOrientation = 2.3F;
+        keyFrames[13].InitialOrientation = 2.2F;
+    }
     transport->pathTime = keyFrames.back().DepartureTime;
 }
 
@@ -353,6 +359,19 @@ Transport* TransportMgr::CreateTransport(uint32 entry, uint32 guid /*= 0*/, Map*
     float y = startNode->y;
     float z = startNode->z;
     float o = tInfo->keyFrames.begin()->InitialOrientation;
+
+    /*
+    // Debug log for transport:
+    if (entry == 190550)
+    {
+        for (size_t i = 0; i < tInfo->keyFrames.size(); ++i)
+        {
+            sLog.outString("Map: %u | X: %f | Y: %f | O: %f | Teleport: %u | Update: %u | TimeTo: %u | TimeFrom: %u", 
+                tInfo->keyFrames[i].Node->mapid, tInfo->keyFrames[i].Node->x, tInfo->keyFrames[i].Node->y, tInfo->keyFrames[i].InitialOrientation,
+                tInfo->keyFrames[i].IsTeleportFrame(), tInfo->keyFrames[i].IsUpdateFrame(), tInfo->keyFrames[i].TimeTo, tInfo->keyFrames[i].TimeFrom);
+        }
+    }
+    */
 
     // initialize the gameobject base
     // HIGHGUID_MO_TRANSPORT
