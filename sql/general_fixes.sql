@@ -374,3 +374,76 @@ set @creature_loot_id = 92139; update creature_template set loot_id = @creature_
 set @creature_loot_id = 92140; update creature_template set loot_id = @creature_loot_id where entry = @creature_loot_id;
 
 replace into gameobject_template (entry, patch, type, displayId, name, faction, flags, size, data0, data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12, data13, data14, data15, data16, data17, data18, data19, data20, data21, data22, data23, mingold, maxgold, phase_quest_id, script_name) VALUES (175325, 0, 2, 2491, 'Caelan\'s Rest Wanted Board', 80, 4, 1, 0, 3991, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+-- Bone Golem
+set @item = 50013; set @spell = 46461;
+delete from custom_pet_entry_relation where item_entry = @item; update item_template set spellid_1 = @spell where entry = @item;
+-- Mini Krampus
+set @item = 50006; set @spell = 46458;
+delete from custom_pet_entry_relation where item_entry = @item; update item_template set spellid_1 = @spell where entry = @item;
+-- Blitzen
+set @item = 50014; set @spell = 46462;
+delete from custom_pet_entry_relation where item_entry = @item; update item_template set spellid_1 = @spell where entry = @item;
+-- Moonkin Hatchling
+set @item = 50019; set @spell = 46463;
+delete from custom_pet_entry_relation where item_entry = @item; update item_template set spellid_1 = @spell where entry = @item;
+-- Black Piglet
+set @item = 50058; set @spell = 46464;
+delete from custom_pet_entry_relation where item_entry = @item; update item_template set spellid_1 = @spell where entry = @item;
+-- Kirin Tor Familiar
+set @item = 50084; set @spell = 46465;
+delete from custom_pet_entry_relation where item_entry = @item; update item_template set spellid_1 = @spell where entry = @item;
+-- Darkmoon Tonk
+set @item = 50200; set @spell = 46467;
+delete from custom_pet_entry_relation where item_entry = @item; update item_template set spellid_1 = @spell where entry = @item;
+-- Egg of Turtlhu
+set @item = 50202; set @spell = 46468;
+delete from custom_pet_entry_relation where item_entry = @item; update item_template set spellid_1 = @spell where entry = @item;
+-- DELETED
+set @item = 50240; set @spell = 0;
+delete from custom_pet_entry_relation where item_entry = @item; update item_template set spellid_1 = @spell where entry = @item;
+-- DELETED
+set @item = 50600; set @spell = 0;
+delete from custom_pet_entry_relation where item_entry = @item; update item_template set spellid_1 = @spell where entry = @item;
+-- DELETED
+set @item = 50601; set @spell = 0;
+delete from custom_pet_entry_relation where item_entry = @item; update item_template set spellid_1 = @spell where entry = @item;
+-- Green Steam Tonk
+set @item = 51002; set @spell = 46473;
+delete from custom_pet_entry_relation where item_entry = @item; update item_template set spellid_1 = @spell where entry = @item;
+-- Purple Steam Tonk
+set @item = 51003; set @spell = 46474;
+delete from custom_pet_entry_relation where item_entry = @item; update item_template set spellid_1 = @spell where entry = @item;
+-- Teldrassil Sproutling
+set @item = 51007; set @spell = 46475;
+delete from custom_pet_entry_relation where item_entry = @item; update item_template set spellid_1 = @spell where entry = @item;
+-- Lost Farm Sheep
+set @item = 51220; set @spell = 46476;
+delete from custom_pet_entry_relation where item_entry = @item; update item_template set spellid_1 = @spell where entry = @item;
+-- Master Dragonslayer\'s Shirt
+set @item = 51240; set @spell = 46478;
+delete from custom_pet_entry_relation where item_entry = @item; update item_template set spellid_1 = @spell where entry = @item;
+-- Little Pony
+set @item = 51259; set @spell = 46480;
+delete from custom_pet_entry_relation where item_entry = @item; update item_template set spellid_1 = @spell where entry = @item;
+-- Prince Herman II
+set @item = 51260; set @spell = 46481;
+delete from custom_pet_entry_relation where item_entry = @item; update item_template set spellid_1 = @spell where entry = @item;
+-- Little Cow
+set @item = 51261; set @spell = 46482;
+delete from custom_pet_entry_relation where item_entry = @item; update item_template set spellid_1 = @spell where entry = @item;
+-- DELETED
+set @item = 51420; set @spell = 0;
+delete from custom_pet_entry_relation where item_entry = @item; update item_template set spellid_1 = @spell where entry = @item;
+-- Little Fawn
+set @item = 51433; set @spell = 46848;
+delete from custom_pet_entry_relation where item_entry = @item; update item_template set spellid_1 = @spell where entry = @item;
+-- Little Ball of Spider Web
+set @item = 51739; set @spell = 46486;
+delete from custom_pet_entry_relation where item_entry = @item; update item_template set spellid_1 = @spell where entry = @item;
+-- DELETED
+set @item = 51760; set @spell = 0;
+delete from custom_pet_entry_relation where item_entry = @item; update item_template set spellid_1 = @spell where entry = @item;
+-- Blackrock\'s Lord Shirt
+set @item = 51857; set @spell = 46488;
+delete from custom_pet_entry_relation where item_entry = @item; update item_template set spellid_1 = @spell where entry = @item;
