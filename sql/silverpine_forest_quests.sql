@@ -119,3 +119,20 @@ replace into creature_involvedrelation (id, quest) values (91720, 40098);
 
 delete from item_template where entry = 60190;
 replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values (60190,3018,'Letter for a Friend',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'A letter addressed to Norga branded with the Royal Seal of Tirisfal Uplands',0);
+
+-- The Price --
+delete from quest_template where entry = 40099;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext4) values (40098,40099,2,85,19,15,0,0,'The Price','This certainly is an interesting turn of events. I can imagine that Duke didn\'t inform you of how our relationship works. So let me tell you how things work around here. I don\'t care if the Queen of the Forsaken sent you herself. The information which I offer does not come for free.\n\nWith that out the way, let\'s make a deal. Near the northern road to Tirisfal Glades lived a man called Lafford. Long story short, he owns me quite a bit, but apparently, he is gone missing when some ruffians burned his house down.\n\nWhile he maybe is gone, I learned that he has a small buried chest behind his house, so here is the deal, you get me that chest, and in return, I will share with you the information on how the Humans are able to resupply their base while being cut off from the rest of the Alliance.','Norga wants me to find Laffords house and locate his buried treasure.','How goes the treasure hunt?','Would you look at that. Who knew that the drunken stories could prove to be so reliable.',60191,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1000,68,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (91720, 40099);
+replace into creature_involvedrelation (id, quest) values (91720, 40099);
+
+delete from item_template where entry = 60191;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values (60191,36510,'Laffords Treasure',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'A Richly Decorated Chest',0);
+
+delete from gameobject_template where entry = 2010825;
+replace into gameobject_template values
+(2010825, 0, 3, 49, 'Pile of Dirt', 0, 4, 1, 43, 2010825, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+delete from gameobject_loot_template where entry = 2010825;
+replace into gameobject_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values (2010825,60191,-100,1,1,0,10);
