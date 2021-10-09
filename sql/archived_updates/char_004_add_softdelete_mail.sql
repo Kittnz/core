@@ -1,2 +1,0 @@
-ALTER TABLE `mail`
-	ADD COLUMN `isDeleted` TINYINT UNSIGNED NULL DEFAULT '0' AFTER `checked`;
