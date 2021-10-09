@@ -463,7 +463,7 @@ struct go_bells : public GameObjectAI
                     break;
                 }
                 case EVENT_RING_BELL:
-                    me->PlayDirectSound(_soundId);
+                    me->PlayDistanceSound(_soundId);
                     break;
                 default:
                     break;
