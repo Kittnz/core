@@ -173,3 +173,22 @@ replace into gameobject_loot_template (entry, item, chanceorquestchance, mincoun
 (2010825,60192,-100,1,1,0,10),
 (2010826,60193,-100,1,1,0,10),
 (2010827,60194,-100,1,1,0,10);
+
+-- Stealing a Core --
+delete from quest_template where entry = 40129;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext4) values (40128,40129,2,17,45,45,0,0,'Stealing a Core','Hello again, impeccable timing! I have done what I can with the parts you acquired from the dig, but we\'re missing a crucial piece. This automaton\'s power source is some advanced crystalline power core.\n\nUnfortunately the one in the chest has cracked and it\'s energy has been depleted. None have been found here and the dig has slowed down due to the Golems. Do not despair though, similar power sources have been found in the Uldaman dig bordering between Loch Modan and the Badlands.\n\nThat dig has also run into issues with the Dark Irons and with awakened defenders. You helped out here, so why not head over there, help them out, and grab me a power core while you\'re at it?','Acquire an Intact Power Core from Uldaman\'s Ancient Treasure.','Is that a Power core in your pocket, or are you just happy to see me?','This is it! Well done! Now I just have to fix this up, and we\'re good to go soon! Come visit again in the future.',60195,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,23740,4075,47,250,54,250,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60441, 40129);
+replace into creature_involvedrelation (id, quest) values (60441, 40129);
+
+delete from item_template where entry = 60195;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60195,24730,'Intact Power Core',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+delete from gameobject_template where entry = 2010828;
+replace into gameobject_template values
+(2010828, 0, 3, 259, 'Ancient Treasures Chest', 0, 4, 1, 43, 2010828, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+delete from gameobject_loot_template where entry = 2010828;
+replace into gameobject_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values 
+(2010828,60195,-100,1,1,0,10);
