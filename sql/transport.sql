@@ -2,10 +2,13 @@ replace into gameobject_template (entry, patch, type, displayId, name, faction, 
 -- Auberdin <> Stormwind
 (181646, 0, 15, 7087, 'Elune\'s Blessing', 0, 40, 1, 967, 30, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
 -- Orgrimmar <> Thunder Bluff
-(190549, 0, 15, 3031, 'The Zephyr', 0, 40, 1, 1221, 30, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+(190549, 0, 15, 3031, 'The Zephyr', 0, 40, 1, 1221, 30, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+-- Sparkwater Port <> Steamwheedle Cartel Port
+(190550, 0, 15, 3015, 'The Sparkrunner', 0, 40, 1, 1500, 60, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
 
 replace into transports (guid, entry, name, period) values (9, 181646, 'Stormwind and Auberdine', 350818);
 replace into transports (guid, entry, name, period) values (10, 190549, 'Orgrimmar and Thunder Bluff', 350818);
+replace into transports (guid, entry, name, period) values (11, 190550, 'Sparkwater Port and Steamwheedle Port', 150818); -- WIP
 
 -- Delete deprecated Menethil Harbor <> Auberdin transport path:
 delete from transports where guid = 4;
