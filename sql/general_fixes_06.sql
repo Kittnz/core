@@ -855,3 +855,44 @@ values (@spell_list_id, @description,
 
 delete from creature_involvedrelation where quest = 80604;
 replace into creature_involvedrelation (id, quest) values (80604, 65005);
+
+-- Samual Boran - display ID 5074, level 32, faction 12 greeting text : "Hey there, hope you're having a fine day." , has questgiver flags
+-- Hargul the Hardy <Son of Margon> , display ID 10039, scale 1, no weapons, level 51 elite, has 9412hp, does 2x damage
+-- Magus Valgon <Kul Tiras> , display ID 10551, level 55 elite, kul tiras faction, no weapons
+-- Hydrox <Magus Valgon's Minion> , display ID 5561 , scale 1.3, level 58, kul tiras faction, no weapons, has 4000 mana, casts frostbolt 
+-- Marine Lockside , display ID 18653, level 55, kul tiran faction, weapon 1 : 4560, weapon2 2081, greeting text : "Rock duty, as boring as ever, hopefully my shift can be over, and one of the other guys can take over soon. There\'s nothing worse then sand all over the place and Rock Crawlers getting in your stuff."
+-- Cannoneer Hancock, display ID 3484, level 50, kul tiran faction, weapon 1 : 1906, greeting text : "We are stationed here to blast any unwanted ships."
+
+replace into creature_template values
+(92936, 0, 5074, 0, 0, 0, 'Samual Boran', '', 0, 32, 32, 1162, 1162, 0, 0, 1061, 534, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 44, 57, 0, 128, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 47.5904, 65.4368, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(92937, 0, 10039, 0, 0, 0, 'Hargul the Hardy', 'Son of Margon', 0, 51, 51, 9412, 9412, 0, 0, 3026, 16, 0, 1.1, 1.14286, 1, 20, 5, 0, 1, 1, 651, 651, 0, 230, 1, 2000, 2000, 1, 32768, 0, 0, 0, 0, 0, 0, 59.3256, 81.5727, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 375, 495, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(92938, 0, 10551, 0, 0, 0, 'Magus Valgon', '', 0, 55, 55, 11070, 11070, 5000, 5000, 3271, 534, 3, 1, 1.14286, 0, 20, 5, 0, 1, 1, 344, 444, 0, 248, 1, 2000, 2000, 8, 0, 0, 0, 0, 0, 0, 0, 59.3256, 81.5727, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 147, 737, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(92939, 0, 5561, 0, 0, 0, 'Hydrox', 'Magus Valgon\'s Minion', 0, 58, 58, 2871, 2871, 4000, 4000, 3420, 534, 0, 1, 1.14286, 1.3, 20, 5, 0, 0, 1, 130, 212, 4, 262, 1, 2000, 2000, 8, 0, 0, 0, 0, 0, 0, 0, 69.696, 95.832, 100, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10181, 0, 0, 0, 0, 0, 0, 22, 'EventAI', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(92940, 0, 18653, 0, 0, 0, 'Marine Lockside', '', 0, 55, 55, 2718, 2718, 0, 0, 2206, 534, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(92941, 0, 3484, 0, 0, 0, 'Cannoneer Hancock', '', 3602, 50, 50, 2384, 2384, 0, 0, 2481, 534, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 87, 112, 0, 230, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 67.32, 92.565, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 1, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+set @equip_template = 56078; set @weapon_1 = 4560; set @weapon_2 = 2081; set @creature = 92940;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 56079; set @weapon_1 = 1906; set @weapon_2 = 0; set @creature = 92941;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @gossip_menu_id = 53113; set @magic_number = 92936;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0');
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Hey there, hope you\'re having a fine day.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 53114; set @magic_number = 92940;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0');
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Rock duty, as boring as ever, hopefully my shift can be over, and one of the other guys can take over soon. There\'s nothing worse then sand all over the place and Rock Crawlers getting in your stuff.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 53115; set @magic_number = 92941;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0');
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'We are stationed here to blast any unwanted ships.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;

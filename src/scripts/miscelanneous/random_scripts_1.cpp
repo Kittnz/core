@@ -1455,7 +1455,7 @@ bool ItemUseSpell_item_mage_refreshment_table(Player* pPlayer, Item* pItem, cons
 			y += dis * sin(pPlayer->GetOrientation());
 			pPlayer->PMonsterEmote("%s begins to conjure a refreshment table.", nullptr, false, pPlayer->GetName());
 			pPlayer->SummonGameObject(1000083, x, y, z + 0.5F, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0, true);
-			pPlayer->RemoveItemCurrency(tableReagent, reagentCount);
+			pPlayer->DestroyItemCount(tableReagent, reagentCount, true);
 			pPlayer->SaveInventoryAndGoldToDB();
 
 			return true;
@@ -1510,7 +1510,7 @@ bool ItemUseSpell_item_warlock_soulwell_ritual(Player* pPlayer, Item* pItem, con
 			y += dis * sin(pPlayer->GetOrientation());
 			pPlayer->PMonsterEmote("%s begins a Soulwell ritual.", nullptr, false, pPlayer->GetName());
 			pPlayer->SummonGameObject(1000087, x, y, z + 0.5F, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0, true);
-			pPlayer->RemoveItemCurrency(ritualReagent, reagentCount);
+			pPlayer->DestroyItemCount(ritualReagent, reagentCount, true);
 			pPlayer->SaveInventoryAndGoldToDB();
 
 			return true;
