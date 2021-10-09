@@ -143,3 +143,33 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 
 replace into creature_questrelation (id, quest) values (91720, 40127);
 replace into creature_involvedrelation (id, quest) values (91712, 40127);
+
+-- An Ancient Aquisition --
+delete from quest_template where entry = 40128;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext4) values (0,40128,2,17,18,18,0,0,'An Ancient Aquisition','Greetings, Torble Sparksprocket here, Junior archaeologist of the Explorer\'s League here! A few weeks ago the dig found this strange contraption. It appears to be the torso of an automaton, it is clearly of Titan make but we haven\'t seen anything like it before, that\'s why I was called here. I quickly realized that it is a modular automaton of some kind. The other parts were found some days later but someone tripped some defense and the dig is now full of Golems. Can you head in there and find the other pieces? You need two arms, two legs, and a head. Look through crates and such.','Gather two Automaton Legs, two Automaton arms, and an Automaton Head from the Bael\'modan Digsite.','Did you find it?','Well done. This contraption will take some time to repair. Do visit sometime in the future and I may have news for you!',60192,2,60193,2,60194,1,0,0,0,0,0,0,0,0,0,0,0,0,3740,1075,47,250,54,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60441, 40128);
+replace into creature_involvedrelation (id, quest) values (60441, 40128);
+
+delete from creature_template where entry = 60441 and 60442;
+replace into creature_template values
+(60441, 0, 6632, 0, 0, 0, 'Torble Sparksprocket', 'Junior Archaeologist', 0, 25, 25, 712, 712, 0, 0, 1009, 55, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 31, 40, 0, 106, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 38.72, 53.24, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60442, 0, 4445, 0, 0, 0, 'Bael\'modan Golem', '', 0, 19, 20, 404, 433, 0, 0, 699, 415, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 27, 34, 0, 90, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 28.6704, 39.4218, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 23, 34, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+delete from item_template where entry between 60192 and 60194;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60192,8629,'Automaton Arm',12,1,2048,1,-1,-1,1,2,-1,-1,-1,-1,4,'',0),
+(60193,23856,'Automaton Leg',12,1,2048,1,-1,-1,1,2,-1,-1,-1,-1,4,'',0),
+(60194,66119,'Automaton Head',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+delete from gameobject_template where entry between 2010825 and 2010827;
+replace into gameobject_template values
+(2010825, 0, 3, 24109, 'Crates with Mechanical Arms', 0, 4, 1, 43, 2010825, 0, 0.25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(2010826, 0, 3, 24109, 'Crates with Mechanical Legs', 0, 4, 1, 43, 2010826, 0, 0.25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(2010827, 0, 3, 33051, 'Mechagnome Head', 0, 4, 1, 43, 2010827, 0, 0.25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+delete from gameobject_loot_template where entry between 2010825 and 2010827;
+replace into gameobject_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values 
+(2010825,60192,-100,1,1,0,10),
+(2010826,60193,-100,1,1,0,10),
+(2010827,60194,-100,1,1,0,10);
