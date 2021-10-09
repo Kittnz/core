@@ -577,9 +577,30 @@ bool QuestAccept_npc_grelda(Player* pPlayer, Creature* pQuestGiver, Quest const*
     return false;
 }
 
+bool GOHello_go_pile_of_dirt(Player* pPlayer, GameObject* pGo)
+{
+    if (!pPlayer->HasItemCount(60189, 1, false))
+    {
+        pPlayer->GetSession()->SendNotification("Need Lordaeron Banner.");
+    }
+    else
+    {
+        pGo->SummonGameObject(2010303, pGo->GetPositionX(), pGo->GetPositionY(), pGo->GetPositionZ() + 0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 30, true);
+        pPlayer->RemoveItemCurrency(60189, 1);
+        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60323))
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+    }
+    return true;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "go_pile_of_dirt";
+    newscript->pGOHello = &GOHello_go_pile_of_dirt;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_grelda";
