@@ -593,9 +593,169 @@ bool GOHello_go_pile_of_dirt(Player* pPlayer, GameObject* pGo)
     return true;
 }
 
+bool GossipHello_npc_torble_and_kex(Player* pPlayer, Creature* pCreature)
+{
+    if (pPlayer->GetQuestStatus(40132) == QUEST_STATUS_INCOMPLETE)
+    {
+        switch (pCreature->GetEntry())
+        {
+        case 60441: // torble
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Let's do it!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Not right now, give me a moment.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+            break;
+        }
+    }
+
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    pPlayer->SEND_GOSSIP_MENU(4654, pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_torble_and_kex(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        switch (pCreature->GetEntry())
+        {
+        case 60441: // torble
+            pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+            DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+                npc->MonsterSay("Here we go! Awaken!");
+                npc->HandleEmote(EMOTE_ONESHOT_TALK);
+                });
+            DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+                if (Creature* analyzer_x51 = player->FindNearestCreature(60444, 30.0F))
+                {
+                    analyzer_x51->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                    analyzer_x51->MonsterSay("Initiating...");
+                    analyzer_x51->HandleEmote(EMOTE_ONESHOT_TALK);
+                }
+                });
+            DoAfterTime(pPlayer, 7 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+                if (Creature* analyzer_x51 = player->FindNearestCreature(60444, 30.0F))
+                {
+                    analyzer_x51->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                    analyzer_x51->MonsterSay("Processing...");
+                    analyzer_x51->HandleEmote(EMOTE_ONESHOT_TALK);
+                }
+                });
+            DoAfterTime(pPlayer, 9 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+                if (Creature* analyzer_x51 = player->FindNearestCreature(60444, 30.0F))
+                {
+                    analyzer_x51->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                    analyzer_x51->MonsterSay("Processing...");
+                    analyzer_x51->HandleEmote(EMOTE_ONESHOT_TALK);
+                }
+                });
+            DoAfterTime(pPlayer, 11 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+                if (Creature* analyzer_x51 = player->FindNearestCreature(60444, 30.0F))
+                {
+                    analyzer_x51->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                    analyzer_x51->MonsterSay("Scanning Unknown beings, threat minimal, universal translator engaged.");
+                    analyzer_x51->HandleEmote(EMOTE_ONESHOT_TALK);
+                }
+                });
+            DoAfterTime(pPlayer, 15 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+                if (Creature* analyzer_x51 = player->FindNearestCreature(60444, 30.0F))
+                {
+                    analyzer_x51->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                    analyzer_x51->MonsterSay("Systems Online. Analyzer X-51 Online. Memory banks are currently restricted. How can I assist you?");
+                    analyzer_x51->HandleEmote(EMOTE_ONESHOT_TALK);
+                }
+                });
+            DoAfterTime(pPlayer, 20 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+                npc->MonsterSay("It works! It speaks! It somehow scanned us and learned our language! Amazing! ahem... What are you?");
+                npc->HandleEmote(EMOTE_ONESHOT_TALK);
+                });
+            DoAfterTime(pPlayer, 25 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+                if (Creature* analyzer_x51 = player->FindNearestCreature(60444, 30.0F))
+                {
+                    analyzer_x51->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                    analyzer_x51->MonsterSay("I am Analyzer X-51, my primary purpose is to analyze systems and mechanisms in order to understand any flaw. Forexample, your purpose has been lost and you have been rendered soft and organic.");
+                    analyzer_x51->HandleEmote(EMOTE_ONESHOT_TALK);
+                }
+                });
+            DoAfterTime(pPlayer, 30 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+                npc->MonsterSay("What? Wait, are you saying that you are...What Gnomes were originally?");
+                npc->HandleEmote(EMOTE_ONESHOT_TALK);
+                });
+            DoAfterTime(pPlayer, 35 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+                if (Creature* analyzer_x51 = player->FindNearestCreature(60444, 30.0F))
+                {
+                    analyzer_x51->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                    analyzer_x51->MonsterSay("We share a basal design, correct. However I cannot say whether you are an analyzer or not. In fact judging by your structure I cannot even ascertain if you were ever granted a purpose. I require more information.");
+                    analyzer_x51->HandleEmote(EMOTE_ONESHOT_TALK);
+                }
+                });
+            DoAfterTime(pPlayer, 40 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+                npc->MonsterSay("That's... Amazing, what else can you tell us? Where did you work? Were you assigned to the facility here? Are there more like you?");
+                npc->HandleEmote(EMOTE_ONESHOT_TALK);
+                });
+            DoAfterTime(pPlayer, 45 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+                if (Creature* analyzer_x51 = player->FindNearestCreature(60444, 30.0F))
+                {
+                    analyzer_x51->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                    analyzer_x51->MonsterSay("My limbs are from different models, and my core was not designed for this body. It is fair to assume that others like me existed or exist. I cannot answer your other questions as I do not know. 97% of my memory banks are restricted.");
+                    analyzer_x51->HandleEmote(EMOTE_ONESHOT_TALK);
+                }
+                });
+            DoAfterTime(pPlayer, 50 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+                npc->MonsterSay("Is there any way to unrestrict them?");
+                npc->HandleEmote(EMOTE_ONESHOT_TALK);
+                });
+            DoAfterTime(pPlayer, 55 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+                if (Creature* analyzer_x51 = player->FindNearestCreature(60444, 30.0F))
+                {
+                    analyzer_x51->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                    analyzer_x51->MonsterSay("Negative. I require an additional component installed, an activation key.");
+                    analyzer_x51->HandleEmote(EMOTE_ONESHOT_TALK);
+                }
+                });
+            DoAfterTime(pPlayer, 60 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+                npc->MonsterSay("I see... Then we will have to acquire one later. Thank you Analyzer X-51. $R come over here for a moment.");
+                npc->HandleEmote(EMOTE_ONESHOT_TALK);
+                });
+            DoAfterTime(pPlayer, 65 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+                if (Creature* analyzer_x51 = player->FindNearestCreature(60444, 30.0F))
+                {
+                    analyzer_x51->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                    analyzer_x51->MonsterSay("I stand by for further instructions or inquiries.");
+                    analyzer_x51->HandleEmote(EMOTE_ONESHOT_TALK);
+                    if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60324))
+                        player->KilledMonster(cInfo, ObjectGuid());
+                    analyzer_x51->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                    npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                }
+                });
+            break;
+        }
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
+    {
+        switch (pCreature->GetEntry())
+        {
+        case 60441: // torble
+            pPlayer->CLOSE_GOSSIP_MENU();
+            break;
+        }
+    }
+
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_torble_and_kex";
+    newscript->pGossipHello = &GossipHello_npc_torble_and_kex;
+    newscript->pGossipSelect = &GossipSelect_npc_torble_and_kex;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "go_pile_of_dirt";
