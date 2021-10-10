@@ -270,3 +270,17 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 
 replace into creature_questrelation (id, quest) values (91727, 40137);
 replace into creature_involvedrelation (id, quest) values (91727, 40137);
+
+-- Bandit Lord --
+delete from quest_template where entry = 40138;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40138,2,85,19,15,0,0,'Bandit Lord','You look like someone who can get things done. I have a proposition for you. You see I have been hunting a man by the name of Storn for a while now, however, he was always surrounded by his minions and was untouchable. But it appears that he had a falling out with his man and has since been in hiding.\n\nGood thing is that I know that he is hiding in a cave close to Rogue Heights in the eastern hills of Tirisfal Uplands. The bad thing is that I need to wait for my client to get here, and she has a habit of leaving early if I do not meet her at her specific time. This is why I need someone to go and hunt Storn for me. So what do you say? You get me Storn\'s head, and I will split the reward for the bounty with you.','I need to find and kill Storn in the cave near Rogue Heights.','How goes the hunt?','You are fast. Have you ever considered changing your profession to being a bounty hunter? Anyways here is your share and thanks for the job well done.',60197,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,900,1900,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (91749, 40138);
+replace into creature_involvedrelation (id, quest) values (91749, 40138);
+
+delete from item_template where entry = 60197;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60197,1445,'Storn\'s Head',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'The head of the bandit lord Storn',0);
+
+delete from creature_loot_template where entry = 122 and item = 60197;
+replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values (122,60197,-100,1,1,0,10);
