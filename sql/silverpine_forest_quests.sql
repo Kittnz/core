@@ -249,3 +249,17 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 
 replace into creature_questrelation (id, quest) values (91712, 40135);
 replace into creature_involvedrelation (id, quest) values (91712, 40135);
+
+-- Dwindling Supplies --
+delete from quest_template where entry = 40136;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40136,2,85,16,15,0,0,'Dwindling Supplies','You there! Yes, you. New in town, ay? Look, I\'m not sure if you are aware, but we are currently at war with the Humans, and as you can imagine, it has taken quite a toll on our dwindling supplies.\n\nThat is why I\'m looking for someone to collect boar meat from the local Cragtusk Boars. So, feeling up for it?','I have been tasked by Butcher Reeves to bring 8 Chunk of Meat ','Back already?','Look at that, a chunk of fine cut meat. Are you sure you are not some mysterious chef who is an adventurer by the day and chef by night? Anyways, thanks a lot, this will surely help. And here I hope this helps.',60196,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,700,950,68,75,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (91727, 40136);
+replace into creature_involvedrelation (id, quest) values (91727, 40136);
+
+delete from item_template where entry = 60196;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60196,25475,'Chunk of Meat',12,1,2048,1,-1,-1,1,8,-1,-1,-1,-1,4,'Lump of Cragtusk Meat',0);
+
+delete from creature_loot_template where entry = 1191 and item = 60196;
+replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values (1191,60196,-100,1,1,0,10);
