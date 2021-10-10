@@ -595,14 +595,12 @@ bool GOHello_go_pile_of_dirt(Player* pPlayer, GameObject* pGo)
 
 bool GossipHello_npc_torble_and_kex(Player* pPlayer, Creature* pCreature)
 {
-    if (pPlayer->GetQuestStatus(40132) == QUEST_STATUS_INCOMPLETE)
+    if (pPlayer->GetQuestStatus(40132) == QUEST_STATUS_INCOMPLETE || pPlayer->GetQuestStatus(40133) == QUEST_STATUS_INCOMPLETE)
     {
-        switch (pCreature->GetEntry())
+        if (pCreature->GetEntry() == 60441 || pCreature->GetEntry() == 60443)
         {
-        case 60441: // torble
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Let's do it!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Not right now, give me a moment.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
-            break;
         }
     }
 
@@ -619,7 +617,7 @@ bool GossipSelect_npc_torble_and_kex(Player* pPlayer, Creature* pCreature, uint3
     {
         switch (pCreature->GetEntry())
         {
-        case 60441: // torble
+        case 60441: // Torble Sparksprocket
             pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
             DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
                 npc->MonsterSay("Here we go! Awaken!");
@@ -636,7 +634,6 @@ bool GossipSelect_npc_torble_and_kex(Player* pPlayer, Creature* pCreature, uint3
             DoAfterTime(pPlayer, 7 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
                 if (Creature* analyzer_x51 = player->FindNearestCreature(60444, 30.0F))
                 {
-                    analyzer_x51->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                     analyzer_x51->MonsterSay("Processing...");
                     analyzer_x51->HandleEmote(EMOTE_ONESHOT_TALK);
                 }
@@ -644,7 +641,6 @@ bool GossipSelect_npc_torble_and_kex(Player* pPlayer, Creature* pCreature, uint3
             DoAfterTime(pPlayer, 9 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
                 if (Creature* analyzer_x51 = player->FindNearestCreature(60444, 30.0F))
                 {
-                    analyzer_x51->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                     analyzer_x51->MonsterSay("Processing...");
                     analyzer_x51->HandleEmote(EMOTE_ONESHOT_TALK);
                 }
@@ -652,7 +648,6 @@ bool GossipSelect_npc_torble_and_kex(Player* pPlayer, Creature* pCreature, uint3
             DoAfterTime(pPlayer, 11 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
                 if (Creature* analyzer_x51 = player->FindNearestCreature(60444, 30.0F))
                 {
-                    analyzer_x51->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                     analyzer_x51->MonsterSay("Scanning Unknown beings, threat minimal, universal translator engaged.");
                     analyzer_x51->HandleEmote(EMOTE_ONESHOT_TALK);
                 }
@@ -660,7 +655,6 @@ bool GossipSelect_npc_torble_and_kex(Player* pPlayer, Creature* pCreature, uint3
             DoAfterTime(pPlayer, 15 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
                 if (Creature* analyzer_x51 = player->FindNearestCreature(60444, 30.0F))
                 {
-                    analyzer_x51->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                     analyzer_x51->MonsterSay("Systems Online. Analyzer X-51 Online. Memory banks are currently restricted. How can I assist you?");
                     analyzer_x51->HandleEmote(EMOTE_ONESHOT_TALK);
                 }
@@ -672,7 +666,6 @@ bool GossipSelect_npc_torble_and_kex(Player* pPlayer, Creature* pCreature, uint3
             DoAfterTime(pPlayer, 25 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
                 if (Creature* analyzer_x51 = player->FindNearestCreature(60444, 30.0F))
                 {
-                    analyzer_x51->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                     analyzer_x51->MonsterSay("I am Analyzer X-51, my primary purpose is to analyze systems and mechanisms in order to understand any flaw. Forexample, your purpose has been lost and you have been rendered soft and organic.");
                     analyzer_x51->HandleEmote(EMOTE_ONESHOT_TALK);
                 }
@@ -684,7 +677,6 @@ bool GossipSelect_npc_torble_and_kex(Player* pPlayer, Creature* pCreature, uint3
             DoAfterTime(pPlayer, 35 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
                 if (Creature* analyzer_x51 = player->FindNearestCreature(60444, 30.0F))
                 {
-                    analyzer_x51->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                     analyzer_x51->MonsterSay("We share a basal design, correct. However I cannot say whether you are an analyzer or not. In fact judging by your structure I cannot even ascertain if you were ever granted a purpose. I require more information.");
                     analyzer_x51->HandleEmote(EMOTE_ONESHOT_TALK);
                 }
@@ -696,8 +688,7 @@ bool GossipSelect_npc_torble_and_kex(Player* pPlayer, Creature* pCreature, uint3
             DoAfterTime(pPlayer, 45 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
                 if (Creature* analyzer_x51 = player->FindNearestCreature(60444, 30.0F))
                 {
-                    analyzer_x51->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-                    analyzer_x51->MonsterSay("My limbs are from different models, and my core was not designed for this body. It is fair to assume that others like me existed or exist. I cannot answer your other questions as I do not know. 97% of my memory banks are restricted.");
+                    analyzer_x51->MonsterSay("My limbs are from different models, and my core was not designed for this body. It is fair to assume that others like me existed or exist. I cannot answer your other questions as I do not know. 97 persent of my memory banks are restricted.");
                     analyzer_x51->HandleEmote(EMOTE_ONESHOT_TALK);
                 }
                 });
@@ -708,7 +699,6 @@ bool GossipSelect_npc_torble_and_kex(Player* pPlayer, Creature* pCreature, uint3
             DoAfterTime(pPlayer, 55 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
                 if (Creature* analyzer_x51 = player->FindNearestCreature(60444, 30.0F))
                 {
-                    analyzer_x51->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                     analyzer_x51->MonsterSay("Negative. I require an additional component installed, an activation key.");
                     analyzer_x51->HandleEmote(EMOTE_ONESHOT_TALK);
                 }
@@ -720,7 +710,6 @@ bool GossipSelect_npc_torble_and_kex(Player* pPlayer, Creature* pCreature, uint3
             DoAfterTime(pPlayer, 65 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
                 if (Creature* analyzer_x51 = player->FindNearestCreature(60444, 30.0F))
                 {
-                    analyzer_x51->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                     analyzer_x51->MonsterSay("I stand by for further instructions or inquiries.");
                     analyzer_x51->HandleEmote(EMOTE_ONESHOT_TALK);
                     if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60324))
@@ -730,16 +719,117 @@ bool GossipSelect_npc_torble_and_kex(Player* pPlayer, Creature* pCreature, uint3
                 }
                 });
             break;
+
+        case 60443: // Kex Blowmaster
+            pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+            DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+                npc->MonsterSay("Hah! Go on then turn on!");
+                npc->HandleEmote(EMOTE_ONESHOT_TALK);
+                });
+            DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+                if (Creature* analyzer_x48 = player->FindNearestCreature(60445, 30.0F))
+                {
+                    analyzer_x48->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                    analyzer_x48->MonsterSay("Initiating...");
+                    analyzer_x48->HandleEmote(EMOTE_ONESHOT_TALK);
+                }
+                });
+            DoAfterTime(pPlayer, 10 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+                if (Creature* analyzer_x48 = player->FindNearestCreature(60445, 30.0F))
+                {
+                    analyzer_x48->MonsterSay("Processing...");
+                    analyzer_x48->HandleEmote(EMOTE_ONESHOT_TALK);
+                }
+                });
+            DoAfterTime(pPlayer, 15 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+                if (Creature* analyzer_x48 = player->FindNearestCreature(60445, 30.0F))
+                {
+                    analyzer_x48->MonsterSay("Processing...");
+                    analyzer_x48->HandleEmote(EMOTE_ONESHOT_TALK);
+                }
+                });
+            DoAfterTime(pPlayer, 15 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+                if (Creature* analyzer_x48 = player->FindNearestCreature(60445, 30.0F))
+                {
+                    analyzer_x48->MonsterSay("Scanning Unknown beings, threat minimal, universal translator engaged.");
+                    analyzer_x48->HandleEmote(EMOTE_ONESHOT_TALK);
+                }
+                });
+            DoAfterTime(pPlayer, 20 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+                if (Creature* analyzer_x48 = player->FindNearestCreature(60445, 30.0F))
+                {
+                    analyzer_x48->MonsterSay("Systems Online. Analyzer X-48 Online. Memory banks are currently restricted. How can I assist you?");
+                    analyzer_x48->HandleEmote(EMOTE_ONESHOT_TALK);
+                }
+                });
+            DoAfterTime(pPlayer, 25 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+                npc->MonsterSay("Oh wow! I was afraid I had to get a Titanic translator or somethin', Yo dude! Tell us where to find gold and rare techologies!");
+                npc->HandleEmote(EMOTE_ONESHOT_TALK);
+                });
+            DoAfterTime(pPlayer, 30 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+                if (Creature* analyzer_x48 = player->FindNearestCreature(60445, 30.0F))
+                {
+                    analyzer_x48->MonsterSay("I am Analyzer X-48, my primary purpose is to analyze systems and mechanisms in order to understand any flaw in them. Forexample, your unadulterated greed and thirst for technology is errant and can lead to your destruction.");
+                    analyzer_x48->HandleEmote(EMOTE_ONESHOT_TALK);
+                }
+                });
+            DoAfterTime(pPlayer, 35 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+                npc->MonsterSay("What? Are you patronizing me?! I gave you life, ya know? I spent time, effort, and MONEY on makin' you work, so help me out yeah? Don't worry about me, I'll be fine even with my greed. Heck if I get enough money maybe it'll go away, so yeah, you can help.");
+                npc->HandleEmote(EMOTE_ONESHOT_TALK);
+                });
+            DoAfterTime(pPlayer, 40 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+                if (Creature* analyzer_x48 = player->FindNearestCreature(60445, 30.0F))
+                {
+                    analyzer_x48->MonsterSay("I doubt your sincerity, however I am in your debt. Would that I could help more, but my memory banks are currently restricted. 98 persent of my memory banks are locked and require a key to function.");
+                    analyzer_x48->HandleEmote(EMOTE_ONESHOT_TALK);
+                }
+                });
+            DoAfterTime(pPlayer, 45 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+                npc->MonsterSay("A key? Huh? Where would we find such a key? Is there another way to unlock your noggin? If we do it will you help?");
+                npc->HandleEmote(EMOTE_ONESHOT_TALK);
+                });
+            DoAfterTime(pPlayer, 50 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+                if (Creature* analyzer_x48 = player->FindNearestCreature(60445, 30.0F))
+                {
+                    analyzer_x48->MonsterSay("There is no other way to my knowledge. A key to unlock the memories within me are required. Once I have my memories back I will divulge the knowledge you seek in return for rebuilding me.");
+                    analyzer_x48->HandleEmote(EMOTE_ONESHOT_TALK);
+                }
+                });
+            DoAfterTime(pPlayer, 55 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+                npc->MonsterSay("Any idea what this knowledge is? Your analytic abilities might be useful, and could help me win some money through gambling or prospectin' or something, but I'd prefer something more substantial. Do you have the blueprints for yourself?");
+                npc->HandleEmote(EMOTE_ONESHOT_TALK);
+                });
+            DoAfterTime(pPlayer, 60 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+                if (Creature* analyzer_x48 = player->FindNearestCreature(60445, 30.0F))
+                {
+                    analyzer_x48->MonsterSay("I do not know which knowledge is stored in my restricted memory banks. I however, surmise that since the memories are restricted, they would be valuable secrets to my people. So yes it could contain blueprints or technology and other things.");
+                    analyzer_x48->HandleEmote(EMOTE_ONESHOT_TALK);
+                }
+                });
+            DoAfterTime(pPlayer, 65 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+                npc->MonsterSay("Sweet! Hey Partner, come over here and talk to me! Analyzer you may rest or somethin', we'll talk later.");
+                npc->HandleEmote(EMOTE_ONESHOT_TALK);
+                });
+            DoAfterTime(pPlayer, 70 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+                if (Creature* analyzer_x48 = player->FindNearestCreature(60445, 30.0F))
+                {
+                    analyzer_x48->MonsterSay("Affirmative, standing by.");
+                    analyzer_x48->HandleEmote(EMOTE_ONESHOT_TALK);
+                    if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60324))
+                        player->KilledMonster(cInfo, ObjectGuid());
+                    analyzer_x48->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                    npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                }
+                });
+            break;
         }
     }
 
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
     {
-        switch (pCreature->GetEntry())
+        if (pCreature->GetEntry() == 60441 || pCreature->GetEntry() == 60443)
         {
-        case 60441: // torble
             pPlayer->CLOSE_GOSSIP_MENU();
-            break;
         }
     }
 
