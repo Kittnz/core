@@ -153,7 +153,7 @@ replace into creature_involvedrelation (id, quest) values (60441, 40128);
 
 delete from creature_template where entry = 60441 and 60442;
 replace into creature_template values
-(60441, 0, 6632, 0, 0, 0, 'Torble Sparksprocket', 'Junior Archaeologist', 0, 25, 25, 712, 712, 0, 0, 1009, 55, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 31, 40, 0, 106, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 38.72, 53.24, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60441, 0, 6632, 0, 0, 0, 'Torble Sparksprocket', 'Junior Archaeologist', 0, 25, 25, 712, 712, 0, 0, 1009, 55, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 31, 40, 0, 106, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 38.72, 53.24, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 'npc_torble_and_kex'),
 (60442, 0, 4445, 0, 0, 0, 'Bael\'modan Golem', '', 0, 19, 20, 404, 433, 0, 0, 699, 415, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 27, 34, 0, 90, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 28.6704, 39.4218, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 23, 34, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
 
 delete from item_template where entry between 60192 and 60194;
@@ -210,3 +210,18 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 
 replace into creature_questrelation (id, quest) values (60443, 40131);
 replace into creature_involvedrelation (id, quest) values (60443, 40131);
+
+-- The Activation --
+delete from quest_template where entry = 40132;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40129,40132,2,17,55,53,0,0,'The Activation','Thank you again, I believe the core is installed. So now all that\'s left to do is the final assembly and then we\'ll have this automaton working! Speak to me again and say the word and we\'ll turn it on.','Acquire an Intact Power Core from Uldaman\'s Ancient Treasure.','Stand By... Processing.','Analyzer X-51 huh? The memory banks are restricted. I\'ll have to figure out how to unlock them, imagine the secrets it may possess! The secrets of the Titans! He\'s very cooperative though, so I\'d say we\'ve made some headway.\n\nI\'ll keep working with Analyzer X-51 and see if he can help the digsite for now. I\'ll call you once I have a hint regarding the memory banks. In the mean time, I have something for you, I have modified Analyzer X-51\'s old depleted power core into an amulet you can wear.\n\nWhile the energies within are but a fraction of what the core once held, it can still sustain your magical energies if you use magic... If not, I bet it can be sold to someone who\'d be interested.',0,0,0,0,0,0,0,0,60324,1,0,0,0,0,0,0,0,0,33740,8075,47,250,54,250,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'Ask Torble to turn on the Analyzer X-51 and observe what will happen.');
+
+replace into creature_questrelation (id, quest) values (60441, 40132);
+replace into creature_involvedrelation (id, quest) values (60441, 40132);
+
+delete from creature_template where entry = 60324;
+replace into creature_template (entry, name, display_id1) values (60324, 'quest_40132_dummy_triger', 328);
+
+delete from creature_template where entry = 60444;
+replace into creature_template values
+(60444, 0, 4445, 0, 0, 0, 'Analyzer X-51', '', 0, 55, 55, 2614, 2614, 0, 0, 4500, 35, 0, 1.1, 1.14286, 0, 20, 5, 0, 0, 1, 50, 73, 0, 248, 1, 2000, 2000, 1, 32768, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 40129, ''); -- change display ID to 18594
+
