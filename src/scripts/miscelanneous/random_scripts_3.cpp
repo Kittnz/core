@@ -931,9 +931,51 @@ bool GossipSelect_npc_boran_brothers(Player* pPlayer, Creature* pCreature, uint3
     return true;
 }
 
+bool GossipHello_npc_chef_jenkel(Player* pPlayer, Creature* pCreature)
+{
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    if (pCreature->IsVendor())
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ACTION_TRADE, "Buy something?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+
+    if (pPlayer->GetQuestStatus(40142) == QUEST_STATUS_INCOMPLETE)
+    {
+        if (pCreature->GetEntry() == 91950 && !pPlayer->HasItemCount(60207, 1, false))
+        {
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Slim is asking for salt.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+        }
+    }
+
+    pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_chef_jenkel(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+        pPlayer->GetSession()->SendListInventory(pCreature->GetGUID());
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
+    {
+        pCreature->MonsterSayToPlayer("Alright, fine, but he owes me, make sure you tell him!", pPlayer);
+        pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+        pPlayer->AddItem(60207, 1);
+    }
+
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_chef_jenkel";
+    newscript->pGossipHello = &GossipHello_npc_chef_jenkel;
+    newscript->pGossipSelect = &GossipSelect_npc_chef_jenkel;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_boran_brothers";
