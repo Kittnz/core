@@ -395,11 +395,7 @@ update creature_template set loot_id = 91833 where entry = 91833;
 update creature_template set loot_id = 91146 where entry = 91146;
 update creature_template set loot_id = 91147 where entry = 91147;
 
-delete from creature_loot_template where entry = 91831 and item = 60206;
-delete from creature_loot_template where entry = 91832 and item = 60206;
-delete from creature_loot_template where entry = 91833 and item = 60206;
-delete from creature_loot_template where entry = 92146 and item = 60206;
-delete from creature_loot_template where entry = 92147 and item = 60206;
+delete from creature_loot_template where item = 60206 and entry between 91831 and 92147;
 replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values
 (91831,60206,-25,1,1,0,10),
 (91832,60206,-25,1,1,0,10),
@@ -410,3 +406,43 @@ replace into creature_loot_template (entry, item, chanceorquestchance, mincounto
 update creature_template set npc_flags = 2 where entry = 91872;
 update creature_template set npc_flags = 17 where entry = 91950;
 update creature_template set script_name = 'npc_chef_jenkel' where entry = 91950;
+
+-- Smashing the Southsea! --
+delete from quest_template where entry = 40143;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40143,2,409,53,40,0,0,'Smashing the Southsea!','The Southsea Pirates are a direct threat to our survival on this island. Their operations here are much larger then we had first anticipated when we set out. They still have many powerful vessels, and whilst they haven\'t attempted to sail them infront of our town, the possibility is still real.\n\nKul Tiras has always been at war with piracy, those that threaten the merchants are a direct threat to our kingdom. I need you to claim the sashes of the Southsea Freebooters, a pirate gang that operates in a vast area. You can find them across both large islands and along the sandbar named after them to the south west of here off the coast of Lapidis.\n\nAs proof of your deeds, bring me twenty of their sashes that they wear. Your efforts will not only help us, but all who travel the vast sea.','Gather 20 Southsea Sashes from Southsea Pirates for Colonel Hardinus in Caelan\'s Rest.','The Southsea Freebooters must be stopped if we are to ever leave this place.','I salute you, you have made the waves a much safer place for all who travel them.',60208,20,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4850,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (92002, 40143);
+replace into creature_involvedrelation (id, quest) values (92002, 40143);
+
+delete from item_template where entry = 60208;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60208,1329,'Southsea Sash',12,1,2048,1,-1,-1,1,20,-1,-1,-1,-1,4,'',0);
+
+update creature_template set loot_id = 92135 where entry = 92135;
+update creature_template set loot_id = 92136 where entry = 92136;
+update creature_template set loot_id = 92138 where entry = 92138;
+update creature_template set loot_id = 92139 where entry = 92139;
+update creature_template set loot_id = 91844 where entry = 91844;
+update creature_template set loot_id = 91845 where entry = 91845;
+update creature_template set loot_id = 91846 where entry = 91846;
+update creature_template set loot_id = 91847 where entry = 91847;
+
+delete from creature_loot_template where item = 60208 and entry = 92135;
+delete from creature_loot_template where item = 60208 and entry = 92136;
+delete from creature_loot_template where item = 60208 and entry = 92138;
+delete from creature_loot_template where item = 60208 and entry = 92139;
+delete from creature_loot_template where item = 60208 and entry = 6371;
+delete from creature_loot_template where item = 60208 and entry = 91844;
+delete from creature_loot_template where item = 60208 and entry = 91845;
+delete from creature_loot_template where item = 60208 and entry = 91846;
+delete from creature_loot_template where item = 60208 and entry = 91847;
+replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values
+(92135,60208,-26,1,1,0,10),
+(92136,60208,-26,1,1,0,10),
+(92138,60208,-26,1,1,0,10),
+(92139,60208,-26,1,1,0,10),
+(6371,60208,-26,1,1,0,10),
+(91844,60208,-26,1,1,0,10),
+(91845,60208,-26,1,1,0,10),
+(91846,60208,-26,1,1,0,10),
+(91847,60208,-26,1,1,0,10);
