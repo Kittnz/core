@@ -815,3 +815,71 @@ replace into creature_loot_template values
  '0', '1', NULL);
  
  update item_template set display_id = 66131 where entry = 83244;
+ 
+replace into gameobject_template (entry, patch, type, displayId, name, faction, flags, size, data0, data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12, data13, data14, data15, data16, data17, data18, data19, data20, data21, data22, data23, mingold, maxgold, phase_quest_id, script_name) VALUES (3000512, 0, 8, 273, 'The Black Anvil', 0, 0, 2, 1, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+update gameobject_template set name = 'Forgotten Tome', displaydid = 2695 where entry = 2010823;
+
+delete from creature_template where entry = 11500;
+replace into creature_template (entry, patch, display_id1, display_id2, display_id3, display_id4, name, subname, gossip_menu_id, level_min, level_max, health_min, health_max, mana_min, mana_max, armor, faction, npc_flags, speed_walk, speed_run, scale, detection_range, call_for_help_range, leash_range, rank, xp_multiplier, dmg_min, dmg_max, dmg_school, attack_power, dmg_multiplier, base_attack_time, ranged_attack_time, unit_class, unit_flags, dynamic_flags, beast_family, trainer_type, trainer_spell, trainer_class, trainer_race, ranged_dmg_min, ranged_dmg_max, ranged_attack_power, type, type_flags, loot_id, pickpocket_loot_id, skinning_loot_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, spell_id1, spell_id2, spell_id3, spell_id4, spell_list_id, pet_spell_list_id, gold_min, gold_max, ai_name, movement_type, inhabit_type, civilian, racial_leader, regeneration, equipment_id, trainer_id, vendor_id, mechanic_immune_mask, school_immune_mask, flags_extra, phase_quest_id, script_name) VALUES (11500, 0, 18727, 0, 0, 0, 'Ganum Highmountain', 'Airship Engineer', 9106, 28, 28, 847, 947, 0, 0, 20, 83, 2, 1, 1.14286, 1.35, 20, 5, 0, 0, 1, 12, 14, 0, 66, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 19.9584, 27.4428, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 1, 0, 0, 3, 2987, 0, 0, 0, 0, 524298, 0, '');
+
+update creature_template set npc_flags = 1 where entry = 11500;
+
+replace into creature_display_info_addon (display_id) values (18720);
+replace into creature_display_info_addon (display_id) values (18721);
+replace into creature_display_info_addon (display_id) values (18722);
+replace into creature_display_info_addon (display_id) values (18723);
+replace into creature_display_info_addon (display_id) values (18724);
+replace into creature_display_info_addon (display_id) values (18725);
+replace into creature_display_info_addon (display_id) values (18726);
+replace into creature_display_info_addon (display_id) values (18727);
+
+
+set @gossip_menu_id = 51661; set @magic_number = 11500;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0');
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Welcome, are you here to ride the Windstrider? She is Thunder Bluff\'s first airship made in collaboration with the Durotar Labor Union.\n\nI have had a lot of influence in the design, being a former Shaman I ensured that she received the blessing of the spirits, and that the material and methods used for her construction was not dangerous or harmful to the land.\n\nMy goblin colleagues wanted to cut corners but the Elders had very strict terms to allow this airship. Connecting our fair city to our Orcish allies is a great boon I am sure.\n\nThey all laughed at me, telling me a Tauren cannot be an Engineer, well look at me now!\n\nIn any case, I am sure she\'s due to arrive at any time. Unless you need something else I must be excused.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+update creature_template set rank = 0, health_min = 2400, health_min = 2200 where entry = 91863;
+update creatute_template set npc_flags = 8192 where entry = 92008;
+
+set @equip_template = 70; set @weapon_1 = 20069; set @weapon_2 = 0; set @creature = 92938;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @gossip_menu_id = 51569; set @magic_number = 92938;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0');
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'I am Magus Valgon, citizen of Kul Tiras, and a wizard dedicated to both Hydromancy and Arcana.\n\nThere are many great mysteries lurking upon this island, I have dedicated myself to uncovering them.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+replace into creature_template (entry, patch, display_id1, display_id2, display_id3, display_id4, name, subname, gossip_menu_id, level_min, level_max, health_min, health_max, mana_min, mana_max, armor, faction, npc_flags, speed_walk, speed_run, scale, detection_range, call_for_help_range, leash_range, rank, xp_multiplier, dmg_min, dmg_max, dmg_school, attack_power, dmg_multiplier, base_attack_time, ranged_attack_time, unit_class, unit_flags, dynamic_flags, beast_family, trainer_type, trainer_spell, trainer_class, trainer_race, ranged_dmg_min, ranged_dmg_max, ranged_attack_power, type, type_flags, loot_id, pickpocket_loot_id, skinning_loot_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, spell_id1, spell_id2, spell_id3, spell_id4, spell_list_id, pet_spell_list_id, gold_min, gold_max, ai_name, movement_type, inhabit_type, civilian, racial_leader, regeneration, equipment_id, trainer_id, vendor_id, mechanic_immune_mask, school_immune_mask, flags_extra, phase_quest_id, script_name) VALUES (9320, 0, 7990, 0, 0, 0, 'Pipoca the Searunner', 'Shanty Awares', 0, 55, 55, 3398, 3398, 0, 0, 4500, 104, 6, 1, 1.14286, 1.25, 20, 5, 0, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 1, 4608, 0, 0, 2, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 2806, 0, 0, 0, 0, 524298, 0, '');
+
+update creature_template set faction = 35 where entry = 9320;
+
+INSERT INTO npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 159, 0, 0, 0, 0);
+INSERT INTO npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 1179, 0, 0, 0, 0);
+INSERT INTO npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 1205, 0, 0, 0, 0);
+INSERT INTO npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 1645, 0, 0, 0, 0);
+INSERT INTO npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 1708, 0, 0, 0, 0);
+INSERT INTO npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 2515, 0, 0, 0, 0);
+INSERT INTO npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 2519, 0, 0, 0, 0);
+INSERT INTO npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 2946, 0, 0, 0, 0);
+INSERT INTO npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 3030, 0, 0, 0, 0);
+INSERT INTO npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 3033, 0, 0, 0, 0);
+INSERT INTO npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 3107, 0, 0, 0, 0);
+INSERT INTO npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 3108, 0, 0, 0, 0);
+INSERT INTO npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 3131, 0, 0, 0, 0);
+INSERT INTO npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 3135, 0, 0, 0, 0);
+INSERT INTO npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 3137, 0, 0, 0, 0);
+INSERT INTO npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 4470, 0, 0, 0, 0);
+INSERT INTO npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 4471, 0, 0, 0, 0);
+INSERT INTO npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 4497, 0, 0, 0, 0);
+INSERT INTO npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 4498, 0, 0, 0, 0);
+INSERT INTO npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 6183, 0, 0, 0, 0);
+INSERT INTO npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 11284, 0, 0, 0, 0);
+INSERT INTO npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 11285, 0, 0, 0, 0);
+INSERT INTO npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 15326, 0, 0, 0, 0);
+INSERT INTO npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 15327, 0, 0, 0, 0);
+INSERT INTO npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 16110, 0, 0, 0, 0);
