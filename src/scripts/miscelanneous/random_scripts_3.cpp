@@ -958,12 +958,19 @@ bool GossipSelect_npc_chef_jenkel(Player* pPlayer, Creature* pCreature, uint32 u
 
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
     {
-        pCreature->MonsterSayToPlayer("Alright, fine, but he owes me, make sure you tell him!", pPlayer);
-        pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
-        pPlayer->AddItem(60207, 1);
+        pPlayer->AddItem(60207);
+        if (pPlayer->HasItemCount(60207, 1, false))
+        {
+            pCreature->MonsterSayToPlayer("Fine! Spare me please, here is the recipe!", pPlayer);
+            pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+            pPlayer->CLOSE_GOSSIP_MENU();
+            return true;
+        }
+        else
+            pPlayer->GetSession()->SendNotification("Your bags are full!");
+        return false;
     }
 
-    pPlayer->CLOSE_GOSSIP_MENU();
     return true;
 }
 
@@ -1003,6 +1010,8 @@ bool GossipSelect_npc_marty_moonshine(Player* pPlayer, Creature* pCreature, uint
             pPlayer->GetSession()->SendNotification("Your bags are full!");
             return false;
     }
+
+    return true;
 }
 
 void AddSC_random_scripts_3()
