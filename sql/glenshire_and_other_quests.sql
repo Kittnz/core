@@ -504,3 +504,52 @@ replace into item_template (entry, display_id, name, class, quality, flags, buy_
 
 replace into page_text values
 (50510,'To Loruk Foreststrider\n\nYour suspicions seem to have been correct, it would seem as if something horrid lurks within the very air. The furbolg who once seemed so very friendly have been turned evil and are hostile upon sight.\n\nThe land itself is beginning to wither and fade. Large craters have dotted the landscape and most of the wildlife seems to be in a similar frenzy to that of the Furbolg. I was unable to see the one who supposedly is the keeper of this place as the area is to dangerous to travel alone.\n\nSomething terrible has happened here, and something must be done.\n\nFeran Strongwind.',0);
+
+-- Rooting Out Evil --
+delete from quest_template where entry = 40147;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40146,40147,2,331,37,26,0,0,'Rooting Out Evil','This report is chilling, there is something going on within The Crescent Grove, and it must be stopped. If we do not end the corruption it could spread as far as Mulgore and beyond. We must do our part, for the greater good of nature itself as druids.\n\nI must ask you to delve into the very depths of The Crescent Grove. It can be found to the south west near Mystral Lake. The cave entrance is just above the waterfall, there should be a pathway up. I recommend you find a band of those heroic enough to travel with you, there is no telling what lies ahead.','Venture into The Crescent Grove, and root out the evil inside.','We must root out evil, no matter the cost.','This is truly an accomplishment to be celebrated. For what you\'ve done within The Crescent Grove, please take one of these. May they assist you well in your future endeavors.',0,0,0,0,0,0,0,0,92110,1,0,0,0,0,0,0,0,0,0,3650,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60213,1,60214,1,60215,1,60216,1,0,0,'');
+
+replace into creature_questrelation (id, quest) values (11720, 40147);
+replace into creature_involvedrelation (id, quest) values (11720, 40147);
+
+update quest_template set type = 81 where entry = 40147;
+
+replace into item_template values
+ ('60213', '0', '4', '3', 'Chain of Loruk', '', '29953', '3', '0', '1', '30016', '7504', '5', '-1', '-1', '40',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '9', '7', '15',
+ '6', '6', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '254', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '5', '1', '0', '0', '120', '0', '0', '0', '0', '43', '0', '0', '0',
+ '0', '1', NULL);
+ 
+replace into item_template values
+ ('60214', '0', '4', '0', 'Cloak of Loruk', '', '23554', '3', '0', '1', '14816', '3704', '16', '-1', '-1', '40',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '12', '6', '4',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '29', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '1', '0', '0', '0', '0', '0', '0', '0', '43', '0', '0', '0',
+ '0', '1', NULL);
+ 
+replace into item_template values
+ ('60215', '0', '4', '2', 'Shoulders of Loruk', '', '16519', '3', '0', '1', '20824', '5206', '3', '-1', '-1', '40',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '14', '3', '8',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '91', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '8', '1', '0', '0', '60', '0', '0', '0', '0', '43', '0', '0', '0',
+ '0', '1', NULL);
+ 
+replace into item_template values
+ ('60216', '0', '4', '1', 'Hat of Loruk', '', '18414', '3', '0', '13624', '3406', '3406', '1', '-1', '-1', '40',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '10', '6', '6',
+ '3', '2', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '47', '0', '0', '0',
+ '0', '0', '0', '7679', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '1', '0', '0', '50', '0', '0', '0', '0', '43', '0', '0', '0',
+ '0', '1', NULL);
