@@ -883,3 +883,41 @@ INSERT INTO npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id
 INSERT INTO npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 15326, 0, 0, 0, 0);
 INSERT INTO npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 15327, 0, 0, 0, 0);
 INSERT INTO npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 16110, 0, 0, 0, 0);
+
+update creature_template set display_id1 = 18702 where entry = 91401;
+update creature_template set display_id1 = 18704 where entry = 91405;
+update creature_template set display_id1 = 18711 where entry = 91402;
+update creature_template set display_id1 = 18712 where entry = 91413;
+update creature_template set display_id1 = 18715 where entry = 91414;
+
+update creature_template set display_id1 = 18716 where entry = 91400;
+update creature_template set display_id1 = 18718 where entry = 91404;
+update creature_template set display_id1 = 18720 where entry = 91411;
+
+update creature_template set display_id1 = 18721 where entry = 91415;
+update creature_template set display_id1 = 18723 where entry = 91407;
+update creature_template set display_id1 = 18724 where entry = 91408;
+
+update creature_template set display_id1 = 18725 where entry = 91409;
+update creature_template set display_id1 = 18726 where entry = 91410
+
+replace into creature_display_info_addon (display_id) values (18700);
+replace into creature_display_info_addon (display_id) values (18701);
+replace into creature_display_info_addon (display_id) values (18702);
+replace into creature_display_info_addon (display_id) values (18703);
+replace into creature_display_info_addon (display_id) values (18704);
+replace into creature_display_info_addon (display_id) values (18705);
+replace into creature_display_info_addon (display_id) values (18706);
+replace into creature_display_info_addon (display_id) values (18707);
+replace into creature_display_info_addon (display_id) values (18708);
+replace into creature_display_info_addon (display_id) values (18709);
+replace into creature_display_info_addon (display_id) values (18710);
+replace into creature_display_info_addon (display_id) values (18711);
+replace into creature_display_info_addon (display_id) values (18712);
+replace into creature_display_info_addon (display_id) values (18713);
+replace into creature_display_info_addon (display_id) values (18714);
+replace into creature_display_info_addon (display_id) values (18715);
+replace into creature_display_info_addon (display_id) values (18716);
+replace into creature_display_info_addon (display_id) values (18717);
+replace into creature_display_info_addon (display_id) values (18718);
+replace into creature_display_info_addon (display_id) values (18719);
