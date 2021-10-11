@@ -2261,12 +2261,12 @@ class Player final: public Unit
         /*********************************************************/
 
     private:
-        typedef std::list<Channel*> JoinedChannelsList;
+        typedef std::list<::Channel*> JoinedChannelsList;
         JoinedChannelsList m_channels;
         void UpdateLocalChannels(uint32 newZone);
     public:
-        void JoinedChannel(Channel* c);
-        void LeftChannel(Channel* c);
+        void JoinedChannel(::Channel* c);
+        void LeftChannel(::Channel* c);
         void CleanupChannels();
         void LeaveLFGChannel();
 
