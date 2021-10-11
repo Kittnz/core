@@ -818,7 +818,7 @@ replace into creature_loot_template values
  
 replace into gameobject_template (entry, patch, type, displayId, name, faction, flags, size, data0, data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12, data13, data14, data15, data16, data17, data18, data19, data20, data21, data22, data23, mingold, maxgold, phase_quest_id, script_name) VALUES (3000512, 0, 8, 273, 'The Black Anvil', 0, 0, 2, 1, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
 
-update gameobject_template set name = 'Forgotten Tome', displaydid = 2695 where entry = 2010823;
+update gameobject_template set name = 'Forgotten Tome', displayid = 2695 where entry = 2010823;
 
 delete from creature_template where entry = 11500;
 replace into creature_template (entry, patch, display_id1, display_id2, display_id3, display_id4, name, subname, gossip_menu_id, level_min, level_max, health_min, health_max, mana_min, mana_max, armor, faction, npc_flags, speed_walk, speed_run, scale, detection_range, call_for_help_range, leash_range, rank, xp_multiplier, dmg_min, dmg_max, dmg_school, attack_power, dmg_multiplier, base_attack_time, ranged_attack_time, unit_class, unit_flags, dynamic_flags, beast_family, trainer_type, trainer_spell, trainer_class, trainer_race, ranged_dmg_min, ranged_dmg_max, ranged_attack_power, type, type_flags, loot_id, pickpocket_loot_id, skinning_loot_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, spell_id1, spell_id2, spell_id3, spell_id4, spell_list_id, pet_spell_list_id, gold_min, gold_max, ai_name, movement_type, inhabit_type, civilian, racial_leader, regeneration, equipment_id, trainer_id, vendor_id, mechanic_immune_mask, school_immune_mask, flags_extra, phase_quest_id, script_name) VALUES (11500, 0, 18727, 0, 0, 0, 'Ganum Highmountain', 'Airship Engineer', 9106, 28, 28, 847, 947, 0, 0, 20, 83, 2, 1, 1.14286, 1.35, 20, 5, 0, 0, 1, 12, 14, 0, 66, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 19.9584, 27.4428, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 1, 0, 0, 3, 2987, 0, 0, 0, 0, 524298, 0, '');
@@ -842,7 +842,7 @@ replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_numbe
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
 update creature_template set rank = 0, health_min = 2400, health_min = 2200 where entry = 91863;
-update creatute_template set npc_flags = 8192 where entry = 92008;
+update creature_template set npc_flags = 8192 where entry = 92008;
 
 set @equip_template = 70; set @weapon_1 = 20069; set @weapon_2 = 0; set @creature = 92938;
 replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0); 
@@ -858,31 +858,31 @@ replace into creature_template (entry, patch, display_id1, display_id2, display_
 
 update creature_template set faction = 35 where entry = 9320;
 
-INSERT INTO npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 159, 0, 0, 0, 0);
-INSERT INTO npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 1179, 0, 0, 0, 0);
-INSERT INTO npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 1205, 0, 0, 0, 0);
-INSERT INTO npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 1645, 0, 0, 0, 0);
-INSERT INTO npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 1708, 0, 0, 0, 0);
-INSERT INTO npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 2515, 0, 0, 0, 0);
-INSERT INTO npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 2519, 0, 0, 0, 0);
-INSERT INTO npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 2946, 0, 0, 0, 0);
-INSERT INTO npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 3030, 0, 0, 0, 0);
-INSERT INTO npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 3033, 0, 0, 0, 0);
-INSERT INTO npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 3107, 0, 0, 0, 0);
-INSERT INTO npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 3108, 0, 0, 0, 0);
-INSERT INTO npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 3131, 0, 0, 0, 0);
-INSERT INTO npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 3135, 0, 0, 0, 0);
-INSERT INTO npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 3137, 0, 0, 0, 0);
-INSERT INTO npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 4470, 0, 0, 0, 0);
-INSERT INTO npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 4471, 0, 0, 0, 0);
-INSERT INTO npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 4497, 0, 0, 0, 0);
-INSERT INTO npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 4498, 0, 0, 0, 0);
-INSERT INTO npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 6183, 0, 0, 0, 0);
-INSERT INTO npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 11284, 0, 0, 0, 0);
-INSERT INTO npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 11285, 0, 0, 0, 0);
-INSERT INTO npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 15326, 0, 0, 0, 0);
-INSERT INTO npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 15327, 0, 0, 0, 0);
-INSERT INTO npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 16110, 0, 0, 0, 0);
+replace into npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 159, 0, 0, 0, 0);
+replace into npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 1179, 0, 0, 0, 0);
+replace into npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 1205, 0, 0, 0, 0);
+replace into npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 1645, 0, 0, 0, 0);
+replace into npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 1708, 0, 0, 0, 0);
+replace into npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 2515, 0, 0, 0, 0);
+replace into npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 2519, 0, 0, 0, 0);
+replace into npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 2946, 0, 0, 0, 0);
+replace into npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 3030, 0, 0, 0, 0);
+replace into npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 3033, 0, 0, 0, 0);
+replace into npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 3107, 0, 0, 0, 0);
+replace into npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 3108, 0, 0, 0, 0);
+replace into npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 3131, 0, 0, 0, 0);
+replace into npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 3135, 0, 0, 0, 0);
+replace into npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 3137, 0, 0, 0, 0);
+replace into npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 4470, 0, 0, 0, 0);
+replace into npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 4471, 0, 0, 0, 0);
+replace into npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 4497, 0, 0, 0, 0);
+replace into npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 4498, 0, 0, 0, 0);
+replace into npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 6183, 0, 0, 0, 0);
+replace into npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 11284, 0, 0, 0, 0);
+replace into npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 11285, 0, 0, 0, 0);
+replace into npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 15326, 0, 0, 0, 0);
+replace into npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 15327, 0, 0, 0, 0);
+replace into npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) VALUES (9320, 16110, 0, 0, 0, 0);
 
 update creature_template set display_id1 = 18702 where entry = 91401;
 update creature_template set display_id1 = 18704 where entry = 91405;
@@ -899,7 +899,7 @@ update creature_template set display_id1 = 18723 where entry = 91407;
 update creature_template set display_id1 = 18724 where entry = 91408;
 
 update creature_template set display_id1 = 18725 where entry = 91409;
-update creature_template set display_id1 = 18726 where entry = 91410
+update creature_template set display_id1 = 18726 where entry = 91410;
 
 replace into creature_display_info_addon (display_id) values (18700);
 replace into creature_display_info_addon (display_id) values (18701);
