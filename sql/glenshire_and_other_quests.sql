@@ -348,3 +348,31 @@ update quest_template set rewchoiceitemcount3 = 1 where entry = 40134;
  
 update quest_template set rewchoiceitemid1 = 60201 where entry = 40135;
 update quest_template set rewchoiceitemcount1 = 1 where entry = 40135;
+
+-- The Boran Family --
+delete from quest_template where entry = 40141;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1,objectivetext2) values (0,40141,2,409,51,40,0,0,'The Boran Family','I come from a large family, one that once occupied the boroughs of Kul Tiras. We weren\'t exactly a rich family, but we were not poor either! I traveled out with two of my brothers when the third war started up in Lordaeron, hoping to earn some fortune and glory. I helped the navy , my brother Karl started work in Menethil Harbor, while Samual went to Southshore to assist the war effort.\n\nEver since I set said years ago, I have had no communication with them, and would like to reach out if you could deliver a letter to the both of them. They must have thought I perished after so long without a word or peep and I want to ease their minds.','Deliver the letters from Arnold Boran to his two brothers.','Have you seen my brothers yet? It will require travelling, but I would appreciate it greatly.','My family has always been close knit, and I know that such a long length without hearing from me would certainly cause worry. I am simply happy to dispell such concern and let them know all is fine. Thanks again, this has meant a lot for me.',60202,1,60203,1,0,0,0,0,60325,1,60326,1,0,0,0,0,0,0,8000,4650,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'Deliver Letter to Karl','Deliver Letter to Samual');
+
+replace into creature_questrelation (id, quest) values (91883, 40141);
+replace into creature_involvedrelation (id, quest) values (91883, 40141);
+
+delete from creature_template where entry = 60325 and 60326;
+replace into creature_template (entry, name, display_id1) values (60325, 'quest_40141_dummy_triger', 328);
+replace into creature_template (entry, name, display_id1) values (60326, 'quest_40141_dummy_triger', 328);
+
+delete from item_template where entry = 60202 and 60203;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60202,3018,'Letter from Karl',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0),
+(60203,13430,'Letter from Samual',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0),
+(60204,3020,'Letter to Karl',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',50508),
+(60205,3020,'Letter to Samual',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',50509);
+
+replace into page_text values
+(50508,'Hello Karl, it has been a long time, and I wanted to reach out in assurance that I am still alive, and kicking. It has been forever since we have seen, and I am eager to see you once again.\n\nAfter departing from Kul Tiras, the fleet spent an extended amount of time at sea. As of recently we were attacked and the ship was destroyed and now we currently reside on the Isle of Lapidis off the coast of Stranglethorn Vale. When the ship is repaired, I will be returning home, and will stop by to say hello like old times.\n\nYour Older Brother Arnold.',0),
+(50509,'Little brother, it has been an eternity since we have seen one another. I am currently stranded on an island called Lapidis off the coast of Stranglethorn Vale near the south seas with others in the fleet. We call this place home, and have for a while now, and are repairing our ship.\n\nWhen repairs are done, I will be stopping to see you and Karl. I look forward to this day very well, and hope you are doing good.\n\nYour Older Brother Arnold.',0);
+
+update creature_template set npc_flags = 3 where entry = 91883;
+update creature_template set npc_flags = 3 where entry = 1242;
+update creature_template set script_name = 'npc_arnold_boran' where entry = 91883;
+update creature_template set script_name = 'npc_boran_brothers' where entry = 92936;
+update creature_template set script_name = 'npc_boran_brothers' where entry = 1242;

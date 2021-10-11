@@ -837,9 +837,114 @@ bool GossipSelect_npc_torble_and_kex(Player* pPlayer, Creature* pCreature, uint3
     return true;
 }
 
+bool QuestAccept_npc_arnold_boran(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver)
+        return false;
+
+    if (!pPlayer)
+        return false;
+
+    bool first_item_added = false;
+    bool second_item_added = false;
+
+    if (pQuest->GetQuestId() == 40141) // The Boran Family
+    {
+        if (pPlayer->AddItem(60204)) first_item_added = true;
+        if (pPlayer->AddItem(60205)) second_item_added = true;
+
+        if (!first_item_added || !second_item_added)
+        {
+            pPlayer->RemoveQuest(40141);
+            pPlayer->SetQuestStatus(40141, QUEST_STATUS_NONE);
+            pPlayer->GetSession()->SendNotification("Your bags are full!");
+            return false;
+        }
+    }
+    return false;
+}
+
+bool GossipHello_npc_boran_brothers(Player* pPlayer, Creature* pCreature)
+{
+    if (pPlayer->GetQuestStatus(40141) == QUEST_STATUS_INCOMPLETE)
+    {
+        if (pCreature->GetEntry() == 1242 || pCreature->GetEntry() == 92936)
+        {
+            if (pPlayer->HasItemCount(60204, 1, false) || pPlayer->HasItemCount(60205, 1, false))
+                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I have a letter from your brother.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        }
+    }
+
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    pPlayer->SEND_GOSSIP_MENU(53113, pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_boran_brothers(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        switch (pCreature->GetEntry())
+        {
+        case 1242:
+            pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
+            if (pPlayer->HasItemCount(60204, 1, false))
+                pPlayer->RemoveItemCurrency(60204, 1);
+            DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+                npc->MonsterSayToPlayer("A letter from Arnold... I thought he died at sea, I haven't heard from him in such a long time.", player);
+                npc->HandleEmote(EMOTE_ONESHOT_TALK);
+                });
+            DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+                npc->MonsterSayToPlayer("This is splendid news, here, please, take this to him.", player);
+                npc->HandleEmote(EMOTE_ONESHOT_TALK);
+                player->AddItem(60202, 1);
+                if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60325))
+                    player->KilledMonster(cInfo, ObjectGuid());
+                npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                });
+            break;
+        case 92936:
+            pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
+            if (pPlayer->HasItemCount(60205, 1, false))
+                pPlayer->RemoveItemCurrency(60205, 1);
+            DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+                npc->MonsterSayToPlayer("I knew Arnold was still out there somewhere, though I cannot imagine what it would be like stranded on some island at sea. Hopefully he returns home safely.", player);
+                npc->HandleEmote(EMOTE_ONESHOT_TALK);
+                });
+            DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+                npc->MonsterSayToPlayer("I have a letter for you, deliver it to him and with haste.", player);
+                npc->HandleEmote(EMOTE_ONESHOT_TALK);
+                player->AddItem(60203, 1);
+                if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60326))
+                    player->KilledMonster(cInfo, ObjectGuid());
+                npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                });
+            break;
+        }
+    }
+
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_boran_brothers";
+    newscript->pGossipHello = &GossipHello_npc_boran_brothers;
+    newscript->pGossipSelect = &GossipSelect_npc_boran_brothers;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_arnold_boran";
+    newscript->pQuestAcceptNPC = &QuestAccept_npc_arnold_boran;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_torble_and_kex";
