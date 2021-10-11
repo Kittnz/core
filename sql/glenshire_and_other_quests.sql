@@ -553,3 +553,16 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '7', '1', '0', '0', '50', '0', '0', '0', '0', '43', '0', '0', '0',
  '0', '1', NULL);
+
+-- Southsea Reserve --
+delete from quest_template where entry = 40148;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40148,2,409,51,40,0,0,'Southsea Reserve','Oh to be back on the sea... back on the sea and on the way home. It\'s been hell just having this part of the island to roam around on, and the only thing us sailors have is ale and eachothers company.\n\nRum is fine, but we\'ve been craving more variety, and this is where you\'re going to come in. The Southsea Pirates have been rather known for their own recipe of Southsea Reserve, of which only they make. That is, until you go and steal the recipe from then, and then we can make it ourselves.\n\nThey are currently holed up on a strand of sand called the Southsea Sandbar and the small neighboring patch of sand known as Distillery Island. It\'s practically a damn factory of the stuff, and they have an entire trained crew working around the clock pumping this stuff out.\n\nIt\'s down in the south west, off the coast of Lapidis Isle, you should see several of their ships docked there. The one who invented the recipe is named \'Moonshine\' Marty, you\'ll get it from him.','Claim the Southsea Reserve Recipe from \'Moonshine\' Marty for Sailor Larson in Caelan\'s Rest.','Any luck matey?','This is it! Haha! Such fine work, you\'d make one excellent swashbuckler aboard the Waterbreaker when she is repaired!',60217,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4800,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (92010, 40148);
+replace into creature_involvedrelation (id, quest) values (92010, 40148);
+
+delete from item_template where entry = 60217;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60217,811,'Southsea Reserve Recipe',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+update creature_template set script_name = 'npc_marty_moonshine' where entry = 92137;

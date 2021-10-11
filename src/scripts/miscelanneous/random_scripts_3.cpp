@@ -967,9 +967,53 @@ bool GossipSelect_npc_chef_jenkel(Player* pPlayer, Creature* pCreature, uint32 u
     return true;
 }
 
+bool GossipHello_npc_marty_moonshine(Player* pPlayer, Creature* pCreature)
+{
+    if (pCreature->IsVendor())
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ACTION_TRADE, "I want to browse your goods.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+
+    if (pPlayer->GetQuestStatus(40148) == QUEST_STATUS_INCOMPLETE)
+    {
+        if (pCreature->GetEntry() == 92137 && !pPlayer->HasItemCount(60217, 1, false))
+        {
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Give me the Recipe for Southsea Reserve and you get to live!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        }
+    }
+
+    pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_marty_moonshine(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+        pPlayer->GetSession()->SendListInventory(pCreature->GetGUID());
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
+    {
+        pPlayer->AddItem(60217);
+        if (pPlayer->HasItemCount(60217, 1, false))
+        {
+            pCreature->MonsterSayToPlayer("Fine! Spare me please, here is the recipe!", pPlayer);
+            pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+            pPlayer->CLOSE_GOSSIP_MENU();
+            return true;
+        }
+        else
+            pPlayer->GetSession()->SendNotification("Your bags are full!");
+            return false;
+    }
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_marty_moonshine";
+    newscript->pGossipHello = &GossipHello_npc_marty_moonshine;
+    newscript->pGossipSelect = &GossipSelect_npc_marty_moonshine;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_chef_jenkel";
