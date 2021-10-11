@@ -376,3 +376,37 @@ update creature_template set npc_flags = 3 where entry = 1242;
 update creature_template set script_name = 'npc_arnold_boran' where entry = 91883;
 update creature_template set script_name = 'npc_boran_brothers' where entry = 92936;
 update creature_template set script_name = 'npc_boran_brothers' where entry = 1242;
+
+-- Sailors Innovation --
+delete from quest_template where entry = 40142;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40142,2,409,51,40,0,0,'Sailors Innovation','From our time at sea it is us Sailors who come up with the fine dining aboard ship and stuck on land. The same meals can get repetitive over, and over again, and so it is time to improvise and innovate.\n\nI came up with this recipe some time ago when we spent a few days on Tel\'Abim. All we had were sand crawlers and banana, fry it up together, and add a pinch of salt, and that was quite a meal! Sadly, we don\'t got bananas, but I do know that Chef Jenkel has some salt. Get the salt from him, and gather 6 Juicy Crawler Legs from any sort of sand crawler around these islands, then I can finally have a change of meal.','Collect 6 Juicy Crawler Legs and a Pinch of Salt for \'Slim\' in Caelan\'s Rest.','Make sure those crawler legs are juicy!','Ahh, yeah this should be everything, a meal worthy for the Admiral! Here, have some, as thanks.',60206,6,60207,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4850,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (91872, 40142);
+replace into creature_involvedrelation (id, quest) values (91872, 40142);
+
+delete from item_template where entry = 60206 and 60207;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60206,5825,'Juicy Crawler Leg',12,1,2048,1,-1,-1,1,6,-1,-1,-1,-1,4,'',0),
+(60207,2480,'Pinch of Salt',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+update creature_template set loot_id = 91831 where entry = 91831;
+update creature_template set loot_id = 91832 where entry = 91832;
+update creature_template set loot_id = 91833 where entry = 91833;
+update creature_template set loot_id = 91146 where entry = 91146;
+update creature_template set loot_id = 91147 where entry = 91147;
+
+delete from creature_loot_template where entry = 91831 and item = 60206;
+delete from creature_loot_template where entry = 91832 and item = 60206;
+delete from creature_loot_template where entry = 91833 and item = 60206;
+delete from creature_loot_template where entry = 92146 and item = 60206;
+delete from creature_loot_template where entry = 92147 and item = 60206;
+replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values
+(91831,60206,-25,1,1,0,10),
+(91832,60206,-25,1,1,0,10),
+(91833,60206,-25,1,1,0,10),
+(92146,60206,-25,1,1,0,10),
+(92147,60206,-25,1,1,0,10);
+
+update creature_template set npc_flags = 2 where entry = 91872;
+update creature_template set npc_flags = 17 where entry = 91950;
+update creature_template set script_name = 'npc_chef_jenkel' where entry = 91950;
