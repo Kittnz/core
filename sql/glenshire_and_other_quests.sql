@@ -490,3 +490,17 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 
 replace into creature_questrelation (id, quest) values (11720, 40145);
 replace into creature_involvedrelation (id, quest) values (11749, 40145);
+
+-- Feran\'s Report --
+delete from quest_template where entry = 40146;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40145,40146,2,331,37,26,0,0,'Feran\'s Report','Loruk may not like the news I am about to deliver to him, it is news of madness, and chaos. Upon studying the hidden grove I found crater marks from infernals, furbolgs enraged by corruption and much, much more.\n\nIt seems as though the elven druids were unable to stop whatever lurks deep inside, and I did not risk my life to learn more. Whatever is inside there, certainly is powerful enough to corrupt the very forest. Take this report to Loruk, it has all of the details of my findings.','Bring Feran\'s Report to Loruk Foreststrider.','So, were my suspicions correct?','So, the rumors are true, there is something evil twisting the very roots of this place, and if left unchecked, could be a force unstoppable.',60212,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60212,1,0,400,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (11749, 40146);
+replace into creature_involvedrelation (id, quest) values (11720, 40146);
+
+delete from item_template where entry = 60212;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60212,13430,'Feran\'s Report',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',50510);
+
+replace into page_text values
+(50510,'To Loruk Foreststrider\n\nYour suspicions seem to have been correct, it would seem as if something horrid lurks within the very air. The furbolg who once seemed so very friendly have been turned evil and are hostile upon sight.\n\nThe land itself is beginning to wither and fade. Large craters have dotted the landscape and most of the wildlife seems to be in a similar frenzy to that of the Furbolg. I was unable to see the one who supposedly is the keeper of this place as the area is to dangerous to travel alone.\n\nSomething terrible has happened here, and something must be done.\n\nFeran Strongwind.',0);
