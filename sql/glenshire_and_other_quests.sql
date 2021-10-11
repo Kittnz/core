@@ -446,3 +446,40 @@ replace into creature_loot_template (entry, item, chanceorquestchance, mincounto
 (91845,60208,-26,1,1,0,10),
 (91846,60208,-26,1,1,0,10),
 (91847,60208,-26,1,1,0,10);
+
+-- Southsea Interference --
+delete from quest_template where entry = 40144;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40143,40144,2,409,54,44,0,0,'Southsea Interference','With each sash collected the Southsea are weakened, but not destroyed. Their strength comes from the captains of each ship and each crew. A man with great charisma and promises of wealth, fortune and adventure can easily rile up a group with no future ahead of them.\n\nIt is these individuals that we will need to target, the captains of the Southsea Freebooters. You shall find them to the south west, along a dangerous strip of sand called The Southsea Sandbar. Be cautious, it is the basecamp of the pirates on both Gilijim, and Lapidis.\n\nYou shall find the captains upon the boats there, enter each, and kill the leaders.','Slay the Southsea Captains located on The Southsea Sandbar for Colonel Hardinus in Caelan\'s Rest.','Once the leaders are dead, the pirates will be sent into a state of chaos to establish new leadership.','The Admiral would be proud of everything done. I have no doubt it will take the Southsea many weeks before someone is their new leaders, and even then, they will be very much weaker then they were. Cheers, the dead of the fleet have been avenged.',0,0,0,0,0,0,0,0,92142,1,92143,1,92144,1,0,0,0,0,4500,6350,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60209,1,60210,1,60211,1,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (92002, 40144);
+replace into creature_involvedrelation (id, quest) values (92002, 40144);
+
+replace into item_template values
+ ('60209', '0', '4', '4', 'Fleet Pauldrons', '', '32903', '2', '0', '1', '46416', '11604', '3', '-1', '-1', '59',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '6', '7', '4', '12',
+ '7', '6', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '424', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '6', '1', '0', '0', '70', '0', '0', '0', '0', '29', '0', '0', '0',
+ '0', '1', NULL);
+ 
+replace into item_template values
+ ('60210', '0', '4', '1', 'Hydromancer Sash', '', '16704', '2', '0', '1', '27608', '6902', '6', '-1', '-1', '59',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '11', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '43', '0', '0', '0',
+ '0', '0', '0', '7703', '1', '0', '0', '-1', '0', '-1', '21624', '1', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '1', '0', '0', '25', '0', '0', '0', '0', '29', '0', '0', '0',
+ '0', '1', NULL);
+ 
+replace into item_template values
+ ('60211', '0', '4', '2', 'Rowdy Sailor Wraps', '', '16816', '2', '0', '1', '40508', '10127', '9', '-1', '-1', '59',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '6', '11', '4', '8',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '68', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '8', '1', '0', '0', '30', '0', '0', '0', '0', '29', '0', '0', '0',
+ '0', '1', NULL);
