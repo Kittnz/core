@@ -566,3 +566,17 @@ replace into item_template (entry, display_id, name, class, quality, flags, buy_
 (60217,811,'Southsea Reserve Recipe',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
 
 update creature_template set script_name = 'npc_marty_moonshine' where entry = 92137;
+
+-- The Rotten Renown --
+delete from quest_template where entry = 40149;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40149,2,409,51,40,0,0,'The Rotten Renown','<The chest appears to be covered in muck and incredibly damaged by the salty sea water, inside, there is a few small items and a rather heavy book that looks well kept and quite elegant. Upon further inspection it is quite obvious that this is the logbook of the pirate ship, \'Rotten Renown\' and holds information that may be of use to someone>.','Find someone who can find use for the Logbook of the Rotten Renown.','Is there something that I can help you with?','You found this in the wreck of the pirate ship? I must say, that is some rather adventurous exploring! This logbook will help us learn quite a lot about the charts, and patrol pathings of pirates, and may help us locate some of their bases at sea.',60218,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60218,1,8000,4800,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into gameobject_questrelation (id, quest) values (2010829, 40149);
+replace into creature_involvedrelation (id, quest) values (92002, 40149);
+
+delete from item_template where entry = 60218;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60218,8092,'Logbook of the Rotten',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+delete from gameobject_template where entry = 2010829;
+replace into gameobject_template (entry, type, displayid, size, name, flags, script_name) values (2010829, 2, 23431, 1, 'Waterlogged Trunk', 32, '');
