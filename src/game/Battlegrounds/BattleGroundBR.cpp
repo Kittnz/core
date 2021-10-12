@@ -48,7 +48,7 @@ void BattleGroundBR::StartingEventCloseDoors()
 void BattleGroundBR::StartingEventOpenDoors()
 {
     // Reset visibility distance back to normal.
-    GetBgMap()->InitVisibilityDistance();
+    // GetBgMap()->InitVisibilityDistance();
     OpenDoorEvent(BG_EVENT_DOOR);
 
     // Loop through players in BG and reset their health and mana again. This is due to the lack of Preparation spell in vanilla.
