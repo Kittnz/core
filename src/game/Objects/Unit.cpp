@@ -7684,7 +7684,7 @@ void Unit::SetHealth(uint32 val)
         val = maxHealth;
 
     SetUInt32Value(UNIT_FIELD_HEALTH, val);
-//  ForceValuesUpdateAtIndex(UNIT_FIELD_MAXHEALTH); // Necessaire pour script qui cache PV aux joueurs.
+    ForceValuesUpdateAtIndex(UNIT_FIELD_MAXHEALTH); // Necessaire pour script qui cache PV aux joueurs.
 
     // group update
     if (Player* pPlayer = ToPlayer())
