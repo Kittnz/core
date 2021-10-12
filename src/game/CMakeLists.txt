@@ -76,6 +76,7 @@ set (game_SRCS
     Battlegrounds/BattleGroundAV.cpp
     Battlegrounds/BattleGroundMgr.cpp
     Battlegrounds/BattleGroundWS.cpp
+    Battlegrounds/BattleGroundBR.cpp
     Battlegrounds/BattleGroundSV.cpp
     Chat/Channel.cpp
     Chat/ChannelMgr.cpp
@@ -264,6 +265,7 @@ set (game_SRCS
     Battlegrounds/BattleGroundAV.h
     Battlegrounds/BattleGroundMgr.h
     Battlegrounds/BattleGroundWS.h
+    Battlegrounds/BattleGroundBR.h
     Battlegrounds/BattleGroundSV.h
     Chat/Channel.h
     Chat/ChannelMgr.h

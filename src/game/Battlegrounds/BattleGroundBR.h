@@ -1,24 +1,38 @@
-#ifndef __BATTLEGROUNDSV_H
-#define __BATTLEGROUNDSV_H
+#ifndef __BATTLEGROUNDBR_H
+#define __BATTLEGROUNDBR_H
 
 #include "BattleGround.h"
 
-class BattleGroundSVScore : public BattleGroundScore
+#define BG_BR_NODES_MAX 2
+#define DOOR_ENTRY 180636
+
+enum BRArenaNodes
+{
+    ARENA_OBJECT_DOOR = 0,
+};
+
+const float ARENA_BR_DoorPositions[BG_BR_NODES_MAX][4] =
+{
+    { -117.381f, 149.775f, -40.384f, 0.0340097f },     // alliance
+    { -76.9176f, 149.735f, -40.384f, 3.144212f },      // horde
+};
+
+class BattleGroundBRScore : public BattleGroundScore
 {
 public:
-    BattleGroundSVScore() {};
-    virtual ~BattleGroundSVScore() {};
+    BattleGroundBRScore() {};
+    virtual ~BattleGroundBRScore() {};
 private:
 };
 
-class BattleGroundSV : public BattleGround
+class BattleGroundBR : public BattleGround
 {
     friend class BattleGroundMgr;
 
     public:
         /* Construction */
-        BattleGroundSV();
-        ~BattleGroundSV();
+        BattleGroundBR();
+        ~BattleGroundBR();
         void Update(uint32 diff);
 
         /* inherited from BattlegroundClass */

@@ -1,7 +1,7 @@
 #include "Object.h"
 #include "Player.h"
 #include "BattleGround.h"
-#include "BattleGroundSV.h"
+#include "BattleGroundBR.h"
 #include "Creature.h"
 #include "GameObject.h"
 #include "ObjectMgr.h"
@@ -11,7 +11,7 @@
 #include "MapManager.h"
 #include "World.h"
 
-BattleGroundSV::BattleGroundSV()
+BattleGroundBR::BattleGroundBR()
 {
     m_StartMessageIds[BG_STARTING_EVENT_FIRST]  = 0;
     m_StartMessageIds[BG_STARTING_EVENT_SECOND] = LANG_ARENA_THIRTY_SECONDS;
@@ -24,17 +24,17 @@ BattleGroundSV::BattleGroundSV()
     m_StartDelayTimes[BG_STARTING_EVENT_FOURTH] = BG_START_DELAY_NONE;
 }
 
-BattleGroundSV::~BattleGroundSV()
+BattleGroundBR::~BattleGroundBR()
 {
 }
 
-void BattleGroundSV::Update(uint32 diff)
+void BattleGroundBR::Update(uint32 diff)
 {
     // Execute this at the end, since it can delete the BattleGround object!
     BattleGround::Update(diff);
 }
 
-void BattleGroundSV::StartingEventCloseDoors()
+void BattleGroundBR::StartingEventCloseDoors()
 {
     if (GetStatus() != STATUS_WAIT_JOIN)
         return;
@@ -45,7 +45,7 @@ void BattleGroundSV::StartingEventCloseDoors()
     //GetBgMap()->SetVisibilityDistance(45.0f);
 }
 
-void BattleGroundSV::StartingEventOpenDoors()
+void BattleGroundBR::StartingEventOpenDoors()
 {
     // Reset visibility distance back to normal.
     GetBgMap()->InitVisibilityDistance();
@@ -65,11 +65,11 @@ void BattleGroundSV::StartingEventOpenDoors()
     }
 }
 
-void BattleGroundSV::AddPlayer(Player *plr)
+void BattleGroundBR::AddPlayer(Player *plr)
 {
     BattleGround::AddPlayer(plr);
     //create score and add it to map, default values are set in constructor
-    BattleGroundSVScore* sc = new BattleGroundSVScore;
+    BattleGroundBRScore* sc = new BattleGroundBRScore;
 
     m_PlayerScores[plr->GetObjectGuid()] = sc;
 
@@ -77,28 +77,28 @@ void BattleGroundSV::AddPlayer(Player *plr)
     plr->RemoveAllArenaSpellCooldown();
 }
 
-void BattleGroundSV::RemovePlayer(Player* /*plr*/, ObjectGuid /*guid*/)
+void BattleGroundBR::RemovePlayer(Player* /*plr*/, ObjectGuid /*guid*/)
 {
 }
 
-void BattleGroundSV::UpdateTeamScore(Team team)
+void BattleGroundBR::UpdateTeamScore(Team team)
 {
 }
 
-void BattleGroundSV::HandleAreaTrigger(Player *Source, uint32 Trigger)
+void BattleGroundBR::HandleAreaTrigger(Player *Source, uint32 Trigger)
 {
     // this is wrong way to implement these things. On official it done by gameobject spell cast.
     if (GetStatus() != STATUS_IN_PROGRESS)
         return;
 }
 
-bool BattleGroundSV::SetupBattleGround()
+bool BattleGroundBR::SetupBattleGround()
 {
     /*doors
-    for (int i = 0; i < BG_SV_NODES_MAX; ++i)
+    for (int i = 0; i < BG_BR_NODES_MAX; ++i)
     {
-        if (!AddObject(ARENA_OBJECT_DOOR + 3 * i, DOOR_ENTRY, ARENA_SV_DoorPositions[i][0], ARENA_SV_DoorPositions[i][1], ARENA_SV_DoorPositions[i][2], ARENA_SV_DoorPositions[i][3], 0, 0, sin(ARENA_SV_DoorPositions[i][3] / 2), cos(ARENA_SV_DoorPositions[i][3] / 2), RESPAWN_ONE_DAY)
-            || !AddObject(ARENA_OBJECT_DOOR + 3 * i + 1, DOOR_ENTRY, ARENA_SV_DoorPositions[i][0], ARENA_SV_DoorPositions[i][1], ARENA_SV_DoorPositions[i][2], ARENA_SV_DoorPositions[i][3], 0, 0, sin(ARENA_SV_DoorPositions[i][3] / 2), cos(ARENA_SV_DoorPositions[i][3] / 2), RESPAWN_ONE_DAY))
+        if (!AddObject(ARENA_OBJECT_DOOR + 3 * i, DOOR_ENTRY, ARENA_BR_DoorPositions[i][0], ARENA_BR_DoorPositions[i][1], ARENA_SV_DoorPositions[i][2], ARENA_BR_DoorPositions[i][3], 0, 0, sin(ARENA_BR_DoorPositions[i][3] / 2), cos(ARENA_BR_DoorPositions[i][3] / 2), RESPAWN_ONE_DAY)
+            || !AddObject(ARENA_OBJECT_DOOR + 3 * i + 1, DOOR_ENTRY, ARENA_BR_DoorPositions[i][0], ARENA_BR_DoorPositions[i][1], ARENA_SV_DoorPositions[i][2], ARENA_BR_DoorPositions[i][3], 0, 0, sin(ARENA_BR_DoorPositions[i][3] / 2), cos(ARENA_BR_DoorPositions[i][3] / 2), RESPAWN_ONE_DAY))
             sLog.outErrorDb("BatteGroundSV: Failed to spawn door objects!");
     }
     */
@@ -106,7 +106,7 @@ bool BattleGroundSV::SetupBattleGround()
     return true;
 }
 
-void BattleGroundSV::Reset()
+void BattleGroundBR::Reset()
 {
     //call parent's class reset
     BattleGround::Reset();
@@ -117,12 +117,18 @@ void BattleGroundSV::Reset()
     }
 }
 
-void BattleGroundSV::EndBattleGround(Team winner)
+void BattleGroundBR::EndBattleGround(Team winner)
 {
+    Team loser = (winner == ALLIANCE) ? HORDE : ALLIANCE;
+    // rewards
+    RewardReputationToTeam(1008, 50, winner);
+    RewardHonorToTeam(145, winner);
+    RewardHonorToTeam(25, loser);
+
     BattleGround::EndBattleGround(winner);
 }
 
-void BattleGroundSV::HandleKillPlayer(Player *player, Player *killer)
+void BattleGroundBR::HandleKillPlayer(Player *player, Player *killer)
 {
     if (GetStatus() != STATUS_IN_PROGRESS)
         return;
@@ -133,14 +139,14 @@ void BattleGroundSV::HandleKillPlayer(Player *player, Player *killer)
     player->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SKINNABLE);
 }
 
-void BattleGroundSV::UpdatePlayerScore(Player *Source, uint32 type, uint32 value)
+void BattleGroundBR::UpdatePlayerScore(Player *Source, uint32 type, uint32 value)
 {
     BattleGroundScoreMap::iterator itr = m_PlayerScores.find(Source->GetObjectGuid());
     if (itr == m_PlayerScores.end())                        // player not found
         return;
 
     BattleGround::UpdatePlayerScore(Source, type, value);
-        
+
     if (type == SCORE_DEATHS)
     {
         switch (Source->GetTeam())
@@ -152,14 +158,20 @@ void BattleGroundSV::UpdatePlayerScore(Player *Source, uint32 type, uint32 value
                 m_HordeDeaths++;
                 break;
         }
+
+        // If both all team members are dead on either side, end arena.
+        if (m_AllianceDeaths >= GetMaxPlayersPerTeam())
+            EndBattleGround(HORDE);
+        else if (m_HordeDeaths >= GetMaxPlayersPerTeam())
+            EndBattleGround(ALLIANCE);
     }
 }
 
-WorldSafeLocsEntry const* BattleGroundSV::GetClosestGraveYard(Player* player)
+WorldSafeLocsEntry const* BattleGroundBR::GetClosestGraveYard(Player* player)
 {
     return nullptr;
 }
 
-void BattleGroundSV::FillInitialWorldStates(WorldPacket& data, uint32& count)
+void BattleGroundBR::FillInitialWorldStates(WorldPacket& data, uint32& count)
 {
 }
