@@ -26,6 +26,7 @@
 #include "BattleGroundAV.h"
 #include "BattleGroundAB.h"
 #include "BattleGroundWS.h"
+#include "BattleGroundBR.h"
 #include "BattleGroundSV.h"
 #include "MapManager.h"
 #include "Map.h"
@@ -1204,7 +1205,10 @@ BattleGround * BattleGroundMgr::CreateNewBattleGround(BattleGroundTypeId bgTypeI
         case BATTLEGROUND_AB:
             bg = new BattleGroundAB(*(BattleGroundAB*)bg_template);
             break;
-        case ARENA_SV:
+        case BATTLEGROUND_BR:
+            bg = new BattleGroundBR(*(BattleGroundBR*)bg_template);
+            break;
+        case BATTLEGROUND_SV:
             bg = new BattleGroundSV(*(BattleGroundSV*)bg_template);
             break;
         default:
@@ -1240,7 +1244,10 @@ uint32 BattleGroundMgr::CreateBattleGround(BattleGroundTypeId bgTypeId, uint32 M
         case BATTLEGROUND_AB:
             bg = new BattleGroundAB;
             break;
-        case ARENA_SV:
+        case BATTLEGROUND_BR:
+            bg = new BattleGroundBR;
+            break;
+        case BATTLEGROUND_SV:
             bg = new BattleGroundSV;
             break;
         default:
@@ -1468,8 +1475,10 @@ BattleGroundQueueTypeId BattleGroundMgr::BGQueueTypeId(BattleGroundTypeId bgType
             return BATTLEGROUND_QUEUE_AB;
         case BATTLEGROUND_AV:
             return BATTLEGROUND_QUEUE_AV;
-        case ARENA_SV:
-            return ARENA_QUEUE_SV;
+        case BATTLEGROUND_BR:
+            return ARENA_QUEUE_BR;
+        case BATTLEGROUND_SV:
+            return BATTLEGROUND_QUEUE_SV;
         default:
             return BATTLEGROUND_QUEUE_NONE;
     }

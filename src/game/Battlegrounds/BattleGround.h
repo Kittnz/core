@@ -147,7 +147,8 @@ enum BattleGroundQueueTypeId
     BATTLEGROUND_QUEUE_AV       = 1,
     BATTLEGROUND_QUEUE_WS       = 2,
     BATTLEGROUND_QUEUE_AB       = 3,
-    ARENA_QUEUE_SV              = 4,
+    ARENA_QUEUE_BR              = 4,
+    BATTLEGROUND_QUEUE_SV       = 5,
 };
 #define MAX_BATTLEGROUND_QUEUE_TYPES 5
 
@@ -288,7 +289,7 @@ class BattleGround
         // Get methods:
         char const* GetName() const         { return m_Name; }
         BattleGroundTypeId GetTypeID() const { return m_TypeID; }
-        bool IsArena() const { return GetTypeID() >= ARENA_SV ? true : false; }
+        bool IsArena() const { return GetTypeID() == BATTLEGROUND_BR ? true : false; }
         BattleGroundBracketId GetBracketId() const { return m_BracketId; }
         // the instanceId check is also used to determine a bg-template
         // that's why the m_map hack is here..
