@@ -10911,12 +10911,12 @@ bool ChatHandler::HandleBGStatusCommand(char* args)
     PSendSysMessage(DO_COLOR(COLOR_INFO, "-- Queues for your bracket"));
     i = 0;
 
-    for (uint8 bgTypeId = BATTLEGROUND_AV; bgTypeId < ARENA_SV; ++bgTypeId)
+    for (uint8 bgTypeId = BATTLEGROUND_AV; bgTypeId < BATTLEGROUND_BR; ++bgTypeId)
     {
         // Skip disabled arenas.
         switch (bgTypeId)
         {
-        case ARENA_SV:
+        case BATTLEGROUND_BR:
             continue;
         }
 
