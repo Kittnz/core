@@ -22352,7 +22352,7 @@ void Player::AddToArenaQueue(bool queuedAsGroup)
 
     // check existence
     BattleGround* bg = nullptr;
-    if (!(bg = sBattleGroundMgr.GetBattleGroundTemplate(ARENA_SV)))
+    if (!(bg = sBattleGroundMgr.GetBattleGroundTemplate(BATTLEGROUND_BR)))
     {
         sLog.outError("Battleground: template BG (all arenas) not found");
         return;
