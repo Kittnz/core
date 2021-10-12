@@ -628,3 +628,41 @@ replace into item_template values
  '0', '1', NULL);
 
 update creature_template set npc_flags = 2 where entry = 91890;
+
+-- The Aqua Stone --
+delete from quest_template where entry = 40151;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40151,2,409,51,44,0,0,'The Aqua Stone','Margon the Mighty and his son Hargul the Hardy are two sea giants that roam the island of Lapidis and the surrounding waters. Hargul especially has been something of a nuissance and attacked Caelan\'s Rest many weeks ago. Whilst no one was harmed he did make away with a few items of importance before the Marines had assembled and figured out a plan to stop him.\n\nOne such item was the Aqua Stone, a magically potent stone that has been channeled with the energy of powerful Hydromancers. With this stone we were able to store more accurately channel our abilities. I would like you to reclaim it, to slay Hargul the Hardy and reclaim this valueable treasure, not just for us Hydromancers, but so that it does not fall in the wrong hands.\n\nYou should find Hargul somewhere off the coast of Lapidis, he was last seen on the Bright Coast, to the west.','Recover the Aqua Stone from Hargul the Hardy.','The Aqua Stone is of much importance to us here and it must be recovered.','This is it! We had abandoned all serious hopes of reclaiming it, and now it is in our posession once again. A marvelous day, and it is all thanks to you.',60222,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1500,5200,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60223,1,60224,1,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (92000, 40151);
+replace into creature_involvedrelation (id, quest) values (92000, 40151);
+
+update quest_template set type = 1 where entry = 40151;
+
+delete from item_template where entry = 60222;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60222,35465,'Aqua Stone',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+update creature_template set loot_id = 92937 where entry = 92937;
+
+replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values
+(92937,60222,-100,1,1,0,10);
+
+replace into item_template values
+ ('60223', '0', '4', '1', 'Aquaweave Leggings', '', '25942', '2', '0', '1', '54748', '13687', '7', '-1', '-1', '57',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '12', '6', '7',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '65', '0', '0', '0',
+ '0', '0', '0', '21619', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '1', '0', '0', '55', '0', '0', '0', '0', '29', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60224', '0', '4', '4', 'Waveguard Gauntlets', '', '35217', '2', '0', '1', '28668', '7167', '10', '-1', '-1', '58',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '6', '7', '9',
+ '4', '2', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '341', '0', '0', '0',
+ '0', '0', '0', '7516', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '6', '1', '0', '0', '40', '0', '0', '0', '0', '29', '0', '0', '0',
+ '0', '1', NULL);
