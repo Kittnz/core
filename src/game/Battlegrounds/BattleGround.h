@@ -150,7 +150,7 @@ enum BattleGroundQueueTypeId
     ARENA_QUEUE_BR              = 4,
     BATTLEGROUND_QUEUE_SV       = 5,
 };
-#define MAX_BATTLEGROUND_QUEUE_TYPES 5
+#define MAX_BATTLEGROUND_QUEUE_TYPES 6
 
 enum BattleGroundBracketId                                  // bracketId for level ranges
 {
