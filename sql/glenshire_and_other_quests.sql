@@ -580,3 +580,51 @@ replace into item_template (entry, display_id, name, class, quality, flags, buy_
 
 delete from gameobject_template where entry = 2010829;
 replace into gameobject_template (entry, type, displayid, size, name, flags, script_name) values (2010829, 2, 23431, 1, 'Waterlogged Trunk', 32, '');
+
+-- Drowning Deeptide --
+delete from quest_template where entry = 40150;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40150,2,409,53,44,0,0,'Drowning Deeptide','The Naga of the Deeptide have been a problem ever since we first arrived. They attacked our vessels when we first made landing upon the island of Gillijim with the High Elves we came with. While we were victorious it still was reason enough for us to travel to Lapidis instead.\n\nUnfortunately you know what happened after we got here, but still the naga remain a threat that must be dealt with. They have a sanctum off the south western coast of Gillijim\'s Island located just south of Lapidis.\n\nHead to their sanctum, and kill what naga you find, take from them their bracelets and bring them to me.','Collect 10 Deeptide Bracelets from Deeptide Naga for Eliza Caldwell in Caelan\'s Rest.','Has it been done? Have you traveled to Gillijim?','The Deeptide Naga have been up to something, but that is not what we are here to investigate. Good work in dispatching the foul creatures, let us hope they prove no further harm to the crew.',60219,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5000,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60220,1,60221,1,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (91890, 40150);
+replace into creature_involvedrelation (id, quest) values (91890, 40150);
+
+delete from item_template where entry = 60219;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60219,18291,'Deeptide Bracelet',12,1,2048,1,-1,-1,1,10,-1,-1,-1,-1,4,'',0);
+
+update creature_template set loot_id = 91840 where entry = 91840;
+update creature_template set loot_id = 91841 where entry = 91841;
+update creature_template set loot_id = 91842 where entry = 91842;
+update creature_template set loot_id = 91843 where entry = 91843;
+
+delete from creature_loot_template where item = 60219 and entry = 91840;
+delete from creature_loot_template where item = 60219 and entry = 91841;
+delete from creature_loot_template where item = 60219 and entry = 91842;
+delete from creature_loot_template where item = 60219 and entry = 91843;
+replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values
+(91840,60219,-50,1,1,0,10),
+(91841,60219,-50,1,1,0,10),
+(91842,60219,-50,1,1,0,10),
+(91843,60219,-50,1,1,0,10);
+
+replace into item_template values
+ ('60220', '0', '4', '3', 'Tidehunter Greaves', '', '26030', '2', '0', '1', '69044', '17261', '8', '-1', '-1', '59',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '8', '3', '5',
+ '7', '2', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '218', '0', '0', '0',
+ '0', '0', '0', '7597', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '5', '1', '0', '0', '50', '0', '0', '0', '0', '8', '0', '0', '0',
+ '0', '1', NULL);
+ 
+replace into item_template values
+ ('60221', '0', '4', '4', 'Tidehunter Girdle', '', '22678', '2', '0', '1', '31444', '7861', '6', '-1', '-1', '58',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '6', '10', '4', '6',
+ '7', '6', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '312', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '6', '1', '0', '0', '40', '0', '0', '0', '0', '8', '0', '0', '0',
+ '0', '1', NULL);
+
+update creature_template set npc_flags = 2 where entry = 91890;
