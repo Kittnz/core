@@ -120,8 +120,8 @@ void BattleGroundBR::Reset()
 void BattleGroundBR::EndBattleGround(Team winner)
 {
     Team loser = (winner == ALLIANCE) ? HORDE : ALLIANCE;
-    // rewards (reputation disabled till 1.15.2)
-    //RewardReputationToTeam(1008, 50, winner);
+    // rewards
+    RewardReputationToTeam(1008, 50, winner);
     RewardHonorToTeam(145, winner);
     RewardHonorToTeam(25, loser);
 
